@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _PYTHONPART_H_
-#define _PYTHONPART_H_
+#ifndef _SCRIPTINGPART_H_
+#define _SCRIPTINGPART_H_
 
 #include <Python.h>
 #include <qdom.h>
@@ -18,31 +18,23 @@
 #include "kdevpart.h"
 
 
-class PythonPart : public KDevPart
+class ScriptingPart : public KDevPart
 {
     Q_OBJECT
 
 public:
-    PythonPart( KDevApi *api, QObject *parent=0, const char *name=0 );
-    ~PythonPart();
+    ScriptingPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    ~ScriptingPart();
 
-    PyObject *add_menu_item(PyObject *args);
-    PyObject *connect(PyObject *args);
-    PyObject *disconnect(PyObject *args);
+    PyObject *addMenuItem(PyObject *args);
+    PyObject *appId(PyObject *args);
 
 private slots:
-    void projectOpened();
-    void projectClosed();
     void slotScriptAction();
 
 private:
-    void evalHook(const QList<PyObject> &hook);
-    
     QDomDocument guiDocument;
     QMap<QString, PyObject*> actions;
-    
-    QList<PyObject> projectOpenedHook;
-    QList<PyObject> projectClosedHook;
 };
 
 #endif

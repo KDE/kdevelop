@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "classstore.h"
+#include "ClassStoreIface.h"
 #include <iostream.h>
 #include <qregexp.h>
 #include "programmingbycontract.h"
@@ -47,6 +48,8 @@ ClassStore::ClassStore()
     
     // Always use full path for the global container.
     globalContainer.setUseFullpath( true );
+
+    dcopIface = new ClassStoreIface(this);
 }
 
 

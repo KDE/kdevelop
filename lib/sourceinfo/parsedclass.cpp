@@ -576,7 +576,7 @@ QDataStream &operator<<(QDataStream &s, const ParsedClass &arg)
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedClass &arg)
+QDataStream &operator>>(QDataStream &s, ParsedClass &arg)
 {
     QString name;
     int definedOnLine, n;

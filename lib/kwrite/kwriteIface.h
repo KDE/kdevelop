@@ -2,11 +2,16 @@
 #define _KWRITE_IFACE_H_
 
 #include <dcopobject.h>
+#include <kdebug.h>
 
-class KWriteIface : virtual public DCOPObject
+class KWriteIface : public DCOPObject
 {
    K_DCOP
 
+public:
+   KWriteIface(const char *name)
+       : DCOPObject(name)
+    {}
 k_dcop:
    virtual void cursorLeft()=0;
    virtual void shiftCursorLeft()=0;

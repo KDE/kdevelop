@@ -22,6 +22,9 @@
 #include "persistantclassstore.h"
 #include "classtreenode.h"
 
+class ClassStoreIface;
+
+
 /**
  * This class has the ability to store and fetch parsed items. 
  *
@@ -37,6 +40,7 @@ private:
 
     /** Store for global pre-parsed classes(like Qt and KDE). */
     PersistantClassStore globalStore;
+    ClassStoreIface *dcopIface;
 
 public:
     

@@ -524,12 +524,12 @@ void Core::openProject()
     QString language = primarylanguageEl.firstChild().toText().data();
     kdDebug(9000) << "Primary language: " << language << endl;
 
-    QStringList nonparts;
-    QDomElement nonpartsEl = generalEl.namedItem("nonparts").toElement();
-    QDomElement partEl = nonpartsEl.firstChild().toElement();
+    QStringList ignoreparts;
+    QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
+    QDomElement partEl = ignorepartsEl.firstChild().toElement();
     while (!partEl.isNull()) {
         if (partEl.tagName() == "part")
-            nonparts << partEl.firstChild().toText().data();
+            ignoreparts << partEl.firstChild().toText().data();
         partEl = partEl.nextSibling().toElement();
     }
 
@@ -559,7 +559,7 @@ void Core::openProject()
         = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"),
                                  QString::fromLatin1("[X-KDevelop-Scope] == 'Project'")); 
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it) {
-        if (nonparts.contains((*it)->name()))
+        if (ignoreparts.contains((*it)->name()))
             continue;
         KDevPart *part = PartLoader::loadService(*it, "KDevPart", api, this);
         initPart(part);
@@ -889,6 +889,15 @@ void Core::running(KDevPart *part, bool runs)
         runningParts.remove(part);
 
     actionCollection()->action("stop_processes")->setEnabled(!runningParts.isEmpty());
+}
+
+
+TextEditorView *Core::activeEditorView()
+{
+    if (activePart && activePart->inherits("EditorPart"))
+        return static_cast<EditorPart*>(activePart)->editorView();
+    else
+        return 0;
 }
 
 

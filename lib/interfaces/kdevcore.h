@@ -9,6 +9,7 @@
 #include "kdevpart.h"
 
 class KDialogBase;
+class TextEditorView;
 
 #ifdef NEW_EDITOR
 namespace KEditor {
@@ -157,10 +158,15 @@ public:
 
 
 #ifdef NEW_EDITOR
-	/**
-	 * The interface to the editor used
-	 */
-	virtual KEditor::Editor *editor() = 0;
+    /**
+     * The interface to the editor used
+     */
+    virtual KEditor::Editor *editor() = 0;
+#else
+    /**
+     * The active editor view, or 0 if no editor is currently focused.
+     */
+    virtual TextEditorView *activeEditorView() = 0;
 #endif
 	
 signals:

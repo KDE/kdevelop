@@ -12,48 +12,48 @@
 #include <kdebug.h>
 #include <kinstance.h>
 
-#include "pythonfactory.h"
-#include "pythonpart.h"
+#include "scriptingfactory.h"
+#include "scriptingpart.h"
 
 
 extern "C" {
 
-    void *init_libkdevpython()
+    void *init_libkdevscripting()
     {
-        return new PythonFactory;
+        return new ScriptingFactory;
     }
     
 };
 
 
-PythonFactory::PythonFactory(QObject *parent, const char *name)
+ScriptingFactory::ScriptingFactory(QObject *parent, const char *name)
     : KDevFactory(parent, name)
 {
 }
 
 
-PythonFactory::~PythonFactory()
+ScriptingFactory::~ScriptingFactory()
 {
     delete s_instance;
     s_instance = 0;
 }
 
 
-KDevPart *PythonFactory::createPartObject(KDevApi *api, QObject *parent,
-                                          const QStringList &/*args*/)
+KDevPart *ScriptingFactory::createPartObject(KDevApi *api, QObject *parent,
+                                             const QStringList &/*args*/)
 {
-    kdDebug(9001) << "Building Python" << endl;
-    return new PythonPart(api, parent, "python part");
+    kdDebug(9001) << "Building Scripting" << endl;
+    return new ScriptingPart(api, parent, "scripting part");
 }
 
 
-KInstance *PythonFactory::s_instance = 0;
-KInstance *PythonFactory::instance()
+KInstance *ScriptingFactory::s_instance = 0;
+KInstance *ScriptingFactory::instance()
 {
     if (!s_instance)
-        s_instance = new KInstance("kdevpython");
+        s_instance = new KInstance("kdevscripting");
 
     return s_instance;
 }
 
-#include "pythonfactory.moc"
+#include "scriptingfactory.moc"

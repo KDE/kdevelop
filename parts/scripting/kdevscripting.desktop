@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Python scripting interface
-Name=KDevPython
+Name=KDevScripting
 ServiceTypes=KDevelop/Part
-X-KDE-Library=libkdevpython
+X-KDE-Library=libkdevscripting
+X-KDevelop-Scope=Global

@@ -1,4 +1,6 @@
 #include <kdebug.h>
+#include <dcopclient.h>
+#include "texteditor.h"
 #include "KDevCoreIface.h"
 #include "kdevcore.h"
 
@@ -26,6 +28,17 @@ void KDevCoreIface::gotoDocumentationFile(const QString &url, int embed)
 void KDevCoreIface::gotoSourceFile(const QString &fileName, int lineNum, int embed)
 {
     m_core->gotoSourceFile(KURL(fileName), lineNum, KDevCore::Embedding(embed));
+}
+
+
+DCOPRef KDevCoreIface::activeEditorView()
+{
+    TextEditorView *view = m_core->activeEditorView();
+    if (view) {
+        kdDebug(9000) << "editor view: " << view->objId() << endl;
+        return DCOPRef(DCOPClient::mainClient()->appId(), view->objId());
+    } else
+        return DCOPRef();
 }
 
 

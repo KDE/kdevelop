@@ -275,7 +275,7 @@ class KWBookmark {
   @author Jochen Wilhelmy
 */
 
-class KWrite : public KTextEditor::View, virtual public KWriteIface {
+class KWrite : public KTextEditor::View, public KWriteIface {
     Q_OBJECT
     friend class KWriteView;
     friend class KWriteDoc;

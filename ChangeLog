@@ -1,3 +1,7 @@
+2001-05-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* New scripting layer based on DCOP
+
 2001-05-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Added TOCs for perl, python and PHP to the

@@ -56,6 +56,9 @@ protected:
     virtual void running(KDevPart *which, bool runs);
     virtual void message(const QString &str);
     virtual KParts::PartManager *partManager() const { return manager; };
+#ifndef NEW_EDITOR
+    virtual TextEditorView *activeEditorView();
+#endif
 
 #ifdef NEW_EDITOR
     KEditor::Editor *editor();

@@ -1517,8 +1517,17 @@ KWBookmark::KWBookmark() {
   cursor.y = -1; //mark bookmark as invalid
 }
 
+
+static QCString generateName()
+{
+    static int id = 0;
+    QCString name = QString("KWriteIface%1").arg(++id).latin1();
+    return name;
+}
+
+
 KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char * name, bool HandleOwnDND, bool deleteDoc)
-  : KTextEditor::View(doc, parent, name), DCOPObject("KWriteIface") {
+  : KTextEditor::View(doc, parent, name), KWriteIface(generateName()) {
   setInstance( KWriteFactory::instance() );
   kWriteDoc = doc;
   m_singleViewMode = doc->isSingleViewMode();

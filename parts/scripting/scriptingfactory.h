@@ -15,13 +15,13 @@
 #include "kdevfactory.h"
 
 
-class PythonFactory : public KDevFactory
+class ScriptingFactory : public KDevFactory
 {
     Q_OBJECT
 
 public:
-    PythonFactory( QObject *parent=0, const char *name=0 );
-    ~PythonFactory();
+    ScriptingFactory( QObject *parent=0, const char *name=0 );
+    ~ScriptingFactory();
 
     virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args);
     static KInstance *instance();

@@ -94,8 +94,7 @@ void PartSelectWidget::saveGlobalConfig()
          it1.current() && it2 != names.end();
          ++it1, ++it2) {
         QCheckListItem *item = static_cast<QCheckListItem*>(it1.current());
-        if (!item->isOn())
-            config->writeEntry(*it2, false);
+        config->writeEntry(*it2, item->isOn());
     }
 }
 
@@ -107,12 +106,12 @@ void PartSelectWidget::readProjectConfig()
     QDomElement docEl = m_projectDom.documentElement();
     QDomElement generalEl = docEl.namedItem("general").toElement();
     
-    QStringList nonparts;
-    QDomElement nonpartsEl = generalEl.namedItem("nonparts").toElement();
-    QDomElement partEl = nonpartsEl.firstChild().toElement();
+    QStringList ignoreparts;
+    QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
+    QDomElement partEl = ignorepartsEl.firstChild().toElement();
     while (!partEl.isNull()) {
         if (partEl.tagName() == "part")
-            nonparts << partEl.firstChild().toText().data();
+            ignoreparts << partEl.firstChild().toText().data();
         partEl = partEl.nextSibling().toElement();
     }
 
@@ -122,7 +121,7 @@ void PartSelectWidget::readProjectConfig()
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it) {
         QCheckListItem *item = new QCheckListItem(lv, (*it)->comment(), QCheckListItem::CheckBox);
         names.prepend((*it)->name());
-        item->setOn(!nonparts.contains((*it)->name()));
+        item->setOn(!ignoreparts.contains((*it)->name()));
     }
 }
 
@@ -132,12 +131,12 @@ void PartSelectWidget::saveProjectConfig()
     QDomElement docEl = m_projectDom.documentElement();
     QDomElement generalEl = docEl.namedItem("general").toElement();
     
-    QStringList nonparts;
-    QDomElement nonpartsEl = generalEl.namedItem("nonparts").toElement();
+    QStringList ignoreparts;
+    QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
 
     // Clear old entries
-    while (!nonpartsEl.firstChild().isNull())
-        nonpartsEl.removeChild(nonpartsEl.firstChild());
+    while (!ignorepartsEl.firstChild().isNull())
+        ignorepartsEl.removeChild(ignorepartsEl.firstChild());
 
     QListViewItemIterator it1(lv);
     QStringList::Iterator it2;
@@ -148,7 +147,7 @@ void PartSelectWidget::saveProjectConfig()
         if (!item->isOn()) {
             QDomElement partEl = m_projectDom.createElement("part");
             partEl.appendChild(m_projectDom.createTextNode(*it2));
-            nonpartsEl.appendChild(partEl);
+            ignorepartsEl.appendChild(partEl);
             kdDebug(9000) << "Appending " << (*it2) << endl;
         }
     }
