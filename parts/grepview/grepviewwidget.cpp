@@ -105,6 +105,8 @@ GrepViewWidget::GrepViewWidget(GrepViewPart *part)
 	     this, SLOT(searchActivated()) );
     connect( this, SIGNAL(clicked(QListBoxItem*)),
              this, SLOT(slotExecuted(QListBoxItem*)) );
+    connect( this, SIGNAL(returnPressed(QListBoxItem*)),
+             this, SLOT(slotExecuted(QListBoxItem*)) );
 
     m_part = part;
 }
