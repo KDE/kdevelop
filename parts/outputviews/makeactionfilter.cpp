@@ -33,7 +33,7 @@ const QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormat
 	static QValueList<ActionFormat> formats
 		= QValueList<ActionFormat>()
 
-	<< ActionFormat( i18n("compiling"), "g++", "(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).*`.*`(?:[^/\\s;]*/)+([^/\\s;]+)", 1 )
+	<< ActionFormat( i18n("compiling"), "g++", "(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).*`.*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 )
 	<< ActionFormat( i18n("compiling"), "g++", "(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).* -c ([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("compiling"), "g++", "(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).* -c -.*", 1 )
 	<< ActionFormat( i18n("generating"), "moc", ".*/moc\\b.*\\s-o\\s([^\\s;]+)", 1 )
