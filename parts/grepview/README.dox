@@ -3,7 +3,7 @@ Integrates "find|grep" in KDevelop - allows fast searching of multiple files usi
 
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 
-\ummaintained This part is currently un-maintained.
+\unmaintained This part is currently un-maintained.
 
 \feature grep works on editor context menu
 
