@@ -33,6 +33,17 @@
 #include "genericlistviewitem.h"
 #include "variantserializer.h"
 
+#if QT_VERSION < 0x030100
+inline QString QDomDocument_toString(QDomDocument & cQDomDocument, int indent )
+{
+    QString str;
+    QTextStream s( str, IO_WriteOnly );
+    cQDomDocument.save( s, indent );
+
+    return str;
+};
+#endif // Qt<3.1.0
+
 typedef KGenericFactory<GenericProjectPart> GenericProjectFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevgenericproject, GenericProjectFactory( "kdevgenericproject" ) );
 
@@ -217,7 +228,11 @@ void GenericProjectPart::loadProjectConfig( QString projectFile )
     QDomDocument dom;
     DomUtil::openDOMFile(dom, QDir::cleanDirPath(projectDirectory() + "/" + projectFile));
 
+#if QT_VERSION >= 0x030100
     kdDebug() << dom.toString(4) << endl;
+#else
+    kdDebug() << QDomDocument_toString(dom, 4) << endl;
+#endif
 
     QDomElement docElem = dom.documentElement();
 

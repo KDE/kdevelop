@@ -1567,7 +1567,7 @@ void TrollProjectWidget::slotAddFiles()
   AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
                                         filter,
                                         this,
-                                        i18n("Insert Existing Files"),
+                                        i18n("Insert Existing Files").ascii(),
                                         true);
 #endif
   dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
