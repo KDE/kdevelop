@@ -192,6 +192,7 @@ void GrepViewWidget::lineHighlighted(int line)
         {
             GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
             m_part->partController()->editDocument(gi->filename(), gi->linenumber());
+            m_part->topLevel()->lowerView(this);
         }
 }
 
