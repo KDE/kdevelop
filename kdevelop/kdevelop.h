@@ -20,14 +20,15 @@
 
 #include <kapp.h>
 #include <kaction.h>
-#include <kparts/dockmainwindow.h>
+//#include <kparts/dockmainwindow.h>
 #include "kdevcomponent.h"
+#include <qextmdimainfrm.h>
 
 
 class KDevelopCore;
 
 
-class KDevelop : public KParts::DockMainWindow
+class KDevelop : public QextMdiMainFrm //KParts::DockMainWindow
 {
  Q_OBJECT
 public:
@@ -44,39 +45,45 @@ public:
 public slots:
    /** Embed the widgets of components in the GUI. */
    void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation);
-/** stacking document views as tabbed KDockWidgets is default behaviour if no view handler library was found.
- *  Usually connected in KDevelopCore::loadInitialComponents. */
- void stackView( QWidget*);
- 
- protected slots: // Protected slots
+
+protected: // Protected methods
+   /** fit the system menu button position to the menu position */
+   virtual void resizeEvent( QResizeEvent * );
+
+protected slots: // Protected slots
    /** reimplemented from KParts::MainWindow */
    //  void slotSetStatusBarText( const QString &text);
-   
+
  signals:
  void addView( QWidget*);
  
  private:
  
- void initActions(); 
- /** initializes the help messages (whats this and
-     statusbar help) on the KActions 
-     !!! isn't used anymore, exists for saving the help texts :-)) !!!
- */ 
-  void initHelp();
-  
+    void initActions();
+    /** initializes the help messages (whats this and
+        statusbar help) on the KActions
+        !!! isn't used anymore, exists for saving the help texts :-)) !!!
+    */
+    void initHelp();
+    /**
+    */
+    void initQextMDI();
+
   
   //
   // the covering dockwidgets for all views
   //
   /** The initial dock cover for document views */
-  KDockWidget* m_dockbaseAreaOfDocumentViews;
+  KDockWidget*              m_dockbaseAreaOfDocumentViews;
 
   // TODO: Workaround for bug in dock window stuff when using protected members
   // DockL and DockB
-  KDockWidget* m_dockOnLeft;
-  KDockWidget* m_dockOnBottom;
+  KDockWidget*              m_dockOnLeft;
+  KDockWidget*              m_dockOnBottom;
 
-  KDevelopCore* m_pCore;
+  KDevelopCore*             m_pCore;
+
+  QList<QextMdiChildView>   m_MDICoverList;
 
 private slots:
    void slotOptionsEditToolbars();

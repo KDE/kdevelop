@@ -3,6 +3,7 @@ SUBDIRS = widgets lib plugin parts templates kwrite_part
 INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
 	   -I$(top_srcdir)/kdevelop/lib/sourceinfo \
 	   -I$(top_srcdir)/kdevelop/lib/projectmanagement \
+	   -I$(top_srcdir)/kdevelop/widgets/qextmdi/include \
 	   $(all_includes)
 
 LFLAGS = -+
@@ -23,7 +24,8 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-kdevelop_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
+kdevelop_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
+                 $(top_builddir)/kdevelop/widgets/qextmdi/src/libkdevqextmdi.la
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h \

@@ -17,6 +17,7 @@
 
 
 #include <qdialog.h>
+#include <qlayout.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -38,25 +39,31 @@
 #include <kconfig.h>
 
 KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f) :
-  KParts::DockMainWindow( pParent, name, f)
+//  KParts::DockMainWindow( pParent, name, f)
+   QextMdiMainFrm( pParent, name, f)
    ,m_dockbaseAreaOfDocumentViews(0L)
    ,m_dockOnLeft(0L)
    ,m_dockOnBottom(0L)
    ,m_pCore(0L)
 {
-  initActions();
-  //  initHelp();
+    m_MDICoverList.setAutoDelete( true);
 
-  setXMLFile( "kdevelopui.rc" );
-  m_pCore = new KDevelopCore(this);
-  createGUI(0);
-  m_pCore->loadInitialComponents();
-  resize(800,600); // temp
+    initActions();
+    //  initHelp();
+
+    setXMLFile( "kdevelopui.rc" );
+    m_pCore = new KDevelopCore(this);
+    createGUI(0);
+    initQextMDI();
+    m_pCore->loadInitialComponents();
+
+    resize(800,600); // temp
 }
 
 
 KDevelop::~KDevelop()
 {
+    kdDebug(9000) << "~KDevelop" << endl;
 }
 
 
@@ -92,8 +99,17 @@ bool KDevelop::queryClose(){
   
 }
 bool KDevelop::queryExit(){
-  kdDebug(9000) << "KDevelop::queryExit" << endl;  
-  return true;
+    kdDebug(9000) << "KDevelop::queryExit" << endl;
+
+    QListIterator<QextMdiChildView> it(m_MDICoverList);
+    for ( ; it.current(); ++it ) {
+        QextMdiChildView* pMdiCover = it.current();
+        QWidget* pEmbeddedView = (QWidget*) pMdiCover->child( pMdiCover->name());
+        if (pEmbeddedView)
+            delete pEmbeddedView;
+    }
+
+    return true;
 }
 
 /** initializes the help messages (whats this and
@@ -485,50 +501,45 @@ void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &
     {
       if (role == KDevComponent::DocumentView)
       {
-        // TODO: check the configuration!
         if( getMainDockWidget()->caption() != QString("default"))
         {
-          // call the view handler service
-          emit addView( w);
-          KParts::GUIActivateEvent ev( true );
-          QApplication::sendEvent( m_pCore->viewHandler(), &ev );
+          QextMdiChildView* pMDICover = new QextMdiChildView( w->caption());
+          m_MDICoverList.append( pMDICover);
+
+          w->reparent( pMDICover, 0, QPoint(0,0));
+          QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
+          pLayout->addWidget( w);
+
+          pMDICover->setName( w->name());
+          addWindow( pMDICover, QextMdi::StandardAdd);
+          pLayout->activate();
         }
-        else
-        {
-          // default: stack dockwidgets
-          m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner | KDockWidget::DockCenter);
-          nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockCenter);
-        }
-        m_dockOnLeft = nextWidget; 
-      }
-      else
-      {
-        if (role == KDevComponent::AreaOfDocumentViews)
-        {
-          // is the MDI mainframe when using QextMDI or QWorkspace
-          nextWidget->setEnableDocking(KDockWidget::DockNone);
-          nextWidget->setDockSite(KDockWidget::DockCorner);
-          setView(nextWidget);
-          setMainDockWidget( nextWidget );
-          m_dockbaseAreaOfDocumentViews = nextWidget;
-        }
+        m_dockOnLeft = nextWidget;
       }
     }
   }
 }
 
-
-void KDevelop::stackView( QWidget* w)
+void KDevelop::initQextMDI()
 {
-  KDockWidget *nextWidget = createDockWidget(QString(w->name()),
-                                             w->icon()? *w->icon() : QPixmap(),
-                                             0L,
-                                             w->caption());
-  nextWidget->setWidget( w);
-  nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockCenter);
+    // cover QextMdi's childarea by a dockwidget
+    m_dockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "");
+    m_dockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
+    m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
+    m_dockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+    // set this dock to main view
+    setView(m_dockbaseAreaOfDocumentViews);
+    setMainDockWidget(m_dockbaseAreaOfDocumentViews);
+
+    setMenuForSDIModeSysButtons( menuBar());
 }
 
-
+/** additionally fit the system menu button position to the menu position */
+void KDevelop::resizeEvent( QResizeEvent *pRSE)
+{
+   KParts::DockMainWindow::resizeEvent( pRSE);
+   setSysButtonsAtMenuPosition();
+}
 
 
 #include "kdevelop.moc"

@@ -136,53 +136,6 @@ void KDevelopCore::readProperties(KConfig* pConfig){
 void KDevelopCore::loadInitialComponents()
 {
   KTrader::OfferList::ConstIterator it;
-  KTrader::OfferList viewHandlerOffers;
-  bool bUseViewHandler = true;  // TODO: make this configurable!
-
-  //
-  // first, load a view handling component (MDI main frame or KDockWidget-based view docking site or ...)
-  // (the precondition for other components which want to embed views!)
-  //
-  if( bUseViewHandler)
-    viewHandlerOffers = KTrader::self()->query("KDevelop/Component/ViewHandler");
-
-  if (!viewHandlerOffers.isEmpty()) {
-    // check the list of hits and take the right one (TODO: chosen in kdevelop options)
-    bool bFound = false;
-    for (it = viewHandlerOffers.begin(); (it != viewHandlerOffers.end()) || !bFound; ++it) {
-      // at the moment it's a trivial rule: take the first one it finds
-      bFound = true;
-      break;
-    }
-
-    kdDebug(9000) << "Found view-handler component " << (*it)->name() << endl;
-    KLibFactory *pFactory = KLibLoader::self()->factory((*it)->library());
-
-    QStringList args;
-    QVariant prop = (*it)->property("X-KDevelop-Args");
-    if (prop.isValid())
-      args = QStringList::split(" ", prop.toString());
-
-    QObject *pObj = pFactory->create(m_pKDevelopGUI, (*it)->name().latin1(), "KDevComponent", args);
-    if (!pObj->inherits("KDevComponent")) {
-      kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
-      return;
-    }
-    m_pViewHandler = (KDevViewHandler*) pObj;
-    QObject::connect( m_pKDevelopGUI, SIGNAL(addView(QWidget*)), m_pViewHandler, SLOT(addView(QWidget*)) );
-    // initialize the view handler component and it's GUI (the mainframe widget)
-    initComponent( m_pViewHandler);
-    m_pKDevelopGUI->guiFactory()->addClient( m_pViewHandler);
-  }
-
-  if (viewHandlerOffers.isEmpty() || !bUseViewHandler) {
-    kdDebug(9000) << "No KDevelop view-handler components. Setting to default (stacked KDockWidgets)..." << endl;
-    // create a default dockwidget (required as main widget)
-    QWidget* pW = new QWidget( m_pKDevelopGUI, "default");
-    m_pKDevelopGUI->embedWidget( pW, KDevComponent::AreaOfDocumentViews, "default view", 0L );
-    QObject::connect( m_pKDevelopGUI, SIGNAL(addView(QWidget*)), m_pKDevelopGUI, SLOT(stackView(QWidget*)) );
-  }
-
   //
   // second, load all other components (and let them create their GUI)
   //
