@@ -120,6 +120,17 @@ GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const Q
     setPixmap(0, SmallIcon("tar"));
 }
 
+GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
+{
+    if (ext == "cpp" || ext == "cc" || ext == "c" || ext == "C" || ext == "c++" || ext == "cxx")
+        return Sources;
+    else if (ext == "hpp" || ext == "h" || ext == "hxx" || ext == "hh" || ext == "h++" || ext == "H")
+        return Headers;
+    else if (ext == "ui")
+        return Forms;
+    else
+        return NoType;
+}
 
 /**
  * Class FileItem
@@ -1000,7 +1011,7 @@ void TrollProjectWidget::addFile(const QString &fileName)
 {
   if (!m_shownSubproject)
     return;
-  QStringList splitFile = QStringList::split('.',fileName);
+/*  QStringList splitFile = QStringList::split('.',fileName);
   QString ext = splitFile[splitFile.count()-1];
   splitFile = QStringList::split('/',fileName);
   QString fileWithNoSlash = splitFile[splitFile.count()-1];
@@ -1012,7 +1023,14 @@ void TrollProjectWidget::addFile(const QString &fileName)
   else if (QString("ui").find(ext)>-1)
     addFileToCurrentSubProject(GroupItem::Forms,fileWithNoSlash);
   else
-    addFileToCurrentSubProject(GroupItem::NoType,fileWithNoSlash);
+    addFileToCurrentSubProject(GroupItem::NoType,fileWithNoSlash);*/
+
+  QFileInfo info(fileName);
+  QString ext = info.extension(false).simplifyWhiteSpace();
+  QString noPathFileName = info.fileName();
+
+  addFileToCurrentSubProject(GroupItem::groupTypeForExtension(ext), noPathFileName);
+
   updateProjectFile(m_shownSubproject);
   slotOverviewSelectionChanged(m_shownSubproject);
   emitAddedFile ( fileName );
@@ -1052,7 +1070,7 @@ void TrollProjectWidget::slotAddFiles()
 void TrollProjectWidget::slotNewFile()
 {
     KDevCreateFile * createFileSupport = m_part->createFileSupport();
-    if (createFileSupport) 
+    if (createFileSupport)
     {
         KDevCreateFile::CreatedFile crFile =
             createFileSupport->createNewFile(QString::null, projectDirectory()+m_shownSubproject->path.mid(projectDirectory().length()));
@@ -1199,7 +1217,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         if (r == idInsNewFile)
         {
             KDevCreateFile * createFileSupport = m_part->createFileSupport();
-            if (createFileSupport) 
+            if (createFileSupport)
             {
                 QString fcext;
                 switch (titem->groupType) {
@@ -1210,13 +1228,13 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     fcext = "h";
                     break;
                 case GroupItem::Forms:
-                    fcext = "ui";
+                    fcext = "ui-widget";
                     break;
-                default: 
+                default:
                     fcext = QString::null;
-                } 
-                KDevCreateFile::CreatedFile crFile = 
-                    createFileSupport->createNewFile(fcext,  m_shownSubproject->path.mid(projectDirectory().length()));
+                }
+                KDevCreateFile::CreatedFile crFile =
+                    createFileSupport->createNewFile(fcext, projectDirectory()+m_shownSubproject->path.mid(projectDirectory().length()));
             } else {
                 bool ok = FALSE;
                 QString filename = QInputDialog::getText(
@@ -1309,7 +1327,9 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
                     list << DomUtil::Pair(srcfile_relpath,uifile_relpath);
                     DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
-                    newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
+//                    newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
+                    newFileNames[i] = projectDirectory() + newFileNames[i];
+                    qWarning("new file: %s", newFileNames[i].latin1());
                 }
                 m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
                                                                 "subclass","sourcefile", "uifile");

@@ -126,6 +126,8 @@ class GroupItem : public ProjectItem
 public:
     enum GroupType {NoType, Sources, Headers, Forms };
 
+    static GroupType groupTypeForExtension(const QString &ext);
+
     GroupItem(QListView *lv, GroupType type, const QString &text,const QString &scopeString);
 
     QPtrList<FileItem> files;
