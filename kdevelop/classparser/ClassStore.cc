@@ -184,6 +184,7 @@ QList<CClassTreeNode> *CClassStore::asForest()
   CClassTreeNode *childNode;
   CClassTreeNode *parentNode;
   QDict<CClassTreeNode> dict;
+  QDictIterator<CClassTreeNode> di(dict);
   QList<CClassTreeNode> *retVal = new QList<CClassTreeNode>;
 
   // Iterate over all parsed classes.
@@ -236,6 +237,15 @@ QList<CClassTreeNode> *CClassStore::asForest()
         parentNode->addChild( childNode );
       }
     }
+  }
+
+  for( di.toFirst();
+       di.current();
+       ++di );
+  {
+    // All classes not found in the system are rootnodes.
+    if( !di.current()->isInSystem )
+      retVal->append( di.current() );
   }
 
   return retVal;
