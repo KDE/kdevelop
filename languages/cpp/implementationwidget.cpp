@@ -135,7 +135,7 @@ ClassDom ImplementationWidget::selectedClass()
 
 bool ImplementationWidget::createClass()
 {
-    QString template_h = "#include \"$BASEINCLUDE$\"\n\nclass $CLASSNAME$: public $BASECLASSNAME$ {\nQ_OBJECT\npublic:\n    $CLASSNAME$(QWidget *parent = 0, const char *name = 0);\n};\n";
+    QString template_h = "#ifndef $DEFTEXT$_H\n#define $DEFTEXT$_H\n\n#include \"$BASEINCLUDE$\"\n\nclass $CLASSNAME$: public $BASECLASSNAME$ {\nQ_OBJECT\npublic:\n    $CLASSNAME$(QWidget *parent = 0, const char *name = 0);\n};\n\n#endif\n";
     QString template_cpp = "#include \"$CLASSINCLUDE$\"\n\n$CLASSNAME$::$CLASSNAME$(QWidget *parent, const char *name)\n    :$BASECLASSNAME$(parent, name)\n{\n}\n";
     if (m_part->project()->options() == KDevProject::UsesAutotoolsBuildSystem)
         template_cpp += "\n#include \"$MOCINCLUDE$\"\n";
@@ -144,6 +144,7 @@ bool ImplementationWidget::createClass()
     template_h.replace(QRegExp("\\$BASEINCLUDE\\$"), formInfo.baseName()+".h");
     template_h.replace(QRegExp("\\$CLASSNAME\\$"), classNameEdit->text());
     template_h.replace(QRegExp("\\$BASECLASSNAME\\$"), m_baseClassName);
+    template_h.replace(QRegExp("\\$DEFTEXT\\$"), formInfo.baseName().upper());
     
     template_cpp.replace(QRegExp("\\$CLASSINCLUDE\\$"), fileNameEdit->text() + ".h");
     template_cpp.replace(QRegExp("\\$CLASSNAME\\$"), classNameEdit->text());
