@@ -168,7 +168,8 @@ public:
     QString getprojectChangelogMultilineEditText();
     void setprojectChangelogMultilineEditText(QString text);
 
-
+    QString getSourceName();
+    
 private:
     void loadSettings();
     void storeSettings();

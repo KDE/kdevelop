@@ -79,8 +79,7 @@ QString packageBase::getAppChangelog() {
 }
 
 QString packageBase::getAppSource() {
-    return (m_dlg->getappNameFormatLineEditText() + "-" + m_dlg->getversionLineEditText() +
-            ((m_dlg->getcustomProjectCheckBoxState() && m_dlg->getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz"));
+    return m_dlg->getSourceName();
 }
 
 QStringList packageBase::getAppFileList() {

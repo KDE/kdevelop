@@ -31,14 +31,12 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
     m_action->setStatusText(i18n("Make Source and Binary Distribution"));
     m_action->setWhatsThis(i18n("Distribution and Publishing:\n\n"));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
-
+    
     m_dialog = new DistpartDialog(this);
 
-    // set up package
-    //KURL projectURL;  // we need to get this from the base project
+    // Package types
     RpmPackage = new SpecSupport(this);
-//    LsmPackage = new LsmSupport(this);
-    //thePackage->loadFile(projectURL);
+    //LsmPackage = new LsmSupport(this);
 }
 
 
@@ -46,8 +44,7 @@ DistpartPart::~DistpartPart() {
     kdDebug(9007) << "DistpartPart::~DistpartPart()" << endl;
     delete m_dialog;
     delete RpmPackage;
-
-//    delete LsmPackage;
+    //delete LsmPackage;
 }
 
 DistpartDialog* DistpartPart::getDlg() {
@@ -61,4 +58,5 @@ void DistpartPart::show() {
 void DistpartPart::hide() {
     m_dialog->hide();
 }
+
 #include "distpart_part.moc"

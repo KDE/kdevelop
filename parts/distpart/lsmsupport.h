@@ -3,7 +3,9 @@
 
 #include <qwidget.h>
 #include "packagebase.h"
+#include "distpart_part.h"
 
+class QLabel;
 
 class LsmSupport : public packageBase
 {
@@ -13,6 +15,9 @@ public:
     LsmSupport(DistpartPart * m_part);
     ~LsmSupport();
 
+private:
+    DistpartPart * m_part;
+    QLabel * label;
 };
 
 #endif

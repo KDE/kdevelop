@@ -92,11 +92,15 @@ void DistpartDialog::slothelp_PushButtonPressed() {
 //    QPushButton* createSrcArchPushButton;
 void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
     QString dist = (getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? "make dist-bzip2" : "make dist";
+
     QString filename = getappNameFormatLineEditText() +
 		       "-" +
 		       getversionLineEditText() +
 		       ((getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz");
-    m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && " + dist);
+    QString command = "cd " + dir + " && " + dist;
+    if (getcustomProjectCheckBoxState())
+	command += " && mv " + filename + " " + getSourceName();
+    m_part->makeFrontend()->queueCommand(dir,command);
 }
 
 //    QPushButton* resetSrcPushButton;
@@ -386,6 +390,14 @@ QString DistpartDialog::getprojectChangelogMultilineEditText() {
 
 void DistpartDialog::setprojectChangelogMultilineEditText(QString text) {
     projectChangelogMultilineEdit->setText(text);
+}
+
+QString DistpartDialog::getSourceName() {
+    QString name = (getcustomProjectCheckBoxState()) ? getarchNameFormatLineEditText() : "%n-%v";
+    name += (getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz";
+    return name.replace(QRegExp("%n"),getappNameFormatLineEditText())
+	.replace(QRegExp("%v"),getversionLineEditText())
+	.replace(QRegExp("%d"),QDate::currentDate().toString("yyyyMMdd"));
 }
 
 void DistpartDialog::loadSettings() {

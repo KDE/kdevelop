@@ -13,6 +13,7 @@
 #include <qvbox.h>
 #include <qgroupbox.h>
 #include <qtabwidget.h>
+#include <qmessagebox.h>
 
 SpecSupport::SpecSupport(DistpartPart * part) : packageBase(part,"Rpm") {
 
@@ -43,7 +44,16 @@ SpecSupport::~SpecSupport() {
 //    QPushButton* buildAllPushButton;
 void SpecSupport::slotbuildAllPushButtonPressed() {
     QMap<QString,QString>::Iterator it;
-    m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && cp " + getAppSource() + " " + *(map.find("_sourcedir")));
+    QFile file1(dir + "/" + getAppSource());
+    QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
+    if (!file2.exists()) {
+	if (!file1.exists()) {
+	    QMessageBox::critical(this,"Error","You need to create a source archive first!");
+	    return;
+	}
+	else
+	    m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && cp " + getAppSource() + " " + *(map.find("_sourcedir")));
+    }
     m_part->makeFrontend()->queueCommand(dir,"cd " + (((it = map.find("_specdir")) != map.end()) ? (*it) : dir) + " && rpmbuild -ba " + m_part->project()->projectName() + ".spec");
 }
 
@@ -168,7 +178,17 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
 //    QPushButton* srcPackagePushButton;
 void SpecSupport::slotsrcPackagePushButtonPressed() {
     QMap<QString,QString>::Iterator it;
-    m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && cp " + getAppSource() + " " + *(map.find("_sourcedir")));
+    
+    QFile file1(dir + "/" + getAppSource());
+    QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
+    if (!file2.exists()) {
+	if (!file1.exists()) {
+	    QMessageBox::critical(this,"Error","You need to create a source archive first!");
+	    return;
+	}
+	else
+	    m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && cp " + getAppSource() + " " + *(map.find("_sourcedir")));
+    }
     m_part->makeFrontend()->queueCommand(dir,"cd " + (((it = map.find("_specdir")) != map.end()) ? (*it) : dir) + " && rpmbuild -bs " + m_part->project()->projectName() + ".spec");
 }
 
