@@ -27,6 +27,7 @@
 #include "subprojectoptionsdlg.h"
 #include "targetoptionsdlg.h"
 #include "addtargetdlg.h"
+#include "addservicedlg.h"
 #include "addfiledlg.h"
 #include "removefiledlg.h"
 #include "autoprojectpart.h"
@@ -332,6 +333,7 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         KPopupMenu pop(i18n("Subproject"));
         int idOptions = pop.insertItem(i18n("Options..."));
         int idAddTarget = pop.insertItem(i18n("Add target..."));
+        int idAddService = pop.insertItem(i18n("Add service..."));
         int idBuild = pop.insertItem(i18n("Build"));
         int r = pop.exec(p);
         if (r == idOptions) {
@@ -340,6 +342,12 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         else if (r == idAddTarget) {
             AddTargetDialog dlg(this, spitem, this, "add target dialog");
             // Update the details view if a target was added
+            if (dlg.exec() && activeSubproject == spitem)
+                slotItemExecuted(spitem);
+        }
+        else if (r == idAddService) {
+            AddServiceDialog dlg(this, spitem, this, "add service dialog");
+            // Update the details view if a service was added
             if (dlg.exec() && activeSubproject == spitem)
                 slotItemExecuted(spitem);
         }

@@ -1,3 +1,9 @@
+2001-06-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* New add service dialog in project management
+	  Not quite ready
+	* Bug fixes in sub project and target options dialog
+
 2001-06-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* New sub project and target options dialogs.

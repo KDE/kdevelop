@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>416</width>
+            <width>412</width>
             <height>474</height>
         </rect>
     </property>
@@ -104,10 +104,6 @@
                                     <cstring>cflags_button</cstring>
                                 </property>
                                 <property stdset="1">
-                                    <name>text</name>
-                                    <string>...</string>
-                                </property>
-                                <property stdset="1">
                                     <name>sizePolicy</name>
                                     <sizepolicy>
                                         <hsizetype>0</hsizetype>
@@ -120,6 +116,10 @@
                                         <width>30</width>
                                         <height>32767</height>
                                     </size>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>...</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -189,10 +189,6 @@
                                     <cstring>cxxflags_button</cstring>
                                 </property>
                                 <property stdset="1">
-                                    <name>text</name>
-                                    <string>...</string>
-                                </property>
-                                <property stdset="1">
                                     <name>sizePolicy</name>
                                     <sizepolicy>
                                         <hsizetype>1</hsizetype>
@@ -205,6 +201,10 @@
                                         <width>30</width>
                                         <height>32767</height>
                                     </size>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>...</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -274,10 +274,6 @@
                                     <cstring>fflags_button</cstring>
                                 </property>
                                 <property stdset="1">
-                                    <name>text</name>
-                                    <string>...</string>
-                                </property>
-                                <property stdset="1">
                                     <name>sizePolicy</name>
                                     <sizepolicy>
                                         <hsizetype>1</hsizetype>
@@ -290,6 +286,10 @@
                                         <width>30</width>
                                         <height>32767</height>
                                     </size>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>...</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -938,4 +938,26 @@
     <slot access="protected">outsideRemoveClicked()</slot>
     <slot access="protected">removePrefixClicked()</slot>
 </connections>
+<tabstops>
+    <tabstop>subprojectoptions_tabwidget</tabstop>
+    <tabstop>cflags_edit</tabstop>
+    <tabstop>cflags_button</tabstop>
+    <tabstop>cxxflags_edit</tabstop>
+    <tabstop>cxxflags_button</tabstop>
+    <tabstop>fflags_edit</tabstop>
+    <tabstop>fflags_button</tabstop>
+    <tabstop>insideinc_listview</tabstop>
+    <tabstop>insidemoveup_button</tabstop>
+    <tabstop>insidemovedown_button</tabstop>
+    <tabstop>outsideinc_listview</tabstop>
+    <tabstop>outsideadd_button</tabstop>
+    <tabstop>outsideremove_button</tabstop>
+    <tabstop>outsidemoveup_button</tabstop>
+    <tabstop>outsidemovedown_button</tabstop>
+    <tabstop>prefix_listview</tabstop>
+    <tabstop>addprefix_button</tabstop>
+    <tabstop>removeprefix_button</tabstop>
+    <tabstop>okbutton</tabstop>
+    <tabstop>cancelbutton</tabstop>
+</tabstops>
 </UI>

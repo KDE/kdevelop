@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>472</width>
+            <width>469</width>
             <height>474</height>
         </rect>
     </property>
@@ -697,4 +697,23 @@
     <slot access="protected">outsideMoveUpClicked()</slot>
     <slot access="protected">outsideRemoveClicked()</slot>
 </connections>
+<tabstops>
+    <tabstop>tabWidget</tabstop>
+    <tabstop>allstatic_box</tabstop>
+    <tabstop>avoidversion_box</tabstop>
+    <tabstop>module_box</tabstop>
+    <tabstop>noundefined_box</tabstop>
+    <tabstop>ldflagsother_edit</tabstop>
+    <tabstop>dependencies_edit</tabstop>
+    <tabstop>insidelib_listview</tabstop>
+    <tabstop>insidemoveup_button</tabstop>
+    <tabstop>insidemovedown_button</tabstop>
+    <tabstop>outsidelib_listview</tabstop>
+    <tabstop>outsideadd_button</tabstop>
+    <tabstop>outsideremove_button</tabstop>
+    <tabstop>outsidemoveup_button</tabstop>
+    <tabstop>outsidemovedown_button</tabstop>
+    <tabstop>okbutton</tabstop>
+    <tabstop>cancelbutton</tabstop>
+</tabstops>
 </UI>

@@ -244,6 +244,7 @@ void TargetOptionsDialog::outsideRemoveClicked()
 void TargetOptionsDialog::accept()
 {
     storeConfig();
+    QDialog::accept();
 }
 
 #include "targetoptionsdlg.moc"

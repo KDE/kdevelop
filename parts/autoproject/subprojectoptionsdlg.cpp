@@ -277,6 +277,7 @@ void SubprojectOptionsDialog::removePrefixClicked()
 void SubprojectOptionsDialog::accept()
 {
     storeConfig();
+    QDialog::accept();
 }
 
 #include "subprojectoptionsdlg.moc"

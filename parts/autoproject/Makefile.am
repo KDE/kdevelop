@@ -14,6 +14,8 @@ libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \
 				subprojectoptionsdlgbase.ui \
 				targetoptionsdlg.cpp \
 				targetoptionsdlgbase.ui \
+				addservicedlg.cpp \
+				addservicedlgbase.ui \
 				addtargetdlg.cpp \
 				addfiledlg.cpp \
 				removefiledlg.cpp \
