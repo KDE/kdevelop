@@ -4,11 +4,13 @@ use File::Copy;
 $templatedir = _;
 $kde_icondir = _;
 
-$homedirectory = $ENV{HOME};
-$local_icondir = $homedirectory . "/.kde/share/icons/";
-$local_datadir = $homedirectory . "/.kde/share/apps/";
-$kde_miniicondir = $kde_icondir . "/mini";
-$local_miniicondir = $local_icondir ."/mini";
+my %changings;
+
+my $homedirectory = $ENV{HOME};
+my $local_icondir = $homedirectory . "/.kde/share/icons/";
+my $local_datadir = $homedirectory . "/.kde/share/apps/";
+my $kde_miniicondir = $kde_icondir . "/mini";
+my $local_miniicondir = $local_icondir ."/mini";
 
 printflush (STDOUT,"Starting with installation\n");
 
@@ -38,6 +40,9 @@ chdir ($processes{DIRECTORY});
 $date = `date`;
 @time = localtime();
 $year = 1900 + $time[5];
+
+setupDefaultChangings();
+
 printflush (STDOUT,"change directory...\n");
 chdir ($overDirectory);
 
@@ -59,33 +64,71 @@ elsif ($processes{APPLICATION} eq "customproj") {
 
 exit;
 
+# this subroutine sets up the changing hash
+sub setupDefaultChangings
+{
+    $changings{"|AUTHOR|"}=$processes{AUTHOR};
+    $changings{"|EMAIL|"}=$processes{EMAIL};
+    $changings{"|VERSION|"}=$processes{VERSION};
+    $changings{"|DATE|"}=$date;
+    $changings{"|YEAR|"}=$year;
+    $changings{"|SUBDIR|"}= $nameLittle;
+    $changings{"|PRJNAME|"}=$name;
+    $changings{"|NAME|"}= $name;
+    $changings{"|NAMELITTLE|"}= $nameLittle;
+    $changings{"|NAMEBIG|"}= $nameBig;
+
+}
 
 #the subroutine for replacing words in files
-sub replaceOldFile {
+sub replaceValuesInFile {
 
-  my ( $word, $replace, $oldfile ) = @_;
+  my $hashref = shift;
+  my $oldfile = shift;
+  my $newfilename = shift || "";
 
-  $where = 0;
-  $wordlength = length($word);
-  $newfile = "newfile.txt";
-  open (INPUT,$oldfile) || die "can not open file: $oldfile";
+  my $where = 0;
+  my $wordlength = 0;
+  my $word = "";
+  my $replace = "";
+  my $newfile = $overDirectory . "/newfile.txt";
+
+  open (INPUT,$oldfile) || die "cannot open file: $oldfile";
   open (OUTPUT,">$newfile");
-  while ( defined ($line = <INPUT> )) {
-    while ($where != -1) {
-      $where = index($line,$word,$where);
-      if ($where != -1) {
-	substr($line,$where,$wordlength) = $replace;
-	++$where;
+
+  # setup filename replacement...
+  $hashref->{"|FILENAME|"}=$oldfile;
+  $hashref->{"|FILENAME|"}=$newfilename if ($newfilename);
+
+  while ( defined ($line = <INPUT> ))
+  {
+    # scan the hash
+    foreach $word (keys %$hashref)
+    {
+
+      $where=0;
+      $wordlength = length($word);
+      $replace="";
+      $replace=$hashref->{$word} if ($hashref->{$word});
+
+      while ($where != -1)
+      {
+        $where = index($line,$word,$where);
+        if ($where != -1)
+        {
+	 substr($line,$where,$wordlength) = $replace;
+	 ++$where;
+        }
       }
     }
+
     print OUTPUT $line;
-    $where = 0;
   }
   close (INPUT);
   close (OUTPUT);
   unlink ($oldfile);
-  rename ("newfile.txt",$oldfile);
-  unlink ("newfile.txt");
+  rename ($newfile,$oldfile);
+  unlink ($newfile);
 }
 
 
@@ -98,12 +141,15 @@ sub unpackFiles {
     system ("gunzip $tarfile.gz");
     printflush (STDOUT, "untar file...\n");
     system ("tar -xf $tarfile");
-    unlink $file;
+    unlink $tarfile;
 
 }
 
 
 sub condCopyTemplateFiles {
+
+    chdir ($underDirectory);
+    mkdir ("templates", 0777);
 
     #copying the templates in the templatedirectoy
     if ($processes{CPP} eq "no" and $processes{HEADER} eq "no") {}
@@ -137,13 +183,7 @@ sub condCopyGNUFiles {
     	copy ("TODO_template",      "$overDirectory/TODO"     );
         chdir($overDirectory);
         # replaced AUTHOR and EMAIL
-        $word = "|AUTHOR|";
-        $replace = $processes{AUTHOR};
-        replaceOldFile($word, $replace, "AUTHORS");
-        $word = "|EMAIL|";
-        $replace = $processes{EMAIL};
-        replaceOldFile($word, $replace, "AUTHORS");
-
+        replaceValuesInFile(\%changings, "AUTHORS");
     }
 }
 
@@ -157,11 +197,7 @@ sub condCopyLsmFile {
 	chdir ($templatedir);
 	copy ("lsm_template", "$overDirectory/$nameLittle.lsm");
 	chdir ($overDirectory);
-	replaceOldFile("|PRJNAME|", $name,               "$nameLittle.lsm");
-	replaceOldFile("|AUTHOR|",       $processes{AUTHOR},  "$nameLittle.lsm");
-	replaceOldFile("|EMAIL|",        $processes{EMAIL},   "$nameLittle.lsm");
-	replaceOldFile("|VERSION|",      $processes{VERSION}, "$nameLittle.lsm");
-
+        replaceValuesInFile(\%changings, "$nameLittle.lsm");
     }
 }
 
@@ -175,24 +211,20 @@ sub condCopyUserDocFiles {
 	chdir ($templatedir);
 	copy ("handbook_en_template", "$underDirectory/docs/en/index.sgml");
 	chdir ("$underDirectory/docs/en");
-	$word = "|PRJNAME|";
-	$replace = $name;
-	replaceOldFile("|PRJNAME|", $name,               "index.sgml");
-	replaceOldFile("|AUTHOR|",       $processes{AUTHOR},  "index.sgml");
-	replaceOldFile("|EMAIL|",        $processes{EMAIL},   "index.sgml");
-	replaceOldFile("|VERSION|",      $processes{VERSION}, "index.sgml");
-	replaceOldFile("|DATE|",         $date,               "index.sgml");
-	replaceOldFile("|YEAR|",         $year,               "index.sgml");
+        replaceValuesInFile(\%changings, "index.sgml");
     }
   
     #if USER-Docs was not chosen in kAppWizard
     if ($processes{USER} eq "no") {
-
-	chdir ($underDirectory);
-	replaceOldFile("SUBDIRS = docs", "", "Makefile.am");
+            my %emptyIT = (
+		"$nameLittle/docs/Makefile" => "",
+		"$nameLittle/docs/en/Makefile" => "",
+#                        "SUBDIRS = docs" => ""		do you really need this???
+                        );
+#	chdir ($underDirectory);
+#	replaceValuesInFile(\%emptyIT, "Makefile.am");
 	chdir ($overDirectory);
-	replaceOldFile("$nameLittle/docs/Makefile",    "", "configure.in");
-	replaceOldFile("$nameLittle/docs/en/Makefile", "", "configure.in");
+	replaceValuesInFile(\%emptyIT, "configure.in");
 
     }
 }
@@ -207,8 +239,7 @@ sub condCopyKdelnkFile {
 	chdir ($templatedir);
 	copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
 	chdir ($underDirectory);
-	replaceOldFile("|PRJNAME|", $nameLittle, "$nameLittle.kdelnk");
-
+    	replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
     }
 }
 
@@ -228,10 +259,10 @@ sub condCopyProgIcons {
     
     #if a new ProgIcon was chosen in kAppWizard
     else {
-	$icon = $kde_icondir . $processes{PROGICON};
+	$icon = $kde_icondir."/".$processes{PROGICON};
 	$copying = copy ($icon, "$underDirectory/$nameLittle.xpm");
 	if ($copying)  {
-	    $icon = $local_icondir . $processes{PROGICON};
+	    $icon = $local_icondir."/".$processes{PROGICON};
 	    copy ($icon, "$underDirectory/$nameLittle.xpm");
 	}
 	chdir ($underDirectory);
@@ -251,10 +282,10 @@ sub condCopyProgIcons {
     
     #if a new MiniIcon was chosen in kAppWizard
     else {
-	$icon = $kde_miniicondir . $processes{MINIICON};
+	$icon = $kde_miniicondir."/".$processes{MINIICON};
 	$copying = copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
 	if ($copying)  {
-	    $icon = $local_miniicondir . $processes{MINIICON};
+	    $icon = $local_miniicondir."/".$processes{MINIICON};
 	    copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
 	}
 	chdir ($underDirectory);
@@ -285,13 +316,9 @@ sub processCppTemplate {
   
     copy ("$local_datadir/kdevelop/cpp", $underDirectory);
     chdir ($underDirectory);
-    replaceOldFile("|FILENAME|", $file,              "cpp");
-    replaceOldFile("|AUTHOR|",   $processes{AUTHOR}, "cpp");
-    replaceOldFile("|EMAIL|",    $processes{EMAIL},  "cpp");
-    replaceOldFile("|DATE|",     $date,              "cpp");
-    replaceOldFile("|YEAR|",     $year,              "cpp");
-    
-    open (INPUT,"$file") || die "can not open file $file: $!";
+    replaceValuesInFile(\%changings, "cpp", $file);
+
+    open (INPUT,"$file") || die "cannot open file: $file; $!";
     open (OUTPUT,">>cpp");
     while ( defined ($line = <INPUT> )) {
 	print OUTPUT $line;
@@ -310,13 +337,9 @@ sub processHeaderTemplate {
   
     copy ("$local_datadir/kdevelop/header", $underDirectory);
     chdir ($underDirectory);
-    replaceOldFile("|FILENAME|", $file,              "header");
-    replaceOldFile("|AUTHOR|",   $processes{AUTHOR}, "header");
-    replaceOldFile("|EMAIL|",    $processes{EMAIL},  "header");
-    replaceOldFile("|DATE|",     $date,              "header");
-    replaceOldFile("|YEAR|",     $year,              "header");
-    
-    open (INPUT,"$file") || die "can not open file $file: $!";
+    replaceValuesInFile(\%changings, "header", $file);
+
+    open (INPUT,"$file") || die "cannot open file: $file; $!";
     open (OUTPUT,">>header");
     while ( defined ($line = <INPUT> )) {
 	print OUTPUT $line;
@@ -339,59 +362,45 @@ sub changeNormalApp {
     rename ("skel", $nameLittle);
     
     #create the templatedirectory
-    chdir ($underDirectory);
-    mkdir ("templates", 0777);
     condCopyTemplateFiles();
 
+    #Replacements in overDirectory  
+    chdir ($overDirectory);
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "configure.in");
+
+#    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
+#		   "Makefile.am");  			not needed anymore!!
+#    							the template should have
+#							SUBDIRS = |NAMELITTLE|.po
+#							but in this case it's made
+#							by the binary itself
+#    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
+#		   "configure.in");    now fixed entry in template of normal.tar.gz
+
+    #Replacements and name changing in underDirectory
     chdir ($underDirectory);
-    rename ("kbase.cpp",     "skel.cpp");
-    rename ("kbase.h",       "skel.h");
+
+    rename ("kbase.cpp",     $nameLittle.".cpp");
+    rename ("kbase.h",       $nameLittle.".h");
     rename ("kbasedoc.cpp",  $nameLittle."doc.cpp");
     rename ("kbasedoc.h",    $nameLittle."doc.h");
     rename ("kbaseview.cpp", $nameLittle."view.cpp");
     rename ("kbaseview.h",   $nameLittle."view.h");
-    
-    #replace skel with the projectname in different files
-    chdir ($overDirectory);
-    replaceOldFile("SUBDIRS = skel", "SUBDIRS = $nameLittle.po", 
-		   "Makefile.am");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "configure.in");
-    replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
-    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
-		   "configure.in");
-    
-    chdir ($underDirectory);
-    replaceOldFile("|NAMELITTLE|",   $nameLittle,          "Makefile.am");
-    replaceOldFile("|NAMELITTLE|",  $nameLittle,          "skel.cpp");
-    replaceOldFile("|NAMELITTLE|",  $nameLittle,          "skel.h");
-    replaceOldFile("|NAMELITTLE|",  $nameLittle,          "main.cpp");
 
-    replaceOldFile("|NAME|",  $name,                "skel.cpp");
-    replaceOldFile("|NAME|",  $name,                "skel.h");
-    replaceOldFile("|NAME|",  $name,                "main.cpp");
-  
-    replaceOldFile("|AUTHOR|", $processes{AUTHOR},   "skel.cpp");
-    replaceOldFile("|NAMEBIG|",  $nameBig,             "skel.h");
-  
-    #renamed skel with the projectname
-    rename ("skel.cpp", $nameLittle.".cpp");
-    rename ("skel.h",   $nameLittle.".h");
-    
-    chdir ($underDirectory);
-    replaceOldFile("|NAME|",  $name,                $nameLittle."doc.cpp");
-    replaceOldFile("|NAME|",  $name,                $nameLittle."doc.h");
-    replaceOldFile("|NAME|",  $name,                $nameLittle."view.cpp");
-    replaceOldFile("|NAME|",  $name,                $nameLittle."view.h");
-    replaceOldFile("|NAME|",  $name,                "resource.h");
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "main.cpp");
+    replaceValuesInFile(\%changings, $nameLittle.".cpp");
+    replaceValuesInFile(\%changings, $nameLittle.".h");
+    replaceValuesInFile(\%changings, $nameLittle."doc.cpp");
+    replaceValuesInFile(\%changings, $nameLittle."view.cpp");
+    replaceValuesInFile(\%changings, $nameLittle."doc.h");
+    replaceValuesInFile(\%changings, $nameLittle."view.h");
+    replaceValuesInFile(\%changings, "resource.h");
 
-    replaceOldFile("|NAMEBIG|",  $nameBig,             $nameLittle."doc.h");
-    replaceOldFile("|NAMEBIG|",  $nameBig,             $nameLittle."view.h");
-    replaceOldFile("|NAMELITTLE|",  $nameLittle,          $nameLittle."doc.cpp");
-    replaceOldFile("|NAMELITTLE|",  $nameLittle,          $nameLittle."view.cpp");
-    replaceOldFile("|NAMELITTLE|",  $nameLittle,          $nameLittle."view.h");
-
+    #Replacements in documentation directory
     chdir ($underDirectory."/docs/en");
-    replaceOldFile("|NAMELITTLE|",   $nameLittle,          "Makefile.am");
+    replaceValuesInFile(\%changings, "Makefile.am");
 
     condCopyGNUFiles();
     condCopyLsmFile();
@@ -428,38 +437,35 @@ sub changeMiniApp {
     rename ("skel", $nameLittle);
     
     #create the templatedirectory
-    chdir ($underDirectory);
-    mkdir ("templates", 0777);
     condCopyTemplateFiles();
-  
-    #replaced skel with the projectname in different files
+
+    #Replacements in overDirectory  
     chdir ($overDirectory);
-    replaceOldFile("SUBDIRS = skel", "SUBDIRS = $nameLittle.po", 
-		   "Makefile.am");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "configure.in");
-    replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
-    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
-		   "configure.in");
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "configure.in");
 
- 
+#    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
+#		   "Makefile.am");  			not needed anymore!!
+#    							the template should have
+#							SUBDIRS = |NAMELITTLE|.po
+#							but in this case it's made
+#							by the binary itself
+#    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
+#		   "configure.in");    now fixed entry in template of mini.tar.gz
+
+    #Replacements and name changing in underDirectory
     chdir ($underDirectory);
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "skel.cpp");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "main.cpp");
 
-    replaceOldFile("|NAME|",    $name,               "skel.cpp");
-    replaceOldFile("|NAME|",    $name,               "skel.h");
-    replaceOldFile("|NAME|",    $name,               "main.cpp");
-
-    replaceOldFile("|AUTHOR|",  $processes{AUTHOR},  "skel.cpp");
-    replaceOldFile("|NAMEBIG|",    $nameBig,            "skel.h");
-   
-    #renamed skel with the projectname
     rename ("skel.cpp", $nameLittle.".cpp");
     rename ("skel.h",   $nameLittle.".h");
 
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "$nameLittle.cpp");
+    replaceValuesInFile(\%changings, "$nameLittle.h");
+    replaceValuesInFile(\%changings, "main.cpp");
+
     chdir ($underDirectory."/docs/en");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
+    replaceValuesInFile(\%changings, "Makefile.am");
 
     condCopyGNUFiles();
     condCopyLsmFile();
@@ -475,7 +481,7 @@ sub changeMiniApp {
     }
 
     condCopyKdelnkFile();
-    condCopyProgIcon();
+    condCopyProgIcons();
     condCreateApiDoc();
     
 }
@@ -491,33 +497,26 @@ sub changeTerminalApp {
     rename ("skel", $nameLittle);
     
     #create the templatedirectory
-    chdir ($underDirectory);
-    mkdir ("templates", 0777);
     condCopyTemplateFiles();
     
     #replaced skel with the projectname in different files
     chdir ($overDirectory);
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "configure.in");
-    replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
-    
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "configure.in");
+
     chdir ($underDirectory);
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "main.cpp");
-    
-    #replaced Skel with the projectname in different files
-    replaceOldFile("|NAME|",    $name,               "main.cpp");
-    
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "main.cpp");
+
     chdir ($underDirectory . "/docs/en");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
-    
+    replaceValuesInFile(\%changings, "Makefile.am");
+
     condCopyGNUFiles();
     condCopyLsmFile();
     condCopyUserDocFiles();
     
     if ($processes{CPP} eq "yes") {
         processCppTemplate("main.cpp");
-#	processCppTemplate("$nameLittle.cpp");
     }
     
     condCopyKdelnkFile();
@@ -537,58 +536,45 @@ sub changeQtApp {
     rename ("skel", $nameLittle);
     
     #create the templatedirectory
-    chdir ($underDirectory);
-    mkdir ("templates", 0777);
     condCopyTemplateFiles();
 
+    #Replacements in overDirectory  
+    chdir ($overDirectory);
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "configure.in");
+
+    #Replacements and name changing in underDirectory
     chdir ($underDirectory);
-    rename ("bank.cpp",     "skel.cpp");
-    rename ("bank.h",       "skel.h");
+
+    rename ("bank.cpp",     $nameLittle.".cpp");
+    rename ("bank.h",       $nameLittle.".h");
     rename ("bankdoc.cpp",  $nameLittle."doc.cpp");
     rename ("bankdoc.h",    $nameLittle."doc.h");
     rename ("bankview.cpp", $nameLittle."view.cpp");
     rename ("bankview.h",   $nameLittle."view.h");
     
-    #replaced skel with the projectname in different files
-    chdir ($overDirectory);
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "configure.in");
-    replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "main.cpp");
+    replaceValuesInFile(\%changings, "$nameLittle.cpp");
+    replaceValuesInFile(\%changings, "$nameLittle.h");
+    replaceValuesInFile(\%changings, "${nameLittle}doc.cpp");
+    replaceValuesInFile(\%changings, "${nameLittle}view.cpp");
+    replaceValuesInFile(\%changings, "${nameLittle}doc.h");
+    replaceValuesInFile(\%changings, "${nameLittle}view.h");
+    replaceValuesInFile(\%changings, "resource.h");
 
-    chdir ($underDirectory);
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "main.cpp");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "skel.cpp");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "skel.h");
-
-    replaceOldFile("|NAME|",    $name."App",         "skel.cpp");
-    replaceOldFile("|NAME|",    $name."App",         "skel.h");
-    replaceOldFile($name."AppDoc",  $name."Doc",   "skel.cpp");
-    replaceOldFile($name."AppDoc",  $name."Doc",   "skel.h");
-    replaceOldFile($name."AppView", $name."View",  "skel.cpp");
-    replaceOldFile($name."AppView", $name."View",  "skel.h");
-    replaceOldFile("|AUTHOR|",  $processes{AUTHOR},  "skel.cpp");
-    replaceOldFile("|NAMEBIG|",    $nameBig,            "skel.h");
-
-    #renamed bank with the projectname
-    rename ("skel.cpp", $nameLittle.".cpp");
-    rename ("skel.h",   $nameLittle.".h");
-
-    chdir ($underDirectory);
-    replaceOldFile("|NAME|",    $name,               "${nameLittle}doc.cpp");
-    replaceOldFile("|NAME|",    $name,               "${nameLittle}doc.h");
-    replaceOldFile("|NAME|",    $name,               "${nameLittle}view.h");
-    replaceOldFile("|NAME|",    $name,               "${nameLittle}view.cpp");
-    replaceOldFile("|NAME|",    $name,               "resource.h");
-    replaceOldFile("|NAMEBIG|",    $nameBig,            "${nameLittle}doc.h");
-    replaceOldFile("|NAMEBIG|",    $nameBig,            "${nameLittle}view.h");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "${nameLittle}doc.cpp");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "${nameLittle}view.cpp");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "${nameLittle}view.h");
+#    replaceOldFile($name."AppDoc",  $name."Doc",   "skel.cpp");
+#    replaceOldFile($name."AppDoc",  $name."Doc",   "skel.h");
+#    replaceOldFile($name."AppView", $name."View",  "skel.cpp");
+#    replaceOldFile($name."AppView", $name."View",  "skel.h");
+#
+#    should be inserted in the template as used with
+#    |NAME|Doc, |NAME|View
+#
 
     chdir ($underDirectory."/docs/en");
-    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
-    
+    replaceValuesInFile(\%changings, "Makefile.am");
+
     condCopyGNUFiles();
     condCopyLsmFile();
     condCopyUserDocFiles();
@@ -619,8 +605,6 @@ sub changeCustomApp {
     mkdir ($nameLittle, 0777);
 
     #create the templatedirectory
-    chdir ($underDirectory);
-    mkdir ("templates", 0777);
     condCopyTemplateFiles();
 
     condCopyGNUFiles();
