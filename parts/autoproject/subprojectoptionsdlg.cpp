@@ -53,22 +53,28 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     fflags_edit->setMinimumWidth(wid);
 
     QDomDocument &dom = *part->projectDom();
-    if (!KService::serviceByName(DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompiler")))
+    QString prefix = "/kdevautoproject/configurations/" + m_part->currentBuildConfig() + "/";
+
+    ccompiler = DomUtil::readEntry(dom, prefix + "ccompiler");
+    cxxcompiler = DomUtil::readEntry(dom, prefix + "cxxcompiler");
+    f77compiler = DomUtil::readEntry(dom, prefix + "f77compiler");
+
+    if (!KService::serviceByName(ccompiler))
         cflags_button->setEnabled(false);
-    if (!KService::serviceByName(DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxcompiler")))
+    if (!KService::serviceByName(cxxcompiler))
         cxxflags_button->setEnabled(false);
-    if (!KService::serviceByName(DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77compiler")))
+    if (!KService::serviceByName(f77compiler))
         fflags_button->setEnabled(false);
 
     insideinc_listview->header()->hide();
     outsideinc_listview->header()->hide();
     buildorder_listview->header()->hide();
-    
+
     insideinc_listview->setSorting(-1);
     outsideinc_listview->setSorting(-1);
     prefix_listview->setSorting(-1);
     buildorder_listview->setSorting(-1);
-    
+
     // Insert all subdirectories as possible include directories
     QStringList l = widget->allSubprojects();
     QCheckListItem *lastItem = 0;
@@ -202,16 +208,14 @@ void SubprojectOptionsDialog::storeConfig()
 
 void SubprojectOptionsDialog::cflagsClicked()
 {
-    QString ccompiler = DomUtil::readEntry(*m_part->projectDom(), "/kdevautoproject/compiler/ccompiler");
     QString new_cflags = AutoProjectTool::execFlagsDialog(ccompiler, cflags_edit->text(), this);
     if (!new_cflags.isNull())
         cflags_edit->setText(new_cflags);
 }
 
 
-void SubprojectOptionsDialog::cxxflagsClicked()
+void SubprojectOptionsDialog::cxxFlagsClicked()
 {
-    QString cxxcompiler = DomUtil::readEntry(*m_part->projectDom(), "/kdevautoproject/compiler/cxxcompiler");
     QString new_cxxflags = AutoProjectTool::execFlagsDialog(cxxcompiler, cxxflags_edit->text(), this);
     if (!new_cxxflags.isNull())
         cxxflags_edit->setText(new_cxxflags);
@@ -220,7 +224,6 @@ void SubprojectOptionsDialog::cxxflagsClicked()
 
 void SubprojectOptionsDialog::fflagsClicked()
 {
-    QString f77compiler = DomUtil::readEntry(*m_part->projectDom(), "/kdevautoproject/compiler/f77compiler");
     QString new_fflags = AutoProjectTool::execFlagsDialog(f77compiler, fflags_edit->text(), this);
     if (!new_fflags.isNull())
         fflags_edit->setText(new_fflags);

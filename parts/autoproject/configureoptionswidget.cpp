@@ -19,6 +19,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
+#include <qvalidator.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <klibloader.h>
@@ -69,6 +70,8 @@ public:
 ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *parent, const char *name)
     : ConfigureOptionsWidgetBase(parent, name)
 {
+    config_combo->setValidator(new QRegExpValidator(QRegExp("^[A-Za-z]"), this));
+
     m_part = part;
 
     coffers   = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'C'");
@@ -196,7 +199,6 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
 void ConfigureOptionsWidget::saveSettings(const QString &config)
 {
     QDomDocument dom = *m_part->projectDom();
-    DomUtil::writeEntry(dom, "/kdevautoproject/general/useconfiguration", config);
     QString prefix = "/kdevautoproject/configurations/" + config + "/";
     kdDebug(9020) << "Saving config under " << prefix << endl;
 
@@ -204,8 +206,6 @@ void ConfigureOptionsWidget::saveSettings(const QString &config)
     DomUtil::writeEntry(dom, prefix + "builddir", builddir_edit->text());
     DomUtil::writeEntry(dom, prefix + "topsourcedir", topsourcedir_edit->text());
 
-    qWarning("!!!!!!!!!!!!!!!!!!!!!!CPPFLAGS=", cppflags_edit->text().latin1());
-    qWarning("!!!!!!!!!!!!!!!!!!!!!!LDFLAGS=", ldflags_edit->text().latin1());
     DomUtil::writeEntry(dom, prefix + "cppflags", cppflags_edit->text());
     DomUtil::writeEntry(dom, prefix + "ldflags", ldflags_edit->text());
 
@@ -414,8 +414,11 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
 
 void ConfigureOptionsWidget::accept()
 {
+    DomUtil::writeEntry(*m_part->projectDom(), "/kdevautoproject/general/useconfiguration", currentConfig);
     if (dirty)
+    {
         saveSettings(currentConfig);
+    }
 }
 
 #include "configureoptionswidget.moc"

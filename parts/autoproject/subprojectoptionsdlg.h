@@ -30,7 +30,7 @@ public:
 
 private:
     virtual void cflagsClicked();
-    virtual void cxxflagsClicked();
+    virtual void cxxFlagsClicked();
     virtual void fflagsClicked();
     virtual void insideMoveUpClicked();
     virtual void insideMoveDownClicked();
@@ -43,13 +43,17 @@ private:
     virtual void buildorderMoveUpClicked();
     virtual void buildorderMoveDownClicked();
     virtual void accept();
-    
+
     void readConfig();
     void storeConfig();
 
     SubprojectItem *subProject;
     AutoProjectWidget *m_widget;
     AutoProjectPart *m_part;
+
+    QString ccompiler;
+    QString cxxcompiler;
+    QString f77compiler;
 };
 
 #endif
