@@ -51,6 +51,7 @@ QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
    m_pParent      = parent;
    setBackgroundMode(NoBackground);
    setFocusPolicy(NoFocus);
+   m_bChildInDrag = false;
 }
 
 //============== ~QextMdiChildFrmCaption =============//
@@ -69,11 +70,6 @@ void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
          QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
       }
       m_pParent->m_bDragging = TRUE;
-      //notify child view
-      QextMdiChildFrmDragBeginEvent ue(e);
-      if( m_pParent->m_pClient != 0L) {
-         QApplication::sendEvent( m_pParent->m_pClient, &ue);
-      }
       m_offset = mapToParent( e->pos());
    }
    else if ( e->button() == RightButton) {
@@ -91,10 +87,13 @@ void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
       releaseMouse();
       if(m_pParent->m_bDragging) {
          m_pParent->m_bDragging = FALSE;
-         //notify child view
-         QextMdiChildFrmDragEndEvent ue(e);
-         if( m_pParent->m_pClient != 0L) {
-            QApplication::sendEvent( m_pParent->m_pClient, &ue);
+         if (m_bChildInDrag) {
+            //notify child view
+            QextMdiChildFrmDragEndEvent ue(e);
+            if( m_pParent->m_pClient != 0L) {
+               QApplication::sendEvent( m_pParent->m_pClient, &ue);
+            }
+            m_bChildInDrag = false;
          }
       }
    }
@@ -103,8 +102,19 @@ void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
 //============== mouseMoveEvent =============//
 void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 {
-   if ( !m_pParent->m_bDragging )
+   if ( !m_pParent->m_bDragging ) {
       return;
+   }
+
+   if (!m_bChildInDrag) {
+      //notify child view
+      QextMdiChildFrmDragBeginEvent ue(e);
+      if( m_pParent->m_pClient != 0L) {
+         QApplication::sendEvent( m_pParent->m_pClient, &ue);
+      }
+      m_bChildInDrag = true;
+   }
+
    QPoint relMousePosInChildArea = m_pParent->m_pManager->mapFromGlobal( e->globalPos() );
 
    // mouse out of child area? stop child frame dragging

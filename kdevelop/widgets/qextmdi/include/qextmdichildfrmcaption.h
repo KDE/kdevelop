@@ -114,6 +114,10 @@ protected: // Protected attributes
    * the position offset related to its parent widget (internally used for translating mouse move positions 
    */
    QPoint            m_offset;
+   /**
+   * True if the child knows that it is currently being dragged. 
+   */
+   bool              m_bChildInDrag;
 };
 
 #endif //_QEXTMDICAPTION_H_
