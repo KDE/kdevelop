@@ -246,6 +246,11 @@ void ChooseTargetDialog::slotChooseTargetToggled(bool on)
 
 void ChooseTargetDialog::accept ()
 {
+	if ( activeTargetRadioButton->isChecked() )
+	{
+		m_choosenTarget = m_widget->activeTarget();
+		m_choosenSubproject = m_widget->activeSubproject();
+	}
 	if ( !m_choosenSubproject || !m_choosenTarget )
 		return;
 
