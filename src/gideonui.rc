@@ -66,7 +66,7 @@
   </Menu>
   <Menu name="settings">
     <text>&amp;Settings</text>
-    <Action name="settings_show_toolbar"/>
+    <Action name="toolbars_showhide"/>
     <DefineGroup name="show_toolbar_merge"/>
     <Separator/>
     <Action name="settings_configure_toolbars"/>
@@ -80,6 +80,7 @@
 </MenuBar>
 
 <ToolBar name="mainToolBar" position="Top" noMerge="1" fullWidth="false" >
+  <text>Main Toolbar</text>
   <Action name="project_open" />
   <Separator/>
   <Merge/>
@@ -87,11 +88,13 @@
 </ToolBar>
 
 <ToolBar name="buildToolBar" position="Top" iconText="IconOnly" >
+  <text>Build Toolbar</text>
   <Merge/>
   <Action name="stop_processes"/>
 </ToolBar>
 
 <ToolBar name="browserToolBar" position="Top" newline="true">
+  <text>Browser Toolbar</text>
 </ToolBar>
 
 <Menu name="rb_popup">
