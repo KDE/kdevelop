@@ -1,3 +1,11 @@
+2003-06-14 Hamish Rodda <rodda@kde.org>
+    * Warn if another process is running on execution and allow a restart.
+    * Make automake deal with METASOURCES=AUTO
+    * Remember position in document for compile warning/errors so that you can
+      edit the document and still be taken to the correct location 
+      (work in progress, commented out, requires up-to-date katepart)
+    * Separate highlighting for errors and warnings (work in progress)
+
 2003-06-12 Alexander Dymo <cloudtemple@mksat.net>
     * Trollproject:
       - Existing files could be added to a project with a relative path or
