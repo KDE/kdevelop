@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+#include <iostream>
 #include "phpparser.h"
 #include "classstore.h"
 #include "parsedclass.h"
@@ -18,6 +18,8 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <kregexp.h>
+
+using namespace std;
 
 PHPParser::PHPParser(KDevCore* core,ClassStore* store){
   m_core = core;

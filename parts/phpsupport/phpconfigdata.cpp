@@ -17,7 +17,7 @@
 
 #include "phpconfigdata.h"
 #include "domutil.h"
-#include <iostream.h>
+#include <iostream>
 
 PHPConfigData::PHPConfigData(QDomDocument* dom){
   //  cerr << endl << "kdevelop (phpsupport): enter PHPConfigData::PHPConfigData";

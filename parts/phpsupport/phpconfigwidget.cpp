@@ -3,13 +3,15 @@
 #include <qlineedit.h>
 #include <qmultilineedit.h>
 #include <qcstring.h>
-#include <iostream.h>
+#include <iostream>
 #include <qradiobutton.h>
 #include <kfiledialog.h>
 
 #include "phpinfodlg.h"
 #include "phpconfigwidget.h"
 #include "phpconfigdata.h"
+
+using namespace std;
 
 PHPConfigWidget::PHPConfigWidget(PHPConfigData* data,QWidget* parent,  const char* name, WFlags fl )
   : PHPConfigWidgetBase( parent, name, fl )

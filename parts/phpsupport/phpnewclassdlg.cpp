@@ -20,14 +20,14 @@
 #include <kcompletion.h>
 #include <kfiledialog.h>
 #include <qtoolbutton.h>
-#include <iostream.h>
+#include <iostream>
 #include <qregexp.h>
 #include <qtextedit.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
 
-
+using namespace std;
 
 PHPNewClassDlg::PHPNewClassDlg(const QStringList& baseClassNames,const QString& directory,QWidget *parent, const char *name) : PHPNewClassDlgBase(parent,name,true) {
   m_filenameModified = false;

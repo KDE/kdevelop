@@ -18,7 +18,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kregexp.h>
-#include <iostream.h>
+#include <iostream>
 #include <khtmlview.h>
 #include <kprocess.h>
 #include <qstringlist.h>
@@ -49,6 +49,7 @@
 #include "parsedmethod.h"
 #include "domutil.h"
 
+using namespace std;
 
 PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
     : KDevLanguageSupport(api, parent, name)
