@@ -424,7 +424,7 @@ public:
 
    void setSwitching( const bool switching ) { m_bSwitching = switching; }
    bool switching(void) const { return m_bSwitching; }
-   
+
 public slots:
    /** addWindow demands a KMdiChildView. This method wraps every QWidget in such an object and
        this way you can every widget put under MDI control.
@@ -454,7 +454,7 @@ public slots:
     * @param index defines an index of tab, after which the new tab will be inserted. This param have not any sence in ChildFrame mode. If index == -1 then the tab will be appended.
     * @since 3.3
     */
-   void addWindow( KMdiChildView* pView, int flags, int index); 
+   void addWindow( KMdiChildView* pView, int flags, int index);
    /**
    * See the method above for more details. Additionally, it moves to point pos.
    */
@@ -539,10 +539,14 @@ public slots:
    virtual void finishIDEAlMode(bool full=true);
    /**
     * Sets the appearance of the IDEAl mode. See KMultiTabBar styles for the first 3 bits.
+    * @deprecated use setToolviewStyle(int flags) instead
     */
-   void setIDEAlModeStyle(int flags);
+   void setIDEAlModeStyle(int flags) KDE_DEPRECATED;
+   //KDE4: Get rid of the above.
    /**
-    * Sets the appearance of the toolview tabs in Tab Page and Childframe mode. See KMdi::ToolviewStyle.
+    * Sets the appearance of the toolview tabs.
+    * @param flags See KMdi::ToolviewStyle.
+    * @since 3.3
     */
    void setToolviewStyle(int flags);
    /*

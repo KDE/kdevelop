@@ -133,6 +133,8 @@ public:
 	 * might vanish, not sure yet
 	 */
 	void showActiveTabTexts(bool show=true);
+protected:
+	virtual void fontChange( const QFont& );
 
 private:
 	class KMultiTabBarInternal *m_internal;
@@ -214,6 +216,7 @@ public:
 	 * this is only used in classic mode if at all
 	 */
 	void showActiveTabText(bool show);
+	void resize(){ setSize( neededSize() ); }
 private:
 	bool m_showActiveTabText;
 	int m_expandedSize;

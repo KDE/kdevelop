@@ -2122,11 +2122,11 @@ static QStrList listEntry(QDomElement &base, const QString &tagName, const QStri
 {
     QStrList list;
 
-    QDomElement subel = base.namedItem(tagName).firstChild().toElement();
-    while (!subel.isNull()) {
+    for( QDomNode n = base.namedItem(tagName).firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement subel = n.toElement();
         if (subel.tagName() == subTagName)
             list.append(subel.firstChild().toText().data().latin1());
-        subel = subel.nextSibling().toElement();
     }
 
     return list;
@@ -2274,16 +2274,13 @@ void KDockManager::readConfig(QDomElement &base)
     }
 
     // firstly, recreate all common dockwidgets
-    QDomElement childEl = base.firstChild().toElement();
-    while (!childEl.isNull() ) {
-        KDockWidget *obj = 0;
+    for( QDomNode n = base.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement childEl = n.toElement();
+        if (childEl.tagName() != "dock") continue;
 
-        if (childEl.tagName() != "dock") {
-            childEl = childEl.nextSibling().toElement();
-            continue;            
-        }
         // Read an ordinary dock widget
-        obj = getDockWidgetFromName(stringEntry(childEl, "name"));
+        KDockWidget *obj = getDockWidgetFromName(stringEntry(childEl, "name"));
         obj->setTabPageLabel(stringEntry(childEl, "tabCaption"));
         obj->setToolTipString(stringEntry(childEl, "tabToolTip"));
 
@@ -2300,13 +2297,14 @@ void KDockManager::readConfig(QDomElement &base)
             KDockWidgetHeader *h = static_cast<KDockWidgetHeader*>(obj->header);
             h->setDragEnabled(boolEntry(childEl, "dragEnabled"));
         }
-
-        childEl = childEl.nextSibling().toElement();
     }
 
     // secondly, now iterate again and create the groups and tabwidgets, apply the dockwidgets to them
-    childEl = base.firstChild().toElement();
-    while (!childEl.isNull() ) {
+    for( QDomNode n = base.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement childEl = n.toElement();
+        if (childEl.isNull()) continue;
+
         KDockWidget *obj = 0;
     
 	if (childEl.tagName() == "dockContainer") {
@@ -2367,7 +2365,6 @@ void KDockManager::readConfig(QDomElement &base)
                 }
             }
         } else {
-            childEl = childEl.nextSibling().toElement();  
             continue;
         }
 
@@ -2384,21 +2381,19 @@ void KDockManager::readConfig(QDomElement &base)
             KDockWidgetHeader *h = static_cast<KDockWidgetHeader*>(obj->header);
             h->setDragEnabled(boolEntry(childEl, "dragEnabled"));
         }
-
-        childEl = childEl.nextSibling().toElement();  
     }
 
     // thirdly, now that all ordinary dockwidgets are created, 
     // iterate them again and link them with their corresponding dockwidget for the dockback action
-    childEl = base.firstChild().toElement();
-    while (!childEl.isNull() ) {
+    for( QDomNode n = base.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement childEl = n.toElement();
+
+        if (childEl.tagName() != "dock" && childEl.tagName() != "tabGroup")
+            continue;            
+        
         KDockWidget *obj = 0;
 
-        if (childEl.tagName() != "dock" && childEl.tagName() != "tabGroup") {
-            childEl = childEl.nextSibling().toElement();
-            continue;            
-        }
-        
         if (!boolEntry(childEl, "hasParent")) {
             // Read a common toplevel dock widget
             obj = getDockWidgetFromName(stringEntry(childEl, "name"));
@@ -2409,7 +2404,6 @@ void KDockManager::readConfig(QDomElement &base)
             obj->formerDockPos = KDockWidget::DockPosition(numberEntry(childEl, "dockBackToPos"));
             obj->updateHeader();
         }
-        childEl = childEl.nextSibling().toElement();  
     }
     
     if (main->inherits("KDockMainWindow")) {

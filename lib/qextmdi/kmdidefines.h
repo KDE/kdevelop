@@ -35,6 +35,9 @@
 #define KMDI_CHILDFRM_MIN_WIDTH 130
 
 //----------------------------------------------------------------------------
+/** 
+* @short A namespace for the KMDI library
+*/
 namespace KMdi
 {
    /** extent Qt events
@@ -96,11 +99,17 @@ namespace KMdi
       ShowWhenMoreThanOneTab = 1,
       NeverShowTabs          = 2
    };
-   
+
+  /** The style of the toolview tabs
+        @since 3.3
+  */
    enum ToolviewStyle {
+   /** Show only icons on the toolview tabs. The visible toolviews contain both the icon and text. */
       IconOnly	= 0,
+   /** Show only the text description on the toolview tabs. */       
       TextOnly	= 1,
-      TextAndIcon = 3 
+   /** Show both the icon and description on the toolview tabs. */      
+      TextAndIcon = 3
    };
 } //namespace
 

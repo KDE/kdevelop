@@ -834,6 +834,12 @@ void KMultiTabBar::setPosition(KMultiTabBarPosition pos)
 	for (uint i=0;i<m_buttons.count();i++)
 		m_buttons.at(i)->setPosition(pos);
 }
+void KMultiTabBar::fontChange(const QFont& /* oldFont */)
+{
+	for (uint i=0;i<tabs()->count();i++)
+		tabs()->at(i)->resize();
+	repaint();
+}
 
 QPtrList<KMultiTabBarTab>* KMultiTabBar::tabs() {return m_internal->tabs();}
 QPtrList<KMultiTabBarButton>* KMultiTabBar::buttons() {return &m_buttons;}
