@@ -3,6 +3,7 @@ Short-Term:
 mhk: move function areas of kdevcore into separate classes
 mhk: improve documentation browsing
 mhk: find a nicer way to remove dynamic menu entries from context menus
+exa: improve new class dialog, configure file templates, add my cool templates ;)
 
 Mid-Term:
 
