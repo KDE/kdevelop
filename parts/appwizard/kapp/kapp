@@ -3,4 +3,4 @@
 Name=Application framework
 Icon=kapp.png
 Category=C++/KDE
-Comment=Generates a simple KDE application with one toplevel window, menus and  toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
+Comment=Generates a simple KDE application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface

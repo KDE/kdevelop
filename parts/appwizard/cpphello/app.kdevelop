@@ -9,15 +9,6 @@
    <mainprogram>src/$APPNAMELC</mainprogram>
   </general>
  </kdevautoproject>
- <kdevfileview>
-  <groups>
-   <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
-   <group pattern="*.ui" name="User Interface" />
-   <group pattern="*.png" name="Icons" />
-   <group pattern="*.po;*.ts" name="Translations" />
-   <group pattern="*" name="Others" />
-  </groups>
- </kdevfileview>
  <kdevdebugger>
   <general>
    <dbgshell>libtool</dbgshell>

@@ -1,0 +1,17 @@
+<!DOCTYPE kdevelop >
+<kdevelop>
+ <general>
+  <projectmanagement>KDevAutoProject</projectmanagement>
+  <primarylanguage>C</primarylanguage>
+ </general>
+ <kdevautoproject>
+  <general>
+   <mainprogram>src/$APPNAMELC</mainprogram>
+  </general>
+ </kdevautoproject>
+ <kdevdebugger>
+  <general>
+   <dbgshell>libtool</dbgshell>
+  </general>
+ </kdevdebugger>
+</kdevelop>

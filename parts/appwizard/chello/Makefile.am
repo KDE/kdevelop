@@ -1,12 +1,11 @@
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
-kappdir = ${appwizarddatadir}/template-kapp
+chellodir = ${appwizarddatadir}/template-chello
 templatedir = ${appwizarddatadir}/templates
 
-kapp_DATA = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
-            appiface.h app_client.cpp main.cpp appui.rc src-Makefile.am \
-            kapp.png app.desktop
-template_DATA = kapp
+chello_DATA = main.c src-Makefile.am c-Makefile.am c-Makefile.cvs \
+	      configure.in chello.png app.kdevelop
+template_DATA = chello
 
 BUILT_SOURCES = script.local
 
@@ -17,5 +16,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) script.local $(kappdir)/script
+	$(INSTALL_DATA) script.local $(chellodir)/script
 

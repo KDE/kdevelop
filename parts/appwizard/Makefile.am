@@ -1,7 +1,7 @@
 # Here resides the app wizard part.
 
 SUBDIRS = common kapp kpartapp kpartplugin kappjava kcmodule kicker kioslave \
-	  kdevpart pythonhello phphello
+	  kdevpart pythonhello phphello chello cpphello gnomeapp
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 

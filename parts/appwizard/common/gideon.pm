@@ -86,6 +86,17 @@ sub installAdmin
 }
 
 
+sub installIncAdmin
+{
+        print "Installing automake administrative stuff\n";
+        copy( "${src}/template-common/incadmin.tar.gz", "${dest}/incadmin.tar.gz" );
+        chdir( $dest ) || die "Could not chdir to $dest\n";
+        system( 'gunzip', '-f', 'incadmin.tar.gz' );
+        system( 'tar', 'xf', 'incadmin.tar' );
+        unlink( "incadmin.tar" );
+}
+
+
 sub installGNU()
 {
         print "Installing GNU coding standard files\n";
@@ -100,6 +111,17 @@ sub installGNU()
         customize( "${dest}/INSTALL" );
         customize( "${dest}/README" );
         customize( "${dest}/TODO" );
+}
+
+
+sub installGNOME
+{
+        print "Installing GNOME autoconf macros\n";
+        copy( "${src}/template-common/gnome.tar.gz", "${dest}/gnome.tar.gz" );
+        chdir( $dest ) || die "Could not chdir to $dest\n";
+        system( 'gunzip', '-f', 'gnome.tar.gz' );
+        system( 'tar', 'xf', 'gnome.tar' );
+        unlink( "gnome.tar" );
 }
 
 

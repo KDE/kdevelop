@@ -315,9 +315,9 @@ void AppWizardDialog::accept()
     QString licensefile;
     switch (license_combo->currentItem())
         {
-        case 0: licensefile = "LICENSE.BSD"; break;
-        case 1: licensefile = "LICENSE.QPL"; break;
-        case 2: licensefile = "COPYING";     break;
+        case 0: licensefile = "COPYING";     break;
+        case 1: licensefile = "LICENSE.BSD"; break;
+        case 2: licensefile = "LICENSE.QPL"; break;
         case 3: licensefile = "COPYING.LIB"; break;
         default: ;
         }

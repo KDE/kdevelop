@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=|PRJNAME|
+Comment=
+Exec=|NAMELITTLE|
+Icon=|NAMELITTLE|-logo.png
+Terminal=0
+Type=Application

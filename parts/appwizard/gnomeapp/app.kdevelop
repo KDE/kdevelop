@@ -2,7 +2,7 @@
 <kdevelop>
  <general>
   <projectmanagement>KDevAutoProject</projectmanagement>
-  <primarylanguage>C++</primarylanguage>
+  <primarylanguage>C</primarylanguage>
  </general>
  <kdevautoproject>
   <general>
@@ -11,10 +11,10 @@
  </kdevautoproject>
  <kdevfileview>
   <groups>
-   <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
-   <group pattern="*.ui" name="User Interface" />
+   <group pattern="*.c;*.h" name="Sources" />
+   <group pattern="*.glade" name="User Interface" />
    <group pattern="*.png" name="Icons" />
-   <group pattern="*.po;*.ts" name="Translations" />
+   <group pattern="*.po" name="Translations" />
    <group pattern="*" name="Others" />
   </groups>
  </kdevfileview>

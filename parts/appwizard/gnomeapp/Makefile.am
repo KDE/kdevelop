@@ -1,12 +1,11 @@
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
-kappdir = ${appwizarddatadir}/template-kapp
+gnomeappdir = ${appwizarddatadir}/template-gnomeapp
 templatedir = ${appwizarddatadir}/templates
 
-kapp_DATA = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
-            appiface.h app_client.cpp main.cpp appui.rc src-Makefile.am \
-            kapp.png app.desktop
-template_DATA = kapp
+gnomeapp_DATA = app.c app.h menus.c menus.h main.c \
+		src-Makefile.am configure.in gnomeapp.png app.kdevelop app.desktop
+template_DATA = gnomeapp
 
 BUILT_SOURCES = script.local
 
@@ -17,5 +16,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) script.local $(kappdir)/script
+	$(INSTALL_DATA) script.local $(gnomeappdir)/script
 
