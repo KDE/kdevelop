@@ -134,6 +134,7 @@
 ///////////////////////////////////////////////////////////////////
 // Toolbar wizard entries 
 #define ID_CLASSBROWSER_WIZARD      14500
+#define ID_CLASSBROWSER_GRAPHVIEW   14501
 #define ID_CV_VIEW_DECLARATION			14510
 #define ID_CV_VIEW_DEFINITION				14511
 #define ID_CV_NEW_METHOD						14512
@@ -364,35 +365,3 @@
 ///////////////////////////////////////////////////////////////////
 // Create cases for entries and connect them to change statusBar entry
 #define ON_STATUS_MSG(id, message)     case id:  slotStatusHelpMsg(message);break;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
