@@ -24,6 +24,7 @@
 
 #include <kdebug.h>
 #include <klistview.h>
+#include <klocale.h>
 
 #include <kdevpartcontroller.h>
 #include <kdevdocumentationplugin.h>
@@ -38,13 +39,13 @@ ContentsView::ContentsView(DocumentationWidget *parent, const char *name)
     QVBoxLayout *cl = new QVBoxLayout(this, 0, 0);
     m_view = new KListView(this);
     cl->addWidget(m_view);
-    
-    m_view->addColumn("Contents");
+
+    m_view->addColumn(i18n( "Contents" ));
     m_view->header()->hide();
     m_view->setResizeMode(QListView::AllColumns);
     m_view->setRootIsDecorated(true);
     m_view->setSorting(-1);
-    
+
     connect(m_view, SIGNAL(executed(QListViewItem*, const QPoint&, int )),
         this, SLOT(itemExecuted(QListViewItem*, const QPoint&, int )));
     connect(m_view, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
@@ -75,7 +76,7 @@ void ContentsView::itemMouseButtonPressed(int button, QListViewItem *item, const
     DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
     if (!docItem)
         return;
-    
+
     DocUtils::docItemPopup(m_widget->part(), docItem, pos, true, true);
 }
 

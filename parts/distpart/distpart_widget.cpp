@@ -143,14 +143,14 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
 		}
 		else
 		{
-			prog->setLabel(i18n("Adding file: ") + files[idx]);
+			prog->setLabel(i18n("Adding file: %1").arg( files[idx]) );
 			prog->progressBar()->setValue( (idx*100)/files.count() );
 		}
 	}
     	tar.close( );
 	prog->hide();
 	delete prog;
-	KMessageBox::information( this, i18n("Archive made at: ") + filename, i18n("Archive Done") );
+	KMessageBox::information( this, i18n("Archive made at: %1").arg( filename ), i18n("Archive Done") );
 
     }
     else

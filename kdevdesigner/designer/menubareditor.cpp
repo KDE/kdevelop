@@ -37,6 +37,8 @@
 #include "menubareditor.h"
 #include "popupmenueditor.h"
 
+#include <klocale.h>
+
 extern void find_accel( const QString &txt, QMap<QChar, QWidgetList > &accels, QWidget *w );
 
 // Drag Object Declaration -------------------------------------------
@@ -152,8 +154,8 @@ MenuBarEditor::MenuBarEditor( FormWindow * fw, QWidget * parent, const char * na
     setAcceptDrops( TRUE );
     setFocusPolicy( StrongFocus );
 
-    addItem.setMenuText( tr("new menu") );
-    addSeparator.setMenuText( tr("new separator") );
+    addItem.setMenuText( i18n("new menu") );
+    addSeparator.setMenuText( i18n("new separator") );
 
     lineEdit = new QLineEdit( this, "menubar lineedit" );
     lineEdit->hide();
@@ -185,11 +187,11 @@ MenuBarEditorItem * MenuBarEditor::createItem( int index, bool addToCmdStack )
     MenuBarEditorItem * i =
 	new MenuBarEditorItem( new PopupMenuEditor( formWnd, ( QWidget * ) parent() ), this );
     if ( addToCmdStack ) {
-	AddMenuCommand * cmd = new AddMenuCommand( "Add Menu", formWnd, this, i, index );
+	AddMenuCommand * cmd = new AddMenuCommand( i18n( "Add Menu" ), formWnd, this, i, index );
 	formWnd->commandHistory()->addCommand( cmd );
 	cmd->execute();
     } else {
-	AddMenuCommand cmd( "Add Menu", formWnd, this, i, index );
+	AddMenuCommand cmd( i18n( "Add Menu" ), formWnd, this, i, index );
 	cmd.execute();
     }
     return i;
@@ -237,7 +239,7 @@ void MenuBarEditor::insertSeparator( int index )
 
     MenuBarEditorItem * i = createItem( index );
     i->setSeparator( TRUE );
-    i->setMenuText( "separator" );
+    i->setMenuText( i18n( "separator" ) );
     hasSeparator = TRUE;
 }
 
@@ -376,7 +378,7 @@ void MenuBarEditor::cut( int index )
 	return; // do nothing
     }
 
-    RemoveMenuCommand * cmd = new RemoveMenuCommand( "Cut Menu", formWnd, this, index );
+    RemoveMenuCommand * cmd = new RemoveMenuCommand( i18n( "Cut Menu" ), formWnd, this, index );
     formWnd->commandHistory()->addCommand( cmd );
     cmd->execute();
 }
@@ -399,7 +401,7 @@ void MenuBarEditor::paste( int index )
 {
     if ( clipboardItem && clipboardOperation ) {
 	MenuBarEditorItem * i = new MenuBarEditorItem( clipboardItem );
-	AddMenuCommand * cmd = new AddMenuCommand( "Paste Menu", formWnd, this, i, index );
+	AddMenuCommand * cmd = new AddMenuCommand( i18n( "Paste Menu" ), formWnd, this, i, index );
 	formWnd->commandHistory()->addCommand( cmd );
 	cmd->execute();
     }
@@ -491,7 +493,7 @@ void MenuBarEditor::deleteItem( int index )
 	index = currentIndex;
 
     if ( (uint)index < itemList.count() ) {
-	RemoveMenuCommand * cmd = new RemoveMenuCommand( "Delete Menu",
+	RemoveMenuCommand * cmd = new RemoveMenuCommand( i18n( "Delete Menu" ),
 							 formWnd,
 							 this,
 							 currentIndex );
@@ -1004,10 +1006,10 @@ void MenuBarEditor::dropInPlace( MenuBarEditorItem * i, const QPoint & pos )
     Command * cmd = 0;
     int iidx = itemList.findRef( i );
     if ( iidx != -1 ) { // internal dnd
-	cmd = new MoveMenuCommand( "Item Dragged", formWnd, this, iidx, idx );
+	cmd = new MoveMenuCommand( i18n( "Item Dragged" ), formWnd, this, iidx, idx );
 	item( iidx )->setVisible( TRUE );
     } else {
-	cmd = new AddMenuCommand( "Add Menu", formWnd, this, i, idx );
+	cmd = new AddMenuCommand( i18n( "Add Menu" ), formWnd, this, i, idx );
 	dropConfirmed = TRUE; // let mouseMoveEvent set the item visible
     }
     formWnd->commandHistory()->addCommand( cmd );
@@ -1043,7 +1045,7 @@ void MenuBarEditor::navigateLeft( bool ctrl )
     if ( currentIndex > 0 ) {
 	hideItem();
 	if ( ctrl ) {
-	    ExchangeMenuCommand * cmd = new ExchangeMenuCommand( "Move Menu Left",
+	    ExchangeMenuCommand * cmd = new ExchangeMenuCommand( i18n( "Move Menu Left" ),
 								 formWnd,
 								 this,
 								 currentIndex,
@@ -1065,7 +1067,7 @@ void MenuBarEditor::navigateRight( bool ctrl )
     hideItem();
     if ( ctrl ) {
 	if ( currentIndex < ( (int)itemList.count() - 1 ) ) {
-	    ExchangeMenuCommand * cmd =	new ExchangeMenuCommand( "Move Menu Right",
+	    ExchangeMenuCommand * cmd =	new ExchangeMenuCommand( i18n( "Move Menu Right" ),
 								 formWnd,
 								 this,
 								 currentIndex,
@@ -1096,12 +1098,12 @@ void MenuBarEditor::leaveEditMode()
     if ( currentIndex >= (int)itemList.count() ) {
 	i = createItem();
 	// do not put rename on cmd stack
-	RenameMenuCommand rename( "Rename Menu", formWnd, this, lineEdit->text(), i );
+	RenameMenuCommand rename( i18n( "Rename Menu" ), formWnd, this, lineEdit->text(), i );
 	rename.execute();
     } else {
 	i = itemList.at( currentIndex );
 	RenameMenuCommand * cmd =
-	    new RenameMenuCommand( "Rename Menu", formWnd, this, lineEdit->text(), i );
+	    new RenameMenuCommand( i18n( "Rename Menu" ), formWnd, this, lineEdit->text(), i );
 	formWnd->commandHistory()->addCommand( cmd );
 	cmd->execute();
     }

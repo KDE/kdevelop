@@ -363,14 +363,14 @@ bool CvsServicePartImpl::checkout()
     if ( dlg.exec() == QDialog::Accepted )
     {
 #if KDE_IS_VERSION(3,2,90)
-        DCOPRef job = m_cvsService->checkout( dlg.workDir(), dlg.serverPath(),	
+        DCOPRef job = m_cvsService->checkout( dlg.workDir(), dlg.serverPath(),
             dlg.module(), dlg.tag(), dlg.pruneDirs(), "", false
         );
-#else    
-        DCOPRef job = m_cvsService->checkout( dlg.workDir(), dlg.serverPath(),	
+#else
+        DCOPRef job = m_cvsService->checkout( dlg.workDir(), dlg.serverPath(),
             dlg.module(), dlg.tag(), dlg.pruneDirs()
         );
-#endif	
+#endif
         if (!m_cvsService->ok()) {
             KMessageBox::sorry( mainWindow()->main(), i18n( "Unable to checkout" ) );
         } else {
@@ -842,7 +842,7 @@ void CvsServicePartImpl::slotDiffFinished( bool normalExit, int exitStatus )
     if ( !err.isEmpty() )
     {
         int s = KMessageBox::warningContinueCancelList( 0,
-            i18n("CVS outputted errors during diff. Do you still want to continue?"),
+            i18n("CVS output errors during diff. Do you still want to continue?"),
             QStringList::split( "\n", err, false ), i18n("Errors During Diff")
         );
         if ( s != KMessageBox::Continue )

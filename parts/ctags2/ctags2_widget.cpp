@@ -48,11 +48,11 @@ CTags2Widget::CTags2Widget( CTags2Part * part, const char* name, WFlags fl)
 {
 	_typeTimeout = new QTimer( this );
 	connect( _typeTimeout, SIGNAL(timeout()), this, SLOT(line_edit_changed()) );
-	
+
 	connect( output_view, SIGNAL(executed(QListViewItem*)), this, SLOT(itemExecuted(QListViewItem*)) );
 	connect( output_view, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(itemExecuted(QListViewItem*)) );
-	
-	updateDBDateLabel();	
+
+	updateDBDateLabel();
 }
 
 CTags2Widget::~CTags2Widget()
@@ -63,13 +63,13 @@ void CTags2Widget::displayHits( Tags::TagList const & list )
 {
 	output_view->clear();
 	showHitCount( list.count() );
-	
+
 	Tags::TagList::ConstIterator it = list.begin();
 	while( it != list.end() )
 	{
 		new TagItem( output_view, (*it).tag, (*it).type, (*it).file, (*it).pattern );
 		++it;
-	}	
+	}
 }
 
 void CTags2Widget::displayHitsAndClear( Tags::TagList const & list )
@@ -77,13 +77,13 @@ void CTags2Widget::displayHitsAndClear( Tags::TagList const & list )
 	input_edit->blockSignals( true );
 	input_edit->clear();
 	input_edit->blockSignals( false );
-	
+
 	displayHits( list );
 }
 
 void CTags2Widget::line_edit_changed( )
 {
-	displayHits( Tags::getPartialMatches( input_edit->text() ) );	
+	displayHits( Tags::getPartialMatches( input_edit->text() ) );
 }
 
 void CTags2Widget::line_edit_changed_delayed( )
@@ -94,7 +94,7 @@ void CTags2Widget::line_edit_changed_delayed( )
 
 void CTags2Widget::showHitCount( int n )
 {
-	hitcount_label->setText( i18n("Hits: ") + QString::number( n ) );
+	hitcount_label->setText( i18n("Hits: %1").arg( n ) );
 }
 
 int CTags2Widget::calculateHitCount( )
@@ -105,10 +105,10 @@ int CTags2Widget::calculateHitCount( )
 void CTags2Widget::itemExecuted( QListViewItem * item )
 {
 	TagItem * tagItem = static_cast<TagItem*>( item );
-	
+
 	KURL url;
 	url.setPath( _part->project()->projectDirectory() + "/" + tagItem->file );
-	
+
 	_part->partController()->editDocument( url, _part->getFileLineFromPattern( url, tagItem->pattern ) );
 }
 
@@ -117,11 +117,11 @@ void CTags2Widget::regeneratebutton_clicked()
 	kdDebug() << k_funcinfo << endl;
 
 	QApplication::setOverrideCursor(Qt::waitCursor);
-	
+
 	_part->createTagsFile();
-	
+
 	QApplication::restoreOverrideCursor();
-	
+
 	updateDBDateLabel();
 }
 

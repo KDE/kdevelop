@@ -18,8 +18,10 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
-/* 
- *  Constructs a AddGlobalDlg as a child of 'parent', with the 
+#include <klocale.h>
+
+/*
+ *  Constructs a AddGlobalDlg as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
@@ -32,9 +34,9 @@ AddGlobalDlg::AddGlobalDlg( QWidget* parent, const char* name, bool modal, WFlag
     if ( !name )
 	setName( "AddGlobalDlg" );
     setSizeGripEnabled( TRUE );
-    AddGlobalDlgLayout = new QGridLayout( this, 1, 1, 11, 6, "AddGlobalDlgLayout"); 
+    AddGlobalDlgLayout = new QGridLayout( this, 1, 1, 11, 6, "AddGlobalDlgLayout");
 
-    Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1"); 
+    Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
 
     buttonHelp = new KPushButton( this, "buttonHelp" );
     buttonHelp->setAutoDefault( TRUE );
@@ -54,11 +56,11 @@ AddGlobalDlg::AddGlobalDlg( QWidget* parent, const char* name, bool modal, WFlag
     AddGlobalDlgLayout->addLayout( Layout1, 1, 0 );
 
     fcglobal_view = new QListView( this, "fcglobal_view" );
-    fcglobal_view->addColumn( tr2i18n( "Type Extension" ) );
-    fcglobal_view->addColumn( tr2i18n( "Type Name" ) );
-    fcglobal_view->addColumn( tr2i18n( "Template Location" ) );
-    fcglobal_view->addColumn( tr2i18n( "Icon" ) );
-    fcglobal_view->addColumn( tr2i18n( "Description" ) );
+    fcglobal_view->addColumn( i18n( "Type Extension" ) );
+    fcglobal_view->addColumn( i18n( "Type Name" ) );
+    fcglobal_view->addColumn( i18n( "Template Location" ) );
+    fcglobal_view->addColumn( i18n( "Icon" ) );
+    fcglobal_view->addColumn( i18n( "Description" ) );
     fcglobal_view->setResizePolicy( QListView::AutoOne );
     fcglobal_view->setAllColumnsShowFocus( TRUE );
     fcglobal_view->setRootIsDecorated( TRUE );
@@ -87,18 +89,18 @@ AddGlobalDlg::~AddGlobalDlg()
  */
 void AddGlobalDlg::languageChange()
 {
-    setCaption( tr2i18n( "Select Global File Types" ) );
+    setCaption( i18n( "Select Global File Types" ) );
     buttonHelp->setGuiItem( KStdGuiItem::help() );
     buttonHelp->setAccel( QKeySequence( tr2i18n( "F1" ) ) );
     buttonOk->setGuiItem( KStdGuiItem::ok() );
     buttonOk->setAccel( QKeySequence( QString::null ) );
     buttonCancel->setGuiItem( KStdGuiItem::cancel() );
     buttonCancel->setAccel( QKeySequence( QString::null ) );
-    fcglobal_view->header()->setLabel( 0, tr2i18n( "Type extension:" ) );
-    fcglobal_view->header()->setLabel( 1, tr2i18n( "Type name:" ) );
-    fcglobal_view->header()->setLabel( 2, tr2i18n( "Template location:" ) );
-    fcglobal_view->header()->setLabel( 3, tr2i18n( "Icon:" ) );
-    fcglobal_view->header()->setLabel( 4, tr2i18n( "Description:" ) );
+    fcglobal_view->header()->setLabel( 0, i18n( "Type extension:" ) );
+    fcglobal_view->header()->setLabel( 1, i18n( "Type name:" ) );
+    fcglobal_view->header()->setLabel( 2, i18n( "Template location:" ) );
+    fcglobal_view->header()->setLabel( 3, i18n( "Icon:" ) );
+    fcglobal_view->header()->setLabel( 4, i18n( "Description:" ) );
 }
 
 #include "addglobaldlg.moc"

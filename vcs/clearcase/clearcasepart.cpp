@@ -67,7 +67,7 @@ void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
          viewname = s2;
        else
          return;
-        
+
         QFileInfo fi(popupfile);
         popup->insertSeparator();
 
@@ -276,7 +276,7 @@ void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err )
     }
 
     if ( diff.isEmpty() && !err.isEmpty() ) {
-        KMessageBox::detailedError( 0, i18n("Clearcase outputted errors during diff."), err, i18n("Errors During Diff") );
+        KMessageBox::detailedError( 0, i18n("Clearcase output errors during diff."), err, i18n("Errors During Diff") );
         return;
     }
 

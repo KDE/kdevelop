@@ -44,6 +44,8 @@
 #include <qaction.h>
 #include <qmetaobject.h>
 
+#include <klocale.h>
+
 ToolBarItem::ToolBarItem( QWidget *parent, QWidget *toolBar,
 			  const QString &label, const QString &tagstr,
 			  const QIconSet &icon, const QKeySequence &key )
@@ -94,29 +96,29 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
 
     if ( richtextMode ) {
 	QPopupMenu *stylesMenu = new QPopupMenu( this );
-	menuBar->insertItem( tr( "&Styles" ), stylesMenu );
+	menuBar->insertItem( i18n( "&Styles" ), stylesMenu );
 
-	basicToolBar = new QToolBar( tr( "Basics" ), this, DockTop );
+	basicToolBar = new QToolBar( i18n( "Basics" ), this, DockTop );
 
-	ToolBarItem *it = new ToolBarItem( this, basicToolBar, tr( "Italic" ),
+	ToolBarItem *it = new ToolBarItem( this, basicToolBar, i18n( "Italic" ),
 					   "i", BarIcon( "designer_textitalic.png", KDevDesignerPartFactory::instance() ), CTRL+Key_I );
 	it->addTo( stylesMenu );
 	connect( it, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *b = new ToolBarItem( this, basicToolBar, tr( "Bold" ),
+	ToolBarItem *b = new ToolBarItem( this, basicToolBar, i18n( "Bold" ),
 					  "b", BarIcon( "designer_textbold.png", KDevDesignerPartFactory::instance() ), CTRL+Key_B );
 	b->addTo( stylesMenu );
 	connect( b, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *ul = new ToolBarItem( this, basicToolBar, tr( "Underline" ),
+	ToolBarItem *ul = new ToolBarItem( this, basicToolBar, i18n( "Underline" ),
 					   "u", BarIcon( "designer_textunderline.png" , KDevDesignerPartFactory::instance()), CTRL+Key_U );
 	ul->addTo( stylesMenu );
 	connect( ul, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *tt = new ToolBarItem( this, basicToolBar, tr( "Typewriter" ),
+	ToolBarItem *tt = new ToolBarItem( this, basicToolBar, i18n( "Typewriter" ),
 					   "tt", BarIcon( "designer_textteletext.png", KDevDesignerPartFactory::instance() ) );
 	tt->addTo( stylesMenu );
 	connect( tt, SIGNAL( clicked( const QString& ) ),
@@ -125,16 +127,16 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
 	basicToolBar->addSeparator();
 
 	QPopupMenu *layoutMenu = new QPopupMenu( this );
-	menuBar->insertItem( tr( "&Layout" ), layoutMenu );
+	menuBar->insertItem( i18n( "&Layout" ), layoutMenu );
 
 	QAction *brAction = new QAction( this );
 	brAction->setIconSet( BarIcon( "designer_textlinebreak.png", KDevDesignerPartFactory::instance() ) );
-	brAction->setText( tr("Break" ) );
+	brAction->setText( i18n("Break" ) );
 	brAction->addTo( basicToolBar );
 	brAction->addTo( layoutMenu );
 	connect( brAction, SIGNAL( activated() ) , this, SLOT( insertBR() ) );
 
-	ToolBarItem *p = new ToolBarItem( this, basicToolBar, tr( "Paragraph" ),
+	ToolBarItem *p = new ToolBarItem( this, basicToolBar, i18n( "Paragraph" ),
 					  "p", BarIcon( "designer_textparagraph.png", KDevDesignerPartFactory::instance() ) );
 	p->addTo( layoutMenu );
 	connect( p, SIGNAL( clicked( const QString& ) ),
@@ -142,25 +144,25 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
 	layoutMenu->insertSeparator();
 	basicToolBar->addSeparator();
 
-	ToolBarItem *al = new ToolBarItem( this, basicToolBar, tr( "Align left" ),
+	ToolBarItem *al = new ToolBarItem( this, basicToolBar, i18n( "Align left" ),
 					   "p align=\"left\"", BarIcon( "designer_textleft.png", KDevDesignerPartFactory::instance() ) );
 	al->addTo( layoutMenu );
 	connect( al, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *ac = new ToolBarItem( this, basicToolBar, tr( "Align center" ),
+	ToolBarItem *ac = new ToolBarItem( this, basicToolBar, i18n( "Align center" ),
 					   "p align=\"center\"", BarIcon( "designer_textcenter.png", KDevDesignerPartFactory::instance() ) );
 	ac->addTo( layoutMenu );
 	connect( ac, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *ar = new ToolBarItem( this, basicToolBar, tr( "Align right" ),
+	ToolBarItem *ar = new ToolBarItem( this, basicToolBar, i18n( "Align right" ),
 					   "p align=\"right\"", BarIcon( "designer_textright.png", KDevDesignerPartFactory::instance() ) );
 	ar->addTo( layoutMenu );
 	connect( ar, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *block = new ToolBarItem( this, basicToolBar, tr( "Blockquote" ),
+	ToolBarItem *block = new ToolBarItem( this, basicToolBar, i18n( "Blockquote" ),
 					      "blockquote", BarIcon( "designer_textjustify.png", KDevDesignerPartFactory::instance() ) );
 	block->addTo( layoutMenu );
 	connect( block, SIGNAL( clicked( const QString& ) ),
@@ -168,51 +170,51 @@ MultiLineEditor::MultiLineEditor( bool call_static, bool richtextMode, QWidget *
 
 
 	QPopupMenu *fontMenu = new QPopupMenu( this );
-	menuBar->insertItem( tr( "&Font" ), fontMenu );
+	menuBar->insertItem( i18n( "&Font" ), fontMenu );
 
 	fontToolBar = new QToolBar( "Fonts", this, DockTop );
 
 	QAction *fontAction = new QAction( this );
 	fontAction->setIconSet( BarIcon( "designer_textfont.png", KDevDesignerPartFactory::instance() ) );
-	fontAction->setText( tr("Font" ) );
+	fontAction->setText( i18n("Font" ) );
 	fontAction->addTo( fontToolBar );
 	fontAction->addTo( fontMenu );
 	connect( fontAction, SIGNAL( activated() ) , this, SLOT( showFontDialog() ) );
 
 
-	ToolBarItem *fp1 = new ToolBarItem( this, fontToolBar, tr( "Fontsize +1" ),
+	ToolBarItem *fp1 = new ToolBarItem( this, fontToolBar, i18n( "Fontsize +1" ),
 					    "font size=\"+1\"", BarIcon( "designer_textlarger.png", KDevDesignerPartFactory::instance() ) );
 	connect( fp1, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *fm1 = new ToolBarItem( this, fontToolBar, tr( "Fontsize -1" ),
+	ToolBarItem *fm1 = new ToolBarItem( this, fontToolBar, i18n( "Fontsize -1" ),
 					    "font size=\"-1\"", BarIcon( "designer_textsmaller.png", KDevDesignerPartFactory::instance() ) );
 	connect( fm1, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *h1 = new ToolBarItem( this, fontToolBar, tr( "Headline 1" ),
+	ToolBarItem *h1 = new ToolBarItem( this, fontToolBar, i18n( "Headline 1" ),
 					   "h1", BarIcon( "designer_texth1.png", KDevDesignerPartFactory::instance() ) );
 	connect( h1, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *h2 = new ToolBarItem( this, fontToolBar, tr( "Headline 2" ),
+	ToolBarItem *h2 = new ToolBarItem( this, fontToolBar, i18n( "Headline 2" ),
 					   "h2", BarIcon( "designer_texth2.png", KDevDesignerPartFactory::instance()  ) );
 	connect( h2, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
-	ToolBarItem *h3 = new ToolBarItem( this, fontToolBar, tr( "Headline 3" ),
+	ToolBarItem *h3 = new ToolBarItem( this, fontToolBar, i18n( "Headline 3" ),
 					   "h3", BarIcon( "designer_texth3.png", KDevDesignerPartFactory::instance() ) );
 	connect( h3, SIGNAL( clicked( const QString& ) ),
 		 this, SLOT( insertTags( const QString& )));
 
 	QPopupMenu *optionsMenu = new QPopupMenu( this );
-	menuBar->insertItem( tr( "O&ptions" ), optionsMenu );
+	menuBar->insertItem( i18n( "O&ptions" ), optionsMenu );
 
 	optionsToolBar = new QToolBar( "Options", this, DockTop );
 	wrapAction = new QAction( this );
 	wrapAction->setToggleAction( TRUE );
 	wrapAction->setIconSet( BarIcon( "designer_wordwrap.png", KDevDesignerPartFactory::instance() ) );
-	wrapAction->setText( tr( "Word Wrapping" ) );
+	wrapAction->setText( i18n( "Word Wrapping" ) );
 	wrapAction->addTo( optionsToolBar );
 	wrapAction->addTo( optionsMenu );
 	connect( wrapAction, SIGNAL( toggled( bool ) ), this, SLOT( changeWrapMode( bool ) ) );
@@ -274,13 +276,13 @@ void MultiLineEditor::okClicked()
 void MultiLineEditor::applyClicked()
 {
     if ( !callStatic ) {
-	PopulateMultiLineEditCommand *cmd = new PopulateMultiLineEditCommand( tr( "Set the text of '%1'" ).arg( mlined->name() ),
+	PopulateMultiLineEditCommand *cmd = new PopulateMultiLineEditCommand( i18n( "Set the text of '%1'" ).arg( mlined->name() ),
 						formwindow, mlined, textEdit->text() );
 	cmd->execute();
 	formwindow->commandHistory()->addCommand( cmd );
 
 	if ( oldDoWrap != doWrap ) {
-	    QString pn( tr( "Set 'wordWrap' of '%2'" ).arg( mlined->name() ) );
+	    QString pn( i18n( "Set 'wordWrap' of '%2'" ).arg( mlined->name() ) );
 	    SetPropertyCommand *propcmd;
 	    if ( doWrap )
 		propcmd = new SetPropertyCommand( pn, formwindow,

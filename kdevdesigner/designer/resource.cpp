@@ -83,6 +83,7 @@
 
 #include <kiconloader.h>
 #include <kfiledialog.h>
+#include <klocale.h>
 
 #include "kdevdesigner_part.h"
 
@@ -830,7 +831,7 @@ void Resource::paste( const QString &cb, QWidget *parent )
     formwindow->setPropertyShowingBlocked( FALSE );
     formwindow->emitShowProperties();
 
-    PasteCommand *cmd = new PasteCommand( FormWindow::tr( "Paste" ), formwindow, widgets );
+    PasteCommand *cmd = new PasteCommand( i18n( "Paste" ), formwindow, widgets );
     formwindow->commandHistory()->addCommand( cmd );
 }
 
@@ -1786,8 +1787,8 @@ QObject *Resource::createObject( const QDomElement &e, QWidget *parent, QLayout*
     if ( !className.isNull() ) {
 	obj = WidgetFactory::create( WidgetDatabase::idFromClassName( className ), parent, 0, FALSE );
 	if ( !obj ) {
-	    QMessageBox::critical( MainWindow::self, MainWindow::tr( "Loading File" ),
-				   MainWindow::tr( "Error loading %1.\n"
+	    QMessageBox::critical( MainWindow::self, i18n( "Loading File" ),
+				   i18n( "Error loading %1.\n"
 						   "The widget %2 couldn't be created" ).
 				   arg( currFileName ).arg( className ) );
 	    return 0;

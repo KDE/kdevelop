@@ -44,6 +44,7 @@
 #include <qapplication.h>
 
 #include <kfiledialog.h>
+#include <klocale.h>
 
 static QString make_func_pretty( const QString &s )
 {
@@ -187,8 +188,8 @@ bool FormFile::save( bool withMsgBox, bool ignoreModified )
 		    f.readBlock( data.data(), f.size() );
 		    f2.writeBlock( data );
 		} else {
-		    QMessageBox::warning( MainWindow::self, "Save", "The file " +
-					  codeFile() + " could not be saved" );
+		    QMessageBox::warning( MainWindow::self, i18n( "Save" ),
+                                  i18n( "The file %1 could not be saved" ).arg( codeFile() ) );
 		}
 	    }
 	}
@@ -210,8 +211,8 @@ bool FormFile::save( bool withMsgBox, bool ignoreModified )
 		    f.readBlock( data.data(), f.size() );
 		    f2.writeBlock( data );
 		} else if ( qApp->type() != QApplication::Tty ) {
-		    QMessageBox::warning( MainWindow::self, "Save", "The file " +
-					  codeFile() + " could not be saved" );
+            QMessageBox::warning( MainWindow::self, i18n( "Save" ),
+                                  i18n( "The file %1 could not be saved" ).arg( codeFile() ) );
 		}
 	    }
 	}
@@ -223,13 +224,13 @@ bool FormFile::save( bool withMsgBox, bool ignoreModified )
 	bool formCodeOnly = isModified( WFormCode ) && !isModified( WFormWindow );
 	if ( !resource.save( pro->makeAbsolute( filename ), formCodeOnly ) ) {
 	    if ( MainWindow::self )
-		MainWindow::self->statusMessage( tr( "Failed to save file '%1'.").arg( formCodeOnly ? codeFile(): filename ) );
+		MainWindow::self->statusMessage( i18n( "Failed to save file '%1'.").arg( formCodeOnly ? codeFile(): filename ) );
 	    if ( formCodeOnly )
 		return FALSE;
 	    return saveAs();
 	}
 	if ( MainWindow::self )
-	    MainWindow::self->statusMessage( tr( "'%1' saved.").
+	    MainWindow::self->statusMessage( i18n( "'%1' saved.").
 						    arg( formCodeOnly ? codeFile() : filename ));
     } else {
 	if ( !Resource::saveFormCode(this, MetaDataBase::languageInterface(pro->language())) )
@@ -257,9 +258,9 @@ bool FormFile::saveAs( bool ignoreModified )
     QString fn;
     while ( !saved ) {
 	fn = KFileDialog::getSaveFileName( f,
-					   tr( "*.ui|Qt User-Interface Files" ) + "\n" +
-					   tr( "*|All Files" ), MainWindow::self, /*0,*/
-					   tr( "Save Form '%1' As ...").arg( formName() )/*,
+					   i18n( "*.ui|Qt User-Interface Files" ) + "\n" +
+					   i18n( "*|All Files" ), MainWindow::self, /*0,*/
+					   i18n( "Save Form '%1' As ...").arg( formName() )/*,
 					   MainWindow::self ? &MainWindow::self->lastSaveFilter : 0*/ );
 	if ( fn.isEmpty() )
 	    return FALSE;
@@ -270,8 +271,8 @@ bool FormFile::saveAs( bool ignoreModified )
 	filename = pro->makeRelative( fn );
 	QFileInfo relfi( filename );
 	if ( relfi.exists() ) {
-	    if ( QMessageBox::warning( MainWindow::self, tr( "File Already Exists" ),
-		tr( "The file already exists. Do you wish to overwrite it?" ),
+	    if ( QMessageBox::warning( MainWindow::self, i18n( "File Already Exists" ),
+		i18n( "The file already exists. Do you wish to overwrite it?" ),
 		QMessageBox::Yes,
 		QMessageBox::No ) == QMessageBox::Yes ) {
 		saved = TRUE;
@@ -290,7 +291,7 @@ bool FormFile::saveAs( bool ignoreModified )
     pro->setModified( TRUE );
     timeStamp.setFileName( pro->makeAbsolute( codeFile() ) );
     if ( ed && formWindow() )
-	ed->setCaption( tr( "Edit %1" ).arg( formWindow()->name() ) );
+	ed->setCaption( i18n( "Edit %1" ).arg( formWindow()->name() ) );
     setModified( TRUE );
     if ( pro->isDummy() )
 	fw->mainWindow()->addRecentlyOpenedFile( fn );
@@ -321,9 +322,9 @@ bool FormFile::closeEvent()
     if ( editor() )
 	editor()->save();
 
-    switch ( QMessageBox::warning( MainWindow::self, tr( "Save Form" ),
-				   tr( "Save changes to form '%1'?" ).arg( filename ),
-				   tr( "&Yes" ), tr( "&No" ), tr( "&Cancel" ), 0, 2 ) ) {
+    switch ( QMessageBox::warning( MainWindow::self, i18n( "Save Form" ),
+				   i18n( "Save changes to form '%1'?" ).arg( filename ),
+				   i18n( "&Yes" ), i18n( "&No" ), i18n( "&Cancel" ), 0, 2 ) ) {
     case 0: // save
 	if ( !save() )
 	    return FALSE;
@@ -433,18 +434,18 @@ bool FormFile::setupUihFile( bool askForUih )
     }
     if ( codeFileStat != FormFile::Ok && !ed ) {
 	if ( hasFormCode() ) {
-	    int i = QMessageBox::information( MainWindow::self, tr( "Using ui.h file" ),
-	                                      tr( "An \"ui.h\" file for this form already exists.\n"
+	    int i = QMessageBox::information( MainWindow::self, i18n( "Using ui.h file" ),
+	                                      i18n( "An \"ui.h\" file for this form already exists.\n"
 					      "Do you want to use it or create a new one?" ),
-	                                      tr( "Use existing" ), tr( "Create new" ),
-					      tr( "Cancel" ), 2, 2 );
+	                                      i18n( "Use existing" ), i18n( "Create new" ),
+					      i18n( "Cancel" ), 2, 2 );
 	    if ( i == 2 )
 		return FALSE;
 	    if ( i == 1 )
 		createFormCode();
 	} else {
-	    if ( QMessageBox::Yes != QMessageBox::information( MainWindow::self, tr( "Creating ui.h file" ),
-						 tr( "Do you want to create an new \"ui.h\" file?" ),
+	    if ( QMessageBox::Yes != QMessageBox::information( MainWindow::self, i18n( "Creating ui.h file" ),
+						 i18n( "Do you want to create an new \"ui.h\" file?" ),
 						 QMessageBox::Yes, QMessageBox::No ) )
 		return FALSE;
 	    createFormCode();
@@ -643,10 +644,10 @@ void FormFile::checkTimeStamp()
 	return;
     timeStamp.update();
     if ( codeEdited ) {
-	if ( QMessageBox::information( MainWindow::self, tr( "Qt Designer" ),
-				       tr( "File '%1' has been changed outside Qt Designer.\n"
+	if ( QMessageBox::information( MainWindow::self, i18n( "Qt Designer" ),
+				       i18n( "File '%1' has been changed outside Qt Designer.\n"
 					   "Do you want to reload it?" ).arg( timeStamp.fileName() ),
-				       tr( "&Yes" ), tr( "&No" ) ) == 0 ) {
+				       i18n( "&Yes" ), i18n( "&No" ) ) == 0 ) {
 	    QFile f( timeStamp.fileName() );
 	    if ( f.open( IO_ReadOnly ) ) {
 		QTextStream ts( &f );
@@ -844,16 +845,16 @@ bool FormFile::checkFileName( bool allowBreak )
 {
     FormFile *ff = pro->findFormFile( filename, this );
     if ( ff )
-	QMessageBox::warning( MainWindow::self, tr( "Invalid Filename" ),
-			      tr( "The project already contains a form with a\n"
+	QMessageBox::warning( MainWindow::self, i18n( "Invalid Filename" ),
+			      i18n( "The project already contains a form with a\n"
 				  "filename of '%1'. Please choose a new filename." ).arg( filename ) );
     while ( ff ) {
 	QString fn;
 	while ( fn.isEmpty() ) {
 	    fn = KFileDialog::getSaveFileName( pro->makeAbsolute( fileName() ),
-					       tr( "*.ui|Qt User-Interface Files" ) + "\n" +
-					       tr( "*|All Files" ), MainWindow::self,/* 0,*/
-					       tr( "Save Form '%1' As ...").
+					       i18n( "*.ui|Qt User-Interface Files" ) + "\n" +
+					       i18n( "*|All Files" ), MainWindow::self,/* 0,*/
+					       i18n( "Save Form '%1' As ...").
 					       arg( formWindow()->name() )/*,
 					       MainWindow::self ? &MainWindow::self->lastSaveFilter : 0 */);
 	    if ( allowBreak && fn.isEmpty() )

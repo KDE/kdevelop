@@ -35,6 +35,8 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 
+#include <klocale.h>
+
 IconViewEditor::IconViewEditor( QWidget *parent, QWidget *editWidget, FormWindow *fw )
     : IconViewEditorBase( parent, 0, TRUE ), formwindow( fw )
 {
@@ -58,7 +60,7 @@ IconViewEditor::IconViewEditor( QWidget *parent, QWidget *editWidget, FormWindow
 
 void IconViewEditor::insertNewItem()
 {
-    QIconViewItem *i = new QIconViewItem( preview, tr( "New Item" ) );
+    QIconViewItem *i = new QIconViewItem( preview, i18n( "New Item" ) );
     preview->setCurrentItem( i );
     preview->setSelected( i, TRUE );
     itemText->setFocus();
@@ -127,7 +129,7 @@ void IconViewEditor::applyClicked()
 	items.append( item );
     }
 
-    PopulateIconViewCommand *cmd = new PopulateIconViewCommand( tr( "Edit the Items of '%1'" ).arg( iconview->name() ),
+    PopulateIconViewCommand *cmd = new PopulateIconViewCommand( i18n( "Edit the Items of '%1'" ).arg( iconview->name() ),
 								formwindow, iconview, items );
     cmd->execute();
     formwindow->commandHistory()->addCommand( cmd );

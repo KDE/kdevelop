@@ -56,7 +56,7 @@ SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QString
     connect( partController(), SIGNAL( savedFile( const KURL& ) ), this, SLOT( savedFile( const KURL& ) ) );
 
     m_widget = new SqlOutputWidget();
-    mainWindow()->embedOutputView( m_widget, "SQL", "Output of SQL commands" );
+    mainWindow()->embedOutputView( m_widget, i18n( "SQL" ), i18n( "Output of SQL commands" ) );
     QWhatsThis::add(m_widget, i18n("<b>Output of SQL commands</b><p>This window shows the output of SQL commands being executed. It can display results of SQL \"select\" commands in a table."));
 }
 

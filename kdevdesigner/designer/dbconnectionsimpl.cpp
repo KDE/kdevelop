@@ -40,6 +40,8 @@
 #include "mainwindow.h"
 #include "asciivalidator.h"
 
+#include <klocale.h>
+
 static bool blockChanges = FALSE;
 
 /*
@@ -123,8 +125,8 @@ void DatabaseConnectionsEditor::doConnect()
 	    listConnections->setCurrentItem( listConnections->count() - 1 );
 	    project->saveConnections();
 	} else {
-	    QMessageBox::warning( MainWindow::self, QApplication::tr( "Connection" ),
-				  QApplication::tr( "Could not connect to the database.\n"
+	    QMessageBox::warning( MainWindow::self, i18n( "Connection" ),
+				  i18n( "Could not connect to the database.\n"
 						    "Please ensure that the database server is running "
 						    "and that all the connection information is correct.\n"
 						    "[ " + conn->lastError() + " ]" ) );

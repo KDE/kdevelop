@@ -177,7 +177,7 @@ void CVSLogPage::slotLinkClicked( const QString &link )
     QString v2 = ver.section( '_', 1, 1 );
     if ( v1.isEmpty() || v2.isEmpty() )
     {
-        m_textBrowser->append( "invalid link clicked" );
+        m_textBrowser->append( i18n( "invalid link clicked" ) );
         return;
     }
 

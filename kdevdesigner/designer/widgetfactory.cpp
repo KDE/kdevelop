@@ -100,6 +100,8 @@
 #include <globaldefs.h>
 #include <qobject.h>
 
+#include <klocale.h>
+
 FormWindow *find_formwindow( QWidget *w )
 {
     if ( !w )
@@ -272,7 +274,7 @@ bool QDesignerTabWidget::eventFilter( QObject *o, QEvent *e )
 
 		FormWindow *fw = find_formwindow( this );
 		MoveTabPageCommand *cmd =
-		    new MoveTabPageCommand( tr( "Move Tab Page" ), fw, this,
+		    new MoveTabPageCommand( i18n( "Move Tab Page" ), fw, this,
 					    dragPage, dragLabel, newIndex, oldIndex );
 		fw->commandHistory()->addCommand( cmd );
 		cmd->execute();
@@ -735,7 +737,7 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 #if !defined(QT_NO_ICONVIEW)
 	QIconView* iv = new QIconView( parent, name );
 	if ( init )
-	    (void) new QIconViewItem( iv, MainWindow::tr( "New Item" ) );
+	    (void) new QIconViewItem( iv, i18n( "New Item" ) );
 	return iv;
 #else
 	return 0;
@@ -762,7 +764,7 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
     else if ( className == "QListBox" ) {
 	QListBox* lb = new QListBox( parent, name );
 	if ( init ) {
-	    lb->insertItem( MainWindow::tr( "New Item" ) );
+	    lb->insertItem( i18n( "New Item" ) );
 	    lb->setCurrentItem( 0 );
 	}
 	return lb;
@@ -770,8 +772,8 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	QListView *lv = new QListView( parent, name );
 	lv->setSorting( -1 );
 	if ( init ) {
-	    lv->addColumn( MainWindow::tr( "Column 1" ) );
-	    lv->setCurrentItem( new QListViewItem( lv, MainWindow::tr( "New Item" ) ) );
+	    lv->addColumn( i18n( "Column 1" ) );
+	    lv->setCurrentItem( new QListViewItem( lv, i18n( "New Item" ) ) );
 	}
 	return lv;
     } else if ( className == "QLineEdit" )
@@ -809,10 +811,10 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	if ( init ) {
 	    FormWindow *fw = find_formwindow( parent );
 	    QWidget *w = fw ? new QDesignerWidget( fw, tw, "tab" ) : new QWidget( tw, "tab" );
-	    tw->addTab( w, MainWindow::tr("Tab 1") );
+	    tw->addTab( w, i18n("Tab 1") );
 	    MetaDataBase::addEntry( w );
 	    w = fw ? new QDesignerWidget( fw, tw, "tab" ) : new QWidget( tw, "tab" );
-	    tw->addTab( w, MainWindow::tr("Tab 2") );
+	    tw->addTab( w, i18n("Tab 2") );
 	    MetaDataBase::addEntry( tw );
 	    MetaDataBase::addEntry( w );
 	}
@@ -869,7 +871,7 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	if ( init && ::qt_cast<FormWindow*>(parent) ) {
 	    QDesignerWidget *dw = new QDesignerWidget( (FormWindow*)parent, wiz, "WizardPage" );
 	    MetaDataBase::addEntry( dw );
-	    wiz->addPage( dw, FormWindow::tr( "Page" ) );
+	    wiz->addPage( dw, i18n( "Page" ) );
 	    QTimer::singleShot( 0, wiz, SLOT( next() ) );
 	}
 	return wiz;
@@ -955,10 +957,10 @@ QWidget *WidgetFactory::createWidget( const QString &className, QWidget *parent,
 	FormWindow *fw = find_formwindow( parent );
 	QWidget *w = fw ? new QDesignerWidget( fw, tb, "page1" ) :
 		     new QWidget( tb, "page1" );
-	tb->addItem( w, MainWindow::tr("Page 1") );
+	tb->addItem( w, i18n("Page 1") );
 	MetaDataBase::addEntry( w );
 	w = fw ? new QDesignerWidget( fw, tb, "page2" ) : new QWidget( tb, "page2" );
-	tb->addItem( w, MainWindow::tr("Page 2") );
+	tb->addItem( w, i18n("Page 2") );
 	MetaDataBase::addEntry( tb );
 	MetaDataBase::addEntry( w );
 	return tb;

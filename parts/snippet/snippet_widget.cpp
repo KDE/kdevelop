@@ -102,12 +102,12 @@ void SnippetWidget::slotAdd()
   SnippetDlg dlg(this, "SnippetDlg", true);
 
   /*check if the user clicked a SnippetGroup
-    If not, we set the group variable to the SnippetGroup 
+    If not, we set the group variable to the SnippetGroup
     which the selected item is a child of*/
   SnippetGroup * group = dynamic_cast<SnippetGroup*>(selectedItem());
   if (!group)
     group = dynamic_cast<SnippetGroup*>(selectedItem()->parent());
-  
+
   /*fill the combobox with the names of all SnippetGroup entries*/
   for (SnippetItem *it=_list.first(); it; it=_list.next()) {
     if (dynamic_cast<SnippetGroup*>(it)) {
@@ -115,7 +115,7 @@ void SnippetWidget::slotAdd()
     }
   }
   dlg.cbGroup->setCurrentText(group->getName());
-  
+
   if (dlg.exec() == QDialog::Accepted) {
       group = dynamic_cast<SnippetGroup*>(SnippetItem::findItemByName(dlg.cbGroup->currentText(), _list));
       _list.append( new SnippetItem(group, dlg.snippetName->text(), dlg.snippetText->text()) );
@@ -137,8 +137,8 @@ void SnippetWidget::slotAddGroup()
   dlg.cbGroup->insertItem(i18n("All"));
   dlg.cbGroup->insertStringList(m_part->getAllLanguages());
   dlg.cbGroup->setCurrentText(i18n("All"));
-  dlg.textLabelGroup->setText(i18n("Language:"));  
-  
+  dlg.textLabelGroup->setText(i18n("Language:"));
+
   if (dlg.exec() == QDialog::Accepted) {
     _list.append( new SnippetGroup(this, dlg.snippetName->text(), SnippetGroup::getMaxId(), dlg.cbGroup->currentText()) );
   }
@@ -160,7 +160,7 @@ void SnippetWidget::slotRemove()
 
   if (group) {
     if (group->childCount() > 0 &&
-        KMessageBox::questionYesNo(this, i18n("Do you really want to remove this group and all its snippets?")) 
+        KMessageBox::questionYesNo(this, i18n("Do you really want to remove this group and all its snippets?"))
         == KMessageBox::No)
       return;
 
@@ -197,7 +197,7 @@ void SnippetWidget::slotEdit()
   dlg.snippetName->setText(pSnippet->getName());
   dlg.snippetText->setText(pSnippet->getText());
   dlg.btnAdd->setText(i18n("&Apply"));
-  
+
   dlg.setCaption(i18n("Edit Snippet"));
   /*fill the combobox with the names of all SnippetGroup entries*/
   for (SnippetItem *it=_list.first(); it; it=_list.next()) {
@@ -220,7 +220,7 @@ void SnippetWidget::slotEdit()
       newGroup->insertItem(pSnippet);
       pSnippet->resetParent();
     }
-    
+
     setSelected(item, TRUE);
   }
 }
@@ -248,14 +248,14 @@ void SnippetWidget::slotEditGroup()
   dlg.cbGroup->insertItem(i18n("All"));
   dlg.cbGroup->insertStringList(m_part->getAllLanguages());
   dlg.cbGroup->setCurrentText(pGroup->getLanguage());
-  dlg.textLabelGroup->setText(i18n("Language:"));  
+  dlg.textLabelGroup->setText(i18n("Language:"));
 
   if (dlg.exec() == QDialog::Accepted) {
     //update the KListView and the SnippetGroup
     item->setText( 0, dlg.snippetName->text() );
     pGroup->setName( dlg.snippetName->text() );
     pGroup->setLanguage(dlg.cbGroup->currentText());
-    
+
     setSelected(item, TRUE);
   }
 }
@@ -316,7 +316,7 @@ void SnippetWidget::writeConfig()
   QString strKeyName="";
   QString strKeyText="";
   QString strKeyId="";
-  
+
   int iSnipCount = 0;
   int iGroupCount = 0;
 
@@ -338,7 +338,7 @@ void SnippetWidget::writeConfig()
       strKeyName=QString("snippetName_%1").arg(iSnipCount);
       strKeyText=QString("snippetText_%1").arg(iSnipCount);
       strKeyId=QString("snippetParent_%1").arg(iSnipCount);
-    
+
       _cfg->writeEntry(strKeyName, item->getName());
       _cfg->writeEntry(strKeyText, item->getText());
       _cfg->writeEntry(strKeyId, item->getParent());
@@ -387,7 +387,7 @@ void SnippetWidget::initConfigOldVersion(KConfig *cfg)
 {
   SnippetGroup * group = new SnippetGroup(this, "DEFAULT", 1);
   _list.append(group);
-  
+
   int iCount = cfg->readNumEntry("snippetCount", 0);
   QString strKeyName="";
   QString strKeyText="";
@@ -430,7 +430,7 @@ void SnippetWidget::initConfig()
 
   //if entry doesn't get found, this will return -1 which we will need a bit later
   int iCount = _cfg->readNumEntry("snippetGroupCount", -1);
-  
+
   for ( int i=0; i<iCount; i++) {  //read the group-list
     strKeyName=QString("snippetGroupName_%1").arg(i);
     strKeyId=QString("snippetGroupId_%1").arg(i);
@@ -458,7 +458,7 @@ void SnippetWidget::initConfig()
 
   /* Check if the snippetGroupCount property has been found
      if iCount is -1 this means, that the user has his snippets
-     stored without groups. Therefore we will call the 
+     stored without groups. Therefore we will call the
      initConfigOldVersion() function below */
   if (iCount != -1) {
     iCount = _cfg->readNumEntry("snippetCount", 0);
@@ -466,16 +466,16 @@ void SnippetWidget::initConfig()
         strKeyName=QString("snippetName_%1").arg(i);
         strKeyText=QString("snippetText_%1").arg(i);
         strKeyId=QString("snippetParent_%1").arg(i);
-    
+
         QString strNameVal="";
         QString strTextVal="";
         int iParentVal = -1;
-    
+
         strNameVal = _cfg->readEntry(strKeyName, "");
         strTextVal = _cfg->readEntry(strKeyText, "");
         iParentVal = _cfg->readNumEntry(strKeyId, -1);
         kdDebug(9035) << "Read item " << strNameVal << " " << iParentVal << endl;
-    
+
         if (strNameVal != "" && strTextVal != "" && iParentVal != -1) {
         item = new SnippetItem(SnippetItem::findGroupById(iParentVal, _list), strNameVal, strTextVal);
         kdDebug(9035) << "Created item " << item->getName() << " " << item->getParent() << endl;
@@ -526,7 +526,7 @@ void SnippetWidget::maybeTip( const QPoint & p )
 
 	QRect r = itemRect( item );
 
-	if (r.isValid() && 
+	if (r.isValid() &&
         _SnippetConfig.useToolTips() )
 	{
         if (dynamic_cast<SnippetGroup*>(item)) {
@@ -800,13 +800,13 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
 
   labTop = new QLabel( &dlg, "label" );
   layoutTop->addWidget(labTop, 0, 0);
-  labTop->setText(i18n("Enter the replacement values for ") + var + ":");
+  labTop->setText(i18n("Enter the replacement values for %1:").arg( var ));
   layout->addMultiCellLayout( layoutTop, 0, 0, 0, 1 );
 
 
   cb = new QCheckBox( &dlg, "cbVar" );
   cb->setChecked( FALSE );
-  cb->setText("make value &default");
+  cb->setText(i18n( "Make value &default" ));
 
   te = new KTextEdit( &dlg, "teVar" );
   layoutVar->addWidget( te, 0, 1, Qt::AlignTop);
@@ -879,7 +879,7 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
 bool SnippetWidget::acceptDrag (QDropEvent *event) const
 {
   kdDebug(9035) << "Format: " << event->format() << "" << event->pos() << endl;
-  
+
   QListViewItem * item = itemAt(event->pos());
 
   if (item &&
@@ -917,7 +917,7 @@ void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *item)
     SnippetDlg dlg(this, "SnippetDlg", true);
     dlg.snippetName->clear();
     dlg.snippetText->setText(encData);
-    
+
     /*fill the combobox with the names of all SnippetGroup entries*/
     for (SnippetItem *it=_list.first(); it; it=_list.next()) {
       if (dynamic_cast<SnippetGroup*>(it)) {

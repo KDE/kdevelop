@@ -58,6 +58,8 @@
 
 #include "kdevdesigner_part.h"
 
+#include <klocale.h>
+
 CommandHistory::CommandHistory( int s )
     : current( -1 ), steps( s ), savedAt( -1 )
 {
@@ -366,7 +368,7 @@ DeleteCommand::DeleteCommand( const QString &n, FormWindow *fw,
     widgets.setAutoDelete( FALSE );
     QWidgetList copyOfWidgets = widgets;
     copyOfWidgets.setAutoDelete(FALSE);
-    
+
     // Include the children of the selected items when deleting
     for ( QWidget *w = widgets.first(); w; w = widgets.next() ) {
 	QObjectList *children = w->queryList( "QWidget" );
@@ -523,8 +525,8 @@ bool SetPropertyCommand::checkProperty()
 	QString s = newValue.toString();
 	if ( !formWindow()->unify( widget, s, FALSE ) ) {
 	    QMessageBox::information( formWindow()->mainWindow(),
-				      FormWindow::tr( "Set 'name' property" ),
-				      FormWindow::tr( "The name of a widget must be unique.\n"
+				      i18n( "Set 'name' property" ),
+				      i18n( "The name of a widget must be unique.\n"
 						      "'%1' is already used in form '%2',\n"
 						      "so the name has been reverted to '%3'." ).
 				      arg( newValue.toString() ).
@@ -535,8 +537,8 @@ bool SetPropertyCommand::checkProperty()
 	}
 	if ( s.isEmpty() ) {
 	    QMessageBox::information( formWindow()->mainWindow(),
-				      FormWindow::tr( "Set 'name' property" ),
-				      FormWindow::tr( "The name of a widget must not be null.\n"
+				      i18n( "Set 'name' property" ),
+				      i18n( "The name of a widget must not be null.\n"
 						      "The name has been reverted to '%1'." ).
 				      arg( oldValue.toString() ));
 	    setProperty( oldValue, oldCurrentItemText, FALSE );
@@ -1173,7 +1175,7 @@ void AddFunctionCommand::execute()
 {
     MetaDataBase::addFunction( formWindow(), function, specifier, access, functionType, language, returnType );
     formWindow()->mainWindow()->functionsChanged();
-    
+
     //integration (add - execute)
     KInterfaceDesigner::Function f;
     f.returnType = returnType;
@@ -1183,7 +1185,7 @@ void AddFunctionCommand::execute()
     f.type = (functionType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;
     formWindow()->clearSelection(false);
     formWindow()->mainWindow()->part()->emitAddedFunction(formWindow()->fileName(), f);
-    
+
     if ( formWindow()->formFile() )
 	formWindow()->formFile()->setModified( TRUE );
 }
@@ -1192,7 +1194,7 @@ void AddFunctionCommand::unexecute()
 {
     MetaDataBase::removeFunction( formWindow(), function, specifier, access, functionType,  language, returnType );
     formWindow()->mainWindow()->functionsChanged();
-    
+
     //integration (add - unexecute)
     KInterfaceDesigner::Function f;
     f.returnType = returnType;
@@ -1201,7 +1203,7 @@ void AddFunctionCommand::unexecute()
     f.access = access;
     f.type = (functionType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;
     formWindow()->mainWindow()->part()->emitRemovedFunction(formWindow()->fileName(), f);
-    
+
     if ( formWindow()->formFile() )
 	formWindow()->formFile()->setModified( TRUE );
 }
@@ -1243,9 +1245,9 @@ void ChangeFunctionAttribCommand::execute()
     f.function = oldName;
     f.specifier = oldSpec;
     f.access = oldAccess;
-    f.type = (oldType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;    
+    f.type = (oldType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;
     formWindow()->mainWindow()->part()->emitEditedFunction(formWindow()->fileName(), of, f);
-                
+
     if ( formWindow()->formFile() )
 	formWindow()->formFile()->setModified( TRUE );
 }
@@ -1257,7 +1259,7 @@ void ChangeFunctionAttribCommand::unexecute()
     formWindow()->formFile()->functionNameChanged( newName, oldName );
     formWindow()->formFile()->functionRetTypeChanged( oldName, newReturnType, oldReturnType );
     formWindow()->mainWindow()->functionsChanged();
-    
+
     //integration (edit - execute)
     KInterfaceDesigner::Function f;
     f.returnType = newReturnType;
@@ -1270,9 +1272,9 @@ void ChangeFunctionAttribCommand::unexecute()
     f.function = oldName;
     f.specifier = oldSpec;
     f.access = oldAccess;
-    f.type = (oldType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;    
+    f.type = (oldType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;
     formWindow()->mainWindow()->part()->emitEditedFunction(formWindow()->fileName(), f, of);
-    
+
     if ( formWindow()->formFile() )
 	formWindow()->formFile()->setModified( TRUE );
 }
@@ -1305,7 +1307,7 @@ void RemoveFunctionCommand::execute()
 {
     MetaDataBase::removeFunction( formWindow(), function, specifier, access, functionType, language, returnType );
     formWindow()->mainWindow()->functionsChanged();
-    
+
     //integration (remove - execute)
     KInterfaceDesigner::Function f;
     f.returnType = returnType;
@@ -1314,7 +1316,7 @@ void RemoveFunctionCommand::execute()
     f.access = access;
     f.type = (functionType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;
     formWindow()->mainWindow()->part()->emitRemovedFunction(formWindow()->fileName(), f);
-    
+
     if ( formWindow()->formFile() )
 	formWindow()->formFile()->setModified( TRUE );
 }
@@ -1325,7 +1327,7 @@ void RemoveFunctionCommand::unexecute()
 	return;
     MetaDataBase::addFunction( formWindow(), function, specifier, access, functionType, language, returnType );
     formWindow()->mainWindow()->functionsChanged();
-    
+
     //integration (remove - unexecute)
     KInterfaceDesigner::Function f;
     f.returnType = returnType;
@@ -1335,7 +1337,7 @@ void RemoveFunctionCommand::unexecute()
     f.type = (functionType == "slot") ? KInterfaceDesigner::ftQtSlot : KInterfaceDesigner::ftFunction ;
     formWindow()->clearSelection(false);
     formWindow()->mainWindow()->part()->emitAddedFunction(formWindow()->fileName(), f);
-            
+
     if ( formWindow()->formFile() )
 	formWindow()->formFile()->setModified( TRUE );
 }

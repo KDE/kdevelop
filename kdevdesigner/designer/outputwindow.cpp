@@ -37,6 +37,8 @@
 #include <stdio.h>
 #include <qpainter.h>
 
+#include <klocale.h>
+
 static QTextEdit *debugoutput = 0;
 bool debugToStderr = FALSE;
 
@@ -75,13 +77,13 @@ void OutputWindow::setupError()
 	     this, SLOT( currentErrorChanged( QListViewItem* ) ) );
 
     if ( MetaDataBase::languages().count() > 1 )
-	addTab( errorView, tr( "Warnings/Errors" ) );
+	addTab( errorView, i18n( "Warnings/Errors" ) );
     else
 	errorView->hide();
-    errorView->addColumn( tr( "Type" ) );
-    errorView->addColumn( tr( "Message" ) );
-    errorView->addColumn( tr( "Line" ) );
-    errorView->addColumn( tr( "Location" ) );
+    errorView->addColumn( i18n( "Type" ) );
+    errorView->addColumn( i18n( "Message" ) );
+    errorView->addColumn( i18n( "Line" ) );
+    errorView->addColumn( i18n( "Location" ) );
     errorView->setResizeMode( QListView::LastColumn );
     errorView->setColumnWidth( 0, errorView->fontMetrics().width( "WARNING1234" ) );
     errorView->setColumnWidth( 1, errorView->fontMetrics().width( "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOP" ) );

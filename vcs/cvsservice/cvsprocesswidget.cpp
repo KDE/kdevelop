@@ -142,7 +142,7 @@ bool CvsProcessWidget::startJob( const DCOPRef &aJob )
     // disconnect 3rd party slots from our signals
     disconnect( SIGNAL(jobFinished(bool, int)) );
 
-    showInfo( i18n("Started job: ") + cmdLine );
+    showInfo( i18n("Started job: %1").arg( cmdLine ) );
 
 #ifdef MYDCOPDEBUG
     g_dcopExitCounter = 0;

@@ -14,6 +14,7 @@
 
 #include <kdebug.h>
 #include <kconfig.h>
+#include <klocale.h>
 
 #include "domutil.h"
 #include "kdevproject.h"
@@ -282,6 +283,6 @@ QString CvsOptions::guessLocation( const QString &projectDir ) const
     else
     {
         kdDebug(9000) << "===> Error: could not open CVS/Entries!! " << endl;
-        return "Error while guessing repository location!!";
+        return i18n( "Error while guessing repository location!" );
     }
 }

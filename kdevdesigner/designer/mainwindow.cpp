@@ -82,6 +82,7 @@
 #include "designeraction.h"
 
 #include <kiconloader.h>
+#include <klocale.h>
 
 #include <qinputdialog.h>
 #include <qtoolbar.h>
@@ -151,7 +152,7 @@ static QString textNoAccel( const QString& text)
 MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, const QString &plgDir )
     : QMainWindow( 0, "designer_mainwindow"/*, WType_TopLevel | (single ? 0 : WDestructiveClose) | WGroupLeader*/ ),
       grd( 10, 10 ), sGrid( TRUE ), snGrid( TRUE ), restoreConfig( TRUE ), splashScreen( TRUE ),
-      fileFilter( tr( "Qt User-Interface Files (*.ui)" ) ), client( asClient ),
+      fileFilter( i18n( "Qt User-Interface Files (*.ui)" ) ), client( asClient ),
       previewing( FALSE ), databaseAutoEdit( FALSE ), autoSaveEnabled( FALSE ), autoSaveInterval( 1800 ), m_part(part)
 {
 //    extern void qInitImages_designercore();
@@ -201,7 +202,7 @@ MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, cons
 
     statusBar()->clear();
 #if defined(QT_NON_COMMERCIAL)
-    statusBar()->addWidget( new QLabel(tr("Ready - This is the non-commercial version of Qt - "
+    statusBar()->addWidget( new QLabel(i18n("Ready - This is the non-commercial version of Qt - "
 	"For commercial evaluations, use the help menu to register with Trolltech."), statusBar()), 1 );
 #else
     statusBar()->addWidget( new QLabel("Ready", statusBar()), 1 );
@@ -220,7 +221,7 @@ MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, cons
     setupSearchActions();
     layoutToolBar = new QToolBar( this, "Layout" );
     layoutToolBar->setCloseMode( QDockWindow::Undocked );
-    addToolBar( layoutToolBar, tr( "Layout" ) );
+    addToolBar( layoutToolBar, i18n( "Layout" ) );
     interpreterPluginManager = 0;
     setupToolActions();
     setupLayoutActions();
@@ -284,7 +285,7 @@ MainWindow::MainWindow( KDevDesignerPart *part, bool asClient, bool single, cons
 
     if ( autoSaveEnabled )
 	autoSaveTimer->start( autoSaveInterval * 1000 );
-    
+
     setFocusPolicy( StrongFocus );
 }
 
@@ -357,9 +358,9 @@ void MainWindow::setupPropertyEditor()
     addToolBar( dw, Qt::DockRight );
     dw->setWidget( propertyEditor );
     dw->setFixedExtentWidth( 250 );
-    dw->setCaption( tr( "Property Editor/Signal Handlers" ) );
+    dw->setCaption( i18n( "Property Editor/Signal Handlers" ) );
     QWhatsThis::add( propertyEditor,
-		     tr("<b>The Property Editor</b>"
+		     i18n("<b>The Property Editor</b>"
 			"<p>You can change the appearance and behavior of the selected widget in the "
 			"property editor.</p>"
 			"<p>You can set properties for components and forms at design time and see the "
@@ -386,7 +387,7 @@ void MainWindow::setupOutputWindow()
     oWindow = new OutputWindow( dw );
     dw->setWidget( oWindow );
     dw->setFixedExtentHeight( 150 );
-    dw->setCaption( tr( "Output Window" ) );
+    dw->setCaption( i18n( "Output Window" ) );
 }
 
 void MainWindow::setupHierarchyView()
@@ -400,10 +401,10 @@ void MainWindow::setupHierarchyView()
     addToolBar( dw, Qt::DockRight );
     dw->setWidget( hierarchyView );
 
-    dw->setCaption( tr( "Object Explorer" ) );
+    dw->setCaption( i18n( "Object Explorer" ) );
     dw->setFixedExtentWidth( 250 );
     QWhatsThis::add( hierarchyView,
-		     tr("<b>The Object Explorer</b>"
+		     i18n("<b>The Object Explorer</b>"
 			"<p>The Object Explorer provides an overview of the relationships "
 			"between the widgets in a form. You can use the clipboard functions using "
 			"a context menu for each item in the view. It is also useful for selecting widgets "
@@ -420,7 +421,7 @@ void MainWindow::setupWorkspace()
     dw->setCloseMode( QDockWindow::Always );
     QVBox *vbox = new QVBox( dw );
     QCompletionEdit *edit = new QCompletionEdit( vbox );
-    QToolTip::add( edit, tr( "Start typing the buffer you want to switch to here (ALT+B)" ) );
+    QToolTip::add( edit, i18n( "Start typing the buffer you want to switch to here (ALT+B)" ) );
     QAccel *a = new QAccel( this );
     a->connectItem( a->insertItem( ALT + Key_B ), edit, SLOT( setFocus() ) );
     wspace = new Workspace( vbox, this );
@@ -429,8 +430,8 @@ void MainWindow::setupWorkspace()
     addToolBar( dw, Qt::DockRight );
     dw->setWidget( vbox );
 
-    dw->setCaption( tr( "Project Overview" ) );
-    QWhatsThis::add( wspace, tr("<b>The Project Overview Window</b>"
+    dw->setCaption( i18n( "Project Overview" ) );
+    QWhatsThis::add( wspace, i18n("<b>The Project Overview Window</b>"
 				"<p>The Project Overview Window displays all the current "
 				"project, including forms and source files.</p>"
 				"<p>Use the search field to rapidly switch between files.</p>"));
@@ -447,8 +448,8 @@ void MainWindow::setupActionEditor()
     actionEditor = new ActionEditor( dw );
     dw->setWidget( actionEditor );
     actionEditor->show();
-    dw->setCaption( tr( "Action Editor" ) );
-    QWhatsThis::add( actionEditor, tr("<b>The Action Editor</b>"
+    dw->setCaption( i18n( "Action Editor" ) );
+    QWhatsThis::add( actionEditor, i18n("<b>The Action Editor</b>"
 				      "<p>The Action Editor is used to add actions and action groups to "
 				      "a form, and to connect actions to slots. Actions and action "
 				      "groups can be dragged into menus and into toolbars, and may "
@@ -468,7 +469,7 @@ void MainWindow::setupToolbox()
     toolBox = new QToolBox( dw );
     dw->setWidget( toolBox );
     dw->setFixedExtentWidth( 160 );
-    dw->setCaption( tr( "Toolbox" ) );
+    dw->setCaption( i18n( "Toolbox" ) );
     dw->show();
     setDockEnabled( dw, Qt::DockTop, FALSE );
     setDockEnabled( dw, Qt::DockBottom, FALSE );
@@ -1277,7 +1278,7 @@ void MainWindow::emitProjectSignals()
 void MainWindow::insertFormWindow( FormWindow *fw )
 {
     if ( fw )
-	QWhatsThis::add( fw, tr( "<b>The Form Window</b>"
+	QWhatsThis::add( fw, i18n( "<b>The Form Window</b>"
 			       "<p>Use the various tools to add widgets or to change the layout "
 			       "and behavior of the components in the form. Select one or multiple "
 			       "widgets to move them or lay them out. If a single widget is chosen it can "
@@ -1332,7 +1333,7 @@ void MainWindow::createNewProject( const QString &lang )
     }
 
     if ( !pro->isValid() ) {
-	QMessageBox::information( this, tr("New Project"), tr( "Cannot create an invalid project." ) );
+	QMessageBox::information( this, i18n("New Project"), i18n( "Cannot create an invalid project." ) );
 	delete pro;
 	return;
     }
@@ -1444,9 +1445,9 @@ void MainWindow::activeWindowChanged( QWidget *w )
 	actionEditCopy->setEnabled( TRUE );
 	actionEditPaste->setEnabled( TRUE );
 	actionEditSelectAll->setEnabled( TRUE );
-	actionEditUndo->setMenuText( tr( "&Undo" ) );
+	actionEditUndo->setMenuText( i18n( "&Undo" ) );
 	actionEditUndo->setToolTip( textNoAccel( actionEditUndo->menuText()) );
-	actionEditRedo->setMenuText( tr( "&Redo" ) );
+	actionEditRedo->setMenuText( i18n( "&Redo" ) );
 	actionEditRedo->setToolTip( textNoAccel( actionEditRedo->menuText()) );
 	if ( hierarchyView->sourceEditor() != w )
 	    hierarchyView->showClasses( se );
@@ -1483,13 +1484,13 @@ void MainWindow::updateUndoRedo( bool undoAvailable, bool redoAvailable,
     actionEditUndo->setEnabled( undoAvailable );
     actionEditRedo->setEnabled( redoAvailable );
     if ( !undoCmd.isEmpty() )
-	actionEditUndo->setMenuText( tr( "&Undo: %1" ).arg( undoCmd ) );
+	actionEditUndo->setMenuText( i18n( "&Undo: %1" ).arg( undoCmd ) );
     else
-	actionEditUndo->setMenuText( tr( "&Undo: Not Available" ) );
+	actionEditUndo->setMenuText( i18n( "&Undo: Not Available" ) );
     if ( !redoCmd.isEmpty() )
-	actionEditRedo->setMenuText( tr( "&Redo: %1" ).arg( redoCmd ) );
+	actionEditRedo->setMenuText( i18n( "&Redo: %1" ).arg( redoCmd ) );
     else
-	actionEditRedo->setMenuText( tr( "&Redo: Not Available" ) );
+	actionEditRedo->setMenuText( i18n( "&Redo: Not Available" ) );
 
     actionEditUndo->setToolTip( textNoAccel( actionEditUndo->menuText()) );
     actionEditRedo->setToolTip( textNoAccel( actionEditRedo->menuText()) );
@@ -1576,19 +1577,19 @@ void MainWindow::setupRMBProperties( QValueList<uint> &ids, QMap<QString, int> &
 	if ( ids.isEmpty() )
 	    ids << rmbWidgets->insertSeparator(0);
 	if ( pixmap && pixmap->designable(w) ) {
-	    ids << ( id = rmbWidgets->insertItem( tr("Choose Pixmap..."), -1, 0) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Choose Pixmap..."), -1, 0) );
 	    props.insert( "pixmap", id );
 	}
 	if ( text && text->designable(w) && !::qt_cast<QTextEdit*>(w) ) {
-	    ids << ( id = rmbWidgets->insertItem( tr("Edit Text..."), -1, 0) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Edit Text..."), -1, 0) );
 	    props.insert( "text", id );
 	}
 	if ( title && title->designable(w) ) {
-	    ids << ( id = rmbWidgets->insertItem( tr("Edit Title..."), -1, 0) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Edit Title..."), -1, 0) );
 	    props.insert( "title", id );
 	}
 	if ( pagetitle && pagetitle->designable(w) ) {
-	    ids << ( id = rmbWidgets->insertItem( tr("Edit Page Title..."), -1, 0) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Edit Page Title..."), -1, 0) );
 	    props.insert( "pagetitle", id );
 	}
     }
@@ -1619,33 +1620,33 @@ void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
 	if ( ids.isEmpty() )
 	    ids << rmbWidgets->insertSeparator( 0 );
 	if ( ( (QDesignerTabWidget*)w )->count() > 1) {
-	    ids << ( id = rmbWidgets->insertItem( tr("Delete Page"), -1, 0 ) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Delete Page"), -1, 0 ) );
 	    commands.insert( "remove", id );
 	}
-	ids << ( id = rmbWidgets->insertItem( tr("Add Page"), -1, 0 ) );
+	ids << ( id = rmbWidgets->insertItem( i18n("Add Page"), -1, 0 ) );
 	commands.insert( "add", id );
     } else if ( ::qt_cast<QWidgetStack*>(w) ) {
 	if ( ids.isEmpty() )
 	    ids << rmbWidgets->insertSeparator( 0 );
 	if ( ( (QDesignerWidgetStack*)w )->count() > 1) {
-	    ids << ( id = rmbWidgets->insertItem( tr("Previous Page"), -1, 0 ) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Previous Page"), -1, 0 ) );
 	    commands.insert( "prevpage", id );
-	    ids << ( id = rmbWidgets->insertItem( tr("Next Page"), -1, 0 ) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Next Page"), -1, 0 ) );
 	    ids << rmbWidgets->insertSeparator( 0 );
 	    commands.insert( "nextpage", id );
-	    ids << ( id = rmbWidgets->insertItem( tr("Delete Page"), -1, 0 ) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Delete Page"), -1, 0 ) );
 	    commands.insert( "remove", id );
 	}
-	ids << ( id = rmbWidgets->insertItem( tr("Add Page"), -1, 0 ) );
+	ids << ( id = rmbWidgets->insertItem( i18n("Add Page"), -1, 0 ) );
 	commands.insert( "add", id );
     } else if ( ::qt_cast<QToolBox*>(w) ) {
 	if ( ids.isEmpty() )
 	    ids << rmbWidgets->insertSeparator( 0 );
 	if ( ( (QToolBox*)w )->count() > 1 ) {
-	    ids << ( id = rmbWidgets->insertItem( tr("Delete Page"), -1, 0 ) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Delete Page"), -1, 0 ) );
 	    commands.insert( "remove", id );
 	}
-	ids << ( id = rmbWidgets->insertItem( tr("Add Page"), -1, 0 ) );
+	ids << ( id = rmbWidgets->insertItem( i18n("Add Page"), -1, 0 ) );
 	commands.insert( "add", id );
 #ifdef QT_CONTAINER_CUSTOM_WIDGETS
     } else if ( WidgetDatabase::
@@ -1657,13 +1658,13 @@ void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
 		ids << rmbWidgets->insertSeparator( 0 );
 
 	    if ( iface->count( WidgetFactory::classNameOf( w ), w ) > 1 ) {
-		ids << ( id = rmbWidgets->insertItem( tr( "Delete Page" ), -1, 0 ) );
+		ids << ( id = rmbWidgets->insertItem( i18n( "Delete Page" ), -1, 0 ) );
 		commands.insert( "remove", id );
 	    }
-	    ids << ( id = rmbWidgets->insertItem( tr("Add Page"), -1, 0 ) );
+	    ids << ( id = rmbWidgets->insertItem( i18n("Add Page"), -1, 0 ) );
 	    commands.insert( "add", id );
 	    if ( iface->currentIndex( WidgetFactory::classNameOf( w ), w ) != -1 ) {
-		ids << ( id = rmbWidgets->insertItem( tr("Rename Current Page..."), -1, 0 ) );
+		ids << ( id = rmbWidgets->insertItem( i18n("Rename Current Page..."), -1, 0 ) );
 		commands.insert( "rename", id );
 	    }
 	}
@@ -1676,7 +1677,7 @@ void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
 			  idFromClassName( WidgetFactory::classNameOf( w ) ), w ) ) {
 	if ( ids.isEmpty() )
 	    ids << rmbWidgets->insertSeparator( 0 );
-	ids << ( id = rmbWidgets->insertItem( tr("Edit..."), -1, 0 ) );
+	ids << ( id = rmbWidgets->insertItem( i18n("Edit..."), -1, 0 ) );
 	commands.insert( "edit", id );
     }
 }
@@ -1691,25 +1692,25 @@ void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
 	    ids << rmbFormWindow->insertSeparator( 0 );
 
 	if ( ( (QWizard*)fw->mainContainer() )->pageCount() > 1) {
-	    ids << ( id = rmbFormWindow->insertItem( tr("Delete Page"), -1, 0 ) );
+	    ids << ( id = rmbFormWindow->insertItem( i18n("Delete Page"), -1, 0 ) );
 	    commands.insert( "remove", id );
 	}
 
-	ids << ( id = rmbFormWindow->insertItem( tr("Add Page"), -1, 0 ) );
+	ids << ( id = rmbFormWindow->insertItem( i18n("Add Page"), -1, 0 ) );
 	commands.insert( "add", id );
 
-	ids << ( id = rmbFormWindow->insertItem( tr("Edit Page Title..."), -1, 0 ) );
+	ids << ( id = rmbFormWindow->insertItem( i18n("Edit Page Title..."), -1, 0 ) );
 	commands.insert( "rename", id );
 
-	ids << ( id = rmbFormWindow->insertItem( tr("Edit Pages..."), -1, 0 ) );
+	ids << ( id = rmbFormWindow->insertItem( i18n("Edit Pages..."), -1, 0 ) );
 	commands.insert( "edit", id );
 
     } else if ( ::qt_cast<QMainWindow*>(fw->mainContainer()) ) {
 	if ( ids.isEmpty() )
 	    ids << rmbFormWindow->insertSeparator( 0 );
-	ids << ( id = rmbFormWindow->insertItem( tr( "Add Menu Item" ), -1, 0 ) );
+	ids << ( id = rmbFormWindow->insertItem( i18n( "Add Menu Item" ), -1, 0 ) );
 	commands.insert( "add_menu_item", id );
-	ids << ( id = rmbFormWindow->insertItem( tr( "Add Toolbar" ), -1, 0 ) );
+	ids << ( id = rmbFormWindow->insertItem( i18n( "Add Toolbar" ), -1, 0 ) );
 	commands.insert( "add_toolbar", id );
     }
 }
@@ -1731,12 +1732,12 @@ void MainWindow::handleRMBProperties( int id, QMap<QString, int> &props, QWidget
 	    text = MultiLineEditor::getText( this, w->property( "text" ).toString(), !::qt_cast<QButton*>(w), &doWrap );
 	    ok = !text.isNull();
 	} else {
-	    text = QInputDialog::getText( tr("Text"), tr( "New text" ),
+	    text = QInputDialog::getText( i18n("Text"), i18n( "New text" ),
 				  QLineEdit::Normal, w->property("text").toString(), &ok, this );
 	}
 	if ( ok ) {
 	    if ( oldDoWrap != doWrap ) {
-		QString pn( tr( "Set 'wordwrap' of '%1'" ).arg( w->name() ) );
+		QString pn( i18n( "Set 'wordwrap' of '%1'" ).arg( w->name() ) );
 		SetPropertyCommand *cmd = new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 								  "wordwrap", QVariant( oldDoWrap, 0 ),
 								  QVariant( doWrap, 0 ), QString::null, QString::null );
@@ -1745,7 +1746,7 @@ void MainWindow::handleRMBProperties( int id, QMap<QString, int> &props, QWidget
 		MetaDataBase::setPropertyChanged( w, "wordwrap", TRUE );
 	    }
 
-	    QString pn( tr( "Set the 'text' of '%1'" ).arg( w->name() ) );
+	    QString pn( i18n( "Set the 'text' of '%1'" ).arg( w->name() ) );
 	    SetPropertyCommand *cmd = new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 							      "text", w->property( "text" ),
 							      text, QString::null, QString::null );
@@ -1755,10 +1756,10 @@ void MainWindow::handleRMBProperties( int id, QMap<QString, int> &props, QWidget
 	}
     } else if ( id == props[ "title" ] ) {
 	bool ok = FALSE;
-	QString title = QInputDialog::getText( tr("Title"), tr( "New title" ),
+	QString title = QInputDialog::getText( i18n("Title"), i18n( "New title" ),
 			       QLineEdit::Normal, w->property("title").toString(), &ok, this );
 	if ( ok ) {
-	    QString pn( tr( "Set the 'title' of '%2'" ).arg( w->name() ) );
+	    QString pn( i18n( "Set the 'title' of '%2'" ).arg( w->name() ) );
 	    SetPropertyCommand *cmd = new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 							      "title", w->property( "title" ),
 							      title, QString::null, QString::null );
@@ -1768,10 +1769,10 @@ void MainWindow::handleRMBProperties( int id, QMap<QString, int> &props, QWidget
 	}
     } else if ( id == props[ "pagetitle" ] ) {
 	bool ok = FALSE;
-	QString text = QInputDialog::getText( tr("Page Title"), tr( "New page title" ),
+	QString text = QInputDialog::getText( i18n("Page Title"), i18n( "New page title" ),
 			      QLineEdit::Normal, w->property("pageTitle").toString(), &ok, this );
 	if ( ok ) {
-	    QString pn( tr( "Set the 'pageTitle' of '%2'" ).arg( w->name() ) );
+	    QString pn( i18n( "Set the 'pageTitle' of '%2'" ).arg( w->name() ) );
 	    SetPropertyCommand *cmd = new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 							      "pageTitle",
 							      w->property( "pageTitle" ),
@@ -1784,7 +1785,7 @@ void MainWindow::handleRMBProperties( int id, QMap<QString, int> &props, QWidget
 	QPixmap oldPix = w->property( "pixmap" ).toPixmap();
 	QPixmap pix = qChoosePixmap( this, formWindow(), oldPix );
 	if ( !pix.isNull() ) {
-	    QString pn( tr( "Set the 'pixmap' of '%2'" ).arg( w->name() ) );
+	    QString pn( i18n( "Set the 'pixmap' of '%2'" ).arg( w->name() ) );
 	    SetPropertyCommand *cmd = new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 							      "pixmap", w->property( "pixmap" ),
 							      pix, QString::null, QString::null );
@@ -1801,7 +1802,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	QTabWidget *tw = (QTabWidget*)w;
 	if ( id == commands[ "add" ] ) {
 	    AddTabPageCommand *cmd =
-		new AddTabPageCommand( tr( "Add Page to %1" ).arg( tw->name() ), formWindow(),
+		new AddTabPageCommand( i18n( "Add Page to %1" ).arg( tw->name() ), formWindow(),
 				       tw, "Tab" );
 	    formWindow()->commandHistory()->addCommand( cmd );
 	    cmd->execute();
@@ -1809,7 +1810,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	    if ( tw->currentPage() ) {
 		QDesignerTabWidget *dtw = (QDesignerTabWidget*)tw;
 		DeleteTabPageCommand *cmd =
-		    new DeleteTabPageCommand( tr( "Delete Page %1 of %2" ).
+		    new DeleteTabPageCommand( i18n( "Delete Page %1 of %2" ).
 					      arg( dtw->pageTitle() ).arg( tw->name() ),
 					      formWindow(), tw, tw->currentPage() );
 		formWindow()->commandHistory()->addCommand( cmd );
@@ -1820,7 +1821,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	QToolBox *tb = (QToolBox*)w;
 	if ( id == commands[ "add" ] ) {
 	    AddToolBoxPageCommand *cmd =
-		new AddToolBoxPageCommand( tr( "Add Page to %1" ).arg( tb->name() ),
+		new AddToolBoxPageCommand( i18n( "Add Page to %1" ).arg( tb->name() ),
 					   formWindow(),
 					   tb, "Page" );
 	    formWindow()->commandHistory()->addCommand( cmd );
@@ -1828,7 +1829,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	} else if ( id == commands[ "remove" ] ) {
 	    if ( tb->currentItem() ) {
 		DeleteToolBoxPageCommand *cmd =
-		    new DeleteToolBoxPageCommand( tr( "Delete Page %1 of %2" ).
+		    new DeleteToolBoxPageCommand( i18n( "Delete Page %1 of %2" ).
 					  arg( tb->itemLabel( tb->currentIndex() ) ).
 					  arg( tb->name() ),
 					  formWindow(), tb, tb->currentItem() );
@@ -1840,14 +1841,14 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	QDesignerWidgetStack *ws = (QDesignerWidgetStack*)w;
 	if ( id == commands[ "add" ] ) {
 	    AddWidgetStackPageCommand *cmd =
-		new AddWidgetStackPageCommand( tr( "Add Page to %1" ).arg( ws->name() ),
+		new AddWidgetStackPageCommand( i18n( "Add Page to %1" ).arg( ws->name() ),
 					       formWindow(), ws );
 	    formWindow()->commandHistory()->addCommand( cmd );
 	    cmd->execute();
 	} else if ( id == commands[ "remove" ] ) {
 	    if ( ws->visibleWidget() ) {
 		DeleteWidgetStackPageCommand *cmd =
-		    new DeleteWidgetStackPageCommand( tr( "Delete Page %1 of %2" ).
+		    new DeleteWidgetStackPageCommand( i18n( "Delete Page %1 of %2" ).
 						      arg( ws->currentPage() ).arg( ws->name() ),
 						      formWindow(), ws, ws->visibleWidget() );
 		formWindow()->commandHistory()->addCommand( cmd );
@@ -1855,7 +1856,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	    }
 	} else if ( id == commands[ "nextpage" ] ) {
 	    int currentPage = w->property( "currentPage" ).toInt();
-	    QString pn( tr( "Raise next page of '%2'" ).arg( w->name() ) );
+	    QString pn( i18n( "Raise next page of '%2'" ).arg( w->name() ) );
 	    SetPropertyCommand *cmd =
 		new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 					"currentPage", currentPage,
@@ -1865,7 +1866,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	    MetaDataBase::setPropertyChanged( w, "currentPage", TRUE );
 	} else if ( id == commands[ "prevpage" ] ) {
 	    int currentPage = w->property( "currentPage" ).toInt();
-	    QString pn( tr( "Raise previous page of '%2'" ).arg( w->name() ) );
+	    QString pn( i18n( "Raise previous page of '%2'" ).arg( w->name() ) );
 	    SetPropertyCommand *cmd =
 		new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 					"currentPage", currentPage,
@@ -1880,7 +1881,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 				      idFromClassName( WidgetFactory::classNameOf( w ) ) ) ) {
 	if ( id == commands[ "add" ] ) {
 	    AddContainerPageCommand *cmd =
-		new AddContainerPageCommand( tr( "Add Page to %1" ).arg( w->name() ),
+		new AddContainerPageCommand( i18n( "Add Page to %1" ).arg( w->name() ),
 					     formWindow(), w, "Page" );
 	    formWindow()->commandHistory()->addCommand( cmd );
 	    cmd->execute();
@@ -1890,7 +1891,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 		QString wClassName = WidgetFactory::classNameOf( w );
 		int index = iface->currentIndex( wClassName, w );
 		DeleteContainerPageCommand *cmd =
-		    new DeleteContainerPageCommand( tr( "Delete Page %1 of %2" ).
+		    new DeleteContainerPageCommand( i18n( "Delete Page %1 of %2" ).
 						    arg( iface->pageLabel( wClassName,
 									   w, index ) ).
 						    arg( w->name() ),
@@ -1905,14 +1906,14 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 		bool ok = FALSE;
 		QString wClassName = WidgetFactory::classNameOf( w );
 		int index = iface->currentIndex( wClassName, w );
-		QString text = QInputDialog::getText( tr("Page Title"), tr( "New page title" ),
+		QString text = QInputDialog::getText( i18n("Page Title"), i18n( "New page title" ),
 						      QLineEdit::Normal,
 						      iface->pageLabel( wClassName, w,
 								       index ),
 						      &ok, this );
 		if ( ok ) {
 		    RenameContainerPageCommand *cmd =
-			new RenameContainerPageCommand( tr( "Rename Page %1 to %2" ).
+			new RenameContainerPageCommand( i18n( "Rename Page %1 to %2" ).
 							arg( iface->
 							     pageLabel( wClassName, w,
 									index ) ).
@@ -1941,7 +1942,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	QWizard *wiz = (QWizard*)fw->mainContainer();
 	if ( id == commands[ "add" ] ) {
 	    AddWizardPageCommand *cmd =
-		new AddWizardPageCommand( tr( "Add Page to %1" ).arg( wiz->name() ),
+		new AddWizardPageCommand( i18n( "Add Page to %1" ).arg( wiz->name() ),
 					  formWindow(), wiz, "WizardPage" );
 	    formWindow()->commandHistory()->addCommand( cmd );
 	    cmd->execute();
@@ -1949,7 +1950,7 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	    if ( wiz->currentPage() ) {
 		QDesignerWizard *dw = (QDesignerWizard*)wiz;
 		DeleteWizardPageCommand *cmd =
-		    new DeleteWizardPageCommand( tr( "Delete Page %1 of %2" ).
+		    new DeleteWizardPageCommand( i18n( "Delete Page %1 of %2" ).
 						 arg( dw->pageTitle() ).arg( wiz->name() ),
 						 formWindow(), wiz,
 						 wiz->indexOf( wiz->currentPage() ) );
@@ -1964,10 +1965,10 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 
 	    bool ok = FALSE;
 	    QDesignerWizard *dw = (QDesignerWizard*)wiz;
-	    QString text = QInputDialog::getText( tr("Page Title"), tr( "New page title" ),
+	    QString text = QInputDialog::getText( i18n("Page Title"), i18n( "New page title" ),
 					  QLineEdit::Normal, dw->pageTitle(), &ok, this );
 	    if ( ok ) {
-		QString pn( tr( "Rename page %1 of %2" ).arg( dw->pageTitle() ).arg( wiz->name() ) );
+		QString pn( i18n( "Rename page %1 of %2" ).arg( dw->pageTitle() ).arg( wiz->name() ) );
 		RenameWizardPageCommand *cmd =
 		    new RenameWizardPageCommand( pn, formWindow()
 						 , wiz, wiz->indexOf( wiz->currentPage() ), text );
@@ -1979,13 +1980,13 @@ void MainWindow::handleRMBSpecialCommands( int id, QMap<QString, int> &commands,
 	QMainWindow *mw = (QMainWindow*)fw->mainContainer();
 	if ( id == commands[ "add_toolbar" ] ) {
 	    AddToolBarCommand *cmd =
-		new AddToolBarCommand( tr( "Add Toolbar to '%1'" ).arg( formWindow()->name() ),
+		new AddToolBarCommand( i18n( "Add Toolbar to '%1'" ).arg( formWindow()->name() ),
 				       formWindow(), mw );
 	    formWindow()->commandHistory()->addCommand( cmd );
 	    cmd->execute();
 	} else if ( id == commands[ "add_menu_item" ] ) {
 	    AddMenuCommand *cmd =
-		new AddMenuCommand( tr( "Add Menu to '%1'" ).arg( formWindow()->name() ),
+		new AddMenuCommand( i18n( "Add Menu to '%1'" ).arg( formWindow()->name() ),
 				    formWindow(), mw );
 	    formWindow()->commandHistory()->addCommand( cmd );
 	    cmd->execute();
@@ -2464,8 +2465,8 @@ QPopupMenu *MainWindow::setupTabWidgetHierarchyMenu( QWidget *parent, const char
 {
     QPopupMenu *menu = new QPopupMenu( parent );
 
-    menu->insertItem( tr( "Add Page" ), parent, addSlot );
-    menu->insertItem( tr( "Delete Page" ), parent, removeSlot );
+    menu->insertItem( i18n( "Add Page" ), parent, addSlot );
+    menu->insertItem( i18n( "Delete Page" ), parent, removeSlot );
     menu->insertSeparator();
     actionEditCut->addTo( menu );
     actionEditCopy->addTo( menu );
@@ -2511,9 +2512,9 @@ void MainWindow::closeEvent( QCloseEvent *e )
 	Project *pro = it.data();
 	++it;
 	if ( pro->isModified() ) {
-	    switch ( QMessageBox::warning( this, tr( "Save Project Settings" ),
-					   tr( "Save changes to '%1'?" ).arg( pro->fileName() ),
-					   tr( "&Yes" ), tr( "&No" ), tr( "&Cancel" ), 0, 2 ) ) {
+	    switch ( QMessageBox::warning( this, i18n( "Save Project Settings" ),
+					   i18n( "Save changes to '%1'?" ).arg( pro->fileName() ),
+					   i18n( "&Yes" ), i18n( "&No" ), i18n( "&Cancel" ), 0, 2 ) ) {
 	    case 0: // save
 		pro->save();
 		break;
@@ -2596,7 +2597,7 @@ bool MainWindow::openEditor( QWidget *w, FormWindow *f )
 			conn.signal = signl;
 			conn.slot = s;
 			AddConnectionCommand *cmd =
-			    new AddConnectionCommand( tr( "Add connection" ), f, conn );
+			    new AddConnectionCommand( i18n( "Add connection" ), f, conn );
 			f->commandHistory()->addCommand( cmd );
 			cmd->execute();
 			f->formFile()->setModified( TRUE );
@@ -2609,7 +2610,7 @@ bool MainWindow::openEditor( QWidget *w, FormWindow *f )
     }
     if ( WidgetFactory::hasSpecialEditor( WidgetDatabase::
 					  idFromClassName( WidgetFactory::classNameOf( w ) ), w ) ) {
-	statusMessage( tr( "Edit %1..." ).arg( w->className() ) );
+	statusMessage( i18n( "Edit %1..." ).arg( w->className() ) );
 	WidgetFactory::editWidget( WidgetDatabase::idFromClassName( WidgetFactory::classNameOf( w ) ),
 				   this, w, formWindow() );
 	statusBar()->clear();
@@ -2634,12 +2635,12 @@ bool MainWindow::openEditor( QWidget *w, FormWindow *f )
 					     !::qt_cast<QButton*>(w), &doWrap );
 	    ok = !text.isNull();
 	} else {
-	    text = QInputDialog::getText( tr("Text"), tr( "New text" ),
+	    text = QInputDialog::getText( i18n("Text"), i18n( "New text" ),
 				  QLineEdit::Normal, w->property("text").toString(), &ok, this );
 	}
 	if ( ok ) {
 	    if ( oldDoWrap != doWrap ) {
-		QString pn( tr( "Set 'wordwrap' of '%1'" ).arg( w->name() ) );
+		QString pn( i18n( "Set 'wordwrap' of '%1'" ).arg( w->name() ) );
 		SetPropertyCommand *cmd = new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 								  "wordwrap", QVariant( oldDoWrap, 0 ),
 								  QVariant( doWrap, 0 ), QString::null, QString::null );
@@ -2648,7 +2649,7 @@ bool MainWindow::openEditor( QWidget *w, FormWindow *f )
 		MetaDataBase::setPropertyChanged( w, "wordwrap", TRUE );
 	    }
 
-	    QString pn( tr( "Set the 'text' of '%1'" ).arg( w->name() ) );
+	    QString pn( i18n( "Set the 'text' of '%1'" ).arg( w->name() ) );
 	    SetPropertyCommand *cmd = new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 							      "text", w->property( "text" ),
 							      text, QString::null, QString::null );
@@ -2661,9 +2662,9 @@ bool MainWindow::openEditor( QWidget *w, FormWindow *f )
     if ( title && title->designable(w) ) {
 	bool ok = FALSE;
 	QString text;
-	text = QInputDialog::getText( tr("Title"), tr( "New title" ), QLineEdit::Normal, w->property("title").toString(), &ok, this );
+	text = QInputDialog::getText( i18n("Title"), i18n( "New title" ), QLineEdit::Normal, w->property("title").toString(), &ok, this );
 	if ( ok ) {
-	    QString pn( tr( "Set the 'title' of '%2'" ).arg( w->name() ) );
+	    QString pn( i18n( "Set the 'title' of '%2'" ).arg( w->name() ) );
 	    SetPropertyCommand *cmd = new SetPropertyCommand( pn, formWindow(), w, propertyEditor,
 							      "title", w->property( "title" ),
 							      text, QString::null, QString::null );
@@ -2705,12 +2706,12 @@ void MainWindow::rebuildCustomWidgetGUI()
 	a->setToggleAction( TRUE );
 	a->setText( w->className );
 	a->setIconSet( *w->pixmap );
-	a->setStatusTip( tr( "Insert a " +w->className + " (custom widget)" ) );
-	a->setWhatsThis( tr("<b>" + w->className + " (custom widget)</b>"
+	a->setStatusTip( i18n( "Insert a %1 (custom widget)" ).arg( w->className ) );
+	a->setWhatsThis( i18n("<b>%1 (custom widget)</b>"
 			    "<p>Click <b>Edit Custom Widgets...</b> in the <b>Tools|Custom</b> menu to "
 			    "add and change custom widgets. You can add properties as well as "
 			    "signals and slots to integrate them into Qt Designer, "
-			    "and provide a pixmap which will be used to represent the widget on the form.</p>") );
+			    "and provide a pixmap which will be used to represent the widget on the form.</p>").arg( w->className ) );
 
 	a->addTo( customWidgetToolBar );
 	a->addTo( customWidgetToolBar2 );
@@ -2840,10 +2841,10 @@ void MainWindow::checkTempFiles()
     d.setNameFilter( "*.ui" );
     QStringList lst = d.entryList();
     QApplication::restoreOverrideCursor();
-    bool load = QMessageBox::information( this, tr( "Restoring the Last Session" ),
-					  tr( "Qt Designer found some temporary saved files, which were\n"
+    bool load = QMessageBox::information( this, i18n( "Restoring the Last Session" ),
+					  i18n( "Qt Designer found some temporary saved files, which were\n"
 					      "written when Qt Designer crashed last time. Do you want to\n"
-					      "load these files?" ), tr( "&Yes" ), tr( "&No" ) ) == 0;
+					      "load these files?" ), i18n( "&Yes" ), i18n( "&No" ) ) == 0;
     QApplication::setOverrideCursor( waitCursor );
     for ( QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it ) {
 	if ( load )
@@ -2904,8 +2905,8 @@ void MainWindow::showDialogHelp()
 	link += "dialog-text";
 
     else {
-	QMessageBox::information( this, tr( "Help" ),
-				  tr( "There is no help available for this dialog at the moment." ) );
+	QMessageBox::information( this, i18n( "Help" ),
+				  i18n( "There is no help available for this dialog at the moment." ) );
 	return;
     }
 
@@ -2936,7 +2937,7 @@ void MainWindow::setupActionManager()
 
 	if ( !( menu = (QPopupMenu*)child( grp.latin1(), "QPopupMenu" ) ) ) {
 	    menu = new QPopupMenu( this, grp.latin1() );
-	    menuBar()->insertItem( tr( grp ), menu );
+	    menuBar()->insertItem( i18n( grp ), menu );
 	}
 	if ( !( tb = (QToolBar*)child( grp.latin1(), "QToolBar" ) ) ) {
 	    tb = new QToolBar( this, grp.latin1() );
@@ -2964,9 +2965,9 @@ void MainWindow::editFunction( const QString &func, bool rereadSource )
 
     QString lang = currentProject->language();
     if ( !MetaDataBase::hasEditor( lang ) ) {
-	QMessageBox::information( this, tr( "Edit Source" ),
-				  tr( "There is no plugin for editing " + lang + " code installed!\n"
-				      "Note: Plugins are not available in static Qt configurations." ) );
+	QMessageBox::information( this, i18n( "Edit Source" ),
+				  i18n( "There is no plugin for editing %1 code installed!\n"
+				      "Note: Plugins are not available in static Qt configurations." ).arg( lang ) );
 	return;
     }
 
@@ -3065,8 +3066,8 @@ void MainWindow::recentlyFilesMenuActivated( int id )
 {
     if ( id != -1 ) {
 	if ( !QFile::exists( *recentlyFiles.at( id ) ) ) {
-	    QMessageBox::warning( this, tr( "Open File" ),
-				  tr( "Could not open '%1'. File does not exist." ).
+	    QMessageBox::warning( this, i18n( "Open File" ),
+				  i18n( "Could not open '%1'. File does not exist." ).
 				  arg( *recentlyFiles.at( id ) ) );
 	    recentlyFiles.remove( recentlyFiles.at( id ) );
 	    return;
@@ -3081,8 +3082,8 @@ void MainWindow::recentlyProjectsMenuActivated( int id )
 {
     if ( id != -1 ) {
 	if ( !QFile::exists( *recentlyProjects.at( id ) ) ) {
-	    QMessageBox::warning( this, tr( "Open Project" ),
-				  tr( "Could not open '%1'. File does not exist." ).
+	    QMessageBox::warning( this, i18n( "Open Project" ),
+				  i18n( "Could not open '%1'. File does not exist." ).
 				  arg( *recentlyProjects.at( id ) ) );
 	    recentlyProjects.remove( recentlyProjects.at( id ) );
 	    return;
@@ -3659,7 +3660,7 @@ void MainWindow::setSingleProject( Project *pro )
 
     singleProject = TRUE;
     projects.clear();
-    QAction *a = new QAction( tr( pro->name() ), tr( pro->name() ), 0,
+    QAction *a = new QAction( i18n( pro->name() ), i18n( pro->name() ), 0,
 			      actionGroupProjects, 0, TRUE );
     eProject = pro;
     projects.insert( a, eProject );
@@ -3706,7 +3707,7 @@ void MainWindow::showGUIStuff( bool b )
 	actionEditFunctions->setEnabled( FALSE );
 	actionEditAccels->setEnabled( FALSE );
 	( (QDockWindow*)propertyEditor->parentWidget() )->
-	    setCaption( tr( "Signal Handlers" ) );
+	    setCaption( i18n( "Signal Handlers" ) );
 	actionGroupNew->removeFrom( fileMenu );
 	actionGroupNew->removeFrom( projectToolBar );
 	actionFileSave->removeFrom( fileMenu );
@@ -3729,9 +3730,9 @@ void MainWindow::showGUIStuff( bool b )
 	layoutToolBar->show();
 	setAppropriate( toolsToolBar, TRUE );
 	toolsToolBar->show();
-	menubar->insertItem( tr( "&Tools" ), toolsMenu, toolsMenuId, toolsMenuIndex );
-	menubar->insertItem( tr( "&Layout" ), layoutMenu, toolsMenuId + 1, toolsMenuIndex + 1 );
-	menubar->insertItem( tr( "&Preview" ), previewMenu, toolsMenuId + 2, toolsMenuIndex + 2 );
+	menubar->insertItem( i18n( "&Tools" ), toolsMenu, toolsMenuId, toolsMenuIndex );
+	menubar->insertItem( i18n( "&Layout" ), layoutMenu, toolsMenuId + 1, toolsMenuIndex + 1 );
+	menubar->insertItem( i18n( "&Preview" ), previewMenu, toolsMenuId + 2, toolsMenuIndex + 2 );
 	connect( this, SIGNAL( hasActiveForm(bool) ), actionEditAccels, SLOT( setEnabled(bool) ) );
 	connect( this, SIGNAL( hasActiveForm(bool) ), actionEditFunctions, SLOT( setEnabled(bool) ) );
 	connect( this, SIGNAL( hasActiveForm(bool) ), actionEditConnections, SLOT( setEnabled(bool) ) );
@@ -3743,7 +3744,7 @@ void MainWindow::showGUIStuff( bool b )
 	actionEditFunctions->setEnabled( TRUE );
 	actionEditAccels->setEnabled( TRUE );
 	( (QDockWindow*)propertyEditor->parentWidget() )->
-	    setCaption( tr( "Property Editor/Signal Handlers" ) );
+	    setCaption( i18n( "Property Editor/Signal Handlers" ) );
 	actionFileSave->removeFrom( fileMenu );
 	actionFileSave->removeFrom( projectToolBar );
 	actionFileExit->removeFrom( fileMenu );

@@ -206,7 +206,7 @@ void ConnectionDialog::okClicked()
 
 	conn.signal = c->signalItem()->currentText();
 	conn.slot = c->slotItem()->currentText();
-	AddConnectionCommand *cmd = new AddConnectionCommand( tr( "Add Signal/Slot "
+	AddConnectionCommand *cmd = new AddConnectionCommand( i18n( "Add Signal/Slot "
 								  "Connection" ),
 							      MainWindow::self->formWindow(),
 							      conn );
@@ -218,23 +218,23 @@ void ConnectionDialog::okClicked()
 	MetaDataBase::connections( MainWindow::self->formWindow() );
     for ( QValueList<MetaDataBase::Connection>::Iterator it = conns.begin();
 	  it != conns.end(); ++it ) {
-	RemoveConnectionCommand *cmd = new RemoveConnectionCommand( tr( "Remove Signal/Slot "
+	RemoveConnectionCommand *cmd = new RemoveConnectionCommand( i18n( "Remove Signal/Slot "
 									"Connection" ),
 								    MainWindow::self->
 								    formWindow(), *it );
 	oldConnectionCmds.append( cmd );
     }
 
-    MacroCommand *cmd1 = new MacroCommand( tr( "Add Signal/Slot Connections" ),
+    MacroCommand *cmd1 = new MacroCommand( i18n( "Add Signal/Slot Connections" ),
 					   MainWindow::self->formWindow(),
 					   newConnectionCmds );
-    MacroCommand *cmd2 = new MacroCommand( tr( "Remove Signal/Slot Connections" ),
+    MacroCommand *cmd2 = new MacroCommand( i18n( "Remove Signal/Slot Connections" ),
 					   MainWindow::self->formWindow(),
 					   oldConnectionCmds );
     QPtrList<Command> cmds;
     cmds.append( cmd2 );
     cmds.append( cmd1 );
-    MacroCommand *cmd = new MacroCommand( tr( "Edit Signal/Slot Connections" ),
+    MacroCommand *cmd = new MacroCommand( i18n( "Edit Signal/Slot Connections" ),
 					  MainWindow::self->formWindow(),
 					  cmds );
     MainWindow::self->formWindow()->commandHistory()->addCommand( cmd );

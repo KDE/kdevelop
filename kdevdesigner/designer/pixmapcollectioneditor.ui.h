@@ -1,3 +1,4 @@
+#include <klocale.h>
 /**********************************************************************
 ** Copyright (C) 2001-2002 Trolltech AS.  All rights reserved.
 **
@@ -111,7 +112,7 @@ void PixmapCollectionEditor::setChooserMode( bool c )
 	buttonOk->setDefault( TRUE );
 	connect( viewPixmaps, SIGNAL( doubleClicked( QIconViewItem * ) ), buttonOk, SIGNAL( clicked() ) );
 	connect( viewPixmaps, SIGNAL( returnPressed( QIconViewItem * ) ), buttonOk, SIGNAL( clicked() ) );
-	setCaption( tr( "Choose an Image" ) );
+	setCaption( i18n( "Choose an Image" ) );
     } else {
 	buttonClose->show();
 	buttonOk->hide();

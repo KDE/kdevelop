@@ -21,6 +21,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include <kdebug.h>
+#include <klocale.h>
 #include <stdlib.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -150,7 +151,7 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep )
 	return;
 
     if ( !QFile::exists( file ) ) {
-	Problem p( "Couldn't find include file " + dep.first,
+	Problem p( i18n( "Couldn't find include file %1" ).arg( dep.first ),
 		   lexer ? lexer->currentLine() : -1,
 		   lexer ? lexer->currentColumn() : -1 );
 	addProblem( fileName, p );
@@ -251,7 +252,7 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
         m_parsedUnits.insert( fileName, translationUnit.release() );
         fileParsed( fileName );
     }
-    
+
     m_currentFileName = QString::null;
     lexer = 0;
 }

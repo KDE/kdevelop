@@ -39,6 +39,7 @@
 
 #include <kiconloader.h>
 #include "kdevdesigner_part.h"
+#include <klocale.h>
 
 #include <qiconview.h>
 #include <qlabel.h>
@@ -156,9 +157,8 @@ void CustomFormItem::insert( Project *pro )
 	Resource resource( MainWindow::self );
 	FormFile *ff = new FormFile( filename, TRUE, pro );
 	if ( !resource.load( ff ) ) {
-	    QMessageBox::information( MainWindow::self, MainWindow::tr("Load Template"),
-				      MainWindow::tr("Couldn't load form description from template '" +
-						     filename + "'" ) );
+	    QMessageBox::information( MainWindow::self, i18n("Load Template"),
+				      i18n("Couldn't load form description from template '%1'" ).arg( filename ) );
 	    delete ff;
 	    return;
 	}
@@ -249,7 +249,7 @@ void NewForm::insertTemplates( QIconView *tView,
     QStringList languages = MetaDataBase::languages();
     if ( !MainWindow::self->singleProjectMode() ) {
 	for ( it = languages.begin(); it != languages.end(); ++it ) {
-	    ProjectItem *pi = new ProjectItem( tView, *it + " " + tr( "Project" ) );
+	    ProjectItem *pi = new ProjectItem( tView, i18n("%1 Project" ).arg( *it ) );
 	    allItems.append( pi );
 	    pi->setLanguage( *it );
 	    pi->setPixmap( SmallIcon( "designer_project.png" , KDevDesignerPartFactory::instance()) );
@@ -257,24 +257,24 @@ void NewForm::insertTemplates( QIconView *tView,
 	}
     }
     QIconViewItem *cur = 0;
-    FormItem *fi = new FormItem( tView,tr( "Dialog" ) );
+    FormItem *fi = new FormItem( tView,i18n( "Dialog" ) );
     allItems.append( fi );
     fi->setFormType( FormItem::Dialog );
     fi->setPixmap( SmallIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
     fi->setDragEnabled( FALSE );
     cur = fi;
     if ( !MainWindow::self->singleProjectMode() ) {
-	fi = new FormItem( tView,tr( "Wizard" ) );
+	fi = new FormItem( tView,i18n( "Wizard" ) );
 	allItems.append( fi );
 	fi->setFormType( FormItem::Wizard );
 	fi->setPixmap( SmallIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
 	fi->setDragEnabled( FALSE );
-	fi = new FormItem( tView, tr( "Widget" ) );
+	fi = new FormItem( tView, i18n( "Widget" ) );
 	allItems.append( fi );
 	fi->setFormType( FormItem::Widget );
 	fi->setPixmap( SmallIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
 	fi->setDragEnabled( FALSE );
-	fi = new FormItem( tView, tr( "Main Window" ) );
+	fi = new FormItem( tView, i18n( "Main Window" ) );
 	allItems.append( fi );
 	fi->setFormType( FormItem::MainWindow );
 	fi->setPixmap( SmallIcon( "designer_newform.png" , KDevDesignerPartFactory::instance()) );
@@ -361,7 +361,7 @@ void NewForm::insertTemplates( QIconView *tView,
 NewForm::NewForm( QIconView *templateView, const QString &templatePath )
 {
     insertTemplates( templateView, templatePath );
-    projectChanged( tr( "<No Project>" ) );
+    projectChanged( i18n( "<No Project>" ) );
 }
 
 NewForm::NewForm( QWidget *parent, const QStringList& projects,

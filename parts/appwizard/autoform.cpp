@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <propeditor/propertywidgetproxy.h>
 #include <kdialog.h>
+#include <klocale.h>
 
 AutoForm::AutoForm(AutoPropertyMap *map, QWidget *parent, const char *name)
  : QScrollView(parent, name)
@@ -37,7 +38,7 @@ AutoForm::AutoForm(AutoPropertyMap *map, QWidget *parent, const char *name)
 	addChild( m_mainBox );
 	m_mainBox->setSpacing( KDialog::spacingHint() );
 	m_mainBox->setMargin( KDialog::marginHint() );
-	
+
 	buildGUI( map );
 
 	connect( m_dataForm, SIGNAL( mapChanged() ), this, SLOT( slotMapChanged() ) );
@@ -63,8 +64,8 @@ void AutoForm::buildGUI( AutoPropertyMap *map )
 		m_mainBox->setSpacing( KDialog::spacingHint() );
 	}
 	QHBox *line = new QHBox(m_mainBox);
-	m_reset = new KPushButton("Reset", line);
-	m_submit = new KPushButton("Submit", line);
+	m_reset = new KPushButton(i18n( "Reset" ), line);
+	m_submit = new KPushButton(i18n( "Submit" ), line);
 	connect( m_reset, SIGNAL( clicked() ), m_dataForm, SLOT( resetView() ) );
 	connect( m_submit, SIGNAL( clicked() ), m_dataForm, SLOT( updateData() ) );
 	line->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed ) );

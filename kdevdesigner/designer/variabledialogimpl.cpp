@@ -37,6 +37,8 @@
 #include "command.h"
 #include "variabledialogimpl.h"
 
+#include <klocale.h>
+
 
 VariableDialog::VariableDialog( FormWindow *fw, QWidget *parent )
     : VariableDialogBase( parent ), formWindow( fw )
@@ -64,7 +66,7 @@ void VariableDialog::setCurrentItem( QString text )
 {
     QListViewItem *i = varView->findItem( text, 0 );
     if ( i )
-	varView->setCurrentItem( i );    
+	varView->setCurrentItem( i );
 }
 
 void VariableDialog::okClicked()
@@ -98,9 +100,9 @@ void VariableDialog::okClicked()
 	    }
 	}
 	if ( !invalidLst.isEmpty() ) {
-	    if ( QMessageBox::information( this, tr( "Edit Variables" ),
-					   tr( "One variable has been declared twice.\n"
-					   "Remove this variable?" ), tr( "&Yes" ), tr( "&No" ) ) == 0 ) {
+	    if ( QMessageBox::information( this, i18n( "Edit Variables" ),
+					   i18n( "One variable has been declared twice.\n"
+					   "Remove this variable?" ), i18n( "&Yes" ), i18n( "&No" ) ) == 0 ) {
 		for ( it2 = invalidLst.begin(); it2 != invalidLst.end(); ++it2 ) {
 		    it = varView->firstChild();
 		    while ( it.current() != 0 ) {
@@ -117,7 +119,7 @@ void VariableDialog::okClicked()
 	    return;
 	}
     }
-    Command *cmd = new SetVariablesCommand( "Edit variables", formWindow, lst );
+    Command *cmd = new SetVariablesCommand( i18n( "Edit variables" ), formWindow, lst );
     formWindow->commandHistory()->addCommand( cmd );
     cmd->execute();
     accept();

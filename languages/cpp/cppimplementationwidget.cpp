@@ -48,21 +48,21 @@ QStringList CppImplementationWidget::createClassFiles()
     QString template_cpp = "#include \"$CLASSINCLUDE$\"\n\n$CLASSNAME$::$CLASSNAME$(QWidget *parent, const char *name)\n    :$BASECLASSNAME$(parent, name)\n{\n}\n";
     if (m_part->project()->options() == KDevProject::UsesAutotoolsBuildSystem)
         template_cpp += "\n#include \"$MOCINCLUDE$\"\n";
-    
+
     QFileInfo formInfo(m_formName);
     template_h.replace(QRegExp("\\$BASEINCLUDE\\$"), formInfo.baseName()+".h");
     template_h.replace(QRegExp("\\$CLASSNAME\\$"), classNameEdit->text());
     template_h.replace(QRegExp("\\$BASECLASSNAME\\$"), m_baseClassName);
     template_h.replace(QRegExp("\\$DEFTEXT\\$"), fileNameEdit->text().upper());
-    
+
     template_cpp.replace(QRegExp("\\$CLASSINCLUDE\\$"), fileNameEdit->text() + ".h");
     template_cpp.replace(QRegExp("\\$CLASSNAME\\$"), classNameEdit->text());
     template_cpp.replace(QRegExp("\\$BASECLASSNAME\\$"), m_baseClassName);
     template_cpp.replace(QRegExp("\\$MOCINCLUDE\\$"), fileNameEdit->text() + ".moc");
-    
+
     template_h = FileTemplate::read(m_part, "h") + template_h;
     template_cpp = FileTemplate::read(m_part, "cpp") + template_cpp;
-    
+
     QString file_h = fileNameEdit->text() + ".h";
     QString file_cpp = fileNameEdit->text() + ".cpp";
     if (!m_part->project()->activeDirectory().isEmpty())
@@ -73,26 +73,26 @@ QStringList CppImplementationWidget::createClassFiles()
 
     QFile ifile(QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + file_cpp));
     if (!ifile.open(IO_WriteOnly)) {
-        KMessageBox::error(0, i18n("Cannot write to implementation file"));
+        KMessageBox::error(this, i18n("Cannot write to implementation file"));
         return QStringList();
     }
     QTextStream istream(&ifile);
     istream << template_cpp;
     ifile.close();
-  
+
     QFile hfile(QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + file_h));
     if (!hfile.open(IO_WriteOnly)) {
-        KMessageBox::error(0, i18n("Cannot write to header file"));
+        KMessageBox::error(this, i18n("Cannot write to header file"));
         return QStringList();
     }
     QTextStream hstream(&hfile);
     hstream << template_h;
     hfile.close();
-    
+
     QStringList fileList;
     fileList.append(file_h);
     fileList.append(file_cpp);
-    
+
     return fileList;
 }
 

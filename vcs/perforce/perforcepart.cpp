@@ -18,7 +18,6 @@
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kdevgenericfactory.h>
-#include <klocale.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
@@ -255,12 +254,12 @@ void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
     }
 
     if ( diff.isEmpty() && !err.isEmpty() ) {
-        KMessageBox::detailedError( 0, i18n("P4 outputted errors during diff."), err, i18n("Errors During Diff") );
+        KMessageBox::detailedError( 0, i18n("P4 output errors during diff."), err, i18n("Errors During Diff") );
         return;
     }
 
     if ( !err.isEmpty() ) {
-        int s = KMessageBox::warningContinueCancelList( 0, i18n("P4 outputted errors during diff. Do you still want to continue?"),
+        int s = KMessageBox::warningContinueCancelList( 0, i18n("P4 output errors during diff. Do you still want to continue?"),
                         QStringList::split( "\n", err, false ), i18n("Errors During Diff") );
         if ( s != KMessageBox::Continue )
             return;

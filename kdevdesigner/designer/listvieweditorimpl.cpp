@@ -44,6 +44,8 @@
 #include <qpushbutton.h>
 #include <qptrstack.h>
 
+#include <klocale.h>
+
 ListViewEditor::ListViewEditor( QWidget *parent, QListView *lv, FormWindow *fw )
     : ListViewEditorBase( parent, 0, TRUE ), listview( lv ), formwindow( fw )
 {
@@ -125,7 +127,7 @@ ListViewEditor::ListViewEditor( QWidget *parent, QListView *lv, FormWindow *fw )
 void ListViewEditor::applyClicked()
 {
     setupItems();
-    PopulateListViewCommand *cmd = new PopulateListViewCommand( tr( "Edit the Items and Columns of '%1'" ).arg( listview->name() ),
+    PopulateListViewCommand *cmd = new PopulateListViewCommand( i18n( "Edit the Items and Columns of '%1'" ).arg( listview->name() ),
 								formwindow, listview, itemsPreview );
     cmd->execute();
     formwindow->commandHistory()->addCommand( cmd );
@@ -282,7 +284,7 @@ void ListViewEditor::currentColumnChanged( QListBoxItem *i )
 void ListViewEditor::newColumnClicked()
 {
     Column col;
-    col.text = tr( "New Column" );
+    col.text = i18n( "New Column" );
     col.pixmap = QPixmap();
     col.clickable = TRUE;
     col.resizable = TRUE;
@@ -394,7 +396,7 @@ void ListViewEditor::itemDownClicked()
 void ListViewEditor::itemNewClicked()
 {
     QListViewItem *item = new QListViewItem( itemsPreview );
-    item->setText( 0, "Item" );
+    item->setText( 0, i18n( "Item" ) );
     item->setRenameEnabled( 0, TRUE );
     itemsPreview->setCurrentItem( item );
     itemsPreview->setSelected( item, TRUE );
@@ -412,7 +414,7 @@ void ListViewEditor::itemNewSubClicked()
     } else {
 	item = new QListViewItem( itemsPreview );
     }
-    item->setText( 0, "Subitem" );
+    item->setText( 0, i18n( "Subitem" ) );
     item->setRenameEnabled( 0, TRUE );
     itemsPreview->setCurrentItem( item );
     itemsPreview->setSelected( item, TRUE );
@@ -626,7 +628,7 @@ ListViewEditor::Column *ListViewEditor::findColumn( QListBoxItem *i )
 void ListViewEditor::initTabPage( const QString &page )
 {
     numColumns = colPreview->count();
-    if ( page == tr( "&Items" ) ) {
+    if ( page == i18n( "&Items" ) ) {
 	setupItems();
 	if ( numColumns == 0 ) {
 	    itemNew->setEnabled( FALSE );

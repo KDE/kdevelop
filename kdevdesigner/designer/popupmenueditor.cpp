@@ -47,6 +47,8 @@
 #include "popupmenueditor.h"
 #include "menubareditor.h"
 
+#include <klocale.h>
+
 // Drag Object Declaration -------------------------------------------
 
 class PopupMenuEditorItemPtrDrag : public QStoredDrag
@@ -298,8 +300,8 @@ void PopupMenuEditor::init()
 {
     reparent( ( QMainWindow * ) formWnd->mainContainer(), pos() );
 
-    addItem.action()->setMenuText( tr("new item") );
-    addSeparator.action()->setMenuText( tr("new separator") );
+    addItem.action()->setMenuText( i18n("new item") );
+    addSeparator.action()->setMenuText( i18n("new separator") );
 
     setAcceptDrops( TRUE );
     setFocusPolicy( StrongFocus );
@@ -433,7 +435,7 @@ void PopupMenuEditor::cut( int index )
     }
 
     RemoveActionFromPopupCommand * cmd =
-	new RemoveActionFromPopupCommand( "Cut Item", formWnd, this, idx );
+	new RemoveActionFromPopupCommand( i18n( "Cut Item" ), formWnd, this, idx );
     formWnd->commandHistory()->addCommand( cmd );
     cmd->execute();
 }
@@ -461,7 +463,7 @@ void PopupMenuEditor::paste( int index )
     if ( clipboardItem && clipboardOperation ) {
 	PopupMenuEditorItem * n = new PopupMenuEditorItem( clipboardItem, this );
 	AddActionToPopupCommand * cmd =
-	    new AddActionToPopupCommand( "Paste Item", formWnd, this, n, idx );
+	    new AddActionToPopupCommand( i18n( "Paste Item" ), formWnd, this, n, idx );
 	formWnd->commandHistory()->addCommand( cmd );
 	cmd->execute();
     }
@@ -503,7 +505,7 @@ void PopupMenuEditor::choosePixmap( int index )
     hide(); // qChoosePixmap hides the menu
     QIconSet icons( qChoosePixmap( 0, formWnd, 0, 0 ) );
     SetActionIconsCommand * cmd =
-	new SetActionIconsCommand( "Set icon", formWnd, a, this, icons );
+	new SetActionIconsCommand( i18n( "Set icon" ), formWnd, a, this, icons );
     formWnd->commandHistory()->addCommand( cmd );
     cmd->execute();
     show();
@@ -626,7 +628,7 @@ PopupMenuEditorItem * PopupMenuEditor::createItem( QAction * a )
     formWindow()->unify( i, n, FALSE );
     i->setName( n );
     AddActionToPopupCommand * cmd =
-	new AddActionToPopupCommand( "Add Item", formWnd, this, i );
+	new AddActionToPopupCommand( i18n( "Add Item" ), formWnd, this, i );
     formWnd->commandHistory()->addCommand( cmd );
     cmd->execute();
     return i;
@@ -636,7 +638,7 @@ void PopupMenuEditor::removeItem( int index )
 {
     int idx = ( index == -1 ? currentIndex : index );
     if ( idx < (int)itemList.count() ) {
-	RemoveActionFromPopupCommand * cmd = new RemoveActionFromPopupCommand( "Remove Item",
+	RemoveActionFromPopupCommand * cmd = new RemoveActionFromPopupCommand( i18n( "Remove Item" ),
 									       formWnd,
 									       this,
 									       idx );
@@ -764,7 +766,7 @@ void PopupMenuEditor::mouseMoveEvent( QMouseEvent * e )
 	    draggedItem = itemAt( mousePressPos.y() );
 	    if ( draggedItem == &addItem ) {
 		draggedItem = createItem();
-		RenameActionCommand cmd( "Rename Item", formWnd, draggedItem->action(),
+		RenameActionCommand cmd( i18n( "Rename Item" ), formWnd, draggedItem->action(),
 					 this, "Unnamed" );
 		cmd.execute();
                 // FIXME: start rename after drop
@@ -1228,7 +1230,7 @@ void PopupMenuEditor::dropInPlace( PopupMenuEditorItem * i, int y )
 	n = itemList.next();
     }
     int same = itemList.findRef( i );
-    AddActionToPopupCommand * cmd = new AddActionToPopupCommand( "Drop Item", formWnd, this, i, idx );
+    AddActionToPopupCommand * cmd = new AddActionToPopupCommand( i18n( "Drop Item" ), formWnd, this, i, idx );
     formWnd->commandHistory()->addCommand( cmd );
     cmd->execute();
     currentIndex = ( same >= 0 && same < idx ) ? idx - 1 : idx;
@@ -1282,7 +1284,7 @@ void PopupMenuEditor::clearCurrentField()
 	return;
     if ( currentField == 0 ) {
 	QIconSet icons( 0 );
-	SetActionIconsCommand * cmd = new SetActionIconsCommand( "Remove icon",
+	SetActionIconsCommand * cmd = new SetActionIconsCommand( i18n( "Remove icon" ),
 								 formWnd,
 								 i->action(),
 								 this,
@@ -1303,7 +1305,7 @@ void PopupMenuEditor::navigateUp( bool ctrl )
 	hideSubMenu();
 	if ( ctrl ) {
 	    ExchangeActionInPopupCommand * cmd =
-		new ExchangeActionInPopupCommand( "Move Item Up",
+		new ExchangeActionInPopupCommand( i18n( "Move Item Up" ),
 						  formWnd,
 						  this,
 						  currentIndex,
@@ -1327,7 +1329,7 @@ void PopupMenuEditor::navigateDown( bool ctrl )
     if ( ctrl ) {
 	if ( currentIndex < ( (int)itemList.count() - 1 ) ) { // safe index
 	    ExchangeActionInPopupCommand * cmd =
-		new ExchangeActionInPopupCommand( "Move Item Down",
+		new ExchangeActionInPopupCommand( i18n( "Move Item Down" ),
 						  formWnd,
 						  this,
 						  currentIndex,
@@ -1423,7 +1425,7 @@ void PopupMenuEditor::leaveEditMode( QKeyEvent * e )
 	    ae->updateActionName( a );
     } else {
 	i = itemList.at( currentIndex );
-	RenameActionCommand * cmd = new RenameActionCommand( "Rename Item",
+	RenameActionCommand * cmd = new RenameActionCommand( i18n( "Rename Item" ),
 							     formWnd,
 							     i->action(),
 							     this,

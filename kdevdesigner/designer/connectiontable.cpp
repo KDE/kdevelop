@@ -26,6 +26,8 @@
 
 #include "connectiontable.h"
 
+#include <klocale.h>
+
 ConnectionTable::ConnectionTable( QWidget *parent, const char *name )
     : QTable( 0, 4, parent, name )
 {
@@ -33,10 +35,10 @@ ConnectionTable::ConnectionTable( QWidget *parent, const char *name )
     setShowGrid( FALSE );
     setFocusStyle( FollowStyle );
     setSelectionMode( SingleRow );
-    horizontalHeader()->setLabel( 0, tr( "Sender" ) );
-    horizontalHeader()->setLabel( 1, tr( "Signal" ) );
-    horizontalHeader()->setLabel( 2, tr( "Receiver" ) );
-    horizontalHeader()->setLabel( 3, tr( "Slot" ) );
+    horizontalHeader()->setLabel( 0, i18n( "Sender" ) );
+    horizontalHeader()->setLabel( 1, i18n( "Signal" ) );
+    horizontalHeader()->setLabel( 2, i18n( "Receiver" ) );
+    horizontalHeader()->setLabel( 3, i18n( "Slot" ) );
     setColumnStretchable( 0, TRUE );
     setColumnStretchable( 1, TRUE );
     setColumnStretchable( 2, TRUE );

@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Marek Janukowicz", I18N_NOOP("Ruby support"), "child@t17.ds.pwr.wroc.pl");
 
   aboutData.addCredit("The KWrite authors", I18N_NOOP("Kate editor component"), "kwrite-devel@kde.org");
-  aboutData.addCredit("The KHTML authors", I18N_NOOP("HTML documentation component"), "kwrite-devel@kde.org");
+  aboutData.addCredit("The KHTML authors", I18N_NOOP("HTML documentation component"), "kfm-devel@kde.org");
   aboutData.addCredit("Robert Moniot", I18N_NOOP("Fortran documentation"), "moniot@fordham.edu");
   aboutData.addCredit("Ka-Ping Yee", I18N_NOOP("Python documentation utility"), "ping@lfw.org");
   aboutData.addCredit("Dimitri van Heesch", I18N_NOOP("Doxygen wizard"), "dimitri@stack.nl");
@@ -109,8 +109,8 @@ int main(int argc, char *argv[])
   Core::getInstance()->doEmitCoreInitialized();
 
   delete splash;
-  
+
   kapp->dcopClient()->registerAs("kdevassistant");
-  
+
   return app.exec();
 }

@@ -100,7 +100,7 @@ void PartWidget::slotFilterChange( const QString & nf )
     if ( empty )
     {
         m_filter->lineEdit()->setText( QString::null );
-        QToolTip::add( m_btnFilter, QString( i18n("Apply last filter (\"%1\")") ).arg( m_lastFilter ) );
+        QToolTip::add( m_btnFilter, i18n("Apply last filter (\"%1\")").arg( m_lastFilter ) );
     }
     else
     {

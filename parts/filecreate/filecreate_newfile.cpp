@@ -144,13 +144,13 @@ namespace FileCreate {
     m_addToProject->setEnabled(m);
     m_addToProject->setChecked(m);
   }
-  
+
 	void NewFileChooser::accept()
 	{
 		QFileInfo file( url().path() );
 		if ( file.exists() )
 		{
-			KMessageBox::sorry( 0, i18n("A file with this name already exists"), i18n("File Exists") );
+			KMessageBox::sorry( this, i18n("A file with this name already exists"), i18n("File Exists") );
 			return;
 		}
 		KDialogBase::accept();

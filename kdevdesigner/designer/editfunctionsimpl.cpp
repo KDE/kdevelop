@@ -47,6 +47,8 @@
 #include <qheader.h>
 #include <qcheckbox.h>
 
+#include <klocale.h>
+
 EditFunctions::EditFunctions( QWidget *parent, FormWindow *fw, bool justSlots )
     : EditFunctionsBase( parent, 0, TRUE ), formWindow( fw )
 {
@@ -85,9 +87,9 @@ EditFunctions::EditFunctions( QWidget *parent, FormWindow *fw, bool justSlots )
 
 	if ( (*it).type == "slot" ) {
 	    if ( MetaDataBase::isSlotUsed( formWindow, MetaDataBase::normalizeFunction( (*it).function ).latin1() ) )
-		i->setText( 5, tr( "Yes" ) );
+		i->setText( 5, i18n( "Yes" ) );
 	    else
-		i->setText( 5, tr( "No" ) );
+		i->setText( 5, i18n( "No" ) );
 	} else {
 	    i->setText( 5, "---" );
 	}
@@ -106,7 +108,7 @@ EditFunctions::EditFunctions( QWidget *parent, FormWindow *fw, bool justSlots )
     QListViewItemIterator lvit = functionListView->firstChild();
     for ( ; *lvit; lvit++ )
 	(*lvit)->setRenameEnabled( 0, TRUE );
-    
+
     // Connect listview signal to signal-relay
     QObject::connect( functionListView,
 		      SIGNAL( itemRenamed( QListViewItem*, int, const QString & ) ),
@@ -130,7 +132,7 @@ EditFunctions::EditFunctions( QWidget *parent, FormWindow *fw, bool justSlots )
 void EditFunctions::okClicked()
 {
     QValueList<MetaDataBase::Function> functionList = MetaDataBase::functionList( formWindow );
-    QString n = tr( "Add/Remove functions of '%1'" ).arg( formWindow->name() );
+    QString n = i18n( "Add/Remove functions of '%1'" ).arg( formWindow->name() );
     QPtrList<Command> commands;
     QValueList<MetaDataBase::Function>::Iterator fit;
     if ( !functionList.isEmpty() ) {
@@ -145,7 +147,7 @@ void EditFunctions::okClicked()
 		}
 	    }
 	    if ( !functionFound )
-		commands.append( new RemoveFunctionCommand( tr( "Remove function" ),
+		commands.append( new RemoveFunctionCommand( i18n( "Remove function" ),
 							    formWindow, (*fit).function, (*fit).specifier,
 							    (*fit).access,
 							    (*fit).type,
@@ -190,7 +192,7 @@ void EditFunctions::okClicked()
 		}
 	    }
 	    if ( !functionFound )
-		commands.append( new AddFunctionCommand( tr( "Add function" ),
+		commands.append( new AddFunctionCommand( i18n( "Add function" ),
 							formWindow, function.function, function.specifier,
 							function.access,
 							function.type, formWindow->project()->language(),
@@ -201,7 +203,7 @@ void EditFunctions::okClicked()
 		QString normalizedOldName = MetaDataBase::normalizeFunction( (*it).oldName );
 		if ((*it).oldName.endsWith("const")) // make sure we get the 'const' when we remove the old name
 		    normalizedOldName += " const";
-		commands.append( new ChangeFunctionAttribCommand( tr( "Change function attributes" ),
+		commands.append( new ChangeFunctionAttribCommand( i18n( "Change function attributes" ),
 								  formWindow, function, normalizedOldName,
 								  (*it).oldSpec, (*it).oldAccess, (*it).oldType,
 								  formWindow->project()->language(), (*it).oldRetTyp ) );
@@ -211,9 +213,9 @@ void EditFunctions::okClicked()
     }
 
     if ( invalidFunctions ) {
-	if ( QMessageBox::information( this, tr( "Edit Functions" ),
-				       tr( "Some syntactically incorrect functions have been defined.\n"
-				       "Remove these functions?" ), tr( "&Yes" ), tr( "&No" ) ) == 0 ) {
+	if ( QMessageBox::information( this, i18n( "Edit Functions" ),
+				       i18n( "Some syntactically incorrect functions have been defined.\n"
+				       "Remove these functions?" ), i18n( "&Yes" ), i18n( "&No" ) ) == 0 ) {
 	    QValueList<FunctItem>::Iterator it = functList.begin();
 	    while ( it != functList.end() ) {
 		bool found = FALSE;
@@ -290,14 +292,14 @@ void EditFunctions::functionAdd( const QString &access, const QString &type )
     if ( i->text( 4 ) == "slot" ) {
 	i->setText( 0, "newSlot()" );
 	if ( MetaDataBase::isSlotUsed( formWindow, "newSlot()" ) )
-	    i->setText( 5, tr( "Yes" ) );
+	    i->setText( 5, i18n( "Yes" ) );
 	else
-	    i->setText( 5, tr( "No" ) );
+	    i->setText( 5, i18n( "No" ) );
     } else {
 	i->setText( 0, "newFunction()" );
 	i->setText( 5, "---" );
     }
-    
+
     functionListView->setCurrentItem( i );
     functionListView->setSelected( i, TRUE );
     functionListView->ensureItemVisible( i );
@@ -397,9 +399,9 @@ void EditFunctions::currentTextChanged( const QString &txt )
 
     if ( functionListView->currentItem()->text( 4 ) == "slot" ) {
 	if ( MetaDataBase::isSlotUsed( formWindow, MetaDataBase::normalizeFunction( txt.latin1() ).latin1() ) )
-	    functionListView->currentItem()->setText( 5, tr( "Yes" ) );
+	    functionListView->currentItem()->setText( 5, i18n( "Yes" ) );
 	else
-	    functionListView->currentItem()->setText( 5, tr( "No" ) );
+	    functionListView->currentItem()->setText( 5, i18n( "No" ) );
     } else {
 	functionListView->currentItem()->setText( 5, "---" );
     }
@@ -441,9 +443,9 @@ void EditFunctions::currentTypeChanged( const QString &type )
     if ( type == "slot" ) {
 	if ( MetaDataBase::isSlotUsed( formWindow,
 		MetaDataBase::normalizeFunction( functionListView->currentItem()->text( 0 ).latin1() ).latin1() ) )
-	    functionListView->currentItem()->setText( 5, tr( "Yes" ) );
+	    functionListView->currentItem()->setText( 5, i18n( "Yes" ) );
 	else
-	    functionListView->currentItem()->setText( 5, tr( "No" ) );
+	    functionListView->currentItem()->setText( 5, i18n( "No" ) );
     } else {
 	functionListView->currentItem()->setText( 5, "---" );
     }
@@ -514,9 +516,9 @@ void EditFunctions::displaySlots( bool justSlots )
 
 	if ( (*it).type == "slot" ) {
 	    if ( MetaDataBase::isSlotUsed( formWindow, MetaDataBase::normalizeFunction( (*it).newName ).latin1() ) )
-		i->setText( 5, tr( "Yes" ) );
+		i->setText( 5, i18n( "Yes" ) );
 	    else
-		i->setText( 5, tr( "No" ) );
+		i->setText( 5, i18n( "No" ) );
 	} else {
 	    i->setText( 5, "---" );
 	}

@@ -38,7 +38,7 @@ CcaseCommentDlg::CcaseCommentDlg(bool bCheckin)
 
   QBoxLayout *layout2 = new QHBoxLayout(layout);
   if(bCheckin) {
-    _check = new QCheckBox("Reserve", this);
+    _check = new QCheckBox(i18n("Reserve"), this);
     layout2->addWidget(_check);
   }
 

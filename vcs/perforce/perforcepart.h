@@ -14,6 +14,7 @@
 #define _PERFORCEPART_H_
 
 #include "kdevplugin.h"
+#include <klocale.h>
 
 class Context;
 class QPopupMenu;
@@ -27,8 +28,8 @@ public:
     PerforcePart( QObject *parent, const char *name, const QStringList & );
     ~PerforcePart();
 
-    virtual QString shortDescription() const 
-    { return "Perforce is a version control system"; };
+    virtual QString shortDescription() const
+    { return i18n( "Perforce is a version control system" ); }
 
 private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);

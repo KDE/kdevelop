@@ -49,14 +49,14 @@ EditorProxy::EditorProxy()
 	KConfig *config = kapp->config();
 	config->setGroup("UI");
 	int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
-	
+
 	m_delayedViewCreationCompatibleUI = (mdimode == KMdi::IDEAlMode || mdimode == KMdi::TabPageMode);
 
-	KAction *ac = new KAction( i18n("Show Context Menu"), 0, this, 
+	KAction *ac = new KAction( i18n("Show Context Menu"), 0, this,
 		SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
-        KShortcut cut ;/*= KStdAccel::shortcut(KStdAccel::PopupMenuContext);*/
-        cut.append(KKey(CTRL+Key_Return));
-        ac->setShortcut(cut);
+    KShortcut cut ;/*= KStdAccel::shortcut(KStdAccel::PopupMenuContext);*/
+    cut.append(KKey(CTRL+Key_Return));
+    ac->setShortcut(cut);
 }
 
 
@@ -201,7 +201,7 @@ void EditorProxy::popupAboutToShow()
   if( selectIface && selectIface->hasSelection() )
   {
     hasMultilineSelection = ( selectIface->selection().contains('\n') != 0 );
-    if ( !hasMultilineSelection ) 
+    if ( !hasMultilineSelection )
     {
       wordstr = selectIface->selection();
     }
@@ -251,16 +251,16 @@ void EditorProxy::showPopup( )
 
 	if ( KParts::Part * part = PartController::getInstance()->activePart() )
 	{
-		ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>( part->widget() );	
+		ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>( part->widget() );
 		if ( iface )
 		{
 			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
 			QPopupMenu * popup = static_cast<QPopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
-			
+
 			popup->exec( view->mapToGlobal( iface->cursorCoordinates() ) );
 		}
 	}
-  	
+
 }
 
 void EditorProxy::registerEditor(EditorWrapper* wrapper)
@@ -311,7 +311,7 @@ void EditorWrapper::show()
     QWidgetStack::show();
     return;
   }
-  
+
   if (m_first) {
     m_first = false;
     QWidgetStack::show();
@@ -324,15 +324,15 @@ void EditorWrapper::show()
   }
 
   m_view = m_doc->createView(this);
-  
+
   addWidget(m_view);
-  
+
   m_doc->setWidget(m_view);
   // FIXME assumption check
   // We're managing the view deletion by being its parent, don't let the part self-destruct
   disconnect( m_view, SIGNAL( destroyed() ), m_doc, SLOT( slotWidgetDestroyed() ) );
   //connect( m_view, SIGNAL( destroyed() ), this, SLOT( deleteLater() ) );
-  
+
   m_doc->insertChildClient(m_view);
 
   PartController::getInstance()->integrateTextEditorPart(m_doc);
@@ -352,28 +352,28 @@ void EditorWrapper::show()
 QWidget * EditorProxy::widgetForPart( KParts::Part * part )
 {
 	if ( !part ) return 0;
-	
+
 	if (part->widget())
 		return part->widget();
-	
+
 	for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
 		if ((*it)->document() == part)
 			return *it;
-	
+
 	return 0L;
 }
 
 QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
 {
 	if ( !part ) return 0;
-	
+
 	for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
 		if ((*it)->document() == part)
 			return *it;
-	
+
 	if (part->widget())
 		return part->widget();
-	
+
 	return 0L;
 }
 

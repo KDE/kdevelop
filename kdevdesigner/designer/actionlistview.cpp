@@ -28,6 +28,8 @@
 #include "actionlistview.h"
 #include <qheader.h>
 
+#include <klocale.h>
+
 ActionListView::ActionListView( QWidget *parent, const char *name )
     : QListView( parent, name )
 {
@@ -85,14 +87,14 @@ QDragObject *ActionListView::dragObject()
 void ActionListView::rmbMenu( QListViewItem *i, const QPoint &p )
 {
     QPopupMenu *popup = new QPopupMenu( this );
-    popup->insertItem( tr( "New &Action" ), 0 );
-    popup->insertItem( tr( "New Action &Group" ), 1 );
-    popup->insertItem( tr( "New &Dropdown Action Group" ), 2 );
+    popup->insertItem( i18n( "New &Action" ), 0 );
+    popup->insertItem( i18n( "New Action &Group" ), 1 );
+    popup->insertItem( i18n( "New &Dropdown Action Group" ), 2 );
     if ( i ) {
 	popup->insertSeparator();
-	popup->insertItem( tr( "&Connect Action..." ), 3 );
+	popup->insertItem( i18n( "&Connect Action..." ), 3 );
 	popup->insertSeparator();
-	popup->insertItem( tr( "Delete Action" ), 4 );
+	popup->insertItem( i18n( "Delete Action" ), 4 );
     }
     int res = popup->exec( p );
     if ( res == 0 )

@@ -31,7 +31,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char **argv)
 {
     KAboutData about("kdevprofileeditor", I18N_NOOP("KDevelop Profile Editor"), "1", "",
-                     KAboutData::License_GPL, "(c) 2004, The KDevelop Developers", 0, 0, "");
+                     KAboutData::License_GPL, I18N_NOOP("(c) 2004, The KDevelop Developers"), 0, 0, "");
     about.addAuthor("Alexander Dymo", 0, "adymo@kdevelop.org");
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
@@ -40,6 +40,6 @@ int main(int argc, char **argv)
     ProfileEditor editor;
     editor.show();
     app.setMainWidget(&editor);
-    
+
     return app.exec();
 }

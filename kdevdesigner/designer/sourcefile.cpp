@@ -38,6 +38,7 @@
 #include <stdlib.h>
 
 #include <kfiledialog.h>
+#include <klocale.h>
 
 SourceFile::SourceFile( const QString &fn, bool temp, Project *p )
     : filename( fn ), ed( 0 ), fileNameTemp( temp ),
@@ -45,16 +46,16 @@ SourceFile::SourceFile( const QString &fn, bool temp, Project *p )
       , accepted( TRUE )
 {
     iface = 0;
-    
+
     if ( !temp )
 	accepted = checkFileName( TRUE );
-    
+
     if (accepted) {
 	load();
 	pro->addSourceFile( this );
 	MetaDataBase::addEntry( this );
     }
-    
+
 }
 
 SourceFile::~SourceFile()
@@ -137,7 +138,7 @@ bool SourceFile::saveAs( bool ignoreModified )
     pro->setModified( TRUE );
     timeStamp.setFileName( pro->makeAbsolute( filename ) );
     if ( ed )
-	ed->setCaption( tr( "Edit %1" ).arg( filename ) );
+	ed->setCaption( i18n( "Edit %1" ).arg( filename ) );
     setModified( TRUE );
     if ( pro->isDummy() ) {
 	QObject *o = ed->parent();
@@ -218,9 +219,9 @@ bool SourceFile::closeEvent()
     if ( ed )
 	ed->save();
 
-    switch ( QMessageBox::warning( MainWindow::self, tr( "Save Code" ),
-				   tr( "Save changes to '%1'?" ).arg( filename ),
-				   tr( "&Yes" ), tr( "&No" ), tr( "&Cancel" ), 0, 2 ) ) {
+    switch ( QMessageBox::warning( MainWindow::self, i18n( "Save Code" ),
+				   i18n( "Save changes to '%1'?" ).arg( filename ),
+				   i18n( "&Yes" ), i18n( "&No" ), i18n( "&Cancel" ), 0, 2 ) ) {
     case 0: // save
 	if ( !save() )
 	    return FALSE;
@@ -262,10 +263,10 @@ void SourceFile::checkTimeStamp()
     if ( timeStamp.isUpToDate() )
 	return;
     timeStamp.update();
-    if ( QMessageBox::information( MainWindow::self, tr( "Qt Designer" ),
-				   tr( "File '%1' has been changed outside Qt Designer.\n"
+    if ( QMessageBox::information( MainWindow::self, i18n( "Qt Designer" ),
+				   i18n( "File '%1' has been changed outside Qt Designer.\n"
 				       "Do you want to reload it?" ).arg( filename ),
-				   tr( "&Yes" ), tr( "&No" ) ) == 0 ) {
+				   i18n( "&Yes" ), i18n( "&No" ) ) == 0 ) {
 	load();
 	if ( ed )
 	    ed->editorInterface()->setText( txt );
@@ -276,8 +277,8 @@ bool SourceFile::checkFileName( bool allowBreak )
 {
     SourceFile *sf = pro->findSourceFile( filename, this );
     if ( sf )
-	QMessageBox::warning( MainWindow::self, tr( "Invalid Filename" ),
-			      tr( "The project already contains a source file with \n"
+	QMessageBox::warning( MainWindow::self, i18n( "Invalid Filename" ),
+			      i18n( "The project already contains a source file with \n"
 				  "filename '%1'. Please choose a new filename." ).arg( filename ) );
     while ( sf ) {
 	LanguageInterface *iface = MetaDataBase::languageInterface( pro->language() );

@@ -24,6 +24,8 @@
 #include "startdialogimpl.h"
 #include "designerapp.h"
 
+#include <klocale.h>
+
 FileDialog::FileDialog( const QString &dir, QWidget *parent )
     : QFileDialog( dir, QString::null, parent )
 {
@@ -62,7 +64,7 @@ void StartDialog::accept()
     if( !tabindex ) {
 	if ( !templateView->currentItem() )
 	    return;
-	Project *pro = MainWindow::self->findProject( tr( "<No Project>" ) );
+	Project *pro = MainWindow::self->findProject( i18n( "<No Project>" ) );
 	if ( !pro )
 	    return;
 	MainWindow::self->setCurrentProject( pro );
@@ -164,15 +166,15 @@ void StartDialog::initFileOpen()
     QPluginManager<ImportFilterInterface> manager( IID_ImportFilter, QApplication::libraryPaths(),
 						   MainWindow::self->pluginDirectory() );
     QStringList filterlist;
-    filterlist << tr( "Designer Files (*.ui *.pro)" );
-    filterlist << tr( "Qt User-Interface Files (*.ui)" );
-    filterlist << tr( "QMAKE Project Files (*.pro)" );
+    filterlist << i18n( "Designer Files (*.ui *.pro)" );
+    filterlist << i18n( "Qt User-Interface Files (*.ui)" );
+    filterlist << i18n( "QMAKE Project Files (*.pro)" );
 
     QStringList list = manager.featureList();
     for ( QStringList::Iterator it2 = list.begin(); it2 != list.end(); ++it2 )
 	filterlist << *it2;
 
-    filterlist << tr( "All Files (*)" );
+    filterlist << i18n( "All Files (*)" );
     QString filters = filterlist.join( ";;" );
     fd->setFilters( filters );
 

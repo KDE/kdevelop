@@ -38,6 +38,8 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 
+#include <klocale.h>
+
 ListBoxEditor::ListBoxEditor( QWidget *parent, QWidget *editWidget, FormWindow *fw )
     : ListBoxEditorBase( parent, 0, TRUE ), formwindow( fw )
 {
@@ -79,12 +81,12 @@ ListBoxEditor::ListBoxEditor( QWidget *parent, QWidget *editWidget, FormWindow *
 			  SLOT( setText( const QString & ) ) );
     }
     delete l;
-    
+
 }
 
 void ListBoxEditor::insertNewItem()
 {
-    QListBoxItem *i = new QListBoxText( preview, tr("New Item") );
+    QListBoxItem *i = new QListBoxText( preview, i18n("New Item") );
     preview->setCurrentItem( i );
     preview->setSelected( i, TRUE );
     itemText->setFocus();
@@ -159,7 +161,7 @@ void ListBoxEditor::applyClicked()
 	items.append( item );
     }
 
-    PopulateListBoxCommand *cmd = new PopulateListBoxCommand( tr( "Edit the Items of '%1'" ).arg( listbox->name() ),
+    PopulateListBoxCommand *cmd = new PopulateListBoxCommand( i18n( "Edit the Items of '%1'" ).arg( listbox->name() ),
 							      formwindow, listbox, items );
     cmd->execute();
     formwindow->commandHistory()->addCommand( cmd );

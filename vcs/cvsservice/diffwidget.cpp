@@ -103,7 +103,7 @@ void KDiffTextEdit::saveAs()
       stream << text( i ) << "\n";
     f.close();
   } else {
-    KMessageBox::sorry( 0, i18n("Unable to open file."), i18n("Diff Frontend") );
+    KMessageBox::sorry( this, i18n("Unable to open file."), i18n("Diff Frontend") );
   }
 }
 
@@ -145,7 +145,7 @@ void KDiffTextEdit::clearSyntaxHighlight()
     clearParagraphBackground( i );
   }
 }
- 
+
 void KDiffTextEdit::searchExtParts()
 {
   // only execute once

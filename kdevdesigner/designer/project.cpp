@@ -59,6 +59,8 @@
 # include <unistd.h>
 #endif
 
+#include <klocale.h>
+
 #ifndef QT_NO_SQL
 DatabaseConnection::~DatabaseConnection()
 {
@@ -143,14 +145,14 @@ bool DatabaseConnection::open( bool suppressDialog )
 	conn->setPort( prt );
 	success = conn->open();
 	if ( !success ) {
-	    switch( QMessageBox::warning( project->messageBoxParent(), QApplication::tr( "Connection" ),
-					  QApplication::tr( "Could not connect to the database.\n"
+	    switch( QMessageBox::warning( project->messageBoxParent(), i18n( "Connection" ),
+					  i18n( "Could not connect to the database.\n"
 							    "Press 'OK' to continue or 'Cancel' to "
 							    "specify different\nconnection information.\n" )
 					  + QString( "[" + conn->lastError().driverText() + "\n" +
 						     conn->lastError().databaseText() + "]\n" ),
-					  QApplication::tr( "&OK" ),
-					  QApplication::tr( "&Cancel" ), QString::null, 0, 1 ) ) {
+					  i18n( "&OK" ),
+					  i18n( "&Cancel" ), QString::null, 0, 1 ) ) {
 	    case 0: // OK or Enter
 		continue;
 	    case 1: // Cancel or Escape
@@ -1395,7 +1397,7 @@ void Project::removeTempProject()
     d.remove( QFileInfo( filename ).dirPath() );
 #if defined(Q_OS_UNIX)
     // ##### implement for all platforms, ideally should be in Qt
-    ::rmdir( d.absPath().latin1() );
+    ::rmdir( QFile::encodeName( d.absPath() ) );
 #endif
 }
 

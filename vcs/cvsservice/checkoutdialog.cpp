@@ -269,7 +269,7 @@ void CheckoutDialog::slotOk()
 	if (errorMessage.isNull())
 		KDialogBase::slotOk();
 	else
-		KMessageBox::error( 0, errorMessage );
+		KMessageBox::error( this, errorMessage );
 }
 
 

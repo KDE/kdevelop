@@ -173,7 +173,7 @@ void ProblemReporter::slotFilter()
     if(!m_tabBar->isTabEnabled(4))
       m_tabBar->setTabEnabled(4,true);
 
-    m_tabBar->tab(4)->setText(i18n("Filtered")+": " + m_filterEdit->text());
+    m_tabBar->tab(4)->setText(i18n("Filtered: %1").arg( m_filterEdit->text() ));
     m_tabBar->setCurrentTab(4);
 
     m_filteredList->clear();
