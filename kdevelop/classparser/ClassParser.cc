@@ -891,6 +891,7 @@ int CClassParser::checkClassDecl()
   bool isMultiDecl = false;
   int retVal = CP_IS_OTHER;
   bool exit = false;
+  CParsedLexem *aLexem;
 
   declStart = getLineno();
 
@@ -909,10 +910,6 @@ int CClassParser::checkClassDecl()
         break;
       case CPSTRUCT:
         isStruct = true;
-        break;
-      case CLCL:
-        isImpl = true;
-        isStruct = false;
         break;
       case CPOPERATOR:
         isOperator = true;
@@ -933,6 +930,11 @@ int CClassParser::checkClassDecl()
       ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' ) ) ||
       ( lexem == 0 ); 
   }
+
+  // Pop the top lexem to check for ::. Then put it back again.
+  aLexem = lexemStack.pop();
+  isImpl = ( !lexemStack.isEmpty() && lexemStack.top()->type == CLCL );
+  lexemStack.push( aLexem );
 
   // If we find a '(' it's a function of some sort.
   if( lexem == '(' )
@@ -1219,7 +1221,9 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
   QList<CParsedAttribute> list;
   CParsedAttribute *anAttr;
   CParsedMethod *aMethod;
+  CParsedMethod *oldMethod;
   int declType;
+  QString str;
 
   declType = checkClassDecl();
   switch( declType )
@@ -1244,8 +1248,23 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
     case CP_IS_METHOD:
       aMethod = new CParsedMethod();
       fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
+
       if( !aMethod->name.isEmpty() )
-        aContainer->addMethod( aMethod );
+      {
+        // If this method already exists we just set some attributes.
+        oldMethod = aContainer->getMethod( *aMethod );
+        if( oldMethod != NULL )
+        {
+          oldMethod->setIsInHFile( false );
+          oldMethod->setDefinedInFile( aMethod->definedInFile );
+          oldMethod->setDefinedOnLine( aMethod->definedOnLine );
+          oldMethod->setDefinitionEndsOnLine( aMethod->definitionEndsOnLine );
+
+          delete aMethod;
+        }
+        else
+          aContainer->addMethod( aMethod );
+      }
       else
         delete aMethod;
       break;
@@ -1383,7 +1402,7 @@ void CClassParser::parseToplevel()
     else
       parseTopLevelLexem();
 
-    kapp->processEvents();  // Jonas: added this here to process pending events as mentioned
+    //    kapp->processEvents();
     getNextLexem();
   }
 }
