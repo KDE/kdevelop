@@ -1,0 +1,7 @@
+# KDE Config File
+[General]
+Name=Kate plugin
+Icon=kateplug.png
+Category=C++/KDE
+Comment=Generates a plugin for Kate the text editor.
+FileTemplates=h,CStyle,cpp,CStyle
