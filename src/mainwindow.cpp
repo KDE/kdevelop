@@ -253,6 +253,18 @@ void MainWindow::init()
 
   createGUI(0);
 
+  connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+          this, SLOT(createGUI(KParts::Part*)));
+  connect(Core::getInstance(), SIGNAL(projectOpened()),
+          this, SLOT(slotReactToProjectOpened()) );
+  connect(ProjectManager::getInstance()->projectSession(),
+          SIGNAL(sig_restoreAdditionalViewProperties(const QString&, const QDomElement*)),
+          this, SLOT(slotRestoreAdditionalViewProperties(const QString&, const QDomElement*)));
+  connect(ProjectManager::getInstance()->projectSession(),
+          SIGNAL(sig_saveAdditionalViewProperties(const QString&, QDomElement*)),
+          this, SLOT(slotSaveAdditionalViewProperties(const QString&, QDomElement*)));
+
+
   if (!isFakingSDIApplication()) {
     menuBar()->removeItem( menuBar()->idAt(menuBar()->count()-4));
     menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, menuBar()->count()-1);
@@ -313,18 +325,6 @@ void MainWindow::createStatusBar()
 void MainWindow::createFramework()
 {
   PartController::createInstance(this);
-
-  connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-          this, SLOT(createGUI(KParts::Part*)));
-  connect(Core::getInstance(), SIGNAL(projectOpened()),
-          this, SLOT(slotReactToProjectOpened()) );
-  connect(ProjectManager::getInstance()->projectSession(),
-          SIGNAL(sig_restoreAdditionalViewProperties(const QString&, const QDomElement*)),
-          this, SLOT(slotRestoreAdditionalViewProperties(const QString&, const QDomElement*)));
-  connect(ProjectManager::getInstance()->projectSession(),
-          SIGNAL(sig_saveAdditionalViewProperties(const QString&, QDomElement*)),
-          this, SLOT(slotSaveAdditionalViewProperties(const QString&, QDomElement*)));
-
 
   setMenuForSDIModeSysButtons(menuBar());
 }
