@@ -332,11 +332,13 @@ void FileBuffer::bufferFile(const QString &fileName)
 /**
  * Writes buffer to a file.
  */
-void FileBuffer::saveBuffer(const QString &filename)
+void FileBuffer::saveBuffer(const QString &filename,const QString &qmakeHeader)
 //==================================================
 {
   QFile dataFile(filename);
-  QStringList writeBuffer = getBufferTextInDepth();
+  QStringList writeBuffer;
+  writeBuffer.append(qmakeHeader);
+  writeBuffer += getBufferTextInDepth();
   if (dataFile.open(IO_WriteOnly))
   {
     for (unsigned int i=0; i<writeBuffer.count(); i++)

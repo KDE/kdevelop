@@ -724,7 +724,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     Buffer->setValues("QMAKE_LFLAGS_RELEASE",item->configuration.m_lflags_release,FileBuffer::VSM_RESET,VALUES_PER_ROW);
 
   // Write to .pro file
-  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
+  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
 
 }
 
@@ -780,8 +780,32 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->removeValues("FORMS");
   subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
-  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
+  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
 }
+
+QString TrollProjectWidget::getHeader()
+{
+  QString header,templateString,targetString;
+  QString relpath = "."+m_shownSubproject->path.mid(projectDirectory().length());
+  if (m_shownSubproject->configuration.m_template==QTMP_APPLICATION)
+  {
+    templateString = i18n("an application: ");
+    targetString = m_shownSubproject->configuration.m_target;
+  }
+  if (m_shownSubproject->configuration.m_template==QTMP_LIBRARY)
+  {
+    templateString = i18n("a library: ");
+    targetString = m_shownSubproject->configuration.m_target;
+  }
+  if (m_shownSubproject->configuration.m_template==QTMP_SUBDIRS)
+    templateString = i18n("a subdirs project");
+  header.sprintf(m_part->getQMakeHeader(),
+                 relpath.ascii(),
+                 templateString.ascii(),
+                 targetString.ascii());
+  return header;
+}
+
 
 void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QString &filename)
 {

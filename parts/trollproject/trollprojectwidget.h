@@ -206,6 +206,7 @@ private:
     void removeFile(SubprojectItem *spitem, FileItem *fitem);
     void parseScope(SubprojectItem *item,QString scopeString, FileBuffer *buffer);
     void parse(SubprojectItem *item);
+    QString getHeader();
 
     QVBox     *overviewContainer;
     KListView *overview;

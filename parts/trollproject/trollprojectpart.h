@@ -40,6 +40,7 @@ protected:
     virtual QStringList allFiles();
     virtual void addFile(const QString &fileName);
     virtual void removeFile(const QString &fileName);
+    virtual QString& getQMakeHeader() {return m_qmakeHeader;}
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
@@ -54,6 +55,7 @@ private:
     void queueCmd(const QString &dir, const QString &cmd);
 
     QGuardedPtr<TrollProjectWidget> m_widget;
+    QString m_qmakeHeader;
     QString m_projectName;
     friend class TrollProjectWidget;
     friend class ProjectRunOptionsDlg;
