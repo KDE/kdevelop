@@ -38,7 +38,7 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
     : QVBox( parent, "fileviewpartwidget" ), m_filetree( 0 ),
     m_filter( 0 ), m_btnFilter( 0 ), m_part( part )
 {
-    Q_ASSERT( part && parent );
+//    Q_ASSERT( part && parent );
 
     KDevVCSFileInfoProvider *infoProvider = 0;
     if (part && part->versionControl() && part->versionControl()->fileInfoProvider())
