@@ -673,7 +673,78 @@ void CKDevelop::slotViewPreviousError(){
 //  }
 }
 
-void CKDevelop::slotViewTTreeView(){
+void CKDevelop::slotViewTTreeView()
+{
+  if (view_menu->isItemChecked(ID_VIEW_TREEVIEW)) {
+    view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+    toolBar()->setButton(ID_VIEW_TREEVIEW,false);
+  }
+  else {
+    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+    toolBar()->setButton(ID_VIEW_TREEVIEW,true);
+
+    // dock back whole groups of dockwidgets
+    QList<KDockWidget> dockWdgList;
+    if (class_tree)
+      dockWdgList.append( (KDockWidget*)class_tree->parentWidget()->parentWidget());
+    if (log_file_tree)
+      dockWdgList.append( (KDockWidget*)log_file_tree->parentWidget()->parentWidget());
+    if (real_file_tree)
+      dockWdgList.append( (KDockWidget*)real_file_tree->parentWidget()->parentWidget());
+    if (doc_tree)
+      dockWdgList.append( (KDockWidget*)doc_tree->parentWidget()->parentWidget());
+    if (var_viewer)
+      dockWdgList.append( (KDockWidget*)var_viewer->parentWidget()->parentWidget());
+
+    QListIterator<KDockWidget> it( dockWdgList);
+    QList<KDockWidget> rootDockWidgetList;
+    QListIterator<KDockWidget> it2( rootDockWidgetList);
+    KDockWidget* pDockW = 0L;
+
+    while ((pDockW = it.current()) != 0L) { // for all of the dockwidget covers of tree views
+      ++it;
+      KDockWidget* pRootDockW = 0L;
+      KDockWidget* pCandidate = 0L;
+      QWidget* pW = pDockW;
+      // find the oldest ancestor of the current dockwidget
+      while (pW) {
+        if (pW->inherits("KDockWidget")) {
+          pRootDockW = (KDockWidget*) pW;
+        }
+        pW = pW->parentWidget();
+      }
+      if (pRootDockW) {
+        // if that oldest ancestor is not already in the list, append it
+        bool found = false;
+        if (!rootDockWidgetList.isEmpty()) {
+          for ( it2.toFirst(); it2.current() && !found; ++it2 ) {
+            KDockWidget* pDockW = it2.current();
+            if (pDockW == pRootDockW)
+              found = true;
+          }
+          if (!found) {
+            rootDockWidgetList.append( pRootDockW);
+          }
+        }
+        else {
+          rootDockWidgetList.append( pRootDockW);
+        }
+      }
+    }
+
+    for ( it2.toFirst(); it2.current(); ++it2 ) { // for all found root dockwidgets
+      KDockWidget* pCur = it2.current();
+      if (pCur->isVisible()) {
+        if (pCur->isTopLevel()) {
+          pCur->raise();
+        }
+      }
+      else {
+        pCur->dockBack();
+      }
+    }
+  }
+
 //////////  if(treedock->isVisible()){
 //////////    view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
 //////////    toolBar()->setButton(ID_VIEW_TREEVIEW,false);
