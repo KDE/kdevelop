@@ -19,7 +19,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <ktmainwindow.h>
+#include <kmainwindow.h>
 #include <kparts/event.h>
 
 #include "mdimainfrmcomponent.h"
@@ -54,7 +54,7 @@ void MdiMainFrmComponent::setupGUI()
   emit embedWidget(m_mainframe, AreaOfDocumentViews, i18n("QextMdi-MainFrm"), i18n("source file views area"));
 
   // give the application menubar to QextMDI
-  KTMainWindow* tlw = (KTMainWindow*) m_mainframe->topLevelWidget();
+  KMainWindow* tlw = (KMainWindow*) m_mainframe->topLevelWidget();
   m_mainframe->setMenuForSDIModeSysButtons( (QMenuBar*) tlw->menuBar());
 
   // construct 'Window' popupmenu of KDevelop by actions
