@@ -21,6 +21,7 @@
 #include <qfile.h>
 #include <klocale.h>
 #include "kdlgldr.h"
+#include <stdlib.h>
 
 extern "C" {
 
