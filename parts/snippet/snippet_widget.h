@@ -40,12 +40,11 @@ tooltips which contains the text of the snippet
 class SnippetWidget : public KListView, public QToolTip
 {
   Q_OBJECT
-    
+
 public:
-		  
+
     SnippetWidget(SnippetPart *part);
     ~SnippetWidget();
-    SnippetItem * pFindByName(QString name);
     QPtrList<SnippetItem> * getList() { return (&_list); }
     void writeConfig();
     void initConfig();
@@ -56,6 +55,7 @@ protected:
     SnippetPart * m_part;
     SnippetDlg * m_dialog;
     void maybeTip( const QPoint & );
+    bool acceptDrag (QDropEvent *event) const;
 
 private:
     void insertIntoActiveView(QString text);
@@ -77,6 +77,7 @@ public slots:
 protected slots:
     void showPopupMenu( QListViewItem * item, const QPoint & p, int );
     void slotListDblClicked(QListViewItem * item, const QPoint & pos, int c);
+    void slotDropped(QDropEvent *e, QListViewItem *after);
 };
 
 

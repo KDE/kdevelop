@@ -6,7 +6,6 @@
  *  Copyright: See COPYING file that comes with this distribution
  */
 
-
 #include <kparts/part.h>
 #include <klibloader.h>
 #include <kurl.h>
@@ -34,6 +33,7 @@
 #include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <kdebug.h>
+#include <qdragobject.h> 
 
 #include <kdevcore.h>
 #include "kdevcore.h"
@@ -53,12 +53,6 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
 
     m_dialog = new SnippetDlg(this, "SnippetDlg", true);
 
-    //connect the signals
-    connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
-             this, SLOT( showPopupMenu(QListViewItem *, const QPoint & , int ) ) );
-    connect( this, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int) ),
-             this, SLOT( slotListDblClicked( QListViewItem *, const QPoint &, int) ) );
-
     // init the QPtrList
     _list.setAutoDelete(TRUE);
 
@@ -67,6 +61,17 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
     addColumn( "" );
     setFullWidth(true);
     header()->hide();
+    setAcceptDrops(true);
+    setDragEnabled(false);
+    setDropVisualizer(false);
+    
+    //connect the signals
+    connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
+             this, SLOT( showPopupMenu(QListViewItem *, const QPoint & , int ) ) );
+    connect( this, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int) ),
+             this, SLOT( slotListDblClicked( QListViewItem *, const QPoint &, int) ) );
+    connect( this, SIGNAL( dropped(QDropEvent *, QListViewItem *) ),
+             this, SLOT( slotDropped(QDropEvent *, QListViewItem *) ) );
 
     _cfg = NULL;
     initConfig();
@@ -104,10 +109,9 @@ void SnippetWidget::slotRemove()
 {
   //get current data
   QListViewItem * item = currentItem();
-  if (item == 0)
+  SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
+  if (!pSnippet)
     return;
-
-  SnippetItem *pSnippet = pFindByName( item->text(0) );
 
   removeItem(item);
   _list.remove(pSnippet);
@@ -124,8 +128,10 @@ void SnippetWidget::slotEdit()
   //get current data
   QListViewItem * item = currentItem();
 
-  SnippetItem *pSnippet = pFindByName( item->text(0) );
-
+  SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
+  if (!pSnippet)
+    return;
+  
   //init the dialog
   m_dialog->snippetName->setText(pSnippet->getName());
   m_dialog->snippetText->setText(pSnippet->getText());
@@ -151,40 +157,12 @@ void SnippetWidget::slotEdit()
 */
 void SnippetWidget::slotListDblClicked(QListViewItem * item, const QPoint &, int)
 {
-  if (item == NULL)
-    return;
-
-  SnippetItem *pSnippet;
-
-  for ( pSnippet = _list.first(); pSnippet; pSnippet = _list.next() ) {
-    if (pSnippet->getName() == item->text(0)) {
-      break;
-    }
-  }
-
-  if (pSnippet == NULL)
+  SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
+  if (!pSnippet)
       return;
-  //OK, now we've got the clicked snippet
 
   //process variables if any, then insert into the active view
   insertIntoActiveView( parseText(pSnippet->getText(), _SnippetConfig.getDelimiter()) );
-}
-
-
-/*!
-    \fn SnippetWidget::pFindByName(QString name)
-    Returns the SnippetItem that is identified by the parameter name
- */
-SnippetItem * SnippetWidget::pFindByName(QString name)
-{
-  SnippetItem *item;
-
-  for ( item = _list.first(); item; item = _list.next() ) {
-    if (item->getName() == name)
-      return item;
-  }
-
-  return NULL;
 }
 
 
@@ -670,5 +648,48 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
 
   return strReturn;
 }
+
+//  fn SnippetWidget::acceptDrag (QDropEvent *event) const
+/*!
+    Reimplementation from KListView.
+    Check here if the data the user is about to drop fits our restrictions.
+    We only accept dropps of plaintext, because from the dropped text 
+    we will create a snippet.
+ */
+bool SnippetWidget::acceptDrag (QDropEvent *event) const
+{
+  kdDebug(9035) << "Format: " << event->format() << endl;
+  
+  if (QString(event->format()).startsWith("text/plain") && event->source() != this)
+    return true;
+  else
+    return false;
+}
+
+//  fn SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *after)
+/*!
+    This slot is connected to the dropped signal.
+    If it is emitted, we need to construct a new snippet entry with 
+    the data given
+ */
+void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *)
+{
+  QCString dropped;
+  QByteArray data = e->encodedData("text/plain");
+  if ( e->provides("text/plain") && data.size()>0 ) {
+    //get the data from the event...
+    QString encData(data.data());
+    kdDebug(9035) << "encData: " << encData << endl;
+    
+    //... then refill the dialog with the given data
+    m_dialog->snippetName->clear();
+    m_dialog->snippetText->setText(encData);
+
+    if (m_dialog->exec() == QDialog::Accepted) {
+      _list.append( new SnippetItem(this, m_dialog->snippetName->text(), m_dialog->snippetText->text()) );
+    }
+  }
+}
+
 
 #include "snippet_widget.moc"
