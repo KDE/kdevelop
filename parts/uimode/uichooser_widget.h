@@ -7,7 +7,8 @@
 
 #include "uichooser.h"
 
-
+class UIChooserPart;
+    
 class UIChooserWidget : public UIChooser
 {
   Q_OBJECT
@@ -15,7 +16,7 @@ class UIChooserWidget : public UIChooser
 public:
 
   UIChooserWidget(QWidget *parent=0, const char *name=0);
-
+  void setPart(UIChooserPart* pPart);
 
 private slots:
 
@@ -24,6 +25,8 @@ private slots:
 
   void accept();
 
+private:
+  UIChooserPart* m_pMyPart;
 };
 
 

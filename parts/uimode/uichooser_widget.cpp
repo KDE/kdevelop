@@ -1,4 +1,19 @@
-#include "uichooser_widget.h"
+/***************************************************************************
+  uichooser_widget.cpp - ?
+			     -------------------
+    begin                : ?
+    copyright            : (C) 2003 by the KDevelop team
+    email                : team@kdevelop.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include <qradiobutton.h>
 
@@ -6,13 +21,21 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
+#include "uichooser_part.h"
+#include "kdevtoplevel.h"
+#include "uichooser_widget.h"
 
 UIChooserWidget::UIChooserWidget(QWidget *parent, const char *name)
   : UIChooser(parent, name)
+  ,m_pMyPart(0L)
 {
   load();
 }
 
+void UIChooserWidget::setPart(UIChooserPart* pMyPart)
+{
+  m_pMyPart = pMyPart;
+}
 
 void UIChooserWidget::load()
 {
@@ -25,7 +48,7 @@ void UIChooserWidget::load()
     return;
   }
 
-  int mdi = config->readNumEntry("MDI mode", 1);
+  int mdi = config->readNumEntry("MDIMode", 1);
 
   switch (mdi)
   {
@@ -56,11 +79,11 @@ void UIChooserWidget::save()
     config->writeEntry("MajorUIMode", "QextMDI");
 
     if (modeTab->isChecked())
-      config->writeEntry("MDI mode", 2);
+      config->writeEntry("MDIMode", 2);
     else if (modeToplevel->isChecked())
-      config->writeEntry("MDI mode", 0);
+      config->writeEntry("MDIMode", 0);
     else
-      config->writeEntry("MDI mode", 1);
+      config->writeEntry("MDIMode", 1);
   }
 
   config->sync();
@@ -70,6 +93,19 @@ void UIChooserWidget::save()
 void UIChooserWidget::accept()
 {
   save();
+  Q_ASSERT(m_pMyPart);
+  
+  if (modeIDEA->isChecked()) { // immediate switch not supported yet 
+  }
+  else if (modeTab->isChecked()) {
+      m_pMyPart->topLevel()->setUserInterfaceMode("TabPage");
+  }
+  else if (modeToplevel->isChecked()) {
+      m_pMyPart->topLevel()->setUserInterfaceMode("Toplevel");
+  }
+  else if (modeMDI->isChecked()) {
+      m_pMyPart->topLevel()->setUserInterfaceMode("Childframe");
+  }
 }
 
 

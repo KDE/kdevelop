@@ -33,6 +33,7 @@ void UIChooserPart::configWidget(KDialogBase *dlg)
 {
   QVBox *vbox = dlg->addVBoxPage(i18n("User Interface"));
   UIChooserWidget *w = new UIChooserWidget(vbox);
+  w->setPart(this);
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }
 
