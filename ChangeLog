@@ -1,3 +1,7 @@
+2000-04-30  Ralf Funken <RFunken@kdevelop.de>
+	* Comitted corrected german tutorial
+	* Comitted 1.2 de.po
+
 2000-04-20 jbb <jbb@ihug.co.nz>
       * Bug#2971 - A better fix from Richard Dale for this bug
         And it also fixes the nested class problem.
