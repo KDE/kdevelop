@@ -1,10 +1,10 @@
 # Here resides the qextmdi main frame view part.
 
-INCLUDES = -I$(top_srcdir)/kdevelop/lib -I$(top_srcdir)/kdevelop/widgets/qextmdi $(all_includes)
+INCLUDES = -I$(top_srcdir)/kdevelop/lib/general -I$(top_srcdir)/kdevelop/widgets/qextmdi $(all_includes)
 
 lib_LTLIBRARIES = libkdevqextmdimainfrmview.la
 libkdevqextmdimainfrmview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
-libkdevqextmdimainfrmview_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la $(top_builddir)/kdevelop/widgets/qextmdi/libkdevqextmdi.la $(LIB_KDEUI)
+libkdevqextmdimainfrmview_la_LIBADD = $(top_builddir)/kdevelop/lib/general/libkdevelop.la $(top_builddir)/kdevelop/widgets/qextmdi/libkdevqextmdi.la $(LIB_KDEUI)
 
 libkdevqextmdimainfrmview_la_SOURCES = main.cpp mdimainfrmcomponent.cpp mdiframe.cpp mdiview.cpp
 

@@ -1,8 +1,8 @@
-INCLUDES = -I$(top_srcdir)/kdevelop/lib $(all_includes)
+INCLUDES = -I$(top_srcdir)/kdevelop/lib/general/ $(all_includes)
 
 lib_LTLIBRARIES = libkdevelopdbg.la
 libkdevelopdbg_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
-libkdevelopdbg_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la $(LIB_KDEUI)
+libkdevelopdbg_la_LIBADD = $(top_builddir)/kdevelop/lib/general/libkdevelop.la $(LIB_KDEUI)
 
 libkdevelopdbg_la_SOURCES = dbgmanager.cpp dbgfactory.cpp memview.cpp \
                             breakpointdialog.cpp  stty.cpp gdbparser.cpp \
