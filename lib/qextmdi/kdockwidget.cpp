@@ -1260,7 +1260,7 @@ void KDockWidget::toDesktop()
    manualDock( 0, DockDesktop, 50, p );
 }
 
-KDockWidget::DockPosition KDockWidget::currentDockPosition()
+KDockWidget::DockPosition KDockWidget::currentDockPosition() const
 {
 	return currentDockPos;
 }
