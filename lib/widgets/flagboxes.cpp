@@ -253,7 +253,7 @@ void FlagPathEditController::readFlags( QStringList * list )
             if ((*sli).startsWith(peitem->flag))
             {
 //                kdDebug() << "Processing.." << endl;
-                peitem->setText((*sli).replace(QRegExp(peitem->flag),""));
+                peitem->setText((*sli).replace(QRegExp(QRegExp::escape(peitem->flag)),""));
                 sli = list->remove(sli);
                 continue;
             }
@@ -462,7 +462,7 @@ void FlagEditController::readFlags( QStringList * list )
         {
             if ((*sli).startsWith(peitem->flag))
             {
-                peitem->appendText((*sli).replace(QRegExp(peitem->flag),""));
+                peitem->appendText((*sli).replace(QRegExp(QRegExp::escape(peitem->flag)),""));
                 sli = list->remove(sli);
                 continue;
             }
@@ -480,7 +480,7 @@ void FlagEditController::readFlags( QStringList * list )
         {
             if ((*sli).startsWith(sitem->flag))
             {
-                sitem->setText((*sli).replace(QRegExp(sitem->flag),""));
+                sitem->setText((*sli).replace(QRegExp(QRegExp::escape(sitem->flag)),""));
                 sli = list->remove(sli);
                 continue;
             }
