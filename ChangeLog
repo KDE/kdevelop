@@ -1,3 +1,7 @@
+2000-09-12   Christian Couder <christian@kdevelop.org>
+	* now the editor window should display the file path
+	* fixed a bug in File/New when painting on a null pixmap 
+
 2000-09-11   Sandy Meier <smeier@kdevelop.org>
 	* many changes on project creation (Appwizard) and loading 
 	(it is now possible to create a KDE-SDI project)
