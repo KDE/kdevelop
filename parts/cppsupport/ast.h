@@ -698,8 +698,12 @@ public:
     TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
     
+    NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
+    void setNestedName( NestedNameSpecifierAST::Node& nestedName );
+    
 private:
     TypeSpecifierAST::Node m_typeSpec;
+    NestedNameSpecifierAST::Node m_nestedName;
                 
 private:
     FunctionDeclarationAST( const FunctionDeclarationAST& source );
@@ -735,8 +739,12 @@ public:
     TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
     
+    NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
+    void setNestedName( NestedNameSpecifierAST::Node& nestedName );
+    
 private:
     TypeSpecifierAST::Node m_typeSpec;
+    NestedNameSpecifierAST::Node m_nestedName;
     
 private:
     FunctionDefinitionAST( const FunctionDefinitionAST& source );

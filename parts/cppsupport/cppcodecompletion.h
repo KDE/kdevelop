@@ -63,6 +63,7 @@ protected slots:
     void slotTextChanged( int nLine, int nCol, const QString& text );
     void slotTextChangedRoberto(int nLine, int nCol, const QString &text );
     void slotCursorPositionChanged();
+    void slotFileParsed( const QString& fileName );
 
 protected:
     QString evaluateExpression( const QString& expr,
@@ -98,6 +99,8 @@ protected:
     QStringList getGlobalSignatureList(const QString &functionName);
     QStringList getSignatureListForClass( QString strClass, QString strMethod );
     QStringList getParentSignatureListForClass( ParsedClass* pClass, QString strMethod );
+    QString getText( unsigned int startLine, unsigned int startColumn,
+		     unsigned int endLine, unsigned int endColumn );
 
 private:
     QGuardedPtr<CppSupportPart> m_pSupport;
@@ -108,6 +111,7 @@ private:
     CppCCParser* m_pParser;
 #endif
     QTimer* m_ccTimer;
+    QString m_currentFileName;
     KTextEditor::ViewCursorInterface* m_pCursorIface;
     KTextEditor::EditInterface* m_pEditIface;
     KTextEditor::CodeCompletionInterface* m_pCompletionIface;

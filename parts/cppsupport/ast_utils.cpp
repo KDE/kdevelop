@@ -102,22 +102,30 @@ void scopeOfNode( AST* ast, QStringList& scope )
     switch( ast->nodeType() )
     {
     case NodeType_ClassSpecifier:
-	s = ((ClassSpecifierAST*)ast)->name()->text();
-	s = s.isEmpty() ? QString::fromLatin1("<unnamed>") : s;
-	kdDebug(9007) << "scope = " << s << endl;
-	scope.push_back( s );
+        if( ((ClassSpecifierAST*)ast)->name() ){
+	    s = ((ClassSpecifierAST*)ast)->name()->text();
+	    s = s.isEmpty() ? QString::fromLatin1("<unnamed>") : s;
+	    scope.push_back( s );
+	}
 	break;
-	
+
     case NodeType_Namespace:
 	s = ((NamespaceAST*)ast)->namespaceName();
 	s = s.isEmpty() ? QString::fromLatin1("<unnamed>") : s;
-	kdDebug(9007) << "scope = " << s << endl;
 	scope.push_back( s );
 	break;
-	
+
+    case NodeType_FunctionDefinition:
+        if( ((FunctionDefinitionAST*)ast)->nestedName() ){
+	    s = ((FunctionDefinitionAST*)ast)->nestedName()->text();
+	    if( s )
+	       scope.push_back( s );
+	}
+	break;
+
     default:
 	break;
-    }    
+    }
 }
 
 

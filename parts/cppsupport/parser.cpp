@@ -2012,102 +2012,10 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
     
     node = nns;
     UPDATE_POS( node, start, lex->index() );
-    node->setText( toString(start,lex->index()) );
+    node->setText( toString(start,lex->index()-1) );
     
     return true;
 }
-
-#if 0
-bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
-{
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNestedNameSpecifier()" << endl;
-
-    int start = lex->index();
-    int index = start;
-    bool ok = false;
-    
-    NestedNameSpecifierAST::Node nns = CreateNode<NestedNameSpecifierAST>();
-    node = nns;
-    
-    while( lex->lookAhead(0) == Token_identifier ){
-	index = lex->index();
-	
-	AST::Node name = CreateNode<AST>();
-	name->setText( toString(start, lex->index(), "") );
-	UPDATE_POS( name, start, lex->index() );
-	
-	ClassOrNamespaceNameAST::Node classOrNamespaceName( new ClassOrNamespaceNameAST() );
-	//classOrNamespaceName->setName( name );
-	int startId = lex->index();
-		
-	if( lex->lookAhead(1) == '<' ){
-	    lex->nextToken(); // skip template name
-	    lex->nextToken(); // skip <
-	    
-	    TemplateArgumentListAST::Node args;
-	    if( !parseTemplateArgumentList(args) ){
-		lex->setIndex( index );
-		return false;
-	    }
-	    args->setText( toString(startId, lex->index()) );
-	    UPDATE_POS( args, startId, lex->index() );
-	    //classOrNamespaceName->setTemplateArgumentList( args );
-	    
-	    if( lex->lookAhead(0) != '>' ){
-		lex->setIndex( index );
-		return false;
-	    } else {
-	        TemplateArgumentListAST::Node null_args;
-	        //classOrNamespaceName->setTemplateArgumentList( null_args );  // remove template argument
-		lex->nextToken(); // skip >
-	    }
-	    
-	    if ( lex->lookAhead(0) == Token_scope ) {
-	        
-		classOrNamespaceName->setText( toString(startId, lex->index()) );
-	    	UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
-		
-		lex->nextToken();
-		ok = true;
-		
-		//node->addClassOrNamespaceName( classOrNamespaceName );
-		
-	    } else {
-		lex->setIndex( index );
-		break;
-	    }
-	    
-	} else if( lex->lookAhead(1) == Token_scope ){
-	    lex->nextToken(); // skip name
-	    
-	    classOrNamespaceName->setText( toString(startId, lex->index()) );
-	    UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
-	    //node->addClassOrNamespaceName( classOrNamespaceName );
-	    
-	    lex->nextToken(); // skip ::
-	    if( lex->lookAhead(0) == Token_template && lex->lookAhead(1) == Token_identifier ){
-		lex->nextToken(); // skip optional template keyword
-	    }
-	    ok = true;
-	    
-	} else
-	    break;
-	    
-    }
-    
-    if ( !ok ) {
-	lex->setIndex( index );
-	return false;
-    }
-    
-    UPDATE_POS( node, start, lex->index() );
-    node->setText( toString(start,lex->index()) );
-    
-    return true;
-}
-#endif
-
-
 
 bool Parser::parsePtrToMember( AST::Node& /*node*/ )
 {
@@ -2637,6 +2545,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    lex->nextToken();
 		    
 		    FunctionDeclarationAST::Node ast = CreateNode<FunctionDeclarationAST>();
+		    ast->setNestedName( nestedName );
 		    ast->setText( toString(start, endSignature) );
 		    node = ast;
 		    UPDATE_POS( node, start, lex->index() );
@@ -2649,6 +2558,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    AST::Node ctorInit, funBody;
 		    if( parseCtorInitializer(ctorInit) && parseFunctionBody(funBody) ){
 			FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
+			ast->setNestedName( nestedName );
 			ast->setText( toString(start, endSignature) );
 			node = ast;
 			UPDATE_POS( node, start, lex->index() );
@@ -2662,6 +2572,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    AST::Node funBody;
 		    if( parseFunctionBody(funBody) ){
 			FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
+			ast->setNestedName( nestedName );
 			ast->setText( toString(start, endSignature) );
 			node = ast;
 			UPDATE_POS( node, start, lex->index() );
@@ -2727,6 +2638,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	    {
 		lex->nextToken();
 		FunctionDeclarationAST::Node ast = CreateNode<FunctionDeclarationAST>();
+		ast->setNestedName( nestedName );
 		ast->setText( toString(start, endSignature) );
 		ast->setTypeSpec( spec );
 		node = ast;
@@ -2739,6 +2651,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	        AST::Node init;
 	        if( parseInitializer(init) ){
 		    FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
+		    ast->setNestedName( nestedName );
 		    ast->setText( toString(start, endSignature) );
 		    ast->setTypeSpec( spec );
 		    node = ast;
@@ -2753,6 +2666,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	        AST::Node funBody;
 	        if ( parseFunctionBody(funBody) ) {
 		    FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
+		    ast->setNestedName( nestedName );
 		    ast->setText( toString(start, endSignature) );
 		    ast->setTypeSpec( spec );
 		    node = ast;

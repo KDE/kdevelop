@@ -896,6 +896,12 @@ void FunctionDeclarationAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
     if( m_typeSpec.get() ) m_typeSpec->setParent( this );
 }
 
+void FunctionDeclarationAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
+{
+    m_nestedName = nestedName;
+    if( m_nestedName.get() ) m_nestedName->setParent( this );
+}
+
 // --------------------------------------------------------------------------
 FunctionDefinitionAST::FunctionDefinitionAST()
 {
@@ -911,3 +917,8 @@ void FunctionDefinitionAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
     if( m_typeSpec.get() ) m_typeSpec->setParent( this );
 }
     
+void FunctionDefinitionAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
+{
+    m_nestedName = nestedName;
+    if( m_nestedName.get() ) m_nestedName->setParent( this );
+}

@@ -19,6 +19,9 @@
 
 #include "cppcodecompletion.h"
 #include "kdevregexp.h"
+#include "backgroundparser.h"
+#include "ast.h"
+#include "ast_utils.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -28,6 +31,7 @@
 #include <kregexp.h>
 #include <kstatusbar.h>
 #include <ktempfile.h>
+#include <ktexteditor/document.h>
 
 #include <qdatastream.h>
 #include <qfile.h>
@@ -163,8 +167,10 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
     
-    QObject::connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
-	    	      this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
+    connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
+	     this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
+    
+    connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
 }
 
 CppCodeCompletion::~CppCodeCompletion( )
@@ -208,6 +214,14 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     if( !part )
       return;
 
+    m_currentFileName = QString::null;
+    
+    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
+    if( !doc )
+	return;
+    
+    m_currentFileName = doc->url().path();
+    
     // if the interface stuff fails we should disable codecompletion automatically
     m_pEditIface = dynamic_cast<KTextEditor::EditInterface*>(part);
     if( !m_pEditIface ){
@@ -1503,8 +1517,57 @@ QStringList CppCodeCompletion::getParentSignatureListForClass( ParsedClass* pCla
           // TODO: look in ClassStore for Namespace classes
           } */
     }
-
+    
     return retVal;
+}
+
+QString CppCodeCompletion::getText( unsigned int startLine, unsigned int startColumn,
+				    unsigned int endLine, unsigned int endColumn )
+{
+    QString text;
+    
+    if( !m_pCursorIface )
+	return text;
+    
+    for( unsigned int i=startLine; i<=endLine; ++i ){
+	QString textLine = m_pEditIface->textLine( i );
+	if( i == startLine )
+	    textLine = textLine.mid( startColumn );
+	else if( i == endLine )
+	    textLine = textLine.left( endColumn );
+	
+	text += textLine;
+	
+	if( i != endLine )
+	    text += "\n";
+    }
+ 
+    return text;
+}
+
+void CppCodeCompletion::slotFileParsed( const QString& fileName )
+{
+    if( fileName != m_currentFileName || !m_pSupport )
+	return;
+    
+    unsigned int line, column;
+    m_pCursorIface->cursorPositionReal( &line, &column );    
+        
+    m_pSupport->backgroundParser()->lock();
+    TranslationUnitAST* ast = m_pSupport->backgroundParser()->translationUnit( fileName );    
+    AST* node = findNodeAt( ast, line, column );
+    if( node && node->nodeType() == NodeType_FunctionDefinition ){
+	int startLine, startColumn;
+	node->getStartPosition( &startLine, &startColumn );
+	
+	int endLine, endColumn;
+	node->getEndPosition( &endLine, &endColumn );
+	
+	QStringList scope;
+	scopeOfNode( node, scope );
+	kdDebug(9007) << "------> scope = " << scope.join( "::" ) << endl;
+    }
+    m_pSupport->backgroundParser()->unlock();
 }
 
 #include "cppcodecompletion.moc"
