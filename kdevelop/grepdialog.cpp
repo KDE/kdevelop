@@ -26,6 +26,7 @@
 #include <qregexp.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qstringlist.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
 #include <kprocess.h>
@@ -295,46 +296,38 @@ void GrepDialog::processOutput()
 }
 
 
-// grep -e 'pattern' $(find 'directory' -name 'filepattern')
-
-
 void GrepDialog::slotSearch()
 {
-  search_button->setEnabled(false);
-  cancel_button->setEnabled(true);
-  
-  StringTokenizer tokener;
-  QString files;
-  QString files_temp = files_combo->currentText();
-  if (files_temp.right(1) != ","){ 
-    files_temp = files_temp + ",";
-  }
-  tokener.tokenize(files_temp,",");
-  if(tokener.hasMoreTokens()){
-    files = files + " '" + QString(tokener.nextToken())+"'" ;
-  }
-  while(tokener.hasMoreTokens()){
-    files = files + " -o -name " + "'"+QString(tokener.nextToken())+ "'";
-  }
+    search_button->setEnabled(false);
+    cancel_button->setEnabled(true);
+
+    QString files;
+    QStringList filelist = QStringList::split(",", files_combo->currentText());
+    if (!filelist.isEmpty())
+        {
+            QStringList::Iterator it(filelist.begin());
+            files = "'" + (*it) + "'";
+            ++it;
+            for (; it != filelist.end(); ++it)
+                files += " -o -name '" + (*it) + "'";
+        }
 
     status_label->setText(i18n("Searching..."));
 
     QString pattern = template_edit->text();
     pattern.replace(QRegExp("%s"), pattern_edit->text());
     pattern.replace(QRegExp("'"), "'\\''");
-    QString filepattern;
-    if (recursive_box->isChecked())
-	{
-	    filepattern = QString("$(find '") + dir_edit->text() +
-		"' -name"  + files + ")";
-	}
-    else
-	{
-	    filepattern = QString("$(find '") + dir_edit->text() +
-		"' -maxdepth 1 -name "+ files + ")";
-	}
 
-    childproc = new KShellProcess();
+    QString filepattern = "`find '";
+    filepattern += dir_edit->text();
+    filepattern += "'";
+    if (!recursive_box->isChecked())
+        filepattern += " -maxdepth 1";
+    filepattern += " -name ";
+    filepattern += files;
+    filepattern += "`";
+
+    childproc = new KShellProcess("/bin/sh");
     *childproc << "grep";
     *childproc << "-n";
     *childproc << (QString("-e '") + pattern + "'");
