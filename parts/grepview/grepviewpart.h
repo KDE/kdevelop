@@ -13,18 +13,18 @@
 #define _GREPVIEWPART_H_
 
 #include <qguardedptr.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 class KDialogBase;
 class GrepViewWidget;
 
 
-class GrepViewPart : public KDevPart
+class GrepViewPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    GrepViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    GrepViewPart( QObject *parent, const char *name, const QStringList & );
     ~GrepViewPart();
 
 private slots:

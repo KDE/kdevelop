@@ -16,17 +16,19 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kdialogbase.h>
+#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
 #include "grepconfigwidget.h"
 #include "grepviewwidget.h"
-#include "grepviewfactory.h"
 #include "grepviewpart.h"
 
+typedef KGenericFactory<GrepViewPart> GrepViewFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevgrepview, GrepViewFactory( "kdevgrepview" ) );
 
-GrepViewPart::GrepViewPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList & )
+    : KDevPlugin( parent, name )
 {
     setInstance(GrepViewFactory::instance());
     

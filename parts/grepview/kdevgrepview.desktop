@@ -5,6 +5,6 @@ Exec=blubb
 Comment=Grep frontend
 Name=KDevGrepView
 Icon=find
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevgrepview
 X-KDevelop-Scope=Global
