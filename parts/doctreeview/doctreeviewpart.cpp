@@ -14,6 +14,7 @@
 #include <qpopupmenu.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
+
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdialogbase.h>

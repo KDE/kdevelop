@@ -9,7 +9,7 @@ kde_module_LTLIBRARIES = libkdevdoctreeview.la kio_kdeapi.la
 libkdevdoctreeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdoctreeview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la
 
-libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp doctreeviewpart.cpp doctreeviewwidget.cpp doctreeglobalconfigwidgetbase.ui doctreeglobalconfigwidget.cpp adddocitemdlg.cpp docindexdlg.cpp docsearchdlg.cpp misc.cpp librarydocdlgbase.ui doctreeprojectconfigwidgetbase.ui doctreeprojectconfigwidget.cpp librarydocdlg.cpp choosedlg.cpp
+libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp doctreeviewpart.cpp doctreeviewwidget.cpp doctreeglobalconfigwidgetbase.ui doctreeglobalconfigwidget.cpp adddocitemdlg.cpp docindexdlg.cpp docsearchdlg.cpp misc.cpp librarydocdlgbase.ui doctreeprojectconfigwidgetbase.ui doctreeprojectconfigwidget.cpp librarydocdlg.cpp choosedlg.cpp docindexwatcher.cpp doctreeitem.cpp
 
 bin_PROGRAMS = kdevelop-htdig
 kdevelop_htdig_SOURCES = htdigindex.cpp
@@ -31,3 +31,4 @@ service_DATA = kdevdoctreeview.desktop kdeapi.protocol
 rcdir = $(kde_datadir)/kdevdoctreeview
 rc_DATA = kdevdoctreeview.rc
 
+noinst_HEADERS =  docindexwatcher.h doctreeitem.h
