@@ -1,4 +1,8 @@
 1999-04-02 Jonas Nordin <jonas.nordin@cenacle.se>
+	* added nested classes and structures to the classview.
+	* fixed minor bug in the parser. The export wasn't set in methods.
+	
+1999-04-02 Jonas Nordin <jonas.nordin@cenacle.se>
 	* rewrote the classparsed from scratch. I changed from a top-down to a
 	  bottom-up strategy. Worked much better. It now handles the current
 	  kdevelop source(which is a lot.. :-)).
