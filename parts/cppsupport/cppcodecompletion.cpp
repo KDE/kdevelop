@@ -1246,12 +1246,15 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	QStringList path = QStringList::split( ".", scope->path() );
 	QValueList<Tag> tags = m_repository->getTagsInScope( name, path );
         kdDebug(9020) << "------> #" << tags.size() << " tags in scope " << scope->path() << endl;
-	if( tags.size() ){
-	    const Tag& tag = tags[ 0 ]; // hmmm
+
+	QValueList<Tag>::Iterator tit = tags.begin();
+	while( tit != tags.end() ){
+	    const Tag& tag = *tit;
+	    ++tit;
 	    if( tag.kind() == Tag::Kind_Class || tag.kind() == Tag::Kind_Namespace )
 		return tag.name();
-
-	    return tag.attribute( "t" ).toString();
+	    else if( tag.hasAttribute( "t" ) )
+		return tag.attribute( "t" ).toString();
 	}
 
         QValueList<Tag> parents = m_repository->getBaseClassList( path.join("::") );

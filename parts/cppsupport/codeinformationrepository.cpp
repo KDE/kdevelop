@@ -64,7 +64,7 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
     while( it != m_catalogs.end() ){
         Catalog* catalog = it.data();
         ++it;
-	
+
         tags += catalog->query( args );
     }
 
@@ -110,7 +110,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
 	<< Catalog::QueryArgument( "scope", scope );
     tags += query( args );
 #endif
-    
+
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
 	<< Catalog::QueryArgument( "scope", scope );
@@ -250,7 +250,7 @@ QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryLis
 		entry.prefix = "class";
 	        entry.text = tag.name();
 	        break;
-	    
+
 	    case Tag::Kind_Namespace:
 		if( !ns.contains(tag.name()) ){
 		    ns.insert( tag.name(), true );
