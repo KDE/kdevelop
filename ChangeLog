@@ -1,3 +1,8 @@
+2000-02-07 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* restore automake stuff and implementing
+	  an official solution of acinclude.m4.in and libtool.m4.in
+	  (thanks to Stephan Kulow for the great help)
+
 2000-02-05 Ralf Funken <funken.ruk@netcologne.de>
 	* Updated de.po. de.po is now 'shortcut clean'
 
