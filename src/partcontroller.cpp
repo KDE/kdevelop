@@ -182,9 +182,7 @@ void PartController::setupActions()
          this, SLOT(slotForwardAboutToShow()));
   connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)),
          this, SLOT(slotPopupActivated(int)));
-  
-}
-
+ }
 
 void PartController::setEncoding(const QString &encoding)
 {
@@ -1220,7 +1218,7 @@ void PartController::slotDocumentDirty( Kate::Document * d, bool isModified, uns
 			_dirtyDocuments.append( doc );
 		}
 		
-		if ( reactToDirty( url, isModified ) )
+		if ( reactToDirty( url ) )
 		{
 			// file has been reloaded
 			emit documentChangedState( url, Clean );
@@ -1247,13 +1245,13 @@ bool PartController::isDirty( KURL const & url )
 	return _dirtyDocuments.contains( static_cast<KTextEditor::Document*>( partForURL( url ) ) );
 }
 
-bool PartController::reactToDirty( KURL const & url, bool )// isModified )
-{
+bool PartController::reactToDirty( KURL const & url )
+{	
+    KConfig *config = kapp->config();
+    config->setGroup("Editor");
+	QString dirtyAction = config->readEntry( "DirtyAction" );
 
-	enum DirtyAction { doNothing, alertUser, autoReload };	
-	DirtyAction action = autoReload;
-		
-	if ( action == doNothing ) return false;
+	if ( dirtyAction == "nothing" ) return false;
 	
 	bool isModified = true;
 	if( KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) ) )
@@ -1275,7 +1273,7 @@ bool PartController::reactToDirty( KURL const & url, bool )// isModified )
 		return false;
 	}
 	
-	if ( action == alertUser )
+	if ( dirtyAction == "alert" )
 	{
 		if ( KMessageBox::warningYesNo( TopLevel::getInstance()->main(), 
 	   		i18n("The file \"%1\" has changed on disk.\n\nDo you want to reload it?").arg( url.path() ), 
