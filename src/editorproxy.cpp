@@ -24,7 +24,6 @@
 
 using namespace KTextEditor;
 
-
 EditorProxy *EditorProxy::s_instance = 0;
 
 
@@ -65,9 +64,13 @@ void EditorProxy::clearExecutionPoint()
     if (!iface)
       continue;
 
-    for (Mark *mark = iface->marks().first(); mark != 0; mark = iface->marks().next())
-      if (mark->type == MarkInterface::markType05)
-	iface->removeMark(mark->line, mark->type);
+    QPtrList<Mark> list = iface->marks();
+    QPtrListIterator<Mark> markIt(list);
+    for( ; markIt.current(); ++markIt ) {
+      Mark* mark = markIt.current();
+      if( mark->type & ExecutionPoint )
+        iface->removeMark( mark->line, ExecutionPoint );
+    }
   }
 }
 
@@ -78,7 +81,7 @@ void EditorProxy::setExecutionPoint(KParts::Part *part, int lineNum)
 
   MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
   if (iface)
-    iface->setMark(lineNum, MarkInterface::markType05);
+    iface->addMark( lineNum, ExecutionPoint );
 }
 
 
@@ -170,23 +173,7 @@ void EditorProxy::removeBreakpoint(KParts::Part *part, int lineNum)
   MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
   if (!iface)
     return;
-
-  for (Mark *mark = iface->marks().first(); mark != 0; mark = iface->marks().next())
-  {
-    if (mark->line == (uint)lineNum)
-    {
-      switch (mark->type)
-      {
-      case MarkInterface::markType02:
-      case MarkInterface::markType03:
-      case MarkInterface::markType04:
-        iface->removeMark(mark->line, mark->type);
-        break;
-      default:
-        break;
-      }
-    }
-  }
+  iface->removeMark( lineNum, ActiveBreakpoint | ReachedBreakpoint | InactiveBreakpoint );
 }
 
 
@@ -198,13 +185,13 @@ void EditorProxy::setBreakpoint(KParts::Part *part, int lineNum, bool enabled, b
 
   removeBreakpoint(part, lineNum);
 
-  uint markType = MarkInterface::markType04; // disabled
+  uint markType = InactiveBreakpoint;
   if (enabled && pending)
-    markType = MarkInterface::markType02; // active
+    markType = ActiveBreakpoint;
   else if (enabled && !pending)
-    markType = MarkInterface::markType03; // reached
+    markType = ReachedBreakpoint;
  
-  iface->addMark(lineNum, markType);
+  iface->addMark( lineNum, markType );
 }
 
 
@@ -214,11 +201,15 @@ void EditorProxy::activePartChanged(KParts::Part *part)
   MarkInterfaceExtension *iface = dynamic_cast<MarkInterfaceExtension*>(part);
   if (iface)
   {
-    iface->setDescription(MarkInterface::markType02, i18n("active breakpoint"));
-    iface->setDescription(MarkInterface::markType03, i18n("breakpoint reached"));
-    iface->setDescription(MarkInterface::markType04, i18n("inactive breakpoint"));
+    iface->setDescription((MarkInterface::MarkTypes)Bookmark, i18n("Bookmark"));
+    iface->setDescription((MarkInterface::MarkTypes)ActiveBreakpoint, i18n("Active Breakpoint"));
+    iface->setDescription((MarkInterface::MarkTypes)ReachedBreakpoint, i18n("Breakpoint Reached"));
+    iface->setDescription((MarkInterface::MarkTypes)InactiveBreakpoint, i18n("Inactive Breakpoint"));
 
-    iface->setMarksUserChangable(MarkInterface::markType01|MarkInterface::markType02|MarkInterface::markType03|MarkInterface::markType04);
+    iface->setMarksUserChangable( Bookmark |
+                                  ActiveBreakpoint |
+                                  ReachedBreakpoint |
+                                  InactiveBreakpoint );
   }
 #endif
 }

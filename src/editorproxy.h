@@ -9,7 +9,7 @@ class QPopupMenu;
 
 
 #include <kparts/part.h>
-
+#include <ktexteditor/markinterface.h>
 
 class EditorProxy : public QObject
 {
@@ -18,7 +18,7 @@ class EditorProxy : public QObject
 public:
 
   static EditorProxy *getInstance();
-	
+
   void setLineNumber(KParts::Part *part, int lineNum);
 
   void removeBreakpoint(KParts::Part *part, int lineNum);
@@ -38,6 +38,13 @@ private slots:
 
   
 private:
+  enum MarkType {
+    Bookmark           = KTextEditor::MarkInterface::markType01,
+    ActiveBreakpoint   = KTextEditor::MarkInterface::markType02,
+    ReachedBreakpoint  = KTextEditor::MarkInterface::markType03,
+    InactiveBreakpoint = KTextEditor::MarkInterface::markType04,
+    ExecutionPoint     = KTextEditor::MarkInterface::markType05
+  };
 
   EditorProxy();
   
