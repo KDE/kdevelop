@@ -87,7 +87,7 @@ QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url
     return QString();
 
   if (absRef == absBase)
-    return QString( "./" );
+    return QString( "." );
   else
     return absRef.replace( 0, absBase.length(), QString() );
 }

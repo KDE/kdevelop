@@ -67,7 +67,7 @@ namespace URLUtil
   /**
   * Given a base directory url in @p baseDirUrl and the url referring to a date sub-directory or file,
   * it will return the path relative to @p baseDirUrl.
-  * If baseDirUrl == url.path() then it will return "./".
+  * If baseDirUrl == url.path() then it will return ".".
   * <code>
   * KURL baseUrl, dirUrl;
   * baseUrl.setPath( "/home/mario/src/kdevelop/" );
