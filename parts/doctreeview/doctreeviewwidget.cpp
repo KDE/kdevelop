@@ -302,6 +302,10 @@ public:
     DocTreeDoxygenBook( DocTreeItem *parent, const QString &name,
                         const QString &tagFileName, const QString &context);
     ~DocTreeDoxygenBook();
+    static bool isInstallationOK(const QString& bookDir)
+    {
+      return QFile::exists(bookDir + "/html/index.html");
+    }
 
     virtual void setOpen(bool o);
     
@@ -357,9 +361,11 @@ void DocTreeDoxygenBook::readTagFile()
         if (childEl.tagName() == "compound" && childEl.attribute("kind") == "class") {
             QString classname = childEl.namedItem("name").firstChild().toText().data();
             QString filename = childEl.namedItem("filename").firstChild().toText().data();
-            
-            DocTreeItem *item = new DocTreeItem(this, Doc, classname, context());
-            item->setFileName(dirname + "/html/" + filename);
+
+            if (QFile::exists(dirname + "/html/" + filename)) { // don't create bad links
+                DocTreeItem *item = new DocTreeItem(this, Doc, classname, context());
+                item->setFileName(dirname + "/html/" + filename);
+            }
         }
         childEl = childEl.nextSibling().toElement();
     }
@@ -393,7 +399,9 @@ void DocTreeDoxygenFolder::refresh()
         QString dirName = (*it);
         if (dirName == "." || dirName == ".." || dirName == "common")
             continue;
-        new DocTreeDoxygenBook(this, *it, d.filePath(*it), context());
+        if (DocTreeDoxygenBook::isInstallationOK(d.filePath(*it))) {
+            new DocTreeDoxygenBook(this, *it, d.filePath(*it), context());
+        }
     }
 
     sortChildItems(0, true);
@@ -768,6 +776,26 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     folder_kdelibs   = new DocTreeKDELibsFolder(docView, "ctx_kdelibs");
     folder_kdelibs->refresh();
 
+    // eventually, Qt docu extra
+    QListViewItem* pChild = folder_doxygen->firstChild();
+    while (pChild && pChild->text(0) != "qt") {
+        pChild = pChild->nextSibling();
+    }
+    if (!pChild) {
+        // qt docu not found in doxygen subtree
+        KConfig *config = DocTreeViewFactory::instance()->config();
+        if (config) {
+            config->setGroup("General");
+            QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
+            if (!qtdocdir.isEmpty()) {
+                DocTreeItem* folder_qt = new DocTreeItem(docView, DocTreeItem::Folder, i18n("Qt"), "qt");
+                if (folder_qt) {
+                    folder_qt->setFileName(qtdocdir + "/index.html");
+                }
+            }
+        }
+    }
+    
     // Preliminary
     folder_kdevelop = new DocTreeItem(docView, DocTreeItem::Folder, i18n("KDevelop"), "ctx_kdevelop");
     ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDE2 Development Book", "ctx_kdevelop") )
