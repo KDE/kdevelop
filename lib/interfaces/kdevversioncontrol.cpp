@@ -18,7 +18,8 @@ KDevVersionControl::~KDevVersionControl()
 
 QString KDevVersionControl::uid() const
 {
-	return this->pluginName();
+	return this->name();
+//	return this->pluginName();
 }
 
 #include "kdevversioncontrol.moc"
