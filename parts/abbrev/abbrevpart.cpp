@@ -441,8 +441,8 @@ void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QS
 	QString macro = entry->text.left( entry->text.length() - expand.length() );
 	*text = "";	
         uint line, col;
-        viewCursorIface->cursorPositionReal(&line, &col);
-        editIface->removeText( line, col-entry->userdata.length(), line, col );
+        viewCursorIface->cursorPositionReal( &line, &col );
+        editIface->removeText( line, col-currentWord().length(), line, col );
 	insertChars( m_templates[entry->userdata]->code );
     }
 }
