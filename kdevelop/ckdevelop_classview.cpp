@@ -725,7 +725,8 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
   QString savedMethod;
 
   // Save the current value.
-  savedMethod = methodCombo->currentText();
+  if(methodCombo->count() > 0)
+    savedMethod = methodCombo->currentText();
 
   methodCombo->clear();
   lb = methodCombo->listBox();
