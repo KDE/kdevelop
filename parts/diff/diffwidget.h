@@ -9,21 +9,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _DIFFDLG_H_
-#define _DIFFDLG_H_
+#ifndef _DIFFWIDGET_H_
+#define _DIFFWIDGET_H_
 
-#include <kdialogbase.h>
+#include <qptrlist.h>
+#include <qwidget.h>
+
 #include <kurl.h>
 
-class DiffWidget;
+class QTextEdit;
+class KTempFile;
 
-class DiffDlg : public KDialogBase
+namespace KIO {
+  class Job;
+}
+
+namespace KParts {
+  class ReadOnlyPart;
+}
+
+class DiffWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    DiffDlg( QWidget *parent = 0, const char *name = 0 );
-    virtual ~DiffDlg();
+    DiffWidget( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
+    virtual ~DiffWidget();
 
 public slots:
     /** The URL has to point to a diff file */
@@ -33,8 +44,25 @@ public slots:
     /** clears the difference viewer */
     void slotClear();
 
+private slots:
+    /** appends a piece of "diff" */
+    void slotAppend( const QString& str );
+    /** overloaded for convenience */
+    void slotAppend( KIO::Job*, const QByteArray& ba );
+    /** call this when the whole "diff" has been sent.
+     *  Don't call slotAppend afterwards!
+     */
+    void slotFinished();
+
 private:
-    DiffWidget* diffWidget;
+    /** sets komparePart to 0 if kompare part is not installed */
+    void loadKomparePart( QWidget* parent );
+
+private:
+    QTextEdit* te;
+    KIO::Job* job;
+    KParts::ReadOnlyPart* komparePart;
+    QPtrList<KTempFile> fileCleanupHandler;
 
 };
 

@@ -10,145 +10,39 @@
  ***************************************************************************/
 
 #include <qlayout.h>
-#include <qtextedit.h>
-#include <qlabel.h>
 
-#include <klineedit.h>
 #include <klocale.h>
-#include <kservice.h>
-#include <ktempfile.h>
  
-#include <kparts/componentfactory.h>
-#include <kparts/part.h>
-
-#include <kio/jobclasses.h>
-#include <kio/job.h>
-
 #include "diffdlg.h"
+#include "diffwidget.h"
 
 DiffDlg::DiffDlg( QWidget *parent, const char *name ):
     KDialogBase( parent, name, true, i18n("Difference Viewer"), Ok )
 {
-  job = 0;
-  komparePart = 0;
+  diffWidget = new DiffWidget( this, "Main Diff Widget" );
+  setMainWidget( diffWidget );
 
-  QWidget* w = new QWidget( this, "Main Widget" );
-  setMainWidget( w );
-
-  loadKomparePart( w );
-
-  te = new QTextEdit( w, "Main Text Edit" );
-  te->setReadOnly( true );
-  te->setMinimumSize( 300, 200 );
-
-  QVBoxLayout* layout = new QVBoxLayout( w, 0, spacingHint() );
-  layout->addWidget( te );
-
-  if ( komparePart ) {
-    // if compare is installed, we take it instead of the QTextEdit
-    te->hide();
-    layout->addWidget( komparePart->widget() );
-  } else {
-    QLabel* lbl = new QLabel( i18n("<i>Note:</i> Please install Kompare from the KDE SDK package "
-                                   "to get a more powerful viewer."), w );
-    layout->addWidget( lbl );
-  }
+  QVBoxLayout* layout = new QVBoxLayout( this, 0, spacingHint() );
+  layout->addWidget( diffWidget );
 }
 
 DiffDlg::~DiffDlg()
 {
-  KTempFile* tmpFile = 0;
-  for ( tmpFile = fileCleanupHandler.first(); tmpFile; tmpFile = fileCleanupHandler.next() ) {
-    delete tmpFile;
-  }
-  fileCleanupHandler.clear();
-}
-
-void DiffDlg::loadKomparePart( QWidget* parent )
-{
-  if ( komparePart )
-    return;
-
-  // ### might be easier to use:
-  // createPartInstanceFromQuery( "text/x-diff", QString::null, parent, 0, this, 0 ); (Simon)
-
-  KService::Ptr kompareService = KService::serviceByDesktopName( "komparepart" );
-  if ( !kompareService )
-    return;
-
-  komparePart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>( kompareService, parent, 0, this, 0 );
 }
 
 void DiffDlg::slotClear()
 {
-  te->clear();
-}
-
-void DiffDlg::slotAppend( const QString& str )
-{
-  te->append( QStyleSheet::escape( str ) );
-}
-
-void DiffDlg::slotAppend( KIO::Job*, const QByteArray& ba )
-{
-  slotAppend( QString( ba ) );
-}
-
-void DiffDlg::slotFinished()
-{
-  // the diff has been loaded so we apply a simple highlighting
-
-  static QColor cAdded( 190, 190, 237);
-  static QColor cRemoved( 190, 237, 190 );
-  int paragCount = te->paragraphs();
-
-  for ( int i = 0; i < paragCount; ++i ) {
-    QString txt = te->text( i );
-    if ( txt.length() > 0 ) {
-      if ( txt.startsWith( "+" ) || txt.startsWith( ">" ) ) {
-        te->setParagraphBackgroundColor( i, cAdded );
-      } else if ( txt.startsWith( "-" ) || txt.startsWith( "<" ) ) {
-        te->setParagraphBackgroundColor( i, cRemoved );
-      }
-    }
-  }
+  diffWidget->slotClear();
 }
 
 void DiffDlg::setDiff( const QString& diff )
 {
-  if ( komparePart ) {
-    // workaround until kompare can view patches directly
-    KTempFile* tmpFile = new KTempFile();
-    fileCleanupHandler.append( tmpFile ); // make sure it gets erased
-    tmpFile->setAutoDelete( true );
-    *(tmpFile->textStream()) << diff;
-    tmpFile->close();
-    openURL( tmpFile->name() );
-    return;
-  }
-
-  slotAppend( diff );
-  slotFinished();
+  diffWidget->setDiff( diff );
 }
 
 void DiffDlg::openURL( const KURL& url )
 {
-  if ( komparePart ) {
-    komparePart->openURL( url );
-    return;
-  }
-
-  if ( job )
-    job->kill();
-
-  KIO::TransferJob* job = KIO::get( url );
-  if ( !job )
-    return;
-
-  connect( job, SIGNAL(data( KIO::Job *, const QByteArray &)),
-           this, SLOT(slotAppend( KIO::Job*, const QByteArray& )) );
-  connect( job, SIGNAL(result( KIO::Job * )),
-           this, SLOT(slotFinished()) );  
+  diffWidget->openURL( url );
 }
 
 #include "diffdlg.moc"
