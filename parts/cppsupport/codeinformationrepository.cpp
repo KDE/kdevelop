@@ -100,10 +100,7 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
 	    
 	    QStringList arguments = tag.attribute( "arguments" ).toStringList();
 	    QStringList argumentNames = tag.attribute( "argumentNames" ).toStringList();
-	    
-	    if( arguments.size() == 0 )
-		entry.text += ")";
-	 
+	    	 
 	    QString signature;
 	    for( uint i=0; i<arguments.size(); ++i ){
 		signature += arguments[ i ];
