@@ -285,13 +285,22 @@ void ClassTreeStructItem::setOpen(bool o)
 
         ParsedStruct *pStruct = static_cast<ParsedStruct*>(m_item);
         ClassTreeItem *lastItem = 0;
-        
         // Add structs
         QValueList<ParsedStruct*> structList = pStruct->getSortedStructList();
         QValueList<ParsedStruct*>::ConstIterator structIt;
         for (structIt = structList.begin(); structIt != structList.end(); ++structIt)
             lastItem = new ClassTreeStructItem(this, lastItem, pStruct);
-        
+
+        QValueList<ParsedMethod*> methodList = pStruct->getSortedMethodList();
+        QValueList<ParsedMethod*>::ConstIterator methodIt;
+	for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt)
+            lastItem = new ClassTreeMethodItem(this, lastItem, *methodIt);
+
+        QValueList<ParsedAttribute*> attributeList = pStruct->getSortedAttributeList();
+        QValueList<ParsedAttribute*>::ConstIterator attrIt;
+        for (attrIt = attributeList.begin(); attrIt != attributeList.end(); ++attrIt)
+            lastItem = new ClassTreeAttrItem(this, lastItem, *attrIt);
+	        
     }
     
     ClassTreeItem::setOpen(o);
