@@ -49,14 +49,18 @@ Create a directory <code>template-khello</code> with the files
 Have a look into the files! There are some variables which the applicatin
 wizard will replace:
 <code><pre>
+    - $AUTHOR$ ...... by the author
+    - $EMAIL$ ....... by the e-mail address 
+    - $VERSION$ ..... by the version
     - $APPNAME$ ..... by the project name (KHello)
     - $APPNAMELC$ ... by the project name in lowercase (khello)
     - $APPNAMEUC$ ... by the project name in uppercase (KHELLO)
-    - $AUTHOR$ ...... by the author
-    - $EMAIL$ ....... by the e-mail address 
-    - $LICENSE$ ..... by the license
+    - $LICENSE$ ..... by the license (GPL, BSD, QPL, LGPL, ...)
+    - $LICENSEFILE$ . by the licensefile
+    - $YEAR$ ........ by the year
     .
 </pre></code>
+All this can be found in <code>$KDEDIR/share/apps/kdevappwizard/template-common/gideon.pm</code>.
 \subsubsection templates_1_2a I.2.1. The Source Files
 
 The files <code>template-khello/app.cpp, template-khello/app.h</code> and
@@ -136,9 +140,31 @@ cp -R --target-directory "$newdir" template-khello
 mv "$newdir/template-khello/khello" "$newdir/templates/"
 echo "done"
 \endcode
+\n
+\attention Please test your template whether it installs and behaves correctly! Test, test and test again! ;)
 
 \section templates_3 III. How To Add The Template To KDevelop CVS HEAD
-\todo TODO!
 
+This section is for developers only. Most probably you don't have to read this!.\n
+Move the directory <code>"template-khello"</code> to <code>kdevelop/parts/appwizard/</code>
+and then add the following files in <code>kdevelop/parts/appwizard/template-khello/</code>:
+    - <code>".kdev_ignore"</code> is an empty file. It prevents KDevelop's
+    C++-parser from parsing the C++ files. This is necessary because there is a KDevelop
+    project in KDevelop's root directory (*.kdevprj and *.kdevelop).
+    - <code>".cvsignore"</code> looks like this:
+\code
+Makefile
+Makefile.in
+script.local
+\endcode
+    - <code>"Makefile.am"</code> looks like this:
+    \include khello/Makefile.am
+    .
+Finally add <code>"template-khello"</code> to "SUBDIRS = " in <code>kdevelop/parts/appwizard/Makefile.am</code>.
+\attention Please test your template whether it installs and behaves correctly!
+Test, test and test again! It works? Well - now talk to the kdevelop guys so
+that they know what's going on and probably you may commit. ;)
+
+That's all! :)
 
 */
