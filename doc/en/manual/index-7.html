@@ -346,63 +346,19 @@ search again from the beginning. If you're finished, select "Cancel".
 </H3>
 
 <P>As KDevelop is designed to give developers the best access to files and information to reduce development cycles, it also contains
-a new printing utility which makes use of two common printing programs available for Unix-Systems, <EM>a2ps</EM> (ASCII-to-Postscript) and
-<EM>enscript</EM>. Besides these, you can also print by directly using lpr (the lineprinter device). As using a2ps or enscript offers the
-most options towards printing, you should install either one of these on your system; both programs are usually shipped with
-distributions, so you shouldn't have any problem to get them. But before printing, you should have a look at the available
-configuration dialogs to prepare the output according to your needs. The following section describes how to configure KDevelop for
+a new printing utility which makes use of <EM>enscript</EM>, a common printing program available for Unix-Systems. 
+Besides, you can also print by directly using lpr (the lineprinter device). As using enscript offers the
+most options towards printing, you should install it on your system; it is usually shipped with
+distributions, so you shouldn't have any problem to get it. But before printing, you should have a look at the available
+configuration dialog to prepare the output according to your needs. The following section describes how to configure KDevelop for
 printing files.
 <P>
 <H4>Configuring the Printer</H4>
 
-<P>The printing programs can both be configured by selecting "Print" from the "File"-menu; on the printing dialog,
+<P>The printing program can be configured by selecting "Print" from the "File"-menu; on the printing dialog,
 select the program by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the
-configuration for the selected program that will be used. Another way to configure the programs are selecting "Printer
-Configuration..." from the "Options"-menu; then select "a2ps" or "enscript".
-<P>
-<H4>The a2ps Configuration Options</H4>
-
-<P>
-<H4>Printing</H4>
-
-<P>
-<UL>
-<LI><B>header:</B>  adds a header frame to the page</LI>
-<LI><B>filename:</B>  if checked, the header frame will contain the filename as its text</LI>
-<LI><B>login:</B>  adds the User ID to the right upper corner of the page</LI>
-<LI><B>borders:</B>  adds frame borders to the text page</LI>
-<LI><B>Date &amp; Time:</B>  adds the printing date and time</LI>
-<LI><B>align files:</B>  prints out files on the same page, available for two-page printing mode</LI>
-<LI><B>set TAB size:</B>  sets the TAB size for printing TABs</LI>
-<LI><B>headertext:</B> available, if filename is deselected and allows inserting another text to the header frame</LI>
-<LI><B>fontsize:</B>  sets the fontsize for the text. The default fontsize is 9</LI>
-</UL>
-<P>
-<H4>Textprinting</H4>
-
-<P>
-<UL>
-<LI><B>cut lines:</B>  cuts the line's contents if the line is too large to be printed. If deselected, lines will be broken.</LI>
-<LI><B>interpret TAB, BS and FF:</B> interpret TAB, Backspace and FastForward characters.</LI>
-<LI><B>replace non-printing character by space:</B> if the file contains non-printable characters, those will be replaced by space
-characters.</LI>
-<LI><B>print non-ASCII character as ISO-Latin 1:</B> prints characters not included in the ASCII format in ISO-Latin 1 mode output</LI>
-<LI><B>bold font:</B> prints the whole text in bold font mode.</LI>
-</UL>
-<P>
-<H4>Numbering</H4>
-
-<P>
-<UL>
-<LI><B>numbering lines:</B>  numbers all lines top-down if enabled</LI>
-<LI><B>numbering pages:</B> allows selecting page-numbering mode by:
-<UL>
-<LI><B>file single:</B> numbers each file's pages beginning with 1</LI>
-<LI><B>file together:</B>  appends all following pages after the first for page numbering</LI>
-</UL>
-</LI>
-<LI><B>lines per page:</B>  sets the maximum lines per page to be printed.</LI>
-</UL>
+configuration for the program.  Another way to configure the program is selecting "Printer
+Configuration..." from the "Options"-menu; then select "enscript".
 <P>
 <H4>The enscript Configuration Options</H4>
 
@@ -539,7 +495,7 @@ characters.</LI>
 
 <P>
 <UL>
-<LI><B>Program:</B> sets the printing program to be used for printing: a2ps, enscript or lpr</LI>
+<LI><B>Program:</B> sets the printing program to be used for printing: enscript or lpr</LI>
 <LI><B>Printer:</B> sets the printer to be used for printing</LI>
 <LI><B>Output location:</B> for printing into a file, select the output location</LI>
 <LI><B>Orientation:</B> sets the orientation for printing, either landscape or portrait</LI>

@@ -354,65 +354,20 @@ weiterführen möchten. Sind Sie mit dem ersetzen fertig, wählen Sie "Abbrechen".
 <H3><A NAME="ss7.6">7.6 Drucken</A>
 </H3>
 
-<P>As KDevelop is designed to give developers the best access to files and information to reduce development cycles, it also contains
-a new printing utility which makes use of two common printing programs available for Unix-Systems, <EM>a2ps</EM> (ASCII-to-Postscript) and
-<EM>enscript</EM>. Besides these, you can also print by directly using lpr (the lineprinter device). As using a2ps or enscript offers the
-most options towards printing, you should install either one of these on your system; both programs are usually shipped with
-distributions, so you shouldn't have any problem to get them. But before printing, you should have a look at the available
-configuration dialogs to prepare the output according to your needs. The following section describes how to configure KDevelop for
-printing files.
+<P>Da KDevelop so entworfen wurde, daß Entwicklern der bestmögliche Zugriff auf Dateien und Informationen ermöglicht wird, um so 
+die Anzahl der Entwicklungszyklen zu verringern, enthält es auch ein Druck Utility das Gebrauch von <EM>enscript</EM> macht. 
+Außerdem können Sie auch mit Hilfe von lpr direkt auf dem Druckerport ausgeben. Da die Verwendung von enscript ein Höchstmaß 
+an Druckeroptionen zur Verfügung stellt, sollten Sie es installieren. Es wird bei den meisten Distributionen mitgeliefert, es sollte 
+also kein Problem sein es zu bekommen. Bevor Sie jedoch drucken, sollten Sie einen Blick auf die verfügbaren 
+Konfigurationsdialoge werfen, um die Ausgabe Ihren Bedürfnissen anzupassen. Der folgende Abschnitt beschreibt die Konfiguration 
+von KDevelop zum Ausdrucken von Dateien.
 <P>
 <H4>Druckerkonfiguration</H4>
 
-<P>Die Druckprogramme können beide über die Auswahl von "Drucken" im Menü "Datei" konfiguriert werden; auf dem Druckdialog wählen Sie das
+<P>Das Druckprogramm kann über die Auswahl von "Drucken" im Menü "Datei" konfiguriert werden; in dem Druckdialog wählen Sie das
 zu verwendende Programm über die Combobox in der linken oberen Ecke. Dann betätigen Sie die Schaltfläche "Einstellungen" auf der
-rechten Seite. Dies öffnet den Konfigurationsdialog des gewählten Programms. Sie können die Programme ebenfalls konfigurieren, indem
-Sie im Menü "Einstellungen", Untermenü "Drucker konfigurieren" das zu verwendende Programm auswählen (a2ps oder enscript).
-<P>
-<H4>Die a2ps Konfigurationseinstellungen</H4>
-
-<P>
-<H4>Druck</H4>
-
-<P>
-<UL>
-<LI><B>Kopf:</B> fügt der Seite einen Kopfrahmen hinzu</LI>
-<LI><B>Dateiname:</B> verwendet den Dateinamen als Text des Kopfrahmens</LI>
-<LI><B>Login:</B> fügt die User ID auf der rechten oberen Ecke der Seite hinzu</LI>
-<LI><B>Rahmen:</B> zeichnet einen Rahmen um die Textseite</LI>
-<LI><B>Datum &amp; Zeit:</B> fügt Datum und Uhrzeit des Drucks ein</LI>
-<LI><B>Dateien ausrichten:</B> Druckt Dateien auf die gleiche Seite, verfügbar bei Zwei-Seiten Druck</LI>
-<LI><B>TAB-Größe:</B> setzt die zu verwendende Weite von Tabulatoren</LI>
-<LI><B>Kopftext:</B> Verfügbar, wenn Dateiname nicht verwendet wird und erlaubt das Einfügen von Text im Kopfrahmen</LI>
-<LI><B>Schriftgröße:</B> Setzt die zu verwendende Schriftgröße des Textes. Standardeinstellung beträt 9</LI>
-</UL>
-<P>
-<H4>Textdruck</H4>
-
-<P>
-<UL>
-<LI><B>Zeilen abschneiden:</B> schneidet das Ende der Zeile ab, wenn sie über den Seitenrand hinausragt. Zeilen werden umgebrochen,
-wenn "Zeilen abschneiden" deaktiviert ist.</LI>
-<LI><B>Interpretiere TAB, BS and FF:</B> interpretiert TAB, Backspace und FastForward Zeichen.</LI>
-<LI><B>Ersetze nicht-druckbare Zeichen durch Leere:</B> ersetzt nicht-durckbare Zeichen durch Leerzeichen</LI>
-<LI><B>Drucke Nicht-ASCII Zeichen als ISO-Latin 1:</B> druckt Zeichen, die nicht im ASCII Zeichensatz enthalten sind, im ISO-Latin 1
-Ausgabemodus.</LI>
-<LI><B>Fettdruck:</B> Druckt den ganzen Text in Fettdruck</LI>
-</UL>
-<P>
-<H4>Numerierung</H4>
-
-<P>
-<UL>
-<LI><B>Zeilen numerieren:</B>   numeriert alle Zeilen</LI>
-<LI><B>Seiten numerieren:</B> erlaubt Seitennumerierung nach Modus:
-<UL>
-<LI><B>Dateien einzeln:</B> numeriert die Seiten jeder Datei einzeln beginnend mit 1</LI>
-<LI><B>Dateien zusammen:</B> numeriert alle Seiten der Druckausgabe aufeinander folgend</LI>
-</UL>
-</LI>
-<LI><B>Zeilen pro Seite:</B> stellt die maximale Anzahl an Zeilen pro Seite ein</LI>
-</UL>
+rechten Seite. Dies öffnet den Konfigurationsdialog des Programms. Sie können das Programm ebenfalls konfigurieren, indem
+Sie im Menü "Einstellungen", Untermenü "Drucker konfigurieren" enscript auswählen .
 <P>
 <H4>Die enscript Konfigurationseinstellungen</H4>
 
@@ -549,7 +504,7 @@ Ausgabemodus.</LI>
 
 <P>
 <UL>
-<LI><B>Programm:</B> das zu verwendende Druckprogramm: a2ps, enscript oder lpr</LI>
+<LI><B>Programm:</B> das zu verwendende Druckprogramm: enscript oder lpr</LI>
 <LI><B>Drucker:</B> den zu verwendenden Drucker</LI>
 <LI><B>in Datei drucken:</B> Ausgabe in Datei umleiten</LI>
 <LI><B>Papierformat:</B> Papierformat in Hochformat oder Querformat verwenden</LI>
