@@ -1,3 +1,6 @@
+2002-06-27  F@lk Brettschneider  <falk@kdevelop.org>
+	* avoid library version clash between qextmdi of Gideon and KDevelop-2.1
+
 2002-06-23 Matthias Hölzer-Klüpfel <mhk@kde.org>
 
 	* Made doxygen config widget "human readable"
