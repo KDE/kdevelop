@@ -408,12 +408,20 @@ public:
   void slotProcessExited(KProcess* proc);
   void slotSearchProcessExited(KProcess*);
   
+  //////////////// -- the methods for signals generated from the CV
+  /** Added method in the classview. */
+  void slotCVAddMethod( CParsedMethod *aMethod );
+  /** Added attribute in the classview. */
+  void slotCVAddAttribute( CParsedAttribute *aAttr );
+  /** The user wants to view the declaration of a method. */
+  void slotCVViewDeclaration();
+  /** The user wants to view the definition of a method/attr... */
+  void slotCVViewDefinition();
+
   // return the position of the classdeclaration begin
   void CVGotoDefinition(QListViewItem *item);
   void CVGotoDeclaration(QListViewItem *item);
 
-  void slotCVViewDeclaration();
-  void slotCVViewDefinition();
 
   /** a tool meth,used in the search engine*/
   int searchToolGetNumber(QString str);
