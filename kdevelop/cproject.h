@@ -152,17 +152,6 @@ public:
   /** destructor */
   ~CProject();
 
-  /** This type defines the different ways
-   * to rebuild this project
-   * @author Walter Tasin
-   */
-   typedef enum
-   {
-     REBUILD_ON_MODIFIED,
-     REBUILD_ON_MODIFIED_WITH_WARN,
-     REBUILD_ALWAYS
-   } RebuildType;
-
 
 public: // Methods to store project options
 
@@ -326,17 +315,6 @@ public: // Public queries
         clearMakefileAmChanged();
   */
   bool getMakefileAmChanged();
-  /** return the value how
-      the project has to be rebuild
-      on modifications w/o warning		REBUILD_ON_MODIFIED
-      on modifications w warning		REBUILD_ON_MODIFIED_WITH_WARN
-      always w/o considering any modification	REBUILD_ALWAYS
-
-      to set it use setRebuildType(RebuildType type),
-
-  */
-  RebuildType getRebuildType();
-
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
   void getAllTopLevelDialogs(QStrList& list);
@@ -406,8 +384,6 @@ public: // Public methods
   */
   QString& setInfosInString(QString& strtemplate, bool basics=true);
   void clearMakefileAmChanged();
-
-  void setRebuildType(RebuildType type);
 
 
 protected:
