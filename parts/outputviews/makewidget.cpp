@@ -180,7 +180,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	mimeSourceFactory()->setImage("warning", QImage((const char**)warning_xpm));
 	mimeSourceFactory()->setImage("message", QImage((const char**)message_xpm));
 
-	childproc = new KShellProcess("/bin/sh");
+	childproc = new KProcess(this);
 	procLineMaker = new ProcessLineMaker( childproc );
 
 	connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
@@ -282,7 +282,8 @@ void MakeWidget::startNextJob()
 
 	childproc->clearArguments();
 	*childproc << currentCommand;
-	childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+	childproc->setUseShell(true);
+	childproc->start(KProcess::OwnGroup, KProcess::AllOutput);
 
 	dirstack.clear();
 	dirstack.push(new QString(dir));
