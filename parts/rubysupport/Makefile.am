@@ -1,6 +1,7 @@
 #Here resides the Ruby support part.
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
+SUBDIRS = file_templates
 
 kde_module_LTLIBRARIES = libkdevrubysupport.la
 libkdevrubysupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
