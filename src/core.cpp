@@ -123,13 +123,13 @@ void Core::initActions()
                           actionCollection(), "project_open" );
     action->setStatusText( i18n("Opens a project") );
 
-    action = new KAction( i18n("C&lose project"), 0,
+    action = new KAction( i18n("C&lose project"), "fileclose",0,
                           this, SLOT(slotProjectClose()),
                           actionCollection(), "project_close" );
     action->setEnabled(false);
     action->setStatusText( i18n("Closes the current project") );
 
-    action = new KAction( i18n("&Import existing directory..."), 0,
+    action = new KAction( i18n("&Import existing directory..."),"wizard", 0,
                           this, SLOT(slotProjectImport()),
                           actionCollection(), "project_import" );
     action->setStatusText( i18n("Creates a project file for a given directory.") );

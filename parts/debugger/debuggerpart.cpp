@@ -60,7 +60,7 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
                                          "variable(s) to the watch section.\n"
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
-    core()->embedWidget(variableWidget, KDevCore::SelectView, i18n("VAR"));
+    core()->embedWidget(variableWidget, KDevCore::SelectView, i18n("Watch"));
     
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint list"));

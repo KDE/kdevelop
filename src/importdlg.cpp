@@ -82,8 +82,8 @@ ImportDialog::ImportDialog(QWidget *parent, const char *name)
 
     KButtonBox *box = new KButtonBox(this);
     box->addStretch();
-    QPushButton *ok_button = box->addButton(i18n("OK"));
-    QPushButton *cancel_button = box->addButton(i18n("Cancel"));
+    QPushButton *ok_button = box->addButton(i18n("&OK"));
+    QPushButton *cancel_button = box->addButton(i18n("&Cancel"));
     ok_button->setDefault(true);
     box->layout();
     layout->addWidget(box);

@@ -52,7 +52,7 @@ ClassViewPart::ClassViewPart(KDevApi *api, QObject *parent, const char *name)
                                       "and implementations. The right button popup menu allows more specialized "
                                       "functionality."));
 
-    core()->embedWidget(m_classtree, KDevCore::SelectView, i18n("CV"));
+    core()->embedWidget(m_classtree, KDevCore::SelectView, i18n("Classes"));
 
     classes_action = new ClassListAction(classStore(), i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
@@ -133,7 +133,7 @@ void ClassViewPart::updatedSourceInfo()
 void ClassViewPart::registerClassToolDialog(ClassToolDialog *dlg)
 {
     m_widgets.append(dlg);
-    core()->embedWidget(dlg, KDevCore::SelectView, i18n("CT"));
+    core()->embedWidget(dlg, KDevCore::SelectView, i18n("Classtools"));
     core()->raiseWidget(dlg);
 }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KDevAppWizard" version="1">
 <MenuBar>
-  <Menu name="file" >
+  <Menu name="project" >
     <Action name="project_new" group="project"/>
   </Menu>
 </MenuBar>

@@ -43,7 +43,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, QObject *parent, const char *name
                                    "Makefile.am. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
     
-    core()->embedWidget(m_widget, KDevCore::SelectView, i18n("PRJ"));
+    core()->embedWidget(m_widget, KDevCore::SelectView, i18n("Project"));
 
     KAction *action;
 

@@ -54,7 +54,7 @@ DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name
                                    "documentation and the KDevelop manuals. It can "
                                    "be configured individually."));
     
-    core()->embedWidget(m_widget, KDevCore::SelectView, i18n("DOC"));
+    core()->embedWidget(m_widget, KDevCore::SelectView, i18n("Books"));
 
     KAction *action;
 

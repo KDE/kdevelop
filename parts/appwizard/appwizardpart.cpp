@@ -25,7 +25,7 @@ AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
 {
     setXMLFile("kdevappwizard.rc");
 
-    (void) new KAction( i18n("&New project..."), 0,
+    (void) new KAction( i18n("&New project..."), "window_new",0,
                         this, SLOT(slotNewProject()),
                         actionCollection(), "project_new" );
 

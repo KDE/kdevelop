@@ -4,12 +4,6 @@
   <Menu name="file">
     <text>&amp;File</text>
     <Merge/>
-    <Action name="project_new"/>
-    <Action name="project_open"/>
-    <Action name="project_open_recent"/>
-    <Action name="project_close"/>
-    <Action name="project_import"/>
-    <DefineGroup name="project"/>
     <Separator/>
     <Action name="file_splitvertically"/>
     <Action name="file_splithorizontally"/>
@@ -30,6 +24,16 @@
     <Action name="view_selectviews"/>
     <Action name="view_outputviews"/>
     <Separator/>
+    <Merge/>
+  </Menu>
+  <Menu name="project">
+    <text>&amp;Project</text>
+    <Action name="project_new"/>
+    <Action name="project_open"/>
+    <Action name="project_open_recent"/>
+    <Action name="project_close"/>
+    <Action name="project_import"/>
+    <DefineGroup name="project"/>
     <Merge/>
   </Menu>
   <Menu name="build">
