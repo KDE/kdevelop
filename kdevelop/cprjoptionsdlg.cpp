@@ -20,6 +20,7 @@
 #include "vc/versioncontrol.h"
 #include <iostream.h>
 #include <qstrlist.h>
+#include <klocale.h>
 #include "debug.h"
 
 // OPTIONS DIALOG
@@ -1559,5 +1560,6 @@ void CPrjOptionsDlg::slotFileDialogClicked() {
 bool CPrjOptionsDlg::needConfigureInUpdate(){
   return  need_configure_in_update;
 }
+
 
 

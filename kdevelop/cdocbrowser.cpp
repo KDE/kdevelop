@@ -34,6 +34,7 @@
 
 
 #include <kapp.h>
+#include <klocale.h>
 #include <kconfig.h>
 #include <kmsgbox.h>
 #include <kfm.h>
@@ -658,6 +659,7 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
 
 
 

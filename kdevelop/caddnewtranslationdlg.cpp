@@ -18,6 +18,7 @@
 
 #include <kapp.h>
 #include <kmsgbox.h>
+#include <klocale.h>
 #include "caddnewtranslationdlg.h"
 #include "cproject.h"
 

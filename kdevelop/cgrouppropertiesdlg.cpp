@@ -20,6 +20,7 @@
 
 #include "cgrouppropertiesdlg.h"
 #include <kapp.h>
+#include <klocale.h>
 
 CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
   
@@ -113,5 +114,6 @@ CGroupPropertiesDlg::~CGroupPropertiesDlg(){
 void CGroupPropertiesDlg::slotOK(){
   accept();
 }
+
 
 

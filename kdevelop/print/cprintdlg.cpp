@@ -25,6 +25,7 @@
 #include <iostream.h>
 #include <string.h>
 #include <kapp.h>
+#include <klocale.h>
 #include "../ctoolclass.h"
 #include <kmsgbox.h>
 #include "../cproject.h"
@@ -1322,6 +1323,7 @@ void CPrintDlg::loadSettings() {
   formatCombBox->setCurrentItem(settings->readNumEntry("OutputFormat"));
   defaultCombBox->setCurrentItem(settings->readNumEntry("Default"));
 }
+
 
 
 

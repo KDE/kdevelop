@@ -22,6 +22,7 @@
 #include <iostream.h>
 #include <kfiledialog.h>
 #include <kquickhelp.h>
+#include <klocale.h>
 #include <qlayout.h>
 #define LAYOUT_BORDER (10)
 
@@ -495,6 +496,7 @@ void CNewFileDlg::slotListHighlighted(int){
   edit->setFocus();
   autocompletion = true;
 }
+
 
 
 

@@ -25,7 +25,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 
-
 /**
   *@author Sandy Meier
   */
@@ -50,3 +49,4 @@ protected:
 };
 
 #endif
+

@@ -21,6 +21,8 @@
 #include <kfiledialog.h>
 #include <kmsgbox.h>
 #include <kquickhelp.h>
+#include <klocale.h>
+
 #include "ctoolsconfigdlg.h"
 #include "ctoolclass.h"
 
@@ -315,6 +317,7 @@ void CToolsConfigDlg::swap(int item1,int item2){
   tools_argument.remove(item2);
   tools_argument.insert(item2,str1);
 }
+
 
 
 

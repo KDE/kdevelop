@@ -21,7 +21,8 @@
 
 #include <qlineedit.h>
 #include <qdialog.h>
-#include <cproject.h>
+#include <klocale.h>
+#include "cproject.h"
 
 /**gets the commandline arguments 
   *@author Ralf Nolden

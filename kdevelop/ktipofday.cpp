@@ -20,7 +20,7 @@
 #include <kapp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-
+#include <klocale.h>
 
 
 KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name, true) {
@@ -194,6 +194,7 @@ void KTipofDay::slotNext()
 		f.close();
 	}
 }
+
 
 
 

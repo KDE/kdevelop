@@ -22,9 +22,9 @@
 #include <qwidget.h>
 #include <qtabdialog.h>
 #include <qdialog.h>
-#include <qmlined.h>
-#include <qlined.h>
-#include <qradiobt.h>
+#include <qmultilinedit.h>
+#include <qlineedit.h>
+#include <qradiobutton.h>
 #include <qcombo.h>
 #include <kapp.h>
 #include <kquickhelp.h>
@@ -88,3 +88,4 @@ protected:
 };
 
 #endif
+

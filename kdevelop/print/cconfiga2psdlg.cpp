@@ -23,6 +23,7 @@
 #include "../ctoolclass.h"
 #include <kmsgbox.h>
 #include <kquickhelp.h>
+#include <klocale.h>
 
 CConfigA2psDlg::CConfigA2psDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -1041,3 +1042,4 @@ void CConfigA2psDlg::loadSettings() {
   slotFontsizeClicked();
   slotLinesClicked();
 }
+

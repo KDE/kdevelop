@@ -25,6 +25,7 @@
 #include "debug.h"
 #include "ctoolclass.h"
 #include <kmsgbox.h>
+#include <klocale.h>
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) : KWizard(parent,name,true){
   q = new KShellProcess();
@@ -2390,4 +2391,5 @@ void CKAppWizard::slotVendorEntry() {
   	modifyVendor = true;
   }
 }
+
 

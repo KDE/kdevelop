@@ -21,6 +21,7 @@
 #include "../ctoolclass.h"
 #include <kmsgbox.h>
 #include <kquickhelp.h>
+#include <klocale.h>
 
 CConfigEnscriptDlg::CConfigEnscriptDlg(QWidget* parent,const char* name) : QTabDialog(parent, name, true){
   init();
@@ -3023,4 +3024,5 @@ void CConfigEnscriptDlg::loadSettings() {
   slotHighlightBarsClicked();
   slotNumberingPagesClicked();
 }
+
 

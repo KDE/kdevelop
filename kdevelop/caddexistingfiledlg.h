@@ -22,7 +22,6 @@
 #define CADDEXISTINGFILEDLG_H
 
 #include <kquickhelp.h>
-
 #include <qwidget.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
@@ -62,4 +61,5 @@ protected:
 };
 
 #endif
+
 

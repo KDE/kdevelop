@@ -33,6 +33,7 @@
 #include <qcheckbox.h>
 #include <kquickhelp.h>
 #include <qlistview.h>
+#include <klocale.h>
 
 /** 
  * Dlg for changing the properties of a file in an existing project

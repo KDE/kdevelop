@@ -24,6 +24,7 @@
 #include <qdatetime.h>
 #include "../cproject.h"
 #include <kquickhelp.h>
+#include <klocale.h>
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -860,6 +861,7 @@ void CFilePrintDlg::loadSettings() {
   settings->readListEntry("FileList",fileList);
   selfChoosenFilesMultiLine->insertStrList(&fileList);
 }
+
 
 
 

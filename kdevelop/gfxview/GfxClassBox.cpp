@@ -19,6 +19,7 @@
 
 
 #include <kapp.h> 
+#include <klocale.h>
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qpopupmenu.h>
@@ -491,3 +492,4 @@ void CGfxClassBox::slotPrintSubTree()
 {
   emit PrintSubTree(this);
 }
+

@@ -31,7 +31,7 @@
 #include <kprocess.h>
 #include <kapp.h>
 #include <htmltoken.h>
-
+#include <klocale.h>
 
 const char *template_desc[] = {
     "normal",
@@ -411,6 +411,7 @@ void GrepDialog::slotClear()
 void  GrepDialog::setDirName(QString dir){
   dir_edit->setText(dir);
 }
+
 
 
 

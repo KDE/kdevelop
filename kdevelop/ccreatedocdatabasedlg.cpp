@@ -23,7 +23,7 @@
 #include <iostream.h>
 #include <kquickhelp.h>
 #include <kapp.h>
-
+#include <klocale.h>
 
 CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config ) : QDialog(parent,name,true) {
 
@@ -333,6 +333,7 @@ void CCreateDocDatabaseDlg::slotDirButtonClicked(){
     dir_edit->setText(name);
   }
 }
+
 
 
 

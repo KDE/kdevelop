@@ -18,6 +18,7 @@
 
 #include <kquickhelp.h>
 #include <qlayout.h>
+#include <klocale.h>
 #define LAYOUT_BORDER (10)
 #include "cnewclassdlg.h"
 #include "cproject.h"
@@ -398,6 +399,7 @@ void CNewClassDlg::slotImplEditChanged(const char*){
     impl_modified = true;
   }
 }
+
 
 
 

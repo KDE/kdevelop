@@ -22,6 +22,7 @@
 #include <kmsgbox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <klocale.h>
 #include <iostream.h>
 #include <assert.h>
 #include "crealfileview.h"
@@ -374,6 +375,7 @@ void CRealFileView::slotCommit()
     }
 }
  
+
 
 
 

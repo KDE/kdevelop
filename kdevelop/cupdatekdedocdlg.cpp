@@ -21,10 +21,9 @@
 #include <kapp.h>
 #include <kfiledialog.h>
 #include <kmsgbox.h>
+#include <klocale.h>
 #include <qprogressdialog.h>
 #include "cupdatekdedocdlg.h"
-
-
 
 
 CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config) : QDialog(parent,name,true) {
@@ -440,4 +439,5 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   }
 
 }
+
 

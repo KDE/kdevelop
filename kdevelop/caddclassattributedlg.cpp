@@ -24,6 +24,7 @@
 #include <kmsgbox.h>
 #include <kapp.h>
 #include <kquickhelp.h>
+#include <klocale.h>
 
 CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -228,3 +229,4 @@ void CAddClassAttributeDlg::OK()
   else
     accept();
 }
+

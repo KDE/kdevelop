@@ -24,11 +24,11 @@
 
 #include <kiconloader.h>
 #include <qdialog.h>
+#include <klocale.h>
 
 /**
   *@author 
   */
-
 class CFindDocTextDlg : public QDialog  {
    Q_OBJECT
 public: 

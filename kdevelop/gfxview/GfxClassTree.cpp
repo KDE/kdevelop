@@ -19,6 +19,7 @@
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qprintdialog.h>
+#include <klocale.h>
 #include "GfxClassTree.h"
 #include <stdio.h>
 
@@ -559,3 +560,4 @@ void CGfxClassTree::slotPrintSubTree(CGfxClassBox *abox)
 
   delete tmplist;
 }
+

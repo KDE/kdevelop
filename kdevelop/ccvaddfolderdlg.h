@@ -27,6 +27,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+
 /** */
 class CCVAddFolderDlg : public QDialog
 {
@@ -55,3 +56,4 @@ private: // Private methods
 };
 
 #endif
+

@@ -26,6 +26,7 @@
 #include <qlayout.h>
 
 #include <kapp.h>
+#include <klocale.h>
 
 #include "cfinddoctextdlg.h"
 
@@ -96,6 +97,7 @@ void CFindDocTextDlg::slotFind()
 {
     emit signalFind( text );
 }
+
 
 
 

@@ -25,6 +25,7 @@
 #include <qregexp.h>
 #include <assert.h>
 #include <kapp.h>
+#include <klocale.h>
 #include <kiconloader.h>
 
 #include "resource.h"
@@ -404,3 +405,4 @@ void CEditWidget::slotLookUp(){
 void CEditWidget::slotGrepText(){
     emit grepText(searchtext);
 }
+

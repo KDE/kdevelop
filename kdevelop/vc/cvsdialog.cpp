@@ -7,7 +7,7 @@
 #include <kapp.h>
 #include <kprocess.h>
 #include <kbuttonbox.h>
-
+#include <klocale.h>
 #include "cvsdialog.h"
 
 // TODO: Only show dialog if cvs client doesn't exit immediately.
@@ -130,3 +130,4 @@ void CvsDialog::startCommand(const char *cmd)
 // End:
 
     
+

@@ -25,6 +25,7 @@
 #include <qstring.h>
 #include <kprocess.h>
 #include <kapp.h>
+#include <klocale.h>
 #include <qdatetime.h>
 #include <iostream.h>
 #include <kmsgbox.h>
@@ -669,4 +670,5 @@ bool CBugReportDlg::sendEmail() {
 
   return true;
 }
+
 

@@ -20,6 +20,7 @@
 #include "cfilepropdlg.h"
 #include <iostream.h>
 #include <qfileinfo.h>
+#include <klocale.h>
 #include "debug.h"
 
 /*********************************************************************
@@ -442,5 +443,6 @@ void CFilePropDlg::slotOk(){
   prj->updateMakefilesAm();
   accept(); 
 }
+
 
 

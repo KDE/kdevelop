@@ -23,7 +23,9 @@
 #include "ccvaddfolderdlg.h"
 #include <kmsgbox.h>
 #include <kapp.h>
+#include <klocale.h>
 #include <qlayout.h>
+
 #define LAYOUT_BORDER (10)
 
 CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
@@ -102,6 +104,7 @@ void CCVAddFolderDlg::OK()
   else
     accept();
 }
+
 
 
 

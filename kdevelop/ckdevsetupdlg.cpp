@@ -25,7 +25,7 @@
 #include <qfileinfo.h>
 
 #include <kmsgbox.h>
-
+#include <klocale.h>
 
 // SETUP DIALOG
 CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa )
@@ -508,6 +508,7 @@ void CKDevSetupDlg::slotKDEClicked(){
     }
   }
 }
+
 
 
 

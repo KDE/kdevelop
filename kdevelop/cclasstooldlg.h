@@ -27,6 +27,7 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h> 
+
 #include "./classparser/ClassStore.h"
 #include "cclasstreehandler.h"
 #include "cclasstooltreeview.h"
@@ -175,4 +176,5 @@ private: // Private methods
 };
 
 #endif
+
 

@@ -24,6 +24,7 @@
 #include <kmsgbox.h>
 #include <kapp.h>
 #include <kquickhelp.h>
+#include <klocale.h>
 
 CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),

@@ -20,6 +20,7 @@
 #include "cclassview.h"
 #include <assert.h>
 #include <kmsgbox.h>
+#include <klocale.h>
 #include <qheader.h>
 #include <qprogressdialog.h> 
 #include <qmessagebox.h>
@@ -1081,4 +1082,5 @@ void CClassView::slotClassWizard()
   dlg.setStore( store );
   dlg.exec();
 }
+
 

@@ -22,6 +22,7 @@
 #include <qstring.h>
 #include <qlist.h>
 #include <qtooltip.h>
+
 #include "ctreeview.h"
 #include "./classparser/ClassParser.h"
 #include "cclasstreehandler.h"
@@ -246,3 +247,4 @@ private: // Private methods
 };
 
 #endif
+

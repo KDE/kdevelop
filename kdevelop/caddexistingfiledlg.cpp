@@ -23,6 +23,7 @@
 #include <kfiledialog.h>
 #include <kmsgbox.h>
 #include <kapp.h>
+#include <klocale.h>
 #include "caddexistingfiledlg.h"
 #include "cproject.h"
 
@@ -223,6 +224,7 @@ bool CAddExistingFileDlg::isTemplateChecked()
 {
  return template_checkbox->isChecked();
 }
+
 
 
 

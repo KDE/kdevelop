@@ -27,6 +27,7 @@
 #include <kmsgbox.h>
 #include <kaccel.h>
 #include <kcursor.h>
+#include <klocale.h>
 
 #include "./kwrite/kwdoc.h"
 #include "ckdevelop.h"
@@ -1256,6 +1257,7 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
 
 
 

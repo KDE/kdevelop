@@ -22,6 +22,7 @@
 #include <qfile.h>
 #include <kapp.h>
 #include <qpixmap.h>
+#include <klocale.h>
 
 CMakeManualDlg::CMakeManualDlg(QWidget *parent, const char *name,QString  manual_file) : QDialog(parent,name,true){
 	initDialog();
@@ -81,6 +82,7 @@ void CMakeManualDlg::slotFileButtonClicked(){
 	file_edit->setText(str);
     }    
 }
+
 
 
 

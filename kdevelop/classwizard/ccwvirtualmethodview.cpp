@@ -1,4 +1,5 @@
 #include <qmessagebox.h>
+#include <klocale.h>
 #include "ccwvirtualmethodview.h"
 
 /*********************************************************************
@@ -260,3 +261,4 @@ void CCWVirtualMethodView::slotAddMethod()
     }
   }
 }
+

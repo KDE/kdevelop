@@ -21,6 +21,7 @@
 
 #include <kapp.h>
 #include <qtooltip.h>
+#include <klocale.h>
 #include "cclasswizarddlg.h"
 
 /*********************************************************************
@@ -114,3 +115,4 @@ void CClassWizardDlg::slotAddMethod( const char *aClassName,
 {
   emit addMethod( aClassName, aMethod );
 }
+

@@ -26,6 +26,7 @@
 #include <kapp.h>
 #include <kmsgbox.h>
 #include <kfiledialog.h>
+#include <klocale.h>
 
 #include "ckdevinstall.h"
 #include "ctoolclass.h"
@@ -869,6 +870,7 @@ void CKDevInstall::slotCancel()
   else
     return;
 }
+
 
 
 

@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include <kapp.h> 
+#include <klocale.h>
 #include <qwidget.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
@@ -235,3 +236,4 @@ void CGfxClassTreeWindow::printClicked()
   if(QPrintDialog::getPrinterSetup( &pr ))
     m_treescrollview->m_classtree->onPrintTree( &pr, tmp );
 }
+

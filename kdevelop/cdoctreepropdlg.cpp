@@ -20,6 +20,7 @@
 #include <kfiledialog.h>
 #include <kapp.h>
 #include <kquickhelp.h>
+#include <klocale.h>
 
 CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
   name_edit = new QLineEdit( this, "name_edit" );
@@ -131,6 +132,8 @@ void CDocTreePropDlg::slotFileButtonClicked(){
     file_edit->setText(str);
   }
 }
+
+
 
 
 
