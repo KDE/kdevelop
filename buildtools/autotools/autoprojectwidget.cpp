@@ -264,6 +264,7 @@ void AutoProjectWidget::openProject( const QString &dirName )
 
 void AutoProjectWidget::closeProject()
 {
+	m_shownSubproject = 0;
 	m_subprojectView->clear();
 	m_detailView->clear();
 }
