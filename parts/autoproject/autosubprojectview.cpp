@@ -288,8 +288,8 @@ void AutoSubprojectView::slotRemoveSubproject()
     }
     
     // check for config.status
-    if( !QFileInfo(m_part->projectDirectory(), "config.status").exists() ){
-	KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run 'Configure' first"));
+    if( !QFileInfo(m_part->buildDirectory(), "config.status").exists() ){
+	KMessageBox::sorry(this, i18n("There is no config.status in the project root build directory. Run 'Configure' first"));
 	return;
     }
     
@@ -306,7 +306,7 @@ void AutoSubprojectView::slotRemoveSubproject()
 	bool removeSources = dlg.removeCheckBox->isChecked();
 	
 	list.remove( it );
-	parent->variables[ "SUBDIRS" ] = list.join( "." );
+	parent->variables[ "SUBDIRS" ] = list.join( " " );
 	
 	parent->listView()->setSelected( parent, true );
 	kapp->processEvents( 500 );
@@ -338,6 +338,8 @@ void AutoSubprojectView::slotRemoveSubproject()
 	cmdline += m_part->projectDirectory();
 	cmdline += " && automake ";
 	cmdline += relmakefile;
+	cmdline += " && cd ";
+	cmdline += m_part->buildDirectory();
 	cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
 	cmdline += relmakefile;
 	cmdline += " ./config.status";
