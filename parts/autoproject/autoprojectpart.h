@@ -13,6 +13,8 @@
 #define _AUTOPROJECTPART_H_
 
 #include <qdict.h>
+#include <qguardedptr.h>
+#include <kgenericfactory.h>
 
 #include "kdevproject.h"
 
@@ -25,7 +27,7 @@ class AutoProjectPart : public KDevProject
     Q_OBJECT
 
 public:
-    AutoProjectPart( KDevApi *api, bool kde, QObject *parent=0, const char *name=0 );
+    AutoProjectPart( QObject *parent, const char *name, const QStringList &args );
     ~AutoProjectPart();
 
 protected:
@@ -56,6 +58,8 @@ private:
     friend class CompilerOptionsWidget;
     friend class AddTranslationDialog;
 };
+
+typedef KGenericFactory<AutoProjectPart> AutoProjectFactory;
 
 #endif
 

@@ -17,6 +17,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -26,14 +28,15 @@
 #include "kdevpartcontroller.h"
 #include "makeoptionswidget.h"
 #include "runoptionswidget.h"
-#include "customprojectfactory.h"
 #include "customprojectwidget.h"
 #include "customprojectpart.h"
 #include "config.h"
 
+typedef KGenericFactory<CustomProjectPart> CustomProjectFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( "kdevcustomproject" ) );
 
-CustomProjectPart::CustomProjectPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevProject(api, parent, name)
+CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QStringList &)
+    : KDevProject(parent, name)
 {
     setInstance(CustomProjectFactory::instance());
 

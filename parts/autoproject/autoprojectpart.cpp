@@ -16,6 +16,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -29,18 +30,20 @@
 #include "configureoptionswidget.h"
 #include "classstoreoptionswidget.h"
 #include "addtranslationdlg.h"
-#include "autoprojectfactory.h"
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
 #include "config.h"
 
+K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) );
 
-AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const char *name)
-    : KDevProject(api, parent, name)
+AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStringList &args)
+    : KDevProject(parent, name)
 {
     setInstance(AutoProjectFactory::instance());
 
     setXMLFile("kdevautoproject.rc");
+
+    bool kde = ( args[ 0 ] == "kde" );
 
     m_widget = new AutoProjectWidget(this, kde);
     m_widget->setIcon(SmallIcon("make"));

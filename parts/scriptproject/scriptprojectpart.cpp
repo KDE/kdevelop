@@ -14,18 +14,20 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kgenericfactory.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
 #include "kdevpartcontroller.h"
-#include "scriptprojectfactory.h"
 #include "scriptprojectwidget.h"
 #include "scriptprojectpart.h"
 
+typedef KGenericFactory<ScriptProjectPart> ScriptProjectFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( "kdevscriptproject" ) );
 
-ScriptProjectPart::ScriptProjectPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevProject(api, parent, name)
+ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QStringList &)
+    : KDevProject(parent, name)
 {
     setInstance(ScriptProjectFactory::instance());
 

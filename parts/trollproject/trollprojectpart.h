@@ -13,6 +13,7 @@
 #define _TROLLPROJECTPART_H_
 
 #include <qdict.h>
+#include <qguardedptr.h>
 
 #include "kdevproject.h"
 
@@ -25,7 +26,7 @@ class TrollProjectPart : public KDevProject
     Q_OBJECT
 
 public:
-    TrollProjectPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    TrollProjectPart( QObject *parent, const char *name, const QStringList &args );
     ~TrollProjectPart();
 
 protected:

@@ -24,7 +24,7 @@
 
 #include "misc.h"
 #include "autoprojectwidget.h"
-#include "autoprojectfactory.h"
+#include "autoprojectpart.h"
 #include "addapplicationdlg.h"
 
 

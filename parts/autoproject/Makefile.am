@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevautoproject.la
 libkdevautoproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevautoproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \
-				autoprojectpart.cpp \
+libkdevautoproject_la_SOURCES = autoprojectpart.cpp \
 				autoprojectwidget.cpp \
 		                classstoreoptionswidget.cpp \
 	                        classstoreoptionswidgetbase.ui \

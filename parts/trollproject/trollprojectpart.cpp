@@ -16,6 +16,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -23,14 +25,15 @@
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
-#include "trollprojectfactory.h"
 #include "trollprojectwidget.h"
 #include "trollprojectpart.h"
 #include "config.h"
 
+typedef KGenericFactory<TrollProjectPart> TrollProjectFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevtrollproject, TrollProjectFactory( "kdevtrollproject" ) );
 
-TrollProjectPart::TrollProjectPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevProject(api, parent, name)
+TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStringList &)
+    : KDevProject(parent, name)
 {
     setInstance(TrollProjectFactory::instance());
 

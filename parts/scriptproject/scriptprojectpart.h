@@ -13,6 +13,7 @@
 #define _SCRIPTPROJECTPART_H_
 
 #include <qdict.h>
+#include <qguardedptr.h>
 
 #include "kdevproject.h"
 
@@ -25,7 +26,7 @@ class ScriptProjectPart : public KDevProject
     Q_OBJECT
 
 public:
-    ScriptProjectPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    ScriptProjectPart( QObject *parent, const char *name, const QStringList &args );
     ~ScriptProjectPart();
 
 protected:

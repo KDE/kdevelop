@@ -13,6 +13,7 @@
 #define _CUSTOMPROJECTPART_H_
 
 #include <qdict.h>
+#include <qguardedptr.h>
 
 #include "kdevproject.h"
 
@@ -26,7 +27,7 @@ class CustomProjectPart : public KDevProject
     Q_OBJECT
 
 public:
-    CustomProjectPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    CustomProjectPart( QObject *parent, const char *name, const QStringList & );
     ~CustomProjectPart();
 
 protected:
