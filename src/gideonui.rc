@@ -80,7 +80,6 @@
   <Menu name="settings" noMerge="1">
     <text>&amp;Settings</text>
     <Action name="settings_show_menubar" />
-    <Merge name="StandardToolBarMenuHandler" />
     <DefineGroup name="show_merge" />
     <Separator/>
     <Action name="settings_main_toolbar"/>

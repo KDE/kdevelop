@@ -242,9 +242,6 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
 
 void MainWindow::init()
 {
-#if (KDE_VERSION > 305)
-  setStandardToolBarMenuEnabled( true );
-#endif
   setXMLFile("gideonui.rc");
 
   createFramework();
