@@ -65,7 +65,7 @@ No suitable viewer was found for the &lt;b&gt;%2&lt;/b&gt; mimetype.&lt;/qt&gt;<
                         <cstring>open_as_text</cstring>
                     </property>
                     <property name="text">
-                        <string>Open it in KDevleop as plain text.</string>
+                        <string>Open it in KDevelop as plain text.</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">

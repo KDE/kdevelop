@@ -217,7 +217,7 @@ The information in this chapter is meant as a quick reference for a head start o
 If you want more information on a topic, just follow the link in the title starting that advice.
 </para>
 <para>
-Information on these topics is availabe:
+Information on these topics is available:
 </para>
 <simplelist>
   <member><link linkend="nutshellitem-look-and-feel">Look and Feel</link></member>
@@ -234,7 +234,7 @@ Information on these topics is availabe:
     <formalpara id="nutshell-IDEAl-tabs">
     <title><link linkend="setup-ui-toolview">Force Smaller Tool View Tabs in IDEAl Mode</link></title>
     <para>
-      By default &kdevelop; starts with large text-based tool tip tabs around the work area. You may change this look to &eg; save space in the &kdevelop; configuration dialog (<menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> <guimenuitem>User Interface</guimenuitem></menuchoice>).
+      By default &kdevelop; starts with large text-based tool tip tabs around the work area. You may change this look, to save space, in the &kdevelop; configuration dialog (<menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> <guimenuitem>User Interface</guimenuitem></menuchoice>).
     </para>
     </formalpara>
     <para>
@@ -262,7 +262,7 @@ Information on these topics is availabe:
       </para></listitem>
     </itemizedlist>
     <para>
-    (This behaviour does sometimes occur after you left clicked a .ui file in one of the file navigators and &kdevelop; did load <application>KUIViewer</application> to show the &GUI; which was produced from this file.)
+    (This behavior does sometimes occur after you left clicked a .ui file in one of the file navigators and &kdevelop; did load <application>KUIViewer</application> to show the &GUI; which was produced from this file.)
     </para>
   </listitem>
 
@@ -386,7 +386,7 @@ Information on these topics is availabe:
     <title><quote>Wrong <command>autoconf</command> version</quote> &etc; Error</title>
 
     <para>
-    There are several error messages concerning too old versions of <application>autoconf</application> &etc; prohibiting <command>configure</command> to work properly. Run <command>autoreconf</command> in the directory tree where the <filename>configure.in</filename> files in question are. This command will try to update the information in the &GNU; Build System files. See <command>man autoreconf</command> for more information.
+    There are several error messages concerning too old versions of <application>autoconf</application> &etc; preventing <command>configure</command> from working properly. Run <command>autoreconf</command> in the directory tree where the <filename>configure.in</filename> files in question are. This command will try to update the information in the &GNU; Build System files. See <command>man autoreconf</command> for more information.
     </para>
     </formalpara>
   </listitem>
@@ -411,7 +411,7 @@ Information on these topics is availabe:
 <title>Loading Projects</title>
 
 <sect2 id="loading-recent-project">
-<title>Loading a Recently Used Project</title>
+<title>Loading a Recently-Used Project</title>
 
 <para>
 (... to be written ...)
@@ -490,10 +490,10 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
   Tool tips show the content of a snippet
   </para></listitem>
   <listitem><para>
-  Snippets are stored in the users home-directory, so every user can have his own snippets
+  Snippets are stored in the user's home-directory, so every user can have their own snippets
   </para></listitem>
   <listitem><para>
-  Snippets can contain variables in the style of $VARNAME$. On using the snippet the user is prompted to enter replacement value for the variables
+  Snippets can contain variables in the style of $VARNAME$. On using the snippet the user is prompted to enter replacement values for the variables
   </para></listitem>
 </itemizedlist>
 </sect1> <!-- editing-snippets -->
@@ -608,7 +608,7 @@ default editor. You can configure them as you like (how?)
 </informaltable>
 
 <para>
-For all the keys above, the Shift can be pressed additionally,
+For all the keys above <keycap>Shift</keycap> can be pressed additionally,
 to mark from the current cursor position to the one afterwards.
 </para>
 
@@ -723,7 +723,7 @@ The conventional search with <menuchoice><guimenu>Edit</guimenu>
 search term before starting. Most of the time, it is much faster to search
 incrementally. If you click into the edit field labeled
 <guilabel>ISearch</guilabel> in the toolbar, the search is performed as you
-type. You will find that often the desired term is already found after typing
+type; you will find that often the desired term is already found after typing
 in 3 or 4 letters.
 </para>
 
@@ -735,26 +735,26 @@ in 3 or 4 letters.
 <indexterm zone="grep"><primary>search</primary><secondary>in files</secondary></indexterm>
 
 <para>
-Both search mechanisms described above are restricted to searching within one
-source file. An additional tool which allows you to search through a (possibly
-large) number of files is available through the
+Both of the search mechanisms described above are restricted to searching within one
+source file; an additional tool, which allows you to search through a (possibly
+large) number of files, is available through the
 <guimenuitem>Search in Files...</guimenuitem> item in the
-<guimenu>Edit</guimenu> menu. It is basically a frontend for the
+<guimenu>Edit</guimenu> menu &mdash; it is basically a frontend for the
 &grep;(1) program.
 </para>
 
 <para>
 In the dialog, you can specify which files are searched. There is a number of
-wildcard patterns available in a combobox. In this way, you can easily
-restrict the find mechanism to header files. Furthermore, you specify a
-directory where the search is started. If you check the
-<guibutton>Recursive</guibutton> box, the search iterates through all
+wildcard patterns available in a combobox: by using them you can easily
+restrict the find mechanism to search, for example, header files.
+You can also specify a directory where the search is started; if you check the
+<guibutton>Recursive</guibutton> box the search will iterate through all
 directories in the hierarchy below this one.
 </para>
 
 <para>
-The search term is in general a regular expression following POSIX syntax.
-For example, you can use the term <literal>"\&lt;K.*"</literal> if you want to
+The search term is, in general, a regular expression following POSIX syntax;
+for example, you can use the term <literal>"\&lt;K.*"</literal> if you want to
 find all words which begin with the letter K. The following characters
 are interpreted in a special way:
 </para>
@@ -791,38 +791,38 @@ Matches the beginning of a line
 <row><entry>
   <literal>?</literal>
 </entry><entry>
-  The preceding item matches less than once
+  Matches either zero or one of the preceding item
 </entry></row>
 <row><entry>
   <literal>*</literal>
 </entry><entry>
-  The preceding item is matched zero or more times
+  Matches zero or more of the preceding item
 </entry></row>
 <row><entry>
   <literal>+</literal>
 </entry><entry>
-  The preceding item is matched once or more times
+  Matches one or more of the preceding item
 </entry></row>
 <row><entry>
   <literal>{n}</literal>
 </entry><entry>
-  The preceding item is matched exactly n times
+  Match the preceding item exactly n times
 </entry></row>
 <row><entry>
   <literal>{n,}</literal>
 </entry><entry>
-  The preceding item is matched n or more times
+  Match the preceding item n or more times
 </entry></row>
 <row><entry>
   <literal>{,n}</literal>
 </entry><entry>
-  The preceding item matches less than n times
+  Match the preceding item fewer than n times
 </entry></row>
 <row><entry>
   <literal>{n,m}</literal>
 </entry><entry>
-  The preceding item matches at least <literal>n</literal> times but less
-than <literal>m</literal> times
+  Match the preceding item at least <literal>n</literal> times but fewer
+  than <literal>m</literal> times
 </entry></row>
 
 </tbody>
@@ -835,19 +835,19 @@ Backreferences to bracketed subexpressions are also available by the notation
 </para>
 
 <para>
-For C++ programmers, as special bonus there are some search templates
-available for typical patterns. These allow you to search for example
-all calls of member functions of a certain object.
+For C++ programmers, as special bonus, there are some search templates
+available for typical patterns; these allow you to search for, for example,
+all calls to member functions of a certain object.
 </para>
 
 <para>
 Once you start the search by clicking on the <guibutton>Search</guibutton>
-button, it will be performed by an external, asynchronous process. All found
-items will appear in the view called <guilabel>Grep</guilabel>. You can then
-jump to the found items by clicking on them. Note that grep scans the files
-as they stored in the file system. If you have modified versions of them in
-your editor, you may get some mismatches in the line number, or some found
-items will be invalid. You can avoid this by saving all files beforehand.
+button, it will be performed by an external, asynchronous process. All items
+found will appear in the view called <guilabel>Grep</guilabel>; you can then
+jump to the items found by clicking on them.  Note that grep scans the files
+as stored in the file system: if you have modified versions of them in
+your editor, you may get some mismatches in the line number, some of the items
+found will be invalid &mdash; you can avoid this by saving all files beforehand.
 </para>
 
 </sect2> <!-- grep -->
@@ -953,10 +953,10 @@ The groups shown in this view can be configured under
 <guimenuitem>Project options</guimenuitem> dialog. In order to customize the
 view to your needs, it is helpful to understand how files are distributed on
 the groups. For each file, &kdevelop; goes through all groups from top to
-bottom. In each group, it looks whether the file name matches one of the
-patterns. If there is a match, the file is shown in this group and the
-iteration is aborted. This makes it clear that more general patterns should
-be put below more specific ones. For example, an asterisk for the
+bottom; in each group, it looks whether the file name matches one of the
+patterns and if there is a match, the file is shown in this group and the
+iteration is aborted; from this, it is clear that the more-general patterns should
+be put below more-specific ones &mdash; for example, an asterisk for the
 <guilabel>Other</guilabel> group should  be the last pattern.
 </para>
 
@@ -985,8 +985,8 @@ that visualize the class structure in different ways.
 
 <para>
 This view is shown on the left side of the main window and contains a linear
-list of all classes, variables and functions in your project. It is designed
-as a tree view. If you open a class node by clicking on it, a list with all
+list of all classes, variables and functions in your project; it is designed
+as a tree view. If you open a class node by clicking on it, a list with all the
 methods and attributes of the respective class is shown.
 </para>
 
@@ -1001,30 +1001,30 @@ methods and attributes of the respective class is shown.
 The class view works in two different modes. By default, all symbols are
 grouped into <quote>Classes</quote>, <quote>Structs</quote>, <quote>Functions</quote>, <quote>Variables</quote> and <quote>Namespaces</quote>.
 In the context menu of the view, you can choose
-<guimenuitem>List by Namespaces</guimenuitem>. In this mode, the namespace
+<guimenuitem>List by Namespaces</guimenuitem>; in this mode, the namespace
 hierarchy is shown and the symbols grouped into the respective namespace where
-they are defined. This may be more useful in projects which make heavy use of
-(nested) namespaces. It is less useful in projects without namespaces.
+they are defined.  This may be more useful in projects which make heavy use of
+(nested) namespaces; it is less useful in projects without namespaces.
 </para>
 
 <para>
-You can also change the way in which class names are displayed. Normally, the
-names of the classes are shown, without the namespace in which they are defined.
-This means, you cannot immediately distinguish classes with the same name in
-different namespaces. If you rest for a while with the mouse over an item, the
-full scoped name is shown as a tooltip though. You can decide to always
-display the fully scoped class name by choosing
+You can also change the way in which class names are displayed: normally, the
+names of the classes are shown, without the namespace in which they are defined;
+this means, you cannot immediately distinguish classes with the same name in
+different namespaces &mdash; rest for a while with the mouse over an item, though,
+the full scoped name is shown as a tooltip.  You can choose to always
+display the fully-scoped class name by choosing
 <guimenuitem>Full Identifier scopes</guimenuitem> from the context menu.
 </para>
 
 <para>
-Clicking on a class or method in the class view brings you to its definition.
-You can also jump to the declaration of a method by choosing
+Clicking on a class or method in the class view brings you to its definition;
+you can also jump to the declaration of a method by choosing
 <guimenuitem>Go to declaration</guimenuitem> from the context menu. In the
 context menu for classes are also the items
 <guimenuitem>Add method..</guimenuitem> and
-<guimenuitem>Add attribute...</guimenuitem>. This opens dialogs where you can
-generate new method and variable declaration in the respective class, together
+<guimenuitem>Add attribute...</guimenuitem>; these open dialogs where you can
+generate new methods and variable declarations in the relavent class, together
 with an empty implementation.
 </para>
 
@@ -1061,7 +1061,7 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 <title>Documentation</title>
 
 <para>
-Documention unfortunately belongs to the most-overlooked programming issues. Yet, once properly set up and maintained internal and external documentation provides most valuable help.
+Documention is, unfortunately, one of the most-overlooked programming issues; yet, once properly set up and maintained, internal and external documentation provides most valuable help.
 </para>
 <para>
 Documentation has multiple facets. There is
@@ -1149,12 +1149,12 @@ more information. Some Linux distributions also provide binary packages.
 </para>
 
 <para>
-An automake based package can easily be cross-compiled by specifying the
+An automake-based package can easily be cross-compiled by specifying the
 <option>--host</option> option to the configure script and setting the
 <envar>CC</envar> and <envar>CXX</envar> environment variables to the
 respective cross compiler binaries. Often you want to switch between a
 the cross-compiled version of your application and one compiled for your
-development system. For this, it is advantageous to use &kdevelop; capability
+development system; for this, it is advantageous to use &kdevelop;'s capability
 of creating multiple build configurations, as explained in
 <xref linkend="buildconfigurations"/>. Once you have created a new build
 configuration for cross-compiling in the
@@ -1194,29 +1194,29 @@ For many combinations, you can use a short form, for instance
 
 <para>
 &qte; is a version of the &Qt; library that does not use the X window
-system, but draws directly to the framebuffer on Linux systems. It is
+system, but draws directly to the framebuffer on Linux systems; it is
 therefore interesting for embedded systems which have tight restrictions
 on the memory usage of the whole system. Its API is fully compatible with
-the one of the X11 version.
+that of the X11 version.
 </para>
 
 <para>
 Developing an application for &qte; with &kdevelop; is not very different
-from developing a program for the X11 version of &Qt;. In fact, you can use the
+from developing a program for the X11 version of &Qt;; in fact, you can use the
 same codebase for both versions. If you use the autoproject project
-management, you switch to the embedded version by passing the argument
+management you can switch to the embedded version by passing the argument
 <option>--enable-embedded</option> to the configure script. You can set
 this in the <menuchoice><guimenu>Project</guimenu>
 <guimenuitem>Project Options...</guimenuitem></menuchoice> dialog under
 <guilabel>Configure Options</guilabel>. With the option
-<option>--with-qt-dir=DIR</option> you set the directory in which &qte;
+<option>--with-qt-dir=DIR</option> you can set the directory in which &qte;
 is installed.
 </para>
 
 <para>
 After configuring and compiling your application with these options, it will
 link with the <filename>libqpe.so</filename> library. This version of your
-application will not normally run when you use X11. In order to test it,
+application will not normally run when you use X11: in order to test it,
 run it under the control of the program <application>qvfb</application>
 (Qt Virtual Frame Buffer). This is done by starting
 <application>qvfb</application> and then starting your application with
@@ -1238,9 +1238,9 @@ system and the version running on the target system.
 Applications for &qte; normally run as single applications on the
 device they are designed for. Trolltech also supports Qtopia, which is a
 collection of applications for PIM, web browsing and various other areas that
-work together in a consistent manner. It is the standard environment for
+work together in a consistent manner; it is the standard environment for
 instance on the Sharp Zaurus. You can write applications that integrate into
-this environment by using the Qtopia SDK. This implies making your application
+this environment by using the Qtopia SDK; this implies making your application
 class a subclass of <classname>QPEApplication</classname> and linking to the
 library <filename>libqpe.so</filename>. If you develop your application with
 the autoproject project management, you have to add
@@ -1259,7 +1259,7 @@ the autoproject project management, you have to add
 
 <para>
 For C and C++, &kdevelop; contains an internal debugger that is directly
-integrated with the editor. Technically, it is implemented as a frontend
+integrated with the editor; technically, it is implemented as a frontend
 that uses the portable &GNU; debugger <application>gdb</application> through
 a pipe. The debugger can be started in several ways:
 </para>

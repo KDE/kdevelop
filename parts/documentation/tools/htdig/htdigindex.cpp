@@ -469,7 +469,7 @@ int main(int argc, char *argv[])
         if (search->createConfig())
             KMessageBox::information(0, i18n("Configuration file updated"));
         else
-            KMessageBox::error(0, i18n("Configuration file update failed!"));
+            KMessageBox::error(0, i18n("Configuration file update failed."));
     }
     else
         if (args->isSet("i"))

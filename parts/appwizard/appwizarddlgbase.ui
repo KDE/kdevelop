@@ -93,7 +93,7 @@
                         <cstring>m_favouritesPage</cstring>
                     </property>
                     <attribute name="title">
-                        <string>&amp;Favourites</string>
+                        <string>&amp;Favorites</string>
                     </attribute>
                     <grid>
                         <property name="name">

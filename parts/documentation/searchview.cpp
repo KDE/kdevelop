@@ -144,7 +144,7 @@ void SearchView::search()
         if (!m_part->configure(1))
             return;
         config->writeEntry("IsSetup", true);
-        KMessageBox::information(this, i18n("Now full text search database will be created.\nWait for database creation to finish and then repeat search."));
+        KMessageBox::information(this, i18n("Now the full text search database will be created.\nWait for database creation to finish and then repeat search."));
         updateIndex();
         return;
     }
@@ -168,7 +168,7 @@ void SearchView::search()
         if (!QFile::exists(indexdir + "/htdig.conf"))
         {
             KMessageBox::error(this, i18n("Can not find the htdig configuration file."));
-            kdDebug() << "Can not find the htdig configuration file" << endl;
+            kdDebug() << "Cannot find the htdig configuration file" << endl;
             return;
         }
     }

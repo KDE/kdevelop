@@ -74,10 +74,10 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 	templates_listview->setColumnWidthMode(0, QListView::Maximum);	//to provide horiz scrollbar.
 	
 	m_templatesMenu = new KPopupMenu(templates_listview);
-	m_templatesMenu->insertItem(i18n("&Add To Favourites"), this, SLOT(addTemplateToFavourites()));
+	m_templatesMenu->insertItem(i18n("&Add To Favorites"), this, SLOT(addTemplateToFavourites()));
 	
 	m_favouritesMenu = new KPopupMenu(favourites_iconview);
-	m_favouritesMenu->insertItem(i18n("&Remove Favourite"), this, SLOT(removeFavourite()));
+	m_favouritesMenu->insertItem(i18n("&Remove Favorite"), this, SLOT(removeFavourite()));
 	
     m_pathIsValid=false;
     m_part = part;
