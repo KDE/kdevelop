@@ -31,6 +31,9 @@ public:
     virtual void accept();
     virtual void init(const QString &projectName, const QString &projectLocation);
     virtual QWidget *self();
+private:
+	QString m_name;
+	QString m_projectLocation;
 };
 
 #endif
