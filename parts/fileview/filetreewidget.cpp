@@ -536,8 +536,8 @@ void FileTreeWidget::slotToggleShowVCSFields()
     {
         header()->hide();
 //        setColumnText( 0, QString::null );
-        hideColumn( 2 );
-        hideColumn( 1 );
+	setColumnWidth( 2, 0 );
+	setColumnWidth( 1, 0 );
         setColumnWidth( 0, viewport()->width() ); // Make the column to occupy all the row
 
         triggerUpdate();
