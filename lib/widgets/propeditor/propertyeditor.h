@@ -20,7 +20,6 @@
 #ifndef PROPERTYEDITOR_H
 #define PROPERTYEDITOR_H
 
-#include <qdockwindow.h>
 #include <qwidget.h>
 #include <qstring.h>
 #include <qmap.h>
@@ -35,10 +34,10 @@ class QString;
   Docked window that contains property editor - QTable with customized editors
   */
 
-class PropertyEditor : public QDockWindow  {
+class PropertyEditor : public QWidget  {
    Q_OBJECT
 public:
-    PropertyEditor( Place p = InDock, QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
+    PropertyEditor( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
     ~PropertyEditor();
 
 public slots:

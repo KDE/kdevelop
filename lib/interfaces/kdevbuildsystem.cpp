@@ -19,10 +19,11 @@
 
 #include <qvbox.h>
 #include <qtable.h>
-#include <qdockwindow.h>
+#include <qlayout.h>
 
 #include <kdialogbase.h>
 #include <klocale.h>
+#include <kdialog.h>
 
 #include "kdevbuildsystem.h"
 
@@ -214,8 +215,10 @@ void KDevBuildSystem::updateDefaultBuildWidget( )
 BuildItemConfigWidget::BuildItemConfigWidget( BuildBaseItem *it, QWidget * parent, const char * name )
     :QWidget(parent, name)
 {
-    PropertyEditor *ed = new PropertyEditor(QDockWindow::InDock, this, "item_propeditor");
+    QVBoxLayout *l = new QVBoxLayout(this, 2, 0);
+    PropertyEditor *ed = new PropertyEditor(this, "item_propeditor");
     ed->populateProperties(it->pAttributes());
+    l->addWidget(ed);
 }
 
 void BuildItemConfigWidget::accept( )

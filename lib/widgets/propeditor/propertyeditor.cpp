@@ -18,26 +18,25 @@
 */
 #ifndef PURE_QT
 #include <klocale.h>
+#include <kdebug.h>
 #else
 #include "qlocale.h"
 #endif
  
-#include <qdockwindow.h>
 #include <qtable.h>
 #include <qlayout.h>
 
 #include "propertyeditor.h"
 #include "property.h"
 
-PropertyEditor::PropertyEditor( Place p, QWidget * parent, const char * name, WFlags f):
-    QDockWindow(p, parent, name, f)
+PropertyEditor::PropertyEditor( QWidget * parent, const char * name, WFlags f):
+    QWidget(parent, name, f)
 {
-    setCloseMode(QDockWindow::Always);
-    setResizeEnabled(true);
+    kdDebug() << "Creating property editor" << endl;
+//    setCloseMode(QDockWindow::Always);
+//    setResizeEnabled(true);
 
-    QWidget *container = new QWidget(this);
-
-    table = new QTable(container);
+    table = new QTable(this);
     table->setNumRows(0);
     table->setNumCols(2);
     table->horizontalHeader()->setLabel(0, i18n("Property"));
@@ -45,9 +44,8 @@ PropertyEditor::PropertyEditor( Place p, QWidget * parent, const char * name, WF
     table->setLeftMargin(0);
     table->setColumnReadOnly(0, TRUE);
 
-    QGridLayout *gl = new QGridLayout(container);
+    QGridLayout *gl = new QGridLayout(this);
     gl->addWidget(table, 0, 0);
-    setWidget(container);
 
     props = 0;
 }
