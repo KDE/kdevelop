@@ -37,6 +37,12 @@
             <property name="text">
                 <string>C&amp;apture output</string>
             </property>
+            <property name="accel">
+                <string>Alt+A</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If this is checked, the output of the application will be shown in the application output view, otherwise all output will be ignored.</string>
+            </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
             <property name="name">
@@ -78,10 +84,25 @@
             <property name="name">
                 <cstring>paramEdit</cstring>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;The following placeholders can be used:&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;%D&lt;/b&gt; - The project directory&lt;br&gt;
+&lt;b&gt;%S&lt;/b&gt; - The current filename&lt;br&gt;
+&lt;b&gt;%T&lt;/b&gt; - The current selection&lt;br&gt;
+&lt;b&gt;%W&lt;/b&gt; - The current word under the cursor&lt;br&gt;
+&lt;/p&gt;
+&lt;p&gt;If any of the used placeholders can't be evaluated (for example
+if you use %T but there is no current selection), the tool won't be
+executed.&lt;/p&gt;</string>
+            </property>
         </widget>
         <widget class="QLineEdit" row="1" column="1">
             <property name="name">
                 <cstring>menutextEdit</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The text that appears in the Tools-Menu</string>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="2">
@@ -136,6 +157,9 @@
         <widget class="KURLRequester" row="2" column="1">
             <property name="name">
                 <cstring>execEdit</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The path and name of the application to execute</string>
             </property>
         </widget>
         <widget class="KDevApplicationTree" row="0" column="0" rowspan="1" colspan="2">
