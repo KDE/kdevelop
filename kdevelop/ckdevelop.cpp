@@ -3301,43 +3301,18 @@ void CKDevelop::slotDocumentDone()
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
 {
   messages_widget->insertAtEnd(QCString(buffer,buflen+1));
-  dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
-  // QString str1 = messages_widget->text();
 }
+
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   messages_widget->insertAtEnd(QCString(buffer,buflen+1), CMakeOutputWidget::Diagnostic);
-  dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
-  // QString str1 = messages_widget->text();
 }
+
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   stdin_stdout_widget->insertAtEnd(QCString(buffer,buflen+1));
-//  if (*(buffer+buflen-1) == '\n')
-//    buflen--;
-    
-//  QString str(buffer,buflen+1);
-//  stdin_stdout_widget->insertLine(str);
-//  stdin_stdout_widget->setCursorPosition(stdin_stdout_widget->numLines()-1,0);
-
-//  int x,y;
-//  showOutputView(true);
-//  stdin_stdout_widget->cursorPosition(&x,&y);
-//  QString str(buffer,buflen+1);
-//  stdin_stdout_widget->insertAt(str,x,y);
 }
+
 void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
   stderr_widget->insertAtEnd(QCString(buffer,buflen+1));
-//  if (*(buffer+buflen-1) == '\n')
-//    buflen--;
-    
-//  QString str(buffer,buflen+1);
-//  stderr_widget->insertLine(str);
-//  stderr_widget->setCursorPosition(stderr_widget->numLines()-1,0);
-
-//  int x,y;
-//  showOutputView(true);
-//  stderr_widget->cursorPosition(&x,&y);
-//  QString str(buffer,buflen+1);
-//  stderr_widget->insertAt(str,x,y);
 }
 
 void CKDevelop::slotApplReceivedStdout(const char* buffer)
@@ -3354,14 +3329,6 @@ void CKDevelop::slotApplReceivedStderr(const char* buffer)
 void CKDevelop::slotDebugReceivedStdout(const QString& buffer)
 {
   dbg_widget->insertAtEnd(buffer);
-//  char* buf = (char*)buffer;
-//  int buflen = strlen(buf);
-//  if (*(buf+buflen-1) == '\n')
-//    buflen--;
-
-//  QString str(buf,buflen+1);
-//  dbg_widget->insertLine(str);
-//  dbg_widget->setCursorPosition(dbg_widget->numLines()-1,0);
 }
 #else
 void CKDevelop::slotDebugReceivedStdout(const QString& )
