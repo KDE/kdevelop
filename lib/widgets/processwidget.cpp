@@ -59,12 +59,8 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
                  pal.color(QPalette::Normal, QColorGroup::Mid));
     setPalette(pal);
 
-#if (KDE_VERSION > 305)
     childproc = new KProcess();
     childproc->setUseShell(true);
-#else
-    childproc = new KShellProcess();
-#endif
 
     procLineMaker = new ProcessLineMaker( childproc );
 
@@ -155,7 +151,14 @@ void ProcessWidget::childFinished(bool normal, int status)
             t = ProcessListBoxItem::Diagnostic;
         }
     } else {
+      if ( childproc->signalled() && childproc->exitSignal() == SIGSEGV )
+      {
+        s = i18n("*** Process aborted. Segmentation fault ***");
+      }
+      else
+      {
         s = i18n("*** Process aborted ***");
+      }
         t = ProcessListBoxItem::Error;
     }
 
