@@ -47,6 +47,7 @@ void Lexer::setSource( const QString& source )
     m_source = source;
     m_ptr = 0;
     m_endPtr = m_source.length();
+    m_inPreproc = false;
 
     tokenize();
 }
@@ -295,6 +296,8 @@ void Lexer::skip( int l, int r )
 
 void Lexer::handleDirective( const QString& directive )
 {
+    m_inPreproc = true;
+
     bool skip = skipWordsEnabled();
     bool preproc = preprocessorEnabled();
 
@@ -325,11 +328,19 @@ void Lexer::handleDirective( const QString& directive )
     }
 
     // skip line
-    while( !currentChar().isNull() && currentChar() != '\n' )
-        nextChar();
+    while( !currentChar().isNull() ){
+
+        Token tk;
+        nextToken( tk, true );
+
+        if( currentChar() == '\n' )
+            break;
+    }
 
     m_skipWordsEnabled = skip;
     m_preprocessorEnabled = preproc;
+
+    m_inPreproc = false;
 }
 
 /*

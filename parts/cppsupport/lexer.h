@@ -180,7 +180,7 @@ private:
     friend class Parser;
 }; // class Token
 
-class Lexer 
+class Lexer
 {
 public:
     Lexer( Driver* driver );
@@ -195,12 +195,12 @@ public:
     bool skipWordsEnabled() const;
     void enableSkipWords();
     void disableSkipWords();
-    
+
     bool preprocessorEnabled() const;
     void enablePreprocessor();
     void disablePreprocessor();
-    
-    
+
+
     void resetSkipWords();
     void addSkipWord( const QString& word, SkipType skipType=SkipWord, const QString& str = QString::null );
 
@@ -246,14 +246,14 @@ private:
     int findOperator3() const;
     int findOperator2() const;
     bool eof() const;
-    
+
     // preprocessor (based on an article of Al Stevens on Dr.Dobb's journal)
 #if 0
     int testDefined();
 #endif
     int testIfLevel();
     int macroDefined();
-    
+
     int macroPrimary();
     int macroMultiplyDivide();
     int macroAddSubtract();
@@ -265,7 +265,7 @@ private:
     int macroLogicalAnd();
     int macroLogicalOr();
     int macroExpression();
-    
+
     void handleDirective( const QString& directive );
     void processDefine( Macro& macro );
     void processElse();
@@ -299,6 +299,7 @@ private:
     QMemArray<bool> m_trueTest;
     int m_ifLevel;
     bool m_preprocessorEnabled;
+    bool m_inPreproc;
 
 private:
     Lexer( const Lexer& source );
@@ -501,10 +502,19 @@ inline void Lexer::readIdentifier()
 
 inline void Lexer::readWhiteSpaces( bool skipNewLine )
 {
-    while( currentChar().isSpace() ){
-        if( currentChar() == '\n' && !skipNewLine )
+    while( !currentChar().isNull() ){
+        QChar ch = currentChar();
+
+        if( ch == '\n' && !skipNewLine ){
             break;
-        nextChar();
+        } else if( ch.isSpace() ){
+            nextChar();
+        } else if( m_inPreproc && currentChar() == '\\' ){
+            nextChar();
+            readWhiteSpaces( true );
+        } else {
+            break;
+        }
     }
 }
 
@@ -583,7 +593,7 @@ inline int Lexer::findOperator3() const
 
     if( n >= 3){
 	QChar ch = currentChar(), ch1=peekChar(), ch2=peekChar(2);
-	
+
 	if( ch == '<' && ch1 == '<' && ch2 == '=' ) return Token_assign;
 	else if( ch == '>' && ch1 == '<' && ch2 == '=' ) return Token_assign;
 	else if( ch == '-' && ch1 == '>' && ch2 == '*' ) return Token_ptrmem;
@@ -599,7 +609,7 @@ inline int Lexer::findOperator2() const
 
     if( n>=2 ){
 	QChar ch = currentChar(), ch1=peekChar();
-	
+
 	if( ch == ':' && ch1 == ':' ) return Token_scope;
 	else if( ch == '.' && ch1 == '*' ) return Token_ptrmem;
 	else if( ch == '+' && ch1 == '=' ) return Token_assign;
