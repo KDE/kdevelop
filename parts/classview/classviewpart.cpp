@@ -148,10 +148,12 @@ void ClassViewPart::setupActions( )
         popup->insertSeparator();
     if (hasNewClass)
         popup->insertItem(SmallIcon("classnew"), i18n("Add Class..."), this, SLOT(selectedAddClass()));
+#if 0 /// FIXME: seems that the 'access attribute' of the 'CodeModel' is wrong!!!!!
     if (hasAddMethod)
         popup->insertItem(SmallIcon("methodnew"), i18n("Add Method..."), this, SLOT(selectedAddMethod()));
     if (hasAddAttribute)
         popup->insertItem(SmallIcon("variablenew"), i18n("Add Attribute..."), this, SLOT(selectedAddAttribute()));
+#endif
 
     popup->insertSeparator();
     popup->insertItem(i18n("Graphical Class Hierarchy"), this, SLOT(graphicalClassView()));
