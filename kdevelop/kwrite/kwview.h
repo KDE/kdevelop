@@ -195,6 +195,7 @@ protected slots:
     void updateCursor();
     void updateCursor(PointStruc &newCursor);
     void updateView(int flags, int newXPos = 0, int newYPos = 0);
+    void scroll(int, int);
 //  void scroll2(int, int);
     void wheelEvent(QWheelEvent *);
     void tagLines(int start, int end);
@@ -244,6 +245,7 @@ protected slots:
     int endLine;
     int updateState;
     int updateLines[2];
+    bool bIsPainting;
 
     QPixmap *drawBuffer;
 };

@@ -345,6 +345,7 @@ void KIconBorder::slotGetRange()
 KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
   kWrite = write;
   kWriteDoc = doc;
+  bIsPainting = false;
 
   QWidget::setCursor(ibeamCursor);
   setMouseTracking(true);   //dbg
@@ -579,6 +580,8 @@ void KWriteView::changeXPos(int p) {
 void KWriteView::changeYPos(int p) {
   int dy;
 
+  if ( bIsPainting )
+    return;
   dy = yPos - p;
   yPos = p;
   startLine = yPos / kWriteDoc->fontHeight;
@@ -938,6 +941,11 @@ void KWriteView::focusOutEvent(QFocusEvent *) {
   }
 }
 
+void KWriteView::scroll( int dx, int dy ) {
+  bIsPainting= true;
+  QWidget::scroll( dx, dy );
+}
+
 void KWriteView::keyPressEvent(QKeyEvent *e) {
   VConfig c;
   bool t;
@@ -1218,6 +1226,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   int xStart, xEnd;
   int h;
   int line, y, yEnd;
+  bIsPainting = true;		// toggle scrolling off
 //  bool isVisible;
 
   QRect updateR = e->rect();
@@ -1266,6 +1275,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   }
   paint.end();
   if (cursorOn) paintCursor();
+  bIsPainting = false;		// toggle scrolling on
 }
 
 void KWriteView::resizeEvent(QResizeEvent *) {
