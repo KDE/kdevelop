@@ -21,7 +21,6 @@
 	* qeditor: Added code folding support
 	* qeditor: Added emacs-style indent mode	
 	
->>>>>>> 1.755
 2002-05-25  Harald Fernengel <harry@kdevelop.org>
 	* use KApplicationTree in tools-part to avoid code duplication
 
