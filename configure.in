@@ -86,6 +86,7 @@ doc/de/Makefile \
 doc/fr/Makefile \
 doc/pl/Makefile \
 doc/pt/manual/Makefile \
+doc/pt/programming/Makefile \
 doc/pt/Makefile \
 doc/sv/Makefile \
 doc/Makefile \
