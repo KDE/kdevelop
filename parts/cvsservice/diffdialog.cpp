@@ -62,3 +62,5 @@ QString DiffDialog::revB() const
     else
         return QString::null;
 }
+
+#include "diffdialog.moc"

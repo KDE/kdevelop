@@ -247,7 +247,7 @@ bool ProjectManager::loadProject(const KURL &url)
   if (m_info->m_projectURL.isLocalFile()) {
     // first restore the project session stored in a .kdevses file
     if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), m_info->m_localParts)) {
-      debug("error during restoring of the KDevelop session !\n");
+      qDebug("error during restoring of the KDevelop session !\n");
     }
   }
 

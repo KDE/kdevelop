@@ -26,3 +26,5 @@ void $APPNAME$::goodBye()
 {
     close();
 }
+
+#include "example.moc"

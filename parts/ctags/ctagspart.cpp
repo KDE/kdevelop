@@ -192,7 +192,7 @@ bool CTagsPart::loadTagsFile()
         
     QCString line;
     while (!stream.atEnd()) {
-        line = stream.readLine();
+        line = stream.readLine().latin1();
         //        kdDebug() << "Line: " << line << endl;
         if (!re.match(line))
             continue;

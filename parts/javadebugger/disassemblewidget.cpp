@@ -142,7 +142,7 @@ void DisassembleWidget::getNextDisplay()
     kdDebug(9012) << "DisasssembleWidget::getNextDisplay()" << endl;
 
     if (address_) {
-        Q_ASSERT(currentAddress_);
+        Q_ASSERT(!currentAddress_.isNull());
 
         // restrict this to a managable size - some functions are _big_
         QString endAddress;

@@ -184,7 +184,7 @@ void PascalSupportPart::parse( const QString & fileName )
 {
     kdDebug(9013) << "PascalSupportPart::parse() -- " << fileName << endl;
 
-    std::ifstream stream( fileName );
+    std::ifstream stream( QFile::encodeName( fileName ).data() );
     QCString _fn = fileName.utf8();
     std::string fn( _fn.data() );
 

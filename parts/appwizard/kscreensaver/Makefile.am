@@ -6,6 +6,7 @@ templatedir = ${appwizarddatadir}/templates
 kscreensaver_DATA = kscreensaver.desktop   kscreensaver.png 	kscreensaver.h kscreensaverui.ui  src-Makefile.am	kscreensaver.cpp  kscreensaver.kdevelop subdirs
 
 template_DATA = kscreensaver
+
 DISTCLEANFILES = script.local
 EXTRA_DIST = script
 

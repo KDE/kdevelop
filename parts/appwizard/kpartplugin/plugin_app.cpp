@@ -110,3 +110,5 @@ extern "C"
 KInstance* $APPNAME$Factory::s_instance = 0L;
 
 #include "plugin_$APPNAMELC$.moc"
+
+#include "plugin_app.moc"

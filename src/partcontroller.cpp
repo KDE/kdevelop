@@ -288,7 +288,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 	  className = "KTextEditor::Editor";
 
       // create the object of the desired class
-      KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className));
+      KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className.latin1()));
       KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
       kdDebug(9000) << "Encoding: " << encoding << ", extension: " << extension << endl;
       if (extension && !encoding.isNull())

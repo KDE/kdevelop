@@ -110,3 +110,5 @@ void $APPNAME$::blank()
     erase();
 }
 
+
+#include "kscreensaver.moc"

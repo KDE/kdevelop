@@ -167,7 +167,7 @@ void QEditorPart::setModified(bool modified)
         save->setEnabled(modified);
 
     // same for the reload action
-    KAction *reload = m_currentView->actionCollection()->action(i18n("Reloa&d"));
+    KAction *reload = m_currentView->actionCollection()->action("Reload");
     if ( reload )
         reload->setEnabled(modified);
 

@@ -549,3 +549,5 @@ void CvsServiceImpl::slotProjectOpened()
 
     m_repository->setWorkingCopy( projectDirectory() );
 }
+
+#include "cvsserviceimpl.moc"

@@ -88,3 +88,5 @@ void KatePlugin$APPNAME$::slotInsertHello()
 }
 
 #include "plugin_$APPNAMELC$.moc"
+
+#include "plugin_app.moc"

@@ -376,7 +376,7 @@ void BashCodeCompletion::cursorPositionChanged()
 
 		KRegExp prevReg("[$][\\d\\w]*\\b$");
 
-		if ( prevReg.match(prevText))
+		if ( prevReg.match(prevText.latin1()))
 		{
 
 			// We are in completion mode

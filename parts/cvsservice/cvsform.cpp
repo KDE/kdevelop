@@ -79,3 +79,5 @@ bool CvsForm::mustInitRoot() const
 {
     return init_check->isChecked();
 }
+
+#include "cvsform.moc"

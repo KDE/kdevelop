@@ -12,3 +12,5 @@ $NEWCLASS$::~$NEWCLASS$()
 }
 
 /*$SPECIALIZATION$*/
+
+#include "subclass_template.moc"

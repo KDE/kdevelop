@@ -68,3 +68,5 @@ extern "C"
                              parent, "$APPNAMELC$");
     }
 }
+
+#include "applet.moc"

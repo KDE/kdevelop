@@ -54,3 +54,5 @@ void $APPNAME$Part::paintContent( QPainter& painter, const QRect& rect, bool /*t
 }
 
 #include "$APPNAMELC$_part.moc"
+
+#include "kopart_part.moc"

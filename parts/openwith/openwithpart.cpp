@@ -1,5 +1,7 @@
 #include "openwithpart.h"
 
+#include <qfile.h>
+
 #include <kpopupmenu.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -53,7 +55,7 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
     KTrader::OfferList::Iterator it;
     for (it = offers.begin(); it != offers.end(); ++it)
     {
-      KAction *action = new KAction((*it)->name(), 0, 0, (*it)->desktopEntryPath());
+      KAction *action = new KAction((*it)->name(), 0, 0, QFile::encodeName( (*it)->desktopEntryPath() ).data());
       connect(action, SIGNAL(activated()), this, SLOT(openWithService()));
       action->plug(sub);
     }

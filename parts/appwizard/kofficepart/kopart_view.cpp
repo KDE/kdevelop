@@ -49,3 +49,5 @@ void $APPNAME$View::cut()
 }
 
 #include "$APPNAMELC$_view.moc"
+
+#include "kopart_view.moc"

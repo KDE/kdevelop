@@ -70,3 +70,5 @@ bool TagDialog::force() const
 {
     return forceCheck->isChecked();
 }
+
+#include "tagdialog.moc"

@@ -1,4 +1,5 @@
 
+#include <iostream>
 
 #include "driver.h"
 #include "ast.h"
@@ -12,9 +13,9 @@
 #include <qprocess.h>
 
 #include <catalog.h>
+#include <kdebug.h>
 #include <kstandarddirs.h>
 
-#include <iostream>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -45,14 +46,14 @@ public:
 
     void fileParsed( const QString& fileName )
     {
-        std::cout << (m_generateTags ? "generate tags for " : "checking ") << fileName << std::endl;
+        std::cout << (m_generateTags ? "generate tags for " : "checking ") << QFile::encodeName( fileName ).data() << std::endl;
 
         QValueList<Problem> l = problems( fileName );
         QValueList<Problem>::Iterator it = l.begin();
         while( it != l.end() ){
             const Problem& p = *it;
             ++it;
-            std::cout << fileName << ":" << p.line() << ":" << p.column() << ": " << p.text() << std::endl;
+            std::cout << QFile::encodeName( fileName ).data() << ":" << p.line() << ":" << p.column() << ": " << p.text().latin1() << std::endl;
         }
 
         TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
@@ -212,20 +213,20 @@ int main( int argc, char* argv[] )
 
     QString datadir = stddir.localkdedir() + "/" + KStandardDirs::kde_default( "data" );
     if (! KStandardDirs::makeDir(datadir + "/kdevcppsupport/pcs/")){
-        std::cerr << "*error* " << "could not create " << datadir + "/kdevcppsupport/pcs/" << std::endl << std::endl;
+        kdWarning() << "*error* " << "could not create " << datadir + "/kdevcppsupport/pcs/" << endl << endl;
         return -1;
     }
 
 
     if( !QFile::exists(datadir + "/kdevcppsupport/pcs/") ){
-        std::cerr << "*error* " << datadir + "/kdevcppsupport/pcs/" << " doesn't exists!!" << std::endl << std::endl;
+        kdWarning() << "*error* " << datadir + "/kdevcppsupport/pcs/" << " doesn't exists!!" << endl << endl;
         return -1;
     }
 
     QString dbFileName = datadir + "/kdevcppsupport/pcs/" + argv[ 1 ] + ".db";
     // std::cout << "dbFileName = " << dbFileName << std::endl;
     if( QFile::exists(dbFileName) ){
-        std::cerr << "*error* " << "database " << dbFileName << " already exists!" << std::endl << std::endl;
+        kdWarning() << "*error* " << "database " << dbFileName << " already exists!" << endl << endl;
         return -1;
     }
 
@@ -261,7 +262,7 @@ int main( int argc, char* argv[] )
 
        QDir dir( s );
        if( !dir.exists() ){
-           std::cerr<< "*error* " << "the directory " << dir.path() << " doesn't exists!" << std::endl << std::endl;
+           kdWarning() << "*error* " << "the directory " << dir.path() << " doesn't exists!" << endl << endl;
            continue;
        }
 

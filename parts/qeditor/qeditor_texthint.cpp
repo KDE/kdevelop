@@ -47,7 +47,7 @@ void QEditorTextHint::maybeTip( const QPoint& pt )
 
     QString textHint = m_editorView->computeTextHint( line, column );
 
-    if( textHint )
+    if( !textHint.isNull() )
         tip( QRect(pt, QSize(100,30)), textHint );
 }
 

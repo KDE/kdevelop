@@ -103,11 +103,11 @@ void RegexpTestDialog::checkQRegExp()
 void RegexpTestDialog::checkKRegExp()
 {
     KRegExp rx;
-    if ( !rx.compile( pattern_edit->text() ) ) {
+    if ( !rx.compile( pattern_edit->text().latin1() ) ) {
 	success_label->setText( i18n( "Compile error, your regexp is invalid" ) );
 	return;
     }
-    if ( !rx.match( teststring_edit->text() ) ) {
+    if ( !rx.match( teststring_edit->text().latin1() ) ) {
         success_label->setText( i18n( "No match" ) );
         return;
     }

@@ -32,6 +32,7 @@
 #include <klocale.h>
 
 #include <kprocess.h>
+#include <kdebug.h>
 
 #include <kregexp.h>
 #include <qstring.h>
@@ -52,15 +53,15 @@ using namespace std;
 
 #if defined(DBG_MONITOR)
   #define JDB_MONITOR
-  #define DBG_DISPLAY(X)          {cout << QString(X) << "\n";}
+  #define DBG_DISPLAY(X)          {kdDebug() << QString(X) << endl;}
 #else
-  #define DBG_DISPLAY(X)          {cout << QString(X) << "\n";}
+  #define DBG_DISPLAY(X)          {kdDebug() << QString(X) << endl;}
 #endif
 
 #if defined(JDB_MONITOR)
-  #define JDB_DISPLAY(X)          {cout << QString(X) << "\n";}
+  #define JDB_DISPLAY(X)          {kdDebug() << QString(X) << endl;}
 #else
-  #define JDB_DISPLAY(X)          {cout << QString(X) << "\n";}
+  #define JDB_DISPLAY(X)          {kdDebug() << QString(X) << endl;}
 #endif
 
 
@@ -121,7 +122,7 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
     config_dbgTerminal_           = config->readBoolEntry("Debug on separate tty console", false);
 
 #if defined (JDB_MONITOR)
-    cout << "Connect\n";
+    kdDebug() << "Connect\n";
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
               SLOT(slotDbgStatus(const QString&, int)));
 #endif
@@ -360,7 +361,7 @@ void JDBController::actOnProgramPause(const QString &msg)
        queueCmd(new JDBCommand("locals", NOTRUNCMD, INFOCMD, LOCALS), FALSE);
        executeCmd();
 
-    } else { cout << "Not running\n";}
+    } else { kdDebug() << "Not running\n";}
 }
 
 // **************************************************************************
@@ -410,10 +411,10 @@ char* JDBController::parseLine(char *buf)
 //    memcpy (&sw, buf, sizeof(int));
 
 	if (memcmp(buf, "Brea", 4) == 0) {
-            cout << "Checking for breakpoint\n";
+            kdDebug() << "Checking for breakpoint\n";
             if ((strncmp(buf, "Breakpoint hit: thread", 22) == 0)) {
                 KRegExp ex( "Breakpoint hit: thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*), bci\\=[0-9]*.*\\n[^\\[]*\\[[0-9]*\\] ");
-                if (ex.match( QString(buf))) {
+                if (ex.match( buf)) {
                     DBG_DISPLAY(QString("Breakpoint hit in line ") + ex.group(3));
                     if (stateIsOn(s_appStarting)) {
                         setStateOff(s_appStarting);
@@ -425,11 +426,11 @@ char* JDBController::parseLine(char *buf)
                     if (currentCmd_ && currentCmd_->isARunCmd()) {
                         delete currentCmd_;
                         currentCmd_ = 0;
-                        cout << "Deleting step command\n";
+                        kdDebug() << "Deleting step command\n";
                     }
 
 
-                    emit showStepInSource(QCString(classpath_ + "/" + mainclass_ + ".java"),
+                    emit showStepInSource(QString(classpath_ + "/" + mainclass_ + ".java").latin1(),
                                           atoi(ex.group(3)), "");
                     actOnProgramPause(QString("Reached Breakpoint in line ")+ex.group(3));
 
@@ -439,10 +440,10 @@ char* JDBController::parseLine(char *buf)
             }
     } else if (memcmp(buf, "Step", 4) == 0) {
             if ((strncmp(buf, "Step completed:", 15) == 0)) {
-                cout << "STEP: " << buf << "\n";
+                kdDebug() << "STEP: " << buf << endl;
                 KRegExp ex( " thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*)");
-                if (ex.match( QString(buf))) {
-                    cout << "MATCH\n";
+                if (ex.match( buf)) {
+                    kdDebug() << "MATCH\n";
                     curMethod = ex.group(2),
                     curLine = ex.group(3);
 
@@ -455,7 +456,7 @@ char* JDBController::parseLine(char *buf)
 
                     QString curClass = QString(ex.group(2)).left(QString(ex.group(2)).findRev("."));
                     QString curFile = getFile(curClass);
-                    cout << "Filename: " << curFile <<"\n";
+                    kdDebug() << "Filename: " << curFile <<endl;
                     emit showStepInSource(curFile, atoi(ex.group(3)), "");
 
                     actOnProgramPause(QString("step completed, stopped in ") + ex.group(2));
@@ -497,7 +498,7 @@ char* JDBController::parseBacktrace(char* buf) {
     KRegExp* exp = 0;
     // Check for a new line of stacktrace output first
     exp = new KRegExp( "^ \\[[0-9]+\\][^\\)]+\\)");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
         DBG_DISPLAY(QString("Found some stacktrace output"));
         frameStack_->addItem(exp->group(0));
         stackLineCount++;
@@ -508,9 +509,9 @@ char* JDBController::parseBacktrace(char* buf) {
 
     // If that fails we check if the standard prompt is displayed
     if (stackLineCount > 0) {
-    cout << ">" << *buf<<"\n";
+    kdDebug() << ">" << *buf<<endl;
     exp->compile("^[^ ]+\\[[0-9]+\\]");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
         DBG_DISPLAY(QString("Found end of stacktrace (prompt)"));
 
         if (currentCmd_ && currentCmd_->typeMatch(BACKTRACE)) {
@@ -540,7 +541,7 @@ char* JDBController::parseBacktrace(char* buf) {
 char* JDBController::parseLocalVars(char* buf) {
     KRegExp* exp = 0;
     exp = new KRegExp( "^Local variable information not available. Compile with -g to generate variable information\n");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
         DBG_DISPLAY(QString("No var info available"));
         if (currentCmd_ && currentCmd_->typeMatch(LOCALS)) {
             delete currentCmd_;
@@ -553,7 +554,7 @@ char* JDBController::parseLocalVars(char* buf) {
     }
 
     exp->compile( "^No local variables");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
         DBG_DISPLAY(QString("No locals"));
 
         // wait for prompt
@@ -565,14 +566,14 @@ char* JDBController::parseLocalVars(char* buf) {
     // Seems as if Java outputs some very strange spaces sometimes
     // or \s is partly broken in KRegExp
     exp->compile( "^  ([^ ]+) \\= ([^\\(\n]+)\\s*\\(id\\=[0-9]*\\)");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
         DBG_DISPLAY(QString("Var info:"));
         varLineCount++;
-        cout << "Name: " << exp->group(1) << "\n";
-        cout << "Type: " << exp->group(2) << "\n"; // Remove possible trailing whitespace
+        kdDebug() << "Name: " << exp->group(1) << endl;
+        kdDebug() << "Type: " << exp->group(2) << endl; // Remove possible trailing whitespace
 
         // Queue current var for processing.
-        // cout << "APPENDING: " << exp->group(1) << "\n";
+        // kdDebug() << "APPENDING: " << exp->group(1) << endl;
         nameQueue.append(exp->group(1));
 
         buf += exp->groupEnd(0);
@@ -582,12 +583,12 @@ char* JDBController::parseLocalVars(char* buf) {
     }
 
     exp->compile("^  ([^ ]+) \\= ([^\n]+)");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
         DBG_DISPLAY(QString("Local Var info:"));
 
         varLineCount++;
-        cout << "Name: " << exp->group(1) << "\n";
-        cout << "Type: " << exp->group(2) << "\n"; // Remove possible trailing whitespace
+        kdDebug() << "Name: " << exp->group(1) << endl;
+        kdDebug() << "Type: " << exp->group(2) << endl; // Remove possible trailing whitespace
 
         // primitive type, add directly
         analyzeDump(exp->group(0));
@@ -600,9 +601,9 @@ char* JDBController::parseLocalVars(char* buf) {
 
 
     exp->compile("^([^ ]+)\\[[0-9]+\\] ");
-    if (exp->match( QString(buf))) {
+    if (exp->match(buf)) {
         DBG_DISPLAY(QString("Found end of var dump (prompt)"));
-        cout << ">" << exp->group(0) << "<\n";
+        kdDebug() << ">" << exp->group(0) << "<\n";
         if (currentCmd_ && currentCmd_->typeMatch(LOCALS)) {
             delete currentCmd_;
             currentCmd_ = 0;
@@ -633,7 +634,7 @@ char* JDBController::parseDump(char* buf) {
 
     // compound object
     exp = new KRegExp( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
         DBG_DISPLAY(QString("Found dump info"));
 
         analyzeDump(exp->group(0));
@@ -650,9 +651,9 @@ char* JDBController::parseDump(char* buf) {
 
     // Array element
     exp->compile("^ ([^\\[]+\\[[0-9]+\\]) \\= ([^\n]+)");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
         DBG_DISPLAY(QString("Found dump info"));
-        cout << "Array element: " << exp->group(1) << " - " << exp->group(2) << "\n";
+        kdDebug() << "Array element: " << exp->group(1) << " - " << exp->group(2) << endl;
         analyzeDump(exp->group(0));
 
         if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
@@ -667,7 +668,7 @@ char* JDBController::parseDump(char* buf) {
     }
 
     exp->compile("^No 'this'.  In native or static method\n");
-    if (exp->match( QString(buf))) {
+    if (exp->match( buf)) {
 
         if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
             delete currentCmd_;
@@ -701,19 +702,19 @@ char* JDBController::parseDump(char* buf) {
 void JDBController::analyzeDump(QString data)
 {
 
-  cout << "Parsing dump: " << data << "\n";
+  kdDebug() << "Parsing dump: " << data << endl;
 
   // case a
   // if we have a primitive type we add it to the list of locals directly
   KRegExp *exp = new KRegExp( "^  ([^ \\[]+) \\= ([^\n]+)"); // dup if it's really a var of primitive type
-  if (exp->match(data)) {
+  if (exp->match(data.latin1())) {
       QString name = exp->group(1);
       QString value = exp->group(2);
       JDBVarItem *item = new JDBVarItem();
       item->value = value;
       item->name = name;
       if (!localData[name]) {
-          cout << "inserting local var\n";
+          kdDebug() << "inserting local var" << endl;
           localData.insert(name, item);
       } else { /* The object is already being referred to as a property */ }
       delete exp;
@@ -722,8 +723,8 @@ void JDBController::analyzeDump(QString data)
   }
 
   exp->compile( " ([^ \\[]+)\\[([0-9]+)\\] \\= ([^\n]+)");
-  if (exp->match( QString(data))) {
-      cout << "Array element: " << exp->group(1) << "[" << exp->group(2)<< "] = " << exp->group(3) <<"\n";
+  if (exp->match(data.latin1())) {
+      kdDebug() << "Array element: " << exp->group(1) << "[" << exp->group(2)<< "] = " << exp->group(3) << endl;
 
       QString name = exp->group(1);
 
@@ -734,8 +735,8 @@ void JDBController::analyzeDump(QString data)
       item = localData[name];
       Q_ASSERT((name != 0));
 
-      //cout << "->Appending to: " << name << "\n";
-      //cout << "Which is at: " << (int)item << "\n";
+      //kdDebug() << "->Appending to: " << name << endl;
+      //kdDebug() << "Which is at: " << (int)item << endl;
 
       // item.insertSibling(subItem);
       item->siblings.append(subItem);
@@ -747,13 +748,13 @@ void JDBController::analyzeDump(QString data)
 
 
   exp->compile( "^([^ ]+) \\= instance of ([^[]+)\\[([0-9])+] \\(id\\=[0-9]+\\) {");
-  if (exp->match(data)) {
-      cout << "Array...\n";
-      cout << "Name: " << exp->group(1) << "\n";
-      cout << "Type: " << exp->group(2) << "\n";
-      cout << "Dimension: " << exp->group(3) << "\n";
+  if (exp->match(data.latin1())) {
+      kdDebug() << "Array...\n";
+      kdDebug() << "Name: " << exp->group(1) << endl;
+      kdDebug() << "Type: " << exp->group(2) << endl;
+      kdDebug() << "Dimension: " << exp->group(3) << endl;
 
-      cout << "Adding array to var tree... \n";
+      kdDebug() << "Adding array to var tree... \n";
       JDBVarItem *item = new JDBVarItem();
       item->name = exp->group(1);
       QString name = exp->group(1);
@@ -761,12 +762,12 @@ void JDBController::analyzeDump(QString data)
           item->value="null";
       }
       if (!localData[name]) {
-          cout << "inserting local var " << name << " at " << (int)item << "\n";
+          kdDebug() << "inserting local var " << name << " at " << (int)item << endl;
           localData.insert(name, item);
       } else { /* The object is already being referred to as a property */ }
 
       for (int i=0; i<atoi(exp->group(3)); i++) {
-          cout <<  QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]") << "\n";
+          kdDebug() <<  QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]") << endl;
           nameQueue.append(QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]"));
       }
 
@@ -778,8 +779,8 @@ void JDBController::analyzeDump(QString data)
   // otherwise we need to extract all properties and add the name of the current var
   // and link it with its properties
   exp->compile( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
-  if (exp->match(data)) {
-      cout << "COMPOUND DATA\n";
+  if (exp->match(data.latin1())) {
+      kdDebug() << "COMPOUND DATA" << endl;
       // create a new jdbvaritem for the name of the object and for each property it
       // contains. the object's jdbvaritem has siblings then
       QString name = exp->group(1);
@@ -787,7 +788,7 @@ void JDBController::analyzeDump(QString data)
       if (!localData[name]) {
           /** oops, we should already have added that object @todo insert assertion */
           item = new JDBVarItem();
-          cout << "NAME: " << name << " - " << (int)item <<"\n";
+          kdDebug() << "NAME: " << name << " - " << (int)item << endl;
           item->name = name;
           localData.insert(name, item);
       } else {
@@ -802,10 +803,10 @@ void JDBController::analyzeDump(QString data)
       QString tmp;
       while (i<data.length()) {
          // I guess this is really slow. Using a char* would be better here
-         if (exp->match(data.mid(i))) {
+         if (exp->match(data.mid(i).latin1())) {
              if (strncmp(exp->group(2), "instance of", 11) != 0) {
                  // property of primitive type
-                 cout << "Primitive type...\n";
+                 kdDebug() << "Primitive type..." << endl;
                  QString fullName = name + QString(".") + QString(exp->group(1));
 
                  // create new item
@@ -833,14 +834,14 @@ void JDBController::analyzeDump(QString data)
                      localData.insert(fullName, subItem);
                  } else { /* Oops */ }  /// @todo insert assertion
 
-                 //cout << "->Appending Name: " << name << "." << exp->group(1) << "\n";
-                 //cout << "Value: " << exp->group(2) << " as " << (int)subItem << "\n";
+                 //kdDebug() << "->Appending Name: " << name << "." << exp->group(1) << endl;
+                 //kdDebug() << "Value: " << exp->group(2) << " as " << (int)subItem << endl;
 
                  // get array dimension andn queue elements for parsing
                  KRegExp *exp2 = new KRegExp("\\[([0-9]+)\\]");
                  if (exp2->match(exp->group(2))) {
                      int dimension = atoi(exp2->group(1));
-                     cout << "Array dimension: " << dimension << "\n";
+                     kdDebug() << "Array dimension: " << dimension << endl;
                      for (int i=0; i<dimension; i++) {
                          nameQueue.append(fullName + "[" + QString::number((i)) + "]");
                      }
@@ -852,7 +853,7 @@ void JDBController::analyzeDump(QString data)
              } else {
                  // property of non-primitive type, we will request additional
                  // information later
-                 cout << "complex...\n";
+                 kdDebug() << "complex..." << endl;
                  QString fullName = name + QString(".") + QString(exp->group(1));
                  nameQueue.append(fullName);
 
@@ -862,7 +863,7 @@ void JDBController::analyzeDump(QString data)
                      localData.insert(fullName, subItem);
                  } else { /* Oops */ }  /// @todo insert assertion
 
-                 cout << "appending: " << fullName << " as " << (int)subItem << "\n";
+                 kdDebug() << "appending: " << fullName << " as " << (int)subItem << endl;
 
                  // item.insertSibling(subItem);
                  item->siblings.append(subItem);
@@ -892,8 +893,8 @@ void JDBController::parseLocals()
         DBG_DISPLAY("Issueing newdump command");
         QString varName = nameQueue.first();
         nameQueue.remove(nameQueue.begin());
-        // cout << nameQueue.count() << "\n";
-        queueCmd(new JDBCommand(QCString("dump " + varName), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
+        // kdDebug() << nameQueue.count() << endl;
+        queueCmd(new JDBCommand(QString("dump " + varName).latin1(), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
     } else if (!parsedThis) {
         parsedThis = TRUE;
         queueCmd(new JDBCommand(QCString("dump this"), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
@@ -942,9 +943,9 @@ char *JDBController::parse(char *buf)
 {
 
     if (stateIsOn(s_dbgNotStarted)) {
-        cout << "dbgnotstarted\n";
+        kdDebug() << "dbgnotstarted" << endl;
         // Check for first prompt
-        cout << QString(buf).left(20) << "\n";
+        kdDebug() << QString(buf).left(20) << endl;
         if (QString(buf).left(20) == "Initializing jdb...\n") { return buf+20; }
         if (QString(buf) == "> ") {
             setStateOff(s_dbgNotStarted);
@@ -957,7 +958,7 @@ char *JDBController::parse(char *buf)
 
 
     if (stateIsOn(s_appStarting)) {
-        cout << "appstarting\n";
+        kdDebug() << "appstarting" << endl;
         char* unparsed = buf;
         char* orig = buf;
         while (*buf) {
@@ -974,7 +975,7 @@ char *JDBController::parse(char *buf)
     // If the app is currently running eat all output
     // until we recognize something
     if (stateIsOn(s_appBusy)) {
-        cout << "\nApp busy:\n";
+        kdDebug() << "\nApp busy:" << endl;
         char* unparsed = buf;
         char* orig = buf;
         while (*buf) {
@@ -990,7 +991,7 @@ char *JDBController::parse(char *buf)
 
     } else {
         // assuming app is paused
-        cout << "\nApp is paused:\n";
+        kdDebug() << "\nApp is paused:" << endl;
         char* unparsed = buf;
         char* orig = buf;
         while (*buf) {
@@ -1134,15 +1135,15 @@ void JDBController::slotAttachTo(int)
 // **************************************************************************
 
 void JDBController::slotDebuggerStarted() {
-    cout << "slotRun()\n";
+    kdDebug() << "slotRun()" << endl;
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
     bool first_flag = FALSE;
 
-    cout << "slotRun()\n";
+    kdDebug() << "slotRun()" << endl;
     if (stateIsOn(s_appNotStarted)) {
         first_flag = TRUE;
-        queueCmd(new JDBCommand(QCString("stop in " + mainclass_ + ".main(java.lang.String[])") , NOTRUNCMD, NOTINFOCMD, 0));
+        queueCmd(new JDBCommand(QString("stop in " + mainclass_ + ".main(java.lang.String[])" ).latin1() , NOTRUNCMD, NOTINFOCMD, 0 ) );
     }
 
     queueCmd(new JDBCommand(stateIsOn(s_appNotStarted) ? "run" : "cont", RUNCMD, NOTINFOCMD, 0));
@@ -1173,7 +1174,7 @@ void JDBController::slotRunUntil(const QString &, int)
 
 void JDBController::slotStepInto()
 {
-    cout << "slotStepInstruction\n";
+    kdDebug() << "slotStepInstruction" << endl;
     if (stateIsOn(s_dbgNotStarted) || stateIsOn(s_appBusy) || stateIsOn(s_parsingOutput)) { return; }
     queueCmd(new JDBCommand("stepi", RUNCMD, NOTINFOCMD, 0));
 }
@@ -1187,7 +1188,7 @@ void JDBController::slotStepIntoIns()
 // **************************************************************************
 
 void JDBController::slotStepOver() {
-    cout << "slotStepOver\n";
+    kdDebug() << "slotStepOver" << endl;
     if (stateIsOn(s_appStarting) || stateIsOn(s_dbgNotStarted) || stateIsOn(s_appBusy) || stateIsOn(s_parsingOutput)) { return; }
     queueCmd(new JDBCommand("step", RUNCMD, NOTINFOCMD, 0));
 }
@@ -1311,7 +1312,7 @@ void JDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     }
     // check the queue for any commands to send
     executeCmd();
-    cout << "stdout\n";
+    kdDebug() << "stdout" << endl;
 }
 
 // **************************************************************************
@@ -1320,7 +1321,7 @@ void JDBController::slotDbgStderr(KProcess */*proc*/, char *buf, int/* buflen*/)
 {
     // At the moment, just drop a message out
     // dont and redirect
-    cout << "STDERR\n";
+    kdDebug() << "STDERR\n";
     DBG_DISPLAY(QString("\nSTDERR: ")+QString(buf));
 //    slotDbgStdout(proc, buf, buflen);
 }
@@ -1331,7 +1332,7 @@ void JDBController::slotDbgWroteStdin(KProcess *)
 {
     setStateOff(s_waitForWrite);
     executeCmd();
-    cout << "dbgwrotestdin\n";
+    kdDebug() << "dbgwrotestdin" << endl;
 }
 
 // **************************************************************************
@@ -1363,7 +1364,7 @@ QString JDBController::getFile(QString className)
 
 void JDBController::varUpdateDone()
 {
-    cout << "VarUpdateDone\n";
+    kdDebug() << "VarUpdateDone" << endl;
 
     QString locals = "";
     QDictIterator<JDBVarItem> it(localData); // iterator for dict
@@ -1380,7 +1381,7 @@ void JDBController::varUpdateDone()
     locals[locals.length()-1] = ' '; // remove trailing comma
     char* _l = new char[locals.length()];
     strcpy(_l, locals.latin1());
-    cout << "\nLocals: "<< _l << "\n";
+    kdDebug() << "\nLocals: "<< _l << endl;
 
 
     varTree_->trim();
@@ -1452,7 +1453,7 @@ JDBVarItem::JDBVarItem() {
 
 QString JDBVarItem::toString() {
     if (!value.isEmpty()) {
-        cout << value <<" - ";
+        kdDebug() << value <<" - ";
         return name + " = " + value;
     } else {
         // iterate over siblings and build return string

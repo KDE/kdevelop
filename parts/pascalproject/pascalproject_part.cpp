@@ -293,7 +293,7 @@ void PascalProjectPart::listOfFiles(QStringList &result, QString path) const
     QFileInfoList *entries = const_cast<QFileInfoList*>(d.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden));
     for (QFileInfo *it = entries->first(); it; it = entries->next())
     {
-        if ((it->isDir()) && (!it->filePath() == path))
+        if ((it->isDir()) && (it->filePath() != path))
         {
 //            qWarning("entering dir %s", it->dirPath().latin1());
             listOfFiles(result, it->dirPath());

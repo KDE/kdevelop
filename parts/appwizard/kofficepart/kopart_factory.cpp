@@ -73,3 +73,5 @@ KInstance* $APPNAME$Factory::global()
 }
 
 #include <$APPNAMELC$_factory.moc>
+
+#include "kopart_factory.moc"

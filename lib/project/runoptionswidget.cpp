@@ -133,7 +133,7 @@ void RunOptionsWidget::directoryRadioChanged()
 void RunOptionsWidget::browseCustomDirectory()
 {
     QString path = customRunDirectory_edit->text().stripWhiteSpace();
-    KDirSelectDialog *dlg = new KDirSelectDialog(path, false, this, QString::null, true);
+    KDirSelectDialog *dlg = new KDirSelectDialog(path, false, this, 0L, true);
     dlg->setCaption(i18n("Select Directory"));
 
     if (dlg->exec()) {

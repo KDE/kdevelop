@@ -152,7 +152,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
     configure();
     cmdList_.setAutoDelete(true);
 
-    ASSERT(! debug_controllerExists);
+    Q_ASSERT(! debug_controllerExists);
     debug_controllerExists = true;
 }
 
@@ -174,9 +174,9 @@ GDBController::~GDBController()
 void GDBController::configure()
 {
     // A a configure.gdb script will prevent these from uncontrolled growth...
-    config_configGdbScript_       = DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript");
-    config_runShellScript_        = DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript");
-    config_runGdbScript_          = DomUtil::readEntry(dom, "/kdevdebugger/general/runGdbScript");
+    config_configGdbScript_       = DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript").latin1();
+    config_runShellScript_        = DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript").latin1();
+    config_runGdbScript_          = DomUtil::readEntry(dom, "/kdevdebugger/general/runGdbScript").latin1();
 
 //  add macros for reading QStrings? or in configGdbScript?
     config_forceBPSet_            = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/allowforcedbpset", true);

@@ -199,3 +199,5 @@ extern "C"
 };
 
 #include "$APPNAMELC$_part.moc"
+
+#include "app_part.moc"

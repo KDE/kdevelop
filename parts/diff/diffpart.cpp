@@ -179,7 +179,7 @@ void DiffPart::receivedStderr( KProcess* /* p */, char* buf, int buflen )
 
 void DiffPart::wroteStdin( KProcess* p )
 {
-  buffer = QString::null;
+  buffer = 0L;
   p->closeStdin();
 }
 

@@ -247,3 +247,5 @@ KDevDiffFrontend *CvsPartImpl::diffFrontend() const
     return m_part->diffFrontend();
 }
 
+
+#include "cvspartimpl.moc"

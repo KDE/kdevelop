@@ -230,3 +230,5 @@ void CheckoutDialog::slotModuleSelected( QListViewItem * )
     m_base->moduleEdit->setText( aModuleItem->name() );
 }
 
+
+#include "checkoutdialog.moc"
