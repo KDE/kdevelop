@@ -32,7 +32,8 @@ public:
   COutputWidget(KApplication* a,QWidget* parent);
   /**destructor*/
   ~COutputWidget(){};
- 
+
+  void insertAtEnd(QString s); 
 protected:
   virtual void mouseReleaseEvent(QMouseEvent* event);
   virtual void keyPressEvent ( QKeyEvent* event);

@@ -146,19 +146,22 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
 {
   assert( aClassName != NULL );
 
-  CParsedMethod *aMethod;
   CAddClassMethodDlg dlg(this, "methodDlg" );
   
+  if (bAutosave)
+    saveTimer->stop();
   // Show the dialog and let the user fill it out.
   if( dlg.exec() )
   {
-    aMethod = dlg.asSystemObj();
+    CParsedMethod *aMethod = dlg.asSystemObj();
     aMethod->setDeclaredInClass( aClassName );
 
     slotCVAddMethod( aClassName, aMethod );
 
     delete aMethod;
   }
+  if (bAutosave)
+    saveTimer->start(saveTimeout);
 }
 
 /*-------------------------------------- CKDevelop::slotCVAddMethod()
@@ -310,14 +313,17 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   CAddClassAttributeDlg dlg(this, "attrDlg" );
   CParsedAttribute *aAttr;
 
-  if( dlg.exec() )
-  {
-    aAttr = dlg.asSystemObj();
+  if (bAutosave)
+    saveTimer->stop();
 
-    aAttr->setDeclaredInClass( aClassName );
-  }
-  else
+  if( !dlg.exec() )
     return;
+
+  aAttr = dlg.asSystemObj();
+  aAttr->setDeclaredInClass( aClassName );
+
+  if (bAutosave)
+    saveTimer->start(saveTimeout);
 
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( aClassName );

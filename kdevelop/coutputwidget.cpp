@@ -19,6 +19,13 @@
 
 COutputWidget::COutputWidget(KApplication* a,QWidget* parent) : KEdit(a,parent){
 }
+void COutputWidget::insertAtEnd(QString s)
+{
+  int row = (numLines() == 0)? 0 : numLines()-1;
+  int col = qstrlen(textLine(row));
+
+  insertAt(s, row, col);
+}
 void COutputWidget::mouseReleaseEvent(QMouseEvent*){
   emit clicked();
 }

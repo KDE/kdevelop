@@ -33,7 +33,7 @@ flex
 optional:
 -----------------------
 KDE-SDK
-sgmltools
+sgmltools 1
 Glimpse >= 4.1
 KIconEdit
 KDbg
@@ -42,6 +42,10 @@ enscript
 Gv, Ghostview, KGhostview
 cvs >= 1.10
 
+Note: By default, KDevelop is configured to use kdoc 1 from the kdesdk
+to generate documentation. If you have kdoc 2 installed on your system
+(which takes slightly different arguments), you should configure with
+--enable-kdoc2. On a Debian system, you should use --enable-docbase.
 
 
 4. Installation

@@ -2113,11 +2113,8 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
-  int x,y;
-  messages_widget->cursorPosition(&x,&y);
-  QString str(buffer,buflen+1);
-  messages_widget->insertAt(str,x,y);
-  o_tab_view->setCurrentTab(MESSAGES);
+  messages_widget->insertAtEnd(QString(buffer,buflen+1));
+//  o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
 
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){
@@ -2144,11 +2141,8 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
 //   }
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
-  int x,y;
-  messages_widget->cursorPosition(&x,&y);
-  QString str(buffer,buflen+1);
-  messages_widget->insertAt(str,x,y);
-  o_tab_view->setCurrentTab(MESSAGES);
+  messages_widget->insertAtEnd(QString(buffer,buflen+1));
+//  o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){
 //     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
@@ -2173,18 +2167,32 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
 //   }
 }
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
-  int x,y;
-  showOutputView(true);
-  stdin_stdout_widget->cursorPosition(&x,&y);
+  if (*(buffer+buflen-1) == '\n')
+    buflen--;
+    
   QString str(buffer,buflen+1);
-  stdin_stdout_widget->insertAt(str,x,y);
+  stdin_stdout_widget->insertLine(str);
+  stdin_stdout_widget->setCursorPosition(stdin_stdout_widget->numLines()-1,0);
+
+//  int x,y;
+//  showOutputView(true);
+//  stdin_stdout_widget->cursorPosition(&x,&y);
+//  QString str(buffer,buflen+1);
+//  stdin_stdout_widget->insertAt(str,x,y);
 }
 void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
-  int x,y;
-  showOutputView(true);
-  stderr_widget->cursorPosition(&x,&y);
+  if (*(buffer+buflen-1) == '\n')
+    buflen--;
+    
   QString str(buffer,buflen+1);
-  stderr_widget->insertAt(str,x,y);
+  stderr_widget->insertLine(str);
+  stderr_widget->setCursorPosition(stderr_widget->numLines()-1,0);
+
+//  int x,y;
+//  showOutputView(true);
+//  stderr_widget->cursorPosition(&x,&y);
+//  QString str(buffer,buflen+1);
+//  stderr_widget->insertAt(str,x,y);
 }
 
 

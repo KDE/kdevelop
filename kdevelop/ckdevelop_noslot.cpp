@@ -483,12 +483,18 @@ void CKDevelop::refreshTrees(TFileInfo *info)
   }
 }
 
+#include <iostream.h>
 void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox){
   if (!isUntitled(filename)) {
+    // We consider only symbolic links in directories here,
+    // not links in files or hardlinks. The _real_ solution
+    // is to use devno/inode anyway.
     QFileInfo fi(filename);
-    if (fi.isSymLink())
-        fi.setFile(fi.readLink());
-    filename = fi.absFilePath();
+    QString dirpart = fi.dir(true).canonicalPath();
+    QString filepart = fi.fileName();
+    cout << "Path: " << dirpart << endl;
+    cout << "File: " << filepart << endl;
+    filename = dirpart + "/" + filepart;
   }
 
   lastfile = edit_widget->getName();
