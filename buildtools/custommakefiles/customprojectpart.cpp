@@ -105,6 +105,9 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
                             "Environment variables and make arguments can be specified "
                             "in the project settings dialog, <b>Build Options</b> tab."));
 
+    m_targetObjectFilesMenu = new QPopupMenu();
+    m_targetOtherFilesMenu = new QPopupMenu();
+
     m_makeEnvironmentsSelector = new KSelectAction( i18n("Make &Environment"),0,
                             actionCollection(), "build_make_environment" );
     m_makeEnvironmentsSelector->setToolTip(i18n("Make environment"));
@@ -116,6 +119,10 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
              this, SLOT(updateTargetMenu()) );
     connect( m_targetMenu, SIGNAL(activated(int)),
              this, SLOT(targetMenuActivated(int)) );
+    connect( m_targetObjectFilesMenu, SIGNAL(activated(int)),
+             this, SLOT(targetObjectFilesMenuActivated(int)) );
+    connect( m_targetOtherFilesMenu, SIGNAL(activated(int)),
+             this, SLOT(targetOtherFilesMenuActivated(int)) );
     connect( m_makeEnvironmentsSelector->popupMenu(), SIGNAL(aboutToShow()),
              this, SLOT(updateMakeEnvironmentsMenu()) );
     connect( m_makeEnvironmentsSelector->popupMenu(), SIGNAL(activated(int)),
@@ -271,6 +278,7 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
     }
 
     QFile f(dirName + "/" + projectName + ".filelist");
+
     if (f.open(IO_ReadOnly)) {
         QTextStream stream(&f);
         while (!stream.atEnd()) {
@@ -682,7 +690,11 @@ void CustomProjectPart::slotExecute()
 void CustomProjectPart::updateTargetMenu()
 {
     m_targets.clear();
+    m_targetsObjectFiles.clear();
+    m_targetsOtherFiles.clear();
     m_targetMenu->clear();
+    m_targetObjectFilesMenu->clear();
+    m_targetOtherFilesMenu->clear();
 
     QDomDocument &dom = *projectDom();
     bool ant = DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant";
@@ -733,24 +745,62 @@ void CustomProjectPart::updateTargetMenu()
             {
                 QString tmpTarget=re.cap(1).simplifyWhiteSpace();
 	        kdDebug(9025) << "Adding target: " << tmpTarget << endl;
-                if (m_targets.find(tmpTarget)==m_targets.end())
-                   m_targets += tmpTarget;
+                if (tmpTarget.endsWith(".o"))
+                {
+                   if (m_targetsObjectFiles.find(tmpTarget)==m_targetsObjectFiles.end())
+                      m_targetsObjectFiles += tmpTarget;
+                }
+                else if (tmpTarget.contains('.'))
+                {
+                   if (m_targetsOtherFiles.find(tmpTarget)==m_targetsOtherFiles.end())
+                      m_targetsOtherFiles += tmpTarget;
+                }
+                else
+                {
+                   if (m_targets.find(tmpTarget)==m_targets.end())
+                      m_targets += tmpTarget;
+                }
             }
         }
         f.close();
         m_targets.sort();
+        m_targetsObjectFiles.sort();
+        m_targetsOtherFiles.sort();
     }
+
+    m_targetMenu->insertItem(i18n("Object Files"), m_targetObjectFilesMenu);
+    m_targetMenu->insertItem(i18n("Other Files"), m_targetOtherFilesMenu);
 
     int id = 0;
     QStringList::ConstIterator it;
     for (it = m_targets.begin(); it != m_targets.end(); ++it)
         m_targetMenu->insertItem(*it, id++);
+
+    id = 0;
+    for (it = m_targetsObjectFiles.begin(); it != m_targetsObjectFiles.end(); ++it)
+        m_targetObjectFilesMenu->insertItem(*it, id++);
+
+    id = 0;
+    for (it = m_targetsOtherFiles.begin(); it != m_targetsOtherFiles.end(); ++it)
+        m_targetOtherFilesMenu->insertItem(*it, id++);
 }
 
 
 void CustomProjectPart::targetMenuActivated(int id)
 {
     QString target = m_targets[id];
+    startMakeCommand(buildDirectory(), target);
+}
+
+void CustomProjectPart::targetObjectFilesMenuActivated(int id)
+{
+    QString target = m_targetsObjectFiles[id];
+    startMakeCommand(buildDirectory(), target);
+}
+
+void CustomProjectPart::targetOtherFilesMenuActivated(int id)
+{
+    QString target = m_targetsOtherFiles[id];
     startMakeCommand(buildDirectory(), target);
 }
 
