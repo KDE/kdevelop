@@ -35,6 +35,8 @@
 #include <klocale.h>
 #include <qregexp.h>
 
+#include "qtdesignerpythonintegration.h"
+#include "pythonimplementationwidget.h"
 
 typedef KDevGenericFactory<PythonSupportPart> PythonSupportFactory;
 static const KDevPluginInfo data("kdevpythonsupport");
@@ -53,6 +55,8 @@ PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QS
              this, SLOT(savedFile(const KURL&)) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+  connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+        this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
     KAction *action;
 
@@ -84,6 +88,22 @@ PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QS
 
 PythonSupportPart::~PythonSupportPart()
 {}
+
+
+void PythonSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
+{
+    if (context->hasType(Context::FileContext)){
+        const FileContext *fc = static_cast<const FileContext*>(context);
+        //this is a .ui file and only selection contains only one such file
+        KURL url = fc->urls().first();
+        if (url.fileName().endsWith(".ui"))
+        {
+            m_contextFileName = url.fileName();
+            int id = popup->insertItem(i18n("Create or Select Implementation..."), this, SLOT(slotCreateSubclass()));
+            popup->setWhatsThis(id, i18n("<b>Create or select implementation</b><p>Creates or selects a subclass of selected form for use with integrated KDevDesigner."));
+        }
+    }
+}
 
 
 void PythonSupportPart::projectConfigWidget(KDialogBase *dlg)
@@ -343,6 +363,44 @@ void PythonSupportPart::slotPydoc()
         url += key;
         partController()->showDocument(KURL(url));
     }
+}
+
+KDevDesignerIntegration *PythonSupportPart::designer(KInterfaceDesigner::DesignerType type)
+{
+    KDevDesignerIntegration *des = 0;
+    switch (type)
+    {
+        case KInterfaceDesigner::QtDesigner:
+            des = m_designers[type];
+            if (des == 0)
+            {
+                PythonImplementationWidget *impl = new PythonImplementationWidget(this);
+                des = new QtDesignerPythonIntegration(this, impl);
+                des->loadSettings(*project()->projectDom(),
+                    "kdevpythonsupport/designerintegration");
+                m_designers[type] = des;
+            }
+            break;
+        case KInterfaceDesigner::Glade:
+		    break;
+    }
+    return des;
+
+}
+
+void PythonSupportPart::slotCreateSubclass()
+{
+    QFileInfo fi(m_contextFileName);
+    kdDebug() << k_funcinfo << " file: " << m_contextFileName << " ext: " << fi.extension(false) << endl;
+    if (fi.extension(false) != "ui")
+        return;
+    QtDesignerPythonIntegration *des = dynamic_cast<QtDesignerPythonIntegration*>(designer(KInterfaceDesigner::QtDesigner));
+    if (des)
+    {
+        kdDebug() << "ok: " << des << endl;
+        kdDebug() << "have impl: " << des->selectImplementation(m_contextFileName);
+    }
+    kdDebug() << "end: " << des << endl;
 }
 
 #include "pythonsupportpart.moc"

@@ -17,6 +17,8 @@
 
 class KDialogBase;
 class QStringList;
+class QPopupMenu;
+class Context;
 
 class PythonSupportPart : public KDevLanguageSupport
 {
@@ -25,6 +27,12 @@ class PythonSupportPart : public KDevLanguageSupport
 public:
     PythonSupportPart( QObject *parent, const char *name, const QStringList & );
     ~PythonSupportPart();
+  
+    virtual KDevDesignerIntegration *designer(KInterfaceDesigner::DesignerType type);
+    
+public slots:
+    void contextMenu(QPopupMenu *popup, const Context *context);
+    void slotCreateSubclass();
 
 protected:
     virtual Features features();
@@ -50,6 +58,9 @@ private:
     void startApplication(const QString &program);
     void maybeParse(const QString fileName);
     void parse(const QString &fileName);
+
+    QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*> m_designers;
+    QString m_contextFileName;
 };
 
 #endif
