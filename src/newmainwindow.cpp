@@ -273,8 +273,10 @@ void NewMainWindow::fillWindowMenu()
 	}
 
 	m_windowList << qMakePair( m_pWindowMenu->insertSeparator(), KURL() );
-	
-	KURL::List list = PartController::getInstance()->openURLs();
+ 
+    QStringList string_list = PartController::getInstance()->openURLs().toStringList();
+	string_list.sort();
+    KURL::List list(string_list);
 	KURL::List::Iterator itt = list.begin();
 	while ( itt != list.end() )
 	{
