@@ -659,6 +659,13 @@ public:
    * @since 3.2
    */
    const QPixmap& pixmap() const;
+
+  /**
+   * @return the current dock position.
+   * @since 3.3
+   */
+  KDockWidget::DockPosition currentDockPosition();
+
 public slots:
   /**
    * subject to changes. It doesn't completely work yet without small hacks from within the calling application (Perhaps

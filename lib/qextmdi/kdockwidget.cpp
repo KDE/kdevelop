@@ -1260,6 +1260,11 @@ void KDockWidget::toDesktop()
    manualDock( 0, DockDesktop, 50, p );
 }
 
+KDockWidget::DockPosition KDockWidget::currentDockPosition()
+{
+	return currentDockPos;
+}
+
 void KDockWidget::undock()
 {
 //  kdDebug()<<"KDockWidget::undock()"<<endl;
