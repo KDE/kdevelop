@@ -281,9 +281,10 @@ bool CvsPart::isRegisteredInRepository()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::diffFinished( const QString& diff, const QString& err )
+void CvsPart::diffFinished( const QString& diff, const QString& err, const int processExitCode )
 {
-    if (diff.isNull() && err.isNull() )
+//    if (diff.isNull() && err.isNull() )
+	if (processExitCode)
 	{
         kdDebug(9000) << "cvs diff cancelled" << endl;
         return; // user pressed cancel or an error occured
@@ -697,10 +698,8 @@ void CvsPart::projectConfigWidget( KDialogBase *dlg )
 
 QWidget* CvsPart::newProjectWidget( QWidget *parent )
 {
-	if (!form)
-	{
-		form = new CvsForm( parent );
-	}
+    	form = new CvsForm( parent, "cvsform" );
+
 	return form;
 }
 

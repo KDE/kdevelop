@@ -102,8 +102,8 @@ private:
 	// Returns true if the file or directory indicated in @p url has been registered in the CVS
 	// (if not, returns false since it avoid performing CVS operation)
 	bool isRegisteredInRepository();
-	// Display "cvs diff" results in the diff part.
-	void diffFinished( const QString& diff, const QString& err );
+	// Display "cvs diff" results in the diff part (embedded views).
+	void diffFinished( const QString& diff, const QString& err, const int processExitCode = 0 );
 	// Call this every time a slot for cvs operations starts!! (It will setup the
 	// state (file/dir URL, ...).
 	// It will also display proper error messages so the caller must only exit if
