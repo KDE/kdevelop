@@ -51,7 +51,7 @@ void TextToolsPart::createWidget()
 {
     if (m_widget)
     {
-        mainWindow()->embedSelectView(m_widget, i18n("Text Structure"), i18n("Text structure"));
+//        mainWindow()->embedSelectView(m_widget, i18n("Text Structure"), i18n("Text structure"));
         return;
     }
 
@@ -88,8 +88,9 @@ void TextToolsPart::activePartChanged(KParts::Part *part)
         createWidget();
         m_widget->setMode(TextToolsWidget::LaTeX, rwpart);
     } else if (m_widget) {
-        kdDebug(9030) << "hide output view" << endl;
-        mainWindow()->removeView(m_widget);
+//        kdDebug(9030) << "hide output view" << endl;
+//        mainWindow()->removeView(m_widget);
+        m_widget->clear();
     }
 }
 
