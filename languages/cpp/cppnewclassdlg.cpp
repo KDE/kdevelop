@@ -39,6 +39,9 @@
 #include <klineedit.h>
 #include <kdeversion.h>
 
+//FIXME: remove this!
+#include <kdevapi.h>
+
 #include "kdevlanguagesupport.h"
 #include "kdevproject.h"
 #include "kdevsourceformatter.h"
@@ -1566,7 +1569,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 
   if (dlg.gen_config->reformat_box->isChecked())
   {
-    KDevSourceFormatter *fmt = dlg.m_part->sourceFormatter();
+    KDevSourceFormatter *fmt = dlg.m_part->extension<KDevSourceFormatter>("KDevelop/SourceFormatter");
     if (fmt)
         classImpl = fmt->formatSource(classImpl);
   }
@@ -1767,7 +1770,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 
   if (dlg.gen_config->reformat_box->isChecked())
   {
-    KDevSourceFormatter *fmt = dlg.m_part->sourceFormatter();
+    KDevSourceFormatter *fmt = dlg.m_part->extension<KDevSourceFormatter>("KDevelop/SourceFormatter");
     if (fmt)
         classIntf = fmt->formatSource(classIntf);
   }

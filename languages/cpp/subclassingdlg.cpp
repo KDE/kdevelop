@@ -17,6 +17,7 @@
 #include "store_walker.h"
 #include "cppsupportfactory.h"
 #include "kdevsourceformatter.h"
+#include "kdevapi.h"
 #include "kdevproject.h"
 #include "filetemplate.h"
 #include "codemodel.h"
@@ -431,7 +432,11 @@ void SubclassingDlg::accept()
   }
 
   if (reformat_box->isChecked())
-    buffer = m_cppSupport->sourceFormatter()->formatSource(buffer);
+  {
+    KDevSourceFormatter *fmt = m_cppSupport->extension<KDevSourceFormatter>("KDevelop/SourceFormatter");
+    if (fmt)
+        buffer = fmt->formatSource(buffer);
+  }
 
   if (m_creatingNewSubclass)
     saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".h");
@@ -486,7 +491,11 @@ void SubclassingDlg::accept()
   }
 
   if (reformat_box->isChecked())
-    buffer = m_cppSupport->sourceFormatter()->formatSource(buffer);
+  {
+    KDevSourceFormatter *fmt = m_cppSupport->extension<KDevSourceFormatter>("KDevelop/SourceFormatter");
+    if (fmt)
+      buffer = fmt->formatSource(buffer);
+  }
 
   if (m_creatingNewSubclass)
     saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".cpp");
