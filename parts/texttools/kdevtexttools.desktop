@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Text Tools
+Name=KDevTextTools
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevtexttools
+X-KDevelop-Scope=Global
