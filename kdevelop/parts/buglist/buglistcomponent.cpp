@@ -116,11 +116,10 @@ void BugListComponent::projectSpaceOpened()
             for (Count = 0;Count < projNodes.count ();Count++)
             {
                 QDomElement projElement = projNodes.item(Count).toElement();
-                kdDebug(9040) << "BugList::Checking " << projElement.attribute("name") << endl;
                 if (LastProject == projElement.attribute("name"))
                 {
                     // Found the right project - grab what we need from it.
-                    m_FileName = projElement.attribute("bugfile");
+                    m_FileName = projElement.attribute("relativePath") + projElement.attribute("bugfile");
                 }
             }
         }
@@ -128,9 +127,10 @@ void BugListComponent::projectSpaceOpened()
         {
             // Just one project, use the bug file from that one.
             QDomElement projElement = projNodes.item(0).toElement();
-            kdDebug(9040) << "BugList::BugFile = " << projElement.attribute("bugfile") << endl;
-            m_FileName = projElement.attribute("bugfile");
+            m_FileName = projElement.attribute("relativePath") + projElement.attribute("bugfile");
         }
+
+        kdDebug(9040) << "BugList::BugFile = " << m_FileName << endl;
 
         // Update the attributes if the component is currently running.
         if (m_pBugList)
@@ -170,7 +170,8 @@ void BugListComponent::projectSpaceClosed()
 
 
 /*
-    Use this slot to create an instance of the bug tracking object.
+    Use this slot to create an instance of the bug tracking object, or
+    bring the current instance to the fore if it is already loaded.
 */
 
 void BugListComponent::slotActivate()
@@ -182,6 +183,10 @@ void BugListComponent::slotActivate()
         m_pBugList = new BugList (NULL,"BugList",m_FileName,m_Initials,m_UserName,m_UserEMail);
         connect (m_pBugList, SIGNAL(signalDeactivate()), this, SLOT(slotWidgetClosed()));
         m_pBugList->show ();
+    }
+    else
+    {
+        m_pBugList->setActiveWindow ();
     }
 }
 
