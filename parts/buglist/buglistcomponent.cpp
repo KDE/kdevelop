@@ -25,7 +25,6 @@
 #include <kiconloader.h>
 #include <kdialogbase.h>
 
-//#include "kdevlanguagesupport.h"
 //#include "kdeveditormanager.h"
 //#include "KDevComponentManager.h"
 
@@ -47,10 +46,7 @@ BugListComponent::~BugListComponent()
         delete m_pBugList;
 }
 
-/*KDevLanguageSupport* BugListComponent::languageSupport(){
-	return static_cast<KDevLanguageSupport*>(componentManager()->component("KDevLanguageSupport"));
-}
-
+/*
 ProjectSpace* BugListComponent::projectSpace(){
 	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
 }

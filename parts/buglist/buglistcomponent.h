@@ -43,7 +43,6 @@ public:
     BugListComponent (QObject *parent, const char *name, const QStringList &args);
 //   	BugListComponent (QObject *parent=0, const char *name=0);
     ~BugListComponent();
-//		KDevLanguageSupport* languageSupport();
 //		KDevEditorManager* editorManager();
 //		ProjectSpace* projectSpace();
 		
