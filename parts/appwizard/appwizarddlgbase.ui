@@ -86,6 +86,14 @@
                                 <string></string>
                             </property>
                         </widget>
+                        <widget class="QCheckBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>showAll_box</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Show all project templates</string>
+                            </property>
+                        </widget>
                     </grid>
                 </widget>
                 <widget class="QWidget">
@@ -526,8 +534,6 @@
         </vbox>
     </widget>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>templates_listview</sender>
@@ -601,6 +607,12 @@
         <receiver>AppWizardDialogBase</receiver>
         <slot>favouritesContextMenu(QIconViewItem*,const QPoint&amp;)</slot>
     </connection>
+    <connection>
+        <sender>showAll_box</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>showTemplates(bool)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>author_edit</tabstop>
@@ -627,6 +639,7 @@
     <slot access="protected">favouritesIconViewClicked( QIconViewItem * )</slot>
     <slot access="protected">templatesContextMenu( QListViewItem *, const QPoint &amp;, int )</slot>
     <slot access="protected">favouritesContextMenu( QIconViewItem *, const QPoint &amp; )</slot>
+    <slot>showTemplates(bool)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>

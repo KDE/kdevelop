@@ -75,9 +75,12 @@
 #include "filepropspage.h"
 #include "misc.h"
 #include "dataform.h"
+#include "profilesupport.h"
+
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
-    : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0)
+    : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0), 
+	m_profileSupport(new ProfileSupport(part))
 {
 	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
 
@@ -118,7 +121,6 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     QStringList::Iterator it;
     for (it = m_templateNames.begin(); it != m_templateNames.end(); ++it) {
         kdDebug(9010) << (*it) << endl;
-
 
         ApplicationInfo *info = new ApplicationInfo;
 		info->templateFile = KGlobal::dirs()->findResource("apptemplates", *it);
@@ -304,6 +306,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
 	m_custom_options_layout = new QHBoxLayout( custom_options );
 	m_custom_options_layout->setAutoAdd(true);
+	
+	showTemplates(false);
 }
 
 AppWizardDialog::~AppWizardDialog()
@@ -1185,6 +1189,46 @@ void AppWizardDialog::loadLicenses()
 	}
 	// kdDebug(9000) << "======================== Done loadLicenses" << endl;
 }
+
+void AppWizardDialog::showTemplates(bool all)
+{
+	if (all)
+	{
+		QListViewItemIterator it(templates_listview);
+		while ( it.current() ) {
+			it.current()->setVisible(true);
+			++it;
+		}
+	}
+	else
+	{
+		QPtrListIterator<ApplicationInfo> ait(m_appsInfo);
+		for (; ait.current(); ++ait) 
+		{
+			ait.current()->item->setVisible(m_profileSupport->isInTemplateList(ait.current()->templateName));
+		}
+		
+		QDictIterator<QListViewItem> dit(m_categoryMap);
+		for (; dit.current(); ++dit) 
+		{
+			//checking whether all children are not visible
+			kdDebug() << "check: " << dit.current()->text(0) << endl;
+			bool visible = false;
+			QListViewItemIterator it(dit.current());
+			while ( it.current() ) {
+				if ((it.current()->childCount() == 0) && it.current()->isVisible())
+				{
+					kdDebug() << "	visible: " << it.current()->text(0) << endl;
+					visible = true;
+					break;
+				}
+				++it;
+			}
+			dit.current()->setVisible(visible);
+		}
+	}
+}
+
 
 #include "appwizarddlg.moc"
 

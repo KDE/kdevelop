@@ -24,6 +24,7 @@ class KPopupMenu;
 class QHBoxLayout;
 class KArchiveDirectory;
 class KArchiveFile;
+class ProfileSupport;
 #include <qptrlist.h>
 #include <qdict.h>
 #include <qlineedit.h>
@@ -185,6 +186,11 @@ private: //data
 	QDict<KDevLicense> m_licenses;
 	QDict<KDevVCSIntegrator> m_integrators;
 	QMap<int, VCSDialog*> m_integratorDialogs;
+	
+	ProfileSupport *m_profileSupport;
+
+public slots:
+    virtual void showTemplates(bool all);
 };
 
 #endif
