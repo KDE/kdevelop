@@ -90,8 +90,8 @@ private:
      */
     void saveCurrentDockAndMdiSzenario();
 
-    QWidget*                  m_viewOnLeft;
-    QWidget*                  m_viewOnBottom;
+    QWidget*                  m_pViewOnLeft;
+    QWidget*                  m_pViewOnBottom;
 
     KDevelopCore*             m_pCore;
 

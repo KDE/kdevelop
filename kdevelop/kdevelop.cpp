@@ -41,8 +41,8 @@
 
 KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
 :  QextMdiMainFrm( pParent, name, f)
-   ,m_viewOnLeft(0L)
-   ,m_viewOnBottom(0L)
+   ,m_pViewOnLeft(0L)
+   ,m_pViewOnBottom(0L)
    ,m_pCore(0L)
 {
     m_MDICoverList.setAutoDelete( true);
@@ -475,25 +475,25 @@ void KDevelop::initHelp(){
 void KDevelop::embedWidget(QWidget *pWidget, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation)
 {
     if (role == KDevComponent::SelectView) {
-        addToolWindow( pWidget,                             // tool view
-                       KDockWidget::DockLeft,               // dock site
-                       m_viewOnLeft ? m_viewOnLeft : this,  // target widget
-                       35,                                  // split balance in %
-                       shortExplanation,                    // tab tooltip
-                       shortCaption);                       // tab caption
+        addToolWindow( pWidget,                                                           // tool view
+                       m_pViewOnLeft ? KDockWidget::DockCenter : KDockWidget::DockLeft,   // dock site
+                       m_pViewOnLeft  ? m_pViewOnLeft : this,                             // target widget
+                       35,                                                                // split balance in %
+                       shortExplanation,                                                  // tab tooltip
+                       shortCaption);                                                     // tab caption
 
-        if (!m_viewOnLeft)
-            m_viewOnLeft = pWidget;
+        if (!m_pViewOnLeft)
+            m_pViewOnLeft = pWidget;
     }
     else if (role == KDevComponent::OutputView) {
-        addToolWindow( pWidget,                                 // tool view
-                       KDockWidget::DockBottom,                 // dock site
-                       m_viewOnBottom ? m_viewOnBottom : this,  // target widget
-                       70,                                      // split balance in %
-                       shortExplanation,                        // tab tooltip
-                       shortCaption);                           // tab caption
-        if (!m_viewOnBottom)
-            m_viewOnBottom = pWidget;
+        addToolWindow( pWidget,                                                           // tool view
+                       m_pViewOnBottom ? KDockWidget::DockCenter : KDockWidget::DockBottom,// dock site
+                       m_pViewOnBottom  ? m_pViewOnBottom : this,                         // target widget
+                       70,                                                                // split balance in %
+                       shortExplanation,                                                  // tab tooltip
+                       shortCaption);                                                     // tab caption
+        if (!m_pViewOnBottom)
+            m_pViewOnBottom = pWidget;
     }
     else if (role == KDevComponent::DocumentView) {
         if( getMainDockWidget()->caption() != QString("default")) {
