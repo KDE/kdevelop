@@ -33,6 +33,7 @@
 #include <krun.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
+#include <khtml_settings.h>
 
 #include "resource.h"
 
@@ -57,14 +58,14 @@
 //#include <iostream.h>
 
 int  CDocBrowser::fSize = 12;
-QString CDocBrowser::standardFont;
-QString CDocBrowser::fixedFont;
-QColor CDocBrowser::bgColor;
+QFont CDocBrowser::standardFont;
+QFont CDocBrowser::fixedFont;
+//FB QColor CDocBrowser::bgColor;
 QColor CDocBrowser::textColor;
 QColor CDocBrowser::linkColor;
 QColor CDocBrowser::vLinkColor;
 bool CDocBrowser::underlineLinks;
-bool CDocBrowser::forceDefaults;
+//FB bool CDocBrowser::forceDefaults;
 
 CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   KHTMLPart(parent, name)
@@ -88,6 +89,10 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
           this, SLOT( slotPopupMenu( const QString&, const QPoint & ) ) );
   connect(this, SIGNAL( setWindowCaption ( const QString&) ), this, SLOT( slotSetFileTitle( const QString&) ) );
 
+  KConfig *config = KGlobal::config();
+  KHTMLSettings* htmlsettings = settings();
+  htmlsettings->init(config); // no reset, just additionally
+
   kdDebug() << "End CDocBrowser creation !" << endl;
 }
 
@@ -107,7 +112,7 @@ void CDocBrowser::slotViewInKFM()
   new KRun(currentURL());
 }
 
-void CDocBrowser::showURL(const QString& url, bool /*reload*/)
+void CDocBrowser::showURL(const QString& url, bool reload)
 {
   if (url.isEmpty())
     return;
@@ -148,6 +153,10 @@ void CDocBrowser::showURL(const QString& url, bool /*reload*/)
   if(complete_url.contains("file%3A/"))
     complete_url.replace( QRegExp("file%3A/"), "" );
 
+  if (!reload && (complete_url == old_url)) {
+    return;
+  }
+
   kapp->setOverrideCursor( Qt::waitCursor );
   KURL kurl(complete_url);
   openURL(kurl);
@@ -175,6 +184,7 @@ void CDocBrowser::setDocBrowserOptions(){
   int i, diff;
 
   fSize = config->readNumEntry( "BaseFontSize",12 );
+  config->setGroup( "HTML Settings" ); // conform to KHMTL_Settings
   QFont font (config->readFontEntry("StandardFont"));
   QString mBodyFamily = font.family();
   setStandardFont(mBodyFamily);
@@ -184,22 +194,24 @@ void CDocBrowser::setDocBrowserOptions(){
   diff = fSize - fontSizes()[3];
   for (i=0;i<7; i++)
     fontsizes << fontSizes()[i] + diff;
+  setFontSizes(fontsizes);
 
-    setFontSizes(fontsizes);
 
-
-  bgColor = config->readColorEntry( "BgColor", &white );
+//FB  bgColor = config->readColorEntry( "BgColor", &white );
+  config->setGroup( "General" ); // conform to KHMTL_Settings
   textColor = config->readColorEntry( "TextColor", &black );
-  linkColor = config->readColorEntry( "LinkColor", &blue );
-  vLinkColor = config->readColorEntry( "VLinkColor", &darkMagenta );
+  linkColor = config->readColorEntry( "linkColor", &blue );
+  vLinkColor = config->readColorEntry( "visitedLinkColor", &darkMagenta );
+  config->setGroup( "HTML Settings" ); // conform to KHMTL_Settings
   underlineLinks = config->readBoolEntry( "UnderlineLinks", true );
-  forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
+//FB  forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
 
 //  setFixedFont( fixedFont);
 //  setStandardFont( standardFont );
   setURLCursor( KCursor::handCursor() );
 
-//  KHTMLSettings* htmlsettings=settings();
+  KHTMLSettings* htmlsettings = settings();
+  htmlsettings->init(config); // no reset, just additionally
 //  setDefaultFontBase( fSize );
 //  htmlsettings->setUnderlineLinks(underlineLinks);
 //  setForceDefault( forceDefaults );
@@ -226,7 +238,7 @@ void CDocBrowser::slotDocFontSize(int size){
 //  emit enableMenuItems();
 }
 
-void CDocBrowser::slotDocStandardFont(const QString& n){
+void CDocBrowser::slotDocStandardFont(const QFont& n){
 
   kdDebug() << "CDocBrowser::slotDocStandardFont !" << endl;
 
@@ -239,7 +251,7 @@ void CDocBrowser::slotDocStandardFont(const QString& n){
 //  emit enableMenuItems();
 }
 
-void CDocBrowser::slotDocFixedFont(const QString& n){
+void CDocBrowser::slotDocFixedFont(const QFont& n){
 
   kdDebug() << "CDocBrowser::slotDocFixedFont !" << endl;
 
@@ -247,6 +259,7 @@ void CDocBrowser::slotDocFixedFont(const QString& n){
 //  KHTMLView* htmlview=view();
 //  htmlview->setFixedFont( n );
 //  htmlview->parse();
+  setDocBrowserOptions(); //FB
   showURL(complete_url, true);
 //  busy = true;
 //  emit enableMenuItems();
@@ -264,6 +277,7 @@ void CDocBrowser::slotDocColorsChanged( const QColor &/*bg*/, const QColor &/*te
 //  htmlview->setDefaultTextColors( text, link, vlink );
 //  htmlview->setUnderlineLinks(uline);
 //  htmlview->parse();
+  setDocBrowserOptions();//FB
   showURL(complete_url, true);
 //  busy = true;
 //  emit enableMenuItems();){
@@ -446,8 +460,8 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
       break;
     }
   }
-  connect( cb, SIGNAL( activated( const QString& ) ),
-            SLOT( slotStandardFont( const QString& ) ) );
+//FB  connect( cb, SIGNAL( activated( const QString& ) ),
+//FB            SLOT( slotStandardFont( const QString& ) ) );
 
   label = new QLabel( i18n( "Fixed Font"), this );
   grid1->addWidget(label,2,0);
@@ -467,8 +481,8 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
       break;
     }
   }
-  connect( cb, SIGNAL( activated( const QString& ) ),
-    SLOT( slotFixedFont( const QString& ) ) );
+//FB  connect( cb, SIGNAL( activated( const QString& ) ),
+//FB    SLOT( slotFixedFont( const QString& ) ) );
 
   connect( bg, SIGNAL( clicked( int ) ), SLOT( slotFontSize( int ) ) );
 }
@@ -481,6 +495,7 @@ void CDocBrowserFont::readOptions()
 
   fSize= config->readNumEntry( "BaseFontSize",13 );
 
+  config->setGroup( "HTML Settings" );
   stdName = config->readEntry( "StandardFont" );
   if ( (stdName.family()).isEmpty() )
     stdName = KGlobalSettings::generalFont();
@@ -545,13 +560,14 @@ void CDocBrowserFont::slotApplyPressed()
   config->writeEntry( "BaseFontSize", fSize );
     emit fontSize( fSize );
 
+  config->setGroup( "HTML Settings" ); // conform to KHMTL_Settings
   config->writeEntry( "StandardFont", stdName );
     emit standardFont( stdName );
 
   config->writeEntry( "FixedFont", fixedName );
-    emit fixedFont( fixedName );
 
   config->sync();
+  emit fixedFont( fixedName );
 }
 
 void CDocBrowserFont::slotFontSize( int i )
@@ -589,14 +605,14 @@ CDocBrowserColor::CDocBrowserColor( QWidget *parent, const char *name )
   KColorButton *colorBtn;
   QLabel *label;
 
-  label = new QLabel( i18n("Background Color:"), this );
-  grid1->addWidget(label,0,0);
+//FB  label = new QLabel( i18n("Background Color:"), this );
+//FB  grid1->addWidget(label,0,0);
 
-  colorBtn = new KColorButton( bgColor, this );
-  grid1->addWidget(colorBtn,0,1);
+//FB  colorBtn = new KColorButton( bgColor, this );
+//FB  grid1->addWidget(colorBtn,0,1);
 
-  connect( colorBtn, SIGNAL( changed( const QColor & ) ),
-    SLOT( slotBgColorChanged( const QColor & ) ) );
+//FB  connect( colorBtn, SIGNAL( changed( const QColor & ) ),
+//FB    SLOT( slotBgColorChanged( const QColor & ) ) );
 
   label = new QLabel( i18n("Normal Text Color:"), this );
   grid1->addWidget(label,1,0);
@@ -629,24 +645,25 @@ CDocBrowserColor::CDocBrowserColor( QWidget *parent, const char *name )
   connect( underlineBox, SIGNAL( toggled( bool ) ),
     SLOT( slotUnderlineLinksChanged( bool ) ) );
 
-  QCheckBox *forceDefaultBox = new QCheckBox( i18n("Always use my colors"), this);
-  grid1->addWidget(forceDefaultBox,5,0);
-  forceDefaultBox->setChecked(forceDefault);
-  connect( forceDefaultBox, SIGNAL( toggled( bool ) ),
-    SLOT( slotForceDefaultChanged( bool ) ) );
+//FB  QCheckBox *forceDefaultBox = new QCheckBox( i18n("Always use my colors"), this);
+//FB  grid1->addWidget(forceDefaultBox,5,0);
+//FB  forceDefaultBox->setChecked(forceDefault);
+//FB  connect( forceDefaultBox, SIGNAL( toggled( bool ) ),
+//FB    SLOT( slotForceDefaultChanged( bool ) ) );
 }
 
 void CDocBrowserColor::readOptions()
 {
   KConfig *config = KGlobal::config();
-  config->setGroup( "DocBrowserAppearance" );
 
-  bgColor = config->readColorEntry( "BgColor", &white );
+//FB  bgColor = config->readColorEntry( "BgColor", &white );
+  config->setGroup( "General" ); // conform to KHMTL_Settings
   textColor = config->readColorEntry( "TextColor", &black );
-  linkColor = config->readColorEntry( "LinkColor", &blue );
-  vLinkColor = config->readColorEntry( "VLinkColor", &magenta );
+  linkColor = config->readColorEntry( "linkColor", &blue );
+  vLinkColor = config->readColorEntry( "visitedLinkColor", &magenta );
+  config->setGroup( "HTML Settings" ); // conform to KHMTL_Settings
   underlineLinks = config->readBoolEntry( "UnderlineLinks", TRUE );
-  forceDefault = config->readBoolEntry( "ForceDefaultColors", true );
+//FB  forceDefault = config->readBoolEntry( "ForceDefaultColors", true );
 
   changed = false;
 }
@@ -654,27 +671,28 @@ void CDocBrowserColor::readOptions()
 void CDocBrowserColor::slotApplyPressed()
 {
   KConfig *config = KGlobal::config();
-  config->setGroup( "DocBrowserAppearance" );
 
-  config->writeEntry( "BgColor", bgColor );
+  config->setGroup( "General" );
+//FB  config->writeEntry( "BgColor", bgColor );
   config->writeEntry( "TextColor", textColor );
-  config->writeEntry( "LinkColor", linkColor );
-  config->writeEntry( "VLinkColor", vLinkColor );
+  config->writeEntry( "linkColor", linkColor );
+  config->writeEntry( "visitedLinkColor", vLinkColor );
+  config->setGroup( "HTML Settings" );
   config->writeEntry( "UnderlineLinks", underlineLinks );
-  config->writeEntry( "ForceDefaultColors", forceDefault );
+//FB  config->writeEntry( "ForceDefaultColors", forceDefault );
 
   if ( changed )
-      emit colorsChanged( bgColor, textColor, linkColor, vLinkColor,
-                underlineLinks, forceDefault );
+      emit colorsChanged( /*bgColor*/QColor(), textColor, linkColor, vLinkColor,
+                underlineLinks, /*forceDefault*/false );
 
   config->sync();
 }
 
 void CDocBrowserColor::slotBgColorChanged( const QColor &col )
 {
-  if ( bgColor != col )
-          changed = true;
-  bgColor = col;
+//FB  if ( bgColor != col )
+//FB          changed = true;
+//FB  bgColor = col;
 }
 
 void CDocBrowserColor::slotTextColorChanged( const QColor &col )
@@ -707,9 +725,9 @@ void CDocBrowserColor::slotUnderlineLinksChanged( bool ulinks )
 
 void CDocBrowserColor::slotForceDefaultChanged( bool force )
 {
-  if ( forceDefault != force )
-          changed = true;
-  forceDefault = force;
+//FB  if ( forceDefault != force )
+//FB          changed = true;
+//FB  forceDefault = force;
 }
 
 //-----------------------------------------------------------------------------

@@ -58,8 +58,8 @@ protected:
 
 public slots:
   void slotDocFontSize(int);
-  void slotDocStandardFont(const QString&);
-  void slotDocFixedFont(const QString&);
+  void slotDocStandardFont(const QFont&);
+  void slotDocFixedFont(const QFont&);
   void slotDocColorsChanged(const QColor&, const QColor&,
                             const QColor&, const QColor&, const bool, const bool);
   void slotPopupMenu( const QString&, const QPoint & );
@@ -93,8 +93,8 @@ protected:
 private:
   // html view preferences
   static int  fSize;
-  static QString standardFont;
-  static QString fixedFont;
+  static QFont standardFont;
+  static QFont fixedFont;
 
   static QColor bgColor;
   static QColor textColor;
@@ -174,12 +174,12 @@ private:
 	void	readOptions();
 
 private:
-	QColor bgColor;
+//FB	QColor bgColor;
 	QColor textColor;
 	QColor linkColor;
 	QColor vLinkColor;
 	bool   underlineLinks;
-  bool   forceDefault;
+//FB  bool   forceDefault;
 	bool   changed;
 };
 

@@ -2257,16 +2257,16 @@ void CKDevelop::slotOptionsDocBrowser(){
 
    connect( browserOptions.fontOptions, SIGNAL(fontSize(int)),
      pDocBr, SLOT(slotDocFontSize( int )) );
-   connect( browserOptions.fontOptions, SIGNAL(standardFont( const QString& )),
-     pDocBr, SLOT(slotDocStandardFont( const QString& )) );
-   connect( browserOptions.fontOptions, SIGNAL(fixedFont( const QString& )),
-     pDocBr, SLOT(slotDocFixedFont( const QString& )) );
+   connect( browserOptions.fontOptions, SIGNAL(standardFont( const QFont& )),
+     pDocBr, SLOT(slotDocStandardFont( const QFont& )) );
+   connect( browserOptions.fontOptions, SIGNAL(fixedFont( const QFont& )),
+     pDocBr, SLOT(slotDocFixedFont( const QFont& )) );
    connect( browserOptions.colorOptions, SIGNAL(colorsChanged(const QColor&, const QColor&,
       const QColor&, const QColor&, const bool, const bool)),
      pDocBr, SLOT(slotDocColorsChanged(const QColor&, const QColor&,
                 const QColor&, const QColor&, const bool, const bool)) );
 
-   browserOptions.show();
+   browserOptions.exec();
    slotStatusMsg(i18n("Ready."));
 }
 
@@ -2274,7 +2274,7 @@ void CKDevelop::slotOptionsToolsConfigDlg(){
 	slotStatusMsg(i18n("Configuring Tools-Menu entries..."));
 //  CToolsConfigDlg* configdlg= new CToolsConfigDlg(this,"configdlg");
 	CToolsConfigDlg configdlg(this,"configdlg");
-	configdlg.show();
+	configdlg.exec();
 
 	tools_menu->clear();
 	setToolmenuEntries();

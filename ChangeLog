@@ -1,3 +1,7 @@
+2002-02-14  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: documentation browser settings dialog works again
+      (but KHTML uses changed settings only after restart of KHTMLPart, needs improvement in kdelibs/khtml!)
+
 2002-02-13  F@lk Brettschneider <falk@kdevelop.org>
     * applied August Hoerandl's <august.hoerandl@gmx.at> patch for better regular expression for KDE2-codecompletion
 
