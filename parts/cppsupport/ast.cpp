@@ -41,17 +41,17 @@ void NameAST::setGlobal( bool b )
     m_global = b;
 }
 
-void NameAST::setNestedName( AST::Ptr& nestedName )
+void NameAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
 {
     m_nestedName = nestedName;
 }
 
-AST* NameAST::nestedName()
+NestedNameSpecifierAST* NameAST::nestedName()
 {
     return m_nestedName.get();
 }
     
-void NameAST::setUnqualifedName( AST::Ptr& unqualifiedName )
+void NameAST::setUnqualifedName( AST::Node& unqualifiedName )
 {
     m_unqualifiedName = unqualifiedName;
 }
@@ -80,7 +80,7 @@ LinkageBodyAST::~LinkageBodyAST()
 {
 }
 
-void LinkageBodyAST::addDeclaration( DeclarationAST::Ptr& ast )
+void LinkageBodyAST::addDeclaration( DeclarationAST::Node& ast )
 {
     if( !ast.get() )
         return;
@@ -112,7 +112,7 @@ LinkageBodyAST* LinkageSpecificationAST::linkageBody()
     return m_linkageBody.get();
 }
 
-void LinkageSpecificationAST::setLinkageBody( LinkageBodyAST::Ptr& linkageBody )
+void LinkageSpecificationAST::setLinkageBody( LinkageBodyAST::Node& linkageBody )
 {
     m_linkageBody = linkageBody;
 }
@@ -122,7 +122,7 @@ DeclarationAST* LinkageSpecificationAST::declaration()
     return m_declaration.get();
 }
 
-void LinkageSpecificationAST::setDeclaration( DeclarationAST::Ptr& decl )
+void LinkageSpecificationAST::setDeclaration( DeclarationAST::Node& decl )
 {
     m_declaration = decl;
 }
@@ -137,7 +137,7 @@ TranslationUnitAST::~TranslationUnitAST()
 {
 }
 
-void TranslationUnitAST::addDeclaration( DeclarationAST::Ptr& ast )
+void TranslationUnitAST::addDeclaration( DeclarationAST::Node& ast )
 {
     if( !ast.get() )
         return;
@@ -169,7 +169,7 @@ LinkageBodyAST* NamespaceAST::linkageBody()
     return m_linkageBody.get();
 }
 
-void NamespaceAST::setLinkageBody( LinkageBodyAST::Ptr& linkageBody )
+void NamespaceAST::setLinkageBody( LinkageBodyAST::Node& linkageBody )
 {
     m_linkageBody = linkageBody;
 }
@@ -199,7 +199,7 @@ NameAST* NamespaceAliasAST::aliasName()
     return m_aliasName.get();
 }
 
-void NamespaceAliasAST::setAliasName( NameAST::Ptr& name )
+void NamespaceAliasAST::setAliasName( NameAST::Node& name )
 {
     m_aliasName = name;
 }
@@ -229,7 +229,7 @@ NameAST* UsingAST::name()
     return m_name.get();
 }
 
-void UsingAST::setName( NameAST::Ptr& name )
+void UsingAST::setName( NameAST::Node& name )
 {
     m_name = name;
 }
@@ -248,7 +248,7 @@ NameAST* UsingDirectiveAST::name()
     return m_name.get();
 }
 
-void UsingDirectiveAST::setName( NameAST::Ptr& name )
+void UsingDirectiveAST::setName( NameAST::Node& name )
 {
     m_name = name;
 }
@@ -266,7 +266,7 @@ AST* TypedefAST::typeSpec()
     return m_typeSpec.get();
 }
 
-void TypedefAST::setTypeSpec( AST::Ptr& typeSpec )
+void TypedefAST::setTypeSpec( AST::Node& typeSpec )
 {
     m_typeSpec = typeSpec;
 }
@@ -276,7 +276,7 @@ AST* TypedefAST::initDeclaratorList()
     return m_initDeclaratorList.get();
 }
 
-void TypedefAST::setInitDeclaratorList( AST::Ptr& initDeclaratorList )
+void TypedefAST::setInitDeclaratorList( AST::Node& initDeclaratorList )
 {
     m_initDeclaratorList = initDeclaratorList;
 }
@@ -290,7 +290,7 @@ TemplateArgumentListAST::~TemplateArgumentListAST()
 {
 }
 
-void TemplateArgumentListAST::addArgument( AST::Ptr& arg )
+void TemplateArgumentListAST::addArgument( AST::Node& arg )
 {
     if( !arg.get() )
         return;
@@ -324,7 +324,7 @@ AST* TemplateDeclarationAST::templateParameterList()
     return m_templateParameterList.get();
 }
 
-void TemplateDeclarationAST::setTemplateParameterList( AST::Ptr& templateParameterList )
+void TemplateDeclarationAST::setTemplateParameterList( AST::Node& templateParameterList )
 {
     m_templateParameterList = templateParameterList;
 }
@@ -334,8 +334,55 @@ DeclarationAST* TemplateDeclarationAST::declaration()
     return m_declaration.get();
 }
 
-void TemplateDeclarationAST::setDeclaration( DeclarationAST::Ptr& declaration )
+void TemplateDeclarationAST::setDeclaration( DeclarationAST::Node& declaration )
 {
     m_declaration = declaration;
+}
+
+// ------------------------------------------------------------------------
+ClassOrNamespaceNameAST::ClassOrNamespaceNameAST()
+{
+}
+
+ClassOrNamespaceNameAST::~ClassOrNamespaceNameAST()
+{
+}
+
+AST* ClassOrNamespaceNameAST::name()
+{
+    return m_name.get();
+}
+
+void ClassOrNamespaceNameAST::setName( AST::Node& name )
+{
+    m_name = name;
+}
+
+TemplateArgumentListAST* ClassOrNamespaceNameAST::templateArgumentList()
+{
+    return m_templateArgumentList.get();
+}
+
+void ClassOrNamespaceNameAST::setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList )
+{
+    m_templateArgumentList = templateArgumentList;
+}
+
+// ------------------------------------------------------------------------
+NestedNameSpecifierAST::NestedNameSpecifierAST()
+{
+    m_classOrNamespaceNameList.setAutoDelete( true );
+}
+
+NestedNameSpecifierAST::~NestedNameSpecifierAST()
+{
+}
+
+void NestedNameSpecifierAST::addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName )
+{
+    if( !classOrNamespaceName.get() )
+        return;
+	
+    m_classOrNamespaceNameList.append( classOrNamespaceName.release() );
 }
 

@@ -84,7 +84,7 @@ void BackgroundParser::run()
     Parser parser( m_reporter, &driver,  &lexer );
     parser.setFileName( m_fileName );
 
-    TranslationUnitAST::Ptr translationUnit;
+    TranslationUnitAST::Node translationUnit;
     parser.parseTranslationUnit( translationUnit );
     
     // a simple test

@@ -17,10 +17,22 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
+template <class T> typename T::Node CreateNode()
+{
+    typename T::Node node( new T );
+    return node;
+}
+
+template <class T> typename T::Node NullNode()
+{
+    typename T::Node node;
+    return node;
+}
+
 class AST
 {
 public:
-    typedef std::auto_ptr<AST> Ptr;
+    typedef std::auto_ptr<AST> Node;
     
 public:
     AST();
@@ -41,10 +53,74 @@ private:
     void operator = ( const AST& source );
 };
 
+class TemplateArgumentListAST: public AST
+{
+public:
+    typedef std::auto_ptr<TemplateArgumentListAST> Node;
+    
+public:
+    TemplateArgumentListAST();
+    virtual ~TemplateArgumentListAST();
+    
+    void addArgument( AST::Node& arg );
+    QPtrList<AST> arguments() { return m_arguments; }
+    
+private:
+    QPtrList<AST> m_arguments;
+    
+private:
+    TemplateArgumentListAST( const TemplateArgumentListAST& source );
+    void operator = ( const TemplateArgumentListAST& source );
+};
+
+class ClassOrNamespaceNameAST: public AST
+{
+public:
+    typedef std::auto_ptr<ClassOrNamespaceNameAST> Node;
+    
+public:
+    ClassOrNamespaceNameAST();
+    virtual ~ClassOrNamespaceNameAST();
+    
+    AST* name();
+    void setName( AST::Node& name );
+    
+    TemplateArgumentListAST* templateArgumentList();
+    void setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList );
+                
+private:
+    AST::Node m_name;
+    TemplateArgumentListAST::Node m_templateArgumentList;
+    
+private:
+    ClassOrNamespaceNameAST( const ClassOrNamespaceNameAST& source );
+    void operator = ( const ClassOrNamespaceNameAST& source );
+};
+
+class NestedNameSpecifierAST: public AST
+{
+public:
+    typedef std::auto_ptr<NestedNameSpecifierAST> Node;
+    
+public:
+    NestedNameSpecifierAST();
+    virtual ~NestedNameSpecifierAST();
+    
+    void addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName );
+    QPtrList<ClassOrNamespaceNameAST> classOrNamespaceNameList() { return m_classOrNamespaceNameList; }
+                    
+private:
+    QPtrList<ClassOrNamespaceNameAST> m_classOrNamespaceNameList;
+    
+private:
+    NestedNameSpecifierAST( const NestedNameSpecifierAST& source );
+    void operator = ( const NestedNameSpecifierAST& source );
+};
+
 class NameAST: public AST
 {
 public:
-    typedef std::auto_ptr<NameAST> Ptr;
+    typedef std::auto_ptr<NameAST> Node;
     
 public:
     NameAST();
@@ -53,16 +129,16 @@ public:
     bool isGlobal() const;
     void setGlobal( bool b );
     
-    void setNestedName( AST::Ptr& nestedName );
-    AST* nestedName();
+    void setNestedName( NestedNameSpecifierAST::Node& nestedName );
+    NestedNameSpecifierAST* nestedName();
     
-    void setUnqualifedName( AST::Ptr& unqualifiedName );
+    void setUnqualifedName( AST::Node& unqualifiedName );
     AST* unqualifiedName();
     
 private:
     bool m_global;
-    AST::Ptr m_nestedName;
-    AST::Ptr m_unqualifiedName;
+    NestedNameSpecifierAST::Node m_nestedName;
+    AST::Node m_unqualifiedName;
     
 private:
     NameAST( const NameAST& source );
@@ -72,7 +148,7 @@ private:
 class DeclarationAST: public AST
 {
 public:
-    typedef std::auto_ptr<DeclarationAST> Ptr;
+    typedef std::auto_ptr<DeclarationAST> Node;
     
 public:
     DeclarationAST();
@@ -86,13 +162,13 @@ private:
 class LinkageBodyAST: public AST
 {
 public:
-    typedef std::auto_ptr<LinkageBodyAST> Ptr;
+    typedef std::auto_ptr<LinkageBodyAST> Node;
     
 public:
     LinkageBodyAST();
     virtual ~LinkageBodyAST();
     
-    void addDeclaration( DeclarationAST::Ptr& ast );
+    void addDeclaration( DeclarationAST::Node& ast );
     QPtrList<DeclarationAST> declarations() { return m_declarations; }
     
 private:
@@ -106,7 +182,7 @@ private:
 class LinkageSpecificationAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<LinkageSpecificationAST> Ptr;
+    typedef std::auto_ptr<LinkageSpecificationAST> Node;
     
 public:
     LinkageSpecificationAST();
@@ -116,15 +192,15 @@ public:
     void setExternType( const QString& type );
     
     LinkageBodyAST* linkageBody();
-    void setLinkageBody( LinkageBodyAST::Ptr& linkageBody );
+    void setLinkageBody( LinkageBodyAST::Node& linkageBody );
     
     DeclarationAST* declaration();
-    void setDeclaration( DeclarationAST::Ptr& decl );
+    void setDeclaration( DeclarationAST::Node& decl );
     
 private:
     QString m_externType;
-    LinkageBodyAST::Ptr m_linkageBody;
-    DeclarationAST::Ptr m_declaration;
+    LinkageBodyAST::Node m_linkageBody;
+    DeclarationAST::Node m_declaration;
         
 private:
     LinkageSpecificationAST( const LinkageSpecificationAST& source );
@@ -134,7 +210,7 @@ private:
 class NamespaceAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<NamespaceAST> Ptr;
+    typedef std::auto_ptr<NamespaceAST> Node;
     
 public:
     NamespaceAST();
@@ -144,11 +220,11 @@ public:
     void setNamespaceName( const QString& name );
     
     LinkageBodyAST* linkageBody();
-    void setLinkageBody( LinkageBodyAST::Ptr& linkageBody );
+    void setLinkageBody( LinkageBodyAST::Node& linkageBody );
     
 private:
     QString m_namespaceName;
-    LinkageBodyAST::Ptr m_linkageBody;
+    LinkageBodyAST::Node m_linkageBody;
     
 private:
     NamespaceAST( const NamespaceAST& source );
@@ -158,7 +234,7 @@ private:
 class NamespaceAliasAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<NamespaceAliasAST> Ptr;
+    typedef std::auto_ptr<NamespaceAliasAST> Node;
     
 public:
     NamespaceAliasAST();
@@ -168,11 +244,11 @@ public:
     void setNamespaceName( const QString& name );
     
     NameAST* aliasName();
-    void setAliasName( NameAST::Ptr& name );
+    void setAliasName( NameAST::Node& name );
     
 private:
     QString m_namespaceName;
-    NameAST::Ptr m_aliasName;
+    NameAST::Node m_aliasName;
     
 private:
     NamespaceAliasAST( const NamespaceAliasAST& source );
@@ -182,7 +258,7 @@ private:
 class UsingAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<UsingAST> Ptr;
+    typedef std::auto_ptr<UsingAST> Node;
     
 public:
     UsingAST();
@@ -192,11 +268,11 @@ public:
     void setTypename( bool b );
     
     NameAST* name();
-    void setName( NameAST::Ptr& name );
+    void setName( NameAST::Node& name );
     
 private:
     bool m_typename;
-    NameAST::Ptr m_name;
+    NameAST::Node m_name;
     
 private:
     UsingAST( const UsingAST& source );
@@ -206,17 +282,17 @@ private:
 class UsingDirectiveAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<UsingDirectiveAST> Ptr;
+    typedef std::auto_ptr<UsingDirectiveAST> Node;
     
 public:
     UsingDirectiveAST();
     virtual ~UsingDirectiveAST();
         
     NameAST* name();
-    void setName( NameAST::Ptr& name );
+    void setName( NameAST::Node& name );
     
 private:
-    NameAST::Ptr m_name;
+    NameAST::Node m_name;
     
 private:
     UsingDirectiveAST( const UsingDirectiveAST& source );
@@ -226,51 +302,31 @@ private:
 class TypedefAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<TypedefAST> Ptr;
+    typedef std::auto_ptr<TypedefAST> Node;
     
 public:
     TypedefAST();
     virtual ~TypedefAST();
     
     AST* typeSpec();
-    void setTypeSpec( AST::Ptr& typeSpec );
+    void setTypeSpec( AST::Node& typeSpec );
     
     AST* initDeclaratorList();
-    void setInitDeclaratorList( AST::Ptr& initDeclaratorList );
+    void setInitDeclaratorList( AST::Node& initDeclaratorList );
     
 private:
-    AST::Ptr m_typeSpec;
-    AST::Ptr m_initDeclaratorList;
+    AST::Node m_typeSpec;
+    AST::Node m_initDeclaratorList;
     
 private:
     TypedefAST( const TypedefAST& source );
     void operator = ( const TypedefAST& source );
 };
 
-class TemplateArgumentListAST: public AST
-{
-public:
-    typedef std::auto_ptr<TemplateArgumentListAST> Ptr;
-    
-public:
-    TemplateArgumentListAST();
-    virtual ~TemplateArgumentListAST();
-    
-    void addArgument( AST::Ptr& arg );
-    QPtrList<AST> arguments() { return m_arguments; }
-    
-private:
-    QPtrList<AST> m_arguments;
-    
-private:
-    TemplateArgumentListAST( const TemplateArgumentListAST& source );
-    void operator = ( const TemplateArgumentListAST& source );
-};
-
 class TemplateDeclarationAST: public DeclarationAST
 {
 public:
-    typedef std::auto_ptr<TemplateDeclarationAST> Ptr;
+    typedef std::auto_ptr<TemplateDeclarationAST> Node;
     
 public:
     TemplateDeclarationAST();
@@ -280,15 +336,15 @@ public:
     void setExport( bool b );
     
     AST* templateParameterList();
-    void setTemplateParameterList( AST::Ptr& templateParameterList );
+    void setTemplateParameterList( AST::Node& templateParameterList );
     
     DeclarationAST* declaration();
-    void setDeclaration( DeclarationAST::Ptr& declaration );
+    void setDeclaration( DeclarationAST::Node& declaration );
     
 private:
     bool m_export;
-    AST::Ptr m_templateParameterList;
-    DeclarationAST::Ptr m_declaration;
+    AST::Node m_templateParameterList;
+    DeclarationAST::Node m_declaration;
     
 private:
     TemplateDeclarationAST( const TemplateDeclarationAST& source );
@@ -298,13 +354,13 @@ private:
 class TranslationUnitAST: public AST
 {
 public:
-    typedef std::auto_ptr<TranslationUnitAST> Ptr;
+    typedef std::auto_ptr<TranslationUnitAST> Node;
     
 public:
     TranslationUnitAST();
     virtual ~TranslationUnitAST();
     
-    void addDeclaration( DeclarationAST::Ptr& ast );
+    void addDeclaration( DeclarationAST::Node& ast );
     QPtrList<DeclarationAST> declarations() { return m_declarations; }
     
 private:
