@@ -100,3 +100,16 @@ if test "$enable_docbase" = "yes"; then
   AC_DEFINE_UNQUOTED(WITH_DOCBASE)
 fi
 ])
+
+
+dnl
+dnl Needed to make am_edit work
+dnl
+AC_DEFUN(KDE_CHECK_FINAL,
+[
+  KDE_USE_FINAL_TRUE="#"
+  KDE_USE_FINAL_FALSE=""
+  AC_SUBST(KDE_USE_FINAL_TRUE)
+  AC_SUBST(KDE_USE_FINAL_FALSE)
+])   
+

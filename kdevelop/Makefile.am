@@ -85,19 +85,19 @@ messages:
 # don't install a list of file. Just one file per install.
 # if you have more of them, create a subdirectory with an extra Makefile 
 install-data-local: 
-	$(mkinstalldirs) $(DESTDIR)$(APPSDIR)/kdevelop
-	$(INSTALL_DATA) kdevelop.kdelnk $(DESTDIR)$(APPSDIR)/kdevelop
-	$(INSTALL_DATA) kdevelop-setup.kdelnk $(DESTDIR)$(APPSDIR)/kdevelop
-	$(INSTALL_DATA) .directory $(DESTDIR)$(APPSDIR)/kdevelop
-	$(mkinstalldirs) $(DESTDIR)$(kde_icondir)
-	$(INSTALL_DATA) kdevelop.xpm $(DESTDIR)$(kde_icondir)
-	$(INSTALL_DATA) kdevelop-project.xpm $(DESTDIR)$(kde_icondir)	
-	$(mkinstalldirs) $(DESTDIR)$(kde_minidir)
-	$(INSTALL_DATA) mini-kdevelop.xpm $(DESTDIR)$(kde_minidir)/kdevelop.xpm
-	$(mkinstalldirs) $(DESTDIR)$(kde_confdir)
-	$(INSTALL_DATA) kdeveloprc $(DESTDIR)$(kde_confdir)/kdeveloprc
-	$(mkinstalldirs) $(DESTDIR)$(kde_mimedir)/application	
-	$(INSTALL_DATA) x-kdevelop-project.kdelnk $(DESTDIR)$(kde_mimedir)/application/
+	$(mkinstalldirs) $(APPSDIR)/kdevelop
+	$(INSTALL_DATA) kdevelop.kdelnk $(APPSDIR)/kdevelop
+	$(INSTALL_DATA) kdevelop-setup.kdelnk $(APPSDIR)/kdevelop
+	$(INSTALL_DATA) .directory $(APPSDIR)/kdevelop
+	$(mkinstalldirs) $(kde_icondir)
+	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)
+	$(INSTALL_DATA) kdevelop-project.xpm $(kde_icondir)	
+	$(mkinstalldirs) $(kde_minidir)
+	$(INSTALL_DATA) mini-kdevelop.xpm $(kde_minidir)/kdevelop.xpm
+	$(mkinstalldirs) $(kde_confdir)
+	$(INSTALL_DATA) kdeveloprc $(kde_confdir)/kdeveloprc
+	$(mkinstalldirs) $(kde_mimedir)/application	
+	$(INSTALL_DATA) x-kdevelop-project.kdelnk $(kde_mimedir)/application/
 
 # remove ALL you have installed in install-data-local or install-exec-local
 uninstall-local:
