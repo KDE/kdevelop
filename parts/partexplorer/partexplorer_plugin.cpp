@@ -57,7 +57,7 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
 
 PartExplorerPlugin::~PartExplorerPlugin()
 {
-    delete m_widget;
+//    delete m_widget;
 }
 
 void PartExplorerPlugin::slotShowWidget()
