@@ -21,6 +21,8 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <klineedit.h>
+#include <kstdguiitem.h>
+#include <kdeversion.h>
 
 #include "kdevplugin.h"
 #include "domutil.h"
@@ -39,7 +41,11 @@ ShellInsertDialog::ShellInsertDialog()
     KButtonBox *buttonbox = new KButtonBox(this);
     start_button = buttonbox->addButton(i18n("&Start"));
     start_button->setDefault(true);
+#if KDE_IS_VERSION( 3, 2, 90 )
+    cancel_button = buttonbox->addButton(KStdGuiItem::cancel());
+#else
     cancel_button = buttonbox->addButton(i18n("Cancel"));
+#endif
     buttonbox->layout();
     layout->addWidget(buttonbox);
 

@@ -28,6 +28,8 @@
 #include <klistbox.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kstdguiitem.h>
+#include <kdeversion.h>
 
 #include "kdevplugin.h"
 #include "kdevcore.h"
@@ -86,7 +88,11 @@ CTagsDialog::CTagsDialog(CTagsPart *part)
     actionBox->addStretch();
     QPushButton *regenerateButton = actionBox->addButton(i18n("&Regenerate"));
     regenerateButton->setDefault(true);
+#if KDE_IS_VERSION( 3, 2, 90 )
+    QPushButton *cancelButton = actionBox->addButton(KStdGuiItem::close());
+#else
     QPushButton *cancelButton = actionBox->addButton(i18n("Close"));
+#endif
     actionBox->addStretch();
     actionBox->layout();
 

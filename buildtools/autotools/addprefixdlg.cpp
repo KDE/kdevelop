@@ -18,6 +18,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
+#include <kdeversion.h>
 
 AddPrefixDialog::AddPrefixDialog( const QString& nameEdit, const QString& pathEdit,
         QWidget *parent, const char *name)
@@ -53,8 +54,13 @@ AddPrefixDialog::AddPrefixDialog( const QString& nameEdit, const QString& pathEd
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
+#if KDE_IS_VERSION( 3, 2, 90 )
+    m_pOk = buttonbox->addButton(KStdGuiItem::ok());
+    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel());
+#else
     m_pOk = buttonbox->addButton(KStdGuiItem::ok().text());
     QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel().text());
+#endif
     m_pOk->setDefault(true);
     connect( m_pOk, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), this, SLOT(reject()) );

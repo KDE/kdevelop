@@ -18,6 +18,7 @@
 #include <kbuttonbox.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kstdguiitem.h>
 
 CcaseCommentDlg::CcaseCommentDlg(bool bCheckin)
   : QDialog(0, "", true)
@@ -40,11 +41,16 @@ CcaseCommentDlg::CcaseCommentDlg(bool bCheckin)
     _check = new QCheckBox("Reserve", this);
     layout2->addWidget(_check);
   }
-  
+
   KButtonBox *buttonbox = new KButtonBox(this);
   buttonbox->addStretch();
+#if KDE_IS_VERSION( 3, 2, 90 )
+  QPushButton *ok = buttonbox->addButton(KStdGuiItem::ok());
+  QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel());
+#else
   QPushButton *ok = buttonbox->addButton(i18n("OK"));
   QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
+#endif
   connect(ok, SIGNAL(clicked()), SLOT(accept()) );
   connect(cancel, SIGNAL(clicked()), SLOT(reject()) );
   ok->setDefault(true);

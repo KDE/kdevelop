@@ -48,8 +48,13 @@ CommitDialog::CommitDialog()
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
+#if KDE_IS_VERSION( 3, 2, 90 )
+    QPushButton *ok = buttonbox->addButton(KStdGuiItem::ok());
+    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel());
+#else
     QPushButton *ok = buttonbox->addButton(KStdGuiItem::ok().text());
     QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel().text());
+#endif
     connect( ok, SIGNAL(clicked()), SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
     ok->setDefault(true);

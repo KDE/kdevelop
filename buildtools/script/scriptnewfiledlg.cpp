@@ -22,6 +22,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kstdguiitem.h>
+#include <kdeversion.h>
 
 #include "scriptprojectpart.h"
 #include "filetemplate.h"
@@ -43,14 +45,19 @@ ScriptNewFileDialog::ScriptNewFileDialog(ScriptProjectPart *part,
 
     usetemplate_box = new QCheckBox(i18n("&Use file template"), this);
     usetemplate_box->setChecked(true);
-        
+
     QFrame *frame = new QFrame(this);
     frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
+#if KDE_IS_VERSION( 3, 2, 90 )
+    QPushButton *ok_button = buttonbox->addButton(KStdGuiItem::ok());
+    QPushButton *cancel_button = buttonbox->addButton(KStdGuiItem::cancel());
+#else
     QPushButton *ok_button = buttonbox->addButton(i18n("&OK"));
     QPushButton *cancel_button = buttonbox->addButton(i18n("Cancel"));
+#endif
     ok_button->setDefault(true);
     connect( ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
@@ -90,7 +97,7 @@ void ScriptNewFileDialog::accept()
     }
 
     bool success = false;
-    
+
     if (usetemplate_box->isChecked()) {
         QString extension = QFileInfo(destpath).extension();
         if (!FileTemplate::exists(m_part, extension)) {
@@ -110,7 +117,7 @@ void ScriptNewFileDialog::accept()
 
     kdDebug(9015) << "AddFile1: " << fileName << endl;
     m_part->addFile(fileName);
-    
+
     QDialog::accept();
 }
 

@@ -31,6 +31,7 @@
 #include <kstandarddirs.h>
 #include <kprocess.h>
 #include <kdeversion.h>
+#include <kstdguiitem.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -47,16 +48,16 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     setCaption(i18n("Documentation Index"));
 
     QLabel *term_label = new QLabel(i18n("Search term:"), this);
-    
+
     term_combo = new KComboBox(true, this);
     term_combo->setFocus();
     QFontMetrics fm(fontMetrics());
     term_combo->setMinimumWidth(fm.width('X')*40);
 
     QApplication::setOverrideCursor(waitCursor);
-    
+
     readKDocIndex();
-    
+
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
     QStringList books = dirs->findAllResources("docindices", QString::null, false, true);
 
@@ -65,7 +66,7 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
         readIndexFromFile(*bit);
 
     QApplication::restoreOverrideCursor();
-    
+
     QVButtonGroup *book_group = new QVButtonGroup(this);
     book_group->setExclusive(false);
 
@@ -86,7 +87,7 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     ident_box->setChecked(true);
     file_box = new QCheckBox(i18n("&File index"), category_group);
     file_box->setChecked(true);
-    
+
     connect( concept_box, SIGNAL(toggled(bool)), this, SLOT(choiceChanged()) );
     connect( ident_box, SIGNAL(toggled(bool)), this, SLOT(choiceChanged()) );
     connect( file_box, SIGNAL(toggled(bool)), this, SLOT(choiceChanged()) );
@@ -99,8 +100,14 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
+#if KDE_IS_VERSION( 3, 2, 90 )
+    QPushButton *ok_button = buttonbox->addButton(KStdGuiItem::ok());
+    QPushButton *cancel_button = buttonbox->addButton(KStdGuiItem::cancel());
+#else
     QPushButton *ok_button = buttonbox->addButton(i18n("&OK"));
     QPushButton *cancel_button = buttonbox->addButton(i18n("Cancel"));
+#endif
+
     ok_button->setDefault(true);
     connect( ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
@@ -116,7 +123,7 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     indices.setAutoDelete(true);
     m_part = part;
     choiceChanged();
-    
+
     if (m_part->project())
         readConfig();
 }
@@ -170,7 +177,7 @@ void DocIndexDialog::storeConfig()
     QDomDocument &dom = *m_part->projectDom();
     QDomElement docEl = dom.documentElement();
     QDomElement doctreeviewEl = docEl.namedItem("kdevdoctreeview").toElement();
-    
+
     QDomElement indexbooksEl = doctreeviewEl.namedItem("indexbooks").toElement();
     if (indexbooksEl.isNull()) {
         indexbooksEl = dom.createElement("indexbooks");
@@ -241,7 +248,7 @@ void DocIndexDialog::readKDocEntryList(FILE *f,
     char buf[1024];
     int pos0;
     QString classname, membername, base, filename;
-    
+
     while (fgets(buf, sizeof buf, f)) {
         QString s = buf;
         if (s.left(pos0=11) == "<BASE URL=\"") {
@@ -286,7 +293,7 @@ void DocIndexDialog::readIndexFromFile(const QString &fileName)
 {
     QFileInfo fi(fileName);
     QString name = fi.baseName();
-    
+
     QFile f(fileName);
     if (!f.open(IO_ReadOnly)) {
         kdDebug(9002) << "Could not read doc index: " << fileName << endl;
@@ -298,11 +305,11 @@ void DocIndexDialog::readIndexFromFile(const QString &fileName)
         kdDebug() << "Not a valid kdevelopindex file: " << fileName << endl;
         return;
     }
-    
+
     f.close();
 
     kdDebug(9002) << "Parsing: " << fileName << endl;
-    
+
     DocIndex *index = new DocIndex;
     indices.append(index);
 
@@ -346,7 +353,7 @@ void DocIndexDialog::accept()
 
     if (term.isEmpty())
         return;
-    
+
     QPtrListIterator<QCheckBox> cit(books_boxes);
     QPtrListIterator<DocIndex> iit(indices);
     for (; cit.current() && iit.current(); ++cit,++iit)
@@ -375,12 +382,12 @@ void DocIndexDialog::accept()
         KMessageBox::sorry(this, i18n("Term not found in the indices."));
         return;
     }
-    
+
     m_part->partController()->showDocument(KURL(url));
 
     if (m_part->project())
         storeConfig();
-    
+
     QDialog::accept();
 }
 
@@ -388,7 +395,7 @@ void DocIndexDialog::accept()
 void DocIndexDialog::choiceChanged()
 {
     QStringList completions;
-    
+
     QPtrListIterator<QCheckBox> cit(books_boxes);
     QPtrListIterator<DocIndex> iit(indices);
     for (; cit.current() && iit.current(); ++cit,++iit)
@@ -400,7 +407,7 @@ void DocIndexDialog::choiceChanged()
             if (file_box->isChecked())
                 completions += (*iit)->fileNames;
         }
-    
+
     term_combo->completionObject()->setItems(completions);
 }
 #include "docindexdlg.moc"

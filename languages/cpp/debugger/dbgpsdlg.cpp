@@ -20,6 +20,8 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kprocess.h>
+#include <kstdguiitem.h>
+#include <kdeversion.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -64,9 +66,15 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     pids_->setFont(KGlobalSettings::fixedFont());
 
     KButtonBox *buttonbox = new KButtonBox(this, Qt::Horizontal, 5);
+#if KDE_IS_VERSION( 3, 2, 90 )
+    QPushButton *ok       = buttonbox->addButton(KStdGuiItem::ok());
+    buttonbox->addStretch();
+    QPushButton *cancel   = buttonbox->addButton(KStdGuiItem::cancel());
+#else
     QPushButton *ok       = buttonbox->addButton(i18n("OK"));
     buttonbox->addStretch();
     QPushButton *cancel   = buttonbox->addButton(i18n("Cancel"));
+#endif
     buttonbox->layout();
     topLayout->addWidget(buttonbox);
 
