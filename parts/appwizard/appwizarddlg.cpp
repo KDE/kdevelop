@@ -478,6 +478,7 @@ void AppWizardDialog::accept()
 	m_pCurrentAppInfo->subMap.insert("VERSION", version_edit->text());
 	m_pCurrentAppInfo->subMap.insert("LICENSE", license_combo->currentText() );
 	m_pCurrentAppInfo->subMap.insert( "I18N", "i18n" );
+	m_pCurrentAppInfo->subMap.insert("YEAR", QString::number( QDate::currentDate().year() ) );
 
 	QStringList cleanUpSubstMap;
 	cleanUpSubstMap << "src" << "I18N" << "kdevelop";
