@@ -557,20 +557,22 @@ void MainWindow::removeView(QWidget *view)
     // Note: this reparenting is necessary. Otherwise, the view gets
     // deleted twice: once when the wrapper is deleted, and the second
     // time when the part is deleted.
+    view->hide();
     view->reparent(this, QPoint(0,0), false);
 
     // Find the KDockWidget which covers the KMdiChildView to remove and delete.
     // Undock the KDockWidget if there is one.
     // This will remove the corresponding tab from the output and tree views.
-    KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
-    if (pDock) {
-      pDock->undock();
-      delete pDock;
-    }
+
+    //KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
+    //if (pDock) {
+    //  pDock->undock();
+    //  delete pDock;
+    //}
 
     // QextMDI removes and deletes the wrapper widget
     // removed by robe.. seems that this fix the crash when exit from gideon in MDI mode
-    // closeWindow(wrapper);
+    closeWindow(wrapper);
   }
 }
 
