@@ -17,6 +17,7 @@
 #include <kcmdlineargs.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
+#include <kiconloader.h>
 
 #include <kdevapi.h>
 #include <kdevplugin.h>
@@ -361,19 +362,19 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
 
 QStringList PluginController::argumentsFromService( const KService::Ptr &service )
 {
-    QStringList args;
-    if ( !service ) 
-        // service is a reference to a pointer, so a check whether it is 0 is still required
-        return args;
-    QVariant prop = service->property( "X-KDevelop-Args" );
-    if ( prop.isValid() )
-        args = QStringList::split( " ", prop.toString() );
-    return args;
+	QStringList args;
+	if ( !service ) 
+		// service is a reference to a pointer, so a check whether it is 0 is still required
+		return args;
+	QVariant prop = service->property( "X-KDevelop-Args" );
+	if ( prop.isValid() )
+		args = QStringList::split( " ", prop.toString() );
+	return args;
 }
 
 void PluginController::slotConfigWidget( KDialogBase* dlg )
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("Plugins"));
+	QVBox *vbox = dlg->addVBoxPage( i18n("Plugins"), i18n("Plugins"), DesktopIcon("kdf") );
   PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadGlobalPlugins()) );

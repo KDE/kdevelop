@@ -25,6 +25,8 @@ namespace KTextEditor
   class Editor; 
 }
 
+namespace Kate { class Document; }
+
 class QTabWidget;
 class QPopupMenu;
 class KAction;
@@ -62,8 +64,11 @@ public:
 
   KURL::List openURLs();
 
+  bool querySaveFiles();
+  
   void saveAllFiles();
   void saveFiles( const KURL::List & list);
+  bool saveFile( const KURL & url, bool force = false );
   
   void revertAllFiles();
   void revertFiles( const KURL::List & list );
@@ -76,24 +81,25 @@ public:
   ////////////////////////////////////////
   
   bool readyToClose();
-  void reinstallPopups();
 
 
 public slots:
 
-  void slotCurrentChanged(QWidget *w);
   void slotActivePartChanged( KParts::Part* part );
   void slotCloseWindow();
   void slotCloseOtherWindows();
   void slotCloseAllWindows();
+
+  void slotSave();
+  void slotReload();
 
 protected:
 
   ~PartController();
 
 private slots:
-
-	void slotWaitForFactoryHack();
+  
+  void slotWaitForFactoryHack();
 
   void slotSaveAllFiles();
   void slotRevertAllFiles();
@@ -113,12 +119,10 @@ private slots:
   void slotPartRemoved( KParts::Part* );
 
   void slotUploadFinished();
-//  void slotFileNameChanged();
 
   void updateMenuItems();
 
-  void dirty( const QString& fileName );
-  void slotFileDirty( const KURL & url );
+  void slotDocumentDirty( Kate::Document * doc, bool isModified, unsigned char reason );
   void slotNewStatus();
 
 private:
@@ -128,30 +132,27 @@ private:
   void setupActions();
 
   bool closeFilesDialog( KURL::List const & ignoreList );
-  
-//  QPopupMenu *contextPopupMenu();
+  bool saveFilesDialog( KURL::List const & ignoreList );
   
   void doEmitState( KURL const & );
 
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName = QString::null );
   KTextEditor::Editor * createEditorPart(bool activate);
 
-  void integratePart(KParts::Part *part, const KURL &url, QWidget* widget = 0L, bool isTextEditor=false, bool activate=true );
+  void integratePart(KParts::Part *part, const KURL &url, QWidget* widget = 0, bool isTextEditor=false, bool activate=true );
 
   // returns a list of modified documents
   KURL::List modifiedDocuments();
   void clearModified( KURL::List const & filelist );
   
   bool isDirty( KURL const & url );
+  bool reactToDirty( KURL const & url, bool isModified );
     
-  void revertFile(KParts::Part *part);
-  void saveFile(KParts::Part *part);
-
+  void reloadFile( const KURL &, bool force = false );
+  
   KURL storedURLForPart( KParts::ReadOnlyPart * );
   void updatePartURL( KParts::ReadOnlyPart * );
   bool partURLHasChanged( KParts::ReadOnlyPart * );
-  void updateTimestamp( KURL const & );
-  void removeTimestamp( KURL const & );
   
   static PartController *s_instance;
 
@@ -160,16 +161,13 @@ private:
   KRecentFilesAction *m_openRecentAction;
   QString m_presetEncoding;
 
-  DocumentationPart *findDocPart(const QString &context);
-
   KToolBarPopupAction* m_backAction;
   KToolBarPopupAction* m_forwardAction;
   
-  KDirWatch* dirWatcher;
-  
   bool m_openNextAsText;
   
-  QMap< KURL, QDateTime > accessTimeMap;
+  QValueList<KParts::ReadWritePart*> _dirtyDocuments;
+  
   QMap< KParts::ReadOnlyPart*, KURL > _partURLMap;	// used to note when a URL changes (a file changes name)
   
   QGuardedPtr<KParts::Factory> _editorFactory;

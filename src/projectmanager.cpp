@@ -27,6 +27,7 @@ class QDomDocument;
 #include <ktempfile.h>
 #include <kmenubar.h>
 #include <kstatusbar.h>
+#include <kiconloader.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -147,15 +148,15 @@ void ProjectManager::slotOpenProject()
 
 void ProjectManager::slotProjectOptions()
 {
-  KDialogBase dlg(KDialogBase::TreeList, i18n("Project Options"),
+	KDialogBase dlg(KDialogBase::IconList, i18n("Project Options"),
                   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
                   "project options dialog");
 
-    QVBox *box = dlg.addVBoxPage(i18n("General"));
+	QVBox *box = dlg.addVBoxPage( i18n("General"), i18n("General"), DesktopIcon("kdevelop") );
     GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
     connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
 
-  QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
+  QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), DesktopIcon("kdf") );
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
   vbox = dlg.addVBoxPage(i18n("Languages"));
   LanguageSelectWidget *lw = new LanguageSelectWidget(*API::getInstance()->projectDom(), vbox, "language selection widget");
@@ -338,10 +339,7 @@ bool ProjectManager::closeProject( bool exiting )
 		m_pProjectSession->saveToFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() );
 	}
   
-//  if ( !PartController::getInstance()->querySaveFiles() )	
-// @todo - use querySaveFiles instead, less confusing name. 
-// closeAllFiles() doesn't actually close, it only asks
-  if ( !PartController::getInstance()->closeAllFiles() )
+  if ( !PartController::getInstance()->querySaveFiles() )
     return false;
 
   Core::getInstance()->doEmitProjectClosed();

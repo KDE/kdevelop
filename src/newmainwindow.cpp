@@ -44,15 +44,10 @@
 #include <ktabwidget.h>
 #include <kparts/part.h>
 #include <kdockwidget.h>
-
-#if (KDE_VERSION > 305)
 #include <knotifydialog.h>
-#endif
-
 #include <kedittoolbar.h>
 
 #include "kdevplugin.h"
-
 #include "projectmanager.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
@@ -334,7 +329,7 @@ void NewMainWindow::createFramework() {
     PartController::createInstance( this );
 
     connect(this, SIGNAL(viewActivated(KMdiChildView*)), this, SLOT(slotViewActivated(KMdiChildView*)) );
-    connect(this, SIGNAL(currentChanged(QWidget*)), PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
+//     connect(this, SIGNAL(currentChanged(QWidget*)), PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
 //    connect(this, SIGNAL(sigCloseWindow(const QWidget *)), PartController::getInstance(),SLOT(slotClosePartForWidget(const QWidget *)));
     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(createGUI(KParts::Part*)));
 }
@@ -479,12 +474,10 @@ static KDockWidget::DockPosition getDockWidgetDockingBorder( QWidget * w )
 	{
 		if ( KDockWidget * dockWidget = dynamic_cast<KDockWidget*>( w ) )
 		{
-			if ( dockWidget->currentDockPosition() == KDockWidget::DockLeft ||
-				dockWidget->currentDockPosition() == KDockWidget::DockRight ||
-				dockWidget->currentDockPosition() == KDockWidget::DockBottom ||
-				dockWidget->currentDockPosition() == KDockWidget::DockTop )
+			KDockWidget::DockPosition pos = dockWidget->currentDockPosition();
+			if ( pos == KDockWidget::DockLeft || pos == KDockWidget::DockRight || pos == KDockWidget::DockBottom || pos == KDockWidget::DockTop )
 			{
-				return dockWidget->currentDockPosition();
+				return pos;
 			}
 		}
 		depth++;

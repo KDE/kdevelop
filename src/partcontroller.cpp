@@ -73,16 +73,10 @@ struct HistoryEntry {
 PartController::PartController(QWidget *parent)
   : KDevPartController(parent), _editorFactory(0L)
 {
-  dirWatcher = new KDirWatch( this );
-
-//  connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(updateMenuItems()));
-//  connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(updateMenuItems()));
   connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part* )) );
   connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part* )) );
   connect(this, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
-  connect(dirWatcher, SIGNAL(dirty(const QString&)), this, SLOT(dirty(const QString&)));
-  connect(this, SIGNAL(fileDirty(const KURL& )), this, SLOT(slotFileDirty(const KURL&)) );
-
+  
   setupActions();
   
   m_Current = m_history.end();
@@ -123,7 +117,7 @@ void PartController::setupActions()
     ac, "file_open_recent" );
   m_openRecentAction->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(m_openRecentAction->text())).arg(i18n("Opens recently opened file.")));
   m_openRecentAction->loadEntries( kapp->config(), "RecentFiles" );
-
+  
   m_saveAllFilesAction = new KAction(i18n("Save Al&l"), 0,
     this, SLOT(slotSaveAllFiles()),
     ac, "file_save_all");
@@ -478,43 +472,7 @@ void PartController::showDocument(const KURL &url, bool newWin)
     activatePart(part);
   }
   part->openURL(docUrl);
-  
-
-  //adymo: context has gone
-/*  DocumentationPart *part = 0;
-  
-  if (!context.isEmpty())
-    part = findDocPart(context);
-
-  if (!part)
-  {
-    part = new DocumentationPart;
-    part->setContext(context);
-    integratePart(part,docUrl);
-  }
-  else
-    activatePart(part);
-  
-  bool bSuccess = part->openURL(docUrl);
-  if (!bSuccess) {
-    // part->showError(...);
-  }*/
 }
-
-
-DocumentationPart *PartController::findDocPart(const QString &context)
-{
-  QPtrListIterator<KParts::Part> it(*parts());
-  for ( ; it.current(); ++it)
-  {
-    DocumentationPart *part = dynamic_cast<DocumentationPart*>(it.current());
-    if (part && (part->context() == context))
-      return part;
-  }
-
-  return 0;
-}
-
 
 KParts::Factory *PartController::findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName)
 {
@@ -574,12 +532,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
   TopLevel::getInstance()->embedPartView(widget, url.filename(), url.url());
 
   addPart(part, activate);
-/*
-  if( isTextEditor )
-  {
-      EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
-  }
-*/
+  
   // tell the parts we loaded a document
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
   if ( !ro_part ) return;
@@ -588,10 +541,11 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
   
   if ( ro_part->url().isLocalFile() ) 
   {
-	updateTimestamp( ro_part->url() );
 	emit loadedFile(ro_part->url().path());
   }
 
+  connect( part, SIGNAL(modifiedOnDisc(Kate::Document*, bool, unsigned char)), this, SLOT(slotDocumentDirty(Kate::Document*, bool, unsigned char)) );
+  
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
   
@@ -672,7 +626,7 @@ void PartController::updatePartURL( KParts::ReadOnlyPart * ro_part )
 
 bool PartController::partURLHasChanged( KParts::ReadOnlyPart * ro_part )
 {
-	if ( _partURLMap.contains( ro_part ) )
+	if ( _partURLMap.contains( ro_part ) && !ro_part->url().isEmpty() )
 	{
 		if ( _partURLMap[ ro_part ] != ro_part->url() )
 		{
@@ -694,71 +648,15 @@ KURL PartController::storedURLForPart( KParts::ReadOnlyPart * ro_part )
 
 void PartController::slotUploadFinished()
 {
-	kdDebug(9000) << k_funcinfo << endl;
-	
 	KParts::ReadOnlyPart *ro_part = const_cast<KParts::ReadOnlyPart*>( dynamic_cast<const KParts::ReadOnlyPart*>(sender()) );
 	if ( !ro_part ) return;
 	
-	if ( ro_part->url().isLocalFile() && isDirty( ro_part->url() ) ) 
-	{
-		emit savedFile( ro_part->url() );
-		emit savedFile( ro_part->url().path() ); // @todo kill this one
-		emit fileDirty( ro_part->url() );
-
-		updateTimestamp( ro_part->url() );
-	}
-
 	if ( partURLHasChanged( ro_part ) )
 	{
 		emit partURLChanged( ro_part );
-		
-		removeTimestamp( storedURLForPart( ro_part ) );
 		updatePartURL( ro_part );
-		updateTimestamp( ro_part->url() );
 	}	
-	
 }
-/*
-void PartController::slotFileNameChanged()
-{
-	kdDebug(9000) << k_funcinfo << endl;
-
-	const KParts::ReadOnlyPart *ro_part = dynamic_cast<const KParts::ReadOnlyPart*>(sender());
-	if ( !ro_part ) return; 
-	
-	emit partURLChanged( const_cast<KParts::ReadOnlyPart*>(ro_part) );
-
-	if ( !ro_part->url().isLocalFile() ) return;
-	
-	updateTimestamp( ro_part->url() );
-
-	emit fileDirty( ro_part->url() );
-}
-*/
-
-void PartController::reinstallPopups( )
-{
-	kdDebug(9000) << k_funcinfo << endl;
-/*
-  EditorProxy* editorProxy = EditorProxy::getInstance();
-  QPopupMenu* popup = contextPopupMenu();
-
-  QPtrListIterator<KParts::Part> it(*parts());
-  for ( ; it.current(); ++it)
-    editorProxy->installPopup( it.current(), popup, true );
-*/	
-}
-
-/*
-QPopupMenu *PartController::contextPopupMenu()
-{
-    QPopupMenu * popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
-
-  kdDebug( 9000 ) << "PartController::contextPopupMenu() will return " << popup << endl;
-
-  return popup;
-}
-*/
 
 KParts::ReadOnlyPart *PartController::partForURL(const KURL &url)
 {
@@ -816,7 +714,10 @@ bool PartController::closePart(KParts::Part *part)
 		{
 			return false;
 		}
-		removeTimestamp( url );
+		_dirtyDocuments.remove( static_cast<KParts::ReadWritePart*>( ro_part ) );
+		
+		emit closedFile( url );
+//		removeTimestamp( url );
 	}
 	
   // FIXME correct? relevant?
@@ -872,63 +773,63 @@ void PartController::updateMenuItems()
   m_forwardAction->setEnabled( m_Current != m_history.fromLast() );
 }
 
-
-void PartController::slotSaveAllFiles()
-{
-  saveAllFiles();
-}
-
-
-void PartController::saveFile(KParts::Part *part)
-{
-  KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(part);
-  if ( !rw_part )
-    return;
-  if ( isDirty( rw_part->url() ) ) {
-    kdDebug(9000) << "DIRTY SAVE" << endl;
-  }
-
-  if( rw_part->isModified() ) {
-    rw_part->save();
-    TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
-  }
-}
-
-void PartController::saveAllFiles()
-{
-  QPtrListIterator<KParts::Part> it(*parts());
-  for ( ; it.current(); ++it)
-    saveFile( it.current() );
-}
-
-
 void PartController::slotRevertAllFiles()
 {
-  revertAllFiles();
+	revertAllFiles();
 }
 
-void PartController::revertFile(KParts::Part *part)
+void PartController::reloadFile( const KURL & url, bool ) //@todo - remove 2nd arg 
 {
-  if ( !part )
-    return;
+	KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
+	if ( part )
+	{
+		if ( part->isModified() )
+		{
+			if ( KMessageBox::warningYesNo( TopLevel::getInstance()->main(),
+				i18n( "The file \"%1\" is modified in memory. Are you sure you want to reload it? (Local changes will be lost.)" ).arg( url.path() ), 
+				i18n( "File is modified" ) ) == KMessageBox::Yes )
+			{
+				part->setModified( false );
+			}
+			else
+			{
+				return;
+			}
+		}
+		
+		unsigned int line = 0; unsigned int col = 0;
+		KTextEditor::ViewCursorInterface * iface = dynamic_cast<KTextEditor::ViewCursorInterface*>( part->widget() );
+		if (iface)
+		{
+			iface->cursorPositionReal( &line, &col );
+		}
+				
+		part->openURL( url );
+		
+		_dirtyDocuments.remove( part );
+		emit documentChangedState( url, Clean );
+		
+		if ( iface )
+		{
+			iface->setCursorPositionReal( line, col );
+		}
+	}	
+}
 
-  if (part->inherits("KParts::ReadWritePart")) {
-      KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
-      if ( rw_part->url().isLocalFile() )
-      {
-          updateTimestamp( rw_part->url() );
-      }
-      rw_part->openURL(rw_part->url());
-    }
+void PartController::revertFiles( const KURL::List & list  )
+{
+	KURL::List::ConstIterator it = list.begin();
+	while ( it != list.end() )
+	{
+		reloadFile( *it );
+		++it;
+	}
 }
 
 void PartController::revertAllFiles()
 {
-  QPtrListIterator<KParts::Part> it(*parts());
-  for ( ; it.current(); ++it)
-    revertFile( it.current() );
+	revertFiles( openURLs() );
 }
-
 
 void PartController::slotCloseWindow()
 {
@@ -952,18 +853,101 @@ KURL::List PartController::modifiedDocuments()
 	return modFiles;
 }
 
+void PartController::slotSave()
+{
+	kdDebug(9000) << k_funcinfo << endl;
+		
+	if ( KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( activePart() ) )
+	{
+		saveFile( part->url() );
+	}
+}
+
+void PartController::slotReload()
+{
+	kdDebug(9000) << k_funcinfo << endl;
+		
+	if ( KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( activePart() ) )
+	{
+		reloadFile( part->url() );
+	}
+}
+
+void PartController::slotSaveAllFiles()
+{
+  saveAllFiles();
+}
+
+bool PartController::saveFile( const KURL & url, bool force )
+{
+	KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
+	if ( !part ) return true;
+	
+	switch( documentState( url ) )
+	{
+		case Clean:
+			if ( !force )
+			{
+				return true;
+			}
+			kdDebug(9000) << "Forced save" << endl;
+			break;
+			
+		case Modified:
+			kdDebug(9000) << "Normal save" << endl;
+			break;
+			
+		case Dirty:
+		case DirtyAndModified:
+			{
+				int code = KMessageBox::warningYesNoCancel( TopLevel::getInstance()->main(),
+					i18n("The file \"%1\" is modified on disc\n\nAre you sure you want to overwrite it? (External changes will be lost.)").arg( url.path() ),
+					i18n("File externally modified") );
+				if ( code == KMessageBox::Yes )
+				{
+					kdDebug(9000) << "Dirty save!!" << endl;
+				}
+				else if ( code == KMessageBox::No )
+				{
+					return true;
+				}
+				else
+				{
+					return false; // a 'false' return means to interrupt the process that caused the save
+				}
+			}
+			break;
+			
+		default:
+			;
+	}
+
+	part->save();
+	_dirtyDocuments.remove( part );
+	emit documentChangedState( url, Clean );
+	emit savedFile( url );
+	
+	return true;
+}
+
+void PartController::saveAllFiles()
+{
+	saveFiles( openURLs() );
+}
+
 void PartController::saveFiles( KURL::List const & filelist )
 {
 	KURL::List::ConstIterator it = filelist.begin();
 	while ( it != filelist.end() )
 	{
-		KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( partForURL( *it ) );
-		if ( rw_part )
-		{
-			rw_part->save();
-		}
+		saveFile( *it );
 		++it;
 	}
+}
+
+bool PartController::querySaveFiles()
+{
+	return saveFilesDialog( KURL::List() );
 }
 
 void PartController::clearModified( KURL::List const & filelist )
@@ -980,7 +964,7 @@ void PartController::clearModified( KURL::List const & filelist )
 	}
 }
 
-bool PartController::closeFilesDialog( KURL::List const & ignoreList )
+bool PartController::saveFilesDialog( KURL::List const & ignoreList )
 {
 	KURL::List modList = modifiedDocuments();
 	
@@ -997,7 +981,13 @@ bool PartController::closeFilesDialog( KURL::List const & ignoreList )
 			return false;
 		}
 	}
+	return true;
+}
 
+bool PartController::closeFilesDialog( KURL::List const & ignoreList )
+{
+	if ( !saveFilesDialog( ignoreList ) ) return false;
+				
 	QPtrList<KParts::Part> partList( *parts() );
 	QPtrListIterator<KParts::Part> it( partList );
 	while ( KParts::Part* part = it.current() )
@@ -1008,8 +998,7 @@ bool PartController::closeFilesDialog( KURL::List const & ignoreList )
 			closePart( part );
 		}
 		++it;
-	}
-	
+	}	
 	return true;
 }
 
@@ -1048,20 +1037,6 @@ void PartController::slotCloseOtherWindows()
 	closeFilesDialog( ignoreList );
 }
 
-void PartController::slotCurrentChanged(QWidget *)
-{
-	kdDebug(9000) << k_funcinfo << " - Doing nothing!!" << endl;
-/*	
-  QPtrListIterator<KParts::Part> it(*parts());
-  for ( ; it.current(); ++it)
-    if (it.current()->widget() == w)
-    {
-      setActivePart(it.current(), w);
-      break;
-    }
-*/	
-}
-
 void PartController::slotOpenFile()
 {
 	KEncodingFileDialog::Result result = KEncodingFileDialog::getOpenURLsAndEncoding(QString::null, QString::null, 
@@ -1083,11 +1058,17 @@ void PartController::slotOpenRecent( const KURL& url )
 
 bool PartController::readyToClose()
 {
-	return closeAllFiles();
+	blockSignals( true );
+	
+	closeAllFiles(); // this should never return false, as the files are already saved
+	
+	return true;
 }
 
 void PartController::slotActivePartChanged( KParts::Part * part )
 {
+	kdDebug(9000) << k_funcinfo << endl;
+	
 	updateMenuItems();
 
 	QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
@@ -1163,50 +1144,119 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
   addPart( part );
 }
 
-void PartController::dirty( const QString& fileName )
+void PartController::slotDocumentDirty( Kate::Document * d, bool isModified, unsigned char reason )
 {
-	KURL url;
-	url.setPath( fileName );
-	emit fileDirty( url );
+	kdDebug(9000) << k_funcinfo << endl;
+
+	//	KTextEditor::Document * doc = reinterpret_cast<KTextEditor::Document*>( d ); // theoretically unsafe in MI scenario
+	KTextEditor::Document * doc = 0;
+	
+	QPtrListIterator<KParts::Part> it( *parts() );
+	while( it.current() )
+	{
+		if ( (void*)it.current() == (void*)d )
+		{
+			doc = dynamic_cast<KTextEditor::Document*>( it.current() );
+			break;
+		}	
+		++it;
+	}
+	
+	if ( !doc ) return;
+	KURL url = storedURLForPart( doc );
+	if ( url.isEmpty() )
+	{
+		kdDebug(9000) << "Warning!! the stored url is empty. Bailing out!" << endl;
+	}
+	
+	if ( reason > 0 )
+	{
+		if ( !_dirtyDocuments.contains( doc ) )
+		{
+			_dirtyDocuments.append( doc );
+		}
+		
+		if ( reactToDirty( url, isModified ) )
+		{
+			// file has been reloaded
+			emit documentChangedState( url, Clean );
+			_dirtyDocuments.remove( doc );
+		}
+		else
+		{
+			emit doEmitState( url );
+		}
+	}
+	else
+	{
+		_dirtyDocuments.remove( doc );
+		emit documentChangedState( url, Clean );
+	}
+	
+	kdDebug(9000) << doc->url().url() << endl;
+	kdDebug(9000) << isModified << endl;
+	kdDebug(9000) << reason << endl;
 }
 
 bool PartController::isDirty( KURL const & url )
 {
-	if ( !url.isLocalFile() ) return false;
-	
-	if ( accessTimeMap.contains( url ) )
-	{
-		return ( accessTimeMap[ url ] < QFileInfo( url.path() ).lastModified() );
-	}
-	
-	return false;
+	return _dirtyDocuments.contains( static_cast<KTextEditor::Document*>( partForURL( url ) ) );
 }
 
-void PartController::updateTimestamp( KURL const & url )
+bool PartController::reactToDirty( KURL const & url, bool )// isModified )
 {
-	if ( !accessTimeMap.contains( url ) )
-	{
-		dirWatcher->addFile( url.path() );
-	}
-	accessTimeMap[ url ] = QFileInfo( url.path() ).lastModified();
-}
 
-void PartController::removeTimestamp( KURL const & url )
-{
-	accessTimeMap.remove( url );
-	dirWatcher->removeFile( url.path() );
+	enum DirtyAction { doNothing, alertUser, autoReload };	
+	DirtyAction action = doNothing;
+		
+	if ( action == doNothing ) return false;
+	
+	bool isModified = true;
+	if( KParts::ReadWritePart * part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) ) )
+	{
+		isModified = part->isModified();
+	}
+	else
+	{
+		kdDebug(9000) << k_funcinfo << " Warning. Not a ReadWritePart." << endl;
+		return false;
+	}
+	
+	if ( isModified )
+	{
+		KMessageBox::sorry( TopLevel::getInstance()->main(), 
+			i18n("Conflict: The file \"%1\" has changed on disc while being modified in memory.\n\n"
+					"You should investigate before saving to make sure you are not losing data.").arg( url.path() ),
+			i18n("Conflict") );
+		return false;
+	}
+	
+	if ( action == alertUser )
+	{
+		if ( KMessageBox::warningYesNo( TopLevel::getInstance()->main(), 
+	   		i18n("The file \"%1\" has changed on disk\n\nDo you want to reload it?").arg( url.path() ), 
+			i18n("File Changed") ) == KMessageBox::No )
+		{
+			return false;
+		}
+	}
+	
+	// here we either answered yes above or are in autoreload mode
+	reloadFile( url );
+	
+	return true;
 }
 
 void PartController::slotNewStatus( )
 {
 	kdDebug(9000) << k_funcinfo << endl;
-
-    QObject * senderobj = const_cast<QObject*>( sender() );
-    KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( senderobj );
-    if ( view )
-    {
+	
+	QObject * senderobj = const_cast<QObject*>( sender() );
+	KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( senderobj );
+	if ( view )
+	{
 		doEmitState( view->document()->url() );
-   }
+	}
 }
 
 DocumentState PartController::documentState( KURL const & url )
@@ -1239,13 +1289,6 @@ void PartController::doEmitState( KURL const & url )
 {
 	emit documentChangedState( url, documentState( url ) );
 }
- 
-void PartController::slotFileDirty( const KURL & url )
-{
-	kdDebug(9000) << k_funcinfo << endl;
-
-	doEmitState( url );
-}
 
 KURL::List PartController::openURLs( )
 {
@@ -1259,11 +1302,6 @@ KURL::List PartController::openURLs( )
 		}
 	}
 	return list;
-}
-
-void PartController::revertFiles( const KURL::List &  )
-{
-#warning not implemented	
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1419,5 +1457,6 @@ void PartController::slotWaitForFactoryHack( )
 		}
 	}
 }
+
 
 #include "partcontroller.moc"

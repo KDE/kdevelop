@@ -37,22 +37,20 @@
 #include <kbugreport.h>
 #include <kurlrequester.h>
 #include <kpopupmenu.h>
+#include <kiconloader.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/configinterface.h>
 #include <kparts/partmanager.h>
-#include <kdevpartcontroller.h>
 #include <kdeversion.h>
 #include <kdebug.h>
-#include "partcontroller.h"
-
-#if (KDE_VERSION > 305)
 #include <knotifydialog.h>
-#endif
+
 
 #include <config.h>
 
+#include "partcontroller.h"
 #include "projectmanager.h"
 #include "core.h"
 #include "settingswidget.h"
@@ -95,7 +93,7 @@ void MainWindowShare::init()
 
 void MainWindowShare::slotActionStatusText( const QString &text )
 {
-    kdDebug(9000) << "MainWindowShare::slotActionStatusText() - " << text << endl;
+//    kdDebug(9000) << "MainWindowShare::slotActionStatusText() - " << text << endl;
 
     if ( ! m_pMainWnd ) return;
 
@@ -146,42 +144,16 @@ void MainWindowShare::createActions()
   action->setToolTip(beautifyToolTip(action->text()));
   action->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(action->text())).arg(i18n("Lets you configure toolbars.")));
 
-#if (KDE_VERSION > 305)
-
   action = KStdAction::configureNotifications(
                 this, SLOT(slotConfigureNotifications()),
                 m_pMainWnd->actionCollection(), "settings_configure_notifications" );
   action->setToolTip(beautifyToolTip(action->text()));
   action->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(action->text())).arg(i18n("Lets you configure system notifications.")));
-#endif
 
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 m_pMainWnd->actionCollection(), "settings_configure" );
   action->setToolTip(beautifyToolTip(action->text()));
   action->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(action->text())).arg(i18n("Lets you customize KDevelop.")));
-
-
-#if (KDE_VERSION <= 305)
-  m_toggleMainToolbar = KStdAction::showToolbar(this, SLOT(slotToggleMainToolbar()), m_pMainWnd->actionCollection(), "settings_main_toolbar");
-  m_toggleMainToolbar->setText(i18n("Show &Main Toolbar"));
-  m_toggleMainToolbar->setToolTip( i18n("Show main toolbar") );
-  m_toggleMainToolbar->setWhatsThis(i18n("<b>Show Main Toolbar</b><p>Hides or shows the main toolbar."));
-
-  m_toggleBuildToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBuildToolbar()),m_pMainWnd->actionCollection(), "settings_build_toolbar");
-  m_toggleBuildToolbar->setText(i18n("Show &Build Toolbar"));
-  m_toggleBuildToolbar->setToolTip( i18n("Show build toolbar") );
-  m_toggleBuildToolbar->setWhatsThis(i18n("<b>Show Build Toolbar</b><p>Hides or shows the build toolbar."));
-
-  m_toggleViewToolbar = KStdAction::showToolbar(this, SLOT(slotToggleViewToolbar()),m_pMainWnd->actionCollection(), "settings_view_toolbar");
-  m_toggleViewToolbar->setText(i18n("Show &View Toolbar"));
-  m_toggleViewToolbar->setToolTip( i18n("Show view toolbar") );
-  m_toggleViewToolbar->setWhatsThis(i18n("<b>Show View Toolbar</b><p>Hides or shows the view toolbar."));
-
-  m_toggleBrowserToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBrowserToolbar()),m_pMainWnd->actionCollection(), "settings_browser_toolbar");
-  m_toggleBrowserToolbar->setText(i18n("Show &Browser Toolbar"));
-  m_toggleBrowserToolbar->setToolTip( i18n("Show browser toolbar") );
-  m_toggleBrowserToolbar->setWhatsThis(i18n("<b>Show Browser Toolbar</b><p>Hides or shows the browser toolbar."));
-#endif
 
   m_toggleStatusbar = KStdAction::showToolbar(this, SLOT(slotToggleStatusbar()),m_pMainWnd->actionCollection(), "settings_statusbar");
   m_toggleStatusbar->setText(i18n("Show &Statusbar"));
@@ -319,14 +291,12 @@ void MainWindowShare::slotShowMenuBar()
 
 void MainWindowShare::slotConfigureNotifications()
 {
-#if (KDE_VERSION > 305)
     KNotifyDialog::configure(m_pMainWnd, "Notification Configuration Dialog");
-#endif
 }
 
 void MainWindowShare::slotSettings()
 {
-    KDialogBase dlg(KDialogBase::TreeList, i18n("Configure KDevelop"),
+	KDialogBase dlg(KDialogBase::IconList, i18n("Configure KDevelop"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
                     "customization dialog");
 
@@ -334,7 +304,7 @@ void MainWindowShare::slotSettings()
     KConfig* config = kapp->config();
     if (TopLevel::mode != TopLevel::AssistantMode)
     {
-        QVBox *vbox = dlg.addVBoxPage(i18n("General"));
+		QVBox *vbox = dlg.addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("kdevelop") );
         gsw = new SettingsWidget(vbox, "general settings widget");
 
         gsw->projects_url->setMode((int)KFile::Directory);
@@ -373,18 +343,7 @@ void MainWindowShare::slotSettings()
     {
         config->setGroup("General Options");
         config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
-#if defined(KDE_IS_VERSION)
-# if KDE_IS_VERSION(3,1,3)
-#  ifndef _KDE_3_1_3_
-#   define _KDE_3_1_3_
-#  endif
-# endif
-#endif
-#if defined(_KDE_3_1_3_)
         config->writePathEntry("DefaultProjectsDir", gsw->projects_url->url());
-#else
-        config->writeEntry("DefaultProjectsDir", gsw->projects_url->url());
-#endif
         config->writeEntry("Application Font", gsw->applicationFont());
         config->setGroup("MakeOutputView");
         config->writeEntry("Messages Font",gsw->messageFont());
@@ -455,6 +414,20 @@ void MainWindowShare::slotGUICreated( KParts::Part * part )
         kdDebug(9000) << " *** found \"set_confdlg\" action - unplugging" << endl;
         action->unplugAll();
     }
+	
+	if ( KAction * action = part->action("file_save") )
+	{
+		kdDebug(9000) << " *** found \"file_save\" action - disconnecting" << endl;
+		disconnect( action, SIGNAL(activated()), 0, 0 );
+		connect( action, SIGNAL(activated()), PartController::getInstance(), SLOT(slotSave()) );
+	}
+
+	if ( KAction * action = part->action("file_reload") )
+	{
+		kdDebug(9000) << " *** found \"file_reload\" action - disconnecting" << endl;
+		disconnect( action, SIGNAL(activated()), 0, 0 );
+		connect( action, SIGNAL(activated()), PartController::getInstance(), SLOT(slotReload()) );
+	}
 }
 
 // called when OK ar Apply is clicked in the EditToolbar Dialog
@@ -464,7 +437,7 @@ void MainWindowShare::slotNewToolbarConfig()
 
   m_pMainWnd->applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
 
-  PartController::getInstance()->reinstallPopups();
+//   PartController::getInstance()->reinstallPopups();
 }
 
 void MainWindowShare::slotKeyBindings()
