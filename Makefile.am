@@ -8,6 +8,9 @@ appsdir = $(kde_appsdir)/Development
 mime_DATA = x-kdevelop.desktop
 mimedir = $(kde_mimedir)/application
 
+utils_DATA = kdevprj2kdevelop
+utilsdir = $(kde_bindir)
+
 install-data-local:
 	@echo ""
 	@echo ""
