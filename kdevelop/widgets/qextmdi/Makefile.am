@@ -2,6 +2,8 @@
 
 INCLUDES = $(all_includes)
 
+KDE_CXXFLAGS = -DHAVE_KDE2
+
 lib_LTLIBRARIES = libkdevqextmdi.la
 libkdevqextmdi_la_LDFLAGS = $(all_libraries) -version-info 1:0
 

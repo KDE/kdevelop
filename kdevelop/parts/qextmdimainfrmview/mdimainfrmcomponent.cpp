@@ -55,7 +55,7 @@ void MdiMainFrmComponent::setupGUI()
 
   // give the application menubar to QextMDI
   KMainWindow* tlw = (KMainWindow*) m_mainframe->topLevelWidget();
-  m_mainframe->setMenuForSDIModeSysButtons( (QMenuBar*) tlw->menuBar());
+  m_mainframe->setMenuForSDIModeSysButtons( tlw->menuBar());
 
   // construct 'Window' popupmenu of KDevelop by actions
   KAction *action;
