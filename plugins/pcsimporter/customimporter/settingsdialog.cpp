@@ -13,7 +13,6 @@
 
 #include <klistbox.h>
 #include <kcombobox.h>
-#include <keditlistbox.h>
 #include <kurlrequester.h>
 #include <kdeversion.h>
 #include <klocale.h>
@@ -22,6 +21,8 @@
 #if KDE_VERSION <= 305
 #include "../compat/kdeveditlistbox.h"
 using namespace KDevCompat;
+#else
+#include <keditlistbox.h>
 #endif
 
 #include <qfile.h>
