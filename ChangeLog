@@ -1,3 +1,8 @@
+2003-05-22 Mario Scalas <mario.scalas@libero.it>
+    * Added tooltips to the watch variable list view so no widget resize is needed
+    * Added a opy to clipboard feature for watched variables so their data is available
+      for other uses.
+ 
 2003-05-21 Roberto Raggi <roberto@kdevelop.org>
     * implemented the support for profiles
     * ported kate file selector to kdevelop
