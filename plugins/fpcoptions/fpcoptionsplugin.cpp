@@ -18,7 +18,7 @@
 
 K_EXPORT_COMPONENT_FACTORY( libkdevfpcoptions, KGenericFactory<FpcOptionsPlugin>( "kdevfpcoptions" ) );
 
-FpcOptionsPlugin::FpcOptionsPlugin(QObject *parent, const char *name, const QStringList &args)
+FpcOptionsPlugin::FpcOptionsPlugin(QObject *parent, const char *name, const QStringList& /*args*/)
     : KDevCompilerOptions(parent, name)
 {
 }
