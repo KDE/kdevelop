@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>427</width>
+            <width>513</width>
             <height>330</height>
         </rect>
     </property>
@@ -513,59 +513,79 @@
                 <attribute name="title">
                     <string>&amp;Linker</string>
                 </attribute>
-                <widget class="QGroupBox">
+                <vbox>
                     <property name="name">
-                        <cstring>GroupBox2_2</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>10</y>
-                            <width>379</width>
-                            <height>79</height>
-                        </rect>
+                    <property name="margin">
+                        <number>11</number>
                     </property>
-                    <property name="title">
-                        <string>Linker</string>
+                    <property name="spacing">
+                        <number>6</number>
                     </property>
-                    <grid>
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>GroupBox2_2</cstring>
                         </property>
-                        <property name="margin">
-                            <number>11</number>
+                        <property name="title">
+                            <string>Linker</string>
                         </property>
-                        <property name="spacing">
-                            <number>6</number>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_2_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Release flags:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_2_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Debug flags:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_debugFlagsLink</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>m_releaseFlagsLink</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer5</cstring>
                         </property>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>TextLabel2_2_2_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Release flags:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>TextLabel2_2_3</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Debug flags:</string>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit" row="0" column="1">
-                            <property name="name">
-                                <cstring>m_debugFlagsLink</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit" row="1" column="1">
-                            <property name="name">
-                                <cstring>m_releaseFlagsLink</cstring>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>71</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -574,51 +594,66 @@
                 <attribute name="title">
                     <string>&amp;Directories</string>
                 </attribute>
-                <widget class="QGroupBox">
+                <vbox>
                     <property name="name">
-                        <cstring>GroupBox5</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>10</y>
-                            <width>379</width>
-                            <height>180</height>
-                        </rect>
+                    <property name="margin">
+                        <number>11</number>
                     </property>
-                    <property name="title">
-                        <string>Paths (-I option)</string>
+                    <property name="spacing">
+                        <number>6</number>
                     </property>
-                    <widget class="QLabel">
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>TextLabel3</cstring>
+                            <cstring>GroupBox5</cstring>
                         </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>11</x>
-                                <y>18</y>
-                                <width>100</width>
-                                <height>22</height>
-                            </rect>
+                        <property name="title">
+                            <string>Paths (-I option)</string>
                         </property>
-                        <property name="text">
-                            <string>Include path:</string>
-                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Include path:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_includePath</cstring>
+                                </property>
+                            </widget>
+                        </grid>
                     </widget>
-                    <widget class="KLineEdit">
+                    <spacer>
                         <property name="name">
-                            <cstring>m_includePath</cstring>
+                            <cstring>Spacer6</cstring>
                         </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>10</x>
-                                <y>40</y>
-                                <width>350</width>
-                                <height>22</height>
-                            </rect>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
                         </property>
-                    </widget>
-                </widget>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>131</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
             </widget>
         </widget>
     </grid>
@@ -665,7 +700,6 @@
     <tabstop>buttonCancel</tabstop>
 </tabstops>
 <includes>
-    <include location="local" impldecl="in implementation">projectconfigurationdlgbase.ui.h</include>
     <include location="global" impldecl="in implementation">klineedit.h</include>
 </includes>
 <slots>
