@@ -20,7 +20,7 @@ class URLUtil {
 public:
 
   enum SlashesPosition { SLASH_PREFIX = 1, SLASH_SUFFIX = 2 };
-  
+
   /**
    * Returns the filename part of a path (i.e. everything past the last slash)
    */
@@ -37,6 +37,14 @@ public:
    * Returns the relative path between a parent and child URL, or blank if the specified child is not a child of parent
    */
   static QString relativePath(const QString & parent, const QString & child, uint slashPolicy = SLASH_PREFIX);
+  /**
+   * Returns the relative path between a directory and file. Should never return empty path.
+   *  Example:
+   *   dirUrl:  /home/test/src
+   *   fileUrl: /home/test/lib/mylib.cpp
+   *  returns:  ../lib/mylib.cpp
+   */
+  static QString relativePathToFile( const QString & dirUrl, const QString & fileUrl );
   /**
    *Returns the path 'up one level' - the opposite of what filename returns
    */
