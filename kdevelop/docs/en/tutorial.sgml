@@ -420,8 +420,106 @@ What you should have looked into additionally until now is the reference documen
 
 <sect>Creating new Applications with KAppWizard<label id="Creating new Applications with KAppWizard">
 <p>
+The KAppWizard, or also called the KDE Application Wizard, is intended to let you start working on new projects with KDevelop.
+Therefore, all your projects are first created by the wizard; then you can start building them and extend the already provided source
+skelleton. KAppWizard also allows to choose between several project types according to your project's goals:
+
+<itemize>
+<item>Normal KDE Application: includes sourcecode for a comlete framestructure of a standard KDE application with support for the
+Document-View-Controller model, a menubar, toolbar and statusbar as well as a set of standard documentation based on SGML, KDE-links
+and application icons. This is the application type usually needed for a new KDE project.
+<item>Mini KDE Application: contains the same general structure as the Normal KDE Application type but with the difference that the
+application's code only provides a widget as a window.
+<item>Normal Qt Application: works like the normal KDE application by it's code with the difference that the project is based on the Qt
+library only and doesn't contain KDE support. This is intended for projects that have to be portable to Windows platforms or that don't
+want to require KDE libraries by the end-user.
+<item>C++ Application: Is based on the C++ compiler only and runs in a console, therefore doesn't require X-Window.
+<item>Custom project: creates an empty project without any sourcecode. This is intended for already existing projects to port to
+KDevelop or for projects where you want to start from scratch.
+</itemize>
+
+In this chapter we'll see how the KAppWizard can be invoked and what has to be done to generate a KDE application project. This will
+also be the initial step of our tutorial, where you will create your first version of <em/KScribble/. For all other project types the
+steps are usually the same, just you may not have certain options available.
+
 <sect1>Invoking KAppWizard and Project Generation
 <p>
+<sect2>Starting KAppWizard and the First Page
+<p>
+To start with your first KDE application, open KDevelop. Then select "New" from the "Project"-menu. The KAppWizard starts, and you see
+a tree on the first page, containing the project types. When a type is selected, you see a preview how it will look like after the
+initial build process. Choose the KDE subtree, Normal type. Then press the "Next" button on the bottom of the first wizard page. This
+will switch to the next page, where you have to set the general project options.
+
+<sect2>The Generate Settings Page
+<p>
+For our first version of <em/KScribble/, enter <tt/KScribble/ as "Projectname". Then select the directory you want to have your project
+build in; the default is your home directory. You can enter the path manually or you can as well press the button on the right to
+select the directory by a dialog.
+
+Next, you have to enter the Versionnumber. For the first version, set this to <tt/0.1/. It is usual to number new applications that are
+in development for the first release lower than 1, and as the initial version will only contain the standard framework, we'll name this
+the 0.1 version. During the following chapters, we'll increase this value along with the facilities that <em/KScribble/ will get by our
+implementation.
+
+Finally, add your name to the "Author" field and your email adress. We'll leave all other options untouched- they are needed for our
+project.
+
+To give you some information about the options, you can press the right mouse button over the options, and you will get a quickhelp
+window that describes the option's purpose.
+
+These are:
+<itemize>
+<item><bf/generate sources and headers:/  generates the application sourcecode
+<item><bf/GNU-Standard-Files:/  adds a copy of the GNU-General Public License to the project as well as some standard files for user
+infromation when distributing the package.
+<item><bf/User-Documentation:/ the user handbook in SGML, already prepared for your project.
+<item><bf/API-Documentation:/ creates an initial HTML documentation set for the <bf/A/pplication <bf/P/rogramming <bf/I/nterface.
+<item><bf/lsm-File:/ the Linux Software Map, used by distribution sites and contains short information about the project's purpose and
+requirements.
+<item><bf/.kdelnk-File: / a KDE link that will install your application in the "Applications" tree of the KDE-Panel.
+<item><bf/Program-Icon: / an Icon that represents your project and can be used to create a link on the desktop.
+<item><bf/Mini-Icon: / a Mini-version of the program icon that represents your application besides it's name in the KDE-Panel and is
+shown in your application's dialogs and main-window in the left upper corner.
+</itemize>
+
+Now we'll switch to the next page by pressing the "Next" button again to set the template for the header files of your project.
+
+
+<sect2>The Header and Source Templates
+<p>
+The header template page allows you to automatically include a preface for your header files, containing the filename, the construction
+date, the year of the copyright, also your name and your email adress. You don't have to change those uppercase parts yourself, as
+KAppWizard does this automatically and stores the template for this project, so it can be used later again for creating new files.
+
+The second part of the default header template contains a license information. By default, your project is set under the GNU General
+Public License, which is also included in the package. This license is used for your souce code's protection against any person that
+just copies your sources for his own purpose. The General Public License offers you this license for free and thereby protects your
+rights as the author, and is common for distributing free software. To get more information about the license, you should read the
+COPYING file in the base directory of your new project later.
+
+Anyway, you may want to choose another license or another header template you're already using for your projects. Therefore you can
+either edit the given default template directly. To do this, you're given the template in an editing window. To clear the default page,
+select "New", to use another template, select "Load...", which lets you choose the template file.
+
+When you're done, go to the next page by entering "Next". This is the template page for your source files and is generally the same as
+the header template page. The only difference is that this template is used for your implementation files.
+
+<sect2>Creating the Project
+<p>
+
+Now that you've set all options for <em/KScribble/, select "Next" and press the "Generate" button on the bottom of the wizard window.
+If the button is not available, you haven't set all options correctly. To correct any errors, step back in the Wizard with "Back".
+
+Then you'll see what KAppWizard does- he copies all templates to your project directory and creates the new project. After KAppWizard
+is finished, the "Cancel" button changes to an "Exit" button to leave the wizard.
+
+After this last step, you're finished with creating a new project. KDevelop then loads it and the treeviews let you browse through the
+project's files and classes.
+
+In the next section, we'll discuss how to build and run your first version of <em/KScribble/ and how the sourcecode is organized, so
+you have an idea where we are and where we're going to extend the features of <em/KScribble/ in the following chapters.
+
 <sect1>The Application Skeletton
 <p>
 <sect1>Additional Contents of KDevelop Projects
@@ -519,6 +617,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
 
 
 
