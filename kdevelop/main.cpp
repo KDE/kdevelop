@@ -21,7 +21,7 @@
 #endif
 
 #include "ckdevelop.h"
-#include "ckdevinstall.h"
+#include "setup/ckdevinstall.h"
 #include "kstartuplogo.h"
 
 #include <dcopclient.h>
