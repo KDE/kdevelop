@@ -104,7 +104,7 @@ void PascalGlobalOptionsDlg::readCompilerOpts( QString compiler )
     {
         KConfig *config = KGlobal::config();
         config->setGroup("Pascal Compiler");
-        settings = config->readEntry(compiler);
+        settings = config->readPathEntry(compiler);
     }
 
     options_edit->setText(settings);

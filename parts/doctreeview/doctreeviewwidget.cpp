@@ -447,7 +447,7 @@ void DocTreeDoxygenFolder::refresh()
 
     /*    KConfig *config = DocTreeViewFactory::instance()->config();
         config->setGroup("General");
-        QString docdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
+        QString docdir = config->readPathEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
      
         //kdDebug(9002) << "docdir: " << docdir << endl;*/
     QDir d(m_location);
@@ -1161,7 +1161,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
         config->setGroup("General Qt");
         QMap<QString, QString> emap = config->entryMap("General Qt");
 
-        QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
+        QString qtdocdir(config->readPathEntry("qtdocdir", QT_DOCDIR));
         if (emap.empty() && (!qtdocdir.isEmpty()))
         {
             config->writePathEntry("Qt Reference Documentation", QString(QT_DOCDIR) + QString("/qt.xml"));

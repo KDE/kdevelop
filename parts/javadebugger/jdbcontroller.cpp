@@ -117,7 +117,7 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
 
     config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
     config_forceBPSet_            = config->readBoolEntry("Allow forced BP set", true);
-    config_jdbPath_               = config->readEntry("JDB path", "");
+    config_jdbPath_               = config->readPathEntry("JDB path");
     config_dbgTerminal_           = config->readBoolEntry("Debug on separate tty console", false);
 
 #if defined (JDB_MONITOR)

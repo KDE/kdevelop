@@ -85,7 +85,7 @@ void DocTreeViewTool::getAllLibraries(QStringList *itemNames, QStringList *fileN
 {
     KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
-    QString idx_path = config->readEntry("KDEDocDir", KDELIBS_DOCDIR);// + "/kdoc-reference";
+    QString idx_path = config->readPathEntry("KDEDocDir", KDELIBS_DOCDIR);// + "/kdoc-reference";
 
     readLibraryDocs(idx_path, itemNames, fileNames);
 }
@@ -214,14 +214,14 @@ QString DocTreeViewTool::tocLocation(const QString& fileName)
     KConfig *config = instanceConfig();
     config->setGroup("TocDirs");
     const QString docName( QFileInfo( fileName ).baseName() );
-    return config->readEntry( docName, DocTreeViewTool::tocDocDefaultLocation( fileName ));
+    return config->readPathEntry( docName, DocTreeViewTool::tocDocDefaultLocation( fileName ));
 }
 
 QString DocTreeViewTool::devhelpLocation(const QString& docName, const QString &defaultLocation)
 {
     KConfig *config = instanceConfig();
     config->setGroup("TocDevHelp");
-    return config->readEntry( docName, defaultLocation);
+    return config->readPathEntry( docName, defaultLocation);
 }
 
 QString DocTreeViewTool::devhelpLocation(const QString& fileName)
@@ -230,7 +230,7 @@ QString DocTreeViewTool::devhelpLocation(const QString& fileName)
     config->setGroup("TocDevHelp");
     QString docName = QFileInfo(fileName).baseName();
     BookInfo inf = DocTreeViewTool::devhelpInfo(fileName);
-    return config->readEntry( docName, inf.defaultLocation);
+    return config->readPathEntry( docName, inf.defaultLocation);
 }
 
 
@@ -243,7 +243,7 @@ void DocTreeViewTool::scanDevHelpDirs( const QString path )
     {
         KConfig *config = instanceConfig();
         config->setGroup("DevHelp");
-        devhelpDir = config->readEntry("DevHelpDir", QString::null);
+        devhelpDir = config->readPathEntry("DevHelpDir");
     }
     else
         devhelpDir = path;
@@ -280,9 +280,14 @@ void DocTreeViewTool::scanDevHelpDirs( const QString path )
             {
                 KConfig *config = DocTreeViewFactory::instance()->config();
                 config->setGroup("TocDevHelp");
-                QString temp = config->readEntry( fi->baseName());
-                if (temp.isEmpty() )
-                    config->writeEntry( fi->baseName(), contentDirURL);                
+                QString temp = config->readPathEntry( fi->baseName());
+                if (temp.isEmpty() ) {
+#if KDE_IS_VERSION(3,1,3)
+                    config->writePathEntry( fi->baseName(), contentDirURL);
+#else
+                    config->writeEntry( fi->baseName(), contentDirURL);
+#endif
+                }
             }
                         
             KIO::NetAccess::copy(src, dest);

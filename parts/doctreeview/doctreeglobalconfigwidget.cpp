@@ -20,6 +20,7 @@
 #include <kprocess.h>
 #include <kurlrequester.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include "../../config.h"
 #include "doctreeviewpart.h"
 #include "doctreeviewwidget.h"
@@ -161,11 +162,11 @@ void DocTreeGlobalConfigWidget::readConfig()
 
     config->setGroup("htdig");
     QString exe = kapp->dirs()->findExe("htdig");
-    htdigbinEdit->setURL(config->readEntry("htdigbin", exe));
+    htdigbinEdit->setURL(config->readPathEntry("htdigbin", exe));
     exe = kapp->dirs()->findExe("htmerge");
-    htmergebinEdit->setURL(config->readEntry("htmergebin", exe));
+    htmergebinEdit->setURL(config->readPathEntry("htmergebin", exe));
     exe = kapp->dirs()->findExe("htsearch");
-    htsearchbinEdit->setURL(config->readEntry("htsearchbin", exe));
+    htsearchbinEdit->setURL(config->readPathEntry("htsearchbin", exe));
 
     //get bookmarks
     QStringList bookmarksTitle, bookmarksURL;
@@ -178,7 +179,7 @@ void DocTreeGlobalConfigWidget::readConfig()
     }
 
     config->setGroup("DevHelp");
-    dhURL->setURL(config->readEntry("DevHelpDir", QString::null));
+    dhURL->setURL(config->readPathEntry("DevHelpDir"));
 
     readTocConfigs();
     DocTreeViewTool::scanDevHelpDirs();
@@ -244,9 +245,15 @@ void DocTreeGlobalConfigWidget::storeConfig()
     config->writeEntry("IndexBookmarks", indexBookmarksBox->isChecked());
 
     config->setGroup("htdig");
+#if KDE_IS_VERSION(3,1,3)
+    config->writePathEntry("htdigbin", htdigbinEdit->url());
+    config->writePathEntry("htmergebin", htmergebinEdit->url());
+    config->writePathEntry("htsearchbin", htsearchbinEdit->url());
+#else
     config->writeEntry("htdigbin", htdigbinEdit->url());
     config->writeEntry("htmergebin", htmergebinEdit->url());
     config->writeEntry("htsearchbin", htsearchbinEdit->url());
+#endif
 
     QStringList bookmarksTitle, bookmarksURL;
     {
@@ -259,7 +266,11 @@ void DocTreeGlobalConfigWidget::storeConfig()
     DocTreeViewTool::setBookmarks(bookmarksTitle, bookmarksURL);
 
     config->setGroup("DevHelp");
+#if KDE_IS_VERSION(3,1,3)
+    config->writePathEntry("DevHelpDir", dhURL->url());
+#else
     config->writeEntry("DevHelpDir", dhURL->url());
+#endif
 }
 
 

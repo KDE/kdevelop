@@ -17,6 +17,7 @@
 #include <qtimer.h>
 
 #include <kconfig.h>
+#include <kdeversion.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kiconloader.h>
@@ -65,7 +66,7 @@ void ToolsConfigWidget::readGroup(const QString &group, QDict<ToolsConfigEntry> 
     QStringList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it) {
         config->setGroup(group + " " + (*it));
-        QString cmdline = config->readEntry("CommandLine");
+        QString cmdline = config->readPathEntry("CommandLine");
         bool isdesktopfile = config->readBoolEntry("DesktopFile");
         bool captured = config->readBoolEntry("Captured");
         ToolsConfigEntry *entry = new ToolsConfigEntry;
@@ -89,7 +90,11 @@ void ToolsConfigWidget::storeGroup(const QString &group, const QDict<ToolsConfig
         ToolsConfigEntry *entry = it.current();
         list << entry->menutext;
         config->setGroup(group + " " + entry->menutext);
+#if KDE_IS_VERSION(3,1,3)
+        config->writePathEntry("CommandLine", entry->cmdline);
+#else
         config->writeEntry("CommandLine", entry->cmdline);
+#endif
         config->writeEntry("DesktopFile", entry->isdesktopfile);
         config->writeEntry("Captured", entry->captured);
     }

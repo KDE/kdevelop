@@ -102,7 +102,7 @@ void AdaGlobalOptionsDlg::readCompilerOpts( QString compiler )
     {
         KConfig *config = KGlobal::config();
         config->setGroup("Ada Compiler");
-        settings = config->readEntry(compiler);
+        settings = config->readPathEntry(compiler);
     }
 
     options_edit->setText(settings);

@@ -244,7 +244,7 @@ void KDevFileSelector::readConfig(KConfig *config, const QString & name)
     // if we restore history
     if ( config->readBoolEntry( "restore location", true ) || kapp->isRestored() )
     {
-        QString loc( config->readEntry( "location" ) );
+        QString loc( config->readPathEntry( "location" ) );
         if ( ! loc.isEmpty() )
         {
             waitingDir = loc;
@@ -315,7 +315,11 @@ void KDevFileSelector::writeConfig(KConfig *config, const QString & name)
         l.append( cmbPath->text( i ) );
     }
     config->writeEntry("dir history", l );
+#if KDE_IS_VERSION(3,1,3)
+    config->writePathEntry( "location", cmbPath->currentText() );
+#else
     config->writeEntry( "location", cmbPath->currentText() );
+#endif
 
     config->writeEntry( "filter history len", filter->maxCount() );
     config->writeEntry( "filter history", filter->historyItems() );

@@ -368,7 +368,7 @@ QString AdaProjectPart::defaultOptions( const QString compiler )
 {
     KConfig *config = KGlobal::config();
     config->setGroup("Ada Compiler");
-    return config->readEntry(compiler);
+    return config->readPathEntry(compiler);
 }
 
 #include "adaproject_part.moc"

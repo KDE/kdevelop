@@ -113,7 +113,7 @@ protected void readProperties(KConfig config)
     // the app is being restored.  read in here whatever you wrote
     // in 'saveProperties'
 
-    String url = config.readEntry("lastURL");
+    String url = config.readPathEntry("lastURL");
 
     if (url != null)
         m_view.openURL(new KURL(url));

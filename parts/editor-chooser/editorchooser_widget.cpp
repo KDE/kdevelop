@@ -2,6 +2,7 @@
 
 
 #include <kapplication.h>
+#include <kdeversion.h>
 #include <ktrader.h>
 #include <kservice.h>
 #include <kdebug.h>
@@ -28,7 +29,7 @@ void EditorChooserWidget::load()
   // find the editor to use
   KConfig *config = kapp->config();
   config->setGroup("Editor");
-  QString editor = config->readEntry("EmbeddedKTextEditor", "");
+  QString editor = config->readPathEntry("EmbeddedKTextEditor");
   
   // add the entries to the listview
   KTrader::OfferList::Iterator it;
@@ -55,8 +56,13 @@ void EditorChooserWidget::save()
 
   KTrader::OfferList::Iterator it;
   for (it = offers.begin(); it != offers.end(); ++it)
-    if ( EditorPart->currentText() == (*it)->name() )
+    if ( EditorPart->currentText() == (*it)->name() ) {
+#if KDE_IS_VERSION(3,1,3)
+      config->writePathEntry("EmbeddedKTextEditor", (*it)->name());
+#else
       config->writeEntry("EmbeddedKTextEditor", (*it)->name());
+#endif
+      }
 
   config->sync();
 }

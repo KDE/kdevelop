@@ -73,7 +73,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
     KConfig *gConfig = kapp->config();
     gConfig->setGroup("General Options");
-    QString defaultProjectsDir = gConfig->readEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+    QString defaultProjectsDir = gConfig->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     QStringList m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
@@ -94,7 +94,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         info->comment = config.readEntry("Comment");
         info->showFileAfterGeneration = config.readEntry("ShowFileAfterGeneration");
         info->fileTemplates = config.readEntry("FileTemplates");
-        QString destDir = config.readEntry("DefaultDestinatonDir", defaultProjectsDir);
+        QString destDir = config.readPathEntry("DefaultDestinatonDir", defaultProjectsDir);
         destDir.replace(QRegExp("HOMEDIR"), QDir::homeDirPath());
         info->defaultDestDir = destDir;
         QString category = config.readEntry("Category");

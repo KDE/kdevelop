@@ -13,6 +13,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdeversion.h>
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <kkeydialog.h>
@@ -120,8 +121,13 @@ void $APPNAME$::saveProperties(KConfig *config)
     // config file.  anything you write here will be available
     // later when this app is restored
 
-    if (!m_view->currentURL().isNull())
+    if (!m_view->currentURL().isEmpty()) {
+#if KDE_IS_VERSION(3,1,3)
+        config->writePathEntry("lastURL", m_view->currentURL());
+#else
         config->writeEntry("lastURL", m_view->currentURL());
+#endif
+    }
 }
 
 void $APPNAME$::readProperties(KConfig *config)
@@ -131,9 +137,9 @@ void $APPNAME$::readProperties(KConfig *config)
     // the app is being restored.  read in here whatever you wrote
     // in 'saveProperties'
 
-    QString url = config->readEntry("lastURL");
+    QString url = config->readPathEntry("lastURL");
 
-    if (!url.isNull())
+    if (!url.isEmpty())
         m_view->openURL(KURL(url));
 }
 

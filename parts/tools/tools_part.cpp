@@ -194,7 +194,7 @@ void ToolsPart::updateToolsMenu()
                                       this, SLOT(toolsMenuActivated()),
                                       (QObject*) 0, menutext.utf8());
         if (isdesktopfile) {
-            KDesktopFile df(config->readEntry("CommandLine"));
+            KDesktopFile df(config->readPathEntry("CommandLine"));
             action->setIcon(df.readIcon());
         }
         actions.append(action);
@@ -237,7 +237,7 @@ void ToolsPart::toolsMenuActivated()
     QString menutext = QString::fromUtf8(sender()->name());
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("Tool Menu " + menutext);
-    QString cmdline = config->readEntry("CommandLine");
+    QString cmdline = config->readPathEntry("CommandLine");
     bool isdesktopfile = config->readBoolEntry("DesktopFile");
     bool captured = config->readBoolEntry("Captured");
     kdDebug() << "activating " << menutext
@@ -256,7 +256,7 @@ void ToolsPart::fileContextActivated(int id)
     
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("File Context " + menutext);
-    QString cmdline = config->readEntry("CommandLine");
+    QString cmdline = config->readPathEntry("CommandLine");
     bool captured = config->readBoolEntry("Captured");
     kdDebug() << "activating " << menutext
               << "with cmdline " << cmdline
@@ -271,7 +271,7 @@ void ToolsPart::dirContextActivated(int id)
 
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("Dir Context " + menutext);
-    QString cmdline = config->readEntry("CommandLine");
+    QString cmdline = config->readPathEntry("CommandLine");
     bool captured = config->readBoolEntry("Captured");
     kdDebug() << "activating " << menutext
               << "with cmdline " << cmdline

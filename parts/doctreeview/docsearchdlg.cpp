@@ -101,7 +101,7 @@ bool DocSearchDialog::performSearch()
 {
     KConfig config("khelpcenterrc", true);
     config.setGroup("htdig");
-    QString exe = config.readEntry("htsearch", kapp->dirs()->findExe("htsearch"));
+    QString exe = config.readPathEntry("htsearch", kapp->dirs()->findExe("htsearch"));
     if (exe.isEmpty()) {
         // Check for htsearch in /usr/lib/cgi-bin (for Debian systems)
         exe = "/usr/lib/cgi-bin/htsearch";

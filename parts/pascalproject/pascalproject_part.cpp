@@ -401,7 +401,7 @@ QString PascalProjectPart::defaultOptions( const QString compiler )
 {
     KConfig *config = KGlobal::config();
     config->setGroup("Pascal Compiler");
-    return config->readEntry(compiler);
+    return config->readPathEntry(compiler);
 }
 
 #include "pascalproject_part.moc"
