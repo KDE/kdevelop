@@ -31,10 +31,8 @@
 KDevProject::KDevProject( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
     : KDevPlugin( pluginName, icon, parent, name)
 {
-//    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotBuildFileMap()) ); // too expensive
-//    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotBuildFileMap()) ); // too expensive
-
-//    connect( this, SIGNAL(changedFilesInProject(const QStringList& )), this, SLOT(slotBuildFileMap()) ); // no reason for this one
+    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotBuildFileMap()) );
+    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotBuildFileMap()) );
 
     connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotAddFilesToFileMap(const QStringList& )) ); 
     connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotRemoveFilesFromFileMap(const QStringList& )) ); 
