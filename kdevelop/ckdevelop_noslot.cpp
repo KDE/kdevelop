@@ -425,6 +425,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_STOP);
     enableCommand(ID_PROJECT_MAKE_PROJECT_API);
     enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+		enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
     if(bAutosave)
       saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
 
@@ -446,6 +447,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_BUILD_STOP);
     disableCommand(ID_PROJECT_MAKE_PROJECT_API);
     disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+    disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
     if(bAutosave)
       saveTimer->stop();  // stop the autosaving if make or something is running
   }
@@ -818,6 +820,7 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
+
 
 
 

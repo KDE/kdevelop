@@ -2126,19 +2126,32 @@ void CKDevelop::statusCallback(int id_){
 
   ON_STATUS_MSG(ID_FILE_QUIT,        						          i18n("Exits the program"))
 
-
+	ON_STATUS_MSG(ID_EDIT_UNDO,															i18n("Reverts the last editing step"))
+	ON_STATUS_MSG(ID_EDIT_REDO,															i18n("Re-execute the last undone step"))
+	
   ON_STATUS_MSG(ID_EDIT_CUT,                     			    i18n("Cuts the selected section and puts it to the clipboard"))
   ON_STATUS_MSG(ID_EDIT_COPY,                    			    i18n("Copys the selected section to the clipboard"))
   ON_STATUS_MSG(ID_EDIT_PASTE,                   			    i18n("Pastes the clipboard contents to actual position"))
-  ON_STATUS_MSG(ID_EDIT_SELECT_ALL,              			    i18n("Selects the whole document contents"))
+
   ON_STATUS_MSG(ID_EDIT_INSERT_FILE,             			    i18n("Inserts a file at the current position"))
+
   ON_STATUS_MSG(ID_EDIT_SEARCH,                  			    i18n("Searchs the file for an expression"))
   ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,           			    i18n("Repeats the last search"))
   ON_STATUS_MSG(ID_EDIT_REPLACE,                 			    i18n("Searchs and replace expression"))
+	ON_STATUS_MSG(ID_EDIT_SEARCH_IN_FILES,									i18n("Opens the search in files dialog to search for expressions over several files"))
+	
+	ON_STATUS_MSG(ID_EDIT_INDENT,														i18n("Moves the selection to the right"))
+	ON_STATUS_MSG(ID_EDIT_UNINDENT,													i18n("Moves the selection to the left"))
+	
+  ON_STATUS_MSG(ID_EDIT_SELECT_ALL,              			    i18n("Selects the whole document contents"))
+	ON_STATUS_MSG(ID_EDIT_DESELECT_ALL,											i18n("Deselects the whole document contents"))
+	ON_STATUS_MSG(ID_EDIT_INVERT_SELECTION,									i18n("Inverts the current selection"))
 
-
+	
   ON_STATUS_MSG(ID_VIEW_GOTO_LINE,               			    i18n("Goes to Line Number..."))
-
+	ON_STATUS_MSG(ID_VIEW_NEXT_ERROR,												i18n("Switches to the file and line the next error was reported"))
+	ON_STATUS_MSG(ID_VIEW_PREVIOUS_ERROR,										i18n("Switches to the file and line the previous error was reported"))
+	
   ON_STATUS_MSG(ID_VIEW_TREEVIEW,              				    i18n("Enables / disables the treeview"))
   ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,            				    i18n("Enables / disables the outputview"))
 
@@ -2149,19 +2162,23 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_VIEW_REFRESH,                			    i18n("Refreshes current view"))
 
 
-  ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			  i18n("Generates a new project with KAppWizard"))
+  ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			  i18n("Generates a new project with Application Wizard"))
   ON_STATUS_MSG(ID_PROJECT_OPEN,			            	      i18n("Opens an existing project"))
   ON_STATUS_MSG(ID_PROJECT_CLOSE,                 			  i18n("Closes the current project"))
   ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,        			  i18n("Adds an existing file to the project"))
+	ON_STATUS_MSG(ID_PROJECT_ADD_NEW_TRANSLATION_FILE,			i18n("Adds a new language for internationalization to the project"))
   ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,           			  i18n("Removes file from the project"))
 
   ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,             			  i18n("Creates a new Class frame structure and files"))
 
   ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,       			  i18n("Shows the current file properties"))
   ON_STATUS_MSG(ID_PROJECT_OPTIONS,               			  i18n("Sets project and compiler options"))
-   ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,        			  i18n("Creates the Project's API with KDoc"))
-  ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,        			  i18n("Creates the Project's User Manual with the sgml-file"))
-  
+	ON_STATUS_MSG(ID_PROJECT_MESSAGES,											i18n("Invokes make to create the message file by extracting all i18n() macros"))
+  ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,        			i18n("Creates the Project's API with KDoc"))
+  ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,        			i18n("Creates the Project's User Manual with the sgml-file"))
+	ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION,							i18n("Creates distribution packages from the current project"))
+	ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,  i18n("Creates a tar.gz file from the current project sources"))
+
   ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
   ON_STATUS_MSG(ID_KDLG_BUILD_GENERATE,                   i18n("Generates the sourcefiles for the dialog"))
   ON_STATUS_MSG(ID_BUILD_MAKE,                    			  i18n("Invokes make-command"))
@@ -2169,6 +2186,8 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,       			  i18n("Invokes make clean and rebuild all"))
   ON_STATUS_MSG(ID_BUILD_STOP,                    			  i18n("Stops make immediately"))
   ON_STATUS_MSG(ID_BUILD_RUN,                     			  i18n("Invokes make-command and runs the program"))
+  ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,										i18n("Lets you set run-arguments to the binary and invokes the make-command"))
+
   ON_STATUS_MSG(ID_BUILD_DEBUG,                   			  i18n("Invokes make and KDbg debugging the binary"))
   ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			  i18n("Invokes make distclean and deletes all compiled files"))
   ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			  i18n("Invokes automake and co."))
@@ -2189,13 +2208,19 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_OPTIONS_PRINT_A2PS,       			        i18n("Configures the printer to use a2ps"))
   ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              		    i18n("Configures KDevelop"))
 
+  ON_STATUS_MSG(ID_BOOKMARKS_SET,													i18n("Sets a bookmark to the current window file"))
+  ON_STATUS_MSG(ID_BOOKMARKS_ADD,													i18n("Adds a bookmark to the current window file"))
+  ON_STATUS_MSG(ID_BOOKMARKS_CLEAR,												i18n("Clears the bookmark list for the current window"))
+
   ON_STATUS_MSG(ID_HELP_BACK,                      			  i18n("Switchs to last browser page"))
   ON_STATUS_MSG(ID_HELP_FORWARD,                   			  i18n("Switchs to next browser page"))
 
   ON_STATUS_MSG(ID_HELP_SEARCH_TEXT,              				  i18n("Searchs the selected text in the documentation"))
   ON_STATUS_MSG(ID_HELP_SEARCH,                           i18n("Lets you search individually for an expression"))
 
-  ON_STATUS_MSG(ID_HELP_CONTENTS,                  			  i18n("Switch to KDevelop's User Manual"))
+  ON_STATUS_MSG(ID_HELP_CONTENTS,                  			  i18n("Switchs to KDevelop's User Manual"))
+  ON_STATUS_MSG(ID_HELP_TUTORIAL,													i18n("Switchs to the KDevelop Programming Handbook"))
+  ON_STATUS_MSG(ID_HELP_TIP_OF_DAY,												i18n("Opens the Tip of the Day dialog with hints for using KDevelop"))
 
   ON_STATUS_MSG(ID_HELP_REFERENCE,                			  i18n("Switchs to the C/C++-Reference"))
   ON_STATUS_MSG(ID_HELP_QT_LIBRARY,                			  i18n("Switchs to the QT-Documentation"))
@@ -2209,6 +2234,19 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
+	ON_STATUS_MSG(ID_KDLG_FILE_NEW,													i18n("Opens the New Dialog dialog to construct a new Widget"))
+	ON_STATUS_MSG(ID_KDLG_FILE_OPEN,												i18n("Opens an existing dialog file"))
+	ON_STATUS_MSG(ID_KDLG_FILE_CLOSE,												i18n("Closes the current dialog"))
+	ON_STATUS_MSG(ID_KDLG_FILE_SAVE,												i18n("Saves the current dialog"))
+	ON_STATUS_MSG(ID_KDLG_FILE_SAVE_AS,											i18n("Saves the current dialog under a new filename"))
+	
+	ON_STATUS_MSG(ID_KDLG_VIEW_PROPVIEW,										i18n("Enables/Disables the properties window"))
+	ON_STATUS_MSG(ID_KDLG_VIEW_TOOLBAR,											i18n("Enables / disables the standard toolbar"))
+	ON_STATUS_MSG(ID_KDLG_VIEW_STATUSBAR,										i18n("Enables / disables the statusbar"))
+
+	ON_STATUS_MSG(ID_KDLG_VIEW_REFRESH,											i18n("Refreshes current view"))
+	ON_STATUS_MSG(ID_KDLG_VIEW_GRID,												i18n("Sets the grid size of the editing widget grid snap"))
+	
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }

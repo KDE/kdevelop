@@ -184,9 +184,6 @@ void CKDevelop::initView(){
   top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
   view->activate(top_panner,o_tab_view); 
 
-  output_view_pos=view->separatorPos();
-  tree_view_pos=top_panner->separatorPos();
-
   // set the mainwidget
   setView(view);
   initKeyAccel();
@@ -450,7 +447,7 @@ void CKDevelop::initMenuBar(){
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
   project_menu->insertSeparator();
   
-  	project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
+  project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
   project_menu->insertItem(i18n("Make AP&I-Doc"), this,
 			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
   project_menu->insertItem(i18n("Make &User-Manual"), this, 
@@ -620,6 +617,7 @@ void CKDevelop::initMenuBar(){
   connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+	connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
 
@@ -1058,6 +1056,11 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
+
+
+
 
 
 

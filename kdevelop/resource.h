@@ -70,9 +70,6 @@
 // View-menu entries
 
 #define ID_VIEW_GOTO_LINE           12010
-#define ID_VIEW_GOTO_BOOKMARK       12011
-#define ID_VIEW_BOOKMARK_ADD        12012
-#define ID_VIEW_BOOKMARKS_CLEAR     12013
 
 #define ID_VIEW_NEXT_ERROR          12015
 #define ID_VIEW_PREVIOUS_ERROR      12017
