@@ -22,17 +22,29 @@
 #define __KDEVPART_CLASSVIEW_H__
 
 #include "kdevlanguagesupport.h"
+#include "viewcombos.h"
 
 #include <qguardedptr.h>
+#include <qmap.h>
+
 #include <kdevplugin.h>
+
 #include <codemodel.h>
+
+namespace KParts { class Part; }
+namespace KTextEditor
+{
+    class Document;
+    class View;
+    class EditInterface;
+    class SelectionInterface;
+    class ViewCursorInterface;
+};
+
 
 class ClassViewWidget;
 class KListViewAction;
 class QListViewItem;
-class NamespaceItem;
-class ClassItem;
-class FunctionItem;
 class KToolBarPopupAction;
 
 class ClassViewPart : public KDevPlugin
@@ -65,15 +77,40 @@ private slots:
     void unfocusClasses();
     void unfocusFunctions();
 
+    void syncCombos();
+    void activePartChanged(KParts::Part*);
+
 private:
     void setupActions();
     bool langHasFeature(KDevLanguageSupport::Features feature);
 
+    NamespaceDom syncNamespaces(const FileDom &dom);
+    ClassDom syncClasses(const NamespaceDom &dom);
+    FunctionDom syncFunctions(const ClassDom &dom);
+
     QGuardedPtr<ClassViewWidget> m_widget;
+    QMap<NamespaceModel*, NamespaceItem*> nsmap;
+    QMap<ClassModel*, ClassItem*> clmap;
+    QMap<FunctionModel*, FunctionItem*> fnmap;
+
+    bool sync;
+
+    KAction *m_followCode;
     KListViewAction *m_namespaces;
     KListViewAction *m_classes;
     KListViewAction *m_functions;
     KToolBarPopupAction *m_popupAction;
+
+    QString m_activeFileName;
+    KTextEditor::Document* m_activeDocument;
+    KTextEditor::View* m_activeView;
+    KTextEditor::SelectionInterface* m_activeSelection;
+    KTextEditor::EditInterface* m_activeEditor;
+    KTextEditor::ViewCursorInterface* m_activeViewCursor;
+
+    friend class NamespaceItem;
+    friend class ClassItem;
+    friend class FunctionItem;
 };
 
 

@@ -27,27 +27,37 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kpopupmenu.h>
+#include <kdebug.h>
+#include <kmimetype.h>
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevlanguagesupport.h>
 #include <kcomboview.h>
 #include <kdevpartcontroller.h>
+#include <urlutil.h>
 
+#include <codemodel.h>
 #include <codemodel_utils.h>
 
 #include "classviewwidget.h"
 #include "classviewpart.h"
-#include "viewcombos.h"
 #include "hierarchydlg.h"
 
 #include "klistviewaction.h"
+
+#include <ktexteditor/document.h>
+#include <ktexteditor/editinterface.h>
+#include <ktexteditor/view.h>
+#include <ktexteditor/selectioninterface.h>
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/clipboardinterface.h>
 
 typedef KGenericFactory<ClassViewPart> ClassViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) );
 
 ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart" )
+    : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart" ), sync(false)
 {
     setInstance(ClassViewFactory::instance());
     setXMLFile("kdevclassview.rc");
@@ -61,6 +71,8 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
     connect( core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
+    connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
+        this, SLOT(activePartChanged(KParts::Part*)));
 }
 
 
@@ -85,6 +97,10 @@ void ClassViewPart::slotProjectClosed( )
 
 void ClassViewPart::setupActions( )
 {
+    m_followCode = new KAction(i18n("Synchronize"), "dirsynch", 0, this, SLOT(syncCombos()), actionCollection(), "sync_combos");
+    m_followCode->setToolTip(i18n("Synchronize selectors"));
+    m_followCode->setWhatsThis(i18n("<b>Synchronize</b>\nSynchronize namespaces, classes and functions selectors with code."));
+
     m_namespaces = new KListViewAction( new KComboView(true), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo" );
     connect( m_namespaces->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectNamespace(QListViewItem*)) );
     m_namespaces->setToolTip(i18n("Namespaces"));
@@ -165,6 +181,11 @@ void ClassViewPart::selectClass( QListViewItem * item )
 
 void ClassViewPart::selectFunction( QListViewItem * item )
 {
+    if (sync)
+    {
+        sync = false;
+        return;
+    }
     FunctionItem *fi = dynamic_cast<FunctionItem*>(item);
     if (!fi)
         return;
@@ -313,6 +334,278 @@ void ClassViewPart::unfocusFunctions( )
 {
     if (m_functions->view()->currentText().isEmpty())
         m_functions->view()->setCurrentText(EmptyFunctions);
+}
+
+void ClassViewPart::syncCombos( )
+{
+    kdDebug() << "ClassViewPart::syncCombos" << endl;
+    if (m_activeFileName.isEmpty())
+        return;
+    FileDom dom = codeModel()->fileByName(m_activeFileName);
+    if (!dom.data())
+        return;
+//     NamespaceDom nsdom = syncNamespaces(dom);
+//     ClassDom cldom = syncClasses(nsdom);
+//     FunctionDom fndom = syncFunctions(cldom);
+
+    kdDebug() << "ClassViewPart::syncCombos working on " << m_activeFileName << endl;
+    unsigned int line; unsigned int column;
+    m_activeViewCursor->cursorPosition(&line, &column);
+
+    //try to sync with declarations
+    bool declarationFound = false;
+    CodeModelUtils::AllFunctions functions = CodeModelUtils::allFunctionsDetailed(dom);
+    FunctionDom fndom;
+    for (FunctionList::Iterator it = functions.functionList.begin();
+        it != functions.functionList.end(); ++it)
+    {
+        int startLine; int startColumn;
+        (*it)->getStartPosition(&startLine, &startColumn);
+        int endLine; int endColumn;
+        (*it)->getEndPosition(&endLine, &endColumn);
+
+        kdDebug() << "sync with " << (*it)->name() << " startLine " << startLine <<
+            " endLine " << endLine << " line " << line << endl;
+
+        if ( (line >= startLine) && (line <= endLine) )
+        {
+            fndom = *it;
+            break;
+        }
+    }
+
+    if (!fndom.data())
+        declarationFound = false;
+    else
+    {
+        NamespaceDom nsdom = functions.relations[fndom].ns;
+        if (nsdom.data())
+            kdDebug() << "namespace to try " << nsdom->name() << endl;
+        else
+            kdDebug() << "namespace data empty" << endl;
+
+        for (QMap<NamespaceModel*, NamespaceItem*>::const_iterator it = nsmap.begin();
+            it != nsmap.end(); ++it)
+        {
+            kdDebug() << " in nsmap " << it.key() << " data " << it.data() << endl;
+            kdDebug() << " in nsmap " << it.key()->name() << " data " << it.data()->text(0) << endl;
+        }
+
+        kdDebug() << " in nsmap is ? " << nsdom.data() << endl;
+        if (nsdom)
+        {
+            kdDebug() << " in nsmap is ? " << nsdom->name() << endl;
+            if (nsdom->name() != "::")
+                return;
+        }
+
+        if (nsdom.data() && nsmap[nsdom.data()])
+        {
+            kdDebug() << "trying namespace " << nsdom->name() << endl;
+            m_namespaces->view()->setCurrentActiveItem(nsmap[nsdom.data()]);
+        }
+        else
+        {
+            kdDebug() << "trying global namespace " << endl;
+            if (m_namespaces->view()->listView()->firstChild())
+            {
+                kdDebug() << "firstChild exists - global ns" << endl;
+                m_namespaces->view()->setCurrentActiveItem(m_namespaces->view()->listView()->firstChild());
+            }
+        }
+        ClassDom cldom = functions.relations[fndom].klass;
+        if (cldom.data() && clmap[cldom.data()])
+        {
+            kdDebug() << "trying class " << cldom->name() << endl;
+            m_classes->view()->setCurrentActiveItem(clmap[cldom.data()]);
+        }
+
+        kdDebug() << "trying function " << fndom->name() << endl;
+        sync = true;
+        m_functions->view()->setCurrentItem(fnmap[fndom.data()]);
+    }
+
+    if (!declarationFound)
+    {
+        //try to sync with definitions
+
+        CodeModelUtils::AllFunctionDefinitions functions = CodeModelUtils::allFunctionDefinitionsDetailed(dom);
+        FunctionDefinitionDom fndom;
+        for (FunctionDefinitionList::Iterator it = functions.functionList.begin();
+            it != functions.functionList.end(); ++it)
+        {
+            int startLine; int startColumn;
+            (*it)->getStartPosition(&startLine, &startColumn);
+            int endLine; int endColumn;
+            (*it)->getEndPosition(&endLine, &endColumn);
+
+            kdDebug() << "sync with " << (*it)->name() << " startLine " << startLine <<
+                " endLine " << endLine << " line " << line << endl;
+
+            if ( (line >= startLine) && (line <= endLine) )
+            {
+                fndom = *it;
+                break;
+            }
+        }
+
+        if (!fndom.data())
+            return;
+        NamespaceDom nsdom = functions.relations[fndom].ns;
+        if (nsdom.data())
+            kdDebug() << "namespace to try " << nsdom->name() << endl;
+        else
+            kdDebug() << "namespace data empty" << endl;
+
+        for (QMap<NamespaceModel*, NamespaceItem*>::const_iterator it = nsmap.begin();
+            it != nsmap.end(); ++it)
+        {
+            kdDebug() << " in nsmap " << it.key() << " data " << it.data() << endl;
+            kdDebug() << " in nsmap " << it.key()->name() << " data " << it.data()->text(0) << endl;
+        }
+
+        kdDebug() << " in nsmap is ? " << nsdom.data() << endl;
+        if (nsdom)
+        {
+            kdDebug() << " in nsmap is ? " << nsdom->name() << endl;
+            if (nsdom->name() != "::")
+                return;
+        }
+
+        if (nsdom.data() && nsmap[nsdom.data()])
+        {
+            kdDebug() << "trying namespace " << nsdom->name() << endl;
+            m_namespaces->view()->setCurrentActiveItem(nsmap[nsdom.data()]);
+        }
+        else
+        {
+            kdDebug() << "trying global namespace " << endl;
+            if (m_namespaces->view()->listView()->firstChild())
+            {
+                kdDebug() << "firstChild exists - global ns" << endl;
+                m_namespaces->view()->setCurrentActiveItem(m_namespaces->view()->listView()->firstChild());
+
+                kdDebug() << "trying to find item using global namespace" << endl;
+                if (codeModel()->globalNamespace()->hasFunction(fndom->name()))
+                {
+                    sync = true;
+                    FunctionModel *mod = const_cast<FunctionModel *>( codeModel()->globalNamespace()->functionByName(fndom->name()).first().data() );
+                    QListViewItem *it = fnmap[mod];
+                    if (it)
+                        m_functions->view()->setCurrentItem(it);
+                    return;
+                }
+            }
+        }
+        ClassDom cldom = functions.relations[fndom].klass;
+        if (cldom.data() && clmap[cldom.data()])
+        {
+            kdDebug() << "trying class " << cldom->name() << endl;
+            m_classes->view()->setCurrentActiveItem(clmap[cldom.data()]);
+
+            kdDebug() << "trying to find item using class " << cldom->name() << endl;
+
+            if (cldom->hasFunction(fndom->name()))
+            {
+                sync = true;
+                QListViewItem *it = fnmap[cldom->functionByName(fndom->name()).first().data()];
+                if (it)
+                    m_functions->view()->setCurrentItem(it);
+                return;
+            }
+        }
+
+        kdDebug() << "trying function definition " << fndom->name()
+             << " with scope " << fndom->scope().join("::") << endl;
+
+        NamespaceDom currNs = codeModel()->globalNamespace();
+        ClassDom currClass;
+        for (QStringList::const_iterator it = fndom->scope().begin();
+            it != fndom->scope().end(); ++it)
+        {
+            if (currNs->hasNamespace(*it))
+            {
+                currNs = currNs->namespaceByName(*it);
+                kdDebug() << "resolved namespace " << *it << endl;
+            }
+            else if (currNs->hasClass(*it))
+            {
+                currClass = currNs->classByName(*it).first();
+                kdDebug() << "resolved class " << *it << endl;
+            }
+            else if (currClass.data() && currClass->hasClass(*it))
+            {
+                currClass = currClass->classByName(*it).first();
+                kdDebug() << "resolved nested class " << *it << endl;
+            }
+        }
+        if (currClass.data())
+        {
+            kdDebug() << "trying to find item using resolved class " << currNs->name() << endl;
+            if (currClass->hasFunction(fndom->name()))
+            {
+                sync = true;
+                QListViewItem *it = fnmap[currClass->functionByName(fndom->name()).first().data()];
+                if (it)
+                    m_functions->view()->setCurrentItem(it);
+                return;
+            }
+        }
+        else if (currNs.data())
+        {
+            kdDebug() << "trying to find item using resolved namespace " << currNs->name() << endl;
+            if (currNs->hasFunction(fndom->name()))
+            {
+                sync = true;
+                FunctionModel *mod= currNs->functionByName(fndom->name()).first().data();
+                QListViewItem *it = fnmap[mod];
+                if (it)
+                    m_functions->view()->setCurrentItem(it);
+                return;
+            }
+        }
+
+        sync = true;
+//        m_functions->view()->setCurrentItem(fnmap[fndom.data()]);
+    }
+}
+//     const NamespaceList nslist = dom->namespaceList();
+//     for (NamespaceList::const_iterator it = nslist->begin(); it != namespaceList.end(); ++it)
+//     {
+//         nsdom = syncNamespaces(*it);
+//     }
+
+void ClassViewPart::activePartChanged( KParts::Part * part)
+{
+    kdDebug() << "ClassViewPart::activePartChanged()" << endl;
+
+    m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
+    m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
+    m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
+    m_activeSelection = dynamic_cast<KTextEditor::SelectionInterface*>( part );
+    m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( m_activeView ) : 0;
+
+    m_activeFileName = QString::null;
+
+    if (m_activeDocument)
+    {
+        m_activeFileName = URLUtil::canonicalPath( m_activeDocument->url().path() );
+/*        if ( languageSupport()->mimeTypes().find(
+            KMimeType::findByPath(m_activeFileName)) != languageSupport()->mimeTypes().end() )
+            m_activeFileName = QString::null;*/
+    }
+}
+
+NamespaceDom ClassViewPart::syncNamespaces( const FileDom & dom )
+{
+}
+
+ClassDom ClassViewPart::syncClasses( const NamespaceDom & dom )
+{
+}
+
+FunctionDom ClassViewPart::syncFunctions( const ClassDom & dom )
+{
 }
 
 #include "classviewpart.moc"

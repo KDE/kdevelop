@@ -17,7 +17,13 @@
  *  Boston, MA 02111-1307, USA.
  *
  */
+#ifndef VIEWCOMBOS_H
+#define VIEWCOMBOS_H
+
+#include <klocale.h>
+
 #include <qlistview.h>
+
 #include "codemodel.h"
 
 class ClassViewPart;
@@ -30,6 +36,7 @@ class NamespaceItem: public QListViewItem{
 public:
     NamespaceItem(ClassViewPart *part, QListView *parent, QString name, NamespaceDom dom);
     NamespaceItem(ClassViewPart *part, QListViewItem *parent, QString name, NamespaceDom dom);
+    ~NamespaceItem();
     NamespaceDom dom() const;
     virtual void setup();
 private:
@@ -41,6 +48,7 @@ class ClassItem: public QListViewItem{
 public:
     ClassItem(ClassViewPart *part, QListView *parent, QString name, ClassDom dom);
     ClassItem(ClassViewPart *part, QListViewItem *parent, QString name, ClassDom dom);
+    ~ClassItem();
     ClassDom dom() const;
     virtual void setup();
 private:
@@ -52,6 +60,7 @@ class FunctionItem: public QListViewItem{
 public:
     FunctionItem(ClassViewPart *part, QListView *parent, QString name, FunctionDom dom);
     FunctionItem(ClassViewPart *part, QListViewItem *parent, QString name, FunctionDom dom);
+    ~FunctionItem();
     FunctionDom dom() const;
     virtual void setup();
 private:
@@ -71,3 +80,5 @@ void processClass( ClassViewPart *part, KComboView *view, ClassItem * item );
 void processFunction( ClassViewPart *part, KComboView *view, FunctionItem * item );
 
 }
+
+#endif

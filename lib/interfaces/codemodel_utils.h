@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -93,11 +94,38 @@ void findFunctionDefinitions( Pred pred, FunctionDefinitionList & lst )
 	findFunctionDefinitions( pred, model_cast<NamespaceDom>(*it), lst );
 }
 
+struct Scope{
+    ClassDom klass;
+    NamespaceDom ns;
+};
 
+struct AllFunctions{
+    QMap<FunctionDom, Scope> relations;
+    FunctionList functionList;
+};
+struct AllFunctionDefinitions{
+    QMap<FunctionDefinitionDom, Scope> relations;
+    FunctionDefinitionList functionList;
+};
+
+namespace Functions{
 void processClasses(FunctionList &list, const ClassDom dom);
 void processNamespaces(FunctionList &list, const NamespaceDom dom);
-FunctionList allFunctions(const FileDom &dom);
+void processClasses(FunctionList &list, const ClassDom dom, QMap<FunctionDom, Scope> &relations);
+void processClasses(FunctionList &list, const ClassDom dom, QMap<FunctionDom, Scope> &relations, const NamespaceDom &nsdom);
+void processNamespaces(FunctionList &list, const NamespaceDom dom, QMap<FunctionDom, Scope> &relations);
+}
+namespace FunctionDefinitions{
+void processClasses(FunctionDefinitionList &list, const ClassDom dom);
+void processNamespaces(FunctionDefinitionList &list, const NamespaceDom dom);
+void processClasses(FunctionDefinitionList &list, const ClassDom dom, QMap<FunctionDefinitionDom, Scope> &relations);
+void processClasses(FunctionDefinitionList &list, const ClassDom dom, QMap<FunctionDefinitionDom, Scope> &relations, const NamespaceDom &nsdom);
+void processNamespaces(FunctionDefinitionList &list, const NamespaceDom dom, QMap<FunctionDefinitionDom, Scope> &relations);
+}
 
+FunctionList allFunctions(const FileDom &dom);
+AllFunctions allFunctionsDetailed(const FileDom &dom);
+AllFunctionDefinitions allFunctionDefinitionsDetailed(const FileDom &dom);
 }
 
 #endif // __CODEMODEL_UTILS_H

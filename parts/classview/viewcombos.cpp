@@ -28,11 +28,18 @@
 NamespaceItem::NamespaceItem(ClassViewPart *part, QListView *parent, QString name, NamespaceDom dom)
     :QListViewItem(parent, name), m_dom(dom), m_part(part)
 {
+    m_part->nsmap[m_dom.data()] = this;
 }
 
 NamespaceItem::NamespaceItem(ClassViewPart *part, QListViewItem *parent, QString name, NamespaceDom dom)
     :QListViewItem(parent, name), m_dom(dom), m_part(part)
 {
+    m_part->nsmap[m_dom.data()] = this;
+}
+
+NamespaceItem::~ NamespaceItem( )
+{
+    m_part->nsmap.remove(m_dom.data());
 }
 
 NamespaceDom NamespaceItem::dom() const
@@ -50,11 +57,18 @@ void NamespaceItem::setup()
 ClassItem::ClassItem(ClassViewPart *part, QListView *parent, QString name, ClassDom dom)
     :QListViewItem(parent, name), m_dom(dom), m_part(part)
 {
+    m_part->clmap[m_dom.data()] = this;
 }
 
 ClassItem::ClassItem(ClassViewPart *part, QListViewItem *parent, QString name, ClassDom dom)
     :QListViewItem(parent, name), m_dom(dom), m_part(part)
 {
+    m_part->clmap[m_dom.data()] = this;
+}
+
+ClassItem::~ ClassItem( )
+{
+    m_part->clmap.remove(m_dom.data());
 }
 
 ClassDom ClassItem::dom() const
@@ -72,11 +86,18 @@ void ClassItem::setup()
 FunctionItem::FunctionItem(ClassViewPart *part, QListView *parent, QString name, FunctionDom dom)
     :QListViewItem(parent, name), m_dom(dom), m_part(part)
 {
+    m_part->fnmap[m_dom.data()] = this;
 }
 
 FunctionItem::FunctionItem(ClassViewPart *part, QListViewItem *parent, QString name, FunctionDom dom)
     :QListViewItem(parent, name), m_dom(dom), m_part(part)
 {
+    m_part->fnmap[m_dom.data()] = this;
+}
+
+FunctionItem::~ FunctionItem( )
+{
+    m_part->fnmap.remove(m_dom.data());
 }
 
 FunctionDom FunctionItem::dom() const
@@ -201,3 +222,4 @@ void processFunction( ClassViewPart *part, KComboView *view, FunctionItem * item
 }
 
 }
+
