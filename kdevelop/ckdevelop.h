@@ -87,7 +87,7 @@ class CKDevelop : public KTMainWindow {
   Q_OBJECT
 public:
   /**constructor*/
-  CKDevelop();
+  CKDevelop(bool witharg=true);
   /**destructor*/
   virtual ~CKDevelop();
   void initView();
@@ -97,7 +97,7 @@ public:
   void initToolBar();
   void initStatusBar();
   void initWhatsThis();
-  void initProject();
+  void initProject(bool witharg);
 
   /** Remove a specified file from the edit_infos struct
    *  and leave the widgets in a proper state

@@ -40,7 +40,8 @@
 #include "cerrormessageparser.h"
 #include "grepdialog.h"
 
-CKDevelop::CKDevelop(){
+
+CKDevelop::CKDevelop(bool witharg){
   version = VERSION;
   project=false;// no project
   beep=false; // no beep
@@ -58,7 +59,7 @@ CKDevelop::CKDevelop(){
 	
   readOptions();
 	
-  initProject();
+  initProject(witharg);
   setToolmenuEntries();
 	
   error_parser = new CErrorMessageParser;
@@ -1042,18 +1043,16 @@ void CKDevelop::initConnections(){
 
 }
 
-void CKDevelop::initProject(){
+void CKDevelop::initProject(bool witharg){
 
   config->setGroup("General Options");
   bool bLastProject;
-  if(!kapp->isRestored())
+  if(!witharg)
     bLastProject= config->readBoolEntry("LastProject",true);
   else
     bLastProject=false;
 
   QString filename;
-  if(kapp->argc() > 1)
-    bLastProject = false;
   if(bLastProject){
     config->setGroup("Files");
     filename = config->readEntry("project_file","");

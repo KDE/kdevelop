@@ -1,5 +1,11 @@
 KDevelop-FAQ
 
+Q: The configure script doesn't find my Qt library.
+A: Use the options 
+     --with-qt-includes=path_to_your_qt_includes
+   and 
+     --with-qt-libraries=path_to_your_qt_library
+
 Q: I get the message: "Wrong JPEG library version: library is 61, caller expects 62 "
 
 A:  There are 2 ways.

@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
       install->show();
       delete install;
     }
-    CKDevelop* kdevelop = new CKDevelop;
+    CKDevelop* kdevelop = new CKDevelop( argc > 1 );
     if(bInstall){
       kdevelop->refreshTrees();  // this is because of the new documentation
     }
