@@ -122,13 +122,13 @@ public:
 	TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
 	
         if( cppSupport()->problemReporter() ){
-	    cppSupport()->problemReporter()->removeAllErrors( fileName );
+	    cppSupport()->problemReporter()->removeAllProblems( fileName );
 
 	    QValueList<Problem> pl = problems( fileName );
 	    QValueList<Problem>::ConstIterator it = pl.begin();
 	    while( it != pl.end() ){
 	        const Problem& p = *it++;
-	        cppSupport()->problemReporter()->reportError( p.text(), fileName, p.line(), p.column() );
+	        cppSupport()->problemReporter()->reportProblem( fileName, p );
 	    }
 	}
 	
@@ -279,13 +279,13 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	kdDebug(9007) << "----------> file " << fileName << " parsed" << endl; 
 
         if( m_problemReporter ){
-	    m_problemReporter->removeAllErrors( fileName );
+	    m_problemReporter->removeAllProblems( fileName );
 
 	    QValueList<Problem> problems = event->problems();
 	    QValueList<Problem>::ConstIterator it = problems.begin();
 	    while( it != problems.end() ){
 	        const Problem& p = *it++;
-	        m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
+	        m_problemReporter->reportProblem( fileName, p );
 	    }
 
 #if 0

@@ -218,6 +218,7 @@ bool BackgroundParser::filesInQueue()
 
 void BackgroundParser::run()
 {
+    /// @todo remove me!
     (void) m_cppSupport->codeCompletion()->repository()->getEntriesInScope( QStringList(), false );
 
     while( !m_close ){

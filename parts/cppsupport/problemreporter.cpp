@@ -141,7 +141,7 @@ void ProblemReporter::slotTextChanged()
         m_timer->changeInterval( m_delay );
 }
 
-void ProblemReporter::removeAllErrors( const QString& filename )
+void ProblemReporter::removeAllProblems( const QString& filename )
 {
     QListViewItem* current = firstChild();
     while( current ){
@@ -184,44 +184,22 @@ void ProblemReporter::slotSelected( QListViewItem* item )
     m_cppSupport->mainWindow()->lowerView( this );
 }
 
-void ProblemReporter::reportError( QString message,
-				   QString filename,
-				   int line, int column )
+void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 {
-    if( m_document && m_markIface && m_filename == filename ){
-	m_markIface->addMark( line, KTextEditor::MarkInterface::markType10 );
+    int markType = levelToMarkType( p.level() );
+    if( markType != -1 && m_document && m_markIface && m_filename == fileName ){
+	m_markIface->addMark( p.line(), markType );
     }
 
+    QString msg = p.text();
+    msg = msg.replace( QRegExp("\n"), "" );
+    
     new ProblemItem( this,
-		     "error",
-		     filename,
-		     QString::number( line+1 ),
-		     QString::number( column+1 ),
-		     message.replace( QRegExp("\n"), "" ) );
-}
-
-void ProblemReporter::reportWarning( QString message,
-                                     QString filename,
-                                     int line, int column )
-{
-    new ProblemItem( this,
-		     "warning",
-		     filename,
-		     QString::number( line+1 ),
-		     QString::number( column+1 ),
-		     message.replace( QRegExp("\n"), "" ) );
-}
-
-void ProblemReporter::reportMessage( QString message,
-                                     QString filename,
-                                     int line, int column )
-{
-    new ProblemItem( this,
-		     "message",
-		     filename,
-		     QString::number( line+1 ),
-		     QString::number( column+1 ),
-		     message.replace( QRegExp("\n"), "" ) );
+		     levelToString( p.level() ),
+		     fileName,
+		     QString::number( p.line() + 1 ),
+		     QString::number( p.column() + 1 ),
+		     msg );
 }
 
 void ProblemReporter::configure()
@@ -257,6 +235,40 @@ void ProblemReporter::slotPartRemoved( KParts::Part* part )
     if( part == m_document ){
 	m_document = 0;
 	m_timer->stop();
+    }
+}
+
+QString ProblemReporter::levelToString( int level ) const
+{
+    switch( level )
+    {
+    case Problem::Level_Error:
+	return QString::fromLatin1( "Error" );
+    case Problem::Level_Warning:
+	return QString::fromLatin1( "Warning" );
+    case Problem::Level_Todo:
+	return QString::fromLatin1( "Todo" );
+    case Problem::Level_Fixme:
+	return QString::fromLatin1( "Fixme" );
+    default:
+        return QString::null;
+    }
+}
+
+int ProblemReporter::levelToMarkType( int level ) const
+{
+    switch( level )
+    {
+    case Problem::Level_Error:
+	return KTextEditor::MarkInterface::markType10;
+    case Problem::Level_Warning:
+        return -1;
+    case Problem::Level_Todo:
+        return -1;
+    case Problem::Level_Fixme:
+        return -1;
+    default:
+        return -1;
     }
 }
 
