@@ -44,6 +44,7 @@ class GDBController : public DbgController
 public:
   GDBController(VarTree* varTree, FrameStack* frameStack);
   ~GDBController();
+  virtual void reConfig();
 
 protected:
   void queueCmd(DbgCommand* cmd, bool executeNext=false);
@@ -139,11 +140,11 @@ private:
   STTY*             tty_;
   bool              programHasExited_;
 
-  // Configuration values (TODO set config properly)
+  // Configuration values
   bool config_breakOnLoadingLibrary_;
   bool config_forceBPSet_;
   bool config_displayStaticMembers_;
-  bool config_asm_demangle_;
+  bool config_asmDemangle_;
 };
 
 #endif

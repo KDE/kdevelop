@@ -56,6 +56,7 @@ public:
 
 	DbgController();
 	virtual ~DbgController();
+  virtual void reConfig()                                                 = 0;
 
 protected:
   virtual void queueCmd(DbgCommand* cmd, bool executeNext)                = 0;

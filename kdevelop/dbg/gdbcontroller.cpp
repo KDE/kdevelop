@@ -102,13 +102,13 @@ GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
   config_breakOnLoadingLibrary_(true),
   config_forceBPSet_(true),
   config_displayStaticMembers_(false),
-  config_asm_demangle_(true)
+  config_asmDemangle_(true)
 {
   KConfig* config = kapp->getConfig();
   config->setGroup("Debug");
   ASSERT(!config->readBoolEntry("Use external debugger", false));
   config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
-  config_asm_demangle_          = !config->readBoolEntry("Display mangled names", true);
+  config_asmDemangle_           = !config->readBoolEntry("Display mangled names", true);
 
 #if defined (GDB_MONITOR)
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),         SLOT(slotDbgStatus(const QString&, int)));
@@ -146,6 +146,34 @@ GDBController::~GDBController()
 
   delete tty_;
   emit dbgStatus ("Debugger stopped", (s_dbgNotStarted|s_appNotStarted));
+}
+
+void GDBController::reConfig()
+{
+  KConfig* config = kapp->getConfig();
+  config->setGroup("Debug");
+  ASSERT(!config->readBoolEntry("Use external debugger", false));
+  bool old_displayStatic = config_displayStaticMembers_;
+  config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
+  bool old_asmDemangle = config_asmDemangle_;
+  config_asmDemangle_          = !config->readBoolEntry("Display mangled names", true);
+  if (dbgProcess_)
+  {
+    if (old_displayStatic != config_displayStaticMembers_)
+    {
+      if (config_displayStaticMembers_)
+        queueCmd(new GDBCommand("set print static-members on", NOTRUNCMD, NOTINFOCMD));
+      else
+        queueCmd(new GDBCommand("set print static-members off", NOTRUNCMD, NOTINFOCMD));
+    }
+    if (old_asmDemangle != config_asmDemangle_)
+    {
+      if (config_asmDemangle_)
+        queueCmd(new GDBCommand("set print asm-demangle on", NOTRUNCMD, NOTINFOCMD));
+      else
+        queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
+    }
+  }
 }
 
 // **************************************************************************
@@ -186,7 +214,9 @@ void GDBController::slotStart(const QString& application, const QString& args)
   // and the application itself
   queueCmd(new GDBCommand(QString().sprintf("set prompt \32%c", IDLE), NOTRUNCMD, NOTINFOCMD));
   queueCmd(new GDBCommand("set confirm off", NOTRUNCMD, NOTINFOCMD));
-  if (!config_displayStaticMembers_)
+  if (config_displayStaticMembers_)
+    queueCmd(new GDBCommand("set print static-members on", NOTRUNCMD, NOTINFOCMD));
+  else
     queueCmd(new GDBCommand("set print static-members off", NOTRUNCMD, NOTINFOCMD));
   queueCmd(new GDBCommand(QString().sprintf("tty %s", (tty_->getMainTTY()).data()), NOTRUNCMD, NOTINFOCMD));
   if (!args.isEmpty())
@@ -208,8 +238,11 @@ void GDBController::slotStart(const QString& application, const QString& args)
 
   // Print some nicer names in disassembly output. Although for an assembler
   // person this may actually be wrong and the mangled name could be better.
-  if (config_asm_demangle_)
+  if (config_asmDemangle_)
     queueCmd(new GDBCommand("set print asm-demangle on", NOTRUNCMD, NOTINFOCMD));
+  else
+    queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
+
 
   // Organise any breakpoints.
   emit acceptPendingBPs();
