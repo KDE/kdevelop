@@ -1,3 +1,10 @@
+1999-05-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* New autoconf/automake framework using DESTDIR for
+	the staging area prefix. Concerns acinclude.m4, ltconfig,
+	ltmain.sh, kdevelop/Makefile.am, po/Makefile.am
+	kdevelop/docs/Makefile.am, kdevelop/docs/en/Makefile.am,
+	kdevelop/tools/Makefile.am, debian/rules 
+
 1999-05-29  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed all i18n() that were missing
 	
