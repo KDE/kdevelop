@@ -96,7 +96,7 @@ Unit* BackgroundParser::parseFile( const QString& fileName, const QString& conte
     // antlr
     lexer.addSkipWord( "ANTLR_USE_NAMESPACE", SkipWordAndArguments );
     lexer.addSkipWord( "ANTLR_USING_NAMESPACE", SkipWordAndArguments );
-    
+
     // gnu
     lexer.addSkipWord( "__extension__" );
     lexer.addSkipWord( "__attribute__", SkipWordAndArguments );
@@ -110,6 +110,7 @@ Unit* BackgroundParser::parseFile( const QString& fileName, const QString& conte
     lexer.addSkipWord( "Q_OVERRIDE", SkipWordAndArguments );
     lexer.addSkipWord( "Q_ENUMS", SkipWordAndArguments );
     lexer.addSkipWord( "Q_PROPERTY", SkipWordAndArguments );
+    lexer.addSkipWord( "Q_CLASSINFO", SkipWordAndArguments );
     lexer.addSkipWord( "Q_SETS", SkipWordAndArguments );
     lexer.addSkipWord( "Q_UNUSED", SkipWordAndArguments );
     lexer.addSkipWord( "Q_CREATE_INSTANCE", SkipWordAndArguments );
