@@ -1235,7 +1235,7 @@ void KWriteView::mousePressEvent(QMouseEvent *e) {
   if (kWrite->popup && e->button() == RightButton) {
     kWrite->popup->popup(mapToGlobal(e->pos()));
   }
-//  kWrite->mousePressEvent(e); // this doesn't do anything, does it?
+  kWrite->mousePressEvent(e); // this doesn't do anything, does it?
 }
 
 void KWriteView::mouseDoubleClickEvent(QMouseEvent *e) {

@@ -24,7 +24,6 @@
 #include <qclipboard.h>
 #include <qregexp.h>
 #include <assert.h>
-#include <kapp.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include "./kwrite/kwdoc.h"
@@ -63,23 +62,49 @@ HlManager hlManager; //highlight manager
 CEditWidget::CEditWidget(QWidget* parent,const char* name)
   : KWrite(new KWriteDoc(&hlManager),parent,name)
 {  
-  setFocusProxy (kWriteView); 
-  pop = new QPopupMenu();
-  //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
-  pop->insertItem(BarIcon("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
-  pop->insertItem(BarIcon("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
-  pop->insertSeparator();
-  pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
-  pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
-  pop->insertItem(BarIcon("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
-  pop->setItemEnabled(ID_EDIT_CUT,false);
-  pop->setItemEnabled(ID_EDIT_COPY,false);
-  pop->setItemEnabled(ID_EDIT_PASTE,false);
-  pop->insertSeparator();
-  pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
-  pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
-  bookmarks.setAutoDelete(true);
-  d = new CEditWidgetPrivate();
+   
+	setFocusProxy (kWriteView); 
+    pop = new QPopupMenu();
+    //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
+    pop->insertItem(BarIcon("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
+    pop->insertItem(BarIcon("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
+    pop->insertSeparator();
+    pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
+    pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
+    pop->insertItem(BarIcon("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
+    pop->setItemEnabled(ID_EDIT_CUT,false);
+    pop->setItemEnabled(ID_EDIT_COPY,false);
+    pop->setItemEnabled(ID_EDIT_PASTE,false);
+    pop->insertSeparator();
+    pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
+    pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
+
+
+    bookmarks.setAutoDelete(true);
+    d = new CEditWidgetPrivate();
+}
+
+CEditWidget::CEditWidget(QWidget* parent,const char* name,KWriteDoc* doc)
+  : KWrite(doc,parent,name)
+{  
+   
+    setFocusProxy (kWriteView); 
+    pop = new QPopupMenu();
+    //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
+    pop->insertItem(BarIcon("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
+    pop->insertItem(BarIcon("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
+    pop->insertSeparator();
+    pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
+    pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
+    pop->insertItem(BarIcon("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
+    pop->setItemEnabled(ID_EDIT_CUT,false);
+    pop->setItemEnabled(ID_EDIT_COPY,false);
+    pop->setItemEnabled(ID_EDIT_PASTE,false);
+    pop->insertSeparator();
+    pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
+    pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
+    bookmarks.setAutoDelete(true);
+    d = new CEditWidgetPrivate();
 }
 
 /*-------------------------------------- CEditWidget::~CEditWidget()
@@ -92,8 +117,8 @@ CEditWidget::CEditWidget(QWidget* parent,const char* name)
  *   -
  *-----------------------------------------------------------------*/
 CEditWidget::~CEditWidget() {
-  delete doc();
-  delete d;
+    //  delete doc();
+    //  delete d;
 }
 
 /*********************************************************************
@@ -363,6 +388,7 @@ void CEditWidget::enterEvent ( QEvent * e){
 }
 
 void CEditWidget::mousePressEvent(QMouseEvent* event){
+
   if(event->button() == RightButton){
     
     if(event->state() & ControlButton) {

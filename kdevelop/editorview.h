@@ -23,6 +23,8 @@
 #include "./widgets/qextmdi/qextmdichildview.h"
 #include <kapp.h>
 #include <qdatetime.h>
+#include <qsplitter.h>
+#include "ceditwidget.h"
 
 class CEditWidget;
 /** An abstraction layer for the editwidget.
@@ -34,7 +36,17 @@ class EditorView : public QextMdiChildView, public Component {
 public: // Constructor and destructor
 
   EditorView (QWidget* parent=0,const char* name=0);
-  CEditWidget* editor;
+  CEditWidget* editorfirstview;
+  QSplitter* split;
+  CEditWidget* editorsecondview;
+  
+  CEditWidget* currentEditor();
+
+protected slots:
+  void slotSplitHorizontal();
+  void slotSplitVertical();
+  void slotUnSplit();
+
  protected:
   virtual void resizeEvent (QResizeEvent *e); 
   virtual void closeEvent(QCloseEvent* e);

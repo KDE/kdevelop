@@ -85,20 +85,20 @@ extern KGuiCmdManager cmdMngr;
 ///////////////////////
 void CKDevelop::doCursorCommand(int cmdNum) {
     if(editor_view != 0){
-	editor_view->editor->doCursorCommand(cmdNum);
+	editor_view->currentEditor()->doCursorCommand(cmdNum);
     }
 }
 
 void CKDevelop::doEditCommand(int cmdNum) {
   if(editor_view != 0){
-      editor_view->editor->doEditCommand(cmdNum);
+      editor_view->currentEditor()->doEditCommand(cmdNum);
   }
   
 }
 
 void CKDevelop::doStateCommand(int cmdNum) {
   if(editor_view != 0){
-      editor_view->editor->doStateCommand(cmdNum);
+      editor_view->currentEditor()->doStateCommand(cmdNum);
   }
 }
 
@@ -151,10 +151,10 @@ void CKDevelop::slotFileClose(){
 	return;
     
     slotStatusMsg(i18n("Closing file..."));
-    QString filename = editor_view->editor->getName();
+    QString filename = editor_view->currentEditor()->getName();
     int msg_result;
 
-    if(editor_view->editor->isModified()){
+    if(editor_view->currentEditor()->isModified()){
 	
 	// no autosave if the user intends to save a file
 	if (bAutosave)
@@ -175,14 +175,14 @@ void CKDevelop::slotFileClose(){
 	    else
 		{
 		    saveFileFromTheCurrentEditWidget();
-		    if (editor_view->editor->isModified())
+		    if (editor_view->currentEditor()->isModified())
 			msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
 		}
 	}
 	
 	if (msg_result == KMessageBox::Cancel) // cancel
 	    {
-		setInfoModified(filename, editor_view->editor->isModified());
+		setInfoModified(filename, editor_view->currentEditor()->isModified());
 		slotStatusMsg(i18n("Ready."));
 		return;
 	    }
@@ -245,7 +245,7 @@ void CKDevelop::slotFileCloseAll()
 //           switchToFile(actual_info->filename);
 //           handledNames.append(actual_info->filename);
 //           slotFileSave();
-//           actual_info->modified=editor_view->editor->isModified();
+//           actual_info->modified=editor_view->currentEditor()->isModified();
 //           cont=!actual_info->modified; //something went wrong
 //         }
 //       }
@@ -320,15 +320,15 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
     if (editor_view==0)
 	return false;
     
-    QString filename=editor_view->editor->getName();
+    QString filename=editor_view->currentEditor()->getName();
 	
-    if (editor_view->editor->modifiedOnDisk()) {
+    if (editor_view->currentEditor()->modifiedOnDisk()) {
 	if (KMessageBox::questionYesNo(this, 
 				       i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(filename))
 	    == QMessageBox::No)
 	    return false;
     }
-    editor_view->editor->doSave();
+    editor_view->currentEditor()->doSave();
     return true;
 }
 
@@ -338,16 +338,16 @@ void CKDevelop::slotFileSave(){
     if (editor_view==0)
 	return;
     
-   QString filename=editor_view->editor->getName();
+   QString filename=editor_view->currentEditor()->getName();
    QString sShownFilename=QFileInfo(filename).fileName();
    slotStatusMsg(i18n("Saving file ")+sShownFilename);
 
    saveFileFromTheCurrentEditWidget(); // save the current file
-   setInfoModified(filename, editor_view->editor->isModified());
+   setInfoModified(filename, editor_view->currentEditor()->isModified());
    ComponentManager::self()->notifySavedFile(filename);
 
    slotStatusMsg(i18n("Ready."));
-   QString sHelpMsg = editor_view->editor->isModified()? i18n("File %1 not saved.") : i18n("File %1 saved.");
+   QString sHelpMsg = editor_view->currentEditor()->isModified()? i18n("File %1 not saved.") : i18n("File %1 saved.");
    slotStatusHelpMsg(sHelpMsg.arg(sShownFilename));
 }
 
@@ -449,7 +449,7 @@ void CKDevelop::slotFilePrint(){
     QString file;
     slotFileSave();
     
-    file = editor_view->editor->getName();
+    file = editor_view->currentEditor()->getName();
     CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
     printerdlg->resize(600,480);
     printerdlg->exec();
@@ -468,18 +468,18 @@ void CKDevelop::slotFileQuit(){
 
 void CKDevelop::slotEditUndo(){
     if(editor_view != 0)
-	editor_view->editor->undo();
+	editor_view->currentEditor()->undo();
 }
 
 
 void CKDevelop::slotEditRedo(){
     if(editor_view != 0)
-	editor_view->editor->redo();
+	editor_view->currentEditor()->redo();
     
 }
 void CKDevelop::slotEditUndoHistory(){
     if(editor_view != 0)
-	editor_view->editor->undoHistory();
+	editor_view->currentEditor()->undoHistory();
     
 }
 
@@ -487,9 +487,10 @@ void CKDevelop::slotEditCut(){
     // if editor_view->editor isn't shown don't proceed
     if(editor_view == 0)
 	return;
+    
 
     slotStatusMsg(i18n("Cutting..."));
-    editor_view->editor->cut();
+    editor_view->currentEditor()->cut();
     slotStatusMsg(i18n("Ready."));
 }
 
@@ -509,7 +510,7 @@ void CKDevelop::slotEditPaste(){
 	return;
     
     slotStatusMsg(i18n("Pasting selection..."));
-    editor_view->editor->paste();
+    editor_view->currentEditor()->paste();
     slotStatusMsg(i18n("Ready."));
 }
 
@@ -519,7 +520,7 @@ void CKDevelop::slotEditInsertFile(){
     if(editor_view == 0)
 	return;
     slotStatusMsg(i18n("Inserting file contents..."));
-    editor_view->editor->insertFile();
+    editor_view->currentEditor()->insertFile();
     slotStatusMsg(i18n("Ready."));
 }
 
@@ -529,7 +530,7 @@ void CKDevelop::slotEditSearch(){
     if(editor_view == 0)
 	return;
     slotStatusMsg(i18n("Searching..."));
-    editor_view->editor->search();
+    editor_view->currentEditor()->search();
     slotStatusMsg(i18n("Ready."));
 }
 
@@ -542,7 +543,7 @@ void CKDevelop::slotEditRepeatSearch(){
     else{
 	// if editor_view->editor isn't shown don't proceed
 	if (editor_view !=0 )
-	    editor_view->editor->searchAgain();
+	    editor_view->currentEditor()->searchAgain();
     }
     slotStatusMsg(i18n("Ready."));
 }
@@ -570,9 +571,9 @@ void CKDevelop::slotEditSearchText(){
 	// if editor_view->editor isn't shown don't proceed
 	if (editor_view !=0)
 	    {
-		text = editor_view->editor->markedText();
+		text = editor_view->currentEditor()->markedText();
 		if(text == ""){
-		    text = editor_view->editor->currentWord();
+		    text = editor_view->currentEditor()->currentWord();
 		}
 	    }
     }
@@ -589,14 +590,14 @@ void CKDevelop::slotEditReplace(){
 	return;
     
     slotStatusMsg(i18n("Replacing..."));
-    editor_view->editor->replace();
+    editor_view->currentEditor()->replace();
     slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotEditSpellcheck(){
    if(editor_view != 0)
-       editor_view->editor->spellcheck();
+       editor_view->currentEditor()->spellcheck();
 }
 
 
@@ -605,13 +606,13 @@ void CKDevelop::slotEditSelectAll(){
     if(editor_view == 0)
 	return;
     slotStatusMsg(i18n("Selecting all..."));
-    editor_view->editor->selectAll();
+    editor_view->currentEditor()->selectAll();
     slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotEditDeselectAll(){
     if(editor_view != 0)
-	editor_view->editor->deselectAll();
+	editor_view->currentEditor()->deselectAll();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -623,7 +624,7 @@ void CKDevelop::slotViewGotoLine(){
     if (editor_view==0)
 	return;
     slotStatusMsg(i18n("Switching to selected line..."));
-    editor_view->editor->gotoLine();
+    editor_view->currentEditor()->gotoLine();
     slotStatusMsg(i18n("Ready."));
 }
 
@@ -779,8 +780,8 @@ void CKDevelop::slotBuildCompileFile(){
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
-  QFileInfo fileinfo(editor_view->editor->getName());
-  slotStatusMsg(i18n("Compiling ")+editor_view->editor->getName());
+  QFileInfo fileinfo(editor_view->currentEditor()->getName());
+  slotStatusMsg(i18n("Compiling ")+editor_view->currentEditor()->getName());
   messages_widget->prepareJob(fileinfo.dirPath());
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
@@ -1071,16 +1072,7 @@ void CKDevelop::slotOptionsEditor(){
     
 
     if (qtd->exec()) {
-	// 	// indent options
-	// 	indentConfig->getData(cpp_widget);
-	// 	indentConfig->getData(header_widget);
-	// 	// select options
-	// 	selectConfig->getData(cpp_widget);
-	// 	selectConfig->getData(header_widget);
-	// 	// edit options
-	// 	editConfig->getData(cpp_widget);
-	// 	editConfig->getData(header_widget);
-
+	
 	indentConfig->getData(editor_widget);
 	selectConfig->getData(editor_widget);
 	editConfig->getData(editor_widget);
@@ -1093,9 +1085,12 @@ void CKDevelop::slotOptionsEditor(){
 	QListIterator<QextMdiChildView> it(editorviews);
 	for (; it.current(); ++it) {
 	    edit_view = static_cast<EditorView*>(it.current());
-	    indentConfig->getData(edit_view->editor);
-	    selectConfig->getData(edit_view->editor);
-	    editConfig->getData(edit_view->editor);
+	    indentConfig->getData(edit_view->editorfirstview);
+	    selectConfig->getData(edit_view->editorfirstview);
+	    editConfig->getData(edit_view->editorfirstview);
+	    indentConfig->getData(edit_view->editorsecondview);
+	    selectConfig->getData(edit_view->editorsecondview);
+	    editConfig->getData(edit_view->editorsecondview);
 	}
 	
     }
@@ -1122,8 +1117,10 @@ void CKDevelop::slotOptionsEditorColors(){
     QListIterator<QextMdiChildView> it(editorviews);
     for (; it.current(); ++it) {
 	edit_view = static_cast<EditorView*>(it.current());
-	edit_view->editor->readConfig(config);
-	edit_view->editor->doc()->readConfig(config);
+	edit_view->editorfirstview->readConfig(config);
+	edit_view->editorfirstview->doc()->readConfig(config);
+	edit_view->editorsecondview->readConfig(config);
+	edit_view->editorsecondview->doc()->readConfig(config);
     }
 
     slotStatusMsg(i18n("Ready."));
@@ -1151,8 +1148,10 @@ void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
     QListIterator<QextMdiChildView> it(editorviews);
     for (; it.current(); ++it) {
 	edit_view = static_cast<EditorView*>(it.current());
-	edit_view->editor->readConfig(config);
-	edit_view->editor->doc()->readConfig(config);
+	edit_view->editorfirstview->readConfig(config);
+	edit_view->editorfirstview->doc()->readConfig(config);
+	edit_view->editorsecondview->readConfig(config);
+	edit_view->editorsecondview->doc()->readConfig(config);
     }
     slotStatusMsg(i18n("Ready."));
 }
@@ -1177,8 +1176,10 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
     QListIterator<QextMdiChildView> it(editorviews);
     for (; it.current(); ++it) {
 	edit_view = static_cast<EditorView*>(it.current());
-	edit_view->editor->readConfig(config);
-	edit_view->editor->doc()->readConfig(config);
+	edit_view->editorfirstview->readConfig(config);
+	edit_view->editorfirstview->doc()->readConfig(config);
+	edit_view->editorsecondview->readConfig(config);
+	edit_view->editorsecondview->doc()->readConfig(config);
      }
     
     slotStatusMsg(i18n("Ready."));
@@ -1518,9 +1519,9 @@ void CKDevelop::slotHelpSearchText(){
 	// if editor_view->editor isn't shown don't proceed
 	if (editor_view !=0)
 	    {
-		text = editor_view->editor->markedText();
+		text = editor_view->currentEditor()->markedText();
 		if(text == ""){
-		    text = editor_view->editor->currentWord();
+		    text = editor_view->currentEditor()->currentWord();
 		}
 	    }
     }
@@ -1902,7 +1903,7 @@ void CKDevelop::slotNewStatus()
   int config;
   //  EditorView* editor_view = getCurrentEditorView();
   if(editor_view !=0){
-      config = editor_view->editor->config();
+      config = editor_view->currentEditor()->config();
       statusBar()->changeItem(config & cfOvr ? "OVR" : "INS",ID_STATUS_INS_OVR);
       // set new caption... maybe the file content is changed
       setMainCaption();
@@ -1913,7 +1914,7 @@ void CKDevelop::slotNewStatus()
 void CKDevelop::slotMarkStatus() {
     EditorView* editor_view = getCurrentEditorView();
     if (editor_view != 0) {
-	if (editor_view->editor->hasMarkedText()) {
+	if (editor_view->currentEditor()->hasMarkedText()) {
 	    enableCommand(ID_EDIT_CUT);
 	    enableCommand(ID_EDIT_COPY);
 	} else{
@@ -1992,15 +1993,15 @@ void CKDevelop::slotNewLineColumn()
     if (editor_view==0)
 	return;
     QString str = i18n("Line: %1 Col: %2")
-	.arg(editor_view->editor->currentLine()+1)
-	.arg(editor_view->editor->currentColumn()+1);
+	.arg(editor_view->currentEditor()->currentLine()+1)
+	.arg(editor_view->currentEditor()->currentColumn()+1);
     statusBar()->changeItem(str, ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo(){
     //    EditorView* editor_view = getCurrentEditorView();
     if(editor_view !=0){
 	int state;
-	state = (editor_view->editor) ? editor_view->editor->undoState() : 0;
+	state = (editor_view->currentEditor()) ? editor_view->currentEditor()->undoState() : 0;
 	//undo
 	if(state & 1){
 	    enableCommand(ID_EDIT_UNDO);
@@ -2414,7 +2415,7 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
     editor_view = getCurrentEditorView();
     int type = CPP_HEADER;
     if(editor_view !=0) {
-	type = CProject::getType(editor_view->editor->getName());
+	type = CProject::getType(editor_view->currentEditor()->getName());
     }
 
     if (editor_view != 0){
@@ -2470,7 +2471,7 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
     
     if (editor_view != 0){
 	int state;
-	state = editor_view->editor->undoState();
+	state = editor_view->currentEditor()->undoState();
 	//undo
 	if(state & 1)
 	    enableCommand(ID_EDIT_UNDO);

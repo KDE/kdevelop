@@ -277,9 +277,9 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
   // Add the declaration.
   //  EditorView* editor_view = getCurrentEditorView();
   if(editor_view != 0){
-      editor_view->editor->insertAtLine( toAdd, atLine );
-      editor_view->editor->setCursorPosition( atLine, 0 );
-      editor_view->editor->toggleModified( true );
+      editor_view->currentEditor()->insertAtLine( toAdd, atLine );
+      editor_view->currentEditor()->setCursorPosition( atLine, 0 );
+      editor_view->currentEditor()->toggleModified( true );
   }
 
   // Get the code for the .cpp file.
@@ -294,9 +294,9 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
     aMethod->asCppCode( toAdd );
     //    EditorView* editor_view = getCurrentEditorView();
     if(editor_view != 0){
-	editor_view->editor->append( toAdd );
-	editor_view->editor->setCursorPosition( editor_view->editor->lines() - 1, 0 );
-	editor_view->editor->toggleModified( true );
+	editor_view->currentEditor()->append( toAdd );
+	editor_view->currentEditor()->setCursorPosition( editor_view->currentEditor()->lines() - 1, 0 );
+	editor_view->currentEditor()->toggleModified( true );
     }
   }
 }
@@ -371,8 +371,8 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   // Add the code to the file.
   EditorView* editor_view = getCurrentEditorView();
   if(editor_view != 0L){
-      editor_view->editor->insertAtLine( toAdd, atLine );
-      editor_view->editor->setCursorPosition( atLine, 0 );
+      editor_view->currentEditor()->insertAtLine( toAdd, atLine );
+      editor_view->currentEditor()->setCursorPosition( atLine, 0 );
   }
 
   // Delete the genererated attribute
@@ -417,7 +417,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
 		    switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
 		    //		    EditorView* editor_view = getCurrentEditorView();
 		    if(editor_view != 0){
-			editor_view->editor->deleteInterval( aMethod->declaredOnLine, 
+			editor_view->currentEditor()->deleteInterval( aMethod->declaredOnLine, 
 						     aMethod->declarationEndsOnLine );
 			
 			// Comment out the definition if it isn't a signal.
@@ -427,7 +427,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
 			    for( line = aMethod->definedOnLine; 
 				 line <= aMethod->definitionEndsOnLine;
 				 line++ )
-				editor_view->editor->insertAtLine( i18n("//Del by KDevelop: "), line );
+				editor_view->currentEditor()->insertAtLine( i18n("//Del by KDevelop: "), line );
 			}
 		    }
 		}

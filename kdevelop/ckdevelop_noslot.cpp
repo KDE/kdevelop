@@ -191,8 +191,8 @@ void CKDevelop::setMainCaption(int tab_item){
 		    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
 		    if(editor_view != 0){
 			kdev_caption+= version +
-			    " - ["+ QFileInfo(editor_view->editor->getName()).fileName()+"] ";
-			if (editor_view->editor->isModified())
+			    " - ["+ QFileInfo(editor_view->currentEditor()->getName()).fileName()+"] ";
+			if (editor_view->currentEditor()->isModified())
 			    {
 				enableCommand(ID_FILE_SAVE);
 				kdev_caption+= " *";
@@ -617,11 +617,12 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   QListIterator<QextMdiChildView> it(editorviews);
   for (; it.current(); ++it) {
       EditorView *editor_view = static_cast<EditorView*>(it.current());
-      if (editor_view->editor->isEditing(filename) ) { 
-          cerr << "Already edited with name:" << editor_view->editor->fileName() << endl;
+      if (editor_view->currentEditor()->isEditing(filename) ) { 
+	  editor_view->setFocus();
+          cerr << "Already edited with name:" << editor_view->currentEditor()->fileName() << endl;
           // This looks odd:
 	  mdi_main_frame->m_pTaskBar->setActiveButton(editor_view);	
-	  editor_view->setFocus();
+	  
 	  return;
       }
   }
@@ -659,30 +660,45 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   }
   QFileInfo fileinfo(filename);
   EditorView* new_editorview = new EditorView(mdi_main_frame,QFileInfo(filename).fileName());
+#warning FIXME MDI stuff
   QFont font("Fixed",10);
-  new_editorview->editor->setFont(font);
+  new_editorview->editorfirstview->setFont(font);
   config->setGroup("KWrite Options");
-  new_editorview->editor->readConfig(config);
-  new_editorview->editor->doc()->readConfig(config);
-  new_editorview->editor->loadFile(filename,1);
-  new_editorview->editor->setName(filename);
+  new_editorview->editorfirstview->readConfig(config);
+  new_editorview->editorfirstview->doc()->readConfig(config);
+  new_editorview->editorfirstview->loadFile(filename,1);  
+  new_editorview->editorfirstview->setName(filename);
+
+  //  new_editorview->editorsecondview->copySettings(new_editorview->editorfirstview);
 
   //connections
   connect(new_editorview,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
 
-  connect(new_editorview->editor, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-  connect(new_editorview->editor, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-  connect(new_editorview->editor, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-  connect(new_editorview->editor, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
-  connect(new_editorview->editor, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-  //   connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-  connect(new_editorview->editor, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-  connect(new_editorview->editor->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+  // firstview
+  connect(new_editorview->editorfirstview, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
+  connect(new_editorview->editorfirstview, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
+  connect(new_editorview->editorfirstview, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
+  connect(new_editorview->editorfirstview, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
+  connect(new_editorview->editorfirstview, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
+  connect(new_editorview->editorfirstview, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+  connect(new_editorview->editorfirstview->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+
+
+  // secondview
+  // connect(new_editorview->editorsecondview, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
+//   connect(new_editorview->editorsecondview, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
+//   connect(new_editorview->editorsecondview, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
+//   connect(new_editorview->editorsecondview, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
+//   connect(new_editorview->editorsecondview, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
+//   connect(new_editorview->editorsecondview, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+//   connect(new_editorview->editorsecondview->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+  
   
   mdi_main_frame->addWindow( new_editorview, true);
   if(maximize){
     new_editorview->maximize(true);
   }
+  new_editorview->setFocus();
   //  new_editorview->setFocus();
   
 }
@@ -692,7 +708,7 @@ void CKDevelop::switchToFile(QString filename, int lineNo){
   switchToFile( filename, false);
   //  EditorView* editor_view = getCurrentEditorView();
   if(editor_view !=0){
-      editor_view->editor->setCursorPosition( lineNo, 0 );
+      editor_view->currentEditor()->setCursorPosition( lineNo, 0 );
   }
 }
 
@@ -857,7 +873,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     
     if (enable && project){
 	if(editor_view !=0){
-	  if (CProject::getType(editor_view->editor->getName()) == CPP_SOURCE){
+	  if (CProject::getType(editor_view->currentEditor()->getName()) == CPP_SOURCE){
 	      enableCommand(ID_BUILD_COMPILE_FILE);
 	  }
 	}

@@ -35,6 +35,7 @@ class CEditWidget : public KWrite {
 public: // Constructor and destructor
 
   CEditWidget(QWidget* parent=0,const char* name=0);
+  CEditWidget(QWidget* parent,const char* name,KWriteDoc* doc);
   ~CEditWidget();
 
 public: // Public methods to set attribute values
@@ -149,6 +150,7 @@ public slots:
 		
 public: // Method to manipulate the buffer
 
+
   /** Delete an interval of lines.
    * @param startAt Line to start deleting at.
    * @param endAt Line to stop deleting at.
@@ -175,8 +177,8 @@ protected: // Protected attributes
   QString searchtext;
 
 protected: // Protected methods
-  void enterEvent ( QEvent * e); 
-  void mousePressEvent(QMouseEvent* event);
+  virtual void enterEvent ( QEvent * e); 
+  virtual  void mousePressEvent(QMouseEvent* event);
 
   /** Get the startposition in the buffer of a line
    * @param buf Buffer to search in.
@@ -193,13 +195,12 @@ signals:
  void grepText(QString text);
  void bufferMenu(const QPoint&);
 
-private:
+public:
  KSpell *kspell;
  KSpellConfig *ksc;
  int spell_offset;
  CEditWidgetPrivate *d;
     
- QDateTime  last_modified;
 };
 
 #endif
