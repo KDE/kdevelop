@@ -62,6 +62,9 @@ public: // Public attributes
   /** Where the method is declared. */
   int declaredOnLine;
 
+  /** The file where the method were declared. */
+  QString declaredInFile;
+
 public: // Public methods to set attribute values
 
   /** Add an argument to this method. */
@@ -72,6 +75,9 @@ public: // Public methods to set attribute values
 
   /** Set the line where the method was declared. */
   void setDeclaredOnLine( int aLine ) { declaredOnLine = aLine; }
+
+  /** Set the file where the methods was declared. */
+  void setDeclaredInFile( const char *aFile ) { declaredInFile = aFile; }
 
 public: // Public attributes
 
