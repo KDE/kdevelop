@@ -247,7 +247,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   mdiStyle = config->readNumEntry("MDIStyle", 0);
 
   setIDEAlModeStyle(mdiStyle); // KDEV3 style of KMultiTabBar
-  setStandardMDIMenuEnabled();
+  setStandardMDIMenuEnabled(false);
   setManagedDockPositionModeEnabled(true);
 
   resize( 800, 600 );
