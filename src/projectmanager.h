@@ -10,13 +10,7 @@
 #include <kservice.h>
 
 class KAction;
-
-
-#include "kdevpart.h"
-
 class KService;
-
-
 class ProjectInfo;
 
 class ProjectManager : public QObject, public KXMLGUIClient

@@ -4,7 +4,6 @@
 #include <kservice.h>
 
 class KXMLGUIClient;
-class KDevPart;
 class KService;
 class KDevPlugin;
 
@@ -20,8 +19,6 @@ public:
   static PluginController *getInstance();
 
   static KService::List pluginServices( const QString &scope = QString::null );
-
-  static KDevPart *loadPlugin(const KService::Ptr &service, const char *className, QObject *parent);
 
   static KDevPlugin *loadPlugin( const KService::Ptr &service );
 

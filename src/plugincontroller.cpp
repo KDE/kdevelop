@@ -11,10 +11,9 @@
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kparts/componentfactory.h>
+#include <assert.h>
 
-#include "kdevpart.h"
 #include "kdevapi.h"
-#include "kdevfactory.h"
 #include "kdevplugin.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
@@ -105,54 +104,17 @@ void PluginController::loadGlobalPlugins()
        continue;
 
     if ( ( *it )->hasServiceType( "KDevelop/Part" ) ) {
-      KDevPart *part = loadPlugin(*it, "KDevPart", Core::getInstance());
-      if (!part)
-        continue;
-
-      integratePart(part);
+      assert( false );
     } else {
         QStringList args = argumentsFromService( *it );
 
         KDevPlugin *plugin = KParts::ComponentFactory
-	    ::createInstanceFromService<KDevPlugin>( *it, API::getInstance(), 0,
+	        ::createInstanceFromService<KDevPlugin>( *it, API::getInstance(), 0,
                                                      args );
         if ( plugin )
             integratePart( plugin );
     }
   }
-}
-
-
-KDevPart *PluginController::loadPlugin(const KService::Ptr &service, const char *className, QObject *parent)
-{
-  QStringList args = argumentsFromService( service );;
-
-  kdDebug(9000) << "Loading service " << service->name() << endl;
-  KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
-
-  if (!factory || !factory->inherits("KDevFactory"))
-  {
-    if (!factory)
-    {
-      QString errorMessage = KLibLoader::self()->lastErrorMessage();
-      KMessageBox::error(0, i18n("There was an error loading the module %1.\n"
-                                 "The diagnostics is:\n%2").arg(service->name()).arg(errorMessage));
-      return 0;
-    }
-
-    kdDebug(9000) << "Does not have a KDevFactory" << endl;
-    return 0;
-  }
-
-  KDevPart *part = static_cast<KDevFactory*>(factory)->createPart(API::getInstance(), parent, args);
-
-  if (!part->inherits(className))
-  {
-    kdDebug(9000) << "Part does not inherit " << className << endl;
-    return 0;
-  }
-
-  return part;
 }
 
 KService::List PluginController::pluginServices( const QString &scope )

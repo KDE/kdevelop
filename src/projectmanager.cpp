@@ -194,18 +194,21 @@ void ProjectManager::loadLanguageSupport()
   KTrader::OfferList languageSupportOffers =
     KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
                            QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(m_info->m_language));
-  if (!languageSupportOffers.isEmpty())
-  {
-    KService *languageSupportService = *languageSupportOffers.begin();
-    KDevPart *part = PluginController::getInstance()->loadPlugin(languageSupportService, "KDevLanguageSupport", Core::getInstance());
-    if (!part)
+  if (languageSupportOffers.isEmpty())
+    KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("No language plugin for %1 found.").arg(m_info->m_language));
+  
+  KService::Ptr languageSupportService = *languageSupportOffers.begin();
+  KDevLanguageSupport *langSupport = KParts::ComponentFactory
+      ::createInstanceFromService<KDevLanguageSupport>( languageSupportService,
+                                                        API::getInstance(),
+                                                        0,
+                                                        PluginController::argumentsFromService(  languageSupportService ) );
+
+    if ( !langSupport )
       return;
 
-    API::getInstance()->setLanguageSupport(static_cast<KDevLanguageSupport*>(part));
-    integratePart(part);
-  }
-  else
-    KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("No language plugin for %1 found.").arg(m_info->m_language));
+    API::getInstance()->setLanguageSupport( langSupport );
+    integratePart( langSupport );
 }
 
 
@@ -280,9 +283,8 @@ void ProjectManager::initializeProjectSupport()
 
 bool ProjectManager::loadService( const KService::Ptr &service ) 
 {
-  KXMLGUIClient *part = PluginController::loadPlugin( service ); if ( !part )
-    part = PluginController::getInstance()->loadPlugin(service, "KDevPart",
-        Core::getInstance()); if ( !part ) return false;
+  KXMLGUIClient *part = PluginController::loadPlugin( service ); 
+  if ( !part ) return false;
 
   integratePart( part );
   m_info->m_localParts.append( part );
