@@ -12,7 +12,7 @@
 #include <kmimetype.h>
 #include <kservice.h>
 #include <ktrader.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <krun.h>
 #include <kdebug.h>
 #include <klocale.h>

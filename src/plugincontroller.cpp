@@ -1,7 +1,7 @@
 #include <qfile.h>
 #include <qvbox.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klibloader.h>
 #include <kservice.h>
 #include <ktrader.h>

@@ -16,7 +16,7 @@
 
 #include "removetargetdlg.h"
 
-#include <qapp.h>
+#include <qapplication.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qfile.h>

@@ -23,7 +23,7 @@
 #ifndef cpp_colorizer_h
 #define cpp_colorizer_h
 
-#include <qsourcecolorizer.h>
+#include "qsourcecolorizer.h"
 #include <qfont.h>
 
 class CppColorizer: public QSourceColorizer{

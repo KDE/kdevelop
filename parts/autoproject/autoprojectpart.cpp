@@ -27,7 +27,6 @@
 #include <qpopupmenu.h>
 #include <qstringlist.h>
 #include <qwhatsthis.h>
-#include <qdir.h>
 
 #include <kaction.h>
 #include <kdebug.h>

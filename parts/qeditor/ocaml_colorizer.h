@@ -22,7 +22,7 @@
 #ifndef ocaml_colorizer_h
 #define ocaml_colorizer_h
 
-#include <qsourcecolorizer.h>
+#include "qsourcecolorizer.h"
 
 class OCamlColorizer: public QSourceColorizer{
 public:

@@ -23,7 +23,7 @@
 #ifndef jsp_colorizer_h
 #define jsp_colorizer_h
 
-#include <qsourcecolorizer.h>
+#include "qsourcecolorizer.h"
 #include <qfont.h>
 
 class JspColorizer: public QSourceColorizer{

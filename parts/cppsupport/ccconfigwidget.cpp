@@ -15,7 +15,6 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
 #include <qlistview.h>
 #include <qcombobox.h>
 #include <qmultilineedit.h>

@@ -16,7 +16,6 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
-#include <qdir.h>
 
 #include <kdebug.h>
 #include <kdialogbase.h>

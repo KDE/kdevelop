@@ -6,10 +6,9 @@
 #include <qvbox.h>
 
 #include <kgenericfactory.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kapplication.h>
 #include <kstatusbar.h>
 #include <kdialogbase.h>
 
@@ -19,7 +18,6 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
-#include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "classstore.h"
 #include "addclass.h"

@@ -37,7 +37,6 @@
 #include <qfileinfo.h>
 #include <qclipboard.h>
 #include <qpopupmenu.h>
-#include <qstylesheet.h>
 #include <private/qrichtext_p.h>
 
 static const char *const error_xpm[] =

@@ -24,7 +24,7 @@
 
 #include "bug.h"
 #include "bugcounter.h"
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <qwidget.h>
 #include <qlistview.h>

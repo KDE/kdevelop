@@ -53,7 +53,6 @@
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
-#include <kmessagebox.h>
 #include <kconfig.h>
 #include <kdeversion.h>
 

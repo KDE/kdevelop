@@ -23,7 +23,7 @@
 #ifndef cs_colorizer_h
 #define cs_colorizer_h
 
-#include <qsourcecolorizer.h>
+#include "qsourcecolorizer.h"
 #include <qfont.h>
 
 class CSharpColorizer: public QSourceColorizer{

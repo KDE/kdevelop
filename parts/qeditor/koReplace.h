@@ -21,7 +21,7 @@
 #ifndef KOREPLACE_H
 #define KOREPLACE_H
 
-#include <koFind.h>
+#include "koFind.h"
 
 class KHistoryCombo;
 class QCheckBox;

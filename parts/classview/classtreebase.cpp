@@ -29,7 +29,6 @@
 #include "classstore.h"
 
 #include "classviewpart.h"
-#include "classviewpart.h"
 #include "classtooldlg.h"
 
 KPopupMenu *ClassTreeItem::createPopup()

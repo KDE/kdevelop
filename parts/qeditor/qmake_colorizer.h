@@ -23,7 +23,7 @@
 #ifndef qmake_colorizer_h
 #define qmake_colorizer_h
 
-#include <qsourcecolorizer.h>
+#include "qsourcecolorizer.h"
 #include <qfont.h>
 
 class QMakeColorizer: public QSourceColorizer{

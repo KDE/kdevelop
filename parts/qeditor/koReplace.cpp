@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <klocale.h>
-#include <koReplace.h>
+#include "koReplace.h"
 #include <kmessagebox.h>
 
 KoReplaceDialog::KoReplaceDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection) :

@@ -23,7 +23,7 @@
 #ifndef python_colorizer_h
 #define python_colorizer_h
 
-#include <qsourcecolorizer.h>
+#include "qsourcecolorizer.h"
 #include <qfont.h>
 
 class PythonColorizer: public QSourceColorizer{

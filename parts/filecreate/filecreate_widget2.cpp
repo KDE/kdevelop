@@ -16,7 +16,6 @@
 #include <klibloader.h>
 #include <kurl.h>
 #include <kdebug.h>
-#include <kurl.h>
 #include <kiconloader.h>
 #include <klocale.h>
 

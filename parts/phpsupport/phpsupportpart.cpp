@@ -36,7 +36,6 @@
 #include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "classstore.h"
-#include <kdevpartcontroller.h>
 
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"

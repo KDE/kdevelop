@@ -28,7 +28,6 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qdialog.h>
 #include <qcombobox.h>
 
 class ClassStore;

@@ -45,7 +45,6 @@
 #include <kiconloader.h>
 
 #include <kconfig.h>
-#include <kdebug.h>
 
 #include <qtimer.h>
 #include <qregexp.h>

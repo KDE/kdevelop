@@ -23,7 +23,7 @@
 #ifndef java_colorizer_h
 #define java_colorizer_h
 
-#include <qsourcecolorizer.h>
+#include "qsourcecolorizer.h"
 #include <qfont.h>
 
 class JavaColorizer: public QSourceColorizer{

@@ -56,7 +56,6 @@
 #include "settingswidget.h"
 #include "statusbar.h"
 #include "kpopupmenu.h"
-#include "kmenubar.h"
 
 
 #include "toplevel.h"

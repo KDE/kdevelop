@@ -516,8 +516,8 @@ char *yytext;
  * Copyright (C) 1997-2003 by Dimitri van Heesch.
  *
  * Permission to use, copy, modify, and distribute this software and its
- * documentation under the terms of the GNU General Public License is hereby 
- * granted. No representations are made about the suitability of this software 
+ * documentation under the terms of the GNU General Public License is hereby
+ * granted. No representations are made about the suitability of this software
  * for any purpose. It is provided "as is" without express or implied warranty.
  * See the GNU General Public License for more details.
  *
@@ -539,7 +539,7 @@ char *yytext;
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qptrstack.h>
-  
+
 #include "config.h"
 #include "version.h"
 
@@ -557,13 +557,13 @@ char *yytext;
 #define Config_getList(val)    getList(__FILE__,__LINE__,val)
 #define Config_getEnum(val)    getEnum(__FILE__,__LINE__,val)
 #define Config_getBool(val)    getBool(__FILE__,__LINE__,val)
-  
+
 void config_err(const char *fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
   vfprintf(stderr, fmt, args);
-  va_end(args); 
+  va_end(args);
 }
 void config_warn(const char *fmt, ...)
 {
@@ -617,10 +617,10 @@ void ConfigOption::writeStringValue(QTextStream &t,QCString &s)
   bool needsEscaping=FALSE;
   if (p)
   {
-    while ((c=*p++)!=0 && !needsEscaping) 
+    while ((c=*p++)!=0 && !needsEscaping)
       needsEscaping = (c==' ' || c=='\n' || c=='\t' || c=='"');
     if (needsEscaping)
-    { 
+    {
       t << "\"";
       p=s.data();
       while (*p)
@@ -657,7 +657,7 @@ void ConfigOption::writeStringList(QTextStream &t,QStrList &l)
 
 Config *Config::m_instance = 0;
 
-void ConfigInt::convertStrToVal() 
+void ConfigInt::convertStrToVal()
 {
   if (!m_valueString.isEmpty())
   {
@@ -677,7 +677,7 @@ void ConfigBool::convertStrToVal()
   QCString val = m_valueString.stripWhiteSpace().lower();
   if (!val.isEmpty())
   {
-    if (val=="yes" || val=="true" || val=="1") 
+    if (val=="yes" || val=="true" || val=="1")
     {
       m_value=TRUE;
     }
@@ -696,7 +696,7 @@ void ConfigBool::convertStrToVal()
 QCString &Config::getString(const char *fileName,int num,const char *name) const
 {
   ConfigOption *opt = m_dict->find(name);
-  if (opt==0) 
+  if (opt==0)
   {
     config_err("%s<%d>: Internal error: Requested unknown option %s!\n",fileName,num,name);
     exit(1);
@@ -712,7 +712,7 @@ QCString &Config::getString(const char *fileName,int num,const char *name) const
 QStrList &Config::getList(const char *fileName,int num,const char *name) const
 {
   ConfigOption *opt = m_dict->find(name);
-  if (opt==0) 
+  if (opt==0)
   {
     config_err("%s<%d>: Internal error: Requested unknown option %s!\n",fileName,num,name);
     exit(1);
@@ -728,7 +728,7 @@ QStrList &Config::getList(const char *fileName,int num,const char *name) const
 QCString &Config::getEnum(const char *fileName,int num,const char *name) const
 {
   ConfigOption *opt = m_dict->find(name);
-  if (opt==0) 
+  if (opt==0)
   {
     config_err("%s<%d>: Internal error: Requested unknown option %s!\n",fileName,num,name);
     exit(1);
@@ -744,7 +744,7 @@ QCString &Config::getEnum(const char *fileName,int num,const char *name) const
 int &Config::getInt(const char *fileName,int num,const char *name) const
 {
   ConfigOption *opt = m_dict->find(name);
-  if (opt==0) 
+  if (opt==0)
   {
     config_err("%s<%d>: Internal error: Requested unknown option %s!\n",fileName,num,name);
     exit(1);
@@ -760,7 +760,7 @@ int &Config::getInt(const char *fileName,int num,const char *name) const
 bool &Config::getBool(const char *fileName,int num,const char *name) const
 {
   ConfigOption *opt = m_dict->find(name);
-  if (opt==0) 
+  if (opt==0)
   {
     config_err("%s<%d>: Internal error: Requested unknown option %s!\n",fileName,num,name);
     exit(1);
@@ -785,7 +785,7 @@ struct ConfigFileState
   YY_BUFFER_STATE oldState;
   YY_BUFFER_STATE newState;
   QCString fileName;
-};  
+};
 
 static const char       *inputString;
 static int	         inputPosition;
@@ -799,7 +799,7 @@ static int               lastState;
 static QCString          elemStr;
 static QCString          includeName;
 static QStrList          includePathList;
-static QStack<ConfigFileState> includeStack;  
+static QStack<ConfigFileState> includeStack;
 static int               includeDepth;
 
 static QCString     tabSizeString;
@@ -820,7 +820,7 @@ static Config      *config;
 static int yyread(char *buf,int max_size)
 {
     // no file included
-    if (includeStack.isEmpty()) 
+    if (includeStack.isEmpty())
     {
         int c=0;
 	while( c < max_size && inputString[inputPosition] )
@@ -829,8 +829,8 @@ static int yyread(char *buf,int max_size)
 	      c++; buf++;
   	}
 	return c;
-    } 
-    else 
+    }
+    else
     {
         //assert(includeStack.current()->newState==YY_CURRENT_BUFFER);
 	return fread(buf,1,max_size,includeStack.current()->filePtr);
@@ -863,7 +863,7 @@ static FILE *findFile(const char *fileName)
     FILE *f = tryPath(s,fileName);
     if (f) return f;
     s=includePathList.next();
-  } 
+  }
   // try cwd if includePathList fails
   return tryPath(".",fileName);
 }
@@ -874,7 +874,7 @@ static void readIncludeFile(const char *incName)
     config_err("Error: maximum include depth (%d) reached, %s is not included. Aborting...\n",
 	MAX_INCLUDE_DEPTH,incName);
     exit(1);
-  } 
+  }
 
   QCString inc = incName;
   substEnvVarsInString(inc);
@@ -896,7 +896,7 @@ static void readIncludeFile(const char *incName)
     msg("@INCLUDE = %s: parsing...\n",inc.data());
 #endif
 
-    // store the state of the old file 
+    // store the state of the old file
     ConfigFileState *fs=new ConfigFileState;
     fs->oldState=YY_CURRENT_BUFFER;
     fs->lineNr=yyLineNr;
@@ -909,7 +909,7 @@ static void readIncludeFile(const char *incName)
     fs->newState=YY_CURRENT_BUFFER;
     yyFileName=inc;
     includeDepth++;
-  } 
+  }
   else
   {
     config_err("Error: @INCLUDE = %s: not found!\n",inc.data());
@@ -1185,12 +1185,12 @@ case 3:
 YY_RULE_SETUP
 #line 429 "config.l"
 { QCString cmd=yytext;
-                                           cmd=cmd.left(cmd.length()-1).stripWhiteSpace(); 
+                                           cmd=cmd.left(cmd.length()-1).stripWhiteSpace();
 					   ConfigOption *option = config->get(cmd);
 					   if (option==0) // oops not known
 					   {
 					     config_err("Warning: ignoring unsupported tag `%s' at line %d, file %s\n",
-						 yytext,yyLineNr,yyFileName.data()); 
+						 yytext,yyLineNr,yyFileName.data());
 					     BEGIN(SkipInvalid);
 					   }
 					   else // known tag
@@ -1235,12 +1235,12 @@ case 4:
 YY_RULE_SETUP
 #line 475 "config.l"
 { QCString cmd=yytext;
-                                          cmd=cmd.left(cmd.length()-2).stripWhiteSpace(); 
+                                          cmd=cmd.left(cmd.length()-2).stripWhiteSpace();
 					  ConfigOption *option = config->get(cmd);
 					  if (option==0) // oops not known
 					  {
 					    config_err("Warning: ignoring unsupported tag `%s' at line %d, file %s\n",
-						yytext,yyLineNr,yyFileName.data()); 
+						yytext,yyLineNr,yyFileName.data());
 					    BEGIN(SkipInvalid);
 					  }
 					  else // known tag
@@ -1261,7 +1261,7 @@ YY_RULE_SETUP
 					      case ConfigOption::O_Int:
 					      case ConfigOption::O_Bool:
 					        config_err("Warning: operator += not supported for `%s'. Ignoring line at line %d, file %s\n",
-						    yytext,yyLineNr,yyFileName.data()); 
+						    yytext,yyLineNr,yyFileName.data());
 					        BEGIN(SkipInvalid);
 						break;
 					     }
@@ -1282,8 +1282,8 @@ YY_RULE_SETUP
 case 7:
 YY_RULE_SETUP
 #line 511 "config.l"
-{ 
-  					  readIncludeFile(yytext); 
+{
+  					  readIncludeFile(yytext);
   					  BEGIN(Start);
 					}
 	YY_BREAK
@@ -1333,14 +1333,14 @@ YY_RULE_SETUP
 case 10:
 YY_RULE_SETUP
 #line 539 "config.l"
-{ 
-  					  yyLineNr++; 
+{
+  					  yyLineNr++;
 					  if (!elemStr.isEmpty())
 					  {
 					    //printf("elemStr1=`%s'\n",elemStr.data());
 					    l->append(elemStr);
 					  }
-					  BEGIN(Start); 
+					  BEGIN(Start);
 					}
 	YY_BREAK
 case 11:
@@ -1364,14 +1364,14 @@ case 13:
 YY_RULE_SETUP
 #line 557 "config.l"
 { lastState=YY_START;
-  					  BEGIN(GetQuotedString); 
-                                          tmpString.resize(0); 
+  					  BEGIN(GetQuotedString);
+                                          tmpString.resize(0);
 					}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 561 "config.l"
-{ 
+{
   					  //printf("Quoted String = `%s'\n",tmpString.data());
   					  if (lastState==GetString)
 					    (*s)+=tmpString;
@@ -1400,16 +1400,16 @@ YY_RULE_SETUP
 case 17:
 YY_RULE_SETUP
 #line 578 "config.l"
-{ 
-  					  QCString bs=yytext; 
+{
+  					  QCString bs=yytext;
   					  bs=bs.upper();
   					  if (bs=="YES" || bs=="1")
 					    *b=TRUE;
 					  else if (bs=="NO" || bs=="0")
 					    *b=FALSE;
-					  else 
+					  else
 					  {
-					    *b=FALSE; 
+					    *b=FALSE;
 					    config_warn("Warning: Invalid value `%s' for "
 						 "boolean tag in line %d, file %s; use YES or NO\n",
 						 bs.data(),yyLineNr,yyFileName.data());
@@ -2361,7 +2361,7 @@ static void writeStringValue(QTextStream &t,QCString &s)
   if (p)
   {
     while ((c=*p++)!=0 && !hasBlanks) hasBlanks = (c==' ' || c=='\n' || c=='\t');
-    if (hasBlanks) 
+    if (hasBlanks)
       t << "\"" << s << "\"";
     else
       t << s;
@@ -2450,8 +2450,8 @@ static void substEnvVarsInStrList(QStrList &sl)
 
     if (!wasQuoted) /* as a result of the expansion, a single string
 		       may have expanded into a list, which we'll
-		       add to sl. If the orginal string already 
-		       contained multiple elements no further 
+		       add to sl. If the orginal string already
+		       contained multiple elements no further
 		       splitting is done to allow quoted items with spaces! */
     {
       int l=result.length();
@@ -2462,7 +2462,7 @@ static void substEnvVarsInStrList(QStrList &sl)
       {
 	char c=0;
 	// skip until start of new word
-	while (i<l && ((c=result.at(i))==' ' || c=='\t')) i++; 
+	while (i<l && ((c=result.at(i))==' ' || c=='\t')) i++;
 	p=i; // p marks the start index of the word
 	// skip until end of a word
 	while (i<l && ((c=result.at(i))!=' ' && c!='\t' && c!='"')) i++;
@@ -2480,7 +2480,7 @@ static void substEnvVarsInStrList(QStrList &sl)
 		sl.insert(sl.at(),result.mid(p,i-p)); // insert new item before current item.
 		sl.next();                 // current item is now the old item
 		p=i+1;
-		break; 
+		break;
 	      }
 	      else if (c=='\\') // skip escaped stuff
 	      {
@@ -2586,25 +2586,25 @@ void Config::check()
   }
 
   QCString &manExtension = Config_getString("MAN_EXTENSION");
-  
+
   // set default man page extension if non is given by the user
   if (manExtension.isEmpty())
   {
     manExtension=".3";
   }
-  
+
   QCString &paperType = Config_getEnum("PAPER_TYPE");
-  paperType=paperType.lower().stripWhiteSpace(); 
+  paperType=paperType.lower().stripWhiteSpace();
   if (paperType.isEmpty())
   {
     paperType = "a4wide";
   }
-  if (paperType!="a4" && paperType!="a4wide" && paperType!="letter" && 
+  if (paperType!="a4" && paperType!="a4wide" && paperType!="letter" &&
       paperType!="legal" && paperType!="executive")
   {
     config_err("Error: Unknown page type specified");
   }
-  
+
   QCString &outputLanguage=Config_getEnum("OUTPUT_LANGUAGE");
   outputLanguage=outputLanguage.stripWhiteSpace();
   if (outputLanguage.isEmpty())
@@ -2618,7 +2618,7 @@ void Config::check()
   {
     htmlFileExtension = ".html";
   }
-  
+
   // expand the relative stripFromPath values
   QStrList &stripFromPath = Config_getList("STRIP_FROM_PATH");
   char *sfp = stripFromPath.first();
@@ -2650,8 +2650,8 @@ void Config::check()
     }
     sfp = stripFromPath.next();
   }
-  
-  
+
+
   // Test to see if HTML header is valid
   QCString &headerFile = Config_getString("HTML_HEADER");
   if (!headerFile.isEmpty())
@@ -2726,8 +2726,8 @@ void Config::check()
     config_err("Invalid value for DOT_IMAGE_FORMAT: `%s'. Using the default.\n",dotImageFormat.data());
     dotImageFormat = "png";
   }
-  
-  
+
+
   // check dot path
   QCString &dotPath = Config_getString("DOT_PATH");
   if (!dotPath.isEmpty())
@@ -2737,15 +2737,15 @@ void Config::check()
       if (dotPath.at(dotPath.length()-1)!='\\')
       {
 	dotPath+='\\';
-      } 
-    } 
+      }
+    }
     else if (dotPath.find('/')!=-1)
     {
       if (dotPath.at(dotPath.length()-1)!='/')
       {
 	dotPath+='/';
-      } 
-    } 
+      }
+    }
 #if defined(_WIN32)
     QFileInfo dp(dotPath+"dot.exe");
 #else
@@ -2769,7 +2769,7 @@ void Config::check()
   {
     dotPath="";
   }
-  
+
   // check input
   QStrList &inputSources=Config_getList("INPUT");
   if (inputSources.count()==0)
@@ -2799,7 +2799,7 @@ void Config::check()
   if (filePatternList.isEmpty())
   {
     filePatternList.append("*.c");
-    filePatternList.append("*.cc"); 
+    filePatternList.append("*.cc");
     filePatternList.append("*.cxx");
     filePatternList.append("*.cpp");
     filePatternList.append("*.c++");
@@ -2831,7 +2831,7 @@ void Config::check()
   //{
   //  imagePatternList.append("*");
   //}
-  
+
   // more checks needed if and only if the search engine is enabled.
   if (Config_getBool("SEARCHENGINE"))
   {
@@ -2849,7 +2849,7 @@ void Config::check()
       config_err("Error: tag CGI_URL: no URL to cgi directory specified.\n");
       exit(1);
     }
-    else if (cgiURL.left(7)!="http://" && 
+    else if (cgiURL.left(7)!="http://" &&
 	     cgiURL.left(8)!="https://" &&
 	     cgiURL.left(4)!="cgi:"
 	    )
@@ -2864,20 +2864,20 @@ void Config::check()
     {
       docURL = Config_getString("OUTPUT_DIRECTORY").copy().prepend("file://").append("html");
     }
-    else if (docURL.left(7)!="http://" && 
+    else if (docURL.left(7)!="http://" &&
 	     docURL.left(8)!="https://" &&
 	     docURL.left(7)!="file://"
 	    )
     {
       config_err("Error: tag DOC_URL: URL to documentation is invalid or "
-	  "not absolute.\n"); 
+	  "not absolute.\n");
       exit(1);
     }
     // check absolute documentation path
     QCString &docAbsPath = Config_getString("DOC_ABSPATH");
     if (docAbsPath.isEmpty())
     {
-      docAbsPath = Config_getString("OUTPUT_DIRECTORY")+"/html"; 
+      docAbsPath = Config_getString("OUTPUT_DIRECTORY")+"/html";
     }
     else if (docAbsPath[0]!='/' && docAbsPath[1]!=':')
     {
@@ -2905,7 +2905,7 @@ void Config::check()
     {
       QFileInfo fi;
       fi.setFile("/usr/bin/perl");
-      if (fi.exists()) 
+      if (fi.exists())
       {
 	perlPath="/usr/bin/perl";
         found=TRUE;
@@ -2937,11 +2937,11 @@ void Config::check()
 #if defined(_WIN32) && !defined(__GNUC__) && (__BORLANDC__ < 0x0550)
 #define PUTENV _putenv
 #define SEP ";"
-#else 
+#else
 #define PUTENV putenv
 #define SEP ":"
 #endif
-  if (Config_getBool("HAVE_DOT")) 
+  if (Config_getBool("HAVE_DOT"))
   {
     char *curFontPath = getenv("DOTFONTPATH");
     int l=curFontPath ? strlen(curFontPath)+1 : 0;
@@ -2955,14 +2955,14 @@ void Config::check()
     }
     PUTENV(buf);
   }
-  
+
   if (Config_getBool("OPTIMIZE_OUTPUT_JAVA") && Config_getBool("INLINE_INFO"))
   {
-    // don't show inline info for Java output, since Java has no inline 
+    // don't show inline info for Java output, since Java has no inline
     // concept.
     Config_getBool("INLINE_INFO")=FALSE;
   }
-  
+
 }
 
 void Config::init()
@@ -2977,7 +2977,7 @@ void Config::init()
 
 void Config::create()
 {
-  if (m_initialized) return; 
+  if (m_initialized) return;
   m_initialized = TRUE;
 
   ConfigString *cs;
@@ -2985,13 +2985,13 @@ void Config::create()
   ConfigList   *cl;
   ConfigInt    *ci;
   ConfigBool   *cb;
-  
+
   // option definitions
   //-----------------------------------------------------------------------------------------------
   addInfo("General","General configuration options");
   //-----------------------------------------------------------------------------------------------
-  
-  
+
+
   cs = addString(
                  "PROJECT_NAME",
                  "The PROJECT_NAME tag is a single word (or a sequence of words surrounded \n"
@@ -3368,7 +3368,7 @@ void Config::create()
                     "For example adding \"sideeffect=\\par Side Effects:\\n\" will allow you to \n"
                     "put the command \\sideeffect (or @sideeffect) in the documentation, which \n"
                     "will result in a user defined paragraph with heading \"Side Effects:\". \n"
-                    "You can put \\n's in the value part of an alias to insert newlines. \n" 
+                    "You can put \\n's in the value part of an alias to insert newlines. \n"
                  );
   cl = addList(
                     "ENABLED_SECTIONS",
@@ -3447,7 +3447,7 @@ void Config::create()
                     "doxygen can produce. The string should contain the $file, $line, and $text \n"
                     "tags, which will be replaced by the file and line number from which the \n"
                     "warning originated and the warning text. \n"
-                   ); 
+                   );
   cs->setDefaultValue("$file:$line: $text");
   cs = addString(
                     "WARN_LOGFILE",
@@ -3546,7 +3546,7 @@ void Config::create()
                     "INPUT_FILTER) will be used to filter the input files when producing source \n"
                     "files to browse (i.e. when SOURCE_BROWSER is set to YES). \n",
                     FALSE
-                );    
+                );
   //-----------------------------------------------------------------------------------------------
   addInfo(  "Source Browser","configuration options related to source browsing");
   //-----------------------------------------------------------------------------------------------
@@ -3586,7 +3586,7 @@ void Config::create()
   //-----------------------------------------------------------------------------------------------
   addInfo(  "Index","configuration options related to the alphabetical class index");
   //-----------------------------------------------------------------------------------------------
-  
+
   cb = addBool(
                     "ALPHABETICAL_INDEX",
                     "If the ALPHABETICAL_INDEX tag is set to YES, an alphabetical index \n"
@@ -3659,7 +3659,7 @@ void Config::create()
                    );
   cs->setWidgetType(ConfigString::File);
   cs->addDependency("GENERATE_HTML");
-  cb = addBool( 
+  cb = addBool(
                     "HTML_ALIGN_MEMBERS",
                     "If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes, \n"
                     "files or namespaces will be aligned in HTML using tables. If set to \n"
@@ -3836,7 +3836,7 @@ void Config::create()
                     "plain latex in the generated Makefile. Set this option to YES to get a \n"
                     "higher quality PDF documentation. \n",
                     FALSE
-                 );   
+                 );
   cb->addDependency("GENERATE_LATEX");
   cb = addBool(
                     "LATEX_BATCHMODE",
@@ -3905,7 +3905,7 @@ void Config::create()
                     "RTF_EXTENSIONS_FILE",
                     "Set optional variables used in the generation of an rtf document. \n"
                     "Syntax is similar to doxygen's config file.\n"
-                );                  
+                );
   cs->setWidgetType(ConfigString::File);
   cs->addDependency("GENERATE_RTF");
 
@@ -3947,7 +3947,7 @@ void Config::create()
   //-----------------------------------------------------------------------------------------------
   addInfo(  "XML","configuration options related to the XML output");
   //-----------------------------------------------------------------------------------------------
-  cb = addBool(  
+  cb = addBool(
                     "GENERATE_XML",
                     "If the GENERATE_XML tag is set to YES Doxygen will \n"
                     "generate an XML file that captures the structure of \n"
@@ -3985,7 +3985,7 @@ void Config::create()
   //-----------------------------------------------------------------------------------------------
   addInfo(  "PerlMod","configuration options related to the Perl module output");
   //-----------------------------------------------------------------------------------------------
-  cb = addBool(  
+  cb = addBool(
                     "GENERATE_PERLMOD",
                     "If the GENERATE_PERLMOD tag is set to YES Doxygen will \n"
                     "generate a Perl module file that captures the structure of \n"
@@ -3994,7 +3994,7 @@ void Config::create()
                     "moment. \n",
                     FALSE
                  );
-  cb = addBool(  
+  cb = addBool(
                     "PERLMOD_LATEX",
                     "If the PERLMOD_LATEX tag is set to YES Doxygen will generate \n"
                     "the necessary Makefile rules, Perl scripts and LaTeX code to be able \n"
@@ -4002,7 +4002,7 @@ void Config::create()
                     FALSE
                  );
   cb->addDependency("GENERATE_PERLMOD");
-  cb = addBool(  
+  cb = addBool(
                     "PERLMOD_PRETTY",
                     "If the PERLMOD_PRETTY tag is set to YES the Perl module output will be \n"
                     "nicely formatted so it can be parsed by a human reader.  This is useful \n"
@@ -4012,7 +4012,7 @@ void Config::create()
                     TRUE
                  );
   cb->addDependency("GENERATE_PERLMOD");
-  cs = addString(  
+  cs = addString(
                     "PERLMOD_MAKEVAR_PREFIX",
                     "The names of the make variables in the generated doxyrules.make file \n"
                     "are prefixed with the string contained in PERLMOD_MAKEVAR_PREFIX. \n"
@@ -4085,7 +4085,7 @@ void Config::create()
                     "If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then \n"
                     "this tag can be used to specify a list of macro names that should be expanded. \n"
                     "The macro definition that is found in the sources will be used. \n"
-                    "Use the PREDEFINED tag if you want to use a different macro definition. \n" 
+                    "Use the PREDEFINED tag if you want to use a different macro definition. \n"
                  );
   cl->addDependency("ENABLE_PREPROCESSING");
   cb = addBool(
@@ -4351,7 +4351,7 @@ static QCString configFileToString(const char *name)
       while ((size=f.readBlock(contents.data()+totalSize,bSize))==bSize)
       {
         totalSize+=bSize;
-        contents.resize(totalSize+bSize); 
+        contents.resize(totalSize+bSize);
       }
       totalSize+=size+2;
       contents.resize(totalSize);
@@ -4375,7 +4375,7 @@ static QCString configFileToString(const char *name)
         int fsize=f.size();
         QCString contents(fsize+2);
         f.readBlock(contents.data(),fsize);
-        if (fsize==0 || contents[fsize-1]=='\n') 
+        if (fsize==0 || contents[fsize-1]=='\n')
           contents[fsize]='\0';
         else
           contents[fsize]='\n'; // to help the scanner
@@ -4384,7 +4384,7 @@ static QCString configFileToString(const char *name)
         return contents;
       }
   }
-  if (!fileOpened)  
+  if (!fileOpened)
   {
     config_err("Error: cannot open file `%s' for reading\n",name);
   }
@@ -4394,7 +4394,7 @@ static QCString configFileToString(const char *name)
 
 bool Config::parse(const char *fn)
 {
-  QCString contents = configFileToString(fn); 
+  QCString contents = configFileToString(fn);
   config = Config::instance();
   inputString   = contents.data();
   inputPosition = 0;

@@ -16,7 +16,6 @@
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qregexp.h>
-#include <qpopupmenu.h>
 #include <qstringlist.h>
 #include <qtabwidget.h>
 #include <qvaluestack.h>

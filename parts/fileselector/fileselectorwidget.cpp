@@ -33,7 +33,7 @@
 #include <kcombobox.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 
 #include "kdevcore.h"
@@ -172,7 +172,7 @@ void FileSelectorWidget::popupAboutToShow()
   m_popupIds.resize(m_popup->count());
   for (uint index=0; index < m_popup->count(); ++index)
     m_popupIds[index] = m_popup->idAt(index);
-   
+
   KFileItem *item = const_cast<KFileItemList*>(dir->selectedItems())->first();
   if (item)
   {

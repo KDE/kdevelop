@@ -26,7 +26,7 @@
 #include "kdevmakefrontend.h"
 #include "kdevcore.h"
 #include "doxygenconfigwidget.h"
-#include <../../lib/util/domutil.h>
+#include "../../lib/util/domutil.h"
 
 
 #include "config.h"
@@ -79,7 +79,7 @@ void DoxygenPart::adjustDoxyfile()
 
   // Initialize configuration
   Config::instance()->init();
-  
+
   // Do some checks and improve the configuration a bit
   Config::instance()->check();
 
@@ -124,7 +124,7 @@ void DoxygenPart::adjustDoxyfile()
   {
     // Remove Doxygen's default patterns
 //    patterns->init();
-    
+
     // Add this ones:
     patterns->addValue("*.C");
     patterns->addValue("*.H");

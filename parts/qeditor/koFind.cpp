@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <klocale.h>
-#include <koFind.h>
+#include "koFind.h"
 #include <kmessagebox.h>
 
 KoFindDialog::KoFindDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings, bool hasSelection) :
