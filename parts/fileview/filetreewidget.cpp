@@ -31,8 +31,6 @@
 #include "domutil.h"
 #include "urlutil.h"
 
-
-
 #include "fileviewpart.h"
 
 #define FILENAME_COLUMN  0
@@ -181,8 +179,8 @@ public:
             return 0;
 
         FileTreeWidget *lv = static_cast<MyFileTreeViewItem*>( parent )->listView();
-        /*
         KDevVCSFileInfoProvider *vcsInfoProvider = 0;
+        /*
         if (lv->part()->versionControl())
             vcsInfoProvider = lv->part()->versionControl()->fileInfoProvider();
         else
