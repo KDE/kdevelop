@@ -766,7 +766,7 @@ void KDlgEdit::generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QStr
     props->dumpBoolPropCall(stream, "setTracking", "isTracking", true);
 
     if (props->getPropValue("Orientation") == "Horizontal")
-	props->dumpPropCall(stream, "setOrientation", "QSlider::Horizontal");
+	props->dumpPropCall(stream, "setOrientation", "QScrollBar::Horizontal");
 
     *stream << "\n";
 }
