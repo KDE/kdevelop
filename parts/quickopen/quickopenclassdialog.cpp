@@ -33,6 +33,28 @@
 #include <qregexp.h>
 #include <qlabel.h>
 
+#if QT_VERSION < 0x030100
+/* original source from qt-3.2.1/src/widgets/qlistbox.cpp
+QListBoxItem* QListBox::selectedItem() const
+{
+    if ( d->selectionMode != Single )
+	return 0;
+    if ( isSelected( currentItem() ) )
+	return  d->current;
+    return 0;
+}
+*/
+QListBoxItem* QListBox_selectedItem(QListBox* cpQListBox)
+{
+    if ( cpQListBox->selectionMode() != QListBox::Single )
+    return 0;
+    if ( cpQListBox->isSelected( cpQListBox->currentItem() ) )
+    return  cpQListBox->item(cpQListBox->currentItem());
+    return 0;
+}
+#endif
+
+
 QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
@@ -78,7 +100,11 @@ void QuickOpenClassDialog::reject()
 
 void QuickOpenClassDialog::accept()
 {
+#if QT_VERSION >= 0x030100
     if( QListBoxItem* item = itemList->selectedItem() )
+#else
+    if( QListBoxItem* item = QListBox_selectedItem(itemList) )
+#endif
     {
         ClassDom klass = findClass( item->text() );
         if( klass )
