@@ -925,6 +925,10 @@ If &kdevelop; was automatically restarted by the KDE session manager the changes
 You may set up the contents of this documentation tree if you select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Documentation Tree</guilabel> in the left hand tree.
 </para>
 
+<note><para>
+&kdevelop; must have loaded the <guilabel>Documentation</guilabel> plugin in order to view the documentation tree. See the <link linkend="setup-plugins">Plugin Tools</link> section for more info.
+</para></note>
+
 <formalpara>
 <title>Alternative Method to Call Up the Configuration Page</title>
 <para>
@@ -940,7 +944,7 @@ The thus displayed <link linkend="configure-doctree-general">configuration page<
   <member><link linkend="setup-docu-general">General</link></member>
   <member><link linkend="setup-docu-textsearch">Full Text Search</link></member>
   <member><link linkend="setup-docu-bookmark">Bookmarks</link></member>
-  <member><link linkend="setup-docu-TOC">KDevelopTOCDocumentation</link></member>
+  <member><link linkend="setup-docu-TOC">KDevelopTOC Documentation</link></member>
   <member><link linkend="setup-docu-DevHelp">DevHelp Documentation</link></member>
 </simplelist>
 <para>
@@ -1173,10 +1177,10 @@ There is not much <ulink url="http://sirtaj.net/projects/kdoc/">KDoc</ulink> bas
 </sect2> <!-- setup-docu-general -->
 
 <sect2 id="setup-docu-TOC">
-<title>Standard Contents of the Documentation Tree (KDevelopTOCDocumentation)</title>
+<title>Handling Structured Documentation (KDevelopTOC Files)</title>
 
 <para>
-The main bulk of &kdevelop;'s documentation tree provides immediate access to structured documentations, local as well as remote ones. You can configure such documentation on the <guilabel>KDevelopTOCDocumentation</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page.
+The main bulk of &kdevelop;'s documentation tree provides immediate access to structured documentation, local as well as remote ones. You can configure this on the <guilabel>KDevelopTOC Documentation</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page.
 </para>
 
 <screenshot>
@@ -1191,20 +1195,20 @@ The main bulk of &kdevelop;'s documentation tree provides immediate access to st
 </screenshot>
 
 <para>
-There is a special feature associated with this. To illustrate, follow these steps: In the documentation tree find an entry shortly below the &Qt;/&kde; documentation (&eg; <quote>KDE2 Development Book (kde.org)</quote>). Click on the plus sign next to it. A tree will then open where you can quickly navigate to subsequent chapters nested several levels deep, all offline. But if you select one of the chapters, &kdevelop; will try to access a remote documentation file.
+There is a special feature associated with this. To illustrate, follow these steps: In the documentation tree find an entry shortly below the &Qt;/&kde; documentation (&eg; <quote>KDE2 Development Book (kde.org)</quote>). Click on the plus sign next to it. A tree will open where you can quickly navigate to subsequent chapters nested several levels deep, all offline. But if you finally select one of the chapters, &kdevelop; will in many cases try to access a <emphasis>remote</emphasis> documentation file.
 </para>
 
 <sect3 id="setup-docu-TOC-files">
 <title>&kdevelop; TOC Files</title>
 
 <para>
-So you can locally navigate remote documentation without wasting net access ressources. &kdevelop; makes this possible through the use of special <quote>table of content</quote> files, which are denoted by <filename>.toc</filename> filename extensions. Such a &kdevelop; TOC file is an &XML; structured description of the document to be accessed.
+So you can locally navigate remote documentation without wasting net access ressources. &kdevelop; makes this possible through the use of special <quote>table of content</quote> files, which are denoted by <filename>.toc</filename> filename extensions. Any such &kdevelop; TOC file contains an &XML; structured description of the document to be accessed.
 </para>
 
 <formalpara>
 <title>Standard Directory of &kdevelop; TOC Files</title>
 <para>
-At installing &kdevelop; a series of predefined <filename>.toc</filename> files usually has been put into the <filename class="directory">$KDEDIR/share/apps/kdevdoctreeview/tocs</filename> directory. These are fairly simple structured text files. You may look at them using a text editor or other display facility.
+When &kdevelop; was installed usually a series of predefined <filename>.toc</filename> files has been put into the <filename class="directory">$KDEDIR/share/apps/kdevdoctreeview/tocs</filename> directory. These are fairly simple, structured text files. You may look at them using a text editor or other text display facility.
 </para>
 </formalpara>
 
@@ -1234,7 +1238,7 @@ At installing &kdevelop; a series of predefined <filename>.toc</filename> files 
         </member>
       </simplelist>
       <para>
-      This &XML; structure will be parsed by &kdevelop; to set up the documentation tree contents and to guide the user in navigating the documentation. It contains all information necessary to display titles and access the documentation texts.
+      This &XML; structure will be parsed by the &kdevelop; <guilabel>Documentation</guilabel> plugin to set up the documentation tree contents and to guide the user in navigating the documentation. It contains all information necessary to display titles and access the documentation file contents.
       </para>
     </listitem>
   </varlistentry>
@@ -1252,7 +1256,7 @@ At installing &kdevelop; a series of predefined <filename>.toc</filename> files 
       This is the title &kdevelop; will display at the basic levels in the documentation tree.
       </para>
       <note><para>
-      This displayed title currently cannot be changed by the user. If you want another text be displayed, you must explicitely change the <computeroutput>&lt;title&gt;</computeroutput> entry in the <filename>.toc</filename> file.
+      This displayed title currently cannot be changed by the user. If you want another text be displayed, you must manually change the <computeroutput>&lt;title&gt;</computeroutput> entry in the <filename>.toc</filename> file.
       </para></note>
     </listitem>
   </varlistentry>
@@ -1267,11 +1271,11 @@ At installing &kdevelop; a series of predefined <filename>.toc</filename> files 
         </member>
       </simplelist>
       <para>
-      This &URL; points to the location where all files of this documentation are located. It will be prepended before each section &URL; in the following content structure list. So, if you &eg; loaded the documentation down from a remote location, all what is needed is to change this <computeroutput>&lt;base&gt;</computeroutput> &URL; to display the texts from the new location.
+      This &URL; points to the location where all files of this documentation are located. It will be prepended before each section &URL; in the following content structure list. So, if you &eg; downloaded a documentation from a remote server, all you need to display the files from this new location is to change its <computeroutput>&lt;base&gt;</computeroutput> &URL;.
       </para>
-      <note><para>
-      It is possible to change the <computeroutput>&lt;base&gt;</computeroutput> &URL; &kdevelop; will use with the <guibutton>Edit</guibutton> button on the <guilabel>KDevelopTOCDocumentation</guilabel> tab of the documentation customization page.
-      </para></note>
+      <para>
+      You need not change the <filename>.toc</filename> file, however. Better use the <guibutton>Edit</guibutton> button on the <guilabel>KDevelopTOC Documentation</guilabel> tab of the documentation customization page as <link linkend="setup-docu-TOC-edit">shown below</link>.
+      </para>
     </listitem>
   </varlistentry>
   <varlistentry>
@@ -1299,20 +1303,20 @@ At installing &kdevelop; a series of predefined <filename>.toc</filename> files 
         </member>
       </simplelist>
       <para>
-      All main navigation and documentation access information is stored in a series of nested <computeroutput>&lt;tocsecti&gt;</computeroutput> ... <computeroutput>&lt;/tocsecti&gt;</computeroutput> pairs. Each <emphasis>i</emphasis> denotes a consecutive nesting level down to a section number <emphasis>n</emphasis> which will correspond to the finally displayed documentation section.
+      All remaining navigation and access information is stored in a series of nested <computeroutput>&lt;tocsecti&gt;</computeroutput> ... <computeroutput>&lt;/tocsecti&gt;</computeroutput> pairs. Each <emphasis>i</emphasis> denotes a consecutive nesting level down to number <emphasis>n</emphasis> which will correspond to the finally displayed documentation section.
       </para>
       <para>
       Any <computeroutput>&lt;tocsecti&gt;</computeroutput> entry must have a <computeroutput>name=""</computeroutput> attribute associated with it. This will be displayed as level title in the documentation tree. It should correspond to an actual documentation section.
       </para>
       <para>
-      There may be an <computeroutput>url=""</computeroutput> attribute associated with any outer <emphasis>i</emphasis> nesting level. &kdevelop; will try to access and display the text at the address composed out of base and section &URL; if the user clicks on the section title in the documentation tree.
+      There may be an <computeroutput>url=""</computeroutput> attribute associated with any <emphasis>i</emphasis> nesting level. When the user clicks on a section title in the documentation tree &kdevelop; will try to access the file at the location pointed to by the combined base and section &URL;.
       </para>
       <para>
-      The final nesting <computeroutput>&lt;tocsectn/&gt;</computeroutput> entry must have an <computeroutput>url=""</computeroutput> attribute whatsoever.
-      This final nesting <computeroutput>&lt;tocsectn/&gt;</computeroutput> does not come in pairs but will immediately be closed by a <computeroutput>/</computeroutput> before the <computeroutput>&gt;</computeroutput> bracket.
+      The <computeroutput>&lt;tocsectn/&gt;</computeroutput> entry must have an <computeroutput>url=""</computeroutput> attribute whatsoever.
+      This final nested <computeroutput>&lt;tocsectn/&gt;</computeroutput> does not come in pairs but will immediately be closed by a <computeroutput>/</computeroutput> before the <computeroutput>&gt;</computeroutput> bracket.
       </para>
       <note><para>
-      The address combined of base and section &URL; must point to some displayable text. Usually this will be a HTML-structured file. It is possible to link to anchor marks within such a HTML file. The documentation entry will in this case use the standard # notation of the format: <filename>/base-url/section-url#anchor-mark</filename>.
+      Any address combined of base and section &URL; must point to some displayable text file. Usually this will be an HTML-structured file. It is possible to link to anchor marks within such an HTML file using the standard # notation of the format: <filename>/base-url/section-url#anchor-mark</filename>.
       </para></note>
     </listitem>
   </varlistentry>
@@ -1324,20 +1328,20 @@ At installing &kdevelop; a series of predefined <filename>.toc</filename> files 
 <title>Altering the &kdevelop; TOC Documentation</title>
 
 <para>
-There are two ways to alter the &kdevelop; TOC Documentation. You may change the docuentation tree list, &ie; add or remove entries from the <guilabel>KDevelopTOCDocumentation</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page. And you may point an existing documentation to another base location.
+There are two ways to alter the &kdevelop; TOC Documentation. You may change the docuentation tree list, &ie; add to or remove entries from the <guilabel>KDevelopTOC Documentation</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page. Additionally you may point an existing documentation to another base location.
 </para>
 
 <formalpara>
 <title>Adding &kdevelop; TOC Files</title>
 <para>
-Adding an entry to the <guilabel>KDevelopTOCDocumentation</guilabel> tab is fairly straightforward. First you need a <filename>.toc</filename> file to some structured documentation following the <link linkend="toc-file-structure">structure</link> shown above. You may easily set this up using your standard text editor. Then add this file using the <link linkend="setup-docu-button-add"><guibutton>Add</guibutton> button</link> on the right of the configuration page.
+Adding an entry to the <guilabel>KDevelopTOC Documentation</guilabel> tab is fairly straightforward. At first you need a <filename>.toc</filename> file to some structured documentation following the <link linkend="toc-file-structure">structure</link> shown above. This is easily constructed using any standard text editor. Then add this file using the <link linkend="setup-docu-button-add"><guibutton>Add</guibutton> button</link> on the configuration page.
 </para>
 </formalpara>
 
 <formalpara>
 <title>Removing a &kdevelop; TOC Entry</title>
 <para>
-To remove an entry from the <guilabel>KDevelopTOCDocumentation</guilabel> tab first select it in the list, then click on the <link linkend="setup-docu-button-remove"><guibutton>Remove</guibutton> button</link> on the right of the configuration page.
+To remove an entry from the <guilabel>KDevelopTOC Documentation</guilabel> tab first select it in the list, then click on the <link linkend="setup-docu-button-remove"><guibutton>Remove</guibutton> button</link> on the configuration page.
 </para>
 </formalpara>
 
@@ -1346,25 +1350,25 @@ To remove an entry from the <guilabel>KDevelopTOCDocumentation</guilabel> tab fi
 <emphasis>Think twice before you click on the <guibutton>Remove</guibutton> button!</emphasis>
 </para>
 <para>
-&kdevelop; will not only remove the list entry but also delete the <filename>.toc</filename> file from the directory if possible. You may want to keep a backup copy if the documentation was valuable.
+&kdevelop; will not only remove the list entry but also delete the <filename>.toc</filename> file from the directorye. You may want to keep a backup copy if the documentation was valuable.
 </para>
 </warning>
 
 <para>
-If the <filename>.toc</filename> file cannot be removed (&ie; if you have no write access to it) then the entry will remain in the <guilabel>KDevelopTOCDocumentation</guilabel> list.
+If the <filename>.toc</filename> file cannot be removed (&ie; if you have no write access), the entry will remain in the <guilabel>KDevelopTOC Documentation</guilabel> list.
 </para>
 
-<formalpara>
+<formalpara id="setup-docu-TOC-edit">
 <title>Changing the Base Address of a &kdevelop; TOC Entry</title>
 <para>
-In case you want the documentation listed in an already existing <filename>.toc</filename> file be read from another location, you may alter its base address. Just select the file in the <guilabel>KDevelopTOCDocumentation</guilabel> list, then click on the <guibutton>Edit</guibutton> button on the right of the configuration page.
+If the documentation in an already listed <filename>.toc</filename> file should be read from another location, tell &kdevelop; to alter the documentation base address. Select the file in the <guilabel>KDevelopTOC Documentation</guilabel> list, then click on the <guibutton>Edit</guibutton> button.
 </para>
 </formalpara>
 
 <!-- ### This is preliminary. Change the following when there will be another edit diaolog. -->
 
 <para>
-For historical reasons the <guibutton>Edit</guibutton> button will in turn display a different dialog which stems from an older approach to structure library documentation:
+For historical reasons clicking the <guibutton>Edit</guibutton> button will pop up a different dialog which stems from an older approach to structured library documentation:
 </para>
 
 <screenshot>
@@ -1379,19 +1383,28 @@ For historical reasons the <guibutton>Edit</guibutton> button will in turn displ
 </screenshot>
 
 <para>
-In the <guilabel>Library name</guilabel> field &kdevelop; has entered the name of the <filename>.toc</filename> file to be referred to. This is the file you selected in the list, thus this field is inaccessible.
+The <guilabel>Library name</guilabel> field shows the name of the <filename>.toc</filename> file which was selected in the list.
+As this is for information only, the field remains inaccessible.
 </para>
 
 <para>
-The base address which &kdevelop; currently keeps for this TOC entry is now in the <guilabel>Documentation path</guilabel> field. Change it to point to the documentation origin &kdevelop; shall subsequently use. Then press <guibutton>OK</guibutton> to alter the access.
+The <guilabel>Documentation path</guilabel> field contains the base address which &kdevelop; currently uses to access this documentation. Change it to point to the new documentation origin &kdevelop; shall subsequently use. Then press <guibutton>OK</guibutton> to alter the access.
 </para>
 
-<note><para>
-&kdevelop; will by no means change the <filename>.toc</filename> file, however. Instead it keeps the current base address in an internal list. Whenever you press the <guibutton>Default</guibutton> in this <guilabel>Library Documentation</guilabel> dialog, &kdevelop; will read the contents of the <computeroutput>&lt;base&gt;</computeroutput> field back from the file.
-</para></note>
 
 <para>
 The remaining <guilabel>Library source path</guilabel> dialog field is of no importance. Just ignore it.
+</para>
+
+<formalpara>
+<title>Reverting to the Default Base Address</title>
+<para>
+&kdevelop; will not change the <filename>.toc</filename> file contents. Instead it keeps the current base address in an internal list.
+</para>
+</formalpara>
+
+<para>
+If you want to get the original documentation base address back, use the <guibutton>Default</guibutton> button in this <guilabel>Library Documentation</guilabel> dialog. &kdevelop; will replace its internal documentation base pointer by the contents of the <computeroutput>&lt;base&gt;</computeroutput> field in the corresponding <filename>.toc</filename> file.
 </para>
 
 </sect3> <!-- setup-docu-TOC-list -->
@@ -1417,6 +1430,14 @@ The remaining <guilabel>Library source path</guilabel> dialog field is of no imp
 </screenshot>
 
 </sect2> <!-- setup-docu-DevHelp -->
+
+<sect2 id="setup-docu-project">
+<title>Displaying Selected Documentation in a Project</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect2> <!-- setup-docu-project -->
 
 <sect2 id="setup-docu-bookmark">
 <title>Bookmarked Documentation</title>
@@ -1468,14 +1489,6 @@ The remaining <guilabel>Library source path</guilabel> dialog field is of no imp
 </screenshot>
 
 </sect2> <!-- setup-docu-textsearch -->
-
-<sect2 id="setup-docu-project">
-<title>Displaying Selected Documentation in a Project</title>
-
-<para>
-(... to be written ...)
-</para>
-</sect2> <!-- setup-docu-project -->
 
 </sect1> <!-- setup-docu -->
 
