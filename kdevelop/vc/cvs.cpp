@@ -12,6 +12,10 @@
    the file name part. The clou is that for directories,
    we want dirpart to be the directory, otherwise we
    would go above the cvs module for the top-level dir.
+
+   Not used for add and remove, because those are not
+   used for top-level dirs and adding/removing . does
+   not work.
 */
    
 void CVS::splitPath(const char *filename, QString *dirpart, QString *filepart)
@@ -32,8 +36,9 @@ void CVS::splitPath(const char *filename, QString *dirpart, QString *filepart)
 
 void CVS::add(const char *filename)
 {
-    QString dirpath, name;
-    splitPath(filename, &dirpath, &name);
+    QFileInfo fi(filename);
+    QString dirpath = fi.dirPath();
+    QString name = fi.fileName();
     
     QString command("cd ");
     command += dirpath;
@@ -49,8 +54,9 @@ void CVS::add(const char *filename)
 
 void CVS::remove(const char *filename)
 {
-    QString dirpath, name;
-    splitPath(filename, &dirpath, &name);
+    QFileInfo fi(filename);
+    QString dirpath = fi.dirPath();
+    QString name = fi.fileName();
     
     QString command("cd ");
     command += dirpath;
