@@ -413,19 +413,26 @@ sub condCreateApiDoc {
     #if API-Files was chosen in kAppWizard
     if ($processes{API} eq "yes") {
 	
-	#create the API-documentation
-	chdir ($underDirectory);
-	mkdir ("api", 0777);
-      if ($processes{KDOC_CALL})
+      #create the API-documentation
+      chdir ($underDirectory);
+      mkdir ("api", 0777);
+      if (<*.h>)
       {
-        my $call=$processes{KDOC_CALL};
-        $call =~ s/\|UNDERDIRECTORY\|/$underDirectory/eg;
+       if ($processes{KDOC_CALL})
+       {
+         my $call=$processes{KDOC_CALL};
+         $call =~ s/\|UNDERDIRECTORY\|/$underDirectory/eg;
 
-	system ("$call");
+	 system ("$call");
+       }
+       else
+       {
+	 system ("kdoc -d $underDirectory/api/ $name *.h");
+       }
       }
       else
       {
-	system ("kdoc -d $underDirectory/api/ $name *.h");
+        printflush (STDOUT,"No header files found, so no API-doc generation yet\n");
       }
     }
 
