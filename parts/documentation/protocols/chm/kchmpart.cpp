@@ -67,11 +67,12 @@ KInstance* KChmPartFactory::instance()
 
 
 KChmPart::KChmPart( QWidget * parent, const char * name )
-	: KHTMLPart( parent, name ), m_job(0)
+	: KDevHTMLPart(  ), m_job(0)
 {
    KInstance * instance = new KInstance( "kchmpart" );
    setInstance( instance );
    m_extension=new KParts::BrowserExtension(this);
+   setOptions(-1);
 }
 
 bool KChmPart::openURL( const KURL &url )
@@ -79,8 +80,17 @@ bool KChmPart::openURL( const KURL &url )
    KURL chmURL = url;
    chmURL.setProtocol("ms-its");
    chmURL.addPath("/");
-   return KHTMLPart::openURL(chmURL);
+   return KDevHTMLPart::openURL(chmURL);
 }
+
+void KChmPart::slotDuplicate()
+{
+}
+
+void KChmPart::slotOpenInNewWindow(const KURL &url)
+{
+}
+
 
 /*
 bool KChmPart::openFile()

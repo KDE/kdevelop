@@ -23,6 +23,7 @@
 #include <khtml_part.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
+#include <kdevhtmlpart.h>
 
 #include <qcstring.h>
 
@@ -50,7 +51,7 @@ class KChmPartFactory: public KParts::Factory
 };
 
 
-class KChmPart : public KHTMLPart
+class KChmPart : public KDevHTMLPart
 {
    Q_OBJECT
    public:
@@ -70,6 +71,11 @@ class KChmPart : public KHTMLPart
       KParts::BrowserExtension *m_extension;
       KIO::TransferJob *m_job;
       QCString m_htmlData;
+
+   protected slots:
+      virtual void slotDuplicate();
+      virtual void slotOpenInNewWindow(const KURL &url);
+
 };
 
 #endif // __kchmpart_h__
