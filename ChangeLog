@@ -1,3 +1,11 @@
+2002-01-15  Walter Tasin <tasin@kdevelop.org>
+    * admin-tarball is now in sync with the actual version of KDE
+      Now it's possible to use this framework for either
+      QT/KDE 3 or QT/KDE 2.
+      The project templates are still designed for KDE/QT 2 version.
+    * correcting some compile/make flags stuff
+    * introducing the NOOPT_CFLAGS for all projects
+
 2002-01-15  F@lk Brettschneider <falk@kdevelop.org>
     * attempt to avoid infinite recursion in KToolBar, also fixed in kdeui today
     * when we open a popup menu FocusIn and FocusOut was called for KWriteView which makes it very slow
