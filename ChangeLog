@@ -1,3 +1,6 @@
+2000-06-19 Falk Brettschneider <gigafalk@yahoo.com>
+   * bugfix (JBB's hint) for: critical CPU load for some seconds - total kdevelop blocking when debugging, happens only sometimes
+
 2000-06-07 Sandy Meier <smeier@kdevelop.de>
 	* commited "open_recent_project" patch by Hartig, Olaf <O.Hartig@keh-berlin.de>
 

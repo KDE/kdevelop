@@ -3499,11 +3499,11 @@ void CKDevelop::slotSTabSelected(int item){
 
   enableCommand(ID_FILE_PRINT);
 
-  QString text=QApplication::clipboard()->text();
-  if(text.isEmpty())
-    disableCommand(ID_EDIT_PASTE);
-  else
-    enableCommand(ID_EDIT_PASTE);
+//  QString text=QApplication::clipboard()->text();
+//  if(text.isEmpty())
+//    disableCommand(ID_EDIT_PASTE);
+//  else
+//    enableCommand(ID_EDIT_PASTE);
 
   enableCommand(ID_EDIT_INSERT_FILE);
   enableCommand(ID_EDIT_SEARCH);
