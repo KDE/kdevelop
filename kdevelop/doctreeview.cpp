@@ -198,7 +198,10 @@ void DocTreeKDevelopBook::setOpen(bool o)
                     fclose(f);
                 }
             else
-                setExpandable(false);
+            {
+              setExpandable(false);
+              o=false; // the book icon remains closed
+            }
         }
     ListViewBookItem::setOpen(o);
 }
@@ -253,7 +256,7 @@ public:
                         const char *libname);
     virtual void setOpen(bool o);
 private:
-    void readKdoc2Index(FILE *f);
+    int readKdoc2Index(FILE *f);
     static QString locatehtml(const char *libname);
     QString idx_filename;
 };
@@ -266,6 +269,8 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
     KConfig *config = kapp->getConfig();
     config->setGroup("Doc_Location");
     QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
+
+#ifdef WITH_KDOC2
     if (!idx_path.isEmpty())
         {
             // If we have a kdoc2 index in either uncompressed
@@ -278,6 +283,8 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
             idx_filename += ".kdoc";
             setExpandable(true);
         }
+#endif
+
 }
 
 
@@ -295,9 +302,10 @@ QString DocTreeKDELibsBook::locatehtml(const char *libname)
 }
 
 
-void DocTreeKDELibsBook::readKdoc2Index(FILE *f)
+int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
 {
     char buf[512];
+    int count=0;
     QString baseurl;
     while (fgets(buf, sizeof buf, f))
         {
@@ -320,30 +328,37 @@ void DocTreeKDELibsBook::readKdoc2Index(FILE *f)
                     QString filename = s.mid(pos1+7, pos2-(pos1+7));
                     new ListViewDocItem(this, classname,
                                         baseurl + "/" + filename);
+  		    count++;
                 }
         }
     sortChildItems(0, true);
+    return count;
 }
 
 
 void DocTreeKDELibsBook::setOpen(bool o)
 {
+  int count=0;
     if (o && childCount() == 0)
         {
             FILE *f;
             if ( (f = fopen(idx_filename, "r")) != 0)
                 {
-                    readKdoc2Index(f);
+                    count=readKdoc2Index(f);
                     fclose(f);
                 }
             else if ( (f = popen(QString("gzip -c -d ")
                                  + idx_filename + ".gz 2>/dev/null", "r")) != 0)
                 {
-                    readKdoc2Index(f);
+                    count=readKdoc2Index(f);
                     pclose(f);
                 }
-            else
-                setExpandable(false);
+
+            if (count==0)
+            {
+              setExpandable(false);
+              o=false;  // the book icons remains closed
+            }
         }
     ListViewBookItem::setOpen(o);
 }
@@ -362,7 +377,6 @@ public:
 void DocTreeKDELibsFolder::refresh()
 {
     ListViewFolderItem::refresh();
-    
     (void) new DocTreeKDELibsBook(this, i18n("Qt Library"),         0);
     (void) new DocTreeKDELibsBook(this, i18n("KDE Core Library"),   "kdecore");
     (void) new DocTreeKDELibsBook(this, i18n("KDE UI Library"),     "kdeui");
@@ -605,6 +619,11 @@ void DocTreeView::refresh(CProject *prj)
     folder_kdelibs->refresh();
     folder_others->refresh();
     folder_project->refresh();
+    // recalculate the positions maybe some mouseEvent is still
+    //  in queue with old positions
+    folder_kdelibs->setup();
+    folder_others->setup();
+    folder_project->setup();
 }
 
 
