@@ -238,7 +238,7 @@ void Catalog::addIndex( const QCString& name )
 	QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + QString(name) + ".idx";
 
         if ((ret = dbp->open(
-	    dbp BDB_OPEN_HACK, indexName, 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+	    dbp BDB_OPEN_HACK, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	    qWarning( "db_open: %s", db_strerror(ret) );
 	    dbp->close( dbp, 0 );
 	    return;
