@@ -1,6 +1,5 @@
 dist-hook:
-	here=`cd $(top_srcdir) && pwd`; \
-	cd $(distdir) && perl $$here/am_edit
+	perl am_edit
 
 # This file you have to edit. Change the name here
 SUBDIRS =  kdevelop kdlgloader doc po debian
