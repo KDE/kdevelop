@@ -82,6 +82,20 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     connect(cancel, SIGNAL(clicked()),  SLOT(reject()));
 
     psProc_ = new KShellProcess("/bin/sh");
+    #ifdef USE_SOLARIS
+    *psProc_ << "ps";
+    *psProc_ << "-opid";
+    *psProc_ << "-otty";
+    *psProc_ << "-os";
+    *psProc_ << "-otime";
+    *psProc_ << "-oargs";
+    pidCmd_ = "ps -opid -otty -os -otime -oargs";
+
+    if (getuid() == 0) {
+        *psProc_ << "-e";
+        pidCmd_ += " -e";
+    }
+    #else
     *psProc_ << "ps";
     *psProc_ << "x";
     pidCmd_ = "ps x";
@@ -90,6 +104,7 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
         *psProc_ << "a";
         pidCmd_ += " a";
     }
+    #endif
 
     connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
     connect( psProc_, SIGNAL(receivedStdout(KProcess *, char *, int)),  SLOT(slotReceivedOutput(KProcess *, char *, int)) );

@@ -296,6 +296,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     QPushButton*  bStep       = new DbgButton(BarIcon("dbgstep"),       QString::null,      this);
     QPushButton*  bStepi      = new DbgButton(BarIcon("dbgstepinst"),   QString::null,      this);
     QPushButton*  bFinish     = new DbgButton(BarIcon("dbgstepout"),    i18n("Step Out"),   this);
+    QPushButton*  bRunTo      = new DbgButton(BarIcon("dbgrunto"),      i18n("Run to cursor"),   this);
     QPushButton*  bView       = new DbgButton(BarIcon("dbgmemview"),    i18n("Viewers"),    this);
     bKDevFocus_ = new DbgButton(BarIcon("kdevelop"),      QString::null,      this);
     bPrevFocus_ = new DbgButton(BarIcon("dbgmemview"),    QString::null,      this);
@@ -307,6 +308,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
   connect(bStep,       SIGNAL(clicked()), part_,  SLOT(slotStepInto()));
   connect(bStepi,      SIGNAL(clicked()), part_,  SLOT(slotStepIntoInstruction()));
   connect(bFinish,     SIGNAL(clicked()), part_,  SLOT(slotStepOut()));
+  connect(bRunTo,      SIGNAL(clicked()), part_,  SLOT(slotRunToCursor()));
   connect(bView,       SIGNAL(clicked()), part_,  SLOT(slotMemoryView()));
   connect(bKDevFocus_, SIGNAL(clicked()), this,   SLOT(slotKdevFocus()));
   connect(bPrevFocus_, SIGNAL(clicked()), this,   SLOT(slotPrevFocus()));
@@ -318,6 +320,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     QToolTip::add( bStep,       i18n("Execute one line of code, stepping into functions if appropriate") );
     QToolTip::add( bStepi,      i18n("Execute one assembler instruction, stepping into functions if appropriate") );
     QToolTip::add( bFinish,     i18n("Execute to end of current stack frame") );
+    QToolTip::add( bRunTo,      i18n("Continues execution until the cursor position is reached.") );
     QToolTip::add( bView,       i18n("Memory, dissemble, registers, library viewers") );
     QToolTip::add( bKDevFocus_, i18n("Set focus on KDevelop") );
     QToolTip::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus") );
@@ -329,6 +332,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     QWhatsThis::add( bStep,       i18n("Execute one line of code, stepping into functions if appropriate.") );
     QWhatsThis::add( bStepi,      i18n("Execute one assembler instruction, stepping into functions if appropriate.") );
     QWhatsThis::add( bFinish,     i18n("Execute to end of current stack frame.") );
+    QWhatsThis::add( bRunTo,      i18n("Continues execution until the cursor position is reached.") );
     QWhatsThis::add( bView,       i18n("Memory, dissemble, registers, library viewers.") );
     QWhatsThis::add( bKDevFocus_, i18n("Set focus on KDevelop.") );
     QWhatsThis::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus.") );
@@ -338,6 +342,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     topLayout->addLayout(nextLayout);
     topLayout->addLayout(stepLayout);
     topLayout->addWidget(bFinish);
+    topLayout->addWidget(bRunTo);
     topLayout->addWidget(bView);
     topLayout->addWidget(bInterrupt);
     topLayout->addLayout(focusLayout);
