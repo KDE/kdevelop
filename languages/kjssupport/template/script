@@ -1,0 +1,13 @@
+#!perl -I/usr/kde/3.1/share/apps/kdevappwizard/template-common
+
+use gideon;
+
+initGideon();
+
+print "Installing project file\n";
+installHTML( "${src}/template-jshello/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
+
+print "Installing application sources\n";
+install( "${src}/template-jshello/app.js",       "${dest}/${APPNAMELC}.js" );
+
+print "Finished\n";
