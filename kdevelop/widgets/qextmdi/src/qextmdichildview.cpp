@@ -525,7 +525,8 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       QObject* pNewChild = ((QChildEvent*)e)->child();
       if((pNewChild != 0L) && (pNewChild->inherits("QWidget")) &&
          !(pNewChild->inherits("QMessageBox")) && !(pNewChild->inherits("QFileDialog")) &&
-         !(pNewChild->inherits("KMessageBox")) && !(pNewChild->inherits("KDialogBase")))
+         !(pNewChild->inherits("KMessageBox")) && !(pNewChild->inherits("KDialogBase")) && 
+         !(pNewChild->inherits("QPopupMenu")) )
       {
          QWidget* pNewWidget = (QWidget*)pNewChild;
          QObjectList *list = pNewWidget->queryList( "QWidget" );
@@ -565,16 +566,18 @@ void QextMdiChildView::installEventFilterForAllChildren()
    while ( (obj=it.current()) != 0 ) { // for each found object...
       QWidget* widg = (QWidget*)obj;
       ++it;
-      widg->installEventFilter(this);
-      if((widg->focusPolicy() == QWidget::StrongFocus) ||
-         (widg->focusPolicy() == QWidget::TabFocus   ) ||
-         (widg->focusPolicy() == QWidget::WheelFocus ))
-      {
-         if(m_firstFocusableChildWidget == 0) {
-            m_firstFocusableChildWidget = widg;  // first widget
+      if (!(widg->inherits("QPopupMenu"))) {
+         widg->installEventFilter(this);
+         if((widg->focusPolicy() == QWidget::StrongFocus) ||
+            (widg->focusPolicy() == QWidget::TabFocus   ) ||
+            (widg->focusPolicy() == QWidget::WheelFocus ))
+         {
+            if(m_firstFocusableChildWidget == 0) {
+               m_firstFocusableChildWidget = widg;  // first widget
+            }
+            m_lastFocusableChildWidget = widg; // last widget
+            //qDebug("*** %s (%s)",widg->name(),widg->className());
          }
-         m_lastFocusableChildWidget = widg; // last widget
-         //qDebug("*** %s (%s)",widg->name(),widg->className());
       }
    }
    //qDebug("### |%s|", m_lastFocusableChildWidget->name());

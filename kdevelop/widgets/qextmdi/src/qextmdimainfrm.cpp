@@ -517,7 +517,11 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
       // is not attached
       if (m_pMdi->getVisibleChildCount() > 0) {
          setActiveWindow();
-         m_pMdi->focusTopChild();
+         m_pCurrentWindow = 0L;
+         QextMdiChildView* pView = m_pMdi->topChild()->m_pClient;
+         if (pView) {
+            pView->activate();
+         }
       }
       else if (m_pWinList->count() > 0) {
          m_pWinList->last()->activate();
@@ -559,10 +563,25 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
       pDockW->setWidget(0L);
       delete pDockW;
    }
-   else if (pWnd->isAttached())
+   else if (pWnd->isAttached()) {
       m_pMdi->destroyChild(pWnd->mdiParent());
-   else
+   }
+   else {
       delete pWnd;
+      // is not attached
+      if (m_pMdi->getVisibleChildCount() > 0) {
+         setActiveWindow();
+         m_pCurrentWindow = 0L;
+         QextMdiChildView* pView = m_pMdi->topChild()->m_pClient;
+         if (pView) {
+            pView->activate();
+         }
+      }
+      else if (m_pWinList->count() > 0) {
+         m_pWinList->last()->activate();
+         m_pWinList->last()->setFocus();
+      }
+   }
 
    if (!m_pCurrentWindow)
       emit lastChildViewClosed();

@@ -735,7 +735,9 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
       FocusPolicy* pFocPol = pFocPolDict->find(widg->name()); // remember the focus policy from before the reparent
       if( pFocPol != 0)
          widg->setFocusPolicy( *pFocPol);
-      widg->installEventFilter(this);
+      if (!(widg->inherits("QPopupMenu"))) {
+         widg->installEventFilter(this);
+      }
    }
    delete list;                        // delete the list, not the objects
    delete pFocPolDict;
@@ -943,7 +945,9 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
             while ( (obj=it.current()) != 0 ) { // for each found object...
                QWidget* widg = (QWidget*)obj;
                ++it;
-               widg->installEventFilter(this);
+               if (!(widg->inherits("QPopupMenu"))) {
+                  widg->installEventFilter(this);
+               }
             }
             delete list;                        // delete the list, not the objects
          }
