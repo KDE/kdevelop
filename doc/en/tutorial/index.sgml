@@ -409,7 +409,7 @@ handlers by virtual functions that filter out the according events by reimplemen
 <item>that the Qt signal-slot mechanism means basically that a component can send out signals and a receiver can connect to those
 signals to process some actions
 <item>that this mechanism avoids inheriting classes for GUI components because the signals inform you about e.g. mouse presses  where
-appropriate for a wiget
+appropriate for a widget
 </itemize>
 
 <sect>The Document-View Model
@@ -568,7 +568,7 @@ interaction and you will see the first functionality that is unique to our appli
 <p>
 
 The first step when creating an application based on the Document-View model should always be to think what kind of data the
-application has to manage. This decides how the view class will look like but especially how the document clas will read and write data
+application has to manage. This decides how the view class will look like but especially how the document class will read and write data
 to and from files and offer methods to manipulate the data. As <em>KScribble</em> will be a simple drawing application that operates on
 graphical data, we will use the Qt class <tt>QPixmap</tt> for storing our paintings while it is edited. <tt>QPixmap</tt> also offers
 simple methods to read and write pictures into files, so the serialization of the document data is done in just two lines, one for
