@@ -84,8 +84,8 @@ protected:
     virtual KMimeType::List mimeTypes();
     virtual QString formatClassName(const QString &name);
     virtual QString unformatClassName(const QString &name);
-    virtual void addMethod(const QString &className);
-    virtual void addAttribute(const QString &className);
+    virtual void addMethod( ClassDom klass );
+    virtual void addAttribute( ClassDom klass );
 
 private slots:
     void activePartChanged(KParts::Part *part);
@@ -135,6 +135,8 @@ private:
     void setPcsVersion( int version );
 
     void saveProjectSourceInfo();
+    static QStringList reorder(const QStringList& list );
+    static QString findHeader( const QStringList&list, const QString& header );
 
     CppCodeCompletion* m_pCompletion;
     CppCodeCompletionConfig* m_pCompletionConfig;

@@ -27,6 +27,7 @@
 #include "lexer.h"
 #include "tree_parser.h"
 #include "cpp_tags.h"
+#include "cppsupport_utils.h"
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -505,7 +506,7 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 
 QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
 {
-    d->classNameList = sortedNameList( m_pSupport->codeModel()->globalNamespace()->classList() );
+    d->classNameList = typeNameList( m_pSupport->codeModel() );
 
     bool global = false;
     if( expr.startsWith("::") ){
@@ -867,7 +868,7 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
     if( name.isEmpty() )
 	return type;
 
-    QString key = findClass( scope.join( "." ) );
+    QString key = findClass( scope.join( "::" ) );
     ClassDom klass = findContainer( key );
     if( klass ){
 	return typeOf( name, klass );
@@ -1342,7 +1343,8 @@ QStringList CppCodeCompletion::typeOf( const QString & name, const FunctionList 
 
 void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QStringList & type )
 {
-    QString key = findClass( type.join( "." ) );
+    CppCodeCompletionConfig* cfg = m_pSupport->codeCompletionConfig();
+    QString key = findClass( type.join( "::" ) );
     ClassDom klass = findContainer( key );
     if( klass ){
 	computeCompletionEntryList( entryList, klass );
@@ -1357,10 +1359,18 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	computeCompletionEntryList( entryList, tags );
 
 	args.clear();
-	args << Catalog::QueryArgument( "kind", Tag::Kind_VariableDeclaration )
+	args << Catalog::QueryArgument( "kind", Tag::Kind_Variable )
 	    << Catalog::QueryArgument( "scope", type );
 	tags = m_repository->query( args );
 	computeCompletionEntryList( entryList, tags );
+
+	if( cfg->includeEnums() ){
+		args.clear();
+		args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
+		<< Catalog::QueryArgument( "scope", type );
+		tags = m_repository->query( args );
+		computeCompletionEntryList( entryList, tags );
+	}
 
 	args.clear();
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
@@ -1481,7 +1491,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	if( text.isEmpty() )
 	    entry.text += ")";
 	else
-	    text += ")";
+	    text += " )";
 
 	if( meth->isConstant() )
 	    text += " const";
@@ -1524,7 +1534,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 
 void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const QString & name, const QStringList & scope )
 {
-    QString key = findClass( scope.join( "." ) );
+    QString key = findClass( scope.join( "::" ) );
     ClassDom klass = findContainer( key );
     if( klass ){
 	computeSignatureList( signatureList, name, klass );
@@ -1575,7 +1585,9 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	if( meth->name() != name )
 	    continue;
 
-	QString signature = meth->name() + "(";
+	QString signature;
+	signature += meth->resultType() + " ";
+	signature += meth->name() + "(";
 
 	ArgumentList args = meth->argumentList();
 	ArgumentList::Iterator argIt = args.begin();
@@ -1594,7 +1606,7 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	if( meth->isConstant() )
 	    signature += " const";
 
-	signatureList << signature;
+	signatureList << signature.stripWhiteSpace();
     }
 }
 
@@ -1609,18 +1621,25 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	if( info.name() != name )
 	    continue;
 
-	QString signature = info.name() + "(" + info.arguments().join(", ") + ")";
+	QString signature;
+	signature += info.type() + " ";
+	signature += info.name() + "(" + info.arguments().join(", ") + ")";
 	if( info.isConst() )
 	    signature += " const";
-	signatureList << signature;
+	signatureList << signature.stripWhiteSpace();
     }
 }
 
 QString CppCodeCompletion::findClass( const QString & className )
 {
+    if( className.isEmpty() )
+        return className;
+
     QStringList lst = d->classNameList.grep( QRegExp("\\b" + className + "$") );
-    if( lst.size() )
+    if( lst.size() ){
+        kdDebug(9007) << "found class: " << lst[ 0 ] << endl;
 	return lst[ 0 ];
+    }
 
     return className;
 }
@@ -1634,7 +1653,7 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
 	return findContainer( name, m_pSupport->codeModel()->globalNamespace(), includeImports );
     }
 
-    QStringList path = QStringList::split( ".", name );
+    QStringList path = QStringList::split( "::", name );
     QStringList::Iterator it = path.begin();
     while( it != path.end() ){
         QString s = *it;
@@ -1652,7 +1671,7 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
     if( path.size() == 0 )
         return model_cast<ClassDom>( container );
 
-    QString className = path.join( "." );
+    QString className = path.join( "::" );
 
     ClassDom c = model_cast<ClassDom>( container );
     while( c && path.size() ){
@@ -1684,7 +1703,7 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
 
         QStringList::Iterator impIt = imports.begin();
         while( impIt != imports.end() ){
-            ClassDom kl = findContainer( (*impIt) + "." + name, container, false );
+            ClassDom kl = findContainer( (*impIt) + "::" + name, container, false );
             if( kl )
                 return kl;
             ++impIt;

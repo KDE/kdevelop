@@ -23,12 +23,9 @@
 #include "backgroundparser.h"
 #include "tree_parser.h"
 #include "ast.h"
+#include "cppsupport_utils.h"
 
 #include <kdevpartcontroller.h>
-
-#include <classstore.h>
-#include <parsedclass.h>
-#include <parsedmethod.h>
 
 #include <kfiledialog.h>
 #include <kparts/part.h>
@@ -123,23 +120,20 @@ private:
 
 }
 
-AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ParsedClass* klass,
+AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ClassDom klass,
 				 QWidget* parent, const char* name, bool modal, WFlags fl)
     : AddMethodDialogBase(parent,name, modal,fl), m_cppSupport( cppSupport ), m_klass( klass ), m_count( 0 )
 {
-    QString fileName = m_klass->declaredInFile();
+    QString fileName = m_klass->fileName();
     m_cppSupport->partController()->editDocument( fileName );
 
     // setup sourceFile combo
-    QValueList<ParsedMethod*> l = m_klass->getSortedMethodList();
-    l += m_klass->getSortedSignalList();
-    l += m_klass->getSortedSlotList();
+    FunctionList l = m_klass->functionList();
     QMap<QString, bool> m;
     {
-	QValueList<ParsedMethod*>::Iterator it = l.begin();
-	while( it != l.end() ){
-	    m.insert( (*it)->definedInFile(), true );
-	    ++it;
+	for( FunctionList::Iterator it = l.begin(); it != l.end(); ++it ){
+	    if( (*it)->hasImplementation() )
+	        m.insert( (*it)->implementedInFile(), true );
 	}
     }
 
@@ -174,8 +168,7 @@ AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ParsedClass* klass,
 	    << "float"
 	    << "double" );
 
-    returnType->insertStringList( m_cppSupport->classStore()->getSortedClassNameList() );
-    returnType->insertStringList( m_cppSupport->classStore()->getSortedStructNameList() );
+    returnType->insertStringList( typeNameList(m_cppSupport->codeModel()) );
 
     updateGUI();
     addMethod();
@@ -192,7 +185,7 @@ void AddMethodDialog::reject()
 
 void AddMethodDialog::accept()
 {
-    QString fileName = m_klass->declaredInFile();
+    QString fileName = m_klass->fileName();
     //kdDebug(9007) << "-------------> fileName = " << fileName << endl;
 
     // sync
@@ -205,7 +198,7 @@ void AddMethodDialog::accept()
 
     TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( fileName );
     if( translationUnit ){
-	AddMethod::FindInsertionPoint findInsertionPoint( m_klass->path() );
+	AddMethod::FindInsertionPoint findInsertionPoint( m_klass->name() );  // FIXME: ROBE klass->path()
 	findInsertionPoint.parseTranslationUnit( translationUnit );
 	line = findInsertionPoint.line();
 	column = findInsertionPoint.column();
@@ -234,7 +227,7 @@ void AddMethodDialog::accept()
 	}
 
 
-	m_cppSupport->partController()->editDocument( m_klass->declaredInFile() );
+	m_cppSupport->partController()->editDocument( m_klass->fileName() );
 	KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
 	if( editIface )
 	    editIface->insertText( line, column, str );
@@ -242,11 +235,7 @@ void AddMethodDialog::accept()
 
     {
 	    QListViewItem* item = methods->firstChild();
-#if QT_VERSION >= 0x030100
-	    QString className = m_klass->path().replace( QString("."), QString("::") );
-#else
-	    QString className = m_klass->path().replace( QRegExp("\\."), QString("::") );
-#endif
+	    QString className = m_klass->name(); // FIXME: ROBE klass->path()
 	    while( item ){
 		if( item->text(2) == "Friend" || item->text(2) == "Pure Virtual" ){
 		    item = item->nextSibling();
@@ -255,7 +244,7 @@ void AddMethodDialog::accept()
 
 		QString implementationFile = item->text( 5 );
 		if( item->text(0) == "True" )
-		    implementationFile = m_klass->declaredInFile();
+		    implementationFile = m_klass->fileName();
 
 		m_cppSupport->partController()->editDocument( implementationFile );
                 m_cppSupport->backgroundParser()->addFile( implementationFile ); // reparse

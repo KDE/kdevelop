@@ -53,7 +53,8 @@
 #include <kdialogbase.h>
 
 
-class ProblemItem: public KListViewItem{
+class ProblemItem: public KListViewItem
+{
 public:
     ProblemItem( QListView* parent, const QString& level, const QString& problem,
 		 const QString& file, const QString& line, const QString& column  )
@@ -115,24 +116,36 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     if( !part )
 	return;
 
-    if( m_document ){
-	reparse();
+    m_timer->stop();
+
+    if( m_document )
 	disconnect( m_document, 0, this, 0 );
-    }
 
     m_document = dynamic_cast<KTextEditor::Document*>( part );
     m_markIface = 0;
 
-    if( m_document ) {
-	m_filename = m_document->url().path();
+    if( !m_document )
+        return;
 
-	if( m_cppSupport->isValidSource(m_filename) ){
-//fileExtensions().contains(QFileInfo(m_filename).extension())
-	    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
-	    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
-	    m_timer->changeInterval( m_delay );
-	}
-    }
+    m_fileName = m_document->url().path();
+
+    if( !m_cppSupport->isValidSource(m_fileName) )
+        return;
+
+    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
+
+    if( !m_cppSupport->backgroundParser() )
+        return;
+
+    m_cppSupport->backgroundParser()->lock();
+    bool needReparse = false;
+    if( !m_cppSupport->backgroundParser()->translationUnit(m_fileName) )
+        needReparse = true;
+    m_cppSupport->backgroundParser()->unlock();
+
+    if( needReparse )
+        reparse();
 }
 
 void ProblemReporter::slotTextChanged()
@@ -167,11 +180,10 @@ void ProblemReporter::reparse()
     if( !m_cppSupport->isValid() )
 	return;
 
-
     m_timer->stop();
 
     kdDebug(9007) << "ProblemReporter::reparse()" << endl;
-    m_cppSupport->backgroundParser()->addFile( m_filename );
+    m_cppSupport->backgroundParser()->addFile( m_fileName );
     kdDebug(9007) << "---> file added" << endl;
 }
 
@@ -187,13 +199,13 @@ void ProblemReporter::slotSelected( QListViewItem* item )
 void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
 {
     int markType = levelToMarkType( p.level() );
-    if( markType != -1 && m_document && m_markIface && m_filename == fileName ){
+    if( markType != -1 && m_document && m_markIface && m_fileName == fileName ){
 	m_markIface->addMark( p.line(), markType );
     }
 
     QString msg = p.text();
     msg = msg.replace( QRegExp("\n"), "" );
-    
+
     new ProblemItem( this,
 		     levelToString( p.level() ),
 		     fileName,

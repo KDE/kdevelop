@@ -29,17 +29,15 @@
 #include "kdevdriver.h"
 #include "cppcodecompletionconfig.h"
 #include "tag_creator.h"
+#include "cppsupport_utils.h"
 
 // wizards
 #include "cppnewclassdlg.h"
 #include "subclassingdlg.h"
-#if 0
 #include "addmethoddialog.h"
 #include "addattributedialog.h"
-#endif
 
 #include <qheader.h>
-#include <qmessagebox.h>
 #include <qdir.h>
 #include <qdom.h>
 #include <qfileinfo.h>
@@ -53,6 +51,7 @@
 #include <qregexp.h>
 #include <qlabel.h>
 #include <qvbox.h>
+#include <kmessagebox.h>
 #include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -155,12 +154,14 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     m_driver = new CppDriver( this );
 
-    setXMLFile("kdevcppsupport.rc");
+    setXMLFile( "kdevcppsupport.rc" );
 
     m_projectCatalog = 0;
     m_catalogList.setAutoDelete( true );
-    m_backgroundParser = 0;
     setupCatalog();
+
+    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
+    m_backgroundParser->start();
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
@@ -363,8 +364,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 }
 
 
-void
-CppSupportPart::projectOpened( )
+void CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
 
@@ -397,15 +397,11 @@ CppSupportPart::projectOpened( )
     m_pCompletion = new CppCodeCompletion( this );
     m_projectClosed = false;
 
-    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
-    m_backgroundParser->start();
-
     QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
 
-void
-CppSupportPart::projectClosed( )
+void CppSupportPart::projectClosed( )
 {
     kdDebug( 9007 ) << "projectClosed( )" << endl;
 
@@ -422,7 +418,7 @@ CppSupportPart::projectClosed( )
 }
 
 
-static QString findHeader(const QStringList &list, const QString &header)
+QString CppSupportPart::findHeader(const QStringList &list, const QString &header)
 {
     QStringList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it) {
@@ -468,7 +464,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 
 // Makes sure that header files come first
-static QStringList reorder(const QStringList &list)
+QStringList CppSupportPart::reorder(const QStringList &list)
 {
     QStringList headers, others;
 
@@ -488,7 +484,9 @@ static QStringList reorder(const QStringList &list)
 
 void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
+    QStringList files = reorder( fileList );
+
+    for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     {
 	QString path = QDir( m_projectDirectory + "/" + (*it) ).canonicalPath();
 
@@ -510,7 +508,9 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 
 void CppSupportPart::changedFilesInProject( const QStringList & fileList )
 {
-    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
+    QStringList files = reorder( fileList );
+
+    for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     {
 	QString path = QDir( m_projectDirectory + "/" + *it ).canonicalPath();
 
@@ -521,6 +521,9 @@ void CppSupportPart::changedFilesInProject( const QStringList & fileList )
 
 void CppSupportPart::savedFile(const QString &fileName)
 {
+    Q_UNUSED( fileName );
+
+#if 0  // not needed anymore
     kdDebug(9007) << "savedFile(): " << fileName.mid ( m_projectDirectory.length() + 1 ) << endl;
 
     QStringList projectFileList = project()->allFiles();
@@ -528,6 +531,7 @@ void CppSupportPart::savedFile(const QString &fileName)
 	maybeParse( fileName );
 	emit addedSourceInfo( fileName );
     }
+#endif
 }
 
 QString CppSupportPart::findSourceFile()
@@ -649,35 +653,26 @@ void CppSupportPart::slotNewClass()
     dlg.exec();
 }
 
-void CppSupportPart::addMethod(const QString &className)
+void CppSupportPart::addMethod( ClassDom klass )
 {
-    /// @todo ROBE implement me
-#if 0
-    ParsedClass* pc = classStore()->getClassByName( className );
-    if (!pc) {
-	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
+    if( !klass ){
+	KMessageBox::error(0,i18n("Error"),i18n("Please select a class!"));
 	return;
     }
 
-    AddMethodDialog dlg( this, pc, mainWindow()->main() );
-    dlg.exec();
-#endif
+    AddMethodDialog dlg( this, klass, mainWindow()->main() );
+    dlg.exec();    /// @todo ROBE implement me
 }
 
-void CppSupportPart::addAttribute(const QString &className)
+void CppSupportPart::addAttribute( ClassDom klass )
 {
-    /// @todo ROBE implement me
-#if 0
-    ParsedClass *pc = classStore()->getClassByName(className);
-
-    if (!pc) {
-	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
+    if( !klass ){
+	KMessageBox::error(0,i18n("Error"),i18n("Please select a class!"));
 	return;
     }
 
-    AddAttributeDialog dlg( this, pc, mainWindow()->main() );
+    AddAttributeDialog dlg( this, klass, mainWindow()->main() );
     dlg.exec();
-#endif
 }
 
 void CppSupportPart::slotCompleteText()

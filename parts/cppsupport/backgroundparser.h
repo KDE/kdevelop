@@ -53,6 +53,7 @@ public:
     QWaitCondition& isEmpty() { return m_isEmpty; }
 
     bool filesInQueue();
+    bool contains( const QString& fileName );
 
     void addFile( const QString& fileName );
     void removeFile( const QString& fileName );

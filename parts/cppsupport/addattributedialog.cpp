@@ -23,12 +23,11 @@
 #include "backgroundparser.h"
 #include "tree_parser.h"
 #include "ast.h"
+#include "cppsupport_utils.h"
 
 #include <kdevpartcontroller.h>
 
-#include <classstore.h>
-#include <parsedclass.h>
-#include <parsedattribute.h>
+#include <codemodel.h>
 
 #include <kfiledialog.h>
 #include <kparts/part.h>
@@ -122,13 +121,10 @@ private:
 
 }
 
-AddAttributeDialog::AddAttributeDialog(CppSupportPart* cppSupport, ParsedClass* klass,
+AddAttributeDialog::AddAttributeDialog(CppSupportPart* cppSupport, ClassDom klass,
 				 QWidget* parent, const char* name, bool modal, WFlags fl)
     : AddAttributeDialogBase(parent,name, modal,fl), m_cppSupport( cppSupport ), m_klass( klass ), m_count( 0 )
 {
-    QString fileName = m_klass->declaredInFile();
-    m_cppSupport->partController()->editDocument( fileName );
-
     returnType->setAutoCompletion( true );
     returnType->insertStringList( QStringList()
 	    << "void"
@@ -143,8 +139,7 @@ AddAttributeDialog::AddAttributeDialog(CppSupportPart* cppSupport, ParsedClass* 
 	    << "float"
 	    << "double" );
 
-    returnType->insertStringList( m_cppSupport->classStore()->getSortedClassNameList() );
-    returnType->insertStringList( m_cppSupport->classStore()->getSortedStructNameList() );
+    returnType->insertStringList( typeNameList(m_cppSupport->codeModel()) );
 
     updateGUI();
     addAttribute();
@@ -161,7 +156,7 @@ void AddAttributeDialog::reject()
 
 void AddAttributeDialog::accept()
 {
-    QString fileName = m_klass->declaredInFile();
+    QString fileName = m_klass->fileName();
     //kdDebug(9007) << "-------------> fileName = " << fileName << endl;
 
     // sync
@@ -174,7 +169,7 @@ void AddAttributeDialog::accept()
 
     TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( fileName );
     if( translationUnit ){
-	AddAttribute::FindInsertionPoint findInsertionPoint( m_klass->path() );
+	AddAttribute::FindInsertionPoint findInsertionPoint( m_klass->name() ); // FIXME: ROBE klass->path()
 	findInsertionPoint.parseTranslationUnit( translationUnit );
 	line = findInsertionPoint.line();
 	column = findInsertionPoint.column();
@@ -197,7 +192,7 @@ void AddAttributeDialog::accept()
 	}
 
 
-	m_cppSupport->partController()->editDocument( m_klass->declaredInFile() );
+	m_cppSupport->partController()->editDocument( m_klass->fileName() );
 	KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
 	if( editIface )
 	    editIface->insertText( line, column, str );

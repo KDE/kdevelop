@@ -22,15 +22,15 @@
 #define ADDMETHODDIALOG_H
 
 #include "addmethoddialogbase.h"
+#include <codemodel.h>
 
 class CppSupportPart;
-class ParsedClass;
 
 class AddMethodDialog : public AddMethodDialogBase
 {
   Q_OBJECT
 public:
-    AddMethodDialog( CppSupportPart* cppSupport, ParsedClass* klass,
+    AddMethodDialog( CppSupportPart* cppSupport, ClassDom klass,
 		     QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~AddMethodDialog();
 
@@ -46,7 +46,7 @@ protected:
 
 private:
     CppSupportPart* m_cppSupport;
-    ParsedClass* m_klass;
+    ClassDom m_klass;
     int m_count;
 };
 

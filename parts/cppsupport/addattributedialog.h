@@ -22,15 +22,15 @@
 #define ADDATTRIBUTEDIALOG_H
 
 #include "addattributedialogbase.h"
+#include <codemodel.h>
 
 class CppSupportPart;
-class ParsedClass;
 
 class AddAttributeDialog : public AddAttributeDialogBase
 {
   Q_OBJECT
 public:
-    AddAttributeDialog( CppSupportPart* cppSupport, ParsedClass* klass,
+    AddAttributeDialog( CppSupportPart* cppSupport, ClassDom klass,
 		     QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~AddAttributeDialog();
 
@@ -45,7 +45,7 @@ protected:
 
 private:
     CppSupportPart* m_cppSupport;
-    ParsedClass* m_klass;
+    ClassDom m_klass;
     int m_count;
 };
 

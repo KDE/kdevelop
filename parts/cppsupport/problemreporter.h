@@ -60,13 +60,13 @@ private slots:
 private:
     QString levelToString( int level ) const;
     int levelToMarkType( int level ) const;
-    
+
 private:
     CppSupportPart* m_cppSupport;
     QGuardedPtr<KTextEditor::Document> m_document;
     KTextEditor::MarkInterface* m_markIface;
     QTimer* m_timer;
-    QString m_filename;
+    QString m_fileName;
     int m_active;
     int m_delay;
 };

@@ -212,7 +212,7 @@ void BackgroundParser::close()
 bool BackgroundParser::filesInQueue()
 {
     QMutexLocker locker( &m_mutex );
-    
+
     return m_fileList.count() || !m_currentFile.isEmpty();
 }
 
@@ -258,7 +258,7 @@ void BackgroundParser::run()
             KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName, unit->problems) );
 
 	    m_currentFile = QString::null;
-	    
+
 	    if( m_fileList.isEmpty() )
 	        m_isEmpty.wakeAll();
 	}
@@ -267,5 +267,11 @@ void BackgroundParser::run()
     kdDebug(9007) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
 
     QThread::exit();
+}
+
+bool BackgroundParser::contains( const QString & fileName )
+{
+    QMutexLocker locker( &m_mutex );
+    return m_fileList.contains( fileName );
 }
 

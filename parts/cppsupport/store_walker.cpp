@@ -376,16 +376,13 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     QString scopeStr = scopeOfDeclarator( d );
     ClassDom cl = findContainer( scopeStr, 0, true ); 	//FIXME: ROBE!!
 
-    if( !scopeStr.isEmpty() && cl && !cl->isNamespace() )
-        return;
-
     VariableDom attr = m_store->create<VariableModel>();
     attr->setName( id );
     attr->setFileName( m_fileName );
 
     if( m_currentClass.top() )
 	m_currentClass.top()->addVariable( attr );
-    else if( cl )        // FIXME: ROBE!!!
+    else if( cl && !scopeStr.isEmpty() )        // FIXME: ROBE!!!
 	cl->addVariable( attr );
     else if( m_currentNamespace.top() )
 	m_currentNamespace.top()->addVariable( attr );
