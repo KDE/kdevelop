@@ -330,9 +330,9 @@ void CKDevelop::CVGotoDefinition( const char *className,
                                   const char *declName, 
                                   THType type )
 {
-  CParsedClass *aClass;
+  CParsedClass *aClass = NULL;
   CParsedAttribute *aAttr = NULL;
-  CParsedStruct *aStruct;
+  CParsedStruct *aStruct = NULL;
   QString toFile;
   int toLine = -1;
 
@@ -340,7 +340,9 @@ void CKDevelop::CVGotoDefinition( const char *className,
   if( className != NULL && strlen( className ) > 0 )
   {
     aClass = class_tree->store->getClassByName( className );
-    CVClassSelected( className );
+
+    if( aClass != NULL )
+      CVClassSelected( className );
   }
 
   // Get the type of declaration at the index.
@@ -351,7 +353,7 @@ void CKDevelop::CVGotoDefinition( const char *className,
       toLine = aClass->definedOnLine;
       break;
     case THSTRUCT:
-      if( aClass )
+      if( aClass != NULL )
         aClass->getStructByName( declName );
       else
         aStruct = class_tree->store->getGlobalStructByName( declName );
@@ -362,7 +364,14 @@ void CKDevelop::CVGotoDefinition( const char *className,
     case THPUBLIC_ATTR:
     case THPROTECTED_ATTR:
     case THPRIVATE_ATTR:
-      aAttr = aClass->getAttributeByName( declName );
+      if( aClass != NULL )
+        aAttr = aClass->getAttributeByName( declName );
+      else
+      {
+        aStruct = class_tree->store->getGlobalStructByName( className );
+        if( aStruct != NULL )
+          aAttr = aStruct->getMemberByName( declName );
+      }
       break;
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
@@ -418,7 +427,7 @@ void CKDevelop::CVGotoDeclaration( const char *className,
                                    const char *declName, 
                                    THType type )
 {
-  CParsedClass *aClass;
+  CParsedClass *aClass = NULL;
   CParsedMethod *aMethod = NULL;
 
   if( className != NULL && strlen( className ) > 0 )
