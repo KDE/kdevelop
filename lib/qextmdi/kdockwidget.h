@@ -664,7 +664,7 @@ public:
    * @return the current dock position.
    * @since 3.3
    */
-  KDockWidget::DockPosition currentDockPosition();
+  KDockWidget::DockPosition currentDockPosition() const;
 
 public slots:
   /**
