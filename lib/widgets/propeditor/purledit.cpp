@@ -79,6 +79,7 @@ void PUrlEdit::updateProperty(const QString &val)
 
 void PUrlEdit::select()
 {
+#ifdef PURE_QT
     QString path = m_url;
     if( m_mode == Directory )
 	m_url = QFileDialog::getExistingDirectory( m_url,this);
@@ -86,7 +87,7 @@ void PUrlEdit::select()
         m_url = QFileDialog::getOpenFileName(m_url, QString::null, this);
     updateProperty(m_url);
     m_edit->setText(m_url);
-
+#endif
 }
 	
 }
