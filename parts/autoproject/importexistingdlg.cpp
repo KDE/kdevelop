@@ -432,7 +432,7 @@ void ImportExistingDialog::slotRemoveSelected()
 {
 	KFileItemListIterator items ( *importView->items() );
 
-	KFileItemList* selectedList = importView->selectedItems();
+	KFileItemList* selectedList = (KFileItemList*) importView->selectedItems();
 
 	KFileItem * deleteItem = 0L;
 
