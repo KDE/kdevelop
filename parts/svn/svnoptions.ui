@@ -44,7 +44,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>Always use the force option (e.g. removing files not in the repositery)</string>
+            <string>Always use the force option (e.g. removing files not in the repository)</string>
         </property>
     </widget>
     <widget class="QCheckBox">

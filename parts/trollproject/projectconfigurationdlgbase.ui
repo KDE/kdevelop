@@ -186,7 +186,7 @@
                                     <cstring>TextLabel2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Outputfile</string>
+                                    <string>Output file</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
