@@ -4,6 +4,14 @@
 	and multiple defined propertyies
 	* some std:: namespace cleanups
 	* added KDevPlugin as successor of KDevPart
+	* ported the konsole plugin to KDevPlugin
+	* extended gideon to load global KDevPlugin components
+	* centralized the trader queries for KDevelop/Part (Plugin) with
+	the additional constraint for the plugin scope into a static
+	PluginController::pluginServices method
+	* moved the duplicated code for extracting the X-KDevelop-Args
+	property of a service into a QStringList into a static private
+	method of PluginController
 
 2002-04-08  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* emit loadedFile and savedFile again
