@@ -1,3 +1,7 @@
+2002-08-09  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+  * trollproject:
+	* Added toolbar to file tree
+
 2002-08-13 Harald Fernengel <harry@bnro.de>
 	* Applied goto next / prev window patch by Yann Hodique
 
@@ -148,7 +152,7 @@
 	  docbook; it's now in doc/kdearch.
 	* New kdeapi ioslave. This allows it to hyperlink
 	  to Qt and kdelibs doxygen documentation in
-	  DocBook documents without having to care for the 
+	  DocBook documents without having to care for the
 	  location of the docs.
 	* Settings widget for qt/kdelibs doxygen docs
 	  location (autodetected by configure if it exists).
@@ -724,7 +728,7 @@
         removed from cpp files.
         * fix: KEditor::Editor don't emit documentActivated when there
         isn't one.
-        
+
 2001-07-29 Victor Röder <victor_roeder@gmx.de>
         * KDevArgHint improved, i.e. positioning, ui
 2001-07-26 Victor Röder <victor_roeder@gmx.de>
@@ -775,7 +779,7 @@
 2001-07-12  Sandy Meier   <smeier@kdevelop.org>
         * implemented extended plugin loading as discussed on Linuxtag 2001
           see HACKING how you can use it
-        
+
 2001-07-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added CustomProject part for projects not based
           on either automake or tmake/qmake
