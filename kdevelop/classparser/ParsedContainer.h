@@ -67,6 +67,7 @@ QList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
   QList<T> *retVal = new QList<T>();
   char *str;
   QStrList srted;
+  QString m;
   QDictIterator<T> itr( dict );
 
   retVal->setAutoDelete( false );
@@ -76,7 +77,10 @@ QList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
        itr.current();
        ++itr )
   {
-    srted.inSort( ( usePath ? itr.current()->path() : itr.current()->name ) );
+    itr.current()->asString( m );
+    srted.inSort( m );
+
+//    srted.inSort( ( usePath ? itr.current()->path() : itr.current()->name ) );
   }
 
   for( str = srted.first();
