@@ -1,3 +1,6 @@
+2002-03-06  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: set mainframe caption also when switching to the documentation views
+
 2002-03-05  Walter Tasin <tasin@kdevelop.org>
     * bugfix: Accelerator-Keys in DocView
     * bugfix: KTheme now treated as a KDE 2 project 

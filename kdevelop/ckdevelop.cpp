@@ -3829,8 +3829,12 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
       enableCommand(ID_EDIT_COPY);
     else
       disableCommand(ID_EDIT_COPY);
+
+    setMainCaption(BROWSER);
   }
-  setMainCaption();
+  else {
+    setMainCaption();
+  }
 }
 
 void CKDevelop::slotLogFileTreeSelected(QString file){
