@@ -11,6 +11,8 @@
 
 //BEGIN Includes
 
+#include <dcopclient.h>
+#include <kapplication.h>
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
 #include <klibloader.h>
@@ -40,7 +42,10 @@
 #include <qdialog.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qdatastream.h>
 
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "replace_part.h"
 #include "replace_widget.h"
@@ -295,11 +300,23 @@ void ReplaceWidget::makeReplacements()
 
         fileitem = fileitem->nextSibling();
     }
+
+    QCString appName;
+    appName.sprintf( "gideon-%d", getpid() );
+
+    QCString replyType;
+    QByteArray data, replyData;
+    QDataStream arg(  data, IO_WriteOnly );
+
+    (void) kapp->dcopClient()->call( appName,
+    		"KDevCppSupport",   // ## TODO: fix me!! it is not very generic :(
+		"parseProject()",
+		data, replyType, replyData );
 }
 
 //BEGIN Helpers
 
-QStringList const & ReplaceWidget::workFiles()
+QStringList ReplaceWidget::workFiles()
 {
     if ( m_dialog->files_all_radio->isChecked() )
     {
@@ -333,7 +350,7 @@ QString ReplaceWidget::fullProjectPath( QString path )
 }
 
 
-QStringList const & ReplaceWidget::allProjectFiles()
+QStringList ReplaceWidget::allProjectFiles()
 {
     _list = m_part->project()->allFiles();
 
@@ -346,13 +363,13 @@ QStringList const & ReplaceWidget::allProjectFiles()
     return _list;
 }
 
-QStringList const & ReplaceWidget::subProjectFiles( QString const & subpath )
+QStringList ReplaceWidget::subProjectFiles( QString const & subpath )
 {
     //kdDebug(0) << " ***** ReplaceWidget::subProjectFiles() - subpath == " << subpath << endl;
 
-    QStringList & projectfiles = allProjectFiles();
+    QStringList projectfiles = allProjectFiles();
 
-    QStringList::iterator it = projectfiles.begin();
+    QStringList::Iterator it = projectfiles.begin();
     while ( it != projectfiles.end() )
     {
         //kdDebug(0) << " ## " << *it << endl;
@@ -371,43 +388,46 @@ QStringList const & ReplaceWidget::subProjectFiles( QString const & subpath )
     return projectfiles;
 }
 
-QStringList const & ReplaceWidget::openProjectFiles()
+QStringList ReplaceWidget::openProjectFiles()
 {
     QStringList projectfiles = allProjectFiles();
 
     _list.clear();
 
-    QPtrList<KParts::Part> * partlist = m_part->partController()->parts();
-    KParts::Part * part = partlist->first();
-    while ( part != 0)
-    {
-        if ( KTextEditor::Editor * ed = dynamic_cast<KTextEditor::Editor *>( part ) )
+    if( const QPtrList<KParts::Part> * partlist = m_part->partController()->parts() ){
+        QPtrListIterator<KParts::Part> it( *partlist );
+        while ( KParts::Part* part = it.current() )
         {
-            QString editorpath = ed->url().path();
-            if ( projectfiles.contains( editorpath ) )
+            if ( KTextEditor::Editor * ed = dynamic_cast<KTextEditor::Editor *>( part ) )
             {
-                _list.append( editorpath );
+                QString editorpath = ed->url().path();
+                if ( projectfiles.contains( editorpath ) )
+                {
+                    _list.append( editorpath );
+                }
             }
+	    ++it;
         }
-        part = partlist->next();
     }
+
     return _list;
 }
 
 KTextEditor::EditInterface * ReplaceWidget::getEditInterfaceForFile( QString const & file )
 {
-    QPtrList<KParts::Part> * partlist = m_part->partController()->parts();
-    KParts::Part * part = partlist->first();
-    while ( part != 0)
-    {
-        if ( KTextEditor::Editor * ed = dynamic_cast<KTextEditor::Editor *>( part ) )
+    if( const QPtrList<KParts::Part> * partlist = m_part->partController()->parts() ){
+        QPtrListIterator<KParts::Part> it( *partlist );
+        while ( KParts::Part* part = it.current() )
         {
-            if ( file == ed->url().path() )
+            if ( KTextEditor::Editor * ed = dynamic_cast<KTextEditor::Editor *>( part ) )
             {
-                return dynamic_cast<KTextEditor::EditInterface *>( part );
+                if ( file == ed->url().path() )
+                {
+                    return dynamic_cast<KTextEditor::EditInterface *>( part );
+                }
             }
+            ++it;
         }
-        part = partlist->next();
     }
     return 0;
 }

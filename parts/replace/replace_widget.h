@@ -49,10 +49,10 @@ private:
     QString relativeProjectPath( QString );
     QString fullProjectPath( QString );
 
-    QStringList const & workFiles();
-    QStringList const & allProjectFiles();
-    QStringList const & subProjectFiles( QString const & );
-    QStringList const & openProjectFiles();
+    QStringList workFiles();
+    QStringList allProjectFiles();
+    QStringList subProjectFiles( QString const & );
+    QStringList openProjectFiles();
 
     KTextEditor::EditInterface * getEditInterfaceForFile( QString const & file );
 
