@@ -46,7 +46,7 @@ class CppCodeCompletion : public QObject
     Q_OBJECT
 
 public:
-    CppCodeCompletion ( CppSupportPart* part, ClassStore* pStore, ClassStore* pCCStore );
+    CppCodeCompletion ( CppSupportPart* part, ClassStore* pStore );
     void setEnableCodeCompletion( bool setEnable );
     virtual ~CppCodeCompletion();
 
@@ -99,7 +99,6 @@ private:
     QGuardedPtr<CppSupportPart> m_pSupport;
     KDevCore* m_pCore;
     ClassStore* m_pStore;
-    ClassStore* m_pCCStore;
     QTimer* m_ccTimer;
     QString m_currentFileName;
     KTextEditor::ViewCursorInterface* m_pCursorIface;
@@ -110,9 +109,6 @@ private:
     bool m_bArgHintShow;
     bool m_bCompletionBoxShow;
     bool m_bCodeCompletion;
-
-    QStringList m_CHCommentList;
-
 };
 
 #endif

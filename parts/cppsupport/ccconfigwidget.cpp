@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 // qt includes
+#include <qtabwidget.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
@@ -17,6 +18,8 @@
 #include <qbuttongroup.h>
 #include <qlistview.h>
 #include <qcombobox.h>
+#include <qmultilineedit.h>
+
 // kde includes
 #include <kdevproject.h>
 #include <kfiledialog.h>
@@ -26,12 +29,13 @@
 #include <kstandarddirs.h>
 #include <kfileitem.h>
 #include <kurlrequester.h>
+
 // gideon includes
-#include "domutil.h"
+#include <domutil.h>
+
 #include "ccconfigwidget.h"
 #include "cppsupportpart.h"
-// c++ includes
-#include <iostream>
+
 using namespace std;
 
 
@@ -39,61 +43,13 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
     : CCConfigWidgetBase( parent, name )
 {
     m_pPart = part;
-    m_bChangedPCS = m_bChangedPP = m_bChangedPPPath
-		  = m_bChangedCC = m_bChangedCH = m_bChangedCHWindow = m_bChangedPCS
-                  = false;
-
-    initCSTab( );
-    initCCTab( );
-    initFTTab( );
-}
-
-void
-CCConfigWidget::initCSTab( )
-{
-    QDomDocument dom = *m_pPart->projectDom();
-
-    bool pcs = DomUtil::readBoolEntry( dom, "/cppsupportpart/classstore/enablepcs" );
-    bool pp  = DomUtil::readBoolEntry( dom, "/cppsupportpart/classstore/enablepp"  );
-
-    cbEnablePCS->setChecked( pcs );
-    cbEnablePP->setChecked( pp );
+    m_bChangedCC = false;
     
-    if( pcs == false ){
-	gbPP->setEnabled( false );
-	//lvPCSPaths->setEnabled( false );
-    }
-
-    if( pp )
-	lvPCSPaths->setEnabled( true );
-
-    lePCSFile->setText( m_pPart->project( )->projectDirectory( ) + "/" +
-                        m_pPart->project( )->projectName( )      + m_pPart->pcsFileExt( ) );
-
-    lvPCSPaths->setSorting( -1 );
-
-    QDomElement dir = dom.documentElement( )
-			 .namedItem( "cppsupportpart" ).toElement( )
-			 .namedItem( "classstore"     ).toElement( )
-			 .namedItem( "preparsing"     ).toElement( )
-			 .firstChild( ).toElement( );
-			 
-    QListViewItem* lastItem = 0;
-    while( !dir.isNull( ) ){
-        if( dir.tagName( ) == "directory" ){
-            QListViewItem* newItem = new QListViewItem( lvPCSPaths, dir.attribute( "parsesubdir" ),
-                                                                    dir.attribute( "dir" ) );
-            if( lastItem )
-                newItem->moveItem( lastItem );
-
-            lastItem = newItem;
-        }
-        else
-            kdDebug( 9007 ) << "CCConfigWidget::CCConfigWidget unknown tag: '"
-	                    << dir.tagName( ) << "'" << endl;
-
-        dir = dir.nextSibling( ).toElement( );
-    }
+    codecompletion_tab->removePage( pageCS );
+    codecompletion_tab->removePage( pageCC );
+    
+    // initCCTab( );
+    initFTTab( );
 }
 
 void
@@ -101,25 +57,11 @@ CCConfigWidget::initCCTab( )
 {
     QDomDocument dom = *m_pPart->projectDom();
 
-//    cbEnableCC->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/codecompletion/enablecc" ) );
+    // cbEnableCC->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/codecompletion/enablecc" ) );
 
     QDomElement chPart = dom.documentElement( )
                             .namedItem( "cppsupportpart" ).toElement( )
-    			    .namedItem( "codecompletion" ).toElement( )
-			    .namedItem( "codehinting"    ).toElement( );
-    
-    if( !chPart.isNull( ) ){
-	cbEnableCH->setChecked( chPart.attribute( "enablech" ).toInt( ) );
-	rbSelectView->setChecked( chPart.attribute( "selectview" ).toInt( ) );
-	rbOutputView->setChecked( chPart.attribute( "outputview").toInt( ) );
-    }
-
-    if( !cbEnableCH->isChecked( ) )
-	bgCodeHinting->setEnabled( false );
-    
-    // for setting a default value
-    if( rbSelectView->isChecked( ) == false )
-	rbOutputView->setChecked( true );
+    			    .namedItem( "codecompletion" ).toElement( );    
 }
 
 void CCConfigWidget::initFTTab( )
@@ -165,38 +107,8 @@ CCConfigWidget::accept( )
     saveCSTab( );    
     saveFTTab( );    
 
-    bool pcs = cbEnablePCS->isChecked( );
-
-    // looks hackish, doesn't it :)
-    if( pcs == true ){
-	if( m_bChangedPCS ){
-	    emit enablePersistantClassStore( true );
-
-	    if( cbEnablePP->isChecked( ) )
-		emit enablePreParsing( true );
-	    else
-		emit enablePreParsing( false );
-	}
-	else {
-	    if( m_bChangedPP ){
-		if( cbEnablePP->isChecked( ) )
-		    emit enablePreParsing( true );
-	        else
-		    emit enablePreParsing( false );
-	    }
-	}
-    }
-    else {
-	emit enablePersistantClassStore( false );
-	emit enablePreParsing( false );
-    }
-
 //    if( m_bChangedCC )
 //	emit enableCodeCompletion( cbEnableCC->isChecked( ) );
-
-    kdDebug( 9007 ) << m_bChangedCH << m_bChangedCHWindow << endl;	
-    if( m_bChangedCH || m_bChangedCHWindow )
-	emit enableCodeHinting( cbEnableCH->isChecked( ), rbOutputView->isChecked( ) );
 }
 
 
@@ -210,35 +122,7 @@ CCConfigWidget::saveCSTab( )
     if( apPart.isNull( ) ){
 	apPart = dom.createElement( "cppsupportpart" );
 	element.appendChild( apPart );
-    }
-    
-    QDomElement classstore = apPart.namedItem( "classstore" ).toElement( );
-    if( classstore.isNull( ) ){
-        classstore = dom.createElement( "classstore" );
-        apPart.appendChild( classstore );
-    }
-
-    DomUtil::writeBoolEntry( dom, "cppsupportpart/classstore/enablepcs", cbEnablePCS->isChecked( ) );
-    DomUtil::writeBoolEntry( dom, "cppsupportpart/classstore/enablepp", cbEnablePP->isChecked( ) );
-
-    QDomElement directories = classstore.namedItem( "preparsing" ).toElement( );
-    if( directories.isNull( ) ){
-        directories = dom.createElement( "preparsing" );
-        classstore.appendChild( directories );
-    }
-
-    // clear old entries
-    while( !directories.firstChild( ).isNull( ) )
-        directories.removeChild( directories.firstChild( ) );
-
-    // write content of the listview to dom
-    QListViewItemIterator it( lvPCSPaths );
-    for( ; it.current( ); ++it ){
-        QDomElement dir = dom.createElement( "directory" );
-        dir.setAttribute( "parsesubdir", it.current( )->text( 0 ) );
-        dir.setAttribute( "dir", it.current( )->text( 1 ) );
-        directories.appendChild( dir );
-    }
+    }    
 }
 
 
@@ -261,17 +145,7 @@ CCConfigWidget::saveCCTab( )
 	apPart.appendChild( codecompletion );
     }
 
-//    DomUtil::writeBoolEntry( dom, "cppsupportpart/codecompletion/enablecc", cbEnableCC->isChecked( ) );
-
-    QDomElement codehinting = codecompletion.namedItem( "codehinting" ).toElement( );
-    if( codehinting.isNull( ) ){
-	codehinting = dom.createElement( "codehinting" );
-	codecompletion.appendChild( codehinting );
-    }
-
-    codehinting.setAttribute( "enablech"  , cbEnableCH->isChecked( ) );
-    codehinting.setAttribute( "selectview", rbSelectView->isChecked( ) );
-    codehinting.setAttribute( "outputview", rbOutputView->isChecked( ) );
+    // DomUtil::writeBoolEntry( dom, "cppsupportpart/codecompletion/enablecc", cbEnableCC->isChecked( ) );
 }
 
 
@@ -314,101 +188,12 @@ void CCConfigWidget::implementationFile()
     }
 }
 
-
-void
-CCConfigWidget::slotEnablePCS( )
-{
-    kdDebug( 9007 ) << "slotEnablePCS" << endl;
-    if( cbEnablePCS->isChecked( ) ){
-	gbPP->setEnabled( true );
-	// lvPCSPaths->setEnabled( true );
-	// pageCC->setEnabled( true );
-    }
-    else {
-	gbPP->setEnabled( false );
-        // lvPCSPaths->setEnabled( false );
-	// pageCC->setEnabled( false );
-    }
-
-    m_bChangedPCS = true;
-}
-
-
-void
-CCConfigWidget::slotEnablePP( )
-{
-    kdDebug( 9007 ) << "slotEnablePP" << endl;
-    if( cbEnablePP->isChecked( ) ){
-        lvPCSPaths->setEnabled( true );
-	// pageCC->setEnabled( true );
-    }
-    else {
-        lvPCSPaths->setEnabled( false );
-	// pageCC->setEnabled( false );
-    }
-	
-    m_bChangedPP = true;
-}
-
-
-void
-CCConfigWidget::slotAddPPPath( )
-{
-    QString newDir = KFileDialog::getExistingDirectory( QString::null, 0,
-                                                        i18n( "Select Directory to Preparse" ) );
-    if( newDir.isEmpty( ) )
-	return;
-
-    int answer = KMessageBox::questionYesNo( 0, i18n( "Include subdirectories?" ) );
-    if( answer == KMessageBox::Yes )
-        ( void ) new QListViewItem( lvPCSPaths, i18n( "Yes" ), newDir );
-    else
-        ( void ) new QListViewItem( lvPCSPaths, i18n( "No"  ), newDir );
-	
-    m_bChangedPPPath = true;
-}
-
-
-void
-CCConfigWidget::slotRemovePPPath( )
-{
-//    QString text = lvPCSPaths->selectedItem( )->text( 1 );
-
-// it's user friendlier, john :)
-//    int answer = KMessageBox::warningYesNo( 0, i18n( "Delete entry ?\n" ) + text );
-//    if( answer == KMessageBox::Yes )
-	QListViewItem * item = lvPCSPaths->selectedItem();
-        if (item) delete item;
-	
-    m_bChangedPPPath = true;
-}
-
-
 void
 CCConfigWidget::slotEnableCC( )
 {
     kdDebug( 9007 ) << "slot EnableCC" << endl;
     m_bChangedCC = true;
 }
-
-
-void
-CCConfigWidget::slotEnableCH( )
-{
-    kdDebug( 9007 ) << "slotEnableCH" << endl;
-    bgCodeHinting->setEnabled( cbEnableCH->isChecked( ) );
-    m_bChangedCH = true;
-}
-
-
-void
-CCConfigWidget::slotSetCHWindow( )
-{
-    kdDebug( 9007 ) << "slotSetCHWindow" << endl;
-    m_bChangedCHWindow = true;
-}
-
-
 
 void CCConfigWidget::slotEnableChooseFiles(bool c)
 {

@@ -3,6 +3,8 @@
  *   jonas.nordin@syncom.se                                                *
  *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2002-2003 by Roberto Raggi                              *
+ *   roberto@kdevelop.org                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +22,6 @@
 
 #include <kdialogbase.h>
 #include <qguardedptr.h>
-#include "cppsupportwidget.h"
 #include <qstring.h>
 #include <qwaitcondition.h>
 #include <qdatetime.h>
@@ -53,29 +54,8 @@ public:
     void setEnableCC( bool b ){ m_bEnableCC = b;    };
     bool getEnableCC( void   ){ return m_bEnableCC; };
 
-    /**
-     * returns pointer to Code Hinting Widget
-     */
-    CppSupportWidget* getCHWidget( ){ return m_pCHWidget; };
-
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
-    /*
-     * void slotCompleteText();
-     * void slotTypeOfExpression();
-     */
-
-    /**
-     * returns persistant classstore File Extension
-     * meant for the project's own classes
-     */
-    static QString pcsFileExt( ){ return ".pcs"; };
-
-    /**
-     * returns pre-parsing File Extension
-     * meant for extern includes
-     */
-    static QString ppFileExt( ){ return "-pp.pcs"; };
 
 
     QStringList fileExtensions( ) const;
@@ -84,7 +64,6 @@ public:
 
     virtual QStringList subclassWidget(QString formName);
     virtual QStringList updateWidget(QString formName, QString fileName);
-
 
 signals:
     void fileParsed( const QString& fileName );
@@ -117,41 +96,22 @@ private slots:
     void slotMakeMember();
 
     // code completion related slots - called from config-widget
-    void slotEnablePersistantClassStore( bool setEnable );
-    void slotEnablePreParsing( bool setEnable );
-    void slotChangedPreParsingPath( );
     void slotEnableCodeCompletion( bool setEnabled );
-    void slotEnableCodeHinting( bool setEnabled, bool setOutputView );
     void slotNodeSelected( QListViewItem* item );
+    void slotNeedTextHint( int, int, QString& );
 
     /**
      * loads, parses and creates both classstores needed
      */
     void initialParse( );
 
-    void slotNeedTextHint( int, int, QString& );
 
 private:
-
-    /**
-     * loads a file into given classstore
-     */
-    bool restorePreParsedClassStore( ClassStore* cs, const QString fileToLoad );
 
     /**
      * only parses the current project
      */
     bool parseProject( );
-
-    /**
-     * parses the current project and saves classstore into given file
-     */
-    bool createProjectPCS( const QString fileToSave );
-
-    /**
-     * parses directories selected in project options into given file
-     */
-    bool createPreParsePCS( const QString fileToSave );
 
     /**
      * checks if a file has to be parsed
@@ -180,7 +140,6 @@ private:
     QString m_contextFileName;
 
     bool m_bEnableCC;
-    QGuardedPtr< CppSupportWidget > m_pCHWidget;
     QGuardedPtr< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
 

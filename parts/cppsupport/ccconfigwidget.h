@@ -24,49 +24,29 @@ public:
     CCConfigWidget( CppSupportPart* part, QWidget* parent = 0, const char* name = 0 );
     ~CCConfigWidget( );
 
-
 public slots:
     void slotEnableCC ( );
-    void slotEnablePCS( );    
-    void slotEnablePP ( );
-    void slotAddPPPath( );    
-    void slotRemovePPPath( );    
-    void slotEnableCH ( );
-    void slotSetCHWindow( );
-    void slotEnableChooseFiles(bool);
     
     void slotSelectTemplateGroup(const QString &);
     void interfaceFile();
     void implementationFile();
+    void slotEnableChooseFiles(bool c);
 
     void accept( );
     
 signals:
-    void enablePersistantClassStore( bool setEnable );
-    void enablePreParsing ( bool setEnable );
-    void changedPreParsingPath( );
-
     void enableCodeCompletion( bool setEnable );
-    void enableCodeHinting( bool setEnable, bool setOutputView );
 
 private:
     void initCCTab( );
-    void initCSTab( );
     void initFTTab( );
     void saveCCTab( );
     void saveCSTab( );
     void saveFTTab( );
     
+private:
     CppSupportPart* m_pPart;
-    
-    bool m_bChangedCC;
-    bool m_bChangedCH;
-    bool m_bChangedCHWindow;
-    bool m_bChangedPCS;
-    bool m_bChangedPP;
-    bool m_bChangedPPPath;
-    int  m_iCHWindow;
-    
+    bool m_bChangedCC;    
 };
 
 #endif

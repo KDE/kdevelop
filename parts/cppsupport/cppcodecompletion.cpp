@@ -40,11 +40,11 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-#include "kdevpartcontroller.h"
-#include "kdevmainwindow.h"
-#include "kdevcore.h"
-#include "classstore.h"
-#include "parsedscopecontainer.h"
+#include <kdevpartcontroller.h>
+#include <kdevmainwindow.h>
+#include <kdevcore.h>
+#include <classstore.h>
+#include <parsedscopecontainer.h>
 
 static QValueList<KTextEditor::CompletionEntry>
 unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
@@ -146,12 +146,11 @@ static QString purify( const QString& decl )
 }
 
 
-CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, ClassStore* pCCStore )
+CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore )
 {
     m_pSupport = part;
     m_pCore    = part->core( );
     m_pStore   = pStore;
-    m_pCCStore = pCCStore;
 
     m_pCursorIface = 0;
     m_pEditIface   = 0;
@@ -187,12 +186,6 @@ CppCodeCompletion::setEnableCodeCompletion( bool setEnable )
 void
 CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
 {
-    // we use the QString type in entry for this
-    if( m_pSupport && m_pSupport->getCHWidget( ) ) {
-        m_pSupport->getCHWidget( )->setCHText( m_CHCommentList[ entry.type.toInt( ) ] );
-    }
-    m_CHCommentList.clear( );
-
     m_bCompletionBoxShow = false;
 }
 
@@ -504,10 +497,6 @@ ParsedClass* CppCodeCompletion::getClassByName( const QString& className )
     ParsedClass* cl = m_pStore->getClassByName( className );
     if( !cl )
         cl = m_pStore->getStructByName( className );
-    if( !cl )
-        cl = m_pCCStore->getClassByName( className );
-    if( !cl )
-        cl = m_pCCStore->getStructByName( className );
 
     return cl;
 }
@@ -560,7 +549,6 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
         text += ")";
         entry.postfix = text;
 	entry.type.setNum( i++ );
-	m_CHCommentList.append( (*methodIt)->comment( ) );
 
         entryList << entry;
     }
@@ -577,7 +565,6 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
         KTextEditor::CompletionEntry entry;
         entry.text = (*attrIt)->name( );
         entry.postfix = "";
-	m_CHCommentList.append( (*attrIt)->name( ) );
         entryList << entry;
     }
 
