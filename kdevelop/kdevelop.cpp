@@ -27,12 +27,11 @@
 #include <kdockwidget.h>
 #include <kmenubar.h>
 #include <klibloader.h>
-#include <ktrader.h>
 
-#include "lib/kdevcomponent.h"
-#include "classparser/ClassParser.h"
-#include "kdevelop.h"
+#include "kdevcomponent.h"
 #include "kdevelopfactory.h"
+#include "kdevelopcore.h"
+#include "kdevelop.h"
 
 
 KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
@@ -53,8 +52,7 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
   setView(m_dockbaseMDIMainFrm);
   setMainDockWidget( m_dockbaseMDIMainFrm );
 
-  //  initCoveringDockViews();
-  initComponents();
+  (void) new KDevelopCore(this);
 }
 
 
@@ -739,67 +737,29 @@ void KDevelop::initHelp(){
 
 }
 
-static CClassStore *classstore = 0;
-void KDevelop::initComponents()
+void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption)
 {
-    // Hack to test the class viewer
-    CClassParser *classparser = new CClassParser;
-    kdDebug(9000) << "Parsing kdevelop.cpp" << endl;
-    classparser->parse("kdevelop.cpp");
-    kdDebug(9000) << "Parsing doctreewidget.cpp" << endl;
-    classparser->parse("parts/doctreeview/doctreewidget.cpp");
-    classstore = &classparser->store;
+    // This is a hack to get the ball rolling...
+    static KDockWidget *leftWidget = m_dockbaseMDIMainFrm;
+    static KDockWidget::DockPosition leftpos = KDockWidget::DockLeft;
+    static KDockWidget *bottomWidget = m_dockbaseMDIMainFrm;
+    static KDockWidget::DockPosition bottompos = KDockWidget::DockBottom;
 
-    loadComponents("SelectView", KDockWidget::DockLeft, 35);
-    loadComponents("OutputView", KDockWidget::DockBottom, 70);
-}
-
-
-void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos, int ratio)
-{
-    KDockWidget *prevWidget = m_dockbaseMDIMainFrm;
-
-    QString constraint = QString::fromLatin1( "[X-KDevelop-ComponentType] == '" ) + type + '\'';
-    
-    KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component", constraint);
-    if (offers.isEmpty())
-        kdDebug(9000) << "No KDevelop components" << endl;
-    
-    KTrader::OfferList::ConstIterator it = offers.begin();
-
-    kdDebug(9000) << "Found " << type << " " << (*it)->name().latin1() << endl;
-    KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
-
-    QStringList args;
-    QVariant prop = (*it)->property("X-KDevelop-Args");
-    if (prop.isValid())
-        args = QStringList::split(" ", prop.toString());
-
-    QObject *obj = factory->create(0, (*it)->name().latin1(),
-                                   "KDevComponent", args);
-
-    if (!obj->inherits("KDevComponent")) {
-        kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
-        return;
+    KDockWidget *nextWidget = createDockWidget(QString(w->name()),
+                                               w->icon()? *w->icon() : QPixmap(),
+                                               0,
+                                               w->caption(),
+                                               shortCaption);
+    nextWidget->setWidget(w);
+    if (role == KDevComponent::SelectView) {
+        nextWidget->manualDock(leftWidget, leftpos, 35);
+        leftWidget = nextWidget;
+        leftpos = KDockWidget::DockCenter;
+    } else {
+        nextWidget->manualDock(bottomWidget, bottompos, 70);
+        bottomWidget = nextWidget;
+        bottompos = KDockWidget::DockCenter;
     }
-    KDevComponent *comp = (KDevComponent*) obj;
-    guiFactory()->addClient(comp);
-
-    KDockWidget *nextWidget = createDockWidget((*it)->name(), (*it)->icon(),
-                                               0, (*it)->comment(), (*it)->name());
-    nextWidget->setWidget(comp->widget());
-    nextWidget->manualDock(prevWidget, pos, ratio);
-    prevWidget = nextWidget;
-    pos = KDockWidget::DockCenter;
-
-    //!!!!HACK !!!!
-    //!!!!------!!!!
-    //!!!! embedToolViewInGUI(..) should be called from the initialization !!!!
-    //!!!! code part of every certain component, not here !!!!
-    //            embedToolViewInGUI(comp->widget());
-
-    // Hack
-    comp->classStoreOpened(classstore);
 }
 
 void KDevelop::slotFilePrint()

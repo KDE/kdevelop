@@ -24,7 +24,7 @@ class AppOutputWidget : public ProcessView
     Q_OBJECT
     
 public:
-    AppOutputWidget(QWidget *parent);
+    AppOutputWidget();
     ~AppOutputWidget();
 
     void compilationAborted();

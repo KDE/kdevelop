@@ -28,7 +28,7 @@ class GrepWidget : public ProcessView
 {
     Q_OBJECT
 public:
-    GrepWidget(GrepView *view, QWidget *parentWidget);
+    GrepWidget(GrepView *view);
     ~GrepWidget();
 
 public slots:

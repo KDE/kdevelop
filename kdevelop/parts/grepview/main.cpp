@@ -31,18 +31,12 @@ GrepFactory::~GrepFactory()
 QObject *GrepFactory::create(QObject *parent, const char *name,
                              const char *classname, const QStringList &args)
 {
-    if (parent && !parent->isWidgetType()) {
-        kdDebug(9001) << "Parent of grep view is not a widget" << endl;
-        return 0;
-    }
-    QWidget *parentWidget = (QWidget *) parent;
-    
     // Depending on classname, this should method should also
     // be able to create the config dialog
 
     kdDebug(9001) << "Building GrepView" << endl;
     
-    QObject *obj = new GrepView(parentWidget, name);
+    QObject *obj = new GrepView(parent, name);
     emit objectCreated(obj);
     return obj;
 }

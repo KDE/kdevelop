@@ -20,8 +20,8 @@
 #include "appoutputwidget.h"
 
 
-AppOutputWidget::AppOutputWidget(QWidget *parent)
-    : ProcessView(parent, "app output widget")
+AppOutputWidget::AppOutputWidget()
+    : ProcessView(0, "app output widget")
 {}
 
 

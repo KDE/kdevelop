@@ -21,6 +21,8 @@
 #include <kapp.h>
 #include <kaction.h>
 #include <kparts/dockmainwindow.h>
+#include "kdevcomponent.h"
+
 
 class KDevelop : public KParts::DockMainWindow
 {
@@ -29,7 +31,10 @@ public:
   /** construtor */
   KDevelop(const char *name=0);
   /** destructor */
-	~KDevelop();
+  ~KDevelop();
+
+public slots:
+  void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption);
 
   /** Embed the widgets of components in the dockwidget-based GUI.
     Which dockwidget gets which widget depends on the object name.

@@ -35,7 +35,7 @@ class DocTreeWidget : public KListView
     Q_OBJECT
     
 public: 
-    DocTreeWidget( DocTreeView *view, QWidget *parentWidget=0 );
+    DocTreeWidget(DocTreeView *view);
     ~DocTreeWidget();
 
     void configurationChanged();

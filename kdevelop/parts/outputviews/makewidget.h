@@ -26,7 +26,7 @@ class MakeWidget : public ProcessView
 {
     Q_OBJECT
 public:
-    MakeWidget(MakeView *view, QWidget *parent);
+    MakeWidget(MakeView *view);
     ~MakeWidget();
 
     void startJob();

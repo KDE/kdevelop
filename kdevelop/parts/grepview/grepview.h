@@ -11,20 +11,17 @@ class GrepView : public KDevComponent
     Q_OBJECT
 
 public:
-    GrepView( QWidget *parent=0, const char *name=0 );
+    GrepView( QObject *parent=0, const char *name=0 );
     ~GrepView();
 
 protected:
+    virtual void setupGUI();
     virtual void compilationAborted();
     virtual void projectClosed();
     virtual void projectOpened(CProject *prj);
     
-signals:
-    void itemSelected(const QString &filename, int linenumber);
-    
 private:
-    GrepWidget *grepWidget()
-        { return (GrepWidget*) KDevComponent::widget(); }
+    GrepWidget *m_widget;
     friend class GrepWidget;
 };
 

@@ -11,7 +11,7 @@ class DocTreeView : public KDevComponent
     Q_OBJECT
 
 public:
-    DocTreeView( QWidget *parent=0, const char *name=0 );
+    DocTreeView( QObject *parent=0, const char *name=0 );
     ~DocTreeView();
 
     // This is currently called by DocTreeViewConfigWidget if the
@@ -20,6 +20,7 @@ public:
     void configurationChanged();
 
 protected:
+    virtual void setupGUI();
     virtual void docPathChanged();
 //    virtual void createConfigWidget(CustomizeDialog *parent);
     virtual void projectClosed();
@@ -30,8 +31,7 @@ signals:
     void projectManualSelected();
 
 private:
-    DocTreeWidget *doctreeWidget()
-        { return (DocTreeWidget*) KDevComponent::widget(); }
+    DocTreeWidget *m_widget;
     friend class DocTreeWidget;
 };
 

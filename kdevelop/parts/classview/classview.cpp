@@ -13,14 +13,28 @@
 #include "caddclassattributedlg.h"
 
 
-ClassView::ClassView(QWidget *parent, const char *name)
+ClassView::ClassView(QObject *parent, const char *name)
     : KDevComponent(parent, name)
 {
     setInstance(ClassFactory::instance());
     setXMLFile("kdevclassview.rc");
-    QLCDNumber *w = new QLCDNumber(parent);
+    
+    m_cv_decl_or_impl = false;
+    m_store = 0;
+}
+
+
+ClassView::~ClassView()
+{}
+
+
+void ClassView::setupGUI()
+{
+    QLCDNumber *w = new QLCDNumber();
     w->display(42);
-    setWidget(w);
+    //    w->setIcon()
+    w->setCaption(i18n("Class view"));
+    embedWidget(w, SelectView, i18n("CV"));
     
     classes_action = new ClassListAction(i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
@@ -34,14 +48,7 @@ ClassView::ClassView(QWidget *parent, const char *name)
     popup_action->popupMenu()->insertSeparator();
     popup_action->popupMenu()->insertItem(i18n("Add method..."), this, SLOT(selectedAddMethod()));
     popup_action->popupMenu()->insertItem(i18n("Add attribute..."), this, SLOT(selectedAddAttribute()));
-    
-    m_cv_decl_or_impl = false;
-    m_store = 0;
 }
-
-
-ClassView::~ClassView()
-{}
 
 
 void ClassView::projectOpened(CProject *prj)
@@ -263,7 +270,7 @@ void ClassView::selectedAddMethod()
     QString cppCode;
     pm->asCppCode(cppCode);
 
-    sourceFileSelected(pc->definedInFile);
+    gotoSourceFile(pc->definedInFile, atLine);
     kdDebug(9003) << "####################" << "Adding at line " << atLine
                   << " " << cppCode
                   << "####################" << endl;
@@ -409,7 +416,7 @@ void ClassView::gotoDeclaration(const QString &className,
     
     if (toLine != -1) {
         kdDebug(9003) << "Classview switching to file " << toFile << "@ line " << toLine << endl;
-        emit sourceFileSelected(toFile, toLine);
+        emit gotoSourceFile(toFile, toLine);
     }
 }
 
@@ -447,5 +454,5 @@ void ClassView::gotoImplementation(const QString &className,
     }
     
     if (pm)
-        emit sourceFileSelected(pm->definedInFile, pm->definedOnLine);
+        emit gotoSourceFile(pm->definedInFile, pm->definedOnLine);
 }

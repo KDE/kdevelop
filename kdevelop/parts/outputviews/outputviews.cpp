@@ -9,28 +9,38 @@
 #include "outputviews.h"
 
 
-MakeView::MakeView(QWidget *parent, const char *name)
+MakeView::MakeView(QObject *parent, const char *name)
+    : KDevComponent(parent,  name)
 {
-    kdDebug(9004) << "Building MakeWidget" << endl;
-
     setInstance(OutputFactory::instance());
     setXMLFile("kdevmakeview.rc");
-    setWidget(new MakeWidget(this, parent));
-
-    KAction *action;
-    action = new KAction( i18n("&Next error"), Key_F4, widget(), SLOT(nextError()),
-                          actionCollection(), "view_next_error");
-    action->setShortText( i18n("Switches to the file and line the next error was reported") );
-    action = new KAction( i18n("&Previous error"), SHIFT+Key_F4, widget(), SLOT(prevError()),
-                          actionCollection(), "view_previous_error");
-    action->setShortText( i18n("Switches to the file and line the previous error was reported") );
 
     m_prj = 0;
+    m_widget = 0;
 }
 
 
 MakeView::~MakeView()
 {}
+
+
+void MakeView::setupGUI()
+{
+    kdDebug(9004) << "Building MakeWidget" << endl;
+
+    m_widget = new MakeWidget(this);
+    m_widget->setCaption(i18n("Compiler messages"));
+
+    emit embedWidget(m_widget, OutputView, i18n("Messages"));
+
+    KAction *action;
+    action = new KAction( i18n("&Next error"), Key_F4, m_widget, SLOT(nextError()),
+                          actionCollection(), "view_next_error");
+    action->setShortText( i18n("Switches to the file and line the next error was reported") );
+    action = new KAction( i18n("&Previous error"), SHIFT+Key_F4, m_widget, SLOT(prevError()),
+                          actionCollection(), "view_previous_error");
+    action->setShortText( i18n("Switches to the file and line the previous error was reported") );
+}
 
 
 void MakeView::compilationStarted(const QString &command)
@@ -39,9 +49,9 @@ void MakeView::compilationStarted(const QString &command)
         kdDebug(9004) << "MakeView: compilation started with project?" << endl;
     }
     
-    makeWidget()->prepareJob(m_prj->getProjectDir());
-    *makeWidget() << command;
-    makeWidget()->startJob();
+    m_widget->prepareJob(m_prj->getProjectDir());
+    *m_widget << command;
+    m_widget->startJob();
 }
 
 
@@ -54,16 +64,14 @@ void MakeView::projectOpened(CProject *prj)
 void MakeView::projectClosed()
 {
     m_prj = 0;
-    makeWidget()->clear();
+    m_widget->clear();
 }
 
 
-AppOutputView::AppOutputView(QWidget *parent, const char *name)
+AppOutputView::AppOutputView(QObject *parent, const char *name)
+    : KDevComponent(parent,  name)
 {
-    kdDebug(9004) << "Building AppOutputWidget" << endl;
-
     setInstance(OutputFactory::instance());
-    setWidget(new AppOutputWidget(parent));
 }
 
 
@@ -71,7 +79,18 @@ AppOutputView::~AppOutputView()
 {}
 
 
+void AppOutputView::setupGUI()
+{
+    kdDebug(9004) << "Building AppOutputWidget" << endl;
+
+    m_widget = new AppOutputWidget();
+    m_widget->setCaption(i18n("Application output"));
+
+    emit embedWidget(m_widget, OutputView, i18n("Application"));
+}
+
+
 void AppOutputView::compilationAborted()
 {
-    appOutputWidget()->compilationAborted();
+    m_widget->compilationAborted();
 }

@@ -17,10 +17,11 @@ class ClassView : public KDevComponent
     Q_OBJECT
 
 public:
-    ClassView( QWidget *parent=0, const char *name=0 );
+    ClassView( QObject *parent=0, const char *name=0 );
     ~ClassView();
 
 protected:
+    virtual void setupGUI();
     virtual void projectOpened(CProject *prj);
     virtual void projectClosed();
     virtual void classStoreOpened(CClassStore *store);
@@ -41,9 +42,7 @@ private slots:
     void selectedAddAttribute();
     
 private:
-    ClassWidget *classWidget()
-        { return (ClassWidget*) KDevComponent::widget(); }
-    friend class ClassWidget;
+    ClassWidget *m_widget;
 
     CParsedClass *getClass(const QString &className);
     void gotoDeclaration(const QString &classname,

@@ -490,8 +490,8 @@ void DocTreeProjectFolder::refresh()
 /**************************************/
 
 
-DocTreeWidget::DocTreeWidget(DocTreeView *view, QWidget *parentWidget)
-    : KListView(parentWidget, "doc tree widget")
+DocTreeWidget::DocTreeWidget(DocTreeView *view)
+    : KListView(0, "doc tree widget")
 {
     setRootIsDecorated(true);
     setSorting(-1);
@@ -534,11 +534,11 @@ void DocTreeWidget::slotItemExecuted(QListViewItem *item)
 
     QString ident = kitem->ident();
     if (ident == "internal:projectAPI")
-        emit m_view->projectAPISelected();
+        emit m_view->gotoProjectApiDoc();
     else if (ident == "internal:projectManual")
-        emit m_view->projectManualSelected();
+        emit m_view->gotoProjectManual();
     else if (!ident.isEmpty())
-        emit m_view->documentationFileSelected(kitem->ident());
+        emit m_view->gotoDocumentationFile(kitem->ident());
 }
 
 

@@ -1,5 +1,10 @@
+2000-06-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* New part framework in which every part can
+	  have multiple widgets.
+
 2000-06-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-	* Ported make view and app output view.
+	* Ported make view and app output view
+	* Fixed tooltips in grep action
 
 2000-06-25 Falk Brettschneider <gigafalk@yahoo.com>
   * added first part of DockWidget stuff (once again).

@@ -31,18 +31,12 @@ DocTreeFactory::~DocTreeFactory()
 QObject *DocTreeFactory::create(QObject *parent, const char *name,
                                 const char *classname, const QStringList &args)
 {
-    if (parent && !parent->isWidgetType()) {
-        kdDebug(9002) << "Parent of doc tree view is not a widget" << endl;
-        return 0;
-    }
-    QWidget *parentWidget = (QWidget *) parent;
-    
     // Depending on classname, this should method should also
     // be able to create the config dialog
 
     kdDebug(9002) << "Building DocTreeView" << endl;
     
-    QObject *obj = new DocTreeView(parentWidget, name);
+    QObject *obj = new DocTreeView(parent, name);
     emit objectCreated(obj);
     return obj;
 }

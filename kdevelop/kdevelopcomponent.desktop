@@ -3,8 +3,5 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/Component
 Name=KDevelop Component
 
-[PropertyDef::X-KDevelop-ComponentType]
-Type=QString
-
 [PropertyDef::X-KDevelop-Args]
 Type=QString

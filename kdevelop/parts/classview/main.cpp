@@ -31,18 +31,12 @@ ClassFactory::~ClassFactory()
 QObject *ClassFactory::create(QObject *parent, const char *name,
                              const char *classname, const QStringList &args)
 {
-    if (parent && !parent->isWidgetType()) {
-        kdDebug(9001) << "Parent of class view is not a widget" << endl;
-        return 0;
-    }
-    QWidget *parentWidget = (QWidget *) parent;
-    
     // Depending on classname, this should method should also
     // be able to create the config dialog
 
     kdDebug(9001) << "Building ClassView" << endl;
     
-    QObject *obj = new ClassView(parentWidget, name);
+    QObject *obj = new ClassView(parent, name);
     emit objectCreated(obj);
     return obj;
 }

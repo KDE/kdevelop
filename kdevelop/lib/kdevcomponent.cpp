@@ -10,6 +10,10 @@ KDevComponent::~KDevComponent()
 {
 }
 
+void KDevComponent::setupGUI()
+{
+}
+
 void KDevComponent::createConfigWidget(CustomizeDialog *parent)
 {
 }
@@ -52,4 +56,14 @@ void KDevComponent::removedFileFromProject(const QString&)
 
 void KDevComponent::savedFile(const QString&)
 {
+}
+
+
+void KDevComponent::setWidget(QWidget *w)
+{
+}
+
+QWidget *KDevComponent::widget()
+{
+    return 0;
 }

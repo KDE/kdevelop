@@ -76,7 +76,6 @@ pics/Makefile \
 pics/mini/Makefile \
 pics/toolbar/Makefile \
 pics/misc/Makefile \
-kdlgloader/Makefile \
 doc/Makefile \
 doc/welcome/Makefile \
 doc/manual/Makefile \

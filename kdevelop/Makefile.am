@@ -1,17 +1,17 @@
-# set the include path for X, qt and KDE
-INCLUDES= $(all_includes)
-# claim, which subdirectories you want to install
-# if you don't have subdirectories, comment it
 SUBDIRS = lib classparser plugin parts tools templates
+
+INCLUDES = -I$(top_srcdir)/kdevelop/lib -I$(top_srcdir)/kdevelop/classparser $(all_includes)
+
 LFLAGS = -+
+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
 bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = main.cpp kdevelop.cpp kdevelopfactory.cpp
+kdevelop_SOURCES = main.cpp kdevelop.cpp kdevelopcore.cpp kdevelopfactory.cpp
 
-kdevelop_METASOURCES = kdevelop.moc
+kdevelop_METASOURCES = kdevelop.moc kdevelopcore.moc
 
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -21,7 +21,7 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevelop_LDADD = $(top_builddir)/kdevelop/classparser/libkdevclassparser.la $(LIB_KPARTS) $(LIB_KFILE)
 
 # this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = kdevelop.h kdevelopfactory.h
+noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h
 
 EXTRA_DIST = kdeveloprc kdevelopui.rc\
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \

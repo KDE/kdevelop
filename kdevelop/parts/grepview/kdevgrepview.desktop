@@ -6,4 +6,3 @@ Name=GrepView
 Icon=find
 ServiceTypes=KDevelop/Component
 X-KDE-Library=libkdevgrepview
-X-KDevelop-ComponentType=OutputView

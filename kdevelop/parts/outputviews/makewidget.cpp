@@ -54,8 +54,8 @@ bool MakeListBoxItem::isCustomItem()
 }
 
 
-MakeWidget::MakeWidget(MakeView *view, QWidget *parent)
-    : ProcessView(parent, "make widget")
+MakeWidget::MakeWidget(MakeView *view)
+    : ProcessView(0, "make widget")
 {
     connect( this, SIGNAL(highlighted(int)),
              this, SLOT(lineHighlighted(int)) );
@@ -133,7 +133,7 @@ void MakeWidget::lineHighlighted(int line)
     ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
     if (i->isCustomItem()) {
         MakeListBoxItem *gi = static_cast<MakeListBoxItem*>(i);
-        emit m_view->sourceFileSelected(gi->filename(), gi->linenumber());
+        emit m_view->gotoSourceFile(gi->filename(), gi->linenumber());
     }
 }
 

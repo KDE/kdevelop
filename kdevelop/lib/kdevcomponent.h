@@ -39,9 +39,16 @@ class KDevComponent : public KParts::Part
     Q_OBJECT
     
 public:
+    enum Role { SelectView, OutputView };
+    
     KDevComponent( QObject *parent=0, const char *name=0 );
     ~KDevComponent();
-    
+
+    /**
+     * Setup the component with its GUI. Note that the component's
+     * widgets must be created here, not in the constructor.
+     */
+    virtual void setupGUI();
     /**
      * Creates a configuration page for use in the
      * KDevelop settings dialog.
@@ -83,8 +90,16 @@ public:
     virtual void savedFile(const QString&);
 
 signals:
-    void sourceFileSelected(const QString &filename, int lineno=-1);
-    void documentationFileSelected(const QString &filename);
+    void embedWidget(QWidget *, KDevComponent::Role, const QString &);
+    void gotoSourceFile(const QString &, int);
+    void gotoDocumentationFile(const QString &);
+    void gotoProjectApiDoc();
+    void gotoProjectManual();
+
+private:
+    // These methods are not meaningful and are therefore forbidden
+    void setWidget(QWidget *w);
+    QWidget *widget();
 };
 
 

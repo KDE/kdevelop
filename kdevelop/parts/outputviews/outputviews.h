@@ -12,17 +12,17 @@ class MakeView : public KDevComponent
     Q_OBJECT
 
 public:
-    MakeView( QWidget *parent=0, const char *name=0 );
+    MakeView( QObject *parent=0, const char *name=0 );
     ~MakeView();
 
 protected:
+    virtual void setupGUI();
     virtual void compilationStarted(const QString &command);
     virtual void projectOpened(CProject *prj);
     virtual void projectClosed();
     
 private:
-    MakeWidget *makeWidget()
-        { return (MakeWidget*) KDevComponent::widget(); }
+    MakeWidget *m_widget;
     friend class MakeWidget;
 
     CProject *m_prj;
@@ -36,15 +36,15 @@ class AppOutputView : public KDevComponent
     Q_OBJECT
 
 public:
-    AppOutputView( QWidget *parent=0, const char *name=0 );
+    AppOutputView( QObject *parent=0, const char *name=0 );
     ~AppOutputView();
 
 protected:
+    virtual void setupGUI();
     virtual void compilationAborted();
     
 private:
-    AppOutputWidget *appOutputWidget()
-        { return (AppOutputWidget*) KDevComponent::widget(); }
+    AppOutputWidget *m_widget;
     friend class AppOutputWidget;
 };
 #endif
