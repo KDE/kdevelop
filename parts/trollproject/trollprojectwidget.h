@@ -131,6 +131,8 @@ public:
     QStringList forms;
     QStringList forms_exclude;
 
+    QStringList distfiles;
+    QStringList distfiles_exclude;
     QStringList images;
     QStringList images_exclude;
     QStringList lexsources;
@@ -194,7 +196,7 @@ protected:
 class GroupItem : public ProjectItem
 {
 public:
-    enum GroupType {NoType, Sources, Headers, Forms,Images,Lexsources,Yaccsources,Translations,IDLs, InstallRoot, InstallObject};
+    enum GroupType {NoType, Sources, Headers, Forms,Distfiles,Images,Lexsources,Yaccsources,Translations,IDLs, InstallRoot, InstallObject};
 
     static GroupType groupTypeForExtension(const QString &ext);
 

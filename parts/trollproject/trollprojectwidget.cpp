@@ -1292,6 +1292,10 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->setValues("IMAGES",spitem->images,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->setValues("IMAGES",spitem->images_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
 
+  subBuffer->removeValues("DISTFILES");
+  subBuffer->setValues("DISTFILES",spitem->distfiles,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  subBuffer->setValues("DISTFILES",spitem->distfiles_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+
   subBuffer->removeValues("LEXSOURCES");
   subBuffer->setValues("LEXSOURCES",spitem->lexsources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->setValues("LEXSOURCES",spitem->lexsources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
@@ -1411,6 +1415,9 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
     case GroupItem::Images:
       titem->owner->images.append(filename);
       break;
+    case GroupItem::Distfiles:
+      titem->owner->distfiles.append(filename);
+      break;
     case GroupItem::Translations:
       titem->owner->translations.append(filename);
       break;
@@ -1468,6 +1475,8 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
       break;
     case GroupItem::Images:
       m_shownSubproject->images.append(filename);
+    case GroupItem::Distfiles:
+      m_shownSubproject->distfiles.append(filename);
       break;
     /*
     case GroupItem::InstallObject:
@@ -1860,6 +1869,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         case GroupItem::Images:
             title = i18n("Images");
             ext = "*.jpg *.png *.xpm *.gif";
+            break;
+        case GroupItem::Distfiles:
+            title = i18n("Distfiles");
+            ext = "*";
             break;
         case GroupItem::Translations:
             title = i18n("Translations");
@@ -2301,6 +2314,9 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
       case GroupItem::Images:
         spitem->images.remove(fitem->text(0));
         break;
+      case GroupItem::Distfiles:
+        spitem->distfiles.remove(fitem->text(0));
+        break;
       case GroupItem::Translations:
         spitem->translations.remove(fitem->text(0));
         break;
@@ -2393,6 +2409,7 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
     subBuffer->getValues("LEXSOURCES",item->lexsources,item->lexsources_exclude);
     subBuffer->getValues("YACCSOURCES",item->yaccsources,item->yaccsources_exclude);
     subBuffer->getValues("IMAGES",item->images,item->images_exclude);
+    subBuffer->getValues("DISTFILES",item->distfiles,item->distfiles_exclude);
     subBuffer->getValues("TRANSLATIONS",item->translations,item->translations_exclude);
     subBuffer->getValues("IDLS",item->idls,item->idls_exclude);
     QStringList installs,installs_exclude;
@@ -2455,6 +2472,18 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
     item->groups.append(titem);
     if (!item->yaccsources.isEmpty()) {
         QStringList l = item->yaccsources;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
+            titem->files.append(fitem);
+        }
+    }
+    titem = createGroupItem(GroupItem::Distfiles, "DISTFILES",scopeString);
+    titem->owner = item;
+    item->groups.append(titem);
+    if (!item->distfiles.isEmpty()) {
+        QStringList l = item->distfiles;
         QStringList::Iterator it;
         for (it = l.begin(); it != l.end(); ++it) {
             FileItem *fitem = createFileItem(*it);
