@@ -26,8 +26,12 @@
 #include <qdom.h>
 #include <qobject.h>
 #include <qtextstream.h>
-#include "KDevCompiler.h"
 
+
+class KDevCompiler;
+class KDevLinker;
+
+class KService;
 class KAboutData;
 
 /**-base class for all project plugins, contains  special config widgets for
@@ -66,6 +70,7 @@ public:
   QString relativePath();
   QString getType(QString absFileName);
 
+//++++++++++ Build-Objects Methods ++++++++++++++++++++++++++++++++++++++
   // the compilers that project uses
   QList<KDevCompiler>* compilers();
 
@@ -74,6 +79,14 @@ public:
 
   // register a compiler for this project
   void addCompiler(KDevCompiler*);
+
+  // the linker that project uses
+  KDevLinker* linker();
+
+  // register the linker for this project
+  void registerLinker(KDevLinker*);
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   /** generate/modify the Makefile
    * if target == QString::null write the custom targets, 
@@ -119,9 +132,19 @@ protected:
   QString m_projectFile;
   QString m_relPath;
 
+//++++++++++ Build Objects ++++++++++++++++++++++++++++++++++++++++++++++
   // the compilers that ps uses
   QList<KDevCompiler>* m_compilers;
+  KDevLinker* m_linker;
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+private:
+	// loads the compilers of the project if present
+  void loadCompilers(KService* ks);
+
+  // loads a linker if present
+  void loadLinker(KService* ks);
 };
 
 #endif

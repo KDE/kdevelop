@@ -26,6 +26,8 @@
 #include <ktrader.h>
 #include <klibloader.h>
 #include "partloader.h"
+#include "KDevCompiler.h"
+#include "KDevLinker.h"
 
 Project::Project(QObject * parent, const char* name) :  QObject(parent,name){
   m_pFiles = new QList<RegisteredFile>();
@@ -95,27 +97,8 @@ void Project::setRelativePath(QString path){
   m_relPath = path;
 }
 
-QList<KDevCompiler>* Project::compilers(){
-	return m_compilers;
-}
-
-KDevCompiler* Project::compilerByName(const QString &name){
-	QListIterator<KDevCompiler> it(*m_compilers);
-  for ( ; it.current(); ++it ) {
-    KDevCompiler *comp = it.current();
-    if (*(comp->name()) == name){
-    	return comp;
-    }
-  }
-  // nothing found
-  return 0;
-}
 
 //////////////////////////////// some set methods //////////////////////
-
-void Project::addCompiler(KDevCompiler* comp){
-	m_compilers->append(comp);
-}
 
 /** store the project version. */
 void Project::setVersion(QString version){
@@ -267,18 +250,63 @@ Project* Project::createNewProject(QString projecttypeName,QObject* parent){
     kdDebug(9030) << "couldn't create the project "<<  service->library()  << endl;
   }else{
   	kdDebug(9030) << "Project::createNewProject: Name: "<<  service->property("Name").toString() << endl;
-  	kdDebug(9030) << "Project::createNewProject: Compilers needed: "<<  service->property("X-KDevelop-Compilers").toString() << endl;
-  	QStringList compilers = QStringList::split(" ", service->property("X-KDevelop-Compilers").toString());
-    QStringList::ConstIterator cit;
-    for (cit = compilers.begin(); cit != compilers.end(); ++cit){
-    	kdDebug(9030) << "Project::createNewProject: Expected compiler: " << *cit << endl;
-      QString constraint = QString("[Name] == '%1'").arg(*cit);
-			KDevCompiler* comp = static_cast<KDevCompiler*>(PartLoader::loadByName(0, *cit, "KDevCompiler"));
-		  kdDebug(9030) << "Project::createNewProject: Loaded compiler: " << *(comp->name()) << endl;
-			prj->addCompiler(comp);
-    }
+  	prj->loadCompilers(service);
+  	prj->loadLinker(service);
   }
   return prj;
+}
+
+//++++++++++ Build-Objects Methods ++++++++++++++++++++++++++++++++++++++
+
+void Project::loadCompilers(KService* ks){
+	kdDebug(9030) << "Project::loadCompilers: Compilers needed: "<<  ks->property("X-KDevelop-Compilers").toString() << endl;
+	QStringList compilers = QStringList::split(" ", ks->property("X-KDevelop-Compilers").toString());
+  QStringList::ConstIterator cit;
+  for (cit = compilers.begin(); cit != compilers.end(); ++cit){
+  	kdDebug(9030) << "Project::loadCompilers: Expected compiler: " << *cit << endl;
+    QString constraint = QString("[Name] == '%1'").arg(*cit);
+		KDevCompiler* comp = static_cast<KDevCompiler*>(PartLoader::loadByName(0, *cit, "KDevCompiler"));
+  	kdDebug(9030) << "Project::loadCompilers: Loaded compiler: " << *(comp->name()) << endl;
+		addCompiler(comp);
+  }
+}
+
+void Project::loadLinker(KService* ks){
+	QString linkerName = ks->property("X-KDevelop-Linker").toString();
+	kdDebug(9030) << "Project::loadLinker: Linker needed: "<<  linkerName << endl;
+  QString constraint = QString("[Name] == '%1'").arg(linkerName);
+  KDevLinker* linker = static_cast<KDevLinker*>(PartLoader::loadByName(0, linkerName, "KDevLinker"));
+  kdDebug(9030) << "Project::loadLinker: Loaded Linker: " << *(linker->name()) << endl;
+	registerLinker(linker);
+}
+
+void Project::addCompiler(KDevCompiler* comp){
+	m_compilers->append(comp);
+}
+
+
+QList<KDevCompiler>* Project::compilers(){
+	return m_compilers;
+}
+
+KDevCompiler* Project::compilerByName(const QString &name){
+	QListIterator<KDevCompiler> it(*m_compilers);
+  for ( ; it.current(); ++it ) {
+    KDevCompiler *comp = it.current();
+    if (*(comp->name()) == name){
+    	return comp;
+    }
+  }
+  // nothing found
+  return 0;
+}
+
+void Project::registerLinker(KDevLinker* linker){
+	m_linker = linker;
+}
+
+KDevLinker* Project::linker(){
+	return m_linker;
 }
 
 /*----------------------------------------------- CProject::getType()
