@@ -63,7 +63,6 @@ QStringList KDevQtImporter::includePaths()
 QWidget * KDevQtImporter::createSettingsPage( QWidget * parent, const char * name )
 {
     m_settings = new SettingsDialog( parent, name );
-    connect( m_settings, SIGNAL(enabled(int)), this, SIGNAL(enabled(int)) );
     return m_settings;
 }
 
