@@ -29,7 +29,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
     for( QStringList::Iterator it=qtdirs.begin(); it!=qtdirs.end(); ++it )
     {
 	QString qtdir = *it;
-	if( !qtdir.isNull() && isValidQtDir(qtdir) )
+	if( !qtdir.isEmpty() && isValidQtDir(qtdir) )
 	    qtListBox->insertItem( qtdir );
     }
 }

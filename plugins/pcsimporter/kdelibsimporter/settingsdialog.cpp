@@ -34,7 +34,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
     for( QStringList::Iterator it=kdedirs.begin(); it!=kdedirs.end(); ++it )
     {
 	QString kdedir = *it;
-	if( !kdedir.isNull() && isValidKDELibsDir(kdedir) )
+	if( !kdedir.isEmpty() && isValidKDELibsDir(kdedir) )
 	    kdeListBox->insertItem( kdedir );
     }
 }
