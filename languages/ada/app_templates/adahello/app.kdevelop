@@ -11,19 +11,21 @@
    <keyword>Code</keyword>
   </keywords>
  </general>
- <kdevadaproject>
-  <general>
-    <useconfiguration>default</useconfiguration>
-  </general>
-  <configurations>
-   <default>
-     <mainsource>src/$APPNAMELC$.adb</mainsource>
-   </default>
-  </configurations>
-  <run>
-   <terminal>true</terminal>
-  </run>
- </kdevadaproject>
+ <kdevcustomproject>
+    <run>
+      <directoryradio>executable</directoryradio>
+      <customdirectory>/</customdirectory>
+      <mainprogram>$APPNAMELC$</mainprogram>
+      <programargs/>
+      <terminal>false</terminal>
+      <autocompile>false</autocompile>
+      <envvars/>
+    </run>
+    <build>
+      <buildtool>make</buildtool>
+      <builddir/>
+    </build> 
+ </kdevcustomproject>
  <kdevfilecreate>
   <useglobaltypes>
    <type ext="ads"/>

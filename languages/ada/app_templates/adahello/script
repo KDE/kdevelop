@@ -12,6 +12,8 @@ print "Installing project file\n";
 installHTML( "${src}/template-adahello/app.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application framework\n";
+install( "${src}/template-adahello/ada-Makefile",        "${dest}/Makefile" );
+install( "${src}/template-adahello/app.kdevelop.filelist", "${dest}/${APPNAMELC}.kdevelop.filelist" );
 mkdir( "${dest}/src", 0777 );
 
 print "Installing application sources\n";

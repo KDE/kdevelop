@@ -3,7 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 adahellodir = ${appwizarddatadir}/template-adahello
 templatedir = ${appwizarddatadir}/templates
 
-adahello_DATA = main.adb app.kdevelop
+adahello_DATA = main.adb app.kdevelop ada-Makefile app.kdevelop.filelist
 template_DATA = adahello
 
 DISTCLEANFILES = script.local
