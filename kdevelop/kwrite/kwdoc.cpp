@@ -1141,7 +1141,7 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
       if (textLine->getChar(textLine->lastChar())=='{') // opening brace
         indent += indentLength;
       #ifdef DEBUG
-      cerr << "indent pos=" << indentPos << endl;
+      std::cerr << "indent pos=" << indentPos << std::endl;
       #endif
       if (indentPos >= 0) // we've got our position
         break;     // terminate loop
