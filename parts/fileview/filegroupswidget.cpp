@@ -12,6 +12,7 @@
 #include "filegroupswidget.h"
 
 #include <qfileinfo.h>
+#include <qdir.h>
 #include <qheader.h>
 #include <qtimer.h>
 #include <qvbox.h>
@@ -154,10 +155,11 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
     if (item->parent()) {
         // Not for group items
         FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);
-        FileContext context(fvfitem->fileName(), false);
+        QString pathName = m_part->project()->projectDirectory() + QDir::separator() + fvfitem->fileName();
+        FileContext context( pathName, false);
         m_part->core()->fillContextMenu(&popup, &context);
     }
-    
+
     int res = popup.exec(p);
     if (res == customizeId) {
         KDialogBase dlg(KDialogBase::TreeList, i18n("Customize File Groups"),
@@ -181,7 +183,7 @@ void FileGroupsWidget::refresh()
         DomUtil::readPairListEntry(dom, "/kdevfileview/groups", "group", "name", "pattern");
 
     FileViewFolderItem *lastGroup = 0;
-    
+
     DomUtil::PairList::ConstIterator git;
     for (git = list.begin(); git != list.end(); ++git) {
         FileViewFolderItem *newItem = new FileViewFolderItem(this, (*git).first, (*git).second);
