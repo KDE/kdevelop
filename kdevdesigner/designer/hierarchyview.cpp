@@ -900,7 +900,8 @@ void FormDefinitionView::objectClicked( QListViewItem *i )
     if ( !i )
 	return;
     if ( (i->rtti() == HierarchyItem::Slot) || (i->rtti() == HierarchyItem::Function) )
-	formWindow->mainWindow()->editFunction( i->text( 0 ) );
+        formWindow->mainWindow()->part()->emitEditFunction(formWindow->fileName(), i->text( 0 ));
+//	formWindow->mainWindow()->editFunction( i->text( 0 ) );
 }
 
 static HierarchyItem::Type getChildType( int type )

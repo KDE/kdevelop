@@ -580,6 +580,9 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
       connect(designerPart, SIGNAL(removedFunction(DesignerType, const QString&, Function )),
           API::getInstance()->languageSupport(),
           SLOT(removeFunction(DesignerType, const QString&, Function )));
+      connect(designerPart, SIGNAL(editFunction(DesignerType, const QString&, const QString& )),
+          API::getInstance()->languageSupport(),
+          SLOT(openFunction(DesignerType, const QString&, const QString& )));
   }
 }
 

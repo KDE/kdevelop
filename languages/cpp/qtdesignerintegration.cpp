@@ -37,6 +37,7 @@
 
 #include "backgroundparser.h"
 #include "cppsupportpart.h"
+#include "codemodel_utils.h"
 #include "implementationwidget.h"
 
 QtDesignerIntegration::QtDesignerIntegration(CppSupportPart *part, const char* name)
@@ -273,6 +274,57 @@ void QtDesignerIntegration::saveSettings(QDomDocument dom, QString path)
         il.setAttribute("implementationpath", it.data()->fileName());
         il.setAttribute("class", it.data()->name());
     }
+}
+
+struct MyPred{
+    MyPred(const QString &functionName): m_functionName(functionName) {}
+    bool operator () (const FunctionDefinitionDom& fun){
+        kdDebug() << "    ==: " << fun->name() << " vs " << m_functionName << endl;
+        if (fun->name() == m_functionName)
+            return true;
+        return false;
+    }
+    QString m_functionName;
+};
+
+
+void QtDesignerIntegration::openFunction(const QString &formName, const QString &functionName)
+{
+    kdDebug() << "QtDesignerIntegration::openFunction, formName = " << formName 
+        << ", functionName = " << functionName << endl;
+    QString fn = functionName;
+    if (fn.find("(") > 0)
+        fn.remove(fn.find("("), fn.length());
+    
+    if (!m_implementations[formName])
+        return;
+
+    int line = -1, col = -1;
+    
+/*    FunctionDefinitionList list;       
+    MyPred mypred(fn);
+    CodeModelUtils::findFunctionDefinitions<MyPred>(mypred, m_implementations[formName], list);
+    if (list.count() == 0)
+        return;
+    
+    list.first()->getStartPosition(&line, &col);*/
+
+    QString impl = m_implementations[formName]->fileName();
+    impl.replace(".h", ".cpp");
+    
+//    kdDebug() << "seeking for fn = " << fn << endl;
+    if (m_part->codeModel()->hasFile(impl))
+    {
+        FunctionDefinitionList list = m_part->codeModel()->fileByName(impl)->functionDefinitionList();
+        for (FunctionDefinitionList::const_iterator it = list.begin(); it != list.end(); ++it)
+        {
+//            kdDebug() << " <<: " << (*it)->name() << endl;
+            if ((*it)->name() == fn)
+                (*it)->getStartPosition(&line, &col);
+        }
+    }
+    
+    m_part->partController()->editDocument(KURL(impl), line, col);
 }
 
 

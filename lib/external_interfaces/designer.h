@@ -48,6 +48,7 @@ signals:
     void removedFunction(DesignerType type, const QString &formName, Function function);
     void editedFunction(DesignerType type, const QString &formName, Function oldFunction, Function function);
     
+    void editFunction(DesignerType type, const QString &formName, const QString &functionName);
 };
 
 }

@@ -526,4 +526,11 @@ void KDevDesignerPart::emitEditedFunction( const QString & form, KInterfaceDesig
     emit editedFunction(designerType(), form, oldFunc, func);
 }
 
+void KDevDesignerPart::emitEditFunction(const QString &formName, const QString &functionName)
+{
+    kdDebug() << "KDevDesignerPart::emitEditedFunction: form " << formName
+        << ", function: " << functionName << endl;
+    emit editFunction(designerType(), formName, functionName);
+}
+
 #include "kdevdesigner_part.moc"

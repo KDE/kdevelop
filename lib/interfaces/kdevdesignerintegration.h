@@ -38,6 +38,7 @@ public slots:
     virtual void removeFunction(const QString &formName, KInterfaceDesigner::Function function) = 0;
     virtual void editFunction(const QString &formName, KInterfaceDesigner::Function oldFunction, KInterfaceDesigner::Function function) = 0;
 
+    virtual void openFunction(const QString &formName, const QString &functionName) = 0;
 };
 
 #endif

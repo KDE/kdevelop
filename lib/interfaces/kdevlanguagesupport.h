@@ -137,6 +137,8 @@ public slots:
     /**Edits a function requested by a gui designer.*/
     void editFunction(DesignerType type, const QString &formName, Function oldFunction, Function function);
     
+    void openFunction(DesignerType type, const QString &formName, const QString &functionName);
+    
 signals:
     /**
      * Emitted when the content of the classtore has been
