@@ -84,7 +84,7 @@ void Driver::reset( )
     m_dependences.clear();
     m_macros.clear();
     m_problems.clear();
-    includePaths.clear();
+    m_includePaths.clear();
 
     while( m_parsedUnits.size() ){
 	TranslationUnitAST* unit = *m_parsedUnits.begin();
@@ -380,7 +380,8 @@ void Driver::removeMacro( const QString& macroName )
 
 void Driver::addIncludePath( const QString &path )
 {
-    includePaths << path;
+    if( !path.stripWhiteSpace().isEmpty() )
+        m_includePaths << path;
 }
 
 QString Driver::findIncludeFile( const Dependence& dep ) const
@@ -395,7 +396,7 @@ QString Driver::findIncludeFile( const Dependence& dep ) const
 
     }
 
-    for ( QStringList::ConstIterator it = includePaths.begin(); it != includePaths.end(); ++it ) {
+    for ( QStringList::ConstIterator it = m_includePaths.begin(); it != m_includePaths.end(); ++it ) {
         QFileInfo fileInfo( *it, fileName );
 	if ( fileInfo.exists() && fileInfo.isFile() )
 	    return fileInfo.absFilePath();

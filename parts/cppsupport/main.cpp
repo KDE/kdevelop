@@ -25,7 +25,7 @@ public:
 
     void setupLexer( Lexer* lex )
     {
-        lex->disableSkipWords();
+        //lex->disableSkipWords();
         Driver::setupLexer( lex );
     }
 
@@ -63,7 +63,9 @@ public:
 	    while ( proc.isRunning() )
 		usleep( 1 );
 
-	    addIncludePath( proc.readStdout() );
+            QString gccLibPath = proc.readStdout();
+            gccLibPath = gccLibPath.replace( QRegExp("[\r\n]"), "" );
+	    addIncludePath( gccLibPath );
 	    addIncludePath( "/usr/include/g++-3" );
 	    addIncludePath( "/usr/include/g++" );
 	    proc.clearArguments();
@@ -94,7 +96,7 @@ public:
 	    QStringList includePaths = QStringList::split( ';', incl );
 	    QStringList::Iterator it = includePaths.begin();
 	    while( it != includePaths.end() ){
-		addIncludePath( *it );
+		addIncludePath( (*it).stripWhiteSpace() );
 		++it;
 	    }
 	    // ### I am sure there are more standard include paths on
@@ -111,12 +113,16 @@ int main( int argc, char* argv[] )
     driver.setResolveDependencesEnabled( true );
 
     bool showMacros = false;
+    bool showIncludePaths = false;
 
     for( int i=1; i<argc; ++i ){
 	QString a = argv[ i ];
-	if( a == "-m" ){
+	if( a == "-m" || a == "--show-macros" ){
 	    showMacros = true;
 	    continue;
+        } else if( a == "-i" || a == "--show-includes-paths" ){
+            showIncludePaths = true;
+            continue;
 	} else if( a == "-n" || a == "--nodep" ){
 	    driver.setResolveDependencesEnabled( false );
             continue;
@@ -168,6 +174,18 @@ int main( int argc, char* argv[] )
     }
 
     std::cout << std::endl << "parsed " << driver.parsedUnits().size() << " files" << std::endl;
+
+    if( showIncludePaths ){
+        std::cout << std::endl << "Include Paths" << std::endl;
+	std::cout << "-----------------------------------------------------------------" << std::endl;
+        QStringList paths = driver.includePaths();
+        QStringList::Iterator it = paths.begin();
+        while( it != paths.end() ){
+            std::cout << "." << (*it) << "." << std::endl;
+            ++it;
+        }
+	std::cout << "-----------------------------------------------------------------" << std::endl;
+    }
 
     if( showMacros ){
 	QMap<QString, Macro> macros = driver.macros();

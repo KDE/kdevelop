@@ -136,10 +136,10 @@ class SourceProvider
 public:
     SourceProvider() {}
     virtual ~SourceProvider() {}
-    
+
     virtual QString contents( const QString& fileName ) = 0;
     virtual bool isModified( const QString& fileName ) = 0;
-    
+
 private:
     SourceProvider( const SourceProvider& source );
     void operator = ( const SourceProvider& source );
@@ -150,12 +150,12 @@ class Driver
 public:
     Driver();
     virtual ~Driver();
-        
+
     SourceProvider* sourceProvider();
     void setSourceProvider( SourceProvider* sourceProvider );
 
     virtual void reset();
-    
+
     virtual void parseFile( const QString& fileName, bool onlyPreProcesss=false, bool force=false );
     virtual void remove( const QString& fileName );
 
@@ -174,6 +174,7 @@ public:
     virtual void removeMacro( const QString& macroName );
     virtual void removeAllMacrosInFile( const QString& fileName );
 
+    QStringList includePaths() const { return m_includePaths; }
     virtual void addIncludePath( const QString &path );
 
     // TODO: remove
@@ -198,7 +199,7 @@ private:
     QMap<QString, Macro> m_macros;
     QMap< QString, QValueList<Problem> > m_problems;
     QMap<QString, TranslationUnitAST*> m_parsedUnits;
-    QStringList includePaths;
+    QStringList m_includePaths;
     uint depresolv : 1;
     Lexer *lexer;
     SourceProvider* m_sourceProvider;
