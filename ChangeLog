@@ -1,10 +1,13 @@
+2003-02-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+	* parts/cppsupport: fix nasty inner class bug (part of bug 45998)
+
 2003-02-26 jbb <jbb@kdevelop.org>
     * parts/debugger
     - Fix display of function parameters.
 
 2003-02-25 F@lk Brettschneider <falkbr@kdevelop.org>
 	* make-outputview: scrolling during compiling possible without immediate auto-scrolling to the bottom
-    
+
 2003-02-25 F@lk Brettschneider <falkbr@kdevelop.org>
 	* KDE-3.0 compile fixes
 	* some (runtime) warning output removed

@@ -281,8 +281,8 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     int endLine, endColumn;
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
-    
-    
+
+
     PIAccess oldAccess = m_currentAccess;
     bool oldInSlots = m_inSlots;
     bool oldInSignals = m_inSignals;
@@ -290,11 +290,11 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     QString kind = ast->classKey()->text();
     if( kind == "class" )
 	m_currentAccess = PIE_PRIVATE;
-    else 
+    else
 	m_currentAccess = PIE_PUBLIC;
     m_inSlots = false;
     m_inSignals = false;
-    
+
     QString className;
     if( !ast->name() ){
 	QFileInfo fileInfo( m_fileName );
@@ -303,44 +303,32 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     } else {
 	className = ast->name()->text();
     }
-    
+
     ParsedClass* klass = new ParsedClass();
     klass->setDeclaredOnLine( startLine );
     klass->setDeclaredInFile( m_fileName );
     klass->setDefinedOnLine( startLine );
     klass->setDefinedInFile( m_fileName );
-    
+
     klass->setName( className );
     klass->setDeclaredInScope( m_currentScope.join(".") );
 
-    bool inStore = false;
-    if( kind == "class" )
-	inStore = m_store->hasClass( klass->path() );
-    else 
-	inStore = m_store->hasStruct( klass->path() );
+    bool innerClass = !m_currentScope.isEmpty();
 
-    if( inStore ){
-	ParsedClass* parsedClassRef = getClassByName( m_store, klass->path() );
-	parsedClassRef->setDeclaredOnLine( klass->declaredOnLine() );
-	parsedClassRef->setDeclaredInFile( klass->declaredInFile() );
-	parsedClassRef->setDeclaredInScope( klass->declaredInScope() );
-	delete klass;
-	klass = parsedClassRef;
+    if ( kind == "class" ) {
+        if (innerClass)
+	  m_currentContainer->addClass( klass );
+	else
+ 	  m_store->addClass( klass );
+    }
+    else {
+        if (innerClass)
+          m_currentContainer->addStruct( klass );
+	else
+	  m_store->addStruct( klass );
     }
 
-    if( kind == "class" ){
-	m_currentContainer->addClass( klass );
-
-	if( !inStore )
-	    m_store->addClass( klass );
-    } else {
-	m_currentContainer->addStruct( klass );
-
-	if( !inStore )
-	    m_store->addStruct( klass );
-    }
-
-    if( ast->baseClause() )
+    if ( ast->baseClause() )
         parseBaseClause( ast->baseClause(), klass );
 
     m_currentScope.push_back( className );
