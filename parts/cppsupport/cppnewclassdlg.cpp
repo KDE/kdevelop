@@ -173,7 +173,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
   namespaceStr = dlg.namespace_edit->text(); 
   baseName = dlg.basename_edit->text();
   childClass = dlg.childclass_box->isChecked();
-  objc = false; // TODO: check button for objc
+  objc = dlg.objc_box->isChecked();
 
   if (baseName.isEmpty() && childClass)
     baseName = "QWidget";

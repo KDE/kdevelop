@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>655</width>
-            <height>591</height>
+            <width>660</width>
+            <height>563</height>
         </rect>
     </property>
     <property name="caption">
@@ -54,44 +54,6 @@ a class for the KDE libraries.</string>
                 </size>
             </property>
         </spacer>
-        <widget class="QLayoutWidget" row="5" column="0">
-            <property name="name">
-                <cstring>Layout10</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>documentation_label_</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Documentation:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>documentation_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QTextEdit">
-                    <property name="name">
-                        <cstring>documentation_edit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Insert a short description for your new class
-here for documentation purposes. This can be used
-to create API documentation in HTML format with
-doxygen or similar tools.</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
         <spacer row="5" column="1">
             <property name="name">
                 <cstring>Spacer6</cstring>
@@ -109,75 +71,6 @@ doxygen or similar tools.</string>
                 </size>
             </property>
         </spacer>
-        <widget class="QLayoutWidget" row="5" column="2">
-            <property name="name">
-                <cstring>Layout9</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>Spacer7</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>filetemplate_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use file templates</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>childclass_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Generate QWidget child class</string>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>Spacer8</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </vbox>
-        </widget>
         <widget class="QLayoutWidget" row="7" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>Layout3</cstring>
@@ -201,6 +94,12 @@ doxygen or similar tools.</string>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
@@ -268,6 +167,86 @@ like using an upper 'K' as the first
 letter for your new class, if it is
 a class for the KDE libraries.</string>
             </property>
+        </widget>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>Spacer11</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Minimum</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QGroupBox" row="3" column="0">
+            <property name="name">
+                <cstring>filenames_group</cstring>
+            </property>
+            <property name="title">
+                <string>File Names</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>header_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Header:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>header_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>header_edit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Insert your header file name here.
+It is automatically inserted while
+you select the classname, but you can
+still edit it afterwards.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>implementation_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Implementation:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>implementation_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>implementation_edit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Insert your implementation filename here.
+It is automatically inserted while
+you select the classname, but you can
+still edit it afterwards.</string>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
         <widget class="QButtonGroup" row="3" column="2">
             <property name="name">
@@ -346,76 +325,114 @@ new class will not have a parent class.</string>
                 </widget>
             </grid>
         </widget>
-        <spacer row="2" column="1">
+        <widget class="QGroupBox" row="5" column="2">
             <property name="name">
-                <cstring>Spacer11</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Minimum</enum>
-            </property>
-        </spacer>
-        <widget class="QGroupBox" row="3" column="0">
-            <property name="name">
-                <cstring>filenames_group</cstring>
+                <cstring>optionsBox</cstring>
             </property>
             <property name="title">
-                <string>File Names</string>
+                <string>Options</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer7</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>76</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>filetemplate_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use file templates</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>childclass_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Generate QWidget child class</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>objc_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use Objective-C</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer8</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>75</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget" row="5" column="0">
+            <property name="name">
+                <cstring>Layout10</cstring>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <property name="margin">
-                    <number>11</number>
+                    <number>0</number>
                 </property>
                 <property name="spacing">
                     <number>6</number>
                 </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>header_label</cstring>
+                        <cstring>documentation_label_</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Header:</string>
+                        <string>&amp;Documentation:</string>
                     </property>
                     <property name="buddy" stdset="0">
-                        <cstring>header_edit</cstring>
+                        <cstring>documentation_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="QTextEdit">
                     <property name="name">
-                        <cstring>header_edit</cstring>
+                        <cstring>documentation_edit</cstring>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Insert your header file name here.
-It is automatically inserted while
-you select the classname, but you can
-still edit it afterwards.</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>implementation_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Implementation:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>implementation_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>implementation_edit</cstring>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Insert your implementation filename here.
-It is automatically inserted while
-you select the classname, but you can
-still edit it afterwards.</string>
+                        <string>Insert a short description for your new class
+here for documentation purposes. This can be used
+to create API documentation in HTML format with
+doxygen or similar tools.</string>
                     </property>
                 </widget>
             </vbox>
@@ -453,12 +470,6 @@ still edit it afterwards.</string>
         <receiver>cpp_new_class_dialog</receiver>
         <slot>classNameChanged(const QString&amp;)</slot>
     </connection>
-    <connection>
-        <sender>name_handler_combo</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>cpp_new_class_dialog</receiver>
-        <slot>nameHandlerChanged(const QString&amp;)</slot>
-    </connection>
 </connections>
 <tabstops>
     <tabstop>classname_edit</tabstop>
@@ -470,8 +481,6 @@ still edit it afterwards.</string>
     <tabstop>private_button</tabstop>
     <tabstop>virtual_box</tabstop>
     <tabstop>documentation_edit</tabstop>
-    <tabstop>filetemplate_box</tabstop>
-    <tabstop>childclass_box</tabstop>
 </tabstops>
 <slots>
     <slot access="protected">classNameChanged(const QString &amp;text)</slot>
