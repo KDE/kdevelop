@@ -19,7 +19,6 @@
 
 #include "subversion_fileinfo.h"
 #include <kdebug.h>
-#include <kio/netaccess.h>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <kdevproject.h>
