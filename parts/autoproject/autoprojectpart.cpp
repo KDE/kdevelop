@@ -15,6 +15,7 @@
 #include <config.h>
 
 #include "autoprojectpart.h"
+#include "autolistviewitems.h"
 #include "configureoptionswidget.h"
 #include "addtranslationdlg.h"
 #include "addicondlg.h"
@@ -85,6 +86,10 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
+
+    action = new KAction( i18n("Build &Active Target"), "make_kdevelop", Key_F7,
+                          this, SLOT(slotBuildActiveTarget()),
+                          actionCollection(), "build_buildactivetarget" );
 
     action = new KAction( i18n("Compile &File"), "make_kdevelop",
                           this, SLOT(slotCompileFile()),
@@ -436,6 +441,28 @@ void AutoProjectPart::slotBuild()
 {
     mainWindow()->raiseView(makeFrontend()->widget());
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
+}
+
+
+void AutoProjectPart::slotBuildActiveTarget()
+{
+  kdDebug( 9020 ) << "Starting to execute build Active Target" << endl;
+  TargetItem* titem = m_widget->activeTarget();
+
+  if ( !titem )
+    return;
+
+  QString name = titem->name;
+  kdDebug( 9020 ) << "Active Target.name :" << name << endl;
+  if ( titem->primary == "LIBRARIES" )
+    name + ".a";
+  else if ( titem->primary == "LTLIBRARIES" )
+    name + ".la";
+  else if ( titem->primary == "KDEDOCS" )
+    name = "index.cache.bz2";
+
+  QString relpath = m_widget->selectedSubproject()->path.mid( projectDirectory().length() );
+  startMakeCommand( buildDirectory() + relpath, titem->name );
 }
 
 
