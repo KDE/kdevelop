@@ -97,10 +97,7 @@ void CKDevelop::initView(){
   // Main view panner
   ////////////////////////
 #warning view was a KNewPanner
-  view = new QSplitter(Vertical,this, "view");
-
-#warning top_panner was a KNewPanner
-  top_panner = new QSplitter(Horizontal, view, "top_panner");
+  view = new QSplitter(Qt::Vertical,this, "view");
 
   ////////////////////////
   // Outputwindow
@@ -122,7 +119,12 @@ void CKDevelop::initView(){
   o_tab_view->addTab(messages_widget,i18n("messages"));
   o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
   o_tab_view->addTab(stderr_widget,i18n("stderr"));
-  
+
+
+#warning top_panner was a KNewPanner
+  top_panner = new QSplitter(Qt::Horizontal, view, "top_panner");
+  view->moveToFirst(top_panner);
+
   ////////////////////////
   // Top Panner
   ////////////////////////
@@ -181,6 +183,7 @@ void CKDevelop::initView(){
   cpp_widget->doc()->readConfig(config);
 
 
+  top_panner->moveToFirst(t_tab_view);
 
 
   // init the 2 first kedits
