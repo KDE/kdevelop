@@ -38,7 +38,6 @@ High priority tasks!
   - Tag file creation fails silently if ctags is not installed
 
 * misc:
-  - Printing files not supported
   - Trying Java projects results in mysterious error messages
   - Project name should be able to contain spaces
   - Should be able to keep project file in a separate directory and
@@ -84,6 +83,8 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
   - import/export 2.1-projects<-->Gideon-projects
   - version control: integration with Cervisia?
 
+* classview:
+  - delete method/class menu items
   
 3. Missing UIs (other than 2)
 -----------------------------
