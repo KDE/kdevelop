@@ -451,7 +451,7 @@ SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, b
         {
                 SubprojectItem* spitem = static_cast<SubprojectItem*>(it.current() );
                 QString relpath = (spitem->path).mid(prefixLen);
-                relpath = (relpath==QString::null) ? "" : relpath;
+                relpath = (relpath==QString::null) ? QString("") : relpath;
                 kdDebug(9020) << " ... checking -" << spitem->path << "-" << endl;
                 kdDebug(9020) << " ... (tailored: -" << relpath << "- against -" << (pathIsAbsolute ? path.mid(prefixLen) : path) << "- )" << endl;
                 if ( relpath == (pathIsAbsolute ? path.mid(prefixLen) : path))
