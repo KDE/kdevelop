@@ -1,3 +1,11 @@
+2003-05-05 Alexander Dymo <cloudtemple@mksat.net>
+    * parts/trollproject
+      MOC_DIR, UI_DIR, OBJECTS_DIR variables support in configuration dialog is back again.
+      Fixed incorrect program path generation that prevented from running the application.
+      Put correct actions into the Build menu and the Build toolbar.
+    * parts/clearcase
+      Applied further modifications by Ajay Guleria <Ajay.Guleria@synopsys.com>.
+
 2003-04-18 Oliver Kellogg <okellogg@users.sourceforge.net>
     * Implemented Ada language support including adasupport part, adaproject
       part, filecreate templates, application wizard template, syntax
@@ -10,7 +18,7 @@
 
 2003-04-30 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added "Core" scope plugins alternative
-    * Updated the plugin selection to be more userfriendly 
+    * Updated the plugin selection to be more userfriendly
 
 2003-04-29 Amilcar Lucas <a.lucas@tu-bs.de>
     * Made the Working Directory of the debugged executable configurable
