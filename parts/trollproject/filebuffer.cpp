@@ -14,6 +14,9 @@
 #include <qmessagebox.h>
 
 
+/**
+ * Destructor
+ */
 FileBuffer::~FileBuffer()
 //=======================
 {
@@ -22,9 +25,16 @@ FileBuffer::~FileBuffer()
   m_subBuffers.clear();
 }
 
+/**
+ * Find next accurance of a substring in the buffer starting at a given caret position
+ * Returns: a Caret pointing to the position where the substring is found.
+ *          nvlToMax ? (rowcount+1,0) : (-1,-1) if the substring is not found.
+ */
 Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, bool nvlToMax)
-//====================================================================================
+//===========================================================================================
 {
+  // ATTENTION: This method is central for the class. It almost all other methods rely on it
+  //            so be careful!
   unsigned int i=startPos.m_row;
   QString line = m_buffer[i++];
   line = line.mid(startPos.m_idx,line.length()-startPos.m_idx);
@@ -42,6 +52,10 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
     return Caret(-1,-1);
 }
 
+/**
+ * Pop a line from the buffer
+ * Returns: the string being popped
+ */
 QString FileBuffer::pop(int row)
 //==============================
 {
@@ -54,8 +68,11 @@ QString FileBuffer::pop(int row)
   return ReturnStr;
 }
 
+/**
+ * Split a scopestring (s1:s2:s3:...:sn) into scopename (s1) and scoperest (s2:s3:...:sn)
+ */
 void FileBuffer::splitScopeString(QString scopeString,QString &scopeName, QString &scopeRest)
-//=====================================================================================
+//===========================================================================================
 {
   scopeString = scopeString.simplifyWhiteSpace();
   scopeName="";
@@ -73,8 +90,12 @@ void FileBuffer::splitScopeString(QString scopeString,QString &scopeName, QStrin
   }  
 } 
 
+/**
+ * Get the subBuffer representing a certain scope (s1:s2:s3:...:sn).
+ * Returns the subbuffer
+ */
 FileBuffer* FileBuffer::getSubBuffer(QString scopeString)
-//======================================================
+//=======================================================
 {
   QString nextScopeName,scopeStringRest;
   splitScopeString(scopeString,nextScopeName,scopeStringRest);
@@ -86,9 +107,11 @@ FileBuffer* FileBuffer::getSubBuffer(QString scopeString)
   return m_subBuffers[idx]->getSubBuffer(scopeStringRest);
 }
   
-
+/**
+ * Set values for a variable. (variable = value_1 value_2 valu_3 ... value_n)
+ */
 void FileBuffer::setValues(const QString &variable,QStringList values,int valuesPerRow)
-//=========================================================================================================
+//=====================================================================================
 {
   unsigned int i;
   QString line = variable + " = ";
@@ -109,8 +132,12 @@ void FileBuffer::setValues(const QString &variable,QStringList values,int values
     m_buffer.append(line);
 }
 
+/**
+ * Get values for a variable.
+ * Returns: values as a whitespace separated list. (value_1 value_2 ... value_n)
+ */
 QString FileBuffer::getValues(const QString &variable)
-//===============================================================================
+//====================================================
 {
   Caret curPos(0,0);
   QString valueString="";
@@ -148,6 +175,9 @@ QString FileBuffer::getValues(const QString &variable)
   return valueString.simplifyWhiteSpace();
 }
 
+/**
+ * Remove values for a variable.
+ */
 void FileBuffer::removeValues(const QString &variable)
 //===============================================================================
 {
@@ -171,8 +201,11 @@ void FileBuffer::removeValues(const QString &variable)
   }
 }
 
+/**
+ * Loads a file into the buffer
+ */
 void FileBuffer::bufferFile(const QString &fileName)
-//===========================================
+//==================================================
 {
   m_buffer.clear();
   QFile dataFile(fileName);
@@ -190,8 +223,11 @@ void FileBuffer::bufferFile(const QString &fileName)
   dataFile.close();
 }
 
+/**
+ * Writes buffer to a file.
+ */
 void FileBuffer::saveBuffer(const QString &filename)
-//===========================================
+//==================================================
 {
   QFile dataFile(filename);
   QStringList writeBuffer = getBufferTextInDepth();
@@ -203,8 +239,14 @@ void FileBuffer::saveBuffer(const QString &filename)
   }
 }
 
+/**
+ * Create a new scope triggering the creation of new subBuffers.
+ * The method is recursive, thus the scope "n1:n2:n3" will create
+ * the subbuffer n1, and n1.makeScope is called with "n2:n3" etc.
+
+ */
 void FileBuffer::makeScope(const QString &scopeString)
-//=================================================
+//====================================================
 {
   FileBuffer *subBuffer;
   QString nextScopeName,scopeStringRest;
