@@ -35,7 +35,6 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   old_ldadd = ldadd.stripWhiteSpace();
   old_addit_flags = prj->getAdditCXXFLAGS().stripWhiteSpace();
   old_cxxflags = cxxflags.stripWhiteSpace();
-  old_makeoptions = prj->getMakeOptions().stripWhiteSpace();
 
   need_configure_in_update = false;
   need_makefile_generation = false;
@@ -1490,9 +1489,6 @@ void CPrjOptionsDlg::ok(){
   }
 
   prj_info->setMakeOptions (text);
-  if(old_makeoptions != prj_info->getMakeOptions().stripWhiteSpace()){
-    need_makefile_generation = true;
-  }
 
   // write it to the disk
   prj_info->writeProject();

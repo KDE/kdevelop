@@ -42,9 +42,9 @@ public:
   void reset();
 
   /** parse the string in the  make mode*/
-  void parseInMakeMode(QString makeoutput,QString startdir);
+  void parseInMakeMode(QString* makeoutput,QString startdir);
   /** parse the string in the  sgml2html mode*/
-  void parseInSgml2HtmlMode(QString sgmloutput,QString sgmlfile);
+  void parseInSgml2HtmlMode(QString* sgmloutput,QString sgmlfile);
   CErrorMessageParser::TEPMode getMode();
   
   /** get the error info for a specific line from the parse "makeoutput")*/

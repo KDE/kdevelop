@@ -23,6 +23,7 @@
 #include <kquickhelp.h>
 #include "../ckdevelop.h"
 #include "kdlgeditwidget.h"
+#include <qtooltip.h>
 
 #define btnsize 34
 
@@ -229,8 +230,8 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   #define macroAddButton(fn, wd, mt, ht) \
     addButton(QPixmap(KApplication::kde_datadir() + QString("/kdevelop/pics/mini/") + fn), wd, kdebtn); \
     connect(buttons[btnsCount-1], SIGNAL(clicked()), parent, SLOT(mt())); \
-    KQuickHelp::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht));
-
+    KQuickHelp::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht)); \
+  QToolTip::add(buttons[btnsCount-1],QString(wd));
   macroAddButton("kdlg_QWidget.xpm",        "QWidget",         clicked_QWidget        ,i18n(
                  "This will insert a QWidget to the dialog.\n"
                  "Such an item may have serveral children items\n"

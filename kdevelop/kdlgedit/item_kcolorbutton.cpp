@@ -76,7 +76,7 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   props->addProp("isMenuButton",   "false",        "General",        ALLOWED_BOOL);
   props->addProp("isAutoResize",   "false",        "General",        ALLOWED_BOOL);
   props->addProp("isAutoRepeat",   "false",        "General",        ALLOWED_BOOL);
-  props->addProp("DisplayedColor", "false",        "General",        ALLOWED_COLOR);
+  props->addProp("DisplayedColor", "",        "General",        ALLOWED_COLOR);
 
   props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }

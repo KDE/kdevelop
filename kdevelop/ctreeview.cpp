@@ -144,6 +144,10 @@ void CTreeView::mousePressEvent(QMouseEvent * event)
 		setSelected(item,true);
   }
   QListView::mousePressEvent( event );
+
+  // reset the saved mousebutton.
+  mouseBtn = NoButton;
+
 }
 
 /*********************************************************************

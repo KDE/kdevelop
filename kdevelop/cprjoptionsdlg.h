@@ -136,7 +136,6 @@ private:
   QString old_ldadd;
   QString old_addit_flags;
   QString old_cxxflags;
-  QString old_makeoptions;
   bool need_configure_in_update;
   bool need_makefile_generation;
   KFileDialog *filedialog;

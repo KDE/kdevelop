@@ -3,24 +3,24 @@
                              -------------------                                         
 
     begin                : 23 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
- ***************************************************************************/
+     copyright            : (C) 1998 by Sandy Meier
+     email                : smeier@rz.uni-potsdam.de
+  ***************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
- *                                                                         *
- ***************************************************************************/
-#ifndef CEDITWIDGET_H
-#define CEDITWIDGET_H
+ /***************************************************************************
+  *                                                                         *
+  *   This program is free software; you can redistribute it and/or modify  *
+  *   it under the terms of the GNU General Public License as published by  *
+  *   the Free Software Foundation; either version 2 of the License, or     *
+  *   (at your option) any later version.                                   *
+  *                                                                         *
+  ***************************************************************************/
+ #ifndef CEDITWIDGET_H
+  #define CEDITWIDGET_H
 
-//#include <keditcl.h>
-#include <kapp.h>
-#include <kspell.h>
+ //#include <keditcl.h>
+ #include <kapp.h>
+ #include <kspell.h>
 
 #include "./kwrite/kwview.h"
 /** an abstraction layer for an editwidget

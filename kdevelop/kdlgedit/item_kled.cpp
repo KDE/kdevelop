@@ -1,5 +1,5 @@
 /***************************************************************************
-                     item_kcombo.cpp  -  description
+                     item_kled.cpp  -  description
                              -------------------                                         
     begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
@@ -68,7 +68,7 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
-  props->addProp("LedColor",   "false",           "Appearance",        ALLOWED_COMBOLIST,  "Yellow\nOrange\nRed\nGreen\nBlue"  );
+  props->addProp("LedColor",   "Yellow",           "Appearance",        ALLOWED_COMBOLIST,  "Yellow\nOrange\nRed\nGreen\nBlue"  );
 
 }
 

@@ -119,7 +119,7 @@ void CKDevelop::refreshTrees(TFileInfo *info)
   }
 }
 
-void CKDevelop::switchToFile(QString filename){
+void CKDevelop::switchToFile(QString filename, bool bForceReload){
   lastfile = edit_widget->getName();
   lasttab = s_tab_view->getCurrentTab();
 
@@ -204,7 +204,7 @@ void CKDevelop::switchToFile(QString filename){
   }
   
   edit_widget->setFocus();
-  if (filename == edit_widget->getName()){
+  if (!bForceReload && filename == edit_widget->getName()){
     //    cerr << endl <<endl << "Filename:" << filename 
     // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
     return;
@@ -233,7 +233,19 @@ void CKDevelop::switchToFile(QString filename){
     if (info->filename == filename ) { // if found in list
       
       //      cerr << "******already****\n" << info->text << "**************\n";
-      edit_widget->setText(info->text);
+      if (bForceReload)
+      {
+	  QFileInfo fileinfo(filename);
+               edit_widget->clear();
+               edit_widget->loadFile(filename,1);
+               info->modified=false;
+               info->cursor_line=info->cursor_col=0;
+               info->text = edit_widget->text();
+      }
+      else
+      {
+         edit_widget->setText(info->text);
+      }
       edit_widget->setName(filename);
       edit_widget->toggleModified(info->modified);
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
@@ -273,7 +285,7 @@ void CKDevelop::switchToFile(QString filename){
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
-  switchToFile( filename );
+  switchToFile( filename, false);
   edit_widget->setCursorPosition( lineNo, 0 );
 }
 

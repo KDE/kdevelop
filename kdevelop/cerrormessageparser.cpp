@@ -29,7 +29,7 @@ CErrorMessageParser::CErrorMessageParser(){
 }
 CErrorMessageParser::~CErrorMessageParser(){
 }
-void  CErrorMessageParser::parseInSgml2HtmlMode(QString sgmloutput,QString sgmlfile){
+void  CErrorMessageParser::parseInSgml2HtmlMode(QString* sgmloutput,QString sgmlfile){
   if(!isOn()) return;
   QStrList outputlist;
   QString str;
@@ -40,9 +40,9 @@ void  CErrorMessageParser::parseInSgml2HtmlMode(QString sgmloutput,QString sgmlf
   
   // fill the outputlist
   while(next != -1){
-    next = sgmloutput.find('\n',pos);
+    next = sgmloutput->find('\n',pos);
     if(next != -1){
-      str = sgmloutput.mid(pos,next-pos);
+      str = sgmloutput->mid(pos,next-pos);
       outputlist.append(str);
     }
     pos = next+1;
@@ -75,7 +75,7 @@ void  CErrorMessageParser::parseInSgml2HtmlMode(QString sgmloutput,QString sgmlf
   out();
 //  cerr << endl << endl << ":::::::::";
 }
-void CErrorMessageParser::parseInMakeMode(QString makeoutput,QString startdir){
+void CErrorMessageParser::parseInMakeMode(QString* makeoutput,QString startdir){
   if(!isOn()) return;
   QStack<QString> stack;
   QStrList outputlist;
@@ -89,9 +89,9 @@ void CErrorMessageParser::parseInMakeMode(QString makeoutput,QString startdir){
   
   // fill the outputlist
   while(next != -1){
-    next = makeoutput.find('\n',pos);
+    next = makeoutput->find('\n',pos);
     if(next != -1){
-      str = makeoutput.mid(pos,next-pos);
+      str = makeoutput->mid(pos,next-pos);
       outputlist.append(str);
     }
     pos = next+1;

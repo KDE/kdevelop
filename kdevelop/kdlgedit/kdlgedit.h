@@ -85,6 +85,19 @@ void slotFileNew();
   void generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQListView(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKDatePicker(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKDateTable(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKKeyButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKLed(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKLedLamp(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKProgress(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKRestrictedLine(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKSeparator(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateKTreeList(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+
   void slotOpenDialog(QString file);
 protected:
   

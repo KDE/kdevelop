@@ -79,11 +79,12 @@ void CKDevelop::slotFileOpen(){
   else{
     str = KFileDialog::getOpenFileName(0,"*",this);
   }  
-  if (str.isEmpty()) return; //cancel
-  switchToFile(str);
-  
+  if (!str.isEmpty()) // nocancel
+  {
+    switchToFile(str);
+  }
+
   slotStatusMsg(i18n("Ready."));
-  
 }
 
 void CKDevelop::slotFileOpen( int id_ ){
@@ -111,7 +112,6 @@ void CKDevelop::slotFileClose(){
       if (filename=="Untitled.cpp" || filename=="Untitled.h")
       {
  	slotFileSaveAs();
-        slotViewRefresh();
       }
       else
         edit_widget->doSave();
@@ -195,48 +195,72 @@ void CKDevelop::slotFileSaveAs(){
   slotStatusMsg(i18n("Save file as..."));
   QString name;
   TEditInfo* actual_info;
-  if(project){
-    name = KFileDialog::getSaveFileName(prj->getProjectDir(),0,this,edit_widget->getName());
+  int message_result=-1; // this means no question of changing was needed
+
+  do
+  {
+    if(project){
+       name = KFileDialog::getSaveFileName(prj->getProjectDir(),0,this,edit_widget->getName());
+    }
+    else{
+      name = KFileDialog::getSaveFileName(0,0,this,edit_widget->getName());
+    }
+
+    if (name.isNull()){
+    // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
+     slotStatusMsg(i18n("Ready."));
+     return;
+    }
+
+    // check if the extension is changed and the widget or program to view must change
+    if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
+      message_result = KMsgBox::yesNoCancel(this,i18n("Save as new type of document?"),
+                                                                  i18n("Do you really want to save the file\n"
+                                                                  "as another type of document?"),
+                                                                  KMsgBox::QUESTION);
+
+  } while (message_result == 2); // repeat it on 'no'
+
+
+  if (message_result==3){
+     //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
+     slotStatusMsg(i18n("Ready."));
+     return;
   }
-  else{
-    name = KFileDialog::getSaveFileName(0,0,this,edit_widget->getName());
+
+
+   // search if we can find the new desired filename in edit_infos ...
+   // means already loaded
+  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+     if (actual_info->filename == name)
+     break; // found
   }
-  if (name.isNull()){
-//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
-    return;
+
+  // now that all cancel possibilities are handled simulate a changed file
+  // edit_widget->toggleModified(true);
+  edit_widget->doSave(name); // try the save
+
+  if (actual_info != 0l && name==edit_widget->getName())
+  {
+       // here we are ... saving the file with the same name
+       //   so only the modified-flags have to be changed
+       actual_info->modified = false;
+       edit_widget->toggleModified(false);
+       slotStatusMsg(i18n("Ready."));
+       return;
   }
-  else {
-    edit_widget->toggleModified(true);
-    edit_widget->doSave(name); // try the save
-    //     if (err == KEdit::KEDIT_OS_ERROR){
-    //  cerr << "error";
-    //  return; // no action
-    // }
-    // and now the modifications for the new file
-    //search the actual edit_info
-    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      if (actual_info->filename == edit_widget->getName()){ // found
-	
- 	//update the info-struct in the list
-	actual_info->filename = name;
-	actual_info->modified = false;
-	//update the widget
-	edit_widget->setName(name);
-	edit_widget->toggleModified(false);
-	//update the menu
-	QFileInfo fileinfo(name);
-	menu_buffers->changeItem(fileinfo.fileName(),actual_info->id);
-	//update kdevelop
-	setCaption(name);
-      }
-    } // end_for
-  } // end_else
+
+  // now open this file as new file in edit_infos
+  //    if an widget still contains the file then update the contents in the widget from file
+  switchToFile(name, true);
+  slotViewRefresh();
+
   slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileSaveAll(){
   // ok,its a dirty implementation  :-)
-  if(!bAutosave || saveTimer->isActive()){
+  if(!bAutosave || !saveTimer->isActive()){
     slotStatusMsg(i18n("Saving all changed files..."));
   }
   else{
@@ -277,20 +301,20 @@ void CKDevelop::slotFileSaveAll(){
 	statProg->setProgress(0);
 	int i=0;
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-//    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+    //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
     i++;
     statProg->setProgress(i);
     if(actual_info->modified){
       if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
       	switchToFile(actual_info->filename);
       	slotFileSaveAs();
-//      	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
-      	mod = true;
+     // 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
+//      	mod = true;  this is now handled by slotFileSaveAs()
       }
       else{
       	switchToFile(actual_info->filename);
       	edit_widget->doSave();
-//      	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
+     // 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
       	if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
       	  mod = true;
       }
@@ -302,11 +326,14 @@ void CKDevelop::slotFileSaveAll(){
     slotViewRefresh();
   }
   // switch back to visible file
-  switchToFile(visibleFile);
+  if (visibleTab == CPP || visibleTab == HEADER)
+  {
+    switchToFile(visibleFile);
+    view->repaint();
+  }
   view->setUpdatesEnabled(true);
   // switch back to visible tab
   s_tab_view->setCurrentTab(visibleTab);
-  view->repaint();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -317,7 +344,7 @@ void CKDevelop::slotFilePrint(){
 /*  if (s_tab_view->getCurrentTab() == BROWSER) {
   	file = browser_widget->currentURL();
   	CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus", TRUE);
-  	printerdlg->resize(600,480);
+ 	printerdlg->resize(600,480);
 	  printerdlg->exec();
   	delete (printerdlg);
   }
@@ -582,7 +609,7 @@ void CKDevelop::slotBuildCompileFile(){
   QFileInfo fileinfo(cpp_widget->getName());
   QDir::setCurrent(fileinfo.dirPath());
   // get the filename of the implementation file to compile and change extension for make
-//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
+  //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
 //  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
   process << make_cmd << fileinfo.baseName()+".o";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -1008,6 +1035,7 @@ void CKDevelop::slotOptionsAutosaveTime(int time){
     saveTimeout=30*60*1000;
     break;
   }
+  saveTimer->changeInterval(saveTimeout);
 }
 
 void CKDevelop::slotOptionsAutoswitch(bool autoswitch){
@@ -1114,7 +1142,7 @@ void CKDevelop::slotHelpBack(){
     history_list.next();
   }
 		
-//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
+  //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -1575,28 +1603,30 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
+  // QString str1 = messages_widget->text();
 
-  if(error_parser->getMode() == CErrorMessageParser::MAKE){
-    error_parser->parseInMakeMode(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
-  }
-  if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-    error_parser->parseInSgml2HtmlMode(messages_widget->text(),prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-  }
+//   if(error_parser->getMode() == CErrorMessageParser::MAKE){
+    
+//     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
+//   }
+//   if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+//     error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+//   }
 
-  //enable/disable the menus/toolbars
-  if(error_parser->hasNext()){
-    enableCommand(ID_VIEW_NEXT_ERROR);
-  }
-  else{
-    disableCommand(ID_VIEW_NEXT_ERROR);
-  }
+//   //enable/disable the menus/toolbars
+//   if(error_parser->hasNext()){
+//     enableCommand(ID_VIEW_NEXT_ERROR);
+//   }
+//   else{
+//     disableCommand(ID_VIEW_NEXT_ERROR);
+//   }
   
-  if(error_parser->hasPrev()){
-    enableCommand(ID_VIEW_PREVIOUS_ERROR);
-  }
-  else{
-    disableCommand(ID_VIEW_PREVIOUS_ERROR);
-  }
+//   if(error_parser->hasPrev()){
+//     enableCommand(ID_VIEW_PREVIOUS_ERROR);
+//   }
+//   else{
+//     disableCommand(ID_VIEW_PREVIOUS_ERROR);
+//   }
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
@@ -1604,28 +1634,28 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
+  // QString str1 = messages_widget->text();
+//   if(error_parser->getMode() == CErrorMessageParser::MAKE){
+//     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
+//   }
+//   if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+//     error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+//   }
 
-  if(error_parser->getMode() == CErrorMessageParser::MAKE){
-    error_parser->parseInMakeMode(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
-  }
-  if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-    error_parser->parseInSgml2HtmlMode(messages_widget->text(),prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-  }
-
-  //enable/disable the menus/toolbars
-  if(error_parser->hasNext()){
-    enableCommand(ID_VIEW_NEXT_ERROR);
-  }
-  else{
-    disableCommand(ID_VIEW_NEXT_ERROR);
-  }
+//   //enable/disable the menus/toolbars
+//   if(error_parser->hasNext()){
+//     enableCommand(ID_VIEW_NEXT_ERROR);
+//   }
+//   else{
+//     disableCommand(ID_VIEW_NEXT_ERROR);
+//   }
   
-  if(error_parser->hasPrev()){
-    enableCommand(ID_VIEW_PREVIOUS_ERROR);
-  }
-  else{
-    disableCommand(ID_VIEW_PREVIOUS_ERROR);
-  }
+//   if(error_parser->hasPrev()){
+//     enableCommand(ID_VIEW_PREVIOUS_ERROR);
+//   }
+//   else{
+//     disableCommand(ID_VIEW_PREVIOUS_ERROR);
+//   }
 }
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   int x,y;
@@ -1876,10 +1906,28 @@ void CKDevelop::slotProcessExited(KProcess* proc){
      messages_widget->cursorPosition(&x,&y);
     messages_widget->insertAt(result, x, y);
   }
+  if (ready){ // start the error-message parser
+    QString str1 = messages_widget->text();
+    
+    if(error_parser->getMode() == CErrorMessageParser::MAKE){
+      error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
+    }
+    if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+      error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+    }
+    //enable/disable the menus/toolbars
+    if(error_parser->hasNext()){
+      enableCommand(ID_VIEW_NEXT_ERROR);
+    }
+    else{
+      disableCommand(ID_VIEW_NEXT_ERROR);
+    }
+  }
   if(beep && ready){
     XBell(kapp->getDisplay(),100); //beep :-)
     beep = false;
   }
+  
 }
 
 

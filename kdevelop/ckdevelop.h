@@ -122,8 +122,10 @@ public:
 
   void switchToWorkspace(int id);
 
-  /**@param filename the absolute filename*/
-  void switchToFile(QString filename); // filename = abs
+  /**@param filename the absolute filename
+      @param bForceReload if true then enforce updating widget text from file
+   */
+  void switchToFile(QString filename, bool bForceReload=false); // filename = abs
 
   /** Switch to a certain line in a certain file.
    *  @param filename Absolute filename of the file to switch to.
