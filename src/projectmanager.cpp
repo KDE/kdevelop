@@ -440,7 +440,7 @@ void ProjectManager::getGeneralInfo()
 
 bool ProjectManager::loadProjectPart()
 {
-  KService::Ptr projectService = KService::serviceByName(m_info->m_projectPlugin);
+  KService::Ptr projectService = KService::serviceByDesktopName(m_info->m_projectPlugin);
   if (!projectService) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("No project management plugin %1 found.")

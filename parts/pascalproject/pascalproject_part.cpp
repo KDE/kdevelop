@@ -448,7 +448,7 @@ void PascalProjectPart::configWidget( KDialogBase * dlg )
 
 KDevCompilerOptions *PascalProjectPart::createCompilerOptions(const QString &name)
 {
-    KService::Ptr service = KService::serviceByName(name);
+    KService::Ptr service = KService::serviceByDesktopName(name);
     if (!service) {
         kdDebug() << "Can't find service " << name;
         return 0;

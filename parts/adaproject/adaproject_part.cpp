@@ -413,7 +413,7 @@ void AdaProjectPart::configWidget( KDialogBase * dlg )
 
 KDevCompilerOptions *AdaProjectPart::createCompilerOptions(const QString &name)
 {
-    KService::Ptr service = KService::serviceByName(name);
+    KService::Ptr service = KService::serviceByDesktopName(name);
     if (!service) {
         kdDebug() << "AdaProjectPart::createCompilerOptions can't find service " << name;
         return 0;

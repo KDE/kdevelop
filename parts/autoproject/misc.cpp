@@ -25,7 +25,7 @@
 
 static KDevCompilerOptions *createCompilerOptions( const QString &name, QObject *parent )
 {
-	KService::Ptr service = KService::serviceByName( name );
+	KService::Ptr service = KService::serviceByDesktopName( name );
 	if ( !service )
 	{
 		kdDebug( 9020 ) << "Can't find service " << name;

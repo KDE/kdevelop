@@ -216,7 +216,7 @@ void DiffWidget::loadExtPart( const QString& partName )
     extPart = 0;
   }
 
-  KService::Ptr extService = KService::serviceByName( partName );
+  KService::Ptr extService = KService::serviceByDesktopName( partName );
   if ( !extService )
     return;
 

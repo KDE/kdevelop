@@ -60,11 +60,11 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     cxxcompiler = DomUtil::readEntry(dom, prefix + "cxxcompiler");
     f77compiler = DomUtil::readEntry(dom, prefix + "f77compiler");
 
-    if (!KService::serviceByName(ccompiler))
+    if (!KService::serviceByDesktopName(ccompiler))
         cflags_button->setEnabled(false);
-    if (!KService::serviceByName(cxxcompiler))
+    if (!KService::serviceByDesktopName(cxxcompiler))
         cxxflags_button->setEnabled(false);
-    if (!KService::serviceByName(f77compiler))
+    if (!KService::serviceByDesktopName(f77compiler))
         fflags_button->setEnabled(false);
 
     insideinc_listview->header()->hide();
