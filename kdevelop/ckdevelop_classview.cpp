@@ -46,7 +46,7 @@
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewTree()
 {
-  class_tree->viewGraphicalTree();
+  m_class_tree->viewGraphicalTree();
 }
 
 /*--------------------------------- CKDevelop::slotClassChoiceCombo()
@@ -67,7 +67,7 @@ void CKDevelop::slotClassChoiceCombo(int index)
 
   if ( !classname.isEmpty() )
   {
-    aClass = class_tree->store->getClassByName( classname );
+    aClass = m_class_tree->store->getClassByName( classname );
     CVRefreshMethodCombo( aClass );
   }
 }
@@ -93,7 +93,7 @@ void CKDevelop::slotMethodChoiceCombo(int index)
   if( !methodname.isEmpty() )
   {
     // Make sure the next click on the wiz-button switch to declaration.
-    cv_decl_or_impl = true;
+    m_cv_decl_or_impl = true;
 
     // Switch to the method defintin
     CVGotoDefinition( classname, methodname, THPUBLIC_METHOD );
@@ -189,7 +189,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
   CParsedMethod *meth = NULL;
 
   // Fetch the current class.
-  aClass = class_tree->store->getClassByName( aClassName );
+  aClass = m_class_tree->store->getClassByName( aClassName );
 
   if( aMethod->isSignal )     // Signals
   {
@@ -277,10 +277,10 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
 
   // Add the declaration.
   //  EditorView* editor_view = getCurrentEditorView();
-  if(editor_view != 0){
-      editor_view->currentEditor()->insertAtLine( toAdd, atLine );
-      editor_view->currentEditor()->setCursorPosition( atLine, 0 );
-      editor_view->currentEditor()->toggleModified( true );
+  if(m_editor_view != 0){
+      m_editor_view->currentEditor()->insertAtLine( toAdd, atLine );
+      m_editor_view->currentEditor()->setCursorPosition( atLine, 0 );
+      m_editor_view->currentEditor()->toggleModified( true );
   }
 
   // Get the code for the .cpp file.
@@ -294,10 +294,10 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
     // Add the code to the file.
     aMethod->asCppCode( toAdd );
     //    EditorView* editor_view = getCurrentEditorView();
-    if(editor_view != 0){
-	editor_view->currentEditor()->append( toAdd );
-	editor_view->currentEditor()->setCursorPosition( editor_view->currentEditor()->lines() - 1, 0 );
-	editor_view->currentEditor()->toggleModified( true );
+    if(m_editor_view != 0){
+	m_editor_view->currentEditor()->append( toAdd );
+	m_editor_view->currentEditor()->setCursorPosition( m_editor_view->currentEditor()->lines() - 1, 0 );
+	m_editor_view->currentEditor()->toggleModified( true );
     }
   }
 }
@@ -327,7 +327,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   aAttr->setDeclaredInScope( aClassName );
 
   // Fetch the current class.
-  aClass = class_tree->store->getClassByName( aClassName );
+  aClass = m_class_tree->store->getClassByName( aClassName );
 
   // Find the line number of the last attribute that has
   // the same export as we want 
@@ -397,7 +397,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
     CParsedMethod *aMethod;
     int line;
     
-    aClass = class_tree->store->getClassByName( aClassName );
+    aClass = m_class_tree->store->getClassByName( aClassName );
     
     if( aClass != NULL ){
 	aMethod = aClass->getMethodByNameAndArg( aMethodName );
@@ -417,18 +417,18 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
 		    // Start by deleting the declaration.
 		    switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
 		    //		    EditorView* editor_view = getCurrentEditorView();
-		    if(editor_view != 0){
-			editor_view->currentEditor()->deleteInterval( aMethod->declaredOnLine, 
+		    if(m_editor_view != 0){
+			m_editor_view->currentEditor()->deleteInterval( aMethod->declaredOnLine,
 						     aMethod->declarationEndsOnLine );
 			
 			// Comment out the definition if it isn't a signal.
 			if( !aMethod->isSignal ){
 			    switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
-			    editor_view = getCurrentEditorView();
+			    m_editor_view = getCurrentEditorView();
 			    for( line = aMethod->definedOnLine; 
 				 line <= aMethod->definitionEndsOnLine;
 				 line++ )
-				editor_view->currentEditor()->insertAtLine( i18n("//Del by KDevelop: "), line );
+				m_editor_view->currentEditor()->insertAtLine( i18n("//Del by KDevelop: "), line );
 			}
 		    }
 		}
@@ -547,7 +547,7 @@ void CKDevelop::CVGotoDefinition( const char *className,
       }
       break;
     case THGLOBAL_FUNCTION:
-      aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
+      aMethod = m_class_tree->store->globalContainer.getMethodByNameAndArg( declName );
       break;
     default:
       debug( "Unknown type %d in CVGotoDefinition.", type );
@@ -589,7 +589,7 @@ void CKDevelop::CVGotoDeclaration( const char *className,
       if( aClass != NULL )
         aClass->getStructByName( declName );
       else
-        aStruct = class_tree->store->globalContainer.getStructByName( declName );
+        aStruct = m_class_tree->store->globalContainer.getStructByName( declName );
 
       toFile = aStruct->declaredInFile;
       toLine = aStruct->declaredOnLine;
@@ -601,7 +601,7 @@ void CKDevelop::CVGotoDeclaration( const char *className,
         aAttr = aClass->getAttributeByName( declName );
       else
       {
-        aStruct = class_tree->store->globalContainer.getStructByName( className );
+        aStruct = m_class_tree->store->globalContainer.getStructByName( className );
         if( aStruct != NULL )
           aAttr = aStruct->getAttributeByName( declName );
       }
@@ -624,10 +624,10 @@ void CKDevelop::CVGotoDeclaration( const char *className,
       aAttr = aClass->getSignalByNameAndArg( declName );
       break;
     case THGLOBAL_FUNCTION:
-      aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
+      aAttr = m_class_tree->store->globalContainer.getMethodByNameAndArg( declName );
       break;
     case THGLOBAL_VARIABLE:
-      aAttr = class_tree->store->globalContainer.getAttributeByName( declName );
+      aAttr = m_class_tree->store->globalContainer.getAttributeByName( declName );
       break;
     default:
       debug( "Unknown type %d in CVGotoDeclaration.", type );
@@ -673,7 +673,7 @@ void CKDevelop::CVRefreshClassCombo()
   classCombo->clear();
 
   // Add all classes.
-  classList = class_tree->store->getSortedClassList();
+  classList = m_class_tree->store->getSortedClassList();
   for( aClass = classList->first(),i=0;
        aClass != NULL;
        aClass = classList->next(), i++ )
@@ -685,7 +685,7 @@ void CKDevelop::CVRefreshClassCombo()
   delete classList;
 
   // Update the method combo with the class from the classcombo.
-  aClass = class_tree->store->getClassByName( savedClass );
+  aClass = m_class_tree->store->getClassByName( savedClass );
   if( aClass && savedIdx != -1 )
   {
     classCombo->setCurrentItem( savedIdx );
@@ -765,7 +765,7 @@ CParsedClass *CKDevelop::CVGetClass( const char *className )
   if( className != NULL && strlen( className ) > 0 )
   {
     // Try to fetch the class.
-    aClass = class_tree->store->getClassByName( className );
+    aClass = m_class_tree->store->getClassByName( className );
 
     // If we found the class and it isn't a subclass we update the combo.
     if( aClass != NULL && !aClass->isSubClass )

@@ -54,11 +54,11 @@ void CKDevelop::slotProjectImport()
 
 bool CKDevelop::slotProjectClose(){
     slotStatusMsg(i18n("Closing project..."));
-    log_file_tree->storeState(prj);
+    m_log_file_tree->storeState(m_prj);
     bool cont;
     cont = slotFileCloseAll();
     if(cont){
-	if(!bKDevelop){
+	if(!m_bKDevelop){
 	    switchToKDevelop();
 	}
 	ComponentManager::self()->notifyProjectClosed(); // notify all components
@@ -68,12 +68,12 @@ bool CKDevelop::slotProjectClose(){
 	toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
        
     
-	// set project to false and disable all ID_s related to project=true	
-	prj->writeProject();
-	project=false;
-	prj->valid = false;
-	delete prj;
-	prj = 0;
+	// set m_project to false and disable all ID_s related to m_project=true	
+	m_prj->writeProject();
+	m_project=false;
+	m_prj->valid = false;
+	delete m_prj;
+	m_prj = 0;
 	
 	
 	disableCommand(ID_FILE_NEW);
@@ -101,8 +101,8 @@ bool CKDevelop::slotProjectClose(){
 	disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
   	disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
 	
-	file_open_popup->clear();
-	file_open_list.clear();
+	m_file_open_popup->clear();
+	m_file_open_list.clear();
     }
     
     slotStatusMsg(i18n("Ready."));
@@ -129,7 +129,7 @@ void CKDevelop::slotAddExistingFiles(){
   bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
   QString token;
   QStrList files;
-  QString str_files = add_dlg->source_edit->text(); 
+  QString str_files = m_add_dlg->source_edit->text();
   StringTokenizer str_token;
     
   str_token.tokenize(str_files,",");
@@ -137,7 +137,7 @@ void CKDevelop::slotAddExistingFiles(){
     token = str_token.nextToken();
     files.append(token);
   }
-  QString dest = add_dlg->destination_edit->text();
+  QString dest = m_add_dlg->destination_edit->text();
   if(dest.right(1) != "/"){ // I hope it works now -Sandy
     dest = dest + "/";
   }
@@ -175,16 +175,16 @@ void CKDevelop::slotAddExistingFiles(){
       KShellProcess process("/bin/sh");
       process << "cat"; // copy is your friend :-) ...cat, too
 
-      if (add_dlg->isTemplateChecked())
+      if (m_add_dlg->isTemplateChecked())
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
-         temp_template = genfile.genHeaderFile(locate("appdata","temp_template"), prj,fi.fileName());
+         temp_template = genfile.genHeaderFile(locate("appdata","temp_template"), m_prj,fi.fileName());
          process << temp_template;
         }
         else if (CProject::getType(file)==CPP_SOURCE)
               {
-               temp_template = genfile.genCPPFile(locate("appdata","temp_template"), prj, fi.fileName());
+               temp_template = genfile.genCPPFile(locate("appdata","temp_template"), m_prj, fi.fileName());
                process << temp_template;
               }
       }
@@ -223,16 +223,16 @@ void CKDevelop::slotAddExistingFiles(){
 
       fi.setFile(file);
 
-      if (add_dlg->isTemplateChecked())
+      if (m_add_dlg->isTemplateChecked())
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
-         temp_template = genfile.genHeaderFile(locate("appdata","temp_template"), prj,fi.fileName());
+         temp_template = genfile.genHeaderFile(locate("appdata","temp_template"), m_prj,fi.fileName());
          process << temp_template;
         }
         else if (CProject::getType(file)==CPP_SOURCE)
               {
-               temp_template = genfile.genCPPFile(locate("appdata","temp_template"), prj, fi.fileName());
+               temp_template = genfile.genCPPFile(locate("appdata","temp_template"), m_prj, fi.fileName());
                process << temp_template;
               }
       }
@@ -253,60 +253,60 @@ void CKDevelop::slotAddExistingFiles(){
     newSubDir();
   }
 
-  delete add_dlg;
+  delete m_add_dlg;
 }
 
 void CKDevelop::slotProjectAddExistingFiles(){
-  add_dlg = new CAddExistingFileDlg(this,"test",prj);
+  m_add_dlg = new CAddExistingFileDlg(this,"test",m_prj);
 
-  add_dlg->destination_edit->setText(prj->getProjectDir()+ prj->getSubDir());
+  m_add_dlg->destination_edit->setText(m_prj->getProjectDir()+ m_prj->getSubDir());
 
-  if(add_dlg->exec()){
+  if(m_add_dlg->exec()){
     QTimer::singleShot(100,this,SLOT(slotAddExistingFiles()));
   }
 }
 
 void CKDevelop::slotProjectRemoveFile(){
-    QString name = log_file_tree->currentItem()->text(0);
+    QString name = m_log_file_tree->currentItem()->text(0);
     delFileFromProject(name);
 }
 
 void CKDevelop::slotProjectOptions(){
-  CPrjOptionsDlg prjdlg(this,"optdialog",prj);
+  CPrjOptionsDlg prjdlg(this,"optdialog",m_prj);
   
-  QString args=prj->getConfigureArgs();
+  QString args=m_prj->getConfigureArgs();
 
   if(prjdlg.exec()){
     if (prjdlg.needConfigureInUpdate()){
-      prj->updateConfigureIn();
+      m_prj->updateConfigureIn();
       KMessageBox::information(0, i18n("You have modified the projectversion.\n"
                                        "We will regenerate all Makefiles now."));
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running automake/autoconf and configure..."));
       showOutputView(true);
-      messages_widget->prepareJob(prj->getProjectDir());
-      (*messages_widget) << make_cmd << " -f Makefile.dist  && ";
-      (*messages_widget) << prj->getCompilationEnvironment();
-      (*messages_widget) << " ./configure" << args;
+      m_messages_widget->prepareJob(m_prj->getProjectDir());
+      (*m_messages_widget) << m_make_cmd << " -f Makefile.dist  && ";
+      (*m_messages_widget) << m_prj->getCompilationEnvironment();
+      (*m_messages_widget) << " ./configure" << args;
 
-      messages_widget->startJob();
+      m_messages_widget->startJob();
       return;
     }
     if(prjdlg.needMakefileUpdate()){
-      prj->updateMakefilesAm();
+      m_prj->updateMakefilesAm();
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running configure..."));
       showOutputView(true);
-      messages_widget->prepareJob(prj->getProjectDir());
-      (*messages_widget) << prj->getCompilationEnvironment();
-      (*messages_widget) << " ./configure "  << args;
-      messages_widget->startJob();
+      m_messages_widget->prepareJob(m_prj->getProjectDir());
+      (*m_messages_widget) << m_prj->getCompilationEnvironment();
+      (*m_messages_widget) << " ./configure "  << args;
+      m_messages_widget->startJob();
     }
   }
   
 }
 void CKDevelop::slotProjectNewClass(){
-  CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",prj);
+  CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",m_prj);
   if(dlg->exec()){
     QString source_file=dlg->getImplFile() ;
     QString header_file=dlg->getHeaderFile();
@@ -315,34 +315,34 @@ void CKDevelop::slotProjectNewClass(){
 
     QFileInfo header_info(header_file);
     QFileInfo source_info(source_file);
-    QString header_relname = prj->getSubDir() + header_info.fileName();
-    QString source_relname = prj->getSubDir() + source_info.fileName();
+    QString header_relname = m_prj->getSubDir() + header_info.fileName();
+    QString source_relname = m_prj->getSubDir() + source_info.fileName();
     TFileInfo file_info;
     file_info.rel_name = source_relname;
     file_info.type = CPP_SOURCE;
     file_info.dist = true;
     file_info.install = false;
-    prj->addFileToProject(source_relname, file_info);
+    m_prj->addFileToProject(source_relname, file_info);
     ComponentManager::self()->notifyAddedFileToProject(source_relname);
     
     file_info.rel_name = header_relname;
     file_info.type = CPP_HEADER;
     file_info.dist = true;
     file_info.install = false;
-    prj->addFileToProject(header_relname, file_info);
+    m_prj->addFileToProject(header_relname, file_info);
     ComponentManager::self()->notifyAddedFileToProject(header_relname);
    
-    prj->updateMakefilesAm();
+    m_prj->updateMakefilesAm();
   }
 }
 
 void CKDevelop::slotProjectFileProperties(){
-  CFilePropDlg dlg(this,"DLG",prj);
+  CFilePropDlg dlg(this,"DLG",m_prj);
   dlg.show();
 }
 
 void CKDevelop::slotShowFileProperties(QString rel_name){
-  CFilePropDlg dlg(this,"DLG",prj,rel_name);
+  CFilePropDlg dlg(this,"DLG",m_prj,rel_name);
   dlg.show();
 }
 
@@ -357,7 +357,7 @@ void CKDevelop::slotProjectOpen(){
   if (filename.isEmpty())
       return;
   
-  if (project && !slotProjectClose())
+  if (m_project && !slotProjectClose())
       return;
  
   QFileInfo info(filename.path());
@@ -367,7 +367,7 @@ void CKDevelop::slotProjectOpen(){
     KMessageBox::sorry(0, i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
                                "Please use only new generated projects!"));
     }
-    ComponentManager::self()->notifyProjectOpened(prj);
+    ComponentManager::self()->notifyProjectOpened(m_prj);
     slotStatusMsg(i18n("Ready."));
   }	
   
@@ -375,11 +375,11 @@ void CKDevelop::slotProjectOpen(){
 
 void CKDevelop::slotProjectOpenRecent(int id_)
 {
-  slotProjectOpenCmdl(recent_projects.at(id_));
+  slotProjectOpenCmdl(m_recent_projects.at(id_));
 }
 
 void CKDevelop::slotProjectOpenCmdl(QString prjname){
-  if (project && !slotProjectClose())
+  if (m_project && !slotProjectClose())
       return;
  
   prjname.replace(QRegExp("file:"),"");
@@ -390,7 +390,7 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname){
       KMessageBox::sorry(0, "This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
                          "Please use only new generated projects!");
     }
-    ComponentManager::self()->notifyProjectOpened(prj);
+    ComponentManager::self()->notifyProjectOpened(m_prj);
     slotStatusMsg(i18n("Ready."));
   }	
 }
@@ -406,29 +406,29 @@ void CKDevelop::slotProjectNewAppl(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
-  if(project){
-    old_project = prj->getProjectFile();
+  if(m_project){
+    old_project = m_prj->getProjectFile();
     if(!slotProjectClose()){
       return;
     }
   }
   
   slotStatusMsg(i18n("Creating a new frame application..."));
-  config->setGroup("General Options");
-  CKAppWizard kappw(this,"zutuz",config->readEntry("author_name",""),
-		    config->readEntry("author_email",""));
+  m_config->setGroup("General Options");
+  CKAppWizard kappw(this,"zutuz",m_config->readEntry("author_name",""),
+		    m_config->readEntry("author_email",""));
   
   
   kappw.exec();
   QString file = kappw.getProjectFile();
   
   if(kappw.generatedProject()){
-    config->setGroup("General Options");
-    config->writeEntry("author_name",kappw.getAuthorName());
-    config->writeEntry("author_email",kappw.getAuthorEmail());
-    config->sync();
+    m_config->setGroup("General Options");
+    m_config->writeEntry("author_name",kappw.getAuthorName());
+    m_config->writeEntry("author_email",kappw.getAuthorEmail());
+    m_config->sync();
     readProjectFile(file);
-    if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde") {
+    if (m_prj->getProjectType() == "normal_kde" || m_prj->getProjectType() == "mini_kde") {
       slotProjectMessages();
     }
   }
@@ -443,10 +443,10 @@ void CKDevelop::slotProjectNewAppl(){
 
 
 void CKDevelop::slotProjectAddNewTranslationFile(){
-  CAddNewTranslationDlg dlg(this,0,prj);
+  CAddNewTranslationDlg dlg(this,0,m_prj);
   if (dlg.exec()){
     QString rel_name = "po/" + dlg.getLangFile();
-    QString file = prj->getProjectDir() + rel_name;
+    QString file = m_prj->getProjectDir() + rel_name;
     QFile nfile(file); // create a empty file
     nfile.open(IO_WriteOnly);
     nfile.close();
@@ -457,11 +457,11 @@ void CKDevelop::slotProjectAddNewTranslationFile(){
     info.dist = false;
     info.install = false;
     info.install_location = "";
-    (void) prj->addFileToProject(rel_name, info);
+    (void) m_prj->addFileToProject(rel_name, info);
     ComponentManager::self()->notifyAddedFileToProject(rel_name);
 
-    prj->writeProject();
-    prj->updateMakefilesAm();
+    m_prj->writeProject();
+    m_prj->updateMakefilesAm();
     slotProjectMessages();
   }
 }
@@ -472,9 +472,9 @@ void CKDevelop::slotAddFileToProject(QString abs_filename){
 
   // Parse the file if it's a sourcefile.
   if( type == CPP_SOURCE || type == CPP_HEADER )
-    class_tree->addFile( abs_filename );
+    m_class_tree->addFile( abs_filename );
 
-  log_file_tree->refresh( prj );
+  m_log_file_tree->refresh( m_prj );
 }
 
 void CKDevelop::slotProjectMessages(){
@@ -485,10 +485,10 @@ void CKDevelop::slotProjectMessages(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating pot-file in /po..."));
-  messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
-  (*messages_widget) << make_cmd << " messages &&  cd ../po && make merge";
-  messages_widget->startJob();
-  beep = true;
+  m_messages_widget->prepareJob(m_prj->getProjectDir() + m_prj->getSubDir());
+  (*m_messages_widget) << m_make_cmd << " messages &&  cd ../po && make merge";
+  m_messages_widget->startJob();
+  m_beep = true;
 }
 
 void CKDevelop::slotProjectAPI(){
@@ -500,12 +500,12 @@ void CKDevelop::slotProjectAPI(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
-  messages_widget->clear();
+  m_messages_widget->clear();
 
-  config->setGroup("Doc_Location");
-  QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
+  m_config->setGroup("Doc_Location");
+  QString idx_path = m_config->readEntry("kdoc_index", KDOC_INDEXDIR);
   if (idx_path.isEmpty())
-      idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+      idx_path = m_config->readEntry("doc_kde", KDELIBS_DOCDIR)
           + "/kdoc-reference";
   QString link;
   if ( QFileInfo(idx_path + "/qt.kdoc").exists() ||
@@ -516,11 +516,11 @@ void CKDevelop::slotProjectAPI(){
        QFileInfo(idx_path + "/kdecore.kdoc.gz").exists() )
       link += "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
 
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+  QDir::setCurrent(m_prj->getProjectDir() + m_prj->getSubDir());
   int dirlength = QDir::currentDirPath().length()+1;
 
   QString sources;
-  QStrList headerlist(prj->getHeaders());
+  QStrList headerlist(m_prj->getHeaders());
   QStrListIterator it(headerlist);
   for (; it.current(); ++it)
       {
@@ -530,47 +530,47 @@ void CKDevelop::slotProjectAPI(){
           sources += " ";
       }
 
-  messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
-  (*messages_widget) << "kdoc";
-  (*messages_widget) << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+  m_messages_widget->prepareJob(m_prj->getProjectDir() + m_prj->getSubDir());
+  (*m_messages_widget) << "kdoc";
+  (*m_messages_widget) << "-p -d" + m_prj->getProjectDir() + m_prj->getSubDir() +  "api";
   if (!sources.isEmpty())
-      (*messages_widget) << sources;
+      (*m_messages_widget) << sources;
   if (!link.isEmpty())
       {
-          (*messages_widget) << ("-L" + idx_path);
-          (*messages_widget) << link;
+          (*m_messages_widget) << ("-L" + idx_path);
+          (*m_messages_widget) << link;
       }
 
-  messages_widget->startJob();
+  m_messages_widget->startJob();
 }
 
 
 void CKDevelop::slotProjectManual(){
 
-	CMakeManualDlg dlg(this,"tesr",prj->getSGMLFile());
+	CMakeManualDlg dlg(this,"tesr",m_prj->getSGMLFile());
   if(dlg.exec()){
 
 		showOutputView(true);
 		setToolMenuProcess(false);
 		//  slotFileSaveAll();
 		slotStatusMsg(i18n("Creating project Manual..."));
-		messages_widget->clear();
+		m_messages_widget->clear();
 
 		if((dlg.file).right(8) == ".docbook"){
 			QFileInfo info(dlg.file);
 			if(!CToolClass::searchProgram("db2html"))
 	    	return;
 			
-			messages_widget->prepareJob(info.dirPath());
-			(*messages_widget) << "db2html -d /usr/lib/sgml/stylesheets/kde.dsl ";
-			(*messages_widget) << info.absFilePath();
-			messages_widget->startJob();
+			m_messages_widget->prepareJob(info.dirPath());
+			(*m_messages_widget) << "db2html -d /usr/lib/sgml/stylesheets/kde.dsl ";
+			(*m_messages_widget) << info.absFilePath();
+			m_messages_widget->startJob();
 
 		}
 		else{
 			bool ksgml = true;
 			if(dlg.program == "sgml2html") ksgml = false;
-			prj->setSGMLFile(dlg.file);
+			m_prj->setSGMLFile(dlg.file);
 			CGenerateNewFile generator;
 			QFileInfo info(dlg.file);
 
@@ -580,29 +580,29 @@ void CKDevelop::slotProjectManual(){
 					generator.genNifFile(nif_file);
 				}
 			}
-			messages_widget->prepareJob(info.dirPath());
+			m_messages_widget->prepareJob(info.dirPath());
 			if(ksgml){
-				(*messages_widget) << "ksgml2html";
-				(*messages_widget) << info.fileName();
-				(*messages_widget) << "en";
+				(*m_messages_widget) << "ksgml2html";
+				(*m_messages_widget) << info.fileName();
+				(*m_messages_widget) << "en";
 			}
 			else{
-				(*messages_widget) << "sgml2html";
-				(*messages_widget) << info.fileName();
+				(*m_messages_widget) << "sgml2html";
+				(*m_messages_widget) << info.fileName();
 			}
-			messages_widget->startJob();
+			m_messages_widget->startJob();
 		}
 	}
 }
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+  if(!m_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
 /*    QValueList<int> sizes;
     sizes << output_view_pos;
     view->setSizes(sizes);
 */
-    dockbase_o_tab_view->show();
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    m_dockbase_o_tab_view->show();
+    m_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 /*    QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -612,11 +612,11 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make dist..."));
-  messages_widget->clear();
-  messages_widget->prepareJob(prj->getProjectDir());
-  (*messages_widget) << make_cmd << " dist";
-  messages_widget->startJob();
-  beep = true;
+  m_messages_widget->clear();
+  m_messages_widget->prepareJob(m_prj->getProjectDir());
+  (*m_messages_widget) << m_make_cmd << " dist";
+  m_messages_widget->startJob();
+  m_beep = true;
 }
 
 /*********************************************************************
@@ -639,7 +639,7 @@ void CKDevelop::newFile(bool add_to_project){
   ProjectFileType type;
   bool new_subdir=false;
   QString complete_filename;
-  CNewFileDlg dlg(this,"test",true,0,prj);
+  CNewFileDlg dlg(this,"test",true,0,m_prj);
 
   dlg.setUseTemplate();
   if (add_to_project){
@@ -689,8 +689,8 @@ bool CKDevelop::addFileToProject(QString complete_filename,
   rel_name.replace(QRegExp("///"),"/"); // remove ///
   rel_name.replace(QRegExp("//"),"/"); // remove //
 		   
-  rel_name.remove(0,prj->getProjectDir().length());
-  //  rel_name.replace(QRegExp(prj->getProjectDir()),"");
+  rel_name.remove(0,m_prj->getProjectDir().length());
+  //  rel_name.replace(QRegExp(m_prj->getProjectDir()),"");
   
   TFileInfo info;
   if( type == KDEV_DIALOG){
@@ -702,7 +702,7 @@ bool CKDevelop::addFileToProject(QString complete_filename,
     //...
     dinfo.is_toplevel_dialog = true;
     
-    new_subdir = prj->addDialogFileToProject(dinfo.rel_name,dinfo);
+    new_subdir = m_prj->addDialogFileToProject(dinfo.rel_name,dinfo);
     
     
     info.rel_name = rel_name;
@@ -714,12 +714,12 @@ bool CKDevelop::addFileToProject(QString complete_filename,
     
     info.install=false;
     info.install_location = "";
-    new_subdir = prj->addFileToProject(rel_name,info);
+    new_subdir = m_prj->addFileToProject(rel_name,info);
     
     
   }
-  prj->writeProject();
-  prj->updateMakefilesAm();
+  m_prj->writeProject();
+  m_prj->updateMakefilesAm();
   
   if(refresh)
     refreshTrees(&info);
@@ -729,8 +729,8 @@ bool CKDevelop::addFileToProject(QString complete_filename,
 
 void CKDevelop::delFileFromProject(QString rel_filename){
 
-  prj->removeFileFromProject(rel_filename);
-  prj->writeProject();
+  m_prj->removeFileFromProject(rel_filename);
+  m_prj->writeProject();
   ComponentManager::self()->notifyRemovedFileFromProject(rel_filename);
 
   // ### Should be removed:
@@ -741,22 +741,22 @@ bool CKDevelop::readProjectFile(QString file){
     QString str;
     QString extension;
     
-    prj = new CProject(file);
-    if(!(prj->readProject())){
+    m_prj = new CProject(file);
+    if(!(m_prj->readProject())){
 	return false;
     }
     else {
-	project=true;
+	m_project=true;
     }
     
     
     
-    extension=(prj->getProjectType()=="normal_c") ? "c" : "cpp";
-    str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
+    extension=(m_prj->getProjectType()=="normal_c") ? "c" : "cpp";
+    str = m_prj->getProjectDir() + m_prj->getSubDir() + m_prj->getProjectName().lower() + ".h";
     if(QFile::exists(str)){
 	switchToFile(str);
     }
-    str = prj->getProjectDir() + prj->getSubDir() + "main."+extension;
+    str = m_prj->getProjectDir() + m_prj->getSubDir() + "main."+extension;
     if(QFile::exists(str)){
 	switchToFile(str);
     }
@@ -775,16 +775,16 @@ bool CKDevelop::readProjectFile(QString file){
     enableCommand(ID_PROJECT_CLOSE);
     enableCommand(ID_PROJECT_ADD_FILE_EXIST);
     
-    if(prj->isKDEProject() || prj->isQtProject()){
+    if(m_prj->isKDEProject() || m_prj->isQtProject()){
     }
     
-    if (prj->isKDEProject()){
+    if (m_prj->isKDEProject()){
 	enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
     }
     else{
 	disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
     }
-    if(prj->isCustomProject()){
+    if(m_prj->isCustomProject()){
 	disableCommand(ID_PROJECT_FILE_PROPERTIES);
 	enableCommand(ID_PROJECT_OPTIONS);
     }
@@ -798,7 +798,7 @@ bool CKDevelop::readProjectFile(QString file){
     enableCommand(ID_BUILD_AUTOCONF);
     enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
     
-    if (prj->getProjectType()!="normal_c")  // activate class wizard unless it is a normal C project
+    if (m_prj->getProjectType()!="normal_c")  // activate class wizard unless it is a normal C project
 	{
 	    enableCommand(ID_PROJECT_NEW_CLASS);
 	    enableCommand(ID_CV_WIZARD);
@@ -812,17 +812,17 @@ bool CKDevelop::readProjectFile(QString file){
 }
 
 void CKDevelop::newSubDir(){
-  if(prj->getProjectType() == "normal_empty"){
+  if(m_prj->getProjectType() == "normal_empty"){
     return; // no makefile handling
   }
   KMessageBox::information(0, i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."));
   setToolMenuProcess(false);
   slotStatusMsg(i18n("Running automake/autoconf and configure..."));
   showOutputView(true);
-  messages_widget->prepareJob(prj->getProjectDir());
-  (*messages_widget) << prj->getCompilationEnvironment();
-  (*messages_widget) << make_cmd << " -f Makefile.dist  && ./configure" << prj->getConfigureArgs();
+  m_messages_widget->prepareJob(m_prj->getProjectDir());
+  (*m_messages_widget) << m_prj->getCompilationEnvironment();
+  (*m_messages_widget) << m_make_cmd << " -f Makefile.dist  && ./configure" << m_prj->getConfigureArgs();
 
-  messages_widget->startJob();
+  m_messages_widget->startJob();
 }
 

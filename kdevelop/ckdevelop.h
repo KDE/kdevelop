@@ -157,7 +157,7 @@ public:
   void setToolMenuProcess(bool enable);
 
   /** Get the current project. */
-  CProject* getProject()                 {return prj;}
+  CProject* getProject()                 {return m_prj;}
 
   /** do something more when resizing */
   void resizeEvent(QResizeEvent* rse);
@@ -651,66 +651,66 @@ protected:
 
 private:
   //the menus for kdevelop main
-  QPopupMenu* file_menu;				
-  QPopupMenu* recent_projects_menu;
-  KGuiCmdPopup* edit_menu;
-  KGuiCmdPopup* view_menu;
-  QPopupMenu* bookmarks_menu;
-  QPopupMenu* doc_bookmarks;
-  QPopupMenu* debugger_views_menu;
+  QPopupMenu* m_file_menu;				
+  QPopupMenu* m_recent_projects_menu;
+  KGuiCmdPopup* m_edit_menu;
+  KGuiCmdPopup* m_view_menu;
+  QPopupMenu* m_bookmarks_menu;
+  QPopupMenu* m_doc_bookmarks;
+  QPopupMenu* m_debugger_views_menu;
 
-  QPopupMenu* project_menu;
-  QPopupMenu* build_menu;
-  QPopupMenu* tools_menu;
-  QPopupMenu* options_menu;
-  QPopupMenu* plugin_menu;
-  QPopupMenu* help_menu;
-    //  QWhatsThis* whats_this;
+  QPopupMenu* m_project_menu;
+  QPopupMenu* m_build_menu;
+  QPopupMenu* m_tools_menu;
+  QPopupMenu* m_options_menu;
+  QPopupMenu* m_plugin_menu;
+  QPopupMenu* m_help_menu;
+    //  QWhatsThis* m_whats_this;
 	
-  QPopupMenu* history_prev;
-  QPopupMenu* history_next;
-  QPopupMenu* file_open_popup;
+  QPopupMenu* m_history_prev;
+  QPopupMenu* m_history_next;
+  QPopupMenu* m_file_open_popup;
   /** Popup menu for the classbrowser wizard button. */
-  QPopupMenu* classbrowser_popup;
+  QPopupMenu* m_classbrowser_popup;
 
   /** Tells if the next click on the classwizard toolbar button should show
    * the declaration or the definition of the selected item. */
-  bool cv_decl_or_impl;
+  bool m_cv_decl_or_impl;
 
-  QStrList file_open_list;	
+  QStrList m_file_open_list;	
   
-  QStrList tools_exe;
-  QStrList tools_entry;
-  QStrList tools_argument;
+  QStrList m_tools_exe;
+  QStrList m_tools_entry;
+  QStrList m_tools_argument;
   	
-  KGuiCmdDispatcher *kdev_dispatcher;
-  KMenuBar* kdev_menubar;
-  KStatusBar* kdev_statusbar;
+  KGuiCmdDispatcher *m_kdev_dispatcher;
+  KMenuBar* m_kdev_menubar;
+  KStatusBar* m_kdev_statusbar;
 
-  DlgEdit* dlgedit;
+  DlgEdit* m_dlgedit;
   /** If this to true, the user get a beep after a 
    *  process,slotProcessExited() */
-  bool beep; 
+  bool m_beep;
   
 
 
-  KIconLoader icon_loader;
+  KIconLoader m_icon_loader;
 
   /** search with glimpse */
-  KShellProcess search_process;
+  KShellProcess m_search_process;
   /** at the moment only one project at the same time */
-  CProject* prj;
+  CProject* m_prj;
 
-  CKDevAccel *accel;
-  KConfig* config;
-  int act_outbuffer_len;
+  CKDevAccel *m_accel;
+  KConfig* m_config;
+  int m_act_outbuffer_len;
 
-  QStrList recent_projects;
+  QStrList m_recent_projects;
   // for the browser
-  QStrList history_list;
-  QStrList history_title_list;
-  QStrList doc_bookmarks_list;
-  QStrList doc_bookmarks_title_list;
+  QStrList m_history_list;
+  QStrList m_history_title_list;
+  QStrList m_doc_bookmarks_list;
+  QStrList m_doc_bookmarks_title_list;
 	
 
   ///////////////////////////////
@@ -718,100 +718,100 @@ private:
   ///////////////////////////////
 
   /** The tabbar for the trees. */
-  KDockWidget* dockbase_t_tab_view;
+  KDockWidget* m_dockbase_t_tab_view;
   /** The tabbar for the output_widgets. */
-  KDockWidget* dockbase_o_tab_view;
+  KDockWidget* m_dockbase_o_tab_view;
 
-  KDockWidget* dockbase_mdi_main_frame;
-  MdiFrame* mdi_main_frame;
+  KDockWidget* m_dockbase_mdi_main_frame;
+  MdiFrame* m_mdi_main_frame;
 
   /** the current editor view or 0*/
-  EditorView* editor_view;
-  DocBrowserView* browser_view;
+  EditorView* m_editor_view;
+  DocBrowserView* m_browser_view;
 
   
-  //  CEditWidget* edit_widget; // a pointer to the actual editwidget
-  //  CEditWidget* header_widget; // the editwidget for the headers/resources
-  //CEditWidget* cpp_widget;    //  the editwidget for cpp files
-  CDocBrowser* browser_widget;
-  //  KSwallowWidget* swallow_widget;
+  //  CEditWidget* m_edit_widget; // a pointer to the actual editwidget
+  //  CEditWidget* m_header_widget; // the editwidget for the headers/resources
+  //CEditWidget* m_cpp_widget;    //  the editwidget for cpp files
+  CDocBrowser* m_browser_widget;
+  //  KSwallowWidget* m_swallow_widget;
  
   /** The classview. */
-  KDockWidget* dockbase_class_tree;
-  CClassView* class_tree;
+  KDockWidget* m_dockbase_class_tree;
+  CClassView* m_class_tree;
   /** The logical fileview. */
-  KDockWidget* dockbase_log_file_tree;
-  CLogFileView* log_file_tree;
+  KDockWidget* m_dockbase_log_file_tree;
+  CLogFileView* m_log_file_tree;
   /** The real fileview. */
-  KDockWidget* dockbase_real_file_tree;
-  CRealFileView* real_file_tree;
+  KDockWidget* m_dockbase_real_file_tree;
+  CRealFileView* m_real_file_tree;
   /** The debugger's tree of local variables */
-  KDockWidget* dockbase_var_viewer;
-  VarViewer* var_viewer;
+  KDockWidget* m_dockbase_var_viewer;
+  VarViewer* m_var_viewer;
   /** The documentation tree. */
-  KDockWidget* dockbase_doc_tree;
-  DocTreeView* doc_tree;
+  KDockWidget* m_dockbase_doc_tree;
+  DocTreeView* m_doc_tree;
   /** splitview, contains a WidgetsView and a PropertyView */
-  KDockWidget* dockbase_widprop_split_view;
-  WidgetsPropSplitView*  widprop_split_view;
+  KDockWidget* m_dockbase_widprop_split_view;
+  WidgetsPropSplitView*  m_widprop_split_view;
   
 	/** Output from the compiler ... */
-	KDockWidget* dockbase_messages_widget;
-	MakeView *messages_widget;
+	KDockWidget* m_dockbase_messages_widget;
+	MakeView *m_messages_widget;
 	/** Output from grep */
-	KDockWidget* dockbase_grepview;
-	GrepView *grepview;
+	KDockWidget* m_dockbase_grepview;
+	GrepView *m_grepview;
 	/** Output from the application */
-	KDockWidget* dockbase_outputview;
-	OutputView *outputview;
+	KDockWidget* m_dockbase_outputview;
+	OutputView *m_outputview;
 	/** Manages a list of breakpoints - Always active */
-	KDockWidget* dockbase_brkptManager_view;
-	BreakpointManager* brkptManager;
+	KDockWidget* m_dockbase_brkptManager_view;
+	BreakpointManager* m_brkptManager;
 	/** Manages a frame stack list */
-	KDockWidget* dockbase_frameStack_view;
-	FrameStack* frameStack;
+	KDockWidget* m_dockbase_frameStack_view;
+	FrameStack* m_frameStack;
 	/** show disassembled code being run */
-	KDockWidget* dockbase_disassemble_view;
-	Disassemble* disassemble;
+	KDockWidget* m_dockbase_disassemble_view;
+	Disassemble* m_disassemble;
 	/** debug aid. Switch on using compile switch GDB_MONITOR
 			or DBG_MONITOR */
-	KDockWidget* dockbase_dbg_widget_view;			
-	COutputWidget* dbg_widget;
+	KDockWidget* m_dockbase_dbg_widget_view;			
+	COutputWidget* m_dbg_widget;
 
 
-  QString version;
-  QString kdev_caption;
-  bool project;
+  QString m_version;
+  QString m_kdev_caption;
+  bool m_project;
 
-  bool  prev_was_search_result;
+  bool  m_prev_was_search_result;
 
   // Autosaving elements
   /** The autosave timer. */
-  QTimer* saveTimer;
+  QTimer* m_saveTimer;
   /** Tells if autosaving is enabled. */
-  bool bAutosave;
+  bool m_bAutosave;
   /** The autosave interval. */
-  int saveTimeout;
+  int m_saveTimeout;
 
-  bool bAutoswitch;
-  bool bDefaultCV;
-  bool bKDevelop;
+  bool m_bAutoswitch;
+  bool m_bDefaultCV;
+  bool m_bKDevelop;
 
-  QProgressBar* statProg;
+  QProgressBar* m_statProg;
   //some vars for the searchengine
-  QString search_output;
-  QString doc_search_display_text, doc_search_text;
+  QString m_search_output;
+  QString m_doc_search_display_text, m_doc_search_text;
   // for more then one job in proc;checked in slotProcessExited(KProcess* proc);
   // values are "run","make" "refresh";
-  QString next_job;
-  QString make_cmd;
+  QString m_next_job;
+  QString m_make_cmd;
 
-  CAddExistingFileDlg* add_dlg;
+  CAddExistingFileDlg* m_add_dlg;
 
-  int lasttab;
-  QString lastfile;
-  bool useGlimpse;
-  bool useHtDig;
+  int m_lasttab;
+  QString m_lastfile;
+  bool m_useGlimpse;
+  bool m_useHtDig;
 
 };
 

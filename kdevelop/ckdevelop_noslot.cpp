@@ -45,17 +45,17 @@
 
 void CKDevelop::addRecentProject(const char* file)
 {
-  if(recent_projects.find(file) == -1){
-    if( recent_projects.count() < 5)
-      recent_projects.insert(0,file);
+  if(m_recent_projects.find(file) == -1){
+    if( m_recent_projects.count() < 5)
+      m_recent_projects.insert(0,file);
     else{
-      recent_projects.remove(4);
-      recent_projects.insert(0,file);
+      m_recent_projects.remove(4);
+      m_recent_projects.insert(0,file);
     }
-    recent_projects_menu->clear();
+    m_recent_projects_menu->clear();
 		uint i;
-    for ( i =0 ; i < recent_projects.count(); i++){
-      recent_projects_menu->insertItem(recent_projects.at(i), i);
+    for ( i =0 ; i < m_recent_projects.count(); i++){
+      m_recent_projects_menu->insertItem(m_recent_projects.at(i), i);
     }
 	}
 }
@@ -76,25 +76,25 @@ void CKDevelop::addRecentProject(const char* file)
 void CKDevelop::setMainCaption(int tab_item){
     EditorView* editor_view = getCurrentEditorView();
     
-    if (bKDevelop)
+    if (m_bKDevelop)
 	{
 	    switch(tab_item)
 		{
 		case BROWSER:
-		    kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
+		    m_kdev_caption=m_browser_widget->currentTitle()+ " - KDevelop " + m_version ;
 		    break;
 		case TOOLS:
-		    kdev_caption=QString(i18n("Tools")) +" - KDevelop " + version ;
+		    m_kdev_caption=QString(i18n("Tools")) +" - KDevelop " + m_version ;
 		    break;
 		default:
-		    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+		    m_kdev_caption=(m_project) ? (const char *) (m_prj->getProjectName()+" - KDevelop ") : "KDevelop ";
 		    if(editor_view != 0){
-			kdev_caption+= version +
+			m_kdev_caption+= m_version +
 			    " - ["+ QFileInfo(editor_view->currentEditor()->getName()).fileName()+"] ";
 			if (editor_view->currentEditor()->isModified())
 			    {
 				enableCommand(ID_FILE_SAVE);
-				kdev_caption+= " *";
+				m_kdev_caption+= " *";
 			    }
 			else
 			    {
@@ -104,7 +104,7 @@ void CKDevelop::setMainCaption(int tab_item){
 		    }
 		}
 	}
-    setCaption(kdev_caption);
+    setCaption(m_kdev_caption);
     
 }
 
@@ -127,9 +127,9 @@ bool CKDevelop::fileSaveAs(){
    KURL name;
    int msg_result = KMessageBox::Ok;
 
-   if (bAutosave) saveTimer->stop();
+   if (m_bAutosave) m_saveTimer->stop();
    
-   oldName = editor_view->currentEditor()->getName();
+   oldName = m_editor_view->currentEditor()->getName();
 
    do {
        name = KFileDialog::getSaveURL(oldName,0,this,oldName);
@@ -139,8 +139,8 @@ bool CKDevelop::fileSaveAs(){
          return false;
        }
        if (name.isEmpty()){
-	    if (bAutosave) {
-	        saveTimer->start(saveTimeout);
+	    if (m_bAutosave) {
+	        m_saveTimer->start(m_saveTimeout);
 	    }
 	   return false;
        }
@@ -150,21 +150,21 @@ bool CKDevelop::fileSaveAs(){
 							   "Do you want overwrite the old one?\n").arg(name.path()));
 	   
 	   if (msg_result==KMessageBox::Cancel){
-	       if (bAutosave)
-		   saveTimer->start(saveTimeout);
+	       if (m_bAutosave)
+		   m_saveTimer->start(m_saveTimeout);
 	       return false;
 	   } 
        }
    }
    while(msg_result == KMessageBox::No);
    
-   editor_view->setMDICaption(QFileInfo(name.path()).fileName());
-   editor_view->currentEditor()->setName(name.path());
-   editor_view->currentEditor()->doSave();
+   m_editor_view->setMDICaption(QFileInfo(name.path()).fileName());
+   m_editor_view->currentEditor()->setName(name.path());
+   m_editor_view->currentEditor()->doSave();
   
    slotViewRefresh();
-   if (bAutosave)
-       saveTimer->start(saveTimeout);
+   if (m_bAutosave)
+       m_saveTimer->start(m_saveTimeout);
 
    return true;
 }
@@ -180,43 +180,43 @@ bool CKDevelop::fileSaveAs(){
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::refreshTrees(){
-  if (!project){
+  if (!m_project){
     return; // no project
   }
 
   // Update the classview.
   slotStatusMsg(i18n("Scanning project files..."));
 	setCursor(KCursor::waitCursor());
-  statProg->show();
-  class_tree->refresh(prj);
-  statProg->reset();
-  statProg->hide();
+  m_statProg->show();
+  m_class_tree->refresh(m_prj);
+  m_statProg->reset();
+  m_statProg->hide();
 
   // Update the classcombo.
   CVRefreshClassCombo();
 
   // Update LFV.
-  log_file_tree->storeState(prj);
-  log_file_tree->refresh(prj);
+  m_log_file_tree->storeState(m_prj);
+  m_log_file_tree->refresh(m_prj);
 
   // Update RFV.
-  real_file_tree->refresh(prj);
+  m_real_file_tree->refresh(m_prj);
 
-  kdev_statusbar->repaint();
+  m_kdev_statusbar->repaint();
   setCursor(KCursor::arrowCursor());	
-  // update the file_open_menu
-  file_open_list=prj->getHeaders();
-  QStrList sources=prj->getSources();
+  // update the m_file_open_menu
+  m_file_open_list=m_prj->getHeaders();
+  QStrList sources=m_prj->getSources();
   uint j;
   for( j=0; j< sources.count(); j++){
-    file_open_list.append(sources.at(j));
+    m_file_open_list.append(sources.at(j));
   }
-  // create the file_open_popup for the toolbar
-  file_open_popup->clear();
+  // create the m_file_open_popup for the toolbar
+  m_file_open_popup->clear();
   uint i;
-  for ( i =0 ; i < file_open_list.count(); i++){
-    QFileInfo fileInfo (file_open_list.at(i));
-    file_open_popup->insertItem(fileInfo.fileName());
+  for ( i =0 ; i < m_file_open_list.count(); i++){
+    QFileInfo fileInfo (m_file_open_list.at(i));
+    m_file_open_popup->insertItem(fileInfo.fileName());
   }
   
   slotStatusMsg(i18n("Ready."));
@@ -235,39 +235,39 @@ void CKDevelop::refreshTrees(){
  *-----------------------------------------------------------------*/
 void CKDevelop::refreshTrees(TFileInfo *info)
 {
-  if( project )
+  if( m_project )
     {
       // If this is a sourcefile we parse it and update the classview.
       if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
 	{
-	  class_tree->addFile( prj->getProjectDir() + info->rel_name );
+	  m_class_tree->addFile( m_prj->getProjectDir() + info->rel_name );
 	  CVRefreshClassCombo();
 	}
       
       // Update LFV.
-      log_file_tree->storeState(prj);
-      log_file_tree->refresh(prj);
+      m_log_file_tree->storeState(m_prj);
+      m_log_file_tree->refresh(m_prj);
       
       // Update RFV.
-      real_file_tree->refresh(prj);
+      m_real_file_tree->refresh(m_prj);
       // update dialogs tree
       // -> Component
-      //      kdlg_dialogs_view->refresh(prj);
+      //      kdlg_dialogs_view->refresh(m_prj);
       
     }
-  // refresh the file_open_list
-  file_open_list=prj->getHeaders();
-  QStrList sources=prj->getSources();
+  // refresh the m_file_open_list
+  m_file_open_list=m_prj->getHeaders();
+  QStrList sources=m_prj->getSources();
   uint j;
   for( j=0; j< sources.count(); j++){
-    file_open_list.append(sources.at(j));
+    m_file_open_list.append(sources.at(j));
   }
-  // create the file_open_popup for the toolbar
-  file_open_popup->clear();
+  // create the m_file_open_popup for the toolbar
+  m_file_open_popup->clear();
   uint i;
-  for ( i =0 ; i < file_open_list.count(); i++){
-    QFileInfo fileInfo (file_open_list.at(i));
-    file_open_popup->insertItem(fileInfo.fileName());
+  for ( i =0 ; i < m_file_open_list.count(); i++){
+    QFileInfo fileInfo (m_file_open_list.at(i));
+    m_file_open_popup->insertItem(fileInfo.fileName());
   }
 }
 
@@ -342,7 +342,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   cerr << "filename:" << filename << endl;
   if((filename).right(8) == ".kdevdlg"){
       
-      QList<QextMdiChildView> dlgviews = mdi_main_frame->childrenOfType("DialogView");
+      QList<QextMdiChildView> dlgviews = m_mdi_main_frame->childrenOfType("DialogView");
       QListIterator<QextMdiChildView> it(dlgviews);
       for (; it.current(); ++it) {
 	  DialogView *tmp_dlg_view = static_cast<DialogView*>(it.current());
@@ -353,25 +353,25 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
       }
 
       // new dialog view
-      QextMdiChildView*act_win = mdi_main_frame->activeWindow () ;
+      QextMdiChildView*act_win = m_mdi_main_frame->activeWindow () ;
       bool maximize = false;
       if(act_win != 0){
 	  maximize = act_win->isMaximized();
       }
       QFileInfo fileinfo(filename);
-      DialogView* new_dialogview = new DialogView(mdi_main_frame,QFileInfo(filename).fileName());
+      DialogView* new_dialogview = new DialogView(m_mdi_main_frame,QFileInfo(filename).fileName());
       new_dialogview->dialogWidget()->openDialog(filename);
       
       //connections
       connect(new_dialogview,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
       // default view size is 3/4 of mdi mainframe
-      new_dialogview->resize(int(double(mdi_main_frame->width()*3)/4.0),
-			     int(double(mdi_main_frame->height()*3)/4.0) );  
+      new_dialogview->resize(int(double(m_mdi_main_frame->width()*3)/4.0),
+			     int(double(m_mdi_main_frame->height()*3)/4.0) );
   
       if( maximize)
-        mdi_main_frame->addWindow( new_dialogview, QextMdi::Maximize); // attached, shown and focused by default
+        m_mdi_main_frame->addWindow( new_dialogview, QextMdi::Maximize); // attached, shown and focused by default
       else
-        mdi_main_frame->addWindow( new_dialogview); // attached, shown and focused by default
+        m_mdi_main_frame->addWindow( new_dialogview); // attached, shown and focused by default
 
       return;
   }
@@ -381,7 +381,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
 
   // and now editor MDI----------------------------------------------------
   cerr << "filename:" << filename << endl;
-  QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+  QList<QextMdiChildView> editorviews = m_mdi_main_frame->childrenOfType("EditorView");
   QListIterator<QextMdiChildView> it(editorviews);
   for (; it.current(); ++it) {
       EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
@@ -395,7 +395,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
 	  //   // handle file if it was modified on disk by another editor/cvs
 	  
 	  
-	  if(editor_view->currentEditor()->modifiedOnDisk() && bShowModifiedBox){
+	  if(m_editor_view->currentEditor()->modifiedOnDisk() && bShowModifiedBox){
 	      if(KMessageBox::questionYesNo(this,
 					    i18n("The file %1 was modified outside this editor.\n"
 						 "Open the file from disk and delete the current Buffer?").arg(filename)) == KMessageBox::Yes){
@@ -414,16 +414,16 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   //  //MDI
   cerr << "new mdi window";
   
-  QextMdiChildView*act_win = mdi_main_frame->activeWindow () ;
+  QextMdiChildView*act_win = m_mdi_main_frame->activeWindow () ;
   bool maximize = false;
   if(act_win != 0){
       maximize = act_win->isMaximized();
   }
   QFileInfo fileinfo(filename);
-  EditorView* new_editorview = new EditorView(mdi_main_frame,QFileInfo(filename).fileName());
-  config->setGroup("KWrite Options");
-  new_editorview->currentEditor()->readConfig(config);
-  new_editorview->currentEditor()->doc()->readConfig(config);
+  EditorView* new_editorview = new EditorView(m_mdi_main_frame,QFileInfo(filename).fileName());
+  m_config->setGroup("KWrite Options");
+  new_editorview->currentEditor()->readConfig(m_config);
+  new_editorview->currentEditor()->doc()->readConfig(m_config);
   new_editorview->currentEditor()->loadFile(filename,1);  
   new_editorview->currentEditor()->setName(filename);
 
@@ -441,30 +441,30 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   connect(new_editorview,SIGNAL(closing(EditorView*)),SLOT(slotFileWillBeClosed(EditorView*)));
 
   // default view size is 3/4 of mdi mainframe
-  new_editorview->resize(int(double(mdi_main_frame->width()*3)/4.0),
-                         int(double(mdi_main_frame->height()*3)/4.0) );  
+  new_editorview->resize(int(double(m_mdi_main_frame->width()*3)/4.0),
+                         int(double(m_mdi_main_frame->height()*3)/4.0) );
   
   if( maximize)
-    mdi_main_frame->addWindow( new_editorview, QextMdi::Maximize); // attached, shown and focused by default
+    m_mdi_main_frame->addWindow( new_editorview, QextMdi::Maximize); // attached, shown and focused by default
   else  
-    mdi_main_frame->addWindow( new_editorview); // attached, shown and focused by default
+    m_mdi_main_frame->addWindow( new_editorview); // attached, shown and focused by default
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
   switchToFile( filename, false);
-  if(editor_view !=0){
-      editor_view->currentEditor()->setCursorPosition( lineNo, 0 );
+  if(m_editor_view !=0){
+      m_editor_view->currentEditor()->setCursorPosition( lineNo, 0 );
   }
 }
 
 void CKDevelop::switchToKDevelop(){
-  setCaption(kdev_caption);
+  setCaption(m_kdev_caption);
 
-  bKDevelop=true;
+  m_bKDevelop=true;
   this->setUpdatesEnabled(false);
 
   //////// change the mainview ////////
-  mdi_main_frame->show();
+  m_mdi_main_frame->show();
 //FALK  dockbase_t_tab_view->show();
 
 //F.B.  top_panner->hide();
@@ -473,14 +473,14 @@ void CKDevelop::switchToKDevelop(){
 //F.B.  top_panner->show();
 
   //////// change the event dispatchers ///////////
-  kdev_dispatcher->setEnabled(true);
+  m_kdev_dispatcher->setEnabled(true);
 
   //////// change the bars ///////////
-  kdev_menubar->show();
-  setMenu(kdev_menubar);
+  m_kdev_menubar->show();
+  setMenu(m_kdev_menubar);
 
-  kdev_statusbar->show();
-  setStatusBar(kdev_statusbar);
+  m_kdev_statusbar->show();
+  setStatusBar(m_kdev_statusbar);
 
 
   toolBar(ID_MAIN_TOOLBAR)->show();
@@ -488,27 +488,27 @@ void CKDevelop::switchToKDevelop(){
 
   setKeyAccel();  // initialize Keys
   ///////// reset bar status ////////////
-  if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
-    kdev_statusbar->show();
+  if(m_view_menu->isItemChecked(ID_VIEW_STATUSBAR))
+    m_kdev_statusbar->show();
   else
-    kdev_statusbar->hide();
+    m_kdev_statusbar->hide();
 
-  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR))
+  if(m_view_menu->isItemChecked(ID_VIEW_TOOLBAR))
     enableToolBar(KToolBar::Show, ID_MAIN_TOOLBAR);
   else
     enableToolBar(KToolBar::Hide, ID_MAIN_TOOLBAR);
 
-  if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR))
+  if(m_view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR))
     enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
   else
     enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
 
   ///////// reset the views status ///////////////
-  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+  if(m_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
     showTreeView();
   else
     showTreeView(false);
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
+  if(m_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
     showOutputView();
   else
     showOutputView(false);
@@ -525,9 +525,9 @@ void CKDevelop::setToolMenuProcess(bool enable){
     else
 	enableCommand(ID_BUILD_STOP);
     
-    if (enable && project){
-	if(editor_view !=0){
-	  if (CProject::getType(editor_view->currentEditor()->getName()) == CPP_SOURCE){
+    if (enable && m_project){
+	if(m_editor_view !=0){
+	  if (CProject::getType(m_editor_view->currentEditor()->getName()) == CPP_SOURCE){
 	      enableCommand(ID_BUILD_COMPILE_FILE);
 	  }
 	}
@@ -540,7 +540,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
 	enableCommand(ID_BUILD_DISTCLEAN);
 	enableCommand(ID_BUILD_AUTOCONF);
 	enableCommand(ID_BUILD_CONFIGURE);
-	if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
+	if (m_prj->getProjectType() != "normal_kde" && m_prj->getProjectType() != "mini_kde"){
 	    disableCommand(ID_PROJECT_MESSAGES);
 	}
 	else{
@@ -571,12 +571,12 @@ void CKDevelop::setToolMenuProcess(bool enable){
 	    disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 	}
     
-    if(bAutosave)
+    if(m_bAutosave)
 	{
 	    if(enable)
-		saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
+		m_saveTimer->start(m_saveTimeout); // restart autosaving if enabled after a process finished
 	    else
-		saveTimer->stop();  // stop the autosaving if make or something is running
+		m_saveTimer->stop();  // stop the autosaving if make or something is running
 	}
 }
 
@@ -584,15 +584,15 @@ void CKDevelop::setToolMenuProcess(bool enable){
 void CKDevelop::showTreeView(bool show){
 
  
-     if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+     if(m_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
 ;//FALK       dockbase_t_tab_view->show();
      else
 ;//FALK       dockbase_t_tab_view->hide();
    
-  if(bAutoswitch)
+  if(m_bAutoswitch)
   {
     if(show){
-      if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+      if(m_view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
         return; // it's already visible){
       }
       else{
@@ -600,7 +600,7 @@ void CKDevelop::showTreeView(bool show){
       }
     }
     else{
-      if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+      if(!m_view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
         return; // it's already unvisible){
       }
       else{
@@ -612,9 +612,9 @@ void CKDevelop::showTreeView(bool show){
 
 
 void CKDevelop::showOutputView(bool show){
-  if(bAutoswitch){
+  if(m_bAutoswitch){
   	if(show){
-	  	if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+	  	if(m_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
   	 		return; // it's already visible
       }
       else{
@@ -622,7 +622,7 @@ void CKDevelop::showOutputView(bool show){
       }
     }
     else{
-      if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+      if(!m_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
         return; //it's already unvisible
       }
       else{
@@ -634,11 +634,11 @@ void CKDevelop::showOutputView(bool show){
 
 
 void CKDevelop::readOptions(){
-  config->setGroup("General Options");
+  m_config->setGroup("General Options");
 
 	/////////////////////////////////////////
 	// GEOMETRY
-  QSize size=config->readSizeEntry("Geometry");
+  QSize size=m_config->readSizeEntry("Geometry");
   if(!size.isEmpty())
 	resize(size);
   else
@@ -652,22 +652,22 @@ void CKDevelop::readOptions(){
 	// BAR STATUS
 
 
-  KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
+  KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)m_config->readNumEntry("ToolBar Position", KToolBar::Top);
   toolBar(ID_MAIN_TOOLBAR)->setBarPos(tool_bar_pos);
-	bool std_toolbar=	config->readBoolEntry("show_std_toolbar", true);
+	bool std_toolbar=	m_config->readBoolEntry("show_std_toolbar", true);
 	if(std_toolbar){
-	  view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
+	  m_view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
     enableToolBar(KToolBar::Show, ID_MAIN_TOOLBAR);
   }
   else{
     enableToolBar(KToolBar::Hide, ID_MAIN_TOOLBAR);
   }
 	// Browser Toolbar
-  KToolBar::BarPosition browser_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("Browser ToolBar Position", KToolBar::Top);
+  KToolBar::BarPosition browser_tool_bar_pos=(KToolBar::BarPosition)m_config->readNumEntry("Browser ToolBar Position", KToolBar::Top);
   toolBar(ID_BROWSER_TOOLBAR)->setBarPos(browser_tool_bar_pos);
-	bool browser_toolbar=config->readBoolEntry("show_browser_toolbar",true);
+	bool browser_toolbar=m_config->readBoolEntry("show_browser_toolbar",true);
 	if(browser_toolbar){
-	  view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
+	  m_view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
     enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
   }
   else{
@@ -676,35 +676,35 @@ void CKDevelop::readOptions(){
 	
 
 	// Statusbar
-  bool statusbar=config->readBoolEntry("show_statusbar",true);
+  bool statusbar=m_config->readBoolEntry("show_statusbar",true);
   if(statusbar){
-    view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
+    m_view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
   }
   else{
     enableStatusBar();
   }
 	// MDI view taskbar
-  bool mdiViewTaskbar=config->readBoolEntry("show_mdiviewtaskbar",true);
+  bool mdiViewTaskbar=m_config->readBoolEntry("show_mdiviewtaskbar",true);
   if(mdiViewTaskbar){
-    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
+    m_view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
   }
   else{
-    mdi_main_frame->hideViewTaskBar();
+    m_mdi_main_frame->hideViewTaskBar();
   }
 	
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop/KDlgEdit
-  bool outputview= config->readBoolEntry("show_output_view", true);
+  bool outputview= m_config->readBoolEntry("show_output_view", true);
   if(outputview){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
+    m_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
   }
   else;
 //FALK    dockbase_o_tab_view->hide();
 
-  bool treeview=config->readBoolEntry("show_tree_view", true);
+  bool treeview=m_config->readBoolEntry("show_tree_view", true);
   if(treeview){
-    view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
+    m_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
   }
   else
@@ -714,46 +714,46 @@ void CKDevelop::readOptions(){
   
 	/////////////////////////////////////////
 	// RUNTIME VALUES AND FILES
-  bAutosave=config->readBoolEntry("Autosave",true);
-  saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
-  saveTimer=new QTimer(this);
-  connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
-  if(bAutosave){
-    saveTimer->start(saveTimeout);
+  m_bAutosave=m_config->readBoolEntry("Autosave",true);
+  m_saveTimeout=m_config->readNumEntry("Autosave Timeout",5*60*1000);
+  m_saveTimer=new QTimer(this);
+  connect(m_saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
+  if(m_bAutosave){
+    m_saveTimer->start(m_saveTimeout);
   }
   else{
-    saveTimer->stop();
+    m_saveTimer->stop();
   }
-  bAutoswitch=config->readBoolEntry("Autoswitch",true);
-  bDefaultCV=config->readBoolEntry("DefaultClassView",true);
-  make_cmd=config->readEntry("Make","make");
+  m_bAutoswitch=m_config->readBoolEntry("Autoswitch",true);
+  m_bDefaultCV=m_config->readBoolEntry("DefaultClassView",true);
+  m_make_cmd=m_config->readEntry("Make","make");
 
-  config->setGroup("Files");
-	recent_projects.setAutoDelete(TRUE);
-	config->readListEntry("Recent Projects",recent_projects);
+  m_config->setGroup("Files");
+	m_recent_projects.setAutoDelete(TRUE);
+	m_config->readListEntry("Recent Projects",m_recent_projects);
 	
 	uint i;
-	for ( i =0 ; i < recent_projects.count(); i++){
-    recent_projects_menu->insertItem(recent_projects.at(i), i);
+	for ( i =0 ; i < m_recent_projects.count(); i++){
+    m_recent_projects_menu->insertItem(m_recent_projects.at(i), i);
   }
 
-	doc_bookmarks_list.setAutoDelete(TRUE);
-	doc_bookmarks_title_list.setAutoDelete(TRUE);
+	m_doc_bookmarks_list.setAutoDelete(TRUE);
+	m_doc_bookmarks_title_list.setAutoDelete(TRUE);
 	
-	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
-	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
-	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
-    doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
+	m_config->readListEntry("doc_bookmarks",m_doc_bookmarks_list);
+	m_config->readListEntry("doc_bookmarks_title",m_doc_bookmarks_title_list);
+	for ( i =0 ; i < m_doc_bookmarks_title_list.count(); i++){
+    m_doc_bookmarks->insertItem(BarIcon("html"),m_doc_bookmarks_title_list.at(i));
   }
 /*	
   QString filename;
-  filename = config->readEntry("browser_file","");
+  filename = m_config->readEntry("browser_file","");
   if(!filename.isEmpty()){
-    slotURLSelected(browser_widget,filename,1,"test");
+    slotURLSelected(m_browser_widget,filename,1,"test");
   }
   else{
     QString file = CToolClass::locatehtml("kdevelop/welcome/index.html");
-    slotURLSelected(browser_widget,"file:" + file,1,"test");
+    slotURLSelected(m_browser_widget,"file:" + file,1,"test");
   }
 */
 	
@@ -763,38 +763,38 @@ void CKDevelop::readOptions(){
 
 void CKDevelop::saveOptions(){
 	
-  config->setGroup("General Options");
-  config->writeEntry("Geometry", size() );
+  m_config->setGroup("General Options");
+  m_config->writeEntry("Geometry", size() );
   
-  config->writeEntry("ToolBar Position",  (int)toolBar(ID_MAIN_TOOLBAR)->barPos());
-  config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
+  m_config->writeEntry("ToolBar Position",  (int)toolBar(ID_MAIN_TOOLBAR)->barPos());
+  m_config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
 
-  config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
-  config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
+  m_config->writeEntry("show_tree_view",m_view_menu->isItemChecked(ID_VIEW_TREEVIEW));
+  m_config->writeEntry("show_output_view",m_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
 
-  config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
-  config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
+  m_config->writeEntry("show_std_toolbar",m_view_menu->isItemChecked(ID_VIEW_TOOLBAR));
+  m_config->writeEntry("show_browser_toolbar",m_view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
 
-  config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
-  config->writeEntry("show_mdiviewtaskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
+  m_config->writeEntry("show_statusbar",m_view_menu->isItemChecked(ID_VIEW_STATUSBAR));
+  m_config->writeEntry("show_mdiviewtaskbar",m_view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
 
-  config->writeEntry("lfv_show_path",log_file_tree->showPath());
+  m_config->writeEntry("lfv_show_path",m_log_file_tree->showPath());
 
-  config->writeEntry("Autosave",bAutosave);
-  config->writeEntry("Autosave Timeout",saveTimeout);
+  m_config->writeEntry("Autosave",m_bAutosave);
+  m_config->writeEntry("Autosave Timeout",m_saveTimeout);
 
-  config->writeEntry("Make",make_cmd);
+  m_config->writeEntry("Make",m_make_cmd);
 
-  config->setGroup("Files");
-  config->writeEntry("browser_file",history_list.current());
-  config->writeEntry("doc_bookmarks", doc_bookmarks_list);
-  config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
-  config->writeEntry("Recent Projects", recent_projects);
+  m_config->setGroup("Files");
+  m_config->writeEntry("browser_file",m_history_list.current());
+  m_config->writeEntry("doc_bookmarks", m_doc_bookmarks_list);
+  m_config->writeEntry("doc_bookmarks_title", m_doc_bookmarks_title_list);
+  m_config->writeEntry("Recent Projects", m_recent_projects);
   
 	// write all settings concerning to the dockwidget´s stuff
-  writeDockConfig( config, "EditMode Dock-Settings");
+  writeDockConfig( m_config, "EditMode Dock-Settings");
 
-  config->sync();
+  m_config->sync();
 }
 
 bool CKDevelop::queryExit(){
@@ -804,10 +804,10 @@ bool CKDevelop::queryExit(){
 
 bool CKDevelop::queryClose(){
     //  swallow_widget->sWClose(false); // close the tools in the tools-tab
-  config->setGroup("Files");
-  if(project){
-    config->writeEntry("project_file",prj->getProjectFile());
-    prj->writeProject();
+  m_config->setGroup("Files");
+  if(m_project){
+    m_config->writeEntry("project_file",m_prj->getProjectFile());
+    m_prj->writeProject();
     if(!slotProjectClose()){ // if not ok,pressed cancel
       return false; //not close!
     }
@@ -816,9 +816,9 @@ bool CKDevelop::queryClose(){
     int msg_result = KMessageBox::Yes;
     int save=true;
 
-    config->writeEntry("project_file","");
+    m_config->writeEntry("project_file","");
 
-    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    QList<QextMdiChildView> editorviews = m_mdi_main_frame->childrenOfType("EditorView");
     QListIterator<QextMdiChildView> it(editorviews);
     for (; it.current(); ++it) {
 	EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
@@ -849,8 +849,8 @@ void CKDevelop::readProperties(KConfig* sess_config){
     }
     else{
       QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
-      connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
-      connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
+      connect(m_class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
+      connect(m_class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
       progressDlg->setCaption(i18n("Starting..."));
       progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
       progressDlg->setProgress(0);
@@ -878,14 +878,14 @@ void CKDevelop::readProperties(KConfig* sess_config){
 
 void CKDevelop::saveProperties(KConfig* sess_config){
 	
-  if(project){
-    sess_config->writeEntry("project_file",prj->getProjectFile());
-    prj->writeProject();
+  if(m_project){
+    sess_config->writeEntry("project_file",m_prj->getProjectFile());
+    m_prj->writeProject();
   }	
-  if(bAutosave)
+  if(m_bAutosave)
     slotFileSaveAll();
   else{
-      QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+      QList<QextMdiChildView> editorviews = m_mdi_main_frame->childrenOfType("EditorView");
       QListIterator<QextMdiChildView> it(editorviews);
       for (; it.current(); ++it) {
 	  EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
@@ -903,7 +903,7 @@ void CKDevelop::saveProperties(KConfig* sess_config){
 
 
 EditorView* CKDevelop::getCurrentEditorView(){
-    QextMdiChildView * win = mdi_main_frame->activeWindow();
+    QextMdiChildView * win = m_mdi_main_frame->activeWindow();
     if (win !=0 && win->inherits("EditorView"))
       return static_cast<EditorView*>(win);
 
@@ -912,5 +912,5 @@ EditorView* CKDevelop::getCurrentEditorView(){
 
 void CKDevelop::resizeEvent(QResizeEvent* rse){
   // if necessary, adjust the 4 system buttons of a maximized MDI view to the right-hand side
-  mdi_main_frame->setSysButtonsAtMenuPosition();
+  m_mdi_main_frame->setSysButtonsAtMenuPosition();
 }

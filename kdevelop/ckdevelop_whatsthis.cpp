@@ -207,23 +207,23 @@ void CKDevelop::initWhatsThis(){
 		                                                  "Opens the Search for Help on... dialog. There, you can "
 		                                                  "search for a keyword in the documentation directly "
 		                                                  "using the search database."));
-	QWhatsThis::add(class_tree, i18n("Class Viewer\n\n"
+	QWhatsThis::add(m_class_tree, i18n("Class Viewer\n\n"
 	                                  "The class viewer shows all classes, methods and variables "
 	                                  "of the current project files and allows switching to declarations "
 	                                  "and implementations. The right button popup-menu allows more specialized "
 	                                  "functionality."));
 	
-	QWhatsThis::add(log_file_tree, i18n("Logical File Viewer\n\n"
+	QWhatsThis::add(m_log_file_tree, i18n("Logical File Viewer\n\n"
 	                                  "The logical file viewer separates your project files into "
 	                                  "logical groups to allow easier access e.g.to header and "
 	                                  "implementation files.The right button popup-menu allows more specialized "
 	                                  "functionality."));
 	
-	QWhatsThis::add(real_file_tree, i18n("Real File Viewer\n\n"
+	QWhatsThis::add(m_real_file_tree, i18n("Real File Viewer\n\n"
 	                                  "The real file viewer shows the project directory in "
 	                                  "it's real structure and gives access to all files."));
 	
-	QWhatsThis::add(doc_tree, i18n("Documentation Tree\n\n"
+	QWhatsThis::add(m_doc_tree, i18n("Documentation Tree\n\n"
 	                                  "The documentation tree gives access to library "
 	                                  "documentation and the KDevelop manuals. Can be "
 	                                  "configured individually by right-button menu."));
@@ -248,7 +248,7 @@ void CKDevelop::initWhatsThis(){
 //	                                  "library class documentation created. Use the documentation "
 //	                                  "tree to switch between various parts of the documentation."));	
 	
-	QWhatsThis::add(messages_widget, i18n("Messages\n\n"
+	QWhatsThis::add(m_messages_widget, i18n("Messages\n\n"
 	                                  "The messages window shows the output of the compiler and "
 	                                  "used utilities like kdoc reference documentation. "
 	                                  "For compiler error messages, click on the error message. "
@@ -266,19 +266,3 @@ void CKDevelop::initWhatsThis(){
 	*/
                                   																												
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
