@@ -427,11 +427,12 @@ void DocTreeDocbaseFolder::setOpen(bool o)
     if (o && childCount() == 0)
         {
             QDir d("/usr/share/doc-base");
-            QStrListIterator it(*d.entryList("*", QDir::Files));
-            for (; it.current(); ++it)
+            QStringList fileList = d.entryList("*", QDir::Files);
+            QStringList::Iterator it;
+            for (it = fileList.begin(); it != fileList.end(); ++it)
                 {
                     FILE *f;
-                    if ( (f = fopen(d.filePath(it.current()), "r")) != 0)
+                    if ( (f = fopen(d.filePath(*it), "r")) != 0)
                         {
                             readDocbaseFile(f);
                             fclose(f);
