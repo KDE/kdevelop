@@ -70,7 +70,7 @@ ListViewDocItem::ListViewDocItem(KDevListViewItem *parent,
 
 void ListViewDocItem::setOpen(bool o)
 {
-    setPixmap(0, o? SmallIcon("mini-doc2") : SmallIcon("document"));
+    setPixmap(0, o? SmallIcon("mini_doc2") : SmallIcon("document"));
     KDevListViewItem::setOpen(o);
 }
 
@@ -100,7 +100,7 @@ ListViewBookItem::ListViewBookItem(KDevListViewItem *parent,
 
 void ListViewBookItem::setOpen(bool o)
 {
-    setPixmap(0, o? SmallIcon("contents") : SmallIcon("mini-book1"));
+    setPixmap(0, o? SmallIcon("contents") : SmallIcon("mini_book1"));
     KDevListViewItem::setOpen(o);
 }
 

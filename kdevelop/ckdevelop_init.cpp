@@ -745,7 +745,7 @@ void CKDevelop::initMenuBar(){
   //MB end
   project_menu->insertItem(i18n("Make AP&I-Doc"), this,
 			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
-  project_menu->insertItem(SmallIconSet("mini-book1"), i18n("Make &User-Manual..."), this,
+  project_menu->insertItem(SmallIconSet("mini_book1"), i18n("Make &User-Manual..."), this,
 			 SLOT(slotProjectManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
   // submenu for making dists
 
@@ -913,12 +913,12 @@ void CKDevelop::initMenuBar(){
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
   help_menu->insertItem(SmallIconSet("filefind"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   help_menu->insertSeparator();
-  help_menu->insertItem(SmallIconSet("mini-book1"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-  help_menu->insertItem(SmallIconSet("mini-book1"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
-  help_menu->insertItem(SmallIconSet("mini-book1"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
-  help_menu->insertItem(SmallIconSet("mini-book1"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
-  help_menu->insertItem(SmallIconSet("mini-book1"),addendum,this,SLOT(slotHelpKDE2DevGuide()),0 ,ID_HELP_KDE2_DEVGUIDE);
-  help_menu->insertItem(SmallIconSet("mini-book1"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
+  help_menu->insertItem(SmallIconSet("mini_book1"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
+  help_menu->insertItem(SmallIconSet("mini_book1"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
+  help_menu->insertItem(SmallIconSet("mini_book1"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
+  help_menu->insertItem(SmallIconSet("mini_book1"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
+  help_menu->insertItem(SmallIconSet("mini_book1"),addendum,this,SLOT(slotHelpKDE2DevGuide()),0 ,ID_HELP_KDE2_DEVGUIDE);
+  help_menu->insertItem(SmallIconSet("mini_book1"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertSeparator();	
 	help_menu->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
   help_menu->insertItem(SmallIconSet("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);

@@ -285,9 +285,9 @@ void CTreeHandler::readIcons()
   icons[ THFOLDER_OPEN ]      = new QPixmap( SmallIcon( "folder_open"));
   icons[ THCLASS ]            = new QPixmap( SmallIcon( "CVclass"));
   icons[ THPROJECT ]          = new QPixmap( SmallIcon( "folder"));
-  icons[ THBOOK ]             = new QPixmap( SmallIcon( "mini-book1"));
-  icons[ THBOOK_OPEN ]        = new QPixmap( SmallIcon( "mini-book2"));
-  icons[ THDOC ]              = new QPixmap( SmallIcon( "mini-doc"));
+  icons[ THBOOK ]             = new QPixmap( SmallIcon( "mini_book1"));
+  icons[ THBOOK_OPEN ]        = new QPixmap( SmallIcon( "mini_book2"));
+  icons[ THDOC ]              = new QPixmap( SmallIcon( "mini_doc"));
   icons[ THSTRUCT ]           = new QPixmap( SmallIcon( "CVstruct"));
   icons[ THSCOPE ]            = new QPixmap( SmallIcon( "CVnamespace"));
   icons[ THPUBLIC_ATTR ]      = new QPixmap( SmallIcon( "CVpublic_var"));
