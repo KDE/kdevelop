@@ -536,6 +536,7 @@ void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
 }
 
 
+#ifdef NEW_EDITOR
 KEditor::Document *Core::createDocument(const KURL &url)
 {
   KEditor::Document *doc = editor()->createDocument(win, url);
@@ -546,6 +547,7 @@ KEditor::Document *Core::createDocument(const KURL &url)
 
   return doc;
 }
+#endif
 
 
 void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
