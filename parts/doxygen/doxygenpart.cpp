@@ -142,6 +142,13 @@ void DoxygenPart::adjustDoxyfile()
     recursive->setValueString("yes");
   }
 
+  // set "XML/GENERATE_XML" to generate XML information to be used with code hinting
+  ConfigBool *gen_xml = dynamic_cast<ConfigBool*>(Config::instance()->get("GENERATE_XML"));
+  if (gen_xml)
+  {
+    gen_xml->setValueString("yes");
+  }
+
   // write doxy file
   QFile f2(fileName);
   if (!f2.open(IO_WriteOnly))
