@@ -1,3 +1,10 @@
+2003-05-18 Alexander Dymo <cloudtemple@mksat.net>
+    * Reformat source option is now available in the "Subclassing" wizard
+    * Trollproject:
+      - recognizes MAKEFILE option in qmake configuration files
+      - uses make options specified in project options dialog
+      - uses makefiles specified by MAKEFILE option to run make
+
 2003-05-18 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Updated BookmarksPart - now bookmarks are saved to session file.
 
