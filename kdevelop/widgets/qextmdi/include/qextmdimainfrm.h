@@ -173,7 +173,7 @@ public:
    /**
    * Destructor.
    */
-   ~QextMdiMainFrm();
+   virtual ~QextMdiMainFrm();
    /**
    * Returns whether the application's MDI views are in maximized state or not.
    */
