@@ -1,16 +1,13 @@
 /** \class subversionPart
 Integrates the SVN (Subversion) version management system into KDevelop.
 
-\warning This is really unstable/experimental for now !
-Don't use it with important projects, you may lose files.
-
 \authors <a href="mailto:marchand AT kde.org">Mickael Marchand</a>
 
 \maintainer <a href="mailto:marchand AT kde.org">Mickael Marchand</a>
 
 \feature Integrates the SVN (Subversion) version management system into KDevelop.
 
-\requirement You need to compile and install kdenonbeta/kio_svn (using a recent Subversion release)
+\requirement You need to compile and install kdesdk/kioslave/svn
 
 */
 

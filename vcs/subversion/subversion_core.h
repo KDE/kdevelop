@@ -24,14 +24,17 @@
 #include <qwidget.h>
 #include <kio/job.h>
 #include <kurl.h>
+#include <dcopobject.h>
 
 class KDevProject;
 class subversionPart;
 class subversionWidget;
 
-class subversionCore : public QObject
+class subversionCore : public QObject, public DCOPObject
 {
   Q_OBJECT
+  K_DCOP
+
 public:
 		  
   subversionCore(subversionPart *part);
@@ -44,6 +47,9 @@ public:
 	void revert( const KURL::List&);
 	void checkout();
 	void createNewProject( const QString& dirName, const KURL& importURL, bool init );
+
+k_dcop:
+	void notification( const QString&, int,int, const QString&, int,int ,long int, const QString& );
 
 private slots:
 	void slotEndCheckout( KIO::Job * job );

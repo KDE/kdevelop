@@ -1,5 +1,4 @@
-/* Copyright (C) 2003
-	 Mickael Marchand <marchand@kde.org>
+/* Copyright (C) 2003-2005 Mickael Marchand <marchand@kde.org>
 
 	 This program is free software; you can redistribute it and/or
 	 modify it under the terms of the GNU General Public
@@ -30,19 +29,40 @@
 #include <kio/job.h>
 #include <kdebug.h>
 #include <kmainwindow.h>
+#include <kapplication.h>
+#include <dcopclient.h>
 
 using namespace KIO;
 
 subversionCore::subversionCore(subversionPart *part)
-	: QObject(this, "subversion core") {
+	: QObject(this, "subversion core"), DCOPObject("subversion") {
 		m_part = part;
 		m_widget = new subversionWidget(part, 0 , "subversionprocesswidget");
+		if ( ! connectDCOPSignal("kded", "ksvnd", "subversionNotify(QString,int,int,QString,int,int,long int,QString)", "notification(QString,int,int,QString,int,int,long int,QString)", false ) )
+			kdWarning() << "Failed to connect to kded dcop signal ! Notifications won't work..." << endl;
 	}
 
 subversionCore::~subversionCore() {
 	if ( processWidget() ) {
 		m_part->mainWindow()->removeView( m_widget );
 		delete m_widget;
+	}
+}
+
+void subversionCore::notification( const QString& path, int action, int kind, const QString& mime_type, int content_state ,int prop_state ,long int revision, const QString& userstring ) {
+	kdDebug() << "Subversion Notification : " 
+		<< "path : " << path
+		<< "action: " << action
+		<< "kind : " << kind
+		<< "mime_type : " << mime_type
+		<< "content_state : " << content_state
+		<< "prop_state : " << prop_state
+		<< "revision : " << revision
+		<< "userstring : " << userstring
+		<< endl;
+	if ( !userstring.isEmpty() ) {
+		m_part->mainWindow()->raiseView(m_widget);
+		m_widget->append( userstring );
 	}
 }
 

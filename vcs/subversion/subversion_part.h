@@ -23,11 +23,14 @@
 #include <qguardedptr.h>
 #include <kdevplugin.h>
 #include <kurl.h>
+#include <qpopupmenu.h>
+#include <kdialogbase.h>
 #include "kdevversioncontrol.h"
 
 class subversionCore;
 class subversionOptionsWidget;
 class subversionProjectWidget;
+class Context;
 
 class subversionPart : public KDevVersionControl
 {

@@ -1,5 +1,5 @@
-/* Copyright (C) 2003
-	 Mickael Marchand <marchand@kde.org>
+/**
+	 Copyright (C) 2003-2005 Mickael Marchand <marchand@kde.org>
 
 	 This program is free software; you can redistribute it and/or
 	 modify it under the terms of the GNU General Public
