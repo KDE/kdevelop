@@ -61,6 +61,12 @@ CKDevelop::CKDevelop(){
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }
 
+CKDevelop::~CKDevelop(){
+  // from Constructur... delete everything which is not constructed
+  //   with a binding to the application
+  delete error_parser;
+}
+
 void CKDevelop::initView(){
   act_outbuffer_len=0;
   prj = 0;

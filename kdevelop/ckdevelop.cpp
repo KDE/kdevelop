@@ -1260,6 +1260,7 @@ void CKDevelop::slotHelpSearchText(){
       text = edit_widget->currentWord();
     }
   }
+  text.replace(QRegExp("\n$"), ""); // strip last \n
   slotHelpSearchText(text);
 }
 
@@ -1644,27 +1645,34 @@ void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
 
 void CKDevelop::slotDocumentDone( KHTMLView *_view ){
   QString actualURL=browser_widget->currentURL();
+  QString actualTitle=browser_widget->currentTitle();
   int cur =  history_list.at()+1; // get the current index
   int found =  history_list.find(actualURL); // get the current index
+  int pos = actualURL.findRev('#');
+  QString url_wo_ref=actualURL; // without ref
 
   if(prev_was_search_result){
     browser_widget->findTextBegin();
     browser_widget->findTextNext(QRegExp(doc_search_text));
   }
-  setCaption(browser_widget->currentTitle()+" - KDevelop " + version);
-	
+  setCaption(actualTitle+" - KDevelop " + version);
+
+  if (pos!=-1)
+   url_wo_ref = actualURL.left(pos);
+
   // insert into the history-list
-  if(actualURL.left(7) != "http://"){ // http aren't added to the history list
+  if(actualURL.left(7) != "http://" || url_wo_ref.right(4).find("htm", FALSE)==-1){
+   // http aren't added to the history list
 
    if (found == -1)
    {
     if(cur == 0 ){
       history_list.append(actualURL);
-      history_title_list.append(browser_widget->currentTitle());
+      history_title_list.append(actualTitle);
     }
     else{
       history_list.insert(cur,actualURL);
-      history_title_list.insert(cur, browser_widget->currentTitle());
+      history_title_list.insert(cur, actualTitle);
     }
    }
    else
@@ -1672,7 +1680,7 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
      // the desired URL was already found in the list
 
      if (actualURL.contains("kdevelop/search_result.html") &&
-	history_title_list.at(found)!=browser_widget->currentTitle())
+	history_title_list.at(found)!=actualTitle)
      {
          // this means... a new search_result.html is selected and an old one
          // was found in list
@@ -1682,7 +1690,7 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
          // append now the new one
          cur=history_list.count();
          history_list.insert(cur,actualURL);
-         history_title_list.insert(cur, browser_widget->currentTitle());
+         history_title_list.insert(cur, actualTitle);
      }
      else
      if (prev_was_search_result)
@@ -1695,7 +1703,7 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
          if (found<cur)
            cur--;
          history_list.insert(cur,actualURL);
-         history_title_list.insert(cur, browser_widget->currentTitle());
+         history_title_list.insert(cur, actualTitle);
       }
       else
       {

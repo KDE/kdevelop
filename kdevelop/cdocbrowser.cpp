@@ -90,8 +90,20 @@ void CDocBrowser::slotViewInKFM(){
 void CDocBrowser::showURL(QString url,bool reload){
  //read the htmlfile
   //cerr << "URL:" << url << "\n";
+  QString url_wo_ref=url; // without ref
+  QString ref;
 
-  if(url.left(7) == "http://"){
+  complete_url=url;
+  int pos = url.findRev('#');
+  int len = url.length();
+
+  ref = (pos!=-1) ? (const char*) url.right(len - pos - 1) : "";
+  m_refTitle = ref;
+
+  if (pos!=-1)
+   url_wo_ref = url.left(pos);
+
+  if(url.left(7) == "http://" || url_wo_ref.right(4).find("htm", FALSE)==-1){
 
     KProcess showHTML;
     showHTML << "kfmclient" << "openURL" << url;
@@ -104,39 +116,32 @@ void CDocBrowser::showURL(QString url,bool reload){
   htmlview=getKHTMLWidget();
 //  htmlview->setCursor( KCursor::waitCursor() );
 
-  QString ref = url;
-  QString url_wo_ref; // without ref
-  int pos = ref.findRev('#');
-  int len = ref.length();
-  ref = ref.right(len - pos - 1);
-  
-  pos = url.findRev('#');
-  url_wo_ref = url.left(pos);
-  
   if( (url_wo_ref != old_url) || reload){
     QString str="";
     KFM::download(url,str);
     
     //cerr << endl << "STR:" << str;
     
-    char buffer[256];
-    int val;
+    char buffer[256+1];
     QFile file(str) ;
     if(file.exists()){
-	 		emit enableStop(ID_HELP_BROWSER_STOP);
+      emit enableStop(ID_HELP_BROWSER_STOP);
       file.open(IO_ReadOnly);
+      QDataStream dstream ( &file );
+      QString content;
+
       begin( url);
-      do
-			{
-	  		buffer[0] = '\0';
-	  		val = file.readLine( buffer, 256 );
-	  		write(buffer);
-			}
-      while ( !file.atEnd() );
-      
+
+      while ( !dstream.eof() )
+      {
+        buffer[256]='\0';
+        dstream.readRawBytes(buffer, 256);
+	write(buffer);
+      }
+
       end();
       parse();
-           show();
+      show();
       KFM::removeTempFile(str);
       file.close();
     }
@@ -148,18 +153,27 @@ void CDocBrowser::showURL(QString url,bool reload){
   }
   
 
-
   if (pos != -1){
     gotoAnchor(ref);
+  }
+  else
+  {
+    if (url_wo_ref == old_url)
+     gotoXY(0,0);
+  }
+
+  if (url_wo_ref == old_url)
+  {
+     emit documentDone(this);  // simulate documentDone to put it in history...
   }
   old_url = url_wo_ref;
 }
 
 QString CDocBrowser::currentURL(){
-  return url;
+  return complete_url;
 }
-void CDocBrowser::setDocBrowserOptions(){
 
+void CDocBrowser::setDocBrowserOptions(){
 
   KConfig *config = KApplication::getKApplication()->getConfig();
   config->setGroup( "DocBrowserAppearance" );
@@ -197,6 +211,7 @@ void CDocBrowser::slotDocFontSize(int size){
   fSize = size;
   htmlview->setDefaultFontBase( size );
   htmlview->parse();
+  showURL(complete_url, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
@@ -207,6 +222,7 @@ void CDocBrowser::slotDocStandardFont(const char* n){
   standardFont = n;
   htmlview->setStandardFont( n );
   htmlview->parse();
+  showURL(complete_url, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
@@ -217,6 +233,7 @@ void CDocBrowser::slotDocFixedFont(const char* n){
   fixedFont = n;
   htmlview->setFixedFont( n );
   htmlview->parse();
+  showURL(complete_url, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
@@ -231,6 +248,7 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
   htmlview->setDefaultTextColors( text, link, vlink );
   htmlview->setUnderlineLinks(uline);
   htmlview->parse();
+  showURL(complete_url, true);
 //	busy = true;
 //	emit enableMenuItems();){
 }
@@ -291,7 +309,7 @@ void CDocBrowser::slotSetFileTitle( const char* title ){
 }
 
 QString CDocBrowser::currentTitle(){
-	return m_title;	
+	return (m_refTitle.isEmpty()) ? m_title : m_refTitle+" - "+m_title;	
 }
 //
 // KDE Help Options

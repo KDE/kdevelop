@@ -75,8 +75,8 @@ public slots:
 	void signalBookmarkAdd();
 	void enableStop(int);	
 protected:
-  QString old_url;
-  QString m_title;
+  QString old_url, complete_url;
+  QString m_title, m_refTitle;
 //  void  mousePressEvent(QMouseEvent* event);
   QPopupMenu* doc_pop;
 

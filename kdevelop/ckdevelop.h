@@ -85,7 +85,7 @@ public:
   /**constructor*/
   CKDevelop();
   /**destructor*/
-  ~CKDevelop(){};
+  virtual ~CKDevelop();
   void initView();
   void initConnections();
   void initKeyAccel();
