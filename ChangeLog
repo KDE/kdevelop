@@ -2,7 +2,9 @@
   * fixed the addExisting files-asked every time, even when a file did not exist
     and added a cancel button. TODO: in CKDevelop::addFileToProject()  proof if file already is
     included in the project file, otherwise files copied to the project that are already in are added
-    to the projectfile twice-this confuses the classviewer as well.
+    to the projectfile twice-this confuses the classviewer as well
+  * added highlighting-selection dialog to the Installer and fixed the selection of qt-documentation path
+  	if it wasn't found by the Installer automatically
 
 1999-03-09 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	

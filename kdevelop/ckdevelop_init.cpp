@@ -39,7 +39,7 @@ CKDevelop::CKDevelop(){
   initProject(); 
 	cerr << "initProject\n";
   config->setGroup("Files");
-  filename = config->readEntry("browser_file");
+  filename = config->readEntry("browser_file","");
   if(!filename.isEmpty()){
     slotURLSelected(browser_widget,filename,1,"test");
   }

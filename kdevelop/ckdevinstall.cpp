@@ -55,6 +55,7 @@ void CKDevInstall::slotProcessExited(KProcess*){
 	    
 	    config->setGroup("General Options");
 	    config->writeEntry("Install",false);
+			config->sync();
 	    finish_dir->setCurrent(QDir::homeDirPath ());
 	    accept();
 	}
@@ -87,8 +88,8 @@ void CKDevInstall::slotProcessExited(KProcess*){
 
   config->setGroup("General Options");
   config->writeEntry("Install",false);
+	config->sync();
   finish_dir->setCurrent(QDir::homeDirPath ());
-
   accept();
 }
 CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
@@ -347,6 +348,164 @@ void CKDevInstall::slotAuto() // proceed >>
   bool kiconedit=false;
   bool ktranslator=false;
 
+  int highl_style=KMsgBox::yesNo(this,i18n("Syntax-Highlighting"),i18n("\nNow you can choose the Syntax-Highlighting style\n"
+                                                                      "KDevelop will use. The options are to set\n"
+                                                                      "the highlighting to Emacs stlye or to the default\n"
+                                                                      "settings of KWrite (k.a. 'Extended Editor')\n\n"
+                                                                      "Which one do you want to use ?\n"),
+                                                                      KMsgBox::QUESTION, i18n("Emacs style"),i18n("KWrite default"));
+  if(highl_style==1){
+    config->setGroup("Perl Highlight");
+    config->writeEntry("Mimetypes","application/x-perl");
+    config->writeEntry("Wildcards","");
+    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Variable","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Operator","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+
+    config->setGroup("C++ Highlight");
+    config->writeEntry("Prep. Lib","0,808000,FFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Char","0,CC07,CC07,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Data Type","0,AD466A,AD466A,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Mimetypes","text/x-c++-src;text/x-c++-hdr;text/x-c-hdr");
+    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Preprocessor","0,800080,800080,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX");
+    config->writeEntry("Comment","0,E0,D7,0,0,1,courier,12,Èñf@");
+    config->writeEntry("String","0,8000,8000,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Keyword","0,A7AD,A7AD,0,0,1,courier,12,Èñf@");
+    config->writeEntry("String Char","0,8000,8000,0,0,1,courier,12,Èñf@");
+
+    config->setGroup("Ada Highlight");
+    config->writeEntry("Base-N","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Mimetypes","text/x-ada-src");
+    config->writeEntry("Wildcards","*.a");
+    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+
+    config->setGroup("Modula 2 Highlight");
+    config->writeEntry("Mimetypes","text/x-modula-2-src");
+    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Wildcards","*.md;*.mi");
+    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+
+    config->setGroup("Java Highlight");
+    config->writeEntry("Prep. Lib","0,8080,FFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Data Type","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Mimetypes","text/x-java-src");
+    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Wildcards","*.java");
+    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+
+    config->setGroup("Normal Highlight");
+    config->writeEntry("Mimetypes","");
+    config->writeEntry("Wildcards","");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
+
+    config->setGroup("C Highlight");
+    config->writeEntry("Prep. Lib","0,8080,FFFF,0,0,1,courier,12,");
+    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Data Type","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Mimetypes","text/x-c-src");
+    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Wildcards","*.c;*.C");
+    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,");
+
+    config->setGroup("HTML Highlight");
+    config->writeEntry("Tag Text","0,0,FFFFFF,1,0,1,courier,12,");
+    config->writeEntry("Char","0,8000,FF00,0,0,1,courier,12,");
+    config->writeEntry("Tag","0,800080,FF00FF,1,0,1,courier,12,");
+    config->writeEntry("Mimetypes","text/html");
+    config->writeEntry("Wildcards","*.html;*.htm");
+    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Tag Value","0,808000,FFFF00,0,0,1,courier,12,");
+
+    config->setGroup("Python Highlight");
+    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Mimetypes","text/x-python-src");
+    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Wildcards","*.py");
+    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+
+    config->setGroup("Bash Highlight");
+    config->writeEntry("Integer","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Mimetypes","text/x-shellscript");
+    config->writeEntry("Substitution","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Wildcards","");
+    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
+    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,");
+
+    config->setGroup("KWrite Options");
+    config->writeEntry("WrapAt","78");
+    config->writeEntry("ConfigFlags","16");
+    config->writeEntry("UndoSteps","50");
+    config->writeEntry("Highlight","C++");
+    config->writeEntry("SearchFlags","32");
+    config->writeEntry("Color0","255,255,255");
+    config->writeEntry("Color1","0,0,128");
+    config->writeEntry("Color2","0,0,0");
+    config->writeEntry("Color3","0,0,0");
+    config->writeEntry("TabWidth","2");
+    config->writeEntry("Color4","255,255,255");
+  }
+  if(highl_style==2){
+    config->setGroup("KWrite Options");
+    config->writeEntry("WrapAt","78");
+    config->writeEntry("ConfigFlags","16");
+    config->writeEntry("UndoSteps","50");
+    config->writeEntry("Highlight","C++");
+    config->writeEntry("SearchFlags","32");
+    config->writeEntry("Color0","255,255,255");
+    config->writeEntry("Color1","0,0,128");
+    config->writeEntry("Color2","0,0,0");
+    config->writeEntry("Color3","0,0,0");
+    config->writeEntry("TabWidth","2");
+    config->writeEntry("Color4","255,255,255");
+	}
   QProgressDialog progress( i18n("Checking needed programs..."), i18n("Cancel"), numProgs, this );
   progress.setMinimumDuration ( 0 );
 
@@ -450,7 +609,7 @@ void CKDevInstall::slotAuto() // proceed >>
   if(kdoc)
     kdoc_str="kdoc"+found+"\n";
   else
-    kdoc_str="kdoc"+not_found+" -- generating API-documentation will not be possible\n";
+    kdoc_str="kdoc"+not_found+" -- generating API-documentations will not be possible\n";
   QString kdbg_str;
   if(kdbg)
     kdbg_str="kdbg"+found+"\n";
@@ -485,67 +644,68 @@ void CKDevInstall::slotAuto() // proceed >>
   if(a2ps || enscript)
     print_str="a2ps / enscript"+found+"  -- printing available\n";
   else
-    print_str="a2ps / enscript"+not_found+" -- printing will not be possible\n";
+    print_str="a2ps / enscript"+not_found+" -- printing can only use lpr\n";
 
 
   KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
                   +print_str+kdbg_str+kiconedit_str+ktranslator_str, KMsgBox::INFORMATION);
 
+  if(qt_test){ // test, if qt_test is required- qt_test is set to "true" in the constructor.
+  						 // Leave out the test if the correct path has been set in the edit field (there, qt_test has been set to false)
+	
+	  // now check for the qt libs documentation
+  	QString qt_testfile="classes.html";
+  	QString qt="";
 
-  // now check for the qt libs documentation
-  QString qt_testfile="classes.html";
-  QString qt="";
+	  QDir* qt_dir=new QDir();
+  	if(qt_dir->cd("/usr/local/qt/html/"))
+    	if(qt_dir->exists("classes.html"))
+      	qt="/usr/local/qt/html/";
 
-  QDir* qt_dir=new QDir();
-  if(qt_dir->cd("/usr/local/qt/html/"))
-    if(qt_dir->exists("classes.html"))
-      qt="/usr/local/qt/html/";
+	  if(qt_dir->cd("/usr/local/lib/qt/html/"))
+  	  if(qt_dir->exists("classes.html"))
+    	  qt="/usr/local/lib/qt/html/";
 
-  if(qt_dir->cd("/usr/local/lib/qt/html/"))
-    if(qt_dir->exists("classes.html"))
-      qt="/usr/local/lib/qt/html/";
+	  if(qt_dir->cd("/usr/lib/qt/html/"))
+  	  if(qt_dir->exists("classes.html"))
+    	  qt="/usr/lib/qt/html/";
 
-  if(qt_dir->cd("/usr/lib/qt/html/"))
-    if(qt_dir->exists("classes.html"))
-      qt="/usr/lib/qt/html/";
+	  if(qt_dir->cd("/usr/lib/qt/doc/html/"))
+  		if(qt_dir->exists("classes.html"))
+      	qt="/usr/lib/qt/doc/html/";
 
-  if(qt_dir->cd("/usr/lib/qt/doc/html/"))
-    if(qt_dir->exists("classes.html"))
-      qt="/usr/lib/qt/doc/html/";
+	  if(qt_dir->cd("/usr/X11/lib/qt/html/"))
+  	  if(qt_dir->exists("classes.html"))
+    	  qt="/usr/X11/lib/qt/html/";
 
-  if(qt_dir->cd("/usr/X11/lib/qt/html/"))
-    if(qt_dir->exists("classes.html"))
-      qt="/usr/X11/lib/qt/html/";
+	  if(qt_dir->cd("/usr/X11/lib/qt/doc/html/"))
+  	  if(qt_dir->exists("classes.html"))
+     	 qt="/usr/X11/lib/qt/doc/html/";
 
-  if(qt_dir->cd(config->readEntry("doc_qt")))
-    if(qt_dir->exists("classes.html"))
-      qt=config->readEntry("doc_qt");
+	  if(!qt.isEmpty())
+  	  qt_test=false;
+	  else
+  	  qt_test=true;
 
-  if(!qt.isEmpty())
-    qt_test=false;
-  else
-    qt_test=true;
-
-  if(!qt_test){
-    config->setGroup("Doc_Location");
-    config->writeEntry("doc_qt",qt);
-    KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found in:\n"+
-                          qt+"\nThe correct path has been set.\n"),KMsgBox::INFORMATION);
-
-  }
-  else{  // return to the setup to set it manually ?
-    int result=KMsgBox::yesNo(this,i18n("Information"),i18n("\nThe Qt-library documentation could not\n"
-                                                  "be detected. Please insert the correct path\n"
-                                                  "to your Qt-documentation manually. Do you want\n"
-                                                  "to set it now ?\n"),KMsgBox::QUESTION);
-    if(result==1){
-			hint_label->setGeometry( 40, 150, 440, 120 );
-    	hint_label->setText(i18n("    Please choose your Qt-Documentation path by pushing the selection button above."));
-      return;
+	  if(!qt_test){
+  	  config->setGroup("Doc_Location");
+    	config->writeEntry("doc_qt",qt);
+	 	  KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n"+qt
+ 	   				+"\n\nThe correct path has been set.\n"),KMsgBox::INFORMATION);
 		}
-  }
-
+  	else{  // return to the setup to set it manually ?
+    	int result=KMsgBox::yesNo(this,i18n("Information"),i18n("\nThe Qt-library documentation could not\n"
+      	                                            "be detected. Please insert the correct path\n"
+        	                                          "to your Qt-documentation manually. Do you want\n"
+          	                                        "to set it now ?\n"),KMsgBox::QUESTION);
+ 	   if(result==1){
+				hint_label->setGeometry( 40, 150, 440, 120 );
+    		hint_label->setText(i18n("    Please choose your Qt-Documentation path by pushing the selection button above."));
+      	return;
+			}
+  	}
+	}
   
   QDir* kde_dir=new QDir();
 
@@ -570,6 +730,7 @@ void CKDevInstall::slotAuto() // proceed >>
     kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
     config->setGroup("Doc_Location");
     config->writeEntry("doc_kde",QDir::homeDirPath ()+"/.kde/share/apps/kdevelop/KDE-Documentation/");
+		config->sync();
     CUpdateKDEDocDlg dlg(this,"test",shell_process, config);
     if(!dlg.exec()){
 			slotProcessExited(shell_process);
@@ -594,11 +755,13 @@ void CKDevInstall::slotCancel()
   if(result==1){
   config->setGroup("General Options");
   config->writeEntry("Install",false);
+	config->sync();
   close();
   }
   else
     return;
 }
+
 
 
 
