@@ -1601,20 +1601,20 @@ not provide a widget in the dialogeditor itself). Then the widget properties for
 properties that are specific to it. For a better understanding the inheritance tree of the available widgets is listed below:
 
 <itemize>
-<item><ref id="QWidget" name="<cdx/QWidget/">
+<item><ref id="QWidget" name="QWidget">
 	<itemize>
-		<item><ref id="QButton" name="<cdx/QButton/"> (abstract)
+		<item><ref id="QButton" name="QButton"> (abstract)
 			<itemize>
 			<item><ref id="QCheckBox" name="QCheckBox">
 			<item><ref id="QPushButton" name="QPushButton">
 			<item><ref id="QRadioButton" name="QRadioButton">
 			</itemize>
-		<item><ref id="QComboBox" name="<cdx/QComboBox/">
+		<item><ref id="QComboBox" name="QComboBox">
 		<item><ref id="QFrame" name="QFrame"> (abstract for now)
 			<itemize>
 			<item><ref id="QGroupBox" name="QGroupBox">
 			<item><ref id="QLCDNumber" name="QLCDNumber">
-			<item><ref id="QLabel" name="<idx/QLabel/">
+			<item><ref id="QLabel" name="QLabel">
 			<item><ref id="QProgressBar" name="QProgressBar">
 			<item><ref id="QScrollView" name="QScrollView"> (abstract for now)
 				<itemize>
@@ -1686,7 +1686,7 @@ protocol, not KDE 1.x !)
 <p>
 <tt/<cdx/QButton// is an abstract widget class that provides properties common to buttons.
 
-Inherits <ref id="QWidget" name="<cdx/QWidget/">
+Inherits <ref id="QWidget" name="QWidget">
 
 Inherited by <ref id="QCheckBox" name="QCheckBox">, <ref id="QPushButton" name="QPushButton"> and <ref id="QRadioButton"
 name="QRadioButton"> inherit <tt/<cdx/QButton//.
@@ -1710,7 +1710,7 @@ name="QRadioButton"> inherit <tt/<cdx/QButton//.
 
 <sect2>QCheckBox Properties <label id="QCheckBox">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QButton" name="<cdx/QButton/">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
 
 <itemize>
 <item><bf/General:/
@@ -1722,7 +1722,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QButton" name="<cd
 
 <sect2>QPushButton Properties <label id="QPushButton">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QButton" name="<cdx/QButton/">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
 
 <itemize>
 <item><bf/General:/
@@ -1741,7 +1741,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QButton" name="<cd
 
 <sect2>QRadioButton Properties <label id="QRadioButton">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QButton" name="<cdx/QButton/">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
 
 <itemize>
 <item><bf/General:/
@@ -1753,7 +1753,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QButton" name="<cd
 
 <sect1><cdx/QComboBox/ Properties <label id="QComboBox">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/">
+Inherits <ref id="QWidget" name="QWidget">
 
 ( no additional properties for now)
 <p>
@@ -1761,7 +1761,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/">
 
 <sect1>QFrame inherited widgets <label id="QFrame">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/">
+Inherits <ref id="QWidget" name="QWidget">
 
 For now only used as an abstract class.
 
@@ -1776,7 +1776,7 @@ For now only used as an abstract class.
 
 <sect2>QGroupBox Properties <label id="QGroupBox">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFrame">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
 
 <itemize>
 <item><bf/General:/
@@ -1788,7 +1788,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFra
 
 <sect2>QLCDNumber Properties  <label id="QLCDNumber">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFrame">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
 
 <itemize>
 <item><bf/General:/
@@ -1802,7 +1802,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFra
 
 <sect2><idx/QLabel/ Properties  <label id="QLabel">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFrame">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
 
 <itemize>
 <item><bf/Appearance:/
@@ -1826,7 +1826,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFra
 
 <sect2>QProgressBar Properties  <label id="QProgressBar">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFrame">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
 
 <itemize>
 <item><bf/General:/
@@ -1839,7 +1839,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFra
 			
 <sect2>QScrollView <label id="QScrollView">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFrame">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
 
 Inherited by <ref id="QListBox" name="QListBox">
 (abstract for now)
@@ -1848,7 +1848,7 @@ Provides a scrollable widget that manages the display of a child widget by a ver
 
 <sect3>QListView<label id="QListView">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/">, <ref id="QFrame" name="QFrame"> and <ref id="QListView" name="QListView">
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QListView" name="QListView">
 
 Provides a list view to display hierarchical data either in a table or a tree. Manages itself by scrollbars through <ref
 id="QScrollView" name="QScrollView">.
@@ -1874,7 +1874,7 @@ id="QScrollView" name="QScrollView">.
 
 <sect2>QSpinBox Properties <label id="QSpinBox">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFrame">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
 
 <itemize>
 <item><bf/General:/
@@ -1891,14 +1891,14 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <ref id="QFrame" name="QFra
 
 <sect2>QTableView inherited widgets <label id="QTableView">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
 
 Inherited by <ref id="QListBox" name="QListBox"> and <ref id="QMultiLineEdit" name="QMultiLineEdit">
 <p>
 
 <sect3>QListBox Properties <label id="QListBox">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
 
 <itemize>
 <item><bf/General:/
@@ -1921,7 +1921,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/">, <ref id="QFrame" name="QFrame"
 
 <sect3>QMultiLineEdit Properties <label id="QMultiLineEdit">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
 
 <itemize>
 <item><bf/General:/
@@ -1942,7 +1942,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/">, <ref id="QFrame" name="QFrame"
 
 <sect1>QLineEdit Properties <label id="QLineEdit">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/">
+Inherits <ref id="QWidget" name="QWidget">
 
 <itemize>
 <item><bf/General:/
@@ -1958,7 +1958,7 @@ Inherits <ref id="QWidget" name="<cdx/QWidget/">
 
 <sect1>QScrollBar Properties <label id="QScrollBar">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <tt/QRangeControl/.
+Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
 
 <itemize>
 <item><bf/General:/
@@ -1975,7 +1975,7 @@ mouse release.
 
 <sect1>QSlider Properties <label id="QSlider">
 <p>
-Inherits <ref id="QWidget" name="<cdx/QWidget/"> and <tt/QRangeControl/.
+Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
 
 <itemize>
 <item><bf/General:/
@@ -1995,9 +1995,9 @@ mouse release.
 <p>
 
 <itemize>
-<item><ref id="QWidget" name="<cdx/QWidget/">
+<item><ref id="QWidget" name="QWidget">
 	<itemize>
-	<item><ref id="QButton" name="<cdx/QButton/"> (abstract)
+	<item><ref id="QButton" name="QButton"> (abstract)
 		<itemize>
 		<item><ref id="QPushButton" name="QPushButton">
   		<itemize>
@@ -2005,7 +2005,7 @@ mouse release.
   		<item><ref id="KKeyButton" name="KKeyButton">
   		</itemize>		
 		</itemize>
-	<item><ref id="QComboBox" name="<cdx/QComboBox/">
+	<item><ref id="QComboBox" name="QComboBox">
 		<itemize>
 		<item><ref id="KCombo" name="KCombo">
 		</itemize>
@@ -2047,7 +2047,7 @@ Inherits <ref id="QPushButton" name="QPushButton">
 <sect1>KCombo<label id="KCombo">
 <p>
 
-Inherits: <ref id="QComboBox" name="<cdx/QComboBox/">
+Inherits: <ref id="QComboBox" name="QComboBox">
 
 <itemize>
 <item>General
@@ -2116,7 +2116,7 @@ Inherits: <ref id="QComboBox" name="<cdx/QComboBox/">
 <sect1>KLed<label id="KLed">
 <p>
 
-Inherits <ref id="QWidget" name="<cdx/QWidget/">
+Inherits <ref id="QWidget" name="QWidget">
 
 <itemize>
 <item>Appearance
@@ -2132,8 +2132,10 @@ Constructing a new dialog is very easy if you already have experience with graph
 create a widget visually and displays the look as it will be shown to the user directly. Further, you can have a preview of your widget
 by selecting "Preview" from the "View" menu.
 
-To begin constructing a dialog or any other widget, switch to the Dialogeditor and select "New" from the "File" menu. Then enter
-all needed information to the "New Dialog" dialog. Those are:
+To begin constructing a dialog or any other widget, switch to the Dialogeditor and select "New" from the "File" menu. Select "Qt/KDE Dialgo (*.kdevdlg)
+from the New File dialog and enter the dialog filename. Construct your dialog and when you´re finished, select "Generate all Sources" from the "Build"-menu.
+
+Then enter all needed information to the appearing dialog. Those are:
 
 <enum>
 <item>The Dialog inheritance. This is necessary because any widget is at least derived from <tt/<cdx/QWidget//. Besides the widget types
