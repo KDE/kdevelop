@@ -1121,12 +1121,20 @@ void CppSupportPart::setupCatalog( )
 {
     kdDebug(9007) << "CppSupportPart::setupCatalog()" << endl;
 
-    QStringList enabledPCSs = DomUtil::readListEntry( *project()->projectDom(), "kdevcppsupport/references", "pcs" );
-    QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
-
     KStandardDirs *dirs = CppSupportFactory::instance()->dirs();
     QStringList pcsList = dirs->findAllResources( "pcs", "*.db", false, true );
     QStringList pcsIdxList = dirs->findAllResources( "pcs", "*.idx", false, true );
+
+    QStringList enabledPCSs;
+    if( DomUtil::elementByPath( *project()->projectDom(), "kdevcppsupport/references" ).isNull() ){
+        for( QStringList::Iterator it=pcsList.begin(); it!=pcsList.end(); ++it ){
+            enabledPCSs.push_back( QFileInfo(*it).baseName() );
+        }
+    } else {
+        enabledPCSs = DomUtil::readListEntry( *project()->projectDom(), "kdevcppsupport/references", "pcs" );
+    }
+
+    QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
 
     if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
         QStringList l = pcsList + pcsIdxList;
