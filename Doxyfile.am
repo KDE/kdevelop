@@ -1,6 +1,6 @@
 ## generate API documentation with doxygen
 apidox-am-yes:
-	if test "$(subdir)" == "."; then \
+	@if test "$(subdir)" == "."; then \
 		$(mkinstalldirs) $(top_builddir)/apidocs/$(subdir) ;\
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
 			if test ! -x $(top_builddir)/apidocs/common; then \
@@ -13,9 +13,6 @@ apidox-am-yes:
 			fi ;\
 		fi ;\
 		cp $(top_srcdir)/admin/Doxyfile.global Doxyfile; \
-		##--------------------------------------------------------------------------- \
-		## Project related configuration options                                      \
-		##--------------------------------------------------------------------------- \
 		echo "PROJECT_NAME           = $(DOXYGEN_PROJECT_NAME)" >> Doxyfile; \
 		echo "PROJECT_NUMBER         = \"Version $(VERSION)\"" >> Doxyfile; \
 		echo "OUTPUT_DIRECTORY       = $(top_builddir)/apidocs" >> Doxyfile; \
@@ -27,25 +24,12 @@ apidox-am-yes:
 		echo "ALIASES               += \"requirement=\xrefitem requirements \\\"Requirement(s)\\\" \\\"Requirements\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"faq=\xrefitem FAQ \\\"F.A.Q.\\\" \\\"F.A.Q.\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"authors=\xrefitem authors \\\"Author(s)\\\" \\\"Authors\\\"\" " >> Doxyfile; \
-		##--------------------------------------------------------------------------- \
-		## Build related configuration options                                        \
-		##--------------------------------------------------------------------------- \
 		echo "EXTRACT_ALL            = YES" >> Doxyfile; \
 		echo "EXTRACT_PRIVATE        = YES" >> Doxyfile; \
 		echo "EXTRACT_LOCAL_CLASSES  = YES" >> Doxyfile; \
 		echo "HIDE_UNDOC_CLASSES     = NO" >> Doxyfile; \
 		echo "SORT_MEMBER_DOCS       = YES" >> Doxyfile; \
 		echo "GENERATE_TODOLIST      = YES" >> Doxyfile; \
-		##--------------------------------------------------------------------------- \
-		## configuration options related to warning and progress messages             \
-		##--------------------------------------------------------------------------- \
-## The following line is not working \
-## it's correct output should be: WARN_FORMAT            = "$file:$line: $text" \
-## hown can I escape a $ sign ? \
-##	echo "WARN_FORMAT            = \"$$ file:$$ line: $$ text\"" >> Doxyfile ;\
-		##--------------------------------------------------------------------------- \
-		## configuration options related to the input files                           \
-		##--------------------------------------------------------------------------- \
 		if test -n "$(DOXYGEN_INPUT)"; then \
 			patterns= ;\
 			dirs= ;\
@@ -72,27 +56,15 @@ apidox-am-yes:
 			echo "EXCLUDE               += $$dirs" >> Doxyfile ;\
 			echo "EXCLUDE_PATTERNS      += $$patterns" >> Doxyfile; \
 		fi ;\
-		## example path for HowToAddTemplates.dox \
 		echo "EXAMPLE_PATH           = parts/appwizard/khello" >> Doxyfile; \
-		## example path for HowToDocument.dox \
 		echo "EXAMPLE_PATH          += parts/appwizard/kdevpart" >> Doxyfile; \
 		echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\
-		##--------------------------------------------------------------------------- \
-		## configuration options related to source browsing                           \
-		##--------------------------------------------------------------------------- \
 		echo "SOURCE_BROWSER         = NO" >> Doxyfile ;\
 		echo "VERBATIM_HEADERS       = NO" >> Doxyfile ;\
-		##--------------------------------------------------------------------------- \
-		## configuration options related to the alphabetical class index              \
-		##--------------------------------------------------------------------------- \
 		echo "IGNORE_PREFIX          = K" >> Doxyfile ;\
-		##--------------------------------------------------------------------------- \
-		## configuration options related to the HTML output                           \
-		##--------------------------------------------------------------------------- \
 		echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
 		echo "HTML_OUTPUT            = html" >> Doxyfile; \
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
-## (It only finds it if we install the documentation) \
 			echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
 			echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
 			echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
@@ -102,29 +74,11 @@ apidox-am-yes:
 			echo "HTML_STYLESHEET        = " >> Doxyfile ;\
 			echo "DISABLE_INDEX          = NO" >> Doxyfile ;\
 		fi ;\
-		##--------------------------------------------------------------------------- \
-		## configuration options related to the LaTeX output                          \
-		##--------------------------------------------------------------------------- \
 		echo "GENERATE_LATEX         = NO" >> Doxyfile ; \
 		echo "LATEX_OUTPUT           = $(subdir)/latex" >> Doxyfile; \
-		##--------------------------------------------------------------------------- \
-		## configuration options related to the RTF output                            \
-		##--------------------------------------------------------------------------- \
 		echo "RTF_OUTPUT             = $(subdir)/rtf" >> Doxyfile; \
-		##--------------------------------------------------------------------------- \
-		## configuration options related to the man page output                       \
-		##--------------------------------------------------------------------------- \
 		echo "GENERATE_MAN           = NO" >> Doxyfile ;\
 		echo "MAN_OUTPUT             = $(subdir)/man" >> Doxyfile; \
-		##--------------------------------------------------------------------------- \
-		## configuration options related to the Perl module output                    \
-		##--------------------------------------------------------------------------- \
-		##--------------------------------------------------------------------------- \
-		## Configuration options related to the preprocessor                          \
-		##--------------------------------------------------------------------------- \
-		##--------------------------------------------------------------------------- \
-		## Configuration::addtions related to external references                     \
-		##--------------------------------------------------------------------------- \
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
 			echo "TAGFILES = \\" >> Doxyfile; \
 			tags='$(DOXYGEN_REFERENCES) qt'; for tag in $$tags; do \
@@ -135,7 +89,6 @@ apidox-am-yes:
 				else \
 					tagpath=`ls -1 $(kde_htmldir)/en/*-apidocs/$$tag/$$tag.tag 2> /dev/null` ;\
 					if test -n "$$tagpath"; then \
-## The path to the tags is relative (It only finds them if we install the documentation) \
 						path=`echo $$tagpath | sed -e "s,.*/\([^/]*-apidocs\)/$$tag/$$tag.tag,../../\1/$$tag,"` ;\
 					fi ;\
 				fi ;\
@@ -147,18 +100,8 @@ apidox-am-yes:
 				fi ;\
 			done ;\
 		fi ;\
-		echo "GENERATE_TAGFILE       = " >> Doxyfile; \
-		##--------------------------------------------------------------------------- \
-		## Configuration options related to the dot tool                              \
-		##--------------------------------------------------------------------------- \
 		echo "HAVE_DOT = $(KDE_HAVE_DOT)" >> Doxyfile ; \
-		##--------------------------------------------------------------------------- \
-		## Configuration options related to the search engine                         \
-		##--------------------------------------------------------------------------- \
 		echo "SEARCHENGINE = $(DOXYGEN_SEARCHENGINE)" >> Doxyfile ; \
-		##--------------------------------------------------------------------------- \
-		## create a link to the KDE common documentation directory                    \
-		##--------------------------------------------------------------------------- \
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
 			rm -f $(top_builddir)/apidocs/common ; \
 			if test -d $(top_srcdir)/doc/common; then \
@@ -168,11 +111,7 @@ apidox-am-yes:
 			fi ;\
 			$(LN_S) $$common_dir $(top_builddir)/apidocs/common ;\
 		fi ;\
-		## Make a nice looking Doxyfile out of the mess that we just did \
 		$(DOXYGEN) -s -u Doxyfile; \
-		##--------------------------------------------------------------------------- \
-		## Run doxygen                                                                \
-		##--------------------------------------------------------------------------- \
 		$(DOXYGEN) Doxyfile; \
 		rm -f Doxyfile; \
 	fi
@@ -220,7 +159,7 @@ uninstall-apidox:
 
 apidox:
 	$(MAKE) apidox-am-@KDE_HAS_DOXYGEN@
-	set fnord $(MAKEFLAGS); amf=$$2; if test -n '$(SUBDIRS)'; then \
+	@set fnord $(MAKEFLAGS); amf=$$2; if test -n '$(SUBDIRS)'; then \
 	    list='$(SUBDIRS)'; \
 	    for subdir in $$list; do \
 		if grep '^include .*Doxyfile.am' $(srcdir)/$$subdir/Makefile.am; then \
