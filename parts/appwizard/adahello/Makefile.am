@@ -17,4 +17,4 @@ script.local: ${srcdir}/script
 
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(adahellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(adahellodir)/script
+	$(INSTALL_DATA) ${srcdir}/script.local $(DESTDIR)$(adahellodir)/script
