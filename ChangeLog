@@ -1,5 +1,5 @@
 1999-09-28 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
-	* fix: clicking on project namei of RFV, caused
+	* fix: clicking on project name of RFV, caused
 	  an open-trial of the project directory
 	* using complete path of file in the caption 
 	  (not only the file name)
