@@ -84,8 +84,6 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             return new Machine(new PLineEdit(property));
         case Property::Integer:
             return new Machine(new PSpinBox(property));
-        case Property::Double:
-            return new Machine(new PDoubleNumInput(property));
         case Property::Boolean:
             return new Machine(new PYesNoButton(property));
         case Property::Date:
@@ -103,6 +101,9 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             return new Machine(new PUrlEdit(KFile::File, property));
         case Property::DirectoryURL:
             return new Machine(new PUrlEdit(KFile::Directory, property));
+        case Property::Double:
+            return new Machine(new PDoubleNumInput(property));
+
 #endif
         case Property::Pixmap:
             return new Machine(new PPixmapEdit(property));

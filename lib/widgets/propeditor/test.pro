@@ -1,4 +1,4 @@
-TEMPLATE = lib
+TEMPLATE = app
 CONFIG += debug
 DEFINES += PURE_QT
 
@@ -16,7 +16,7 @@ SOURCES += childproperty.cpp  pcombobox.cpp  \
 	ppixmapedit.cpp \
 	propertylist.cpp  pspinbox.cpp \
 	propertywidgetproxy.cpp plinestyleedit.cpp \
-	qeditlistbox.cpp pcolorbutton.cpp
+	qeditlistbox.cpp pcolorbutton.cpp test.cpp
 
 HEADERS += childproperty.h pcombobox.h \
 	pdummywidget.h ppointedit.h \
