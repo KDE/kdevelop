@@ -1192,7 +1192,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     for (; it1.current(); ++it1)
         docView->takeItem(it1.current());
 
-    docView->takeItem(folder_doxygen);
+    if(folder_doxygen) docView->takeItem(folder_doxygen);
     if(folder_qt) docView->takeItem(folder_qt);
     if(folder_kdelibs) docView->takeItem(folder_kdelibs);
 //    docView->takeItem(folder_kdevelop);
