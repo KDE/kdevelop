@@ -1,3 +1,7 @@
+2003-01-15 Julian Rockey <linux@jrockey.com>
+	* parts/filecreate
+	  - added "New" option into Gideon's "File" menu
+	
 2003-01-14 Mickael Marchand <marchand@kde.org>
   * repaired subversion part
   * added svn diff support (trough the diff viewer)
