@@ -91,7 +91,9 @@ private slots:
   void slotCoreInitialized();
   void slotPartURLChanged( KParts::ReadOnlyPart *);
   void documentChangedState( const KURL &, DocumentState );
-
+  void fillWindowMenu();
+  void openURL( int );
+   
 //  void loadMDISettings();
 
 private:
@@ -109,6 +111,7 @@ private:
   
   KAction *m_raiseEditor;
 
+  QValueList< QPair< int, KURL > > m_windowList;
   MainWindowShare*   m_pMainWindowShare;
 };
 

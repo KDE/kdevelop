@@ -140,18 +140,20 @@ void NewMainWindow::init() {
 	delete m_pWindowMenu;
 	
 	// get the xmlgui created one instead
-    m_pWindowMenu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
+    m_pWindowMenu = static_cast<QPopupMenu*>(main()->child( "window", "KPopupMenu" ));
 
     if( !m_pWindowMenu )
 	{
-		// Add window menu to the menu bar
+		kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
+		
 		m_pWindowMenu = new QPopupMenu( main(), "window");
-		m_pWindowMenu->setCheckable( TRUE);
 		menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
 	}
 	
+    m_pWindowMenu->setCheckable( TRUE);
+	QObject::connect( m_pWindowMenu, SIGNAL(activated(int)), this, SLOT(openURL(int )) );
     QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
-
+			   	   
 	menuBar()->setEnabled( false );
 	
     if ( PluginController::pluginServices().isEmpty() ) {
@@ -169,7 +171,7 @@ void NewMainWindow::init() {
 	
 	connect( PartController::getInstance(), SIGNAL(documentChangedState(const KURL &, DocumentState)), 
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
-	
+	   
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,2,90)
 	if ( tabWidget() )
 	{
@@ -197,6 +199,86 @@ void NewMainWindow::slotCoreInitialized( )
 	menuBar()->setEnabled( true );
 }
 
+void NewMainWindow::openURL( int id )
+{
+	QValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
+	while ( it != m_windowList.end() )
+	{
+		if ( (*it).first == id )
+		{
+			KURL url( (*it).second );
+			if ( !url.isEmpty() )
+			{
+//				PartController::getInstance()->editDocument( url );
+//				PartController::getInstance()->setActivePart( PartController::getInstance()->partForURL( url ) );
+				PartController::getInstance()->activatePart( PartController::getInstance()->partForURL( url ) );
+				return;
+			}
+		}
+		++it;
+	}
+}
+
+void NewMainWindow::fillWindowMenu()
+{
+	bool hasWidget = ( PartController::getInstance()->activeWidget() != 0 );	// hmmm... works??
+	
+	// clear menu
+	QValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
+	while ( it != m_windowList.end() )
+	{
+		m_pWindowMenu->removeItem( (*it).first );
+		++it;
+	}
+	
+	int temp = 0;
+	
+	temp = m_pWindowMenu->insertItem(i18n("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
+	m_pWindowMenu->setItemEnabled( temp, hasWidget );
+	m_windowList << qMakePair( temp, KURL() );
+	
+	temp = m_pWindowMenu->insertItem(i18n("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
+	m_pWindowMenu->setItemEnabled( temp, hasWidget );
+	m_windowList << qMakePair( temp, KURL() );
+	
+	temp = m_pWindowMenu->insertItem(i18n("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
+	m_pWindowMenu->setItemEnabled( temp, hasWidget );
+	m_windowList << qMakePair( temp, KURL() );
+	
+	if	( m_mdiMode == KMdi::ChildframeMode )
+	{
+		temp = m_pWindowMenu->insertItem(i18n("&Minimize All"), this, SLOT(iconifyAllViews()));
+		m_pWindowMenu->setItemEnabled( temp, hasWidget );
+		m_windowList << qMakePair( temp, KURL() );
+		
+		m_windowList << qMakePair( m_pWindowMenu->insertSeparator(), KURL() );
+		
+		temp = m_pWindowMenu->insertItem(i18n("&Tile..."), m_pPlacingMenu);
+		m_windowList << qMakePair( temp, KURL() );
+		m_pWindowMenu->setItemEnabled( temp, hasWidget );
+	
+		m_pPlacingMenu->clear();
+		m_pPlacingMenu->insertItem(i18n("Ca&scade Windows"), m_pMdi,SLOT(cascadeWindows()));
+		m_pPlacingMenu->insertItem(i18n("Cascade &Maximized"), m_pMdi,SLOT(cascadeMaximized()));
+		m_pPlacingMenu->insertItem(i18n("Expand &Vertically"), m_pMdi,SLOT(expandVertical()));
+		m_pPlacingMenu->insertItem(i18n("Expand &Horizontally"), m_pMdi,SLOT(expandHorizontal()));
+		m_pPlacingMenu->insertItem(i18n("Tile &Non-overlapped"), m_pMdi,SLOT(tileAnodine()));
+		m_pPlacingMenu->insertItem(i18n("Tile Overla&pped"), m_pMdi,SLOT(tilePragma()));
+		m_pPlacingMenu->insertItem(i18n("Tile V&ertically"), m_pMdi,SLOT(tileVertically()));
+	}
+
+	m_windowList << qMakePair( m_pWindowMenu->insertSeparator(), KURL() );
+	
+	KURL::List list = PartController::getInstance()->openURLs();
+	KURL::List::Iterator itt = list.begin();
+	while ( itt != list.end() )
+	{
+		temp = m_pWindowMenu->insertItem( (*itt).fileName() );
+		m_windowList << qMakePair( temp, *itt );
+		
+		++itt;
+	}
+}
 
 bool NewMainWindow::queryClose()
 {
