@@ -53,7 +53,6 @@ class KDlgItems : public QWidget  {
     QListView *treelist;
     QPixmap folder_pix;
     QPixmap entry_pix;
-    CKDevelop *pCKDevel;
   public:
     KDlgItems(CKDevelop *CKPar, QWidget *parent=0, const char *name=0);
     ~KDlgItems();
@@ -73,8 +72,10 @@ class KDlgItems : public QWidget  {
     */
     void refreshList();
 
+    CKDevelop *pCKDevel;
   public slots:
     void itemSelected();
+    void rightButtonPressed ( QListViewItem *, const QPoint &, int );
 };
 
 #endif

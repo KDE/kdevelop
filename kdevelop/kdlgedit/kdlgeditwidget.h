@@ -108,6 +108,12 @@ class KDlgEditWidget : public QWidget  {
     int gridSizeX() { return grid_size_x; }
     int gridSizeY() { return grid_size_y; }
     void setGridSize(int x, int y);
+    bool isModified() { return is_modified; }
+    void setModified(bool b = true) { is_modified = b; }
+    bool wasWidgetAdded() { return was_widgetadded; }
+    void setWidgetAdded(bool b = true) { was_widgetadded = b; }
+    bool wasWidgetRemoved() { return was_widgetremoved; }
+    void setWidgetRemoved(bool b = true) { was_widgetremoved = b; }
   public slots:
     int slot_raiseSelected() { return raiseSelected(); }
     int slot_lowerSelected() { return lowerSelected(); }
@@ -120,6 +126,24 @@ class KDlgEditWidget : public QWidget  {
     void slot_helpSelected();
 
   protected:
+    class typeCount
+    {
+      public:
+        typeCount() { clear(); }
+
+        void clear();
+        int returnCount(QString type);
+        void addType(QString type);
+        void increase(QString type);
+        void decrease(QString type);
+        QString countString(QString type);
+
+      protected:
+        QString types[64];
+        int counts[64];
+    } typeCounter;
+
+
     int dlgfilelinecnt;
     int grid_size_x, grid_size_y;
 
@@ -139,6 +163,9 @@ class KDlgEditWidget : public QWidget  {
     KDlgItem_Base *selected_widget;
     CKDevelop *pCKDevel;
     KRuler *rulh, *rulv;
+    bool is_modified;
+    bool was_widgetadded;
+    bool was_widgetremoved;
 };
 
 #endif

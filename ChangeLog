@@ -1,3 +1,8 @@
+1999-04-15 Pascal Krahmer <pascal@beast.de>
+        * added isModified(), wasWidgetAdded() and wasWidgetRemoved()
+          methods to KDlgEditWidget (Sandy needs them)
+        * wigets now get varnames followed by number automatically
+
 1999-04-14 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed another parsing bug. Classdeclarations with empty
 	        inheritance like in: class foo : {};
@@ -24,10 +29,16 @@
 	* added delete icons to the popupmenus in the treeviews.
 	
 1999-04-11 Pascal Krahmer <pascal@beast.de>
-	* fixed some minor bugs
-	* changes style of rulers in order to let them look better :-)
-	* added grid functionality
-	* added pixmaps to the popupmenu of the widgets
+        * added "Grip" dialog (Menu "View"/"Grip...")
+        * fixed some minor bugs again...
+        * added quickhelp (rightclick) to the "widgets" tab
+        * kills most pointers in the destructors now ;-)
+
+1999-04-11 Pascal Krahmer <pascal@beast.de>
+        * fixed some minor bugs
+        * changes style of rulers in order to let them look better :-)
+        * added grid functionality
+        * added pixmaps to the popupmenu of the widgets
 
 1999-04-11 Pascal Krahmer <pascal@beast.de>
         * added popupmenu in the edit view (rightclick on an item or on the mainwidget)

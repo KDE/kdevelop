@@ -10,6 +10,7 @@ void CALLER_ITEMCLASS_NAME::MyWidget::mousePressEvent ( QMouseEvent *e )
 
   if (e->button() == LeftButton)
     {
+      parentObject->getEditWidget()->setModified(true);
       isMBPressed = true;
       startPnt = e->globalPos();
       lastPnt = e->globalPos();

@@ -9,7 +9,7 @@
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
+ *   it usnder the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   * 
  *                                                                         *
@@ -80,6 +80,10 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
   if ((parCKD) && parCKD->kdlg_get_prop_widget())
     parCKD->kdlg_get_prop_widget()->refillList(selected_widget);
+
+  setModified(false);
+  setWidgetAdded(false);
+  setWidgetRemoved(false);
 }
 
 KDlgEditWidget::~KDlgEditWidget()
@@ -93,6 +97,8 @@ void KDlgEditWidget::setGridSize(int x, int y)
   grid_size_y = y;
   rulh->setPixelPerMark(x);
   rulv->setPixelPerMark(y);
+
+  setModified(true);
 }
 
 
@@ -120,6 +126,8 @@ int KDlgEditWidget::raiseSelected(bool updateMe)
   if ((res == 0) && (updateMe))
     mainWidget()->recreateItem();
 
+  setModified(true);
+
   return res;
 }
 
@@ -146,6 +154,8 @@ int KDlgEditWidget::lowerSelected(bool updateMe)
 
   if ((res == 0) && (updateMe))
     mainWidget()->recreateItem();
+
+  setModified(true);
 
   return res;
 }
@@ -179,6 +189,7 @@ void KDlgEditWidget::slot_deleteSelected()
     return;
 
   KDlgItem_Widget *dummy = (KDlgItem_Widget*)selected_widget;
+  selected_widget = 0;
   deselectWidget();
 
   if (dummy->parentWidgetItem)
@@ -200,6 +211,9 @@ void KDlgEditWidget::slot_deleteSelected()
 
   if ((pCKDevel) && ((CKDevelop*)pCKDevel)->kdlg_get_items_view())
     ((CKDevelop*)pCKDevel)->kdlg_get_items_view()->addWidgetChilds(main_widget);
+
+  setModified(true);
+  setWidgetRemoved(true);
 }
 
 void KDlgEditWidget::slot_copySelected()
@@ -210,6 +224,7 @@ void KDlgEditWidget::slot_copySelected()
 void KDlgEditWidget::slot_pasteSelected()
 {
   qhw->popup("Sorry, feature not yet implemented.\n\n<i>Pascal Krahmer</i>", QCursor::pos().x(),QCursor::pos().y());
+  setModified(true);
 }
 
 void KDlgEditWidget::slot_helpSelected()
@@ -308,6 +323,7 @@ bool KDlgEditWidget::readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, Q
       int i;
       for (i=1; i<=thatsme->getProps()->getEntryCount(); i++)
         thatsme->getProps()->setProp_Value(i,"");
+      thatsme->getProps()->setProp_Value("VarName", typeCounter.countString(ctype));
     }
   else
     {
@@ -334,9 +350,9 @@ bool KDlgEditWidget::readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, Q
       {
         if (s.left(s.find(' ')).upper() == "ITEM")
           {
-            if ((ctype == "QWIDGET") || (ctype == "QFRAME"))
+            if ((ctype.upper() == "QWIDGET") || (ctype.upper() == "QFRAME"))
               {
-                if (!readGrp_Item( edwid, thatsme, t, s.right(s.length()-s.find(' ')-1).upper() ))
+                if (!readGrp_Item( edwid, thatsme, t, s.right(s.length()-s.find(' ')-1) ))
                   return false;
               }
             else
@@ -371,7 +387,7 @@ bool KDlgEditWidget::readGroup( KDlgEditWidget *edwid, QTextStream *t )
     return false;
 
   QString type = s.left(s.find(' ')).upper();
-  QString name = s.right(s.length()-s.find(' ')-1).upper();
+  QString name = s.right(s.length()-s.find(' ')-1);
 
   if ((s == "{") || (s == "}"))
     return true;
@@ -380,12 +396,12 @@ bool KDlgEditWidget::readGroup( KDlgEditWidget *edwid, QTextStream *t )
 
   if (type == "DATA")
     {
-      if (name == "INFORMATION")
+      if (name.upper() == "INFORMATION")
         {
           if (!readGrp_Information( t ))
             return false;
         }
-      else if (name == "SESSIONMANAGEMENT")
+      else if (name.upper() == "SESSIONMANAGEMENT")
         {
           if (!readGrp_SessionManagement( t ))
             return false;
@@ -414,6 +430,8 @@ bool KDlgEditWidget::openFromFile( QString fname )
   if ( f.open(IO_ReadOnly) )
     {
       QTextStream t( &f );
+
+      typeCounter.clear();
 
       while (!t.eof())
         {
@@ -452,6 +470,10 @@ bool KDlgEditWidget::openFromFile( QString fname )
 
   getCKDevel()->kdlg_get_items_view()->refreshList();
   selectWidget(mainWidget());
+
+  setModified(false);
+  setWidgetAdded(false);
+  setWidgetRemoved(false);
 
   return true;
 }
@@ -511,6 +533,10 @@ bool KDlgEditWidget::saveToFile( QString fname )
     }
 
   printf("kdlgedit : Saving complete.\n");
+
+  setModified(false);
+  setWidgetAdded(false);
+  setWidgetRemoved(false);
 
   return true;
 }
@@ -647,13 +673,23 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
 
   #define macro_CreateIfRightOne(a,typ) \
     if (QString(a).upper() == Name.upper()) \
-      wid = (KDlgItem_Widget*)new typ( this, par->getItem() );
+      { \
+        wid = (KDlgItem_Widget*)new typ( this, par->getItem() ); \
+        if (wid->getProps()->getProp("VarName")->value == "") \
+          { \
+            typeCounter.increase(a); \
+            wid->getProps()->setProp_Value("VarName", typeCounter.countString(a)); \
+          } \
+      }
 
   macro_CreateIfRightOne("QWidget", KDlgItem_Widget )
   macro_CreateIfRightOne("QPushButton", KDlgItem_PushButton )
   macro_CreateIfRightOne("QLineEdit", KDlgItem_LineEdit )
 
   #undef macro_CreateIfRightOne
+
+  setModified(true);
+  setWidgetAdded(true);
 
   if (!wid)
     return 0;
@@ -670,3 +706,69 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
   return wid;
 }
 
+
+
+void KDlgEditWidget::typeCount::clear()
+{
+  int i;
+  for (i = 0; i<64; i++)
+    {
+      types[i] = "";
+      counts[i] = 0;
+    }
+}
+
+int KDlgEditWidget::typeCount::returnCount(QString type)
+{
+  int i;
+  for (i = 0; i<64; i++)
+    if (type.upper() == types[i].upper())
+      return counts[i];
+
+  return 0;
+}
+
+void KDlgEditWidget::typeCount::addType(QString type)
+{
+  int i;
+  for (i = 0; i<64; i++)
+    if ((types[i]=="") && (returnCount(type) == 0))
+      {
+        types[i] = type.stripWhiteSpace();
+        counts[i] = 1;
+        printf("Added : %s\n",(const char*)types[i]);
+      }
+}
+
+void KDlgEditWidget::typeCount::increase(QString type)
+{
+  int i;
+  for (i = 0; i<64; i++)
+    if (type.stripWhiteSpace().upper() == types[i].upper())
+      {
+        counts[i]++;
+        printf("Inc : %s\n",(const char*)types[i]);
+        return;
+      }
+
+  addType(type);
+}
+
+void KDlgEditWidget::typeCount::decrease(QString type)
+{
+  int i;
+  for (i = 0; i<64; i++)
+    if (type.upper().stripWhiteSpace() == types[i].upper())
+      {
+        counts[i]--;
+        printf("Dec : %s\n",(const char*)types[i]);
+        return;
+      }
+
+  addType(type);
+}
+
+QString KDlgEditWidget::typeCount::countString(QString type)
+{
+  return type + QString("_") + QString().setNum(returnCount(type));
+}

@@ -761,6 +761,8 @@ void AdvLvi_Base::refreshItem()
 
   if (propEntry->name.upper() == "NAME")
     pCKDevel->kdlg_get_items_view()->refreshList();
+
+  pCKDevel->kdlg_get_edit_widget()->setModified(true);
 }
 
 AdvLvi_String::AdvLvi_String(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name )
