@@ -1,3 +1,9 @@
+1999-10-19 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* the search of kdelibs documentation now depends
+	  also on the KDE path
+	* making class parsing now size independent of
+	  comment parts and precomiler parts
+
 1999-10-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* New asynchronous error message parser, replaces
 	  the complete class CErrorMessageParser
