@@ -324,12 +324,16 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   {
     // add the error keyed on the line number in the make output widget
     ErrorDetails errorDetails(fileInErr, lineInErr, type);
+#if QT_VERSION >= 300
     if (isAboveQt303()) {
       m_errorMap.insert(numLines(), errorDetails);
     }
     else {
       m_errorMap.insert(numLines()-1, errorDetails);
     }
+#else
+      m_errorMap.insert(numLines()-1, errorDetails);
+#endif
   }
 }
 
