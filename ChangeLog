@@ -1,3 +1,6 @@
+2004-01-26 Dominik Haumann <dhdev@gmx.de>
+    * src/projectmanager.cpp: ask if user tries to reload the already opened project
+
 2004-01-26 Alexander Dymo <cloudtemple@mksat.net>
     * Added snippet part by Robert Gruber.
 
