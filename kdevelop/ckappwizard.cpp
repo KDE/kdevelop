@@ -24,7 +24,6 @@
 #include "ckappwizard.h"
 #include "debug.h"
 #include "ctoolclass.h"
-#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <klocale.h>
 
@@ -37,6 +36,7 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   setCaption(i18n("Application Wizard"));
   init();
   initPages();
+  project=0l;
   m_author_email = author_email;
   m_author_name = author_name;
   //cerr << ":" << m_author_name << ":";
@@ -1371,6 +1371,10 @@ void CKAppWizard::slotPerlErr(KProcess*,char* buffer,int buflen) {
 }
 
 void CKAppWizard::slotApplicationClicked() {
+  // reset some titles
+  setPage(4, i18n("Headertemplate for .cpp-files"));
+  cppheader->setText( i18n("headertemplate for .cpp-files") );
+
   if (kdenormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
     widget1b->setBackgroundPixmap(pm);
@@ -2380,7 +2384,5 @@ void CKAppWizard::slotVendorEntry() {
   	modifyVendor = true;
   }
 }
-
-
 
 
