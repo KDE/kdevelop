@@ -1711,6 +1711,12 @@ void CKAppWizard::slotApplicationClicked() {
     apphelp->setText (i18n("Create an MDI framework based on the QextMDI library and Qt2.0x. "
     											"Allows to switch between both modes, Toplevel and Childframe. "
     											"Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm)"));
+    QMessageBox::information(0,i18n("Important hint for a QextMDI project"),
+                               i18n("If you choose this kind of project:\n\n"
+			            "An environment variable QEXTMDIDIR should be set!\n"
+                                    "Because the wizard searches\n"
+				    "the header files in:  $(QEXTMDIDIR)/include\n"
+				    "and libqextmdi.so in: $(QEXTMDIDIR)/lib"));
   }
   else if ((citem->isSelected() || cppitem->isSelected())
             && strcmp (cancelButton->text(), i18n("Exit"))) {
