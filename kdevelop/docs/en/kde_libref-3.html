@@ -22,8 +22,7 @@
 
 <P>The KDE libraries, in conjunction with the Qt library, are providing developers a complete framework for application design. As KDE is
 targeted towards Unix Operating Systems running the graphical X11 System, you would think you would have to understand Unix and X11-
-but as the libraries are already encapsulating the complex graphics subsystem, you don't have to know about that in most cases. You are
-provided a complete application framework that contains all necessary parts of GUI application design, therefore is ready to use. If
+but as the libraries are already encapsulating the complex graphics subsystem, you don't have to know about that in most cases. If
 you're already familiar with Qt, KDE won't make too much difference in regards of using classes and widgets.
 <P>Beginners, on the other hand, have a lot of problems in the sections of
 <P>
@@ -34,12 +33,12 @@ you're already familiar with Qt, KDE won't make too much difference in regards o
 </UL>
 <P>The following will help you to understand, where you will generally find classes used in KDE applications, including the according
 replacements of Qt classes for those developers that are familiar with Qt, but didn't make use of KDE libraries. These will be the
-application objects, their behavoir and creation.You will learn about:
+application objects, their behavior and creation.You will learn about:
 <P>
 <UL>
 <LI>the most needed objects of a KDE application</LI>
 <LI>the difference between your code and the application framework</LI>
-<LI>KDE application classes that encapsulate the windowmanager communication</LI>
+<LI>KDE application classes that encapsulate the window manager communication</LI>
 <LI>the class <CODE>QWidget</CODE> that all GUI components inherit</LI>
 <LI>graphical objects</LI>
 <LI>the system clipboard</LI>
@@ -53,17 +52,17 @@ application objects, their behavoir and creation.You will learn about:
 <P>For information about Qt application design, see the Qt online reference documentation.
 <P>
 <P>
-<H3><A NAME="ss3.1">3.1 The Application Object</A>
+<H3><A NAME="ss3.1">3.1 The Application Instance</A>
 </H3>
 
 <P>
 <P>Generally, a KDE application has to be started with creating an instance (and only one!) of the class <CODE>KApplication</CODE>, which is
 provided by the <CODE>kdecore</CODE> library. The class <CODE>KApplication</CODE> itself is derived from the according Qt class <CODE>QApplication</CODE>.
 <P>What happens exactly is that <CODE>QApplication</CODE> manages the application event queue, which means it processes events from the underlying
-window system to it's child objects, such as mouse movements or keyboard events. This is also the reason, why only one instance of
+window system to its child objects, such as mouse movements or keyboard events. This is also the reason, why only one instance of
 <CODE>KApplication</CODE> can be declared and why this has to be the first thing the <CODE>main()</CODE> function executes.
 <P>The <CODE>KApplication</CODE> class extends the Qt class in terms of providing additional functionality for a unique-looking application that
-integrates into other desktop components and can therefore be influenced in it's behavoir by control applications (in KDE generally
+integrates into other desktop components and can therefore be influenced in its behavior by control applications (in KDE generally
 collected in the KDE Control Center) such as keyboard accelerator configuration and GUI style.
 <P>Corresponding to the Qt class, the <CODE>KApplication</CODE> class provides a static function to access the application object within the
 application, <CODE>KApplication::getKApplication()</CODE>. This solves the problem to pass the pointer to the application object. Further, the
@@ -75,31 +74,32 @@ provided by their purpose:
 <P>
 <DL>
 <DT><B><B>KConfig</B></B><DD><P>a configuration object that is used to read and store configuration settings in a resource file. Use the
-according methods of <CODE>KConfigBase</CODE> to read and write values.
+according methods of <CODE>KConfigBase</CODE> to read and write values. The configuration object is retrieved by <CODE>kapp->getConfig()</CODE>, the
+session managment configuration by <CODE>kapp->getSessionConfig()</CODE>
 <P>
 <DT><B><B>KIconLoader</B></B><DD><P>an object that loads icons into <CODE>QPixmap</CODE>s by using the KDE File System. This takes away the need to
 search for any pixmap on the file system completely as only the filename has to be entered. Use the macro <CODE>Icon("icon.xpm")</CODE> to load
-an icon easily
+an icon easily. The iconloader instance can be addressed by <CODE>kapp->getIconLoader()</CODE>
 <P>
-<DT><B><B>KLocale</B></B><DD><P>an object that always returns the actual localization settings. This makes applications always
-appear in the same language on the desktop chosen by the user globally. Use the macro <CODE>klocale</CODE> to access the application locale
-object.
+<DT><B><B>KLocale</B></B><DD><P>an object that returns the actual localization settings. This makes applications appear in the language on the
+desktop chosen by the user globally. Use the macro <CODE>klocale</CODE> to access the application locale object. The klocale instance can be
+addressed by using <CODE>kapp->getLocale()</CODE> (as the macro klocale does already)
 <P>
 <DT><B><B>KCharsets</B></B><DD><P>the charset object currently set globally by the user. This translates key events to the correctly set
-charset.
+charset. Retrieve the charsets instance with <CODE>kapp->getCharsets()</CODE>.
 </DL>
 <P>
 <P>Further, the KApplication class provides you with the needed methods to access the KDE File System Standard. This will prevent you from
-problems that will always occur when hardcoding any directories into the code (see 
+problems that will always occur when hard-coding any directories into the code (see 
 <A HREF="programming.html">The KDevelop Programming Handbook</A> for information about the KDE-FSS). The class also provides the needed access for the application icon and mini
 icon, current KDE fonts and session management support.
 <P>To use the clipboard, the according <CODE>QApplication</CODE> class already provides a clipboard object, <CODE>QApplication::clipboard()</CODE>, which
 can be used to exchange text and image data between applications (see <CODE>QClipboard</CODE>).
-<P>Internationalization is another keyword for KDE applications. This is supported by the <CODE>KLocale</CODE> object already created above and is
-always used with the macro <CODE>i18n()</CODE> of <CODE>kapp.h</CODE>. It just shortens the call of the KApplication pointer to the KLocale pointer and
-is read by gettext to extract all macro-embraced strings into an application message file that then can be translated.
-<P>At least, the <CODE>KAppliation</CODE> already constructs a help menu that can be inserted into a menubar the application may contain with a
-predefined (can be turned on/off) KDE hint dialog and your application's aboutdialog.
+<P>Internationalization is another keyword for KDE applications. This is supported by the <CODE>KLocale</CODE> object already mentioned above and
+is always used with the macro <CODE>i18n()</CODE> of <CODE>kapp.h</CODE>. It just shortens the call of the KApplication pointer to the KLocale pointer
+and is read by gettext to extract all macro-embraced strings into an application message file that then can be translated.
+<P>At least, the <CODE>KApplication</CODE> already constructs a help menu that can be inserted into a menu bar the application may contain with a
+predefined (can be turned on/off) KDE hint dialog and your application's about dialog.
 <P>You should notice that <CODE>KApplication</CODE> has to be lead with:
 <P>
 <UL>
@@ -118,16 +118,16 @@ predefined (can be turned on/off) KDE hint dialog and your application's aboutdi
 <LI>shutDown()</LI>
 </UL>
 <P>As the widgets of your application will receive these signals, they will normally update themselves. The important signals for you will
-be in most cases <CODE>saveYourself()</CODE> and <CODE>shutDown()</CODE>.
-<P>You will be able to the windowmanager as well by the according static functions found in <CODE>kwm.h</CODE>, which allows you to find the
-according values you need.
+be in most cases <CODE>saveYourself()</CODE> and <CODE>shutDown()</CODE> (whereby <CODE>KTMainWindow</CODE> already catches <CODE>saveYourself()</CODE> to call
+<CODE>KTMainWindow::saveData()</CODE>).
+<P>You will be able to communicate with the KWM window manager as well by the according static methods of <CODE>kwm.h</CODE>.
 <P>
 <H3><A NAME="ss3.2">3.2 Commandline Argument Processing</A>
 </H3>
 
 <P>
 <P>Finally, an application usually wants to process commandline options. Those are entered by the user if he started the application from
-a console for the reason to either start it non-graphically for any processing reasons the applcation may be capable to execute or to
+a console for the reason to either start it non-graphically for any processing reasons the application may be capable to execute or to
 start the application with a file. This is also important to interact with filemanagers that can include your application to the list
 of those that open a mime-type automatically when called with a filename. The <CODE>main()</CODE> function therefore is constructed with the
 declaration
@@ -177,17 +177,24 @@ to exclude any of the above values in the <CODE>main()</CODE> function. Within t
 accessed by the argument number, whereby the argument <CODE>kapp->argv()[0]</CODE> is the application name; any other following arguments can
 be processed with <CODE>kapp->argv()[number]</CODE>.
 <P>
-<H3><A NAME="ss3.3">3.3 Other Application Objects</A>
+<H4>Comment</H4>
+The <CODE>KApplication</CODE> class uses different methods to change the application's style, fonts and colors by X11 Atoms which
+call all open KDE applications to change their values recursively throughout all widgets. This is done automatically when the user
+changes values through using the KDE control center which causes these X11 events. The method <CODE>x11eventFilter()</CODE> emits the
+according signals to change all values. As far as I know of, the only value not changed by KDE 1.x is the double click interval, which
+is set to 400 ms by default in <CODE>QApplication</CODE>. Changes on this can be made using <CODE>QApplication::setDoubleClickInterval()</CODE>.
+<P>
+<H3><A NAME="ss3.3">3.3 Other Application Classes</A>
 </H3>
 
-<P>By "Other Application Objects" we would describe any replacements of the <CODE>KApplication</CODE> class. The KDE library <CODE>kdeui</CODE> offers two
-more classes that inherit <CODE>KApplication</CODE> for more specific use in KDE appliations. Those are the class <CODE>KControlApplication</CODE> and
+<P>By "Other Application Classes" we would describe any replacements of the <CODE>KApplication</CODE> class. The KDE library <CODE>kdeui</CODE> offers two
+more classes that inherit <CODE>KApplication</CODE> for more specific use in KDE applications. Those are the class <CODE>KControlApplication</CODE> and
 <CODE>KWMModuleApplication</CODE>.
 <P>
 <H4>KControlApplication</H4>
 
 <P>The <CODE>KControlApplication</CODE> is a class for specific applications that are intended to serve as setup modules. By providing a
-tabdialog, control modules can easily be created. The differences to <CODE>KApplication</CODE> are:
+tab dialog, control modules can easily be created. The differences to <CODE>KApplication</CODE> are:
 <P>
 <UL>
 <LI>uses <CODE>-init</CODE> as commandline option to call the method <CODE>init()</CODE>. This one has to be overwritten to initialize the dialog
@@ -201,11 +208,11 @@ settings.</LI>
 <H4>KWMModuleApplication</H4>
 
 <P>KWMModuleApplication is another class that inherits <CODE>KApplication</CODE> for a certain purpose: the class provides methods that allow
-interaction with the windowmanager. An example for a KWMModuleApplication is the <CODE>kpager</CODE>, who uses the signals that the
-windowmanager sends out to manage the windows with the static methods of KWM.
+interaction with the window manager. An example for a KWMModuleApplication is the <CODE>kpager</CODE>, who uses the signals that the
+window manager sends out to manage the windows with the static methods of KWM.
 <P>To create a KWMModuleApplication, you first have to create your application instance and then call the method <CODE>connectToKWM()</CODE>
 <P>
-<H4>Doking of Windows</H4>
+<H4>Docking of Windows</H4>
 
 <P>Another issue to general KDE application design is the use of <CODE>kpanel</CODE> to display your running application symbolized. KDE users are
 probably familiar with the display settings symbol left of the clock in <CODE>kpanel</CODE>.
@@ -236,12 +243,12 @@ desktop application.
 <CODE>KTMainWindow</CODE> as a pendant to the Qt class <CODE>QMainWindow</CODE>. Before describing the general guideline, we have a look at the
 exceptional: using any other widget.
 <P>When using <CODE>QApplication</CODE> as the base application class, you would first create the application instance, then create the main
-widget. Now, it is save to register the widget as the top widget with the method <CODE>setMainWidget()</CODE>, because the user can use the
+widget. Now, it is safe to register the widget as the top widget with the method <CODE>setMainWidget()</CODE>, because the user can use the
 close button of the window to exit the window. He expects the application to be terminated, if the last window is closed, but to do so,
-you have to call the QApplication slot <CODE>quit()</CODE>. You could do this in a derived class by a reimplementation of
+you have to call the QApplication slot <CODE>quit()</CODE>. You could do this in a derived class by a re-implementation of
 <CODE>QWidget::closeEvent()</CODE>, but with the method <CODE>setMainWidget()</CODE> this is already done. Now, in any case of using widgets with
 <CODE>KApplication</CODE>, things are almost the same with the difference that the according method of KDE is <CODE>setTopWidget()</CODE>.
-The only exception is when using the class <CODE>KTMainWindow</CODE> who automatically does this in it's constructor (if there is no other
+The only exception is when using the class <CODE>KTMainWindow</CODE> who automatically does this in its constructor (if there is no other
 topwidget).
 <P>
 <H4>Using KTMainWindow</H4>
@@ -253,12 +260,12 @@ that already is capable of all needed functions that an application may make use
 <UL>
 <LI>session management support</LI>
 <LI>a main widget</LI>
-<LI>a menubar</LI>
+<LI>a menu bar</LI>
 <LI>as many toolbars as your application may require</LI>
 <LI>a statusbar</LI>
 </UL>
 <P>The elements of the Widget themselves are already managed by <CODE>KTMainWindow</CODE>'s geometry implementation, therefore you usually don't
-have to take care of that to reimplement an application specific instance for your program.
+have to take care of that to re-implement an application specific instance for your program.
 <P>
 <P ALIGN="RIGHT">
 

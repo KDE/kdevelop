@@ -21,9 +21,9 @@
 <H3><A NAME="s13">13. The KDE File System Standard</A></H3>
 
 <P>This chapter is a copy of the KDE-File System Standard as published on the KDE website at 
-<A HREF="http://www.kde.org">http://www.kde.org</A>, written by Richard Moore 
-<A HREF="rich@kde.org">rich@kde.org</A><P>
-<P><B>KDE File System Standard</B>
+<A HREF="http://www.kde.org">http://www.kde.org</A>, written by
+Richard Moore 
+<A HREF="rich@kde.org">rich@kde.org</A><P><B>KDE File System Standard</B>
 <P>This file documents the directory structure that KDE and all KDE compliant applications should use. This is version 0.0.4 of the
 standard.
 <P>
@@ -44,8 +44,15 @@ two letter language codes eg. 'fr' for French, 'de' for German etc.
 <P>The KDE directory structure is as shown below, the top of the KDE installation tree is usually '/opt/kde' and can be found at run time
 by using the kdedir() method of KApplication (this replaces the KDEDIR environment variable the use of which is now deprecated). This
 document will refer to this directory as kdedir().
+<!--
+KDE File System
+-->
+<!--
+.kdelnk files
+-->
 <P>
-<P>kdedir()/
+<UL>
+<LI>kdedir()/
 <UL>
 <LI>bin/
 <UL>
@@ -180,6 +187,8 @@ document will refer to this directory as kdedir().
 </UL>
 </LI>
 </UL>
+</LI>
+</UL>
 <P>
 <H3><A NAME="ss13.3">13.3 What does this mean to application developers?</A>
 </H3>
@@ -201,7 +210,10 @@ Application platform independent data             kdedir()/share/apps/&lt;appnam
 Application platform specific data                kdedir()/lib/&lt;appname&gt;/
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>
+
+<!--
+KDE File System
+-->
 <H3><A NAME="ss13.4">13.4 Application Documentation</A>
 </H3>
 

@@ -58,10 +58,10 @@ remove the "Hello World" line in main() and construct your classes the same way 
 configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
 as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
 by the classbrowser.
-<P>To ensure the buildprocess, your custom project has to have all sources in a subdirectory matching the lowecase name of your project;
+<P>To ensure the build process, your custom project has to have all sources in a subdirectory matching the lowercase name of your project;
 the execution of the binary is also restricted to this lowercase project name.
-<P>Mind that KDevelop does not write any information into Makefiles or configuration files. You ar responsible for any project behavoir
-and buildsettings yourself.
+<P>Mind that KDevelop does not write any information into Makefiles or configuration files. You are responsible for any project behavior
+and build settings yourself.
 <P>
 <H4>Libraries</H4>
 
@@ -78,10 +78,10 @@ the
 <A HREF="programming-15.html">KDevelop Programming Handbook</A> offers a Makefile.am template. If the subdirectory's
 Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
 build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
-project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original projectsubdirectory
+project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original project-subdirectory
 according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter 
 <A HREF="#Project Hacking">Project Hacking</A>.</LI>
-<LI>for installing a shared library, you have to watch the KDE-Filesystem Standard as explained in 
+<LI>for installing a shared library, you have to watch the KDE-File-system Standard as explained in 
 <A HREF="programming-13.html">The KDevelop Programming Handbook</A></LI>
 </UL>
 <P>
@@ -114,7 +114,7 @@ newtarget.pot</LI>
 </UL>
 </LI>
 <LI>add your sources like the KDevelop write area contains outside the write area for your binary or library</LI>
-<LI>for installing static libraries, create the library with KDevelop's autocreation inside subdirectories. Then modify the
+<LI>for installing static libraries, create the library with KDevelop's auto-creation inside subdirectories. Then modify the
 Makefile.am outside the write area according to the needed settings</LI>
 </UL>
 <P>
@@ -135,15 +135,15 @@ and statusbar.
 "Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a GUI
 first or for those working on commandline programs written in C++ or C. C programmers can also take advantage of the C-only project,
 which requires any C-compiler at the minimum.
-<P>The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name and
-Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
+<P>The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
+Email address are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
 *.lsm file.
 <P>
 <H3><A NAME="ss8.3">8.3 Opening and Closing of Projects</A>
 </H3>
 
 <P>KDevelop is by default configured to open the last project loaded when starting. This allows a fast start, but you may want to
-change that to just start the IDE without any project. To prevent the default behavoir, disable the "Load last project" option in
+change that to just start the IDE without any project. To prevent the default behavior, disable the "Load last project" option in
 the 
 <A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A> dialog.
 <P>To open another project, select "Open" from the "Project" menu or press the "Open Project" button on the toolbar. In case you've
@@ -157,7 +157,7 @@ project by using the Class Browser directly.
 <P>Another comfortable way to open a project is to select the project file in the KFM, the KDE File Manager. This will start
 KDevelop with loading the selected project file. You could as well open a project by commandline, entering <CODE>kdevelop
 projectname.kdevprj</CODE>.
-<P>When closing KDevelop, your project file will be saved automatically and the IDE detects if you have changed any projectfiles.
+<P>When closing KDevelop, your project file will be saved automatically and the IDE detects if you have changed any project files.
 Then you will be asked to save any changes before exiting. The available options for closing are the same than for closing a
 project before loading another.
 <P>
@@ -185,22 +185,22 @@ management in special cases.
 
 <P>Adding a new file is often used when you think that you should separate your class implementation file into several ones. Then you
 need to create an new file which will contain the part of the class implementation you want to move. You can do this by choosing
-"New" from the "File" menu, opening the "New File" dialog. This enables you to specify the file-type, name and the location. When
-entering the filename, KDevelop automatically enters the extension for you, but you can as well change the extensions towards your
-own preferences. Further, you can include the header template for sourcefiles, so you don't have to copy this into your new file
-yourself. Also, you can decide, if the file is included in the project or not. Mind that this doesn't cover the installation
+"New" from the "File"-menu, opening the "New File" dialog. This enables you to specify the file-type, name and the
+location. When entering the filename, KDevelop automatically enters the extension for you, but you can as well change the extensions
+towards your own preferences. Further, you can include the header template for sourcefiles, so you don't have to copy this into your
+new file yourself. Also, you can decide, if the file is included in the project or not. Mind that this doesn't cover the installation
 destination; this has to be configured later by setting the file preferences.
 <P>After the new file has been created, the project file will be updated as well as the according Makefile.am's.
-To add a complete class to your project, you can constuct a new class with the Classgenerator which is invoked by "New Class" from
+To add a complete class to your project, you can construct a new class with the Classgenerator which is invoked by "New Class" from
 the Project-menu.
 <P>In case you have an existing project and you want to add certain classes that you want to re-use in your project, select "Add
-File(s) to Project..." from the Project-menu. Select "Add existing files", which will open a dialog to let you specify which files
-will be added to the project and the destination directory. Mind that the files will be copied into the specified directory and
+File(s) to Project..." from the "Project"-menu. Select "Add existing files", which will open a dialog to let you specify which
+files will be added to the project and the destination directory. Mind that the files will be copied into the specified directory and
 added to the project. You should call "Make" after adding sources; then your added files will be included in the build-process. In
 case you want to add e.g. pixmaps that have to be installed by the end-user, you should update the File Properties for the added
 file and specify the installation path (see 
 <A HREF="#Setting Project File Options">Setting Project File Options</A><P>To add a file to the project that is already in the project directory, go to the RFV, where all project-included files are
-dispayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
+displayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
 file icon) and press the right mouse button to get the popup-menu. Then select "Add".
 <P>Files can also be removed from your project. This could be needed in cases where you don't want to use pre-generated files that
 are already given by the KAppWizard. To remove a file, you have additionally the option between removing a file from the project
@@ -219,25 +219,25 @@ look in your Makefile.am where the location macros are specified.
 <P>
 <H4><A NAME="Adding Translations"></A> Adding Translations</H4>
 
-<P>As KDE allows configuring your desktop and the behavoir of your applications, you also have the option to choose the language
+<P>As KDE allows configuring your desktop and the behavior of your applications, you also have the option to choose the language
 that your application uses, in regards of the use of online-documentation as well as the application's look. For documentation files,
-this seems a trivial task. You would add a subdirectory labeled by the desired language, e.g. <CODE>de</CODE> for german, to the
+this seems a trivial task. You would add a subdirectory labeled by the desired language, e.g. <CODE>de</CODE> for German, to the
 <CODE>docs</CODE> directory of your project and copy the english documentation into that directory. Then you would generate the
 documentation and set all project file options for the installation directories. Then you could start translating the SGML file to
 your desired language and regenerate the documentation; then you're done.
 For the application, this seems a bit more difficult for the programmer. Now, we want to explain how to enable
 internationalization support for your application and how to add the languages you want to support.
 <P>First, you have to enclose all visible strings of your application that appear in bars or dialogs with the <CODE>i18n()</CODE> macro.
-This macro is a replacement for the function <CODE>klocale->tranlate()</CODE> of the KLocale class and much easier to use. As this macro
+This macro is a replacement for the function <CODE>klocale->translate()</CODE> of the KLocale class and much easier to use. As this macro
 is declared in the <CODE>kapp.h</CODE> include file, you have to add <CODE>#include &lt;kapp.h&gt;</CODE> to the source file or the class
 declaration file of the class that makes use of the macro. Also it should be mentioned, that although <CODE>i18n()</CODE> is a macro and
 therefore you could think about using the original function, this won't work because the strings that are set up for translation
 have to be read out of the sources and get stored in the application's translation file (&lt;YourApp&gt;.pot in the /po
-subdirectory). This task is done by the program xgettext, and to do this, you would enter <CODE>make messages</CODE> in your prject
+subdirectory). This task is done by the program xgettext, and to do this, you would enter <CODE>make messages</CODE> in your project
 directory containing the sources. As xgettext depends on the <CODE>i18n()</CODE> macro, the original function won't do the job.
 <P>For translations themselves, you first have to create the message file containing all strings that are used in your sources with
 the <CODE>i18n()</CODE> macro. This can be done by choosing "Make messages and merge" from the Build-menu.
-Then you have to add the languages that your application wants to support. Therefore, select "Add Tranlation File" from the
+Then you have to add the languages that your application wants to support. Therefore, select "Add Translation File" from the
 Project-menu. This opens a language selection dialog. Select the language and press OK. This will build the ASCII file containing
 entries for the filename of the string and the line where the original string is placed. Then you will see a <CODE>msgid</CODE> line
 containing the string to translate, followed by <CODE>msgstr</CODE>. The msgstr line is mostly empty except for the translations already
@@ -246,16 +246,16 @@ provided by the KDE-libraries. Those have to be filled with the according transl
 KTranslator, which ready the already existing files from other applications installed on the system, so you can reuse already
 translated strings to support your language.
 <P>To access KTranslator, the easiest way is selecting a &lt;language&gt;.po file in the /po directory either in the LFV or in the
-RFV. This opens KTranslator and lets you do the translating easiely. Mind that you have to set up KTranslator's properties
+RFV. This opens KTranslator and lets you do the translating easily. Mind that you have to set up KTranslator's properties
 yourself to include the author name and the language as well as the destination file. KTranslator by default only opens your
 translation file.
 <P>For all translation files, <CODE>make</CODE> uses the program <CODE>msgfmt</CODE> to format your message files to use with the binary, but you
 don't have to take care for that, as well as specifying the destination directory for installing the translation files; this is
 all done by KDevelop automatically.
 <P>For more information about internationalization support, see 
-<A HREF="http://www.kde.org">http://www.kde.org</A>; a lot
-of people are doing translations for you to support their language. You will find a list of email-adresses of the translators you
-could write to and who will help you with this. Also read 
+<A HREF="http://www.kde.org">http://www.kde.org</A>; a lot of people are doing translations for
+you to support their language. You will find a list of email-addresses of the translators you could write to and who will help you with
+this. Also read 
 <A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A> and 
 <A HREF="programming-11.html">The KDevelop Programming Handbook</A> where questions about internationalization are covered again.
 <P>
@@ -291,7 +291,7 @@ way to specify the installation path. For more options about specifying installa
 
 <P>When working with a project, you should never edit the project file by hand. This will prevent KDevelop from loading your project
 correctly under certain circumstances, as well as changes will not result in updating the Makefiles. To change any settings for
-your project, you have to use the given menuentries like e.g. for adding files or setting file properties. For experts that are
+your project, you have to use the given menu entries like e.g. for adding files or setting file properties. For experts that are
 not comfortable with certain options for e.g. the Linker or need additional project configuration, you should work yourself into
 the Makefile.am macros and add all changes in the Makefile.am's after the section separated with the entry "KDevelop write area".
 As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
@@ -312,11 +312,11 @@ information how and where to set Compiler Options, Warnings and Linker Options.
 </H3>
 
 <P>Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
-empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
+empty project file with your project name, version and type information as well as your name and email address.  Then copy all your
 compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
 will be copied into your project directory and the Makefile.am's are updated.   Please change all Makefile.am entries existing
 before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
-compiled and installed after the conversion to ensure the project's consistancy.
+compiled and installed after the conversion to ensure the project's consistency.
 <P>
 <P ALIGN="RIGHT">
 

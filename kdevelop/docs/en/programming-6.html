@@ -24,11 +24,11 @@
 <H3><A NAME="ss6.1">6.1 What the Dialogeditor provides</A>
 </H3>
 
-<P>The Build-In dialogeditor of KDevelop is designed to help you construct widgets and dialogs that fit your application's purpose and
-reduces the time rapidely to extend the GUI of your applcation. The only limitation for now is that the dialogeditor does not support
+<P>The built-In dialogeditor of KDevelop is designed to help you construct widgets and dialogs that fit your application's purpose and
+reduces the time rapidly to extend the GUI of your application. The only limitation for now is that the dialogeditor does not support
 geometry management that is provided by Qt; therefore the dialogs are static in their size and this may lead to certain circumstances
 where e.g. the label width is not long enough to support the full length of a translation.
-<P>On the other hand, the current state of the editor in conjunction with KDevelop's project management offers the fastes way to create
+<P>On the other hand, the current state of the editor in conjunction with KDevelop's project management offers the fastest way to create
 full-featured applications for the K Desktop Environment.
 <P>
 <P>
@@ -39,16 +39,17 @@ full-featured applications for the K Desktop Environment.
 <P><B>QT-Widgets:</B>
 <UL>
 <LI><B>QWidget</B> - a widget that can be specified by yourself and can contain other widgets as well. This allows creating a widget
-hirarchy within your dialog.</LI>
+hierarchy within your dialog.</LI>
 <LI><B>QLabel</B> - a label that represents text information on the widget. Use QLabel e.g. in front of lineedits to signal what the
-purpose of the lineedit is or which varialbe e.g. a combo box allows to set.</LI>
+purpose of the line-edit is or which variable e.g. a combo box allows to set.</LI>
 <LI><B>QPushButton</B> - a button that allows to e.g. call another dialog like QFileDialog for selecting a filename.</LI>
-<LI><B>QCheckBox</B> - a checkbox for e.g. enableing/disableing options. QCheckBox is widely used for configuration dialogs.</LI>
+<LI><B>QCheckBox</B> - a check box for e.g. enabling/disabling options. QCheckBox is widely used for configuration dialogs.</LI>
 <LI><B>QLCDNumber</B> - displays numbers in LCD style. Often used for clocks.</LI>
 <LI><B>QRadioButton</B> - like QCheckBox often used to let the user set any options. QRadioButton specializes the options setting when more
-of them depend on each other, e.g. you have three radiobuttons, but ony want the user to choose one of three offered options.</LI>
-<LI><B>QComboBox</B> - a combo box lets the user set a value by selecting it from a drop-down menu or by inserting the value, if the
-box is write enabled.</LI>
+of them depend on each other, e.g. you have three radio-buttons, but you want the user to choose one of three offered options. See
+<CODE>QButtonGroup</CODE> for additional information.</LI>
+<LI><B>QComboBox</B> - a combo box lets the user set a value by selecting it from a
+drop-down menu or by inserting the value, if the box is write enabled.</LI>
 <LI><B>QListBox</B> - provides a single-column list of items that can be scrolled.</LI>
 <LI><B>QListView</B> - creates a multi-column list view that can be used to display e.g. file trees etc. in tree and table view.</LI>
 <LI><B>QMultiLineEdit</B> - offers a multi-line editor.</LI>
@@ -56,19 +57,19 @@ box is write enabled.</LI>
 <LI><B>QSpinBox</B> - allows choosing numeric values by up- and down buttons or insertion if write enabled.</LI>
 <LI><B>QSlider</B> - sets a value in a program-defined range by a slider.</LI>
 <LI><B>QScrollBar</B> - indicates the range of a value and sets the current value by a slider as well as up- and down buttons; often
-used for widgets whose contents is larger than the acutally visible view area. By using the scrollbar, the visible area can be changed
+used for widgets whose contents is larger than the actually visible view area. By using the scrollbar, the visible area can be changed
 to another part of the widgets' contents.</LI>
-<LI><B>QGroupBox</B> - provides a groupbox frame with title to indicate that child widgets within the box belong together.</LI>
+<LI><B>QGroupBox</B> - provides a group box frame with title to indicate that child widgets within the box belong together.</LI>
 </UL>
 <P><B>KDE-Widgets:</B>
 <UL>
 <LI><B>KColorButton</B> - a pushbutton displaying a selected color. On a button press, the KDE Color dialog is shown where the user can
 select another color. Often used for drawing applications or in any case where color values can be set.</LI>
-<LI><B>KCombo</B> - similar to <CODE>QComboBox</CODE>. Lets the user choose a value by a drop-down listbox.</LI>
+<LI><B>KCombo</B> - similar to <CODE>QComboBox</CODE>. Lets the user choose a value by a drop-down list box.</LI>
 <LI><B>KDatePicker</B> - a complete widget to get a date value by the user.</LI>
-<LI><B>KDateTable</B> - a calendar table to select a date of a month. Used by <CODE>KDatePicker</CODE> to build the datepicker dialog.</LI>
+<LI><B>KDateTable</B> - a calendar table to select a date of a month. Used by <CODE>KDatePicker</CODE> to build the date picker dialog.</LI>
 <LI><B>KKeyButton</B> - a button to select a key value. If the button is selected, it gets activated. Pressing a keyboard button will
-change the key value for the button which can be used to configure keybindings.</LI>
+change the key value for the button which can be used to configure key-bindings.</LI>
 <LI><B>KLed</B> - and LED (Light Emitting Diode) widget to display a certain state.</LI>
 <LI><B>KLedLamp</B> - and LED lamp that also supports click actions</LI>
 <LI><B>KProgress</B> - similar to <CODE>QProgressBar</CODE>, <CODE>KProgress</CODE> supports certain other values.</LI>
@@ -76,7 +77,7 @@ change the key value for the button which can be used to configure keybindings.<
 by password dialogs.</LI>
 <LI><B>KSeparator</B> - a separator widget to be used in all cases where KDE applications require a separator to provide a unique look.
 Often used in dialogs to separate logical parts where <CODE>QGroupBox</CODE> doesn't fit.</LI>
-<LI><B>KTreeList</B> - a collapsable list view to display trees similar to <CODE>QListView</CODE>.</LI>
+<LI><B>KTreeList</B> - a collapsible list view to display trees similar to <CODE>QListView</CODE>.</LI>
 </UL>
 <P>
 <H3><A NAME="ss6.3">6.3 Properties of Qt supported Widgets</A>
@@ -85,17 +86,17 @@ Often used in dialogs to separate logical parts where <CODE>QGroupBox</CODE> doe
 <P>
 <P>The following chapter gives a complete overview over the currently supported widgets of the Qt toolkit. To achieve a better
 understanding of the properties, these are separated to their inheritance. As all of them inherit <CODE>QWidget</CODE>, this class is described
-first. All QWidget properties are available for all other widgets as well, so these are not listed for them again. For widget groups
-that inherit an abstract subclass of QWidget as their baseclass, the baseclasses' properties are listed first (though this class does
-not provide a widget in the dialogeditor itself). Then the widget properities for the available widget of the group contains the
+first. All <CODE>QWidget</CODE> properties are available for all other widgets as well, so these are not listed for them again. For widget groups
+that inherit an abstract subclass of <CODE>QWidget</CODE> as their base-class, the base-classes' properties are listed first (though this class does
+not provide a widget in the dialogeditor itself). Then the widget properties for the available widget of the group contains the
 properties that are specific to it. For a better understanding the inheritance tree of the available widgets is listed below:
 <P>
 <UL>
 <LI>
-<A HREF="#QWidget">QWidget</A>
+<A HREF="#QWidget">&lt;cdx/QWidget/</A>
 <UL>
 <LI>
-<A HREF="#QButton">QButton</A> (abstract)
+<A HREF="#QButton">&lt;cdx/QButton/</A> (abstract)
 <UL>
 <LI>
 <A HREF="#QCheckBox">QCheckBox</A></LI>
@@ -106,7 +107,7 @@ properties that are specific to it. For a better understanding the inheritance t
 </UL>
 </LI>
 <LI>
-<A HREF="#QComboBox">QComboBox</A></LI>
+<A HREF="#QComboBox">&lt;cdx/QComboBox/</A></LI>
 <LI>
 <A HREF="#QFrame">QFrame</A> (abstract for now)
 <UL>
@@ -115,7 +116,7 @@ properties that are specific to it. For a better understanding the inheritance t
 <LI>
 <A HREF="#QLCDNumber">QLCDNumber</A></LI>
 <LI>
-<A HREF="#QLabel">QLabel</A></LI>
+<A HREF="#QLabel">&lt;idx/QLabel/</A></LI>
 <LI>
 <A HREF="#QProgressBar">QProgressBar</A></LI>
 <LI>
@@ -150,7 +151,7 @@ properties that are specific to it. For a better understanding the inheritance t
 <P>
 <H4><A NAME="QWidget"></A> QWidget Properties </H4>
 
-<P>QWidget is the base class for almost all widgets in Qt and KDE. Therefore widgets that inherit QWidget will allow to use the same
+<P><CODE>QWidget</CODE> is the base class for almost all widgets in Qt and KDE. Therefore widgets that inherit <CODE>QWidget</CODE> will allow to use the same
 settings in most cases.
 <P>
 <UL>
@@ -160,19 +161,20 @@ settings in most cases.
 <LI><B>BgMode:</B> Background mode of the widget</LI>
 <LI><B>BgPalColor:</B> Color pallette for the background</LI>
 <LI><B>BgPixmap:</B> filename for a background pixmap</LI>
-<LI><B>Cursor:</B> Cusor over the widget</LI>
+<LI><B>Cursor:</B> Cursor over the widget</LI>
 <LI><B>Font:</B> Font for the widget</LI>
 <LI><B>MaskBitmap:</B> filename for a masking bitmap.</LI>
 </UL>
 </LI>
 <LI><B>C++ Code:</B>
 <UL>
-<LI><B>AcceptsDrops:</B> if set to true, the widget item will accept drops by drag'n drop mechanisms</LI>
+<LI><B>AcceptsDrops:</B> if set to true, the widget item will accept drops by drag'n drop mechanisms (Qt drag'n drop
+protocol, not KDE 1.x !)</LI>
 <LI><B>Connections:</B> connects the item's signals to slots</LI>
 <LI><B>FocusProxy:</B> the item that gives its focus to this widget.</LI>
 <LI><B>HasFocus:</B> sets if the item has the focus by default. Mind that only one item per dialog can have this value as true</LI>
-<LI><B>ResizeToParent:</B> resizes the widget to it's parent size (not visible in editing mode)</LI>
-<LI><B>VarName:</B> Variable name of the item. Chage this to names that describe the item's purpose.</LI>
+<LI><B>ResizeToParent:</B> resizes the widget to its parent's size (not visible in editing mode)</LI>
+<LI><B>VarName:</B> Variable name of the item. Change this to names that describe the item's purpose.</LI>
 </UL>
 </LI>
 <LI><B>General:</B>
@@ -190,8 +192,8 @@ settings in most cases.
 <LI><B>MaxWidth:</B> maximum value for Width</LI>
 <LI><B>MinHeight:</B> minimum value for Height</LI>
 <LI><B>MinWidth:</B> minimum value for Width</LI>
-<LI><B>SizeIncX:</B> pixel steps for resize actions for X position</LI>
-<LI><B>SizeIncY:</B> pixel steps for resize actions for Y position</LI>
+<LI><B>SizeIncX:</B> pixel steps for resize actions to X direction</LI>
+<LI><B>SizeIncY:</B> pixel steps for resize actions to Y direction</LI>
 <LI><B>Width:</B> width of the item</LI>
 <LI><B>X:</B> position horizontal, counted from the left corner</LI>
 <LI><B>Y:</B> position vertical, counted up to down</LI>
@@ -204,7 +206,7 @@ settings in most cases.
 
 <P><CODE>QButton</CODE> is an abstract widget class that provides properties common to buttons.
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A><P>Inherited by 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A><P>Inherited by 
 <A HREF="#QCheckBox">QCheckBox</A>, 
 <A HREF="#QPushButton">QPushButton</A> and 
 <A HREF="#QRadioButton">QRadioButton</A> inherit <CODE>QButton</CODE>.
@@ -220,7 +222,7 @@ settings in most cases.
 <UL>
 <LI><B>setText:</B> the text on labels, buttons and boxes, also pre-set text for lineedits.</LI>
 <LI><B>setAutoRepeat:</B> if enabled, the clicked() signal is emitted at regular intervals while the button is down. No effect on
-toogle buttons.</LI>
+toggle buttons.</LI>
 <LI><B>setAutoResize:</B> Enables auto-resizing if TRUE. When auto-resize is enabled, the button will resizes itself
 whenever the contents changes.</LI>
 </UL>
@@ -228,11 +230,11 @@ whenever the contents changes.</LI>
 </UL>
 <P>
 <P>
-<H4><A NAME="QCheckBox"></A> QCheckBox Properities </H4>
+<H4><A NAME="QCheckBox"></A> QCheckBox Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
-<A HREF="#QButton">QButton</A><P>
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
+<A HREF="#QButton">&lt;cdx/QButton/</A><P>
 <UL>
 <LI><B>General:</B>
 <UL>
@@ -245,8 +247,8 @@ whenever the contents changes.</LI>
 <H4><A NAME="QPushButton"></A> QPushButton Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
-<A HREF="#QButton">QButton</A><P>
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
+<A HREF="#QButton">&lt;cdx/QButton/</A><P>
 <UL>
 <LI><B>General:</B>
 <UL>
@@ -266,12 +268,12 @@ boxes.</LI>
 <H4><A NAME="QRadioButton"></A> QRadioButton Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
-<A HREF="#QButton">QButton</A><P>
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
+<A HREF="#QButton">&lt;cdx/QButton/</A><P>
 <UL>
 <LI><B>General:</B>
 <UL>
-<LI><B>isChecked: (setChecked)</B> defines is the radiobutton is set checked on construction</LI>
+<LI><B>isChecked: (setChecked)</B> defines is the radio button is set checked on construction</LI>
 </UL>
 </LI>
 </UL>
@@ -280,14 +282,14 @@ boxes.</LI>
 <H4><A NAME="QComboBox"></A> QComboBox Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A><P>( no additional properties for now)
+<A HREF="#QWidget">&lt;cdx/QWidget/</A><P>( no additional properties for now)
 <P>
 <P>
 <P>
 <H4><A NAME="QFrame"></A> QFrame inherited widgets </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A><P>For now only used as an abstract class.
+<A HREF="#QWidget">&lt;cdx/QWidget/</A><P>For now only used as an abstract class.
 <P>
 <UL>
 <LI><B>Appearance:</B>
@@ -302,12 +304,12 @@ contents.</LI>
 <H4><A NAME="QGroupBox"></A> QGroupBox Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
 <A HREF="#QFrame">QFrame</A><P>
 <UL>
 <LI><B>General:</B>
 <UL>
-<LI><B>Title: (setTitle)</B> sets the groupbox title that is displayed in the box frame.</LI>
+<LI><B>Title: (setTitle)</B> sets the group box title that is displayed in the box frame.</LI>
 </UL>
 </LI>
 </UL>
@@ -316,7 +318,7 @@ contents.</LI>
 <H4><A NAME="QLCDNumber"></A> QLCDNumber Properties  </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
 <A HREF="#QFrame">QFrame</A><P>
 <UL>
 <LI><B>General:</B>
@@ -332,7 +334,7 @@ contents.</LI>
 <H4><A NAME="QLabel"></A> QLabel Properties  </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
 <A HREF="#QFrame">QFrame</A><P>
 <UL>
 <LI><B>Appearance:</B>
@@ -360,12 +362,12 @@ moved.</LI>
 <H4><A NAME="QProgressBar"></A> QProgressBar Properties  </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
 <A HREF="#QFrame">QFrame</A><P>
 <UL>
 <LI><B>General:</B>
 <UL>
-<LI><B>TotalSteps: (setTotalSteps)</B> (public slot) sets the total steps of the progressbar. During the iteration of your action to
+<LI><B>TotalSteps: (setTotalSteps)</B> (public slot) sets the total steps of the progress bar. During the iteration of your action to
 display the progress, you have to call setProgress(int) to advance the progress step displayed to (int).</LI>
 </UL>
 </LI>
@@ -375,18 +377,18 @@ display the progress, you have to call setProgress(int) to advance the progress 
 <H4><A NAME="QScrollView"></A> QScrollView </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
 <A HREF="#QFrame">QFrame</A><P>Inherited by 
 <A HREF="#QListBox">QListBox</A>
 (abstract for now)
-<P>Provides a scrollable widget that manages the display of a childwidget by a vertical and horizontal scrollbar.
+<P>Provides a scrollable widget that manages the display of a child widget by a vertical and horizontal scrollbar.
 <P>
 <H4><A NAME="QListView"></A> QListView</H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A>, 
 <A HREF="#QFrame">QFrame</A> and 
-<A HREF="#QListView">QListView</A><P>Provides a list view to display hierarchical data either in a table or a tree. Manages itself by scrollbars throug 
+<A HREF="#QListView">QListView</A><P>Provides a list view to display hierarchical data either in a table or a tree. Manages itself by scrollbars through 
 <A HREF="#QScrollView">QScrollView</A>.
 <P>
 <UL>
@@ -398,8 +400,8 @@ display the progress, you have to call setProgress(int) to advance the progress 
 <LI><B>hScrollBarMode:</B> Scrollbar mode provided by 
 <A HREF="#QScrollView">QScrollView</A> for the horizontal scrollbar</LI>
 <LI><B>isAllColumnsShowFocus:</B> (setAllColumnsShowFocus(bool)) displays focus on all columns of an item.</LI>
-<LI><B>isMultiSelection:</B> enables multiselection of list items</LI>
-<LI><B>isRootDecorated:</B> enabeles the + and - decoration to open and close trees</LI>
+<LI><B>isMultiSelection:</B> enables multi-selection of list items</LI>
+<LI><B>isRootDecorated:</B> enables the + and - decoration to open and close trees</LI>
 <LI><B>vScrollBarMode:</B>Scrollbar mode provided by 
 <A HREF="#QScrollView">QScrollView</A> for the vertical scrollbar</LI>
 </UL>
@@ -415,7 +417,7 @@ display the progress, you have to call setProgress(int) to advance the progress 
 <H4><A NAME="QSpinBox"></A> QSpinBox Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and 
 <A HREF="#QFrame">QFrame</A><P>
 <UL>
 <LI><B>General:</B>
@@ -434,7 +436,7 @@ display the progress, you have to call setProgress(int) to advance the progress 
 <H4><A NAME="QTableView"></A> QTableView inherited widgets </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A>, 
 <A HREF="#QFrame">QFrame</A> and 
 <A HREF="#QTableView">QTableView</A><P>Inherited by 
 <A HREF="#QListBox">QListBox</A> and 
@@ -443,7 +445,7 @@ display the progress, you have to call setProgress(int) to advance the progress 
 <H4><A NAME="QListBox"></A> QListBox Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A>, 
 <A HREF="#QFrame">QFrame</A> and 
 <A HREF="#QTableView">QTableView</A><P>
 <UL>
@@ -460,7 +462,7 @@ display the progress, you have to call setProgress(int) to advance the progress 
 </LI>
 <LI><B>Geometry:</B>
 <UL>
-<LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of textlines are displayed using the
+<LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of text lines are displayed using the
 current font.</LI>
 </UL>
 </LI>
@@ -470,7 +472,7 @@ current font.</LI>
 <H4><A NAME="QMultiLineEdit"></A> QMultiLineEdit Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QWidget">&lt;cdx/QWidget/</A>, 
 <A HREF="#QFrame">QFrame</A> and 
 <A HREF="#QTableView">QTableView</A><P>
 <UL>
@@ -485,7 +487,7 @@ current font.</LI>
 </LI>
 <LI><B>Geometry:</B>
 <UL>
-<LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of textlines are displayed using the current font.</LI>
+<LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of text lines are displayed using the current font.</LI>
 </UL>
 </LI>
 </UL>
@@ -495,14 +497,14 @@ current font.</LI>
 <H4><A NAME="QLineEdit"></A> QLineEdit Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A><P>
+<A HREF="#QWidget">&lt;cdx/QWidget/</A><P>
 <UL>
 <LI><B>General:</B>
 <UL>
 <LI><B>CursorPosition: (setCursorPosition)</B> sets the default cursor position.</LI>
 <LI><B>MaxLength: (setMaxLength) </B> sets the maximum string length</LI>
 <LI><B>Text: (setText) </B> (public slot) sets the contents displayed on construction</LI>
-<LI><B>hasFrame: (setFrame) </B> draws the lineedit witin a two-pixel frame if enabled.</LI>
+<LI><B>hasFrame: (setFrame) </B> draws the line edit within a two-pixel frame if enabled.</LI>
 <LI><B>isTextSelected: (selectAll) </B> (public slot) sets the text to be selected.</LI>
 </UL>
 </LI>
@@ -512,7 +514,7 @@ current font.</LI>
 <H4><A NAME="QScrollBar"></A> QScrollBar Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and <CODE>QRangeControl</CODE>.
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and <CODE>QRangeControl</CODE>.
 <P>
 <UL>
 <LI><B>General:</B>
@@ -531,7 +533,7 @@ mouse release.</LI>
 <H4><A NAME="QSlider"></A> QSlider Properties </H4>
 
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A> and <CODE>QRangeControl</CODE>.
+<A HREF="#QWidget">&lt;cdx/QWidget/</A> and <CODE>QRangeControl</CODE>.
 <P>
 <UL>
 <LI><B>General:</B>
@@ -555,10 +557,10 @@ mouse release.</LI>
 <P>
 <UL>
 <LI>
-<A HREF="#QWidget">QWidget</A>
+<A HREF="#QWidget">&lt;cdx/QWidget/</A>
 <UL>
 <LI>
-<A HREF="#QButton">QButton</A> (abstract)
+<A HREF="#QButton">&lt;cdx/QButton/</A> (abstract)
 <UL>
 <LI>
 <A HREF="#QPushButton">QPushButton</A>
@@ -572,7 +574,7 @@ mouse release.</LI>
 </UL>
 </LI>
 <LI>
-<A HREF="#QComboBox">QComboBox</A>
+<A HREF="#QComboBox">&lt;cdx/QComboBox/</A>
 <UL>
 <LI>
 <A HREF="#KCombo">KCombo</A></LI>
@@ -634,7 +636,7 @@ mouse release.</LI>
 
 <P>
 <P>Inherits: 
-<A HREF="#QComboBox">QComboBox</A><P>
+<A HREF="#QComboBox">&lt;cdx/QComboBox/</A><P>
 <UL>
 <LI>General
 <UL>
@@ -715,7 +717,7 @@ mouse release.</LI>
 
 <P>
 <P>Inherits 
-<A HREF="#QWidget">QWidget</A><P>
+<A HREF="#QWidget">&lt;cdx/QWidget/</A><P>
 <UL>
 <LI>Appearance
 <UL>
@@ -748,7 +750,7 @@ remember what class is kept where. The data file that has to be set will later c
 dialog. You should not edit this file manually afterwards; use the implementation file for any additions towards dialog construction
 code and method implementations.</LI>
 </OL>
-<P>The dialog will then show itself as a widget with a grid. As the dialgoeditor uses the grid to snap any child widgets to the geometry,
+<P>The dialog will then show itself as a widget with a grid. As the dialogeditor uses the grid to snap any child widgets to the geometry,
 you can change the grid size with the "Grid Size" entry in the "View" menu, if the preset values don't match your needs.
 <P>Then select the "Widgets" tabulator on the left pane and press the button for the widget item you want to add to the main widget. It
 directly appears on the main widget's left upper corner and gets selected by a resizable frame. Then move or resize the widget with the
@@ -760,21 +762,32 @@ projects, all widget properties that will be visible later, e.g. label texts, ar
 support internationalization. Therefore you should do a "Make Messages and merge" when finished with construction and implementation.
 <P>When creating a dialog or widget, you should watch the following guidelines:
 <UL>
-<LI>Always try to be consistant! This is probably the most important rule when constructing GUI elements. Mind that the user will
+<LI>Always try to be consistent! This is probably the most important rule when constructing GUI elements. Mind that the user will
 only accept an application that is easy to understand no matter how complex it's purpose may be.</LI>
-<LI>Add help whereever you can by tooltips, What's this..? help or Quickhelp. This allows getting direct information about the
+<LI>Add help wherever you can by tool-tips, What's this..? help or Quick-help. This allows getting direct information about the
 purpose of the GUI elements.</LI>
 <LI>watch the <B>keyboard focus</B> !  The generator does not take care of that- this has to be watched when constructing any widget;
 otherwise you have to reorder your initialization code by hand which is a very unthankful job. The keyboard focus on any widget means
 the oder on which items get the keyboard input focus when the user presses the tab and shift+tab button. It would be very annoying if
 the focus changes everywhere but not to the next widget visible below or to the right of the current widget. Therefore start
-constructing your widget top down from left to right to ensure the consistancy of the focus.</LI>
+constructing your widget top down from left to right to ensure the consistency of the focus.</LI>
 </UL>
 <P>
 <H3><A NAME="ss6.6">6.6 Setting Widget Properties</A>
 </H3>
 
-<P>Widget properties can be set easily with the properties window entries. When a widget gets selected, the properties window
+<P>
+<!--
+widget properties
+-->
+<!--
+dialogeditor
+-->
+<!--
+properties window
+-->
+
+Widget properties can be set easily with the properties window entries. When a widget gets selected, the properties window
 automatically updates to the properties of the current widget. As all widgets are derived from <CODE>QWidget</CODE>, you can set the
 <CODE>QWidget</CODE> properties plus an amount of properties that are specific to the selected widget. Properties can be:
 <P>
@@ -803,14 +816,14 @@ to the header declaration of your <CODE>KTMainWindow</CODE> instance replacing t
 that the document instance and the App instance depends on the view class. In this case, it is technically a much better way to create
 a mini-KDE application and construct your <CODE>KTMainWindow</CODE> instance yourself.
 <P>More often the widget is intended to be a part of the view area, which means it is combined with other widgets. This can be done by
-using one of the following classes that provide a devider to separate two widgets:
+using one of the following classes that provide a divider to separate two widgets:
 <P>
 <OL>
 <LI><CODE>QSplitter</CODE></LI>
 <LI><CODE>KPanner</CODE></LI>
 <LI><CODE>KNewPanner</CODE></LI>
 </OL>
-<P>If the main view shall contain more than two widgets, you have to use another instance of the devider as one of the two managed widgets
+<P>If the main view shall contain more than two widgets, you have to use another instance of the divider as one of the two managed widgets
 by the first one. Then add the according widgets to each panner and set the first panner the view area.
 <P>
 <H4><CODE>QDialog</CODE> inherited</H4>
@@ -819,10 +832,14 @@ by the first one. Then add the according widgets to each panner and set the firs
 preferences. To invoke the dialog, you have to add a slot to the <CODE>App</CODE> class by adding the method declaration and the implementation
 body. Then add the constructor call to the method as well as a call to <CODE>show()</CODE> or <CODE>exec()</CODE> the dialog. Finally, you should take
 care for processing the results of the dialog; this can either be done by the dialog who changes values of the parent widget itself or
-by retriving the values from the dialog (which would make your dialog a lot more reusable in other projects). Mind that you should call
+by retrieving the values from the dialog (which would make your dialog a lot more reusable in other projects). Mind that you should call
 <CODE>delete</CODE> if you called the dialog instance with <CODE>new</CODE> to avoid memory leaks.
 <P>Finally, you have to connect a menuentry (with according statusbar help) to the new slot invoking the dialog; optionally a keyboard
-accelerator and a toolbar icon. For this, add a resource ID to the file <CODE>resource.h</CODE> with a define. Then add an according menuentry
+accelerator
+<!--
+accelerator
+-->
+ and a toolbar icon. For this, add a resource ID to the file <CODE>resource.h</CODE> with a define. Then add an according menuentry
 to one of the popup menus already present in the menubar or create a new popup to add your menuentry. The menuentry consists of:
 <P>
 <UL>
@@ -832,9 +849,21 @@ to one of the popup menus already present in the menubar or create a new popup t
 ampersand should be in front of the letter that will be displayed underlined to access the entry directly by keyboard acceleration.</LI>
 <LI>the member instance to call. Normally this would be the <CODE>this</CODE> pointer.</LI>
 <LI>the member slot to call. Use <CODE>SLOT(yourmethod()</CODE> to call the slot on the signal <CODE>activated()</CODE>.</LI>
-<LI>the accelerator key. This should be set to zero as this is done by an enty in <CODE>initKeyAccel()</CODE> where you have to introduce an
-accelerator key together with the slot to call. Then call <CODE>changeMenuAccel()</CODE> to change the menuitem's accelerator. This will make
-it configurable by a keychooser dialog later. For standard actions, use the enumerable values given by <CODE>KAccel</CODE>.</LI>
+<LI>the accelerator
+<!--
+accelerator
+-->
+ key. This should be set to zero as this is done by an entry in <CODE>initKeyAccel()</CODE> where you have to introduce an
+accelerator
+<!--
+accelerator
+-->
+ key together with the slot to call. Then call <CODE>changeMenuAccel()</CODE> to change the menu item's accelerator
+<!--
+accelerator
+-->
+. This will make
+it configurable by a key-chooser dialog later. For standard actions, use the enumerable values given by <CODE>KAccel</CODE>.</LI>
 <LI>the menu ID as set in <CODE>resource.h</CODE></LI>
 </UL>
 <P>

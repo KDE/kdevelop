@@ -24,8 +24,13 @@
 <H3><A NAME="ss10.1">10.1 The Classviewer</A>
 </H3>
 
-<P>The KDevelop Classviewer is one of the most useful and important tools that the IDE provides a developer for managing his project
-sources. When a project is loaded, a classparser reads all project sources for functions, classes etc., then displays the results in
+<P>
+<!--
+classbrowser
+-->
+
+The KDevelop Classviewer is one of the most useful and important tools that the IDE provides a developer for managing his project
+sources. When a project is loaded, a class parser reads all project sources for functions, classes etc., then displays the results in
 the CV treeview. This chapter shows you how to use the Classviewer and the provided functionality and how it can improve your work.
 <P>Classes and their methods can also be accessed by the browser toolbar. There, the left combo selects the class; the right
 lets you choose the methods of the selected class. When you select a method, the classbrowser will automatically bring you to the
@@ -74,7 +79,7 @@ within files. Therefore, selections by a mouse click will result in the followin
 <UL>
 <LI><B>On a classname:</B>  Switches to the class declaration</LI>
 <LI><B>On a class method:</B> Switches to the method implementation</LI>
-<LI><B>On a class attribute:</B> Switches to the attibute's declaration in the class declaration</LI>
+<LI><B>On a class attribute:</B> Switches to the attribute's declaration in the class declaration</LI>
 <LI><B>On a struct:</B> Switches to the struct's declaration</LI>
 <LI><B>On a global function:</B> Switches to the function's implementation</LI>
 </UL>
@@ -86,15 +91,20 @@ right-button context menus over items. On a method or function, this means that 
 <LI><B>Go to definition:</B> Switches to the implementation- this is the default for a left click as described above</LI>
 <LI><B>Go to declaration:</B> Switches to the declaration of the method or function.</LI>
 </UL>
-<P>By this behavoir, the Class Browser offers you access to every place you have to go for coding your C++ application.
+<P>By this behavior, the Class Browser offers you access to every place you have to go for coding your C++ application.
 <P>The following sections give you a description of the other tools that the Class Browser offers- you will find them very useful when
 working with large projects as they enhance working object-orientated on C++ programs.
 <P>
 <H3><A NAME="ss10.2">10.2 The Classtools</A>
 </H3>
 
-<P>The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes.
-The classviewer displays all objects by their occurence in the code, but you sometimes want to get more information about
+<P>
+<!--
+classtools
+-->
+
+The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes.
+The classviewer displays all objects by their occurrence in the code, but you sometimes want to get more information about
 classes without having to look inside the code. Therefore, the classtool dialogs are specialized on displaying specific class
 attributes.
 <P>The classtool dialog is invoked by the popup menu over a class in the classviewer. Select "Classtool", and the dialog will appear.
@@ -102,7 +112,7 @@ To get informed about a class, select the class in the combo box on top. Then th
 you specific trees for your class. These are:
 <P>
 <DL>
-<DT><B> Parents:</B><DD><P>The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
+<DT><B> Parents:</B><DD><P>The parents of the selected class, which means the class it inherits. This is useful for multiple inheritance as well as to see why a
 class behaves in one or the other way, e.g. for dialogs your parent class could be <CODE>QWidget</CODE> or <CODE>QDialog</CODE>.
 <DT><B>Children:</B><DD><P>Displays the children classes that inherit the current class.
 <DT><B>Clients:</B><DD><P>Classes that make use of the selected class by an attribute in their class declaration
@@ -120,7 +130,7 @@ attribute value.
 
 <P>The Class Browser additionally allows adding methods and attributes directly by dialogs. This means you don't have to type the
 classdeclaration and the implementation header yourself. After adding a method, you only have to set the formal parameters to the
-implementation header and, if the method requrires an attribute, to the declaration.
+implementation header and, if the method requires an attribute, to the declaration.
 <P><B>&raquo; How to add a method to a class</B>
 <P>
 <OL>

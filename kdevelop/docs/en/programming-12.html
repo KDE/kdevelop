@@ -21,6 +21,9 @@
 <H3><A NAME="s12">12. Finding Errors</A></H3>
 
 <P>
+<!--
+debugging macros
+-->
 <H3><A NAME="ss12.1">12.1 Debugging Macros provided by Qt</A>
 </H3>
 
@@ -72,7 +75,7 @@ message which get replaced by the additional parameters. An example:
 <BLOCKQUOTE><CODE>
 <HR>
 <PRE>
-KDEBUG3( KDEBUG_INFO, kmail_composer, "Message no. %d to %s has %d bytes",
+KDEBUG3( &lt;idx/KDEBUG_INFO/, kmail_composer, "Message no. %d to %s has %d bytes",
           message_no, aMessage.to(), aMessage.length() );
 </PRE>
 <HR>

@@ -28,14 +28,18 @@ to make it available to the user.
 <H3><A NAME="ss9.1">9.1 Why SGML ?</A>
 </H3>
 
-<P>SGML is a text formatting system that allows to create output in various formats; therefore technical documentation has to be written
-only once and then transfered to the desired output. The most used output is probably HTML to provide online help through web-browsers
-in a time where internet standards are available even on single-desktop systems. KDE makes use of HTML documentation by it's KDEHelp
-application where all KDE applications are listed and give access to their user manuals. To provide a unique look to KDE documentation,
-the KDE-Software Development Kit (SDK) contains a tool called <CODE>ksgml2html</CODE> which itself uses the sgmltools' sgml2html program to
-extend the HTML output with the KDE logo.
-<P>But besides this, sgmltools allow output in plain text, GNU info, LyX, DVI, Postscript and RTF; therefore the SGML documentation can be
-easily used to provide a printed version of the online handbook.
+<P>SGML (Standard Generalized Markup Language) is a text formatting system that allows to create output in various formats; therefore
+technical documentation has to be written only once and can then be transfered to the desired output. The most used output is probably
+HTML to provide online help through web-browsers in a time where Internet standards are available even on single-desktop systems. KDE
+makes use of HTML documentation by it's KDEHelp application where all KDE applications are listed and give access to their user manuals
+as well as by a helpmenu where the user can access the online-help directly from within the application.
+<P>To provide a unique look to KDE documentation, the KDE-Software Development Kit (SDK) contains a tool called <CODE>ksgml2html</CODE> which
+itself uses the sgml-tools' ksgml2html program to extend the HTML output with the KDE logo.
+<P>But besides this, sgml-tools allow output in plain text, GNU info, LyX, DVI, Postscript and RTF; therefore the SGML
+documentation can be easily used to provide a printed version of the online handbook. The KDevelop IDE itself contains four handbooks
+that are all written in SGML - you may read this in a printed version or online right now; this alone shows how useful it is to
+learn the few things about writing in SGML.
+<P>
 <P>
 <H3><A NAME="ss9.2">9.2 What the Documentation already contains</A>
 </H3>
@@ -56,16 +60,27 @@ properties correctly to install the logo file into the same location the HTML fi
 <P>Adding another page to the documentation is very easy by adding another &lt;sect&gt;, followed by the name of the chapter to the
 index.sgml file at the location where your chapter will appear. For that, search the &lt;sect&gt; that is the chapter before and add
 your section after that into the sgml file. Whenever you want to rebuild your documentation output to control for errors, select "Make
-Doc-Handbook" from the "Project" menu which will invoke either sgml2html or ksgml2html depending on the project type. If errors occur,
+Doc-Handbook" from the "Project" menu which will invoke either ksgml2html or ksgml2html depending on the project type. If errors occur,
 you are able to locate the error by clicking on the error message or selecting "next error" from the "View" menu.
 <P>For each &lt;sect&gt; you added, another HTML output file will be generated; therefore all chapters after the inserted will change
-their chapters. This is important if you call your HTML documentation pages from within your application- mind that you have to whatch
+their chapters. This is important if you call your HTML documentation pages from within your application- mind that you have to watch
 the page you call for help.
+<P>The sgmltools-package contains a reference for almost all valid tags and contains sample code for various formatting purposes. As the
+standard SGML file uses the &lt;article&gt; format, you should think about changing to &lt;book&gt; formatting if your documentation
+extends more than 10-20 pages in printed form. The KDevelop handbooks have been created this way; the only thing you have to watch out
+for is using &lt;chapt&gt; instead of &lt;sect&gt; for chapters. The following subsections then have to be declared with &lt;sect&gt;,
+&lt;sect1&gt; etc. as usual.
+<P>
 <P>
 <H3><A NAME="ss9.4">9.4 How to call Help in Dialogs</A>
 </H3>
 
-<P>Calling help in dialogs is often done by adding a Help-button; then you add a slot that is called when the button gets pressed. Within
+<P>
+<!--
+help functions
+-->
+
+Calling help in dialogs is often done by adding a Help-button; then you add a slot that is called when the button gets pressed. Within
 the slot implementation, call
 <P>
 <P>

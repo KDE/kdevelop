@@ -29,11 +29,11 @@
 </UL>
 
 Generally, the editor itself doesn't do much difference in comparison to other editors; especially as it is a build-in version of
-the popular KWrite, also known as the "Extended Editor". If you're familar with that, you won't have any problems using it for
+the popular KWrite, also known as the "Extended Editor". If you're familiar with that, you won't have any problems using it for
 managing your projects. In addition to normal editors, KDevelop contains a new printing system, that is far more extended for use
 with sourcecodes- and you can choose between the printing program you want to use.
 <P>This section gives you more information about how to handle your project files and to make you more familiar with the editor's
-functionality. A lot of Unix-hardliners would prefer using Emacs or XEmacs- they're fine with that. But it isn't neccessary for
+functionality. A lot of Unix-hardliners would prefer using Emacs or XEmacs- they're fine with that. But it isn't necessary for
 easy programming, and especially for beginners, to work themselves into powerful editors which shall, in the result, only allow
 you to enter your code.
 <P>
@@ -43,15 +43,15 @@ you to enter your code.
 <P>The following sections describe how to create, save, open and close your project files you need to edit- mind that this doesn't
 include translation files or pixmaps. Those are recognized automatically and the according editing program like KTranslator opens
 those files for you.
-<P>To give you an easy access to your files, KDevelop contains two easy-to-handle treeviews, similar to a filemanager, that recognize
+<P>To give you an easy access to your files, KDevelop contains two easy-to-handle tree-views, similar to a filemanager, that recognize
 if you selected a file, and opens it in the according editor window. The main view contains two windows that are used
 independently, but connected via the Project Editor, so you can do all menubar actions the same way. The intention behind this is
 that it allows you to handle two windows at the same time, although only one is visible. The C/C++ window thereby takes another
-task, which allows you to easily compile your sources one by one, so you can check the impelmentations without having to run a
+task, which allows you to easily compile your sources one by one, so you can check the implementations without having to run a
 complete build-process over your project.
 <P>This can be done when having the C/C++ window on top. Select "Compile File" from the Build-menu or press the according button in
 the toolbar. Your file gets saved and compiled, and you can control any errors by the Compiler output in the output window.
-<P>Within the IDE you can open as many textfiles as you like. All opened files are listed in the Window-menu, so you can switch
+<P>Within the IDE you can open as many text files as you like. All opened files are listed in the Window-menu, so you can switch
 between them by selecting the according filename from the menu. Further, the actual opened file is displayed with its name in the
 window frame of KDevelop.
 <P>
@@ -67,13 +67,13 @@ or "Save As" from the File-menu or by the Save-button on the toolbar. For saving
 select "Save all" from the File-menu.
 <P>Now, when working on a project, it is very annoying if something critical happens while you have done a lot of changes on your
 files; sometimes you will bite yourself that you have forgotten to save the changes. KDevelop takes care of this by offering
-"Autosaving", which is by default enabled and set to save all files in intervalls of 5 minutes. To select another saving period or
+"Autosaving", which is by default enabled and set to save all files in intervals of 5 minutes. To select another saving period or
 to disable this, see 
 <A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A>, where the setup options are described.
 <P>Additionally, KDevelop takes care for all changes if you open another project or exit KDevelop. You will be asked for saving the
 changed files, where you also have the option to specify which one to save and which you want to stay unsaved. Further, when
 invoking any build-processes, your files get saved automatically, so you won't ever wonder why your application doesn't run the
-way you expected it to do after your changes to the sourcefiles. The only exception is the "Compile File" command, which only
+way you expected it to do after your changes to the source files. The only exception is the "Compile File" command, which only
 saves the currently opened source file visible in the source editor window.
 <P>
 <H4>Opening and Closing Files</H4>
@@ -84,7 +84,7 @@ more frequently used way is to select the file from the LFV, the Logical File Vi
 <A HREF="index-5.html#Overview">Overview</A>
 ). The advantage of the file trees is that they provide a quick visual access to your files, especially the LFV,
 which only displays your project files by their type, collected into folders. You can as well configure the LFV towards sorting
-your files in another manner by a right mouseclick on the tree. Select "New Group" from the popup-menu, and you can configure a
+your files in another manner by a right mouse click on the tree. Select "New Group" from the popup-menu, and you can configure a
 new group, or select "Edit Group" to install new file filters by specifying the group's file extensions, separated by commas.
 <P>The standard file groups for a project generated by KAppWizard are the Headers, Sources, GNU and Others. Additionally, after
 adding a translation file, KDevelop adds a folder "Translations", containing your *.po files.
@@ -99,7 +99,7 @@ opened files will be checked for changes and you will be asked for saving as wel
 <P><B>&raquo; How to find a certain line in a file</B>
 <P>
 <OL>
-<LI>Select "Goto Line" in the "View"-menu or press CTRL+G. The dialogfiled "Goto Line" appears.</LI>
+<LI>Select "Goto Line" in the "View"-menu or press CTRL+G. The dialogfield "Goto Line" appears.</LI>
 <LI>Insert the linenumber you want to go to.</LI>
 <LI>Press OK.</LI>
 </OL>
@@ -116,7 +116,7 @@ and appends it to the bookmarks-list. The documentation browser also offers sett
 entry "Add Bookmark".
 <P><B>&raquo; How to delete bookmarks</B>
 <P>The bookmarks are set for each editing window separately- mind that your bookmarks aren't connected to a certain file you set the
-bookmark for. To delete all bookmaks, select "Delete Bookmarks" from the "Bookmarks"-menu. This deletes the bookmarks for the
+bookmark for. To delete all bookmarks, select "Delete Bookmarks" from the "Bookmarks"-menu. This deletes the bookmarks for the
 window actually on top, either the Header window, the C++ window or the browser window.
 <P><B>&raquo; How to go to a bookmarked line</B>
 <P>
@@ -193,7 +193,7 @@ press OK after you finished with your configuration.
 
 <P>
 <DL>
-<DT><B>Auto Indent:</B><DD><P>this sets the edior to place the cursor below the first literal when a new line is entered.
+<DT><B>Auto Indent:</B><DD><P>this sets the editor to place the cursor below the first literal when a new line is entered.
 <P>
 <DT><B>Backspace Indent:</B><DD><P>this option sets the cursor below the first literal of the line above when backspace is pressed.
 <P>
@@ -241,7 +241,7 @@ from the "Options"-menu. You can configure colors for:
 <H4>Syntax Highlighting</H4>
 
 <P>The syntax-highlighting mode of KDevelop's editor can be configured by two dialogs; first you can set default colors for
-syntax-highlihgting by the "Editor Defaults" entry in the "Options"-menu. There, you can set colors and fonts as well as the
+syntax-highlighting by the "Editor Defaults" entry in the "Options"-menu. There, you can set colors and fonts as well as the
 fontsize for e.g. keywords. Select the default item and set all needed options.
 <P>The second configuration dialog is accessed by the "Syntax-Highlighting" entry in the "Options"-menu. This allows you to set the
 file filters for the programming language, e.g. *.cpp, *.h  for C++. Then select the item that you want to configure. If you wish
@@ -259,18 +259,18 @@ used by the editor.
 <OL>
 <LI>Select "Search" from the "Edit"-menu. This opens the search dialog.</LI>
 <LI>Specify the expression to search for in the edit field. The drop-down menu offers selecting a previous search expression.</LI>
-<LI>Select additonal options like "Whole Words only"</LI>
+<LI>Select additional options like "Whole Words only"</LI>
 <LI>Press OK.</LI>
 </OL>
 <P>To repeat searching for an expression entered in the search dialog, press F3.
 <P>
 <H4>Searching over Several Files</H4>
 
-<P>As the seach function only is referencing seaches over a single file that is currently visible, you're limited to this. But often
+<P>As the search function only is referencing searches over a single file that is currently visible, you're limited to this. But often
 you want to search for the same expression overall your project. Therefore, KDevelop contains a <CODE>grep</CODE>-dialog, which
 lets you search over all files that you specify either by setting the directory to start the search from and/or by mime-type.
 Specifying the exact directory and the mime-type will therefore reduce the time that KDevelop needs to read your files and display
-the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The seach dialog opens and
+the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The search dialog opens and
 lets you enter:
 <P>
 <UL>
@@ -322,8 +322,8 @@ following:
 <P>
 <OL>
 <LI>place your cursor at the word you want to search or mark an expression</LI>
-<LI>select "Search Marked Text" from the "Help"-menu or press the right mouse button to open the context menu; then select "Look
-Up: "expression".</LI>
+<LI>select "Search Marked Text" from the Help-menu or press the right mouse button to open the context menu; then select
+"Look Up: "expression".</LI>
 <LI>after the search result page is displayed in the documentation browser, select the page that you think could contain the
 information you need.</LI>
 <LI>the selected documentation page is displayed and your search result is marked. To display the next result within the same
@@ -355,10 +355,10 @@ printing files.
 <P>
 <H4>Configuring the Printer</H4>
 
-<P>The printing programs can both be configured by selecting "Print" from the "File"-menu; on the printing dialog, select the program
-by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the configuration for the
-selected program that will be used. Another way to configure the programs are selecting "Printer Configuration..." from the
-"Options"-menu; then select "a2ps" or "enscript".
+<P>The printing programs can both be configured by selecting "Print" from the "File"-menu; on the printing dialog,
+select the program by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the
+configuration for the selected program that will be used. Another way to configure the programs are selecting "Printer
+Configuration..." from the "Options"-menu; then select "a2ps" or "enscript".
 <P>
 <H4>The a2ps Configuration Options</H4>
 
@@ -555,7 +555,7 @@ characters.</LI>
 <UL>
 <LI><B>pretty-print:</B> enables pretty-print mode for enscript</LI>
 <LI><B>color:</B> use color printing</LI>
-<LI><B>Pretty Print Mode:</B> sets the printing mode dependend on your file format</LI>
+<LI><B>Pretty Print Mode:</B> sets the printing mode dependent on your file format</LI>
 </UL>
 </LI>
 </UL>
@@ -565,7 +565,7 @@ characters.</LI>
 <H4>File Selection</H4>
 
 <P>The file selection dialog is accessed by the "Files" button on the printing dialog. The file selection allows specifying which files to
-print out by certain criterias:
+print out by certain criteria:
 <UL>
 <LI><B>File Selection:</B>
 <UL>

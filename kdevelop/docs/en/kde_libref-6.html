@@ -38,7 +38,7 @@ the application is a drawing or painting program to select the current brush as 
 values for widgets.
 <P>The usage itself is often combined with a <CODE>KColorButton</CODE>, which is a specific <CODE>QPushButton</CODE> implemented in <CODE>kdeui</CODE> that
 displays a color and calls the <CODE>KColorDialog</CODE> already when the user presses the button. Anyway, you can call the color dialog from
-your menubar or toolbar as well to retrieve a color value from the user.
+your menu bar or toolbar as well to retrieve a color value from the user.
 <P>Using the colordialog is very easy inside applications. The class provides a static method which can be called to retrieve the color
 value:
 <P>
@@ -53,7 +53,7 @@ int result = KColorDialog::getColor( myColor );
 </PRE>
 <HR>
 <P>This creates an instance of QColor to store a color value and by calling the static method <CODE>getColor()</CODE> the color gets the selected
-value. The returned integer value will probably be of no interest- it's the result code of <CODE>QDialog</CODE> that specifies the dialog has
+value. The returned integer value will probably be of no interest - its the result code of <CODE>QDialog</CODE> that specifies the dialog has
 been exited via the OK or Cancel button.
 <P>
 <H3><A NAME="ss6.2">6.2 KWizard</A>
@@ -77,7 +77,7 @@ widget as well as into a picture.
 </H3>
 
 <P>For applications requiring an icon selection, KDE provides the <CODE>KIconLoaderDialog</CODE>. The main purpose is to select an icon on the
-system to draw it on a button for example. Usage is made by the KDE windowmanager to select the icons for mounted/unmounted states of
+system to draw it on a button for example. Usage is made by the KDE window manager to select the icons for mounted/unmounted states of
 device links. Then the values for the link are displayed on the according button to display the current selection; the filenames get
 stored in the link file and can be drawn on the desktop as a symbol by loading the icons dependent on the state of the connected
 device.
@@ -86,7 +86,7 @@ device.
 </H3>
 
 <P>The <CODE>KMsgBox</CODE> class provides a whole set of message boxes that match everyday life usage in applications. Using KMsgBox has a lot of
-advantages: you can use one of the static methods to retrieve results on standard questions and you can still influence the behavoir by
+advantages: you can use one of the static methods to retrieve results on standard questions and you can still influence the behavior by
 setting text, window text, symbol and button text.
 <P>
 <UL>
@@ -115,7 +115,7 @@ filename to save files to.
 </H3>
 
 <P>
-<P>(kspell) spellchecking dialog for use with ISpell
+<P>(kspell) spell checking dialog for use with Ispell
 <P>
 <H3><A NAME="ss6.8">6.8 DatePickerDialog</A>
 </H3>

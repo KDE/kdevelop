@@ -68,7 +68,7 @@ optimization level below from 1 to 3.
 debuggers within the final binary, so the programmer can follow the execution of the application with the debugger in direct
 context to the sourcecode.
 <P>Enable debugging therefore sets the -g flag; the debugging level specifies the amount of information to be included in the binary.
-Availabel are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any debugging option and that
+Available are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any debugging option and that
 the binary size will increase by the debugging level.
 <P>Generate extra information for gprof: sets the -pg flag, resulting that the Compiler will include information for the gprof
 program that displays caller graphs of your program's function.
@@ -88,7 +88,7 @@ description of all available Compiler flags you should see your Compiler documen
 <H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
 </H3>
 
-<P>The following gives a desciption about the Compiler warning options that can be set on page 3 of the project options dialog. The
+<P>The following gives a description about the Compiler warning options that can be set on page 3 of the project options dialog. The
 explanations are taken from the man page for GCC, egcs version 1.1.1.
 The warnings themselves are diagnostic messages that indicate that constructions may cause errors.
 <P>
@@ -112,7 +112,7 @@ that will compile with certain obsolete, brain-damaged Compilers.
 <DT><B>-Wpointer-arith</B><DD><P>Warn about anything that depends on the «size of» a function type or of void. GNU C assigns these types a
 size of 1, for convenience in calculations with void * pointers and pointers to functions.
 <P>
-<DT><B>-Wbad-function-cast</B><DD><P>Warn whenever a function call is cast to a non-matching type. Forexample, warn if <CODE>int malloc()</CODE> is
+<DT><B>-Wbad-function-cast</B><DD><P>Warn whenever a function call is cast to a non-matching type. For example, warn if <CODE>int malloc()</CODE> is
 cast to <CODE>anything *.</CODE>
 <P>
 <DT><B>-Wcast-equal</B><DD><P>Warn whenever a pointer is cast so as to remove a type qualifier from the target type. For example, warn if a
@@ -157,7 +157,7 @@ virtual function declared in the base class. Use this option to request warnings
 be an erroneous attempt to define a virtual function: that is, warn when a function with the same name as a virtual function in
 the base class, but with a type signature that doesn't match any virtual functions from the base class.
 <P>
-<DT><B>-Wsynth</B><DD><P>Warn when g++'s synthesis behavoir does not match that of cfront.
+<DT><B>-Wsynth</B><DD><P>Warn when g++'s synthesis behavior does not match that of cfront.
 <P>
 <DT><B>make all warnings into errors</B><DD><P>(-Werror) Treat warnings as errors; abort compilation after any warning.
 <P>
@@ -167,14 +167,23 @@ the base class, but with a type signature that doesn't match any virtual functio
 <H3><A NAME="Linker Options"></A> <A NAME="ss9.4">9.4 Linker Options</A>
 </H3>
 
-<P>The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
+<P>
+<!--
+linker options
+-->
+
+The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
 libraries that your application uses to link them to your binary with the Linker, e.g. your application uses the class
-KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes or functions that are
-not listed as checkboxes, use the <B>"additonal libraries"</B> field.
+KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes
+or functions that are not listed as checkboxes, use the <B>"additional libraries"</B> field.
 <P>
 <H4>Linker Flags</H4>
 
 <P>
+<!--
+linker flags
+-->
+
 <DL>
 <DT><B>remove all symbol table and relocation information from the executable:</B><DD><P>This means that all redundant information will be
 removed from the object files and the binary, resulting that debugging will not be possible. For as long as your application is in
@@ -209,9 +218,9 @@ symbol tables.
 <P>
 <DT><B>kfile</B><DD><P>The KFile library. Contains file dialogs etc.
 <P>
-<DT><B>kspell</B><DD><P>The KSpell library. Contains an interface for programs to use ISpell for spellchecking.
+<DT><B>kspell</B><DD><P>The KSpell library. Contains an interface for programs to use Ispell for spell-checking.
 <P>
-<DT><B>kab</B><DD><P>The KAdressBook library. Needed for access to the adressbook as well as providing adressbook widgets
+<DT><B>kab</B><DD><P>The KAdressBook library. Needed for access to the addressbook as well as providing addressbook widgets
 <P>
 </DL>
 
@@ -226,7 +235,7 @@ en/disabled. The available settings are:
 <DL>
 <DT><B></B><DD><P>
 <DT><B>Print debug information</B><DD><P>prints out all information about the project files and what make determines for rebuilding them.
-<DT><B>Continue after errors</B><DD><P>tries to continue with the compilation after an error occured (e.g. a file couldn't be compiled due to an
+<DT><B>Continue after errors</B><DD><P>tries to continue with the compilation after an error occurred (e.g. a file couldn't be compiled due to an
 error)
 <DT><B>Print the data base</B><DD><P>prints out the make-database for the current process which contains the changes from the last
 build-run. 

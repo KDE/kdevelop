@@ -24,20 +24,20 @@
 <H3><A NAME="ss11.1">11.1 What is i18n ?</A>
 </H3>
 
-<P>i18n is an internationalization standard that is used to offer internationalized versions of an application or project. The difficulty
+<P>i18n is an internationalization system that is used to offer internationalized versions of an application or project. The difficulty
 with writing applications is that they only support the language they originally are composed with; visually this can be seen on
-labels, menuentries and the like. Goal of the internationalization is to provide applications and library functions in the language of
+labels, menu entries and the like. Goal of the internationalization is to provide applications and library functions in the language of
 the user; therefore enabling users that are not capable of the original language to make use of the provided functionality and feel
 more comfortable.
 <P>
 <H3><A NAME="ss11.2">11.2 How KDE supports Internationalization</A>
 </H3>
 
-<P>KDE, as one of the most modern desktop environments, has set one of it's numerous goals to provide applications for users in their
-native language, and simplifies the work for developers to provide their application in any of the supported language.
+<P>KDE, as one of the most modern desktop environments, has set one of its numerous goals to provide applications for users in their
+native languages, and simplifies the work for developers to provide their application in any of the supported language.
 <P>Technically, this is realized by the KDE File System Standard which contains localization support for languages in terms of
 documentation and by providing application internationalization through the use of the KDE-core library class <CODE>KLocale</CODE>. This class
-does all the translation, dependend on the prefered language set in the KDE Control Center.
+does all the translation, dependent on the preferred language set in the KDE Control Center.
 <P>The developer on the other hand only has to know two things to make his application able to use this feature:
 <P>
 <OL>
@@ -56,13 +56,25 @@ used by <CODE>KConfig</CODE>, because this is not necessary on one hand and does
 create a new KDE project, a <CODE>po</CODE> directory is added to the main project directory. There, your <EM>&lt;application&gt;</EM>.pot file
 will be placed after the generation is complete. The .pot file already contains all strings that are set up with the i18n() macro,
 therefore you only have to write your code using the macro again. From time to time, you should do a "Project"-"Make messages and
-merge", which will automatically extract all macros again and rebuilds the pot file.
-<P>To add a language to your application, choose "Project"-"Add tranlation file", which opens the language selection dialog. Select the
+merge", which will automatically extract all macros again and rebuilds the potfile.
+<!--
+"Project"-menu
+-->
+<!--
+PO-files
+-->
+<!--
+translations
+-->
+<!--
+KLocale
+-->
+<P>To add a language to your application, choose "Project"-"Add translation file", which opens the language selection dialog. Select the
 desired language and press OK. Then, the according <EM>&lt;lang&gt;</EM>.po file will be build in the <CODE>po</CODE> directory. Then start
 translating the po file by selecting it from the po directory in the Real File Viewer or from the LFV, folder "Translations". If you
 have KTranslator installed, it will be opened in the "Tools" window with KTranslator, otherwise as a text file in the header/resource
 window.
-<P>KTranslator makes it very easy to translate strings by scanning the existing translations of your local KDE installation, so they can
+KTranslator makes it very easy to translate strings by scanning the existing translations of your local KDE installation, so they can
 be used already.
 <P>For editing by hand, we'll have a look at an example:
 <BLOCKQUOTE><CODE>
@@ -74,7 +86,7 @@ msgstr ""
 </CODE></BLOCKQUOTE>
 <P>The above shows a string that was extracted from the file <CODE>kscribble.cpp</CODE> at line 619. <CODE>msgid</CODE> and <CODE>msgstr</CODE> are the tags which
 give the information for the translation; <CODE>msgstr</CODE> will contain the translated string. There, you have to watch escape sequences
-such as \n or \t, which have to be included into the translation string. A german translation would therefore look like this:
+such as \n or \t, which have to be included into the translation string. A German translation would therefore look like this:
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
@@ -84,14 +96,26 @@ msgstr "Öffnet ein existierendes Dokument"
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>That would be all to watch for translation; after you're done, save the file. When make is run within the po directory, the message
-files will be processed and errors may occur if strings are not translated consistantly, e.g. escape sequences are missing. Then edit
+files will be processed and errors may occur if strings are not translated consistently, e.g. escape sequences are missing. Then edit
 the according message string again and make sure that make runs without errors.
 <P>Additionally, you should be very careful when translating ampersands within text strings. The letters after ampersands are used as
-keyboard accelerators in conjunction with the ALT key to access menubar or popup menu items to change the keyboard focus to the
-selected item more quickly. Now, if the same accelerator letter appears in the same keyboard focus area (which would be the main widget
-on one time, and a dialog at another), each widget after the first one cannot be accessed by the supposed keyboard accelerator. So even
+keyboard accelerator
+<!--
+accelerator
+-->
+s in conjunction with the ALT key to access menubar or popup menu items to change the keyboard focus to the
+selected item more quickly. Now, if the same accelerator
+<!--
+accelerator
+-->
+ letter appears in the same keyboard focus area (which would be the main widget
+on one time, and a dialog at another), each widget after the first one cannot be accessed by the supposed keyboard accelerator
+<!--
+accelerator
+-->
+. So even
 translators have a responsibility for the usage of the application under their language. There is also no guarantee that the original
-letter will occur in the tranlation, so translators have to choose very carefully and should test the application under their language
+letter will occur in the translation, so translators have to choose very carefully and should test the application under their language
 after they installed the translation to ensure it runs without these malfunctions.
 <P>
 <H3><A NAME="ss11.4">11.4 Translation Team Contacts</A>
@@ -101,7 +125,7 @@ after they installed the translation to ensure it runs without these malfunction
 in language teams and coordinate the translation work.
 For an actual list and information who to ask for translating your application, see 
 <A HREF="http://www.kde.org">http://www.kde.org</A>.
-<P>The information below is taken from the KDE website and contains the current contact adresses as of March 06, 1999. If you want to join
+<P>The information below is taken from the KDE web site and contains the current contact addresses as of March 06, 1999. If you want to join
 a team please write directly to one of the team coordinators.
 <P>The translation of the KDE is organized by Juraj Bednar 
 <A HREF="mailto:bednar@rak.isternet.sk">mailto:bednar@rak.isternet.sk</A> and Matthias Elter 

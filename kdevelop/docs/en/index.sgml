@@ -5,7 +5,7 @@
 <subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.0
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 2.0 , Apr 11,1999
+<date>Version 2.1 , July 7,1999
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
@@ -101,56 +101,55 @@ of time searching for functions and features as it will enable you to make use o
 <p>
 <sect>How to obtain KDevelop
 <p>
-KDevelop can be found either on the <idx/KDE/ Applications page (<htmlurl url="http://www.kde.org/current.html"
-name="http://www.kde.org/current.html">) or on the KDevelop homepage (<htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">).
-KDevelop is also available on Linux distributions, such as SuSE 6.1.
+KDevelop can be found either on the <idx/KDE/ Applications page at <url url="http://www.kde.org/current.html"> or on the KDevelop
+homepage at <url url="http://www.kdevelop.org">. KDevelop is also available on Linux distributions, such
+as SuSE 6.1.
 
-We're offering weekly snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
+We're also offering snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
 KDevelop. Usually, the snapshots are not intended to be used for production but as a test for new features and to give an insight
 into development progress of the KDevelop team. Also we offer various third party software needed by KDevelop directly such as
 <idx/KDoc/ and <idx/KDbg/.
 
 If you're experiencing problems with compiling or using KDevelop, please read the <ref id="Questions and Answers" name="Questions and
 Answers"> section of this handbook or the FAQ-file included with the KDevelop package. If your problem is not addressed, please
-subscribe to the KDevelop mailinglist at <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name =
+subscribe to the KDevelop mailing list at <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name =
 "kdevelop@fara3.cs.uni-potsdam.de"> by sending a mail with an empty header and "subscribe" as contents. Requests and problem report
 should only target the usage of the KDevelop IDE and not towards any questions that regard any <idx/implementation/ problem you may have
-while coding your own application. Anyway, all mails send to the mailinglist should be written in English, so that all participants can
-take part on discussions and are able to provide better help. The mailinglist is also intended for those users willing to contribute
+while coding your own application. Anyway, all mails send to the mailing list should be written in English, so that all participants can
+take part on discussions and are able to provide better help. The mailing list is also intended for those users willing to contribute
 and who found solutions for any problems they experienced, so we can fix <idx/errors/ and include that knowledge to give beginners an even
 more qualified first-hand help.
 An good way to report problems is to send the <idx/output/ you get by starting kdevelop from the console or to copy and paste the
 contents of KDevelop's internal <idx/Messages-window/.
 
-<sect>Requirements
+<sect><idx/Requirements/
 <p>
 In order to successfully compile and use KDevelop, you need the following programs and libraries which are available on most platforms
 as distribution packages and thereby can be installed easily.
 <p>
 <bf>Required:</bf>
 <itemize>
-<item>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (or compatible), available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item>GNU make (or compatible), available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item>perl 5.004, available at <htmlurl url="http://www.perl.com" name="http://www.perl.com">
-<item><idx/autoconf/ 2.12, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item><idx/automake/ 1.2, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (or compatible), available at <url url="http://www.gnu.org">
+<item>GNU make (or compatible), available at <url url="http://www.gnu.org">
+<item>perl 5.004, available at <url url="http://www.perl.com">
+<item><idx/autoconf/ 2.12, available at <url url="http://www.gnu.org">
+<item><idx/automake/ 1.2, available at <url url="http://www.gnu.org">
 <item>flex 2.5.4,
-<item>GNU gettext, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item>Qt 1.42, avaliable at <htmlurl url="http://www.troll.no" name="http://www.troll.no">
-<item><idx/KDE/ 1.1.x, available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">
+<item>GNU gettext, available at <url url="http://www.gnu.org">
+<item>Qt 1.42, available at <url url="http://www.troll.no">
+<item><idx/KDE/ 1.1.x, available at <url url="http://www.kde.org">
 </itemize>
 <p>
 <bf>Optional:</bf>
 <itemize>
 <item><idx/a2ps/ or <idx/enscript/ for <idx/printing/ support
 <item>ghostview or kghostview for <idx/printing/ preview
-<item><idx/glimpse/ 4.0 for the <idx/search index/, available at <htmlurl url="http://glimpse.cs.arizona.edu" name="http://glimpse.cs.arizona.edu">
-<item>sgmltools 1.0, available at <htmlurl url="http://www.sgmltools.org" name="http://www.sgmltools.org">
-<item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it)with <idx/KDoc/, KSgml2Html, <idx/KTranslator/ (available at <htmlurl
-url="http://developer.kde.org" name="http://developer.kde.org">)
-<item><idx/KDbg/, available at <htmlurl url="http://members.telecom.at/~johsixt/<idx/KDbg/.html" name="http://members.telecom.at/~johsixt/<idx/KDbg/.html">
-<item><idx/KIconEdit/ (available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
+<item><idx/glimpse/ 4.0 for the <idx/search index/, available at <url url="http://glimpse.cs.arizona.edu">
+<item>sgmltools 1.0, available at <url url="http://www.sgmltools.org">
+<item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it), which includes <idx/KDoc/, <idx/KSgml2Html/, <idx/KTranslator/
+(available at <url url="http://developer.kde.org">)
+<item><idx/KDbg/, available at <url url="http://members.telecom.at/~johsixt/KDbg.html">
+<item><idx/KIconEdit/ (available at <url url="http://www.kde.org">)
 </itemize>
 
 KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
@@ -165,12 +164,11 @@ For creating the <idx/KDE/ library documentation, you need the kdelibs package i
 system as provided by the KDE project or included with the source packages of your distribution and <bf><idx/KDoc/</bf> (included in the
 <idx/KDE-SDK/).
 
-Also we're offering a C/C++ <idx/Reference/ on our homepage at <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"
-name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> that is integrated into the <idx/documentation browser/ after it's
-installation. Download the package and copy the source file as <tt/root/ into your <idx/KDE/ directory and untar it with <tt/tar zxvf
-c_c++_reference.tar.gz/, then the reference is available in the documentation tree; otherwise selecting the reference book in the
-browser shows an error page with the KDevelop homepage URL offering a download and describes the installation process.
-<sect>Compilation and Installation
+Also we're offering a C/C++ <idx/Reference/ on our homepage at <url url="http://www.kdevelop.org">
+that is integrated into the <idx/documentation browser/ after it's installation. Download the package and copy the source file as
+<tt/root/ into your <idx/KDE/ directory and untar it with <tt/tar zxvf c_c++_reference.tar.gz/, then the reference is available in the
+documentation tree; otherwise selecting the reference book in the browser shows an error page with the KDevelop homepage URL offering a
+download and describes the installation process. <sect>Compilation and Installation
 <p>
 In order to compile and install KDevelop on your system, type the following in the base directory of the KDevelop distribution:
 
@@ -210,7 +208,7 @@ Under other window managers, open a console and type:
 &percnt kdevelop
 </verb></tscreen>
 
-To start Kdevelop with an existing project, change into the project-directory and type:
+To start KDevelop with an existing project, change into the project-directory and type:
 
 <tscreen><verb> 	
 &percnt kdevelop  &lt;yourProject&gt;.kdevprj
@@ -241,7 +239,7 @@ The Installation dialog's buttons execute the following actions:
 
 <enum>
 <item> Checking for make/gmake, <idx/autoconf/, autoheader, <idx/automake/ and perl for the creation and compilation of new applications
-generated by KDevelop. If gmake is installed, the <idx/make-command/ will be set automatically to use gmake.  Other comandline options
+generated by KDevelop. If gmake is installed, the <idx/make-command/ will be set automatically to use gmake.  Other commandline options
 to your make program can be set in the <idx/setup/ dialog accessed by the options menu later, an introduction into development under Unix is
 explained in section <ref id="Programs" name="Programs">.
 
@@ -249,7 +247,7 @@ explained in section <ref id="Programs" name="Programs">.
 automatically in a later <idx/setup/ step if found.
 
 <item> Checking for <idx/a2ps/ and <idx/enscript/ to ensure that <idx/printing/ is available.  Either one of these programs have to be installed to
-allow correct <idx/printing/. If neither program is installed, you can do this at any time lateron at your option without having to run the
+allow correct <idx/printing/. If neither program is installed, you can do this at any time later on at your option without having to run the
 <idx/setup/ again.
 
 <item> Checking for <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/.  We encourage you to install those programs as they are good
@@ -270,28 +268,27 @@ Usually this is in the qt/html directory. After doing so, the installation can c
 <item> If <idx/KDoc/ was detected, you are asked to create/update your <idx/KDE/-library documentation.  For that, you need to have the
 kde-libraries in source form. For Linux-Users who have installed <idx/KDE/ from a distribution, we suggest to copying and extracting
 the source of the kdelibs-package to your system; Free BSD users who installed the kdelibs as a package should look for their according
-distfile package of the ports-collection.   If none of these cases match your situation, you should download the sources from <htmlurl
-url="http://www.kde.org" name="http://www.kde.org"> and untar the sources on your system. If you wish to use the documentation package
-provided by <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">, cancel the creation and continue with creating
-the <idx/search index/. After the installer finished and KDevelop has been started, set the path to the extracted documentation package in
-the KDevelop Setup dialog and run the <idx/search index/ <idx/setup/ again, which can be found at the same <idx/setup/ page of the dialog.
+distfile package of the ports-collection.   If none of these cases match your situation, you should download the sources from <url
+url="http://www.kde.org"> and untar the sources on your system. If you wish to use the documentation package provided by <url
+url="http://developer.kde.org">, cancel the creation and continue with creating the <idx/search index/. After the installer finished
+and KDevelop has been started, set the path to the extracted documentation package in the KDevelop Setup dialog and run the <idx/search
+index/ <idx/setup/ again, which can be found at the same <idx/setup/ page of the dialog.
 
 The "Update <idx/KDE/-Library documentation" dialog is set up to use a default path for the location of the documentation in
 $(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your library sources you
-extracted on the sytem with the selection button on top of the dialog and press OK. As an example, if you got the kdelibs.tar.gz
-package from <htmlurl url="http://www.kde.org" name="http://www.kde.org"> and downloaded it to your home directory, you should open a
-console or terminal and enter "tar zxvf kdelibs.tar.gz". This will untar the sources into a directory $HOME/kdelibs, which then
-contains the sources for each library in a subdirectory, e.g. for kdecore, this would be in /home/rnolden/kdelibs/kdecore. Now, the
-path you have to enter in the KDE-Library documentation dialog would be the path to all libraries, in the example
-/home/rnolden/kdelibs. After pressing the OK button, a message in the installation window shows that the documentation generation is in progress and you
-should wait for the next message.
+extracted on the system with the selection button on top of the dialog and press OK. As an example, if you got the kdelibs.tar.gz
+package from <url url="http://www.kde.org"> and downloaded it to your home directory, you should open a console or terminal and enter
+"tar zxvf kdelibs.tar.gz". This will untar the sources into a directory $HOME/kdelibs, which then contains the sources for each library
+in a subdirectory, e.g. for kdecore, this would be in /home/rnolden/kdelibs/kdecore. Now, the path you have to enter in the KDE-Library
+documentation dialog would be the path to all libraries, in the example /home/rnolden/kdelibs. After pressing the OK button, a message
+in the installation window shows that the documentation generation is in progress and you should wait for the next message.
 <p>
 
-<bf>NOTE:</bf> On a multi-user system or systems with disk-quotas for user accounts, the installation of a complete <idx/HTML/ documentation
-for each user would be a waste of disk space. In this case, ask your system administrator to run KDevelop under the root account to
-allow write access to the system's root directory. Then install the documentation within the <idx/KDE/-directory, under
-$KDEDIR/share/apps/kdevelop/KDE-Documentation. The correct path can then be set up later in the KDevelop <idx/setup/ dialog, available in the
-"Options"-menu.
+<bf>NOTE:</bf> On a <idx/multi-user system/ or systems with <idx/disk-quotas/ for user accounts, the installation of a complete
+<idx/HTML/ documentation for each user would be a waste of disk space. In this case, ask your system administrator to run KDevelop
+under the root account to allow write access to the system's root directory. Then install the documentation within the
+<idx/KDE/-directory, under $KDEDIR/share/apps/kdevelop/KDE-Documentation. The correct path can then be set up later in the KDevelop
+<idx/setup/ dialog, available in the <idx/"Options"-menu/.
 
 <item> If the system check found the <idx/glimpse/ program on your system, you are offered to create a search database. The
 search database can be created with the options of including the <idx/KDE-Documentation/ and the <idx/Qt-Documentation/ (default). Additionally
@@ -565,7 +562,7 @@ minimum, users are enabled to start working at a new project within seconds. Cal
 creating a new application with KDevelop.
 
 <idx/KAppWizard/ provides you a so-called application skeleton with all needed C++ source code files for a running application. After
-you specified a projectname and set the needed preferences, your new project will be generated and you have a completele application
+you specified a projectname and set the needed preferences, your new project will be generated and you have a complete application
 that already contains a lot of functionality (for KDE and Qt projects), without even having to type one line of C++ code yourself. When
 specifying the complete set of options the program generator offers, your application already contains:
 <itemize>
@@ -603,7 +600,7 @@ Classgenerator is invoked by the Project-menu, entry "<idx/New Class/".
 
 <sect3>The Class Browser
 <p>
-The Class Browser displays all types of objects and fuctions of your project in a tree left of the editing windows. A classparser
+The Class Browser displays all types of objects and functions of your project in a tree left of the editing windows. A class parser
 scans all files for methods and <idx/classes/ and makes them available by graphical symbols. Over those, context-menus offer a
 specialized functionality to work with the sources by focusing on the <idx/classes/ and functions.
 
@@ -668,9 +665,9 @@ so you should have a look there first. Then we advise to have a closer look at t
 like the K<idx/HTML/ library contains very specialized <idx/widgets/ that a lot of programs make use of. It just simplifies application design like
 the predefined dialogs provided with Qt. For your own dialogs, those low-level <idx/widgets/ are the one you need. A dialog merely
 consists by a collection of different <idx/widgets/ combined together building the interface and is technically programmed by C++ code
-in a class that is derived from <cdx/QWidget/ or a more specialized dialog class that inherits <cdx/QWidget/. The program using the widget
-therefore needs an object of the widget's class- this is almost all you have to understand how dialogs or views are used.
-
+in a class that is derived from <tt/<cdx/QWidget// or a more specialized dialog class that inherits <tt/<cdx/QWidget//. The program
+using the widget therefore needs an object of the widget's class- this is almost all you have to understand how dialogs or views are
+used.
 The <idx/dialog editor/ of KDevelop now offers a nice way to simply construct dialogs and user interfaces visually instead of you having
 to combine dialogs with pure C++ code together- this is the hard way to create interfaces. Switch to the <idx/dialog editor/ by
 choosing the according entry in the "View"-menu (or by the toolbar button). You will see that KDevelop's face has changed but for
@@ -698,8 +695,8 @@ would be to create the main view and additional dialogs by which the user can ch
 functions.
 
 To build your main-view, the generated source code for your application already contains a class in the form of
-&lt;YourApplication&gt;View which inherits the <cdx/QWidget/ class (this is the minimal class that handles visual interfaces in Qt and
-therefore in <idx/KDE/ as well). In general, there are three different ways how to extend the given class:
+&lt;YourApplication&gt;View which inherits the <tt/<cdx/QWidget// class (this is the minimal class that handles visual interfaces in Qt
+and therefore in <idx/KDE/ as well). In general, there are three different ways how to extend the given class:
 <itemize>
 <item>remove the document-view structure and use one of the predefined "big" <idx/widgets/ already containing a lot of functionality-
 just remove the View-class and replace the view-object by another.
@@ -736,7 +733,7 @@ didn't cover the work a programmer has to do usually: working on the <idx/implem
 execution by the end-user. Now, why is KDevelop the IDE you would want to use as a coding environment, including it's use to
 create even non-<idx/GUI/ applications ?
 
-Implicitely, the IDE keeps track of your project in general; that means, you don't have to take care for saving changes, the
+Implicitly, the IDE keeps track of your project in general; that means, you don't have to take care for saving changes, the
 <idx/Makefile/ generation and so on- this is providing full project-management, and KDevelop plays out all it's power here in any case
 of C++ application development. It is easy to understand that, after taking away the management from the programmer, he is more
 concentrated on working out the sourcecode. On the other hand, the code is usually spread over many different files across
@@ -748,7 +745,7 @@ actions, that allow fast work and moving the developer's focus from files to obj
 classgenerator lets you create a new class including inheritance, <idx/attributes/ and documentation easily . For object-oriented work,
 the Class Browser brings you to the location of your objects; it doesn't matter any more where the code is actually. The
 Browser scans all sources automatically and rebuilds itself after additions to keep up with your work and enables you to access
-the new code directly. By context-menus, the browser offers even more fuctionality, like bringing you to the <idx/implementation/ or to
+the new code directly. By context-menus, the browser offers even more functionality, like bringing you to the <idx/implementation/ or to
 the <idx/declaration/ of <idx/member functions/. Then, the addition of members are done graphically by dialogs- no search for the file and the
 place you would have to add your entries. Finally, you can get an even more specialized view of your project's <idx/classes/ by the
 Classtool dialog, providing you trees that show the usage, contents and inheritance of <idx/classes/ and their objects. For more
@@ -768,7 +765,7 @@ You're starting the build-process by:
 To execute your application, choose
 <itemize>
 <item>the symbol "Execute" or "Debug" (starting <idx/KDbg/ with your program) from the toolbar
-<item>by the according menuentries in the Build-menu.
+<item>by the according menu entries in the Build-menu.
 <item>or by "Execute with Arguments" to start your application with additional arguments
 </itemize>
 For more information about the build-process, see <ref id="Projects" name="Projects">.
@@ -804,19 +801,19 @@ in other documentations:
 <itemize>
 <item><htmlurl url="programming.html" name="The KDevelop Programming Handbook">, covering a complete introduction into <idx/GUI/ application
 design and programming with the Qt and <idx/KDE/ libraries,
-<item>this handbook, sections <ref id="Overview" name="Overview"> to <ref id="Projects" name="Projects">, describing all availiable
-functions within KDevelop, <item>this handbook, section <ref id="The Dialog Editor" name="The Dialog Editor">, adressing the use of the
+<item>this handbook, sections <ref id="Overview" name="Overview"> to <ref id="Projects" name="Projects">, describing all avaliable
+functions within KDevelop, <item>this handbook, section <ref id="The Dialog Editor" name="The Dialog Editor">, addressing the use of the
 <idx/dialog editor/ to create your own <idx/widgets/, <item>The <em/Online-<idx/Reference/ Documentation/ to the <idx/Qt-library/, which covers examples of
 using the Qt <idx/GUI/-toolkit as well as a class reference and screenshots for the most important ready-to-use <idx/widgets/ included,
 <item>The <em/KDE-Library Class-<idx/Reference//, generated automatically by KDevelop from the KDE-Library sources, containing
 descriptions for all <idx/classes/ and <idx/widgets/ including example code for their use,
 <item>on the Internet, see:
-<itemize>
-<item><htmlurl url="http://www.troll.no" name="http://www.troll.no"> for information about Qt and additional third-party <idx/widgets/,
-<item><htmlurl url="http://www.kde.org" name="http://www.kde.org"> for information about the KDE project and developer guidelines,
-<item><htmlurl url="http://developer.kde.org" name="http://developer.kde.org"> for additonal references to KDE application development.
-<item>on the KDevelop homepage <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"
-name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> </itemize>
+  <itemize>
+  <item><url url="http://www.troll.no"> for information about Qt and additional third-party <idx/widgets/,
+  <item><url url="http://www.kde.org"> for information about the KDE project and developer guidelines,
+  <item><url url="http://developer.kde.org"> for additional references to KDE application development.
+  <item>on the KDevelop homepage <url url="http://www.kdevelop.org">
+  </itemize>
 </itemize>
 
 <chapt>Overview<label id="Overview">
@@ -890,7 +887,7 @@ such as make or a terminal application.
 <p>
 This section covers the functions that KDevelop provides about files; accessed via the File-menu in the menubar or by the
 according icons in the toolbar:
-
+<nidx/"File"-menu/
 <itemize>
 <item><bf/New			Ctrl+N/ Opens the "<idx/New File/" dialog, allowing to create a new file. The file can be created using different templates
 and the filename has to be given as well as the path where the file will be created.<p>
@@ -907,7 +904,7 @@ lpr<p>
 <p>
 
 <sect1>Editing Files
-<p>
+<p><nidx/"Edit"-menu"/
 Here, the "Edit" menu and the according icons in the toolbar are covered which provide editing files. Also the editing functions
 are available via a context-menu in the <idx/editor/.
 <itemize>
@@ -940,7 +937,7 @@ becomes selected.<p>
 <p>
 
 <sect1>View Configuration
-<p>
+<p><nidx/"View"-menu"/
 The View-Menu covers closing and opening functions for windows and commands to enable/disable the tool- and statusbar as well as
 to jump <idx/errors/ in the code.
 <itemize>
@@ -961,7 +958,7 @@ give you a descriptive help what the problem is, so you can correct the error.<p
 <p>
 
 <sect1>Creating and Maintaining Projects
-<p>
+<p><nidx/"Project"-menu/
 This section describes functions that are available in the "Project"-menu and are supposed to cover the creation and maintaining
 of projects
 <itemize>
@@ -1004,7 +1001,7 @@ release with optimization.<p>
 <p>
 
 <sect1>Building Projects
-<p>
+<p><nidx/"Build"-menu/
 This section describes the Build menu that covers all actions to be done with make or actions like rebuilding the project's online
 help or <idx/API/ documentation.
 
@@ -1033,19 +1030,19 @@ Configure again.<p>
 <p>
 
 <sect1>Calling <idx/Tools/
-<p>
+<p><nidx/"Tools"-menu/
 The <idx/Tools/-menu contains by default the entries for the following programs if installed: <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/. These are
 checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
 "<idx/Tools/"-window and start the selected program inside this window. The <idx/Tools/ menu can be edited by the <idx/Tools/-entry in the Options-menu;
 see <ref id="Configuring the &dquot;<idx/Tools/&dquot; Menu" name="Configuring the &dquot;<idx/Tools/&dquot; Menu">.
 
 <sect1>Changing KDevelop's settings
-<p>
+<p><nidx/"Options"-menu/
 The Options-menu contains all entries for invoking <idx/configuration dialog/s with which you can change KDevelop's default settings.
-Major settings like those for the <idx/editor/ or <idx/printing/ have their own entries; general settings of KDevelop's behavoir can be made
+Major settings like those for the <idx/editor/ or <idx/printing/ have their own entries; general settings of KDevelop's behavior can be made
 with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
 <itemize>
-<item><bf/Editor.../ Allows the configuration of the editor's behavoir like word-breaking, selections etc.<p>
+<item><bf/Editor.../ Allows the configuration of the editor's behavior like word-breaking, selections etc.<p>
 <item><bf/Editor Colors.../ Here, you can set the color-configuration of the <idx/editor/ like e.g. the background.<p>
 <item><bf/Editor Defaults.../ This sets the default display like font and fontsize for the <idx/editor/<p>
 <item><bf/Syntax-Highlighting / This dialog lets you configure the fonts and colors for the highlighting of several programming
@@ -1065,14 +1062,14 @@ key-configuration and the Documentation settings. The Documentation settings als
 </itemize>
 
 <sect1>The Window Menu
-<p>
+<p><nidx/"Window"-menu/
 The Window menu contains a list with all currently open files. This allows a quick switch to another file you're currently working
 on.
 
 <sect1>Managing Bookmarks
-<p>
+<p><nidx/"Bookmarks"-menu/
 The Bookmarks menu is intended for adding and removing <idx/bookmarks/ you want to set in the current editing file. As KDevelop uses two
-editing windows, each one configures it's <idx/bookmarks/ seperately.
+editing windows, each one configures it's <idx/bookmarks/ separately.
 <itemize>
 <item><bf/Set Bookmark/ Opens a context-menu with up to nine configurable <idx/bookmarks/. This allows setting a bookmark to a certain entry
 in the <idx/bookmarks/ menu by logical reasons.<p>
@@ -1083,55 +1080,72 @@ Browser-Window <idx/bookmarks/ menu.<p>
 the Header-Window is visible and you call Clear Bookmarks, the entries for the Header-Window are deleted.<p>
 <item><bf/Header-Window/ Contains the bookmark-list for the Header-Window. Selecting a bookmark will set the cursor to the selected
 <idx/bookmarks/' line. Mind that <idx/bookmarks/ are only assigned to the file they are set to, so if you change to another file, the
-<idx/bookmarks/ are not deleted but choosing a bookmark won't change to the file they are assingned to as well.<p>
+<idx/bookmarks/ are not deleted but choosing a bookmark won't change to the file they are assigned to as well.<p>
 <item><bf>C/C++-Window</bf> Contains the bookmark-list for the C/C++-Window. The preferences are the same as for the
 Header-Window.
 <item><bf>Browser Window</bf> Contains the browser <idx/bookmarks/. Selecting a bookmark will open the browser with the selected page.
 </itemize>
 
-<sect1>Online Help
-<p>
+<sect1><idx/Online Help/
+<p><nidx/Help-menu/
 The Help-menu contains entries for navigating in the <idx/Helpbrowser/ as well as entries for library and online-documentation for the
 most recently used cases. Accessing additional online-documentation can be achieved with the <idx/DOC/-tree in the treeview
 automatically opened (if Autoswitch is enabled) when changing to the Documentation Browser window.
 <itemize>
-<item><bf/Back  Alt+ Left Arrow/ Opens the page opened before the actual one.<p>
-<item><bf/Forward Alt+ Right Arrow/ Opens the next page of the browser-history, available after a "Back"-action.<p>
-<item><bf/Search Marked Text		F2/ Scans the search-index for text currently marked in the editing windows or the browser-window. Afte
-the search, a result page is shown which lets you select the help-page to switch to. After choosing a page, the browser will
+<item><bf/<idx/Back/  Alt+ Left Arrow/ Opens the page opened before the actual one.<p>
+<item><bf/<idx/Forward/ Alt+ Right Arrow/ Opens the next page of the browser-history, available after a "Back"-action.<p>
+<item><bf/<idx/Search Marked Text/		F2/ Scans the search-index for text currently marked in the editing windows or the browser-window.
+After the search, a result page is shown which lets you select the help-page to switch to. After choosing a page, the browser will
 highlight the found entry for the expression the search was invoked for. With the F3 key the next <idx/search result/ on the same page
 will be displayed if more than one hit was reported for the search on one page.<p>
-<item><bf/Search for Help on.../Opens the Search for Help on... dialog that lets you search for a specific expression you want help on.<p>
-<item><bf/User Manual		F1/ Opens the User's Manual to KDevelop index page so you have access to this manual.<p>
-<item><bf/Programming Handbook / Opens the <htmlurl url="programming.html" name="KDevelop Programming Handbook"> index page to access
-the programming manuals <p> <item><bf/Tip of the Day/ Opens the Tip of the Day dialog to inform you about KDevelop's features.<p>
-<item><bf/KDevelop Homepage/ Opens the KDevelop Homepage in the browser window if Internet access is provided.<p>
-<item><bf/Bug Report.../ Opens the KDevelop Bug Report dialog, where you can send a bug-report directly to the KDevelop Team by email.
-See <ref id="Bug Reporting" name="Bug Reporting"><p>
+<item><bf/<idx/Search for Help on...//Opens the Search for Help on... dialog that lets you search for a specific expression you want
+help on.
+<p>
+<item><bf/<idx/User Manual/		<idx/F1// Opens the User's Manual to KDevelop index page so you have access to this manual.
+<p>
+<item><bf/<idx/Programming Handbook/ / Opens the <htmlurl url="programming.html" name="KDevelop Programming Handbook"> index page to
+access the programming manuals
+<p>
+<item><bf/<idx/Tip of the Day// Opens the Tip of the Day dialog to inform you about KDevelop's
+features.
+<p>
+<item><bf/<idx/KDevelop Homepage// Opens the KDevelop Homepage in the browser window if Internet access is provided.
+<p>
+<item><bf/<idx/Bug Report/.../ Opens the KDevelop Bug Report dialog, where you can send a bug-report directly to the KDevelop Team by
+email. See <ref id="Bug Reporting" name="Bug Reporting">
+<p>
 <item><bf>C/C++ <idx/Reference/</bf> Displays the language reference index page. If the
-reference is not installed, an error page shows you how to get the reference and how to install it correctly.<p>
-<item><bf/Qt-Library/ Changes to the index page of the Qt-library documentation provided with your copy of the Qt-library.<p>
-<item><bf/KDE-Core-Library/ Opens the class-index file of the KDE-Core library documentation.<p>
-<item><bf/KDE-<idx/GUI/-Library/  As above for the <idx/GUI/-library<p>
-<item><bf/KDE-KFile-Library/ As above for the KFile-library<p>
-<item><bf/KDE-<idx/HTML/-Library/ As above for the <idx/HTML/-library<p>
-<item><bf/Project-<idx/API/-Doc/ Changes to the project's class-documentation index file.<p>
-<item><bf/Project-User-Manual/ Opens the User manual's index file of your current project. This can be used to review the <idx/HTML/-<idx/output/
-generated by <idx/KSgml2Html/<p>
-<item><bf/About KDevelop.../ Shows the Aboutbox of KDevelop containing the used version number and the authors' names and
-email-adresses as well as reference to the licensing of KDevelop.
+reference is not installed, an error page shows you how to get the reference and how to install it correctly.
+<p>
+<item><bf/<idx/Qt-Library// Changes to the index page of the Qt-library documentation provided with your copy of the Qt-library.
+<p>
+<item><bf/<idx/KDE-Core-Library// Opens the class-index file of the KDE-Core library documentation.<nidx/kdecore/
+<p>
+<item><bf/<idx/KDE-GUI-Library//  As above for the <idx/GUI/-library<nidx/kdeui/
+<p>
+<item><bf/<idx/KDE-KFile-Library// As above for the KFile-library
+<p>
+<item><bf/<idx/KDE-HTML-Library// As above for the <idx/HTML/-library<p>
+<item><bf/<idx/Project-API-Doc// Changes to the project's class-documentation index file.<nidx/KDoc/<nidx/API/
+<p>
+<item><bf/<idx/Project-User-Manual// Opens the User manual's index file of your current project. This can be used to review the
+<idx/HTML/-<idx/output/ generated by <idx/KSgml2Html/
+<p>
+<item><bf/About KDevelop.../ Shows the aboutbox of KDevelop containing the used version number and the authors' names and
+email-addresses as well as reference to the licensing of KDevelop.
 </itemize>
 
 <sect><idx/Toolbar/ Items
 <p>
 KDevelop provides quick access to a various set of commands by it's toolbars. These are the standard and the browser toolbar; in
-<idx/dialog editor/ mode only the standard toolbar is visible. Both can be en-/disabled by the according menuentries in the "View" menu; also
+<idx/dialog editor/ mode only the standard toolbar is visible. Both can be en-/disabled by the according menu entries in the "View" menu; also
 dragged out of the main window and replaced on each side of the working area.
 
 <sect1>The Standard <idx/Toolbar/
 <p>
 The standard toolbar provides quick access to the most recently used functions for file processing and editing as well as building your
 application. The buttons execute the following commands from left to right:
+<nidx/"File"-menu/<nidx/"Edit"-menu/<nidx/"Project"-menu"/<nidx/"Build"-menu/<nidx/debugging/<nidx/Tree-View/<nidx/Output-View/<nidx/execute target/
 
 <itemize>
 <item>Open Project - shows the open project dialog
@@ -1162,9 +1176,9 @@ button.
 
 <sect1>The Browser <idx/Toolbar/
 <p>
-The browser toolbar is another toolbar that provides a lot of useful commands for browsing files and the documentation. The toolbar
-contains:
-
+The <idx/browser/ toolbar is another toolbar that provides a lot of useful commands for browsing files and the <idx/documentation/. The
+toolbar contains:
+<nidx/documentation browser/<nidx/Help-menu"/
 <itemize>
 <item>the Class combo box - lets you select a class of the current project to browse to
 <item>the Method combo box - lets you select a method of the current class and browses to the <idx/implementation/ of the method
@@ -1182,13 +1196,13 @@ history.
 
 <sect>Keyboard Shortcuts
 <p>
-This section handles the predifined as well as the standard values for configurable keyboard commands used in the KDevelop IDE.
+This section handles the predefined as well as the standard values for configurable keyboard commands used in the KDevelop IDE.
 You should see section <ref id="Changing Keyboard Shortcuts" name="Changing Keyboard Shortcuts"> for a detailed explanation how
 to change assigned values to commands.
 
 <sect1>Shortcuts for Text Processing
 <p>
-
+<nidx/Keyboard Shortcuts/<nidx/Shortcuts/
 <sect2>Cursor Movements<p>
 <code>
 one letter to the left                           Left Arrow
@@ -1269,7 +1283,7 @@ locate previous error                            SHIFT+F4
 <sect2>Searching Text with the Documentation Browser
 <p>
 <code>
-search selected <idx/editor/ text in documentation     F2
+search selected editor text in documentation     F2
 search selected browser text in documentation    F2
 display next search hit on the same page         F3
 
@@ -1326,7 +1340,7 @@ To switch to a certain window, press ALT plus the underlined letter in the windo
 Compile current sourcefile                       CTRL+F8
 Build current project target                     F8
 Execute target after Build process               CTRL+F9
-Exectue target with Arguments                    ALT+F9
+Execute target with Arguments                    ALT+F9
 Stop the current process                         F10
 </code>
 
@@ -1343,29 +1357,29 @@ get the information you need for development.
 <p>
 Looking at KDevelop's top toolbar, you will see the "What's this?" button on the right end. By selecting the button, the cursor
 will change to a pointer with a question mark on the right, as is the same as the button in the toolbar. Now, you can select any
-visible part of the KDevelop user interface and click on it. This will result in displaying a helpwindow giving you a short
-description of the function this part gives you or what it can do for you. Included are the main view, the treeviews and the
-toolbars, for which every button help is provided. After another mouseclick or a keyboard input, the What's this? help window
-disappears and your cursor is set to the last active position. Mind, that, if you place the mousepointer over a button, it gets
-raised and after a short time, you will get a QuickTip-window, describing the function the button represents in the menubar; this
-will disappear if you move the mousepointer away.
+visible part of the KDevelop user interface and click on it. This will result in displaying a help-window giving you a short
+description of the function this part gives you or what it can do for you. Included are the main view, the tree-views and the
+toolbars, for which every button help is provided. After another mouse click or a keyboard input, the What's this? help window
+disappears and your cursor is set to the last active position. Mind, that, if you place the mouse pointer over a button, it gets
+raised and after a short time, you will get a Quick-Tip-window, describing the function the button represents in the menubar; this
+will disappear if you move the mouse pointer away.
 
 For user interaction dialogs, <idx/Quickhelp/ provides you help windows with a short description of the selected item you want help for.
-These are accessed by a right-button mouseclick to the item, a context-menu pops up that allows the selection of "Quick-Help".
+These are accessed by a right-button mouse click to the item, a context-menu pops up that allows the selection of "Quick-Help".
 Selecting this will pop up the help window. This is always useful for dialogs where you can't see the action's purpose for as long
 as you are not familiar with KDevelop. Mind that most dialogs offer a Help-button which will show you the detailed context-help
 for the dialog's options within the provided online-manual in the help-browser.
 
 <sect> The <idx/Statusbar/ Help
 <p>
-The statusbar of KDevelop offers you many fuctions that inform you about the current activity state as well as "status messages"
+The statusbar of KDevelop offers you many functions that inform you about the current activity state as well as "status messages"
 offering a short description for commands.
 
 <sect1> <idx/Statusbar/ Entries
 <p>
 The <idx/Statusbar/ contains:
 <enum>
-<item> a general message field, mostleft. This is used for help messages and displays the current activity.
+<item> a general message field, most left. This is used for help messages and displays the current activity.
 <item> the progressbar, indicating the progress for actions that require a comparably long time to be finished, such as saving
 files and the scan-progress of the Class Browser. The progressbar only appears during those processes are executed.
 <item> an Insert/Overwrite indicator. It shows the <idx/editor/ mode for insert actions by INS for Insert mode and OVR for Overwrite
@@ -1376,10 +1390,10 @@ mode. The mode can be changed by the INS-key on the keyboard.
 
 <sect1> Help Messages
 <p>
-The statusbar informs you about the action of menuentries if you select a menu within the menubar and select an action without
+The statusbar informs you about the action of menu entries if you select a menu within the menubar and select an action without
 executing it. Further, if you press on a toolbar icon, but without releasing the mousebutton, the help message for the button is
-displayed in the same way as for the menuentries. You can prevent the execution of the selected icon by moving the mousepointer
-away from the icon, still hoding the button pressed. If the cursor is away, release the mousebutton.
+displayed in the same way as for the menu entries. You can prevent the execution of the selected icon by moving the mousepointer
+away from the icon, still holding the button pressed. If the cursor is away, release the mousebutton.
 
 For actions that are currently executed, KDevelop displays the action. This counts for processes running in the background
 such as saving files as well as for dialogs. If the process has exited such as a make-invocation, the statusbar display
@@ -1404,7 +1418,7 @@ The <idx/configuration dialog/ shows you two tabulators; the first for setting t
 The first option for the font display is the size. Available are small, medium and large. The best display for normal use
 is set to small by default.
 For the font selection you have to specify a standard font for normal text as it appears in <idx/HTML/ documents; the fixed font is the
-one used for dispaying e.g. code within the <idx/HTML/ file.
+one used for displaying e.g. code within the <idx/HTML/ file.
 
 <sect1>Color Preferences
 <p>
@@ -1427,7 +1441,7 @@ documentation.
 <sect1>Requirements
 <p>
 To make use of all features of the <idx/Helpbrowser/, you should have <idx/KDoc/ and <idx/glimpse/ installed. <idx/KDoc/ will generate all kind of online
-classdocumentation for the <idx/KDE-libraries/ during the <idx/setup/ process, but can also invoked by option in the <ref id="General
+class-documentation for the <idx/KDE-libraries/ during the <idx/setup/ process, but can also invoked by option in the <ref id="General
 Configuration" name="KDevelop Setup">. For the generation of an <idx/API/ (Application Programming Interface) Documentation for your
 project's <idx/classes/, <idx/KDoc/ is also used and called by the Project-menu, entry "Make <idx/API/-Doc". This will process all current header files
 of the project plus the addition of a cross-reference to the Qt and <idx/KDE-libraries/ if those are available in the <idx/Helpbrowser/. For
@@ -1447,28 +1461,28 @@ installation, configuration, available functionality and introduction to applica
 url="programming.html" name="The KDevelop Programming Handbook"> in it's first edition. The programming handbook covers most questions
 related to the creation and extension of projects that work with KDevelop. By tutorials the user gets an introduction to the rich
 facilities that applications created with the Qt- and/or <idx/KDE-libraries/ have to offer as well as given a guideline for ensuring
-<idx/KDE/-compliance, which covers the same instructions given on the internet site of <htmlurl url="http://developer.kde.org"
-name="http://developer.kde.org"> However, the programming handbook cannot replace any additonal documentation available in printed or
-electronic form about the C++ programming language as well as about the usage of the Qt-library in certain terms.
+<idx/KDE/-compliance, which covers the same instructions given on the Internet site at <url url="http://developer.kde.org">. However,
+the programming handbook cannot replace any additional documentation available in printed or electronic form about the C++ programming
+language as well as about the usage of the Qt-library in certain terms.
 
-The C/C++-<idx/Reference/ used with KDevelop is currently only available on the KDevelop homepage at <htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">. On
-distributions the reference may be included, see your distribution installation program index for more information. It can be installed
-easily by downloading and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you have to untar it as root with <tt/tar
-zxvf c_c++_reference.tar.gz/, the reference will then be copied the documentation directory of KDevelop. For uninstalling the reference
-documentation you just have to delete the "reference" folder under ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
+The C/C++-<idx/Reference/ used with KDevelop is currently only available on the KDevelop homepage at <url
+url="http://www.kdevelop.org">. On distributions the reference may be included, see your distribution installation program index for
+more information. It can be installed easily by downloading and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you
+have to untar it as root with <tt/tar zxvf c_c++_reference.tar.gz/, the reference will then be copied the documentation directory of
+KDevelop. For uninstalling the reference documentation you just have to delete the "reference" folder under
+($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
 
 The Qt/<idx/KDE-libraries/ documentation folder allows direct access to the <idx/HTML/-online documentation of your copy of the
 Qt-library. The path to the library documentation is usually automatically detected by the KDevelop installation program, but can be
 set manually in the <ref id="General Configuration" name="KDevelop Setup"> dialog. Also, all available documentation for the
 <idx/KDE-libraries/ are listed in order of the library name, so if you would use <idx/classes/ of a certain library it is easy to
 determine the library type to be added to the <idx/Linker/ settings in the project. Mind that the whole KDE-Library documentation is
-only accessable when generated by <idx/KDoc/- so this program, included in the <idx/KDE-SDK/, has to be installed before the
+only accessible when generated by <idx/KDoc/- so this program, included in the <idx/KDE-SDK/, has to be installed before the
 documentation can be generated. As the installation program of KDevelop does this automatically, it should be installed before running
 the KDevelop Setup. If this is not the case and the documentation cannot be build, you are able to create it afterwards at any time
 with the <ref id="General Configuration" name="KDevelop Setup"> dialog.
 
-The documentation tree also contains the "Others" folder which is inteded to contain all personally customized
+The documentation tree also contains the "Others" folder which is intended to contain all personally customized
 documentation as described below. Finally, the Doc-Tree allows access to the <idx/API/ and the Manual for your current
 project.
 
@@ -1478,14 +1492,14 @@ To customize your <idx/Helpbrowser/, open the Tree-View and select the "<idx/DOC
 The "Others" folder is, by default, empty. On a right mousebutton click over this folder, a context menu opens that has an entry "Add
 Entry". Select this to open the Add Entry dialog where you have to enter two values: the upper one for the name that will be displayed
 for the documentation within the Doc-tree, and, below that, a file-entry line. Here, you have to enter the path and filename to the
-startpage that will be opened by the selection of the entry later. You can enter the path and filename directly or by selection of the
-pushbutton on the right to open a file-chooser dialog. This allows a quick browsing on your system to the path for your startpage. Mind
+start page that will be opened by the selection of the entry later. You can enter the path and filename directly or by selection of the
+pushbutton on the right to open a file-chooser dialog. This allows a quick browsing on your system to the path for your start page. Mind
 that only <idx/HTML/-documentation can be selected, so only <idx/HTML/ files are allowed to choose. Selecting OK will add the entry to the Doc-tree
 and is available directly.
 
 <sect1>Using the Searchindex<label id="Using the Searchindex">
 <p>
-KDevelop includes a set of fuctions to help you search information within <idx/HTML/ documentation. To use these features, your system
+KDevelop includes a set of functions to help you search information within <idx/HTML/ documentation. To use these features, your system
 needs to have the program "<idx/glimpse/", a free database generator, installed, which creates the <idx/search index/ and executes searches
 within the documentation. To set up the index, see <ref id="General Configuration" name="KDevelop Setup">. The index is also
 automatically generated during the installation program.
@@ -1494,13 +1508,13 @@ The search functions are available through several ways which you can choose fro
 <enum>
 <item>in the <idx/editor/, select the text you want to have help on or place the cursor in the word that you want to look for. Then
 press the right mouse button and select look up: "expression" This can also be done by selecting "Search Marked Text" from the
-help menu, the shorcut key F2 or by selecting the Search icon from the toolbar.
+Help-menu, the shortcut key F2 or by selecting the Search icon from the toolbar.
 <item>in the Documentation browser select the text you want to look up and press the right mouse button, select look
 up:"expression" or select "Search Marked Text" or the search icon as above.
-<item>if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help
+<item>if you want to search for a specific keyword, select "Search for Help on..." in the Help-menu or select the "Search for Help
 on..." icon from the toolbar, opening a search dialog where you can enter the expression you want to get information for.
 </enum>
-Direct access to specific documentation is given by selecting the according icon in the "<idx/DOC/" -tree-view or by the help menu
+Direct access to specific documentation is given by selecting the according icon in the "<idx/DOC/" -tree-view or by the Help-menu
 entries.
 
 The <idx/Helpbrowser/ also offers support for <idx/grep/ to search for a selection within your current project, e.g you've opened the documentation
@@ -1518,12 +1532,12 @@ An important part of the integrated development environment is the <idx/editor/.
 <item><idx/printing/ your <idx/project files/
 </itemize>
 Generally, the <idx/editor/ itself doesn't do much difference in comparison to other editors; especially as it is a build-in version of
-the popular KWrite, also known as the "Extended Editor". If you're familar with that, you won't have any problems using it for
+the popular KWrite, also known as the "Extended Editor". If you're familiar with that, you won't have any problems using it for
 managing your projects. In addition to normal editors, KDevelop contains a new <idx/printing/ system, that is far more extended for use
 with sourcecodes- and you can choose between the <idx/printing/ program you want to use.
 
 This section gives you more information about how to handle your <idx/project files/ and to make you more familiar with the <idx/editor/'s
-functionality. A lot of Unix-hardliners would prefer using Emacs or XEmacs- they're fine with that. But it isn't neccessary for
+functionality. A lot of Unix-hardliners would prefer using Emacs or XEmacs- they're fine with that. But it isn't necessary for
 easy programming, and especially for beginners, to work themselves into powerful editors which shall, in the result, only allow
 you to enter your code.
 
@@ -1533,17 +1547,17 @@ The following sections describe how to create, save, open and close your <idx/pr
 include translation files or <idx/pixmaps/. Those are recognized automatically and the according editing program like <idx/KTranslator/ opens
 those files for you.
 
-To give you an easy access to your files, KDevelop contains two easy-to-handle treeviews, similar to a filemanager, that recognize
+To give you an easy access to your files, KDevelop contains two easy-to-handle tree-views, similar to a filemanager, that recognize
 if you selected a file, and opens it in the according <idx/editor/ window. The main view contains two windows that are used
 independently, but connected via the Project Editor, so you can do all menubar actions the same way. The intention behind this is
 that it allows you to handle two windows at the same time, although only one is visible. The C/C++ window thereby takes another
-task, which allows you to easily compile your sources one by one, so you can check the impelmentations without having to run a
+task, which allows you to easily compile your sources one by one, so you can check the implementations without having to run a
 complete build-process over your project.
 
 This can be done when having the C/C++ window on top. Select "<idx/Compile File/" from the Build-menu or press the according button in
 the toolbar. Your file gets saved and compiled, and you can control any <idx/errors/ by the <idx/Compiler/ <idx/output/ in the <idx/output/ window.
 
-Within the IDE you can open as many textfiles as you like. All opened files are listed in the Window-menu, so you can switch
+Within the IDE you can open as many text files as you like. All opened files are listed in the Window-menu, so you can switch
 between them by selecting the according filename from the menu. Further, the actual opened file is displayed with its name in the
 window frame of KDevelop.
 
@@ -1562,13 +1576,13 @@ select "Save all" from the File-menu.
 
 Now, when working on a project, it is very annoying if something critical happens while you have done a lot of changes on your
 files; sometimes you will bite yourself that you have forgotten to save the changes. KDevelop takes care of this by offering
-"Autosaving", which is by default enabled and set to save all files in intervalls of 5 minutes. To select another saving period or
+"Autosaving", which is by default enabled and set to save all files in intervals of 5 minutes. To select another saving period or
 to disable this, see <ref id="KDevelop Setup" name="KDevelop Setup">, where the <idx/setup/ options are described.
 
 Additionally, KDevelop takes care for all changes if you open another project or exit KDevelop. You will be asked for saving the
 changed files, where you also have the option to specify which one to save and which you want to stay unsaved. Further, when
 invoking any build-processes, your files get saved automatically, so you won't ever wonder why your application doesn't run the
-way you expected it to do after your changes to the sourcefiles. The only exception is the "<idx/Compile File/" command, which only
+way you expected it to do after your changes to the source files. The only exception is the "<idx/Compile File/" command, which only
 saves the currently opened source file visible in the source <idx/editor/ window.
 
 <sect1>Opening and Closing Files
@@ -1578,7 +1592,7 @@ File-menu. You will be presented an "Open File" dialog, which allows you to choo
 more frequently used way is to select the file from the <idx/LFV/, the Logical File Viewer, or the <idx/RFV/, the Real File Viewer (see <ref
 id="Overview">). The advantage of the file trees is that they provide a quick visual access to your files, especially the <idx/LFV/,
 which only displays your <idx/project files/ by their type, collected into folders. You can as well configure the <idx/LFV/ towards sorting
-your files in another manner by a right mouseclick on the tree. Select "New Group" from the popup-menu, and you can configure a
+your files in another manner by a right mouse click on the tree. Select "New Group" from the popup-menu, and you can configure a
 new group, or select "Edit Group" to install new file filters by specifying the group's file extensions, separated by commas.
 
 The standard file groups for a project generated by <idx/KAppWizard/ are the Headers, Sources, GNU and Others. Additionally, after
@@ -1595,7 +1609,7 @@ The following gives you a general guideline how to locate certain positions with
 <bf>&raquo How to find a certain line in a file</bf>
 
 <enum>
-<item>Select "Goto Line" in the "View"-menu or press CTRL+G. The dialogfiled "Goto Line" appears.
+<item>Select "Goto Line" in the "View"-menu or press CTRL+G. The dialogfield "Goto Line" appears.
 <item>Insert the linenumber you want to go to.
 <item>Press OK.
 </enum>
@@ -1616,7 +1630,7 @@ entry "Add Bookmark".
 <bf>&raquo How to delete <idx/bookmarks/</bf>
 
 The <idx/bookmarks/ are set for each editing window separately- mind that your <idx/bookmarks/ aren't connected to a certain file you set the
-bookmark for. To delete all bookmaks, select "Delete Bookmarks" from the "Bookmarks"-menu. This deletes the <idx/bookmarks/ for the
+bookmark for. To delete all bookmarks, select "Delete Bookmarks" from the "Bookmarks"-menu. This deletes the <idx/bookmarks/ for the
 window actually on top, either the Header window, the C++ window or the browser window.
 
 <bf>&raquo How to go to a bookmarked line</bf>
@@ -1689,7 +1703,7 @@ press OK after you finished with your configuration.
 <sect2>Edit Options
 <p>
 <descrip>
-<tag/Auto Indent:/	this sets the edior to place the cursor below the first literal when a new line is entered.
+<tag/Auto Indent:/	this sets the editor to place the cursor below the first literal when a new line is entered.
 <p>
 <tag/Backspace Indent:/ this option sets the cursor below the first literal of the line above when backspace is pressed.
 <p>
@@ -1736,7 +1750,7 @@ from the "Options"-menu. You can configure colors for:
 <sect1>Syntax Highlighting
 <p>
 The syntax-highlighting mode of KDevelop's <idx/editor/ can be configured by two dialogs; first you can set default colors for
-syntax-highlihgting by the "Editor Defaults" entry in the "Options"-menu. There, you can set colors and fonts as well as the
+syntax-highlighting by the "Editor Defaults" entry in the "Options"-menu. There, you can set colors and fonts as well as the
 fontsize for e.g. keywords. Select the default item and set all needed options.
 
 The second <idx/configuration dialog/ is accessed by the "Syntax-Highlighting" entry in the "Options"-menu. This allows you to set the
@@ -1753,7 +1767,7 @@ used by the <idx/editor/.
 <enum>
 <item>Select "Search" from the "Edit"-menu. This opens the search dialog.
 <item>Specify the expression to search for in the edit field. The drop-down menu offers selecting a previous search expression.
-<item>Select additonal options like "Whole Words only"
+<item>Select additional options like "Whole Words only"
 <item>Press OK.
 </enum>
 
@@ -1761,11 +1775,11 @@ To repeat searching for an expression entered in the search dialog, press F3.
 
 <sect1>Searching over Several Files
 <p>
-As the seach function only is referencing seaches over a single file that is currently visible, you're limited to this. But often
+As the search function only is referencing searches over a single file that is currently visible, you're limited to this. But often
 you want to search for the same expression overall your project. Therefore, KDevelop contains a <tt/<idx/grep//-dialog, which
 lets you search over all files that you specify either by setting the directory to start the search from and/or by mime-type.
 Specifying the exact directory and the mime-type will therefore reduce the time that KDevelop needs to read your files and display
-the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The seach dialog opens and
+the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The search dialog opens and
 lets you enter:
 
 <itemize>
@@ -1823,8 +1837,8 @@ following:
 
 <enum>
 <item>place your cursor at the word you want to search or mark an expression
-<item>select "Search Marked Text" from the "Help"-menu or press the right mouse button to open the context menu; then select "Look
-Up: "expression".
+<item>select "Search Marked Text" from the <idx/Help-menu/ or press the right mouse button to open the context menu; then select
+"Look Up: "expression".
 <item>after the <idx/search result/ page is displayed in the <idx/documentation browser/, select the page that you think could contain the
 information you need.
 <item>the selected documentation page is displayed and your <idx/search result/ is marked. To display the next result within the same
@@ -1856,10 +1870,10 @@ distributions, so you shouldn't have any problem to get them. But before <idx/pr
 
 <sect1>Configuring the Printer
 <p>
-The <idx/printing/ programs can both be configured by selecting "Print" from the "File"-menu; on the <idx/printing/ dialog, select the program
-by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the configuration for the
-selected program that will be used. Another way to configure the programs are selecting "Printer Configuration..." from the
-"Options"-menu; then select "<idx/a2ps/" or "<idx/enscript/".
+The <idx/printing/ programs can both be configured by selecting "Print" from the <idx/"File"-menu/; on the <idx/printing/ dialog,
+select the program by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the
+configuration for the selected program that will be used. Another way to configure the programs are selecting "Printer
+Configuration..." from the "Options"-menu; then select "<idx/a2ps/" or "<idx/enscript/".
 
 <sect2>The <idx/a2ps/ Configuration Options
 <p>
@@ -2030,7 +2044,7 @@ characters.
     <itemize>
     <item><bf/pretty-print:/ enables pretty-print mode for <idx/enscript/
     <item><bf/color:/ use color <idx/printing/
-    <item><bf/Pretty Print Mode:/ sets the <idx/printing/ mode dependend on your file format
+    <item><bf/Pretty Print Mode:/ sets the <idx/printing/ mode dependent on your file format
     </itemize>
   </itemize>
 </itemize>
@@ -2038,7 +2052,7 @@ characters.
 <sect2>File Selection
 <p>
 The file selection dialog is accessed by the "Files" button on the <idx/printing/ dialog. The file selection allows specifying which files to
-print out by certain criterias:
+print out by certain criteria:
 <itemize>
 <item><bf/File Selection:/
   <itemize>
@@ -2116,11 +2130,11 @@ configure and Makefiles. As far as the execution and the build-process is concer
 as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
 by the classbrowser.
 
-To ensure the buildprocess, your custom project has to have all sources in a subdirectory matching the lowecase name of your project;
+To ensure the build process, your custom project has to have all sources in a subdirectory matching the lowercase name of your project;
 the execution of the binary is also restricted to this lowercase project name.
 
-Mind that KDevelop does not write any information into Makefiles or configuration files. You ar responsible for any project behavoir
-and buildsettings yourself.
+Mind that KDevelop does not write any information into Makefiles or configuration files. You are responsible for any project behavior
+and build settings yourself.
 
 <sect1>Libraries
 <p>
@@ -2136,10 +2150,10 @@ subdirectory are included in the project and are therefore available in the clas
 the <htmlurl url="programming-15.html" name="KDevelop Programming Handbook"> offers a Makefile.am template. If the subdirectory's
 Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
 build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
-project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original projectsubdirectory
+project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original project-subdirectory
 according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter <ref
 id="Project Hacking" name="Project Hacking">.
-<item>for installing a shared library, you have to watch the KDE-Filesystem Standard as explained in <htmlurl url="programming-13.html"
+<item>for installing a shared library, you have to watch the KDE-File-system Standard as explained in <htmlurl url="programming-13.html"
 name="The KDevelop Programming Handbook">
 </itemize>
 
@@ -2173,7 +2187,7 @@ modifications outside the KDevelop write area):
 newtarget.pot
 	</itemize>
 <item>add your sources like the KDevelop write area contains outside the write area for your binary or library
-<item>for installing static libraries, create the library with KDevelop's autocreation inside subdirectories. Then modify the
+<item>for installing static libraries, create the library with KDevelop's auto-creation inside subdirectories. Then modify the
 Makefile.am outside the write area according to the needed settings
 </itemize>
 
@@ -2195,14 +2209,14 @@ The C++ -Application type offers a framework for creating commandline applicatio
 first or for those working on commandline programs written in C++ or C. C programmers can also take advantage of the C-only project,
 which requires any C-compiler at the minimum.
 
-The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name and
-Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
+The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
+Email address are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
 *.lsm file.
 
 <sect>Opening and Closing of Projects
 <p>
 KDevelop is by default configured to open the last project loaded when starting. This allows a fast start, but you may want to
-change that to just start the IDE without any project. To prevent the default behavoir, disable the "Load last project" option in
+change that to just start the IDE without any project. To prevent the default behavior, disable the "Load last project" option in
 the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
 
 To open another project, select "Open" from the "Project" menu or press the "Open Project" button on the toolbar. In case you've
@@ -2219,7 +2233,7 @@ Another comfortable way to open a project is to select the project file in the K
 KDevelop with loading the selected project file. You could as well open a project by commandline, entering <tt/kdevelop
 projectname.kdevprj/.
 
-When closing KDevelop, your project file will be saved automatically and the IDE detects if you have changed any projectfiles.
+When closing KDevelop, your project file will be saved automatically and the IDE detects if you have changed any project files.
 Then you will be asked to save any changes before exiting. The available options for closing are the same than for closing a
 project before loading another.
 
@@ -2245,25 +2259,25 @@ management in special cases.
 <p>
 Adding a new file is often used when you think that you should separate your class <idx/implementation/ file into several ones. Then you
 need to create an new file which will contain the part of the class <idx/implementation/ you want to move. You can do this by choosing
-"New" from the "File" menu, opening the "<idx/New File/" dialog. This enables you to specify the file-type, name and the location. When
-entering the filename, KDevelop automatically enters the extension for you, but you can as well change the extensions towards your
-own preferences. Further, you can include the header template for sourcefiles, so you don't have to copy this into your new file
-yourself. Also, you can decide, if the file is included in the project or not. Mind that this doesn't cover the installation
+"New" from the <idx/"File"-menu/, opening the "<idx/New File/" dialog. This enables you to specify the file-type, name and the
+location. When entering the filename, KDevelop automatically enters the extension for you, but you can as well change the extensions
+towards your own preferences. Further, you can include the header template for sourcefiles, so you don't have to copy this into your
+new file yourself. Also, you can decide, if the file is included in the project or not. Mind that this doesn't cover the installation
 destination; this has to be configured later by setting the file preferences.
 
 After the new file has been created, the project file will be updated as well as the according <idx/Makefile.am/'s.
-To add a complete class to your project, you can constuct a new class with the Classgenerator which is invoked by "<idx/New Class/" from
+To add a complete class to your project, you can construct a new class with the Classgenerator which is invoked by "<idx/New Class/" from
 the Project-menu.
 
 In case you have an existing project and you want to add certain <idx/classes/ that you want to re-use in your project, select "Add
-File(s) to Project..." from the Project-menu. Select "Add existing files", which will open a dialog to let you specify which files
-will be added to the project and the destination directory. Mind that the files will be copied into the specified directory and
+File(s) to Project..." from the <idx/"Project"-menu/. Select "Add existing files", which will open a dialog to let you specify which
+files will be added to the project and the destination directory. Mind that the files will be copied into the specified directory and
 added to the project. You should call "Make" after adding sources; then your added files will be included in the build-process. In
 case you want to add e.g. <idx/pixmaps/ that have to be installed by the end-user, you should update the File Properties for the added
 file and specify the installation path (see <ref id="Setting Project File Options" name="Setting Project File Options">
 
 To add a file to the project that is already in the project directory, go to the <idx/RFV/, where all project-included files are
-dispayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
+displayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
 file icon) and press the right mouse button to get the popup-menu. Then select "Add".
 
 Files can also be removed from your project. This could be needed in cases where you don't want to use pre-generated files that
@@ -2283,9 +2297,9 @@ look in your <idx/Makefile.am/ where the location macros are specified.
 
 <sect1>Adding Translations<label id="Adding Translations">
 <p>
-As <idx/KDE/ allows configuring your desktop and the behavoir of your applications, you also have the option to choose the language
+As <idx/KDE/ allows configuring your desktop and the behavior of your applications, you also have the option to choose the language
 that your application uses, in regards of the use of online-documentation as well as the application's look. For documentation files,
-this seems a trivial task. You would add a subdirectory labeled by the desired language, e.g. <tt/de/ for german, to the
+this seems a trivial task. You would add a subdirectory labeled by the desired language, e.g. <tt/de/ for German, to the
 <tt/docs/ directory of your project and copy the english documentation into that directory. Then you would generate the
 documentation and set all project file options for the installation directories. Then you could start translating the <idx/SGML/ file to
 your desired language and regenerate the documentation; then you're done.
@@ -2293,17 +2307,17 @@ For the application, this seems a bit more difficult for the programmer. Now, we
 internationalization support for your application and how to add the languages you want to support.
 
 First, you have to enclose all visible strings of your application that appear in bars or dialogs with the <tt/<idx/i18n/()/ macro.
-This macro is a replacement for the function <tt/klocale->tranlate()/ of the KLocale class and much easier to use. As this macro
+This macro is a replacement for the function <tt/klocale->translate()/ of the KLocale class and much easier to use. As this macro
 is declared in the <tt/kapp.h/ include file, you have to add <tt/#include &lt;kapp.h&gt;/ to the source file or the class
 <idx/declaration/ file of the class that makes use of the macro. Also it should be mentioned, that although <tt/<idx/i18n/()/ is a macro and
 therefore you could think about using the original function, this won't work because the strings that are set up for translation
 have to be read out of the sources and get stored in the application's translation file (&lt;YourApp&gt;.pot in the /po
-subdirectory). This task is done by the program xgettext, and to do this, you would enter <tt/make <idx/messages// in your prject
+subdirectory). This task is done by the program xgettext, and to do this, you would enter <tt/make <idx/messages// in your project
 directory containing the sources. As xgettext depends on the <tt/<idx/i18n/()/ macro, the original function won't do the job.
 
 For translations themselves, you first have to create the message file containing all strings that are used in your sources with
 the <tt/<idx/i18n/()/ macro. This can be done by choosing "Make <idx/messages/ and merge" from the Build-menu.
-Then you have to add the languages that your application wants to support. Therefore, select "Add Tranlation File" from the
+Then you have to add the languages that your application wants to support. Therefore, select "Add Translation File" from the
 Project-menu. This opens a language selection dialog. Select the language and press OK. This will build the ASCII file containing
 entries for the filename of the string and the line where the original string is placed. Then you will see a <tt/msgid/ line
 containing the string to translate, followed by <tt/msgstr/. The msgstr line is mostly empty except for the translations already
@@ -2314,7 +2328,7 @@ You could think about writing the translations by hand, which can also be done. 
 translated strings to support your language.
 
 To access <idx/KTranslator/, the easiest way is selecting a &lt;language&gt;.po file in the /po directory either in the <idx/LFV/ or in the
-<idx/RFV/. This opens <idx/KTranslator/ and lets you do the translating easiely. Mind that you have to set up <idx/KTranslator/'s properties
+<idx/RFV/. This opens <idx/KTranslator/ and lets you do the translating easily. Mind that you have to set up <idx/KTranslator/'s properties
 yourself to include the author name and the language as well as the destination file. <idx/KTranslator/ by default only opens your
 translation file.
 
@@ -2322,10 +2336,10 @@ For all translation files, <tt/<idx/make// uses the program <tt/msgfmt/ to forma
 don't have to take care for that, as well as specifying the destination directory for installing the translation files; this is
 all done by KDevelop automatically.
 
-For more information about internationalization support, see <htmlurl url="http://www.kde.org" name="http://www.kde.org">; a lot
-of people are doing translations for you to support their language. You will find a list of email-adresses of the translators you
-could write to and who will help you with this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <htmlurl
-url="programming-11.html" name="The KDevelop Programming Handbook"> where questions about internationalization are covered again.
+For more information about internationalization support, see <url url="http://www.kde.org">; a lot of people are doing translations for
+you to support their language. You will find a list of email-addresses of the translators you could write to and who will help you with
+this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <htmlurl url="programming-11.html" name="The KDevelop
+Programming Handbook"> where questions about internationalization are covered again.
 
 <sect1>Extending the Project Documentation<label id="Extending the Project Documentation">
 <p>
@@ -2360,7 +2374,7 @@ url="programming-14.html" name="The KDevelop Programming Handbook">.
 <p>
 When working with a project, you should never edit the project file by hand. This will prevent KDevelop from loading your project
 correctly under certain circumstances, as well as changes will not result in updating the <idx/Makefile/s. To change any settings for
-your project, you have to use the given menuentries like e.g. for adding files or setting file properties. For experts that are
+your project, you have to use the given menu entries like e.g. for adding files or setting file properties. For experts that are
 not comfortable with certain options for e.g. the <idx/Linker/ or need additional project configuration, you should work yourself into
 the <idx/Makefile.am/ macros and add all changes in the <idx/Makefile.am/'s after the section separated with the entry "KDevelop write area".
 As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
@@ -2378,11 +2392,11 @@ information how and where to set Compiler Options, Warnings and <idx/Linker/ Opt
 <sect>External Projects
 <p>
 Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
-empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
+empty project file with your project name, version and type information as well as your name and email address.  Then copy all your
 compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
 will be copied into your project directory and the <idx/Makefile.am/'s are updated.   Please change all <idx/Makefile.am/ entries existing
 before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
-compiled and installed after the conversion to ensure the project's consistancy.
+compiled and installed after the conversion to ensure the project's consistency.
 
 <chapt>Build Settings<label id="Build Settings">
 <p>
@@ -2438,7 +2452,7 @@ debuggers within the final binary, so the programmer can follow the execution of
 context to the sourcecode.
 
 Enable <idx/debugging/ therefore sets the -g flag; the <idx/debugging/ level specifies the amount of information to be included in the binary.
-Availabel are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any <idx/debugging/ option and that
+Available are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any <idx/debugging/ option and that
 the binary size will increase by the <idx/debugging/ level.
 
 Generate extra information for gprof: sets the -pg flag, resulting that the <idx/Compiler/ will include information for the gprof
@@ -2460,7 +2474,7 @@ description of all available <idx/Compiler/ flags you should see your <idx/Compi
 
 <sect>Compiler Warnings<label id="Compiler Warnings">
 <p>
-The following gives a desciption about the <idx/Compiler/ warning options that can be set on page 3 of the project options dialog. The
+The following gives a description about the <idx/Compiler/ warning options that can be set on page 3 of the project options dialog. The
 explanations are taken from the man page for GCC, egcs version 1.1.1.
 The <idx/warnings/ themselves are diagnostic messages that indicate that constructions may cause <idx/errors/.
 
@@ -2484,7 +2498,7 @@ that will compile with certain obsolete, brain-damaged <idx/Compiler/s.
 <tag/-Wpointer-arith/Warn about anything that depends on the «size of» a function type or of void. GNU C assigns these types a
 size of 1, for convenience in calculations with void * pointers and pointers to functions.
 <p>
-<tag/-Wbad-function-cast/Warn whenever a function call is cast to a non-matching type. Forexample, warn if <tt/int malloc()/ is
+<tag/-Wbad-function-cast/Warn whenever a function call is cast to a non-matching type. For example, warn if <tt/int malloc()/ is
 cast to <tt/anything *./
 <p>
 <tag/-Wcast-equal/Warn whenever a pointer is cast so as to remove a type qualifier from the target type. For example, warn if a
@@ -2529,7 +2543,7 @@ virtual function declared in the base class. Use this option to request <idx/war
 be an erroneous attempt to define a virtual function: that is, warn when a function with the same name as a virtual function in
 the base class, but with a type signature that doesn't match any virtual functions from the base class.
 <p>
-<tag/-Wsynth/Warn when g++'s synthesis behavoir does not match that of cfront.
+<tag/-Wsynth/Warn when g++'s synthesis behavior does not match that of cfront.
 <p>
 <tag/make all <idx/warnings/ into <idx/errors//(-Werror) Treat <idx/warnings/ as <idx/errors/; abort compilation after any warning.
 <p>
@@ -2538,14 +2552,14 @@ the base class, but with a type signature that doesn't match any virtual functio
 For a release of your project, it is recommended to enable <bf/-Wall/.
 
 <sect><idx/Linker/ Options<label id="Linker Options">
-<p>
+<p><nidx/linker options/
 The <idx/Linker/ Options for your current project can be set by the last page of the project options dialog. You have to enable those
 libraries that your application uses to link them to your binary with the <idx/Linker/, e.g. your application uses the class
-KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For <idx/classes/ or functions that are
-not listed as checkboxes, use the <bf/"additonal libraries"/ field.
+<cdx/KFileDialog/. As the class <cdx/KFileDialog/ is part of the KFile library, you have to enable kfile. For <idx/classes/
+or functions that are not listed as checkboxes, use the <bf/"additional libraries"/ field.
 
 <sect1><idx/Linker/ Flags
-<p>
+<p><nidx/linker flags/
 <descrip>
 <tag/remove all symbol table and relocation information from the executable:/ This means that all redundant information will be
 removed from the object files and the binary, resulting that <idx/debugging/ will not be possible. For as long as your application is in
@@ -2564,25 +2578,25 @@ The libraries section contains checkboxes for the most needed libraries in conju
 development. You have to enable those libraries that your application uses, otherwise the <idx/Linker/ will complain about unresolved
 symbol tables.
 <descrip>
-<tag/X11/The X11 library. Recommended for all X-Window programs.
+<tag/<cdx/X11// The X11 library. Recommended for all X-Window programs.
 <p>
-<tag/Xext/The X11 extension library. Also most X-Window programs depend on Xext.
+<tag/<cdx/Xext// The X11 extension library. Also most X-Window programs depend on Xext.
 <p>
-<tag/qt/The <idx/Qt-library/. Recommended for Qt and <idx/KDE/ applications.
+<tag/<cdx/qt// The <idx/Qt-library/. Recommended for Qt and <idx/KDE/ applications.
 <p>
-<tag/kdecore/The KDE Core library; contains the <idx/classes/ for KDE Application frameworks.
+<tag/<cdx/kdecore// The KDE Core library; contains the <idx/classes/ for KDE Application frameworks.
 <p>
-<tag/kdeui/The KDE User Interface library; contains KDE-specific <idx/widgets/.
+<tag/<cdx/kdeui// The KDE User Interface library; contains KDE-specific <idx/widgets/.
 <p>
-<tag/khtmlw/The KHTML Widget library.
+<tag/<cdx/khtmlw// The KHTML Widget library.
 <p>
-<tag/kfm/The KFM library containing <idx/classes/ for KFM functions.
+<tag/<cdx/kfm// The KFM library containing <idx/classes/ for KFM functions.
 <p>
-<tag/kfile/The KFile library. Contains file dialogs etc.
+<tag/<cdx/kfile// The KFile library. Contains file dialogs etc.
 <p>
-<tag/kspell/The KSpell library. Contains an interface for programs to use ISpell for spellchecking.
+<tag/<cdx/kspell// The KSpell library. Contains an interface for programs to use Ispell for spell-checking.
 <p>
-<tag/kab/The KAdressBook library. Needed for access to the adressbook as well as providing adressbook <idx/widgets/
+<tag/<cdx/kab// The KAdressBook library. Needed for access to the addressbook as well as providing addressbook <idx/widgets/
 <p>
 </descrip>
 <bf/additional libraries:/ Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
@@ -2597,7 +2611,7 @@ en/disabled. The available settings are:
 <tag/
 
 <tag/Print debug information/ prints out all information about the <idx/project files/ and what <idx/make/ determines for rebuilding them.
-<tag/Continue after <idx/errors// tries to continue with the compilation after an error occured (e.g. a file couldn't be compiled due to an
+<tag/Continue after <idx/errors// tries to continue with the compilation after an error occurred (e.g. a file couldn't be compiled due to an
 error)
 <tag/Print the data base/ prints out the <idx/make/-database for the current process which contains the changes from the last
 build-run. <tag/Environment variables/ give the current environment variables a higher priority than the currently used variables in
@@ -2615,9 +2629,9 @@ means that the file will be processed by <idx/make/ and compiled if it is a sour
 <chapt>The Class Browser<label id="The Class Browser">
 <p>
 <sect>The Classviewer
-<p>
+<p><nidx/classbrowser/
 The KDevelop Classviewer is one of the most useful and important tools that the IDE provides a developer for managing his project
-sources. When a project is loaded, a classparser reads all project sources for functions, <idx/classes/ etc., then displays the results in
+sources. When a project is loaded, a class parser reads all project sources for functions, <idx/classes/ etc., then displays the results in
 the <idx/CV/ treeview. This chapter shows you how to use the Classviewer and the provided functionality and how it can improve your work.
 
 Classes and their methods can also be accessed by the browser toolbar. There, the left combo selects the class; the right
@@ -2671,7 +2685,7 @@ within files. Therefore, selections by a mouse click will result in the followin
 <itemize>
 <item><bf/On a classname:/  Switches to the class <idx/declaration/
 <item><bf/On a class method:/ Switches to the method <idx/implementation/
-<item><bf/On a class attribute:/ Switches to the attibute's <idx/declaration/ in the class <idx/declaration/
+<item><bf/On a class attribute:/ Switches to the attribute's <idx/declaration/ in the class <idx/declaration/
 <item><bf/On a struct:/ Switches to the struct's <idx/declaration/
 <item><bf/On a global function:/ Switches to the function's <idx/implementation/
 </itemize>
@@ -2685,15 +2699,15 @@ right-button context menus over items. On a method or function, this means that 
 <item><bf/Go to <idx/declaration/:/ Switches to the <idx/declaration/ of the method or function.
 </itemize>
 
-By this behavoir, the Class Browser offers you access to every place you have to go for coding your C++ application.
+By this behavior, the Class Browser offers you access to every place you have to go for coding your C++ application.
 
 The following sections give you a description of the other tools that the Class Browser offers- you will find them very useful when
 working with large projects as they enhance working object-orientated on C++ programs.
 
 <sect>The Classtools
-<p>
+<p><nidx/classtools/
 The classtools are dialogs that makes it even more easier for the developer to get more information about his project's <idx/classes/.
-The <idx/classviewer/ displays all objects by their occurence in the code, but you sometimes want to get more information about
+The <idx/classviewer/ displays all objects by their occurrence in the code, but you sometimes want to get more information about
 <idx/classes/ without having to look inside the code. Therefore, the classtool dialogs are specialized on displaying specific class
 <idx/attributes/.
 
@@ -2703,7 +2717,7 @@ you specific trees for your class. These are:
 
 <descrip>
 <tag/ Parents:/
-The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
+The parents of the selected class, which means the class it inherits. This is useful for multiple inheritance as well as to see why a
 class behaves in one or the other way, e.g. for dialogs your parent class could be <tt/<cdx/QWidget// or <tt/<cdx/QDialog//.
 <tag/Children:/
 Displays the children <idx/classes/ that inherit the current class.
@@ -2722,7 +2736,7 @@ attribute value.
 <p>
 The Class Browser additionally allows adding methods and <idx/attributes/ directly by dialogs. This means you don't have to type the
 <idx/classdeclaration/ and the <idx/implementation/ header yourself. After adding a method, you only have to set the formal parameters to the
-<idx/implementation/ header and, if the method requrires an attribute, to the <idx/declaration/.
+<idx/implementation/ header and, if the method requires an attribute, to the <idx/declaration/.
 
 <bf>&raquo How to add a method to a class</bf>
 
@@ -2769,29 +2783,30 @@ properties of the child <idx/widgets/ that your dialog contains.
 <p>
 <sect1>The Mainview
 <p>
-The <idx/dialog editor/'s view is logically seperated by:
+The <idx/dialog editor/'s view is logically separated by:
 <itemize>
 <item>The Widgets Tabulator, containing the "Widgets", "Dialogs" and "Items" tabs. These are described in <ref id="Adding Widgets"
 name="Adding Widgets">.
 <item>The Widget-Editor, representing the editing view for creating your dialog. See <ref id="The Widget Editor" name="The Widget
 Editor">
-<item>The Properties window, containing a list of properties and their values, dependend on the currently selected widget in the widget
-editor. See <ref id="Setting Properties" name="Setting Properties"> for information how to specialize the widget's behavoir and look.
+<item>The Properties window, containing a list of properties and their values, dependent on the currently selected widget in the widget
+editor. See <ref id="Setting Properties" name="Setting Properties"> for information how to specialize the widget's behavior and look.
 </itemize>
 
 <sect1><idx/Menubar/, <idx/Toolbar/ and <idx/Statusbar/ differences to KDevelop
 <p>
-In Dialogeditor mode, KDevelop changes the menubar, toolbar and statusbar slighly to provide the functionality you need for creating
+In Dialogeditor mode, KDevelop changes the menubar, toolbar and statusbar slightly to provide the functionality you need for creating
 <idx/widgets/. These are:
 
 <sect2><idx/Menubar/
 <p>
-<bf/"File"-menu:/ replaces "New" with "New Dialog". "Open" allows to open a dialog definition file.
+<bf/<idx/"File"-menu/:/ replaces "New" with "New Dialog". "Open" allows to open a dialog definition file.
 
-<bf/"View"-menu:/ replaces "Tree-View" with "Widgets-View", en/disableing the Widgets-View tabulators; adds "Properties-View" to
+<bf/<idx/"View"-menu/:/ replaces "Tree-View" with "Widgets-View", en/disabling the Widgets-View tabulators; adds "Properties-View" to
 en/disable the Properties-View and "Grid Size" to let you specify the grid size in pixels for horizontal and vertical values.
 
-<bf/"Build"-menu:/ replaces "<idx/Compile File/" with "Generate Sources". This lets you actually generate the sources for your dialog.
+<bf/<idx/"Build"-menu/:/ replaces "<idx/Compile File/" with "Generate Sources". This lets you actually generate the sources for your
+dialog.
 
 <sect2><idx/Toolbar/
 <p>
@@ -2802,17 +2817,17 @@ The toolbar contains a new icon for "New Dialog" as well as a replacement for "<
 The statusbar is providing you information about the currently selected widget, especially displaying the values for X
 and Y size in the coordinate system. For <idx/Statusbar/ help, you are provided the same functionality than in Project-editing mode.
 
-While changing widget size, the statusbar shows the current values for width and height of the selecte widget.
+While changing widget size, the statusbar shows the current values for width and height of the selected widget.
 
 <sect>Creating a New Dialog
 <p>
-After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
+After creating your project skeleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
 the project types KDE and Qt application, the <idx/dialog editor/ recognizes this and offers widget construction by the <idx/widgets/ that are
 provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
 information about widget design, see <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
 
-To create a new dialog, select "New" from the "File"-menu or select "New" from the context menu in the "Dialogs" tab. The "New Dialog"
-menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
+To create a new dialog, select "New" from the <idx/"File"-menu/ or select "New" from the context menu in the "Dialogs" tab. The "New
+Dialog" menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
 destination.
 
 <sect1>Dialog Class
@@ -2821,8 +2836,8 @@ The dialog class you can select, is the class that is inherited by your new widg
 Therefore, you have the following options:
 <enum>
 <item><bf/<cdx/QWidget/:/ the base class for all user interaction <idx/widgets/ provided by Qt. Used for main views and top-level <idx/widgets/.
-<item><bf/<cdx/QFrame/:/ inherits <cdx/QWidget/ and is used by numerous <idx/widgets/ as a base class. This is useful for <idx/widgets/ that already want to
-have a <cdx/QFrame/ functionality in addition to <cdx/QWidget/ methods.
+<item><bf/<cdx/QFrame/:/ inherits <tt/<cdx/QWidget// and is used by numerous <idx/widgets/ as a base class. This is useful for
+<idx/widgets/ that already want to have a <tt/<cdx/QFrame// functionality in addition to <tt/<cdx/QWidget// methods.
 <item><bf/Custom:/ inherits a custom class that has to be set in the "Custom Properties". This could be an already designed class
 provided by your project or the libraries.
 <item><bf/<cdx/QDialog/:/ the base class for dialogs that you would inherit for user interaction like setting properties or changing values.
@@ -2846,16 +2861,16 @@ Now, what about the files ? When you are ready with constructing the widget visu
 the <idx/implementation/ for your widget. As this will be a class, the dialog will exist by the header file containing the <idx/classdeclaration/,
 a C++ file containing the method <idx/implementation/ for your widget's methods and slots. The Data file is the file that will contain a
 function that is called by the constructor of your widget, the <em/initDialog()/ method. The file itself shouldn't be changed as it
-will contain the generated code from the <idx/dialog editor/ to create the widget on the screen. If you ever have to chage values, you should
-do this by the constructor or be sure that you won't change the dialog during the development process, as the Data file wil be
+will contain the generated code from the <idx/dialog editor/ to create the widget on the screen. If you ever have to change values, you should
+do this by the constructor or be sure that you won't change the dialog during the development process, as the Data file will be
 overwritten each time the code is generated for your widget. The header and C++ file contain sections, where the <idx/dialog editor/ writes;
 these are marked by comments. After file generation, you can change any values and settings outside these sections; otherwise your
-changees will get lost by the next code-creation.
+changes will get lost by the next code-creation.
 
 <sect1>Location
 <p>
-For generating the widget's sources, the <idx/dialog editor/ needs to know the location where these will go. The default value for the <idx/output/
-directory is the current project subdirectory containing the sources already present.
+For generating the widget's sources, the <idx/dialog editor/ needs to know the location where these will go. The default value for the
+<idx/output/ directory is the current project subdirectory containing the sources already present.
 
 After pressing "OK", your default values are generated and an empty Widget constructor is opened. Then you are ready to go for creating
 your own widget. Mind that the <idx/dialog editor/ currently only supports static <idx/widgets/ without geometry management. If you're about to use
@@ -2866,7 +2881,7 @@ KDevelop Programming Handbook">.
 <sect>Adding Widgets<label id="Adding Widgets">
 <p>
 After specifying the dialogs or <idx/widgets/ class and filenames, you are ready to start creating the widget and filling it with contents.
-Adding low-level <idx/widgets/ to your dialog is a very easy task. Just select the widget you want to add from the "Wigets" tabulator on the
+Adding low-level <idx/widgets/ to your dialog is a very easy task. Just select the widget you want to add from the "Widgets" tabulator on the
 left by a single click over the according widget icon. The widget will then be laid on the left upper corner of the currently opened
 main widget. An added widget then gets the default size of 100x30 pixels on the <idx/editor/ view. To move a widget, click over it to
 activate the drawing frame, which is displayed in dark grey with hot spots on the corners and on the center of the top, bottom, left
@@ -2896,19 +2911,19 @@ Over a selected widget, the context menu shows the class name of the selected it
 After setting the size and position, you can edit the preferences for the selected item on the Preferences window.
 
 <sect1>The Widgets Tabulator
-<p>
+<p><nidx/dialog editor widgets/
 The <idx/widgets/ tab represents the available <idx/widgets/ you can place on the dialog. If you want information about a certain widget, press the
 right mouse button over a widget icon and select "Quick-Help" from the popup-menu. Mind that the <idx/dialog editor/ automatically determines,
 if your project type is Qt-only or KDE. This prevents you from using KDE-<idx/widgets/ in a Qt application.
 
 After you selected a widget item, it is placed with default sizes and values on the editing window and marked selected by a frame and
 darkened corners. To resize a widget, move your mouse over one of the dark spots and your cursor will change to display which resizing
-directions are possible. Then press the mousebutton and move the mouse while hoding it. When you're finished with resizing the widget,
+directions are possible. Then press the mousebutton and move the mouse while holding it. When you're finished with resizing the widget,
 release the mouse. While resizing, the statusbar displays the current position of the item by X and Y values and the current size by
 W(Width) and H(Height) values.
 
 <sect1>The Dialogs Tabulator
-<p>
+<p><nidx/project dialogs/
 The dialogs tabulator is intended to let you open your project's dialogs by a mouseclick. As the dialog's structure is saved in a
 *.kdevdlg file within the directory that contains the generated files, only those dialog definition files are shown. Also mind that you
 don't delete these definition files.
@@ -2916,14 +2931,13 @@ don't delete these definition files.
 On selecting a dialog, it will be shown as by the state it was saved in the last editing step in the Widget-Editor view.
 
 <sect1>The Items Tabulator
-<p>
-The Items tabulator lets you have an overview over the currently present widget items of the dialog hirarchically. This means, that, as
+<p><nidx/dialog items/
+The Items tabulator lets you have an overview over the currently present widget items of the dialog hierarchically. This means, that, as
 your background represents the parent of all <idx/widgets/ within the dialog, it is shown on top of the tree. The children of the main dialog
 are then listed in the next tree-level.
 
-On selecting an item, it gets marked in the edior view, as well as the properties are shown in the properties window.
-Using the items view is sometimes important if your <idx/widgets/ behavoir depends on the parent-child relationship. For more information
-see <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
+On selecting an item, it gets marked in the editor view, as well as the properties are shown in the properties window.
+Using the items view is sometimes important if your <idx/widgets/ behavior depends on the parent-child relationship.
 
 <sect>The Widget Editor<label id="The Widget Editor">
 <p>
@@ -2932,69 +2946,70 @@ can be selected and resized, as well as moved to the place you need them. Over a
 functions like cut, copy and insert.
 
 <sect>Setting Properties<label id="Setting Properties">
-<p>
-The properties window on the right is the place where you set the default behavoir for the widget and its items. It displays the
+<p><nidx/setting widget properties/
+The properties window on the right is the place where you set the default behavior for the widget and its items. It displays the
 pre-set values for each selected item right away; changing values will result in direct changes on the Widget Editor view, e.g. naming
 labels or buttons.
 
 To separate certain property values by their effect, the properties window contains four folders; selecting a folder will pop up all
-values for the properties group. All possible values are described below. Mind that the properties are dependend on the widget, e.g. a
+values for the properties group. All possible values are described below. Mind that the properties are dependent on the widget, e.g. a
 label and button will have a property for their on-screen name, while lineedits will have properties for methods like <em/setText()/.
 
-For a complete list of the available values per item, you should see the classreference of the widget which explains the used methods
-and all possible values. Note that most values are implemented in <cdx/QWidget/ and are used for all <idx/widgets/ that inherit <cdx/QWidget/. Also mind
-that the final code does not contain any method calls that are unchanged by the user and therefore use the default values as given in
-the widget's constructors.
+For a complete list of the available values per item, you should see the class-reference of the widget which explains the used methods
+and all possible values. Note that most values are implemented in <tt/<cdx/QWidget// and are used for all <idx/widgets/ that inherit
+<cdx/QWidget/. Also mind that the final code does not contain any method calls that are unchanged by the user and therefore use the
+default values as given in the widget's constructors.
 
-A complete list of the supported properties that can be set in the properties window for each widget item, see <htmlurl
-url="programming-6.html" name="The KDevelop Programming Handbook">.
+A complete list of the supported properties that can be set in the properties window for each widget item.
 
 
 <sect>Generating Files
-<p>
+<p><nidx/dialog sourcecode generation/
+
 After creating a widget, you have to generate the sourcecode to make it available in your project. This can be done either with the
 "Generate Sources" from the "Build"-menu or by the according icon in the <idx/dialog editor/ toolbar. Your <idx/Makefile/s will be updated
 automatically to include the new widget in the compiling process; therefore, after calling "Generate Sources", you can build your
 project again within the <idx/dialog editor/. The <idx/output/ window pops up below the Widget-Editor window as in Project Editor mode.
 
 Now that your project contains a new widget, your work as a programmer is to implement functionality to the used slots and eventually
-add other methods you may need.
-
-For more information about <idx/implementation/ of the <idx/widgets/ functions, see <htmlurl url="programming-6.html" name="The KDevelop
-Programming Handbook">.
+add other methods you may need. <footnote>See <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook, The
+Dialogeditor"> for more information about widget properties and sourcecode generation.</footnote>
 
 <chapt>General Configuration<label id="General Configuration">
 <p>
-This chapter describes how you can set your individual preferences about how KDevelop works. All settings adressed below can be
+
+This chapter describes how you can set your individual preferences about how KDevelop works. All settings addressed below can be
 found by the according entry in the Options-menu.
 
 <sect>Configuring the "<idx/Tools/" Menu<label id="Configuring the &dquot;<idx/Tools/&dquot; Menu">
-<p>
+<p><nidx/configuring the Tools-menu/<nidx/"Options"-menu/
+
 As KDevelop supports the use of third-party programs within it's user interface, you are able to <idx/configure/ any program that suits
 your needs towards application development. This can be done by adding programs to the already pre-defined ones in the
-"<idx/Tools/"-menu. To change the tools-menu, select "<idx/Tools/" from the "Options" menu. This dialog allows to specify the entry name,
-program and additional command line options you want to pass to the execution. To remove a program from the menu, select the entry
-name and choose "Delete". To add a program, specify the menuentry, where a & is used as a menu-accelerator; you may compare the
+<idx/"Tools"-menu/. To change the tools-menu, select "<idx/Tools/" from the "Options" menu. This dialog allows to specify the entry
+name, program and additional command line options you want to pass to the execution. To remove a program from the menu, select the
+entry name and choose "Delete". To add a program, specify the menuentry, where a & is used as a menu-accelerator; you may compare the
 already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
 is added to the list. After leaving the <idx/configuration dialog/, the tools-menu updates itself, so the new configuration is already
 usable without restarting KDevelop.
 
 <sect>File Viewer Options
-<p>
+<p><nidx/file viewers/
+
 The Logical File Viewer can be configured by context menus completely. As it's intention is to separate files logically to keep a
 better overview over complex projects, one of the most used configurations is to create file groups. Those can be set by opening the
 context menu with a right mouse button click over the project icon displayed at the root of the tree. The menu offers:
 <itemize>
 <item><idx/New File/: Opens the <idx/New File/ dialog. Equals to the menubar command "File"-"New"
-<item><idx/New Class/: Opens the Classgenerator to create a new class. Equals to the menubar command "Project"-"<idx/New Class/"
-<item>New Group: Opens a dialog to create a new group. There, set the group name and the file filter for the <idx/project files/ that will be
-displayed in this group.
+<item><idx/New Class/: Opens the Classgenerator to create a new class. Equals to the menubar command "Project"-"<idx/New
+Class/"<nidx/"Project"-menu/
+<item>New Group: Opens a dialog to create a new group. There, set the group name and the file filter for
+the <idx/project files/ that will be displayed in this group.
 <item>Show relative path: displays the files with their path name starting from the main project directory if checked; otherwise only
 the filename is shown.
 </itemize>
 
 Over a group folder, the according context menu offers:
-
 <itemize>
 <item>New Group: Opens the New Group dialog as in the context menu described above.
 <item>Remove group: removes the group from the <idx/LFV/.
@@ -3007,7 +3022,7 @@ Over a group folder, the according context menu offers:
 <bf><idx/Make-command/:</bf>
 The General Options dialog lets you configure KDevelop's general settings.
 First, you should set the <idx/make-command/ available on your system. If the selected program does not exist,
-KDevelop will warn you the next time your're invoking a make command.
+KDevelop will warn you the next time you're invoking a make command.
 
 <bf><idx/Autosave/:</bf>
 
@@ -3017,14 +3032,14 @@ If Autosave is checked, KDevelop will save all changed files periodically.  The 
 <bf><idx/Autoswitch/:</bf>
 
 If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
-documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the <idx/output/
+documentation in the Help-menu, the Documentation browser will be opened, together with the documentation tree and the <idx/output/
 window turned off.
 Startup:
 
-For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
-Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
+For starting KDevelop, you have the option to enable/disable the <idx/start-logo/ to be shown during the time KDevelop loads.
+Further, if you don't like the last project to be opened on startup, you can disable the default behavior.
 
-<sect>Changing Keyboard Shortcuts<label id="Changing Keyboard Shortcuts">
+<sect>Changing <idx/Keyboard Shortcuts/<label id="Changing Keyboard Shortcuts">
 <p>
 The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
 KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
@@ -3032,7 +3047,7 @@ configuration can be changed by checking values like the Alt / Ctrl key etc.
 
 <sect>Documentation<label id="Documentation">
 <p>
-<sect1> Directories
+<sect1>Directories<nidx/documentation path/
 <p>
 For setting up the <idx/documentation browser/ to work correctly, KDevelop needs some information about where the <idx/HTML/-documentation
 is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in <idx/HTML/
@@ -3058,10 +3073,10 @@ to set up the path to your recent kdelibs sources, which is not the include-path
 Then, you can choose three different installation modes, as:
 
 <itemize>
-<item> Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
+<item> Delete old Documentation and  install to recent Documentation-path:  this assumes that you already have a documentation
 installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
 newly generated documentation into the recent path.
-<item> Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
+<item> Delete old Documentation and install to new Documentation-path:   this will result in deleting the old documentation as
 well as above, but gives you the choice to set up a new documentation place.
 <item> Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
 the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
@@ -3074,55 +3089,54 @@ users who generate a new documentation from scratch.
 After pressing the OK button, KDevelop will create a subdirectory "<idx/KDoc/-reference" in the documentation path containing the <idx/KDoc/
 reference files.  First, the qt library documentation <idx/classes/ will be indexed to connect the Qt documentation with the
 documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by qt2<idx/KDoc/. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
-give browsing the most functionality.
+that it can be found by <tt/<cdx/qt2kdoc//. Finally, the KDE libs will be indexed and the documentation will be build with
+cross-references to give browsing the most functionality.
 
 <sect2>Create Search Database
 <p>
 The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
-keyword interactively.  To create and use the documentation search function, you must have the program <idx/glimpse/ 4.1 installed.
+keyword interactively.  To create and use the documentation search function, you must have the program <idx/glimpse/ 4.0 installed.
 Preset are the options to index the given KDE-Library documentation as well as the <idx/Qt-Documentation/, assuming the path to the
 documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
-directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an addional
+directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an additional
 directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path
 in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
-medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger searchdatabase
+medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger search-database
 will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
 <ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
 
 
 <chapt>Questions and Answers<label id="Questions and Answers">
 <p>
-This section adresses questions by users that were answered by the KDevelop Team or by their supporters on the KDevelop
-mailinglist during experiences with the current versions of KDevelop as well as bug reporting in general.
+This section addresses questions by users that were answered by the KDevelop Team or by their supporters on the KDevelop
+mailing list during experiences with the current versions of KDevelop as well as bug reporting in general.
 
-<sect>Bug Reporting <label id="Bug Reporting">
+<sect><idx/Bug Reporting/ <label id="Bug Reporting">
 <p>
 Another improvement of KDevelop is the integrated bug-reporting system via email. If you experience a bug, you have the option to send
 the KDevelop development team a bug report either by your email-client or by the bug-report dialog. All bug-reports are collected on
-the KDevelop website and can be reviewed on <htmlurl url="http://fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html"
-name="fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html">. You can also receive all bug-reports via subscription to the
-bug-report mailinglist by sending an empty email to <htmlurl  url="mailto:kdevelop-bug-report-request@fara3.cs.uni-potsdam.de"
-name="kdevelop-bug-report-request@fara3.cs.uni-potsdam.de"> with "subscribe <em/your_email_adress/" as the body contents.
+the KDevelop web site and can be reviewed on <url url="http://fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html" >. You
+can also receive all bug-reports via subscription to the bug-report mailing list by sending an empty email to <htmlurl
+url="mailto:kdevelop-bug-report-request@fara3.cs.uni-potsdam.de" name="kdevelop-bug-report-request@fara3.cs.uni-potsdam.de"> with
+"subscribe <em/your_email_address/" as the body contents.
 
-To send bug reports, please use this email adress by your mail program. If you want to use KDevelop for direct bug-reporting, choose
-"Bug Report" from the "Help" menu. You are presented the report dialog that lets you enter all necessary information about the bug you
-found. After pressing "OK", the dialog's contents is sent to the mailinglist automatically.
+To send bug reports, please use this email address by your mail program. If you want to use KDevelop for direct bug-reporting, choose
+"Bug Report" from the <idx/Help-menu/. You are presented the report dialog that lets you enter all necessary information about the
+bug you found. After pressing "OK", the dialog's contents is sent to the mailing list automatically.
 
 <sect>Where to get Information
 <p>
-<bf>Q:</bf> I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
+<bf>Q:</bf> I have a question which is not addressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
 
-<bf>A:</bf>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailinglist at <htmlurl
+<bf>A:</bf>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailing list at <htmlurl
 url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name = "kdevelop@fara3.cs.uni-potsdam.de">. Send a mail with an empty header and
-"subscribe" as contents; then you can participate on the discussions. All questions should go there and will be adressed there as well.
+"subscribe" as contents; then you can participate on the discussions. All questions should go there and will be addressed there as well.
 If you stick to that, you will get the most help by the developers and all users having the same problems, as well as helping to keep
 the FAQ up to date.
 
-The KDevelop Homepage at <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"
-name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> also contains a mailing-list archive that allows you to browse the
-mails already send by the subscribers, so you should look there first as most problems should have been adressed already by the team or
-other users.
+The <idx/KDevelop Homepage/ at <url url="http://www.kdevelop.org"> also contains a <idx/mailing-list/ archive that allows you to browse
+the mails already send by the subscribers, so you should look there first as most problems should have been addressed already by the
+team or other users.
 
 <sect>Library and System Problems
 <p>
@@ -3212,7 +3226,7 @@ make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
 make: *** [all-recursive-am] Error 2
 </verb></tscreen>
 <bf>A:</bf> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall
-them or get an updated rpm of the kdelibs from <htmlurl url="ftp://ftp.suse.com" name="ftp://ftp.suse.com">
+them or get an updated rpm of the kdelibs from <url url="ftp://ftp.suse.com">
 
 <sect>Usage Questions
 <p>
@@ -3238,7 +3252,7 @@ according *.moc.cpp file and rebuild the project.
 
 Sandy Meier 			<htmlurl url="mailto:smeier@rz.uni-potsdam.de" name = "<smeier@rz.uni-potsdam.de>">
 (maintainer, development coordinator and homepage provider)
-<quote/Main development of: framestructure, IDE look'n feel, projectmanagement./
+<quote/Main development of: frame structure, IDE look'n feel, project management./
 
 Stefan Heidrich			<htmlurl url="mailto:sheidric@rz.uni-potsdam.de" name = "<sheidric@rz.uni-potsdam.de>">
 <quote/Main development of: <idx/KAppWizard/, <idx/printing/ functionality/
@@ -3374,6 +3388,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
+
+
 
 
 

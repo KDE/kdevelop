@@ -25,23 +25,23 @@
 <H3><A NAME="The Menubar"></A> <A NAME="ss5.1">5.1 The Menubar</A>
 </H3>
 
-<P>The menubar is a central component of the main window. It allows the user to execute operations that the application (or to be precise:
+<P>The menu bar is a central component of the main window. It allows the user to execute operations that the application (or to be precise:
 the mainview) offers in regards of manipulating the main view's contents. In opposition to Qt's <CODE>QMenuBar</CODE>, KDE offers the use of
-the class <CODE>KMenuBar</CODE>. Additionally, the menubar is already constructed for the programmer when using <CODE>KTMainWindow</CODE> with the
+the class <CODE>KMenuBar</CODE>. Additionally, the menu bar is already constructed for the programmer when using <CODE>KTMainWindow</CODE> with the
 first call of <CODE>menuBar()</CODE>.
-<P>The menubar itself, independent which class is going to be used, contains entries that the user can select with the mouse or by using
+<P>The menu bar itself, independent which class is going to be used, contains entries that the user can select with the mouse or by using
 keyboard accelerators with the ALT-key and the underlined character. The menus that have to pop up on a selection have to be created
 with the class <CODE>QPopupMenu</CODE>, which itself only provides the popups, entries have to be inserted using the methods provided by
 <CODE>QMenuData</CODE>.
-<P>Mind that menubars should always contain all functions a program has to offer except those that can be accessed by additional dialogs.
-The menubar also makes use of the <CODE>KApplication</CODE> help menu already provided. Inserting the menu is just easy with
+<P>Mind that menu-bars should always contain all functions a program has to offer except those that can be accessed by additional dialogs.
+The menu bar also makes use of the <CODE>KApplication</CODE> help menu already provided. Inserting the menu is just easy with
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
 menuBar()->insertItem(i18n("Help"), kapp->getHelpMenu());
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>Example construction of a menubar with using <CODE>KTMainWindow</CODE> and setting the menubar explicitely:
+<P>Example construction of a menu bar with using <CODE>KTMainWindow</CODE> and setting the menu bar explicitely:
 <HR>
 <PRE>
 my_menubar=new KMenuBar(this,"my_menubar");
@@ -72,20 +72,20 @@ my_menubar->insertItem(i18n("&amp;File"), file_menu);
 setMenu(my_menubar);
 </PRE>
 <HR>
-<P>The example creates a menubar and a popup menu first. Then the popup menu is filled with entries. The used method of <CODE>QMenuData</CODE>
+<P>The example creates a menu bar and a popup menu first. Then the popup menu is filled with entries. The used method of <CODE>QMenuData</CODE>
 here allows an implicit connection to the method to call when the popup menu emits SIGNAL(activated(int)). The zero parameters after
 the slot declaration is left out as the example assumes the program will use <CODE>KAccel</CODE> to set the according keyboard accelerators
 with <CODE>changeMenuAccel()</CODE>. Further you can see that the integer value ID is inserted like the method name with all uppercase letters
-and underscores to separate the words. The menu id's themselve are set with #define in a separate file to keep track of the used
-numbers. You would think that you don't need the menu id if the <CODE>activated()</CODE> signal is already connected- in fact the id can be
-used to forward the singnal <CODE>highlighted(int)</CODE> to a method that compares the id by a switch statement and sets a statusbar
-helpmessage for the menuentry. You could as well do that for the signal <CODE>activated(int)</CODE> as well to call the according method by a
+and underscores to separate the words. The menu id's themselves are set with #define in a separate file to keep track of the used
+numbers. You would think that you don't need the menu id if the <CODE>activated()</CODE> signal is already connected - in fact the id can be
+used to forward the signal <CODE>highlighted(int)</CODE> to a method that compares the id by a switch statement and sets a statusbar
+help message for the menu entry. You could as well do that for the signal <CODE>activated(int)</CODE> as well to call the according method by a
 switch statement. Then you have to add a <CODE>connect()</CODE> for each popup menu you want to use.
-<P>You can as well insert a separator into the menubar with <CODE>my_menubar->insertSeparator()</CODE>. This will align all entries inserted after
+<P>You can as well insert a separator into the menu bar with <CODE>my_menubar->insertSeparator()</CODE>. This will align all entries inserted after
 the separator to the right in Motif style, in windows style this has no effect.
-<P>The creation of a separate menubar allows the creation of several menubars which can be set as the actual menu with <CODE>setMenu()</CODE>.
-This is how we did it in KDevelop to change the menubar when switching to the dialogeditor and back to the project editor.
-<P>Finally, the apmersand in the menuentry sets the following character as the keyboard accelerator when the user presses ALT+ the
+<P>The creation of a separate menu bar allows the creation of several menubars which can be set as the actual menu with <CODE>setMenu()</CODE>.
+This is how we did it in KDevelop to change the menu bar when switching to the dialogeditor and back to the project editor.
+<P>Finally, the ampersand in the menu entry sets the following character as the keyboard accelerator when the user presses ALT+ the
 character.
 <P>
 <H3><A NAME="ss5.2">5.2 The Toolbar</A>
@@ -94,14 +94,14 @@ character.
 <P>
 <P>Toolbars are another component that enhances user interaction with symbols representing most needed functions that an application
 provides. The KDE libraries are again offering another class to use with KDE applications, <CODE>KToolBar</CODE>; when using <CODE>KTMainWindow</CODE>
-these are created like the menubar by the first call of <CODE>toolBar()</CODE>. As you can use as many toolbars as your application requires,
-you can create them with the number in the <CODE>toolBar()</CODE> method; if the method's paramenter is empty, the first toolbar number is 0.
+these are created like the menu bar by the first call of <CODE>toolBar()</CODE>. As you can use as many toolbars as your application requires,
+you can create them with the number in the <CODE>toolBar()</CODE> method; if the method's parameter is empty, the first toolbar number is 0.
 <P>
 <H3><A NAME="ss5.3">5.3 The Statusbar</A>
 </H3>
 
 <P>KDE also provides the pendant to Qt's <CODE>QStatusBar</CODE>, <CODE>KStatusBar</CODE>. The statusbar can contain labels as well as widgets, such as
-progressbars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
+progress bars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
 application and gives hints about the usage of commands e.g. over toolbars and menubars.
 <P>
 <H3><A NAME="Keyboard Accelerators"></A> <A NAME="ss5.4">5.4 Keyboard Accelerators</A>

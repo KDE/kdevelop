@@ -23,7 +23,7 @@
 <P>As the last chapter covered the KDE File System Standard, this chapter deals with what you have to do to use the file system. A KDE
 project uses the file system at least for installation routines; therefore we will discuss setting installation properties for your
 project files. Your application may make use of files that are installed afterwards, where it is important to know how to get the
-relative pathname by the standard. This enables your application to work wherever the KDE file system may be and prevents hardcoding
+relative pathname by the standard. This enables your application to work wherever the KDE file system may be and prevents hard-coding
 any file information.
 <P>
 <H3><A NAME="ss14.1">14.1 Accessing Files during Runtime</A>
@@ -55,7 +55,6 @@ static const QString&amp; kde_sounddir ()
 static const QString&amp; kde_toolbardir ()
 static const QString&amp; kde_wallpaperdir ()
 static const QString&amp; kde_bindir ()
-static const QString&amp; kde_partsdir ()
 static const QString&amp; kde_configdir ()
 static const QString&amp; kde_mimedir ()
 static QString localkdedir ()
@@ -63,7 +62,12 @@ static QString localconfigdir ()
 static QString findFile ( const char *file )
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>The methods are generally used with the <CODE>KApplication</CODE> object of your application, where <CODE>KApplication</CODE> offers the macro
+
+<!--
+KDE File System
+-->
+
+The methods are generally used with the <CODE>KApplication</CODE> object of your application, where <CODE>KApplication</CODE> offers the macro
 <CODE>kapp</CODE> to receive the pointer:
 <P>#define kapp KApplication::getKApplication()
 <P>Therefore, the methods are generally used like this:
@@ -74,7 +78,7 @@ QString sounddir=kapp->kde_sounddir();
 </CODE></BLOCKQUOTE>
 
 This example stores the path of the KDE sounddirectory under a <CODE>QString</CODE>, where you would append e.g. the sound filename. Then you
-can process this information and play a sound file that is located there. You should always test for the existance of a file by using
+can process this information and play a sound file that is located there. You should always test for the existence of a file by using
 <CODE>QFileInfo</CODE>'s <CODE>exists()</CODE> method.
 <P>Within these methods,
 <P>
@@ -83,8 +87,7 @@ can process this information and play a sound file that is located there. You sh
 void invokeHTMLHelp( QString aFilename, QString aTopic ) const [public]
 </PRE>
 </CODE></BLOCKQUOTE>
-
-takes a special position to invoke the KDE help. Generally, you should use it everywhere a user needs to access information, e.g. when
+<P>takes a special position to invoke the KDE help. Generally, you should use it everywhere a user needs to access information, e.g. when
 he is presented a modal dialog. The F1 key will not work to invoke the help contents, also the user should be presented the according
 help page. To make a good use of it, add a "Help" button to your dialog and create a slot that is used to connect on signal
 <CODE>pressed()</CODE>. In this method, use <CODE>invokeHTMLHelp()</CODE> with the according page and subject; in case your application's documentation
@@ -127,8 +130,6 @@ kde_wallpaperdir()    kdedir()/share/wallpapers       Returns the directory wher
 
 kde_bindir()          kdedir()/bin                    Returns the directory where KDE application binaries are stored
 
-kde_partsdir()        kdedir()/parts                  Returns the directory where KParts are stored
-
 kde_configdir()       kdedir()/share/config           Returns the directory where config files are stored
 
 kde_mimedir()         kdedir()/share/mimelnk          Returns the directory where mimetypes are stored
@@ -157,6 +158,7 @@ localconfigdir()      $HOME/.kde/share/config         Get the local KDE config d
 <P>QPixmap loadApplicationIcon ( const QString &amp;name, int w = 0, int h = 0 )
 <P>QPixmap loadApplicationMiniIcon ( const QString &amp;name, int w = 0, int h = 0 )
 <P>bool insertDirectory ( int index, const QString &amp;dir_name )
+<P>
 <P>
 <H3><A NAME="ss14.4">14.4 Setting File Installation Properties</A>
 </H3>
@@ -188,7 +190,7 @@ macro towards the actual destination.
 <P>When looking a standard KDE application project, you will see on the file property of your <CODE>index.html</CODE> file that it already uses a
 macro to determine where it should go:
 <P>$(kde_htmldir)/en/kscribble/index.html
-<P>This says, that make should install the file index.html in the kde-html directory, subdirectory en for english, the application
+<P>This says, that make should install the file index.html in the kde-html directory, subdirectory en for English, the application
 subdirectory and the filename. You could as well use another filename if you like to rename the file on the installation destination.
 <P>For the destination of your binary you currently have to edit the project's Makefile.am if your destination should be different form
 the "Applications" section of kpanel:
@@ -205,7 +207,7 @@ the "Applications" section of kpanel:
 <LI>System</LI>
 <LI>Utilities</LI>
 </UL>
-<P>Setting no directory will end your applink directly in kpanel's root.
+<P>Setting no directory will end your applnk directly in kpanel's root.
 <P>The following list contains the macros that can be used in the installation setup for files:
 <P>
 <BLOCKQUOTE><CODE>
@@ -269,7 +271,7 @@ Name[de]=kscribble
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>This already contains the basic configuration for the application specific data such as the icon, binary name, application name etc.
-You see that the section Comment is still empty. There you have to insert the QuickTip that will be displayed when the mouse cursor
+You see that the section Comment is still empty. There you have to insert the Quick-Tip that will be displayed when the mouse cursor
 moves over the kdelnk file icon on the desktop or in kpanel. If scribble would be a small drawing program, you would enter e.g.
 <P>
 <BLOCKQUOTE><CODE>
@@ -280,8 +282,8 @@ Comment=A simple drawing program
 <P>Each comment line afterwards will contain the same description translated in the language the brackets symbolize. Ask translators to
 insert a good translation in their native language or include the kdelnk file when asking for translating the application's po file;
 the same applies to the name of the application set in the Name lines.
-<P>
-<P>
+<P><B>Note:</B> for more information about the purpose of the .kdelnk file, especially its use for commandline processing, see
+<A HREF="kde_libref.html"">The KDE Library Reference Guide</A><P>
 <P ALIGN="RIGHT">
 
 <A HREF="programming-15.html">Next</A>

@@ -106,7 +106,7 @@ GUI-programs, taking advantage of the KDE and Qt libraries. By specifying only t
 minimum, users are enabled to start working at a new project within seconds. Calling KAppWizard should be the first step to be done for
 creating a new application with KDevelop.
 <P>KAppWizard provides you a so-called application skeleton with all needed C++ source code files for a running application. After
-you specified a projectname and set the needed preferences, your new project will be generated and you have a completele application
+you specified a projectname and set the needed preferences, your new project will be generated and you have a complete application
 that already contains a lot of functionality (for KDE and Qt projects), without even having to type one line of C++ code yourself. When
 specifying the complete set of options the program generator offers, your application already contains:
 <UL>
@@ -142,7 +142,7 @@ Classgenerator is invoked by the Project-menu, entry "New Class".
 <P>
 <H4>The Class Browser</H4>
 
-<P>The Class Browser displays all types of objects and fuctions of your project in a tree left of the editing windows. A classparser
+<P>The Class Browser displays all types of objects and functions of your project in a tree left of the editing windows. A class parser
 scans all files for methods and classes and makes them available by graphical symbols. Over those, context-menus offer a
 specialized functionality to work with the sources by focusing on the classes and functions.
 <P>Selecting a class will result in opening the file that contains the declaration; on methods and functions this will
@@ -205,9 +205,10 @@ so you should have a look there first. Then we advise to have a closer look at t
 like the KHTML library contains very specialized widgets that a lot of programs make use of. It just simplifies application design like
 the predefined dialogs provided with Qt. For your own dialogs, those low-level widgets are the one you need. A dialog merely
 consists by a collection of different widgets combined together building the interface and is technically programmed by C++ code
-in a class that is derived from QWidget or a more specialized dialog class that inherits QWidget. The program using the widget
-therefore needs an object of the widget's class- this is almost all you have to understand how dialogs or views are used.
-<P>The dialog editor of KDevelop now offers a nice way to simply construct dialogs and user interfaces visually instead of you having
+in a class that is derived from <CODE>QWidget</CODE> or a more specialized dialog class that inherits <CODE>QWidget</CODE>. The program
+using the widget therefore needs an object of the widget's class- this is almost all you have to understand how dialogs or views are
+used.
+The dialog editor of KDevelop now offers a nice way to simply construct dialogs and user interfaces visually instead of you having
 to combine dialogs with pure C++ code together- this is the hard way to create interfaces. Switch to the dialog editor by
 choosing the according entry in the "View"-menu (or by the toolbar button). You will see that KDevelop's face has changed but for
 e.g. the menubar and the toolbar are very similar. This makes it very easy to switch back and forth between the two working modes
@@ -234,8 +235,8 @@ visually and provides all functions to manipulate the data by the user. As the b
 would be to create the main view and additional dialogs by which the user can change any settings or has access to additional
 functions.
 <P>To build your main-view, the generated source code for your application already contains a class in the form of
-&lt;YourApplication&gt;View which inherits the QWidget class (this is the minimal class that handles visual interfaces in Qt and
-therefore in KDE as well). In general, there are three different ways how to extend the given class:
+&lt;YourApplication&gt;View which inherits the <CODE>QWidget</CODE> class (this is the minimal class that handles visual interfaces in Qt
+and therefore in KDE as well). In general, there are three different ways how to extend the given class:
 <UL>
 <LI>remove the document-view structure and use one of the predefined "big" widgets already containing a lot of functionality-
 just remove the View-class and replace the view-object by another.</LI>
@@ -270,7 +271,7 @@ the KAppWizard and the dialog editor shorten the time you would usually need to 
 didn't cover the work a programmer has to do usually: working on the implementation of his application to provide a proper
 execution by the end-user. Now, why is KDevelop the IDE you would want to use as a coding environment, including it's use to
 create even non-GUI applications ?
-<P>Implicitely, the IDE keeps track of your project in general; that means, you don't have to take care for saving changes, the
+<P>Implicitly, the IDE keeps track of your project in general; that means, you don't have to take care for saving changes, the
 Makefile generation and so on- this is providing full project-management, and KDevelop plays out all it's power here in any case
 of C++ application development. It is easy to understand that, after taking away the management from the programmer, he is more
 concentrated on working out the sourcecode. On the other hand, the code is usually spread over many different files across
@@ -282,7 +283,7 @@ actions, that allow fast work and moving the developer's focus from files to obj
 classgenerator lets you create a new class including inheritance, attributes and documentation easily . For object-oriented work,
 the Class Browser brings you to the location of your objects; it doesn't matter any more where the code is actually. The
 Browser scans all sources automatically and rebuilds itself after additions to keep up with your work and enables you to access
-the new code directly. By context-menus, the browser offers even more fuctionality, like bringing you to the implementation or to
+the new code directly. By context-menus, the browser offers even more functionality, like bringing you to the implementation or to
 the declaration of member functions. Then, the addition of members are done graphically by dialogs- no search for the file and the
 place you would have to add your entries. Finally, you can get an even more specialized view of your project's classes by the
 Classtool dialog, providing you trees that show the usage, contents and inheritance of classes and their objects. For more
@@ -301,7 +302,7 @@ your program as well as locating errors in the sourcecode.
 <P>To execute your application, choose
 <UL>
 <LI>the symbol "Execute" or "Debug" (starting KDbg with your program) from the toolbar</LI>
-<LI>by the according menuentries in the Build-menu.</LI>
+<LI>by the according menu entries in the Build-menu.</LI>
 <LI>or by "Execute with Arguments" to start your application with additional arguments</LI>
 </UL>
 
@@ -344,10 +345,10 @@ in other documentations:
 design and programming with the Qt and KDE libraries,</LI>
 <LI>this handbook, sections 
 <A HREF="index-5.html#Overview">Overview</A> to 
-<A HREF="index-8.html#Projects">Projects</A>, describing all availiable
+<A HREF="index-8.html#Projects">Projects</A>, describing all avaliable
 functions within KDevelop, </LI>
 <LI>this handbook, section 
-<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>, adressing the use of the
+<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>, addressing the use of the
 dialog editor to create your own widgets, </LI>
 <LI>The <EM>Online-Reference Documentation</EM> to the Qt-library, which covers examples of
 using the Qt GUI-toolkit as well as a class reference and screenshots for the most important ready-to-use widgets included,</LI>
@@ -360,9 +361,9 @@ descriptions for all classes and widgets including example code for their use,</
 <LI>
 <A HREF="http://www.kde.org">http://www.kde.org</A> for information about the KDE project and developer guidelines,</LI>
 <LI>
-<A HREF="http://developer.kde.org">http://developer.kde.org</A> for additonal references to KDE application development.</LI>
+<A HREF="http://developer.kde.org">http://developer.kde.org</A> for additional references to KDE application development.</LI>
 <LI>on the KDevelop homepage 
-<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html</A> </LI>
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A></LI>
 </UL>
 </LI>
 </UL>

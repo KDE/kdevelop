@@ -96,7 +96,10 @@ such as make or a terminal application.</LI>
 
 <P>This section covers the functions that KDevelop provides about files; accessed via the File-menu in the menubar or by the
 according icons in the toolbar:
-<P>
+<!--
+"File"-menu
+-->
+
 <UL>
 <LI><B>New                      Ctrl+N</B> Opens the "New File" dialog, allowing to create a new file. The file can be created using different templates
 and the filename has to be given as well as the path where the file will be created.<P>
@@ -122,7 +125,12 @@ lpr<P>
 <P>
 <H4>Editing Files</H4>
 
-<P>Here, the "Edit" menu and the according icons in the toolbar are covered which provide editing files. Also the editing functions
+<P>
+<!--
+"Edit"-menu"
+-->
+
+Here, the "Edit" menu and the according icons in the toolbar are covered which provide editing files. Also the editing functions
 are available via a context-menu in the editor.
 <UL>
 <LI><B>Undo                     Ctrl+Z</B> Reverts the last editing operation<P>
@@ -170,7 +178,12 @@ becomes selected.<P>
 <P>
 <H4>View Configuration</H4>
 
-<P>The View-Menu covers closing and opening functions for windows and commands to enable/disable the tool- and statusbar as well as
+<P>
+<!--
+"View"-menu"
+-->
+
+The View-Menu covers closing and opening functions for windows and commands to enable/disable the tool- and statusbar as well as
 to jump errors in the code.
 <UL>
 <LI><B>Goto Line...     Ctrl+G</B>Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
@@ -201,7 +214,12 @@ DOC-tree.<P>
 <P>
 <H4>Creating and Maintaining Projects</H4>
 
-<P>This section describes functions that are available in the "Project"-menu and are supposed to cover the creation and maintaining
+<P>
+<!--
+"Project"-menu
+-->
+
+This section describes functions that are available in the "Project"-menu and are supposed to cover the creation and maintaining
 of projects
 <UL>
 <LI><B>New...</B> Starts the KAppWizard and allows you to create a new project by choosing application type, name,
@@ -258,7 +276,12 @@ release with optimization.<P>
 <P>
 <H4>Building Projects</H4>
 
-<P>This section describes the Build menu that covers all actions to be done with make or actions like rebuilding the project's online
+<P>
+<!--
+"Build"-menu
+-->
+
+This section describes the Build menu that covers all actions to be done with make or actions like rebuilding the project's online
 help or API documentation.
 <P>
 <UL>
@@ -298,7 +321,12 @@ Configure again.<P>
 <P>
 <H4>Calling Tools</H4>
 
-<P>The Tools-menu contains by default the entries for the following programs if installed: KDbg, KIconEdit and KTranslator. These are
+<P>
+<!--
+"Tools"-menu
+-->
+
+The Tools-menu contains by default the entries for the following programs if installed: KDbg, KIconEdit and KTranslator. These are
 checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
 "Tools"-window and start the selected program inside this window. The Tools menu can be edited by the Tools-entry in the Options-menu;
 see 
@@ -306,12 +334,17 @@ see
 <P>
 <H4>Changing KDevelop's settings</H4>
 
-<P>The Options-menu contains all entries for invoking configuration dialogs with which you can change KDevelop's default settings.
-Major settings like those for the editor or printing have their own entries; general settings of KDevelop's behavoir can be made
+<P>
+<!--
+"Options"-menu
+-->
+
+The Options-menu contains all entries for invoking configuration dialogs with which you can change KDevelop's default settings.
+Major settings like those for the editor or printing have their own entries; general settings of KDevelop's behavior can be made
 with the 
 <A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A> dialog.
 <UL>
-<LI><B>Editor...</B> Allows the configuration of the editor's behavoir like word-breaking, selections etc.<P>
+<LI><B>Editor...</B> Allows the configuration of the editor's behavior like word-breaking, selections etc.<P>
 </LI>
 <LI><B>Editor Colors...</B> Here, you can set the color-configuration of the editor like e.g. the background.<P>
 </LI>
@@ -341,13 +374,23 @@ HTML-library documentation and the rebuilding of the search index for the Helpbr
 <P>
 <H4>The Window Menu</H4>
 
-<P>The Window menu contains a list with all currently open files. This allows a quick switch to another file you're currently working
+<P>
+<!--
+"Window"-menu
+-->
+
+The Window menu contains a list with all currently open files. This allows a quick switch to another file you're currently working
 on.
 <P>
 <H4>Managing Bookmarks</H4>
 
-<P>The Bookmarks menu is intended for adding and removing bookmarks you want to set in the current editing file. As KDevelop uses two
-editing windows, each one configures it's bookmarks seperately.
+<P>
+<!--
+"Bookmarks"-menu
+-->
+
+The Bookmarks menu is intended for adding and removing bookmarks you want to set in the current editing file. As KDevelop uses two
+editing windows, each one configures it's bookmarks separately.
 <UL>
 <LI><B>Set Bookmark</B> Opens a context-menu with up to nine configurable bookmarks. This allows setting a bookmark to a certain entry
 in the bookmarks menu by logical reasons.<P>
@@ -361,7 +404,7 @@ the Header-Window is visible and you call Clear Bookmarks, the entries for the H
 </LI>
 <LI><B>Header-Window</B> Contains the bookmark-list for the Header-Window. Selecting a bookmark will set the cursor to the selected
 bookmarks' line. Mind that bookmarks are only assigned to the file they are set to, so if you change to another file, the
-bookmarks are not deleted but choosing a bookmark won't change to the file they are assingned to as well.<P>
+bookmarks are not deleted but choosing a bookmark won't change to the file they are assigned to as well.<P>
 </LI>
 <LI><B>C/C++-Window</B> Contains the bookmark-list for the C/C++-Window. The preferences are the same as for the
 Header-Window.</LI>
@@ -370,7 +413,12 @@ Header-Window.</LI>
 <P>
 <H4>Online Help</H4>
 
-<P>The Help-menu contains entries for navigating in the Helpbrowser as well as entries for library and online-documentation for the
+<P>
+<!--
+Help-menu
+-->
+
+The Help-menu contains entries for navigating in the Helpbrowser as well as entries for library and online-documentation for the
 most recently used cases. Accessing additional online-documentation can be achieved with the DOC-tree in the treeview
 automatically opened (if Autoswitch is enabled) when changing to the Documentation Browser window.
 <UL>
@@ -378,60 +426,114 @@ automatically opened (if Autoswitch is enabled) when changing to the Documentati
 </LI>
 <LI><B>Forward Alt+ Right Arrow</B> Opens the next page of the browser-history, available after a "Back"-action.<P>
 </LI>
-<LI><B>Search Marked Text               F2</B> Scans the search-index for text currently marked in the editing windows or the browser-window. Afte
-the search, a result page is shown which lets you select the help-page to switch to. After choosing a page, the browser will
+<LI><B>Search Marked Text               F2</B> Scans the search-index for text currently marked in the editing windows or the browser-window.
+After the search, a result page is shown which lets you select the help-page to switch to. After choosing a page, the browser will
 highlight the found entry for the expression the search was invoked for. With the F3 key the next search result on the same page
 will be displayed if more than one hit was reported for the search on one page.<P>
 </LI>
-<LI><B>Search for Help on...</B>Opens the Search for Help on... dialog that lets you search for a specific expression you want help on.<P>
+<LI><B>Search for Help on...</B>Opens the Search for Help on... dialog that lets you search for a specific expression you want
+help on.
+<P>
 </LI>
-<LI><B>User Manual              F1</B> Opens the User's Manual to KDevelop index page so you have access to this manual.<P>
+<LI><B>User Manual              F1</B> Opens the User's Manual to KDevelop index page so you have access to this manual.
+<P>
 </LI>
 <LI><B>Programming Handbook </B> Opens the 
-<A HREF="programming.html">KDevelop Programming Handbook</A> index page to access
-the programming manuals <P> 
+<A HREF="programming.html">KDevelop Programming Handbook</A> index page to
+access the programming manuals
+<P>
 </LI>
-<LI><B>Tip of the Day</B> Opens the Tip of the Day dialog to inform you about KDevelop's features.<P>
+<LI><B>Tip of the Day</B> Opens the Tip of the Day dialog to inform you about KDevelop's
+features.
+<P>
 </LI>
-<LI><B>KDevelop Homepage</B> Opens the KDevelop Homepage in the browser window if Internet access is provided.<P>
+<LI><B>KDevelop Homepage</B> Opens the KDevelop Homepage in the browser window if Internet access is provided.
+<P>
 </LI>
-<LI><B>Bug Report...</B> Opens the KDevelop Bug Report dialog, where you can send a bug-report directly to the KDevelop Team by email.
-See 
-<A HREF="index-13.html#Bug Reporting">Bug Reporting</A><P>
+<LI><B>Bug Report...</B> Opens the KDevelop Bug Report dialog, where you can send a bug-report directly to the KDevelop Team by
+email. See 
+<A HREF="index-13.html#Bug Reporting">Bug Reporting</A>
+<P>
 </LI>
 <LI><B>C/C++ Reference</B> Displays the language reference index page. If the
-reference is not installed, an error page shows you how to get the reference and how to install it correctly.<P>
+reference is not installed, an error page shows you how to get the reference and how to install it correctly.
+<P>
 </LI>
-<LI><B>Qt-Library</B> Changes to the index page of the Qt-library documentation provided with your copy of the Qt-library.<P>
+<LI><B>Qt-Library</B> Changes to the index page of the Qt-library documentation provided with your copy of the Qt-library.
+<P>
 </LI>
-<LI><B>KDE-Core-Library</B> Opens the class-index file of the KDE-Core library documentation.<P>
+<LI><B>KDE-Core-Library</B> Opens the class-index file of the KDE-Core library documentation.
+<!--
+kdecore
+-->
+
+<P>
 </LI>
-<LI><B>KDE-GUI-Library</B>  As above for the GUI-library<P>
+<LI><B>KDE-GUI-Library</B>  As above for the GUI-library
+<!--
+kdeui
+-->
+
+<P>
 </LI>
-<LI><B>KDE-KFile-Library</B> As above for the KFile-library<P>
+<LI><B>KDE-KFile-Library</B> As above for the KFile-library
+<P>
 </LI>
 <LI><B>KDE-HTML-Library</B> As above for the HTML-library<P>
 </LI>
-<LI><B>Project-API-Doc</B> Changes to the project's class-documentation index file.<P>
+<LI><B>Project-API-Doc</B> Changes to the project's class-documentation index file.
+<!--
+KDoc
+-->
+<!--
+API
+-->
+
+<P>
 </LI>
-<LI><B>Project-User-Manual</B> Opens the User manual's index file of your current project. This can be used to review the HTML-output
-generated by KSgml2Html<P>
+<LI><B>Project-User-Manual</B> Opens the User manual's index file of your current project. This can be used to review the
+HTML-output generated by KSgml2Html
+<P>
 </LI>
-<LI><B>About KDevelop...</B> Shows the Aboutbox of KDevelop containing the used version number and the authors' names and
-email-adresses as well as reference to the licensing of KDevelop.</LI>
+<LI><B>About KDevelop...</B> Shows the aboutbox of KDevelop containing the used version number and the authors' names and
+email-addresses as well as reference to the licensing of KDevelop.</LI>
 </UL>
 <P>
 <H3><A NAME="ss5.5">5.5 Toolbar Items</A>
 </H3>
 
 <P>KDevelop provides quick access to a various set of commands by it's toolbars. These are the standard and the browser toolbar; in
-dialog editor mode only the standard toolbar is visible. Both can be en-/disabled by the according menuentries in the "View" menu; also
+dialog editor mode only the standard toolbar is visible. Both can be en-/disabled by the according menu entries in the "View" menu; also
 dragged out of the main window and replaced on each side of the working area.
 <P>
 <H4>The Standard Toolbar</H4>
 
 <P>The standard toolbar provides quick access to the most recently used functions for file processing and editing as well as building your
 application. The buttons execute the following commands from left to right:
+<!--
+"File"-menu
+-->
+<!--
+"Edit"-menu
+-->
+<!--
+"Project"-menu"
+-->
+<!--
+"Build"-menu
+-->
+<!--
+debugging
+-->
+<!--
+Tree-View
+-->
+<!--
+Output-View
+-->
+<!--
+execute target
+-->
 <P>
 <UL>
 <LI>Open Project - shows the open project dialog</LI>
@@ -462,9 +564,15 @@ button.</LI>
 <P>
 <H4>The Browser Toolbar</H4>
 
-<P>The browser toolbar is another toolbar that provides a lot of useful commands for browsing files and the documentation. The toolbar
-contains:
-<P>
+<P>The browser toolbar is another toolbar that provides a lot of useful commands for browsing files and the documentation. The
+toolbar contains:
+<!--
+documentation browser
+-->
+<!--
+Help-menu"
+-->
+
 <UL>
 <LI>the Class combo box - lets you select a class of the current project to browse to</LI>
 <LI>the Method combo box - lets you select a method of the current class and browses to the implementation of the method</LI>
@@ -483,7 +591,7 @@ history.</LI>
 <H3><A NAME="ss5.6">5.6 Keyboard Shortcuts</A>
 </H3>
 
-<P>This section handles the predifined as well as the standard values for configurable keyboard commands used in the KDevelop IDE.
+<P>This section handles the predefined as well as the standard values for configurable keyboard commands used in the KDevelop IDE.
 You should see section 
 <A HREF="index-12.html#Changing Keyboard Shortcuts">Changing Keyboard Shortcuts</A> for a detailed explanation how
 to change assigned values to commands.
@@ -491,7 +599,12 @@ to change assigned values to commands.
 <H4>Shortcuts for Text Processing</H4>
 
 <P>
-<P>
+<!--
+Keyboard Shortcuts
+-->
+<!--
+Shortcuts
+-->
 <H4>Cursor Movements</H4>
 
 <P>
@@ -588,7 +701,7 @@ locate previous error                            SHIFT+F4
 <P>
 <HR>
 <PRE>
-search selected &lt;idx/editor/ text in documentation     F2
+search selected editor text in documentation     F2
 search selected browser text in documentation    F2
 display next search hit on the same page         F3
 
@@ -657,7 +770,7 @@ Symbol "Search Marked Text"                      F2
 Compile current sourcefile                       CTRL+F8
 Build current project target                     F8
 Execute target after Build process               CTRL+F9
-Exectue target with Arguments                    ALT+F9
+Execute target with Arguments                    ALT+F9
 Stop the current process                         F10
 </PRE>
 <HR>
