@@ -1,8 +1,10 @@
-***Main-Developers (KDevelop 0.3)***
+***Main-Developers***
 
 -Sandy Meier <smeier@rz.uni-potsdam.de>
 -Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 -Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+-Jonas Nordin <jonas.nordin@cenacle.se>
+-Pascal Krahmer <pascal@beast.de>
 -Stefan Bartel <bartel@rz.uni-potsdam.de>
 
 ***Translations coordination***
@@ -14,6 +16,9 @@
 -Ilmar Habibulin <ilmar@ints.ru>              - russian 
 -Steen Rabol <rabol@get2net.dk>               - danish
 -Martin Piskernig <martin.piskernig@stuwo.at> - german
+-Salvador Gimeno <salgiza@eui.upv.es>	      - spanish
+-Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>     - polnish
+-Duarte Loreto <dnloreto@esoterica.pt>	      - portuguese
 
 ***small patches and bugfixes***
 
@@ -21,10 +26,15 @@
 -David Barth <dbarth@videotron.ca>
 -Matthias Hipp <Matthias.Hipp@gmx.de>
 -Martin Piskernig <martin.piskernig@stuwo.at>
+-Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
 -Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+-Matt Koss <koss@napri.sk>
 
+KDevelop contains sourcecode from the following programs/classes:
 
-KDevelop contains sourcecode from KWrite 0.98 
-(c) by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
-
+KWrite 0.98	:(c) 1998 by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
+KDE Help	:(c) 1996 by Martin R. Jones <mjones@kde.org>
+GrapeFruit	:(c) 1999 by Bernd Gehrmann <bernd@physik.hu-berlin.de>
+KSwallow	:(c) by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
+kcmlocale	:(c) 1998 by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
 

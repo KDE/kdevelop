@@ -81,7 +81,7 @@ void CKDevelop::switchToFile(QString filename){
   }
   //load ktranslator if clicked/loaded an po file
   if((filename).right(3) == ".po"){
-    if(CToolClass::searchProgram("ktranslator")){
+    if(CToolClass::searchInstProgram("ktranslator")){
       showOutputView(false);
       s_tab_view->setCurrentTab(TOOLS);
       swallow_widget->sWClose(false);
@@ -161,7 +161,7 @@ void CKDevelop::switchToFile(QString filename){
   info = new TEditInfo;
   
   info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
-  info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( (Sandy Meier)
+  info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( -Sandy 
   info->modified = false;
   info->cursor_line = 0;
   info->cursor_col = 0;

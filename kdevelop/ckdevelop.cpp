@@ -555,6 +555,7 @@ void CKDevelop::slotBuildDebug(){
     switchToKDevelop();
 
   showOutputView(false);
+  showTreeView(false);
   
   slotStatusMsg(i18n("Running  "+prj->getBinPROGRAM()+"  in KDbg"));
 
@@ -758,7 +759,6 @@ void CKDevelop::slotBuildAPI(){
     return;
   }
   showOutputView(true);
-  error_parser->toogleOff();
 
   setToolMenuProcess(false);
   error_parser->toogleOff();
@@ -849,35 +849,53 @@ void CKDevelop::slotBuildManual(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
+// void CKDevelop::slotToolsKDbg(){
+
+//   if(!CToolClass::searchProgram("kdbg")){
+//     return;
+//   }
+//   if(!bKDevelop)
+//     switchToKDevelop();
+
+//   showOutputView(false);
+
+//   s_tab_view->setCurrentTab(TOOLS);
+//   swallow_widget->sWClose(false);
+//   swallow_widget->setExeString("kdbg");
+//   swallow_widget->sWExecute();
+//   swallow_widget->init();
+// }
+
 void CKDevelop::slotToolsTool(int tool){
-	switch(tool){
-		case ID_TOOLS_KDLGEDIT:
-			return;
-			break;
-		case ID_KDLG_TOOLS_KDEVELOP:
-			return;
-			break;
-	}
-	if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
-    return;
-  }
-  if(!bKDevelop)
-    switchToKDevelop();
-
-  showOutputView(false);
-
-  QString argument=tools_argument.at(tool);
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
-  if(argument.isEmpty()){
+    switch(tool){
+    case ID_TOOLS_KDLGEDIT:
+	return;
+	break;
+    case ID_KDLG_TOOLS_KDEVELOP:
+	return;
+	break;
+    }
+    if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
+	return;
+    }
+    if(!bKDevelop)
+	switchToKDevelop();
+    
+    showOutputView(false);
+    
+    QString argument=tools_argument.at(tool);
+    s_tab_view->setCurrentTab(TOOLS);
+    swallow_widget->sWClose(false);
+    if(argument.isEmpty()){
   	swallow_widget->setExeString(tools_exe.at(tool));
-	}
-	else{
+    }
+    else{
   	swallow_widget->setExeString(tools_exe.at(tool)+argument);
-	}
-	swallow_widget->sWExecute();
- 	swallow_widget->init();
+    }
+    swallow_widget->sWExecute();
+    swallow_widget->init();
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1238,7 +1256,14 @@ void CKDevelop::slotHelpContents(){
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
 void CKDevelop::slotHelpHomepage(){
-  //  slotURLSelected(browser_widget,"http://anakonda.alpha.org/~smeier/kdevelop/index.html",1,"test");
+  if(vfork() > 0) {
+    // drop setuid, setgid
+    setgid(getgid());
+    setuid(getuid());
+    
+    execlp("kfmclient", "kfmclient", "exec", QString("http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html").data(), 0);
+    _exit(0);
+  }
 }
 void CKDevelop::slotHelpAbout(){
   KMsgBox::message(this,i18n("About KDevelop..."),i18n("\t   KDevelop Version "+version+" \n\n\t(c) 1998,1999 KDevelop Team \n
@@ -1248,10 +1273,9 @@ Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 Jonas Nordin <jonas.nordin@cenacle.se>
 Pascal Krahmer <pascal@beast.de>
 Stefan Bartel <bartel@rz.uni-potsdam.de>
+Martin Piskernig <martin.piskernig@stuwo.at>
 
-KDevelop contains sourcecode from KWrite 0.98 
-(c) by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
-"));
+Read the AUTHORS file for further informations!"));
 
 }
 
@@ -1558,10 +1582,7 @@ int CKDevelop::searchToolGetNumber(QString str){
   QString sub = str.right((str.length()-pos-2));
   return sub.toInt();
 }
-void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
-  char a = key;
-  appl_process.writeStdin(&a,1);
-}
+
 void CKDevelop::slotClickedOnMessagesWidget(){
   TErrorMessageInfo info;
   int x,y;
@@ -1648,7 +1669,35 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 
       appl_process.clearArguments();
       // Warning: not every user has the current directory in his path !
-      appl_process << "./" + prj->getBinPROGRAM().lower();
+      if(prj->getProjectType() == "normal_cpp"){
+	QString term = "xterm";
+	QString exec_str = term + " -e sh -c './" + prj->getBinPROGRAM().lower() + "'";
+	
+	if(CToolClass::searchInstProgram("konsole")){
+	  term = "konsole";
+	}
+	if(CToolClass::searchInstProgram("ksh")){
+	  exec_str = term + " -e ksh -c './" + prj->getBinPROGRAM().lower() + 
+	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
+	}
+	if(CToolClass::searchInstProgram("csh")){
+	  exec_str = term +" -e csh -c './" + prj->getBinPROGRAM().lower() + 
+	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
+	}
+	if(CToolClass::searchInstProgram("tcsh")){
+	  exec_str =  term +" -e tcsh -c './" + prj->getBinPROGRAM().lower() + 
+	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
+	}
+	if(CToolClass::searchInstProgram("bash")){
+	  exec_str =  term +" -e bash -c './" + prj->getBinPROGRAM().lower() + 
+	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
+	}
+	appl_process << exec_str;
+	cout << exec_str;
+      }
+      else{
+	appl_process << "./" + prj->getBinPROGRAM().lower();
+      }
       setToolMenuProcess(false);
       appl_process.start(KProcess::NotifyOnExit,KProcess::All);
       next_job = "";

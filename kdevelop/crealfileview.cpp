@@ -133,7 +133,7 @@ void CRealFileView::addFilesFromDir( const QString& directory,
        fileList.next() )
   {
     item = treeH->addItem( fileList.current(), THC_FILE, parent );
-    debug( "Added item %s", fileList.current() );
+    //    debug( "Added item %s", fileList.current() );
     
     // If this is an installed file, we change the icon.
     if( isInstalledFile( getRelFilename( item ) ) )

@@ -416,7 +416,7 @@ public:
 
   void slotMenuBuffersSelected(int id);
   void slotClickedOnMessagesWidget();
-  void slotKeyPressedOnStdinStdoutWidget(int key);
+  
 
   void slotURLSelected(KHTMLView* widget,const char* url,int,const char*);
   void slotDocumentDone( KHTMLView *_view );
@@ -512,7 +512,7 @@ private:
   
   KIconLoader icon_loader;
   KProcess process; // for tools,compiler,make,kodc
-  KProcess appl_process; //only for selfmade appl
+  KShellProcess appl_process; //only for selfmade appl
   KShellProcess shell_process; // for kdoc,sgmltools ...
   KShellProcess search_process; // search with glimpse
   CProject* prj; // at the moment only one project at the same time

@@ -25,7 +25,7 @@
 #include <htmltoken.h>
 
 /**
- * some methods,that would be normaly global,but I hate global function :-)
+ * some methods,that would be normaly global,but I hate global functions :-)
  * @author Sandy Meier
  */
 class CToolClass {

@@ -118,15 +118,14 @@ void CKDevelop::init(){
   connect(messages_widget,SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
 
   stdin_stdout_widget = new COutputWidget(kapp,o_tab_view);
-  stdin_stdout_widget->setFocusPolicy(QWidget::ClickFocus);
+  stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
   
-  connect(stdin_stdout_widget,SIGNAL(keyPressed(int)),this,SLOT(slotKeyPressedOnStdinStdoutWidget(int)));
   stderr_widget = new COutputWidget(kapp,o_tab_view);
   stderr_widget->setReadOnly(TRUE);
   stderr_widget->setFocusPolicy(QWidget::NoFocus);
 
   o_tab_view->addTab(messages_widget,i18n("messages"));
-  o_tab_view->addTab(stdin_stdout_widget,i18n("stdin/stdout"));
+  o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
   o_tab_view->addTab(stderr_widget,i18n("stderr"));
   
   //  s_tab_current = 0;
@@ -707,9 +706,10 @@ void CKDevelop::initMenu(){
   help_menu->insertItem(Icon("lookup.xpm"),i18n("&Search Marked Text"),this,
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
   help_menu->insertItem(Icon("contents.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
+  
   help_menu->insertSeparator();
   help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-
+  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);
@@ -727,7 +727,6 @@ void CKDevelop::initMenu(){
 
   help_menu->insertItem(i18n("Project &User-Manual"),this,
 				      SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
-  //  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
   kdev_menubar->insertItem(i18n("&Help"), help_menu);
