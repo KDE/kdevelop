@@ -8,5 +8,4 @@ Icon=kdevelop
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevvisualboyadvance
 X-KDevelop-Scope=Project
-X-KDevelop-ProgrammingLanguages=
 Keywords=GBA
