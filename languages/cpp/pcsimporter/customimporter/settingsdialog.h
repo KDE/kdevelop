@@ -35,6 +35,7 @@ public:
 
 private slots:
   void validate();
+  void validateDirectory( const QString & dir );
 
 private:
   KEditListBox *elb;

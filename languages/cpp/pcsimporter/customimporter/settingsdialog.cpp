@@ -9,21 +9,17 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qdir.h>
 
 #include <klistbox.h>
 #include <kcombobox.h>
 #include <kurlrequester.h>
 #include <kdeversion.h>
 #include <klocale.h>
+#include <kmessagebox.h>
+#include <klineedit.h>
 
-// only for KDE < 3.1
-#if KDE_VERSION <= 305
-#include "../compat/kdeveditlistbox.h"
-//using namespace KDevCompat;
-#define KEditListBox KDevCompat::KEditListBox
-#else
 #include <keditlistbox.h>
-#endif
 
 // should be included after possible KEditListBox redefinition
 #include "settingsdialog.h"
@@ -42,15 +38,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
     KURLRequester *req = new KURLRequester( this );
     req->setMode(KFile::Directory);
     KEditListBox::CustomEditor pCustomEditor;
-#if KDE_VERSION > 305
     pCustomEditor = req->customEditor();
-#else
-    QObjectList* pOL = req->queryList("KLineEdit"); // dirty hack :)
-    KLineEdit* pEdit = dynamic_cast<KLineEdit*>(pOL->first());
-    assert(pEdit);
-    KEditListBox::CustomEditor editor(req, pEdit);
-    pCustomEditor = editor;
-#endif
     elb = new KEditListBox( i18n("Directories to Parse"), pCustomEditor, this );
 
     grid->addMultiCellWidget(elb, 2, 2, 0, grid->numCols());
@@ -58,6 +46,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
     connect(dbName_edit, SIGNAL(textChanged(const QString& )), this, SLOT( validate() ));
     connect(elb->addButton(), SIGNAL(clicked()), this, SLOT(validate()));
     connect(elb->removeButton(), SIGNAL(clicked()), this, SLOT(validate()));
+	connect(elb, SIGNAL(added(const QString& )), this, SLOT(validateDirectory(const QString& )) );
 }
 
 SettingsDialog::~SettingsDialog()
@@ -82,6 +71,23 @@ bool SettingsDialog::recursive( ) const
 void SettingsDialog::validate()
 {
     emit enabled( !dbName_edit->text().isEmpty() && elb->listBox()->count() > 0 );
+}
+
+void SettingsDialog::validateDirectory( const QString & dir )
+{
+	QDir d( dir, QString::null, QDir::DefaultSort, QDir::Dirs );
+	if ( !d.exists() )
+	{
+		elb->lineEdit()->setText( dir );
+	
+		if ( QListBoxItem * item = elb->listBox()->findItem( dir, Qt::ExactMatch ) )
+		{
+			elb->listBox()->removeItem( elb->listBox()->index( item ) );
+		}
+		
+		QString errormsg = QString("<qt><b>%1</b> is not a directory</qt>").arg( dir );
+		KMessageBox::error( 0, errormsg, "Couldn't find directory" );
+	}
 }
 
 #include "settingsdialog.moc"

@@ -93,7 +93,7 @@ void KDevCustomImporter::processDir( const QString path, QStringList & files )
         kdDebug(9015) << "Examining: " << dir.path() << endl;
         const QFileInfoList *dirEntries = dir.entryInfoList();
         QPtrListIterator<QFileInfo> it(*dirEntries);
-        for (; it.current(); ++it) {
+        for (; dirEntries && it.current(); ++it) {
             QString fileName = it.current()->fileName();
             if (fileName == "." || fileName == "..")
                 continue;
