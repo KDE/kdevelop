@@ -1,8 +1,10 @@
+# some directories
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
 khellodir = ${appwizarddatadir}/template-khello
 templatedir = ${appwizarddatadir}/templates
 
+# all khello data files
 khello_DATA = src-Makefile.am app.cpp app.h main.cpp appui.rc app.kdevelop subdirs app.desktop preview.png
 template_DATA = khello
 
