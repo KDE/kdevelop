@@ -73,6 +73,9 @@ QSourceColorizer::~QSourceColorizer()
 
 void QSourceColorizer::updateStyles( QMap<QString, QPair<QFont, QColor> >& values )
 {
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );  // or colorizer ?!?!?
+
     QMap<QString, QPair<QFont, QColor> >::Iterator it = values.begin();
     while( it != values.end() ){
         QTextFormat* fmt = formatFromId( it.key() );
@@ -82,6 +85,16 @@ void QSourceColorizer::updateStyles( QMap<QString, QPair<QFont, QColor> >& value
         }
         ++it;
     }
+
+    {
+        QMap<int, QPair<QString, QTextFormat*> >::Iterator it = m_formats.begin();
+        while( it != m_formats.end() ){
+            STORE_FORMAT_ITEM( it.key() );
+            ++it;
+        }
+    }
+
+    config->sync();
 }
 
 

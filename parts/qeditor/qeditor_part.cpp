@@ -36,6 +36,7 @@
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <klocale.h>
+#include <kxmlguifactory.h>
 
 #include <qvbox.h>
 #include <qfile.h>

@@ -53,7 +53,7 @@ void HighlightingConfigPage::accept()
 void HighlightingConfigPage::slotUpdatePreview()
 {
     kdDebug() << "HighlightingConfigPage::slotUpdatePreview()" << endl;
-    
+
     QFont font( comboFontFamily->currentText(), spinFontSize->value() );
     font.setBold( checkBold->isChecked() );
     font.setItalic( checkItalic->isChecked() );
