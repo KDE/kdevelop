@@ -113,12 +113,8 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     m_views.setAutoDelete( FALSE );
     m_cursors.setAutoDelete( TRUE );
 
-    m_currentView = new QEditorView( this, parentWidget, widgetName );
-    m_views.append( m_currentView );
-    insertChildClient( m_currentView );
-    m_currentView->show();
-    setWidget( m_currentView );
-
+    (void) createView( parentWidget, widgetName );
+    
     setupHighlighting();
 
     // we are read-write by default
@@ -230,6 +226,11 @@ bool QEditorPart::saveFile()
     // if we aren't read-write, return immediately
     if (isReadWrite() == false)
         return false;
+    
+    if( m_file.isEmpty() ){
+	fileSaveAs();
+	return true;
+    }
 
     // m_file is always local, so we use QFile
     QFile file(m_file);
@@ -351,21 +352,20 @@ bool QEditorPart::removeLine( unsigned int line )
     return TRUE;
 }
 
-KTextEditor::View* QEditorPart::createView( QWidget* /*parent*/, const char* /*name*/ )
+KTextEditor::View* QEditorPart::createView( QWidget* parentWidget, const char* widgetName )
 {
-#warning "TODO: implement QEditorPart::createView()"
-
-#if 0
-    QEditorView* pView = new QEditorView( this, parent, name );
-    if( m_currentView ){
-        pView->editor()->setDocument( m_currentView->editor()->document() );
+    kdDebug(9032) << "QEditorPart::createView()" << endl;
+    
+    if( !m_currentView ){
+	m_currentView = new QEditorView( this, parentWidget, widgetName );
+	m_views.append( m_currentView );
+	insertChildClient( m_currentView );
+	setWidget( m_currentView );
     }
-
-    m_views.append( pView );
-    return pView;
-#endif
-
-    return m_currentView;
+    else
+	m_currentView->reparent( parentWidget, QPoint(0,0) );
+	    
+    return m_currentView;    
 }
 
 QPtrList<KTextEditor::View> QEditorPart::views() const
