@@ -310,7 +310,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 	m_custom_options_layout = new QHBoxLayout( custom_options );
 	m_custom_options_layout->setAutoAdd(true);
 	
-	showTemplates(true);
+	showTemplates(false);
 }
 
 AppWizardDialog::~AppWizardDialog()
@@ -912,6 +912,7 @@ void AppWizardDialog::insertCategoryIntoTreeView(const QString &completeCategory
             //pParentItem->setOpen(true);
             kdDebug(9010) << "Category: " << category << endl;
             m_categoryMap.insert(category,pParentItem);
+            m_categoryItems.append(pParentItem);
         } else {
             pParentItem = item;
         }
@@ -1261,9 +1262,41 @@ void AppWizardDialog::showTemplates(bool all)
 			}
 			dit.current()->setVisible(visible);
 		}
+		checkAndHideItems(templates_listview);
 	}
 }
 
+void AppWizardDialog::checkAndHideItems(QListView *view)
+{
+	QListViewItem *item = view->firstChild();
+	while (item)
+	{
+		if (!m_categoryItems.contains(item))
+			continue;
+		checkAndHideItems(item);
+		item = item->nextSibling();
+	}
+}
+
+bool AppWizardDialog::checkAndHideItems(QListViewItem *item)
+{
+	if (!m_categoryItems.contains(item))
+		return !item->isVisible();
+	QListViewItem *child = item->firstChild();
+	bool hide = true;
+	while (child)
+	{
+		hide = hide && checkAndHideItems(child);
+		child = child->nextSibling();
+	}
+	kdDebug(9010) << "check_: " << item->text(0) << " hide: " <<  hide << endl;
+	if (hide)
+	{
+		item->setVisible(false);
+		return true;
+	}
+	return false;
+}
 
 #include "appwizarddlg.moc"
 

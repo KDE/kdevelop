@@ -162,12 +162,16 @@ private: //methods
 	void setPermissions(const KArchiveFile *source, QString dest);
 	void setPermissions(const installFile &file);
 	
+	void checkAndHideItems(QListView *view);
+	bool checkAndHideItems(QListViewItem *item);
+	
 private: //data
 
     QPtrList<ApplicationInfo> m_appsInfo;
 	QValueList<AppWizardFileTemplate> m_fileTemplates;
     //! Store the category name and the pointer in the treeview
     QDict<QListViewItem> m_categoryMap;
+	QValueList<QListViewItem*> m_categoryItems;
     //! A list of currently available version control systems
 //    QDict<KDevVersionControl> m_availVcs;
 	

@@ -9,7 +9,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 kde_module_LTLIBRARIES = libkdevappwizard.la
 libkdevappwizard_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevappwizard_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
-	$(top_builddir)/lib/interfaces/extras/libkdevextras.la
+	$(top_builddir)/lib/interfaces/extras/libkdevextras.la $(top_builddir)/lib/util/libkdevutil.la
 
 libkdevappwizard_la_SOURCES = appwizardfactory.cpp appwizardpart.cpp \
 		appwizarddlg.cpp importdlg.cpp filepropspagebase.ui filepropspage.cpp \
