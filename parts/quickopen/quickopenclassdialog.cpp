@@ -58,8 +58,8 @@ QListBoxItem* QListBox_selectedItem(QListBox* cpQListBox)
 QuickOpenClassDialog::QuickOpenClassDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
-    nameLabel->setText( i18n("Class name:") );
-    itemListLabel->setText( i18n("Class list:") );
+    nameLabel->setText( i18n("Class &name:") );
+    itemListLabel->setText( i18n("Class &list:") );
 
     findAllClasses( m_classList );
     qHeapSort( m_classList );

@@ -30,7 +30,7 @@
                 <string>[NAME]</string>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>fileNameEdit</cstring>
+                <cstring>nameEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -41,7 +41,7 @@
                 <string>[ITEM LIST]</string>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>projectFileList</cstring>
+                <cstring>itemList</cstring>
             </property>
         </widget>
         <widget class="KListBox" row="3" column="0">
@@ -63,20 +63,6 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonHelp</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
-                    </property>
-                    <property name="accel">
-                        <string>F1</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
@@ -144,6 +130,9 @@
                     <width>0</width>
                     <height>18</height>
                 </size>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
             </property>
         </widget>
     </grid>
@@ -218,10 +207,10 @@
     </connection>
 </connections>
 <tabstops>
+    <tabstop>nameEdit</tabstop>
     <tabstop>itemList</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
-    <tabstop>buttonHelp</tabstop>
 </tabstops>
 <slots>
     <slot>slotTextChanged(const QString&amp;)</slot>

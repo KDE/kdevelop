@@ -33,76 +33,7 @@
                 <cstring>pattern_edit</cstring>
             </property>
         </widget>
-        <widget class="QLabel" row="5" column="0">
-            <property name="name">
-                <cstring>subgroups_label</cstring>
-            </property>
-            <property name="text">
-                <string>Matched subgroups:</string>
-            </property>
-        </widget>
-        <widget class="QListView" row="5" column="1" rowspan="1" colspan="2">
-            <column>
-                <property name="text">
-                    <string>Group</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Value</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>subgroups_listview</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="allColumnsShowFocus">
-                <bool>true</bool>
-            </property>
-            <property name="resizeMode">
-                <enum>AllColumns</enum>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Shows which groups were matched. See the corresponding documentations how groups are matched.</string>
-            </property>
-        </widget>
-        <spacer row="2" column="1">
-            <property name="name">
-                <cstring>Spacer</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Minimum</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLabel" row="3" column="0">
+        <widget class="QLabel" row="2" column="0">
             <property name="name">
                 <cstring>teststring_label</cstring>
             </property>
@@ -113,7 +44,7 @@
                 <cstring>teststring_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="2">
+        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>teststring_edit</cstring>
             </property>
@@ -121,7 +52,7 @@
                 <string>Enter a string which will be matched against the regular expression</string>
             </property>
         </widget>
-        <widget class="QLabel" row="4" column="1" rowspan="1" colspan="2">
+        <widget class="QLabel" row="3" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>success_label</cstring>
             </property>
@@ -137,7 +68,7 @@
                 <string></string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>Layout4</cstring>
             </property>
@@ -154,6 +85,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Insert Quoted</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Inserts the regular expression into the currently opened source code file. Escapes any special characters like backslash.</string>
@@ -203,6 +137,14 @@
         <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>flavor_group</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>4</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="title">
                 <string>Regular Expression T&amp;ype</string>
@@ -279,8 +221,70 @@
                 <string>&amp;Edit...</string>
             </property>
             <property name="autoDefault">
-                <bool>false</bool>
+                <bool>true</bool>
             </property>
+        </widget>
+        <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>subgroups_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Matched subgroups:</string>
+                    </property>
+                </widget>
+                <widget class="QListView">
+                    <column>
+                        <property name="text">
+                            <string>Group</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Value</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>subgroups_listview</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="allColumnsShowFocus">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizeMode">
+                        <enum>AllColumns</enum>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Shows which groups were matched. See the corresponding documentations how groups are matched.</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
     </grid>
 </widget>

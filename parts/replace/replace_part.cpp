@@ -37,7 +37,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     m_widget->setIcon( SmallIcon("filefind") );
 
     QWhatsThis::add
-        (m_widget, i18n("Replace\n\n"
+        (m_widget, i18n("<b>Replace</b><p>"
                         "This window shows a preview of a string replace "
                         "operation. Uncheck a line to exclude that replacement. "
                         "Uncheck a file to exclude the whole file from the "
@@ -46,12 +46,17 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
                         "open the corresponding source file and set the "
                         "cursor to the line with the match." ));
 
-    mainWindow()->embedOutputView( m_widget, i18n("Replace"), i18n("project wide string replacement") );
+    mainWindow()->embedOutputView( m_widget, i18n("Replace"), i18n("Project wide string replacement") );
 
     KAction * action = new KAction(i18n("Find-Select-Replace..."), "replace project",
-                                   CTRL+ALT+Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
-    action->setStatusText( i18n("Replaces a string across the project") );
-    action->setWhatsThis( i18n("Replaces a string across the project") );
+                                   CTRL+SHIFT+Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
+    action->setToolTip( i18n("Project wide string replacement") );
+    action->setWhatsThis( i18n("<b>Find-Select-Replace</b><p>"
+                               "Opens the project wide string replacement dialog. There you "
+                               "can enter a string or a regular expression which is then "
+                               "searched for within all files in the locations "
+                               "you specify. Matches will be displayed in the <b>Replace</b> window, you "
+                               "can replace them with the specified string, exclude them from replace operation or cancel the whole replace.") );
 
     core()->insertNewAction( action );
 }

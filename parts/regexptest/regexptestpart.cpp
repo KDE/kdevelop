@@ -33,6 +33,10 @@ RegexpTestPart::RegexpTestPart(QObject *parent, const char *name, const QStringL
     action = new KAction( i18n("Debug Regular Expression..."), 0,
                           this, SLOT(slotRegexpTest()),
                           actionCollection(), "tools_regexptest" );
+    action->setToolTip(i18n("Debug regular expression"));
+    action->setWhatsThis(i18n("<b>Debug regular expression</b><p>Allows to enter a regular expression "
+        "and validate it. It is possible to check syntax of basic POSIX, extended POSIX "
+        "regular expressions and also syntax allowed by QRegExp and KRegExp classes."));
 
     m_dialog = 0;
 }

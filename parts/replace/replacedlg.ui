@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>432</width>
-            <height>538</height>
+            <width>428</width>
+            <height>487</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -29,56 +29,11 @@
     <property name="caption">
         <string>Project Wide String Replacement</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox1</cstring>
-            </property>
-            <property name="title">
-                <string>Strings</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Find:</string>
-                    </property>
-                </widget>
-                <widget class="KHistoryCombo">
-                    <property name="name">
-                        <cstring>find_combo</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Target string</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Replacement:</string>
-                    </property>
-                </widget>
-                <widget class="KHistoryCombo">
-                    <property name="name">
-                        <cstring>replacement_combo</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>The replacement string</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>groupBox2</cstring>
             </property>
@@ -94,7 +49,7 @@
                         <cstring>case_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Case sensitive</string>
+                        <string>C&amp;ase sensitive</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -122,7 +77,7 @@
                                 <cstring>strings_all_radio</cstring>
                             </property>
                             <property name="text">
-                                <string>All substrings</string>
+                                <string>All s&amp;ubstrings</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -133,7 +88,7 @@
                                 <cstring>strings_wholewords_radio</cstring>
                             </property>
                             <property name="text">
-                                <string>Whole words only</string>
+                                <string>&amp;Whole words only</string>
                             </property>
                         </widget>
                         <widget class="QLayoutWidget">
@@ -149,7 +104,7 @@
                                         <cstring>strings_regexp_radio</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Regular expression:</string>
+                                        <string>Regular e&amp;xpression:</string>
                                     </property>
                                     <property name="toolTip" stdset="0">
                                         <string>Use regexp to specify target</string>
@@ -163,7 +118,7 @@
                                         <bool>false</bool>
                                     </property>
                                     <property name="text">
-                                        <string>Editor</string>
+                                        <string>&amp;Edit</string>
                                     </property>
                                     <property name="toolTip" stdset="0">
                                         <string>Opens the regexp editor. Only enabled if installed.</string>
@@ -186,7 +141,7 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="QButtonGroup" row="2" column="0">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
             </property>
@@ -202,7 +157,7 @@
                         <cstring>files_all_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>All files</string>
+                        <string>A&amp;ll files</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -216,7 +171,7 @@
                         <cstring>files_open_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>Open files only</string>
+                        <string>&amp;Open files only</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Only open project files will be considered.</string>
@@ -227,7 +182,7 @@
                         <cstring>files_path_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>Files under path:</string>
+                        <string>Files under &amp;path:</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Only project files in this dir and its subdirs will be considered.</string>
@@ -243,7 +198,7 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="3" column="0">
             <property name="name">
                 <cstring>layout4</cstring>
             </property>
@@ -286,7 +241,7 @@
                         <cstring>find_button</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Find</string>
+                        <string>&amp;Find &amp;&amp; Replace</string>
                     </property>
                     <property name="default">
                         <bool>true</bool>
@@ -305,7 +260,58 @@
                 </widget>
             </hbox>
         </widget>
-    </vbox>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Strings</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Text to find:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>find_combo</cstring>
+                    </property>
+                </widget>
+                <widget class="KHistoryCombo" row="1" column="0">
+                    <property name="name">
+                        <cstring>find_combo</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Target string</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Replacement text:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>replacement_combo</cstring>
+                    </property>
+                </widget>
+                <widget class="KHistoryCombo" row="3" column="0">
+                    <property name="name">
+                        <cstring>replacement_combo</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The replacement string</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
 </widget>
 <connections>
     <connection>
@@ -350,13 +356,14 @@
     <tabstop>replacement_combo</tabstop>
     <tabstop>case_box</tabstop>
     <tabstop>strings_all_radio</tabstop>
+    <tabstop>strings_regexp_radio</tabstop>
     <tabstop>regexp_button</tabstop>
+    <tabstop>regexp_combo</tabstop>
     <tabstop>files_all_radio</tabstop>
     <tabstop>path_urlreq</tabstop>
     <tabstop>find_button</tabstop>
     <tabstop>cancel_button</tabstop>
     <tabstop>strings_wholewords_radio</tabstop>
-    <tabstop>strings_regexp_radio</tabstop>
     <tabstop>files_path_radio</tabstop>
 </tabstops>
 <includes>
@@ -367,12 +374,12 @@
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>
