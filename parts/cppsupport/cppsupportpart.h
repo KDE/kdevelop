@@ -90,16 +90,20 @@ private slots:
     void slotCompleteText();
     void slotExpandText();
     void slotTypeOfExpression();
-    void slotEnableCodeHinting(bool setEnabled, bool setOutputView);
-    void slotEnableCodeCompletion(bool setEnabled);
+
+    // code completion related slots - called from config-widget
+    void slotEnablePersistantClassStore( bool setEnable );
+    void slotEnablePreParsing( bool setEnable );
+    void slotChangedPreParsingPath( );
+    void slotEnableCodeCompletion( bool setEnabled );
+    void slotEnableCodeHinting( bool setEnabled, bool setOutputView );
 
     // Internal
-    void initialParse();
+    void initialParse( );
     
 private:
-    QStringList fileExtensions();
-    void maybeParse(const QString fileName, ClassStore *store, CClassParser *parser);
-    // daniel
+    QStringList fileExtensions( );
+    void maybeParse( const QString fileName, ClassStore *store, CClassParser *parser );
     /**
      * parses a directory incl. subdirectories if wanted
      * param directory start directory
@@ -107,8 +111,8 @@ private:
      * param bar progressbar
      * param label for debug output on screen
      */
-    void parseDirectory(const QString &directory, bool withSubDirectories,
-                        QProgressBar *bar, QLabel *label);
+    void parseDirectory( const QString &directory, bool withSubDirectories,
+                         QProgressBar *bar, QLabel *label );
     
     QString asHeaderCode(ParsedMethod *pm);
     QString asCppCode(ParsedMethod *pm);

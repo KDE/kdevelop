@@ -148,10 +148,75 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     } 
 }
 
+
+CppSupportPart::~CppSupportPart()
+{
+    topLevel()->removeView(m_pCHWidget);
+
+    delete m_pParser;
+    delete m_pCompletion;
+
+    delete m_pCCParser;
+    delete m_pCHWidget;
+}
+
+// daniel
+void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
+{
+    QVBox* vbox = dlg->addVBoxPage( i18n( "C++ specific" ) );
+    CCConfigWidget* w = new CCConfigWidget( this, vbox );
+    connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
+
+    connect( w, SIGNAL( enablePersistantClassStore( bool ) ),
+	     this, SLOT( slotEnablePersistantClassStore( bool ) ) );
+	     
+    connect( w, SIGNAL( enablePreParsing( bool ) ),
+	     this, SLOT( slotEnablePreParsing( bool ) ) );
+	     
+    connect( w, SIGNAL( changedPreParsingPath( ) ),
+	     this, SLOT( slotChangedPreParsingPath( ) ) );
+    
+    connect( w, SIGNAL( enableCodeHinting( bool, bool ) ),
+	     this, SLOT( slotEnableCodeHinting( bool, bool ) ) );
+	     
+    connect( w, SIGNAL( enableCodeCompletion( bool ) ),
+	     this, SLOT( slotEnableCodeCompletion( bool ) ) );
+	     
+}
+
+
+void
+CppSupportPart::slotEnablePersistantClassStore( bool setEnable )
+{
+    kdDebug( 9007 ) << "slotEnablePersistantClassStore called with setEnable = " << setEnable << endl;
+}
+
+
+void
+CppSupportPart::slotEnablePreParsing( bool setEnable )
+{
+    kdDebug( 9007 ) << "slotEnablePreParsing called with setEnable = " << setEnable << endl;
+}
+
+
+void
+CppSupportPart::slotChangedPreParsingPath( )
+{
+    kdDebug( 9007 ) << "slotChangedPreParsingPath called" << endl;
+}
+
+
+void
+CppSupportPart::slotEnableCodeCompletion( bool setEnable )
+{
+    if( m_pCompletion )
+	m_pCompletion->setEnableCodeCompletion( setEnable );
+}
+
+
 void
 CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
 {
-    // removeWidget is newly implemented by daniel
     if( setEnable == false ){
 	if( m_pCHWidget ){
 	    topLevel( )->removeView( m_pCHWidget );
@@ -172,38 +237,6 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
 	else
 	    topLevel()->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ) );	    
     }
-}
-
-void
-CppSupportPart::slotEnableCodeCompletion( bool setEnable )
-{
-    if( m_pCompletion )
-	m_pCompletion->setEnableCodeCompletion( setEnable );
-}
-
-CppSupportPart::~CppSupportPart()
-{
-    topLevel()->removeView(m_pCHWidget);
-
-    delete m_pParser;
-    delete m_pCompletion;
-
-    delete m_pCCParser;
-    delete m_pCHWidget;
-}
-
-// daniel
-void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
-{
-    QVBox* vbox = dlg->addVBoxPage( i18n( "C++ specific" ) );
-    CCConfigWidget* w = new CCConfigWidget( this, vbox );
-    connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
-    
-    connect( w, SIGNAL( enableCodeHinting( bool, bool ) ),
-	     this, SLOT( slotEnableCodeHinting( bool, bool ) ) );
-	     
-    connect( w, SIGNAL( enableCodeCompletion( bool ) ),
-	     this, SLOT( slotEnableCodeCompletion( bool ) ) );
 }
 
 

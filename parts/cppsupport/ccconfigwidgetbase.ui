@@ -50,6 +50,12 @@
                         <property name="name">
                             <cstring>GroupBox4</cstring>
                         </property>
+                        <property name="frameShape">
+                            <enum>Box</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Sunken</enum>
+                        </property>
                         <property name="title">
                             <string>Persistant Class Store</string>
                         </property>
@@ -128,7 +134,7 @@
                     </spacer>
                     <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>GroupBox5</cstring>
+                            <cstring>gbPP</cstring>
                         </property>
                         <property name="title">
                             <string>Pre-Parsing</string>
@@ -528,38 +534,20 @@
         <slot>slotRemovePPPath()</slot>
     </connection>
     <connection>
-        <sender>cbEnableCC</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotEnableCC(bool)</slot>
-    </connection>
-    <connection>
         <sender>cbEnableCH</sender>
         <signal>toggled(bool)</signal>
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotEnableCH(bool)</slot>
     </connection>
-    <connection>
-        <sender>rbOutputView</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotSetCHWindow(int)</slot>
-    </connection>
-    <connection>
-        <sender>rbSelectView</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotSetCHWindow(int)</slot>
-    </connection>
 </connections>
 <slots>
     <slot access="protected">slotAddPPPath( void )</slot>
-    <slot access="protected">slotEnableCC( bool )</slot>
+    <slot access="protected">slotEnableCC( )</slot>
     <slot access="protected">slotEnableCH( bool )</slot>
     <slot access="protected">slotEnablePCS( bool )</slot>
     <slot access="protected">slotEnablePP( bool )</slot>
     <slot access="protected">slotRemovePPPath( void )</slot>
-    <slot access="protected">slotSetCHWindow( int )</slot>
+    <slot access="protected">slotSetCHWindow( void )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

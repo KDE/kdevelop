@@ -21,6 +21,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 // gideon includes
 #include "domutil.h"
 #include "ccconfigwidget.h"
@@ -34,38 +35,12 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
     : CCConfigWidgetBase( parent, name )
 {
     m_pPart = part;
+    m_bChangedCC = m_bChangedCH = m_bChangedCHWindow = m_bChangedPCS
+                 = m_bChangedPP = m_bChangedPPPath   = false;
 
-    initCCTab( );
     initCSTab( );
+    initCCTab( );
 }
-
-
-void
-CCConfigWidget::initCCTab( )
-{
-    QDomDocument dom = *m_pPart->projectDom();
-
-    cbEnableCC->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/codecompletion/enablecc" ) );
-
-    QDomElement chPart = dom.documentElement( )
-                            .namedItem( "cppsupportpart" ).toElement( )
-    			    .namedItem( "codecompletion" ).toElement( )
-			    .namedItem( "codehinting"    ).toElement( );
-    
-    if( !chPart.isNull( ) ){
-	cbEnableCH->setChecked( chPart.attribute( "enablech" ).toInt( ) );
-	rbSelectView->setChecked( chPart.attribute( "selectview" ).toInt( ) );
-	rbOutputView->setChecked( chPart.attribute( "outputview").toInt( ) );
-    }
-
-    if( !cbEnableCH->isChecked( ) )
-	bgCodeHinting->setEnabled( false );
-    
-    // for setting a default value
-    if( rbSelectView->isChecked( ) == false )
-	rbOutputView->setChecked( true );
-}
-
 
 void
 CCConfigWidget::initCSTab( )
@@ -75,8 +50,10 @@ CCConfigWidget::initCSTab( )
     cbEnablePCS->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/classstore/enablepcs" ) );
     bool b = DomUtil::readBoolEntry( dom, "/cppsupportpart/classstore/enablepp" );
     cbEnablePP->setChecked( b );
-    if( b == false )
+    if( b == false ){
+	gbPP->setEnabled( false );
         lvPCSPaths->setEnabled( false );
+    }
 
     lePCSFile->setText( m_pPart->project( )->projectDirectory( ) + "/" +
                         m_pPart->project( )->projectName( ) + ".pcs" );
@@ -106,6 +83,32 @@ CCConfigWidget::initCSTab( )
     }
 }
 
+void
+CCConfigWidget::initCCTab( )
+{
+    QDomDocument dom = *m_pPart->projectDom();
+
+    cbEnableCC->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/codecompletion/enablecc" ) );
+
+    QDomElement chPart = dom.documentElement( )
+                            .namedItem( "cppsupportpart" ).toElement( )
+    			    .namedItem( "codecompletion" ).toElement( )
+			    .namedItem( "codehinting"    ).toElement( );
+    
+    if( !chPart.isNull( ) ){
+	cbEnableCH->setChecked( chPart.attribute( "enablech" ).toInt( ) );
+	rbSelectView->setChecked( chPart.attribute( "selectview" ).toInt( ) );
+	rbOutputView->setChecked( chPart.attribute( "outputview").toInt( ) );
+    }
+
+    if( !cbEnableCH->isChecked( ) )
+	bgCodeHinting->setEnabled( false );
+    
+    // for setting a default value
+    if( rbSelectView->isChecked( ) == false )
+	rbOutputView->setChecked( true );
+}
+
 
 CCConfigWidget::~CCConfigWidget( )
 {
@@ -115,48 +118,28 @@ CCConfigWidget::~CCConfigWidget( )
 void
 CCConfigWidget::accept( )
 {
-
     saveCCTab( );
     saveCSTab( );    
 
-    // if( m_b... == true )
-    // 	 emit ...
-    // ....    
-}
+    bool b = cbEnablePCS->isChecked( );
+    if( m_bChangedPCS )
+	emit enablePersistantClassStore( b );
 
-
-void
-CCConfigWidget::saveCCTab( )
-{
-    QDomDocument dom     = *m_pPart->projectDom( );
-    QDomElement  element = dom.documentElement( );
-
-    QDomElement apPart = element.namedItem( "cppsupportpart" ).toElement( );
-    if( apPart.isNull( ) ){
-	apPart = dom.createElement( "cppsupportpart" );
-	element.appendChild( apPart );
+    // without persistance we don't allow preparsing
+    if( b ){
+	if( m_bChangedPP )
+	    emit enablePreParsing( cbEnablePP->isChecked( ) );
+	if( m_bChangedPPPath )
+	    emit changedPreParsingPath( );
     }
-
-    QDomElement codecompletion = apPart.namedItem( "codecompletion" ).toElement( );
-    if( codecompletion.isNull( ) ){
-	codecompletion = dom.createElement( "codecompletion" );
-	apPart.appendChild( codecompletion );
-    }
-
-    DomUtil::writeBoolEntry( dom, "cppsupportpart/codecompletion/enablecc", cbEnableCC->isChecked( ) );
-
-    QDomElement codehinting = codecompletion.namedItem( "codehinting" ).toElement( );
-    if( codehinting.isNull( ) ){
-	codehinting = dom.createElement( "codehinting" );
-	codecompletion.appendChild( codehinting );
-    }
-
-    codehinting.setAttribute( "enablech"  , cbEnableCH->isChecked( ) );
-    codehinting.setAttribute( "selectview", rbSelectView->isChecked( ) );
-    codehinting.setAttribute( "outputview", rbOutputView->isChecked( ) );
-
-    m_pPart->setEnableCC( cbEnableCC->isChecked( ) );
-    emit enableCodeHinting( cbEnableCH->isChecked( ), rbOutputView->isChecked( ) );
+    else
+        emit enablePreParsing( false );
+	
+    if( m_bChangedCC )
+	emit enableCodeCompletion( cbEnableCC->isChecked( ) );
+	
+    if( m_bChangedCH || m_bChangedCHWindow )
+	emit enableCodeHinting( cbEnableCH->isChecked( ), rbOutputView->isChecked( ) );
 }
 
 
@@ -165,8 +148,8 @@ CCConfigWidget::saveCSTab( )
 {
     QDomDocument dom     = *m_pPart->projectDom( );
     QDomElement  element = dom.documentElement( );
-
-    QDomElement apPart = element.namedItem( "cppsupportpart" ).toElement( );
+    QDomElement  apPart  = element.namedItem( "cppsupportpart" ).toElement( );
+			 
     if( apPart.isNull( ) ){
 	apPart = dom.createElement( "cppsupportpart" );
 	element.appendChild( apPart );
@@ -203,54 +186,92 @@ CCConfigWidget::saveCSTab( )
 
 
 void
-CCConfigWidget::slotEnableCH( bool /*isChecked*/)
+CCConfigWidget::saveCCTab( )
 {
-    bgCodeHinting->setEnabled( cbEnableCH->isChecked( ) );
+
+    QDomDocument dom     = *m_pPart->projectDom( );
+    QDomElement  element = dom.documentElement( );
+    QDomElement  apPart  = element.namedItem( "cppsupportpart" ).toElement( );
+			 
+    if( apPart.isNull( ) ){
+	apPart = dom.createElement( "cppsupportpart" );
+	element.appendChild( apPart );
+    }
+
+    QDomElement codecompletion = apPart.namedItem( "codecompletion" ).toElement( );
+    if( codecompletion.isNull( ) ){
+	codecompletion = dom.createElement( "codecompletion" );
+	apPart.appendChild( codecompletion );
+    }
+
+    DomUtil::writeBoolEntry( dom, "cppsupportpart/codecompletion/enablecc", cbEnableCC->isChecked( ) );
+
+    QDomElement codehinting = codecompletion.namedItem( "codehinting" ).toElement( );
+    if( codehinting.isNull( ) ){
+	codehinting = dom.createElement( "codehinting" );
+	codecompletion.appendChild( codehinting );
+    }
+
+    codehinting.setAttribute( "enablech"  , cbEnableCH->isChecked( ) );
+    codehinting.setAttribute( "selectview", rbSelectView->isChecked( ) );
+    codehinting.setAttribute( "outputview", rbOutputView->isChecked( ) );
+
+    m_pPart->setEnableCC( cbEnableCC->isChecked( ) );
+    emit enableCodeHinting( cbEnableCH->isChecked( ), rbOutputView->isChecked( ) );
 }
 
 
 void
-CCConfigWidget::slotEnableCC( bool /*isChecked*/)
+CCConfigWidget::slotEnableCH( bool isChecked )
 {
-    // m_bChangedCC = true;
+    bgCodeHinting->setEnabled( /*cbEnableCH->isChecked( )*/ isChecked );
+    m_bChangedCH = true;    
 }
 
 
 void
-CCConfigWidget::slotSetCHWindow( int /*window*/ )
+CCConfigWidget::slotEnableCC( )
 {
-    // m_bChangedCHWindow = true;
+    m_bChangedCC = true;
 }
 
 
 void
-CCConfigWidget::slotEnablePCS( bool /*isChecked*/ )
+CCConfigWidget::slotSetCHWindow( )
 {
-/*
-    QDomDocument dom = *m_pPart->projectDom( );
-    DomUtil::writeBoolEntry( dom, "/cppsupportpart/classstore/enablepcs", isChecked );
-*/
-    // m_bChangedPCS = true;
+    m_bChangedCHWindow = true;
+}
+
+
+void
+CCConfigWidget::slotEnablePCS( bool isChecked )
+{
+    if( isChecked )
+	gbPP->setEnabled( true );
+    else
+	gbPP->setEnabled( false );
+
+    m_bChangedPCS = true;
 }
 
 
 void
 CCConfigWidget::slotEnablePP( bool isChecked )
 {
-//    if( !cbEnablePP->isChecked( ) )
-    if( !isChecked )
-        lvPCSPaths->setEnabled( false );
-    else
+    if( isChecked )
         lvPCSPaths->setEnabled( true );
+    else
+        lvPCSPaths->setEnabled( false );
 	
-    // m_bChangedPP = true;
+    m_bChangedPP = true;
 }
 
 
 void
 CCConfigWidget::slotAddPPPath( )
 {
-    QString newDir = KFileDialog::getExistingDirectory( QString::null, 0, i18n( "Select a directory to preparse" ) );
+    QString newDir = KFileDialog::getExistingDirectory( QString::null, 0,
+                                                        i18n( "Select a directory to preparse" ) );
     if( newDir.isEmpty( ) )
 	return;
 
@@ -260,7 +281,7 @@ CCConfigWidget::slotAddPPPath( )
     else
         ( void ) new QListViewItem( lvPCSPaths, i18n( "No"  ), newDir );
 	
-    // m_bChangedPPPath = true;
+    m_bChangedPPPath = true;
 }
 
 
@@ -273,7 +294,7 @@ CCConfigWidget::slotRemovePPPath( )
     if( answer == KMessageBox::Yes )
         delete lvPCSPaths->selectedItem( );
 	
-    // m_bChangedPPPath = true;
+    m_bChangedPPPath = true;
 }
 
 #include "ccconfigwidget.moc"

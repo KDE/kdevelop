@@ -26,20 +26,23 @@ public:
 
 
 public slots:
-    void accept( );
-    void slotEnableCH( bool );
-    void slotEnableCC( bool );
-    void slotAddPPPath( void );
-    void slotEnablePCS( bool );
-    void slotEnablePP( bool );
-    void slotRemovePPPath( void );
-    void slotSetCHWindow( int );
+    void slotEnableCC ( );
+    void slotEnablePCS( bool );    
+    void slotEnablePP ( bool );
+    void slotAddPPPath( );    
+    void slotRemovePPPath( );    
+    void slotEnableCH ( bool );
+    void slotSetCHWindow( );
 
+    void accept( );
     
 signals:
+    void enablePersistantClassStore( bool setEnable );
+    void enablePreParsing ( bool setEnable );
+    void changedPreParsingPath( );
+
     void enableCodeCompletion( bool setEnable );
     void enableCodeHinting( bool setEnable, bool setOutputView );
-
 
 private:
     void initCCTab( );
@@ -48,6 +51,15 @@ private:
     void saveCSTab( );
     
     CppSupportPart* m_pPart;
+    
+    bool m_bChangedCC;
+    bool m_bChangedCH;
+    bool m_bChangedCHWindow;
+    bool m_bChangedPCS;
+    bool m_bChangedPP;
+    bool m_bChangedPPPath;
+    int  m_iCHWindow;
+    
 };
 
 #endif
