@@ -22,7 +22,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-#include <iostream.h>;
+#include <iostream.h>
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
