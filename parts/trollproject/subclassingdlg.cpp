@@ -30,6 +30,16 @@
 #define WIDGET_SLOTS        "slots"
 #define WIDGET_FUNCTIONS    "functions"
 
+// All widgets
+#define accept SlotItem(m_slotView,"accept()","virtual","protected","void",false)
+#define reject SlotItem(m_slotView,"reject()","virtual","protected","void",false)
+
+// Wizards
+#define back SlotItem(m_slotView,"back()","virtual","protected","void",false)
+#define next SlotItem(m_slotView,"next()","virtual","protected","void",false)
+#define help SlotItem(m_slotView,"help()","virtual","protected","void",false)
+
+
 SlotItem::SlotItem(QListView *parent,const QString &methodName,
                    const QString &specifier,
                    const QString &access, const QString &returnType,
@@ -41,11 +51,18 @@ SlotItem::SlotItem(QListView *parent,const QString &methodName,
   m_access = access == "" ? (const QString) "public" : access;
   m_specifier = specifier == "" ? (const QString) "virtual" : specifier;
   m_returnType = returnType == "" ? (const QString) "void" : returnType;
+  m_isFunc = isFunc;
   setText(0,m_methodName);
   setText(1,m_access);
   setText(2,m_specifier);
   setText(3,m_returnType);
-  setText(4,isFunc ? "Function" : "Slot");
+  setText(4,m_isFunc ? "Function" : "Slot");
+  if (m_access=="private" ||
+      m_specifier=="non virtual")
+  {
+    setOn(false);
+    setEnabled(false);
+  }
 }
 
 
@@ -93,7 +110,7 @@ m_newFileNames(newFileNames)
                                      funcelem.attributeNode("access").value(),
                                      funcelem.attributeNode("returnType").value(),true);
     m_slotView->insertItem(newFunc);
-    m_functions << newFunc;
+    m_slots << newFunc;
   }
 
 }
@@ -170,14 +187,17 @@ void SubclassingDlg::accept()
 
   // h - file
 
-  QString public_decl =
+  QString public_slot =
     "/*$PUBLIC_SLOTS$*/\n  ";
 
-  QString protected_decl =
+  QString protected_slot =
     "/*$PROTECTED_SLOTS$*/\n  ";
 
-  QString function_decl =
-    "/*$FUNCTIONS$*/\n  ";
+  QString public_func =
+    "/*$PUBLIC_FUNCTIONS$*/\n  ";
+
+  QString protected_func =
+    "/*$PROTECTED_FUNCTIONS$*/\n  ";
 
   QString buffer;
   loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.h"));
@@ -185,25 +205,51 @@ void SubclassingDlg::accept()
   for (i=0; i<m_slots.count(); i++)
   {
     SlotItem *slitem = m_slots[i];
-    QString decl;
+    if (!slitem->isOn())
+      continue;
+    QString declBuild;
     if (slitem->m_access=="public")
-      decl = public_decl;
+      if (!slitem->m_isFunc)
+        declBuild = public_slot;
+      else
+        declBuild = public_func;
     if (slitem->m_access=="protected")
-      decl = protected_decl;
-    decl += slitem->m_specifier=="non virtual" ? "" : slitem->m_specifier + " ";
-    decl += slitem->m_returnType + " ";
+      if (!slitem->m_isFunc)
+        declBuild = protected_slot;
+      else
+        declBuild = protected_func;
+    if (!(slitem->m_specifier=="non virtual"))
+      declBuild += "virtual ";
+    declBuild += slitem->m_returnType + " ";
     QString spacer;
     if (slitem->m_access=="public")
     {
-      decl += spacer.fill(' ',43-decl.length()) + slitem->m_methodName + ";";
-      replace(buffer,"/*$PUBLIC_SLOTS$*/",decl);
+      if (!slitem->m_isFunc)
+      {
+        declBuild += spacer.fill(' ',43-declBuild.length()) + slitem->m_methodName + ";";
+        replace(buffer,"/*$PUBLIC_SLOTS$*/",declBuild);
+      }
+      else
+      {
+        declBuild += spacer.fill(' ',47-declBuild.length()) + slitem->m_methodName + ";";
+        replace(buffer,"/*$PUBLIC_FUNCTIONS$*/",declBuild);
+      }
     }
     if (slitem->m_access=="protected")
     {
-      decl += spacer.fill(' ',46-decl.length()) + slitem->m_methodName + ";";
-      replace(buffer,"/*$PROTECTED_SLOTS$*/",decl);
+      if (!slitem->m_isFunc)
+      {
+        declBuild += spacer.fill(' ',46-declBuild.length()) + slitem->m_methodName + ";";
+        replace(buffer,"/*$PROTECTED_SLOTS$*/",declBuild);
+      }
+      else
+      {
+        declBuild += spacer.fill(' ',50-declBuild.length()) + slitem->m_methodName + ";";
+        replace(buffer,"/*$PROTECTED_FUNCTIONS$*/",declBuild);
+      }
     }
   }
+
   saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".h");
 
   // cpp - file
@@ -212,13 +258,15 @@ void SubclassingDlg::accept()
     "/*$SPECIALIZATION$*/\n"
     "$RETURNTYPE$ $NEWCLASS$::$METHOD$\n"
     "{\n"
-    "}\n\n";
+    "}\n";
 
   loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.cpp"));
   replaceKeywords(buffer);
   for (i=0; i<m_slots.count(); i++)
   {
     SlotItem *slitem = m_slots[i];
+    if (!slitem->isOn())
+      continue;
     QString impl = implementation;
     replace(impl,"$RETURNTYPE$",slitem->m_returnType);
     replace(impl,"$NEWCLASS$",m_edClassName->text());

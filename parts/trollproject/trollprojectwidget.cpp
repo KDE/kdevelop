@@ -26,6 +26,7 @@
 #include <qprocess.h>
 #include <qtimer.h>
 #include <qdir.h>
+#include <qregexp.h>
 #include <qinputdialog.h>
 #include <kfiledialog.h>
 #include <qtooltip.h>
@@ -1194,8 +1195,12 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           QStringList newFileNames;
           SubclassingDlg *dlg = new SubclassingDlg(m_shownSubproject->path + "/" + fitem->name,newFileNames);
           dlg->exec();
-          for (int i=0;i<newFileNames.count();i++)
-            addFile(newFileNames[i]);
+          for (uint i=0; i<newFileNames.count(); i++)
+          {
+            newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()),"");
+          }
+
+          m_part->addFiles(newFileNames);
         }
 
     }

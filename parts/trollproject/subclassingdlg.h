@@ -31,6 +31,7 @@ class SlotItem : public QCheckListItem
   QString         m_methodName;
   QString         m_returnType;
   QString         m_specifier;
+  bool            m_isFunc;
 };
 
 

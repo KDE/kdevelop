@@ -12,3 +12,4 @@ $NEWCLASS$::~$NEWCLASS$()
 }
 
 /*$SPECIALIZATION$*/
+

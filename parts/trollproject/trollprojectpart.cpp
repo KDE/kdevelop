@@ -154,12 +154,12 @@ void TrollProjectPart::addFile(const QString &fileName)
 void TrollProjectPart::addFiles ( const QStringList &fileList )
 {
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_widget->addFile ( *it );
 	}
-	
+
 	emit addedFilesToProject ( fileList );
 }
 
@@ -178,7 +178,7 @@ void TrollProjectPart::removeFiles ( const QStringList& fileList )
 // 	QStringList::ConstIterator it;	
 // 	
 // 	it = fileList.begin();
-// 	
+//
 // 	for ( ; it != fileList.end(); ++it )
 // 	{
 // 		FIXME
