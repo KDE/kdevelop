@@ -1,7 +1,7 @@
 # Here resides the custom project part.
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces \
-	   -I$(top_srcdir)/lib/project \
+	   -I$(top_srcdir)/lib/project -I$(top_builddir)/lib/project \
 	   -I$(top_srcdir)/lib/util \
 	   $(all_includes)
 
