@@ -42,10 +42,12 @@
 
 #include "tokenizer.h"
 #include <qstring.h>
-/** */
+
+/** Represents the parent to a class. */
 class CParsedParent
 {
 public: // Constructor & Destructor
+
   CParsedParent();
   ~CParsedParent();
 
@@ -69,6 +71,9 @@ public: // Public methods
 
   /** Return a string made for persistant storage. */
   void asPersistantString( QString &dataStr );
+
+  /** Initialize the object from a persistant string. */
+  int fromPersistantString( const char *str, int startPos ) { return startPos; }
 
   /** Output the class as text on stdout */
   void out();
