@@ -145,7 +145,7 @@ void PartSelectWidget::init()
 	hbox->setMargin( 6 );
 	QPushButton * setAsDefaultButton = new QPushButton( i18n("Set as Default"), hbox );
 	setAsDefaultButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	new QLabel( i18n("Set this plugin selection as the default for this IDE profile"), hbox );
+	new QLabel( i18n("Set this plugin selection as the default"), hbox );
 	layout->addWidget( hbox );
 
     connect( _pluginList, SIGNAL( selectionChanged( QListViewItem * ) ), this, SLOT( itemSelected( QListViewItem * ) ) );
