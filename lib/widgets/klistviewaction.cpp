@@ -62,11 +62,13 @@ KComboView * KListViewAction::view( ) const
 
 void KListViewAction::setToolTip( const QString & str )
 {
+    QToolTip::remove(m_view);
     QToolTip::add(m_view, str);
 }
 
 void KListViewAction::setWhatsThis( const QString & str )
 {
+    QWhatsThis::remove(m_view);
     QWhatsThis::add(m_view, str);
 }
 
