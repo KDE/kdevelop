@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SnippetSettingsBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
+            <width>574</width>
             <height>398</height>
         </rect>
     </property>
@@ -26,29 +26,46 @@
             <property name="title">
                 <string>Tooltips</string>
             </property>
-            <widget class="QCheckBox">
+            <grid>
                 <property name="name">
-                    <cstring>cbToolTip</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>19</y>
-                        <width>556</width>
-                        <height>18</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Show snippet's text in &amp;tooltip</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Decides if a tooltip should be shown containing text from the bookmarked line</string>
-                </property>
-            </widget>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>cbToolTip</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show snippet's text in &amp;tooltip</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Decides if a tooltip should be shown containing text from the bookmarked line</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
+        <spacer row="3" column="0">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>70</height>
+                </size>
+            </property>
+        </spacer>
         <widget class="QButtonGroup" row="1" column="0">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
@@ -161,29 +178,54 @@
                 </widget>
             </grid>
         </widget>
-        <spacer row="2" column="0">
+        <widget class="QButtonGroup" row="2" column="0">
             <property name="name">
-                <cstring>spacer2</cstring>
+                <cstring>btnGroupAutoOpen</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="title">
+                <string>Automatically open groups</string>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>120</height>
-                </size>
-            </property>
-        </spacer>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>rbOpenOnActiv</cstring>
+                    </property>
+                    <property name="text">
+                        <string>The group's language is the project's primary language</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>&lt;qt&gt;If the group's language is the same as the project's primary language, the group will be automatically opened.&lt;/qt&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>rbOpenOnSupported</cstring>
+                    </property>
+                    <property name="text">
+                        <string>The group's language is supported by the project</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>&lt;qt&gt;Groups having a language which is supported by the current project will be opened automatically. &lt;br&gt;Even if the group's language is not the same as the project's primary language.&lt;/qt&gt;</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
     </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

@@ -29,7 +29,8 @@ public:
   QString getDelimiter() { return (strDelimiter); };
   QRect getSingleRect() { return (rSingle); };
   QRect getMultiRect() { return (rMulti); };
-
+  int getAutoOpenGroups() { return iAutoOpenGroups; }
+  
   void setToolTips(bool b) { bToolTip=b; };
   void setInputMethod(int i) { iInputMethod=i; };
   void setDelimiter(QString s) { strDelimiter=s; };
@@ -39,6 +40,7 @@ public:
   void setMultiRect(QRect r) {
     rMulti = (r.isValid())?r:QRect();
   }
+  void setAutoOpenGroups(int autoopen) { iAutoOpenGroups = autoopen; }
 
 protected:
     bool bToolTip;
@@ -48,6 +50,7 @@ protected:
     QRect rMulti;
     int iMultiBasicHeight;
     int iMultiCount;
+    int iAutoOpenGroups;
 };
 
 #endif

@@ -33,6 +33,8 @@ public:
   SnippetPart(QObject *parent, const char *name, const QStringList &);
   ~SnippetPart();
   KAboutData * aboutData();
+    QStringList getAllLanguages();
+    QStringList getProjectLanguages();
 
 private:
   QGuardedPtr<SnippetWidget> m_widget;

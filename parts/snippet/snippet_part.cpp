@@ -18,8 +18,10 @@
 #include <klineedit.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
+#include <ktrader.h>
 
 #include "kdevcore.h"
+#include <kdevproject.h>
 #include "kdevmainwindow.h"
 
 #include <kdebug.h>
@@ -28,6 +30,7 @@
 #include "snippet_part.h"
 #include "snippetitem.h"
 #include "snippetsettings.h"
+#include "snippetconfig.h"
 
 typedef KGenericFactory<SnippetPart> snippetFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevsnippet, snippetFactory( "kdevsnippet" ) )
@@ -47,7 +50,11 @@ SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
   mainWindow()->embedSelectViewRight( m_widget, i18n("Code Snippets"), i18n("Insert a code snippet") );
 
   connect( core(), SIGNAL( configWidget( KDialogBase * ) ), this, SLOT( slotConfigWidget( KDialogBase * ) ) );
-
+  
+  /*The next two connects are used to check if certain SnippetGroups need to be opened 
+    according to the languages supported by this project*/
+  connect( core(), SIGNAL( projectOpened() ), m_widget, SLOT( languageChanged() ) );
+  connect( core(), SIGNAL( languageChanged() ), m_widget, SLOT( languageChanged() ) );
 }
 
 SnippetPart::~SnippetPart()
@@ -88,8 +95,46 @@ void SnippetPart::slotConfigWidget( KDialogBase *dlg )
   w->btnGroup->setButton(m_widget->getSnippetConfig()->getInputMethod());
   w->leDelimiter->setText(m_widget->getSnippetConfig()->getDelimiter());
   w->cbToolTip->setChecked(m_widget->getSnippetConfig()->useToolTips());
-
+  w->btnGroupAutoOpen->setButton(m_widget->getSnippetConfig()->getAutoOpenGroups());
   connect( dlg, SIGNAL(okClicked()), w, SLOT(slotOKClicked()) );
+}
+
+
+QStringList SnippetPart::getAllLanguages()
+{
+    KTrader::OfferList languageSupportOffers =
+        KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
+                               QString::fromLatin1("[X-KDevelop-Version] == %1"
+                               ).arg( KDEVELOP_PLUGIN_VERSION ));
+    
+    QStringList languages;
+
+    for (KTrader::OfferList::ConstIterator it = languageSupportOffers.begin(); it != languageSupportOffers.end(); ++it)
+    {
+        QString language = (*it)->property("X-KDevelop-Language").toString();
+        languages.append(language);
+        
+        kdDebug(9035) << "Found language: " << (*it)->property("X-KDevelop-Language").toString() << endl <<
+        "genericName(): " <<(*it)->genericName() << endl << 
+        "comment(): " <<(*it)->comment() << endl << endl;
+    }
+    
+    return languages;
+}
+
+
+QStringList SnippetPart::getProjectLanguages()
+{
+    QStringList languages;
+    if (!projectDom())
+        return languages;
+
+    QDomDocument m_projectDom = *projectDom();
+    
+    if (m_widget->getSnippetConfig()->getAutoOpenGroups() == 1)
+        languages = DomUtil::readListEntry(m_projectDom, "/general/secondaryLanguages", "language");
+    languages.prepend( DomUtil::readEntry(m_projectDom, "/general/primarylanguage") );
+    return languages;
 }
 
 

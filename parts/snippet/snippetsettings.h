@@ -35,6 +35,7 @@ public slots:
 
 private:
   SnippetConfig * _cfg;
+  SnippetWidget * _widget;
 };
 
 #endif

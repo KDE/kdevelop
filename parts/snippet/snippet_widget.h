@@ -17,7 +17,7 @@
 
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/view.h>
-#include <snippetconfig.h>
+#include "snippetconfig.h"
 
 class KDevProject;
 class SnippetPart;
@@ -41,6 +41,8 @@ class SnippetWidget : public KListView, public QToolTip
 {
   Q_OBJECT
 
+  friend class SnippetSettings; //to allow SnippetSettings to call languageChanged()
+  
 public:
     SnippetWidget(SnippetPart *part);
     ~SnippetWidget();
@@ -52,6 +54,7 @@ public:
 
 private slots:
     void initConfig();
+    void languageChanged();
 
 protected:
     SnippetPart * m_part;
@@ -73,6 +76,7 @@ private:
 public slots:
     void slotRemove();
     void slotEdit();
+    void slotEditGroup();
     void slotAdd();
     void slotAddGroup();
 

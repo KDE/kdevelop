@@ -136,12 +136,14 @@ void SnippetWidget::slotAddGroup()
   SnippetDlg dlg(this, "SnippetDlg", true);
   dlg.snippetText->setEnabled(false);
   dlg.snippetText->setText("GROUP");
-  delete dlg.cbGroup;
-  delete dlg.textLabelGroup;
   dlg.setCaption(i18n("Add Group"));
-
+  dlg.cbGroup->insertItem(i18n("All"));
+  dlg.cbGroup->insertStringList(m_part->getAllLanguages());
+  dlg.cbGroup->setCurrentText(i18n("All"));
+  dlg.textLabelGroup->setText(i18n("Language:"));  
+  
   if (dlg.exec() == QDialog::Accepted) {
-    _list.append( new SnippetGroup(this, dlg.snippetName->text(), SnippetGroup::getMaxId()) );
+    _list.append( new SnippetGroup(this, dlg.snippetName->text(), SnippetGroup::getMaxId(), dlg.cbGroup->currentText()) );
   }
 }
 
@@ -188,8 +190,9 @@ void SnippetWidget::slotEdit()
   //get current data
   QListViewItem * item = currentItem();
 
+  SnippetGroup *pGroup = dynamic_cast<SnippetGroup*>(item);
   SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
-  if (!pSnippet)
+  if (!pSnippet || pGroup) /*selected item must be a SnippetItem but MUST not be a SnippetGroup*/
     return;
 
   //init the dialog
@@ -198,22 +201,14 @@ void SnippetWidget::slotEdit()
   dlg.snippetText->setText(pSnippet->getText());
   dlg.btnAdd->setText(i18n("&Apply"));
   
-  if (dynamic_cast<SnippetGroup*>(item)){
-    dlg.snippetText->setEnabled(FALSE);
-    delete dlg.cbGroup;
-    dlg.cbGroup = NULL;
-    delete dlg.textLabelGroup;
-    dlg.setCaption(i18n("Edit Group"));
-  } else {
-    dlg.setCaption(i18n("Edit Snippet"));
-    /*fill the combobox with the names of all SnippetGroup entries*/
-    for (SnippetItem *it=_list.first(); it; it=_list.next()) {
-      if (dynamic_cast<SnippetGroup*>(it)) {
-        dlg.cbGroup->insertItem(it->getName());
-      }
+  dlg.setCaption(i18n("Edit Snippet"));
+  /*fill the combobox with the names of all SnippetGroup entries*/
+  for (SnippetItem *it=_list.first(); it; it=_list.next()) {
+    if (dynamic_cast<SnippetGroup*>(it)) {
+      dlg.cbGroup->insertItem(it->getName());
     }
-    dlg.cbGroup->setCurrentText(SnippetItem::findGroupById(pSnippet->getParent(), _list)->getName());
   }
+  dlg.cbGroup->setCurrentText(SnippetItem::findGroupById(pSnippet->getParent(), _list)->getName());
 
   if (dlg.exec() == QDialog::Accepted) {
     //update the KListView and the SnippetItem
@@ -222,8 +217,7 @@ void SnippetWidget::slotEdit()
     pSnippet->setText( dlg.snippetText->text() );
 
     /* if the user changed the parent we need to move the snippet */
-    if (dlg.cbGroup != NULL && 
-        SnippetItem::findGroupById(pSnippet->getParent(), _list)->getName() != dlg.cbGroup->currentText()) {
+    if ( SnippetItem::findGroupById(pSnippet->getParent(), _list)->getName() != dlg.cbGroup->currentText() ) {
       SnippetGroup * newGroup = dynamic_cast<SnippetGroup*>(SnippetItem::findItemByName(dlg.cbGroup->currentText(), _list));
       pSnippet->parent()->takeItem(pSnippet);
       newGroup->insertItem(pSnippet);
@@ -234,6 +228,40 @@ void SnippetWidget::slotEdit()
   }
 }
 
+/*!
+    \fn SnippetWidget::slotEditGroup()
+    Opens the dialog of editing the selected snippet-group
+ */
+void SnippetWidget::slotEditGroup()
+{
+  //get current data
+  QListViewItem * item = currentItem();
+
+  SnippetGroup *pGroup = dynamic_cast<SnippetGroup*>( item );
+  if (!pGroup) /*selected item MUST be a SnippetGroup*/
+    return;
+
+  //init the dialog
+  SnippetDlg dlg(this, "SnippetDlg", true);
+  dlg.snippetName->setText(pGroup->getName());
+  dlg.snippetText->setText(pGroup->getText());
+  dlg.btnAdd->setText(i18n("&Apply"));
+  dlg.snippetText->setEnabled(FALSE);
+  dlg.setCaption(i18n("Edit Group"));
+  dlg.cbGroup->insertItem(i18n("All"));
+  dlg.cbGroup->insertStringList(m_part->getAllLanguages());
+  dlg.cbGroup->setCurrentText(pGroup->getLanguage());
+  dlg.textLabelGroup->setText(i18n("Language:"));  
+
+  if (dlg.exec() == QDialog::Accepted) {
+    //update the KListView and the SnippetGroup
+    item->setText( 0, dlg.snippetName->text() );
+    pGroup->setName( dlg.snippetName->text() );
+    pGroup->setLanguage(dlg.cbGroup->currentText());
+    
+    setSelected(item, TRUE);
+  }
+}
 
 //  \fn SnippetWidget::slotListDblClicked()
 /*!
@@ -288,7 +316,6 @@ void SnippetWidget::writeConfig()
   _cfg->setGroup("SnippetPart");
 
   SnippetItem *item;
-  SnippetGroup *group;
   QString strKeyName="";
   QString strKeyText="";
   QString strKeyId="";
@@ -298,13 +325,16 @@ void SnippetWidget::writeConfig()
 
   for ( item = _list.first(); item; item = _list.next() ) {  //write the snippet-list
     kdDebug(9035) << "SnippetWidget::writeConfig() " << item->getName() << endl;
-    if (group = dynamic_cast<SnippetGroup*>(item)) {
+    SnippetGroup * group = dynamic_cast<SnippetGroup*>(item);
+    if (group) {
       kdDebug(9035) << "-->GROUP " << item->getName() << group->getId() << " " << iGroupCount<< endl;
       strKeyName=QString("snippetGroupName_%1").arg(iGroupCount);
       strKeyId=QString("snippetGroupId_%1").arg(iGroupCount);
+      strKeyText=QString("snippetGroupLang_%1").arg(iGroupCount);
 
       _cfg->writeEntry(strKeyName, group->getName());
       _cfg->writeEntry(strKeyId, group->getId());
+      _cfg->writeEntry(strKeyText, group->getLanguage());
       iGroupCount++;
     } else if (dynamic_cast<SnippetItem*>(item)) {
       kdDebug(9035) << "-->ITEM " << item->getName() << item->getParent() << " " << iSnipCount << endl;
@@ -342,6 +372,7 @@ void SnippetWidget::writeConfig()
   _cfg->writeEntry( "snippetDelimiter", _SnippetConfig.getDelimiter() );
   _cfg->writeEntry( "snippetVarInput", _SnippetConfig.getInputMethod() );
   _cfg->writeEntry( "snippetToolTips", _SnippetConfig.useToolTips() );
+  _cfg->writeEntry( "snippetGroupAutoOpen", _SnippetConfig.getAutoOpenGroups() );
 
   _cfg->writeEntry("snippetSingleRect", _SnippetConfig.getSingleRect() );
   _cfg->writeEntry("snippetMultiRect", _SnippetConfig.getMultiRect() );
@@ -406,21 +437,28 @@ void SnippetWidget::initConfig()
   for ( int i=0; i<iCount; i++) {  //read the group-list
     strKeyName=QString("snippetGroupName_%1").arg(i);
     strKeyId=QString("snippetGroupId_%1").arg(i);
+    strKeyText=QString("snippetGroupLang_%1").arg(i);
 
     QString strNameVal="";
     int iIdVal=-1;
+    QString strLangVal="";
 
     strNameVal = _cfg->readEntry(strKeyName, "");
     iIdVal = _cfg->readNumEntry(strKeyId, -1);
+    strLangVal = _cfg->readEntry(strKeyText, i18n("All"));
     kdDebug(9035) << "Read group " << strNameVal << " " << iIdVal << endl;
 
-    if (strNameVal != "" && iIdVal != -1) {
-      group = new SnippetGroup(this, strNameVal, iIdVal);
+    if (strNameVal != "" && iIdVal != -1 && strLangVal != "") {
+      group = new SnippetGroup(this, strNameVal, iIdVal, strLangVal);
       kdDebug(9035) << "Created group " << group->getName() << " " << group->getId() << endl;
       _list.append(group);
+      if (group->getLanguage() == i18n("All"))
+        group->setOpen(TRUE);
+      else
+        group->setOpen(FALSE); //groups assigned to certain languages get handled later
     }
   }
-  
+
   /* Check if the snippetGroupCount property has been found
      if iCount is -1 this means, that the user has his snippets
      stored without groups. Therefore we will call the 
@@ -473,6 +511,7 @@ void SnippetWidget::initConfig()
   _SnippetConfig.setDelimiter( _cfg->readEntry("snippetDelimiter", "$") );
   _SnippetConfig.setInputMethod( _cfg->readNumEntry("snippetVarInput", 0) );
   _SnippetConfig.setToolTips( _cfg->readBoolEntry("snippetToolTips", true) );
+  _SnippetConfig.setAutoOpenGroups( _cfg->readNumEntry("snippetGroupAutoOpen", 1) );
 
   _SnippetConfig.setSingleRect( _cfg->readRectEntry("snippetSingleRect", 0L) );
   _SnippetConfig.setMultiRect( _cfg->readRectEntry("snippetMultiRect", 0L) );
@@ -490,11 +529,14 @@ void SnippetWidget::maybeTip( const QPoint & p )
 
 	QRect r = itemRect( item );
 
-	if (!dynamic_cast<SnippetGroup*>(item) && 
-        r.isValid() && 
+	if (r.isValid() && 
         _SnippetConfig.useToolTips() )
 	{
-		tip( r, item->getText() );  //show the tip
+        if (dynamic_cast<SnippetGroup*>(item)) {
+		    tip( r, i18n("Language:")+((SnippetGroup*)item)->getLanguage() );  //show the group's language
+        } else {
+		    tip( r, item->getText() );  //show the snippet's text
+        }
 	}
 }
 
@@ -512,7 +554,11 @@ void SnippetWidget::showPopupMenu( QListViewItem * item, const QPoint & p, int )
 
 		popup.insertItem( i18n("Add Item..."), this, SLOT( slotAdd() ) );
 		popup.insertItem( i18n("Add Group..."), this, SLOT( slotAddGroup() ) );
-		popup.insertItem( i18n("Edit..."), this, SLOT( slotEdit() ) );
+        if (dynamic_cast<SnippetGroup*>(item)) {
+            popup.insertItem( i18n("Edit..."), this, SLOT( slotEditGroup() ) );
+        } else {
+            popup.insertItem( i18n("Edit..."), this, SLOT( slotEdit() ) );
+        }
 		popup.insertItem( i18n("Remove"), this, SLOT( slotRemove() ) );
 
 	} else {
@@ -891,5 +937,24 @@ void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *item)
   }
 }
 
+
+/*!
+    \fn SnippetWidget::languageChanged()
+ */
+void SnippetWidget::languageChanged()
+{
+  QStringList langs = m_part->getProjectLanguages();
+
+  for (SnippetItem *it=_list.first(); it; it=_list.next()) {
+    SnippetGroup * group = dynamic_cast<SnippetGroup*>(it);
+    if (group) {
+      if (group->getLanguage() == i18n("All") || langs.contains(group->getLanguage())) {
+        group->setOpen(TRUE);
+      } else {
+        group->setOpen(FALSE);
+      }
+    }
+  }
+}
 
 #include "snippet_widget.moc"

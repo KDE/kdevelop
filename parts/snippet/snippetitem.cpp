@@ -100,7 +100,7 @@ Deklaration for class SnippetGroup
 
 int SnippetGroup::iMaxId = 1;
 
-SnippetGroup::SnippetGroup(QListView * parent, QString name, int id)
+SnippetGroup::SnippetGroup(QListView * parent, QString name, int id, QString lang)
  : SnippetItem(parent, name, "GROUP")
 {
     if (id > 0) {
@@ -111,6 +111,8 @@ SnippetGroup::SnippetGroup(QListView * parent, QString name, int id)
       iId = iMaxId;
       iMaxId++;
     }
+    
+    strLanguage = lang;
 }
 
 SnippetGroup::~SnippetGroup()

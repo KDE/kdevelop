@@ -10,7 +10,7 @@
 #define SNIPPETITEM_H
 
 #include <klistview.h>
-
+#include <klocale.h>
 
 class QString;
 
@@ -49,16 +49,20 @@ it in the main QPtrList<SnippetItem>.
 */
 class SnippetGroup : public SnippetItem {
 public:
-    SnippetGroup(QListView * parent, QString name, int id);
+    SnippetGroup(QListView * parent, QString name, int id, QString lang=i18n("All"));
     ~SnippetGroup();
 
     int getId() { return iId; }
-    void setId(int id);
     static int getMaxId() { return iMaxId; }
+    QString getLanguage() { return strLanguage; }
+    
+    void setId(int id);
+    void setLanguage(QString lang) { strLanguage = lang; }
 
 private:
     static int iMaxId;
     int iId;
+    QString strLanguage;
 };
 
 #endif
