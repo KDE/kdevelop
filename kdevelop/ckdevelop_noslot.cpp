@@ -1156,7 +1156,8 @@ void CKDevelop::showOutputView(bool show){
 void CKDevelop::readOptions()
 {
   //default geometry on first startup, saved geometry is set by applyMainWindowSettings afterwards
-  setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
+//  setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
+	showMaximized();
   applyMainWindowSettings(config);
 
   config->setGroup("General Options");
@@ -1235,7 +1236,7 @@ void CKDevelop::readOptions()
 	
   QString filename = config->readEntry("browser_file","");
   if (filename.isEmpty())
-		filename = DocTreeKDevelopBook::locatehtml("welcome/index.html");
+		filename = DocTreeKDevelopBook::locatehtml("about/intro.html");
 
   if(!filename.isEmpty())
     slotURLSelected(filename,1,"test");

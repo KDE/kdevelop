@@ -1,0 +1,212 @@
+<HTML>
+
+<HEAD>
+	<title>Welcome to KDevelop!</title>
+	<link rel="stylesheet" href="konq.css" type="text/css" />
+</HEAD>
+
+<BODY BGCOLOR=#3679AD LEFTMARGIN=0 TOPMARGIN=5>
+
+<TABLE BORDER=0 WIDTH=100% CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+     <COLGROUP>
+        <COL WIDTH=170>
+        <COL WIDTH=20>
+        <COL WIDTH=309>
+	<COL WIDTH=*>
+     </COLGROUP>
+	<TR HEIGHT=24>
+		<TD BGCOLOR=#505050 ALIGN=RIGHT><IMG WIDTH=70 HEIGHT=22  SRC="pointers.png"></TD>
+		<TD class="deco" BGCOLOR=#505050 COLSPAN=3></TD>
+	</TR>
+	<TR>
+		<TD WIDTH=190 COLSPAN=2 ROWSPAN=2> &nbsp;</TD>
+		<TD BGCOLOR=#DDDDDD><IMG WIDTH=309 HEIGHT=77 SRC="kdevelop.png"></TD>
+		<TD BGCOLOR=#DDDDDD BACKGROUND="lines.png">&nbsp;</TD>
+	</TR>
+
+	<TR>
+
+		<TD COLSPAN=2 BGCOLOR=#505050 ALIGN=RIGHT HEIGHT=22>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+	<TR>
+		<TD HEIGHT=20 class="menu">&nbsp; <A class="menu" HREF="intro.html">Introduction</A> &nbsp;</TD>
+		<TD HEIGHT=20 class="menu">|</TD>
+		<TD HEIGHT=20 class="menu">&nbsp; <A class="menu" HREF="tips.html">Tips</A> &nbsp;</TD>
+		<TD HEIGHT=20 class="menu">|</TD>
+		<TD HEIGHT=20 class="menuactive">&nbsp; Specifications &nbsp;</TD>
+		<TD HEIGHT=20 class="menu">&nbsp</TD>
+	</TR>
+</TABLE>
+		</TD>
+	</TR>
+
+	<TR>
+		<TD COLSPAN=2 WIDTH=190></TD>
+		<TD COLSPAN=2 class="shadow1" HEIGHT=9 COLSPAN=4></TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=2 WIDTH=190></TD>
+		<TD COLSPAN=2 HEIGHT=41 COLSPAN=4></TD>
+	</TR>
+</TABLE>
+
+<!-- end of header -->
+
+
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+<TR>
+	<TD WIDTH=190></TD>
+	<TD  class="trans" BGCOLOR=#D0DFEC>
+
+		<TABLE WIDTH= 100% BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+		<TR>
+			<TD HEIGHT=20 WIDTH=20>&nbsp;</TD>
+			<TD>&nbsp;</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=20>&nbsp;</TD>
+			<TD VALIGN=TOP>
+
+<!-- here comes the content -->
+
+
+    <H3>Specifications<H3>
+<P>KDevelop is designed to be an integrated development environment (IDE) on UNIX systems that allows the developer a maximum in terms
+of flexibility and as such is integrating the functionality of many other applications that are commonly used by developers on UNIX.
+It makes use of the GCC C/C++ Compiler, the GNU make and GNU autoconf/automake utilities available for most UNIX platforms. For KDE and
+Qt Development, projects generated with KDevelop automatically apply to the KDE 2.1 Desktop standards, make use of the /admin setup
+directory also used by the KDE project to maintain the main KDE sourcetree modules and as such developers can update their projects
+easily through KDE to enable new requirements and extended OS support on other platforms.  By integrating the use of TrollTech´s Qt
+Designer, developers have an easy time creating and implementing Graphical User Interfaces (GUI) from within KDevelop.
+</P>
+<P>
+KDevelop also manages/requires:
+</P>
+<BR>
+<TABLE class="vnice" BGCOLOR=#FFFFFF BORDER=1 CELLSPACING=0 CELLPADDING=1>
+        <TR ALIGN=LEFT VALIGN=MIDDLE BGCOLOR="000000" HEIGHT=6>
+                <TD>
+                        <FONT COLOR=#FFFFFF>&nbsp; S P E C I F I C A T I O N S</FONT>
+                </TD>
+        </TR><TR><TD>
+
+
+
+<TABLE class="vnice" BORDER=0 CELLSPACING=0 CELLPADDING=2>
+        <TR BGCOLOR="#DADADA">
+                <TH WIDTH=40%>Supported functionality</TH>
+		<TH WIDTH=2%>&nbsp;</TD>
+                <TH>Additional requirements*</TH>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Project generation</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>built-in: C, C++ (Terminal), KDE 2, Qt 2.2, GNOME, existing projects. Requires <b>Perl</b>, <b>GNU-Tools</b>,
+                        <b>GCC 2.95.2</b> and project-specific libraries/header files</TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>KDE 2.1 templates</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>built-in: KDE mini, normal, MDI and Kicker (KDE panel) applet</TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Qt 2.2.x templates</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>built-in: Qt SDI, Qt MDI (QWorkspace) and Qt MDI (QextMDI)</TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>automake/autoconf compatible existing projects</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>built-in Projectfile generator</TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Internal Debugger</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>built-in, requires gdb</TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>External debuggers</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>requires gdb and either kdbg or ddd.</TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Classbrowser</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>built-in</TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>KDE API Documentation Generator</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>built-in, requires KDoc 2.0a40</TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Qt Designer integration</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>requires Qt Designer (comes with Qt > 2.2.1), KDevelop Project generated with KDevelop > 1.3</A></TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>Internationalization support</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>requires additionally:
+                        <UL>
+                                <LI>GNU gettext package</LI>
+                                <LI>KBabel for KDE 2.x internationalization</LI>
+                                <LI>Qt Linguist for Qt 2.x internationalization</LI>
+                        </UL>
+                </TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Project API Documentation</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>requires additionally (either of):
+                        <UL>
+                                <LI>KDoc 2.0a40 (comes with KDE > 2.0.1)</LI>
+                                <LI>Doxygen</LI>
+                        </UL>
+                </TD>
+                <TD></TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>Search Database for API/Documenation lookup</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>requires additionally (either of):
+                        <UL>
+                                <LI>glimpse (only for non-commercial use)</LI>
+                                <LI>Ht://Dig</LI>
+                        </UL>
+                </TD>
+        </TR>
+
+</TABLE>
+
+	</TD></TR>
+</TABLE>
+
+<BR>
+<P>&nbsp; <A HREF="intro.html">Back</A> &nbsp; to the Introduction  </P>
+
+<!-- End of text -->
+
+
+  		</TD>
+		<TD WIDTH=20>&nbsp;</TD>
+ 	</TR>
+	<TR>
+		<TD HEIGHT=20 WIDTH=20>&nbsp;</TD>
+		<TD>&nbsp;</TD>
+	</TR>
+
+</TABLE>
+
+		</TD>
+		<TD WIDTH=20>&nbsp;</TD>
+	</TR>
+	<TR>
+		<TD HEIGHT=50 COLSPAN=3>&nbsp;</TD>
+	</TR>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>

@@ -311,13 +311,12 @@ void DocTreeKDevelopFolder::refresh()
 {
   ListViewFolderItem::refresh();
 
-  QString welcome=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("welcome/index.html"));    
-  QString manual=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("index.html"));    
+  QString manual=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("index.html"));
   QString programming=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("programming/index.html"));    
   QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));    
   QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));    
 
-  (void) new DocTreeKDevelopBook(this, welcome,                 "welcome/index.html",     false);
+  (void) new DocTreeKDevelopBook(this, i18n("Welcome to KDevelop!"), "about/intro.html");
   (void) new DocTreeKDevelopBook(this, manual,                  "index.html",             true);
   (void) new DocTreeKDevelopBook(this, programming,             "programming/index.html", true);
   (void) new DocTreeKDevelopBook(this, tutorial,                "tutorial/index.html",    true);
