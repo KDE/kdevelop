@@ -45,7 +45,7 @@ kdelibs_docdirs=""
 
 kdelibs_docdirs="/usr/doc/kdelibs-doc/html"
 if test "$kde_htmldir" != ""; then
- kdelibs_docdirs="$kdelibs_docdir $kde_htmldir/default/kdelibs"
+ kdelibs_docdirs="$kdelibs_docdirs $kde_htmldir/default/kdelibs"
 fi 
 kdelibs_docdirs="$ac_kdelibs_docdirs $kdelibs_docdirs"
 AC_FIND_FILE(kdecore/index.html, $kdelibs_docdirs, kdelibs_docdir)

@@ -1,3 +1,6 @@
+1999-10-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+        * With kdoc2, use "doc_kde/kdoc-reference" if kdoc_index is not set
+
 1999-10-30 The KDevelop Team
 	* KDevelop 1.0Beta4.1 released
 

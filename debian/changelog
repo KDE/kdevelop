@@ -1,4 +1,4 @@
-kdevelop (1:1.0beta4-19991030-1) unstable; urgency=low
+kdevelop (1:1.0beta4.1-19991030-1) unstable; urgency=low
 
   * New upstream changes
   * Disabled debug - is stripped anyway

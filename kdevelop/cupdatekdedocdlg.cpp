@@ -374,14 +374,14 @@ void CUpdateKDEDocDlg::OK(){
           cmd += qtPath;
           cmd += " --outdir=";
           cmd += new_doc_path;
-          cmd += " --compress ";
+          cmd += "kdoc-reference --compress ";
           cmd += qtPath;
           cmd += ";\n";
       }
 
   cmd += "makekdedoc --libdir=";
   cmd += new_doc_path;
-  cmd += " --outputdir=";
+  cmd += "kdoc-reference --outputdir=";
   cmd += new_doc_path;
   *proc << cmd;
   
