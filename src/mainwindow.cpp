@@ -582,19 +582,51 @@ void MainWindow::removeView(QWidget *view)
 
 void MainWindow::raiseView(QWidget *view)
 {
-  QextMdiChildView *wrapper = m_widgetMap[view];
-  if (wrapper)
-  {
+    m_myWindowsReady = true;                                    // From now on, we can rely on the windows beeing active
+    // Handle differences between output and tree views
+    QPtrList<QextMdiChildView> *pViews        = 0L;             // The views to make a menu from
+
+    QextMdiChildView *wrapper = m_widgetMap[ view ];
+    if( !wrapper ){
+        kdDebug(9000) << "no wrapper!!" << endl;
+        return;
+    }
+
+    // find the container
+    if( m_outputViews.contains(wrapper) )
+        pViews = &m_outputViews;
+    else if( m_outputViews.contains(wrapper) )
+        pViews = &m_selectViews;
+
+    if( pViews ){
+
+        QPtrListIterator<QextMdiChildView> it(*pViews);
+        const  ToolDockBaseState allWinState(pViews);
+
+        if (allWinState.dockBaseMayBeDockBack) // If it may be dock back, it is invisible
+        {
+            allWinState.pDockBaseWindow->dockBack();  // Show it again
+        }
+        else if(allWinState.dockBaseIsHidden)       // In toplevel mode the tool window is just hidden
+        {
+            allWinState.pDockBaseWindow->show();      // Then show it
+        }
+        else
+        {
+            // not a single tool window found, so we show all of them
+            showAllToolWin( pViews == &m_outputViews ? OutputView : TreeView, 1 );
+        }
+    }
+
     wrapper->activate();
     activateView(wrapper);
     KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper);
     if (pDock) {
-      if ( (pDock->parentWidget() && pDock->parentWidget()->isVisible())
-        || (!pDock->parentWidget() && pDock->isVisible()) ) {
-        makeDockVisible(pDock);
-      }
+        if ( (pDock->parentWidget() && pDock->parentWidget()->isVisible())
+            || (!pDock->parentWidget() && pDock->isVisible()) ) {
+                makeDockVisible(pDock);
+            }
     }
-  }
 }
 
 
