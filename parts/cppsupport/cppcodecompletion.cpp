@@ -162,7 +162,7 @@ static QString purify( const QString& decl )
 
     QRegExp rx1( "\\*" );
     QRegExp rx2( "&" );
-    s = s.replace( rx1, "" ).replace( rx2, "" );
+    s = s.replace( rx1, "" ).replace( rx2, "" ).replace("\\b(class|struct|union)\\b", "");
     s = remove_keywords( s );
     s = remove( s, '[', ']' );
     s = s.simplifyWhiteSpace();

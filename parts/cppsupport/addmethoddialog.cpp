@@ -44,6 +44,9 @@
 #include <qtoolbutton.h>
 #include <qtextstream.h>
 
+namespace AddMethod
+{
+
 class FindInsertionPoint: public TreeParser
 {
 public:
@@ -117,6 +120,8 @@ private:
     int m_line;
     int m_column;
 };
+
+}
 
 AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ParsedClass* klass,
 				 QWidget* parent, const char* name, bool modal, WFlags fl)
@@ -200,7 +205,7 @@ void AddMethodDialog::accept()
 
     TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( fileName );
     if( translationUnit ){
-	FindInsertionPoint findInsertionPoint( m_klass->path() );
+	AddMethod::FindInsertionPoint findInsertionPoint( m_klass->path() );
 	findInsertionPoint.parseTranslationUnit( translationUnit );
 	line = findInsertionPoint.line();
 	column = findInsertionPoint.column();

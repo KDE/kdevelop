@@ -43,6 +43,9 @@
 #include <qtoolbutton.h>
 #include <qtextstream.h>
 
+namespace AddAttribute
+{
+
 class FindInsertionPoint: public TreeParser
 {
 public:
@@ -117,6 +120,8 @@ private:
     int m_column;
 };
 
+}
+
 AddAttributeDialog::AddAttributeDialog(CppSupportPart* cppSupport, ParsedClass* klass,
 				 QWidget* parent, const char* name, bool modal, WFlags fl)
     : AddAttributeDialogBase(parent,name, modal,fl), m_cppSupport( cppSupport ), m_klass( klass ), m_count( 0 )
@@ -169,7 +174,7 @@ void AddAttributeDialog::accept()
 
     TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( fileName );
     if( translationUnit ){
-	FindInsertionPoint findInsertionPoint( m_klass->path() );
+	AddAttribute::FindInsertionPoint findInsertionPoint( m_klass->path() );
 	findInsertionPoint.parseTranslationUnit( translationUnit );
 	line = findInsertionPoint.line();
 	column = findInsertionPoint.column();
