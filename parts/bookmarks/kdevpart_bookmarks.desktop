@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=A plugins that aims to persist source bookmarks (not quite finished)
+Name=KDevBookmarks
+GenericName=Persistant Source Bookmarks
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Global
+X-KDE-Library=libkdevbookmarks

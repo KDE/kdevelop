@@ -1,0 +1,22 @@
+libkdevbookmarks
+-------------
+
+This plugin provides a navigation view for bookmarks and
+persistance to editor bookmarks in such a way that it is
+possible to have bookmarks in files that are not open and,
+when implemented, that these bookmarks are saved with the
+project.
+
+by Jens Dagerbo <jens.dagerbo@swipnet.se> aka teatime
+
+
+
+Planned development:
+
+# Real persistance - store the bookmarks to the .kdevelop file
+
+# Tooltips to display full path
+
+# Rightclick events for the navigation view to clear bookmarks (?)
+
+# Tooltips to display source context for bookmark (?)
