@@ -1924,6 +1924,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
         if(ConfigSetMode[0] == FileBuffer::VSM_RESET)
         {
           item->configuration.m_inheritconfig = false;
+	  break;
 	}
       }
     }
