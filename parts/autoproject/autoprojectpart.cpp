@@ -113,7 +113,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                               actionCollection(), "build_execute" );
     }
     
-    connect( buildConfigAction->popupMenu(), SIGNAL(activated(const QString&)),
+    connect( buildConfigAction, SIGNAL(activated(const QString&)),
              this, SLOT(slotBuildConfigChanged(const QString&)) );
     connect( buildConfigAction->popupMenu(), SIGNAL(aboutToShow()),
              this, SLOT(slotBuildConfigAboutToShow()) );
@@ -239,11 +239,15 @@ QStringList AutoProjectPart::allBuildConfigs()
     QDomDocument &dom = *projectDom();
 
     QStringList allConfigs;
+    allConfigs.append("default");
+    
     QDomNode node = dom.documentElement().namedItem("kdevautoproject").namedItem("configurations");
     QDomElement childEl = node.firstChild().toElement();
     while (!childEl.isNull()) {
-        allConfigs.append(childEl.tagName());
-        kdDebug(9020) << "Found config " << childEl.tagName() << endl;
+        QString config = childEl.tagName();
+        kdDebug(9020) << "Found config " << config << endl;
+        if (config != "default")
+            allConfigs.append(config);
         childEl = childEl.nextSibling().toElement();
     }
 
@@ -465,12 +469,13 @@ void AutoProjectPart::slotBuildConfigChanged(const QString &config)
 {
     QDomDocument &dom = *projectDom();
     DomUtil::writeEntry(dom, "/kdevautoproject/general/useconfiguration", config);
+    kdDebug(9020) << "Changed used configuration to " << config << endl;
 }
 
 
 void AutoProjectPart::slotBuildConfigAboutToShow()
 {
-    QStringList l =  allBuildConfigs();
+    QStringList l = allBuildConfigs();
     buildConfigAction->setItems(l);
     buildConfigAction->setCurrentItem(l.findIndex(currentBuildConfig()));
 }

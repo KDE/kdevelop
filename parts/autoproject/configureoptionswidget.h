@@ -34,6 +34,7 @@ public slots:
     void accept();
 
 private:
+    virtual void builddirClicked();
     virtual void configChanged(const QString &config);
     virtual void configComboTextChanged(const QString &config);
     virtual void configAdded();
@@ -45,6 +46,7 @@ private:
     virtual void cxxserviceChanged();
     virtual void f77serviceChanged();
 
+    void fixLayout();
     void readSettings(const QString &config);
     void saveSettings(const QString &config);
     

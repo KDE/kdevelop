@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>546</width>
-            <height>380</height>
+            <width>510</width>
+            <height>338</height>
         </rect>
     </property>
     <property name="caption">
@@ -72,7 +72,7 @@
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer17_2</cstring>
                     </property>
                     <property name="orientation">
@@ -105,7 +105,7 @@
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer18_2</cstring>
                     </property>
                     <property name="orientation">
@@ -114,22 +114,16 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
                 </spacer>
             </hbox>
         </widget>
         <widget class="QTabWidget">
             <property name="name">
-                <cstring>fortran_tab</cstring>
+                <cstring>tabwidget</cstring>
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>general_tab</cstring>
                 </property>
                 <attribute name="title">
                     <string>General</string>
@@ -145,7 +139,7 @@
                         <number>6</number>
                     </property>
                     <spacer row="5" column="1">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer25</cstring>
                         </property>
                         <property name="orientation">
@@ -154,22 +148,16 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
                     </spacer>
                     <spacer row="2" column="2">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer26</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
                         </property>
                         <property name="sizeType">
-                            <enum>Minimum</enum>
+                            <enum>Fixed</enum>
                         </property>
                         <property name="sizeHint">
                             <size>
@@ -178,12 +166,12 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="3">
                         <property name="name">
                             <cstring>configargs_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
+                    <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
                         <property name="name">
                             <cstring>configargs_label</cstring>
                         </property>
@@ -191,7 +179,7 @@
                             <string>Configure arguments:</string>
                         </property>
                     </widget>
-                    <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
+                    <widget class="QLabel" row="3" column="0" rowspan="1" colspan="4">
                         <property name="name">
                             <cstring>builddir_label</cstring>
                         </property>
@@ -199,13 +187,8 @@
                             <string>Build directory:</string>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>builddir_edit</cstring>
-                        </property>
-                    </widget>
                     <spacer row="1" column="0">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer23</cstring>
                         </property>
                         <property name="orientation">
@@ -222,7 +205,7 @@
                         </property>
                     </spacer>
                     <spacer row="4" column="0">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer24</cstring>
                         </property>
                         <property name="orientation">
@@ -238,11 +221,36 @@
                             </size>
                         </property>
                     </spacer>
+                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>builddir_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton" row="4" column="3">
+                        <property name="name">
+                            <cstring>builddir_button</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>30</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>30</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>...</string>
+                        </property>
+                    </widget>
                 </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>c_tab</cstring>
                 </property>
                 <attribute name="title">
                     <string>C</string>
@@ -257,23 +265,80 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>ccompiler_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>C Compiler:</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>cservice_combo</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="1" column="1">
+                        <property name="name">
+                            <cstring>Spacer11</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>cbinary_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Compiler command (CC):</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
+                            <cstring>cbinary_edit</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>Spacer12</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <widget class="QLabel" row="4" column="0">
                         <property name="name">
                             <cstring>cflags_label</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
                         </property>
                         <property name="text">
                             <string>Compiler flags (CFLAGS):</string>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="4" column="3">
+                    <widget class="QLineEdit" row="4" column="1">
+                        <property name="name">
+                            <cstring>cflags_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton" row="4" column="2">
                         <property name="name">
                             <cstring>cflags_button</cstring>
                         </property>
@@ -296,7 +361,7 @@
                         </property>
                     </widget>
                     <spacer row="5" column="1">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer10</cstring>
                         </property>
                         <property name="orientation">
@@ -305,132 +370,12 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
                     </spacer>
-                    <widget class="QLabel" row="0" column="0">
-                        <property name="name">
-                            <cstring>ccompiler_label</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="text">
-                            <string>C Compiler:</string>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>cflags_edit</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                    </widget>
-                    <spacer row="1" column="1">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer11</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="3" column="1">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer12</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QLabel" row="2" column="0">
-                        <property name="name">
-                            <cstring>cbinary_label</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="text">
-                            <string>Compiler command (CC):</string>
-                        </property>
-                    </widget>
-                    <spacer row="2" column="2">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer31</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QLineEdit" row="2" column="1">
-                        <property name="name">
-                            <cstring>cbinary_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QComboBox" row="0" column="1">
-                        <property name="name">
-                            <cstring>cservice_combo</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>1</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                    </widget>
                 </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>cxx_tab</cstring>
                 </property>
                 <attribute name="title">
                     <string>C++</string>
@@ -445,7 +390,80 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget class="QPushButton" row="4" column="3">
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>cxxcompiler_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>C++ Compiler</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>cxxservice_combo</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="1" column="1">
+                        <property name="name">
+                            <cstring>Spacer13</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>cxxbinary_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Compiler command (CXX):</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
+                            <cstring>cxxbinary_edit</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>Spacer13_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="4" column="0">
+                        <property name="name">
+                            <cstring>cxxflags_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Compiler flags (CXXFLAGS):</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="4" column="1">
+                        <property name="name">
+                            <cstring>cxxflags_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton" row="4" column="2">
                         <property name="name">
                             <cstring>cxxflags_button</cstring>
                         </property>
@@ -467,42 +485,8 @@
                             <string>...</string>
                         </property>
                     </widget>
-                    <spacer row="1" column="1">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer13</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="3" column="1">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer13_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <spacer row="5" column="1">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer16</cstring>
                         </property>
                         <property name="orientation">
@@ -511,74 +495,12 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QComboBox" row="0" column="1">
-                        <property name="name">
-                            <cstring>cxxservice_combo</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="0" column="0">
-                        <property name="name">
-                            <cstring>cxxcompiler_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>C++ Compiler</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="2" column="0">
-                        <property name="name">
-                            <cstring>cxxbinary_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Compiler command (CXX):</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="4" column="0">
-                        <property name="name">
-                            <cstring>cxxflags_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Compiler flags (CXXFLAGS):</string>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="2" column="1">
-                        <property name="name">
-                            <cstring>cxxbinary_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>cxxflags_edit</cstring>
-                        </property>
-                    </widget>
-                    <spacer row="2" column="2">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer31_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
                     </spacer>
                 </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>fortran_tab</cstring>
                 </property>
                 <attribute name="title">
                     <string>Fortran</string>
@@ -593,12 +515,80 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>f77compiler_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Fortran Compiler:</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>f77service_combo</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="1" column="1">
+                        <property name="name">
+                            <cstring>Spacer16_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>f77binary_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Compiler command (F77):</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
+                            <cstring>f77binary_edit</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>Spacer17</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="4" column="0">
+                        <property name="name">
+                            <cstring>f77flags_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Compiler flags (FFLAGS):</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="4" column="1">
                         <property name="name">
                             <cstring>f77flags_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="4" column="3">
+                    <widget class="QPushButton" row="4" column="2">
                         <property name="name">
                             <cstring>f77flags_button</cstring>
                         </property>
@@ -620,66 +610,8 @@
                             <string>...</string>
                         </property>
                     </widget>
-                    <widget class="QLabel" row="0" column="0">
-                        <property name="name">
-                            <cstring>f77compiler_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Fortran Compiler:</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="2" column="0">
-                        <property name="name">
-                            <cstring>f77binary_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Compiler command (F77):</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="4" column="0">
-                        <property name="name">
-                            <cstring>f77flags_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Compiler flags (FFLAGS):</string>
-                        </property>
-                    </widget>
-                    <spacer row="1" column="1">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer16_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="3" column="1">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer17</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <spacer row="5" column="1">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer18</cstring>
                         </property>
                         <property name="orientation">
@@ -688,40 +620,7 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
                     </spacer>
-                    <spacer row="2" column="2">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer31_3</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QLineEdit" row="2" column="1">
-                        <property name="name">
-                            <cstring>f77binary_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QComboBox" row="0" column="1">
-                        <property name="name">
-                            <cstring>f77service_combo</cstring>
-                        </property>
-                    </widget>
                 </grid>
             </widget>
         </widget>
@@ -788,6 +687,12 @@
         <receiver>configure_options_widget</receiver>
         <slot>configComboTextChanged(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>builddir_button</sender>
+        <signal>clicked()</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>builddirClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>cservice_combo</tabstop>
@@ -814,6 +719,7 @@
     <slot access="protected">cxxserviceChanged()</slot>
     <slot access="protected">f77flagsClicked()</slot>
     <slot access="protected">f77serviceChanged()</slot>
+    <slot access="protected">builddirClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

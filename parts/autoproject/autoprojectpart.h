@@ -31,10 +31,9 @@ public:
     AutoProjectPart( QObject *parent, const char *name, const QStringList &args );
     ~AutoProjectPart();
 
-protected:
-    virtual void openProject(const QString &dirName, const QString &projectName);
-    virtual void closeProject();
-
+    /**
+     * Implementation of the KDevProject interface.
+     */
     virtual QString projectDirectory();
     virtual QString projectName();
     virtual QString mainProgram();
@@ -42,7 +41,23 @@ protected:
     virtual QStringList allFiles();
     virtual void addFile(const QString &fileName);
     virtual void removeFile(const QString &fileName);
-    
+
+    /**
+     * automake specific methods.
+     */
+    QStringList allBuildConfigs();
+    QString currentBuildConfig();
+    QString buildDirectory();
+    void startMakeCommand(const QString &dir, const QString &target);
+
+protected:
+    /**
+     * Reimplemented from KDevProject. These methods are only
+     * for use by the application core.
+     */
+    virtual void openProject(const QString &dirName, const QString &projectName);
+    virtual void closeProject();
+
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotAddTranslation();
@@ -59,20 +74,12 @@ private slots:
     //void slotImportExisting();
     
 private:
-    QStringList allBuildConfigs();
-    QString currentBuildConfig();
-    QString buildDirectory();
-    
-    void startMakeCommand(const QString &dir, const QString &target);
-    
     QGuardedPtr<AutoProjectWidget> m_widget;
     QString m_projectName;
     KSelectAction *buildConfigAction;
-    
+
+    // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;
-    friend class CompilerOptionsWidget;
-    friend class AddTranslationDialog;
-    friend class AddIconDialog;
 };
 
 typedef KGenericFactory<AutoProjectPart> AutoProjectFactory;

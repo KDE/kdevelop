@@ -15,10 +15,12 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <kdebug.h>
+#include <kfiledialog.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -84,26 +86,41 @@ ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *p
     if (f77offers.isEmpty())
         f77flags_button->setEnabled(false);
 
-    currentConfig = QString::null;
-    configChanged("default");
-
-    QDomDocument dom = *m_part->projectDom();
-    QDomNode node = dom.documentElement().namedItem("kdevautoproject").namedItem("configurations");
-    QDomElement childEl = node.firstChild().toElement();
-    while (!childEl.isNull()) {
-        allConfigs.append(childEl.tagName());
-        kdDebug(9020) << "Found config " << childEl.tagName() << endl;
-        childEl = childEl.nextSibling().toElement();
-    }
-
-    if (!allConfigs.contains("default"))
-        allConfigs.append("default");
+    allConfigs = part->allBuildConfigs();
     config_combo->insertStringList(allConfigs);
+
+    currentConfig = QString::null;
+    configChanged(part->currentBuildConfig());
+
+    fixLayout();
 }
 
 
 ConfigureOptionsWidget::~ConfigureOptionsWidget()
 {}
+
+
+void ConfigureOptionsWidget::fixLayout()
+{
+    int w1 = ccompiler_label->sizeHint().width();
+    int w2 = cbinary_label->sizeHint().width();
+    int w3 = cflags_label->sizeHint().width();
+    int w4 = cxxcompiler_label->sizeHint().width();
+    int w5 = cxxbinary_label->sizeHint().width();
+    int w6 = cxxflags_label->sizeHint().width();
+    int w7 = f77compiler_label->sizeHint().width();
+    int w8 = f77binary_label->sizeHint().width();
+    int w9 = f77flags_label->sizeHint().width();
+
+    int w = QMAX(w1, QMAX(w2, w3));
+    w = QMAX(w, QMAX(w4, w5));
+    w = QMAX(w, QMAX(w6, w7));
+    w = QMAX(w, QMAX(w8, w9));
+
+    ccompiler_label->setMinimumWidth(w);
+    cxxcompiler_label->setMinimumWidth(w);
+    f77compiler_label->setMinimumWidth(w);
+}
 
 
 void ConfigureOptionsWidget::readSettings(const QString &config)
@@ -173,13 +190,14 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
 void ConfigureOptionsWidget::saveSettings(const QString &config)
 {
     QDomDocument dom = *m_part->projectDom();
+    DomUtil::writeEntry(dom, "/kdevautoproject/general/useconfiguration", config);
     QString prefix = "/kdevautoproject/configurations/" + config + "/";
     kdDebug(9020) << "Saving config under " << prefix << endl;
 
     DomUtil::writeEntry(dom, prefix + "configargs", configargs_edit->text());
     DomUtil::writeEntry(dom, prefix + "builddir", builddir_edit->text());
 
-    QFileInfo fi(builddir_edit->text());
+    QFileInfo fi(m_part->buildDirectory());
     QDir dir(fi.dir());
     dir.mkdir(fi.fileName());
 
@@ -198,8 +216,17 @@ void ConfigureOptionsWidget::saveSettings(const QString &config)
     DomUtil::writeEntry(dom, prefix + "cxxflags", cxxflags_edit->text());
     DomUtil::writeEntry(dom, prefix + "f77flags", f77flags_edit->text());
 
-    if (KMessageBox::questionYesNo(this, i18n("Rerun configure now?")) == KMessageBox::Yes)
+    if (KMessageBox::questionYesNo(this, i18n("Rerun configure for %1 now?").arg(config)) == KMessageBox::Yes)
         QTimer::singleShot(0, m_part, SLOT(slotConfigure()));
+}
+
+
+void ConfigureOptionsWidget::builddirClicked()
+{
+    QString dir = builddir_edit->text();
+    dir = KFileDialog::getExistingDirectory(dir, this);
+    if (!dir.isNull())
+        builddir_edit->setText(dir);
 }
 
 
@@ -251,6 +278,8 @@ void ConfigureOptionsWidget::configRemoved()
 
     config_combo->clear();
     config_combo->insertStringList(allConfigs);
+    
+    currentConfig = QString::null;
     configChanged("default");
 }
 
