@@ -13,6 +13,6 @@
 #include <klocale.h>
 
 const Error& Errors::InternalError = Error( 1, -1, i18n("Internal Error") );
-const Error& Errors::SyntaxError = Error( 2, -1, i18n("Syntax Error before `%1'") );
-const Error& Errors::ParseError = Error( 3, -1, i18n("Parse Error  before `%1'") );
+const Error& Errors::SyntaxError = Error( 2, -1, i18n("Syntax Error before '%1'") );
+const Error& Errors::ParseError = Error( 3, -1, i18n("Parse Error before '%1'") );
 
