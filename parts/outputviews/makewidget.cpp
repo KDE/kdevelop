@@ -641,7 +641,13 @@ void MakeWidget::insertLine2(const QString &line, Type type)
 
     QString color = getOutputColor( type );
     QString eLine = QStyleSheet::escape( line );
-    append(QString("<code>%1<font color=\"%2\">%3</font></code>").arg(icon).arg(color).arg(eLine));
+    // Qt >= 3.1 doesn't need a <br>.
+#if QT_VERSION < 0x040000
+    static const QString br = QString::fromLatin1( qVersion() ).section( ".", 1, 1 ).toInt() > 0 ? "" : "<br>";
+#else
+    static const QString br;
+#endif
+    append(QString("<code>%1<font color=\"%2\">%3</font></code>%4").arg(icon).arg(color).arg(eLine).arg(br)); 
     setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
 
     if (move)
