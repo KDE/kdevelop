@@ -1,3 +1,5 @@
+#include <lexer.h>
+
 #include <kdevdriver.h>
 #include <unistd.h>
 
@@ -34,6 +36,12 @@ void KDevDriver::setupProject()
 		++it;
 	}
 	}
+}
+
+void KDevDriver::setupLexer( Lexer* lexer )
+{
+	lexer->setReportMessages( true );
+	lexer->setReportWarnings( true );
 }
 
 // setup the preprocessor

@@ -22,6 +22,10 @@ public:
     // setup the preprocessor
     // code provided by Reginald Stadlbauer <reggie@trolltech.com>
     void setup();
+
+protected:
+    void setupLexer( Lexer* lexer );
+
 private:
     CppSupportPart* m_cppSupport;
 };
