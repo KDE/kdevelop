@@ -35,7 +35,7 @@ AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoSubprojectVi
     : AddSubprojectDlgBase(parent, name, true)
 {
     setIcon(SmallIcon("folder_new.png"));
-    
+
     connect( createButton, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
 
@@ -76,7 +76,7 @@ void AddSubprojectDialog::accept()
 	return;
     }
 #endif
-    
+
     QDir      dir( m_subProject->path );
     QFileInfo file( dir, name );
 
@@ -135,14 +135,14 @@ void AddSubprojectDialog::accept()
             return;
         }
         QTextStream stream(&f);
-        stream << "INCLUDES = " << newitem->variables["INCLUDES"] << endl;
+        stream << "INCLUDES = " << newitem->variables["INCLUDES"] << endl << "METASOURCES = AUTO" << endl;
         f.close();
     }
-     
+
 #if 0
     QString relmakefile = (m_subProject->path + "/" + name + "/Makefile").mid(m_part->projectDirectory().length()+1);
     kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
-    
+
     QString cmdline = "cd ";
     cmdline += m_part->projectDirectory();
     cmdline += " && automake ";
@@ -150,13 +150,13 @@ void AddSubprojectDialog::accept()
     cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
     cmdline += relmakefile;
     cmdline += " ./config.status";
-    
+
     m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), cmdline );
     m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), m_part->configureCommand() );
 #endif
-    
+
     m_part->needMakefileCvs();
-    
+
     QDialog::accept();
 }
 

@@ -760,6 +760,21 @@ void AutoProjectPart::slotExecute()
         return;
     }
 
+    if (appFrontend()->isRunning()) {
+        if (KMessageBox::questionYesNo(m_widget, i18n("Your application is currently running. Do you want to restart it?"), i18n("Application already running"), i18n("&Restart application"), i18n("Do &Nothing")) == KMessageBox::No)
+            return;
+        connect(appFrontend(), SIGNAL(processExited()), SLOT(slotExecute2()));
+        appFrontend()->stopApplication();
+        return;
+    }
+
+    slotExecute2();
+}
+
+void AutoProjectPart::slotExecute2()
+{
+    disconnect(appFrontend(), SIGNAL(processExited()), this, SLOT(slotExecute2()));
+
     QString directory;
     QString program = mainProgram();
     int pos = program.findRev('/');

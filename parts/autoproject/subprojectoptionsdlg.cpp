@@ -17,6 +17,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
+#include <qcheckbox.h>
 #include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -82,7 +83,7 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     for (it = l.begin(); it != l.end(); ++it) {
 	kdDebug(9013) << "----------> subproject = " << (*it) << endl;
 	QString subProjectName = *it;
-	
+
 	if( subProjectName.isEmpty() ){
 	    subProjectName = QString::fromLatin1( "." );
 	}
@@ -93,7 +94,7 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     }
 
     setIcon ( SmallIcon ( "configure" ) );
-        
+
     readConfig();
 }
 
@@ -108,7 +109,9 @@ void SubprojectOptionsDialog::readConfig()
     cflags_edit->setText(subProject->variables["AM_CFLAGS"]);
     cxxflags_edit->setText(subProject->variables["AM_CXXFLAGS"]);
     fflags_edit->setText(subProject->variables["AM_FFLAGS"]);
-    
+
+    metasources_checkbox->setChecked(subProject->variables["METASOURCES"].stripWhiteSpace() == "AUTO");
+
     QString includes = subProject->variables["INCLUDES"];
     QStringList includeslist = QStringList::split(QRegExp("[ \t]"), QString(includes));
 
@@ -119,7 +122,7 @@ void SubprojectOptionsDialog::readConfig()
         while (clitem) {
             if (*it == ("-I$(top_srcdir)/" + clitem->text())) {
                 clitem->setOn(true);
-                break;	
+                break;
             }
             clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
         }
@@ -130,7 +133,7 @@ void SubprojectOptionsDialog::readConfig()
             lastItem = item;
         }
     }
-    
+
     QMap<QString, QString>::ConstIterator it2;
     for (it2 = subProject->prefixes.begin(); it2 != subProject->prefixes.end(); ++it2)
         new QListViewItem(prefix_listview, it2.key(), it2.data());
@@ -151,7 +154,7 @@ void SubprojectOptionsDialog::readConfig()
 void SubprojectOptionsDialog::storeConfig()
 {
     QMap<QString, QString> replaceMap;
-    
+
     QString old_cflags = subProject->variables["AM_CFLAGS"];
     QString new_cflags = cflags_edit->text();
     if (new_cflags != old_cflags) {
@@ -171,6 +174,13 @@ void SubprojectOptionsDialog::storeConfig()
     if (new_fflags != old_fflags) {
         subProject->variables["AM_FFLAGS"] = new_fflags;
         replaceMap.insert("AM_FFLAGS", new_fflags);
+    }
+
+    QString old_metasources = subProject->variables["METASOURCES"];
+    QString new_metasources = metasources_checkbox->isChecked() ? "AUTO" : QString::null;
+    if (new_metasources != old_metasources) {
+        subProject->variables["METASOURCES"] = new_metasources;
+        replaceMap.insert("METASOURCES", new_metasources);
     }
 
     QStringList includeslist;
@@ -207,7 +217,7 @@ void SubprojectOptionsDialog::storeConfig()
     kdDebug() << "New subdirs variable: " << subdirs << endl;
     subProject->variables["SUBDIRS"] = subdirs;
     replaceMap.insert("SUBDIRS", subdirs);
-    
+
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 }
 
@@ -306,7 +316,7 @@ void SubprojectOptionsDialog::addPrefixClicked()
     AddPrefixDialog dlg;
     if (!dlg.exec())
         return;
-    
+
     new QListViewItem(prefix_listview, dlg.name(), dlg.path());
 }
 

@@ -93,6 +93,7 @@ private slots:
     void slotMakeMessages();
     void slotConfigure();
     void slotExecute();
+    void slotExecute2();
     void slotBuildConfigChanged(const QString &config);
     void slotBuildConfigAboutToShow();
     void slotCommandFinished( const QString& command );
