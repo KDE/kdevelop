@@ -265,7 +265,7 @@ void CClassTreeHandler::addMethods( QList<CParsedMethod> *list,
        aMethod != NULL;
        aMethod = list->next() )
   {
-    if( filter == CTHALL || filter == aMethod->export )
+    if( filter == CTHALL || filter == (CTHFilter)aMethod->export )
       addMethod( aMethod, parent );
   }
 }
@@ -295,7 +295,7 @@ void CClassTreeHandler::addMethod( CParsedMethod *aMethod,
   else if( aMethod->isPrivate() )
     type = THPRIVATE_METHOD;
   
-  aMethod->toString( str );
+  aMethod->asString( str );
   addItem( str, type, parent );
 }
 
@@ -346,7 +346,7 @@ void CClassTreeHandler::addAttributes( QList<CParsedAttribute> *list,
        aAttr != NULL;
        aAttr = list->next() )
   {
-    if( filter == CTHALL || aAttr->export == filter )
+    if( filter == CTHALL || filter == (CTHFilter)aAttr->export )
       addAttribute( aAttr, parent );
   }
 }
@@ -409,7 +409,7 @@ void CClassTreeHandler::addSlotsFromClass( CParsedClass *aPC, QListViewItem *par
     else if( aMethod->isPrivate() )
       type = THPRIVATE_SLOT;
 
-    aMethod->toString( str );
+    aMethod->asString( str );
     addItem( str, type, parent );
   }
 }
@@ -444,7 +444,7 @@ void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *p
     else if( aMethod->isPrivate() )
       type = THPRIVATE_SIGNAL;
 
-    aMethod->toString( str );
+    aMethod->asString( str );
     addItem( str, type, parent );
   }
 }
@@ -518,7 +518,7 @@ void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
 
   QString str;
 
-  aMethod->toString( str );
+  aMethod->asString( str );
   addItem( str, THGLOBAL_FUNCTION, parent );
 }
 

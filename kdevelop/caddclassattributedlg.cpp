@@ -258,16 +258,19 @@ CParsedAttribute *CAddClassAttributeDlg::asSystemObj()
   aAttr->setType( typeEdit.text() );
   aAttr->setName( nameEdit.text() );
 
+  // Set export
   if( publicRb.isChecked() )
-    aAttr->setExport( PUBLIC );
+    aAttr->setExport( PIE_PUBLIC );
   else if( protectedRb.isChecked() )
-    aAttr->setExport( PROTECTED );
+    aAttr->setExport( PIE_PROTECTED );
   else if( privateRb.isChecked() )
-    aAttr->setExport( PRIVATE );
+    aAttr->setExport( PIE_PRIVATE );
   
+  // Set modifiers
   aAttr->setIsStatic( staticCb.isChecked() );
   aAttr->setIsConst( constCb.isChecked() );
 
+  // Set comment
   comment = "/** " + docEdit.text() + " */";
   aAttr->setComment( comment );
 
@@ -286,7 +289,3 @@ void CAddClassAttributeDlg::OK()
   else
     accept();
 }
-
-
-
-

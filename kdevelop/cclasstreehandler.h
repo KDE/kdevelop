@@ -18,18 +18,19 @@
 #ifndef _CCLASSTREEHANDLER_H_INCLUDED
 #define _CCLASSTREEHANDLER_H_INCLUDED
 
-#include "./classparser/ClassParser.h"
+#include "./classparser/ClassStore.h"
 #include "ctreehandler.h"
 
 typedef enum
 {
   CTHALL = -1, 
-  CTHPUBLIC = PUBLIC, 
-  CTHPROTECTED = PROTECTED, 
-  CTHPRIVATE = PRIVATE
+  CTHPUBLIC = PIE_PUBLIC, 
+  CTHPROTECTED = PIE_PROTECTED, 
+  CTHPRIVATE = PIE_PRIVATE
 } CTHFilter;
 
-/** */
+/** This is an subclass of the treehandler specifically made for
+  * presenting tree-hierarchies of classes. */
 class CClassTreeHandler : public CTreeHandler
 {
 public: // Constructor & destructor

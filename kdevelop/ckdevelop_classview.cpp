@@ -163,14 +163,16 @@ void CKDevelop::slotCVAddMethod( CParsedMethod *aMethod )
   {
     switch( aMethod->export )
     {
-      case PUBLIC:
+      case PIE_PUBLIC:
         toAdd = "public: // Public methods\n" + toAdd;
         break;
-      case PROTECTED:
+      case PIE_PROTECTED:
         toAdd = "protected: // Protected methods\n" + toAdd;
         break;
-      case PRIVATE:
+      case PIE_PRIVATE:
         toAdd = "private: // Private methods\n" + toAdd;
+        break;
+      default:
         break;
     }
 
@@ -236,14 +238,16 @@ void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
   {
     switch( aAttr->export )
     {
-      case PUBLIC:
+      case PIE_PUBLIC:
         toAdd = "public: // Public attributes\n" + toAdd;
         break;
-      case PROTECTED:
+      case PIE_PROTECTED:
         toAdd = "protected: // Protected attributes\n" + toAdd;
         break;
-      case PRIVATE:
+      case PIE_PRIVATE:
         toAdd = "private: // Private attributes\n" + toAdd;
+        break;
+      default:
         break;
     }
 
@@ -530,7 +534,7 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
        aClass->methodIterator.current();
        ++aClass->methodIterator )
   {
-    aClass->methodIterator.current()->toString( str );
+    aClass->methodIterator.current()->asString( str );
     lb->inSort( str );
   }
   
@@ -538,7 +542,7 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
        aClass->slotIterator.current();
        ++aClass->slotIterator )
   {
-    aClass->slotIterator.current()->toString( str );
+    aClass->slotIterator.current()->asString( str );
     lb->inSort( str );
   }
 

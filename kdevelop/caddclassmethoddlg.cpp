@@ -281,17 +281,20 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
   else // Else just set the whole thing as the name
     aMethod->setName( decl );
   
+  // Set the export 
   if( publicRb.isChecked() )
-    aMethod->setExport( PUBLIC );
+    aMethod->setExport( PIE_PUBLIC );
   else if( protectedRb.isChecked() )
-    aMethod->setExport( PROTECTED );
+    aMethod->setExport( PIE_PROTECTED );
   else if( privateRb.isChecked() )
-    aMethod->setExport( PRIVATE );
+    aMethod->setExport( PIE_PRIVATE );
   
+  // Set modifiers
   aMethod->setIsStatic( staticCb.isChecked() );
   aMethod->setIsConst( constCb.isChecked() );
   aMethod->setIsVirtual( virtualCb.isChecked() );
 
+  // Set comment
   comment = "/** " + docEdit.text() + " */";
   aMethod->setComment( comment );
 
@@ -309,7 +312,3 @@ void CAddClassMethodDlg::OK()
   else
     accept();
 }
-
-
-
-
