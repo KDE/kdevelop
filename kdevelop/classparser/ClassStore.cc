@@ -153,13 +153,52 @@ void CClassStore::addClass( CParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void CClassStore::out()
 {
+  QList<CParsedMethod> *globalMethods;
+  QList<CParsedAttribute> *globalAttributes;
+  QList<CParsedStruct> *globalStructs;
+  CParsedMethod *aMethod;
+  CParsedAttribute *aAttr;
+  CParsedStruct *aStruct;
+
   // Output all classes.
   for( classIterator.toFirst();
        classIterator.current();
        ++classIterator )
     classIterator.current()->out();
 
-  cout << "Global declarations\n";
+  // Global methods
+  cout << "Global functions\n";
+
+  globalMethods = globalContainer.getSortedMethodList();
+  for( aMethod = globalMethods->first();
+       aMethod != NULL;
+       aMethod = globalMethods->next() )
+  {
+    aMethod->out();
+  }
+  delete globalMethods;
+
+  // Global structures
+  cout << "Global variables\n";
+  globalAttributes = globalContainer.getSortedAttributeList();
+  for( aAttr = globalAttributes->first();
+       aAttr != NULL;
+       aAttr = globalAttributes->next() )
+  {
+    aAttr->out();
+  }
+  delete globalAttributes;  
+
+  // Global structures
+  cout << "Global structs\n";
+  globalStructs = globalContainer.getSortedStructList();
+  for( aStruct = globalStructs->first();
+       aStruct != NULL;
+       aStruct = globalStructs->next() )
+  {
+    aStruct->out();
+  }
+  delete globalStructs;  
 }
 
 /*********************************************************************
@@ -193,8 +232,6 @@ QList<CClassTreeNode> *CClassStore::asForest()
   {
     aClass = classIterator.current();
 
-    debug( "Processing class %s", aClass->name.data() );
-    
     // Check if we have added the child.
     childNode = ctDict.find( aClass->name );
     
@@ -203,15 +240,10 @@ QList<CClassTreeNode> *CClassStore::asForest()
     {
       childNode = new CClassTreeNode();
 
-      debug( " Adding %s to dict", aClass->name.data() );
-
       ctDict.insert( aClass->name, childNode );
     }
     else if( !childNode->isInSystem )
-    {
-      debug( " Removing %s from retVal", childNode->name.data() );
       retVal->removeRef( childNode );
-    }
     
     // Set childnode values.
     childNode->setName( aClass->name );
@@ -228,8 +260,6 @@ QList<CClassTreeNode> *CClassStore::asForest()
            aParent != NULL;
            aParent = childNode->theClass->parents.next() )
       {
-        debug( " Processing parent %s", aParent->name.data() );
-
         // Check if we have added the parent already.
         parentNode = ctDict.find( aParent->name );
         
@@ -241,15 +271,11 @@ QList<CClassTreeNode> *CClassStore::asForest()
           parentNode->setName( aParent->name );
           parentNode->setIsInSystem( false );
 
-          debug( "  Appending new parent %s to retVal", aParent->name.data() );
-
           retVal->append( parentNode );
           ctDict.insert( parentNode->name, parentNode );
         }
         
         // Add the child to the parent node.
-        debug( "   Adding %s as child of %s", childNode->name.data(),
-               parentNode->name.data() );
         parentNode->addChild( childNode );
       }
     }
