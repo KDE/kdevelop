@@ -123,11 +123,13 @@ ExitStatusItem::ExitStatusItem( bool normalExit, int exitStatus )
 	: m_normalExit( normalExit )
 	, m_exitStatus( exitStatus )
 {
+//	kdDebug() << "ExitStatusItem: normalExit=" << normalExit << "; exitStatus=" << exitStatus << endl;
 	m_text = i18n("*** Compilation aborted ***");
-	if ( m_normalExit && m_exitStatus )
-		m_text = i18n("*** Exited with status: %1 ***").arg( m_exitStatus );
 	if ( m_normalExit )
-		m_text = i18n("*** Success ***");
+		if (m_exitStatus )
+			m_text = i18n("*** Exited with status: %1 ***").arg( m_exitStatus );
+        	else
+			m_text = i18n("*** Success ***");
 }
 
 QString ExitStatusItem::text( EOutputLevel )
