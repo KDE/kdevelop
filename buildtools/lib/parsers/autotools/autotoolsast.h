@@ -85,6 +85,17 @@ public:
 	/** @return The indentation string based on node depth.*/
 	virtual QString indentation();
 	
+	//! \return true if this AST has children
+	bool hasChildren() const;
+
+	/**
+	 * Get the children of this ast
+	 * \return the list of this ast's childre
+	 */
+	QValueList<AST*> children() const;
+
+
+	
 protected:
 	NodeType m_nodeType;
 	QValueList<AST*> m_children;
@@ -181,7 +192,7 @@ public:
 	AssignmentAST(): AST(AST::AssignmentAST) {}
 
 	virtual void writeBack(QString &buffer);
-
+	
 	/**Scoped name of the variable.*/
 	QString scopedID;
 	
