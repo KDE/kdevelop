@@ -23,6 +23,8 @@
 
 #include "filecreate_typechooser.h"
 
+class KPopupMenu;
+
 namespace FileCreate {
   class Widget;
   class FileType;
@@ -113,9 +115,16 @@ public slots:
    * Called when a new file is required - for example, from the "New.." menu action.
    */
   void slotNewFile();
+  
+  /**
+   * Called from KToolBarPopupMenu to request a new file action
+   * @param pFileType is acutally a pointer to FileType
+   */
+  void slotNewFilePopup(int pFileType);
 
 protected slots:
   void slotNoteFiletype(const FileType * filetype);
+  void slotAboutToShowNewPopupMenu();
   void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int );
 
 private:
@@ -173,6 +182,9 @@ private:
 
   bool m_useSideTab;
   ConfigWidgetProxy * _configProxy;
+  
+  KPopupMenu* m_newPopupMenu;
+  QPtrList<KPopupMenu>* m_subPopups;
 };
 
 

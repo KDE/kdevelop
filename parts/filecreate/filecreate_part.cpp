@@ -25,6 +25,9 @@
 #include <kstdaction.h>
 #include <kaction.h>
 #include <kapplication.h>
+#include <kactionclasses.h>
+#include <kpopupmenu.h>
+#include <kiconloader.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -55,7 +58,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( &data ) )
 using namespace FileCreate;
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList & )
-    : KDevCreateFile("FileCreate", "filecreate", parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true)
+    : KDevCreateFile("FileCreate", "filecreate", parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true), m_subPopups(0)
 {
   setInstance(FileCreateFactory::instance());
   setXMLFile("kdevpart_filecreate.rc");
@@ -70,10 +73,12 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
-  KAction * newAction = KStdAction::openNew(this, SLOT(slotNewFile()), actionCollection(), "file_new");
+  KToolBarPopupAction * newAction = new KToolBarPopupAction( "&New", "file_new", CTRL+Qt::Key_N, this, SLOT(slotNewFile()), actionCollection(), "file_new");
   newAction->setWhatsThis( i18n("<b>New file</b><p>Creates a new file. Also adds it the project if the <b>Add to project</b> checkbox is turned on.") );
   newAction->setToolTip( i18n("Create a new file") );
-
+  m_newPopupMenu = newAction->popupMenu();
+  connect(m_newPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotAboutToShowNewPopupMenu()));
+  
 //  m_filetypes.setAutoDelete(true);
 
   m_availableWidgets[0] = new FriendlyWidget(this);
@@ -101,6 +106,9 @@ FileCreatePart::~FileCreatePart()
   }
 */  
   delete _configProxy;
+  
+  m_newPopupMenu->clear();
+  delete m_subPopups;
 }
 
 void FileCreatePart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
@@ -160,6 +168,66 @@ bool FileCreatePart::setWidget(TypeChooser * widg) {
 
 void FileCreatePart::refresh() {
   if (typeChooserWidget()) typeChooserWidget()->refresh();
+}
+
+void FileCreatePart::slotAboutToShowNewPopupMenu()
+{
+	KIconLoader * m_iconLoader = KGlobal::iconLoader();
+	m_newPopupMenu->clear();
+	delete m_subPopups;
+	m_subPopups = NULL;
+	int id = 0;
+	FileType * filetype = m_filetypes.first();
+	for(; filetype; filetype=m_filetypes.next())
+	{
+		if (filetype->enabled())
+		{
+			if (filetype->subtypes().count()==0)
+			{
+				QPixmap iconPix = m_iconLoader->loadIcon(
+					filetype->icon(), KIcon::Desktop, KIcon::SizeSmall,
+					KIcon::DefaultState, NULL, true);
+				m_newPopupMenu->insertItem(iconPix, filetype->name(), this,
+					SLOT(slotNewFilePopup(int)), 0, ++id );
+				m_newPopupMenu->setItemParameter( id, (int)filetype );
+			} else
+			{
+				KPopupMenu* subMenu = NULL;
+				QPtrList<FileType> subtypes = filetype->subtypes();
+				for(FileType * subtype = subtypes.first(); subtype; subtype=subtypes.next())
+				{
+					if (subtype->enabled()){
+						if( !subMenu )
+							subMenu = new KPopupMenu(0,0);
+						QPixmap iconPix = m_iconLoader->loadIcon(
+							subtype->icon(), KIcon::Desktop, KIcon::SizeSmall,
+							KIcon::DefaultState, NULL, true);
+						subMenu->insertItem(iconPix, subtype->name(), this,
+							SLOT(slotNewFilePopup(int)), 0, ++id );
+						subMenu->setItemParameter( id, (int)filetype );
+					}
+				}
+				if( subMenu )
+				{
+					if( !m_subPopups )
+					{
+						m_subPopups = new QPtrList<KPopupMenu>;
+						m_subPopups->setAutoDelete(true);
+					}
+					m_subPopups->append( subMenu );
+					m_newPopupMenu->insertItem( filetype->name(), subMenu );
+				}
+			}
+
+		}
+
+	}
+}
+
+void FileCreatePart::slotNewFilePopup( int pFileType )
+{
+	const FileType* filetype = (const FileType*) pFileType;
+	slotFiletypeSelected( filetype );
 }
 
 void FileCreatePart::slotNewFile() {
@@ -505,3 +573,5 @@ void FileCreatePart::slotInitialize( )
 }
 
 #include "filecreate_part.moc"
+
+	// kate: indent-width 4; replace-tabs off; tab-width 4; space-indent off;
