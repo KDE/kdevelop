@@ -22,6 +22,8 @@ SplashScreen::SplashScreen()
   m_splash = new QWidget( 0,
     "splash", WStyle_NoBorder | WStyle_Customize | WStyle_StaysOnTop | WX11BypassWM );
 
+  m_splash->installEventFilter( this );
+
   QVBoxLayout *vbox = new QVBoxLayout(m_splash);
 
   QLabel *pixmap = new QLabel(m_splash);
@@ -66,14 +68,14 @@ void SplashScreen::showMessage(const QString &message)
 {
   kdDebug(9000) << "SPLASH: message=" << message << endl;
 
-  m_message->setText(message);
+  m_message->setText(" " + message);
   kapp->processEvents();
 }
 
 bool SplashScreen::eventFilter(QObject* obj, QEvent* e)
 {
-  if (obj == m_message && e->type() == QEvent::MouseButtonRelease) {
-    m_splash->close(true);
+  if (obj == m_splash && e->type() == QEvent::MouseButtonRelease) {
+    m_splash->hide();
     return true;
   }
   return false;
