@@ -192,22 +192,26 @@ void SubclassingDlg::readUiFile()
   SlotItem *newSlot;
   m_qtBaseClassName = DomUtil::elementByPathExt(doc,"widget").attribute("class","QDialog");
 
-  if (m_qtBaseClassName=="QMainWindow")
+  if ( (m_qtBaseClassName=="QMainWindow") || (m_qtBaseClassName=="QWidget") )
     m_canBeModal = false;
   else
     m_canBeModal = true;
-  newSlot = new SLOT_ACCEPT;
-  newSlot->setOn(false);
-  if (allreadyInSubclass("accept()"))
-    newSlot->setAllreadyInSubclass();
-  m_slotView->insertItem(newSlot);
-  m_slots << newSlot;
-  newSlot = new SLOT_REJECT;
-  newSlot->setOn(false);
-  if (allreadyInSubclass("reject()"))
-    newSlot->setAllreadyInSubclass();
-  m_slotView->insertItem(newSlot);
-  m_slots << newSlot;
+  if (m_qtBaseClassName != "QWidget")
+  {
+      newSlot = new SLOT_ACCEPT;
+      newSlot->setOn(false);
+      if (allreadyInSubclass("accept()"))
+          newSlot->setAllreadyInSubclass();
+      m_slotView->insertItem(newSlot);
+      m_slots << newSlot;
+
+      newSlot = new SLOT_REJECT;
+      newSlot->setOn(false);
+      if (allreadyInSubclass("reject()"))
+          newSlot->setAllreadyInSubclass();
+      m_slotView->insertItem(newSlot);
+      m_slots << newSlot;
+  }
 
   if (m_qtBaseClassName == "QWizard")
   {
