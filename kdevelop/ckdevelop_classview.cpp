@@ -79,27 +79,19 @@ void CKDevelop::slotClassChoiceCombo(int index)
  *-----------------------------------------------------------------*/
 void CKDevelop::slotMethodChoiceCombo(int index)
 {
-  CParsedClass *aClass;
-  CParsedMethod *aMethod;
-  QString toFile;
-  int toLine;
   KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->text( index );
 
-  if (methodname == "") return;
-  aClass = class_tree->store->getClassByName( classname );
-  if( aClass )
+  // Only bother if the methodname is non-empty.
+  if( !methodname.isEmpty() )
   {
-    aMethod = aClass->getMethodByNameAndArg( methodname );
+    // Make sure the next click on the wiz-button switch to declaration.
+    cv_decl_or_impl = true;
 
-    if( aMethod )
-    {
-      toFile = ( aMethod->isInHFile ? aClass->declaredInFile : aClass->definedInFile );
-      toLine = aMethod->definedOnLine;
-      switchToFile( toFile, toLine );
-    }
+    // Switch to the method defintin
+    CVGotoDefinition( classname, methodname, THPUBLIC_METHOD );
   }
 }
 
@@ -118,6 +110,7 @@ void CKDevelop::slotCVViewDeclaration( const char *className,
                                        THType type )
 {
   CVGotoDeclaration( className, declName, type );
+  CVMethodSelected( declName );
 }
 
 /*-------------------------------- CKDevelop::slotCVViewDefinition()
@@ -135,24 +128,22 @@ void CKDevelop::slotCVViewDefinition(  const char *className,
                                        THType type )
 {
   CVGotoDefinition( className, declName, type );
+  CVMethodSelected( declName );
 }
 
 /*-------------------------------------- CKDevelop::slotCVAddMethod()
  * slotCVAddMethod()
- *   Event when the user adds a method to a class.
+ *   Event when the user adds a method to a class. Brings up a dialog
+ *   and lets the user fill it out.
  *
  * Parameters:
- *   aMethod         The method to add.
+ *   aClassName      The class to add the method to.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::slotCVAddMethod( const char *aClassName )
 {
-  CParsedClass *aClass;
-  QString toAdd;
-  int atLine = -1;
-  CParsedMethod *meth = NULL;
   CParsedMethod *aMethod;
   CAddClassMethodDlg dlg(this, "methodDlg" );
   
@@ -161,31 +152,80 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
   {
     aMethod = dlg.asSystemObj();
     aMethod->setDeclaredInClass( aClassName );
+
+    slotCVAddMethod( aClassName, aMethod );
+
+    delete aMethod;
   }
-  else
-    return;
+}
+
+/*-------------------------------------- CKDevelop::slotCVAddMethod()
+ * slotCVAddMethod()
+ *   Event when the user adds a method to a class. 
+ *
+ * Parameters:
+ *   aClassName      The class to add the method to.
+ *   aMethod         The method to add to the class.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod )
+{
+  CParsedClass *aClass;
+  QString toAdd;
+  int atLine = -1;
+  CParsedMethod *meth = NULL;
 
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( aClassName );
 
-  // Search for a method with the same export as the one being added.
-  for( aClass->methodIterator.toFirst();
-       aClass->methodIterator.current() && meth == NULL;
-       ++aClass->methodIterator )
+  if( aMethod->isSignal )     // Signals
   {
-    if( aClass->methodIterator.current()->exportScope == aMethod->exportScope )
+    // Search for a signal with the same export as the one being added.
+    for( aClass->signalIterator.toFirst();
+         aClass->signalIterator.current();
+         ++aClass->signalIterator )
+    {
+      meth = aClass->signalIterator.current();
+      if( meth->exportScope == aMethod->exportScope && 
+          atLine < meth->declarationEndsOnLine )
+        atLine = meth->declarationEndsOnLine;
+    }
+  }
+  else if( aMethod->isSlot )  // Slots
+  {
+    // Search for a slot with the same export as the one being added.
+    for( aClass->slotIterator.toFirst();
+         aClass->slotIterator.current();
+         ++aClass->slotIterator )
+    {
+      meth = aClass->slotIterator.current();
+      if( meth->exportScope == aMethod->exportScope && 
+          atLine < meth->declarationEndsOnLine )
+        atLine = meth->declarationEndsOnLine;
+    }
+  }
+  else                        // Methods
+  {
+    // Search for a method with the same export as the one being added.
+    for( aClass->methodIterator.toFirst();
+         aClass->methodIterator.current();
+         ++aClass->methodIterator )
+    {
       meth = aClass->methodIterator.current();
+      if( meth->exportScope == aMethod->exportScope && 
+          atLine < meth->declarationEndsOnLine )
+        atLine = meth->declarationEndsOnLine;
+    }
   }
 
   // Switch to the .h file.
-  //CVGotoDefinition( aClass->name, NULL, THCLASS );
-	switchToFile( aClass->declaredInFile );
+  CVGotoDeclaration( aClass->name, NULL, THCLASS );  
 
   aMethod->asHeaderCode( toAdd );
 
-  if( meth )
-    atLine = meth->declarationEndsOnLine;
-  else
+  if( atLine == -1 )
   {
     switch( aMethod->exportScope )
     {
@@ -358,14 +398,19 @@ void CKDevelop::CVClassSelected( const char *aName )
   bool found = false;
   int i;
 
-  for( i=0; i< classCombo->count() && !found; i++ )
-    found = ( strcmp( classCombo->text( i ), aName ) == 0 );
-
-  if( found )
+  // Only bother if the text has changed.
+  if( strcmp( classCombo->currentText(), aName ) != 0 )
   {
-    i--;
-    classCombo->setCurrentItem( i );
-    slotClassChoiceCombo( i );
+
+    for( i=0; i< classCombo->count() && !found; i++ )
+      found = ( strcmp( classCombo->text( i ), aName ) == 0 );
+    
+    if( found )
+    {
+      i--;
+      classCombo->setCurrentItem( i );
+      slotClassChoiceCombo( i );
+    }
   }
 }
 
@@ -385,9 +430,10 @@ void CKDevelop::CVMethodSelected( const char *aName )
   bool found = false;
   int i;
 
+  // Only bother if the text has changed.
   for( i=0; i< methodCombo->count() && !found; i++ )
     found = ( strcmp( methodCombo->text( i ), aName ) == 0 );
-
+    
   if( found )
   {
     i--;
@@ -436,14 +482,17 @@ void CKDevelop::CVGotoDefinition( const char *className,
       if( aClass )
       {
         aMethod = aClass->getMethodByNameAndArg( declName );
-        CVMethodSelected( declName );
+
+        // If at first we don't succeed...
+        if( aMethod == NULL )
+          aMethod = aClass->getSlotByNameAndArg( declName ); 
       }
       break;
     case THGLOBAL_FUNCTION:
       aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
       break;
     default:
-      debug( "Clicked on unknown type." );
+      debug( "Unknown type %d in CVGotoDefinition.", type );
   }
 
   if( aMethod )
@@ -509,7 +558,10 @@ void CKDevelop::CVGotoDeclaration( const char *className,
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
       aAttr = aClass->getMethodByNameAndArg( declName );
-      CVMethodSelected( declName );
+
+      // If at first we don't succeed...
+      if( aAttr == NULL )
+        aAttr = aClass->getSlotByNameAndArg( declName );      
       break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
@@ -528,6 +580,7 @@ void CKDevelop::CVGotoDeclaration( const char *className,
       aAttr = class_tree->store->globalContainer.getAttributeByName( declName );
       break;
     default:
+      debug( "Unknown type %d in CVGotoDeclaration.", type );
       break;
   }
   
@@ -569,8 +622,8 @@ void CKDevelop::refreshClassCombo()
   // Clear the combos.
   classCombo->clear();
 
-  classList = class_tree->store->getSortedClasslist();
   // Add all classes.
+  classList = class_tree->store->getSortedClassList();
   for( aClass = classList->first(),i=0;
        aClass != NULL;
        aClass = classList->next(), i++ )
@@ -579,7 +632,6 @@ void CKDevelop::refreshClassCombo()
     if( aClass->name == savedClass )
       savedIdx = i;
   }
-
   delete classList;
 
   // Update the method combo with the class from the classcombo.
@@ -644,9 +696,3 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
       methodCombo->setCurrentItem( i );
   }
 }
-
-
-
-
-
-
