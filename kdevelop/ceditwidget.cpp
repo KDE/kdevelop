@@ -66,7 +66,7 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   pop->insertSeparator();
   pop->insertItem(Icon("grep.xpm"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
   pop->insertItem(Icon("lookup.xpm"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
-  bookmarks.setAutoDelete(true);
+//  bookmarks.setAutoDelete(true);
   pop->insertSeparator();
   pop->insertItem(Icon("dbgrunto.xpm"),"Run to cursor",this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
   pop->insertItem(Icon("dbgwatchvar.xpm"),"",this,SLOT(slotAddWatchVariable()),0,ID_EDIT_ADD_WATCH_VARIABLE);

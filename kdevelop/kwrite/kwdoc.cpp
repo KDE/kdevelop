@@ -19,7 +19,7 @@ const int taShift = 6;
 
 TextLine::TextLine(int attribute, int context)
   : len(0), size(0), text(0L), attribs(0L), attr(attribute), ctx(context),
-    bpID(0)
+    bpID(0),bookmarked(false)
 {
   visible=true;
 }

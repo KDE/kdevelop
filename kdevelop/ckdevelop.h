@@ -431,8 +431,8 @@ public:
   ////////////////////////
   // BOOKMARKS-Menu entries
   ///////////////////////
-  void slotBookmarksSet();
-  void slotBookmarksAdd();
+//  void slotBookmarksSet();
+  void slotBookmarksToggle();
   void slotBookmarksClear();
   void slotBookmarksBrowserSelected(int);
  	void slotBookmarksNext();

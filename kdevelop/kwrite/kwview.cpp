@@ -218,7 +218,7 @@ void KIconBorder::paintDbgPosition(int line)
 
 void KIconBorder::paintLine(int line)
 {
-  if (line >=0 && line < kWriteDoc->getTextLineCount())
+  if (line >= 0 && line < kWriteDoc->getTextLineCount())
   {
 		clearLine(line);
 		paintBookmark(line);
@@ -302,6 +302,8 @@ void KIconBorder::slotEditBreakpoint()
 /** toggles a bookmark */
 void KIconBorder::slotToggleBookmark()
 {
+	kWrite->toggleBookmark(cursorOnLine);
+/*
 	if(kWrite->bookmarked(cursorOnLine))
   {
     kWrite->removeBookmark(cursorOnLine);
@@ -322,6 +324,7 @@ void KIconBorder::slotToggleBookmark()
     kWriteDoc->tagLines(cursorOnLine, cursorOnLine);
 	  kWriteDoc->updateViews();
 	}
+*/
 }
 
 /** gets the Range of the function the cursor is in */
@@ -565,25 +568,6 @@ void KWriteView::update(VConfig &c) {
   if (cursor.x == c.cursor.x && cursor.y == c.cursor.y) return;
   exposeCursor = true;
 
-	/*
-	if(cursor.y != c.cursor.y)
-	{
-		int h = kWriteDoc->fontHeight;
-
-		// Check if the cursor goes out of what is currently seen
-		if(h * cursor.y < yPos)
-		{
-			debug("KWriteView::update1: scroll: dy: %d\n", yPos - h * cursor.y);	
-			leftBorder->scroll(0, yPos - h * cursor.y);
-		}
-		else if(h * (cursor.y + 1) > yPos + height())
-		{
-			debug("KWriteView::update2: scroll: dy: %d\n", yPos + height() - h * (cursor.y + 1));	
-			leftBorder->scroll(0, yPos + height() - h * (cursor.y + 1));
-		}
-	}
-	*/
-
   kWriteDoc->unmarkFound();
   
   if (cursorOn) {
@@ -652,6 +636,7 @@ void KWriteView::insLine(int line) {
     tagAll();
   }  
 
+/*
   //bookmarks
   KWBookmark *b;
   for (b = kWrite->bookmarks.first(); b != 0L; b = kWrite->bookmarks.next()) {
@@ -660,6 +645,7 @@ void KWriteView::insLine(int line) {
       b->yPos += kWriteDoc->fontHeight;
     }
   }
+*/
 }
 
 void KWriteView::delLine(int line)
@@ -677,6 +663,7 @@ void KWriteView::delLine(int line)
     tagAll();
   }  
 
+/*
   //bookmarks
   KWBookmark *b;
   for (b = kWrite->bookmarks.first(); b != 0L; b = kWrite->bookmarks.next()) {
@@ -686,6 +673,7 @@ void KWriteView::delLine(int line)
 //      if (b->yPos < 0) b->yPos = 0;
     }
   }
+*/
 }
 
 void KWriteView::updateCursor() {
@@ -713,8 +701,6 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
   int cYPos;
   int cXPosMin, cXPosMax, cYPosMin, cYPosMax;
   int dx, dy;
-
-	debug("KWriteView::updateView\n");
 
   if (exposeCursor || flags & ufDocGeometry) {
     emit kWrite->newCurPos();
@@ -845,13 +831,11 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     }
 
     if (b) {
-			debug("KWriteView::updateView: repainting\n");
       repaint(0, 0, width(), height(), false);
 
     } else {
 			if(dy) leftBorder->scroll(0,dy);
 
-			debug("KWriteView::updateView: updateState: %d\n", updateState);
       if (updateState > 0) paintTextLines(oldXPos,oldYPos);
 
       if (dx || dy) {				
@@ -937,7 +921,6 @@ void KWriteView::paintTextLines(int xPos, int yPos) {
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
     bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h);
 
-		debug("KWriteView::paintTextLines: line: %d", line);
 		leftBorder->paintLine(line);
   }
   paint.end();
@@ -1361,10 +1344,11 @@ debug("First Counter: %i",counter);
 	return line;	
 }
 
-
+/*
 KWBookmark::KWBookmark() {
   cursor.y = -1;
 }
+*/
 
 KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char *name)
   : QWidget(parent, name) {
@@ -1378,7 +1362,7 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char *name)
   replacePrompt = 0L;
   kfm = 0L;
   popup = 0L;
-  bookmarks.setAutoDelete(true);
+//  bookmarks.setAutoDelete(true);
 
   kWriteView->setFocus();
 }
@@ -2373,121 +2357,101 @@ void KWrite::installBMPopup(QPopupMenu *p/*KWBookPopup *p*/) {
 //  bookPopup = p;
   connect(p,SIGNAL(aboutToShow()),SLOT(updateBMPopup()));
   connect(p,SIGNAL(activated(int)),SLOT(gotoBookmark(int)));
-  bmEntries = p->count();
+//  bmEntries = p->count();
 }
 
-void KWrite::setBookmark(int n) {
-  KWBookmark *b;
+void KWrite::toggleBookmark() {
 
-  while ((int) bookmarks.count() <= n)
-    bookmarks.append(new KWBookmark());
-  b = bookmarks.at(n);
-  b->xPos = kWriteView->xPos;
-  b->yPos = kWriteView->yPos;
-  b->cursor = kWriteView->cursor;
-
-  int line = b->cursor.y;
-  kWriteDoc->tagLines( line, line );
-  kWriteDoc->updateViews();
+	toggleBookmark(kWriteView->cursor.y);
 }
 
-void KWrite::setBookmark() {
-  QPopupMenu *popup;
-  int z;
-  char s[8];
-
-  popup = new QPopupMenu(0L);
-
-  for (z = 1; z <= 9; z++) {
-    sprintf(s,"&%d",z);
-    popup->insertItem(s,z);
-  }
-
-  popup->move(mapToGlobal(QPoint((width() - 41/*popup->width()*/)/2,
-    (height() - 211/*popup->height()*/)/2)));
-
-  z = popup->exec();
-//  printf("map %d %d\n",popup->width(),popup->height());
-  delete popup;
-  if (z > 0) {
-    setBookmark(z - 1);
-  }
-}
-
-void KWrite::addBookmark() {
-  int z;
-
-  for (z = 0; z < (int) bookmarks.count(); z++) {
-    if (bookmarks.at(z)->cursor.y == -1) break;
-  }
-  setBookmark(z);
-}
-
-void KWrite::removeBookmark(int line)
+void KWrite::toggleBookmark(int line)
 {
-	KWBookmark *b;
- 	for (b = bookmarks.first(); b != 0L; b = bookmarks.next())
-  {
-    if (b->cursor.y == line)
-		{
-      bookmarks.remove();
-      kWriteDoc->tagLines( line, line );
-		  kWriteDoc->updateViews();
-		}
-  }
+	TextLine* textline = kWriteDoc->textLine(line);
+	if(textline != NULL) textline->toggleBookmark();
+
+  kWriteDoc->tagLines(line, line);
+  kWriteDoc->updateViews();
 }
 
 void KWrite::nextBookmark()
 {
- 	if(bookmarks.count() > 0)
-	{
-    int startLine = kWriteView->cursor.y;
-		int lineCount = kWriteDoc->lastLine();
-		int line = startLine;
-		int normalizedLine;
-		do
-		{
-			line++;
-			normalizedLine = line % lineCount;
-		}
-		while(normalizedLine != startLine && !bookmarked(normalizedLine));
+  int startLine = kWriteView->cursor.y;
+ 	int lineCount = kWriteDoc->lastLine();
+ 	int line = startLine;
+ 	int normalizedLine;
+ 	do
+ 	{
+ 		line++;
+ 		normalizedLine = line % lineCount;
+ 	}
+ 	while(normalizedLine != startLine && !bookmarked(normalizedLine));
 
-		gotoPos(0, normalizedLine);
-	}
+ 	if(normalizedLine != startLine) gotoPos(0, normalizedLine);
 }
 
 void KWrite::previousBookmark()
 {
- 	if(bookmarks.count() > 0)
-	{
-    int startLine = kWriteView->cursor.y;
-		int lineCount = kWriteDoc->lastLine();
-		int line = startLine + lineCount;
-		int normalizedLine;
-		do
-		{
-			line--;
-			normalizedLine = line % lineCount;
-		}
-		while(normalizedLine != startLine && !bookmarked(normalizedLine));
+  int startLine = kWriteView->cursor.y;
+ 	int lineCount = kWriteDoc->lastLine();
+ 	int line = startLine + lineCount;
+ 	int normalizedLine;
+ 	do
+ 	{
+ 		line--;
+ 		normalizedLine = line % lineCount;
+ 	}
+ 	while(normalizedLine != startLine && !bookmarked(normalizedLine));
 		
-		gotoPos(0, normalizedLine);
-	}
+ 	if(normalizedLine != startLine) gotoPos(0, normalizedLine);
 }
 
 bool KWrite::bookmarked(int line)
 {
-  // Look for a bookmark on this line
-	KWBookmark *b;
- 	for (b = bookmarks.first(); b != 0L; b = bookmarks.next())
-  {
-    if (b->cursor.y == line)
-      return true;
-  }
+	TextLine* textline = kWriteDoc->textLine(line);
+	if(textline != NULL) return (textline->isBookmarked());
+
 	return false;
+	
+//  // Look for a bookmark on this line
+//	KWBookmark *b;
+// 	for (b = bookmarks.first(); b != 0L; b = bookmarks.next())
+//  {
+//    if (b->cursor.y == line)
+//      return true;
+//  }
+//	return false;
 }
 
 void KWrite::gotoBookmark(int n) {
+
+	int currentBookmark = 1;
+	if(n >= 1)
+	{
+		for(int line = 0; line < kWriteDoc->getTextLineCount(); line++)
+		{
+    	TextLine* textline = kWriteDoc->textLine(line);
+    	if(textline != NULL)
+			{
+				if(textline->isBookmarked())
+				{
+					debug("KWrite::gotoBookmark: line: %d, currentBookmark: %d, n: %d",
+						line, currentBookmark, n);
+
+					if(n == currentBookmark)
+					{
+            gotoPos(0, line);
+						return;
+					}
+					else
+					{
+            currentBookmark++;
+					}
+				}
+			}
+		}
+	}
+/*
   KWBookmark *b;
 
   if (n < 0 || n >= (int) bookmarks.count()) return;
@@ -2498,9 +2462,23 @@ void KWrite::gotoBookmark(int n) {
   kWriteView->updateView(ufPos, b->xPos, b->yPos);
 //  kWriteView->updateView(ufPos, 0, b->cursor.y*kWriteDoc->fontHeight - height()/2);
   kWriteDoc->updateViews(kWriteView); //uptade all other views except this one
+*/
 }
 
 void KWrite::clearBookmarks() {
+
+	for(int line = 0; line < kWriteDoc->getTextLineCount(); line++)
+	{
+		TextLine* textline = kWriteDoc->textLine(line);
+		if(textline != NULL)
+			if(textline->isBookmarked())
+			{
+				textline->toggleBookmark();	
+  			kWriteDoc->tagLines(line, line);
+			}
+	}
+	
+/*
   for (int z = 0; z < (int) bookmarks.count(); z++)
   {
     KWBookmark *b = bookmarks.at(z);
@@ -2511,31 +2489,55 @@ void KWrite::clearBookmarks() {
     }
   }
   bookmarks.clear();
+*/
   kWriteDoc->updateViews();
 }
 
 void KWrite::updateBMPopup() {
-  QPopupMenu *p;
-  KWBookmark *b;
-  char buf[64];
-  int z;
 
-  p = (QPopupMenu *) sender();
+	QPopupMenu* popup = (QPopupMenu *) sender();
 
-  while ((int) p->count() > bmEntries) {
-    p->removeItemAt(p->count() - 1);
+  while ((int) popup->count() > 0) {
+    popup->removeItemAt(popup->count() - 1);
   }
 
-  for (z = 0; z < (int) bookmarks.count(); z++) {
-    b = bookmarks.at(z);
-//  for (b = bookmarks.first(); b != 0L; b = bookmarks.next()) {
-    if (b->cursor.y >= 0) {
-      if ((int) p->count() == bmEntries) p->insertSeparator();
-      sprintf(buf,"%s %d",i18n("Line"),b->cursor.y +1);
-      p->insertItem(buf,z);
-      if (z < 9) p->setAccel(ALT+keys[z],z);
-    }
-  }
+	popup->insertSeparator();
+
+	for(int line = 0; line < kWriteDoc->getTextLineCount(); line++)
+	{
+  	TextLine* textline = kWriteDoc->textLine(line);
+		if(textline != NULL)
+			if(textline->isBookmarked())
+			{
+			  char buf[64];
+        sprintf(buf,"%s %d",i18n("Line"), line + 1);
+				int z = popup->count();
+        popup->insertItem(buf,z);
+        if (z < 9) popup->setAccel(ALT+keys[z],z);       	
+			}
+	}
+
+//  QPopupMenu *p;
+//  KWBookmark *b;
+//  char buf[64];
+//  int z;
+//
+//  p = (QPopupMenu *) sender();
+//
+//  while ((int) p->count() > bmEntries) {
+//    p->removeItemAt(p->count() - 1);
+//  }
+//
+//  for (z = 0; z < (int) bookmarks.count(); z++) {
+//    b = bookmarks.at(z);
+////  for (b = bookmarks.first(); b != 0L; b = bookmarks.next()) {
+//    if (b->cursor.y >= 0) {
+//      if ((int) p->count() == bmEntries) p->insertSeparator();
+//      sprintf(buf,"%s %d",i18n("Line"),b->cursor.y +1);
+//      p->insertItem(buf,z);
+//      if (z < 9) p->setAccel(ALT+keys[z],z);
+//    }
+//  }
 }
 
 
@@ -2621,10 +2623,10 @@ void KWrite::writeConfig(KConfig *config) {
 
 void KWrite::readSessionConfig(KConfig *config) {
   PointStruc cursor;
-  int count, z;
-  char s1[16];
+//  int count, z;
+//  char s1[16];
   QString s2;
-  KWBookmark *b;
+//  KWBookmark *b;
 
 /*
   searchFlags = config->readNumEntry("SearchFlags",sfPrompt);
@@ -2639,6 +2641,7 @@ void KWrite::readSessionConfig(KConfig *config) {
   cursor.y = config->readNumEntry("CursorY");
   kWriteView->updateCursor(cursor);
 
+/*
   count = config->readNumEntry("Bookmarks");
   for (z = 0; z < count; z++) {
     b = new KWBookmark();
@@ -2649,13 +2652,14 @@ void KWrite::readSessionConfig(KConfig *config) {
       sscanf(s2,"%d,%d,%d,%d",&b->xPos,&b->yPos,&b->cursor.x,&b->cursor.y);
     }
   }
+*/
 }
 
 void KWrite::writeSessionConfig(KConfig *config) {
-  int z;
-  char s1[16];
-  char s2[64];
-  KWBookmark *b;
+//  int z;
+//  char s1[16];
+//  char s2[64];
+//  KWBookmark *b;
 
 /*
   config->writeEntry("SearchFlags",searchFlags);
@@ -2669,6 +2673,7 @@ void KWrite::writeSessionConfig(KConfig *config) {
   config->writeEntry("CursorX",kWriteView->cursor.x);
   config->writeEntry("CursorY",kWriteView->cursor.y);
 
+/*
   config->writeEntry("Bookmarks",bookmarks.count());
   for (z = 0; z < (int) bookmarks.count(); z++) {
     b = bookmarks.at(z);
@@ -2678,6 +2683,7 @@ void KWrite::writeSessionConfig(KConfig *config) {
       config->writeEntry(s1,s2);
     }
   }
+*/
 }
 
 /*

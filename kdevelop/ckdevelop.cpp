@@ -1622,7 +1622,12 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   return;
 
 }
-	
+
+///////////////////////////////////////////////////////////////////////////////////////
+// BOOKMARK-Menu slots
+///////////////////////////////////////////////////////////////////////////////////////
+
+/*	
 void CKDevelop::slotBookmarksSet(){
 	if(s_tab_view->getCurrentTab()==BROWSER)
 		slotBookmarksAdd();
@@ -1633,23 +1638,43 @@ void CKDevelop::slotBookmarksSet(){
 			cpp_widget->setBookmark();
 	}
 }
-void CKDevelop::slotBookmarksAdd(){
-	if(s_tab_view->getCurrentTab()==BROWSER){
+*/
+
+void CKDevelop::slotBookmarksToggle()
+{
+	if(s_tab_view->getCurrentTab()==BROWSER)
+	{
 		doc_bookmarks->clear();
-		doc_bookmarks_list.append(browser_widget->currentURL());
-		doc_bookmarks_title_list.append(browser_widget->currentTitle());
+
+		// Check if the current URL is bookmarked
+		int pos = doc_bookmarks_list.find(browser_widget->currentURL());
+		if(pos > -1)
+		{
+			// The current URL is bookmarked, let's remove the bookmark
+			doc_bookmarks_list.remove(pos);
+			doc_bookmarks_title_list.remove(pos);
+		}
+		else
+		{
+			// The current URL is not bookmark, let's bookmark it
+			doc_bookmarks_list.append(browser_widget->currentURL());
+			doc_bookmarks_title_list.append(browser_widget->currentTitle());
+		}
 		
-		uint i;
-    for ( i =0 ; i < doc_bookmarks_list.count(); i++){
+		// Recreate thepopup menu
+    for (uint i = 0 ; i < doc_bookmarks_list.count(); i++){
       doc_bookmarks->insertItem(Icon("mini/html.xpm"),doc_bookmarks_title_list.at(i));
     }
 	}
-	if(edit_widget==header_widget)
-		header_widget->addBookmark();
-	if(edit_widget==cpp_widget)
-		cpp_widget->addBookmark();
-
+	else
+	{
+  	if(edit_widget==header_widget)
+  		header_widget->toggleBookmark();
+  	if(edit_widget==cpp_widget)
+  		cpp_widget->toggleBookmark();
+	}
 }
+
 void CKDevelop::slotBookmarksClear(){
 	if(s_tab_view->getCurrentTab()==BROWSER){
 		doc_bookmarks_list.clear();
@@ -1671,7 +1696,8 @@ void CKDevelop::openBrowserBookmark(char* file)
   slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotBookmarksBrowserSelected(int id_){
+void CKDevelop::slotBookmarksBrowserSelected(int id_)
+{
 	char* file = doc_bookmarks_list.at(id_);
 	openBrowserBookmark(file);	
 }	
@@ -3381,10 +3407,10 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              		    i18n("Configures KDevelop"))
 
   ON_STATUS_MSG(ID_BOOKMARKS_SET,													i18n("Sets a bookmark to the current window file"))
-  ON_STATUS_MSG(ID_BOOKMARKS_ADD,													i18n("Adds a bookmark to the current window file"))
+  ON_STATUS_MSG(ID_BOOKMARKS_TOGGLE,											i18n("Toggles a bookmark to the current window file"))
   ON_STATUS_MSG(ID_BOOKMARKS_NEXT,												i18n("Goes to the next bookmark in the current window file"))
   ON_STATUS_MSG(ID_BOOKMARKS_PREVIOUS,										i18n("Goes to the previous bookmark in the current window file"))
-  ON_STATUS_MSG(ID_BOOKMARKS_CLEAR,												i18n("Clears the bookmark list for the current window"))
+  ON_STATUS_MSG(ID_BOOKMARKS_CLEAR,												i18n("Clears the bookmarks for the current window"))
 
   ON_STATUS_MSG(ID_HELP_BACK,                      			  i18n("Switchs to last browser page"))
   ON_STATUS_MSG(ID_HELP_FORWARD,                   			  i18n("Switchs to next browser page"))

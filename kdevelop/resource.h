@@ -210,7 +210,7 @@
 ///////////////////////////////////////////////////////////////////
 // Bookmark-menu-entries
 #define ID_BOOKMARKS_SET						17000
-#define ID_BOOKMARKS_ADD						17010
+#define ID_BOOKMARKS_TOGGLE					17010
 #define ID_BOOKMARKS_CLEAR					17020
 #define ID_BOOKMARKS_NEXT						17030
 #define ID_BOOKMARKS_PREVIOUS				17040
@@ -373,7 +373,6 @@
 #define IDK_VIEW_PREVIEW							CTRL+Key_Space
 
 #define IDK_EDIT_SELECT_ALL						CTRL+Key_A
-#define IDK_BOOKMARKS_ADD							CTRL+ALT+Key_A
 #define IDK_VIEW_OUTPUTVIEW	    			CTRL+Key_B
 #define IDK_EDIT_COPY	       					CTRL+Key_C						// standard key
 #define IDK_BOOKMARKS_CLEAR						CTRL+ALT+Key_C
@@ -394,6 +393,7 @@
 #define IDK_EDIT_REPLACE							CTRL+Key_R						// standard key
 #define IDK_FILE_SAVE	       					CTRL+Key_S						// standard key
 #define IDK_VIEW_TREEVIEW	    				CTRL+Key_T
+#define IDK_BOOKMARKS_TOGGLE					CTRL+ALT+Key_T
 #define IDK_EDIT_UNINDENT							CTRL+Key_U
 #define IDK_EDIT_PASTE								CTRL+Key_V						// standard key
 #define IDK_FILE_CLOSE	       				CTRL+Key_W						// standard key
