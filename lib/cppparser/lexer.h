@@ -199,10 +199,10 @@ public:
 
     bool recordWhiteSpaces() const;
     void setRecordWhiteSpaces( bool record );
-    
+
     bool reportWarnings() const;
     void setReportWarnings( bool enable );
-    
+
     bool reportMessages() const;
     void setReportMessages( bool enable );
 
@@ -211,7 +211,7 @@ public:
 
     bool preprocessorEnabled() const;
     void setPreprocessorEnabled( bool enabled );
-    
+
     void resetSkipWords();
     void addSkipWord( const QString& word, SkipType skipType=SkipWord, const QString& str = QString::null );
 
@@ -227,7 +227,8 @@ public:
     const Token& nextToken();
     const Token& lookAhead( int n ) const;
 
-    QString toString( const Token& token ) const;
+    static QString toString( const Token& token );
+    static int toInt( const QString &s );
 
     int tokenPosition( const Token& token ) const;
     void getTokenPosition( const Token& token, int* line, int* col );
@@ -309,7 +310,7 @@ private:
     int m_ifLevel;
     bool m_preprocessorEnabled;
     bool m_inPreproc;
-    
+
     bool m_reportWarnings;
     bool m_reportMessages;
 
@@ -553,13 +554,13 @@ inline void Lexer::readLineComment()
 	    QString msg;
 	    int line = m_currentLine;
 	    int col = m_currentColumn;
-	    
+
 	    while( currentChar() ){
 		if( currentChar() == '*' && peekChar() == '/' )
 		    break;
 		else if( currentChar() == '\n' )
 		    break;
-		
+
 		msg += currentChar();
 		nextChar();
 	    }
@@ -597,7 +598,7 @@ inline void Lexer::readMultiLineComment()
 	    QString msg;
 	    int line = m_currentLine;
 	    int col = m_currentColumn;
-	    
+
 	    while( currentChar() ){
 		if( currentChar() == '*' && peekChar() == '/' )
 		    break;
@@ -751,7 +752,7 @@ inline void Lexer::setPreprocessorEnabled( bool enabled )
     m_preprocessorEnabled = enabled;
 }
 
-inline QString Lexer::toString( const Token& token ) const
+inline QString Lexer::toString( const Token& token )
 {
     //return m_source.mid( token.position(), token.length() );
     return token.text();

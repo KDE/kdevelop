@@ -160,6 +160,20 @@ void Lexer::reset()
     m_currentColumn = 0;
 }
 
+// ### should all be done with a "long" type IMO
+int Lexer::toInt( const QString &s )
+{
+    // hex literal ?
+    if ( s[0] == '0' && (s[1] == 'x' || s[1] == 'X') )
+	return s.mid( 2 ).toInt( 0, 16 );
+    QString n;
+    int i = 0;
+    while ( i < int(s.length()) && s[i].isDigit() )
+	n += s[i++];
+    // ### respect more prefixes and suffixes ?
+    return n.toInt();
+}
+
 void Lexer::getTokenPosition( const Token& token, int* line, int* col )
 {
     token.getStartPosition( line, col );
@@ -197,14 +211,14 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
     } else if( m_startLine && m_skipping[ m_ifLevel ] ){
 	// skip line and continue
         m_startLine = false;
-        int d = preprocessorEnabled();
+        int ppe = preprocessorEnabled();
 	setPreprocessorEnabled( false );
 	while( currentChar() && currentChar() != '\n' ){
             Token tok;
             nextToken( tok, true );
         }
         m_startLine = true;
-        setPreprocessorEnabled( d );
+        setPreprocessorEnabled( ppe );
         return;
     } else if( ch == '/' && ch1 == '/' ){
 	int start = currentPosition();
@@ -811,7 +825,7 @@ int Lexer::macroPrimary()
 		/// @todo implement
 		return m_driver->hasMacro( toString(tk) );
 	    case Token_number_literal:
-		return toString(tk).toInt();
+		return toInt( toString(tk) );
 	    case Token_char_literal:
 		return 1;
 		default:

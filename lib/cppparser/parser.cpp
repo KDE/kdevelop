@@ -2847,7 +2847,7 @@ bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
     bool hasStorageSpec = parseStorageClassSpecifier( storageSpec );
 
     if( hasStorageSpec && !hasFunSpec )
-        parseFunctionSpecifier( funSpec );
+        hasFunSpec = parseFunctionSpecifier( funSpec );
 
     // that is for the case 'friend __declspec(dllexport) ....'
     GroupAST::Node winDeclSpec2;
@@ -2962,6 +2962,8 @@ start_decl:
 
     TypeSpecifierAST::Node spec;
     if( parseTypeSpecifier(spec) ){
+	if ( !hasFunSpec )
+	    parseFunctionSpecifier( funSpec ); 	// e.g. "void inline"
         spec->setCvQualify( cv );
 
 	InitDeclaratorListAST::Node declarators;
