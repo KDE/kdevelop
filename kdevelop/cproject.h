@@ -26,6 +26,22 @@
 #include <qfileinfo.h>
 #include <ksimpleconfig.h>
 
+/** This type defines the different types that can 
+  * exist in a project. 
+  * @author Jonas Nordin
+  */
+typedef enum _Project_enum
+{
+  CORBA_SOURCE,
+  CPP_SOURCE,
+  CPP_HEADER,
+  SCRIPT,
+  DATA,
+  PO,
+  KDEV_DIALOG,
+  PT_END_POS
+} ProjectFileType;
+
 /** info struct for a Makefile.am (used in CProject)
   *@author Sandy Meier
   */
@@ -62,9 +78,9 @@ struct TDialogFileInfo {
   
   QString header_file;
   QString source_file;
-  QString data_file;
-  
+  QString data_file;  
 };
+
 /** info struct for a file (used in CProject)
   *@author Sandy Meier
   */
@@ -72,7 +88,7 @@ struct TFileInfo {
   /** location + name in the projectdir*/
   QString rel_name;
   /** SOURCE,HEADER,SCRIPT,DATA,PO,DIALOG*/
-  QString type;
+  ProjectFileType type;
   /** include in distribution?*/
   bool dist;
   /** install?*/
@@ -80,6 +96,7 @@ struct TFileInfo {
   /** install-location*/
   QString install_location;
 };
+
 struct TWorkspace {
   int id; // 1, 2 or 3
   QStrList openfiles;
@@ -132,83 +149,128 @@ public:
 public: // Methods to store project options
 
   /** Store the version of the kdevprj file format*/
-  void setKDevPrjVersion(QString version);
-  /** at the moment there exists 3 types: normal_cpp,normal_kde,mini_kde*/
-  void setProjectType(QString type);
+  void setKDevPrjVersion(const char* version) { writeGroupEntry( "General", "kdevprj_version", version ); }
+
+  /** Store the project type: {normal_cpp,normal_kde,mini_kde} */
+  void setProjectType(const char *type)       { writeGroupEntry( "General", "project_type", type ); }
+
   /** Store the projectname. */
-  void setProjectName(QString name);
+  void setProjectName(const char *name)       { writeGroupEntry( "General", "project_name", name ); }
+
   /** the mainsubdir, not "po"*/
-  void setSubDir(QString dirname);
+  void setSubDir(const char *dirname)         { writeGroupEntry( "General", "sub_dir", dirname ); }
+
   /** Store the authors name. */
-  void setAuthor(QString name);
+  void setAuthor(const char *name)            { writeGroupEntry( "General", "author", name ); }
+
   /** Store the authors eMail-address. */
-  void setEmail(QString email);
+  void setEmail(const char *email)            { writeGroupEntry( "General", "email", email ); }
+
   /** Store the project version. */
-  void setVersion(QString version);
+  void setVersion(const char *version)        { writeGroupEntry( "General", "version",version ); }
+
   /** Store the classview tree. */
-  void setClassViewTree( QString &tree );
+  void setClassViewTree( const char *tree )   { writeGroupEntry( "General", "classview_tree", tree ); }
+
+  /** at the moment only an english sgmlfile in docs/en/ */
+  void setSGMLFile(const char *name)          { writeGroupEntry( "General", "sgml_file", name ); }
+
+  /** Store options for make( f.e. "-k" for "make -k"*/
+  void setMakeOptions(const char *options)    { writeGroupEntry( "General", "make_options", options ); }
+
+  /** Store the commandline execution arguments for the project binary */
+  void setExecuteArgs(const char *args)       { writeGroupEntry( "General", "execute_args", args ); }
+
+  void setBinPROGRAM(const char *name)        { writeGroupEntry( "Config for BinMakefileAm", "bin_program", name ); }
+
+
   /** Store all open groups in the LFV*/
   void setLFVOpenGroups(QStrList groups);
-  /** at the moment only an english sgmlfile in docs/en/ */
-  void setSGMLFile(QString version);  
+
   void setShortInfo(QStrList short_info);
-  void setBinPROGRAM(QString name);
-  /** Store the linked flags. */
+
+  /** Store the linker flags. */
   void setLDFLAGS(QString flags);
+  void setLDADD(QString libstring);
+
   /** Store the C++ compiler flags. */
   void setCXXFLAGS(QString flags);
-  /** Store the librarys*/
-  void setLDADD(QString libstring);
   void setAdditCXXFLAGS(QString flags);
-  /** Store options for make( f.e. "-k" for "make -k"*/
-  void setMakeOptions(QString options);
-  /** Store the commandline execution arguments for the project binary */
-  void setExecuteArgs(QString args);
+
+  void setFilters(QString group,QStrList& filters);
 
 public: // Methods to fetch project options
 
-  /** Fetch the classview tree. */
-  QString getClassViewTree();
-  /** get all open groups in the LFV*/
-  void getLFVOpenGroups(QStrList& groups);
-  /** Fetch the commandline execution arguments for the project binary. */
-  QString getExecuteArgs();
-  /** Fetch the options for make( i.e "-k" for "make -k". */
-  QString getMakeOptions();
   /** Fetch the version of the kdevprj file format*/
-  QString getKDevPrjVersion();
+  QString getKDevPrjVersion() { return readGroupEntry( "General", "kdevprj_version" ); }
+
   /** Fetch the type: {normal_cpp,normal_kde,mini_kde} */
-  QString getProjectType();
-  QString getProjectFile();
-  QString getProjectDir();
-  QString getSubDir();
+  QString getProjectType()    { return readGroupEntry( "General", "project_type" ); }
+
+  /** Fetch the name of the project. */
+  QString getProjectName()    { return readGroupEntry( "General", "project_name" ); }
+
+  /** Fetch the main subdir, not "po". */
+  QString getSubDir()         { return readGroupEntry( "General", "sub_dir" ); }
+
   /** Fetch the authors name. */
-  QString getAuthor();
+  QString getAuthor()         { return readGroupEntry( "General", "author" ); }
+
   /** Fetch the authors eMail-address. */
-  QString getEmail();
-  /** Fetch the projects version. */
-  QString getVersion();
-  QString getSGMLFile();
-  QString getProjectName();
-  QStrList getShortInfo();
-  QString getBinPROGRAM();
-  QString getLDFLAGS();
-  QString getCXXFLAGS();
-  /** Fetch the librarys. */
-  QString getLDADD();
-  QString getAdditCXXFLAGS();
+  QString getEmail()          { return readGroupEntry( "General", "email" ); }
+
+  /** Fetch the projects' version. */
+  QString getVersion()        { return readGroupEntry( "General", "version" ); }
+
+  /** Fetch the classview tree. */
+  QString getClassViewTree()  { return readGroupEntry( "General", "classview_tree" ); }
+
+  /** Fetch the documentation file. */
+  QString getSGMLFile()       { return readGroupEntry( "General", "sgml_file" ); }
+
+  /** Fetch the options for make( i.e "-k" for "make -k". */
+  QString getMakeOptions()    { return readGroupEntry( "General", "make_options" ); }
+
+  /** Fetch the commandline execution arguments for the project binary. */
+  QString getExecuteArgs()    { return readGroupEntry( "General", "execute_args" ); }
+
+  QString getBinPROGRAM()     { return readGroupEntry( "Config for BinMakefileAm", "bin_program" ); }
+
   /** Fetch all groups in the logic file view. */
   void getLFVGroups(QStrList& groups);
+
+  /** Fetch all open groups in the LFV. */
+  void getLFVOpenGroups(QStrList& groups);
+
+  QStrList getShortInfo();
+
+  /** Fetch the librarys. */
+  QString getLDFLAGS();
+  QString getLDADD();
+  QString getCXXFLAGS();
+  QString getAdditCXXFLAGS();
+
+  void getFilters(QString group,QStrList& filters);
+
   TFileInfo getFileInfo(QString filename);
-  TDialogFileInfo getDialogFileInfo(QString rel_filename);
+
   TMakefileAmInfo getMakefileAmInfo(QString rel_name);
+
+  TDialogFileInfo getDialogFileInfo(QString rel_filename);
 
 public: // Public queries
 
+  /** Return the actual file in which the project is stored. */
+  QString getProjectFile() { return prjfile; }
+
+  /** Return the project dir. */
+  QString getProjectDir()  { return dir; }
+
   /* return the sources(.cpp,.c,.C,.cxx) */
-  QStrList& getSources() { return cpp_files; }
+  QStrList& getSources()   { return cpp_files; }
+
   /** return the headers(.h.) */
-  QStrList& getHeaders() { return header_files; }
+  QStrList& getHeaders()   { return header_files; }
 
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
@@ -216,19 +278,34 @@ public: // Public queries
 
   /** Get all sources for this makefile */
   void getSources(QString rel_name_makefileam,QStrList& sources);
+
   /** Get all po files for this makefile */
   void getPOFiles(QString rel_name_makefileam,QStrList& po_files);
 
-  /** check if a subdir is in the project (registered)*/
+  /** check if a subdir is in the project (registered). */
   bool isDirInProject(QString rel_name);
+
+  /** Method that returns the filetype for a given file by looking at 
+   * it's extension.
+   * @param aFile The filename to check.
+   */
+  static ProjectFileType getType( const char *aFile );
+
+  /** Return the type matching a string.
+   * @param aStr The string representation of a type.
+   */
+  ProjectFileType getTypeFromString( const char *aStr );
+
+  /** Return a string matching a type. 
+   * @param aType The type to get the string for.
+   */
+  const char *getTypeString( ProjectFileType aType );
 
 public: // Public methods
 
   /** if ace_group == empty insert prepend at the grouplist*/
   void addLFVGroup(QString name,QString ace_group);
   void removeLFVGroup(QString name);
-  void getFilters(QString group,QStrList& filters);
-  void setFilters(QString group,QStrList& filters);
   void writeFileInfo(TFileInfo info);
   //  void writeMakefileAmInfo(TMakefileAmInfo info);
   /** return true if a new subdir was added to the project*/
@@ -255,21 +332,40 @@ public: // Public methods
 
 protected:
 
+  /** Write an entry to the project file. 
+   * @param group Name of the group.
+   * @param tag   The value-tag e.g version.
+   * @param entry The string to store. */
+  void writeGroupEntry( const char *group, const char *tag, const char *entry );
+
+  /** Read an entry from the project file and return it.
+   * @param group Name of the group.
+   * @param tag   The value-tag e.g version. */
+  QString readGroupEntry( const char *group, const char *tag );
+
   void setSourcesHeaders();
   void getAllStaticLibraries(QStrList& libs);
   QString getDir(QString rel_name);
   QString getName(QString rel_name);
 
 protected: // Protected attributes
+
+  /** The actual project file. */
   QString prjfile;
+
+  /** The project directory. */
   QString dir;
   
-  /** a list of all cpp-files in the project*/
+  /** A list of all cpp-files in the project*/
   QStrList cpp_files;
-  /** a list of all header-files in the project*/
+
+  /** A list of all header-files in the project*/
   QStrList header_files;
 
-  KSimpleConfig* config;
+  /** Maps a ProjectFileType to a string. */
+  QString *ptStringMap;
+  
+  KSimpleConfig config;
   
 };
 #endif
