@@ -83,7 +83,6 @@ void CDocTree::initPopups()
  *-----------------------------------------------------------------*/
 void CDocTree::refresh(CProject* prj)
 { 
-  assert( prj != NULL );
 
   QListViewItem* top_item;
   QListViewItem* project_item;
@@ -157,10 +156,12 @@ void CDocTree::refresh(CProject* prj)
   project_item = treeH->addItem( i18n("Current Project"), THFOLDER, top_item );
   
   // add the Project-Doc
-  if(prj->valid)
-  {
-    treeH->addItem( i18n("API-Documentation"), THBOOK, project_item );
-    treeH->addItem( i18n("User-Manual"), THBOOK, project_item );
+  if(prj != 0){
+      if(prj->valid)
+	  {
+	      treeH->addItem( i18n("API-Documentation"), THBOOK, project_item );
+	      treeH->addItem( i18n("User-Manual"), THBOOK, project_item );
+	  }
   }
 
   treeH->setLastItem( project_item );
