@@ -61,7 +61,7 @@ static const KAboutData data("kdevautoproject", I18N_NOOP("Automake Manager"), "
 K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( &data ) )
 
 AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevProject("AutoProject", "autoproject", parent, name ? name : "AutoProjectPart")
+    : KDevProject("AutoProject", "make", parent, name ? name : "AutoProjectPart")
     , m_lastCompilationFailed(false)
 {
     setInstance(AutoProjectFactory::instance());
@@ -73,7 +73,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     m_needMakefileCvs = false;
 
     m_widget = new AutoProjectWidget(this, m_isKDE);
-    m_widget->setIcon(SmallIcon("make"));
+	m_widget->setIcon(SmallIcon( icon() ));
     m_widget->setCaption(i18n("Automake Manager"));
     QWhatsThis::add(m_widget, i18n("<b>Automake manager</b><p>"
                                    "The project tree consists of two parts. The 'overview' "
@@ -222,9 +222,9 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 //    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS );
-	_configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS );
-	_configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS );
+	_configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS, icon() );
+	_configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS, icon() );
+	_configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS, icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
