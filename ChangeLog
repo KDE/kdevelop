@@ -9,6 +9,7 @@
 	* some std:: namespace cleanups
 	* added KDevPlugin as successor of KDevPart
 	* ported the konsole plugin to KDevPlugin
+	* ported the editor chooser plugin to KDevPlugin
 	* extended gideon to load global KDevPlugin components
 	* centralized the trader queries for KDevelop/Part (Plugin) with
 	the additional constraint for the plugin scope into a static
