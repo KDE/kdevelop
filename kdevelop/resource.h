@@ -105,6 +105,7 @@
 // Build-menu entries 
 #define ID_BUILD_COMPILE_FILE       14010
 #define ID_BUILD_MAKE               14020
+#define ID_BUILD_MAKE_WITH          14022
 #define ID_BUILD_REBUILD_ALL        14030
 #define ID_BUILD_CLEAN_REBUILD_ALL  14040
 
@@ -138,13 +139,13 @@
 
 #define ID_OPTIONS_DOCBROWSER			               16050
 
-#define ID_OPTIONS_KEYS               	  	     16035
+#define ID_OPTIONS_KEYS          16035
 
 #define ID_OPTIONS_PRINT         16036
 #define ID_OPTIONS_PRINT_A2PS          16037
 #define ID_OPTIONS_PRINT_ENSCRIPT      16038
 
-#define ID_OPTIONS_KDEVELOP  			     16040
+#define ID_OPTIONS_KDEVELOP            16040
 
 
 
@@ -234,9 +235,9 @@
 #define IDK_EDIT_REPLACE       CTRL+Key_R
 ///////////////////////////////////////////////////////////////////
 // View-menu entries
-#define IDK_VIEW_GOTO_LINE					CTRL+Key_L
-#define IDK_VIEW_TREEVIEW						CTRL+Key_T
-#define IDK_VIEW_OUTPUTVIEW					CTRL+Key_G
+#define IDK_VIEW_GOTO_LINE	    CTRL+Key_L
+#define IDK_VIEW_TREEVIEW	    CTRL+Key_T
+#define IDK_VIEW_OUTPUTVIEW	    CTRL+Key_G
 #define IDK_VIEW_STATUSBAR          CTRL+Key_B			
 
 ///////////////////////////////////////////////////////////////////
@@ -244,9 +245,10 @@
 
 ///////////////////////////////////////////////////////////////////
 // Build-menu entries 
-#define IDK_BUILD_COMPILE_FILE	 		CTRL+Key_F10
-#define IDK_BUILD_MAKE							Key_F9
-#define IDK_BUILD_RUN								CTRL+Key_F9
+#define IDK_BUILD_COMPILE_FILE	        CTRL+Key_F10
+#define IDK_BUILD_MAKE			Key_F9
+#define IDK_BUILD_MAKE_WITH		ALT+Key_F9
+#define IDK_BUILD_RUN			CTRL+Key_F9
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
@@ -260,6 +262,11 @@
 #define IDK_HELP_SEARCH_TEXT					Key_F2				
 #define IDK_HELP_CONTENTS						Key_F1
 
+#define IDK_SHOW_HEADER        CTRL+Key_1
+#define IDK_SHOW_C	       CTRL+Key_2
+#define IDK_SHOW_HELP	       CTRL+Key_3
+#define IDK_SHOW_TOOLS	       CTRL+Key_4
+#define IDK_TOGGLE_LAST        CTRL+Key_Tab
 
 
 ///////////////////////////////////////////////////////////////////
@@ -306,9 +313,6 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
-
-
-
 
 
 
