@@ -20,6 +20,8 @@ parts to distinguish, mainly:
   - parts = The various parts using the KParts framework
   .
       
+\image html Architecture.png
+
 \subsection core-part The Core Part of KDevelop
 
 \subsubsection mainwindows Main Window Objects
