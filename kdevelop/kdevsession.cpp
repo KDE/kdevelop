@@ -293,6 +293,7 @@ void KDevSession::recreateDocs(QDomElement& el){
   }
   // evil hack (of Falk): resize the childframe again 'cause of event timing probs with resizing
   if (bMaxMode && pLastFrm && pLastFrm->parentWidget()) {
+    QApplication::sendPostedEvents();
     pLastFrm->setGeometry(-QEXTMDI_MDI_CHILDFRM_BORDER,
                           -QEXTMDI_MDI_CHILDFRM_BORDER - pLastFrm->captionHeight() - QEXTMDI_MDI_CHILDFRM_SEPARATOR,
                           pLastFrm->parentWidget()->width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
