@@ -1,3 +1,8 @@
+1999-07-27 Jonas Nordin   <jonas.nordin@cenacle.se>
+	* fixed problems with the browser toolbar. It now correctly switches
+	  between declaration/definition for slots and methods. Also doesn't
+	  clear the combo when selecting the first element in the list.
+
 1999-07-26  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* commit patch by Gordon Tyler <gtyler@iafrica.com> (fixed some errormessage-parser problems)
 	* commit patch by Huy Cuong Nguyen <huyc@iquebec.com> (syntax highlighting in kwrite)
@@ -12,8 +17,8 @@
 1999-07-24  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* Bernd: I commented out the #include "commitdilalog.moc" in commitdialog.cpp to make it compile and added
 	  Q_OBJECT to commitdialog.h instead.
-  * updated Makefile.am's for new documentation package structure done by Eric Bishoff
-  * fixed errors that rely to the update
+	* updated Makefile.am's for new documentation package structure done by Eric Bishoff
+	* fixed errors that rely to the update
 
 1999-07-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Combobox for version control in project options
