@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>Manual do Utilizador do KDevelop: Build Settings</TITLE>
+<TITLE>Manual do Utilizador do KDevelop: Definições de Construção</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="KDE, KDevelop">
 <META NAME="description" CONTENT="Manual do Utilizador do KDevelop">
@@ -18,200 +18,198 @@
  <A HREF="index-8.html">Página anterior</A>
  <A HREF="index.html#toc9">Índice geral</A>
 </P>
-<H3><A NAME="Build Settings"></A> <A NAME="s9">9. Build Settings</A></H3>
+<H3><A NAME="Build Settings"></A> <A NAME="s9">9. Definições de Construção</A></H3>
 
-<P>The Project Options dialog, accessed by the project menu, lets you specify all needed parameters for your project. Those will be
-used for the Makefile.am's and the configure.in script (e.g. version number change or compiler warnings ) and thereby set the
-compilation preferences as well.. After changing the project options, you should invoke "make clean" or "rebuild all" to compile
-your project with the new options. Please mind that debugging is only available if the project options are set to create debugging
-information, the amount can be set with the debug level (0-3). If you add functions that belong to a library that is not included
-in the linker flags, your program will not link correctly if those are not updated, so keep track of your library linking.
-<P>For a release build of your application or for distributing the sourcecode package, you should watch the following standard
-settings:
+<P>O diálogo de Opções do Projecto, acedido a partir do menu projecto, permite-lhe especificar todos os parâmetros necessários para o seu projecto. Eles serão
+utilizados pelos Makefile.am's e o script configure.in (por ex. alteração de número de versão ou avisos do compilador) e assim definem também
+as preferências de compilação. Após alterar as opções do projecto, deverá invocar "make clean" ou "reconstruir tudo" para compilar
+o seu projecto com as novas opções. Por favor lembre-se que depurar apenas está disponível se as opções do projecto estão definidas para gerar
+informação de depuração, a quantidade pode ser definida com o nível de depuração (0-3). Se adicionar funções que pertençam a uma biblioteca que não esteja incluida
+nas parâmetros do linker, o seu programa não será correctamente linkado se essas opções não forem actualizadas, por isso tenha atenção às linkagens de bibliotecas.
+<P>Para uma construção de distribuição das suas aplicações ou para distribuir um pacote com o código fonte, deverá observar as seguintes definições
+standard:
 <P>
 <UL>
-<LI>disable debugging</LI>
-<LI>enable optimization and set optimization level to <B>-02</B></LI>
-<LI>set the compiler warnings to <B>-Wall</B></LI>
-<LI>for each new release, increase the version number and update the project.lsm file for version and requirements.</LI>
+<LI>desactivar a depuração</LI>
+<LI>activar optimização e definir o nível de optimização para <B>-02</B></LI>
+<LI>definir os avisos do compilador para <B>-Wall</B></LI>
+<LI>por cada nova distribuição, aumentar o número da versão e actualizar o ficheiro projecto.lsm segundo a versão e os requerimentos.</LI>
 </UL>
 <P>
-<H3><A NAME="ss9.1">9.1 General Options</A>
+<H3><A NAME="ss9.1">9.1 Opções Gerais</A>
 </H3>
 
-<P>The first page of the Project Options dialog sets the general options for your project. These are project name and number, the
-handbook sgml file which is used for generating a set of HTML files that are included in the project and specific information
-about the author. The short description field is for additional information that you want to include like the program's purpose
-and the like.
+<P>A primeira página do diálogo de Opções do Projecto define as opções gerais para o seu projecto. Estas são o nome e número do projecto, o
+ficheiro sgml de manual que será utilizado para gerar um conjunto de ficheiros HTML que serão incluidos no projecto e informação específica
+sobre o autor. O campo para breve descrição é para informação adicional que deseje incluir tal como o objectivo do programa
+e outras similares.
 <P>
-<H3><A NAME="Compiler Options"></A> <A NAME="ss9.2">9.2 Compiler Options</A>
+<H3><A NAME="Compiler Options"></A> <A NAME="ss9.2">9.2 Opções de Compilador</A>
 </H3>
 
-<P>The compiler options page sets the compiler flags towards your target, debugging and additional.
+<P>A página de opções do compilador define os parâmetros do compilador em relação ao seu alvo, depuração e outras.
 <P>
-<H4>Target</H4>
+<H4>Alvo</H4>
 
-<P>The target box contains three options that can be set:
-<P>Target Machine: You have the choice to set the target machine option here by choosing between your machine (default) and i386v,
-which is the option if you configured your compiler as a cross-compiler for an Intel 386-compatible machine running System V. This
-option sets the -b flag to the compiler. Usually you would leave this to the default.
-<P>only syntax-check: If checked, the -fsyntax-only flag is set. This means that the compiler will check your code only for
-correctness in regards to the syntax, but doesn't check anything beyond that.
-<P>Optimize: You can enable optimization for your build process by this option, meaning to set the -O flag. If not checked, the flag
-is set to -O0, so no optimization will be used. If you enable optimization by checking this option, you can as well specify the
-optimization level below from 1 to 3.
-<P>For a release version of your application, enable optimization and set the level to 2.
+<P>A caixa de alvo contém três opções que podem ser definidas:
+<P>Máquina Alvo: Tem a possibilidade de definir a máquina alvo escolhendo entre a sua máquina (defeito) e i386v,
+que é a opção se tiver definido o seu compilador como sendo compilador-cruzado para uma máquina Intel 386-compatível correndo System V. Esta
+opção define o parâmetro -b para o compilador. Normalmente deixaria isto como sendo o defeito.
+<P>apenas verificação de sintaxe: Se activo, o parâmetro -fsyntax-only é definido. Isto significa que o compilador irá verificar o seu código apenas por
+correcção no que toca à sintaxe, mas não verifica mais nada para além disso.
+<P>Optimizar: Pode activar optimização para o seu processo de construção através desta opção, o que significa que é definido o parâmetro -O. Se inactivo, o parâmetro
+é definido para -O0, pelo que nenhuma optimização será utilizada. Se activar optimização seleccionando esta opção, pode também especificar o
+nível de optimização entre 1 e 3.
+<P>Para uma versão de distribuição da sua aplicação, active a optimização e defina o nível para 2.
 <P>
-<H4>Debugging</H4>
+<H4>Depuração</H4>
 
-<P>Right of the Target box, you can see the Debugging-section. This means that you can set your compiler to include information for
-debuggers within the final binary, so the programmer can follow the execution of the application with the debugger in direct
-context to the sourcecode.
-<P>Enable debugging therefore sets the -g flag; the debugging level specifies the amount of information to be included in the binary.
-Availabel are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any debugging option and that
-the binary size will increase by the debugging level.
-<P>Generate extra information for gprof: sets the -pg flag, resulting that the compiler will include information for the gprof
-program that displays caller graphs of your program's function.
-<P>Store temporary intermediate files: sets the -save-temps flag. This will result in storing the usually temporary files produced by
-the preprocessor and the assembler. A compilation of a sourcefile will therefore produce three output files: an *.o file which is
-the final output of the compiler, an *.i file produced by the preprocessor and an *.s file as the output of the assembler.
-<P>For a release of your project, disable any debugging.
+<P>À direita da caixa de Alvo, pode ver a secção de Depuração. Isto significa que você pode definir o seu compilador para incluir informação para
+depuradores dentro do binário final, para que o programador possa seguir a execução da aplicação com o depurador em contexto
+directo com o código fonte.
+<P>Activar a defpuração assim define o parâmetro -g; o nível de depuração especifica a quantidade de informação a ser incluida no binário.
+Disponíveis estão os níveis 1 até 3 para escolher. Lembre-se que a execução do binário será mais lenta se definir quaisquer opções de depuração e que o
+tamanho do binário será tanto maior quanto o nível de depuração.
+<P>Gerar informação extra para o gprof: define o parâmetro -pg, resultando em que o compilador irá incluir informação para o programa
+gprof que apresenta gráficos de chamadas das funções do seu programa.
+<P>Guardar ficheiros temporários intermédios: define o parâmetro -save-temps. Isto irá resultar no armazenamento dos normais ficheiros temporários produzidos
+pelo preprocessador e o assemblador. A compilação de um ficheiro de código irá assim produzir três ficheiros finais: um ficheiro *.o que é
+o resultado final do compilador, um ficheiro *.i produzido pelo preprocessador e um ficheiro *.s que é o resultado final do assemblador.
+<P>Para a distribuição do seu projecto, desactive a depuração.
 <P>
-<H4>Additional Options</H4>
+<H4>Opções Adicionais</H4>
 
-<P>The text entry field on the bottom is intended for you to manually set any flags for the compiler by setting the CXXFLAGS
-environment variable in the makefiles, so make sets the flags before the build process and reset them afterwards. For a complete
-description of all available compiler flags you should see your compiler documentation; for gcc and egcs this can be done by
-<B>man gcc</B>; <B>man g++</B> will show you information about the c++ script that is used to lead the compiler.
+<P>O campo de entrada de texto em baixo destina-se a que introduza manualmente quaisquer parâmetros para o compilador definindo as variáveis
+de ambiente CXXFLAGS nos makefiles, para que o make defina os parâmetros antes do processo de construção e os desligue depois. Para uma descrição
+completa de todos os parâmetros de compilador disponíveis deverá ler a documentação do seu compilador; para o gcc e egcs isto pode ser feito através
+de <B>man gcc</B>; <B>man g++</B> irá mostrar-lhe informação sobre o script c++ que é utilizado para coordenar o compilador.
 <P>
 <P>
-<H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
+<H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Avisos de Compilador</A>
 </H3>
 
-<P>The following gives a desciption about the compiler warning options that can be set on page 3 of the project options dialog. The
-explanations are taken from the man page for GCC, egcs version 1.1.1.
-The warnings themselves are diagnostic messages that indicate that constructions may cause errors.
+<P>De seguida iremos ver uma descrição sobre as opções de avisos do compilador que podem ser definidas na página 3 do diálogo de opções do projecto. As
+explicações foram tiradas da página do manual para o GCC, egcs versão 1.1.1.
+Os avisos em si são mensagens de diagnóstico que indicam construções que podem causar erros.
 <P>
 <DL>
-<DT><B>-Wall</B><DD><P>Standard `-W' options combined.
+<DT><B>-Wall</B><DD><P>Opções `-W' standard combinadas.
 <P>
-<DT><B>-W</B><DD><P>Compile with -W. This option sets options not included in -Wall which are very specific. Please read GCC-Info for more
-information.
+<DT><B>-W</B><DD><P>Compilar com -W. Esta opção define opções não incluidas no -Wall que são muito específicas. Por favor leia a informação GCC para mais
+informações.
 <P>
-<DT><B>-Wtraditional</B><DD><P>Warn about certain constructs that behave differently in traditional and ANSI C.
+<DT><B>-Wtraditional</B><DD><P>Avisa sobre algumas construções que se comportam de forma diferente no C tradicional e ANSI.
 <P>
-<DT><B>-Wundef</B><DD><P>"Warn if an undefined identifier is evaluated in an `#if' directive.
+<DT><B>-Wundef</B><DD><P>Avisa de um identificador não definido é avaliado numa directiva `#if'.
 <P>
-<DT><B>-Wshadow</B><DD><P>Warn whenever a local variable shadows another local variable.
+<DT><B>-Wshadow</B><DD><P>Avisa sempre que uma variável local encobre outra variável local.
 <P>
-<DT><B>-Wid-clash-LEN</B><DD><P>Warn whenever two distinct identifiers match in the first len characters. This may help you prepare a program
-that will compile with certain obsolete, brain-damaged compilers.
+<DT><B>-Wid-clash-LEN</B><DD><P>Avisa sempre que dois identificadores distintos coincidem nos primeiros len caracteres. Isto pode ajudá-lo a preparar um programa
+que irá compilar com alguns compiladores obsoletos e com lesões cerebrais.
 <P>
-<DT><B>-Wlarger-then-LEN</B><DD><P>Warn whenever an object of larger than LEN bytes is defined.
+<DT><B>-Wlarger-then-LEN</B><DD><P>Avisa sempre que um objecto maior que LEN bytes é definido.
 <P>
-<DT><B>-Wpointer-arith</B><DD><P>Warn about anything that depends on the «size of» a function type or of void. GNU C assigns these types a
-size of 1, for convenience in calculations with void * pointers and pointers to functions.
+<DT><B>-Wpointer-arith</B><DD><P>Avisa sobre tudo o que dependa do «size of» de um tipo de função ou de void. O GNU C atribui a estes tipos um
+tamanho de 1, por conveniencia nos cálculos com ponteiros void * e ponteiros para funções.
 <P>
-<DT><B>-Wbad-function-cast</B><DD><P>Warn whenever a function call is cast to a non-matching type. Forexample, warn if <CODE>int malloc()</CODE> is
-cast to <CODE>anything *.</CODE>
+<DT><B>-Wbad-function-cast</B><DD><P>Avisa sempre que uma chamada a uma função é feita para um tipo não coincidente. Por exemplo, avisa se <CODE>int malloc()</CODE> é
+feito sobre <CODE>qualquer_coisa *.</CODE>
 <P>
-<DT><B>-Wcast-equal</B><DD><P>Warn whenever a pointer is cast so as to remove a type qualifier from the target type. For example, warn if a
-const char * is cast to an ordinary char *.
+<DT><B>-Wcast-equal</B><DD><P>Avisa sempre que um ponteiro for feito de forma a remover um qualificador de tipo do tipo do alvo. Por exemplo, avisa se um
+const char * é feito sobre um char * normal.
 <P>
-<DT><B>-Wcast-align</B><DD><P>Warn whenever a pointer is cast such that the required alignment of the target is increased. For example, warn
-if a char * is cast to an int * on machines where integers can only be accessed at two- or four-byte boundaries.
+<DT><B>-Wcast-align</B><DD><P>Avisa sempre que um ponteiro é feito de tal modo que o alinhamento requerido do alvo é aumentado. Por exemplo, avisa
+se um char * é feito sobre um int * em máquinas em que inteiros apenas podem ser acedidos em fronteiras de dois ou quatro byte.
 <P>
-<DT><B>-Wwrite-strings</B><DD><P>Give string constants the type const char[length] so that copying the address of one into a non-const char *
-pointer will get a warning. These warnings will help you find at compile time code that can try to write into a string constant,
-but only if you have been very careful about using const in declarations and prototypes. Otherwise, it will just be a nuisance;
-this is why we did not make `-Wall' request these warnings.
+<DT><B>-Wwrite-strings</B><DD><P>Dá às constantes string o tipo const char[tamanho] de forma a que copiar o endereço de uma para um ponteiro char *
+não-const dará um aviso. Estes avisos ajuda-lo-ão a encontrar na hora da compilação código que pode tentar escrever numa constante string,
+Mas apenas se você tiver sido muito cuidadoso na utilização de const em declarações e protótipos. Caso contrário, será apenas uma nuisance;
+é por esta razão que não fizemos o `-Wall' pedir estes avisos.
 <P>
-<DT><B>-Wconversion</B><DD><P>Warn if a prototype causes a type conversion that is different from what would happen to the same argument in the absence of a
-prototype. This includes conversions of fixed point to floating and vice versa, and conversions changing the width or signedness
-of a fixed point argument except when the same as the default promotion.
+<DT><B>-Wconversion</B><DD><P>Avisa se um protótipo causar uma conversão de tipo que é diferente da que aconteceria ao mesmo argumento na ausência de um
+protótipo. Isto inclui conversões de virgula fixa para flutuante e vice versa, e conversões que alteram o tamanho ou signedness
+(poder ser negativo ou ser sempre valor absoluto) de um argumento de vírgula fixa excepto quando é o mesmo que a promoção por defeito.
 <P>
-<DT><B>-Wsign-compare</B><DD><P>Warn when a comparison between signed and unsigned values could produce an incorrect result when the signed
-value is converted to unsigned.
+<DT><B>-Wsign-compare</B><DD><P>Avisa quando uma comparação entre valores signed e unsigned pode produzir um resultado incorrecto quando o valor signed
+é convertido para unsigned.
 <P>
-<DT><B>-Waggregate-return</B><DD><P>Warn if any functions that return
-structures or unions are defined or called. (In languages where you can return an array, this also elicits a warning.)
+<DT><B>-Waggregate-return</B><DD><P>Avisa se qualquer função retornar
+estruturas ou uniões definidas ou chamadas. (Em linguagens em que pode retornar uma matriz (array), isto também levanta um aviso.)
 <P>
-<DT><B>-Wmissing-prototypes</B><DD><P>Warn if a global function is defined without a previous prototype declaration. This warning is issued even if the definition
-itself provides a prototype. The aim is to detect global functions that fail to be declared in header files.
+<DT><B>-Wmissing-prototypes</B><DD><P>Avisa se uma função global é definida sem a prévia declaração de protótipo. Este aviso é levantado mesmo se a definição
+em si disponibiliza um protótipo. O objectivo é detectar funções globais que não são declaradas em ficheiros header.
 <P>
-<DT><B>-Wmissing-declarations</B><DD><P>Warn if a global function is defined without a previous declaration. Do so even if the definition
-itself provides a prototype. Use this option to detect global functions that are not declared in header files. -Wredundant-decls
-Warn if anything is declared more than once in the same scope, even in cases where multiple declaration is valid and changes nothing.
+<DT><B>-Wmissing-declarations</B><DD><P>Avisa se uma função global é definida sem a declaração prévia. Faz isto mesmo se a definição
+em si disponibiliza um protótipo. Utilize esta opção para detectar funções globais que não são declaradas em ficheiros header.
 <P>
-<DT><B>-Wredundant-decls</B><DD><P>Warn if anything is declared more than once in the same scope even in cases where multiple declaration is
-valid and changes nothing.
+<DT><B>-Wredundant-decls</B><DD><P>Avisa se algo for declarado mais de uma vez no mesmo âmbito, mesmo em casos em que a declaração múltipla é válida e não altera nada.
 <P>
-<DT><B>-Wnested-externs</B><DD><P>Warn if an extern declaration is encountered within an function.
+<DT><B>-Wnested-externs</B><DD><P>Avisa se uma declaração externa é encontrada dentro de uma função.
 <P>
-<DT><B>-Winline</B><DD><P>Warn if a function can not be inlined, and either it was declared as inline, or else the -fin*line-functions option was given.
+<DT><B>-Winline</B><DD><P>Avisa se uma função não pode ser inlined, e ou foi declarada como inline, ou então a opção -fin*line-functions foi dada.
 <P>
-<DT><B>-Wold-style-cast</B><DD><P>Warn if an old-style (C-style) cast is used within a program
+<DT><B>-Wold-style-cast</B><DD><P>Avisa se uma chamada (cast) de tipo antigo (C-style) é utilizada dentro do programa
 <P>
-<DT><B>-Woverloaded-virtual</B><DD><P>(C++ only.) In a derived class, the definitions of virtual functions must match the type signature of a
-virtual function declared in the base class. Use this option to request warnings when a derived class declares a function that may
-be an erroneous attempt to define a virtual function: that is, warn when a function with the same name as a virtual function in
-the base class, but with a type signature that doesn't match any virtual functions from the base class.
+<DT><B>-Woverloaded-virtual</B><DD><P>(apenas C++.) Numa classe derivada, as definições de funções virtuais têm de coincidir com o tipo de signature de uma
+função virtual declarada na classe base. Utilize esta opção para pedir avisos quando uma classe derivada declara uma função que possa
+ser uma tentativa errada para definir uma função virtual: isto é, avisa quando uma função com o mesmo nome que uma função virtual na
+classe base, mas com um tipo de signature que não coincide com o de nenhuma função virtual da classe base.
 <P>
-<DT><B>-Wsynth</B><DD><P>Warn when g++'s synthesis behavoir does not match that of cfront.
+<DT><B>-Wsynth</B><DD><P>Avisa quando o comportamento de síntese do g++ não coincide com o do cfront.
 <P>
-<DT><B>make all warnings into errors</B><DD><P>(-Werror) Treat warnings as errors; abort compilation after any warning.
+<DT><B>torna todos os avisos em erros</B><DD><P>(-Werror) Trata os avisos como erros; aborta a compilação após quaisquer avisos.
 <P>
 </DL>
-<P>For a release of your project, it is recommended to enable <B>-Wall</B>.
+<P>Para uma distribuição do seu projecto, é recomendado que active <B>-Wall</B>.
 <P>
-<H3><A NAME="Linker Options"></A> <A NAME="ss9.4">9.4 Linker Options</A>
+<H3><A NAME="Linker Options"></A> <A NAME="ss9.4">9.4 Opções de Linkagem</A>
 </H3>
 
-<P>The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
-libraries that your application uses to link them to your binary with the linker, e.g. your application uses the class
-KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes or functions that are
-not listed as checkboxes, use the <B>"additonal libraries"</B> field.
+<P>As Opções de Linkagem para o seu actual projecto podem ser definidas na última página do diálogo de opções do projecto. Tem de activar as
+bibliotecas que a sua aplicação utiliza para as ligar ao seu binário com o linkador, por ex. a sua aplicação utiliza a classe
+KFileDialog. Como a classe KFileDialog é parte da biblioteca KFile, tem de activar kfile. Para classes ou funções que não são
+listadas nas caixas de escolha, utilize o campo <B>"bibliotecas adicionais"</B>.
 <P>
-<H4>Linker Flags</H4>
+<H4>Parâmetros do Linkador</H4>
 
 <P>
 <DL>
-<DT><B>remove all symbol table and relocation information from the executable:</B><DD><P>This means that all redundant information will be
-removed from the object files and the binary, resulting that debugging will not be possible. For as long as your application is in
-a development stage and not released as final, you should leave this option disabled.
+<DT><B>remove toda a tabela de símbolos e informação de realocação do executável:</B><DD><P>isto significa que toda a informação redundante será
+removida dos ficheiros de objecto e do binário, resultando em que a depuração não será possível. Durante o tempo em que a sua aplicação estiver
+em fase de desenvolvimento e não em distribuição final, deve deixar esta opção desactivada.
 <P>
-<DT><B>prevent using shared libraries:</B><DD><P>This option disables the use of shared libraries on systems that support this. On systems
-using no shared libraries, this option will have no effect.
+<DT><B>impedir a utilização de bibliotecas partilhadas:</B><DD><P>Esta opção desactiva a utilização de bibliotecas partilhadas em sistemas que suportem isto. Em sistemas
+que não utilizem bibliotecas partilhadas, esta opção não terá qualquer efeito.
 <P>
-<DT><B>additional flags:</B><DD><P>Here, you can enter additional flags for the linker, setting the LDFLAGS environment variable by make. The
-available options can be taken from the man page for <B>ld</B> or your compiler manpage.
+<DT><B>parâmetros adicionais:</B><DD><P>Aqui, você poderá introduzir parâmetros adicionais para o linkador, definindo a variável de ambiente LDFLAGS através do make. As
+opções disponíveis podem ser tiradas da página de manual para <B>ld</B> ou a página de manual do seu compilador.
 </DL>
 <P>
-<H4>Libraries</H4>
+<H4>Bibliotecas</H4>
 
-<P>The libraries section contains checkboxes for the most needed libraries in conjuction with Qt/KDE application
-development. You have to enable those libraries that your application uses, otherwise the linker will complain about unresolved
-symbol tables.
+<P>A secção de bibliotecas contém caixas de selecção para as bibliotecas mais utilizadas em conjunto com o desenvolvimento de aplicações
+Qt/KDE. Tem de activar as bibliotecas que a sua aplicação utiliza, caso contrário o linkador irá queixar-se sobre tabelas
+de símbolos não resolvidas.
 <DL>
-<DT><B>X11</B><DD><P>The X11 library. Recommended for all X-Window programs.
+<DT><B>X11</B><DD><P>A biblioteca X11. Recomendada para todos os programas X-Window.
 <P>
-<DT><B>Xext</B><DD><P>The X11 extension library. Also most X-Window programs depend on Xext.
+<DT><B>Xext</B><DD><P>A biblioteca de extenções X11. Também a maioria dos programas X-Window depende da Xext.
 <P>
-<DT><B>qt</B><DD><P>The Qt library. Recommended for Qt and KDE applications.
+<DT><B>qt</B><DD><P>A biblioteca Qt. Recomendada para aplicações Qt e KDE.
 <P>
-<DT><B>kdecore</B><DD><P>The KDE Core library; contains the classes for KDE Application frameworks.
+<DT><B>kdecore</B><DD><P>A biblioteca KDE Core; contém as classes para o esqueleto de aplicações KDE.
 <P>
-<DT><B>kdeui</B><DD><P>The KDE User Interface library; contains KDE-specific widgets.
+<DT><B>kdeui</B><DD><P>A biblioteca de interface de utilizador KDE; contém widgets específicos KDE.
 <P>
-<DT><B>khtmlw</B><DD><P>The KHTML Widget library.
+<DT><B>khtmlw</B><DD><P>A biblioteca de Widget KHTML.
 <P>
-<DT><B>kfm</B><DD><P>The KFM library containing classes for KFM functions.
+<DT><B>kfm</B><DD><P>A biblioteca KFM contendo classes para funções KFM.
 <P>
-<DT><B>kfile</B><DD><P>The KFile library. Contains file dialogs etc.
+<DT><B>kfile</B><DD><P>A biblioteca KFile. Contém diálogos de ficheiros etc.
 <P>
-<DT><B>kspell</B><DD><P>The KSpell library. Contains an interface for programs to use ISpell for spellchecking.
+<DT><B>kspell</B><DD><P>A biblioteca KSpell. Contém um interface para programas utilizarem o ISpell para verificação ortográfica.
 <P>
-<DT><B>kab</B><DD><P>The KAdressBook library. Needed for access to the adressbook as well as providing adressbook widgets
+<DT><B>kab</B><DD><P>A biblioteca KAdressBook. Necessária para acesso ao livro de endereços bem como para disponibilizar o widget de livro de endereços
 <P>
 </DL>
 
@@ -220,27 +218,38 @@ libraries with the -l option; for the example -lkom.
 <P>
 <H4>Make</H4>
 
-<P>As GNU make supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
-en/disabled. The available settings are:
+<P>Como o make GNU suporta algumas opções úteis, o diálogo de Opções do Projecto contém uma página chamada "Opções Make", onde essas podem ser
+(des)activadas. As definições disponíveis são:
 <P>
 <DL>
 <DT><B></B><DD><P>
-<DT><B>Print debug information</B><DD><P>prints out all information about the project files and what make determines for rebuilding them.
-<DT><B>Continue after errors</B><DD><P>tries to continue with the compilation after an error occured (e.g. a file couldn't be compiled due to an
-error)
-<DT><B>Print the data base</B><DD><P>prints out the make-database for the current process which contains the changes from the last
-build-run. 
-<DT><B>Environment variables</B><DD><P>give the current environment variables a higher priority than the currently used variables in
-the Makefiles.
-<DT><B>No built-in rules</B><DD><P>doesn't use built-in rules for make.
-<DT><B>Touch files</B><DD><P>don't run the compiler on changed files; instead only touches them. This sets them as already processed by make.
-<DT><B>Ignore all errors</B><DD><P>Ignores all errors that occur
-<DT><B>Silent operation</B><DD><P>doesn't print out any information about the build-process
-<DT><B>Print working directory</B><DD><P>prints the current directory during the make-process.
-<DT><B>job number</B><DD><P>sets the amount of parallel processes for make. For a single-CPU system we recommend setting this to one or two.
-<DT><B>set modified</B><DD><P>sets the selected file modified. Choose the file by clicking the folder button on the right. Setting a file modified
-means that the file will be processed by make and compiled if it is a source file.
-<DT><B>additional options</B><DD><P>set additional options to make; those can be found in your local man page for "GNU Make". 
+<DT><B>Imprimir informação de depuração</B><DD><P>imprime toda a informação sobre ficheiros do projecto e o que o make determina para os reconstruir.
+<P>
+<DT><B>Continuar após erros</B><DD><P>tenta continuar com a compilação após um erro ocorrer (por ex. um ficheiro não conseguiu ser compilado devido a
+um erro)
+<P>
+<DT><B>Imprimir a base de dados</B><DD><P>imprime a base de dados make para o processo actual que contém as modificações desde a última
+execução de construção.
+<P>
+<DT><B>Variáveis de ambiente</B><DD><P>dão as variáveis de ambiente actuais uma prioridade mais elevada que as variáveis a utilizar nos ficheiros
+Makefiles.
+<P>
+<DT><B>Não utiliza regras inclusas</B><DD><P>não utiliza as regras inclusas para o make.
+<P>
+<DT><B>Tocar ficheiros</B><DD><P>não corre o compilador sobre ficheiros modificados; em vez disso apenas os toca. Isto define-os como já processados pelo make.
+<P>
+<DT><B>Ignorar todos os erros</B><DD><P>Ignora todos os erros que possam ocorrer
+<P>
+<DT><B>Operação silenciosa</B><DD><P>não imprime qualquer informação sobre o processo de construção
+<P>
+<DT><B>Imprime o directório de trabalho</B><DD><P>imprime o directório actual durante o processo do make.
+<P>
+<DT><B>Número do trabalho</B><DD><P>define o número de processos paralelos para o make. Para um sistema de CPU único nós recomendamos definir este parâmetro para um ou dois.
+<P>
+<DT><B>Definir modificado</B><DD><P>define o ficheiro seleccionado como modificado. Escolha o ficheiro clicando sobre o botão de pasta à direita. Definir um ficheiro como
+modificado significa que esse ficheiro será processado pelo make e compilado se for um ficheiro de código fonte.
+<P>
+<DT><B>Opções adicionais</B><DD><P>define opções adicionais para o make; estas podem ser encontradas na sua página de manual local para o "Make GNU". 
 </DL>
 <P>
 <P ALIGN="RIGHT">

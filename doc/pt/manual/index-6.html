@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>Manual do Utilizador do KDevelop: The Help System</TITLE>
+<TITLE>Manual do Utilizador do KDevelop: O Sistema de Ajuda</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="KDE, KDevelop">
 <META NAME="description" CONTENT="Manual do Utilizador do KDevelop">
@@ -18,183 +18,183 @@
  <A HREF="index-5.html">Página anterior</A>
  <A HREF="index.html#toc6">Índice geral</A>
 </P>
-<H3><A NAME="The Help System"></A> <A NAME="s6">6. The Help System</A></H3>
+<H3><A NAME="The Help System"></A> <A NAME="s6">6. O Sistema de Ajuda</A></H3>
 
-<P>Most of KDevelop's strength is accumulated in the Help System.  It is also to be understood as an example of how to extend your own
-KDE application with a complete set of help functionality, and is, in part, already realized in the template applications, so
-KDE/Qt application frameworks generated with the KAppWizard do already contain the basic functionality for statusbar help and
-documentation, that only has to be extended by the programmer. This section therefore introduces into the usage of the general
-help provided within the IDE as well as to show the usage of the Helpbrowser, which, by intelligent use, will make it very easy to
-get the information you need for development.
+<P>Muita da força do KDevelop está acumulada no Sistema de Ajuda. Deve ser também entendido como um exemplo de como extender a sua própria
+aplicação KDE com um conjunto completo de funcionalidades de ajuda, e está, em parte, já realizado nos modelos de aplicações iniciais, pelo
+que esqueletos de aplicações KDE/Qt geradas pelo KAppWizard já contêm a funcionalidade básica para a ajuda de barra de estados e
+documentação, que apenas tem de ser aumentada pelo programador. Esta secção irá assim introduzi-lo à utilização da ajuda geral
+disponibilizada dentro do ambiente de desenvolvimento bem como mostrar a utilização do Navegador de Ajuda, o qual, através de uma utilização inteligente, irá tornar muito fácil
+encontrar a informação de que necessita para o desenvolvimento.
 <P>
-<H3><A NAME="ss6.1">6.1 The "What's this ?"-Button and Quickhelp</A>
+<H3><A NAME="ss6.1">6.1 O Botão "O que é isto?" e a Ajuda Rápida</A>
 </H3>
 
-<P>Looking at KDevelop's top toolbar, you will see the "What's this?" button on the right end. By selecting the button, the cursor
-will change to a pointer with a question mark on the right, as is the same as the button in the toolbar. Now, you can select any
-visible part of the KDevelop user interface and click on it. This will result in displaying a helpwindow giving you a short
-description of the function this part gives you or what it can do for you. Included are the main view, the treeviews and the
-toolbars, for which every button help is provided. After another mouseclick or a keyboard input, the What's this? help window
-disappears and your cursor is set to the last active position. Mind, that, if you place the mousepointer over a button, it gets
-raised and after a short time, you will get a QuickTip-window, describing the function the button represents in the menubar; this
-will disappear if you move the mousepointer away.
-<P>For user interaction dialogs, Quickhelp provides you help windows with a short description of the selected item you want help for.
-These are accessed by a right-button mouseclick to the item, a context-menu pops up that allows the selection of "Quick-Help".
-Selecting this will pop up the help window. This is always useful for dialogs where you can't see the action's purpose for as long
-as you are not familiar with KDevelop. Mind that most dialogs offer a Help-button which will show you the detailed context-help
-for the dialog's options within the provided online-manual in the help-browser.
+<P>Olhando para a barra de ferramentas de cima do KDevelop, você vê o botão "O que é isto?" na ponta direita. Seleccionando o botão, o cursor
+irá mudar para um ponteiro com um ponto de interrogação à direita, tal como o icon do botão na barra de ferramentas. Agora, pode seleccionar qualquer
+parte visível do interface de utilizador do KDevelop e clicar sobre ela. Isto irá resultar na apresentação de uma janela de ajuda dando-lhe uma breve
+descrição da função que esta parte lhe dá ou o que poderá fazer por si. Inclui-se a janela principal, as vistas de árvore e as
+barras de ferramentas, para os quais é disponibilizada ajuda para cada botão. Após outro clique do rato ou entrada de teclado, a janela de ajuda O que é isto?
+desaparece e o seu cursor é modificado de volta à última forma activa. Lembre-se, que, se colocar o ponteiro do rato sobre um botão, ele fica
+em relevo e após um curto período de tempo, obtém uma janela com uma Dica Rápida, descrevendo as funcionalidades que o botão representa na barra de menu; a dica
+irá desaparecer se afastar o ponteiro do rato.
+<P>Para diálogos de interacção com o utilizador, a Ajuda Rápida disponibiliza-lhe janelas de ajuda com uma breve descrição do item seleccionado para o qual deseja ajuda.
+Estes são acedidos através de um clique do botão direito do rato sobre o item, em que um menu de contexto surge e permite a selecção da "Ajuda Rápida".
+Seleccionado esta surge uma janela de ajuda. Isto é sempre útil para diálogos em que não consegue ver qual o objectivo da acção durante o
+período em que não estiver familiarizado com o KDevelop. Lembre-se que a maior parte dos diálogos oferece um botão de Ajuda que lhe mostra a ajuda de contecto
+para as opções do diálogo dentro do manual electrónico no navegador de ajuda.
 <P>
-<H3><A NAME="ss6.2">6.2 The Statusbar Help</A>
+<H3><A NAME="ss6.2">6.2 A Ajuda de Barra de Estados</A>
 </H3>
 
-<P>The statusbar of KDevelop offers you many fuctions that inform you about the current activity state as well as "status messages"
-offering a short description for commands.
+<P>A barra de estados do KDevelop disponibiliza-lhe várias funções que o informam sobre o estado da actividade actual bem como uma "mensagem de estado"
+oferecendo uma breve descrição para os comandos.
 <P>
-<H4>Statusbar Entries</H4>
+<H4>Entradas da Barra de Estados</H4>
 
-<P>The Statusbar contains:
+<P>A Barra de Estados contém:
 <OL>
-<LI> a general message field, mostleft. This is used for help messages and displays the current activity.</LI>
-<LI> the progressbar, indicating the progress for actions that require a comparably long time to be finished, such as saving
-files and the scan-progress of the Class Browser. The progressbar only appears during those processes are executed.</LI>
-<LI> an Insert/Overwrite indicator. It shows the editor mode for insert actions by INS for Insert mode and OVR for Overwrite
-mode. The mode can be changed by the INS-key on the keyboard.</LI>
-<LI> a line counter, displaying the current line the cursor is placed.</LI>
-<LI> a column counter, indicating the current column position of the cursor in a line.</LI>
+<LI> um campo de mensagem genérica, na extrema esquerda. Isto é utilizado para mensagens de ajuda e apresenta a actividade a decorrer.</LI>
+<LI> a barra de progresso, indicando o progresso para acções que requeiram um período de tempo mais comprido para terminar, tal como gravar
+ficheiros e o progresso de percorrer todos os ficheiros do Navegador de Classes. A barra de progresso apenas aparece durante o decurso desses processos.</LI>
+<LI> um indicador de Inserir/Sobrepor. Mostra o modo do editor para acções de inserção através de INS para modo inserir e OVR para modo
+sobrepor. O modo pode ser modificado através da tecla INS (Insert) no teclado.</LI>
+<LI> um contador de linha, apresentando a linha actual em que o cursor se encontra.</LI>
+<LI> um contador de coluna, apresentando a coluna actual em que o cursor se encontra na linha.</LI>
 </OL>
 <P>
-<H4>Help Messages</H4>
+<H4>Mensagens de Ajuda</H4>
 
-<P>The statusbar informs you about the action of menuentries if you select a menu within the menubar and select an action without
-executing it. Further, if you press on a toolbar icon, but without releasing the mousebutton, the help message for the button is
-displayed in the same way as for the menuentries. You can prevent the execution of the selected icon by moving the mousepointer
-away from the icon, still hoding the button pressed. If the cursor is away, release the mousebutton.
-<P>For actions that are currently executed, KDevelop displays the action. This counts for processes running in the background
-such as saving files as well as for dialogs. If the process has exited such as a make-invocation, the statusbar display
-changes back to "Ready" state.
-<P>Also, when using the documentation browser, the statusbar displays link urls for as long as the cursor is placed over an URL link
-in the browser window. Therefore, you can easily find out if the file is a local or a remote file only accessed by network
-connection.
-<P>The caption of the KDevelop Project Editor shows you the currently opened filename in the top window. This would be a HTML file
-for the documentation browser or a text file for the editing windows. Further, the Project name is displayed, so you have constant
-control where you are and what you're currently working at.
+<P>A barra de estados informa-o sobre acções de entradas de menu se seleccionar um menu dentro da barra de menu e seleccionar uma acção sem
+a executar. Além disso, se premir um icon da barra de ferramentas, mas sem largar o botão do rato, a mensagem de ajuda do botão é
+apresentada da mesma forma que para as entradas de menu. Pode impedir a execução do icon seleccionado movendo o ponteiro do rato
+para longe do icon, ainda premindo o botão do rato. Se o cursor estiver afastado, largue o botão do rato.
+<P>Para acções que estão presentemente em execução, o KDevelop apresenta a acção. Isto inclui processos a decorrer por trás
+tal como gravar ficheiros bem como diálogos. Se o processo tiver saido tal como uma invocação do make, a barra de estados
+modifica-se para o estado "Pronta".
+<P>Também, quando a utilizar o navegador de documentação, a barra de estados disponibiliza ligações urls durante o período de tempo que o cursor estiver colocado sobre um endereço URL
+na janela de navegação. Assim, pode rapidamente descobrirse um ficheiro é local ou ficheiro remoto apenas acessível através de uma
+conecção na rede.
+<P>O título do Editor de Projecto KDevelop apresenta o nome do ficheiro presentemente aberto na janela de topo. Isto seria um ficheiro HTML
+para o navegador de documentação ou um ficheiro de texto para as janelas de edição. Além disso, o nome do Projecto é apresentada, pelo que você tem controlo constante
+sobre onde se encontra e no que está presentemente a trabalhar.
 <P>
-<H3><A NAME="ss6.3">6.3 Configuring the HTML Browser</A>
+<H3><A NAME="ss6.3">6.3 Configurar o Navegador de HTML</A>
 </H3>
 
-<P>The browser included in KDevelop is completely HTML-based, therefore you can specify the usual options like background and the
-like. You can set all preferences by the "Documentation Browser"-entry of the "Options"-menu.
-The configuration dialog shows you two tabulators; the first for setting the font preferences, the second for color selection.
+<P>O navegador incluido com o KDevelop é completamente baseado em HTML, pelo que você pode especificar as opções normais tais como fundo e
+afins. Pode definir todas as preferências através da entrada "Navegador de Documentação" do menu "Opções".
+O diálogo de configuração mostra-lhe dois tabuladores; o primeiro para definir as preferências de fontes, o segundo para selecção de cores.
 <P>
-<H4>Font Preferences</H4>
+<H4>Preferências de Fontes</H4>
 
-<P>The first option for the font display is the size. Available are small, medium and large. The best display for normal use
-is set to small by default.
-For the font selection you have to specify a standard font for normal text as it appears in HTML documents; the fixed font is the
-one used for dispaying e.g. code within the HTML file.
+<P>A primeira opção para a apresentação da fonte é o tamanho. Os disponíveis são pequeno, médio e grande. A melhor apresentação para utilização normal
+é definir pequeno por defeito.
+Para a selecção de fonte tem de especificar uma fonte standard para texto normal tal como surge em documentos HTML; a fonte fixa é para
+apresentar por ex. código dentro de um ficheiro de HTML.
 <P>
-<H4>Color Preferences</H4>
+<H4>Preferências de Cores</H4>
 
-<P>The color preferences dialog allows configuration of background, normal text, URL Link and followed link color. The
-colored buttons on the right are displaying the current settings; selecting a button will result in opening the "Select Color"
-dialog. There, you can specify the color either by choosing a System Color, a custom color, select the color by the multi-colored
-window or by setting the values directly. The middle contains a preview for the color selected.
-<P>Further, you can specify if the browser should underline links to easier detect them visually and if you like to use your own
-colors always independent of the page's preset ones. "Apply" will execute all changes, while "OK" will apply changes and close the
-dialog. "Cancel" leaves all settings untouched and exits the configuration.
+<P>O diálogo de preferências de cores permite a configuração das cores de fundo, texto normal, ligações URL e côr das ligações seguidas. OS
+botões coloridos à direita estão a mostrar as definições actuais; seleccionando um botão irá resultar na abertura de um diálogo de "Selecção de Côr".
+Aí, você pode especificar a côr quer escolhendo uma Côr de Sistema, uma côr costumizada, seleccionando a côr a partir da janela
+multi-colorida ou através da entrada directa de valores. O meio contém uma antevisão da côr seleccionada.
+<P>Além disso, você pode especificar se o navegador deverá sublinhar ligações para mais facilmente você as detectar visualmente e se deseja utilizar as suas próprias
+cores sempre independentemente as pré-definidas da página que estiver a visualizar. "Aplicar" irá executar todas as alterações, enquanto que "OK" irá aplicar as alterações e fechar
+o diálogo. "Cancelar" deixa todas as definições intocadas e sai da configuração.
 <P>
-<H3><A NAME="Using the Documentation Browser"></A> <A NAME="ss6.4">6.4 Using the Documentation Browser</A>
+<H3><A NAME="Using the Documentation Browser"></A> <A NAME="ss6.4">6.4 Utilizar o Navegador de Documentação</A>
 </H3>
 
-<P>The documentation browser allows quick and easy access to all manuals and documentations that are provided with KDevelop or
-generated automatically, including online-documentation for the KDE-libraries and your project documentation. Plus, the
-Documentation Tree in the tree-view lets you customize a special "Others" folder that contains all individually added
-documentation.
+<P>O navegador de documentação permite acesso rápido e fácil a todos os manuais e documentações que são disponibilizadas com o KDevelop ou
+geradas automaticamente, incluindo documentação electrónica para as bibliotecas KDE e a documentação do seu projecto. Mais, a
+Árvore de Documentação na vista de árvore permite-lhe costumizar uma pasta especial "Outras" que contém toda a documentação adicionada
+individualmente.
 <P>
-<H4>Requirements</H4>
+<H4>Requisitos</H4>
 
-<P>To make use of all features of the Helpbrowser, you should have KDoc and glimpse installed. KDoc will generate all kind of online
-classdocumentation for the KDE-libraries during the setup process, but can also invoked by option in the 
-<A HREF="index-12.html#General Configuration">KDevelop Setup</A>. For the generation of an API (Application Programming Interface) Documentation for your
-project's classes, KDoc is also used and called by the Build-menu, entry "Make API-Doc". This will process all current header files of
-the project plus the addition of a cross-reference to the Qt and KDE-libraries if those are available in the Helpbrowser. For the
-generation of the project handbooks, you should have ksgml2html (provided with the KDE-SDK) and, as a minimum, SGML-tools
-installed on your system. To extend and change your project's online-documentation, you have to edit the documentation file for your
-project by selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Build-menu. In case sgmltools detect
-formatting errors, those will be displayed in the output window allow you to find the error line directly. The program "glimpse"
-is used to create a personal search-index for your documentation automatically. The index is generally build during the
-installation process, but can also be build with the 
-<A HREF="index-12.html#General Configuration">KDevelop Setup</A> dialog. For a description of
-the provided search functions see 
-<A HREF="#Using the Search Index">Using the Search Index</A>.
+<P>Para fazer uso de todas as funcionalidades do Navegador de Ajuda, deverá ter o KDoc e o glimpse instalados. O KDoc irá gerar todo o tipo de documentação electrónica
+de classes para as bibliotecas KDE durante o processo de instalação, mas pode também ser invocado por opção na 
+<A HREF="index-12.html#General Configuration">Configuração do KDevelop</A>. Para a geração de uma Documentação da API (Application Programming Interface - Interface de Programação da Aplicação)
+para as classes do seu projecto, o KDoc é também utilizado e chamado pelo menu Construir, entrada "Fazer Doc-API". Isto irá processar todos os ficheiros header actuais
+do projecto mais uma referência cruzada com as bibliotecas da Qt e KDE se estas estiverem disponíveis no Navegador de Ajuda. Para a
+geração de manuais do projecto, deverá ter o ksgml2html (disponibilizado com o KDE-SDK) e, como um mínimo, as ferramentas SGML
+instaladas no seu sistema. Para aumentar e modificar a documentação electrónica do seu projecto, tem de editar o ficheiro de documentação do seu
+projecto seleccionando-o no VFR. Após gravar as suas modificações, chame "Fazer Manual do Utilizador" a partir do menu Construir. No caso das ferramentas sgml
+detectarem erros de formatação, estes serão apresentadas na janela de output permitindo-lhe descobrir directamente a linha com o erro. O programa "glimpse"
+é utilizado para criar automaticamente um índice de busca pessoal para a sua documentação. O índice é geralmente construido durante o
+processo de instalação, mas pode também ser construido com o diálogo da 
+<A HREF="index-12.html#General Configuration">Configuração do KDevelop</A>. Para uma descrição
+das funções de busca disponibilizadas veja 
+<A HREF="#Using the Search Index">Utilizar o Índice de Busca</A>.
 <P>
-<H4>Provided Documentation</H4>
+<H4>Documentação Disponibilizada</H4>
 
-<P>The KDevelop IDE comes with two sets of online-documentation, which can be accessed either via the Help-menu or by the Doc-tree in
-the Tree-View in the KDevelop folder. The first book provided is this online-handbook containing all information you need towards
-installation, configuration, available functionality and introduction to application development. The second book is <EM>The
-KDevelop Programming Handbook</EM> in it's first edition. The programming handbook covers most questions related to the creation and
-extension of projects that work with KDevelop. By tutorials the user gets an introduction to the rich facilities that applications
-created with the Qt- and/or KDE-libraries have to offer as well as given a guideline for ensuring KDE-compliance, which
-covers the same instructions given on the internet site of 
-<A HREF="http://developer.kde.org">http://developer.kde.org</A>
-However, the programming handbook cannot replace any additonal documentation available in printed or electronic form about the C++
-programming language as well as about the usage of the Qt-library in certain terms.
-<P>The C/C++-Reference used with KDevelop is currently only available on the KDevelop homepage at 
-<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html</A>.
-It can be installed easily by downloading and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you have to
-untar it as root with <CODE>tar zxvf c_c++_reference.tar.gz</CODE>, the reference will then be copied the documentation
-directory of KDevelop. For uninstalling the reference documentation you just have to delete the "reference" folder under
+<P>O ambiente de desenvolvimento KDevelop vem com dois conjuntos de documentação electrónica, que podem ser acedidos quer através do menu Ajuda ou através da árvore de documentação
+na Vista de Árvore na pasta do KDevelop. O primeiro livro apresentado é o manual electrónico contendo toda a informação de que poderá necessitar no sentido
+de instalar, configurar, funcionalidades disponíveis e introdução ao desenvolvimento de aplicações. O segundo livro é o <EM>Manual
+de Programação do KDevelop</EM> na sua primeira edição. O manual de programação cobre a maior parte das questões relativas à criação e
+expansão de projectos que funcionem com o KDevelop. Através de explicações passo-a-passo o utilizador obtém uma introdução às ricas potencialidades que aplicações
+criadas com as bibliotecas da Qt e/ou KDE têm a oferecer bem como dar linhas mestras para assegurar compatibilidade com o KDE, o que
+cobre as mesmas instruções dadas na página de internet do 
+<A HREF="http://developer.kde.org">http://developer.kde.org</A>.
+No entanto, o manual de programação não pode ser substituido por nenhuma documentação adicional disponível em formato impresso ou electrónico sobre a linguagem
+de programação C++ bem como sobre a utilização da biblioteca Qt sob certos termos.
+<P>A Referência C/C++ utiizada com o KDevelop é actualmente a única disponível na página de internet do KDevelop em 
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A>.
+Pode ser instalada facilmente puxando o ficheiro e copiando o código fonte para o directório principal do KDE ($KDEDIR). Aí, tem de
+descomprimir o ficheiro como root com <CODE>tar zxvf c_c++_reference.tar.gz</CODE>, a referência será então copiada para o directório de
+documentação do KDevelop. Para desinstalar a documentação de referência apenas tem de apagar o directório "reference" em
 ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
-<P>The Qt/KDE-libraries documentation folder allows direct access to the HTML-online documentation of your copy of the Qt-library.
-The path to the library documentation is usually automatically detected by the KDevelop installation program, but can be set
-manually in the 
-<A HREF="index-12.html#General Configuration">KDevelop Setup</A> dialog. Also, all available documentation for the KDE-libraries
-are listed in order of the library name, so if you would use classes of a certain library it is easy to determine the library type
-to be added to the linker settings in the project. Mind that the whole KDE-library documentation is only accessable when generated
-by KDoc- so this program, included in the KDE-SDK, has to be installed before the documentation can be generated. As the
-installation program of KDevelop does this automatically, it should be installed before KDevelop is started for the first time. If
-this is not the case and the documentation cannot be build, you are able to create it afterwards at any time with the 
-<A HREF="index-12.html#General Configuration">KDevelop Setup</A> dialog.
-<P>The library documentation tree is followed by the "Others" folder which is inteded to contain all personally customized
-documentation as described below. Finally, the Doc-Tree allows access to the Project API and the Project Manual for your current
-project.
+<P>A pasta de documentação das bibliotecas Qt/KDE permite acesso directo à documentação electrónica da sua cópia da biblioteca Qt.
+O caminho para a documentação da biblioteca é normalmente detectado pelo programa de instalação do KDevelop, mas pode ser definido
+manualmente no diálogo de 
+<A HREF="index-12.html#General Configuration">Configuração do KDevelop</A>. Também, toda a documentação disponível para as bibliotecas KDE
+são listadas por ordem de nome de biblioteca, pelo qie se você utilizar classes de uma dada biblioteca é fácil determinar o tipo de biblioteca
+a ser adicionada às definições de linkagem do projecto. Lembre-se de que toda a documentação da biblioteca KDE apenas é acessível quando gerada
+pelo KDoc- pelo que este programa, incluido no KDE-SDK, tem de estar instalado antes da documentação poder ser gerada. Como o
+programa de instalação do KDevelop faz isto automaticamente, deve ser instalado antes do KDevelop ser iniciado pela primeira vez. Se
+este não for o caso e a documentação não conseguir ser construida, é-lhe possível cria-la posteriormente a qualquer momento através do diálogo 
+<A HREF="index-12.html#General Configuration">Configuração do KDevelop</A>.
+<P>A árvore de documentação das bibliotecas é seguida de uma pasta "Outros" que se destina a conter toda a documentação costumizada
+pessoalmente como descrito abaixo. Finalmente, a Árvore de Doc permite um acesso rápido à API de um Projecto e ao Manual do Projecto para o projecto
+actual.
 <P>
-<H4>Adding Documentation to the Helpbrowser</H4>
+<H4>Adicionar Documentação ao Navegador de Ajuda</H4>
 
-<P>To customize your Helpbrowser, open the Tree-View and select the "DOC" Tabulator. You will see an opened tree called
-Documentation, containing four folders. The "Others" folder is, by default, empty. On a right mousebutton click over this folder,
-a context menu opens that has an entry "Add Entry". Select this to open the Add Entry dialog where you have to enter two values:
-the upper one for the name that will be displayed for the documentation within the Doc-tree, and, below that, a file-entry line.
-Here, you have to enter the path and filename to the startpage that will be opened by the selection of the entry later. You can
-enter the path and filename directly or by selection of the pushbutton on the right to open a file-chooser dialog. This allows a
-quick browsing on your system to the path for your startpage. Mind that only HTML-documentation can be selected, so only HTML
-files are allowed to choose. Selecting OK will add the entry to the Doc-tree and is available directly.
+<P>Para costumizar o Navegador de Ajuda, abra a Vista de Árvore e seleccione a pasta "ADOC". Verá uma árvore aberta chamada
+Documentação, contendo quatro pastas. A pasta "Outras" está, por defeito, vazia. Com um clique do botão direito do rato sobre esta pasta,
+um menu de contexto abre e possui uma entrada "Adicionar Entrada". Seleccione este para abrir o diálogo de Adicionar Entrada onde terá de inserir dois valores:
+o de cima para o nome que será apresentado para a documentação dentro da árvore de Doc, e, por baixo dessa, uma linha de entrada de ficheiro.
+Aqui, tem de inserir o caminho e nome de ficheiro para a página inicial que será aberta pela selecção da entrada mais tarde. Você pode
+indicar o caminho e nome de ficheiro directamente ou selecciona-lo premindo um botão à direita para abrir um diálogo de escolha de ficheiro. Isto permite
+uma visão rápida do seu sistem até ao caminho para a sua página inicial. Lembre-se que apenas documentação HTML pode ser seleccionada, pelo que apenas
+é possível escolher ficheiros HTML. Seleccionando OK irá adicionar a entrada à árvore de Doc e encontra-se desde logo disponível.
 <P>
-<H4><A NAME="Using the Search Index"></A> Using the Search Index</H4>
+<H4><A NAME="Using the Search Index"></A> Utilizar o Índice de Busca</H4>
 
-<P>KDevelop includes a set of fuctions to help you search information within HTML documentation. To use these features, your system
-needs to have the program "glimpse", a free database generator, installed, which creates the search index and executes searches
-within the documentation. To set up the index, see 
-<A HREF="index-12.html#General Configuration">KDevelop Setup</A>. The index is also
-automatically generated during the installation program.
-<P>The search functions are available through several ways which you can choose from:
+<P>O KDevelop inclui um conjunto de funções para ajudar a busca de informação dentro da documentação HTML. Para utilizar estas funcionalidades, o seu sistema
+tem de ter o programa "glimpse", um gerador de bases de dados gratuito, instalado, que irá criar o índice de busca e executar as procuras
+dentro da documentação. Para definir o índice, veja 
+<A HREF="index-12.html#General Configuration">Configuração do KDevelop</A>. O índice é também
+gerado automaticamente durante o programa de instalação.
+<P>As funções de busca estão disponíveis através de várias formas que pode escolher:
 <OL>
-<LI>in the editor, select the text you want to have help on or place the cursor in the word that you want to look for. Then
-press the right mouse button and select look up: "expression" This can also be done by selecting "Search Marked Text" from the
-help menu, the shorcut key F2 or by selecting the Search icon from the toolbar.</LI>
-<LI>in the Documentation browser select the text you want to look up and press the right mouse button, select look
-up:"expression" or select "Search Marked Text" or the search icon as above.</LI>
-<LI>if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help
-on..." icon from the toolbar, opening a search dialog where you can enter the expression you want to get information for.</LI>
+<LI>no editor, seleccione o texto sobre o qual deseja ter ajuda ou coloque o cursor na palavra que deseja procurar. Depois
+prima o botão direito do rato e seleccione procurar: "expressão" Isto também pode ser feito seleccionado "Procurar Texto Marcado" a partir do
+menu de ajuda, da tecla de atalho F2 ou seleccionando o icon de Busca a partir da barra de ferramentas.</LI>
+<LI>no Navegador de Documentação seleccione o texto que deseja procurar e prima o botão direito do rato, seleccione procurar
+:"expressão" ou seleccione "Procurar Texto Marcado" ou o icon de busca como acima.</LI>
+<LI>se deseja procurar uma palavra chave específica, seleccione "Procurar Ajuda sobre..." no menu de ajuda ou seleccione o icon "Procurar Ajuda
+sobre..." a partir da barra de ferramentas, abrindo um diálogo de busca onde poderá inserir a expressão sobre a qual deseja obter informações.</LI>
 </OL>
 
-Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu
-entries.
-<P>The Helpbrowser also offers support for grep to search for a selection within your current project, e.g you've opened the documentation
-page for the <CODE>KTMainWindow</CODE> class (KDEUI library) and you want to know where in your code <CODE>KTMainWindow</CODE> appears. Mark
-<CODE>KTMainWindow</CODE> and either select "Grep: KTMainWindow" or press Shift+F2. The "Search in Files" dialog opens with the results about
-your grep search directly. Then you can choose an result line to jump to the according sourcecode.
+Acesso directo a documentação específica é dado seleccionando o icon correspondente na vista de árvore "ADOC" ou através das entradas do menu
+de ajuda.
+<P>O Navegador de Ajuda também disponibiliza suporte para grep para procurar por uma selecção dentro do projecto actual, por ex. você abriu a página de documentação
+para a classe <CODE>KTMainWindow</CODE> (biblioteca KDEUI) e deseja saber onde no seu código <CODE>KTMainWindow</CODE> surge. Marque
+<CODE>KTMainWindow</CODE> e seleccione "Grep: KTMainWindow" ou então prima Shift+F2. O diálog "Procurar nos Ficheiros" abre com os resultados sobre
+a sua busca grep directamente. Depois pode escolher uma linha de resultado e ir para o código fonte respectivo.
 <P>
 <P ALIGN="RIGHT">
 

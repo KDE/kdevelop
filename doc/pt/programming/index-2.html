@@ -1,0 +1,378 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>O Manual de Programação do KDevelop: As Bibliotecas KDE e Qt</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">Página seguinte</A>
+ <A HREF="index-1.html">Página anterior</A>
+ <A HREF="index.html#toc2">Índice geral</A>
+</P>
+<H3><A NAME="s2">2. As Bibliotecas KDE e Qt</A></H3>
+
+<P>A empresa Norueguesa Troll Tech (
+<A HREF="http://www.troll.no">http://www.troll.no</A>) disponibiliza um chamado conjunto de ferramentas de GUI, chamado Qt. Assim, GUI significa
+"<B>G</B>raphical <B>U</B>ser <B>I</B>nterface - Interface Gráfico de Utilizador", e assim, as aplicações baseadas na Qt representam-se com botões, janelas etc,
+permitindo inserção de dados do utilizador visualizando as funções que a aplicação disponibiliza. Este conjunto de ferramentas é necessário para o desenvolvimento de
+aplicações gráficas que corram no Interface X-Window em Sistemas Unix, porque o X não contém um interface de utilizador pré-definido em si.
+Apesar de outros conjuntos de ferramentas estarem também disponíveis para criar Interfaces de Utilizador, a Qt oferece algumas vantagens técnicas que tornam o desenho de aplicações
+muito fácil. Adicionalmente, o conjunto de ferramentas Qt também está disponível para o sistema Microsoft Windows, o que permite aos programadores disponibilizarem
+as suas aplicações para ambas as plataformas.
+<P>A Equipa KDE (
+<A HREF="http://www.kde.org">http://www.kde.org</A>) juntou-se com o objectivo de tornar a utilização de Sistemas Unix
+mais amigável, e decidiu utilizar o conjunto de ferramentas Qt para o desenvolvimento de um gestor de janelas no X-Window, mais uma variedade de ferramentas
+incluídas com os pacotes KDE. O Ambiente de Trabalho K  contém assim o gestor de janelas <EM>kwm</EM>, o gestor de ficheiros <EM>kfm</EM> e
+o painel de controlo <EM>kpanel</EM> como sendo os componentes principais mais uma variedade de utilitários e aplicações de primeira classe. Depois do KDE ter saido, muitos
+dos programadores voltaram os seus olhos no sentido deste novo ambiente e do que tem para lhes oferecer. As bibliotecas KDE estão a disponibilizar
+métodos e classes fundamentais que fazem com que todas as aplicações desenhadas com elas tenham um aspecto similar e consistente, e o utilizador tem a grande vantagem
+de apenas ter de se acostumar com a utilização específica de uma aplicação, não com o manuseamento de diálogos ou botões. Também, os programas KDE integram-se
+no ambiente de trabalho e são capazes de interagir com o gestor de ficheiros através do arrastar e largar (drag and drop), oferecer gestão de sessões e muito mais,
+se todas as funcionalidades oferecidas pelas bibliotecas KDE forem utilizadas.
+<P>Ambos, o conjunto de ferramentas Qt e as bibliotecas KDE, são implementadas na linguagem de programação C++; assim aplicações que façam uso
+destas bibliotecas são também maioritariamente escritas em C++. No capítulo seguinte, faremos uma breve viagem através das bibliotecas para ver o que
+já é disponibilizado e como as aplicações Qt e KDE são criadas em geral.
+<P>
+<H3><A NAME="ss2.1">2.1 O Conjunto de Ferramentas GUI Qt</A>
+</H3>
+
+<P>Como foi dito, a biblioteca Qt é um conjunto de ferramentas que oferece elementos gráficos que são utilizados para criar GUI's de aplicações e são necessárias
+para programação X-Window. Adicionalmente, este conjunto de ferramentas oferece:
+<P>
+<UL>
+<LI>Um conjunto completo de classes e métodos prontos a utilizar para questões de programação não-gráfica,</LI>
+<LI>Uma boa solução no sentido da interacção do utilizador através de métodos virtuais e mecanismos sinal/espaço,</LI>
+<LI>Um conjunto de elementos GUI pré-definidos, chamados "widgets", que podem ser facilmente utilizados para criar elementos visíveis</LI>
+<LI>Diálogos adicionais completamente pré-definidos que são muitas vezes utilizados em aplicaçãis tais como diálogos de progresso e de ficheiros.</LI>
+</UL>
+<P>Posto isto conhecer as classes Qt é essêncial, mesmo se você apenas deseja programar aplicações KDE. Para ter uma ideia do conceito
+basico sobre como as aplicações GUI são construidas e compiladas, iremos primeiro observar um programa exemplo apenas Qt; depois extende-lo-emos
+para um programa KDE.
+<P>
+<H4>A Primeira Aplicação Qt</H4>
+
+<P>Como normalmente, programas em C++ têm de conter a função <CODE>main()</CODE>, que é o ponto de partida para a execução da aplicação. Como queremos que
+seja graficamente visível em janelas e ofereça interacção do utilizador, temos primeiro que saber, como se podem mostrar a si próprias ao
+utilizador. Por exemplo, iremos observar o primeiro programa de tutor incluido com a Documentação Electrónica de Referência Qt e explicar os passos de
+execução básicos; também como e porquê as janelas da aplicação aparecem:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+#include &lt;qapplication.h>
+#include &lt;qpushbutton.h>
+
+int main( int argc, char **argv )
+{
+QApplication a( argc, argv );
+
+QPushButton hello( "Hello world!" );
+hello.resize( 100, 30 );
+
+a.setMainWidget( &amp;hello );
+hello.show();
+return a.exec();
+}
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Esta aplicação meramente pinta uma janela contendo um botão com "Hello world" ("Olá Mundo") como texto. Como todas as aplicações baseadas na Qt, primeiro
+tem de declarar uma instância da classe <CODE>QApplication</CODE>, representada por <CODE>a</CODE>.
+<P>Depois, o programa cria uma instância da classe <CODE>QPushButton</CODE> chamada <CODE>hello</CODE>, isto será o botão. O constructor do
+<CODE>hello</CODE> obtém uma string (conjunto de caracteres) como parâmetro, que é o conteudo do widget visível como sendo o texto do botão.
+<P>Depois o método <CODE>resize()</CODE> é chamado sobre o botão <CODE>hello</CODE>. Isto muda o tamanho de defeito que um widget (que é neste caso
+o QPushButton) tem quando criado para o comprimento de 100 pixels e a altura de 30 pixels. Finalmente, o método <CODE>setMainWidget()</CODE>
+é chamado para <CODE>a</CODE> e o método <CODE>show()</CODE> para <CODE>hello</CODE>. A <CODE>QApplication</CODE> é finalmente executada por <CODE>a.exec()</CODE>,
+entra no ciclo de acontecimento principal e aguarda até que tenha de devolver um valor inteiro para a camada do Sistema Operativo assinalando que
+a aplicação terminou.
+<P>
+<H4>A Documentação de Referência para a Qt</H4>
+
+<P>Agora, vamos observar rapidamente a documentação de referência da biblioteca Qt. Para fazer isto, inicie o KDevelop e seleccione "biblioteca Qt" a partir
+do menu "Ajuda" na barra de menu. O navegador de documentação abre e mostra-lhe a página inicial da referência Qt. Isto irá ser o seu
+primeiro local para obter informação sobre a Qt, suas classes e as funções disponíveis que oferece. Também, o programa acima mostrado é o primeiro
+que é incluído na secção dos tutores. Para obter as classes que desejamos observar, <CODE>QApplication</CODE> e <CODE>QPushButton</CODE>,
+seleccione "Lista Alfabética de Classes" e procure os nomes correspondentes. Siga qualquer uma delas para observar a documentação de classes.
+<P>Para a <CODE>QApplication</CODE>, verá o construtor e todos os outros métodos que esta classe disponibiliza. Se seguir uma hiper-ligação, irá obter mais
+informação sobre a utilização e significado dos métodos, o que é muito útil quando você às vezes não consegue detectar a utilização correcta
+ou deseja ver um exemplo. Isto também vale para a documentação da biblioteca KDE, que utiliza um tipo de documentação similar; assim isto é
+praticamente tudo o que tem de saber sobre a utilização da referência de classes com o navegador de documentação.
+<P>
+<H4>Interpretação do Exemplo</H4>
+
+<P>Começando com a <CODE>QApplication</CODE>, você irá ver todos os métodos utilizados no nosso primeiro exemplo:
+<P>
+<UL>
+<LI>o construtor <CODE>QApplication()</CODE>,</LI>
+<LI>o método <CODE>setMainWidget()</CODE> e</LI>
+<LI>o método <CODE>exec()</CODE>.</LI>
+</UL>
+<P>A interpretação sobre porque utilizamos estes métodos é muito simples:
+<P>
+<OL>
+<LI>primeiro criamos uma instância da classe <CODE>QApplication</CODE> com o construtor, para que possamos utilizar os elementos GUI disponibilizados pela
+Qt,</LI>
+<LI>criamos um widget que será o contentor da janela do nosso programa,</LI>
+<LI>definimos o widget como sendo o widget principal para <CODE>a</CODE>,</LI>
+<LI>executamos a instância <CODE>a</CODE> da <CODE>QApplication</CODE>.</LI>
+</OL>
+<P>O segundo objecto do nosso programa é o botão, como uma instância da classe <CODE>QPushButton</CODE>. Dos dois construtores dados para
+criar uma instância, nós utilizamos o segundo: este aceita um texto, que é a etiqueta do conteudo do botão; aqui, a etiqueta é o texto "Hello
+world!". Depois chamamos o método <CODE>resize()</CODE> para modificar o tamanho do botão de acordo com o seu conteudo- o botão tem de ser maior
+para tornar o texto completamente visível.
+<P>Mas e então o método <CODE>show()</CODE>? Agora, você vê que tal como a maior parte dos outros widgets, <CODE>QPushButton</CODE> é baseado numa herança única-
+aqui, a documentação diz, <EM>Herda</EM> <CODE>QButton</CODE>. Siga a hiper-ligação para a classe <CODE>QButton</CODE>. Isto irá mostrar-lhe imensos outros
+métodos que são herdados pelo QPushButton, que iremos utilizar mais tarde para explicar o mecanismo sinal/espaço. De qualquer modo, o método <CODE>show()</CODE>
+não está listado, pelo que, tem de ser um método que é disponibilizado também por herança. A classe que o <CODE>QButton</CODE> herda, é
+<CODE>QWidget</CODE>. Basta seguir de novo a hiper-ligação, e irá ver imensos métodos que a classe <CODE>QWidget</CODE> disponibiliza; incluindo o
+método <CODE>show()</CODE>. Agora nós compreendemos o que foi feito no exemplo com o botão:
+<P>
+<OL>
+<LI>criar uma instância do <CODE>QPushButton</CODE>, utilizar uma segunda construção para definir o texto do botão,</LI>
+<LI>redimensionar o widget para o seu conteudo,</LI>
+<LI>definir o widget como sendo o widget principal da instância <CODE>a</CODE> da <CODE>QApplication</CODE>,</LI>
+<LI>dizer ao widget para se mostrar no ecrã chamando <CODE>show()</CODE>, um método herdado de <CODE>QWidget</CODE>.</LI>
+</OL>
+<P>Após chamar o método <CODE>exec()</CODE>, a aplicação é visível para o utilizador, mostrando uma janela com um botão apresentando "Hello world!".
+Agora, programas GUI comportam-se de um modo ligeiramenta diferente das aplicações processuais. A coisa principal aqui é que a aplicação entra num
+chamado "ciclo de evento principal". Isto significa que o programa tem de aguardar por acções do utilizador e depois reagir a estas, também que para uma aplicação
+Qt, o programa tem de estar no ciclo de evento principal para iniciar o manuseamento de eventos. A secção seguinte diz-lhe de forma breve o que isto
+significa para o utilizador e o que a Qt oferece para processar eventos do utilizador.
+<P>(Para utilizadores já avançados: O botão não tem pai declarado no construtor, por isso é por si só um widget de nível superior e corre num
+ciclo de evento local que não tem de aguardar pelo ciclo de evento principal, veja a documentação de classe <CODE>QWidget</CODE> e 
+<A HREF="kde_libref.html">O Guia de Referência da Biblioteca KDE</A>)
+<P><B>Sumário:</B>
+<P>Uma aplicação Qt tem sempre de ter uma instância da classe <CODE>QApplication</CODE>. Isto permite que possamos criar janelas que são a
+representação gráfica de programas para o utilizador final e permitem interacção. O conteudo da janela em si é chamado o "Widget Principal", significando
+que todos os elementos gráficos são baseados na classe <CODE>QWidget</CODE> e podem ser qualquer tipo de widget que sirva as necessidades da aplicação para
+comunicar com o utilizador. Assim, todos os elementos de utilizador têm de herdar de uma forma ou de outra <CODE>QWidget</CODE> para serem visíveis.
+<P>
+<H4><A NAME="User Interaction"></A> Interacção do Utilizador</H4>
+
+<P>Após ler as secções anteriores, você já deverá saber:
+<UL>
+<LI>o que a biblioteca Qt disponibiliza em termos de aplicações GUI,</LI>
+<LI>como é que um programa que utilize a Qt é criado e</LI>
+<LI>onde e como obter informação sobre classes que deseja utilizar com o navegador de documentação</LI>
+</UL>
+<P>Agora iremos começar a dar "vida" à aplicação através do processamento de eventos do utilizador. Geralmente, o utilizador tem duas formas de interagir com o programa:
+o rato e o teclado. Para ambas as formas, um interface gráfico de utilizador (GUI) tem de disponibilizar métodos que detectem acções e métodos que façam
+alguma coisa como reacção a estas acções.
+<P>O sistema de Janelas assim envia todos os eventos de interacção para a respectiva aplicação. A QApplication envia-os então para a janela
+activa como um <CODE>QEvent</CODE> e os prórpios widgets têm de decidir o que fazer com os eventos. Um widget recebe o evento e processa
+<CODE>QWidget</CODE>::event(QEvent*)/, que então decide que evento foi executado e como reagir; event() é assim quem faz o manuseamento
+principal de eventos. Depois, a função <CODE>event()</CODE> passa o evento para os chamados filtros de eventos, que determinam que aconteceu e o que fazer com
+o evento. Se nenhum filtro encontra um responsável pelo evento, os manuseadores especializados de eventos são chamados. Assim podemos decidir entre:
+<P><B>a) Eventos de Teclado -- teclas TAB e Shift-TAB:</B>
+<P>muda o focus de entrada do teclado do widget actual para o widget seguinte na ordem de focus. O focus pode ser atribuido aos widgets
+chamando <CODE>setFocusPolicy
+<!--
+setFocusPolicy()
+-->
+()</CODE> e processar os seguintes indicadores de eventos:
+<P>
+<UL>
+<LI><CODE>virtual void focusInEvent
+<!--
+focusInEvent()
+-->
+ ( QFocusEvent * )</CODE></LI>
+<LI><CODE>virtual void focusOutEvent
+<!--
+focusOutEvent()
+-->
+ ( QFocusEvent * )</CODE></LI>
+</UL>
+<P><B>b) todos os restantes eventos de teclado:</B>
+<UL>
+<LI><CODE>virtual void keyPressEvent
+<!--
+keyPressEvent()
+-->
+ ( QKeyEvent * )</CODE></LI>
+<LI><CODE>virtual void keyReleaseEvent
+<!--
+keyReleaseEvent()
+-->
+ ( QKeyEvent * )</CODE></LI>
+</UL>
+<P><B>c) movimentos do rato:</B>
+<UL>
+<LI><CODE>virtual void mouseMoveEvent ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void enterEvent ( QEvent * )</CODE></LI>
+<LI><CODE>virtual void leaveEvent ( QEvent * )</CODE></LI>
+</UL>
+<P><B>d) acções de botões do rato:</B>
+<UL>
+<LI><CODE>virtual void mousePressEvent ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void mouseReleaseEvent ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void mouseDoubleClickEvent ( QMouseEvent * )</CODE></LI>
+</UL>
+<P><B>e) eventos da janela que contém o widget:</B>
+<UL>
+<LI><CODE>virtual void moveEvent ( QMoveEvent * )</CODE></LI>
+<LI><CODE>virtual void resizeEvent ( QResizeEvent * )</CODE></LI>
+<LI><CODE>virtual void closeEvent ( QCloseEvent * )</CODE></LI>
+</UL>
+<P>
+<P>Note que todas as funções de eventos são virtuais e protegidas; assim você pode re-implementar os eventos que necessitar nos seus próprios
+widgets e especificar como o seu widget tem de reagir. O <CODE>QWidget</CODE> também contém alguns outros métodos virtuais que podem ser úteis nos seus
+programas; de qualquer modo, é suficiente saber sobre o <CODE>QWidget</CODE> de uma forma geral.
+<P>
+<H4>Interacção de Objectos através de Sinais e Espaços</H4>
+
+<P>Agora estamos a chegar às vantagens mais óbvias do conjunto de ferramentas Qt: o mecanismo sinal/espaço. Isto oferece uma solução bastante "à-mão"
+e útil para interacção de objectos, que é normalmente resolvido através de funções de <CODE>callback</CODE> para conjuntos de ferramentas X-Window. Como esta comunicação
+requer uma programação estrita e às vezes torna a criação de interfaces gráficos muito difícil (como referido pela documentação Qt e
+explicado em <EM>Programação com Qt</EM> por K.Dalheimer), a Troll Tech inventou um novo sistema onde objectos podem emitir sinais que podem ser
+conectados a métodos declarados como espaços. Para a parte C++ do programador, ele apenas tem de saber algumas coisas sobre este mecanismo:
+<P>
+<OL>
+<LI>a declaração de classe da classe que utiliza sinais/espaços tem de conter a macro <CODE>Q_OBJECT</CODE> no início (sem o
+ponto e vírgula); e tem de derivar da classe <CODE>QObject</CODE>,</LI>
+<LI>um sinal pode ser emitido por uma palavra-chave <CODE>emit</CODE>, por ex. <CODE>emit signal(parâmetros);</CODE> a partir de qualquer função membra
+de uma classe que permita sinais/espaços,</LI>
+<LI>todos os sinais utilizados pelas classes que não são herdadas têm de ser adicionados à declaração da classe através de uma secção <CODE>signals:</CODE>,</LI>
+<LI>todos os métodos que podem ser conectados com um sinal são declarados em secções com a palavra-chave adicional <CODE>slot</CODE>, por ex.
+<CODE><B>public</B> slots:</CODE> dentro da declaração da classe,</LI>
+<LI>o compilador de meta-objectos <CODE>moc</CODE> tem de correr sobre o ficheiro header para expandir as macros e produzir a implementação (que
+não é necessário saber.). Os ficheiros resultantes do <CODE>moc</CODE> são compilados também pelo compilador C++.</LI>
+</OL>
+<P>Outra forma de utilizar sinais sem derivar de <CODE>QObject</CODE> é utilizar a classe <CODE>QSignal</CODE>- veja a documentação de referência para
+mais informação e exemplos de utilização. Nos exemplos seguintes, nós assumimos que você está a derivar da <CODE>QObject</CODE>.
+<P>
+<P>Desta forma, a sua classe é capaz de enviar sinais para qualquer lado e de disponibilizar espaços a onde se possam conectar sinais. Utilizando os sinais, você não
+tem de se preocupar com quem os está a receber- você apenas tem de emitir o sinal e qualquer que seja o espaço que lhe queira conectar poderá reagir à
+emissão. Também os espaços podem ser utilizados como métodos normais durante a implementação.
+<P>Agora, para conectar um sinal a um espaço, tem de utilizar os métodos <CODE>connect()</CODE> que são disponibilizados através do <CODE>QObject</CODE> ou, onde disponível,
+métodos especiais que os objectos disponibilizam para definir a conecção para um certo sinal.
+<P>
+<P>
+<H4>Exemplo de Utilização</H4>
+
+<P>Para explicar a forma como definir interacção de objectos, iremos agarrar de novo no nosso primeiro exemplo e extende-lo através de uma conecção simples:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+#include &lt;qapplication.h>
+#include &lt;qpushbutton.h>
+
+int main( int argc, char **argv )
+{
+QApplication a( argc, argv );
+
+QPushButton hello( "Hello world!" );
+hello.resize( 100, 30 );
+
+a.setMainWidget( &amp;hello );
+
+connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );
+
+hello.show();
+return a.exec();
+}
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Como vê, a única adição para dar ao botão mais interacção é utilizar um método <CODE>connect()</CODE>:
+<CODE>connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );</CODE> é tudo o que temos de acrescentar. Qual é o significado agora? A declaração
+da classe de <CODE>QObject</CODE> diz sobre o método <CODE>connect()</CODE>:
+<P><CODE>bool connect ( const QObject * sender, const char * signal, const QObject * receiver, const char * member )</CODE>
+<P>Isto significa, você tem de especificar um ponteiro de uma instância de QObject que é o emissor do sinal, significando que pode emitir este sinal como
+primeiro parâmetro; depois você tem de especificar o sinal a que se deseja conectar. Os dois últimos parâmetros são o objecto receptor que
+disponibiliza um espaço, seguido pela função membro que <EM>é</EM> na realidade o espaço que será executado aquando da emissão do sinal.
+<P>Utilizando sinais e espaços, os objectos do seu programa podem interagir entre eles facilmente sem dependerem explicitamente do tipo
+de objecto receptor. Você irá aprender mais sobre a utilização deste mecanismo para utilização produtiva mais tarde neste manual. Mais informação sobre
+o mecanismo Sinal/Espaço pode ser encontrado no 
+<A HREF="kde_libref.html">Guia de Referência da Biblioteca KDE</A> e na referência electrónica Qt.
+<P>
+<H3><A NAME="ss2.2">2.2 O que o KDE disponibiliza</A>
+</H3>
+
+<P>
+<H4>As bibliotecas KDE 1.1.x</H4>
+
+<P>À altura deste documento e devido ao facto de o KDevelop utilizar KDE 1.1, referimo-nos ao estado das bibliotecas KDE nessa
+distribuição. As bibliotecas KDE principaos que irá utilizar para criar as suas próprias aplicações KDE são:
+<P>
+<UL>
+<LI>a biblioteca KDE-Core, contendo todas as classes que são elementos não-visíveis e disponibilizam funcionalidades que a sua aplicação pode utilizar.</LI>
+<LI>a biblioteca KDE-UI, contendo elementos de interface com o utilizador tais como barras de menu, de ferramentas e afins,</LI>
+<LI>a biblioteca KFile, contendo diálogos de selecção de ficheiros,</LI>
+</UL>
+<P>Adicionalmente, para soluções específicas o KDE oferece as seguintes bibliotecas:
+<P>
+<UL>
+<LI>a biblioteca KHTMLW, oferecendo um completo widget de interpretação HTML que é utilizado por vários programas como o KDEHelp, KFM, KDevelop,</LI>
+<LI>a biblioteca KFM, permitindo a utilização do gestor de ficheiros do KDE a partir de dentro da sua aplicação.</LI>
+<LI>a biblioteca KAb, o KAddressBook. Disponibiliza acesso a livro de endereços para por ex. aplicações de e-mail</LI>
+<LI>a biblioteca KSpell, oferecendo widgets e funcionalidades para integrar a utilização do Ispell, o corrector ortográfico comum, em aplicações
+tais como editores; utilizado na aplicação KEdit.</LI>
+</UL>
+<P>De seguida, iremos observar o que é necessário para tornar a nossa primeira aplicação Qt numa KDE.
+<P>
+<H4>Aplicação KDE Exemplo</H4>
+
+<P>No seguinte código, irá ver que escrever uma aplicação KDE não é muito mais difícil que uma aplicação Qt. Para a utilização das características
+do KDE, apenas tem de utilizar algumas outras classes, e está quase tudo feito. Como um exemplo, iremos discutir a versão alterada do exemplo
+Qt dado acima:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+#include &lt;kapp.h>
+#include &lt;qpushbutton.h>
+
+int main( int argc, char **argv )
+{
+KApplication a( argc, argv );
+
+QPushButton hello( "Hello world!" );
+hello.resize( 100, 30 );
+
+a.setTopWidget( &amp;hello );
+
+connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );
+
+hello.show();
+return a.exec();
+}
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Pode ver que primeiro alteramos de <CODE>QApplication</CODE> para <CODE>KApplication</CODE>. Além disso, tivemos de modificar o método <CODE>setMainWidget()</CODE>
+anteriormente utilizado para <CODE>setTopWidget</CODE>, que a <CODE>KApplication</CODE> utiliza para definir o widget principal. E é tudo! A sua primeira
+aplicação KDE está pronta- apenas tem de dizer ao compilador o caminho dos ficheiros include do KDE e ao linker para ligar a biblioteca KDE-Core com
+-lkdecore.
+<P>Como você agora saber o que pelo menos a função main() disponibiliza de forma geral e como uma aplicação se torna visível e permite a interacção de utilizadores e
+objectos, iremos continuar com o capítulo seguinte, onde a nossa primeira aplicação é feita com o KDevelop- aí poderá também testar tudo o
+que foi mencionado anteriormente e verificar os resultados.
+<P>O que deverá ter consultado adicionalmente até agora é a documentação de referência da Qt, especialmente as classes <CODE>QApplication</CODE>,
+<CODE>QWidget</CODE> e <CODE>QObject</CODE> e a documentação da biblioteca KDE-Core para a classe <CODE>KApplication</CODE>. O manual de 
+<A HREF="kde_libref-3.html">Referência da Biblioteca KDE</A> também cobre uma descrição completa sobre a invocação dos construtores
+<CODE>QApplication</CODE> e <CODE>KApplication</CODE> incluindo processamento de argumentos de linha de comandos.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">Página seguinte</A>
+ <A HREF="index-1.html">Página anterior</A>
+ <A HREF="index.html#toc2">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>O Manual de Programação do KDevelop: Desenho de Vista de Aplicação</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-5.html">Página seguinte</A>
+ <A HREF="index-3.html">Página anterior</A>
+ <A HREF="index.html#toc4">Índice geral</A>
+</P>
+<H3><A NAME="s4">4. Desenho de Vista de Aplicação</A></H3>
+
+<P>Quando se está a desenvolver uma aplicação com um interface gráfico de utilização, o trabalho principal é feito a disponibilizar a chamada "vista" para a
+aplicação. A vista geralmente é um widget que apresenta os dados de um documento e disponibiliza métodos para manipular o conteudo do
+documento. Isto pode ser feito pelo utilizador através de eventos que emite pelo teclado ou rato; operações mais complexas são muitas vezes
+processadas pelas barras de ferramentas e menus que interagem com a vista e o documento. A barra de estados apresenta informação sobre o estado
+do documento, vista ou aplicação. Como exemplo, olhamos para como um editor está construido e onde podemos encontrar cada parte.
+<P>Um editor é suposto geralmente disponibilizar um interface para o utilizador ver e/ou modificar o conteudo de um documento de texto. Se você
+iniciar o <EM>KEdit</EM>, vê o interface visual da seguinte forma:
+<P>
+<UL>
+<LI>A barra de menu: disponibiliza operações complexas bem como abrir, gravar e fechar ficheiros e sair da aplicação.</LI>
+<LI>A barra de ferramentas: oferece icons que permitem um acesso rápido para as funções mais necessárias,</LI>
+<LI>A barra de estados: apresenta o estado da posição do cursor através da linha e coluna actuais,</LI>
+<LI>A vista no centro da janela, apresentando um documento e oferecendo um cursor conectado ao teclado e rato
+para trabalhar sobre os dados.</LI>
+</UL>
+<P>Agora é fácil compreender, que uma vista é uma parte única da aplicação e que o desenho da vista decide sobre a
+usabilidade e aceitação de uma aplicação. Isto significa que um dos primeiros passos no desenvolvimento é determinar o objectivo da
+aplicação e que tipo de desenho lhe iria mais de encontro para permitir a qualquer utilizador trabalhar com a aplicação com um mínimo de
+trabalho de aprendizagem de como utilizar o interface gráfico.
+<P>Para alguns objectivos como edição de texto e apresentação de ficheiros HTML, as vistas são disponibilizadas pelas bibliotecas Qt e KDE; iremos discutir alguns
+aspectos destes widgets de alto-nível na próxima secção. Mas para a maioria das aplicações novos widgets têm de ser desenhados e implementados. É
+isso que faz um programador e também um desenhador e onde as suas capacidades em criatividade são necessárias. De qualquer modo, deverá procurar a
+intuição primeiro. Lembre-se que imensos utilizadores não aceitarão uma aplicação que não seja
+<P>
+<UL>
+<LI>bonita graficamente,</LI>
+<LI>oferece imensas funcionalidades,</LI>
+<LI>fácil de utilizar,</LI>
+<LI>rápida de aprender como utilizar.</LI>
+</UL>
+
+Desnecessário dizer que a estabilidade é um dos objectivos principais. Ninguém pode impedir erros de código, mas um mínimo pode ser atingido pelo menos por objectivos de desenho
+inteligentes e a utilização de desenho orientado por objectos. C++ torna a programação um prazer se você souber como explorar as suas capacidades- hereditariedade,
+ocultação de informação e reutilização de código já existente.
+<P>Quando se cria um projecto KDE ou Qt, você tem sempre de ter uma vista que herda <CODE>QWidget</CODE>, quer por herança directa ou porque
+a biblioteca do widget que quer utilizar herda <CODE>QWidget</CODE>. Assim, o Assistente de Aplicação já constroi a vista que é uma
+instância da classe <CODE>&lt;yourapp&gt;View</CODE>, que já herda <CODE>QWidget</CODE>. A aplicação cria a sua vista no método
+<CODE>initView()</CODE>, onde uma instãncia é criada e conectada com o widget principal como sua vista com  <CODE>KTMainWidget::setView()</CODE>.
+<P>Este capítulo descreve assim como utilizar bibliotecas de widgets para criar vistas de aplicações KDE ou Qt que são geradas com o
+KDevelop, depois iremos observar as bibliotecas e que tipos de vistas são já oferecidas.
+<P>
+<H3><A NAME="ss4.1">4.1 Utilizar Bibliotecas de Vistas</A>
+</H3>
+
+<P>Quando o desenho da sua aplicação estiver definido, você deverá primeiro procurar código já existente que fará a sua vida muito mais simples. Uma
+parte desta busca é a procura de um widget que possa ser utilizado como vista ou pelo menos parte dela; quer directamente ou por hereditariedade.
+As bibliotecas KDE e Qt já contêm um conjunto de widgets que podem ser utilizados para este propósito. Para os utilizar, você tem duas opções:
+<P>
+<OL>
+<LI> remover a nova classe de cista e criar uma instância de um widget de biblioteca; depois defini-lo como vista,</LI>
+<LI> modificar a hereditariedade da classe de vista disponibilizada para a classe do widget de biblioteca a utilizar.</LI>
+</OL>
+<P>De qualquer uma das formas, é importante saber que se a estrutura de aplicação não está actualmente ligada a nenhuma biblioteca que contenha o
+widget, o linker irá falhar. Depois de se decidir a utilizar um certo widget, procure a biblioteca a linkar; depois abra
+"Projecto"->"Opções" na barra de menu do KDevelop. Vá para a página "Opções do Linker" e procure as caixas de selecção que indiquem as
+bibliotecas que estão correntemente a serem utilizadas. Se a biblioteca do seu widget de vista já estiver seleccionada, pode deixar as opções do projecto intocadas
+e começar a fazer as alterações necessárias devido à sua escolha. Caso contrário, a opção de linker permite adicionar a biblioteca através de uma caixa de selecção,
+active-a e prima "OK" para sair de novo do diálogo de opções do projecto. Em qualquer outro caso, adicione a biblioteca na linha de edição por baixo da
+opção <CODE>-l</CODE>. Para bibliotecas que a sua aplicação tem de procurar antes de preparar os ficheiros Makefiles através do script <CODE>configure</CODE> na
+máquina do utilizador final, adicione a seguinte macro de procura ao ficheiro <CODE>configure.in</CODE>  localizado na raiz do directório do seu projecto e
+adicione a macro à linha de edição. Lembre-se que tem de correr "Construir"->"Autoconf e automake" e "Construir"->"Configurar" antes
+dos Makefiles conterem as expansões correctas para a macro de biblioteca.
+<P>Também, se os ficheiros inclued para a biblioteca a adicionar não estiverem no caminho actual de include (que pode ser visto pela opção <CODE>-I</CODE> na
+janela de output ao fazer "Make"), tem de adicionar o caminho no diálogo de Opções de Projecto -página "Opções de Compilador" com a opção <CODE>-I</CODE>
+ou a correspondente macro de automake na linha de edição para "Opções Adicionais".
+<P>
+<H4>Qt Views</H4>
+
+<P>Looking at the first page of the Qt online documentation, you will find a link to "Widget Screenshots" where you can have a look at
+how the widgets Qt contains look like. These are ready to use and can be combined together to form complex widgets to create
+application views or dialogs. In the following, we'll discuss some of these which are very usable for creating application views, but
+keep in mind that the KDE libraries sometimes contain other widgets for the same purpose; those will be reviewed in the next section.
+<P>Here are a set of hints for what purpose you could use which Qt component:
+<OL>
+<LI>if your view area isn't big enough to display all your data, the user must be enabled to scroll over the document with bars on
+the left and bottom of the view. For this, Qt provides the class <CODE>QScrollView</CODE>, which offers a scrollable child area. As explained,
+you could inherit your own widget from <CODE>QScrollView</CODE> or use an instance to manage your document's view widget.</LI>
+<LI>to create a ScrollView yourself, inherit the View widget from <CODE>QWidget</CODE> and add vertical and horizontal <CODE>QScrollBar</CODE>s.
+(this is done by KDE`s KHTMLView widget).</LI>
+<LI>for text processing, use <CODE>QMultiLineEdit</CODE>. This class provides a complete text editor widget that is already capable to cut,
+copy and paste text and is managed by a scrollview.</LI>
+<LI>use <CODE>QTableView</CODE> to display data that is arranged in a table. As <CODE>QTableView</CODE> is managed by scrollbars as well, it offers a
+good solution for table calculation applications.</LI>
+<LI>to display two different widgets or two widget instances at the same time, use <CODE>QSplitter</CODE>. This allows to tile views by
+horizontal or vertical dividers. Netscape's Mail window is a good example how this would look like- the main view is separated by a
+splitter vertically, the right window then is divided again horizontally.</LI>
+<LI><CODE>QListView</CODE> displays information in a list and tree. This is useful for creating file trees or any other hierarchical
+information you want to interact with.</LI>
+</OL>
+<P>You see that Qt alone offers a whole set of widgets which are ready to use so you don't have to invent new solutions if these match
+your needs. The sideffect when using standard widgets is that users already know how to handle them and only have to concentrate on
+the displayed data.
+<P>
+<H4>KDE Views</H4>
+
+<P>The KDE libraries were invented to make designing applications for the K Desktop Environment easier and capable of more functionality
+than what Qt alone is offering. To see what's available, we have a look at the documentation tree in KDevelop. You see that the KDE
+libraries start with <CODE>kdecore</CODE>, which is a base for all KDE applications. Then,<CODE>kdeui</CODE> offers user interface elements. This is
+where we will find some useful things first. For creating new applications, the <CODE>kdeui</CODE> library offers:
+<P>
+<OL>
+<LI><CODE>KTabListBox</CODE>: offers a multi-column list box where the user can change the rows with drag'n drop.</LI>
+<LI><CODE>KTreeList</CODE>: inherited from <CODE>QTableView</CODE>, offering a collapsible tree. This could be used instead of
+<CODE>QListView</CODE>.</LI>
+<LI><CODE>KEdit</CODE>: the base classes for the <EM>KEdit</EM> application offered with KDE. This could be used instead of
+<CODE>QMultiLineEdit</CODE>.</LI>
+<LI><CODE>KNewPanner</CODE>: manage two child widgets like <CODE>QSplitter</CODE>.</LI>
+</OL>
+<P>The <CODE>khtmlw</CODE> library on the other hand offers a complete HTML-interpreting widget that is ready to use. It is scrollable already,
+so you don't even have to take care for that. A possible use could be to integrate it as a preview widget for an HTML editor; used by
+applications such as KFM, KDEHelp and KDevelop to display HTML files.
+<P>
+<P>
+<H3><A NAME="Creating your own Views"></A> <A NAME="ss4.2">4.2 Creating your own Views</A>
+</H3>
+
+<P>Now that you have a general overview of what is already provided, you may notice that for a lot of purposes already existing widgets
+can be used or combined together. KMail is an example as well as KDevelop itself makes use of library view components to display data.
+<P>For applications that use a special file format or have to deal with graphics, you are probably forced to create your own view widget
+to allow data manipulation. This is realized in our sample by the class <CODE>KScribbleView</CODE>, already providing a base for a view area.
+<P>The inheritance from <CODE>QWidget</CODE> is necessary to overwrite the virtual methods to process user events, this is probably the most work
+besides providing popup menus for easier access of certain functions. Also it is likely that you have to implement a set of slots which
+can be accessed by toolbar buttons or menu bar commands to connect to as well as methods to manipulate variables such as e.g. a painter
+color.
+<P>For completeness, we will repeat the necessary methods:
+<P><B>a) Keyboard events --TAB and Shift-TAB keys:</B>
+<P>changes the keyboard input focus from the current widget to the next widget in the focus order. The focus can be set to widgets by
+calling <CODE>setFocusPolicy
+<!--
+setFocusPolicy()
+-->
+()</CODE> and process the following event handlers:
+<P>
+<UL>
+<LI><CODE>virtual void focusInEvent
+<!--
+focusInEvent()
+-->
+ ( QFocusEvent * )</CODE></LI>
+<LI><CODE>virtual void focusOutEvent
+<!--
+focusOutEvent()
+-->
+ ( QFocusEvent * )</CODE></LI>
+</UL>
+<P><B>b) all other keyboard input:</B>
+<UL>
+<LI><CODE>virtual void keyPressEvent
+<!--
+keyPressEvent()
+-->
+ ( QKeyEvent * )</CODE></LI>
+<LI><CODE>virtual void keyReleaseEvent
+<!--
+keyReleaseEvent()
+-->
+ ( QKeyEvent * )</CODE></LI>
+</UL>
+<P><B>c) mouse movements:</B>
+<UL>
+<LI><CODE>virtual void mouseMoveEvent
+<!--
+-->
+ ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void enterEvent
+<!--
+enterEvent()
+-->
+ ( QEvent * )</CODE></LI>
+<LI><CODE>virtual void leaveEvent
+<!--
+leaveEvent()
+-->
+ ( QEvent * )</CODE></LI>
+</UL>
+<P><B>d) mouse button actions:</B>
+<UL>
+<LI><CODE>virtual void mousePressEvent
+<!--
+mousePressEvent()
+-->
+ ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void mouseReleaseEvent
+<!--
+mouseReleaseEvent()
+-->
+ ( QMouseEvent * )</CODE></LI>
+<LI><CODE>virtual void mouseDoubleClickEvent
+<!--
+mouseDoubleClickEvent()
+-->
+ ( QMouseEvent * )</CODE></LI>
+</UL>
+<P><B>e) window events containing the widget:</B>
+<UL>
+<LI><CODE>virtual void moveEvent
+<!--
+moveEvent()
+-->
+ ( QMoveEvent * )</CODE></LI>
+<LI><CODE>virtual void resizeEvent
+<!--
+resizeEvent()
+-->
+ ( QResizeEvent * )</CODE></LI>
+<LI><CODE>virtual void closeEvent
+<!--
+closeEvent()
+-->
+ ( QCloseEvent * )</CODE></LI>
+</UL>
+<P>When re-implementing these functions, you should watch certain issues to avoid implementation mistakes that will make it almost
+impossible to change the widget's behavior afterwards:
+<P>
+<OL>
+<LI>declare your virtual methods as <B>virtual</B> as well and keep the access to protected. This allows code-reuse by inheritance and
+is consistent.</LI>
+<LI>don't hard-code any event-processing which should be made configurable. This counts most for keyboard events which should be
+realized with keyboard accelerator
+<!--
+accelerator
+-->
+s if any function is called. This even counts for text processing ! (Imagine that a lot of users are
+familiar with their favorite editor's behavior. If this is configurable, they can use the behavior they like and are used to)</LI>
+<LI>forward popup menu highlighting signals to the main widget to enable statusbar help</LI>
+</OL>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-5.html">Página seguinte</A>
+ <A HREF="index-3.html">Página anterior</A>
+ <A HREF="index.html#toc4">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

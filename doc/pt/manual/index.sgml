@@ -1269,8 +1269,8 @@ procurar texto seleccionado no navegador dentro do projecto    SHIFT+F2
 <sect3>Atalhos do Navegador
 <p>
 <code>
-página anterior                                 Alt+ Seta para a Esquerda
-página seguinte                                 Alt+ Seta para a Direita
+página anterior                                                                                                                                            Alt+ Seta para a Esquerda
+página seguinte                                                                                                                                                                Alt+ Seta para a Direita
 </code>
 <p>
 
@@ -1319,1224 +1319,1222 @@ Executar alvo com Argumentos                     ALT+F9
 Parar o processo actual                          F10
 </code>
 
-<sect>The Help System<label id="The Help System">
+<sect>O Sistema de Ajuda<label id="The Help System">
 <p>
-Most of KDevelop's strength is accumulated in the Help System.  It is also to be understood as an example of how to extend your own
-KDE application with a complete set of help functionality, and is, in part, already realized in the template applications, so
-KDE/Qt application frameworks generated with the KAppWizard do already contain the basic functionality for statusbar help and
-documentation, that only has to be extended by the programmer. This section therefore introduces into the usage of the general
-help provided within the IDE as well as to show the usage of the Helpbrowser, which, by intelligent use, will make it very easy to
-get the information you need for development.
+Muita da força do KDevelop está acumulada no Sistema de Ajuda. Deve ser também entendido como um exemplo de como extender a sua própria
+aplicação KDE com um conjunto completo de funcionalidades de ajuda, e está, em parte, já realizado nos modelos de aplicações iniciais, pelo
+que esqueletos de aplicações KDE/Qt geradas pelo KAppWizard já contêm a funcionalidade básica para a ajuda de barra de estados e
+documentação, que apenas tem de ser aumentada pelo programador. Esta secção irá assim introduzi-lo à utilização da ajuda geral
+disponibilizada dentro do ambiente de desenvolvimento bem como mostrar a utilização do Navegador de Ajuda, o qual, através de uma utilização inteligente, irá tornar muito fácil
+encontrar a informação de que necessita para o desenvolvimento.
 
-<sect1>The "What's this ?"-Button and Quickhelp
+<sect1>O Botão "O que é isto?" e a Ajuda Rápida
 <p>
-Looking at KDevelop's top toolbar, you will see the "What's this?" button on the right end. By selecting the button, the cursor
-will change to a pointer with a question mark on the right, as is the same as the button in the toolbar. Now, you can select any
-visible part of the KDevelop user interface and click on it. This will result in displaying a helpwindow giving you a short
-description of the function this part gives you or what it can do for you. Included are the main view, the treeviews and the
-toolbars, for which every button help is provided. After another mouseclick or a keyboard input, the What's this? help window
-disappears and your cursor is set to the last active position. Mind, that, if you place the mousepointer over a button, it gets
-raised and after a short time, you will get a QuickTip-window, describing the function the button represents in the menubar; this
-will disappear if you move the mousepointer away.
+Olhando para a barra de ferramentas de cima do KDevelop, você vê o botão "O que é isto?" na ponta direita. Seleccionando o botão, o cursor
+irá mudar para um ponteiro com um ponto de interrogação à direita, tal como o icon do botão na barra de ferramentas. Agora, pode seleccionar qualquer
+parte visível do interface de utilizador do KDevelop e clicar sobre ela. Isto irá resultar na apresentação de uma janela de ajuda dando-lhe uma breve
+descrição da função que esta parte lhe dá ou o que poderá fazer por si. Inclui-se a janela principal, as vistas de árvore e as
+barras de ferramentas, para os quais é disponibilizada ajuda para cada botão. Após outro clique do rato ou entrada de teclado, a janela de ajuda O que é isto?
+desaparece e o seu cursor é modificado de volta à última forma activa. Lembre-se, que, se colocar o ponteiro do rato sobre um botão, ele fica
+em relevo e após um curto período de tempo, obtém uma janela com uma Dica Rápida, descrevendo as funcionalidades que o botão representa na barra de menu; a dica
+irá desaparecer se afastar o ponteiro do rato.
 
-For user interaction dialogs, Quickhelp provides you help windows with a short description of the selected item you want help for.
-These are accessed by a right-button mouseclick to the item, a context-menu pops up that allows the selection of "Quick-Help".
-Selecting this will pop up the help window. This is always useful for dialogs where you can't see the action's purpose for as long
-as you are not familiar with KDevelop. Mind that most dialogs offer a Help-button which will show you the detailed context-help
-for the dialog's options within the provided online-manual in the help-browser.
+Para diálogos de interacção com o utilizador, a Ajuda Rápida disponibiliza-lhe janelas de ajuda com uma breve descrição do item seleccionado para o qual deseja ajuda.
+Estes são acedidos através de um clique do botão direito do rato sobre o item, em que um menu de contexto surge e permite a selecção da "Ajuda Rápida".
+Seleccionado esta surge uma janela de ajuda. Isto é sempre útil para diálogos em que não consegue ver qual o objectivo da acção durante o
+período em que não estiver familiarizado com o KDevelop. Lembre-se que a maior parte dos diálogos oferece um botão de Ajuda que lhe mostra a ajuda de contecto
+para as opções do diálogo dentro do manual electrónico no navegador de ajuda.
 
-<sect1> The Statusbar Help
+<sect1> A Ajuda de Barra de Estados
 <p>
-The statusbar of KDevelop offers you many fuctions that inform you about the current activity state as well as "status messages"
-offering a short description for commands.
+A barra de estados do KDevelop disponibiliza-lhe várias funções que o informam sobre o estado da actividade actual bem como uma "mensagem de estado"
+oferecendo uma breve descrição para os comandos.
 
-<sect2> Statusbar Entries
+<sect2> Entradas da Barra de Estados
 <p>
-The Statusbar contains:
+A Barra de Estados contém:
 <enum>
-<item> a general message field, mostleft. This is used for help messages and displays the current activity.
-<item> the progressbar, indicating the progress for actions that require a comparably long time to be finished, such as saving
-files and the scan-progress of the Class Browser. The progressbar only appears during those processes are executed.
-<item> an Insert/Overwrite indicator. It shows the editor mode for insert actions by INS for Insert mode and OVR for Overwrite
-mode. The mode can be changed by the INS-key on the keyboard.
-<item> a line counter, displaying the current line the cursor is placed.
-<item> a column counter, indicating the current column position of the cursor in a line.
+<item> um campo de mensagem genérica, na extrema esquerda. Isto é utilizado para mensagens de ajuda e apresenta a actividade a decorrer.
+<item> a barra de progresso, indicando o progresso para acções que requeiram um período de tempo mais comprido para terminar, tal como gravar
+ficheiros e o progresso de percorrer todos os ficheiros do Navegador de Classes. A barra de progresso apenas aparece durante o decurso desses processos.
+<item> um indicador de Inserir/Sobrepor. Mostra o modo do editor para acções de inserção através de INS para modo inserir e OVR para modo
+sobrepor. O modo pode ser modificado através da tecla INS (Insert) no teclado.
+<item> um contador de linha, apresentando a linha actual em que o cursor se encontra.
+<item> um contador de coluna, apresentando a coluna actual em que o cursor se encontra na linha.
 </enum>
 
-<sect2> Help Messages
+<sect2> Mensagens de Ajuda
 <p>
-The statusbar informs you about the action of menuentries if you select a menu within the menubar and select an action without
-executing it. Further, if you press on a toolbar icon, but without releasing the mousebutton, the help message for the button is
-displayed in the same way as for the menuentries. You can prevent the execution of the selected icon by moving the mousepointer
-away from the icon, still hoding the button pressed. If the cursor is away, release the mousebutton.
+A barra de estados informa-o sobre acções de entradas de menu se seleccionar um menu dentro da barra de menu e seleccionar uma acção sem
+a executar. Além disso, se premir um icon da barra de ferramentas, mas sem largar o botão do rato, a mensagem de ajuda do botão é
+apresentada da mesma forma que para as entradas de menu. Pode impedir a execução do icon seleccionado movendo o ponteiro do rato
+para longe do icon, ainda premindo o botão do rato. Se o cursor estiver afastado, largue o botão do rato.
 
-For actions that are currently executed, KDevelop displays the action. This counts for processes running in the background
-such as saving files as well as for dialogs. If the process has exited such as a make-invocation, the statusbar display
-changes back to "Ready" state.
+Para acções que estão presentemente em execução, o KDevelop apresenta a acção. Isto inclui processos a decorrer por trás
+tal como gravar ficheiros bem como diálogos. Se o processo tiver saido tal como uma invocação do make, a barra de estados
+modifica-se para o estado "Pronta".
 
-Also, when using the documentation browser, the statusbar displays link urls for as long as the cursor is placed over an URL link
-in the browser window. Therefore, you can easily find out if the file is a local or a remote file only accessed by network
-connection.
+Também, quando a utilizar o navegador de documentação, a barra de estados disponibiliza ligações urls durante o período de tempo que o cursor estiver colocado sobre um endereço URL
+na janela de navegação. Assim, pode rapidamente descobrirse um ficheiro é local ou ficheiro remoto apenas acessível através de uma
+conecção na rede.
 
-The caption of the KDevelop Project Editor shows you the currently opened filename in the top window. This would be a HTML file
-for the documentation browser or a text file for the editing windows. Further, the Project name is displayed, so you have constant
-control where you are and what you're currently working at.
+O título do Editor de Projecto KDevelop apresenta o nome do ficheiro presentemente aberto na janela de topo. Isto seria um ficheiro HTML
+para o navegador de documentação ou um ficheiro de texto para as janelas de edição. Além disso, o nome do Projecto é apresentada, pelo que você tem controlo constante
+sobre onde se encontra e no que está presentemente a trabalhar.
 
-<sect1> Configuring the HTML Browser
+<sect1> Configurar o Navegador de HTML
 <p>
-The browser included in KDevelop is completely HTML-based, therefore you can specify the usual options like background and the
-like. You can set all preferences by the "Documentation Browser"-entry of the "Options"-menu.
-The configuration dialog shows you two tabulators; the first for setting the font preferences, the second for color selection.
+O navegador incluido com o KDevelop é completamente baseado em HTML, pelo que você pode especificar as opções normais tais como fundo e
+afins. Pode definir todas as preferências através da entrada "Navegador de Documentação" do menu "Opções".
+O diálogo de configuração mostra-lhe dois tabuladores; o primeiro para definir as preferências de fontes, o segundo para selecção de cores.
 
-<sect2>Font Preferences
+<sect2>Preferências de Fontes
 <p>
-The first option for the font display is the size. Available are small, medium and large. The best display for normal use
-is set to small by default.
-For the font selection you have to specify a standard font for normal text as it appears in HTML documents; the fixed font is the
-one used for dispaying e.g. code within the HTML file.
+A primeira opção para a apresentação da fonte é o tamanho. Os disponíveis são pequeno, médio e grande. A melhor apresentação para utilização normal
+é definir pequeno por defeito.
+Para a selecção de fonte tem de especificar uma fonte standard para texto normal tal como surge em documentos HTML; a fonte fixa é para
+apresentar por ex. código dentro de um ficheiro de HTML.
 
-<sect2>Color Preferences
+<sect2>Preferências de Cores
 <p>
-The color preferences dialog allows configuration of background, normal text, URL Link and followed link color. The
-colored buttons on the right are displaying the current settings; selecting a button will result in opening the "Select Color"
-dialog. There, you can specify the color either by choosing a System Color, a custom color, select the color by the multi-colored
-window or by setting the values directly. The middle contains a preview for the color selected.
+O diálogo de preferências de cores permite a configuração das cores de fundo, texto normal, ligações URL e côr das ligações seguidas. OS
+botões coloridos à direita estão a mostrar as definições actuais; seleccionando um botão irá resultar na abertura de um diálogo de "Selecção de Côr".
+Aí, você pode especificar a côr quer escolhendo uma Côr de Sistema, uma côr costumizada, seleccionando a côr a partir da janela
+multi-colorida ou através da entrada directa de valores. O meio contém uma antevisão da côr seleccionada.
 
-Further, you can specify if the browser should underline links to easier detect them visually and if you like to use your own
-colors always independent of the page's preset ones. "Apply" will execute all changes, while "OK" will apply changes and close the
-dialog. "Cancel" leaves all settings untouched and exits the configuration.
+Além disso, você pode especificar se o navegador deverá sublinhar ligações para mais facilmente você as detectar visualmente e se deseja utilizar as suas próprias
+cores sempre independentemente as pré-definidas da página que estiver a visualizar. "Aplicar" irá executar todas as alterações, enquanto que "OK" irá aplicar as alterações e fechar
+o diálogo. "Cancelar" deixa todas as definições intocadas e sai da configuração.
 
-<sect1> Using the Documentation Browser<label id="Using the Documentation Browser">
+<sect1> Utilizar o Navegador de Documentação<label id="Using the Documentation Browser">
 <p>
-The documentation browser allows quick and easy access to all manuals and documentations that are provided with KDevelop or
-generated automatically, including online-documentation for the <idx/KDE-libraries/ and your project documentation. Plus, the
-Documentation Tree in the tree-view lets you customize a special "Others" folder that contains all individually added
-documentation.
+O navegador de documentação permite acesso rápido e fácil a todos os manuais e documentações que são disponibilizadas com o KDevelop ou
+geradas automaticamente, incluindo documentação electrónica para as bibliotecas <idx/KDE/ e a documentação do seu projecto. Mais, a
+Árvore de Documentação na vista de árvore permite-lhe costumizar uma pasta especial "Outras" que contém toda a documentação adicionada
+individualmente.
 
-<sect2>Requirements
+<sect2>Requisitos
 <p>
-To make use of all features of the Helpbrowser, you should have KDoc and glimpse installed. KDoc will generate all kind of online
-classdocumentation for the <idx/KDE-libraries/ during the setup process, but can also invoked by option in the <ref id="General
-Configuration" name="KDevelop Setup">. For the generation of an API (Application Programming Interface) Documentation for your
-project's classes, KDoc is also used and called by the Build-menu, entry "Make API-Doc". This will process all current header files of
-the project plus the addition of a cross-reference to the Qt and <idx/KDE-libraries/ if those are available in the Helpbrowser. For the
-generation of the project handbooks, you should have ksgml2html (provided with the <idx/KDE-SDK/) and, as a minimum, SGML-tools
-installed on your system. To extend and change your project's online-documentation, you have to edit the documentation file for your
-project by selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Build-menu. In case sgmltools detect
-formatting errors, those will be displayed in the output window allow you to find the error line directly. The program "glimpse"
-is used to create a personal search-index for your documentation automatically. The index is generally build during the
-installation process, but can also be build with the <ref id="General Configuration" name="KDevelop Setup"> dialog. For a description of
-the provided search functions see <ref id="Using the Search Index" name="Using the Search Index">.
+Para fazer uso de todas as funcionalidades do Navegador de Ajuda, deverá ter o KDoc e o glimpse instalados. O KDoc irá gerar todo o tipo de documentação electrónica
+de classes para as bibliotecas <idx/KDE/ durante o processo de instalação, mas pode também ser invocado por opção na <ref id="General
+Configuration" name="Configuração do KDevelop">. Para a geração de uma Documentação da API (Application Programming Interface - Interface de Programação da Aplicação)
+para as classes do seu projecto, o KDoc é também utilizado e chamado pelo menu Construir, entrada "Fazer Doc-API". Isto irá processar todos os ficheiros header actuais
+do projecto mais uma referência cruzada com as bibliotecas da Qt e <idx/KDE/ se estas estiverem disponíveis no Navegador de Ajuda. Para a
+geração de manuais do projecto, deverá ter o ksgml2html (disponibilizado com o <idx/KDE-SDK/) e, como um mínimo, as ferramentas SGML
+instaladas no seu sistema. Para aumentar e modificar a documentação electrónica do seu projecto, tem de editar o ficheiro de documentação do seu
+projecto seleccionando-o no VFR. Após gravar as suas modificações, chame "Fazer Manual do Utilizador" a partir do menu Construir. No caso das ferramentas sgml
+detectarem erros de formatação, estes serão apresentadas na janela de output permitindo-lhe descobrir directamente a linha com o erro. O programa "glimpse"
+é utilizado para criar automaticamente um índice de busca pessoal para a sua documentação. O índice é geralmente construido durante o
+processo de instalação, mas pode também ser construido com o diálogo da <ref id="General Configuration" name="Configuração do KDevelop">. Para uma descrição
+das funções de busca disponibilizadas veja <ref id="Using the Search Index" name="Utilizar o Índice de Busca">.
 
-<sect2>Provided Documentation
+<sect2>Documentação Disponibilizada
 <p>
-The KDevelop IDE comes with two sets of online-documentation, which can be accessed either via the Help-menu or by the Doc-tree in
-the Tree-View in the KDevelop folder. The first book provided is this online-handbook containing all information you need towards
-installation, configuration, available functionality and introduction to application development. The second book is <em/The
-KDevelop Programming Handbook/ in it's first edition. The programming handbook covers most questions related to the creation and
-extension of projects that work with KDevelop. By tutorials the user gets an introduction to the rich facilities that applications
-created with the Qt- and/or <idx/KDE-libraries/ have to offer as well as given a guideline for ensuring <idx/KDE/-compliance, which
-covers the same instructions given on the internet site of <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">
-However, the programming handbook cannot replace any additonal documentation available in printed or electronic form about the C++
-programming language as well as about the usage of the Qt-library in certain terms.
+O ambiente de desenvolvimento KDevelop vem com dois conjuntos de documentação electrónica, que podem ser acedidos quer através do menu Ajuda ou através da árvore de documentação
+na Vista de Árvore na pasta do KDevelop. O primeiro livro apresentado é o manual electrónico contendo toda a informação de que poderá necessitar no sentido
+de instalar, configurar, funcionalidades disponíveis e introdução ao desenvolvimento de aplicações. O segundo livro é o <em/Manual
+de Programação do KDevelop/ na sua primeira edição. O manual de programação cobre a maior parte das questões relativas à criação e
+expansão de projectos que funcionem com o KDevelop. Através de explicações passo-a-passo o utilizador obtém uma introdução às ricas potencialidades que aplicações
+criadas com as bibliotecas da Qt e/ou <idx/KDE/ têm a oferecer bem como dar linhas mestras para assegurar compatibilidade com o <idx/KDE/, o que
+cobre as mesmas instruções dadas na página de internet do <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">.
+No entanto, o manual de programação não pode ser substituido por nenhuma documentação adicional disponível em formato impresso ou electrónico sobre a linguagem
+de programação C++ bem como sobre a utilização da biblioteca Qt sob certos termos.
 
-The C/C++-Reference used with KDevelop is currently only available on the KDevelop homepage at <htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">.
-It can be installed easily by downloading and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you have to
-untar it as root with <tt/tar zxvf c_c++_reference.tar.gz/, the reference will then be copied the documentation
-directory of KDevelop. For uninstalling the reference documentation you just have to delete the "reference" folder under
+A Referência C/C++ utiizada com o KDevelop é actualmente a única disponível na página de internet do KDevelop em <htmlurl
+url="http://www.kdevelop.org" name="http://www.kdevelop.org">.
+Pode ser instalada facilmente puxando o ficheiro e copiando o código fonte para o directório principal do KDE ($KDEDIR). Aí, tem de
+descomprimir o ficheiro como root com <tt/tar zxvf c_c++_reference.tar.gz/, a referência será então copiada para o directório de
+documentação do KDevelop. Para desinstalar a documentação de referência apenas tem de apagar o directório "reference" em
 ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
 
-The Qt/KDE-libraries documentation folder allows direct access to the HTML-online documentation of your copy of the Qt-library.
-The path to the library documentation is usually automatically detected by the KDevelop installation program, but can be set
-manually in the <ref id="General Configuration" name="KDevelop Setup"> dialog. Also, all available documentation for the KDE-libraries
-are listed in order of the library name, so if you would use classes of a certain library it is easy to determine the library type
-to be added to the linker settings in the project. Mind that the whole KDE-library documentation is only accessable when generated
-by KDoc- so this program, included in the <idx/KDE-SDK/, has to be installed before the documentation can be generated. As the
-installation program of KDevelop does this automatically, it should be installed before KDevelop is started for the first time. If
-this is not the case and the documentation cannot be build, you are able to create it afterwards at any time with the <ref
-id="General Configuration" name="KDevelop Setup"> dialog.
+A pasta de documentação das bibliotecas Qt/KDE permite acesso directo à documentação electrónica da sua cópia da biblioteca Qt.
+O caminho para a documentação da biblioteca é normalmente detectado pelo programa de instalação do KDevelop, mas pode ser definido
+manualmente no diálogo de <ref id="General Configuration" name="Configuração do KDevelop">. Também, toda a documentação disponível para as bibliotecas KDE
+são listadas por ordem de nome de biblioteca, pelo qie se você utilizar classes de uma dada biblioteca é fácil determinar o tipo de biblioteca
+a ser adicionada às definições de linkagem do projecto. Lembre-se de que toda a documentação da biblioteca KDE apenas é acessível quando gerada
+pelo KDoc- pelo que este programa, incluido no <idx/KDE-SDK/, tem de estar instalado antes da documentação poder ser gerada. Como o
+programa de instalação do KDevelop faz isto automaticamente, deve ser instalado antes do KDevelop ser iniciado pela primeira vez. Se
+este não for o caso e a documentação não conseguir ser construida, é-lhe possível cria-la posteriormente a qualquer momento através do diálogo <ref
+id="General Configuration" name="Configuração do KDevelop">.
 
-The library documentation tree is followed by the "Others" folder which is inteded to contain all personally customized
-documentation as described below. Finally, the Doc-Tree allows access to the Project API and the Project Manual for your current
-project.
+A árvore de documentação das bibliotecas é seguida de uma pasta "Outros" que se destina a conter toda a documentação costumizada
+pessoalmente como descrito abaixo. Finalmente, a Árvore de Doc permite um acesso rápido à API de um Projecto e ao Manual do Projecto para o projecto
+actual.
 
-<sect2>Adding Documentation to the Helpbrowser
+<sect2>Adicionar Documentação ao Navegador de Ajuda
 <p>
-To customize your Helpbrowser, open the Tree-View and select the "DOC" Tabulator. You will see an opened tree called
-Documentation, containing four folders. The "Others" folder is, by default, empty. On a right mousebutton click over this folder,
-a context menu opens that has an entry "Add Entry". Select this to open the Add Entry dialog where you have to enter two values:
-the upper one for the name that will be displayed for the documentation within the Doc-tree, and, below that, a file-entry line.
-Here, you have to enter the path and filename to the startpage that will be opened by the selection of the entry later. You can
-enter the path and filename directly or by selection of the pushbutton on the right to open a file-chooser dialog. This allows a
-quick browsing on your system to the path for your startpage. Mind that only HTML-documentation can be selected, so only HTML
-files are allowed to choose. Selecting OK will add the entry to the Doc-tree and is available directly.
+Para costumizar o Navegador de Ajuda, abra a Vista de Árvore e seleccione a pasta "ADOC". Verá uma árvore aberta chamada
+Documentação, contendo quatro pastas. A pasta "Outras" está, por defeito, vazia. Com um clique do botão direito do rato sobre esta pasta,
+um menu de contexto abre e possui uma entrada "Adicionar Entrada". Seleccione este para abrir o diálogo de Adicionar Entrada onde terá de inserir dois valores:
+o de cima para o nome que será apresentado para a documentação dentro da árvore de Doc, e, por baixo dessa, uma linha de entrada de ficheiro.
+Aqui, tem de inserir o caminho e nome de ficheiro para a página inicial que será aberta pela selecção da entrada mais tarde. Você pode
+indicar o caminho e nome de ficheiro directamente ou selecciona-lo premindo um botão à direita para abrir um diálogo de escolha de ficheiro. Isto permite
+uma visão rápida do seu sistem até ao caminho para a sua página inicial. Lembre-se que apenas documentação HTML pode ser seleccionada, pelo que apenas
+é possível escolher ficheiros HTML. Seleccionando OK irá adicionar a entrada à árvore de Doc e encontra-se desde logo disponível.
 
-<sect2>Using the Search Index<label id="Using the Search Index">
+<sect2>Utilizar o Índice de Busca<label id="Using the Search Index">
 <p>
-KDevelop includes a set of fuctions to help you search information within HTML documentation. To use these features, your system
-needs to have the program "glimpse", a free database generator, installed, which creates the search index and executes searches
-within the documentation. To set up the index, see <ref id="General Configuration" name="KDevelop Setup">. The index is also
-automatically generated during the installation program.
+O KDevelop inclui um conjunto de funções para ajudar a busca de informação dentro da documentação HTML. Para utilizar estas funcionalidades, o seu sistema
+tem de ter o programa "glimpse", um gerador de bases de dados gratuito, instalado, que irá criar o índice de busca e executar as procuras
+dentro da documentação. Para definir o índice, veja <ref id="General Configuration" name="Configuração do KDevelop">. O índice é também
+gerado automaticamente durante o programa de instalação.
 
-The search functions are available through several ways which you can choose from:
+As funções de busca estão disponíveis através de várias formas que pode escolher:
 <enum>
-<item>in the editor, select the text you want to have help on or place the cursor in the word that you want to look for. Then
-press the right mouse button and select look up: "expression" This can also be done by selecting "Search Marked Text" from the
-help menu, the shorcut key F2 or by selecting the Search icon from the toolbar.
-<item>in the Documentation browser select the text you want to look up and press the right mouse button, select look
-up:"expression" or select "Search Marked Text" or the search icon as above.
-<item>if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help
-on..." icon from the toolbar, opening a search dialog where you can enter the expression you want to get information for.
+<item>no editor, seleccione o texto sobre o qual deseja ter ajuda ou coloque o cursor na palavra que deseja procurar. Depois
+prima o botão direito do rato e seleccione procurar: "expressão" Isto também pode ser feito seleccionado "Procurar Texto Marcado" a partir do
+menu de ajuda, da tecla de atalho F2 ou seleccionando o icon de Busca a partir da barra de ferramentas.
+<item>no Navegador de Documentação seleccione o texto que deseja procurar e prima o botão direito do rato, seleccione procurar
+:"expressão" ou seleccione "Procurar Texto Marcado" ou o icon de busca como acima.
+<item>se deseja procurar uma palavra chave específica, seleccione "Procurar Ajuda sobre..." no menu de ajuda ou seleccione o icon "Procurar Ajuda
+sobre..." a partir da barra de ferramentas, abrindo um diálogo de busca onde poderá inserir a expressão sobre a qual deseja obter informações.
 </enum>
-Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu
-entries.
+Acesso directo a documentação específica é dado seleccionando o icon correspondente na vista de árvore "ADOC" ou através das entradas do menu
+de ajuda.
 
-The Helpbrowser also offers support for grep to search for a selection within your current project, e.g you've opened the documentation
-page for the <tt/KTMainWindow/ class (KDEUI library) and you want to know where in your code <tt/KTMainWindow/ appears. Mark
-<tt/KTMainWindow/ and either select "Grep: KTMainWindow" or press Shift+F2. The "Search in Files" dialog opens with the results about
-your grep search directly. Then you can choose an result line to jump to the according sourcecode.
+O Navegador de Ajuda também disponibiliza suporte para grep para procurar por uma selecção dentro do projecto actual, por ex. você abriu a página de documentação
+para a classe <tt/KTMainWindow/ (biblioteca KDEUI) e deseja saber onde no seu código <tt/KTMainWindow/ surge. Marque
+<tt/KTMainWindow/ e seleccione "Grep: KTMainWindow" ou então prima Shift+F2. O diálog "Procurar nos Ficheiros" abre com os resultados sobre
+a sua busca grep directamente. Depois pode escolher uma linha de resultado e ir para o código fonte respectivo.
 
-<sect>Working with the Editor<label id="Working with the Editor">
+<sect>Trabalhar com o Editor<label id="Working with the Editor">
 <p>
-An important part of the integrated development environment is the editor. You're using it for:
+Uma parte importante do ambiente integrado de desenvolvimento é o editor. Você usa-o para:
 <itemize>
-<item>creating, opening and saving source and project files
-<item>editing source and project files
-<item>writing your sgml documentation
-<item>printing your project files
+<item>criar, abrir e gravar ficheiros de código e do projecto
+<item>editar código e ficheiros do projecto
+<item>escrever a sua documentação sgml
+<item>imprimir os ficheiros do seu projecto
 </itemize>
-Generally, the editor itself doesn't do much difference in comparison to other editors; especially as it is a build-in version of
-the popular KWrite, also known as the "Extended Editor". If you're familar with that, you won't have any problems using it for
-managing your projects. In addition to normal editors, KDevelop contains a new printing system, that is far more extended for use
-with sourcecodes- and you can choose between the printing program you want to use.
+Geralmente, o editor em si não faz muita diferença em comparação com outros editores; especialmente pois é uma versão incorporada do
+popular KWrite, também conhecido como "Editor Extendido". Se está familiarizado com ele, não terá quaisquer problemas a utiliza-lo para
+gerir os seus projectos. Em adição aos editores normais, o KDevelop contém um novo sistema de impressão, que tem muitas mais características para utilização
+com código fonte- e você pode escolher qual o programa de impressão que deseja utilizar.
 
-This section gives you more information about how to handle your project files and to make you more familiar with the editor's
-functionality. A lot of Unix-hardliners would prefer using Emacs or XEmacs- they're fine with that. But it isn't neccessary for
-easy programming, and especially for beginners, to work themselves into powerful editors which shall, in the result, only allow
-you to enter your code.
+Esta secção dá-lhe mais informação sobre como gerir os ficheiros do seu projecto e familiariza-lo com as funcionalidades do
+editor. Muitos dos utilizadores mais antigos de Unix prefeririam utilizar o Emacs ou XEmacs- estão à vontade com eles. Mas não é necessário simplesmente
+para programar, e especialmente para iniciados, é difícil habituarem-se a editores potentes que irão, no fim de contas, apenas permitir
+introduzir o seu código.
 
-<sect1>Managing Project Files
+<sect1>Gerir Ficheiros do Projecto
 <p>
-The following sections describe how to create, save, open and close your project files you need to edit- mind that this doesn't
-include translation files or pixmaps. Those are recognized automatically and the according editing program like KTranslator opens
-those files for you.
+As secções seguintes descrevem como criar, gravar, abrir e fechar os ficheiros do seu projecto que necessita editar- lembre-se que isto não inclui
+os ficheiros de tradução ou imagens. Esses são reconhecidos automaticamente e o programa de edição correspondente tal como o KTranslator abre
+esses ficheiros para sí.
 
-To give you an easy access to your files, KDevelop contains two easy-to-handle treeviews, similar to a filemanager, that recognize
-if you selected a file, and opens it in the according editor window. The main view contains two windows that are used
-independently, but connected via the Project Editor, so you can do all menubar actions the same way. The intention behind this is
-that it allows you to handle two windows at the same time, although only one is visible. The C/C++ window thereby takes another
-task, which allows you to easily compile your sources one by one, so you can check the impelmentations without having to run a
-complete build-process over your project.
+Para lhe permitir um acesso fácil aos seus ficheiros, o KDevelop contém duas vistas de árvore fáceis de utilizar, similares a um gestor de ficheiros, que reconhece
+se seleccionou um ficheiro, e abre-o na janela de edição correspondente. A vista principal contém duas janelas que são utilizadas
+independentemente, mas conectadas através do Editor de Projecto, pelo que pode fazer todas as acções de menu da mesma forma. A intenção por trás disto é
+que lhe permite manusear duas janelas ao mesmo tempo, apesar de que apenas uma se encontra visível. A janela C/C++ toma assim outra
+tarefa, que lhe permite facilmente compilar o seu código ficheiro a ficheiro, para que possa verificar as implementações sem ter de executar
+um processo de construção completo do seu projecto.
 
-This can be done when having the C/C++ window on top. Select "Compile File" from the Build-menu or press the according button in
-the toolbar. Your file gets saved and compiled, and you can control any errors by the compiler output in the output window.
+Isto pode ser conseguido tendo a janela C/C++ no topo. Seleccione "Compilar Ficheiro" a partir do menu Construir ou pressione o botão correspondente na
+barra de ferramentas. O seu ficheiro é gravado e compilado, e pode controlar quaisquer erros do compilador pela janela de output.
 
-Within the IDE you can open as many textfiles as you like. All opened files are listed in the Window-menu, so you can switch
-between them by selecting the according filename from the menu. Further, the actual opened file is displayed with its name in the
-window frame of KDevelop.
+Dentro do ambiente de desenvolvimento pode ter abertas quantos ficheiros de texto desejar. Todos os ficheiros abertos são listados no menu Janela, para que possa alternar
+entre eles seleccionando o correspondente nome de ficheiro a partir do menu. Ainda mais, o ficheiro actualmente aberto é apresentado com o seu nome na
+moldura de janela do KDevelop.
 
-<sect2>Creating and Saving Files
+<sect2>Criar e Gravar Ficheiros
 <p>
-To create a new file, choose "New" from the File-menu or select "Add File(s) to project"&rarr"New File". This opens the "New File"
-dialog, where you can specify the filename and type. Additionally, you have to set the destination directory as well if the file
-is added to the project or not. Finally, you can also use your header template for the project in case you want to add a new
-sourcefile without generating a new class by the Class-Generator.
+Para criar um ficheiro novo, escolhe "Novo" a partir do menu Ficheiro ou seleccione "Adicionar Ficheiro(s) ao projecto"&rarr"Novo Ficheiro". Isto abre o diálogo "Novo Ficheiro",
+onde pode especificar o nome e tipo de ficheiro. Adicionalmente, tem de definir o directório de destino bem como se o ficheiro
+é adicionado ao projecto ou não. Finalmente, pode também utilizar o seu modelo de cabeçalho para o projecto no caso de querer adicionar um novo
+ficheiro de código sem gerar uma nova classe através do Gerador de Classes.
 
-After the file has been created, you can edit the new file as usual; if you have to switch between different files, you can always
-turn back to the file either via the file-trees or by the Window-menu.
+Após o ficheiro ter sido criado, pode editar o novo ficheiro normalmente; se tem de alternar entre ficheiros diferentes, pode sempre
+voltar atrás ao ficheiro quer através da árvore de ficheiros ou do menu Janela.
 
-For saving any changes, KDevelop offers a whole variety of options. The standard way would be to save the file by selecting "Save"
-or "Save As" from the File-menu or by the Save-button on the toolbar. For saving all changed files at once, you could as well
-select "Save all" from the File-menu.
+Para gravar quaisquer alterações, o KDevelop oferece uma variedade de opções. A forma standard seria gravar o ficheiro seleccionando "Gravar"
+ou "Gravar Como " a partir do menu Ficheiro ou através do botão Gravar na barra de ferramentas. Para gravar todos os ficheiros alterados de uma vez, poderia também
+seleccionar "Gravar Todos" a partir do menu Ficheiro.
 
-Now, when working on a project, it is very annoying if something critical happens while you have done a lot of changes on your
-files; sometimes you will bite yourself that you have forgotten to save the changes. KDevelop takes care of this by offering
-"Autosaving", which is by default enabled and set to save all files in intervalls of 5 minutes. To select another saving period or
-to disable this, see <ref id="KDevelop Setup" name="KDevelop Setup">, where the setup options are described.
+Agora, quando a trabalhar num projecto, é muito irritante se algo crítico acontece após ter feito imensas alterações aos seus
+ficheiros; algumas vezes irá morder-se a si próprio por se ter esquecido de gravar as alterações. O KDevelop toma conta disto oferecendo
+"Auto-gravação", que está activada por defeito e definida para gravar todos os ficheiros em intrevalos de 5 minutos. Para seleccionar outro período de gravação ou
+desactivar isto, veja <ref id="KDevelop Setup" name="Configuração do KDevelop">, onde as opções de configuração são descritas.
 
-Additionally, KDevelop takes care for all changes if you open another project or exit KDevelop. You will be asked for saving the
-changed files, where you also have the option to specify which one to save and which you want to stay unsaved. Further, when
-invoking any build-processes, your files get saved automatically, so you won't ever wonder why your application doesn't run the
-way you expected it to do after your changes to the sourcefiles. The only exception is the "Compile File" command, which only
-saves the currently opened source file visible in the source editor window.
+Adicionalmente, o KDevelop toma conta de todas as alterações se abrir outro projecto ou sair do KDevelop. Ser-lhe-á perguntado se deseja gravar
+os ficheiros modificados, onde poderá também ter a opção de espeificar quais gravar e quais manter como estavam anteriormente. Além disso, quando
+se invoca qualquer processo de construção, os seus ficheiros são gravados automaticamente, pelo que nunca se perguntará porque a sua aplicação não corre da
+forma que esperava após ter modificado o seu código fonte. A única excepção é o comando "Compilar Ficheiro", que apenas
+grava o ficheiro de código actualmente aberto e visível na janela de código do editor.
 
-<sect2>Opening and Closing Files
+<sect2>Abrir e Fechar Ficheiros
 <p>
-To open a source file, you have a lot of options as well. One way could be, as the standard for editors, to select "Open" from the
-File-menu. You will be presented an "Open File" dialog, which allows you to choose the file you want to edit. Another, probably
-more frequently used way is to select the file from the LFV, the Logical File Viewer, or the RFV, the Real File Viewer (see <ref
-id="Overview">). The advantage of the file trees is that they provide a quick visual access to your files, especially the LFV,
-which only displays your project files by their type, collected into folders. You can as well configure the LFV towards sorting
-your files in another manner by a right mouseclick on the tree. Select "New Group" from the popup-menu, and you can configure a
-new group, or select "Edit Group" to install new file filters by specifying the goup's file extensions, separated by commas.
+Para abrir um ficheiro de código, também tem imensas opções. Uma poderia ser, como é standard para os editores, seleccionar "Abrir" a partir do 
+menu Ficheiro. Ser-lhe-á apresentado um diálogo "Abrir Ficheiro", que lhe permite escolher o ficheiro que deseja editar. Outra forma, provavelmente
+mais frequentemente utilizada é seleccionar o ficheiro a partir do VLF, o Visualizador Lógico de Ficheiros, ou do VRF, o Visualizador Real de Ficheiros (veja <ref
+id="Overview">). A vantagem das árvores de ficheiro é que proporcionam um acesso visual rápido aos seus ficheiros, especialmente o VLF,
+que apenas apresenta os ficheiros do seu projecto pelo seu tipo, agregados dentro de pastas. Pode também configurar o VLF no sentido de ordenar
+os seus ficheiros de outra forma através de um clique do botão direito do rato sobre a árvore. Seleccione "Novo Grupo" a partir do menu de contexto, e pode configurar um
+novo grupo, ou seleccionar "Editar Grupo" para instalar um novo filtro de ficheiro especificando as extenções de ficheiros do grupo, separadas por vírgulas.
 
-The standard file groups for a project generated by KAppWizard are the Headers, Sources, GNU and Others. Additionally, after
-adding a translation file, KDevelop adds a folder "Translations", containing your *.po files.
+Os grupos de ficheiros standard para um projecto gerado pelo KAppWizard são os Headers, Código, GNU e Outros. Adicionalmente, após
+adicionar um ficheiro de tradução, o KDevelop adiciona uma pasta "Traduções", contendo os seus ficheiros *.po.
 
-To close files, select the file to close from the Window-menu, which loads the opened file into the front editor. Then select
-"Close" from the File-menu. If your file has been changed, you will be asked to save it. When closing a project, all currently
-opened files will be checked for changes and you will be asked for saving as well.
+Para fechar ficheiros, seleccione o ficheiro a fechar a partir do menu Janelamenu, que lê o ficheiro aberto para o editor de topo. Depois seleccione
+"Fechar" a partir do menu Ficheiro. Se o seu ficheiro tiver sido modificado, ser-lhe-á perguntado se o deseja gravar. Quando fechar um projecto, todos os ficheiros
+correntemente abertos serão verificados por alterações e ser-lh-é também perguntado se os deseja gravar.
 
-<sect1>Navigating within Files
+<sect1>Navegar dentro dos Ficheiros
 <p>
-The following gives you a general guideline how to locate certain positions within your files for a quicker access.
+De seguida ser-lhe-ão dadas linhas gerais de orientação sobre como localizar certas posições dentro dos seus ficheiros para um acesso mais rápido.
 
-<bf>&raquo How to find a certain line in a file</bf>
+<bf>&raquo Como encontrar uma certa linha num ficheiro</bf>
 
 <enum>
-<item>Select "Line" in the "View"-menu or press STRG+L. The dialogfiled "Goto Line" appears.
-<item>Insert the linenumber you want to go to.
-<item>Press OK.
+<item>Seleccione "Linha" no menu "Ver" ou prima STRG+L. O diálogo preenchido "Ir para Linha" surge.
+<item>Insira o número da linha para onde deseja ir.
+<item>Prima OK.
 </enum>
 
-<bf>&raquo How to set a bookmark</bf>
+<bf>&raquo Como definir uma marca de leitura</bf>
 
 <enum>
-<item>Set the cursor to the line you want to access via a bookmark
-<item>Select "Set Bookmark" from the "Bookmarks"-menu.
-<item>A popup-menu opens that allows you to select the bookmark number you want to set for the new bookmark.
-<item>Select the bookmark number.
+<item>Coloque o cursor na linha que deseja aceder através da marca de leitura
+<item>Seleccione "Definir Marca de Leitura" através do menu "Marcas de Leitura".
+<item>Um menu de contexto surge que lhe permite seleccionar o número da marca de leitura que deseja definir para a nova marca.
+<item>Seleccione o número da marca de leitura.
 </enum>
 
-Another way to set bookmarks would be to select "Add Bookmark" from the "Bookmarks"-menu. This sets a bookmark to the current line
-and appends it to the bookmarks-list. The documentation browser also offers setting a bookmark to the current page by a context menu
-entry "Add Bookmark".
+Outra forma de definir marcas de leitura seria seleccionar "Adicionar Marca de Leitura" a partir do menu "Marcas de Leitura". Isto define uma marca para a linha actual
+e acrescenta a marca à lista de marcas de leitura. O navegador de documentação também oferece a definição de marcas de leitura para a página actual através de um menu de contexto
+na entrada "Adicionar Marca de Leitura".
 
-<bf>&raquo How to delete bookmarks</bf>
+<bf>&raquo Como apagar marcas de leitura</bf>
 
-The bookmarks are set for each editing window separately- mind that your bookmarks aren't connected to a certain file you set the
-bookmark for. To delete all bookmaks, select "Delete Bookmarks" from the "Bookmarks"-menu. This deletes the bookmarks for the
-window actually on top, either the Header window, the C++ window or the browser window.
+As marcas de leitura são definidas para cada janela de edição separadamente- lembre-se que as suas marcas não estão conectadas com um dado ficheiro em que tenha definido
+uma marca de leitura. Para apagar todas as marcas de leitura, seleccione "Apagar Marcas de Leitura" a partir do menu "Marcas de Leitura". Isto apaga as marcas para a
+janela actualmente no topo, quer seja a janela de Header, a janela C++ ou a janela de navegação.
 
-<bf>&raquo How to go to a bookmarked line</bf>
+<bf>&raquo Como ir para uma linha marcada</bf>
 
 <enum>
-<item>Select the "Bookmarks"-menu and open the popup menu containing the bookmarks for the window containing the bookmark you want
-to view; either the C++-Window or the Header-Window entry.
-<item>Select the bookmarked line.
+<item>Seleccione o menu "Marcas de Leitura" e abra o menu de contexto contendo as marcas de leitura para a janela cujas marcas deseja
+ver; poderá ser a entrada de janela C++ ou de janela Header.
+<item>Seleccione a linha marcada.
 </enum>
 
-Selecting a bookmark for the browser window will open the browser and loads the page.
+Seleccionar uma marca de leitura para uma janela de navegação irá abrir o navegador e ler a página.
 
-<sect1>Working with Keyboard Shortcuts
+<sect1>Trabalhar com Atalhos de teclado
 <p>
-For using the editor, you should make yourself comfortable with some keyboard shortcuts that make it easier to position the cursor
-and edit the file. The complete shortcut reference is also listed in section <ref id="Overview" name="Overview">.
+Para utilizar o editor, deverá tornar-se acostumado com alguns atalhos de teclado que lhe tornam a vida mais fácil para posicionar o cursor
+e editar o ficheiro. A referência completa de atalhos de teclado está também listada na secção <ref id="Overview" name="Descrição Geral">.
 
 <code>
-one letter to the left                           Left Arrow
-one letter to the right                          Right Arrow
-one word to the left                             CTRL+Left Arrow
-one word to the right                            CTRL+Right Arrow
-one line upwards                                 Up Arrow
-one line downwards                               Down Arrow
-to the beginning of the line                     POS 1
-to the end of the line                           END
-one page up                                      PageUp
-one page down                                    PageDown
-to the beginning of the current file             CTRL+PageUp
-to the end of the current file                   CTRL+PageDown
-one letter to the left                           SHIFT+Left Arrow
-one letter to the right                          SHIFT+Right Arrow
-one word to the left                             CTRL+SHIFT+Left Arrow
-one word to the right                            CTRL+SHIFT+Right Arrow
-one line upwards                                 CTRL+Up
-one line downwards                               CTRL+Down
-to the beginning of the current line             CTRL+POS 1
-to the end of the current line                   CTRL+END
-one page up                                      SHIFT+PageUp
-one page down                                    SHIFT+PageDown
-to the beginning of the current file             CTRL+SHIFT+PageUp
-to the end of the current file                   CTRL+SHIFT+PageDown
-en/disable insertmode                            INS
-copy selection to the clipboard                  CTRL+C, CTRL+INS
-insert text from the clipboard                   CTRL+V, SHIFT+INS
-delete current line                              CTRL+K
-insert line after current line                   END, then Enter
-insert line before current line                  POS 1, then Enter
-undo editing step                                CTRL+Z
-redo an undo step                                CTRL+Y
-tabulator                                        TAB
-delete letter left of cursor position            Backspace
-delete letter right of cursor position           Delete
-delete selected text                             Select text, then Backspace
+uma letra para a esquerda                        Seta para a Esquerda
+uma letra para a direita                         Seta para a Direita
+uma palavra para a esquerda                      CTRL+Seta para a Esquerda
+uma palavra para a direita                       CTRL+Seta para a Direita
+uma linha para cima                              Seta para Cima
+uma linha para baixo                             Seta para Baixo
+para o princípio da linha                        POS 1
+para o fim da linha                              END
+uma página para cima                             PageUp
+uma página para baixo                            PageDown
+para o princípio do ficheiro actual              CTRL+PageUp
+para o fim do ficheiro actual                    CTRL+PageDown
+uma letra para a esquerda                        SHIFT+Seta para a Esquerda
+uma letra para a direita                         SHIFT+Seta para a Direita
+uma palavra para a esquerda                      CTRL+SHIFT+Seta para a Esquerda
+uma palavra para a direita                       CTRL+SHIFT+Seta para a Direita
+uma linha para cima                              CTRL+Seta para Cima
+uma linha para baixo                             CTRL+Seta para Baixo
+para o princípio da linha                        CTRL+POS 1
+para o fim da linha                              CTRL+END
+uma página para cima                             SHIFT+PageUp
+uma página para baixo                            SHIFT+PageDown
+para o princípio do ficheiro actual              CTRL+SHIFT+PageUp
+para o fim do ficheiro actual                    CTRL+SHIFT+PageDown
+(des)activar modo de inserção                    INS
+copiar selecção para a área de transferência     CTRL+C, CTRL+INS
+inserir texto da área de transferência           CTRL+V, SHIFT+INS
+apagar a linha actual                            CTRL+K
+inserir linha após a linha actual                END, depois Enter
+inserir linha antes da linha actual              POS 1, depois Enter
+desfazer passo de edição                         CTRL+Z
+re-fazer passo de edição                         CTRL+Y
+tabulador                                        TAB
+apagar letra à esquerda da posição do cursor     Backspace
+apagar letra à direita da posição do cursor      Delete
+apagar texto seleccionado                        Seleccionar texto, depois Backspace
 </code>
 <p>
 
-<sect1>Edit Windows Settings
+<sect1>Editar Definições de Janelas
 <p>
-The editor inside KDevelop can be configured towards special editing needs with a global effect on all editing windows. Thereby
-you can set the color modes, highlighting colors (also configurable in reference to the programming language of the file) and
-automatic text settings like tab-with and selection modes. The following describes how to set these options by the configuration
-dialogs provided in the "Options"-menu.
+O editor dentro do KDevelop pode ser configurado no sentido de necessidades especiais de edição com efeito global para todas as janelas de edição. Assim
+pode definir modos de cores, cores de realce (também configurável em relação à linguagem de programação do ficheiro) e
+definições de texto automaticas tais como dimensão da tabulação e modos de selecção. De seguida iremos ver como definir estas opções através dos diálogos
+de configuração disponibilizados no menu de "Opções"menu.
 
-<sect2>General Settings
+<sect2>Definições Gerais
 <p>
-The editor's general settings can be configured with the "Editor" entry in the "Options"-menu. Select the according values and
-press OK after you finished with your configuration.
+As definições gerais do editor podem ser configuradas com a entrada "Editor" no menu de "Opções". Seleccione os valores desejados e
+prima OK após terminar com a sua configuração.
 
-<sect3>Edit Options
-<p>
-<descrip>
-<tag/Auto Indent:/	this sets the edior to place the cursor below the first literal when a new line is entered.
-<p>
-<tag/Backspace Indent:/ this option sets the cursor below the first literal of the line above when backspace is pressed.
-<p>
-<tag/Word Wrap:/ words are taken into the next line after the column set in "Wrap Words At:"
-<p>
-<tag/Replace Tabs:/ tabulators in the current text are replaced with tabulators of the "Tab Width:" value
-<p>
-<tag/Remove Trailing Spaces:/removes trailing spaces
-<p>
-<tag/Wrap Cursor:/ sets the cursor to the end of the last line when backspace enters the beginning of a line
-<p>
-<tag/Auto Brackets:/ creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
-</descrip>
-
-<sect3>Select Options
+<sect3>Opções de Edição
 <p>
 <descrip>
-<tag/Persistent Selections:/ selections made stay marked after setting the cursor to a different place
+<tag/Indentação Automática:/	especifica que o editor deverá colocar o cursor por baixo do primeiro literal quando se inicia uma nova linha.
 <p>
-<tag/Multiple Selections:/ allows multiple independent selections within the text
+<tag/Indentação de Backspace:/ esta opção define que o cursor deverá ser movido para baixo do primeiro literal da linha de cima quando a tecla backspace é premida.
 <p>
-<tag/Vertical Selections:/ when selecting multiple lines, the selection is also made horizontal and doesn't cover the
-whole line
+<tag/Translineamento:/ as palavras são levadas para a linha seguinte após a coluna definida em "Translinear Palavras em:"
 <p>
-<tag/Delete On Input:/ deletes a selection when writing in the selection.
+<tag/Substituir Tabs:/ tabuladores no texto actual são substituidos por tabuladores do valor "Comprimento de Tab:"
 <p>
-<tag/Toggle Old:/ allows only one selection. A selection made gets deselected when another selection is made.
+<tag/Remover Espaços Finais:/ remove os espaços no final das linhas
 <p>
-<tag/Wrap Words At:/ sets the maximum columns that a line can have. The word that contains a letter that reaches over this value
-will be automatically broken into the next line.
+<tag/Translinear Cursor:/ coloca o cursor no final da última linha quando o backspace leva ao início de uma linha
+<p>
+<tag/Parentesis Automáticos:/ cria um parentesis de fecho em frente do cursor sempre que (qualquer tipo de) parentesis é aberto (parentesis curvos e rectos, chavetas, etc.).
 </descrip>
 
-<sect2>Colors
+<sect3>Seleccionar Opções
 <p>
-For changing the editor's general appearance, you can define a set of colors that the editor uses by selecting "Editor Colors"
-from the "Options"-menu. You can configure colors for:
+<descrip>
+<tag/Selecções Persistentes:/ selecções feitas ficam marcadas após colocar o cursor noutro local
+<p>
+<tag/Selecções Multiplas:/ permite selecções multiplas independentes dentro de um texto
+<p>
+<tag/Selecções Verticais:/ quando a seleccionar multiplas linhas, a selecção é também feita na horizontal e não cobre
+toda a linha
+<p>
+<tag/Apagar na Inserção:/ apaga uma selecção quando se escreve na selecção.
+<p>
+<tag/Alternar Antiga:/ permite apenas uma selecção. Uma selecção feita é des-seleccionada quando outra selecção é feita.
+<p>
+<tag/Translinear Palavras em:/ define o número máximo de colunas que uma linha pode ter. A palavra que contém a letra que alcança este valor
+será automaticamente quebrada para a linha seguinte.
+</descrip>
+
+<sect2>Cores
+<p>
+Para alterar a aparência geral do editor, pode definir um conjunto de cores que o editor utiliza através da entrada "Cores do Editor"
+a partir do menu "Opções". Pode configurar as cores para:
 <itemize>
-<item><bf/background:      /        the editor's background
-<item><bf/text background:  /     	the background of displayed text
-<item><bf/selected:         /       the color of selected text to display the selection
-<item><bf/found:            /       the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".
-<item><bf/selected + found: /       the color of text selected to search for and found
+<item><bf/fundo:      /        o fundo do editor
+<item><bf/fundo do texto:  /     	o fundo do texto apresentado
+<item><bf/seleccionado:         /       a cor do texto seleccionado para apresentar a selecção
+<item><bf/encontrado:            /       a cor do texto encontrado por uma busca através do menu "Ver"-"Procurar", "Repetir Procura" e "Substituir".
+<item><bf/seleccionado + encontrado: /       a cor do texto seleccionado para ser procurado e encontrado
 </itemize>
 
-<sect2>Syntax Highlighting
+<sect2>Realce de Sintaxe
 <p>
-The syntax-highlighting mode of KDevelop's editor can be configured by two dialogs; first you can set default colors for
-syntax-highlihgting by the "Editor Defaults" entry in the "Options"-menu. There, you can set colors and fonts as well as the
-fontsize for e.g. keywords. Select the default item and set all needed options.
+O modo de realce de sintaxe do editor do KDevelop pode ser configurado através de dois diálogos; primeiro pode definir as cores por defeito para
+o realce de sintaxe através da entrada "Defeitos do Editor" no menu "Opções". Aí, pode definir cores e fontes bem como o tamanho
+das fontes por ex. palavras-chave. Seleccione o item por defeito e defina todas as opções necessárias.
 
-The second configuration dialog is accessed by the "Syntax-Highlighting" entry in the "Options"-menu. This allows you to set the
-file filters for the programming language, e.g. *.cpp, *.h  for C++. Then select the item that you want to configure. If you wish
-to use the default values you've set in the "Editor Defaults" dialog, select the "default" checkboxes in the Item-style and
-Item-Font sections. This reads the default settings for the selected item. After pressing OK, your new values will be enabled and
-used by the editor.
+O segundo diálogo de configuração é acedido através da entrada "Realce de Sintaxe" no menu "Opções". Isto permite-lhe definir os
+filtros de ficheiros para a linguagem de programação, por ex. *.cpp, *.h  para C++. Depois seleccione o item que deseja configurar. Se desejar
+utilizar os valores por defeito que definiu no diálogo "Defeitos do Editor", seleccione as caixas de escolha "defeito" nas selecções Estilo-Item e
+Fonte-Item. Isto lê as definições por defeito para o item seleccionado. Após premir OK, os seus novos valores serão activados e
+utilizados pelo editor.
 
-<sect1>Searching and Replacing
+<sect1>Procurar e Substituir
 <p>
-<sect2>Sigle File Search
+<sect2>Procura num Único Ficheiro
 <p>
-<bf>&raquo How to find one or more characters in the actual editing window</bf>
+<bf>&raquo Como encontrar um ou mais caracteres na janela de edição actual</bf>
 <enum>
-<item>Select "Search" from the "Edit"-menu. This opens the search dialog.
-<item>Specify the expression to search for in the edit field. The drop-down menu offers selecting a previous search expression.
-<item>Select additonal options like "Whole Words only"
-<item>Press OK.
+<item>Seleccione "Procurar" a partir do menu "Editar". Isto abre um diálogo de procura.
+<item>Especifique a expressão a procurar no campo de edição. O menu de caixa permite a escolha de uma expressão de busca anterior.
+<item>Seleccione opções adicionais tais como "Apenas Palavras Inteiras"
+<item>Prima OK.
 </enum>
 
-To repeat searching for an expression entered in the search dialog, press F3.
+Para repetir a busca por uma expressão inserida no diálogo de procura, prima F3.
 
-<sect2>Searching over Several Files
+<sect2>Procurar em Vários Ficheiros
 <p>
-As the seach function only is referencing seaches over a single file that is currently visible, you're limited to this. But often
-you want to search for the same expression overall your project. Therefore, KDevelop contains a <tt/grep/-dialog, which
-lets you search over all files that you specify either by setting the directory to start the search from and/or by mime-type.
-Specifying the exact directory and the mime-type will therefore reduce the time that KDevelop needs to read your files and display
-the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The seach dialog opens and
-lets you enter:
+Como a função de procura está a realizar buscas sobre apenas um ficheiro que está actualmente visível, encontra-se limitado a isto. Mas muitas vezes
+você deseja procurar a mesma expressão em todo o seu projecto. Assim, o KDevelop contém um diálogo <tt/grep/, que lhe
+permite procurar sobre todos os ficheiros que especificar quer através da definição do directório onde iniciar a busca e/ou por tipos mime.
+Especificando o directório exacto e o tipo mime irá assim reduzir o tempo que o KDevelop necessita para ler os ficheiros e apresentar
+os resultados. Para iniciar uma busca sobre vários ficheiros, seleccione "Procurar nos ficheiros..." a partir do menu "Editar". O diálogo deprocura abre e
+permite-lhe inserir:
 
 <itemize>
-<item>The expression to search for (the pattern)
-<item>The template used for the search
-<item>The mime-type of files to search in
-<item>The directory to start form
-<item>If the search is recursive over all included subdirectories
+<item>A expressão a procurar (o padrão)
+<item>O modelo utilizado para a busca
+<item>O tipo mime dos ficheiros onde procurar
+<item>O directório onde começar
+<item>Se a busca é recursiva sobre todos os subdirectórios incluidos
 </itemize>
 
-By default, the grep-dialog is set to start at your project directory and works recursively over implementation and header files.
+Por defeito, o diálogo grep está definido para iniciar no directório do seu projecto e trabalhar recursivamente sobre os ficheiros de implementação e header.
 
-You can even extend your search pattern by using the following options:
+Pode até ampliar o seu padrão de busca utilizando as seguintes opções:
 
 <enum>
-<item><bf/./ Match any character
-<item><bf/^/ Match the beginning of a line
-<item><bf/$/ Match the end of a line
-<item><bf/\< / Match the beginning of a word
-<item><bf/\> / Match the end of a word
+<item><bf/./ Equivale a qualquer caractere
+<item><bf/^/ Equivale ao princípio de uma linha
+<item><bf/$/ Equivale ao fim de uma linha
+<item><bf/\< / Equivale ao princípio de uma palavra
+<item><bf/\> / Equivale ao fim de uma palavra
 </enum>
 
-For a repeating search, you can also use the availabel operators:
+Para uma busca repetida, pode também utilizar os operadores disponíbilizados:
 <enum>
-<item><bf/?/ The preceding item matches less than once
-<item><bf/*/ The preceding item is matched zero or more times
-<item><bf/+/ The preceding item is matched once or more times
-<item><bf/{ n }/ The preceding item is matched exactly <em/n/ times
-<item><bf/{ n,}/ The preceding item is matched <em/n/ or more times
-<item><bf/{,n }/ The preceding item matches less than <em/n/ times
-<item><bf/{n,m}/ The preceding item matches at least <em/n/ times but less than <em/m/ times
+<item><bf/?/ O item precedente é encontrado menos de uma vez
+<item><bf/*/ O item precedente é encontrado zero ou mais vezes
+<item><bf/+/ O item precedente é encontrado uma ou mais vezes
+<item><bf/{ n }/ O item precedente é encontrado exactamente <em/n/ vezes
+<item><bf/{ n,}/ O item precedente é encontrado <em/n/ ou mais vezes
+<item><bf/{,n }/ O item precedente é encontrado menos de <em/n/ vezes
+<item><bf/{n,m}/ O item precedente é encontrado pelo menos <em/n/ vezes mas menos de <em/m/ vezes
 </enum>
 
-Backreferences to bracketed subexpressions are also available by the notation <em/\n/.
+Referências anteriores a subexpressões dentro de aspas estão também disponíveis através da notação <em/\n/.
 
-After specifying your search, press "Search". The results are then displayed in the result-window. To jump to a file and line
-number, select the resultline and press Enter or double click the result. The editor will automatically open the according file
-and place the cursor to the line of the result. This allows a complete specification for any search action and give out exact
-results.
+Após especificar a sua busca, prima "Procurar". Os resultados são então apresentados na janela de resultado. Para ir para um ficheiro e número de
+linha, seleccione a linha do resultado e prima Enter ou clique duplo sobre o resultado. O editor irá automaticamente abrir o ficheiro correspondente
+e colocar o cursor na linha do resultado. Isto permite uma especificação completa para qualquer acção de procura e devolve resultados
+exactos.
 
-KDevelop offers also some more specialized functionality to use grep within the editors and the browser. Select the expression you want
-to search for in either of the windows and press SHIFT+F2 or select "grep:&lt;your_expression&gt;" from the right button popup menu.
-This will ask grep to search for the selection in your project directory's files and will show the results immediately. Switching to
-the result works as described above. From within the browser window, it lasts to place the cursor over a word and start searching; the
-word under the cursor will be the search pattern.
+O KDevelop oferece também algumas funcionalidades mais específicas para a utilização do grep dentro do editor e do navegador. Seleccione a expressão que deseja
+procurar em qualquer uma das janelas e prima SHIFT+F2 ou seleccione "grep:&lt;sua_expressão&gt;" a partir do menu de contexto acessível pelo botão direito do rato.
+Isto irá pedir ao grep para procurar pela selecção nos ficheiros no directório do seu projecto e mostrará os resultados imediatamente. Ir para o
+resultado funciona como descrito acima. A partir da janela de navegação, basta colocar o cursor sobre uma palavra e iniciar a procura; a
+palavra por baixo do cursor será o padrão de procura.
 
-<sect2>Searching within Documentation
+<sect2>Procurar dentro da Documentação
 <p>
-While working on a project, you often need to have information about the parameters of member functions you want to use- most
-often you remember the function's name that matches your needs, but the parameters are a very hard thing to keep in mind.
-Therefore, and for other purposes that may occur, KDevelop contains a search functionality that combines searching expressions
-that appear in your files with the documentation browser. To make use of this search functionality, you should have set up the
-documentation browser correctly and created the search database. For invoking a search through the documentation, do the
-following:
+Enquanto a trabalhar num projecto, muitas vezes você necessita de ter informação sobre parâmetros de funções membras que deseja utilizar- quase
+sempre você lembra-se do nome da função que responde às suas necessidades, mas os parâmetros são algo muito difícil de memorizar.
+Assim, e para outros propósitos que possam ocorrer, o KDevelop contém uma funcionalidade de procura que combina a busca de expressões
+que surgem dentro dos seus ficheiros com o navegador de documentação. Para fazer uso desta funcionalidade de busca, você deverá ter definido o navegador de
+documentação correctamente e criado a base de dados de pesquisa. Para invocar uma procura através da documentação, faça o
+seguinte:
 
 <enum>
-<item>place your cursor at the word you want to search or mark an expression
-<item>select "Search Marked Text" from the "Help"-menu or press the right mouse button to open the context menu; then select "Look
-Up: "expression".
-<item>after the search result page is displayed in the documentation browser, select the page that you think could contain the
-information you need.
-<item>the selected documentation page is displayed and your search result is marked. To display the next result within the same
-documentation page, press F3.
+<item>coloque o cursor na palavra que deseja procurar ou seleccione uma expressão
+<item>seleccione "Procurar Texto Marcado" a partir do menu "Ajuda" ou prima o botão direito do rato para abrir o menu de contexto; depois seleccione "Procurar
+: "expressão".
+<item>após a página de resultados da busca ser apresentada no navegador de documentação, seleccione a página que pensa conter a
+informação de que necessita.
+<item>a página de documentação seleccionada é apresentada e o resultado da sua procura é marcado. Para observar o resultado seguinte dentro da mesma
+página de documentação, prima F3.
 </enum>
 
-This allows you to easily find the information you need. For using the results, the documentation browser allows marking a
-selection and copying it to the clipboard. Then return to the file you're editing and select "Paste" from the "Edit"-menu.
+Isto permite-lhe procurar facilmente a informação de que necessita. Para utilizar os resultados, o navegador de documentação permite marcar uma
+selecção e copia-la para a área de transferência. Depois volte para o ficheiro que estava a editar e seleccione "Colar" a partir do menu "Editar".
 
-For a full description on how to use the Documentation, see <ref id="Using the Search Index" name="Using the Search Index">.
+Para uma descrição completa de como utilizar a Documentação, veja <ref id="Using the Search Index" name="Utilizar o Índice de Busca">.
 
-<sect2>Replacing Text
+<sect2>Substituir Texto
 <p>
-For replacing an expression, select "Search and Replace" from the "Edit"-menu. The "Search and Replace"-dialog lets you specify
-the expression to be replaced as well as the replacement expression. Then press OK. The first expression which is found will be
-marked, so you can see where the expression is and in which context. Then you can specify by a dialog if the expression shall be
-replaced or not. When the search is finished by reaching the end of the current file, you will be asked if you want to start the
-search again from the beginning. If you're finished, select "Cancel".
+Para substituir uma expressão, seleccione "Procurar e Substituir" a partir do menu "Editar". O diálogo de "Procurar e Substituir" permite-lhe especificar
+a expressão a ser substituida bem como a expressão de substituição. Depois prima OK. A primeira expressão que for encontrada será
+marcada, pelo que pode ver onde a expressão está e em que contexto. Depois pode especificar através de um diálogo se a expressão será
+substituida ou não. Quando a busca estiver terminada por atingir o final do ficheiro actual, ser-lhe-á perguntado se deseja re-iniciar a
+procura de novo a partir do início do ficheiro. Se tiver terminado, seleccione "Cancelar".
 
-<sect1>Printing
+<sect1>Imprimir
 <p>
-As KDevelop is designed to give developers the best access to files and information to reduce development cycles, it also contains
-a new printing utility which makes use of two common printing programs available for Unix-Systems, <em/a2ps/ (ASCII-to-Postscript) and
-<em/enscript/. Besides these, you can also print by directly using lpr (the lineprinter device). As using a2ps or enscript offers the
-most options towards printing, you should install either one of these on your system; both programs are usually shipped with
-distributions, so you shouldn't have any problem to get them. But before printing, you should have a look at the available
-configuration dialogs to prepare the output according to your needs. The following section describes how to configure KDevelop for
-printing files.
+Como o KDevelop está desenhado para dar aos programadores o melhor acesso aos ficheiros e informação para reduzir o ciclo de desenvolvimento, também contém
+um novo utilitário de impressão que faz uso de dois programas de impressão comuns disponíveis para sistemas Unix, <em/a2ps/ (ASCII-para-Postscript) e
+<em/enscript/. Para além destes, pode também imprimir directamente utilizando o lpr (o dispositivo de impressão linear). Como a utilização do a2ps ou enscript oferecem o
+maior número de opções de impressão, deverá instalar qualquer um deles no seu sistema; ambos os programas são normalmente enviados com as
+distribuições, pelo que não deverá ter qualquer problema em os obter. Mas antes de imprimir, deverá percorrer os diálogos de
+configuração disponíveis para preparar o resultado final de acordo com as suas necessidades. As secções seguintes descrevem como configurar o KDevelop para
+imprimir ficheiros.
 
-<sect2>Configuring the Printer
+<sect2>Configurar a Impressora
 <p>
-The printing programs can both be configured by selecting "Print" from the "File"-menu; on the printing dialog, select the program
-by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the configuration for the
-selected program that will be used. Another way to configure the programs are selecting "Printer Configuration..." from the
-"Options"-menu; then select "a2ps" or "enscript".
+Ambos os programas de impressão podem ser configurados seleccionando "Imprimir" a partir do menu "Ficheiro"; no diálogo de impressão, seleccione o programa
+através do menu de caixa no canto superior esquerdo. Depois prima o botão "Opções" à direita. Isto irá abrir a configuração para o
+programa seleccionado que será utilizado. Outra forma de configurar os programas é seleccionando "Configuração de Impressora..." a partir do
+menu "Opções"; depois seleccione "a2ps" ou "enscript".
 
-<sect3>The a2ps Configuration Options
+<sect3>As Opções de Configuração do a2ps
 <p>
-<sect4>Printing
-<p>
-<itemize>
-<item><bf/header:/  adds a header frame to the page
-<item><bf/filename:/  if checked, the header frame will contain the filename as its text
-<item><bf/login:/  adds the User ID to the right upper corner of the page
-<item><bf/borders:/  adds frame borders to the text page
-<item><bf/Date & Time:/  adds the printing date and time
-<item><bf/align files:/  prints out files on the same page, available for two-page printing mode
-<item><bf/set TAB size:/  sets the TAB size for printing TABs
-<item><bf/headertext:/ available, if filename is deselected and allows inserting another text to the header frame
-<item><bf/fontsize:/  sets the fontsize for the text. The default fontsize is 9
-</itemize>
-
-<sect4>Textprinting
+<sect4>Imprimir
 <p>
 <itemize>
-<item><bf/cut lines:/  cuts the line's contents if the line is too large to be printed. If deselected, lines will be broken.
-<item><bf/interpret TAB, BS and FF:/ interpret TAB, Backspace and FastForward characters.
-<item><bf/replace non-printing character by space:/ if the file contains non-printable characters, those will be replaced by space
-characters.
-<item><bf/print non-ASCII character as ISO-Latin 1:/ prints characters not included in the ASCII format in ISO-Latin 1 mode output
-<item><bf/bold font:/ prints the whole text in bold font mode.
+<item><bf/cabeçalho:/  adiciona uma moldura de cabeçalho à página
+<item><bf/nome do ficheiro:/  se activo, a moldura de cabeçalho conterá o nome do ficheiro como sendo o seu texto
+<item><bf/utilizador:/  adiciona a identificação do utilizador (User ID) ao canto superior direito da página
+<item><bf/margens:/  adiciona molduras de margem à página de texto
+<item><bf/Data & Hora:/  adiciona a data e hora de impressão
+<item><bf/alinhar ficheiros:/  imprime os ficheiros na mesma página, disponível para modo de impressão de duas páginas
+<item><bf/definir tamanho do TAB:/  define o tamanho do TAB  para impressão de TABs
+<item><bf/texto de cabeçalho:/ disponível, se nome de ficheiro está inactivo e permite inserir outro texto na moldura de cabeçalho
+<item><bf/tamanho da fonte:/  define o tamanho da fonte para o texto. O tamanho por defeito é 9
 </itemize>
 
-<sect4>Numbering
+<sect4>Impressão de Texto
 <p>
 <itemize>
-<item><bf/numbering lines:/  numbers all lines top-down if enabled
-<item><bf/numbering pages:/ allows selecting page-numbering mode by:
-<itemize>
-<item><bf/file single:/ numbers each file's pages beginning with 1
-<item><bf/file together:/  appends all following pages after the first for page numbering
-</itemize>
-<item><bf/lines per page:/  sets the maximum lines per page to be printed.
+<item><bf/cortar linhas:/  corta o conteudo das linhas se elas forem demasiado grandes para serem impressas. Se inactivo, as linhas serão quebradas.
+<item><bf/interpretar TAB, BS e FF:/ interpreta os caracteres TAB, Backspace e FastForward.
+<item><bf/substituir caracteres não imprimíveis por espaços:/ se o ficheiro contém caracteres não-imprimíveis, eles serão substituidos por caracteres
+de espaços.
+<item><bf/imprimir caracteres não-ASCII como ISO-Latin 1:/ imprime caracteres não incluídos no formato ASCII em formato ISO-Latin 1
+<item><bf/fonte negrito:/ imprime todo o texto em modo de fonte negrito.
 </itemize>
 
-<sect3>The enscript Configuration Options
-<p>
-<sect4>Header
+<sect4>Numeração
 <p>
 <itemize>
-<item><bf/Fancy Header:/ adds a fancy header
-<item><bf/Header Text:/ enables adding a header text
+<item><bf/numeração de linhas:/  numera todas as linhas de cima para baixo, se activo
+<item><bf/numeração de páginas:/ permite seleccionar o modo de numeração de páginas por:
 <itemize>
-<item><bf/text:/ sets the text's contents
-<item><bf/position:/ sets the text's position to left, center or right
+<item><bf/ficheiro sozinho:/ numera as páginas de cada ficheiro a começar no 1
+<item><bf/ficheiros juntos:/  junta todas as páginas após a primeira para numeração de páginas
 </itemize>
-<item><bf/Login:/ add the UserID to the header
-<itemize>
-<item><bf/login:/ enables adding UserID
-<item><bf/position:/ sets the position for the UserID
-</itemize>
-<item><bf/Filename:/ add the filename to the header
-<itemize>
-<item><bf/Size of filename:/ add filename as full or short, meaning full path or filename only
-<item><bf/Position:/ sets the position for the filename
-</itemize>
-<item><bf/Hostname:/ add the hostname to the header
-<itemize>
-<item><bf/hostname:/ enables adding hostname
-<item><bf/size of hostname:/ sets the size for hostname
-<item><bf/Position:/ sets the position for hostname
-</itemize>
+<item><bf/linhas por página:/  define o número máximo de linhas por página a ser impressa.
 </itemize>
 
-<sect4>Date & Time
+<sect3>As Opções de Configuração enscript
+<p>
+<sect4>Cabeçalho
 <p>
 <itemize>
-<item><bf/Current Date:/ include the current date
+<item><bf/Cabeçalho Fantasioso:/ adiciona um cabeçalho fantasioso
+<item><bf/Texto de Cabeçalho:/ permite adicionar um texto de cabeçalho
 <itemize>
-<item><bf/current date:/ enables current date adding
-<item><bf/positon:/ sets the position for the date entry
-<item><bf/format:/ sets the date format
+<item><bf/texto:/ define o conteúdo do texto
+<item><bf/posicionamento:/ define o posicionamento do texto à esquerda, centro ou direita
 </itemize>
-<item><bf/Modification Date:/ include the last modification date
+<item><bf/Utilizador:/ adiciona a identificação do utilizador (UserID) ao cabeçalho
 <itemize>
-<item><bf/modification date:/ enables modification date adding
-<item><bf/position:/ sets the position for modification date entry
-<item><bf/format:/ sets the date format
+<item><bf/utilizador:/ permite adicionar identificação de utilizador (UserID)
+<item><bf/posicionamento:/ define o posicionamento para o UserID
 </itemize>
-<item><bf/Current Time:/ include current time
+<item><bf/Nome de Ficheiro:/ adiciona o nome de ficheiro ao cabeçalho
 <itemize>
-<item><bf/current time:/ enables current time adding
-<item><bf/AM/PM:/ use AM/PM or 24h format
-<item><bf/Position:/ sets the position for the time entry
-<item><bf/Format:/ sets the time format
+<item><bf/Tamanho do Nome de Ficheiro:/ adiciona o nome do ficheiro como completo ou curto, significando caminho completo ou apenas nome do ficheiro
+<item><bf/Posicionamento:/ define o posicionamento do nome do ficheiro
 </itemize>
-<item><bf/Modification Time:/ include the last modification time
+<item><bf/Nome do Servidor:/ adiciona o nome do computador (hostname) ao cabeçalho
 <itemize>
-<item><bf/modification time:/ enables adding modification time
-<item><bf/AM/PM:/ use AM/PM or 24h format
-<item><bf/Position:/ sets the position for the time entry
-<item><bf/Format:/ sets the time format
+<item><bf/nome do servidor:/ permite adicionar nome do computador
+<item><bf/tamanho do nome do servidor:/ define o tamanho do nome do servidor
+<item><bf/posicionamento:/ define o posicionamento para o nome do servidor
 </itemize>
 </itemize>
 
-<sect4>Layout
+<sect4>Data & Hora
 <p>
 <itemize>
-<item><bf/Numbering & Border:/
+<item><bf/Data Actual:/ inclui a data actual
 <itemize>
-<item><bf/numbering lines:/ adds line numbers to the document for printing
-<item><bf/borders:/ adds a border to the pages for printing
-<item><bf/numbering pages:/ numbers pages for printing
-<item><bf/align files:/ appends files for page numbering
-<item><bf/lines per page:/ the maximum value for lines per page
+<item><bf/data actual:/ permite adicionar a data actual
+<item><bf/posicionamento:/ define o posicionamento para a entrada de data
+<item><bf/formato:/ define o formato da data
 </itemize>
-<item><bf/Format and TAB:/
+<item><bf/Data de Modificação:/ inclui a data da última modificação
 <itemize>
-<item><bf/set TAB size:/ sets the TAB size for interpreting TABs
-<item><bf/font for header:/ sets the font used for the header text
-<item><bf/font for body:/ sets the font for the body text (file contents)
+<item><bf/data de modificação:/ permite adicionar a data da última modificação
+<item><bf/posicionamento:/ define o posicionamento para a entrada de data de modificação
+<item><bf/formato:/ define o formato da data
 </itemize>
-<item><bf/Textprinting:/
+<item><bf/Hora Actual:/ inclui a hora actual
 <itemize>
-<item><bf/cut lines:/ cuts the lines if too large. If unchecked, lines are broken
-<item><bf/replace non-printing character by space:/ replaces characters that the printing charset doesn't support by space characters
+<item><bf/hora actual:/ permite adicionar a hora actual
+<item><bf/AM/PM:/ utiliza o formato AM/PM ou 24h
+<item><bf/Posicionamento:/ define o posicionamento para a entrada de hora
+<item><bf/Formato:/ define o formato de hora
 </itemize>
-<item><bf/Other Options:/
+<item><bf/Hora de Modificação:/ inclui a hora da última modificação
 <itemize>
-<item><bf/table of contents:/ adds a table of contents page that contains information about printed files, page numbers etc.
-<item><bf/Highlight bars:/
-<itemize>
-<item><bf/highlight bars:/ highlights rows for printing
-<item><bf/cycle fo change:/ sets the number of rows to change highlight style
-</itemize>
-<item><bf/Wrapped line:/
-<itemize>
-<item><bf/mark wrapped lines:/ lines that are broken get marked for printing
-<item><bf/value for wrapped line:/ the preset value for the new line the line is broken into.
-</itemize>
+<item><bf/hora de modificação:/ permite adicionar a hora de modificação
+<item><bf/AM/PM:/ utiliza o formato AM/PM ou 24h
+<item><bf/Posicionamento:/ define o posicionamento para a entrada de hora
+<item><bf/Formato:/ define o formato de hora
 </itemize>
 </itemize>
 
-<sect4>Underlay
+<sect4>Aspecto Final
 <p>
 <itemize>
-<item><bf/Text:/ sets the text to underlay
-<item><bf/Position:/ sets the position of underlay text
-<item><bf/Font:/ sets the font used for the underlay
-<item><bf/Angle:/ sets the angle for the underlay text
-<item><bf/Gray scaling:/ sets the grayscaling for the underlay text
-<item><bf/Style:/ sets the underlay text to be printed as outlined or filled
+<item><bf/Numeração & Margens:/
+<itemize>
+<item><bf/numeração de linhas:/ adiciona numeração de linhas ao documento a ser impresso
+<item><bf/margens:/ adiciona uma margem às páginas a serem impressas
+<item><bf/numeração de páginas:/ numera as paginas para impressão
+<item><bf/alinhar ficheiros:/ junta os ficheiros para numeração de página
+<item><bf/linhas por página:/ o valor máximo de linhas por página
+</itemize>
+<item><bf/Formato e TAB:/
+<itemize>
+<item><bf/define tamanho de TAB:/ define o tamanho do TAB para interpretar TABs
+<item><bf/fonte para cabeçalhos:/ define a fonte utilizada para texto de cabeçalho
+<item><bf/fonte para corpo:/ define a fonte para o corpo do texte (conteudo do ficheiro)
+</itemize>
+<item><bf/Impressão de Texto:/
+<itemize>
+<item><bf/cortar linhas:/ corta as linhas se forem demasiado grandes. Se inactivo, as linhas são quebradas
+<item><bf/substituir caracteres não imprimíveis por espaços:/ substitui caracteres não imprimíveis por caracteres de espaço
+</itemize>
+<item><bf/Outras Opções:/
+<itemize>
+<item><bf/índice:/ adiciona uma página de índice que contém informação sobre os ficheiros impressos, número de páginas etc.
+<item><bf/Barras de Realce:/
+<itemize>
+<item><bf/barras de realce:/ realça as linhas para impressão
+<item><bf/ciclo de mudança:/ define o número de linhas para mudar o estilo de realce
+</itemize>
+<item><bf/Translinear Linha:/
+<itemize>
+<item><bf/marcar linhas translineadas:/ linhas que são quebradas são marcadas para impressão
+<item><bf/valor para linhas translineadas:/ o valor pré-definido para para a nova linha em que a linha foi quebrada.
+</itemize>
+</itemize>
 </itemize>
 
-<sect2>The Printing Dialog
+<sect4>Marca de Água
 <p>
-<sect3>Direct Printing Options
+<itemize>
+<item><bf/Texto:/ define o texto para a marca de água
+<item><bf/Posicionamento:/ define o posicionamento para o texto de marca de água
+<item><bf/Fonte:/ define a fonte utilizada para a marca de água
+<item><bf/Ângulo:/ define o ângulo para o texto da marca de água
+<item><bf/Escala de Cinzento:/ define a escala de cinzento para o texto de marca de água
+<item><bf/Estilo:/ define o texto de marca de água a ser impresso como sendo apenas bordejado ou cheio
+</itemize>
+
+<sect2>O Diálogo de Impressão
+<p>
+<sect3>Opções de Impressão Directa
 <p>
 <itemize>
-<item><bf/Program:/ sets the printing program to be used for printing: a2ps, enscript or lpr
-<item><bf/Printer:/ sets the printer to be used for printing
-<item><bf/Output location:/ for printing into a file, select the output location
-<item><bf/Orientation:/ sets the orientation for printing, either landscape or portrait
-<item><bf/Copy:/ sets the amount of copies to be made per page
-<item><bf/Paper Size:/ sets the paper size to be used
-<item><bf/Output Format:/ for using enscript as printing program, you can choose between postscript or html printing
-<item><bf/Default Printsettings:/ sets the default settings to use for printing
-<item><bf/Outprinting:/
+<item><bf/Programa:/ define o programa de impressão a ser utilizado: a2ps, enscript ou lpr
+<item><bf/Impressora:/ define a impressora a ser utilizada
+<item><bf/Localização do Output:/ para imprimir para ficheiro, selecciona a localização do output
+<item><bf/Orientação:/ define a orientação para imprimir, ou paisagem ou retrato
+<item><bf/Copias:/ define o número de copias a serem feitas por página
+<item><bf/Tamanho do Papel:/ define o tamanho do papel a ser utilizado
+<item><bf/Formato do Output:/ para utilizar o enscript como programa de impressão, pode escolher entre impressão em postscript ou html
+<item><bf/Definições de Impressão de Defeito:/ utiliza as definições por defeito para impressão
+<item><bf/Formato de Impressão:/
 <itemize>
-<item><bf/Page Printing:/ sets one or two pages on one sheet
-<item><bf/Pages:/ select all,odd or even for using enscript
-<item><bf/Pretty Print:/
+<item><bf/Impressão de Páginas:/ define uma ou duas páginas numa folha de papel
+<item><bf/Páginas:/ selecciona todas, ímpares ou pares para utilização com o enscript
+<item><bf/Impressão de Qualidade:/
 <itemize>
-<item><bf/pretty-print:/ enables pretty-print mode for enscript
-<item><bf/color:/ use color printing
-<item><bf/Pretty Print Mode:/ sets the printing mode dependend on your file format
+<item><bf/impressão de qualidade:/ activa modo de impressão de qualidade para o enscript
+<item><bf/côr:/ imprime a cores
+<item><bf/Modo de Impressão de Qualidade:/ define o modo de impressão dependendo do formato do seu ficheiro
 </itemize>
 </itemize>
 </itemize>
 
-<sect3>File Selection
+<sect3>Selecção de Ficheiros
 <p>
-The file selection dialog is accessed by the "Files" button on the printing dialog. The file selection allows specifying which files to
-print out by certain criterias:
+O diálogo de selecção de ficheiros é acedido através do botão "Ficheiros" no diálog de impressão. A selecção de ficheiros permite especificar que ficheiros
+imprimir através de certos critérios:
 <itemize>
-<item><bf/File Selection:/
+<item><bf/Selecção de Ficheiros:/
 <itemize>
-<item><bf/current:/ the currently opened file visible in the editing window
-<item><bf/all in project:/ all files included in the project currently opened
-<item><bf/self chosen files:/ allows choosing the files to be printed by file-selection
-<item><bf/all cpp files:/ prints out all source files of the project
-<item><bf/all headers:/ prints out all header files of the project
-<item><bf/changed files:/ allows specifying files that are changed in a timespan:
+<item><bf/actual:/ o ficheiro actualmente aberto e visível na janela de edição
+<item><bf/todos no projecto:/ todos os ficheiros incluidos no projecto actualmente aberto
+<item><bf/ficheiros escolhidos:/ permite-lhe escolher que ficheiros imprimir através de selecção de ficheiros
+<item><bf/todos os ficheiros cpp:/ imprime todos os ficheiros de código do projecto
+<item><bf/todos os headers:/ imprime todos os ficheiros header do projecto
+<item><bf/ficheiros modificados:/ permite especificar ficheiros que foram modificados entre datas:
 </itemize>
-<item><bf/Changed Files:/
+<item><bf/Ficheiros Modificados:/
 <itemize>
-<item><bf/Between:/ specifies all files changed after:
+<item><bf/Entre:/ especifica todos os ficheiros modificados depois:
 <itemize>
-<item><bf/Date:/ the date the files were changed
-<item><bf/Time:/ the time the files were changed
+<item><bf/Data:/ a data em que os ficheiros foram modificados
+<item><bf/Hora:/ a hora a que os ficheiros foram alterados
 </itemize>
-<item><bf/And:/ specifies all files changed before:
+<item><bf/E:/ especifica todos os ficheiros modificados antes:
 <itemize>
-<item><bf/Date:/ the date the files were changed
-<item><bf/Time:/ the time the files were changed
+<item><bf/Data:/ a data em que os ficheiros foram modificados
+<item><bf/Hora:/ a hora a que os ficheiros foram modificados
 </itemize>
 </itemize>
-<item><bf/Self Chosen Files:/ available if self chosen files is selected (see above)
+<item><bf/Ficheiros Escolhidos:/ disponível se foi seleccionado ficheiros escolhidos (ver acima)
 <itemize>
-<item><bf/add:/ press this to add a file selected for printing in the lineedit field left
-<item><bf/delete:/ deletes a selected file from the printing list
-<item><bf/clear:/ clears the printing list
+<item><bf/adicionar:/ prima para adicionar um ficheiro seleccionado para imprimir à lista à esquerda
+<item><bf/apagar:/ apaga um ficheiro seleccionado da lista de impressão
+<item><bf/limpar:/ limpa a lista de impressão
 </itemize>
 </itemize>
 
-<sect3>Print Preview
+<sect3>Ver Antes
 <p>
-Print Preview is available for you to control how the output will look like. Therefore, KDevelop uses the program <em/ghostview/ or
-<em/kghostview/. When the preview-button was pressed on either printing dialog, you will be presented a template output that shows you
-the effect of the currently set options.
+Ver Antes está disponível para que você possa controlar qual será o aspecto do resultado final. Assim, o KDevelop utiliza o programa <em/ghostview/ ou
+<em/kghostview/. Quando o botão de ver antes for premido em qualquer um dos diálogos de impressão, ser-lhe-á apresentado um modelo de output que lhe mostra
+o efeito das opções actualmente definidas.
 
-<sect>Projects<label id="Projects">
-<p>
-
-<sect1>Projecttypes
-<p>
-
-<sect2>Programs
-<p>
-KDevelop creates a projectfile with the .kdevprj ending. This file contains all your project information, so be careful not to
-delete it. It is stored in the project's base directory and has to be opened to load the project. The projectfile keeps all
-information for your files like the file properties, install path, distribution status and compiler options (CXXFLAGS). Setting
-file properties allows you to keep track of where the files should go.
-
-With KAppWizard, you can create a new application project according to your choice of application type. For now, KAppWizard
-generates three kinds of fram applications, as:
-
-<itemize>
-<item>a single document interface (SDI) <idx/KDE/-application including a menubar, a toolbar and a statusbar. It contains basic control
-resource management to allow extending the frame application into a unique <idx/KDE/ application. The application frame also
-contains statusbar help messages as known from commercial products just like KDevelop itself. From the programmer's point of view,
-it is based on three application-specific classes leaning on the MVC-concept (Model-View-Controller). Technically, the base
-classes may not be viewed that way, but it's construction is at least created most logical to create applications with a GUI.
-
-<item>a <idx/KDE/-based application frame window. This application type offers most flexibility to those wanting to develop their
-program from scratch, but can also be used as a basis for developing wizard applications or modules.
-
-<item>a Qt-only based program framework. For those programmers who want to use the Qt library as the GUI interface alone, we
-tried to offer you a smart framework to support your application development. As Qt programming is fully supported, you should
-have no problems to create a full-functional application by using Qt only.
-
-<item>a C++ program framework. This application type is intended for those wanting to write a terminal based C++ program. Just
-remove the "Hello World" line in main() and construct your classes the same way with KDevelop as for <idx/KDE/ applications.
-</itemize>
-For importing existing applications, we suggest using the New Project option. Select "Project" from the menubar and select "New".
-The New Project dialog offers creates a project directory and subdirectories as well as the project file with the project name and
-type. We advise copying all needed creation files like configure.in, Makefile.am's etc. into the project directory from your
-existing project and choose "Project"&rarr"Add file(s)"&rarr"Add existing file(s)" to copy the sources into your new project directory.
-Note that your Makefile.am's will be changed by KDevelop and you probably will have to change or delete some entries to provide
-clean compilation. You should not edit the KDevelop write area, instead you should read the entries made by KDevelop and delete
-matching titles created yourself. Also note that only one project is supported to work on at the moment, so your source files
-should be in the project's subdirectory which has the same name as the main project directory. In the Logical File Viewer the
-groups have to be set by yourself if you chose to use that importing possibility. Another way could be to create a frame
-application and delete the created source and header files. Then you can add existing files as above.
-
-<sect2>Libraries
+<sect>Projectos<label id="Projects">
 <p>
 
-This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of
+<sect1>Tipos de Projectos
+<p>
+
+<sect2>Programas
+<p>
+O KDevelop cria um ficheiro de projecto com a extenção .kdevprj. Este ficheiro contém toda a informação do seu projecto, pelo que deverá ter cuidado em
+não o apagar. É guardado no directório base do projecto e tem de ser aberto para ler o projecto. O ficheiro de projecto armazena toda
+a informação dos seus ficheiros tal como propriedades dos ficheiros, caminhos de instalação, estado de distribuição e opções de compilador (CXXFLAGS). Definir
+propriedades dos ficheiros permite-lhe manter registo de para onde os ficheiros deverão ir.
+
+Com o KAppWizard, você pode criar um novo projecto de aplicação de acordo com a sua escolha de tipo de aplicação. Por ora, o KAppWizard
+gera três tipos de esqueletos de aplicação, sendo:
+
+<itemize>
+<item>Aplicação <idx/KDE/ Interface de Documento Único (SDI) incluindo uma barra de menu, uma barra de ferramentas e de estados. Contém controlo básico de
+gestão de recursos para permitir extender o esqueleto da aplicação até obter uma nova aplicação <idx/KDE/. O esqueleto de aplicação também
+contém mensagens de ajuda na barra de estados já conhecidas de produtos comerciais e até do próprio KDevelop. Do ponto de vista do programador,
+é baseada em três classes específicas de aplicação que se apoiam no conceito MVC (Model-View-Controller = Controlo de Modelo de Vista). Tecnicamente, as classes
+base podem não ser vistas dessa forma, mas a sua construção é pelo menos bastante lógica para criar aplicações com interface gráfico.
+
+<item>esqueleto de janela de aplicação baseada em <idx/KDE/. Este tipo de aplicação oferece a maior flexibilidade para aqueles que querem desenvolver o seu
+programa de raiz, mas pode também ser utilizado como uma base para desenvolver aplicações tipo assistente ou módulos.
+
+<item>um esqueleto de programa baseado apenas na Qt. Para aqueles programadores que desejam utilizar apenas as bibliotecas Qt como interface gráfico, nós
+tentamos oferecer um esqueleto inteligente para suportar o desenvolvimento da sua aplicação. Como a programação Qt é completamente suportada, não deverá
+ter quaiquer problemas em criar uma aplicação completamente funcional utilizando apenas a Qt.
+
+<item>um esqueleto de programa C++. Este tipo de aplicação é destinado aqueles que desejam escrever um programa C++ baseado em consola. Basta
+removee a linha "Hello World" no main() e construir as suas classes da mesma forma com o KDevelop como faria para uma aplicação <idx/KDE/.
+</itemize>
+Para importar aplicações existentes, sugerimos que utiliza a opção Novo Projecto. Seleccione "Projecto" a partir da barra de menu e seleccione "Novo".
+O diálogo de Novo Projecto oferece a criação de directório de projecto e subdirectórios bem como o ficheiro do projecto com o nome do projecto e
+tipo. Aconcelhamos copiar todos os ficheiros de criação necessários tais como configure.in, Makefile.am's etc. para dentro do directório do projecto a partir do seu
+projecto existente e escolher "Projecto"&rarr"Adicionar Ficheiro(s)"&rarr"Adicionar ficheiro(s) existente(s)" para copiar o código para o seu novo directório de projecto.
+Note que os seus Makefile.am's serão alterados pelo KDevelop e provavelmente terá de modificar ou apagar algumas entradas para conseguir
+uma compilação limpa. Não deverá editar a área de escrita do KDevelop, em vez disso deverá ler as entradas feitas pelo KDevelop e apagar
+os títulos correspondentes criados por si próprio. Também note que apenas é suportado trabalhar num projecto de momento, pelo que os seus ficheiros de código
+deverão estar no subdirectório do projecto que terá o mesmo nome que o directório principal do projecto. No Visualizador Lógico de Ficheiros os
+grupos têm de ser definidos por sí se escolher utilizar essa forma de importação. Outra forma seria criar um esqueleto de aplicação e
+apagar os ficheiros de código e header criados. Depois adiciona os ficheiros existentes como descrito acima.
+
+<sect2>Bibliotecas
+<p>
+
+Este tipo de projecto não é suportado de momento. Esta é outra funcionalidade planeada para ser integrada em versões posteriores do
 KDevelop.
 
-<sect2>Multiple Targets
+<sect2>Alvos Múltiplos
 <p>
 
-For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
-targets like packages containing several applications. As commands like "Execute" or the Class Browser require that only one
-target is build by the developer, those types of projects are only supported in the way that you have to write your own entries to
-the Makefiles and build your directories for the additional libraries or binaries to build. Nevertheless, a build-process always
-invokes your make-program independent from what actually the targets are; so these functions still can be used.
+Para alguns projectos, as facilidades do KDevelop no seu estado actual não serão suficientes. Esses projectos são os que incluem alvos múltiplos
+tais como pacotes contendo várias aplicações. Como comandos tais como "Executar" ou o Navegador de Classes requerem que apenas um
+alvo seja construido pelo programados, esses tipos de projectos são apenas suportados na forma em que tem de escrever as suas próprias entradas nos
+Makefiles e construir os seus directórios para bibliotecas ou binários adicionais a serem construidos. No entanto, um processo de construção sempre
+invoca o seu programa make independentemente do que são na realidade os alvos; pelo que estas funções ainda podem ser utilizadas.
 
-Another way to still work with this type and to still have access to the binaries themselves are creating empty projects and move
-their subdirectories in conjunction with the project files to the directory containing all sources later. Then you could load each
-target independently by its project file; this also allows executing and debugging the target.
+Outra forma de poder trabalhar com este tipo e continuar a ter acesso aos binários em si é criar projectos vazios e mover
+mais tarde os seus subdirectórios em conjunto com os ficheiros de projecto para o directório contendo todo o código. Depois poderá ler cada um
+dos alvos independentemente através do seu ficheiro de projecto; isto também permite executar e depurar o alvo.
 
-<sect1> New Projects
+<sect1> Projectos Novos
 <p>
 
-The KDevelop Application Wizard allows the creation of four different types of projects, constructing a
-framework for each. All projects are FSF-compliant and use the GNU standard development tools as described in the requirements
-section of this handbook. For <idx/KDE/ applications, the wizard offers two different frameworks, the <idx/KDE/-Application, providing
-a complete application with base classes for document type, view and application. This includes the creation of a menubar, toolbar
-and statusbar, the mainwindow inherits the KTMainWindow class. The <idx/KDE/-Mini-Application only gives a view which is empty. This
-type of project can be used for the creation of small desktop tools or other simple applications without too much change on the
-existing code provided by the framework. A Qt-Application offers the creation of a <idx/Qt/-only program if you wish no dependencies
-towards the KDE-libraries for end-users. (NOTE: The configure script still checks for the <idx/KDE-libraries/.  This will be fixed in
-the next version of KDevelop).	
-The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar
-and statusbar.
+O Assistente de Aplicações do KDevelop permite a criação de quatro tipos diferentes de projectos, construindo um
+esqueleto para cada. Todos os projectos estão de acordo com FSF e utilizam as ferramentas de desenvolvimento standard GNU como descrito na secção dos
+requerimentos deste manual. Para aplicações <idx/KDE/, o assistente oferece dois esqueletos diferentes, a Aplicação <idx/KDE/, disponibilizando
+uma aplicação completa com classes base para escrever documento, ver e aplicação. Isto inclui a criação de barras de menu, ferramentas
+e estadps, a janela principal herda a classe KTMainWindow. A Mini-Aplicação <idx/KDE/ apenas disponibiliza uma vista que está vazia. Este
+tipo de projecto pode ser utilizado para criar uma pequena ferramenta de ambiente de trabalho ou outra aplicação simples sem muitas modificações no
+código existente disponibilizado com o esqueleto. Uma aplicação Qt disponibiliza a criação de um programa apenas <idx/Qt/ se não desejar quaisquer dependências
+de bibliotecas KDE para o utilizador final. (NOTA: O script de configuração irá verificar a existência das bibliotecas <idx/KDE/.  Isto será corrigido
+na próxima versão do KDevelop).	
+A Aplicação Qt também é criada com três classes base tal como a Aplicação Standard KDE e disponibiliza uma barra de menu, de ferramentas
+e de estados.
 
-The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
-"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a GUI
-first or for those working on commandline programs written in C++ or C.
+A Aplicação C++ oferece um esqueleto para criar aplicações de linha de comando.  Está pronta a correr e por defeito apresenta
+"Hello World" como única acção. Isto pode ser útil a quem está a aprender C++ e que queiram programar aplicações sem utilizar um ambiente gráfico
+primeiro ou para aqueles a trabalhar em programas de linha de comando escritos em C++ ou C.
 
-The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name and
-Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
-*.lsm file.
+O assistente pergunta-lhe o nome do projecto, versão e localização conde deseja que o directório do projecto seja construido. Além disso, o seu Nome
+e Endereço Email são pedidos para inserir no cabeçalho dos modelos de header e cpp bem como nas entradas no
+ficheiro *.lsm.
 
-<sect1>Opening and Closing of Projects
+<sect1>Abrir e Fechar Projectos
 <p>
-KDevelop is by default configured to open the last project loaded when starting. This allows a fast start, but you may want to
-change that to just start the IDE without any project. To prevent the default behavoir, disable the "Load last project" option in
-the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
+O KDevelop está por defeito configurado para abrir o último projecto carregado quando arranca. Isto permite um arranque rápido, mas pode desejar
+alterar isso para iniciar o ambiente de desenvolvimento sem qualquer projecto. Para evitar o comportamento de defeito, desactive a opção "Ler último projecto"
+no diálogo <ref id="KDevelop Setup" name="Configuração do KDevelop">.
 
-To open another project, select "Open" from the "Project" menu or press the "Open Project" button on the toolbar. In case you've
-got another project currently open, this will be closed. If your current project then contains files that aren't saved, you are
-asked to save all changed files. Thereby, you can select which file to save and which you want to close without saving, or to save
-all at once.
+Para abrir outro projecto, seleccione "Abrir" a partir do menu "Projecto" ou prima o botão "Abrir Projecto" na barra de ferramentas. No caso de
+ter outro projecto presentemente aberto, ele será fechado. Se esse seu projecto contiver ficheiros que não estão gravados, é-lhe
+perguntado se deseja gravar todos os ficheiros modificados. Assim, pode seleccionar quais os ficheiros que grava e quais os que fecha sem gravar, ou gravar
+todos de uma vez.
 
-Then you get an "Open Project" dialog, where you can change to the directory containing the project file to be loaded. KDevelop
-project files have the <em/*.kdevprj/ mime-type which is also displayed by a project icon. Select the project file and press
-"Open". When loading a project, the Class Browser scans all files and builds the initial classtree, so you can start working on the
-project by using the Class Browser directly.
+Depois obtém um diálogo "Abrir Projecto", onde pode ir para o directório contendo o ficheiro do projecto a ser aberto. Os ficheiros de
+projecto do KDevelop têm a extenção mime <em/*.kdevprj/ que é também apresentada pelo icon do projecto. Seleccione o ficheiro do projecto e prima
+"Abrir". Quando a ler o projecto, o Navegador de Classes percorre todos os ficheiros e constroi a árvore de classes inicial, para que possa começar a trabalhar
+no projecto utilizando directamente o Navegador de Classes.
 
-Another comfortable way to open a project is to select the project file in the KFM, the <idx/KDE/ File Manager. This will start
-KDevelop with loading the selected project file. You could as well open a project by commandline, entering <tt/kdevelop
-projectname.kdevprj/.
+Outra forma confortável de abrir um projecto é seleccionar o ficheiro do projecto no KFM, o Gestor de Ficheiros do <idx/KDE/. Isto irá iniciar
+o KDevelop lendo o ficheiro de projecto seleccionado. Pode também abrir um projecto através da linha de comandos, escrevendo <tt/kdevelop
+nomeprojecto.kdevprj/.
 
-When closing KDevelop, your project file will be saved automatically and the IDE detects if you have changed any projectfiles.
-Then you will be asked to save any changes before exiting. The available options for closing are the same than for closing a
-project before loading another.
+Quando fechar o KDevelop, os ficheiros do seu projecto serão gravados automaticamente e o ambiente de desenvolvimento detecta se você modificou quaisquer ficheiros do projecto.
+Ser-lhe-á então perguntado se deseja gravar as modificações antes de sair. As opções disponíveis são as mesmas que para fechar um
+projecto antes de abrir outro.
 
-<sect1>Editing a Project
+<sect1>Editar um Projecto
 <p>
-After you created a new project with the KAppWizard, the usual task is to extend the project by editing the already created
-sources and adding classes, pixmaps, pictures and whatelse you project needs. Now, editing a project means that you can change the
-default project after its generation by menus and dialogs according to your needs. The next section therefore describes how you
-can add existing files and classes as well as creating new files. This is needed for building your project, but this won't help
-you for the installation process by the end-user. Therefore, section <ref id="Setting Project File Options" name="Setting Project File
-Options"> describes how to set File Properties especially for additional files that you want make to install, like documentation or
-pixmaps.
-Another part in project maintaining is adding translations for applications that support internationalization, which is described
-in <ref id="Adding Translations" name="Adding Translations">.
+Após ter criado um projecto novo com o KAppWizard, a tarefa habitual é ampliar o projecto editando o código já criado
+e adicionar classes, pixmaps, imagens e o que mais o seu projecto necessitar. Agora, editar um projecto significa que você pode modificar o
+projecto de defeito após a sua geração através de menus e diálogos de acordo com as suas necessidades. A secção seguinte descreve assim como pode
+adicionar ficheiros existentes e classes bem como criar novos ficheiros. Isto é necessário para construir o seu projecto, mas não o ajudará
+no processo de instalação para o utilizador final. Desta forma, a secção <ref id="Setting Project File Options" name="Definir Opções de Ficheiros
+do Projecto"> descreve como definir Propriedades dos Ficheiros especialmente para adicionar ficheiros que deseja que o make instale, tais como documentação
+ou pixmaps.
+Outra parte na manutenção de um projecto é adicionar traduções para a aplicações que suportem internacionalização, o que é descrito
+em <ref id="Adding Translations" name="Adicionar Traduções">.
 
-<ref id="Extending the Project Documentation" name="Extending the Project Documentation"> covers questions on how to create a good set
-of documentation for online help enabling the end-user to help himself in case of troubles as well as how to use your product.
+<ref id="Extending the Project Documentation" name="Extender a Documentação do Projecto"> cobre questões sobre como criar um bom conjunto
+de documentação para ajuda electrónica permitindo ao utilizador final ajudar-se a si próprio em caso de problemas bem como saber utilizar o seu produto.
 
-Finally, <ref id="Project Hacking" name="Project Hacking"> describes how you can eventually work around the KDevelop project
-management in special cases.
+Finalmente, <ref id="Project Hacking" name="Hacking do Projecto"> descreve como poderá eventualmente trabalhar à volta da gestão do projecto no
+KDevelop em casos especiais.
 
-<sect2>Adding and Removing Files and Classes<label id="Adding Files and Classes">
+<sect2>Adicionar e Remover Ficheiros e Classes<label id="Adding Files and Classes">
 <p>
-Adding a new file is often used when you think that you should separate your class implementation file into several ones. Then you
-need to create an new file which will contain the part of the class implementation you want to move. You can do this by choosing
-"New" from the "File" menu, opening the "New File" dialog. This enables you to specify the file-type, name and the location. When
-entering the filename, KDevelop automatically enters the extension for you, but you can as well change the extensions towards your
-own preferences. Further, you can include the header template for sourcefiles, so you don't have to copy this into your new file
-yourself. Also, you can decide, if the file is included in the project or not. Mind that this doesn't cover the installation
-destination; this has to be configured later by setting the file preferences.
+Adicionar um novo ficheiro é muito utilizado quando pensa em separar o seu ficheiro de implementação de classes em vários. Depois você
+necessita de criar um novo ficheiro que contenha parte da implementação da classe que deseja mover. Pode fazer isto escolhendo
+"Novo" a partir do menu "Ficheiro", abrindo o diálogo "Novo Ficheiro". Isto permite-lhe especificar o tipo de ficheiro, nome e localização. Depois
+de inserir o nome do ficheiro, o KDevelop automaticamente acrescenta a extenção por si, mas pode modificar a extenção segundo as
+suas preferências. Mais ainda, pode incluir o modelo de cabeçalho para ficheiros de código, pelo que não tem de copiar isto para o seu novo ficheiro
+manualmente. Também, você pode decidir, de o ficheiro é ou não incluido no projecto. Lembre-se que isto não cobre o destino de
+instalação; isto tem de ser configurado mais tarde definindo as preferências de ficheiro.
 
-After the new file has been created, the project file will be updated as well as the according Makefile.am's.
-To add a complete class to your project, you can constuct a new class with the Classgenerator which is invoked by "New Class" from
-the Project-menu.
+Depois de o novo ficheiro ter sido criado, o ficheiro de projecto será actualizado bem como os correspondentes Makefile.am's.
+Para adicionar uma classe completa ao seu projecto, pode construir uma nova classe no Gerador de Classes que é invocado pela entrada "Nova Classe"
+no menu Projecto.
 
-In case you have an existing project and you want to add certain classes that you want to re-use in your project, select "Add
-File(s) to Project..." from the Project-menu. Select "Add existing files", which will open a dialog to let you specify which files
-will be added to the project and the destination directory. Mind that the files will be copied into the specified directory and
-added to the project. You should call "Make" after adding sources; then your added files will be included in the build-process. In
-case you want to add e.g. pixmaps that have to be installed by the end-user, you should update the File Properties for the added
-file and specify the installation path (see <ref id="Setting Project File Options" name="Setting Project File Options">
+No caso de ter um projecto existente e querer adicionar certas classes que deseja re-utilizar no seu projecto, seleccione "Adicionar
+Ficheiros(s) ao Projecto..." a partir do menu Projecto. Seleccione "Adicionar ficheiros existentes", que irá abrir um diálogo para lhe permitir especificar que ficheiros
+serão adicionados ao projecto e o directório de destino. Lembre-se que os ficheiros serão copiados para o directório especificado e
+adicionados ao projecto. Deverá chamar o "Make" após adicionar código; depois os ficheiros por si adicionados serão incluidos no processo de construção. No
+caso de querer adicionar por ex. pixmaps que têm de ser instalados pelo utilizador final, deverá actualizar as Propriedades do Ficheiro para o ficheiro
+adicionado e especificar o caminho de instalação (veja <ref id="Setting Project File Options" name="Definir Opções de Ficheiros do Projecto">
 
-To add a file to the project that is already in the project directory, go to the RFV, where all project-included files are
-dispayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
-file icon) and press the right mouse button to get the popup-menu. Then select "Add".
+Para adicionar um ficheiro ao projecto que já se encontra no directório do projecto, vá ao VFR, onde todos os ficheiros incluídos no projecto são
+apresentados pelo seu estado no projecto através de um ! a vermelho sobre o icon do ficheiro. Seleccione o ficheiro que deseja adicionar ao projecto (que tem um
+icon de ficheiro normal) e prima o botão direito do rato para obter o menu de contexto. Depois seleccione "Adicionar".
 
-Files can also be removed from your project. This could be needed in cases where you don't want to use pre-generated files that
-are already given by the KAppWizard. To remove a file, you have additionally the option between removing a file from the project
-or delete it completely. To remove a file from the project, select the file in the LFV or the RFV, press the right mouse button
-and select "remove". To delete a file, select "delete physically".
+Ficheiros podem também ser removidos do seu projecto. Isto pode ser necessário em casos em que não deseja utilizar ficheiros pré-gerados
+que são já dados pelo KAppWizard. Para remover um ficheiro, tem adicionalmente a opção entre remover o ficheiro do projecto
+ou apaga-lo completamente. Para remover um ficheiro do projecto, seleccione o ficheiro no VFL ou no VFR, pressione o botão direito do rato
+e seleccione "remover". Para apagar um ficheiro, seleccione "apagar fisicamente".
 
-<sect2>Setting Project File Options<label id="Setting Project File Options">
+<sect2>Definir Opções de Ficheiro de Projecto<label id="Setting Project File Options">
 <p>
-The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
-files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
-included in the project as well as the installation path if the file is going to be installed by the end-user's make install
-command.  It is important for documentation files as well as pixmaps to specify the location where the files should go when the
-project is build and installed by end users, so you have to set up those locations. For standard <idx/KDE/ location macros you should
-look in your Makefile.am where the location macros are specified.
+O diálogo de propriedades do ficheiro pode ser acedido através do menu projecto ou dentro do VFL através de um clique do botão direito do rato. Mostra os ficheiros
+do projecto em grupos como estão ordenados no VFL e são apresentadas as propriedades dos ficheiros tais como tamanho do ficheiro, tipo de ficheiro e se o ficheiro está
+incluido no projecto bem como o caminho de instalação se o ficheiro for ser instalado pelo comando make install do utilizador final.
+É importante para ficheiros de documentação bem como pixmaps especificar a licalização para onde os ficheiros devem ir quando o
+projecto é construido e instalado pelos utilizadores finais, pelo que tem de definir estas localizações. Para macros de localizações standard <idx/KDE/ deverá
+procurar no seu Makefile.am onde as macros de localização são especificadas.
 
 
-<sect2>Adding Translations<label id="Adding Translations">
+<sect2>Adicionar Traduções<label id="Adding Translations">
 <p>
-As <idx/KDE/ allows configuring your desktop and the behavoir of your applications, you also have the option to choose the language
-that your application uses, in regards of the use of online-documentation as well as the application's look. For documentation files,
-this seems a trivial task. You would add a subdirectory labeled by the desired language, e.g. <tt/de/ for german, to the
-<tt/docs/ directory of your project and copy the english documentation into that directory. Then you would generate the
-documentation and set all project file options for the installation directories. Then you could start translating the sgml file to
-your desired language and regenerate the documentation; then you're done.
-For the application, this seems a bit more difficult for the programmer. Now, we want to explain how to enable
-internationalization support for your application and how to add the languages you want to support.
+Como o <idx/KDE/ permite configurar o seu ambiente de trabalho e o comportamento das suas aplicações, tem também a opção de escolher o idioma
+que a sua aplicação utiliza, no que toca à utilização de documentação electrónica bem como do aspecto da aplicação. Para ficheiros de documentação,
+isto parece uma tarefa trivial. Deverá adicionar um subdirectório com o nome do idioma desejado, por ex. <tt/de/ para alemão, ao
+directório <tt/docs/ do seu projecto e copiar a documentação em inglês para esse directório. Depois deverá gerar a
+documentação e definir todas as opções de ficheiros de projecto para os directórios de instalação. Depois poderá começar a traduzir o ficheiro sgml para o
+seu idioma desejado e re-gerar a documentação; ficará tudo pronto.
+Para a aplicação, isto é um pouco mais difícil para o programador. Agora, nós queremos explicar como permitir suporte
+para internacionalização na sua aplicação e como adicionar idiomas que deseje suportar.
 
-First, you have to enclose all visible strings of your application that appear in bars or dialogs with the <tt/i18n()/ macro.
-This macro is a replacement for the function <tt/klocale->tranlate()/ of the KLocale class and much easier to use. As this macro
-is declared in the <tt/kapp.h/ include file, you have to add <tt/#include &lt;kapp.h&gt;/ to the source file or the class
-declaration file of the class that makes use of the macro. Also it should be mentioned, that although <tt/i18n()/ is a macro and
-therefore you could think about using the original function, this won't work because the strings that are set up for translation
-have to be read out of the sources and get stored in the application's translation file (&lt;YourApp&gt;.pot in the /po
-subdirectory). This task is done by the program xgettext, and to do this, you would enter <tt/make messages/ in your prject
-directory containing the sources. As xgettext depends on the <tt/i18n()/ macro, the original function won't do the job.
+Primeiro, tem de delimitar todo o texto visível da sua aplicação que surge em barras ou diálogos com a macro <tt/i18n()/.
+Esta macro é a substituição para a função <tt/klocale->tranlate()/ da classe KLocale e muito mais fácil de utilizar. Como esta macro
+é declarada no ficheiro include <tt/kapp.h/, tem de adicionar <tt/#include &lt;kapp.h&gt;/ ao ficheiro de código ou ficheiro de
+declaração de classe da classe que faz uso desta macro. Também deverá ser mencionado, que apesar de <tt/i18n()/ ser uma macro e
+por isso você poderia pensar em utilizar a função original, mas isto não irá funcionar porque os textos que são definidos para tradução
+têm de ser lidos a partir do código e serem guardados no ficheiro de tradução da aplicação (&lt;SuaApl&gt;.pot no subdirectório /po
+). Esta tarefa é feita pelo programa xgettext, e para o fazer, você deverá escrever <tt/make messages/ no directório do
+seu projecto contendo o código. Como o xgettext depende da macro <tt/i18n()/, a função original não conseguirá realizar a tarefa.
 
-For translations themselves, you first have to create the message file containing all strings that are used in your sources with
-the <tt/i18n()/ macro. This can be done by choosing "Make Messages and merge" from the Build-menu.
-Then you have to add the languages that your application wants to support. Therefore, select "Add Tranlation File" from the
-Project-menu. This opens a language selection dialog. Select the language and press OK. This will build the ASCII file containing
-entries for the filename of the string and the line where the original string is placed. Then you will see a <tt/msgid/ line
-containing the string to translate, followed by <tt/msgstr/. The msgstr line is mostly empty except for the translations already
-provided by the <idx/KDE-libraries/. Those have to be filled with the according translations of your language.
+Para as traduções em si, tem primeiro de criar o ficheiro de mensagens contendo todos os textos a serem utilizados no seu código com
+a macro <tt/i18n()/. isto pode ser feito escolhendo "Make Messages e juntar" a partir do menu Construir.
+Depois tem de adicionar os idiomas que a sua aplicação deseja suportar. Para tal, seleccione "Adicionar Ficheiro de Tradução" a partir do
+menu Projecto. Isto abre o diálogo de selecção de idioma. Seleccione o idioma e prima OK. Isto irá construir o ficheiro ASCII contendo
+entradas para o ficheiro do texto e a linha onde o texto original é colocado. Depois irá ver uma linha <tt/msgid/
+contendo o texto a ser traduzido, seguido de <tt/msgstr/. A linha msgstr é normalmente vazia excepto para as traduções já
+disponibilizadas pelas bibliotecas <idx/KDE/. Essas têm de ser preenchidas com as traduções correspondentes para o seu idioma.
 
-You could think about writing the translations by hand, which can also be done. But the <idx/KDE-SDK/ offers the use of the program
-KTranslator, which ready the already existing files from other applications installed on the system, so you can reuse already
-translated strings to support your language.
+Poderia pensar em escrever as traduções manualmente, o que pode ser feito. Mas o <idx/KDE-SDK/ disponibiliza a utilização do programa
+KTranslator, que abre os ficheiros existentes de outras aplicações instaladas no sistema, para que possa re-utilizar textos
+já traduzidos para suportar o seu idioma.
 
-To access KTranslator, the easiest way is selecting a &lt;language&gt;.po file in the /po directory either in the LFV or in the
-RFV. This opens KTranslator and lets you do the translating easiely. Mind that you have to set up KTranslator's properties
-yourself to include the author name and the language as well as the destination file. KTranslator by default only opens your
-translation file.
+Para aceder ao KTranslator, a forma mais fácil é seleccionar um ficheiro &lt;idioma&gt;.po no directório /po quer através do VFL ou no
+VFR. Isto abre o KTranslator permite-lhe fazer a tradução facilmente. Lembre-se que tem de definir você mesmo as propriedades do KTranslator
+para incluir o nome do autor e o idioma bem como o ficheiro de destino. O KTranslator por defeito apenas abre o seu
+ficheiro de tradução.
 
-For all translation files, <tt/make/ uses the program <tt/msgfmt/ to format your message files to use with the binary, but you
-don't have to take care for that, as well as specifying the destination directory for installing the translation files; this is
-all done by KDevelop automatically.
+Para todos os ficheiros de tradução, <tt/make/ utiliza o programa <tt/msgfmt/ para formatar os seus ficheiros de mensagens para utilizar com o binário, mas você
+não tem de tomar conta disto, bem como especificar o directório de destino para instalar os ficheiros de tradução; isto é
+tudo feito automaticamente pelo KDevelop.
 
-For more information about internationalization support, see <htmlurl url="http://www.kde.org" name="http://www.kde.org">; a lot
-of people are doing translations for you to support their language. You will find a list of email-adresses of the translators you
-could write to and who will help you with this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <em/The KDevelop
-Programming Handbook/ where questions about internationalization are covered again.
+Para mais informações sobre suporte à internacionalização, veja <htmlurl url="http://www.kde.org" name="http://www.kde.org">; imensas
+pessoas estão a fazer traduções para si para suportar o idioma deles. Irá encontrar uma lista de endereços e-mail dos tradutores a que poderá
+escrever e que o ajudarão com isto. Leia também <ref id="The Dialog Editor" name="O Editor de Diálogos"> e <em/O Manual
+de Programação do KDevelop/ onde questões sobre a internacionalização são de novo abordadas.
 
-<sect2>Extending the Project Documentation<label id="Extending the Project Documentation">
+<sect2>Aumentar a Documentação do Projecto<label id="Extending the Project Documentation">
 <p>
-All projects created with KDevelop contain a pre-configured documentation, which already contains standard chapters for
-installation, project name and version as well as the author name and email-address. As KDevelop uses SGML-templates, it's very
-easy to extend the documentation to a full descriptive helpsystem. The only thing you have to do is editing the sgml file, placed
-in docs/en as index.sgml. The reference documentation included with your sgml-tools package can be added to the helpbrowser and
-allow you direct access to special tags as well as a short description of how to extend the documentation. SGML has a lot of
-advantages, whereas <idx/KDE/ makes wide use by this documentation type with the additional ksgml2html tool. This creates the typical
-<idx/KDE/-style documentation and makes it look nicer. Anyway, the sgmltools alone are enough to produce a html output that is already
-included in your application. To create the documents using ksgml2html, install the tool and run "Make User-Manual" from the
-Build-menu. The Documentation Browser allows a direct controlling of the output by selecting "Project User-Manual" from the
-Help-menu or the according icon in the DOC-tree. Then you can browse the documentation online in KDevelop and have a better
-overview by the output over errors that result in missing tags.
+Todos os projectos criados com o KDevelop contêm uma documentação pré-configurada, que já contém capítulos standard para
+instalação, nome de projecto e versão bem como o nome do autor e endereço email. Como o KDevelop utiliza modelos SGML, é muito
+simples ampliar a documentação para um sistema de ajuda completamente descritivo. A única coisa que tem de fazer é editar o ficheiro sgml, colocado
+em docs/en como index.sgml. A documentação de referência incluida com o seu pacote de ferramentas sgml pode ser adicionada ao navegador de ajuda e
+permitir-lhe acesso directo a algumas tags especiais bem como uma breve descrição de como expandir a sua documentação. O SGML tem imensas
+vantagens, pelo que o <idx/KDE/ faz grande uso deste tipo de documentação adicionalmente à ferramenta ksgml2html. Isto cria a documentação
+tipica estilo-<idx/KDE/ e fa-la ter um melhor aspecto. De qualquer forma, as ferramentas sgml por si são o suficiente para produzir um resultado em html que é logo
+incluido na sua aplicação. Para criar os documentos utilizando o ksgml2html, instale a ferramenta e corra "Make Manual do Utilizador" a partir do
+menu Construir. O Navegador de Documentação permite um controlo directo do resultado seleccionando "Manual do Utilizador do Projecto" a partir
+do menu Ajuda ou do icon correspondente na árvore DOC. Pode depois navegar a sua documentação electrónica no KDevelop e ter uma melhor
+visão do resultado final em relação a erros resultantes de tags que não foram escritas.
 
-Now, while extending the documentation, you can't avoid that additional files are produced that have to be included into the
-project as each <tt/sect/-tag creates a new HTML file. The output generated by the KAppWizard is already included in the project,
-so you don't have to care for their installation path. What you have to watch out for is any index-xx.html file, where xx is
-higher than 6 (as the first six pages are already included in the project). After generating the documentation, switch to the RFV
-and browse to your documentation directory. Press the right mouse button over the files to add and select "Add". Further,
-ksgml2html adds the <idx/KDE/ logo to the documentation directory. This file, <tt/logotp3.gif/, has to be added to the project as well.
-Then you have to select the "File Properties" either from the Project menu or by the popup menu in the file-viewers. The easiest
-way to set the installation path is to select a documentation file already set up for installation such as <tt/index.html/. You
-see that <tt/Install/ is checked and the Installdir+filename already contains the destination. Mark the Installdir and enter
-CTRL+C to copy the installation path to the clipboard. Then select the file you want to specify for installation. Enable
-<tt/Install/, this will enable the installdir-entry field, already containing the filename. Place the cursor in front of the
-filename and enter CTRL+V to insert the clipboard contents (which was the installation path copied before). This is the fastest
-way to specify the installation path. For more options about specifying installation destinations, see <em/The KDevelop
-Programming Handbook/.
+Agora, enquanto a ampliar a documentação, não pode evitar que ficheiros adicionais sejam produzidos e tenham de ser incluidos no
+projecto já que cada <tt/sect/-tag cria um novo ficheiro HTML. O resultado final gerado pelo KAppWizard já se encontra incluido no projecto,
+pelo que não se tem de preocupar com o seu caminho de instalação. O que tem de observar é qualquer ficheiro index-xx.html, onde xx é
+superior a 6 (já que as primeiras seis páginas já estão incluidas no projecto). Após gerar a documentação, mude para o VFR
+e vá para o seu directório de documentação. Prima o botão direito do rato sobre os ficheiros a adicionar e seleccione "Adicionar". Além disso,
+o ksgml2html adiciona o logotipo <idx/KDE/ ao directório da documentação. Este ficheiro, <tt/logotp3.gif/, tem também de ser adicionado ao projecto.
+Depois tem de seleccionar "Propriedades de Ficheiros" quer a partir do menu Projecto ou pelo menu de contexto nos visualizadores de ficheiros. A forma mais
+fácil de definir o caminho de instalação é seleccionar um ficheiro de documentação já definido para instalação tal como o <tt/index.html/. Verá
+que o <tt/Instalar/ está activo e o Directório de Instalação+Nome de Ficheiro já contêm o destino. Marque o Directório de Instalação prima
+CTRL+C para copiar o caminho de instalação para a área de transferência. Depois seleccione o ficheiro que deseja especificar para instalação. Active
+<tt/Instalar/, o que irá activar o campo Directório de Instalação, já contendo o nome do ficheiro. Coloque o cursor em frente do
+nome do ficheiro e prima CTRL+V para inserir o conteudo da área de transferência (que eram o caminho de instalação copiado anteriormente). Esta é a forma mais
+rápida de especificar o caminho de instalação. Para mais opções sobre especificação de destinos de instalação, veja <em/O Manual de
+Programação do KDevelop/.
 
-<sect2>Project Hacking<label id="Project Hacking">
+<sect2>Hacking ao Projecto<label id="Project Hacking">
 <p>
-When working with a project, you should never edit the project file by hand. This will prevent KDevelop from loading your project
-correctly under certain circumstances, as well as changes will not result in updating the Makefiles. To change any settings for
-your project, you have to use the given menuentries like e.g. for adding files or setting file properties. For experts that are
-not comfortable with certain options for e.g. the linker or need additional project configuration, you should work yourself into
-the Makefile.am macros and add all changes in the Makefile.am's after the section separated with the entry "KDevelop write area".
-As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
-this will prevent using KDevelop for any changes related to project configuration.
+Quando a trabalhar com um projecto, nunca deverá editar o ficheiro do projecto manualmente. Isto impedirá o KDevelop de ler o seu projecto
+correctamente em algumas circunstâncias, bem como alterações não irão resultar na actualização dos ficheiros Makefiles. Para modificar quaisquer definições para
+o seu projecto, tem de utilizar as entradas de menu existentes tal como por ex. para adicionar ficheiros ou definir propriedades de ficheiros. Para grandes conehcedores
+que não estão à vontade com certas opções por ex. o linkador ou configurações adicionais de projecto necessárias, deverá mexer por si nas
+macros dos Makefile.am e adicionar todas as modificações nos Makefile.am's após a secção separada com a entrada "KDevelop write area".
+Como as ferramentas GNU estão a utilizar os comandos no final de todos os ficheiros macros, pode passar por cima das definições do KDevelop desta forma. Lembre-se
+que isto o impedirá de utilizar o KDevelop para quaisquer modificações relacionadas com a configuração do projecto.
 
-<sect1>Compiler and Linker Flags for Projects
+<sect1>Parâmetros de Compilador e Linker para Projectos
 <p>
-Each new project contains all needed options for the compiler and linker as well as general settings. By default, your project
-is set to use debugging by the -g flag, and warnings are set to the standard, -Wall. This ensures you can debug your application
-and detect constructions that may cause program errors. For some applications, you would need additional compiler or linker flags,
-especially if you're using libraries that are not currently included by the linker. Then you need to update the project by
-configuring the correct settings with the Project Options dialog. See <ref id="Build Settings" name="Build Settings"> for more
-information how and where to set Compiler Options, Warnings and Linker Options.
+Cada novo projecto contém todas as opções necessárias para o compilador e linker bem como as definições gerais. Por defeito, o seu projecto
+está preparado para utilizar depuração pela parâmetro -g, e os avisos estão definidos para standard, -Wall. Isto assegura que você pode depurar a sua aplicação
+e detectar construções que podem causar erros no programa. Para algumas aplicações, poderá precisar de opções adicionais de compilador ou linker,
+especialmente se estiver a utilizar bibliotecas que não estão actualmente incluidas pelo linker. Depois necessita de actualizar o projecto através
+da configuração das definições correctas com o diálogo de Opções do Projecto. Veja <ref id="Build Settings" name="Definições de Construção"> para mais
+informação sobre onde definir Opções de Compilador, Avisos e Opções de Linkagem.
 
-<sect1>External Projects
+<sect1>Projectos Externos
 <p>
-Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
-empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
-compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
-will be copied into your project directory and the makefile.am's are updated.   Please change all Makefile.am entries existing
-before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
-compiled and installed after the conversion to ensure the project's consistancy.
+Projectos existentes podem ser convertidos para projectos do KDevelop seleccionando "Novo" a partir do menu projecto. O diálogo seguinte cria um
+ficheiro de projecto vazio com o nome do seu projecto, versão e informação tipo bem como o seu nome e endereço email. Depois copie todos os
+seus ficheiros de compilação e construção para o novo directório de projecto e escolha "Adicionar Ficheiros" a partir do menu projecto. Os ficheiros seleccionados
+serão copiados para o seu directório de projecto e os makefile.am's são actualizados. Por favor modifique todas as entradas existentes nos Makefile.am
+antes da conversão no sentido das entradas agora criadas pelo KDevelop na área KDevelop. Teste, se o seu programa ainda pode ser
+compilado e instalado depois da conversão para se assegurar da consistência do projecto.
 
-<sect>Build Settings<label id="Build Settings">
+<sect>Definições de Construção<label id="Build Settings">
 <p>
-The Project Options dialog, accessed by the project menu, lets you specify all needed parameters for your project. Those will be
-used for the Makefile.am's and the configure.in script (e.g. version number change or compiler warnings ) and thereby set the
-compilation preferences as well.. After changing the project options, you should invoke "make clean" or "rebuild all" to compile
-your project with the new options. Please mind that debugging is only available if the project options are set to create debugging
-information, the amount can be set with the debug level (0-3). If you add functions that belong to a library that is not included
-in the linker flags, your program will not link correctly if those are not updated, so keep track of your library linking.
+O diálogo de Opções do Projecto, acedido a partir do menu projecto, permite-lhe especificar todos os parâmetros necessários para o seu projecto. Eles serão
+utilizados pelos Makefile.am's e o script configure.in (por ex. alteração de número de versão ou avisos do compilador) e assim definem também
+as preferências de compilação. Após alterar as opções do projecto, deverá invocar "make clean" ou "reconstruir tudo" para compilar
+o seu projecto com as novas opções. Por favor lembre-se que depurar apenas está disponível se as opções do projecto estão definidas para gerar
+informação de depuração, a quantidade pode ser definida com o nível de depuração (0-3). Se adicionar funções que pertençam a uma biblioteca que não esteja incluida
+nas parâmetros do linker, o seu programa não será correctamente linkado se essas opções não forem actualizadas, por isso tenha atenção às linkagens de bibliotecas.
 
-For a release build of your application or for distributing the sourcecode package, you should watch the following standard
-settings:
+Para uma construção de distribuição das suas aplicações ou para distribuir um pacote com o código fonte, deverá observar as seguintes definições
+standard:
 
 <itemize>
-<item>disable debugging
-<item>enable optimization and set optimization level to <bf/-02/
-<item>set the compiler warnings to <bf/-Wall/
-<item>for each new release, increase the version number and update the project.lsm file for version and requirements.
+<item>desactivar a depuração
+<item>activar optimização e definir o nível de optimização para <bf/-02/
+<item>definir os avisos do compilador para <bf/-Wall/
+<item>por cada nova distribuição, aumentar o número da versão e actualizar o ficheiro projecto.lsm segundo a versão e os requerimentos.
 </itemize>
 
-<sect1>General Options
+<sect1>Opções Gerais
 <p>
-The first page of the Project Options dialog sets the general options for your project. These are project name and number, the
-handbook sgml file which is used for generating a set of HTML files that are included in the project and specific information
-about the author. The short description field is for additional information that you want to include like the program's purpose
-and the like.
+A primeira página do diálogo de Opções do Projecto define as opções gerais para o seu projecto. Estas são o nome e número do projecto, o
+ficheiro sgml de manual que será utilizado para gerar um conjunto de ficheiros HTML que serão incluidos no projecto e informação específica
+sobre o autor. O campo para breve descrição é para informação adicional que deseje incluir tal como o objectivo do programa
+e outras similares.
 
-<sect1>Compiler Options<label id="Compiler Options">
+<sect1>Opções de Compilador<label id="Compiler Options">
 <p>
-The compiler options page sets the compiler flags towards your target, debugging and additional.
+A página de opções do compilador define os parâmetros do compilador em relação ao seu alvo, depuração e outras.
 
-<sect2>Target
+<sect2>Alvo
 <p>
-The target box contains three options that can be set:
+A caixa de alvo contém três opções que podem ser definidas:
 
-Target Machine: You have the choice to set the target machine option here by choosing between your machine (default) and i386v,
-which is the option if you configured your compiler as a cross-compiler for an Intel 386-compatible machine running System V. This
-option sets the -b flag to the compiler. Usually you would leave this to the default.
+Máquina Alvo: Tem a possibilidade de definir a máquina alvo escolhendo entre a sua máquina (defeito) e i386v,
+que é a opção se tiver definido o seu compilador como sendo compilador-cruzado para uma máquina Intel 386-compatível correndo System V. Esta
+opção define o parâmetro -b para o compilador. Normalmente deixaria isto como sendo o defeito.
 
-only syntax-check: If checked, the -fsyntax-only flag is set. This means that the compiler will check your code only for
-correctness in regards to the syntax, but doesn't check anything beyond that.
+apenas verificação de sintaxe: Se activo, o parâmetro -fsyntax-only é definido. Isto significa que o compilador irá verificar o seu código apenas por
+correcção no que toca à sintaxe, mas não verifica mais nada para além disso.
 
-Optimize: You can enable optimization for your build process by this option, meaning to set the -O flag. If not checked, the flag
-is set to -O0, so no optimization will be used. If you enable optimization by checking this option, you can as well specify the
-optimization level below from 1 to 3.
+Optimizar: Pode activar optimização para o seu processo de construção através desta opção, o que significa que é definido o parâmetro -O. Se inactivo, o parâmetro
+é definido para -O0, pelo que nenhuma optimização será utilizada. Se activar optimização seleccionando esta opção, pode também especificar o
+nível de optimização entre 1 e 3.
 
-For a release version of your application, enable optimization and set the level to 2.
+Para uma versão de distribuição da sua aplicação, active a optimização e defina o nível para 2.
 
-<sect2>Debugging
+<sect2>Depuração
 <p>
-Right of the Target box, you can see the Debugging-section. This means that you can set your compiler to include information for
-debuggers within the final binary, so the programmer can follow the execution of the application with the debugger in direct
-context to the sourcecode.
+À direita da caixa de Alvo, pode ver a secção de Depuração. Isto significa que você pode definir o seu compilador para incluir informação para
+depuradores dentro do binário final, para que o programador possa seguir a execução da aplicação com o depurador em contexto
+directo com o código fonte.
 
-Enable debugging therefore sets the -g flag; the debugging level specifies the amount of information to be included in the binary.
-Availabel are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any debugging option and that
-the binary size will increase by the debugging level.
+Activar a defpuração assim define o parâmetro -g; o nível de depuração especifica a quantidade de informação a ser incluida no binário.
+Disponíveis estão os níveis 1 até 3 para escolher. Lembre-se que a execução do binário será mais lenta se definir quaisquer opções de depuração e que o
+tamanho do binário será tanto maior quanto o nível de depuração.
 
-Generate extra information for gprof: sets the -pg flag, resulting that the compiler will include information for the gprof
-program that displays caller graphs of your program's function.
+Gerar informação extra para o gprof: define o parâmetro -pg, resultando em que o compilador irá incluir informação para o programa
+gprof que apresenta gráficos de chamadas das funções do seu programa.
 
-Store temporary intermediate files: sets the -save-temps flag. This will result in storing the usually temporary files produced by
-the preprocessor and the assembler. A compilation of a sourcefile will therefore produce three output files: an *.o file which is
-the final output of the compiler, an *.i file produced by the preprocessor and an *.s file as the output of the assembler.
+Guardar ficheiros temporários intermédios: define o parâmetro -save-temps. Isto irá resultar no armazenamento dos normais ficheiros temporários produzidos
+pelo preprocessador e o assemblador. A compilação de um ficheiro de código irá assim produzir três ficheiros finais: um ficheiro *.o que é
+o resultado final do compilador, um ficheiro *.i produzido pelo preprocessador e um ficheiro *.s que é o resultado final do assemblador.
 
-For a release of your project, disable any debugging.
+Para a distribuição do seu projecto, desactive a depuração.
 
-<sect2>Additional Options
+<sect2>Opções Adicionais
 <p>
-The text entry field on the bottom is intended for you to manually set any flags for the compiler by setting the CXXFLAGS
-environment variable in the makefiles, so make sets the flags before the build process and reset them afterwards. For a complete
-description of all available compiler flags you should see your compiler documentation; for gcc and egcs this can be done by
-<bf/man gcc/; <bf/man g++/ will show you information about the c++ script that is used to lead the compiler.
+O campo de entrada de texto em baixo destina-se a que introduza manualmente quaisquer parâmetros para o compilador definindo as variáveis
+de ambiente CXXFLAGS nos makefiles, para que o make defina os parâmetros antes do processo de construção e os desligue depois. Para uma descrição
+completa de todos os parâmetros de compilador disponíveis deverá ler a documentação do seu compilador; para o gcc e egcs isto pode ser feito através
+de <bf/man gcc/; <bf/man g++/ irá mostrar-lhe informação sobre o script c++ que é utilizado para coordenar o compilador.
 
 
-<sect1>Compiler Warnings<label id="Compiler Warnings">
+<sect1>Avisos de Compilador<label id="Compiler Warnings">
 <p>
-The following gives a desciption about the compiler warning options that can be set on page 3 of the project options dialog. The
-explanations are taken from the man page for GCC, egcs version 1.1.1.
-The warnings themselves are diagnostic messages that indicate that constructions may cause errors.
+De seguida iremos ver uma descrição sobre as opções de avisos do compilador que podem ser definidas na página 3 do diálogo de opções do projecto. As
+explicações foram tiradas da página do manual para o GCC, egcs versão 1.1.1.
+Os avisos em si são mensagens de diagnóstico que indicam construções que podem causar erros.
 
 <descrip>
-<tag/-Wall/Standard `-W' options combined.
+<tag/-Wall/ Opções `-W' standard combinadas.
 <p>
-<tag/-W/ Compile with -W. This option sets options not included in -Wall which are very specific. Please read GCC-Info for more
-information.
+<tag/-W/ Compilar com -W. Esta opção define opções não incluidas no -Wall que são muito específicas. Por favor leia a informação GCC para mais
+informações.
 <p>
-<tag/-Wtraditional/Warn about certain constructs that behave differently in traditional and ANSI C.
+<tag/-Wtraditional/ Avisa sobre algumas construções que se comportam de forma diferente no C tradicional e ANSI.
 <p>
-<tag/-Wundef/"Warn if an undefined identifier is evaluated in an `#if' directive.
+<tag/-Wundef/ Avisa de um identificador não definido é avaliado numa directiva `#if'.
 <p>
-<tag/-Wshadow/Warn whenever a local variable shadows another local variable.
+<tag/-Wshadow/ Avisa sempre que uma variável local encobre outra variável local.
 <p>
-<tag/-Wid-clash-LEN/Warn whenever two distinct identifiers match in the first len characters. This may help you prepare a program
-that will compile with certain obsolete, brain-damaged compilers.
+<tag/-Wid-clash-LEN/ Avisa sempre que dois identificadores distintos coincidem nos primeiros len caracteres. Isto pode ajudá-lo a preparar um programa
+que irá compilar com alguns compiladores obsoletos e com lesões cerebrais.
 <p>
-<tag/-Wlarger-then-LEN/Warn whenever an object of larger than LEN bytes is defined.
+<tag/-Wlarger-then-LEN/ Avisa sempre que um objecto maior que LEN bytes é definido.
 <p>
-<tag/-Wpointer-arith/Warn about anything that depends on the «size of» a function type or of void. GNU C assigns these types a
-size of 1, for convenience in calculations with void * pointers and pointers to functions.
+<tag/-Wpointer-arith/ Avisa sobre tudo o que dependa do «size of» de um tipo de função ou de void. O GNU C atribui a estes tipos um
+tamanho de 1, por conveniencia nos cálculos com ponteiros void * e ponteiros para funções.
 <p>
-<tag/-Wbad-function-cast/Warn whenever a function call is cast to a non-matching type. Forexample, warn if <tt/int malloc()/ is
-cast to <tt/anything *./
+<tag/-Wbad-function-cast/ Avisa sempre que uma chamada a uma função é feita para um tipo não coincidente. Por exemplo, avisa se <tt/int malloc()/ é
+feito sobre <tt/qualquer_coisa *./
 <p>
-<tag/-Wcast-equal/Warn whenever a pointer is cast so as to remove a type qualifier from the target type. For example, warn if a
-const char * is cast to an ordinary char *.
+<tag/-Wcast-equal/ Avisa sempre que um ponteiro for feito de forma a remover um qualificador de tipo do tipo do alvo. Por exemplo, avisa se um
+const char * é feito sobre um char * normal.
 <p>
-<tag/-Wcast-align/Warn whenever a pointer is cast such that the required alignment of the target is increased. For example, warn
-if a char * is cast to an int * on machines where integers can only be accessed at two- or four-byte boundaries.
+<tag/-Wcast-align/ Avisa sempre que um ponteiro é feito de tal modo que o alinhamento requerido do alvo é aumentado. Por exemplo, avisa
+se um char * é feito sobre um int * em máquinas em que inteiros apenas podem ser acedidos em fronteiras de dois ou quatro byte.
 <p>
-<tag/-Wwrite-strings/Give string constants the type const char[length] so that copying the address of one into a non-const char *
-pointer will get a warning. These warnings will help you find at compile time code that can try to write into a string constant,
-but only if you have been very careful about using const in declarations and prototypes. Otherwise, it will just be a nuisance;
-this is why we did not make `-Wall' request these warnings.
+<tag/-Wwrite-strings/ Dá às constantes string o tipo const char[tamanho] de forma a que copiar o endereço de uma para um ponteiro char *
+não-const dará um aviso. Estes avisos ajuda-lo-ão a encontrar na hora da compilação código que pode tentar escrever numa constante string,
+Mas apenas se você tiver sido muito cuidadoso na utilização de const em declarações e protótipos. Caso contrário, será apenas uma nuisance;
+é por esta razão que não fizemos o `-Wall' pedir estes avisos.
 <p>
-<tag/-Wconversion/Warn if a prototype causes a type conversion that is different from what would happen to the same argument in the absence of a
-prototype. This includes conversions of fixed point to floating and vice versa, and conversions changing the width or signedness
-of a fixed point argument except when the same as the default promotion.
+<tag/-Wconversion/ Avisa se um protótipo causar uma conversão de tipo que é diferente da que aconteceria ao mesmo argumento na ausência de um
+protótipo. Isto inclui conversões de virgula fixa para flutuante e vice versa, e conversões que alteram o tamanho ou signedness
+(poder ser negativo ou ser sempre valor absoluto) de um argumento de vírgula fixa excepto quando é o mesmo que a promoção por defeito.
 <p>
-<tag/-Wsign-compare/Warn when a comparison between signed and unsigned values could produce an incorrect result when the signed
-value is converted to unsigned.
+<tag/-Wsign-compare/ Avisa quando uma comparação entre valores signed e unsigned pode produzir um resultado incorrecto quando o valor signed
+é convertido para unsigned.
 <p>
-<tag/-Waggregate-return/Warn if any functions that return
-structures or unions are defined or called. (In languages where you can return an array, this also elicits a warning.)
+<tag/-Waggregate-return/ Avisa se qualquer função retornar
+estruturas ou uniões definidas ou chamadas. (Em linguagens em que pode retornar uma matriz (array), isto também levanta um aviso.)
 <p>
-<tag/-Wmissing-prototypes/ Warn if a global function is defined without a previous prototype declaration. This warning is issued even if the definition
-itself provides a prototype. The aim is to detect global functions that fail to be declared in header files.
+<tag/-Wmissing-prototypes/ Avisa se uma função global é definida sem a prévia declaração de protótipo. Este aviso é levantado mesmo se a definição
+em si disponibiliza um protótipo. O objectivo é detectar funções globais que não são declaradas em ficheiros header.
 <p>
-<tag/-Wmissing-declarations/ Warn if a global function is defined without a previous declaration. Do so even if the definition
-itself provides a prototype. Use this option to detect global functions that are not declared in header files. -Wredundant-decls
-Warn if anything is declared more than once in the same scope, even in cases where multiple declaration is valid and changes nothing.
+<tag/-Wmissing-declarations/ Avisa se uma função global é definida sem a declaração prévia. Faz isto mesmo se a definição
+em si disponibiliza um protótipo. Utilize esta opção para detectar funções globais que não são declaradas em ficheiros header.
 <p>
-<tag/-Wredundant-decls/Warn if anything is declared more than once in the same scope even in cases where multiple declaration is
-valid and changes nothing.
+<tag/-Wredundant-decls/ Avisa se algo for declarado mais de uma vez no mesmo âmbito, mesmo em casos em que a declaração múltipla é válida e não altera nada.
 <p>
-<tag/-Wnested-externs/Warn if an extern declaration is encountered within an function.
+<tag/-Wnested-externs/ Avisa se uma declaração externa é encontrada dentro de uma função.
 <p>
-<tag/-Winline/Warn if a function can not be inlined, and either it was declared as inline, or else the -fin*line-functions option was given.
+<tag/-Winline/ Avisa se uma função não pode ser inlined, e ou foi declarada como inline, ou então a opção -fin*line-functions foi dada.
 <p>
-<tag/-Wold-style-cast/Warn if an old-style (C-style) cast is used within a program
+<tag/-Wold-style-cast/ Avisa se uma chamada (cast) de tipo antigo (C-style) é utilizada dentro do programa
 <p>
-<tag/-Woverloaded-virtual/(C++ only.) In a derived class, the definitions of virtual functions must match the type signature of a
-virtual function declared in the base class. Use this option to request warnings when a derived class declares a function that may
-be an erroneous attempt to define a virtual function: that is, warn when a function with the same name as a virtual function in
-the base class, but with a type signature that doesn't match any virtual functions from the base class.
+<tag/-Woverloaded-virtual/ (apenas C++.) Numa classe derivada, as definições de funções virtuais têm de coincidir com o tipo de signature de uma
+função virtual declarada na classe base. Utilize esta opção para pedir avisos quando uma classe derivada declara uma função que possa
+ser uma tentativa errada para definir uma função virtual: isto é, avisa quando uma função com o mesmo nome que uma função virtual na
+classe base, mas com um tipo de signature que não coincide com o de nenhuma função virtual da classe base.
 <p>
-<tag/-Wsynth/Warn when g++'s synthesis behavoir does not match that of cfront.
+<tag/-Wsynth/ Avisa quando o comportamento de síntese do g++ não coincide com o do cfront.
 <p>
-<tag/make all warnings into errors/(-Werror) Treat warnings as errors; abort compilation after any warning.
+<tag/torna todos os avisos em erros/(-Werror) Trata os avisos como erros; aborta a compilação após quaisquer avisos.
 <p>
 </descrip>
 
-For a release of your project, it is recommended to enable <bf/-Wall/.
+Para uma distribuição do seu projecto, é recomendado que active <bf/-Wall/.
 
-<sect1>Linker Options<label id="Linker Options">
+<sect1>Opções de Linkagem<label id="Linker Options">
 <p>
-The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
-libraries that your application uses to link them to your binary with the linker, e.g. your application uses the class
-KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes or functions that are
-not listed as checkboxes, use the <bf/"additonal libraries"/ field.
+As Opções de Linkagem para o seu actual projecto podem ser definidas na última página do diálogo de opções do projecto. Tem de activar as
+bibliotecas que a sua aplicação utiliza para as ligar ao seu binário com o linkador, por ex. a sua aplicação utiliza a classe
+KFileDialog. Como a classe KFileDialog é parte da biblioteca KFile, tem de activar kfile. Para classes ou funções que não são
+listadas nas caixas de escolha, utilize o campo <bf/"bibliotecas adicionais"/.
 
-<sect2>Linker Flags
+<sect2>Parâmetros do Linkador
 <p>
 <descrip>
-<tag/remove all symbol table and relocation information from the executable:/ This means that all redundant information will be
-removed from the object files and the binary, resulting that debugging will not be possible. For as long as your application is in
-a development stage and not released as final, you should leave this option disabled.
+<tag/remove toda a tabela de símbolos e informação de realocação do executável:/ isto significa que toda a informação redundante será
+removida dos ficheiros de objecto e do binário, resultando em que a depuração não será possível. Durante o tempo em que a sua aplicação estiver
+em fase de desenvolvimento e não em distribuição final, deve deixar esta opção desactivada.
 
-<tag/prevent using shared libraries:/ This option disables the use of shared libraries on systems that support this. On systems
-using no shared libraries, this option will have no effect.
+<tag/impedir a utilização de bibliotecas partilhadas:/ Esta opção desactiva a utilização de bibliotecas partilhadas em sistemas que suportem isto. Em sistemas
+que não utilizem bibliotecas partilhadas, esta opção não terá qualquer efeito.
 
-<tag/additional flags:/ Here, you can enter additional flags for the linker, setting the LDFLAGS environment variable by make. The
-available options can be taken from the man page for <bf/ld/ or your compiler manpage.
+<tag/parâmetros adicionais:/ Aqui, você poderá introduzir parâmetros adicionais para o linkador, definindo a variável de ambiente LDFLAGS através do make. As
+opções disponíveis podem ser tiradas da página de manual para <bf/ld/ ou a página de manual do seu compilador.
 </descrip>
 
-<sect2>Libraries
+<sect2>Bibliotecas
 <p>
-The libraries section contains checkboxes for the most needed libraries in conjuction with <idx/Qt//<idx/KDE/ application
-development. You have to enable those libraries that your application uses, otherwise the linker will complain about unresolved
-symbol tables.
+A secção de bibliotecas contém caixas de selecção para as bibliotecas mais utilizadas em conjunto com o desenvolvimento de aplicações
+<idx/Qt//<idx/KDE/. Tem de activar as bibliotecas que a sua aplicação utiliza, caso contrário o linkador irá queixar-se sobre tabelas
+de símbolos não resolvidas.
 <descrip>
-<tag/X11/The X11 library. Recommended for all X-Window programs.
+<tag/X11/ A biblioteca X11. Recomendada para todos os programas X-Window.
 <p>
-<tag/Xext/The X11 extension library. Also most X-Window programs depend on Xext.
+<tag/Xext/ A biblioteca de extenções X11. Também a maioria dos programas X-Window depende da Xext.
 <p>
-<tag/qt/The Qt library. Recommended for <idx/Qt/ and <idx/KDE/ applications.
+<tag/qt/ A biblioteca Qt. Recomendada para aplicações <idx/Qt/ e <idx/KDE/.
 <p>
-<tag/kdecore/The KDE Core library; contains the classes for KDE Application frameworks.
+<tag/kdecore/ A biblioteca KDE Core; contém as classes para o esqueleto de aplicações KDE.
 <p>
-<tag/kdeui/The KDE User Interface library; contains KDE-specific widgets.
+<tag/kdeui/ A biblioteca de interface de utilizador KDE; contém widgets específicos KDE.
 <p>
-<tag/khtmlw/The KHTML Widget library.
+<tag/khtmlw/ A biblioteca de Widget KHTML.
 <p>
-<tag/kfm/The KFM library containing classes for KFM functions.
+<tag/kfm/ A biblioteca KFM contendo classes para funções KFM.
 <p>
-<tag/kfile/The KFile library. Contains file dialogs etc.
+<tag/kfile/ A biblioteca KFile. Contém diálogos de ficheiros etc.
 <p>
-<tag/kspell/The KSpell library. Contains an interface for programs to use ISpell for spellchecking.
+<tag/kspell/ A biblioteca KSpell. Contém um interface para programas utilizarem o ISpell para verificação ortográfica.
 <p>
-<tag/kab/The KAdressBook library. Needed for access to the adressbook as well as providing adressbook widgets
+<tag/kab/ A biblioteca KAdressBook. Necessária para acesso ao livro de endereços bem como para disponibilizar o widget de livro de endereços
 <p>
 </descrip>
 <bf/additional libraries:/ Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
@@ -2544,27 +2542,39 @@ libraries with the -l option; for the example -lkom.
 
 <sect2>Make
 <p>
-As GNU make supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
-en/disabled. The available settings are:
+Como o make GNU suporta algumas opções úteis, o diálogo de Opções do Projecto contém uma página chamada "Opções Make", onde essas podem ser
+(des)activadas. As definições disponíveis são:
 
 <descrip>
 <tag/
 
-<tag/Print debug information/ prints out all information about the project files and what make determines for rebuilding them.
-<tag/Continue after errors/ tries to continue with the compilation after an error occured (e.g. a file couldn't be compiled due to an
-error)
-<tag/Print the data base/ prints out the make-database for the current process which contains the changes from the last
-build-run. <tag/Environment variables/ give the current environment variables a higher priority than the currently used variables in
-the Makefiles.
-<tag/No built-in rules/ doesn't use built-in rules for make.
-<tag/Touch files/ don't run the compiler on changed files; instead only touches them. This sets them as already processed by make.
-<tag/Ignore all errors/ Ignores all errors that occur
-<tag/Silent operation/ doesn't print out any information about the build-process
-<tag/Print working directory/ prints the current directory during the make-process.
-<tag/job number/ sets the amount of parallel processes for make. For a single-CPU system we recommend setting this to one or two.
-<tag/set modified/ sets the selected file modified. Choose the file by clicking the folder button on the right. Setting a file modified
-means that the file will be processed by make and compiled if it is a source file.
-<tag/additional options/ set additional options to make; those can be found in your local man page for "GNU Make". </descrip>
+<tag/Imprimir informação de depuração/ imprime toda a informação sobre ficheiros do projecto e o que o make determina para os reconstruir.
+<p>
+<tag/Continuar após erros/ tenta continuar com a compilação após um erro ocorrer (por ex. um ficheiro não conseguiu ser compilado devido a
+um erro)
+<p>
+<tag/Imprimir a base de dados/ imprime a base de dados make para o processo actual que contém as modificações desde a última
+execução de construção.
+<p>
+<tag/Variáveis de ambiente/ dão as variáveis de ambiente actuais uma prioridade mais elevada que as variáveis a utilizar nos ficheiros
+Makefiles.
+<p>
+<tag/Não utiliza regras inclusas/ não utiliza as regras inclusas para o make.
+<p>
+<tag/Tocar ficheiros/ não corre o compilador sobre ficheiros modificados; em vez disso apenas os toca. Isto define-os como já processados pelo make.
+<p>
+<tag/Ignorar todos os erros/ Ignora todos os erros que possam ocorrer
+<p>
+<tag/Operação silenciosa/ não imprime qualquer informação sobre o processo de construção
+<p>
+<tag/Imprime o directório de trabalho/ imprime o directório actual durante o processo do make.
+<p>
+<tag/Número do trabalho/ define o número de processos paralelos para o make. Para um sistema de CPU único nós recomendamos definir este parâmetro para um ou dois.
+<p>
+<tag/Definir modificado/ define o ficheiro seleccionado como modificado. Escolha o ficheiro clicando sobre o botão de pasta à direita. Definir um ficheiro como
+modificado significa que esse ficheiro será processado pelo make e compilado se for um ficheiro de código fonte.
+<p>
+<tag/Opções adicionais/ define opções adicionais para o make; estas podem ser encontradas na sua página de manual local para o "Make GNU". </descrip>
 
 <sect>O Navegador de Classes<label id="The Class Browser">
 <p>
@@ -2907,136 +2917,139 @@ Após criar o widget, tem de gerar o código fonte para o tornar disponível no seu
 automaticamente para incluir o novo widget no processo de compilação; Assim, após chamar "Gerar Código", pode construir o seu
 projecto de novo dentro do editor de diálogos. A janela de output surge debaixo da janela de Edição de Widget tal como no modo de Edição de Projecto.
 
-Agora qie o seu projecto contém um novo widget, o seu trabalho como programador é implementar funcionalidades para os espaços utilizados e eventualmente
+Agora que o seu projecto contém um novo widget, o seu trabalho como programador é implementar funcionalidades para os espaços utilizados e eventualmente
 adicionar outros métodos de que possa necessitar.
 
 Para mais informações sobre a implementação de funções de widgets, veja <em/O Manual de Programação do KDevelop/.
 
-<sect>General Configuration<label id="General Configuration">
+<sect>Configuração Geral<label id="General Configuration">
 <p>
-This chapter describes how you can set your individual preferences about how KDevelop works. All settings adressed below can be
-found by the according entry in the Options-menu.
+Este capítulo descreve como pode definir as suas preferências pessoais sobre a forma como o KDevelop trabalha. Todas as configurações descritas em baixo podem ser
+encontradas na entrada correspondente do menu de Opções.
 
-<sect1>Configuring the "Tools" Menu<label id="Configuring the &dquot;Tools&dquot; Menu">
+<sect1>Configurar o Menu "Ferramentas"<label id="Configuring the &dquot;Tools&dquot; Menu">
 <p>
-As KDevelop supports the use of third-party programs within it's user interface, you are able to configure any program that suits
-your needs towards application development. This can be done by adding programs to the already pre-defined ones in the
-"Tools"-menu. To change the tools-menu, select "Tools" from the "Options" menu. This dialog allows to specify the entry name,
-program and additional command line options you want to pass to the execution. To remove a program from the menu, select the entry
-name and choose "Delete". To add a program, specify the menuentry, where a & is used as a menu-accelerator; you may compare the
-already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
-is added to the list. After leaving the configuration dialog, the tools-menu updates itself, so the new configuration is already
-usable without restarting KDevelop.
+Como o KDevelop suporta a utilização de programas de terceiros dentro do seu interface, é-lhe possível configurar quaisquer programas que lhe suprimam
+necessidades no sentido do desenvolvimento de aplicações. Isto pode ser feito adicionando programas aos já definidos no
+menu "Ferramentas". Para modificar o menu ferramentas, seleccione "Ferramentas" a partir do menu "Opções". Este diálogo permite especificar o nome para o menu,
+o programa e comandos de linha adicionais que deseje passar no momento da execução. Para remover um programa do menu, seleccione o nome de
+entrada e escolhe "Apagar". Para adicionar um programa, especifique a entrada de menu, em que & é utilizado como um acelarador de menu; pode comparar as entradas
+já configuradas com a lista de entradas. Seleccione o binário e passe as opções de linha de comandos. Depois prima "Adicionar" e a entrada
+é adicionada à lista. Após sair do diálogo de configuração, o menu de ferramentas actualiza-se automaticamente, pelo que a nova configuração está já
+disponível sem a necessidade de reiniciar o KDevelop.
 
-<sect1>File Viewer Options
+<sect1>Opções de Vista de Ficheiros
 <p>
-The Logical File Viewer can be configured by context menus completely. As it's intention is to separate files logically to keep a
-better overview over complex projects, one of the most used configurations is to create file groups. Those can be set by opening the
-context menu with a right mouse button click over the project icon displayed at the root of the tree. The menu offers:
+O Visualizador Lógico de Ficheiros pode ser configurado completamente por menus de contexto. Como o seu objectivo é separar ficheiros logicamente para manter uma
+visão geral melhor de projectos complexos, uma das configurações mais utilizada é criar grupos de ficheiros. Estes podem ser definidos abrindo o
+menu de contexto com um clique do botão direito do rato sobre o icon do projecto apresentado na raíz da árvore. O menu disponibiliza:
 <itemize>
-<item>New File: Opens the New File dialog. Equals to the menubar command "File"-"New"
-<item>New Class: Opens the Classgenerator to create a new class. Equals to the menubar command "Project"-"New Class"
-<item>New Group: Opens a dialog to create a new group. There, set the group name and the file filter for the project files that will be
-displayed in this group.
-<item>Show relative path: displays the files with their path name starting from the main project directory if checked; otherwise only
-the filename is shown.
+<item>Novo Ficheiro: Abre o diálogo de Novo Ficheiro. Equivale ao comando da barra de menu "Ficheiro"-"Novo"
+<item>Nova Classe: Abre o Gerador de Classes para criar uma nova classe. Equivale ao comando da barra de menu "Projecto"-"Nova Classe"
+<item>Novo Grupo: Abre um diálogo para criar um novo grupo. Aí, defina o nome do grupo e o filtro de ficheiro para os ficheiros do projecto que serão
+apresentados neste grupo.
+<item>Mostrar Caminho Relativo: apresenta os ficheiros com os seus caminhos a partir do directório do projecto se definido; caso contrário
+apenas o nome do ficheiro é mostrado.
 </itemize>
 
-Over a group folder, the according context menu offers:
+Sobre uma pastas de grupo, o respectivo menu de contexto disponibiliza:
 
 <itemize>
-<item>New Group: Opens the New Group dialog as in the context menu described above.
-<item>Remove group: removes the group from the LFV.
-<item>Properties: Opens the properties of the group. There, you can edit the file filters by a list of wildcards separated by commas.
+<item>Novo Grupo: Abre o diálogo de Novo Grupo tal como no menu de contexto descrito acima.
+<item>Remover grupo: remove o grupo do VFL.
+<item>Propriedades: Abre as propriedades do grupo. Aí, pode editar os filtros de ficheiros através de uma lista com caractéres de selecção múltipla (wildcards) separados por vírgulas.
 </itemize>
 
 
-<sect1>KDevelop Setup<label id="KDevelop Setup">
+<sect1>Configuração do KDevelop<label id="KDevelop Setup">
 <p>
-<bf>Make-command:</bf>
-The General Options dialog lets you configure KDevelop's general settings.
-First, you should set the make-command available on your system. If the selected program does not exist,
-KDevelop will warn you the next time your're invoking a make command.
+<bf>Comando Make:</bf>
+O diálogo de Opções Gerais permite-lhe configurar definições gerais do KDevelop.
+Primeiro, deve definir o comando make disponível no seu sistema. Se o programa seleccionado não existir, o
+KDevelop avisa-lo-á da próxima vez que invocar o comando make.
 
-<bf>Autosave:</bf>
+<bf>Gravação Automática:</bf>
 
-If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
+Se a Gravação Automática estiver seleccionada, o KDevelop irá gravar todos os ficheiros modificados periodicamente. O intrevalo de tempo da gravação automática pode ser definido para 3, 5, 15 ou 30 minutos.
 
 
-<bf>Autoswitch:</bf>
+<bf>Auto-Alternância:</bf>
 
-If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
-documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output
-window turned off.
-Startup:
+Se a Auto-Alternância estiver activa, a janela do KDevelop irá alternar entre estados consoante o contexto de utilização, por ex.  se for para a
+documentação no menu de Ajuda, o navegador de Documentação irá ser aberto, junto com a árvore de documentação e a janela de
+output será desligada.
 
-For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
-Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
-<sect1>Changing Keyboard Shortcuts<label id="Changing Keyboard Shortcuts">
+
+<bf>Iniciar:</bf>
+
+Para iniciar o KDevelop, tem a opção de activar/desactivar o logotipo de arranque a ser apresentado enquanto o KDevelop lê.
+Além disso, se não gosta que o último projecto seja aberto aquando do carregamento do programa, pode desligar o comportamento por defeito.
+
+<sect1>Alterar Atalhos de Teclado<label id="Changing Keyboard Shortcuts">
 <p>
-The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
-KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
-configuration can be changed by checking values like the Alt / Ctrl key etc.
+O diálogo de Configuração de Teclas permite-lhe configurar os atalhos de teclas do KDevelop. Note que as teclas globais podem ser configuradas no
+Controlo Central do KDE, tais como abrir ficheiro e imprimir. Uma função de teclado pode ser configurada escolhendo a entrada de menu. Depois a
+configuração pode ser modificada activando valores tais como as teclas Alt / Ctrl etc.
 
-<sect1>Documentation<label id="Documentation">
+<sect1>Documentação<label id="Documentation">
 <p>
-<sect2> Directories
+<sect2> Directórios
 <p>
-For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
-is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
-as well as the path to the KDE-library documentation.
+Para configurar o navegador de documentação para funcionar correctamente, o KDevelop necessita de alguma informação sobre onde a documentação HTML
+está localizada no sistema. Assim, o diálogo de propriedades do Caminho da Documentação necessita do caminho para a documentação electrónica da Qt em HTML
+bem como o caminho para a documentação da biblioteca KDE.
 
-Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
-you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the
-documentation, assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the
-according buttons, displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should
-first enter the next configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice,
-also setting the KDE Library Doc path automatically.
+Normalmente, a documentação Qt é colocada no mesmo directório que a Qt é instalada; por ex. se a Qt reside em /usr/local/qt, o caminho
+que tem de introduzir é /usr/local/qt/html. Para a documentação KDE, tem de definir o directório para a raiz da
+documentação, assumindo que toda a documentação das bibliotecas do KDE residem no mesmo directório. Ambos os caminhos podem ser seleccionados premindo os
+botões respectivos, que mostram uma selecção de caminho. Se o seu sistema não contém a documentação para as bibliotecas KDE, você deverá
+primeiro ir para o diálogo de configuração seguinte, Actualizar Documentação KDE. Isto irá criar a documentação para um caminho da sua escolha,
+também definindo o caminho da documentação da biblioteca KDE automaticamente.
 
-<sect2>Options
+<sect2>Opções
 <p>
-<sect3>Update KDE-Documentation
+<sect3>Actualizar Documentação KDE
 <p>
-For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
-installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
-function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package. First of, you have to set
-up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
+Para aqueles utilizadores que não dispõem de documentação recente das bibliotecas de KDE, especialmente a documentação para os ficheiros
+instalados no sistema, o diálogo de Actualização de Documentação KDE cria uma documentação nova ou actualiza a existente. Esta
+função requer que o seu sistem tenha o kdoc e o qt2kdoc instalados, incluídos no pacote kdesdk. Primeiro, tem de definir
+o caminho para o código fonte recente das kdelibs, que não é o caminho include para o KDE ! Basta introsuzir o caminho para o código, como:
 /home/rnolden/kdelibs-1.1/.
 
-Then, you can choose three different installation modes, as:
+Depois, pode seleccionar três modos de instalação diferentes, como sendo:
 
 <itemize>
-<item> Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
-installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
-newly generated documentation into the recent path.
-<item> Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
-well as above, but gives you the choice to set up a new documentation place.
-<item> Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
-the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
-kdelibs version.
+<item> Apagar Documentação antiga e instalar para o Caminho de Documentação recente:  isto assume que você já tem a documentação
+instalada e está colocada no caminho que foi inserido no diálogo de Caminho da Documentação. Isto irá apagar toda a documentação e instalar a
+documentação recentemente gerada no caminho recente.
+<item> Apagar Documentação antiga e instalar para o novo Caminho de Documentação: isto irá resultar em apagar a documentação antiga tal como
+acima, mas dá-lhe a escolha de definir um novo local para a documentação.
+<item> Deixar a Documentação intocada e instalar para o novo caminho de Documentação: Isto é recomendado para uma nova geração da
+documentação das kdelibs para utilizadores que antes não tinham nenhuma e para aqueles que querem guardar a última documentação para uma
+versão mais antiga das kdelibs.
 </itemize>
 
-The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for
-users who generate a new documentation from scratch.
+O "novo caminho da Documentação das Bibliotecas KDE" tem de ser difinido para opções 2 e 3 do modo de instalação.  Isto é também recomendado para
+utilizadores que geram nova documentação do zero.
 
-After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
-reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the
-documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
-give browsing the most functionality.
+Após premir o botão OK, o KDevelop irá criar um subdirectório "kdoc-reference" no caminho da documentação contendo os ficheiros
+de referência do Kdoc. Primeiro, a documentação das classes da biblioteca qt serão indexadas para ligar a documentação da Qt com a
+documentação a ser gerada para as kdelibs. Assim é importanteque tenha definido o caminho da documentação Qt primeiro para assegurar
+que pode ser encontrada pelo qt2kdoc. Finalmente, as bibliotecas KDE serão indexadas e a documentação será construida com referências cruzadas para
+dar à navegação a melhor funcionalidade.
 
-<sect3>Create Search Database
+<sect3>Criar Base de Dados de Busca
 <p>
-The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
-keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.
-Preset are the options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the
-documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
-directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an addional
-directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path
-in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
-medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger searchdatabase
-will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
-<ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
+O diálogo Criar Base de Dados de Busca, acedido através do botão criar, permite ao programador criar uma base de dados para procurar uma
+palavra chave interactivamente. Para criar e utilizar a função de procura na documentação, tem de ter o programa glimpse 4.1 instalado.
+Pre-definidas estão as opções para indexar a documentação das bibliotecas KDE bem como a documentação Qt, assumindo que o caminho para os
+ficheiros de documentação estavam definidos no diálogo "Caminho da Documentação" do menu de opções. Adicionamente, o índice pode incluir
+directórios que o utilizador pode definir por si através do campo "directórios adicionais para o index". Após definir um caminho para um directório
+adicional, o botão "Adicionar" tem de ser premido para definir o caminho. Um caminho definido pode ser removido do index seleccionando o caminho
+no campo de caminho e premindo "Remover". Ainda mais, ao utilizador são oferecidos três modos diferentes para o tamanho do index: minúsculo, pequeno e
+médio. Quanto maior o tamanho do index, mais os ficheiros de index irão crescer. Por outro lado, uma busca numa base de dados maior
+será mais rápida e melhor sucedida, pelo que sugerimos a escolha de um tamanho "médio". Para a utilização da função de busca, veja a secção
+<ref id="Using the Documentation Browser" name="Utilizar o Navegador de Documentação">.
 
 <sect>Perguntas e Respostas<label id="Questions and Answers">
 <p>

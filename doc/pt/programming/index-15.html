@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>O Manual de Programação do KDevelop: Programming Guidelines</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+Página seguinte <A HREF="index-14.html">Página anterior</A>
+ <A HREF="index.html#toc15">Índice geral</A>
+</P>
+<H3><A NAME="s15">15. Programming Guidelines</A></H3>
+
+<P>
+<P>Close to the end of this handbook, I want to summarize several issues that programmers should watch out while coding. These are mostly
+C++ programming tips that relate to KDE and Qt programming especially and are taken from the KDE Developer's Center which can be found
+on the Internet at 
+<A HREF="http://www.kde.org">http://www.kde.org</A>.
+<P>
+<DL>
+<DT><B>Filenames</B><DD><P>First of all, when creating sourcefiles, you should always use lowercase filenames. KDevelop supports
+this guideline already if you stick to its filename aut-suggestion. This makes it easier for other developers to remember what source
+files to look for when they have to debug your application.
+<P>
+<DT><B>Classnames</B><DD><P>The classnaming for KDE projects is recommended to be:
+<UL>
+<LI>class names should begin with a prefixed <B>K</B> followed by the name of the class by purpose (your choice). This would be e.g.
+<CODE>KMyWidget</CODE> for an application specific widget.</LI>
+<LI>the class members should always begin with lowercase letters, followed by uppercase beginnings for the next word, e.g.
+<CODE>myWidgetPointer()</CODE></LI>
+<LI>methods that return a private members value shouldn't use the <CODE>get</CODE>-prefix. You should prefer using a descriptive name for
+those types of classmembers. Example: <CODE>b_myboolean</CODE> is a private member. The method returning the current value would be e.g.
+<CODE>myBoolean()</CODE>.</LI>
+</UL>
+<P>
+<DT><B>File access within code</B><DD><P>Hardcoding any path should be avoided by using the KDE File System Standard. You only have to watch the installation path for your
+files by the according macros of the <CODE>Makefile.am</CODE> as described in this handbook. Within the code, you should use the methods of
+<CODE>KApplication</CODE> to retrieve the actual path.
+<P>
+<DT><B>Class documentation</B><DD><P>Another thing already mentionend is class documentation. You should stick to use <CODE>KDoc</CODE> formatting rules as they are used by all KDE
+developers to document their classes. You should at least add a single line to all of your classmembers for yourself to remember the
+prurpose and for others to reuse code. The code-reuse by the GPL makes much more sense if you know where to find an already existing
+solution if classes are documented. The Qt library referece is a good example of well-documented interfaces, though it doesn't use
+<CODE>KDoc</CODE>.
+<P>
+<DT><B>Use <CODE>new</CODE> to create widgets</B><DD><P>Within your implementation, you should always prefer to create widgets on the heap with <CODE>new</CODE>. The Qt library has a nice habbit to
+automatically delete all child widgets you created with <CODE>new</CODE>, so you don't ever have to use <CODE>delete</CODE> again in those cases. This
+is one of the most important practical features of the Qt library and you should make <P ALIGN="RIGHT">
+
+Página seguinte <A HREF="index-14.html">Página anterior</A>
+ <A HREF="index.html#toc15">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
