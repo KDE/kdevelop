@@ -236,7 +236,7 @@ class %{APPNAMESC} < KDE::MainWindow
     def newToolbarConfig()
         # This slot is called when user clicks "Ok" or "Apply" in the toolbar editor.
         # recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
-        createGUI(Dir.getwd + '/%{APPNAMESC}ui.rc')
+        createGUI(Dir.getwd + '/%{APPNAMELC}ui.rc')
     
         applyMainWindowSettings(KDE::Global.config(), autoSaveGroup())
     end
