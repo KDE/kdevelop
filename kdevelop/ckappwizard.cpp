@@ -2684,8 +2684,11 @@ void CKAppWizard::slotProcessExited() {
   {
    dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
 
-   QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \"" + messageline->text() +
-       (QString) "\" " + projectlocationline->text() + (QString) " " + vendorline->text() +
+   QString message=messageline->text();
+   if (!message.isEmpty())
+    message.replace(QRegExp("'"), "'\"'\"'");
+   QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \'" + message +
+       (QString) "\' " + projectlocationline->text() + (QString) " " + vendorline->text() +
        (QString) " " + releaseline->text();
    p << import;
    p.start(KProcess::Block, KProcess::AllOutput);
@@ -2773,11 +2776,14 @@ void CKAppWizard::slotMakeEnd() {
   }
   project->writeProject ();
   project->updateMakefilesAm ();
+  QString message=messageline->text();
+  if (!message.isEmpty())
+   message.replace(QRegExp("'"), "'\"'\"'");
 
   if (vsBox->currentItem() == 1 && !cvscommand.isEmpty())
   {
    KShellProcess p;
-   cvscommand += (QString) "cvs com -m \"" + messageline->text() + "\" .";
+   cvscommand += (QString) "cvs commit -m \'" + message + "\' .";
    p.clearArguments();
    p << cvscommand;
    p.start(KProcess::Block, KProcess::AllOutput);
@@ -2788,7 +2794,7 @@ void CKAppWizard::slotMakeEnd() {
   {
    KShellProcess p;
    cvscommand="cd "+ directorytext + "/po && cvs add "+ nametext +".pot && ";
-   cvscommand += QString("cvs com -m \"") + messageline->text() + "\" .";
+   cvscommand += QString("cvs commit -m \'") + message + "\' .";
    p.clearArguments();
    p << cvscommand;
    p.start(KProcess::Block, KProcess::AllOutput);
