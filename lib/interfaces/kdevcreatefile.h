@@ -17,12 +17,40 @@ public:
   public:  
     enum Status { STATUS_OK, STATUS_NOTCREATED, STATUS_NOTWITHINPROJECT };
 
+    CreatedFile()
+      : status( STATUS_NOTCREATED ) {}
+    
+    CreatedFile( const CreatedFile& source )
+      : dir( source.dir ), filename( source.filename ),
+        ext( source.ext ), subtype( source.subtype ),
+	status( source.status ) {}
+	
+    CreatedFile& operator = ( const CreatedFile& source )
+    {
+	dir = source.dir;
+	filename = source.filename;
+	ext = source.ext;
+	subtype = source.subtype;
+	status = source.status;
+	return( *this );
+    }
+    
+    bool operator == ( const CreatedFile& source ) const
+    {
+        return
+           dir == source.dir &&
+	   filename == source.filename &&
+	   ext == source.ext &&
+	   subtype == source.subtype &&
+	   status == source.status;
+    }
+    
+    // this should be private
     QString dir;
     QString filename;
     QString ext;
     QString subtype;
     Status status;
-    
   };
                      
 
