@@ -19,9 +19,4 @@
    <terminal>true</terminal>
   </run>
  </kdevautoproject>
- <kdevdebugger>
-  <general>
-   <dbgshell>libtool</dbgshell>
-  </general>
- </kdevdebugger>
 </kdevelop>
