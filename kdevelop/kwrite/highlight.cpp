@@ -139,7 +139,7 @@ const char *pythonKeywords[] = {
 
 const char *perlKeywords[] = {
   "and","&&", "bless","caller","cmp","continue","dbmclose","dbmopen","do",
-  "die", "dump", "eval", "elsif","eq","exit", "foreach","for","ge", "goto",
+  "die","dump","eval","else","elsif","eq","exit","foreach","for","ge","goto",
   "gt","if","import", "last","le","local","lt","my","next","ne","no","not",
   "!","or","||", "package","ref","redo","require","return","sub","tied",
   "tie","unless","until","untie","use","wantarray","while","xor", 0L};
@@ -1564,7 +1564,8 @@ void HtmlHighlight::makeContextList() {
 // ---------------------------------------------------------------------------
 
 BashHighlight::BashHighlight(const QString& name) : GenHighlight(name) {
-  dm = "text/x-shellscript";
+  dw = "*.sh;";
+  dm = "text/x-shellscript;application/x-shellscript";
 }
 
 
@@ -1744,7 +1745,7 @@ void PythonHighlight::makeContextList() {
 // ---------------------------------------------------------------------------
 
 PerlHighlight::PerlHighlight(const QString& name) : Highlight(name) {
-  dw = "*.pl";
+  dw = "*.pl;*.pm";
   dm = "application/x-perl";
 }
 
