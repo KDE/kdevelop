@@ -1,3 +1,6 @@
+2004-04-16 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Added MimeWarningDialog - KDevelop will now ask the user what to do when an unknown mimetype is encountered.
+
 2004-04-15 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added Thomas Nagy's KConfig XT based apptemplate.
 
