@@ -104,6 +104,8 @@ signals:
 	 * Provided for convenience when many files were removed. The file names are relative to the project directory.
 	 */
 	void removedFilesFromProject(const QStringList& fileList );
+	
+	void projectCompiled();
 };
 
 #endif
