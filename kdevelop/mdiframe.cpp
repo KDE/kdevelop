@@ -39,10 +39,12 @@ void MdiFrame::switchToChildframeMode()
 {
   emit letKDevelopDoTheSwitchToChildframeMode();
   QextMdiMainFrm::switchToChildframeMode();
+  setUndockPositioningOffset( QPoint( 0, 0));
 }
 
 void MdiFrame::switchToToplevelMode()
 {
+  setUndockPositioningOffset( QPoint( 0, taskBarHeight() + 30) );
   QextMdiMainFrm::switchToToplevelMode();
   emit letKDevelopDoTheSwitchToToplevelMode();
 }
