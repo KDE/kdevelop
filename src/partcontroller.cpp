@@ -153,8 +153,34 @@ void PartController::setEncoding(const QString &encoding)
   m_presetEncoding = encoding;
 }
 
+KParts::Part* PartController::findOpenDocument(const KURL& url)
+{
+  KURL partURL = API::getInstance()->project() ? findURLInProject(url) : url;
 
-void PartController::editDocument(const KURL &inputUrl, int lineNum)
+  partURL.cleanPath();
+
+  return partForURL(partURL);
+}
+
+KURL PartController::findURLInProject(const KURL& url)
+{
+  QStringList fileList = API::getInstance()->project()->allFiles();
+
+  bool filenameOnly = (url.url().find('/') == -1);
+  QString filename = filenameOnly ? "/" : "";
+  filename += url.url();
+
+  for (QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it) {
+    if ((*it).endsWith(filename)) {
+      // Match! The first one is as good as any one, I guess...
+      return API::getInstance()->project()->projectDirectory() + "/" + *it;
+    }
+  }
+
+  return url;
+}
+
+void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 {
   kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << endl;
 
@@ -168,15 +194,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
     KDevProject* project = API::getInstance()->project();
 
     if (project) {
-      QStringList fileList = project->allFiles();
-
-      for (QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it) {
-        if ((*it).endsWith(url.url())) {
-          // Match! The first one is as good as any one, I guess...
-          url = project->projectDirectory() + "/" + *it;
-          break;
-        }
-      }
+      url = findURLInProject(url);
 
       localUrl = url.url().startsWith("file:/");
       if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
@@ -200,7 +218,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
   if (existingPart)
   {
     activatePart(existingPart);
-    EditorProxy::getInstance()->setLineNumber(existingPart, lineNum);
+    EditorProxy::getInstance()->setLineNumber(existingPart, lineNum, col);
     return;
   }
 
@@ -216,7 +234,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
   }
 
   kdDebug(9000) << "mimeType = " << mimeType << endl;
-  
+
   if (mimeType.startsWith("text/")
       || mimeType == "application/x-zerosize"
       || mimeType == "application/x-desktop"
@@ -249,16 +267,16 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
   }
 
   kdDebug(9000) << "factory = " << factory << endl;
-  
+
   if (factory)
   {
       // Currently, only a single view per document is supported.
       // So fall back (downgrade) from MDI-mode editor to SDI-mode editor
       // (Note: This always works since KTextEditor::Document inherits KTextEditor::Editor)
-      
-      if (className == "KTextEditor::Document") 
+
+      if (className == "KTextEditor::Document")
 	  className = "KTextEditor::Editor";
-      
+
       // create the object of the desired class
       KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className));
       KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
@@ -270,12 +288,12 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
 	  extension->setURLArgs(args);
       }
       part->openURL(url);
-      
+
       bool isTextEditor = className == "KTextEditor::Editor";
       integratePart(part, url, isTextEditor );
-      
+
       if( isTextEditor )
-	  EditorProxy::getInstance()->setLineNumber(part, lineNum);
+	  EditorProxy::getInstance()->setLineNumber(part, lineNum, col);
   }
   else
       KRun::runURL(url, mimeType);
@@ -374,7 +392,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
 
   if( isTextEditor ){
       EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
-      
+
 #if KDE_VERSION < 310
       // HACK: this is a workaround. The kate-part does not emit "completed" when
       // it save a file yet.
@@ -917,6 +935,5 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
   TopLevel::getInstance()->embedPartView( part->widget(), name, shortDescription );
   addPart( part );
 }
-
 
 #include "partcontroller.moc"

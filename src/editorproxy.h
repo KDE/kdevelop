@@ -24,18 +24,18 @@ public:
 
   static EditorProxy *getInstance();
 
-  void setLineNumber(KParts::Part *part, int lineNum);
+  void setLineNumber(KParts::Part *part, int lineNum, int col);
 
   void installPopup(KParts::Part *part, QPopupMenu *popup);
- 
+
 private slots:
 
   void popupAboutToShow();
 
 private:
-  
+
   EditorProxy();
-  
+
   static EditorProxy *s_instance;
 
   QMemArray<int> m_popupIds;

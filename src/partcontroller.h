@@ -31,8 +31,9 @@ public:
   PartController(QWidget *toplevel);
 
   void setEncoding(const QString &encoding);
-  void editDocument(const KURL &inputUrl, int lineNum=-1);
+  void editDocument(const KURL &inputUrl, int lineNum=-1, int col=-1);
   void showDocument(const KURL &url, const QString &context = QString::null);
+  KParts::Part* findOpenDocument(const KURL& url);
 
   bool closeDocuments(const QStringList &list);
   bool closePartForWidget( const QWidget* widget );
@@ -79,7 +80,7 @@ private slots:
   void slotBackPopupActivated( int id );
   void slotForwardAboutToShow();
   void slotForwardPopupActivated( int id );
-  
+
   void slotSwitchTo();
 
   void slotUploadFinished();
@@ -90,6 +91,7 @@ private slots:
   void addHistoryEntry( HistoryEntry* entry );
 
 private:
+  KURL findURLInProject(const KURL& url);
 
   void setupActions();
 

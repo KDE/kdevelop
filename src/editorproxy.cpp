@@ -38,7 +38,7 @@ EditorProxy *EditorProxy::getInstance()
 }
 
 
-void EditorProxy::setLineNumber(KParts::Part *part, int lineNum)
+void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
 {
   if (!part || !part->inherits("KTextEditor::Document"))
     return;
@@ -48,7 +48,7 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum)
 
   ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
   if (iface)
-    iface->setCursorPosition(lineNum, 0);
+    iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
 }
 
 
@@ -90,11 +90,11 @@ void EditorProxy::popupAboutToShow()
     }
   }
 
-  // ugly hack: mark the "original" items 
+  // ugly hack: mark the "original" items
   m_popupIds.resize(popup->count());
   for (uint index=0; index < popup->count(); ++index)
     m_popupIds[index] = popup->idAt(index);
-  
+
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(PartController::getInstance()->activePart());
   if (!ro_part)
     return;
@@ -102,7 +102,7 @@ void EditorProxy::popupAboutToShow()
   // fill the menu in the file context
   FileContext context(ro_part->url().path(), false);
   Core::getInstance()->fillContextMenu(popup, &context);
-  
+
   // fill the menu in the editor context
   if (!ro_part->widget())
     return;
@@ -139,7 +139,7 @@ void EditorProxy::popupAboutToShow()
   } else {
     Core::getInstance()->fillContextMenu(popup, 0);
   }
-  
+
   // Remove redundant separators (any that are first, last, or doubled)
   bool lastWasSeparator = true;
   for( uint i = 0; i < popup->count(); ) {
