@@ -531,22 +531,20 @@ void TopLevelSDI::slotTextChanged() {
     }
 }
 
-void TopLevelSDI::slotUpdateModifiedFlags() {
+void TopLevelSDI::slotUpdateModifiedFlags() 
+{
+    QString newTitle;
     QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
     for ( ; it.current(); ++it) {
         KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
         if ( rw_part && rw_part->widget() ) {
-            int idx = m_tabWidget->indexOf( rw_part->widget() );
-            if ( idx < 0 )
-                continue;
-            QString t = m_tabWidget->tabLabel( rw_part->widget() );
-            bool titleMod = (t.right( 1 ) == "*");
-            if ( rw_part->isModified() && !titleMod ) {
-                m_tabWidget->changeTab( rw_part->widget(), t + "*" );
-            } else if ( !rw_part->isModified() && titleMod ) {
-                t.truncate( t.length() - 1 );
-                m_tabWidget->changeTab( rw_part->widget(), t );
-            }
+	    newTitle = rw_part->url().fileName();
+	    if ( rw_part->isModified() )
+                newTitle += "*";
+            if ( m_tabWidget->tabLabel( rw_part->widget() ) != newTitle ) {
+		m_tabWidget->changeTab( rw_part->widget(), newTitle );
+		m_tabWidget->setTabToolTip( rw_part->widget(), rw_part->url().url() );
+	    }
         }
     }
 }
