@@ -595,7 +595,7 @@ bool DebuggerPart::startDebugger()
             KMessageBox::error(
                 mainWindow()->main(),
                 i18n("Could not locate the debugging shell '%1'.").arg( shell ),
-                i18n("Debugging shell not found.") );
+                i18n("Debugging Shell Not Found") );
             return false;
         }
     }
