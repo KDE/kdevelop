@@ -87,6 +87,8 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     m_prevLine = -1;
     m_prevColumn = -1;
     m_sequenceLength = 0;
+
+    updateActions();
 }
 
 
@@ -392,24 +394,26 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
         docIface = 0;
         editIface = 0;
         viewCursorIface = 0;
-        completionIface = 0;        	
-    }    
-        
+        completionIface = 0;
+    }
+
     editIface = dynamic_cast<KTextEditor::EditInterface*>( part );
-    
-    QWidget *view = partController()->activeWidget();    
+
+    QWidget *view = partController()->activeWidget();
     viewCursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( view );
     completionIface = dynamic_cast<KTextEditor::CodeCompletionInterface*>( view );
-    
+
+    updateActions();
+
     if( !editIface || !viewCursorIface || !completionIface )
     	return;
-    
+
     KConfig* config = AbbrevFactory::instance()->config();
     config->setGroup( "General" );
-    
+
     disconnect( view, 0, this, 0 );
     disconnect( doc, 0, this, 0 );
-    
+
     connect( view, SIGNAL(filterInsertString(KTextEditor::CompletionEntry*, QString*)),
 	     this, SLOT(slotFilterInsertString(KTextEditor::CompletionEntry*, QString*)) );
 
@@ -418,7 +422,7 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
 		 this, SLOT(slotCompletionAborted()) );
 	connect( view, SIGNAL(completionDone()),
 		 this, SLOT(slotCompletionDone()) );
-	
+
 	connect( doc, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
     }
 
@@ -471,6 +475,12 @@ void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QS
         editIface->removeText( line, col-currentWord().length(), line, col );
 	insertChars( m_templates[entry->userdata]->code );
     }
+}
+
+void AbbrevPart::updateActions()
+{
+    actionCollection()->action( "edit_expandtext" )->setEnabled( docIface != 0 );
+    actionCollection()->action( "edit_expandabbrev" )->setEnabled( docIface != 0 );
 }
 
 #include "abbrevpart.moc"

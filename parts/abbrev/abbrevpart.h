@@ -51,7 +51,7 @@ public:
     void removeTemplate(const QString &templ);
     void clearTemplates();
     QAsciiDictIterator<CodeTemplate> templates() const;
-    
+
 private slots:
     void slotExpandText();
     void slotExpandAbbrev();
@@ -63,6 +63,7 @@ private slots:
     void slotFilterInsertString( KTextEditor::CompletionEntry*, QString* );
 
 private:
+    void updateActions();
     void load();
     void save();
     QString currentWord() const;
