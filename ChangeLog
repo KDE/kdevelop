@@ -1,3 +1,6 @@
+2001-12-18  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: now Childframe mode considers font set by user for MDI-view caption
+
 2001-12-17  Roland Krause  <rokrau@yahoo.com>
     * Implemented make for a single directory, through RFV.
 
