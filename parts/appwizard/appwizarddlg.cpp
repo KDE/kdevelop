@@ -43,6 +43,7 @@
 #include <ktempfile.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
+#include <kapplication.h>
 
 #include "kdevglobalversioncontrol.h"
 #include "kdevmakefrontend.h"
@@ -64,6 +65,10 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     m_appsInfo.setAutoDelete(true);
     m_tempFiles.setAutoDelete(true);
 
+    KConfig *gConfig = kapp->config();
+    gConfig->setGroup("General Options");
+    QString defaultProjectsDir = gConfig->readEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     QStringList m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
 
@@ -83,8 +88,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         info->comment = config.readEntry("Comment");
         info->showFileAfterGeneration = config.readEntry("ShowFileAfterGeneration");
         info->fileTemplates = config.readEntry("FileTemplates");
-        QString destDir = config.readEntry("DefaultDestinatonDir", "HOMEDIR");
-        destDir = destDir.replace(QRegExp("HOMEDIR"), QDir::homeDirPath());
+        QString destDir = config.readEntry("DefaultDestinatonDir", defaultProjectsDir);
         info->defaultDestDir = destDir;
         QString category = config.readEntry("Category");
         // format category to a unique status
@@ -118,7 +122,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
     email_edit->setText(email);
-    dest_edit->setText(QDir::homeDirPath()+"/");
+    dest_edit->setText(defaultProjectsDir);
 
     /*    //add a new page (fileprops)
 	  QString projectname = "Test";
