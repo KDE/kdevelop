@@ -392,6 +392,10 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     if (!context->hasType("editor"))
         return;
 
+    popup->insertSeparator();
+    popup->insertItem( i18n( "Switch Header/Implementation"),
+        this, SLOT( slotSwitchHeader() ) );
+
     const EditorContext *econtext = static_cast<const EditorContext*>(context);
     QString str = econtext->currentLine();
     if (str.isEmpty())
@@ -406,7 +410,6 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     if (m_contextFileName.isEmpty())
         return;
 
-    popup->insertSeparator();
     popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
                        this, SLOT(slotGotoIncludeFile()) );
 }
