@@ -62,7 +62,7 @@ QStrList *getSortedIteratorNameList( QDictIterator<T> &itr )
  * @return List of sorted elements.
  */
 template<class T>
-QList<T> *getSortedDictList( QDict<T> &dict )
+QList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
 {
   QList<T> *retVal = new QList<T>();
   char *str;
@@ -76,7 +76,7 @@ QList<T> *getSortedDictList( QDict<T> &dict )
        itr.current();
        ++itr )
   {
-    srted.inSort( itr.current()->name );
+    srted.inSort( ( usePath ? itr.current()->path() : itr.current()->name ) );
   }
 
   for( str = srted.first();
