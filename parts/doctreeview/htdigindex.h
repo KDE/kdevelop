@@ -12,6 +12,7 @@
  ***************************************************************************/
 
 #include <stdio.h>
+#include <qdom.h>
 #include <qlabel.h>
 #include <kdialogbase.h>
 #include <kprocess.h>
@@ -28,6 +29,7 @@ public:
 
     void addDir(const QString &dir);
     void addKdocDir(FILE *f);
+    void addTocFile(QDomDocument &doc);
     void scanDirectories();
     bool createConfig();
     bool generateIndex();

@@ -1,3 +1,10 @@
+2001-07-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Canonicalize target name in TargetOptionsDialog.
+	  Thanks to Ludovic LANGE <ludovic.lange@free.fr> for a patch
+	* Wait cursor while index dialog loads index files
+	* Configurable full text search in toc'ed documentation
+
 2001-07-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Added kdoc-generated Qt/KDE index to index dialog

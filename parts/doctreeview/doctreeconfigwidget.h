@@ -55,6 +55,7 @@ private:
     QCheckBox *indexshownlibs_box;
     QCheckBox *indexhiddenlibs_box;
     QCheckBox *indexbookmarks_box;
+    QListView *indexedtocs_view;
     void readConfig();
     void storeConfig();
 };

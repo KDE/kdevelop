@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qapplication.h>
 #include <qcheckbox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -47,6 +48,8 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     QFontMetrics fm(fontMetrics());
     term_combo->setMinimumWidth(fm.width('X')*40);
 
+    QApplication::setOverrideCursor(waitCursor);
+    
     readKDocIndex();
     
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
@@ -55,6 +58,8 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     QStringList::Iterator bit;
     for (bit = books.begin(); bit != books.end(); ++bit)
         readIndexFromFile(*bit);
+
+    QApplication::restoreOverrideCursor();
     
     QVButtonGroup *book_group = new QVButtonGroup(this);
     book_group->setExclusive(false);

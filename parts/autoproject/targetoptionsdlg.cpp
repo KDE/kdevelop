@@ -141,13 +141,14 @@ void TargetOptionsDialog::storeConfig()
     }
     QCString new_addstr = liblist.join(" ").latin1();
 
+    QCString canonname = AutoProjectTool::canonicalize(target->name);
     QMap<QCString, QCString> replaceMap;
     
     if (target->primary == "PROGRAMS") {
         QCString old_ldadd = target->ldadd;
         if (new_addstr != old_ldadd) {
             target->ldadd = new_addstr;
-            replaceMap.insert(target->name + "_LDADD", new_addstr);
+            replaceMap.insert(canonname + "_LDADD", new_addstr);
         }
     }
     
@@ -155,20 +156,20 @@ void TargetOptionsDialog::storeConfig()
         QCString old_libadd = target->libadd;
         if (new_addstr != old_libadd) {
             target->libadd = new_addstr;
-            replaceMap.insert(target->name + "_LIBADD", new_addstr);
+            replaceMap.insert(canonname + "_LIBADD", new_addstr);
         }
     }
     
     QCString old_ldflags = target->ldflags;
     if (new_ldflags != old_ldflags) {
         target->ldflags = new_ldflags;
-        replaceMap.insert(target->name + "_LDFLAGS", new_ldflags);
+        replaceMap.insert(canonname + "_LDFLAGS", new_ldflags);
     }
 
     QCString old_dependencies = target->dependencies;
     if (new_dependencies != old_dependencies) {
         target->dependencies = new_dependencies;
-        replaceMap.insert(target->name + "_DEPENDENCIES", new_dependencies);
+        replaceMap.insert(canonname + "_DEPENDENCIES", new_dependencies);
     }
 
     // We can safely assume that this target is in the active sub project

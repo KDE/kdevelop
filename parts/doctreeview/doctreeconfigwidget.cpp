@@ -11,6 +11,8 @@
 #define GIDEON
 
 #include <qcheckbox.h>
+#include <qdom.h>
+#include <qfile.h>
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
@@ -152,7 +154,10 @@ QWidget *DocTreeConfigWidget::createIndexTab()
     indexshownlibs_box = new QCheckBox(i18n("Index &libraries shown in the documentation tree"), w);
     indexhiddenlibs_box = new QCheckBox(i18n("Index &other libraries"), w);
     indexbookmarks_box = new QCheckBox(i18n("Index files in the &Bookmarks section of the documentation tree"), w);
-
+    indexedtocs_view = new QListView(w);
+    indexedtocs_view->addColumn("");
+    indexedtocs_view->header()->hide();
+    
     QPushButton *update_button = new QPushButton(i18n("&Update index now"), w);
     connect( update_button, SIGNAL(clicked()), this, SLOT(updateIndexClicked()) );
     
@@ -163,6 +168,7 @@ QWidget *DocTreeConfigWidget::createIndexTab()
     layout->addWidget(indexshownlibs_box);
     layout->addWidget(indexhiddenlibs_box);
     layout->addWidget(indexbookmarks_box);
+    layout->addWidget(indexedtocs_view);
     layout->addStretch(2);
     layout->addWidget(update_button, 0, AlignCenter);
     layout->addStretch(2);
@@ -213,6 +219,36 @@ void DocTreeConfigWidget::readConfig()
         ++librariesPos;
     }
 
+    KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+    QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
+
+    int tocsPos = 0;
+    QStringList::Iterator tit;
+    for (tit = tocs.begin(); tit != tocs.end(); ++tit) {
+        QFile f(*tit);
+        if (!f.open(IO_ReadOnly)) {
+            kdDebug(9002) << "Could not read doc toc: " << (*tit) << endl;
+            continue;
+        }
+        
+        QDomDocument doc;
+        if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
+            kdDebug() << "Not a valid kdeveloptoc file: " << (*tit) << endl;
+            continue;
+        }
+        
+        f.close();
+        
+        QDomElement docEl = doc.documentElement();
+        QDomElement titleEl = docEl.namedItem("title").toElement();
+        QString title = titleEl.firstChild().toText().data();
+        
+        DocTreeConfigListItem *citem = new DocTreeConfigListItem(indexedtocs_view, title, (*tit), tocsPos);
+        citem->setOn(false);
+        kdDebug(9002) << "Insert " << (*tit) << " with title " << title << endl;
+        ++tocsPos;
+    }
+
 #ifndef GIDEON
     // Enable/disable items in the KDevelop tree
     DocTreeViewTool::getHiddenKDevelop(&kdevelopHidden);
@@ -233,18 +269,16 @@ void DocTreeConfigWidget::readConfig()
     // Enable/disable items in the Libraries tree
     DocTreeViewTool::getHiddenLibraries(&librariesHidden);
     for (QStringList::Iterator it = librariesHidden.begin(); it != librariesHidden.end();
-         ++it)
-	{
-            QListViewItem *item = libraries_view->firstChild();
-            for (; item; item = item->nextSibling())
-                {
-                    DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
-                    // kdDebug(9002) << "Checking " << citem->ident() << " with " << (*it) << endl;
-                    if (citem->ident() == (*it))
-                        citem->setOn(false);
-                }
+         ++it) {
+        QListViewItem *item = libraries_view->firstChild();
+        for (; item; item = item->nextSibling()) {
+            DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
+            // kdDebug(9002) << "Checking " << citem->ident() << " with " << (*it) << endl;
+            if (citem->ident() == (*it))
+                citem->setOn(false);
         }
-
+    }
+    
     // Read in configuration of the Bookmarks tree
     // Here we store what we _want_ to see, in contrast to the KDevelop/Libraries
     // sections where we store what  we _don't_ want to see
@@ -259,10 +293,22 @@ void DocTreeConfigWidget::readConfig()
 
     // Read configuration of the index tab
     bool indexShownLibs, indexHiddenLibs, indexBookmarks;
-    DocTreeViewTool::getIndexOptions(&indexShownLibs, &indexHiddenLibs, &indexBookmarks);
+    QStringList indexedTocs;
+    DocTreeViewTool::getIndexOptions(&indexShownLibs, &indexHiddenLibs, &indexBookmarks, &indexedTocs);
     indexshownlibs_box->setChecked(indexShownLibs);
     indexhiddenlibs_box->setChecked(indexHiddenLibs);
     indexbookmarks_box->setChecked(indexBookmarks);
+
+    for (QStringList::Iterator it = indexedTocs.begin(); it != indexedTocs.end();
+         ++it) {
+        QListViewItem *item = indexedtocs_view->firstChild();
+        for (; item; item = item->nextSibling()) {
+            DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
+            // kdDebug(9002) << "Checking " << citem->ident() << " with " << (*it) << endl;
+            if (citem->ident() == (*it))
+                citem->setOn(true);
+        }
+    }
 }
 
 
@@ -275,12 +321,11 @@ void DocTreeConfigWidget::storeConfig()
     QStringList kdevelopHidden;
     {
         QListViewItem *item = kdevelop_view->firstChild();
-        for (; item; item = item->nextSibling())
-            {
-                DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
-                if (!citem->isOn())
-                    kdevelopHidden.append(citem->ident());
-            }
+        for (; item; item = item->nextSibling()) {
+            DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
+            if (!citem->isOn())
+                kdevelopHidden.append(citem->ident());
+        }
     }
     DocTreeViewTool::setHiddenKDevelop(kdevelopHidden);
 #endif
@@ -289,12 +334,11 @@ void DocTreeConfigWidget::storeConfig()
     QStringList librariesHidden;
     {
         QListViewItem *item = libraries_view->firstChild();
-        for (; item; item = item->nextSibling())
-            {
-                DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
-                if (!citem->isOn())
-                    librariesHidden.append(citem->ident());
-            }
+        for (; item; item = item->nextSibling()) {
+            DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
+            if (!citem->isOn())
+                librariesHidden.append(citem->ident());
+        }
     }
     DocTreeViewTool::setHiddenLibraries(librariesHidden);
     
@@ -302,18 +346,28 @@ void DocTreeConfigWidget::storeConfig()
     QStringList bookmarksTitle, bookmarksURL;
     {
         QListViewItem *item = bookmarks_view->firstChild();
-        for (; item; item = item->nextSibling())
-            {
-                bookmarksTitle.append(item->text(0));
-                bookmarksURL.append(item->text(1));
-            }
+        for (; item; item = item->nextSibling()) {
+            bookmarksTitle.append(item->text(0));
+            bookmarksURL.append(item->text(1));
+        }
     }
     DocTreeViewTool::setBookmarks(bookmarksTitle, bookmarksURL);
-
+    
+    // Collect indexed tocs list
+    QStringList indexedTocs;
+    {
+        QListViewItem *item = indexedtocs_view->firstChild();
+        for (; item; item = item->nextSibling()) {
+            DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
+            if (citem->isOn())
+                indexedTocs.append(citem->ident());
+        }
+    }
     // Save Index section
     DocTreeViewTool::setIndexOptions(indexshownlibs_box->isChecked(),
                                      indexhiddenlibs_box->isChecked(),
-                                     indexbookmarks_box->isChecked());
+                                     indexbookmarks_box->isChecked(),
+                                     indexedTocs);
 }
 
 

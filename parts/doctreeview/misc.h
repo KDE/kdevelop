@@ -27,8 +27,8 @@ public:
     // Returns the list of items for the Others tree
     static void getBookmarks(QStringList *itemNames, QStringList *fileNames);
     static void setBookmarks(const QStringList &itemNames, const QStringList &fileNames);
-    static void setIndexOptions(bool shownlibs, bool hiddenlibs, bool others);
-    static void getIndexOptions(bool *shownlibs, bool *hiddenlibs, bool *others);
+    static void setIndexOptions(bool shownlibs, bool hiddenlibs, bool others, const QStringList &tocs);
+    static void getIndexOptions(bool *shownlibs, bool *hiddenlibs, bool *others, QStringList *tocs);
 };
 
 #endif

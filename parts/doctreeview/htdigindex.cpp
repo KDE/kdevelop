@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kstddirs.h>
 
 #define INDEXER
@@ -132,6 +133,7 @@ void ProgressDialog::addDir(const QString &dir)
             kapp->processEvents();
         }
     }
+    kapp->processEvents();
 }
 
 
@@ -151,16 +153,67 @@ void ProgressDialog::addKdocDir(FILE *f)
 }
 
 
+void ProgressDialog::addTocFile(QDomDocument &doc)
+{
+    QStringList candidates;
+    QString base;
+    QDomElement childEl = doc.documentElement().firstChild().toElement();
+    while (!childEl.isNull()) {
+        if (childEl.tagName() == "tocsect1") {
+            QString url = childEl.attribute("url");
+            if (!url.isEmpty()) {
+                url.prepend(base);
+                kdDebug() << "candidate: " << url << endl;
+                candidates.append(url);
+            }
+            // TODO: Generalize to arbitrary number of levels
+            QDomElement grandchildEl = childEl.firstChild().toElement();
+            while (!grandchildEl.isNull()) {
+                if (grandchildEl.tagName() == "tocsect2") {
+                    QString url = grandchildEl.attribute("url");
+                    if (!url.isEmpty()) {
+                        url.prepend(base);
+                        kdDebug() << "candidate: " << url << endl;
+                        candidates.append(url);
+                    }
+                }
+                grandchildEl = grandchildEl.nextSibling().toElement();
+            }
+        } else if (childEl.tagName() == "base") {
+            base = childEl.attribute("href");
+            if (!base.isEmpty())
+                base += "/";
+        }
+        childEl = childEl.nextSibling().toElement();
+    }
+
+    QStringList::ConstIterator it;
+    for (it = candidates.begin(); it != candidates.end(); ++it) {
+        QString url = *it;
+        int pos = url.findRev('#');
+        if (pos != -1)
+            url.truncate(pos);
+        if ((url.startsWith("/") || url.startsWith("file://"))
+            && !files.contains(url)) {
+            files.append(url);
+            kdDebug() << "tocurl: " << url << endl;
+            setFilesScanned(++filesScanned);
+        }
+    }
+}
+
+
 void ProgressDialog::scanDirectories()
 {
     bool indexShownLibs, indexHiddenLibs, indexBookmarks;
-    DocTreeViewTool::getIndexOptions(&indexShownLibs, &indexHiddenLibs, &indexBookmarks);
+    QStringList indexedTocs;
+    DocTreeViewTool::getIndexOptions(&indexShownLibs, &indexHiddenLibs, &indexBookmarks, &indexedTocs);
 
     QStringList itemNames, fileNames, hiddenNames;
     DocTreeViewTool::getAllLibraries(&itemNames, &fileNames);
     DocTreeViewTool::getHiddenLibraries(&hiddenNames);
 
-    QStringList::Iterator it1, it2;
+    QStringList::ConstIterator it1, it2;
     for (it1 = itemNames.begin(), it2 = fileNames.begin();
          it1 != itemNames.end() && it2 != fileNames.end();
          ++it1, ++it2) {
@@ -185,13 +238,29 @@ void ProgressDialog::scanDirectories()
     if (indexBookmarks) {
         QStringList bookmarksTitle, bookmarksURL;
         DocTreeViewTool::getBookmarks(&bookmarksTitle, &bookmarksURL);
-        QStringList::Iterator it3;
+        QStringList::ConstIterator it3;
         for (it3 = bookmarksURL.begin(); it3 != bookmarksURL.end(); ++it3) {
             // FIXME: Perhaps one should consider indexing the whole directory the file
             // lives in
             files.append(*it3);
             setFilesScanned(++filesScanned);
         }
+    }
+
+    QStringList::ConstIterator it4;
+    for (it4 = indexedTocs.begin(); it4 != indexedTocs.end(); ++it4) {
+        QFile f(*it4);
+        if (!f.open(IO_ReadOnly)) {
+            kdDebug() << "Could not read doc toc: " << (*it4) << endl;
+            continue;
+        }
+        QDomDocument doc;
+        if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
+            kdDebug() << "Not a valid kdeveloptoc file: " << (*it4) << endl;
+            continue;
+        }
+        f.close();
+        addTocFile(doc);
     }
 }
 
@@ -304,6 +373,7 @@ bool ProgressDialog::generateIndex()
             }
             ts << "http://localhost/" + files[count] << endl;
         }
+        f.close();
         
         // execute htdig
         proc->start(KProcess::NotifyOnExit, KProcess::Stdout);      
@@ -311,6 +381,7 @@ bool ProgressDialog::generateIndex()
             kapp->processEvents();
         
         if (!proc->normalExit() || proc->exitStatus() != 0) {
+            KMessageBox::sorry(0, i18n("Running htdig failed"));
             delete proc;
             return false;
         }
