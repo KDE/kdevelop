@@ -44,7 +44,7 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
 
     setXMLFile("kdevpart_distpart.rc");
 
-    m_action =  new KAction( i18n("Distribution & Publishing"), "package", 0,
+    m_action =  new KAction( i18n("Distribution && Publishing"), "package", 0,
                              this, SLOT(show()),
                              actionCollection(), "make_dist" );
 
