@@ -187,7 +187,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
 
-    QString id = d->declaratorId()->unqualifiedName()->text();
+    QString id = d->declaratorId()->unqualifiedName()->text().stripWhiteSpace();
 
     QStringList scope = m_currentScope;
     if( d->declaratorId()->classOrNamespaceNameList().count() ){
@@ -228,11 +228,14 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     bool isConstructor = cl && typeSpec == 0 && id == cl->name();
     method->setIsConstructor( isConstructor );
 
+#if 0
     if( cl && isConstructor )
 	method->setType( cl->name() + "*" );
     else if( cl && isDestructor )
 	method->setType( "void" );
-    else {
+    else 
+#endif
+    {
 	QString text = typeOfDeclaration( typeSpec, d );
 	if( !text.isEmpty() )
 	    method->setType( text );
@@ -299,7 +302,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	QString shortFileName = fileInfo.baseName();
 	className.sprintf( "(%s_%d)", shortFileName.latin1(), m_anon++ );
     } else {
-	className = ast->name()->unqualifiedName()->text();
+	className = ast->name()->unqualifiedName()->text().stripWhiteSpace();
     }
 
     ParsedClass* klass = new ParsedClass();
@@ -559,11 +562,13 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 	bool isConstructor = typeSpec == 0 && id == m_currentClass->name();
 	method->setIsConstructor( isConstructor );
 
+#if 0
 	if( m_currentClass && isConstructor )
 	    method->setType( m_currentClass->name() + "*" );
 	else if( m_currentClass && isDestructor )
 	    method->setType( "void" );
 	else
+#endif
 	    method->setType( typeOfDeclaration(typeSpec, d) );
     } else {
 	QString text = typeOfDeclaration( typeSpec, d );

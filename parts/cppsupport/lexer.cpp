@@ -23,6 +23,7 @@
 #include "keywords.lut.h"
 
 #include <kdebug.h>
+#include <qregexp.h>
 
 using namespace std;
 
@@ -388,7 +389,7 @@ void Lexer::processDefine( Macro& m )
 	        
     QString body;    
     while( !currentChar().isNull() ){
-	
+
 	if( currentChar() == '\n' ){
 	    break;
 	} else if( currentChar().isSpace() ){
@@ -396,7 +397,7 @@ void Lexer::processDefine( Macro& m )
 	    body += " ";
 	} else if( currentChar() == '\\' ){
 	    nextChar();
-	    readWhiteSpaces();
+	    readWhiteSpaces( false );
 	    if( currentChar() == '\n' ){
 		nextChar();
 	    }
