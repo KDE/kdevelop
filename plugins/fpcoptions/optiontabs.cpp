@@ -11,6 +11,8 @@
 #include <kdialog.h>
 #include <klocale.h>
 
+#include <qspinbox.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qvbuttongroup.h>
 #include <qapplication.h>
@@ -136,20 +138,19 @@ FilesAndDirectoriesTab2::FilesAndDirectoriesTab2( QWidget * parent, const char *
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
 
-    new FlagCheckBox(this, controller,
-                     "-P", i18n("Use pipes instead of files when assembling."));
+    new FlagPathEdit(this, "", pathController,
+                     "-FE", i18n("Write executables and units in:"));
+    new FlagPathEdit(this, "", pathController,
+                     "-FU", i18n("Write units in:"));
+    new FlagPathEdit(this, "", pathController,
+                     "-o", i18n("Executable name:"), KFile::File);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
-    layout->addSpacing(10);
+    layout->addSpacing(20);
 
     new FlagPathEdit(this, "", pathController,
                      "-e", i18n("Location of as and ld programs:"));
     new FlagPathEdit(this, "", pathController,
                      "-FL", i18n("Dynamic linker executable:"), KFile::File);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
-    layout->addSpacing(20);
-
-    new FlagPathEdit(this, "", pathController,
-                     "-FU", i18n("Write units in:"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(20);
 
@@ -275,6 +276,8 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
 
 
     QVButtonGroup *asm_group = new QVButtonGroup(i18n("Assembler Output"), this);
+    new FlagCheckBox(asm_group, controller,
+                     "-P", i18n("Use pipes instead of files when assembling."));
     QRadioButton *m_default = new QRadioButton(i18n("Use Default Output"), asm_group);
     m_default->setChecked(true);
     new FlagRadioButton(asm_group, asmController,
@@ -336,6 +339,8 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
                      "-g", i18n("Generate information for GDB."), "-!g");
     new FlagCheckBox(debug_group, controller,
                      "-gd", i18n("Generate information for DBX."), "-!gd");
+    new FlagCheckBox(debug_group, controller,
+                     "-gl", i18n("Use lineinfo unit."), "-!gl");
     new FlagCheckBox(debug_group, controller,
                      "-gh", i18n("Use heaptrc unit."), "-!gh");
     new FlagCheckBox(debug_group, controller,
@@ -432,7 +437,7 @@ void DebugOptimTab::setReleaseOptions()
     m_default->setChecked(true);
     m_default2->setChecked(true);
 //    m_default3->setChecked(true);
-    QStringList sl = QStringList::split(",", "-!g,-!gd,-!gh,-!gc,-!pg,-!Ou,-!Or");
+    QStringList sl = QStringList::split(",", "-!g,-!gd,-!gl,-!gh,-!gc,-!pg,-!Ou,-!Or");
     readFlags(&sl);
     optim1->setChecked(true);
     optim2->setChecked(true);
@@ -440,7 +445,7 @@ void DebugOptimTab::setReleaseOptions()
 
 void DebugOptimTab::setDebugOptions()
 {
-    QStringList sl = QStringList::split(",", "-g,-!gd,-gh,-gc,-!pg,-!Ou,-!Or");
+    QStringList sl = QStringList::split(",", "-g,-!gd,-gl,-gh,-gc,-!pg,-!Ou,-!Or");
     readFlags(&sl);
     m_default->setChecked(true);
     m_default2->setChecked(true);
@@ -449,7 +454,7 @@ void DebugOptimTab::setDebugOptions()
 
 CodegenTab::CodegenTab( QWidget * parent, const char * name )
     : QWidget(parent, name), controller(new FlagCheckBoxController()),
-    listController(new FlagListEditController())
+    listController(new FlagEditController())
 {
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
@@ -479,6 +484,13 @@ CodegenTab::CodegenTab( QWidget * parent, const char * name )
 
     new FlagListEdit(this, ":", listController, "-u", i18n("Undefine conditional defines (delimited by \":\"):"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    new FlagSpinEdit(this, 1024, 67107840, 1, 131072, listController,
+                    "-Cs", i18n("Stack size:"));
+    new FlagSpinEdit(this, 1024, 67107840, 1, 2097152, listController,
+                    "-Ch", i18n("Heap size:"));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
     layout->addStretch();
 }
@@ -503,7 +515,7 @@ void CodegenTab::writeFlags( QStringList * str )
 
 LinkerTab::LinkerTab( QWidget * parent, const char * name )
     : QWidget(parent, name), controller(new FlagCheckBoxController()),
-    listController(new FlagListEditController())
+    listController(new FlagEditController())
 {
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
@@ -561,4 +573,81 @@ void LinkerTab::writeFlags( QStringList * str )
 {
     controller->writeFlags(str);
     listController->writeFlags(str);
+}
+
+MiscTab::MiscTab( QWidget * parent, const char * name )
+    : QWidget(parent, name), controller(new FlagCheckBoxController()),
+    radioController(new FlagRadioButtonController()),
+    pathController(new FlagPathEditController()),
+    editController(new FlagEditController())
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+    layout->setAutoAdd(true);
+
+    new FlagCheckBox(this, controller,
+                     "-B", i18n("Recompile all used units."));
+    new FlagCheckBox(this, controller,
+                     "-n", i18n("Do not read default configuration file."));
+    new FlagPathEdit(this, "", pathController,
+                     "@", i18n("Compiler configuration file:"), KFile::File);
+    new FlagSpinEdit(this, 1, 1000, 1, 50, editController,
+                    "-Se", i18n("Stop after the error:"));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    QVButtonGroup *browser_group = new QVButtonGroup(i18n("Browser info"), this);
+    QRadioButton *m_defaultBrowser = new QRadioButton(i18n("No browser info"), browser_group);
+    m_defaultBrowser->setChecked(true);
+    new FlagRadioButton(browser_group, radioController,
+                     "-b", i18n("Global browser info"));
+    new FlagRadioButton(browser_group, radioController,
+                     "-bl", i18n("Global and local browser info"));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    QVButtonGroup *target_group = new QVButtonGroup(i18n("Target OS"), this);
+    QRadioButton *m_defaultTarget = new QRadioButton(i18n("Default"), target_group);
+    m_defaultTarget->setChecked(true);
+    new FlagRadioButton(target_group, radioController,
+                     "-TGO32V1", i18n("DOS and version 1 of the DJ DELORIE extender"));
+    new FlagRadioButton(target_group, radioController,
+                     "-TGO32V2", i18n("DOS and version 2 of the DJ DELORIE extender"));
+    new FlagRadioButton(target_group, radioController,
+                     "-TLINUX",  i18n("Linux"));
+    new FlagRadioButton(target_group, radioController,
+                     "-TOS2", i18n("OS/2 (2.x) using the EMX extender"));
+    new FlagRadioButton(target_group, radioController,
+                     "-TWIN32", i18n("WINDOWS 32 bit"));
+    new FlagRadioButton(target_group, radioController,
+                     "-TSUNOS", i18n("SunOS/Solaris"));
+    new FlagRadioButton(target_group, radioController,
+                     "-TBEOS", i18n("BeOS"));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    layout->addStretch();
+}
+
+MiscTab::~ MiscTab( )
+{
+    delete controller;
+    delete pathController;
+    delete radioController;
+    delete editController;
+}
+
+void MiscTab::readFlags( QStringList * str )
+{
+    controller->readFlags(str);
+    radioController->readFlags(str);
+    pathController->readFlags(str);
+    editController->readFlags(str);
+}
+
+void MiscTab::writeFlags( QStringList * str )
+{
+    controller->writeFlags(str);
+    radioController->writeFlags(str);
+    pathController->writeFlags(str);
+    editController->writeFlags(str);
 }

@@ -13,12 +13,13 @@
 
 #include <qwidget.h>
 
+class QSpinBox;
 class QRadioButton;
 class FlagRadioButton;
 class FlagCheckBoxController;
 class FlagRadioButtonController;
 class FlagPathEditController;
-class FlagListEditController;
+class FlagEditController;
 
 class FeedbackTab : public QWidget
 {
@@ -124,7 +125,7 @@ public:
 
 private:
     FlagCheckBoxController *controller;
-    FlagListEditController *listController;
+    FlagEditController *listController;
 };
 
 class LinkerTab : public QWidget
@@ -138,7 +139,23 @@ public:
 
 private:
     FlagCheckBoxController *controller;
-    FlagListEditController *listController;
+    FlagEditController *listController;
+};
+
+class MiscTab : public QWidget
+{
+public:
+    MiscTab( QWidget *parent=0, const char *name=0 );
+    ~MiscTab();
+
+    void readFlags(QStringList *str);
+    void writeFlags(QStringList *str);
+
+private:
+    FlagCheckBoxController *controller;
+    FlagRadioButtonController *radioController;
+    FlagPathEditController *pathController;
+    FlagEditController *editController;
 };
 
 #endif

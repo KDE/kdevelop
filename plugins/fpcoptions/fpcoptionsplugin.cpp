@@ -47,10 +47,10 @@ FpcOptionsDialog::FpcOptionsDialog( QWidget *parent, const char *name )
     vbox = addVBoxPage(i18n("Language"));
     language = new LanguageTab(vbox, "language tab");
 
-    vbox = addVBoxPage(i18n("Directories I"));
+    vbox = addVBoxPage(i18n("Locations I"));
     directories = new FilesAndDirectoriesTab(vbox, "directories tab");
 
-    vbox = addVBoxPage(i18n("Directories II"));
+    vbox = addVBoxPage(i18n("Locations II"));
     directories2 = new FilesAndDirectoriesTab2(vbox, "directories2 tab");
 
     vbox = addVBoxPage(i18n("Debug and Optimization"));
@@ -67,6 +67,9 @@ FpcOptionsDialog::FpcOptionsDialog( QWidget *parent, const char *name )
 
     vbox = addVBoxPage(i18n("Feedback"));
     feedback = new FeedbackTab(vbox, "feedback tab");
+
+    vbox = addVBoxPage(i18n("Miscellaneous"));
+    misc = new MiscTab(vbox, "miscellaneous tab");
 }
 
 FpcOptionsDialog::~FpcOptionsDialog()
@@ -85,6 +88,7 @@ void FpcOptionsDialog::setFlags(const QString &flags)
     debug_optim->readFlags(&flaglist);
     directories->readFlags(&flaglist);
     directories2->readFlags(&flaglist);
+    misc->readFlags(&flaglist);
     unrecognizedFlags = flaglist;
 }
 
@@ -100,6 +104,7 @@ QString FpcOptionsDialog::flags() const
     assembler->writeFlags(&flaglist);
     linker->writeFlags(&flaglist);
     feedback->writeFlags(&flaglist);
+    misc->writeFlags(&flaglist);
 
     QString flags;
     QStringList::ConstIterator li;

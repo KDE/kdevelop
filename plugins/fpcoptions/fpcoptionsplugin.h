@@ -56,6 +56,7 @@ private:
     CodegenTab *codegen;
     AssemblerTab *assembler;
     LinkerTab *linker;
+    MiscTab *misc;
     QStringList unrecognizedFlags;
 };
 
