@@ -7,7 +7,7 @@ Category=C++/KDE
 Comment=Generates a simple KDE application with one toplevel window, menus and toolbars. A DCOP interface is also provided, so that your application can provide a scripting interface
 Comment[fr]=Génère une simple application KDE avec une fenêtre principale, des menus, et des barres d'outils. Une interface DCOP est aussi disponible et l'application peut être facilement contrôlée par des scripts.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/APPNAMELCview.cpp
+ShowFilesAfterGeneration=src/APPNAMELCview.cpp,src/README
 Archive=kapp.tar.gz
 
 [ADMIN]
@@ -25,18 +25,11 @@ Dir=%{dest}/doc
 [MKDIR_DOCBOOK2]
 Type=mkdir
 Dir=%{dest}/doc/en
-[MkDir1]
-Type=mkdir
-Dir=%{dest}/doc
 
 [FILE1]
 Type=install
 Source=%{kdevelop}/template-common/kde-doc-Makefile.am
 Dest=%{dest}/doc/Makefile.am
-
-[MkDir2]
-Type=mkdir
-Dir=%{dest}/doc/en
 
 [FILE2]
 Type=install
@@ -167,3 +160,6 @@ Type=install
 Source=%{src}/README
 Dest=%{dest}/src/README
 
+[MSG]
+Type=message
+Comment=A KDE Appication was created at %{dest}

@@ -74,3 +74,6 @@ Type=install
 Source=%{src}/README.dox
 Dest=%{dest}/src/README.dox
 
+[MSG]
+Type=message
+Comment=A language plugin for KDevelop for standalone build was created in %{dest}

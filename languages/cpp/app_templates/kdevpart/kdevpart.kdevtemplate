@@ -54,3 +54,6 @@ Type=install
 Source=%{src}/README.dox
 Dest=%{dest}/README.dox
 
+[MSG]
+Type=message
+Comment=A KDevelop part was created in %{dest}

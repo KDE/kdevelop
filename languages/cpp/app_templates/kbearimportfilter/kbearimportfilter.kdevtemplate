@@ -65,3 +65,6 @@ Type=install
 Source=%{src}/kbearimportfilter.desktop
 Dest=%{dest}/src/kbear%{APPNAMELC}importfilter.desktop
 
+[MSG]
+Type=message
+Comment=An import filter for KBear was created in %{dest}

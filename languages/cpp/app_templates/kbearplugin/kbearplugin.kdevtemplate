@@ -104,3 +104,6 @@ Type=install
 Source=%{src}/hi32-action-plugin.png
 Dest=%{dest}/src/hi32-action-kbear%{APPNAMELC}.png
 
+[MSG]
+Type=message
+Comment=A plugin for KBear was created in %{dest}
