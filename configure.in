@@ -75,6 +75,7 @@ kdevelop/plugin/projectmanagement/kdesdi_appwizard/Makefile \
 kdevelop/plugin/projectmanagement/kdesdi_appwizard/res/Makefile \
 kdevelop/plugin/projectmanagement/kdebinary_project/Makefile \
 kdevelop/parts/Makefile \
+kdevelop/parts/dbg/Makefile \
 kdevelop/parts/grepview/Makefile \
 kdevelop/parts/doctreeview/Makefile \
 kdevelop/parts/classview/Makefile \
