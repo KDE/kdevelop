@@ -1,5 +1,5 @@
 /***************************************************************************
-                          ParsedItem.cc  -  description
+                          classtreenode.cpp  -  description
                              -------------------
     begin                : Sun May 16 1999
     copyright            : (C) 1999 by Jonas Nordin

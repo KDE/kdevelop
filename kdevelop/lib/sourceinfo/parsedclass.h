@@ -1,5 +1,5 @@
 /***************************************************************************
-                          ParsedStruct.h  -  description
+                          parsedstruct.h  -  description
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin

@@ -1,5 +1,5 @@
 /***************************************************************************
-                 ParsedClassContainer.cc  -  implementation
+                 parsedclasscontainer.cpp  -  implementation
                              -------------------
     begin                : Tue Aug 27 1999
     copyright            : (C) 1999 by Jonas Nordin
