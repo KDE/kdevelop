@@ -43,7 +43,7 @@ KDevCustomImporter::KDevCustomImporter(QObject *parent, const char *name, const 
     
     QDomDocument &dom = *project()->projectDom();
     includes = DomUtil::readListEntry(dom, customImporter, "include");
-    excludes = DomUtil::readListEntry(dom, customImporter, "include");
+    excludes = DomUtil::readListEntry(dom, customImporter, "exclude");
     
     if (includes.isEmpty())
         includes << "*.h" << "*.cpp" << "*.c";   // ### remove me
