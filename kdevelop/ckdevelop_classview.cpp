@@ -26,8 +26,8 @@
 #include "classparser/ProgrammingByContract.h"
 #include "docviewman.h"
 
-#include <../../kate-cvs/interfaces/document.h>
-#include <../../kate-cvs/interfaces/view.h>
+#include <kate/document.h>
+#include <kate/view.h>
 
 #include <qlistbox.h>
 #include <kcombobox.h>
@@ -329,7 +329,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
   // Add the declaration.
   Kate::View* pView = m_docViewManager->currentEditView();
   Kate::Document* pDoc = pView->getDoc();
-  pDoc->insertLine( toAdd, atLine );
+  pDoc->insertLine(atLine,toAdd);
   pView->setCursorPosition( atLine, 0 );
   pDoc->setModified( true );
 
@@ -357,8 +357,8 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
 
     Kate::View* pView = m_docViewManager->currentEditView();
     Kate::Document* pDoc = pView->getDoc();
-    pDoc->insertLine( toAdd, -1 );
-    pView->setCursorPosition( pView->numLines()-1 , 0 );
+    pDoc->insertLine( -1 , toAdd );
+    pView->setCursorPosition( pDoc->numLines()-1 , 0 );
     pDoc->setModified( true );
   }
 }
@@ -441,7 +441,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   // Add the code to the file.
   Kate::View* pView = m_docViewManager->currentEditView();
   Kate::Document* pDoc = pView->getDoc();
-  pDoc->insertLine( toAdd, atLine );
+  pDoc->insertLine( atLine , toAdd );
   pView->setCursorPosition( atLine, 0 );
 
   // Delete the genererated attribute
@@ -523,7 +523,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
   // Add the code to the file.
   Kate::View* pView = m_docViewManager->currentEditView();
   Kate::Document* pDoc = pView->getDoc();
-  pDoc->insertLine( toAdd, atLine );
+  pDoc->insertLine( atLine , toAdd );
   pView->setCursorPosition( atLine, 0 );
   slotFileSave();
   if( !aAttr -> isStatic )
@@ -561,7 +561,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
         Line -= 1;
         switchToFile( File, Line );
         toAdd = aAttr -> type + " " + aClass -> name + "::" + aAttr -> name + ";\n";
-        pDoc->insertLine( toAdd, atLine );
+        pDoc->insertLine( atLine , toAdd );
         pView->setCursorPosition( atLine, 0 );
     }
   }
@@ -584,7 +584,7 @@ void CKDevelop::slotCVSigSlotMapImplement ( CParsedClass* aClass, const QString&
     switchToFile ( aClass -> definedInFile );
     Kate::View* pView = m_docViewManager->currentEditView();
     Kate::Document* pDoc = pView->getDoc();
-    pDoc->insertLine( toAdd, atLine );
+    pDoc->insertLine( atLine , toAdd );
     pView->setCursorPosition( atLine, 0 );
     slotFileSave();
 }
@@ -647,7 +647,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
           for( line = aMethod->definedOnLine; 
                line <= aMethod->definitionEndsOnLine;
                line++ )
-            pDoc->insertLine( i18n("//Del by KDevelop: "), line );
+            pDoc->insertLine( line , i18n("//Del by KDevelop: ") );
         }
       }
     }

@@ -34,8 +34,8 @@
 #include "ckonsolewidget.h"
 #include "docviewman.h"
 //#include "kwdoc.h"
-#include <../../kate-cvs/interfaces/document.h>
-#include <../../kate-cvs/interfaces/view.h>
+#include <kate/document.h>
+#include <kate/view.h>
 
 
 #include "coutputwidget.h"
@@ -207,7 +207,8 @@ bool CKDevelop::isProjectDirty()
 void CKDevelop::setMainCaption(int item)
 {
   QString capt=QString::null;
-  Kate::View* pCEW = m_docViewManager->currentEditView();
+//  Kate::View* pCEW = m_docViewManager->currentEditView();
+  Kate::Document* pDoc = m_docViewManager->currentEditDoc();
   switch(item)
   {
   case BROWSER:
@@ -217,18 +218,18 @@ void CKDevelop::setMainCaption(int item)
       if (pCurBrowserDoc) {
         setCaption(pCurBrowserDoc->currentTitle());
         QextMdiChildView* pMDICover = (QextMdiChildView*) pCurBrowserView->parentWidget();
-	if (pMDICover) {
+        if (pMDICover) {
           pMDICover->setCaption(pCurBrowserDoc->currentURL());
           pMDICover->setTabCaption(pCurBrowserDoc->currentTitle());
-	}
+        }
       }
     }
     break;
 
   default:
-    if (pCEW) {
+    if (pDoc) {
       //capt = QFileInfo(pCEW->getName()).fileName();
-      QString name=pCEW->getDoc()->docName();
+      QString name=pDoc->docName();
       int len=name.length();
       int ip=name.findRev("/",-1);
       capt = name.right(len-ip-1);
@@ -236,7 +237,7 @@ void CKDevelop::setMainCaption(int item)
     if (prj && capt.isNull()) {
       capt = prj->getProjectName();
     }
-    if (pCEW && pCEW->isModified())
+    if (pDoc && pDoc->isModified())
     {
       enableCommand(ID_FILE_SAVE);
       setCaption(capt,true);
@@ -355,7 +356,7 @@ bool CKDevelop::fileSaveAs(){
     // here we are ... saving the file with the same name
     //   so only the modified-flags have to be changed
     pActualDoc->setModified(false);
-    m_docViewManager->currentEditView()->setModified(false);
+    //m_docViewManager->currentEditView()->setModified(false);
   }
   else {
     // now open this file as new file in edit_infos
