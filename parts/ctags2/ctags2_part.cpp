@@ -60,11 +60,14 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin(&data, parent, name ? name : "ctags2Part" )
 {
 	setInstance(CTags2Factory::instance());
-//	setXMLFile("kdevpart_ctags2.rc");
+	setXMLFile("kdevpart_ctags2.rc");
 
 	QDomDocument & dom = *projectDom();
 	QString tagsfile = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" );
-	if ( tagsfile.isEmpty() ) tagsfile =  project()->projectDirectory() + "/tags";
+	if ( tagsfile.isEmpty() ) 
+	{
+		tagsfile =  project()->projectDirectory() + "/tags";
+	}
 	Tags::setTagsFile( tagsfile );
 
 	m_widget = new CTags2Widget(this);
@@ -81,18 +84,15 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 	new KAction( i18n("Lookup current text"), 0, 0, this, SLOT(slotLookup()), actionCollection(), "ctags_lookup_shortcut");
-	new KAction( i18n("Lookup current text as type"), 0, 0, this, SLOT(slotLookupType()), actionCollection(), "ctags_type_shortcut");
 	new KAction( i18n("Lookup current text as declaration"), 0, 0, this, SLOT(slotLookupDeclaration()), actionCollection(), "ctags_declaration_shortcut");
 	new KAction( i18n("Lookup current text as definition"), 0, 0, this, SLOT(slotLookupDefinition()), actionCollection(), "ctags_definition_shortcut");
+	new KAction( i18n("Jump to next match"), 0, 0, this, SLOT(slotGoToNext()), actionCollection(), "ctags_jump_to_next");
 	new KAction( i18n("Open lookup dialog"), 0, 0, this, SLOT(slotOpenLookup()), actionCollection(), "ctags_input_shortcut");
-
 }
 
 
 CTags2Part::~CTags2Part()
 {
-	kdDebug() << "Bye from CTags2Part!" << endl;
-
 	if ( m_widget )
 	{
 		mainWindow()->removeView( m_widget );
@@ -103,8 +103,6 @@ CTags2Part::~CTags2Part()
 
 void CTags2Part::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
-	kdDebug() << k_funcinfo << endl;
-
 	if ( pagenumber == CTAGSSETTINGSPAGE )
 	{
 		CTags2SettingsWidget * w = new CTags2SettingsWidget( this, page );
@@ -162,27 +160,24 @@ void CTags2Part::contextMenu(QPopupMenu *popup, const Context *context)
 	if (ident.isEmpty())
 		return;
 
-	QDomDocument & dom = *project()->projectDom();
-	bool showType = DomUtil::readBoolEntry( dom, "/ctagspart/showType", true );
-	bool showDefinition = DomUtil::readBoolEntry( dom, "/ctagspart/showDefinition", true );
-	bool showDeclaration = DomUtil::readBoolEntry( dom, "/ctagspart/showDeclaration", true );
-	bool showLookup = DomUtil::readBoolEntry( dom, "/ctagspart/showLookup", true );
-	
-	if ( Tags::hasTag( ident ) && ( showDefinition || showDeclaration || showLookup || showType ) )
+	KConfig * config = kapp->config();
+	config->setGroup( "CTAGS" );
+	bool showDeclaration = config->readBoolEntry( "ShowDeclaration", true );
+	bool showDefinition = config->readBoolEntry( "ShowDefinition", true );
+	bool showLookup = config->readBoolEntry( "ShowLookup", true );
+		
+	if ( Tags::hasTag( ident ) && ( showDefinition || showDeclaration || showLookup  ) )
 	{
 		m_contextString = ident;
 	    QString squeezed = KStringHandler::csqueeze(ident, 30);
 
 		popup->insertSeparator();
 		
-		if ( showType )
-			popup->insertItem( i18n("CTags - Goto Type: %1").arg(squeezed), this, SLOT(slotGotoType()) );
-			
 		if ( showDeclaration )
-			popup->insertItem( i18n("CTags - Goto Declaration: %1").arg(squeezed), this, SLOT(slotGotoDeclaration()) );
+			popup->insertItem( i18n("CTags - Go To Declaration: %1").arg(squeezed), this, SLOT(slotGotoDeclaration()) );
 			
 		if ( showDefinition )
-			popup->insertItem( i18n("CTags - Goto Definition: %1").arg(squeezed), this, SLOT(slotGotoDefinition()) );
+			popup->insertItem( i18n("CTags - Go To Definition: %1").arg(squeezed), this, SLOT(slotGotoDefinition()) );
 			
 		if ( showLookup )
 			popup->insertItem( i18n("CTags - Lookup: %1").arg(squeezed), this, SLOT(slotGotoTag()) );
@@ -206,37 +201,37 @@ void CTags2Part::gotoTagForTypes( QStringList const & types )
 {
 	Tags::TagList list = Tags::getMatches( m_contextString, false, types );
 	
-	if ( list.count() == 1 )
+	if ( list.count() < 1 ) return;
+	
+	KConfig * config = kapp->config();
+	config->setGroup("CTAGS");
+	bool jumpToFirst = config->readBoolEntry( "JumpToFirst", false );
+	
+	if ( list.count() == 1 || jumpToFirst )
 	{
 		Tags::TagEntry tag = list.first();
 		KURL url;
 		url.setPath( project()->projectDirectory() + "/" + tag.file );
 		partController()->editDocument( url, getFileLineFromPattern( url, tag.pattern ) );
+		m_widget->displayHitsAndClear( list );
 	}
-	else if ( list.count() > 1 )
+	else 
 	{
 		showHits( list );
 	}
 }
 
-void CTags2Part::slotGotoType( )
-{
-	QStringList types;
-	types << "c" << "e" << "n" << "t" << "u";
-	gotoTagForTypes( types );
-}
-
 void CTags2Part::slotGotoDefinition( )
 {
 	QStringList types;
-	types << "f";
+	types << "S" << "d" << "f" << "t" << "v";
 	gotoTagForTypes( types );
 }
 
 void CTags2Part::slotGotoDeclaration( )
 {
 	QStringList types;
-	types << "p";
+	types << "L" << "c" << "e" << "g" << "m" << "n" << "p" << "s" << "u" << "x";
 	gotoTagForTypes( types );
 }
 
@@ -247,11 +242,7 @@ int CTags2Part::getFileLineFromStream( QTextStream & istream, QString const & pa
 	QString reduced = pattern.mid( 2, pattern.length() -4 );
 	QString escaped = QRegExp::escape( reduced );
 	QString re_string( "^" + escaped + "$" );
-/*
-	kdDebug() << "pattern: " << pattern << endl;
-	kdDebug() << "escaped: " << escaped << endl;
-	kdDebug() << "re_string: " << re_string << endl;
-*/
+	
 	QRegExp re( re_string );
 
 	int n = 0;
@@ -271,16 +262,12 @@ int CTags2Part::getFileLineFromPattern( KURL const & url, QString const & patter
 	// if the file is open - get the line from the editor buffer
 	if ( KTextEditor::EditInterface * ei = dynamic_cast<KTextEditor::EditInterface*>( partController()->partForURL( url ) ) )
 	{
-		kdDebug() << "the file is open - get the line from the editor buffer" << endl;
-
 		QString ibuffer = ei->text();
 		QTextStream istream( &ibuffer, IO_ReadOnly );
 		return getFileLineFromStream( istream, pattern );
 	}
 	else // else the file is not open - get the line from the file on disk
 	{
-		kdDebug() << "the file is not open - get the line from the file on disk" << endl;
-
 		QFile file( url.path() );
 		QString buffer;
 
@@ -291,15 +278,6 @@ int CTags2Part::getFileLineFromPattern( KURL const & url, QString const & patter
 		}
 	}
 	return -1;
-}
-
-void CTags2Part::slotLookupType( )
-{
-	m_contextString = currentWord();
-	if ( !m_contextString.isEmpty() )
-	{
-		slotGotoType();
-	}
 }
 
 void CTags2Part::slotLookupDeclaration( )
@@ -333,6 +311,11 @@ void CTags2Part::slotOpenLookup( )
 {
 	mainWindow()->raiseView( m_widget );
 	m_widget->input_edit->setFocus();
+}
+
+void CTags2Part::slotGoToNext( )
+{
+	m_widget->goToNext();
 }
 
 QString CTags2Part::currentWord( )

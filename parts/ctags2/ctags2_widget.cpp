@@ -114,8 +114,6 @@ void CTags2Widget::itemExecuted( QListViewItem * item )
 
 void CTags2Widget::regeneratebutton_clicked()
 {
-	kdDebug() << k_funcinfo << endl;
-
 	QApplication::setOverrideCursor(Qt::waitCursor);
 
 	_part->createTagsFile();
@@ -138,15 +136,42 @@ void CTags2Widget::updateDBDateLabel( )
 	}
 }
 
-void CTags2Widget::focusInEvent( QFocusEvent * /*e*/ )
+void CTags2Widget::focusInEvent( QFocusEvent* )
 {
 	updateDBDateLabel();
-	
 	input_edit->setFocus();
-/*	QFocusData *fd = focusData();
-	QWidget *next = fd->next();
-	if (next)
-		next->setFocus();*/
+}
+
+void CTags2Widget::goToNext( )
+{
+	QListViewItem * item = output_view->firstChild();
+	while( item )
+	{
+		if ( item->isSelected() )
+		{
+			// found the current, take the next
+			item->setSelected( false );
+			if ( item = item->nextSibling() )
+			{
+				item->setSelected( true );
+				output_view->repaint( true );
+				itemExecuted( item );
+				return;
+			}
+			else
+			{
+				break;
+			}
+		}
+		item = item->nextSibling();
+	}
+	
+	// use the first
+	if ( item = output_view->firstChild() )
+	{
+		item->setSelected( true );
+		itemExecuted( item );
+	}
 }
 
 #include "ctags2_widget.moc"

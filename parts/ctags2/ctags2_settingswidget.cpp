@@ -45,32 +45,30 @@ CTags2SettingsWidget::~CTags2SettingsWidget()
 void CTags2SettingsWidget::loadSettings()
 {
 	QDomDocument & dom = *m_part->projectDom();
-	showTypeBox->setChecked( DomUtil::readBoolEntry( dom, "/ctagspart/showType", true ) );
-	showDefinitionBox->setChecked( DomUtil::readBoolEntry( dom, "/ctagspart/showDefinition", true ) );
-	showDeclarationBox->setChecked( DomUtil::readBoolEntry( dom, "/ctagspart/showDeclaration", true ) );
-	showLookupBox->setChecked( DomUtil::readBoolEntry( dom, "/ctagspart/showLookup", true ) );
-	tagfileDefault->setChecked( DomUtil::readBoolEntry( dom, "/ctagspart/tagfileDefault", true ) );
 	tagfileCustomEdit->setText( DomUtil::readEntry( dom, "/ctagspart/customArguments" ) );
 	tagfilePath->setURL( DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" ) );
 	
 	KConfig * config = kapp->config();
 	config->setGroup( "CTAGS" );
+	showDeclarationBox->setChecked( config->readBoolEntry( "ShowDeclaration", true ) );
+	showDefinitionBox->setChecked( config->readBoolEntry( "ShowDefinition", true ) );
+	showLookupBox->setChecked( config->readBoolEntry( "ShowLookup", true ) );
+	jumpToFirstBox->setChecked( config->readBoolEntry( "JumpToFirst", false ) );
 	binaryPath->setURL( config->readEntry( "ctags binary" ) );
 }
 
 void CTags2SettingsWidget::storeSettings()
 {
 	QDomDocument & dom = *m_part->projectDom();
-	DomUtil::writeBoolEntry( dom, "/ctagspart/showType", showTypeBox->isChecked() );
-	DomUtil::writeBoolEntry( dom, "/ctagspart/showDefinition", showDefinitionBox->isChecked() );
-	DomUtil::writeBoolEntry( dom, "/ctagspart/showDeclaration", showDeclarationBox->isChecked() );
-	DomUtil::writeBoolEntry( dom, "/ctagspart/showLookup", showLookupBox->isChecked() );
-	DomUtil::writeBoolEntry( dom, "/ctagspart/tagfileDefault", tagfileDefault->isChecked() );
 	DomUtil::writeEntry( dom, "/ctagspart/customArguments", tagfileCustomEdit->text() );
 	DomUtil::writeEntry( dom, "/ctagspart/customTagfilePath", tagfilePath->url() );
 	
 	KConfig * config = kapp->config();
 	config->setGroup( "CTAGS" );
+	config->writeEntry( "ShowDeclaration", showDeclarationBox->isChecked() );
+	config->writeEntry( "ShowDefinition", showDefinitionBox->isChecked() );
+	config->writeEntry( "ShowLookup", showLookupBox->isChecked() );
+	config->writeEntry( "JumpToFirst", jumpToFirstBox->isChecked() );
 	config->writeEntry( "ctags binary", binaryPath->url() );
 	
 	emit newTagsfileName( tagfilePath->url() );

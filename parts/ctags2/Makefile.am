@@ -14,7 +14,7 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevctags2.desktop
 
-#rc_DATA = kdevpart_ctags2.rc
+rc_DATA = kdevpart_ctags2.rc
 rcdir = $(kde_datadir)/kdevctags2
 
 noinst_HEADERS = ctags2_widget.h tags.h readtags.h ctagskinds.h \

@@ -39,12 +39,11 @@ public:
 	bool createTagsFile();
 
 private slots:
-	void slotLookupType();
 	void slotLookupDeclaration();
 	void slotLookupDefinition();
 	void slotLookup();
 	void slotOpenLookup();
-	void slotGotoType();
+	void slotGoToNext();
 	void slotGotoDefinition();
 	void slotGotoDeclaration();
 	void slotGotoTag();

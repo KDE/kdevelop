@@ -1,0 +1,3 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="ctags" library="libctagsplugin" version="1">
+</kpartplugin>

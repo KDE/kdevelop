@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>466</width>
-            <height>499</height>
+            <width>373</width>
+            <height>408</height>
         </rect>
     </property>
     <property name="caption">
@@ -32,35 +32,24 @@
                 </property>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>showDefinitionBox</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Show "Goto Definition"</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>If checked, an option to go directly to the matching tag definition will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
                         <cstring>showDeclarationBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Show "Goto Declaration"</string>
+                        <string>Show "Go To Declaration"</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>If checked, an option to go directly to the matching tag definition will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
+                        <string>If checked, an option to go directly to the matching tag declaration will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>showTypeBox</cstring>
+                        <cstring>showDefinitionBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Show "Goto Type"</string>
+                        <string>Show "Go To Definition"</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>If checked, an option to go directly to the matching type tag will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
+                        <string>If checked, an option to go directly to the matching tag definition will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -68,45 +57,45 @@
                         <cstring>showLookupBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Show generic "CTags Lookup"</string>
+                        <string>Show "CTags Lookup"</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>If checked, an option to do a full lookup of all mathing tags shown.</string>
+                        <string>If checked, an option to do a full lookup of all macthing tags is shown in the context menu. The results will be shown in the main ctags results view.</string>
                     </property>
                 </widget>
             </vbox>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>buttonGroup2</cstring>
+                <cstring>groupBox3_2</cstring>
             </property>
             <property name="title">
-                <string>Tagfile Generation Arguments</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>The &lt;i&gt;Default&lt;/i&gt; setting should be fine, but if needed, custom arguments can be given to the tag generation process.</string>
+                <string>Options</string>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QRadioButton">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>tagfileDefault</cstring>
+                        <cstring>jumpToFirstBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Default</string>
+                        <string>When more than one hit, go directly to the first</string>
                     </property>
-                    <property name="checked">
-                        <bool>true</bool>
+                    <property name="whatsThis" stdset="0">
+                        <string>If more than one hit was produced from an attempt to find an exact match, go to the first match in the list. Note: the &lt;i&gt;Go To Next Match&lt;/i&gt; shortcut can be used to step between the matches.</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>tagfileCustom</cstring>
+                        <cstring>checkBox5</cstring>
                     </property>
                     <property name="text">
-                        <string>Custom</string>
+                        <string>Use custom tagfile generation arguments</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The default arguments should be fine, but if needed a custom generation arguments string can be used.</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -115,6 +104,12 @@
                     </property>
                     <property name="enabled">
                         <bool>false</bool>
+                    </property>
+                    <property name="readOnly">
+                        <bool>false</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter custom arguments to ctags database creation here. Note: do not set a custom tags file filename here, do that below instead.</string>
                     </property>
                 </widget>
             </vbox>
@@ -180,7 +175,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>40</height>
+                    <height>60</height>
                 </size>
             </property>
         </spacer>
@@ -188,10 +183,10 @@
 </widget>
 <connections>
     <connection>
-        <sender>tagfileDefault</sender>
+        <sender>checkBox5</sender>
         <signal>toggled(bool)</signal>
         <receiver>tagfileCustomEdit</receiver>
-        <slot>setDisabled(bool)</slot>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>

@@ -30,9 +30,8 @@ public:
 	void displayHits( Tags::TagList const & );
 	void displayHitsAndClear( Tags::TagList const & );
   
-	//@todo - just push the search tag into the widget lookup widget, the rest is automatic!
-	
 	void updateDBDateLabel();
+	void goToNext();
 
 protected:
 	void focusInEvent( QFocusEvent *e );
