@@ -674,9 +674,9 @@ void TrollProjectWidget::setupContext()
     projectconfButton->setEnabled(projectconfigurable);
 
     configurefileButton->setEnabled(false);
-    newfileButton->setEnabled(false);
+    newfileButton->setEnabled(true);
     removefileButton->setEnabled(false);
-    addfilesButton->setEnabled(false);
+    addfilesButton->setEnabled(true);
 
     details->setEnabled(hasSourceFiles);
 }
@@ -691,7 +691,7 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
     buildProjectDetailTree(m_shownSubproject,details);
 
     QString subProjPath = m_shownSubproject->path;
-    QString relpath = subProjPath.remove(0,projectDirectory().length());
+    QString relpath = subProjPath.remove(0,projectDirectory().length()+1);
     QDomDocument &dom = *(m_part->projectDom());
     DomUtil::writeEntry(dom, "/kdevtrollproject/general/activedir",relpath);
 
@@ -1930,14 +1930,14 @@ void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
 {
     if (!item)
     {
-        addfilesButton->setEnabled(false);
-        newfileButton->setEnabled(false);
+//        addfilesButton->setEnabled(false);
+//        newfileButton->setEnabled(false);
         removefileButton->setEnabled(false);
         configurefileButton->setEnabled(false);
         return;
     }
-    addfilesButton->setEnabled(false);
-    newfileButton->setEnabled(false);
+//    addfilesButton->setEnabled(false);
+//    newfileButton->setEnabled(false);
     removefileButton->setEnabled(false);
     configurefileButton->setEnabled(false);
 /*    buildTargetButton->setEnabled(false);

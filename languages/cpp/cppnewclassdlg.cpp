@@ -1781,16 +1781,8 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 
 	QStringList fileList;
 
-	if ( project->activeDirectory().isEmpty() )
-	{
-		fileList.append ( project->projectDirectory() + "/" + header );
-		fileList.append ( project->projectDirectory() + "/" + implementation );
-	}
-	else
-	{
-		fileList.append ( project->activeDirectory() + "/" + header );
-		fileList.append ( project->activeDirectory() + "/" + implementation );
-	}
+	fileList.append ( project->activeDirectory() + "/" + header );
+	fileList.append ( project->activeDirectory() + "/" + implementation );
 
 	project->addFiles ( fileList );
 }
