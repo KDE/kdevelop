@@ -170,6 +170,7 @@ void ProblemReporter::reparse()
     kdDebug(9007) << "ProblemReporter::reparse()" << endl;
 
     m_timer->stop();
+    
     m_cppSupport->backgroundParser()->addFile( m_filename );
 }
 

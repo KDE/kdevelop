@@ -791,8 +791,9 @@ CppCodeCompletion::completeText( )
             ctx = 0;
        }
 
-       m_pSupport->backgroundParser()->unlock();
     }
+
+    m_pSupport->backgroundParser()->unlock();
 
     if( !type.isEmpty() ){
         kdDebug(9007) << "type = " << type << endl;
