@@ -41,10 +41,14 @@
 #ifndef _PERSISTANTCLASSTORE_H_INCLUDED
 #define _PERSISTANTCLASSTORE_H_INCLUDED
 
-#include <gdbm.h>
 #include <qstring.h>
 #include "ParsedClass.h"
-/** */
+
+
+/** This class handles all persistant storage of classes,
+ * global functions and variables.
+ * @author Jonas Nordin
+ */
 class CPersistantClassStore
 {
 
@@ -56,6 +60,9 @@ public: // Constructor & Destructor
 
 public: // Public attributes
 
+  /** Path where the database files will be put. */
+  QString path;
+
   /** The filename. */
   QString filename;
 
@@ -64,11 +71,15 @@ public: // Public attributes
 
 public: // Public methods
 
-  /** Set the name of the file to read/write. */
-  void setFilename( const char *aFilename );
+  /** Set the path where the database files should be stored.
+   * @param aPath Path to the database files.
+   */
+  void setPath( const char *aPath );
 
-  /** Create a new database. */
-  bool create();
+  /** Set the name of the file to read/write. 
+   * @param aFilename Name of the database file.
+   */
+  void setFilename( const char *aFilename );
 
   /** Open the file. */
   bool open();
@@ -76,8 +87,15 @@ public: // Public methods
   /** Close the file. */
   void close();
 
-  /** Store a class in the database. */
+  /** Store a class in the database. 
+   * @param aClass The class to store in the database.
+   */
   void storeClass( CParsedClass *aClass );
+
+  /** Remove a class from the database. 
+   * @param aName Name of the class to remove.
+   */
+  void removeClass( const char *aName ) {}
 
 public: // Public queries
 
@@ -92,8 +110,11 @@ public: // Public queries
 
 private: // Private attributes
 
-  /** The physcial file. */
-  GDBM_FILE file;
+  /** The database environment. */
+  //  DbEnv env;
+
+  /** The database object. */
+  //  Db *db;
 };
 
 #endif 
