@@ -326,6 +326,8 @@ CppSupportPart::projectOpened( )
 	     this, SLOT(slotProjectCompiled()) );	     
 
     // code completion working class
+    m_projectFileList = project()->allFiles();
+    
     m_timestamp.clear();
     m_pCompletion = new CppCodeCompletion( this, classStore() );
     m_projectClosed = false;
@@ -376,7 +378,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
 
     QString popupstr = re.cap(1);
-    m_contextFileName = findHeader(project()->allFiles(), popupstr);
+    m_contextFileName = findHeader(m_projectFileList, popupstr);
     if (m_contextFileName.isEmpty())
         return;
 
@@ -423,6 +425,8 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 	partController()->editDocument ( KURL ( path ) );
     }
     
+    m_projectFileList = project()->allFiles();
+    
     emit updatedSourceInfo();
 }
 
@@ -442,6 +446,8 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 	m_backgroundParser->removeFile( path );
     }
     
+    m_projectFileList = project()->allFiles();
+    
     emit updatedSourceInfo();
 }
 
@@ -450,7 +456,7 @@ void CppSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9007) << "savedFile(): " << fileName.mid ( project()->projectDirectory().length() + 1 ) << endl;
     
-    if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
+    if (m_projectFileList.contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
 	// changed - daniel
 	maybeParse( fileName, classStore( ) );
 	emit updatedSourceInfo();
@@ -1205,7 +1211,7 @@ QStringList CppSupportPart::modifiedFileList()
 {
     QStringList lst;
     
-    QStringList fileList = project()->allFiles();
+    QStringList fileList = m_projectFileList;
     QStringList::Iterator it = fileList.begin();
     while( it != fileList.end() ){
 	QString fileName = *it;
