@@ -1,3 +1,10 @@
+1999-08-11 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* bug-fix: selecting a C-project causes a wrong app-wizard-page-title
+          i. e. "Headertemplate for .c-files" instead of "Headertemplate for .h-files"
+          and "Headertemplate for .cpp-files" instead of "Headertemplate for .c-files"
+        * an asterisk in the caption is shown, if a file of an edit-window is modified
+        * switching to Tools-Tab changes now the caption
+
 1999-08-10 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* kdevelop should now compile on gcc 2.95, thanks to Christian Kirsch <ck@held.mind.de> for the infos
 
