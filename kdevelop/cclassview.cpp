@@ -269,7 +269,7 @@ void CClassView::refresh( CProject *proj )
   src1 = proj->getSources();
   
   
-  // a really cool hack.:-) 
+  // a really cool hack.:-), unfortunaly this make the refresh a little bit slower. :-( 
   //we revert the order of the src's to get the data files (dlgs) first parsed. It's important for the addMethod dlg...
   // -Sandy
   QString filestr;
