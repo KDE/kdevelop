@@ -52,38 +52,69 @@
 #define QEXTMDI_RESIZE_BOTTOMLEFT (8|2)
 #define QEXTMDI_RESIZE_BOTTOMRIGHT (8|4)
 
-#include "closebutton.xpm"
-#include "minbutton.xpm"
-#include "maxbutton.xpm"
-#include "restorebutton.xpm"
-#include "undockbutton.xpm"
+#include "filenew.xpm"
+#ifdef WIN32
+ #include "win_closebutton.xpm"
+ #include "win_minbutton.xpm"
+ #include "win_maxbutton.xpm"
+ #include "win_restorebutton.xpm"
+ #include "win_undockbutton.xpm"
+#else // in case of UNIX: KDE look
+ #include "kde_closebutton.xpm"
+ #include "kde_minbutton.xpm"
+ #include "kde_maxbutton.xpm"
+ #include "kde_restorebutton.xpm"
+ #include "kde_undockbutton.xpm"
+#endif
 
 //============ QextMdiChildFrm ============//
 
 QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
-:QFrame(parent, "qextmdi_childfrm")
+ : QFrame(parent, "qextmdi_childfrm")
+  ,m_pClient(0)
+  ,m_resizeMode(false)
+  ,m_windowMenuID(0)
 {
-  m_pClient   = 0;
-  m_pCaption  = new QextMdiChildFrmCaption(this);
-  m_pManager  = parent;
-  
-  m_resizeMode = false;
-  
-  m_pMinimize = new QPushButton(m_pCaption, "qextmdi_pushbutton_min");
-  connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
-  m_pMaximize = new QPushButton(m_pCaption, "qextmdi_pushbutton_max");
-  connect(m_pMaximize,SIGNAL(clicked()),this,SLOT(maximizePressed()));
-  m_pClose    = new QPushButton(m_pCaption, "qextmdi_pushbutton_close");
-  connect(m_pClose,SIGNAL(clicked()),this,SLOT(closePressed()));
-  m_pUndock   = new QPushButton(m_pCaption, "qextmdi_pushbutton_undock");
-  connect(m_pUndock,SIGNAL(clicked()),this,SLOT(undockPressed()));
-  
-  m_pMinButtonPixmap = new QPixmap( minbutton);
-  m_pMaxButtonPixmap = new QPixmap( maxbutton);
-  m_pRestoreButtonPixmap = new QPixmap( restorebutton);
-  m_pCloseButtonPixmap = new QPixmap( closebutton);
-  m_pUndockButtonPixmap = new QPixmap( undockbutton);
-  
+   m_pCaption  = new QextMdiChildFrmCaption(this);
+   m_pManager  = parent;
+
+#ifdef WIN32
+	m_pIcon	   = new QPushButton(m_pCaption, "qextmdi_pushbutton_icon");
+   m_pMinimize = new QPushButton(m_pCaption, "qextmdi_pushbutton_min");
+   m_pMaximize = new QPushButton(m_pCaption, "qextmdi_pushbutton_max");
+   m_pClose    = new QPushButton(m_pCaption, "qextmdi_pushbutton_close");
+   m_pUndock   = new QPushButton(m_pCaption, "qextmdi_pushbutton_undock");
+#else	// in case of UNIX: KDE look
+   m_pIcon     = new QToolButton(m_pCaption, "qextmdi_toolbutton_icon");
+   m_pMinimize = new QToolButton(m_pCaption, "qextmdi_toolbutton_min");
+   m_pMaximize = new QToolButton(m_pCaption, "qextmdi_toolbutton_max");
+   m_pClose    = new QToolButton(m_pCaption, "qextmdi_toolbutton_close");
+   m_pUndock   = new QToolButton(m_pCaption, "qextmdi_toolbutton_undock");
+#endif
+
+   QObject::connect(m_pIcon,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+   QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+   QObject::connect(m_pMaximize,SIGNAL(clicked()),this,SLOT(maximizePressed()));
+   QObject::connect(m_pClose,SIGNAL(clicked()),this,SLOT(closePressed()));
+   QObject::connect(m_pUndock,SIGNAL(clicked()),this,SLOT(undockPressed()));
+
+   m_pIconButtonPixmap = new QPixmap( filenew);
+#ifdef WIN32
+   m_pMinButtonPixmap = new QPixmap( win_minbutton);
+   m_pMaxButtonPixmap = new QPixmap( win_maxbutton);
+   m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
+   m_pCloseButtonPixmap = new QPixmap( win_closebutton);
+   m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
+#else	// in case of UNIX: KDE look
+   m_pMinButtonPixmap = new QPixmap( kde_minbutton);
+   m_pMaxButtonPixmap = new QPixmap( kde_maxbutton);
+   m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
+   m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
+   m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
+#endif
+
+   m_pIcon->setPixmap( *m_pIconButtonPixmap);
+   m_pIcon->setFocusPolicy(NoFocus);
    m_pClose->setPixmap( *m_pCloseButtonPixmap);
    m_pClose->setFocusPolicy(NoFocus);
    m_pMinimize->setPixmap( *m_pMinButtonPixmap);
@@ -102,6 +133,9 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_iLastCursorCorner=QEXTMDI_NORESIZE;
    setMouseTracking(true);
    setMinimumSize(QSize(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH,QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT));
+
+	QObject::connect( this, SIGNAL(clickedInWindowMenu(int)),
+							m_pManager, SLOT(menuActivated(int)) );
 }
 
 //============ ~QextMdiChildFrm ============//
@@ -435,12 +469,11 @@ void QextMdiChildFrm::enableClose(bool bEnable)
 	m_pClose->repaint(false);
 }
 
-//============ setIconPointer =============//
+//============ setIcon =============//
 
-void QextMdiChildFrm::setIconPointer(QPixmap *ptr)
+void QextMdiChildFrm::setIcon(QPixmap *ptr)
 {
-	m_pCaption->m_pIcon=ptr;
-	m_pCaption->repaint(false);
+	m_pIcon->setPixmap( *ptr);
 }
 
 //============ setClient ============//
@@ -588,6 +621,7 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
    delete pFocPolDict;
 
    // reset the focus policies for the rest
+   m_pIcon->setFocusPolicy(QWidget::NoFocus);
    m_pClient->setFocusPolicy(QWidget::ClickFocus);
    m_pCaption->setFocusPolicy(QWidget::NoFocus);
    m_pUndock->setFocusPolicy(QWidget::NoFocus);
@@ -596,6 +630,7 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
    m_pClose->setFocusPolicy(QWidget::NoFocus);
 
    // install the event filter (catch mouse clicks) for the rest
+   m_pIcon->installEventFilter(this);
    m_pCaption->installEventFilter(this);
    m_pUndock->installEventFilter(this);
    m_pMinimize->installEventFilter(this);
@@ -637,6 +672,7 @@ QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
    delete list;                        // delete the list, not the objects
 
    // remove the event filter (catch mouse clicks) for the rest
+   m_pIcon->removeEventFilter(this);
    m_pCaption->removeEventFilter(this);
    m_pUndock->removeEventFilter(this);
    m_pMinimize->removeEventFilter(this);
@@ -662,10 +698,19 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
 		captionHeight
 	);
 	//The buttons are caption children
+#ifdef WIN32
+	m_pIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
 	m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
 	m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
 	m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
 	m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);   //F.B.
+#else	// in case of Unix : KDE look
+	m_pIcon->setGeometry(0,0,captionHeight,captionHeight);
+	m_pClose->setGeometry((captionWidth-captionHeight),0,captionHeight,captionHeight);
+	m_pMaximize->setGeometry((captionWidth-(captionHeight*2)),0,captionHeight,captionHeight);
+	m_pMinimize->setGeometry((captionWidth-(captionHeight*3)),0,captionHeight,captionHeight);
+	m_pUndock->setGeometry((captionWidth-(captionHeight*4)),0,captionHeight,captionHeight);   //F.B.
+#endif
 	//Resize the client
 	if(m_pClient){
 		m_pClient->setGeometry(
@@ -702,4 +747,18 @@ void QextMdiChildFrm::raiseAndActivate()
    //qDebug("ChildFrm::raiseAndActivate");
    m_pCaption->setActive(true);
    m_pManager->setTopChild(this,false); //Do not focus by now...
+}
+
+//============= slot_clickedInWindowMenu ===============//
+
+/** called if someone click on the "Window" menu item for this child frame window */
+void QextMdiChildFrm::slot_clickedInWindowMenu()
+{
+	emit clickedInWindowMenu( m_windowMenuID);
+}
+
+/** sets an ID that is submitted to QextMdiChildArea::activate( int) when the menu item for this child frame was clicked */
+void QextMdiChildFrm::setWindowMenuID( int id)
+{
+	m_windowMenuID = id;
 }
