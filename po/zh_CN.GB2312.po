@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: kdevelop1.0beta1 19990812\n"
-"POT-Creation-Date: 1999-08-31 17:06+0200\n"
-"PO-Revision-Date: 1999-08-12 20:18+CST\n"
+"Project-Id-Version: kdevelop1.2 20000414\n"
+"POT-Creation-Date: 2000-04-11 20:17+0200\n"
+"PO-Revision-Date: 2000-04-14 20:14:18+CST\n"
 "Last-Translator: Lee Song Chen <leesongchen@263.net>\n"
 "Language-Team: simplified chinese <gb2312>\n"
 "MIME-Version: 1.0\n"
@@ -91,7 +91,8 @@ msgid ""
 "\n"
 "Now KDevelop will create a new KDE-library\n"
 "documentation. For that, you need the kdelibs\n"
-"package as the source package. If you don't have\n"
+"package as the source package. In most cases it is\n"
+"included in your distribution.If you don't have\n"
 "the kdelibs as sources, we advise to obtain them\n"
 "from www.kde.org. Mind that the sources should match\n"
 "your installed kdelibs version.\n"
@@ -112,7 +113,7 @@ msgid ""
 "\n"
 "Now you can choose the Syntax-Highlighting style\n"
 "KDevelop will use. The options are to set\n"
-"the highlighting to Emacs stlye or to the default\n"
+"the highlighting to Emacs style or to the default\n"
 "settings of KWrite (k.a. 'Extended Editor')\n"
 "\n"
 "Which one do you want to use ?"
@@ -122,6 +123,13 @@ msgstr ""
 "´ıÑ¡µÄÓĞEmacs·ç¸ñºÍKWrite·ç¸ñ¡£\n"
 "\n"
 "ÄãÒªÑ¡ÔñÄÄÒ»¸ö?"
+
+msgid ""
+"\n"
+"Process will continue without deletion..."
+msgstr ""
+"\n"
+"Ã»ÓĞÉ¾³ı,¹ı³Ì½«¼ÌĞø..."
 
 msgid ""
 "\n"
@@ -220,6 +228,67 @@ msgstr ""
 "KDevelop¿ª·¢Ğ¡×é"
 
 msgid ""
+"\n"
+"doesn´t exist anymore."
+msgstr ""
+"\n"
+"²»ÔÙ´æÔÚ."
+
+msgid ""
+" \n"
+"\n"
+"\t(c) 1998,1999,2000 The KDevelop Team \n"
+"\n"
+"Sandy Meier <smeier@kdevelop.de>\n"
+"Stefan Heidrich <sheidric@rz.uni-potsdam.de>\n"
+"Ralf Nolden <rnolden@kdevelop.de>\n"
+"Jonas Nordin <jonas.nordin@cenacle.se>\n"
+"Pascal Krahmer <pascal@beast.de>\n"
+"Bernd Gehrmann <bernd@physik.hu-berlin.de>\n"
+"Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
+"Jörgen Olsson<jorgen@cenacle.net>\n"
+"Martin Piskernig <mpiskernig@kdevelop.de>\n"
+"Walter Tasin <tasin@kdevelop.de>\n"
+"John Birch <jbb@ihug.co.nz>>\n"
+"\n"
+"See The KDevelop User Manual, Chapter Authors\n"
+"for further information.\n"
+"\n"
+"This program is free software; you can\n"
+"redistribute it and/or modify it under\n"
+"the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation;\n"
+"either version 2 of the License, or (at your\n"
+"option) any later version.\n"
+"\n"
+msgstr ""
+" \n"
+"\n"
+"\t(c) 1998,1999,2000 KDevelop Ğ¡×é \n"
+"\n"
+"Sandy Meier <smeier@kdevelop.de>\n"
+"Stefan Heidrich <sheidric@rz.uni-potsdam.de>\n"
+"Ralf Nolden <rnolden@kdevelop.de>\n"
+"Jonas Nordin <jonas.nordin@cenacle.se>\n"
+"Pascal Krahmer <pascal@beast.de>\n"
+"Bernd Gehrmann <bernd@physik.hu-berlin.de>\n"
+"Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
+"Jörgen Olsson<jorgen@cenacle.net>\n"
+"Martin Piskernig <mpiskernig@kdevelop.de>\n"
+"Walter Tasin <tasin@kdevelop.de>\n"
+"John Birch <jbb@ihug.co.nz>>\n"
+"\n"
+"²Î¼ûKDevelopÓÃ»§ÊÖ²á,×÷ÕßÕÂÒÔ»ñµÄ\n"
+"¸ü¶àµÄĞÅÏ¢\n"
+"\n"
+"±¾³ÌĞòÊÇ×ÔÓÉÈí¼ş; Äã¿ÉÒÔÔÚ\n"
+"ÓÉ×ÔÓÉÈí¼ş»ù½ğ»á·¢²¼µÄ GNU\n"
+"¹«ÓÃĞí¿ÉÖ¤ÏÂ·¢²¼ºÍ(»ò)ĞŞ¸Ä\n"
+"±¾Èí¼ş;ÎŞÂÛĞí¿ÉÖ¤ÊÇ°æ±¾2»ò\n"
+"Õß(ÓÉÄãÑ¡Ôñ)ÈÎºÎºó¼ÌµÄ°æ±¾\n"
+"\n"
+
+msgid ""
 "                 Creating search database                                    "
 "                                                                     Please "
 "wait...                                                                      "
@@ -256,6 +325,15 @@ msgstr "    Çë°´ÉÏÃæµÄ°´Å¥ÒÔÑ¡ÔñÄãµÄQtÎÄµµÂ·¾¶¡£ "
 msgid "  -- printing available\n"
 msgstr "  -- ´òÓ¡¿ÉÓÃ\n"
 
+msgid " -- editing icons will not be possible\n"
+msgstr " -- ÎŞ·¨±ß¼ÊÍ¼±ê\n"
+
+msgid " -- generating API-documentations will not be possible\n"
+msgstr " -- ÎŞ·¨Éú³ÉAPIÎÄµµ\n"
+
+msgid " -- generating application handbooks will not be possible\n"
+msgstr " -- ÎŞ·¨Éú³ÉÓ¦ÓÃ³ÌĞòÊÖ²á\n"
+
 msgid " -- generation of new frame applications will not be possible\n"
 msgstr " -- ÎŞ·¨Éú³É¿ò¼ÜÓ¦ÓÃ³ÌĞò\n"
 
@@ -273,6 +351,9 @@ msgstr "ÒÑ¾­´æÔÚ£¡"
 
 msgid " attributes"
 msgstr "ÊôĞÔ"
+
+msgid " isn't writable!"
+msgstr " ²»¿ÉĞ´!"
 
 msgid " matches"
 msgstr "ÏîÆ¥Åä"
@@ -295,6 +376,20 @@ msgstr "Ğé·½·¨"
 msgid " was found."
 msgstr " ÒÑ¾­ÕÒµ½¡£"
 
+msgid ""
+" was modified outside\n"
+" this editor.Save anyway?"
+msgstr ""
+"ÔÚ±¾±à¼­Æ÷Íâ±»ĞŞ¸Ä\n"
+"ÊÇ·ñ±£´æ?"
+
+msgid ""
+" was modified outside this editor.\n"
+"Open the file from disk and delete the current Buffer?"
+msgstr ""
+"ÔÚ±¾±à¼­Æ÷Íâ±»ĞŞ¸Ä\n"
+"ÊÇ·ñ´Ó´ÅÅÌÔØÈë²¢É¾³ıµ±Ç°»º³å?"
+
 msgid " was not found."
 msgstr " Ã»ÓĞÕÒµ½¡£"
 
@@ -304,14 +399,18 @@ msgstr "\"ÔÚÎÄµµÖĞÃ»ÓĞ·¢ÏÖ£¡"
 msgid "\" not found!"
 msgstr "\" Î´ÕÒµ½!"
 
-msgid "&A2ps..."
-msgstr "&A2ps..."
+msgid ""
+"\" to work properly.\n"
+"\tPlease install it!"
+msgstr ""
+"\" ²ÅÄÜÕı³£¹¤×÷.\n"
+"\tÇë°²×°Ö®!"
+
+msgid "%s-Library"
+msgstr "%s-¿â"
 
 msgid "&Add"
 msgstr "Ìí¼Ó(&A)"
-
-msgid "&Add Bookmark..."
-msgstr "Ìí¼ÓÊéÇ©(&A)..."
 
 msgid "&Add existing File(s)..."
 msgstr "Ìí¼ÓÏÖ´æµÄÎÄ¼ş(&A)..."
@@ -326,7 +425,7 @@ msgid "&Autoconf"
 msgstr "&Autoconf"
 
 msgid "&Autoconf and automake"
-msgstr "autoconfºÍautomake(&A)"
+msgstr "AutoconfºÍAutomake(&A)"
 
 msgid "&Back"
 msgstr "ÉÏÒ»Ò³(&B)"
@@ -355,8 +454,8 @@ msgstr "Çå³ı/È«²¿ÖØ½¨(&C)"
 msgid "&Clear Bookmarks"
 msgstr "Çå³ıÊéÇ©(&C)..."
 
-msgid "&Debug..."
-msgstr "µ÷ÊÔ(&D)..."
+msgid "&Conditional"
+msgstr "Ìõ¼ş(&C)"
 
 msgid "&Delete On Input"
 msgstr "ÊäÈëÊ±É¾³ı(&D)"
@@ -375,6 +474,9 @@ msgstr "ÎÄµµä¯ÀÀÆ÷(&D)"
 
 msgid "&Editor..."
 msgstr "±à¼­Æ÷(&E)..."
+
+msgid "&Enable"
+msgstr "ÓĞĞ§(&E)"
 
 msgid "&Enscript..."
 msgstr "&Enscript..."
@@ -397,9 +499,6 @@ msgstr "ÏÂÒ»Ò³(&F)"
 msgid "&From Cursor"
 msgstr "´Ó¹â±ê´¦¿ªÊ¼(&F)"
 
-msgid "&Generate Complete Sources..."
-msgstr "Éú³ÉÍêÕûµÄÔ´(&G)..."
-
 msgid "&Generate Sources..."
 msgstr "Éú³ÉÔ´(&G)..."
 
@@ -414,6 +513,9 @@ msgstr "Í·ÎÄ¼ş´°¿Ú(&H)"
 
 msgid "&Ignore"
 msgstr "ºöÂÔ(&I)"
+
+msgid "&Ignore count"
+msgstr "ºöÂÔ¼ÆÊı(&I)"
 
 msgid "&Insert File..."
 msgstr "²åÈëÎÄ¼ş(&I)..."
@@ -439,6 +541,9 @@ msgstr "ĞÂ½¨Àà(&N)..."
 msgid "&New..."
 msgstr "ĞÂ½¨(&N)"
 
+msgid "&Next Bookmark"
+msgstr "ÏÂÒ»¸öÊéÇ©(&N)"
+
 msgid "&Next Error"
 msgstr "ÏÂÒ»¸ö´íÎó(&N)"
 
@@ -460,8 +565,8 @@ msgstr "ÑùÊ½(&P)£º"
 msgid "&Persistent Selections"
 msgstr "³ÖĞøÑ¡Ôñ(&P)"
 
-msgid "&Preview dialog"
-msgstr "Ô¤ÀÀ¶Ô»°¿ò(&P)"
+msgid "&Previous Bookmark"
+msgstr "ÉÏÒ»¸öÊéÇ©(&P)"
 
 msgid "&Previous Error"
 msgstr "ÉÏÒ»¸ö´íÎó(&P)"
@@ -475,9 +580,6 @@ msgstr "ÔÚÌæ»»Ê±ÌáÊ¾(&P)"
 msgid "&Properties-View"
 msgstr "ÊôĞÔÊÓÍ¼(&P)"
 
-msgid "&Qt-Library"
-msgstr "Qt¿â(&Q)"
-
 msgid "&Raise"
 msgstr "ÉÏÉı(&R)"
 
@@ -490,8 +592,8 @@ msgstr "°üÀ¨×ÓÄ¿Â¼(&R)"
 msgid "&Refresh"
 msgstr "¸üĞÂ(&R)"
 
-msgid "&Repeat Search"
-msgstr "²éÕÒÏÂÒ»¸ö(&R)"
+msgid "&Replace Tabs"
+msgstr "Ìæ»»ÖÆ±í·û(&R)"
 
 msgid "&Replace With:"
 msgstr "Ìæ»»³É(&R)£º"
@@ -505,9 +607,6 @@ msgstr "²éÕÒ(&S)"
 msgid "&Search Marked Text"
 msgstr "²éÕÒ±êÊ¾µÄÎÄ±¾"
 
-msgid "&Search in Files..."
-msgstr "ÔÚÎÄ¼şÖĞ²éÕÒ(&S)..."
-
 msgid "&Search..."
 msgstr "²éÕÒ(&S)..."
 
@@ -517,9 +616,6 @@ msgstr "ÒÑÑ¡µÄ(&S)"
 msgid "&Selected Text"
 msgstr "½öÔÚÑ¡ÔñÇøÖĞ(&S)"
 
-msgid "&Set Bookmark..."
-msgstr "ÉèÖÃÊéÇ©(&S)..."
-
 msgid "&Show again."
 msgstr "ÏÂ´ÎÏÔÊ¾(&S)"
 
@@ -528,6 +624,9 @@ msgstr "tgz¸ñÊ½µÄÔ´(&S)"
 
 msgid "&Sourcecode Editor"
 msgstr "Ô´´úÂë±à¼­Æ÷(&S)"
+
+msgid "&Statusbar"
+msgstr "×´Ì¬Ìõ(&S)"
 
 msgid "&Stop Build"
 msgstr "Í£Ö¹Á¬±à(&S)"
@@ -541,17 +640,11 @@ msgstr "Ä£°å(&T)£º"
 msgid "&Text To Find:"
 msgstr "Òª²éÕÒ(&T)£º"
 
-msgid "&Toolbar"
-msgstr "¹¤¾ßÌõ(&T)"
-
 msgid "&Tools"
 msgstr "¹¤¾ß(&T)"
 
 msgid "&Tree-View"
 msgstr "Ê÷×´ÊÓÍ¼(&T)"
-
-msgid "&Unindent"
-msgstr "²»Ëõ½ø(&U)"
 
 msgid "&Vertical Selections"
 msgstr "´¹Ö±Ñ¡Ôñ(&V)"
@@ -560,7 +653,7 @@ msgid "&Whole Words Only"
 msgstr "È«×ÖÆ¥Åä(&W)"
 
 msgid "&Widgets-View"
-msgstr "WidgetsÊÓÍ¼(&W)"
+msgstr "¿Ø¼şÊÓÍ¼(&W)"
 
 msgid "&Window"
 msgstr "´°¿Ú(&W)"
@@ -579,10 +672,10 @@ msgstr ""
 "Ó¦ÓÃ³ÌĞòÌá¹©Ë®Æ½»ò´¹Ö±Ö±ÏßµÄÒ»ÖÂÍâ¹Û¡£"
 
 msgid "(not defined)"
-msgstr "Î´¶¨Òå"
+msgstr "(Î´¶¨Òå)"
 
 msgid "(not set)"
-msgstr "Î´ÉèÖÃ"
+msgstr "(Î´ÉèÖÃ)"
 
 msgid "*** exit-code: %i ***\n"
 msgstr "***  ÍË³öÂë£º%i ***\n"
@@ -1121,6 +1214,15 @@ msgstr ""
 "ÓÃÓÚÉú³ÉÔ´¡£¶¨Òå°üº¬¸ÃÏîÖ¸ÕëµÄ±äÁ¿¡£"
 
 msgid ""
+"<i>Class : QButtonGroup</i>\n"
+"\n"
+"Sets the buttongroup title that is displayed in the box frame."
+msgstr ""
+"<i>Àà£ºQButtonGroup</i>\n"
+"\n"
+"ÉèÖÃ°´Å¥×éµÄ±êÌâÎÄ±¾¡£"
+
+msgid ""
 "<i>Class : QGroupBox</i>\n"
 "\n"
 "Sets the groupbox title that is displayed in the box frame."
@@ -1607,6 +1709,9 @@ msgstr "ÁĞ±íÊÓÍ¼ÈÃÄãµÄÓ¦ÓÃ³ÌĞòÏÔÊ¾¶àÁĞ»òÊ÷×´ÁĞ±í¡£"
 msgid "A push button that looks like a keyboard key."
 msgstr "¿´ÆğÀ´Ïó¼üÅÌ¼üµÄ°´Å¥¡£"
 
+msgid "A&uto Copy"
+msgstr "×Ô¶¯¸´ÖÆ(&A)"
+
 msgid "AM/PM"
 msgstr "ÉÏÎç/ÏÂÎç"
 
@@ -1625,8 +1730,11 @@ msgstr "¹ØÓÚKDevelop..."
 msgid "Access"
 msgstr "·ÃÎÊ"
 
-msgid "Add Bookmark"
-msgstr "Ìí¼ÓÊéÇ©"
+msgid "Activate"
+msgstr "¼¤»î"
+
+msgid "Activate (KDevelop gets focus)"
+msgstr "¼¤»î(KDevelop»ñµÄ½¹µã)"
 
 msgid "Add Entry..."
 msgstr "Ìí¼ÓÌõÄ¿..."
@@ -1697,11 +1805,11 @@ msgstr "Ìí¼ÓĞÂµÄ·­ÒëÎÄ¼ş(&T)..."
 msgid "Add new Translation File"
 msgstr "Ìí¼ÓĞÂµÄ·­ÒëÎÄ¼ş"
 
-msgid "Add slot for signal"
-msgstr "ÎªSignalÌí¼ÓSlot"
-
 msgid "Add to Repository"
 msgstr "Ìí¼Óµ½²Ö¿â"
+
+msgid "Add to project: "
+msgstr "Ìí¼Óµ½ÏîÄ¿:"
 
 msgid "Added method"
 msgstr "ÒÑÌí¼ÓµÄ·½·¨"
@@ -1712,8 +1820,8 @@ msgstr "Ïò²Ö¿âÖĞÌí¼ÓÎÄ¼ş"
 msgid "Additional Options"
 msgstr "¸½¼ÓÑ¡Ïî"
 
-msgid "Adds a bookmark to the current window file"
-msgstr "ÔÚµ±Ç°´°¿ÚÎÄ¼şÖĞÌí¼ÓÊéÇ©"
+msgid "Adds // to the beginning of each selected line"
+msgstr "ÔÚËùÑ¡ĞĞµÄ¿ªÊ¼´¦¼ÓÉÏ //"
 
 msgid "Adds a new language for internationalization to the project"
 msgstr "Ìí¼ÓĞÂÓïÑÔµ½ÏîÄ¿ÖĞ"
@@ -1723,6 +1831,9 @@ msgstr "Ìí¼ÓÒ»¸ösignal/slot»úÖÆ"
 
 msgid "Adds an existing file to the project"
 msgstr "Ìí¼ÓÏÖ´æÎÄ¼şµ½ÏîÄ¿ÖĞ"
+
+msgid "Adds file/directory to the repository"
+msgstr "Ïò²Ö¿âÖĞÌí¼ÓÎÄ¼ş"
 
 msgid "All"
 msgstr "ËùÓĞµÄ"
@@ -1737,13 +1848,25 @@ msgstr ""
 msgid "Always use my colors"
 msgstr "×ÜÊ¹ÓÃÎÒµÄÑÕÉ«"
 
+msgid "Amount/End address (memory/disassemble):"
+msgstr "ÊıÁ¿/½áÊøµØÖ· (ÄÚ´æ/·´»ã±à):"
+
 msgid "An Error occured while trying to open this Document"
 msgstr "ÔÚ´ò¿ª¸ÃÎÄµµÊ±³ö´í"
 
 msgid "And"
 msgstr "ºÍ"
 
+msgid "Annotated List"
+msgstr "×¢ÊÍµÄÁĞ±í"
+
+msgid "Any symbols gdb resolves are suspect"
+msgstr "ÈÎºÎÓÉgdb½âÎöµÄ·ûºÅ¾ùÊÜ»³ÒÉ"
+
 msgid "Application Wizard"
+msgstr "Ó¦ÓÃ³ÌĞòÏòµ¼"
+
+msgid "ApplicationWizard"
 msgstr "Ó¦ÓÃ³ÌĞòÏòµ¼"
 
 msgid "Applications"
@@ -1761,11 +1884,23 @@ msgstr "ÄãÈ·¶¨ÒªÉ¾³ıÕâ¸öÎÄ¼ş¼ĞÂğ£¿"
 msgid "Are you sure you want to delete this method?"
 msgstr "ÄãÈ·¶¨ÒªÉ¾³ıÕâ¸ö·½·¨Âğ£¿"
 
+msgid "Arguments"
+msgstr "²ÎÊı"
+
 msgid "Arguments:"
 msgstr "²ÎÊı£º"
 
 msgid "Arguments: "
 msgstr "²ÎÊı£º"
+
+msgid "Attach to process"
+msgstr "¸½¼Óµ½½ø³Ì"
+
+msgid "Attach to process %d in %s"
+msgstr "¸½ÖÁ½ø³Ì %d ÓÚ %s"
+
+msgid "Attach to running process"
+msgstr "¸½¼ÓÖÁÔËĞĞµÄ½ø³Ì"
 
 msgid "Attention"
 msgstr "×¢Òâ"
@@ -1780,7 +1915,7 @@ msgid "Auto &Indent"
 msgstr "×Ô¶¯Ëõ½ø(&I)"
 
 msgid "Autoconf and automake"
-msgstr "autoconfºÍautomake"
+msgstr "AutoconfºÍAutomake"
 
 msgid "Autosave"
 msgstr "×Ô¶¯±£´æ"
@@ -1853,11 +1988,27 @@ msgstr "´ÖÌå"
 msgid "Book&marks"
 msgstr "ÊéÇ©(&M)"
 
+msgid "Breakpoint"
+msgstr "¶Ïµã"
+
+msgid ""
+"Breakpoint list\n"
+"\n"
+"Displays a list of breakpoints with their current status. Clicking on a "
+"breakpoint item with the RMB displays a popupmenu so you may manipulate the "
+"breakpoint. Double clicking will take to the source in the editor window."
+msgstr ""
+"¶ÏµãÁĞ±í\n"
+"\n"
+"ÏÔÊ¾ËùÓĞµÄ¶Ïµã¼°Æä×´Ì¬.ÓÃÊó±êÓÒ¼üµã»÷Ò»¸ö\n"
+"¶Ïµã»á³öÏÖµ¯³öÊ½²Ëµ¥,Äã¿ÉÒÔÍ¨¹ıËüÀ´²Ù×İ¶Ï\n"
+"µã.Ë«»÷¶Ïµã»áÔÚ±à¼­´°¿ÚÖĞÏÔÊ¾ÏàÓ¦µÄÔ´´úÂë"
+
 msgid "Browser-Toolbar"
 msgstr "ä¯ÀÀÆ÷¹¤¾ßÌõ"
 
 msgid "Bug Description :"
-msgstr "BugÃèÊö: "
+msgstr "´íÎóÃèÊö: "
 
 msgid "Bug Report"
 msgstr "Bug±¨¸æ"
@@ -1889,6 +2040,9 @@ msgstr "C³ÌĞò"
 
 msgid "C&lose"
 msgstr "¹Ø±Õ(&L)"
+
+msgid "C&omment"
+msgstr "×¢ÊÍµô(&C)"
 
 msgid "C&onfigure..."
 msgstr "ÅäÖÃ(&O)..."
@@ -1926,13 +2080,19 @@ msgid "C/C++-Reference"
 msgstr "C/C++²Î¿¼"
 
 msgid "CVS Commit"
-msgstr "Ìá½»"
+msgstr "CVS Ìá½»"
 
 msgid "Canceled"
 msgstr "ÒÑ±»È¡Ïû"
 
 msgid "Cancels the document request"
 msgstr "È¡ÏûÎÄµµÇëÇó"
+
+msgid "Change to shared lib"
+msgstr "×ª»»ÖÁ¹²Ïí¿â"
+
+msgid "Change to static lib"
+msgstr "×ª»»ÖÁ¾²Ì¬¿â"
 
 msgid "Changed files"
 msgstr "¸ü¸Ä¹ıµÄÎÄ¼ş"
@@ -1991,7 +2151,7 @@ msgstr ""
 
 msgid ""
 "Checking this will delete the current documentation\n"
-"and replacing it with the new generated documentation\n"
+"and replace it with the new generated documentation\n"
 "in the same path."
 msgstr ""
 "Ñ¡Ôñ¸ÃÏî½«É¾³ıµ±Ç°ÎÄµµ²¢½«ĞÂ\n"
@@ -2042,14 +2202,14 @@ msgstr ""
 "±äÁ¿£¬Í¬Ê±Ò²ÔÊĞíÇĞ»»µ½ÉùÃ÷ºÍÊµÏÖ´¦¡£Êó±ê\n"
 "ÓÒ¼üµÄµ¯³öÊ½²Ëµ¥ÔÊĞí¸ü¶àÌØ±ğµÄ¹¦ÄÜ¡£"
 
+msgid "Class error"
+msgstr "Àà´íÎó"
+
 msgid "Class missing"
 msgstr "ÀàÎ´ÕÒµ½"
 
 msgid "Class:"
 msgstr "Àà£º"
-
-msgid "ClassWizard"
-msgstr "ÀàÏòµ¼"
 
 msgid "ClassWizard Tool"
 msgstr "ÀàÏòµ¼¹¤¾ß"
@@ -2060,8 +2220,7 @@ msgstr "Àà"
 msgid ""
 "Classes\n"
 "\n"
-"Choosing a class will switch to the header file where the class is "
-"declarated."
+"Choosing a class will switch to the header file where the class is declared."
 msgstr ""
 "Àà\n"
 "\n"
@@ -2085,8 +2244,14 @@ msgstr "Çå³ı²ÎÊı"
 msgid "Clear Bookmarks"
 msgstr "Çå³ıÊéÇ©"
 
-msgid "Clears the bookmark list for the current window"
-msgstr "Çå³ıµ±Ç°´°¿ÚµÄÊéÇ©ÁĞ"
+msgid "Clear all bookmarks"
+msgstr "Çå³ıËùÓĞÊéÇ©"
+
+msgid "Clear all breakpoints"
+msgstr "Çå³ıËùÓĞ¶Ïµã"
+
+msgid "Clears the bookmarks for the current window"
+msgstr "Çå³ıµ±Ç°´°¿ÚµÄÊéÇ©"
 
 msgid "Clears the pre-set headertemplate"
 msgstr "Çå³ıÔ¤ÉèµÄÍ·Ä£°å"
@@ -2133,11 +2298,17 @@ msgstr "ÕıÔÚ¹Ø±ÕÏîÄ¿..."
 msgid "Colors"
 msgstr "ÑÕÉ«"
 
+msgid "Comment"
+msgstr "×¢ÊÍµô"
+
 msgid "Commit"
 msgstr "Ìá½»"
 
 msgid "Commiting file"
 msgstr "ÕıÔÚÌá½»ÎÄ¼ş"
+
+msgid "Commits file/directory to the repository"
+msgstr "Ïò²Ö¿âÖĞÌá½»ÎÄ¼ş"
 
 msgid "Compile &File"
 msgstr "±àÒëÎÄ¼ş(&F)"
@@ -2181,8 +2352,8 @@ msgstr ""
 "±àÒëÊ±´ø²ÎÊı-Wall¡£ËüÊÇĞí¶àÍÆ¼ö´ò¿ª¾¯¸æ\n"
 "µÄ×éºÏ¡£"
 
-msgid "Compiler"
-msgstr "±àÒëÆ÷"
+msgid "Compiler :"
+msgstr "±àÒëÆ÷:"
 
 msgid "Compiler Options"
 msgstr "±àÒëÑ¡Ïî"
@@ -2263,11 +2434,33 @@ msgstr ""
 msgid "Continue after errors"
 msgstr "·¢Éú´íÎóºó¼ÌĞø"
 
+msgid ""
+"Continue application execution\n"
+"\n"
+"Continues the execution of your application in the debugger. This only has "
+"affect when the application has been halted by the debugger (ie. a "
+"breakpoint has been activated or the interrupt was pressed)."
+msgstr ""
+"¼ÌĞø³ÌĞòÖ´ĞĞ\n"
+"\n"
+"ÔÚµ÷ÊÔÆ÷ÖĞ¼ÌĞøÖ´ĞĞÄãµÄ³ÌĞò.ÕâÖ»ÔÚ³ÌĞò\n"
+"±»µ÷ÊÔÆ÷ÖĞ¶ÏÊ±²Å¿ÉÓÃ.(¼´Ò»¸ö¶Ïµã±»¼¤»î\n"
+"»òÕß°´ÁËÔİÍ£"
+
 msgid "Continue from the beginning"
 msgstr "´Ó¿ªÊ¼´¦¼ÌĞøÂğ£¿"
 
 msgid "Continue from the end"
 msgstr "´Ó×îºó¼ÌĞøÂğ£¿"
+
+msgid "Continue with app execution. May start the app"
+msgstr "¼ÌĞø³ÌĞòÖ´ĞĞ.¿ÉÒÔÆô¶¯³ÌĞò"
+
+msgid "Continues app execution"
+msgstr "¼ÌĞø³ÌĞòÖ´ĞĞ"
+
+msgid "Continues app execution until reaching the current cursor position"
+msgstr "¼ÌĞøÓ¦ÓÃÖ´ĞĞÖ±µ½µ±È»µÄ¹â±ê´¦"
 
 msgid ""
 "Copy\n"
@@ -2286,6 +2479,9 @@ msgstr ""
 "¸´ÖÆ\n"
 "\n"
 "½«ËùÑ¡Widget¸´ÖÆµ½ÏµÍ³¼ôÌù°å¡£"
+
+msgid "Copy and add to project: "
+msgstr "¸´ÖÆ²¢Ìí¼Óµ½ÏîÄ¿:"
 
 msgid "Copying files..."
 msgstr "ÕıÔÚ¸´ÖÆÎÄ¼ş..."
@@ -2307,6 +2503,9 @@ msgstr "ÎŞ·¨±£´æ¸ÃÎÄµµ¡£»¹Òª´ò¿ªĞÂÎÄµµÂğ£¿"
 msgid "Could not start or find KFM"
 msgstr "ÎŞ·¨Æô¶¯»òÎ´ÕÒµ½KFM"
 
+msgid "Couldn't find class: "
+msgstr "ÕÒ²»µ½Àà:"
+
 msgid "Couldn't find the class which has the method to delete."
 msgstr "Ã»ÓĞÕÒµ½ÓµÓĞ¸Ã·½·¨µÄÀà¡£"
 
@@ -2315,6 +2514,18 @@ msgstr "Ã»ÓĞÕÒµ½ÒªÉ¾³ıµÄ·½·¨¡£"
 
 msgid "Create"
 msgstr "Éú³É"
+
+msgid ""
+"Create KDOC-reference of your project\n"
+"\n"
+"If this is enabled, on creating the API-Documentation KDoc creates also\n"
+"a cross reference file of your project into the seleceted kdoc-reference\n"
+"directory."
+msgstr ""
+"Éú³ÉÏîÄ¿µÄKDOC²Î¿¼\n"
+"\n"
+"Èç¹ûÔÊĞí,ÔÚÉú³ÉµÄAPIÎÄµµÖĞ»áÔö¼Ó¶ÔKDoc²Î¿¼\n"
+"ÊÖ²áµÄ½»²æÒıÓÃ"
 
 msgid ""
 "Create Search Database\n"
@@ -2355,6 +2566,25 @@ msgstr ""
 "Éú³ÉC++Ó¦ÓÃ³ÌĞò¡£¸Ã³ÌĞòÔÚÖÕ¶ËÖĞÔËĞĞ£¬\n"
 "²»ĞèÒªÈÎºÎÀàÓëÍ¼ĞÎ½çÃæµÄÖ§³Ö¡£"
 
+msgid ""
+"Create a KDE-2 MDI (Multiple Document Interface) application with menubar, "
+"toolbar, statusbar and support for a document-view codeframe model."
+msgstr ""
+"Éú³ÉKDE-2 MDI(¶àÎÄµµ½çÃæ)Ó¦ÓÃ³Ì\n"
+"Ğò.°üÀ¨»á»°¹ÜÀí,²Ëµ¥Ìõ,¹¤¾ßÌõ,\n"
+"×´Ì¬Ìõ,Ö§³ÖÎÄµµ/ÊÓÍ¼Ä£ĞÍ¡£"
+
+msgid "Create a KDE-2 application with an empty main widget."
+msgstr "Éú³É½öÓĞÒ»¸öÖ÷´°¿ÚµÄKDE-2Ó¦ÓÃ³ÌĞò¡£"
+
+msgid ""
+"Create a KDE-2 application with session-management, menubar, toolbar, "
+"statusbar and support for a document-view codeframe model."
+msgstr ""
+"Éú³ÉKDE-2Ó¦ÓÃ³ÌĞò¡£°üÀ¨»á»°¹ÜÀí£¬\n"
+"²Ëµ¥Ìõ£¬¹¤¾ßÌõ£¬×´Ì¬Ìõ¡£Ö§³Ö\n"
+"ÎÄµµ/ÊÓÍ¼Ä£ĞÍ¡£"
+
 msgid "Create a KDE-application with an empty main widget."
 msgstr "Éú³É½öÓĞÒ»¸öÖ÷´°¿ÚµÄKDEÓ¦ÓÃ³ÌĞò¡£"
 
@@ -2365,6 +2595,34 @@ msgstr ""
 "Éú³ÉKDEÓ¦ÓÃ³ÌĞò¡£°üÀ¨»á»°¹ÜÀí£¬\n"
 "²Ëµ¥Ìõ£¬¹¤¾ßÌõ£¬×´Ì¬Ìõ¡£Ö§³Ö\n"
 "ÎÄµµ/ÊÓÍ¼Ä£ĞÍ¡£"
+
+msgid ""
+"Create a KDE-application with session-management, menubar, toolbar, "
+"statusbar and support for a document-view codeframe model. OpenGL(tm) "
+"(Mesa3D) support is added."
+msgstr ""
+"Éú³ÉKDEÓ¦ÓÃ³ÌĞò¡£°üÀ¨»á»°¹ÜÀí£¬\n"
+"²Ëµ¥Ìõ£¬¹¤¾ßÌõ£¬×´Ì¬Ìõ¡£Ö§³Ö\n"
+"ÎÄµµ/ÊÓÍ¼Ä£ĞÍÒÔ¼°OpenGL(tm)(\n"
+"Mesa3D)Ö§³Ö¡£"
+
+msgid ""
+"Create a Qt-2.1 Application with a main window containing a menubar, toolbar "
+"and statusbar, including support for a multiple document interface (MDI) "
+"model."
+msgstr ""
+"Éú³ÉQt-2.1Ó¦ÓÃ³ÌĞò¡£Ö÷´°¿Ú°üÀ¨\n"
+"²Ëµ¥Ìõ£¬¹¤¾ßÌõ£¬×´Ì¬Ìõ¡£Ö§³Ö/\n"
+"¶àÎÄµµ½çÃæ(MDI)Ä£ĞÍ"
+
+msgid ""
+"Create a Qt-2.x Application with a main window containing a menubar, toolbar "
+"and statusbar, including support for a single document-view interface (SDI) "
+"model."
+msgstr ""
+"Éú³ÉQt-2.Ó¦ÓÃ³ÌĞò¡£Ö÷´°¿Ú°üÀ¨²Ë\n"
+"µ¥Ìõ£¬¹¤¾ßÌõ£¬×´Ì¬Ìõ¡£Ö§³Öµ¥ÎÄ\n"
+"µµ½çÃæ(SDI)Ä£ĞÍ"
 
 msgid ""
 "Create a Qt-Application with a main window containing a menubar, toolbar and "
@@ -2384,6 +2642,19 @@ msgstr ""
 "ÎªÄãµÄÏîÄ¿Éú³ÉlsmÎÄ¼ş¡£¸ÃÎÄ¼şÓÃÀ´\n"
 "ÔÚ·¢²¼Ê±°üº¬Ò»¶Î¹ØÓÚ¸ÃÏîÄ¿µÄ¼ò¶Ì\n"
 "ĞÅÏ¢£¬ÀıÈçÏîÄ¿ĞèÒªµÄ¸¨Öú¿â¡£"
+
+msgid "Create also KDOC-reference of your project"
+msgstr "Éú³ÉÏîÄ¿µÄKDOC²Î¿¼"
+
+msgid ""
+"Create an MDI framework based on the QextMDI library and Qt2.0x. Allows to "
+"switch between both modes, Toplevel and Childframe. Requires QextMDI!!! "
+"(www.geocities.com/gigafalk/qextmdi.htm)"
+msgstr ""
+"Éú³É»ùÓÚQextMDI¿âºÍQt2.0xµÄ¶à\n"
+"ÎÄµµ½çÃæ¿ò¼Ü.ÔÊĞíÔÚÁ½ÖÖÄ£ĞÍ,\n"
+"¶¥¼¶ºÍ×ÓÖ¡¼äÇĞ»».ĞèÒªQextMDI\n"
+"(www.geocities.com/gigafalk/qextmdi.htm)"
 
 msgid "Create..."
 msgstr "Éú³É..."
@@ -2459,7 +2730,7 @@ msgid "Custom Class:"
 msgstr "¶¨ÖÆÀà£º"
 
 msgid "Custom Header:"
-msgstr "¶¨ÖÆÍ·£º"
+msgstr "¶¨ÖÆÎÄ¼şÍ·£º"
 
 msgid "Custom Properties:"
 msgstr "¶¨ÖÆÊôĞÔ£º"
@@ -2500,24 +2771,96 @@ msgstr "ÈÕÆÚÓëÊ±¼ä"
 msgid "De&lete"
 msgstr "É¾³ı(&L)"
 
+msgid "Debu&g"
+msgstr "µ÷ÊÔ(&G)"
+
 msgid "Debug"
 msgstr "µ÷ÊÔ"
+
+msgid "Debug an app other than the current project executable"
+msgstr "µ÷ÊÔÒ»¸ö·Ç±¾ÏîÄ¿µÄ¿ÉÖ´ĞĞÎÄ¼ş"
+
+msgid "Debug another executable"
+msgstr "µ÷ÊÔÆäËü¿ÉÖ´ĞĞÎÄ¼ş"
+
+msgid "Debug attach"
+msgstr "Debug ¸½¼Ó"
+
+msgid "Debug examine core"
+msgstr "Debug ¼ì²écore"
+
+msgid "Debug interrupt"
+msgstr "Debug ÔİÍ£"
+
+msgid "Debug other executable"
+msgstr "Debug ÆäËü¿ÉÖ´ĞĞ"
 
 msgid ""
 "Debug program\n"
 "\n"
-"Opens KDbg in the tools window with your actualprogram and allows you to "
-"execute it step by stepby setting breakpoints in the sourcecode.Note that "
-"you have to open your sourcecodes in KDbgto access it."
+"Runs your program in the debugger you have chosen (by default the internal "
+"debugger is used) All debuggers should allow you to execute your program "
+"step by step by setting breakpoints in the sourcecode."
 msgstr ""
 "µ÷ÊÔ³ÌĞò\n"
 "\n"
-"ÔÚ¹¤¾ß´°¿ÚÖĞÍ¬ÄãµÄ³ÌĞòÒ»Æğ´ò¿ªKDbg¿ÉÒÔ\n"
-"Ê¹ÄãÔÚÔ´´úÂëÖĞÉèÖÃ¶Ïµã²¢µ¥²½Ö´ĞĞ¡£×¢Òâ£¬\n"
-"Äã±ØĞëÔÚKDbgÖĞÍ¬Ê±´ò¿ª³ÌĞòÔ´ÎÄ¼ş¡£"
+"ÔÚÄãÑ¡ÔñµÄµ÷ÊÔÆ÷ÖĞÔËĞĞ³ÌĞò(È±Ê¡µÄÊÇÄÚ\n"
+"ÖÃµ÷ÊÔÆ÷)ËùÓĞµÄµ÷ÊÔÆ÷¶¼Ó¦¸ÃÔÊĞíÄãÍ¨¹ı\n"
+"ÔÚÔ´³ÌĞòÖĞÉèÖÃ¶Ïµãµ¥²½Ö´ĞĞ³ÌĞò"
+
+msgid "Debug run"
+msgstr "Debug ÔËĞĞ"
+
+msgid "Debug run to cursor"
+msgstr "Debug ÔËĞĞµ½¹â±ê´¦"
+
+msgid "Debug running process..."
+msgstr "µ÷ÊÔÔËĞĞµÄ½ø³Ì..."
+
+msgid "Debug start"
+msgstr "Debug Æô¶¯"
+
+msgid "Debug start other"
+msgstr "Debug Æô¶¯ÆäËü"
+
+msgid "Debug start with args"
+msgstr "Debug ´ø²ÎÊıÆô¶¯"
+
+msgid "Debug step into"
+msgstr "Debug µ¥²½½øÈë"
+
+msgid "Debug step into instr"
+msgstr "Debug µ¥²½½øÈëÖ¸Áî"
+
+msgid "Debug step out"
+msgstr "Debug µ¥²½Ìø³ö"
+
+msgid "Debug step over"
+msgstr "Debug µ¥²½Ìø¹ı"
+
+msgid "Debug step over instr"
+msgstr "Debug µ¥²½Ìø¹ıÖ¸Áî"
+
+msgid "Debug stop"
+msgstr "Debug Í£Ö¹"
+
+msgid "Debug toggle breakpoint"
+msgstr "Debug Ìøµ½¶Ïµã´¦"
+
+msgid "Debug viewers"
+msgstr "Debug ÊÓÍ¼"
+
+msgid "Debug with arguments"
+msgstr "´ø²ÎÊıµ÷ÊÔ"
 
 msgid "Debug-level"
 msgstr "µ÷ÊÔ¼¶±ğ"
+
+msgid "Debugger"
+msgstr "µ÷ÊÔÆ÷"
+
+msgid "Debugger stopped"
+msgstr "µ÷ÊÔÆ÷ÒÑÖÕÖ¹"
 
 msgid "Debugging"
 msgstr "µ÷ÊÔ"
@@ -2533,6 +2876,9 @@ msgstr "È±Ê¡×ÖÌå"
 
 msgid "Default Item Styles"
 msgstr "ÏîµÄÈ±Ê¡·ç¸ñ"
+
+msgid "Default Project Path"
+msgstr "È±Ê¡ÏîÄ¿Â·¾¶"
 
 msgid "Default printsettings"
 msgstr "È±Ê¡´òÓ¡ÉèÖÃ"
@@ -2569,6 +2915,12 @@ msgstr "É¾³ıSignal"
 
 msgid "Delete slot"
 msgstr "É¾³ıSlot"
+
+msgid "Delete watch variable"
+msgstr "É¾³ı²é¿´µÄ±äÁ¿"
+
+msgid "Deletes file from disk and removes it from the repository"
+msgstr "´Ó´ÅÅÌÉÏÉ¾³ıÎÄ¼ş²¢´Ó²Ö¿âÖĞÉ¾³ı"
 
 msgid "Deletes the current class"
 msgstr "É¾³ıµ±Ç°Àà"
@@ -2652,6 +3004,32 @@ msgstr "Ä¿Â¼"
 msgid "Directory:"
 msgstr "Ä¿Â¼£º"
 
+msgid "Disassemble"
+msgstr "·´»ã±à"
+
+msgid "Display source code"
+msgstr "ÏÔÊ¾Ô´´úÂë"
+
+msgid "Display static members"
+msgstr "ÏÔÊ¾¾²Ì¬³ÉÔ±"
+
+msgid ""
+"Display static members\n"
+"\n"
+"Displaying static members makes gdb slower in\n"
+"producing data within kde and qt.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on.\n"
+"But if you need to debug into these values then\n"
+"check this option"
+msgstr ""
+"ÏÔÊ¾¾²Ì¬³ÉÔ±\n"
+"\n"
+"ÏÔÊ¾¾²Ì¬³ÉÔ±»áÊ¹gdbÔÚ´¦ÀíkdeºÍqtÖĞµÄ\n"
+"Êı¾İÊ±±äÂı.Ëü¿ÉÄÜ»Ø¸Ä±äQString¼°ÆäÓÑ\n"
+"ÀàËùÒÀÀµµÄÊı¾İ\"Ç©Ãû\".µ«ÊÇÈç¹ûÄãµÄ\n"
+"È·ĞèÒªµ÷ÊÔÕâĞ©Öµ¾ÍÑ¡ÉÏ"
+
 msgid ""
 "Displays a number in the style of LC-displays\n"
 "often used in clocks."
@@ -2734,6 +3112,15 @@ msgstr ""
 "%s\n"
 "Ìí¼Óµ½ÏîÄ¿ÖĞ£¿"
 
+msgid "DocBook SGML (english) (*.docbook)"
+msgstr "DocBook SGML (Ó¢ÎÄ) (*.docbook)"
+
+msgid "Dock to panel"
+msgstr "ÒÆÖÁÃæ°åÖĞ"
+
+msgid "Dock to panel and iconify kDevelop"
+msgstr "ÒÆÖÁÃæ°å²¢½«KDevelopÍ¼±ê»°"
+
 msgid "Documentation"
 msgstr "ÎÄµµ"
 
@@ -2805,6 +3192,9 @@ msgstr "Íê³É"
 msgid "Edit Options"
 msgstr "±à¼­Ñ¡Ïî"
 
+msgid "Edit breakpoint"
+msgstr "±à¼­¶Ïµã"
+
 msgid "Edit your headertemplate here"
 msgstr "ÔÚÕâ¶ù±à¼­ÄãµÄÍ·Ä£°å"
 
@@ -2813,6 +3203,14 @@ msgstr "±à¼­Æ÷ÑÕÉ«(&C)..."
 
 msgid "Editor &Defaults..."
 msgstr "±à¼­Æ÷È±Ê¡(&D)..."
+
+msgid ""
+"Either the desired directory cannot be created or\n"
+"you haven't enough rights to use it.\n"
+"It isn't possible to generate a new project into this directory."
+msgstr ""
+"Ä¿Â¼ÎŞ·¨Éú³É»òÕßÄãÃ»ÓĞ×ã¹»µÄÈ¨ÏŞ.ÔÚ¸ÃÄ¿Â¼ÏÂ\n"
+"²»¿ÉÄÜÉú³ÉĞÂÏîÄ¿."
 
 msgid ""
 "Eliminate  use  of the built-in implicit rules.  Also\n"
@@ -2829,26 +3227,68 @@ msgstr "E-mailµØÖ·£º"
 msgid "Empty Textfile"
 msgstr "¿ÕÎÄ±¾ÎÄ¼ş"
 
-msgid "Enables / disables the browser toolbar"
+msgid "Enable floating toolbar"
+msgstr "ÔÊĞí¸¡¶¯µÄ¹¤¾ßÌõ"
+
+msgid ""
+"Enable floating toolbar\n"
+"\n"
+"Use the floating toolbar. This toolbar always stays\n"
+"on top of all windows so that if the app covers KDevelop\n"
+"you have control of the app though the small toolbar\n"
+"Also this toolbar can be docked to the panel\n"
+"This toolbar is in addition to the toolbar in KDevelop"
+msgstr ""
+"ÔÊĞí¸¡¶¯µÄ¹¤¾ßÌõ\n"
+"\n"
+"Ê¹ÓÃ¸¡¶¯µÄ¹¤¾ßÌõ.¸Ã¹¤¾ßÌõ×ÜÊÇÔÚËùÓĞ´°¿ÚµÄ\n"
+"µÄÉÏÃæ,Èç¹ûÓ¦ÓÃ³ÌĞòÕÚ×¡ÁËKDevelop,Äã¿ÉÒÔ\n"
+"Í¨¹ıÕâ¸ö¹¤¾ßÌõÀ´¿ØÖÆ.¸Ã¹¤¾ßÌõÒ²¿ÉÒÔ·ÅÈëÃæ\n"
+"ÖĞ,ËüÔÚKDevelopÊÇ¿ÉÑ¡µÄ"
+
+msgid "Enable separate terminal for application i/o"
+msgstr "ÔÊĞíÎªÓ¦ÓÃ³ÌĞòI/O·ÖÀëÖÕ¶Ë"
+
+msgid ""
+"Enable separate terminal for application i/o\n"
+"\n"
+"This allows you to enter terminal input when your\n"
+"application contains terminal input code (eg cin, fgets etc.) \n"
+"If you use terminal input in your app, then tick this option.\n"
+"Otherwise leave this off."
+msgstr ""
+"ÔÊĞíÎªÓ¦ÓÃ³ÌĞòI/O·ÖÀëÖÕ¶Ë\n"
+"\n"
+"ÔÊĞíÄãÔÚÓ¦ÓÃ³ÌĞòĞèÒª´ÓÖÕ¶ËÊäÈëÊ±(±ÈÈçcin,\n"
+"fgetsµÈ)´ÓÖÕ¶ËÊäÈë.Èç¹ûÄãÒªÔÚÔÚÓ¦ÓÃÖĞÊ¹ÓÃ\n"
+"´ÓÖÕ¶ËÊäÈë,Ñ¡ÉÏ¸ÃÑ¡Ïî,·ñÔò¾Í±ğÑ¡"
+
+msgid "Enables the user to (de-)select some settings."
+msgstr "ÈÃÓÃ»§¿ÉÒÔ£¨²»£©Ñ¡ÔñÄ³Ğ©ÉèÖÃ¡£"
+
+msgid "Enables/Disables the browser toolbar"
 msgstr "ÔÊĞí/½ûÖ¹ä¯ÀÀÆ÷¹¤¾ßÌõ"
 
-msgid "Enables / disables the outputview"
+msgid "Enables/Disables the outputview"
 msgstr "ÔÊĞí/½ûÖ¹Êä³öÊÓÍ¼"
-
-msgid "Enables / disables the standard toolbar"
-msgstr "ÔÊĞí/½ûÖ¹±ê×¼¹¤¾ßÌõ"
-
-msgid "Enables / disables the statusbar"
-msgstr "ÔÊĞí/½ûÖ¹×´Ì¬Ìõ"
-
-msgid "Enables / disables the treeview"
-msgstr "ÔÊĞí/½ûÖ¹Ê÷×´ÊÓÍ¼"
 
 msgid "Enables/Disables the properties window"
 msgstr "ÔÊĞí/½ûÖ¹ÊôĞÔ´°¿Ú"
 
+msgid "Enables/Disables the standard toolbar"
+msgstr "ÔÊĞí/½ûÖ¹±ê×¼¹¤¾ßÌõ"
+
+msgid "Enables/Disables the statusbar"
+msgstr "ÔÊĞí/½ûÖ¹×´Ì¬Ìõ"
+
+msgid "Enables/Disables the treeview"
+msgstr "ÔÊĞí/½ûÖ¹Ê÷×´ÊÓÍ¼"
+
 msgid "End of document reached"
 msgstr "ÒÑµ½ÎÄµµ×îºó"
+
+msgid "EndDate"
+msgstr "½áÊøÈÕÆÚ"
 
 msgid "Enter a menu text for the executable here."
 msgstr "ÔÚÕâ¶ùÎª¿ÉÖ´ĞĞÎÄ¼şÊäÈëÏÔÊ¾ÔÚ²Ëµ¥ÖĞµÄÎÄ±¾¡£"
@@ -2858,6 +3298,12 @@ msgstr "ÔÚÕâ¶ùÊäÈëĞÂÎÄ¼şÃû¡£"
 
 msgid "Enter arguments for the executable here."
 msgstr "ÔÚÕâ¶ùÊäÈë¿ÉÖ´ĞĞÎÄ¼şµÄ²ÎÊı¡£"
+
+msgid "Enter core file to examine..."
+msgstr "ÊäÈë´ı¼ì²éµÄcoreÎÄ¼ş..."
+
+msgid "Enter executable to debug..."
+msgstr "ÊäÈëÒªµ÷ÊÔµÄ¿ÉÖ´ĞĞÎÄ¼ş..."
 
 msgid "Enter log message:"
 msgstr "ÈÕÖ¾ĞÅÏ¢"
@@ -2912,7 +3358,7 @@ msgid ""
 "Documentation for the Documentation Browser.\n"
 "QT usually comes with complete Documentation\n"
 "whereas for KDE you can create the Documentation\n"
-"easiely by pressing the Update button below."
+"easily by pressing the Update button below."
 msgstr ""
 "ÊäÈëQTºÍKDE¿âÎÄµµµÄÂ·¾¶£¬ÎÄ\n"
 "µµä¯ÀÀÆ÷ÒªÓÃµ½Ëü¡£QTÍ¨³£¶¼´ø\n"
@@ -3010,6 +3456,9 @@ msgstr "´íÎóÀà£º"
 msgid "Error Location :"
 msgstr "´íÎó¶¨Î»£º"
 
+msgid "Error in creating documentation!"
+msgstr "ÔÚÉú³ÉÎÄµµÊ±·¢Éú´íÎó!"
+
 msgid ""
 "Error loading kdlgloader library (libkdlgloader.so).\n"
 "\n"
@@ -3051,6 +3500,15 @@ msgstr ""
 msgid "Error..."
 msgstr "´íÎó..."
 
+msgid "Examine a core file"
+msgstr "¼ì²éÒ»¸öcoreÎÄ¼ş"
+
+msgid "Examine core file"
+msgstr "¼ì²écoreÎÄ¼ş"
+
+msgid "Examine core file %s in %s"
+msgstr "¼ì²écoreÎÄ¼ş %s ÓÚ %s"
+
 msgid "Executable not set!"
 msgstr "Î´ÉèÖÃ¿ÉÖ´ĞĞÎÄ¼ş£¡"
 
@@ -3086,6 +3544,21 @@ msgstr "´ø²ÎÊıÖ´ĞĞ(&W)"
 msgid "Execute &with Arguments..."
 msgstr "´ø²ÎÊıÖ´ĞĞ(&W)..."
 
+msgid "Execute one assembler instruction, but run through functions"
+msgstr "Ö´ĞĞÒ»Ìõ»ã±àÖ¸Áî,µ«Ìø¹ıº¯Êı"
+
+msgid "Execute one assembler instruction, stepping into fn if appropriate"
+msgstr "Ö´ĞĞÒ»Ìõ»ã±àÖ¸Áî,µ¥²½½øÈëº¯Êı"
+
+msgid "Execute one line of code, but run through functions"
+msgstr "Ö´ĞĞÒ»ĞĞ´úÂë,µ«ÊÇÌø¹ıº¯Êı"
+
+msgid "Execute one line of code, stepping into fn if appropriate"
+msgstr "Ö´ĞĞÒ»ĞĞ´úÂë,Èç¹ûÊÇº¯ÊıÔò½øÈë"
+
+msgid "Execute to end of current stack frame"
+msgstr "Ö´ĞĞµ½µ±Ç°Õ»µÄÎ²²¿"
+
 msgid "Execute with Arguments"
 msgstr "´ø²ÎÊıÔËĞĞ"
 
@@ -3104,8 +3577,14 @@ msgstr "ÕıÔÚÍË³ö..."
 msgid "Exits the program"
 msgstr "ÍË³ö³ÌĞò"
 
+msgid "External"
+msgstr "Íâ²¿"
+
 msgid "Family:"
 msgstr "×å:"
+
+msgid "Fancy header"
+msgstr "ÉèÏëÍ·ÎÄ¼ş"
 
 msgid "File "
 msgstr "ÎÄ¼ş"
@@ -3136,6 +3615,9 @@ msgstr "ÎÄ¼şÃû"
 
 msgid "Filename:"
 msgstr "ÎÄ¼şÃû£º"
+
+msgid "Filename: %s at line: %d"
+msgstr "ÎÄ¼şÃû: %s µÚ %d ĞĞ"
 
 msgid "Files exists!"
 msgstr "ÎÄ¼şÒÑ¾­´æÔÚ£¡"
@@ -3190,6 +3672,19 @@ msgstr "ÏÂÒ»Ò³"
 msgid "Found:"
 msgstr "ÕÒµ½£º"
 
+msgid ""
+"Frame stack display\n"
+"\n"
+"Often referred to as the \"call stack\", this is a list showing what "
+"function is currently active and who called each function to get to this "
+"point in your program. By clicking on an item you can see the values in any "
+"of the previous calling functions See the VAR tab for these frame variables."
+msgstr ""
+"Ö¡Õ»ÏÔÊ¾\n"
+"\n"
+"³£³£±»³Æ×÷\"µ÷ÓÃÕ»\".¸Ã±íÏÔÊ¾ÓĞÄÇĞ©º¯Êıµ±Ç°\n"
+"Îª»î¶¯×´Ì¬,ÒÔ¼°ÕâĞ©º¯Êı±»Ë­µ÷ÓÃ."
+
 msgid "Function"
 msgstr "º¯Êı"
 
@@ -3199,17 +3694,20 @@ msgstr "º¯Êı"
 msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
 msgstr "GNU±ê×¼ÎÄ¼ş"
 
+msgid "Ge&nerate Complete Sources..."
+msgstr "Éú³ÉÍêÕûµÄÔ´(&N)..."
+
 msgid "General"
 msgstr "³£¹æ"
-
-msgid "General information"
-msgstr "Ò»°ãĞÅÏ¢"
 
 msgid "Generate Dialog... (C++ Sourcecode)"
 msgstr "Éú³É¶Ô»°¿ò...£¨C++Ô´´úÂë£©"
 
 msgid "Generate Sources"
 msgstr "Éú³ÉÔ´"
+
+msgid "Generate User Manual"
+msgstr "Éú³ÉÓÃ»§ÊÖ²á"
 
 msgid ""
 "Generate a HTML-based documentation set\n"
@@ -3294,6 +3792,9 @@ msgid ""
 "over variables from makefiles."
 msgstr "ÈÃ»·¾³±äÁ¿ÓÅÏÈÓÚMakefilesÖĞµÄ±äÁ¿¡£"
 
+msgid "Globals"
+msgstr "È«¾Ö"
+
 msgid "Go to declaration"
 msgstr "Ìøµ½ÉùÃ÷´¦"
 
@@ -3305,6 +3806,12 @@ msgstr "×ªµ½ĞĞ..."
 
 msgid "Goes to the class declaration"
 msgstr "Ìøµ½ÀàÉùÃ÷´¦"
+
+msgid "Goes to the next bookmark in the current window file"
+msgstr "µ½ÏÂÒ»¸öÊéÇ©"
+
+msgid "Goes to the previous bookmark in the current window file"
+msgstr "µ½ÉÏÒ»¸öÊéÇ©"
 
 msgid "Goto &Line..."
 msgstr "Ìøµ½ĞĞ(&L)..."
@@ -3347,6 +3854,9 @@ msgstr "Í·ÎÄ¼ş"
 
 msgid "Header File:"
 msgstr "Í·ÎÄ¼ş£º"
+
+msgid "Header Files"
+msgstr "Í·ÎÄ¼ş"
 
 msgid "Header settings"
 msgstr "Ò³Í·ÉèÖÃ"
@@ -3428,11 +3938,18 @@ msgstr ""
 "±¾¿ØÖÆ¡£µ±È»£¬Äã±ØĞëÔÚ¸ÃÎ»ÖÃÓµÓĞ\n"
 "¶ÁĞ´È¨¡£"
 
+msgid ""
+"Here you can choose, if the hostname up to the first\n"
+"dot , or the full hostname is printed."
+msgstr ""
+"Äã¿ÉÒÔÔÚÕâ¶ùÑ¡Ôñ´òÓ¡µÚÒ»¸öµãºÅÇ°\n"
+"µÄÖ÷»úÃû»¹ÊÇ´òÓ¡ÍêÕûµÄÖ÷»úÃû"
+
 msgid "Here you can choose, if you print out in postscript or html."
 msgstr "ÔÚÕâ¶ù£¬Äã¿ÉÒÔÑ¡ÔñÊÇ´òÓ¡³Épostscript¸ñÊ½»¹ÊÇhtml¸ñÊ½¡£"
 
 msgid ""
-"Here you can choose, if you time will be printed in\n"
+"Here you can choose, if your time will be printed in\n"
 "am/pm format or in 24h format."
 msgstr ""
 "ÔÚÕâ¶ù£¬Äã¿ÉÒÔÑ¡ÔñÊÇÊ¹ÓÃÉÏÎç/ÏÂÎç¸ñÊ½\n"
@@ -3473,6 +3990,9 @@ msgstr "Äã¿ÉÒÔÔÚÕâ¶ùÑ¡Ôñ´òÓ¡ÎÄ¼şµÄ´ÎÊı¡£"
 msgid "Highlight Auto Select"
 msgstr "¸ßÁÁ×Ô¶¯Ñ¡Ôñ"
 
+msgid "Highlight bars"
+msgstr "¸ßÁÁÌõ"
+
 msgid "Highlight:"
 msgstr "¸ßÁÁ£º"
 
@@ -3490,6 +4010,17 @@ msgstr "ÈçºÎÖØ¸´´íÎó£º"
 
 msgid "Icon (*.xpm)"
 msgstr "Í¼±ê (*.xpm)"
+
+msgid ""
+"Identify the external debugger\n"
+"\n"
+"Enter the program name you wish to run\n"
+"as your debugger"
+msgstr ""
+"Ö¸¶¨Íâ²¿µ÷ÊÔÆ÷\n"
+"\n"
+"ÊäÈëÄãÏ£ÍûÊ¹ÓÃµÄÍâ²¿\n"
+"µ÷ÊÔÆ÷³ÌĞò"
 
 msgid ""
 "If button checked ,lines too large will be truncate.\n"
@@ -3537,12 +4068,29 @@ msgstr ""
 "ÏÖÔÚÄã¿ÉÒÔÓÃÒ»´®ÎÄ±¾À´´úÌæÎÄ¼şÃû¡£"
 
 msgid ""
+"If you choose this kind of project:\n"
+"\n"
+"An environment variable QEXTMDIDIR should be set!\n"
+"Because the wizard searches\n"
+"the header files in:  $(QEXTMDIDIR)/include\n"
+"and libqextmdi.so in: $(QEXTMDIDIR)/lib"
+msgstr ""
+"Èç¹ûÄãÑ¡ÔñÁË´ËÖÖÏîÄ¿:\n"
+"\n"
+"»·¾³±äÁ¿QEXTMDIDIR±ØĞëÉèÖÃ!!\n"
+"ÒòÎªÏòµ¼ÔÚÔÚÒ»ÏÂÂ·¾¶ËÑË÷\n"
+"Í·ÎÄ¼ş: $(QEXTMDIDIR)/include\n"
+"libqextmdi.so: $(QEXTMDIDIR)/lib"
+
+msgid "If you want a fancy header, then check it."
+msgstr "Èç¹ûÄãÏ£ÍûÓĞÉèÏëµÄÍ·ÎÄ¼ş¾ÍÑ¡ÖĞËü¡£"
+
+msgid ""
 "If you want to generate the user-documentation, you need one of these "
-"programs.\n"
-"If you do not have one, the user-documentation will not be generate."
+"programs."
 msgstr ""
 "Èç¹ûÄãĞèÒªÉú³ÉÓÃ»§ÎÄµµ£¬Äã¾Í±ØĞë\n"
-"ÓĞÆäÖĞÖ®Ò»£¬·ñÔòÎŞ·¨Éú³É¡£"
+"ÓĞÆäÖĞÖ®Ò»¡£"
 
 msgid ""
 "If you want to use a debugger, you\n"
@@ -3592,8 +4140,8 @@ msgstr "ºöÂÔÖ´ĞĞÖØĞÂÁ¬±àÊ±µÄËùÓĞ´íÎó¡£"
 msgid "Impl."
 msgstr "ÊµÏÖ"
 
-msgid "Implement virtual function..."
-msgstr "ÊµÏÖĞé·½·¨..."
+msgid "Important hint for a QextMDI project"
+msgstr "QextMDIÏîÄ¿µÄÖØÒªÌáÊ¾"
 
 msgid "In&dent"
 msgstr "Ëõ½ø(&D)"
@@ -3606,6 +4154,9 @@ msgstr "Ë÷ÒıÑ¡Ïî"
 
 msgid "Index Size"
 msgstr "Ë÷Òı´óĞ¡"
+
+msgid "Index engine :"
+msgstr "Ë÷ÒıÒıÇæ:"
 
 msgid ""
 "Indicates the range of a value and sets the current value\n"
@@ -3622,7 +4173,7 @@ msgstr ""
 msgid "Information..."
 msgstr "ĞÅÏ¢..."
 
-msgid "Inheritence"
+msgid "Inheritance"
 msgstr "¼Ì³Ğ"
 
 msgid ""
@@ -3784,6 +4335,18 @@ msgstr "°²×°³É¹¦ £¡"
 msgid "Installdir + Filename:"
 msgstr "°²×°Ä¿Â¼+ÎÄ¼şÃû£º"
 
+msgid "Internal"
+msgstr "ÄÚÖÃ"
+
+msgid "Interrupt"
+msgstr "ÔİÍ£"
+
+msgid "Interrupt the app execution"
+msgstr "ÔİÍ£³ÌĞòÖ´ĞĞ"
+
+msgid "Interuppt the app"
+msgstr "ÔİÍ£³ÌĞò"
+
 msgid ""
 "Into which widget do you want to insert this item ?\n"
 "\n"
@@ -3807,9 +4370,6 @@ msgstr "µ÷ÓÃ ./configure"
 msgid "Invokes automake and co."
 msgstr "µ÷ÓÃautomakeºÍco."
 
-msgid "Invokes make and KDbg debugging the binary"
-msgstr "µ÷ÓÃÁ¬±àºÍKDbgµ÷ÊÔ¶ş½øÖÆ´úÂë"
-
 msgid "Invokes make clean and rebuild all"
 msgstr "Çå³ı¾ÉÎÄ¼ş²¢È«²¿ÖØ½¨"
 
@@ -3824,6 +4384,9 @@ msgstr "µ÷ÓÃÁ¬±àÃüÁî"
 
 msgid "Invokes make-command and runs the program"
 msgstr "µ÷ÓÃÁ¬±àÃüÁî²¢ÔËĞĞ³ÌĞò"
+
+msgid "Invokes the debugger on the current project executable"
+msgstr "Îªµ±Ç°ÏîÄ¿µÄ¿ÉÖ´ĞĞÎÄ¼şµôÓÃµ÷ÊÔÆ÷"
 
 msgid "Item Font"
 msgstr "Ïî×ÖÌå"
@@ -3843,8 +4406,17 @@ msgstr "ÓëQComboBoxÏàËÆ"
 msgid "KDE"
 msgstr "KDE³ÌĞò"
 
-msgid "KDE 2 Developer Guide"
-msgstr "KDE 2¿ª·¢ÕßÖ¸ÄÏ"
+msgid "KDE 2 MDI"
+msgstr "KDE 2 ¶àÎÄµµ½çÃæ"
+
+msgid "KDE 2 Mini"
+msgstr "KDE 2 ÃÔÄã"
+
+msgid "KDE 2 Normal"
+msgstr "KDE 2 ÆÕÍ¨"
+
+msgid "KDE 2.x directory:"
+msgstr "KDE 2.xÄ¿Â¼£º"
 
 msgid "KDE Core Library"
 msgstr "KDEºËĞÄ¿â"
@@ -3873,9 +4445,6 @@ msgstr "KDE KSpell¿â"
 msgid "KDE Library Documentation Update..."
 msgstr "KDE¿âÎÄµµ¸üĞÂ..."
 
-msgid "KDE Library Reference"
-msgstr "KDE¿â²Î¿¼"
-
 msgid "KDE Libs Directory..."
 msgstr "KDE¿âÄ¿Â¼..."
 
@@ -3902,18 +4471,6 @@ msgstr "KDEÓÃ»§½çÃæ¿â"
 
 msgid "KDE version :"
 msgstr "KDE°æ±¾ºÅ£º"
-
-msgid "KDE-&Core-Library"
-msgstr "KDEºËĞÄ¿â(&C)"
-
-msgid "KDE-&GUI-Library"
-msgstr "KDE-GUI¿â(&G)"
-
-msgid "KDE-&HTML-Library"
-msgstr "KDE-HTML¿â(&H)"
-
-msgid "KDE-&KFile-Library"
-msgstr "KDE-KFile¿â(&K)"
 
 msgid "KDE-Core-Library"
 msgstr "KDEºËĞÄ¿â"
@@ -3946,7 +4503,7 @@ msgid "KDE-UI-Library"
 msgstr "KDE-UI¿â"
 
 msgid "KDE-Widgets"
-msgstr "KDE-Widgets"
+msgstr "KDE ¿Ø¼ş"
 
 msgid "KDevelop"
 msgstr "KDevelop"
@@ -3964,9 +4521,42 @@ msgid "KDevelop Setup"
 msgstr "ÉèÖÃKDevelop"
 
 msgid ""
+"KDevelop couldn't find sendmail at the given location.\n"
+"If you just want to generate the bugreport and send it\n"
+"by hand later, you can continue.\n"
+"Otherwise press Cancel and retype the sendmail command."
+msgstr ""
+"KDevelopÎŞ·¨ÔÚÖ¸¶¨µÄÎ»ÖÃÕÒµ½sendmail.Èç¹ûÄã½ö½öÒªÉú³É±¨¸æ²¢¹ıºóÊÖ¶¯·¢ËÍ,Äã¿ÉÒ"
+"Ô¼ÌĞø\n"
+"·ñÔò°´È¡Ïû²¢ÖØÌísendmailÃüÁî"
+
+msgid ""
+"KDevelop couldn't find the KDE API-Documentation.\n"
+"Do you want to generate it now?"
+msgstr ""
+"KDevelopÃ»ÓĞÕÒµ½KDE APIÎÄµµ\n"
+"ÊÇ·ñÏÖÔÚÉú³É?"
+
+msgid ""
 "KDevelop couldn't find the search database.\n"
 " Do you want to generate it now?"
 msgstr "KDevelopÃ»ÓĞ·¢ÏÖ²éÕÒÊı¾İ¿â£¬ÏÖÔÚÉú³ÉÂğ£¿"
+
+msgid "KDevelop debugger: Click to execute one line of code (\"step\")"
+msgstr "KDevelopµ÷ÊÔÆ÷:µã»÷Ö´ĞĞÒ»ĞĞ´úÂë(\"µ¥²½\")"
+
+msgid "KDevelop failed to shutdown correctly previously"
+msgstr "KDevelopÉÏÒ»´ÎÃ»ÓĞÄÜ¹»ÕıÈ·µÄ¹Ø±Õ"
+
+msgid ""
+"KDevelop failed to shutdown correctly previously\n"
+"Would you like to start with the last loaded project?"
+msgstr ""
+"KDevelopÉÏÒ»´ÎÃ»ÓĞÄÜ¹»ÕıÈ·µÄ¹Ø±Õ\n"
+"ÊÇ·ñ´Ó×î½üÒ»´Î×°ÔØµÄÏîÄ¿¿ªÊ¼?"
+
+msgid "KDevelop needs \""
+msgstr "KDevelopĞèÒª \""
 
 msgid ""
 "KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n"
@@ -3974,6 +4564,20 @@ msgid ""
 msgstr ""
 "KDevelopĞèÒª¡°gv¡°»ò¡°ghostview¡°\n"
 "»ò¡°kghostview¡°²ÅÄÜÕı³£¹¤×÷£¬Çë\n"
+"°²×°ÆäÖĞÖ®Ò»¡£"
+
+msgid ""
+"KDevelop needs either \"glimpse\" or \"htsearch\" to work properly.\n"
+"\tPlease install one!"
+msgstr ""
+"KDevelopĞèÒª\"glimpse\"»ò\"htsearch\"²ÅÄÜÕı³£¹¤×÷\n"
+"°²×°ÆäÖĞÖ®Ò»¡£"
+
+msgid ""
+"KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n"
+"\tPlease install one!"
+msgstr ""
+"KDevelopĞèÒª\"glimpseindex\"»ò\"htdig\"²ÅÄÜÕı³£¹¤×÷\n"
 "°²×°ÆäÖĞÖ®Ò»¡£"
 
 msgid "KDevelop version :"
@@ -3990,13 +4594,24 @@ msgid ""
 "for an internet job to finish\n"
 "Please wait until it has finished\n"
 "Alternatively stop the running one."
-msgstr "KWriteÕıÔÚµÈ´ıÒ»¸ö»¥ÁªÍøÈÎÎñµÄ½áÊø¡£ÇëµÈ´ıÆäÍê³É»òÕß½áÊø¸ÃÈÎÎñ¡£"
+msgstr ""
+"KWriteÕıÔÚµÈ´ıÒ»¸ö»¥ÁªÍøÈÎÎñµÄ½áÊø¡£\n"
+"ÇëµÈ´ıÆäÍê³É»òÕß½áÊø¸ÃÈÎÎñ¡£"
 
 msgid "Keys"
 msgstr "¼ü"
 
 msgid "Killing current process..."
 msgstr "ÕıÔÚÖÕÖ¹µ±Ç°½ø³Ì..."
+
+msgid "Kills the app and exits the debugger"
+msgstr "ÖÕÖ¹Ó¦ÓÃ³ÌĞò²¢ÍË³öµ÷ÊÔÆ÷"
+
+msgid "LMB sets bookmarks"
+msgstr "LMBÉèÖÃÊéÇ©"
+
+msgid "LMB sets breakpoints"
+msgstr "LMBÉèÖÃ¶Ïµã"
 
 msgid "Label:"
 msgstr "±êÇ©£º"
@@ -4016,11 +4631,12 @@ msgstr "ÈÃÓÃ»§Ñ¡ÔñÊ±¼ä¡£"
 msgid "Lets the user choose between several options."
 msgstr "ÈÃÓÃ»§ÔÚ¼¸¸öÑ¡Ïî¼äÑ¡Ôñ¡£"
 
-msgid "Lets user can (de-)select some settings."
-msgstr "ÈÃÓÃ»§¿ÉÒÔ£¨²»£©Ñ¡ÔñÄ³Ğ©ÉèÖÃ¡£"
-
 msgid "Lets you create a new logical file group"
 msgstr "ÈÃÄãÉú³ÉÒ»¸öĞÂµÄÂß¼­ÎÄ¼ş×é"
+
+msgid ""
+"Lets you debug your project app after specifying arguments for your app."
+msgstr "Ê¹ÄãÔÚÎªÓ¦ÓÃÖ¸¶¨²ÎÊıºóµ÷ÊÔ³ÌĞò"
 
 msgid "Lets you search individually for an expression"
 msgstr "ÈÃÄã¸÷¸ö²éÕÒ±í´ïÊ½"
@@ -4047,6 +4663,9 @@ msgstr "ÈÃÄãÎª³ÌĞòÉèÖÃÔËĞĞÊ±¿Ì²ÎÊı²¢µ÷ÓÃÁ¬±àÃüÁî"
 msgid "Lexical File (*.l, *.ll, *.lxx, *.l++)"
 msgstr "lex´Ê·¨·ÖÎöÎÄ¼ş(*.l,*.ll,*.lxx,*.l++)"
 
+msgid "Libraries"
+msgstr "¿â"
+
 msgid "Line"
 msgstr "ĞĞ"
 
@@ -4064,6 +4683,9 @@ msgstr "Á¬½ÓÆ÷Ñ¡Ïî"
 
 msgid "Linux/KDE"
 msgstr "Linux/KDE"
+
+msgid "LinuxDoc SGML (english) (*.sgml)"
+msgstr "LinuxDoc SGML(Ó¢ÎÄ)(*.sgml)"
 
 msgid "List of QStrings"
 msgstr "QStringÁĞ±í"
@@ -4091,6 +4713,9 @@ msgstr "ÕıÔÚ¼ÓÔØ..."
 msgid "Location:"
 msgstr "Î»ÖÃ£º"
 
+msgid "Log Message"
+msgstr "ÈÕÖ¾ĞÅÏ¢"
+
 msgid ""
 "Logical File Viewer\n"
 "\n"
@@ -4109,6 +4734,19 @@ msgstr "µÇÂ¼"
 
 msgid "Lower to &bottom"
 msgstr "½µµ½µ×¶Ë(&B)"
+
+msgid ""
+"Machine code display\n"
+"\n"
+"A machine code view into your running executable with the current "
+"instruction highlighted. You can step instruction by instruction using the "
+"debuggers toolbar buttons of \"step over\" instruction and \"step into\" "
+"instruction."
+msgstr ""
+"»úÆ÷ÂëÏÔÊ¾\n"
+"ÏÔÊ¾ÕıÔÚÖ´ĞĞ³ÌĞòµÄ»úÆ÷Âë²¢±êÊ¾³öµ±Ç°Ö¸Áî.\n"
+"Äã¿ÉÒÔÍ¨¹ıµ÷ÊÔ²Ëµ¥µÄ\"µ¥²½µ÷¹ıÖ¸Áî\"ºÍ\"µ¥\n"
+"²½½øÈëÖ¸Áî\"À´µ¥²½Ö´ĞĞ"
 
 msgid "Main Widget"
 msgstr "Ö÷Widget"
@@ -4138,6 +4776,9 @@ msgstr ""
 
 msgid "Make &API-Doc"
 msgstr "Éú³ÉAPIÎÄµµ(&A)"
+
+msgid "Make &Distribution"
+msgstr "Éú³É·¢²¼(&D)"
 
 msgid "Make &User-Manual"
 msgstr "Éú³ÉÓÃ»§ÊÖ²á(&U)"
@@ -4200,8 +4841,23 @@ msgstr "ÊÖ²áÎÄ¼ş£º"
 msgid "Manuals"
 msgstr "ÊÖ²á"
 
+msgid "Math library"
+msgstr "ÊıÑ§¿â"
+
 msgid "Medium"
 msgstr "ÖĞ"
+
+msgid "Memory"
+msgstr "ÄÚ´æ"
+
+msgid "Memory, dissemble, registers, library viewers"
+msgstr "ÄÚ´æ,·´»ã±à,¼Ä´æÆ÷,¿âä¯ÀÀÆ÷"
+
+msgid "Memory/Misc viewer"
+msgstr "ÄÚ´æ/ÔÓÏîä¯ÀÀÆ÷"
+
+msgid "MemoryView:"
+msgstr "ÄÚ´æÊÓ:"
 
 msgid "Menu Text:"
 msgstr "²Ëµ¥ÎÄ±¾£º"
@@ -4253,6 +4909,12 @@ msgstr "ÃÔÄãĞÍ"
 msgid "Mini-Icon"
 msgstr "ÃÔÄãÍ¼±ê"
 
+msgid "Miscalleneous :"
+msgstr "ÔÓÏî:"
+
+msgid "Mismatched core file"
+msgstr "²»Æ¥ÅäµÄcoreÎÄ¼ş"
+
 msgid "Modification date"
 msgstr "ĞŞ¸ÄÈÕÆÚ"
 
@@ -4279,6 +4941,36 @@ msgstr "°ÑÑ¡ÔñÒÆµ½ÓÒ±ß"
 
 msgid "Name:"
 msgstr "±äÁ¿Ãû£º"
+
+msgid "Namespaces"
+msgstr "Ãû×Ö¿Õ¼ä"
+
+msgid ""
+"Neither glimpse nor htdig is installed,\n"
+"therefore KDevelop can not index your\n"
+"documentation to provide a proper help\n"
+"functionality. We advise to install glimpse\n"
+"or htdig and create the searchdatabase later by\n"
+"choosing KDevelop Setup in the Options menu.\n"
+"\n"
+"As this is the last step of the Installation\n"
+"process, KDevelop will be started now.\n"
+"\n"
+"We hope you enjoy KDevelop and that it is a useful\n"
+"help to create new software.\n"
+"\n"
+"The KDevelop Team"
+msgstr ""
+"³ÌĞòglimpse»òhtdigÃ»ÓĞ°²×°£¬Òò´Ë£¬KDevelopÎŞ·¨ÔÚÄãµÄÎÄµµÖĞ\n"
+"±àÈëË÷ÒıÒÔÌá¹©ÊÊµ±µÄ°ïÖú¹¦ÄÜ¡£ÎÒÃÇ½¨Òé°²×°glimpse²¢\n"
+"Éú³É²éÕÒÊı¾İ¿â£¨ÔÚ£¢Ñ¡Ïî£¢²Ëµ¥ÖĞÑ¡Ôñ£¢ÉèÖÃKDevelop£¢£©\n"
+"\n"
+"ÓÉÓÚÕâÊÇ°²×°¹ı³ÌµÄ×îºóÒ»²½£¬ÏÖÔÚ½«Æô¶¯KDevelop\n"
+"\n"
+"ÎÒÃÇÏ£ÍûÄãÄÜ¹»Ï²»¶KDevelop£¬Ò²Ï£ÍûËüÄÜ¶ÔÄãÉú³ÉĞÂµÄÓ¦\n"
+"ÓÃ³ÌĞòÓĞËù°ïÖú¡£\n"
+"\n"
+"KDevelop¿ª·¢Ğ¡×é"
 
 msgid "New"
 msgstr "ĞÂ½¨"
@@ -4316,6 +5008,9 @@ msgstr "ĞÂ½¨ÎÄ¼ş..."
 msgid "New..."
 msgstr "ĞÂ½¨..."
 
+msgid "Next Bookmark"
+msgstr "ÏÂÒ»¸öÊéÇ©"
+
 msgid "Next Error"
 msgstr "ÏÂÒ»¸ö´íÎó"
 
@@ -4325,14 +5020,11 @@ msgstr "ÏÂÒ»Ìõ"
 msgid "No Database created!"
 msgstr "Ã»ÓĞÉú³ÉÊı¾İ¿â£¡"
 
+msgid "No File to print !"
+msgstr "Ã»ÓĞÒª´òÓ¡µÄÎÄ¼ş !"
+
 msgid "No Grid"
 msgstr "Ã»ÓĞÍø¸ñ"
-
-msgid "No Project API documentation !"
-msgstr "Ã»ÓĞÏîÄ¿APIÎÄµµ£¡"
-
-msgid "No Project manual found !"
-msgstr "Ã»ÓĞÏîÄ¿ÊÖ²á£¡"
 
 msgid "No built-in rules"
 msgstr "ÎŞÄÚ½¨¹æÔò"
@@ -4349,6 +5041,9 @@ msgstr "Î´·¢ÏÖÆ¥ÅäÏî"
 msgid "No name"
 msgstr "Ã»ÓĞÃû×Ö"
 
+msgid "No such file or directory."
+msgstr "ÎÄ¼ş»òÄ¿Â¼²»´æÔÚ."
+
 msgid "No type"
 msgstr "Ã»ÓĞÀàĞÍ"
 
@@ -4361,6 +5056,9 @@ msgstr "ÆÕÍ¨"
 msgid "Normal Text Color:"
 msgstr "ÆÕÍ¨ÎÄ±¾ÑÕÉ«£º"
 
+msgid "Normal-OpenGL"
+msgstr "ÆÕÍ¨-OpenGL"
+
 msgid "Normal:"
 msgstr "ÆÕÍ¨£º"
 
@@ -4369,6 +5067,9 @@ msgstr "Î´ÕÒµ½"
 
 msgid "Not found!"
 msgstr "Î´ÕÒµ½!"
+
+msgid "Not implemented"
+msgstr "Ã»ÓĞÊµÏÖ"
 
 msgid ""
 "Now KDevelop will perform the last step\n"
@@ -4387,6 +5088,9 @@ msgstr "ÕıÔÚ±àºÅ"
 msgid "Numbering & border"
 msgstr "±àºÅ£¦±ß½ç"
 
+msgid "O&ptions..."
+msgstr "Ñ¡Ïî(&O)..."
+
 msgid "OS / distribution :"
 msgstr "²Ù×÷ÏµÍ³/·¢²¼°æ:"
 
@@ -4395,6 +5099,9 @@ msgstr "Ìá¹©¶àĞĞ±à¼­Æ÷¡£"
 
 msgid "Ok"
 msgstr "È·¶¨"
+
+msgid "Old documentation deletion!"
+msgstr "¾ÉÎÄµµÉ¾³ı!"
 
 msgid ""
 "On systems that support dynamic linking,\n"
@@ -4503,7 +5210,7 @@ msgstr "Êä³öÊÓÍ¼"
 msgid ""
 "Output-View\n"
 "\n"
-"Enables/ disables the output window. The state of the window is displayed by "
+"Enables/Disables the output window. The state of the window is displayed by "
 "the toggle button: if the button is pressed, the window is open, otherwise "
 "closed."
 msgstr ""
@@ -4606,6 +5313,9 @@ msgstr "½«¼ôÌù°åÖĞµÄÄÚÈİÕ³Ìùµ½Êµ¼ÊÎ»ÖÃ"
 msgid "Pasting selection..."
 msgstr "ÕıÔÚÑ¡ÔñÕ³Ìù..."
 
+msgid "Path"
+msgstr "Â·¾¶"
+
 msgid "Perhaps a bugfix or workaround ?"
 msgstr "ĞŞÕı¸Ã´íÎóµÄ½¨Òé£¿"
 
@@ -4625,6 +5335,12 @@ msgstr ""
 msgid "Position"
 msgstr "Î»ÖÃ"
 
+msgid "Pr&eview dialog"
+msgstr "Ô¤ÀÀ¶Ô»°¿ò(&E)"
+
+msgid "Preparing file: "
+msgstr "ÕıÔÚ×¼±¸ÎÄ¼ş "
+
 msgid "Press Enter to continue!"
 msgstr "°´»Ø³µ¼ÌĞø£¡"
 
@@ -4643,6 +5359,11 @@ msgstr ""
 "Ê±»á±»ÖØĞÂ±àÒë¡£"
 
 msgid ""
+"Pressing this button lets you select the file\n"
+"by a filedialog."
+msgstr "°´×Å¸ö°´Å¥ÈÃÄãÍ¨¹ıÎÄ¼ş¶Ô»°¿òÑ¡ÔñÎÄ¼ş"
+
+msgid ""
 "Pretend that the target file has just been  modified.\n"
 "It  is  almost the same as running a touch command on\n"
 "the given file before running make, except  that  the\n"
@@ -4658,6 +5379,9 @@ msgstr "Ô¤ÀÀ"
 
 msgid "Preview dialog"
 msgstr "Ô¤ÀÀ¶Ô»°¿ò"
+
+msgid "Previous Bookmark"
+msgstr "ÉÏÒ»¸öÊéÇ©"
 
 msgid "Previous Error"
 msgstr "ÉÏÒ»¸ö´íÎó"
@@ -4764,6 +5488,9 @@ msgstr "´òÓ¡µ±Ç°ÎÄµµ"
 msgid "Priority"
 msgstr "ÓÅÏÈ¼¶"
 
+msgid "Private"
+msgstr "Ë½ÓĞµÄ"
+
 msgid "Problem description"
 msgstr "ÎÊÌâÃèÊö"
 
@@ -4788,9 +5515,6 @@ msgstr "³ÌĞòÍ¼±ê"
 msgid "Programmer's Hall of Fame..."
 msgstr "¹ØÓÚKDevelop..."
 
-msgid "Programming Handbook"
-msgstr "±à³ÌÊÖ²á"
-
 msgid "Project"
 msgstr "ÏîÄ¿"
 
@@ -4803,8 +5527,17 @@ msgstr "ÏîÄ¿ÓÃ»§ÊÖ²á(&U)"
 msgid "Project Options"
 msgstr "ÏîÄ¿Ñ¡Ïî"
 
+msgid "Project Path:"
+msgstr "ÏîÄ¿Â·¾¶£º"
+
+msgid "Project name:"
+msgstr "ÏîÄ¿Ãû£º"
+
 msgid "Project options"
 msgstr "ÏîÄ¿Ñ¡Ïî"
+
+msgid "Project sources have been modified"
+msgstr "ÏîÄ¿Ô´ÒÑ¾­±»ĞŞ¸Ä"
 
 msgid "Project/LFV"
 msgstr "ÏîÄ¿/Âß¼­ÎÄ¼şä¯ÀÀÆ÷"
@@ -4836,24 +5569,49 @@ msgstr "ÊôĞÔ..."
 msgid "Property"
 msgstr "ÊôĞÔ"
 
+msgid "Protected"
+msgstr "±£»¤µÄ"
+
+msgid ""
+"Provides a buttongroup frame with title to indicate that\n"
+"child widgets within the box belong together."
+msgstr ""
+"Ìá¹©´ø±êÌâµÄ°´Å¥×éÒÔ±íÃ÷¸Ã\n"
+"¿òÖĞµÄ×Ó¿Ø¼şÊôÓÚÍ¬Àà¡£"
+
 msgid ""
 "Provides a groupbox frame with title to indicate that\n"
 "child widgets within the box belong together."
 msgstr ""
 "Ìá¹©´ø±êÌâµÄ×é¿ò¿ò¼ÜÒÔ±íÃ÷¸Ã\n"
-"¿òÖĞµÄ×ÓwidgetÊôÓÚÍ¬Àà¡£"
+"¿òÖĞµÄ×Ó¿Ø¼şÊôÓÚÍ¬Àà¡£"
 
 msgid "Provides a single-column list of items that can be scrolled."
 msgstr "Ìá¹©¿É¹ö¶¯µÄµ¥ÁĞÁĞ±í¡£"
+
+msgid "Public"
+msgstr "¹«¹²µÄ"
 
 msgid "QT version :"
 msgstr "QT°æ±¾ºÅ£º"
 
 msgid "QT-Widgets"
-msgstr "QT-Widgets"
+msgstr "QT ¿Ø¼ş"
 
 msgid "Qt"
 msgstr "Qt³ÌĞò"
+
+msgid "Qt 2.1 MDI"
+msgstr "Qt 2.1 ¶àÎÄµ²½çÃæ"
+
+msgid "Qt 2.x / KDE path"
+msgstr "Qt 2.x / KDE Â·¾¶"
+
+msgid "Qt 2.x SDI"
+msgstr "Qt 2.x µ¥ÎÄµµ½çÃæ"
+
+msgid "Qt 2.x directory:"
+msgstr "Qt 2.x Ä¿Â¼£º"
 
 msgid "Qt Documentation found"
 msgstr "ÕÒµ½QtÎÄµµ"
@@ -4881,6 +5639,9 @@ msgstr "ÎÊÌâ"
 
 msgid "R&edo"
 msgstr "ÖØ¸´(&R)"
+
+msgid "RFV Options"
+msgstr "RFVÑ¡Ïî"
 
 msgid "Raise to &top"
 msgstr "Éıµ½¶¥¶Ë(&T)"
@@ -4958,6 +5719,12 @@ msgstr "¸üĞÂ"
 msgid "Refreshes current view"
 msgstr "¸üĞÂµ±Ç°ÊÓÍ¼"
 
+msgid "Registers"
+msgstr "¼Ä´æÆ÷"
+
+msgid "Release Tag"
+msgstr "Release±êÇ©"
+
 msgid "Reloading page..."
 msgstr "ÕıÔÚÖØĞÂÔØÈëÒ³..."
 
@@ -4979,11 +5746,17 @@ msgstr "É¾³ı×é"
 msgid "Remove Trailing &Spaces"
 msgstr "É¾³ıºó×º¿Õ¸ñ(&S)"
 
+msgid "Remove breakpoint"
+msgstr "É¾³ı¶Ïµã"
+
 msgid "Remove from Repository (and Disk)"
 msgstr "´Ó²Ö¿â£¨ºÍ´ÅÅÌ£©ÖĞÉ¾³ı"
 
 msgid "Remove from Repository (and disk)"
 msgstr "´Ó²Ö¿âÖĞ£¨ºÍ´ÅÅÌÉÏ£©É¾³ı"
+
+msgid "Removes // from the beginning of each selected line"
+msgstr "½«ËùÑ¡ĞĞ¿ªÊ¼´¦µÄ // É¾³ı"
 
 msgid "Removes file from the project"
 msgstr "´ÓÏîÄ¿ÖĞÉ¾³ıÎÄ¼ş"
@@ -4994,6 +5767,9 @@ msgstr "É¾³ıËùÑ¡ÔñµÄÂß¼­ÎÄ¼ş×é"
 msgid "Removing file from repository"
 msgstr "´Ó²Ö¿âÖĞÉ¾³ıÎÄ¼ş"
 
+msgid "Repeat Searc&h"
+msgstr "²éÕÒÏÂÒ»¸ö(&H)"
+
 msgid "Repeat Search"
 msgstr "²éÕÒÏÂÒ»¸ö"
 
@@ -5003,14 +5779,14 @@ msgstr "ÕıÔÚ²éÕÒÏÂÒ»¸ö..."
 msgid "Repeats the last search"
 msgstr "²éÕÒÏÂÒ»¸ö"
 
-msgid "Replace &Tabs"
-msgstr "Ìæ»»ÖÆ±í·û(&T)"
-
 msgid "Replace this occurence?"
 msgstr "Ìæ»»Âğ£¿"
 
 msgid "Replacing..."
 msgstr "ÕıÔÚÌæ»»..."
+
+msgid "Repository in VCS"
+msgstr "VCS²Ö¿â"
 
 msgid "Restricted Editline: Only selected Characters are valid input."
 msgstr "ÊÜÏŞ±à¼­¿ò£ºÖ»ÓĞËùÑ¡µÄ×Ö·û²ÅÄÜ±»ÊäÈë¡£"
@@ -5021,11 +5797,26 @@ msgstr "»Ö¸´×î½üÒ»´Î±à¼­"
 msgid "Run"
 msgstr "ÔËĞĞ"
 
+msgid "Run program to this cursor position"
+msgstr "ÔËĞĞ³ÌĞòÖÁ¹â±ê´¦"
+
+msgid "Run the program until this function/method ends"
+msgstr "ÔËĞĞ³ÌĞòÖÁ±¾º¯Êı/·½·¨½áÊø"
+
+msgid "Run to cursor"
+msgstr "ÔËĞĞµ½¹â±ê´¦"
+
+msgid "Run to end of function"
+msgstr "ÔËĞĞÖÁº¯Êı½áÊø"
+
 msgid "Running "
 msgstr "ÕıÔÚÔËĞĞ "
 
-msgid "Running  "
-msgstr "ÕıÔÚÔËĞĞ"
+msgid "Running %s in %s"
+msgstr "ÕıÔÚÔËĞĞ %s ÓÚ %s"
+
+msgid "Running %s in internal debugger"
+msgstr "ÕıÔÚÄÚÖÃµ÷ÊÔÆ÷ÖĞÔËĞĞ %s"
 
 msgid "Running ./configure..."
 msgstr "ÕıÔÚÔËĞĞ ./configure..."
@@ -5166,6 +5957,9 @@ msgstr "ÎÒÒª²éÕÒ:"
 msgid "Search for: "
 msgstr "²éÕÒ£º"
 
+msgid "Search in &Files..."
+msgstr "ÔÚÎÄ¼şÖĞ²éÕÒ(&F)..."
+
 msgid "Search in Files"
 msgstr "ÔÚÎÄ¼şÖĞ²éÕÒ"
 
@@ -5178,6 +5972,15 @@ msgstr "ÔÚÎÄ¼şÖĞ²éÕÒËùÑ¡ÎÄ±¾"
 msgid "Search string not found!"
 msgstr "×Ö´®Î´ÕÒµ½£¡"
 
+msgid "Searches and replace expression"
+msgstr "²éÕÒÓëÌæ»»±í´ïÊ½"
+
+msgid "Searches the file for an expression"
+msgstr "ÔÚÎÄ¼şÖĞ²éÕÒ±í´ïÊ½"
+
+msgid "Searches the selected text in the documentation"
+msgstr "ÔÚÎÄµµÖĞ²éÕÒËùÑ¡ÔñµÄÎÄ±¾"
+
 msgid "Searching for Help on..."
 msgstr "ÕıÔÚ²éÕÒ°ïÖú..."
 
@@ -5189,15 +5992,6 @@ msgstr "ÕıÔÚÎÄµµÖĞ²éÕÒÎÄ±¾..."
 
 msgid "Searching..."
 msgstr "ÕıÔÚ²éÕÒ..."
-
-msgid "Searchs and replace expression"
-msgstr "²éÕÒÓëÌæ»»±í´ïÊ½"
-
-msgid "Searchs the file for an expression"
-msgstr "ÔÚÎÄ¼şÖĞ²éÕÒ±í´ïÊ½"
-
-msgid "Searchs the selected text in the documentation"
-msgstr "ÔÚÎÄµµÖĞ²éÕÒËùÑ¡ÔñµÄÎÄ±¾"
 
 msgid "Select &All"
 msgstr "È«Ñ¡(&A)"
@@ -5216,6 +6010,22 @@ msgstr "Ñ¡ÔñÁ¬±àÃüÁî£º"
 
 msgid "Select Options"
 msgstr "Ñ¡ÔñÑ¡Ïî"
+
+msgid "Select debug command:"
+msgstr "Ñ¡Ôñµ÷ÊÔÃüÁî:"
+
+msgid ""
+"Select internal or external debugger\n"
+"\n"
+"Choose whether to use an external debugger\n"
+"or the internal debugger within kdevelop\n"
+"The internal debugger is a frontend to gdb"
+msgstr ""
+"Ñ¡ÔñÄÚÖÃ»òÍâ²¿µ÷ÊÔÆ÷\n"
+"\n"
+"Ñ¡ÔñÔÚKDevelopÖĞÊÇÊ¹ÓÃÄÚÖÃ\n"
+"»¹ÊÇÍâ²¿µ÷ÊÔÆ÷.ÄÚÖÃµ÷ÊÔÆ÷ÊÇ\n"
+"gdbµÄÇ°¶Ë"
 
 msgid ""
 "Select the directory where the new\n"
@@ -5268,6 +6078,12 @@ msgid ""
 "make-program here."
 msgstr "ÔÚÕâ¶ùÎªÄãµÄÁ¬±à³ÌĞòÉèÖÃÆäËüµÄ¸½¼ÓÑ¡Ïî¡£"
 
+msgid "Set focus on KDevelop"
+msgstr "½«½¹µãÉèÖÃÔÚDevelop"
+
+msgid "Set focus on window that had focus when \"kdev\" was pressed"
+msgstr "½«½¹µãÉèÖÃÔÚ°´ÏÂ\"kdev\"ÓµÓĞ½¹µãµÄ´°¿ÚÖĞ"
+
 msgid ""
 "Set the -O option for the GCC\n"
 "here. Turning off optimization\n"
@@ -5315,6 +6131,18 @@ msgstr "Äã¿ÉÒÔÔÚÕâ¶ùÑ¡ÔñÒ³Í·ËùÔÚÎ»ÖÃ¡£"
 
 msgid "Set the project name here."
 msgstr "ÔÚÕâ¶ùÉèÖÃÏîÄ¿Ãû¡£"
+
+msgid ""
+"Set the root directory path leading to your KDE 2 includes/libraries, e.g. "
+"/opt/kde2"
+msgstr "ÉèÖÃKDE 2.xÍ·ÎÄ¼şºÍ¿âµÄ¸ùÂ·¾¶(±ÈÈç/opt/kde2"
+
+msgid ""
+"Set the root directory path leading to your Qt 2.x path, e.g. /usr/lib/qt-2.0"
+msgstr "ÉèÖÃQt 2.xµÄ¸ùÂ·¾¶(±ÈÈç /usr/lib/qt-2.0)"
+
+msgid "Set the start directory where to create/load projects here"
+msgstr "ÔÚÕâ¶ùÑ¡ÔñĞÂ½¨/¼ÓÔØÏîÄ¿Ê±µÄÆô¶¯Ä¿Â¼"
 
 msgid "Set your Compiler options here"
 msgstr "ÔÚÕâ¶ùÉèÖÃ±àÒëÆ÷Ñ¡Ïî"
@@ -5366,8 +6194,11 @@ msgstr "ÉèÖÃ¿ªÊ¼Ê±¼äµÄĞ¡Ê±Öµ¡£"
 msgid "Sets the hour value of the end time."
 msgstr "ÉèÖÃ½áÊøÊ±¼äµÄĞ¡Ê±Öµ¡£"
 
-msgid "Sets the minute value of the end time."
+msgid "Sets the minute value of the beginning time."
 msgstr "ÉèÖÃ¿ªÊ¼Ê±¼äµÄ·ÖÖÓÖµ¡£"
+
+msgid "Sets the minute value of the end time."
+msgstr "ÉèÖÃ½áÊøÊ±¼äµÄ·ÖÖÓÖµ¡£"
 
 msgid "Setting up KDevelop..."
 msgstr "ÕıÔÚÉèÖÃKDevelop..."
@@ -5390,6 +6221,12 @@ msgstr "ÑÏÖØĞÔ"
 msgid "Short Information:"
 msgstr "¼ò¶ÌĞÅÏ¢£º"
 
+msgid "Should the project be rebuild before starting the application?"
+msgstr "ÔÚÆô¶¯Ó¦ÓÃÇ°ÊÇ·ñÖØ½¨¸ÃÏîÄ¿?"
+
+msgid "Should the project be rebuild before starting the debug session?"
+msgstr "ÔÚÆô¶¯µ÷ÊÔ»á»°Ç°ÊÇ·ñÖØ½¨ÏîÄ¿?"
+
 msgid "Show attributes"
 msgstr "ÏÔÊ¾ÊôĞÔ"
 
@@ -5399,11 +6236,17 @@ msgstr "ÏÔÊ¾×ÓÀà"
 msgid "Show clients"
 msgstr "ÏÔÊ¾¿Í»§"
 
+msgid "Show files that aren't registered as project files"
+msgstr "ÏÔÊ¾Î´×¢²áÎªÏîÄ¿ÎÄ¼şµÄÎÄ¼ş"
+
 msgid "Show graphical classview"
 msgstr "ÏÔÊ¾Í¼ĞÎ»¯µÄÀàÊÓÍ¼"
 
 msgid "Show methods"
 msgstr "ÏÔÊ¾·½·¨"
+
+msgid "Show non-project Files"
+msgstr "ÏÈÊÇ·ÇÏîÄ¿ÎÄ¼ş"
 
 msgid "Show parents"
 msgstr "ÏÔÊ¾¸¸Àà"
@@ -5413,9 +6256,6 @@ msgstr "ÏÔÊ¾Ïà¶ÔÂ·¾¶"
 
 msgid "Show suppliers"
 msgstr "ÏÔÊ¾Ìá¹©Õß"
-
-msgid "Show virtual methods"
-msgstr "ÏÔÊ¾Ğé·½·¨"
 
 msgid "Shows the current file properties"
 msgstr "ÏÔÊ¾µ±Ç°ÎÄ¼şÊôĞÔ"
@@ -5445,6 +6285,13 @@ msgstr "Ğ¡"
 
 msgid "Some information about the dialog editor..."
 msgstr "¹ØÓÚ¶Ô»°¿ò±à¼­Æ÷µÄÒ»Ğ©ĞÅÏ¢..."
+
+msgid ""
+"Sorry, but KDevelop is not able to add classes to existing header or "
+"implementation files."
+msgstr ""
+"±§Ç¸,KDevelopÎŞ·¨ÏòÏÖ´æµÄÍ·ÎÄ¼ş\n"
+"»òÊµÏÖÎÄ¼şÌí¼ÓÀà"
 
 msgid ""
 "Sorry, the maximum item count per dialog has been arrived.\n"
@@ -5513,6 +6360,12 @@ msgstr "Õı·½ĞÎÍø¸ñ"
 msgid "Standard Font"
 msgstr "±ê×¼×ÖÌå"
 
+msgid "Start (other)..."
+msgstr "Æô¶¯(ÆäËü)..."
+
+msgid "Start:"
+msgstr "Æô¶¯:"
+
 msgid "Starting..."
 msgstr "ÕıÔÚÆô¶¯..."
 
@@ -5543,9 +6396,6 @@ msgstr ""
 "Èç¹ûÔÊĞíÆô¶¯»Õ±ê£¬KDevelop½«\n"
 "ÔÚÆô¶¯Ê±ÏÔÊ¾»Õ±êÍ¼°¸¡£"
 
-msgid "Status&bar"
-msgstr "×´Ì¬Ìõ(&B)"
-
 msgid "Statusbar"
 msgstr "×´Ì¬Ìõ"
 
@@ -5559,6 +6409,65 @@ msgstr ""
 "\n"
 "±ê×¼´íÎóÊä³ö´°¿ÚÏÔÊ¾ÕıÔÚÔËĞĞµÄÓ¦ÓÃ³Ì\n"
 "ĞòÓÃcerrº¯ÊıÊä³öµÄÏûÏ¢ÒÔÓÃÓÚµ÷ÊÔ¡£"
+
+msgid "Step instr"
+msgstr "µ¥²½Ö¸Áî"
+
+msgid "Step into"
+msgstr "µ¥²½½øÈë"
+
+msgid ""
+"Step into\n"
+"\n"
+"Executes exactly one line of source. If the source line is a call to a "
+"function then execution will stop after the function has been entered "
+msgstr ""
+"µ¥²½½øÈë\n"
+"\n"
+"Ö»Ö´ĞĞÒ»ĞĞ´úÂë.Èç¹û¸ÃĞĞ´úÂëµôÓÃÁËÄ³¸ö\n"
+"º¯Êı,Ö´ĞĞ»áÍ£ÔÚ¸Ãº¯ÊıµÄÈë¿Ú´¦"
+
+msgid "Step into instr."
+msgstr "µ¥²½½øÈëÖ¸Áî"
+
+msgid "Step out"
+msgstr "µ¥²½Ìø³ö"
+
+msgid ""
+"Step out of\n"
+"\n"
+"Executes the application until the currently executing function is "
+"completed. The debugger will then display the line after the original call "
+"to that function. If we are in the outermost frame (ie in main()), then this "
+"operation has no affect."
+msgstr ""
+"µ¥²½Ìø³ö\n"
+"\n"
+"Ö´ĞĞ³ÌĞòÖ±µ½µ±Ç°º¯Êı½áÊø.µ÷ÊÔÆ÷»áÏÔÊ¾µ½\n"
+"µ÷ÓÃ¸Ãº¯ÊıµÄÏÂÒ»ĞĞ.Èç¹ûÎÒÃÇÔÚ×îÍâÃæµÄÄÇ\n"
+"Ò»Ö¡(¼´main()),¸ÃÖ¸ÁîÃ»ÓĞÓ°Ïì"
+
+msgid "Step over"
+msgstr "µ¥²½Ìø¹ı"
+
+msgid ""
+"Step over\n"
+"\n"
+"Executes one line of source in the current source file. If the source line "
+"is a call to a function the whole function is executed and the app will stop "
+"at the line following the function call."
+msgstr ""
+"µ¥²½Ìø¹ı\n"
+"\n"
+"Ö»Ö´ĞĞÒ»ĞĞ´úÂë.Èç¹û¸ÃĞĞ´úÂëµôÓÃÁËÄ³¸ö\n"
+"º¯Êı,¸Ãº¯Êı±»Õû¸öÖ´ĞĞ,²¢Í£ÓÚµôÓÃ¸Ãº¯Êı\n"
+"µÄÏÂÒ»ĞĞ"
+
+msgid "Step over instr"
+msgstr "µ¥²½Ìø¹ıÖ¸Áî"
+
+msgid "Step over instr."
+msgstr "µ¥²½Ìø¹ıÖ¸Áî"
 
 msgid ""
 "Stop\n"
@@ -5605,11 +6514,50 @@ msgstr "ÇĞ»»µ½±à¼­Ä£Ê½"
 msgid "Switch to the dialogeditor"
 msgstr "ÇĞ»»µ½¶Ô»°¿ò±à¼­Æ÷"
 
+msgid "Switches to KDevelop's User Manual"
+msgstr "ÇĞ»»µ½KDevelopÓÃ»§ÊÖ²á"
+
+msgid "Switches to declaration/implementation"
+msgstr "ÇĞ»»µ½ÉùÃ÷/ÊµÏÖ´¦"
+
+msgid "Switches to last browser page"
+msgstr "ÇĞ»»µ½ÉÏÒ»ä¯ÀÀÒ³"
+
+msgid "Switches to next browser page"
+msgstr "ÇĞ»»µ½ÏÂÒ»ä¯ÀÀÒ³"
+
+msgid "Switches to the C/C++-Reference"
+msgstr "ÇĞ»»µ½C/C++²Î¿¼"
+
+msgid "Switches to the KDE 2 Developer´s Guide Handbook"
+msgstr "ÇĞ»»µ½KDE 2¿ª·¢ÕßÖ¸ÄÏ"
+
+msgid "Switches to the KDE Library Reference Guide Handbook"
+msgstr "ÇĞ»»µ½KDevelop¿â²Î¿¼ÊÖ²á"
+
+msgid "Switches to the KDE Tutorials Handbook"
+msgstr "ÇĞ»»µ½KDevelop½Ì³ÌÊÖ²á"
+
+msgid "Switches to the KDevelop Programming Handbook"
+msgstr "ÇĞ»»µ½KDevelop±à³ÌÊÖ²á"
+
 msgid "Switches to the file and line the next error was reported"
 msgstr "ÇĞ»»µ½ÏÂÒ»¸ö´íÎóËùÔÚµÄÎÄ¼şºÍĞĞ"
 
 msgid "Switches to the file and line the previous error was reported"
 msgstr "ÇĞ»»µ½ÉÏÒ»¸ö´íÎóËùÔÚµÄÎÄ¼şºÍĞĞ"
+
+msgid "Switches to the method's declaration"
+msgstr "ÇĞ»»µ½·½·¨µÄÉùÃ÷´¦"
+
+msgid "Switches to the method's definition"
+msgstr "ÇĞ»»µ½·½·¨µÄ¶¨Òå´¦"
+
+msgid "Switches to the project's API-Documentation"
+msgstr "ÇĞ»»µ½ÏîÄ¿µÄAPIÎÄµµ"
+
+msgid "Switches to the project's User-Manual"
+msgstr "ÇĞ»»µ½ÏîÄ¿µÄÓÃ»§ÊÖ²á"
 
 msgid "Switching to last page..."
 msgstr "ÕıÔÚÇĞ»»µ½×îºóÒ»Ò³..."
@@ -5626,59 +6574,14 @@ msgstr "ÕıÔÚÇĞ»»µ½ÏîÄ¿ÊÖ²á..."
 msgid "Switching to selected line..."
 msgstr "ÕıÔÚÇĞ»»µ½ËùÑ¡ĞĞ..."
 
-msgid "Switchs to KDevelop's User Manual"
-msgstr "ÇĞ»»µ½KDevelopÓÃ»§ÊÖ²á"
-
-msgid "Switchs to declaration/implementation"
-msgstr "ÇĞ»»µ½ÉùÃ÷/ÊµÏÖ´¦"
-
-msgid "Switchs to last browser page"
-msgstr "ÇĞ»»µ½ÉÏÒ»ä¯ÀÀÒ³"
-
-msgid "Switchs to next browser page"
-msgstr "ÇĞ»»µ½ÏÂÒ»ä¯ÀÀÒ³"
-
-msgid "Switchs to the C/C++-Reference"
-msgstr "ÇĞ»»µ½C/C++²Î¿¼"
-
-msgid "Switchs to the KDE-Core-Documentation"
-msgstr "ÇĞ»»µ½KDEºËĞÄÎÄµµ"
-
-msgid "Switchs to the KDE-File-Documentation"
-msgstr "ÇĞ»»µ½KDE-FILEÎÄµµ"
-
-msgid "Switchs to the KDE-GUI-Documentation"
-msgstr "ÇĞ»»µ½KDE-GUIÎÄµµ"
-
-msgid "Switchs to the KDE-Html-Documentation"
-msgstr "ÇĞ»»µ½KDE-HtmlÎÄµµ"
-
-msgid "Switchs to the KDevelop Programming Handbook"
-msgstr "ÇĞ»»µ½KDevelop±à³ÌÊÖ²á"
-
-msgid "Switchs to the QT-Documentation"
-msgstr "ÇĞ»»µ½QTÎÄµµ"
-
-msgid "Switchs to the method's declaration"
-msgstr "ÇĞ»»µ½·½·¨µÄÉùÃ÷´¦"
-
-msgid "Switchs to the method's definition"
-msgstr "ÇĞ»»µ½·½·¨µÄ¶¨Òå´¦"
-
-msgid "Switchs to the project's API-Documentation"
-msgstr "ÇĞ»»µ½ÏîÄ¿µÄAPIÎÄµµ"
-
-msgid "Switchs to the project's User-Manual"
-msgstr "ÇĞ»»µ½ÏîÄ¿µÄÓÃ»§ÊÖ²á"
-
 msgid "Syntax error in pattern"
 msgstr "ÑùÊ½Óï·¨´íÎó"
 
 msgid "Syntax-Highlighting"
 msgstr "Óï·¨¸ßÁÁ"
 
-msgid "System information"
-msgstr "ÏµÍ³ĞÅÏ¢"
+msgid "System"
+msgstr "ÏµÍ³"
 
 msgid "Tab Width:"
 msgstr "ÖÆ±í·û¿í¶È£º"
@@ -5702,16 +6605,6 @@ msgid "The KDE-Documentation-Path isn't set correctly."
 msgstr "KDEÎÄµµÂ·¾¶ÉèÖÃ²»¶Ô¡£"
 
 msgid ""
-"The Project API documentation is not present.\n"
-"Would you like to generate it now ?"
-msgstr "ÏîÄ¿APIÎÄµµ²»´æÔÚ£¬ÏÖÔÚÉú³ÉÂğ£¿"
-
-msgid ""
-"The Project manual documentation is not present.\n"
-"Would you like to generate the handbook  now ?"
-msgstr "ÏîÄ¿ÊÖ²áÎÄµµ²»´æÔÚ£¬ÏÖÔÚÉú³ÉÂğ£¿"
-
-msgid ""
 "The Qt-Documentation path is not set correctly.\n"
 "If you want your KDE-library documentation to\n"
 "be cross-referenced to the Qt-library, you have\n"
@@ -5729,11 +6622,17 @@ msgstr "QTÎÄµµÂ·¾¶ÉèÖÃ²»¶Ô¡£"
 
 msgid ""
 "The chosen path does not lead to the\n"
-"KDE Libraries. Please choose the\n"
+"KDE-2.x root directory. Please choose the\n"
 "correct path."
 msgstr ""
-"ËùÑ¡µÄÂ·¾¶Ã»ÓĞKDE¿â¡£\n"
+"ËùÑ¡µÄÂ·¾¶Ã»ÓĞKDE-2.x¸ùÄ¿Â¼¡£\n"
 "ÇëÑ¡ÔñÕıÈ·µÄÂ·¾¶¡£"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Do you really want to save\n"
+"this value?"
+msgstr "Ñ¡ÔñµÄÂ·¾¶Ã»ÓĞKDE¿âÎÄµµ¡£È·ÊµÒª±£´æ¸ÃÖµÃ´?"
 
 msgid ""
 "The chosen path does not lead to the\n"
@@ -5743,6 +6642,20 @@ msgid ""
 msgstr ""
 "Ñ¡ÔñµÄÂ·¾¶Ã»ÓĞKDE¿âÎÄµµ¡£ÇëÑ¡ÔñÕıÈ·\n"
 "µÄÂ·¾¶»ò¡°¸üĞÂ¡°ÒÔÉú³ÉÒ»¸öĞÂÎÄµµ¡£"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"Qt-2.x root directory. Please choose the\n"
+"correct path."
+msgstr ""
+"Ñ¡ÔñµÄÂ·¾¶Ã»ÓĞQt-2.x¸ùÄ¿Â¼¡£ÇëÑ¡Ôñ\n"
+"ÕıÈ·µÄÂ·¾¶¡£"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"Qt-library documentation. Do you really want to save\n"
+"this value?"
+msgstr "Ñ¡ÔñµÄÂ·¾¶Ã»ÓĞQt¿âÎÄµµ¡£È·ÊµÒª±£´æ¸ÃÖµÃ´?"
 
 msgid ""
 "The chosen path does not lead to the\n"
@@ -5772,8 +6685,21 @@ msgstr "µ±Ç°ÎÄµµÒÑ¾­¸Ä±ä¡£ÄãÏë±£´æËüÂğ£¿"
 msgid "The document was modified,save?"
 msgstr "ÎÄµµÒÑ¾­¸Ä±ä£¬ÊÇ·ñ±£´æ£¿"
 
+msgid "The file "
+msgstr "¸ÃÎÄ¼ş"
+
+msgid ""
+"The file %s was modified outside\n"
+"this editor. Save anyway?"
+msgstr ""
+"ÎÄ¼ş%sÔÚ±¾±à¼­Æ÷Íâ±»ĞŞ¸Ä\n"
+"ÊÇ·ñ±£´æ?"
+
 msgid "The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"
 msgstr "ÎÄ¼şÃû±ØĞèÒÔ.cpp,.c,.cc,.C,.cxx,.ec»ò.ecpp½áÎ²£¡"
+
+msgid "The filename must end with .docbook !"
+msgstr "ÎÄ¼şÃû±ØĞèÒÔ.docbook½áÎ²£¡"
 
 msgid "The filename must end with .h or .hxx!"
 msgstr "ÎÄ¼şÃû±ØĞèÒÔ.h»ò.hxx½áÎ²£¡"
@@ -5805,32 +6731,8 @@ msgstr ""
 "\n"
 " "
 
-msgid ""
-"The program glimpse is not installed,\n"
-"therefore KDevelop can not index your\n"
-"documentation to provide a proper help\n"
-"functionality. We advise to install glimpse\n"
-"and create the searchdatabase later by choosing\n"
-"KDevelop Setup in the Options menu .\n"
-"\n"
-"As this is the last step of the Installation\n"
-"process, KDevelop will be started now.\n"
-"\n"
-"We hope you enjoy KDevelop and that it is a useful\n"
-"help to create new software.\n"
-"\n"
-"The KDevelop Team"
-msgstr ""
-"³ÌĞòglimpseÃ»ÓĞ°²×°£¬Òò´Ë£¬KDevelopÎŞ·¨ÔÚÄãµÄÎÄµµÖĞ\n"
-"±àÈëË÷ÒıÒÔÌá¹©ÊÊµ±µÄ°ïÖú¹¦ÄÜ¡£ÎÒÃÇ½¨Òé°²×°glimpse²¢\n"
-"Éú³É²éÕÒÊı¾İ¿â£¨ÔÚ£¢Ñ¡Ïî£¢²Ëµ¥ÖĞÑ¡Ôñ£¢ÉèÖÃKDevelop£¢£©\n"
-"\n"
-"ÓÉÓÚÕâÊÇ°²×°¹ı³ÌµÄ×îºóÒ»²½£¬ÏÖÔÚ½«Æô¶¯KDevelop\n"
-"\n"
-"ÎÒÃÇÏ£ÍûÄãÄÜ¹»Ï²»¶KDevelop£¬Ò²Ï£ÍûËüÄÜ¶ÔÄãÉú³ÉĞÂµÄÓ¦\n"
-"ÓÃ³ÌĞòÓĞËù°ïÖú¡£\n"
-"\n"
-"KDevelop¿ª·¢Ğ¡×é"
+msgid "The old documentation path\n"
+msgstr "¾ÉÎÄµµÂ·¾¶\n"
 
 msgid ""
 "The project\n"
@@ -5883,15 +6785,18 @@ msgid ""
 msgstr "¸Ã¶Ô»°¿òÓÃÓÚÉèÖÃÁ¬±àÑ¡Ïî¡£"
 
 msgid ""
-"This doesn't delete your current documentation and leaves it\n"
-"is now and you can select a new path for the new kdelibs\n"
-"documentation. CAUTION: Don't insert the same path where\n"
-"your recent documentation is installed- this may mess up\n"
+"This doesn't delete your current documentation, leaves it\n"
+"where it is now and you can select a new path for the new kdelibs\n"
+"documentation. CAUTION: Don't insert the same path as\n"
+"for your recent documentation - this may mess up\n"
 "the documentation by mixing old and new files!"
 msgstr ""
 "Õâ²»»áÉ¾³ı¾ÉµÄÎÄµµ£¬Äã¿ÉÒÔÎªĞÂÎÄµµ\n"
 "ÁíÑ¡Ò»¸öÂ·¾¶¡£×¢Òâ£º²»ÒªÑ¡Ôñ¾ÉÎÄµµ\n"
 "ËùÔÚÂ·¾¶£¬Õâ»á°ÑĞÂ¾ÉÎÄ¼ş»ìÔÚÒ»Æğ¡£"
+
+msgid "This function isn't implemented yet."
+msgstr "¸Ãº¯Êı»¹Ã»ÓĞÊµÏÖ"
 
 msgid ""
 "This installation program will check your system for helper programs needed "
@@ -5907,6 +6812,15 @@ msgstr ""
 "³ö¸ü¶àÓĞ¹Ø°²×°µÄĞÅÏ¢¡£Ñ¡Ôñ¡°È¡Ïû¡°½«Í£Ö¹°²×°\n"
 "¹ı³Ì KDevelopÆô¶¯ºó£¬ÏàÓ¦µÄ¹¦ÄÜ»áÓÉÓÚÈ±ÉÙ´¦Ê¼\n"
 "Öµ¶øÎŞ·¨Ê¹ÓÃ"
+
+msgid ""
+"This is a Project-File from KDevelop 0.1\n"
+"Sorry,but it's incompatible with KDevelop >= 0.2.\n"
+"Please use only new generated projects!"
+msgstr ""
+"ÕâÊÇKDevelop 0.1µÄÏîÄ¿ÎÄ¼ş\n"
+"ºÜ±§Ç¸,ËüÓëKDevelop>=0.2²»¼æÈİ\n"
+"ÇëÖ»Ê¹ÓÃĞÂÉú³ÉµÄÏîÄ¿!"
 
 msgid "This is a button displaying the selected color."
 msgstr "¿ÉÒÔÏÔÊ¾²ÊÉ«µÄ°´Å¥¡£"
@@ -5961,25 +6875,13 @@ msgstr ""
 "ÆäËüÖµ¿ÉÒÔÔÚMakefileÖĞÕÒµ½¡£"
 
 msgid ""
-"This option sets the compiler\n"
-"to <i>-fsyntax-only</i>\n"
-"which lets you check your code for\n"
-"syntax-errors but doesn't do anything\n"
-"else beyond that."
-msgstr ""
-"¸ÃÑ¡Ïî½«±àÒëÆ÷ÉèÖÃÎª\n"
-"<i>-fsyntax-only</i> ¡£\n"
-"Õâ¿ÉÒÔÊ¹ÄãÖ»¼ì²éÊÇ·ñÓĞ\n"
-"Óï·¨´íÎó¶ø²»±Ø×öÆäËüÊÂ¡£"
-
-msgid ""
 "This will insert a QWidget to the dialog.\n"
-"Such an item may have serveral children items\n"
+"Such an item may have several children items\n"
 "or even more QWidgets as children. That means\n"
 "this item lets you create complex hierarchies\n"
 "for you dialog.\n"
 "\n"
-"Another think you will need this item type for\n"
+"Another thing you will need this item type for\n"
 "are widgets like the tab view which need several\n"
 "widgets they can bring to the top."
 msgstr ""
@@ -6007,6 +6909,9 @@ msgstr "Î´ÕÒµ½Ğ¡¼¼ÇÉÊı¾İ¿â£¡Çë¼ì²é°²×°¡£"
 msgid "Title"
 msgstr "±êÌâ"
 
+msgid "Toggles a bookmark to the current window file"
+msgstr "Îªµ±Ç°´°¿ÚÎÄ¼şÉèÖÃÊéÇ©"
+
 msgid "Toogle Output-View"
 msgstr "ÇĞ»»Êä³öÊÓÍ¼"
 
@@ -6015,6 +6920,9 @@ msgstr "ÇĞ»»Ê÷×´ÊÓÍ¼"
 
 msgid "Tool&s"
 msgstr "¹¤¾ß(&S)"
+
+msgid "Toolb&ar"
+msgstr "¹¤¾ßÌõ(&A)"
 
 msgid "Toolbar"
 msgstr "¹¤¾ßÌõ"
@@ -6052,7 +6960,7 @@ msgstr "Ê÷×´ÊÓÍ¼"
 msgid ""
 "Tree-View\n"
 "\n"
-"Enables/ disables the tree window. The state of the window is displayed by "
+"Enables/Disables the tree window. The state of the window is displayed by "
 "the toggle button: if the button is pressed, the window is open, otherwise "
 "closed."
 msgstr ""
@@ -6062,8 +6970,9 @@ msgstr ""
 "°´Å¥Ö¸Ê¾£ºÈç¹û¸Ã°´Å¥ÊÇ°´ÏÂµÄ£¬ÄÇÃ´´°\n"
 "¿Ú¾ÍÊÇ´ò¿ªµÄ£¬·´Ö®ÔòÊÇ¹Ø±ÕµÄ¡£"
 
-msgid "Tutorials"
-msgstr "½Ì³Ì"
+msgid ""
+"Try to display this variable whenever the application execution is paused"
+msgstr "ÏÔÊ¾±äÁ¿Öµ,ÎŞÂÛ³ÌĞòÊÇ·ñ±»ÔİÍ£"
 
 msgid "Type"
 msgstr "ÀàĞÍ"
@@ -6076,6 +6985,12 @@ msgstr "³·Ïû(&N)"
 
 msgid "URL Link Color:"
 msgstr "Á´½ÓµÄÑÕÉ«£º"
+
+msgid "Unco&mment"
+msgstr "È¡Ïû×¢ÊÍ(&M)"
+
+msgid "Uncomment"
+msgstr "È¡Ïû×¢ÊÍ"
 
 msgid "Underline links"
 msgstr "Á´½Ó´øÏÂ»®Ïß"
@@ -6095,11 +7010,17 @@ msgstr "³·Ïû²½Êı£º"
 msgid "Unfold all"
 msgstr "È«²¿Õ¹¿ª"
 
+msgid "Uninden&t"
+msgstr "²»Ëõ½ø(&T)"
+
 msgid "Unindent"
 msgstr "²»Ëõ½ø"
 
 msgid "Update"
 msgstr "¸üĞÂ"
+
+msgid "Update API"
+msgstr "¸üĞÂAPI"
 
 msgid ""
 "Update KDE-Documentation\n"
@@ -6127,8 +7048,17 @@ msgstr ""
 msgid "Update KDE-Documentation :"
 msgstr "¸üĞÂKDEÎÄµµ"
 
+msgid "Update Makefile.am"
+msgstr "¸üĞÂMakefile.am"
+
+msgid "Update all Makefile.am"
+msgstr "¸üĞÂËùÓĞµÄMakefile.am"
+
 msgid "Update..."
 msgstr "¸üĞÂ..."
+
+msgid "Updates file/directory from repository"
+msgstr "´Ó²Ö¿âÖĞ¸üĞÂÎÄ¼ş/Ä¿Â¼"
 
 msgid "Updating"
 msgstr "ÕıÔÚ¸üĞÂ"
@@ -6145,6 +7075,9 @@ msgid ""
 "Use a standard\n"
 "headertemplate for your implementation files"
 msgstr "ÔÚÄãµÄÊµÏÖÎÄ¼şÖĞÊ¹ÓÃ±ê×¼µÄÍ·Ä£°å"
+
+msgid "Use external debugger"
+msgstr "Ê¹ÓÃÍâ²¿µ÷ÊÔÆ÷"
 
 msgid ""
 "Use this text instead of the file name in the page\n"
@@ -6165,14 +7098,53 @@ msgstr "ÓÃ»§ÊÖ²á"
 msgid "User-Documentation"
 msgstr "ÓÃ»§ÎÄµµ"
 
+msgid "VAR"
+msgstr "±äÁ¿"
+
+msgid "VCS"
+msgstr "°æ±¾¿ØÖÆÏµÍ³"
+
+msgid "VCS Location"
+msgstr "VCS Î»ÖÃ£º"
+
+msgid "VCS Support"
+msgstr "VCSÖ§³Ö"
+
 msgid "Value"
 msgstr "Öµ"
 
 msgid "Variable"
 msgstr "±äÁ¿"
 
+msgid ""
+"Variable Tree\n"
+"\n"
+"The variable tree allows you to see the variable values as you step through "
+"your program using the internal debugger. Click the RMB on items in this "
+"view to get a popup menu.\n"
+"To speed up stepping through your code leave the tree items closed and add "
+"the variable(s) to the watch section.\n"
+"To change a variable value in your running app use a watch variable (eg a=5)."
+msgstr ""
+"±äÁ¿Ê÷\n"
+"\n"
+"±äÁ¿Ê÷ÔÊĞíÄãÔÚÊ¹ÓÃÄÚÖÃµ÷ÊÔÆ÷¸ú×ÙµÄÊ±ºò¿´µ½\n"
+"±äÁ¿.°´ÏÂÊó±êÓÒ¼üµÃµ½Ò»¸öµ¯³öÊ½²Ëµ¥.\n"
+"ÎªÁË¼ÓËÙµ¥²½µ÷ÊÔ,±£³Ö¸ÃÊ÷Îª¿Õ²¢°Ñ±äÁ¿Ìí¼Ó\n"
+"µ½²é¿´Çø.\n"
+"ÓÃ²é¿´±äÁ¿(±ÈÈça=5)À´¸Ä±äÔËĞĞ³ÌĞòÖĞµÄ±äÁ¿Öµ"
+
 msgid "Variables"
 msgstr "±äÁ¿"
+
+msgid "Various startups for the debugger"
+msgstr "µ÷ÊÔÆ÷µÄ¸÷ÖÖÆô¶¯·½·¨"
+
+msgid "Various views into the app"
+msgstr "Ó¦ÓÃ³ÌĞòµÄ¸÷ÖÖÊÓÍ¼"
+
+msgid "Vendor Tag"
+msgstr "±êÇ©"
 
 msgid "Version Control System Support"
 msgstr "°æ±¾¿ØÖÆÏµÍ³Ö§³Ö"
@@ -6197,6 +7169,9 @@ msgstr "´¹Ö±Ñ¡Ôñ´ò¿ª"
 
 msgid "View in new window"
 msgstr "ÔÚĞÂ´°¿ÚÖĞ´ò¿ª"
+
+msgid "Viewers"
+msgstr "²é¿´"
 
 msgid "Views a calendar in a tableview."
 msgstr "ÔÚ±í¸ñÊÓÍ¼ÖĞÏÔÊ¾Ê±¼ä¡£"
@@ -6377,8 +7352,11 @@ msgstr ""
 "ÀıÈç£ºÔÚÖ»ÄÜÔÚ2»ò4×Ö½Ú±ß½ç·ÃÎÊÕûÊıµÄ»úÆ÷ÉÏ£¬\n"
 "°Ñ<i>char *</i>×ª»»³É<i>int *</i>¡£"
 
-msgid "Welcome !"
-msgstr "»¶Ó­ £¡"
+msgid "Watch"
+msgstr "²é¿´"
+
+msgid "Watch: "
+msgstr "²é¿´:"
 
 msgid "Welcome to KDevelop!"
 msgstr "»¶Ó­À´µ½KDevelop£¡"
@@ -6410,13 +7388,13 @@ msgstr ""
 "¿òÖĞµÄÏî¡£"
 
 msgid "Widget Editor"
-msgstr "Widget±à¼­Æ÷"
+msgstr "¿Ø¼ş±à¼­Æ÷"
 
 msgid "Widget Properties"
-msgstr "WidgetÊôĞÔ"
+msgstr "¿Ø¼şÊôĞÔ"
 
 msgid "Widgets"
-msgstr "Widgets"
+msgstr "¿Ø¼ş"
 
 msgid ""
 "Widgets\n"
@@ -6430,6 +7408,9 @@ msgstr ""
 "Äã¿ÉÒÔÔÚÕâ¶ùÑ¡ÔñÒ»¸öwidget¼ÓÈëµ½ÄãµÄ¶Ô»°¿òÖĞ¡£\n"
 " Í¨¹ı¡°ÕâÊÇÊ²Ã´¡°°´Å¥»òKDevelopÎÄµµ¿ÉÒÔ»ñµÃ\n"
 "ÓĞ¹ØwidgetÏî¸ü¶àµÄĞÅÏ¢¡£"
+
+msgid "Wrap &Cursor"
+msgstr "¹â±ê¶ÔÆë(&C)"
 
 msgid "Wrap Words At:"
 msgstr "Ã¿ĞĞ×Ö·ûÊı:"
@@ -6509,6 +7490,11 @@ msgid ""
 "We will regenerate all Makefiles now."
 msgstr "ÄãĞŞ¸ÄÁËÏîÄ¿°æ±¾ºÅ£¬ÎÒÃÇÏÖÔÚ»áÖØĞÂÉú³ÉËùÓĞµÄMakefiles¡£"
 
+msgid ""
+"You have no write permission to delete\n"
+"the old documentation in\n"
+msgstr "ÄãÃ»ÓĞÉ¾¾ÉÎÄµµµÄĞ´È¨ÏŞ\n"
+
 msgid "You have specified a directory"
 msgstr "ÄãÖ¸¶¨ÁËÒ»¸öÄ¿Â¼"
 
@@ -6575,6 +7561,18 @@ msgstr "Äã±ØĞèÎªÊµÏÖÎÄ¼şÖ¸¶¨Ãû×Ö£¡"
 msgid "You must select a text for searching the documentation!"
 msgstr "Äã±ØĞëÑ¡ÔñĞèÒªÔÚÎÄµµÖĞ²éÕÒµÄÎÄ±¾£¡"
 
+msgid ""
+"You need to select at least one file for printing. This can be done by "
+"entering the filename on the left at the file entry field."
+msgstr ""
+"ÄãĞèÒªÖÁÉÙÒ»¸öÎÄ¼şÀ´´òÓ¡.¿ÉÒÔÔÚ×ó±ßµÄÎÄ¼ş\n"
+"ÊäÈëÓòÖĞÊäÈëÎÄ¼şÃû"
+
+msgid ""
+"You need write permission to create\n"
+"the documentation in\n"
+msgstr "ÄãĞèÒªĞ´È¨ÏŞÀ´Éú³ÉÎÄµµ\n"
+
 msgid "Your E-mail Address :"
 msgstr "ÄãµÄE-mailµØÖ·£º"
 
@@ -6586,6 +7584,9 @@ msgstr "ÄãµÄÔ´´úÂëÒÑ¾­±»ÒëÎªËùÓĞÖ§³ÖµÄÓïÑÔ¡£"
 
 msgid "a tiny index (2-3% of the total size of all files)"
 msgstr "ºÜĞ¡µÄË÷Òı£¨Õ¼ËùÓĞÎÄ¼ş´óĞ¡µÄ2-3%£©"
+
+msgid "a2ps default"
+msgstr "a2ps È±Ê¡"
 
 msgid "add"
 msgstr "Ìí¼Ó"
@@ -6623,6 +7624,9 @@ msgstr "ËùÓĞÍ·ÎÄ¼ş"
 msgid "all in project"
 msgstr "ËùÓĞÔÚÏîÄ¿ÖĞµÄ"
 
+msgid "always rebuild"
+msgstr "×ÜÊÇÖØ½¨"
+
 msgid "angle"
 msgstr "½Ç¶È"
 
@@ -6632,12 +7636,21 @@ msgstr "´Ö×ÖÌå"
 msgid "borders"
 msgstr "±ß½ç"
 
+msgid "br;Breton"
+msgstr "br;(·¨¹ú)²¼ÁĞËşÄáÓï"
+
+msgid "breakpoint"
+msgstr "¶Ïµã"
+
 msgid ""
 "builds a medium-size index (20-30% of the size\n"
 "of all files), allowing faster search."
 msgstr ""
 "½¨Á¢ÖĞµÈ´óĞ¡µÄË÷Òı£¨Õ¼ËùÓĞÎÄ¼ş´ó\n"
 "Ğ¡µÄ20-30%£©£¬ÔÊĞí¿ìËÙ²éÕÒ¡£"
+
+msgid "ca;Catalan"
+msgstr "ca;¼ÓÌ©Â¡Óï"
 
 msgid "center"
 msgstr "¾ÓÖĞ"
@@ -6660,6 +7673,9 @@ msgstr "Éú³ÉÏîÄ¿"
 msgid "critical"
 msgstr "¹Ø¼ü"
 
+msgid "cs;Czech"
+msgstr "cs;½İ¿ËÓï"
+
 msgid "current"
 msgstr "µ±Ç°µÄ"
 
@@ -6675,8 +7691,17 @@ msgstr "×Ô¶¨ÒåÏîÄ¿"
 msgid "cut lines"
 msgstr "¼ôÇĞĞĞ"
 
+msgid "da;Danish"
+msgstr "da;µ¤ÂóÓï"
+
 msgid "date"
 msgstr "ÈÕÆÚ"
+
+msgid "de;German"
+msgstr "de;µÂÓï"
+
+msgid "debugger"
+msgstr "µ÷ÊÔÆ÷"
 
 msgid "default"
 msgstr "È±Ê¡"
@@ -6684,20 +7709,38 @@ msgstr "È±Ê¡"
 msgid "delete"
 msgstr "É¾³ı"
 
+msgid "disassemble"
+msgstr "·´»ã±à"
+
+msgid "el;Greek"
+msgstr "el;Ï£À°Óï"
+
 msgid "enable Autosave"
 msgstr "ÔÊĞí×Ô¶¯±£´æ"
 
 msgid "enable Autoswitch"
 msgstr "ÔÊĞí×Ô¶¯ÇĞ»»"
 
-msgid "english (.sgml)"
-msgstr "sgmlÔ´ÎÄ¼ş(*.sgml)"
+msgid "eo;Esperanto"
+msgstr "eo;ÊÀ½çÓï"
+
+msgid "es;Spanish"
+msgstr "es;Î÷°àÑÀÓï"
+
+msgid "et;Estonian"
+msgstr "et;°®É³ÄáÑÇÓï"
 
 msgid "even"
 msgstr "Å¼Êı"
 
 msgid "exit the CKAppWizard"
 msgstr "ÍË³öÏòµ¼"
+
+msgid "fancy header"
+msgstr "ÉèÏëÎÄ¼ş"
+
+msgid "fi;Finnish"
+msgstr "fi;·ÒÀ¼Óï"
 
 msgid "file"
 msgstr "ÎÄ¼ş"
@@ -6711,8 +7754,32 @@ msgstr "×ÖÌå"
 msgid "fontsize"
 msgstr "×ÖÌå´óĞ¡"
 
+msgid "fr;French"
+msgstr "fr;·¨Óï"
+
+msgid "frame stack"
+msgstr "Ö¡Õ»"
+
 msgid "full"
 msgstr "ÍêÕû"
+
+msgid ""
+"gdb cannot use the tty* or pty* devices\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices\n"
+"and/or add the user to the tty group using\n"
+"\"usermod -G tty username\""
+msgstr ""
+"gdbÎŞ·¨Ê¹ÓÃ tty* »ò pty* Éè±¸\n"
+"¼ì²éÔÚ /dev/tty* ºÍ /dev/pty* µÄÉèÖÃ\n"
+"\n"
+"ÒÔ³¬¼¶ÓÃ»§Éí·İÖ´ĞĞ \"chmod ug+rw\" tty* ºÍ pty* Éè±¸ \n"
+"²¢ÇÒ(»òÕß)Ê¹ÓÃ \"usermod -G tty username\" \n"
+"½«ÓÃ»§Ìí¼Óµ½tty×é"
+
+msgid "gdb message:\n"
+msgstr "gdb ĞÅÏ¢:\n"
 
 msgid "generate a QWidget-Childclass"
 msgstr "Éú³ÉQWidgetµÄ×ÓÀà"
@@ -6732,6 +7799,12 @@ msgstr "ÑÏÖØ"
 msgid "grep: "
 msgstr "ÕıÔò±í´ïÊ½:"
 
+msgid "handleCreateSubDirectory() has created directory '%s'\n"
+msgstr "handleCreateSubDirectory()ÒÑ¾­´´½¨Ä¿Â¼'%s'\n"
+
+msgid "he;Hebrew"
+msgstr "he;Ï£²®À´Óï"
+
 msgid "header"
 msgstr "Ò³Í·"
 
@@ -6750,8 +7823,17 @@ msgstr "Ò³Í·ÎÄ±¾"
 msgid "high"
 msgstr "¸ß"
 
+msgid "highlight bars"
+msgstr "¸ßÁÁÌõ"
+
 msgid "hostname"
 msgstr "Ö÷»úÃû"
+
+msgid "hr;Croatian"
+msgstr "hr;¿ËÂŞµØÑÇÓï"
+
+msgid "hu;Hungarian"
+msgstr "hu;ĞÙÑÀÀûÓï"
 
 msgid "i386v"
 msgstr "i386v"
@@ -6774,11 +7856,23 @@ msgstr "°²×°"
 msgid "interpret TAB, BS and FF"
 msgstr "½âÊÍTAB,BSºÍFF"
 
+msgid "is;Islandic"
+msgstr "is;°®¶ûÀ¼Óï"
+
+msgid "it;Italian"
+msgstr "it;Òâ´óÀûÓï"
+
+msgid "ja;Japanese"
+msgstr "ja;ÈÕÓï"
+
 msgid "job number"
 msgstr "ÈÎÎñÊı"
 
 msgid "kdelnk-File - for the KDE-Menu"
 msgstr "KDEÁ´½ÓÎÄ¼ş - ÓÃÓÚKDE²Ëµ¥"
+
+msgid "ko;Korean"
+msgstr "ko;³¯ÏÊÓï"
 
 msgid "left"
 msgstr "¾Ó×ó"
@@ -6789,11 +7883,14 @@ msgstr "¿â"
 msgid "library flags"
 msgstr "¿â±êÖ¾"
 
+msgid "lineprinter"
+msgstr "ĞĞÊ½´òÓ¡»ú"
+
 msgid "lines per page"
 msgstr "ĞĞÃ¿Ò³"
 
-msgid "log message"
-msgstr "ÈÕÖ¾ĞÅÏ¢"
+msgid "local"
+msgstr "±¾µØ"
 
 msgid "login"
 msgstr "µÇÂ¼"
@@ -6822,6 +7919,9 @@ msgstr "ÖĞµÈ"
 msgid "messages"
 msgstr "ÏûÏ¢"
 
+msgid "mk;Macedonian"
+msgstr "mk;ÂíÆä¶ÙÓï"
+
 msgid "modification date"
 msgstr "¸ü¸ÄÈÕÆÚ"
 
@@ -6834,8 +7934,14 @@ msgstr "ĞÂµÄKDE¿âÎÄµµÂ·¾¶£º"
 msgid "new KDE Libs sources path:"
 msgstr "ĞÂµÄKDE¿âÔ´Â·¾¶£º"
 
+msgid "nl;Dutch"
+msgstr "nl;ºÉÀ¼Óï"
+
 msgid "no"
 msgstr "·ñ"
+
+msgid "no;Norwegian"
+msgstr "no;Å²ÍşÓï"
 
 msgid "normal"
 msgstr "Ò»°ã"
@@ -6849,14 +7955,17 @@ msgstr "´òÓ¡Ò³ºÅ"
 msgid "odd"
 msgstr "ÆæÊı"
 
-msgid "only syntax check"
-msgstr "Ö»½øĞĞÓï·¨¼ì²é"
+msgid "only on modification"
+msgstr "½öÔÚ¸ü¸ÄÊ±"
 
 msgid "optimize"
 msgstr "ÓÅ»¯"
 
 msgid "o´clock"
 msgstr "Õı"
+
+msgid "pl;Polish"
+msgstr "pl;²¨À¼Óï"
 
 msgid "please wait..."
 msgstr "ÇëµÈ´ı..."
@@ -6876,8 +7985,23 @@ msgstr "´òÓ¡µ½ÎÄ¼ş"
 msgid "printername"
 msgstr "´òÓ¡»úÃû"
 
-msgid "release tag"
-msgstr "release±êÇ©"
+msgid "private"
+msgstr "Ë½ÓĞµÄ"
+
+msgid "protected"
+msgstr "±£»¤µÄ"
+
+msgid "pt;Portuguese"
+msgstr "pt;ÆÏÌÑÑÀÓï"
+
+msgid "pt_BR;Brazil Portuguese"
+msgstr "pt_BR;°ÍÎ÷ÆÏÌÑÑÀÓï"
+
+msgid "public"
+msgstr "¹«¹²µÄ"
+
+msgid "registered"
+msgstr "ÒÑ×¢²á"
 
 msgid "remove"
 msgstr "É¾³ı"
@@ -6891,14 +8015,20 @@ msgstr "ÓÃ¿Õ¸ñ´úÌæ²»¿É´òÓ¡µÄ×Ö·û"
 msgid "replace(s) made"
 msgstr "´¦ÒÑÌæ»»"
 
-msgid "repository in vcs"
-msgstr "VCS²Ö¿â"
-
 msgid "right"
 msgstr "¾ÓÓÒ"
 
+msgid "ro;Romanian"
+msgstr "ro;ÂŞÂíÄáÑÇÓï"
+
 msgid "row(s) entered."
 msgstr "ĞĞ±»ÊäÈë¡£"
+
+msgid "ru;Russian"
+msgstr "ru;¶íÓï"
+
+msgid "sendmail command :"
+msgstr "sendmailÃüÁî :"
 
 msgid "set TAB size"
 msgstr "ÉèÖÃÖÆ±í·û´óĞ¡"
@@ -6927,6 +8057,12 @@ msgstr "ÎÄ¼ş´óĞ¡"
 msgid "size of hostname"
 msgstr "Ö÷»úÃû³¤¶È"
 
+msgid "sk;Slovak"
+msgstr "sk;Ë¹Âå·¥¿ËÓï"
+
+msgid "sl;Slovenian"
+msgstr "sl;Ë¹ÂåÎÄÄáÑÇÓï"
+
 msgid "small size"
 msgstr "Ğ¡"
 
@@ -6939,6 +8075,9 @@ msgstr "±ê×¼Êä³ö"
 msgid "store temporary intermediate files"
 msgstr "±£´æÁÙÊ±µÄÖĞ¼äÎÄ¼ş"
 
+msgid "sv;Swedish"
+msgstr "sv;ÈğµäÓï"
+
 msgid "table of contents"
 msgstr "Ä¿Â¼"
 
@@ -6950,6 +8089,9 @@ msgstr "Ê±¼ä"
 
 msgid "tiny size"
 msgstr "ºÜĞ¡"
+
+msgid "tr;Turkish"
+msgstr "tr;ÍÁ¶úÆäÓï"
 
 msgid "use Class View as default"
 msgstr "½«ÀàÊÓÍ¼×÷ÎªÈ±Ê¡"
@@ -6983,26 +8125,8 @@ msgstr "Ê¹ÓÃÍ·Ä£°å"
 msgid "uses lines per page"
 msgstr "ĞĞÃ¿Ò³"
 
-msgid "vcs location"
-msgstr "VCSÎ»ÖÃ"
-
-msgid "vcs support"
-msgstr "VCSÖ§³Ö"
-
-msgid "vendor tag"
-msgstr "±êÇ©"
-
-msgid "xxxxxxxxxxxxxx"
-msgstr "xxxxxxxxxxxxxx"
-
-msgid "xxxxxxxxxxxxxxxxxxxx"
-msgstr "xxxxxxxxxxxxxxxxxxxx"
-
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
-msgstr "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-msgstr "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgid "warning on modification"
+msgstr "¸ü¸ÄÊ±¾¯¸æ"
 
 msgid "yes"
 msgstr "ÊÇ"
@@ -7010,5 +8134,8 @@ msgstr "ÊÇ"
 msgid "your machine"
 msgstr "ÄãµÄ»úÆ÷"
 
-msgid "yyyyyyyyyyyyyy"
-msgstr "yyyyyyyyyyyyyy"
+msgid "zh_CN.GB2312;Simplified Chinese"
+msgstr "zh_CN.GB2312;¼òÌåÖĞÎÄ"
+
+msgid "zh_TW.Big5;Chinese"
+msgstr "zh_TW.Big5;·±ÌåÖĞÎÄ"
