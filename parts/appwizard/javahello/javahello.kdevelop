@@ -3,7 +3,7 @@
   <general>
     <author>$AUTHOR$</author>
     <email>$EMAIL$</email>
-    <projectmanagement>KDevCustomProject</projectmanagement>
+    <projectmanagement>KDevAntProject</projectmanagement>
     <primarylanguage>Java</primarylanguage>
     <ignoreparts>
       <part>KDevDebugger</part>
