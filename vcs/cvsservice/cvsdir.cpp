@@ -233,9 +233,9 @@ void CVSDir::ignoreFile( const QString &fileName )
         found = (fileName == readFileName);
     }
 
+    f.close();
     if (!found)
     {
-        f.close();
         f.open( IO_WriteOnly );
 
         t << fileName << "\n";
@@ -273,11 +273,12 @@ void CVSDir::doNotIgnoreFile( const QString &fileName )
             removed = true;
     }
 
+    f.close();
     if (removed)
     {
-        f.close();
         f.open( IO_WriteOnly );
         f.writeBlock( cachedOutputFile );
+        f.close();
     }
 }
 
