@@ -183,6 +183,8 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 
   QextMdiChildView* pMDICover = (QextMdiChildView*) pCurEditWidget->parentWidget();
   pMDICover->activate();
+
+	qDebug("DocViewMan::doSwitchToFile: cursor-pos(line: %d col: %d)", line, col);
 }
 
 
