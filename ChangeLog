@@ -1,3 +1,8 @@
+2003-03-29 F@lk Brettschneider <falkbr@kdevelop.org>
+	* applied patch of Luc Willems <Willems.luc@pandora.be>
+	  that highly improves the class tool-view for Perl projects
+	  (classes, global functions and variables support)
+
 2003-03-29  Amilcar Lucas  <a.lucas@tu-bs.de>
   * Implemented intelegent bottom view autohide.
 
