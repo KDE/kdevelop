@@ -15,8 +15,8 @@
 <P ALIGN="RIGHT">
 
 <A HREF="index-4.html">Next</A>
- <A HREF="index-2.html">Previous</A>
- <A HREF="index.html#toc3">Table of Contents</A>
+<A HREF="index-2.html">Previous</A>
+<A HREF="index.html#toc3">Table of Contents</A>
 </P>
 <H3><A NAME="s3">3. Classes of KDE Applications</A></H3>
 
@@ -69,7 +69,7 @@ collected in the KDE Control Center) such as keyboard accelerator configuration 
 application, <CODE>KApplication::getKApplication()</CODE>. This solves the problem to pass the pointer to the application object. Further, the
 include file <CODE>kapp.h</CODE> provides a macro that can be used instead of the static function, <CODE>kapp</CODE>. Whenever you need to access the
 application object, use this macro.
-<BLOCKQUOTE>In KDE 2, the application object can be retrieved with <CODE>KGlobal::kApp()</CODE>.</BLOCKQUOTE>
+<BLOCKQUOTE>In KDE 2, the application object can be retrieved with <CODE>KApplication::kApplication()</CODE>.</BLOCKQUOTE>
 <P>The <CODE>KApplication</CODE> object itself provides a set of instances that are commonly used in KDE applications and lets the programmer
 access them by functions. You will make extensive use of them as they avoid creating own instances. The following objects are
 provided by their purpose:
@@ -188,8 +188,8 @@ to exclude any of the above values in the <CODE>main()</CODE> function. Within t
 <CODE>QApplication</CODE> provides the methods <CODE>argc()</CODE> and <CODE>argv()</CODE> to process any other options given at the commandline. These can be
 accessed by the argument number, whereby the argument <CODE>kapp->argv()[0]</CODE> is the application name; any other following arguments can
 be processed with <CODE>kapp->argv()[number]</CODE>.
-<BLOCKQUOTE>KDE 2 has an additional class, <CODE>KStartParams</CODE>, to parse additional
-command-line parameters.</BLOCKQUOTE>
+<BLOCKQUOTE>KDE 2 has an additional class, <CODE>KCmdLineArgs</CODE>, to parse additional
+command-line parameters, which is already used by KDevelop´s KDE 2 frameworks.</BLOCKQUOTE>
 <P>
 <H4>Comment</H4>
 The <CODE>KApplication</CODE> class uses different methods to change the application's style, fonts and colors by X11 Atoms which
@@ -291,8 +291,8 @@ have to take care of that to re-implement an application specific instance for y
 <P ALIGN="RIGHT">
 
 <A HREF="index-4.html">Next</A>
- <A HREF="index-2.html">Previous</A>
- <A HREF="index.html#toc3">Table of Contents</A>
+<A HREF="index-2.html">Previous</A>
+<A HREF="index.html#toc3">Table of Contents</A>
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
