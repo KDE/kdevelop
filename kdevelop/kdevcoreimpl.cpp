@@ -10,6 +10,8 @@
 #include "KDevCoreIface.h"
 #include "ckdevelop.h"
 
+#include <qhbox.h>
+
 #include <kparts/partmanager.h>
 #include <kparts/factory.h>
 #include <kapplication.h>
@@ -108,19 +110,23 @@ void KDevCoreImpl::initGlobalParts()
 }
 
 
-void KDevCoreImpl::embedWidget(QWidget*, Role, const QString&)
+void KDevCoreImpl::embedWidget( QWidget* w, Role r,
+                                const QString& description )
 {
-    kdDebug() << "KDevCoreImpl::embedWidget()" << endl;
+    kdDebug() << "------------------> KDevCoreImpl::embedWidget()" << endl;
+    m_pDevelop->embedToolWidget( w, r, description );
 }
 
-void KDevCoreImpl::raiseWidget(QWidget*)
+void KDevCoreImpl::raiseWidget( QWidget* w )
 {
-    kdDebug() << "KDevCoreImpl::raiseWidget()" << endl;
+    kdDebug() << "------------------> KDevCoreImpl::raiseWidget()" << endl;
+    w->show();
 }
 
-void KDevCoreImpl::removeWidget( QWidget*, Role )
+void KDevCoreImpl::removeWidget( QWidget* w, Role r )
 {
     kdDebug() << "KDevCoreImpl::removeWidget()" << endl;
+    m_pDevelop->removeToolWidget( w, r );
 }
 
 void KDevCoreImpl::fillContextMenu(QPopupMenu *popup, const Context *context)
@@ -201,17 +207,15 @@ QStatusBar * KDevCoreImpl::statusBar() const
 
 void KDevCoreImpl::initPart(KDevPart* part)
 {
-    kdDebug() << "KDevCoreImpl::initPart() -- NOT IMLEMENTED YET" << endl;
-    //parts.append(part);
-    //win->guiFactory()->addClient(part);
+    parts.append( part );
+    m_pDevelop->guiFactory()->addClient(part);
 }
 
 void KDevCoreImpl::removePart(KDevPart* part)
 {
-    kdDebug() << "KDevCoreImpl::removePart() -- NOT IMLEMENTED YET" << endl;
-    //win->guiFactory()->removeClient(part);
-    //parts.remove(part);
-    //delete part;
+    m_pDevelop->guiFactory()->removeClient(part);
+    parts.remove(part);
+    delete( part );
 }
 
 void KDevCoreImpl::removeGlobalParts()

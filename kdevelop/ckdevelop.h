@@ -23,6 +23,7 @@
 #include "ctreehandler.h"
 #include "ctags/cctags_interf.h"
 #include "ctoolclass.h"
+#include "kdevcore.h"
 
 #include "resource.h"
 #include "kpp/kpp.h"
@@ -260,6 +261,10 @@ public:
 
   bool getAutomaticCompletion();
   bool getAutomaticArgsHint();
+
+  // gideon's part support --- robe
+  void embedToolWidget( QWidget *w, KDevCore::Role role, const QString &shortCaption );
+  void removeToolWidget( QWidget* w, KDevCore::Role role );
 
  public slots:
 

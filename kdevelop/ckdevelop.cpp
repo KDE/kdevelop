@@ -4813,3 +4813,18 @@ bool CKDevelop::getAutomaticArgsHint()
     config->setGroup("CodeCompletion");
     return config->readBoolEntry("automatic_argshint", true);
 }
+
+void CKDevelop::embedToolWidget( QWidget *w, KDevCore::Role role, const QString &shortCaption )
+{
+    if( role == KDevCore::SelectView || role == KDevCore::DocumentView ){
+        addToolWindow( w, KDockWidget::DockCenter, class_tree, 25, shortCaption, shortCaption );
+    } else {
+        addToolWindow( w, KDockWidget::DockCenter, messages_widget, 25, shortCaption, shortCaption );
+    }
+}
+
+void CKDevelop::removeToolWidget( QWidget* w, KDevCore::Role role )
+{
+    //removeToolWindow( w );
+    // delete( w );
+}
