@@ -51,24 +51,18 @@ bool Core::queryClose()
   // save the the project to open it automaticly on startup if needed
   KConfig* config = kapp->config();
   config->setGroup("General Options");
-#if defined(KDE_IS_VERSION)
-# if KDE_IS_VERSION(3,1,3)
-#  ifndef _KDE_3_1_3_
-#   define _KDE_3_1_3_
-#  endif
-# endif
-#endif
-#if defined(_KDE_3_1_3_)
   config->writePathEntry("Last Project",ProjectManager::getInstance()->projectFile().url());
-#else
-  config->writeEntry("Last Project",ProjectManager::getInstance()->projectFile().url());
-#endif
-
-  if ( ProjectManager::getInstance()->projectLoaded()
-   && !ProjectManager::getInstance()->closeProject() )
+  
+//  if ( !PartController::getInstance()->querySaveFiles() )
+  if ( !PartController::getInstance()->closeAllFiles() )
+	  return false;
+  
+  if ( !ProjectManager::getInstance()->closeProject( true ) )
       return false;
+  
   if ( !PartController::getInstance()->readyToClose() )
       return false;
+  
   return true;
 }
 
