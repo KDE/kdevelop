@@ -36,7 +36,7 @@ static KDevCompilerOptions *createCompilerOptions( const QString &name, QObject 
     KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
     if (!factory) {
         QString errorMessage = KLibLoader::self()->lastErrorMessage();
-        kdDebug() << "There was an error loading the module " << service->name() << endl <<
+        kdDebug(9020) << "There was an error loading the module " << service->name() << endl <<
 	    "The diagnostics is:" << endl << errorMessage << endl;
         exit(1);
     }
@@ -89,6 +89,7 @@ QString AutoProjectTool::canonicalize( const QString &str )
 	for ( uint i = 0; i < str.length(); ++i )
 		res += ( str[ i ].isLetterOrNumber() || str[ i ] == '@' ) ? str[ i ] : QChar( '_' );
 
+	kdDebug(9020) << k_funcinfo << "normalized '" << str << "' to '" << res << "'" << endl;
 	return res;
 }
 
@@ -280,7 +281,7 @@ QStringList AutoProjectTool::configureinLoadMakefiles(QString configureinpath)
 
 	if ( !configurein.open( IO_ReadOnly ) )
 	{
-		kdDebug() << k_funcinfo << " - couldn't open file: " << configureinpath << endl;
+		kdDebug(9020) << k_funcinfo << " - couldn't open file: " << configureinpath << endl;
 		return QStringList();
 	}
 

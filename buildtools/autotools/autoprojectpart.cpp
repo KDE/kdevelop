@@ -312,7 +312,7 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
 
     QDomDocument &dom = *projectDom();
     QString activeTarget = DomUtil::readEntry(dom, "/kdevautoproject/general/activetarget");
-    kdDebug(9020) << "activeTarget " << activeTarget << endl;
+    kdDebug(9020) << k_funcinfo << "activeTarget " << activeTarget << endl;
     if (!activeTarget.isEmpty())
         m_widget->setActiveTarget(activeTarget);
 
@@ -411,12 +411,12 @@ QString AutoProjectPart::mainProgram(bool relative) const
         TargetItem* titem = m_widget->activeTarget();
 
         if ( !titem ) {
-            kdDebug ( 9000 ) << "Error! : No Main Program was specified and there's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+            kdDebug ( 9020 ) << k_funcinfo << "Error! : No Main Program was specified and there's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
             return QString::null;
         }
 
         if ( titem->primary != "PROGRAMS" ) {
-            kdDebug ( 9000 ) << "Error! : No Main Program was specified and active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+            kdDebug ( 9020 ) << k_funcinfo << "Error! : No Main Program was specified and active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
             return QString::null;
         }
 
@@ -592,7 +592,7 @@ QStringList AutoProjectPart::allBuildConfigs() const
     QDomElement childEl = node.firstChild().toElement();
     while (!childEl.isNull()) {
         QString config = childEl.tagName();
-        kdDebug(9020) << "Found config " << config << endl;
+        kdDebug(9020) << k_funcinfo << "Found config " << config << endl;
         if (config != "default")
             allConfigs.append(config);
         childEl = childEl.nextSibling().toElement();
@@ -670,7 +670,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
     QString cmdline = DomUtil::readEntry(dom, "/kdevautoproject/make/makebin");
     int prio = DomUtil::readIntEntry(dom, "/kdevautoproject/make/prio");
     QString nice;
-    kdDebug(9020) << "constructMakeCommandLine() nice = " << prio<< endl;
+    kdDebug(9020) << k_funcinfo << "nice = " << prio<< endl;
     if (prio != 0) {
         nice = QString("nice -n%1 ").arg(prio);
     }
@@ -1200,15 +1200,15 @@ void AutoProjectPart::savePartialProjectSession ( QDomElement* el )
 
     KMessageBox::information ( 0, "Hallo, Welt!" );
 
-    kdDebug ( 9000 ) << "*********************************************** 1) AutoProjectPart::savePartialProjectSession()" << endl;
+    kdDebug ( 9020 ) << k_funcinfo << "1" << endl;
 
     if ( domDoc.isNull() )
     {
-        kdDebug ( 9000 ) << "*********************************************** 2) AutoProjectPart::savePartialProjectSession()" << endl;
+        kdDebug ( 9020 ) << k_funcinfo << "2" << endl;
         return;
     }
 
-    kdDebug ( 9000 ) << "*********************************************** 3) AutoProjectPart::savePartialProjectSession()" << endl;
+    kdDebug ( 9020 ) << k_funcinfo << "3" << endl;
 
     m_widget->saveSession ( el );
 }
