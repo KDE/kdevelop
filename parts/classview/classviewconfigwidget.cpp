@@ -34,7 +34,7 @@ ClassViewConfigWidget::~ClassViewConfigWidget()
 void ClassViewConfigWidget::readConfig()
 {
     QDomDocument &dom = *m_part->projectDom();
-    bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy");
+    bool foldersAsHierarchy = DomUtil::readBoolEntry(dom, "/kdevclassview/folderhierarchy", true);
     
     if (foldersAsHierarchy) {
         hierarchyButton->setChecked(true);
