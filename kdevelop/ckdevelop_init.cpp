@@ -80,7 +80,7 @@ CKDevelop::CKDevelop(bool witharg)
   config->setGroup("General Options");
   KStartupLogo* start_logo=0L;
   if(config->readBoolEntry("Logo",true)){
-    start_logo= new KStartupLogo;
+    start_logo= new KStartupLogo(this);
     start_logo->show();
   }
 
