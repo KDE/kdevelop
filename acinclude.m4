@@ -267,7 +267,7 @@ if test -n "$USE_RPATH"; then
 fi
 
 AC_MSG_CHECKING([for KDE libraries installed])
-ac_link='/bin/sh $LIBTOOL --silent --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext $LIBS -lkdecore $LIBQT $KDE_TEST_RPATH 1>&5'
+ac_link='/bin/sh ./libtool --silent --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext $LIBS -lkdecore $LIBQT $KDE_TEST_RPATH 1>&5'
 
 if AC_TRY_EVAL(ac_link) && test -s conftest; then 
   AC_MSG_RESULT(yes)
