@@ -150,6 +150,8 @@ statusbar help) on the KActions */
   KAction* m_paHelpAboutApp;
   KAction* m_paHelpAboutKDE;
 
+private slots:
+  void slotFilePrint();
 };
 
 #endif

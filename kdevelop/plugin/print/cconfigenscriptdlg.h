@@ -49,7 +49,6 @@ public:
   void initTab3(QWidget*parent);
   void initTab4(QWidget*parent);
   void selectedProgram();
-  bool lookProgram(QString);
   void loadSettings();
   QString createParameters(int);
 

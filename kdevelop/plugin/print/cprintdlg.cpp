@@ -27,12 +27,9 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include "../misc.h"
-#include "../ctoolclass.h"
-#include "../cproject.h"
-#include "../cdocbrowser.h"
-#include "../resource.h"
-#include "../ckdevelop.h"
+
+#include "cproject.h"
+#include "ctoolclass.h"
 #include "cprintdlg.h"
 #include "cfileprintdlg.h"
 #include "cconfigenscriptdlg.h"
@@ -40,12 +37,12 @@
 
 
 
-CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool html) : QDialog(parent, name, true){
+CPrintDlg::CPrintDlg(QWidget* parent, QString filename,const char* name, bool html) : QDialog(parent, name, true){
   init();
   loadSettings();
   string = "";
   globalpara = "";
-	oldfiles = (QString) edittab;
+  oldfiles = filename;
   files = createFileString();
   doctab = html;
 }
@@ -997,7 +994,9 @@ void CPrintDlg::slotCreateParameters() {
 }
 
 void CPrintDlg::slotPreviewClicked() {
-  if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
+  if (!(CToolClass::searchInstProgram("gv") ||
+        CToolClass::searchInstProgram("ghostview") ||
+        CToolClass::searchInstProgram("kghostview"))) {
     KMessageBox::sorry(0, i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
     return;
   }
@@ -1045,19 +1044,19 @@ void CPrintDlg::slotPreviewClicked() {
       return;
     }
     else {
-      if (lookProgram("gv")) {
+      if (CToolClass::searchInstProgram("gv")) {
 				*process2 << "gv";
 				*process2 << dir;
 				process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
 				return;
       }
-      else if (lookProgram("ghostview")) {
+      else if (CToolClass::searchInstProgram("ghostview")) {
 				*process2 << "ghostview";
 				*process2 << dir;
 				process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
 				return;
       }
-      else if (lookProgram("kghostview")) {
+      else if (CToolClass::searchInstProgram("kghostview")) {
 				*process2 << "kghostview";
 				*process2 << dir;
 				process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -1109,24 +1108,6 @@ void CPrintDlg::slotPrintToFileDlgClicked() {
   printToFileLine->setText(KFileDialog::getOpenURL().path());
 }
 
-bool CPrintDlg::lookProgram(QString name) {
-  StringTokenizer tokener;
-  bool found=false;
-  QString file;
-  QString complete_path = getenv("PATH");
-  
-  tokener.tokenize(complete_path,":");
-  
-  while(tokener.hasMoreTokens()){
-    file = QString(tokener.nextToken()) + "/" + name;
-    if(QFile::exists(file)){
-      found = true;
-      break;
-    }
-  }
-  return found;
-}
-
 void CPrintDlg::slotOkClicked() {
   settings = kapp->config();
   settings->setGroup("PrintDialog");
@@ -1146,7 +1127,9 @@ void CPrintDlg::slotOkClicked() {
   settings->writeEntry("PrintToFileLine",printToFileLine->text());
   settings->sync();
 
-  if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
+  if (!(CToolClass::searchInstProgram("gv") ||
+        CToolClass::searchInstProgram("ghostview") ||
+        CToolClass::searchInstProgram("kghostview"))) {
     QMessageBox::information(0, i18n("Program not found!"), i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"));
     return;
   }

@@ -32,8 +32,7 @@
 #include <kconfig.h>
 #include <kapp.h>
 
-#include "../ctoolclass.h"
-#include "../misc.h"
+#include "ctoolclass.h"
 #include "cconfiga2psdlg.h"
 
 
@@ -824,7 +823,9 @@ QString CConfigA2psDlg::slotCreateParameters() {
 }
 
 void CConfigA2psDlg::slotPreviewClicked() {
-  if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
+  if (!(CToolClass::searchInstProgram("gv") ||
+        CToolClass::searchInstProgram("ghostview") ||
+        CToolClass::searchInstProgram("kghostview"))) {
     QMessageBox::information(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
     return;
   }
@@ -841,19 +842,19 @@ void CConfigA2psDlg::slotPreviewClicked() {
   process->start(KProcess::Block,KProcess::AllOutput);
   delete (process);
   process2 = new KShellProcess();
-  if (lookProgram("gv")) {
+  if (CToolClass::searchInstProgram("gv")) {
     *process2 << "gv";
     *process2 << dir;
     process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
     return;
   }
-  else if (lookProgram("ghostview")) {
+  else if (CToolClass::searchInstProgram("ghostview")) {
     *process2 << "ghostview";
     *process2 << dir;
     process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
     return;
   }
-  else if (lookProgram("kghostview")) {
+  else if (CToolClass::searchInstProgram("kghostview")) {
     *process2 << "kghostview";
     *process2 << dir;
     process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -894,24 +895,6 @@ void CConfigA2psDlg::slotOkClicked() {
 
 void CConfigA2psDlg::slotCancelClicked() {
   reject();
-}
-
-bool CConfigA2psDlg::lookProgram(QString name) {
-  StringTokenizer tokener;
-  bool found=false;
-  QString file;
-  QString complete_path = getenv("PATH");
-  
-  tokener.tokenize(complete_path,":");
-  
-  while(tokener.hasMoreTokens()){
-    file = QString(tokener.nextToken()) + "/" + name;
-    if(QFile::exists(file)){
-      found = true;
-      break;
-    }
-  }
-  return found;
 }
 
 void CConfigA2psDlg::slotFontsizeClicked() {

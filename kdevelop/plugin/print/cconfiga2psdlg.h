@@ -40,7 +40,6 @@ public:
   CConfigA2psDlg(QWidget* parent=0,const char* name=0);
   ~CConfigA2psDlg();
   void init();
-  bool lookProgram(QString);
   void loadSettings();
 
 public slots:

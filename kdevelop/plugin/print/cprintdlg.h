@@ -39,10 +39,9 @@ class KConfig;
 class CPrintDlg : public QDialog {
   Q_OBJECT
 public:
-  CPrintDlg(QWidget* parent=0,const char* file="",const char* name=0, bool html = false);
+  CPrintDlg(QWidget* parent=0,QString filename="",const char* name=0, bool html = false);
   ~CPrintDlg();
   void init();
-  bool lookProgram(QString name);
   QString createFileString();
   void loadSettings();
   QString files,globalpara,prj_str;

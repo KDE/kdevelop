@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-#include "../cproject.h"
+#include "cproject.h"
 #include "cfileprintdlg.h"
 
 

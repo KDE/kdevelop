@@ -1,4 +1,9 @@
 2000-06-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Made a new shared library libkdevelop with (currently)
+	  CToolClass and CProject
+	* Turned print dialog into a plugin
+
+2000-06-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Moved icons into their own directory structure directly
 	  under the toplevel dir
 	* Minimized Makefile.am

@@ -16,12 +16,14 @@
  ***************************************************************************/
 
 
+#include <qdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstdaction.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kstddirs.h>
+#include <klibloader.h>
 
 #include "kdevelop.h"
 #include "kdevelopfactory.h"
@@ -37,9 +39,12 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
   createGUI( 0L );
 }
 
+
 KDevelop::~KDevelop()
 {
 }
+
+
 /** sets up the KActions designed User Interface
 for the toolbars and menubar */
 void KDevelop::initActions(){
@@ -735,3 +740,25 @@ void KDevelop::initHelp(){
 //  m_paHelpAboutKDE->setWhatsThis(  );
 
 }
+
+
+void KDevelop::slotFilePrint()
+{
+    KLibFactory *factory = KLibLoader::self()->factory("libkdevprintplugin");
+    if (!factory) 
+        return;
+
+    QStringList args;
+    args << "/vmlinuz"; // temporary ;-)
+    QObject *obj = factory->create(this, "print dialog", "KDevPrintDialog", args);
+    if (!obj->inherits("QDialog")) {
+        qDebug("Print plugin doesn't provide a dialog");
+        return;
+    }
+
+    QDialog *dlg = (QDialog *)obj;
+    dlg->exec();
+    delete dlg;
+}
+
+#include "kdevelop.moc"
