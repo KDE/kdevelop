@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>551</width>
-            <height>470</height>
+            <height>472</height>
         </rect>
     </property>
     <property name="caption">
@@ -31,7 +31,7 @@
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>pageCS</cstring>
                 </property>
                 <attribute name="title">
                     <string>Class Store</string>
@@ -78,7 +78,7 @@
                                 </property>
                             </widget>
                             <spacer>
-                                <property name="name">
+                                <property name="name" stdset="0">
                                     <cstring>Spacer65</cstring>
                                 </property>
                                 <property name="orientation">
@@ -86,6 +86,12 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Minimum</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QLabel">
@@ -110,7 +116,7 @@
                         </vbox>
                     </widget>
                     <spacer>
-                        <property name="name">
+                        <property name="name" stdset="0">
                             <cstring>Spacer14</cstring>
                         </property>
                         <property name="orientation">
@@ -152,7 +158,7 @@
                                 </property>
                             </widget>
                             <spacer>
-                                <property name="name">
+                                <property name="name" stdset="0">
                                     <cstring>Spacer70</cstring>
                                 </property>
                                 <property name="orientation">
@@ -160,6 +166,12 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Minimum</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QLabel">
@@ -218,7 +230,7 @@
                                         <number>6</number>
                                     </property>
                                     <spacer>
-                                        <property name="name">
+                                        <property name="name" stdset="0">
                                             <cstring>Spacer68</cstring>
                                         </property>
                                         <property name="orientation">
@@ -226,6 +238,12 @@
                                         </property>
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
                                         </property>
                                     </spacer>
                                     <widget class="QPushButton">
@@ -237,7 +255,7 @@
                                         </property>
                                     </widget>
                                     <spacer>
-                                        <property name="name">
+                                        <property name="name" stdset="0">
                                             <cstring>Spacer67</cstring>
                                         </property>
                                         <property name="orientation">
@@ -245,6 +263,12 @@
                                         </property>
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
                                         </property>
                                     </spacer>
                                     <widget class="QPushButton">
@@ -256,7 +280,7 @@
                                         </property>
                                     </widget>
                                     <spacer>
-                                        <property name="name">
+                                        <property name="name" stdset="0">
                                             <cstring>Spacer69</cstring>
                                         </property>
                                         <property name="orientation">
@@ -264,6 +288,12 @@
                                         </property>
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
                                         </property>
                                     </spacer>
                                 </hbox>
@@ -274,7 +304,7 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>pageCC</cstring>
                 </property>
                 <attribute name="title">
                     <string>Code Completion</string>
@@ -325,7 +355,7 @@
                         </vbox>
                     </widget>
                     <spacer>
-                        <property name="name">
+                        <property name="name" stdset="0">
                             <cstring>Spacer72_2</cstring>
                         </property>
                         <property name="orientation">
@@ -333,6 +363,12 @@
                         </property>
                         <property name="sizeType">
                             <enum>Minimum</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                     <widget class="QGroupBox">
@@ -415,7 +451,7 @@
                                 </vbox>
                             </widget>
                             <spacer row="2" column="0">
-                                <property name="name">
+                                <property name="name" stdset="0">
                                     <cstring>Spacer27</cstring>
                                 </property>
                                 <property name="orientation">
@@ -432,7 +468,7 @@
                                 </property>
                             </spacer>
                             <spacer row="1" column="1">
-                                <property name="name">
+                                <property name="name" stdset="0">
                                     <cstring>Spacer74</cstring>
                                 </property>
                                 <property name="orientation">
@@ -451,7 +487,7 @@
                         </grid>
                     </widget>
                     <spacer>
-                        <property name="name">
+                        <property name="name" stdset="0">
                             <cstring>Spacer52</cstring>
                         </property>
                         <property name="orientation">
@@ -459,6 +495,12 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                 </vbox>
@@ -1267,18 +1309,6 @@
 </widget>
 <connections>
     <connection>
-        <sender>cbEnablePCS</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotEnablePCS(bool)</slot>
-    </connection>
-    <connection>
-        <sender>cbEnablePP</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotEnablePP(bool)</slot>
-    </connection>
-    <connection>
         <sender>btAddPath</sender>
         <signal>pressed()</signal>
         <receiver>CCConfigWidgetBase</receiver>
@@ -1289,12 +1319,6 @@
         <signal>pressed()</signal>
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotRemovePPPath()</slot>
-    </connection>
-    <connection>
-        <sender>cbEnableCH</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotEnableCH(bool)</slot>
     </connection>
     <connection>
         <sender>choose_files</sender>
@@ -1319,6 +1343,30 @@
         <signal>urlSelected(const QString&amp;)</signal>
         <receiver>CCConfigWidgetBase</receiver>
         <slot>interfaceFile()</slot>
+    </connection>
+    <connection>
+        <sender>cbEnablePCS</sender>
+        <signal>clicked()</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotEnablePCS()</slot>
+    </connection>
+    <connection>
+        <sender>cbEnablePP</sender>
+        <signal>clicked()</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotEnablePP()</slot>
+    </connection>
+    <connection>
+        <sender>cbEnableCC</sender>
+        <signal>clicked()</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotEnableCC()</slot>
+    </connection>
+    <connection>
+        <sender>cbEnableCH</sender>
+        <signal>clicked()</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotEnableCH()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -1345,17 +1393,17 @@
     <tabstop>implementation_file</tabstop>
 </tabstops>
 <slots>
-    <slot access="protected">interfaceFile()</slot>
     <slot access="protected">implementationFile()</slot>
-    <slot access="protected">slotAddPPPath( void )</slot>
-    <slot access="protected">slotEnableCC()</slot>
-    <slot access="protected">slotEnableCH( bool )</slot>
+    <slot access="protected">interfaceFile()</slot>
+    <slot access="protected">slotAddPPPath( )</slot>
+    <slot access="protected">slotEnableCC( )</slot>
+    <slot access="protected">slotEnableCH( )</slot>
     <slot access="protected">slotEnableChooseFiles( bool )</slot>
-    <slot access="protected">slotEnablePCS( bool )</slot>
-    <slot access="protected">slotEnablePP( bool )</slot>
-    <slot access="protected">slotRemovePPPath( void )</slot>
+    <slot access="protected">slotEnablePCS( )</slot>
+    <slot access="protected">slotEnablePP( )</slot>
+    <slot access="protected">slotRemovePPPath( )</slot>
     <slot access="protected">slotSelectTemplateGroup( const QString &amp; )</slot>
-    <slot access="protected">slotSetCHWindow( void )</slot>
+    <slot access="protected">slotSetCHWindow( )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

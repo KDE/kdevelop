@@ -48,7 +48,7 @@ public:
     bool getEnableCC( void   ){ return m_bEnableCC; };
     
     /**
-     * return pointer to Code Hinting Widget
+     * returns pointer to Code Hinting Widget
      */
     CppSupportWidget* getCHWidget( ){ return m_pCHWidget; };
     
@@ -62,15 +62,13 @@ public:
      * returns persistant classstore File Extension    
      * meant for the project's own classes
      */
-    static QString pcsFileExt()
-    { return ".pcs"; };
+    static QString pcsFileExt( ){ return ".pcs"; };
     
     /**
      * returns pre-parsing File Extension
      * meant for extern includes
      */
-    static QString ppFileExt()
-    { return "-pp.pcs"; };    
+    static QString ppFileExt( ){ return "-pp.pcs"; };    
     
 protected:
     virtual KDevLanguageSupport::Features features();
@@ -107,11 +105,18 @@ private slots:
      * loads, parses and creates both classstores needed
      */
     void initialParse( );
+    
+private:
 
     /**
      * loads a file into given classstore
      */
     bool restorePreParsedClassStore( ClassStore* cs, const QString fileToLoad );
+    
+    /**
+     * only parses the current project
+     */
+    bool parseProject( );
     
     /**
      * parses the current project and saves classstore into given file
@@ -122,10 +127,12 @@ private slots:
      * parses directories selected in project options into given file
      */
     bool createPreParsePCS( const QString fileToSave );
-    
-private:
-    QStringList fileExtensions( );
+
+    /**
+     * checks if a file has to be parsed
+     */
     void maybeParse( const QString fileName, ClassStore *store, CClassParser *parser );
+
     /**
      * parses a directory incl. subdirectories if wanted
      * param directory start directory
@@ -143,6 +150,8 @@ private:
     CClassParser *m_pParser;
     CppCodeCompletion* m_pCompletion;
     CClassParser* m_pCCParser;
+    
+    QStringList fileExtensions( );    
     
     bool withcpp;
     QString m_contextFileName;

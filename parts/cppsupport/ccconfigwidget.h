@@ -27,11 +27,11 @@ public:
 
 public slots:
     void slotEnableCC ( );
-    void slotEnablePCS( bool );    
-    void slotEnablePP ( bool );
+    void slotEnablePCS( );    
+    void slotEnablePP ( );
     void slotAddPPPath( );    
     void slotRemovePPPath( );    
-    void slotEnableCH ( bool );
+    void slotEnableCH ( );
     void slotSetCHWindow( );
     void slotEnableChooseFiles(bool);
     

@@ -39,8 +39,9 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
     : CCConfigWidgetBase( parent, name )
 {
     m_pPart = part;
-    m_bChangedCC = m_bChangedCH = m_bChangedCHWindow = m_bChangedPCS
-                 = m_bChangedPP = m_bChangedPPPath   = false;
+    m_bChangedPCS = m_bChangedPP = m_bChangedPPPath
+		  = m_bChangedCC = m_bChangedCH = m_bChangedCHWindow = m_bChangedPCS
+                  = false;
 
     initCSTab( );
     initCCTab( );
@@ -52,16 +53,22 @@ CCConfigWidget::initCSTab( )
 {
     QDomDocument dom = *m_pPart->projectDom();
 
-    cbEnablePCS->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/classstore/enablepcs" ) );
-    bool b = DomUtil::readBoolEntry( dom, "/cppsupportpart/classstore/enablepp" );
-    cbEnablePP->setChecked( b );
-    if( b == false ){
+    bool pcs = DomUtil::readBoolEntry( dom, "/cppsupportpart/classstore/enablepcs" );
+    bool pp  = DomUtil::readBoolEntry( dom, "/cppsupportpart/classstore/enablepp"  );
+
+    cbEnablePCS->setChecked( pcs );
+    cbEnablePP->setChecked( pp );
+    
+    if( pcs == false ){
 	gbPP->setEnabled( false );
-        lvPCSPaths->setEnabled( false );
+	//lvPCSPaths->setEnabled( false );
     }
 
+    if( pp )
+	lvPCSPaths->setEnabled( true );
+
     lePCSFile->setText( m_pPart->project( )->projectDirectory( ) + "/" +
-                        m_pPart->project( )->projectName( ) + ".pcs" );
+                        m_pPart->project( )->projectName( )      + m_pPart->pcsFileExt( ) );
 
     lvPCSPaths->setSorting( -1 );
 
@@ -156,23 +163,36 @@ CCConfigWidget::accept( )
     saveCSTab( );    
     saveFTTab( );    
 
-    bool b = cbEnablePCS->isChecked( );
-    if( m_bChangedPCS )
-	emit enablePersistantClassStore( b );
+    bool pcs = cbEnablePCS->isChecked( );
 
-    // without persistance we don't allow preparsing
-    if( b ){
-	if( m_bChangedPP )
-	    emit enablePreParsing( cbEnablePP->isChecked( ) );
-	if( m_bChangedPPPath )
-	    emit changedPreParsingPath( );
+    // looks hackish, doesn't it :)
+    if( pcs == true ){
+	if( m_bChangedPCS ){
+	    emit enablePersistantClassStore( true );
+
+	    if( cbEnablePP->isChecked( ) )
+		emit enablePreParsing( true );
+	    else
+		emit enablePreParsing( false );
+	}
+	else {
+	    if( m_bChangedPP ){
+		if( cbEnablePP->isChecked( ) )
+		    emit enablePreParsing( true );
+	        else
+		    emit enablePreParsing( false );
+	    }
+	}
     }
-    else
-        emit enablePreParsing( false );
-	
+    else {
+	emit enablePersistantClassStore( false );
+	emit enablePreParsing( false );
+    }
+
     if( m_bChangedCC )
 	emit enableCodeCompletion( cbEnableCC->isChecked( ) );
-	
+
+    kdDebug( 9007 ) << m_bChangedCH << m_bChangedCHWindow << endl;	
     if( m_bChangedCH || m_bChangedCHWindow )
 	emit enableCodeHinting( cbEnableCH->isChecked( ), rbOutputView->isChecked( ) );
 }
@@ -250,9 +270,6 @@ CCConfigWidget::saveCCTab( )
     codehinting.setAttribute( "enablech"  , cbEnableCH->isChecked( ) );
     codehinting.setAttribute( "selectview", rbSelectView->isChecked( ) );
     codehinting.setAttribute( "outputview", rbOutputView->isChecked( ) );
-
-    m_pPart->setEnableCC( cbEnableCC->isChecked( ) );
-    emit enableCodeHinting( cbEnableCH->isChecked( ), rbOutputView->isChecked( ) );
 }
 
 
@@ -297,46 +314,36 @@ void CCConfigWidget::implementationFile()
 
 
 void
-CCConfigWidget::slotEnableCH( bool isChecked )
+CCConfigWidget::slotEnablePCS( )
 {
-    bgCodeHinting->setEnabled( /*cbEnableCH->isChecked( )*/ isChecked );
-    m_bChangedCH = true;    
-}
-
-
-void
-CCConfigWidget::slotEnableCC( )
-{
-    m_bChangedCC = true;
-}
-
-
-void
-CCConfigWidget::slotSetCHWindow( )
-{
-    m_bChangedCHWindow = true;
-}
-
-
-void
-CCConfigWidget::slotEnablePCS( bool isChecked )
-{
-    if( isChecked )
+    kdDebug( 9007 ) << "slotEnablePCS" << endl;
+    if( cbEnablePCS->isChecked( ) ){
 	gbPP->setEnabled( true );
-    else
+	// lvPCSPaths->setEnabled( true );
+	// pageCC->setEnabled( true );
+    }
+    else {
 	gbPP->setEnabled( false );
+        // lvPCSPaths->setEnabled( false );
+	// pageCC->setEnabled( false );
+    }
 
     m_bChangedPCS = true;
 }
 
 
 void
-CCConfigWidget::slotEnablePP( bool isChecked )
+CCConfigWidget::slotEnablePP( )
 {
-    if( isChecked )
+    kdDebug( 9007 ) << "slotEnablePP" << endl;
+    if( cbEnablePP->isChecked( ) ){
         lvPCSPaths->setEnabled( true );
-    else
+	// pageCC->setEnabled( true );
+    }
+    else {
         lvPCSPaths->setEnabled( false );
+	// pageCC->setEnabled( false );
+    }
 	
     m_bChangedPP = true;
 }
@@ -365,12 +372,40 @@ CCConfigWidget::slotRemovePPPath( )
 {
     QString text = lvPCSPaths->selectedItem( )->text( 1 );
 
+// it's user friendlier, john :)
 //    int answer = KMessageBox::warningYesNo( 0, i18n( "Delete entry ?\n" ) + text );
 //    if( answer == KMessageBox::Yes )
         delete lvPCSPaths->selectedItem( );
 	
     m_bChangedPPPath = true;
 }
+
+
+void
+CCConfigWidget::slotEnableCC( )
+{
+    kdDebug( 9007 ) << "slot EnableCC" << endl;
+    m_bChangedCC = true;
+}
+
+
+void
+CCConfigWidget::slotEnableCH( )
+{
+    kdDebug( 9007 ) << "slotEnableCH" << endl;
+    bgCodeHinting->setEnabled( cbEnableCH->isChecked( ) );
+    m_bChangedCH = true;
+}
+
+
+void
+CCConfigWidget::slotSetCHWindow( )
+{
+    kdDebug( 9007 ) << "slotSetCHWindow" << endl;
+    m_bChangedCHWindow = true;
+}
+
+
 
 void CCConfigWidget::slotEnableChooseFiles(bool c)
 {

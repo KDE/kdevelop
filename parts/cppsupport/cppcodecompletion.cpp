@@ -400,7 +400,7 @@ CppCodeCompletion::createTmpFileForParser( int iLine )
             reg += "[\\s\t]*([\\w\\d_]+)::[\\w\\d_]+";	// method class and -name
 	    reg += "\\([\\w\\d\\&\\*\\s\t,_]*\\)"; 	// parameters
 //	    reg += "[\\s\t]*[:([\\s\t\\w\\d_])+]?[\\{]?)" ; // base class - not finished yet :)
-	    reg += "[\\s\t]*[^;])";		// avoid static method calls
+//	    reg += "[\\s\t]*[^;])";			// avoid static method calls
     
     QRegExp regMethod( reg );
     QString strLine;
