@@ -84,3 +84,6 @@ QList<ClassFileProp> FilePropsPage::getClassFileProps(){
 void FilePropsPage::slotClassnameChanged(const QString& text){
   classes_listbox->changeItem(text, classes_listbox->currentItem());
 }
+
+#include "filepropspage.moc"
+#include "filepropspagebase.moc"

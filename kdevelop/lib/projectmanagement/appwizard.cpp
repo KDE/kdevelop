@@ -88,3 +88,6 @@ void AppWizard::slotNewHeader(){
 }
 void AppWizard::slotLoadHeader(){
 }
+
+#include "appwizard.moc"
+#include "appwizardbase.moc"

@@ -21,3 +21,5 @@ QObjectPlugin::QObjectPlugin(QObject *parent, const char *name ) : QObject(paren
 }
 QObjectPlugin::~QObjectPlugin(){
 }
+
+#include "qobjectplugin.moc"

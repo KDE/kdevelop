@@ -21,3 +21,5 @@ PMC::PMC(QWidget *parent, const char *name ) : QDialog(parent,name) {
 }
 PMC::~PMC(){
 }
+
+#include "pmc.moc"

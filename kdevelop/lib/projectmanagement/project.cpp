@@ -180,3 +180,4 @@ bool Project::writeUserConfig(KSimpleConfig* config){
   return true;
 }
 
+#include "project.moc"

@@ -55,3 +55,5 @@ bool AutomakeProjectSpace::writeUserConfig(KSimpleConfig* config){
   
   ProjectSpace::writeUserConfig(config);
 }
+
+#include "automakeprojectspace.moc"

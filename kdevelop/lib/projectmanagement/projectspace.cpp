@@ -211,3 +211,4 @@ bool ProjectSpace::writeUserConfig(KSimpleConfig* config){
   return true;
 }
 
+#include "projectspace.moc"

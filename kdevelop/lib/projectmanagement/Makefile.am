@@ -5,17 +5,19 @@ INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general
 
 noinst_LTLIBRARIES = libkdevprojectmanagement.la
 
-METASOURCES = AUTO
+METASOURCES = appwizard.moc appwizardbase.moc automakeprojectspace.moc \
+	      filepropspage.moc filepropspagebase.moc pmc.moc \
+	      project.moc projectspace.moc qobjectplugin.moc
 
 appwizardbase.h : $(srcdir)/appwizard.ui
 	$(UIC) -o appwizardbase.h $(srcdir)/appwizard.ui
-	$(MOC) appwizardbase.h -o appwizardbase.moc.cpp
+	$(MOC) appwizardbase.h -o appwizardbase.moc
 appwizardbase.cpp : $(srcdir)/appwizard.ui
 	$(UIC) -i appwizardbase.h -o appwizardbase.cpp $(srcdir)/appwizard.ui
 
 filepropspagebase.h : $(srcdir)/filepropspage.ui
 	$(UIC) -o filepropspagebase.h $(srcdir)/filepropspage.ui
-	$(MOC) filepropspagebase.h -o filepropspagebase.moc.cpp
+	$(MOC) filepropspagebase.h -o filepropspagebase.moc
 filepropspagebase.cpp : $(srcdir)/filepropspage.ui
 	$(UIC) -i filepropspagebase.h -o filepropspagebase.cpp $(srcdir)/filepropspage.ui
 
