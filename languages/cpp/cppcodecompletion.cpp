@@ -1088,10 +1088,6 @@ void CppCodeCompletion::completeText( )
 
 				type = evaluateExpression( expr, ctx );
 			}
-			else if ( node->nodeType() == NodeType_ClassSpecifier )
-			{
-				kdDebug( 9007 ) << "------> found a class specifier" << endl;
-			}
 		}
 	}
 	m_pSupport->backgroundParser() ->unlock();
@@ -1866,19 +1862,35 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 		KTextEditor::CompletionEntry entry;
 		//entry.prefix = meth->type();
 
-		entry.text = meth->name() + "(";
-
 		QString text;
 
 		ArgumentList args = meth->argumentList();
 		ArgumentList::Iterator argIt = args.begin();
+		
+		if ( m_completionMode == VirtualDeclCompletion )
+		{
+			//Ideally the type info would be a entry.prefix, but we need them to be
+			//inserted upon completion so they have to be part of entry.text
+			entry.text = meth->resultType();
+			entry.text += " ";
+			entry.text += meth->name();
+		}
+		else
+			entry.text = meth->name();
+		
+		if ( !args.size() )
+			entry.text += "(";
+		else
+			entry.text += "( ";
+		
 		while ( argIt != args.end() )
 		{
 			ArgumentDom arg = *argIt;
 			++argIt;
 
 			text += arg->type();
-			if ( m_completionMode == NormalCompletion )
+			if ( m_completionMode == NormalCompletion ||
+			     m_completionMode == VirtualDeclCompletion )
 				text += QString( " " ) + arg->name();
 
 			if ( argIt != args.end() )
@@ -1892,9 +1904,11 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 
 		if ( meth->isConstant() )
 			text += " const";
-
+		
+		if ( m_completionMode == VirtualDeclCompletion )
+			entry.text += text + ";";
 		if ( m_completionMode != NormalCompletion )
-			entry.text += text.stripWhiteSpace();
+			entry.text += text;
 		else
 			entry.postfix = text;
 
