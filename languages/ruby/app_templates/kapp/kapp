@@ -1,6 +1,0 @@
-[General]
-Name=Korundum Ruby application
-Category=Ruby
-Comment=This generates a simple Korundum application
-FileTemplates=rb,ShellStyle
-ShowFilesAfterGeneration=APPNAMELC.rb

@@ -1,5 +1,5 @@
-dataFiles = app.rb app.kdevelop app-autogen.sh app-Makefile.am app-configure.ac
-templateName = kapp
+dataFiles = app.rb app.kdevelop app-Makefile.am app-configure.in.in
+templateName = kappruby
 
 ### no need to change below:
 template_DATA = $(templateName).kdevtemplate
