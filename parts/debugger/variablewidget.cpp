@@ -776,7 +776,7 @@ VarFrameRoot::~VarFrameRoot()
 
 void VarFrameRoot::setLocals(char *locals)
 {
-    Q_ASSERT(isActive());
+    setActive();
 
     // "No symbol table info available" or "No locals."
     bool noLocals = (locals &&  (strncmp(locals, "No ", 3) == 0));
@@ -796,15 +796,6 @@ void VarFrameRoot::setLocals(char *locals)
     needLocals_ = false;
     if (isOpen())
         setOpen(true);
-}
-
-// **************************************************************************
-
-void VarFrameRoot::setParams(const QCString &params)
-{
-    setActive();
-    params_ = params;
-    needLocals_ = true;
 }
 
 // **************************************************************************

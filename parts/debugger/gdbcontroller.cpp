@@ -883,9 +883,10 @@ void GDBController::parseFrameSelected(char *buf)
 
 // **************************************************************************
 
-// This is called when a completely new set of local data arrives. This data
-// is always attached to (and completely updates) the current frame
-// _All_ inactive items in the tree are trimmed here.
+// This is called twice per program stop. First to process the arguments
+// to a fn  and then again to process the locals.
+// Once the locals have been process we trim the tree of items that are
+// inactive.
 void GDBController::parseLocals(char type, char *buf)
 {
     varTree_->viewport()->setUpdatesEnabled(false);
@@ -900,12 +901,7 @@ void GDBController::parseLocals(char type, char *buf)
 
     frame->setFrameName(frameStack_->getFrameName(currentFrame_, viewedThread_));
 
-    // Frame data consists of the parameters of the calling function
-    // and the local data.
-    if (type == (char) ARGS)
-        frame->setParams(buf);
-    else
-        frame->setLocals(buf);
+    frame->setLocals(buf);
 
     // This is tricky - trim the whole tree when we're on the top most
     // frame so that they always see only "frame 0" on a program stop.
@@ -913,10 +909,13 @@ void GDBController::parseLocals(char type, char *buf)
     // Reselecting a frame 0 regenerates the data and therefore trims
     // the whole tree _but_ all the items in every frame will be active
     // so nothing will be deleted.
-    if (currentFrame_ == 0 && viewedThread_ == -1) // FIXME:
-        varTree_->trim();
-    else
-        frame->trim();
+    if (type == (char) LOCALS)
+    {
+        if (currentFrame_ == 0 || viewedThread_ == -1)
+            varTree_->trim();
+        else
+            frame->trim();
+    }
 
     varTree_->viewport()->setUpdatesEnabled(true);
     varTree_->repaint();
@@ -979,8 +978,6 @@ char *GDBController::parseCmdBlock(char *buf)
             parseProgramLocation      (buf);
             break;
         case ARGS:
-            parseLocals               (cmdType, buf);
-            break;
         case LOCALS:
             parseLocals               (cmdType, buf);
             break;

@@ -215,11 +215,10 @@ public:
     virtual ~VarFrameRoot();
 
     void setLocals(char *locals);
-    void setParams(const QCString& params);
-
     void setOpen(bool open);
 
-    void setFrameName(const QString &frameName) { setText(VarNameCol, frameName); setText(ValueCol, ""); }
+    void setFrameName(const QString &frameName)
+                { setText(VarNameCol, frameName); setText(ValueCol, ""); }
 
     bool needLocals() const                     { return needLocals_; }
     bool matchDetails(int frameNo, int threadNo);
