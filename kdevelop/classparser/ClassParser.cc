@@ -407,6 +407,7 @@ void CClassParser::parseDeclaration()
   CParsedMethod *method = new CParsedMethod();
 
   // Initialize the object.
+  method->setDefinedInFile( currentFile );
   method->setDeclaredInFile( currentFile );
   method->setExport( declaredScope );
 
