@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "items.h"
+
 #include "kdlgpropwidget.h"
 #include "kdlgproplvis.h"
 #include <kcolorbtn.h>
@@ -231,15 +231,8 @@ void AdvListView::mousePressEvent ( QMouseEvent *e )
 
   if (e->button() == RightButton)
     {
-      QPopupMenu *phelp = new QPopupMenu;
-      phelp->insertItem( i18n("&Help"), this, SLOT(help()) );
-//      QPoint p(viewport()->mapFromGlobal (QCursor::pos()));
-    //  QPoint p(QCursor::pos()); //mapFromGlobal (QCursor::pos()));
-//      p.setY(p.y()-header()->height());
-//      p.setX(0);
-//      if (itemAt(p))
-//        phelp->exec(QCursor::pos());
-//      return;
+//      QPopupMenu *phelp = new QPopupMenu;
+//      phelp->insertItem( i18n("&Help"), this, SLOT(help()) );
 help();
     }
   else
@@ -453,6 +446,11 @@ AdvListViewItem::AdvListViewItem( AdvListViewItem * parent, QString a, QString b
    : QListViewItem( parent, a, b )
 {
   init();
+}
+
+AdvListViewItem::~AdvListViewItem()
+{
+  clearAllColumnWidgets(true);
 }
 
 void AdvListViewItem::init()
@@ -836,12 +834,12 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
 
         AdvListViewItem *lvi = new AdvListViewItem(grpLvis[numGrp],prop->name,val);
         if (adv)
-          lvi->setColumnWidget(1, adv);*/
+          lvi->setColumnWidget(1, adv);
+*/
 
         AdvListViewItem *lvi = new AdvListViewItem(grpLvis[numGrp],prop->name,val);
         if (adv)
-          lvi->setColumnWidget(1, adv);
-
+            lvi->setColumnWidget(1, adv);
     }
 
   lv->restoreOpenStats();

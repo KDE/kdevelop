@@ -1,3 +1,7 @@
+1999-10-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* In switchToFile(), resolve symlinks
+	* Fixed gigantic memory leak in kdlgedit
+
 1999-10-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Fixed #1871: Crash on Solaris due to KSwallow bug
 	* Fixed #2086: Not enough spacing in make options
