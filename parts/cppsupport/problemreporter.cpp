@@ -52,15 +52,15 @@
 #include <kdialogbase.h>
 
 
-class ProblemItem: public QListViewItem{
+class ProblemItem: public KListViewItem{
 public:
 	ProblemItem( QListView* parent, const QString& level, const QString& problem,
 				 const QString& file, const QString& line, const QString& column  )
-		: QListViewItem( parent, level, problem, file, line, column ) {}
+		: KListViewItem( parent, level, problem, file, line, column ) {}
 
 	ProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
 				 const QString& file, const QString& line, const QString& column  )
-		: QListViewItem( parent, level, problem, file, line, column ) {}
+		: KListViewItem( parent, level, problem, file, line, column ) {}
 
 	int compare( QListViewItem* item, int column, bool ascending ) const {
 		if( column == 2 || column == 3 ){
@@ -76,7 +76,7 @@ public:
 };
 
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
-    : QListView( parent, name ),
+    : KListView( parent, name ),
       m_cppSupport( part ),
       m_editor( 0 ),
       m_document( 0 ),
@@ -101,9 +101,7 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
 
     connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
 
-    connect( this, SIGNAL(doubleClicked(QListViewItem*)),
-             this, SLOT(slotSelected(QListViewItem*)) );
-    connect( this, SIGNAL(returnPressed(QListViewItem*)),
+    connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotSelected(QListViewItem*)) );
 
     configure();
@@ -192,7 +190,7 @@ void ProblemReporter::reparse()
 		}
 	}
 		
-    m_bgParser = new BackgroundParser( this, m_editor->text(), m_filename );
+    m_bgParser = new BackgroundParser( m_cppSupport, m_editor->text(), m_filename );
     m_bgParser->start();
 
 }

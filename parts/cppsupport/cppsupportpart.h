@@ -30,6 +30,7 @@ class Context;
 class CClassParser;
 class CppCodeCompletion;
 class ProblemReporter;
+class FileRepository;
 class QLabel;
 class QProgressBar;
 
@@ -52,7 +53,9 @@ public:
      * returns pointer to Code Hinting Widget
      */
     CppSupportWidget* getCHWidget( ){ return m_pCHWidget; };
-
+    
+    ProblemReporter* problemReporter() { return m_problemReporter; }
+    FileRepository* fileRepository() { return m_fileRepository; }
 
     /*
      * void slotCompleteText();
@@ -162,6 +165,7 @@ private:
     bool m_bEnableCC;
     QGuardedPtr< CppSupportWidget > m_pCHWidget;
     QGuardedPtr< ProblemReporter > m_problemReporter;
+    QGuardedPtr< FileRepository> m_fileRepository;
 };
 
 #endif

@@ -9,23 +9,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef BACKGROUNDPARSER_H
-#define BACKGROUNDPARSER_H
+#ifndef __filerepository_h
+#define __filerepository_h
 
-#include <qthread.h>
-#include <qstring.h>
+#include <qobject.h>
+#include "parser.h"
 
-class BackgroundParser: public QThread{
+namespace KParts{ class Part; }
+
+class FileRepository: public QObject
+{
+    Q_OBJECT
 public:
-    BackgroundParser( class CppSupportPart*, const QString& source, const QString& filename );
-    virtual ~BackgroundParser();
-
-    virtual void run();
-
+    FileRepository( class CppSupportPart* part );
+    virtual ~FileRepository();
+    
+    class TranslationUnitAST* translationUnit( const QString& fileName, bool reparse=false );
+    QValueList<Problem> problems( const QString& fileName, bool reparse=false );
+    
+private slots:
+    void slotPartAdded( KParts::Part* );
+    void slotPartRemoved( KParts::Part* );
+    
 private:
-    class CppSupportPart* m_cppSupport;
-    QString m_source;
-    QString m_fileName;
+    class FileRepositoryData* d;
 };
 
 #endif

@@ -16,6 +16,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qvaluelist.h>
 #include <qvaluestack.h>
 
 class ParserPrivateData;
@@ -24,20 +25,51 @@ class Driver;
 class Lexer;
 class Token;
 class Error;
-class ProblemReporter;
+
+class Problem
+{
+public:
+    Problem() {}
+    Problem( const Problem& source )
+	: m_text( source.m_text ), m_line( source.m_line ), m_column( source.m_column ) {}
+    Problem( const QString& text, int line, int column )
+	: m_text( text ), m_line( line ), m_column( column ) {}
+    
+    Problem& operator = ( const Problem& source )
+    {
+	m_text = source.m_text;
+	m_line = source.m_line;
+	m_column = source.m_column;
+	return( *this );
+    }
+    
+    bool operator == ( const Problem& p ) const
+    {
+	return m_text == p.m_text && m_line == p.m_line && m_column == p.m_column;
+    }
+    
+    QString text() const { return m_text; }
+    int line() const { return m_line; }
+    int column() const { return m_column; }
+    
+private:
+    QString m_text;
+    int m_line;
+    int m_column;
+};
 
 class Parser
 {
 public:
-    Parser( ProblemReporter* pr, Driver* drv, Lexer* lexer );
+    Parser( Driver* drv, Lexer* lexer );
     virtual ~Parser();
 
     QString fileName() const;
     void setFileName( const QString& fileName );
 
-    int errors() const;
-
-    virtual void resetErrors();
+    QValueList<Problem> problems() const { return m_problems; }
+    
+private:
     virtual bool reportError( const Error& err );
     /*TODO: remove*/ virtual bool reportError( const QString& msg );
     /*TODO: remove*/ virtual void syntaxError();
@@ -164,27 +196,16 @@ public /*rules*/ :
 
 private:
     ParserPrivateData* d;
-    ProblemReporter* m_problemReporter;
     Driver* driver;
     Lexer* lex;
     QString m_fileName;
-    int m_errors;
-    int m_maxErrors;
+    QValueList<Problem> m_problems;
+    int m_maxProblems;
 };
 
 inline QString Parser::fileName() const
 {
     return m_fileName;
-}
-
-inline int Parser::errors() const
-{
-    return m_errors;
-}
-
-inline void Parser::resetErrors()
-{
-    m_errors = 0;
 }
 
 

@@ -14,7 +14,6 @@
 #include "driver.h"
 #include "lexer.h"
 #include "errors.h"
-#include "problemreporter.h"
 
 // qt
 #include <qstring.h>
@@ -61,16 +60,15 @@ struct ParserPrivateData
 };
 
 
-Parser::Parser( ProblemReporter* pr, Driver* drv, Lexer* lexer )
-    : m_problemReporter( pr ),
-      driver( drv ),
+Parser::Parser( Driver* drv, Lexer* lexer )
+    : driver( drv ),
       lex( lexer )
 {
     d = new ParserPrivateData();
     m_fileName = "<stdin>";
     
-    m_maxErrors = 5;
-    resetErrors();
+    m_maxProblems = 5;
+    m_problems.clear();
 }
 
 Parser::~Parser()
@@ -87,7 +85,7 @@ void Parser::setFileName( const QString& fileName )
 bool Parser::reportError( const Error& err )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::reportError()" << endl;
-    if( m_errors < m_maxErrors ){
+    if( (int)m_problems.size() < m_maxProblems ){
 	int line=0, col=0;
 	const Token& token = lex->lookAhead( 0 );
 	lex->getTokenPosition( token, &line, &col );
@@ -97,32 +95,22 @@ bool Parser::reportError( const Error& err )
 	if( s.isEmpty() )
 	    s = i18n( "<eof>" );
 	
-	m_problemReporter->reportError( err.text.arg(s),
-					m_fileName,
-					line,
-					col );
+	m_problems << Problem( err.text.arg(s), line, col );
     }
-    
-    ++m_errors;
-    
+        
     return true;
 }
 
 bool Parser::reportError( const QString& msg )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::reportError()" << endl;
-    if( m_errors < m_maxErrors ){
+    if( (int)m_problems.size() < m_maxProblems ){
 	int line=0, col=0;
 	const Token& token = lex->lookAhead( 0 );
 	lex->getTokenPosition( token, &line, &col );
 
-	m_problemReporter->reportError( msg,
-					m_fileName,
-					line,
-					col );
+	m_problems << Problem( msg, line, col );
     }
-    
-    ++m_errors;
     
     return true;
 }
@@ -311,6 +299,7 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTranslationUnit()" << endl;
             
+    m_problems.clear();
     TranslationUnitAST::Node tun = CreateNode<TranslationUnitAST>();
     node = tun;
     while( !lex->lookAhead(0).isNull() ){
@@ -322,7 +311,7 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 	node->addDeclaration( def );
     }
     
-    return m_errors == 0;
+    return m_problems.size() == 0;
 }
 
 bool Parser::parseDefinition( DeclarationAST::Node& node )

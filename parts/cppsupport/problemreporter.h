@@ -19,7 +19,7 @@
 #ifndef PROBLEMSREPORTER_H
 #define PROBLEMSREPORTER_H
 
-#include <qlistview.h>
+#include <klistview.h>
 
 class CppSupportPart;
 class QTimer;
@@ -36,7 +36,7 @@ namespace KTextEditor{
     class Document;
 }
 
-class ProblemReporter: public QListView{
+class ProblemReporter: public KListView{
     Q_OBJECT
 public:
     ProblemReporter( CppSupportPart* part, QWidget* parent=0, const char* name=0 );
@@ -67,7 +67,7 @@ private:
     CppSupportPart* m_cppSupport;
     KTextEditor::EditInterface* m_editor;
     KTextEditor::Document* m_document;
-	KTextEditor::MarkInterface* m_markIface;
+    KTextEditor::MarkInterface* m_markIface;
     QTimer* m_timer;
     QString m_filename;
     int m_active;
