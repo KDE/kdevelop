@@ -588,6 +588,10 @@ public:
                               THType parentType,
                               THType itemType );
 
+  /** slot to views the class definition from
+      the graphical classbrowser. */
+  void slotSwitchToFile( const QString &, int );
+
   /** The user wants to view the definition of a method/attr...
    * @param className Name of the class holding the definition. NULL for globals.
    * @param declName Name of the definition item.
