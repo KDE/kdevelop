@@ -136,7 +136,7 @@ public /*rules*/ :
     bool parseBaseSpecifier( BaseSpecifierAST::Node& node );
     bool parseInitializerClause( AST::Node& node );
     bool parseMemInitializerId( NameAST::Node& node );
-    bool parseFunctionBody( AST::Node& node );
+    bool parseFunctionBody( StatementListAST::Node& node );
 
     // expression
     bool skipExpression();

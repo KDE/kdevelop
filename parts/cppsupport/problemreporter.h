@@ -62,7 +62,6 @@ private slots:
     void slotActivePartChanged( KParts::Part* );
     void slotTextChanged();
     void slotSelected( QListViewItem* );
-    void slotNeedTextHint( int, int, QString& );
 
 private:
     CppSupportPart* m_cppSupport;

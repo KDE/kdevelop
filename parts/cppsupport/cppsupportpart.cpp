@@ -224,6 +224,8 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	    m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
 	}
 	
+	m_astView->clear();
+	
 	if( fileName == m_activeFileName ){
 	    AST* ast = m_backgroundParser->translationUnit( fileName );
 	    if( ast ){

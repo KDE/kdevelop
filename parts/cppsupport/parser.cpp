@@ -896,14 +896,13 @@ bool Parser::parseTemplateArgument( AST::Node& node )
     return true;
 }
 
-bool Parser::parseTypeSpecifier( TypeSpecifierAST::Node& /*node*/ )
+bool Parser::parseTypeSpecifier( TypeSpecifierAST::Node& spec )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeSpecifier()" << endl;
 
     AST::Node cv;    
     parseCvQualify( cv );
     
-    TypeSpecifierAST::Node spec;
     if( parseElaboratedTypeSpecifier(spec) || parseSimpleTypeSpecifier(spec) ){
         AST::Node cv2;
 	parseCvQualify( cv2 );
@@ -2555,10 +2554,13 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		
 	    case ':':
 	        {
-		    AST::Node ctorInit, funBody;
+		    AST::Node ctorInit;
+		    StatementListAST::Node funBody;
 		    if( parseCtorInitializer(ctorInit) && parseFunctionBody(funBody) ){
 			FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
 			ast->setNestedName( nestedName );
+			ast->setInitDeclarator( decl );
+			ast->setFunctionBody( funBody );
 			ast->setText( toString(start, endSignature) );
 			node = ast;
 			UPDATE_POS( node, start, lex->index() );
@@ -2569,11 +2571,13 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		
 	    case '{':
 	        {
-		    AST::Node funBody;
+		    StatementListAST::Node funBody;
 		    if( parseFunctionBody(funBody) ){
 			FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
 			ast->setNestedName( nestedName );
+			ast->setInitDeclarator( decl );
 			ast->setText( toString(start, endSignature) );
+			ast->setFunctionBody( funBody );
 			node = ast;
 			UPDATE_POS( node, start, lex->index() );
 		        return true;
@@ -2663,7 +2667,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 
 	case '{':
 	    {
-	        AST::Node funBody;
+	        StatementListAST::Node funBody;
 	        if ( parseFunctionBody(funBody) ) {
 		    FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
 		    ast->setNestedName( nestedName );
@@ -2683,14 +2687,18 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     return false;
 }
 
-bool Parser::parseFunctionBody( AST::Node& /*node*/ )
+bool Parser::parseFunctionBody( StatementListAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseFunctionBody()" << endl;
+    
+    int start = lex->index();
     
     if( lex->lookAhead(0) != '{' ){
 	return false;
     }
     lex->nextToken();
+    
+    StatementListAST::Node ast = CreateNode<StatementListAST>();
     
     while( !lex->lookAhead(0).isNull() ){
 	if( lex->lookAhead(0) == '}' )
@@ -2699,10 +2707,14 @@ bool Parser::parseFunctionBody( AST::Node& /*node*/ )
 	StatementAST::Node stmt;	
 	if( !parseStatement(stmt) ){
 	    skipUntilStatement();
-	}
+	} else
+	    ast->addStatement( stmt );
     }
     
     ADVANCE( '}', "}" );
+    
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     
     return true;
 }

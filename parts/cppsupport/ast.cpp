@@ -922,3 +922,35 @@ void FunctionDefinitionAST::setNestedName( NestedNameSpecifierAST::Node& nestedN
     m_nestedName = nestedName;
     if( m_nestedName.get() ) m_nestedName->setParent( this );
 }
+
+void FunctionDefinitionAST::setInitDeclarator( InitDeclaratorAST::Node& initDeclarator )
+{
+    m_initDeclarator = initDeclarator;
+    if( m_initDeclarator.get() ) m_initDeclarator->setParent( this );
+}
+
+void FunctionDefinitionAST::setFunctionBody( StatementListAST::Node& functionBody )
+{
+    m_functionBody = functionBody;
+    if( m_functionBody.get() ) m_functionBody->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+StatementListAST::StatementListAST()
+{
+    m_statementList.setAutoDelete( true );
+}
+
+StatementListAST::~StatementListAST()
+{
+}
+
+void StatementListAST::addStatement( StatementAST::Node& statement )
+{
+    if( !statement.get() )
+	return;
+    
+    statement->setParent( this );
+    m_statementList.append( statement.release() );
+}
+

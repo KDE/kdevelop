@@ -59,6 +59,7 @@ enum NodeType
     NodeType_TemplateDeclaration,
     NodeType_SimpleDeclaration,
     NodeType_Statement,
+    NodeType_StatementList,
     NodeType_TranslationUnit,
     NodeType_FunctionDeclaration,
     NodeType_FunctionDefinition,
@@ -726,6 +727,28 @@ private:
     void operator = ( const StatementAST& source );
 };
 
+class StatementListAST: public AST
+{
+public:
+    typedef std::auto_ptr<StatementListAST> Node;
+    enum { Type = NodeType_StatementList };
+
+public:
+    StatementListAST();
+    virtual ~StatementListAST();
+    
+    QPtrList<StatementAST> statementList() { return m_statementList; }
+    void addStatement( StatementAST::Node& statement );
+    
+private:
+    QPtrList<StatementAST> m_statementList;
+    
+private:
+    StatementListAST( const StatementListAST& source );
+    void operator = ( const StatementListAST& source );
+};
+
+
 class FunctionDefinitionAST: public DeclarationAST
 {
 public:
@@ -739,12 +762,20 @@ public:
     TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
     
+    InitDeclaratorAST* initDeclarator() { return m_initDeclarator.get(); }
+    void setInitDeclarator( InitDeclaratorAST::Node& initDeclarator );
+    
     NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
     void setNestedName( NestedNameSpecifierAST::Node& nestedName );
+    
+    StatementListAST* functionBody() { return m_functionBody.get(); }
+    void setFunctionBody( StatementListAST::Node& functionBody );
     
 private:
     TypeSpecifierAST::Node m_typeSpec;
     NestedNameSpecifierAST::Node m_nestedName;
+    InitDeclaratorAST::Node m_initDeclarator;
+    StatementListAST::Node m_functionBody;
     
 private:
     FunctionDefinitionAST( const FunctionDefinitionAST& source );
