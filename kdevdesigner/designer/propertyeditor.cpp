@@ -89,6 +89,24 @@
 
 #include <limits.h>
 
+const QPixmap DesignerResetPix = SmallIcon( "designer_resetproperty.png" , KDevDesignerPartFactory::instance());
+const QPixmap DesignerEditSlotsPix = SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance());
+
+const QPixmap ArrowPix = SmallIcon( "designer_arrow.png" , KDevDesignerPartFactory::instance());
+const QPixmap UpArrowPix = SmallIcon( "designer_uparrow.png" , KDevDesignerPartFactory::instance());
+const QPixmap CrossPix = SmallIcon( "designer_cross.png" , KDevDesignerPartFactory::instance());
+const QPixmap WaitPix = SmallIcon( "designer_wait.png" , KDevDesignerPartFactory::instance());
+const QPixmap IBeamPix = SmallIcon( "designer_ibeam.png" , KDevDesignerPartFactory::instance());
+const QPixmap SizeVPix = SmallIcon( "designer_sizev.png" , KDevDesignerPartFactory::instance());
+const QPixmap SizeHPix = SmallIcon( "designer_sizeh.png" , KDevDesignerPartFactory::instance());
+const QPixmap SizeFPix = SmallIcon( "designer_sizef.png" , KDevDesignerPartFactory::instance());
+const QPixmap SizeBPix = SmallIcon( "designer_sizeb.png" , KDevDesignerPartFactory::instance());
+const QPixmap SizeAllPix = SmallIcon( "designer_sizeall.png" , KDevDesignerPartFactory::instance());
+const QPixmap VSplitPix = SmallIcon( "designer_vsplit.png" , KDevDesignerPartFactory::instance());
+const QPixmap HSplitPix = SmallIcon( "designer_hsplit.png" , KDevDesignerPartFactory::instance());
+const QPixmap HandPix = SmallIcon( "designer_hand.png" , KDevDesignerPartFactory::instance());
+const QPixmap NoPix = SmallIcon( "designer_no.png" , KDevDesignerPartFactory::instance());
+
 static QFontDatabase *fontDataBase = 0;
 QString assistantPath();
 
@@ -408,7 +426,7 @@ void PropertyItem::createResetButton()
     hbox->setLineWidth( 1 );
     resetButton = new QPushButton( hbox );
     setupStyle( resetButton );
-    resetButton->setPixmap( SmallIcon( "designer_resetproperty.png" , KDevDesignerPartFactory::instance()) );
+    resetButton->setPixmap( DesignerResetPix );
     resetButton->setFixedWidth( resetButton->sizeHint().width() );
     hbox->layout()->setAlignment( Qt::AlignRight );
     listview->addChild( hbox );
@@ -2358,23 +2376,23 @@ QComboBox *PropertyCursorItem::combo()
     comb->hide();
     QBitmap cur;
 
-    comb->insertItem( SmallIcon( "designer_arrow.png" , KDevDesignerPartFactory::instance()), tr("Arrow"), QObject::ArrowCursor);
-    comb->insertItem( SmallIcon( "designer_uparrow.png" , KDevDesignerPartFactory::instance()), tr("Up-Arrow"), QObject::UpArrowCursor );
-    comb->insertItem( SmallIcon( "designer_cross.png" , KDevDesignerPartFactory::instance()), tr("Cross"), QObject::CrossCursor );
-    comb->insertItem( SmallIcon( "designer_wait.png" , KDevDesignerPartFactory::instance()), tr("Waiting"), QObject::WaitCursor );
-    comb->insertItem( SmallIcon( "designer_ibeam.png" , KDevDesignerPartFactory::instance()), tr("iBeam"), QObject::IbeamCursor );
-    comb->insertItem( SmallIcon( "designer_sizev.png" , KDevDesignerPartFactory::instance()), tr("Size Vertical"), QObject::SizeVerCursor );
-    comb->insertItem( SmallIcon( "designer_sizeh.png" , KDevDesignerPartFactory::instance()), tr("Size Horizontal"), QObject::SizeHorCursor );
-    comb->insertItem( SmallIcon( "designer_sizef.png" , KDevDesignerPartFactory::instance()), tr("Size Slash"), QObject::SizeBDiagCursor );
-    comb->insertItem( SmallIcon( "designer_sizeb.png" , KDevDesignerPartFactory::instance()), tr("Size Backslash"), QObject::SizeFDiagCursor );
-    comb->insertItem( SmallIcon( "designer_sizeall.png" , KDevDesignerPartFactory::instance()), tr("Size All"), QObject::SizeAllCursor );
+    comb->insertItem( ArrowPix, tr("Arrow"), QObject::ArrowCursor);
+    comb->insertItem( UpArrowPix, tr("Up-Arrow"), QObject::UpArrowCursor );
+    comb->insertItem( CrossPix, tr("Cross"), QObject::CrossCursor );
+    comb->insertItem( WaitPix, tr("Waiting"), QObject::WaitCursor );
+    comb->insertItem( IBeamPix, tr("iBeam"), QObject::IbeamCursor );
+    comb->insertItem( SizeVPix, tr("Size Vertical"), QObject::SizeVerCursor );
+    comb->insertItem( SizeHPix, tr("Size Horizontal"), QObject::SizeHorCursor );
+    comb->insertItem( SizeFPix, tr("Size Slash"), QObject::SizeBDiagCursor );
+    comb->insertItem( SizeBPix, tr("Size Backslash"), QObject::SizeFDiagCursor );
+    comb->insertItem( SizeAllPix, tr("Size All"), QObject::SizeAllCursor );
     cur = QBitmap( 25, 25, 1 );
     cur.setMask( cur );
     comb->insertItem( cur, tr("Blank"), QObject::BlankCursor );
-    comb->insertItem( SmallIcon( "designer_vsplit.png" , KDevDesignerPartFactory::instance()), tr("Split Vertical"), QObject::SplitVCursor );
-    comb->insertItem( SmallIcon( "designer_hsplit.png" , KDevDesignerPartFactory::instance()), tr("Split Horizontal"), QObject::SplitHCursor );
-    comb->insertItem( SmallIcon( "designer_hand.png" , KDevDesignerPartFactory::instance()), tr("Pointing Hand"), QObject::PointingHandCursor );
-    comb->insertItem( SmallIcon( "designer_no.png" , KDevDesignerPartFactory::instance()), tr("Forbidden"), QObject::ForbiddenCursor );
+    comb->insertItem( VSplitPix, tr("Split Vertical"), QObject::SplitVCursor );
+    comb->insertItem( HSplitPix, tr("Split Horizontal"), QObject::SplitHCursor );
+    comb->insertItem( HandPix, tr("Pointing Hand"), QObject::PointingHandCursor );
+    comb->insertItem( NoPix, tr("Forbidden"), QObject::ForbiddenCursor );
 
     connect( comb, SIGNAL( activated( int ) ),
 	     this, SLOT( setValue() ) );
@@ -3960,7 +3978,7 @@ void EventList::setup()
 		continue;
 	    item = new HierarchyItem( HierarchyItem::EventFunction, eventItem, item,
 						     (*cit).slot, QString::null, QString::null );
-	    item->setPixmap( 0, SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()) );
+	    item->setPixmap( 0, DesignerEditSlotsPix );
 	}
 	++it;
     }
@@ -3984,7 +4002,7 @@ void EventList::contentsMouseDoubleClickEvent( QMouseEvent *e )
 	s = QString( editor->widget()->name() ) + "_" + i->text( 0 );
     }
 
-    insertEntry( i, SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()), s );
+    insertEntry( i, DesignerEditSlotsPix , s );
 }
 
 void EventList::setCurrent( QWidget * )

@@ -65,6 +65,11 @@
 
 QListViewItem *newItem = 0;
 
+const QPixmap DesignerFormPix = SmallIcon( "designer_form.png" , KDevDesignerPartFactory::instance());
+const QPixmap DesignerLayoutPix = SmallIcon( "designer_layout.png" , KDevDesignerPartFactory::instance());
+const QPixmap DesignerFolderPix = SmallIcon( "designer_folder.png" , KDevDesignerPartFactory::instance());
+const QPixmap DesignerEditSlotsPix = SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance());
+
 static QPluginManager<ClassBrowserInterface> *classBrowserInterfaceManager = 0;
 
 HierarchyItem::HierarchyItem( Type type, QListViewItem *parent, QListViewItem *after,
@@ -449,10 +454,10 @@ void HierarchyList::insertObject( QObject *o, QListViewItem *parent )
     else
 	item = new HierarchyItem( HierarchyItem::Widget, parent, 0, name, className, dbInfo );
     item->setOpen( TRUE );
-    if ( !parent )
-	item->setPixmap( 0, SmallIcon( "designer_form.png" , KDevDesignerPartFactory::instance()) );
-    else if ( ::qt_cast<QLayoutWidget*>(o) )
-	item->setPixmap( 0, SmallIcon( "designer_layout.png" , KDevDesignerPartFactory::instance()));
+    if ( !parent ) 
+	item->setPixmap( 0, DesignerFormPix );
+    else if ( ::qt_cast<QLayoutWidget*>(o) ) 
+	item->setPixmap( 0, DesignerLayoutPix );
     else
 	item->setPixmap( 0, WidgetDatabase::iconSet(
 		    WidgetDatabase::idFromClassName( WidgetFactory::classNameOf( o ) ) ).
@@ -703,7 +708,7 @@ void FormDefinitionView::setup()
 	for ( QStringList::Iterator dit = defs.begin(); dit != defs.end(); ++dit ) {
 	    HierarchyItem *itemDef = new HierarchyItem( HierarchyItem::DefinitionParent, this, 0,
 							tr( *dit ), QString::null, QString::null );
-	    itemDef->setPixmap( 0, SmallIcon( "designer_folder.png" , KDevDesignerPartFactory::instance()) );
+	    itemDef->setPixmap( 0, DesignerFolderPix );
 	    itemDef->setOpen( TRUE );
 	    QStringList entries =
 		lIface->definitionEntries( *dit, formWindow->mainWindow()->designerInterface() );
@@ -746,7 +751,7 @@ void FormDefinitionView::setupVariables()
 
     HierarchyItem *itemVar = new HierarchyItem( HierarchyItem::VarParent, this, 0, tr( "Class Variables" ),
 						QString::null, QString::null );
-    itemVar->setPixmap( 0, SmallIcon( "designer_folder.png" , KDevDesignerPartFactory::instance()) );
+    itemVar->setPixmap( 0, DesignerFolderPix );
     itemVar->setOpen( TRUE );
 
     itemVarPriv = new HierarchyItem( HierarchyItem::VarPrivate, itemVar, 0, tr( "private" ),
@@ -770,7 +775,7 @@ void FormDefinitionView::setupVariables()
 	    else // default is protected
 		item = new HierarchyItem( HierarchyItem::Variable, itemVarProt, 0, (*it).varName,
 					  QString::null, QString::null );
-	    item->setPixmap( 0, SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()) );
+	    item->setPixmap( 0, DesignerEditSlotsPix );
 	    if ( it == varList.begin() )
 		break;
 	    --it;
@@ -828,7 +833,7 @@ void FormDefinitionView::refresh()
     itemFunct = new HierarchyItem( HierarchyItem::FunctParent,
 				   this, 0, tr( "Functions" ), QString::null, QString::null );
     itemFunct->moveItem( i );
-    itemFunct->setPixmap( 0, SmallIcon( "designer_folder.png" , KDevDesignerPartFactory::instance()) );
+    itemFunct->setPixmap( 0, DesignerFolderPix );
     itemFunctPriv = new HierarchyItem( HierarchyItem::FunctPrivate, itemFunct, 0,
 				       tr( "private" ), QString::null, QString::null );
     itemFunctProt = new HierarchyItem( HierarchyItem::FunctProtected, itemFunct, 0,
@@ -838,7 +843,7 @@ void FormDefinitionView::refresh()
 
     itemSlots = new HierarchyItem( HierarchyItem::SlotParent,
 				   this, 0, tr( "Slots" ), QString::null, QString::null );
-    itemSlots->setPixmap( 0, SmallIcon( "designer_folder.png" , KDevDesignerPartFactory::instance()) );
+    itemSlots->setPixmap( 0, DesignerFolderPix );
     itemPrivate = new HierarchyItem( HierarchyItem::SlotPrivate, itemSlots, 0, tr( "private" ),
 				     QString::null, QString::null );
     itemProtected = new HierarchyItem( HierarchyItem::SlotProtected, itemSlots, 0, tr( "protected" ),
@@ -872,7 +877,7 @@ void FormDefinitionView::refresh()
 		    item = new HierarchyItem( HierarchyItem::Function, itemFunctPubl, 0, (*it).function,
 					      QString::null, QString::null );
 	    }
-	    item->setPixmap( 0, SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()) );
+	    item->setPixmap( 0, DesignerEditSlotsPix );
 	    if ( it == functionList.begin() )
 		break;
 	    --it;
