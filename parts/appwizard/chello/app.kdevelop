@@ -1,8 +1,14 @@
 <!DOCTYPE kdevelop >
 <kdevelop>
  <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>C</primarylanguage>
+  <keywords>
+   <keyword>C</keyword>
+   <keyword>Code</keyword>
+  </keywords>
  </general>
  <kdevautoproject>
   <run>

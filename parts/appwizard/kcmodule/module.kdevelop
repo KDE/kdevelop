@@ -1,9 +1,15 @@
 <!DOCTYPE kdevelop >
 <kdevelop>
  <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
   <projectmanagement>KDevKDEAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
+  <keywords>
+   <keyword>C++</keyword>
+   <keyword>Code</keyword>
+   <keyword>Qt</keyword>
    <keyword>KDE</keyword>
   </keywords>
  </general>

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -15,81 +15,37 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qtextstream.h>
+#include <qpushbutton.h>
 #include <qregexp.h>
+#include <qtextstream.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
+#include <kinstance.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include "kdevcore.h"
 
+#include "importdlg.h"
+#include "misc.h"
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
-#include "importdlg.h"
-#include "kdevcore.h"
-#include <qpushbutton.h>
-#include <kinstance.h>
 
 
 ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *name)
-    : QDialog(parent, name, true), m_part(part)
+    : ImportDialogBase(parent, name, true), m_part(part)
 {
-    setCaption(i18n("Import Directory"));
-
-    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
-
-    QLabel *name_label = new QLabel(i18n("Project &name:"), this);
+    QString author, email;
+    AppWizardUtil::guessAuthorAndEmail(&author, &email);
+    author_edit->setText(author);
+    email_edit->setText(email);
     
-    name_edit = new QLineEdit(this);
-    name_edit->setFocus();
-    name_label->setBuddy(name_edit);
-    
-    QLabel *dir_label = new QLabel(i18n("&Directory:"), this);
-
-    dir_edit = new QLineEdit(this);
-    QFontMetrics fm(dir_edit->fontMetrics());
-    dir_edit->setMinimumWidth(fm.width("X")*35);
-    dir_label->setBuddy(dir_edit);
-    
-    QPushButton *dir_button = new QPushButton("...", this);
-    dir_button->setFixedSize(30, 25);
-    connect( dir_button, SIGNAL(clicked()), this, SLOT(dirButtonClicked()) );
-    
-    QLabel *project_label = new QLabel(i18n("&Project type:"), this);
-
-    project_combo = new QComboBox(this);
-    project_label->setBuddy(project_combo);
-
-    QGridLayout *grid = new QGridLayout(3, 2);
-    layout->addLayout(grid);
-
-    grid->addWidget(name_label, 0, 0);
-    grid->addWidget(name_edit, 0, 1);
-    grid->addWidget(dir_label, 1, 0);
-    grid->addWidget(dir_edit, 1, 1);
-    grid->addWidget(dir_button, 1, 2);
-    grid->addWidget(project_label, 2, 0);
-    grid->addWidget(project_combo, 2, 1);
-
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    layout->addWidget(frame, 0);
-
-    KButtonBox *box = new KButtonBox(this);
-    box->addStretch();
-    QPushButton *ok_button = box->addButton(i18n("&OK"));
-    QPushButton *cancel_button = box->addButton(i18n("&Cancel"));
-    ok_button->setDefault(true);
-    box->layout();
-    layout->addWidget(box);
-
-    connect(ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
-    connect(cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
-
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     importNames = dirs->findAllResources("appimports", QString::null, false, true);
+    importNames.sort();
+    
     QStringList::ConstIterator it;
     for (it = importNames.begin(); it != importNames.end(); ++it) {
         KConfig config(KGlobal::dirs()->findResource("appimports", *it));
@@ -123,6 +79,9 @@ void ImportDialog::accept()
             return;
         }
 
+    QString author = author_edit->text();
+    QString email = email_edit->text();
+    
     QFileInfo finfo(importNames[project_combo->currentItem()]);
     QDir importdir(finfo.dir());
     importdir.cdUp();
@@ -145,6 +104,8 @@ void ImportDialog::accept()
     while (!srcstream.atEnd()) {
         QString line = srcstream.readLine();
         line.replace(QRegExp("\\$APPNAMELC\\$"), projectName);
+        line.replace(QRegExp("\\$AUTHOR\\$"), author);
+        line.replace(QRegExp("\\$EMAIL\\$"), email);
         deststream << line << endl;
     }
 
@@ -164,6 +125,136 @@ void ImportDialog::dirButtonClicked()
     QString dir = KFileDialog::getExistingDirectory(QString::null, this,
                                                     i18n("Choose a directory to import"));
     dir_edit->setText(dir);
+}
+
+
+void ImportDialog::dirChanged()
+{
+    QString dirName = dir_edit->text();
+    QDir dir(dir_edit->text());
+    if (!dir.exists())
+        return;
+
+    // KDevelop legacy project?
+    QStringList files = dir.entryList("*.kdevprj");
+    if (!files.isEmpty()) {
+        scanLegacyKDevelopProject(dir.absFilePath(files.first()));
+        return;
+    }
+
+    // Studio legacy project?
+    files = dir.entryList("*.studio");
+    if (!files.isEmpty()) {
+        scanLegacyStudioProject(dir.absFilePath(files.first()));
+        return;
+    }
+
+    // Automake based?
+    if (dir.exists("acinclude.m4")) {
+        scanAutomakeProject(dirName);
+        return;
+    }
+
+    // Python?
+    if (!dir.entryList("*.py").isEmpty()) {
+        setProjectType("python");
+        return;
+    }
+
+    // Perl?
+    if (!dir.entryList("*.pl").isEmpty()) {
+        setProjectType("perl");
+        return;
+    }
+}
+
+
+void ImportDialog::scanLegacyKDevelopProject(const QString &fileName)
+{
+    kdDebug(9010) << "Scanning legacy KDevelop project file " << fileName << endl;
+    
+    KSimpleConfig config(fileName, true);
+    config.setGroup("General");
+    author_edit->setText(config.readEntry("author"));
+    email_edit->setText(config.readEntry("email"));
+    name_edit->setText(config.readEntry("project_name"));
+
+    QString legacyType = config.readEntry("project_type");
+    if (QStringList::split(",", "normal_kde,normal_kde2,kde2_normal,mdi_kde2").contains(legacyType))
+        setProjectType("kde");
+    else if (legacyType == "normal_gnome")
+        setProjectType("gnome");
+    else if (legacyType == "normal_empty")
+        setProjectType("cpp-auto");
+    else
+        setProjectType("cpp");
+}
+
+
+void ImportDialog::scanLegacyStudioProject(const QString &fileName)
+{
+    kdDebug(9010) << "Scanning legacy studio project file " << fileName << endl;
+
+    // Not much to do here...
+    KSimpleConfig config(fileName, true);
+    config.setGroup("kdestudio");
+    name_edit->setText(config.readEntry("Name"));
+}
+
+
+void ImportDialog::scanAutomakeProject(const QString &dirName)
+{
+    kdDebug(9010) << "Scanning automake project directory " << dirName << endl;
+    setProjectType("cpp-auto");
+
+    QFile af(dirName + "/AUTHORS");
+    if (!af.open(IO_ReadOnly))
+        return;
+    QTextStream astream(&af);
+    
+    QRegExp are("(.*)<(.*)>");
+    while (!astream.atEnd()) {
+        QString s = astream.readLine();
+        if (are.search(s) != -1) {
+            author_edit->setText(are.cap(1).stripWhiteSpace());
+            email_edit->setText(are.cap(2).stripWhiteSpace());
+            break;
+        }
+    }
+    af.close();
+      
+    QFile cf(dirName + "/configure.in");
+    if (!cf.open(IO_ReadOnly))
+        return;
+    QTextStream cstream(&cf);
+    
+    QRegExp cre("AM_INIT_AUTOMAKE\\((.*),.*\\).*");
+    while (!cstream.atEnd()) {
+        QString s = cstream.readLine();
+        if (cre.search(s) != -1) {
+            name_edit->setText(cre.cap(1).stripWhiteSpace());
+            break;
+        }
+    }
+    cf.close();
+}
+
+
+void ImportDialog::setProjectType(const QString &type)
+{
+    kdDebug(9010) << "Setting project type " << type << endl;
+    QString suffix = "/" + type;
+    int suffixLength = suffix.length();
+    
+    int i=0;
+    QStringList::ConstIterator it;
+    for (it = importNames.begin(); it != importNames.end(); ++it) {
+        if ((*it).right(suffixLength) == suffix) {
+            project_combo->setCurrentItem(i);
+            break;
+        }
+        ++i;
+    }
 }
 
 #include "importdlg.moc"

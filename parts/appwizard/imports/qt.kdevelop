@@ -3,7 +3,7 @@
  <general>
   <author>$AUTHOR$</author>
   <email>$EMAIL$</email>
-  <projectmanagement>KDevTrollProject</projectmanagement>
+  <projectmanagement>KDevKDEAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
    <keyword>Qt</keyword>
@@ -14,6 +14,7 @@
    <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
    <group pattern="*.ui" name="User Interface" />
    <group pattern="*.png" name="Icons" />
+   <group pattern="*.po;*.ts" name="Translations" />
    <group pattern="*" name="Others" />
   </groups>
  </kdevfileview>

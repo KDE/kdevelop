@@ -1,8 +1,13 @@
 <!DOCTYPE kdevelop >
 <kdevelop>
  <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
   <projectmanagement>KDevScriptProject</projectmanagement>
   <primarylanguage>Python</primarylanguage>
+  <keywords>
+   <keyword>Python</keyword>
+  </keywords>
   <ignoreparts>
    <part>KDevFileView</part>
   </ignoreparts>

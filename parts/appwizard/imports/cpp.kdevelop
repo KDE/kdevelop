@@ -1,6 +1,8 @@
 <!DOCTYPE kdevelop >
 <kdevelop>
  <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
   <projectmanagement>KDevCustomProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <ignoreparts>

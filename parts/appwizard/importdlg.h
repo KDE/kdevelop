@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -12,16 +12,14 @@
 #ifndef _IMPORTDLG_H_
 #define _IMPORTDLG_H_
 
-#include <qdialog.h>
+#include "importdlgbase.h"
 #include <qstringlist.h>
 
-class QComboBox;
-class QLineEdit;
 
 class AppWizardPart;
 
 
-class ImportDialog : public QDialog
+class ImportDialog : public ImportDialogBase
 {
     Q_OBJECT
     
@@ -31,18 +29,17 @@ public:
 
 protected:
     virtual void accept();
-    
-private slots:
-    void dirButtonClicked();
+    virtual void dirButtonClicked();
+    virtual void dirChanged();
     
 private:
+    void scanLegacyKDevelopProject(const QString &fileName);
+    void scanLegacyStudioProject(const QString &fileName);
+    void scanAutomakeProject(const QString &dirName);
+    void setProjectType(const QString &type);
+    
     QStringList importNames;
-    QLineEdit *name_edit;
-    QLineEdit *dir_edit;
-    QComboBox *project_combo;
-
     AppWizardPart *m_part;
-
 };
 
 #endif

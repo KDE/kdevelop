@@ -11,22 +11,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <pwd.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include <qbuttongroup.h>
+#include <qcombobox.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qgrid.h>
-#include <qbuttongroup.h>
-#include <qcombobox.h>
+#include <qheader.h>
 #include <qlabel.h>
+#include <qlistview.h>
 #include <qmultilineedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
+#include <qregexp.h>
 #include <qtextstream.h>
+#include <qtextview.h>
+#include <qtoolbutton.h>
 #include <qtooltip.h>
-#include <qlistview.h>
-#include <qheader.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
@@ -36,33 +36,15 @@
 #include <kprocess.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-#include <qtextview.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
-#include <qtoolbutton.h>
 #include "kdevmakefrontend.h"
 
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
 #include "appwizarddlg.h"
 #include "filepropspage.h"
-#include <qregexp.h>
-
-static void guessAuthorAndEmail(QString *author, QString *email)
-{
-    char hostname[512];
-
-    struct passwd *pw = ::getpwuid(getuid());
-    // pw==0 => the system must be really fucked up
-    if (!pw)
-        return;
-
-    // I guess we don't have to support users with longer host names ;-)
-    (void) ::gethostname(hostname, sizeof hostname);
-
-    *author = pw->pw_gecos;
-    *email = QString(pw->pw_name) + "@" + hostname;
-}
+#include "misc.h"
 
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
@@ -125,7 +107,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
 
   QString author, email;
-  guessAuthorAndEmail(&author, &email);
+  AppWizardUtil::guessAuthorAndEmail(&author, &email);
   author_edit->setText(author);
   email_edit->setText(email);
   dest_edit->setText(QDir::homeDirPath()+"/");
