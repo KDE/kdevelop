@@ -35,6 +35,7 @@ public:
     void setTagType(tagType type);
     void setSearchResult(const CTagList& taglist);
     void gotoTag(const CTag* tag);
+    void searchTags(const QString& text, int* ntags, const CTagList** taglist=0L) ;
 public slots:
     void slotLBItemSelected(int i);
     void slotClear();

@@ -1600,10 +1600,22 @@ void CKDevelop::slotTagSwitchTo()
   QString curFileName = curFileInfo.fileName();
   QString curFileExt = curFileInfo.extension(FALSE);
   QString switchToName = curFileInfo.baseName();
-  // this assumes that your source files end in .cpp - that's BAD !!!
+  // this assumes that your source files end in .cpp or .cxx - that's BAD !!!
   bool bToHeader;
   if (m_docViewManager->curDocIsHeaderFile()) {
-    switchToName = switchToName + ".cpp";
+    if (bCTags) {
+      int ntags;
+      ctags_dlg->searchTags(switchToName+".cxx",&ntags);
+      if (ntags) {
+        switchToName = switchToName + ".cxx";
+      }
+      else {
+        switchToName = switchToName + ".cpp";
+      }
+    }
+    else {
+      switchToName = switchToName + ".cpp";
+    }
     bToHeader=false;
   }
   else if (m_docViewManager->curDocIsCppFile()) {

@@ -82,20 +82,11 @@ void searchTagsDialogImpl::slotSearchTag()
 {
   kdDebug() << "searchTagsDialogImpl::slotSearchTag():\n";
   QString searchtext = searchTagLineEdit->text();
-
-  CProject* prj = currentProject();
-  CTagsDataBase& tagsDB = prj->ctagsDataBase();
-  if (tagsDB.is_initialized()) {
-    kdDebug() << "found tags data base\n";
-    const CTagList* taglist = tagsDB.ctaglist(searchtext);
-    if (taglist)
-    {
-      int ntags = taglist->count();
-      kdDebug() << "found: " << ntags << " entries for: "
-                << searchtext << "\n";
-      setSearchResult(*taglist);
-    }
-  }
+  int ntags;
+  const CTagList* taglist;
+  searchTags(searchtext,&ntags,&taglist);
+  if (taglist)
+    setSearchResult(*taglist);
 }
 /*
  * internal method
@@ -153,6 +144,32 @@ void searchTagsDialogImpl::gotoTag(const CTag* tag)
   kdDebug() << "emit signal: switchToFile("
             <<  tag->file() << "," << line << ");\n";
   emit switchToFile(tag->file(),line);
+}
+/*
+ * public method
+ */
+void searchTagsDialogImpl::searchTags(const QString& text, int* ntags, const CTagList** taglist)
+{
+  CProject* prj = currentProject();
+  if (!ntags||!prj) return;
+  CTagsDataBase& tagsDB = prj->ctagsDataBase();
+  *ntags=0;
+  if (tagsDB.is_initialized()) {
+    kdDebug() << "searchTagsDialogImpl::searchTag: found tags data base\n";
+    if (taglist) {
+      (*taglist) = tagsDB.ctaglist(text);
+      if (*taglist)
+      {
+        *ntags = (*taglist)->count();
+      }
+    }
+    // if taglist is null, only the number of tags is returned
+    else {
+      *ntags = tagsDB.nCTags(text);
+    }
+    kdDebug() << "searchTagsDialogImpl::searchTag: found " << *ntags << " entries for: "
+              << text << "\n";
+  }
 }
 /*
  * public slot
