@@ -204,7 +204,6 @@ CTagsDialog::CTagsDialog(KDevPart *part)
     QPushButton *search_button = actionbox->addButton(i18n("&Search"));
     search_button->setDefault(true);
     QPushButton *cancel_button = actionbox->addButton(i18n("Close"));
-    cancel_button->setEnabled(false);
     actionbox->addStretch();
     actionbox->layout();
 
@@ -292,7 +291,9 @@ void CTagsDialog::slotExecuted(QListBoxItem *item)
         return;
     
     CTagsResultItem *ritem = static_cast<CTagsResultItem*>(item);
-    QString fileName = m_part->project()->projectDirectory() + "/" + ritem->fileName();
+    QString fileName = ritem->fileName();
+    if (!fileName.startsWith("/"))
+        fileName.prepend(m_part->project()->projectDirectory() + "/");
     QString pattern = ritem->pattern();
     bool ok;
     int lineNum = pattern.toInt(&ok);
@@ -301,7 +302,7 @@ void CTagsDialog::slotExecuted(QListBoxItem *item)
         return;
     }
     
-    m_part->core()->gotoSourceFile(fileName, lineNum-1);
+    m_part->core()->gotoSourceFile(fileName, lineNum-1, KDevCore::Replace);
 }
 
 
@@ -336,7 +337,7 @@ bool CTagsDialog::createTagsFile()
 
     QString cmd = "cd ";
     cmd += m_part->project()->projectDirectory();
-    cmd += " && ctags ";
+    cmd += " && ctags -n ";
 
     QStringList l = m_part->project()->allSourceFiles();
     QStringList::ConstIterator it;
