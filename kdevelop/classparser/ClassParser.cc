@@ -198,13 +198,12 @@ void CClassParser::parseUnion()
 {
   // Get the name
   getNextLexem();
-  assert( lexem == ID );
 
-  // Skip the '{'
-  getNextLexem();
-  assert( lexem == '{' );
+  if( lexem == ID )
+    getNextLexem();
 
-  skipBlock();
+  if( lexem == '{' )
+    skipBlock();
 }
 
 /*----------------------------------- CClassParser::fillInParsedType()
@@ -616,6 +615,7 @@ int CClassParser::checkClassDecl()
 void CClassParser::parseClassInheritance( CParsedClass *aClass )
 {
   CParsedParent *aParent; // A parent of this class.
+  QString cname;          // Name of inherited class.
   int export;             // Parent import status(private/public/protected).
 
   // Add parents until we find a {
@@ -627,26 +627,25 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     // For classes with no scope identifier at inheritance.
     if( lexem == ID )
       export = PRIVATE;
-    else
+    else // Find out type of inheritance.
     {
-      // Find out type of inheritance.
       export = lexem;
-          
-      // Read the name of the parent.
       getNextLexem();
-      assert( lexem == ID );
     }
-        
+    
+    cname = "";
+    while( lexem != '{' && lexem != ',' )
+    {
+      cname += getText();
+      getNextLexem();
+    }
+    
     // Add the parent.
     aParent = new CParsedParent();
-    aParent->setName( getText() );
+    aParent->setName( cname );
     aParent->setExport( export );
     
     aClass->addParent( aParent );
-    
-    // Fetch next lexem.
-    getNextLexem();
-    assert( lexem == '{' || lexem == ',' );
   }
 }
 
@@ -900,7 +899,12 @@ void CClassParser::parseToplevel()
       case CPCLASS:
         aClass = parseClass();
         if( aClass != NULL )
+        {
+          if( !store.hasClass( aClass->name ) )
             store.addClass( aClass );
+          else
+            debug( "Found new definition of class %s", aClass->name.data() );
+        }
         break;
       case '{': // Skip implementation blocks
         skipBlock();
