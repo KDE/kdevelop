@@ -1,3 +1,9 @@
+2001-06-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Implemented modification of build order of subprojects
+	* Fixed update of prefixes list
+	* Fixed update of include directory list
+
 2001-06-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Perldoc support

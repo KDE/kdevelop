@@ -40,6 +40,8 @@ private:
     virtual void outsideRemoveClicked();
     virtual void addPrefixClicked();
     virtual void removePrefixClicked();
+    virtual void buildorderMoveUpClicked();
+    virtual void buildorderMoveDownClicked();
     virtual void accept();
     
     void readConfig();

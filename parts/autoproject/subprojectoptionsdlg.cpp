@@ -57,10 +57,12 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
 
     insideinc_listview->header()->hide();
     outsideinc_listview->header()->hide();
+    buildorder_listview->header()->hide();
     
     insideinc_listview->setSorting(-1);
     outsideinc_listview->setSorting(-1);
     prefix_listview->setSorting(-1);
+    buildorder_listview->setSorting(-1);
     
     // Insert all subdirectories as possible include directories
     QStringList l = widget->allSubprojects();
@@ -89,11 +91,11 @@ void SubprojectOptionsDialog::readConfig()
     fflags_edit->setText(subProject->variables["AM_FFLAGS"]);
 
     QCString includes = subProject->variables["INCLUDES"];
-    QStringList l = QStringList::split(QRegExp("[ \t]"), QString(includes));
+    QStringList includeslist = QStringList::split(QRegExp("[ \t]"), QString(includes));
 
     QListViewItem *lastItem = 0;
     QStringList::Iterator it;
-    for (it = l.begin(); it != l.end(); ++it) {
+    for (it = includeslist.begin(); it != includeslist.end(); ++it) {
         QCheckListItem *clitem = static_cast<QCheckListItem*>(insideinc_listview->firstChild());
         while (clitem) {
             if (*it == ("-I$(top_srcdir)/" + clitem->text())) {
@@ -113,6 +115,17 @@ void SubprojectOptionsDialog::readConfig()
     QMap<QCString, QCString>::ConstIterator it2;
     for (it2 = subProject->prefixes.begin(); it2 != subProject->prefixes.end(); ++it2)
         new QListViewItem(prefix_listview, it2.key(), it2.data());
+
+    QCString subdirs = subProject->variables["SUBDIRS"];
+    kdDebug() << "Subdirs variable: " << subdirs << endl;
+    QStringList subdirslist = QStringList::split(QRegExp("[ \t]"), QString(subdirs));
+    lastItem = 0;
+    for (it = subdirslist.begin(); it != subdirslist.end(); ++it) {
+        QListViewItem *item = new QListViewItem(buildorder_listview, *it);
+        if (lastItem)
+            item->moveItem(lastItem);
+        lastItem = item;
+    }
 }
 
 
@@ -144,7 +157,8 @@ void SubprojectOptionsDialog::storeConfig()
     QStringList includeslist;
     QCheckListItem *clitem = static_cast<QCheckListItem*>(insideinc_listview->firstChild());
     while (clitem) {
-        includeslist.append("-I$(top_srcdir)/" + clitem->text());
+        if (clitem->isOn())
+            includeslist.append("-I$(top_srcdir)/" + clitem->text());
         clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
     }
     clitem = static_cast<QCheckListItem*>(outsideinc_listview->firstChild());
@@ -156,12 +170,24 @@ void SubprojectOptionsDialog::storeConfig()
     subProject->variables["INCLUDES"] = includes;
     replaceMap.insert("INCLUDES", includes);
 
-    // FIXME: adjust prefixes variable 
+    subProject->prefixes.clear();
     for (QListViewItem *item = prefix_listview->firstChild();
-         item; item = item->nextSibling())
-        replaceMap.insert(QCString(item->text(0).latin1()) + "dir", item->text(1).latin1());
+         item; item = item->nextSibling()) {
+        QCString key = item->text(0).latin1();
+        QCString data = item->text(1).latin1();
+        subProject->prefixes[key] = data;
+        replaceMap.insert(key + "dir", data);
+    }
+    // FIXME: take removed prefixes into account
 
-    // FIXME: take removed items into account
+    QStringList subdirslist;
+    for (QListViewItem *item = buildorder_listview->firstChild();
+         item; item = item->nextSibling())
+        subdirslist.append(item->text(0));
+    QCString subdirs = subdirslist.join(" ").latin1();
+    kdDebug() << "New subdirs variable: " << subdirs << endl;
+    subProject->variables["SUBDIRS"] = subdirs;
+    replaceMap.insert("SUBDIRS", subdirs);
     
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 }
@@ -272,6 +298,31 @@ void SubprojectOptionsDialog::addPrefixClicked()
 void SubprojectOptionsDialog::removePrefixClicked()
 {
     delete prefix_listview->currentItem();
+}
+
+
+void SubprojectOptionsDialog::buildorderMoveUpClicked()
+{
+    if (buildorder_listview->currentItem() == buildorder_listview->firstChild()) {
+        KNotifyClient::beep();
+        return;
+    }
+
+    QListViewItem *item = buildorder_listview->firstChild();
+    while (item->nextSibling() != buildorder_listview->currentItem())
+        item = item->nextSibling();
+    item->moveItem(buildorder_listview->currentItem());
+}
+
+
+void SubprojectOptionsDialog::buildorderMoveDownClicked()
+{
+   if (buildorder_listview->currentItem()->nextSibling() == 0) {
+        KNotifyClient::beep();
+        return;
+   }
+
+   buildorder_listview->currentItem()->moveItem(buildorder_listview->currentItem()->nextSibling());
 }
 
 

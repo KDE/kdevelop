@@ -1,8 +1,4 @@
-* Fix builddir 
-
 * Script project options 
-
-* Implement modification of build order.
 
 * Implement removing sub projects.
 

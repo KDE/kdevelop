@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>545</width>
+            <width>541</width>
             <height>350</height>
         </rect>
     </property>
@@ -297,4 +297,12 @@
     </connection>
     <slot access="public">somethingChanged()</slot>
 </connections>
+<tabstops>
+    <tabstop>pattern_edit</tabstop>
+    <tabstop>basicposix_button</tabstop>
+    <tabstop>extendedposix_button</tabstop>
+    <tabstop>teststring_edit</tabstop>
+    <tabstop>subgroups_listview</tabstop>
+    <tabstop>cancelbutton</tabstop>
+</tabstops>
 </UI>

@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>407</width>
-            <height>474</height>
+            <width>404</width>
+            <height>437</height>
         </rect>
     </property>
     <property stdset="1">
@@ -668,6 +668,10 @@
                             <name>name</name>
                             <cstring>prefix_listview</cstring>
                         </property>
+                        <property stdset="1">
+                            <name>allColumnsShowFocus</name>
+                            <bool>true</bool>
+                        </property>
                     </widget>
                     <widget row="0"  column="0" >
                         <class>QLabel</class>
@@ -727,27 +731,6 @@
                                     <string>&amp;Add...</string>
                                 </property>
                             </widget>
-                            <spacer>
-                                <property>
-                                    <name>name</name>
-                                    <cstring>Spacer7</cstring>
-                                </property>
-                                <property stdset="1">
-                                    <name>orientation</name>
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property stdset="1">
-                                    <name>sizeType</name>
-                                    <enum>Preferred</enum>
-                                </property>
-                                <property>
-                                    <name>sizeHint</name>
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
                             <widget>
                                 <class>QPushButton</class>
                                 <property stdset="1">
@@ -781,6 +764,140 @@
                                 </property>
                             </spacer>
                         </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget>
+                <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>tab</cstring>
+                </property>
+                <attribute>
+                    <name>title</name>
+                    <string>&amp;Build order</string>
+                </attribute>
+                <grid>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget row="1"  column="1" >
+                        <class>QLayoutWidget</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>Layout9_2</cstring>
+                        </property>
+                        <vbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>0</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <spacer>
+                                <property>
+                                    <name>name</name>
+                                    <cstring>Spacer2_3_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>orientation</name>
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property stdset="1">
+                                    <name>sizeType</name>
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property>
+                                    <name>sizeHint</name>
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget>
+                                <class>QPushButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>buildmoveup_button</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Move &amp;Up</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QPushButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>buildmovedown_button</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Move &amp;Down</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property>
+                                    <name>name</name>
+                                    <cstring>Spacer3_2_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>orientation</name>
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property stdset="1">
+                                    <name>sizeType</name>
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property>
+                                    <name>sizeHint</name>
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget row="1"  column="0" >
+                        <class>QListView</class>
+                        <column>
+                            <property>
+                                <name>text</name>
+                                <string></string>
+                            </property>
+                            <property>
+                                <name>clickable</name>
+                                <bool>true</bool>
+                            </property>
+                            <property>
+                                <name>resizeable</name>
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>buildorder_listview</cstring>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="0"  rowspan="1"  colspan="2" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>buildorder_label</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Order in which sub projects are built:</string>
+                        </property>
                     </widget>
                 </grid>
             </widget>
@@ -921,17 +1038,24 @@
         <slot>fflagsClicked()</slot>
     </connection>
     <connection>
-        <sender>addprefix_button</sender>
+        <sender>buildmovedown_button</sender>
         <signal>clicked()</signal>
         <receiver>sub project options widget</receiver>
-        <slot>addPrefixClicked()</slot>
+        <slot>buildorderMoveDownClicked()</slot>
     </connection>
-    <slot access="protected">addPrefixClicked()</slot>
+    <connection>
+        <sender>buildmoveup_button</sender>
+        <signal>clicked()</signal>
+        <receiver>sub project options widget</receiver>
+        <slot>buildorderMoveUpClicked()</slot>
+    </connection>
+    <slot access="protected">buildorderMoveDownClicked()</slot>
     <slot access="protected">cflagsClicked()</slot>
     <slot access="protected">cxxFlagsClicked()</slot>
     <slot access="protected">fflagsClicked()</slot>
     <slot access="protected">insideMoveDownClicked()</slot>
     <slot access="protected">insideMoveUpClicked()</slot>
+    <slot access="protected">buildorderMoveUpClicked()</slot>
     <slot access="protected">outsideAddClicked()</slot>
     <slot access="protected">outsideMoveDownClicked()</slot>
     <slot access="protected">outsideMoveUpClicked()</slot>
