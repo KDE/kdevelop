@@ -1,3 +1,13 @@
+2003-05-14 Mario Scalas <mario.scalas@libero.it>
+	* (lib/interface) Merged KDevGlobalVersionControl in KDevGlobalVersionControl
+	* (lib/interface) removed KDevGlobalVersion
+	* (lib/interface) Updated Makefile.am
+	* (parts/appwizard) changed code for retrieving the available VCS (lookt at loadVCS())
+	* (parts/cvs) Merged GlobalCvs in CvsPart
+	* (parts/cvs) removed parts/cvs/globalcvs
+	* (parts/cvs) added common cvs options as #define in new cvs_commonoptions.h
+	* (parts/cvs) updated Makefile.am
+
 2003-05-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added BookmarksPart
 
