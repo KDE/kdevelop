@@ -1177,22 +1177,22 @@ void CKAppWizard::generateEntries(const QString &filename) {
   else entries << "no\n";
   entries << "KDOC_CALL\n";
 
-  QString target_dir=QString(vsBox->text(vsBox->currentItem())).lower();
-
+  if (!idx_path.isEmpty() && !link.isEmpty())
+    idx_path=QString(" -L")+idx_path+link;
 #ifdef WITH_KDOC2
   bool bCreateKDoc;
 
   config->setGroup("General Options");
   bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
   if (bCreateKDoc)
-   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api -L")+
-	idx_path+link+" -n "+nameline->text()+" *.h\n";
+   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
+	idx_path+" -n "+nameline->text()+" *.h\n";
   else
-   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api -L")+
-	idx_path+link+" *.h\n";
+   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
+	idx_path+" *.h\n";
 #else
-   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api -L")+
-	idx_path+link+" "+nameline->text()+" *.h\n";
+   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
+	idx_path+" "+nameline->text()+" *.h\n";
 #endif
   entries << "USER\n";
   if (userdoc->isChecked())
@@ -1530,10 +1530,12 @@ void CKAppWizard::slotApplicationClicked() {
   setPage(4, i18n("Headertemplate for .cpp-files"));
   cppheader->setText( i18n("headertemplate for .cpp-files") );
 
+  apidoc->setEnabled(!citem->isSelected() && !customprojitem->isSelected());
+  userdoc->setEnabled(!customprojitem->isSelected());
+
   if (kdenormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(true);
     apidoc->setChecked(true);
     datalink->setEnabled(true);
     datalink->setChecked(true);
@@ -1561,7 +1563,6 @@ void CKAppWizard::slotApplicationClicked() {
   {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalOglApp.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(true);
     apidoc->setChecked(true);
     datalink->setEnabled(true);
     datalink->setChecked(true);
@@ -1589,7 +1590,6 @@ void CKAppWizard::slotApplicationClicked() {
   else if (kdeminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(true);
     apidoc->setChecked(true);
     datalink->setEnabled(true);
     datalink->setChecked(true);
@@ -1612,7 +1612,6 @@ void CKAppWizard::slotApplicationClicked() {
   else if (kde2normalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(true);
     apidoc->setChecked(true);
     datalink->setEnabled(true);
     datalink->setChecked(true);
@@ -1637,7 +1636,6 @@ void CKAppWizard::slotApplicationClicked() {
   else if (kde2miniitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(true);
     apidoc->setChecked(true);
     datalink->setEnabled(true);
     datalink->setChecked(true);
@@ -1660,8 +1658,7 @@ void CKAppWizard::slotApplicationClicked() {
   else if (kde2mdiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/kdemdi.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(false);
-    apidoc->setChecked(false);
+    apidoc->setChecked(true);
     datalink->setEnabled(true);
     datalink->setChecked(true);
     progicon->setEnabled(true);
@@ -1685,7 +1682,6 @@ void CKAppWizard::slotApplicationClicked() {
   else if (qtnormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(false);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
@@ -1710,7 +1706,6 @@ void CKAppWizard::slotApplicationClicked() {
   else if (qt2normalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(false);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
@@ -1735,7 +1730,6 @@ void CKAppWizard::slotApplicationClicked() {
   else if (qt2mdiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtmdi.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(false);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
@@ -1760,7 +1754,6 @@ void CKAppWizard::slotApplicationClicked() {
   else if (qextmdiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qextmdi.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(true);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
@@ -1797,7 +1790,6 @@ void CKAppWizard::slotApplicationClicked() {
       setPage(4, i18n("Headertemplate for .c-files"));
       cppheader->setText( i18n("headertemplate for .c-files") );
     }
-    apidoc->setEnabled(false);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
@@ -1841,7 +1833,6 @@ void CKAppWizard::slotApplicationClicked() {
   else if (customprojitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/customApp.bmp");
     widget1b->setBackgroundPixmap(pm);
-    apidoc->setEnabled(false);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
@@ -1854,7 +1845,6 @@ void CKAppWizard::slotApplicationClicked() {
     lsmfile->setChecked(true);
     gnufiles->setChecked(true);
     userdoc->setChecked(false);
-    userdoc->setEnabled(false);
     generatesource->setChecked(false);
     generatesource->setEnabled(false);
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
@@ -1926,6 +1916,7 @@ void CKAppWizard::slotDefaultClicked(int page) {
 
   widget1b->setBackgroundPixmap(pm);
   applications->setSelected(kdenormalitem,true);
+  apidoc->setEnabled(true);
   apidoc->setChecked(true);
   lsmfile->setChecked(true);
   cppheader->setChecked(true);
@@ -1934,6 +1925,7 @@ void CKAppWizard::slotDefaultClicked(int page) {
   miniicon->setChecked(true);
   progicon->setChecked(true);
   gnufiles->setChecked(true);
+  userdoc->setEnabled(true);
   userdoc->setChecked(true);
   miniload->setEnabled(true);
   iconload->setEnabled(true);
