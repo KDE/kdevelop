@@ -1,0 +1,456 @@
+<!DOCTYPE kdeveloptoc> 
+<kdeveloptoc> 
+<title>C++ Annotations</title>
+<base href="http://www.icce.rug.nl/documents/cplusplus/"/>
+
+<tocsect1 name="Chapter 1: Overview of the chapters" url="cplusplus01.html#l1" />
+<tocsect1 name="Chapter 2: Introduction" url="cplusplus02.html#l2">
+  <tocsect2 name="2.1: What's new in the C++ Annotations" url="cplusplus02.html#l3"/>
+  <tocsect2 name="2.2: Free Lectures in C++" url="cplusplus02.html#l4"/>
+  <tocsect2 name="2.3: The history of C++" url="cplusplus02.html#l5">
+    <tocsect3 name="2.3.1: History of the C++ Annotations" url="cplusplus02.html#l6"/>
+    <tocsect3 name="2.3.2: Compiling a C program by a C++ compiler" url="cplusplus02.html#l7"/>
+    <tocsect3 name="2.3.3: Compiling a C++ program" url="cplusplus02.html#l8">
+      <tocsect4 name="2.3.3.1: C++ under MS-Windows" url="cplusplus02.html#l9"/>
+      <tocsect4 name="2.3.3.2: Compiling a C++ source text" url="cplusplus02.html#l10"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="2.4: Advantages and pretensions of C++" url="cplusplus02.html#l11"/>
+  <tocsect2 name="2.5: What is Object-Oriented Programming?" url="cplusplus02.html#l12"/>
+  <tocsect2 name="2.6: Differences between C and C++" url="cplusplus02.html#l13">
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Chapter 3: A first impression of C++" url="cplusplus03.html#l32">
+  <tocsect2 name="3.1: More extensions to C in C++" url="cplusplus03.html#l33">
+    <tocsect3 name="3.1.1: The scope resolution operator ::" url="cplusplus03.html#l34"/>
+    <tocsect3 name="3.1.2: `cout', `cin' and `cerr'" url="cplusplus03.html#l35"/>
+    <tocsect3 name="3.1.3: The keyword `const'" url="cplusplus03.html#l36"/>
+    <tocsect3 name="3.1.4: References" url="cplusplus03.html#l37"/>
+  </tocsect2>
+  <tocsect2 name="3.2: Functions as part of structs" url="cplusplus03.html#l38"/>
+  <tocsect2 name="3.3: Several new data types" url="cplusplus03.html#l39">
+    <tocsect3 name="3.3.1: The `bool' data type" url="cplusplus03.html#l40"/>
+    <tocsect3 name="3.3.2: The `wchar_t' data type" url="cplusplus03.html#l41"/>
+  </tocsect2>
+  <tocsect2 name="3.4: Data hiding: public, private and class" url="cplusplus03.html#l42"/>
+  <tocsect2 name="3.5: Structs in C vs. structs in C++" url="cplusplus03.html#l43"/>
+  <tocsect2 name="3.6: Namespaces" url="cplusplus03.html#l44">
+    <tocsect3 name="3.6.1: Defining namespaces" url="cplusplus03.html#l45">
+      <tocsect4 name="3.6.1.1: Declaring entities in namespaces" url="cplusplus03.html#l46"/>
+      <tocsect4 name="3.6.1.2: A closed namespace " url="cplusplus03.html#l47"/>
+    </tocsect3>
+    <tocsect3 name="3.6.2: Referring to entities" url="cplusplus03.html#l48">
+      <tocsect4 name="3.6.2.1: The `using' directive " url="cplusplus03.html#l49"/>
+      <tocsect4 name="3.6.2.2: `Koenig lookup' " url="cplusplus03.html#l50"/>
+    </tocsect3>
+    <tocsect3 name="3.6.3: The standard namespace" url="cplusplus03.html#l51"/>
+    <tocsect3 name="3.6.4: Nesting namespaces and namespace aliasing" url="cplusplus03.html#l52">
+      <tocsect4 name="3.6.4.1: Defining entities outside of their namespaces" url="cplusplus03.html#l53"/>
+    </tocsect3>
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Chapter 4: The `string' data type" url="cplusplus04.html#l54">
+  <tocsect2 name="4.1: Operations on strings" url="cplusplus04.html#l55"/>
+  <tocsect2 name="4.2: Overview of operations on strings" url="cplusplus04.html#l56">
+    <tocsect3 name="4.2.1: The string initializers" url="cplusplus04.html#l57"/>
+    <tocsect3 name="4.2.2: The string iterators" url="cplusplus04.html#l58"/>
+    <tocsect3 name="4.2.3: The string operators" url="cplusplus04.html#l59"/>
+    <tocsect3 name="4.2.4: The string member functions" url="cplusplus04.html#l60"/>
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Chapter 5: The IO-stream Library" url="cplusplus05.html#l61">
+  <tocsect2 name="5.1: Iostream header files" url="cplusplus05.html#l62"/>
+  <tocsect2 name="5.2: The foundation: the class `ios_base'" url="cplusplus05.html#l63"/>
+  <tocsect2 name="5.3: Interfacing `streambuf' objects: the class `ios'" url="cplusplus05.html#l64">
+    <tocsect3 name="5.3.1: Condition states" url="cplusplus05.html#l65"/>
+    <tocsect3 name="5.3.2: Formatting output and input" url="cplusplus05.html#l66">
+      <tocsect4 name="5.3.2.1: Formatting flags" url="cplusplus05.html#l67"/>
+      <tocsect4 name="5.3.2.2: Format modifying member functions" url="cplusplus05.html#l68"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="5.4: Output" url="cplusplus05.html#l69">
+    <tocsect3 name="5.4.1: Basic output: the class `ostream'" url="cplusplus05.html#l70">
+      <tocsect4 name="5.4.1.1: Writing to `ostream' objects" url="cplusplus05.html#l71"/>
+      <tocsect4 name="5.4.1.2: `ostream' positioning" url="cplusplus05.html#l72"/>
+      <tocsect4 name="5.4.1.3: `ostream' flushing" url="cplusplus05.html#l73"/>
+    </tocsect3>
+    <tocsect3 name="5.4.2: Output to files: the class `ofstream'" url="cplusplus05.html#l74">
+      <tocsect4 name="5.4.2.1: Modes for opening stream objects" url="cplusplus05.html#l75"/>
+    </tocsect3>
+    <tocsect3 name="5.4.3: Output to memory: the class `ostringstream'" url="cplusplus05.html#l76"/>
+  </tocsect2>
+  <tocsect2 name="5.5: Input" url="cplusplus05.html#l77">
+    <tocsect3 name="5.5.1: Basic input: the class `istream'" url="cplusplus05.html#l78">
+      <tocsect4 name="5.5.1.1: Reading from `istream' objects" url="cplusplus05.html#l79"/>
+      <tocsect4 name="5.5.1.2: `istream' positioning" url="cplusplus05.html#l80"/>
+    </tocsect3>
+    <tocsect3 name="5.5.2: Input from streams: the class `ifstream'" url="cplusplus05.html#l81"/>
+    <tocsect3 name="5.5.3: Input from memory: the class `istringstream'" url="cplusplus05.html#l82"/>
+  </tocsect2>
+  <tocsect2 name="5.6: Manipulators" url="cplusplus05.html#l83"/>
+  <tocsect2 name="5.7: The `streambuf' class" url="cplusplus05.html#l84">
+    <tocsect3 name="5.7.1: Protected `streambuf' members" url="cplusplus05.html#l85"/>
+    <tocsect3 name="5.7.2: The class `filebuf'" url="cplusplus05.html#l86"/>
+  </tocsect2>
+  <tocsect2 name="5.8: Advanced topics" url="cplusplus05.html#l87">
+    <tocsect3 name="5.8.1: Copying streams" url="cplusplus05.html#l88"/>
+    <tocsect3 name="5.8.2: Coupling streams" url="cplusplus05.html#l89"/>
+    <tocsect3 name="5.8.3: Redirection using streams" url="cplusplus05.html#l90"/>
+    <tocsect3 name="5.8.4: Reading AND Writing to a stream" url="cplusplus05.html#l91"/>
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Chapter 6: Classes" url="cplusplus06.html#l92">
+  <tocsect2 name="6.1: The constructor" url="cplusplus06.html#l93">
+    <tocsect3 name="6.1.1: A first application" url="cplusplus06.html#l94"/>
+    <tocsect3 name="6.1.2: Constructors: with and without arguments" url="cplusplus06.html#l95">
+      <tocsect4 name="6.1.2.1: The order of construction" url="cplusplus06.html#l96"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="6.2: Const member functions and const objects" url="cplusplus06.html#l97"/>
+  <tocsect2 name="6.3: The keyword `inline'" url="cplusplus06.html#l98">
+    <tocsect3 name="6.3.1: Inline functions within class declarations" url="cplusplus06.html#l99"/>
+    <tocsect3 name="6.3.2: Inline functions outside of class declarations" url="cplusplus06.html#l100"/>
+    <tocsect3 name="6.3.3: When to use inline functions" url="cplusplus06.html#l101"/>
+  </tocsect2>
+  <tocsect2 name="6.4: Objects in objects: composition" url="cplusplus06.html#l102">
+    <tocsect3 name="6.4.1: Composition and const objects: const member initializers" url="cplusplus06.html#l103"/>
+    <tocsect3 name="6.4.2: Composition and reference objects: reference member initializers" url="cplusplus06.html#l104"/>
+  </tocsect2>
+  <tocsect2 name="6.5: Header file organization with classes" url="cplusplus06.html#l105">
+    <tocsect3 name="6.5.1: Using namespaces in header files" url="cplusplus06.html#l106"/>
+  </tocsect2>
+  <tocsect2 name="6.6: The keyword `mutable'" url="cplusplus06.html#l107"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 7: Classes and memory allocation" url="cplusplus07.html#l108">
+  <tocsect2 name="7.1: The operators `new' and `delete'" url="cplusplus07.html#l109">
+    <tocsect3 name="7.1.1: Allocating arrays" url="cplusplus07.html#l110"/>
+    <tocsect3 name="7.1.2: Deleting arrays" url="cplusplus07.html#l111"/>
+    <tocsect3 name="7.1.3: Enlarging arrays" url="cplusplus07.html#l112"/>
+  </tocsect2>
+  <tocsect2 name="7.2: The destructor" url="cplusplus07.html#l113">
+    <tocsect3 name="7.2.1: New and delete and object pointers" url="cplusplus07.html#l114"/>
+    <tocsect3 name="7.2.2: The function set_new_handler()" url="cplusplus07.html#l115"/>
+  </tocsect2>
+  <tocsect2 name="7.3: The assignment operator" url="cplusplus07.html#l116">
+    <tocsect3 name="7.3.1: Overloading the assignment operator" url="cplusplus07.html#l117">
+      <tocsect4 name="7.3.1.1: The function 'operator=()'" url="cplusplus07.html#l118"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="7.4: The this pointer" url="cplusplus07.html#l119">
+    <tocsect3 name="7.4.1: Preventing self-destruction with this" url="cplusplus07.html#l120"/>
+    <tocsect3 name="7.4.2: Associativity of operators and this" url="cplusplus07.html#l121"/>
+  </tocsect2>
+  <tocsect2 name="7.5: The copy constructor: Initialization vs. Assignment" url="cplusplus07.html#l122">
+    <tocsect3 name="7.5.1: Similarities between the copy constructor and operator=()" url="cplusplus07.html#l123"/>
+    <tocsect3 name="7.5.2: Preventing the use of certain member functions" url="cplusplus07.html#l124"/>
+  </tocsect2>
+  <tocsect2 name="7.6: Conclusion" url="cplusplus07.html#l125"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 8: Exceptions" url="cplusplus08.html#l126">
+  <tocsect2 name="8.1: Using exceptions: syntax elements" url="cplusplus08.html#l127"/>
+  <tocsect2 name="8.2: An example using exceptions" url="cplusplus08.html#l128">
+    <tocsect3 name="8.2.1: No exceptions: `setjmp()' and `longjmp()'" url="cplusplus08.html#l129"/>
+    <tocsect3 name="8.2.2: Exceptions: the preferred alternative" url="cplusplus08.html#l130"/>
+  </tocsect2>
+  <tocsect2 name="8.3: Throwing exceptions" url="cplusplus08.html#l131">
+    <tocsect3 name="8.3.1: The empty `throw' statement" url="cplusplus08.html#l132"/>
+  </tocsect2>
+  <tocsect2 name="8.4: The try block" url="cplusplus08.html#l133"/>
+  <tocsect2 name="8.5: Catching exceptions" url="cplusplus08.html#l134">
+    <tocsect3 name="8.5.1: The default catcher" url="cplusplus08.html#l135"/>
+  </tocsect2>
+  <tocsect2 name="8.6: Declaring exception throwers" url="cplusplus08.html#l136"/>
+  <tocsect2 name="8.7: Iostreams and exceptions" url="cplusplus08.html#l137"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 9: More Operator Overloading" url="cplusplus09.html#l138">
+  <tocsect2 name="9.1: Overloading `operator[]()'" url="cplusplus09.html#l139"/>
+  <tocsect2 name="9.2: Overloading the insertion and extraction operators" url="cplusplus09.html#l140"/>
+  <tocsect2 name="9.3: Conversion operators" url="cplusplus09.html#l141"/>
+  <tocsect2 name="9.4: The `explicit' keyword" url="cplusplus09.html#l142"/>
+  <tocsect2 name="9.5: Overloading increment and decrement" url="cplusplus09.html#l143"/>
+  <tocsect2 name="9.6: Overloading `operator new(size_t)'" url="cplusplus09.html#l144"/>
+  <tocsect2 name="9.7: Overloading `operator delete(void *)'" url="cplusplus09.html#l145"/>
+  <tocsect2 name="9.8: Operators `new[]' and `delete[]'" url="cplusplus09.html#l146"/>
+  <tocsect2 name="9.9: Function Objects" url="cplusplus09.html#l147">
+    <tocsect3 name="9.9.1: Constructing manipulators" url="cplusplus09.html#l148">
+      <tocsect4 name="9.9.1.1: Manipulators requiring arguments" url="cplusplus09.html#l149"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="9.10: Overloadable Operators" url="cplusplus09.html#l150"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 10: Static data and functions" url="cplusplus10.html#l151">
+  <tocsect2 name="10.1: Static data" url="cplusplus10.html#l152">
+    <tocsect3 name="10.1.1: Private static data" url="cplusplus10.html#l153"/>
+    <tocsect3 name="10.1.2: Public static data" url="cplusplus10.html#l154"/>
+  </tocsect2>
+  <tocsect2 name="10.2: Static member functions" url="cplusplus10.html#l155"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 11: Friends" url="cplusplus11.html#l156">
+  <tocsect2 name="11.1: Friend-functions" url="cplusplus11.html#l157"/>
+  <tocsect2 name="11.2: Inline friends" url="cplusplus11.html#l158"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 12: Abstract Containers" url="cplusplus12.html#l159">
+  <tocsect2 name="12.1: The `pair' container" url="cplusplus12.html#l160"/>
+  <tocsect2 name="12.2: Sequential Containers" url="cplusplus12.html#l161">
+    <tocsect3 name="12.2.1: The `vector' container" url="cplusplus12.html#l162"/>
+    <tocsect3 name="12.2.2: The `list' container" url="cplusplus12.html#l163"/>
+    <tocsect3 name="12.2.3: The `queue' container" url="cplusplus12.html#l164"/>
+    <tocsect3 name="12.2.4: The `priority_queue' container" url="cplusplus12.html#l165"/>
+    <tocsect3 name="12.2.5: The `deque' container" url="cplusplus12.html#l166"/>
+    <tocsect3 name="12.2.6: The `map' container" url="cplusplus12.html#l167"/>
+    <tocsect3 name="12.2.7: The `multimap' container" url="cplusplus12.html#l168"/>
+    <tocsect3 name="12.2.8: The `set' container" url="cplusplus12.html#l169"/>
+    <tocsect3 name="12.2.9: The `multiset' container" url="cplusplus12.html#l170"/>
+    <tocsect3 name="12.2.10: The `stack' container" url="cplusplus12.html#l171"/>
+    <tocsect3 name="12.2.11: The `hash_map' and other hashing-based containers" url="cplusplus12.html#l172"/>
+  </tocsect2>
+  <tocsect2 name="12.3: The `complex' container" url="cplusplus12.html#l173"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 13: Inheritance" url="cplusplus13.html#l174">
+  <tocsect2 name="13.1: Related types" url="cplusplus13.html#l175"/>
+  <tocsect2 name="13.2: The constructor of a derived class" url="cplusplus13.html#l176"/>
+  <tocsect2 name="13.3: The destructor of a derived class" url="cplusplus13.html#l177"/>
+  <tocsect2 name="13.4: Redefining member functions" url="cplusplus13.html#l178"/>
+  <tocsect2 name="13.5: Multiple inheritance" url="cplusplus13.html#l179"/>
+  <tocsect2 name="13.6: Conversions between base classes and derived classes" url="cplusplus13.html#l180">
+    <tocsect3 name="13.6.1: Conversions in object assignments" url="cplusplus13.html#l181"/>
+    <tocsect3 name="13.6.2: Conversions in pointer assignments" url="cplusplus13.html#l182"/>
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Chapter 14: Polymorphism" url="cplusplus14.html#l183">
+  <tocsect2 name="14.1: Virtual functions" url="cplusplus14.html#l184"/>
+  <tocsect2 name="14.2: Virtual destructors" url="cplusplus14.html#l185"/>
+  <tocsect2 name="14.3: Pure virtual functions" url="cplusplus14.html#l186"/>
+  <tocsect2 name="14.4: Virtual functions in multiple inheritance" url="cplusplus14.html#l187">
+    <tocsect3 name="14.4.1: Ambiguity in multiple inheritance" url="cplusplus14.html#l188"/>
+    <tocsect3 name="14.4.2: Virtual base classes" url="cplusplus14.html#l189"/>
+    <tocsect3 name="14.4.3: When virtual derivation is not appropriate" url="cplusplus14.html#l190"/>
+  </tocsect2>
+  <tocsect2 name="14.5: Run-Time Type identification" url="cplusplus14.html#l191">
+    <tocsect3 name="14.5.1: The dynamic_cast operator" url="cplusplus14.html#l192"/>
+    <tocsect3 name="14.5.2: The typeid operator" url="cplusplus14.html#l193"/>
+  </tocsect2>
+  <tocsect2 name="14.6: Deriving classes from `streambuf'" url="cplusplus14.html#l194"/>
+  <tocsect2 name="14.7: A polymorphic exception class" url="cplusplus14.html#l195"/>
+  <tocsect2 name="14.8: How polymorphism is implemented" url="cplusplus14.html#l196"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 15: Classes having pointers to members" url="cplusplus15.html#l197">
+  <tocsect2 name="15.1: Pointers to members: an example" url="cplusplus15.html#l198"/>
+  <tocsect2 name="15.2: Defining pointers to members" url="cplusplus15.html#l199"/>
+  <tocsect2 name="15.3: Using pointers to members" url="cplusplus15.html#l200"/>
+  <tocsect2 name="15.4: Pointers to static members" url="cplusplus15.html#l201"/>
+  <tocsect2 name="15.5: Sizes of pointers" url="cplusplus15.html#l202"/>
+</tocsect1>
+
+<tocsect1 name="Chapter 16: Nested Classes" url="cplusplus16.html#l203">
+  <tocsect2 name="16.1: Defining nested class members" url="cplusplus16.html#l204"/>
+  <tocsect2 name="16.2: Declaring nested classes" url="cplusplus16.html#l205"/>
+  <tocsect2 name="16.3: Accessing private members in nested classes" url="cplusplus16.html#l206"/>
+  <tocsect2 name="16.4: Nesting enumerations" url="cplusplus16.html#l207">
+    <tocsect3 name="16.4.1: Empty enumerations" url="cplusplus16.html#l208"/>
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Chapter 17: The Standard Template Library, generic algorithms" url="cplusplus17.html#l209">
+  <tocsect2 name="17.1: Predefined function objects" url="cplusplus17.html#l210">
+    <tocsect3 name="17.1.1: Arithmetic Function Objects" url="cplusplus17.html#l211"/>
+    <tocsect3 name="17.1.2: Relational Function Objects" url="cplusplus17.html#l212"/>
+    <tocsect3 name="17.1.3: Logical Function Objects" url="cplusplus17.html#l213"/>
+    <tocsect3 name="17.1.4: Function Adaptors" url="cplusplus17.html#l214"/>
+  </tocsect2>
+  <tocsect2 name="17.2: Iterators" url="cplusplus17.html#l215">
+    <tocsect3 name="17.2.1: Insert iterators" url="cplusplus17.html#l216"/>
+    <tocsect3 name="17.2.2: istream iterators" url="cplusplus17.html#l217">
+      <tocsect4 name="17.2.2.1: istreambuf iterators" url="cplusplus17.html#l218"/>
+    </tocsect3>
+    <tocsect3 name="17.2.3: ostream iterators" url="cplusplus17.html#l219">
+      <tocsect4 name="17.2.3.1: ostreambuf iterators" url="cplusplus17.html#l220"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="17.3: The 'auto_ptr' class" url="cplusplus17.html#l221">
+    <tocsect3 name="17.3.1: Defining auto_ptr variables" url="cplusplus17.html#l222"/>
+    <tocsect3 name="17.3.2: Pointing to a newly allocated object" url="cplusplus17.html#l223"/>
+    <tocsect3 name="17.3.3: Pointing to another auto_ptr" url="cplusplus17.html#l224"/>
+    <tocsect3 name="17.3.4: Creating a plain auto_ptr" url="cplusplus17.html#l225"/>
+    <tocsect3 name="17.3.5: Auto_ptr: operators and members" url="cplusplus17.html#l226"/>
+  </tocsect2>
+  <tocsect2 name="17.4: The Generic Algorithms" url="cplusplus17.html#l227">
+    <tocsect3 name="17.4.1: accumulate()" url="cplusplus17.html#l228"/>
+    <tocsect3 name="17.4.2: adjacent_difference()" url="cplusplus17.html#l229"/>
+    <tocsect3 name="17.4.3: adjacent_find()" url="cplusplus17.html#l230"/>
+    <tocsect3 name="17.4.4: binary_search()" url="cplusplus17.html#l231"/>
+    <tocsect3 name="17.4.5: copy()" url="cplusplus17.html#l232"/>
+    <tocsect3 name="17.4.6: copy_backward()" url="cplusplus17.html#l233"/>
+    <tocsect3 name="17.4.7: count()" url="cplusplus17.html#l234"/>
+    <tocsect3 name="17.4.8: count_if()" url="cplusplus17.html#l235"/>
+    <tocsect3 name="17.4.9: equal()" url="cplusplus17.html#l236"/>
+    <tocsect3 name="17.4.10: equal_range()" url="cplusplus17.html#l237"/>
+    <tocsect3 name="17.4.11: fill()" url="cplusplus17.html#l238"/>
+    <tocsect3 name="17.4.12: fill_n()" url="cplusplus17.html#l239"/>
+    <tocsect3 name="17.4.13: find()" url="cplusplus17.html#l240"/>
+    <tocsect3 name="17.4.14: find_end()" url="cplusplus17.html#l241"/>
+    <tocsect3 name="17.4.15: find_first_of()" url="cplusplus17.html#l242"/>
+    <tocsect3 name="17.4.16: find_if()" url="cplusplus17.html#l243"/>
+    <tocsect3 name="17.4.17: for_each()" url="cplusplus17.html#l244"/>
+    <tocsect3 name="17.4.18: generate()" url="cplusplus17.html#l245"/>
+    <tocsect3 name="17.4.19: generate_n()" url="cplusplus17.html#l246"/>
+    <tocsect3 name="17.4.20: includes()" url="cplusplus17.html#l247"/>
+    <tocsect3 name="17.4.21: inner_product()" url="cplusplus17.html#l248"/>
+    <tocsect3 name="17.4.22: inplace_merge()" url="cplusplus17.html#l249"/>
+    <tocsect3 name="17.4.23: iter_swap()" url="cplusplus17.html#l250"/>
+    <tocsect3 name="17.4.24: lexicographical_compare()" url="cplusplus17.html#l251"/>
+    <tocsect3 name="17.4.25: lower_bound()" url="cplusplus17.html#l252"/>
+    <tocsect3 name="17.4.26: max()" url="cplusplus17.html#l253"/>
+    <tocsect3 name="17.4.27: max_element()" url="cplusplus17.html#l254"/>
+    <tocsect3 name="17.4.28: merge()" url="cplusplus17.html#l255"/>
+    <tocsect3 name="17.4.29: min()" url="cplusplus17.html#l256"/>
+    <tocsect3 name="17.4.30: min_element()" url="cplusplus17.html#l257"/>
+    <tocsect3 name="17.4.31: mismatch()" url="cplusplus17.html#l258"/>
+    <tocsect3 name="17.4.32: next_permutation()" url="cplusplus17.html#l259"/>
+    <tocsect3 name="17.4.33: nth_element()" url="cplusplus17.html#l260"/>
+    <tocsect3 name="17.4.34: partial_sort()" url="cplusplus17.html#l261"/>
+    <tocsect3 name="17.4.35: partial_sort_copy()" url="cplusplus17.html#l262"/>
+    <tocsect3 name="17.4.36: partial_sum()" url="cplusplus17.html#l263"/>
+    <tocsect3 name="17.4.37: partition()" url="cplusplus17.html#l264"/>
+    <tocsect3 name="17.4.38: prev_permutation()" url="cplusplus17.html#l265"/>
+    <tocsect3 name="17.4.39: random_shuffle()" url="cplusplus17.html#l266"/>
+    <tocsect3 name="17.4.40: remove()" url="cplusplus17.html#l267"/>
+    <tocsect3 name="17.4.41: remove_copy()" url="cplusplus17.html#l268"/>
+    <tocsect3 name="17.4.42: remove_if()" url="cplusplus17.html#l269"/>
+    <tocsect3 name="17.4.43: remove_copy_if()" url="cplusplus17.html#l270"/>
+    <tocsect3 name="17.4.44: replace()" url="cplusplus17.html#l271"/>
+    <tocsect3 name="17.4.45: replace_copy()" url="cplusplus17.html#l272"/>
+    <tocsect3 name="17.4.46: replace_if()" url="cplusplus17.html#l273"/>
+    <tocsect3 name="17.4.47: replace_copy_if()" url="cplusplus17.html#l274"/>
+    <tocsect3 name="17.4.48: reverse()" url="cplusplus17.html#l275"/>
+    <tocsect3 name="17.4.49: reverse_copy()" url="cplusplus17.html#l276"/>
+    <tocsect3 name="17.4.50: rotate()" url="cplusplus17.html#l277"/>
+    <tocsect3 name="17.4.51: rotate_copy()" url="cplusplus17.html#l278"/>
+    <tocsect3 name="17.4.52: search()" url="cplusplus17.html#l279"/>
+    <tocsect3 name="17.4.53: search_n()" url="cplusplus17.html#l280"/>
+    <tocsect3 name="17.4.54: set_difference()" url="cplusplus17.html#l281"/>
+    <tocsect3 name="17.4.55: set_intersection()" url="cplusplus17.html#l282"/>
+    <tocsect3 name="17.4.56: set_symmetric_difference()" url="cplusplus17.html#l283"/>
+    <tocsect3 name="17.4.57: set_union()" url="cplusplus17.html#l284"/>
+    <tocsect3 name="17.4.58: sort()" url="cplusplus17.html#l285"/>
+    <tocsect3 name="17.4.59: stable_partition()" url="cplusplus17.html#l286"/>
+    <tocsect3 name="17.4.60: stable_sort()" url="cplusplus17.html#l287"/>
+    <tocsect3 name="17.4.61: swap()" url="cplusplus17.html#l288"/>
+    <tocsect3 name="17.4.62: swap_ranges()" url="cplusplus17.html#l289"/>
+    <tocsect3 name="17.4.63: transform()" url="cplusplus17.html#l290"/>
+    <tocsect3 name="17.4.64: unique()" url="cplusplus17.html#l291"/>
+    <tocsect3 name="17.4.65: unique_copy()" url="cplusplus17.html#l292"/>
+    <tocsect3 name="17.4.66: upper_bound()" url="cplusplus17.html#l293"/>
+    <tocsect3 name="17.4.67: Heap algorithms" url="cplusplus17.html#l294">
+      <tocsect4 name="17.4.67.1: make_heap()" url="cplusplus17.html#l295"/>
+      <tocsect4 name="17.4.67.2: pop_heap()" url="cplusplus17.html#l296"/>
+      <tocsect4 name="17.4.67.3: push_heap()" url="cplusplus17.html#l297"/>
+      <tocsect4 name="17.4.67.4: sort_heap()" url="cplusplus17.html#l298"/>
+      <tocsect4 name="17.4.67.5: An example using the heap algorithms" url="cplusplus17.html#l299"/>
+    </tocsect3>
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Chapter 18: Templates" url="cplusplus18.html#l300">
+  <tocsect2 name="18.1: Template functions" url="cplusplus18.html#l301">
+    <tocsect3 name="18.1.1: Template function definitions" url="cplusplus18.html#l302"/>
+    <tocsect3 name="18.1.2: Instantiations of template functions" url="cplusplus18.html#l303">
+      <tocsect4 name="18.1.2.1: Declaring template functions" url="cplusplus18.html#l304"/>
+    </tocsect3>
+    <tocsect3 name="18.1.3: Argument deduction" url="cplusplus18.html#l305">
+      <tocsect4 name="18.1.3.1: Lvalue transformations" url="cplusplus18.html#l306"/>
+      <tocsect4 name="18.1.3.2: Qualification conversions" url="cplusplus18.html#l307"/>
+      <tocsect4 name="18.1.3.3: Conversion to a base class" url="cplusplus18.html#l308"/>
+      <tocsect4 name="18.1.3.4: Summary: the template argument deduction algorithm" url="cplusplus18.html#l309"/>
+    </tocsect3>
+    <tocsect3 name="18.1.4: Explicit arguments" url="cplusplus18.html#l310">
+      <tocsect4 name="18.1.4.1: Template explicit instantiation declarations" url="cplusplus18.html#l311"/>
+    </tocsect3>
+    <tocsect3 name="18.1.5: Template explicit specialization " url="cplusplus18.html#l312"/>
+    <tocsect3 name="18.1.6: Overloading template functions" url="cplusplus18.html#l313"/>
+    <tocsect3 name="18.1.7: Selecting an overloaded (template) function" url="cplusplus18.html#l314"/>
+    <tocsect3 name="18.1.8: Name resolution within template functions" url="cplusplus18.html#l315"/>
+  </tocsect2>
+  <tocsect2 name="18.2: Template classes" url="cplusplus18.html#l316">
+    <tocsect3 name="18.2.1: Template class definitions" url="cplusplus18.html#l317"/>
+    <tocsect3 name="18.2.2: Template class instantiations" url="cplusplus18.html#l318"/>
+    <tocsect3 name="18.2.3: Non-type parameters" url="cplusplus18.html#l319"/>
+    <tocsect3 name="18.2.4: Template class member functions" url="cplusplus18.html#l320"/>
+    <tocsect3 name="18.2.5: Template classes and friend declarations" url="cplusplus18.html#l321">
+      <tocsect4 name="18.2.5.1: Non-template friends" url="cplusplus18.html#l322"/>
+      <tocsect4 name="18.2.5.2: Bound friends" url="cplusplus18.html#l323"/>
+      <tocsect4 name="18.2.5.3: Unbound friends" url="cplusplus18.html#l324"/>
+    </tocsect3>
+    <tocsect3 name="18.2.6: Template classes and static data" url="cplusplus18.html#l325"/>
+    <tocsect3 name="18.2.7: Derived Template Classes" url="cplusplus18.html#l326"/>
+    <tocsect3 name="18.2.8: Nesting and template classes" url="cplusplus18.html#l327"/>
+    <tocsect3 name="18.2.9: Member templates" url="cplusplus18.html#l328"/>
+    <tocsect3 name="18.2.10: Template class specializations" url="cplusplus18.html#l329"/>
+    <tocsect3 name="18.2.11: Template class partial specializations" url="cplusplus18.html#l330"/>
+    <tocsect3 name="18.2.12: Name resolution within template classes" url="cplusplus18.html#l331"/>
+  </tocsect2>
+  <tocsect2 name="18.3: Constructing iterators" url="cplusplus18.html#l332">
+    <tocsect3 name="18.3.0.1: The implementation of a Random Access Iterator " url="cplusplus18.html#l333"/>
+    <tocsect3 name="18.3.0.2: The implementation of a reverse_iterator" url="cplusplus18.html#l334"/>
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Chapter 19: Concrete examples of C++" url="cplusplus19.html#l335">
+  <tocsect2 name="19.1: Function objects performing bitwise operations" url="cplusplus19.html#l336"/>
+  <tocsect2 name="19.2: Implementing a reverse_iterator" url="cplusplus19.html#l337"/>
+  <tocsect2 name="19.3: A text to anything converter" url="cplusplus19.html#l338"/>
+  <tocsect2 name="19.4: `streambuf' classes using file descriptors" url="cplusplus19.html#l339">
+    <tocsect3 name="19.4.1: A class for output operations" url="cplusplus19.html#l340"/>
+    <tocsect3 name="19.4.2: Classes for input operations" url="cplusplus19.html#l341">
+      <tocsect4 name="19.4.2.1: Using a one-character buffer" url="cplusplus19.html#l342"/>
+      <tocsect4 name="19.4.2.2: Using an n-character buffer" url="cplusplus19.html#l343"/>
+      <tocsect4 name="19.4.2.3: Seeking positions in `streambuf' objects" url="cplusplus19.html#l344"/>
+      <tocsect4 name="19.4.2.4: Multiple `unget()' calls in `streambuf' objects" url="cplusplus19.html#l345"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="19.5: Using form() with ostream objects" url="cplusplus19.html#l346"/>
+  <tocsect2 name="19.6: Redirection revisited" url="cplusplus19.html#l347"/>
+  <tocsect2 name="19.7: The fork() system call" url="cplusplus19.html#l348">
+    <tocsect3 name="19.7.1: The `Daemon' program" url="cplusplus19.html#l349"/>
+    <tocsect3 name="19.7.2: The `Pipe' class" url="cplusplus19.html#l350"/>
+    <tocsect3 name="19.7.3: The `ParentSlurp' class" url="cplusplus19.html#l351"/>
+    <tocsect3 name="19.7.4: Communicating with multiple children" url="cplusplus19.html#l352">
+      <tocsect4 name="19.7.4.1: The `Select' class" url="cplusplus19.html#l353"/>
+      <tocsect4 name="19.7.4.2: The `Child' class" url="cplusplus19.html#l354"/>
+      <tocsect4 name="19.7.4.3: The `Monitor' class" url="cplusplus19.html#l355"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="19.8: Using Bison and Flex" url="cplusplus19.html#l356">
+    <tocsect3 name="19.8.1: Using Flex++ to create a scanner" url="cplusplus19.html#l357">
+      <tocsect4 name="19.8.1.1: The flex++ specification file" url="cplusplus19.html#l358"/>
+      <tocsect4 name="19.8.1.2: The derived class: Scanner" url="cplusplus19.html#l359"/>
+      <tocsect4 name="19.8.1.3: The main() function" url="cplusplus19.html#l360"/>
+      <tocsect4 name="19.8.1.4: Building the scanner-program" url="cplusplus19.html#l361"/>
+    </tocsect3>
+    <tocsect3 name="19.8.2: Using both bison++ and flex++" url="cplusplus19.html#l362">
+      <tocsect4 name="19.8.2.1: The bison++ specification file" url="cplusplus19.html#l363"/>
+      <tocsect4 name="19.8.2.2: The bison++ header section" url="cplusplus19.html#l364"/>
+      <tocsect4 name="19.8.2.3: The bison++ definition section" url="cplusplus19.html#l365"/>
+      <tocsect4 name="19.8.2.4: The bison++ grammar rules" url="cplusplus19.html#l366"/>
+      <tocsect4 name="19.8.2.5: The flex++ specification file" url="cplusplus19.html#l367"/>
+      <tocsect4 name="19.8.2.6: The generation of the code" url="cplusplus19.html#l368"/>
+    </tocsect3>
+  </tocsect2>
+</tocsect1>
+
+<tocsect1 name="Index" url="cppindex.html" />
+
+</kdeveloptoc>
