@@ -20,8 +20,13 @@
 #ifndef __treeview_h__
 #define __treeview_h__
 
+
 #include <qstring.h>
+
+
 #include <klistview.h>
+#include <kservicegroup.h>
+
 
 class QPopupMenu;
 
@@ -56,9 +61,6 @@ class TreeView : public KListView
 public:
     TreeView(QWidget *parent = 0, const char *name = 0);
 
-public slots:
-    void currentChanged();
-
 signals:
     void entrySelected(const QString&);
 
@@ -67,11 +69,12 @@ protected:
     void fill();
     void fillBranch(const QString& relPath, TreeItem* parent);
 
-    QStringList fileList(const QString& relativePath);
-    QStringList dirList(const QString& relativePath);
-
 private:
     QPopupMenu *_rmb;
+
+    void decorateItem(TreeItem *item, KServiceGroup::Ptr g);
+    void decorateItem(TreeItem *item, KService::Ptr s);
+
   };
 
 #endif

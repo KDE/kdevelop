@@ -27,6 +27,7 @@
 #include <qdatastream.h>
 #include <qcstring.h>
 #include <qpopupmenu.h>
+#include <qregexp.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -35,6 +36,11 @@
 #include <kiconloader.h>
 #include <kdesktopfile.h>
 #include <kaction.h>
+#include <kservicegroup.h>
+#include <ksycoca.h>
+#include <ksycocaentry.h>
+#include <kservice.h>
+#include <kdebug.h>
 
 
 TreeItem::TreeItem(QListViewItem *parent, const QString& file)
@@ -81,183 +87,77 @@ void TreeView::fill()
 
 void TreeView::fillBranch(const QString& rPath, TreeItem *parent)
 {
-  // get rid of leading slash in the relative path
-  QString relPath = rPath;
-  if (relPath[0] == '/')
-    relPath = relPath.mid(1, relPath.length());
+  KServiceGroup::Ptr root = KServiceGroup::group(rPath);
+  if (!root)
+    return;
 
-  // I don't use findAllResources as subdirectories are not recognised as resources
-  // and therefore I already have to iterate by hand to get the subdir list.
-  QStringList dirlist = dirList(relPath);
-  QStringList filelist = fileList(relPath);
+  KServiceGroup::List list = root->entries(true);
+  if (list.isEmpty()) 
+    return;
 
-  //for (QStringList::ConstIterator it = dirlist.begin(); it != dirlist.end(); ++it)
-  //  kdDebug() << (*it).local8Bit() << endl;
+  KServiceGroup::List::ConstIterator it = list.begin();
+  for (; it != list.end(); ++it) 
+  {
+    KSycocaEntry * e = *it;
 
-  // first add tree items for the desktop files in this directory
-  if (!filelist.isEmpty())
+    if (e->isType(KST_KServiceGroup)) 
     {
-      QStringList::ConstIterator it = filelist.end();
-      do
-        {
-          --it;
+      KServiceGroup::Ptr g(static_cast<KServiceGroup *>(e));
 
-          KDesktopFile df(*it);
-          if (df.readBoolEntry("Hidden") == true)
-            continue;
+      // Avoid adding empty groups.
+      KServiceGroup::Ptr subMenuRoot = KServiceGroup::group(g->relPath());
+      if (subMenuRoot->childCount() == 0)
+        continue;
+      
+      // Ignore dotfiles.
+      if ((g->name().at(0) == '.'))
+        continue;
 
-          TreeItem* item;
-          if (parent == 0) item = new TreeItem(this, *it);
-          else item = new TreeItem(parent, *it);
+      TreeItem *item = 0;
 
-          item->setText(0, df.readName());
-          item->setPixmap(0, KGlobal::iconLoader()->
-                          loadIcon(df.readIcon(), KIcon::Desktop, KIcon::SizeSmall));
-        }
-      while (it != filelist.begin());
+      if (parent)
+	item = new TreeItem(parent, "");
+      else
+	item = new TreeItem(this, "");
+
+      decorateItem(item, g);
+
+      fillBranch(g->name(), item);
     }
-
-  // add directories and process sudirs
-  if (!dirlist.isEmpty())
+    else
     {
-      QStringList::ConstIterator it = dirlist.end();
-      do
-        {
-          --it;
+       KService::Ptr s(static_cast<KService *>(e));
+      
+       TreeItem *item = 0;
 
-          QString dirFile = KGlobal::dirs()->findResource("apps", *it + "/.directory");
-          TreeItem* item;
+       if (parent)
+         item = new TreeItem(parent, s->desktopEntryPath());
+       else
+         item = new TreeItem(this, s->desktopEntryPath());
 
-          if (dirFile.isNull())
-            {
-              if (parent == 0)
-                item = new TreeItem(this, *it + "/.directory");
-              else
-                item = new TreeItem(parent, *it + "/.directory");
-              item->setText(0, *it);
-              item->setPixmap(0, KGlobal::iconLoader()->
-                              loadIcon("package", KIcon::Desktop, KIcon::SizeSmall));
-              item->setExpandable(true);
-            }
-          else
-            {
-              KDesktopFile df(dirFile);
-              if (df.readBoolEntry("Hidden") == true)
-                continue;
-
-              if (parent == 0)
-                item = new TreeItem(this, *it + "/.directory");
-              else
-                item = new TreeItem(parent, *it + "/.directory");
-
-              item->setText(0, df.readName());
-              item->setPixmap(0, KGlobal::iconLoader()
-                              ->loadIcon(df.readIcon(), KIcon::Desktop, KIcon::SizeSmall));
-              item->setExpandable(true);
-            }
-          fillBranch(*it, item);
-
-          // remove dir again, when there are no children
-          if (!item->firstChild())
-            delete item;
-        }
-      while (it != dirlist.begin());
+       decorateItem(item, s);
     }
+  }
 }
 
 
-void TreeView::currentChanged()
+void TreeView::decorateItem(TreeItem *item, KServiceGroup::Ptr g)
 {
-  TreeItem *item = (TreeItem*)selectedItem();
-  if (item == 0) return ;
+  QString groupCaption = g->caption();
+  groupCaption.replace(QRegExp("&"), "&&");
 
-  KDesktopFile df(item->file());
-  item->setText(0, df.readName());
-  item->setPixmap(0, KGlobal::iconLoader()
-                  ->loadIcon(df.readIcon(), KIcon::Desktop, KIcon::SizeSmall));
+  item->setText(0, groupCaption);
+  item->setPixmap(0, KGlobal::iconLoader()->loadIcon(g->icon(), KIcon::Small));
 }
 
-QStringList TreeView::fileList(const QString& rPath)
+
+void TreeView::decorateItem(TreeItem *item, KService::Ptr s)
 {
-  QString relativePath = rPath;
+  QString name = s->name();
+  name.replace(QRegExp("&"), "&&");
 
-  // truncate "/.directory"
-  int pos = relativePath.findRev("/.directory");
-  if (pos > 0) relativePath.truncate(pos);
-
-  QStringList filelist;
-
-  // loop through all resource dirs and build a file list
-  QStringList resdirlist = KGlobal::dirs()->resourceDirs("apps");
-  for (QStringList::ConstIterator it = resdirlist.begin(); it != resdirlist.end(); ++it)
-    {
-      QDir dir((*it) + "/" + relativePath);
-      if (!dir.exists()) continue;
-
-      dir.setFilter(QDir::Files);
-      dir.setNameFilter("*.desktop");
-
-      // build a list of files
-      QStringList files = dir.entryList();
-      for (QStringList::ConstIterator it = files.begin(); it != files.end(); ++it)
-        {
-          // does not work?!
-          //if (filelist.contains(*it)) continue;
-
-          if (relativePath == "")
-            {
-              filelist.remove(*it);  // hack
-              filelist.append(*it);
-            }
-          else
-            {
-              filelist.remove(relativePath + "/" + *it);  //hack
-              filelist.append(relativePath + "/" + *it);
-            }
-        }
-    }
-  return filelist;
-}
-
-QStringList TreeView::dirList(const QString& rPath)
-{
-  QString relativePath = rPath;
-
-  // truncate "/.directory"
-  int pos = relativePath.findRev("/.directory");
-  if (pos > 0) relativePath.truncate(pos);
-
-  QStringList dirlist;
-
-  // loop through all resource dirs and build a subdir list
-  QStringList resdirlist = KGlobal::dirs()->resourceDirs("apps");
-  for (QStringList::ConstIterator it = resdirlist.begin(); it != resdirlist.end(); ++it)
-    {
-      QDir dir((*it) + "/" + relativePath);
-      if (!dir.exists()) continue;
-      dir.setFilter(QDir::Dirs);
-
-      // build a list of subdirs
-      QStringList subdirs = dir.entryList();
-      for (QStringList::ConstIterator it = subdirs.begin(); it != subdirs.end(); ++it)
-        {
-          if ((*it) == "." || (*it) == "..") continue;
-          // does not work?!
-          // if (dirlist.contains(*it)) continue;
-
-          if (relativePath == "")
-            {
-              dirlist.remove(*it);  //hack
-              dirlist.append(*it);
-            }
-          else
-            {
-              dirlist.remove(relativePath + "/" + *it);  //hack
-              dirlist.append(relativePath + "/" + *it);
-            }
-        }
-    }
-  return dirlist;
+  item->setText(0, name);
+  item->setPixmap(0, s->pixmap(KIcon::Small));
 }
 
 

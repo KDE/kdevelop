@@ -12,6 +12,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+
 #include "tools_part.h"
 #include "treeview.h"
 
@@ -70,15 +71,15 @@ void ToolsConfig::showEvent(QShowEvent *e)
   fill();
   checkButtons();
 
-  connect(_tree, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(checkButtons()));
-  connect(_list, SIGNAL(currentChanged(QListBoxItem*)), this, SLOT(checkButtons()));
+  connect(_tree, SIGNAL(selectionChanged()), this, SLOT(checkButtons()));
+  connect(_list, SIGNAL(selectionChanged()), this, SLOT(checkButtons()));
 }
 
 
 void ToolsConfig::checkButtons()
 {
   _toList->setEnabled(_tree->selectedItem() && !_tree->selectedItem()->firstChild());
-  _toTree->setEnabled(_list->currentItem() >= 0 || _list->currentItem() < (int)_list->count());
+  _toTree->setEnabled(_list->currentItem() >= 0 && _list->currentItem() < (int)_list->count());
 }
 
 
@@ -122,6 +123,8 @@ void ToolsConfig::toList()
   TreeItem *item = (TreeItem*)_tree->selectedItem();
   if (item)
     add(item->file());
+
+  checkButtons();
 }
 
 
