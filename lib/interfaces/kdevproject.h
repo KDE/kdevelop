@@ -31,6 +31,8 @@
 #include <qstringlist.h>
 #include <qmap.h>
 
+class QTimer;
+
 class KDevProject : public KDevPlugin
 {
     Q_OBJECT
@@ -154,6 +156,7 @@ public:
     virtual QStringList symlinkProjectFiles();
     
 private slots:
+    void buildFileMap();
     void slotBuildFileMap();
     void slotAddFilesToFileMap(const QStringList & fileList );
     void slotRemoveFilesFromFileMap(const QStringList & fileList );
@@ -194,6 +197,7 @@ signals:
 private:
     QMap<QString, QString> m_absToRel;
     QStringList m_symlinkList;
+    QTimer *m_timer;
 };
 
 #endif

@@ -27,15 +27,19 @@
 #include "kdevproject.h"
 #include <urlutil.h>
 #include <qfileinfo.h>
+#include <qtimer.h>
 
 KDevProject::KDevProject( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
     : KDevPlugin( pluginName, icon, parent, name)
 {
-    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotBuildFileMap()) );
-    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotBuildFileMap()) );
+    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(buildFileMap()) );
+    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(buildFileMap()) );
 
     connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotAddFilesToFileMap(const QStringList& )) ); 
     connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotRemoveFilesFromFileMap(const QStringList& )) ); 
+    
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotBuildFileMap()));
 }
 
 KDevProject::~KDevProject()
@@ -73,9 +77,15 @@ QString KDevProject::relativeProjectFile( const QString & absFileName )
     return QString::null;
 }
 
-void KDevProject::slotBuildFileMap( )
+void KDevProject::buildFileMap()
 {
-	kdDebug(9000) << k_funcinfo << endl;
+    m_timer->stop();
+    m_timer->start(0, true);
+}
+
+void KDevProject::slotBuildFileMap()
+{
+    kdDebug(9000) << k_funcinfo << endl;
 
     m_absToRel.clear();
     m_symlinkList.clear();
@@ -94,7 +104,7 @@ void KDevProject::slotBuildFileMap( )
 
 void KDevProject::openProject( const QString & /*dirName*/, const QString & /*projectName*/ )
 {
-    slotBuildFileMap();
+    buildFileMap();
 }
 
 QStringList KDevProject::symlinkProjectFiles( )
