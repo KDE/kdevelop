@@ -1,3 +1,9 @@
+2001-08-29  F@lk Brettschneider <falk@kdevelop.org>
+    * changed version number to 2.0.1
+
+2001-08-27  F@lk Brettschneider <falk@kdevelop.org>
+    * avoid khtml crash on restoring files also with KDE-2.2.0
+
 2001-08-26  F@lk Brettschneider <falk@kdevelop.org>
     * find dialog in docu view highlights found text piece again
       (solution: uses KHTMLPart's find dialog now)
@@ -306,7 +312,7 @@
    * restored the spashlogo as it was before. Now it shows all of the time
       the last project is loaded which can take a while ad which is why it worked
       the former way :)
-   * removed the KTipOfDay class and dialog. We´re using KTipDialog from kdelibs now :)
+   * removed the KTipOfDay class and dialog. Were using KTipDialog from kdelibs now :)
       tip.database changed to XML accordingly.
 
 2001-06-06  Christian Couder <christian@kdevelop.org>
@@ -330,7 +336,7 @@
       switching
 
 2001-06-01  jbb <jbb@kdevelop.org>
-    * Patch from August Hörandl <august.hoerandl@gmx.at>
+    * Patch from August Hrandl <august.hoerandl@gmx.at>
         just a little "adjustment" to the clone functionalities "templates"
         - added the copy constructor
         - corrected operator << and >>
@@ -447,7 +453,7 @@
     * Bugfix: F12 now leaves the cursor where it was if the file was opened.
 
 2001-05-11  jbb <jbb@kdevelop.org>
-    * Patch from August Hörandl <august.hoerandl@gmx.at>
+    * Patch from August Hrandl <august.hoerandl@gmx.at>
       updates clone dialog
     * remove warnings from code
     
