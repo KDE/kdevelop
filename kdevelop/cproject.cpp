@@ -941,7 +941,7 @@ void CProject::updateMakefileAm(const QString& makefile)
            else
              if (QFileInfo(getProjectDir() + "automoc").exists())
                stream << "\nlib" << canonicalizeDirName(dir.dirName()) << "_a_METASOURCES = USE_AUTOMOC\n";
- 
+
 
           stream << "\nlib" << canonicalizeDirName(dir.dirName()) << "_a_SOURCES = " << sources << "\n";
           if(isQt2Project())
@@ -988,9 +988,9 @@ void CProject::updateMakefileAm(const QString& makefile)
             stream << "\nINCLUDES = $(all_includes)\n";
           else
             stream << "\n## INCLUDES were found outside kdevelop specific part\n";
-          
+
           stream << "\n\nLDFLAGS = " << getLDFLAGS() << "\n\n";
-          
+
           if (sharedLibSubDir)
             stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = " << sharedlibLDFLAGS << "\n\n";
 
@@ -1679,7 +1679,9 @@ bool CProject::isKDEProject()
 }
 bool CProject::isKDE2Project()
 {
-  if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" || getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kc_module" || getProjectType()=="kpart_plugin")
+  if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" ||
+      getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kc_module" ||
+      getProjectType()=="kpart_plugin" || getProjectType()=="ktheme")
      return true;
   return false;
 }

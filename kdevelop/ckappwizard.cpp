@@ -1041,8 +1041,11 @@ void CKAppWizard::generateEntries(const QString &filename) {
         libname=fi->fileName();  // get the filename
         if(fi->isFile())
         {
+         if (fi->baseName() != QString("libkmid")) 
+         { // workaround for a strange behaviour of kdoc: don't try libkmid
           libname=" -l"+fi->baseName();  // get only the base of the filename as library name
           link+=libname;
+         }
         }
         ++it; // increase the iterator
       }
@@ -2334,18 +2337,18 @@ void CKAppWizard::slotProcessExited() {
   }
 
   project->setConfigureArgs(createConfigureArgs());
-	
+
   QStrList sub_dir_list;
   TMakefileAmInfo makeAmInfo;
   makeAmInfo.rel_name = "Makefile.am";
   makeAmInfo.type = "normal";
   sub_dir_list.append(namelow);
   // Added 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
-  if (kde2normalitem->isSelected() || kde2miniitem->isSelected() ||kde2mdiitem->isSelected() ||
-		kcmoduleitem->isSelected()||kickeritem->isSelected()||kpartitem->isSelected()||kioslaveitem->isSelected())
- {
- 	sub_dir_list.append("po");
- }
+  if (project->isKDE2Project())
+  {
+    sub_dir_list.append("po");
+  }
+
   if (gnomenormalitem->isSelected()){
     sub_dir_list.append("macros");
     sub_dir_list.append("pixmaps");
@@ -2374,7 +2377,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
-  if(!gnomenormalitem->isSelected()){
+  if(!gnomenormalitem->isSelected() && !kthemeitem->isSelected()){
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
 
@@ -2386,13 +2389,11 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
-  if(!gnomenormalitem->isSelected()){
+  if(!gnomenormalitem->isSelected() && !kthemeitem->isSelected()){
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
 
-  if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() ||
-       project->isQt2Project() || qextmdiitem->isSelected()) &&
-        CToolClass::searchProgram("xgettext"))
+  if (project->isKDE2Project() && CToolClass::searchProgram("xgettext"))
   {
     makeAmInfo.rel_name = "po/Makefile.am";
     makeAmInfo.type = "po";
@@ -2792,7 +2793,7 @@ void CKAppWizard::slotProcessExited() {
       project->addFileToProject (namelow + "/docs/en/index"+num+".html",fileInfo);
     }
   }
-  if (userdoc->isChecked() && project->isKDE2Project())
+  if (userdoc->isChecked() && project->isKDE2Project() && !kthemeitem->isSelected())
   {
       fileInfo.rel_name ="doc/en/index.docbook";
       fileInfo.type = DATA;
@@ -2820,7 +2821,7 @@ void CKAppWizard::slotProcessExited() {
     project->setFilters("GNU",group_filters);
   }
 
-  if (kickeritem->isSelected()||project->isKDE2Project() || project->isKDEProject())
+  if (project->isKDE2Project() || project->isKDEProject())
   {
     group_filters.clear();
     group_filters.append("*.po");

@@ -122,8 +122,7 @@ if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenorma
     }
   }
 
-if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
-    $processes{APPLICATION} eq "kde2mdi")
+if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|kickerapp|^kpart$|kioslave|kcmodule|ktheme/)
   {
     printflush (STDOUT,"creating $nameLittle.pot\n");
     if ($processes{XGETTEXT} && $processes{XGETTEXT} eq "yes")
