@@ -14,26 +14,38 @@
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qregexp.h>
+#include <qlineedit.h>
 
 #include <klistview.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
+#include <ktexteditor/viewcursorinterface.h>
 #include <kprocess.h>
 #include <kdebug.h>
 #include <kstringhandler.h>
+#include <kdialogbase.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kaction.h>
 
+#include "kdevappfrontend.h"
 #include <kdevgenericfactory.h>
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
 #include <kdevpartcontroller.h>
 #include <kdevplugininfo.h>
+#include "configwidgetproxy.h"
+#include "domutil.h"
 
+#include "ctags2_settingswidget.h"
 #include "ctags2_widget.h"
 #include "ctags2_part.h"
 #include "tags.h"
+
+#define CTAGSSETTINGSPAGE 1
 
 namespace ctags
 {
@@ -48,32 +60,68 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin(&data, parent, name ? name : "ctags2Part" )
 {
 	setInstance(CTags2Factory::instance());
-	//setXMLFile("kdevpart_ctags2.rc");
+//	setXMLFile("kdevpart_ctags2.rc");
 
-	Tags::setTagsFile( project()->projectDirectory() + "/tags" );
+	QDomDocument & dom = *projectDom();
+	QString tagsfile = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" );
+	if ( tagsfile.isEmpty() ) tagsfile =  project()->projectDirectory() + "/tags";
+	Tags::setTagsFile( tagsfile );
 
 	m_widget = new CTags2Widget(this);
 
-	QWhatsThis::add(m_widget, i18n("<b>CTAGS</b><p>Result view for a tag lookup. Click a line to go to the corresponding place in the code."));
-	m_widget->setCaption(i18n("CTAGS Lookup"));
-	mainWindow()->embedOutputView( m_widget, i18n( "CTAGS" ), i18n( "CTAGS lookup results" ) );
+	QWhatsThis::add(m_widget, i18n("<b>CTags</b><p>Result view for a tag lookup. Click a line to go to the corresponding place in the code."));
+	m_widget->setCaption(i18n("CTags Lookup"));
+	mainWindow()->embedOutputView( m_widget, i18n( "CTags" ), i18n( "CTags lookup results" ) );
 
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+
+	_configProxy = new ConfigWidgetProxy( core() );
+	_configProxy->createProjectConfigPage( i18n("CTags"), CTAGSSETTINGSPAGE, info()->icon() );
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
+		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
+
+	new KAction( i18n("Lookup current text"), 0, 0, this, SLOT(slotLookup()), actionCollection(), "ctags_lookup_shortcut");
+	new KAction( i18n("Lookup current text as type"), 0, 0, this, SLOT(slotLookupType()), actionCollection(), "ctags_type_shortcut");
+	new KAction( i18n("Lookup current text as declaration"), 0, 0, this, SLOT(slotLookupDeclaration()), actionCollection(), "ctags_declaration_shortcut");
+	new KAction( i18n("Lookup current text as definition"), 0, 0, this, SLOT(slotLookupDefinition()), actionCollection(), "ctags_definition_shortcut");
+	new KAction( i18n("Open lookup dialog"), 0, 0, this, SLOT(slotOpenLookup()), actionCollection(), "ctags_input_shortcut");
+
 }
 
 
 CTags2Part::~CTags2Part()
 {
+	kdDebug() << "Bye from CTags2Part!" << endl;
+
 	if ( m_widget )
 	{
 		mainWindow()->removeView( m_widget );
 	}
 	delete m_widget;
+	delete _configProxy;
+}
+
+void CTags2Part::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
+{
+	kdDebug() << k_funcinfo << endl;
+
+	if ( pagenumber == CTAGSSETTINGSPAGE )
+	{
+		CTags2SettingsWidget * w = new CTags2SettingsWidget( this, page );
+		connect( dlg, SIGNAL(okClicked()), w, SLOT(slotAccept()) );
+		connect( w, SIGNAL(newTagsfileName(const QString& )), this, SLOT(updateTagsfileName(const QString& )) );
+	}
+}
+
+void CTags2Part::updateTagsfileName( const QString & name )
+{
+	Tags::setTagsFile( name.isEmpty() ? project()->projectDirectory() + "/tags" : name );
+	m_widget->updateDBDateLabel();
 }
 
 bool CTags2Part::createTagsFile()
 {
+/*
 	KProcess proc;
 	proc.setWorkingDirectory( project()->projectDirectory() );
 
@@ -81,39 +129,117 @@ bool CTags2Part::createTagsFile()
 	proc << "-R" << "--c++-types=+px" << "--excmd=pattern" << "--exclude=Makefile";
 
 	bool success = proc.start(KProcess::Block);
+	
+	return success;	
+*/
+	KConfig * config = kapp->config();
+	config->setGroup( "CTAGS" );
+	QString ctagsBinary = config->readEntry( "ctags binary", "ctags" );
 
-	return success;
+	QString argsDefault = "-R --c++-types=+px --excmd=pattern --exclude=Makefile --exclude=.";
+	
+	QDomDocument & dom = *projectDom();
+	QString argsCustom = DomUtil::readEntry( dom, "/ctagspart/customArguments" );
+	QString tagsfileCustom = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" );
+	
+	QString commandline = ctagsBinary + " " + 
+		( argsCustom.isEmpty() ? argsDefault : argsCustom ) + 
+		( tagsfileCustom.isEmpty() ? "" : " -f " + tagsfileCustom );
+	
+	if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+		appFrontend->startAppCommand( project()->projectDirectory(), commandline, false);
+
+	return true;
 }
 
 void CTags2Part::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (!context->hasType( Context::EditorContext ))
-        return;
+	if (!context->hasType( Context::EditorContext ))
+		return;
+	
+	const EditorContext *econtext = static_cast<const EditorContext*>(context);
+	QString ident = econtext->currentWord();
+	if (ident.isEmpty())
+		return;
 
-    const EditorContext *econtext = static_cast<const EditorContext*>(context);
-    QString ident = econtext->currentWord();
-    if (ident.isEmpty())
-        return;
-
-	if ( Tags::hasTag( ident ) )
+	QDomDocument & dom = *project()->projectDom();
+	bool showType = DomUtil::readBoolEntry( dom, "/ctagspart/showType", true );
+	bool showDefinition = DomUtil::readBoolEntry( dom, "/ctagspart/showDefinition", true );
+	bool showDeclaration = DomUtil::readBoolEntry( dom, "/ctagspart/showDeclaration", true );
+	bool showLookup = DomUtil::readBoolEntry( dom, "/ctagspart/showLookup", true );
+	
+	if ( Tags::hasTag( ident ) && ( showDefinition || showDeclaration || showLookup || showType ) )
 	{
 		m_contextString = ident;
 	    QString squeezed = KStringHandler::csqueeze(ident, 30);
 
-		int id = popup->insertItem( i18n("CTAGS Lookup: %1").arg(squeezed),
-						this, SLOT(slotGotoTag()) );
-		popup->setWhatsThis(id, i18n("<b>Go to ctags declaration</b><p>Searches in the tags database for a symbol "
-			"under the cursor and opens a file that contains the symbol declaration."));
+		popup->insertSeparator();
+		
+		if ( showType )
+			popup->insertItem( i18n("CTags - Goto Type: %1").arg(squeezed), this, SLOT(slotGotoType()) );
+			
+		if ( showDeclaration )
+			popup->insertItem( i18n("CTags - Goto Declaration: %1").arg(squeezed), this, SLOT(slotGotoDeclaration()) );
+			
+		if ( showDefinition )
+			popup->insertItem( i18n("CTags - Goto Definition: %1").arg(squeezed), this, SLOT(slotGotoDefinition()) );
+			
+		if ( showLookup )
+			popup->insertItem( i18n("CTags - Lookup: %1").arg(squeezed), this, SLOT(slotGotoTag()) );
 	}
 }
 
-void CTags2Part::slotGotoTag( )
+void CTags2Part::showHits( Tags::TagList const & tags )
 {
-	m_widget->displayHitsAndClear( Tags::getExactMatches( m_contextString ) );
+	m_widget->displayHitsAndClear( tags );
 
 	mainWindow()->raiseView( m_widget );
 	m_widget->output_view->setFocus();
 }
+
+void CTags2Part::slotGotoTag( )
+{
+	showHits( Tags::getExactMatches( m_contextString ) );
+}
+
+void CTags2Part::gotoTagForTypes( QStringList const & types )
+{
+	Tags::TagList list = Tags::getMatches( m_contextString, false, types );
+	
+	if ( list.count() == 1 )
+	{
+		Tags::TagEntry tag = list.first();
+		KURL url;
+		url.setPath( project()->projectDirectory() + "/" + tag.file );
+		partController()->editDocument( url, getFileLineFromPattern( url, tag.pattern ) );
+	}
+	else if ( list.count() > 1 )
+	{
+		showHits( list );
+	}
+}
+
+void CTags2Part::slotGotoType( )
+{
+	QStringList types;
+	types << "c" << "e" << "n" << "t" << "u";
+	gotoTagForTypes( types );
+}
+
+void CTags2Part::slotGotoDefinition( )
+{
+	QStringList types;
+	types << "f";
+	gotoTagForTypes( types );
+}
+
+void CTags2Part::slotGotoDeclaration( )
+{
+	QStringList types;
+	types << "p";
+	gotoTagForTypes( types );
+}
+
 
 int CTags2Part::getFileLineFromStream( QTextStream & istream, QString const & pattern )
 {
@@ -167,6 +293,75 @@ int CTags2Part::getFileLineFromPattern( KURL const & url, QString const & patter
 	return -1;
 }
 
+void CTags2Part::slotLookupType( )
+{
+	m_contextString = currentWord();
+	if ( !m_contextString.isEmpty() )
+	{
+		slotGotoType();
+	}
+}
+
+void CTags2Part::slotLookupDeclaration( )
+{
+	m_contextString = currentWord();
+	if ( !m_contextString.isEmpty() )
+	{
+		slotGotoDeclaration();
+	}
+}
+
+void CTags2Part::slotLookupDefinition( )
+{
+	m_contextString = currentWord();
+	if ( !m_contextString.isEmpty() )
+	{
+		slotGotoDefinition();
+	}
+}
+
+void CTags2Part::slotLookup( )
+{
+	m_contextString = currentWord();
+	if ( !m_contextString.isEmpty() )
+	{
+		slotGotoTag();
+	}
+}
+
+void CTags2Part::slotOpenLookup( )
+{
+	mainWindow()->raiseView( m_widget );
+	m_widget->input_edit->setFocus();
+}
+
+QString CTags2Part::currentWord( )
+{
+	KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
+	if ( !ro_part || !ro_part->widget() ) return QString::null;
+	
+	KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
+	KTextEditor::EditInterface * editIface = dynamic_cast<KTextEditor::EditInterface*>( ro_part );
+	
+	QString wordstr, linestr;
+	if( cursorIface && editIface )
+	{
+		uint line, col;
+		line = col = 0;
+		cursorIface->cursorPositionReal(&line, &col);
+		linestr = editIface->textLine(line);
+		int startPos = QMAX( QMIN( (int)col, (int)linestr.length()-1 ), 0 );
+		int endPos = startPos;
+		while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~') )
+			startPos--;
+		while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
+			endPos++;
+			
+		return ( ( startPos == endPos ) ? QString::null : linestr.mid( startPos+1, endPos-startPos-1 ) );
+	}
+	return QString::null;
+}
+
 #include "ctags2_part.moc"
 
-// kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;
+// kate: space-indent off; indent-width 4; tab-width 4; show-tabs on;

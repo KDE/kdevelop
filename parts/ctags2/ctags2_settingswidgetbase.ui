@@ -1,0 +1,206 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>CTags2SettingsWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>CTags2SettingsWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>466</width>
+            <height>499</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>CTags2SettingsWidgetBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Editor Context Menu</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>showDefinitionBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show "Goto Definition"</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked, an option to go directly to the matching tag definition will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>showDeclarationBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show "Goto Declaration"</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked, an option to go directly to the matching tag definition will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>showTypeBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show "Goto Type"</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked, an option to go directly to the matching type tag will be shown. If more than one match, all matches will be shown in the main ctags result view.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>showLookupBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show generic "CTags Lookup"</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked, an option to do a full lookup of all mathing tags shown.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup2</cstring>
+            </property>
+            <property name="title">
+                <string>Tagfile Generation Arguments</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The &lt;i&gt;Default&lt;/i&gt; setting should be fine, but if needed, custom arguments can be given to the tag generation process.</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>tagfileDefault</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Default</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>tagfileCustom</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Custom</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>tagfileCustomEdit</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox3</cstring>
+            </property>
+            <property name="title">
+                <string>Paths</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Enter the path to the exuberant ctags binary. If empty, &lt;i&gt;ctags&lt;/i&gt; will be executed via $PATH. Note that it is sometimes installed as &lt;i&gt;exuberant-ctags&lt;/i&gt;.</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Path to ctags binary:</string>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>binaryPath</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter the path to the exuberant ctags binary. If empty, &lt;i&gt;ctags&lt;/i&gt; will be executed via $PATH. Note that it is sometimes installed as &lt;i&gt;exuberant-ctags&lt;/i&gt;.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Path to project tagfile:</string>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>tagfilePath</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Enter the full path of the project tagfile. If empty, the file will be called &lt;i&gt;tags&lt;/i&gt; and reside in the root of the project.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>tagfileDefault</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>tagfileCustomEdit</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

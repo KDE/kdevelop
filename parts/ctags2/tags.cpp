@@ -64,7 +64,7 @@ unsigned int Tags::numberOfMatches( const QString & tagpart, bool partial )
 	return n;
 }
 
-Tags::TagList Tags::getMatches( const QString & tagpart, bool partial )
+Tags::TagList Tags::getMatches( const QString & tagpart, bool partial, const QStringList & types )
 {
 	Tags::TagList list;
 	
@@ -85,8 +85,10 @@ Tags::TagList Tags::getMatches( const QString & tagpart, bool partial )
 			{
 				type = "macro";
 			}
-			
-			list << TagEntry( QString( entry.name ), type, file, QString( entry.address.pattern ) );			
+			if ( types.isEmpty() || types.contains( entry.kind ) )
+			{
+				list << TagEntry( QString( entry.name ), type, file, QString( entry.address.pattern ) );
+			}
 		}
 		while ( ctags::tagsFindNext( file, &entry ) == ctags::TagSuccess );
 	}

@@ -134,12 +134,14 @@ void CTags2Widget::updateDBDateLabel( )
 	}
 	else
 	{
-		datetime_label->setText( i18n("No CTAGS database found") );
+		datetime_label->setText( i18n("No CTags database found") );
 	}
 }
 
 void CTags2Widget::focusInEvent( QFocusEvent * /*e*/ )
 {
+	updateDBDateLabel();
+	
 	input_edit->setFocus();
 /*	QFocusData *fd = focusData();
 	QWidget *next = fd->next();

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
+Icon=kdevelop
 Comment=CTags is a source navigation tool with support for many languages. When loaded it provides a context menu for finding type declarations/definitions and also a query dialog. http://ctags.sourceforge.net/
 Comment[ca]=CTags és una eina de navegació de codi font amb suport per a diversos llenguatges. En carregar-se proporciona un menú de context per a localitzar les declaracions/definicions de tipus i també un diàleg de consultes. http://ctags.sourceforge.net/
 Comment[da]=CTags er et kildenavigationsværktøj med støtte for mange sprog. Når det er indlæst sørger det for en sammenhængsmenu til at finde type-deklarationer/definitioner og også en forespørgselsdialog. http://ctags.sourceforge.net/
@@ -30,7 +31,7 @@ Name[da]=KDevelop CTags2
 Name[sv]=KDevelop ctags-2
 Name[tg]=KDevCТегҳо2
 Name[xx]=xxKDevCTags2xx
-GenericName=CTags Frontend (2)
+GenericName=CTags Frontend
 GenericName[ca]=Entorn per a CTags (2)
 GenericName[da]=CTags2 forende
 GenericName[de]=Oberfläche für CTags (2)

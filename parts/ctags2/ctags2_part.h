@@ -16,12 +16,15 @@
 #include <qstring.h>
 
 #include <kdevplugin.h>
+#include "tags.h"
 
 class QPopupMenu;
 class Context;
 class KURL;
 class QTextStream;
 class CTags2Widget;
+class ConfigWidgetProxy;
+class KDialogBase;
 
 class CTags2Part : public KDevPlugin
 {
@@ -36,14 +39,29 @@ public:
 	bool createTagsFile();
 
 private slots:
+	void slotLookupType();
+	void slotLookupDeclaration();
+	void slotLookupDefinition();
+	void slotLookup();
+	void slotOpenLookup();
+	void slotGotoType();
+	void slotGotoDefinition();
+	void slotGotoDeclaration();
 	void slotGotoTag();
 	void contextMenu(QPopupMenu *, const Context *);
+	void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int );
+	void updateTagsfileName( const QString & name );
 	
 private:
 	int getFileLineFromStream( QTextStream & stream, QString const & pattern);
+	void gotoTagForTypes( QStringList const & types );
+	void showHits( Tags::TagList const & tags );
+	QString currentWord();
     
 	QGuardedPtr<CTags2Widget> m_widget;
 	QString m_contextString ;
+	
+	ConfigWidgetProxy * _configProxy;
 };
 
 

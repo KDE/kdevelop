@@ -137,7 +137,7 @@
                         <string>Regenerate</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Press to regenerate CTAGS database.&lt;p&gt;This will take some time on a large project.</string>
+                        <string>Press to regenerate CTags database.&lt;p&gt;This will take some time on a large project.</string>
                     </property>
                 </widget>
             </hbox>

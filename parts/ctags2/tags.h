@@ -15,6 +15,7 @@
 #include <qvaluelist.h>
 #include <qcstring.h>
 #include <qstring.h>
+#include <qstringlist.h>
 
 class Tags
 {
@@ -50,15 +51,13 @@ public:
 	
 	static unsigned int numberOfPartialMatches( const QString & tagpart );
 	static unsigned int numberOfExactMatches( const QString & tag );
+	static unsigned int numberOfMatches( const QString & tagpart, bool partial );
 	
 	static TagList getPartialMatches( const QString & tagpart );
 	static TagList getExactMatches( const QString & tag );
-	
+	static TagList getMatches( const QString & tagpart, bool partial, const QStringList & types = QStringList() );	
 
 private:
-	static unsigned int numberOfMatches( const QString & tagpart, bool partial );
-	static TagList getMatches( const QString & tagpart, bool partial );
-
 	static QCString _tagsfile;
 };
 
