@@ -117,6 +117,7 @@ public slots:
     void slotRubyInspect(const QString &inspectText);
     void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
     void slotSetLocalViewState(bool onOff);
+    void slotSetGlobalViewState(bool onOff);
     void slotAddWatchVariable(const QString& expr, bool execute);
 	void slotRemoveWatchVariable(int displayId);
 

@@ -116,6 +116,7 @@ public:
     void trim();
     void trimExcessFrames();
     void setLocalViewState(bool localsOn, int frameNo, int threadNo);
+    void setGlobalViewState(bool globalsOn);
 
 	// (from QToolTip) Display a tooltip when the cursor is over an item
 	virtual void maybeTip(const QPoint &);
@@ -124,7 +125,8 @@ signals:
     void toggleWatchpoint(const QString &varName);
     void selectFrame(int frameNo, int threadNo);
     void expandItem(VarItem *item, const QCString &request);
-    void setLocalViewState(bool localsOn);
+    void localViewState(bool localsOn);
+    void globalViewState(bool globalsOn);
     void addWatchVariable(const QString& expr, bool execute);
     void removeWatchVariable(int displayId);
 
@@ -327,9 +329,6 @@ public:
 	
     void setOpen(bool open);
     void setGlobals(char *globals);
-
-private:
-    QCString globals_;
 };
 
 /***************************************************************************/

@@ -371,8 +371,10 @@ void RubyDebuggerPart::setupController()
     // variableTree -> controller
     connect( variableTree,          SIGNAL(expandItem(VarItem*, const QCString&)),
              controller,            SLOT(slotExpandItem(VarItem*, const QCString&)));
-    connect( variableTree,          SIGNAL(setLocalViewState(bool)),
+    connect( variableTree,          SIGNAL(localViewState(bool)),
              controller,            SLOT(slotSetLocalViewState(bool)));
+    connect( variableTree,          SIGNAL(globalViewState(bool)),
+             controller,            SLOT(slotSetGlobalViewState(bool)));
     connect( variableTree,          SIGNAL(varItemConstructed(VarItem*)),
              controller,            SLOT(slotVarItemConstructed(VarItem*)));
     connect( variableTree,          SIGNAL(addWatchVariable(const QString&, bool)),
@@ -736,7 +738,8 @@ void RubyDebuggerPart::savePartialProjectSession(QDomElement* el)
 
 KDevAppFrontend * RDBDebugger::RubyDebuggerPart::appFrontend( )
 {
-    return extension<KDevAppFrontend>("KDevelop/AppFrontend");
+	return extension<KDevAppFrontend>("KDevelop/AppFrontend");
+//    return static_cast<KDevAppFrontend*>(extension("KDevelop/AppFrontend"));
 }
 
 KDevDebugger * RDBDebugger::RubyDebuggerPart::debugger()

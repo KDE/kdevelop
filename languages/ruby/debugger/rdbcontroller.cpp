@@ -338,10 +338,11 @@ void RDBController::actOnProgramPause(const QString &msg)
 		queueCmd(new RDBCommand("where", NOTRUNCMD, INFOCMD), true);
         queueCmd(new RDBCommand("thread list", NOTRUNCMD, INFOCMD), true);
 		
-		queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
+		if (stateIsOn(s_viewGlobals)) {
+			queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
+		}
         
-		if (stateIsOn(s_viewLocals))
-        {
+		if (stateIsOn(s_viewLocals)) {
 //            queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
             queueCmd(new RDBCommand("var instance self", NOTRUNCMD, INFOCMD));
             queueCmd(new RDBCommand("var class self.class", NOTRUNCMD, INFOCMD));
@@ -1163,12 +1164,29 @@ void RDBController::slotRemoveWatchVariable(int displayId)
 // is open. This speeds up stepping through code a great deal.
 void RDBController::slotSetLocalViewState(bool onOff)
 {
-    if (onOff)
+    if (onOff) {
         setStateOn(s_viewLocals);
-    else
+    } else {
         setStateOff(s_viewLocals);
+	}
 
     kdDebug(9012) << (onOff ? "<Locals ON>": "<Locals OFF>") << endl;
+}
+
+// **************************************************************************
+
+// The user will only get globals if the Global frame is open
+void RDBController::slotSetGlobalViewState(bool onOff)
+{
+    if (onOff) {
+        setStateOn(s_viewGlobals);
+		queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
+		executeCmd();
+    } else {
+        setStateOff(s_viewGlobals);
+	}
+
+    kdDebug(9012) << (onOff ? "<Globals ON>": "<Globals OFF>") << endl;
 }
 
 // **************************************************************************

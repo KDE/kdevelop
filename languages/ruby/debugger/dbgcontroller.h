@@ -55,7 +55,7 @@ enum DBGStateFlags
   s_viewBT            = 128,
   s_viewBP            = 256,
   s_attached          = 512,
-  s_core              = 1024,
+  s_viewGlobals       = 1024,
   s_waitTimer         = 2048,
   s_shuttingDown      = 4096,
   s_viewThreads       = 8192

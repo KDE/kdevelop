@@ -239,10 +239,16 @@ void VariableTree::setLocalViewState(bool localsOn, int frameNo, int threadNo)
         }
     }
 
-    emit setLocalViewState(localsOn);
+    emit localViewState(localsOn);
     emit selectFrame(frameNo, threadNo);
 }
 
+// **************************************************************************
+
+void VariableTree::setGlobalViewState(bool globalsOn)
+{
+	emit globalViewState(globalsOn);
+}
 
 // **************************************************************************
 
@@ -776,7 +782,7 @@ void VarFrameRoot::setLocals()
 // **************************************************************************
 
 // Override setOpen so that we can decide what to do when we do change
-// state. This
+// state.
 void VarFrameRoot::setOpen(bool open)
 {
 	bool localStateChange = (isOpen() != open);
@@ -810,7 +816,9 @@ void VarFrameRoot::setFrameName(const QString &frameName)
 void GlobalRoot::setGlobals(char * globals)
 {
     setActive();
-	globals_ = globals;
+    RDBParser::getRDBParser()->parseData(this, globals);
+	
+	return;
 }
 
 // **************************************************************************
@@ -820,20 +828,20 @@ void GlobalRoot::setGlobals(char * globals)
 
 void GlobalRoot::setOpen(bool open)
 {
-    QListViewItem::setOpen(open);
+	bool globalStateChange = (isOpen() != open);
+	QListViewItem::setOpen(open);
 	
-    if (!open)
-        return;
-
-    RDBParser::getRDBParser()->parseData(this, globals_.data());
-    globals_ = "";
+	if (globalStateChange) {
+    	((VariableTree*)listView())->setGlobalViewState(open);
+	}
+	
+	return;
 }
 
 // **************************************************************************
 
 GlobalRoot::GlobalRoot(VariableTree *parent)
-    : TrimmableItem(parent),
-	globals_("")
+    : TrimmableItem(parent)
 {
     setText(0, i18n("Global"));
     setExpandable(true);
