@@ -196,6 +196,34 @@ bool KTabZoomWidget::isEmpty() const
   return d->m_info.isEmpty();
 }
 
+uint KTabZoomWidget::count() const
+{
+  return d->m_info.count();
+}
+
+int KTabZoomWidget::indexOf(QWidget *widget) const
+{
+for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+    if (i->m_widget == widget)
+        return i->m_index;
+        
+        return -1;
+}
+
+QWidget *KTabZoomWidget::at(int index) const
+{
+for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+    if (i->m_index == index)
+        return i->m_widget;
+        
+        return 0;
+}
+
+QWidget *KTabZoomWidget::current() const
+{
+return d->m_lastActiveWidget;
+}
+
 void KTabZoomWidget::unselected()
 {
   d->m_popup->hide();
