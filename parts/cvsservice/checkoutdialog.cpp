@@ -225,7 +225,7 @@ void CheckoutDialog::slotModuleSelected( QListViewItem *item )
         m_base->modulesListView->selectedItem()
     );
     if (!aModuleItem)
-        return QString::null;
+        return;
 
     m_base->moduleEdit->setText( aModuleItem->name() );
 }
