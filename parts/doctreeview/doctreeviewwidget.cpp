@@ -305,7 +305,7 @@ void DocTreeKDELibsFolder::refresh()
 
     sortChildItems(0, true);
 
-    /// @todo: merge in default libraries and hidden options
+    /// @todo merge in default libraries and hidden options
 
     // Read in possible items for the Libraries tree
     /*    QStringList libNames, docDirs, sourceDirs;
@@ -832,7 +832,7 @@ DocTreeProjectFolder::DocTreeProjectFolder(KListView *parent, const QString &con
 
 void DocTreeProjectFolder::refresh()
 {
-    /// @todo: use doxygen tags
+    /// @todo use doxygen tags
     if( !m_project )
         return;
 

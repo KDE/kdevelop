@@ -53,7 +53,7 @@ KatePlugin$APPNAME$::~KatePlugin$APPNAME$()
 
 void KatePlugin$APPNAME$::addView(Kate::MainWindow *win)
 {
-    // TODO: doesn't this have to be deleted?
+    /// @todo doesn't this have to be deleted?
     PluginView *view = new PluginView ();
 
      (void) new KAction ( i18n("Insert Hello World"), 0, this,

@@ -395,7 +395,7 @@ enum lineStarts
 char* JDBController::parseLine(char *buf)
 {
 
-    /// @todo: ignore empty lines
+    /// @todo ignore empty lines
 
 
     // Doing this copy should remove any alignment problems that
@@ -785,7 +785,7 @@ void JDBController::analyzeDump(QString data)
       QString name = exp->group(1);
       JDBVarItem *item;
       if (!localData[name]) {
-          /** oops, we should already have added that object @todo: insert assertion */
+          /** oops, we should already have added that object @todo insert assertion */
           item = new JDBVarItem();
           cout << "NAME: " << name << " - " << (int)item <<"\n";
           item->name = name;
@@ -814,7 +814,7 @@ void JDBController::analyzeDump(QString data)
                  subItem->name = fullName;
                  if (!localData[fullName]) {
                      localData.insert(fullName, subItem);
-                 } else { /* Oops */ }  /// @todo: insert assertion
+                 } else { /* Oops */ }  /// @todo insert assertion
 
                  // item.insertSibling(subItem);
                  item->siblings.append(subItem);
@@ -831,7 +831,7 @@ void JDBController::analyzeDump(QString data)
                  subItem->name = fullName;
                  if (!localData[fullName]) {
                      localData.insert(fullName, subItem);
-                 } else { /* Oops */ }  /// @todo: insert assertion
+                 } else { /* Oops */ }  /// @todo insert assertion
 
                  //cout << "->Appending Name: " << name << "." << exp->group(1) << "\n";
                  //cout << "Value: " << exp->group(2) << " as " << (int)subItem << "\n";
@@ -860,7 +860,7 @@ void JDBController::analyzeDump(QString data)
                  subItem->name = fullName;
                  if (!localData[fullName]) {
                      localData.insert(fullName, subItem);
-                 } else { /* Oops */ }  /// @todo: insert assertion
+                 } else { /* Oops */ }  /// @todo insert assertion
 
                  cout << "appending: " << fullName << " as " << (int)subItem << "\n";
 
@@ -1275,7 +1275,7 @@ void JDBController::slotExpandUserItem(VarItem *, const QCString& )
 
 // The user will only get locals if one of the branches to the local tree
 // is open. This speeds up stepping through code a great deal.
-/// @todo:
+/// @todo
 void JDBController::slotSetLocalViewState(bool)
 {
 }
@@ -1351,7 +1351,7 @@ void JDBController::slotDbgProcessExited(KProcess*)
 /**
  * This function returns the absolute position of the source file
  * for the class specified by the parameter className.
- * @todo: Make this function work by using the java sourcepath or
+ * @todo Make this function work by using the java sourcepath or
  * the KDevelop class store.
 */
 QString JDBController::getFile(QString className)

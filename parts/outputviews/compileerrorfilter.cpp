@@ -28,7 +28,7 @@ CompileErrorFilter::CompileErrorFilter( OutputFilter& next )
 
 CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 {
-	/// @todo: could get these from emacs compile.el
+	/// @todo could get these from emacs compile.el
 	static ErrorFormat formats[] = {
 		// GCC
 		ErrorFormat( "([^: \t]+):([0-9]+):(.*)", 1, 2, 3 ),

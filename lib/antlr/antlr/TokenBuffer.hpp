@@ -26,7 +26,7 @@ namespace antlr {
  * token is not done by conume(), but deferred until needed by LA or LT.
  * <p>
  *
- * @todo: see if we can integrate this one with InputBuffer into one template
+ * @todo see if we can integrate this one with InputBuffer into one template
  * or so.
  *
  * @see antlr.Token

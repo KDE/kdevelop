@@ -110,7 +110,7 @@ public:
     QStringList includePaths() const { return m_includePaths; }
     virtual void addIncludePath( const QString &path );
 
-    /// @todo: remove
+    /// @todo remove
     const QMap<QString, RefJavaAST> &parsedUnits() const { return m_parsedUnits; }
 
     virtual void setResolveDependencesEnabled( bool enabled );

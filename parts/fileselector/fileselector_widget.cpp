@@ -469,7 +469,7 @@ void KDevFileSelector::setActiveDocumentDir()
 
 void KDevFileSelector::viewChanged()
 {
-    /// @todo: make sure the button is disabled if the directory is unreadable, eg
+    /// @todo make sure the button is disabled if the directory is unreadable, eg
     ///       the document URL has protocol http
     acSyncDir->setEnabled( ! activeDocumentUrl().directory().isEmpty() );
 }

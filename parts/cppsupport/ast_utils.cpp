@@ -103,7 +103,7 @@ void scopeOfNode( AST* ast, QStringList& scope )
 }
 
 
-QString typeSpecToString( TypeSpecifierAST* typeSpec )  /// @todo: remove
+QString typeSpecToString( TypeSpecifierAST* typeSpec )  /// @todo remove
 {
     if( !typeSpec )
         return QString::null;

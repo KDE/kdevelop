@@ -72,7 +72,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   m_availableWidgets[1] = new ListWidget(this);
   m_numWidgets = 2;
 
-  /// @todo: provide a way of choosing your preferred widget without
+  /// @todo provide a way of choosing your preferred widget without
   /// having to change the source, as this is not considered 'user-friendly'
   /// these days, I'm led to believe.
   selectWidget(1);
@@ -496,7 +496,7 @@ void FileCreatePart::slotInitialize( )
     readTypes(globalDom, m_filetypes, false);
 
     // use side tab or not?
-    /// @todo: this is a very Bad Way to do this. Must remember to move this setting to user's gideonrc config file
+    /// @todo this is a very Bad Way to do this. Must remember to move this setting to user's gideonrc config file
     QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
     if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
         m_useSideTab = false;

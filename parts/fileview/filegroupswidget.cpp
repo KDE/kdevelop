@@ -149,7 +149,7 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
     if (!item)
         return;
     KPopupMenu popup(i18n("File Groups"), this);
-    /// @todo: Add, remove groups
+    /// @todo Add, remove groups
     int customizeId = popup.insertItem(i18n("Customize..."));
     popup.insertSeparator();
     if (item->parent()) {

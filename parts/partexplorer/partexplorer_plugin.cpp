@@ -24,9 +24,9 @@
 #include "partexplorerform.h"
 
 /**
-* @todo: Create the main window only when it is requested: for now the form is simply hidden until
+* @todo Create the main window only when it is requested: for now the form is simply hidden until
 * requested. To further investigate.
-* @todo: Must eliminate the creation of KListViewItem objects here: should add some methods in the
+* @todo Must eliminate the creation of KListViewItem objects here: should add some methods in the
 * part explorer form so this code does not need to access form's widgets. Must find a suitable way.
 */
 

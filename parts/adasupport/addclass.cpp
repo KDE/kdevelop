@@ -144,7 +144,7 @@ static bool makeDirs(const QString &dest)
 
     if (fi.exists() && !fi.isDir())
     {
-      /// @todo: message to user!
+      /// @todo message to user!
       return false;
     }
     
@@ -332,13 +332,13 @@ bool AddClass::generate()
 
   if (QFile::exists(m_info.adaFileName()))
   {
-    /// @todo: ask before overwriting!
+    /// @todo ask before overwriting!
   }
   
   QFile of(m_info.adaFileName());
   if (!of.open(IO_WriteOnly))
   {
-    /// @todo: message to user
+    /// @todo message to user
     return false;
   }
 

@@ -39,7 +39,7 @@ extern "C"
 $APPNAME$Setup::$APPNAME$Setup( QWidget *parent, const char *name )
         : $APPNAME$UI( parent, name, TRUE )
 {
-    //TODO:
+    /// @todo
     //Connect your signals and slots here to configure the screen saver.
     connect( OkayPushButton, SIGNAL( released() ),
              SLOT( slotOkPressed() ) );
@@ -53,7 +53,7 @@ void $APPNAME$Setup::readSettings()
 {
     KConfig *config = KGlobal::config();
     config->setGroup( "Settings" );
-    // TODO
+    /// @todo
     // Add your config options here...
     CheckBox1->setChecked(config->readBoolEntry( "somesetting", false ));
 }
@@ -64,7 +64,7 @@ void $APPNAME$Setup::slotOkPressed()
 {
     KConfig *config = KGlobal::config();
     config->setGroup( "Settings" );
-    // TODO
+    /// @todo
     // Add your config options here.
     config->writeEntry( "somesetting", CheckBox1->isChecked() );
     config->sync();
@@ -95,7 +95,7 @@ void $APPNAME$::readSettings()
 {
     KConfig *config = KGlobal::config();
     config->setGroup( "Settings" );
-    // TODO
+    /// @todo
     // Add your config options here...
     bool somesetting = config->readBoolEntry( "somesetting", false );
 }
@@ -103,7 +103,7 @@ void $APPNAME$::readSettings()
 
 void $APPNAME$::blank()
 {
-    //TODO
+    /// @todo
     //Add your code to render the screen.
     setBackgroundColor( QColor(black)  );
     //

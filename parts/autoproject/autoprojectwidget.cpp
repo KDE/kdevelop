@@ -509,7 +509,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 			//m_activeTarget->sources.append( fitem );
 			//m_activeTarget->insertItem( fitem );
 
-			/// @todo: Merge with code in addfiledlg.cpp
+			/// @todo Merge with code in addfiledlg.cpp
 			addToTarget(fileName, m_activeSubproject, m_activeTarget);
 //			QString canontargetname = AutoProjectTool::canonicalize( m_activeTarget->name );
 //			QString varname = canontargetname + "_SOURCES";

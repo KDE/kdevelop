@@ -385,7 +385,7 @@ void JavaNewClassDialog::remClassFromAdv(QString text)
         delete it;
     if ((it = constructors_view->findItem(text, 0)))
     {
-        /// @todo: changing constructors text in constructors_java_edit
+        /// @todo changing constructors text in constructors_java_edit
         /// and constructors_h_edit must be implemented
 
 /*        int *para = new int(1);
@@ -1423,7 +1423,7 @@ void JavaNewClassDialog::ClassGenerator::gen_interface()
   headerGuard.replace(QRegExp("\\."),"_");
   headerGuard.replace(QRegExp("::"),"_");
   QString includeBaseHeader;
-  if (childClass && (dlg.baseclasses_view->childCount() == 0)) /// @todo: do this only if this is a Qt class
+  if (childClass && (dlg.baseclasses_view->childCount() == 0)) /// @todo do this only if this is a Qt class
   {
     includeBaseHeader = "#include <qwidget.h>";
   }

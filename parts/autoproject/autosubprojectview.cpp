@@ -696,7 +696,7 @@ void AutoSubprojectView::parse( SubprojectItem *item )
 			parseSUBDIRS( item, lhs, rhs );
 	}
 
-	/// @todo: only if in a c++ project
+	/// @todo only if in a c++ project
 	TargetItem* noinst_HEADERS_item = 0;
 	QPtrListIterator<TargetItem> itemIt( item->targets );
 	while( itemIt.current() ){

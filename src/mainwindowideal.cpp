@@ -295,7 +295,7 @@ void MainWindowIDEAl::removeView(QWidget *view)
 }
 
 void MainWindowIDEAl::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
-    /// @todo: implement me
+    /// @todo implement me
 }
 
 void MainWindowIDEAl::raiseView(QWidget *view) {

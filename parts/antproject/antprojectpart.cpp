@@ -73,7 +73,7 @@ void AntProjectPart::openProject(const QString &dirName, const QString &projectN
   m_projectDirectory = dirName;
   m_projectName = projectName;
 
-  /// @todo: read alternative build file from properties
+  /// @todo read alternative build file from properties
   m_antOptions.m_buildXML = "build.xml";
 
   parseBuildXML();
@@ -184,7 +184,7 @@ QString AntProjectPart::mainProgram()
 
 QString AntProjectPart::activeDirectory()
 {
-  /// @todo: Fix this
+  /// @todo Fix this
   return m_projectDirectory;
 }
 
@@ -292,8 +292,8 @@ void AntProjectPart::parseBuildXML()
       m_antOptions.m_defineProperties.insert(node.toElement().attribute("name"), false);
     }
 
-    /// @todo: Handle property files
-    /// @todo: evaluate properties' values
+    /// @todo Handle property files
+    /// @todo evaluate properties' values
     
     node = node.nextSibling();
   }

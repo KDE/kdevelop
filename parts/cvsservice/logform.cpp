@@ -121,7 +121,7 @@ void LogForm::slotLinkClicked( const QString & link )
         return;
     }
 
-    // TODO: use the diff frontend
+    /// @todo use the diff frontend
     CvsOptions *options = CvsOptions::instance();
 
     DCOPRef job = m_cvsService->diff( m_pathName, v1, v2, options->diff(), options->contextLines() );

@@ -54,7 +54,7 @@ static QValueList<ParsedMethod*> getVirtualMethodListForClassAndAncestors( CppSu
         if ( pClass )
             retVal += getVirtualMethodListForClassAndAncestors( part, pClass );
         else {
-            /// @todo: look in ClassStore for Namespace classes
+            /// @todo look in ClassStore for Namespace classes
         }
     }
 

@@ -1590,7 +1590,7 @@ bool Parser::parseTypeId( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTypeId()" << endl;
 
-    /// @todo: implement the AST for typeId
+    /// @todo implement the AST for typeId
     int start = lex->index();
     AST::Node ast = CreateNode<AST>();
 
@@ -1671,7 +1671,7 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
 good:
     ast->setParameterDeclarationList( params );
 
-    /// @todo: add ellipsis
+    /// @todo add ellipsis
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
 

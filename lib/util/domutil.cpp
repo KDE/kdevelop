@@ -48,7 +48,7 @@ QString DomUtil::readEntry(const QDomDocument &doc, const QString &path, const Q
         return el.firstChild().toText().data();
 }
 
-/// @todo: consider whether it's okay to accept empty string == default value
+/// @todo consider whether it's okay to accept empty string == default value
 /// if not use the below type
 ///typedef pair<bool,QString> EltInfo;
 

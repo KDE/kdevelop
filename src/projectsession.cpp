@@ -251,7 +251,7 @@ bool ProjectSession::saveToFile(const QString& sessionFileName, const QDict<KDev
 
     DocumentationPart* pDocuPart = dynamic_cast<DocumentationPart*>(pReadOnlyPart);
 
-    /// @todo: Save relative path for project sharing?
+    /// @todo Save relative path for project sharing?
     QString url = pReadOnlyPart->url().url();
 
     docIdStr.setNum(nDocs);

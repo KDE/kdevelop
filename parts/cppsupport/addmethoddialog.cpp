@@ -218,7 +218,7 @@ void AddMethodDialog::accept()
 	QListViewItem* item = methods->firstChild();
 	stream << "\n";
 	while( item ){
-	    /// @todo: check item
+	    /// @todo check item
 	    stream << "    " << item->text(1).lower() << ": ";
 	    if( item->text(2) == "Virtual" || storage->currentText() == "Pure Virtual" )
 		stream << "virtual ";
@@ -262,7 +262,7 @@ void AddMethodDialog::accept()
 
 		KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
 		if( !editIface ){
-		    /// @todo: report error
+		    /// @todo report error
 		    item = item->nextSibling();
 		    continue;
 		}

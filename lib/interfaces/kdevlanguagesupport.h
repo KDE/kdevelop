@@ -59,7 +59,7 @@ public:
     /**
      * Opens a "New class" dialog and adds the configured
      * class to the sources.
-     * @todo: Use KDevNode stuff for this
+     * @todo Use KDevNode stuff for this
      */
     virtual void addClass();
     /**

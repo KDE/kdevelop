@@ -220,7 +220,7 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<KMdiChildView> *pViews):
       dockBaseIsVisible     = winState.dockBaseIsVisible;
       if (winState.dockBaseIsHidden ||
          (winState.dockBaseMayBeDockBack && !winState.dockBaseIsVisible))
-         dockBaseIsHidden = true;  /// @todo: not just parentIsHidden = winState.parentIsHidden?
+         dockBaseIsHidden = true;  /// @todo not just parentIsHidden = winState.parentIsHidden?
 
     }
     if (winState.viewMenuChecked) noViews++;
@@ -1301,7 +1301,7 @@ void MainWindow::callCommand(const QString& command)
  */
 void MainWindow::storeOutputViewTab()
 {
-/** @todo: implement this properly
+/** @todo implement this properly
        look at MainWindow::slotReactToProjectOpened() to hide a view
        MainWindow::toggleSingleToolWin() to show it and also to check the visibility
 
@@ -1321,7 +1321,7 @@ void MainWindow::storeOutputViewTab()
  */
 void MainWindow::restoreOutputViewTab()
 {
-/** @todo: implement this properly
+/** @todo implement this properly
        look at MainWindow::slotReactToProjectOpened() to hide a view
        MainWindow::toggleSingleToolWin() to show it and also to check the visibility
 

@@ -28,7 +28,7 @@ void $APPNAME$View::paintEvent( QPaintEvent* ev )
     QPainter painter;
     painter.begin( this );
 
-    // ### TODO: Scaling
+    /// @todo Scaling
 
     // Let the document do the drawing
     koDocument()->paintEverything( painter, ev->rect(), FALSE, this );

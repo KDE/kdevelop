@@ -38,7 +38,7 @@ int main(int argc, char **argv)
         // no session.. just start up normally
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-        // TODO: do something with the command line args here
+        /// @todo do something with the command line args here
 
         mainWin = new $APPNAME$();
         app.setMainWidget( mainWin );

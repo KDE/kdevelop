@@ -25,13 +25,13 @@ KoView* $APPNAME$Part::createViewInstance( QWidget* parent, const char* name )
 
 bool $APPNAME$Part::loadXML( QIODevice *, const QDomDocument & )
 {
-    // TODO load the document from the QDomDocument
+    /// @todo load the document from the QDomDocument
     return true;
 }
 
 QDomDocument $APPNAME$Part::saveXML()
 {
-    // TODO save the document into a QDomDocument
+    /// @todo save the document into a QDomDocument
     return QDomDocument();
 }
 
