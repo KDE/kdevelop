@@ -31,36 +31,9 @@ AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidge
                                          SubprojectItem *item, QWidget *parent, const char *name)
     : AddSubprojectDlgBase(parent, name, true)
 {
-//    setCaption(("Add Subproject"));
     setIcon(SmallIcon("folder_new.png"));
     
- /*   QLabel *name_label = new QLabel(i18n("&Name:"), this);
-    name_edit = new QLineEdit(this);
-    name_edit->setFocus();
-    name_label->setBuddy(name_edit);
-
-    QVBoxLayout *layout = new QVBoxLayout(this, 10);
-    
-    QGridLayout *grid = new QGridLayout(1, 2);
-    layout->addLayout(grid);
-    grid->addWidget(name_label, 0, 0);
-    grid->addWidget(name_edit, 0, 1);
-
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    layout->addWidget(frame, 0);
-
-    KButtonBox *buttonbox = new KButtonBox(this);
-    buttonbox->addStretch();
-    QPushButton *ok = buttonbox->addButton(i18n("&OK"));
-    QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
-    ok->setDefault(true);
-    connect( ok, SIGNAL(clicked()), this, SLOT(accept()) );
-    connect( cancel, SIGNAL(clicked()), this, SLOT(reject()) );
-    buttonbox->layout();
-    layout->addWidget(buttonbox, 0);*/
-    
-	connect( createButton, SIGNAL(clicked()), this, SLOT(accept()) );
+    connect( createButton, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
 
     m_subProject = item;
@@ -78,33 +51,41 @@ void AddSubprojectDialog::accept()
     QString name = spEdit->text().stripWhiteSpace();
 
     if (name.isEmpty()) {
-        KMessageBox::sorry(this, i18n("You have to give the subproject a name"));
+        KMessageBox::sorry(this, i18n("You have to give the subproject a name."));
         return;
     }
 
     QListViewItem *childItem = m_subProject->firstChild();
     while (childItem) {
         if (name == static_cast<SubprojectItem*>(childItem)->subdir) {
-            KMessageBox::sorry(this, i18n("A subproject with this name already exists"));
+            KMessageBox::sorry(this, i18n("A subproject with this name already exists."));
             return;
         }
         childItem = childItem->nextSibling();
     }
-
-    QString relmakefile = (m_subProject->path + "/" + name + "/Makefile").mid(m_widget->projectDirectory().length()+1);
-    kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
-    QDir dir(m_subProject->path);
-    if (dir.exists()) {
+ 
+    QDir      dir( m_subProject->path );
+    QFileInfo file( dir, name );
+    
+    if( file.exists() && !file.isDir() ) {
+        KMessageBox::sorry(this, i18n("A file named %1 already exists.").arg(name));
+        return;
+    } else if( file.isDir() ) {
         if( KMessageBox::warningContinueCancel(this,
                i18n("A subdirectory %1 already exists. "
                     "Do you wish to add it as a subproject?").arg(name)) 
             == KMessageBox::Cancel )
-        return;
+            return;
     } else if (!dir.mkdir(name)) {
-        KMessageBox::sorry(this, i18n("Could not create subdirectory %1").arg(name));
+        KMessageBox::sorry(this, i18n("Could not create subdirectory %1.").arg(name));
         return;
     }
 
+    if(!dir.cd(name)) {
+       KMessageBox::sorry(this, i18n("Could not access the subdirectory %1.").arg(name));
+       return;
+    }
+    
     // Adjust SUBDIRS variable in containing Makefile.am
     m_subProject->variables["SUBDIRS"] += (" " + name);
     QMap<QString,QString> replaceMap;
@@ -125,9 +106,9 @@ void AddSubprojectDialog::accept()
     if (lastItem != newitem)
         newitem->moveItem(lastItem);
     
-    // Create the new subdirectory and create a Makefile in it
+    // Create a Makefile in the new subdirectory
     
-    QFile f(m_widget->projectDirectory() + "/" + relmakefile + ".am");
+    QFile f( dir.filePath("Makefile.am") );
     if (f.exists()) {
         m_widget->parse( newitem );
     } else {
@@ -139,6 +120,9 @@ void AddSubprojectDialog::accept()
         stream << "INCLUDES = " << newitem->variables["INCLUDES"] << endl;
         f.close();
     }
+    
+    QString relmakefile = (m_subProject->path + "/" + name + "/Makefile").mid(m_widget->projectDirectory().length()+1);
+    kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
     
     QString cmdline = "cd ";
     cmdline += m_widget->projectDirectory();
