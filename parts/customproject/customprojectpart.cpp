@@ -95,7 +95,7 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Run Options"));
-    RunOptionsWidget *w1 = new RunOptionsWidget(*projectDom(), "/kdevcustomproject", vbox);
+    RunOptionsWidget *w1 = new RunOptionsWidget(*projectDom(), "/kdevcustomproject",projectDirectory(), vbox);
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
     vbox = dlg->addVBoxPage(i18n("Build Options"));
     QTabWidget *buildtab = new QTabWidget(vbox);
