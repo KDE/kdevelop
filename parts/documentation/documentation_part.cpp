@@ -38,6 +38,7 @@
 #include <kbookmarkmenu.h>
 #include <kinputdialog.h>
 #include <kstringhandler.h>
+#include <kconfig.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -285,30 +286,103 @@ void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
         {
             m_contextStr = ident;
             QString squeezed = KStringHandler::csqueeze(m_contextStr, 20);            
-            int id = popup->insertItem(i18n("Find Documentation: %1").arg(squeezed),
-                               this, SLOT(contextFindDocumentation()));
-            id = popup->insertItem(i18n("Look in Documentation Index: %1").arg(squeezed),
-                               this, SLOT(contextLookInDocumentationIndex()));
-            popup->setWhatsThis(id, i18n("<b>Look in documentation index</b><p>"
-                              "Opens the documentation index tab. It allows "
-                              "a term to be entered which will be looked for in "
-                              "the documentation index."));
-            id = popup->insertItem(i18n("Search in Documentation: %1").arg(squeezed),
-                               this, SLOT(contextSearchInDocumentation()));
-            popup->setWhatsThis(id, i18n("<b>Search in documentation</b><p>Searches "
-                               "for a term under the cursor in "
-                               "the documentation. For this to work, "
-                               "a full text index must be created first, which can be done in the "
-                               "configuration dialog of the documentation plugin."));
-            id = popup->insertItem(i18n("Goto Manpage: %1").arg(squeezed),
-                               this, SLOT(contextManPage()));
-            popup->setWhatsThis(id, i18n("<b>Goto manpage</b><p>Tries to open a man page for the term under the cursor."));
-            id = popup->insertItem( i18n("Goto Infopage: %1").arg(squeezed),
-                               this, SLOT(contextInfoPage()) );
-            popup->setWhatsThis(id, i18n("<b>Goto infopage</b><p>Tries to open an info page for the term under the cursor."));
-            popup->insertSeparator();
+            int id = -1;
+            if (hasContextFeature(Finder)) {
+                id = popup->insertItem(i18n("Find Documentation: %1").arg(squeezed),
+                                    this, SLOT(contextFindDocumentation()));
+                popup->setWhatsThis(id, i18n("<b>Find documentation</b><p>"
+                                    "Opens the documentation finder tab and searches "
+                                    "all possible sources of documentation like "
+                                    "table of contents, index, man and info databases, "
+                                    "Google, etc."));
+            }
+            if (hasContextFeature(IndexLookup)) {
+                id = popup->insertItem(i18n("Look in Documentation Index: %1").arg(squeezed),
+                                this, SLOT(contextLookInDocumentationIndex()));
+                popup->setWhatsThis(id, i18n("<b>Look in documentation index</b><p>"
+                                "Opens the documentation index tab. It allows "
+                                "a term to be entered which will be looked for in "
+                                "the documentation index."));
+            }
+            if (hasContextFeature(FullTextSearch)) {
+                id = popup->insertItem(i18n("Search in Documentation: %1").arg(squeezed),
+                                this, SLOT(contextSearchInDocumentation()));
+                popup->setWhatsThis(id, i18n("<b>Search in documentation</b><p>Searches "
+                                "for a term under the cursor in "
+                                "the documentation. For this to work, "
+                                "a full text index must be created first, which can be done in the "
+                                "configuration dialog of the documentation plugin."));
+            }
+            if (hasContextFeature(GotoMan)) {
+                id = popup->insertItem(i18n("Goto Manpage: %1").arg(squeezed),
+                                this, SLOT(contextManPage()));
+                popup->setWhatsThis(id, i18n("<b>Goto manpage</b><p>Tries to open a man page for the term under the cursor."));
+            }
+            if (hasContextFeature(GotoInfo)) {
+                id = popup->insertItem( i18n("Goto Infopage: %1").arg(squeezed),
+                                this, SLOT(contextInfoPage()) );
+                popup->setWhatsThis(id, i18n("<b>Goto infopage</b><p>Tries to open an info page for the term under the cursor."));
+            }
+            if (id != -1)
+                popup->insertSeparator();
         }
     }
+}
+
+bool DocumentationPart::hasContextFeature(ContextFeature feature)
+{
+    KConfig *config = DocumentationFactory::instance()->config();
+    QString group = config->group();
+    config->setGroup("Context Features");
+    switch (feature)
+    {
+        case Finder:
+            return config->readBoolEntry("Finder", true);
+            break;
+        case IndexLookup:
+            return config->readBoolEntry("IndexLookup", false);
+            break;
+        case FullTextSearch:
+            return config->readBoolEntry("FullTextSearch", true);
+            break;
+        case GotoMan:
+            return config->readBoolEntry("GotoMan", false);
+            break;
+        case GotoInfo:
+            return config->readBoolEntry("GotoInfo", false);
+            break;
+    }
+    config->setGroup(group);
+    return false;
+}
+
+void DocumentationPart::setContextFeature(ContextFeature feature, bool b)
+{
+    KConfig *config = DocumentationFactory::instance()->config();
+    QString group = config->group();
+    config->setGroup("Context Features");
+    QString key;
+    switch (feature)
+    {
+        case Finder:
+            key = "Finder";
+            break;
+        case IndexLookup:
+            key = "IndexLookup";
+            break;
+        case FullTextSearch:
+            key = "FullTextSearch";
+            break;
+        case GotoMan:
+            key = "GotoMan";
+            break;
+        case GotoInfo:
+            key = "GotoInfo";
+            break;
+    }
+    if (!key.isEmpty())
+        config->writeEntry(key, b);
+    config->setGroup(group);
 }
 
 void DocumentationPart::lookInDocumentationIndex()

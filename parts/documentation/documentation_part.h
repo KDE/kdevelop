@@ -42,6 +42,7 @@ class DocumentationPart : public KDevPlugin
 {
     Q_OBJECT
 public:
+    enum ContextFeature { Finder, IndexLookup, FullTextSearch, GotoMan, GotoInfo };
 
     DocumentationPart(QObject *parent, const char *name, const QStringList &);
     ~DocumentationPart();
@@ -49,6 +50,9 @@ public:
     void emitIndexSelected(KListBox *indexBox);
     void emitBookmarkLocation(const QString &title, const KURL &url);
     bool configure(int page = 0);
+    
+    bool hasContextFeature(ContextFeature feature);
+    void setContextFeature(ContextFeature feature, bool b);
 
 public slots:
     void lookInDocumentationIndex();

@@ -25,6 +25,7 @@
 
 #include <qlayout.h>
 #include <qtoolbox.h>
+#include <qcheckbox.h>
 
 #include <kconfig.h>
 #include <kprocess.h>
@@ -89,6 +90,12 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
                 htsearchbinEdit->setURL("/usr/lib/cgi-bin/htsearch");
         }
     }
+    
+    find_box->setChecked(m_part->hasContextFeature(DocumentationPart::Finder));
+    index_box->setChecked(m_part->hasContextFeature(DocumentationPart::IndexLookup));
+    search_box->setChecked(m_part->hasContextFeature(DocumentationPart::FullTextSearch));
+    man_box->setChecked(m_part->hasContextFeature(DocumentationPart::GotoMan));
+    info_box->setChecked(m_part->hasContextFeature(DocumentationPart::GotoInfo));
 }
 
 DocGlobalConfigWidget::~DocGlobalConfigWidget()
@@ -179,6 +186,13 @@ void DocGlobalConfigWidget::accept()
 
         f.close();
     }
+    
+    //write editor context menu configuration
+    m_part->setContextFeature(DocumentationPart::Finder, find_box->isChecked());
+    m_part->setContextFeature(DocumentationPart::IndexLookup, index_box->isChecked());
+    m_part->setContextFeature(DocumentationPart::FullTextSearch, search_box->isChecked());
+    m_part->setContextFeature(DocumentationPart::GotoMan, man_box->isChecked());
+    m_part->setContextFeature(DocumentationPart::GotoInfo, info_box->isChecked());
     
     config->sync();
 }
