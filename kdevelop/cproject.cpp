@@ -410,6 +410,7 @@ bool CProject::addDialogFileToProject(QString rel_name,TDialogFileInfo info){
 
 bool CProject::addFileToProject(QString rel_name,TFileInfo info)
 {  
+
   // normalize it a little bit
   rel_name.replace(QRegExp("///"),"/"); // remove ///
   rel_name.replace(QRegExp("//"),"/"); // remove //
@@ -450,20 +451,23 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
   check_makefile_list.append(makefile_name);
   QString makefile_name_org = makefile_name.copy();
 
-  //  cerr << endl << "*check:*" << makefile_name;
+  //   cerr << endl << "*check:*" << makefile_name;
   
   while((slash_pos = makefile_name.findRev('/')) != -1){ // if found
 
-    slash2_pos = makefile_name.findRev('/',slash_pos-1);
-    if(slash2_pos != -1 && makefile_name != "/"){
-      makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
-      check_makefile_list.append(makefile_name);
-      cerr << "append to check_makefile_list: " << makefile_name << endl;
-    } 
-    else{
-      makefile_name = "";
+      slash2_pos = makefile_name.findRev('/',slash_pos-1);
+      if(slash2_pos != -1 && makefile_name != "/"){
+	makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
+	check_makefile_list.append(makefile_name);
+	cerr << "append to check_makefile_list: " << makefile_name << endl;
+      } 
+      else{
+	makefile_name = "";
+      }
+      if (makefile_name == "/Makefile.am") {
+	break;
+      }
     }
-  }
 
   config.setGroup("General");
   config.readListEntry("makefiles",makefile_list);

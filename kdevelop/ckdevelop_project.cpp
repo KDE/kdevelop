@@ -279,7 +279,37 @@ void CKDevelop::slotAddExistingFiles(){
    
     // Fetch the type of the file
     type = CProject::getType( dest_name );
-      
+
+    if(file == dest_name) {
+      copy = false;
+      process.clearArguments();
+      process << "cat"; // copy is your friend :-) ...cat, too
+
+      if (add_dlg->isTemplateChecked())
+      {
+       if (CProject::getType(file)==CPP_HEADER)
+        {
+         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,fi.fileName());
+         process << temp_template;
+        }
+        else if (CProject::getType(file)==CPP_SOURCE)
+              {
+               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, fi.fileName());
+               process << temp_template;
+              }
+      }
+      process << file;
+      process << ">";
+
+      process << "temp.tmp";
+      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important 
+      process.clearArguments();
+      process << "mv";
+      process << "temp.tmp";
+      process << dest_name;
+      process.start(KProcess::Block,KProcess::AllOutput);
+    }
+    else
     if(QFile::exists(dest_name)){
       int result=KMsgBox::yesNoCancel(this,i18n("File exists!"),
                                       QString(i18n("\nThe file\n\n"))+
@@ -323,6 +353,7 @@ void CKDevelop::slotAddExistingFiles(){
       process << dest+fi.fileName();
       process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
     }
+
     new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
   }
   progress.setProgress( files.count() );
@@ -899,8 +930,11 @@ bool CKDevelop::addFileToProject(QString complete_filename,
   rel_name.replace(QRegExp("///"),"/"); // remove ///
   rel_name.replace(QRegExp("//"),"/"); // remove //
 		   
-  rel_name.replace(QRegExp(prj->getProjectDir()),"");
-  
+  rel_name.remove(0,prj->getProjectDir().length());
+  //  rel_name.replace(QRegExp(prj->getProjectDir()),"");
+  //  cerr << "getProDir():" << prj->getProjectDir() << endl;
+  //  cerr << "*rel_name2*:" << rel_name << endl;
+
   TFileInfo info;
   if( type == KDEV_DIALOG){
     TDialogFileInfo dinfo;

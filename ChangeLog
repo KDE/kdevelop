@@ -1,3 +1,8 @@
+1999-09-19 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* now, you can have + (like c++) in the directory
+	* you can add existing files, which are in the same directory 
+	without problem
+
 1999-09-19 Stefan Bartel <bartel@rz.uni-potsdam.de>
 	* RFV can now hide non-project files
 	* pathbox in newfiledialog will not be disabled,
