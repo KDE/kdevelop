@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>354</width>
-            <height>413</height>
+            <width>393</width>
+            <height>423</height>
         </rect>
     </property>
     <property name="caption">
@@ -24,7 +24,7 @@
                 <cstring>activeTargetRadioButton</cstring>
             </property>
             <property name="text">
-                <string>Add New &amp;Files to My Active Target</string>
+                <string>Add new &amp;files to my active target</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -49,7 +49,7 @@
                 <cstring>chooseTargetRadioButton</cstring>
             </property>
             <property name="text">
-                <string>&amp;Choose Another Target Now from Automake Manager</string>
+                <string>&amp;Choose another target now from automake manager</string>
             </property>
         </widget>
         <spacer>
@@ -172,7 +172,7 @@
                 <cstring>neverAskAgainCheckBox</cstring>
             </property>
             <property name="text">
-                <string>&amp;Do not ask me again and use always my Active Target.</string>
+                <string>&amp;Do not ask me again and use always my active target.</string>
             </property>
         </widget>
         <spacer>

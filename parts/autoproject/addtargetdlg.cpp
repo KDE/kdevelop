@@ -33,10 +33,10 @@ AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item
 	primary_combo->setFocus();
 	primary_combo->insertItem(i18n("Program"));
 	primary_combo->insertItem(i18n("Library"));
-	primary_combo->insertItem(i18n("Libtool library"));
+	primary_combo->insertItem(i18n("Libtool Library"));
 	primary_combo->insertItem(i18n("Script"));
 	primary_combo->insertItem(i18n("Header"));
-	primary_combo->insertItem(i18n("Data file"));
+	primary_combo->insertItem(i18n("Data File"));
 	primary_combo->insertItem(i18n("Java"));
 
 	primaryChanged(); // updates prefix combo

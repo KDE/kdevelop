@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>FileGroupsConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -55,7 +55,7 @@
                         <property name="clickable">
                             <bool>true</bool>
                         </property>
-                        <property name="resizeable">
+                        <property name="resizable">
                             <bool>true</bool>
                         </property>
                     </column>
@@ -66,7 +66,7 @@
                         <property name="clickable">
                             <bool>true</bool>
                         </property>
-                        <property name="resizeable">
+                        <property name="resizable">
                             <bool>true</bool>
                         </property>
                     </column>
@@ -91,6 +91,12 @@
             </property>
             <property name="sizeType">
                 <enum>Preferred</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
             </property>
         </spacer>
         <widget class="QLayoutWidget">
@@ -117,13 +123,19 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>addgroup_button</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Add Group</string>
+                        <string>&amp;Add Group...</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -143,6 +155,12 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
@@ -171,6 +189,12 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
                 </spacer>
             </vbox>
         </widget>
@@ -183,6 +207,12 @@
             </property>
             <property name="sizeType">
                 <enum>Preferred</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
             </property>
         </spacer>
     </hbox>

@@ -587,7 +587,7 @@
                                             <cstring>lowercase_filenames</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Lowercase filenames</string>
+                                            <string>Lowercase file names</string>
                                         </property>
                                     </widget>
                                     <widget class="QLabel" row="0" column="0">
@@ -650,7 +650,7 @@
                                                 <cstring>TextLabel1</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Filename:</string>
+                                                <string>File name:</string>
                                             </property>
                                         </widget>
                                         <widget class="KURLRequester">

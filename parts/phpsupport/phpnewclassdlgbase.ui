@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>PHPNewClassDlgBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -30,7 +30,7 @@
                 <cstring>TextLabel1</cstring>
             </property>
             <property name="text">
-                <string>Classname:</string>
+                <string>Class name:</string>
             </property>
         </widget>
         <spacer row="5" column="0" rowspan="1" colspan="3">
@@ -42,6 +42,12 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
             </property>
         </spacer>
         <widget class="QPushButton" row="5" column="3" rowspan="1" colspan="2">
@@ -75,7 +81,7 @@
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>Baseclass:</string>
+                <string>Base class:</string>
             </property>
         </widget>
         <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
@@ -99,7 +105,7 @@
                 <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>Filename:</string>
+                <string>File name:</string>
             </property>
         </widget>
         <widget class="QToolButton" row="2" column="6">
@@ -167,4 +173,7 @@ class CLASSNAME extends BASECLASS {
     <include location="global" impldecl="in declaration">klineedit.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>

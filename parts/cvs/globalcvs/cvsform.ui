@@ -35,7 +35,7 @@ for your new project</string>
                 <cstring>TextLabel1</cstring>
             </property>
             <property name="text">
-                <string>CVS Root :</string>
+                <string>CVS root:</string>
             </property>
         </widget>
         <widget class="QLineEdit" row="0" column="1">
@@ -55,7 +55,7 @@ e.g. &lt;tt&gt;/home/cvsroot&lt;/tt&gt; or &lt;tt&gt;:pserver:me@localhost:/home
                 <cstring>TextLabel5</cstring>
             </property>
             <property name="text">
-                <string>Release Tag :</string>
+                <string>Release tag:</string>
             </property>
         </widget>
         <widget class="QLineEdit" row="5" column="1">
@@ -108,7 +108,7 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>Message :</string>
+                <string>Message:</string>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -116,7 +116,7 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>CVS Repository :</string>
+                <string>CVS repository:</string>
             </property>
         </widget>
         <widget class="QLabel" row="3" column="0">
@@ -124,7 +124,7 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>TextLabel4</cstring>
             </property>
             <property name="text">
-                <string>Vendor Tag:</string>
+                <string>Vendor tag:</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="1" column="1">

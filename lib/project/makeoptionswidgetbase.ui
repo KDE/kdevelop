@@ -43,7 +43,7 @@
         </property>
         <property name="sizeHint">
             <size>
-                <width>20</width>
+                <width>210</width>
                 <height>20</height>
             </size>
         </property>
@@ -56,22 +56,6 @@
             </rect>
         </property>
     </spacer>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>makebin_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>83</y>
-                <width>138</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Name of make executable:</string>
-        </property>
-    </widget>
     <spacer>
         <property name="name">
             <cstring>Spacer30</cstring>
@@ -97,54 +81,6 @@
             </rect>
         </property>
     </spacer>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>jobs_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>109</y>
-                <width>138</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Number of simultaneous jobs:</string>
-        </property>
-    </widget>
-    <widget class="QSpinBox">
-        <property name="name">
-            <cstring>jobs_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>155</x>
-                <y>110</y>
-                <width>210</width>
-                <height>18</height>
-            </rect>
-        </property>
-        <property name="maxValue">
-            <number>30</number>
-        </property>
-        <property name="minValue">
-            <number>1</number>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>makebin_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>155</x>
-                <y>84</y>
-                <width>210</width>
-                <height>18</height>
-            </rect>
-        </property>
-    </widget>
     <spacer>
         <property name="name">
             <cstring>Spacer36</cstring>
@@ -157,7 +93,7 @@
         </property>
         <property name="sizeHint">
             <size>
-                <width>20</width>
+                <width>210</width>
                 <height>20</height>
             </size>
         </property>
@@ -356,6 +292,70 @@
                 </rect>
             </property>
         </spacer>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>makebin_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>83</y>
+                <width>172</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Name of make executable:</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>jobs_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>109</y>
+                <width>193</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Number of simultaneous jobs:</string>
+        </property>
+    </widget>
+    <widget class="QSpinBox">
+        <property name="name">
+            <cstring>jobs_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>215</x>
+                <y>110</y>
+                <width>150</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="maxValue">
+            <number>30</number>
+        </property>
+        <property name="minValue">
+            <number>1</number>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>makebin_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>215</x>
+                <y>84</y>
+                <width>150</width>
+                <height>20</height>
+            </rect>
+        </property>
     </widget>
 </widget>
 <connections>

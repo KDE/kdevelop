@@ -616,8 +616,8 @@ void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
   QString relpath = spitem->path.mid(projectDirectory().length());
   bool ok = FALSE;
   QString scopename = QInputDialog::getText(
-                      i18n( "Create scope" ),
-                      i18n( "Please enter a name for the new scope." ),
+                      i18n( "Create Scope" ),
+                      i18n( "Please enter a name for the new scope:" ),
                       QLineEdit::Normal, QString::null, &ok, this );
   if ( ok && !scopename.isEmpty() )
   {
@@ -646,7 +646,7 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
   bool ok = FALSE;
   QString subdirname = QInputDialog::getText(
                     i18n( "Add Subdirectory" ),
-                    i18n( "Please enter a name for the new subdirectory." ),
+                    i18n( "Please enter a name for the new subdirectory:" ),
                     QLineEdit::Normal, QString::null, &ok, this );
   if ( ok && !subdirname.isEmpty() )
   {
@@ -992,7 +992,7 @@ void TrollProjectWidget::slotNewFile()
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
   QString filename = QInputDialog::getText(
                      i18n( "Insert New File"),
-                     i18n( "Please enter a name for the new file." ),
+                     i18n( "Please enter a name for the new file:" ),
                      QLineEdit::Normal, QString::null, &ok, this );
   if ( ok && !filename.isEmpty() )
   {
@@ -1130,7 +1130,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           bool ok = FALSE;
           QString filename = QInputDialog::getText(
                             i18n( "Insert New File"),
-                            i18n( "Please enter a name for the new file." ),
+                            i18n( "Please enter a name for the new file:" ),
                             QLineEdit::Normal, QString::null, &ok, this );
           if ( ok && !filename.isEmpty() )
           {

@@ -1125,7 +1125,7 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
 
 void DocTreeViewWidget::slotConfigure()
 {
-    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize documentation tree"),
+    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize Documentation Tree"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                     "customization dialog");
     QVBox *vbox1 = dlg.addVBoxPage(i18n("Documentation Tree: Global"));
