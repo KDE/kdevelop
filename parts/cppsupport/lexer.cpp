@@ -328,13 +328,11 @@ void Lexer::handleDirective( const QString& directive )
     }
 
     // skip line
-    while( !currentChar().isNull() ){
+    while( !currentChar().isNull() && currentChar() != '\n' ){
 
         Token tk;
         nextToken( tk, true );
 
-        if( currentChar() == '\n' )
-            break;
     }
 
     m_skipWordsEnabled = skip;
