@@ -14,8 +14,8 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       addclassattributedlg.cpp
 
 EXTRA_DIST = tokenizer.l
-tokenizer.cc: tokenizer.l
-	$(LEX) -+ -otokenizer.cpp $(srcdir)/tokenizer.l
+tokenizer.cpp: tokenizer.l
+	flex -+ -otokenizer.cpp $(srcdir)/tokenizer.l
 
 METASOURCES = AUTO
 

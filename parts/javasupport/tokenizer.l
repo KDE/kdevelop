@@ -44,9 +44,9 @@
   QString comment;
 
   /* Function prototypes */
-  bool beginComment(MyLexer *lex);
-  void inComment(MyLexer *lex);
-  bool endComment(MyLexer *lex);
+  static bool beginComment(MyLexer *lex);
+  static void inComment(MyLexer *lex);
+  static bool endComment(MyLexer *lex);
 %}
 
 WS           [[:blank:]\r]+

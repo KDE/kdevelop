@@ -42,9 +42,9 @@
   QString comment;
 
   /* Function prototypes */
-  bool beginComment(MyLexer *lex);
-  void inComment(MyLexer *lex);
-  bool endComment(MyLexer *lex);
+  static bool beginComment(MyLexer *lex);
+  static void inComment(MyLexer *lex);
+  static bool endComment(MyLexer *lex);
 %}
 
 WS           [[:blank:]\r]+
@@ -180,20 +180,20 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %%
 
-bool beginComment(MyLexer *lex)
+static bool beginComment(MyLexer *lex)
 {
  comment_start = lex->lineno();
  comment="/*";
  return true;
 }
 
-void inComment(MyLexer *lex)
+static void inComment(MyLexer *lex)
 {
   char *text=lex->gettext();
   comment+=text;
 };
 
-bool endComment(MyLexer *lex)
+static bool endComment(MyLexer *lex)
 {
  comment_end = lex->lineno();
  comment+="*/";
