@@ -15,13 +15,17 @@ libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp kdevlanguagesupport.
 			       kde30x_texthintinterface.cpp
 
 kdevelopincludedir = $(includedir)/kdevelop
-kdevelopinclude_HEADERS = kdevcore.h kdevproject.h \
-			  kdevlanguagesupport.h kdevversioncontrol.h kdevdifffrontend.h \
-			  kdevmakefrontend.h kdevappfrontend.h kdevcompileroptions.h \
-			  KDevMakeFrontendIface.h KDevAppFrontendIface.h KDevCoreIface.h \
-			  kdevplugin.h kdevdebugger.h kdevcreatefile.h \
-			  kde30x_markinterfaceextension.h \
-			  kde30x_texthintinterface.h
+kdevelopinclude_HEADERS = \
+	KDevAppFrontendIface.h		 kdevdebugger.h \
+	KDevCoreIface.h			 kdevdifffrontend.h \
+	KDevMakeFrontendIface.h		 kdevglobalversioncontrol.h \
+	KDevPartControllerIface.h	 kdevlanguagesupport.h \
+	kde30x_markinterfaceextension.h  kdevmainwindow.h \
+	kde30x_texthintinterface.h	 kdevmakefrontend.h \
+	kdevcreatefile.h		 kdevpartcontroller.h \
+	kdevappfrontend.h		 kdevplugin.h \
+	kdevcompileroptions.h		 kdevproject.h \
+	kdevcore.h			 kdevversioncontrol.h 
 
 noinst_HEADERS = kdevapi.h
 
