@@ -72,8 +72,9 @@ QMap<QString, QString> typedefMap( const CodeModel* model )
 	QMap<QString, QString>::iterator it = map.begin();
 	for ( ; it != map.end(); ++it )
 	{
-		while ( map.contains( map[ it.key() ] ) )
- 		{
+		while ( map.contains( map[ it.key() ] ) && 
+		        it.key() != map[ it.key() ] )
+		{
 	 		map[ it.key() ] = map[ map[ it.key() ] ];
 		}
 	}
