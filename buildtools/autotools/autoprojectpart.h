@@ -19,6 +19,7 @@
 #include <qguardedptr.h>
 #include <qmap.h>
 #include <qdatetime.h>
+#include <qdir.h>
 #include <kdevgenericfactory.h>
 
 #include "kdevproject.h"
@@ -49,6 +50,7 @@ public:
     virtual QString runDirectory() const;
     virtual QString mainProgram(bool relative = false) const;
     virtual QString runArguments() const;
+    virtual QString environString() const;    
     virtual QString activeDirectory() const;
     virtual QStringList allFiles() const;
     virtual void addFile(const QString &fileName);
@@ -72,6 +74,7 @@ public:
     QString topsourceDirectory() const;
     void startMakeCommand(const QString &dir, const QString &target, bool withKdesu = false);
     void buildTarget(QString relpath, TargetItem* titem);
+    void executeTarget(const QDir& dir, const TargetItem* titem);
 
     void needMakefileCvs();
     bool isDirty();
@@ -101,6 +104,8 @@ private slots:
     void slotConfigure();
     void slotExecute();
     void slotExecute2();
+    void slotExecuteTargetAfterBuild(const QString& command);
+    void slotNotExecuteTargetAfterBuildFailed(const QString& command);    
     void slotBuildConfigChanged(const QString &config);
     void slotBuildConfigAboutToShow();
     void slotCommandFinished( const QString& command );
@@ -125,6 +130,7 @@ private:
     bool m_needMakefileCvs;
     bool m_lastCompilationFailed;
     bool m_isKDE;
+    QPair<QDir,TargetItem*> m_executeTargetAfterBuild;    
 
 	ConfigWidgetProxy * _configProxy;
 

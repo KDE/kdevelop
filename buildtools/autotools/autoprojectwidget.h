@@ -205,7 +205,7 @@ private:
 	QToolButton *addTargetButton, *addServiceButton, *addApplicationButton;
 	QToolButton *buildSubprojectButton, *targetOptionsButton;
 	QToolButton *addNewFileButton, *addExistingFileButton;
-	QToolButton *buildTargetButton, *removeButton;
+	QToolButton *buildTargetButton, *executeTargetButton, *removeButton;
 
 	AutoSubprojectView* m_subprojectView;
 	AutoDetailsView* m_detailView;

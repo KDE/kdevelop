@@ -189,6 +189,12 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 		( buildTargetButton, i18n( "Build" ) );
     QWhatsThis::add(buildTargetButton, i18n("<b>Build target</b><p>Constructs a series of make commands to build the selected target. "
                                             "Also builds dependent targets."));
+					    
+	executeTargetButton = new QToolButton( targetButtonBox );
+	executeTargetButton->setPixmap( SmallIcon( "exec") );
+	QToolTip::add
+		( executeTargetButton, i18n( "Execute" ) );
+    QWhatsThis::add(executeTargetButton, i18n("<b>Execute target</b><p> Executes target, if it's a program. Tries to build it, if that's not yet done."));					    
 
 	QWidget *spacer2 = new QWidget( targetButtonBox );
 	targetButtonBox->setStretchFactor( spacer2, 1 );
@@ -206,6 +212,7 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	addExistingFileButton->setEnabled( false );
 	removeButton->setEnabled( true );
 	buildTargetButton->setEnabled( true );
+	executeTargetButton->setEnabled( true );	
 
 	m_detailView = new AutoDetailsView( this, m_part, targetBox, "project details widget" );
 	m_detailView->setRootIsDecorated( true );
@@ -230,6 +237,7 @@ void AutoProjectWidget::initActions()
 	connect( addExistingFileButton, SIGNAL( clicked() ), m_detailView, SLOT( slotAddExistingFile() ) );
 	connect( removeButton , SIGNAL( clicked() ), m_detailView, SLOT( slotRemoveDetail() ) );
 	connect( buildTargetButton, SIGNAL( clicked() ), m_detailView, SLOT( slotBuildTarget() ) );
+	connect( executeTargetButton, SIGNAL( clicked() ), m_detailView, SLOT( slotExecuteTarget() ) );	
 
 	connect( m_subprojectView, SIGNAL( selectionChanged( QListViewItem* ) ),
 	         this, SLOT( slotOverviewSelectionChanged( QListViewItem* ) ) );
@@ -675,6 +683,7 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 	addExistingFileButton->setEnabled ( false );
 	removeButton->setEnabled ( false );
 	buildTargetButton->setEnabled ( false );
+	executeTargetButton->setEnabled ( false );	
 }
 
 
@@ -683,6 +692,7 @@ void AutoProjectWidget::slotDetailsSelectionChanged( QListViewItem *item )
 	bool isTarget = false;
 	bool isRegularTarget = false;
 	bool isFile = false;
+	bool isProgram = false;
 
 	if ( item )
 	{
@@ -714,6 +724,8 @@ void AutoProjectWidget::slotDetailsSelectionChanged( QListViewItem *item )
 		        || primary == "LTLIBRARIES" || primary == "JAVA" )
 			isRegularTarget = true; // not a data group
 
+		if ( primary == "PROGRAMS" )
+			isProgram = true;
 		/*		if ( isRegularTarget && pvitem->type() == ProjectItem::File )
 				{
 					isRegularFile = true;
@@ -726,9 +738,18 @@ void AutoProjectWidget::slotDetailsSelectionChanged( QListViewItem *item )
 	removeButton->setEnabled ( true );
 
 	if ( isRegularTarget && isFile || isRegularTarget )
+	{
 		buildTargetButton->setEnabled ( true );
+		if( isProgram )
+			executeTargetButton->setEnabled ( true );
+	}
 	else
+	{
 		buildTargetButton->setEnabled ( false );
+		executeTargetButton->setEnabled ( false );		
+	}
+			
+	
 }
 
 TargetItem *AutoProjectWidget::selectedTarget()

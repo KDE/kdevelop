@@ -22,6 +22,7 @@
 #include <klistview.h>
 
 #include "domutil.h"
+#include "autolistviewitems.h"
 
 class KAction;
 
@@ -53,6 +54,7 @@ class AutoDetailsView : public KListView
 		void slotAddExistingFile();
 		void slotAddIcon();
 		void slotBuildTarget();
+		void slotExecuteTarget();
 		void slotRemoveDetail();
 		void slotSetActiveTarget();
 		
@@ -67,6 +69,7 @@ class AutoDetailsView : public KListView
 		KAction* addExistingFileAction;
 		KAction* addIconAction;
 		KAction* buildTargetAction;
+		KAction* executeTargetAction;		
 		KAction* setActiveTargetAction;
 		KAction* removeDetailAction;
 

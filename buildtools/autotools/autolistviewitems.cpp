@@ -111,7 +111,7 @@ TargetItem::TargetItem( QListView *lv, bool group, const QString &text )
 */
 
 FileItem::FileItem( QListView *lv, const QString &text, bool set_is_subst )
-		: is_subst(set_is_subst), ProjectItem( File, lv, text )
+		: ProjectItem( File, lv, text ) , is_subst(set_is_subst)
 {
 	if(!is_subst)
 	{

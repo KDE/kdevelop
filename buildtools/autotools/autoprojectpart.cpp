@@ -1059,6 +1059,89 @@ void AutoProjectPart::slotExecute()
     slotExecute2();
 }
 
+void AutoProjectPart::executeTarget(const QDir& dir, const TargetItem* titem)
+{
+	partController()->saveAllFiles();
+	
+	bool is_dirty = false;
+	QDateTime t = QFileInfo(dir , titem->name ).lastModified();	
+	QPtrListIterator<FileItem> it( titem->sources );
+	for( ; it.current() ; ++it )
+	{
+		if( t < QFileInfo(dir , (*it)->name).lastModified())
+			is_dirty = true;
+	}
+	
+	
+	if( DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/autocompile", true) && is_dirty )
+	{	
+		connect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteTargetAfterBuild(const QString&)) );
+		connect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed(const QString&)) );		
+		m_executeTargetAfterBuild.first = dir;
+		m_executeTargetAfterBuild.second = const_cast<TargetItem*>(titem);
+		
+		QString relpath = dir.path().mid( projectDirectory().length() );
+		buildTarget(relpath, const_cast<TargetItem*>(titem));
+		return;	
+	}
+	
+	
+	bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
+	
+	QString program = environString();
+	if(titem->name.startsWith("/"))
+	  program += "./";
+	program += titem->name;	
+	
+	QString args = DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/runarguments/" + titem->name);
+	
+	program += " " + args;
+	
+	appFrontend()->startAppCommand(dir.path(), program ,inTerminal);
+
+}
+
+void AutoProjectPart::slotExecuteTargetAfterBuild(const QString& command)
+{
+
+if ( constructMakeCommandLine(m_executeTargetAfterBuild.first.path(), m_executeTargetAfterBuild.second->name) == command )
+{
+	disconnect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteAfterTargetBuild()) );
+	disconnect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotExecuteAfterTargetBuildFailed()) );
+	executeTarget(m_executeTargetAfterBuild.first, m_executeTargetAfterBuild.second);
+}
+
+}
+
+void AutoProjectPart::slotNotExecuteTargetAfterBuildFailed(const QString& command)
+{
+
+if ( constructMakeCommandLine(m_executeTargetAfterBuild.first.path(), m_executeTargetAfterBuild.second->name) == command )
+{
+	disconnect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteTargetAfterBuild()) );
+	disconnect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed()) );	
+}
+
+}
+
+
+/* Get the run environment variables pairs into the environstr string
+ * in the form of: "ENV_VARIABLE=ENV_VALUE"
+ * Note that we quote the variable value due to the possibility of
+ * embedded spaces. */
+QString AutoProjectPart::environString() const
+{
+    DomUtil::PairList envvars = runEnvironmentVars();
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+        environstr += EnvVarTools::quote((*it).second);
+        environstr += " ";
+    }
+ return environstr;
+}
 
 /** Executes the currently selected main program.
   * If no main Program was selected in the Run Options dialog
@@ -1068,32 +1151,11 @@ void AutoProjectPart::slotExecute2()
 {
     disconnect(appFrontend(), SIGNAL(processExited()), this, SLOT(slotExecute2()));
 
-    // Get the run environment variables pairs into the environstr string
-    // in the form of: "ENV_VARIABLE=ENV_VALUE"
-    // Note that we quote the variable value due to the possibility of
-    // embedded spaces
-    DomUtil::PairList envvars = runEnvironmentVars();
-    QString environstr;
-    DomUtil::PairList::ConstIterator it;
-    for (it = envvars.begin(); it != envvars.end(); ++it) {
-        environstr += (*it).first;
-        environstr += "=";
-/*
-#if (KDE_VERSION > 305)
-        environstr += KProcess::quote((*it).second);
-#else
-        environstr += KShellProcess::quote((*it).second);
-#endif
-*/
-        environstr += EnvVarTools::quote((*it).second);
-        environstr += " ";
-    }
-
     if (mainProgram(true).isEmpty())
     // Do not execute non executable targets
         return;
 
-    QString program = environstr;
+    QString program = environString();
     // Adds the ./ that is necessary to execute the program in bash shells
     if (!mainProgram(true).startsWith("/"))
         program += "./";
@@ -1103,7 +1165,7 @@ void AutoProjectPart::slotExecute2()
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
 
     kdDebug(9020) << "runDirectory: <" << runDirectory() << ">" <<endl;
-    kdDebug(9020) << "environstr  : <" << environstr << ">" <<endl;
+    kdDebug(9020) << "environstr  : <" << environString() << ">" <<endl;
     kdDebug(9020) << "mainProgram : <" << mainProgram(true) << ">" <<endl;
     kdDebug(9020) << "runArguments: <" << runArguments() << ">" <<endl;
 
