@@ -2018,7 +2018,7 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   if(!bKDevelop)
     switchToKDevelop();
   showOutputView(false);
-  s_tab_view->setCurrentTab(BROWSER);
+  //  s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
   QString url_str = url;
   if(url_str.contains("kdevelop/search_result.html") != 0){
