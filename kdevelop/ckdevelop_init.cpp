@@ -672,6 +672,7 @@ void CKDevelop::initMenuBar(){
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
   view_menu->insertItem(i18n("&Output-View"),this,
 			SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
+  view_menu->insertItem(i18n("Tool &Views"), dockHideShowMenu());//FB
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("Toolb&ar"),this,
 			   SLOT(slotViewTStdToolbar()),0,ID_VIEW_TOOLBAR);
@@ -685,8 +686,6 @@ void CKDevelop::initMenuBar(){
   view_menu->insertSeparator();
   view_menu->insertItem(SmallIconSet("reload"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
-  view_menu->insertSeparator();
-  view_menu->insertItem(i18n("Tool &Views"), dockHideShowMenu());//FB
 			
   menuBar()->insertItem(i18n("&View"), view_menu);
 
@@ -744,9 +743,10 @@ void CKDevelop::initMenuBar(){
 
   project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
   // create a tags file
-  project_menu->insertItem(SmallIconSet("tags"),i18n("Make &tags file"), this, SLOT(slotProjectMakeTags()),0, ID_PROJECT_MAKE_TAGS);
+ // Roland: icon tags is missing !  RN
+  project_menu->insertItem(/*SmallIconSet("tags"),*/i18n("Make &tags file"), this, SLOT(slotProjectMakeTags()),0, ID_PROJECT_MAKE_TAGS);
   // load a tags file
-  project_menu->insertItem(SmallIconSet("tags"),i18n("Load &tags file"), this, SLOT(slotProjectLoadTags()),0, ID_PROJECT_LOAD_TAGS);
+  project_menu->insertItem(/*SmallIconSet("tags"),*/i18n("Load &tags file"), this, SLOT(slotProjectLoadTags()),0, ID_PROJECT_LOAD_TAGS);
 
   project_menu->insertSeparator();
 
