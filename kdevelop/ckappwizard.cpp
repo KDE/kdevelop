@@ -1808,7 +1808,7 @@ void CKAppWizard::slotProcessExited() {
   project->setCXXFLAGS ("-O0 -g3 -Wall");
   
   if (kdenormalitem->isSelected()) {
-    project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
+    project->setLDADD (" -lkfile -lkdeui -lkdecore -lqt -lXext -lX11");
   }
   else if (kdeminiitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
