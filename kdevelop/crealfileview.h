@@ -47,11 +47,8 @@ public:
 
 protected: // Implementations of virtual methods.
 
-  /** Initialize popupmenus. */
-  void initPopups();
-
-  /** Get the current popupmenu. */
-  KPopupMenu *getCurrentPopup();
+    /** Get the current popupmenu. */
+  virtual KPopupMenu *getCurrentPopup();
 
 signals:
   /**
@@ -82,11 +79,11 @@ protected slots:
   void slotRemoveFileFromProject();
   void slotDeleteFilePhys();
   void slotShowFileProperties();
+  void slotAddToRepository();
+  void slotRemoveFromRepository();
 
 private: // Popupmenus
-  KPopupMenu installed_file_menu;
-  KPopupMenu other_file_menu;
-  KPopupMenu folder_menu;
+  KPopupMenu *popup;
 
 private: // Private attributes
   QStrList filelist;

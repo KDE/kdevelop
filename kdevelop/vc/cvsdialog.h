@@ -28,7 +28,6 @@ private:
     void processOutput();
     void finish();
 
-    bool running;
     QString cmd;
     QMultiLineEdit *resultbox;
     QPushButton *button;

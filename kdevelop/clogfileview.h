@@ -60,21 +60,13 @@ public:
   void setAllGroupsOpened(){allgroups_opened=true;}
   /** returns the relative filename*/
   QString getFileName(QListViewItem* item);
+  QString getFullFilename(QListViewItem* item);
   bool showPath(){return show_path;}
-
-  KPopupMenu* filePopup() { return &file_pop;};
-  KPopupMenu* groupPopup(){ return &group_pop;};
-  KPopupMenu* projectPopup(){ return &project_pop;};
-
 
 protected: // Implementations of virtual methods.
 
-  /** Initialize popupmenus. */
-  void initPopups();
-
-
   /** Get the current popupmenu. */
-  KPopupMenu *getCurrentPopup();
+  virtual KPopupMenu *getCurrentPopup();
 
 protected:
   void split(QString str,QStrList& filters);
@@ -88,6 +80,8 @@ protected:
     void slotFileDelete();
     void slotGroupProp();
     void slotGroupRemove();
+    void slotAddToRepository();
+    void slotRemoveFromRepository();
     /**  */
 	  void slotShowPath();
     
@@ -98,11 +92,10 @@ protected:
     void selectedFileRemove(QString);
     void selectedGroupProp();
     void logFileTreeSelected(QString);
+    void menuItemHighlighted(int);
 
 protected:
-  KPopupMenu file_pop;
-  KPopupMenu group_pop;  
-  KPopupMenu project_pop;
+  KPopupMenu *popup;
   bool popupmenu_disable;
   bool firstitemselect;
   bool allgroups_opened;

@@ -30,6 +30,8 @@
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
+#include "clogfileview.h"
+#include "crealfileview.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgreadmedlg.h"
 

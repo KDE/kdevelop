@@ -16,17 +16,17 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include <iostream.h>
-#include <kmsgbox.h>
 #include <qregexp.h>
-#include <kprocess.h>
-#include "debug.h"
-#include <assert.h>
 #include <qfileinfo.h>
+#include <kprocess.h>
+#include <kmsgbox.h>
+#include <assert.h>
+#include "debug.h"
 #include "resource.h"
 #include "clogfileview.h"
 #include "cgrouppropertiesdlg.h"
 #include "cproject.h"
+#include "vc/versioncontrol.h"
 
 
 /*********************************************************************
@@ -38,9 +38,9 @@
 CLogFileView::CLogFileView(QWidget*parent,const char* name,bool s_path)
   : CTreeView(parent,name)
 {
-	show_path = s_path;
+  show_path = s_path;
   // Create the popupmenus.
-  initPopups();
+  popup = 0;
  
   connect(this,
           SIGNAL(selectionChanged(QListViewItem*)),
@@ -56,42 +56,7 @@ CLogFileView::CLogFileView(QWidget*parent,const char* name,bool s_path)
 CLogFileView::~CLogFileView(){
 }
 
-/*---------------------------------------- CLogFileView::initPopups()
- * initPopups()
- *   Initialze all popupmenus.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CLogFileView::initPopups()
-{
-  file_pop.setTitle(i18n("File"));
-  file_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()),0, ID_FILE_NEW );
-  file_pop.insertItem(i18n("Remove File from Project..."),this,SLOT(slotFileRemove()),0,ID_PROJECT_REMOVE_FILE );
-  file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Remove File from Disc..."),this,SLOT(slotFileDelete()), 0, ID_FILE_DELETE);
-  file_pop.insertSeparator();
-  file_pop.insertItem(i18n("Properties..."),this,SLOT(slotFileProp()), 0, ID_PROJECT_FILE_PROPERTIES);
-  
-  group_pop.setTitle(i18n("Group"));
-  group_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()), 0, ID_LFV_NEW_GROUP);
-  group_pop.insertSeparator();
-  group_pop.insertItem(i18n("Remove Group"),this,SLOT(slotGroupRemove()),0,ID_LFV_REMOVE_GROUP);
-  group_pop.insertSeparator();
-  group_pop.insertItem(i18n("Properties..."),this,SLOT(slotGroupProp()),0, ID_LFV_GROUP_PROP);
 
-
-  project_pop.setTitle(i18n("Project/LFV"));
-  project_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()),0,ID_FILE_NEW);
-  project_pop.insertItem(i18n("New Class..."),this,SLOT(slotNewClass()), 0, ID_PROJECT_NEW_CLASS);
-  project_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()),0,ID_LFV_NEW_GROUP);
-  project_pop.insertSeparator();
-  project_pop.insertItem(i18n("Show relative path"),this,SLOT(slotShowPath()),0,ID_LFV_SHOW_PATH_ITEM);
-  project_pop.setCheckable(true);
-  if(show_path) project_pop.setItemChecked(ID_LFV_SHOW_PATH_ITEM,true);
-
-}
 
 /*********************************************************************
  *                                                                   *
@@ -223,6 +188,7 @@ void CLogFileView::refresh(CProject* prj)
 void CLogFileView::setPreSelectedItem(QString rel_filename){
   preselectitem = rel_filename;
 }
+
 /** select the first item, after a refresh*/
 void CLogFileView::setFirstItemSelected(){
   firstitemselect = true;
@@ -238,23 +204,68 @@ KPopupMenu *CLogFileView::getCurrentPopup()
 {
   if(popupmenu_disable == true) return 0; // popupmenu
   
-  KPopupMenu *popup = NULL;
+  if (popup)
+    delete popup;
   
   switch( treeH->itemType() )
   {
     case THPROJECT:
-      popup = &project_pop;
+      popup = new KPopupMenu(i18n("Project/LFV"));
+      popup->insertItem( i18n("New File..."),
+                         this, SLOT(slotNewFile()), 0, ID_FILE_NEW);
+      popup->insertItem( i18n("New Class..."),
+                         this, SLOT(slotNewClass()), 0, ID_PROJECT_NEW_CLASS );
+      popup->insertItem( i18n("New Group..."), 
+                         this, SLOT(slotNewGroup()), 0, ID_LFV_NEW_GROUP );
+      popup->insertSeparator();
+      popup->insertItem( i18n("Show relative path"),
+                         this, SLOT(slotShowPath()), 0, ID_LFV_SHOW_PATH_ITEM );
+      popup->setCheckable(true);
+      if(show_path) popup->setItemChecked(ID_LFV_SHOW_PATH_ITEM, true);
       break;
     case THFOLDER:
-      popup = &group_pop;
+      popup = new KPopupMenu(i18n("Group"));
+      popup->insertItem( i18n("New Group..."),
+                         this, SLOT(slotNewGroup()), 0, ID_LFV_NEW_GROUP );
+      popup->insertSeparator();
+      popup->insertItem( i18n("Remove Group"),
+                         this, SLOT(slotGroupRemove()), 0, ID_LFV_REMOVE_GROUP );
+      popup->insertSeparator();
+      popup->insertItem( i18n("Properties..."),
+                         this, SLOT(slotGroupProp()), 0, ID_LFV_GROUP_PROP );
       break;
     case THC_FILE:
-      popup = &file_pop;
+      popup = new KPopupMenu(i18n("File"));
+      popup->insertItem( i18n("New File..."),
+                         this,SLOT(slotNewFile()), 0, ID_FILE_NEW );
+      popup->insertItem( i18n("Remove File from Project..."),
+                         this,SLOT(slotFileRemove()), 0, ID_PROJECT_REMOVE_FILE );
+      popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),
+                         this, SLOT(slotFileDelete()), 0, ID_FILE_DELETE );
+      popup->insertSeparator();
+      popup->insertItem( i18n("Properties..."),
+                         this, SLOT(slotFileProp()), 0, ID_PROJECT_FILE_PROPERTIES );
+
+      if (project->getVersionControl())
+          {
+              bool reg = project->getVersionControl()->isRegistered(getFullFilename(currentItem()));
+              int id;
+              popup->insertSeparator();
+              id = popup->insertItem( i18n("Add to Repository"),
+                                      this, SLOT(slotAddToRepository()) );
+              popup->setItemEnabled(id, !reg);
+              id = popup->insertItem( i18n("Remove from Repository"),
+                                      this, SLOT(slotRemoveFromRepository()) );
+              popup->setItemEnabled(id, reg);
+          }
       break;
     default:
+      popup = 0;
       break;
   }
 
+  if (popup)
+      connect(popup, SIGNAL(highlighted(int)), SIGNAL(menuItemHighlighted(int)));
   return popup;
 }
 
@@ -266,31 +277,28 @@ KPopupMenu *CLogFileView::getCurrentPopup()
 
 void CLogFileView::slotSelectionChanged( QListViewItem* item)
 {
-  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE ||
-	  	mouseBtn == MidButton && treeH->itemType() == THC_FILE){
-  	if(show_path){
-	    emit logFileTreeSelected(project->getProjectDir() + item->text(0));
-	  }
-    else{
-	    emit logFileTreeSelected(project->getProjectDir() + dict->find(item));
-	  }
-  }
+  if ( (mouseBtn == LeftButton || mouseBtn == MidButton)
+       && treeH->itemType() == THC_FILE )
+    emit logFileTreeSelected(getFullFilename(item));
 }
+
 
 void CLogFileView::slotNewClass(){
   emit selectedNewClass();
 }
+
+
 void CLogFileView::slotNewFile(){
   emit selectedNewFile();
 }
-void CLogFileView::slotFileProp(){
-  if(show_path) {
-	  emit showFileProperties(currentItem()->text(0));
-  }
-  else{
-	  emit showFileProperties(dict->find(currentItem()));
-	}
+
+
+void CLogFileView::slotFileProp()
+{
+  emit showFileProperties(getFileName(currentItem()));
 }
+
+
 void CLogFileView::slotGroupProp(){
   QStrList filters;
   QString filter_str,str;
@@ -314,6 +322,8 @@ void CLogFileView::slotGroupProp(){
   
   //emit selectedGroupProp();
 }
+
+
 void CLogFileView::slotNewGroup(){
   CGroupPropertiesDlg dlg;
   QString current_group = currentItem()->text(0);
@@ -330,19 +340,22 @@ void CLogFileView::slotNewGroup(){
     }
   } 
 }
-void CLogFileView::slotFileRemove(){
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to remove the file from project?\n\t\tIt will remain on disk."),KMsgBox::EXCLAMATION) == 2){
-    return;
-  }
-  if(show_path) {
-	  emit selectedFileRemove(currentItem()->text(0));
-  }
-  else{
-	  emit selectedFileRemove(dict->find(currentItem()));
-	}
 
+
+void CLogFileView::slotFileRemove()
+{
+  QString filename=getFileName(currentItem());
+  QString msg;
+  msg.sprintf(i18n("Do you really want to remove the file\n%s\nfrom project?\n\t\tIt will remain on disk."), filename.data());
+  if (KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
+    return;
+
+  emit selectedFileRemove(filename);
 }
-void CLogFileView::slotFileDelete(){
+
+
+void CLogFileView::slotFileDelete()
+{
 
   if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
     return;
@@ -364,18 +377,30 @@ void CLogFileView::slotFileDelete(){
 	}
   
 }
+
+
 QString CLogFileView::getFileName(QListViewItem* item){
 	if(show_path){
 		return item->text(0);
 	}
  	return  dict->find(item);
 }
+
+
+QString CLogFileView::getFullFilename(QListViewItem* item)
+{
+    return project->getProjectDir() + getFileName(item);
+}
+
+
 void CLogFileView::slotGroupRemove(){
   QString name = currentItem()->text(0);
   project->removeLFVGroup(name);
   refresh(project);
   
 }
+
+
 void CLogFileView::split(QString str,QStrList& filters){
   int pos=0;
   int next=0;
@@ -436,19 +461,25 @@ void CLogFileView::storeState(CProject* prj){
 
 
 /**  */
-void CLogFileView::slotShowPath(){
-	if(project_pop.isItemChecked(ID_LFV_SHOW_PATH_ITEM)){
-		project_pop.setItemChecked(ID_LFV_SHOW_PATH_ITEM,false);
-		show_path = false;
-	}
-	else{
-		project_pop.setItemChecked(ID_LFV_SHOW_PATH_ITEM,true);
-		show_path = true;
-	}
-	refresh(project);	
+void CLogFileView::slotShowPath()
+{
+  show_path = !show_path;
+  refresh(project);	
 }
 
 
+void CLogFileView::slotAddToRepository()
+{
+    project->getVersionControl()->add(getFullFilename(currentItem()),
+                                      i18n("Adding file to repository"));
+}
 
+
+void CLogFileView::slotRemoveFromRepository()
+{
+    project->getVersionControl()->remove(getFullFilename(currentItem()),
+                                         i18n("Removing file to repository"));
+}
+ 
 
 

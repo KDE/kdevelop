@@ -23,6 +23,7 @@
 #include "ckappwizard.h"
 #include "debug.h"
 #include "cclassview.h"
+#include "crealfileview.h"
 #include "cprjoptionsdlg.h"
 #include "caddexistingfiledlg.h"
 #include "cfilepropdlg.h"

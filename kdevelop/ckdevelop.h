@@ -51,6 +51,8 @@ class CKDevelop;
 class CDocBrowser;
 class CClassView;
 class DocTreeView;
+class CRealFileView;
+class CLogFileView;
 class KSwallowWidget;
 class CAddExistingFileDlg;
 class QListViewItem;
@@ -59,10 +61,10 @@ class GrepDialog;
 #include "ceditwidget.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
-#include "crealfileview.h"
-#include "clogfileview.h"
+//#include "crealfileview.h"
+//#include "clogfileview.h"
+#include "ctreehandler.h"
 #include "cproject.h"
-//#include "cdoctree.h"
 #include "structdef.h"
 #include "resource.h"
 #include "./print/cprintdlg.h"

@@ -22,6 +22,7 @@
 #include <kiconloader.h>
 #include <kapp.h>
 #include <qstring.h>
+#include <qheader.h>
 #include "kdlgproplvis.h"
 #include "../ckdevelop.h"
 #include "items.h"

@@ -67,7 +67,7 @@ protected: // Protected methods
   void mousePressEvent(QMouseEvent* event);
 
   /** Initialize popupmenus. */
-  virtual void initPopups() = 0;
+    //  virtual void initPopups() = 0;
 
   /** Get the current popupmenu. */
   virtual KPopupMenu *getCurrentPopup() = 0;

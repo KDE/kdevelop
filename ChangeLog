@@ -1,3 +1,8 @@
+1999-07-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Minimal cvs support in RFV, LFV
+	* Show names of files to de deleted in dialog boxes
+	* Reduced dependencies between header files
+
 1999-07-16  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* kdoc2 support everywhere
 

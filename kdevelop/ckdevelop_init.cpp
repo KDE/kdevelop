@@ -32,6 +32,8 @@
 #include "cclassview.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
+#include "clogfileview.h"
+#include "crealfileview.h"
 #include "ctoolclass.h"	
 #include "kswallow.h"
 #include "ctabctl.h"
@@ -945,9 +947,7 @@ void CKDevelop::initConnections(){
   connect(log_file_tree, SIGNAL(selectedNewFile()), SLOT(slotProjectAddNewFile()));
   connect(log_file_tree, SIGNAL(selectedFileRemove(QString)), SLOT(delFileFromProject(QString)));
   connect(log_file_tree, SIGNAL(showFileProperties(QString)),SLOT(slotShowFileProperties(QString)));
-  connect(log_file_tree->filePopup(), SIGNAL(highlighted(int)),SLOT(statusCallback(int)));
-  connect(log_file_tree->groupPopup(), SIGNAL(highlighted(int)),SLOT(statusCallback(int)));
-  connect(log_file_tree->projectPopup(), SIGNAL(highlighted(int)),SLOT(statusCallback(int)));
+  connect(log_file_tree, SIGNAL(menuItemHighlighted(int)), SLOT(statusCallback(int)));
 
   connect(real_file_tree, SIGNAL(fileSelected(QString)), SLOT(slotRealFileTreeSelected(QString)));
   connect(real_file_tree, SIGNAL(showFileProperties(QString)),SLOT(slotShowFileProperties(QString)));

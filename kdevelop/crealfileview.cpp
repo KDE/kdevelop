@@ -26,6 +26,7 @@
 #include <assert.h>
 #include "crealfileview.h"
 #include "cproject.h"
+#include "vc/versioncontrol.h"
 
 /*********************************************************************
  *                                                                   *
@@ -49,7 +50,7 @@ CRealFileView::CRealFileView(QWidget*parent,const char* name)
   : CTreeView(parent,name)
 {
   // Create the popupmenus.
-  initPopups();
+  popup = 0;
 
   file_col = 0;
   
@@ -59,31 +60,10 @@ CRealFileView::CRealFileView(QWidget*parent,const char* name)
 }
 
 CRealFileView::~CRealFileView(){
+  if (popup)
+      delete popup;
 }
 
-/*---------------------------------------- CRealFileView::initPopups()
- * initPopups()
- *   Initialze all popupmenus.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CRealFileView::initPopups()
-{
-  installed_file_menu.setTitle(i18n("File (Registered)"));
-  installed_file_menu.insertItem(i18n("Remove File from Project..."),this,SLOT(slotRemoveFileFromProject()));
-  installed_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disc..."),this,SLOT(slotDeleteFilePhys()));
-  installed_file_menu.insertSeparator();
-  installed_file_menu.insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
-
-  other_file_menu.setTitle(i18n("File"));
-  other_file_menu.insertItem(i18n("Add File to Project..."),this,SLOT(slotAddFileToProject()));
-  other_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disc..."),this,SLOT(slotDeleteFilePhys()));
-  //other_file_menu->insertSeparator();
-  //other_file_menu->insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
-}
 
 /*********************************************************************
  *                                                                   *
@@ -206,21 +186,57 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
  *-----------------------------------------------------------------*/
 KPopupMenu *CRealFileView::getCurrentPopup()
 {
-  KPopupMenu *popup;
+  if (popup)
+    delete popup;
 
   switch( treeH->itemType() )
   {
     case THINSTALLED_FILE:
-      popup = &installed_file_menu;
+      popup = new KPopupMenu(i18n("File (Registered)"));
+      popup->insertItem( i18n("Remove File from Project..."),
+                         this, SLOT(slotRemoveFileFromProject()));
+      popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),
+                         this, SLOT(slotDeleteFilePhys()));
+      popup->insertSeparator();
+      popup->insertItem( i18n("Properties..."),
+                         this, SLOT(slotShowFileProperties()));
       break;
     case THC_FILE:
-      popup = &other_file_menu;
+      popup = new KPopupMenu(i18n("File"));
+      popup->insertItem( i18n("Add File to Project..."),
+                         this, SLOT(slotAddFileToProject()));
+      popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),
+                         this, SLOT(slotDeleteFilePhys()));
       break;
+    case THFOLDER:
+      if (project->getVersionControl())
+          {
+              popup = new KPopupMenu(i18n("Folder"));
+              popup->insertItem( i18n("Add to Repository"),
+                                 this, SLOT(slotAddToRepository()) );
+              popup->insertItem( i18n("Remove from Repository"),
+                                 this, SLOT(slotRemoveFromRepository()) );
+              break;
+          }
     default:
-      popup = NULL;
-      break;
+      popup = 0;
   }
 
+  VersionControl *vc = project->getVersionControl();
+  if ( (treeH->itemType() == THINSTALLED_FILE || treeH->itemType() == THC_FILE)
+       && vc)
+      {
+          bool reg = vc->isRegistered(getFullFilename(currentItem()));
+          int id;
+          popup->insertSeparator();
+          id = popup->insertItem( i18n("Add to Repository"),
+                                  this, SLOT(slotAddToRepository()) );
+          popup->setItemEnabled(id, !reg);
+          id = popup->insertItem( i18n("Remove from Repository"),
+                                  this, SLOT(slotRemoveFromRepository()) );
+          popup->setItemEnabled(id, reg);
+      }
+              
   return popup;
 }
 
@@ -231,8 +247,7 @@ QString CRealFileView::getRelFilename(QListViewItem* pItem) {
     pItem=pItem->parent();
   }
   while (pItem != pRootItem) {
-    filename="/"+filename;
-    filename = pItem->text(file_col)+filename;
+    filename = QString(pItem->text(file_col)) + "/" + filename;
     pItem = pItem->parent();
   }
   return filename;
@@ -243,8 +258,7 @@ QString CRealFileView::getFullFilename(QListViewItem* pItem) {
   QString filename = pItem->text(file_col);
   while (pItem != pRootItem) {
     pItem = pItem->parent();
-    filename="/"+filename;
-    filename = pItem->text(file_col)+filename;
+    filename = QString(pItem->text(file_col)) + "/" + filename;
   }
   return filename;
 }
@@ -270,11 +284,10 @@ void CRealFileView::slotSelectionChanged(QListViewItem* selection)
 void CRealFileView::slotAddFileToProject() {
 
   QString filename=getFullFilename(currentItem());
-  if(KMsgBox::yesNo(0,i18n("Question"),
-                    i18n("Do you want to add the file:\n"+filename+"\n to the project ?"),
-                    KMsgBox::QUESTION) == 2){
+  QString msg;
+  msg.sprintf(i18n("Do you want to add the file\n%s\nto the project ?"), filename.data());
+  if (KMsgBox::yesNo(0, i18n("Question"), msg, KMsgBox::QUESTION) == 2)
     return;
-  }
 
   currentItem()->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
   emit addFileToProject(filename);
@@ -283,28 +296,45 @@ void CRealFileView::slotAddFileToProject() {
 void CRealFileView::slotRemoveFileFromProject() {
 
   QString filename=getRelFilename(currentItem());
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to remove the file from project?\n\t\tIt will remain on disk."),KMsgBox::EXCLAMATION) == 2){
+  QString msg;
+  msg.sprintf(i18n("Do you really want to remove the file\n%s\nfrom project?\n\t\tIt will remain on disk."), filename.data());
+  if (KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
     return;
-  }
+
   emit removeFileFromProject(filename);
 }
 
 void CRealFileView::slotDeleteFilePhys() {
 
   QString filename=getRelFilename(currentItem());
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
+  QString msg;
+  msg.sprintf(i18n("Do you really want to delete the file\n%s\nfrom the disk?\nThere is no way to restore it!"), filename.data());
+  if(KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
     return;
-  }
-  filename = getFullFilename(currentItem());
-  QFile::remove(filename);
 
-  filename=getRelFilename(currentItem());
-  if (isInstalledFile(filename)) {
+  QFile::remove(getFullFilename(currentItem()));
+
+  if (isInstalledFile(filename)) 
     emit removeFileFromProject(filename);
-}
+
   refresh(project);
 }
 
 void CRealFileView::slotShowFileProperties() {
   emit showFileProperties(getRelFilename(currentItem()));
 }
+
+
+void CRealFileView::slotAddToRepository()
+{
+    project->getVersionControl()->add(getFullFilename(currentItem()),
+                                      i18n("Adding file to repository"));
+}
+
+
+void CRealFileView::slotRemoveFromRepository()
+{
+    project->getVersionControl()->remove(getFullFilename(currentItem()),
+                                         i18n("Removing file from repository"));
+}
+ 

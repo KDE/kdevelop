@@ -1,3 +1,4 @@
+
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qmultilinedit.h>
@@ -19,28 +20,28 @@ CvsDialog::CvsDialog(const char *command, const char *text)
 
     cmd = command;
     
-    QBoxLayout *layout = new QVBoxLayout(this);
+    QBoxLayout *layout = new QVBoxLayout(this, 10);
 
     QLabel *textlabel = new QLabel(text, this);
     textlabel->setMinimumWidth(textlabel->sizeHint().width());
     textlabel->setFixedHeight(textlabel->sizeHint().height());
-    layout->addWidget(textlabel);
+    layout->addWidget(textlabel, 0);
+    layout->addSpacing(4);
 
     resultbox = new QMultiLineEdit(this);
     resultbox->setReadOnly(true);
     QFontMetrics rb_fm(resultbox->fontMetrics());
-    resultbox->setMinimumSize(rb_fm.width("0")*45,
-			      rb_fm.lineSpacing()*15);
-    layout->addWidget(resultbox);
+    resultbox->setMinimumSize(rb_fm.width("0")*60,
+			      rb_fm.lineSpacing()*4);
+    layout->addWidget(resultbox, 5);
     
     QFrame *frame = new QFrame(this);
     frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     frame->setMinimumHeight(frame->sizeHint().height());
-    layout->addWidget(frame);
+    layout->addWidget(frame, 0);
 
     KButtonBox *buttonbox = new KButtonBox(this);
-    layout->addSpacing(10);
-    layout->addWidget(buttonbox);
+    layout->addWidget(buttonbox, 0);
     buttonbox->addStretch();
     button = buttonbox->addButton(i18n("Cancel"));
     connect( button, SIGNAL(clicked()), SLOT(buttonPressed()) );
@@ -87,11 +88,8 @@ void CvsDialog::finish()
 
 void CvsDialog::buttonPressed()
 {
-    if (running)
-	{
-	    finish();
-	    running = false;
-	}
+    if (childproc)
+        finish();
     else
 	delete this;
 }
@@ -112,8 +110,6 @@ void CvsDialog::receivedOutput(KProcess *proc, char *buffer, int buflen)
 
 void CvsDialog::show()
 {
-    running = true;
-    
     childproc = new KShellProcess();
     *childproc << cmd;
 

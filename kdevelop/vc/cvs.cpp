@@ -14,7 +14,7 @@ void CVS::add(const char *filename, const char *text)
     command += dirpath;
     command += " && cvs add ";
     command += filename;
-    command += "2>&1";
+    command += " 2>&1";
     // >/dev/null";
 
     ( new CvsDialog(command, text) )->show();
@@ -31,7 +31,7 @@ void CVS::remove(const char *filename, const char *text)
     command += dirpath;
     command += " && cvs remove -f ";
     command += filename;
-    command += "2>&1";
+    command += " 2>&1";
     // >/dev/null";
 
     ( new CvsDialog(command, text) )->show();
@@ -61,7 +61,7 @@ bool CVS::isRegistered(const char *filename)
 	    if ( (nextp = strchr(buf+1, '/')) == 0)
 		continue;
 	    *nextp = '\0';
-	    if (qstrcmp(buf+1, name) == 0)
+	    if (qstrcmp(buf+1, name) == 0 && *(nextp+1) != '-')
 		{
 		    found = true;
 		    break;

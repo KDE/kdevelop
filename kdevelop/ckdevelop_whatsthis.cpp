@@ -18,6 +18,8 @@
  
 #include "ckdevelop.h"
 #include "cclassview.h"
+#include "clogfileview.h"
+#include "crealfileview.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
  
