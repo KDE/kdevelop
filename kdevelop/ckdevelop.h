@@ -470,8 +470,6 @@ public:
   ///////////////////////
   /** swich construction for the toolbar icons, selecting the right slots */
   void slotToolbarClicked(int);
-  /** set the tree tab automatically without click */
-  void slotTCurrentTab(int idOfTabPage);
 	
   ///////////// -- the methods for the treeview selection
   /** click action on LFV */
