@@ -37,7 +37,6 @@
 #include "qextmdichildarea.h"
 #include "qextmdichildview.h"
 
-#ifndef KDE_USE_FINAL
 #ifdef _OS_WIN32_
  #include "win_undockbutton.xpm"
  #include "win_minbutton.xpm"
@@ -48,7 +47,6 @@
  #include "kde_minbutton.xpm"
  #include "kde_restorebutton.xpm"
  #include "kde_closebutton.xpm"
-#endif
 #endif
 
 //============ constructor ============//
@@ -362,7 +360,9 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    
    QextMdiTaskBarButton* but = m_pTaskBar->getButton(pWnd);
    // changed signale (mmorin)
-   QObject::disconnect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
+   if (but != 0L) {
+      QObject::disconnect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
+   }
    m_pTaskBar->removeWinButton(pWnd);
    
    if(pWnd->isAttached()) {
