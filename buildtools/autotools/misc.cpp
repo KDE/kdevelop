@@ -143,7 +143,9 @@ void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, Q
 							s += "\\\n\t";
 							l = 8;
 						}
-						s += variableList[i] + " ";
+						s += variableList[i];
+						if( i != variableList.count() - 1 )
+							s += ' ';
 					}
 				}
 				else
@@ -168,15 +170,17 @@ void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, Q
 	for ( it2 = variables.begin(); it2 != variables.end(); ++it2 ){
 	    if( !it2.data().stripWhiteSpace().isEmpty() ) {
 		QStringList variableList = QStringList::split(' ', it2.data());
-		outs << it2.key() + " = ";
-		int l = it2.key().length();
+		outs << it2.key() + " =";
+		int l = it2.key().length() + 2;
 		for (uint i = 0; i < variableList.count(); i++) {
 			l += variableList[i].length() + 1;
 			if (l > 80)	{
-				outs << "\\\n\t";
-				l = 8;
+				outs << "\\\n\t" << variableList[i];
+				l = 8 + variableList[i].length();
+			} else
+			{
+				outs << ' ' << variableList[i];
 			}
-			outs << variableList[i] << " ";
 		}
 		outs << endl;
             }
