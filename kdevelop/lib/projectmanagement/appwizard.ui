@@ -1,0 +1,375 @@
+<!DOCTYPE UI><UI>
+<class>AppWizardBase</class>
+<author>Sandy Meier &lt;smeier@kdevelop.org&gt;</author>
+<widget>
+    <class>QWizard</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>AppWizardBase</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>414</width>
+            <height>433</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Form1</string>
+    </property>
+    <property>
+        <name>toolTip</name>
+        <string></string>
+    </property>
+    <widget>
+        <class>QWidget</class>
+        <attribute>
+            <name>title</name>
+            <string>General</string>
+        </attribute>
+        <grid>
+            <property stdset="1">
+                <name>margin</name>
+                <number>11</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget row="1"  column="0" >
+                <class>QGroupBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>GroupBox8</cstring>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string>Project</string>
+                </property>
+                <grid>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget row="1"  column="0"  rowspan="1"  colspan="4" >
+                        <class>QCheckBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>lsm_checkbox</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>generate lsm-File - (Linux Software Map)</string>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="0" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel7</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>License:</string>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="1" >
+                        <class>QComboBox</class>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>GPL</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>LGPL</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>BSD</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>Artistic</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>QPL</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>Custom</string>
+                            </property>
+                        </item>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>license_combobox</cstring>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="2" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Version:</string>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="3" >
+                        <class>QLineEdit</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>version_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget row="2"  column="0"  rowspan="1"  colspan="2" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel5</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Description:</string>
+                        </property>
+                    </widget>
+                    <widget row="3"  column="0"  rowspan="1"  colspan="4" >
+                        <class>QMultiLineEdit</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>desc_multiedit</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget row="0"  column="0" >
+                <class>QGroupBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>General</cstring>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string>General</string>
+                </property>
+                <grid>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget row="2"  column="0" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel4</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Company:</string>
+                        </property>
+                    </widget>
+                    <widget row="1"  column="0" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel6</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Email:</string>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="0" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel3</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Author:</string>
+                        </property>
+                    </widget>
+                    <widget row="2"  column="1" >
+                        <class>QLineEdit</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>company_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget row="1"  column="1" >
+                        <class>QLineEdit</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>email_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="1" >
+                        <class>QLineEdit</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>author_edit</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </grid>
+    </widget>
+    <widget>
+        <class>QWidget</class>
+        <attribute>
+            <name>title</name>
+            <string>Header</string>
+        </attribute>
+        <grid>
+            <property stdset="1">
+                <name>margin</name>
+                <number>11</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget row="0"  column="0" >
+                <class>QLayoutWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Layout5</cstring>
+                </property>
+                <hbox>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>0</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget>
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>headertemplate for your files:</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property>
+                            <name>name</name>
+                            <cstring>Spacer1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>168</x>
+                                <y>5</y>
+                                <width>39</width>
+                                <height>20</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property stdset="1">
+                            <name>sizeType</name>
+                            <enum>Expanding</enum>
+                        </property>
+                    </spacer>
+                    <widget>
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>loadheader_button</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Load...</string>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string></string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>newheader_button</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>New</string>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string>Clears the pre-set headertemplate</string>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget row="1"  column="0" >
+                <class>QMultiLineEdit</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>header_multiedit</cstring>
+                </property>
+            </widget>
+        </grid>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>loadheader_button</sender>
+        <signal>clicked()</signal>
+        <receiver>AppWizardBase</receiver>
+        <slot>slotLoadHeader()</slot>
+    </connection>
+    <connection>
+        <sender>newheader_button</sender>
+        <signal>clicked()</signal>
+        <receiver>AppWizardBase</receiver>
+        <slot>slotNewHeader()</slot>
+    </connection>
+    <slot access="public">slotLoadHeader()</slot>
+    <slot access="public">slotNewHeader()</slot>
+</connections>
+<tabstops>
+    <tabstop>loadheader_button</tabstop>
+    <tabstop>newheader_button</tabstop>
+    <tabstop>header_multiedit</tabstop>
+    <tabstop>author_edit</tabstop>
+    <tabstop>email_edit</tabstop>
+    <tabstop>company_edit</tabstop>
+    <tabstop>license_combobox</tabstop>
+    <tabstop>version_edit</tabstop>
+    <tabstop>lsm_checkbox</tabstop>
+    <tabstop>desc_multiedit</tabstop>
+</tabstops>
+</UI>
