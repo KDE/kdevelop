@@ -5,7 +5,6 @@ URL=
 Icon=wizard
 Comment=A konqueror navigation panel plugin  called $NAME$
 Name=%{APPNAMELC}
-Name[xx]=xx%{APPNAMELC}xx
 
 Open=false
 X-KDE-KonqSidebarModule=konqsidebar_%{APPNAMELC}
