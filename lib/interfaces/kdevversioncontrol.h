@@ -7,17 +7,17 @@
 #define _KDEVVERSIONCONTROL_H_
 
 #include <qstringlist.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 
-class KDevVersionControl : public KDevPart
+class KDevVersionControl : public KDevPlugin
 {
     Q_OBJECT
     
 public:
     enum State { canBeCommited = 1, canBeAdded = 2 };
     
-    KDevVersionControl( KDevApi *api, QObject *parent=0, const char *name=0 );
+    KDevVersionControl( QObject *parent, const char *name=0 );
     ~KDevVersionControl();
 
     /**
