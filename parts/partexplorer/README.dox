@@ -1,9 +1,12 @@
 /** \class PartExplorerPlugin
 A Graphical tool for performing KTrader-like queries about registered services
 
-PartExplorer is a frontend to KTrader (http://developer.kde.org/documentation/library/3.1-api/classref/kio/KTrader.html)
+PartExplorer is a frontend to KTrader class (http://developer.kde.org/documentation/library/3.1-api/classref/kio/KTrader.html)
 and uses its syntax, no more no less: so before saying "it really sucks", give a look at
 http://developer.kde.org/documentation/library/kdeqt/tradersyntax.html.
+
+The real job is done by the @see PartExplorerForm class which handles user input, query system
+configuration and (eventually) fills the property list.
 
 It has helped figuring out several problems when querying KParts (ok, mostly mispelled names ;-), and I
 hope that some other people will find it useful.

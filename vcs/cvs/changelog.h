@@ -29,7 +29,7 @@ public:
     void addLine( const QString &aLine );
     //! Add a bunch of lines for this entry
     void addLines( const QStringList &someLines );
-    //! Pretty format for this entry: you may insert a line tag (such as tab (\t) or 4 spaces ("    ")
+    //! Pretty format for this entry: you may insert a line tag (such as tab ("\t") or 4 spaces ("    ")
     //! or whatever you want (such as "\t * ")
     QString toString( const QString &startLineString = QString::null ) const;
     //! Once the entry is completed one would like to write on a file! (You may add on start of file

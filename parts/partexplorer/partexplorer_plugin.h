@@ -21,16 +21,6 @@ class QPainter;
 class KURL;
 class PartExplorerForm;
 
-/**
- * A front-end to @see KTrader class: the real job is done by the
- * @see PartExplorerForm class which handles user input, query system
- * configuration and (eventually) fills the property list.
- * application.
- *
- * @short Main Part
- * @author Mario Scalas <mario@gicomsrl.it>
- * @version 0.1
- */
 class PartExplorerPlugin : public KDevPlugin
 {
     Q_OBJECT

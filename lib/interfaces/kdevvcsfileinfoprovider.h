@@ -70,7 +70,7 @@ public:
     * Status for the local files in the specified directory: the info are collected locally so they are
     * necessarly in sync with the repository
     * @param dirPath relative (to project dir) directory path to stat
-    * @return status for all <u>registered</u> files
+    * @return status for all <b>registered</b> files
     */
     virtual const VCSFileInfoMap *status( const QString &dirPath ) const = 0;
 
@@ -87,7 +87,7 @@ public:
 signals:
     /**
     * Emitted when the status request to remote repository has finished
-    * @param fileInfoMap status for <u>registered in repository</u> files
+    * @param fileInfoMap status for <b>registered in repository</b> files
     * @param callerData @see requestStatus.
     */
     void statusReady( const VCSFileInfoMap &fileInfoMap, void *callerData );

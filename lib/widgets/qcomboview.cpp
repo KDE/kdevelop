@@ -256,7 +256,7 @@ void QComboView::setAutoResize( bool enable )
 
 
 /*!
-    \reimp
+    reimp
 
     This implementation caches the size hint to avoid resizing when
     the contents change dynamically. To invalidate the cached value
@@ -367,7 +367,7 @@ void QComboView::setFont( const QFont &font )
 }
 
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::resizeEvent( QResizeEvent * e )
@@ -378,7 +378,7 @@ void QComboView::resizeEvent( QResizeEvent * e )
     QWidget::resizeEvent( e );
 }
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::paintEvent( QPaintEvent * )
@@ -433,7 +433,7 @@ void QComboView::paintEvent( QPaintEvent * )
 }
 
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::mousePressEvent( QMouseEvent *e )
@@ -468,21 +468,21 @@ void QComboView::mousePressEvent( QMouseEvent *e )
     }
 }
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::mouseMoveEvent( QMouseEvent * )
 {
 }
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::mouseReleaseEvent( QMouseEvent * )
 {
 }
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::mouseDoubleClickEvent( QMouseEvent *e )
@@ -491,7 +491,7 @@ void QComboView::mouseDoubleClickEvent( QMouseEvent *e )
 }
 
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::keyPressEvent( QKeyEvent *e )
@@ -579,7 +579,7 @@ QString QComboView::currentText() const
         return QString::null;
 }
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::focusInEvent( QFocusEvent * e )
@@ -591,7 +591,7 @@ void QComboView::focusInEvent( QFocusEvent * e )
     emit focusGranted();
 }
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::focusOutEvent( QFocusEvent * e )
@@ -603,7 +603,7 @@ void QComboView::focusOutEvent( QFocusEvent * e )
     emit focusLost();
 }
 
-/*!\reimp
+/*!reimp
 */
 
 void QComboView::wheelEvent( QWheelEvent *e )
@@ -762,7 +762,7 @@ void QComboView::popup()
 
 
 /*!
-  \reimp
+  reimp
 */
 void QComboView::updateMask()
 {
@@ -816,7 +816,7 @@ void QComboView::currentChanged()
     update();
 }
 
-/*! \reimp
+/*! reimp
 
   \internal
 
@@ -1126,7 +1126,7 @@ void QComboView::returnPressed()
 }
 
 
-/*! \reimp
+/*! reimp
 */
 
 void QComboView::setEnabled( bool enable )
@@ -1310,7 +1310,7 @@ bool QComboView::autoCompletion() const
     return d->useCompletion;
 }
 
-/*!\reimp
+/*!reimp
  */
 void QComboView::styleChange( QStyle& s )
 {

@@ -19,11 +19,6 @@ class PascalProjectWidget;
 class KDialogBase;
 class KDevCompilerOptions;
 
-/**
-    Pascal Project: the common project part for all available pascal
-    compilers (gpc, fpc, dcc). It holds no project file list and
-    tries to abstract from their specifics.
-*/
 class PascalProjectPart : public KDevProject
 {
     Q_OBJECT

@@ -54,15 +54,6 @@ class KConfig;
 class QSourceColorizer;
 class KDialogBase;
 
-
-/**
- * This is a "Part".  It that does all the real work in a KPart
- * application.
- *
- * @short Main Part
- * @author Roberto Raggi <roberto@kdevelop.org>
- * @version 0.1
- */
 class QEditorPart:
 	public KTextEditor::Document,
 	public KTextEditor::EditInterface,

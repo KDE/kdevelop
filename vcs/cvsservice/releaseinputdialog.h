@@ -25,7 +25,6 @@ class ReleaseInputDialog : public ReleaseInputDialogBase
 public:
     /**
     * C-tor
-    * @param releaseMsg the custom message to display when prompting the user
     * @param parent
     */
     ReleaseInputDialog( QWidget* parent = 0 );
