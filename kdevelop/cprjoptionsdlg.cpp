@@ -184,26 +184,26 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   need_configure_in_update = false;
   need_makefile_generation = false;
 
-  QFrame* compilerOptions = addPage(i18n("Compiler Options"),i18n("General Compiler Options"),
-		KGlobal::instance()->iconLoader()->loadIcon( "pipe", KIcon::NoGroup, KIcon::SizeMedium ));
+  QFrame* compilerOptions = addPage(i18n("Compiler Options"),i18n("General Compiler Options"),KGlobal::instance()->iconLoader()->loadIcon( "pipe", KIcon::NoGroup, KIcon::SizeMedium ));
 
   QWhatsThis::add(compilerOptions, i18n("Set your Compiler options here"));
-
+  QGridLayout *grid1 = new QGridLayout(compilerOptions,2,2,15,7);
   QGroupBox* target_group;
   target_group=new QGroupBox(compilerOptions,"target_group");
-  target_group->setGeometry(10,10,260,140);
+  grid1->addWidget(target_group,0,0);
   target_group->setTitle(i18n("Target"));
   QWhatsThis::add(target_group, i18n("Set your target options here "
              "by specifying your machine type "
              "and GCC optimization level (0-3)"));
 
+  QGridLayout *grid2 = new QGridLayout( target_group,3,2,15,7);
   QLabel* target_label;
-  target_label=new QLabel(compilerOptions,"target_label");
-  target_label->setGeometry(20,30,100,20);
+  target_label=new QLabel(target_group,"target_label");
+  grid2->addWidget( target_label,0,0);
   target_label->setText(i18n("Target Machine"));
 
-  target=new QComboBox(false,compilerOptions,"target");
-  target->setGeometry(120,30,120,20);
+  target=new QComboBox(false,target_group,"target");
+  grid2->addWidget( target,0,1);
   target->insertItem(i18n("your machine"),0);
   target->insertItem(i18n("i386v"),1);
   if (cxxflags.contains("-b ")) {
@@ -233,13 +233,13 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
 //         "syntax-errors but doesn't do anything "
 //         "else beyond that."));
 
-  optimize=new QCheckBox(compilerOptions,"optimize");
-  optimize->setGeometry(20,90,220,20);
+  optimize=new QCheckBox(target_group,"optimize");
+  grid2->addWidget( optimize,1,0);
   optimize->setText(i18n("optimize"));
   optimize->setChecked(!cxxflags.contains("-O0"));
 
-  optimize_level=new QSpinBox(compilerOptions,"optimize_level");
-  optimize_level->setGeometry(40,120,40,20);
+  optimize_level=new QSpinBox(target_group,"optimize_level");
+  grid2->addWidget( optimize_level,2,1);
   optimize_level->setRange(1,3);
   if (cxxflags.contains("-O1")) optimize_level->setValue(1);
   if (cxxflags.contains("-O2")) optimize_level->setValue(2);
@@ -247,8 +247,8 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   connect( optimize_level, SIGNAL(valueChanged(int)),this , SLOT(slotOptimize_level_changed(int)) );
 
   QLabel* optimize_level_label;
-  optimize_level_label=new QLabel(compilerOptions,"optimize_level_label");
-  optimize_level_label->setGeometry(100,120,140,20);
+  optimize_level_label=new QLabel(target_group,"optimize_level_label");
+  grid2->addWidget( optimize_level_label,2,0);
   optimize_level_label->setText(i18n("Optimization-level"));
 
   QString optimizeMsg = i18n("Set the -O option for the GCC "
@@ -263,12 +263,13 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
 
   QGroupBox* debug_group;
   debug_group=new QGroupBox(compilerOptions,"debug_group");
-  debug_group->setGeometry(280,10,255,140);
+  grid1->addWidget(debug_group,0,1);
   debug_group->setTitle(i18n("Debugging"));
   QWhatsThis::add(debug_group, i18n("Set your debugging options here."));
 
-  debug=new QCheckBox(compilerOptions,"debug");
-  debug->setGeometry(290,30,220,20);
+  grid2 = new QGridLayout( debug_group,4,2,15,7);
+  debug=new QCheckBox(debug_group,"debug");
+  grid2->addWidget(debug,0,0);
   debug->setText(i18n("generate debugging information"));
   if (cxxflags.contains("-g")) {
     debug->setChecked(true);
@@ -278,8 +279,8 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   QWhatsThis::add(debug, i18n("Checking this turns on the -g flag "
                             "to generate debugging information."));
 
-  debug_level=new QSpinBox(compilerOptions,"debug_level");
-  debug_level->setGeometry(310,60,40,20);
+  debug_level=new QSpinBox(debug_group,"debug_level");
+  grid2->addWidget(debug_level,1,1);
   debug_level->setRange(1,3);
   if (cxxflags.contains("-g1")) debug_level->setValue(1);
   if (cxxflags.contains("-g2")) debug_level->setValue(2);
@@ -287,8 +288,8 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   connect( debug_level, SIGNAL(valueChanged(int)),this , SLOT(slotDebug_level_changed(int)) );
 
   QLabel* debug_level_label;
-  debug_level_label=new QLabel(compilerOptions,"debug_level_label");
-  debug_level_label->setGeometry(370,60,140,20);
+  debug_level_label=new QLabel(debug_group,"debug_level_label");
+  grid2->addWidget(debug_level_label,1,0);
   debug_level_label->setText(i18n("Debug-level"));
 
   QString debugLevelMsg = i18n("Set the debugging level here. "
@@ -299,8 +300,8 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   QWhatsThis::add(debug_level_label, debugLevelMsg);
 
 
-  gprof_info=new QCheckBox(compilerOptions,"gprof_info");
-  gprof_info->setGeometry(290,90,220,20);
+  gprof_info=new QCheckBox(debug_group,"gprof_info");
+  grid2->addWidget(gprof_info,2,0);
   gprof_info->setText(i18n("generate extra information for gprof"));
   if (cxxflags.contains("-pg")) {
     gprof_info->setChecked(true);
@@ -311,8 +312,8 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
         "information for the analysis program "
         "<i>gprof</i>."));
 
-  save_temps=new QCheckBox(compilerOptions,"save_temps");
-  save_temps->setGeometry(290,120,220,20);
+  save_temps=new QCheckBox(debug_group,"save_temps");
+  grid2->addWidget(save_temps,3,0);
   save_temps->setText(i18n("store temporary intermediate files"));
   if (cxxflags.contains("-save-temps")) {
     save_temps->setChecked(true);
@@ -324,13 +325,19 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
         "compiling a file <i>foo.c</i> will produce "
         "the files <i>foo.o, foo.i</i> and<i>foo.s"));
 
+  QGroupBox* compiler_group;
+  compiler_group=new QGroupBox(compilerOptions,"debug_group");
+  grid1->addMultiCellWidget(compiler_group,1,1,0,1);
+
+  grid2 = new QGridLayout( compiler_group,4,1,15,7);
+
   QLabel* addit_gcc_options_label;
-  addit_gcc_options_label=new QLabel(compilerOptions,"addit_gcc_options_label");
-  addit_gcc_options_label->setGeometry(10,180,200,20);
+  addit_gcc_options_label=new QLabel(compiler_group,"addit_gcc_options_label");
+  grid2->addWidget(addit_gcc_options_label,0,0);
   addit_gcc_options_label->setText(i18n("additional options:"));
 
-  addit_gcc_options=new QLineEdit(compilerOptions,"addit_gcc_options");
-  addit_gcc_options->setGeometry(10,210,490,30);
+  addit_gcc_options=new QLineEdit(compiler_group,"addit_gcc_options");
+  grid2->addWidget(addit_gcc_options,1,0);
   addit_gcc_options->setText(prj_info->getAdditCXXFLAGS());
 
   QString gccOptionsMsg = i18n("Insert other GCC-options here "
@@ -1004,9 +1011,11 @@ void CPrjOptionsDlg::addMakePage()
   QFrame* makeOptions = addPage(i18n("Make Options"),i18n("Build Program Settings"),
 		KGlobal::instance()->iconLoader()->loadIcon( "make", KIcon::NoGroup, KIcon::SizeMedium ));
   QWhatsThis::add(makeOptions, i18n("This dialog is for setting your make options."));
+  QGridLayout *grid1 = new QGridLayout(makeOptions,7,3,15,7);
+
 
   m_print_debug_info = new QCheckBox( makeOptions, "m_print_debug_info" );
-  m_print_debug_info->setGeometry( 10, 20, 220, 25 );
+  grid1->addWidget( m_print_debug_info,0,0);
   m_print_debug_info->setFocusPolicy( QWidget::TabFocus );
   m_print_debug_info->setBackgroundMode( QWidget::PaletteBackground );
   m_print_debug_info->setFontPropagation( QWidget::NoChildren );
@@ -1016,7 +1025,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_print_debug_info->setAutoResize( FALSE );
 
   m_cont_after_error = new QCheckBox( makeOptions, "m_cont_after_error" );
-  m_cont_after_error->setGeometry( 240, 20, 190, 25 );
+  grid1->addWidget(  m_cont_after_error,0,1);
   m_cont_after_error->setFocusPolicy( QWidget::TabFocus );
   m_cont_after_error->setBackgroundMode( QWidget::PaletteBackground );
   m_cont_after_error->setFontPropagation( QWidget::NoChildren );
@@ -1026,7 +1035,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_cont_after_error->setAutoResize( FALSE );
 
   m_print_data_base = new QCheckBox( makeOptions, "m_print_data_base" );
-  m_print_data_base->setGeometry( 445, 20, 190, 25 );
+  grid1->addWidget( m_print_data_base,0,2);
   m_print_data_base->setFocusPolicy( QWidget::TabFocus );
   m_print_data_base->setBackgroundMode( QWidget::PaletteBackground );
   m_print_data_base->setFontPropagation( QWidget::NoChildren );
@@ -1036,7 +1045,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_print_data_base->setAutoResize( FALSE );
 
   m_env_variables = new QCheckBox( makeOptions, "m_env_variables" );
-  m_env_variables->setGeometry( 10, 50, 190, 25 );
+  grid1->addWidget( m_env_variables,1,0);
   m_env_variables->setFocusPolicy( QWidget::TabFocus );
   m_env_variables->setBackgroundMode( QWidget::PaletteBackground );
   m_env_variables->setFontPropagation( QWidget::NoChildren );
@@ -1046,7 +1055,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_env_variables->setAutoResize( FALSE );
 
   m_no_rules = new QCheckBox( makeOptions, "m_no_rules" );
-  m_no_rules->setGeometry( 240, 50, 190, 25 );
+  grid1->addWidget( m_no_rules,1,1);
   m_no_rules->setFocusPolicy( QWidget::TabFocus );
   m_no_rules->setBackgroundMode( QWidget::PaletteBackground );
   m_no_rules->setFontPropagation( QWidget::NoChildren );
@@ -1056,7 +1065,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_no_rules->setAutoResize( FALSE );
 
   m_touch_files = new QCheckBox( makeOptions, "m_touch_files" );
-  m_touch_files->setGeometry( 445, 50, 190, 25 );
+  grid1->addWidget(m_touch_files ,1,2);
   m_touch_files->setFocusPolicy( QWidget::TabFocus );
   m_touch_files->setBackgroundMode( QWidget::PaletteBackground );
   m_touch_files->setFontPropagation( QWidget::NoChildren );
@@ -1066,7 +1075,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_touch_files->setAutoResize( FALSE );
 
   m_ignor_errors = new QCheckBox( makeOptions, "m_ignor_errors" );
-  m_ignor_errors->setGeometry( 10, 80, 190, 25 );
+  grid1->addWidget(m_ignor_errors ,2,0);
   m_ignor_errors->setFocusPolicy( QWidget::TabFocus );
   m_ignor_errors->setBackgroundMode( QWidget::PaletteBackground );
   m_ignor_errors->setFontPropagation( QWidget::NoChildren );
@@ -1076,7 +1085,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_ignor_errors->setAutoResize( FALSE );
 
   m_silent_operation = new QCheckBox( makeOptions, "m_silent_operation" );
-  m_silent_operation->setGeometry( 240, 80, 190, 25 );
+  grid1->addWidget(m_silent_operation ,2,1);
   m_silent_operation->setFocusPolicy( QWidget::TabFocus );
   m_silent_operation->setBackgroundMode( QWidget::PaletteBackground );
   m_silent_operation->setFontPropagation( QWidget::NoChildren );
@@ -1086,7 +1095,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_silent_operation->setAutoResize( FALSE );
 
   m_print_work_dir = new QCheckBox( makeOptions, "m_print_work_dir" );
-  m_print_work_dir->setGeometry( 445, 80, 190, 25 );
+  grid1->addWidget( m_print_work_dir ,2,2);
   m_print_work_dir->setFocusPolicy( QWidget::TabFocus );
   m_print_work_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_print_work_dir->setFontPropagation( QWidget::NoChildren );
@@ -1095,8 +1104,12 @@ void CPrjOptionsDlg::addMakePage()
   m_print_work_dir->setAutoRepeat( FALSE );
 //  m_print_work_dir->setAutoResize( FALSE );
 
+
+  QGridLayout *grid2 = new QGridLayout(makeOptions,1,4,15,7);
+  grid1->addMultiCellLayout(grid2,3,3,0,2);
+
   m_job_number_label = new QLabel( makeOptions, "m_job_number_label" );
-  m_job_number_label->setGeometry( 10, 110, 100, 25 );
+  grid2->addWidget(m_job_number_label,0,0);
   m_job_number_label->setFocusPolicy( QWidget::NoFocus );
   m_job_number_label->setBackgroundMode( QWidget::PaletteBackground );
   m_job_number_label->setFontPropagation( QWidget::NoChildren );
@@ -1106,7 +1119,7 @@ void CPrjOptionsDlg::addMakePage()
   m_job_number_label->setMargin( -1 );
 
   m_job_number = new QSpinBox( makeOptions, "m_job_number" );
-  m_job_number->setGeometry( 130, 110, 50, 25 );
+  grid2->addWidget(m_job_number,0,1);
   m_job_number->setFocusPolicy( QWidget::StrongFocus );
   m_job_number->setBackgroundMode( QWidget::PaletteBackground );
   m_job_number->setFontPropagation( QWidget::NoChildren );
@@ -1121,7 +1134,7 @@ void CPrjOptionsDlg::addMakePage()
   m_job_number->setWrapping( FALSE );
 
   m_rebuild_label = new QLabel( makeOptions, "m_rebuild_label" );
-  m_rebuild_label->setGeometry( 200, 110, 250, 25 );
+  grid2->addWidget(m_rebuild_label,0,2);
   m_rebuild_label->setFocusPolicy( QWidget::NoFocus );
   m_rebuild_label->setBackgroundMode( QWidget::PaletteBackground );
   m_rebuild_label->setFontPropagation( QWidget::NoChildren );
@@ -1131,7 +1144,7 @@ void CPrjOptionsDlg::addMakePage()
   m_rebuild_label->setMargin( -1 );
 
   m_rebuild_combo = new QComboBox( makeOptions, "m_rebuild_label" );
-  m_rebuild_combo->setGeometry( 430, 110, 170, 25 );
+  grid2->addWidget(m_rebuild_combo,0,3);
   m_rebuild_combo->setFocusPolicy( QWidget::NoFocus );
   m_rebuild_combo->setBackgroundMode( QWidget::PaletteBase );
   m_rebuild_combo->setFontPropagation( QWidget::NoChildren );
@@ -1140,8 +1153,12 @@ void CPrjOptionsDlg::addMakePage()
   m_rebuild_combo->insertItem(i18n("only on modification"));
   m_rebuild_combo->insertItem(i18n("always rebuild"));
 
+
+  grid2 = new QGridLayout(makeOptions,3,3,15,7);
+  grid1->addMultiCellLayout(grid2,4,6,0,2);
+
   m_set_modify_label = new QLabel( makeOptions, "m_set_modify_label" );
-  m_set_modify_label->setGeometry( 10, 150, 100, 25 );
+  grid2->addWidget(m_set_modify_label,0,0);
   m_set_modify_label->setFocusPolicy( QWidget::NoFocus );
   m_set_modify_label->setBackgroundMode( QWidget::PaletteBackground );
   m_set_modify_label->setFontPropagation( QWidget::NoChildren );
@@ -1151,9 +1168,7 @@ void CPrjOptionsDlg::addMakePage()
   m_set_modify_label->setMargin( -1 );
 
   m_set_modify_line = new QLineEdit( makeOptions, "m_set_modify_line" );
-  m_set_modify_line->setGeometry( 130, 150, 430, 25 );
-//  m_set_modify_line->setMinimumSize( 0, 0 );
-//  m_set_modify_line->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(m_set_modify_line,0,1);
   m_set_modify_line->setFocusPolicy( QWidget::StrongFocus );
   m_set_modify_line->setBackgroundMode( QWidget::PaletteBase );
   m_set_modify_line->setFontPropagation( QWidget::NoChildren );
@@ -1164,9 +1179,7 @@ void CPrjOptionsDlg::addMakePage()
   m_set_modify_line->setFrame( TRUE );
 
   m_set_modify_dir = new QPushButton( makeOptions, "m_set_modify_dir" );
-  m_set_modify_dir->setGeometry( 570, 150, 30, 25 );
-//  m_set_modify_dir->setMinimumSize( 0, 0 );
-//  m_set_modify_dir->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(m_set_modify_dir,0,2);
   m_set_modify_dir->setFocusPolicy( QWidget::TabFocus );
   m_set_modify_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_set_modify_dir->setFontPropagation( QWidget::NoChildren );
@@ -1176,7 +1189,6 @@ void CPrjOptionsDlg::addMakePage()
 //  m_set_modify_dir->setAutoResize( FALSE );
 
   m_optional_label = new QLabel( makeOptions, "m_optional_label" );
-  m_optional_label->setGeometry( 10, 190, 115, 25 );
   m_optional_label->setFocusPolicy( QWidget::NoFocus );
   m_optional_label->setBackgroundMode( QWidget::PaletteBackground );
   m_optional_label->setFontPropagation( QWidget::NoChildren );
@@ -1184,11 +1196,10 @@ void CPrjOptionsDlg::addMakePage()
   m_optional_label->setText(i18n("additional options"));
   m_optional_label->setAlignment( 289 );
   m_optional_label->setMargin( -1 );
+  grid2->addWidget(m_optional_label,1,0);
 
   m_optional_line = new QLineEdit( makeOptions, "m_optional_line" );
-  m_optional_line->setGeometry( 130, 190, 470, 25 );
-//  m_optional_line->setMinimumSize( 0, 0 );
-//  m_optional_line->setMaximumSize( 32767, 32767 );
+  grid2->addMultiCellWidget( m_optional_line,1,1,1,2);
   m_optional_line->setFocusPolicy( QWidget::StrongFocus );
   m_optional_line->setBackgroundMode( QWidget::PaletteBase );
   m_optional_line->setFontPropagation( QWidget::NoChildren );
@@ -1199,7 +1210,7 @@ void CPrjOptionsDlg::addMakePage()
   m_optional_line->setFrame( TRUE );
 
   m_makestartpoint_label = new QLabel( makeOptions, "m_makestartpoint_label" );
-  m_makestartpoint_label->setGeometry( 10, 230, 100, 25 );
+  grid2->addWidget(m_makestartpoint_label,2,0);
   m_makestartpoint_label->setFocusPolicy( QWidget::NoFocus );
   m_makestartpoint_label->setBackgroundMode( QWidget::PaletteBackground );
   m_makestartpoint_label->setFontPropagation( QWidget::NoChildren );
@@ -1209,9 +1220,7 @@ void CPrjOptionsDlg::addMakePage()
   m_makestartpoint_label->setMargin( -1 );
 
   m_makestartpoint_line = new QLineEdit( makeOptions, "m_makestartpoint_line" );
-  m_makestartpoint_line->setGeometry( 130, 230, 430, 25 );
-//  m_makestartpoint_line->setMinimumSize( 0, 0 );
-//  m_makestartpoint_line->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(m_makestartpoint_line,2,1);
   m_makestartpoint_line->setFocusPolicy( QWidget::StrongFocus );
   m_makestartpoint_line->setBackgroundMode( QWidget::PaletteBase );
   m_makestartpoint_line->setFontPropagation( QWidget::NoChildren );
@@ -1222,9 +1231,7 @@ void CPrjOptionsDlg::addMakePage()
   m_makestartpoint_line->setFrame( TRUE );
 
   m_makestartpoint_dir = new QPushButton( makeOptions, "m_makestartpoint_dir" );
-  m_makestartpoint_dir->setGeometry( 570, 230, 30, 25 );
-//  m_makestartpoint_dir->setMinimumSize( 0, 0 );
-//  m_makestartpoint_dir->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(m_makestartpoint_dir,2,2);
   m_makestartpoint_dir->setFocusPolicy( QWidget::TabFocus );
   m_makestartpoint_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_makestartpoint_dir->setFontPropagation( QWidget::NoChildren );
@@ -1379,22 +1386,21 @@ void CPrjOptionsDlg::addMakePage()
 //
 void CPrjOptionsDlg::addBinPage()
 {
-  QFrame* binaryOptions = addPage(i18n("Binary"),  i18n("Binary Program to start"),
-		KGlobal::instance()->iconLoader()->loadIcon( "exec", KIcon::NoGroup, KIcon::SizeMedium ));
+  QFrame* binaryOptions = addPage(i18n("Binary"),  i18n("Binary Program to start"),KGlobal::instance()->iconLoader()->loadIcon( "exec", KIcon::NoGroup, KIcon::SizeMedium ));
+  QGridLayout *grid = new QGridLayout( binaryOptions ,3,1,15,7);
   QGroupBox* binary_box= new QGroupBox(binaryOptions,"binary_box");
-  binary_box->setGeometry(10,10,560,150);
-//  binary_box->setMinimumSize(0,0);
+  grid->addWidget(binary_box,0,0);
   binary_box->setTitle(i18n("Name"));
 
-  QLabel* binary = new QLabel(binaryOptions,"binary_label");
-  binary->setGeometry(30,40,500,30);
+ 
 //  binary->setMinimumSize(0,0);
+  
+  QGridLayout *grid1 = new QGridLayout( binary_box ,2,2,15,7);
+  QLabel* binary = new QLabel(binary_box,"binary_label");
   binary->setText(i18n("Path and Filename of binary:"));
-
-  binary_edit= new QLineEdit(binaryOptions,"binary_edit");
-  binary_edit->setGeometry(30,70,470,30);
-//  binary_edit->setMinimumSize(0,0);
-//  binary_edit->setMaxLength( 32767 );
+  grid1->addWidget(binary,0,0);
+  binary_edit= new QLineEdit(binary_box,"binary_edit");
+  grid1->addWidget(binary_edit,1,0);
 
   QString underDir=prj_info->pathToBinPROGRAM();
   if (underDir.isEmpty())
@@ -1409,10 +1415,9 @@ void CPrjOptionsDlg::addBinPage()
 
   binary_edit->setText(underDir+prj_info->getBinPROGRAM());
 
-  QPushButton* binary_button= new QPushButton(binaryOptions,"binary_button");
-  binary_button->setGeometry(510,70,30,30);
-//  binary_button->setMinimumSize(0,0);
+  QPushButton* binary_button= new QPushButton(binary_box,"binary_button");
   binary_button->setPixmap(SmallIcon("fileopen"));
+  grid1->addWidget(binary_button,1,1);
 
   QString binaryMsg = i18n("Set the path and filename of the binary that will be started on Run or Debug. "
             "Hint: Use a relative path starting from your project base directory to be location independent.");
