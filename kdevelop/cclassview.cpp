@@ -696,8 +696,8 @@ int CClassView::getTreeStrItem( const char *str, int pos, char *buf )
  *-----------------------------------------------------------------*/
 void CClassView::buildTree( const char *str )
 {
-	time_t lStart = time(NULL);
-	clock_t lStartClock = clock();
+//	time_t lStart = time(NULL);
+//	clock_t lStartClock = clock();
   uint pos=0;
   QListViewItem *root=NULL;
   QListViewItem *parent=NULL;
@@ -753,8 +753,8 @@ void CClassView::buildTree( const char *str )
     }
   }
   classesItem = root;
-  cout << "buildTree(str) took " << (time(NULL) - lStart) << "ms to complete" << endl;
-  cout << "buildTree(str) took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+//  cout << "buildTree(str) took " << (time(NULL) - lStart) << "ms to complete" << endl;
+//  cout << "buildTree(str) took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 
 }
 
@@ -841,8 +841,8 @@ void CClassView::asTreeStr(QString &str)
  *-----------------------------------------------------------------*/
 void CClassView::buildInitalClassTree()
 {
-	time_t start = time(NULL);
-	clock_t startClock = clock();
+//	time_t start = time(NULL);
+//	clock_t startClock = clock();
   QString str;
   CParsedClass *aPC;
   QListViewItem *folder;
@@ -916,8 +916,8 @@ void CClassView::buildInitalClassTree()
 //  project->setClassViewTree( str );
   //end modif
 
-  cout << "buildInitialClassTree took " << (time(NULL) - start) << " ms to complete" << endl;
-  cout << "buildInitialClassTree took " << (clock() - startClock) << " clock to complete" << endl;
+//  cout << "buildInitialClassTree took " << (time(NULL) - start) << " ms to complete" << endl;
+//  cout << "buildInitialClassTree took " << (clock() - startClock) << " clock to complete" << endl;
 }
 
 /*----------------------------------------- CClassView::createCTDlg()

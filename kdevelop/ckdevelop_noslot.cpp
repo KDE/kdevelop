@@ -395,8 +395,8 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::refreshTrees(QStrList * iFileList){
-	time_t lStart = time(NULL);
-	clock_t lStartClock = clock();
+//	time_t lStart = time(NULL);
+//	clock_t lStartClock = clock();
   doc_tree->refresh(prj);
   if (!project){
     return; // no project
@@ -432,11 +432,11 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
 	}
 	else
 	{
-		time_t lStart = time(NULL);
-		clock_t lStartClock = clock();
+//		time_t lStart = time(NULL);
+//		clock_t lStartClock = clock();
 		class_tree->refresh(prj);
-		cout << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
- 	 	cout << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+//		cout << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
+// 	 	cout << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 
 	}
 
@@ -473,8 +473,8 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
   }
   
   slotStatusMsg(i18n("Ready."));
-  cout << "refreshTree took " << (time(NULL) - lStart) << "ms to complete" << endl;
-  cout << "refrehTree took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+//  cout << "refreshTree took " << (time(NULL) - lStart) << "ms to complete" << endl;
+//  cout << "refrehTree took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 }
  
 /*------------------------------------------ CKDevelop::refreshTrees()
