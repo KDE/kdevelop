@@ -290,13 +290,23 @@ void AppWizardDialog::accept()
     if (fi.exists()) {
         KMessageBox::sorry(this, i18n("The directory you have chosen as location for "
                                       "the project already exists."));
-	showPage(generalPage);
+        showPage(generalPage);
         dest_edit->setFocus();
         return;
     }
 
     if (!fi.dir().exists()) {
-      KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist."));
+        // create dir if it doesn't exist
+        KShellProcess p("/bin/sh");
+        p.clearArguments();
+        p << "mkdirhier";
+        p << "\"" << dest_edit->text() << "\"";
+        p.start(KProcess::Block,KProcess::AllOutput);
+    }
+
+    // if dir still does not exist
+    if (!fi.dir().exists()) {
+      KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist and can not be created."));
       showPage(generalPage);
       dest_edit->setFocus();
       return;
