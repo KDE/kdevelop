@@ -276,7 +276,7 @@ public: // Methods to fetch project options
 
   QString getBinPROGRAM()     { return readGroupEntry( "Config for BinMakefileAm", "bin_program" ); }
 
-  QString getDirWhereMakeWillBeCalled() { return readGroupEntry( "General", "dir_where_make_will_be_called" ); }
+  QString getDirWhereMakeWillBeCalled(QString defaultStr);
 
   /** Fetch all groups in the logic file view. */
   void getLFVGroups(QStrList& groups);
