@@ -21,8 +21,6 @@
 #include "cclassview.h"
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
-#include <assert.h>
-
 
 /*********************************************************************
  *                                                                   *
@@ -154,7 +152,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
   if( dlg.exec() )
   {
     CParsedMethod *aMethod = dlg.asSystemObj();
-    aMethod->setDeclaredInClass( aClassName );
+    aMethod->setDeclaredInScope( aClassName );
 
     slotCVAddMethod( aClassName, aMethod );
 
@@ -320,7 +318,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
     return;
 
   aAttr = dlg.asSystemObj();
-  aAttr->setDeclaredInClass( aClassName );
+  aAttr->setDeclaredInScope( aClassName );
 
   if (bAutosave)
     saveTimer->start(saveTimeout);
@@ -764,7 +762,7 @@ CParsedClass *CKDevelop::CVGetClass( const char *className )
     aClass = class_tree->store->getClassByName( className );
 
     // If we found the class and it isn't a subclass we update the combo.
-    if( aClass != NULL && !aClass->isSubClass() )
+    if( aClass != NULL && !aClass->isSubClass )
       CVClassSelected( className );
   }
 
