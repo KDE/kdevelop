@@ -222,7 +222,14 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
 
 void PartController::showDocument(const KURL &url, const QString &context)
 {
-kdDebug(9000) << "SHOW: " << url.url() << " context=" << context << endl;
+  kdDebug(9000) << "SHOW: " << url.url() << " context=" << context << endl;
+
+  if ( url.isLocalFile() && KMimeType::findByURL(url)->name() != "text/html" ) {
+    // a link in a html-file pointed to a local text file - display
+    // it in the editor instead of a html-view to avoid uglyness
+    editDocument( url );
+    return;
+  }
 
   DocumentationPart *part = 0;
 
