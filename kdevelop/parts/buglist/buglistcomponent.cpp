@@ -27,7 +27,7 @@
 #include <kdialogbase.h>
 
 
-BugListComponent::BugListComponent (QObject *parent=0, const char *name=0)
+BugListComponent::BugListComponent (QObject *parent, const char *name)
 : KDevComponent(parent, name)
 {
     setInstance(BugListFactory::instance());

@@ -107,7 +107,7 @@ const QDate BugEdit::QStringToDate (QString InputString)
     return OutputDate;
 }
 
-BugEdit::BugEdit (QWidget * parent=0, const char * name=0, Bug * pBug = 0, bool AddItem = TRUE, bool modal=FALSE, WFlags f=0)
+BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem, bool modal, WFlags f)
 : QTabDialog (parent, name, modal)
 {
     int     Count;
