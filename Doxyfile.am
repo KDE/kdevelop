@@ -96,6 +96,8 @@ apidox-am-yes:
 					tagpath=`ls -1 $(kde_htmldir)/en/*-apidocs/$$tag/$$tag.tag 2> /dev/null` ;\
 					if test -n "$$tagpath"; then \
 						path=`echo $$tagpath | sed -e "s,.*/\([^/]*-apidocs\)/$$tag/$$tag.tag,../../\1/$$tag,"` ;\
+					else \
+						tagpath=/home/apidox/public/cvs-api/$$tag/$$tag.tag ;\
 					fi ;\
 				fi ;\
 				if test "$$tag" = qt; then \
