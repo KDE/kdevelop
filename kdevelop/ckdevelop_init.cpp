@@ -1333,12 +1333,7 @@ void CKDevelop::initConnections()
 
 void CKDevelop::completeStartup( bool loadLastProject )
 {
-  CProject* pProj = initProject(loadLastProject);
-  QApplication::sendPostedEvents();
-
-  if (pProj != 0L) {
-    projectOpenCmdl_Part2(pProj);
-  }
+  initProject(loadLastProject);
 
   config->setGroup("TipOfTheDay");
   if( !kapp->isRestored())
@@ -1367,7 +1362,7 @@ CProject* CKDevelop::initProject( bool loadLastProject )
     return 0;
 
   config->setGroup("Files");
-  return projectOpenCmdl_Part1( config->readEntry("project_file","") );
+  slotOpenProject( KURL( config->readEntry("project_file","") ) );
 }
 
 void CKDevelop::setKeyAccel()

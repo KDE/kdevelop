@@ -251,13 +251,6 @@ public:
 
   /** shared helper method for slotViewTTreeView and slotViewTOutputView */
   void toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolViewCoverList);
-  /** First part of opening a .kdevprj project from file using prjfile as filename.
-   *  Between part 1 and 2 we can place other stuff
-   *  (e.g.: as it is needed during KDevelop's startup)
-   */
-  CProject* projectOpenCmdl_Part1(QString prjfile);
-  /** Second part of opening a .kdevprj project from file using prjfile as filename. */
-  void projectOpenCmdl_Part2(CProject* pProj);
 
   // code completion support
   void setAutomaticCompletion( bool );
@@ -270,6 +263,8 @@ public:
 
   void enableCommand(int id_);
   void disableCommand(int id_);
+
+  void slotOpenProject( const KURL& url );
 
   ////////////////////////
   // FILE-Menu entries

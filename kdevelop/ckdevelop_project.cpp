@@ -76,8 +76,16 @@
 
 bool CKDevelop::slotProjectClose()
 {
-  // R.Nolden 03.02.99
+  if( !project )
+    return true;
+
   slotStatusMsg(i18n("Closing project..."));
+  
+  if( !m_docViewManager->doProjectClose() ) {
+    slotStatusMsg(i18n("Ready."));
+    return false;
+  }
+
   log_file_tree->storeState(prj);
 
   // save the session
@@ -87,59 +95,34 @@ bool CKDevelop::slotProjectClose()
   sessionFileName = sessionFileName.left( sessionFileName.length() - 7);
   sessionFileName += "kdevses";
   m_pKDevSession->saveToFile(sessionFileName);
+  prj->writeProject();
 
-  bool bCloseProj = m_docViewManager->doProjectClose();
+  class_tree->clear();
+  log_file_tree->clear();
+  real_file_tree->clear();
+  messages_widget->clear();
+  stdin_stdout_widget->clear();
+  stderr_widget->clear();
+  file_open_popup->clear();
+  file_open_list.clear();
 
-  if (bCloseProj)
-    {
-      // cancel wasn't pressed and all sources are saved - project closed
-      // clear all widgets
-      
-      class_tree->clear();
-      log_file_tree->clear();
-      real_file_tree->clear();
-      // menu_buffers->clear();
-      
-      messages_widget->clear();
-      stdin_stdout_widget->clear();
-      stderr_widget->clear();
-      
-      if (dbgController)
-        slotDebugStop();
-      
-      //clear all edit_infos before starting a new project
-      // edit_infos.clear(); now in doProjectClose (Christian)
+  if (dbgController)
+    slotDebugStop();
 
-//      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-//      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
-//      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+  m_docViewManager->doCloseAllDocs();
 
-      // close all documents
-              m_docViewManager->doCloseAllDocs();
+  stateChanged("project_open",StateReverse);
 
-      // set project to false and disable all ID_s related to project=true    
-      prj->writeProject();
-      project=false;
-      //    prj->valid = false;   wtf!!!!
-      delete prj;
-      prj = 0;
+  project=false;
+  delete prj;
+  prj = 0;
 
-      stateChanged("project_open",StateReverse);
-
-      file_open_popup->clear();
-      file_open_list.clear();
-    }
-
-  slotStatusMsg(i18n("Ready."));
   refreshTrees();
-
-  if (bCloseProj) {
-    setMainCaption();
-  }
   
-  return bCloseProj; // false if pressed cancel
+  setMainCaption();
+  
+  return true;
 }
-
 
 void CKDevelop::slotProjectAddNewFile(){
   newFile(true);
@@ -559,130 +542,94 @@ void CKDevelop::slotShowFileProperties(const QString& rel_name){
 
 void CKDevelop::slotProjectOpen()
 {
-  QString old_project = "";
+  if( !slotProjectClose() )
+    return;
 
   slotStatusMsg(i18n("Opening project..."));
-  QString str;
-// --- changed by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
+
   config->setGroup("General Options");
   QString defDir=config->readEntry("ProjectDefaultDir", QDir::homeDirPath());
-  str = KFileDialog::getOpenFileName( defDir, "*.kdevprj");
 
-  CProject* pProj = projectOpenCmdl_Part1(str);
-  if (pProj != 0L) {
-    projectOpenCmdl_Part2(pProj);
-    // later we will change the whole project business to work on KURLs instead
-    // then this can be removed (rokrau 02/17/02)
-    KURL url;
-    url.setPath(str);
-    pRecentProjects->addURL(url);
-  }
+  slotOpenProject( KFileDialog::getOpenURL( defDir, "*.kdevprj") );
 }
 
-void CKDevelop::slotProjectOpenRecent(const KURL& url)
+void CKDevelop::slotProjectOpenRecent( const KURL& url )
 {
-        kdDebug() << "in CKDevelop::slotProjectOpenRecent(), selected :"
-                  << url.path() << "\n";
+  if( !slotProjectClose() )
+    return;
 
-//  QString proj = getProjectAsString(id);
-// FIXME until we use KURLs to open projects we need to stick with this
-// quirky code... (rokrau 02/17/02)
-  QString proj = url.path();
-
-  if (QFile::exists(proj)) {
-    CProject* pProj = projectOpenCmdl_Part1(proj);
-    if (pProj != 0L) {
-      projectOpenCmdl_Part2(pProj);
-      pRecentProjects->addURL(url);
-    }
-//    shuffleProjectToTop(id);
-  } else {
-    int answer=KMessageBox::questionYesNo(this,i18n("This project does no longer exist. Do you want to remove it from the list?"),
-                                            i18n("File not Found: ") + proj);
-    if (answer==KMessageBox::Yes) {
+  // FIXME: Remote Files?
+  if( !QFile::exists(url.path()) ) {
+    if( KMessageBox::Yes == KMessageBox::questionYesNo(
+          this, i18n( "This project no longer exists. "
+                      "Do you want to remove it from the list?"),
+          i18n("File not Found: %1").arg( url.url() ) ) )
       pRecentProjects->removeURL(url);
-//      recent_projects_menu->removeItem(id);
-
-    }
+    return;
   }
-}
-// however split this method should be kicked in the arse
-CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
-{
-  prjname.replace(QRegExp("file:"),"");
-  QFileInfo info(prjname);
 
-  //if the new project file is not valid, do nothing
+  slotOpenProject( url );
+}
+
+void CKDevelop::slotOpenProject( const KURL& url )
+{
+  if( !slotProjectClose() )
+    return;
+
+  kdDebug() << "CKDevelop::slotOpenProject(): " << url.prettyURL() << endl;
+
+  QString prjname = url.path();
+
+  QFileInfo info( prjname );
+
+  // if the new project file is not valid, do nothing
   if (!info.isFile())
-    return 0L;
+    return;
 
   // Make sure we have the right permissions to read and write to the prj file
-  if (!(info.isWritable() && info.isReadable()))
-  {
-    KMessageBox::error(0,
-      i18n("Unable to read the project file because you\n"
-      "do not have read/write permissions for this project"),
-      prjname);
-    return 0L;
-  }
+  if (!(info.isWritable() && info.isReadable())) {
+    KMessageBox::error( this,
+      i18n("Unable to open \"%1\" because you do not have "
+           "read/write permissions for this file.").arg( url.prettyURL() ),
+      i18n("Permission Denied") );
 
-//  project_menu->setEnabled(false);
-//  disableCommand(ID_PROJECT_OPEN);
-//  accel->setEnabled(false);
-
-  QString old_project;
-  if (project)
-  {
-    if (prj)
-      old_project = prj->getProjectFile();
-    //the user may have pressed cancel in which case we want to reload
-    // the old project
-    if (!slotProjectClose())
-      prjname = old_project; // just reset the prjname to the old one
-  }
-  CProject* pProj = prepareToReadProjectFile(prjname);
-  if (pProj != 0L) {
-    // first restore the project session stored in a .kdevses file
-    QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
-    projSessionFileName += "kdevses"; // suffix for a KDeveop session file
-    if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
-      debug("error during restoring of the KDevelop session !\n");
-    }
-    else{ //fill in the configs into the toolbar
-      KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
-      compile_combo->clear();
-      QStringList configs=m_pKDevSession->getCompileConfigs();
-      configs.prepend(i18n("(Default)"));
-      compile_combo->insertStringList(configs);
-      compile_combo->setEnabled(true);
-      int idx = configs.findIndex(m_pKDevSession->getLastCompile());
-      if(idx==-1)
-        idx=configs.findIndex(i18n("(Default)"));
-      compile_combo->setCurrentItem(idx);
-    }
-    return pProj; // but it's unfinished here, we will call projectOpenCmdl_Part2 later
-  }
-  else {
-    KMessageBox::error(0,
-    i18n("This does not appear to be a valid or\n"
-      "supported kdevelop project file"),
-      prjname);
-
-    // enable the GUI again
-//                stateChanged("no_file");
-//                stateChanged("no_project");
-
-//    project_menu->setEnabled(true);
-//    enableCommand(ID_PROJECT_OPEN);
-//    accel->setEnabled(true);
     slotStatusMsg(i18n("Ready."));
+    return;
   }
-  return 0L;
-}
 
-/** actually loading the project */
-void CKDevelop::projectOpenCmdl_Part2(CProject* pProj)
-{
+  CProject* pProj = prepareToReadProjectFile( url.path() );
+
+  if( !pProj ) {
+   KMessageBox::error( this,
+    i18n("\"%1\" is not a valid KDevelop project file.").arg( url.prettyURL() ),
+    i18n("Invalid Project") );
+
+    slotStatusMsg(i18n("Ready."));
+    return;
+  }
+
+  // first restore the project session stored in a .kdevses file
+  QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
+  projSessionFileName += "kdevses"; // suffix for a KDeveop session file
+  if( !m_pKDevSession->restoreFromFile(projSessionFileName) ) {
+    debug("error during restoring of the KDevelop session !\n");
+    slotStatusMsg(i18n("Ready."));
+    return;
+  }
+
+  // fill in the configs into the toolbar
+  KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+  compile_combo->clear();
+  QStringList configs=m_pKDevSession->getCompileConfigs();
+  configs.prepend(i18n("(Default)"));
+  compile_combo->insertStringList(configs);
+  compile_combo->setEnabled(true);
+  int idx = configs.findIndex(m_pKDevSession->getLastCompile());
+  if(idx==-1) {
+    idx=configs.findIndex(i18n("(Default)"));
+    compile_combo->setCurrentItem(idx);
+  }
+
   // now parse the .kdevprj file
   readProjectFile(pProj->getProjectFile(), pProj);
   slotViewRefresh();
@@ -695,6 +642,9 @@ void CKDevelop::projectOpenCmdl_Part2(CProject* pProj)
   stateChanged("project_open");
 
   slotStatusMsg(i18n("Ready."));
+
+  pRecentProjects->addURL(url);
+//  shuffleProjectToTop(id);
 }
 
 void CKDevelop::slotProjectNewAppl(){
@@ -860,28 +810,6 @@ void CKDevelop::slotProjectGenerate()
   next_job="load_new_prj";
 }
 
-// This is no longer being used - remove
-//void  CKDevelop::slotProjectWorkspaces(int id){
-//  if(project_menu->isItemChecked(id)){
-//    return; // we are already in this workspace
-//  }
-//  saveCurrentWorkspaceIntoProject();
-//
-//  // and now the new workspace
-//  switch(id){
-//  case ID_PROJECT_WORKSPACES_1:
-//    switchToWorkspace(1);
-//    break;
-//  case ID_PROJECT_WORKSPACES_2:
-//    switchToWorkspace(2);
-//    break;
-//  case ID_PROJECT_WORKSPACES_3:
-//    switchToWorkspace(3);
-//    break;
-//  }
-//
-//}
-//
 void CKDevelop::slotProjectAddNewTranslationFile(){
   CAddNewTranslationDlg dlg(this,0,prj);
   QString file;
@@ -1509,12 +1437,6 @@ void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
   // the whole Workspace concept was never really implemented I suppose
   // so let's mark it for removal
   //switchToWorkspace(prj->getCurrentWorkspaceNumber());
-  // set the menus enable
-  // file menu
-  
-  enableCommand(ID_FILE_NEW);
-  KAction* pFileNewAction = actionCollection()->action("file_new");
-  pFileNewAction->setEnabled(true);
 
   // doc menu
   enableCommand(ID_HELP_PROJECT_API);
@@ -1555,7 +1477,6 @@ void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
     enableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
     enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
   }
-  //addRecentProject(file);
 }
 
 
