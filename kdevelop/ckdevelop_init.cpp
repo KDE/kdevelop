@@ -799,7 +799,7 @@ void CKDevelop::initStatusBar(){
   statusBar()->changeItem("", ID_STATUS_LN_CLM);
 
   statusBar()->insertItem(i18n(" INS "), ID_STATUS_INS_OVR);
-  statusBar()->insertItem(i18n(" CAPS "), ID_STATUS_CAPS);
+//  statusBar()->insertItem(i18n(" CAPS "), ID_STATUS_CAPS);
   statusBar()->insertItem(i18n("yyyyyyyyyyyyyy"),ID_STATUS_EMPTY_2);
   statusBar()->changeItem("", ID_STATUS_EMPTY_2);
 
