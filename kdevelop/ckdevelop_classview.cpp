@@ -178,7 +178,8 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
   }
 
   // Switch to the .h file.
-  CVGotoDefinition( aClass->name, NULL, THCLASS );  
+  //CVGotoDefinition( aClass->name, NULL, THCLASS );
+	switchToFile( aClass->declaredInFile );
 
   aMethod->asHeaderCode( toAdd );
 
@@ -210,7 +211,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
   edit_widget->toggleModified( true );
 
   // Switch to the .cpp file.
-  switchToFile( aClass->declaredInFile );
+  switchToFile( aClass->definedInFile );
 
   // Add the code to the file.
   aMethod->asCppCode( toAdd );
@@ -643,6 +644,7 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
       methodCombo->setCurrentItem( i );
   }
 }
+
 
 
 

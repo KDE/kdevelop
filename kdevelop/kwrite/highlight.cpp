@@ -291,6 +291,22 @@ const char *HlFloat::checkHgl(const char *s) {
   if (b) return s; else return 0L;
 }
 
+HlCSymbol::HlCSymbol(int attribute, int context)
+  : HlItemWw(attribute,context) {
+}
+
+bool isCSymbol(char c) {
+  static char data[] = {255,255,255,255,28,128,255,3,255,255,255,151,255,255,255,7};
+  if (c & 128) return false;
+  return !(data[c >> 3] & (1 << (c & 7)));
+}
+
+const char *HlCSymbol::checkHgl(const char *str) {
+  const char *s = str;
+  while ( isCSymbol(*s) ) s++;
+  if (s > str) return s;
+  return 0L;
+}
 
 HlCInt::HlCInt(int attribute, int context)
   : HlInt(attribute,context) {
@@ -999,10 +1015,10 @@ int GenHighlight::doHighlight(int ctxNum, TextLine *textLine) {
   s1 = str;
   while (*s1) {
     for (item = context->items.first(); item != 0L; item = context->items.next()) {
-      if (item->startEnable(lastChar)) {
+      if (item->startEnable(lastChar) || isCSymbol(*s1)) {
         s2 = item->checkHgl(s1);
         if (s2 > s1) {
-          if (item->endEnable(*s2)) {
+          if (item->endEnable(*s2) || isCSymbol(*s1)) {
             textLine->setAttribs(item->attr,s1 - str,s2 - str);
             ctxNum = item->ctx;
             context = contextList[ctxNum];
@@ -1063,6 +1079,7 @@ void CHighlight::createItemData(ItemDataList &list) {
   list.append(new ItemData("Comment",dsComment));
   list.append(new ItemData("Preprocessor",dsOthers));
   list.append(new ItemData("Prep. Lib",dsOthers,darkYellow,yellow,false,false));
+  list.append(new ItemData("Symbol",dsNormal));
 }
 
 void CHighlight::makeContextList() {
@@ -1071,6 +1088,7 @@ void CHighlight::makeContextList() {
 
   //normal context
   contextList[0] = c = new HlContext(0,0);
+    c->items.append(new HlCSymbol(13,0));
     c->items.append(keyword = new HlKeyword(1,0));
     c->items.append(dataType = new HlKeyword(2,0));
     c->items.append(new HlCFloat(6,0));

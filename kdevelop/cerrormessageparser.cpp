@@ -57,7 +57,7 @@ void  CErrorMessageParser::parseInSgml2HtmlMode(QString* sgmloutput,QString sgml
   QRegExp error_reg(":*:[0-9]*:*:"); // is it an error line for sgml2html?, I hope it works
   
   for(str = outputlist.first();str != 0;str = outputlist.next()){
-    makeoutputline++;
+    //    makeoutputline++;
     if((pos1=error_reg.match(str)) != -1){ // error ?
       pos2 = str.find(':',pos1+1);
       error_str = str.mid(pos1+1,pos2-pos1-1);
@@ -71,6 +71,7 @@ void  CErrorMessageParser::parseInSgml2HtmlMode(QString* sgmloutput,QString sgml
 	m_info_list.append( error_info);
       }
     }
+    makeoutputline++;
   }
   out();
 //  cerr << endl << endl << ":::::::::";
@@ -115,7 +116,7 @@ void CErrorMessageParser::parseInMakeMode(QString* makeoutput,QString startdir){
   QString error_str;
 
   for(str = outputlist.first();str != 0;str = outputlist.next()){
-    makeoutputline++;
+    //    makeoutputline++;
     //enter directory
     if((pos1=enter_reg.match(str)) != -1){
       // extract the enter directory
@@ -167,6 +168,7 @@ void CErrorMessageParser::parseInMakeMode(QString* makeoutput,QString startdir){
 	
       }
     }
+    makeoutputline++;
   } //  end for outputlist
 }
 

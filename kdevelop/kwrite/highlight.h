@@ -98,6 +98,12 @@ class HlFloat : public HlItemWw {
     virtual const char *checkHgl(const char *);
 };
 
+class HlCSymbol : public HlItemWw {
+  public:
+    HlCSymbol(int attribute, int context);
+    virtual const char *checkHgl(const char *);
+};
+
 class HlCInt : public HlInt {
   public:
     HlCInt(int attribute, int context);

@@ -253,11 +253,11 @@ void KDlgPropertyBase::fillWithStandardEntrys()
   addProp("IsEnabled",          "",             "General",        ALLOWED_BOOL);
 
   addProp("VarName",            "",             "C++ Code",       ALLOWED_VARNAME);
-  addProp("Connections",        "",             "C++ Code",       ALLOWED_CONNECTIONS);
+  //  addProp("Connections",        "",             "C++ Code",       ALLOWED_CONNECTIONS);
   addProp("ResizeToParent",     "",             "C++ Code",       ALLOWED_BOOL);
   addProp("AcceptsDrops",       "",             "C++ Code",       ALLOWED_BOOL);
   addProp("HasFocus",           "",             "C++ Code",       ALLOWED_BOOL);
-  addProp("FocusProxy",         "",             "C++ Code",       ALLOWED_STRING);
+  //  addProp("FocusProxy",         "",             "C++ Code",       ALLOWED_STRING);
 
   addProp("X",                  "10",           "Geometry",       ALLOWED_INT);
   addProp("Y",                  "10",           "Geometry",       ALLOWED_INT);

@@ -1,5 +1,25 @@
-# KDE Config File
-[KDE Desktop Entry]
-Name=KDevelop
-Icon=package.xpm
-MiniIcon=package.xpm
+[Desktop Entry]
+Name=Development
+Name[cs]=Vývojové nástroje
+Name[da]=Udvikling
+Name[de]=Entwicklung
+Name[eo]=Programado
+Name[es]=Desarrollo
+Name[fi]=Kehitystyökalut
+Name[fr]=Développement
+Name[hr]=Razvoj
+Name[hu]=Fejlesztés
+Name[is]=Þróun
+Name[it]=Sviluppo
+Name[ja]=³«È¯
+Name[no]=Utvikling
+Name[pl]=Narzêdzia programistów
+Name[pt]=Desenvolvimento
+Name[pt_BR]=Desenvolvimento
+Name[ro]=Dezvoltare
+Name[ru]=òÁÚÒÁÂÏÔËÁ
+Name[sk]=Vývoj
+Name[sl]=Razvoj
+Name[sv]=Utveckling
+Icon=development_package.xpm
+MiniIcon=development_package.xpm

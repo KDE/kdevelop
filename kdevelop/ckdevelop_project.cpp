@@ -993,7 +993,7 @@ bool CKDevelop::readProjectFile(QString file){
   }
   if(prj->isCustomProject()){
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
-    disableCommand(ID_PROJECT_OPTIONS);
+    enableCommand(ID_PROJECT_OPTIONS);
   }
   else{
     enableCommand(ID_PROJECT_FILE_PROPERTIES);

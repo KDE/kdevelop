@@ -966,7 +966,7 @@ void KDlgEdit::generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QS
     props->dumpBoolPropCall(stream, "setDefault", "isDefault", false);
     props->dumpBoolPropCall(stream, "setAutoDefault", "isAutoDefault", false);
     props->dumpBoolPropCall(stream, "setToggleButton", "isToggleButton", false);
-    props->dumpBoolPropCall(stream, "setToogledOn", "isToogledOn", false);
+    props->dumpBoolPropCall(stream, "setToggledOn", "isToggledOn", false);
     props->dumpBoolPropCall(stream, "setIsMenuButton", "isMenuButton", false);
     props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
     props->dumpBoolPropCall(stream, "setAutoRepeat", "isAutoRepeat", false);

@@ -1,8 +1,7 @@
 /***************************************************************************
                           cupdatekdedocdlg.cpp  -  description                              
                              -------------------                                         
-
-    version              :                                   
+         
     begin                : Mon Nov 9 1998                                           
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -260,7 +259,8 @@ void CUpdateKDEDocDlg::OK(){
   if(!QFileInfo(kde_testfile).exists()){
     KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path for the KDE-Libs does not\n"
 									 "lead to the KDE Libraries. Please choose the\n"
-									 "correct path."),KMsgBox::EXCLAMATION);
+									 "correct path.This is where you have unpacked\n"
+									 "e.g. a kdelibs snapshot a la /snapshot/kdelibs."),KMsgBox::EXCLAMATION);
     return;
   }
   

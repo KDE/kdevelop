@@ -1,3 +1,9 @@
+1999-07-26  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* commit patch by Gordon Tyler <gtyler@iafrica.com> (fixed some errormessage-parser problems)
+	* commit patch by Huy Cuong Nguyen <huyc@iquebec.com> (syntax highlighting in kwrite)
+	* commit patch by John R. Zedlewski <zedlwski@princeton.edu> (fixed function adding bug)
+	* bugfix in sourcecode generation (kdlgedit): Bugreport ID : 19:15,16.07.99
+
 1999-07-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Use KDELIBS_DOCDIR and QT_DOCDIR as defaults everywhere
 	* Fixed relative path of user manual

@@ -13,7 +13,7 @@
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # just set the variable
-APPSDIR = $(kde_appsdir)/Development
+APPSDIR = $(kde_appsdir)
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
@@ -85,10 +85,10 @@ messages:
 # don't install a list of file. Just one file per install.
 # if you have more of them, create a subdirectory with an extra Makefile 
 install-data-local: 
-	$(mkinstalldirs) $(APPSDIR)/kdevelop
-	$(INSTALL_DATA) kdevelop.kdelnk $(APPSDIR)/kdevelop
-	$(INSTALL_DATA) kdevelop-setup.kdelnk $(APPSDIR)/kdevelop
-	$(INSTALL_DATA) .directory $(APPSDIR)/kdevelop
+	$(mkinstalldirs) $(APPSDIR)/Development
+	$(INSTALL_DATA) kdevelop.kdelnk $(APPSDIR)/Development
+	$(INSTALL_DATA) kdevelop-setup.kdelnk $(APPSDIR)/Development
+	$(INSTALL_DATA) .directory $(APPSDIR)/Development
 	$(mkinstalldirs) $(kde_icondir)
 	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)
 	$(INSTALL_DATA) kdevelop-project.xpm $(kde_icondir)	
@@ -101,7 +101,8 @@ install-data-local:
 
 # remove ALL you have installed in install-data-local or install-exec-local
 uninstall-local:
-	-rm -f $(APPSDIR)/kdevelop.kdelnk
+	-rm -f $(APPSDIR)/Development/kdevelop.kdelnk
+	-rm -f $(APPSDIR)/Development/kdevelop-setup.kdelnk
 	-rm -f $(kde_icondir)/kdevelop.xpm
 	-rm -f $(kde_minidir)/kdevelop.xpm
 
