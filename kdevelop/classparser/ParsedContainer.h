@@ -104,7 +104,7 @@ class CParsedContainer : public CParsedItem
 {
 public: // Constructor and destructor
 
-  CParsedContainer(bool autodel=true);
+  CParsedContainer();
   ~CParsedContainer();
 
 protected: // Private attributes
@@ -244,7 +244,7 @@ public: // Public methods
   void removeStruct( const char *aName );
 
   /** Clear the internal state. */
-  void clear();
+  void clear(bool bAutoDel=true);
 
 public: // Implementation of virtual methods
 
