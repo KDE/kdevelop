@@ -1,2 +1,2 @@
 METASOURCES = AUTO
-SUBDIRS = automake custom
+SUBDIRS = automake custom qmake

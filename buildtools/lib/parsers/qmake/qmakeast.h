@@ -72,7 +72,7 @@ public:
     int depth() const { return m_depth; }
     /**@return The indentation string based on node depth.*/
     virtual QString indentation();
-    
+        
 protected:
     NodeType m_nodeType;
     QValueList<AST*> m_children;
@@ -101,7 +101,8 @@ public:
     enum Kind { 
         Project        /**<Project*/, 
         Scope          /**<Scope*/, 
-        FunctionScope  /**<FunctionScope*/
+        FunctionScope  /**<FunctionScope*/,
+        Empty          /**<Project does not exist, the AST is empty*/
     };
     
     /**Constructs a project node of given @p kind.*/
@@ -116,6 +117,8 @@ public:
     bool isScope() const { return m_kind == Scope; }
     /**@return true if this node is a function scope.*/
     bool isFunctionScope() const { return m_kind == FunctionScope; }
+    /**@return true if this node is empty.*/
+    bool isEmpty() const { return m_kind == Empty; }
     
     /**Scoped identifier (scope name or function name).*/
     QString scopedID;

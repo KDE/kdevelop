@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=KDevQMakeEditor
+Comment=Imports and edits qmake projects
+Icon=gear
+X-KDevelop-Version=3
+ServiceTypes=KDevelop/ProjectImporter
+X-KDevelop-ProjectImporter=
+X-KDE-Library=libqmakeimporter

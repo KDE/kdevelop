@@ -20,6 +20,11 @@
 #ifndef QMAKEQMAKEDRIVER_H
 #define QMAKEQMAKEDRIVER_H
 
+#include "qmakeast.h"
+
+#include <qvaluelist.h>
+#include <kurl.h>
+
 namespace QMake {
 
 /**
@@ -41,7 +46,24 @@ public:
     @return The result of parsing. Result is 0 on success and <> 0 on failure.
     */
     static int parseFile(const char *fileName, ProjectAST **ast);
-
+    static int parseFile(QString fileName, ProjectAST **ast);
+    static int parseFile(KURL fileName, ProjectAST **ast);
+    
+/*    template<class Op>
+    static void walkAST(Op &op, const ProjectAST *ast)
+    {
+//         op(ast);
+        for (QValueList<QMake::AST*>::const_iterator it = ast->statements.constBegin();
+                it != ast->statements.constEnd(); ++it)
+        {
+            const AST *child = *it;
+            if (child->nodeType() == AST::ProjectAST)
+                walkAST<Op>(op, static_cast<const QMake::ProjectAST*>(child));
+            else
+                op(child);
+        }
+    }
+*/
 };
 
 }

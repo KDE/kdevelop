@@ -282,6 +282,7 @@ ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
     m_listView->addColumn(QString::null);
     m_listView->setRootIsDecorated(QListView::LastColumn);
     m_listView->setResizeMode(QListView::LastColumn);
+    m_listView->setSorting(-1);
     
     connect(m_listView, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));
     connect(m_listView, SIGNAL(executed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));    
@@ -434,7 +435,12 @@ void ProjectViewItem::setup()
         if (ProjectWorkspaceDom workspace = dom()->toWorkspace())
             setPixmap(0, SmallIcon("window"));
         else if (ProjectFolderDom folder = dom()->toFolder())
-            setPixmap(0, SmallIcon("folder"));
+        {
+            if (dom()->hasAttribute("Icon"))
+                setPixmap(0, SmallIcon(dom()->attribute("Icon").toString()));
+            else
+                setPixmap(0, SmallIcon("folder"));
+        }
         else if (ProjectTargetDom target = dom()->toTarget())
             setPixmap(0, SmallIcon("target_kdevelop"));
         else if (ProjectFileDom file = dom()->toFile())

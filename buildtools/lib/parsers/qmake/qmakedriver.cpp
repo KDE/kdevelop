@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <qvaluestack.h>
+#include <kio/netaccess.h>
 
 extern FILE *yyin, *yyout;
 extern int yyparse();
@@ -42,6 +43,21 @@ int Driver::parseFile(const char *fileName, ProjectAST **ast)
     int ret = yyparse();
     *ast = projects.top();
     fclose(yyin);
+    return ret;
+}
+
+int Driver::parseFile(QString fileName, ProjectAST **ast)
+{
+    return parseFile(fileName.ascii(), ast);
+}
+
+int Driver::parseFile(KURL fileName, ProjectAST **ast)
+{
+    QString tmpFile;
+    int ret = 0;
+    if (KIO::NetAccess::download(fileName, tmpFile, 0))
+        ret = parseFile(tmpFile, ast);
+    KIO::NetAccess::removeTempFile(tmpFile);
     return ret;
 }
 

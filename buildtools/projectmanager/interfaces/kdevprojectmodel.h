@@ -200,6 +200,12 @@ private:
     friend class ProjectModel;
 };
 
+/**
+Project Folder Model.
+
+Special attributes:
+- <b>Icon</b>: The name of the icon to load instead of default folder icon.
+*/
 class ProjectFolderModel: public ProjectModelItem
 {
     typedef ProjectFolderDom Ptr;
