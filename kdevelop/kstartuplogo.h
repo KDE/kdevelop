@@ -31,6 +31,10 @@ class KStartupLogo : public QWidget  {
 public: 
 	KStartupLogo(QWidget *parent=0, const char *name=0);
 	~KStartupLogo();
+	void setHideEnabled(bool bEnabled) { m_bReadyToHide = bEnabled; };
+protected:
+  virtual void mousePressEvent( QMouseEvent*);
+  bool m_bReadyToHide;
 };
 
 #endif

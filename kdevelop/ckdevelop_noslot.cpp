@@ -836,7 +836,7 @@ void CKDevelop::readOptions()
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
     if (config->readBoolEntry("show_statusbar",true))
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
-    if (config->readBoolEntry("show_mdi_view_taskbar",true))
+    if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isVisible()))
     view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
 
   // read setting whether to use the ctags search database

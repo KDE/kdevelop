@@ -181,10 +181,11 @@ int main(int argc, char* argv[])
   CKDevelop* kdevelop = new CKDevelop();
   a.setMainWidget(kdevelop);
 
-  if (start_logo)
-      start_logo->raise();
-  QApplication::flushX();
-
+  if (start_logo) {
+    start_logo->raise();
+    start_logo->setHideEnabled(true);
+    QApplication::flushX();
+  }
   kdevelop->completeStartup(args->count() == 0);
 
   if (start_logo)
