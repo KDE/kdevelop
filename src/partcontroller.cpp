@@ -54,6 +54,9 @@
 #include "urlutil.h"
 #include "mimewarningdialog.h"
 
+#include "designer.h"
+#include "kdevlanguagesupport.h"
+
 #include "partcontroller.h"
 
 PartController *PartController::s_instance = 0;
@@ -321,7 +324,7 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 	
 	// we generally prefer embedding, but if Qt-designer is the preferred application for this mimetype
 	// make sure we launch designer instead of embedding KUIviewer
-	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
+/*	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
 	{
 		KService::Ptr preferredApp = KServiceTypeProfile::preferredService( MimeType->name(), "Application" );
 		if ( preferredApp && preferredApp->desktopEntryName() == "designer" )
@@ -329,7 +332,9 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 			KRun::runURL(url, MimeType->name() );
 			return;
 		}
-	}
+	}*/
+        //load kdevdesigner part if it is available
+
 	
 	KConfig *config = kapp->config();
 	config->setGroup("General");
@@ -599,6 +604,20 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
 
   if (isTextEditor)
     integrateTextEditorPart(static_cast<KTextEditor::Document*>(part));
+  
+  KInterfaceDesigner::Designer *designerPart = dynamic_cast<KInterfaceDesigner::Designer *>(part);
+  if (designerPart && API::getInstance()->languageSupport())
+  {
+      kdDebug() << "integrating designer part with language support" << endl;
+      connect(designerPart, SIGNAL(addedFunction(DesignerType, const QString&, Function )),
+          API::getInstance()->languageSupport(),
+          SLOT(addFunction(DesignerType, const QString&, Function )));
+      connect(designerPart, SIGNAL(editedFunction(DesignerType, const QString&, Function, Function )), API::getInstance()->languageSupport(),
+      SLOT(editFunction(DesignerType, const QString&, Function, Function )));
+      connect(designerPart, SIGNAL(removedFunction(DesignerType, const QString&, Function )),
+          API::getInstance()->languageSupport(),
+          SLOT(removeFunction(DesignerType, const QString&, Function )));
+  }
 }
 
 void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
