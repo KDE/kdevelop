@@ -43,14 +43,14 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Ka-Ping Yee", "pydoc utility", "ping@lfw.org");
   aboutData.addAuthor("Dimitri van Heesch", "doxywizard", "dimitri@stack.nl");
   aboutData.addAuthor("Harald Fernengel", "Qt 3 port, patches", "harry@kdevelop.org");
-  aboutData.addAuthor("Roberto Raggi", "QEditor part, code completion, abbrev part", "roberto@kdevelop.org");
+  aboutData.addAuthor("Roberto Raggi", "QEditor part, code completion, Abbrev part, C++ support, Java support", "roberto@kdevelop.org");
   aboutData.addAuthor("Simon Hausmann", "Help with KParts infrastructure", "hausmann@kde.org");
   aboutData.addAuthor("Trolltech AS", "Designer code", "info@trolltech.com");
   aboutData.addAuthor("Hugo Varotto", "Fileselector part", "hugo@varotto-usa.com");
   aboutData.addAuthor("Matt Newell", "Fileselector part", "newellm@proaxis.com");
   aboutData.addAuthor("Jakob Simon-Gaarde", "QMake projectmanager", "jsgaarde@tdcspace.dk");
   aboutData.addAuthor("Yann Hodique", "patches", "Yann.Hodique@lifl.fr");
-  aboutData.addAuthor("F@lk Brettschneider", "MDI modes, bugfixes", "falk@kdevelop.org");
+  aboutData.addAuthor("F@lk Brettschneider", "MDI modes, QEditor, bugfixes", "falk@kdevelop.org");
   aboutData.addAuthor("Caleb Tennis", "KTabBar, bugfixes, Gideon release", "caleb@aei-tech.com");
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
