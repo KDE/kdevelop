@@ -2,6 +2,8 @@
     * KDE version check fixed. Now KDevelop-2.0 runs even on FreeBSD
       with the little help of KrazyKiwi. Thanks a lot!
     * applied patch of John Firebaugh <jfirebaugh@kde.org>. Thanks a lot!
+    * bugfix: repaired Project->Rebuild, Project->DistClean/RebuildAll and
+      optimized CKDevelop::slotProcessExited, needs to be tested a while
 
 2001-07-25  rokrau@yahoo.com
     * bugfix: F12 now works without a project loaded. I've implemented this

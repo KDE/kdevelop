@@ -1840,7 +1840,7 @@ void CKDevelop::slotBuildRebuildAll()
 {
   slotStatusMsg(i18n("Running make clean and make all..."));
   RunMake(CMakefile::toplevel,"clean");
-  RunMake(CMakefile::toplevel,"all");
+	next_job = "all";
 }
 void CKDevelop::slotBuildDistClean()
 {
@@ -1862,9 +1862,7 @@ void CKDevelop::slotBuildCleanRebuildAll()
 {
   prj->updateMakefilesAm();
   slotBuildDistClean();
-  slotBuildAutoconf();
-  slotBuildConfigure();
-  slotBuildMake();
+  next_job = "autoconf+configure+make";
 }
 void CKDevelop::slotBuildConfigure(){
     //    QString shell = getenv("SHELL");
@@ -3323,14 +3321,14 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       next_job="";
     }
 
-    if (next_job == "make_end"  && process.exitStatus() == 0)
+    else if (next_job == "make_end"  && process.exitStatus() == 0)
     {
       // if we can run the application, so we can clear the Makefile.am-changed-flag
       prj->clearMakefileAmChanged();
       next_job = "";
     }
 
-    if (next_job == make_cmd)
+    else if (next_job == make_cmd)
     { // rest from the rebuild all
       QString makefileDir=prj->getProjectDir() + prj->getSubDir();
       QDir::setCurrent(makefileDir);
@@ -3357,7 +3355,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       ready=false;
     }
 
-    if (next_job == "debug"  && process.exitStatus() == 0)
+    else if (next_job == "debug"  && process.exitStatus() == 0)
     {
       // if we can debug the application, so we can clear the Makefile.am-changed-flag
       prj->clearMakefileAmChanged();
@@ -3367,7 +3365,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       ready = false;
     }
 
-    if (next_job == "debug_with_args"  && process.exitStatus() == 0)
+    else if (next_job == "debug_with_args"  && process.exitStatus() == 0)
     {
       // if we can debug the application, so we can clear the Makefile.am-changed-flag
       prj->clearMakefileAmChanged();
@@ -3377,7 +3375,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       ready = false;
     }
 
-    if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0)
+    else if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0)
     {
       // if we can run the application, so we can clear the Makefile.am-changed-flag
       prj->clearMakefileAmChanged();
@@ -3387,16 +3385,18 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       ready = false;
     }
       
-    if (next_job == "refresh")
+    else if (next_job == "refresh")
     { // rest from the add projectfile
       refreshTrees();
+      next_job = "";
     }
-    if (next_job == "fv_refresh")
+    else if (next_job == "fv_refresh")
     { // update fileview trees...
       log_file_tree->refresh(prj);
       real_file_tree->refresh(prj);
+      next_job = "";
     }
-    if( next_job == "load_new_prj")
+    else if( next_job == "load_new_prj")
     {
 
       if(project) {  //now that we know that a new project will be built we can close the previous one   {
@@ -3425,8 +3425,23 @@ void CKDevelop::slotProcessExited(KProcess* proc){
           slotViewRefresh();    // a new project started, this is legitimate
         }
       }
+      next_job = "";
     }
-    next_job = "";
+    else if (next_job == "all") {
+		  RunMake(CMakefile::toplevel,"all");
+      next_job = "";
+    }
+	  else if (next_job == "autoconf+configure+make") {
+			slotBuildAutoconf();
+      next_job = "configure+make";
+		}
+	  else if (next_job == "configure+make") {
+			slotBuildConfigure();
+      next_job = "all";
+		}
+		else {
+      next_job = "";
+    }
   }
   else {
     result= i18n("*** process exited with error(s) ***\n");
