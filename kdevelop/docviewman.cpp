@@ -340,7 +340,7 @@ void DocViewMan::doSearch()
 }
 
 /** */
-void DocViewMan::doRepeatSearch(QString &search_text, int back)
+void DocViewMan::doRepeatSearch(QString &/*search_text*/, int back)
 {
   if (currentEditView()) {
       currentEditView()->searchAgain(back==1);
