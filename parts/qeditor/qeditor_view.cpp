@@ -224,7 +224,8 @@ bool QEditorView::setCursorPosition(unsigned int line, unsigned int col)
     kdDebug(9032) << "TODO: implement QEditorView::setCursorPosition" << endl;
 
     QTextParagraph* p = m_editor->document()->paragAt( line );
-    ensureTextIsVisible( p );
+    if (p)
+        ensureTextIsVisible( p );
 
     m_editor->setCursorPosition( line, col );
     m_editor->ensureCursorVisible();
