@@ -458,7 +458,7 @@ void CClassView::tip( const QPoint &p, QRect &r, QString &str )
   i = itemAt( p );
   r = itemRect( i );
 
-  if( treeH->itemType( i ) != THFOLDER && i != NULL && r.isValid() )
+  if( i != NULL &&  treeH->itemType( i ) != THFOLDER && r.isValid() )
     str = i->text( 0 );
   else
     str = "";
