@@ -15,6 +15,8 @@ In particular, they do not depend on Kdevelop, KDE, or Qt.
 
 Consult \ref LangSupportStatus for an up to date status of this programming language support part.
 
+\unmaintained This part is currently un-maintained, and it's compilation disabled in languages/Makefile.am file
+
 \authors <a href="mailto:okellogg AT users.sourceforge.net">Oliver Kellogg</a>
 \authors <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a>
 

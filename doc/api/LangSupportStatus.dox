@@ -7,13 +7,13 @@
 <table border="1">
     <tr>
       <th scope=col>Feature/Language</th>
-      <th scope=col>Ada</th>
+      <th scope=col>Ada (disabled)</th>
       <th scope="col">Bash</th>
       <th scope=col>C/C++</th>
       <th scope=col>Fortran</th>
       <th scope=col>Java</th>
       <th scope=col>Pascal</th>
-      <th scope=col>Perl</th>
+      <th scope=col>Perl (disabled)</th>
       <th scope=col>PHP</th>
       <th scope=col>Python</th>
       <th scope=col>Ruby</th>

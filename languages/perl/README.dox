@@ -8,15 +8,12 @@ and images.
 
 Consult \ref LangSupportStatus for an up to date status of this programming language support part.
 
+\unmaintained This part is currently un-maintained, and it's compilation disabled in languages/Makefile.am file
+
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 \authors <a href="mailto:2nd author AT provider.com">2nd author full name</a>
 ...
 \authors <a href="mailto:nth author AT provider.com">nth author full name</a>
-
-\maintainer <a href="mailto:$EMAIL$">$AUTHOR$</a>
-\maintainer <a href="mailto:2nd maintainer AT provider.com">2nd maintainer full name</a>
-...
-\maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
 
 \feature Describe the first feature
 \feature Describe the second feature
