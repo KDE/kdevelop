@@ -1,6 +1,8 @@
 1999-03-25   Sandy Meier <smeier@rz.uni-potsdam.de>
 
 	* Converted the LFV to QListView.
+	* move all print-related files to the subdir print
+	* commit new automoc and changed some Makefiles.am
 
 1999-03-24 Jonas Nordin <jonas.nordin@cenacle.se>
 	* Converted the classview from KTreeList to QListView. Minor fixes to the
