@@ -24,6 +24,8 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
+
 
 namespace FileCreate {
 
@@ -143,4 +145,16 @@ namespace FileCreate {
     m_addToProject->setChecked(m);
   }
 
+	void NewFileChooser::accept()
+	{
+		QFileInfo file( url().path() );
+		if ( file.exists() )
+		{
+			KMessageBox::sorry( 0, i18n("A file with this name already exists."), i18n("File Exists") );
+			return;
+		}
+		KDialogBase::accept();
+	}
+
 }
+
