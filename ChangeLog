@@ -1,3 +1,8 @@
+1999-02-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * added autosave functionality. saveTimeout is set to 5 min. TODO: configuration dialog for saveTimeout.
+    until then change Autosave Timeout (in ms) in your kdeveloprc
+  * modified slotFileSaveAll() for performance, refresh trees only called on headers
+
 1999-02-18  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* replace some files in the base application
 	* now the main.cpp have also a template
@@ -8,19 +13,22 @@
 	<martin.piskernig@stuwo.at>
 
 1999-02-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-        * merged Documentation menu into Help menu, search marked text into view_menu
-        * added right button menus to CDocBrowser to copy marked text to clipboard, connected to
-         slotEditCopy() as well; button menu to switch back and forward in the browser window
+  * merged Documentation menu into Help menu, search marked text into view_menu
+  * added right button menus to CDocBrowser to copy marked text to clipboard, connected to
+    slotEditCopy() as well; button menu to switch back and forward in the browser window
+  * added autosave functionality. saveTimeout is set to 5 min. TODO: configuration dialog for saveTimeout.
+    until then change Autosave Timeout (in ms) in your kdeveloprc
+  * modified slotFileSaveAll() for performance, refresh trees only called on headers
 
-1999-02-17  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+1999-02-17  Stefan heidrich  <sheidric@rz.uni-potsdam.de>
 	* in the applicationwizard the real installationpath is printed
 	* the applications are generated in debug-mode
 
 1999-02-16 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-        * completed QWhatsThis help
-        * changed cut icon in front of copy icon of toolbar
-        * replaced some separators with frame lines
-        * placed lookup entry in edit window menu at the bottom
+  * completed QWhatsThis help
+  * changed cut icon in front of copy icon of toolbar
+  * replaced some separators with frame lines
+  * placed lookup entry in edit window menu at the bottom
 
 1999-02-16  Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commit  the i18n() patches and the german translation by Martin Piskernig 

@@ -30,6 +30,7 @@ class CKDevelop;
 #include <qstring.h>
 #include <qstrlist.h>
 #include <qwhatsthis.h>
+#include <qtimer.h>
 
 #include <keditcl.h>
 #include <kapp.h>
@@ -192,6 +193,7 @@ public:
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
   void slotOptionsDocBrowser();
+  void slotOptionsAutosave();
   void slotOptionsMake(int id);
 
   void slotDocBack();
@@ -342,9 +344,11 @@ private:
   bool bViewStatusbar;
 
   bool  prev_was_search_result;
-
+  // Autosaving elements
+  QTimer* saveTimer; // the timer
+  bool bAutosave;    // enable=true
+  int saveTimeout;   // timeout time
   //some vars for the searchengine
-  
   QString search_output;
   QString doc_search_text;
   // for more then one job in proc;checked in slotProcessExited(KProcess* proc);
@@ -355,6 +359,8 @@ private:
 };
 
 #endif
+
+
 
 
 

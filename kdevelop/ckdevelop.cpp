@@ -86,11 +86,15 @@ void CKDevelop::slotFileSave(){
 }
 void CKDevelop::slotFileSaveAll(){
   // ok,its a dirty implementation  :-)
-  slotStatusMsg(i18n("Saving all changed files..."));
-
+  if(!bAutosave || saveTimer->isActive()){
+    slotStatusMsg(i18n("Saving all changed files..."));
+  }
+  else
+    slotStatusMsg(i18n("Autosaving..."));
   TEditInfo* actual_info;
   bool mod = false;
-	
+  // save current filename to switch back after saving
+	QString visibleFile = edit_widget->getName();
   // first the 2 current edits
   if(header_widget->isModified()){
     if(header_widget->getName() == "Untitled.h"){
@@ -98,7 +102,7 @@ void CKDevelop::slotFileSaveAll(){
       slotFileSaveAs();
     }
     else{
-    header_widget->doSave();
+      header_widget->doSave();
     }
     mod=true;
   }
@@ -110,7 +114,7 @@ void CKDevelop::slotFileSaveAll(){
     else{
       cpp_widget->doSave();
     }
-    mod=true;
+//    mod=true;
   }
   
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
@@ -118,23 +122,26 @@ void CKDevelop::slotFileSaveAll(){
     
     if(actual_info->modified){
       if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
-	switchToFile(actual_info->filename);
-	slotFileSaveAs();
-	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
-	mod = true;
+      	switchToFile(actual_info->filename);
+      	slotFileSaveAs();
+      	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
+      	mod = true;
       }
       else{
-	switchToFile(actual_info->filename);
-	edit_widget->doSave();
-	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
-	mod = true;
+      	switchToFile(actual_info->filename);
+      	edit_widget->doSave();
+      	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
+      	if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
+      	  mod = true;
       }
     }
   }
   if(mod){
     slotViewRefresh();
   }
-  slotStatusMsg(IDS_DEFAULT); 
+  // switch back to visible file
+  switchToFile(visibleFile);
+  slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotFileSaveAs(){
   slotStatusMsg(i18n("Save file as..."));
@@ -270,6 +277,10 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
+
+  config->writeEntry("Autosave",bAutosave);
+  config->writeEntry("Autosave Timeout",saveTimeout);
+
   config->writeEntry("Make",make_cmd);
 
   config->setGroup("Files");
@@ -521,6 +532,14 @@ void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(IDS_DEFAULT);
 }
 
+void CKDevelop::slotOptionsAutosave(){
+  bAutosave=!bAutosave;
+  options_menu->setItemChecked(ID_OPTIONS_AUTOSAVE,bAutosave);
+  if(bAutosave)
+    saveTimer->start(saveTimeout);
+  else
+    saveTimer->stop();
+}
 void CKDevelop::slotOptionsMake(int id){
 
   switch(id){
@@ -1598,11 +1617,16 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       			i18n("Sets the Editor's colors"))
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS, 			i18n("Sets the highlighting default colors"))
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, 			i18n("Sets the highlighting colors"))
-  ON_STATUS_MSG(ID_OPTIONS_KEYS, 			i18n("Sets the keyboard accelerators"))
+  ON_STATUS_MSG(ID_OPTIONS_KEYS, 			                i18n("Sets the keyboard accelerators"))
   ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              			i18n("Set up the KDevelop environment"))
   ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  				i18n("Configures the Browser options"))
   ON_STATUS_MSG(ID_OPTIONS_UPDATE_KDE_DOCUMENTATION,  		i18n("Update your KDE-Libs Documentation"))
   ON_STATUS_MSG(ID_OPTIONS_CREATE_SEARCHDATABASE,    		i18n("Create a search database of the current Documentation"))
+  ON_STATUS_MSG(ID_OPTIONS_MAKE,                         i18n("Sets the make-program"))
+  ON_STATUS_MSG(ID_OPTIONS_MAKE_MAKE,                   i18n("Sets KDevelop to use make"))
+  ON_STATUS_MSG(ID_OPTIONS_MAKE_GMAKE,                  i18n("Sets KDevelop to use gmake"))
+  ON_STATUS_MSG(ID_OPTIONS_MAKE_DMAKE,                  i18n("Sets KDevelop to use dmake"))
+  ON_STATUS_MSG(ID_OPTIONS_AUTOSAVE,                    i18n("Enables / disables the autosave-function"))
 
   ON_STATUS_MSG(ID_DOC_BACK,                      			i18n("Switchs to last browser page"))
   ON_STATUS_MSG(ID_DOC_FORWARD,                   			i18n("Switchs to next browser page"))
@@ -1620,6 +1644,15 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
 
 
 

@@ -373,10 +373,6 @@ void CKDevelop::initMenu(){
 			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
   accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
 
-  view_menu->insertItem(i18n("&Search Marked Text"),this,
-				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
-  accel->changeMenuAccel(view_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
-
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
@@ -550,6 +546,8 @@ void CKDevelop::initMenu(){
 				 SLOT(slotCreateSearchDatabase()),0,ID_OPTIONS_CREATE_SEARCHDATABASE);
   options_menu->insertSeparator();
 
+  options_menu->insertItem(i18n("&Autosave"),this,SLOT(slotOptionsAutosave()),0,ID_OPTIONS_AUTOSAVE);
+  options_menu->insertSeparator();
 
   QPopupMenu* make = new QPopupMenu;
   make->insertItem("&Make",ID_OPTIONS_MAKE_MAKE);
@@ -557,8 +555,19 @@ void CKDevelop::initMenu(){
   make->insertItem("&Dmake",ID_OPTIONS_MAKE_DMAKE);
   options_menu->insertItem("Make-&Command..",make,ID_OPTIONS_MAKE);
   connect(make, SIGNAL(activated(int)), SLOT(slotOptionsMake(int)));
-  
+
   config->setGroup("General Options");
+  bAutosave=config->readBoolEntry("Autosave",true);
+  saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
+  saveTimer=new QTimer(this);
+  connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
+  if(bAutosave){
+		options_menu->setItemChecked(ID_OPTIONS_AUTOSAVE, true);
+    saveTimer->start(saveTimeout);
+  }
+  else
+    saveTimer->stop();
+		
   make_cmd=config->readEntry("Make","make");
 	if(make_cmd=="make")
 		options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE, true);
@@ -582,8 +591,9 @@ void CKDevelop::initMenu(){
   help_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
   help_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
   help_menu->insertSeparator();
-  help_menu->insertItem(i18n("Contents"),this,SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
-
+  help_menu->insertItem(i18n("&Search Marked Text"),this,
+				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
+  accel->changeMenuAccel(help_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
   help_menu->insertItem(i18n("KDE-&Core-Library"),this,
@@ -601,6 +611,8 @@ void CKDevelop::initMenu(){
   help_menu->insertItem(i18n("Project &User-Manual"),this,
 				      SLOT(slotDocManual()),0,ID_DOC_USER_MANUAL);
   //  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
+  help_menu->insertSeparator();
+  help_menu->insertItem(i18n("Contents"),this,SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
   menuBar()->insertItem(i18n("&Help"), help_menu);
@@ -620,6 +632,7 @@ void CKDevelop::initMenu(){
   connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(make,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
 }
@@ -817,6 +830,16 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -138,6 +138,8 @@
 #define ID_OPTIONS_UPDATE_KDE_DOCUMENTATION 	   16060
 #define ID_OPTIONS_CREATE_SEARCHDATABASE 	       16070
 
+#define ID_OPTIONS_AUTOSAVE                      16075
+
 #define ID_OPTIONS_MAKE                 16080
 #define ID_OPTIONS_MAKE_MAKE            16081
 #define ID_OPTIONS_MAKE_GMAKE           16082
@@ -302,6 +304,7 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
 
 
 
