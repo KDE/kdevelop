@@ -7,7 +7,7 @@
 #include <qstringlist.h>
 #include <qfileinfo.h>
 
-#include "classstore.h"
+#include <codemodel.h>
 #include "AdaAST.hpp"
 #include "ada_utils.hpp"
 
@@ -19,92 +19,107 @@
 
 #line 10 "expandedada.store.g"
 
+#include <codemodel.h>
 #include <kdebug.h>
 
-#include "parsedclass.h"
-#include "parsedattribute.h"
-#include "parsedmethod.h"
-#include "parsedargument.h"
-
-#line 30 "AdaStoreWalker.hpp"
-class AdaStoreWalker : public antlr::TreeParser, public AdaStoreWalkerTokenTypes
+#line 26 "AdaStoreWalker.hpp"
+class AdaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public AdaStoreWalkerTokenTypes
 {
-#line 29 "expandedada.store.g"
+#line 25 "expandedada.store.g"
 
 private:
     QString m_fileName;
-    QPtrList<ParsedScopeContainer> m_scopeStack;
-    ClassStore* m_store;
+    QValueList<NamespaceDom> m_scopeStack;
+    CodeModel* m_model;
     QValueList<QStringList> m_imports;
-    ParsedScopeContainer* m_currentContainer;
-    PIAccess m_currentAccess;
+    NamespaceDom m_currentContainer;
+    int m_currentAccess;
     bool m_addToStore; /* auxiliary variable: for the moment, this is `true'
                           only when we are in specs, not bodies.  */
     bool m_isSubprogram;  // auxiliary to def_id()
+    FileDom m_file;
 
 public:
-    void setClassStore (ClassStore* store)     { m_store = store; }
-    ClassStore* classStore ()                  { return m_store; }
-    const ClassStore* classStore () const      { return m_store; }
+    void setCodeModel (CodeModel* model)     { m_model = model; }
+    CodeModel* codeModel ()                  { return m_model; }
+    const CodeModel* codeModel () const      { return m_model; }
 
     QString fileName () const                  { return m_fileName; }
     void setFileName (const QString& fileName) { m_fileName = fileName; }
 
     void init () {
         m_scopeStack.clear ();
-	m_imports.clear ();
-        m_currentContainer = m_store->globalScope ();
-	m_scopeStack.append (m_currentContainer);
-        m_currentAccess = PIE_PUBLIC;
-	m_addToStore = false;
-	m_isSubprogram = false;
-        m_store->removeWithReferences (m_fileName);
+        m_imports.clear ();
+        m_currentContainer = m_model->globalNamespace ();
+        m_scopeStack.append (m_currentContainer);
+        m_currentAccess = CodeModelItem::Public;
+        m_addToStore = false;
+        m_isSubprogram = false;
+        if (m_model->hasFile(m_fileName))
+            m_model->removeFile (m_model->fileByName(m_fileName));
+        m_file = m_model->create<FileModel>();
+        m_file->setName(m_fileName);
+        m_model->addFile(m_file);
     }
 
-    void wipeout ()            { m_store->wipeout (); }
-    void out ()                { m_store->out (); }
+    void wipeout ()            { m_model->wipeout (); }
+//    void out ()                { m_store->out (); }
     void removeWithReferences (const QString& fileName) {
-	m_store->removeWithReferences (fileName);
+        m_model->removeFile (m_model->fileByName(fileName));
     }
-    ParsedScopeContainer * insertScopeContainer
-			  (ParsedScopeContainer* scope, const QStringList & scopes ) {
-	QStringList::ConstIterator it = scopes.begin();
-	QString prefix( *it );
-	ParsedScopeContainer* ns = scope->getScopeByName( prefix );
-	if (ns == NULL) {
-	    ns = new ParsedScopeContainer( false );
-	    ns->setName( prefix );
-	    scope->addScope( ns );
-	    if (scope == m_store->globalScope())
-		m_store->addScope( ns );
-	}
-	while ( ++it != scopes.end() ) {
-	    QString nameSegment( *it );
-	    prefix += "." + nameSegment;
-	    ParsedScopeContainer* inner = scope->getScopeByName( prefix );
-	    if (inner == NULL ) {
-	        inner = new ParsedScopeContainer( false );
-		inner->setName( nameSegment );
-		ns->addScope( inner );
-	    }
-	    ns = inner;
-	}
-	return ns;
+    NamespaceDom insertScopeContainer
+                (NamespaceDom scope, const QStringList & scopes ) {
+        QStringList::ConstIterator it = scopes.begin();
+        QString prefix( *it );
+        NamespaceDom ns = scope->namespaceByName( prefix );
+//        kdDebug() << "insertScopeContainer begin with prefix " << prefix << endl;
+        if (!ns.data()) {
+//            kdDebug() << "insertScopeContainer: ns is empty" << endl;
+            ns = m_model->create<NamespaceModel>();
+//            kdDebug() << "insertScopeContainer: ns created" << endl;
+            ns->setName( prefix );
+//            kdDebug() << "insertScopeContainer: ns name set" << endl;
+            scope->addNamespace( ns );
+//            kdDebug() << "insertScopeContainer: ns added to a scope" << endl;
+
+            if (scope == m_model->globalNamespace())
+                m_file->addNamespace( ns );
+        }
+//        kdDebug() << "insertScopeContainer: while" << endl;
+        while ( ++it != scopes.end() ) {
+            QString nameSegment( *it );
+            prefix += "." + nameSegment;
+//            kdDebug() << "insertScopeContainer: while prefix = " << prefix << endl;
+            NamespaceDom inner = scope->namespaceByName( prefix );
+            if (!inner.data() ) {
+//                kdDebug() << "insertScopeContainer: inner is empty " << endl;
+                inner = m_model->create<NamespaceModel>();
+//                kdDebug() << "insertScopeContainer: inner created " << endl;
+                inner->setName( nameSegment );
+                ns->addNamespace( inner );
+//                kdDebug() << "insertScopeContainer: inner added " << endl;
+            }
+            ns = inner;
+        }
+        return ns;
     }
-    ParsedScopeContainer * defineScope( RefAdaAST namenode ) {
+    NamespaceDom defineScope( RefAdaAST namenode ) {
        QStringList scopes( qnamelist( namenode ) );
-       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopes );
-       psc->setDeclaredOnLine( namenode->getLine() );
-       psc->setDeclaredInFile( m_fileName );
-       // psc->setDeclarationEndsOnLine (endLine);
-       psc->setDefinedOnLine( namenode->getLine() );
-       psc->setDefinedInFile( m_fileName );
+//        kdDebug() << "defineScope: " << scopes.join(" ") << endl;
+       NamespaceDom psc = insertScopeContainer( m_currentContainer, scopes );
+//        kdDebug() << "defineScope psc created" << endl;
+       psc->setStartPosition(namenode->getLine(), namenode->getColumn());
+//        kdDebug() << "defineScope start position set" << endl;
+       psc->setFileName(m_fileName);
+//        kdDebug() << "defineScope file name set" << endl;
+       // psc->setEndPosition (endLine, 0);
+//        kdDebug() << "defineScope return" << endl;
        return psc;
     }
-#line 34 "AdaStoreWalker.hpp"
+#line 30 "AdaStoreWalker.hpp"
 public:
 	AdaStoreWalker();
-	void initializeASTFactory( antlr::ASTFactory& factory );
+	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
 	int getNumTokens() const
 	{
 		return AdaStoreWalker::NUM_TOKENS;
@@ -309,15 +324,15 @@ private:
 #endif
 	
 	static const unsigned long _tokenSet_0_data_[];
-	static const antlr::BitSet _tokenSet_0;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_0;
 	static const unsigned long _tokenSet_1_data_[];
-	static const antlr::BitSet _tokenSet_1;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_1;
 	static const unsigned long _tokenSet_2_data_[];
-	static const antlr::BitSet _tokenSet_2;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_2;
 	static const unsigned long _tokenSet_3_data_[];
-	static const antlr::BitSet _tokenSet_3;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_3;
 	static const unsigned long _tokenSet_4_data_[];
-	static const antlr::BitSet _tokenSet_4;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_4;
 };
 
 #endif /*INC_AdaStoreWalker_hpp_*/

@@ -48,6 +48,7 @@
 #include <qtimer.h>
 #include <qregexp.h>
 #include <qvbox.h>
+#include <qwhatsthis.h>
 #include <kdialogbase.h>
 
 
@@ -82,6 +83,8 @@ ProblemReporter::ProblemReporter( AdaSupportPart* part, QWidget* parent, const c
 	  m_markIface( 0 ),
       m_bgParser( 0 )
 {
+    QWhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows errors reported by a language parser."));
+
     addColumn( i18n("Level") );
     addColumn( i18n("Problem") );
     addColumn( i18n("File") );
@@ -125,7 +128,7 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     
     if( m_editor )
 	reparse();
-		
+
     m_document = dynamic_cast<KTextEditor::Document*>( part );
     if( m_document ){
         m_filename = m_document->url().path();
@@ -136,7 +139,7 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
         connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 
 	m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
-    
+
 	m_timer->changeInterval( m_delay );
 }
 
@@ -183,10 +186,10 @@ void ProblemReporter::reparse()
 		}
 	}
 
-/* Temporarily deactivated (crashes)
+/* Temporarily deactivated (crashes)*/
     m_bgParser = new BackgroundParser( this, m_editor->text(), m_filename );
     m_bgParser->start();
- */
+ /**/
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )

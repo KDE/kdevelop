@@ -5,6 +5,8 @@
 
 #include "kdevlanguagesupport.h"
 
+#include <qwaitcondition.h>
+
 class AdaSupportPartData;
 class KDialogBase;
 class QStringList;
@@ -29,6 +31,7 @@ private slots:
 
     void addedFilesToProject (const QStringList &fileList);
     void removedFilesFromProject (const QStringList &fileList);
+    void changedFilesInProject( const QStringList &fileList );
 
     void initialParse ();
     void savedFile (const QString&);
@@ -37,6 +40,7 @@ private:
     void maybeParse (const QString &fileName);
     void parse (const QString &fileName);
 
+    void saveProjectSourceInfo( );
 private:
     AdaSupportPartData* d;
 };

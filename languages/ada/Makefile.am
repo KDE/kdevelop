@@ -1,7 +1,7 @@
 # Here resides the Ada support part.
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-INCLUDES = -I$(top_srcdir)/lib/antlr 		-I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util		-I$(top_srcdir)/lib/sourceinfo 		$(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 SUBDIRS = app_templates file_templates
 
 
@@ -17,15 +17,18 @@ EXTRA_DIST = ada.g ada.tree.g ada.store.g
 
 ## The following three rules assume that you have Java installed,
 ## ANTLR installed, and you have the antlr jar in your CLASSPATH.
-#
+
 #AdaLexer.hpp AdaLexer.cpp AdaParser.hpp AdaParser.cpp: ada.g
-#	java antlr.Tool   ada.g
-#
+#	antlr   ada.g
+
 #AdaTreeParserSuper.hpp AdaTreeParserSuper.cpp: ada.tree.g
-#	java antlr.Tool   ada.tree.g
-#
+#	antlr   ada.tree.g
+
 #AdaStoreWalker.hpp AdaStoreWalker.cpp: ada.store.g
-#	java antlr.Tool -glib ada.tree.g  ada.store.g
+#	antlr -glib ada.tree.g  ada.store.g
+
+genparser:
+	antlr   ada.g && antlr   ada.tree.g && antlr -glib ada.tree.g  ada.store.g
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevadasupport.desktop

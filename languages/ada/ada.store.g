@@ -4,22 +4,18 @@
  */
 
 header "pre_include_hpp" {
-#  include <qstring.h>
-#  include <qstringlist.h>
-#  include <qfileinfo.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qfileinfo.h>
 
-#  include "classstore.h"
-#  include "AdaAST.hpp"
-#  include "ada_utils.hpp"
+#include <codemodel.h>
+#include "AdaAST.hpp"
+#include "ada_utils.hpp"
 }
 
 header "post_include_hpp" {
-#  include <kdebug.h>
-
-#  include "parsedclass.h"
-#  include "parsedattribute.h"
-#  include "parsedmethod.h"
-#  include "parsedargument.h"
+#include <codemodel.h>
+#include <kdebug.h>
 }
 
 options {
@@ -35,72 +31,91 @@ options {
 {
 private:
     QString m_fileName;
-    QPtrList<ParsedScopeContainer> m_scopeStack;
-    ClassStore* m_store;
+    QValueList<NamespaceDom> m_scopeStack;
+    CodeModel* m_model;
     QValueList<QStringList> m_imports;
-    ParsedScopeContainer* m_currentContainer;
-    PIAccess m_currentAccess;
+    NamespaceDom m_currentContainer;
+    int m_currentAccess;
     bool m_addToStore; /* auxiliary variable: for the moment, this is `true'
                           only when we are in specs, not bodies.  */
     bool m_isSubprogram;  // auxiliary to def_id()
+    FileDom m_file;
 
 public:
-    void setClassStore (ClassStore* store)     { m_store = store; }
-    ClassStore* classStore ()                  { return m_store; }
-    const ClassStore* classStore () const      { return m_store; }
+    void setCodeModel (CodeModel* model)     { m_model = model; }
+    CodeModel* codeModel ()                  { return m_model; }
+    const CodeModel* codeModel () const      { return m_model; }
 
     QString fileName () const                  { return m_fileName; }
     void setFileName (const QString& fileName) { m_fileName = fileName; }
 
     void init () {
         m_scopeStack.clear ();
-	m_imports.clear ();
-        m_currentContainer = m_store->globalScope ();
-	m_scopeStack.append (m_currentContainer);
-        m_currentAccess = PIE_PUBLIC;
-	m_addToStore = false;
-	m_isSubprogram = false;
-        m_store->removeWithReferences (m_fileName);
+        m_imports.clear ();
+        m_currentContainer = m_model->globalNamespace ();
+        m_scopeStack.append (m_currentContainer);
+        m_currentAccess = CodeModelItem::Public;
+        m_addToStore = false;
+        m_isSubprogram = false;
+        if (m_model->hasFile(m_fileName))
+            m_model->removeFile (m_model->fileByName(m_fileName));
+        m_file = m_model->create<FileModel>();
+        m_file->setName(m_fileName);
+        m_model->addFile(m_file);
     }
 
-    void wipeout ()            { m_store->wipeout (); }
-    void out ()                { m_store->out (); }
+    void wipeout ()            { m_model->wipeout (); }
+//    void out ()                { m_store->out (); }
     void removeWithReferences (const QString& fileName) {
-	m_store->removeWithReferences (fileName);
+        m_model->removeFile (m_model->fileByName(fileName));
     }
-    ParsedScopeContainer * insertScopeContainer
-			  (ParsedScopeContainer* scope, const QStringList & scopes ) {
-	QStringList::ConstIterator it = scopes.begin();
-	QString prefix( *it );
-	ParsedScopeContainer* ns = scope->getScopeByName( prefix );
-	if (ns == NULL) {
-	    ns = new ParsedScopeContainer( false );
-	    ns->setName( prefix );
-	    scope->addScope( ns );
-	    if (scope == m_store->globalScope())
-		m_store->addScope( ns );
-	}
-	while ( ++it != scopes.end() ) {
-	    QString nameSegment( *it );
-	    prefix += "." + nameSegment;
-	    ParsedScopeContainer* inner = scope->getScopeByName( prefix );
-	    if (inner == NULL ) {
-	        inner = new ParsedScopeContainer( false );
-		inner->setName( nameSegment );
-		ns->addScope( inner );
-	    }
-	    ns = inner;
-	}
-	return ns;
+    NamespaceDom insertScopeContainer
+                (NamespaceDom scope, const QStringList & scopes ) {
+        QStringList::ConstIterator it = scopes.begin();
+        QString prefix( *it );
+        NamespaceDom ns = scope->namespaceByName( prefix );
+//        kdDebug() << "insertScopeContainer begin with prefix " << prefix << endl;
+        if (!ns.data()) {
+//            kdDebug() << "insertScopeContainer: ns is empty" << endl;
+            ns = m_model->create<NamespaceModel>();
+//            kdDebug() << "insertScopeContainer: ns created" << endl;
+            ns->setName( prefix );
+//            kdDebug() << "insertScopeContainer: ns name set" << endl;
+            scope->addNamespace( ns );
+//            kdDebug() << "insertScopeContainer: ns added to a scope" << endl;
+
+            if (scope == m_model->globalNamespace())
+                m_file->addNamespace( ns );
+        }
+//        kdDebug() << "insertScopeContainer: while" << endl;
+        while ( ++it != scopes.end() ) {
+            QString nameSegment( *it );
+            prefix += "." + nameSegment;
+//            kdDebug() << "insertScopeContainer: while prefix = " << prefix << endl;
+            NamespaceDom inner = scope->namespaceByName( prefix );
+            if (!inner.data() ) {
+//                kdDebug() << "insertScopeContainer: inner is empty " << endl;
+                inner = m_model->create<NamespaceModel>();
+//                kdDebug() << "insertScopeContainer: inner created " << endl;
+                inner->setName( nameSegment );
+                ns->addNamespace( inner );
+//                kdDebug() << "insertScopeContainer: inner added " << endl;
+            }
+            ns = inner;
+        }
+        return ns;
     }
-    ParsedScopeContainer * defineScope( RefAdaAST namenode ) {
+    NamespaceDom defineScope( RefAdaAST namenode ) {
        QStringList scopes( qnamelist( namenode ) );
-       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopes );
-       psc->setDeclaredOnLine( namenode->getLine() );
-       psc->setDeclaredInFile( m_fileName );
-       // psc->setDeclarationEndsOnLine (endLine);
-       psc->setDefinedOnLine( namenode->getLine() );
-       psc->setDefinedInFile( m_fileName );
+//        kdDebug() << "defineScope: " << scopes.join(" ") << endl;
+       NamespaceDom psc = insertScopeContainer( m_currentContainer, scopes );
+//        kdDebug() << "defineScope psc created" << endl;
+       psc->setStartPosition(namenode->getLine(), namenode->getColumn());
+//        kdDebug() << "defineScope start position set" << endl;
+       psc->setFileName(m_fileName);
+//        kdDebug() << "defineScope file name set" << endl;
+       // psc->setEndPosition (endLine, 0);
+//        kdDebug() << "defineScope return" << endl;
        return psc;
     }
 }
@@ -139,7 +154,7 @@ use_clause
 
 library_item :
 	#(LIBRARY_ITEM
-		#(MODIFIERS ( PRIVATE { m_currentAccess = PIE_PROTECTED; } )? )
+		#(MODIFIERS ( PRIVATE { m_currentAccess = CodeModelItem::Protected; } )? )
 		( lib_subprog_decl_or_rename_or_inst_or_body
 		| #(PACKAGE_BODY pb:def_id pkg_body_part)
 		| #(GENERIC_PACKAGE_INSTANTIATION gpi:def_id
@@ -150,20 +165,20 @@ library_item :
 		   )
 		| #(PACKAGE_SPECIFICATION ps:def_id
 		     {
-		       ParsedScopeContainer* psc = defineScope( #ps );
+		       NamespaceDom psc = defineScope( #ps );
 		       m_currentContainer = psc;
 		       m_scopeStack.append( psc );
 		       m_addToStore = true;
 		     }
 		    pkg_spec_part
 		     {
-		       m_scopeStack.removeLast();
+		       m_scopeStack.remove(m_scopeStack.last());
 		       if (m_scopeStack.count() == 0) {
 			 kdDebug() << "adastore: m_scopeStack is empty!" << endl;
-		         m_scopeStack.append( m_store->globalScope() );
+		         m_scopeStack.append( m_model->globalNamespace() );
 		       }
 		       m_currentContainer = m_scopeStack.last();
-		       // m_currentContainer->setDeclarationEndsOnLine (endLine);
+		       // m_currentContainer->setEndPosition (endLine, 0);
 		       m_addToStore = false;
 		     }
 		   )
@@ -202,22 +217,29 @@ subprog_decl
 def_id
 	: cn:compound_name
 	  {
+//        kdDebug() << "cn:compound_name started " << endl;
 	    if (m_addToStore) {
+//          kdDebug() << "cn:compound_name m_addToStore " << endl;
 	      if (m_isSubprogram) {
-	        ParsedMethod *method = new ParsedMethod;
+//            kdDebug() << "cn:compound_name m_isSubprogram " << endl;
+            FunctionDom method = m_model->create<FunctionModel>();
 	        method->setName (qtext (cn));
-	        method->setDeclaredInFile ( m_fileName );
-	        method->setDeclaredOnLine ( #cn->getLine() );
-	        method->setDefinedInFile ( m_fileName );
-	        method->setDefinedOnLine ( #cn->getLine() );
+            method->setFileName(m_fileName);
+//            kdDebug() << "cn:compound_name method->setStartPosition(" << endl;
+            method->setStartPosition(#cn->getLine(), #cn->getColumn());
 
-	        ParsedMethod *old = m_currentContainer->getMethod (method);
+            if (m_currentContainer == m_model->globalNamespace())
+                m_file->addFunction(method);
+            else
+                m_currentContainer->addFunction(method);
+            //FIXME: adymo: is this valid for CodeModel
+/*	        ParsedMethod *old = m_currentContainer->getMethod (method);
 	        if (old) {
 	          delete (method);
 	          method = old;
 	        } else {
 	          m_currentContainer->addMethod (method);
-	        }
+	        }*/
 	      } else {
 	        // TBC: what about other declarations?
 	      }
@@ -271,21 +293,27 @@ name    : IDENTIFIER
 def_designator
 	: cn:compound_name
 	  {
+//        kdDebug() << "def_designator cn:compound_name started" << endl;
 	    if (m_addToStore) {
-	      ParsedMethod *method = new ParsedMethod;
-	      method->setName (qtext (cn));
-	      method->setDeclaredInFile ( m_fileName );
-	      method->setDeclaredOnLine ( #cn->getLine() );
-	      method->setDefinedInFile ( m_fileName );
-	      method->setDefinedOnLine ( #cn->getLine() );
+//            kdDebug() << "def_designator cn:compound_name m_addToStore" << endl;
+            FunctionDom method = m_model->create<FunctionModel>();
+            method->setName (qtext (cn));
+            method->setFileName(m_fileName);
+//            kdDebug() << "def_designator cn:compound_name method->setStartPosition(" << endl;
+            method->setStartPosition(#cn->getLine(), #cn->getColumn());
 
-	      ParsedMethod *old = m_currentContainer->getMethod (method);
+            if (m_currentContainer == m_model->globalNamespace())
+                m_file->addFunction(method);
+            else
+                m_currentContainer->addFunction(method);
+            //FIXME: adymo: is this valid for CodeModel
+/*	      ParsedMethod *old = m_currentContainer->getMethod (method);
 	      if (old) {
 		delete method;
 		method = old;
 	      } else {
 		m_currentContainer->addMethod (method);
-	      }
+	      }*/
 	    }
 	  }
 	| definable_operator_symbol
@@ -300,17 +328,17 @@ spec_decl_part
 	: #(GENERIC_PACKAGE_INSTANTIATION def_id generic_inst)
 	| #(PACKAGE_SPECIFICATION ps:def_id
 	     {
-	       ParsedScopeContainer* psc = defineScope( #ps );
+	       NamespaceDom psc = defineScope( #ps );
 	       m_currentContainer = psc;
 	       m_scopeStack.append( psc );
 	       m_addToStore = true;
 	     }
 	    pkg_spec_part
 	     {
-	       m_scopeStack.removeLast();
+	       m_scopeStack.remove(m_scopeStack.last());
 	       if (m_scopeStack.count() == 0) {
 		 kdDebug() << "adastore: m_scopeStack is empty!" << endl;
-	         m_scopeStack.append( m_store->globalScope() );
+	         m_scopeStack.append( m_model->globalNamespace() );
 	       }
 	       m_currentContainer = m_scopeStack.last();
 	       // m_currentContainer->setDeclarationEndsOnLine (endLine);
@@ -322,9 +350,9 @@ spec_decl_part
 
 pkg_spec_part
 	: basic_declarative_items_opt
-	  (	{ m_currentAccess = PIE_PROTECTED; }
+	  (	{ m_currentAccess = CodeModelItem::Protected; }
 		basic_declarative_items_opt
-	 	{ m_currentAccess = PIE_PUBLIC; }
+	 	{ m_currentAccess = CodeModelItem::Public; }
 	  )?
 	;
 
@@ -436,16 +464,16 @@ generic_decl
 	: #(GENERIC_PACKAGE_RENAMING generic_formal_part_opt def_id renames)
 	| #(GENERIC_PACKAGE_DECLARATION generic_formal_part_opt gpd:def_id
 		     {
-		       ParsedScopeContainer* psc = defineScope( #gpd );
+		       NamespaceDom psc = defineScope( #gpd );
 		       m_currentContainer = psc;
 		       m_scopeStack.append( psc );
 		       m_addToStore = true;
 		     }
 		pkg_spec_part
 		     {
-		       m_scopeStack.removeLast();
+		       m_scopeStack.remove(m_scopeStack.last());
 		       if (m_scopeStack.count() == 0)
-		         m_scopeStack.append( m_store->globalScope() );
+		         m_scopeStack.append( m_model->globalNamespace() );
 		       m_currentContainer = m_scopeStack.last();
 		       // m_currentContainer->setDeclarationEndsOnLine (endLine);
 		       m_addToStore = false;

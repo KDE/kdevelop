@@ -4,6 +4,7 @@
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qvbox.h>
+#include <qprogressbar.h>
 
 #include <kgenericfactory.h>
 #include <kapp.h>
@@ -12,6 +13,7 @@
 #include <kapplication.h>
 #include <kstatusbar.h>
 #include <kdialogbase.h>
+#include <kiconloader.h>
 
 #include <fstream>
 #include <strstream>
@@ -21,15 +23,18 @@
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
-#include "classstore.h"
+#include "codemodel.h"
 #include "adasupportpart.h"
 #include "problemreporter.h"
+#include "backgroundparser.h"
 
 #include "AdaLexer.hpp"
 #include "AdaParser.hpp"
 #include "AdaStoreWalker.hpp"
 #include "AdaAST.hpp"
 
+enum { KDEV_DB_VERSION = 3 };
+enum { KDEV_PCS_VERSION = 2 };
 
 typedef KGenericFactory<AdaSupportPart> AdaSupportPartFactory;
 
@@ -50,7 +55,8 @@ AdaSupportPart::AdaSupportPart (QObject *parent, const char *name, const QString
     d->problemReporter = new ProblemReporter (this);
     connect (core (), SIGNAL (configWidget (KDialogBase*)),
              d->problemReporter, SLOT (configWidget (KDialogBase*)));
-
+    d->problemReporter->setIcon( SmallIcon("info") );
+    mainWindow( )->embedOutputView( d->problemReporter, i18n("Problems"), i18n("Problem reporter"));
 
     setXMLFile ("adasupportpart.rc");
 
@@ -60,9 +66,9 @@ AdaSupportPart::AdaSupportPart (QObject *parent, const char *name, const QString
     connect (partController (), SIGNAL (savedFile (const QString&)),
              this, SLOT (savedFile (const QString&)));
 
-    mainWindow ()->embedOutputView (d->problemReporter, i18n ("Problems"), i18n ("problem reporter"));
-
     connect (core (), SIGNAL (configWidget (KDialogBase*)), this, SLOT (configWidget (KDialogBase*)));
+    connect( core(), SIGNAL(configWidget(KDialogBase*)),
+             d->problemReporter, SLOT(configWidget(KDialogBase*)) );
 
     // a small hack (robe)
     //classStore ()->globalScope ()->setName ("(default packages)");
@@ -75,6 +81,7 @@ AdaSupportPart::~AdaSupportPart ()
 {
     mainWindow ()->removeView (d->problemReporter);
     delete (d->problemReporter);
+    d->problemReporter = 0;
 
     delete (d);
     d = 0;
@@ -94,6 +101,8 @@ void AdaSupportPart::projectOpened ()
             this, SLOT (addedFilesToProject (const QStringList &)));
     connect (project (), SIGNAL (removedFilesFromProject (const QStringList &)),
             this, SLOT (removedFilesFromProject (const QStringList &)));
+    connect( project( ), SIGNAL( changedFilesInProject( const QStringList & ) ),
+             this, SLOT( changedFilesInProject( const QStringList & ) ) );
 
     QTimer::singleShot (0, this, SLOT (initialParse ()));
 }
@@ -101,6 +110,7 @@ void AdaSupportPart::projectOpened ()
 
 void AdaSupportPart::projectClosed ()
 {
+    saveProjectSourceInfo();
 }
 
 
@@ -110,12 +120,22 @@ void AdaSupportPart::initialParse ()
 
     if (project ())
     {
+        mainWindow()->statusBar()->message( i18n("Updating...") );
+        kapp->processEvents( );
         kapp->setOverrideCursor (waitCursor);
 
-        /// @todo Progress indicator!
-
+        int n = 0;
         QStringList files = project ()->allFiles ();
+
+        QProgressBar* bar = new QProgressBar( files.count( ), mainWindow( )->statusBar( ) );
+        bar->setMinimumWidth( 120 );
+        bar->setCenterIndicator( true );
+        mainWindow( )->statusBar( )->addWidget( bar );
+        bar->show( );
+
         for (QStringList::Iterator it = files.begin (); it != files.end (); ++it) {
+            bar->setProgress( n++ );
+
             QString fn = project ()->projectDirectory () + "/" + *it;
             maybeParse (fn);
             kapp->processEvents (500);
@@ -123,9 +143,13 @@ void AdaSupportPart::initialParse ()
 
         emit updatedSourceInfo();
 
+        mainWindow( )->statusBar( )->removeWidget( bar );
+        delete bar;
+
         kapp->restoreOverrideCursor ();
-        mainWindow ()->statusBar ()->message
-            (i18n ("Found 1 problem", "Found %n problems", d->problemReporter->childCount ()));
+        mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
+/*        mainWindow ()->statusBar ()->message
+            (i18n ("Found 1 problem", "Found %n problems", d->problemReporter->childCount ()));*/
     }
 }
 
@@ -141,7 +165,7 @@ void AdaSupportPart::maybeParse (const QString &fileName)
     if (!fileExtensions ().contains (QFileInfo (fileName).extension ()))
         return;
 
-    mainWindow ()->statusBar ()->message (i18n ("Parsing file: %1").arg (fileName));
+//    mainWindow ()->statusBar ()->message (i18n ("Parsing file: %1").arg (fileName));
     parse (fileName);
 }
 
@@ -154,9 +178,8 @@ void AdaSupportPart::addedFilesToProject (const QStringList &fileList)
         {
             QString path = project ()->projectDirectory () + "/" + (*it);
             maybeParse (path);
+            emit addedSourceInfo( path );
         }
-
-        emit updatedSourceInfo();
 }
 
 
@@ -168,10 +191,15 @@ void AdaSupportPart::removedFilesFromProject (const QStringList &fileList)
         {
             kdDebug () << "AdaSupportPart::removedFileFromProject () -- " << (*it) << endl;
             QString path = project ()->projectDirectory () + "/" + (*it);
-            classStore ()->removeWithReferences (path);
+
+            if( codeModel()->hasFile(path) )
+            {
+                emit aboutToRemoveSourceInfo( path );
+                codeModel()->removeFile( codeModel()->fileByName(path) );
+            }
         }
 
-        emit updatedSourceInfo();
+//        emit updatedSourceInfo();
 }
 
 
@@ -211,7 +239,7 @@ void AdaSupportPart::parse (const QString &fileName)
             kdDebug () << "-------------------> start StoreWalker" << endl;
             AdaStoreWalker walker;
             walker.setFileName (fileName);
-            walker.setClassStore (classStore ());
+            walker.setCodeModel (codeModel ());
             walker.compilation_unit (ast);
         }
     } catch (antlr::ANTLRException& ex) {
@@ -277,6 +305,65 @@ KMimeType::List AdaSupportPart::mimeTypes( )
     list << KMimeType::mimeType( "text/x-adasrc" );
 
     return list;
+}
+
+//@todo adymo: implement source info loading and saving
+//hint: check javasupport for an example
+//      and modify initialParse() method
+void AdaSupportPart::saveProjectSourceInfo( )
+{
+/*    const FileList fileList = codeModel()->fileList();
+
+    if( !project() || fileList.isEmpty() )
+        return;
+
+    QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
+    if( !f.open( IO_WriteOnly ) )
+        return;
+
+    QDataStream stream( &f );
+    QMap<QString, Q_ULONG> offsets;
+
+    QString pcs( "PCS" );
+    stream << pcs << KDEV_PCS_VERSION;
+
+    stream << int( fileList.size() );
+    for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
+        const FileDom dom = (*it);
+#if QT_VERSION >= 0x030100
+        stream << dom->name() << m_timestamp[ dom->name() ].toTime_t();
+#else
+        stream << dom->name() << toTime_t(m_timestamp[ dom->name() ]);
+#endif
+        offsets.insert( dom->name(), stream.device()->at() );
+        stream << (Q_ULONG)0; // dummy offset
+    }
+
+    for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
+        const FileDom dom = (*it);
+        int offset = stream.device()->at();
+
+        dom->write( stream );
+
+        int end = stream.device()->at();
+
+        stream.device()->at( offsets[dom->name()] );
+        stream << offset;
+        stream.device()->at( end );
+    }*/
+}
+
+void AdaSupportPart::changedFilesInProject( const QStringList & fileList )
+{
+    QStringList files = fileList;
+
+    for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
+    {
+        QString path = project ()->projectDirectory () + "/" + *it ;
+
+        maybeParse( path );
+        emit addedSourceInfo( path );
+    }
 }
 
 
