@@ -16,6 +16,6 @@ Last updated on 28.07.2003 by Mario Scalas
 
 \feature Performs KTrader-like queries about registered services
 
-\bug bugs from <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=partexplorer&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">partexplorer component in Bugzilla database</a>
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=partexplorer&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">partexplorer component at Bugzilla database</a>
 
 */

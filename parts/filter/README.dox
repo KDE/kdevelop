@@ -20,9 +20,6 @@ and images.
 ...
 \feature Describe the last feature
 
-\bug bugs from <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=YOUR_COMPONENT_NAME&
-bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">
-YOUR_COMPONENT_NAME in Bugzilla database</a>
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
 ..
 \bug Describe a the nth bug that you know of, but probably hasn't been reported yet.

@@ -19,7 +19,7 @@ Consult \ref LangSupportStatus for an up to date status of this programming lang
 ...
 \feature Describe the last feature
 
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=javasupport&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number"> javasupport component at Bugzilla database</a>
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=javasupport&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">javasupport component at Bugzilla database</a>
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
 ..
 \bug Describe a the nth bug that you know of, but probably hasn't been reported yet.

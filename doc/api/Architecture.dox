@@ -149,7 +149,7 @@ These parts implement a KDevProject Class interface.
 These parts implement a KDevVersionControl Class interface.
 
   - vcs/cervisia = Cervisia Support
-    - (see CervisiaPart)
+    - (see CervisiaPlugin)
     .
   - vcs/clearcase = IBM Rational ClearCase Support
     - (see ClearcasePart)

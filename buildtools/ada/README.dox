@@ -9,14 +9,9 @@ It holds the project file list and tries to abstract from their specifics.
 
 \deprecated This class is deprecated, use GenericProjectPart (buildtools/generic) instead.
 
-\feature Feature 1
-\feature Feature 2
+\feature supports gnat compiler
+\feature Holds the project file list and tries to abstract from their specifics
 
-
-\bug Bug1
-\bug Bug2
-
-
-\requirement Ada compiler
+\requirement Ada gnat compiler
 
 */

@@ -63,10 +63,8 @@ ui-mainwin
 \feature friendly sidebar listing the types of new file that can be created for your project
 \feature configurable per-project file types and global file types
 
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=file+create&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=file+create&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">file create component at Bugzilla database</a>
 \bug Arrangement of text in sidebar is not always perfect
-
-
 
 
 */

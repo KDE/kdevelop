@@ -25,7 +25,7 @@ What cvspart when compared to Cervisia is really missing:
 \feature It does intercept events like adding and removing project's files, asking
   for user action.
 
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">cvs part component at Bugzilla database</a>
 
 \requirement <a href="http://www.cvshome.org">CVS</a> >= 1.10.6
 

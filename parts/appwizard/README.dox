@@ -64,9 +64,8 @@ GNOME     GNOME application
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 
 \feature Can create simple applications that you can use as a starting point.
-\feature Feature 2
 
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=appwizard&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=appwizard&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">appwizard component at Bugzilla database</a>
 \bug The C/C++ applications use libtool as a degugging shell. That doesn't work. Please remove libtool from "Project Options...-> Debugger -> Debugging Shell" to make them work.
 
 \requirement <a href="http://www.perl.com"> perl </a> >= 5.004

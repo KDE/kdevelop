@@ -59,7 +59,7 @@ Implementation of this component is done by:
 \feature can tag / un-tag files
 \feature Can revert and diff between specific releases
 
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">cvs part component at Bugzilla database</a>
 
 \requirement <a href="http://www.cvshome.org">CVS</a> >= 1.10.6
 \requirement Cervisia >= 2.1 (from kdesdk package included in <a href="http://www.kde.org">KDE</a> >= 3.2)

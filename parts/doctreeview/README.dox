@@ -1,55 +1,31 @@
-/** \class $APPNAME$
-Put a brief description here, the brief description ends at the first dot.
-Put a more detailed description of your part in these lines. It can span
-over several lines. You can even use some html commands in these lines like:
-<code>This is code</code>, html links <a href="http://somelocation">link text</a>,
-and images.
+/** \class DocTreeViewPart
+This part shows apidocs and other documentation.
+It is also responsible for indexing the documentation.
+The indexing is done whith the helper tool "kdevelop-htdig", located in htdigindex.h/cpp.
+With the index you can search for keywords in the kdelibs/qt api.
 
-\authors <a href="mailto:$EMAIL$">$AUTHOR$</a>
-\authors <a href="mailto:2nd author AT provider.com">2nd author full name</a>
-...
-\authors <a href="mailto:nth author AT provider.com">nth author full name</a>
+If you use KDE-3.1 you must make the doxygen docs yourself with "make apidox" in your kdelibs sources.
+Then copy the subfolders of "apidocs" to a folder of your choice.
+Recommend is $KDEDIR/share/doc/HTML/en/kdelibs-apidocs/
 
-\maintainer <a href="mailto:$EMAIL$">$AUTHOR$</a>
-\maintainer <a href="mailto:2nd maintainer AT provider.com">2nd maintainer full name</a>
-...
-\maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
 
-\feature Describe the first feature
-\feature Describe the second feature
-...
-\feature Describe the last feature
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 
-\bug bugs from <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=YOUR_COMPONENT_NAME&
-bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">
-YOUR_COMPONENT_NAME in Bugzilla database</a>
-\bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
-..
-\bug Describe a the nth bug that you know of, but probably hasn't been reported yet.
+\maintainer <a href="mailto:skratzert AT gmx.de">Sebastian Kratzert</a>
+\maintainer <a href="mailto:cloudtemple AT mksat.net">Alexander Dymo</a>
 
-\requirement Describe a the 1st requirement of your part.
-\requirement Describe a the 2nd requirement of your part.
-...
-\requirement Describe a the nth requirement of your part.
+\feature shows html documentation
+\feature indexes the documentation
+\feature search for keywords in the indexed documentation
 
-\todo Describe a the 1st TODO of your part.
-\todo Describe a the 2nd TODO of your part.
-...
-\todo Describe a the nth TODO of your part.
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=doctreeview&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">doctreeview component at Bugzilla database</a>
 
-\faq <b>First frequenly asked question about your part ?</b> Answer.
-\faq <b>Second frequenly asked question about your part ?</b> Answer.
-...
-\faq <b>Last frequenly asked question about your part ?</b> Answer.
+\todo make project docs nicer
+\todo disable STL or remove
+\todo custom folders
 
-\note First note text.
-\note Second note text.
-...
-\note Last note text.
-
-\warning First warning text.
-\warning Second warning text.
-...
-\warning Last warning text.
+\warning If you use KDE-3.1 you must make the doxygen docs yourself with "make apidox" in your kdelibs sources.
+Then copy the subfolders of "apidocs" to a folder of your choice.
+Recommend is $KDEDIR/share/doc/HTML/en/kdelibs-apidocs/
 
 */
