@@ -16,5 +16,6 @@ install( "${src}/template-kdevpart/kdevpart_widget.cpp",  "${dest}/${APPNAMELC}_
 install( "${src}/template-kdevpart/kdevpart_widget.h",    "${dest}/${APPNAMELC}_widget.h" );
 install( "${src}/template-kdevpart/kdevpart_part.rc",   "${dest}/kdevpart_${APPNAMELC}.rc" );
 install( "${src}/template-kdevpart/kdevpart.desktop",   "${dest}/kdevpart_${APPNAMELC}.desktop" );
+install( "${src}/template-kdevpart/README.dox",   "${dest}/README.dox" );
 
 print "Finished\n";

@@ -61,6 +61,7 @@ apidox-am-yes:
 	fi ;\
 	## example path for howToAddTemplates.
 	echo "EXAMPLE_PATH           = parts/appwizard/khello" >> Doxyfile; \
+	echo "EXAMPLE_PATH          += parts/appwizard/kdevpart" >> Doxyfile; \
 	echo "EXAMPLE_PATTERNS       = " >> Doxyfile; \
 	echo "EXAMPLE_RECURSIVE      = NO" >> Doxyfile; \
 	echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\

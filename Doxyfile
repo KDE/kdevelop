@@ -66,11 +66,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = src \
-                         lib \
-                         parts \
-                         plugins \
-                         doc/api
+INPUT                  =                          doc/api
 FILE_PATTERNS          = *.h \
                          *.cpp \
                          *.cc \
@@ -144,7 +140,8 @@ EXCLUDE_PATTERNS       = *.moc.* \
                          *unload.* \
                          */test/* \
                          */tests/*
-EXAMPLE_PATH           = parts/appwizard/khello
+EXAMPLE_PATH           = parts/appwizard/khello \
+                         parts/appwizard/kdevpart
 EXAMPLE_PATTERNS       = 
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             = ./doc/api

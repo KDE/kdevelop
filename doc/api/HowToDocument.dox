@@ -3,11 +3,11 @@
   */
 /** \page howToDocument How to document KDevelop parts
 
-You should add a README and a README.dox file to your part (KPart).
+You should add a README and a README.dox file to your part (KDevPlugin).
 
 On the README file put this text:
 \verbatim
-Please read the on-line automaticaly updated KDevelop API documentation at:
+Please read the on-line, automaticaly updated KDevelop API documentation at:
 http://www.kdevelop.org
 or read the README.dox file.
 \endverbatim
@@ -15,9 +15,9 @@ or read the README.dox file.
 On the README.dox file put the mandatory information:
 \verbatim
 /** \class yourPartClassName
-Put a brief description here, the brief description end at the first dot.
+Put a brief description here, the brief description ends at the first dot.
 Put a more detailed description of your part in these lines. It can span
-oner several lines. You can even use some html commands in these lines like:
+over several lines. You can even use some html commands in these lines like:
 <code>This is code</code>, html links <a href="http://somelocation">link text</a>,
 and images.
 
@@ -26,49 +26,12 @@ and images.
 /*
 \endverbatim
 
-You should replace <code>yourPartClassName</code> with the name of the class that
-implements you part.
+<b>IMPORTANT:</b> You should replace <code>yourPartClassName</code> with the name of the class that
+implements your part.
 
-On the area marked with <code>...</code> you can add the following optional information:
-\verbatim
-\authors <a href="mailto:1st author AT provider.com">1st author full name</a>
-\authors <a href="mailto:2nd author AT provider.com">2nd author full name</a>
-...
-\authors <a href="mailto:nth author AT provider.com">nth author full name</a>
+On the area marked with <code>...</code> you can add optional informations. Here is an example of that:
 
-\maintainer <a href="mailto:1st maintainer AT provider.com">1st maintainer full name</a>
-\maintainer <a href="mailto:2nd maintainer AT provider.com">2nd maintainer full name</a>
-...
-\maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
-
-\feature Describe the first feature
-\feature Describe the second feature
-...
-\feature Describe the last feature
-
-\bug bugs from <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=YOUR_COMPONENT_NAME&
-bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">
-YOUR_COMPONENT_NAME in Bugzilla database</a>
-\bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
-..
-\bug Describe a the nth bug that you know of, but probably hasn't been reported yet.
-
-\requirement Describe a the 1st requirement of your part.
-\requirement Describe a the 2nd requirement of your part.
-...
-\requirement Describe a the nth requirement of your part.
-
-\todo Describe a the 1st TODO of your part.
-\todo Describe a the 1st TODO of your part.
-...
-\todo Describe a the nth TODO of your part.
-
-\faq <b>First frequenly asked question about your part ?</b> Answer.
-\faq <b>Second frequenly asked question about your part ?</b> Answer.
-...
-\faq <b>Last frequenly asked question about your part ?</b> Answer.
-
-\endverbatim
+\verbinclude parts/appwizard/kdevpart/README.dox
 
 All these infos are optional and you should only add the link to the bugzilla database if YOUR_COMPONENT_NAME
 has been defined in that database.

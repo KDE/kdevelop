@@ -454,7 +454,7 @@ public slots:
     * <UL><LI>the view should be attached or detached.</LI>
     * <LI>shown or hidden</LI>
     * <LI>maximized, minimized or restored (normalized)</LI>
-    * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.
+    * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.</LI></UL>
     */
    virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd);
    /**

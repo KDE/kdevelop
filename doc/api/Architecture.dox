@@ -5,7 +5,7 @@
 /** \page KDev3Arch KDevelop 3 Architecture
 
 KDevelop uses a plugin based architecture. This will be explained in more
-detail in the next sections. To add a new plugin check this page \ref howToExtend
+detail in the next sections. To add a new plugin check this page \ref howToAddPlugins
 
 \section overview Source Overview
 
@@ -137,7 +137,7 @@ operation of KDevelop.
 
 \subsubsection language-parts Language Support Parts in KDevelop
 
-To add support for a new language check this page \ref howToAddNewLanguage
+To add support for a new language check this page \ref howToAddProgrammingLanguages
 
   - parts/cppsupport = Support for C/C++
     - (see CppSupportPart)
