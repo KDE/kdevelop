@@ -91,8 +91,6 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   project=0l;
   m_author_email = author_email;
   m_author_name = author_name;
-  //cerr << ":" << m_author_name << ":";
-  //cerr << ":" << m_author_email << ":";
   slotDefaultClicked();
 }
 
@@ -2177,7 +2175,7 @@ void CKAppWizard::slotProcessExited() {
     project->setProjectType("normal_gnome");
   }
   else if (kickeritem->isSelected()){
-   project->setProjectType("mini_kde2");
+   project->setProjectType("kicker_app");
   }
   else if (customprojitem->isSelected()) {
     project->setProjectType("normal_empty");
@@ -2256,7 +2254,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
   sub_dir_list.clear();
   if(kickeritem->isSelected()){
-   makeAmInfo.type = "shared_library";
+  	makeAmInfo.type = "shared_library";
   }
   else {
    makeAmInfo.type = "prog_main";
@@ -2549,12 +2547,12 @@ void CKAppWizard::slotProcessExited() {
   }
 
   if(kickeritem->isSelected()){
-        fileInfo.rel_name = namelow + "/" + namelow + "/myview.ui";
-        fileInfo.type = DATA;
+        fileInfo.rel_name = namelow +  "/myview.ui";
+        fileInfo.type = CPP_SOURCE;
         fileInfo.dist = true;
         fileInfo.install = false;
         fileInfo.install_location = "";
-        project->addFileToProject (namelow + "/" + namelow + "/myview.ui",fileInfo);
+        project->addFileToProject (namelow +  "/myview.ui",fileInfo);
   }
 
   if (datalink->isChecked()) {

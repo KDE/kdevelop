@@ -483,7 +483,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
   check_makefile_list.append(makefile_name);
   QString makefile_name_org = makefile_name.copy();
 
-  //   kdDebug() << endl << "*check:*" << makefile_name;
+ // kdDebug() << endl << "*check:*" << makefile_name;
 
   while((slash_pos = makefile_name.findRev('/')) != -1){ // if found
 
@@ -1133,7 +1133,11 @@ void CProject::removeLFVGroup(QString name){
 }
 
 void CProject::addMakefileAmToProject(QString rel_name,TMakefileAmInfo info){
-  
+
+	cerr << "Create " << rel_name << endl;
+        for ( QString subdir=info.sub_dirs.first(); subdir != 0; subdir=info.sub_dirs.next() )
+            cerr << subdir << endl;
+
   config.setGroup(rel_name);
   config.writeEntry("type",info.type);
   config.writeEntry("sub_dirs",info.sub_dirs);
@@ -1435,7 +1439,7 @@ bool CProject::isKDEProject()
 }
 bool CProject::isKDE2Project()
 {
-  if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2")
+  if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" || getProjectType()=="kicker_app" )
   		return true;
   return false;
 }
