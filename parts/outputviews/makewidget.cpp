@@ -627,9 +627,9 @@ void MakeWidget::updateColors()
     int h,s,v;
     paletteBackgroundColor().hsv( &h, &s, &v );
     bool bright_bg = (v > 127);
-    errorColor = bright_bg ? "darkRed" : "lightRed";
+    errorColor = bright_bg ? "maroon" : "red";
     diagnosticColor = bright_bg ? "black" : "white";
-    normalColor = bright_bg ? "darkBlue" : "lightBlue";
+    normalColor = bright_bg ? "navy" : "blue";
 }
 
 QString MakeWidget::getOutputColor( Type type )
