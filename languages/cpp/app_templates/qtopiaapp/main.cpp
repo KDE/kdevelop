@@ -1,3 +1,4 @@
+
 #include "$APPNAMELC$.h"
 #include <qpe/qpeapplication.h>
 

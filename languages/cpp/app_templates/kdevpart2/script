@@ -3,6 +3,7 @@
 use kdevelop;
 
 initKDevelop();
+installFileTemplate();
 installLicense();
 installAdmin();
 installGNU();
@@ -26,5 +27,6 @@ install( "${src}/template-kdevpart2/kdevpart_widget.cpp",  "${dest}/src/${APPNAM
 install( "${src}/template-kdevpart2/kdevpart_widget.h",    "${dest}/src/${APPNAMELC}_widget.h" );
 install( "${src}/template-kdevpart2/kdevpart_part.rc",   "${dest}/src/kdevpart_${APPNAMELC}.rc" );
 install( "${src}/template-kdevpart2/kdevpart.desktop",   "${dest}/src/kdevpart_${APPNAMELC}.desktop" );
+install( "${src}/template-kdevpart2/README.dox",   "${dest}/src/README.dox" );
 
 print "Finished\n";

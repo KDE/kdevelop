@@ -1,5 +1,7 @@
 #!/usr/bin/perl
+
 use kdevelop;
+
 initKDevelop();
 installFileTemplate();
 installLicense();

@@ -1,3 +1,4 @@
+
 // $APPNAME$ - Screensaver Template from KDevelop
 //
 // Copyright (c)  Ian Reinhart Geiser

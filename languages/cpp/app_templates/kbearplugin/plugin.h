@@ -1,6 +1,3 @@
-/**
- *  Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
- */
  
 #ifndef __KBEARPLUGIN_$APPNAMEUC$_H__
 #define __KBEARPLUGIN_$APPNAMEUC$_H__

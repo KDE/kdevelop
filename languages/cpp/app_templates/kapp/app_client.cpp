@@ -1,6 +1,3 @@
-/*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
- */
 
 #include <kapplication.h>
 #include <dcopclient.h>

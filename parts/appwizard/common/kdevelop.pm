@@ -9,6 +9,22 @@ sub customize
 
         open(IN, "<$filename") || die "Could not open for reading: $filename\n";
         open(OUT, ">$filename.tmp") || die "Could not open for writing: $filename.tmp\n";
+
+# Pre-append a file template if one exists
+        my %templates = split(/,/, $FILETEMPLATES);
+        while (($suffix, $templatefile) = each %templates) {
+             my %fullfilename = split(/\./, $filename);
+#             print "Installing file $filename and comparing it with $suffix template\n";
+             while (($filenameprefix, $filenamesufix) = each %fullfilename) {
+                  if ($filenamesufix eq $suffix) {
+#                      print "Matches, going to preapend template\n";
+                      open(INTEMPLATE, "<$templatefile") || die "Could not open for reading: $templatefile\n";
+                      while (<INTEMPLATE>) { print OUT $_};
+                      close INTEMPLATE;
+                  }
+             }
+        }
+
         while (<IN>) {
               s/\$AUTHOR\$/$AUTHOR/g;
               s/\$EMAIL\$/$EMAIL/g;

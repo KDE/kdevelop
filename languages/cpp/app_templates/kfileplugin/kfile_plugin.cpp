@@ -1,6 +1,3 @@
-/**
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
- */
 
 #include <config.h>
 #include "kfile_$APPNAMELC$.h"

@@ -1,6 +1,3 @@
-/*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
- */
 
 #include <wx/wx.h>
 #include "$APPNAMELC$.h"

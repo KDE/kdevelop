@@ -1,7 +1,3 @@
-/*
- *  Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>   
- */
- 
 
 #ifndef __KDEVPART_$APPNAMEUC$_H__
 #define __KDEVPART_$APPNAMEUC$_H__
@@ -14,6 +10,9 @@
 class $APPNAME$Widget;
 
 
+/*
+ Please read the README.dox file for more info about this part
+ */
 class $APPNAME$Part : public KDevPlugin
 {
   Q_OBJECT
