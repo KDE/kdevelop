@@ -28,7 +28,7 @@ bin_program=kdevelop
 cflags=
 cppflags=
 cxxflags=\s-O0 -g3 -Wall
-ldadd=./widgets/qextmdi/src/libkdevelopqextmdi.la $(LEXLIB) -lktexteditor -lkatepart $(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
+ldadd=./widgets/qextmdi/src/libkdevelopqextmdi.la $(LEXLIB) -lktexteditor -lkatepartinterfaces $(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=\s   \s
 
 [FAQ]
