@@ -289,7 +289,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    int svLine = currentLine();
 	    int svColumn = currentColumn();
 
-	    Macro& m = m_driver->macro( ide );
+//	    Macro& m = m_driver->macro( ide );
+	    Macro m = m_driver->macro( ide );
 	    //m_driver->removeMacro( m.name() );
 
             QString ellipsisArg;
