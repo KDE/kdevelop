@@ -17,7 +17,9 @@ libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp \
 
 bin_PROGRAMS = gideon-index
 gideon_index_SOURCES = htdigindex.cpp
-gideon_index_CXXFLAGS = -DINDEXER
+
+# gideon_index_CXXFLAGS = -DINDEXER ## makes problems with automake 1.5 and am_edit (Walter/2.01.2002)
+
 gideon_index_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 gideon_index_LDADD = $(LIB_KDEUI)
 
