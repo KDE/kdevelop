@@ -1,0 +1,8 @@
+# KDE Config File
+[General]
+Name=Gtk-- Application framework
+Category=C++/GTK+
+Icon=gtk2mm.png
+Comment=Generates a simple Gtk-- application. Gtkmm >= 1.2.8 and < 1.3.0 should be installed. To edit glade file glade-- is required.
+FileTemplates=hh,CStyle,cc,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp

@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
+
+<glade-interface>
+
+<widget class="GtkWindow" id="main_window">
+  <property agent="glademm" name="cxx_separate_class">True</property>
+  <property agent="glademm" name="cxx_separate_file">True</property>
+  <property agent="glademm" name="cxx_visibility">public</property>
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">$APPNAME$ Project</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_CENTER</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <signal name="delete_event" handler="quit"/>
+
+  <child>
+    <placeholder/>
+  </child>
+</widget>
+
+</glade-interface>
