@@ -99,14 +99,16 @@ public:
   /** retrieves the document found by its filename */
   int findDoc( const QString& strFileName) const;
 
-  /** Get the last focused CEditWidget view (Note: not the covering MDI widgets but the embedded view) */
+  /** Get the currently focused CEditWidget view (Note: not the covering MDI widgets but the embedded view) */
   CEditWidget* currentEditView() { return m_pCurEditView; };
-  /** Get the last focused KHTMLView view (Note: not the covering MDI widgets but the embedded view) */
+  /** Get the currently focused KHTMLView view (Note: not the covering MDI widgets but the embedded view) */
   KHTMLView* currentBrowserView() { return m_pCurBrowserView; };
-  /** Get the document of the last focused CEditWidget view. */
+  /** Get the document of the currently focused CEditWidget view. */
   KWriteDoc* currentEditDoc() { return m_pCurEditDoc; };
-  /** Get the document of the last focused KHTMLView view. */
+  /** Get the document of the currently focused KHTMLView view. */
   CDocBrowser* currentBrowserDoc() { return m_pCurBrowserDoc; };
+  /** Get the type of the currently (because of its view) focused document */
+  int currentDocType() { return m_currentDocType; };
 
 public slots:
   /** */
@@ -151,6 +153,8 @@ private:
   CEditWidget*              m_pCurEditView;
   CDocBrowser*              m_pCurBrowserDoc;
   KHTMLView*                m_pCurBrowserView;
+
+  int                       m_currentDocType;
 };
 
 #endif //DOCVIEWMAN_H

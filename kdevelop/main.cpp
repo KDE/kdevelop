@@ -106,7 +106,6 @@ int main(int argc, char* argv[])
       kdevelop->refreshTrees();  // this is because of the new documentation
 
     KGlobal::config()->setGroup("General Options");
-    kdevelop->slotSCurrentTab(KGlobal::config()->readNumEntry("LastActiveTab",BROWSER));
     kdevelop->slotTCurrentTab(KGlobal::config()->readNumEntry("LastActiveTree",DOC));
     
     if (args->count())

@@ -590,8 +590,6 @@ public:
       disassemble, frame stack*/
   void slotOTabSelected(int item);
 
-  /** set the window tab automatically without click */
-  void slotSCurrentTab(int item);
   /** click on the treeview tabs: cv,lfv,wfv,doc*/
   void slotTTabSelected(int item);
   /** set the tree tab automatically without click */
@@ -641,8 +639,6 @@ public:
   void slotNewUndo();
 
   void slotBufferMenu(const QPoint& pos);
-
-  void slotToggleLast();
 
   void slotMenuBuffersSelected(int id);
   void slotClickedOnMessagesWidget();
@@ -904,8 +900,6 @@ private:
   //some widgets for the mainview
   ///////////////////////////////
 
-  /** The tabbar for the sourcescode und browser. */
-  CTabCtl* s_tab_view;
   /** The tabbar for the trees. */
   CTabCtl* t_tab_view;
   /** The tabbar for the output_widgets. */

@@ -45,6 +45,7 @@ DocViewMan::DocViewMan( CKDevelop* parent)
   ,m_pCurEditView(0L)
   ,m_pCurBrowserDoc(0L)
   ,m_pCurBrowserView(0L)
+  ,m_currentDocType(DocViewMan::Undefined)
 {
   m_docsAndViews.setAutoDelete(true);
   m_MDICoverList.setAutoDelete(true);
@@ -232,9 +233,39 @@ void DocViewMan::closeDoc(int docId)
   }
 
   //   remove list entry
+  int removedDocType = pCurDocViewNode->docType;
   m_docsAndViews.remove(pCurDocViewNode);
+
   //   emit an according signal if we closed the last doc
+  bool bBrowserDocFound = false;
+  bool bEditDocFound = false;
+  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
+    int docType = itDoc.current()->docType;
+    if (docType == DocViewMan::HTML)
+      bBrowserDocFound = true;
+    else if ((docType == DocViewMan::Source) || (docType == DocViewMan::Header))
+      bEditDocFound = true;
+  }
+
+  // check if there's still a m_pCurBrowserDoc, m_pCurBrowserView, m_pCurEditDoc, m_pCurEditView
+  switch (removedDocType) {
+  case DocViewMan::Header:
+  case DocViewMan::Source:
+    if (!bEditDocFound) {
+      m_pCurEditDoc = 0L;
+      m_pCurEditView = 0L;
+    }
+    break;
+  case DocViewMan::HTML:
+    if (!bBrowserDocFound) {
+      m_pCurBrowserDoc = 0L;
+      m_pCurBrowserView = 0L;
+    }
+    break;
+  }
+
   if (m_docsAndViews.count() == 0) {
+    m_currentDocType = DocViewMan::Undefined;
     emit sig_lastDocClosed();
   }
 }
@@ -531,6 +562,7 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
     m_pCurBrowserView = (KHTMLView*) pView;
 
   // set current document
+  m_currentDocType = DocViewMan::Undefined; // assume worst case
   QObject* pDoc = 0L;
   QListIterator<DocViewNode>    itDoc(m_docsAndViews);
   for (; itDoc.current() != 0 && !pDoc; ++itDoc) {
@@ -539,6 +571,7 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
       if (itView.current() == pView) {
         // view found
         pDoc = itDoc.current()->pDoc;
+        m_currentDocType = itDoc.current()->docType;
       }
     }
   }

@@ -494,7 +494,7 @@ void CKDevelop::slotFileSaveAll()
   debug("slotFileSaveAll !\n");
 
   debug("get currenttab ! \n");
-  int visibleTab=s_tab_view->getCurrentTab();
+  int visibleTab = m_docViewManager->currentDocType();
 
   // ok,its a dirty implementation  :-)
   if(!bAutosave || !saveTimer->isActive())
@@ -575,7 +575,7 @@ void CKDevelop::slotEditCut(){
 }
 void CKDevelop::slotEditCopy(){
   slotStatusMsg(i18n("Copying..."));
-  if(s_tab_view->getCurrentTab()==BROWSER){
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
     browser_widget->slotCopyText();
   }
   else
@@ -595,7 +595,7 @@ void CKDevelop::slotEditInsertFile(){
 void CKDevelop::slotEditSearch(){
   
   slotStatusMsg(i18n("Searching..."));
-  if(s_tab_view->getCurrentTab()==BROWSER){
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
       CFindDocTextDlg* help_srch_dlg=new CFindDocTextDlg(this,"Search_for_Help_on");
       connect(help_srch_dlg,SIGNAL(signalFind(QString)),browser_widget,SLOT(slotFindTextNext(QString)));
       help_srch_dlg->exec();
@@ -608,7 +608,7 @@ void CKDevelop::slotEditSearch(){
 }
 void CKDevelop::slotEditRepeatSearch(int back){
   slotStatusMsg(i18n("Repeating last search..."));
-  if(s_tab_view->getCurrentTab()==BROWSER){
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
     browser_widget->findTextNext(QRegExp(doc_search_text),true);
   }
   else{
@@ -651,7 +651,7 @@ void CKDevelop::slotEditSearchInFiles(QString search){
 
 void CKDevelop::slotEditSearchText(){
   QString text;
-  if(s_tab_view->getCurrentTab()==BROWSER){
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
     text = browser_widget->selectedText();
   }
   else{
@@ -2175,7 +2175,7 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
 
 /*  
 void CKDevelop::slotBookmarksSet(){
-  if(s_tab_view->getCurrentTab()==BROWSER)
+  if (m_docViewManager->currentDocType() == DocViewMan::Browser)
     slotBookmarksAdd();
   else{
     m_docViewManager->currentEditView()->setBookmark();
@@ -2185,7 +2185,7 @@ void CKDevelop::slotBookmarksSet(){
 
 void CKDevelop::slotBookmarksToggle()
 {
-  if(s_tab_view->getCurrentTab()==BROWSER)
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
   {
     doc_bookmarks->clear();
 
@@ -2216,7 +2216,7 @@ void CKDevelop::slotBookmarksToggle()
 }
 
 void CKDevelop::slotBookmarksClear(){
-  if(s_tab_view->getCurrentTab()==BROWSER){
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
     doc_bookmarks_list.clear();
     doc_bookmarks_title_list.clear();
     doc_bookmarks->clear();
@@ -2250,7 +2250,7 @@ void CKDevelop::slotBookmarksBrowserSelected(int id_)
 
 void CKDevelop::slotBookmarksNext()
 {
-  if(s_tab_view->getCurrentTab()==BROWSER)
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
   {
     if(doc_bookmarks_list.count() > 0)
     {
@@ -2268,7 +2268,7 @@ void CKDevelop::slotBookmarksNext()
 
 void CKDevelop::slotBookmarksPrevious()
 {
-  if(s_tab_view->getCurrentTab()==BROWSER)
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
   {
     if(doc_bookmarks_list.count() > 0)
     {
@@ -2292,8 +2292,9 @@ void CKDevelop::slotHelpBack()
   slotStatusMsg(i18n("Switching to last page..."));
   QString str = history_list.prev();
   if (str != 0){
-    s_tab_view->setCurrentTab(BROWSER);
-    browser_widget->showURL(str);
+    CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
+    if (pCurBrowser)
+      pCurBrowser->showURL(str);
   }
 
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
@@ -2304,9 +2305,10 @@ void CKDevelop::slotHelpForward()
 {
   slotStatusMsg(i18n("Switching to next page..."));
   QString str = history_list.next();
-  if (str != 0){
-    s_tab_view->setCurrentTab(BROWSER);
-    browser_widget->showURL(str);
+  if (str != 0) {
+    CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
+    if (pCurBrowser)
+      pCurBrowser->showURL(str);
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -2318,9 +2320,10 @@ void CKDevelop::slotHelpHistoryBack(int id)
 
 	int index = history_prev->indexOf(id);
   QString str = history_list.at(index);
-  if (str != 0){
-    s_tab_view->setCurrentTab(BROWSER);
-    browser_widget->showURL(str);
+  if (str != 0) {
+    CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
+    if (pCurBrowser)
+      pCurBrowser->showURL(str);
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -2334,9 +2337,10 @@ void CKDevelop::slotHelpHistoryForward( int id)
 	int index = history_next->indexOf(id);
   int cur=history_list.at()+1;
   QString str = history_list.at(cur+index);
-  if (str != 0){
-    s_tab_view->setCurrentTab(BROWSER);
-    browser_widget->showURL(str);
+  if (str != 0) {
+    CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
+    if (pCurBrowser)
+      pCurBrowser->showURL(str);
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -2345,9 +2349,11 @@ void CKDevelop::slotHelpHistoryForward( int id)
 void CKDevelop::slotHelpBrowserReload()
 {
   slotStatusMsg(i18n("Reloading page..."));
-  s_tab_view->setCurrentTab(BROWSER);
-  browser_widget->view()->setFocus();
-  browser_widget->showURL(browser_widget->currentURL(), true);
+  CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
+  if (pCurBrowser) {
+    pCurBrowser->view()->setFocus();
+    pCurBrowser->showURL(pCurBrowser->currentURL(), true);
+  }
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -2456,7 +2462,7 @@ void CKDevelop::slotHelpSearchText(QString text){
 void CKDevelop::slotHelpSearchText()
 {
   QString text;
-  if(s_tab_view->getCurrentTab()==BROWSER){
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
     text = browser_widget->selectedText();
   }
   else{
@@ -2804,8 +2810,8 @@ void CKDevelop::slotNewStatus()
 void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
 {
 
-  int item=s_tab_view->getCurrentTab();
-  if (item==CPP)
+  int item = m_docViewManager->currentDocType();
+  if (item == DocViewMan::Source)
   {
     if(bMarked){
       enableCommand(ID_EDIT_CUT);
@@ -2820,8 +2826,8 @@ void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
 
 void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
 {
-  int item=s_tab_view->getCurrentTab();
-  if (item==HEADER)
+  int item = m_docViewManager->currentDocType();
+  if (item == DocViewMan::Header)
   {
       if(bMarked){
         enableCommand(ID_EDIT_CUT);
@@ -2836,8 +2842,7 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
 
 void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
 {
-  int item=s_tab_view->getCurrentTab();
-  if (item==BROWSER)
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
   {
       if(bMarked){
         enableCommand(ID_EDIT_COPY);
@@ -2850,9 +2855,8 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
 
 void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
 {
-  int item=s_tab_view->getCurrentTab();
   QString text=QApplication::clipboard()->text();
-  if(!bContents || item==BROWSER)
+  if(!bContents || m_docViewManager->currentDocType() == DocViewMan::HTML)
     disableCommand(ID_EDIT_PASTE);
   else
     enableCommand(ID_EDIT_PASTE);
@@ -2909,10 +2913,12 @@ void CKDevelop::slotURLSelected(const QString& url,int,const char*)
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
 
-	if (s_tab_view->getCurrentTab() != BROWSER)
+	if (m_docViewManager->currentDocType() != DocViewMan::HTML)
 	{
-  	s_tab_view->setCurrentTab(BROWSER);
-  	browser_widget->view()->setFocus();
+    CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
+    if (pCurBrowser) {
+    	pCurBrowser->view()->setFocus();
+    }
 	}
 }
 
@@ -2948,7 +2954,7 @@ void CKDevelop::slotDocumentDone()
     browser_widget->findTextNext(QRegExp(doc_search_text),true);
   }
 
-  if (s_tab_view->getCurrentTab()==BROWSER)
+  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
     setMainCaption(BROWSER);
 
   if (pos!=-1)
@@ -3484,9 +3490,9 @@ void CKDevelop::slotTTabSelected(int item){
   }
 }
 void CKDevelop::slotSTabSelected(int item){
-  lasttab = s_tab_view->getCurrentTab();
+  lasttab = m_docViewManager->currentDocType();
 
-  if (item == HEADER || item == CPP)
+  if (item == DocViewMan::Header || item == DocViewMan::Source)
   {
    // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
     enableCommand(ID_FILE_SAVE_AS);
@@ -3729,17 +3735,6 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
 
 void CKDevelop::slotTCurrentTab(int item){
     t_tab_view->setCurrentTab(item);
-}
-
-void CKDevelop::slotSCurrentTab(int item){
-    s_tab_view->setCurrentTab(item);
-}
-
-void CKDevelop::slotToggleLast() {
-  if ( lasttab != s_tab_view->getCurrentTab() )
-    s_tab_view->setCurrentTab( lasttab );
-  else
-    switchToFile( lastfile );
 }
 
 void CKDevelop::slotBufferMenu( const QPoint& point ) {

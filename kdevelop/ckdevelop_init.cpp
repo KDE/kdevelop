@@ -175,8 +175,6 @@ void CKDevelop::initView()
   act_outbuffer_len=0;
   prj = 0;
 
-  s_tab_view = new CTabCtl(0L);//FB
-  s_tab_view->hide();   //FB
   o_tab_view = new CTabCtl(0L, "output_tabview","output_widget");//FB
   addToolWindow(o_tab_view, KDockWidget::DockBottom, m_pMdi, 70);//FB
 
@@ -246,7 +244,6 @@ void CKDevelop::initView()
   ////////////////////////////
   // editor and browser window
   ////////////////////////////
-//FB  browser_widget = new CDocBrowser(s_tab_view,"browser");
   int newDocId = m_docViewManager->createDoc(DocViewMan::HTML, "browser");
   if (newDocId != -1) {
     browser_widget = (CDocBrowser*) m_docViewManager->docPointer( newDocId);
@@ -257,8 +254,6 @@ void CKDevelop::initView()
 
   prev_was_search_result= false;
   //init
-
-//FB  s_tab_view->addTab(browser_widget->view(),SmallIcon("contents"),i18n("&Documentation-Browser"));
 
   ////////////////////////
   // Outputwindow
@@ -526,9 +521,6 @@ void CKDevelop::initKeyAccel()
 
   accel->insertItem( i18n("View Project User-Manual"), "HelpProjectManual", (unsigned int) 0);
   accel->connectItem( "HelpProjectManual", this, SLOT(slotHelpManual()), true, ID_HELP_USER_MANUAL);   // Tab-Switch
-
-  accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
-  accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast()) );
 
   // Debugger startups
   accel->insertItem( i18n("Debug start"), "DebugStart", (unsigned int) 0);
@@ -1214,7 +1206,6 @@ void CKDevelop::initStatusBar()
 void CKDevelop::initConnections(){
 
 //FB  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
-//FB  connect(s_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotSTabSelected(int)));
 //FB  connect(o_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotOTabSelected(int)));
 
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));

@@ -941,7 +941,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
 
   if (enable && project){
 
-    if(s_tab_view->getCurrentTab() == CPP){
+    if (m_docViewManager->currentDocType() == DocViewMan::Source){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
     enableCommand(ID_BUILD_RUN);
@@ -1198,7 +1198,6 @@ void CKDevelop::saveOptions(){
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
-  config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
   // set the mode of the tab headers
