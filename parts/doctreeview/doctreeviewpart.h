@@ -13,21 +13,22 @@
 #define _DOCTREEVIEWPART_H_
 
 #include <qguardedptr.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 
 class KDialogBase;
 class DocTreeViewWidget;
 class DocIndexDialog;
 class Context;
+class QPopupMenu;
 
 
-class DocTreeViewPart : public KDevPart
+class DocTreeViewPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    DocTreeViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    DocTreeViewPart( QObject *parent, const char *name, const QStringList &args );
     ~DocTreeViewPart();
 
 private slots:

@@ -9,55 +9,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kdebug.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
 #include "doctreeviewfactory.h"
-#include "doctreeviewpart.h"
 
+K_EXPORT_COMPONENT_FACTORY( libkdevdoctreeview, DocTreeViewFactory );
 
-extern "C" {
-
-    void *init_libkdevdoctreeview()
-    {
-        return new DocTreeViewFactory;
-    }
-    
-};
-
-
-DocTreeViewFactory::DocTreeViewFactory(QObject *parent, const char *name)
-    : KDevFactory(parent, name)
+DocTreeViewFactory::DocTreeViewFactory()
+    : KGenericFactory<DocTreeViewPart>( "kdevdoctreeview" )
 {
 }
 
-
-DocTreeViewFactory::~DocTreeViewFactory()
+KInstance *DocTreeViewFactory::createInstance()
 {
-    delete s_instance;
-    s_instance = 0;
+    KInstance *instance = KGenericFactory<DocTreeViewPart>::createInstance();
+    KStandardDirs *dirs = instance->dirs();
+    dirs->addResourceType("docindices", KStandardDirs::kde_default("data") + "kdevdoctreeview/indices/");
+    dirs->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
+    return instance;
 }
 
-
-KDevPart *DocTreeViewFactory::createPartObject(KDevApi *api, QObject *parent,
-                                               const QStringList &/*args*/)
-{
-    kdDebug(9002) << "Building DocTreeView" << endl;
-    return new DocTreeViewPart(api, parent, "doc tree view part");
-}
-
-
-KInstance *DocTreeViewFactory::s_instance = 0;
-KInstance *DocTreeViewFactory::instance()
-{
-    if (!s_instance) {
-        s_instance = new KInstance("kdevdoctreeview");
-        KStandardDirs *dirs = s_instance->dirs();
-        dirs->addResourceType("docindices", KStandardDirs::kde_default("data") + "kdevdoctreeview/indices/");
-        dirs->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
-    }
-
-    return s_instance;
-}
-
-#include "doctreeviewfactory.moc"

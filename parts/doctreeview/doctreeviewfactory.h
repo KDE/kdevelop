@@ -12,22 +12,17 @@
 #ifndef _DOCTREEVIEWFACTORY_H_
 #define _DOCTREEVIEWFACTORY_H_
 
-#include "kdevfactory.h"
+#include <kgenericfactory.h>
+#include "doctreeviewpart.h"
 
 
-class DocTreeViewFactory : public KDevFactory
+class DocTreeViewFactory : public KGenericFactory<DocTreeViewPart>
 {
-    Q_OBJECT
-
 public:
-    DocTreeViewFactory( QObject *parent=0, const char *name=0 );
-    ~DocTreeViewFactory();
+    DocTreeViewFactory();
 
-    virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args);
-    static KInstance *instance();
-
-private:
-    static KInstance *s_instance;
+protected:
+    virtual KInstance *createInstance();
 };
 
 #endif

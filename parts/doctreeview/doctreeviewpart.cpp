@@ -20,6 +20,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kstringhandler.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
@@ -33,8 +34,8 @@
 #include "doctreeconfigwidget.h"
 
 
-DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStringList & )
+    : KDevPlugin(parent, name)
 {
     setInstance(DocTreeViewFactory::instance());
 
