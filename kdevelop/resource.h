@@ -55,6 +55,7 @@
 
 #define ID_EDIT_SEARCH              11070
 #define ID_EDIT_REPEAT_SEARCH       11080
+#define ID_EDIT_REPEAT_SEARCH_BACK  11082
 #define ID_EDIT_REPLACE             11090
 #define ID_EDIT_SEARCH_IN_FILES     11130
 
@@ -338,6 +339,7 @@
 #define IDK_HELP_SEARCH_TEXT					SHIFT+Key_F2
 
 #define IDK_EDIT_REPEAT_SEARCH				Key_F3
+#define IDK_EDIT_REPEAT_SEARCH_BACK			SHIFT+Key_F3
 
 #define IDK_VIEW_NEXT_ERROR           Key_F4
 #define IDK_VIEW_PREVIOUS_ERROR       SHIFT+Key_F4

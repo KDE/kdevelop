@@ -577,15 +577,18 @@ void CKDevelop::slotEditSearch(){
   }
   slotStatusMsg(i18n("Ready."));
 }
-void CKDevelop::slotEditRepeatSearch(){
+void CKDevelop::slotEditRepeatSearch(int back){
   slotStatusMsg(i18n("Repeating last search..."));
   if(s_tab_view->getCurrentTab()==BROWSER){
     browser_widget->findTextNext(QRegExp(doc_search_text),true);
   }
   else{
-    edit_widget->searchAgain();
+    edit_widget->searchAgain(back==1);
   }
   slotStatusMsg(i18n("Ready."));
+}
+void CKDevelop::slotEditRepeatSearchBack(){
+  slotEditRepeatSearch(1);	// flag backward search
 }
 void CKDevelop::slotEditSearchInFiles(){
   slotStatusMsg(i18n("Searching in Files..."));

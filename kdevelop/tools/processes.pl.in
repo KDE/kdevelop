@@ -46,15 +46,15 @@ if ($processes{KDEICONDIR})
 }
 
 if ($processes{VSSUPPORT} eq "none"){
-	$overDirectory = $processes{DIRECTORY} . "/";
-	$underDirectory = $overDirectory . $nameLittle;
+  $overDirectory = $processes{DIRECTORY} . "/";
+  $underDirectory = $overDirectory . $nameLittle;
 }
 else{
-	$overDirectory = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/";
-	$underDirectory = $overDirectory . $nameLittle;
+  $overDirectory = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/";
+  $underDirectory = $overDirectory . $nameLittle;
 }
-	
-	
+  
+  
 # change to work/project directory 
 printflush (STDOUT, "changing directory...\n");
 chdir ($overDirectory) || die "Couldn't change to directory $overDirectory: $!";
@@ -73,12 +73,12 @@ if ($processes{APPLICATION} =~/customproj/){
   changeCustomApp();  
 }
 else{
-  unpackFiles ("template.tar");	
-  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|kicker/) {
-    unpackFiles ("admin.tar");	
+  unpackFiles ("template.tar");
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|kickerapp/) {
+    unpackFiles ("admin.tar");
   }
 
-  if ($processes{APPLICATION} =~ /kde2mini|kicker/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kickerapp/) {
     changeMiniApp();
   }
   elsif ($processes{APPLICATION} =~ /kdenormal|kde2normal|kde2mdi/)
@@ -198,8 +198,8 @@ sub replaceValuesInFile {
         $where = index($line,$word,$where);
         if ($where != -1)
         {
-	        substr($line,$where,$wordlength) = $replace;
-	        ++$where;
+          substr($line,$where,$wordlength) = $replace;
+          ++$where;
         }
       }
     }
@@ -238,15 +238,15 @@ sub condCopyTemplateFiles {
   #copying the templates in the templatedirectoy
   if ($processes{CPP} eq "no" and $processes{HEADER} eq "no") {}
   else {
-  	if ($processes{HEADER} eq "yes") {
-  	    copy ("$local_datadir/kdevelop/header",
-  		  "$underDirectory/templates/header_template");
-  	}
-	
-  	if ($processes{CPP} eq "yes") {
-  	    copy ("$local_datadir/kdevelop/cpp",
-  		  "$underDirectory/templates/cpp_template");
-  	}
+    if ($processes{HEADER} eq "yes") {
+        copy ("$local_datadir/kdevelop/header",
+        "$underDirectory/templates/header_template");
+    }
+  
+    if ($processes{CPP} eq "yes") {
+        copy ("$local_datadir/kdevelop/cpp",
+        "$underDirectory/templates/cpp_template");
+    }
   }
 }
 
@@ -255,16 +255,16 @@ sub condCopyGNUFiles {
 
   #if GNU-Files was chosen in kAppWizard
   if ($processes{GNU} eq "yes") {
-  	#copying the GNU-Files and renamed these
-  	chdir ($templatedir);
-  	copy ("AUTHORS_template",   "$overDirectory/AUTHORS"  );
-  	copy ("COPYING_template",   "$overDirectory/COPYING"  );
-  	copy ("ChangeLog_template", "$overDirectory/ChangeLog");
-  	copy ("INSTALL_template",   "$overDirectory/INSTALL"  );
-  	copy ("README_template",    "$overDirectory/README"   );
-  	copy ("TODO_template",      "$overDirectory/TODO"     );
+    #copying the GNU-Files and renamed these
+    chdir ($templatedir);
+    copy ("AUTHORS_template",   "$overDirectory/AUTHORS"  );
+    copy ("COPYING_template",   "$overDirectory/COPYING"  );
+    copy ("ChangeLog_template", "$overDirectory/ChangeLog");
+    copy ("INSTALL_template",   "$overDirectory/INSTALL"  );
+    copy ("README_template",    "$overDirectory/README"   );
+    copy ("TODO_template",      "$overDirectory/TODO"     );
 
-  	# replace AUTHOR and EMAIL
+    # replace AUTHOR and EMAIL
     chdir($overDirectory);
     replaceValuesInFile(\%changings, "AUTHORS");
   }
@@ -275,47 +275,47 @@ sub condCopyLsmFile {
 
   #if LSM-Files was chosen in kAppWizard
   if ($processes{LSM} eq "yes") {
-  	#copying, rename and replace in the lsm-template
-  	chdir ($templatedir);
-  	copy ("lsm_template", "$overDirectory/$nameLittle.lsm");
-  	chdir ($overDirectory);
+    #copying, rename and replace in the lsm-template
+    chdir ($templatedir);
+    copy ("lsm_template", "$overDirectory/$nameLittle.lsm");
+    chdir ($overDirectory);
     replaceValuesInFile(\%changings, "$nameLittle.lsm");
   }
 }
 
 
-sub condCopyUserDocFiles {	
+sub condCopyUserDocFiles {  
 
   #if USER-Docs was chosen in kAppWizard
   if ($processes{USER} eq "yes")
   {
-  	#copying, rename and replace in the handbook-en-template
-  	chdir ($templatedir);
+    #copying, rename and replace in the handbook-en-template
+    chdir ($templatedir);
     if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/)
     {
-    	copy ("docbook_en_template", "$overDirectory/doc/en/index.docbook");
-    	chdir ("$overDirectory/doc/en");
+      copy ("docbook_en_template", "$overDirectory/doc/en/index.docbook");
+      chdir ("$overDirectory/doc/en");
       replaceValuesInFile(\%changings, "index.docbook");
     }
     else
     {
-    	copy ("handbook_en_template", "$underDirectory/docs/en/index.sgml");
-    	chdir ("$underDirectory/docs/en");
+      copy ("handbook_en_template", "$underDirectory/docs/en/index.sgml");
+      chdir ("$underDirectory/docs/en");
       replaceValuesInFile(\%changings, "index.sgml");
     }
-	}
+  }
   
   #if USER-Docs was not chosen in kAppWizard
   if ($processes{USER} eq "no") {
     my %emptyIT = (
-  	"$nameLittle/docs/Makefile" => "",
-  	"$nameLittle/docs/en/Makefile" => "",
-    # "SUBDIRS = docs" => ""		do you really need this???
+    "$nameLittle/docs/Makefile" => "",
+    "$nameLittle/docs/en/Makefile" => "",
+    # "SUBDIRS = docs" => ""    do you really need this???
                         );
-    #	chdir ($underDirectory);
-    #	replaceValuesInFile(\%emptyIT, "Makefile.am");
-   	chdir ($overDirectory);
-   	replaceValuesInFile(\%emptyIT, "configure.in");
+    #  chdir ($underDirectory);
+    #  replaceValuesInFile(\%emptyIT, "Makefile.am");
+     chdir ($overDirectory);
+     replaceValuesInFile(\%emptyIT, "configure.in");
 
   }
 }
@@ -326,28 +326,28 @@ sub condCopyKdelnkFile {
   #if .kdelnk-file was chosen in kAppWizard
   if ($processes{KDELNK} eq "yes") {
 
-  	#copying, rename and replace in the kdelnk-file
-  	chdir ($templatedir);
+    #copying, rename and replace in the kdelnk-file
+    chdir ($templatedir);
 
     if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/) {
-    	copy ("kdelnk_template", "$underDirectory/$nameLittle.desktop");
-    	chdir ($underDirectory);
-        replaceValuesInFile(\%changings, "$nameLittle.desktop");
+      copy ("kdelnk_template", "$underDirectory/$nameLittle.desktop");
+      chdir ($underDirectory);
+      replaceValuesInFile(\%changings, "$nameLittle.desktop");
     }
     else
     {
-        if ($processes{APPLICATION} eq "kicker") {
+      if ($processes{APPLICATION} eq "kickerapp") {
 
-                move ("$underDirectory/skel.desktop","$underDirectory/$nameLittle.desktop");
-                chdir ($underDirectory);
-                replaceValuesInFile(\%changings, "$nameLittle.desktop");
-        }
-        else
-        {
-                copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
-    	        chdir ($underDirectory);
-                replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
-        }
+        move ("$underDirectory/skel.desktop","$underDirectory/$nameLittle.desktop");
+        chdir ($underDirectory);
+        replaceValuesInFile(\%changings, "$nameLittle.desktop");
+      }
+      else
+      {
+        copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
+        chdir ($underDirectory);
+        replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
+      }
     }
   }
 }
@@ -360,22 +360,22 @@ sub condCopyProgIcons {
 
   #if the default ProgIcon was chosen in kAppWizard
   elsif ($processes{PROGICON} eq "(null)") {
-  	chdir ($kde_icondir);
-  	copy ("edit.xpm", "$underDirectory/$nameLittle.xpm");
-  	chdir ($underDirectory);
-  	chmod (0666, "$nameLittle.xpm");
+    chdir ($kde_icondir);
+    copy ("edit.xpm", "$underDirectory/$nameLittle.xpm");
+    chdir ($underDirectory);
+    chmod (0666, "$nameLittle.xpm");
   }
     
   #if a new ProgIcon was chosen in kAppWizard
   else {
-  	$icon = $kde_icondir."/".$processes{PROGICON};
-  	$copying = copy ($icon, "$underDirectory/$nameLittle.xpm");
-  	if ($copying)  {
-  	    $icon = $local_icondir."/".$processes{PROGICON};
-  	    copy ($icon, "$underDirectory/$nameLittle.xpm");
-  	}
-  	chdir ($underDirectory);
-  	chmod (0666, "$nameLittle.xpm");
+    $icon = $kde_icondir."/".$processes{PROGICON};
+    $copying = copy ($icon, "$underDirectory/$nameLittle.xpm");
+    if ($copying)  {
+        $icon = $local_icondir."/".$processes{PROGICON};
+        copy ($icon, "$underDirectory/$nameLittle.xpm");
+    }
+    chdir ($underDirectory);
+    chmod (0666, "$nameLittle.xpm");
   }
     
   #if no MiniIcon was chosen in kAppWizard
@@ -383,22 +383,22 @@ sub condCopyProgIcons {
 
   #if the default MiniIcon was chosen in kAppWizard
   elsif ($processes{MINIICON} eq "(null)") {
-  	chdir ($kde_miniicondir);
-  	copy ("application_settings.xpm", "$underDirectory/mini-$nameLittle.xpm");
-  	chdir ($underDirectory);
-  	chmod (0666, "mini-$nameLittle.xpm");
+    chdir ($kde_miniicondir);
+    copy ("application_settings.xpm", "$underDirectory/mini-$nameLittle.xpm");
+    chdir ($underDirectory);
+    chmod (0666, "mini-$nameLittle.xpm");
   }
     
   #if a new MiniIcon was chosen in kAppWizard
   else {
-  	$icon = $kde_miniicondir."/".$processes{MINIICON};
-  	$copying = copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
-  	if ($copying)  {
-  	    $icon = $local_miniicondir."/".$processes{MINIICON};
-  	    copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
-  	}
-  	chdir ($underDirectory);
-  	chmod (0666, "mini-$nameLittle.xpm");
+    $icon = $kde_miniicondir."/".$processes{MINIICON};
+    $copying = copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
+    if ($copying)  {
+        $icon = $local_miniicondir."/".$processes{MINIICON};
+        copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
+    }
+    chdir ($underDirectory);
+    chmod (0666, "mini-$nameLittle.xpm");
   }
 }
 
@@ -445,7 +445,7 @@ sub processHeaderTemplate {
   open (INPUT,"$file") || die "cannot open file: $file; $!";
   open (OUTPUT,">>header");
   while ( defined ($line = <INPUT> )) {
-  	print OUTPUT $line;
+    print OUTPUT $line;
   }
   close (INPUT);
   close (OUTPUT);
@@ -473,20 +473,20 @@ sub changeNormalApp {
   {
     replaceValuesInFile(\%changings, "configure.in");
   }
-  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi|kicker/)
+  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi|kickerapp/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
   }
 
 #    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
-#		   "Makefile.am");  			not needed anymore!!
-#    							the template should have
-#							SUBDIRS = |NAMELITTLE|.po
-#							but in this case it's made
-#							by the binary itself
+#       "Makefile.am");        not needed anymore!!
+#                  the template should have
+#              SUBDIRS = |NAMELITTLE|.po
+#              but in this case it's made
+#              by the binary itself
 #    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
-#		   "configure.in");    now fixed entry in template of normal.tar.gz
+#       "configure.in");    now fixed entry in template of normal.tar.gz
 
   #Replacements and name changing in underDirectory
   chdir ($underDirectory);
@@ -527,17 +527,17 @@ sub changeNormalApp {
     
   if ($processes{CPP} eq "yes") {
     processCppTemplate("main.cpp");
-  	processCppTemplate("$nameLittle.cpp");
-  	processCppTemplate("${nameLittle}view.cpp");
-  	processCppTemplate("${nameLittle}doc.cpp");
+    processCppTemplate("$nameLittle.cpp");
+    processCppTemplate("${nameLittle}view.cpp");
+    processCppTemplate("${nameLittle}doc.cpp");
   }
   if ($processes{HEADER} eq "yes") {
-  	processHeaderTemplate("$nameLittle.h");
-  	processHeaderTemplate("${nameLittle}view.h");
-  	processHeaderTemplate("${nameLittle}doc.h");
+    processHeaderTemplate("$nameLittle.h");
+    processHeaderTemplate("${nameLittle}view.h");
+    processHeaderTemplate("${nameLittle}doc.h");
     if ($processes{APPLICATION} =~ /kdenormal/)
     {
-    	processHeaderTemplate("resource.h");
+      processHeaderTemplate("resource.h");
     }
   }
   condCopyKdelnkFile();
@@ -562,20 +562,20 @@ sub changeMiniApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  if ($processes{APPLICATION} =~ /kde2mini|kicker/)
+  if ($processes{APPLICATION} =~ /kde2mini|kickerapp/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
   }
 
 #    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
-#		   "Makefile.am");  			not needed anymore!!
-#    							the template should have
-#							SUBDIRS = |NAMELITTLE|.po
-#							but in this case it's made
-#							by the binary itself
+#       "Makefile.am");        not needed anymore!!
+#                  the template should have
+#              SUBDIRS = |NAMELITTLE|.po
+#              but in this case it's made
+#              by the binary itself
 #    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
-#		   "configure.in");    now fixed entry in template of mini.tar.gz
+#       "configure.in");    now fixed entry in template of mini.tar.gz
 
   #Replacements and name changing in underDirectory
   chdir ($underDirectory);
@@ -597,11 +597,11 @@ sub changeMiniApp {
     
   if ($processes{CPP} eq "yes") {
     processCppTemplate("main.cpp");
-  	processCppTemplate("$nameLittle.cpp");
+    processCppTemplate("$nameLittle.cpp");
   }
     
   if ($processes{HEADER} eq "yes") {
-  	processHeaderTemplate("$nameLittle.h");
+    processHeaderTemplate("$nameLittle.h");
   }
 
   condCopyKdelnkFile();
@@ -753,17 +753,17 @@ sub changeQtApp {
 
   if ($processes{CPP} eq "yes") {
     processCppTemplate("main.cpp");
-  	processCppTemplate("$nameLittle.cpp");
-  	processCppTemplate("${nameLittle}view.cpp");
-  	processCppTemplate("${nameLittle}doc.cpp");
+    processCppTemplate("$nameLittle.cpp");
+    processCppTemplate("${nameLittle}view.cpp");
+    processCppTemplate("${nameLittle}doc.cpp");
   }
     
   if ($processes{HEADER} eq "yes") {
-  	processHeaderTemplate("$nameLittle.h");
-  	processHeaderTemplate("${nameLittle}view.h");
-  	processHeaderTemplate("${nameLittle}doc.h");
+    processHeaderTemplate("$nameLittle.h");
+    processHeaderTemplate("${nameLittle}view.h");
+    processHeaderTemplate("${nameLittle}doc.h");
     if ($processes{APPLICATION} =~ /qtnormal|qextmdi/) {
-    	processHeaderTemplate("resource.h");
+      processHeaderTemplate("resource.h");
     }
   }
   condCopyKdelnkFile();
@@ -828,13 +828,13 @@ sub changeGnomeApp {
 
   if ($processes{CPP} eq "yes") {
     processCppTemplate("main.c");
-  	processCppTemplate("app.c");
-  	processCppTemplate("menus.c");
+    processCppTemplate("app.c");
+    processCppTemplate("menus.c");
   }
   if ($processes{HEADER} eq "yes") {
-  	processHeaderTemplate("main.h");
-  	processHeaderTemplate("app.h");
-  	processHeaderTemplate("menus.h");
+    processHeaderTemplate("main.h");
+    processHeaderTemplate("app.h");
+    processHeaderTemplate("menus.h");
  }
 
   condCopyKdelnkFile();
@@ -842,16 +842,3 @@ sub changeGnomeApp {
   condCreateApiDoc();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

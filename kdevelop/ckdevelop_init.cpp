@@ -377,8 +377,10 @@ void CKDevelop::initKeyAccel()
   accel->connectItem( KStdAccel::Find, this, SLOT(slotEditSearch() ), true, ID_EDIT_SEARCH );
 
   accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
-  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch() ), true, ID_EDIT_REPEAT_SEARCH );
+  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch(int) ), true, ID_EDIT_REPEAT_SEARCH );
 
+  accel->insertItem( i18n("Repeat Search Back"), "RepeatSearchBack",IDK_EDIT_REPEAT_SEARCH_BACK );
+  accel->connectItem( "RepeatSearchBack", this, SLOT(slotEditRepeatSearchBack() ), true, ID_EDIT_REPEAT_SEARCH_BACK );
   accel->connectItem( KStdAccel::Replace, this, SLOT(slotEditReplace() ), true, ID_EDIT_REPLACE );
 
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_GREP_IN_FILES );
@@ -655,7 +657,7 @@ void CKDevelop::initMenuBar(){
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(SmallIconSet("find"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
-  edit_menu->insertItem(SmallIconSet("next"),i18n("Repeat Searc&h"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
+  edit_menu->insertItem(SmallIconSet("next"),i18n("Repeat Searc&h"), this, SLOT(slotEditRepeatSearch(int)),0,ID_EDIT_REPEAT_SEARCH);
 
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
   edit_menu->insertItem(SmallIconSet("grep"),i18n("Search in &Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
@@ -1408,6 +1410,7 @@ void CKDevelop::setKeyAccel()
   accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KStdAccel::Paste );
   accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KStdAccel::Find );
   accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH_BACK,"RepeatSearchBack" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KStdAccel::Replace );
   accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );

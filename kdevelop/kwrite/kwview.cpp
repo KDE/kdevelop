@@ -2124,9 +2124,10 @@ void KWrite::replace() {
 //    kWriteView->tagAll();
 //    searchAgain();
 
-void KWrite::searchAgain() {
-
-  initSearch(s,searchFlags | sfFromCursor | sfPrompt | sfAgain);
+void KWrite::searchAgain(bool back) {
+  bool b= (searchFlags & sfBackward) > 0;
+  initSearch(s, (searchFlags & ((b==back)?~sfBackward:~0))  // clear flag for forward searching
+                | sfFromCursor | sfPrompt | sfAgain | ((b!=back)?sfBackward:0) );
   if (s.flags & sfReplace) replaceAgain(); else searchAgain(s);
 }
 
@@ -2157,6 +2158,24 @@ void KWrite::initSearch(SConfig &s, int flags) {
   s.flags = flags;
   if (s.flags & sfFromCursor) {
     s.cursor = kWriteView->cursor;
+    TextLine *textLine= kWriteDoc->textLine(s.cursor.y);
+    const char *line = textLine->getText();
+    int (*cmpfct)(const char *, const char *, size_t);
+    if ( s.flags & sfCaseSensitive )
+      cmpfct= strncmp;
+    else
+      cmpfct= strnicmp;
+    if ( s.flags & sfBackward )
+    {
+      if ( static_cast<int>(s.cursor.x)-static_cast<int>(strlen(searchFor)) >= 0 )
+        if ( cmpfct(line+s.cursor.x-strlen(searchFor), searchFor, strlen(searchFor)) == 0 )
+          s.cursor.x-= strlen(searchFor);
+    }
+    else 
+    {
+      if ( cmpfct(line+s.cursor.x, searchFor, strlen(searchFor)) == 0 )
+        s.cursor.x+= strlen(searchFor);
+    }
   } else {
     if (!(s.flags & sfBackward)) {
       s.cursor.x = 0;

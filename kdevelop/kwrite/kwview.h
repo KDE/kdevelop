@@ -522,7 +522,7 @@ class KWrite : public QWidget {
     /** Repeasts the last search or replace operation. On replace, the
         user is prompted even if the "Prompt On Replace" option was off.
     */
-    void searchAgain();
+    void searchAgain(bool back=false);
     /** Presents a "Goto Line" dialog to the user
     */
     void gotoLine();

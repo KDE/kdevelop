@@ -259,7 +259,9 @@ public:
   /** opens the search dialog for the editing widget */
   void slotEditSearch();
   /** repeat last search */
-  void slotEditRepeatSearch();
+  void slotEditRepeatSearch(int back=0);
+  /** repeat last search backwards*/
+  void slotEditRepeatSearchBack();
   /** acts on grep to search the selected word by keyboard shortcut */
   void slotEditSearchText();
   /** search in files, use grep and find*/
