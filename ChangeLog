@@ -73,8 +73,7 @@
     Pelrsupportpart:
     - add support for namespaces and scripts in classviewer
     - parsing of "use ...." libraries
-    - get l2003-03-29 F@lk Brettschneider <falkbr@kdevelop.org>
-ist of INC path in local installed perl to allow parsing of perl
+    - get list of INC path in local installed perl to allow parsing of perl
     libraries outside the project directory
 
 2003-04-05 Amilcar Lucas <a.lucas@tu-bs.de>
