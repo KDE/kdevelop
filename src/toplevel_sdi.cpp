@@ -9,10 +9,12 @@
 #include <kdebug.h>
 #include <kaction.h>
 #include <klocale.h>
+#include <kmenubar.h>
 #include <kconfig.h>
 #include <kstatusbar.h>
 #include <kdialogbase.h>
 #include <kkeydialog.h>
+#include <kedittoolbar.h>
 
 
 #include "widgets/ktabzoomwidget.h"
@@ -140,11 +142,21 @@ void TopLevelSDI::createActions()
   
   connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
            this, SLOT(slotActiveProcessCountChanged(uint)) );
-    
+ 
+  action = KStdAction::showMenubar(
+     this, SLOT(slotShowMenuBar()),
+     actionCollection(), "settings_show_menubar" );
+  action->setStatusText(i18n("Lets you switch the menubar on/off"));
+   
   action = KStdAction::keyBindings(
       this, SLOT(slotKeyBindings()),
       actionCollection(), "settings_configure_shortcuts" );
   action->setStatusText(i18n("Lets you configure shortcut keys"));
+
+  action = KStdAction::configureToolbars(
+      this, SLOT(slotConfigureToolbars()),
+      actionCollection(), "settings_configure_toolbars" );
+  action->setStatusText(i18n("Lets you configure toolbars"));
   
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
@@ -278,6 +290,31 @@ void TopLevelSDI::slotKeyBindings()
   dlg.configure();
 }
 
+void TopLevelSDI::slotConfigureToolbars()
+{
+  saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
+  KEditToolbar dlg( factory() );
+  connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
+  dlg.exec();
+}
+
+// called when OK ar Apply is clicked in the EditToolbar Dialog
+void TopLevelSDI::slotNewToolbarConfig()
+{
+  // replug actionlists here...
+
+  applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
+}
+
+void TopLevelSDI::slotShowMenuBar()
+{
+  if (menuBar()->isVisible()) {
+    menuBar()->hide();
+  } else {
+    menuBar()->show();
+  }
+  saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
+}
 
 void TopLevelSDI::slotSettings()
 {
