@@ -25,6 +25,7 @@
 
 #include "ckdevinstallstate.h"
 #include "wizardkdedocpage.h"
+#include <config.h>
 
 WizardKDEDocPage::WizardKDEDocPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
@@ -35,34 +36,36 @@ WizardKDEDocPage::WizardKDEDocPage(QWidget* parent, const char* name, const QStr
 
 void WizardKDEDocPage::showEvent(QShowEvent*)
 {
-  bool kde_test=true;
+  bool kde_docs_found=false;
 
   QStringList kde_dirs;
   kde_dirs  << "/opt/kde2/share/doc/HTML/en/kdelibs"     // normal dist
 //!? conflict with KDE-1.x            << "/opt/kde/share/doc/HTML/en/kdelibs"     // normal dist
             << "/usr/share/doc/kdelibs"                 // Redhat 6.0
-            << "/usr/local/kde/share/doc/kdelibs";      // other locations
+            << "/usr/local/kde/share/doc/kdelibs"       // other locations
+            << KDELIBS_DOCDIR;    // autoconf said
 
   // first check the autoconfified path
-  if(kde_test && !m_pInstallState->kde.isEmpty())
+  if(!m_pInstallState->kde.isEmpty())
   {
     if(QFileInfo(m_pInstallState->kde+"/kdecore/index.html").exists())
-      kde_test=false;
+      kde_docs_found=true;
   }
 
-  for ( QStringList::Iterator it = kde_dirs.begin(); !kde_test && it != kde_dirs.end(); ++it )
+  for ( QStringList::Iterator it = kde_dirs.begin();
+	!kde_docs_found && it != kde_dirs.end(); ++it )
   {
     if(QFileInfo((*it)+"/kdecore/index.html").exists())
     {
       m_pInstallState->kde = (*it);
-      kde_test=false;
+      kde_docs_found=true;
     }
   };
 
   m_vbox = new QVBox(this);
   m_vbox->show();
   QLabel* label;
-  if (!kde_test) {
+  if (kde_docs_found) {
     label = new QLabel(m_vbox);
     label->show();
     label = new QLabel(i18n("The KDE-Library-Documentation has been found at:\n\n") + m_pInstallState->kde + "\n\n" +

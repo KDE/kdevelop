@@ -1,3 +1,62 @@
+kdevelop (1:2.0b1-1) unstable; urgency=low
+
+  * New release
+  * don't compress tip database
+  * small fix to find kdelibs docs in setup wizard
+  * split into binary, doc and data packages
+  * added graphviz to suggests
+
+ -- Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>  Mon, 23 Jul 2001 20:18:09 +0300
+
+kdevelop (1:1.4.0-3.4) unstable; urgency=low
+
+  * Updated the build-depends field 
+
+ -- Norman Jordan <njordan@debian.org>  Sun, 13 May 2001 22:17:08 -0700
+
+kdevelop (1:1.4.0-3.3) unstable; urgency=low
+
+  * Suggests sgmltools-lite instead of sgmltools (Closes: #96274)
+
+ -- Norman Jordan <njordan@debian.org>  Sun, 13 May 2001 13:09:12 -0700
+
+kdevelop (1:1.4.0-3.2) unstable; urgency=low
+
+  * Change Maintainer (Closes: #90814)
+  * No longer installs extractrc (Closes: #93012)
+  * Suggests kdesdk-scripts 
+
+ -- Norman Jordan <njordan@debian.org>  Thu,  5 Apr 2001 11:03:57 -0700
+
+kdevelop (1:1.4.0-3.1) unstable; urgency=low
+ 
+  * NMU
+  * Fixing build-depends (Closes: #92190)
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 30 Mar 2001 21:22:00 -0700
+
+kdevelop (1:1.4.0-3) unstable; urgency=low
+ 
+  * Change Maintainer
+  * More upstream fixes while I'm at it
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 23 Mar 2001 03:00:00 -0700
+
+kdevelop (1:1.4.0-2) unstable; urgency=low
+ 
+  * Removed non en docs as they are provided in kde-i18n now
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 04 Mar 2001 20:00:00 -0700
+
+kdevelop (1:1.4.0-1) unstable; urgency=low
+ 
+  * Cleaned up source based off of current CVS branch
+  * Fix desktop file (Closes: #87802)
+  * Update Build-Depends
+  * If you install qt-doc and not qt2.2-doc this works (Closes: #88185)
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 02 Mar 2001 07:00:00 -0700
+
 kdevelop (1:1.4-final-1) unstable; urgency=low
  
   * New upstream release

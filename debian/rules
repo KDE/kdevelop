@@ -2,68 +2,91 @@
 # Made with the aid of debmake, by Christoph Lameter,
 # games on the sample debian/rules file for GNU hello by Ian Jackson.
 
-build: build-stamp
- 
+# This is the debhelper compatability version to use.
+export DH_COMPAT=3
+
 -include debian/debiandirs
- 
+
 debian/debiandirs: debian/debianrules
 	perl -w debian/debianrules echodirs > debian/debiandirs
- 
-build-stamp:
+
+configure: configure-stamp
+configure-stamp:
 	dh_testdir
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi
 	./configure $(configkdevelop)
+
+	touch configure-stamp
+
+build:  configure-stamp build-stamp
+build-stamp:
+	dh_testdir
 	$(MAKE)
 
 	touch build-stamp
 
 debian-clean:
 	dh_testdir
-	-rm -f build-stamp install-stamp
+	rm -f build-stamp configure-stamp
 	dh_clean
- 
+
 clean: debian-clean
 	-rm -f debian/debiandirs 
 	if test -d CVS; then \
 	make -f admin/Makefile.common cvs-clean ;\
 	fi
 	-make distclean
-	
-binary-indep:	build
-	dh_testroot
-	dh_testdir
 
-binary-arch:	build
-	dh_testroot
+install: build
 	dh_testdir
-	dh_clean -a
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
 	install -d debian/tmp/etc/kde2
 	$(MAKE) prefix=/usr DESTDIR=`pwd`/debian/tmp/ install
-	-rm -rf debian/tmp/home debian/tmp/blah \
-		debian/tmp/usr/share/applnk/Development/designer.desktop \
-		debian/tmp/usr/share/applnk/Development/linguist.desktop
+	-rm -rf debian/tmp/usr/bin/extractrc
 	cp kdevelop/kdeveloprc debian/tmp/etc/kde2/
-	perl -w debian/debianrules cleanup
-	dh_undocumented 
-	dh_installmenu
-	perl -w debian/debianrules docbase
-	dh_installdocs
-	dh_installchangelogs
-	dh_strip
-	dh_compress
-	dh_fixperms
-	chmod 755 debian/tmp/usr/share/apps/kdevelop/tools/*
-	dh_perl
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb    
+	#perl -w debian/debianrules cleanup
+	#perl -w debian/debianrules docbase -a
+
+binary-indep:
+	dh_movefiles -i
+	dh_undocumented -i
+	dh_installmenu -i
+	dh_installdocs -i
+	dh_installchangelogs -i
+	dh_compress -X.database -i
+
+binary-arch: 
+	dh_movefiles -a
+	dh_undocumented -a
+	dh_installmenu -a
+	dh_installdocs -a
+	dh_installchangelogs -a
+	dh_strip -a
+	dh_compress -X.database -a
 
 # Below here is fairly generic really
 
-binary:		binary-indep binary-arch
+binary:	install binary-arch binary-indep
+	dh_fixperms
+	#dh_makeshlibs
+	dh_installdeb
+#	dh_perl
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums 
+	dh_builddeb
 
-.PHONY: binary binary-arch binary-indep clean
+
+# Install local without making a package
+
+install-local:
+	$(MAKE) prefix=/usr
+	sudo $(MAKE) prefix=/usr install
+
+.PHONY: binary binary-arch binary-indep clean install install-local
+
+

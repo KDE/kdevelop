@@ -1,21 +1,52 @@
 Source: kdevelop
 Section: devel
 Priority: optional
-Maintainer: Ivan E. Moore II <rkrusty@debian.org>
-Build-Depends: debhelper, kdelibs-dev (>= 4:2.1.0-0), gettext, autoconf, automake, libtool, kdoc, kdelibs3-doc
-Standards-Version: 3.5.0
+Maintainer: Norman Jordan <njordan@debian.org>
+Build-Depends: debhelper (>> 3.0.0), kdelibs-dev (>= 4:2.1.0-0), gettext, autoconf, automake, libtool, kdoc, kdelibs3-doc | kdelibs-doc, qt-doc | qt2.2-doc, flex
+Standards-Version: 3.5.2
 
 Package: kdevelop
 Architecture: any
-Replaces: kde-i18n
-Depends: ${shlibs:Depends}, ${perl:Depends}, autoconf, automake, kdebase-libs
+Depends: ${shlibs:Depends}, autoconf, automake, kdebase-libs, kdevelop-doc, kdevelop-data
 Recommends: make
-Suggests: libqt-dev, qt-doc, kdbg, kdelibs-dev, kdebase, kdelibs3-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt-designer | kde-designer, glimpse, ark, kpaint, kbabel, kiconedit, gdb
+Suggests: libqt-dev, qt-doc, kdbg, kdelibs-dev, kdebase, kdelibs3-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt-designer | kde-designer, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz
 Description: An IDE for Unix/X11
  KDevelop is an easy to use Integrated Development Environment
  for developing C/C++ applications under X11. It features 
  project management, an advanced editor, a class browser
  and an integrated debugger.
  .
- The application wizard can generate fully functional frameworks
- for terminal programs and programs based on Qt, KDE or GNOME.
+ The application wizard can generate fully functional projects
+ for terminal programs and GUI programs using Qt, KDE or GNOME.
+
+Package: kdevelop-doc
+Architecture: all
+Depends:
+Recommends: make
+Suggests: libqt-dev, qt-doc, kdbg, kdelibs-dev, kdebase, kdelibs3-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt-designer | kde-designer, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz
+Description: An IDE for Unix/X11 - documentation
+ KDevelop is an easy to use Integrated Development Environment
+ for developing C/C++ applications under X11. It features 
+ project management, an advanced editor, a class browser
+ and an integrated debugger.
+ .
+ The application wizard can generate fully functional projects
+ for terminal programs and GUI programs using Qt, KDE or GNOME.
+ .
+ This package contains documentation for KDevelop.
+
+Package: kdevelop-data
+Architecture: all
+Depends: kdevelop (= ${Source-Version})
+Recommends: make
+Suggests: libqt-dev, qt-doc, kdbg, kdelibs-dev, kdebase, kdelibs3-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt-designer | kde-designer, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz
+Description: An IDE for Unix/X11 - data
+ KDevelop is an easy to use Integrated Development Environment
+ for developing C/C++ applications under X11. It features 
+ project management, an advanced editor, a class browser
+ and an integrated debugger.
+ .
+ The application wizard can generate fully functional projects
+ for terminal programs and GUI programs using Qt, KDE or GNOME.
+ .
+ This package contains arch independent datas for KDevelop.
