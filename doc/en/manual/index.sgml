@@ -2159,20 +2159,37 @@ Makefile.am outside the write area according to the needed settings
 <sect> <idx/New Project/s
 <p>
 
-The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
-projects use the GNU standard development tools as described in the requirements section of this handbook. For <idx/KDE/ applications,
-the wizard offers two different frameworks, the <idx/KDE/-Application, providing a complete application with base <idx/classes/ for
-document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow inherits the
-KTMainWindow class. The <idx/KDE/-Mini-Application only gives a view which is empty. This type of project can be used for the creation
-of small desktop tools or other simple applications without too much change on the existing code provided by the framework. A
-Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the <idx/KDE-libraries/ for end-users.
-The Qt-Application also is created by using tree base <idx/classes/ like the KDE-standard-Application and provides a menubar, toolbar
-and statusbar.
+The KDevelop Application Wizard allows the creation of thirteen different types of projects, constructing a framework for each. All
+projects use the GNU standard development tools as described in the requirements section of this handbook.
 
-The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
-"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a <idx/GUI/
-first or for those working on commandline programs written in C++ or C. C programmers can also take advantage of the C-only project,
-which requires any C-compiler at the minimum.
+For <idx/KDE/ applications there are six different frameworks:
+<itemize>
+<item>Mini: Creates a KDE-application with an empty main widget.
+<item>Normal: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe model.
+<item>Normal-OpenGL: Creates a KDE-application with session-management, menubar, toolbar, statusbar and support for a document-view 
+codeframe model. OpenGL(tm) (Mesa3D) support is added.
+<item>KDE 2 Normal: Creates a KDE-2 application with session-management, menubar, toolbar, statusbar and support for a document-view codeframe 
+model.
+<item>KDE 2 Mini: Creates a KDE-2 application with an empty main widget.
+<item>KDE 2 MDI: Creates a KDE-2 MDI (Multiple Document Interface) application with menubar, toolbar, statusbar and support for a document-view 
+codeframe model.
+</itemize>
+<P>
+If you wish no dependencies towards the <idx/KDE-libraries/ for end-users, you can choose from four Qt-only types:
+<itemize>
+<item>Normal: Creates a Qt-Application with a main window containing a menubar, toolbar and statusbar, including support for a generic 
+document-view model.
+<item>QT 2.x SDI: Creates a Qt-2.x Application with a main window containing a menubar, toolbar and statusbar, including support for a single 
+document-view interface (SDI) model.
+<item>QT 2.1 MDI: Creates a Qt-2.1 Application with a main window containing a menubar, toolbar and statusbar, including support for a multiple 
+document interface (MDI) model.
+<item>QextMDI: Creates an MDI framework based on the QextMDI library and Qt2.0x. Allows to switch between both modes, Toplevel and Childframe. 
+Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm).
+</itemize>
+
+The two C and C++ -Application types offer a framework for creating commandline applications.
+
+And last but not least you can create an empty projekt, e.g. to work with existing projects.
 
 The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
 Email address are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
