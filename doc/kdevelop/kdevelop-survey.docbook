@@ -83,7 +83,7 @@
     All tool views are docked in a tabbar fashion around the mainframe area. They are grouped left, bottom, and right according to the services provided.
     </para></listitem>
     <listitem><para>
-    Editor and browser views will be stacked in a big sized tabbed window inmidst the mainframe area.
+    Editor and browser views will be stacked in a big sized tabbed window amidst the mainframe area.
     </para></listitem>
   </itemizedlist>
   </listitem>

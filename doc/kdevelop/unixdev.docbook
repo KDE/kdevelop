@@ -7,11 +7,11 @@
   </authorgroup>
 </chapterinfo>
 
-<title>Development on UNIX</title>
+<title>Development on &UNIX;</title>
 
 <indexterm zone="unixdev"><primary>development</primary></indexterm>
 <indexterm zone="unixdev">
-  <primary>UNIX</primary>
+  <primary>&UNIX;</primary>
   <secondary>development</secondary></indexterm>
 
 <sect1 id="history">
@@ -20,23 +20,23 @@
 <indexterm zone="history"><primary>history</primary></indexterm>
 <indexterm zone="history"><primary>scripting languages</primary></indexterm>
 <indexterm zone="history">
-  <primary>UNIX</primary>
+  <primary>&UNIX;</primary>
   <secondary>history</secondary></indexterm>
 <indexterm zone="history">
-  <primary>UNIX</primary>
+  <primary>&UNIX;</primary>
   <secondary>pipe</secondary></indexterm>
 <indexterm zone="history">
-  <primary>UNIX</primary>
+  <primary>&UNIX;</primary>
   <secondary>shell</secondary></indexterm>
 <indexterm zone="history">
   <primary>shell</primary>
-  <secondary>UNIX</secondary></indexterm>
+  <secondary>&UNIX;</secondary></indexterm>
 
 <para>
-From the beginning, UNIX has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. UNIX was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the UNIX kernel and associated programs on a DEC PDP-11 computer.)
+From the beginning, &UNIX; has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. &UNIX; was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the &UNIX; kernel and associated programs on a DEC PDP-11 computer.)
 </para>
 <para>
-The other paradigm is the world of <emphasis>scripting languages</emphasis>. This world evolved with the invention of the UNIX shell which was the user's interface to the operating system&mdash;and at the same time a very high level programming language. A shell script is built from a set of small utility programs like &eg; <command>grep</command>, <command>sed</command>, or <command>find</command>. Each such utility is designed for some tightly defined job. The trick is that any such utility can be connected to another one via a simple transport mechanism, called a <emphasis>pipe</emphasis>, which directs the output of the foregoing utility into the input of the next processed one. This makes up for a very powerful and highly flexible programming tool.
+The other paradigm is the world of <emphasis>scripting languages</emphasis>. This world evolved with the invention of the &UNIX; shell which was the user's interface to the operating system&mdash;and at the same time a very high level programming language. A shell script is built from a set of small utility programs like &eg; <command>grep</command>, <command>sed</command>, or <command>find</command>. Each such utility is designed for some tightly defined job. The trick is that any such utility can be connected to another one via a simple transport mechanism, called a <emphasis>pipe</emphasis>, which directs the output of the foregoing utility into the input of the next processed one. This makes for a very powerful and highly flexible programming tool.
 </para>
 <para>
 As time has gone by, both worlds have evolved. While C is still used mainly as a system programming language, C++ as a variant of C enriched by object-oriented and generic extensions has found its place for the development of complex applications in the 1990's. There are numerous other programming languages, even older ones keep their place&mdash;FORTRAN77 and Ada &eg; still have their stronghold in numerical applications.
@@ -51,7 +51,7 @@ As time has gone by, both worlds have evolved. While C is still used mainly as a
 In the scripting area, there has been a shift away from the shell, which suffers from portability concerns, to languages which unify all commonly needed functionality in their standard libraries, while still being able to interface to the outside through pipes when necessary.
 </para>
 <para>
-All these scripting languages have in common that they are widely portable between UNIX variants, Microsoft &Windows;, &Mac; OS or even VMS. Also, they all have implementations that are freely distributable.
+All these scripting languages have in common that they are widely portable between &UNIX; variants, Microsoft &Windows;, &Mac; OS or even VMS. Also, they all have implementations that are freely distributable.
 </para>
 
 <sect2 id="unixdev-SL-Perl">
@@ -92,7 +92,7 @@ For more information see the <ulink url="http://cpan.org">Comprehensive Perl Arc
   <secondary>PHP</secondary></indexterm>
 
 <para>
-<ulink url="http://www.php.net">&php;</ulink> was invented as a language directly embeddable into HTML pages and consequently has its main uses in delivering dynamic content in the web.
+<ulink url="http://www.php.net">&php;</ulink> was invented as a language directly embeddable into HTML pages and consequently has its main uses in delivering dynamic content on the web.
 </para>
 </sect2> <!-- unixdev-SL-PHP -->
 </sect1> <!-- unixdev-scripting-languages -->
@@ -102,7 +102,7 @@ For more information see the <ulink url="http://cpan.org">Comprehensive Perl Arc
 <title>Higher-level Scripting</title>
 
 <para>
-Higher-level UNIX applications usually miss the speed and flexibility of the traditional character-oriented shell scripting mechanisms. This is especially true in the world of graphical user interfaces (&GUI;) as &eg; &kde;.
+Higher-level &UNIX; applications usually miss the speed and flexibility of the traditional character-oriented shell scripting mechanisms. This is especially true in the world of graphical user interfaces (&GUI;) such as &eg; &kde;.
 </para>
 <para>
 There have been attempts to provide similar mechanisms which will work on a higher application level, most notably <link linkend="unixdev-corba">CORBA</link> and, in the &kde; environment, <link linkend="unixdev-dcop">DCOP</link>.
@@ -143,16 +143,16 @@ The main drawback of CORBA is its rather low speed. While this may be tolerable 
   <secondary>DCOP</secondary></indexterm>
 
 <para>
-Another evolution on UNIX-like scripting is the <ulink url="http://developer.kde.org/documentation/library/kdeqt/dcop.html"><emphasis>DCOP</emphasis></ulink> protocol which was devised for communication between &kde; applications to overcome the limitations of CORBA.
+Another evolution on &UNIX;-like scripting is the <ulink url="http://developer.kde.org/documentation/library/kdeqt/dcop.html"><emphasis>DCOP</emphasis></ulink> protocol which was devised for communication between &kde; applications to overcome the limitations of CORBA.
 </para>
 <para>
-DCOP stands for <emphasis>Desktop Communication Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional UNIX pipe mechanism.
+DCOP stands for <emphasis>Desktop Communication Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional &UNIX; pipe mechanism.
 </para>
 <para>
 Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. DCOP allows elaborate graphical programs to communicate with each other in a quite similar way. This enables &eg; a &kde; program to send messages to another &kde; program, or receive data from it for its own purposes.
 </para>
 <para>
-There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly (although a lot faster than CORBA). But it returns much of the power and flexibility of UNIX scripting to high-level programs which are based on a graphical user interface.
+There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly (although a lot faster than CORBA). But it returns much of the power and flexibility of &UNIX; scripting to high-level programs which are based on a graphical user interface.
 </para>
 <para>
 For more information, see the <ulink url="http://developer.kde.org/documentation/library/kdeqt/dcop.html">DCOP: Desktop COmmunications Protocol</ulink> paper or <ulink url="developer.kde.org/documentation/library/cvs-api/dcop/html/index.html">The DCOP Desktop Communication Protocol library</ulink> API reference of the &kde; dcop library.
@@ -188,7 +188,7 @@ To accomplish this, the basic tools needed are
   a <emphasis>make system</emphasis> which provides some means to manage all this stuff and&mdash;not to forget
   </para></listitem>
   <listitem><para>
-  a <emphasis>debugger</emphasis> to (hopefully) find all errors in the program and possibly some other diagnosis tools to get everything running smoothly.
+  a <emphasis>debugger</emphasis> to (hopefully) find all errors in the program and possibly some other diagnostic tools to get everything running smoothly.
   </para></listitem>
 </itemizedlist>
 </para>
@@ -335,7 +335,7 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
   <para>A <emphasis>class generator</emphasis>, for creating new classes and integrating them into the current project.</para>
   </listitem>
   <listitem>
-  <para><emphasis>File managemen</emphasis>t for sources, headers, documentation &etc; to be included in the project.</para>
+  <para><emphasis>File management</emphasis> for sources, headers, documentation &etc; to be included in the project.</para>
   </listitem>
   <listitem>
   <para>Assistance in <emphasis>creating application user manuals</emphasis> written with KDE tools.</para>
@@ -344,7 +344,7 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
   <para>Automatic HTML-based <emphasis>API-documentation</emphasis> for a project's classes with cross-references to the used libraries.</para>
   </listitem>
   <listitem>
-  <para><emphasis>Internationalization support</emphasis>, allowing translators to add their target language to a project easily, including support of KBabel.</para>
+  <para><emphasis>Internationalization support</emphasis>, allowing translators to add their target language to a project easily, including support for KBabel.</para>
   </listitem>
   <listitem>
   <para>Support for managing a project via one of several <emphasis>versioning systems</emphasis> (&eg; CVS) by providing an easy-to-use frontend for the most needed functions.</para>

@@ -10,7 +10,7 @@
 <title>Configuring &kdevelop;</title>
 
 <para>
-&kdevelop; is a very powerful and flexible IDE which offers many ways to tailor it to your needs. To start configuration select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. This will cause the configuration dialog to pop up consisting of a selection window to the left and the configuration dialog on the right hand side whose contents will vary upon the configuration item you did select.
+&kdevelop; is a very powerful and flexible IDE which offers many ways to tailor it to your needs. To start configuration select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. This will cause the configuration dialog to pop up consisting of a selection window to the left and the configuration dialog on the right hand side whose contents will vary upon the configuration item you selected.
 </para>
 
 <screenshot>
@@ -262,7 +262,7 @@ As already said in the <link linkend="uimodes-survey">Available User Interface M
 </itemizedlist>
 
 <para>
-To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the followig settings dialog to the right.
+To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Configure KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the followig settings dialog to the right.
 </para>
 
 <screenshot>
@@ -323,7 +323,7 @@ In the IDEAl and tabbed pages modes there will be named tabs on top of the docum
 <formalpara id="setup-ui-hover">
 <title>Setting Up to Close a Document by a Click On Its Tab</title>
 <para>
-When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, you may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> coniguration section for this.
+When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, you may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> configuration section for this.
 </para>
 </formalpara>
 <variablelist>
@@ -369,7 +369,7 @@ The <guilabel>Toolview Tab Layout</guilabel> configuration section will be avail
 <varlistentry>
   <term><guilabel>Text</guilabel></term>
   <listitem><para>
-  This is the default toolview tab display mode. Each tab displays the name of its associated toolwiew.
+  This is the default toolview tab display mode. Each tab displays the name of its associated toolview.
   </para></listitem>
 </varlistentry>
 <varlistentry>
@@ -460,11 +460,11 @@ These editor interfaces are fully integrated in the &kdevelop; IDE concept. Part
 </para>
 
 <note><para>
-Changing the editor will not effect already open files. There are two possibilities to proceed. Either close all open text windows and reopen them one by one. Or simply close the whole project and reopen it again. The windows will then automatically open under the new text editor interface.
+Changing the editor will not affect already open files. There are two possibilities to proceed. Either close all open text windows and reopen them one by one or simply close the whole project and reopen it again. The windows will then automatically open under the new text editor interface.
 </para></note>
 
 <important id="setup-editor-kparts"><para>
-KDevelop lets you use editor interfaces which have registered with &kde; and that provide a KatePart interface. If you miss one one of the selections shown above check your &kde; installation if the corresponding KPart was correctly installed.
+&kdevelop; lets you use editor interfaces which have registered with &kde; and that provide a KatePart interface. If you miss one one of the selections shown above check your &kde; installation if the corresponding KPart was correctly installed.
 </para></important>
 </sect2> <!-- setup-editor -->
 
@@ -484,7 +484,7 @@ To set up a specific format style, select <menuchoice> <guimenu>Settings</guimen
 </para>
 
 <tip><para>
-Any style changes apply to newly entered text only. If you want to change the formatting style of an already existing source text you will have to explicitely use the <menuchoice><guimenu>Edit</guimenu><guimenuitem>Reformat Source</guimenuitem></menuchoice> command.
+Any style changes apply to newly entered text only. If you want to change the formatting style of an already existing source text you will have to explicitly use the <menuchoice><guimenu>Edit</guimenu><guimenuitem>Reformat Source</guimenuitem></menuchoice> command.
 </para></tip>
 
 <note><para>
@@ -492,7 +492,7 @@ The exact outcome of these style formatting definitions depends on the <link lin
 </para></note>
 
 <warning><para>
-There may be incompatibilities between the configuration style settings provided here and the editor you use up to the extent that in extreme cases it even might destroy your files. Make sure you have a backup of your source files before you try out these settings with an none KDE standard editor.
+There may be incompatibilities between the configuration style settings provided here and the editor you use up to the extent that in extreme cases it even might destroy your files. Make sure you have a backup of your source files before you try out these settings with a non-&kde;-standard editor.
 </para></warning>
 
 <sect3 id="setup-format-general">
@@ -527,7 +527,7 @@ Currently only the predefined source formatting styles will be demonstrated by a
 <title>Indentation Style Setup</title>
 
 <para>
-Proper indentation is the main means to enhance readability of a source text. I you selected the <guilabel>Indentation</guilabel> tab of the <guilabel>Source Formatter</guilabel> dialog you will be presented with a series of indentation formatting choices grouped into three boxes as following.
+Proper indentation is the main means to enhance readability of a source text. If you selected the <guilabel>Indentation</guilabel> tab of the <guilabel>Source Formatter</guilabel> dialog you will be presented with a series of indentation formatting choices grouped into three boxes as following.
 </para>
 
 <screenshot>
@@ -934,7 +934,7 @@ There is a toolbar on top of the <guilabel>File Selector</guilabel> which can be
 <formalpara id="setup-fileselector-autosync">
 <title>Defining When the Contents Should Change</title>
 <para>
-Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, &ie; when you select another directory or when you explicitely want to refresh its contents.
+Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, &ie; when you select another directory or when you explicitly want to refresh its contents.
 </para>
 </formalpara>
 
@@ -1001,7 +1001,7 @@ By default the <guilabel>File Selector</guilabel> is set up so that it shows the
 </formalpara>
 
 <note><para>
-If &kdevelop; was automatically restarted by the KDE session manager the changes in these settings will have no effect. In this case location and filter settings of the most recent KDE session will always be restored.
+If &kdevelop; was automatically restarted by the &kde; session manager the changes in these settings will have no effect. In this case location and filter settings of the most recent &kde; session will always be restored.
 </para></note>
 
 <variablelist>
@@ -1241,7 +1241,7 @@ If you have a non-standard installation, either there will be no information lis
 </sect3> <!-- setup-docu-general-qt -->
 
 <sect3 id="setup-docu-general-kde">
-<title>KDE API Documentations</title>
+<title>&kde; API Documentations</title>
 
 <para>
 The other two lists on the <guilabel>General</guilabel> documentation tree configuration page concern API documentations provided by the &kde; system.

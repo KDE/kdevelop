@@ -375,9 +375,9 @@ Information on these topics is available:
     </formalpara>
     <itemizedlist>
       <listitem><para>
-      Once you configured your project with default it will no longer build with debug or optimzed.
+      Once you configured your project with default it will no longer build with debug or optimized.
       </para></listitem>
-      <listitem><para>Once you configured your project with debug or optimzed it will no longer build with default.</para></listitem>
+      <listitem><para>Once you configured your project with debug or optimized it will no longer build with default.</para></listitem>
      </itemizedlist>
   </listitem>
 
@@ -609,7 +609,7 @@ default editor. You can configure them as you like (how?)
 
 <para>
 For all the keys above <keycap>Shift</keycap> can be pressed additionally,
-to mark from the current cursor position to the one afterwards.
+to mark from the current cursor position to the one afterward.
 </para>
 
 <informaltable>

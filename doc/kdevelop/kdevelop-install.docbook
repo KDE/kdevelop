@@ -23,7 +23,7 @@ In this chapter we will discuss the steps necessary to compile and install the &
   <link linkend="requirements">&kdevelop; requirements</link> lists the programs and libraries which you need installed to successfully compile the IDE.
   </para></listitem>
   <listitem><para>
-  <link linkend="compile-and-install">&kdevelop; compilation and installation</link> leads you trough all steps of compilation and installing the application.
+  <link linkend="compile-and-install">&kdevelop; compilation and installation</link> leads you through all the steps of compilation and installation of the application.
   </para></listitem>
   <listitem><para>
   <link linkend="make-api">How to obtain a &kdevelop; API documentation</link> tells what an API is and how you get such a useful tool for navigating the &kdevelop; sources.
@@ -111,7 +111,7 @@ Now you may compile your &kdevelop; version as shown in the <link linkend="compi
 </sect3> <!-- howto-cvs-co -->
 
 <sect3 id="howto-cvs-up">
-<title>Keeping Your &CVS; Copy Actual</title>
+<title>Keeping Your &CVS; Copy up to Date</title>
 
 <indexterm zone="howto-cvs-up">
   <primary>update</primary></indexterm>
@@ -202,7 +202,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    &perl; 5.004
+    &perl; 5.004 (or higher)
     <indexterm>
       <primary>Perl</primary>
       <secondary>requirements</secondary></indexterm>
@@ -213,7 +213,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    <application>autoconf</application> &ge; 2.52
+    <application>autoconf</application> &ge; 2.52 (or higher)
     <indexterm>
       <primary>autoconf</primary>
       <secondary>requirements</secondary></indexterm>
@@ -224,7 +224,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    <application>automake</application> &ge; 1.6
+    <application>automake</application> &ge; 1.6 (or higher)
     <indexterm>
       <primary>automake</primary>
       <secondary>requirements</secondary></indexterm>
@@ -235,7 +235,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    <application>flex</application> 2.5.4
+    <application>flex</application> 2.5.4 (or higher)
     <indexterm>
       <primary>flex</primary>
       <secondary>requirements</secondary></indexterm>
@@ -246,7 +246,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    &Qt; &ge; 3.0.3
+    &Qt; &ge; 3.0.3 (or higher)
     <indexterm>
       <primary>Qt</primary>
       <secondary>requirements</secondary></indexterm>
@@ -257,7 +257,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    <application>KDE</application> &ge; 3.0.2
+    <application>KDE</application> &ge; 3.0.2 (or higher)
     <indexterm>
       <primary>KDE</primary>
       <secondary>requirements</secondary></indexterm>
@@ -304,7 +304,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
 <orderedlist>
   <listitem>
     <para>
-    You can to a certain extent circumvent the need for &autoconf; &ge; 2.52 and &automake; &ge; 1.6. Just remove the <filename class="directory">admin</filename> directory in your &kdevelop; installation directory and type
+    You can, to a certain extent, circumvent the need for &autoconf; &ge; 2.52 and &automake; &ge; 1.6. Just remove the <filename class="directory">admin</filename> directory in your &kdevelop; installation directory and type
     <indexterm>
       <primary>autoconf</primary>
       <secondary>circumvent version need</secondary></indexterm>
@@ -359,7 +359,7 @@ Once all requirements are met, you are ready to compile and install &kdevelop;. 
   <link linkend="compile-and-install-bsd">How to Compile on FreeBSD</link> discusses special considerations about the Berkeley Database systems in order to compile and install &kdevelop;.
   </para></listitem>
   <listitem><para>
-  <link linkend="compile-and-install-options">Some Notes on configure Options</link> tells you how to run &kdevelop; if it has been installed in another location than the &kde; directory.
+  <link linkend="compile-and-install-options">Some Notes on configure Options</link> tells you how to run &kdevelop; if it has been installed in a location other than the &kde; directory.
   </para></listitem>
 </itemizedlist>
 
@@ -768,7 +768,7 @@ API is the short form of <quote>Application Program Interface</quote>. Actually 
 There is a version of the most current API available at the <ulink url="http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/index.html">KDevelop-Home website</ulink>. It will be automatically updated every 24 hours so you can keep up.
 </para>
 <para>
-Alas, this version is best used read-only over the internet. If you do not allways have net access you may as well build your own API documentation from the &kdevelop; sources. To do so, you must tell the automake system where to find the KDELIBS API in your system. This is accomplished by the special option <option>--with-kdelibsdoxy-dir</option> in the <command>configure</command> command when you prepare to compile the &kdevelop; sources:
+Alas, this version is best used read-only over the internet. If you do not always have internet access you may as well build your own API documentation from the &kdevelop; sources. To do so, you must tell the automake system where to find the KDELIBS API in your system. This is accomplished by the special option <option>--with-kdelibsdoxy-dir</option> in the <command>configure</command> command when you prepare to compile the &kdevelop; sources:
 </para>
 
 <informalexample><simplelist>
@@ -808,11 +808,11 @@ and entering the root password. Then install the API files:
 </member></simplelist></informalexample>
 
 <para>
-Once this is done, <command>make</command> will inform you about the directory where you can finally look at the API documentation's contents. Note this address, you can use it from the &konqueror; as well as from inside &kdevelop;, in case you have set up the &kdevelop; sources themselves as a project to work on.
+Once this is done, <command>make</command> will inform you about the directory where you can finally look at the API documentation's contents. Note this address, you can use it from  &konqueror; as well as from inside &kdevelop;, in case you have set up the &kdevelop; sources themselves as a project to work on.
 </para>
 
 <note><para>
-You will most probably see a lot of warning and/or error messages during the API build run by <application>Doxygen</application>. Best ignore them, they are of interest to the &kdevelop; developers only. If the API generation ever comes to a successful end, the <filename>.html</filename> API files will be useable.
+You will most probably see a lot of warning and/or error messages during the API build run by <application>Doxygen</application>. It is best to ignore them, they are of interest to the &kdevelop; developers only. If the API generation ever comes to a successful end, the <filename>.html</filename> API files will be usable.
 </para></note>
 
 </sect1> <!-- make-api -->
