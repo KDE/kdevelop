@@ -423,16 +423,16 @@
 #define IDK_GOTO_PREVWIN                                        ALT+Key_Prior
 #define IDK_GOTO_NEXTWIN                                        ALT+Key_Next
 
-#define IDK_GOTO_EDITORVIEW1                                    ALT+Key_1
-#define IDK_GOTO_EDITORVIEW2                                    ALT+Key_2
-#define IDK_GOTO_EDITORVIEW3                                    ALT+Key_3
-#define IDK_GOTO_EDITORVIEW4                                    ALT+Key_4
-#define IDK_GOTO_EDITORVIEW5                                    ALT+Key_5
-#define IDK_GOTO_EDITORVIEW6                                    ALT+Key_6
-#define IDK_GOTO_EDITORVIEW7                                    ALT+Key_7
-#define IDK_GOTO_EDITORVIEW8                                    ALT+Key_8
-#define IDK_GOTO_EDITORVIEW9                                    ALT+Key_9
-#define IDK_GOTO_EDITORVIEW10                                   ALT+Key_0
+#define IDK_GOTO_EDITORVIEW1                                    CTRL+Key_1
+#define IDK_GOTO_EDITORVIEW2                                    CTRL+Key_2
+#define IDK_GOTO_EDITORVIEW3                                    CTRL+Key_3
+#define IDK_GOTO_EDITORVIEW4                                    CTRL+Key_4
+#define IDK_GOTO_EDITORVIEW5                                    CTRL+Key_5
+#define IDK_GOTO_EDITORVIEW6                                    CTRL+Key_6
+#define IDK_GOTO_EDITORVIEW7                                    CTRL+Key_7
+#define IDK_GOTO_EDITORVIEW8                                    CTRL+Key_8
+#define IDK_GOTO_EDITORVIEW9                                    CTRL+Key_9
+#define IDK_GOTO_EDITORVIEW10                                   CTRL+Key_0
 
 #define ID_ACTIVATETREEVIEW_CLASS                               CTRL+SHIFT+Key_C
 #define ID_ACTIVATETREEVIEW_LFV                                 CTRL+SHIFT+Key_L
