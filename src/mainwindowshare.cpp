@@ -62,6 +62,12 @@ MainWindowShare::MainWindowShare(QObject* pParent, const char* name)
   m_pMainWnd = (KParts::MainWindow*)pParent;
 }
 
+void MainWindowShare::init()
+{
+  connect(Core::getInstance(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+          this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+}
+
 void MainWindowShare::createActions()
 {
   ProjectManager::getInstance()->createActions( m_pMainWnd->actionCollection() );
@@ -282,6 +288,14 @@ void MainWindowShare::slotConfigureToolbars()
   KEditToolbar dlg( m_pMainWnd->factory() );
   connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
   dlg.exec();
+}
+
+void MainWindowShare::contextMenu(QPopupMenu* popup, const Context *)
+{
+  if ( m_pMainWnd->menuBar()->isVisible() )
+    return;
+
+  popup->insertItem( i18n("Show &Menubar"), m_pMainWnd->menuBar(), SLOT(show()) );
 }
 
 #include "mainwindowshare.moc"

@@ -254,6 +254,8 @@ void MainWindow::init()
 
   createGUI(0);
 
+  m_pMainWindowShare->init();
+
   KAction *a = actionCollection()->action("help_report_bug");
   disconnect(a, SIGNAL(activated()), 0, 0);
   connect(a, SIGNAL(activated()), m_pMainWindowShare, SLOT(slotReportBug()));
@@ -268,7 +270,6 @@ void MainWindow::init()
   connect(ProjectManager::getInstance()->projectSession(),
           SIGNAL(sig_saveAdditionalViewProperties(const QString&, QDomElement*)),
           this, SLOT(slotSaveAdditionalViewProperties(const QString&, QDomElement*)));
-
 
   if (!isFakingSDIApplication()) {
     unsigned int count = menuBar()->count();

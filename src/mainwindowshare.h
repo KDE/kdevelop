@@ -33,6 +33,7 @@ public:
   ~MainWindowShare() {}
 
   void createActions();
+  void init();
 
 signals:
   void gotoNextWindow();
@@ -55,6 +56,8 @@ private slots:
   void slotToggleViewToolbar();
   void slotToggleBrowserToolbar();
   void slotToggleStatusbar();
+
+  void contextMenu(QPopupMenu *, const Context *);
 
 private:
   KToggleAction*   m_toggleMainToolbar;
