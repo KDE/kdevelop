@@ -739,10 +739,11 @@ void CKDevelop::initMenuBar(){
 // 			 SLOT(slotBuildMakeWith()),0,ID_BUILD_MAKE_WITH);
 //   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE_WITH ,"MakeWith" );
 
-  build_menu->insertItem(Icon("rebuild.xpm"),i18n("&Rebuild all"), this,
+  build_menu->insertItem(i18n("Clea&n"),this,SLOT(slotBuildMakeClean()),0,ID_BUILD_MAKECLEAN);
+  build_menu->insertItem(Icon("rebuild.xpm"),i18n("&Rebuild"), this,
 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
 
-  build_menu->insertItem(i18n("&Clean/Rebuild all"), this, 
+  build_menu->insertItem(i18n("Dist&Clean/Rebuild All"), this,
 			 SLOT(slotBuildCleanRebuildAll()),0,ID_BUILD_CLEAN_REBUILD_ALL);
   build_menu->insertSeparator();
   build_menu->insertItem(Icon("stop_proc.xpm"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
@@ -753,7 +754,6 @@ void CKDevelop::initMenuBar(){
 
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
-  build_menu->insertItem(i18n("Ma&ke Clean"),this,SLOT(slotBuildMakeClean()),0,ID_BUILD_MAKECLEAN);
   build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   build_menu->insertItem(i18n("C&onfigure..."), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
 
