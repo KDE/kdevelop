@@ -44,7 +44,7 @@ ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QS
     setXMLFile("kdevscriptproject.rc");
 
     KAction *action;
-    action = new KAction( i18n("New file..."), 0,
+    action = new KAction( i18n("New File..."), 0,
                           this, SLOT(slotNewFile()),
                           actionCollection(), "file_newfile" );
     
