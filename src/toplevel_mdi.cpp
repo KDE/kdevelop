@@ -194,6 +194,9 @@ void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
 
 void TopLevelMDI::removeView(QWidget *view)
 {
+  if (!view)
+    return;
+
   QextMdiChildView *wrapper = m_widgetMap[view];
 
   if (wrapper)
