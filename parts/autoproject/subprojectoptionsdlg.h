@@ -38,6 +38,7 @@ private:
     virtual void outsideMoveDownClicked();
     virtual void outsideAddClicked();
     virtual void outsideRemoveClicked();
+    virtual void outsideEditClicked();
     virtual void addPrefixClicked();
     virtual void removePrefixClicked();
     virtual void buildorderMoveUpClicked();

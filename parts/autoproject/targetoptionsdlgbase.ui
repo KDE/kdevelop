@@ -414,6 +414,14 @@
                             </widget>
                             <widget class="QPushButton">
                                 <property name="name">
+                                    <cstring>outsideedit_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit...</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
                                     <cstring>outsideremove_button</cstring>
                                 </property>
                                 <property name="text">
@@ -554,6 +562,12 @@
         <slot>outsideAddClicked()</slot>
     </connection>
     <connection>
+        <sender>outsideedit_button</sender>
+        <signal>clicked()</signal>
+        <receiver>target_options_dialog</receiver>
+        <slot>outsideEditClicked()</slot>
+    </connection>
+    <connection>
         <sender>outsideremove_button</sender>
         <signal>clicked()</signal>
         <receiver>target_options_dialog</receiver>
@@ -579,6 +593,7 @@
     <tabstop>insidemovedown_button</tabstop>
     <tabstop>outsidelib_listview</tabstop>
     <tabstop>outsideadd_button</tabstop>
+    <tabstop>outsideedit_button</tabstop>
     <tabstop>outsideremove_button</tabstop>
     <tabstop>outsidemoveup_button</tabstop>
     <tabstop>outsidemovedown_button</tabstop>
@@ -589,6 +604,7 @@
     <slot access="protected">insideMoveDownClicked()</slot>
     <slot access="protected">insideMoveUpClicked()</slot>
     <slot access="protected">outsideAddClicked()</slot>
+    <slot access="protected">outsideEditClicked()</slot>
     <slot access="protected">outsideMoveDownClicked()</slot>
     <slot access="protected">outsideMoveUpClicked()</slot>
     <slot access="protected">outsideRemoveClicked()</slot>

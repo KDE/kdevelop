@@ -305,6 +305,18 @@ void SubprojectOptionsDialog::outsideAddClicked()
 }
 
 
+void SubprojectOptionsDialog::outsideEditClicked()
+{
+    if ( (outsideinc_listview->childCount()==0) || (outsideinc_listview->currentItem() == 0) )
+        return;
+    bool ok;
+    QString dir = KLineEditDlg::getText(i18n("Edit include directory:"),
+            outsideinc_listview->currentItem()-> text(0), &ok, 0);
+    if (ok && !dir.isEmpty())
+        outsideinc_listview->currentItem()-> setText(0, dir);
+}
+
+
 void SubprojectOptionsDialog::outsideRemoveClicked()
 {
     delete outsideinc_listview->currentItem();

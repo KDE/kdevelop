@@ -33,6 +33,7 @@ private:
     virtual void outsideMoveUpClicked();
     virtual void outsideMoveDownClicked();
     virtual void outsideAddClicked();
+    virtual void outsideEditClicked();
     virtual void outsideRemoveClicked();
     virtual void accept();
     
