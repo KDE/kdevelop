@@ -112,11 +112,27 @@ public:     // Methods
 	 */
 	bool isMaximized();//Useful only when attached (?)
 	/**
-	 * Returns the geometry of this window or of the parent if there is any...
+	 * Returns the geometry of this MDI child window as QWidget::geometry() does.
+	 */
+	QRect internalGeometry();
+	/**
+	 * Sets the geometry of the client area of this MDI child window. The 
+    * top left position of the argument is the position of the top left point
+    * of the client area in its parent coordinates and the arguments width
+    * and height is the width and height of the client area. Please note: This
+    * differs from the behaviour of QWidget::setGeometry()!
+	 */
+	void setInternalGeometry(const QRect& newGeomety);
+	/**
+	 * Returns the frame geometry of this window or of the parent if there is any...
 	 */
 	QRect externalGeometry();
 	/**
-	 * Sets the geometry of this window or of the parent if there is any...
+	 * Sets the geometry of the frame of this MDI child window. The top left 
+    * position of the argument is the position of the top left point of the 
+    * frame in its parent coordinates and the arguments width and height is 
+    * the width and height of the widget frame. Please note: This differs
+    * from the behaviour of QWidget::setGeometry()!
 	 */
 	void setExternalGeometry(const QRect& newGeomety);
 	//Methods to override ABSOLUTELY
@@ -182,6 +198,8 @@ public slots:
    virtual void slot_clickedInWindowMenu();
    /** called if someone click on the "Dock/Undock..." menu item for this child frame window */
    virtual void slot_clickedInDockMenu();
+   /** calls QWidget::show but also for it's parent widget if attached */
+   virtual void show();
 
 protected:	// Protected methods
 	/**
