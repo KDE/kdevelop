@@ -204,7 +204,7 @@ class KWriteDoc : QObject {
 
   public:
     int getHighlight() {return hlManager->findHl(highlight);}
-  	int getFontHeight() {return fontHeight;}
+    int getFontHeight() {return fontHeight;}
   protected:
     void setHighlight(int n);
     void makeAttribs();

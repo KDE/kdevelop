@@ -867,7 +867,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
       repaint(0, 0, width(), height(), false);
 
     } else {
-			if(dy) leftBorder->scroll(0,dy);
+      if(dy) leftBorder->scroll(0,dy);
 
       if (updateState > 0) paintTextLines(oldXPos,oldYPos);
 
@@ -961,7 +961,7 @@ void KWriteView::paintTextLines(int xPos, int yPos) {
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
     bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h);
 
-		leftBorder->paintLine(line);
+    leftBorder->paintLine(line);
   }
   paint.end();
 }
@@ -1345,7 +1345,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
 //    if (cursorOn && line == cursor.y) paintCursor(paint,cXPos - xStart,h);
     bitBlt(this,updateR.x(),y,drawBuffer,0,0,updateR.width(),h);
 
-		leftBorder->paintLine(line);
+    leftBorder->paintLine(line);
 
     line++;
     y += h;
