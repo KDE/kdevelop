@@ -126,6 +126,7 @@ void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
       QRect    newGeoQt;
       newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
       newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
+
       newGeoQt.setWidth(newGeometry.width()+nFrameSizeLeft+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER/2);
       newGeoQt.setHeight(newGeometry.height()+nFrameSizeTop+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER/2);
 //      newGeoQt.setWidth(newGeometry.width()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
@@ -143,8 +144,13 @@ void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
 
       // create the new geometry that is accepted by the QWidget::setGeometry() method
       QRect    newGeoQt;
+#if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
+      newGeoQt.setX(newGeometry.x()-nFrameSizeLeft+frameGeo.width()-geo.width()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+1);
+      newGeoQt.setY(newGeometry.y()-nFrameSizeTop+frameGeo.height()-geo.height()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+1);
+#else
       newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
       newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
+#endif
       newGeoQt.setWidth(newGeometry.width());
       newGeoQt.setHeight(newGeometry.height());
 
