@@ -282,7 +282,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	     this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
 
     connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
-    
+
     if( part->partController()->activePart() )
         slotActivePartChanged( part->partController()->activePart() );
 }
@@ -308,7 +308,7 @@ void CppCodeCompletion::slotTimeout()
     QChar ch = textLine[ nCol ];;
     if( ch.isLetterOrNumber() || ch == '_' )
 	return;
-    
+
     completeText();
 }
 
@@ -611,19 +611,21 @@ CppCodeCompletion::completeText( )
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
 
-    kdDebug(9007) << "ch = " << ch << endl;
-    kdDebug(9007) << "ch2 = " << ch2 << endl;
-
     if( ch2 == "->" || ch == "." || ch == "(" ){
 	int pos = ch2 == "->" ? nCol - 3 : nCol - 2;
 	QChar c = strCurLine[ pos ];
-	kdDebug(9007) << "c = " << c.latin1() << endl;
+	while( pos > 0 && c.isSpace() )
+	    c = strCurLine[ --pos ];
+
 	if( !(c.isLetterOrNumber() || c == '_' || c == ')') )
 	    return;
     }
 
     if( ch == "(" ){
         --nCol;
+	while( nCol > 0 && strCurLine[nCol].isSpace() )
+	   --nCol;
+
         showArguments = TRUE;
     }
 
@@ -842,7 +844,7 @@ CppCodeCompletion::completeText( )
 		kdDebug(9007) << "include types" << endl;
 		entryList += CodeInformationRepository::toEntryList( m_repository->getClassOrNamespaceList(QStringList()) );
 	    }
-	    
+
 	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() && expr.isEmpty() ){
 		kdDebug(9007) << "include global function declarations" << endl;
  		QValueList<Catalog::QueryArgument> args;
@@ -872,12 +874,12 @@ CppCodeCompletion::completeText( )
 
 	} else if( !showArguments && word.length() ) {
 	    QValueList<KTextEditor::CompletionEntry> entryList;
-	    
+
 	    if( m_pSupport->codeCompletionConfig()->includeTypes() && expr.isEmpty() ){
 		kdDebug(9007) << "include types" << endl;
 		entryList += CodeInformationRepository::toEntryList( m_repository->getClassOrNamespaceList(QStringList()) );
 	    }
-	    
+
 	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() ){
 		kdDebug(9007) << "include global function declarations" << endl;
 		QValueList<Catalog::QueryArgument> args;
