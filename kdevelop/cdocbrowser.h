@@ -1,11 +1,11 @@
 /***************************************************************************
                     cdocbrowser.h - a htmlview for kdevelop
-                             -------------------                                         
+                             -------------------
 
-    version              :                                   
-    begin                : 20 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    version              :
+    begin                : 20 Jul 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #ifndef CDOCBROWSER_H
@@ -28,22 +28,22 @@
 #include <qpopupmenu.h>
 #include <qframe.h>
 
-#include <khtml.h>
+#include <khtml_part.h>
 #include <kiconloader.h>
 #include <kapp.h>
 #include <kconfig.h>
 #include "structdef.h"
 
 
-/** 
+/**
   *the documentation browser, attention!: only a prototype
   *@author Sandy Meier
   */
-class CDocBrowser : public KHTMLWidget {
+class CDocBrowser : public KHTMLPart {
   Q_OBJECT
-public: 
+public:
   /** construtor */
-  CDocBrowser(QWidget*parent=0,const char* name=0); 
+  CDocBrowser(QWidget*parent=0,const char* name=0);
   /** destructor */
   ~CDocBrowser();
 

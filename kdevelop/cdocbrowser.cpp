@@ -1,10 +1,10 @@
 /***************************************************************************
-           cdocbrowser.cpp - 
-                             -------------------                                         
+           cdocbrowser.cpp -
+                             -------------------
 
-    begin                : 20 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : 20 Jul 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -42,6 +42,7 @@
 #include <kcursor.h>
 #include <kprocess.h>
 #include <kio/netaccess.h>
+#include <kurl.h>
 
 #include "resource.h"
 
@@ -55,7 +56,7 @@ QColor CDocBrowser::vLinkColor;
 bool CDocBrowser::underlineLinks;
 bool CDocBrowser::forceDefaults;
 
-CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLWidget(parent,name){
+CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLPart(parent,name){
 
   doc_pop = new QPopupMenu();
   doc_pop->insertItem(BarIcon("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
@@ -115,12 +116,12 @@ void CDocBrowser::showURL(QString url,bool reload){
     showHTML.start(KProcess::DontCare);
     return;
   }
-  
+
 
   if( (url_wo_ref != old_url) || reload){
     QString str="";
     KIO::NetAccess::download(url,str);
-    
+
     //cerr << endl << "STR:" << str;
 
     char buffer[256+1];
@@ -143,7 +144,8 @@ void CDocBrowser::showURL(QString url,bool reload){
 
       end();
       //      parse();
-      show();
+      //
+      //show();
 
       KIO::NetAccess::removeTempFile(str);
       file.close();
@@ -153,7 +155,7 @@ void CDocBrowser::showURL(QString url,bool reload){
        return;
     }
   }
-  
+
 
   if (pos != -1){
     gotoAnchor(ref);
@@ -220,28 +222,31 @@ void CDocBrowser::setDocBrowserOptions(){
 }
 
 void CDocBrowser::slotDocFontSize(int size){
-  fSize = size;
-  KHTMLWidget::setFontSizes( &size );
+    int fontSizes[7];
+    const int *oldFontSizes = KHTMLPart::fontSizes();
+    memcpy(fontSizes, oldFontSizes, 7*sizeof(int));
+    fontSizes[3] = size;
+    KHTMLPart::setFontSizes( fontSizes );
   //  htmlview->parse();
-  openURL(complete_url, true);
+    openURL(complete_url);//, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
 
 void CDocBrowser::slotDocStandardFont(const char* n){
   standardFont = n;
-  KHTMLWidget::setStandardFont( n );
+  KHTMLPart::setStandardFont( n );
   //  htmlview->parse();
-  openURL(complete_url, true);
+  openURL(complete_url);//, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
 
 void CDocBrowser::slotDocFixedFont(const char* n){
   fixedFont = n;
-  KHTMLWidget::setFixedFont( n );
+  KHTMLPart::setFixedFont( n );
   //  htmlview->parse();
-  openURL(complete_url, true);
+  openURL(complete_url);//, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
@@ -251,17 +256,27 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 {
   #warning uncommented htmlview->setForceDefault( force );
   //  htmlview->setForceDefault( force );
-  KHTMLWidget::setDefaultBGColor( bg );
-  KHTMLWidget::setDefaultTextColors( text, link, vlink );
-  KHTMLWidget::setUnderlineLinks(uline);
+    QString styleSheet;
+
+    styleSheet += "body { background-color: " + bg.name() + ";\n";
+    styleSheet += "       color: " + text.name() + "; }\n";
+    styleSheet += "a[href] { color: " + link.name() + ";\n";
+    styleSheet += "          text-decoration: ";
+    if(uline)
+	styleSheet += "underline; }\n";
+    else
+	styleSheet += "none; }\n";
+    styleSheet += "a:visited { color: " + vlink.name() + "; }\n";
+
   //  htmlview->parse();
-  openURL(complete_url, true);
+    openURL(complete_url);//, true);
 //	busy = true;
 //	emit enableMenuItems();){
 }
 
 void CDocBrowser::slotPopupMenu(const QString &, const QPoint & pnt){
   QString text;
+
   if(this->isTextSelected()){
 
     text = selectedText();
@@ -295,7 +310,7 @@ void CDocBrowser::slotPopupMenu(const QString &, const QPoint & pnt){
 }
 
 void CDocBrowser::slotCopyText(){
-  kapp->clipboard()->setText(KHTMLWidget::selectedText());
+    //kapp->clipboard()->setText(KHTMLPart::selectedText());
 }
 
 void CDocBrowser::slotSearchText(){
@@ -303,7 +318,7 @@ void CDocBrowser::slotSearchText(){
 }
 
 void CDocBrowser::slotGrepText(){
-  emit signalGrepText(KHTMLWidget::selectedText());
+    //emit signalGrepText(KHTMLPart::selectedText());
 }
 
 void CDocBrowser::slotURLBack(){
