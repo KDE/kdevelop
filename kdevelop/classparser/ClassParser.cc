@@ -1209,46 +1209,73 @@ int CClassParser::checkClassDecl()
   bool isOperator = false;
   bool isMultiDecl = false;
   int retVal = CP_IS_OTHER;
-  bool exit = false;
+//  bool exit = false;
 //  CParsedLexem *aLexem;
 
-  while( !exit )
+//  while( !exit )
+  while( true )
   {
     switch( lexem )
     {
       case '<':
         // Only skip templates when we're not declaring an operator.
         if( !isOperator )
-        {
+//        {
           parseTemplate();
-          if( lexem == '>' )
-            getNextLexem();
-        }
+//          if( lexem == '>' )
+//            getNextLexem();
+//        }
+          // MW eating an extra token here is the wrong way to
+          // prevent the '>' from beeing pushed on the lexemStack
+        else
+          // MW the RightWay (tm) is to only push if no template
+          // declaration was skipped.
+          PUSH_LEXEM();
         break;
       case CPSTRUCT:
         isStruct = true;
+        PUSH_LEXEM();
         break;
       case CPOPERATOR:
         isOperator = true;
         isStruct = false;
+        PUSH_LEXEM();
         break;
       case ',':
         isMultiDecl = true;
         isStruct = false;
+        PUSH_LEXEM();
         break;
       case CLCL:
         isImpl = true;
+        PUSH_LEXEM();
+        break;
+      default:
+        PUSH_LEXEM();
         break;
     }
 
-    PUSH_LEXEM();
+//    PUSH_LEXEM();
     getNextLexem();
 
-    exit =
-      ( isStruct && ( lexem == '(' || lexem == ';' || lexem == '=' || lexem == '{' ) )||
-      ( isOperator && lexem == '(' && lexemStack.top()->type != CPOPERATOR ) || 
-      ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' ) ) ||
-      ( lexem == 0 ); 
+    // MW at least my compiler generates wrong code with the original exit condition.
+    // SuSE 7.0, gcc 2.95.2, so nothing really exotic..
+    // caveat: most of the time it's better not trying to be toooo clever.
+    // this will result in more portable code.
+    if ( isStruct && ( lexem == '(' || lexem == ';' || lexem == '=' || lexem == '{' ) )
+      break;
+    if ( isOperator && lexem == '(' && lexemStack.top()->type != CPOPERATOR )
+      break;
+    if ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' ) )
+      break;
+    if ( lexem == 0 )
+      break;
+
+//    exit =
+//      ( isStruct && ( lexem == '(' || lexem == ';' || lexem == '=' || lexem == '{' ) )||
+//      ( isOperator && lexem == '(' && lexemStack.top()->type != CPOPERATOR ) ||
+//      ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' ) ) ||
+//      ( lexem == 0 );
   }
 
 //this is not correct when considering an operator implementation

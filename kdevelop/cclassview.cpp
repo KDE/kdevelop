@@ -316,6 +316,16 @@ void CClassView::refresh( CProject *proj )
     emit setStatusbarProgress( ++currentCount );
   }
 	
+  cerr << "before ui file removal: " << src.count() << endl;
+  QString cur;
+  for (cur = src.first(); cur !=NULL; cur = src.next())
+  {
+      if(cur.contains(".ui")){
+        src.remove(src.current());
+        src.prev(); // set the previous item the current so the next item will be the next after the removed ui file
+      }
+  }
+  cerr <<"after ui file removal: " << src.count() << endl;
   // Parse sourcefiles.
   for( str = src.first(); str != NULL; str = src.next() )
   {
@@ -348,6 +358,17 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
 {
 //  cp->getDependentFiles( iHeaderList, iSourceList);
 
+  cerr << "before ui file removal: " << iSourceList.count() << endl;
+  QString cur;
+  for (cur = iSourceList.first(); cur; cur = iSourceList.next())
+  {
+      if(cur.contains(".ui")){
+        iSourceList.remove(iSourceList.current());
+        iSourceList.prev(); // set the previous item the current so the next item will be the next after the removed ui file
+      }
+  }
+  cerr <<"after ui file removal: " << iSourceList.count() << endl;
+
   // Initialize progressbar.
   int lTotalCount = 0;
 	lTotalCount += iHeaderList.count()+iSourceList.count();
@@ -358,7 +379,6 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
   emit setStatusbarProgressSteps( lTotalCount );
 
   const char* lCurFile;
-
   // Remove all references to the files in the lists
 //  for (lCurFile = iHeaderList.first(); lCurFile; lCurFile = iHeaderList.next())
 //    cp->removeWithReferences( lCurFile );
