@@ -57,6 +57,7 @@ public:
     virtual void parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
     virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
     virtual void parseFunctionArguments( DeclaratorAST* declarator, ParsedMethod* method );
+    virtual void parseBaseClause( BaseClauseAST* baseClause, ParsedClass* klass );
 
 private:
     ParsedScopeContainer* findOrInsertScopeContainer( ParsedScopeContainer* scope, const QString& name );

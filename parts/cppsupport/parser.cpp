@@ -2151,6 +2151,7 @@ bool Parser::parseBaseSpecifier( BaseSpecifierAST::Node& node )
 
     BaseSpecifierAST::Node ast = CreateNode<BaseSpecifierAST>();
     ast->setAccess( access );
+    ast->setName( name );
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
 

@@ -74,7 +74,6 @@
 #include "parsedclass.h"
 #include "parsedattribute.h"
 #include "parsedmethod.h"
-#include "classparser.h"
 #include "addclassattributedlg.h"
 #include "cppnewclassdlg.h"
 #include "cppaddmethoddlg.h"
@@ -173,9 +172,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setStatusText( i18n("Generate a new class") );
     action->setWhatsThis( i18n("Generate a new class") );
 
-
-    m_pParser      = 0;
-    m_pCCParser    = 0;
     m_pCompletion  = 0;
 
     withcpp = false;
@@ -216,11 +212,8 @@ CppSupportPart::~CppSupportPart()
     mainWindow()->removeView( m_structureView );
 
     delete m_backgroundParser;
-    delete m_pParser;
     delete m_pCompletion;
     delete m_structureView;
-
-    delete m_pCCParser;
     delete m_pCHWidget;
     delete m_problemReporter;
 }
@@ -441,12 +434,6 @@ CppSupportPart::projectOpened( )
     connect( project( ), SIGNAL( removedFilesFromProject( const QStringList &) ),
              this, SLOT( removedFilesFromProject( const QStringList & ) ) );
 
-    // standard project classstore - displayed in classview - widget
-    m_pParser     = new CClassParser( classStore( ) );
-
-    // code completion classstore - just for preparsing - stuff
-    m_pCCParser   = new CClassParser( ccClassStore( ) );
-
     // code completion working class
     m_pCompletion = new CppCodeCompletion( this, classStore( ), ccClassStore( ) );
 
@@ -472,12 +459,7 @@ CppSupportPart::projectClosed( )
 
     m_backgroundParser->removeAllFiles();
 
-    delete m_pParser;
-    delete m_pCCParser;
     delete m_pCompletion;
-
-    m_pParser     = 0;
-    m_pCCParser   = 0;
     m_pCompletion = 0;
 }
 
@@ -553,7 +535,7 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 
 		// changed - daniel
 		QString path = project()->projectDirectory() + "/" + ( *it );
-		maybeParse( path, classStore( ), m_pParser );
+		maybeParse( path, classStore( ) );
 
 		partController()->editDocument ( KURL ( path ) );
 	}
@@ -585,7 +567,7 @@ void CppSupportPart::savedFile(const QString &fileName)
 
     if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         // changed - daniel
-        maybeParse( fileName, classStore( ), m_pParser );
+        maybeParse( fileName, classStore( ) );
         emit updatedSourceInfo();
     }
 }
@@ -734,7 +716,7 @@ void CppSupportPart::addMethod(const QString &className)
 	return;
     }
 
-    CppAddMethodDialog dlg( m_pParser->getClassStore(), m_pCCParser->getClassStore(),
+    CppAddMethodDialog dlg( classStore(), ccClassStore(),
 			    className, 0, "methodDlg"); //TODO: Leak ?
     if (!dlg.exec())
         return;
@@ -821,7 +803,7 @@ void CppSupportPart::addAttribute(const QString &className)
 	return;
     }
 
-    AddClassAttributeDialog dlg(m_pParser->getClassStore(), m_pCCParser->getClassStore(), 0, "attrDlg");
+    AddClassAttributeDialog dlg(classStore(), ccClassStore(), 0, "attrDlg");
     if( !dlg.exec() )
       return;
 
@@ -1118,7 +1100,7 @@ CppSupportPart::parseProject( )
 		filePath = project()->projectDirectory() + "/" + ( *it );
 	label->setText( i18n( "Currently parsing: '%1'" )
 	                .arg( filePath ) );
-        maybeParse( filePath, classStore( ), m_pParser );
+        maybeParse( filePath, classStore() );
     }
 
     kdDebug( 9007 ) << "updating sourceinfo" << endl;
@@ -1156,15 +1138,12 @@ CppSupportPart::createProjectPCS( const QString fileToSave )
 
 
 void
-CppSupportPart::maybeParse( const QString fileName, ClassStore *store, CClassParser *parser )
+CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
 {
     if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
         return;
 
     store->removeWithReferences( fileName );
-#if 0
-    parser->parse( fileName );
-#else
     m_backgroundParser->lock();
     TranslationUnitAST* translationUnit =  m_backgroundParser->translationUnit( fileName );
     if( translationUnit ){
@@ -1172,7 +1151,6 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store, CClassPar
 	walker.parseTranslationUnit( translationUnit );
     }
     m_backgroundParser->unlock();
-#endif
 }
 
 
@@ -1279,7 +1257,7 @@ CppSupportPart::parseDirectory( const QString &startDir, bool withSubDir,
         bar->setProgress( n++ );
         label->setText( i18n( "Currently parsing: '%1'" )
 	                .arg( fi->filePath( ) ) );
-        maybeParse( fi->filePath( ), ccClassStore ( ), m_pCCParser );
+        maybeParse( fi->filePath( ), ccClassStore ( ) );
         ++it;
     }
 

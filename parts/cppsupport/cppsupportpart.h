@@ -27,15 +27,14 @@ class ParsedMethod;
 class ParsedAttribute;
 class ClassStore;
 class Context;
-class CClassParser;
 class CppCodeCompletion;
 class ProblemReporter;
 class BackgroundParser;
 class QLabel;
 class QProgressBar;
 class QStringList;
-class KListView;
 class QListViewItem;
+class KListView;
 
 namespace KParts { class Part; }
 namespace KTextEditor { class EditInterface; class SelectionInterface; class ViewCursorInterface; };
@@ -154,7 +153,7 @@ private:
     /**
      * checks if a file has to be parsed
      */
-    void maybeParse( const QString fileName, ClassStore *store, CClassParser *parser );
+    void maybeParse( const QString fileName, ClassStore *store );
 
     /**
      * parses a directory incl. subdirectories if wanted
@@ -172,9 +171,7 @@ private:
 
     QString findSourceFile();
 
-    CClassParser *m_pParser;
     CppCodeCompletion* m_pCompletion;
-    CClassParser* m_pCCParser;
 
     bool withcpp;
     QString m_contextFileName;

@@ -306,7 +306,10 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     
     if( !inStore )
 	m_store->addClass( klass );
-     
+
+    if( ast->baseClause() )
+        parseBaseClause( ast->baseClause(), klass );
+
     m_currentScope.push_back( className );
  
     ParsedClass* oldClass = m_currentClass;
@@ -606,5 +609,35 @@ QString StoreWalker::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAS
     }
 
     return text;
+}
+
+void StoreWalker::parseBaseClause( BaseClauseAST * baseClause, ParsedClass * klass )
+{
+    QPtrList<BaseSpecifierAST> l = baseClause->baseSpecifierList();
+    QPtrListIterator<BaseSpecifierAST> it( l );
+    while( it.current() ){
+	BaseSpecifierAST* baseSpecifier = it.current();
+
+	QString access;
+	if( baseSpecifier->access() )
+	    access = baseSpecifier->access()->text();
+	bool isVirtual = baseSpecifier->isVirtual() != 0;
+
+	QString baseName;
+	if( baseSpecifier->name() )
+	    baseName = baseSpecifier->name()->text();
+
+	ParsedParent* parent = new ParsedParent();
+	parent->setName( baseName );
+	if( access == "public" )
+	    parent->setAccess( PIE_PUBLIC );
+	else if( access == "protected" )
+	    parent->setAccess( PIE_PROTECTED );
+	else
+	    parent->setAccess( PIE_PRIVATE );
+
+	klass->addParent( parent );
+	++it;
+    }
 }
 
