@@ -71,7 +71,7 @@ struct HistoryEntry {
 };
 
 PartController::PartController(QWidget *parent)
-  : KDevPartController(parent)
+  : KDevPartController(parent), _editorFactory(0L)
 {
   dirWatcher = new KDirWatch( this );
 
@@ -196,11 +196,22 @@ void PartController::setEncoding(const QString &encoding)
 
 KParts::Part* PartController::findOpenDocument(const KURL& url)
 {
-  KURL partURL = API::getInstance()->project() ? findURLInProject(url) : url;
-
-  partURL.cleanPath();
-
-  return partForURL(partURL);
+	// if we find it this way, all is well
+	KParts::Part * part = partForURL( url );
+	if ( part )
+	{
+		return part;
+	}
+	
+	// ok, let's see if we can try harder
+	if ( API::getInstance()->project() )
+	{
+		KURL partURL = findURLInProject( url );
+		partURL.cleanPath();
+		return partForURL( partURL );
+	}
+	
+	return 0L;
 }
 
 KURL PartController::findURLInProject(const KURL& url)
@@ -226,146 +237,145 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
   kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << endl;
 
   KURL url = inputUrl;
-  bool localUrl = url.url().startsWith("file:/");
 
   // Make sure the URL exists
-  // KDE 3.0 compatibility hack: use KIO::NetAccess for everything >= KDE 3.1
-#ifdef OLD__KDE
-  if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
-#else
-  if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
-#endif
-    // Try to find this file in the current project's list instead
-    KDevProject* project = API::getInstance()->project();
-
-    if (project) {
-      url = findURLInProject(url);
-
-      localUrl = url.url().startsWith("file:/");
-#ifdef OLD__KDE
-      if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
-#else
-      if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
-#endif
-        // See if this url is relative to the current project's directory
-        url = project->projectDirectory() + "/" + url.url();
-      }
-    }
-
-    localUrl = url.url().startsWith("file:/");
-#ifdef OLD__KDE
-    if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
-#else
-    if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
-#endif
-      // Here perhaps we should prompt the user to find the file?
-      return;
-    }
-  }
+	if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
+	{
+		// Try to find this file in the current project's list instead
+		if ( API::getInstance()->project() ) 
+		{
+			url = findURLInProject(url);
+		
+			if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
+			{
+				// See if this url is relative to the current project's directory
+				url = API::getInstance()->project()->projectDirectory() + "/" + url.path();
+			}
+		}
+	
+		if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
+		{
+			// Not found - prompt the user to find it?
+			kdDebug(9000) << "cannot find URL: " << url.url() << endl;
+			return;
+		}
+	}
 
   // We now have a url that exists ;)
 
-  url.cleanPath(true);
-  if (url.isLocalFile())
-  {
-    QString path = url.path();
-    path = URLUtil::canonicalPath(path);
-    if ( !path.isEmpty() )
-      url.setPath(path);
-  }
+  // clean it and resolve possible symlink
+	url.cleanPath(true);
+	if (url.isLocalFile())
+	{
+		QString path = url.path();
+		path = URLUtil::canonicalPath(path);
+		if ( !path.isEmpty() )
+			url.setPath(path);
+	}
 
-  KParts::Part *existingPart = partForURL(url);
-  if (existingPart)
-  {
-    activatePart(existingPart);
-    EditorProxy::getInstance()->setLineNumber(existingPart, lineNum, col);
-    return;
-  }
-
-  QString preferred, className;
-
-  QString mimeType, encoding;
-  if (m_presetEncoding.isNull())
-    mimeType = KMimeType::findByURL(url)->name();
-  else {
-    mimeType = "text/plain";
-    encoding = m_presetEncoding;
-    m_presetEncoding = QString::null;
-  }
+	// is it already open?
+	KParts::Part *existingPart = partForURL(url);
+	if (existingPart)
+	{
+		activatePart(existingPart);
+		EditorProxy::getInstance()->setLineNumber(existingPart, lineNum, col);
+		return;
+	}
+	
+	KMimeType::Ptr MimeType = KMimeType::findByURL( url );
+	
+	kdDebug(9000) << "mimeType = " << MimeType->name() << endl;
+	
+	// is the URL pointing to a directory?
+	if ( MimeType->is( "inode/directory" ) )
+	{
+		return;
+	}
   
-  // we generally prefer embedding, but if Qt-designer is the preferred application for this mimetype
-  // make sure we launch designer instead of embedding KUIviewer
-  if ( mimeType == "application/x-designer" )
-  {
-    KService::Ptr preferredApp = KServiceTypeProfile::preferredService( mimeType, "Application" );
-    if ( preferredApp->desktopEntryName() == "designer" )
-    {
-      KRun::runURL(url, mimeType);
-      return;
-    }
-  }
+	// if we've been called with an encoding set - open in editor as encoded text
+	if ( !m_presetEncoding.isNull() )
+	{
+		KTextEditor::Editor * editorpart = createEditorPart();
+
+		if ( editorpart )
+		{
+			KParts::BrowserExtension * extension = KParts::BrowserExtension::childObject( editorpart );
+			if ( extension )
+			{
+				KParts::URLArgs args;
+				args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
+				extension->setURLArgs(args);
+			}
+
+			editorpart->openURL( url );
+			integratePart( editorpart, url, true );
+			EditorProxy::getInstance()->setLineNumber( editorpart, lineNum, col );
+		}
+		m_presetEncoding = QString::null;
+		return;
+	}
   
-  kdDebug(9000) << "mimeType = " << mimeType << endl;
+	// we generally prefer embedding, but if Qt-designer is the preferred application for this mimetype
+	// make sure we launch designer instead of embedding KUIviewer
+	if ( MimeType->is( "application/x-designer" ) )
+	{
+		KService::Ptr preferredApp = KServiceTypeProfile::preferredService( MimeType->name(), "Application" );
+		if ( preferredApp->desktopEntryName() == "designer" )
+		{
+			KRun::runURL(url, MimeType->name() );
+			return;
+		}
+	}
+  
+	// is this regular text - open in editor
+	if ( MimeType->is( "text/plain" ) || MimeType->is( "text/html" ) || MimeType->is( "application/x-zerosize" ) )
+	{
+		KTextEditor::Editor * editorpart = createEditorPart();
 
-  if ( mimeType.startsWith("text/")
-      || mimeType.startsWith("application/x-") && mimeType != "application/x-designer"
-      || mimeType == "image/x-xpm")
-  {
-      mimeType = "text/plain";
-      kapp->config()->setGroup("Editor");
-      preferred = kapp->config()->readPathEntry("EmbeddedKTextEditor");
-  } else if( mimeType.startsWith("inode/") ){
-      return;
-  }
+		if ( editorpart )
+		{
+			editorpart->openURL( url );
 
-  KParts::Factory *factory = 0;
+			integratePart( editorpart, url, true );
+			EditorProxy::getInstance()->setLineNumber( editorpart, lineNum, col );
 
-  // load the appropriate part factory like chosen in the editor-chooser part
-  // (Note: KTextEditor/Document is the editor in MDI mode. KTextEditor/Editor is the editor in SDI mode.
-  //        But KTextEditor/Editor doesn't work for the Kate part on KDE-3.0.x, so better use KTextEditor/Document anyway.)
-  QString services[] = {"KTextEditor/Document", "KParts/ReadWritePart", "KParts/ReadOnlyPart"};
-  QString classnames[] = {"KTextEditor::Document", "KParts::ReadWritePart", "KParts::ReadOnlyPart"};
-  for (uint i=0; i<3; ++i)
-  {
-    factory = findPartFactory(mimeType, services[i], preferred);
-    if (factory)
-    {
-      className = classnames[i];
-      break;
-    }
-  }
+			return;
+		}
+	}
+	
+	// OK, it's not text and it's not a designer file.. let's see what else we can come up with..
+	
+	KParts::Factory *factory = 0;
+	QString className;
+	
+	QString services[] = { "KParts/ReadWritePart", "KParts/ReadOnlyPart" };
+	QString classnames[] = { "KParts::ReadWritePart", "KParts::ReadOnlyPart" };
+	for (uint i=0; i<2; ++i)
+	{
+		factory = findPartFactory( MimeType->name(), services[i] );
+		if (factory)
+		{
+			className = classnames[i];
+			break;
+		}
+	}
+	
+	kdDebug(9000) << "factory = " << factory << endl;
 
-  kdDebug(9000) << "factory = " << factory << endl;
-
-  if (factory)
-  {
-      // Currently, only a single view per document is supported.
-      // So fall back (downgrade) from MDI-mode editor to SDI-mode editor
-      // (Note: This always works since KTextEditor::Document inherits KTextEditor::Editor)
-
-      if (className == "KTextEditor::Document")
-	  className = "KTextEditor::Editor";
-
-      // create the object of the desired class
-      KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className.latin1()));
-      KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
-      kdDebug(9000) << "Encoding: " << encoding << ", extension: " << extension << endl;
-      if (extension && !encoding.isNull())
-      {
-	  KParts::URLArgs args;
-	  args.serviceType = mimeType + ";" + encoding;
-	  extension->setURLArgs(args);
-      }
-      part->openURL(url);
-
-      bool isTextEditor = className == "KTextEditor::Editor";
-      integratePart(part, url, isTextEditor );
-
-      if( isTextEditor )
-	  EditorProxy::getInstance()->setLineNumber(part, lineNum, col);
-  }
-  else
-      KRun::runURL(url, mimeType);
+	if (factory)
+	{
+		// create the object of the desired class
+		KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>( factory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, className.latin1() ) );
+		if ( part )
+		{
+			part->openURL( url );
+			integratePart( part, url, false );
+		}
+	}
+	else
+	{
+		KRun::runURL(url, MimeType->name() );
+	}
 }
 
 
@@ -446,6 +456,21 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
   return 0;
 }
 
+KTextEditor::Editor * PartController::createEditorPart( )
+{
+	
+	if ( !_editorFactory )
+	{
+		kapp->config()->setGroup("Editor");
+		QString preferred = kapp->config()->readPathEntry("EmbeddedKTextEditor");
+		
+		_editorFactory = findPartFactory( "text/plain", "KTextEditor/Document", preferred );
+		
+		if ( !_editorFactory ) return 0L;
+	}
+	
+	return static_cast<KTextEditor::Editor*>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KTextEditor/Editor" ) );
+}
 
 void PartController::integratePart(KParts::Part *part, const KURL &url, bool isTextEditor )
 {
@@ -460,28 +485,23 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
 
   addPart(part);
 
-  if( isTextEditor ){
+  if( isTextEditor )
+  {
       EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
-
-#if KDE_VERSION < 310
-      // HACK: this is a workaround. The kate-part does not emit "completed" when
-      // it save a file yet.
-      connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotUploadFinished()));
-#endif
   }
 
   // tell the parts we loaded a document
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
   if (ro_part && ro_part->url().isLocalFile()) {
 //    kdDebug(9000) << "KDirWatch: adding " << url.path() << endl;
-    dirWatcher->addFile( url.path() );
+//    dirWatcher->addFile( url.path() );
     accessTimeMap[ ro_part ] = dirWatcher->ctime( url.path() );
     emit loadedFile(ro_part->url().path());
   }
 
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
-  connect(part, SIGNAL(completed()), this, SLOT(slotRestoreStatus()));
+  connect(part, SIGNAL(completed()), this, SLOT(slotRestoreStatus()));	// do we need this one?
   
   // yes, we're cheating again. this signal exists for katepart's 
   // Document object and our DocumentationPart
@@ -635,7 +655,7 @@ bool PartController::closePart(KParts::Part *part)
   // that point (slots are called in an undefined order)!
 
   // The following line can be removed with kdelibs HEAD! (2002-05-26)
-  removePart( part );
+//  removePart( part );
 
   if (part->widget())
     TopLevel::getInstance()->removeView(part->widget());
@@ -832,13 +852,10 @@ void PartController::slotCloseOtherWindows()
 
 void PartController::slotCurrentChanged(QWidget *w)
 {
-
-  kdDebug()<<"slotCurrentChanged***********************************+"<<endl;
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
     if (it.current()->widget() == w)
     {
-      kdDebug()<<"found it**************************************"<<endl;
       setActivePart(it.current(), w);
       break;
     }
@@ -925,6 +942,8 @@ void PartController::slotSwitchTo()
         }
     }
 }
+
+//BEGIN documentation viewer history bookkeeping
 
 void PartController::slotBack()
 {
@@ -1033,6 +1052,8 @@ void PartController::restoreState()
   updateMenuItems();
 }
 
+//END documentation viewer history bookkeeping
+
 void PartController::showPart( KParts::Part* part, const QString& name, const QString& shortDescription )
 {
   if (!part->widget()) {
@@ -1088,8 +1109,14 @@ void PartController::restorePartWidgetIcon( KParts::Part * part )
 {
     if (!part->widget())
         return;
-    if (partWidgetIcons.contains(part))
-        part->widget()->setIcon(partWidgetIcons[part]);
+	if (partWidgetIcons.contains(part))
+	{
+		part->widget()->setIcon(partWidgetIcons[part]);
+	}
+	else
+	{
+		part->widget()->setIcon( SmallIcon("kdevelop") );
+	}
 }
 
 void PartController::slotNewStatus( )
@@ -1135,7 +1162,8 @@ void PartController::slotFileDirty( const KURL & url )
 	} 
 	else if ( !rw_part->isModified() )
 	{
-		rw_part->widget()->setIcon( SmallIcon("kdevelop") );
+//		rw_part->widget()->setIcon( SmallIcon("kdevelop") );
+		restorePartWidgetIcon( rw_part );
 	}
 	else
 	{

@@ -8,6 +8,7 @@
 #include <qptrlist.h>
 #include <kurl.h>
 #include <qmap.h>
+#include <qguardedptr.h>
 
 namespace KParts
 {
@@ -15,6 +16,10 @@ namespace KParts
   class Factory;
   class PartManager;
   class ReadOnlyPart;
+}
+namespace KTextEditor 
+{ 
+	class Editor; 
 }
 
 class QTabWidget;
@@ -121,6 +126,7 @@ private:
   QPopupMenu *contextPopupMenu();
 
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName = QString::null );
+  KTextEditor::Editor * createEditorPart();
 
   void integratePart(KParts::Part *part, const KURL &url, bool isTextEditor=false );
 
@@ -152,6 +158,7 @@ private:
   QMap< const KParts::ReadOnlyPart*, QDateTime > accessTimeMap;
   QMap< const KParts::Part*, QPixmap > partWidgetIcons;
   bool m_restoring;
+  QGuardedPtr<KParts::Factory> _editorFactory;
 };
 
 
