@@ -49,7 +49,7 @@
 #include "ParsedContainer.h"
 
 /** The parsed representation of a structure */
-class CParsedStruct : public CParsedItem, public CParsedContainer
+class CParsedStruct : public CParsedItem, public CParsedContainer, public CParsedClassItem
 {
 public: // Constructor & Destructor
 
