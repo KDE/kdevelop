@@ -17,10 +17,14 @@
 class DocTreeViewTool
 {
 public:
+    // List of libraries to document
+    static void getLibraries(QStringList *libNames, QStringList *docDirs, QStringList *sourceDirs);
+    static void setLibraries(QStringList *libNames, QStringList *docDirs, QStringList *sourceDirs);
     // Looks up kdoc index files and returns lists of library names
     // and the corresponding index file names. Index files in ~/.kdoc
     // have a (private) suffix in their item name
-    static void getAllLibraries(QStringList *itemNames, QStringList *fileNames);
+    static void readLibraryDocs(QString dir, QStringList *itemNames, QStringList *fileNames);
+    static void getAllLibraries(QStringList *itemNames, QStringList *fileNames); // TODO: not a good name
     // Returns the list of index files to be hidden
     static void getHiddenLibraries(QStringList *fileNames);
     static void setHiddenLibraries(const QStringList &fileNames);

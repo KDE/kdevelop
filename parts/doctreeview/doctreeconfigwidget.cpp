@@ -282,20 +282,35 @@ void DocTreeConfigWidget::readConfig()
 	}
 #endif
     // Read in possible items for the Libraries tree
+    QStringList libNames, docDirs, sourceDirs;
+    DocTreeViewTool::getLibraries(&libNames, &docDirs, &sourceDirs);
+    // TODO:will merge this stuff with the generalised view -- exa
     QStringList librariesTitle, librariesURL, librariesHidden;
     DocTreeViewTool::getAllLibraries(&librariesTitle, &librariesURL);
     DocTreeViewTool::getHiddenLibraries(&librariesHidden);
-
-    int librariesPos = 0;
-    QStringList::Iterator lit1, lit2;
-    for (lit1 = librariesTitle.begin(), lit2 = librariesURL.begin();
-         lit1 != librariesTitle.end() && lit2 != librariesURL.end();
-         ++lit1, ++lit2) {
-        (void) new DocTreeConfigListItem(libraries_view, (*lit1), (*lit2), librariesPos);
-        kdDebug(9002) << "Insert " << (*lit2) << endl;
-        ++librariesPos;
+        
+    QStringList::Iterator libName, docDir, sourceDir;
+    for (libName = libNames.begin(),
+         docDir = docDirs.begin(),
+         sourceDir = sourceDirs.begin() ;
+         libName!=libNames.end() && docDir!=docDirs.end() && sourceDir!=sourceDirs.end();
+         ++libName, ++docDir, ++sourceDir) {
+         new QListViewItem(libraries_view, *libName, *docDir, *sourceDir);
     }
+// load the docs
+//    QStringList librariesTitle, librariesURL, librariesHidden;
+//    DocTreeViewTool::readLibraryDocs(*docDir,&librariesTitle, &librariesURL);    
+//    int librariesPos = 0;
+//    QStringList::Iterator lit1, lit2;
+//    for (lit1 = librariesTitle.begin(), lit2 = librariesURL.begin();
+//         lit1 != librariesTitle.end() && lit2 != librariesURL.end();
+//         ++lit1, ++lit2) {
+//        (void) new DocTreeConfigListItem(libraries_view, (*lit1), (*lit2), librariesPos);
+//      kdDebug(9002) << "Insert " << (*lit2) << endl;
+//      ++librariesPos;
+//  }
 
+    // Read doc TOCs    
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
     QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
 
@@ -408,16 +423,21 @@ void DocTreeConfigWidget::storeConfig()
 #endif
     
     // Save Libraries section
-    QStringList librariesHidden;
+//    QStringList librariesHidden;
+    QStringList libNames, docDirs, sourceDirs;
     {
         QListViewItem *item = libraries_view->firstChild();
         for (; item; item = item->nextSibling()) {
-            DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
-            if (!citem->isOn())
-                librariesHidden.append(citem->ident());
+            libNames.append(item->text(0));
+            docDirs.append(item->text(1));
+            sourceDirs.append(item->text(2));
+//            DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
+//            if (!citem->isOn())
+//                librariesHidden.append(citem->ident());
         }
     }
-    DocTreeViewTool::setHiddenLibraries(librariesHidden);
+    DocTreeViewTool::setLibraries(&libNames, &docDirs, &sourceDirs);
+//    DocTreeViewTool::setHiddenLibraries(librariesHidden);
     
     // Save Bookmarks section
     QStringList bookmarksTitle, bookmarksURL;

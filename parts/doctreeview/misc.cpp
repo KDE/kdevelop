@@ -32,14 +32,27 @@ static KConfig *instanceConfig()
 #endif
 }
 
-
-void DocTreeViewTool::getAllLibraries(QStringList *itemNames, QStringList *fileNames)
+void DocTreeViewTool::getLibraries(QStringList *libNames, QStringList *docDirs, QStringList *sourceDirs)
 {
     KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
-    QString idx_path = config->readEntry("KDEDocDir", KDELIBS_DOCDIR) + "/kdoc-reference";
+    *libNames = config->readListEntry("LibrariesNames");
+    *docDirs = config->readListEntry("LibrariesDocDirs");
+    *sourceDirs = config->readListEntry("LibrariesSourceDirs");
+}
 
-    QDir globaldir(idx_path);
+void DocTreeViewTool::setLibraries(QStringList *libNames, QStringList *docDirs, QStringList *sourceDirs)
+{
+    KConfig *config = instanceConfig();
+    config->setGroup("DocTreeView");
+    config->writeEntry("LibrariesNames", *libNames);
+    config->writeEntry("LibrariesDocDirs", *docDirs );
+    config->writeEntry("LibrariesSourceDirs", *sourceDirs);
+}
+
+void DocTreeViewTool::readLibraryDocs(QString dir, QStringList *itemNames, QStringList *fileNames)
+{
+    QDir globaldir(dir + "/kdoc-reference");
     QStringList globalentries =
         globaldir.exists()? globaldir.entryList("*", QDir::Files) : QStringList();
     for (QStringList::Iterator it = globalentries.begin(); it != globalentries.end(); ++it) {
@@ -54,7 +67,16 @@ void DocTreeViewTool::getAllLibraries(QStringList *itemNames, QStringList *fileN
         *itemNames += i18n("%1 (private)").arg(QFileInfo(*it).baseName());
         *fileNames += privatedir.filePath(*it);
         //        kdDebug(9002) << "Local: " << privatedir.filePath(*it) << endl;
-    }
+    } 
+}
+
+void DocTreeViewTool::getAllLibraries(QStringList *itemNames, QStringList *fileNames)
+{
+    KConfig *config = instanceConfig();
+    config->setGroup("DocTreeView");
+    QString idx_path = config->readEntry("KDEDocDir", KDELIBS_DOCDIR) + "/kdoc-reference";
+
+    readLibraryDocs(idx_path, itemNames, fileNames);
 }
 
 

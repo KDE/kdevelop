@@ -241,17 +241,38 @@ void DocTreeKDELibsFolder::refresh()
 {
     DocTreeItem::clear();
 
-    QStringList itemNames, fileNames, hiddenNames;
-    DocTreeViewTool::getAllLibraries(&itemNames, &fileNames);
-    DocTreeViewTool::getHiddenLibraries(&hiddenNames);
-
-    QStringList::Iterator it1, it2;
-    for (it1 = itemNames.begin(), it2 = fileNames.begin();
-         it1 != itemNames.end() && it2 != fileNames.end();
-         ++it1, ++it2)
-        if (!hiddenNames.contains(*it2)) {
-            (void) new DocTreeKDELibsBook(this, *it1, *it2, context());
+    //TODO: merge in default libraries and hidden options
+    
+    // Read in possible items for the Libraries tree
+    QStringList libNames, docDirs, sourceDirs;
+    DocTreeViewTool::getLibraries(&libNames, &docDirs, &sourceDirs);
+    QStringList::Iterator libName, docDir, sourceDir;
+    for (libName = libNames.begin(),
+         docDir = docDirs.begin(),
+         sourceDir = sourceDirs.begin() ;
+         libName!=libNames.end() && docDir!=docDirs.end() && sourceDir!=sourceDirs.end();
+         ++libName, ++docDir, ++sourceDir) {
+        QStringList itemNames, fileNames, hiddenNames;
+        DocTreeViewTool::readLibraryDocs(*docDir,&itemNames, &fileNames);
+        QStringList::Iterator it1, it2;
+        for (it1 = itemNames.begin(), it2 = fileNames.begin();
+             it1 != itemNames.end() && it2 != fileNames.end();
+            ++it1, ++it2) {
+            new DocTreeKDELibsBook(this, *it1, *it2, context());
         }
+        
+    }    
+    
+//    DocTreeViewTool::getAllLibraries(&itemNames, &fileNames);
+//    DocTreeViewTool::getHiddenLibraries(&hiddenNames);
+
+//    QStringList::Iterator it1, it2;
+//    for (it1 = itemNames.begin(), it2 = fileNames.begin();
+//         it1 != itemNames.end() && it2 != fileNames.end();
+//         ++it1, ++it2)
+//        if (!hiddenNames.contains(*it2)) {
+//            (void) new DocTreeKDELibsBook(this, *it1, *it2, context());
+//        }
 }
     
 
