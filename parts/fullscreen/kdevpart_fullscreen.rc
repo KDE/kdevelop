@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="fullscreen" library="libfullscreenplugin" version="1">
+<MenuBar>
+ <Menu name="tools"><Text>&amp;Tools</Text>
+  <Action name="fullscreen"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar">
+  <Action name="fullscreen"/>
+</ToolBar>
+</kpartplugin>
