@@ -13,6 +13,7 @@
 #define _IMPORTDLG_H_
 
 #include <qdialog.h>
+#include <qstringlist.h>
 
 class QComboBox;
 class QLineEdit;

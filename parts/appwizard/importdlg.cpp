@@ -16,6 +16,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qtextstream.h>
+#include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kdialog.h>
