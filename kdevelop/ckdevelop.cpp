@@ -2642,7 +2642,7 @@ void CKDevelop::slotHelpBugReport(){
 
 void CKDevelop::slotHelpAPI(){
   if(project){
-    QString api_file=prj->getProjectDir() + prj->getSubDir() +  "api/index.html";
+    QString api_file=prj->getProjectDir() + prj->getProjectName().lower() +  "/api/index.html";
     if(!QFileInfo(api_file).exists()){
 //    	int result=KMsgBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
 //    																																	"Would you like to generate it now ?"), KMsgBox::QUESTION);
@@ -3538,14 +3538,14 @@ void CKDevelop::slotProcessExited(KProcess* proc){
      	  else
     		{
     		  QDir dir(QDir::current());
-          readProjectFile( dir.dirName()+".kdevprj");
+          readProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj");
           slotViewRefresh();		// a new project started, this is legitimate
     		}
      	}
    	  else
   		{
   		  QDir dir(QDir::current());
-        readProjectFile( dir.dirName()+".kdevprj");
+        readProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj");
         slotViewRefresh();		// a new project started, this is legitimate
   		}
 

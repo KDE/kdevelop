@@ -922,7 +922,31 @@ void CKDevelop::slotProjectAPI(){
     }
   }
 
-  QDir d(prj->getProjectDir() + prj->getSubDir());
+//  QDir d(prj->getProjectDir() + prj->getSubDir());
+//  int dirlength = d.absPath().length()+1;
+//
+//  QString sources;
+//  QStrList headerlist(prj->getHeaders());
+//  QStrListIterator it(headerlist);
+//  for (; it.current(); ++it)
+//      {
+//          QString file = it.current();
+//          file.remove(0, dirlength);
+//          sources += file;
+//          sources += " ";
+//      }
+//
+//  shell_process.clearArguments();
+//  shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
+//  shell_process << "kdoc";
+//  shell_process << "-p -d '" + prj->getProjectDir() + prj->getSubDir() +  "api'";
+//  if (!link.isEmpty())
+//      {
+//          shell_process << ("-L" + idx_path);
+//          shell_process << link;
+//      }
+
+  QDir d(prj->getProjectDir());
   int dirlength = d.absPath().length()+1;
 
   QString sources;
@@ -935,17 +959,15 @@ void CKDevelop::slotProjectAPI(){
           sources += file;
           sources += " ";
       }
-
+  QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
-  shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
   shell_process << "kdoc";
-  shell_process << "-p -d '" + prj->getProjectDir() + prj->getSubDir() +  "api'";
+  shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "/api'";
   if (!link.isEmpty())
       {
           shell_process << ("-L" + idx_path);
           shell_process << link;
       }
-
 /* using the project name in the kdoc call will cause an warning
    if you have no write permission to the kdoc-reference directory,
    because kdoc tries to create a cross-reference file "<project_name>.kdoc(.gz)"
