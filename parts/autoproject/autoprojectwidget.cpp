@@ -223,7 +223,7 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
 
     targetOptionsButton = new QToolButton(targetButtonBox);
     targetOptionsButton->setPixmap(SmallIcon("configure"));
-    QToolTip::add(targetOptionsButton, i18n("Show options of currently target..."));
+    QToolTip::add(targetOptionsButton, i18n("Show options of currently selected target..."));
 
     addNewFileButton = new QToolButton(targetButtonBox);
     addNewFileButton->setPixmap(SmallIcon("filenew"));

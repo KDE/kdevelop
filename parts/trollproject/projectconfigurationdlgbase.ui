@@ -64,7 +64,7 @@
                 <cstring>buttonOk</cstring>
             </property>
             <property name="text">
-                <string>&amp;Ok</string>
+                <string>&amp;OK</string>
             </property>
         </widget>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
@@ -230,7 +230,7 @@
                             <string>Build mode</string>
                         </property>
                         <property name="toolTip" stdset="0">
-                            <string>Set project to be build in release mode</string>
+                            <string>Set project to be built in release mode</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -250,7 +250,7 @@
                                     <string>&amp;Debug</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Set project to be build in debug mode</string>
+                                    <string>Set project to be built in debug mode</string>
                                 </property>
                             </widget>
                             <widget class="QRadioButton">
@@ -261,7 +261,7 @@
                                     <string>&amp;Release</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Set project to be build in release mode</string>
+                                    <string>Set project to be built in release mode</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">

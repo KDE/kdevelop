@@ -250,7 +250,7 @@
                                     <string>Add All</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Import by creating symbolic links (recommended).</string>
+                                    <string>Import by creating symbolic links (recommended)</string>
                                 </property>
                             </widget>
                             <widget class="QPushButton">
@@ -261,7 +261,7 @@
                                     <string>Add Selected</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Import by copying (not recommendable).</string>
+                                    <string>Import by copying (not recommended)</string>
                                 </property>
                             </widget>
                             <spacer>

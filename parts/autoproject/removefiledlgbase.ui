@@ -200,7 +200,7 @@
                                 <cstring>removeCheckBox</cstring>
                             </property>
                             <property name="text">
-                                <string>Also remove it from disc?</string>
+                                <string>Also remove it from disk?</string>
                             </property>
                         </widget>
                     </vbox>

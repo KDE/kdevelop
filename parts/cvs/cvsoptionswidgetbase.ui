@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Cvs Options</string>
+        <string>CVS Options</string>
     </property>
     <widget class="QLabel">
         <property name="name">

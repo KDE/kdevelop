@@ -148,7 +148,12 @@
                         <string>Display static &amp;members</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Displaying static members makes GDB slower in producing data within kde and qt. It may change the "signature" of the data which QString and friends rely on. But if you need to debug into these values then check this option</string>
+                        <string>Displaying static members makes GDB slower in
+producing data within KDE and Qt.
+It may change the "signature" of the data
+which QString and friends rely on,
+but if you need to debug into these values then
+check this option.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -159,7 +164,9 @@
                         <string>Display &amp;demangled names</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>When displaying the disassembled code you can select to see the methods' mangled names. However, non-mangled names are easier to read.</string>
+                        <string>When displaying the disassembled code you
+can select to see the methods' mangled names.
+However, non-mangled names are easier to read.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -171,12 +178,12 @@
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>If GDB hasn't seen a library that will be loaded via
-"dlopen" then it'll refuse to set a breakpoint in that code.
-We can get gdb to stop on a library load and hence
-try to set the pending breakpoints. See docs for more
-details and a "gotcha" relating to this behaviour.
+"dlopen" then it will refuse to set a breakpoint in that code.
+We can get GDB to stop on a library load and hence
+try to set the pending breakpoints. See the documentation
+for more details and a "gotcha" relating to this behavior.
 
-If you are not "dlopen"ing libs leave this off.</string>
+If you are not "dlopen"ing libs then leave this unchecked.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -189,9 +196,10 @@ If you are not "dlopen"ing libs leave this off.</string>
                     <property name="whatsThis" stdset="0">
                         <string>Use the floating toolbar. This toolbar always stays
 on top of all windows so that if the app covers KDevelop
-you have control of the app though the small toolbar
-Also this toolbar can be docked to the panel
-This toolbar is in addition to the toolbar in KDevelop</string>
+you have control of the app through the small toolbar. It
+can also be docked into the panel.
+
+This toolbar is in addition to the toolbar in KDevelop.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -203,9 +211,9 @@ This toolbar is in addition to the toolbar in KDevelop</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>This allows you to enter terminal input when your
-application contains terminal input code (eg cin, fgets etc.)
-If you use terminal input in your app, then tick this option.
-Otherwise leave this off.</string>
+application contains terminal input code (e.g. cin, fgets, etc.).
+If you use terminal input in your application then check this option.
+Otherwise leave it unchecked.</string>
                     </property>
                 </widget>
                 <spacer>

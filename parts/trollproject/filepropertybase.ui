@@ -63,7 +63,7 @@
                 <cstring>buttonOk</cstring>
             </property>
             <property name="text">
-                <string>Ok</string>
+                <string>OK</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0">
