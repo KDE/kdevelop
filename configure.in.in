@@ -17,6 +17,10 @@ kdevelop/plugin/print/Makefile \
 kdevelop/plugin/projectmanagement/Makefile \
 kdevelop/plugin/projectmanagement/kdesdi_appwizard/Makefile \
 kdevelop/plugin/projectmanagement/kdesdi_appwizard/res/Makefile \
+kdevelop/plugin/projectmanagement/kdejavasdi_appwizard/Makefile \
+kdevelop/plugin/projectmanagement/kdejavasdi_appwizard/res/Makefile \
+kdevelop/plugin/projectmanagement/kdeobjcsdi_appwizard/Makefile \
+kdevelop/plugin/projectmanagement/kdeobjcsdi_appwizard/res/Makefile \
 kdevelop/plugin/projectmanagement/kdebinary_project/Makefile \
 kdevelop/plugin/Compilers/Makefile \
 kdevelop/plugin/Compilers/gcc/Makefile \
