@@ -93,7 +93,6 @@ void PHPCodeCompletion::documentActivated(KEditor::Document* doc){
 }
 
 void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, int col){
-  return;
   //  cerr << endl << "PHPCodeCompletion::cursorPositionChanged:" << line << ":" << col;
   m_editInterface = KEditor::EditDocumentIface::interface(doc);
   if (!m_editInterface) { 
