@@ -210,6 +210,11 @@ void CKDevelop::initView()
   QString log_file_tree_title = i18n("Groups");
   QString real_file_tree_title = i18n("Files");
   QString doc_tree_title = i18n("Books");
+  class_tree->setCaption(class_tree_title);
+  log_file_tree->setCaption(log_file_tree_title);
+  real_file_tree->setCaption(real_file_tree_title);
+  doc_tree->setCaption(doc_tree_title);
+
   // set the mode of the tab headers
   config->setGroup("General Options");
   int mode=config->readNumEntry("tabviewmode", 3);
@@ -225,13 +230,9 @@ void CKDevelop::initView()
       real_file_tree->setIcon(SmallIcon("folder"));
       doc_tree->setIcon(SmallIcon("contents"));
   }
-  class_tree->setCaption(class_tree_title);
   addToolWindow(class_tree, KDockWidget::DockLeft, m_pMdi, 25, i18n("class tree"), class_tree_title);
-  log_file_tree->setCaption(log_file_tree_title);
   addToolWindow(log_file_tree, KDockWidget::DockCenter, class_tree, 25, i18n("files of project"), log_file_tree_title);
-  real_file_tree->setCaption(real_file_tree_title);
   addToolWindow(real_file_tree, KDockWidget::DockCenter, class_tree, 25, i18n("view on project directory"), real_file_tree_title);
-  doc_tree->setCaption(doc_tree_title);
   addToolWindow(doc_tree, KDockWidget::DockCenter, class_tree, 25, i18n("documentation"), doc_tree_title);
 
   prev_was_search_result= false;

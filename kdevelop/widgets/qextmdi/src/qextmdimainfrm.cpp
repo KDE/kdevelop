@@ -359,7 +359,7 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
                                               pToolView->icon() ? *(pToolView->icon()) : QPixmap(),
                                               0L,  // parent
                                               pToolView->caption(),
-                                              tabCaption.isEmpty() ? pToolView->tabCaption() : tabCaption);
+                                              tabCaption );
       pCover->setWidget( pToolView);
       pCover->setToolTipString( tabToolTip);
       KDockWidget* pTargetDock = 0L;
