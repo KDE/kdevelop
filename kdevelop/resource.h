@@ -81,6 +81,7 @@
 #define ID_VIEW_STATUSBAR           12060
 
 #define ID_VIEW_REFRESH             12070
+#define ID_VIEW_PREVIEW             12072
 
 
 ///////////////////////////////////////////////////////////////////
@@ -305,6 +306,7 @@
 #define IDK_VIEW_TREEVIEW	    				CTRL+Key_T
 #define IDK_VIEW_OUTPUTVIEW	    			CTRL+Key_G
 #define IDK_VIEW_STATUSBAR          	CTRL+Key_B			
+#define IDK_VIEW_PREVIEW				CTRL+Key_Space
 
 ///////////////////////////////////////////////////////////////////
 // Project-menu entries 

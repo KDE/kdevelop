@@ -67,6 +67,7 @@ KDlgReadmeDlg::KDlgReadmeDlg(QWidget *parent)
   btn = new QPushButton(i18n("&Okay"), this);
   btn->setGeometry(190,320,100,30);
   btn->setDefault(true);
+  btn->setPalette(QPalette(QColor(0xff, 0xf9, 0xe0)));
 
   cb = new QCheckBox(i18n("&Show again."), this);
   cb->setChecked(true);

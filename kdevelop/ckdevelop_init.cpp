@@ -313,6 +313,8 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
   accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast() ) );
 
+  accel->insertItem( i18n("Preview dialog"), "Preview dialog",IDK_VIEW_PREVIEW);
+
   accel->readSettings();
 }
 void CKDevelop::initMenuBar(){
@@ -897,6 +899,7 @@ void CKDevelop::initProject(){
 
 void CKDevelop::setKeyAccel(){
 if(bKDevelop){
+    accel->disconnectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()));
     accel->disconnectItem(accel->stdAction( KAccel::Open ),(QObject*)kdlgedit, SLOT(slotFileOpen()) );
     accel->disconnectItem(accel->stdAction( KAccel::Close ) , (QObject*)kdlgedit, SLOT(slotFileClose()) );
     accel->disconnectItem(accel->stdAction( KAccel::Save ) , (QObject*)kdlgedit, SLOT(slotFileSave()) );
@@ -965,6 +968,7 @@ if(bKDevelop){
     accel->disconnectItem(accel->stdAction( KAccel::Paste ), this, SLOT(slotEditPaste()) );
     accel->disconnectItem("KDevKDlg",this,SLOT(switchToKDlgEdit()) );
 
+    accel->connectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()));
     accel->connectItem( KAccel::Open , (QObject*)kdlgedit, SLOT(slotFileOpen()) );
     accel->connectItem( KAccel::Close , (QObject*)kdlgedit, SLOT(slotFileClose()) );
     accel->connectItem( KAccel::Save , (QObject*)kdlgedit, SLOT(slotFileSave()) );
@@ -990,6 +994,7 @@ if(bKDevelop){
     accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
     accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
     accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_STATUSBAR,"Statusbar");
+    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_PREVIEW,"Preview dialog");
 
     accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
     accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_MAKE ,"Make" );

@@ -60,10 +60,10 @@ void CKDevelop::initKDlg(){
   kdlg_tabctl->setTabEnabled("dialogs_view",false);
   kdlg_tabctl->setCurrentTab(1);// dialogs
   
+  initKDlgMenuBar();
   initKDlgKeyAccel();
   initKDlgToolBar();
-  initKDlgMenuBar();
-  
+
   initKDlgStatusBar();
 }
 
@@ -117,7 +117,7 @@ void CKDevelop::initKDlgMenuBar(){
 			   SLOT(slotViewRefresh()),0,ID_KDLG_VIEW_REFRESH);
   kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(i18n("&Preview dialog"),kdlgedit,
-			   SLOT(slotViewPreview()),0,0);
+			   SLOT(slotViewPreview()),0,ID_VIEW_PREVIEW);
   kdlg_view_menu->insertItem(i18n("&Grid..."),kdlgedit,
 			   SLOT(slotViewGrid()),0,ID_KDLG_VIEW_GRID);
 
@@ -416,6 +416,7 @@ void CKDevelop::initKDlgKeyAccel(){
 
   // tools-menu
   accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
+  accel->connectItem( "Preview dialog", kdlgedit, SLOT(slotViewPreview()));
 
   accel->readSettings();
 }

@@ -1226,7 +1226,8 @@ class PreviewDlg : public QDialog
     PreviewDlg::PreviewDlg(QWidget*parent=0,const char* name="Preview_Dialog")
       : QDialog(parent,name, TRUE)
      {
-        ldr = new KDlgLoader(this);
+        QWidget *wid = new QWidget(this);
+        ldr = new KDlgLoader(wid);
         if (!ldr)
           return;
         if (!ldr->isLibLoaded())
@@ -1241,6 +1242,8 @@ class PreviewDlg : public QDialog
             return;
           }
         ldr->openDialog("/tmp/~~previewdlg~~.kdevdlg");
+        wid->move(0,0);
+        setGeometry(wid->geometry());
      }
 
     ~PreviewDlg()
@@ -1267,5 +1270,6 @@ void KDlgEdit::slotViewPreview()
     }
 
   PreviewDlg dlg;
+  dlg.move(100,100);
   dlg.exec();
 }

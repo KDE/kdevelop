@@ -290,6 +290,7 @@ void CKDevelop::switchToFile(QString filename, int lineNo){
 }
 
 void CKDevelop::switchToKDevelop(){
+
   kdlg_caption = caption();
   setCaption(kdev_caption);
 
@@ -352,6 +353,7 @@ void CKDevelop::switchToKDevelop(){
 }
 void CKDevelop::switchToKDlgEdit(){
 //   KConfig *config = kapp->getConfig();
+
 
   config->setGroup("KDlgEdit");
   if (config->readEntry("KDlgEdit_ShowReadme").lower() != "false")
