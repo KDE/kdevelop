@@ -26,6 +26,7 @@
 #include "projectoptionswidget.h"
 #include "addtranslationdlg.h"
 #include "autoprojectpart.h"
+#include "config.h"
 
 
 AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const char *name)
@@ -156,7 +157,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 
     QString cmdline = DomUtil::readEntry(doc, "/kdevautoproject/make/makebin");
     if (cmdline.isEmpty())
-        cmdline = "make";
+        cmdline = MAKE_COMMAND;
     if (!DomUtil::readBoolEntry(doc, "/kdevautoproject/make/abortonerror"))
         cmdline += " -k";
     int jobs = DomUtil::readIntEntry(doc, "/kdevautoproject/make/numberofjobs");
@@ -200,7 +201,7 @@ void AutoProjectPart::slotMakefilecvs()
 {
     QString cmdline = DomUtil::readEntry(*document(), "/kdevautoproject/make/makebin");
     if (cmdline.isEmpty())
-        cmdline = "make";
+        cmdline = MAKE_COMMAND;
     cmdline += " -f Makefile.cvs";
     
     QFileInfo fi(projectDirectory() + "/Makefile.cvs");

@@ -13,3 +13,5 @@ KDEV_CHECK_PHPDOCDIR
 KDEV_PATH_KDELIBSDOC
 
 AC_PATH_PROG(DOT_FOUND, dot, no)
+AC_CHECK_PROG(gmake_prog, gmake, gmake, make)
+AC_DEFINE_UNQUOTED(MAKE_COMMAND, "$gmake_prog", [GNU make command])
