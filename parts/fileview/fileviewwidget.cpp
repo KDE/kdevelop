@@ -150,7 +150,7 @@ void FileViewWidget::slotContextMenu(KListView *, QListViewItem *item, const QPo
     
     int res = popup.exec(p);
     if (res == customizeId) {
-        KDialogBase dlg(KDialogBase::TreeList, i18n("Customize file tree"),
+        KDialogBase dlg(KDialogBase::TreeList, i18n("Customize File Tree"),
                         KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                         "customization dialog");
         QVBox *vbox = dlg.addVBoxPage(i18n("File View"));

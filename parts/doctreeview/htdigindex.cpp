@@ -32,7 +32,7 @@
 
 
 ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
-    : KDialogBase(KDialogBase::Plain, i18n("Generating search index"), Cancel, Cancel,
+    : KDialogBase(KDialogBase::Plain, i18n("Generating Search Index"), Cancel, Cancel,
                   parent, name, false)
 {
     proc = 0;
