@@ -24,6 +24,9 @@
 
 class QLineEdit;
 
+/**
+@short %Property editor for QRect values.
+*/
 class PRectEdit : public PropertyWidget
 {
     Q_OBJECT

@@ -28,6 +28,7 @@ PDateEdit::PDateEdit(MultiProperty* property, QWidget* parent, const char* name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QDateEdit(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
     
     connect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(updateProperty(const QDate&)));
@@ -43,7 +44,7 @@ void PDateEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, c
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, value.toDate().toString(Qt::LocalDate));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toDate().toString(Qt::LocalDate));
 }
 
 void PDateEdit::setValue(const QVariant& value, bool emitChange)

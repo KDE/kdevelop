@@ -17,42 +17,56 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "ppointedit.h"
+#include "pfontbutton.h"
 
-#include <qlineedit.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qpushbutton.h>
 
-PPointEdit::PPointEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
+#include <kfontrequester.h>
+#include <klocale.h>
+
+PFontButton::PFontButton(MultiProperty* property, QWidget* parent, const char* name)
+    :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QLineEdit(this);
+    m_edit = new KFontRequester(this);
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    m_edit->button()->setText(i18n("..."));
     l->addWidget(m_edit);
 
-    m_edit->setReadOnly(true);
+    connect(m_edit, SIGNAL(fontSelected(const QFont& )), this, SLOT(updateProperty(const QFont& )));
 }
 
-QVariant PPointEdit::value() const
+QVariant PFontButton::value() const
 {
-    return m_value;
+    return QVariant(m_edit->font());
 }
 
-void PPointEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
+void PFontButton::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
 {
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
+    QFontInfo fi(value.toFont());
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, 
+        fi.family() + (fi.bold() ? i18n(" Bold") : QString("")) +
+        (fi.italic() ? i18n(" Italic") : QString("")) +
+        " " + QString("%1").arg(fi.pointSize()) );
 }
 
-void PPointEdit::setValue(const QVariant& value, bool emitChange)
+void PFontButton::setValue(const QVariant& value, bool emitChange)
 {
-    m_value = value;
-    m_edit->setText(QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
-
+    disconnect(m_edit, SIGNAL(fontSelected(const QFont&)), this, SLOT(updateProperty(const QFont&)));
+    m_edit->setFont(value.toFont());
+    connect(m_edit, SIGNAL(fontSelected(const QFont& )), this, SLOT(updateProperty(const QFont& )));
     if (emitChange)
         emit propertyChanged(m_property, value);
 }
 
-#include "ppointedit.moc"
+void PFontButton::updateProperty(const QFont &font)
+{
+    emit propertyChanged(m_property, value());
+}
+
+#include "pfontbutton.moc"

@@ -44,8 +44,7 @@ Value is a @ref QVariant.
 
 Property can optionally have a list of possible values.
 In that case use @ref ValueFromList type and valueList member.
-Use @ref description for i18n'ed label and @ref oldValue() to get old value of property
-and implement undo.
+Use @ref description for i18n'ed label.
 
 Examples:
 creating property:
@@ -79,6 +78,7 @@ public:
         Point = QVariant::Point            /**<point (x,y)*/,
         Rect = QVariant::Rect              /**<rectangle (x,y, width, height)*/,
         SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
+        Font = QVariant::Font              /**<font*/,
 
         //predefined custom types
         ValueFromList = 2000               /**<string value from a list*/,
@@ -113,7 +113,7 @@ public:
     /**@return the value of the property.*/
     virtual QVariant value() const;
     /**Sets the value of the property.*/
-    virtual void setValue(const QVariant &value);
+    virtual void setValue(const QVariant &value, bool rememberOldValue = true);
     /**@return the description of the property.*/
     virtual QString description() const;
     /**Sets the description of the property.*/
@@ -134,6 +134,10 @@ public:
     virtual bool visible() const;
     /**Set the visibility.*/
     virtual void setVisible(const bool visible);
+    
+    /**Gets the previous property value.*/
+    virtual QVariant oldValue() const;
+    
 private:
 //    Property(Property &property) {};
 //    void operator=(Property &property) {};
@@ -142,6 +146,7 @@ private:
     QString m_name;
     QString m_description;
     QVariant m_value;
+    QVariant m_oldValue;
     bool m_save;
     bool m_readOnly;
     bool m_visible;

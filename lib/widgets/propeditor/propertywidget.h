@@ -60,9 +60,15 @@ public:
     virtual QString propertyName() const;
     /**Sets the name of edited property.*/
     virtual void setProperty(MultiProperty *property);
+    /**Sets the list of possible values shown in the editor widget. This method 
+    does not emit propertyChanged signal.*/
+    virtual void setValueList(const QMap<QString, QVariant> &valueList);
     
     /**Function to draw a property viewer when the editor isn't shown.*/
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    
+    /**Reverts the property value to previous setting.*/
+    virtual void undo();
 
 signals:
     /**Emit this signal when property value is changed. Probably you want

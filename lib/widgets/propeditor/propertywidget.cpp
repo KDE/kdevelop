@@ -41,7 +41,17 @@ void PropertyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect 
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, value.toString());
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toString());
+}
+
+void PropertyWidget::setValueList(const QMap<QString, QVariant> &valueList)
+{
+    //this does nothing
+}
+
+void PropertyWidget::undo()
+{
+    m_property->undo();
 }
 
 #ifndef PURE_QT

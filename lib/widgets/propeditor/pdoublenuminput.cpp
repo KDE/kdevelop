@@ -29,6 +29,7 @@ PDoubleNumInput::PDoubleNumInput(MultiProperty *property, QWidget *parent, const
 {    
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KDoubleNumInput(-999999.0, 999999.0, 0.0, 0.01, 2, this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 /*    m_edit->setMinValue(-999999999);
     m_edit->setMaxValue(+999999999);
     m_edit->setPrecision(2);*/

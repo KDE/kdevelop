@@ -27,6 +27,7 @@ PUrlEdit::PUrlEdit(KFile::Mode mode, MultiProperty* property, QWidget* parent, c
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KURLRequester(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
     m_edit->setMode(mode);
 

@@ -27,7 +27,16 @@ class MultiProperty;
 /**
 @short Child property
 
-Used by @ref PropertyMachineFactory to create child properties.
+Child property is a detailed property for complex parent properties.
+For example, to edit a property of Point type one can request two
+child properties for "x" and "y" components of a point.
+
+Child properties instances usually belong to MultiProperty class
+which is used to fetch and display them in the property editor.
+Child properties are created by a PropertyMachineFactory.
+Factory in such case does not only creates a machine for a property,
+but also fills corrresponding multiproperty with a list of child
+properties.
 */
 class ChildProperty: public Property{
 public:
@@ -60,7 +69,7 @@ public:
     /**@return the value of the property.*/
     virtual QVariant value() const;
     /**Sets the value of the property.*/
-    virtual void setValue(const QVariant &value);
+    virtual void setValue(const QVariant &value, bool rememberOldValue = true);
     
 private:
     MultiProperty *m_parent;

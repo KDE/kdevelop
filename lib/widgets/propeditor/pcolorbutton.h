@@ -17,42 +17,31 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "ppointedit.h"
+#ifndef PCOLORBUTTON_H
+#define PCOLORBUTTON_H
 
-#include <qlineedit.h>
-#include <qlayout.h>
-#include <qpainter.h>
+#include "propertywidget.h"
 
-PPointEdit::PPointEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
+class KColorButton;
+
+/**
+@short %Property editor with color chooser button.
+*/
+class PColorButton: public PropertyWidget
 {
-    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QLineEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    l->addWidget(m_edit);
+    Q_OBJECT
+public:
+    PColorButton(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
 
-    m_edit->setReadOnly(true);
-}
+    virtual QVariant value() const;
+    virtual void drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value);
+    virtual void setValue(const QVariant& value, bool emitChange);
+    
+protected slots:
+    void updateProperty(const QColor& color);
 
-QVariant PPointEdit::value() const
-{
-    return m_value;
-}
+private:
+    KColorButton *m_edit;
+};
 
-void PPointEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
-{
-    p->setPen(Qt::NoPen);
-    p->setBrush(cg.background());
-    p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
-}
-
-void PPointEdit::setValue(const QVariant& value, bool emitChange)
-{
-    m_value = value;
-    m_edit->setText(QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
-
-    if (emitChange)
-        emit propertyChanged(m_property, value);
-}
-
-#include "ppointedit.moc"
+#endif

@@ -27,6 +27,7 @@ PLineEdit::PLineEdit(MultiProperty *property, QWidget *parent, const char *name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QLineEdit(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
     
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));

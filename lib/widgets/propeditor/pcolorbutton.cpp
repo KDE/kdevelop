@@ -17,42 +17,58 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "ppointedit.h"
+#include "pcolorbutton.h"
 
-#include <qlineedit.h>
 #include <qlayout.h>
 #include <qpainter.h>
 
-PPointEdit::PPointEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
+#include <kcolorbutton.h>
+
+PColorButton::PColorButton(MultiProperty* property, QWidget* parent, const char* name)
+    :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QLineEdit(this);
+    m_edit = new KColorButton(this);
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
 
-    m_edit->setReadOnly(true);
+    connect(m_edit, SIGNAL(changed(const QColor&)), this, SLOT(updateProperty(const QColor&)));
 }
 
-QVariant PPointEdit::value() const
+QVariant PColorButton::value() const
 {
-    return m_value;
+    return QVariant(m_edit->color());
 }
 
-void PPointEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
+void PColorButton::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
 {
+/*    p->setBrush(value.toColor());
+    p->setPen(Qt::NoPen);
+    p->drawRect(r);*/
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
+    
+    p->setBrush(value.toColor());
+    p->setPen(Qt::SolidLine);
+    QRect r2(r);
+    r2.setTopLeft(r.topLeft() + QPoint(5,5));
+    r2.setBottomRight(r.bottomRight() - QPoint(5,5));
+    p->drawRect(r2);
 }
 
-void PPointEdit::setValue(const QVariant& value, bool emitChange)
+void PColorButton::setValue(const QVariant& value, bool emitChange)
 {
-    m_value = value;
-    m_edit->setText(QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
-
+    disconnect(m_edit, SIGNAL(changed(const QColor&)), this, SLOT(updateProperty(const QColor&)));
+    m_edit->setColor(value.toColor());
+    connect(m_edit, SIGNAL(changed(const QColor&)), this, SLOT(updateProperty(const QColor&)));
     if (emitChange)
         emit propertyChanged(m_property, value);
 }
 
-#include "ppointedit.moc"
+void PColorButton::updateProperty(const QColor &color)
+{
+    emit propertyChanged(m_property, value());
+}
+
+#include "pcolorbutton.moc"

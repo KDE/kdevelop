@@ -17,42 +17,50 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "ppointedit.h"
+#include "pyesnobutton.h"
 
-#include <qlineedit.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qpushbutton.h>
 
-PPointEdit::PPointEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
+#include <klocale.h>
+
+PYesNoButton::PYesNoButton(MultiProperty* property, QWidget* parent, const char* name)
+    :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QLineEdit(this);
+    m_edit = new QPushButton(this);
+    m_edit->setToggleButton(true);
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
 
-    m_edit->setReadOnly(true);
+    connect(m_edit, SIGNAL(toggled(bool)), this, SLOT(updateProperty(bool)));
 }
 
-QVariant PPointEdit::value() const
+QVariant PYesNoButton::value() const
 {
-    return m_value;
+    return QVariant(m_edit->isOn());
 }
 
-void PPointEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
+void PYesNoButton::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
 {
-    p->setPen(Qt::NoPen);
-    p->setBrush(cg.background());
-    p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
+    PropertyWidget::drawViewer(p, cg, r, value.toBool() ? i18n("Yes") : i18n("No"));
 }
 
-void PPointEdit::setValue(const QVariant& value, bool emitChange)
+void PYesNoButton::setValue(const QVariant& value, bool emitChange)
 {
-    m_value = value;
-    m_edit->setText(QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
-
+    disconnect(m_edit, SIGNAL(toggled(bool)), this, SLOT(updateProperty(bool)));
+    m_edit->setDown(value.toBool());
+    value.toBool() ? m_edit->setText(i18n("Yes")) : m_edit->setText(i18n("No"));
+    connect(m_edit, SIGNAL(toggled(bool)), this, SLOT(updateProperty(bool)));
     if (emitChange)
         emit propertyChanged(m_property, value);
 }
 
-#include "ppointedit.moc"
+void PYesNoButton::updateProperty(bool toggled)
+{
+    toggled ? m_edit->setText(i18n("Yes")) : m_edit->setText(i18n("No"));
+    emit propertyChanged(m_property, value());
+}
+
+#include "pyesnobutton.moc"

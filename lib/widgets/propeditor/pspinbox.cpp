@@ -29,6 +29,7 @@ PSpinBox::PSpinBox(MultiProperty *property, QWidget *parent, const char *name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QSpinBox(INT_MIN, INT_MAX, 1, this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
     
     connect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));

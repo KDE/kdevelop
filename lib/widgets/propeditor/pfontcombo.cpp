@@ -36,6 +36,7 @@ PFontCombo::PFontCombo(MultiProperty *property, QWidget *parent, const char *nam
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KFontCombo(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
     
     /*adymo: KFontCombo seems to have a bug: when it is not editable, the signals

@@ -20,7 +20,7 @@
 #ifndef PROPERTYEDITOR_H
 #define PROPERTYEDITOR_H
 
-#include <qlistview.h>
+#include <klistview.h>
 
 #include "propertylist.h"
 
@@ -29,6 +29,8 @@ class PropertyGroupItem;
 class PropertyWidget;
 class Property;
 class MultiProperty;
+class QPushButton;
+class QGridLayout;
 struct Machine;
 
 /** @file propertyeditor.h
@@ -44,11 +46,11 @@ creation of property widgets from the machine factory.
 @see Machine
 @see PropertyMachineFactory
 */
-class PropertyEditor: public QListView{
+class PropertyEditor: public KListView{
    Q_OBJECT
 public:
     /**Constructs the property editor.*/
-    PropertyEditor(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+    PropertyEditor(QWidget *parent = 0, const char *name = 0);
     ~PropertyEditor();
     
     /**@return @ref Machine for given property.
@@ -57,7 +59,7 @@ public:
     Machine *machine(MultiProperty *property);
     
 public slots:
-    /**Shows properties from accessor.*/
+    /**Shows properties from a list.*/
     void populateProperties(PropertyList *list);
     /**Clears property list, disconnects accessor from the editor and deletes it.*/
     void clearProperties();
@@ -67,12 +69,15 @@ public slots:
 protected slots:
     /**Updates property widget in the editor.*/
     void propertyValueChanged(Property* property);
-    /**Updates accessor when new value is selected in the editor.*/
+    /**Updates property in the list when new value is selected in the editor.*/
     void propertyChanged(MultiProperty *property, const QVariant &value);
 
     /**Shows property editor.*/
     void slotClicked(QListViewItem* item);
     void updateEditorSize();
+    
+    /**Undoes the last change in property editor.*/
+    void undo();
     
 protected:
     void editItem(QListViewItem*, int);
@@ -95,9 +100,13 @@ private:
 
     PropertyItem *m_currentEditItem;
     PropertyWidget *m_currentEditWidget;
+    QWidget *m_currentEditArea;
+    QGridLayout *m_currentEditLayout;
     
     bool m_doubleClickForEdit;
     QListViewItem* m_lastClickedItem;
+    
+    QPushButton *m_undoButton;
     
 friend class PropertyItem;
 };

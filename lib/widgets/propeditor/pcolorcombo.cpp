@@ -29,6 +29,7 @@ PColorCombo::PColorCombo(MultiProperty *property, QWidget *parent, const char *n
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KColorCombo(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
 
     connect(m_edit, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
@@ -53,11 +54,18 @@ void PColorCombo::updateProperty(int /*val*/)
     emit propertyChanged(m_property, value());
 }
 
-void PColorCombo::drawViewer(QPainter *p, const QColorGroup &/*cg*/, const QRect &r, const QVariant &value)
+void PColorCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-    p->setBrush(value.toColor());
     p->setPen(Qt::NoPen);
+    p->setBrush(cg.background());
     p->drawRect(r);
+    
+    p->setBrush(value.toColor());
+    p->setPen(Qt::SolidLine);
+    QRect r2(r);
+    r2.setTopLeft(r.topLeft() + QPoint(5,5));
+    r2.setBottomRight(r.bottomRight() - QPoint(5,5));
+    p->drawRect(r2);
 }
 
 #ifndef PURE_QT

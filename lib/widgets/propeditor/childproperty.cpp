@@ -39,7 +39,7 @@ ChildProperty::ChildProperty(MultiProperty *parent, const QString & name, ChildP
 {
 }
 
-void ChildProperty::setValue(const QVariant &value)
+void ChildProperty::setValue(const QVariant &value, bool rememberOldValue)
 {
     qWarning("ChildProperty::setValue");
     if (!m_parent->valid())

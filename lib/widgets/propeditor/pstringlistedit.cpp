@@ -36,8 +36,10 @@ PStringListEdit::PStringListEdit(MultiProperty *property, QWidget *parent, const
 
     edit = new QLineEdit(this);
     edit->setReadOnly(true);
+    edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(edit);
     pbSelect = new QPushButton("...", this);
+    pbSelect->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
     l->addWidget(pbSelect);
 
     connect(pbSelect, SIGNAL(clicked()), this, SLOT(showEditor()));
@@ -93,7 +95,7 @@ void PStringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, value.toStringList().join(", "));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toStringList().join(", "));
 }
 
 #ifndef PURE_QT

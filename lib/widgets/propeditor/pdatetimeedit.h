@@ -24,6 +24,9 @@
 
 class QDateTimeEdit;
 
+/**
+@short %Property editor for QDateTime values.
+*/
 class PDateTimeEdit : public PropertyWidget
 {
 Q_OBJECT

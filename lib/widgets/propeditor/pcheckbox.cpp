@@ -34,6 +34,7 @@ PCheckBox::PCheckBox(MultiProperty *property, QWidget *parent, const char *name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QCheckBox(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
     
     connect(m_edit, SIGNAL(toggled(bool)), this, SLOT(updateProperty(bool)));
@@ -63,7 +64,7 @@ void PCheckBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
     p->setBrush(cg.background());
     p->setPen(Qt::NoPen);
     p->drawRect(r);
-    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, value.toBool() ? i18n("true") : i18n("false"));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toBool() ? i18n("true") : i18n("false"));
 }
 
 #ifndef PURE_QT

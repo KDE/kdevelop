@@ -36,17 +36,15 @@ class MultiProperty;
 /**
 @short The list of properties.
 
-A list of properties with convenience access functions.
-
-Every object in a program must operate with properties through
+Every object in a program should operate with properties through
 this list in order to:
 - be informed about property changes
 - allow property lists intersections
 - display properties in the property editor widget (see @ref PropertyEditor).
 .
 
-PropertyList owns properties and deletes them itself if propertyOwner = true
-in PropertyList's constructor.
+PropertyList owns properties and deletes them itself. For a list that does not own
+it's properties, look at @ref PropertyBuffer class.
 
 PropertyList is also capable of grouping properties.
 You can have unsorted list of groups of properties or a plain
@@ -59,9 +57,14 @@ public:
     PropertyList();
     virtual ~PropertyList();
 
-    /**Accesses a property by it's name.
-    @return @ref MultiProperty with given name.
-    */
+    /**Accesses a property by it's name. All property modifications are allowed
+    trough this method. For example, to set a value of a property, use:
+    /code
+    PropertyList list;
+    ...
+    list["My Property"]->setValue("My Value");
+    /endcode
+    @return @ref MultiProperty with given name.*/
     virtual MultiProperty *operator[](const QString &name);
 
     /**Adds the property to the list to the "common" group.*/
@@ -79,9 +82,12 @@ public:
     /**@return the map: property - group name.*/
     virtual const QMap<MultiProperty*, QString>& groupOfProperty() const;
     
+    /**Clears the list of properties.*/
     virtual void clear();
+    /**Returns true if the list of properties contains property with given name.*/
     virtual bool contains(const QString &name);
     
+    /**The list of properties with given name.*/
     QPtrList<Property> properties(const QString &name);
 
 signals:
@@ -91,6 +97,7 @@ signals:
     void aboutToDeleteProperty(Property* property);
     
 protected:
+    /**Constructs a list which owns or does not own it's properties.*/
     PropertyList(bool propertyOwner);
 
     /**Adds property to a group.*/
@@ -116,9 +123,31 @@ friend class MultiProperty;
 friend class PropertyBuffer;
 };
 
+
+/**
+@short The list of properties which does not own them.
+
+This class acts as @ref PropertyList but it does not delete properties
+in destructor (i.e. it does not own properties).
+This class should be used to store results of property intersections.
+
+Example:
+/code
+PropertyList *list = new PropertyList();
+PropertyList *list2 = new PropertyList();
+PropertyList *list3 = new PropertyList();
+...
+PropertyBuffer *buf = new PropertyBuffer(list);
+buf->intersect(list2);
+buf->intersect(list3);
+...
+/endcode
+*/
 class PropertyBuffer: public PropertyList{
 public:
+    /**Constructs a buffer from given property list.*/
     PropertyBuffer(PropertyList *list);
+    /**Constructs an empty property buffer.*/
     PropertyBuffer();
 
     /**Intersects with other @ref PropertyList.*/

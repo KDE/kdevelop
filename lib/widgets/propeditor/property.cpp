@@ -1,8 +1,5 @@
 /***************************************************************************
  *   Copyright (C) 2002-2004 by Alexander Dymo  <cloudtemple@mskat.net>    *
- *   Copyright (C) 2002 by Lucijan Busch <lucijan@gmx.at>                  *
- *   Copyright (C) 2003 by Cedric Pasteur <cedric.pasteur@free.fr>         *
- *   Copyright (C) 2004 by Jaroslaw Staniek <js@iidea.pl>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -80,8 +77,12 @@ QVariant Property::value() const
     return m_value;
 }
 
-void Property::setValue(const QVariant &value)
+void Property::setValue(const QVariant &value, bool rememberOldValue)
 {
+    if (rememberOldValue)
+        m_oldValue = m_value;
+    else
+        m_oldValue = value;
     m_value = value;
 }
 
@@ -113,5 +114,13 @@ bool Property::visible() const
 void Property::setVisible( const bool visible )
 {
     m_visible = visible;
+}
+
+QVariant Property::oldValue() const
+{
+    if (m_oldValue.isNull())
+        return m_value;
+    else
+        return m_oldValue;
 }
 

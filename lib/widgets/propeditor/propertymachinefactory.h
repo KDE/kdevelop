@@ -39,20 +39,13 @@ class QWidget;
 Contains a pointer to a property viewer,
 property editor and a list of detailed property
 editors and viewers.
-
-Detailed property editors can be used as convenience
-editors for complex properties.
-For example, consider property "Font" which can have detailed
-property viewers and editors for font family, size, etc.
 */
 struct Machine{
     Machine()
     {
-//        details.setAutoDelete(true);
     }
     Machine(PropertyWidget *widget)
     {
-//        details.setAutoDelete(true);
         propertyEditor = widget;
     }
     ~Machine()
@@ -62,8 +55,6 @@ struct Machine{
     
     /**Property viewer and editor widget.*/
     PropertyWidget *propertyEditor;
-    /**A list of detailed properties.*/
-//    QPtrList<ChildProperty> details;
 };
 
 /**A pointer to factory function which creates and returns machine for a property.*/
@@ -97,7 +88,7 @@ private:
     //registered machines for property types
     QMap<int, createMachine > m_registeredForType;
 };
-    
+
 
 
 #endif

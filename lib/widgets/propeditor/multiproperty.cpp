@@ -242,7 +242,17 @@ QVariant MultiProperty::findValueDescription(QVariant val) const
     return "";
 }
 
-bool MultiProperty::valid( ) const
+bool MultiProperty::valid() const
 {
     return list.count() != 0;
+}
+
+void MultiProperty::undo()
+{
+    Property *property;
+    for (property = list.first(); property; property = list.next())
+    {
+        property->setValue(property->oldValue(), false);
+        emit m_propertyList->propertyValueChanged(property);
+    }
 }

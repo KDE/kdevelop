@@ -29,6 +29,7 @@ PSizePolicyEdit::PSizePolicyEdit(MultiProperty* property, const QMap<QString, QV
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QLineEdit(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
 
     m_edit->setReadOnly(true);
@@ -44,7 +45,7 @@ void PSizePolicyEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, QString("%1/%2/%3/%4").arg(findValueDescription(value.toSizePolicy().horData())).arg(findValueDescription(value.toSizePolicy().verData())).arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("%1/%2/%3/%4").arg(findValueDescription(value.toSizePolicy().horData())).arg(findValueDescription(value.toSizePolicy().verData())).arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));
 }
 
 void PSizePolicyEdit::setValue(const QVariant& value, bool emitChange)

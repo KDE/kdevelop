@@ -22,6 +22,7 @@
 #ifndef PURE_QT
 #include <klocale.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 #else
 #include "compat_tools.h"
 #endif
@@ -31,21 +32,23 @@
 #include <qpainter.h>
 #include <qptrlist.h>
 #include <qvaluelist.h>
+#include <qpushbutton.h>
 
 #include "property.h"
 #include "multiproperty.h"
 #include "propertymachinefactory.h"
 
-class PropertyItem: public QListViewItem{
+class PropertyItem: public KListViewItem{
 public:
     PropertyItem(PropertyEditor *parent, MultiProperty *property)
-        :QListViewItem(parent, property->description()), m_editor(parent), m_property(property)
+        :KListViewItem(parent, property->description()), m_editor(parent), m_property(property),
+        m_changed(false)
     {
     }
     
-    PropertyItem(PropertyEditor *editor, QListViewItem *parent, MultiProperty *property)
-        :QListViewItem(parent, property->description()), m_editor(editor),
-        m_property(property)
+    PropertyItem(PropertyEditor *editor, KListViewItem *parent, MultiProperty *property)
+        :KListViewItem(parent, property->description()), m_editor(editor),
+        m_property(property), m_changed(false)
     {
     }
     
@@ -66,36 +69,58 @@ public:
     
     virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align)
     {
+        if ((column == 0) && m_changed)
+        {
+            QFont font;
+            font.setBold(true);
+            p->setFont(font);
+            p->setBrush(cg.highlight());
+            p->setPen(cg.highlightedText());
+        }
         if (column == 1)
         {
-            QRect r(0, 0, m_editor->header()->sectionSize(1), height()-1);
+            QRect r(0, 0, m_editor->header()->sectionSize(1), height());
             //FIXME: this is ugly, but how else can we deal with ValueFromList properties?
             QVariant valueToDraw;
             if (m_property->type() == Property::ValueFromList)
                 valueToDraw = m_property->findValueDescription();
             else
                 valueToDraw = m_property->value();
-            m_editor->machine(m_property)->propertyEditor->drawViewer(p, cg, r, valueToDraw);
+            QColorGroup icg(cg);
+            icg.setColor(QColorGroup::Background, backgroundColor());
+            m_editor->machine(m_property)->propertyEditor->drawViewer(p, icg, r, valueToDraw);
             return;
         }
-        QListViewItem::paintCell(p, cg, column, width, align);
+        KListViewItem::paintCell(p, cg, column, width, align);
+    }
+    
+    virtual void setup()
+    {
+        KListViewItem::setup();
+        setHeight(height()*1.5);
+    }
+    
+    void setChanged(bool changed)
+    {
+        m_changed = changed;
     }
 
 private:
     PropertyEditor *m_editor;
     MultiProperty *m_property;
+    bool m_changed;
 };
 
 
-class PropertyGroupItem: public QListViewItem{
+class PropertyGroupItem: public KListViewItem{
 public:
-    PropertyGroupItem(QListView *parent, const QString &name)
-        :QListViewItem(parent, name)
+    PropertyGroupItem(KListView *parent, const QString &name)
+        :KListViewItem(parent, name)
     {
         init();
     }
-    PropertyGroupItem(QListViewItem *parent, const QString &name)
-        :QListViewItem(parent, name)
+    PropertyGroupItem(KListViewItem *parent, const QString &name)
+        :KListViewItem(parent, name)
     {
         init();
     }
@@ -110,8 +135,14 @@ public:
             p->setBrush(cg.highlight());
             p->setPen(cg.highlightedText());
         }
-        QListViewItem::paintCell(p, cg, column, width, align);
+        KListViewItem::paintCell(p, cg, column, width, align);
     }
+    virtual void setup()
+    {
+        KListViewItem::setup();
+        setHeight(height()*1.4);
+    }
+
 private:
     void init()
     {
@@ -119,24 +150,25 @@ private:
     }
 };
 
-class SeparatorItem: public QListViewItem{
+class SeparatorItem: public KListViewItem{
 public:
-    SeparatorItem(QListView *parent)
-        :QListViewItem(parent)
+    SeparatorItem(KListView *parent)
+        :KListViewItem(parent)
     {
         setSelectable(false);
     }
 };
 
-PropertyEditor::PropertyEditor(QWidget *parent, const char *name, WFlags f)
-    :QListView(parent, name, f)
+PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
+    :KListView(parent, name)
 {
     setSorting(-1);
     
     addColumn(i18n("Name"));
     addColumn(i18n("Value"));
     setAllColumnsShowFocus(true);
-    setResizeMode(QListView::AllColumns);
+    setColumnWidthMode(0, QListView::Maximum);
+    setResizeMode(QListView::LastColumn);
 
     header()->setClickEnabled(false);
 
@@ -150,6 +182,17 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name, WFlags f)
     m_lastClickedItem = 0;    
     m_currentEditWidget = 0;
     m_list = 0;
+    
+    m_currentEditArea = new QWidget(viewport());
+    m_currentEditArea->hide();
+    m_undoButton = new QPushButton(m_currentEditArea);
+    m_undoButton->setPixmap(SmallIcon("undo"));
+    m_undoButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
+    m_undoButton->resize(m_undoButton->height(), m_undoButton->height());
+    m_undoButton->hide();
+    connect(m_undoButton, SIGNAL(clicked()), this, SLOT(undo()));
+    m_currentEditLayout = new QGridLayout(m_currentEditArea, 1, 2, 0, 0);
+//    m_currentEditLayout->addWidget(m_undoButton, 0, 1);
 }
 
 PropertyEditor::~PropertyEditor()
@@ -180,6 +223,12 @@ void PropertyEditor::populateProperties(PropertyList *list)
             else
                 addProperty(*it2);
         }
+    }
+    if (firstChild())
+    {
+        setCurrentItem(firstChild());
+        setSelected(firstChild(), true);
+        slotClicked(firstChild());
     }
 }
 
@@ -227,11 +276,11 @@ void PropertyEditor::clearProperties()
     m_detailedList.clear();
     if (!m_list)
         return;
-    if (m_currentEditWidget)
-        m_currentEditWidget->hide();
     
-    clear();
+    hideEditor();
+    
     disconnect(m_list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(propertyValueChanged(Property*)));
+    clear();
     delete m_list;
     m_list = 0;
 }
@@ -259,6 +308,14 @@ void PropertyEditor::propertyChanged(MultiProperty *property, const QVariant &va
     
     kdDebug() << "editor: assign " << property->name().latin1() << " to " << value.toString().latin1() << endl;
     property->setValue(value, false);
+    
+    //highlight changed properties
+    if (m_currentEditItem && (m_currentEditItem->property() == property))
+    {
+        m_currentEditItem->setChanged(true);
+        repaintItem(m_currentEditItem);
+    }
+    
 /*    if (m_list->contains(name))
     {
         (*m_list)[name]->setValue(value, false);
@@ -270,7 +327,13 @@ void PropertyEditor::hideEditor()
     m_lastClickedItem = 0;
     m_currentEditItem = 0;
     if (m_currentEditWidget)
+    {
+        m_currentEditLayout->remove(m_currentEditWidget);
         m_currentEditWidget->hide();
+    }
+    m_currentEditLayout->remove(m_undoButton);
+    m_undoButton->hide();
+    m_currentEditArea->hide();
     m_currentEditWidget = 0;
 }
 
@@ -279,6 +342,8 @@ void PropertyEditor::showEditor(PropertyItem *item)
     m_currentEditItem = item;
     placeEditor(item);
     m_currentEditWidget->show();
+    m_undoButton->show();
+    m_currentEditArea->show();
 }
 
 void PropertyEditor::placeEditor(PropertyItem *item)
@@ -306,8 +371,11 @@ void PropertyEditor::placeEditor(PropertyItem *item)
 
     if (PropertyWidget* editor = prepareEditor(item))
     {
-        editor->resize(r.size());
-        moveChild(editor, r.x(), r.y());
+        m_currentEditLayout->addWidget(editor, 0, 0);
+        m_currentEditLayout->addWidget(m_undoButton, 0, 1);
+        m_currentEditArea->resize(r.size());
+//        m_currentEditLayout->invalidate();
+        moveChild(m_currentEditArea, r.x(), r.y());
         m_currentEditWidget = editor;
     }
 }
@@ -324,6 +392,8 @@ PropertyWidget* PropertyEditor::prepareEditor(PropertyItem *item)
     {*/
     editorWidget = machine(item->property())->propertyEditor;
     editorWidget->setProperty(item->property());
+    if (item->property()->type() == Property::ValueFromList)
+        editorWidget->setValueList(item->property()->valueList());
     editorWidget->setValue(item->property()->value(), false);
     //}
     return editorWidget;
@@ -365,7 +435,7 @@ Machine *PropertyEditor::machine(MultiProperty *property)
         m_registeredForType[type] = PropertyMachineFactory::getInstance()->machineForProperty(property);
         connect(m_registeredForType[type]->propertyEditor, SIGNAL(propertyChanged(MultiProperty*, const QVariant&)),
             this, SLOT(propertyChanged(MultiProperty*, const QVariant&)));
-        m_registeredForType[type]->propertyEditor->reparent(viewport(), 0, viewport()->childrenRect().topLeft());
+        m_registeredForType[type]->propertyEditor->reparent(m_currentEditArea, 0, m_currentEditArea->childrenRect().topLeft());
         m_registeredForType[type]->propertyEditor->hide();
     }
     return m_registeredForType[type];
@@ -378,6 +448,17 @@ void PropertyEditor::clearMachineCache()
         delete it.data();
     }
     m_registeredForType.clear();
+}
+
+void PropertyEditor::undo()
+{
+    if ((m_currentEditItem == 0) || (m_currentEditWidget == 0) 
+        || (!m_currentEditWidget->isVisible()))
+        return;
+    
+    m_currentEditWidget->undo();
+    m_currentEditItem->setChanged(false);
+    repaintItem(m_currentEditItem);
 }
 
 #include "propertyeditor.moc"

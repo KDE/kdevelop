@@ -26,6 +26,9 @@
 
 class KURLRequester;
 
+/**
+@short %Property editor with an url editor to choose the location of file or directory.
+*/
 class PUrlEdit : public PropertyWidget
 {
 Q_OBJECT

@@ -28,6 +28,7 @@ PSizeEdit::PSizeEdit(MultiProperty *property, QWidget *parent, const char *name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QLineEdit(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
 
     m_edit->setReadOnly(true);
@@ -43,7 +44,7 @@ void PSizeEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, c
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
 }
 
 void PSizeEdit::setValue(const QVariant& value, bool emitChange)

@@ -47,6 +47,11 @@
 #include "ppointedit.h"
 #include "prectedit.h"
 #include "psizepolicyedit.h"
+#include "pcolorbutton.h"
+#include "pyesnobutton.h"
+#include "pfontbutton.h"
+#include "ppixmapedit.h"
+#include "pcursoredit.h"
 
 PropertyMachineFactory *PropertyMachineFactory::m_factory = 0;
 
@@ -76,7 +81,7 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
         case Property::Double:
             return new Machine(new PDoubleNumInput(property));
         case Property::Boolean:
-            return new Machine(new PCheckBox(property));
+            return new Machine(new PYesNoButton(property));
         case Property::Date:
             return new Machine(new PDateEdit(property));
         case Property::DateTime:
@@ -84,7 +89,11 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
         case Property::StringList:
             return new Machine(new PStringListEdit(property));
         case Property::Color:
-            return new Machine(new PColorCombo(property));
+            return new Machine(new PColorButton(property));
+        case Property::Font:
+            return new Machine(new PFontButton(property));
+        case Property::Pixmap:
+            return new Machine(new PPixmapEdit(property));
 
         case Property::ValueFromList:
             return new Machine(new PComboBox(property, valueList));
@@ -136,6 +145,28 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             property->details.append(ChildProperty(property, i18n("vSizeType"), ChildProperty::SizePolicy_VerData, spValues, i18n("Vertical Size Type")));
             property->details.append(ChildProperty(property, Property::Integer, ChildProperty::SizePolicy_HorStretch, i18n("hStretch"), i18n("Horizontal Stretch")));
             property->details.append(ChildProperty(property, Property::Integer, ChildProperty::SizePolicy_VerStretch, i18n("vStretch"), i18n("Vertical Stretch")));
+            return mach;
+        }
+        case Property::Cursor:
+        {
+            QMap<QString, QVariant> spValues;
+            spValues[i18n("Arrow")] = Qt::ArrowCursor;
+            spValues[i18n("Up Arrow")] = Qt::UpArrowCursor;
+            spValues[i18n("Cross")] = Qt::CrossCursor;
+            spValues[i18n("Waiting")] = Qt::WaitCursor;
+            spValues[i18n("iBeam")] = Qt::IbeamCursor;
+            spValues[i18n("Size Vertical")] = Qt::SizeVerCursor;
+            spValues[i18n("Size Horizontal")] = Qt::SizeHorCursor;
+            spValues[i18n("Size Slash")] = Qt::SizeBDiagCursor;
+            spValues[i18n("Size Backslash")] = Qt::SizeFDiagCursor;
+            spValues[i18n("Size All")] = Qt::SizeAllCursor;
+            spValues[i18n("Blank")] = Qt::BlankCursor;
+            spValues[i18n("Split Vertical")] = Qt::SplitVCursor;
+            spValues[i18n("Split Horizontal")] = Qt::SplitHCursor;
+            spValues[i18n("Pointing Hand")] = Qt::PointingHandCursor;
+            spValues[i18n("Forbidden")] = Qt::ForbiddenCursor;
+            spValues[i18n("What's this")] = Qt::WhatsThisCursor;
+            Machine *mach = new Machine(new PCursorEdit(property, spValues));
             return mach;
         }
 

@@ -44,16 +44,20 @@ public:
     /**Sets the value shown in the editor widget. Set emitChange to false
     if you don't want to emit propertyChanged signal.*/
     virtual void setValue(const QVariant &value, bool emitChange=true);
+    /**Sets the list of possible values shown in the editor widget. This method 
+    does not emit propertyChanged signal. Reimplemented because combobox is used
+    to display possible values from valueList.*/
+    virtual void setValueList(const QMap<QString, QVariant> &valueList);
 
 protected:
-    virtual void fillBox();
+    QString findDescription(const QVariant &value);
 
-private slots:
+protected slots:
     void updateProperty(int val);
 
 private:
+    virtual void fillBox();
     void init(bool rw = false);
-    QString findDescription(const QVariant &value);
     
     /** map<description, value>*/
     QMap<QString, QVariant> m_valueList;

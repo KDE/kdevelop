@@ -26,6 +26,9 @@
 
 class QLineEdit;
 
+/**
+@short %Property editor for QSizePolicy values.
+*/
 class PSizePolicyEdit : public PropertyWidget
 {
 Q_OBJECT

@@ -27,6 +27,7 @@ PRectEdit::PRectEdit(MultiProperty* property, QWidget* parent, const char* name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QLineEdit(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
 
     m_edit->setReadOnly(true);
@@ -42,7 +43,7 @@ void PRectEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, c
     p->setPen(Qt::NoPen);
     p->setBrush(cg.background());
     p->drawRect(r);
-    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
 }
 
 void PRectEdit::setValue(const QVariant& value, bool emitChange)

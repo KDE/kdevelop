@@ -38,6 +38,7 @@ void PComboBox::init(bool rw)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QComboBox(rw, this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
     
     fillBox();
@@ -90,6 +91,13 @@ QString PComboBox::findDescription(const QVariant &value)
             return it.key();
     }
     return "";
+}
+
+void PComboBox::setValueList(const QMap<QString, QVariant> &valueList)
+{
+    m_valueList = valueList;
+    m_edit->clear();
+    fillBox();
 }
 
 #ifndef PURE_QT

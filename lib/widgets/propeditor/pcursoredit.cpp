@@ -17,42 +17,19 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "ppointedit.h"
+#include "pcursoredit.h"
 
-#include <qlineedit.h>
-#include <qlayout.h>
 #include <qpainter.h>
 
-PPointEdit::PPointEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
+PCursorEdit::PCursorEdit(MultiProperty* property, const QMap<QString, QVariant> &spValues,
+    QWidget* parent, const char* name)
+    :PComboBox(property, spValues, parent, name)
 {
-    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QLineEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    l->addWidget(m_edit);
-
-    m_edit->setReadOnly(true);
 }
 
-QVariant PPointEdit::value() const
+void PCursorEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
 {
-    return m_value;
+    PropertyWidget::drawViewer(p, cg, r, findDescription(value));
 }
 
-void PPointEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
-{
-    p->setPen(Qt::NoPen);
-    p->setBrush(cg.background());
-    p->drawRect(r);
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
-}
-
-void PPointEdit::setValue(const QVariant& value, bool emitChange)
-{
-    m_value = value;
-    m_edit->setText(QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
-
-    if (emitChange)
-        emit propertyChanged(m_property, value);
-}
-
-#include "ppointedit.moc"
+#include "pcursoredit.moc"

@@ -39,9 +39,11 @@ PSymbolCombo::PSymbolCombo(MultiProperty *property, QWidget *parent, const char 
     l = new QHBoxLayout(this);
 
     m_edit = new QLineEdit(this);
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_edit->setMaxLength(1);
     l->addWidget(m_edit);
     m_select = new QPushButton("...", this);
+    m_select->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
     l->addWidget(m_select);
 
 #ifdef PURE_QT
@@ -118,7 +120,7 @@ void PSymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r
     p->setBrush(cg.background());
     p->setPen(Qt::NoPen);
     p->drawRect(r);
-    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, QChar(value.toInt()));
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QChar(value.toInt()));
 }
 
 #ifndef PURE_QT
