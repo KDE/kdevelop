@@ -21,8 +21,8 @@ $nameBig = $processes{NAME};
 $nameBig =~ tr/a-z/A-Z/;
 $name =  $processes{NAME};
 
-$overDirectory = $processes{DIRECTORY} . $nameLittle;
-$underDirectory = $processes{DIRECTORY} . $nameLittle . "/" . $nameLittle;
+$overDirectory = $processes{DIRECTORY};
+$underDirectory = $processes{DIRECTORY} . $nameLittle;
 
 
 #start make -f Makefile.dist

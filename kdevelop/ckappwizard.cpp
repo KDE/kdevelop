@@ -346,11 +346,14 @@ void CKAppWizard::initPages(){
 
 // connection to directoryload
 void CKAppWizard::slotDirDialogClicked() {
-  dirdialog = new KDirDialog(directoryline->text(),this,"Directory");
+  QString projname;
+  dirdialog = new KDirDialog(dir,this,"Directory");
   dirdialog->setCaption (i18n("Directory"));
   dirdialog->show();
-  dir = dirdialog->dirPath();
+  projname = nameline->text();
+  dir = dirdialog->dirPath() + projname.lower();
   directoryline->setText(dir);
+  dir = dirdialog->dirPath();
   delete (dirdialog);
 }
 
@@ -465,10 +468,10 @@ void CKAppWizard::slotOkClicked() {
   namelow = nameline->text();
   namelow = namelow.lower();
   QDir directory;
-  directory.mkdir(directoryline->text() + QString("/") + namelow);
+  directory.mkdir(directoryline->text() + QString("/"));
   p = new KProcess();
   QString copysrc;
-  QString copydes = directoryline->text() + QString ("/") + namelow;
+  QString copydes = directoryline->text() + QString ("/");
   if (kma->isChecked()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
     *p << "cp";
@@ -654,8 +657,8 @@ void CKAppWizard::slotDefaultClicked() {
   progicon->setChecked(true);
   gnufiles->setChecked(true);
   userdoc->setChecked(true);
-  directoryline->setText(QDir::homeDirPath()+ "/");
-  dir = QDir::homeDirPath();
+  directoryline->setText(QDir::homeDirPath()+ QString("/"));
+  dir = QDir::homeDirPath()+ QString("/");
   nameline->setText(0);
   okButton->setEnabled(false);
   miniload->setPixmap(QPixmap(KApplication::kde_icondir() + "/mini/application_settings.xpm"));
@@ -681,6 +684,7 @@ void CKAppWizard::slotProjectnameEntry() {
     }
   }
   nameline->setText(nametext);
+  directoryline->setText(dir + nametext.lower());
   nametext == "" ? okButton->setEnabled(false) : okButton->setEnabled(true);
 }
 
@@ -759,7 +763,7 @@ void CKAppWizard::slotCppHeaderClicked() {
 void CKAppWizard::slotProcessExited() {
 
   QString directory = directoryline->text();
-  QString prj_str = directory + "/" + namelow + "/" + namelow + ".kdevprj";
+  QString prj_str = directory + "/" + namelow + ".kdevprj";
   project = new CProject(prj_str);
   project->readProject();
   project->setKDevPrjVersion("0.2");
@@ -781,8 +785,8 @@ void CKAppWizard::slotProcessExited() {
   project->setSGMLFile ("index.sgml");
   }
   project->setBinPROGRAM (namelow);
-  project->setLDFLAGS (" -s ");
-  project->setCXXFLAGS ("-O2 -Wall");
+  project->setLDFLAGS (" -g1 ");
+  project->setCXXFLAGS ("-O2 -g1 -Wall");
 
   if (kna->isChecked()) {
   project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
@@ -1113,10 +1117,10 @@ QString CKAppWizard::getProjectFile() {
   nametext = nametext.lower();
   directorytext = directoryline->text();
   if(QString(directoryline->text()).right(1) == "/"){
-    directorytext = directorytext + nametext + "/" + nametext + ".kdevprj";
+    directorytext = directorytext + nametext + ".kdevprj";
   }
   else{
-    directorytext = directorytext + "/" + nametext + "/" + nametext + ".kdevprj";
+    directorytext = directorytext + "/" + nametext + ".kdevprj";
   }
   delete (directoryline);
   delete (nameline);
