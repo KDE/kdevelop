@@ -64,7 +64,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("New File Wizard"), PROJECTSETTINGSPAGE );
-	_configProxy->createProjectConfigPage( i18n("New File Wizard"), GLOBALSETTINGSPAGE );
+	_configProxy->createGlobalConfigPage( i18n("New File Wizard"), GLOBALSETTINGSPAGE );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
