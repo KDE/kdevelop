@@ -30,7 +30,8 @@
 /***************************************************************************/
 
 Disassemble::Disassemble(QWidget* parent,char* name) :
-  OutputView(parent, name),
+  QObject(parent, name),
+//  OutputView(parent, name),
   active_(false),
   lower_(0),
   upper_(0),
@@ -84,7 +85,7 @@ void Disassemble::slotDisassemble(char* buf)
   if (!active_)
     return;
 
-  clear();
+  //clear();
   // Skip the first line (just header info)
   char* start = strchr(buf, '\n');
 

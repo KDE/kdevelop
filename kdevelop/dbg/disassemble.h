@@ -18,7 +18,7 @@
 #ifndef __disassemble_h__
 #define __disassemble_h__
 
-#include <outputview.h>
+//#include <outputview.h>
 
 #include <kapp.h>
 
@@ -29,7 +29,7 @@ class QMouseEvent;
 /***************************************************************************/
 /***************************************************************************/
 
-class Disassemble : public OutputView
+class Disassemble : public QObject // OutputView
 {
   Q_OBJECT
 

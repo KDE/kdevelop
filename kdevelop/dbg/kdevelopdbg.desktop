@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Gdb frontend
+Name=KdevelopDbg
+Icon=find
+ServiceTypes=KDevelop/Component
+X-KDE-Library=libkdevelopdbg
+X-KDevelop-ComponentType=OutputView
