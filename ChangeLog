@@ -1,3 +1,6 @@
+2002-10-28 F@lk Brettschneider <falk@kdevelop.org>
+	* compiles with KDE-3.0.3 again
+	
 2002-10-21 Harald Fernengel <harry@kdevelop.org>
 	* show modified flag in sdi-mode if a file has
 	  been modified

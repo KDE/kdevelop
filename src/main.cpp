@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Matt Newell", "Fileselector part", "newellm@proaxis.com");
   aboutData.addAuthor("Jakob Simon-Gaarde", "QMake projectmanager", "jsgaarde@tdcspace.dk");
   aboutData.addAuthor("Yann Hodique", "patches", "Yann.Hodique@lifl.fr");
+  aboutData.addAuthor("F@lk Brettschneider", "MDI modes, bugfixes", "falk@kdevelop.org");
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
   
