@@ -76,6 +76,15 @@ using namespace std;
     AST::Node node = CreateNode<AST>(); \
     UPDATE_POS( node, (tk), (tk)+1 );
 
+    
+// remove me
+enum
+{
+    OBJC_CLASS,
+    OBJC_PROTOCOL,
+    OBJC_ALIAS
+};
+
 struct ParserPrivateData
 {
     ParserPrivateData()
@@ -89,6 +98,7 @@ Parser::Parser( Driver* driver, Lexer* lexer )
     d = new ParserPrivateData();
 
     m_maxProblems = 5;
+    objcp = false;
 }
 
 Parser::~Parser()
@@ -463,6 +473,11 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     default:
         {
 	    // lex->setIndex( start );
+	    
+	    if( objcp && parseObjcDef(node) )
+		return true;
+	    
+	    lex->setIndex( start );
 
 	    GroupAST::Node storageSpec;
 	    parseStorageClassSpecifier( storageSpec );
@@ -3729,5 +3744,277 @@ bool Parser::parseThrowExpression( AST::Node& /*node*/ )
         return false;
 
     return true;
+}
+
+bool Parser::parseIvarDeclList( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseIvarDecls( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseIvarDecl( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseIvars( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseIvarDeclarator( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseMethoDdecl( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseUnarySelector( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseKeywordSelector( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseSelector( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseKeywordDecl( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseReceiver( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcMessageExpr( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseMessageArgs( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseKeywordExpr( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseKeywordArgList( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseKeywordArg( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseReservedWord( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseMyParms( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseMyParm( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseOptParmList( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcSelectorExpr( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseSelectorArg( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseKeywordNameList( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseKeywordName( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcEncodeExpr( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcString( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseProtocolRefs( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseIdentifierList( AST::Node & node )
+{
+    Q_UNUSED( node );
+    
+    if( lex->lookAhead(0) != Token_identifier )   
+	return false;
+    lex->nextToken();
+    
+    while( lex->lookAhead(0) == ',' ){
+	lex->nextToken();
+	ADVANCE( Token_identifier, "identifier" );
+    }
+    
+    return true;
+}
+
+bool Parser::parseIdentifierColon( AST::Node & node )
+{
+    Q_UNUSED( node );
+    
+    if( lex->lookAhead(0) == Token_identifier && lex->lookAhead(1) == ':' ){
+	lex->nextToken();
+	lex->nextToken();
+	return true;
+    } // ### else if PTYPENAME -> return true ;
+    
+    return false;
+}
+
+bool Parser::parseObjcProtocolExpr( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcOpenBracketExpr( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcCloseBracket( AST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcDef( DeclarationAST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcClassDef( DeclarationAST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcClassDecl( DeclarationAST::Node & node )
+{
+    Q_UNUSED( node );
+    
+    ADVANCE( OBJC_CLASS, "@class" );
+    
+    AST::Node idList;
+    parseIdentifierList( idList );
+    ADVANCE( ';', ";" );
+    
+    return true;
+}
+
+bool Parser::parseObjcProtocolDecl( DeclarationAST::Node & node )
+{
+    Q_UNUSED( node );
+    
+    ADVANCE( OBJC_PROTOCOL, "@protocol" );
+    
+    AST::Node idList;
+    parseIdentifierList( idList );
+    ADVANCE( ';', ";" );
+    
+    return true;
+}
+
+bool Parser::parseObjcAliasDecl( DeclarationAST::Node & node )
+{
+    Q_UNUSED( node );
+    
+    ADVANCE( OBJC_ALIAS, "@alias" );
+    
+    AST::Node idList;
+    parseIdentifierList( idList );
+    ADVANCE( ';', ";" );
+    
+    return true;
+}
+
+bool Parser::parseObjcProtocolDef( DeclarationAST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
+}
+
+bool Parser::parseObjcMethodDef( DeclarationAST::Node & node )
+{
+    Q_UNUSED( node );
+    return false;
 }
 
