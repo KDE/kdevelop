@@ -18,7 +18,7 @@
 #ifndef __disassemble_h__
 #define __disassemble_h__
 
-#include <../outputview.h>
+#include <outputview.h>
 
 #include <kapp.h>
 

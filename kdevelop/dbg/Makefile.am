@@ -1,5 +1,5 @@
 
-INCLUDES= $(all_includes)
+INCLUDES= $(all_includes) -I..
 
 noinst_LIBRARIES = libdbg.a
 
