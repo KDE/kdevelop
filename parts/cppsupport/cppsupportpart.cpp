@@ -69,15 +69,21 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
                                "this brings you to the corresponding header file.") );
     action->setEnabled(false);
     
-    m_parser = 0;
+    m_pParser = NULL;
+    m_pCompletion = NULL;
+    m_pEditIface = NULL;
+    m_pCursorIface = NULL;
+
     withcpp = cpp;
 }
 
 
 CppSupportPart::~CppSupportPart()
 {
-    if ( !m_parser ) delete m_parser;
-    if ( !m_pCompletion ) delete m_pCompletion;
+    if ( m_pParser ) delete m_pParser;
+/*    if ( m_pEditIface ) delete m_pEditIface;
+    if ( m_pCursorIface ) delete m_pCursorIface;*/
+    if ( m_pCompletion ) delete m_pCompletion;
 }
 
 
@@ -94,6 +100,11 @@ void CppSupportPart::documentActivated(KEditor::Document *doc)
     }
 
     actionCollection()->action("edit_switchheader")->setEnabled(enabled);
+
+	m_pEditIface = KEditor::EditDocumentIface::interface(doc);
+	disconnect(m_pEditIface, 0, this, 0 ); // to make sure that it is't connected twice
+	connect(m_pEditIface,SIGNAL(textChanged()),m_pCompletion,SLOT(slotTextChanged()));
+
 }
 
 
@@ -108,7 +119,7 @@ void CppSupportPart::projectOpened()
 
     // We want to parse only after all components have been
     // properly initialized
-    m_parser = new CClassParser(classStore());
+    m_pParser = new CClassParser(classStore());
     m_pCompletion = new CppCodeCompletion ( core(), classStore() );
 
     QTimer::singleShot(0, this, SLOT(initialParse()));
@@ -117,10 +128,15 @@ void CppSupportPart::projectOpened()
 
 void CppSupportPart::projectClosed()
 {
-    delete m_parser;
-    delete m_pCompletion;
-    m_parser = NULL;
+    if ( m_pParser) delete m_pParser;
+/*    if ( m_pEditIface ) delete m_pEditIface;
+    if ( m_pCursorIface ) delete m_pCursorIface;*/
+    if ( m_pCompletion ) delete m_pCompletion;
+
+    m_pParser = NULL;
     m_pCompletion = NULL;
+/*    m_pEditIface = NULL;
+    m_pCursorIface = NULL;*/
 }
 
 
@@ -166,12 +182,12 @@ void CppSupportPart::maybeParse(const QString fileName)
     if (ext == "cpp" || ext == "cc" || ext == "cxx") {
         QString headerFileName = path.left(path.length()-ext.length()) + "h";
         classStore()->removeWithReferences(headerFileName);
-        m_parser->parse(headerFileName);
+        m_pParser->parse(headerFileName);
         classStore()->removeWithReferences(fileName);
-        m_parser->parse(fileName);
+        m_pParser->parse(fileName);
     } else if (ext == "h") {
         classStore()->removeWithReferences(fileName);
-        m_parser->parse(fileName);
+        m_pParser->parse(fileName);
     }
 }
 

@@ -14,6 +14,8 @@
 #ifndef _CPPSUPPORTPART_H_
 #define _CPPSUPPORTPART_H_
 
+#include "keditor/edit_iface.h"
+#include "keditor/cursor_iface.h"
 
 #include "kdevlanguagesupport.h"
 
@@ -60,8 +62,11 @@ private:
     QString asCppCode(ParsedMethod *pm);
     QString asHeaderCode(ParsedAttribute *pa);
 
-    CClassParser *m_parser;
+    CClassParser *m_pParser;
     CppCodeCompletion* m_pCompletion;
+    KEditor::CursorDocumentIface* m_pCursorIface;
+    KEditor::EditDocumentIface* m_pEditIface;
+
     bool withcpp;
     QString popupstr;
 };

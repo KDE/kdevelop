@@ -46,8 +46,9 @@ class CppCodeCompletion : public QObject
 	protected slots:
 		void slotDocumentActivated ( KEditor::Document* pDoc );
 		void slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol );
-		void argHintHided();
-		void completionBoxHided();
+		void slotArgHintHided();
+		void slotCompletionBoxHided();
+		void slotTextChanged();
 
 	protected:
 		QString getCompletionText ( int nLine, int nCol );
@@ -75,6 +76,7 @@ class CppCodeCompletion : public QObject
 		KEditor::CursorDocumentIface* m_pCursorIface;
 		KEditor::EditDocumentIface* m_pEditIface;
 		KEditor::CodeCompletionDocumentIface* m_pCompletionIface;
+		KEditor::Document* m_pDoc;
 
 		KTempFile* m_pTmpFile;
 

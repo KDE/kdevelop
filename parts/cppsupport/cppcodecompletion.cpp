@@ -54,19 +54,36 @@ CppCodeCompletion::~CppCodeCompletion()
 	if ( m_pCompletionIface ) delete m_pCompletionIface;
 }
 
-void CppCodeCompletion::argHintHided()
+void CppCodeCompletion::slotArgHintHided()
 {
 	m_bArgHintShow = false;
 }
 
-void CppCodeCompletion::completionBoxHided()
+void CppCodeCompletion::slotCompletionBoxHided()
 {
 	kdDebug ( 9007 ) << "m_bCompletionBoxShow = false;" << endl;
 	m_bCompletionBoxShow = false;
 }
 
+void CppCodeCompletion::slotTextChanged()
+{
+	int nLine, nCol;
+	
+	m_pCursorIface->getCursorPosition ( nLine, nCol );
+
+	kdDebug ( 9007 ) << "CppCodeCompletion::slotTextChanged()@" << nLine << ":" << nCol << endl;
+	
+	m_pEditIface = KEditor::EditDocumentIface::interface ( m_pDoc );
+		
+	QString strCurLine = m_pEditIface->line ( nLine );
+	
+	kdDebug ( 9007 ) << "strCurLine => " << strCurLine << endl;
+}
+
 void CppCodeCompletion::slotDocumentActivated ( KEditor::Document* pDoc )
 {
+    m_pDoc = pDoc;
+	
 	kdDebug ( 9007 ) << "CppCodeCompletion::slotDocumentActivated" << endl;
 
 	m_pCursorIface = KEditor::CursorDocumentIface::interface ( pDoc );
@@ -76,7 +93,7 @@ void CppCodeCompletion::slotDocumentActivated ( KEditor::Document* pDoc )
 		return;
 	}
 
-	disconnect ( m_pCursorIface, 0, this, 0 ); // to make sure that it isn't connected twice or more
+	disconnect ( m_pCursorIface, 0, this, 0 ); // to make sure that it isn't connected twice
 	connect ( m_pCursorIface, SIGNAL ( cursorPositionChanged ( KEditor::Document*, int, int ) ),
 		this, SLOT ( slotCursorPositionChanged ( KEditor::Document*, int, int ) ) );
 }
@@ -100,9 +117,9 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 	}
 
 	disconnect ( m_pCompletionIface, 0, this, 0);
-	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( argHintHided() ) );
-	connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( completionBoxHided() ) );
-	connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( completionBoxHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
 
 	QString strCurLine = m_pEditIface->line ( nLine );
 
