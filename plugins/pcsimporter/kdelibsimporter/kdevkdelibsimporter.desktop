@@ -2,6 +2,7 @@
 Type=Service
 Name=KDevKDELibsImporter
 Comment=KDevelop KDELibs PCS Importer
+Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevkdelibsimporter
 X-KDevelop-PCSImporter=

@@ -2,6 +2,7 @@
 Type=Service
 Name=KDevQtImporter
 Comment=KDevelop Qt PCS Importer
+Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevqtimporter
 X-KDevelop-PCSImporter=
