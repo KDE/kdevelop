@@ -49,6 +49,9 @@ public: // Constructor and Destructor
 
 public: // Public attributes
   
+  /** The name of this node. */
+  QString name;
+
   /** The actual class data. */
   CParsedClass *theClass;
 
@@ -59,6 +62,9 @@ public: // Public attributes
   bool isInSystem;
   
 public: // Public methods
+
+  /** Set the nodename. */
+  void setName( const char *aName ) { name = aName; }
 
   /** Set the class data. */
   void setClass( CParsedClass *aClass );
