@@ -171,6 +171,8 @@ void GenericProjectWidget::initDetailsListView( QSplitter * splitter )
         this, SLOT(slotItemSelected(QListViewItem*)) );
     connect( m_detailsListView, SIGNAL(executed(QListViewItem*)),
         this, SLOT(slotItemExecuted(QListViewItem*)) );
+    connect( m_detailsListView, SIGNAL(returnPressed(QListViewItem*)),
+        this, SLOT(slotItemExecuted(QListViewItem*)) );
 
     connect( this, SIGNAL(targetSelected(BuildTargetItem*)),
         this, SLOT(showTargetDetails(BuildTargetItem*)) );
