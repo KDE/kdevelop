@@ -29,3 +29,7 @@ METASOURCES = AUTO
 #testprj_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
 #	$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
 #		$(LIB_KFILE) $(LIB_KPARTS)
+
+projectspace.cpp: addexistingfilesbase.h
+
+addexistingfilesdlg.cpp: addtreedlgbase.h
