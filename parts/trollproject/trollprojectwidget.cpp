@@ -278,9 +278,9 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
 
     KPopupMenu popup(i18n("Subproject %1").arg(item->text(0)), this);
-    int idAddSubproject = popup.insertItem(i18n("Add Subproject..."));
-    int idBuild = popup.insertItem(i18n("Build"));
-    int idQmake = popup.insertItem(i18n("Run qmake"));
+    int idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
+    int idBuild = popup.insertItem(SmallIcon("launch"),i18n("Build"));
+    int idQmake = popup.insertItem(SmallIcon("launch"),i18n("Run qmake"));
     int r = popup.exec(p);
 
     QString relpath = spitem->path.mid(projectDirectory().length());
@@ -395,8 +395,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
 
         KPopupMenu popup(title, this);
-        int idInsExistingFile = popup.insertItem(i18n("Insert existing files..."));
-        int idInsNewFile = popup.insertItem(i18n("Insert new file..."));
+        int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert existing files..."));
+        int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert new file..."));
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
         if (r == idInsExistingFile)

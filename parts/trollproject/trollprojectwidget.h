@@ -45,6 +45,7 @@ public:
 private:
     Type typ;
     void init();
+
 };
 
 
