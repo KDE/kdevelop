@@ -29,7 +29,7 @@ Type = value
 ValueType=QString
 Value= CFLAGS
 Comment= Optional CFLAGS to define in the makefile.
-Default= -O2
+Default=
 
 [MGS]
 Type=message
