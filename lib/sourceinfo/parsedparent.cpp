@@ -100,9 +100,9 @@ void ParsedParent::setAccess( PIAccess aAccess )
  *-----------------------------------------------------------------*/
 void ParsedParent::out()
 {
-    cout << "    " << _name << "(";
+    cout << "    " << name().latin1() << "(";
 
-    switch (_access)
+    switch (access())
         {
         case PIE_PUBLIC:
             cout << "public";

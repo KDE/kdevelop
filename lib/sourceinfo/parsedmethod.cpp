@@ -187,15 +187,11 @@ void ParsedMethod::out()
     }
     
     cout << ( isConst()? " ) const\n" : " )\n" );
-    sprintf( buf, "%d", declaredOnLine() );
-    cout << "      declared @ line " << buf << " - ";
-    sprintf( buf, "%d", declarationEndsOnLine() );
-    cout << buf << "\n";
+    cout << "      declared @ line " << declaredOnLine()
+         << " - " << declarationEndsOnLine() << endl;
     cout << "      defined(in " << ( isInHFile()? ".h" : ( isObjectiveC()? ".m" : ".cc" ) ) << ")";
-    sprintf( buf, "%d", definedOnLine() );
-    cout << "@ line " << buf << " - ";
-    sprintf( buf, "%d", definitionEndsOnLine() );
-    cout << buf << "\n";
+    cout << "@ line " << definedOnLine()
+         << " - " << definitionEndsOnLine() << endl;
 }
 
 

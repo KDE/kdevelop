@@ -218,7 +218,7 @@ void ParsedAttribute::out()
     QString attrString;
     
     if ( !comment().isEmpty() )
-        cout << "    " << comment() << "\n";
+        cout << "    " << comment().latin1() << "\n";
     
     cout << "    ";
     
@@ -242,11 +242,8 @@ void ParsedAttribute::out()
         }
     
     // cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
-    cout << asString();
-    buf.sprintf("%d", declaredOnLine() );
-    cout << " @ line " << buf << " - ";
-    buf.sprintf("%d", declarationEndsOnLine() );
-    cout << buf << "\n";
+    cout << asString().latin1() << " @ line " << declaredOnLine()
+         << " - " << declarationEndsOnLine() << endl;
 }
 
 

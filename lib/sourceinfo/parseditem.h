@@ -19,7 +19,6 @@
 #define _PARSEDITEM_H_
 
 #include <qstring.h>
-#include <assert.h>
 
 
 /** The type of a ParsedItem. */

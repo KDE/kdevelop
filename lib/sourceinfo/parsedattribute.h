@@ -49,12 +49,12 @@ public:
     
     /** Sets the attribute's static status */
     void setIsStatic(bool aState = true);
-    bool isStatic()
+    bool isStatic() const
         { return _isStatic; }
     
     /** Sets the attribute's const status */
     void setIsConst(bool aState = true);
-    bool isConst()
+    bool isConst() const
         { return _isConst; }
     
     /**
