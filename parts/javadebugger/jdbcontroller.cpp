@@ -110,7 +110,7 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
 {
     KConfig *config = JavaDebuggerFactory::instance()->config();
     config->setGroup("Debug");
-    ASSERT(!config->readBoolEntry("Use external debugger", false));
+    Q_ASSERT(!config->readBoolEntry("Use external debugger", false));
     
     config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
     config_forceBPSet_            = config->readBoolEntry("Allow forced BP set", true);
@@ -183,7 +183,7 @@ void JDBController::reConfig()
 {
     KConfig *config = JavaDebuggerFactory::instance()->config();
     config->setGroup("Debug");
-    ASSERT(!config->readBoolEntry("Use external debugger", false));
+    Q_ASSERT(!config->readBoolEntry("Use external debugger", false));
 
     bool old_displayStatic        = config_displayStaticMembers_;
     config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
@@ -269,7 +269,7 @@ void JDBController::executeCmd()
       }
     }
     
-    ASSERT(currentCmd_ && currentCmd_->moreToSend());
+    Q_ASSERT(currentCmd_ && currentCmd_->moreToSend());
 
     // Output command info for debugging purposes
     dbgProcess_->writeStdin(currentCmd_->cmdToSend().data(), currentCmd_->cmdLength());
@@ -729,7 +729,7 @@ void JDBController::analyzeDump(QString data)
       subItem->name = QString(exp->group(1)) + "[" + QString(exp->group(2)) + "]";
       subItem->value = exp->group(3);
       item = localData[name];
-      ASSERT((name != 0));
+      Q_ASSERT((name != 0));
 
       //cout << "->Appending to: " << name << "\n";
       //cout << "Which is at: " << (int)item << "\n";
@@ -1054,7 +1054,7 @@ void JDBController::modifyBreakpoint(Breakpoint *)
 */
 void JDBController::slotStart(const QString &/*application*/, const QString &args, const QString &sDbgShell)
 {
-    ASSERT (!dbgProcess_ && !tty_);
+    Q_ASSERT (!dbgProcess_ && !tty_);
     
     // Remove .class suffix and leading path information from appname
     // (should not be there anyway)
@@ -1299,7 +1299,7 @@ void JDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     *(jdbOutput_+jdbOutputLen_) = 0;
     
     if (char *nowAt = parse(jdbOutput_)) {
-        ASSERT(nowAt <= jdbOutput_+jdbOutputLen_+1);
+        Q_ASSERT(nowAt <= jdbOutput_+jdbOutputLen_+1);
         jdbOutputLen_ = strlen(nowAt);
         // Some bytes that weren't parsed need to be moved to the head of the buffer
         if (jdbOutputLen_)
@@ -1388,7 +1388,7 @@ void JDBController::varUpdateDone()
     if (!(frame = varTree_->findFrame(currentFrame_)))
         frame = new FrameRoot(varTree_, currentFrame_);
     
-    ASSERT(frame);
+    Q_ASSERT(frame);
     frame->setFrameName(frameStack_->getFrameName(currentFrame_));
 
     frame->setLocals(_l);

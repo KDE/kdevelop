@@ -76,7 +76,7 @@ int BreakpointWidget::findIndex(const Breakpoint *breakpoint) const
 {
     // NOTE:- The match doesn't have to be equal. Each type of BP
     // must decide on the match criteria.
-    ASSERT (breakpoint);
+    Q_ASSERT (breakpoint);
     
     for (int index=0; index<(int)count(); index++) {
         Breakpoint *BP = (Breakpoint*)(item(index));

@@ -61,7 +61,7 @@ void GDBParser::parseData(TrimmableItem *parent, char *buf,
 {
     static const char *unknown = "?";
     
-    ASSERT(parent);
+    Q_ASSERT(parent);
     if (!buf)
         return;
     
@@ -256,7 +256,7 @@ DataType GDBParser::determineType(char *buf) const
                 break;
             case ',':
                 if (*(buf-1) == '}')
-                    ASSERT(false);
+                    Q_ASSERT(false);
                 return typeArray;
             case '}':
                 if (*(buf+1) == ',' || *(buf+1) == '\n' || !*(buf+1))

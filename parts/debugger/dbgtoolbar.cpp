@@ -420,7 +420,7 @@ void DbgToolBar::slotDock()
     if (docked_)
         return;
 
-    //  ASSERT(!docker_);
+    //  Q_ASSERT(!docker_);
     hide();
 
     docker_->show();

@@ -379,14 +379,14 @@ DataType TrimmableItem::getDataType() const
 
 void TrimmableItem::setCache(const QCString&)
 {
-    ASSERT(false);
+    Q_ASSERT(false);
 }
 
 // **************************************************************************
 
 QCString TrimmableItem::getCache()
 {
-    ASSERT(false);
+    Q_ASSERT(false);
     return QCString();
 }
 
@@ -451,7 +451,7 @@ QString VarItem::varPath() const
 QString VarItem::fullName() const
 {
     QString itemName(getName());
-    ASSERT (itemName);
+    Q_ASSERT (itemName);
     QString vPath = varPath();
     if (itemName[0] == '<')
         return vPath;
@@ -654,7 +654,7 @@ void FrameRoot::addLocal(QString name, QString /*type*/, QString /*value*/)
 
 void FrameRoot::setLocals(char *locals)
 {
-    ASSERT(isActive());
+    Q_ASSERT(isActive());
     
     // "No symbol table info available" or "No locals."
     bool noLocals = (locals &&  (strncmp(locals, "No ", 3) == 0));

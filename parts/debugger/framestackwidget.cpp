@@ -104,7 +104,7 @@ void FramestackWidget::slotSelectFrame(int frameNo, int threadNo)
         viewedThread_ = findThread(threadNo);
         if (!viewedThread_)
         {
-            ASSERT(!viewedThread_);
+            Q_ASSERT(!viewedThread_);
             return;                 // fatal
         }
 

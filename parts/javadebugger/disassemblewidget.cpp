@@ -50,7 +50,7 @@ DisassembleWidget::~DisassembleWidget()
 
 bool DisassembleWidget::displayCurrent()
 {
-    ASSERT(address_ >= lower_ || address_ <= upper_);
+    Q_ASSERT(address_ >= lower_ || address_ <= upper_);
     
     int line;
     for (line=0; line < numLines(); line++) {
@@ -139,7 +139,7 @@ void DisassembleWidget::getNextDisplay()
     kdDebug(9012) << "DisasssembleWidget::getNextDisplay()" << endl;
 
     if (address_) {
-        ASSERT(currentAddress_);
+        Q_ASSERT(currentAddress_);
         
         // restrict this to a managable size - some functions are _big_
         QString endAddress;

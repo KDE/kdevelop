@@ -81,7 +81,7 @@ ParsedMethod::~ParsedMethod()
  *-----------------------------------------------------------------*/
 void ParsedMethod::addArgument( ParsedArgument *anArg )
 {
-    ASSERT( anArg != NULL );
+    Q_ASSERT( anArg != NULL );
 
     if ( anArg->type() != "void" )
         arguments.append( anArg );
@@ -229,7 +229,7 @@ void ParsedMethod::out()
  *-----------------------------------------------------------------*/
 void ParsedMethod::copy( ParsedMethod *aMethod )
 {
-    ASSERT( aMethod != NULL );
+    Q_ASSERT( aMethod != NULL );
 
     ParsedArgument *newArg;
     ParsedArgument *anArg;

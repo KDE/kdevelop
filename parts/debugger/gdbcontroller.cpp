@@ -287,7 +287,7 @@ void GDBController::executeCmd()
         currentCmd_ = cmdList_.take(0);
     }
 
-    ASSERT(currentCmd_ && currentCmd_->moreToSend());
+    Q_ASSERT(currentCmd_ && currentCmd_->moreToSend());
 
     dbgProcess_->writeStdin(currentCmd_->cmdToSend().data(), currentCmd_->cmdLength());
     setStateOn(s_waitForWrite);
@@ -428,7 +428,7 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
 // Any data that isn't "wrapped", arrives here.
 void GDBController::parseLine(char* buf)
 {
-    ASSERT(*buf != (char)BLOCK_START);
+    Q_ASSERT(*buf != (char)BLOCK_START);
 
     // Don't process blank lines
     if (!*buf)
@@ -546,7 +546,7 @@ void GDBController::parseLine(char* buf)
                 queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
             }
             else
-                ASSERT(false);
+                Q_ASSERT(false);
 
             actOnProgramPause(QString(buf));
             return;
@@ -760,7 +760,7 @@ void GDBController::parseBacktraceList(char *buf)
     if (!(varFrame = varTree_->findFrame(currentFrame_, viewedThread_)))
         varFrame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
 
-    ASSERT(varFrame);
+    Q_ASSERT(varFrame);
 
     // Make a nice descriptive name for this item.
     // This item gets all the variables attached to it.
@@ -870,7 +870,7 @@ void GDBController::parseLocals(char type, char *buf)
     if (!(frame = varTree_->findFrame(currentFrame_, viewedThread_)))
         frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
 
-    ASSERT(frame);
+    Q_ASSERT(frame);
 
     frame->setFrameName(frameStack_->getFrameName(currentFrame_, viewedThread_));
 
@@ -903,7 +903,7 @@ void GDBController::parseLocals(char type, char *buf)
 // parser for that type of data.
 char *GDBController::parseCmdBlock(char *buf)
 {
-    ASSERT(*buf == (char)BLOCK_START);
+    Q_ASSERT(*buf == (char)BLOCK_START);
 
     char *end = 0;
     switch (*(buf+1))
@@ -1006,7 +1006,7 @@ char *GDBController::parseCmdBlock(char *buf)
 char *GDBController::parseOther(char *buf)
 {
     // Could be the start of a block that isn't terminated yet
-    ASSERT (*buf != (char)BLOCK_START);
+    Q_ASSERT (*buf != (char)BLOCK_START);
 
     char *end = buf;
     while (*end)
@@ -1095,7 +1095,7 @@ void GDBController::clearBreakpoint(const QCString &BPClearCmd)
 
 void GDBController::modifyBreakpoint( const Breakpoint& BP )
 {
-    ASSERT(BP.isActionModify());
+    Q_ASSERT(BP.isActionModify());
     if (BP.dbgId())
     {
         if (BP.changedCondition())
@@ -1130,7 +1130,7 @@ void GDBController::slotStart(const QString& shell, const QString &application)
 {
     badCore_ = QString();
 
-    ASSERT (!dbgProcess_ && !tty_);
+    Q_ASSERT (!dbgProcess_ && !tty_);
 
     tty_ = new STTY(config_dbgTerminal_, "konsole");
     if (!config_dbgTerminal_)
@@ -1578,7 +1578,7 @@ void GDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
     if (!haveFrame)
         frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
 
-    ASSERT(frame);
+    Q_ASSERT(frame);
 
     // Make vartree display a pretty frame description
     frame->setFrameName(frameStack_->getFrameName(currentFrame_, viewedThread_));
@@ -1628,7 +1628,7 @@ void GDBController::slotExpandUserItem(VarItem *item, const QCString &userReques
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    ASSERT(item);
+    Q_ASSERT(item);
 
     // Bad user data!!
     if (userRequest.isEmpty())
@@ -1679,7 +1679,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 
     if (char *nowAt = parse(gdbOutput_))
     {
-        ASSERT(nowAt <= gdbOutput_+gdbOutputLen_+1);
+        Q_ASSERT(nowAt <= gdbOutput_+gdbOutputLen_+1);
         gdbOutputLen_ = strlen(nowAt);
         // Some bytes that wern't parsed need to be move to the head of the buffer
         if (gdbOutputLen_)

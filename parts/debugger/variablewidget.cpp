@@ -398,14 +398,14 @@ DataType TrimmableItem::getDataType() const
 
 void TrimmableItem::setCache(const QCString&)
 {
-    ASSERT(false);
+    Q_ASSERT(false);
 }
 
 // **************************************************************************
 
 QCString TrimmableItem::getCache()
 {
-    ASSERT(false);
+    Q_ASSERT(false);
     return QCString();
 }
 
@@ -669,7 +669,7 @@ VarFrameRoot::~VarFrameRoot()
 
 void VarFrameRoot::setLocals(char *locals)
 {
-    ASSERT(isActive());
+    Q_ASSERT(isActive());
 
     // "No symbol table info available" or "No locals."
     bool noLocals = (locals &&  (strncmp(locals, "No ", 3) == 0));
