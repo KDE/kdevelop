@@ -244,7 +244,7 @@ extern tagResult tagsFindNext (tagFile *const file, tagEntry *const entry);
 extern tagResult tagsClose (tagFile *const file);
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif
