@@ -6,9 +6,6 @@
 #include "keditor/documents_iface.h"
 
 
-namespace KEditor {
-		
-
 class DocumentsIfaceImpl : public KEditor::DocumentsEditorIface
 {
   Q_OBJECT
@@ -17,13 +14,10 @@ public:
 
   DocumentsIfaceImpl(KEditor::Editor *editor);
 
-  QList<Document> documents() const;
+  QList<KEditor::Document> documents() const;
 
 
 };
-
-
-}
 
 
 #endif

@@ -8,26 +8,23 @@
 #include "documents_iface_impl.h"
 
 
-using namespace KEditor;
-
-
-DocumentsIfaceImpl::DocumentsIfaceImpl(Editor *editor)
+DocumentsIfaceImpl::DocumentsIfaceImpl(KEditor::Editor *editor)
   : DocumentsEditorIface(editor)
 {
 }
 
 
-QList<Document> DocumentsIfaceImpl::documents() const
+QList<KEditor::Document> DocumentsIfaceImpl::documents() const
 {
-  QList<Document> retval;
-  
+  QList<KEditor::Document> retval;
+ /* 
   QListIterator<DocumentImpl> it(((KWritePart*)editor())->_documents);
   for ( ; it.current(); ++it)
 	{
       kdDebug() << "ADDED to retval: " << it.current()->shortName() << endl;
 	  retval.append(it.current());
     }
-  
+  */
   return retval; 
 }
 

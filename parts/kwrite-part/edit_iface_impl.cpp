@@ -1,10 +1,7 @@
 #include "edit_iface_impl.h"
 
 
-using namespace KEditor;
-
-
-EditIfaceImpl::EditIfaceImpl(QMultiLineEdit *edit, Editor *parent)
+EditIfaceImpl::EditIfaceImpl(QMultiLineEdit *edit, KEditor::Editor *parent)
     : EditIface(parent), m_edit(edit)
 {}
 

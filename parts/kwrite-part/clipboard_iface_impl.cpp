@@ -7,10 +7,7 @@
 #include "clipboard_iface_impl.h"
 
 
-using namespace KEditor;
-
-
-ClipboardIfaceImpl::ClipboardIfaceImpl(KWrite *edit, Document *parent, Editor *editor)
+ClipboardIfaceImpl::ClipboardIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor::Editor *editor)
   : ClipboardDocumentIface(parent, editor), m_edit(edit), _available(false)
 {
   connect(m_edit, SIGNAL(newMarkStatus()), this, SLOT(slotCopyAvailable()));

@@ -4,10 +4,7 @@
 #include "undo_iface_impl.h"
 
 
-using namespace KEditor;
-
-
-UndoIfaceImpl::UndoIfaceImpl(KWrite *edit, Document *parent, Editor *editor)
+UndoIfaceImpl::UndoIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor::Editor *editor)
   : UndoDocumentIface(parent, editor), m_edit(edit), _undo(false), _redo(false)
 {
   connect(m_edit, SIGNAL(newUndo()), this, SLOT(slotUndoStatus()));

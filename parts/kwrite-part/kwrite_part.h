@@ -28,13 +28,18 @@ public:
   virtual KEditor::Document *getDocument(const QString &filename=QString::null);
   virtual KEditor::Document *currentDocument();
 
-  QList <DocumentImpl> _documents;
+  QList<DocumentImpl> _documents;
 
 
 private slots:
 
-  void fileNameChanged(QString name);
-  void currentChanged(QWidget *widget);
+  void activePartChanged(KParts::Part *part);
+
+
+private:
+		
+  KEditor::Document *_currentDocument;
+
 
 };
 

@@ -4,10 +4,7 @@
 #include "cursor_iface_impl.h"
 
 
-using namespace KEditor;
-
-
-CursorIfaceImpl::CursorIfaceImpl(KWrite *edit, Document *parent, Editor *editor)
+CursorIfaceImpl::CursorIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor::Editor *editor)
   : CursorDocumentIface(parent, editor), m_edit(edit)
 {
 }

@@ -1,5 +1,6 @@
 #include <kinstance.h>
 #include <kparts/partmanager.h>
+#include <kdebug.h>
 
 
 #include "kwrite/kwview.h"
@@ -12,16 +13,13 @@
 #include "documents_iface_impl.h"
 
 
-using namespace KEditor;
-
-
 KWritePart::KWritePart(QObject *parent, const char *name )
-  : Editor(parent, name)
+  : KEditor::Editor(parent, name), _currentDocument(0)
 {
-  setInstance( KWritePartFactory::instance() );
+  setInstance(KWritePartFactory::instance());
 
   // create the interfaces
-  new DocumentsIfaceImpl(this);
+  (void) new DocumentsIfaceImpl(this);
 
   setXMLFile("kwriteeditor_part.rc");
 
@@ -34,18 +32,7 @@ KWritePart::~KWritePart()
 }
 
 
-void KWritePart::currentChanged(QWidget *widget)
-{
-/*
-  QListIterator<DocumentImpl> it(_documents);
-  for ( ; it.current(); ++it)
-	if (it.current()->widget() == widget)
-	  emit documentActivated(it.current());		
-*/
-}
-
-
-Document *KWritePart::getDocument(const QString &filename)
+KEditor::Document *KWritePart::getDocument(const QString &filename)
 {
   DocumentImpl *impl = 0;
 
@@ -71,8 +58,10 @@ Document *KWritePart::getDocument(const QString &filename)
 	impl->load(filename);
 	
     connect(impl, SIGNAL(fileNameChanged(QString)), this, SLOT(fileNameChanged(QString)));
+    connect(impl->manager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
 
     _documents.append(impl);
+    _currentDocument = impl;
 
     created = true;
   }
@@ -89,26 +78,22 @@ Document *KWritePart::getDocument(const QString &filename)
 }
 
 
-Document *KWritePart::currentDocument()
+void KWritePart::activePartChanged(KParts::Part *part)
 {
-/*
-  QListIterator<DocumentImpl> it(_documents);
-  for ( ; it.current(); ++it)
-    if (it.current() == it.current()->manager()->activePart())
-      return it.current();
-*/
+kdDebug() << "NEW CURRENT DOCUMENT: " << part << endl;
 
-  return 0;
+  if (part && part->inherits("KEditor::Document"))
+	_currentDocument = (KEditor::Document*)part;
+  else
+	_currentDocument = 0;
+
+  emit Editor::documentActivated(_currentDocument);
 }
 
 
-void KWritePart::fileNameChanged(QString)
+KEditor::Document *KWritePart::currentDocument()
 {
-/*
-   QListIterator<DocumentImpl> it(_documents);
-   for ( ; it.current(); ++it)
-     _stack->changeTab(it.current()->widget(), it.current()->shortName());
-*/
+  return _currentDocument;
 }
 
 

@@ -15,11 +15,8 @@
 #include "kwrite/kwview.h"
 
 
-using namespace KEditor;
-
-
-DocumentImpl::DocumentImpl(Editor *parent)
-  : Document(parent)
+DocumentImpl::DocumentImpl(KEditor::Editor *parent)
+  : KEditor::Document(parent)
 {
   setInstance( KWritePartFactory::instance() );
   
