@@ -31,11 +31,11 @@
 #include <qpushbutton.h>
 
 CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) :
-  QDialog(parent,name,this)
+  QDialog(parent,name)
 {
     resize(250,120);
     setCaption(i18n("Search for Help on..."));
-    setIcon(BarIcon("contents"));
+    setIcon(SmallIcon("contents"));
     QVBoxLayout *vl = new QVBoxLayout( this, 15 );
 
     QHBoxLayout *hl = new QHBoxLayout( 15 );

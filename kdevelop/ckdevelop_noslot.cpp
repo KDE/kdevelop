@@ -1343,7 +1343,7 @@ void CKDevelop::readOptions()
 	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
 	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
 	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
-    doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
+    doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
   }
 	
   QString filename = config->readEntry("browser_file","");

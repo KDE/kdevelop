@@ -281,30 +281,30 @@ void CTreeHandler::readIcons()
     icons[ i ] = NULL;
 
   // Load the icons
-  icons[ THFOLDER ]           = new QPixmap( BarIcon( "folder"));
-  icons[ THFOLDER_OPEN ]      = new QPixmap( BarIcon( "folder_open"));
-  icons[ THCLASS ]            = new QPixmap( BarIcon( "CVclass"));
-  icons[ THPROJECT ]          = new QPixmap( BarIcon( "kwm"));
-  icons[ THBOOK ]             = new QPixmap( BarIcon( "mini-book1"));
-  icons[ THBOOK_OPEN ]        = new QPixmap( BarIcon( "mini-book2"));
-  icons[ THDOC ]              = new QPixmap( BarIcon( "mini-doc"));
-  icons[ THSTRUCT ]           = new QPixmap( BarIcon( "CVstruct"));
-  icons[ THSCOPE ]            = new QPixmap( BarIcon( "CVnamespace"));
-  icons[ THPUBLIC_ATTR ]      = new QPixmap( BarIcon( "CVpublic_var"));
-  icons[ THPROTECTED_ATTR ]   = new QPixmap( BarIcon( "CVprotected_var"));
-  icons[ THPRIVATE_ATTR ]     = new QPixmap( BarIcon( "CVprivate_var"));
-  icons[ THPUBLIC_SLOT ]      = new QPixmap( BarIcon( "CVpublic_slot"));
-  icons[ THPROTECTED_SLOT ]   = new QPixmap( BarIcon( "CVprotected_slot"));
-  icons[ THPRIVATE_SLOT ]     = new QPixmap( BarIcon( "CVprivate_slot"));
-  icons[ THSIGNAL ]           = new QPixmap( BarIcon( "CVpublic_signal"));
-  icons[ THGLOBAL_VARIABLE ]  = new QPixmap( BarIcon( "CVglobal_var"));
-  icons[ THPUBLIC_METHOD ]    = new QPixmap( BarIcon( "CVpublic_meth"));
-  icons[ THPROTECTED_METHOD ] = new QPixmap( BarIcon( "CVprotected_meth"));
-  icons[ THPRIVATE_METHOD ]   = new QPixmap( BarIcon( "CVprivate_meth"));
-  icons[ THGLOBAL_FUNCTION ]  = new QPixmap( BarIcon( "CVglobal_meth"));
-  icons[ THC_FILE ]           = new QPixmap( BarIcon( "source"));
-  icons[ THINSTALLED_FILE ]   = new QPixmap( BarIcon( "inst_file"));
-  icons[ THDELETE ]           = new QPixmap( BarIcon( "delete"));
+  icons[ THFOLDER ]           = new QPixmap( SmallIcon( "folder"));
+  icons[ THFOLDER_OPEN ]      = new QPixmap( SmallIcon( "folder_open"));
+  icons[ THCLASS ]            = new QPixmap( SmallIcon( "CVclass"));
+  icons[ THPROJECT ]          = new QPixmap( SmallIcon( "kwm"));
+  icons[ THBOOK ]             = new QPixmap( SmallIcon( "mini-book1"));
+  icons[ THBOOK_OPEN ]        = new QPixmap( SmallIcon( "mini-book2"));
+  icons[ THDOC ]              = new QPixmap( SmallIcon( "mini-doc"));
+  icons[ THSTRUCT ]           = new QPixmap( SmallIcon( "CVstruct"));
+  icons[ THSCOPE ]            = new QPixmap( SmallIcon( "CVnamespace"));
+  icons[ THPUBLIC_ATTR ]      = new QPixmap( SmallIcon( "CVpublic_var"));
+  icons[ THPROTECTED_ATTR ]   = new QPixmap( SmallIcon( "CVprotected_var"));
+  icons[ THPRIVATE_ATTR ]     = new QPixmap( SmallIcon( "CVprivate_var"));
+  icons[ THPUBLIC_SLOT ]      = new QPixmap( SmallIcon( "CVpublic_slot"));
+  icons[ THPROTECTED_SLOT ]   = new QPixmap( SmallIcon( "CVprotected_slot"));
+  icons[ THPRIVATE_SLOT ]     = new QPixmap( SmallIcon( "CVprivate_slot"));
+  icons[ THSIGNAL ]           = new QPixmap( SmallIcon( "CVpublic_signal"));
+  icons[ THGLOBAL_VARIABLE ]  = new QPixmap( SmallIcon( "CVglobal_var"));
+  icons[ THPUBLIC_METHOD ]    = new QPixmap( SmallIcon( "CVpublic_meth"));
+  icons[ THPROTECTED_METHOD ] = new QPixmap( SmallIcon( "CVprotected_meth"));
+  icons[ THPRIVATE_METHOD ]   = new QPixmap( SmallIcon( "CVprivate_meth"));
+  icons[ THGLOBAL_FUNCTION ]  = new QPixmap( SmallIcon( "CVglobal_meth"));
+  icons[ THC_FILE ]           = new QPixmap( SmallIcon( "source"));
+  icons[ THINSTALLED_FILE ]   = new QPixmap( SmallIcon( "inst_file"));
+  icons[ THDELETE ]           = new QPixmap( SmallIcon( "delete"));
 
   iconsRead = true;
 }

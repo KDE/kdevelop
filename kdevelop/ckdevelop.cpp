@@ -793,9 +793,11 @@ void CKDevelop::slotViewTBrowserToolbar(){
 void CKDevelop::slotViewTStatusbar(){
   if(view_menu->isItemChecked(ID_VIEW_STATUSBAR)){
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
+    statusBar()->hide();
   }
   else{
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
+    statusBar()->show();
   }
 }
 
@@ -2449,7 +2451,7 @@ void CKDevelop::slotBookmarksToggle()
     
     // Recreate thepopup menu
     for (uint i = 0 ; i < doc_bookmarks_list.count(); i++){
-      doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
+      doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
     }
   }
   else
@@ -2787,8 +2789,8 @@ void CKDevelop::slotHelpAPI(){
      //MB
      if (doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
      {
-       QString api_dir =  prj->getProjectDir() + prj->getProjectName().lower() + "/";
-      QString doxconf = api_dir +  "Doxyfile";
+       QString api_dir =  prj->getProjectDir() + "/";
+      QString doxconf = api_dir +  prj->getProjectName().lower()+".doxygen";
       if(!QFileInfo(doxconf).exists())
       {
            KMessageBox::error(0,
@@ -2797,7 +2799,7 @@ void CKDevelop::slotHelpAPI(){
                              "Project->API Doc Tool->Configure doxygen"));
         return;
       }
-      api_file=api_dir + "api/html/index.html";
+      api_file=api_dir +  prj->getProjectName().lower() +"-api/html/index.html";
    }
     //MB end
     if(!QFileInfo(api_file).exists()){
@@ -2990,7 +2992,7 @@ void CKDevelop::slotStatusMsg(const char *text)
 //  statusBar()->clear();
 //    statProg->hide();
     statProg->reset();
-    statusBar()->changeItem(text, ID_STATUS_MSG );
+    m_statusLabel->setText(text );
 }
 
 
@@ -3163,11 +3165,11 @@ void CKDevelop::slotURLonURL(const QString& url )
 
   if ( url_str )
   {
-    statusBar()->changeItem(url_str,ID_STATUS_MSG);
+    m_statusLabel->setText(url_str );
   }
   else
   {
-    statusBar()->changeItem(i18n("Ready."), ID_STATUS_MSG);
+    m_statusLabel->setText(i18n("Ready.") );
   }
 }
 

@@ -588,16 +588,16 @@ void CKDevelop::initMenuBar(){
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
   file_menu = new QPopupMenu;
-  file_menu->insertItem(BarIcon("filenew"),i18n("&New..."),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
-  file_menu->insertItem(BarIcon("open"),i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
+  file_menu->insertItem(SmallIconSet("filenew"),i18n("&New..."),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
+  file_menu->insertItem(SmallIconSet("open"),i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
   file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
   file_menu->insertItem(i18n("Close All"), this, SLOT(slotFileCloseAll()), 0, ID_FILE_CLOSE_ALL);
   file_menu->insertSeparator();
-  file_menu->insertItem(BarIcon("save"),i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
+  file_menu->insertItem(SmallIconSet("save"),i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
   file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
-  file_menu->insertItem(BarIcon("save_all"),i18n("Save A&ll"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
+  file_menu->insertItem(SmallIconSet("save_all"),i18n("Save A&ll"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   file_menu->insertSeparator();
-  file_menu->insertItem(BarIcon("fileprint"),i18n("&Print..."), this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
+  file_menu->insertItem(SmallIconSet("fileprint"),i18n("&Print..."), this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("E&xit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
 
@@ -608,28 +608,28 @@ void CKDevelop::initMenuBar(){
 // Edit-menu entries
 
   edit_menu = new QPopupMenu;
-  edit_menu->insertItem(BarIcon("undo"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
-  edit_menu->insertItem(BarIcon("redo"), i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
+  edit_menu->insertItem(SmallIconSet("undo"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
+  edit_menu->insertItem(SmallIconSet("redo"), i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
   edit_menu->insertSeparator();
-  edit_menu->insertItem(BarIcon("cut"),i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
-  edit_menu->insertItem(BarIcon("copy"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
-  edit_menu->insertItem(BarIcon("paste"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
+  edit_menu->insertItem(SmallIconSet("cut"),i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
+  edit_menu->insertItem(SmallIconSet("copy"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
+  edit_menu->insertItem(SmallIconSet("paste"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
   edit_menu->insertSeparator();
-	edit_menu->insertItem(BarIcon("indent"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-	edit_menu->insertItem(BarIcon("unindent"),i18n("Uninden&t"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+	edit_menu->insertItem(SmallIconSet("indent"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
+	edit_menu->insertItem(SmallIconSet("unindent"),i18n("Uninden&t"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
   edit_menu->insertSeparator();
-	edit_menu->insertItem(BarIcon("comment"),i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
-	edit_menu->insertItem(BarIcon("uncomment"),i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
+	edit_menu->insertItem(SmallIconSet("comment"),i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
+	edit_menu->insertItem(SmallIconSet("uncomment"),i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(BarIcon("search"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
+  edit_menu->insertItem(SmallIconSet("search"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
   edit_menu->insertItem(i18n("Repeat Searc&h"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
 
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
-  edit_menu->insertItem(BarIcon("grep"),i18n("Search in &Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
+  edit_menu->insertItem(SmallIconSet("grep"),i18n("Search in &Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
   edit_menu->insertSeparator();
@@ -650,7 +650,7 @@ void CKDevelop::initMenuBar(){
   view_menu->insertItem(i18n("&Previous Error"),this,
 			SLOT(slotViewPreviousError()),0,ID_VIEW_PREVIOUS_ERROR);
   view_menu->insertSeparator();
-  view_menu->insertItem(BarIcon("newwidget"),i18n("&Dialog Editor"),this,SLOT(startDesigner()),0,ID_TOOLS_DESIGNER);
+  view_menu->insertItem(SmallIconSet("newwidget"),i18n("&Dialog Editor"),this,SLOT(startDesigner()),0,ID_TOOLS_DESIGNER);
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
@@ -664,7 +664,7 @@ void CKDevelop::initMenuBar(){
   view_menu->insertItem(i18n("&Statusbar"),this,
 			   SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
   view_menu->insertSeparator();
-  view_menu->insertItem(BarIcon("reload"),i18n("&Refresh"),this,
+  view_menu->insertItem(SmallIconSet("reload"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
 
   kdev_menubar->insertItem(i18n("&View"), view_menu);
@@ -676,7 +676,7 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(i18n("New..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
   project_menu->insertItem(i18n("Generate Project File..."), this, SLOT(slotProjectGenerate()),0,ID_PROJECT_GENERATE);
 
-  project_menu->insertItem(BarIcon("openprj"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
+  project_menu->insertItem(SmallIconSet("openprj"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
 
   recent_projects_menu = new QPopupMenu();
   connect( recent_projects_menu, SIGNAL(activated(int)), SLOT(slotProjectOpenRecent(int)) );
@@ -689,13 +689,13 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
 
-  project_menu->insertItem(BarIcon("locale"),i18n("Add new &Translation File..."), this,
+  project_menu->insertItem(SmallIconSet("locale"),i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
  		
-  project_menu->insertItem(BarIcon("file_properties"),i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
+  project_menu->insertItem(SmallIconSet("file_properties"),i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
 			
   project_menu->insertSeparator();
@@ -711,7 +711,7 @@ void CKDevelop::initMenuBar(){
   //MB end
   project_menu->insertItem(i18n("Make AP&I-Doc"), this,
 			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
-  project_menu->insertItem(BarIcon("mini-book1"), i18n("Make &User-Manual..."), this,
+  project_menu->insertItem(SmallIconSet("mini-book1"), i18n("Make &User-Manual..."), this,
 			 SLOT(slotProjectManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
   // submenu for making dists
 
@@ -736,27 +736,27 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Build-menu entries
   build_menu = new QPopupMenu;
-  build_menu->insertItem(BarIcon("compfile"),i18n("Compile &File"),
+  build_menu->insertItem(SmallIconSet("compfile"),i18n("Compile &File"),
 			 this,SLOT(slotBuildCompileFile()),0,ID_BUILD_COMPILE_FILE);
-  build_menu->insertItem(BarIcon("make_kdevelop"),i18n("&Make"),this,
+  build_menu->insertItem(SmallIconSet("make_kdevelop"),i18n("&Make"),this,
 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
 
-//   build_menu->insertItem(BarIcon("make_kdevelop"),i18n("Make &with"),this,
+//   build_menu->insertItem(SmallIconSet("make_kdevelop"),i18n("Make &with"),this,
 // 			 SLOT(slotBuildMakeWith()),0,ID_BUILD_MAKE_WITH);
 //   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE_WITH ,"MakeWith" );
 
   build_menu->insertItem(i18n("Clea&n"),this,SLOT(slotBuildMakeClean()),0,ID_BUILD_MAKECLEAN);
-  build_menu->insertItem(BarIcon("rebuild"),i18n("&Rebuild"), this,
+  build_menu->insertItem(SmallIconSet("rebuild"),i18n("&Rebuild"), this,
 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
 
   build_menu->insertItem(i18n("Dist&Clean/Rebuild All"), this,
 			 SLOT(slotBuildCleanRebuildAll()),0,ID_BUILD_CLEAN_REBUILD_ALL);
   build_menu->insertSeparator();
-  build_menu->insertItem(BarIcon("stop_proc"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
+  build_menu->insertItem(SmallIconSet("stop_proc"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
   build_menu->insertSeparator();
 
-  build_menu->insertItem(BarIcon("run"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
-  build_menu->insertItem(BarIcon("run"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
+  build_menu->insertItem(SmallIconSet("run"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
+  build_menu->insertItem(SmallIconSet("run"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
 
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
@@ -769,31 +769,31 @@ void CKDevelop::initMenuBar(){
   // Debug-menu entries
 
   QPopupMenu* debugPopup = new QPopupMenu();
-  debugPopup->insertItem(BarIcon("debugger"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
-  debugPopup->insertItem(BarIcon("debugger"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
-  debugPopup->insertItem(BarIcon("debugger"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugPopup->insertItem(BarIcon("debugger"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
+  debugPopup->insertItem(SmallIconSet("debugger"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
+  debugPopup->insertItem(SmallIconSet("debugger"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
+  debugPopup->insertItem(SmallIconSet("debugger"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
+  debugPopup->insertItem(SmallIconSet("debugger"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
   connect(debugPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
   debug_menu = new QPopupMenu;
-  debug_menu->insertItem(BarIcon("debugger"),    i18n("&Start"),           ID_DEBUG_START);  //this, SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
-  debug_menu->insertItem(BarIcon("debugger"),    i18n("Start (other)..."), debugPopup, ID_DEBUG_START_OTHER);
+  debug_menu->insertItem(SmallIconSet("debugger"),    i18n("&Start"),           ID_DEBUG_START);  //this, SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
+  debug_menu->insertItem(SmallIconSet("debugger"),    i18n("Start (other)..."), debugPopup, ID_DEBUG_START_OTHER);
   debug_menu->insertSeparator();
 
-  debug_menu->insertItem(BarIcon("dbgrun"),      i18n("Run"),              ID_DEBUG_RUN);
-  debug_menu->insertItem(BarIcon("dbgrunto"),    i18n("Run to cursor"),    ID_DEBUG_RUN_CURSOR);
-  debug_menu->insertItem(BarIcon("dbgnext"),     i18n("Step over"),        ID_DEBUG_NEXT);
-  debug_menu->insertItem(BarIcon("dbgnextinst"), i18n("Step over instr."), ID_DEBUG_NEXT_INST);
-  debug_menu->insertItem(BarIcon("dbgstep"),     i18n("Step into"),        ID_DEBUG_STEP);
-  debug_menu->insertItem(BarIcon("dbgstepinst"), i18n("Step into instr."), ID_DEBUG_STEP_INST);
-  debug_menu->insertItem(BarIcon("dbgstepout"),  i18n("Step out"),         ID_DEBUG_FINISH);
+  debug_menu->insertItem(SmallIconSet("dbgrun"),      i18n("Run"),              ID_DEBUG_RUN);
+  debug_menu->insertItem(SmallIconSet("dbgrunto"),    i18n("Run to cursor"),    ID_DEBUG_RUN_CURSOR);
+  debug_menu->insertItem(SmallIconSet("dbgnext"),     i18n("Step over"),        ID_DEBUG_NEXT);
+  debug_menu->insertItem(SmallIconSet("dbgnextinst"), i18n("Step over instr."), ID_DEBUG_NEXT_INST);
+  debug_menu->insertItem(SmallIconSet("dbgstep"),     i18n("Step into"),        ID_DEBUG_STEP);
+  debug_menu->insertItem(SmallIconSet("dbgstepinst"), i18n("Step into instr."), ID_DEBUG_STEP_INST);
+  debug_menu->insertItem(SmallIconSet("dbgstepout"),  i18n("Step out"),         ID_DEBUG_FINISH);
   debug_menu->insertSeparator();
 
-  debug_menu->insertItem(BarIcon("dbgmemview"),  i18n("Viewers"),          this, SLOT(slotDebugMemoryView()), 0, ID_DEBUG_MEMVIEW);
+  debug_menu->insertItem(SmallIconSet("dbgmemview"),  i18n("Viewers"),          this, SLOT(slotDebugMemoryView()), 0, ID_DEBUG_MEMVIEW);
   debug_menu->insertSeparator();
 
-  debug_menu->insertItem(BarIcon("dbgbreak"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
-  debug_menu->insertItem(BarIcon("stop_proc"),   i18n("Stop"),             ID_DEBUG_STOP);
+  debug_menu->insertItem(SmallIconSet("dbgbreak"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
+  debug_menu->insertItem(SmallIconSet("stop_proc"),   i18n("Stop"),             ID_DEBUG_STOP);
 
   kdev_menubar->insertItem(i18n("Debu&g"), debug_menu);
   connect(debug_menu,SIGNAL(activated(int)), SLOT(slotDebugActivator(int)));
@@ -872,23 +872,23 @@ void CKDevelop::initMenuBar(){
   QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));
 
   help_menu = new QPopupMenu();
-  help_menu->insertItem(BarIcon("back"),i18n("&Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
-  help_menu->insertItem(BarIcon("forward"),i18n("&Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
+  help_menu->insertItem(SmallIconSet("back"),i18n("&Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
+  help_menu->insertItem(SmallIconSet("forward"),i18n("&Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
   help_menu->insertSeparator();
-  help_menu->insertItem(BarIcon("lookup"),i18n("&Search Marked Text"),this,
+  help_menu->insertItem(SmallIconSet("lookup"),i18n("&Search Marked Text"),this,
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
-  help_menu->insertItem(BarIcon("contents"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
+  help_menu->insertItem(SmallIconSet("contents"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   help_menu->insertSeparator();
-  help_menu->insertItem(BarIcon("mini-book1"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-  help_menu->insertItem(BarIcon("mini-book1"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
-  help_menu->insertItem(BarIcon("mini-book1"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
-  help_menu->insertItem(BarIcon("mini-book1"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
-  help_menu->insertItem(BarIcon("mini-book1"),addendum,this,SLOT(slotHelpKDE2DevGuide()),0 ,ID_HELP_KDE2_DEVGUIDE);
-  help_menu->insertItem(BarIcon("mini-book1"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
+  help_menu->insertItem(SmallIconSet("mini-book1"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
+  help_menu->insertItem(SmallIconSet("mini-book1"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
+  help_menu->insertItem(SmallIconSet("mini-book1"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
+  help_menu->insertItem(SmallIconSet("mini-book1"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
+  help_menu->insertItem(SmallIconSet("mini-book1"),addendum,this,SLOT(slotHelpKDE2DevGuide()),0 ,ID_HELP_KDE2_DEVGUIDE);
+  help_menu->insertItem(SmallIconSet("mini-book1"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertSeparator();	
-	help_menu->insertItem(BarIcon("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
-  help_menu->insertItem(BarIcon("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
-  help_menu->insertItem(BarIcon("mail_generic"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
+	help_menu->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
+  help_menu->insertItem(SmallIconSet("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
+  help_menu->insertItem(SmallIconSet("mail_generic"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("Project &API-Doc"),this,
                         SLOT(slotHelpAPI()),0,ID_HELP_PROJECT_API);
@@ -918,7 +918,7 @@ void CKDevelop::initMenuBar(){
                                   SLOT(slotClassbrowserNewMethod()), 0, ID_CV_METHOD_NEW);
   classbrowser_popup->insertItem( i18n("Add member variable..."), this,
                                   SLOT(slotClassbrowserNewAttribute()), 0, ID_CV_ATTRIBUTE_NEW );
-  classbrowser_popup->insertItem( BarIcon("graphview"), i18n("Show graphical classview"), this,
+  classbrowser_popup->insertItem( SmallIconSet("graphview"), i18n("Show graphical classview"), this,
   																SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);
 
 
@@ -986,10 +986,10 @@ void CKDevelop::initToolBar(){
   toolBar()->insertSeparator();
   toolBar()->insertButton(BarIcon("debugger"),ID_DEBUG_START, false, i18n("Debug"));
   QPopupMenu* debugToolPopup = new QPopupMenu();
-  debugToolPopup->insertItem(BarIcon("debugger"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
-  debugToolPopup->insertItem(BarIcon("debugger"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
-  debugToolPopup->insertItem(BarIcon("debugger"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugToolPopup->insertItem(BarIcon("debugger"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
+  debugToolPopup->insertItem(SmallIconSet("debugger"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
+  debugToolPopup->insertItem(SmallIconSet("debugger"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
+  debugToolPopup->insertItem(SmallIconSet("debugger"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
+  debugToolPopup->insertItem(SmallIconSet("debugger"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
   connect(debugToolPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
 
@@ -1017,12 +1017,12 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(BarIcon("dbgstepout"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
 
   QPopupMenu* stepOverMenu = new QPopupMenu();
-  stepOverMenu->insertItem(BarIcon("dbgnextinst"),i18n("Step over instr."),this,SLOT(slotDebugStepOverIns()),0,ID_DEBUG_NEXT_INST);
+  stepOverMenu->insertItem(SmallIconSet("dbgnextinst"),i18n("Step over instr."),this,SLOT(slotDebugStepOverIns()),0,ID_DEBUG_NEXT_INST);
   connect(stepOverMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_NEXT, stepOverMenu);
 
   QPopupMenu* stepIntoMenu = new QPopupMenu();
-  stepIntoMenu->insertItem(BarIcon("dbgstepinst"),i18n("Step into instr."),this,SLOT(slotDebugStepIntoIns()),0,ID_DEBUG_STEP_INST);
+  stepIntoMenu->insertItem(SmallIconSet("dbgstepinst"),i18n("Step into instr."),this,SLOT(slotDebugStepIntoIns()),0,ID_DEBUG_STEP_INST);
   connect(stepIntoMenu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_STEP, stepIntoMenu);
 
@@ -1111,28 +1111,40 @@ void CKDevelop::initStatusBar()
 
 //  m_statusBar = new KStatusBar(this,"KDevelop_statusbar");
   statProg = new QProgressBar(statusBar(),"Progressbar");
-  statProg->setFixedWidth( 120 );             // arbitrary width
+  statProg->setFixedWidth( 100 );             // arbitrary width
   statProg->setCenterIndicator(true);
 //  statProg->setFrameStyle(QFrame::Box|QFrame::Raised);
-//  statProg->setLineWidth(1);
+  statProg->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+  statProg->setMargin( 0 );
+  statProg->setLineWidth(0);
 //  statProg->setMidLineWidth(3);
-//  statProg->setBackgroundMode( QWidget::PaletteBackground );
+  statProg->setBackgroundMode( QWidget::PaletteBackground );
 
   connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
   connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));
   connect(class_tree,SIGNAL(resetStatusbarProgress()),statProg,SLOT(reset()));
 
-  statusBar()->insertItem("",                                       ID_STATUS_MSG,      1,  true);
+  m_statusLabel = new KStatusBarLabel( "", 0, statusBar() );
+  m_statusLabel->setFixedHeight( m_statusLabel->sizeHint().height() );
+  m_statusLabel->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+  m_statusLabel->setMargin( 0 );
+  m_statusLabel->setLineWidth(0);
+
+
+  statusBar()->addWidget( m_statusLabel, 1, false );
+//  statusBar()->insertItem("   ",                                       ID_STATUS_MSG,      1,  true);
   statusBar()->insertFixedItem("     ",                             ID_STATUS_DBG,          true);
   statusBar()->addWidget(statProg,                                                      0,  true);
+  statProg->setFixedHeight( statProg->sizeHint().height() - 8 );
   statusBar()->insertFixedItem("              ",                    ID_STATUS_EMPTY_2,      true);
   statusBar()->insertFixedItem("        ",                          ID_STATUS_INS_OVR,      true);
   statusBar()->insertFixedItem("                                ",  ID_STATUS_LN_CLM,       true);
   statusBar()->insertFixedItem("                      ",            ID_STATUS_EMPTY,        true);
 
-  statusBar()->setItemAlignment(ID_STATUS_MSG, AlignLeft|AlignVCenter);
+  m_statusLabel->setAlignment(AlignLeft|AlignVCenter);
   statusBar()->setItemAlignment(ID_STATUS_DBG, AlignCenter|AlignVCenter);
   statusBar()->setItemAlignment(ID_STATUS_INS_OVR, AlignCenter|AlignVCenter);
+
 }
 
 /*--------------------------------------- CKDevelop::initConnections()

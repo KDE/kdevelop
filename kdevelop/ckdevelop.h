@@ -76,6 +76,7 @@ class BreakpointManager;
 class Breakpoint;
 class Disassemble;
 class DbgToolbar;
+class KStatusBarLabel;
 
 /** the mainclass in kdevelop
   *@author Sandy Meier
@@ -794,6 +795,8 @@ private:
   QPopupMenu* view_menu;
   QPopupMenu* bookmarks_menu;
   QPopupMenu* doc_bookmarks;
+
+  KStatusBarLabel *m_statusLabel;
 
   QPopupMenu* project_menu;
 //  QPopupMenu* workspaces_submenu;

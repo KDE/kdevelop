@@ -874,8 +874,8 @@ void CKDevelop::slotProjectAPI(){
   //MB
   if (project_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
   {
-	  QString dir = prj->getProjectDir() + prj->getProjectName().lower() + "/";
-	  QString doxconf =  dir +  "Doxyfile";
+	  QString dir = prj->getProjectDir() + "/";
+	  QString doxconf =  dir +   prj->getProjectName().lower()+".doxygen";
  		if(!QFileInfo(doxconf).exists())
    	{
  		    KMessageBox::error(0,
@@ -894,7 +894,7 @@ void CKDevelop::slotProjectAPI(){
     messages_widget->clear();
     shell_process.clearArguments();
     shell_process << QString("cd '")+ dir + "' && ";
-    shell_process << "doxygen ";
+    shell_process << "doxygen "+prj->getProjectName().lower()+".doxygen";
     next_job="fv_refresh";
     shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 	  beep=true;
@@ -982,15 +982,15 @@ void CKDevelop::slotProjectAPI(){
 
 void CKDevelop::slotConfigureDoxygen(){
 	// check for Doxyfile
-	KProcess process;
-  QString dir = prj->getProjectDir() + prj->getSubDir();
-  QString file= dir + "Doxyfile";
+	KShellProcess process;
+  QString dir =prj->getProjectDir();
+  QString file= prj->getProjectDir()+"/"+prj->getProjectName().lower()+".doxygen";
   if(!QFileInfo(file).exists())
   {
   	// create default
 		process.clearArguments();
     process << QString("cd '")+ dir + "' && ";
-    process << "doxygen -s -g Doxyfile";
+    process << "doxygen -s -g "+prj->getProjectName().lower()+".doxygen";
     process.start(KProcess::Block,KProcess::AllOutput);
  	
     // fill file with default projectname directories, etc.
@@ -1006,7 +1006,7 @@ void CKDevelop::slotConfigureDoxygen(){
     	if (s.find("#") == 0)
     		continue;
     	if (s.find("OUTPUT_DIRECTORY") == 0)
-    		vec.back() = QString("OUTPUT_DIRECTORY\t=")+dir+"api/";
+    		vec.back() = QString("OUTPUT_DIRECTORY\t=")+dir+prj->getProjectName().lower()+"-api/";
     	if (s.find("TAB_SIZE") == 0)
     		vec.back() = "TAB_SIZE\t=4";
     	if (s.find("WARN_IF_UNDOCUMENTED") == 0)
@@ -1047,7 +1047,7 @@ void CKDevelop::slotConfigureDoxygen(){
   KShellProcess	shell_process;
   shell_process.clearArguments();
   shell_process << QString("cd '")+ dir + "' && ";
-  shell_process << "doxywizard Doxyfile";
+  shell_process << "doxywizard "+prj->getProjectName().lower()+".doxygen";
   shell_process.start(KProcess::DontCare);
 }
 

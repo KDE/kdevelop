@@ -69,15 +69,15 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   KHTMLPart(parent, name)
 {
   doc_pop = new QPopupMenu();
-  doc_pop->insertItem(BarIcon("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
-  doc_pop->insertItem(BarIcon("forward"),i18n("Forward"),this,SLOT(slotURLForward()),0,ID_HELP_FORWARD);
+  doc_pop->insertItem(SmallIconSet("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
+  doc_pop->insertItem(SmallIconSet("forward"),i18n("Forward"),this,SLOT(slotURLForward()),0,ID_HELP_FORWARD);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(BarIcon("copy"),i18n("Copy"),this, SLOT(slotCopyText()),0,ID_EDIT_COPY);
+  doc_pop->insertItem(SmallIconSet("copy"),i18n("Copy"),this, SLOT(slotCopyText()),0,ID_EDIT_COPY);
   doc_pop->insertItem(i18n("Toggle Bookmark"),this, SIGNAL(signalBookmarkToggle()),0,ID_BOOKMARKS_TOGGLE);
   doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(BarIcon("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
-  doc_pop->insertItem(BarIcon("lookup"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
+  doc_pop->insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
+  doc_pop->insertItem(SmallIconSet("lookup"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
   
 //  view()->setFocusPolicy( QWidget::StrongFocus );
   connect(this, SIGNAL( popupMenu( const QString&, const QPoint & ) ),
@@ -270,16 +270,16 @@ void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
     if(text.length() > 20 ){
       text = text.left(20) + "...";
     }
-    doc_pop->changeItem(BarIcon("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
-    doc_pop->changeItem(BarIcon("lookup"),i18n("look up: ")+ text,ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
+    doc_pop->changeItem(SmallIconSet("lookup"),i18n("look up: ")+ text,ID_HELP_SEARCH_TEXT);
   }
   else
   {
     doc_pop->setItemEnabled(ID_EDIT_COPY,false);
     doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,false);
     doc_pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES,false);
-    doc_pop->changeItem(BarIcon("grep"),i18n("grep: "), ID_EDIT_SEARCH_IN_FILES);
-    doc_pop->changeItem(BarIcon("lookup"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(SmallIconSet("grep"),i18n("grep: "), ID_EDIT_SEARCH_IN_FILES);
+    doc_pop->changeItem(SmallIconSet("lookup"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
   }
   doc_pop->popup(pnt);
 }

@@ -70,7 +70,7 @@ ListViewDocItem::ListViewDocItem(KDevListViewItem *parent,
 
 void ListViewDocItem::setOpen(bool o)
 {
-    setPixmap(0, o? BarIcon("mini-doc2") : BarIcon("mini-doc"));
+    setPixmap(0, o? SmallIcon("mini-doc2") : SmallIcon("mini-doc"));
     KDevListViewItem::setOpen(o);
 }
 
@@ -100,7 +100,7 @@ ListViewBookItem::ListViewBookItem(KDevListViewItem *parent,
 
 void ListViewBookItem::setOpen(bool o)
 {
-    setPixmap(0, o? BarIcon("mini-book2") : BarIcon("mini-book1"));
+    setPixmap(0, o? SmallIcon("mini-book2") : SmallIcon("mini-book1"));
     KDevListViewItem::setOpen(o);
 }
 
@@ -129,7 +129,7 @@ ListViewFolderItem::ListViewFolderItem(KDevListView *parent, const char *text)
 
 void ListViewFolderItem::setOpen(bool o)
 {
-    setPixmap(0, o? BarIcon("folder_open") : BarIcon("folder"));
+    setPixmap(0, o? SmallIcon("folder_open") : SmallIcon("folder"));
     KDevListViewItem::setOpen(o);
 }
 
