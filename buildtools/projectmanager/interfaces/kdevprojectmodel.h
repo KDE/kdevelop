@@ -93,7 +93,7 @@ public:
 
 protected:
     ProjectModelItem(ProjectModel *model)
-        : m_projectModel(model) {}
+        : m_projectModel(model), m_dirty(false) {}
 
 public:
     virtual ~ProjectModelItem() {}
@@ -108,6 +108,12 @@ public:
     
     inline void setName(const QString &name)
     { m_name = name; }
+    
+    inline bool isDirty() const
+    { return m_dirty; }
+    
+    inline void setDirty(bool dirty)
+    { m_dirty = dirty; }
     
 //
 // attributes
@@ -130,6 +136,7 @@ public:
 private:
     ProjectModel *m_projectModel;
     QString m_name;
+    bool m_dirty;
     QMap<QString, QVariant> m_attributes;
     
     friend class ProjectModel;    

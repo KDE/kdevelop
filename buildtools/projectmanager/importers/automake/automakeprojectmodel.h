@@ -89,6 +89,9 @@ protected:
 public:
     static AutomakeFolderDom from(ProjectFolderDom dom)
     { return AutomakeFolderDom(dynamic_cast<AutomakeFolderModel*>(dom.data())); }
+    
+    QStringList subdirs() const;
+    void addSubdir(const QString &path);
 
     QMap<QString, QString> prefixes;
     

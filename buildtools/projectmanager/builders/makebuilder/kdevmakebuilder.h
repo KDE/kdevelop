@@ -31,6 +31,8 @@ public:
     KDevMakeBuilder(QObject *parent = 0, const char *name = 0);
     virtual ~KDevMakeBuilder();
     
+    virtual KDevProject *project() const;
+    
     virtual bool isExecutable(ProjectItemDom dom) const;
 
     virtual ProjectItemDom defaultExecutable() const;
@@ -41,6 +43,7 @@ public:
     virtual bool execute(ProjectItemDom dom = ProjectItemDom());
     
 private:
+    KDevProject *m_project;
     ProjectItemDom m_defaultExecutable;
 };
 

@@ -25,6 +25,7 @@
 #include <qmap.h>
 
 class KDevProjectEditor;
+class KDevProject;
 
 /**
 @author Roberto Raggi
@@ -35,6 +36,8 @@ class KDevProjectImporter: public QObject
 public:
     KDevProjectImporter(QObject *parent = 0, const char *name = 0);
     virtual ~KDevProjectImporter();
+    
+    virtual KDevProject *project() const = 0;
    
     virtual KDevProjectEditor *editor() const
     { return 0; }

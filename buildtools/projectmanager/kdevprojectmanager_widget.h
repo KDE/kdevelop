@@ -131,9 +131,11 @@ public slots:
     virtual void insertItem(ProjectItemDom dom);
     virtual void removeItem(ProjectItemDom dom);
     virtual void open(ProjectItemDom dom);
+    virtual void showProperties(ProjectItemDom dom);
 
 private slots:
     void executed(QListViewItem *item);
+    void showProperties(QListViewItem *item);
     
 private:    
     KListView *m_listView;
@@ -151,7 +153,10 @@ public:
     virtual ~ProjectOverview();
 
     virtual ProjectViewItem *createProjectItem(ProjectItemDom dom, ProjectViewItem *parent);
-    virtual void refresh();    
+    
+public slots:    
+    virtual void refresh();
+    virtual void reload();
 };
 
 class ProjectDetails: public ProjectView

@@ -21,26 +21,40 @@
 #define KDEVAUTOMAKEIMPORTER_H
 
 #include "automakeprojectmodel.h"
-#include <kdevprojectimporter.h>
+#include <kdevprojecteditor.h>
 
-class KDevAutomakeImporter: public KDevProjectImporter
+class KDevAutomakeImporter: public KDevProjectEditor
 {
     Q_OBJECT
 public:
-    typedef QMap<QString, QString> Environment;
+    typedef QMap<QString, QVariant> Environment;
     
 public:
     KDevAutomakeImporter(QObject *parent = 0, const char *name = 0, const QStringList &args = QStringList());
     virtual ~KDevAutomakeImporter();
     
+//
+// KDevProjectImporter inerface
+//
+    virtual KDevProject *project() const;
+    
     virtual ProjectItemDom import(ProjectFolderDom dom, const QString &fileName);
     virtual QString findMakefile(ProjectFolderDom dom) const;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const;
+  
+//
+// KDevProjectEditor interface
+//  
+    virtual ProjectFolderDom addFolder(ProjectFolderDom folder, const QString &name);
+    virtual ProjectTargetDom addTarget(ProjectFolderDom folder, const QString &name);
+    virtual ProjectFileDom addFile(ProjectFolderDom folder, const QString &name);
+    virtual ProjectFileDom addFile(ProjectTargetDom target, const QString &name);
     
 private:    
     static void setup(AutomakeTargetDom dom, const QString &name, const QString &prefix, const QString &primary);
     static QString nicePrimary(const QString &primary);
     static void parseMakefile(const QString &fileName, ProjectItemDom dom);
+    static void saveMakefile(const QString &fileName, ProjectItemDom dom);    
     static void modifyMakefile(const QString &fileName, const Environment &env);
     static void removeFromMakefile(const QString &fileName, const Environment &env);
     static QString canonicalize(const QString &str);
@@ -56,6 +70,7 @@ private:
     void parseSUBDIRS(ProjectItemDom item, const QString &lhs, const QString &rhs);
     
 private:
+    KDevProject *m_project;
     QStringList headers; // ### remove me!!
 };
 

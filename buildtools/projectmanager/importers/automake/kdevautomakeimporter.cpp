@@ -20,6 +20,8 @@
 #include "kdevautomakeimporter.h"
 #include "automakeprojectmodel.h"
 
+#include <kdevproject.h>
+
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -33,12 +35,71 @@
 K_EXPORT_COMPONENT_FACTORY(libkdevautomakeimporter, KGenericFactory<KDevAutomakeImporter>("kdevautomakeimporter"))
 
 KDevAutomakeImporter::KDevAutomakeImporter(QObject *parent, const char *name, const QStringList &)
-    : KDevProjectImporter(parent, name)
+    : KDevProjectEditor(parent, name)
 {
+    m_project = ::qt_cast<KDevProject*>(parent);
+    Q_ASSERT(m_project);
 }
 
 KDevAutomakeImporter::~KDevAutomakeImporter()
 {
+}
+
+ProjectFolderDom KDevAutomakeImporter::addFolder(ProjectFolderDom folder, const QString &name)
+{
+    if (AutomakeFolderDom am_folder = AutomakeFolderModel::from(folder)) {
+        AutomakeFolderDom new_folder = am_folder->projectModel()->create<AutomakeFolderModel>();
+        new_folder->setName(name);
+        am_folder->addFolder(new_folder->toFolder());
+        am_folder->setDirty(true);
+        
+        am_folder->addSubdir(new_folder->name());
+        return new_folder->toFolder();
+    }
+    
+    return ProjectFolderDom();
+}
+
+ProjectTargetDom KDevAutomakeImporter::addTarget(ProjectFolderDom folder, const QString &name)
+{
+    if (AutomakeFolderDom am_folder = AutomakeFolderModel::from(folder)) {
+        AutomakeTargetDom new_target = am_folder->projectModel()->create<AutomakeTargetModel>();
+        new_target->setName(name);
+        am_folder->addTarget(new_target->toTarget());
+        am_folder->setDirty(true);
+        
+        // ### add the target
+        
+        return new_target->toTarget();
+    }
+    
+    return ProjectTargetDom();
+}
+
+ProjectFileDom KDevAutomakeImporter::addFile(ProjectFolderDom folder, const QString &name)
+{
+    if (AutomakeFolderDom am_folder = AutomakeFolderModel::from(folder)) {
+        AutomakeFileDom new_file = am_folder->projectModel()->create<AutomakeFileModel>();
+        new_file->setName(name);
+        am_folder->addFile(new_file->toFile());
+        return new_file->toFile();
+    }
+    
+    return ProjectFileDom();
+}
+
+ProjectFileDom KDevAutomakeImporter::addFile(ProjectTargetDom target, const QString &name)
+{
+    if (AutomakeTargetDom am_target = AutomakeTargetModel::from(target)) {
+        AutomakeFileDom new_file = am_target->projectModel()->create<AutomakeFileModel>();
+        new_file->setName(name);
+        am_target->addFile(new_file->toFile());
+        
+        // ### add the file to the target 
+        return new_file->toFile();
+    }
+    
+    return ProjectFileDom();
 }
 
 QString KDevAutomakeImporter::canonicalize(const QString &str)
@@ -87,6 +148,11 @@ void KDevAutomakeImporter::parseMakefile(const QString &fileName, ProjectItemDom
     f.close();
 }
 
+void KDevAutomakeImporter::saveMakefile(const QString &fileName, ProjectItemDom dom)
+{
+    modifyMakefile(fileName, dom->attributes());
+}
+
 void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environment &env)
 {
     QFile fin(fileName);
@@ -117,11 +183,13 @@ void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environ
 
             if (it != variables.end())
             {
+                QString data = it.data().toString();
+                
                 // Skip continuation lines
                 while (!s.isEmpty() && s[ s.length() - 1 ] == '\\' && !ins.atEnd())
                     s = ins.readLine();
-                if(!it.data().stripWhiteSpace().isEmpty()) {
-                    QStringList variableList = QStringList::split(' ', it.data());
+                if(!data.stripWhiteSpace().isEmpty()) {
+                    QStringList variableList = QStringList::split(' ', data);
                     s = it.key() + " = ";
                     int l = s.length();
                     for (uint i = 0; i < variableList.count(); i++) {
@@ -153,10 +221,11 @@ void KDevAutomakeImporter::modifyMakefile(const QString &fileName, const Environ
     }
 
     // Write new variables out
-    QMap<QString, QString>::Iterator it2;
+    QMap<QString, QVariant>::Iterator it2;
     for (it2 = variables.begin(); it2 != variables.end(); ++it2){
-        if(!it2.data().stripWhiteSpace().isEmpty()) {
-        QStringList variableList = QStringList::split(' ', it2.data());
+        QString data = it2.data().toString();
+        if(!data.stripWhiteSpace().isEmpty()) {
+        QStringList variableList = QStringList::split(' ', data);
         outs << it2.key() + " =";
         int l = it2.key().length() + 2;
         for (uint i = 0; i < variableList.count(); i++) {
@@ -206,7 +275,7 @@ void KDevAutomakeImporter::removeFromMakefile(const QString &fileName, const Env
         {
             QString lhs = re.cap(1);
             QString rhs = re.cap(2);
-            QMap<QString, QString>::Iterator it;
+            QMap<QString, QVariant>::Iterator it;
 
             for (it = variables.begin(); it != variables.end(); ++it)
             {
@@ -731,6 +800,11 @@ QString KDevAutomakeImporter::nicePrimary( const QString & primary )
         return i18n( "Java" );
     
     return QString::null;
+}
+
+KDevProject *KDevAutomakeImporter::project() const
+{
+    return m_project;
 }
 
 #include "kdevautomakeimporter.moc"

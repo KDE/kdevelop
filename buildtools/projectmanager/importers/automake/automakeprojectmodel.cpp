@@ -17,3 +17,21 @@
     Boston, MA 02111-1307, USA.
 */
 #include "automakeprojectmodel.h"
+
+#include <urlutil.h>
+
+#include <qregexp.h>
+
+QStringList AutomakeFolderModel::subdirs() const
+{
+    QString s = attribute("SUBDIRS").toString();
+    return QStringList::split(QRegExp("[ \t]+"), s);
+}
+
+void AutomakeFolderModel::addSubdir(const QString &path)
+{
+    QString s = URLUtil::relativePathToFile(name(), path);
+    Q_ASSERT(!s.isEmpty());
+    QString subdirs = attribute("SUBDIRS").toString() + " " + s;
+    setAttribute("SUBDIRS", subdirs.stripWhiteSpace());
+}

@@ -22,11 +22,15 @@
 #include <kdevcore.h>
 #include <kdevpartcontroller.h>
 
+#include <klocale.h>
+#include <kaction.h>
+#include <kdialogbase.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kurl.h>
 
+#include <qlayout.h>
 #include <qfileinfo.h>
 #include <qframe.h>
 #include <qheader.h>
@@ -316,18 +320,22 @@ void ProjectViewItem::setOpen(bool opened)
 }
 
 // ---------------------------------------------------------------------------------
-ProjectOverview::ProjectOverview(KDevProjectManagerWidget *parent, QWidget *parentWidget)
-    : ProjectView(parent, parentWidget)
+ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *parentWidget)
+    : ProjectView(manager, parentWidget)
 {
-#if 0 // ###
+    KAction *m_actionReload = new KAction(i18n("Reload"), SmallIcon("reload"), 0, this, SLOT(reload()),
+        actionCollection(), "project_reload");
+    
     if (KToolBar *tb = toolBar()) {
+        m_actionReload->plug(tb);
+#if 0 // ###
         tb->insertButton(SmallIcon("folder_new"), -1, true);
         tb->insertButton(SmallIcon("targetnew_kdevelop"), -1, true);
         tb->insertButton(SmallIcon("window_new"), -1, true);
         tb->insertButton(SmallIcon("launch"), -1, true);
         tb->insertButton(SmallIcon("configure"), -1, true);
-    }
 #endif
+    }
     
     connect(part(), SIGNAL(refresh()),
         this, SLOT(refresh()));
@@ -353,6 +361,12 @@ ProjectViewItem *ProjectOverview::createProjectItem(ProjectItemDom dom, ProjectV
     }
         
     return item;
+}
+
+void ProjectOverview::reload()
+{
+    kdDebug(9000) << "ProjectOverview::reload()" << endl;
+    part()->import(KDevProjectManagerPart::ForceRefresh);
 }
 
 void ProjectOverview::refresh()
@@ -433,6 +447,19 @@ void ProjectView::open(ProjectItemDom dom)
     
     if (ProjectFileDom file = dom->toFile()) {
         part()->partController()->editDocument(KURL(file->name()));
+    }
+}
+
+void ProjectView::showProperties(ProjectItemDom dom)
+{
+    Q_ASSERT(dom);
+    // ### implement me ;)
+}
+
+void ProjectView::showProperties(QListViewItem *item)
+{
+    if (ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item)) {
+        showProperties(projectItem->dom());
     }
 }
 

@@ -1,14 +1,24 @@
 
 #include "kdevmakebuilder.h"
+
+#include <kdevproject.h>
+
 #include <kdebug.h>
 
 KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const char *name)
     : KDevProjectBuilder(parent, name)
 {
+    m_project = ::qt_cast<KDevProject*>(parent);
+    Q_ASSERT(m_project);
 }
 
 KDevMakeBuilder::~KDevMakeBuilder()
 {
+}
+
+KDevProject *KDevMakeBuilder::project() const
+{
+    return m_project;
 }
 
 bool KDevMakeBuilder::isExecutable(ProjectItemDom dom) const

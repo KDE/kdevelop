@@ -73,6 +73,8 @@ public:
     virtual void addFile(const QString &fileName);
     virtual void removeFiles (const QStringList &fileList);
     virtual void removeFile(const QString &fileName);
+
+    void import(RefreshPolicy policy = Refresh);
     
 signals:    
     void refresh();
@@ -83,7 +85,6 @@ private slots:
     void fileDirty(const QString &fileName);
     void fileCreated(const QString &fileName);
     void fileDeleted(const QString &fileName);
-    void import(RefreshPolicy policy = Refresh);
     
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);

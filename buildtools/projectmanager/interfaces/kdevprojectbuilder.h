@@ -23,6 +23,8 @@
 
 #include <qobject.h>
 
+class KDevProject;
+
 /**
 @author Roberto Raggi
 */
@@ -32,6 +34,8 @@ class KDevProjectBuilder: public QObject
 public:
     KDevProjectBuilder(QObject *parent = 0, const char *name = 0);
     virtual ~KDevProjectBuilder();
+    
+    virtual KDevProject *project() const = 0;
     
     virtual bool isExecutable(ProjectItemDom dom) const = 0;
 

@@ -260,9 +260,8 @@ void KDevProjectManagerPart::removeFiles(const QStringList &fileList)
     // ### block the signals.. i really don't want to add the method ::addFiles() to the KDevProjectEditor    
     if (KDevProjectEditor *editor = defaultImporter()->editor()) {
         for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it) {
-            // ### i'm not 100% sure to use the workspace as default folder
-            bool removed = editor->removeFile(*it);
-            Q_UNUSED(removed); // ### check the result
+            // ### implement me
+            Q_UNUSED(editor);
         }
     }
 }
