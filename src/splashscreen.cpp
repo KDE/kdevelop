@@ -8,7 +8,7 @@
 #include <kstddirs.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
-
+#include <kdeversion.h>
 
 #include "splashscreen.h"
 #include "splashscreen.moc"
@@ -35,16 +35,15 @@ SplashScreen::SplashScreen()
 
   showMessage(i18n("Starting core application"));
 
-  // m_splash->resize(m_splash->sizeHint());
-
+#if (KDE_IS_VERSION(3,1,90))
   QRect rect = KGlobalSettings::splashScreenDesktopGeometry();
+#else
+  QRect rect = QApplication::desktop()->screenGeometry(
+    QApplication::desktop()->screenNumber(QPoint(0,0)));
+#endif
   m_splash->move(rect.x() + (rect.width() - m_splash->sizeHint().width()) / 2,
      rect.y() + (rect.height() - m_splash->sizeHint().height()) / 2);
   m_splash->setFixedSize(m_splash->sizeHint());
-
-//  m_splash->setGeometry(QApplication::desktop()->width()/2-m_splash->width()/2,
-//              QApplication::desktop()->height()/2-m_splash->height()/2,
-//              m_splash->width(), m_splash->height());
 
   m_splash->show();
 }
