@@ -24,7 +24,8 @@
 #include <qradiobutton.h>
 #include <qtextstream.h>
 #include <qtooltip.h>
-#include <qvbox.h>
+#include <qlistview.h>
+#include <qheader.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
@@ -34,11 +35,14 @@
 #include <kprocess.h>
 #include <kstddirs.h>
 #include <ktempfile.h>
+#include <qtextview.h>
+#include <kiconloader.h>
+#include <kfiledialog.h>
 
 #include "kdevmakefrontend.h"
 #include "appwizardpart.h"
 #include "appwizarddlg.h"
-
+#include "filepropspage.h"
 
 static void guessAuthorAndEmail(QString *author, QString *email)
 {
@@ -58,87 +62,105 @@ static void guessAuthorAndEmail(QString *author, QString *email)
 
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
-    : QWizard(parent, name)
+    : AppWizardDialogBase(parent, name)
 {
-    firstpage = new QVBox(this);
-    firstpage->setMargin(10);
-    firstpage->setSpacing(4);
-    
-    QButtonGroup *templatebox = new QButtonGroup(1, Horizontal, i18n("Templates"), firstpage);
-    firstpage->setStretchFactor(templatebox, 1);
-
-    KGlobal::dirs()->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "gideon/templates/");
-    templateNames = KGlobal::dirs()->findAllResources("apptemplates", QString::null, false, true);
-    kdDebug(9010) << "Templates: " << endl;
-    
-    QStringList::Iterator it;
-    for (it = templateNames.begin(); it != templateNames.end(); ++it) {
-        kdDebug(9010) << (*it) << endl;
-        KConfig config(KGlobal::dirs()->findResource("apptemplates", *it));
-        config.setGroup("General");
-        QString name = config.readEntry("Name");
-        QString comment = config.readEntry("Comment");
-        QRadioButton *button = new QRadioButton(name, templatebox);
-        templateButtons.append(button);
-        QToolTip::add(button, QString("<qt>") + comment + "</qt>");
-        if (it == templateNames.begin()) {
-            button->setChecked(true);
-            button->setFocus();
-        }
+  templates_listview->header()->hide();
+  m_pAppsInfo = new QList<ApplicationInfo>();
+  m_pCategoryMap = new QDict<QListViewItem>();
+  KGlobal::dirs()->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "gideon/templates/");
+  m_templateNames = KGlobal::dirs()->findAllResources("apptemplates", QString::null, false, true);
+  kdDebug(9010) << "Templates: " << endl;
+  QString category;
+  QStringList categories;
+  QStringList::Iterator it;
+  for (it = m_templateNames.begin(); it != m_templateNames.end(); ++it) {
+    kdDebug(9010) << (*it) << endl;
+    ApplicationInfo* pInfo = new ApplicationInfo();
+    KConfig config(KGlobal::dirs()->findResource("apptemplates", *it));
+    config.setGroup("General");
+    pInfo->templateName = (*it);
+    pInfo->name = config.readEntry("Name");
+    pInfo->comment = config.readEntry("Comment");
+    category = config.readEntry("Category");
+    // format category to a unique status
+    if(category.right(1) == "/"){ 
+      category.remove(category.length()-1,1); // remove /
     }
-
-    QGrid *firstpagegrid = new QGrid(2, firstpage);
-    firstpagegrid->setSpacing(4);
-    firstpage->setStretchFactor(firstpagegrid, 2);
-
-    QLabel *appname_label = new QLabel(i18n("Application &name:"), firstpagegrid);
-    appname_edit = new QLineEdit(firstpagegrid);
-    appname_label->setBuddy(appname_edit);
+    if(category.left(1) != "/"){ 
+      category.prepend("/"); // prepend /
+    }
+    
+    categories.append(category);
+    pInfo->category = category;
+    m_pAppsInfo->append(pInfo);
+  }
+  categories.sort();
+  for (it = categories.begin(); it != categories.end(); ++it) {
+    insertCategoryIntoTreeView(*it);
+  }
+  ApplicationInfo* pInfo=0;
+  QListViewItem* pItem=0;
+  for(pInfo=m_pAppsInfo->first();pInfo!=0;pInfo=m_pAppsInfo->next()){
+    pItem = m_pCategoryMap->find(pInfo->category);
+    if(pItem !=0){
+      pItem = new QListViewItem(pItem,pInfo->name);
+      //      pItem->setPixmap(0, SmallIcon("resource"));
+      pInfo->pItem = pItem;
+    }
+    else{
+      kdDebug(9010) << "Error can't find category in categoryMap: " << pInfo->category << endl;
+    }
+  }
+  
+  
+  QString author, email;
+  guessAuthorAndEmail(&author, &email);
+  author_edit->setText(author);
+  email_edit->setText(email);
+  dest_edit->setText(QDir::homeDirPath());
+  filetemplate_edit->setFont(KGlobalSettings::fixedFont());
+  QFontMetrics fm(filetemplate_edit->fontMetrics());
+  filetemplate_edit->setMinimumSize(fm.width("X")*81, fm.lineSpacing()*22);
+    
+    /*    //add a new page (fileprops)
+	  QString projectname = "Test";
+    FilePropsPage* m_sdi_fileprops_page = new FilePropsPage(this,"fileprops");
+    QList<ClassFileProp>* props_temp = new QList<ClassFileProp>;
+    ClassFileProp* prop = new ClassFileProp();
+    prop->m_classname = projectname + "App";
+    prop->m_headerfile = projectname.lower() + "app.h";
+    prop->m_implfile = projectname.lower() + "app.cpp";
+    prop->m_baseclass = "KMainWindow";
+    prop->m_description = "The base class for the application window. It sets up the main window and reads the config file as well as providing a menubar, toolbar and statusbar. An instance of the View creates your center view, which is connected to the window's Doc object.";
+    prop->m_change_baseclass = false;
+    prop->m_key = "App";
+    props_temp->append(prop);
+    
+    prop = new ClassFileProp();
+    prop->m_classname = projectname + "View";
+    prop->m_headerfile = projectname.lower() + "view.h";
+    prop->m_implfile = projectname.lower() + "view.cpp";
+    prop->m_baseclass = "QWidget";
+    prop->m_description = "The View class provides the view widget for the App instance. The View instance inherits QWidget as a base class and represents the view object of a KMainWindow. As View is part of the document-view model, it needs a reference to the document object connected with it by the App class to manipulate and display the document structure provided by the Doc class.";
+    prop->m_change_baseclass = true;
+    prop->m_key = "View";
+    props_temp->append(prop);
+    
+    prop = new ClassFileProp();
+    prop->m_classname = projectname + "Doc";
+    prop->m_headerfile = projectname.lower() + "doc.h";
+    prop->m_implfile = projectname.lower() + "doc.cpp";
+    prop->m_baseclass = "QObject";
+    prop->m_description = "The Doc class provides a document object that can be used in conjunction with the classes App and View to create a document-view model for standard KDE applications based on KApplication and KMainWindow. Doc contains the methods for serialization of the document data from and to files";
+    prop->m_change_baseclass = true;
+    prop->m_key = "Doc";
+    props_temp->append(prop);
+    
+    m_sdi_fileprops_page->setClassFileProps(*props_temp);
+    */
     
 
-    QLabel *dest_label = new QLabel(i18n("&Location:"), firstpagegrid);
-    dest_edit = new QLineEdit(firstpagegrid);
-    dest_label->setBuddy(dest_edit);
-
-    QString author, email;
-    guessAuthorAndEmail(&author, &email);
-    
-    QLabel *author_label = new QLabel(i18n("&Author:"), firstpagegrid);
-    author_edit = new QLineEdit(firstpagegrid);
-    author_edit->setText(author);
-    author_label->setBuddy(author_edit);
-    
-    QLabel *email_label = new QLabel(i18n("&Email:"), firstpagegrid);
-    email_edit = new QLineEdit(firstpagegrid);
-    email_edit->setText(email);
-    email_label->setBuddy(email_edit);
-    
-    QLabel *version_label = new QLabel(i18n("&Version:"), firstpagegrid);
-    version_edit = new QLineEdit(firstpagegrid);
-    version_edit->setText("0.1");
-    version_label->setBuddy(version_edit);
-    
-    QLabel *license_label = new QLabel(i18n("L&icense:"), firstpagegrid);
-    license_combo = new QComboBox(false, firstpagegrid);
-    license_combo->insertItem("BSD");
-    license_combo->insertItem("QPL");
-    license_combo->insertItem("GPL");
-    license_combo->insertItem("LGPL");
-    license_combo->insertItem(i18n("Custom"));
-    license_label->setBuddy(license_combo);
-    
-    secondpage = new QVBox(this);
-    secondpage->setMargin(10);
-    secondpage->setSpacing(4);
-    
-    (void) new QLabel(i18n("File template"), secondpage);
-    filetemplate_edit = new QMultiLineEdit(secondpage);
-    filetemplate_edit->setFont(KGlobalSettings::fixedFont());
-    QFontMetrics fm(filetemplate_edit->fontMetrics());
-    filetemplate_edit->setMinimumSize(fm.width("X")*81, fm.lineSpacing()*22);
-
-    addPage(firstpage, i18n("General"));
-    addPage(secondpage, i18n("File headers"));
+    //    addPage(m_sdi_fileprops_page,"Class/File Properties");
     helpButton()->hide();
 
     connect( appname_edit, SIGNAL(textChanged(const QString&)),
@@ -156,8 +178,6 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     tempFile = 0;
     m_part = part;
 }
-
-
 AppWizardDialog::~AppWizardDialog()
 {
     delete tempFile;
@@ -170,7 +190,7 @@ void AppWizardDialog::textChanged()
         || dest_edit->text().isEmpty()
         || author_edit->text().isEmpty()
         || version_edit->text().isEmpty();
-    setFinishEnabled(secondpage, !invalid);
+    setFinishEnabled(fileHeadersPage, !invalid);
 }
 
 
@@ -192,6 +212,13 @@ void AppWizardDialog::licenseChanged()
         {
         case 0:
             str +=
+                " *   This program is free software; you can redistribute it and/or modify  *\n"
+                " *   it under the terms of the GNU General Public License as published by  *\n"
+                " *   the Free Software Foundation; either version 2 of the License, or     *\n"
+                " *   (at your option) any later version.                                   *\n";
+            break;
+        case 1:
+            str +=
                 " *   Permission is hereby granted, free of charge, to any person obtaining *\n"
                 " *   a copy of this software and associated documentation files (the       *\n"
                 " *   \"Software\"), to deal in the Software without restriction, including   *\n"
@@ -211,7 +238,7 @@ void AppWizardDialog::licenseChanged()
                 " *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR *\n"
                 " *   OTHER DEALINGS IN THE SOFTWARE.                                       *\n";
             break;
-        case 1:
+        case 2:
             str +=
                 " *   This program may be distributed under the terms of the Q Public       *\n"
                 " *   License as defined by Trolltech AS of Norway and appearing in the     *\n"
@@ -220,13 +247,6 @@ void AppWizardDialog::licenseChanged()
                 " *   This program is distributed in the hope that it will be useful,       *\n"
                 " *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *\n"
                 " *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *\n";
-            break;
-        case 2:
-            str +=
-                " *   This program is free software; you can redistribute it and/or modify  *\n"
-                " *   it under the terms of the GNU General Public License as published by  *\n"
-                " *   the Free Software Foundation; either version 2 of the License, or     *\n"
-                " *   (at your option) any later version.                                   *\n";
             break;
         case 3:
             str +=
@@ -248,51 +268,46 @@ void AppWizardDialog::accept()
     if (fi.exists()) {
         KMessageBox::sorry(this, i18n("The directory you have chosen as location for\n"
                                       "the project already exists."));
-        showPage(firstpage);
+	showPage(generalPage);
         dest_edit->setFocus();
         return;
     }
 
     if (!fi.dir().exists()) {
-        KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist."));
-        showPage(firstpage);
-        dest_edit->setFocus();
-        return;
+      KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist."));
+      showPage(generalPage);
+      dest_edit->setFocus();
+      return;
     }
 
     QString appname = appname_edit->text();
     for (uint i=0; i < appname.length(); ++i)
         if (!appname[i].isLetterOrNumber()) {
-            KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers."));
-            showPage(firstpage);
+	  KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers,\n"
+					"as it will be used as toplevel directory name."));
+	  showPage(generalPage);
             appname_edit->setFocus();
             return;
         }
-
+    
     // Do something smarter here...
     if (m_part->makeFrontend()->isRunning()) {
         KMessageBox::sorry(0, i18n("There is currently a job running."));
         return;
     }
 
-    QString source, script;
-    for (uint i=0; i < templateButtons.count(); ++i) {
-        // Argl
-        QList<QRadioButton> *list = const_cast< QList<QRadioButton>* >(&templateButtons);
-        if (list->at(i)->isChecked()) {
-            QFileInfo fi(templateNames[i]);
-            QDir dir(fi.dir());
-            dir.cdUp();
-            source = dir.absPath();
-            script = dir.filePath("template-" + fi.fileName() + "/script");
-        }
-    }
-    
-    QString license =
+      QString source, script;
+      QFileInfo finfo(m_pCurrentAppInfo->templateName);
+      QDir dir(finfo.dir());
+      dir.cdUp();
+      source = dir.absPath();
+      script = dir.filePath("template-" + finfo.fileName() + "/script");
+      
+      QString license =
         (license_combo->currentItem()<4)? license_combo->currentText() : QString("Custom");
-    
-    QString licensefile;
-    switch (license_combo->currentItem())
+      
+      QString licensefile;
+      switch (license_combo->currentItem())
         {
         case 0: licensefile = "LICENSE.BSD"; break;
         case 1: licensefile = "LICENSE.QPL"; break;
@@ -338,4 +353,50 @@ void AppWizardDialog::accept()
 
     QWizard::accept();
 }
+
+void AppWizardDialog::insertCategoryIntoTreeView(QString completeCategoryPath){
+  kdDebug(9010) << "TemplateCategory: " << completeCategoryPath << endl;
+  QStringList categories = QStringList::split("/",completeCategoryPath);
+  QStringList::Iterator it;
+  QString category ="";
+  QListViewItem* pItem=0;
+  QListViewItem* pParentItem=0;
+  for( it = categories.begin(); it != categories.end(); ++it ){
+    category = category + "/"+ *it;
+    pItem = m_pCategoryMap->find(category);
+    if(pItem == 0){ // not found, create it
+      if(pParentItem==0){
+	pParentItem = new QListViewItem(templates_listview,*it);
+      }
+      else{
+	pParentItem = new QListViewItem(pParentItem,*it);
+      }
+      pParentItem->setPixmap(0, SmallIcon("folder"));
+      pParentItem->setOpen(true);
+      kdDebug(9010) << "Category: " << category << endl;
+      m_pCategoryMap->insert(category,pParentItem);
+    }
+    else{
+      pParentItem = pItem;
+    }
+  }
+}
+
+void AppWizardDialog::templatesTreeViewClicked(QListViewItem* pItem){
+  ApplicationInfo* pInfo=0;
+  for(pInfo=m_pAppsInfo->first();pInfo!=0;pInfo=m_pAppsInfo->next()){
+    if(pInfo->pItem == pItem){
+      desc_textview->setText(pInfo->comment);
+      m_pCurrentAppInfo = pInfo;
+    }
+  }
+}
+void AppWizardDialog::destButtonClicked(){
+  QString dir = KFileDialog::getExistingDirectory ( dest_edit->text(),this,
+						    "Project Location" );
+  if(!dir.isEmpty()){
+    dest_edit->setText(dir);
+  }
+}
+
 #include "appwizarddlg.moc"

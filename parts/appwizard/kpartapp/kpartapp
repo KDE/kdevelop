@@ -1,4 +1,6 @@
 # KDE Config File
 [General]
-Name=A KParts based application framework
+Name=Application framework (KParts)
+Category=C++/KDE
 Comment=This generates a complex KDE application with a KParts shell and a KPart component.
+

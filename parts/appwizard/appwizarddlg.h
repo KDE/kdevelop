@@ -13,25 +13,34 @@
 #define _APPWIZARDDIALOG_H_
 
 class AppWizardPart;
-class QComboBox;
-class QLineEdit;
 class QMultiLineEdit;
 class QRadioButton;
-class QVBox;
 class KTempFile;
 
 #include <qlist.h>
-#include <qwizard.h>
+#include <qdict.h>
+#include <qlistview.h>
 
+#include "appwizarddlgbase.h"
 
-class AppWizardDialog : public QWizard
+class ApplicationInfo {
+public:
+  QString templateName;
+  QString name;
+  QString comment;
+  QString category;
+  QListViewItem* pItem; // item pointer to the listview
+};
+
+class AppWizardDialog : public AppWizardDialogBase
 {
     Q_OBJECT
 
 public:
     AppWizardDialog( AppWizardPart *part, QWidget *parent=0, const char *name=0 );
     ~AppWizardDialog();
-
+    virtual void templatesTreeViewClicked(QListViewItem*);
+    virtual void destButtonClicked();
 protected:
     virtual void accept();
 
@@ -40,17 +49,15 @@ private slots:
     void licenseChanged();
     
 private:
-    QStringList templateNames;
+    void insertIntoTreeView(ApplicationInfo* pInfo);
+    void insertCategoryIntoTreeView(QString completeCategoryPath);
+    QStringList m_templateNames;
     KTempFile *tempFile;
-    QList<QRadioButton> templateButtons;
-
-    QVBox *firstpage, *secondpage;
-    QLineEdit *appname_edit, *dest_edit;
-    QLineEdit *author_edit, *email_edit, *version_edit;
-    QComboBox *license_combo;
-    QMultiLineEdit *filetemplate_edit;
+    QList<ApplicationInfo>* m_pAppsInfo;
+    QDict<QListViewItem>* m_pCategoryMap; //store the category name and the pointer in the treeview
 
     AppWizardPart *m_part;
+    ApplicationInfo* m_pCurrentAppInfo;
 };
 
 #endif

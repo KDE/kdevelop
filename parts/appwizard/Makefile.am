@@ -10,7 +10,10 @@ libkdevappwizard_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevappwizard_la_SOURCES = appwizardfactory.cpp \
 			      appwizardpart.cpp \
-			      appwizarddlg.cpp
+			      appwizarddlg.cpp \
+				filepropspagebase.ui \
+				filepropspage.cpp \
+				appwizarddlgbase.ui
 
 METASOURCES = AUTO
 

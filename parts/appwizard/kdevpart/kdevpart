@@ -1,4 +1,5 @@
 # KDE Config File
 [General]
-Name=A Plugin for KDevelop
+Name=General plugin
+Category=C++/KDevelop/
 Comment=This generates a plugin for KDevelop

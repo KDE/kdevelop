@@ -1,3 +1,7 @@
+2001-04-29  Sandy Meier  <smeier@kdevelop.org>
+	* some changes in appwizard gui (qtdesigner based),
+	templates can have a category property now
+
 2001-04-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Implemented a generic project part for scripting languages. 
