@@ -250,7 +250,7 @@ void CKDevelop::slotFileCloseAll()
       // create the save project messagebox
 
       // what to do
-      if(result==KMessageBox::Yes) // Yes- only save the actual file
+      if(result==KMessageBox::Yes) // Yes- only save the current file
       {
         // save file as if Untitled and close file
         if(isUntitled(actual_info->filename))
@@ -4094,9 +4094,9 @@ void CKDevelop::statusCallback(int id_){
   {
     ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
     ON_STATUS_MSG(ID_FILE_OPEN,                             i18n("Opens an existing file"))
-    ON_STATUS_MSG(ID_FILE_CLOSE,                            i18n("Closes the actual file"))
+    ON_STATUS_MSG(ID_FILE_CLOSE,                            i18n("Closes the current file"))
 
-    ON_STATUS_MSG(ID_FILE_SAVE,                             i18n("Save the actual document"))
+    ON_STATUS_MSG(ID_FILE_SAVE,                             i18n("Save the current document"))
     ON_STATUS_MSG(ID_FILE_SAVE_AS,                          i18n("Save the document as..."))
     ON_STATUS_MSG(ID_FILE_SAVE_ALL,                         i18n("Save all changed files"))
 
@@ -4111,7 +4111,7 @@ void CKDevelop::statusCallback(int id_){
 
     ON_STATUS_MSG(ID_EDIT_CUT,                              i18n("Cuts the selected section and puts it to the clipboard"))
     ON_STATUS_MSG(ID_EDIT_COPY,                             i18n("Copys the selected section to the clipboard"))
-    ON_STATUS_MSG(ID_EDIT_PASTE,                            i18n("Pastes the clipboard contents to actual position"))
+    ON_STATUS_MSG(ID_EDIT_PASTE,                            i18n("Pastes the clipboard contents to current position"))
 
     ON_STATUS_MSG(ID_EDIT_INSERT_FILE,                      i18n("Inserts a file at the current position"))
 
