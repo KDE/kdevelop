@@ -1,0 +1,11 @@
+EXTRA_DIST =index.sgml logotp3.png \
+            index.html
+
+install-data-local:
+	$(mkinstalldirs) $(kde_htmldir)/zh_CN.GB2312/kdevelop/welcome
+	$(INSTALL_DATA) logotp3.png $(kde_htmldir)/zh_CN.GB2312/kdevelop/welcome/logotp3.png
+	$(INSTALL_DATA) index.html $(kde_htmldir)/zh_CN.GB2312/kdevelop/welcome/index.html
+
+uninstall-local:
+	-rm -f $(kde_htmldir)/zh_CN.GB2312/kdevelop/welcome/logotp3.png
+	-rm -f $(kde_htmldir)/zh_CN.GB2312/kdevelop/welcome/index.html
