@@ -156,7 +156,7 @@ void CKDevelop::slotAddExistingFiles(){
     copy = false;
     progress.setProgress( i );
     if (!QFile::exists(file)) {
-        KMessageBox::sorry(this, i18n("File %1does not exist!").arg(file));
+        KMessageBox::sorry(this, i18n("File %1 does not exist!").arg(file));
         continue;
     }
     file_info.setFile(file);
