@@ -88,6 +88,10 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     m_prevColumn = -1;
     m_sequenceLength = 0;
 
+    KConfig* config = AbbrevFactory::instance()->config();
+    KConfigGroupSaver group( config, "General" );
+    m_autoWordCompletionEnabled = config->readBoolEntry( "AutoWordCompletion", true );
+	
     updateActions();
 }
 
@@ -95,6 +99,39 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
 AbbrevPart::~AbbrevPart()
 {
     save();
+}
+
+bool AbbrevPart::autoWordCompletionEnabled() const
+{
+    return m_autoWordCompletionEnabled;
+}
+
+void AbbrevPart::setAutoWordCompletionEnabled( bool enabled )
+{
+    if( enabled == m_autoWordCompletionEnabled )
+	return;
+    
+    KConfig* config = AbbrevFactory::instance()->config();
+    KConfigGroupSaver group( config, "General" );
+
+    m_autoWordCompletionEnabled = enabled;
+    config->writeEntry( "AutoWordCompletion", m_autoWordCompletionEnabled );
+    config->sync();
+    
+    if( !docIface || !docIface->widget() )
+	return;
+    
+    disconnect( docIface, 0, this, 0 );
+    disconnect( docIface->widget(), 0, this, 0 );
+    
+    if( m_autoWordCompletionEnabled ){
+	connect( docIface->widget(), SIGNAL(completionAborted()),
+		 this, SLOT(slotCompletionAborted()) );
+	connect( docIface->widget(), SIGNAL(completionDone()),
+		 this, SLOT(slotCompletionDone()) );
+
+	connect( docIface, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+    }
 }
 
 void AbbrevPart::slotCompletionAborted()
@@ -413,16 +450,13 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
     if( !editIface || !viewCursorIface || !completionIface )
     	return;
 
-    KConfig* config = AbbrevFactory::instance()->config();
-    config->setGroup( "General" );
-
     disconnect( view, 0, this, 0 );
     disconnect( doc, 0, this, 0 );
 
     connect( view, SIGNAL(filterInsertString(KTextEditor::CompletionEntry*, QString*)),
 	     this, SLOT(slotFilterInsertString(KTextEditor::CompletionEntry*, QString*)) );
 
-    if( config->readBoolEntry("AutoExpand", true) ){
+    if( autoWordCompletionEnabled() ){
 	connect( view, SIGNAL(completionAborted()),
 		 this, SLOT(slotCompletionAborted()) );
 	connect( view, SIGNAL(completionDone()),

@@ -13,12 +13,14 @@
 
 #include "abbrevconfigwidget.h"
 
+#include <kconfig.h>
+
 #include <qlistview.h>
 #include <qmultilineedit.h>
+#include <qcheckbox.h>
 
 #include "addtemplatedlg.h"
 #include "abbrevpart.h"
-
 
 AbbrevConfigWidget::AbbrevConfigWidget(AbbrevPart *part, QWidget *parent, const char *name)
     : AbbrevConfigWidgetBase(parent, name)
@@ -35,6 +37,8 @@ AbbrevConfigWidget::AbbrevConfigWidget(AbbrevPart *part, QWidget *parent, const 
                            templ->code );
         ++it;
     }
+    
+    checkWordCompletion->setChecked( part->autoWordCompletionEnabled() );
 }
 
 
@@ -101,6 +105,8 @@ void AbbrevConfigWidget::accept()
                              item->text(3) );
         item = item->nextSibling();
     }
+    
+    m_part->setAutoWordCompletionEnabled( checkWordCompletion->isChecked() );
 }
 
 #include "abbrevconfigwidget.moc"

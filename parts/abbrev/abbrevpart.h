@@ -45,6 +45,9 @@ class AbbrevPart : public KDevPlugin
 public:
     AbbrevPart( QObject *parent, const char *name, const QStringList & );
     ~AbbrevPart();
+    
+    bool autoWordCompletionEnabled() const;
+    void setAutoWordCompletionEnabled( bool enabled );
 
     void addTemplate(const QString &templ, const QString &descr,
                      const QString &suffixes, const QString &code);
@@ -74,6 +77,7 @@ private:
     int m_prevLine;
     int m_prevColumn;
     int m_sequenceLength;
+    bool m_autoWordCompletionEnabled;
 
     KTextEditor::Document* docIface;
     KTextEditor::EditInterface* editIface;
