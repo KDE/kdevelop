@@ -545,21 +545,30 @@ void FileTreeWidget::slotToggleShowVCSFields()
     // @todo implement show VCS Fields
     if (showVCSFields())
     {
-        setColumnWidth( 1, viewport()->width() / 3 ); // "Revision"
-        setColumnWidth( 2, viewport()->width() / 3 ); // "Timestamp"
+        setColumnWidth( 0, contentsWidth() / 3 ); // "Filename"
+        setColumnWidth( 1, contentsWidth() / 3 ); // "Revision"
+        setColumnWidth( 2, contentsWidth() / 3 ); // "Timestamp"
 
         header()->show();
-        triggerUpdate();
     }
     else
     {
         header()->hide();
-        setColumnWidth( 0, viewport()->width() ); // Make the column to occupy all the row
-        hideColumn( 1 );
-        hideColumn( 2 );
-
-        triggerUpdate();
+        setColumnWidth( 2 ,0 ); // Hide columns
+        setColumnWidth( 1, 0 );
+        setColumnWidth( 0, contentsWidth() ); // Make the column to occupy all the row
     }
+
+    triggerUpdate();
+}
+
+void FileTreeWidget::resizeContents( int w, int h )
+{
+    KFileTreeView::resizeContents( w, h );
+/*
+    if (!showVCSFields())
+        setColumnWidth( 0, contentsWidth() );
+*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////

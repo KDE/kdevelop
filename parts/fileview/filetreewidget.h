@@ -47,6 +47,7 @@ public:
     QString hidePatterns() const;
 
 public slots:
+    virtual void resizeContents( int w, int h );
     void hideOrShow();
     void addProjectFiles( QStringList const & fileList, bool constructing = false );
     void removeProjectFiles( QStringList const & fileList );
