@@ -2,7 +2,9 @@ INCLUDES = -I$(top_srcdir)/lib/compat  -I$(top_srcdir)/lib/interfaces  -I$(top_s
 
 noinst_LTLIBRARIES = libkdevutil.la libkdevutillgpl.la
 
-libkdevutil_la_SOURCES = processwidget.cpp processlinemaker.cpp domutil.cpp splitter.cpp execcommand.cpp ksavealldialog.cpp filetemplate.cpp urlutil.cpp pathutil.cpp configwidgetproxy.cpp
+libkdevutil_la_SOURCES = processwidget.cpp processlinemaker.cpp domutil.cpp \
+	splitter.cpp execcommand.cpp ksavealldialog.cpp filetemplate.cpp urlutil.cpp \
+	pathutil.cpp configwidgetproxy.cpp profiles.cpp
 
 libkdevutillgpl_la_SOURCES = processwidget.cpp processlinemaker.cpp splitter.cpp execcommand.cpp ksavealldialog.cpp urlutil.cpp configwidgetproxy.cpp
 
