@@ -1,3 +1,9 @@
+2001-11-02  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: disable the disassemble when it's hidden
+
+2001-11-02  jbb <jbb@kdevelop.org>
+    * bugfix for 27/10/2001 patch (repaired switching the files (KDE2 version))
+
 2001-11-01  Harald Fernengel <harry@bnro.de>
     * applyed a patch by Markus Kuehni <markus.kuehni@trilab.ch>:
         * fixed saving of argument list for the external Tool apps
