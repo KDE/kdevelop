@@ -3614,6 +3614,40 @@ added files will be included as well.
 automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
 according *.moc.cpp file and rebuild the project.
 
+<bf>Q:</bf> Configure complains about not being able to compile a small KDE
+application. Examining config.log reveals that it can't find the library
+libXext.
+<bf>A:</bf> Install the package xdevel
+
+<bf>Q:</bf> I´m developing an application where I need to set -D options to the preprocessor. If I add these 
+in KDevelop to my project options, everything is ok, but when I distribute my package, the -D options set in 
+KDevelop are not used. What do I have to do to make this work ?
+<bf>A:</bf> Edit the file configure.in in your toplevel source directory. Here, you have to enter somewhere at 
+the beginning:
+
+CXXFLAGS=$(CXXFLAGS) " -DYOURDEFINE"
+AC_SUBST(CXXFLAGS)
+
+
+<bf>Q:</bf> I´m already running a KDE 2 snapshot and I want to use KDevelop under KDE 2. What is the best way 
+to do this ?
+<bf>A:</bf> As KDevelop for KDE 2 is currently under development, you should consider using the current stable 
+1.x release of KDevelop for production usage. Running KDevelop 1.x under KDE 2 can be done by creating a 
+shell-script:
+
+#/bin/bash
+QTDIR=/usr/lib/qt-1.44 export QTDIR
+KDEDIR=/opt/kde export KDEDIR
+exec /opt/kde/bin/kdevelop
+
+Save this file as e.g. kdevelop1 and set this file to executable with
+
+chmod 755 kdevelop1
+
+Then you can run KDevelop 1.x under KDE 2 by calling kdevelop1.
+For developing KDE 2 applications with KDevelop 1.x you have to set the correct path in the KDevelop Setup 
+even if you´re running KDevelop under KDE 2 !
+
 <chapt>Authors
 <p>
 <bf>Main Developers:</bf>

@@ -1,4 +1,8 @@
-2000-03-13 Ralf Nolden <rnolden@kdevelop.de>
+2000-03-17 Ralf Nolden <rnolden@kdevelop.de>
+        * fixed focus setting on docbrowser after autosaving/save all
+        * added FAQ´s for running KDevelop1.x under KDE 2 and adding -D to projects to FAQ file and english manual
+
+2000-03-16 Ralf Nolden <rnolden@kdevelop.de>
         * updated handbook for various changes
         * updated kappwizard´s CVS page (directorybutton, labels)
         * fixed autosave label size in kdevelop setup dialog

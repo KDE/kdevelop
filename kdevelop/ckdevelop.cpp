@@ -461,6 +461,10 @@ void CKDevelop::slotFileSaveAll(){
     {
       edit_widget->setFocus();
     }
+    if (visibleTab == BROWSER)
+    {
+      browser_widget->setFocus();
+    }
     view->setUpdatesEnabled(true);
     // switch back to visible tab
 
