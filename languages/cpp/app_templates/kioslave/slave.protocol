@@ -7,3 +7,7 @@ reading=true
 defaultMimetype=text/plain
 Icon=remote
 Description=A kioslave for %{APPNAMELC}
+Description[et]=%{APPNAMELC} ioslave
+Description[it]=Un kioslave per %{APPNAMELC}
+Description[ru]=Обработчик ввода-вывода для %{APPNAMELC}
+Description[sv]=En I/O-slav för %{APPNAMELC}
