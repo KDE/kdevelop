@@ -17,6 +17,7 @@
 
 
 #include <qdialog.h>
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstdaction.h>
@@ -40,11 +41,11 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
   m_mainwidget->setWidget(new QWidget(this, "mainwidget"));
   setView(m_mainwidget);
   setMainDockWidget(m_mainwidget);
-
-  initComponents();
   //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
   setXMLFile( "kdevelopui.rc" );
+  guiFactory()->addClient(this);
+  initComponents();
   createGUI( 0L );
 }
 
@@ -753,29 +754,37 @@ void KDevelop::initHelp(){
 
 void KDevelop::initComponents()
 {
+    loadComponents("SelectView", KDockWidget::DockLeft);
+    loadComponents("OutputView", KDockWidget::DockBottom);
+}
+
+
+void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos)
+{
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component");
     KTrader::OfferList::Iterator it;
     if (offers.isEmpty())
-        qDebug("No KDevelop components");
+        kdDebug(9000) << "No KDevelop components" << endl;
     for (it = offers.begin(); it != offers.end(); ++it) {
         QVariant prop = (*it)->property("X-KDevelop-ComponentType");
 
-        if (prop.isValid() && prop.toString() == "SelectView") {
-            qDebug("Found SelectView %s", (*it)->name().latin1());
+        if (prop.isValid() && prop.toString() == type) {
+            kdDebug(9000) << "Found " << type << (*it)->name().latin1() << endl;
             KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
-            QObject *obj = factory->create(0, (*it)->name().latin1(), "KParts::Plugin");
+            QObject *obj = factory->create(0, (*it)->name().latin1(), "KDevComponent");
 
             if (!obj->inherits("KDevComponent")) {
-                qDebug("Component does not inherit KDevComponent");
+                kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
                 continue;
             }
             KDevComponent *comp = (KDevComponent*) obj;
-
-            KDockWidget *wid = createDockWidget((*it)->name(), BarIcon((*it)->icon())
-                                                , 0, (*it)->comment(), "");
+            guiFactory()->addClient(comp);
+            
+            KDockWidget *wid = createDockWidget((*it)->name(), BarIcon((*it)->icon()),
+                                                0, (*it)->comment(), "");
             wid->setWidget(comp->widget());
             wid->setToolTipString((*it)->comment());
-            wid->manualDock(m_mainwidget, KDockWidget::DockLeft);
+            wid->manualDock(m_mainwidget, pos);
         }
     }
 }
@@ -791,7 +800,7 @@ void KDevelop::slotFilePrint()
     args << "/vmlinuz"; // temporary ;-)
     QObject *obj = factory->create(this, "print dialog", "KDevPrintDialog", args);
     if (!obj->inherits("QDialog")) {
-        qDebug("Print plugin doesn't provide a dialog");
+        kdDebug(9000) << "Print plugin doesn't provide a dialog" << endl;
         return;
     }
 

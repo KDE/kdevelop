@@ -45,6 +45,7 @@ statusbar help) on the KActions */
   void initHelp();
   /** loads the components */
   void initComponents();
+  void loadComponents(const QString &type, KDockWidget::DockPosition pos);
   // File Actions
   KAction* m_paFileNew;
   KAction* m_paFileOpen;

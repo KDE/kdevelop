@@ -19,7 +19,7 @@
 #define _KDEVCOMPONENT_H_
 
 #include <qstring.h>
-#include <kparts/plugin.h>
+#include <kparts/part.h>
 
 class CProject;
 class CustomizeDialog;
@@ -33,7 +33,7 @@ class CustomizeDialog;
  * course, this functionality is essential for non-trivial plugins.
  */
 
-class KDevComponent : public KParts::Plugin
+class KDevComponent : public KParts::Part
 {
     Q_OBJECT
     
@@ -77,10 +77,6 @@ public:
      * given relative to the project dir.
      */
     virtual void savedFile(const QString&);
-    /**
-     * The component's widget.
-     */
-    virtual QWidget *widget();
 };
 
 

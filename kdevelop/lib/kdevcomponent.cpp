@@ -2,7 +2,7 @@
 
 
 KDevComponent::KDevComponent(QObject *parent, const char *name)
-    : KParts::Plugin(parent, name)
+    : KParts::Part(parent, name)
 {
 }
 
@@ -40,9 +40,4 @@ void KDevComponent::removedFileFromProject(const QString&)
 
 void KDevComponent::savedFile(const QString&)
 {
-}
-
-QWidget *KDevComponent::widget()
-{
-    return 0;
 }

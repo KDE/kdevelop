@@ -1,5 +1,5 @@
 /***************************************************************************
-                             doctreeview.h
+                             doctreewidget.h
                              -------------------
     copyright            : (C) 1999 by Bernd Gehrmann
     email                : bernd@physik.hu-berlin.de
@@ -39,7 +39,7 @@ public:
     ~DocTreeWidget();
 
     void configurationChanged();
-    void createConfigWidget(CustomizeDialog *dlg);
+    //    void createConfigWidget(CustomizeDialog *dlg);
     void docPathChanged();
     void projectClosed();
     void projectOpened(CProject *prj);
@@ -56,6 +56,6 @@ private:
     DocTreeOthersFolder *folder_others;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
-    DocTreeView *view;
+    DocTreeView *m_view;
 };
 #endif

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Grep frontend
+Name=GrepView
+Icon=find
+ServiceTypes=KDevelop/Component
+X-KDE-Library=libkdevgrepview
+X-KDevelop-ComponentType=OutputView

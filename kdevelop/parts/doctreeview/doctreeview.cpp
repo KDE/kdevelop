@@ -1,3 +1,5 @@
+#include <kdebug.h>
+
 #include "doctreeview.h"
 #include "doctreewidget.h"
 #include "main.h"
@@ -5,10 +7,10 @@
 
 DocTreeView::DocTreeView(QWidget *parent, const char *name)
 {
+    kdDebug(9002) << "Building DocTreeView" << endl;
+
     setInstance(DocTreeFactory::instance());
-    
-    qDebug("Building DocTreeWidget");
-    m_widget = new DocTreeWidget(this, parent);
+    setWidget(new DocTreeWidget(this, parent));
 }
 
 
@@ -18,23 +20,17 @@ DocTreeView::~DocTreeView()
 
 void DocTreeView::docPathChanged()
 {
-    m_widget->docPathChanged();
+    doctreeWidget()->docPathChanged();
 }
 
 
 void DocTreeView::projectOpened(CProject *prj)
 {
-    m_widget->projectOpened(prj);
+    doctreeWidget()->projectOpened(prj);
 }
 
 
 void DocTreeView::projectClosed()
 {
-    m_widget->projectClosed();
-}
-
-
-QWidget *DocTreeView::widget()
-{
-    return m_widget;
+    doctreeWidget()->projectClosed();
 }

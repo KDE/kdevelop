@@ -1,2 +1,1 @@
-SUBDIRS = print doctreeview
-
+SUBDIRS = print 

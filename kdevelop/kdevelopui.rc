@@ -36,7 +36,7 @@
    <Action name="edit_search" />
    <Action name="edit_repeat_search" />
    <Action name="edit_replace" />
-   <Action name="edit_search_in_files" />
+   <Merge/>
    <Separator/>
    <Action name="edit_select_all" />
    <Action name="edit_deselect_all" />

@@ -2,8 +2,9 @@
 #define _DOCTREEVIEW_H_
 
 #include "kdevcomponent.h"
-#include "doctreewidget.h"
 
+
+class DocTreeWidget;
 
 class DocTreeView : public KDevComponent
 {
@@ -23,7 +24,6 @@ protected:
 //    virtual void createConfigWidget(CustomizeDialog *parent);
     virtual void projectClosed();
     virtual void projectOpened(CProject *prj);
-    virtual QWidget *widget();
     
 signals:
     void fileSelected(const QString &url_file);
@@ -31,7 +31,8 @@ signals:
     void projectManualSelected();
 
 private:
-    DocTreeWidget *m_widget;
+    DocTreeWidget *doctreeWidget()
+        { return (DocTreeWidget*) KDevComponent::widget(); }
     friend class DocTreeWidget;
 };
 

@@ -65,7 +65,9 @@ Makefile
 kdevelop/Makefile \
 kdevelop/plugin/Makefile \
 kdevelop/plugin/print/Makefile \
-kdevelop/plugin/doctreeview/Makefile \
+kdevelop/parts/Makefile \
+kdevelop/parts/grepview/Makefile \
+kdevelop/parts/doctreeview/Makefile \
 kdevelop/lib/Makefile \
 pics/Makefile \
 pics/mini/Makefile \

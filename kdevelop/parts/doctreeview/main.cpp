@@ -1,3 +1,4 @@
+#include <kdebug.h>
 #include <kinstance.h>
 #include "main.h"
 #include "doctreeview.h"
@@ -31,7 +32,7 @@ QObject *DocTreeFactory::create(QObject *parent, const char *name,
                                 const char *classname, const QStringList &args)
 {
     if (parent && !parent->isWidgetType()) {
-        qDebug("Parent of print dialog is not a widget");
+        kdDebug(9002) << "Parent of print dialog is not a widget" << endl;
         return 0;
     }
     QWidget *parentWidget = (QWidget *) parent;
@@ -39,7 +40,7 @@ QObject *DocTreeFactory::create(QObject *parent, const char *name,
     // Depending on classname, this should method should also
     // be able to create the config dialog
 
-    qDebug("Building DocTreeView");
+    kdDebug(9002) << "Building DocTreeView" << endl;
     
     QObject *obj = new DocTreeView(parentWidget, name);
     emit objectCreated(obj);
@@ -51,7 +52,7 @@ KInstance *DocTreeFactory::s_instance = 0;
 KInstance *DocTreeFactory::instance()
 {
     if (!s_instance)
-        s_instance = new KInstance("doctreeview");
+        s_instance = new KInstance("kdevdoctreeview");
 
     return s_instance;
 }

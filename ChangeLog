@@ -1,3 +1,8 @@
+2000-06-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Made KDevComponent inherit KParts::Part
+	* Turned grep view into a KDevComponent
+	* Again a change in the directory structure. Sorry.
+
 2000-06-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Turned Component into KDevComponent which inherits KParts::Plugin
 	  Instead of multiple inheritance, the component and its visual
