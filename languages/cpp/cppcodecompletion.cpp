@@ -649,7 +649,16 @@ QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* 
 
 	QStringList exprList = splitExpression( expr );
 	QStringList type = evaluateExpressionInternal( exprList, QStringList(), ctx );
-
+	
+	QMap<QString, QString> typedefs = typedefMap( m_pSupport->codeModel() );
+	
+	QStringList::iterator it = type.begin();
+	for ( ; it != type.end(); ++it )
+	{
+		if ( typedefs.contains( ( *it ) ) )
+			( *it ) = typedefs[ ( *it ) ];
+	}
+	
 	m_pSupport->mainWindow() ->statusBar() ->message( i18n( "Type of %1 is %2" ).arg( expr ).arg( type.join( "::" ) ), 1000 );
 
 	QMap<QString, bool> visited;

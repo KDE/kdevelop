@@ -12,11 +12,13 @@
 #ifndef __cppsupport_utils_h
 #define __cppsupport_utils_h
 
+#include <qmap.h>
 #include <qstringlist.h>
 
 class CodeModel;
 
 QStringList typeNameList( const CodeModel* model );
+QMap<QString, QString> typedefMap( const CodeModel* model );
 
 #endif // __cppsupport_utils_h 
 // kate: indent-mode csands; tab-width 4;
