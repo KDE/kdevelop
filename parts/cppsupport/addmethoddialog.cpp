@@ -182,7 +182,7 @@ void AddMethodDialog::accept()
 
             QString access = (*it).lower();
 
-            bool isInline = currentItem->text( 0 ) == i18n("True");
+            bool isInline = currentItem->text( 0 ) == "True";
             QString str = isInline ? functionDefinition( currentItem ) : functionDeclaration( currentItem );
 
 	    QPair<int, int> pt;
@@ -208,8 +208,12 @@ void AddMethodDialog::accept()
 
         item = item->nextSibling();
 
+	QString str = functionDefinition( currentItem );
+	if( str.isEmpty() )
+	    continue;
+	
         QString implementationFile = currentItem->text( 5 );
-        if( currentItem->text(0) == i18n("True") )
+        if( currentItem->text(0) == "True" )
             implementationFile = m_klass->fileName();
 
         QFileInfo fileInfo( implementationFile );
@@ -222,10 +226,10 @@ void AddMethodDialog::accept()
         if( !editIface )
             continue;
 
-        bool isInline = currentItem->text( 0 ) == i18n("True");
+        bool isInline = currentItem->text( 0 ) == "True";
         if( !isInline ){
             editIface->insertLine( editIface->numLines(), QString::fromLatin1("") );
-            editIface->insertText( editIface->numLines()-1, 0, functionDefinition( currentItem ) );
+            editIface->insertText( editIface->numLines()-1, 0, str );
             m_cppSupport->backgroundParser()->addFile( implementationFile );
         }
     }
@@ -250,14 +254,14 @@ void AddMethodDialog::updateGUI()
 
     if( enable ){
 	QListViewItem* item = methods->selectedItem();
-	item->setText( 0, isInline->isChecked() ? i18n("True") : i18n("False") );
+	item->setText( 0, isInline->isChecked() ? "True" : "False" );
 	item->setText( 1, access->currentText() );
 	item->setText( 2, storage->currentText() );
 	item->setText( 3, returnType->currentText() );
 	item->setText( 4, declarator->text() );
 	item->setText( 5, sourceFile->currentText() );
 
-	if( isInline->isChecked() || storage->currentText() == i18n("Friend") || storage->currentText() == i18n("Pure Virtual") ){
+	if( isInline->isChecked() || storage->currentText() == "Friend" || storage->currentText() == "Pure Virtual" ){
 	    sourceFile->setEnabled( false );
 	    browseButton->setEnabled( false );
 	}
@@ -266,7 +270,7 @@ void AddMethodDialog::updateGUI()
 
 void AddMethodDialog::addMethod()
 {
-    QListViewItem* item = new QListViewItem( methods, i18n("False"), "Public", "Normal", "void", QString("method_%1()").arg(++m_count),
+    QListViewItem* item = new QListViewItem( methods, "False", "Public", "Normal", "void", QString("method_%1()").arg(++m_count),
     		sourceFile->currentText() );
     methods->setCurrentItem( item );
     methods->setSelected( item, true );
@@ -290,7 +294,7 @@ void AddMethodDialog::currentChanged( QListViewItem* item )
         QString _declarator = item->text( 4 );
         QString _sourceFile = item->text( 5 );
 
-	isInline->setChecked( _isInline == i18n("True") ? true : false );
+	isInline->setChecked( _isInline == "True" ? true : false );
 	access->setCurrentText( _access );
 	storage->setCurrentText( _storage );
 	returnType->setCurrentText( _returnType );
@@ -316,14 +320,14 @@ QString AddMethodDialog::functionDeclaration( QListViewItem * item ) const
     QString access = item->text( 1 ).lower();
 
     stream << "    "; /// @todo use AStyle
-    if( item->text(2) == "Virtual" || storage->currentText() == i18n("Pure Virtual") )
+    if( item->text(2) == "Virtual" || item->text(2) == "Pure Virtual" )
 	stream << "virtual ";
-    else if( item->text(2) == i18n("Friend") )
+    else if( item->text(2) == "Friend" )
 	stream << "friend ";
     else if( item->text(2) == "Static" )
 	stream << "static ";
     stream << item->text( 3 ) << " " << item->text( 4 );
-    if( item->text(2) == i18n("Pure Virtual") )
+    if( item->text(2) == "Pure Virtual" )
 	stream << " = 0";
     stream << ";\n";
 
@@ -332,7 +336,7 @@ QString AddMethodDialog::functionDeclaration( QListViewItem * item ) const
 
 QString AddMethodDialog::functionDefinition( QListViewItem* item ) const
 {
-    if( item->text( 1 ) == "Signals" )
+    if( item->text( 1 ) == "Signals" || item->text(2) == "Pure Virtual" || item->text(2) == "Friend" )
         return QString::null;
 
     QString className = m_klass->name();
@@ -344,7 +348,7 @@ QString AddMethodDialog::functionDefinition( QListViewItem* item ) const
     QString str;
     QTextStream stream( &str, IO_WriteOnly );
 
-    bool isInline = item->text(0) == i18n("True");
+    bool isInline = item->text(0) == "True";
 
     QString ind;
     if( isInline )
