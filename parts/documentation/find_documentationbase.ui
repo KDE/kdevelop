@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>FindDocumentationBase</class>
 <author>Tobias Gläßer</author>
 <widget class="QWidget">
@@ -101,6 +101,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>button_search</sender>
@@ -132,6 +134,12 @@
         <receiver>FindDocumentationBase</receiver>
         <slot>startSearch()</slot>
     </connection>
+    <connection>
+        <sender>result_list</sender>
+        <signal>returnPressed(QListViewItem*)</signal>
+        <receiver>FindDocumentationBase</receiver>
+        <slot>clickOnItem(QListViewItem*)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>search_term</tabstop>
@@ -154,4 +162,7 @@
     <slot>buttonPressedOnItem( int button, QListViewItem * item, const QPoint &amp; pos, int c )</slot>
 </slots>
 <layoutdefaults spacing="1" margin="1"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>

@@ -299,6 +299,13 @@ void FindDocumentation::startSearch()
 
         item = item->itemBelow();
     }  
+    
+    //Set the focus to the listview and the first child to the
+    //current item of the list, so that you can brows the items with your keyboard
+    result_list->setFocus();
+    if(result_list->firstChild())
+      result_list->setCurrentItem(result_list->firstChild());
+    
 }
 
 void FindDocumentation::setSearchTerm( const QString & term )
