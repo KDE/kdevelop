@@ -157,20 +157,18 @@ void GrepViewWidget::searchActivated()
     pattern.replace(QRegExp("%s"), grepdlg->patternString());
     pattern.replace(QRegExp("'"), "'\\''");
 
-    QString filepattern = "`find '";
+    QString filepattern = "find '";
     filepattern += grepdlg->directoryString();
     filepattern += "'";
     if (!grepdlg->recursiveFlag())
         filepattern += " -maxdepth 1";
     filepattern += " \\( -name ";
     filepattern += files;
-    filepattern += " \\) -print`";
+    filepattern += " \\) -print";
 
-    QString command = "grep -n -e ";
+    QString command = filepattern + " | xargs " ;
+    command += "egrep -n -e ";
     command += KShellProcess::quote(pattern);
-    command += " ";
-    command += filepattern;
-    command += " /dev/null";
     startJob("", command);
 
     m_part->topLevel()->raiseView(this);
