@@ -691,17 +691,20 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
       }
       else {
         if (pCur->isDockBackPossible()) {
+					QWidget* oldParentWdg = pCur->parentWidget();
           pCur->dockBack();
-        }
-        else {
-          // this is a weak attempt to emulate a dockBack() if it aint possible
-          // (one should actually fix KDockWidget in a way that dockBack() is always possible)
-          if (type == ID_VIEW_TREEVIEW)
-            pCur->manualDock(m_pDockbaseAreaOfDocumentViews, KDockWidget::DockLeft, 25);
-          else
-            pCur->manualDock(m_pDockbaseAreaOfDocumentViews, KDockWidget::DockBottom, 70);
-          if (pCur->isTopLevel())
-            pCur->show();
+					if (pCur->parentWidget() == oldParentWdg) {
+						// oops...somehow dockBack() failed :-(
+						//
+	          // now try a weak attempt to emulate a dockBack() if it aint possible
+  	        // (one should actually fix KDockWidget in a way that dockBack() is always possible)
+    	      if (type == ID_VIEW_TREEVIEW)
+      	      pCur->manualDock(m_pDockbaseAreaOfDocumentViews, KDockWidget::DockLeft, 25);
+        	  else
+          	  pCur->manualDock(m_pDockbaseAreaOfDocumentViews, KDockWidget::DockBottom, 70);
+	          if (pCur->isTopLevel())
+  	          pCur->show();
+					}
         }
       }
     }

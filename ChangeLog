@@ -1,6 +1,8 @@
 2001-07-01  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: initial toolbutton state fixed
     * bugfix: prevented startup from flickering
+    * bugfix: readDockConfig() is still disabled since there are cases in tab MDI mode
+              when it screws up the user interface. But I already fixed it for Childframe MDI mode today.
 
 2001-07-01  F@lk Brettschneider <falk@kdevelop.org>
     * startlogo solution of gallium reactivated plus a little change by me
