@@ -345,15 +345,15 @@ void AntProjectPart::removeFile(const QString &fileName)
 
 void AntProjectPart::removeFiles ( const QStringList& fileList )
 {
-	QStringList::ConstIterator it;	
-	
+	kdDebug() << "Emitting removedFilesFromProject" << endl;
+	emit removedFilesFromProject(fileList);
+
+	QStringList::ConstIterator it;
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_sourceFiles.remove ( *it );
 	}
-
-	kdDebug() << "Emitting removedFilesFromProject" << endl;
-	emit removedFilesFromProject(fileList);
 }
 
 void AntProjectPart::parseBuildXML()

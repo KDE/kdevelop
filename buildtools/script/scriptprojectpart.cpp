@@ -316,14 +316,14 @@ void ScriptProjectPart::removeFile(const QString &fileName)
 
 void ScriptProjectPart::removeFiles ( const QStringList& fileList )
 {
+	emit removedFilesFromProject ( fileList );
+
 	QStringList::ConstIterator it;
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_sourceFiles.remove ( ( *it ) );
 	}
-
-	emit removedFilesFromProject ( fileList );
 }
 
 void ScriptProjectPart::slotNewFile()

@@ -455,15 +455,15 @@ void CustomProjectPart::removeFile(const QString &fileName)
 
 void CustomProjectPart::removeFiles ( const QStringList& fileList )
 {
+	kdDebug(9025) << "Emitting removedFilesFromProject" << endl;
+	emit removedFilesFromProject ( fileList );
+
 	QStringList::ConstIterator it;
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		m_sourceFiles.remove ( *it );
 	}
-
-	kdDebug(9025) << "Emitting removedFilesFromProject" << endl;
-	emit removedFilesFromProject ( fileList );
 }
 
 QString CustomProjectPart::buildDirectory() const

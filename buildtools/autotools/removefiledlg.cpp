@@ -31,7 +31,6 @@
 #include "autoprojectwidget.h"
 #include "autodetailsview.h"
 
-
 static bool fileListContains(const QPtrList<FileItem> &list, const QString &name)
 {
 	QPtrListIterator<FileItem> it(list);
@@ -95,6 +94,8 @@ RemoveFileDialog::~RemoveFileDialog()
 
 void RemoveFileDialog::accept()
 {
+	m_widget->emitRemovedFile ( subProject->path.mid ( m_part->projectDirectory().length() + 1 ) + "/" + fileName );
+
 	QMap<QString,QString> replaceMap;
 
 	if (removeFromTargetsCheckBox && removeFromTargetsCheckBox->isChecked()) {
@@ -174,8 +175,6 @@ void RemoveFileDialog::accept()
 
 	if (removeCheckBox->isChecked())
 		QFile::remove(subProject->path + "/" + fileName);
-
-	m_widget->emitRemovedFile ( subProject->path.mid ( m_part->projectDirectory().length() + 1 ) + "/" + fileName );
 
 	QDialog::accept();
 }
