@@ -31,10 +31,10 @@ ClassToolWidget::~ClassToolWidget()
 
 KPopupMenu *ClassToolWidget::createPopup()
 {
-    KPopupMenu *popup = contextItem->createPopup();
+    KPopupMenu *popup = contextItem? contextItem->createPopup() : 0;
     if (!popup) {
         popup = new KPopupMenu();
-        popup->insertTitle(i18n("Class view"), -1, 0);
+        popup->insertTitle(i18n("Class tool"), -1, 0);
     }
 
     return popup;

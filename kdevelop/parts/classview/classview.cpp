@@ -22,6 +22,7 @@
 #include "classactions.h"
 #include "classtreewidget.h"
 #include "classtooldlg.h"
+//#include "hierarchydlg.h"
 #include "main.h"
 #include "cproject.h"
 #include "classstore.h"
@@ -41,7 +42,7 @@ ClassView::ClassView(QObject *parent, const char *name)
     // In contrast to other widgets, we can have any number of class tool
     // dialogs. That's why we don't use QGuardedPtr here, but instead let
     // the dialogs register() and unregister() themselves.
-    m_classtools.setAutoDelete(true);
+    m_widgets.setAutoDelete(true);
 }
 
 
@@ -84,6 +85,7 @@ void ClassView::setupPopup()
     popup->insertItem(i18n("Goto declaration"), this, SLOT(selectedGotoDeclaration()));
     popup->insertItem(i18n("Goto implementation"), this, SLOT(selectedGotoImplementation()));
     popup->insertItem(i18n("Goto class declaration"), this, SLOT(selectedGotoClassDeclaration()));
+//    popup->insertItem(i18n("View class hierarchy"), this, SLOT(selectedViewHierarchy()));
     popup->insertItem("Dump class tree on console", this, SLOT(dumpTree()));
 
     if (m_langsupport) {
@@ -152,17 +154,33 @@ void ClassView::refresh()
 }
 
 
-void ClassView::registerClassTool(ClassToolDialog *dlg)
+void ClassView::registerClassToolDialog(ClassToolDialog *dlg)
 {
-    m_classtools.append(dlg);
+    m_widgets.append(dlg);
     emit embedWidget(dlg, SelectView, i18n("CT"), i18n("class tool"));
 }
 
 
-void ClassView::unregisterClassTool(ClassToolDialog *dlg)
+#if 0
+void ClassView::registerHierarchyDialog(HierarchyDialog *dlg)
 {
-    m_classtools.removeRef(dlg);
+    m_widgets.append(dlg);
 }
+#endif
+
+
+void ClassView::unregisterClassToolDialog(ClassToolDialog *dlg)
+{
+    m_widgets.removeRef(dlg);
+}
+
+
+#if 0
+void ClassView::unregisterHierarchyDialog(HierarchyDialog *dlg)
+{
+    m_widgets.removeRef(dlg);
+}
+#endif
 
 
 /**
@@ -217,6 +235,20 @@ void ClassView::switchedDeclImpl()
             gotoImplementation(className, methodName, PublicMethod);
     }
 }
+
+
+#if 0
+/**
+ * The user selected "View class hierarchy" from the delayed class wizard popup.
+ */
+void ClassView::selectedViewHierarchy()
+{
+    HierarchyDialog *dlg = new HierarchyDialog(this);
+    dlg->setClassStore(m_store);
+    dlg->setLanguageSupport(m_langsupport);
+    dlg->show();
+}
+#endif
 
 
 /**

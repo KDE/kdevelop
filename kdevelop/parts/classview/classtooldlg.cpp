@@ -65,13 +65,13 @@ ClassToolDialog::ClassToolDialog( ClassView *part )
   connect( part, SIGNAL(setClassStore(ClassStore*)),
            this, SLOT(setClassStore(ClassStore*)) );
 
-  m_part->registerClassTool(this);
+  m_part->registerClassToolDialog(this);
 }
 
 
 ClassToolDialog::~ClassToolDialog()
 {
-    m_part->unregisterClassTool(this);
+    m_part->unregisterClassToolDialog(this);
 }
 
 
@@ -214,7 +214,8 @@ void ClassToolDialog::setClassStore(ClassStore *store)
 void ClassToolDialog::setLanguageSupport(KDevLanguageSupport *ls)
 {
     classTree.setLanguageSupport(ls);
-    connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
+    if (ls)
+        connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
 }
 
 

@@ -20,6 +20,7 @@
 
 class ClassTreeWidget;
 class ClassToolDialog;
+class HierarchyDialog;
 class ClassStore;
 class ClassListAction;
 class MethodListAction;
@@ -41,8 +42,10 @@ public:
                     PublicSlot, ProtectedSlot, PrivateSlot,
                     Signal, GlobalFunction, GlobalVariable };
 
-    void registerClassTool(ClassToolDialog *dlg);
-    void unregisterClassTool(ClassToolDialog *dlg);
+    void registerClassToolDialog(ClassToolDialog *dlg);
+    void registerHierarchyDialog(HierarchyDialog *dlg);
+    void unregisterClassToolDialog(ClassToolDialog *dlg);
+    void unregisterHierarchyDialog(HierarchyDialog *dlg);
     
 signals:
     void setLanguageSupport(KDevLanguageSupport *ls);
@@ -60,6 +63,7 @@ private slots:
     void selectedClass();
     void selectedMethod();
     void switchedDeclImpl();
+//    void selectedViewHierarchy();
     void selectedGotoDeclaration();
     void selectedGotoImplementation();
     void selectedGotoClassDeclaration();
@@ -70,8 +74,9 @@ private slots:
     
 private:
     QGuardedPtr<QWidget> m_classtree;
-    QList<QWidget> m_classtools;
+    QList<QWidget> m_widgets;
     friend class ClassTreeBase;
+    friend class HierarchyDialog;
 
     void setupPopup();
     ParsedClass *getClass(const QString &className);

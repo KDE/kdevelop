@@ -430,9 +430,6 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
 
 void ClassTreeBase::slotRightButtonPressed(QListViewItem *item, const QPoint &p)
 {
-    if (!item)
-        return;
-    
     contextItem = static_cast<ClassTreeItem*>(item);
     
     KPopupMenu *popup = createPopup();

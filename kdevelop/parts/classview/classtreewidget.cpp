@@ -38,7 +38,7 @@ ClassTreeWidget::~ClassTreeWidget()
 
 KPopupMenu *ClassTreeWidget::createPopup()
 {
-    KPopupMenu *popup = contextItem->createPopup();
+    KPopupMenu *popup = contextItem? contextItem->createPopup() : 0;
     if (!popup) {
         popup = new KPopupMenu();
         popup->insertTitle(i18n("Class view"), -1, 0);
@@ -61,7 +61,8 @@ KPopupMenu *ClassTreeWidget::createPopup()
 void ClassTreeWidget::setLanguageSupport(KDevLanguageSupport *ls)
 {
     ClassTreeBase::setLanguageSupport(ls);
-    connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
+    if (ls)
+        connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
 }
 
 

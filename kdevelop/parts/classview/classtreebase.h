@@ -146,7 +146,6 @@ public:
     ~ClassTreeClassItem()
         {}
 
-protected:
     virtual void setOpen(bool o);
 
 private:
@@ -162,7 +161,6 @@ public:
     ~ClassTreeStructItem()
         {}
 
-protected:
     virtual void setOpen(bool o);
 };
 
