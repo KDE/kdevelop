@@ -2207,249 +2207,250 @@ KDevelop die Erstellung aus dem ursprünglichen Projekt-Unterverzeichnis aufruft.
 zu erstellen wäre, die Makefile.am des ursprünglichen Unterverzeichnisses an die Schablone des Programmierhandbuches anzupassen, indem
 Sie die Regeln zur Projekt-Modifikation beachten, die im Abschnitt <ref id="Projekt Hacking" name="Projekt Hacking"> beschrieben
 werden.
-<item>Um eine dynamische Bibliothek zu installieren, müssen Sie den KDE-Datei-System Standard beachten, wie er im <htmlurl
-url="programming-13.html" name="The KDevelop Programming Handbook"> beschrieben ist.
+<item>Um eine dynamische Bibliothek zu installieren, müssen Sie den KDE-Datei-System Standard beachten, wie er im <htmlurl url="programming/index-13.html" name="The KDevelop Programming Handbook"> beschrieben ist.
 </itemize>
 
 <sect1>Mehrere Zielobjekte
 <p>
-For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
-targets like packages containing several applications. As commands like "Execute" require that only one target is build by the
-developer, those types of projects are only supported in the way that you have to write your own entries to the <idx/Makefile.am/'s and
-creating your directories for the additional libraries or binaries to build. Nevertheless, a build-process always invokes your
-make-program independent from what actually the targets are; so these functions still can be used (with the restriction that the build
-is invoked from the main project subdirectory).
+Für manche Projekte reichen die Möglichkeiten von KDevelop zur Zeit noch nicht aus. Dies sind Projekte, die mehrere Zielobjekte beinhalten, wie 
+Pakete, die mehrere Anwendung enthalten. Da Kommandos wie "Ausführen" erfordern, daß nur <em/ein/ Ziel vom Entwickler erstellt  wird, werden 
+solche Projekte nur in der Weise unterstützt, daß Sie Ihre eigenen Einträge in die <idx/Makefile.am/'s vornehmen und Ihre eigenen Verzeichnisse für 
+die zu erstellenden zusätzlichen Bibliotheken oder ausführbaren Dateien erstellen müssen. Dennoch ruft ein Erstellungsprozeß immer Ihr 
+Makeprogramm auf, unabhängig davon welche Ziele tatsächlich erstellt werden; diese Funktionen können also weiterhin verwendet werden (mit der 
+Einschränkung, daß das Erstellen aus dem Haupt-Projektverzeichnis heraus aufgerufen wird).
 
-Another way to still work with this type and to still have access to the binaries themselves are creating empty projects and move their
-subdirectories in conjunction with the <idx/project files/ to the directory containing all sources later. Then you could load each
-target independently by its project file; this also allows executing and <idx/debugging/ the target.
+Eine weitere Methoden mit diesem Typ von Projekt umzugehen und denoch den Zugriff auf die ausführbaren Dateien zu erhalten, ist das Erstellen von
+leeren Projekten mit anschließendem Verschieben der Unterverzeichnisse mit den kdevprj Dateien in das Verzeichnis, das später alle Ihre Quellen 
+enthalten wird. Sie könnten dann jedes Ziel unabhängig von den anderen mit Hilfe der zugehörigen kdevprj Datei laden; dies ermöglicht Ihnen auch 
+das Ausführen und Debuggen des Zieles.
 
-Multiple binaries or libraries within the main project subdirectory are possible with following the rules explained in section 
-<ref id="Projekt Hacking" name="Projekt Hacking"> and the following guidelines for editing the main project's subdirectory 
-Makefile.am (all modifications outside the KDevelop write area):
+Mehrere Binärdateien oder Bibliotheken innerhalb Haupt-Projektverzeichnisses sind möglich, wenn Sie sich an die in  
+<ref id="Projekt Hacking" name="Projekt Hacking"> erläuterten Regeln und an die folgenden Richtlinien zum Editieren von Makefile.am im
+Projektverzeichnis halten (alle Modifikationen müssen außerhalb der KDevelop write area erfolgen) :
 
 <itemize>
-<item>add your target to the bin_PROGRAMS if it is an executable
-<item>add your library declaration line if it is a shared library
-<item>add the same declarations like the original project binary is build:
+<item>Fügen Sie das Ziel bin_PROGRAMS hinzu, wenn es eine auführbare Datei ist
+<item>Fügen Sie Ihre Bibliotheksdeklaration hinzu, wenn es sich um eine dynamische Bibliothek handelt
+<item>Fügen Sie dieselben Deklarationen wie beim Originalprojekt hinzu:
 	<itemize>
-	<item>newtarget_METASOURCES
-	<item>newtarget_LD_FLAGS
+	<item>NeuesZiel_METASOURCES
+	<item>NeuesZiel_LD_FLAGS
 	<item>DISTCLEANFILES
-	<item>copy the messages: entry for the original binary and replace target_SOURCES with newtarget_SOURCES, target.pot with
-newtarget.pot
+	<item>Kopieren Sie die messages Einträge und ersetzen Sie Ziel_SOURCES Ziel.pot durch NeuesZiel_SOURCES NeuesZiel.pot
 	</itemize>
-<item>add your sources like the KDevelop write area contains outside the write area for your binary or library
-<item>for installing static libraries, create the library with KDevelop's auto-creation inside subdirectories. Then modify the
-Makefile.am outside the write area according to the needed settings
+<item>Fügen Sie Ihre Quellcodes, die sie für Ihre Binärdatei oder Bibliothek benötigen, wie im KDevelop Schreib-Bereich aufgeführt außerhalb des Schreibbereiches hinzu.
+<item>Um statische Bibliotheken zu installieren, erzeugen Sie die Bibliothek mit KDevelop's automatischer Generierung innerhalb von Unterverzeichnissen. Dann ändern Sie die 
+Makefile.am außerhalb des Schreibbereichs gemäß den von Ihnen benötigten Einstellungen.
 </itemize>
 
 
 <sect>Neue Projekte
 <p>
+Der KDevelop Application Wizard ermöglicht die Erstellung von dreizehn verschiedenen Projekttypen. Alle Projekte verwenden die Standard GNU 
+Entwicklungswerkzeuge wie unter Anforderungen beschrieben.
 
-The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
-projects use the GNU standard development tools as described in the requirements section of this handbook. For <idx/KDE/ applications,
-the wizard offers two different frameworks, the <idx/KDE/-Application, providing a complete application with base <idx/classes/ for
-document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow inherits the
-KTMainWindow class. The <idx/KDE/-Mini-Application only gives a view which is empty. This type of project can be used for the creation
-of small desktop tools or other simple applications without too much change on the existing code provided by the framework. A
-Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the <idx/KDE-libraries/ for end-users.
-The Qt-Application also is created by using tree base <idx/classes/ like the KDE-standard-Application and provides a menubar, toolbar
-and statusbar.
+Für KDE Anwendungen stehen sechs Projekttypen zur Verfügung :
+<itemize>
+<item>Mini: Erzeugt eine KDE Applikation mit leerem Hauptwidget.
+<item>Normal: Erzeugt eine KDE-Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
+Doc/View Modell. 
+<item>Normal-OpenGL: Erzeugt eine KDE-Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
+Doc/View Modell. Zusätzlich OpenGL(tm) (Mesa3D) Unterstützung.
+<item>KDE 2 Normal: Erzeugt eine KDE-2 Applikation mit Session-Management, Menüleiste, Werkzeugleiste, Statusleiste und Unterstützung für das 
+Doc/View Modell. 
+<item>KDE 2 Mini: Erzeugt eine KDE-2 Applikation mit leerem Hauptwidget.
+<item>KDE 2 MDI: Erzeugt eine KDE-2 MDI (Multiple Document Interface) Applikation mit Session-Management, Menüleiste, Werkzeugleiste, 
+Statusleiste und Unterstützung für das Doc/View Modell.
+</itemize>
+<p>
 
-The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
-"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a <idx/GUI/
-first or for those working on commandline programs written in C++ or C. C programmers can also take advantage of the C-only project,
-which requires any C-compiler at the minimum.
+Wenn Sie keine Abhängigkeiten zu den KDE Bibliotheken wünschen, können Sie eine der vier Qt Anwendungen wählen:
+<itemize>
+<item>Normal: Erzeugt eine Qt-Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, einschließlich 
+Unterstützung für ein rudimentäres Doc/View-Modell.
+<item>QT 2.x SDI: Erzeugt eine Qt-Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, einschließlich 
+Unterstützung für ein Single Document-view Interface (SDI) Modell.
+<item>QT 2.1 MDI: Erzeugt eine Qt-2.1 Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, 
+einschließlich Unterstützung für ein Multiple Document Interface (MDI) Modell.
+<item>QextMDI: Erzeugt eine auf der QextMDI Bibliothek und Qt2.0x basierende MDI Anwendung. Ermöglicht das Umschalten zwischen den beiden 
+Modi Toplevel und Kind-Frame. Benötigt QextMDI !!! (www.geocities.com/gigafalk/qextmdi.htm).
+</itemize>
 
-The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name and
-Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
-*.lsm file.
+Die beiden Typen C und C++ bieten die Erstellung einer Kommandozeilenanwendung an. 
+
+Außerdem können Sie ein völlig leeres Projekt erzeugen, um beispielsweise mit bereits vorhandene Projekten zu arbeiten.
+
+Der Wizard fragt Sie nach dem Projektnamen, Version und dem Verzeichnis in dem das Projekt erstellt werden soll. Außerdem können Sie Ihren 
+Namen und Ihre EMail Adresse angeben. Diese werden in den Header und cpp Schablonen am Anfang Ihrer Quelldateien eingetragen und werden 
+außerdem für die Einträge in die -lsm Datei verwendet.
 
 <sect>Öffnen und Schließen von Projekten
 <p>
-KDevelop is by default configured to open the last project loaded when starting. This allows a fast start, but you may want to
-change that to just start the Entwicklungsumgebung without any project. To prevent the default behavoir, disable the "Load last project" option in
-the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
+KDevelop ist standardmäßig so eingestellt, daß das zuletzt geöffnete Projekt beim Start geladen wird. Dies ermöglicht einen schnellen Start, aber 
+möglicherweise wollen Sie es ändern, so daß die Entwicklungsumgebung ohne ein Projekt gestartet wird. Zum Ändern des Standardverhaltens 
+schalten Sie 'Letztes Projekt Laden' im <ref id="KDevelop Setup" name="KDevelop Setup"> Dialog aus.
 
-To open another project, select "Open" from the "Project" menu or press the "Open Project" button on the toolbar. In case you've
-got another project currently open, this will be closed. If your current project then contains files that aren't saved, you are
-asked to save all changed files. Thereby, you can select which file to save and which you want to close without saving, or to save
-all at once.
+Zum Öffnen eines anderen Projekts wählen Sie "Öffnen" aus dem Projektmenü oder drücken den "Projekt öffnen" Schalter auf der Werkzeugleiste. Im
+Falle, daß Sie schon ein Projekt geöffnet haben, wird dieses geschlossen. Wenn Ihr aktuelles Projekt nicht gesicherte Dateien enthält, werden Sie 
+gefragt ob Sie diese Dateien speichern wollen. Sie können sich dann entscheiden, welche Dateien gesichert werden sollen und welche nicht, oder 
+Sie können alle Dateien auf einmal speichern.
 
-Then you get an "Open Project" dialog, where you can change to the directory containing the project file to be loaded. KDevelop
-project files have the <em/*.kdevprj/ mime-type which is also displayed by a project icon. Select the project file and press
-"Open". When loading a project, the Class Browser scans all files and builds the initial classtree, so you can start working on the
-project by using the Class Browser directly.
+Sie erhalten einen "Projekt öffnen" Dialog, in dem Sie zu dem Verzeichnis wechseln können, das Ihre zu ladende Projektdatei enthält. KDevelop 
+Projektdateien haben einen <em/*.kdevprj/ Mimetypen der auch durch ein Projekt Icon dargestellt wird. Wählen Sie die Projektdatei und betätigen Sie 
+"Öffnen". Wenn ein Projekt geladen wird, scannt der Klassenbrowser alle Dateien und baut den Klassenbaum auf, so daß Sie sofort mit der Arbeit 
+beginnen können, indem Sie den Klassenbrowser benutzen.
 
-Another comfortable way to open a project is to select the project file in the KFM, the <idx/KDE/ File Manager. This will start
-KDevelop with loading the selected project file. You could as well open a project by commandline, entering <tt/kdevelop
-projectname.kdevprj/.
+Eine weitere komfortable Möglichkeit ein Projekt zu öffnen, besteht darin, es im KFM, dem <idx/KDE/ Datei Manager anzuwählen. Dies startet 
+KDevelop  zusammen mit dem gewählten Projekt. Sie könnten es genausogut von der Kommandozeile starten, indem Sie eingeben 
+<tt/kdevelop projektname.kdevprj/.
 
-When closing KDevelop, your project file will be saved automatically and the Entwicklungsumgebung detects if you have changed any projectfiles.
-Then you will be asked to save any changes before exiting. The available options for closing are the same than for closing a
-project before loading another.
+Wenn Sie KDevelop schließen, wird Ihre Projektdatei automatisch gespeichert und die Entwicklungsumgebung stellt fest, ob irgendwelche 
+Projektdateien verändert wurden. Sie werden dann gefragt, ob Sie die Änderungen speichern wollen. Die verfügbaren Optionen sind die gleichen wie 
+beim Schließen eines Projekts.
 
 <sect>Bearbeiten eines Projekts
 <p>
-After you created a new project with the KAppWizard, the usual task is to extend the project by editing the already created
-sources and adding classes, pixmaps, pictures and whatelse you project needs. Now, editing a project means that you can change the
-default project after its generation by menus and dialogs according to your needs. The next section therefore describes how you
-can add existing files and classes as well as creating new files. This is needed for building your project, but this won't help
-you for the installation process by the end-user. Therefore, section <ref id="Setzen der Projekt Optionen" name="Setzen der Projekt Optionen"> describes how to set File Properties especially for additional files that you want make to install, like documentation or
-pixmaps.
-Another part in project maintaining is adding translations for applications that support internationalization, which is described
-in <ref id="Übersetzung hinzufügen" name="Übersetzung hinzufügen">.
+Nachem Sie ein Projekt mit dem KAppWizard erstellt haben, werden Soe normalerweise das Projekt erweitern, indem Sie Quelldateien, Klassen, 
+Pixmaps, Bilder und was immer Ihr Projekt benötigt, hinzufügen. Nun, editieren eines Projektes bedeutet, daß Sie das Standardprojekt nach der 
+Erstellung mit Hilfe von Menüs und Dialogen Ihren Anforderungen gemäß verändern können. Der nächste Abschnitt beschreibt deshalb, wie Sie 
+bereits existierende Dateien und Klassen hinzufügen und wie Sie neue Dateien erstellen können. Dies ist notwendig um Ihr Projekt zu erstellen, wird 
+aber nicht dem End-User beim Installieren helfen. Deshalb beschreibt der Abschnitt 
+<ref id="Setzen der Projekt Optionen" name="Setzen der Projekt Optionen">, wie Sie die Dateieigenschaften, insbesondere für zusätzliche Dateien, die 
+installiert werden sollen, setzen können. Dies betrifft z.B. Dokumentationen oder Pixmaps. Eine weitere Arbeit bei der Wartung Ihres Programms ist das 
+Hinzufügen von Übersetzungen, die die Internationalisierung unterstützen. Dies wird in 
+<ref id="Übersetzung hinzufügen" name="Übersetzung hinzufügen"> beschrieben.
 
-<ref id="Erweitern der Projekt Dokumentation" name="Erweitern der Projekt Dokumentation"> covers questions on how to create a good set
-of documentation for online help enabling the end-user to help himself in case of troubles as well as how to use your product.
+<ref id="Erweitern der Projekt Dokumentation" name="Erweitern der Projekt Dokumentation"> behandelt Fragen, wie ein guter Satz an Dokumentationen 
+für Online Hilfe erstellt werden kann, die dem Endbenutzer die Verwendung Ihres Produktes ermöglicht und Ihn in die Lage versetzt, sich bei Problemen 
+selbst helfen zu können.
 
-Finally, <ref id="Projekt Hacking" name="Projekt Hacking"> describes how you can eventually work around the KDevelop project
-management in special cases.
+Schließlich wird im Abschnitt <ref id="Projekt Hacking" name="Projekt Hacking"> beschrieben, wie Sie das KDevelop Projektmanagment in bestimmten 
+Fällen umgehen können.
 
 <sect1>Hinzufügen und Entfernen von Dateien und Klassen<label id="Hinzufügen und Entfernen von Dateien und Klassen">
 <p>
-Adding a new file is often used when you think that you should separate your class implementation file into several ones. Then you
-need to create an new file which will contain the part of the class implementation you want to move. You can do this by choosing
-"New" from the "File" menu, opening the "New File" dialog. This enables you to specify the file-type, name and the location. When
-entering the filename, KDevelop automatically enters the extension for you, but you can as well change the extensions towards your
-own preferences. Further, you can include the header template for sourcefiles, so you don't have to copy this into your new file
-yourself. Also, you can decide, if the file is included in the project or not. Mind that this doesn't cover the installation
-destination; this has to be configured later by setting the file preferences.
+Das Hinzufügen neuer Dateien wird oft benötigt, wenn Sie Ihre Klassenimplementationsdatei in mehrere Dateien aufteilen wollen. Dann ist es nötig eine neue Datei zu erzeugen, 
+die den Teil der Implementation enthält, den Sie  auslagern wollen. Sie können dies erreichen, indem Sie "Neu" aus dem Dateimenü wählen, wodurch der "Datei-Neu" Dialog 
+aufgerufen wird. Dies gibt Ihnen die Möglichkeit, den Dateitypen, den Namen und Speicherort anzugeben. Während Sie den Dateinamen angeben, fügt KDevelop automatisch 
+eine Erweiterung hinzu, Sie können diese Erweiterung jedoch auch noch Ihren Bedürfnissen anpassen. Außerdem können Sie die Vorlagendatei für Quelldateien einbinden, so 
+daß Sie den Kopf nicht von Hand in Ihre Datei kopieren müssen. Des weiteren können Sie entscheiden, ob die Datei dem Projekt hinzugefügt werden soll oder nicht. Denken 
+Sie daran, daß dies nichts mit der späteren Installation zu tun hat; diese Konfiguration erfolgt später innerhalb der Dateivoreinstellungen.
 
-After the new file has been created, the project file will be updated as well as the according Makefile.am's.
-To add a complete class to your project, you can constuct a new class with the Classgenerator which is invoked by "New Class" from
-the Project-menu.
+Nachdem die neue Datei erzeugt wurde, werden sowohl die Projektdatei, als auch die zugehörigen Makefile.am's aktualisiert. Zum Hinzufügen einer kompletten Klasse, können 
+Sie mit Hilfe des Klassengenerators eine neue Klasse konstruieren. Dieser wird durch Wahl von "Neue Klasse" aus dem Projektmenü aufgerufen.
 
-In case you have an existing project and you want to add certain classes that you want to re-use in your project, select "Add
-File(s) to Project..." from the Project-menu. Select "Add existing files", which will open a dialog to let you specify which files
-will be added to the project and the destination directory. Mind that the files will be copied into the specified directory and
-added to the project. You should call "Make" after adding sources; then your added files will be included in the build-process. In
-case you want to add e.g. pixmaps that have to be installed by the end-user, you should update the File Properties for the added
-file and specify the installation path (see <ref id="Setzen der Projekt Optionen" name="Setzen der Projekt Optionen">
+Im Falle, daß Sie ein existierendes Projekt haben und bestimmte Klassen hinzufügen wollen, die Sie in Ihrem Projekt wiederverwenden wollen, wählen Sie "Vorhandene Datei(en) 
+hinzufügen..." aus dem Projektmenü. In dem erscheinenden Dialog können Sie wählen, welche Dateien Sie hinzufügen wollen und welches das Zielverzeichnis sein soll. 
+Denken Sie daran, daß die Dateien in das Zielverzeichnis kopiert und dem Projekt hinzugefügt werden. Sie sollten nach dem Hinzufügen Make aufrufen, damit Ihre Dateien dem 
+Erstellungsprozeß hinzugefügt werden. Für den Fall, daß Sie z.B. Pixmaps hinzufügen wollen, die später durch den Endbenutzer installiert werden sollen, sollten Sie die Dateieigenschaften 
+anpassen und den Installationspfad angeben (siehe <ref id="Setzen der Projekt Optionen" name="Setzen der Projekt Optionen">).
 
-To add a file to the project that is already in the project directory, go to the RFV, where all project-included files are
-dispayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
-file icon) and press the right mouse button to get the popup-menu. Then select "Add".
+Um Dateien dem Projekt hinzuzufügen, die sich bereits im Projektverzeichnis befinden, wechseln Sie in die RFV Ansicht, in der Sie zugehörige Dateien an Hand des Icons 
+ausmachen können. Wählen Sie die hinzuzufügende Datei und betätigen Sie die rechte Maustaste um das Popup-Menü zu öffnen. Dann wählen Sie "Datei zum Projekt 
+hinzufügen...".
 
-Files can also be removed from your project. This could be needed in cases where you don't want to use pre-generated files that
-are already given by the KAppWizard. To remove a file, you have additionally the option between removing a file from the project
-or delete it completely. To remove a file from the project, select the file in the LFV or the RFV, press the right mouse button
-and select "remove". To delete a file, select "delete physically".
+Sie können auch Dateien vom Projekt entfernen. Dies wird dann nötig, wenn Sie nicht die vom KAppWizard vorgenerierten Dateien verwenden wollen. Beim Entfernen von 
+Dateien haben Sie zusätzlich die Möglichkeit, die Datei komplett von der Festplatte zu entfernen. Zum Entfernen vom Projekt, wählen Sie die Datei im LFV oder im RFV, drücken 
+die rechte Maustaste und wählen "Datei vom Projekt entfernen...". Zum Löschen der Datei wählen Sie "Datei von der Festplatte entfernen...".
 
 <sect1>Setzen der Projekt Optionen<label id="Setzen der Projekt Optionen">
 <p>
-The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
-files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
-included in the project as well as the installation path if the file is going to be installed by the end-user's make install
-command.  It is important for documentation files as well as pixmaps to specify the location where the files should go when the
-project is build and installed by end users, so you have to set up those locations. For standard <idx/KDE/ location macros you should
-look in your Makefile.am where the location macros are specified.
-
+Auf den Dateieigenschaftendialog kann über das Projektmenu oder innerhalb des LFV mit einem Klick der rechten Maustaste zugegriffen werden. Er zeigt die Projektdateien 
+in Gruppen, so wie sie auch im LFV angeordnet sind und zeigt die Dateieigenschaften wie Größe, Dateityp, ob die Datei zum Projekt gehört sowie den Pfad, in den die Datei 
+durch das make install Kommando des Endnutzers installiert wird. Es ist wichtig, diesen Pfad für Dokumentationsdateien und Pixmaps anzugeben, Sie müssen diese Pfade also 
+hier einstellen. Für Standard <idx/KDE/ Pfad Makros sollten Sie in Ihrer Makefile.am nachsehen, wo diese Makros aufgeführt sind.
 
 <sect1>Übersetzung hinzufügen<label id="Übersetzung hinzufügen">
 <p>
-As <idx/KDE/ allows configuring your desktop and the behavoir of your applications, you also have the option to choose the language
-that your application uses, in regards of the use of online-documentation as well as the application's look. For documentation files,
-this seems a trivial task. You would add a subdirectory labeled by the desired language, e.g. <tt/de/ for german, to the
-<tt/docs/ directory of your project and copy the english documentation into that directory. Then you would generate the
-documentation and set all project file options for the installation directories. Then you could start translating the sgml file to
-your desired language and regenerate the documentation; then you're done.
-For the application, this seems a bit more difficult for the programmer. Now, we want to explain how to enable
-internationalization support for your application and how to add the languages you want to support.
+Da <idx/KDE/ die Konfiguration Ihres Desktops und des Verhaltens Ihrer Anwendungen ermöglicht, haben Sie auch die Möglichkeit die Sprache, die Ihre Anwendung verwendet 
+zu wählen. Dies betrifft die Verwendung der Online-Dokumentation genauso wie das gesamte Aussehen Ihrer Applikation. In Bezug auf die Dokummentationsdateien scheint dies 
+ein triviales Unterfangen zu sein. Sie würden ein Unterverzeichnis mit dem Kürzel der jeweiligen Sprache im <tt/docs/ Verzeichnis Ihres Projektes anlegen, z.B <tt//de/ für 
+Deutsch und die englische Dokumentation in dieses Verzeichnis kopieren. Dann würden Sie die Dokumentation erzeugen und alle Projekt Optionen bezüglich der 
+Installationsverzeichnisse setzen. Dann könnten Sie damit beginnen die sgml Datei zu übersetzen und die Dokumentation neu zu erzeugen. Das ist alles. Für die Anwendung 
+selber scheint dies ein wenig schwieriger zu sein. Wir wollen deshalb hier erklären, wie man die Internationalisierung unterstützt und wie man die Sprachen die man unterstützen 
+möchte einbindet.
 
-First, you have to enclose all visible strings of your application that appear in bars or dialogs with the <tt/i18n()/ macro.
-This macro is a replacement for the function <tt/klocale->tranlate()/ of the KLocale class and much easier to use. As this macro
-is declared in the <tt/kapp.h/ include file, you have to add <tt/#include &lt;kapp.h&gt;/ to the source file or the class
-declaration file of the class that makes use of the macro. Also it should be mentioned, that although <tt/i18n()/ is a macro and
-therefore you could think about using the original function, this won't work because the strings that are set up for translation
-have to be read out of the sources and get stored in the application's translation file (&lt;YourApp&gt;.pot in the /po
-subdirectory). This task is done by the program xgettext, and to do this, you would enter <tt/make messages/ in your prject
-directory containing the sources. As xgettext depends on the <tt/i18n()/ macro, the original function won't do the job.
+Zuerst müssen Sie alle in Ihrer Anwendung sichtbaren Zeichenketten, die also auf Balken oder in Menüs erscheinen, in einem <tt/i18n()/ Makro einschließen. Dieses Makro 
+wird durch die Funktion <tt/klocale->translate()/ aus der KLocale Klasse ersetzt ist aber wesentlich einfacher zu verwenden. Da das Makro in der <tt/kapp.h/ Includedatei 
+definiert ist, müssen Sie Ihrer Quelldatei ein <tt/#include &lt;kapp.h&gt;/ hinzufügen. Es sollte auch erwähnt werden, daß obwohl <tt/i18n()/ ein Makro ist und Sie deshalb 
+denken, Sie könnten die Originalfunktion verwenden, dies nicht funktionieren wird. Das liegt daran, daß die Zeichenketten, die übersetzt werden sollen, aus den Quelldateien 
+ausgelesen und in der Übersetzungsdatei der Anwendung gespeichert werden (&lt;IhreApp&gt;.pot im /po Unterverzeichnis). Dies wird vom xgettext Programm gemacht, welches 
+mit <tt/make messages/ aus Ihrem Projektverzeichnis heraus aufgerufen wird. Da xgettext das <tt/i18n()/ Makro benötigt, wird Sie die Verwendung der Originalfunktion  nicht zum 
+Ziel führen.
 
-For translations themselves, you first have to create the message file containing all strings that are used in your sources with
-the <tt/i18n()/ macro. This can be done by choosing "Make Messages and merge" from the Build-menu.
-Then you have to add the languages that your application wants to support. Therefore, select "Add Tranlation File" from the
-Project-menu. This opens a language selection dialog. Select the language and press OK. This will build the ASCII file containing
-entries for the filename of the string and the line where the original string is placed. Then you will see a <tt/msgid/ line
-containing the string to translate, followed by <tt/msgstr/. The msgstr line is mostly empty except for the translations already
-provided by the <idx/KDE-libraries/. Those have to be filled with the according translations of your language.
+Für die Übersetzungen selbst, müssen Sie zunächst die message Datei erzeugen, die alle vom <tt/i18n()/ Makro eingeschlossenen Zeichenketten aus Ihrem Quellcode enthält. 
+Dies wird durch Auswahl von "Meldungen erstellen und verbinden" aus dem Projektmenü erreicht. Dann müssen die Sprachen, die Ihr Projekt unterstützen soll, hinzugefügt 
+werden. Dazu wählen Sie "Neue Übersetzung hinzufügen..." aus dem Projektmenü. Dies öffnet den Sprachauswahldialog. Wählen Sie eine Sprache und bestätigen Sie mit OK. 
+Es wird eine ASCII Datei erzeugt, die Einträge für den Dateinamen und die Zeilennummer des Vorkommens der Zeichenkette enthält. Sie sehen dann jeweils eine <tt/msgid/ 
+Zeile, die die zu übersetzende Zeichenkette enthält, gefolg von einer <tt/msgstr/ Zeile. Die <tt/msgstr/ Zeile ist leer, bis auf Einträge, die bereits von den <idx/KDE Bibliotheken/ 
+bereitgestellt werden. Die leeren Zeilen müssen von Ihnen mit der entsprechenden Übersetzung ausgefüllt werden.
 
-You could think about writing the translations by hand, which can also be done. But the <idx/KDE-SDK/ offers the use of the program
-KTranslator, which ready the already existing files from other applications installed on the system, so you can reuse already
-translated strings to support your language.
+Sie könnten die Übersetzungen von Hand schreiben. Das <idx/KDE-SDK/ bietet jedoch auch das Programm KTranslator, welches die Dateien bereits auf Ihrem System installierter 
+Programme liest, so daß Sie bereits übersetzte Zeichenketten wiederverwenden können.
 
-To access KTranslator, the easiest way is selecting a &lt;language&gt;.po file in the /po directory either in the LFV or in the
-RFV. This opens KTranslator and lets you do the translating easiely. Mind that you have to set up KTranslator's properties
-yourself to include the author name and the language as well as the destination file. KTranslator by default only opens your
-translation file.
+Um auf KTranslator zuzugreifen, wählen Sie am einfachsten eine &lt;Sprache&gt;.po Datei aus dem /po Verzeichnis entweder in LFV oder RFV. Dies öffnet KTranslator und 
+ermöglicht es, auf einfache die Übersetzung durchzuführen. Denken Sie daran das Sie KTranslator konfigurieren müssen, damit der Autorenname, sowie Sprache und Zieldatei 
+korrekt gesetzt sind. Standardmäßig öffnet KTranslator nur die Übersetzungsdatei.
 
-For all translation files, <tt/make/ uses the program <tt/msgfmt/ to format your message files to use with the binary, but you
-don't have to take care for that, as well as specifying the destination directory for installing the translation files; this is
-all done by KDevelop automatically.
+Für alle Übersetzungen verwendet <tt/make/ das Programm <tt/msgfmt/ für die Formatierungen Ihrer in der ausführbaren Datei verwendeten Meldungen, Sie brauchen sich darüber 
+aber keine Gedanken zu machen; dies wird alles von KDevelop automatisch gemacht.
 
-For more information about internationalization support, see <htmlurl url="http://www.kde.org" name="http://www.kde.org">; a lot
-of people are doing translations for you to support their language. You will find a list of email-adresses of the translators you
-could write to and who will help you with this. Also read <ref id="Der Dialogeditor" name="Der Dialogeditor"> and <htmlurl
-url="programming-11.html" name="The KDevelop Programming Handbook"> where questions about internationalization are covered again.
+
+Weitere Informationen zur Unterstützung der Internationalisierung finden Sie auf <htmlurl url="http://www.kde.org" name="http://www.kde.org">; eine Menge Leute machen 
+Übersetzungen für Sie. Sie finden dort auch eine Liste mit EMail Adressen der Übersetzer, denen Sie schreiben könnten und die Ihnen dabei helfen können. Lesen Sie
+auch  <ref id="Der Dialogeditor" name="Der Dialogeditor"> und <htmlurl url="programming/index-11.html" name="The KDevelop Programming Handbook"> 
+wo Fragen der Internationalisierung auch wieder behandelt werden.
 
 <sect1>Erweitern der Projekt Dokumentation<label id="Erweitern der Projekt Dokumentation">
 <p>
-All projects created with KDevelop contain a pre-configured documentation, which already contains standard chapters for
-installation, project name and version as well as the author name and email-address. As KDevelop uses SGML-templates, it's very
-easy to extend the documentation to a full descriptive helpsystem. The only thing you have to do is editing the sgml file, placed
-in docs/en as index.sgml. The reference documentation included with your sgml-tools package can be added to the helpbrowser and
-allow you direct access to special tags as well as a short description of how to extend the documentation. SGML has a lot of
-advantages, whereas <idx/KDE/ makes wide use by this documentation type with the additional ksgml2html tool. This creates the typical
-<idx/KDE/-style documentation and makes it look nicer. Anyway, the sgmltools alone are enough to produce a html output that is already
-included in your application. To create the documents using ksgml2html, install the tool and run "Make User-Manual" from the
-Build-menu. The Documentation Browser allows a direct controlling of the output by selecting "Project User-Manual" from the
-Help-menu or the according icon in the DOC-tree. Then you can browse the documentation online in KDevelop and have a better
-overview by the output over errors that result in missing tags.
+Alle mit KDevelop erstellten Projekte enthalten eine vorkonfigurierte Dokumentation, die bereits Standardkapitel zu Installation, Projektname und Version, sowie Autorname und 
+Emailadresse beinhaltet. Da KDevelop SGML Schablonen verwendet, ist es sehr einfach die Dokumentation zu einem kompletten Hilfesystem zu erweitern. Alles was Sie dazu 
+tun müssen, ist die sgml Datei, die sich in docs/en unter dem Namen index.sgml befindet, zu editieren. Die Referenz Dokumentation Ihres sgml-tools Paketes kann dem 
+Hilfebrowser hinzugefügt werden, erlaubt direkten Zugriff auf spezielle Tags und enthält eine kurze Beschreibung, wie die Dokumentation zu erweitern ist.
+SGML hat eine Reihe von Vorteilen und <idx/KDE/ macht häufig Gebrauch von diesem Dokumentationstyp zusammen mit dem ksgml2html Programm. Dieses Werkzeug erzeugt 
+die typische Dokumentation im <idx/KDE/ Stil und sorgt dafür, daß sie schöner aussieht. Trotzdem sind auch die sgmtools alleine schon ausreichend, die html Ausgabe zu  
+erzeugen, die Ihre Applikation beinhaltet. Wenn Sie die Dokumentation mit ksgml2html erzeugen wollen, installieren Sie dieses Programm und rufen "Benutzerhandbuch erstellen" 
+aus dem Projektmenü auf. Der Dokumentationsbrowser ermöglicht die sofortige Kontrolle der Ausgabe, indem Sie entweder "Benutzerhandbuch des Projekts" aus dem Hilfemenü 
+oder das entsprechende Icon aus der DOC Baumansicht wählen. Dadurch können Sie direkt in KDevelop durch die Dokumentation browsen und haben so eine bessere 
+Übersicht über die Fehler, die durch fehlende Tags entstehen.
 
-Now, while extending the documentation, you can't avoid that additional files are produced that have to be included into the
-project as each <tt/sect/-tag creates a new HTML file. The output generated by the KAppWizard is already included in the project,
-so you don't have to care for their installation path. What you have to watch out for is any index-xx.html file, where xx is
-higher than 6 (as the first six pages are already included in the project). After generating the documentation, switch to the RFV
-and browse to your documentation directory. Press the right mouse button over the files to add and select "Add". Further,
-ksgml2html adds the <idx/KDE/ logo to the documentation directory. This file, <tt/logotp3.gif/, has to be added to the project as well.
-Then you have to select the "File Properties" either from the Project menu or by the popup menu in the file-viewers. The easiest
-way to set the installation path is to select a documentation file already set up for installation such as <tt/index.html/. You
-see that <tt/Install/ is checked and the Installdir+filename already contains the destination. Mark the Installdir and enter
-STRG+C to copy the installation path to the clipboard. Then select the file you want to specify for installation. Enable
-<tt/Install/, this will enable the installdir-entry field, already containing the filename. Place the cursor in front of the
-filename and enter STRG+V to insert the clipboard contents (which was the installation path copied before). This is the fastest
-way to specify the installation path. For more options about specifying installation destinations, see <htmlurl
-url="programming-14.html" name="The KDevelop Programming Handbook">.
+Nun, während Sie die Dokumentation erweitern, ergibt es sich zwangsläufig, daß zusätzliche Dateien erzeugt werden, die zum Projekt hinzugefügt werden müssen, da jeder 
+<tt/sect/ Tag eine neue HTML Datei erzeugt. Die Ausgabe des KAppWizard gehört bereits zum Projekt, so daß Sie sich um die Installationspfade keine Gedanken machen 
+müssen. Worauf Sie achten müssen, sind index-xx.html Dateien bei denen xx größer als 6 ist (die ersten sechs Dateien gehören bereits zum Projekt). Nachdem Sie die 
+Dokumentation erzeugt haben, wechseln Sie zum RFV und kontrollieren Ihr Dokumentationsverzeichnis. Drücken Sie die rechte Maustaste über den Dateien und wählen Sie 
+"hinzufügen". Des weiteren fügt ksgm2html dem Dokumentationsverzeichnis das <idx/KDE/ Logo hinzu. Diese Datei, <tt/logotp3.gif/, müssen Sie ebenfalls dem Projekt hinzufügen. 
+Dann müssen Sie "Dateieigenschaften" entweder aus dem Projektmenü oder mit Hilfe des Popup Menüs in den Ansichten wählen. Der einfachste Weg den Installationspfad zu 
+setzen, ist eine bereits zur Installation vorgesehene Dokumentationsdatei zu wählen, wie <tt/index.html/. Sie sehen, daß "Installieren" angekreuzt ist und "Installationsverzeichnis 
+und Dateiname" bereits ein Ziel enthält. Markieren Sie diesen Eintrag und geben Sie STRG+C ein um den Eintrag in's Clipboard zu kopieren. Dann wählen Sie die Datei die Sie 
+als zu installieren spezifizieren wollen. Markieren Sie "Installieren", dies wird das "Installationsverzeichnis und Dateiname" Feld aktivieren, welches dann schon den 
+Dateinamen enthält. Plazieren Sie den Cursor vor dem Dateinamen und geben Sie STRG+V zum Einfügen des Clipboardinhalts ein. Dies ist die schnellste Methode, den 
+Installationspfad einzugeben. Weitere Informationen zur Angabe von Installationszielen finden Sie im <htmlurl url="programming/index-14.html" name="KDevelop Programming Handbook">.
 
 <sect1>Projekt Hacking<label id="Projekt Hacking">
 <p>
-When working with a project, you should never edit the project file by hand. This will prevent KDevelop from loading your project
-correctly under certain circumstances, as well as changes will not result in updating the Makefiles. To change any settings for
-your project, you have to use the given menuentries like e.g. for adding files or setting file properties. For experts that are
-not comfortable with certain options for e.g. the linker or need additional project configuration, you should work yourself into
-the Makefile.am macros and add all changes in the Makefile.am's after the section separated with the entry "KDevelop write area".
-As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
-this will prevent using KDevelop for any changes related to project configuration.
+Wenn Sie mit einem Projekt arbeiten, sollten Sie nie die Projektdatei von Hand bearbeiten. Das würde es KDevelop unter bestimmten Umständen unmöglich machen, das 
+Projekt korrekt zu laden und Änderungen würden eventuell nicht richtig in die Makedateien eingetragen. Zum Ändern irgendwelcher Projekt-Einstellungen, müssen Sie 
+immer die vorhandenen Menüeinträge benutzen, z.B. zum Hinzufügen von Dateien oder das Setzen von Dateieigenschaften. Experten, die nicht zufrieden mit bestimmten 
+Optionen sind, z.B. Linkeroptionen oder zusätzliche Möglichkeiten zur Projektkonfiguration benötigen, können sich in die Makefile.am Makros einarbeiten und alle Änderungen 
+in die Makefile.am, hinter dem mit "KDevelop write area" gekennzeichneten Bereich, eintragen. Da die GNU Werkzeuge diese Kommandos verwenden, können Sie damit die 
+KDevelop Einstellungen überschreiben. Denken Sie daran, daß dies die Verwendung von KDevelop für Änderungen an der Projektkonfiguration verhindert.
 
-<sect>Compiler and Linker Flags for Projects
+<sect>Compiler und Linker Schalter für Projekte
 <p>
-Each new project contains all needed options for the compiler and linker as well as general settings. By default, your project
-is set to use debugging by the -g flag, and warnings are set to the standard, -Wall. This ensures you can debug your application
-and detect constructions that may cause program errors. For some applications, you would need additional compiler or linker flags,
-especially if you're using libraries that are not currently included by the linker. Then you need to update the project by
-configuring the correct settings with the Project Options dialog. See <ref id="Erstellungsoptionen" name="Erstellungsoptionen"> for more
-information how and where to set Compiler Options, Warnings and Linker Options.
+Jedes neue Projekt enthält alle benötigten Optionen für den Compiler und den Linker, sowie generelle Einstellungen. Standardmäßig ist Debuggen durch den <em/-g/ Schalter, sowie 
+das Warnen bei allen Fehlern mit <em/-Wall/ eingestellt. Dies stellt sicher, daß Sie Ihre Applikation debuggen können und Konstruktionen erkennen können, die möglicherweise 
+Programmfehler verursachen würden. Für manche Anwendungen benötigen Sie jedoch noch zusätzliche Compiler- oder Linkerschalter, insbesondere wenn Sie Bibliotheken 
+verwenden, die so nicht eingebunden werden. Dann müssen Sie Ihr Projekt mit Hilfe der Optionen aus dem Projektmenü rekonfigurieren. Lesen Sie das Kapitel 
+<ref id="Erstellungsoptionen" name="Erstellungsoptionen">, um mehr über Compiler Optionen, Warnungen und Linkeroptionen zu erfahren.
 
-<sect>External Projects
+<sect>Externe Projekte
 <p>
-Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
-empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
-compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
-will be copied into your project directory and the makefile.am's are updated.   Please change all Makefile.am entries existing
-before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
-compiled and installed after the conversion to ensure the project's consistancy.
+Existierende Projekte können in KDevelop Projekte konvertiert werden, indem sie "Neu" aus dem Projektmenü und anschließend "Eigenes Projekt" wählen. Der folgende 
+Dialog erstellt eine leere Projektdatei mit dem Projektnamen, Versionsnummer und Typinformation, sowie Ihrem Namen und Ihrer EMailadresse. Kopieren Sie dann alle Ihre 
+Kompilations- und Konstruktionsdateien in das neue Projektverzeichnis und wählen Sie "Dateien hinzufügen" aus dem Projektmenü. Die ausgewählten Dateien werden in Ihr 
+Projektverzeichnis kopiert und die Makefile.am's werden aktualisiert. Bitte ändern Sie alle Makefile.am Einträge, die vor der Konvertierung schon bestanden, gemäß den 
+Einträgen die KDevelop in der KDevelop write area vorgenommen hat. Testen Sie, ob sich Ihr Programm nach der Konvertierung immer noch kompilieren und installieren läßt, 
+um so die Konsistenz des Projekts zu prüfen.
 
 <chapt>Erstellungsoptionen<label id="Erstellungsoptionen">
 <p>
@@ -2905,7 +2906,7 @@ While changing widget size, the statusbar shows the current values for width and
 After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
 the project types KDE and Qt application, the dialogeditor recognizes this and offers widget construction by the widgets that are
 provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
-information about widget design, see <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
+information about widget design, see <htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook">.
 
 To create a new dialog, select "New" from the "File"-menu or select "New" from the context menu in the "Dialogs" tab. The "New Dialog"
 menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
@@ -2956,8 +2957,7 @@ directory is the current project subdirectory containing the sources already pre
 After pressing "OK", your default values are generated and an empty Widget constructor is opened. Then you are ready to go for creating
 your own widget. Mind that the dialogeditor currently only supports static widgets without geometry management. If you're about to use
 geometry management for your widgets, you should make yourself accustomed with the classes that Qt provides for this, create a new
-class with the classgenerator and write your widget by hand. For more information, see <htmlurl url="programming.html" name="The
-KDevelop Programming Handbook">.
+class with the classgenerator and write your widget by hand. For more information, see <htmlurl url="programming/index.html" name="The KDevelop Programming Handbook">.
 
 <sect>Adding Widgets<label id="Adding Widgets">
 <p>
@@ -3019,7 +3019,7 @@ are then listed in the next tree-level.
 
 On selecting an item, it gets marked in the edior view, as well as the properties are shown in the properties window.
 Using the items view is sometimes important if your widgets behavoir depends on the parent-child relationship. For more information
-see <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
+see <htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook">.
 
 <sect>The Widget Editor<label id="The Widget Editor">
 <p>
@@ -3042,8 +3042,7 @@ and all possible values. Note that most values are implemented in QWidget and ar
 that the final code does not contain any method calls that are unchanged by the user and therefore use the default values as given in
 the widget's constructors.
 
-A complete list of the supported properties that can be set in the properties window for each widget item, see <htmlurl
-url="programming-6.html" name="The KDevelop Programming Handbook">.
+A complete list of the supported properties that can be set in the properties window for each widget item, see <htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook">.
 
 
 <sect>Generating Files
