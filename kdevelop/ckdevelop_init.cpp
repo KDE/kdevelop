@@ -1277,8 +1277,9 @@ void CKDevelop::initConnections(){
   //  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
   connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));
 
-  connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
-
+  connect(grep_dlg,SIGNAL(itemSelected(QString,int)),this,SLOT(slotGrepDialogItemSelected(QString,int)));
+  // connect ctag search dialog signal
+  connect(ctags_dlg,SIGNAL(gotoTag(const CTag*)),this,SLOT(slotTagGotoFile(const CTag*)));
 
   // connections for the proc -processes
   connect(&search_process, SIGNAL(receivedStdout(KProcess*,char*,int)),
@@ -1288,7 +1289,7 @@ void CKDevelop::initConnections(){
           this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
 
   connect(&search_process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
+          this,SLOT(slotSearchProcessExited(KProcess*) )) ;
 
 
   connect(&process,SIGNAL(receivedStdout(KProcess*,char*,int)),

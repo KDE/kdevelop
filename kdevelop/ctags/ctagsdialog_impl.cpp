@@ -16,6 +16,11 @@
  ***************************************************************************/
 
 #include "ctagsdialog_impl.h"
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qlistbox.h>
+#include <kdebug.h>
 
 /* 
  *  Constructs a searchTagsDialogImpl which is a child of 'parent', with the 
@@ -25,7 +30,7 @@
  *  TRUE to construct a modal dialog.
  */
 searchTagsDialogImpl::searchTagsDialogImpl( QWidget* parent,  const char* name, bool modal, WFlags fl )
-    : searchTagsDialog( parent, name, modal, fl )
+    : searchTagsDialog( parent, name, modal, fl ), m_currentTagList()
 {
 }
 
@@ -38,31 +43,48 @@ searchTagsDialogImpl::~searchTagsDialogImpl()
 }
 
 /* 
- * public slot
+ * public slot slotLBItemSelected(int i)
+ * The slot gets called upon double click on an item in the
+ * QListBox, it emits a signal that is connected to a method
+ * in CKdevelop which in turn opens the file at the appropriate
+ * line.
  */
-void searchTagsDialogImpl::slotLBItemSelected()
+void searchTagsDialogImpl::slotLBItemSelected(int i)
 {
-    qWarning( "searchTagsDialogImpl::slotLBItemSelected() not yet implemented!" ); 
+  kdDebug() << "in searchTagsDialogImpl::slotLBItemSelected() \n";
+  kdDebug() << "selected item: " << i << "\n";
+  emit gotoTag(&m_currentTagList[i]);
 }
 /* 
  * public slot
  */
 void searchTagsDialogImpl::slotClear()
 {
-    qWarning( "searchTagsDialogImpl::slotClear() not yet implemented!" ); 
+  tagsListBox->clear();
 }
-/* 
- * public slot
- */
-void searchTagsDialogImpl::slotGotoTag()
-{
-    qWarning( "searchTagsDialogImpl::slotGotoTag() not yet implemented!" ); 
-}
-/* 
+/*
  * public slot
  */
 void searchTagsDialogImpl::slotSearchTag()
 {
-    qWarning( "searchTagsDialogImpl::slotSearchTag() not yet implemented!" ); 
+  kdDebug() << "searchTagsDialogImpl::slotSearchTag():\n";
+  QString text = searchTagLineEdit->text();
+
 }
 
+void searchTagsDialogImpl::setSearchResult(const CTagList& taglist)
+{
+  tagsListBox->clear();
+  searchTagLineEdit->setText(taglist.tag());
+  int ntags = taglist.count();
+  for (int it=0; it<ntags; ++it)
+  {
+    const CTag& tag = taglist[it];
+    QString line = tag.kind() + ", in ";
+    line = line + tag.file();
+    line = line + ", line: ";
+    line = line + QString::number(tag.line());
+    tagsListBox->insertItem(line);
+  }
+  m_currentTagList = taglist;
+}

@@ -54,6 +54,10 @@
                 <name>name</name>
                 <cstring>tagsListBox</cstring>
             </property>
+            <property stdset="1">
+                <name>columnMode</name>
+                <enum>FixedNumber</enum>
+            </property>
         </widget>
         <widget row="5"  column="0"  rowspan="1"  colspan="3" >
             <class>QLabel</class>
@@ -282,29 +286,16 @@
         <sender>doneButton</sender>
         <signal>clicked()</signal>
         <receiver>searchTagsDialog</receiver>
-        <slot>slotGotoTag()</slot>
-    </connection>
-    <connection>
-        <sender>doneButton</sender>
-        <signal>clicked()</signal>
-        <receiver>searchTagsDialog</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>tagsListBox</sender>
         <signal>selected(int)</signal>
         <receiver>searchTagsDialog</receiver>
-        <slot>slotGotoTag()</slot>
+        <slot>slotLBItemSelected(int)</slot>
     </connection>
-    <connection>
-        <sender>tagsListBox</sender>
-        <signal>selected(int)</signal>
-        <receiver>searchTagsDialog</receiver>
-        <slot>slotLBItemSelected()</slot>
-    </connection>
-    <slot access="public">slotLBItemSelected()</slot>
     <slot access="public">slotClear()</slot>
-    <slot access="public">slotGotoTag()</slot>
+    <slot access="public">slotLBItemSelected(int)</slot>
     <slot access="public">slotSearchTag()</slot>
 </connections>
 <tabstops>

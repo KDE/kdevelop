@@ -16,6 +16,7 @@
  ***************************************************************************/
 #ifndef SEARCHTAGSDIALOGIMPL_H
 #define SEARCHTAGSDIALOGIMPL_H
+#include "cctags.h"
 #include "ctagsdialog.h"
 
 class searchTagsDialogImpl : public searchTagsDialog
@@ -25,13 +26,18 @@ class searchTagsDialogImpl : public searchTagsDialog
 public:
     searchTagsDialogImpl( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~searchTagsDialogImpl();
+    void setSearchResult(const CTagList& taglist);
 
 public slots:
-    void slotLBItemSelected();
+    void slotLBItemSelected(int i);
     void slotClear();
-    void slotGotoTag();
     void slotSearchTag();
 
+signals:
+    void gotoTag(const CTag* tag);
+
+private:
+    CTagList m_currentTagList;
 };
 
 #endif // SEARCHTAGSDIALOGIMPL_H

@@ -752,6 +752,10 @@ public:
    */
   void slotCreateNewViewWindow();
   /**
+   * Goto the line in the file of the tag
+   */
+  void slotTagGotoFile(const CTag* tag);
+  /**
    * Open the file that corresponds to tag
    */
   void slotTagOpenFile(QString tag);

@@ -3999,6 +3999,7 @@ void CKDevelop::slotDockWidgetHasUndocked(KDockWidget*)
 
 void CKDevelop::fillToggleTreeViewsMenu()
 {
+#ifndef USE_KDE_2_1_1
   bool bVisible;
   QWidget* pTabWidget;
   KDockWidget* pDock;
@@ -4053,55 +4054,67 @@ void CKDevelop::fillToggleTreeViewsMenu()
       toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), true);   //only if all are on
     }
   }
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTClassesView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(2)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTGroupsView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(3)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTFilesView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(4)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTBooksView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(5)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTWatchView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(6)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::fillToggleOutputViewsMenu()
 {
+#ifndef USE_KDE_2_1_1
   bool bVisible;
   QWidget* pTabWidget;
   KDockWidget* pDock;
@@ -4185,78 +4198,95 @@ void CKDevelop::fillToggleOutputViewsMenu()
       toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
     }
   }
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOMessagesView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(2)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOStdOutView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(3)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOStdErrView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(4)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOKonsoleView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(5)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOBreakpointView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(6)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewODisassembleView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(7)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOFrameStackView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(8)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewODebuggerView()
 {
+#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(9)))
     pDock->undock();
   else
     pDock->dockBack();
+#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::statusCallback(int id_){

@@ -57,12 +57,16 @@ public:
  ~CTag() {}
   /** return the tag type */
   char type() const {return m_type;}
+  /** return a string characterizing the tag type */
+  QString kind() const ;
   /** return the file name */
   QString file() const {return m_file;}
   /** return stripped search pattern for kwrite based editor */
-  QString pattern() ;
+  QString pattern() const ;
   /** return line number extracted from excmd */
   int line() const ;
+  /** return a copy of ctags extension string */
+  QString ext() const {return m_ext;}
 protected:
   void parse_ext(); // parse exuberant extension
 private:
@@ -81,17 +85,39 @@ private:
  * CTagList additioally has the tag name. A smart algorithm can then be used
  * to help the user find the approriate location, depending on the context
  * of the search tag and the choosen location method.
+ * We distinguish three groups of tags, tags that point to a file, tags that
+ * point to a definition and tags that point to a declaration.
  *
  * \author rokrau@yahoo.com
  **/
 class CTagList : public QValueList<CTag> {
 public:
   /** constructor, requires the tag name as argument */
-  CTagList(QString _tag) : QValueList<CTag>(), m_tag(_tag) {}
+  CTagList(QString _tag=QString::null) : QValueList<CTag>(),
+    m_tag(_tag), m_nfiles(0), m_ndefinitions(0), m_ndeclarations(0) {}
   /** destructor */
   ~CTagList() {}
+  /** append a CTag to the list and count it */
+  CTagList::Iterator append(const CTag& ctag);
+  /** return the tag */
+  QString tag() const {return m_tag;}
+  /** return number of file tags */
+  int nFileTags() const {return m_nfiles;}
+  /** return all file tags */
+  CTagList getFileTags() const ;
+  /** return number of definition tags */
+  int nDefinitionTags() const {return m_ndefinitions;}
+  /** return all definition tags */
+  CTagList getDefinitionTags() const ;
+  /** return number of Declaration tags */
+  int nDeclarationTags() const {return m_ndeclarations;}
+  /** return all declaration tags */
+  CTagList getDeclarationTags() const ;
 private:
-  QString m_tag;    // tag name
+  QString m_tag;       // tag name
+  int m_nfiles;        // number of file tags
+  int m_ndefinitions;  // number of definition tags
+  int m_ndeclarations; // number of declaration tags
 };
 /**
  * \def A CTagListDict is a QDict for CTagLists

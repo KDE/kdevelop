@@ -366,39 +366,20 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
           int ntags = taglist->count();
           kdDebug() << "found: " << ntags << " entries for: "
                     << searchtext << "\n";
-          for (int it=0; it<ntags; ++it)
-          {
-            const CTag& tag = (*taglist)[it];
-            char t = tag.type();
-            kdDebug() << "tag number: " << it << " type= " << t << "\n";
-            switch (t) {
-              case 'F': // filename
-                pop->setItemEnabled(ID_EDIT_TAGS_OPEN,true);
-                pop->changeItem(/*SmallIconSet("help"),*/i18n("Open File: ") + str,ID_EDIT_TAGS_OPEN);
-              break;
-              case 'd': // macro definitions (and #undef names)
-              case 'f': // function definitions
-              case 'S': // S subroutines (fortran)
-              case 't': // typedefs
-              case 'v': // v variable definitions
-                pop->setItemEnabled(ID_EDIT_TAGS_DEFINITION,true);
-                pop->changeItem(/*SmallIconSet("help"),*/i18n("Goto Definition: ") + str,ID_EDIT_TAGS_DEFINITION); // tag file search
-              break;
-              case 'c': // c classes
-              case 'e': // enumerators
-              case 'g': // enumeration names
-              case 'L': // fortran locals
-              case 'm': // class, struct, or union members
-              case 'n': // namespaces
-              case 'p': // function prototypes and declarations
-              case 's': // structure names
-              case 'u': // union names
-              case 'x': // x extern and forward variable declarations
-              default:
-                pop->setItemEnabled(ID_EDIT_TAGS_DECLARATION,true);
-                pop->changeItem(/*SmallIconSet("help"),*/i18n("Goto Declaration: ") + str,ID_EDIT_TAGS_DECLARATION);
-              break;
-            }
+          if (taglist->nFileTags()) {
+            kdDebug() << "number of FileTags: " << taglist->nFileTags() << "\n";
+            pop->setItemEnabled(ID_EDIT_TAGS_OPEN,true);
+            pop->changeItem(/*SmallIconSet("help"),*/i18n("Open File: ") + str,ID_EDIT_TAGS_OPEN);
+          }
+          if (taglist->nDefinitionTags()) {
+            kdDebug() << "number of DefinitionTags: " << taglist->nDefinitionTags() << "\n";
+            pop->setItemEnabled(ID_EDIT_TAGS_DEFINITION,true);
+            pop->changeItem(/*SmallIconSet("help"),*/i18n("Goto Definition: ") + str,ID_EDIT_TAGS_DEFINITION);
+          }
+          if (taglist->nDeclarationTags()) {
+            kdDebug() << "number of DeclarationTags: " << taglist->nDeclarationTags() << "\n";
+            pop->setItemEnabled(ID_EDIT_TAGS_DECLARATION,true);
+            pop->changeItem(/*SmallIconSet("help"),*/i18n("Goto Declaration: ") + str,ID_EDIT_TAGS_DECLARATION);
           }
         }
       }
