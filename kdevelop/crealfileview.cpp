@@ -429,6 +429,7 @@ void CRealFileView::slotShowFileProperties() {
 void CRealFileView::slotAddToRepository()
 {
     project->getVersionControl()->add(getFullFilename(currentItem()));
+    refresh(project);
 }
 
 
