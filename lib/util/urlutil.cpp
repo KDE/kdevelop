@@ -25,15 +25,23 @@
 
 #include "urlutil.h"
 
+///////////////////////////////////////////////////////////////////////////////
+// Namespace URLUtil
+///////////////////////////////////////////////////////////////////////////////
+
 QString URLUtil::filename(const QString & name) {
   int slashPos = name.findRev("/");
   return slashPos<0 ? name : name.mid(slashPos+1);
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 QString URLUtil::directory(const QString & name) {
   int slashPos = name.findRev("/");
   return slashPos<0 ? QString("") : name.left(slashPos);
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 QString URLUtil::relativePath(const KURL & parent, const KURL & child, uint slashPolicy) {
   bool slashPrefix = slashPolicy & SLASH_PREFIX;
@@ -47,15 +55,21 @@ QString URLUtil::relativePath(const KURL & parent, const KURL & child, uint slas
   return child.path(b).mid(parent.path(a).length());
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 QString URLUtil::relativePath(const QString & parent, const QString & child, uint slashPolicy) {
   return relativePath(KURL(parent), KURL(child), slashPolicy);
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 QString URLUtil::upDir(const QString & path, bool slashSuffix) {
   int slashPos = path.findRev("/");
   if (slashPos<1) return QString::null;
   return path.mid(0,slashPos+ (slashSuffix ? 1 : 0) );
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 KURL URLUtil::mergeURL(const KURL & source, const KURL & dest, const KURL & child) {
 
@@ -76,11 +90,15 @@ KURL URLUtil::mergeURL(const KURL & source, const KURL & dest, const KURL & chil
 
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 QString URLUtil::getExtension(const QString & path) {
   int dotPos = path.findRev('.');
   if (dotPos<0) return QString("");
   return path.mid(dotPos+1);
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url )
 {
@@ -97,12 +115,24 @@ QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url
     return absRef.replace( 0, absBase.length(), QString() );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 QString URLUtil::extractPathNameRelative(const QString &basePath, const KURL &url )
 {
-  KURL baseDirUrl;
-  baseDirUrl.setPath( basePath );
+  KURL baseDirUrl = KURL::fromPathOrURL( basePath );
   return extractPathNameRelative( baseDirUrl, url );
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString URLUtil::extractPathNameRelative(const QString &basePath, const QString &absFilePath )
+{
+  KURL baseDirUrl = KURL::fromPathOrURL( basePath ),
+      fileUrl = KURL::fromPathOrURL( absFilePath );
+  return extractPathNameRelative( baseDirUrl, fileUrl );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 
 QString URLUtil::extractPathNameAbsolute( const KURL &url )
 {
@@ -121,10 +151,14 @@ QString URLUtil::extractPathNameAbsolute( const KURL &url )
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 bool URLUtil::isDirectory( const KURL &url )
 {
   return QDir( url.path() ).exists();
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 void URLUtil::dump( const KURL::List &urls, const QString &aMessage )
 {
@@ -141,6 +175,8 @@ void URLUtil::dump( const KURL::List &urls, const QString &aMessage )
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 QStringList URLUtil::toRelativePaths( const QString &baseDir, const KURL::List &urls)
 {
   QStringList paths;
@@ -152,6 +188,8 @@ QStringList URLUtil::toRelativePaths( const QString &baseDir, const KURL::List &
 
   return paths;
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 QString URLUtil::relativePathToFile( const QString & dirUrl, const QString & fileUrl )
 {
@@ -195,8 +233,9 @@ QString URLUtil::relativePathToFile( const QString & dirUrl, const QString & fil
   return result_up + result_down + resFileName;
 }
 
-// code from qt-3.1.2 version of QDir::canonicalPath()
+///////////////////////////////////////////////////////////////////////////////
 
+// code from qt-3.1.2 version of QDir::canonicalPath()
 QString URLUtil::canonicalPath( const QString & path )
 {
     QString r;
@@ -214,6 +253,7 @@ QString URLUtil::canonicalPath( const QString & path )
     return r;
 }
 
+///////////////////////////////////////////////////////////////////////////////
 
 //written by "Dawit A." <adawit@kde.org>
 //borrowed from his patch to KShell

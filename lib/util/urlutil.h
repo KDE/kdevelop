@@ -80,6 +80,7 @@ namespace URLUtil
   */
   QString extractPathNameRelative(const KURL &baseDirUrl, const KURL &url );
   QString extractPathNameRelative(const QString &basePath, const KURL &url );
+  QString extractPathNameRelative(const QString &basePath, const QString &absFilePath );
 
   /**
   * Will return the absolute path name referred in @p url.
