@@ -23,6 +23,7 @@
 
 class KConfig;
 class KURLRequester;
+class QPushButton;
 
 class GrepDialog : public QDialog
 {
@@ -31,7 +32,7 @@ class GrepDialog : public QDialog
 public:
     GrepDialog(QWidget *parent=0, const char *name=0);
     ~GrepDialog();
-    
+
     void setPattern(const QString &pattern)
 	{ pattern_combo->setEditText(pattern); }
     void setDirectory(const QString &dir)
@@ -64,7 +65,7 @@ signals:
 private slots:
     void templateActivated(int index);
     void slotSearchClicked();
-
+    void slotPatternChanged( const QString &);
 private:
     QLineEdit *template_edit;
     QComboBox *pattern_combo, *files_combo;
@@ -76,6 +77,7 @@ private:
     QCheckBox *ignore_scm_box;
 #endif
     KConfig* config;
+    QPushButton *search_button;
 };
 
 

@@ -150,7 +150,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
-    QPushButton *search_button = new QPushButton(i18n("&Search"), this);
+    search_button = new QPushButton(i18n("&Search"), this);
     search_button->setDefault(true);
     KPushButton *done_button = new KPushButton(KStdGuiItem::cancel(), this);
     button_layout->addStretch();
@@ -198,6 +198,9 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 	     SLOT(slotSearchClicked()) );
     connect( done_button, SIGNAL(clicked()),
 	     SLOT(hide()) );
+    connect( pattern_combo->lineEdit(), SIGNAL( textChanged ( const QString & ) ),
+             SLOT( slotPatternChanged( const QString & ) ) );
+    slotPatternChanged( pattern_combo->currentText() );
 }
 
 // Returns the contents of a QComboBox as a QStringList
@@ -224,6 +227,10 @@ GrepDialog::~GrepDialog()
 #endif
 }
 
+void GrepDialog::slotPatternChanged( const QString & _text )
+{
+    search_button->setEnabled( !_text.isEmpty() );
+}
 
 void GrepDialog::templateActivated(int index)
 {
