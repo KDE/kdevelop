@@ -1,4 +1,6 @@
 2002-10-21 Harald Fernengel <harry@kdevelop.org>
+	* show modified flag in sdi-mode if a file has
+	  been modified
 	* added KSaveAllDialog that is shown if more than
 	  one file is modified and needs to be saved.
 	* Display a nice error message if gideon cannot
