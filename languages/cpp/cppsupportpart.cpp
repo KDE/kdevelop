@@ -438,37 +438,6 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
        kdDebug(9007) << "======> code model has the file: " << m_activeFileName << " = " << codeModel()->hasFile( m_activeFileName ) << endl;
        if( codeModel()->hasFile(m_activeFileName) ){
-           QString candidate1;
-           if (isHeader(m_activeFileName))
-               candidate1 = sourceOrHeaderCandidate();
-           else
-               candidate1 = m_activeFileName;
-
-           if( codeModel()->hasFile(candidate1) ){
-               QPopupMenu* m = new QPopupMenu( popup );
-               id = popup->insertItem( i18n("Go to Definition"), m );
-               popup->setWhatsThis(id, i18n("<b>Go to definition</b><p>Provides a menu to select available function definitions "
-                    "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
-
-               const FileDom file = codeModel()->fileByName( candidate1 );
-               const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
-               for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it ){
-	           QString text = (*it)->scope().join( "::");
-	           if( !text.isEmpty() )
-		       text += "::";
-	           text += formatModelItem( *it, true );
-#if QT_VERSION >= 0x030100
-       text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
-#else
-		   text = text.replace( QRegExp(QString::fromLatin1("&")), QString::fromLatin1("&&") );
-#endif
-                   int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
-	           int line, column;
-	           (*it)->getStartPosition( &line, &column );
-	           m->setItemParameter( id, line );
-               }
-           }
-
            kdDebug() << "CppSupportPart::contextMenu 1" << endl;
            QString candidate;
            if (isSource(m_activeFileName))
@@ -504,6 +473,37 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 		    m2->setItemParameter( id, line );
                 }
                 kdDebug() << "CppSupportPart::contextMenu 4" << endl;
+           }
+
+           QString candidate1;
+           if (isHeader(m_activeFileName))
+               candidate1 = sourceOrHeaderCandidate();
+           else
+               candidate1 = m_activeFileName;
+
+           if( codeModel()->hasFile(candidate1) ){
+               QPopupMenu* m = new QPopupMenu( popup );
+               id = popup->insertItem( i18n("Go to Definition"), m );
+               popup->setWhatsThis(id, i18n("<b>Go to definition</b><p>Provides a menu to select available function definitions "
+                    "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
+
+               const FileDom file = codeModel()->fileByName( candidate1 );
+               const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
+               for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it ){
+	           QString text = (*it)->scope().join( "::");
+	           if( !text.isEmpty() )
+		       text += "::";
+	           text += formatModelItem( *it, true );
+#if QT_VERSION >= 0x030100
+       text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
+#else
+		   text = text.replace( QRegExp(QString::fromLatin1("&")), QString::fromLatin1("&&") );
+#endif
+                   int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
+	           int line, column;
+	           (*it)->getStartPosition( &line, &column );
+	           m->setItemParameter( id, line );
+               }
            }
        }
 
