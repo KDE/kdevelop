@@ -170,30 +170,34 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 
     setSelected(item, true);    // Need to select this item.
 
-    if (item->parent()) {
+    if (item->parent())
+    {
         KPopupMenu popup(item->text(VarNameCol), this);
         int idRemoveWatch = -2;
         if (dynamic_cast<WatchRoot*>(findRoot(item)))
             idRemoveWatch = popup.insertItem( i18n("Remove Watch Variable") );
+
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
         int	idCopyToClipboard = popup.insertItem( i18n("Copy to clipboard") );
-
         int res = popup.exec(QCursor::pos());
 
         if (res == idRemoveWatch)
             delete item;
-		else if (res == idCopyToClipboard) {
+        else if (res == idCopyToClipboard)
+        {
             QClipboard *qb = KApplication::clipboard();
             QString text = "{ \"" + item->text( 0 ) + "\", " + // name
-                "\"" + item->text( 2 ) + "\", " + // type
-                "\"" + item->text( 1 ) + "\" }";  // value
-			qb->setText( text
-#if KDE_VERSION > 305				     
-				     , QClipboard::Clipboard 
-#endif				     
-				     );
-		}
-        else if (res == idToggleWatch) {
+                            "\"" + item->text( 2 ) + "\", " + // type
+                            "\"" + item->text( 1 ) + "\" }";  // value
+
+#if KDE_VERSION > 305
+            qb->setText( text, QClipboard::Clipboard );
+#else
+            qb->setText( text );
+#endif
+        }
+        else if (res == idToggleWatch)
+        {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
                 emit toggleWatchpoint(item->fullName());
         }
@@ -206,7 +210,7 @@ void VariableTree::slotAddWatchVariable(const QString &watchVar)
 {
     kdDebug(9012) << "Add watch variable: " << watchVar << endl;
     VarItem *varItem = new VarItem(findWatch(), watchVar, typeUnknown);
-	emit expandItem(varItem);
+    emit expandItem(varItem);
 }
 
 // **************************************************************************
@@ -354,15 +358,15 @@ QListViewItem *VariableTree::lastChild() const
 
 void VariableTree::maybeTip(const QPoint &p)
 {
-	kdDebug(0) << "ToolTip::maybeTip()" << endl;
+    kdDebug(9012) << "ToolTip::maybeTip()" << endl;
 
-	VarItem * item = dynamic_cast<VarItem*>( itemAt( p ) );
-	QRect r = itemRect( item );
-
-	if ( item && r.isValid() )
-	{
-		tip( r, item->tipText() );
-	}
+    VarItem * item = dynamic_cast<VarItem*>( itemAt( p ) );
+    if ( item )
+    {
+        QRect r = itemRect( item );
+        if ( r.isValid() )
+            tip( r, item->tipText() );
+    }
 }
 
 // **************************************************************************

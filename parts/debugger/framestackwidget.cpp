@@ -44,7 +44,7 @@ FramestackWidget::FramestackWidget(QWidget *parent, const char *name, WFlags f)
     addColumn(QString::null);
     header()->hide();
 
-    connect( this, SIGNAL(selectionChanged(QListViewItem*)),
+    connect( this, SIGNAL(clicked(QListViewItem*)),
              this, SLOT(slotSelectionChanged(QListViewItem*)) );
 }
 

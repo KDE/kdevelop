@@ -139,8 +139,8 @@ signals:
     void rawGDBMemoryDump     (char *buf);
     void rawGDBRegisters      (char *buf);
     void rawGDBLibraries      (char *buf);
-    void ttyStdout            (const char *output);
-    void ttyStderr            (const char *output);
+//    void ttyStdout            (const char *output);
+//    void ttyStderr            (const char *output);
     void dbgStatus            (const QString &status, int statusFlag);
     void acceptPendingBPs     ();
     void unableToSetBPNow     (int BPNo);
@@ -176,7 +176,6 @@ private:
     bool    config_runAppInAppDirectory_;
     QString config_gdbPath_;
     QString config_dbgShell_;
-    QString config_programArgs_;
 };
 
 }
