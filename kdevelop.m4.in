@@ -516,13 +516,13 @@ AC_DEFUN([KDEV_CHECK_MDI],
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
     save_CXXFLAGS="$CXXFLAGS"
-    CXXFLAGS="-I$ac_kde_includes"
+    CXXFLAGS="-I$ac_qt_includes -I$ac_kde_includes"
 
     AC_TRY_COMPILE([
       #include <kdeversion.h>
     ],
     [
-      #if KDE_VERSION < ((3<<16) | (2<<8) | (90))
+      #if !KDE_IS_VERSION(3,2,90)
          KDE_choke me
       #endif
     ],
