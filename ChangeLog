@@ -1,3 +1,11 @@
+2001-07-26  John Firebaugh <jfirebaugh@kde.org>
+    * Bug fix for the creation of ctags database.
+      Developer's Note: The following is not a good thing to do:
+      QStringList::Iterator it = methodThatReturnsQStringListByValue().begin();
+      Why? As soon as that statement is executed, the temorary QStringList is
+      destructed and your iterator is left pointing somewhere bad. A very
+      tricky thing!
+
 2001-07-26  F@lk Brettschneider <falk@kdevelop.org>
     * KDE version check fixed. Now KDevelop-2.0 runs even on FreeBSD
       with the little help of KrazyKiwi. Thanks a lot!
