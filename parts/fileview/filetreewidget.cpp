@@ -15,6 +15,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qheader.h>
+#include <qpainter.h>
 #include <qregexp.h>
 #include <qvaluestack.h>
 #include <kdebug.h>
@@ -40,15 +41,23 @@ public:
     FileTreeItem(FileTreeWidget *parent, Type type, const QString &nam);
     FileTreeItem(FileTreeItem *parent, Type type, const QString &nam);
     ~FileTreeItem();
+    
     QString path();
-    Type type()
+    Type type() const
     { return typ; }
+    void setBold(bool b)
+    { bld = b; }
+    bool isBold() const
+    { return bld; }
 
     virtual void setOpen(bool o);
+    virtual void paintCell(QPainter *p, const QColorGroup &cg,
+                           int column, int width, int alignment);
 
 private:
     void init();
     Type typ;
+    bool bld;
 };
 
 
@@ -68,6 +77,8 @@ FileTreeItem::FileTreeItem(FileTreeItem *parent, Type type, const QString &name)
 
 void FileTreeItem::init()
 {
+    bld = false;
+    
     if (typ == File)
         setPixmap(0, SmallIcon("document"));
     else {
@@ -115,6 +126,18 @@ void FileTreeItem::setOpen(bool o)
         }
     }
     QListViewItem::setOpen(o);
+}
+
+
+void FileTreeItem::paintCell(QPainter *p, const QColorGroup &cg,
+                             int column, int width, int alignment)
+{
+    if (isBold()) {
+        QFont font(p->font());
+        font.setBold(true);
+        p->setFont(font);
+    }
+    QListViewItem::paintCell(p, cg, column, width, alignment);
 }
 
 
@@ -183,10 +206,12 @@ void FileTreeWidget::hideOrShow()
         // Show all directory items
         if (ftitem->type() == FileTreeItem::Dir)
             continue;
-        
-        bool b1 = m_showNonProjectFiles || projectFiles.contains(ftitem->path());
+
+        bool isProjectFile = projectFiles.contains(ftitem->path());
+        bool b1 = m_showNonProjectFiles || isProjectFile;
         bool b2 = !matchesHidePattern(it.current()->text(0));
         ftitem->setVisible(b1 && b2);
+        ftitem->setBold(m_showNonProjectFiles && isProjectFile);
     }
 }
 
