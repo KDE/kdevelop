@@ -151,18 +151,19 @@ void PartSelectWidget::init()
 
     connect( _pluginList, SIGNAL( selectionChanged( QListViewItem * ) ), this, SLOT( itemSelected( QListViewItem * ) ) );
 	connect( _urlLabel, SIGNAL( leftClickedURL( const QString & ) ), this, SLOT( openURL( const QString & ) ) );
-
+/*
     if (_scope == Global)
         readGlobalConfig();
     else
-        readProjectConfig();
+*/	
+	readProjectConfig();
 }
 
 
 PartSelectWidget::~PartSelectWidget()
 {}
 
-
+#if 0
 void PartSelectWidget::readGlobalConfig()
 {
     //FIXME: fix this, use new profiles arch !!!!!
@@ -196,11 +197,10 @@ void PartSelectWidget::readGlobalConfig()
 	}
 }
 
-
 void PartSelectWidget::saveGlobalConfig()
 {
     //FIXME: fix this, use new profiles arch !!!!!!!!!!!!
-/*    KConfig config( PluginController::getInstance()->currentProfilePath() );
+*    KConfig config( PluginController::getInstance()->currentProfilePath() );
     config.setGroup("Plugins");
 
     QListViewItemIterator it( _pluginList );
@@ -209,19 +209,22 @@ void PartSelectWidget::saveGlobalConfig()
         PluginItem * item = static_cast<PluginItem*>( it.current() );
         config.writeEntry( item->name(), item->isOn() );
         ++it;
-    }*/
+    }
 }
-
+#endif
 
 void PartSelectWidget::readProjectConfig()
 {
-    //FIXME: include not only project plugins but also global ones here
-    QStringList ignoreparts = DomUtil::readListEntry(m_projectDom, "/general/ignoreparts", "part");
+	QStringList ignoreparts = DomUtil::readListEntry(m_projectDom, "/general/ignoreparts", "part");
+	
+	KTrader::OfferList localOffers = PluginController::getInstance()->engine().offers(
+		PluginController::getInstance()->currentProfile(), ProfileEngine::Project);
+	KTrader::OfferList globalOffers = PluginController::getInstance()->engine().offers(
+		PluginController::getInstance()->currentProfile(), ProfileEngine::Global);
 
-    KTrader::OfferList localOffers = PluginController::getInstance()->engine().offers(
-        PluginController::getInstance()->currentProfile(), ProfileEngine::Project);
-    for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
-    {
+	KTrader::OfferList offers = localOffers + globalOffers;
+	for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
+	{
 		// parse out any existing url to make it clickable
 		QString Comment = (*it)->comment();
 		QRegExp re("\\bhttp://[\\S]*");
@@ -234,9 +237,9 @@ void PartSelectWidget::readProjectConfig()
 			url = re.cap();
 		}
 
-        PluginItem *item = new PluginItem( _pluginList, (*it)->desktopEntryName(), (*it)->genericName(), Comment, url );
-        item->setOn(!ignoreparts.contains((*it)->desktopEntryName()));
-    }
+		PluginItem *item = new PluginItem( _pluginList, (*it)->desktopEntryName(), (*it)->genericName(), Comment, url );
+		item->setOn(!ignoreparts.contains((*it)->desktopEntryName()));
+	}
 
 	QListViewItem * first = _pluginList->firstChild();
 	if ( first )
@@ -293,10 +296,12 @@ void PartSelectWidget::saveProjectConfig()
 
 void PartSelectWidget::accept()
 {
+/*
     if (_scope == Global)
         saveGlobalConfig();
     else
-        saveProjectConfig();
+*/
+    saveProjectConfig();
     emit accepted();
 }
 

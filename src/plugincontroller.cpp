@@ -114,10 +114,10 @@ void PluginController::loadCorePlugins()
   loadPlugins( coreOffers );
 }
 
-void PluginController::loadGlobalPlugins()
+void PluginController::loadGlobalPlugins( const QStringList & ignorePlugins )
 {
   KTrader::OfferList globalOffers = m_engine.offers(m_profile, ProfileEngine::Global);
-  loadPlugins( globalOffers );
+  loadPlugins( globalOffers, ignorePlugins );
 }
 
 void PluginController::loadProjectPlugins( const QStringList & ignorePlugins )
@@ -132,7 +132,7 @@ void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList
   {
     QString name = (*it)->desktopEntryName();
 
-    // Check if it is already loaded
+    // Check if it is already loaded or shouldn't be
     if( m_parts[ name ] != 0 || ignorePlugins.contains( name ) )
       continue;
 

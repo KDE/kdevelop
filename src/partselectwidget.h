@@ -49,8 +49,8 @@ private:
     enum Scope { Global, Project };
 
     void init();
-    void readGlobalConfig();
-    void saveGlobalConfig();
+//    void readGlobalConfig();
+//    void saveGlobalConfig();
     void readProjectConfig();
     void saveProjectConfig();
     void fillProfilesList();

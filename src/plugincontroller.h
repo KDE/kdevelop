@@ -37,7 +37,9 @@ public:
   
   void loadProjectPlugins( const QStringList & ignorePlugins );
   void unloadProjectPlugins();
-  
+
+  void loadGlobalPlugins( const QStringList & ignorePlugins = QStringList() );
+    
   //  KDevPlugin * getPlugin( const KService::Ptr &service );
   
   virtual KDevPlugin *extension(const QString &serviceType, const QString &constraint = "");
@@ -67,7 +69,6 @@ protected:
 
 private slots:
   void slotConfigWidget( KDialogBase* );
-  void loadGlobalPlugins();
   void loadCorePlugins();
   void loadPlugins( KTrader::OfferList offers, const QStringList & ignorePlugins = QStringList() );
   void unloadPlugins();

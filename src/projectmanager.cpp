@@ -315,7 +315,10 @@ bool ProjectManager::closeProject( bool exiting )
   Core::getInstance()->doEmitProjectClosed();
 
   unloadVCSSupport();
-  PluginController::getInstance()->unloadProjectPlugins();
+// fixme: this should unload global plugins as well and switch to the selected "base" profile unless 
+// we are on our way to load a new project
+  PluginController::getInstance()->unloadProjectPlugins();	
+  
   PluginController::getInstance()->changeProfile(m_oldProfileName);
   unloadLanguageSupport();
   unloadProjectPart();
@@ -564,6 +567,7 @@ void ProjectManager::loadLocalParts()
 
 	PluginController::getInstance()->unloadPlugins( m_info->m_ignoreParts );
 	PluginController::getInstance()->loadProjectPlugins( m_info->m_ignoreParts );
+	PluginController::getInstance()->loadGlobalPlugins( m_info->m_ignoreParts );
 }
 
 KURL ProjectManager::projectFile() const
