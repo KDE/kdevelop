@@ -1024,7 +1024,7 @@ void CKDevelop::slotBuildDebug()
     switchToKDevelop();
 
 // TODO: jbb-991220 - This code isn't quite right
-// The slotBuildMake needs to be above the Internal debugger but it must
+// The slotBuildMake might need to be above the Internal debugger but it must
 // run to completion _before_ starting _any_ debugger. I've put the internal
 // debugger above the make for now.
 // If fact we should only "make" when "dirty" and we should probably ask
@@ -1044,10 +1044,18 @@ void CKDevelop::slotBuildDebug()
     return;
   }
 
+// TODO: jbb-990115 I've remove the make before debugging. See above and...
+// this does not run to completion before kdbg (or whatever) is started up
+// so it may not be working properly. Also, it often isn't appropriate
+// doing a make before debugging, as this can just slow the debugging cycle
+// down, _if_ the user is savvy enough to understand what limitations they
+// are pushing when they do that.(that means me!!) I can imagine people will
+// complain about this, so some config option would be best.
+
 //   maybe the sources have changed, so it has to be compiled
 //
 //  if(!prj->getBinPROGRAM()){
-    slotBuildMake();
+//    slotBuildMake();
 //  }
 
   showOutputView(false);
