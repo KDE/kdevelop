@@ -38,8 +38,8 @@
     * Bug 58999 : Debugger will not start (libtool issue)
     * Bug 62888 : Back and forward buttons available in context menu.
     * Bug 69035 : Run Options not honored (custom makefiles)
-    * Bug 70175 : Problems on minimum wxWindows version test.
-    * Bug 70176 : wxWindows apptemplate broke compilation with Unicode compiled wxWindows
+    * Bug 70175 : Problems on minimum wxWidgets version test.
+    * Bug 70176 : wxWidgets apptemplate broke compilation with Unicode compiled wxWidgets
     * Bug 71003 : Cannot translate project due to srcdir != builddir.
     * Bug 72502 : Kdevelop crashes when closing multiple files via Keyboard.
     * Bug 72523 : Grep dialog doesn't prepopulate with selected text.

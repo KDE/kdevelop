@@ -34,7 +34,7 @@ $APPNAME$Frame::$APPNAME$Frame( const wxString& title, const wxPoint& pos, const
 	SetMenuBar( menuBar );
 	
 	CreateStatusBar();
-	SetStatusText( wxT( "Welcome to Kdevelop wxWindows app!" ) );
+	SetStatusText( wxT( "Welcome to Kdevelop wxWidgets app!" ) );
 }
 
 void 
@@ -46,7 +46,7 @@ $APPNAME$Frame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 void 
 $APPNAME$Frame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 {
-	wxMessageBox( wxT( "This is a wxWindows Hello world sample" ),
+	wxMessageBox( wxT( "This is a wxWidgets Hello world sample" ),
 			wxT( "About Hello World" ), wxOK | wxICON_INFORMATION, this );
 }
 

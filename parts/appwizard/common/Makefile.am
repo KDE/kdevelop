@@ -13,9 +13,9 @@ gnu.tar.gz:
 		ChangeLog  INSTALL  NEWS  README  TODO
 	gzip gnu.tar
 
-wxwindows.tar.gz:
-	$(TAR) -cf wxwindows.tar -C $(srcdir)/wx macros
-	gzip wxwindows.tar
+wxwidgets.tar.gz:
+	$(TAR) -cf wxwidgets.tar -C $(srcdir)/wx macros
+	gzip wxwidgets.tar
 
 incadmin.tar.gz:
 	$(TAR) -cf incadmin.tar -C $(srcdir)/incadmin \
@@ -25,7 +25,7 @@ incadmin.tar.gz:
 
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
-commondata_DATA = kdevelop.pm admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz wxwindows.tar.gz \
+commondata_DATA = kdevelop.pm admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz wxwidgets.tar.gz \
 						kde-app.lsm kde-Makefile.am kde-Makefile.cvs kde-configure.in.in \
 						kde-index.docbook kde-po-Makefile.am kde-doc-Makefile.am kde-doc-en-Makefile.am \
 						hi16-app-app.png hi32-app-app.png kde-app.desktop kde-part.desktop \

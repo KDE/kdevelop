@@ -198,12 +198,12 @@ sub installGNOME
 
 sub installWX
 {
-        print "Installing wxWindows autoconf macros\n";
-		  copy( "${src}/template-common/wxwindows.tar.gz", "${dest}/wxwindows.tar.gz" );
+        print "Installing wxWidgets autoconf macros\n";
+		  copy( "${src}/template-common/wxwidgets.tar.gz", "${dest}/wxwidgets.tar.gz" );
 		  chdir( $dest ) || die "Could not chdir to $dest\n";
-        system( 'gunzip', '-f', 'wxwindows.tar.gz' );
-        system( 'tar', 'xf', 'wxwindows.tar' );
-        unlink( "wxwindows.tar" );
+        system( 'gunzip', '-f', 'wxwidgets.tar.gz' );
+        system( 'tar', 'xf', 'wxwidgets.tar' );
+        unlink( "wxwidgets.tar" );
 }
 
 sub installDocbook()

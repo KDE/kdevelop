@@ -63,7 +63,7 @@
       <toc>sdl</toc>
       <toc>stl</toc>
       <toc>sw</toc>
-      <toc>wxwindows_bugs</toc>
+      <toc>wxwidgets_bugs</toc>
     </ignoretocs>
     <ignoreqt_xml>
       <toc>Guide to the Qt Translation Tools</toc>
