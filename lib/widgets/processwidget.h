@@ -23,8 +23,16 @@
 #include <klistbox.h>
 #include <kprocess.h>
 
+/**
+@file processwidget.h
+Widgets for various output views.
+*/
+
 class ProcessLineMaker;
 
+/**
+Listbox item for process widgets.
+*/
 class ProcessListBoxItem : public QListBoxText
 {
 public:

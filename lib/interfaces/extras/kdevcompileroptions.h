@@ -19,15 +19,56 @@
 */
 
 /**
- * The interface to compiler options configuration
- */
+@file kdevcompileroptions.h
+The interface to compiler options configuration.
+*/
 
 #ifndef _KDEVCOMPILEROPTIONS_H_
 #define _KDEVCOMPILEROPTIONS_H_
 
 #include <qobject.h>
 
+/**
+The interface to compiler options configuration.
+Used by build systems to give users a compiler options configuration dialog.
 
+Common use case:
+@code
+static KDevCompilerOptions *createCompilerOptions( const QString &name, QObject *parent )
+{
+    KService::Ptr service = KService::serviceByDesktopName( name );
+    if ( !service )
+        return 0;
+    
+    KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
+    if (!factory)
+        return 0;
+
+    QStringList args;
+    QVariant prop = service->property("X-KDevelop-Args");
+    if (prop.isValid())
+        args = QStringList::split(" ", prop.toString());
+
+    QObject *obj = factory->create(parent, service->name().latin1(),
+                                   "KDevCompilerOptions", args);
+
+    if (!obj->inherits("KDevCompilerOptions"))
+        return 0;
+    
+    KDevCompilerOptions *dlg = (KDevCompilerOptions*) obj;
+    return dlg;
+}
+
+...
+KDevCompilerOptions *plugin = createCompilerOptions(compilerName, parent);
+QString flags = ""; //old compiler flags
+if ( plugin )
+{
+    flags = plugin->exec( parent, flags ); //new compiler flags are returned
+    delete plugin;
+}
+@endcode
+*/
 class KDevCompilerOptions : public QObject
 {
     Q_OBJECT

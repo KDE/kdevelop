@@ -33,7 +33,7 @@ class MultiProperty;
 class ChildProperty;
 
 /** @file propertymachinefactory.h
-@short Contains @ref PropertyLib::PropertyMachineFactory class and @ref Machine structure.
+@short Contains @ref PropertyLib::PropertyMachineFactory class and @ref PropertyLib::Machine structure.
 */
 
 /**

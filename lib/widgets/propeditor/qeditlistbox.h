@@ -27,7 +27,6 @@ class QLineEdit;
 class QComboBox;
 class QPushButton;
 
-class QEditListBoxPrivate;
 /**
  * An editable listbox
  *
@@ -39,6 +38,10 @@ class QEditListBoxPrivate;
  * \image html keditlistbox.png "KDE Edit List Box Widget"
  *
  */
+
+
+class QEditListBoxPrivate;
+
 class QEditListBox : public QGroupBox
 {
    Q_OBJECT
@@ -46,7 +49,7 @@ class QEditListBox : public QGroupBox
    Q_PROPERTY( QStringList items READ items WRITE setItems )
 
 public:
-    /// @since 3.1
+    // @since 3.1
     class CustomEditor
     {
     public:

@@ -3,6 +3,12 @@
 
 #include <kurl.h>
 
+/**
+@file rurl.h
+Classes and functions to work with relative URLs.
+*/
+
+/**Classes and functions to work with relative URLs.*/
 namespace Relative
 {
 

@@ -23,6 +23,16 @@
 
 #include "qcomboview.h"
 
+/**
+@file kcomboview.h
+KComboView class.
+*/
+
+/**
+KComboView - a combo with a QListView as a popup widget.
+KComboView provides text completion.
+@sa QComboView for a description.
+*/
 class KComboView: public QComboView
 {
     Q_OBJECT

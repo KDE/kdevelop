@@ -7,6 +7,11 @@
 
 #include <khtml_part.h>
 
+/**
+@file kdevhtmlpart.h
+Customized KHTML part for KDevelop.
+*/
+
 class KAction;
 class KToolBarPopupAction;
 class KParts::ReadOnlyPart;
@@ -22,6 +27,21 @@ struct DocumentationHistoryEntry {
     }
 };
 
+/**
+Customized KHTML part for KDevelop.
+Used as HTML documentation and file viewer. 
+
+Represents customized BrowserViewGUI mode of KHTMLPart. Provides also actions for:
+- reload;
+- stop;
+- duplicate;
+- print;
+- copy text;
+- back;
+- forward.
+.
+It has it's own popup menu and font/zoom settings.
+*/
 class KDevHTMLPart : public KHTMLPart
 {
     Q_OBJECT

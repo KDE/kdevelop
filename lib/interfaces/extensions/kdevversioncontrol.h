@@ -29,7 +29,7 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
-#include "kdevplugin.h"
+#include <kdevplugin.h>
 
 /**
 @file kdevversioncontrol.h
@@ -44,7 +44,17 @@ Used, for example in file views to display VCS related information about files.
 struct VCSFileInfo
 {
     /**State of the file.*/
-    enum FileState { Unknown, Added, Uptodate, Modified, Conflict, Sticky, NeedsPatch, NeedsCheckout, Directory };
+    enum FileState { 
+        Unknown        /**<No VCS information about a file is known.*/, 
+        Added          /**<File was added to the repository but not commited.*/, 
+        Uptodate       /**<File was updated or it is already at up to date version.*/, 
+        Modified       /**<File was modified locally.*/, 
+        Conflict       /**<Local version conflicts with the one in a repository.*/, 
+        Sticky         /**<File is sticky.*/, 
+        NeedsPatch     /**<File needs a patch.*/, 
+        NeedsCheckout  /**<File needs to be checkout again.*/, 
+        Directory      /**<This is a directory.*/ 
+    };
 
     /**Constructor.*/
     VCSFileInfo() {}
@@ -56,9 +66,13 @@ struct VCSFileInfo
     VCSFileInfo( QString fn, QString workRev, QString repoRev, FileState aState )
         : fileName(fn), workRevision(workRev), repoRevision(repoRev), state(aState) {}
 
+    /**The file name.*/
     QString fileName;   // Yeah, _just_ the file name ;-)
+    /**The working revision number.*/
     QString workRevision;
+    /**The repository revision number.*/
     QString repoRevision;
+    /**The state of a file.*/
     FileState state;
 
     /**@return A descriptive string with all VCS related info about the file.*/

@@ -26,6 +26,15 @@ class KComboView;
 class QMouseEvent;
 class MyPushButton;
 
+/**
+@file resizablecombo.h
+Resizable combo box.
+*/
+
+/**
+Resizable combo box.
+Used to place resizable KComboBox onto toolbars.
+*/
 class ResizableCombo: public QWidget{
     Q_OBJECT
 public:

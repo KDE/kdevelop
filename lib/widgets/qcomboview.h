@@ -22,6 +22,10 @@
 
 #ifndef QT_NO_COMBOBOX
 
+/**
+@file qcomboview.h
+QComboView class.
+*/
 
 class QStrList;
 class QStringList;
@@ -31,6 +35,11 @@ class QListView;
 class QListViewItem;
 class QComboViewData;
 
+/**
+QComboView - a combo with a QListView as a popup widget.
+This means that you can have a treeview inside of a combo. Otherwise it works
+in the same way as QComboBox and have similar API.
+*/
 class Q_EXPORT QComboView : public QWidget
 {
     Q_OBJECT

@@ -22,8 +22,16 @@
 
 #include <qobject.h>
 
+/**
+@file processlinemaker.h
+Utility objects for process output views.
+*/
+
 class KProcess;
 
+/**
+Convenience class to catch output of KProcess.
+*/
 class ProcessLineMaker : public QObject
 {
 Q_OBJECT

@@ -23,6 +23,11 @@
 
 #include <kfile.h>
 
+/**
+@file flagboxes.h
+Support classes for compiler plugins.
+*/
+
 #include <qlistview.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -40,7 +45,7 @@ class KLineEdit;
 class QPushButton;
 class KURLRequester;
 
-
+/**List item holding a compiler flag.*/
 class FlagListItem : public QCheckListItem
 {
 public:
@@ -59,6 +64,7 @@ private:
 };
 
 
+/**List box item holding a compiler flag.*/
 class FlagListBox : public QListView
 {
     Q_OBJECT
@@ -72,6 +78,7 @@ public:
 };
 
 
+/**Check box item holding a compiler flag.*/
 class FlagCheckBox : public QCheckBox
 {
     Q_OBJECT
@@ -97,6 +104,7 @@ private:
     friend class FlagCheckBoxController;
 };
 
+/**Radiobutton item holding an option of a compiler flag.*/
 class FlagRadioButton : public QRadioButton
 {
     Q_OBJECT
@@ -111,6 +119,7 @@ private:
     friend class FlagRadioButtonController;
 };
 
+/**Path editor if path is a compiler flag.*/
 class FlagPathEdit: public QWidget
 {
     Q_OBJECT
@@ -139,6 +148,7 @@ private:
     friend class FlagPathEditController;
 };
 
+/**List editor if list is a compiler flag.*/
 class FlagListEdit: public QWidget
 {
     Q_OBJECT
@@ -168,6 +178,7 @@ private:
     friend class FlagEditController;
 };
 
+/**Spin editor of a compiler flag.*/
 class FlagSpinEdit: public QWidget
 {
 public:
@@ -190,6 +201,7 @@ private:
     friend class FlagEditController;
 };
 
+/**Controller for path editors.*/
 class FlagPathEditController
 {
 public:
@@ -205,6 +217,7 @@ private:
     friend class FlagPathEdit;
 };
 
+/**Controller for flag editors.*/
 class FlagEditController
 {
 public:
@@ -223,6 +236,7 @@ private:
     friend class FlagSpinEdit;
 };
 
+/**Controller for check box editors.*/
 class FlagCheckBoxController
 {
 public:
@@ -244,6 +258,7 @@ private:
     QStringList m_multiKeys;
 };
 
+/**Controller for radiobutton editors.*/
 class FlagRadioButtonController
 {
 public:

@@ -21,23 +21,55 @@
 
 #include <qobject.h>
 
+/**
+@file kdevvcsintegrator.h
+The interface to VCS integrators.
+*/
+
 class QDomDocument;
 class QWidget;
 
+/**
+VCS Integration Dialog.
+
+Usually it is created as:
+@code
+class MyVCSDialog: public QWidget, public VCSDialog {
+    MyVCSDialog(QWidget *parent = 0, const char *name = 0);
+    virtual void accept() { ... }
+    virtual void init(const QString &projectName, const QString &projectLocation) { ... }
+    virtual QWidget *self() {
+        return const_cast<MyVCSDialog*>(this);
+    }
+}
+@endcode
+*/
 class VCSDialog {
 public:
     VCSDialog() { }
+    /**Implement all integration actions here. Do not use QDialog::accept method
+    to perform integration actions.*/
     virtual void accept() = 0;
+    /**Init integration dialog with the project name and location.*/
     virtual void init(const QString &projectName, const QString &projectLocation) = 0;
+    /**Reimplement to return an actual integration widget. Use QWidgets for that, not
+    QDialogs because integrator dialogs are usually have parent containers.*/
     virtual QWidget *self() = 0;
 };
 
+/**
+The interface to VCS integrators.
+VCS integrator takes care about setting up VCS for new and existing projects.
+It can, for example, perform checkout or import operations.
+*/
 class KDevVCSIntegrator: public QObject {
     Q_OBJECT
 public:
     KDevVCSIntegrator(QObject *parent = 0, const char *name = 0);
 
+    /**Reimplement to return a dialog to fetch the project from VCS.*/
     virtual VCSDialog *fetcher(QWidget *parent) = 0;
+    /**Reimplement to return a dialog to integrate the project into VCS.*/
     virtual VCSDialog *integrator(QWidget *parent) = 0;
 };
 

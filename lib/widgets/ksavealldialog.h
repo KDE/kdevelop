@@ -25,7 +25,14 @@
 #include <kurl.h>
 
 class KListView;
+/**
+@file ksavealldialog.h
+Dialogs to save multiple files.
+*/
 
+/**
+Dialog to save selected files.
+*/
 class KSaveSelectDialog : public KDialogBase
 {
 	Q_OBJECT
@@ -48,6 +55,9 @@ private:
 };
 
 
+/**
+Dialog to save all files.
+*/
 class KSaveAllDialog : public KDialogBase
 {
   Q_OBJECT

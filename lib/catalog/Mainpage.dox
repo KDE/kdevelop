@@ -1,7 +1,7 @@
 /**
 @mainpage The KDevelop Catalog Library
 
-This is the persistant symbol store library working with BerleleyDb backend.
+This is the persistant symbol store library working with BerkeleyDb backend.
 
 <b>Link with</b>: -lkdevcatalog \$(KDEDIR)/kdevbdb/libdb.a
 

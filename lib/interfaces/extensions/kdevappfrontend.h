@@ -23,63 +23,88 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-
-
-#ifndef _KDEVAPPFRONTEND_H_
-#define _KDEVAPPFRONTEND_H_
+#ifndef KDEVAPPFRONTEND_H
+#define KDEVAPPFRONTEND_H
 
 #include <qstringlist.h>
-#include "kdevplugin.h"
+#include <kdevplugin.h>
 
 /**
- * \short The interface to a app frontend.
- *
- * This interface is responsible for handling the running of an application in KDevelop.
- * Currently, this interface defines ways to do the following:
- * \li Check if the application is running
- * \li Execute the application
- * \li Stop the currently running application
- * \li Control the output view as seen in the 'Application' tool dock
- */
+@file kdevappfrontend.h
+Application frontend interface.
+*/
+
+/**
+Application frontend interface. 
+This interface is responsible for handling the running of an application in KDevelop.
+Currently, this interface defines ways to do the following:
+- check if the application is running;
+- execute the application;
+- stop the currently running application;
+- control the output view as seen in the 'Application' tool dock.
+
+Instances that implement this interface are available through extension architecture:
+@code
+KDevAppFrontend *apf = extension<KDevAppFrontend>("KDevelop/AppFrontend");
+if (apf) {
+    // do something
+} else {
+    // fail
+}
+@endcode
+@sa KDevPlugin::extension method documentation.
+*/
 class KDevAppFrontend : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-
+    /**Constructor.
+    @param info Important information about the plugin - plugin internal and generic
+    (GUI) name, description, a list of authors, etc. That information is used to show
+    plugin information in various places like "about application" dialog, plugin selector
+    dialog, etc. Plugin does not take ownership on info object, also its lifetime should
+    be equal to the lifetime of the plugin.
+    @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
+    interface. Otherwise the plugin will not be constructed.
+    @param name The internal name which identifies the plugin.*/
     KDevAppFrontend(const KDevPluginInfo *info, QObject *parent=0, const char *name=0 )
         :KDevPlugin(info, parent, name ? name : "KDevAppFrontend") {}
 
-    /**
-     * Returns whether the application is currently running.
-     */
+    /**@return Whether the application is currently running.*/
     virtual bool isRunning() = 0;
 
 public slots:
     /**
      * The component shall start to execute an app-like command.
      * Running the application is always asynchronous.
-     * If directory is empty it will use the user's home directory.
-     * If inTerminal is true, the program is started in an external
-     * konsole.
+     * @param directory The working directory to start the app in, 
+     * if empty then the user's home directory is used.
+     * @param program A program to start.
+     * @param inTerminal If true then the program is started in an external konsole.
      */
     virtual void startAppCommand(const QString &directory, const QString &program, bool inTerminal) = 0;
+    
     /**
-     * Stop the currently running application
+     * Stops the currently running application.
      */
     virtual void stopApplication() = 0;
+    
     /**
-     * Inserts a string into the view.
+     * Inserts a string into the application output view.
+     * @param line A string to insert.
      */
     virtual void insertStdoutLine(const QString &line) = 0;
+    
     /**
-     * Inserts a string into the view marked as stderr output
-     * (colored in the current implementation).
+     * Inserts a string into the application output view marked as stderr output
+     * (usually colored).
+     * @param line An error string to insert.
      */
     virtual void insertStderrLine(const QString &line) = 0;
+    
     /**
-     * Clears the output view
+     * Clears the output view.
      */
     virtual void clearView() = 0;
 };

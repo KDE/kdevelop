@@ -18,38 +18,60 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-/**
- * The interface to a diff frontend
- */
-
-#ifndef _KDEVDIFFFRONTEND_H_
-#define _KDEVDIFFFRONTEND_H_
+#ifndef KDEVDIFFFRONTEND_H
+#define KDEVDIFFFRONTEND_H
 
 #include <kurl.h>
-#include "kdevplugin.h"
+#include <kdevplugin.h>
 
+/**
+@file kdevdifffrontend.h
+Diff frontend interface.
+*/
 
+/**
+KDevelop diff frontend interface.
+This is the abstract base class for plugins that want to display differencies between
+files.
+
+Instances that implement this interface are available through extension architecture:
+@code
+KDevDiffFrontend *df = extension<KDevDiffFrontend>("KDevelop/DiffFrontend");
+if (df) {
+    // do something
+} else {
+    // fail
+}
+@endcode
+@sa KDevPlugin::extension method documentation.
+*/
 class KDevDiffFrontend : public KDevPlugin
 {
 
 public:
-
+    /**Constructor.
+    @param info Important information about the plugin - plugin internal and generic
+    (GUI) name, description, a list of authors, etc. That information is used to show
+    plugin information in various places like "about application" dialog, plugin selector
+    dialog, etc. Plugin does not take ownership on info object, also its lifetime should
+    be equal to the lifetime of the plugin.
+    @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
+    interface. Otherwise the plugin will not be constructed.
+    @param name The internal name which identifies the plugin.*/
     KDevDiffFrontend( const KDevPluginInfo *info, QObject *parent=0, const char *name=0 )
         :KDevPlugin(info, parent, name ? name : "KDevDiffFrontend") {}
 
-    /**
-     * displays the patch.
-     */
+    /**Displays the patch.
+    @param diff A string which contains a patch in unified format.*/
     virtual void showDiff( const QString& diff ) = 0;
 
-    /**
-     * displays a patch file
-     */
+    /**Displays a patch file.
+    @param url An url of the patch file.*/
     virtual void openURL( const KURL &url ) = 0;
 
-    /**
-     * displays the difference between the two files
-     */
+    /**Displays the difference between the two files.
+    @param url1 First file to compare.
+    @param url2 Second file to compare.*/
     virtual void showDiff( const KURL &url1, const KURL &url2 ) = 0;
 
 };

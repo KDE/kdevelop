@@ -21,13 +21,48 @@
 
 #include <kdevplugin.h>
 
+/**
+@file kdevsourceformatter.h
+Source formatter interface.
+*/
+
+/**
+Source formatter interface.
+This interface is responsible for formatting source files and strings of code.
+
+Instances that implement this interface are available through extension architecture:
+@code
+KDevSourceFormatter *sf = extension<KDevSourceFormatter>("KDevelop/SourceFormatter");
+if (sf) {
+    // do something
+} else {
+    // fail
+}
+@endcode
+@sa @ref KDevPlugin::extension method documentation.
+@sa @ref whatisextension and @ref creatingextension sections of Platform API documentation.
+*/
 class KDevSourceFormatter : public KDevPlugin
 {
 public:
+    /**Constructor.
+    @param info Important information about the plugin - plugin internal and generic
+    (GUI) name, description, a list of authors, etc. That information is used to show
+    plugin information in various places like "about application" dialog, plugin selector
+    dialog, etc. Plugin does not take ownership on info object, also its lifetime should
+    be equal to the lifetime of the plugin.
+    @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
+    interface. Otherwise the plugin will not be constructed.
+    @param name The internal name which identifies the plugin.*/
     KDevSourceFormatter(const KDevPluginInfo *info, QObject* parent, const char* name)
-	:KDevPlugin(info, parent, name) {}
+        :KDevPlugin(info, parent, name) {}
 
+    /**Formats the source.
+    @param text A string with a code.
+    @return The formatted string.*/
     virtual QString formatSource(const QString text) = 0;
+    
+    /**@return The indentation string. For example, tab or four spaces can be returned.*/
     virtual QString indentString() const = 0;
 };
 

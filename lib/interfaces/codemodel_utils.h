@@ -322,38 +322,97 @@ void findFunctionDeclarations( Pred pred, const FunctionDom& fun, FunctionList &
 	lst << fun;
 }
 
-
+/**A scope.*/
 struct Scope{
+    /**Class.*/
     ClassDom klass;
+    /**Namespace.*/
     NamespaceDom ns;
 };
 
+/**Information about functions.*/
 struct AllFunctions{
+    /**Scope of functions.*/
     QMap<FunctionDom, Scope> relations;
+    /**List of functions.*/
     FunctionList functionList;
 };
+/**Information about function definitions.*/
 struct AllFunctionDefinitions{
+    /**Scope of function definitions.*/
     QMap<FunctionDefinitionDom, Scope> relations;
+    /**List of function definitions.*/
     FunctionDefinitionList functionList;
 };
 
+/**Namespace with utilities to find functions in the @ref CodeModel.*/
 namespace Functions{
+/**Looks for functions in the class.
+@param list The list of functions found by this routine.
+@param dom The class to look for functions.*/
 void processClasses(FunctionList &list, const ClassDom dom);
+
+/**Looks for functions in the namespace.
+@param list The list of functions found by this routine.
+@param dom The namespace to look for functions.*/
 void processNamespaces(FunctionList &list, const NamespaceDom dom);
+
+/**Looks for functions in the class and also saves their scope.
+@param list The list of functions found by this routine.
+@param dom The class to look for functions.
+@param relations The scope information.*/
 void processClasses(FunctionList &list, const ClassDom dom, QMap<FunctionDom, Scope> &relations);
+
+/**Looks for functions in the class and also saves their scope. 
+Used for classes withing a namespace.
+@param list The list of functions found by this routine.
+@param dom The class to look for functions.
+@param relations The scope information.
+@param nsdom The namespace which contains a class.*/
 void processClasses(FunctionList &list, const ClassDom dom, QMap<FunctionDom, Scope> &relations, const NamespaceDom &nsdom);
+
+/**Looks for functions in the namespace and also saves their scope.
+@param list The list of functions found by this routine.
+@param dom The namespace to look for functions.
+@param relations The scope information.*/
 void processNamespaces(FunctionList &list, const NamespaceDom dom, QMap<FunctionDom, Scope> &relations);
 }
+
+/**Namespace with utilities to find function definitions in the @ref CodeModel.*/
 namespace FunctionDefinitions{
+/**Looks for function definitions in the class.
+@param list The list of function definitions found by this routine.
+@param dom The class to look for function definitions.*/
 void processClasses(FunctionDefinitionList &list, const ClassDom dom);
+
+/**Looks for function definitions in the namespace.
+@param list The list of function definitions found by this routine.
+@param dom The namespace to look for function definitions.*/
 void processNamespaces(FunctionDefinitionList &list, const NamespaceDom dom);
+
+/**Looks for function definitions in the class and also saves their scope.
+@param list The list of function definitions found by this routine.
+@param dom The class to look for function definitions.
+@param relations The scope information.*/
 void processClasses(FunctionDefinitionList &list, const ClassDom dom, QMap<FunctionDefinitionDom, Scope> &relations);
+
+/**Looks for function definitions in the class and also saves their scope. 
+Used for classes withing a namespace.
+@param list The list of function definitions found by this routine.
+@param dom The class to look for function definitions .
+@param relations The scope information.
+@param nsdom The namespace which contains a class.*/
 void processClasses(FunctionDefinitionList &list, const ClassDom dom, QMap<FunctionDefinitionDom, Scope> &relations, const NamespaceDom &nsdom);
+
+/**Looks for function definitions in the namespace and also saves their scope.
+@param list The list of function definitions found by this routine.
+@param dom The namespace to look for function definitions.
+@param relations The scope information.*/
 void processNamespaces(FunctionDefinitionList &list, const NamespaceDom dom, QMap<FunctionDefinitionDom, Scope> &relations);
 }
 
 /**
- * Compare a declaration and a defintion of a function.
+ * Compares a declaration and a defintion of a function.
  * @param dec declaration
  * @param def definition
  * @return true, if dec is the declaration of the functiondefinition def, false otherwise
@@ -363,6 +422,7 @@ bool compareDeclarationToDefinition(const FunctionDom& dec, const FunctionDefini
 
 /**
  * Predicate for use with findFunctionDefintions. Searches for a defintion matching a declaration.
+ * @sa Pred documentation to learn more about predicates used with code model.
  * @author Jonas Jacobi
  */
 class PredDefinitionMatchesDeclaration{
@@ -377,17 +437,25 @@ private:
 	const FunctionDom m_declaration;
 };
 
+/**@return A list of all functions in the file.
+@param dom File Dom to look for functions in.*/
 FunctionList allFunctions(const FileDom &dom);
+/**@return A detailed list of all functions in the file (detailed list contains
+the information about a scope of each FunctionDom found).
+@param dom File Dom to look for functions in.*/
 AllFunctions allFunctionsDetailed(const FileDom &dom);
+/**@return A detailed list of all function definitions in the file (detailed list contains
+the information about a scope of each FunctionDefinitionDom found).
+@param dom File Dom to look for functions in.*/
 AllFunctionDefinitions allFunctionDefinitionsDetailed(const FileDom &dom);
 
 /**
- * Find a class by its position in a file(position inside the part of the file, where the class is declared).
+ * Finds a class by its position in a file(position inside the part of the file, where the class is declared).
  * In the case of nested classes the innermost class which is declared at/around the provided position.
- * @param nameSpace A namespace to search for the class
- * @param line a linenumber inside the class declaration
- * @param col the colum of line.
- * @return The innermost class, which is declared at/around position defined with line / col, or 0 if no class is found
+ * @param nameSpace A namespace to search for the class.
+ * @param line A linenumber inside the class declaration.
+ * @param col The colum of line.
+ * @return The innermost class, which is declared at/around position defined with line / col, or 0 if no class is found.
  * @author Jonas Jacobi <j.jacobi@gmx.de>
  */
 ClassDom findClassByPosition( NamespaceModel* nameSpace, int line, int col );
@@ -399,24 +467,24 @@ ClassDom findClassByPosition( ClassModel* aClass, int line, int col );
 
 /**
  * Finds the last occurrence (line of file wise) of a method inside a class declaration with specific access specificer.
- * This can be used e.g. to find a position to new methods to the class
- * @param aClass class to search for method
- * @param access the access specifier with which methods are searched for
+ * This can be used e.g. to find a position to new methods to the class.
+ * @param aClass class to search for method.
+ * @param access the access specifier with which methods are searched for.
  * @return The last line a Method with access specifier access is found, 
- * or -1 if no method with that access specifier was found
+ * or -1 if no method with that access specifier was found.
  * @author Jonas Jacobi <j.jacobi@gmx.de>
  */
 int findLastMethodLine( ClassDom aClass, CodeModelItem::Access access );
 
 /**
- * Same as above, but finds a membervariable instead of a method
+ * Same as above, but finds a membervariable instead of a method.
  */
 int findLastVariableLine( ClassDom aClass, CodeModelItem::Access access );
 	
 /**
  * Get the string representation of an accesss pecifier
- * @param access access specifier to get a string representation of.
- * @return string representation of access (e.g. "public")
+ * @param access An access specifier to get a string representation of.
+ * @return string The representation of an access (e.g. "public").
  * @author Jonas Jacobi <j.jacobi@gmx.de>
  */
 QString accessSpecifierToString( CodeModelItem::Access access );

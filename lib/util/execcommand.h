@@ -27,15 +27,21 @@ class KProcess;
 class KProgressDialog;
 
 /**
+@file execcommand.h
+Command execution facilities.
+*/
+
+/**
  * This class invokes a binary with the arguments passed in the constructor and
- * emits the signal finished() with the output. It also displays a progress dialog
- * with the possibility to cancel the command.
- * If there was an error or the user pressed cancel, finished will emit a QString::null,
- * otherwise QStrings containing the stdout/stderr.
+ * emits the signal finished() with the output. It also displays
+ * a progress dialog with the possibility to cancel the command.
+ *
+ * If there was an error or the user pressed cancel, finished ()
+ * will emit a QString::null, otherwise QStrings containing the stdout/stderr.
+ *
  * The object will delete itself after the finished signal has been emitted.
  * Additional environment can be set in the QStringList env via QStrings with the format "foo=blah"
  */
-
 class ExecCommand : public QObject
 {
     Q_OBJECT

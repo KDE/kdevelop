@@ -17,27 +17,51 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-#ifndef _KDEVCREATEFILE_H_
-#define _KDEVCREATEFILE_H_
+#ifndef KDEVCREATEFILE_H
+#define KDEVCREATEFILE_H
 
 #include <qstring.h>
 
-#include "kdevplugin.h"
+#include <kdevplugin.h>
 
 /**
- *
- * KDevelop Authors
- **/
+@file kdevcreatefile.h
+File creation facility interface.
+*/
+
+/**
+File creation facility interface.
+
+An abstract class for all extensions that are responsible for file creation.
+
+Instances that implement this interface are available through extension architecture:
+@code
+KDevCreateFile *cf = extension<KDevCreateFile>("KDevelop/CreateFile");
+if (cf) {
+    // do something
+} else {
+    // fail
+}
+@endcode
+@sa KDevPlugin::extension method documentation.
+*/
 class KDevCreateFile : public KDevPlugin
 {
 
 public:
+  /**File created with @ref KDevCreateFile implementation.*/
   class CreatedFile {
 
   public:
-    enum Status { STATUS_OK, STATUS_NOTCREATED, STATUS_NOTWITHINPROJECT };
+    /**The status of a file.*/
+    enum Status { 
+        STATUS_OK                /**<File was successfuly created.*/,
+        STATUS_NOTCREATED        /**<File was not created due to an error or user intervention.*/,
+        STATUS_NOTWITHINPROJECT  /**<File was successfuly created but not added to a project.*/
+    };
 
+    /**Constructor.
+    Sets status to STATUS_NOTCREATED.*/
     CreatedFile()
       : status( STATUS_NOTCREATED ) {}
 
@@ -69,26 +93,47 @@ public:
     }
 
     // this should be private
+    /**The directory.*/
     QString dir;
+    /**The name (without directory path).*/
     QString filename;
+    /**The extension of a file. Extension defines a "type" of the file template 
+    to use during file creation.*/
     QString ext;
+    /**The subtype of a file. "Subtype" defines a file template to use when
+    there are several file templates for each extension.*/
     QString subtype;
+    /**Current status.*/
     Status status;
+    /**true if the file should be added to a project.*/
     bool addToProject;
   };
 
 
 public:
 
+  /**Constructor.
+  @param info Important information about the plugin - plugin internal and generic
+  (GUI) name, description, a list of authors, etc. That information is used to show
+  plugin information in various places like "about application" dialog, plugin selector
+  dialog, etc. Plugin does not take ownership on info object, also its lifetime should
+  be equal to the lifetime of the plugin.
+  @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
+  interface. Otherwise the plugin will not be constructed.
+  @param name The internal name which identifies the plugin.*/
   KDevCreateFile(const KDevPluginInfo *info, QObject * parent = 0, const char * name = 0)
       :KDevPlugin(info, parent, name) {}
 
-  /**
-   * Call this method to create a new file, within or without the project. Supply as
-   * much information as you know. Leave what you don't know as QString::null.
-   * The user will be prompted as necessary for the missing information, and the
-   * file created, and added to the project as necessary.
-   */
+  /**Creates a new file, within or without the project. 
+  Supply as much information as you know. Leave what you don't know as QString::null.
+  The user will be prompted as necessary for the missing information, and the
+  file created, and added to the project as necessary.
+  @param ext File extension (type).
+  @param dir The absolute path to a directory.
+  @param name The name of a file.
+  @param subtype The subtype, pass this only if an extension is not enough to find the
+  file template.
+  @return @ref CreatedFile instance with information about file and file creation process.*/
   virtual CreatedFile createNewFile(QString ext = QString::null,
                      QString dir = QString::null,
                      QString name = QString::null,

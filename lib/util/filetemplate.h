@@ -24,16 +24,28 @@
 
 class KDevPlugin;
 
+/**
+@file filetemplate.h
+FileTemplate class with utility methods to work with file templates.
+*/
 
+/**
+Utilities to work with file templates in the current project.
+*/
 class FileTemplate
 {
 public:
-    
-    typedef enum { Default, Custom } Policy;
+
+    /**Policy of finding file templates.*/ 
+    typedef enum { 
+        Default    /**<Checks for templates in project and also for global filecreate templates.*/,
+        Custom     /**<Checks for templates in custom directories. This usually means that 
+                       full paths are given for FileTemplate methods.*/
+    } Policy;
     /**
-     * Returns whether a template with the given name
+     * @return Whether a template with the given name
      * exists in the current project. File templates
-     * are stored in the "templates" subdirectory of a project.
+     * are stored in the "templates" subdirectory of a project or in application shared dirs.
      */
     static bool exists(KDevPlugin *part, const QString &name, Policy p = Default);
     /**

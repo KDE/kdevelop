@@ -24,7 +24,7 @@ Library provides a @ref PropertyLib::Property class which stores property name, 
 more important information like description or the list of possible values.
 Using @ref PropertyLib::Property class adds more overhead over Q_PROPERTY but provides more
 flexibility. You can subclass @ref PropertyLib::Property and create your custom properties.
-Custom properties can have either predefined type (see @ref PropertyLib::PropertyType) or
+Custom properties can have either predefined type (see @ref PropertyLib::Property::PropertyType) or
 custom type. Custom type should be used if a custom property editor widget is
 necessary.
 
@@ -33,20 +33,19 @@ to store such lists in most efficient manner. It also allows to group
 properties (for example think about "geometrical" properties like "x", "y", etc.).
 
 Property lists can be displayed in @ref PropertyLib::PropertyEditor widget which will
-display them in a table form. Note that @ref PropertyLib::PropertyEditor takes not
-a @ref PropertyLib::PropertyList object, but @ref PropertyLib::PropertyAccessor instead.
+display them in a table form. @ref PropertyLib::PropertyEditor takes a pointer to a @ref PropertyLib::PropertyList object so @ref PropertyLib::PropertyBuffer can be used too.
 
-@ref PropertyLib::PropertyAccessor is designed to provide a method to access an intersection
+@ref PropertyLib::PropertyBuffer is designed to provide a method to access an intersection
 of property lists. For example, let's consider object A with property list a_list
 abd object B with list b_list. Now let's imagine we want to display common properties
 from a_list and b_list in one @ref PropertyLib::PropertyEditor widget. Obviously, we need to
 "intersect" a_list with b_list and display the result of intersection.
-This is why @ref PropertyLib::PropertyAccessor is used for editing. If we change
-the value of a property in the editor, @ref PropertyLib::PropertyAccessor will update
+This is why @ref PropertyLib::PropertyBuffer is used for editing. If we change
+the value of a property in the editor, @ref PropertyLib::PropertyBuffer will update
 both properties from underlying a_list and b_list.
 
 @ref PropertyLib::PropertyEditor at the same time shows only one editor for selected
-property in the list. Each @ref PropertyLib::PropertyType has corresponding @ref PropertyLib::PropertyWidget
+property in the list. Each @ref PropertyLib::Property::PropertyType has corresponding @ref PropertyLib::PropertyWidget
 which displays property editor or draws a property in the list if it is not edited.
 More exactly, if @ref PropertyLib::PropertyEditor needs to display editor widget, it displays
 @ref PropertyLib::PropertyWidget, else it calls @ref PropertyLib::PropertyWidget::drawViewer function.
@@ -55,9 +54,9 @@ Custom property widgets should be subclasses of @ref PropertyLib::PropertyWidget
 To create property widgets at runtime, a factory is used. Factory class is
 called @ref PropertyLib::PropertyMachineFactory. Static function @ref PropertyLib::PropertyMachineFactory::getInstance
 can be used to obtain the reference to the factory instance. Factory creates and returns
-so-called @ref Machine for each registered property type (either predefined or user defined).
+so-called @ref PropertyLib::Machine for each registered property type (either predefined or user defined).
 
-@ref Machine contains @ref PropertyLib::PropertyWidget and a list of "detailed" machines.
+@ref PropertyLib::Machine contains @ref PropertyLib::PropertyWidget and a list of "detailed" machines.
 Usually only property widget is necessary for a property but there are 
 complex properties like "Font" for example. We would like to see separate editors
 for font family, size, etc. and a button to choose all of these in the dialog.
@@ -80,7 +79,7 @@ A simple example on how to create a property editor and use it with one property
     m_editor->populateProperties(*list);
 \endcode
 
-More advanced example with property accessors and list intersection:
+More advanced example with property buffers and list intersection:
 \code
     PropertyEditor *m_editor = new PropertyEditor(this);
     
@@ -100,9 +99,10 @@ More advanced example with property accessors and list intersection:
     list2->addProperty(new Property(String, "Third Property",
         "This is my third property", "green"));
 
-    PropertyAccessor *ac = list->intersect(*list2);
+    PropertyBuffer buf(list)
+    buf.intersect(*list2);
     
-    m_editor->populateProperties(ac);
+    m_editor->populateProperties(buf);
 \endcode
 In this example only properties named "First Property" and "Second Property" will be shown in editor.
 "Third Property" has different types in list and list2 and will not be included in intersection. 

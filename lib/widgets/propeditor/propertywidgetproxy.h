@@ -33,6 +33,12 @@ class PropertyWidget;
 
 #define PropertyType Property::PropertyType
 
+/**
+Property Widget Proxy.
+It is sometimes useful to create single property editor widgets instead of having them
+all in the property editor. Proxy creates an empty widget and shows the property editor
+depending on the property type.
+*/
 class PropertyWidgetProxy: public QWidget
 {
 Q_OBJECT
@@ -42,14 +48,18 @@ public:
     PropertyWidgetProxy(QWidget *parent = 0, const char *name = 0);
     ~PropertyWidgetProxy();
     
+    /**Sets the type of a property editor to appear.*/
     void setPropertyType(int propertyType);
     int propertyType() const { return m_propertyType; }
+    /**Sets the type of a property editor to appear.*/
     void setPropertyType2(PropertyType propertyType);
     PropertyType propertyType2() const { return m_propertyType; }
     
     QVariant value() const;
     void setValue(const QVariant &value);
     
+    /**Sets the type of an editor basing on the @p value if the name is "value".
+    Otherwise works as QWidget::setProperty.*/
     bool setProperty( const char *name, const QVariant &value);
     QVariant property( const char *name) const;
     

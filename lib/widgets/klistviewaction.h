@@ -20,20 +20,21 @@
 #define KLISTVIEWACTION_H
 
 #include <kdeversion.h>
-#if KDE_VERSION > 305
-# include <kaction.h>
-#else
-# include <kdevwidgetaction.h>
-#endif
+#include <kaction.h>
 
 class KComboView;
 
-class KListViewAction
-#if KDE_VERSION > 305
-: public KWidgetAction
-#else
-: public KDevCompat::KWidgetAction
-#endif
+/**
+@file klistviewaction.h
+Widget action with KComboView.
+*/
+
+
+/**
+Widget action with KComboView.
+Can be used on toolbars. It appears as @ref ResizableCombo.
+*/
+class KListViewAction: public KWidgetAction
 {
 public:
     KListViewAction(KComboView *view, const QString &text, const KShortcut &cut, const QObject *receiver, const char *slot, KActionCollection *parent, const char *name);

@@ -19,6 +19,11 @@
 #include <qvaluelist.h>
 #include <qmap.h>
 
+/**
+@file domutil.h
+Utility functions to operate on %DOM.
+*/
+
 struct DomAttribute
 {
   QString name;

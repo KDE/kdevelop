@@ -31,7 +31,7 @@ namespace PropertyLib{
 class PropertyList;
 
 /** @file multiproperty.h
-@short Contains @ref MultiProperty class.
+@short Contains @ref PropertyLib::MultiProperty class.
 */
 
 /**
@@ -89,6 +89,7 @@ public:
     /**Sets the value of a %property.*/
     void setValue(const QVariant& value);
     /**Sets the value of a %property.
+    @param value new value of thus %multiproperty 
     @param emitChange if set to true then %property list which owns this %multiproperty 
     emits propertyValueChanged signal.*/
     void setValue(const QVariant& value, bool emitChange);

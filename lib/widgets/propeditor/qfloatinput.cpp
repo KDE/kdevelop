@@ -1,4 +1,4 @@
-/**
+/*
  * qfloatinput.cpp
  *
  * Copyright (C)  2004  David Faure <faure@kde.org>

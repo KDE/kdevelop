@@ -76,7 +76,7 @@ signals:
     /**Emit this signal when property value is changed. Probably you want
     to emit it only from @ref setValue() method.
     @ref PropertyLib::PropertyEditor widget will connect this to the appropriate slot which
-    will make updates to the @ref PropertyLib::PropertyAccessor that hold propeties.*/
+    will make updates to the @ref PropertyLib::PropertyList that hold propeties.*/
     void propertyChanged(MultiProperty *property, const QVariant &value);
 
 protected:
