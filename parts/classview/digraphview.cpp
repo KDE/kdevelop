@@ -219,7 +219,7 @@ void DigraphView::parseDotResults(const QStringList &list)
 void DigraphView::process()
 {
     if (!KGlobal::dirs()->findExe("dot")) {
-        KMessageBox::sorry(0, i18n("You don't have the dot installed :-(\n Get it from www.graphviz.org"));
+        KMessageBox::sorry(0, i18n("You don't have 'dot' installed.\nIt can be downloaded from www.graphviz.org."));
         return;
     }
     
