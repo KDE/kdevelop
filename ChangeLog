@@ -1,3 +1,36 @@
+2004-02-15 KDevelop authors <kdevelop-devel@kde.org>
+    * User Manual.
+    * Fixed many typos.
+    * Restructured and updated the todo file.
+    * KCModule Template to use KDE 3.0 API and KGenericFactory.
+    * Updated to the latest Doxygen version.
+    * Make source files generated with appwizard honor the selected file templates.
+    * Clanlib documentation
+    * Ask if user tries to reload the already opened project.
+    * Project templates by ignoring irrelevant documentation and other small fixes.
+    * Add ConfigWidgetProxy class for config widget demand load support (reduces memory).
+    * SearchText in QEditor
+    * Possibility to change fontsize in documentation browser.
+    * Make Haskell language support work again
+    * Clear all breakpoints
+    * A case where unsaved files aren't queried for saving when KDevelop is closed.
+    * Bug 58999 : Debugger will not start (libtool issue)
+    * Bug 62888 : Back and forward buttons available in context menu.
+    * Bug 69035 : Run Options not honored (custom makefiles)
+    * Bug 70175 : Problems on minimum wxWindows version test.
+    * Bug 70176 : wxWindows apptemplate broke compilation with Unicode compiled wxWindows
+    * Bug 71003 : Cannot translate project due to srcdir != builddir.
+    * Bug 72502 : Kdevelop crashes when closing multiple files via Keyboard.
+    * Bug 72523 : Grep dialog doesn't prepopulate with selected text.
+    * Bug 72552 : Unsaved changes icon disappears even if save could not be performed.
+    * Bug 72582 : Crashes while loading plugins after unloading plugins.
+    * Bug 73025 : expand text (ctrl+J) crashes kdevelop.
+    * Bug 73039 : cvs tools may crash kdevelop.
+    * Bug 73116 : Kdevelop crashes when typing a dot at the end of a comment.
+    * Bug 73467 : Incomplete make clean for parts/appwizard/common.
+    * Bug 73567 : Use -u instead of -u3 since it is obsoleted.
+    * Bug 74955 : Crash when working with Java ant projects.
+
 2004-01-28 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Ported autotools part, FileTree, FileGroups and File cerate to demand loaded config page
 
