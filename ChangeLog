@@ -1,3 +1,8 @@
+2000-09-05 Ralf Nolden <nolden@kde.org>
+        * updated KDE2normal project template to use KAction stuff+XML rc file
+          testproject crashes for me when using uncommented fileClose KAction-please test!
+        * updated processes.pl.in for the rc file and removal of resource.h
+
 2000-09-02 Ralf Nolden <nolden@kde.org>
 	* fixed CProject to treat *.ui designer files as SOURCE for Makefile.am´s
 	* updated KDE2 and Qt2 templates to current KDE automake/autoconf
