@@ -465,6 +465,7 @@ void CKDevelop::initMenuBar(){
   pixmap = loader->loadIcon("redo");
   edit_menu->addCommand(ctEditCommands, cmRedo, pixmap, ID_EDIT_REDO);
 
+  edit_menu->insertItem(i18n("Undo/Redo &History..."),this,SLOT(slotEditUndoHistory()),0,ID_EDIT_UNDO_HISTORY);
 
   edit_menu->insertSeparator();
   pixmap = loader->loadIcon("cut");

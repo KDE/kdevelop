@@ -34,19 +34,21 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include "structdef.h"
+#include "kbrowser.h"
 
 
 /** 
   *the documentation browser, attention!: only a prototype
   *@author Sandy Meier
   */
-class CDocBrowser : public KHTMLView {
+class CDocBrowser : public KBrowser {
   Q_OBJECT 
 public: 
   /** construtor */
   CDocBrowser(QWidget*parent=0,const char* name=0); 
   /** destructor */
   ~CDocBrowser();
+
   /**show a html in a htmlview,if reload true it reload a file even it is in memory*/
   void showURL(QString url,bool reload=false);
   void setDocBrowserOptions();
@@ -80,6 +82,7 @@ protected:
   QString m_title, m_refTitle;
 //  void  mousePressEvent(QMouseEvent* event);
   QPopupMenu* doc_pop;
+  KBrowser* createFrame( QWidget *_parent, const char *_name );
 
 
 private:

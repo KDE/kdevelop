@@ -46,6 +46,7 @@
 
 #define ID_EDIT_UNDO                11010
 #define ID_EDIT_REDO                11020
+#define ID_EDIT_UNDO_HISTORY        11023
 
 #define ID_EDIT_CUT                 11030
 #define ID_EDIT_COPY                11040

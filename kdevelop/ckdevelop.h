@@ -241,6 +241,7 @@ public:
   void slotEditUndo();
   /** Redo last editing step */
   void slotEditRedo();
+  void slotEditUndoHistory();
   /** cuts a selection to the clipboard */
   void slotEditCut();
   /** copies a selection to the clipboard */

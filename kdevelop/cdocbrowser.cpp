@@ -55,7 +55,7 @@ QColor CDocBrowser::vLinkColor;
 bool CDocBrowser::underlineLinks;
 bool CDocBrowser::forceDefaults;
 
-CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,name){
+CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KBrowser(parent,name){
 
   doc_pop = new QPopupMenu();
   doc_pop->insertItem(BarIcon("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
@@ -93,6 +93,9 @@ void CDocBrowser::slotViewInKFM(){
 void CDocBrowser::showURL(QString url,bool reload){
  //read the htmlfile
   //cerr << "URL:" << url << "\n";
+
+    //    openURL(url,reload);
+    //    return;
   QString url_wo_ref=url; // without ref
   QString ref;
 
@@ -326,6 +329,10 @@ void CDocBrowser::slotSetFileTitle( const char* title ){
 
 QString CDocBrowser::currentTitle(){
 	return (m_refTitle.isEmpty()) ? m_title : m_refTitle+" - "+m_title;	
+}
+
+KBrowser* CDocBrowser::createFrame( QWidget *_parent, const char *_name ){
+    return new CDocBrowser(_parent,_name);
 }
 //
 // KDE Help Options

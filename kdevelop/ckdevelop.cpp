@@ -39,6 +39,7 @@
 #include <stdlib.h>
 #include <kstddirs.h>
 #include <kmenubar.h>
+#include <qtabdialog.h>
 
 #include "./kdlgedit/kdlgedit.h"
 #include "ctoolsconfigdlg.h"
@@ -57,6 +58,7 @@
 #include "cfinddoctextdlg.h"
 #include "cexecuteargdlg.h"
 #include "./kwrite/kwdoc.h"
+#include "./kwrite/kwdialog.h"
 #include "kswallow.h"
 #include "cerrormessageparser.h"
 #include "grepdialog.h"
@@ -464,7 +466,11 @@ void CKDevelop::slotEditUndo(){
 void CKDevelop::slotEditRedo(){
   edit_widget->redo();
 }
-
+void CKDevelop::slotEditUndoHistory(){
+    if(edit_widget != 0L){
+	edit_widget->undoHistory();
+    }
+}
 
 void CKDevelop::slotEditCut(){
   slotStatusMsg(i18n("Cutting..."));
@@ -1048,23 +1054,6 @@ void CKDevelop::slotBuildStop(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-// void CKDevelop::slotToolsKDbg(){
-
-//   if(!CToolClass::searchProgram("kdbg")){
-//     return;
-//   }
-//   if(!bKDevelop)
-//     switchToKDevelop();
-
-//   showOutputView(false);
-
-//   s_tab_view->setCurrentTab(TOOLS);
-//   swallow_widget->sWClose(false);
-//   swallow_widget->setExeString("kdbg");
-//   swallow_widget->sWExecute();
-//   swallow_widget->init();
-// }
-
 void CKDevelop::slotToolsTool(int tool){
 
     if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
@@ -1103,17 +1092,47 @@ void CKDevelop::slotToolsTool(int tool){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotOptionsEditor(){
-  slotStatusMsg(i18n("Setting up the Editor..."));
-  #warning FIXME
-  //  cpp_widget->optDlg();
-  config->setGroup("KWrite Options");
-  cpp_widget->writeConfig(config);
-  cpp_widget->doc()->writeConfig(config);
-  header_widget->copySettings(cpp_widget);
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
-  slotStatusMsg(i18n("Ready."));
+    slotStatusMsg(i18n("Setting up the Editor..."));
+    
+    QTabDialog *qtd = new QTabDialog(this, "tabdialog", TRUE);
+    
+    qtd->setCaption(i18n("Options Editor"));
+    
+    // indent options
+    IndentConfigTab *indentConfig = new IndentConfigTab(qtd, cpp_widget);
+    qtd->addTab(indentConfig, i18n("Indent"));
+    
+    // select options
+    SelectConfigTab *selectConfig = new SelectConfigTab(qtd, cpp_widget);
+    qtd->addTab(selectConfig, i18n("Select"));
+    
+    // edit options
+    EditConfigTab *editConfig = new EditConfigTab(qtd, cpp_widget);
+    qtd->addTab(editConfig, i18n("Edit"));
+    
+    
+    qtd->setOkButton(i18n("OK"));
+    qtd->setCancelButton(i18n("Cancel"));
+    
+
+    if (qtd->exec()) {
+	// indent options
+	indentConfig->getData(cpp_widget);
+	indentConfig->getData(header_widget);
+	// select options
+	selectConfig->getData(cpp_widget);
+	selectConfig->getData(header_widget);
+	// edit options
+	editConfig->getData(cpp_widget);
+	editConfig->getData(header_widget);
+	
+	config->setGroup("KWrite Options");
+	cpp_widget->writeConfig(config);
+	cpp_widget->doc()->writeConfig(config);
+	
+	slotStatusMsg(i18n("Ready."));
+    }
+    delete qtd;
 
 }
 void CKDevelop::slotOptionsEditorColors(){
@@ -1990,30 +2009,14 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     browser_widget->showURL(url); // without reload if equal
   }
 
-/*  if (!history_list.isEmpty()){
-    enableCommand(ID_HELP_BACK);
-  }
-*/
+
 
   QString str = history_list.current();
   //if it's a url-request from the search result jump to the correct point
   if (str.contains("kdevelop/search_result.html")){
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
-/*  // insert into the history-list
-  if(QString(url).left(7) != "http://"){ // http aren't added to the history list
 
-    int cur =  history_list.at(); // get the current index
-    if(cur == -1){
-      history_list.append(url);
-			history_title_list.append(browser_widget->currentTitle());
-    }
-    else{
-      history_list.insert(cur+1,url);
-      history_title_list.insert(cur+1, browser_widget->currentTitle());
-    }
-  }
-*/	
 }
 
 void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
