@@ -96,6 +96,7 @@ doc/de/Makefile \
 doc/de/manual/Makefile \
 doc/de/welcome/Makefile \
 doc/de/cref/Makefile \
+doc/de/tutorial/Makefile \
 doc/en/Makefile \
 doc/en/addendum/Makefile \
 doc/en/cref/Makefile \
