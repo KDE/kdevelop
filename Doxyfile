@@ -103,6 +103,7 @@ EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = *.moc.* \
                          moc* \
                          *.all_cpp.* \
+                         *Iface_skel.cpp \
                          *unload.* \
                          */test/* \
                          */tests/*

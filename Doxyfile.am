@@ -31,7 +31,6 @@ apidox-am-yes:
 		echo "HIDE_UNDOC_CLASSES     = NO" >> Doxyfile; \
 		echo "SORT_MEMBER_DOCS       = YES" >> Doxyfile; \
 		echo "GENERATE_TODOLIST      = YES" >> Doxyfile; \
-		echo "WARN_LOGFILE           = doxygen.log" >> Doxyfile; \
 		if test -n "$(DOXYGEN_INPUT)"; then \
 			patterns= ;\
 			dirs= ;\
