@@ -3,10 +3,9 @@
 <titlepag>
 <title>Benutzerhandbuch zu KDevelop
 <subtitle>Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.2
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>" >, 
-Ralf Funken <htmlurl url="mailto:RFunken@kdevelop.de" name = "<RFunken@kdevelop.de>">. Übersetzung : Ralf Funken <htmlurl 
-url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">, Ralf Nolden <htmlurl 
-url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>" > <inst>Das KDevelop Team
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>" >
+<newline>Übersetzung: Ralf Funken <htmlurl url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">
+<inst>The KDevelop Team
 <date>Version 3.0 , Mär 21,2000
 <abstract>
 Dieses Handbuch ist Teil der KDevelop Integrierten Entwicklungsumgebung und ist daher ebenso unter der GNU General Public License
@@ -432,7 +431,8 @@ oder suchen Sie nach "GNU Make" in der KDE-Hilfe unter "System GNU Info contents
 
 Dies erklärt Ihnen, warum ein Entwickler das Make-Werkzeug benötigt, um den Übersetzungsvorgang seiner Applikation zu vereinfachen. Nun,
 das Schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie müssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
-Aber hier ist die gute Nachricht über KDevelop und das Make-Werkzeug: Sie müssen nur das Make-Kommando im <ref id="KDevelop Setup" name="KDevelop Setup"> Dialog setzen und Sie sind soweit. Alle Projekte, die von KDevelop erzeugt werden, benutzen das
+Aber hier ist die gute Nachricht über KDevelop und das Make-Werkzeug: Sie müssen nur das Make-Kommando im <ref id="KDevelop Setup"
+name="KDevelop Setup">  Dialog setzen und Sie sind soweit. Alle Projekte, die von KDevelop erzeugt werden, benutzen das
 Make-Kommando um die Zielapplikation zu erstellen, und Sie müssen nichts eingeben. Klicken Sie einfach auf den Make-Knopf in der
 Werkzeugleiste oder wählen Sie die gewünschte Funktion aus dem "Erstellen" Menü.
 
@@ -2238,7 +2238,8 @@ KDevelop.
 Desweiteren erlaubt es KDevelop, Projekte für KDE 2 und Qt 2.x zu erstellen. Diese machen, bevor Sie ein Projekt erstellen, die
 Installation der benötigten Bibliotheken, sowie das Setzen des entsprechenden Installationspfades im KDevelop Setupdialog,
 erforderlich (siehe auch <ref id="Grundsätzliche Konfiguration" name="Grundsätzliche Konfiguration">), damit sichergestellt ist,
-daß alles automatisch funktioniert.
+daß alles automatisch funktioniert. Der KDevelop 1.2 Applikations-Wizard enthält zusätzlich ein GNOME-Projekttyp, damit Entwickern die
+Möglichkeit gegeben wird, mit KDevelop GTK+-basierte Programme zu erstellen.
 
 Zusätzlich bietet sich KDevelop an, um mit bereits existierenden Projekten zu arbeiten. Diese können jede Option haben, die der
 Programmierer selbst in configure und Makefiles gesetzt hat. Soweit es die Ausführung und den Erstellungsprozess betrifft, sind zur
@@ -2262,18 +2263,18 @@ mit KDevelop Bibliotheken zu erstellen. Hier erhalten Sie ein paar Richtlinien u
 daraus eine statische Bibliothek erzeugen. Das bedeutet, das statische Bibliotheken grundsätzlich schon durch das Projektmanagement
 unterstützt wird, um die Projektdateien übersichtlicher zu sortieren. Beachten Sie, das die statische Bibliothek später ein Teil der
 Binärdatei wird und daher nicht installiert wird.
-
-<item>Um eine dynamische Bibliothek zu erstellen, können Sie ein weiteres Projekt-Unterverzeichnis anlegen. Die Quellcodes, die sich in
-diesem Unterverzeichnis befinden, werden dem Projekt hinzugefügt und sind daher in der Klassen-Ansicht as Hauptklassen verfügbar. Um
-eine dynamische Bibliothek zu erzeugen, bietet Ihnen das <htmlurl url="programming/index-19.html" name="KDevelop Programming Handbook"> im
-Anhang eine Schablone zur Erstellung der entsprechenden Makefile.am an. Wenn das Makefile des neuen Unterverzeichnisses dem
-configure.in Skript hinzugefügt wurde, müssen Sie nur noch "Autoconf und automake" und "Configure" ausführen, um die Makefiles zu
-erzeugen. Die Erstellung selbst ist jedoch nur möglich, indem das Erstellungsprogramm aus dem Unterverzeichnis aufgerufen wird, da
-KDevelop die Erstellung aus dem ursprünglichen Projekt-Unterverzeichnis aufruft. Eine weitere Möglichkeit, eine dynamische Bibliothek
-zu erstellen wäre, die Makefile.am des ursprünglichen Unterverzeichnisses an die Schablone des Programmierhandbuches anzupassen, indem
-Sie die Regeln zur Projekt-Modifikation beachten, die im Abschnitt <ref id="Projekt Hacking" name="Projekt Hacking"> beschrieben
-werden.
-<item>Um eine dynamische Bibliothek zu installieren, müssen Sie den KDE-Datei-System Standard beachten, wie er im <htmlurl url="programming/index-13.html" name="The KDevelop Programming Handbook"> beschrieben ist.
+<item>Um eine shared library (dynamische Bibliothek) zu erzeugen, bietet Ihnen KDevelop einen einfachen Weg an, um eine wie oben
+beschriebene statischen Bibliothek zu einer dynamischen zu konvertieren: Öffnen Sie den RFV am linken Rand des KDevelop-Hauptfensters
+und wechseln Sie zum erzeugten Unterverzeichnis. Dort benutzen Sie den rechten Maus-Button über dem Unterverzeichnis. Das Popup-Menü
+bietet dann die folgenden Optionen:
+<itemize>
+<item>Makefile.am aktualisieren
+<item>Zur statischen Bibliothek machen
+<item>Zur dynamischen Bibliothek machen
+</itemize>
+Verwenden Sie "Zur dynamischen Bibliothek machen", um die standardmäßig erzeugte statische Bibliothek zu einer dynamischen zu
+konvertieren. Sie können Ihre Entscheidung später auch rückgängig machen, falls Sie sich dazu entscheiden sollten, doch eine statische
+Bibliothek zu verwenden- wiederholen Sie einfach die selben Schritte und wählen Sie "Zur statischen Bibliothek machen".
 </itemize>
 
 <sect1>Mehrere Zielobjekte
@@ -2312,7 +2313,7 @@ Makefile.am außerhalb des Schreibbereichs gemäß den von Ihnen benötigten Einstel
 
 <sect>Neue Projekte
 <p>
-Der KDevelop Application Wizard ermöglicht die Erstellung von dreizehn verschiedenen Projekttypen. Alle Projekte verwenden die Standard GNU 
+Der KDevelop Application Wizard ermöglicht die Erstellung von verschiedenen Projekttypen. Alle Projekte verwenden die Standard GNU
 Entwicklungswerkzeuge wie unter Anforderungen beschrieben.
 
 Für KDE Anwendungen stehen sechs Projekttypen zur Verfügung :
@@ -2342,6 +2343,9 @@ einschließlich Unterstützung für ein Multiple Document Interface (MDI) Modell.
 Modi Toplevel und Kind-Frame. Benötigt QextMDI. Mehr Informationen erhalten Sie auf
 <htmlurl url="http://www.geocities.com/gigafalk/qextmdi.htm" name="http://www.geocities.com/gigafalk/qextmdi.htm">.
 </itemize>
+
+Weiterhin bietet der Applikations-Wizard eine Schablone, um GNOME-konforme Applikationen mit der GTK+ C-Bibliothek zu erstellen, die
+standardmäßig schon ein Hauptfenster mit Menüleiste, Werkzeugleiste und Statuszeile enthält.
 
 Die beiden Typen C und C++ bieten die Erstellung einer Kommandozeilenanwendung an. 
 

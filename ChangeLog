@@ -1,3 +1,6 @@
+2000-04-16 Ralf Nolden <rnolden@kdevelop.de>
+        * updated kdevelop.pot, de.po and documentation, fixed french
+          Makefile.am installation destination
 2000-04-16 Sandy Meier <smeier@kdevelop.de>
 	* added a GNOME template to the Application wizard and updated the projectmangement
 
