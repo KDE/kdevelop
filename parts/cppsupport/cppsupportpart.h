@@ -42,7 +42,6 @@ class KListView;
 namespace KParts { class Part; }
 namespace KTextEditor { class EditInterface; class SelectionInterface; class ViewCursorInterface; };
 
-
 class CppSupportPart : public KDevLanguageSupport
 {
     Q_OBJECT
@@ -66,6 +65,8 @@ public:
     virtual QStringList subclassWidget(const QString& formName);
     virtual QStringList updateWidget(const QString& formName, const QString& fileName);
     
+    static KConfig *config();
+    
 signals:
     void fileParsed( const QString& fileName );
 
@@ -84,6 +85,7 @@ private slots:
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
+    void configWidget(KDialogBase *dlg);
     void projectConfigWidget(KDialogBase *dlg);
     void contextMenu(QPopupMenu *popup, const Context *context);
     void addedFilesToProject(const QStringList &fileList);

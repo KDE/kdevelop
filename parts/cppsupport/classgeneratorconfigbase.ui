@@ -1,0 +1,246 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>ClassGeneratorConfigBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ClassGeneratorConfigBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>475</width>
+            <height>524</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>ClassGeneratorConfigBase</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox7_2</cstring>
+            </property>
+            <property name="title">
+                <string>File Templates</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="0">
+                    <item>
+                        <property name="text">
+                            <string>Cpp Header</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Cpp Source</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Objective-C Header</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Objective-C Source</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>GTK C Header</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>GTK C Source</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>templatename_box</cstring>
+                    </property>
+                </widget>
+                <widget class="QTextEdit" row="1" column="0">
+                    <property name="name">
+                        <cstring>template_edit</cstring>
+                    </property>
+                    <property name="tabChangesFocus">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0">
+            <property name="name">
+                <cstring>groupBox9</cstring>
+            </property>
+            <property name="title">
+                <string>Class Documentation</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>author_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Include Author Name in Class Documentation</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>doc_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Generate Empty Documentation Strings</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>groupBox10</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Names</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>textLabel3_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>#ifndef - #define Names</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>File Names:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="0">
+                    <item>
+                        <property name="text">
+                            <string>Lowercase</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Uppercase</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Same as class names</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>filecase_box</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="1">
+                    <item>
+                        <property name="text">
+                            <string>Lowercase</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Uppercase</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Same as class names</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Same as file names</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>defcase_box</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="2">
+                    <item>
+                        <property name="text">
+                            <string>Lowercase</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Uppercase</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Same as class names</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>supercase_box</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="2">
+                    <property name="name">
+                        <cstring>textLabel3_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Superclass File Names:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>templatename_box</sender>
+        <signal>activated(int)</signal>
+        <receiver>ClassGeneratorConfigBase</receiver>
+        <slot>templateTypeChanged(int)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>templatename_box</tabstop>
+    <tabstop>template_edit</tabstop>
+    <tabstop>filecase_box</tabstop>
+    <tabstop>defcase_box</tabstop>
+    <tabstop>supercase_box</tabstop>
+    <tabstop>author_box</tabstop>
+    <tabstop>doc_box</tabstop>
+</tabstops>
+<slots>
+    <slot access="protected">templateTypeChanged(int type)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

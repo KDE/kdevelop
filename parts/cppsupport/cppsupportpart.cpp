@@ -29,6 +29,8 @@
 #include "addmethoddialog.h"
 #include "addattributedialog.h"
 #include "KDevCppSupportIface.h"
+#include "cppsupportfactory.h"
+#include "classgeneratorconfig.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -98,10 +100,6 @@ void showMemUsage()
 {}
 #endif
 
-
-typedef KGenericFactory<CppSupportPart> CppSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
-
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
     : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "KDevCppSupport"), 
       m_activeSelection( 0 ), m_activeEditor( 0 ),
@@ -142,6 +140,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
+    connect( core(), SIGNAL(configWidget(KDialogBase*)),
+             this, SLOT(configWidget(KDialogBase*)) );
 
     KAction *action;
 
@@ -263,6 +263,13 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
     connect( w, SIGNAL( enableCodeCompletion( bool ) ),
              this, SLOT( slotEnableCodeCompletion( bool ) ) );
 
+}
+
+void CppSupportPart::configWidget(KDialogBase *dlg)
+{
+  QVBox *vbox = dlg->addVBoxPage(i18n("C++ New Class Generator"));
+  ClassGeneratorConfig *w = new ClassGeneratorConfig(vbox, "classgenerator config widget");
+  connect(dlg, SIGNAL(okClicked()), w, SLOT(storeConfig()));
 }
 
 void

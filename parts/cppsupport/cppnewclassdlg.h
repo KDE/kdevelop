@@ -107,6 +107,8 @@ protected:
     virtual void headerChanged();
     virtual void implementationChanged();
     virtual void nameHandlerChanged(const QString &text);
+    virtual void baseclassname_changed(const QString &text);
+    virtual void baseIncludeChanged(const QString &text);
     
     virtual void addBaseClass();
     virtual void remBaseClass();
@@ -117,6 +119,7 @@ protected:
     virtual void currBasePublicSet();
     virtual void currBaseVirtualChanged(int val);
     virtual void currBaseSelected(QListViewItem *it);
+    virtual void scopeboxActivated(int value);
 
     virtual void checkObjCInheritance(int val);
     virtual void checkQWidgetInheritance(int val);
@@ -156,6 +159,7 @@ protected:
 private:
 
     bool headerModified;
+    bool baseincludeModified;
     bool implementationModified;
     QString m_parse;
     QPopupMenu *accessMenu;
@@ -198,6 +202,15 @@ private:
       void genMethodDeclaration(ParsedMethod *method, QString className,
         QString *adv_h, QString *adv_cpp, bool extend, QString baseClassName );
 
+      void beautifyHeader(QString &templ, QString &headerGuard,
+        QString &includeBaseHeader, QString &author, QString &doc, QString &className,
+        QString &baseclass, QString &inheritance, QString &qobjectStr, QString &args,
+        QString &header, QString &namespaceBeg, QString &constructors, QString &advH_public, QString &advH_public_slots,
+        QString &advH_protected, QString &advH_protected_slots, QString &advH_private, QString &advH_private_slots, 
+        QString &namespaceEnd);        
+      void beautifySource(QString &templ, QString &header, QString &className, QString &namespaceBeg,
+        QString &constructors, QString &advCpp, QString &namespaceEnd, QString &implementation);
+        
       QString className;
       QString header;
       QString implementation;

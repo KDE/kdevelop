@@ -60,62 +60,6 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QGroupBox" row="2" column="1">
-                        <property name="name">
-                            <cstring>optionsBox</cstring>
-                        </property>
-                        <property name="title">
-                            <string>&amp;Options</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>filetemplate_box</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Use file templates</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>qobject_box</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>C&amp;lass is Q_OBJECT</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>childclass_box</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Generate &amp;QWidget child class</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>gtk_box</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Generate GTK+ Class</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>objc_box</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Use Objecti&amp;ve-C</string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
                     <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>Layout10</cstring>
@@ -217,6 +161,81 @@ still edit it afterwards.</string>
                             </widget>
                         </vbox>
                     </widget>
+                    <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>groupBox7</cstring>
+                        </property>
+                        <property name="title">
+                            <string>&amp;Class</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>classname_label</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Name:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>classname_edit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>classname_edit</cstring>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Insert your new classname here.
+Please try to keep some standards
+like using an upper 'K' as the first
+letter for your new class, if it is
+a class for the KDE libraries.</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>namespace_label</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>N&amp;amespace:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>namespace_edit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>namespace_edit</cstring>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Insert your new classname here.
+Please try to keep some standards
+like using an upper 'K' as the first
+letter for your new class, if it is
+a class for the KDE libraries.</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
                     <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>inheritance_group</cstring>
@@ -234,63 +253,6 @@ still edit it afterwards.</string>
                             <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>layout4</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>virtual_box</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>virtual</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>public_button</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>public</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>protected_button</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>protected</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>private_button</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>private</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
                             <widget class="QPushButton" row="2" column="0">
                                 <property name="name">
                                     <cstring>addbaseclass_button</cstring>
@@ -431,7 +393,7 @@ still edit it afterwards.</string>
                                     <cstring>basename_edit</cstring>
                                 </property>
                             </widget>
-                            <widget class="QListView" row="2" column="1" rowspan="4" colspan="1">
+                            <widget class="QListView" row="2" column="1" rowspan="4" colspan="2">
                                 <column>
                                     <property name="text">
                                         <string>Baseclass Name</string>
@@ -467,6 +429,23 @@ still edit it afterwards.</string>
                                     <enum>AllColumns</enum>
                                 </property>
                             </widget>
+                            <spacer row="6" column="0">
+                                <property name="name">
+                                    <cstring>spacer13</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>16</height>
+                                    </size>
+                                </property>
+                            </spacer>
                             <widget class="KLineEdit" row="0" column="1">
                                 <property name="name">
                                     <cstring>basename_edit</cstring>
@@ -495,99 +474,174 @@ still edit it afterwards.</string>
                                     <string>Insert the base class which your new class will be derived from. If you have checked 'Generate QWidget child class' the new class will be derived from QWidget. If no base class is named, the new class will not have a parent class.</string>
                                 </property>
                             </widget>
-                            <spacer row="6" column="0">
+                            <widget class="KLineEdit" row="0" column="2">
                                 <property name="name">
-                                    <cstring>spacer13</cstring>
+                                    <cstring>baseinclude_edit</cstring>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
+                                <property name="enabled">
+                                    <bool>false</bool>
                                 </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
                                 </property>
-                                <property name="sizeHint">
+                                <property name="minimumSize">
                                     <size>
-                                        <width>20</width>
-                                        <height>16</height>
+                                        <width>0</width>
+                                        <height>20</height>
                                     </size>
                                 </property>
-                            </spacer>
+                                <property name="focusPolicy">
+                                    <enum>StrongFocus</enum>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Insert the base class which your new class will be derived from. If you have checked 'Generate QWidget child class' the new class will be derived from QWidget. If no base class is named, the new class will not have a parent class.</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>layout5</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QComboBox">
+                                        <item>
+                                            <property name="text">
+                                                <string>Global</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Local</string>
+                                            </property>
+                                        </item>
+                                        <property name="name">
+                                            <cstring>scope_box</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>1</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>virtual_box</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>virtual</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>public_button</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>public</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>protected_button</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>protected</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>private_button</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>private</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
                         </grid>
                     </widget>
-                    <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
+                    <widget class="QGroupBox" row="2" column="1">
                         <property name="name">
-                            <cstring>groupBox7</cstring>
+                            <cstring>optionsBox</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;Class</string>
+                            <string>&amp;Options</string>
                         </property>
-                        <hbox>
+                        <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLabel">
+                            <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>classname_label</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                    <cstring>filetemplate_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Name:</string>
+                                    <string>&amp;Use file templates</string>
                                 </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>classname_edit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit">
-                                <property name="name">
-                                    <cstring>classname_edit</cstring>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Insert your new classname here.
-Please try to keep some standards
-like using an upper 'K' as the first
-letter for your new class, if it is
-a class for the KDE libraries.</string>
+                                <property name="checked">
+                                    <bool>true</bool>
                                 </property>
                             </widget>
-                            <widget class="QLabel">
+                            <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>namespace_label</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                    <cstring>qobject_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>N&amp;amespace:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>namespace_edit</cstring>
+                                    <string>C&amp;lass is Q_OBJECT</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>namespace_edit</cstring>
+                                    <cstring>childclass_box</cstring>
                                 </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Insert your new classname here.
-Please try to keep some standards
-like using an upper 'K' as the first
-letter for your new class, if it is
-a class for the KDE libraries.</string>
+                                <property name="text">
+                                    <string>Generate &amp;QWidget child class</string>
                                 </property>
                             </widget>
-                        </hbox>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>gtk_box</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Generate GTK+ Class</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>objc_box</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Use Objecti&amp;ve-C</string>
+                                </property>
+                            </widget>
+                        </vbox>
                     </widget>
                 </grid>
             </widget>
@@ -925,6 +979,27 @@ a class for the KDE libraries.</string>
                     </widget>
                 </vbox>
             </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Generation Options</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="ClassGeneratorConfig" row="0" column="0">
+                        <property name="name">
+                            <cstring>gen_config</cstring>
+                        </property>
+                        <property name="focusPolicy">
+                            <enum>StrongFocus</enum>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -994,6 +1069,22 @@ a class for the KDE libraries.</string>
         </sizepolicy>
         <pixmap>image0</pixmap>
         <signal>textChanged(const QString &amp;)</signal>
+    </customwidget>
+    <customwidget>
+        <class>ClassGeneratorConfig</class>
+        <header location="local">classgeneratorconfig.h</header>
+        <sizehint>
+            <width>0</width>
+            <height>0</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
     </customwidget>
 </customwidgets>
 <images>
@@ -1158,14 +1249,32 @@ a class for the KDE libraries.</string>
         <receiver>cpp_new_class_dialog</receiver>
         <slot>newTabSelected(QWidget*)</slot>
     </connection>
+    <connection>
+        <sender>basename_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>baseclassname_changed(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>baseinclude_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>baseIncludeChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>scope_box</sender>
+        <signal>activated(int)</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>scopeboxActivated(int)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>classname_edit</tabstop>
     <tabstop>namespace_edit</tabstop>
-    <tabstop>header_edit</tabstop>
-    <tabstop>implementation_edit</tabstop>
     <tabstop>addbaseclass_button</tabstop>
     <tabstop>basename_edit</tabstop>
+    <tabstop>baseinclude_edit</tabstop>
+    <tabstop>scope_box</tabstop>
     <tabstop>virtual_box</tabstop>
     <tabstop>public_button</tabstop>
     <tabstop>protected_button</tabstop>
@@ -1174,6 +1283,8 @@ a class for the KDE libraries.</string>
     <tabstop>rembaseclass_button</tabstop>
     <tabstop>upbaseclass_button</tabstop>
     <tabstop>downbaseclass_button</tabstop>
+    <tabstop>header_edit</tabstop>
+    <tabstop>implementation_edit</tabstop>
     <tabstop>filetemplate_box</tabstop>
     <tabstop>qobject_box</tabstop>
     <tabstop>childclass_box</tabstop>
@@ -1191,6 +1302,7 @@ a class for the KDE libraries.</string>
     <tabstop>constructors_h_edit</tabstop>
     <tabstop>methods_view</tabstop>
     <tabstop>access_view</tabstop>
+    <tabstop>gen_config</tabstop>
     <tabstop>constructors_cpp_edit</tabstop>
 </tabstops>
 <slots>
@@ -1230,9 +1342,14 @@ a class for the KDE libraries.</string>
     <slot access="protected">gtk_box_stateChanged(int)</slot>
     <slot access="protected">qobject_box_stateChanged(int)</slot>
     <slot access="protected">selectall_button_clicked()</slot>
+    <slot access="protected">baseclassname_changed(const QString&amp;)</slot>
+    <slot access="protected">baseIncludeChanged(const QString&amp;)</slot>
+    <slot access="protected">scopeboxActivated(int)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>classgeneratorconfig.h</includehint>
 </includehints>
 </UI>
