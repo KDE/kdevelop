@@ -699,6 +699,25 @@ CppSupportPart::initialParse( )
     return;
 }
 
+#if QT_VERSION < 0x030100
+// Taken from qt-3.2/tools/qdatetime.cpp/QDateTime::toTime_t() and modified for normal function
+uint toTime_t(QDateTime t)
+{
+    tm brokenDown;
+    brokenDown.tm_sec = t.time().second();
+    brokenDown.tm_min = t.time().minute();
+    brokenDown.tm_hour = t.time().hour();
+    brokenDown.tm_mday = t.date().day();
+    brokenDown.tm_mon = t.date().month() - 1;
+    brokenDown.tm_year = t.date().year() - 1900;
+    brokenDown.tm_isdst = -1;
+    int secsSince1Jan1970UTC = (int) mktime( &brokenDown );
+    if ( secsSince1Jan1970UTC < -1 )
+    secsSince1Jan1970UTC = -1;
+    return (uint) secsSince1Jan1970UTC;
+}
+#endif
+
 bool
 CppSupportPart::parseProject( )
 {
@@ -763,7 +782,11 @@ CppSupportPart::parseProject( )
 		if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
 		    continue;
 
+#if QT_VERSION >= 0x030100
 		if( pcs.contains(absFilePath) && t.toTime_t() == pcs[absFilePath].first ){
+#else
+		if( pcs.contains(absFilePath) && toTime_t(t) == pcs[absFilePath].first ){
+#endif
 		    stream.device()->at( pcs[absFilePath].second );
 		    FileDom file = codeModel()->create<FileModel>();
 		    file->read( stream );
@@ -1241,7 +1264,11 @@ void CppSupportPart::saveProjectSourceInfo( )
     stream << int( fileList.size() );
     for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
 	const FileDom dom = (*it);
-	stream << dom->name() << m_timestamp[ dom->name() ].toTime_t();
+#if QT_VERSION >= 0x030100
+  stream << dom->name() << m_timestamp[ dom->name() ].toTime_t();
+#else
+  stream << dom->name() << toTime_t(m_timestamp[ dom->name() ]);
+#endif
 	offsets.insert( dom->name(), stream.device()->at() );
 	stream << (Q_ULONG)0; // dummy offset
     }
