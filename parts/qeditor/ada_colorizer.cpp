@@ -120,14 +120,21 @@ int AdaColorizer::computeLevel (QTextParagraph* parag, int startLevel)
 
     data->setBlockStart (false);
 
-    // Level starters for Ada:  begin, do, loop, then
-    if (s.contains ("begin") ||
-        s.contains ("do") ||
-        s.contains ("loop") ||
-	s.contains ("then"))
-        ++level;
+    // Level starters for Ada:  begin, case, do, if, loop, select, while
+    QRegExp startRx ("^\\s*(begin|case|if|loop|select|while)\\b", false);
+    
+    // We need another regexp for loops such as "for I in 1 .. 2 loop" because
+    // the keyword does not appear at the start of the line.
+    // We do not use the keyword "for" here because its meaning is overloaded.
+    // We must also guard against matching the statement "end loop".
+    QRegExp startLoopRx ("\\bloop\\s*(--.*)?$", false);
+
     // Level terminators for Ada: end
-    else if (s.contains ("end"))
+    QRegExp endRx ("^\\s*end\\b", false);
+
+    if (startRx.search (s) != -1 || startLoopRx.search (s) != -1)
+        ++level;
+    else if (endRx.search (s) != -1)
         --level;
 
     if (level > startLevel) {
