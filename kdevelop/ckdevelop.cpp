@@ -525,7 +525,7 @@ void CKDevelop::slotFilePrint(){
 
 void CKDevelop::slotFileQuit(){
   slotStatusMsg(i18n("Exiting..."));
-  saveOptions();
+//  saveOptions();
   close();
 }
 

@@ -84,11 +84,11 @@ int main(int argc, char* argv[])
   if (args->isSet("setup"))
     bInstall = true; // start the setupwizard
 
-  if (kapp->isRestored())
-  {
-    RESTORE(CKDevelop);
-  }
-  else
+//  if (kapp->isRestored())
+//  {
+//    RESTORE(CKDevelop);
+//  }
+//  else
   {
     if (bInstall)
     {
