@@ -859,31 +859,27 @@ void CKDevelop::slotBuildRunWithArgs()
 
   if (qYesNoCancel!=QMessageBox::Cancel)
   {
-    QString args=prj->getExecuteArgs();
-    CExecuteArgDlg argdlg(this,"Arguments",i18n("Execute with Arguments"),args);
-    if(argdlg.exec())
+    beep=false;
+    prj->writeProject();
+    if (prj->isCustomProject() || (isDirty && qYesNoCancel==QMessageBox::Yes))
     {
-	prj->setExecuteArgs(argdlg.getArguments());		
-	beep=false;
-	prj->writeProject();
-        if (prj->isCustomProject() || (isDirty && qYesNoCancel==QMessageBox::Yes))
-        {
-          next_job = "run_with_args";
-          slotBuildMake();
-        }
-        else
-          slotStartRun();
+      next_job = "run_with_args";
+      slotBuildMake();
     }
+    else
+      slotStartRun(true);
   }
 }
 
 void CKDevelop::slotStartRun(bool bWithArgs)
 {
-  slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
+  bool bContinue=true;
    // rest from the buildRun
   appl_process.clearArguments();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
 
+  // if we can run the application, so we can clear the Makefile.am-changed-flag
+  prj->clearMakefileAmChanged();
   stdin_stdout_widget->clear();
   stderr_widget->clear();
 
@@ -893,55 +889,67 @@ void CKDevelop::slotStartRun(bool bWithArgs)
 
   if(bWithArgs)
   {
-    if(!args.isEmpty())
+    CExecuteArgDlg argdlg(this,"Arguments",i18n("Execute with Arguments"),args);
+    if(argdlg.exec())
     {
-     program = prj->getBinPROGRAM().lower()+" "+args;
+        args=argdlg.getArguments();
+	prj->setExecuteArgs(args);
+        if(!args.isEmpty())
+        {
+          program = program+" "+args;
+        }
     }
+    else
+      bContinue=false;
   }
 
-  // Warning: not every user has the current directory in his path !
-  if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
+  if (bContinue)
   {
-  	o_tab_view->setCurrentTab(STDINSTDOUT);
-  	QString term = "xterm";
-  	QString exec_str = term + " -e sh -c './" +  program + "'";
-  	
-  	if(CToolClass::searchInstProgram("konsole"))
-        {
-          term = "konsole";
-  	}
-  	if(CToolClass::searchInstProgram("ksh"))
-        {
-          exec_str = term + " -e ksh -c './" + program +
+    slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
+    // Warning: not every user has the current directory in his path !
+    if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
+    {
+       o_tab_view->setCurrentTab(STDINSTDOUT);
+       QString term = "xterm";
+       QString exec_str = term + " -e sh -c './" +  program + "'";
+
+       if(CToolClass::searchInstProgram("konsole"))
+       {
+         term = "konsole";
+       }
+       if(CToolClass::searchInstProgram("ksh"))
+       {
+         exec_str = term + " -e ksh -c './" + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
-  	}
-  	if(CToolClass::searchInstProgram("csh"))
-        {
-          exec_str = term +" -e csh -c './" + program +
+       }
+       if(CToolClass::searchInstProgram("csh"))
+       {
+         exec_str = term +" -e csh -c './" + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
-  	}
-  	if(CToolClass::searchInstProgram("tcsh"))
-        {
+       }
+       if(CToolClass::searchInstProgram("tcsh"))
+       {
           exec_str =  term +" -e tcsh -c './" + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
-  	}
-  	if(CToolClass::searchInstProgram("bash"))
-        {
+       }
+       if(CToolClass::searchInstProgram("bash"))
+       {
           exec_str =  term +" -e bash -c './" + program +
           ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
-  	}
-        appl_process << exec_str;
-        cerr << endl << "EXEC:" << exec_str;
-  }
-  else
-  {
-    appl_process << "./" + program;
-    cerr << endl << "EXEC:" << "./" +program;
-    o_tab_view->setCurrentTab(STDERR);
-  }
+       }
+       appl_process << exec_str;
+       cerr << endl << "EXEC:" << exec_str;
+    }
+    else
+    {
+      appl_process << "./" + program;
+      cerr << endl << "EXEC:" << "./" +program;
+      o_tab_view->setCurrentTab(STDERR);
+    }
 
-  setToolMenuProcess(false);
-  appl_process.start(KProcess::NotifyOnExit,KProcess::All);
+    setToolMenuProcess(false);
+    appl_process.start(KProcess::NotifyOnExit,KProcess::All);
+  }
 }
 
 void CKDevelop::slotDebugActivator(int id)
@@ -1327,6 +1335,9 @@ void CKDevelop::slotStartDebugRunWithArgs()
   if (args.isEmpty())
     QString args=prj->getExecuteArgs();
 
+  // if we can run the application, so we can clear the Makefile.am-changed-flag
+  prj->clearMakefileAmChanged();
+
   CExecuteArgDlg argdlg(this,"Arguments",i18n("Debug with arguments"), args);
   if (argdlg.exec())
   {
@@ -1350,6 +1361,9 @@ void CKDevelop::slotStartDebugRunWithArgs()
 
 void CKDevelop::slotStartDebug()
 {
+  // if we can run the application, so we can clear the Makefile.am-changed-flag
+  prj->clearMakefileAmChanged();
+
   if (dbgInternal)
   {
     if (dbgController)
@@ -1553,9 +1567,6 @@ void CKDevelop::slotBuildMake(){
     process << make_cmd;
   }
   beep = true;
-
-  // clear the flag that a Makefile.am has changed
-  prj->clearMakefileAmChanged();
 
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
@@ -3260,6 +3271,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     if ( proc== &appl_process)
       result.sprintf(i18n("*** exit-code: %i ***\n"), 
 		     proc->exitStatus());
+
     if (next_job=="doc_refresh")
     {
       doc_tree->refresh(prj);

@@ -30,7 +30,6 @@ CProject::CProject(QString file)
   : config( file )
 {
   valid = false;
-  bMakefileamHasChanged=false;
   prjfile = file;
   vc = 0;
 
@@ -79,6 +78,16 @@ void CProject::writeProject(){
  *                 METHODS TO STORE CONFIG VALUES                    *
  *                                                                   *
  ********************************************************************/
+
+void CProject::clearMakefileAmChanged()
+{
+    config.setGroup("General");
+    config.writeEntry("AMChanged", false );
+    // this is an immediate flag ... it should be written immediately
+    //  to the project file
+    config.sync();
+}
+
 
 void CProject::setVCSystem(const char *vcsystem)
 {
@@ -587,10 +596,15 @@ void CProject::updateMakefilesAm(){
   config.setGroup("General");
   
   bool update = getModifyMakefiles();
-    
+
   if ( getProjectType() == "normal_empty" || update == false)
     return;
   
+  config.writeEntry("AMChanged", true );
+  // this is an immediate flag ... it should be written immediately
+  //  to the project file
+  config.sync();
+
   QString makefile;
   QStrList makefile_list;
   
@@ -599,6 +613,7 @@ void CProject::updateMakefilesAm(){
     config.setGroup(makefile);
     updateMakefileAm(makefile); 
   }
+
 }
 
 void CProject::updateMakefileAm(QString makefile){
@@ -796,7 +811,6 @@ void CProject::updateMakefileAm(QString makefile){
     } // end for
   }// end writeonly
   file.close();
-  bMakefileamHasChanged=true;
 }
 
 QString CProject::getDir(QString rel_name){
@@ -840,6 +854,12 @@ TDialogFileInfo CProject::getDialogFileInfo(QString rel_filename){
   info.source_file = config.readEntry("source_file");
   info.data_file = config.readEntry("data_file");
   return info;  
+}
+
+bool CProject::getMakefileAmChanged()
+{
+  config.setGroup("General");
+  return config.readBoolEntry("AMChanged", true);
 }
 
 void CProject::getSources(QString rel_name_makefileam,QStrList& sources){
