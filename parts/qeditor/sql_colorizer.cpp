@@ -55,7 +55,7 @@ SqlColorizer::SqlColorizer( QEditor* editor )
 {
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
-    context0->appendChild( new KeywordsHLItem( sql_keywords, Keyword, Normal, 0 ) );
+    context0->appendChild( new KeywordsHLItem( sql_keywords, Keyword, Normal, 0, true, true ) );
     context0->appendChild( new StartsWithHLItem( "--", Comment, 0 ) );
     context0->appendChild( new StringHLItem( "'", String, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );

@@ -100,16 +100,20 @@ public:
 
 class KeywordsHLItem: public HLItem{
 public:
-    KeywordsHLItem( const char** keywords, int state, int ide_state, int context, bool finalize = true )
-        : HLItem( state, context ), m_ok(false), m_state(state), m_ide_state(ide_state), m_finalize(finalize) {
+    KeywordsHLItem( const char** keywords, int state, int ide_state, int context, bool finalize = true, bool ignoreCase = false )
+        : HLItem( state, context ), m_ok(false), m_state(state), m_ide_state(ide_state), m_finalize(finalize), m_ignoreCase(ignoreCase) {
             int i = 1;
-            while( *keywords ){
-                m_keywords.insert( QString(*keywords++), i++ );
+	    if ( ignoreCase ) {
+		while( *keywords )
+		    m_keywords.insert( QString(*keywords++).lower(), i++ );
+	    } else {
+		while( *keywords )
+		    m_keywords.insert( QString(*keywords++), i++ );
             }
     }
 	
-    KeywordsHLItem( const QMap<QString, int> keywords, int state, int ide_state, int context, bool finalize = true )
-	: HLItem( state, context ), m_ok(false), m_state(state), m_ide_state(ide_state), m_finalize(finalize) {
+    KeywordsHLItem( const QMap<QString, int> keywords, int state, int ide_state, int context, bool finalize = true, bool ignoreCase = false )
+	: HLItem( state, context ), m_ok(false), m_state(state), m_ide_state(ide_state), m_finalize(finalize), m_ignoreCase(ignoreCase) {
 	    m_keywords = keywords;
     }
     
@@ -123,8 +127,13 @@ public:
 	while( (pos<length) && (buffer[pos].isLetterOrNumber() || buffer[pos] == '_') )
 	    ++pos;
 	
-	if( start_pos != pos )
-	    m_ok = m_keywords.contains( QString(buffer+start_pos, pos-start_pos) );
+	if( start_pos != pos ) {
+	    if ( m_ignoreCase ) {
+	    	m_ok = m_keywords.contains( QString(buffer+start_pos, pos-start_pos).lower() );
+	    } else {
+		m_ok = m_keywords.contains( QString(buffer+start_pos, pos-start_pos) );
+	    }
+	}
 	
 	return ( m_ok || m_finalize ) ? pos : start_pos;
     }
@@ -135,6 +144,7 @@ private:
     int m_state;
     int m_ide_state;
     bool m_finalize; //!< setting finalize to false allows to have another KeywordsHLItem in HLItemCollection after this one
+    bool m_ignoreCase;
 };
 
 class StartsWithHLItem: public HLItem{
