@@ -61,6 +61,8 @@ void Document::rename(QString filename)
 
 QString Document::fileName() const
 {
+  if (_fileName.isEmpty())
+    return i18n("Unnamed");
   return _fileName;
 }
 
