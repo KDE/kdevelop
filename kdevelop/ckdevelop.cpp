@@ -2857,6 +2857,19 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
   }
 }
 
+void CKDevelop::slotMarkStatus(KWriteView *, bool bMarked)
+{
+  if(bMarked){
+    enableCommand(ID_EDIT_CUT);
+    enableCommand(ID_EDIT_COPY);
+  }
+  else{
+    disableCommand(ID_EDIT_CUT);
+    disableCommand(ID_EDIT_COPY);
+  }
+}
+
+
 void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
 {
   if (m_docViewManager->curDocIsBrowser())

@@ -738,10 +738,14 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
     QIconSet iconSet(SmallIcon("source_cpp"));
     // Cover it by a QextMDI childview and add that MDI system
     addQExtMDIFrame(pEW, bShow, iconSet.pixmap());
-  } else {
+  } else if (getKWriteDocType(pDoc)==CPP_HEADER) {
     connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
     QIconSet iconSet(SmallIcon("source_h"));
     // Cover it by a QextMDI childview and add that MDI system
+    addQExtMDIFrame(pEW, bShow, iconSet.pixmap());
+  } else {
+    connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotMarkStatus(KWriteView *, bool)) );
+    QIconSet iconSet(SmallIcon("txt"));
     addQExtMDIFrame(pEW, bShow, iconSet.pixmap());
   }
   

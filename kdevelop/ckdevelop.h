@@ -641,6 +641,7 @@ public:
   /** change copy & cut status */
   void slotCPPMarkStatus(KWriteView *, bool);
   void slotHEADERMarkStatus(KWriteView *, bool);
+  void slotMarkStatus(KWriteView *, bool);
   void slotBROWSERMarkStatus(KHTMLPart *, bool);
   /** recognize change of Clipboard data */
   void slotClipboardChanged(KWriteView *, bool);
