@@ -65,11 +65,11 @@ GenericProjectWidget::~GenericProjectWidget()
 void GenericProjectWidget::initOverviewListView( QSplitter * splitter )
 {
     QVBox* vbox = new QVBox( splitter );
-    
+
     QHBox* buttonBox = new QHBox( vbox );
     buttonBox->setMargin( 2 );
     buttonBox->setSpacing( 2 );
- 
+
     QToolButton* btn = 0;
 
     btn = new QToolButton( buttonBox );
@@ -104,7 +104,7 @@ void GenericProjectWidget::initOverviewListView( QSplitter * splitter )
     m_overviewListView->header()->hide();
     m_overviewListView->addColumn( QString::null );
 
-    connect( m_overviewListView, SIGNAL(clicked(QListViewItem*)),
+    connect( m_overviewListView, SIGNAL(selectionChanged(QListViewItem*)),
             this, SLOT(slotItemSelected(QListViewItem*)) );
 
     connect( this, SIGNAL(groupSelected(BuildGroupItem*)),
@@ -204,7 +204,7 @@ void GenericProjectWidget::fillGroupItem( BuildGroupItem * group, GenericGroupLi
 {
     m_itemToGroup.insert( item, group );
     m_groupToItem.insert( group, item );
-    
+
     QValueList<BuildGroupItem*> groups = group->groups();
     QValueListIterator<BuildGroupItem*> it = groups.begin();
     while( it != groups.end() ){
@@ -238,17 +238,17 @@ void GenericProjectWidget::showDetails( BuildGroupItem * groupItem )
     m_activeGroup = groupItem;
     kdDebug() << "unset active target" << endl;
     m_activeTarget = 0;
-    
+
     m_detailsListView->clear();
-    
+
     m_itemToTarget.clear();
     m_targetToItem.clear();
     m_itemToFile.clear();
     m_fileToItem.clear();
-    
+
     if( !groupItem )
-	return; 
-    
+	return;
+
     QValueList<BuildTargetItem*> targets = groupItem->targets();
     QValueListIterator<BuildTargetItem*> it = targets.begin();
     while( it != targets.end() ){
