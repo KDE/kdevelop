@@ -72,7 +72,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>project requires QT/KDE version:</string>
+                        <string>project requires Qt/KDE version:</string>
                     </property>
                 </widget>
                 <widget>
