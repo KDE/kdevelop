@@ -116,7 +116,6 @@ private:
     QString popupstr;
     
     bool m_bEnableCC;
-    KDevCore::Role m_CHSide;
     QGuardedPtr< CppSupportWidget > m_pCHWidget;
    
     KTextEditor::EditInterface *m_pEditIface;

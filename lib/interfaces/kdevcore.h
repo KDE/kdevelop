@@ -121,13 +121,6 @@ class KDevCore : public QObject
     
 public:
     /**
-     * An enumeration used for the widget embedding. A SelectView
-     * appears on the left side of the main window. An OutputView
-     * appears at the bottom. DocumentView is not currently
-     * supported.
-     */
-    enum Role { SelectView, OutputView, DocumentView };
-    /**
      * An enumeration that specifies the behaviour of the
      * methods gotoSourceFile() and gotoDocumentationFile().
      */
