@@ -1,14 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The KDE 2 Developer's Guide: The KDE Daemon</TITLE>
+<TITLE>The KDE 2 Developer's Guide: Using KOM / OpenParts HOWTO</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
-<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
 <HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
 
  
@@ -18,375 +18,907 @@
  <A HREF="add_kdedoc-4.html">Previous</A>
  <A HREF="add_kdedoc.html#toc5">Table of Contents</A>
 </P>
-<H3><A NAME="KDEDAEMON"></A> <A NAME="s5">5. The KDE Daemon</A></H3>
+<H3><A NAME="KOMHOWTO"></A> <A NAME="s5">5. Using KOM / OpenParts HOWTO</A></H3>
 
+<P>
 <P>Simon Hausmann 
-<A HREF="mailto:hausmann@kde.org">&lt;hausmann@kde.org></A><P>v1.0 26, June 1999
-<EM>This documentation describes the KDE Daemon, the services it provides and
-how to use it. So if you're dealing with CORBA servers in the KDE or if you're
-interested in a smart way of accessing KService data in your application then
-you might want to read this and use kded</EM>
+<A HREF="mailto:hausmann@kde.org">&lt;hausmann@kde.org></A><P>v1.0 18, June 1999
+<P><EM>This documentation is meant to help programmers who are already familiar
+with the standard Qt/KDE application framework and who are interested in using
+the KDE component technology, the KDE Object Model (KOM) and OpenParts, for
+their application.  It covers both "why" you should use KOM/OP
+and "how" to do so.</EM>
 <P>
 <H3><A NAME="ss5.1">5.1 Introduction</A>
 </H3>
 
-<P>The KDE Daemon, herein simply named kded, is a central daemon in the KDE Desktop
-Environment. It provides three services:
+<P>This documentation is meant to help programmers who are already familiar with
+the standard Qt/KDE application framework and who are interested in using the
+KDE component technology, the KDE Object Model (KOM) and OpenParts, for their
+application. The goals of using components in case of standard KDE
+applications might be:
 <P>
 <UL>
-<LI>The KDE Trader (KTrader) , which provides an easy-to-use but still extremly
-powerful interface to the KDE Registry.</LI>
-<LI>The KDE Activator (KActivator) , which makes accessing CORBA based services
-in KDE the easiest thing of the world ;-) .</LI>
-<LI>The KDE Naming Service (KNaming) , which provides a simple but useful
-naming service for CORBA Objects.</LI>
+<LI>make several modules of the application re-usable components, being
+available for other applications, not matter in what language they are
+written or on what platform/machine they're running.</LI>
+<LI>make use of OpenPart's embedding facility and its way to manage shared
+GUI elements to provide seamless graphical integration of components in
+applications.</LI>
+<LI>use CORBA and KOM as an easy way of inter-process communication</LI>
 </UL>
+<P>I recommend reading the
+<A HREF="http://developer.kde.org/openparts/html/openparts.html">article by Torben Weis about KOM/Openparts</A>
+<A HREF="mailto:weis@kde.org">Torben Weis</A> is the
+author/creator/master/god of KOM/OpenParts.
 <P>
-<H3><A NAME="ss5.2">5.2 Using The KDE Daemon In Your Application</A>
+<H3><A NAME="ss5.2">5.2 The KDE Object Model (KOM)</A>
 </H3>
 
-<P>Before we can use any of kded's services, we have to know something about it's
-"position" in the KDE and the way it itself and the services can be accessed.
-<P>
-<P>As kded uses CORBA to communicate with it's clients, your application (as client),
-has to
-<UL>
-<LI>link to the kded library, libkded.</LI>
-<LI>link to libmico</LI>
-<LI>initialize the MICO ORB</LI>
-</UL>
-<P>
-<P>The first two points are fixed for all clients, the third one depends on the
-specific client. In general you have to choices:
-<P>
-<UL>
-<LI>If your application already uses KOM, then you're fine with using
-KOMApplication (as you need it anyway) .</LI>
-<LI>If you don't want to use KOM, then you can initialize the ORBA "manually":
-<PRE>
-CORBA::ORB_ptr orb = CORBA::ORB_init( argc, argv, "mico-local-orb" );
-</PRE>
+<H4>First ways of communication - the KOM::Base interface</H4>
 
-Please note that when using this construct or similar ones, your application is
-<B>not</B> able to act as CORBA server if you are using KDE/Qt classes at the
-same time. This is due to the fact that the ORB needs it's own event loop, beside
-the main Qt event loop. Currently only KOMApplication, as part of the KDE Object
-Model, implements the needed functionality to combine both event loops and thus
-making KDE apps able to serve CORBA Objects.</LI>
-</UL>
-<P>
-<P>Although kded uses CORBA extensively, the API is kept simple and free from
-complicated CORBA stuff. In fact when talking about kded and it's API not the
-kded server is meant but the KDE Daemon library. This library contains the
-interface to the server (for the clients) as well as the whole server functionality.
-The reason for this is based on the idea that an application using kded should
-not be forced to rely on an existing kded server binary nor a running server at
-all. The following three situations may exist when a client app gets started:
+<P>The Base interface and its implementation in <CODE>libkom</CODE> provide the basic
+functionality for a standardized communication between CORBA objects using
+KOM. This includes
 <P>
 <UL>
-<LI>No kded is running and there's no kded server binary in the path. In this
-situation libkded will automatically start a local instance of kded in
-the application's process.</LI>
-<LI>No kded is running but there's a kded server binary available. Here libkded
-will start the kded executable and connect to it.</LI>
-<LI>kded is already running :-) . The fact that a kded is running is indicated
-by a special property on the X Root Window. kded publishes it's IOR
-(Interoperable Object Reference) in this property. This also ensures that
-a kded instance is specific to a X display and therefore to your KDE session.</LI>
-</UL>
-<P>To sum it up: libkded will always make sure that the services of kded are available
-for your client application, no matter in what alien environment the app is
-running :-) . And, although you don't have to care about this, you can optionally
-control this behaviour of libkded by adding one of the following three commandline arguments
-to your app:
-<UL>
-<LI>"-kdedlocal" , which will make libkded <B>always</B> start a process-local
-instance of kded and it's services.</LI>
-<LI>"-kdedremote" , which will make libkded try to look for a running kded
-instance before starting a local one.</LI>
-<LI>"-kdedior ior_here" , which will make libkded connect to the kded server
-specified by the given IOR.</LI>
+<LI>signals and slots, similar to the mechanism used in the Qt toolkit</LI>
+<LI>event handling, including filtering</LI>
+<LI>relatives management</LI>
+<LI>reference counting</LI>
 </UL>
 <P>
-<P>Your actual interface to kded and it's services is the <CODE>KdedInstance</CODE> class,
-defined in kded_instance.h . So if you want to use kded (I guess that's why you're
-reading this shit ;) ) then make sure to create <B>one</B> single instance
-of it, preferably by adding the following line somewhere in the beginning of
-your <CODE>main()</CODE> :
-<PRE>
-KdedInstance( argc, argv, _a_reference_to_the_orb_here_ );
-</PRE>
+<H4>Signals and Slots</H4>
 
-If you're using KOMApplication as application object (make sure to create the
-instance before this line) , then you're fine by specifying <CODE>komapp_orb</CODE> as
-reference to the ORB.
-<P>
-<P>As there is always only one single instance of this class, you can simply access
-it by the static <CODE>self()</CODE> method of the class from anywhere you want. No
-need to pass KdedInstance arguments all around in your program ;-) .
-<P>
-<P>For further information about <CODE>KdedInstance</CODE> you might want to read
-<CODE>kded_instance.h</CODE> , it's pretty good documented.
-<P>
-<H3><A NAME="ss5.3">5.3 KTrader</A>
-</H3>
-
-<P>As already mentioned in the introduction, KTrader gives you access to the registry.
-"Now what the hell is the registry?" you might ask. As this is just a documentation
-about kded/libkded, I can only respond: "Please consult the documentation of/in
-<CODE>libkio</CODE> for more information" :-} . Just one thing about it here: KTrader loads
-the whole and bloaty registry for you. Thanks to the magic of <CODE>libkio</CODE> the loaded
-registry will always be in sync with the "real" registry, the .desktop files in
-the following standard directories (both types, the system wide and the user ones) :
-<UL>
-<LI>applnk</LI>
-<LI>mimelnk</LI>
-<LI>services</LI>
-<LI>servicetypes</LI>
-</UL>
-<P>
-<P>Now over to KTrader and it's API. Similar to <CODE>KdedInstance</CODE> there can
-be only one single instance. The difference is that you don't have to care
-about allocating it, just simply get a reference to the KTrader by calling
-the <CODE>ktrader()</CODE> method of <CODE>KdedInstance</CODE> . And: don't
-even think about deleting the returned reference! Just simply use it and be
-happy with it :-) . (hey, kded is designed to be easy to use, no need for difficult
-stuff...)
-<P>
-<P>The KTrader API is even so simple that it contains only two methods ;-) . But
-before I describe these methods you have to know something about the kind of
-data KTrader returns. In simple words: You will always get a list of KService
-objects. More detailed: The returned list is a <CODE>QValueList</CODE> and the
-entries are <CODE>KSharedPtr</CODE>'s (FIXME: will soon be renamed to QSharedPtr,
-as it will become part of Qt.... AFAIK) to <CODE>KService</CODE> objects. Please
-read the corresponding Qt documentation about these two classes. The big advantage
-of using these two template classes is that everything becomes easy for you
-and that the memory consumption is kept at a minimum . You don't have to care
-about pointers, freeing them and cleaning up the list, as long as you use
-<CODE>KTrader::ServicePtr</CODE> variables to hold the KService objects and as
-long as you use <CODE>KTrader::OfferList</CODE> to pass the list around in your
-program. So: Remember to always use these two types when dealing with KTrader!
-<P>Now over to the two methods.
-<P>
-<P><CODE>KTrader::listServices()</CODE> returns your a list of <B>all</B> available
-services in the whole KDE. (no need for further explanations I think...)
-<P><CODE>KTrader::query()</CODE> is the key method of this beast. It performs a lookup
-in the registry database, given your information about what you want to have.
-The first argument is the name of the servicetype which all returned services
-must implement. If you're unsure about the word "servicetype" , then you can
-replace it with "mimetype" , for most, but not all, cases.
-<P>The second argument is an additional constraint expression, which has to be
-fulfilled by a service.
-<P>The third argument is a preference expression after which the returned services
-will be sorted. The value of the expression has to be numeric.
-<P>The syntax of these two expressions is equal with the language of the standard
-CORBA Trader (this is due to the fact that the parsing code is from the COS
-Trader of MICO) . The language is not very difficult and I don't want to bloat
-this documentation with further explanations about it. Please consult your
-CORBA literature for more information. Just one thing you have to know:
-Comparisons are always done with the properties of the KService object,
-which are the standard entries (Name, ServiceType, RepoIds, ...) plus
-the ones specified in the servicetype declaration and read by KService.
-<P>Well, after so much theoretical explanations it's time for some practical example
-code:
+<P>KOM supports signals and slots just like in the Qt toolkit, with a few
+differences in usage and implementation. The first and biggest difference is
+that signals and slots are no more typesafe again, meaning there's no moc
+compiler generating meta data for KOM signals/slots to enable type checking at
+run-time, when connecting.
+<P>Another difference is the way you declare signal and slot functions. Signals
+have to be declared with the <CODE>SIGNAL_IMPL</CODE> macro from <CODE>komBase.h</CODE>,
+without  specifying any signal arguments. Slot methods have to be defined in
+your CORBA  interface description.
+<P>For KOM signals the equivalent to the "emit" keyword from Qt is the
+<CODE>SIGNAL_CALLx</CODE> macro, were "x" is one of 0, 1, 2, depending on the
+number of arguments.
 <!--
-KTrader::OfferList
+KOM::Base
+-->
+
+Example:
+<P>In your CORBA interface description:
+<PRE>
+  #include &lt;kom.idl&gt;
+
+  interface FooSender : KOM::Base
+  {
+    signal void mySignal( in long foobaz );
+  };
+
+  interface FooReceiver : KOM::Base
+  {
+    slot void mySlot( in long gosh );
+  };
+</PRE>
+<P>In the implementation of FooSender:
+<PRE>
+  FooSender_Impl::FooSender_Impl( ... )
+  {
+    ...
+    SIGNAL_IMPL( "mySignal" );
+    ...
+  }
+
+  FooSender_Impl::mySignal( CORBA::Long foobaz )
+  {
+    SIGNAL_CALL1( "mySignal", foobaz );
+  }
+</PRE>
+<P>In the implementation of FooReceiver:
+<PRE>
+  FooReceiver_Impl::mySlot( CORBA::Long gosh )
+  {
+    ...
+  }
+</PRE>
+<P>First some words about the sender: It is not required to define the signal
+in the interface description and to provide an implementation which simply
+emits the signal. However in many cases this is recommended, because this makes
+it easier for other developers to use your interface because they aren't required
+to seek in the implementation sources just to find out about the signals this
+object emits. Another way is to simply document the existence of the signal
+in the interface description, without defining a method. From the technical
+point only the <CODE>SIGNAL_CALLx</CODE> macro counts when emitting the signal.
+<P>What's left is connecting and disconnecting. In the above described example it
+could like this:
+<PRE>
+  ...
+  SenderObject->connect( "mySignal", ReceiverObject, "mySlot" );
+  ...
+  SenderObject->disconnect( "mySignal", ReceiverObject", "mySlot");
+</PRE>
+<P>Well, this is quite self-explaining I think. Just make sure to always disconnect
+from your object upon destruction.
+<P>
+<H4>Events</H4>
+
+<P>
+<P>An event consists of two elements, the event name, being a string, and an
+event argument, being a CORBA::Any value and therefore freely choosable by the
+developer.
+<P>Events, sent to a specified object, can be imagined as being put through a
+pipe until they reach the destination object. This "pipe" is filled with
+installed  event filters. There are three kinds of filters.
+<UL>
+<LI>reading filters ( <CODE>FM_READ</CODE> )</LI>
+<LI>writing filters ( <CODE>FM_WRITE</CODE> )</LI>
+<LI>implementing filters ( <CODE>FM_IMPLEMENT</CODE> )</LI>
+</UL>
+<P>In the current implementation in KOM these filter modes only specify the order
+how the event is processed. When an event is emitted it gets first filtered by
+all event filters with the filter mode <CODE>FM_WRITE</CODE>, then followed by
+<CODE>FM_IMPLEMENT</CODE> and finally by <CODE>FM_READ</CODE>. Event filters have two
+possibilities what they can do with the actual event: They can just
+<B>read</B> it or they can <B>discard</B>  it, which means the event is
+discarded and will never receive its destination  object.
+<P>The actual event name has a special meaning in regard to event filters.  When
+installing an event filter to an object you have to specify, beside a
+reference to the filter object and the name of the filter mapping function, a
+sequence of so called event type patterns. An event type pattern can be the
+name of a  single event as well as a special pattern (see <CODE>kom.idl</CODE> for more
+information about event type patterns) .
+<P>When an event is meant to be processed by a filter, the specified filter
+function gets called, with the event name and the event value as arguments.
+This filter function has to return (through a boolean value) whether the event
+should be discarded or not.
+<P>When all filtering is done and none of the installed filters discarded the
+event, it is finally received by the destination object, by calling the
+object's <CODE>event()</CODE> method, defined in the KOM::Base interface. The default
+implementation does actually nothing, so you may want to re-implement this
+virtual function.
+<P>The very low-level usage of events is to call the receive/receiveASync methods
+of an object for sending an event and to re-implement KOMBase::event for
+mapping an event. But KOM provides some nice macros which simplify the
+processing of events.
+<P>
+<H4>Sending Events</H4>
+
+<P>
+<P>For sending komBase.h defines some useful <CODE>EMIT_EVENT</CODE> macros, all
+using the same syntax:
+<PRE>
+EMIT_EVENT_x( destination_object, event_name, event_argument)
+</PRE>
+<P>"destination_object" is a reference to the object which is meant to
+receive/process the event. The event will be filtered through all event
+filters which are installed in this destination object. "event_name" is
+self-explaining ;-) . The event argument depends on the specific macro, which
+are in particular:
+<P>
+<UL>
+<LI><CODE>EMIT_EVENT</CODE>, the general macro for sending. The event argument is
+required to have a <CODE>&lt;&lt;=</CODE> operator for CORBA::Any defined. You
+will want to use this macro whenever the event argument is a structure
+for example. (and don't forget to compile your idl file with the "--any"
+option, so that the idl compiler generates the necessary operator
+methods)</LI>
+<LI><CODE>EMIT_EVENT_BOOLEAN</CODE>, useful for boolean event arguments. The
+only difference to the <CODE>EMIT_EVENT</CODE> macro is that it uses
+CORBA::Any::from_boolean for you to convert the boolean value. So it
+doesn't really matter whether you use:
+
+<PRE>
+    EMIT_EVENT( receiver, name, CORBA::Any::from_boolean( value ) );
+</PRE>
+
+or
+<PRE>
+    EMIT_EVENT_BOOLEAN( receiver, name, value );
+</PRE>
+
+</LI>
+<LI><CODE>EMIT_EVENT_OCTET</CODE>, similar to EMIT_EVENT_BOOLEAN, useable for
+CORBA::Octet values.</LI>
+<LI><CODE>EMIT_EVENT_CHAR</CODE>, similar to EMIT_EVENT_BOOLEAN, useable for char
+(CORBA::Char) values.</LI>
+<LI><CODE>EMIT_EVENT_WCHAR</CODE>, similar to EMIT_EVENT_BOOLEAN, useable for
+CORBA::WChar values.</LI>
+<LI><CODE>EMIT_EVENT_STRING</CODE>, similar to EMIT_EVENT_BOOLEAN, useable for
+char * (CORBA::Char*) values.</LI>
+<LI><CODE>EMIT_EVENT_WSTRING</CODE>, similar to EMIT_EVENT_BOOLEAN, useable for
+CORBA::WChar* values.</LI>
+<LI><CODE>EMIT_EVENT_OBJECT</CODE>, similar to EMIT_EVENT_BOOLEAN, useable for
+CORBA objects (CORBA::Object).</LI>
+</UL>
+<P>
+<H4>Receiving Events</H4>
+
+<P>
+<P>The process of receiving events is a little bit more difficult, compared
+to sending, since we have to process all kinds of events an object can receive
+in one handler method, KOM::Base::event (IDL) / KOMBase::event (C++) . Just
+like with sending events you can again do everything on low CORBA level, but
+why should we go the hard way? KOM again provides very nice and easy-to-use
+macros for this (defined in komBase.h) :-) . Usually all this looks like the
+following example:
+<!--
+KOM::Base
 -->
 
 <PRE>
-  ...
-  //get a reference to the KTrader
-  KTrader *trader = KdedInstance::self()->ktrader();
+#include &lt;kom.idl&gt;
 
-  ...
-  //will return a list of all services which implement the servicetype
-  //named "text/plain"
-  KTrader::OfferList offers = trader->query( "text/plain" );
+module MyModule
+{
+  // we say: the event argument is a string
+  const string eventFirstFoo = "MyFooEventNameOrWhateverYouNameIt";
 
+  struct MyStruct
+  {
+    boolean kde_rules;
+  };
 
-  ...
-  //will return a list of all services which implement the servicetype
-  //named "image/gif" and which have the AllowAsDefault property set true
-  KTrader::OfferList offers = trader->query( "image/gif", "AllowAsDefault == TRUE" );
+  const string eventSecondFoo = "Blaafooo";
+  typedef MyStruct EventSecondFoo;
 
-  ...
-  //will return KSpread ;-)
-  KTrader::OfferList offers = trader->query( "KOfficeDocument", "(Exec == 'kspread') and (Path != '/opt/gnome/bin')" );
+  interface SomethingElse
+  {
+    //..
+  };
 
+  const string eventThirdFoo = "KOMIsCool";
+  typedef SomethingElse EventThirdFoo;
+
+  interface Foo : KOM::Base
+  {
+    //...
+  };
+
+};
+
+bool FooImpl::event( const char *event, const CORBA::Any &amp;value )
+{
+  EVENT_MAPPER( event, value );
+
+  MAPPING_STRING( MyModule::eventFirstFoo, mappingFirstFoo );
+
+  MAPPING( MyModule::eventSecondFoo, MyModule::EventSecondFoo, mappingSecondFoo );
+
+  MAPPING( MyModule::eventThirdFoo, MyModule::EventThirdFoo_ptr, mappingThirdFoo );
+
+  END_EVENT_MAPPER; //the macro executes "return false;" for us, to indicate that
+                    //we did not handle the event if we reach this point
+}
+
+bool FooImpl::mappingFirstFoo( const char *myArgument )
+{
   ...
-  //will return a list of all services which implement the servicetype
-  //named "BlahFoo" and which will be sorted (from lowest to highest) by
-  //the value of the property "Price" , declared in the servicetype
-  //declaration of BlahFoo.
-  KTrader::OfferList offers = trader->query( "BlahFoo", QString::null, "min Price" );
+  //don't forget to return with a boolean value, indicating whether you sucessfully
+  //processed the event or not.
+}
+
+bool FooImpl::mappingSecondFoo( MyModule::MyString anotherArg )
+{
+  //...
+}
+
+bool FooImpl::mappingThirdFoo( MyModule::SomethingElse_ptr whaaboo )
+{
+  //...
+}
 </PRE>
+<P>As you can see an event handler usually begins with the <CODE>EVENT_MAPPER</CODE>
+macro and ends with <CODE>END_EVENT_MAPPER</CODE> . Similar to the
+<CODE>EMIT_EVENT_x</CODE> macros, the <CODE>MAPPING</CODE> macros consist of a general
+<CODE>MAPPING</CODE> macro and the following friends:
+<UL>
+<LI><CODE>MAPPING_BOOLEAN</CODE></LI>
+<LI><CODE>MAPPING_OCTET</CODE></LI>
+<LI><CODE>MAPPING_CHAR</CODE></LI>
+<LI><CODE>MAPPING_WCHAR</CODE></LI>
+<LI><CODE>MAPPING_STRING</CODE></LI>
+<LI><CODE>MAPPING_WSTRING</CODE></LI>
+<LI><CODE>MAPPING_OBJECT</CODE></LI>
+</UL>
+<P>In order to structurize the process of event handling a little bit, every
+event  gets its own event handling function. These functions are called by the
+mapping  macros (last argument) . The above used naming scheme is not a
+requirement,  however it is used in most applications using KOM.
 <P>
-<P>Please note that KTrader, since it queries <CODE>libkio</CODE> for services, will
-always return services sorted by the user's preferences for the specific
-servicetype. These preferences can be specified in the file "profilerc" .
-<P>
-<H4>KTraderServiceProvider</H4>
+<H4>Adopting</H4>
 
-<P>This section requires to be familiar with <CODE>libkio</CODE> and it is meant for everybody who
-wants to use KRun in his application.
-<P>KRun requires a fully loaded registry in order to resolve mimetype &lt;-> application
-bindings. A fully loaded registry means that you need a <CODE>KServiceTypeFactory</CODE> and
-a KServiceFactory, which both load the appropriate <CODE>KServiceType</CODE><CODE>KService</CODE> objects.
-Now the KServiceType information doesn't need that much memory, but the KService
-object really eat loooots of it. And isn't it kind of stupid to load this information
-if this is already done by kded? Yes, it is ;-) .
 <P>
-<P>What we would need is to make KRun query KTrader for KService data, instead of
-directly using KServiceTypeProfile. Fortunately KRun is flexible enough for this,
-we just need a re-implementation of the KServiceProvider, defined in <CODE>krun.h</CODE>
-and used by KRun. Guess what, but KTrader provides you this re-implementation :-) .
-Just have a look at the end of <CODE>ktrader.h</CODE>.
+<P>You should use adopting whenever you want to hold a reference to an object and
+want to be informed when the object dies in order to free all your references
+to this object. But this should only be used when you're not the parent
+object, meaning you didn't reference the object directly via the KOM reference
+counter.  When using adopting you should re-implement the <CODE>leaveNotify</CODE>
+(and perhaps <CODE>adoptNotify</CODE>) methods of your  object (and don't forget
+to call the original KOMBase method!) .
 <P>
-<P>To sum it up: The following line makes KRun query kded, in your application:
-<PRE>
-  ...
-  //place this somewhere BEFORE the first usage of KRun, preferable somewhere
-  //in main()
-  KTraderServiceProvider serviceProvider;
-  ...
-</PRE>
+<H4>KOM referencing</H4>
 
-That's all, except that you <B>must</B> have a KdedInstance in order to be
-able to use it.
 <P>
-<H3><A NAME="ss5.4">5.4 KActivator</A>
-</H3>
-
-<P>One often mentioned problem, when talking about applications which provide
-their services via CORBA, is how to start and access these services. Solutions
-like making apps write the IOR of an object somewhere into a file in the
-filesystem or similar approaches are just hacks ;-) . Better use KActivator,
-since it can automatically, on demand, start servers for you or use already
-running ones. This is accomplished with the help of the mediators for BOA/POA
-and the IMR (Implementation Repository), both provided by MICO. Fortunately
-you don't have to deal with IMR entries and the mediators.
-<P>
-<P>Before you can use KActivator to start a server for you, you have to register
-the server's service. There are two possible ways, the last one is highly
-recommended though:
+<P>KOM reference counting should be used to "express" that you possess the
+object. This gives you direct control over the lifecycle of the object by
+letting the reference counter act directly on the server object, in contrary
+to CORBA reference counting, where the reference counter only acts on the stub
+object, in case of remote objects (this is different for local objects, where
+stub = server object) . When the KOM reference counter drops down to zero the
+object gets destroyed. This destruction is done by calling <CODE>cleanUp()</CODE>,
+which closes all connections to other objects and leaves all relatives.  After
+this call is finished the object truly gets released. You might want to
+re-implement the <CODE>cleanUp()</CODE> method. In this case make sure that you
+don't forget two things:
 <P>
 <UL>
-<LI>Register and unregister it manually, by using the two corresponding
-methods of the KActivator.</LI>
-<LI>Go the smart way and provide the necessary information in a .desktop file.
-Fortunately KService supports the necessary properties, like repository
-ids, activation mode and others.</LI>
+<LI>only execute if the boolean variable <CODE>m_bIsClean</CODE> is false,
+otherwise simply return</LI>
+<LI>make sure you call the previous implementation!</LI>
+</UL>
+<P>As a short summary to this KOM reference stuff just keep in mind, that
+there are three ways to hold a reference to an object:
+<UL>
+<LI>you're connected to the object via signals/slots or via event filters</LI>
+<LI>you're the parent object, meaning you hold a reference through the KOM
+reference counter</LI>
+<LI>otherwise you should use adopting to get informed whenever the object wants
+to die, in order to free all references to the object which are not of
+one of the above kinds. The idea behind all this is that all
+connections/references between objects are symmetric, meaning
+<B>both</B> sides know about the connection and <B>both</B> sides
+clean up all connections between each other whenever one of the two
+objects wants to die. In case of signal/slot connections this is done
+automatically by KOM. In case of KOM reference counters you have the
+direct control over the lifecylcle for the object. Adopting, as third
+way, can be used to keep other connections symmetric, connections which
+are neither signal/slot connections nor direct references via the KOM
+reference counter.</LI>
+</UL>
+<P>Hint: Using the <CODE>KOMVar</CODE> template makes handling KOM references much
+easier, they can be used similar to the CORBA _var types.
+<P>
+<H4>THE component - the KOM::Component interface</H4>
+
+<P>The Component interface, being derived from the Base interface, additionally
+provides a kind of small interface repository for only this component,
+combined with the possibility to provide new interfaces by dynamic aggregation
+and a standard way to add plugin components. This gives CORBA objects the
+possibility to enhance their functionality at run-time.
+<P>There are five kinds of interfaces:
+<UL>
+<LI>Builtin Interfaces (derived Interfaces)</LI>
+<LI>Builtin Aggregate Interfaces</LI>
+<LI>Dynamic Aggregate Interfaces</LI>
+<LI>Builtin Plugin Interfaces</LI>
+<LI>Dynamic Plugin Interfaces</LI>
+</UL>
+<P>Builtin interfaces are all interfaces the object directly implements. This
+means they are part of the actual object implementation and can be specified
+via the <CODE>ADD_INTERFACE</CODE> macro (in komComponent.h) . So for example if
+your interface description looks like this:
+<PRE>
+module Foo
+{
+  interface MyInterface : AnotherInterface
+  {
+    ...
+  };
+};
+</PRE>
+<P>You should add the following line into the constructor of an implementation of
+this interface:
+<!--
+IDL
+-->
+
+<PRE>
+ConstructorNameOfMyInterface::ConstructorNameOfMyInterface( ... )
+{
+  ...
+  ADD_INTERFACE( "IDL:Foo/MyInterface:1.0" );
+  ...
+}
+</PRE>
+<P>This way you tell your component that it supports the interface
+"Foo/Interface" and therefore makes it available through the three functions
+<CODE>getInterface()</CODE>, <CODE>interfaces()</CODE> and
+<CODE>supportsInterface()</CODE> .
+<P>
+<H4>Extend your component by aggregation - KOM::Aggregate</H4>
+
+<P>
+<P>Aggregates solve a problem with distributed objects, the problem of
+derivation.  Since the implementation of an interface is completely
+encapsulated there has to be another way to extend the functionality of an
+already existing  object.  By using aggregate components you can add new
+interfaces to an object,  at run-time. This means you extend the functionality
+but you do not change the behaviour of the object itself.
+<P>
+<H4>Builtin Aggregates</H4>
+
+<P>
+<P>Builtin aggregate interfaces are the interfaces of aggregate implementations
+which run in the same process as our component. See in komComponent.h the four
+functions of the <CODE>KOMComponent</CODE> class for adding builtin aggregates,  it's easy.
+<P>
+<H4>Dynamic Aggregates</H4>
+
+<P>
+<P>Dynamic aggregates are similar to builtin aggregates, with two differences:
+<P>
+<UL>
+<LI>They can (are) be installed from "outside" of the component,
+using  AggregateFactories (see kom.idl) . This way they do neither have
+to run  within the same process nor on the same computer.</LI>
+<LI>They can depend on other available interfaces. KOM does the job of resolving
+these dependencies for you.</LI>
 </UL>
 <P>
-<P>For the second point it's important that the .desktop file is available for
-KRegistry, by placing it in a directory which gets scanned by the registry.
-If your application has already a .desktop file in the applnk tree for example,
-then you're fine with adding the necessary fields in there. Otherwise the
-directory named "services" (either system-wide or user-local) is the best place
-for it. If you provide the CORBA service information this way, then KActivator
-will automatically detect it and register it automatically at the IMR. This
-means that it is immediately available for KActivator and thus to your client app.
-And since KRegistry is such a cool thing :-) , you can do all this even at
-run-time, when kded is running. Just place the .desktop file in one of the
-right directories for it and KActivator will update the IMR on-the-fly. The
-same applies obviously for just deleted or modified .desktop files, which will
-make KActivator adjust the IMR. Now you might get the idea why this is the
-preferred way :-)) .
+<H4>Plugins - the KOM::Plugin interface</H4>
+
 <P>
-<P>Now that you know how to register CORBA services you will want to know how
-to "access" it. <CODE>activateService()</CODE> is your friend here. Simply pass
-it the name of the service, the repository id of the server object and the
-object's tag and it will return you a functional object reference. That's all :-)
+<P>Plugins are the kind of counterpart to aggregates. They do not extend the
+functionality of an object by providing new interfaces, but instead usually
+change the behaviour of it, by
+<OL>
+<LI>doing things like installing event filters to the object, etc.</LI>
+<LI>providing special plugin interfaces</LI>
+</OL>
 <P>
-<P>Depending on the service's activation mode, KActivator will either return a reference
-to an already running server or it will start a new instance.
+<H4>Collect your components - the KOM::Container interface</H4>
+
 <P>
-<P>One note about the returned object reference: This is a virtual reference,
-which means that that server object is started when the first call is invoked
-on this reference, thus making your server get started "lazy", only on-demand.
-But that's just additional information, you don't have to deal and know about
-it at all. Just be happy with your functional object reference :-) .
+<P>Containers do something simple but extremly useful: They act as repository for
+Container members. A container member structure consists of two elements:
 <P>
-<P>Want some examples? Here we go:
-<P>This is how a .desktop file could look like, assuming that the commandline
-"--server" starts the app in CORBA server mode:
-<PRE>
-Name=MyApp
-Exec=fooblah
-CORBAExec=fooblah --server
-X-KDE-RepoIds=IDL:Foo/Blah:1.0#MyFoo
-X-KDE-ActivationMode=shared
-</PRE>
+<UL>
+<LI>the member name, a freely chooseable and unique string identifier</LI>
+<LI>the member object, a KOM::Base type You can add, remove, replace, list
+and lookup container members or just clear  the whole container. In
+addition the container emits signals whenever a  member has been added
+or removed.</LI>
+</UL>
 <P>
-<P>If KActivator "gets" this file, it will register the service and then you're
-able to do something like this:
-<PRE>
-  ...
-  KActivator *activator = KdedInstance::self()->kactivator();
-  ...
-  CORBA::Object_var obj = activator->activateServer( "MyApp", "IDL:Foo/Blah:1.0", "MyFoo );
-  ...
-</PRE>
+<H4>Factories</H4>
+
 <P>
-<P>The above example will either start a new fooblah instance or connect to a running
-one.
-<P>For further information please have a look at the examples in kdelibs/corba/tutorials/kded .
-The example application there registers the server manually via <CODE>registerService</CODE> .
-<P>Please note: The server <B>has</B> to be started by kded in order to make KActivator
-return a reference to a running one. Executing "fooblah" from somewhere else
-will <B>not</B> make KActivator use it. This is a problem for persistent
-servers like KDesktop for example. But there's a solution available, just read
-the next chapter about the KDE Naming Service :-) .
+<P>KOM contains two abstract factory interfaces:
+<OL>
+<LI>KOM::AggregateFactory</LI>
+<LI>KOM::PluginFactory</LI>
+</OL>
+<P>They both serve the job of creating objects and are needed for the creation of
+dynamic plugin and aggregate components. Whenever you want to install a such a
+dynamically created object to a component you have to provide an
+implementation of a factory interface.
 <P>
-<H3><A NAME="ss5.5">5.5 KNaming</A>
+<H4>KOMApplication</H4>
+
+<P>
+<P>KOMApplication is the drop-in replacement for KApplication, required when
+using CORBA in your KDE Application. It, internally, combines CORBA event
+handling with Qt event handling and initializes the ORB and the BOA on
+startup.  komApplication.h defines two smart macros to get a reference to the
+ORB/BOA: <CODE>komapp_orb</CODE> and <CODE>komapp_boa</CODE> . Usually you will want
+to use your own application class, derived from KOMApplication, and
+re-implement <CODE>start()</CODE> and/or <CODE>restore()</CODE> , which will be called
+>from <CODE>KOMApplication::exec()</CODE>, depending on the BOA's state about
+restoring objects. For further information about KOMApplication's API see
+komApplication.h .
+<P>
+<H3><A NAME="ss5.3">5.3 OpenParts</A>
 </H3>
 
-<P>The KDE Naming Service, KNaming, is also a very simple service, but it's pretty
-useful and in some cases a very nice solution to make a CORBA client connect to
-a persistent CORBA server.
 <P>
-<P>With KNaming you can bind a freely chooseable name to a CORBA object. And since
-kded is system (session) wide available, your object becomes available for any
-client which is able to connect to kded.
 <P>
-<P>There's not much to explain here :-} , so I suggest having a look at the KNaming
-API, in <CODE>knaming.h</CODE>.
-<P>
-<P>Example code can be, again, found in kdelibs/corba/tutorials/kded . Here's just
-a short real example situation:
-<P>
-<P>Just think of KDesktop, that nice app providing your background desktop icons.
-It provides some functionality via CORBA, just have a look at kdesktop.idl to
-see what I'm talking about. Now the problem for KDesktop is: How can it provide
-this service to other apps in the system? Writing an IOR into some file is no
-clean solution IMHO, and using KActivator doesn't work because KDesktop does not
-get started by kded but by the startkde script on KDE startup. So we find a better
-way and make KDesktop register it's object at KNaming. This is done by the following
-lines:
-<PRE>
-  ...
-  KNaming *knaming = KdedInstance::self()->knaming();
-  naming->bind( "KDesktop", kdesktop_object_here );
-  ...
-</PRE>
+<H4>Introduction</H4>
 
-Well, I told you a lie ;) : KNaming does not really bind to "KDesktop" but
-instead to "IDL:KDesktopIf:1.0" , but since there's no naming convention
-for the naming I have choosen a more readable name, IMHO of course :-) (don't
-mind me David :] ) . I personally prefer human readable names ;) , in contrary
-to repository ids with tags.
 <P>
-<P>Back to KNaming and KDesktop: Now any client application, kfmclient for example,
-can "connect" to KDesktop. Just like this:
+<P>The goals of the OpenParts technology, based upon KOM, are:
+<UL>
+<LI>provide an easy way to graphically embed other application's "widgets"</LI>
+<LI>provide an clever way to manage shared GUI elements and provide a CORBA/KOM
+interface/implementation of these</LI>
+<LI>implement the basic support for the document view model</LI>
+</UL>
+<P>To simplify the act of understanding OpenParts I will give a short example
+situation:
+<P>Imagine you have an a word processor and a formula editor, both being separate
+applications. If you now want to insert a formula into your word processor
+document by using your formula editor application this arises several
+problems: You can of course embed the formula editor's main widget window via
+swallowing by using XReparentWindow and friends, or easier by using QXEmbed.
+But then how do you want to edit your formula without having access to the
+formula editor's menubar / toolbar? In any way it would look ugly if these are
+part of the formula window. Wouldn't it be nice if the menus / toolbars of
+your word processor application would get replaced by the formula editor ones,
+except for some general menu /toolbar items? And when you go back to your text
+document the old menus / toolbars come back again.
+<P>Well, this is a perfect job for OpenParts :-) .
+<P>OpenParts solves the above described problem by introducing a new sytem of
+visual components and a new way of creating shared GUI elements, such as menus
+or toolbars, dynamically on demand.
+<P>In the implementation of OpenParts every element consists usually of two
+classes, the interface implementation, where the class name ends with "If",
+and the Qt/KDE object. So for example the OpenParts StatusBar element is
+represented by two classes: <CODE>OPStatusBar</CODE>, being derived from
+KStatusBar,  handles the Qt/KDE specific extensions, and
+<CODE>OPStatusBarIf</CODE> which is  responsible for providing an implementation
+of the actual OpenPartsUI::StatusBar  interface by "translating" the interface
+functionality into Qt/KDE function  calls.
+<P>Since every Qt/KDE object in OpenParts is most often bound to such an
+interface, like described above, there is usually an interface() function
+which returns a reference to the OpenParts interface of the element. In case
+of the above example <CODE>OPStatusBar::interface()</CODE> returns a reference to
+an <CODE>OPStatusBarIf</CODE> object which is directly bound to this
+<CODE>OPStatusBar</CODE> object.
+<P>
+<H4>OPApplication</H4>
+
+<P>
+<P>Similar to KOMApplication, the class OPApplication (derived from
+KOMApplication) is required when using OpenParts.
+<P>
+<H4>QWidget as Component? - the OpenParts::Part interface</H4>
+
+<P>
+<P>In OpenParts every window which has its own GUI and which is meant to be
+displayed in a MainWindow is called a Part (just like the formula editor view
+or the word processor document view in the above described example) , and
+implements the OpenParts::Part interface by deriving from the class
+<CODE>OPPartIf</CODE>.
+<P>If you want to make a widget class a full-featured Part component then you
+have to handle some things different than you might be used to, in regard to
+the standard Qt/KDE widget framework. In fact now a widget is no more a simple
+window in which you display some data, no, a Part is much more than this. In
+particular a Part has, beside it's window (widget, which may of course contain
+sub-windows or even other Parts (see <CODE>OPFrame</CODE> documentation) ) a
+full-featured GUI, consisting of a menubar with menus, toolbar(s) and a
+statusbar.
+<P>The special thing with the GUI is the way it is created, handled/used and
+"destroyed" . All this has to be highly dynamic because now the user decides
+about which Part he wants to have active. OpenParts provides the basic
+framework for this:
+<UL>
+<LI>it tells you when you have to create your GUI and provides you the necessary
+references to the GUI related objects of OpenParts.</LI>
+<LI>it also tells you when the GUI is destructed.</LI>
+<LI>in addition you are notified when your Part gets the focus and gives you
+the choice whether to accept or reject the focus.</LI>
+<LI>you are also notified when your Part gets registered to a MainWindow, in
+order to register your component at several GUI servant objects, just
+like the menubar manager for example.</LI>
+</UL>
+<P>The very first step you have to make is to tell the OpenParts Part Interface
+(<CODE>OPPartIf</CODE>) , the class you have to inherit from, what the actual
+widget is, because <CODE>OPartIf</CODE> does not inherit from QWidget. This gives
+you the  flexibility to separate your Part component from your actualy widget,
+but you  don't have to do this. You can simply multiply inherit from
+<CODE>OPPartIf</CODE> and <CODE>QWidget</CODE> or the appropriate widget class. In any way you
+specify your Part  widget by calling <CODE>setWidget( your_widget_here )</CODE> .
+In most cases, when  the Part component is the widget at the same time, you
+simply call <CODE>setWidget( this )</CODE> :-) . Make sure this call is done in
+the constructor of your class!
+<P>The next important point is that you will want to re-implement the virtual
+<CODE>init()</CODE> function of <CODE>OPPartIf</CODE> . This is highly recommended
+since this function is called after your Part got registered by a MainWindow.
+The idea  behind this function is that at the time the constructor of a Part
+gets executed, the Part itself is definitely not registered to a MainWindow,
+yet. But in fact you need to know when your Part gets registered, in order to
+register your Part at the GUI servant objects, which are only available via
+the MainWindow's interface. A reference to the MainWindow is available through
+the <CODE>m_vMainWindow</CODE> variable, which will be automatically initialized
+when the MainWindow  registration is done, so don't use this variable before
+your <CODE>init()</CODE> function gets called (<CODE>m_vMainWindow</CODE> will be nil
+anyway) .
+<P>Now over to the details of the <CODE>init()</CODE> function. Here you should place
+all initialisation stuff which depends on being registered to a MainWindow.
+In addition you can do the above mentioned registration at the GUI managing
+objects. Usually this looks like the following example:
 <PRE>
-  ..
-  KNaming *knaming = KdedInstance::self()->knaming();
-  ...
-  CORBA::Object_var obj = knaming->resolve( "KDesktop" );
-  KDesktopIf_var kdesky = KDesktopIf::_narrow( obj );
-  kdesky->selectAll(); //let's confuse the user by selecting all icons ;-)
-  ...
+void MyPart::init()
+{
+  //register at the menubar manager if you want to use/display a menubar
+  OpenParts::MenuBarManager_var menuBarManager = m_vMainWindow->menuBarManager();
+  if ( !CORBA::is_nil( menuBarManager ) ) //check whether the shell window allows us to have a menubar
+    menuBarManager->registerClient( id(), this ); //see chapter about the
+              //*barManager objects
+              //for further explanations
+
+  //...the same with the toolbar
+  OpenParts::ToolBarManager_var toolBarManager = m_vMainWindow->toolBarManager();
+  if ( !CORBA::is_nil( toolBarManager ) )
+    toolBarManager->registerClient( id(), this );
+
+  //better define a class wide variable, of course
+  OpenPartsUI::StatusBar_var m_vMyStatusBar;
+
+  OpenParts::StatusBarManager_var statusBarManager = m_vMainWindow->statusBarManager();
+  if ( !CORBA::is_nil( statusBarManager ) )
+    m_vMyStatusBar = statusBarManager->registerClient( id() );
+}
 </PRE>
+<P>Note that the registration calls for these three GUI element types are only
+necessary if you really want to use them. For example if your Part does not
+want to display any toolbar you should leave out the corresponding call.  In
+addition you might come up with the situation that for example the
+<CODE>toolBarManager()</CODE> call returns a nil reference, which indicates that
+the MainWindow does not allow its Parts to have a toolbar. Obviously the same
+applies for the menubar and the statusbar.
+<P>OpenParts makes use of KOM events to tell a Part about the
+construction/destruction of it's GUI. These are in particular:
+<UL>
+<LI><CODE>OpenPartsUI::eventCreateMenuBar</CODE> ("OpenPartsUI/CreateMenuBar")</LI>
+</UL>
+
+The attached argument is a <CODE>OpenPartsUI::MenuBar</CODE>
+<P>
+<UL>
+<LI><CODE>OpenPartsUI::eventCreateToolBar</CODE> ("OpenPartsUI/CreateToolBar")</LI>
+</UL>
+
+The attached argument is a <CODE>OpenPartsUI::ToolBarFactory</CODE>
+<P>Depending on whether a Part wants to display a menubar and/or toolbar, the
+managing objects emit these two events to it. In regard to your implementation
+this means that you have to re-implement the <CODE>event()</CODE> function
+(remember: A Part is a full-featured KOM Component) .
+<P>The attached event arguments indicate whether the toolbar(s) or the menubar
+are to be created or cleared. Check these arguments against
+<CODE>CORBA::is_nil()</CODE> and you know :-) .
+<P>The OpenParts StatusBar is handled different compared to the
+MenuBar/ToolBar(s) . In fact it is easier: When registering at the OpenParts
+StatusBarManager you receive your <CODE>OpenParts::StatusBar</CODE> as return
+value. You can then use the StatusBar everywhere in your Part, independend
+from whether it is visible (active) or not.
+<P>In the <CODE>init()</CODE> function a lot of registration stuff is done, and
+corresponding to this in the <CODE>cleanUp()</CODE> function (see chapter about
+KOM::Base) you have to unregister from the GUI servant objects and free all
+appropriate references, following KOM's model of symmetric references and
+connections. Usually the code looks like this:
+<PRE>
+void MyPart::cleanUp()
+{
+  if ( m_bIsClean )
+    return;
+
+  //unregister our menubar
+  OpenParts::MenuBarManager_var menuBarManager = m_vMainWindow->menuBarManager();
+  if ( !CORBA::is_nil( menuBarManager ) )
+    menuBarManager->unregisterClient( id() );
+
+  //...the same with the toolbar
+  OpenParts::ToolBarManager_var toolBarManager = m_vMainWindow->toolBarManager();
+  if ( !CORBA::is_nil( toolBarManager ) )
+    toolBarManager->unregisterClient( id() );
+
+  OpenParts::StatusBarManager_var statusBarManager = m_vMainWindow->statusBarManager();
+  if ( !CORBA::is_nil( statusBarManager ) )
+    statusBarManager->unregisterClient( id() );
+
+  //free other references here
+  //...
+
+  //this is IMPORTANT!!!
+  //Always call the cleanUp() method of the base class when you're done!
+  OPPartIf::cleanUp();
+}
+</PRE>
+<P>
+<H4>Part Children</H4>
+
+<P>
+<P>A Part Child is a usual Part with three extra features:
+<OL>
+<LI>A Part Child has a Parent Part assigned.</LI>
+<LI>It does not have a GUI and it therefore does not receive any GUI creation
+events.</LI>
+<LI>The Parent Child receives events whenever there are any child related focus
+changes. Since the Part Child functionality is integrated in the
+<CODE>OpenParts::Part</CODE> interface and it's implementation,
+<CODE>OPPartIf</CODE>, you don't have to deal  with additional classes when
+using Child Parts. Simply leave out the mapping of the OpenParts GUI
+events in the Child Part and instead map the Child Part events described
+below and assign the Parent Part via <CODE>setParent()</CODE>. See the
+interface description of <CODE>OpenParts::Part</CODE> , in openparts.idl,
+for further information about the events and the API in general.</LI>
+</OL>
+<P>
+<H4>How to embed a Part - the OPFrame class</H4>
+
+<P>
+<P>Now that you know how to create full-featured Part components it is still
+unexplained how Parts are really displayed/shown. Since Parts are no simple
+QWidgets but CORBA objects we need a helping hand here, which is the
+<CODE>OPFrame</CODE> class. In fact <CODE>OPFrame</CODE> is a QWidget, but in
+conjuction with Qt's QXEmbed it embeds the Part's widget window. The usage of
+<CODE>OPFrame</CODE> is really easy, usually the code looks like this:
+<P>
+<PRE>
+... somewhere in an application's widget ...
+myFrame = new OPFrame( the_parent_widget );
+myFrame->attach( a_reference_to_the_part_we_want_to_embed );
+myFrame->show();
+</PRE>
+<P>In addition to the above example you can <CODE>detach()</CODE> your Part, which
+you should usually do on exit. Just have a look at opFrame.h, it is
+documented.
+<P>
+<P>One last important thing you have to know about <CODE>OPFrame</CODE> is that this
+class internally uses KOM referencing (using a <CODE>KOMVar</CODE> variable) to
+hold the Part.  This means that there are two possible situations when using
+<CODE>OPFrame</CODE> :
+<P>
+<UL>
+<LI>If the embedding Widget/Object uses KOM referencing as well to keep a
+reference to the Part then there are two objects influencing the Part's
+lifecycle. On the one hand there's the <CODE>OPFrame</CODE> which
+increases/decreases the Part's KOM reference counter when it gets
+attached/detached, and on the other hand there's the embedding
+Widget/Object. So make sure that you know when you free your KOM
+reference to the Part in regard to detaching the Part!</LI>
+<LI>If the embedding Widget/Object does not use KOM referencing then you have
+to know that when detaching the Part it automatically gets destroyed,
+since usually the <CODE>OPFrame</CODE> is the only object holding a KOM
+reference  to the Part and the KOM reference counter therefore drops
+down to zero and issues the complete destruction of the object.</LI>
+</UL>
+<P>
+<H4>The center of OpenParts - the OpenParts::MainWindow interface</H4>
+
+<P>
+<P>Another important component is the so called OpenParts::MainWindow, being
+derived from a KTMainWindow in the implementation (and therefore the top-level
+window of your application) and being the shell around visible sub-windows and
+shared GUI elements.
+<P>The MainWindow's functionality is extended by some builtin aggregates, the
+managing objects for the menu-/tool-/statusbar. These objects are either
+available directly via the <CODE>*barManager()</CODE> methods of the MainWindow's
+interface or indirectly by being aggregates and therefore available via the
+components interface repository (<CODE>getInterface()</CODE>,
+<CODE>supportsInterface()</CODE>, ...) .
+<P>A Part can only be displayed in a MainWindow and the MainWindow has to know
+about this. So before you can display a Part you have to register it to the
+MainWindow. This is done by calling the Part Interface's
+<CODE>setMainWindow()</CODE> method (see previous chapter for further information
+about the process of registration) and this will give the Part a unique ID
+(which is for example used when addressing the part's GUI via the *bar manager
+objects) .
+<P>The MainWindow, as shell, has full control over all shared GUI elements.  This
+means that it is responsible for
+<UL>
+<LI>creating the appropriate *bar managing objects</LI>
+<LI>providing a skeleton/standard GUI which is meant to be always present,
+no matter what Part is active</LI>
+<LI>telling the GUI managing objects to activate/deactivate a Part's GUI</LI>
+</UL>
+<P>The creation of the *bar managers can be easily done by simply performing a
+dummy call to <CODE>*barManager()</CODE> which usually returns a pointer to the
+appropriate manager and also creates a new one if it does not exist yet. It is
+recommended to perform these calls in the constructor of your MainWindow.
+<P>The creation/handling of the skeleton GUI is explained later in the chapters
+about OPMenu(Bar)/OPToolBar .
+<P>Your MainWindow emits a Qt signal (<CODE>activePartChanged</CODE>) which informs
+you about a focus change of the active part, meaning whenever the user clicks
+on a non-active Part and it accepts the focus. Beside the pure informative
+sense  of this signal it is recommended to connect to this signal and perform
+the  following two steps in the slot implementation:
+<P>
+<OL>
+<LI>deactivate the previous active Part's GUI by calling the *bar managers
+<CODE>clear()</CODE> function, which will do the job and, beside some
+internal stuff, emit the GUI events (see previous chapter) to the Part.</LI>
+<LI>activate the new active Part's GUI by calling the *bar managers
+<CODE>create()</CODE> function, which will, similar to the activation, emit
+events to the Part. This is not really required but it is highly
+recommended. The following code is usually used for this:
+
+<PRE>
+      void NameOfYourMainWindow::slotActivePartChanged( unsigned long old_id,
+                                                        unsigned long new_id )
+      {
+        // clear the menu/tool/statusbar(s)
+        menuBarManager()->clear();
+        toolBarManager()->clear();
+        statusBarManager()->clear();
+        // create the new Part's GUI
+        menuBarManager()->create( new_id );
+        toolBarManager()->create( new_id );
+        statusBarManager()->create( new_id );
+      }
+      
+</PRE>
+</LI>
+</OL>
+<P>Now that the MainWindow handles all the shared "stuff" there is one thing
+which was not mentioned in this documentation, yet: What about the
+MainWindow's caption? The OpenParts MainWindow interface allows parts to have
+their own window captions, but how does OpenParts handle this?
+<P>Well, there are two ways:
+<OL>
+<LI><CODE>OPMainWindow</CODE> provides you a so called <CODE>AutoCaption</CODE> mode
+which automatically changes the MainWindow's caption whenever the active
+part changes. This is enabled by default.</LI>
+<LI>But sometimes the shell wants to have full control over the window's
+caption, and this is accomplished by disabling the <CODE>AutoCaption</CODE>
+mode, which  leads to the situation that the window's caption is not
+changed by OpenParts  in any way but instead gives you control over it.</LI>
+</OL>
+<P>
+<H4>Access shared GUI elements through CORBA - OpenPartsUI and its interfaces</H4>
+
+<P>
+<P>Well, now that we know when we have to construct/destruct a Part's GUI,
+via the OpenPartsUI events, we have to learn how to really create it, because
+we don't have the common KMenuBar, KToolBar, etc. classes anymore available.
+The replacement for them are CORBA Objects, described in openparts_ui.idl which
+is, together with the corresponding implementations, a part of the partsui
+module. The interfaces are 98%; similar to the KDE/Qt classes, so they're
+quite easy to use. Instead of bloating up this documentation with example code
+I rather suggest reading the tutorials in kdelibs/corba/tutorials .
+<P>
+<H4>Pixmaps and Strings in OpenParts - OPUIUtils</H4>
+
+<P>
+<P>Toolbars and menus are usually beautified with pixmaps, using QPixmap classes.
+As we now use a CORBA interface to access our GUI elements, QPixmap has become
+OpenPartsUI::Pixmap for OpenParts applications. OpenPartsUI::Pixmap is just
+a "stringified" QPixmap, and opUIUtils.(h,cc) contains some easy
+to use conversion routines.
+<P>In addition OPUIUtils contains string conversion routines between CORBA::WChar*
+and QString. This is necessary since Qt version >=2.0 supports Unicode,
+via QString, all over the place, and obviously GUI elements like menus or
+toolbars have been converted to support this. OpenParts has been converted,
+too, by using "wstring" (CORBA::WChar *) in the interfaces and by
+using and providing conversion routines. These routines are static member
+functions of the OPUIUtils  class, just like with the pixmap conversion. To
+simplify the usage, two macros have been defined: <CODE>Q2C</CODE> and
+<CODE>C2Q</CODE> . The first one converts a QString into a CORBA::WChar * string
+and the second one vice-versa.
+<P>When converting from QString to CORBA::WChar * the conversion routine
+allocates memory. To avoid memory leaks it is highly recommended to use
+CORBA::WString_var variables. Exactly the same applies for QPixmap ->
+OpenPartsUI::Pixmap conversions: Use OpenPartsUI::Pixmap_var , and you don't
+have to worry about leaks :-) .
+<P>Here's some example code, to show how to do it right:
+<PRE>
+    ...
+    OpenPartsUI::Pixmap_var pm = OPUIUtils::convertPixmap( QPixmap_variable_here );
+    someToolBar->insertButton( pm, ... );
+    ...
+    //use the same pm variable again
+    pm = OPUIUtils::convertPixmap( another_qpixmap );
+    ...
+</PRE>
+<P>Similar things have to be done with QString's:
+<P>
+<PRE>
+    ...
+    CORBA::WString_var text = Q2C( QString_here );
+    someMenuBar->insertItem7( text, ... );
+    ...
+    // or you can write:
+    someMenuBar->insertItem7( ( text = Q2C( QString_here ) ) , ...);
+    ...
+</PRE>
+<P>One note left: When you return a "wide string" (CORBA::WChar *) as
+a function result by using <CODE>Q2C</CODE>, make sure not to use
+<CODE>CORBA::wstring_dup()</CODE>.
+<P>Example:
+<PRE>
+  return CORBA::string_dup( Q2C( QString_here ) ); //!!!! WRONG!!!!!
+  ...
+  return Q2C( QString_here ); // RIGHT! because Q2C already allocates the string
+</PRE>
+<P>That's it! Have fun using KOM/OpenParts :-)
+<P>TODO:
+<UL>
+<LI>KOMShutdownManager</LI>
+<LI>AutoLoader template classes</LI>
+<LI>OPApplication Interface + Factories</LI>
+</UL>
+<P>
 <P>
 <P ALIGN="RIGHT">
 

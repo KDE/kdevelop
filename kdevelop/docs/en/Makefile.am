@@ -10,7 +10,7 @@ EXTRA_DIST =cref.html logotp3.gif tipdatabase \
 						kde_libref.html kde_libref-1.html kde_libref-2.html kde_libref-3.html kde_libref-4.html kde_libref-5.html kde_libref-6.html \
 						kde_libref-7.html kde_libref-8.html kde_libref-9.html \
 						add_kdedoc.html add_kdedoc-1.html add_kdedoc-2.html add_kdedoc-3.html add_kdedoc-4.html add_kdedoc-5.html add_kdedoc-6.html \
-						add_kdedoc-7.html
+						add_kdedoc-7.html add_kdedoc-8.html
 						
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
@@ -137,6 +137,8 @@ install-data-local:
 	$(INSTALL_DATA) add_kdedoc-6.html $(kde_htmldir)/en/kdevelop/add_kdedoc-6.html
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) add_kdedoc-7.html $(kde_htmldir)/en/kdevelop/add_kdedoc-7.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) add_kdedoc-8.html $(kde_htmldir)/en/kdevelop/add_kdedoc-8.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/cref.html
@@ -201,4 +203,5 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-5.html
 	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-6.html
 	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-7.html
+	-rm -f $(kde_htmldir)/en/kdevelop/add_kdedoc-8.html
 

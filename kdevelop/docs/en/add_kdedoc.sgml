@@ -694,6 +694,380 @@ particular order): Roberto Alsina, Waldo Bastian, Harri Porten, Samuel
 Wuethrich, Daniel Naber, Martin Konold, and Pietro Iglio.
 
 
+<chapt>Using KDE I/O Slaves
+<p>
+Kurt Granroth <htmlurl url="mailto:granroth@kde.org" name="&lt;granroth@kde.org&gt;">
+
+v0.1, 15, June 1999
+
+<em>
+ This HOWTO describes how the KDE I/O slaves (ioslaves) work.  It is
+ intended for both ioslave implementers as well as users.  In this
+ document, I will attempt to describe both how ioslaves work as well
+ as how to use them.
+</em>
+
+
+<sect>Introduction
+
+<sect1>What Are I/O Slaves?
+<p>
+ The K Desktop Environment (KDE) I/O slaves (ioslaves) are a series of
+ small programs that have intimate knowledge on working with a very
+ specific protocol.  For instance, the HTTP ioslave (<tt><cdx/kio_http/</tt>)
+ knows all about sending and receiving data to and from a <idx/web server/.  It
+ knows all about <idx/SSL/, encoding, and what all of the different header fields
+ mean.  It knows this so that KDE developers won't have to -- if they want
+ a web page, they merely have to use <tt><cdx/kio_http/</tt> for it and it will
+ take care of everything for them.
+
+ The ioslaves are based on the KIO library (<tt><cdx/libkio/</tt>).  This library
+ implements a method of asynchronous communication between
+ applications as well as provides a "protocol registry" of sorts.
+ This has many advantages.  Two of the major ones are:
+
+ <itemize>
+ <item>
+    The client does not need to know anything about the ioslave that
+    it is calling.  It merely specifies the protocol and <tt>cdx/libkio/</tt> will
+  	automatically determine the proper ioslave to use.
+	
+ <item>
+    All communication is done asynchronously.  All <tt><cdx/libkio/</tt> calls will
+    return immediately.  Whenever events occur, <tt><cdx/libkio/</tt> will send
+  	signals altering the client to that fact.  This means that the
+	  client does not have to engage in any "busy waiting."
+ </itemize>
+
+ Here is a fully working snippet of code to download a web page:<ncdx/KIOJob/<ncdx/sigData()/
+
+ <verb>
+ KIOJob *job = new KIOJob;
+ connect(job, SIGNAL(sigData(int, const char*, int)),
+         this, SIGNAL(slotData(int, const char*, int)));
+ job->get("http://www.kde.org/news_dyn.html");
+ </verb>
+
+ That's it!  When the ioslave is done getting the KDE news page, it
+ will call your application's slotData() function with the page.
+
+<sect1>Copyright
+
+<p>
+ Copyright (c) 1999 Kurt Granroth, All rights reserved.  This is free
+ documentware; you can redistribute it and/or modify it under the
+ terms of version 2 or later of the
+ <htmlurl url="http://www.gnu.org/copyleft/gpl.html" name="GNU General Public
+ License">
+
+<sect>Setting Up IOSlaves
+
+ <p>
+ Using the KDE ioslaves is very easy once the framework is in place.
+ This section will describe getting the "back-end" stuff setup.
+
+<sect1>The KIO Library
+
+ <p>
+ The first part that needs to be installed is the KDE IO library
+ (<tt><cdx/libkio/</tt>).  This library is part of the KDE 2.x <tt><cdx/kdelibs/</tt>
+ package.  It
+ will be installed by default on all KDE 2.x systems when 2.x is
+ finally released.  In the meantime, you will need to get it through
+ either CVSUP or the snapshots.  See www.kde.org (or a later appendix
+ when I get around to it later) for details on that.
+
+ <tt><cdx/libkio/</tt> depends on the KDE UI library (<tt><cdx/libkdeui/</tt>), the KDE
+ Core library (<tt><cdx/libkdecore/</tt>), and Qt (<tt><cdx/libqt/</tt>).  These are
+ the "standard" KDE libraries so there shouldn't be any problems, there.
+
+<sect1>The IOSlaves
+
+ <p>
+ There are ioslaves for <tt><cdx/http/</tt>, <tt><cdx/file/</tt>, <tt><cdx/gzip/</tt>,
+ <tt><cdx/tar/</tt>, <tt><cdx/file/</tt>, <tt><cdx/smb/</tt>, <tt><cdx/pop3/</tt>, and
+ <tt><cdx/imap4/</tt> as of the time of this writing.  They are all found in the
+ <tt><cdx/kdebase/</tt> package under <tt><cdx/kioslaves/</tt>.  Again, these are
+ available only from the KDE development CVS so you'll need to use CVSUP or
+ the snapshots to retrieve them.
+
+<sect>Using ioslaves in your Application
+
+ <p>
+ Now that you have the backend stuff all setup, you can start setting
+ up your application to use them.  This requires adding the <tt><cdx/libkio/</tt>
+ library to your linking and including the proper header files.
+
+<sect1>Modifying your Makefile
+
+ <p>
+ If you are using the standard KDE automake/autoconf system for your
+ application, then you are in luck!  Adding another library is
+ trivial:
+
+ <itemize>
+ <item>
+   Edit <idx/Makefile.am/
+ <item>
+   Change the line &lt;yourapp&gt;<cdx/_LDADD/ to look something like:
+
+   <verb>
+     myapp_LDADD = $(LIB_KIO)
+   </verb>
+ </itemize>
+
+ That's it!  If you are not using the KDE setup, then just make sure
+ that you are including the following in your link stage:
+
+ <verb>
+    -lkio -lkdeui -lkdecore -lqt
+ </verb>
+
+<sect1>Adding the Proper Headers
+
+ <p>
+ This is also simple:
+
+ <verb>
+   #include <kio_job.h>
+ </verb>
+
+ Will take care of everything.
+
+<sect>Using IOSlaves via KIOJob
+ <p>
+ Now that your application is all prepped for using ioslaves, you can
+ actually start using them!
+
+ The only class you need to deal with at a client level is the KIOJob
+ class.  You will use it to "call" the ioslaves and it will send you
+ signals when it received events from them.
+
+ The basic procedure is something like this:
+
+ <itemize>
+ <item>
+    Create a <idx/KIOJob/ instance
+ <item>
+    Connect all of the signals (events) that you are interested in to
+    some local slots (callbacks).
+ <item>
+    Send the actual request
+ <item>
+    Process the resulting response in your slots.
+ </itemize>
+
+ <sect1>Typical Example
+ <p>
+ An example looks like so:<ncdx/sigData()/<ncdx/sigError()/<ncdx/sigDataEnd()/<ncdx/sigFinished()/
+
+ <verb>
+ KIOJob *job = new KIOJob;
+ connect(job, SIGNAL(sigData(int, const char*, int)),
+         this, SLOT(slotData(int, const char*, int)));
+ connect(job, SIGNAL(sigError(int, int, const char*)),
+         this, SLOT(slotError(int, int, const char*)));
+ connect(job, SIGNAL(sigDataEnd(int)),
+         this, SLOT(slotDataEnd(int)));
+ connect(job, SIGNAL(sigFinished(int)),
+         this, SLOT(slotFinished(int)));
+ job->get("http://www.pobox.com/~kurt_granroth/index.html");
+ </verb>
+
+ This will get the web page at the above URL.  When the ioslave is done
+ receiving the page, it will send it to you with your <tt><cdx/slotData()/</tt>
+ function.  If there was an error, then you receive it in
+ <tt>slotError()</tt>.  If the page was large, then it will be sent in
+ chunks.  You know that you are done receiving data when
+ <tt>slotDataEnd()</tt> is called.  The <tt>slotFinished()</tt> function is
+ called when the ioslave is completely done.
+
+<sect>KIOJob Calls
+
+ <p>
+ There are numerous operations that you can do with KIOJob.  Some of them
+ are: <tt><cdx/put/</tt>, <tt><cdx/get/</tt>, <tt><cdx/mkdir/</tt>, <tt><cdx/copy/</tt>,
+ <tt><cdx/move/</tt>, <tt><cdx/del/</tt>, <tt><cdx/unmount/</tt>, and <tt><cdx/mount/</tt>.  I will
+ refer only to <tt><cdx/put()/</tt> and <tt><cdx/get()/</tt> in this HOWTO.  The others
+ follow similar patterns.
+
+<sect1>get(const char* url)
+
+ <p>
+ This is probably the most common operation.  It tells the ioslave to
+ "get" the resource described in the URL.  This may be a web page, a
+ POP3 message, or a local file -- it all depends on your URL.
+
+ This operation is not very interactive.  You tell the ioslave what
+ you want and it gets it for you.  Period.
+
+ Specifically, it will send back your data with the <tt><cdx/sigData(int id,
+ char char* data, int length)/</tt> signal.
+
+ Parameters:
+
+ const char *url - The URL of the resource that you wish to get
+
+<sect1>put(const char* url, int mode, bool overwrite, bool resume, int size)
+
+ <p>
+ This operation will start the process of "putting" or sending data to
+ the location specified in the URL.  This is used, for instance, to
+ send files to a remote FTP server or do do a PUT or POST request with
+ HTTP.  It is not quite a straight-forward as a <tt><cdx/get()/</tt> operation.
+
+ The basic procedure looks like:
+
+ <itemize>
+ <item>
+    Connect <tt><cdx/sigReady(int)/</tt> to a local slot (e.g., <tt>slotReady(int)</tt>)
+ <item>
+    Send a <tt><cdx/KIOJob::put(..)/</tt> request
+ <item>
+    When <tt>slotReady(..)</tt> is called, you know that the ioslave is ready
+    to relay your data to its final destination.
+ <item>
+    Send all of your data using the <tt><cdx/KIOJob::data(const char*, int)/</tt>
+    operation.  When you are done, notify the ioslave of this by
+	sending a <tt><cdx/KIOJob::dataEnd()/</tt>
+ </itemize>
+
+ Some sample code looks like so:
+
+ <verb>
+ KIOJob *job;
+ char *data = "My message";
+ Client::Client()
+ {
+ 	job = new KIOJob;
+	connect(job, SIGNAL(sigReady(int)), this, SLOT(slotReady(int)));
+	connect(job, SIGNAL(sigData(int, const char*, int)),
+	        this, SLOT(slotData(int, const char*, int)));
+	connect(job, SIGNAL(sigDataEnd(int)),
+	        this, SLOT(slotDataEnd(int)));
+	job->put("http://server.com/cgi-bin/post.cgi", -1, true, false, strlen(data));
+ }
+
+ void Client::sigReady(int id)
+ {
+    job->data(data, strlen(data));
+	job->dataEnd();
+ }
+ </verb>
+
+ Parameters:
+
+   const char* url - The end location for your data
+   int mode        - Special permissions for your data.  This should be set
+                     to -1 if there are no special permissions
+   bool overwrite  - Instructs the ioslave to overwrite anything that
+                     may already be there.
+   bool resume     - Instructs the ioslave to resume a previously aborted
+                     transaction.
+   int size        - This is the size of the data that you will be sending
+
+
+ Beyond that, everything else is identical to the 'get' method.
+
+<sect1>data(void *data, int size)
+
+ <p>
+ This is used to send data to an ioslave.  It is used in conjunction with
+ the <tt><cdx/KIOJob::put(..)/</tt> operation.  It is almost always called from
+ your object's <tt>slotReady()</tt> slot as you must wait for the
+ <tt><cdx/sigReady(int)/</tt> signal before sending any data.  If your data is
+ greater than 2048 bytes, then you must break it up into many chunks and
+ send each chunk individually.
+
+ Parameters:
+
+ void *data - Your data that needs to go to the ioslave.  This should be no
+              more than 2048 bytes.
+ int size   - The size of this data
+
+<sect1>dataEnd()
+
+ <p>
+ This is used along with <tt><cdx/KIOJob::data(..)/</tt> and
+ <tt><cdx/KIOJob::put(..)/</tt>.  It signals the ioslave that you are done
+ sending it data.  If you do not send this signal, then the ioslave will
+ essentially hang.  You do not need to use this if you are using
+ <tt><cdx/KIOJob::get(..)/</tt>.
+
+ Parameters:
+
+ None
+
+<sect>KIOJob Signals
+
+ <p>
+ All communication from the ioslaves come through KIOJob in the form of
+ signals.  There are quite a few of them (see <tt><cdx/kio_job.h/</tt> for a complete
+ listing), but I'll only discuss the "essential" ones.
+
+<sect1>sigError(int id, int errid, const char* text)
+
+ <p>
+ This signal is emitted whenever an error occurs.  You should always connect a
+ slot to this signal unless you really don't care if there is an error or not.
+
+ Parameters:
+
+ int id           - The job id
+ int errid        - The error code.  This corresponds to the list of errors
+                    defined in kio_interface.h
+ const char* text - A textual description of the error
+
+<sect1>sigReady(int id)
+
+ <p><ncdx/sigReady()/
+ This signal occurs when the ioslave is ready to accept data.  If you are
+ using only <tt><cdx/get(..)/</tt> methods, then you should not have to connect to this
+ signal.  If you are using a <tt><cdx/put(..)/</tt> method, then you must connect to this
+ signal and begin sending data from there.
+
+ Parameters:
+
+ int id - The job id
+
+<sect1>sigData(int id, const char *data, int size)
+
+ <p><ncdx/sigData()/
+ This signal happens whenever the ioslave is sending you data.  This is
+ typically the data that it just downloaded.  It will never be more than 2048
+ bytes, so plan on having it called several times.  You are responsible for
+ collecting all of the data.  You will know that the ioslave is done sending
+ you data when you get the <tt><cdx/sigDataEnd(int)/</tt> signal.
+
+ Parameters:
+
+ int id           - The job id
+ const char *data - The data that the ioslave just downloaded
+ int size         - The size of this data chunk
+
+<sect1>sigDataEnd(int id)
+
+ <p><ncdx/sigDataEnd()/
+ This signal is sent to signify that the ioslave is done sending you data.
+ You should use this signal as an assurance that you can use the data as
+ <tt><cdx/sigData(..)/</tt> will never again be called.
+
+ Parameters:
+
+ int id - The job id
+
+<sect1>sigFinished(int id)
+
+ <p><ncdx/sigFinished()/
+ This signal indicates the the ioslave is completely done.
+
+ Parameters:
+
+ int id - The job id
+
+<!-- TODO: HOW KIOSLAVES ACTUALLY WORK FOR THE IMPLEMENTERS -->
+
+
 <chapt>KDE KOM/Open Parts<label id="KOMOP">
 <p>
 Torben Weis <tt/weis@kde.org/, Bernd Wuebben <tt/wuebben@kde.org/
@@ -2607,11 +2981,13 @@ Elements which are not specified in the interface are not accessible by clients.
 
 <tag/MICO/ free implementation of the CORBA standard. KDE's KOM/OpenParts technology is based on the MICO implementation.
 
+<tag/OMA/ Object Management Architecture
+
 <tag/OMG/ Object Management Group
 
 <tag/ORB/ Object Request Broker, abstract name for the communication service between clients and remote objects.
 
-<tag/POA/
+<tag/POA/ Portable Object Adapter. The POA extends the features the BOA provides; introduced in the CORBA 2.2 standard.
 </descrip>
 
 <p>
