@@ -239,9 +239,15 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     header->setLabel( IgnoreCount,  i18n("Ignore Count") );
     header->setLabel( Hits,         i18n("Hits") );
 
+    m_ctxMenu = new QPopupMenu( this );
+    m_ctxMenu->insertItem( i18n( "Show" ),    BW_ITEM_Show );
+    m_ctxMenu->insertItem( i18n( "Edit" ),    BW_ITEM_Edit );
+    m_ctxMenu->insertItem( i18n( "Disable" ), BW_ITEM_Disable );
+    m_ctxMenu->insertItem( i18n( "Delete" ),  BW_ITEM_Delete );
+
     m_table->show();
 
-    connect( addMenu,     SIGNAL(activated(int)),
+    connect( addMenu,       SIGNAL(activated(int)),
              this,          SLOT(slotAddBlankBreakpoint(int)) );
     connect( m_delete,      SIGNAL(clicked()),
              this,          SLOT(slotRemoveBreakpoint()) );
@@ -250,10 +256,14 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     connect( m_removeAll,   SIGNAL(clicked()),
              this,          SLOT(slotRemoveAllBreakpoints()) );
 
-//    connect( m_table,       SIGNAL(contextMenuRequested(int, int, const QPoint &)),
-//             this,          SLOT(slotEditRow(int, int, const QPoint &)));
-    connect( m_table,       SIGNAL(clicked(int, int, int, const QPoint &)),
-             this,          SLOT(slotRowSelected(int, int, int, const QPoint &)));
+    connect( m_table,       SIGNAL(contextMenuRequested(int, int, const QPoint &)),
+             this,          SLOT(slotContextMenuShow(int, int, const QPoint & )) );
+    connect( m_ctxMenu,     SIGNAL(activated(int)),
+             this,          SLOT(slotContextMenuSelect(int)) );
+
+    connect( m_table,       SIGNAL(doubleClicked(int, int, int, const QPoint &)),
+             this,          SLOT(slotRowDoubleClicked(int, int, int, const QPoint &)));
+
     connect( m_table,       SIGNAL(valueChanged(int, int)),
              this,          SLOT(slotNewValue(int, int)));
 
@@ -265,6 +275,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
              this,          SLOT(slotRemoveBreakpoint()));
     connect( m_table,       SIGNAL(insertPressed()),
              this,          SLOT(slotAddBreakpoint()));
+
 }
 
 /***************************************************************************/
@@ -417,7 +428,7 @@ void GDBBreakpointWidget::slotToggleBreakpointEnabled(const QString &fileName, i
     if (btr)
     {
         Breakpoint* bp=btr->breakpoint();
-        bp->setEnabled(!isEnabled());
+        bp->setEnabled(!bp->isEnabled());
         emit publishBPState(*bp);
     }
 }
@@ -683,7 +694,7 @@ void GDBBreakpointWidget::slotRemoveAllBreakpoints()
 
 /***************************************************************************/
 
-void GDBBreakpointWidget::slotRowSelected(int row, int col, int btn, const QPoint &)
+void GDBBreakpointWidget::slotRowDoubleClicked(int row, int col, int btn, const QPoint &)
 {
     if ( btn == Qt::LeftButton )
 	{
@@ -699,6 +710,71 @@ void GDBBreakpointWidget::slotRowSelected(int row, int col, int btn, const QPoin
             if (col == Location || col ==  Condition || col == IgnoreCount)
                 m_table->editCell(row, col, false);
         }
+    }
+}
+
+void GDBBreakpointWidget::slotContextMenuShow( int row, int /*col*/, const QPoint &mousePos )
+{
+    BreakpointTableRow *btr = (BreakpointTableRow *)m_table->item( row, Control );
+    
+    if (btr != NULL)
+    {
+        m_ctxMenu->setItemEnabled( BW_ITEM_Show, (btr->breakpoint( )->type( ) == BP_TYPE_FilePos) );
+        if (btr->breakpoint( )->isEnabled( ))
+        {
+            m_ctxMenu->changeItem( BW_ITEM_Disable, i18n("Disable") );
+        }
+        else
+        {
+            m_ctxMenu->changeItem( BW_ITEM_Disable, i18n("Enable") );
+        }
+
+        //m_ctxMenu->popup( mapToGlobal( mousePos ) );
+        m_ctxMenu->popup( mousePos );
+    }
+}
+
+void GDBBreakpointWidget::slotContextMenuSelect( int item )
+{
+    int                  row, col;
+    BreakpointTableRow  *btr;
+    Breakpoint          *bp;
+    FilePosBreakpoint   *fbp;
+    
+    row= m_table->currentRow( );
+    if (row == -1)
+        return;
+    btr = (BreakpointTableRow *)m_table->item( row, Control );
+    if (btr == NULL)
+        return;
+    bp = btr->breakpoint( );
+    if (bp == NULL)
+        return;
+    fbp = dynamic_cast<FilePosBreakpoint*>(bp);
+
+    switch( item )
+    {
+        case BW_ITEM_Show:
+            if (fbp)
+                emit gotoSourcePosition(fbp->fileName(), fbp->lineNum()-1);
+            break;
+        case BW_ITEM_Edit:
+            col = m_table->currentColumn( );
+            if (col == Location || col ==  Condition || col == IgnoreCount)
+                m_table->editCell(row, col, false);
+            break;
+        case BW_ITEM_Disable:
+            bp->setEnabled( !bp->isEnabled( ) );
+            btr->setRow( );
+            emit publishBPState( *bp );
+            break;
+        case BW_ITEM_Delete:
+            slotRemoveBreakpoint( );
+            break;
+        default:
+            // oops, check it out! this case is not in sync with the
+            // m_ctxMenu.  Check the enum in the header file.
+            return;
     }
 }
 

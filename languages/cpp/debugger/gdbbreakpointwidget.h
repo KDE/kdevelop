@@ -17,6 +17,7 @@
 #define _GDBBreakpointWidget_H_
 
 #include <qhbox.h>
+#include <qpopupmenu.h>
 
 class QDomElement;
 class QToolButton;
@@ -63,6 +64,7 @@ public slots:
     void slotRefreshBP(const KURL &filename);
     
 protected:
+    enum BW_ITEMS { BW_ITEM_Show, BW_ITEM_Edit, BW_ITEM_Disable, BW_ITEM_Delete };
     virtual void focusInEvent(QFocusEvent *e);
 
 private slots:
@@ -72,7 +74,9 @@ private slots:
     void slotEditBreakpoint();
     void slotAddBreakpoint();
     void slotAddBlankBreakpoint(int idx);
-    void slotRowSelected(int row, int col, int button, const QPoint & mousePos);
+    void slotRowDoubleClicked(int row, int col, int button, const QPoint & mousePos);
+    void slotContextMenuShow( int row, int col, const QPoint &mousePos );
+    void slotContextMenuSelect( int item );
     void slotEditRow(int row, int col, const QPoint & mousePos);
     void slotNewValue(int row, int col);
 
@@ -98,6 +102,7 @@ private:
     QToolButton*    m_delete;
     QToolButton*    m_edit;
     QToolButton*    m_removeAll;
+    QPopupMenu*     m_ctxMenu;
 };
 
 /***************************************************************************/
