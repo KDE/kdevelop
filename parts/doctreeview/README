@@ -16,6 +16,5 @@ Maintainer: Sebastian Kratzert <skratzert@gmx.de>
 
 TODO:
 -make project docs nicer
--change htdigindex, so that can be canceled
 -disable STL or remove
 -custom folders

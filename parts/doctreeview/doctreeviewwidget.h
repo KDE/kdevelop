@@ -16,9 +16,14 @@
 
 #include <qmap.h>
 #include <qstringlist.h>
+#include <qlayout.h>
+#include <qapplication.h>
 #include <qvbox.h>
+#include <qlineedit.h>
+#include <qcheckbox.h>
 
-#include "klistview.h"
+#include <klistview.h>
+#include <ktabctl.h>
 
 
 class DocTreeItem;
@@ -34,9 +39,30 @@ class DocTreeViewPart;
 class KDevProject;
 class CustomizeDialog;
 class QToolButton;
-class KListView;
 class KHistoryCombo;
+class ChooseDlg;
+class DocLineEdit;
 
+class DocSearchDialog;
+
+class IndexTreeData
+{
+public:
+    IndexTreeData(const QString &text, const QString &parent, const QString &filename);
+
+    void setVisible(bool v)     { m_visible = v;}
+
+    bool isVisible()            { return m_visible; }
+    QString text()              { return m_text; }
+    QString fileName()          { return m_filename; }
+    QString parent()            { return m_parent; }
+
+private:
+    QString m_text;
+    QString m_parent;
+    QString m_filename;
+    bool m_visible;
+};
 
 class DocTreeViewWidget : public QVBox
 {
@@ -48,7 +74,7 @@ public:
 
     void configurationChanged();
     void projectChanged(KDevProject *project);
-    
+
     static QString locatehtml(const QString &fileName);
 
 private slots:
@@ -65,11 +91,21 @@ private slots:
     void slotAddBookmark();
     void slotRemoveBookmark();
 
+    void slotFilterTextChanged(const QString &);
+    void slotFilterReturn();
+    void slotIndexItemExecuted(QListViewItem *item);
+    void slotCurrentTabChanged(int);
+    void slotSubstringCheckClicked();
+    void slotIndexModeCheckClicked();
+    void slotIndexNextMatch();
+    void slotIndexPrevMatch();
+
 protected:
     void searchForItem ( const QString& );
     bool initKDocKDELibs();
+    void filterMultiReferences();
 
-private: 
+private:
     bool kdelibskdoc;
     KListView* docView;
     QPtrList<QListViewItem> searchResultList;
@@ -92,7 +128,21 @@ private:
     QToolButton* nextButton;
     QToolButton* startButton;
     KHistoryCombo* completionCombo;
-    
+
     DocTreeItem* m_activeTreeItem;
+
+    KTabCtl *modeSwitch;
+    QVBox *treeWidget;
+    QVBox *indexWidget;
+    DocLineEdit *filterEdit;
+    KListView *indexView;
+    QToolButton *subSearchButton;
+    QToolButton *indexModeSwitch;
+    int indexMode;
+    bool subStringSearch;
+
+    enum { filteredMode, plainListMode };
+
+    QPtrList<IndexTreeData> indexItems;
 };
 #endif

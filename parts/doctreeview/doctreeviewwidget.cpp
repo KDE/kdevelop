@@ -23,8 +23,13 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qlistview.h>
+#include <qmessagebox.h>
+#include <qlabel.h>
+#include <qptrlist.h>
+#include <qprogressdialog.h>
 
 #include <kdebug.h>
+#include <kapplication.h>
 #include <kdialogbase.h>
 #include <kcombobox.h>
 #include <kglobal.h>
@@ -35,6 +40,8 @@
 #include <ksimpleconfig.h>
 #include <kprocess.h>
 #include <kdeversion.h>
+
+#include "choosedlg.h"
 
 #include "kdevcore.h"
 #include "domutil.h"
@@ -48,6 +55,14 @@
 #include "doctreeviewpart.h"
 #include "doctreeglobalconfigwidget.h"
 #include "doctreeprojectconfigwidget.h"
+#include "doclineedit.h"
+
+#include "docsearchdlg.h"
+
+IndexTreeData::IndexTreeData(const QString &text, const QString &parent, const QString &filename) :
+        m_text(text), m_parent(parent), m_filename(filename), m_visible(false)
+{
+}
 
 class DocTreeItem : public QListViewItem
 {
@@ -57,12 +72,12 @@ public:
     DocTreeItem( DocTreeItem *parent, Type type, const QString &text, const QString &context);
 
     void setFileName(const QString &fn)
-        { filename = fn; }
+    { filename = fn; }
     virtual QString fileName()
-        { return filename; }
+    { return filename; }
     virtual void clear();
     virtual QString context() const { return m_context; }
-	virtual Type getType() const { return typ; }
+    virtual Type getType() const { return typ; }
 
 private:
     void init();
@@ -72,14 +87,14 @@ private:
 
 
 DocTreeItem::DocTreeItem(KListView *parent, Type type, const QString &text, const QString &context)
-    : QListViewItem(parent, text), typ(type), m_context(context)
+        : QListViewItem(parent, text), typ(type), m_context(context)
 {
     init();
 }
 
 
 DocTreeItem::DocTreeItem(DocTreeItem *parent, Type type, const QString &text, const QString &context)
-    : QListViewItem(parent, text), typ(type), m_context(context)
+        : QListViewItem(parent, text), typ(type), m_context(context)
 {
     init();
 }
@@ -101,7 +116,8 @@ void DocTreeItem::init()
 void DocTreeItem::clear()
 {
     QListViewItem *child = firstChild();
-    while (child) {
+    while (child)
+    {
         QListViewItem *old = child;
         child = child->nextSibling();
         delete old;
@@ -135,8 +151,8 @@ private:
 
 
 DocTreeKDELibsBook::DocTreeKDELibsBook(DocTreeItem *parent, const QString &name, const QString &idxfilename, const QString &context)
-    : DocTreeItem(parent, Book, name, context),
-      idx_filename(idxfilename)
+        : DocTreeItem(parent, Book, name, context),
+        idx_filename(idxfilename)
 {
     setExpandable(true);
 }
@@ -166,13 +182,17 @@ void DocTreeKDELibsBook::readContents()
 {
     FILE *f;
     bool success = false;
-    if (idx_filename.right(3) != QString::fromLatin1(".gz")) {
-        if ( (f = fopen(idx_filename, "r")) != 0) {
+    if (idx_filename.right(3) != QString::fromLatin1(".gz"))
+    {
+        if ( (f = fopen(idx_filename, "r")) != 0)
+        {
             readKdoc2Index(f);
             fclose(f);
             success = true;
         }
-    } else {
+    }
+    else
+    {
         QString cmd = "gzip -c -d ";
 #if (KDE_VERSION > 305)
         cmd += KProcess::quote(idx_filename);
@@ -180,7 +200,8 @@ void DocTreeKDELibsBook::readContents()
         cmd += KShellProcess::quote(idx_filename);
 #endif
         cmd += " 2>/dev/null";
-        if ( (f = popen(QFile::encodeName(cmd), "r")) != 0) {
+        if ( (f = popen(QFile::encodeName(cmd), "r")) != 0)
+        {
             readKdoc2Index(f);
             pclose(f);
             success = true;
@@ -197,45 +218,49 @@ void DocTreeKDELibsBook::readKdoc2Index(FILE *f)
     int pos0;
     QString classname, membername, filename;
 
-    while (fgets(buf, sizeof buf, f)) {
+    while (fgets(buf, sizeof buf, f))
+    {
         QString s = buf;
-        if (s.left(pos0=11) == "<BASE URL=\"") {
+        if (s.left(pos0=11) == "<BASE URL=\"")
+        {
             int pos2 = s.find("\">", pos0);
             if (pos2 != -1)
                 setFileName(s.mid(pos0, pos2-pos0));
         }
-        else if (s.left(pos0=9) == "<C NAME=\"") {
+        else if (s.left(pos0=9) == "<C NAME=\"")
+        {
             int pos1 = s.find("\" REF=\"", pos0);
             if (pos1 == -1)
                 continue;
-                int pos2 = s.find("\">", pos1+7);
-                if (pos2 == -1)
-                    continue;
-                classname = s.mid(pos0, pos1-pos0);
-                filename = s.mid(pos1+7, pos2-(pos1+7));
-                filename.replace(QRegExp("::"), "__");
-                classItem = new DocTreeItem(this, Doc, classname, context());
-                classItem->setFileName(DocTreeItem::fileName() + "/" + filename);
+            int pos2 = s.find("\">", pos1+7);
+            if (pos2 == -1)
+                continue;
+            classname = s.mid(pos0, pos1-pos0);
+            filename = s.mid(pos1+7, pos2-(pos1+7));
+            filename.replace(QRegExp("::"), "__");
+            classItem = new DocTreeItem(this, Doc, classname, context());
+            classItem->setFileName(DocTreeItem::fileName() + "/" + filename);
         }
-      else if (/*s.left(pos0=9) == "<M NAME=\"" || */s.left(pos0=10) == "<ME NAME=\"")
-          {
-              int pos1 = s.find("\" REF=\"", pos0);
-              if (pos1 == -1)
-                  continue;
-              int pos2 = s.find("\">", pos1+7);
-              if (pos2 == -1)
-                  continue;
+        else if (/*s.left(pos0=9) == "<M NAME=\"" || */s.left(pos0=10) == "<ME NAME=\"")
+        {
+            int pos1 = s.find("\" REF=\"", pos0);
+            if (pos1 == -1)
+                continue;
+            int pos2 = s.find("\">", pos1+7);
+            if (pos2 == -1)
+                continue;
 
-              // Long version: membername = classname + "::" + s.mid(pos0, pos1-pos0);
-              membername = s.mid(pos0, pos1-pos0);
-              filename = s.mid(pos1+7, pos2-(pos1+7));
-              filename.replace(QRegExp("::"), "__");
-              if (classItem) {
-                  DocTreeItem *item = new DocTreeItem(classItem, Doc, membername, context());
-//              kdDebug ( 9000 ) << "++++++++++++++ " << membername << endl;
-                  item->setFileName(DocTreeItem::fileName() + "/" + filename);
-              }
-          }
+            // Long version: membername = classname + "::" + s.mid(pos0, pos1-pos0);
+            membername = s.mid(pos0, pos1-pos0);
+            filename = s.mid(pos1+7, pos2-(pos1+7));
+            filename.replace(QRegExp("::"), "__");
+            if (classItem)
+            {
+                DocTreeItem *item = new DocTreeItem(classItem, Doc, membername, context());
+                //              kdDebug ( 9000 ) << "++++++++++++++ " << membername << endl;
+                item->setFileName(DocTreeItem::fileName() + "/" + filename);
+            }
+        }
     }
 
     sortChildItems(0, true);
@@ -246,8 +271,8 @@ class DocTreeKDELibsFolder : public DocTreeItem
 {
 public:
     DocTreeKDELibsFolder(QString location, QString name, KListView *parent, const QString &context)
-        : DocTreeItem(parent, Folder, name, context), m_location(location)
-        { setExpandable(true); }
+            : DocTreeItem(parent, Folder, name, context), m_location(location)
+    { setExpandable(true); }
     void refresh();
 private:
     QString m_location;
@@ -258,23 +283,24 @@ void DocTreeKDELibsFolder::refresh()
 {
     DocTreeItem::clear();
 
-/*    QDir d(m_location);
-    QStringList fileList = d.entryList("*", QDir::Dirs);
-
-    QStringList::ConstIterator it;
-    for (it = fileList.begin(); it != fileList.end(); ++it) {
-        QString dirName = (*it);
-        if (dirName == "." || dirName == ".." || dirName == "common")
-            continue;
-        qWarning("loading dir %s", dirName.latin1());*/
-        QStringList itemNames, fileNames, hiddenNames;
-        DocTreeViewTool::readLibraryDocs(m_location,&itemNames, &fileNames);
-        QStringList::Iterator it1, it2;
-        for (it1 = itemNames.begin(), it2 = fileNames.begin();
-             it1 != itemNames.end() && it2 != fileNames.end();
-            ++it1, ++it2) {
-            new DocTreeKDELibsBook(this, *it1, *it2, context());
-        }
+    /*    QDir d(m_location);
+        QStringList fileList = d.entryList("*", QDir::Dirs);
+     
+        QStringList::ConstIterator it;
+        for (it = fileList.begin(); it != fileList.end(); ++it) {
+            QString dirName = (*it);
+            if (dirName == "." || dirName == ".." || dirName == "common")
+                continue;
+            qWarning("loading dir %s", dirName.latin1());*/
+    QStringList itemNames, fileNames, hiddenNames;
+    DocTreeViewTool::readLibraryDocs(m_location,&itemNames, &fileNames);
+    QStringList::Iterator it1, it2;
+    for (it1 = itemNames.begin(), it2 = fileNames.begin();
+            it1 != itemNames.end() && it2 != fileNames.end();
+            ++it1, ++it2)
+    {
+        new DocTreeKDELibsBook(this, *it1, *it2, context());
+    }
     //}
 
     sortChildItems(0, true);
@@ -282,24 +308,24 @@ void DocTreeKDELibsFolder::refresh()
     //TODO: merge in default libraries and hidden options
 
     // Read in possible items for the Libraries tree
-/*    QStringList libNames, docDirs, sourceDirs;
-    DocTreeViewTool::getLibraries(&libNames, &docDirs, &sourceDirs);
-    QStringList::Iterator libName, docDir, sourceDir;
-    for (libName = libNames.begin(),
-         docDir = docDirs.begin(),
-         sourceDir = sourceDirs.begin() ;
-         libName!=libNames.end() && docDir!=docDirs.end() && sourceDir!=sourceDirs.end();
-         ++libName, ++docDir, ++sourceDir) {
-        QStringList itemNames, fileNames, hiddenNames;
-        DocTreeViewTool::readLibraryDocs(*docDir,&itemNames, &fileNames);
-        QStringList::Iterator it1, it2;
-        for (it1 = itemNames.begin(), it2 = fileNames.begin();
-             it1 != itemNames.end() && it2 != fileNames.end();
-            ++it1, ++it2) {
-            new DocTreeKDELibsBook(this, *it1, *it2, context());
-        }
-
-    }*/
+    /*    QStringList libNames, docDirs, sourceDirs;
+        DocTreeViewTool::getLibraries(&libNames, &docDirs, &sourceDirs);
+        QStringList::Iterator libName, docDir, sourceDir;
+        for (libName = libNames.begin(),
+             docDir = docDirs.begin(),
+             sourceDir = sourceDirs.begin() ;
+             libName!=libNames.end() && docDir!=docDirs.end() && sourceDir!=sourceDirs.end();
+             ++libName, ++docDir, ++sourceDir) {
+            QStringList itemNames, fileNames, hiddenNames;
+            DocTreeViewTool::readLibraryDocs(*docDir,&itemNames, &fileNames);
+            QStringList::Iterator it1, it2;
+            for (it1 = itemNames.begin(), it2 = fileNames.begin();
+                 it1 != itemNames.end() && it2 != fileNames.end();
+                ++it1, ++it2) {
+                new DocTreeKDELibsBook(this, *it1, *it2, context());
+            }
+     
+        }*/
 }
 
 
@@ -320,7 +346,7 @@ public:
     ~DocTreeDoxygenBook();
     static bool isInstallationOK(const QString& bookDir)
     {
-      return QFile::exists(bookDir + "/html/index.html");
+        return QFile::exists(bookDir + "/html/index.html");
     }
 
     virtual void setOpen(bool o);
@@ -333,8 +359,8 @@ private:
 
 DocTreeDoxygenBook::DocTreeDoxygenBook(DocTreeItem *parent, const QString &name,
                                        const QString &dirName, const QString &context)
-    : DocTreeItem(parent, Book, name, context),
-      dirname(dirName)
+        : DocTreeItem(parent, Book, name, context),
+        dirname(dirName)
 {
     QString fileName = dirName + "index.html";
     setFileName(fileName);
@@ -363,17 +389,19 @@ void DocTreeDoxygenBook::readTagFile()
 #if QT_VERSION >= 0x030100
         tagName.remove("/html/");
 #else
-	tagName.replace( QRegExp( "\\/html\\/" ), QString() );
+        tagName.replace( QRegExp( "\\/html\\/" ), QString() );
 #endif
         f.setName( tagName );
     }
-    if (!f.open(IO_ReadOnly)) {
+    if (!f.open(IO_ReadOnly))
+    {
         kdDebug(9002) << "Could not open tag file: " << f.name() << endl;
         return;
     }
 
     QDomDocument dom;
-    if (!dom.setContent(&f) || dom.documentElement().nodeName() != "tagfile") {
+    if (!dom.setContent(&f) || dom.documentElement().nodeName() != "tagfile")
+    {
         kdDebug(9002) << "No valid tag file" << endl;
         return;
     }
@@ -382,12 +410,15 @@ void DocTreeDoxygenBook::readTagFile()
     QDomElement docEl = dom.documentElement();
 
     QDomElement childEl = docEl.firstChild().toElement();
-    while (!childEl.isNull()) {
-        if (childEl.tagName() == "compound" && childEl.attribute("kind") == "class") {
+    while (!childEl.isNull())
+    {
+        if (childEl.tagName() == "compound" && childEl.attribute("kind") == "class")
+        {
             QString classname = childEl.namedItem("name").firstChild().toText().data();
             QString filename = childEl.namedItem("filename").firstChild().toText().data();
 
-            if (QFile::exists(dirname + filename)) { // don't create bad links
+            if (QFile::exists(dirname + filename))
+            { // don't create bad links
                 DocTreeItem *item = new DocTreeItem(this, Doc, classname, context());
                 item->setFileName(dirname + filename);
             }
@@ -403,8 +434,8 @@ class DocTreeDoxygenFolder : public DocTreeItem
 {
 public:
     DocTreeDoxygenFolder(QString location, QString name, KListView *parent, const QString &context)
-        : DocTreeItem(parent, Folder, name, context), m_location(location)
-        { setExpandable(true); }
+            : DocTreeItem(parent, Folder, name, context), m_location(location)
+    { setExpandable(true); }
     void refresh();
 private:
     QString m_location;
@@ -414,21 +445,23 @@ void DocTreeDoxygenFolder::refresh()
 {
     DocTreeItem::clear();
 
-/*    KConfig *config = DocTreeViewFactory::instance()->config();
-    config->setGroup("General");
-    QString docdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
-
-    //kdDebug(9002) << "docdir: " << docdir << endl;*/
+    /*    KConfig *config = DocTreeViewFactory::instance()->config();
+        config->setGroup("General");
+        QString docdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
+     
+        //kdDebug(9002) << "docdir: " << docdir << endl;*/
     QDir d(m_location);
     QStringList fileList = d.entryList("*", QDir::Dirs);
 
     QStringList::ConstIterator it;
-    for (it = fileList.begin(); it != fileList.end(); ++it) {
+    for (it = fileList.begin(); it != fileList.end(); ++it)
+    {
         QString dirName = (*it);
         //kdDebug(9002) << "dirname: " << dirName << endl;
         if (dirName == "." || dirName == ".." || dirName == "common")
             continue;
-        if (DocTreeDoxygenBook::isInstallationOK(d.absFilePath(*it))) {
+        if (DocTreeDoxygenBook::isInstallationOK(d.absFilePath(*it)))
+        {
             new DocTreeDoxygenBook(this, *it, d.absFilePath(*it) + "/html/", context());
             //kdDebug(9002) << "foo: " << d.absFilePath(*it) + "/html/" + *it << endl;
         }
@@ -453,7 +486,7 @@ public:
     ~DocTreeTocFolder();
 
     QString tocName() const
-    { return toc_name; }
+        { return toc_name; }
 
 private:
     QString base;
@@ -464,7 +497,7 @@ private:
 void DocTreeTocFolder::addTocSect(DocTreeItem *parent, QDomElement childEl, uint level)
 {
     QListViewItem *lastChildItem = 0;
-    while (!childEl.isNull()) 
+    while (!childEl.isNull())
     {
         if (childEl.tagName() == QString("tocsect%1").arg(level))
         {
@@ -481,7 +514,7 @@ void DocTreeTocFolder::addTocSect(DocTreeItem *parent, QDomElement childEl, uint
             if (lastChildItem)
                 item->moveItem(lastChildItem);
             lastChildItem = item;
-    
+
             QDomElement grandchildEl = childEl.firstChild().toElement();
             addTocSect(item, grandchildEl, level+1);
         }
@@ -490,7 +523,7 @@ void DocTreeTocFolder::addTocSect(DocTreeItem *parent, QDomElement childEl, uint
 }
 
 DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, const QString &context)
-    : DocTreeItem(parent, Folder, fileName, context)
+        : DocTreeItem(parent, Folder, fileName, context)
 {
     setFileName( fileName );
 
@@ -499,13 +532,15 @@ DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, c
     base = DocTreeViewTool::tocLocation( fileName );
 
     QFile f(fileName);
-    if (!f.open(IO_ReadOnly)) {
+    if (!f.open(IO_ReadOnly))
+    {
         kdDebug(9002) << "Could not read doc toc: " << fileName << endl;
         return;
     }
 
     QDomDocument doc;
-    if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
+    if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc")
+    {
         kdDebug() << "Not a valid kdeveloptoc file: " << fileName << endl;
         return;
     }
@@ -516,59 +551,59 @@ DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, c
     setText(0, titleEl.firstChild().toText().data());
 
     QDomElement childEl = docEl.firstChild().toElement();
-    
+
     //!!! finally infinite tocsect depth implemented
     addTocSect(0, childEl, 1);
-    
-/*    while (!childEl.isNull()) {
-        if (childEl.tagName() == "tocsect1") {
-            QString name = childEl.attribute("name");
-            QString url = childEl.attribute("url");
-            DocTreeItem *item = new DocTreeItem(this, Book, name, DocTreeItem::context());
-            if (!url.isEmpty())
-                item->setFileName(base + url);
 
-            if (lastChildItem)
-                item->moveItem(lastChildItem);
-            lastChildItem = item;
-
-            // Ok, this means we have two levels in the table of contents hardcoded
-            // Eventually, this limitation should go, but at the moment it is simple to implement :-)
-            QListViewItem *lastGrandchildItem = 0;
-            QDomElement grandchildEl = childEl.firstChild().toElement();
-            while (!grandchildEl.isNull()) {
-                if (grandchildEl.tagName() == "tocsect2") {
-                    QString name2 = grandchildEl.attribute("name");
-                    QString url2 = grandchildEl.attribute("url");
-                    DocTreeItem *item2 = new DocTreeItem(item, Doc, name2, DocTreeItem::context());
-                    if (!url2.isEmpty())
-                        item2->setFileName(base + url2);
-                    if (lastGrandchildItem)
-                        item2->moveItem(lastGrandchildItem);
-                    lastGrandchildItem = item2;
-		    // and nobody said there couldn't be another level ;-)
-		    QListViewItem *last2GrandchildItem = 0;
-		    QDomElement grand2childEl = grandchildEl.firstChild().toElement();
-		    while (!grand2childEl.isNull()) {
-			if (grand2childEl.tagName() == "tocsect3") {
-			    QString name3 = grand2childEl.attribute("name");
-			    QString url3 = grand2childEl.attribute("url");
-			    DocTreeItem *item3 = new DocTreeItem(item2, Doc, name3, DocTreeItem::context());
-                            if (!url3.isEmpty())
-                                item3->setFileName(base + url3);
-			    if (last2GrandchildItem)
-				item3->moveItem(last2GrandchildItem);
-			    last2GrandchildItem = item3;
-                
-			}
-			grand2childEl = grand2childEl.nextSibling().toElement();
-		    }
+    /*    while (!childEl.isNull()) {
+            if (childEl.tagName() == "tocsect1") {
+                QString name = childEl.attribute("name");
+                QString url = childEl.attribute("url");
+                DocTreeItem *item = new DocTreeItem(this, Book, name, DocTreeItem::context());
+                if (!url.isEmpty())
+                    item->setFileName(base + url);
+     
+                if (lastChildItem)
+                    item->moveItem(lastChildItem);
+                lastChildItem = item;
+     
+                // Ok, this means we have two levels in the table of contents hardcoded
+                // Eventually, this limitation should go, but at the moment it is simple to implement :-)
+                QListViewItem *lastGrandchildItem = 0;
+                QDomElement grandchildEl = childEl.firstChild().toElement();
+                while (!grandchildEl.isNull()) {
+                    if (grandchildEl.tagName() == "tocsect2") {
+                        QString name2 = grandchildEl.attribute("name");
+                        QString url2 = grandchildEl.attribute("url");
+                        DocTreeItem *item2 = new DocTreeItem(item, Doc, name2, DocTreeItem::context());
+                        if (!url2.isEmpty())
+                            item2->setFileName(base + url2);
+                        if (lastGrandchildItem)
+                            item2->moveItem(lastGrandchildItem);
+                        lastGrandchildItem = item2;
+    		    // and nobody said there couldn't be another level ;-)
+    		    QListViewItem *last2GrandchildItem = 0;
+    		    QDomElement grand2childEl = grandchildEl.firstChild().toElement();
+    		    while (!grand2childEl.isNull()) {
+    			if (grand2childEl.tagName() == "tocsect3") {
+    			    QString name3 = grand2childEl.attribute("name");
+    			    QString url3 = grand2childEl.attribute("url");
+    			    DocTreeItem *item3 = new DocTreeItem(item2, Doc, name3, DocTreeItem::context());
+                                if (!url3.isEmpty())
+                                    item3->setFileName(base + url3);
+    			    if (last2GrandchildItem)
+    				item3->moveItem(last2GrandchildItem);
+    			    last2GrandchildItem = item3;
+                    
+    			}
+    			grand2childEl = grand2childEl.nextSibling().toElement();
+    		    }
+                    }
+                    grandchildEl = grandchildEl.nextSibling().toElement();
                 }
-                grandchildEl = grandchildEl.nextSibling().toElement();
             }
-        }
-        childEl = childEl.nextSibling().toElement();
-    }*/
+            childEl = childEl.nextSibling().toElement();
+        }*/
 }
 
 DocTreeTocFolder::~DocTreeTocFolder()
@@ -584,7 +619,7 @@ public:
     ~DocTreeDevHelpFolder();
 
     QString tocName() const
-    { return toc_name; }
+        { return toc_name; }
 
 private:
     QString base;
@@ -612,7 +647,7 @@ void DocTreeDevHelpFolder::addTocSect(DocTreeItem *parent, QDomElement childEl)
             if (lastChildItem)
                 item->moveItem(lastChildItem);
             lastChildItem = item;
-    
+
             QDomElement grandchildEl = childEl.firstChild().toElement();
             addTocSect(item, grandchildEl);
         }
@@ -621,7 +656,7 @@ void DocTreeDevHelpFolder::addTocSect(DocTreeItem *parent, QDomElement childEl)
 }
 
 DocTreeDevHelpFolder::DocTreeDevHelpFolder(KListView *parent, const QString &fileName, const QString &context)
-    : DocTreeItem(parent, Folder, fileName, context)
+        : DocTreeItem(parent, Folder, fileName, context)
 {
 
     QFileInfo fi(fileName);
@@ -629,13 +664,15 @@ DocTreeDevHelpFolder::DocTreeDevHelpFolder(KListView *parent, const QString &fil
     base = DocTreeViewTool::devhelpLocation( fileName );
 
     QFile f(fileName);
-    if (!f.open(IO_ReadOnly)) {
+    if (!f.open(IO_ReadOnly))
+    {
         kdDebug(9002) << "Could not read devhelp toc: " << fileName << endl;
         return;
     }
 
     QDomDocument doc;
-    if (!doc.setContent(&f)) {
+    if (!doc.setContent(&f))
+    {
         kdDebug() << "Not a valid devhelp file: " << fileName << endl;
         return;
     }
@@ -648,7 +685,7 @@ DocTreeDevHelpFolder::DocTreeDevHelpFolder(KListView *parent, const QString &fil
 
     QDomElement childEl = chaptersEl.firstChild().toElement();
     addTocSect(0, childEl);
-    
+
 }
 
 DocTreeDevHelpFolder::~DocTreeDevHelpFolder()
@@ -675,7 +712,7 @@ private:
 
 
 DocTreeDocbaseFolder::DocTreeDocbaseFolder(KListView *parent, const QString &context)
-    : DocTreeItem(parent, Folder, i18n("Documentation Base"), context)
+        : DocTreeItem(parent, Folder, i18n("Documentation Base"), context)
 {
     setExpandable(true);
 }
@@ -690,7 +727,8 @@ void DocTreeDocbaseFolder::readDocbaseFile(FILE *f)
     char buf[1024];
     QString title;
     bool html = false;
-    while (fgets(buf, sizeof buf, f)) {
+    while (fgets(buf, sizeof buf, f))
+    {
         QString s = buf;
         if (s.right(1) == "\n")
             s.truncate(s.length()-1); // chop
@@ -700,7 +738,8 @@ void DocTreeDocbaseFolder::readDocbaseFile(FILE *f)
         else if (s.left(8) == "Format: ")
             html = s.find("HTML", 8, false) != -1;
         else if (s.left(7) == "Index: "
-                 && html && !title.isEmpty()) {
+                 && html && !title.isEmpty())
+        {
             QString filename = s.mid(7, s.length()-7);
             DocTreeItem *item = new DocTreeItem(this, Doc, title, context());
             item->setFileName(filename);
@@ -715,13 +754,16 @@ void DocTreeDocbaseFolder::readDocbaseFile(FILE *f)
 
 void DocTreeDocbaseFolder::setOpen(bool o)
 {
-    if (o && childCount() == 0) {
+    if (o && childCount() == 0)
+    {
         QDir d("/usr/share/doc-base");
         QStringList fileList = d.entryList("*", QDir::Files);
         QStringList::Iterator it;
-        for (it = fileList.begin(); it != fileList.end(); ++it) {
+        for (it = fileList.begin(); it != fileList.end(); ++it)
+        {
             FILE *f;
-            if ( (f = fopen(d.filePath(*it), "r")) != 0) {
+            if ( (f = fopen(d.filePath(*it), "r")) != 0)
+            {
                 readDocbaseFile(f);
                 fclose(f);
             }
@@ -746,7 +788,7 @@ public:
 };
 
 DocTreeBookmarksFolder::DocTreeBookmarksFolder(KListView *parent, const QString &context)
-    : DocTreeItem(parent, Folder, i18n("Bookmarks"), context)
+        : DocTreeItem(parent, Folder, i18n("Bookmarks"), context)
 {}
 
 void DocTreeBookmarksFolder::refresh()
@@ -757,8 +799,9 @@ void DocTreeBookmarksFolder::refresh()
     DocTreeViewTool::getBookmarks(&othersTitle, &othersURL);
     QStringList::Iterator it1, it2;
     for (it1 = othersTitle.begin(), it2 = othersURL.begin();
-         it1 != othersTitle.end() && it2 != othersURL.end();
-         ++it1, ++it2) {
+            it1 != othersTitle.end() && it2 != othersURL.end();
+            ++it1, ++it2)
+    {
         DocTreeItem *item = new DocTreeItem(this, Book, *it1, context());
         item->setFileName(*it2);
     }
@@ -774,7 +817,7 @@ class DocTreeProjectFolder : public DocTreeItem
 public:
     DocTreeProjectFolder(KListView *parent, const QString &context);
     void setProject(KDevProject *project)
-        { m_project = project; }
+    { m_project = project; }
     void refresh();
 
 private:
@@ -783,9 +826,8 @@ private:
 };
 
 DocTreeProjectFolder::DocTreeProjectFolder(KListView *parent, const QString &context)
-    : DocTreeItem(parent, Folder, i18n("Current Project"), context), m_project(0)
-{
-}
+        : DocTreeItem(parent, Folder, i18n("Current Project"), context), m_project(0)
+{}
 
 
 void DocTreeProjectFolder::refresh()
@@ -795,47 +837,51 @@ void DocTreeProjectFolder::refresh()
         return;
 
     m_userdocDir = DomUtil::readEntry(
-        *m_project->projectDom() , "/kdevdoctreeview/projectdoc/userdocDir");
+                       *m_project->projectDom() , "/kdevdoctreeview/projectdoc/userdocDir");
     m_apidocDir = DomUtil::readEntry(
-        *m_project->projectDom() , "/kdevdoctreeview/projectdoc/apidocDir");
+                      *m_project->projectDom() , "/kdevdoctreeview/projectdoc/apidocDir");
 
 
     DocTreeItem::clear();
 
-        // API documentation
-        QDir apidir( m_apidocDir );
-        if (apidir.exists()) {
-            QStringList entries = apidir.entryList("*.html", QDir::Files);
-            QString filename = apidir.absPath() + "/index.html";
-            if (!QFileInfo(filename).exists())
-                return;
-            DocTreeItem *item = new DocTreeItem(
-                this, Book, i18n("API of %1").arg(m_project->projectName() ), context());
-                item->setFileName(filename);
-            for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it) {
-                filename = *it;
-                DocTreeItem *ditem = new DocTreeItem(item,
-                    Doc, QFileInfo(filename).baseName() , context());
-                ditem->setFileName(apidir.absPath() +"/"+ filename);
-            }
+    // API documentation
+    QDir apidir( m_apidocDir );
+    if (apidir.exists())
+    {
+        QStringList entries = apidir.entryList("*.html", QDir::Files);
+        QString filename = apidir.absPath() + "/index.html";
+        if (!QFileInfo(filename).exists())
+            return;
+        DocTreeItem *item = new DocTreeItem(
+                                this, Book, i18n("API of %1").arg(m_project->projectName() ), context());
+        item->setFileName(filename);
+        for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it)
+        {
+            filename = *it;
+            DocTreeItem *ditem = new DocTreeItem(item,
+                                                 Doc, QFileInfo(filename).baseName() , context());
+            ditem->setFileName(apidir.absPath() +"/"+ filename);
         }
-        // User documentation
-        QDir userdir( m_userdocDir );
-        if (userdir.exists()) {
-            QStringList entries = userdir.entryList("*.html", QDir::Files);
-            QString filename = userdir.absPath() + "/index.html";
-            if (!QFileInfo(filename).exists())
-                return;
-            DocTreeItem *item = new DocTreeItem(
-                this, Book, i18n("Usedoc for %1").arg(m_project->projectName() ), context());
-                item->setFileName(filename);
-            for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it) {
-                filename = *it;
-                DocTreeItem *ditem = new DocTreeItem(item,
-                    Doc, QFileInfo(filename).baseName() , context());
-                ditem->setFileName(userdir.absPath() +"/"+ filename);
-            }
+    }
+    // User documentation
+    QDir userdir( m_userdocDir );
+    if (userdir.exists())
+    {
+        QStringList entries = userdir.entryList("*.html", QDir::Files);
+        QString filename = userdir.absPath() + "/index.html";
+        if (!QFileInfo(filename).exists())
+            return;
+        DocTreeItem *item = new DocTreeItem(
+                                this, Book, i18n("Usedoc for %1").arg(m_project->projectName() ), context());
+        item->setFileName(filename);
+        for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it)
+        {
+            filename = *it;
+            DocTreeItem *ditem = new DocTreeItem(item,
+                                                 Doc, QFileInfo(filename).baseName() , context());
+            ditem->setFileName(userdir.absPath() +"/"+ filename);
         }
+    }
 
     if (!firstChild())
         setExpandable(false);
@@ -857,27 +903,29 @@ private:
     QString m_xml;
 };
 
-DocTreeQtFolder::DocTreeQtFolder(QString xml, QString name, KListView *parent, 
-    const QString &context)
-    : DocTreeItem(parent, Folder, name, context), m_xml(xml)
+DocTreeQtFolder::DocTreeQtFolder(QString xml, QString name, KListView *parent,
+                                 const QString &context)
+        : DocTreeItem(parent, Folder, name, context), m_xml(xml)
 {
-//    filename = _fileName;
+    //    filename = _fileName;
 }
 
 void DocTreeQtFolder::refresh()
 {
     filename = m_xml;
-    
+
     QFileInfo fi(filename);
 
     QFile f(filename);
-    if (!f.open(IO_ReadOnly)) {
+    if (!f.open(IO_ReadOnly))
+    {
         kdDebug(9002) << "Could not read" << m_xml << endl;
         kdDebug(9002) << "  Filename was: " << filename << endl;
         return;
     }
     QDomDocument doc;
-    if (!doc.setContent(&f) || doc.doctype().name() != "DCF") {
+    if (!doc.setContent(&f) || doc.doctype().name() != "DCF")
+    {
         kdDebug(9002) << "Not a valid DCF file: " << filename << endl;
         return;
     }
@@ -887,7 +935,7 @@ void DocTreeQtFolder::refresh()
 
     QDomElement docEl = doc.documentElement();
     QDomElement titleEl = docEl.namedItem("DCF").toElement();
-    
+
     setFileName(fi.dirPath( true ) +"/"+ docEl.attribute("ref", QString::null));
 
     QDomElement childEl = docEl.lastChild().toElement();
@@ -899,28 +947,28 @@ void DocTreeQtFolder::refresh()
             QString title = childEl.attribute("title");
 
             //dymo: enable all qt docs: disable "Class Reference" check
-/*            int i = title.find("Class Reference");
-            if( i > 0 )
+            /*            int i = title.find("Class Reference");
+                        if( i > 0 )
+                        {
+                            title = title.left(i);*/
+            DocTreeItem* item = item = new DocTreeItem(this, Book, title, context());
+            item->setFileName(fi.dirPath( true ) +"/"+ ref);
+
+            QDomElement grandChild = childEl.lastChild().toElement();
+            while(!grandChild.isNull())
             {
-                title = title.left(i);*/
-                DocTreeItem* item = item = new DocTreeItem(this, Book, title, context());
-                item->setFileName(fi.dirPath( true ) +"/"+ ref);
-
-                QDomElement grandChild = childEl.lastChild().toElement();
-                while(!grandChild.isNull())
+                if (grandChild.tagName() == "keyword")
                 {
-                    if (grandChild.tagName() == "keyword")
-                    {
-                        QString dref = grandChild.attribute("ref");
-                        QString dtitle = grandChild.text();
+                    QString dref = grandChild.attribute("ref");
+                    QString dtitle = grandChild.text();
 
-                        DocTreeItem* dItem = new DocTreeItem(item, Doc, dtitle, context());
-                        dItem->setFileName(fi.dirPath( true ) +"/"+ dref);
-                    }
-                    grandChild = grandChild.previousSibling().toElement();
-               }
-               //kdDebug(9002) <<"ref: "<< ref <<"  title: " << title << endl;
-//            }
+                    DocTreeItem* dItem = new DocTreeItem(item, Doc, dtitle, context());
+                    dItem->setFileName(fi.dirPath( true ) +"/"+ dref);
+                }
+                grandChild = grandChild.previousSibling().toElement();
+            }
+            //kdDebug(9002) <<"ref: "<< ref <<"  title: " << title << endl;
+            //            }
             childEl = childEl.previousSibling().toElement();
         }
     }
@@ -928,21 +976,21 @@ void DocTreeQtFolder::refresh()
 
 bool DocTreeViewWidget::initKDocKDELibs()
 {
-/*    KConfig *config = DocTreeViewFactory::instance()->config();
-    config->setGroup( "General" );
-    kdelibskdoc = config->readBoolEntry("displayKDELibsKDoc", false);
-
-    if ( kdelibskdoc ) {
-        if( folder_kdelibs ) return true;
-        folder_kdelibs = new DocTreeKDELibsFolder(docView, "ctx_kdelibs");
-        folder_kdelibs->refresh();
-        return true;
-    } else {
-        if( folder_kdelibs )
-            delete folder_kdelibs;
-        folder_kdelibs = 0L;
-        return false;
-    }*/
+    /*    KConfig *config = DocTreeViewFactory::instance()->config();
+        config->setGroup( "General" );
+        kdelibskdoc = config->readBoolEntry("displayKDELibsKDoc", false);
+     
+        if ( kdelibskdoc ) {
+            if( folder_kdelibs ) return true;
+            folder_kdelibs = new DocTreeKDELibsFolder(docView, "ctx_kdelibs");
+            folder_kdelibs->refresh();
+            return true;
+        } else {
+            if( folder_kdelibs )
+                delete folder_kdelibs;
+            folder_kdelibs = 0L;
+            return false;
+        }*/
     return true;
 }
 /**************************************/
@@ -950,15 +998,63 @@ bool DocTreeViewWidget::initKDocKDELibs()
 /**************************************/
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
-    : QVBox(0, "doc tree widget"), m_activeTreeItem ( 0L )
+        : QVBox(0, "doc tree widget"), m_activeTreeItem ( 0L ), indexMode ( plainListMode ), // will be switched
+        subStringSearch( false )
 {
-    /* initializing the documentation toolbar */
-    searchToolbar = new QHBox ( this, "search toolbar" );
+
+    /* initializing the tree/index switch */
+    modeSwitch = new KTabCtl(this, "mode switch");
+
+    /* create the 2 tabs */
+    treeWidget = new QVBox(modeSwitch, "tree mode widget");
+    indexWidget = new QVBox(modeSwitch, "index mode widget");
+
+    // INDEX MODE INIT
+    QHBox *hbo = new QHBox(indexWidget, "label + edit");
+    hbo->setMargin( 2 );
+    QLabel *l = new QLabel( 0, i18n("&Search:"), hbo, "search-label" );
+    filterEdit = new DocLineEdit( hbo, "index mode filter line edit" );
+    l->setBuddy(filterEdit);
+
+    subSearchButton = new QToolButton ( hbo, "sub search check" );
+    subSearchButton->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, 0) );
+    subSearchButton->setPixmap ( SmallIcon ( "pause" ) );
+    QToolTip::add ( subSearchButton, i18n ( "Search Substrings" ) );
+
+    indexModeSwitch = new QToolButton ( hbo, "index mode switch" );
+    indexModeSwitch->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, 0) );
+    indexModeSwitch->setPixmap ( SmallIcon ( "pause" ) );
+    QToolTip::add ( indexModeSwitch, i18n ( "Show Topics for Index Items" ) );
+
+    indexView = new KListView ( indexWidget, "documentation index list view" );
+
+    indexView->setFocusPolicy(ClickFocus);
+    indexView->setResizeMode(QListView::LastColumn);
+    indexView->addColumn(QString::null);
+    indexView->setSorting(0);
+    indexView->header()->hide();
+
+    connect ( filterEdit, SIGNAL ( textChanged(const QString &) ), this, SLOT ( slotFilterTextChanged(const QString &) ) );
+    connect ( filterEdit, SIGNAL ( returnPressed() ), this, SLOT ( slotFilterReturn() ) );
+    connect ( filterEdit, SIGNAL ( upPressed() ), this, SLOT ( slotIndexPrevMatch() ) );
+    connect ( filterEdit, SIGNAL ( downPressed() ), this, SLOT ( slotIndexNextMatch() ) );
+    connect ( indexView, SIGNAL ( executed(QListViewItem *) ), this, SLOT ( slotIndexItemExecuted(QListViewItem *) ) );
+    connect ( indexView, SIGNAL ( returnPressed(QListViewItem *) ), this, SLOT ( slotIndexItemExecuted(QListViewItem *) ) );
+
+    connect ( modeSwitch, SIGNAL ( tabSelected(int) ), this, SLOT ( slotCurrentTabChanged(int) ) );
+
+    connect ( subSearchButton, SIGNAL ( clicked() ), this, SLOT ( slotSubstringCheckClicked() ) );
+    connect ( indexModeSwitch, SIGNAL ( clicked() ), this, SLOT ( slotIndexModeCheckClicked() ) );
+
+    // TREE MODE INIT
+
+    /* initializing the documentation tree toolbar */
+    searchToolbar = new QHBox ( treeWidget, "search toolbar" );
     searchToolbar->setMargin ( 2 );
     searchToolbar->setSpacing ( 2 );
 
     completionCombo = new KHistoryCombo ( true, searchToolbar, "completion combo box" );
-    
+
     startButton = new QToolButton ( searchToolbar, "start searching" );
     startButton->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, startButton->sizePolicy().hasHeightForWidth()) );
     startButton->setPixmap ( SmallIcon ( "key_enter" ) );
@@ -976,7 +1072,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     QToolTip::add ( prevButton, i18n ( "Jump to last matching entry" ) );
     prevButton->setEnabled( false );
 
-    docView = new KListView ( this, "documentation list view" );
+    docView = new KListView ( treeWidget, "documentation list view" );
 
     docView->setFocusPolicy(ClickFocus);
     docView->setRootIsDecorated(true);
@@ -1006,7 +1102,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit)
         folder_toc.append(new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit)));
 
-//    initKDocKDELibs();
+    //    initKDocKDELibs();
 
     KConfig *config = DocTreeViewFactory::instance()->config();
     if (config)
@@ -1028,7 +1124,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
             folder_kdoc.append(kdf);
         }
     }
-    
+
     if (config)
     {
         config->setGroup("General Doxygen");
@@ -1049,17 +1145,17 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
         }
     }
 
-        
-//    folder_doxygen   = new DocTreeDoxygenFolder(docView, "ctx_doxygen");
-    
-//    folder_doxygen->refresh();
+
+    //    folder_doxygen   = new DocTreeDoxygenFolder(docView, "ctx_doxygen");
+
+    //    folder_doxygen->refresh();
 
     // eventually, Qt docu extra
-/*    QListViewItem* pChild = folder_doxygen->firstChild();
-    while (pChild && pChild->text(0) != "qt") {
-        pChild = pChild->nextSibling();
-    }
-*/
+    /*    QListViewItem* pChild = folder_doxygen->firstChild();
+        while (pChild && pChild->text(0) != "qt") {
+            pChild = pChild->nextSibling();
+        }
+    */
     if (config)
     {
         config->setGroup("General Qt");
@@ -1101,36 +1197,22 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     connect ( docView, SIGNAL ( selectionChanged ( QListViewItem* ) ), this, SLOT ( slotSelectionChanged ( QListViewItem* ) ) );
 
     m_part = part;
+
+//    modeSwitch->setShape(QTabBar::TriangularAbove);
+    modeSwitch->setBorder(false);
+    modeSwitch->addTab(treeWidget, i18n("Con&tents"));
+    modeSwitch->addTab(indexWidget, i18n("&Index"));
 }
 
 
 DocTreeViewWidget::~DocTreeViewWidget()
 {}
-/*
-void DocTreeViewWidget::searchForItem ( const QString& currentText )
-{
-	completionCombo->addToHistory( currentText );
-	QListViewItem* current = docView->firstChild();
-	if( current->firstChild() )
-	{  //only allow items with childs to be searched in
-		QListViewItemIterator  docViewIterator( current );
-		while( docViewIterator.current() )
-		{// now we do the search
-			if( docViewIterator.current()->text(0).find( currentText, false )>=0 )
-			{
-				searchResultList.append( docViewIterator.current() );
-			}
-			++docViewIterator;
-		}
-	}
-}
-*/
 
 void DocTreeViewWidget::searchForItem ( const QString& currentText )
 {
     completionCombo->addToHistory( currentText );
 
-    QListViewItemIterator  docViewIterator( docView );
+    QListViewItemIterator docViewIterator( docView );
     while( docViewIterator.current() )
     {
         // Load this category
@@ -1147,45 +1229,45 @@ void DocTreeViewWidget::searchForItem ( const QString& currentText )
 
 void DocTreeViewWidget::slotJumpToNextMatch()
 {
-	if( searchResultList.next() )
-	{
-		docView->setSelected ( searchResultList.current(), true );
-		docView->ensureItemVisible ( searchResultList.current() );
-		slotItemExecuted ( searchResultList.current() );
-		prevButton->setEnabled( true );
+    if( searchResultList.next() )
+    {
+        docView->setSelected ( searchResultList.current(), true );
+        docView->ensureItemVisible ( searchResultList.current() );
+        slotItemExecuted ( searchResultList.current() );
+        prevButton->setEnabled( true );
 
-		if(searchResultList.current() == searchResultList.getLast() )
-			nextButton->setEnabled( false );
-	}
-	else
-	{
-		searchResultList.last();
-	}
+        if(searchResultList.current() == searchResultList.getLast() )
+            nextButton->setEnabled( false );
+    }
+    else
+    {
+        searchResultList.last();
+    }
 
 }
 
 void DocTreeViewWidget::slotJumpToPrevMatch()
 {
-	if( searchResultList.prev() )
-	{
-		docView->setSelected ( searchResultList.current(), true );
-		docView->ensureItemVisible ( searchResultList.current() );
-		slotItemExecuted ( searchResultList.current() );
-		nextButton->setEnabled( true );
+    if( searchResultList.prev() )
+    {
+        docView->setSelected ( searchResultList.current(), true );
+        docView->ensureItemVisible ( searchResultList.current() );
+        slotItemExecuted ( searchResultList.current() );
+        nextButton->setEnabled( true );
 
-		if(searchResultList.current() == searchResultList.getFirst() )
-			prevButton->setEnabled( false );
-	}
-	else
-	{
-		searchResultList.first();
-	 }
+        if(searchResultList.current() == searchResultList.getFirst() )
+            prevButton->setEnabled( false );
+    }
+    else
+    {
+        searchResultList.first();
+    }
 }
 
 void DocTreeViewWidget::slotStartSearching()
 {
     QString currentText = completionCombo->currentText();
-	slotHistoryReturnPressed ( currentText );
+    slotHistoryReturnPressed ( currentText );
 }
 
 void DocTreeViewWidget::slotHistoryReturnPressed ( const QString& currentText )
@@ -1194,41 +1276,41 @@ void DocTreeViewWidget::slotHistoryReturnPressed ( const QString& currentText )
         docView->setCurrentItem( docView->firstChild() );
 
     nextButton->setEnabled( false );
-	prevButton->setEnabled( false );
-	searchResultList.clear();
+    prevButton->setEnabled( false );
+    searchResultList.clear();
 
-	if( currentText.length() > 0 )
-		searchForItem( currentText ); //fills searchResultList
+    if( currentText.length() > 0 )
+        searchForItem( currentText ); //fills searchResultList
 
 
-	if ( searchResultList.count() )
-	{
-		kdDebug ( 9002 ) << "Found a matching entry!" << endl;
-		docView->setSelected ( searchResultList.first(), true );
-		docView->ensureItemVisible (  searchResultList.first() );
-		slotItemExecuted ( searchResultList.first() );
-	}
-	if ( searchResultList.count() > 1 )
-	{
-		nextButton->setEnabled( true );
-	}
+    if ( searchResultList.count() )
+    {
+        kdDebug ( 9002 ) << "Found a matching entry!" << endl;
+        docView->setSelected ( searchResultList.first(), true );
+        docView->ensureItemVisible (  searchResultList.first() );
+        slotItemExecuted ( searchResultList.first() );
+    }
+    if ( searchResultList.count() > 1 )
+    {
+        nextButton->setEnabled( true );
+    }
 }
 
 void DocTreeViewWidget::slotSelectionChanged ( QListViewItem* item )
 {
-	contextItem = item;
+    contextItem = item;
 
-	if( !item->parent() )
-	{// current is a toplevel item, so we initialize all childs
-		QListViewItem * myChild = item->firstChild();
-		while( myChild && myChild->parent())
-		{// only initialize current folder, not the below ones
-			myChild->setOpen( true );
-			myChild->setOpen( false );
+    if( !item->parent() )
+    {// current is a toplevel item, so we initialize all childs
+        QListViewItem * myChild = item->firstChild();
+        while( myChild && myChild->parent())
+        {// only initialize current folder, not the below ones
+            myChild->setOpen( true );
+            myChild->setOpen( false );
 
-			myChild = myChild->itemBelow();
-		}
-	}
+            myChild = myChild->itemBelow();
+        }
+    }
 
 }
 
@@ -1246,7 +1328,8 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
         return;
 
     // avoid empty pages when clicking on .toc files, choose its first child instead
-    if (ident.right(4) == ".toc") {
+    if (ident.right(4) == ".toc")
+    {
         dtitem = static_cast<DocTreeItem*>(dtitem->firstChild());
         if (!dtitem) return;
         ident = dtitem->fileName();
@@ -1274,9 +1357,12 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
     {
         i = i->parent();
     }
-    if ( i == folder_project ) {
+    if ( i == folder_project )
+    {
         popup.insertItem(i18n("Project Properties"), this, SLOT(slotConfigureProject()));
-    } else {
+    }
+    else
+    {
         popup.insertItem(i18n("Properties"), this, SLOT(slotConfigure()));
     }
     if ( i != folder_bookmarks && dItem && !dItem->fileName().isEmpty() )
@@ -1317,14 +1403,15 @@ void DocTreeViewWidget::slotConfigureProject()
 
     DocTreeProjectConfigWidget *w2 = 0;
 
-    if(m_part->project()) {
-      QVBox *vbox2 = dlg.addVBoxPage(i18n("Documentation Tree: Project"));
-      w2 = new DocTreeProjectConfigWidget(this, vbox2, m_part->project(),"doctreeview project config widget");
-      connect(&dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
-      dlg.exec();
+    if(m_part->project())
+    {
+        QVBox *vbox2 = dlg.addVBoxPage(i18n("Documentation Tree: Project"));
+        w2 = new DocTreeProjectConfigWidget(this, vbox2, m_part->project(),"doctreeview project config widget");
+        connect(&dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
+        dlg.exec();
     }
     if(w2)
-      delete w2;
+        delete w2;
 }
 
 
@@ -1339,12 +1426,12 @@ void DocTreeViewWidget::configurationChanged()
 void DocTreeViewWidget::refresh()
 {
     kdDebug(9002) << "DocTreeViewWidget::refresh()" << endl;
-//    folder_doxygen->refresh();
+    //    folder_doxygen->refresh();
     folder_bookmarks->refresh();
     folder_project->refresh();
-    
-/*    if( folder_kdelibs )
-        folder_kdelibs->refresh();*/
+
+    /*    if( folder_kdelibs )
+            folder_kdelibs->refresh();*/
 
     folder_devhelp.setAutoDelete(true);
     folder_devhelp.clear();
@@ -1359,8 +1446,8 @@ void DocTreeViewWidget::refresh()
         if( !ignoredh.contains( QFileInfo(*tit).baseName() ) )
             folder_devhelp.append(new DocTreeDevHelpFolder(docView, *tit, QString("ctx_%1").arg(*tit)));
     }
-    
-       
+
+
     DocTreeTocFolder *item;
     for ( item = folder_toc.first(); item; item = folder_toc.next() )
         delete item;
@@ -1379,7 +1466,7 @@ void DocTreeViewWidget::refresh()
     folder_kdoc.setAutoDelete(true);
     folder_kdoc.clear();
     folder_kdoc.setAutoDelete(false);
-    
+
     KConfig *config = DocTreeViewFactory::instance()->config();
     if (config)
     {
@@ -1393,11 +1480,11 @@ void DocTreeViewWidget::refresh()
             folder_kdoc.append(kdf);
         }
     }
-   
+
     folder_doxygen.setAutoDelete(true);
     folder_doxygen.clear();
     folder_doxygen.setAutoDelete(false);
-    
+
     if (config)
     {
         config->setGroup("General Doxygen");
@@ -1411,11 +1498,11 @@ void DocTreeViewWidget::refresh()
         }
     }
 
-        
+
     folder_qt.setAutoDelete(true);
     folder_qt.clear();
     folder_qt.setAutoDelete(false);
-    
+
     if (config)
     {
         config->setGroup("General Qt");
@@ -1435,7 +1522,8 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
 {
     folder_project->setProject(project);
     folder_project->refresh();
-    if(!project) {
+    if(!project)
+    {
         kdDebug(9002) << "No Project...." << endl;
         return;
     }
@@ -1450,7 +1538,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     QPtrListIterator<DocTreeDevHelpFolder> itdh(folder_devhelp);
     for (; itdh.current(); ++itdh)
         docView->takeItem(itdh.current());
-    
+
     QPtrListIterator<DocTreeTocFolder> it1(folder_toc);
     for (; it1.current(); ++it1)
         docView->takeItem(it1.current());
@@ -1458,17 +1546,17 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     QPtrListIterator<DocTreeKDELibsFolder> itk(folder_kdoc);
     for (; itk.current(); ++itk)
         docView->takeItem(itk.current());
-//    if(folder_doxygen) docView->takeItem(folder_doxygen);
+    //    if(folder_doxygen) docView->takeItem(folder_doxygen);
     QPtrListIterator<DocTreeDoxygenFolder> itx(folder_doxygen);
     for (; itx.current(); ++itx)
         docView->takeItem(itx.current());
-    
+
     QPtrListIterator<DocTreeQtFolder> itq(folder_qt);
     for (; itq.current(); ++itq)
         docView->takeItem(itq.current());
-//    if(folder_qt) docView->takeItem(folder_qt);
-//    if(folder_kdelibs) docView->takeItem(folder_kdelibs);
-//    docView->takeItem(folder_kdevelop);
+    //    if(folder_qt) docView->takeItem(folder_qt);
+    //    if(folder_kdelibs) docView->takeItem(folder_kdelibs);
+    //    docView->takeItem(folder_kdevelop);
 
     // .. and insert all again except for ignored items
     QStringList ignoretocs = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc");
@@ -1481,38 +1569,39 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     QPtrListIterator<DocTreeDevHelpFolder> itdh2(folder_devhelp);
     for (; itdh2.current(); ++itdh2)
         docView->insertItem(itdh2.current());
-    
+
     QPtrListIterator<DocTreeTocFolder> it2(folder_toc);
-//    it2.toLast();
-//    for (; it2.current(); --it2) {
-    for (; it2.current(); ++it2) {
+    //    it2.toLast();
+    //    for (; it2.current(); --it2) {
+    for (; it2.current(); ++it2)
+    {
         if (!ignoretocs.contains(it2.current()->tocName()))
             docView->insertItem(it2.current());
     }
 
-//    docView->insertItem(folder_doxygen);
+    //    docView->insertItem(folder_doxygen);
     QPtrListIterator<DocTreeKDELibsFolder> itk2(folder_kdoc);
-//    itk2.toLast();
-//    for (; itk2.current(); --itk2)
+    //    itk2.toLast();
+    //    for (; itk2.current(); --itk2)
     for (; itk2.current(); ++itk2)
         docView->insertItem(itk2.current());
-    
+
     QPtrListIterator<DocTreeDoxygenFolder> itx2(folder_doxygen);
-//    itx2.toLast();
-//    for (; itx2.current(); --itx2)
+    //    itx2.toLast();
+    //    for (; itx2.current(); --itx2)
     for (; itx2.current(); ++itx2)
         docView->insertItem(itx2.current());
-    
-/*    if(folder_kdelibs && kdelibskdoc )
-        if (!ignoretocs.contains("kde"))
-            docView->insertItem(folder_kdelibs);
-*/
+
+    /*    if(folder_kdelibs && kdelibskdoc )
+            if (!ignoretocs.contains("kde"))
+                docView->insertItem(folder_kdelibs);
+    */
     QPtrListIterator<DocTreeQtFolder> itq2(folder_qt);
-//    itq2.toLast();
-//    for (; itq2.current(); --itq2)
+    //    itq2.toLast();
+    //    for (; itq2.current(); --itq2)
     for (; itq2.current(); ++itq2)
         docView->insertItem(itq2.current());
-//    if(folder_qt) docView->insertItem(folder_qt);
+    //    if(folder_qt) docView->insertItem(folder_qt);
 
     docView->triggerUpdate();
 }
@@ -1523,7 +1612,7 @@ QString DocTreeViewWidget::locatehtml(const QString &fileName)
 
     QString path = locate("html", KGlobal::locale()->language() + '/' + fileName);
     if (path.isNull())
-       path = locate("html", "default/" + fileName);
+        path = locate("html", "default/" + fileName);
 
     return path;
 }
@@ -1531,27 +1620,234 @@ QString DocTreeViewWidget::locatehtml(const QString &fileName)
 
 void DocTreeViewWidget::slotAddBookmark()
 {
-	DocTreeItem *item = dynamic_cast<DocTreeItem*>( contextItem );
-	if( item )
-	{
-		DocTreeViewTool::addBookmark( item->text(0), item->fileName() );
-		folder_bookmarks->refresh();
-	}
+    DocTreeItem *item = dynamic_cast<DocTreeItem*>( contextItem );
+    if( item )
+    {
+        DocTreeViewTool::addBookmark( item->text(0), item->fileName() );
+        folder_bookmarks->refresh();
+    }
 }
 
 void DocTreeViewWidget::slotRemoveBookmark()
 {
-	DocTreeItem *item = dynamic_cast<DocTreeItem*>( contextItem );
-	if( item )
-	{
-		int posFolder = docView->itemIndex( folder_bookmarks );
-		int i = docView->itemIndex( item ) - posFolder;
-		//kdDebug(9002) << "remove item: " << i << endl;
+    DocTreeItem *item = dynamic_cast<DocTreeItem*>( contextItem );
+    if( item )
+    {
+        int posFolder = docView->itemIndex( folder_bookmarks );
+        int i = docView->itemIndex( item ) - posFolder;
+        //kdDebug(9002) << "remove item: " << i << endl;
 
-		DocTreeViewTool::removeBookmark( i );
+        DocTreeViewTool::removeBookmark( i );
 
-		folder_bookmarks->refresh();
-	}
+        folder_bookmarks->refresh();
+    }
+}
+
+/* INDEX MODE SLOTS */
+
+void DocTreeViewWidget::slotFilterTextChanged(const QString &nt)
+{
+    int res;
+    QListViewItemIterator docViewIterator( indexView );
+    QListViewItem *it = 0;
+
+    while( docViewIterator.current() )
+    {
+        res = docViewIterator.current()->text(0).find(nt, 0, false);
+        //  Not listed  OR  substring but !bSub
+        if( (res == -1) || (!subStringSearch && (res > 0)) ) docViewIterator.current()->setVisible(false);
+        else
+        {
+            if (it == 0) it = docViewIterator.current();
+            docViewIterator.current()->setVisible(true);
+        }
+
+        ++docViewIterator;
+    }
+    if (it)
+        indexView->setCurrentItem(it);
+}
+
+void DocTreeViewWidget::slotFilterReturn()
+{
+    indexView->setFocus();
+/*    if (indexView->currentItem())
+    {
+        indexView->setFocus();
+        slotItemExecuted(indexView->currentItem());
+    }*/
+}
+
+void DocTreeViewWidget::slotIndexItemExecuted(QListViewItem *item)
+{
+    IndexTreeData *itd;
+    QPtrList<IndexTreeData> *resultList;
+
+    if (!item) return;
+
+    QString ident = item->text(0);
+    if (ident.isEmpty()) return;
+
+    QPtrListIterator<IndexTreeData> ptrListIterator( indexItems );
+    resultList = new QPtrList<IndexTreeData>();
+
+    while( ptrListIterator.current() )
+    {
+        itd = static_cast<IndexTreeData *>(ptrListIterator.current());
+
+        if((indexMode == filteredMode) && (itd->text() == ident)) resultList->append(itd);
+        else if((indexMode == plainListMode) && ((itd->text() + " (" + itd->parent() + ")") == ident)) resultList->append(itd);
+        ++ptrListIterator;
+    }
+
+    if(resultList->count() == 0)
+    {
+    }
+    else if(resultList->count() == 1)
+    {
+        m_part->partController()->showDocument(resultList->first()->fileName(), ident);
+        m_part->mainWindow()->lowerView(this);
+    }
+    else
+    {
+        ChooseDlg chooseDlg(this, "choose dlg", m_part);
+        chooseDlg.setList(resultList);
+        chooseDlg.exec();
+    }
+
+    delete resultList;
+}
+
+void DocTreeViewWidget::filterMultiReferences()
+{
+    bool bFound;
+    IndexTreeData *itd;
+    IndexTreeData *itd2;
+
+    QPtrListIterator<IndexTreeData> ptrListIterator( indexItems );
+    while( ptrListIterator.current() )
+    {
+        itd = static_cast<IndexTreeData *>(ptrListIterator.current());
+        bFound = false;
+
+        QPtrListIterator<IndexTreeData> ptrListIterator2( indexItems );
+        while( ptrListIterator2.current() )
+        {
+            itd2 = static_cast<IndexTreeData *>(ptrListIterator2.current());
+
+            if( itd2->isVisible() && (itd2->text() == itd->text()) )
+            {
+                bFound = true;
+                break;
+            }
+            ++ptrListIterator2;
+        }
+
+        // Make it visible !
+        if(bFound == false) itd->setVisible(true);
+
+        qApp->processEvents();
+        ++ptrListIterator;
+    }
+}
+
+void DocTreeViewWidget::slotCurrentTabChanged(int curtab)
+{
+    IndexTreeData *iI;
+    
+    if((curtab == 1) && (indexView->childCount() == 0))
+    {
+        // Index list not created yet
+        QProgressDialog progress(i18n("Generating Index..."), 0, 100, this, "progDialog", true);
+
+        indexItems.clear();
+        progress.setProgress(0);
+
+        /* Load Data out of the DocView -> easier changes later, but bit slower*/
+        QListViewItemIterator docViewIterator( docView );
+        while( docViewIterator.current() )
+        {
+            // Load this category
+            docViewIterator.current()->setOpen(true);
+            docViewIterator.current()->setOpen(false);
+
+            DocTreeItem *dtitem = static_cast<DocTreeItem*>(docViewIterator.current());
+
+            // Save them in a list
+            iI = new IndexTreeData(dtitem->text(0), (dtitem->parent() != 0) ? dtitem->parent()->text(0) : QString(" "), dtitem->fileName());
+            indexItems.append(iI);
+
+            qApp->processEvents();
+            ++docViewIterator;
+        }
+        progress.setProgress(30);
+
+        filterMultiReferences();
+
+        progress.setProgress(90);
+
+        // Put them in the list
+        slotIndexModeCheckClicked();
+        
+        progress.setProgress(100);
+    }
+}
+
+void DocTreeViewWidget::slotSubstringCheckClicked()
+{
+    subStringSearch = !subStringSearch;
+    slotFilterTextChanged(filterEdit->text());
+}
+
+void DocTreeViewWidget::slotIndexModeCheckClicked()
+{
+    QString s;
+    
+    if(indexMode == filteredMode)   indexMode = plainListMode;
+    else                            indexMode = filteredMode;
+    
+    indexView->clear();
+    
+    QPtrListIterator<IndexTreeData> ptrListIterator( indexItems );
+    while( ptrListIterator.current() )
+    {
+        IndexTreeData *itd = static_cast<IndexTreeData *>(ptrListIterator.current());
+
+        if(indexMode == plainListMode) s = itd->text() + " (" + itd->parent() + ")";
+        else s = itd->text();
+        
+        if((indexMode == plainListMode) || itd->isVisible()) new QListViewItem(indexView, s);
+
+        ++ptrListIterator;
+    }
+    
+    slotFilterTextChanged(filterEdit->text());
+}
+
+void DocTreeViewWidget::slotIndexNextMatch( )
+{
+    if (indexView->currentItem())
+    {
+        QListViewItem *below = indexView->currentItem()->itemBelow();
+        if (below)
+        {
+            indexView->setCurrentItem(below);
+            indexView->ensureItemVisible(below);
+        }
+    }
+}
+
+void DocTreeViewWidget::slotIndexPrevMatch( )
+{
+    if (indexView->currentItem())
+    {
+        QListViewItem *above = indexView->currentItem()->itemAbove();
+        if (above)
+        {
+            indexView->setCurrentItem(above);
+            indexView->ensureItemVisible(above);
+        }
+    }
 }
 
 #include "doctreeviewwidget.moc"

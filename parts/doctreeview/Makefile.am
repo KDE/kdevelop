@@ -9,7 +9,7 @@ kde_module_LTLIBRARIES = libkdevdoctreeview.la kio_kdeapi.la
 libkdevdoctreeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdoctreeview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp 				doctreeviewpart.cpp 				doctreeviewwidget.cpp  				doctreeglobalconfigwidgetbase.ui 				doctreeglobalconfigwidget.cpp 				adddocitemdlg.cpp 				docindexdlg.cpp 				docsearchdlg.cpp 				misc.cpp 				librarydocdlgbase.ui 				doctreeprojectconfigwidgetbase.ui 				doctreeprojectconfigwidget.cpp librarydocdlg.cpp librarydocdlg.h
+libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp 				doctreeviewpart.cpp 				doctreeviewwidget.cpp  				doctreeglobalconfigwidgetbase.ui 				doctreeglobalconfigwidget.cpp 				adddocitemdlg.cpp 				docindexdlg.cpp 				docsearchdlg.cpp 				misc.cpp 				librarydocdlgbase.ui 				doctreeprojectconfigwidgetbase.ui 				doctreeprojectconfigwidget.cpp librarydocdlg.cpp librarydocdlg.h doclineedit.cpp doclineedit.h choosedlg.cpp choosedlg.h
 
 bin_PROGRAMS = kdevelop-htdig
 kdevelop_htdig_SOURCES = htdigindex.cpp
