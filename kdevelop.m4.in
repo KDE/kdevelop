@@ -357,3 +357,33 @@ fi
 AC_SUBST(JAVA_SUBDIRS)
 ])
 
+AC_DEFUN(KDEV_CHECK_SVN,
+[
+AC_MSG_CHECKING(for Subversion svn-config)
+AC_ARG_WITH(subversion-dir,
+  [  --with-subversion-dir=DIR           where Subversion is installed ],
+  [
+    SVNCONFIG="$withval/bin/svn-config"
+  ])
+if test -z "$SVNCONFIG"; then
+  _SVNCONFIG="`svn-config --prefix`"
+  if test -n "$_SVNCONFIG"; then
+    SVNCONFIG="$_SVNCONFIG/bin/svn-config"
+  fi
+fi
+AC_SUBST(SVNCONFIG)
+if test -x "$SVNCONFIG"; then
+  SVN_SUBDIR=svn
+  SVNLD="`$SVNCONFIG --ldflags`"
+  SVNLIBS="`$SVNCONFIG --libs --cppflags`"
+  dnl ugly hack for subversion svn-config problems in 0.14.x, to be removed when svn-config is fixed
+  SVNINC="`$SVNCONFIG --includes` -I$_SVNCONFIG/include/subversion-1/"
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(svn-config not found)
+fi
+AC_SUBST(SVNLD)
+AC_SUBST(SVNINC)
+AC_SUBST(SVNLIBS)
+AC_SUBST(SVN_SUBDIR)
+])
