@@ -22,6 +22,7 @@
   #include "tokenizer.h"
 
 
+  int cont=0;           /* Continue parsing defines. */
   int line_num=1;       /* Counter for the current line being parsed         */
   int comment_start=0;  /* Line where a comment starts (for nested comments) */
 
@@ -46,6 +47,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %option yylineno
 %x comment
+%x define
 %%
     /*==============> Strip whitespace and tabs <==============*/
 {WS}         {}
@@ -66,9 +68,10 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "struct"        {return CPSTRUCT;}
 "union"         {return CPUNION;}
 
-    /*==============> Ignore Q_EXPORT:s <==============*/
+    /*==============> Ignored stuff <==============*/
 "Q_EXPORT"       {}
 "Q_EXPORTH"      {}
+"inline"         {}
 
     /*==============> String <==============*/
 "L"?["]{SCHAR}*["]     {return STRING;}
@@ -106,13 +109,22 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
     /*==============> Numbers <==============*/
 {NUM}        {return STRING;}
- 
+
     /*==============> Inrease the line counter at CR <==============*/
 "\n"         {line_num++;}
  
     /*==============> Strip preprocessor stuff <==============*/   
-"#"(.)*"\n"  {line_num++;}
+"#"[aceimpsuw ](.)*"\n" {line_num++;}
 
+    /*==============> Skip defines <==============*/   
+"#define"              BEGIN(define);
+<define>[^\\\n]*       
+<define>"\\"           {cont=1;}
+<define>"\n"           {if(cont==1) 
+                          cont=0;
+                        else 
+                          BEGIN(INITIAL);}
+ 
     /*==============> Strip // comments <==============*/
 "//"(.)*"\n" {line_num++;}
 
