@@ -138,6 +138,9 @@ private:
 
   /** Fills the show-hide menu for a tool view (output or tree view) */
   void fillToolViewsMenu(EView eView);
+  /** Allows to override kmdi default "Window" menu. This allows to use "Window"
+  menu actions from KParts among with kmdi default window actions.*/
+  void setWindowMenu(QPopupMenu *menu);
 
   virtual bool queryClose();
   virtual bool queryExit();
@@ -169,6 +172,8 @@ The newly created KMdiChildView is not yet connected to any other widget of Gide
   void saveMDISettings();
   void loadMDISettings();
 
+  void clearWindowMenu();
+
   QMap<QWidget*,KMdiChildView*> m_widgetMap;    //!< Key: QWidget* --> Data:KMdiChildView*.\n
                                                    //!< Contains the same pairs as \ref MainWindow::m_childViewMap "m_childViewMap"
   QMap<KMdiChildView*,QWidget*> m_childViewMap; //!< Key: KMdiChildView* --> Data:QWidget*.\n
@@ -191,6 +196,8 @@ The newly created KMdiChildView is not yet connected to any other widget of Gide
   KToggleAction*   m_toggleViewbar;
 
   MainWindowShare*   m_pMainWindowShare;
+
+  QValueList<int> m_windowMenus;
 };
 
 //=========================

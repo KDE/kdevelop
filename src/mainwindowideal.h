@@ -124,6 +124,8 @@ private:
   void raiseTabbar( KTabZoomWidget *tabBar );
   void updateTabForPart( KParts::ReadWritePart * );
 
+  void clearWindowMenu();
+
   KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar, *m_raiseEditor;
 
   KTabWidget *m_tabWidget;
@@ -133,6 +135,9 @@ private:
 
   QMap<QWidget*, QDateTime> m_timeStamps;
   bool m_bSwitching;
+
+  QValueList<int> m_windowMenus;
+  QPtrList<KAction> m_windowDynamicMenus;
 
   friend class IDEAlEventFilter;
 };

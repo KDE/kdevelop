@@ -275,16 +275,12 @@ void MainWindow::init()
           this, SLOT(slotSaveAdditionalViewProperties(const QString&, QDomElement*)));
 
   if (!isFakingSDIApplication()) {
+    QPopupMenu *menu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
     unsigned int count = menuBar()->count();
-    unsigned int idx;
-    for (idx = 0; idx < count; idx++) {
-      int id = menuBar()->idAt(idx);
-      if (menuBar()->text(id) == i18n("&Window")) {
-        menuBar()->removeItem(id);
-        break;
-      }
-    }
-    menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, count-2); // standard position is left to the last ('Help')
+    if (menu)
+        setWindowMenu(menu);
+    else
+        menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, count-2); // standard position is left to the last ('Help')
   }
 
   if ( PluginController::pluginServices().isEmpty() ) {
@@ -773,11 +769,14 @@ void MainWindow::fillWindowMenu()
    }
    // construct the menu and its submenus
    if (!m_bClearingOfWindowMenuBlocked) {
-      m_pWindowMenu->clear();
+      clearWindowMenu();
    }
    int closeId         = m_pWindowMenu->insertItem(i18n("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
+   m_windowMenus.append(closeId);
    int closeAllId      = m_pWindowMenu->insertItem(i18n("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
+   m_windowMenus.append(closeAllId);
    int closeAllOtherId = m_pWindowMenu->insertItem(i18n("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
+   m_windowMenus.append(closeAllOtherId);
    if (bNoViewOpened) {
       m_pWindowMenu->setItemEnabled(closeId, FALSE);
       m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
@@ -785,13 +784,15 @@ void MainWindow::fillWindowMenu()
    }
    if (!bTabPageMode) {
       int iconifyId = m_pWindowMenu->insertItem(i18n("&Minimize All"), this, SLOT(iconifyAllViews()));
+      m_windowMenus.append(iconifyId);
       if (bNoViewOpened) {
          m_pWindowMenu->setItemEnabled(iconifyId, FALSE);
       }
    }
-   m_pWindowMenu->insertSeparator();
+   m_windowMenus.append(m_pWindowMenu->insertSeparator());
    if (!bTabPageMode) {
       int placMenuId = m_pWindowMenu->insertItem(i18n("&Tile..."), m_pPlacingMenu);
+      m_windowMenus.append(placMenuId);
       m_pPlacingMenu->clear();
       m_pPlacingMenu->insertItem(i18n("Ca&scade Windows"), m_pMdi,SLOT(cascadeWindows()));
       m_pPlacingMenu->insertItem(i18n("Cascade &Maximized"), m_pMdi,SLOT(cascadeMaximized()));
@@ -803,10 +804,11 @@ void MainWindow::fillWindowMenu()
       if (m_mdiMode == KMdi::ToplevelMode) {
          m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
       }
-      m_pWindowMenu->insertSeparator();
+      m_windowMenus.append(m_pWindowMenu->insertSeparator());
       int dockUndockId = m_pWindowMenu->insertItem(i18n("&Dock/Undock..."), m_pDockMenu);
-         m_pDockMenu->clear();
-      m_pWindowMenu->insertSeparator();
+      m_windowMenus.append(dockUndockId);
+      m_pDockMenu->clear();
+      m_windowMenus.append(m_pWindowMenu->insertSeparator());
       if (bNoViewOpened) {
          m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
          m_pWindowMenu->setItemEnabled(dockUndockId, FALSE);
@@ -871,12 +873,12 @@ void MainWindow::fillWindowMenu()
       }
 //      if (!inserted) {  // append it
          timeStamps.insert( timeStampIterator, timeStamp );
-            m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, indx+entryCount);
+            m_windowMenus.append(m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, indx+entryCount));
             if (pView == m_pCurrentWindow)
                m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+entryCount), TRUE);
             pView->setWindowMenuID( i);
             if (!bTabPageMode) {
-               m_pDockMenu->insertItem( item, pView, SLOT(slot_clickedInDockMenu()), 0, -1, indx);
+               m_windowMenus.append(m_pDockMenu->insertItem( item, pView, SLOT(slot_clickedInDockMenu()), 0, -1, indx));
                if (pView->isAttached())
                   m_pDockMenu->setItemChecked( m_pDockMenu->idAt( indx), TRUE);
             }
@@ -1339,6 +1341,23 @@ void MainWindow::restoreOutputViewTab()
   }
   previous_output_view = NULL;
 */
+}
+
+void MainWindow::clearWindowMenu( )
+{
+    for (QValueList<int>::iterator it = m_windowMenus.begin(); it != m_windowMenus.end(); ++it)
+    {
+        m_pWindowMenu->removeItem(*it);
+    }
+}
+
+void MainWindow::setWindowMenu(QPopupMenu *menu)
+{
+    if (m_pWindowMenu)
+        delete m_pWindowMenu;
+    m_pWindowMenu = menu;
+    m_pWindowMenu->setCheckable( TRUE);
+    QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 }
 
 #include "mainwindow.moc"

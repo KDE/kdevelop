@@ -135,6 +135,7 @@ MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
 void MainWindowIDEAl::init() {
 
     actionCollection()->setHighlightingEnabled( true );
+    m_windowDynamicMenus.setAutoDelete(true);
 
 #if (KDE_VERSION > 305)
     setStandardToolBarMenuEnabled( true );
@@ -457,13 +458,16 @@ void MainWindowIDEAl::saveSettings() {
 void MainWindowIDEAl::slotFillWindowMenu() {
     // construct the menu and its submenus
     bool bNoViewOpened = true;    // Assume no view is open yet
-    m_pWindowMenu->clear();       // Erase whole window menu
+    clearWindowMenu();
 
     // Construct fixed enties of the window menu
     int closeId         = m_pWindowMenu->insertItem(i18n("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
+    m_windowMenus.append(closeId);
     int closeAllId      = m_pWindowMenu->insertItem(i18n("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
+    m_windowMenus.append(closeAllId);
     int closeAllOtherId = m_pWindowMenu->insertItem(i18n("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
-    m_pWindowMenu->insertSeparator();
+    m_windowMenus.append(closeAllOtherId);
+    m_windowMenus.append(m_pWindowMenu->insertSeparator());
 
     int entryCount = m_pWindowMenu->count();
 
@@ -497,7 +501,8 @@ void MainWindowIDEAl::slotFillWindowMenu() {
         KToggleAction *action = new KToggleAction(name, 0, 0, name.latin1());
         action->setChecked(ro_part == PartController::getInstance()->activePart());
         connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
-    action->plug(m_pWindowMenu, indx);
+        action->plug(m_pWindowMenu, indx);
+        m_windowDynamicMenus.append(action);
         bNoViewOpened = false;   // Now we know that at least one view exists.
     }
 
@@ -782,6 +787,20 @@ void MainWindowIDEAl::restoreOutputViewTab()
 
 void MainWindowIDEAl::projectOpened() {
   loadSettings();
+}
+
+void MainWindowIDEAl::clearWindowMenu( )
+{
+    for (QValueList<int>::iterator it = m_windowMenus.begin(); it != m_windowMenus.end(); ++it)
+    {
+        m_pWindowMenu->removeItem(*it);
+    }
+    KAction *action;
+    for (action = m_windowDynamicMenus.first(); action; action = m_windowDynamicMenus.next())
+    {
+        action->unplug(m_pWindowMenu);
+    }
+    m_windowDynamicMenus.clear();
 }
 
 #include "mainwindowideal.moc"
