@@ -15,4 +15,4 @@ rcdir = $(kde_datadir)/kdevdocumentation
 rc_DATA = kdevpart_documentation.rc
 
 noinst_HEADERS = contentsview.h indexview.h docglobalconfigwidget.h docconfiglistview.h editcatalogdlg.h docutils.h searchview.h bookmarkview.h
-SUBDIRS = plugins tools data
+SUBDIRS = plugins tools data protocols

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=DocKDevTOCPlugin
+Exec=blubb
+Comment=Documentation plugin for KDevelopTOC documentation
+ServiceTypes=KDevelop/DocumentationPlugins
+X-KDevelop-Version=1
+X-KDE-Library=libdockdevtocplugin
