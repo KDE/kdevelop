@@ -1,4 +1,4 @@
-kdevelop (1:1.1beta2-19990131-1) stable; urgency=low
+kdevelop (1:1.1beta2-20000131-1) stable; urgency=low
 
   * New upstream version: 1.1beta2
   * Use --prefix in configure, set kde_confdir, kde_htmldir explicitly
