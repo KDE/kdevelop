@@ -2734,6 +2734,13 @@ bool Parser::parseLabeledStatement( StatementAST::Node& node )
 	AST::Node expr;
 	if( !parseConstantExpression(expr) ){
 	    reportError( i18n("expression expected") );
+	} else if( lex->lookAhead(0) == Token_ellipsis ){
+	    lex->nextToken();
+	    
+	    AST::Node expr2;
+	    if( !parseConstantExpression(expr2) ){
+	        reportError( i18n("expression expected") );
+	    }
 	}
 	ADVANCE( ':', ":" );
 
