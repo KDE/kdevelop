@@ -152,7 +152,7 @@ void KIconBorder::clearPixelLines(int startPixelLine, int numberPixelLine)
 
 	paint.begin(this);
 
-  paint.fillRect(0, startPixelLine, iconBorderWidth-2, numberPixelLine, colorGroup().background());		
+  paint.fillRect(0, startPixelLine, iconBorderWidth-2, numberPixelLine, colorGroup().background());
 
   paint.setPen(white);
   paint.drawLine(iconBorderWidth-2, startPixelLine, iconBorderWidth-2, startPixelLine + numberPixelLine);
@@ -396,6 +396,18 @@ KWriteView::~KWriteView() {
   releaseBuffer(this);
 }
 
+QPoint KWriteView::getCursorCoordinates() const
+{
+    int h, y, x;
+
+    h = kWriteDoc->fontHeight;
+    y = h*(cursor.y+1) - yPos;
+    x = cXPos - (xPos-2);
+
+    QPoint pt( x, y );
+    return pt;
+}
+
 bool KWriteView::event( QEvent *e )
 {
   if ( e->type() == KeyPress ){
@@ -439,7 +451,7 @@ void KWriteView::cursorRight(VConfig &c) {
       cursor.y++;
       cursor.x = -1;
     }
-  }  
+  }
 #ifdef QT_I18N
   if (cursor.x >= 0 &&
       iseucchar(kWriteDoc->textLine(cursor.y)->getChar(cursor.x))) {
@@ -462,10 +474,10 @@ void KWriteView::cursorLeftWord(VConfig &c) {
       if (c.flags & cfWrapCursor && cursor.y > 0) {
         cursor.y--;
         cursor.x = kWriteDoc->textLength(cursor.y);
-      }else break;  
+      }else break;
     }
     CurrLine = kWriteDoc->textLine(cursor.y);
-  
+
   }while( !isalnum(CurrLine->getChar(cursor.x)) ||
          isalnum(CurrLine->getChar(cursor.x - 1))
         );
@@ -485,8 +497,8 @@ void KWriteView::cursorRightWord(VConfig &c) {
         cursor.y++;
         cursor.x = -1;
       }else break;
-    }  
-    
+    }
+
     cursor.x++;
     CurrLine = kWriteDoc->textLine(cursor.y);
   }while( isalnum(CurrLine->getChar(cursor.x - 1)) ||
@@ -506,7 +518,7 @@ void KWriteView::cursorUp(VConfig &c) {
 
 void KWriteView::cursorDown(VConfig &c) {
   int x;
-  
+
   if (cursor.y == kWriteDoc->lastLine()) {
     x = kWriteDoc->textLength(cursor.y);
     if (cursor.x >= x) return;
@@ -515,7 +527,7 @@ void KWriteView::cursorDown(VConfig &c) {
   } else {
     cursor.y++;
     cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
-  }  
+  }
   update(c);
 }
 
@@ -527,7 +539,7 @@ void KWriteView::home(VConfig &c) {
 }
 
 void KWriteView::end(VConfig &c) {
-  
+
   cursor.x = kWriteDoc->textLength(cursor.y);
   cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
   update(c);
@@ -541,7 +553,7 @@ void KWriteView::pageUp(VConfig &c) {
 }
 
 void KWriteView::pageDown(VConfig &c) {
-  
+
   cursor.y += endLine - startLine;
   cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
   update(c);
@@ -556,7 +568,7 @@ void KWriteView::top(VConfig &c) {
 }
 
 void KWriteView::bottom(VConfig &c) {
-  
+
   cursor.x = 0;
   cursor.y = kWriteDoc->lastLine();
   cOldXPos = cXPos = 0;
@@ -606,12 +618,12 @@ void KWriteView::getVConfig(VConfig &c) {
 }
 
 void KWriteView::update(VConfig &c) {
-	
+
   if (cursor.x == c.cursor.x && cursor.y == c.cursor.y) return;
   exposeCursor = true;
 
   kWriteDoc->unmarkFound();
-  
+
   if (cursorOn) {
     tagLines(c.cursor.y, c.cursor.y);
     cursorOn = false;
@@ -2007,7 +2019,7 @@ void KWrite::initSearch(SConfig &s, int flags) {
         if ( cmpfct(line+s.cursor.x-strlen(searchFor), searchFor, strlen(searchFor)) == 0 )
           s.cursor.x-= strlen(searchFor);
     }
-    else 
+    else
     {
       if ( cmpfct(line+s.cursor.x, searchFor, strlen(searchFor)) == 0 )
         s.cursor.x+= strlen(searchFor);
@@ -2324,7 +2336,7 @@ void KWrite::previousBookmark()
  		normalizedLine = line % lineCount;
  	}
  	while(normalizedLine != startLine && !bookmarked(normalizedLine));
-		
+
  	if(normalizedLine != startLine) gotoPos(0, normalizedLine);
 }
 
@@ -2368,7 +2380,7 @@ void KWrite::clearBookmarks()
   kWriteDoc->clearBookmarks();
 }
 
-void KWrite::updateBMPopup() 
+void KWrite::updateBMPopup()
 {
   QPopupMenu* popup = (QPopupMenu *) sender();
 
@@ -2377,7 +2389,7 @@ void KWrite::updateBMPopup()
   }
 
   popup->insertSeparator();
-  
+
   for(int line = 0; line < kWriteDoc->getTextLineCount(); line++)
     {
       TextLine* textline = kWriteDoc->textLine(line);
@@ -2388,7 +2400,7 @@ void KWrite::updateBMPopup()
 	    sprintf(buf,"%s %d",i18n("Line").data(), line + 1);
 	    int z = popup->count();
 	    popup->insertItem(buf,z);
-	    if (z < 9) popup->setAccel(ALT+kw_bookmark_keys[z],z);       	
+	    if (z < 9) popup->setAccel(ALT+kw_bookmark_keys[z],z);
 	  }
     }
 }
@@ -2634,6 +2646,30 @@ void KWrite::delMarkedText()
   kWriteView->getVConfig(c);
   kWriteDoc->delMarkedText(kWriteView,c);
   kWriteDoc->updateViews();
+}
+
+QString KWrite::textLine( int i ) const
+{
+    KWrite* e = (KWrite*) this;
+    TextLine* line = e->doc()->textLine( i );
+    if( !line )
+        return QString::null;
+
+    QString txt = QString::fromLatin1( line->getText(), line->length() );
+    return txt;
+}
+
+void KWrite::insertText( const QString& s, bool /*mark*/ )
+{
+    VConfig c;
+    kWriteView->getVConfig( c );
+    kWriteDoc->insert( kWriteView, c, s );
+    kWriteDoc->updateViews();
+}
+
+QPoint KWrite::getCursorCoordinates() const
+{
+    return kWriteView->getCursorCoordinates();
 }
 
 #include "kwview.moc"

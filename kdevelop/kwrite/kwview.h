@@ -5,7 +5,7 @@
 
 #include <qscrbar.h>
 #include <qiodev.h>
-#include <kpopupmenu.h>                  	
+#include <kpopupmenu.h>
 #include <kconfig.h>
 
 #include "kwdialog.h"
@@ -192,6 +192,7 @@ class KWriteView : public QWidget {
     int getYPos() { return yPos;}
     int getRange(int midline);
     QPoint cursorPosition() { return QPoint(cursor.x, cursor.y); };
+    QPoint getCursorCoordinates() const;
 
 protected slots:
     void changeXPos(int);
@@ -237,7 +238,7 @@ protected slots:
     KWriteDoc *kWriteDoc;
     QScrollBar *xScroll;
     QScrollBar *yScroll;
-	
+
     KIconBorder *leftBorder;
 
     int xPos;
@@ -304,6 +305,14 @@ class KWrite : public QWidget {
   void setStepLine( int line );
   void clearStepLine();
   int getStepLine(){ return stepLine; }
+
+  /** */
+  QString textLine( int ) const;
+
+  /** */
+  void insertText( const QString& text, bool mark=FALSE );
+
+  QPoint getCursorCoordinates() const;
 
 //status functions
     /** Returns the current line number, that is the line the cursor is on.

@@ -59,8 +59,8 @@ DocViewMan::DocViewMan( CKDevelop* parent)
 
   m_docBookmarksList.setAutoDelete(TRUE);
   m_docBookmarksTitleList.setAutoDelete(TRUE);
-    
-  connect( this, SIGNAL(sig_viewActivated(QWidget*)), 
+
+  connect( this, SIGNAL(sig_viewActivated(QWidget*)),
            m_pParent, SLOT(slotViewSelected(QWidget*)) );
   connect( this, SIGNAL(sig_newStatus(const QString&)),
            m_pParent, SLOT(slotStatusMsg(const QString&)) );
@@ -277,7 +277,7 @@ void DocViewMan::doOptionsSyntaxHighlighting()
   }
 }
 
-/** shared helper function for the 4 slots 
+/** shared helper function for the 4 slots
   * doOptionsEditor, doOptionsEditorColors,
   * doOptionsSyntaxHighlightingDefaults and doOptionsSyntaxHighlighting
   */
@@ -403,7 +403,7 @@ bool DocViewMan::curDocIsHeaderFile()
 /** */
 bool DocViewMan::curDocIsCppFile()
 {
-  return (!curDocIsBrowser() 
+  return (!curDocIsBrowser()
       && m_pCurEditDoc
       && ((getKWriteDocType(m_pCurEditDoc)==CPP_SOURCE)||
           (getKWriteDocType(m_pCurEditDoc)==FTN_SOURCE)));
@@ -426,7 +426,7 @@ KWriteDoc* DocViewMan::createKWriteDoc(const QString& strFileName)
     if(file_info.exists()) {
         pDoc->setLastFileModifDate(file_info.lastModified());
     }
-    
+
   // Add the new doc to the list
   m_documentList.append(pDoc);
 
@@ -439,7 +439,7 @@ KWriteDoc* DocViewMan::createKWriteDoc(const QString& strFileName)
   pDoc->setFileName(strFileName);
 
   // Return the new document
-  return pDoc; 
+  return pDoc;
 }
 
 CDocBrowser* DocViewMan::createCDocBrowser(const QString& url)
@@ -456,11 +456,11 @@ CDocBrowser* DocViewMan::createCDocBrowser(const QString& url)
     connect(pDocBr, SIGNAL(signalSearchText()),m_pParent,SLOT(slotHelpSearchText()));
     //  connect(pDocBr, SIGNAL(goRight()), m_pParent, SLOT(slotHelpForward()));
     //  connect(pDocBr, SIGNAL(goLeft()), m_pParent, SLOT(slotHelpBack()));
-    connect(pDocBr, SIGNAL(enableStop(int)), m_pParent, SLOT(enableCommand(int)));    
+    connect(pDocBr, SIGNAL(enableStop(int)), m_pParent, SLOT(enableCommand(int)));
     connect(pDocBr->popup(), SIGNAL(highlighted(int)), m_pParent, SLOT(statusCallback(int)));
     connect(pDocBr, SIGNAL(signalGrepText(QString)), m_pParent, SLOT(slotEditSearchInFiles(QString)));
     //  connect(pDocBr, SIGNAL(textSelected(KHTMLPart *, bool)),m_pParent,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
-    
+
     // init browser and assign URL
     pDocBr->setDocBrowserOptions();
     pDocBr->showURL(url, true); // with reload if equal
@@ -470,14 +470,14 @@ CDocBrowser* DocViewMan::createCDocBrowser(const QString& url)
   }
 
   // Return the new document
-  return pDocBr; 
+  return pDocBr;
 }
 
 //-----------------------------------------------------------------------------
 // load edit document from file
 //-----------------------------------------------------------------------------
-void DocViewMan::loadKWriteDoc(KWriteDoc* pDoc, 
-                               const QString& strFileName, 
+void DocViewMan::loadKWriteDoc(KWriteDoc* pDoc,
+                               const QString& strFileName,
                                int /*mode*/)
 {
   if(QFile::exists(strFileName)) {
@@ -499,7 +499,7 @@ bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
     KMessageBox::sorry(0L, i18n("You do not have write permission to this file:\n" + strFileName));
     return false;
   }
-  
+
   QFile f(strFileName);
   if (f.open(IO_WriteOnly | IO_Truncate)) {
     pDoc->writeFile(f);
@@ -512,7 +512,7 @@ bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
 }
 
 //-----------------------------------------------------------------------------
-// Find if there is another KWriteDoc in the doc list 
+// Find if there is another KWriteDoc in the doc list
 //-----------------------------------------------------------------------------
 KWriteDoc* DocViewMan::findKWriteDoc()
 {
@@ -562,7 +562,7 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
     delete pDoc;
   }
 
-  // check if there's still a m_pCurBrowserDoc, m_pCurBrowserView, 
+  // check if there's still a m_pCurBrowserDoc, m_pCurBrowserView,
   // m_pCurEditDoc, m_pCurEditView
   KWriteDoc* pNewDoc = findKWriteDoc();
 
@@ -579,7 +579,7 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
 }
 
 //-----------------------------------------------------------------------------
-// Find if there is another CDocBrowser in the doc list 
+// Find if there is another CDocBrowser in the doc list
 //-----------------------------------------------------------------------------
 CDocBrowser* DocViewMan::findCDocBrowser()
 {
@@ -621,7 +621,7 @@ void DocViewMan::closeCDocBrowser(CDocBrowser* pDoc)
     m_pCurBrowserDoc = 0L;
     m_pCurBrowserView = 0L;
   }
-  
+
   // emit an according signal if we closed the last doc
   if (m_documentList.count() == 0) {
     emit sig_lastViewClosed();
@@ -658,7 +658,7 @@ KWriteDoc* DocViewMan::kwDocPointer(int docId) const
 */
 
 //-----------------------------------------------------------------------------
-// cover a newly created view with a QextMDI childview 
+// cover a newly created view with a QextMDI childview
 //-----------------------------------------------------------------------------
 void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& icon)
 {
@@ -762,7 +762,7 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
     QIconSet iconSet(SmallIcon("txt"));
     addQExtMDIFrame(pEW, bShow, iconSet.pixmap());
   }
-  
+
   // some additional settings
   pEW->setFocusPolicy(QWidget::StrongFocus);
   pEW->setFont(KGlobalSettings::fixedFont());
@@ -845,7 +845,7 @@ void DocViewMan::closeEditView(CEditWidget* pView)
 
   QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
   pMDICover->hide();
-  
+
   // disconnect the focus signals
   disconnect(pMDICover, SIGNAL(activated(QextMdiChildView*)),
     this, SLOT(slot_viewActivated(QextMdiChildView*)));
@@ -876,15 +876,15 @@ void DocViewMan::closeBrowserView(KHTMLView* pView)
 
   QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
   pMDICover->hide();
-  
+
   // disconnect the focus signals
   disconnect(pMDICover, SIGNAL(activated(QextMdiChildView*)), this, SLOT(slot_viewActivated(QextMdiChildView*)));
-  
-  // get a KHTMLView out of the parent to avoid a delete, 
+
+  // get a KHTMLView out of the parent to avoid a delete,
   // it will be deleted later in the CDocBrowser destructor
   pView->reparent(0L,0,QPoint(0,0));
   QApplication::sendPostedEvents();
-  
+
   // remove the view from MDI and delete the view
   m_pParent->removeWindowFromMdi( pMDICover);
   m_MDICoverList.remove( pMDICover);
@@ -980,7 +980,7 @@ void DocViewMan::slot_viewActivated(QextMdiChildView* pMDICover)
     m_curIsBrowser = true;
   }
 
-  // emit the got focus signal 
+  // emit the got focus signal
   // (connected to CKDevelop but could also be caught by other ones)
   emit sig_viewActivated(pView);
 }
@@ -1026,7 +1026,7 @@ QObject* DocViewMan::findDocFromFilename(const QString& strFileName) const
 }
 
 //-----------------------------------------------------------------------------
-// Find if no documents have been modified 
+// Find if no documents have been modified
 //-----------------------------------------------------------------------------
 bool DocViewMan::noDocModified()
 {
@@ -1382,7 +1382,7 @@ void DocViewMan::saveModifiedFiles()
     m_pParent->refreshClassViewByFileList(&iFileList);
 
 }
-  
+
 void DocViewMan::reloadModifiedFiles()
 {
   QListIterator<QObject> itDoc(m_documentList);
@@ -1390,7 +1390,7 @@ void DocViewMan::reloadModifiedFiles()
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
     if (pDoc) {
       QFileInfo file_info(pDoc->fileName());
-        
+
       // Reload only changed files
       if(pDoc->getLastFileModifDate() != file_info.lastModified()) {
         // Force reload, no modified on disc messagebox
@@ -1459,7 +1459,7 @@ void DocViewMan::installBMPopup(QPopupMenu * bm_menu)
   connect(code_bookmarks,SIGNAL(activated(int)),
           this,SLOT(gotoCodeBookmark(int)));
 
-    
+
   bm_menu->insertItem(SmallIconSet("bookmark_folder"),
                       i18n("Code &Window"),code_bookmarks,31000);
 
@@ -1498,7 +1498,7 @@ void DocViewMan::updateCodeBMPopup()
 }
 
 //-----------------------------------------------------------------------------
-// Shows the desired editor bookmark 
+// Shows the desired editor bookmark
 // (eventually, switches to file and activates it)
 //-----------------------------------------------------------------------------
 void DocViewMan::gotoCodeBookmark(int n) {
@@ -1522,7 +1522,7 @@ void DocViewMan::gotoCodeBookmark(int n) {
 }
 
 //-----------------------------------------------------------------------------
-// Shows the desired browser bookmark 
+// Shows the desired browser bookmark
 // (eventually, switches to file and activates it)
 //-----------------------------------------------------------------------------
 void DocViewMan::gotoDocBookmark(int id_)
@@ -1559,7 +1559,7 @@ void DocViewMan::doBookmarksToggle()
 
     // Recreate thepopup menu
     for (uint i = 0 ; i < m_docBookmarksList.count(); i++){
-      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"), 
+      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"),
                                       getBrowserMenuItem(i));
     }
   }
@@ -1581,7 +1581,7 @@ void DocViewMan::doBookmarksClear()
       m_docBookmarksList.clear();
       m_docBookmarksTitleList.clear();
       m_pDocBookmarksMenu->clear();
-    }    
+    }
   else
     {
       doClearBookmarks();
@@ -1600,7 +1600,7 @@ void DocViewMan::doBookmarksNext()
       QString file = m_docBookmarksList.next();
       if (file.isEmpty())
         file = m_docBookmarksList.first();
-      m_pParent->openBrowserBookmark(file);  
+      m_pParent->openBrowserBookmark(file);
     }
   }
   else
@@ -1622,7 +1622,7 @@ void DocViewMan::doBookmarksPrevious()
       QString file = m_docBookmarksList.prev();
       if(file.isEmpty())
         file = m_docBookmarksList.last();
-      m_pParent->openBrowserBookmark(file);  
+      m_pParent->openBrowserBookmark(file);
     }
   }
   else
@@ -1645,7 +1645,7 @@ QString DocViewMan::getBrowserMenuItem(int index)
     bmTitle = m_docBookmarksTitleList.at(index);
   }
   return bmTitle;
-} 
+}
 
 //-----------------------------------------------------------------------------
 // Reads bookmarks from the config
@@ -1788,6 +1788,13 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem(i18n("Invert Selection"), "Invert Selection", 0);
   accel->connectItem("Invert Selection", this, SLOT(slotEditInvertSelection()), true, ID_EDIT_INVERT_SELECTION);
 
+  accel->insertItem(i18n("Expand Text"), "Expand Text", CTRL + Key_J);
+  accel->connectItem("Expand Text", this, SLOT(slotEditExpandText()), true, ID_EDIT_EXPAND_TEXT);
+
+  accel->insertItem(i18n("Complete Text"), "Complete Text", CTRL + Key_Space);
+  accel->connectItem("Complete Text", this, SLOT(slotEditCompleteText()), true, ID_EDIT_COMPLETE_TEXT);
+
+
   //view menu
   accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
   accel->connectItem( "GotoLine", m_pParent, SLOT( slotViewGotoLine()), true, ID_VIEW_GOTO_LINE );
@@ -1812,7 +1819,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
 
   accel->insertItem( i18n("Browser-Toolbar"), "Browser-Toolbar", 0);
   accel->connectItem( "Browser-Toolbar", m_pParent, SLOT(slotViewTBrowserToolbar()), true, ID_VIEW_BROWSER_TOOLBAR );
-    
+
   accel->insertItem( i18n("Statusbar"), "Statusbar", 0);
   accel->connectItem( "Statusbar", m_pParent, SLOT(slotViewTStatusbar()), true, ID_VIEW_STATUSBAR );
 
@@ -1871,7 +1878,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
 
   accel->insertItem(i18n("Make Source-tgz"), "Source-tgz", 0);
   accel->connectItem("Source-tgz", m_pParent, SLOT(slotProjectMakeDistSourceTgz()), true, ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ );
-     
+
   accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
   accel->connectItem("ProjectOptions", m_pParent, SLOT(slotProjectOptions() ), true, ID_PROJECT_OPTIONS );
 
@@ -2184,6 +2191,20 @@ void DocViewMan::activateView9()
 void DocViewMan::activateView10()
 {
    m_pParent->activateView(9);
+}
+
+void DocViewMan::slotEditExpandText()
+{
+    kdDebug() << "DocViewMan::slotEditExpandText()" << endl;
+    if (currentEditView())
+        currentEditView()->expandText();
+}
+
+void DocViewMan::slotEditCompleteText()
+{
+    kdDebug() << "DocViewMan::slotEditCompleteText()" << endl;
+//    if (currentEditView())
+//        currentEditView()->completeText();
 }
 
 #include "docviewman.moc"

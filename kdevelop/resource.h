@@ -1,9 +1,9 @@
 /***************************************************************************
-                          resource.h  - 
+                          resource.h  -
                              -------------------
 
     begin                : Mon Oct  5 1998
-    copyright            : (C) 1998 by Sandy Meier                     
+    copyright            : (C) 1998 by Sandy Meier
     email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -83,6 +83,9 @@
 #define ID_EDIT_TAGS_SEARCH         11230
 #define ID_EDIT_TAGS_SWITCH         11240
 
+#define ID_EDIT_EXPAND_TEXT         11300
+#define ID_EDIT_COMPLETE_TEXT       11310
+
 ///////////////////////////////////////////////////////////////////
 // View-menu entries
 
@@ -109,7 +112,7 @@
 #define ID_VIEW_IN_KFM							12080
 
 ///////////////////////////////////////////////////////////////////
-// Project-menu entries 
+// Project-menu entries
 
 #define ID_PROJECT_KAPPWIZARD       13210
 #define ID_PROJECT_GENERATE         13211
@@ -159,7 +162,7 @@
 #define ID_PROJECT_LIB_PROPERTIES       14280
 
 ///////////////////////////////////////////////////////////////////
-// Build-menu entries 
+// Build-menu entries
 #define ID_BUILD_COMPILE_FILE       14010
 #define ID_BUILD_MAKE               14020
 #define ID_BUILD_MAKE_WITH          14030
@@ -167,7 +170,7 @@
 #define ID_BUILD_CLEAN_REBUILD_ALL  14050
 
 #define ID_BUILD_STOP               14060
-  
+
 #define ID_BUILD_RUN                14070
 #define ID_BUILD_RUN_WITH_ARGS      14075
 
@@ -199,7 +202,7 @@
 #define ID_DEBUG_ATTACH             14398
 
 ///////////////////////////////////////////////////////////////////
-// Classviewer popup entries 
+// Classviewer popup entries
 #define ID_CV_WIZARD                    14510
 #define ID_CV_GRAPHICAL_VIEW            14511
 
@@ -238,11 +241,11 @@
 #define	ID_CV_TOOLBAR_COMPILE_CHOICE	14543
 
 ///////////////////////////////////////////////////////////////////
-// Tools-menu entries 
+// Tools-menu entries
 
 #define ID_TOOLS_DESIGNER           15000
 ///////////////////////////////////////////////////////////////////
-// Options-menu entries 
+// Options-menu entries
 
 #define ID_OPTIONS_EDITOR          	      	     16010
 #define ID_OPTIONS_EDITOR_COLORS           	     16020
@@ -250,7 +253,7 @@
 #define ID_OPTIONS_SYNTAX_HIGHLIGHTING 	  	     16040
 
 #define ID_OPTIONS_DOCBROWSER			               16050
-#define ID_OPTIONS_TOOLS_CONFIG_DLG								16060	
+#define ID_OPTIONS_TOOLS_CONFIG_DLG								16060
 #define ID_OPTIONS_SPELLCHECKER										16065
 //#define ID_OPTIONS_PRINT         16070
 //#define ID_OPTIONS_PRINT_A2PS          16071
@@ -417,7 +420,7 @@
 #define IDK_EDIT_PASTE								CTRL+Key_V						// standard key
 #define IDK_FILE_CLOSE	       				CTRL+Key_W						// standard key
 #define IDK_EDIT_CUT	       					CTRL+Key_X						// standard key
-#define IDK_EDIT_REDO	       					CTRL+Key_Y						
+#define IDK_EDIT_REDO	       					CTRL+Key_Y
 #define IDK_EDIT_UNDO	       					CTRL+Key_Z						// standard key
 
 #define IDK_GOTO_PREVWIN                                        ALT+Key_Prior

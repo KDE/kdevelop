@@ -1,10 +1,10 @@
 /***************************************************************************
-               ceditwidget.cpp  -  a abstraction layer for an editwidget   
-                             -------------------                                         
+               ceditwidget.cpp  -  a abstraction layer for an editwidget
+                             -------------------
 
-    begin                : 23 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : 23 Aug 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,13 +12,16 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
 #include "ceditwidget.h"
+#include "cppcodecompletion.h"
 
 #include <kdebug.h>
+#include <kregexp.h>
+
 #include "kwdoc.h"
 #include "highlight.h"
 #include "cproject.h"
@@ -27,6 +30,7 @@
 #include <qpopupmenu.h>
 #include <qclipboard.h>
 #include <qregexp.h>
+#include <qmap.h>
 #include <assert.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -35,6 +39,30 @@
 #include "resource.h"
 
 HlManager hlManager; //highlight manager
+
+
+static QValueList<CompletionEntry> getAllWords( const QString& text,
+                                                const QString& prefix )
+{
+    QMap<QString, bool> map;
+    QValueList<CompletionEntry> entries;
+    QRegExp rx( QString("\\b") + prefix + "[a-zA-Z0-9_]+\\b" );
+    int idx = 0;
+    int pos = 0;
+    int len = 0;
+    while( (pos = rx.match(text, idx, &len)) != -1 ){
+        QString word = text.mid( pos, len );
+        if( map.find(word) == map.end() ){
+            CompletionEntry e;
+            e.text = word;
+            entries << e;
+            map[ word ] = TRUE;
+        }
+        idx = pos + len + 1;
+    }
+    return entries;
+}
+
 
 /*********************************************************************
  *                                                                   *
@@ -82,6 +110,8 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc) :
   pop->insertSeparator();
   pop->insertItem(SmallIconSet("dbgrunto"),i18n("Run to cursor"),this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
   pop->insertItem(SmallIconSet("dbgwatchvar"),"",this,SLOT(slotAddWatchVariable()),0,ID_EDIT_ADD_WATCH_VARIABLE);
+
+  m_pCodeCompletion = new CppCodeCompletion( this );
 }
 
 /*-------------------------------------- CEditWidget::~CEditWidget()
@@ -435,5 +465,62 @@ void CEditWidget::slotAddWatchVariable(){
     emit addWatchVariable(searchtext);
 }
 
-#include "ceditwidget.moc"
+QString CEditWidget::getFunctionBody( int iLine )
+{
+    KRegExp regMethod ("[ \t]*[A-Za-z_][A-Za-z_0-9]*::[~A-Za-z_][A-Za-z_0-9]*[ \t]*.*\\)[ \t]*[:{]");
+    QString currentClassName;
 
+    int iMethodBegin = 0;
+    QString text;
+    QString strLine;
+    for( int i=iLine; i>0; --i ){
+        QString s = textLine( i );
+        s = s.replace( QRegExp("const"), "" );
+        text.prepend( s ).simplifyWhiteSpace();
+        if( regMethod.match(text) ){
+            iMethodBegin = i;
+            currentClassName = strLine;
+            currentClassName.remove( currentClassName.find( "::" ), 999 );
+            currentClassName.remove( 0, currentClassName.findRev( " ", -1 ) + 1);
+            kdDebug( 9007 ) << "method's classname is '" << currentClassName << "'" << endl;
+            break;
+        }
+    }
+
+
+    if( iMethodBegin == 0 ){
+        kdDebug( 9007 ) << "no method declaration found" << endl;
+        return QString::null;
+    }
+
+    QString strCopy;
+    for( int i = iMethodBegin; i < iLine; i++ ){
+        strCopy += textLine( i ) + "\n";
+    }
+
+    return strCopy;
+}
+
+void CEditWidget::expandText()
+{
+    kdDebug() << "CEditWidget::expandText()" << endl;
+
+    QString prefix = currentWord();
+    if( !prefix.isEmpty() ){
+        QValueList<CompletionEntry> entries = getAllWords( text(),
+                                                           prefix );
+#if QT_VERSION < 300
+        if( entries.count() == 1 ){
+            insertText( entries[ 0 ].text.mid(currentWord().length()) );
+        } else if( entries.count() ){
+#else
+        if( entries.size() == 1 ){
+            insertText( entries[ 0 ].text.mid(currentWord().length()) );
+        } else if( entries.size() ){
+#endif
+            m_pCodeCompletion->showCompletionBox( entries, prefix.length() );
+        }
+    }
+}
+
+#include "ceditwidget.moc"
