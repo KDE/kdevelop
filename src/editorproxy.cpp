@@ -92,7 +92,6 @@ void EditorProxy::installPopup(KParts::Part *part, QPopupMenu *popup)
       iface->installPopup(popup);
 
       connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
-      connect(popup, SIGNAL(aboutToHide()), this, SLOT(popupAboutToHide()));
     }
   }
 }
