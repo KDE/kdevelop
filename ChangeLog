@@ -1,3 +1,8 @@
+2000-06-28  Sandy Meier  <smeier@kdevelop.de>
+	* commited initial "version" for new projectmanagment
+	* yes, it doesn't work, isn't finished yet and has design problems, 
+	but I will be back soon... :-)
+	
 2000-06-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* New part framework in which every part can
 	  have multiple widgets.

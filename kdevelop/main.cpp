@@ -22,6 +22,10 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>
+#include <qstringlist.h>
+#include <qstring.h>
+#include <stdlib.h>
+#include <kdebug.h>
 
 #include "kdevelop.h"
 #include "kdevelopfactory.h"
@@ -109,6 +113,17 @@ int main(int argc, char* argv[])
 //    }
   }
   args->clear();
+
+
+  //just add the dirs for LD_LIBRARY_PATH to the standard path
+  // this make development of plugins much easier
+  QStringList::Iterator it;
+  QString lib_path = getenv("LD_LIBRARY_PATH");
+  QStringList dir_list = QStringList::split(":",lib_path);
+  for(it = dir_list.begin();it != dir_list.end();it++){
+    kdDebug(9000)  << "added resourcdir:" << *it << endl;
+    KGlobal::dirs()->addResourceDir("lib",*it);
+  }
   
   int rc = a.exec();
   return rc;

@@ -61,6 +61,7 @@ private:
   void loadComponents(const QString &type, KDockWidget::DockPosition pos, int ratio);
 
   // File Actions
+
   KAction* m_paFileNew;
   KAction* m_paFileOpen;
   KAction* m_paFileClose;
@@ -141,6 +142,7 @@ private:
   KAction* m_paOptionsDocumentationBrowser;
   KAction* m_paOptionsConfigureEnscript;
   KAction* m_paOptionsKDevelopSetup;
+  KAction* m_paOptionsEditToolbars;
   // Bookmark Actions
   KAction* m_paBookmarksToggle;
   KAction* m_paBookmarksNext;
@@ -200,7 +202,9 @@ private:
   KDockWidget* m_dockbaseDbgWidgetView;			
 
 private slots:
-  void slotFilePrint();
+   void slotFilePrint();
+ void slotProjectNew();
+ void slotOptionsEditToolbars();
 };
 
 #endif

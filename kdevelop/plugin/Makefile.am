@@ -1,1 +1,1 @@
-SUBDIRS = print 
+SUBDIRS = print projectmanagement

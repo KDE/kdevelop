@@ -27,11 +27,15 @@
 #include <kdockwidget.h>
 #include <kmenubar.h>
 #include <klibloader.h>
-
+#include <ktrader.h>
+#include <kedittoolbar.h>
+#include "lib/kdevcomponent.h"
+#include "lib/projectmanagement/newprojectdlg.h"
+#include "classparser/ClassParser.h"
+#include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevelopfactory.h"
 #include "kdevelopcore.h"
-#include "kdevelop.h"
 
 
 KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
@@ -42,6 +46,7 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
   //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
   setXMLFile( "kdevelopui.rc" );
+
   createGUI( 0L );
 
   // build up the inner tool views and information views
@@ -156,7 +161,7 @@ void KDevelop::initActions(){
 
 
   /////////////////////////////////////
-  // View Menu
+  // Project Menu
   ////////////////////////////////////
   m_paProjectNew = new KAction( i18n("&New..."), 0, this, SLOT( slotProjectNew() ),
           actionCollection(), "project_new");
@@ -248,23 +253,25 @@ void KDevelop::initActions(){
   // Options Menu
   ////////////////////////////////////
   m_paOptionsEditor = new KAction( i18n("&Editor..."), 0, this, SLOT( slotOptionsEditor() ),
-         actionCollection(), "options_editor");
+				   actionCollection(), "options_editor");
   m_paOptionsEditorColors = new KAction( i18n("Editor &Colors..."), 0, this, SLOT( slotOptionsEditorColors() ),
-         actionCollection(), "options_editor_colors");
+					 actionCollection(), "options_editor_colors");
   m_paOptionsEditorDefaults = new KAction( i18n("Editor &Defaults..."), 0, this, SLOT( slotOptionsEditorDefaults() ),
-         actionCollection(), "options_editor_defaults");
+					   actionCollection(), "options_editor_defaults");
   m_paOptionsSyntaxHighlighting = new KAction( i18n("&Syntax Highlighting..."), 0, this, SLOT( slotOptionsSyntaxHighlighting() ),
-         actionCollection(), "options_syntax_highlighting");
+					       actionCollection(), "options_syntax_highlighting");
   // Separator
   m_paOptionsDocumentationBrowser = new KAction( i18n("Documentation &Browser..."), 0, this, SLOT( slotOptionsDocumentationBrowser() ),
-         actionCollection(), "options_documentation_browser");
+						 actionCollection(), "options_documentation_browser");
   /////////////
   // Configure Printer submenu
   m_paOptionsConfigureEnscript = new KAction( i18n("&Enscript..."), 0, this, SLOT( slotOptionsConfigureEnscript() ),
-         actionCollection(), "options_configure_printer_enscript");
+					      actionCollection(), "options_configure_printer_enscript");
   // Separator
   m_paOptionsKDevelopSetup = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
-         actionCollection(), "options_kdevelop_setup");
+					  actionCollection(), "options_kdevelop_setup");
+
+  m_paOptionsEditToolbars = KStdAction::configureToolbars(this, SLOT(slotOptionsEditToolbars()), actionCollection(),"options_configure_toolbars");
 
   /////////////////////////////////////
   // Window Menu
@@ -780,6 +787,20 @@ void KDevelop::slotFilePrint()
     dlg->exec();
     delete dlg;
 }
+
+void KDevelop::slotProjectNew(){
+  NewProjectDlg* dlg = new NewProjectDlg();
+  dlg->show();
+  delete dlg;
+}
+
+void KDevelop::slotOptionsEditToolbars(){
+  KEditToolbar dlg(actionCollection());
+  
+  if (dlg.exec())
+    createGUI(0);
+}
+
 
 /** creates and inits all tool (selection and output) views */
 void KDevelop::initCoveringDockViews(){
