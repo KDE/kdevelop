@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>CCConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>551</width>
-            <height>499</height>
+            <height>501</height>
         </rect>
     </property>
     <property name="caption">
@@ -107,11 +107,11 @@
                 <attribute name="title">
                     <string>Code Completion</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget">
+                    <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>layout2</cstring>
                         </property>
@@ -147,24 +147,7 @@
                             </widget>
                         </vbox>
                     </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>spacer1</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>31</width>
-                                <height>51</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QListView">
+                    <widget class="QListView" row="3" column="0" rowspan="1" colspan="2">
                         <column>
                             <property name="text">
                                 <string>Column 1</string>
@@ -186,13 +169,73 @@
                             <enum>LastColumn</enum>
                         </property>
                     </widget>
-                </vbox>
+                    <spacer row="2" column="0">
+                        <property name="name">
+                            <cstring>spacer1</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Minimum</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>31</width>
+                                <height>51</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLayoutWidget" row="1" column="1">
+                        <property name="name">
+                            <cstring>layout2</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>81</width>
+                                        <height>21</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>newPCSButton</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>New Persistant Class Store</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </grid>
             </widget>
         </widget>
     </vbox>
 </widget>
 <customwidgets>
 </customwidgets>
+<connections>
+    <connection>
+        <sender>newPCSButton</sender>
+        <signal>clicked()</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotNewPCS()</slot>
+    </connection>
+</connections>
 <tabstops>
     <tabstop>interface_suffix</tabstop>
     <tabstop>implementation_suffix</tabstop>
@@ -217,6 +260,7 @@
     <slot access="protected">slotRemovePPPath( )</slot>
     <slot access="protected">slotSelectTemplateGroup( const QString &amp; )</slot>
     <slot access="protected">slotSetCHWindow( )</slot>
+    <slot>slotNewPCS()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>

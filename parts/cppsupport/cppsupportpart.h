@@ -64,6 +64,8 @@ public:
     CppCodeCompletionConfig* codeCompletionConfig() { return m_pCompletionConfig; }
 
     const QPtrList<Catalog>& catalogList() { return m_catalogList; }
+    void addCatalog( Catalog* catalog );
+    void removeCatalog( const QString& dbName );
 
     bool isValidSource( const QString& fileName ) const;
     QStringList fileExtensions( ) const;

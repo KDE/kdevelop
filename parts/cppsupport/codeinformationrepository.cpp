@@ -12,6 +12,7 @@
 #include "codeinformationrepository.h"
 #include "cpp_tags.h"
 
+#include <kdevcoderepository.h>
 #include <kdebug.h>
 
 /// @todo move in utils.cpp
@@ -36,22 +37,13 @@ my_unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
     return l;
 }
 
-CodeInformationRepository::CodeInformationRepository()
+CodeInformationRepository::CodeInformationRepository( KDevCodeRepository* rep )
+    : m_rep( rep )
 {
 }
 
 CodeInformationRepository::~CodeInformationRepository()
 {
-}
-
-void CodeInformationRepository::addCatalog( const QString & id, Catalog * catalog )
-{
-    m_catalogs[ id ] = catalog;
-}
-
-void CodeInformationRepository::removeCatalog( const QString & id )
-{
-    m_catalogs.remove( id );
 }
 
 QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: QueryArgument> & args )
@@ -60,9 +52,10 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
 
     QValueList<Tag> tags;
 
-    QMap<QString, Catalog*>::Iterator it = m_catalogs.begin();
-    while( it != m_catalogs.end() ){
-        Catalog* catalog = it.data();
+    QValueList<Catalog*> catalogs = m_rep->registeredCatalogs();
+    QValueList<Catalog*>::Iterator it = catalogs.begin();
+    while( it != catalogs.end() ){
+        Catalog* catalog = *it;
         ++it;
 	
 	if( !catalog->enabled() )
@@ -81,9 +74,10 @@ QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileNa
     QValueList<Catalog::QueryArgument> args;
     args << Catalog::QueryArgument( "fileName", fileName );
 
-    QMap<QString, Catalog*>::Iterator it = m_catalogs.begin();
-    while( it != m_catalogs.end() ){
-        Catalog* catalog = it.data();
+    QValueList<Catalog*> catalogs = m_rep->registeredCatalogs();
+    QValueList<Catalog*>::Iterator it = catalogs.begin();
+    while( it != catalogs.end() ){
+        Catalog* catalog = *it;
         ++it;
 
         QValueList<Tag> tags = catalog->query( args );

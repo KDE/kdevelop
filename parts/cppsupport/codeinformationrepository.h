@@ -18,16 +18,13 @@
 
 #include <ktexteditor/codecompletioninterface.h>
 
+class KDevCodeRepository;
+
 class CodeInformationRepository
 {
 public:
-    CodeInformationRepository();
+    CodeInformationRepository( KDevCodeRepository* rep );
     virtual ~CodeInformationRepository();
-
-    const QMap<QString, Catalog*>& catalogs() const { return m_catalogs; }
-
-    virtual void addCatalog( const QString& id, Catalog* catalog );
-    virtual void removeCatalog( const QString& id );
 
     static QValueList<KTextEditor::CompletionEntry> toEntryList( const QValueList<Tag>& tags,
     				CppCodeCompletion::CompletionMode mode=CppCodeCompletion::NormalCompletion  );
@@ -43,9 +40,9 @@ public:
     QValueList<Tag> getClassOrNamespaceList( const QStringList& scope );
 
 private:
-    QMap<QString, Catalog*> m_catalogs;
     QValueList<KTextEditor::CompletionEntry> m_globalEntries;
-
+    KDevCodeRepository* m_rep;
+    
 private:
    CodeInformationRepository( const CodeInformationRepository& source );
    void operator = ( const CodeInformationRepository& source );

@@ -29,6 +29,11 @@ public:
 
 public slots:
     void accept( );
+    void slotNewPCS();
+    
+private slots:
+    void catalogRegistered( Catalog* c );
+    void catalogUnregistered( Catalog* c );
 
 private:
     void initFileTemplatesTab();
@@ -43,6 +48,7 @@ private:
     QCheckListItem* m_includeTypes;
     QCheckListItem* m_includeEnums;
     QCheckListItem* m_includeTypedefs;
+    QListViewItem* m_pcsOptions;
     QMap<QCheckListItem*, Catalog*> m_catalogs;
 };
 

@@ -51,6 +51,7 @@
 #include <kdevpartcontroller.h>
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
+#include <kdevcoderepository.h>
 
 class SimpleVariable
 {
@@ -264,7 +265,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     m_bCompletionBoxShow = false;
     m_completionMode     = NormalCompletion;
 
-    m_repository = new CodeInformationRepository();
+    m_repository = new CodeInformationRepository( cppSupport->codeRepository() );
     setupCodeInformationRepository();
 
     connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
@@ -951,20 +952,6 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
 
 void CppCodeCompletion::setupCodeInformationRepository( )
 {
-    // add all available pcs for now
-
-    m_pSupport->mainWindow()->statusBar()->message( i18n("Setup the code information repository. Please wait..."), 1000 );
-    kapp->processEvents();
-
-    int id = 1;
-    CppSupportPart* part = m_pSupport;
-    QPtrListIterator<Catalog> it( part->catalogList() );
-    while( it.current() ){
-        Catalog* catalog = it.current();
-        ++it;
-
-        m_repository->addCatalog( QString::number(id++), catalog );
-    }
 }
 
 QStringList CppCodeCompletion::typeName( const QString& str )

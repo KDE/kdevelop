@@ -155,7 +155,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {
     setInstance(CppSupportFactory::instance());
-
+    
     m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
     connect( m_pCompletionConfig, SIGNAL(stored()), this, SLOT(codeCompletionConfigStored()) );
 
@@ -1491,6 +1491,45 @@ void CppSupportPart::gotoDeclarationLine( int line )
         url.setPath(sourceOrHeaderCandidate());
         partController()->editDocument(url, line);
     }
+}
+
+void CppSupportPart::removeCatalog( const QString & dbName )
+{
+    if( !QFile::exists(dbName) )
+	return;
+    
+    QValueList<Catalog*> catalogs = codeRepository()->registeredCatalogs();
+    Catalog* c = 0;
+    for( QValueList<Catalog*>::Iterator it=catalogs.begin(); it!=catalogs.end(); ++it )
+    {
+	if( (*it)->dbName() == dbName ){
+	    c = *it;
+	    break;
+	}
+    }
+    
+    if( c ){
+	codeRepository()->unregisterCatalog( c );
+	m_catalogList.remove( c );
+    }
+    
+    QFileInfo fileInfo( dbName );
+    QDir dir( fileInfo.dir(true) );
+    QStringList fileList = dir.entryList( fileInfo.baseName() + "*.idx" );
+    for( QStringList::Iterator it=fileList.begin(); it!=fileList.end(); ++it )
+    {
+	QString idxName = fileInfo.dirPath( true ) + "/" + *it;
+	kdDebug(9007) << "=========> remove db index: " << idxName << endl;
+	dir.remove( *it );
+    }
+    
+    dir.remove( fileInfo.fileName() );
+}
+
+void CppSupportPart::addCatalog( Catalog * catalog )
+{
+    m_catalogList.append( catalog );
+    codeRepository()->registerCatalog( catalog );
 }
 
 #include "cppsupportpart.moc"

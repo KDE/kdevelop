@@ -31,15 +31,19 @@
 #include <kurlrequester.h>
 #include <klistview.h>
 #include <knuminput.h>
+#include <kmainwindow.h>
 
 // gideon includes
 #include <domutil.h>
+#include <kdevcoderepository.h>
+#include <kdevmainwindow.h>
 #include <kdevcoderepository.h>
 #include <catalog.h>
 
 #include "ccconfigwidget.h"
 #include "cppsupportpart.h"
 #include "cppcodecompletionconfig.h"
+#include "createpcsdialog.h"
 
 using namespace std;
 
@@ -48,6 +52,8 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
     : CCConfigWidgetBase( parent, name )
 {
     m_pPart = part;
+    connect( m_pPart->codeRepository(), SIGNAL(catalogRegistered(Catalog* )), this, SLOT(catalogRegistered(Catalog* )) );
+    connect( m_pPart->codeRepository(), SIGNAL(catalogUnregistered(Catalog* )), this, SLOT(catalogUnegistered(Catalog* )) );
 
     initFileTemplatesTab( );
     initCodeCompletionTab( );
@@ -108,13 +114,13 @@ void CCConfigWidget::initCodeCompletionTab( )
     m_includeTypedefs = new QCheckListItem( codeCompletionOptions, i18n("Include Typedefs"), QCheckListItem::CheckBox );
     m_includeTypedefs->setOn( c->includeTypedefs() );
     
-    QListViewItem* pcsOptions = new QListViewItem( advancedOptions, i18n("Persistant Class Store") );
+    m_pcsOptions = new QListViewItem( advancedOptions, i18n("Persistant Class Store") );
     QValueList<Catalog*> catalogs = m_pPart->codeRepository()->registeredCatalogs();
     for( QValueList<Catalog*>::Iterator it=catalogs.begin(); it!=catalogs.end(); ++it )
     {
 	Catalog* c = *it;
 	QFileInfo dbInfo( c->dbName() );
-	QCheckListItem* item = new QCheckListItem( pcsOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
+	QCheckListItem* item = new QCheckListItem( m_pcsOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
 	item->setOn( c->enabled() );
 	
 	m_catalogs[ item ] = c;
@@ -142,6 +148,34 @@ void CCConfigWidget::saveCodeCompletionTab( )
     }
     
     c->store();
+}
+
+void CCConfigWidget::slotNewPCS( )
+{
+    CreatePCSDialog dlg( m_pPart, m_pPart->mainWindow()->main() );
+    dlg.exec();    
+}
+
+void CCConfigWidget::catalogRegistered( Catalog * c )
+{
+    QFileInfo dbInfo( c->dbName() );
+    QCheckListItem* item = new QCheckListItem( m_pcsOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
+    item->setOn( c->enabled() );
+    
+    m_catalogs[ item ] = c;
+}
+
+void CCConfigWidget::catalogUnregistered( Catalog * c )
+{
+    for( QMap<QCheckListItem*, Catalog*>::Iterator it=m_catalogs.begin(); it!=m_catalogs.end(); ++it )
+    {
+	if( it.data() == c ){
+	    QCheckListItem* item = it.key();
+	    delete( item );
+	    m_catalogs.remove( it );
+	    break;
+	}
+    }
 }
 
 #include "ccconfigwidget.moc"
