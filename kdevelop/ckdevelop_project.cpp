@@ -316,86 +316,80 @@ void CKDevelop::slotProjectAddNewFile(){
 
 void CKDevelop::slotAddExistingFiles(){
   bool copy = false;
-  QString type;
+  ProjectFileType type;
   bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
   QString token;
-    QStrList files;
-    QString str_files = add_dlg->source_edit->text(); 
-    StringTokenizer str_token;
+  QStrList files;
+  QString str_files = add_dlg->source_edit->text(); 
+  StringTokenizer str_token;
     
-    str_token.tokenize(str_files,",");
-    while(str_token.hasMoreTokens()){
-      token = str_token.nextToken();
-      files.append(token);
-    }
-    QString dest = add_dlg->destination_edit->text();
-    if(dest.right(1) != "/"){ // I hope it works now -Sandy
-      dest = dest + "/";
-    }
-    QString source_name;
-    QString dest_name ;
-    QString file;
-    QFileInfo file_info;
-    int i=files.count();
+  str_token.tokenize(str_files,",");
+  while(str_token.hasMoreTokens()){
+    token = str_token.nextToken();
+    files.append(token);
+  }
+  QString dest = add_dlg->destination_edit->text();
+  if(dest.right(1) != "/"){ // I hope it works now -Sandy
+    dest = dest + "/";
+  }
+  QString source_name;
+  QString dest_name ;
+  QString file;
+  QFileInfo file_info;
+  int i=files.count();
     
-    QProgressDialog progress( i18n("Copying files..."),0, i, this,"",true );
-    progress.setCaption(i18n("please wait..."));
-    progress.show();
+  QProgressDialog progress( i18n("Copying files..."),0, i, this,"",true );
+  progress.setCaption(i18n("please wait..."));
+  progress.show();
     
-    i=0;
-    progress.setProgress( i);
+  i=0;
+  progress.setProgress( i);
 
-    for(file = files.first(); file !=0;file = files.next()){
-      i++;
-      copy = false;
-      progress.setProgress( i );
-      file_info.setFile(file);
-      source_name = file_info.fileName();
-      dest_name = dest + source_name;
+  for(file = files.first(); file !=0;file = files.next()){
+    i++;
+    copy = false;
+    progress.setProgress( i );
+    file_info.setFile(file);
+    source_name = file_info.fileName();
+    dest_name = dest + source_name;
+   
+    // Fetch the type of the file
+    type = CProject::getType( dest_name );
       
-      type = "DATA";
-      if (dest_name.right(2) == ".h" || dest_name.right(4) == ".hxx"){
-        type = "HEADER";
+    if(QFile::exists(dest_name)){
+      int result=KMsgBox::yesNoCancel(this,i18n("Files exists!"),
+                                      i18n("\nThe file\n\n"+source_name+"\n\nalready exists.\nDo you want overwrite the old one?\n"));
+      if(result==1)
+        copy = true;
+      if(result==2)
+        copy = false;
+      if(result==3){
+        setCursor( KCursor::arrowCursor() );
+        break;;
       }
-      if (getTabLocation(dest_name) == CPP){
-	type = "SOURCE";
-      }
-      
-      if(QFile::exists(dest_name)){
-      	int result=KMsgBox::yesNoCancel(this,i18n("Files exists!"),
-		  	    i18n("\nThe file\n\n"+source_name+"\n\nalready exists.\nDo you want overwrite the old one?\n"));
-		    if(result==1)
-	        copy = true;
-	      if(result==2)
-	        copy = false;
-	      if(result==3){
-          setCursor( KCursor::arrowCursor() );
-	        break;;
-        }
-      }
-      else {
-      	copy = true;
-      }
-      
-      if(copy){
-	process.clearArguments();
-	process << "cp"; // copy is your friend :-)
-	process << file;
-	process << dest;
-	process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
-      }
-      new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
     }
-    progress.setProgress( files.count() );
-    switchToFile(dest_name);
-    refreshTrees();
+    else {
+      copy = true;
+    }
+      
+    if(copy){
+      process.clearArguments();
+      process << "cp"; // copy is your friend :-)
+      process << file;
+      process << dest;
+      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
+    }
+    new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
+  }
+  progress.setProgress( files.count() );
+  switchToFile(dest_name);
+  refreshTrees();
     
-    if(new_subdir){
-      newSubDir();
-    }
+  if(new_subdir){
+    newSubDir();
+  }
 
-    delete add_dlg;
-    
+  delete add_dlg;
 }
 
 void CKDevelop::slotProjectAddExistingFiles(){
@@ -441,13 +435,13 @@ void CKDevelop::slotProjectNewClass(){
     QFileInfo source_info(source_file);
     TFileInfo file_info;
     file_info.rel_name = prj->getSubDir() + source_info.fileName();
-    file_info.type = "SOURCE";
+    file_info.type = CPP_SOURCE;
     file_info.dist = true;
     file_info.install = false;
     prj->addFileToProject(prj->getSubDir() + source_info.fileName(),file_info);
     
     file_info.rel_name = prj->getSubDir() + header_info.fileName();
-    file_info.type = "HEADER";
+    file_info.type = CPP_HEADER;
     file_info.dist = true;
     file_info.install = false;
     prj->addFileToProject(prj->getSubDir() + header_info.fileName(),file_info);
@@ -595,20 +589,14 @@ void CKDevelop::slotProjectAddNewTranslationFile(){
     QFile nfile(file); // create a empty file
     nfile.open(IO_WriteOnly);
     nfile.close();
-    addFileToProject(file,"PO"); 
+    addFileToProject(file, PO); 
     slotBuildMessages();
   }
 }
 void CKDevelop::slotAddFileToProject(QString abs_filename){
-  QString  type = "DATA";
-  if (abs_filename.right(2) == ".h" || abs_filename.right(4) == ".hxx"){
-    type = "HEADER";
-  }
-  if (getTabLocation(abs_filename) == CPP){
-    type = "SOURCE";
-  }
-  addFileToProject(abs_filename,type,true);
-	refreshTrees();
+  ProjectFileType type = CProject::getType( abs_filename );
+
+  addFileToProject(abs_filename, type, true);
 }
 
 /*********************************************************************
@@ -617,30 +605,35 @@ void CKDevelop::slotAddFileToProject(QString abs_filename){
  *                                                                   *
  ********************************************************************/ 
 
+/*---------------------------------------------- CKDevelop::newFile()
+ * newFile()
+ *   Create a new file and add it to the project.
+ *
+ * Parameters:
+ *   add_to_project      Should the file be added to the project?
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::newFile(bool add_to_project){
+  ProjectFileType type;
+  bool new_subdir=false;
+  QString complete_filename;
   CNewFileDlg dlg(this,"test",true,0,prj);
+
   dlg.setUseTemplate();
   if (add_to_project){
     dlg.setAddToProject();
   }
   if(!dlg.exec()) return; // cancel
   
-  QString filename = dlg.fileName();
-  QString complete_filename;
-  complete_filename = dlg.location() + filename;
+  complete_filename = dlg.location() + dlg.fileName();
   
   // load into the widget
   switchToFile(complete_filename);
   
-  QString type = "DATA";
-  QString filetype = dlg.fileType();
-  if(filetype == "HEADER"){
-    type = "HEADER";
-  }
-  if(filetype == "CPP"){
-    type = "SOURCE";
-  }
-  bool new_subdir=false;
+  // Get the filetype.
+  type = CProject::getType( complete_filename );
   
   // add the file to the project if necessary
   if (dlg.addToProject() == true){
@@ -651,7 +644,23 @@ void CKDevelop::newFile(bool add_to_project){
   }
   
 }
-bool CKDevelop::addFileToProject(QString complete_filename,QString type,bool refresh){
+
+/*-------------------------------------- CKDevelop::addFileToProject()
+ * addFileToProject()
+ *   Add a file with a specified type to the project.
+ *
+ * Parameters:
+ *   complete_filename   The absolute filename.
+ *   type                Type of file.
+ *   refresh             If to refresh the trees.
+ *
+ * Returns:
+ *   true                If a new subdir was added.
+ *-----------------------------------------------------------------*/
+bool CKDevelop::addFileToProject(QString complete_filename,
+                                 ProjectFileType type,
+                                 bool refresh)
+{
   bool new_subdir = false;
   QString rel_name = complete_filename;
   
@@ -664,27 +673,28 @@ bool CKDevelop::addFileToProject(QString complete_filename,QString type,bool ref
   TFileInfo info;
   info.rel_name = rel_name;
   info.type = type;
-  info.dist = true;
-  if(type == "PO"){
-    info.dist = false;
-  }
+  info.dist = ( type != PO );
+
   info.install=false;
   info.install_location = "";
   new_subdir = prj->addFileToProject(rel_name,info);
   
   prj->writeProject();
   prj->updateMakefilesAm();
-  if(refresh){
-    refreshTrees();
-  }
+
+  if(refresh)
+    refreshTrees(&info);
+
   return new_subdir;
 }
+
 void CKDevelop::delFileFromProject(QString rel_filename){
 
   prj->removeFileFromProject(rel_filename);
   prj->writeProject();
   refreshTrees();
 }
+
 bool CKDevelop::readProjectFile(QString file){
   QString str;
   prj = new CProject(file);

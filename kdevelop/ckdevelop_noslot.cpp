@@ -32,33 +32,61 @@ void CKDevelop::refreshTrees(){
   if (!project){
     return; // no project
   }
+
+  // Update the classview.
   slotStatusMsg(i18n("Scanning project files..."));
-	statProg->show();
+  statProg->show();
   class_tree->refresh(prj);
-	statProg->reset();
-	statProg->hide();
+  statProg->reset();
+  statProg->hide();
+
+  // Update the classcombo.
   refreshClassCombo();
+
+  // Update LFV.
   log_file_tree->storeState(prj);
   log_file_tree->refresh(prj);
+
+  // Update RFV.
   real_file_tree->refresh(prj);
+
   kdlg_dialogs_view->refresh(prj);
+
   kdev_statusbar->repaint();
   slotStatusMsg(IDS_DEFAULT);
 }
  
+/*------------------------------------------ CKDevelop::refreshTrees()
+ * refreshTrees()
+ *   Refresh the file trees with regard to a certain file.
+ *
+ * Parameters:
+ *   aFilename   The relative filename.
+ *   aType       Type of file.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::refreshTrees(TFileInfo *info)
+{
+  if( project )
+  {
+    // If this is a sourcefile we parse it and update the classview.
+    if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
+    {
+      class_tree->addFile( prj->getProjectDir() + info->rel_name );
+      refreshClassCombo();
+    }
 
-int CKDevelop::getTabLocation(QString filename){
-  if(filename.right(4) == ".cpp" || filename.right(4) == ".CPP" || filename.right(2) == ".c"
-     || filename.right(2) == ".C" || filename.right(3) == ".cc"|| filename.right(3) == ".CC"
-     || filename.right(4) == ".cxx"|| filename.right(4) == ".CXX"  || filename.right(3) == ".ec"
-     || filename.right(5) == ".ecpp"){
-    return CPP;
+    // Update LFV.
+    log_file_tree->storeState(prj);
+    log_file_tree->refresh(prj);
+    
+    // Update RFV.
+    real_file_tree->refresh(prj);
   }
-  else{
-    return HEADER;
-  }
-  
 }
+
 void CKDevelop::switchToFile(QString filename){
   lastfile = edit_widget->getName();
   lasttab = s_tab_view->getCurrentTab();
@@ -104,7 +132,7 @@ void CKDevelop::switchToFile(QString filename){
   }
   
   // set the correct edit_widget
-  if (getTabLocation(filename) == HEADER){
+  if (CProject::getType(filename) == CPP_HEADER){
     edit_widget = header_widget;
     s_tab_view->setCurrentTab(HEADER);
     disableCommand(ID_BUILD_COMPILE_FILE);

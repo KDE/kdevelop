@@ -95,9 +95,10 @@ public:
   void initWhatsThis();
   void initProject();
   void refreshTrees();
+  void refreshTrees(TFileInfo *info);
 
   void setKeyAccel();
-	void setToolmenuEntries();
+  void setToolmenuEntries();
 	
   void initKDlg();
   void initKDlgMenuBar();
@@ -113,16 +114,24 @@ public:
   void newFile(bool add_to_project);
   /** read the projectfile from the disk*/
   bool readProjectFile(QString file);
-  /**@param type HEADER,SOURCE,SCRIPT,DATA
-   * return true if a new subdir was added to the project
+
+  /** Add a file with a specified type to the project. Returns
+   *  true if a new subdir was added.
+   *  @param complete_filename   The absolute filename.
+   *  @param type                Type of file.
+   *  @param refresh             If to refresh the trees.
    */
-  bool addFileToProject(QString complete_filename,QString type,bool refreshTrees=true);
+  bool addFileToProject(QString complete_filename,ProjectFileType type,bool refreshTrees=true);
+
   void switchToWorkspace(int id);
-  int getTabLocation(QString filename);
 
   /**@param filename the absolute filename*/
   void switchToFile(QString filename); // filename = abs
-  /** Switch to a certain line in a certain file. */
+
+  /** Switch to a certain line in a certain file.
+   *  @param filename Absolute filename of the file to switch to.
+   *  @param lineNo   The line in the file to switch to.
+   */
   void switchToFile(QString filename, int lineNo);
 
   /** set the correct toolbar and menubar,if a process is running
