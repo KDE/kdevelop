@@ -891,8 +891,6 @@ void CKDevelop::slotStartRun(bool bWithArgs)
   appl_process.clearArguments();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
 
-  // if we can run the application, so we can clear the Makefile.am-changed-flag
-  prj->clearMakefileAmChanged();
   stdin_stdout_widget->clear();
   stderr_widget->clear();
 
@@ -1352,9 +1350,6 @@ void CKDevelop::slotStartDebugRunWithArgs()
   if (args.isEmpty())
     QString args=prj->getExecuteArgs();
 
-  // if we can run the application, so we can clear the Makefile.am-changed-flag
-  prj->clearMakefileAmChanged();
-
   CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Debug with arguments"), args);
   if (argdlg.exec())
   {
@@ -1583,6 +1578,8 @@ void CKDevelop::slotBuildMake(){
   }
   beep = true;
 
+  if (next_job.isEmpty())
+    next_job="make_end";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
@@ -1641,7 +1638,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
     return;
   }
 
-prj->updateMakefilesAm();
+  prj->updateMakefilesAm();
   slotDebugStop();
   //  QString shell = getenv("SHELL");
   QString flaglabel;
@@ -1678,6 +1675,8 @@ prj->updateMakefilesAm();
 //  shell_process  << "\" "<< "./configure && " << make_cmd;
 	shell_process  << "\" "<< "./configure " << prj->getConfigureArgs() << " && " << make_cmd;
   beep = true;
+
+  next_job="make_end";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
@@ -3287,10 +3286,18 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       result.sprintf(i18n("*** exit-code: %i ***\n"), 
 		     proc->exitStatus());
 
+
     if (next_job=="doc_refresh")
     {
       doc_tree->refresh(prj);
       next_job="";
+    }
+
+    if (next_job == "make_end"  && process.exitStatus() == 0)
+    {
+      // if we can run the application, so we can clear the Makefile.am-changed-flag
+      prj->clearMakefileAmChanged();
+      next_job = "";
     }
 
     if (next_job == make_cmd)
@@ -3305,12 +3312,15 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       }
       setToolMenuProcess(false);
       process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-      next_job = "";
+      next_job = "make_end";
       ready=false;
     }
 
     if (next_job == "debug"  && process.exitStatus() == 0)
     {
+      // if we can debug the application, so we can clear the Makefile.am-changed-flag
+      prj->clearMakefileAmChanged();
+
       slotStartDebug();
       next_job = "";
       ready = false;
@@ -3318,6 +3328,9 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 
     if (next_job == "debug_with_args"  && process.exitStatus() == 0)
     {
+      // if we can debug the application, so we can clear the Makefile.am-changed-flag
+      prj->clearMakefileAmChanged();
+
       slotStartDebugRunWithArgs();
       next_job = "";
       ready = false;
@@ -3325,6 +3338,9 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 
     if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0)
     {
+      // if we can run the application, so we can clear the Makefile.am-changed-flag
+      prj->clearMakefileAmChanged();
+
       slotStartRun(next_job=="run_with_args");
       next_job = "";
       ready = false;
