@@ -13,15 +13,16 @@
 
 #include "debuggerconfigwidget.h"
 
+#include "debuggerpart.h"
+#include "kdevproject.h"
+
+#include "domutil.h"
 #include <kurlrequester.h>
 
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <qfileinfo.h>
-
-#include "kdevproject.h"
-#include "domutil.h"
-#include "debuggerpart.h"
+#include <qlineedit.h>
+#include <qradiobutton.h>
 
 namespace GDBDebugger
 {
@@ -66,6 +67,23 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
     breakOnLoadingLibrary_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", true));
     dbgTerminal_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false));
     enableFloatingToolBar_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", false));
+    int outputRadix = DomUtil::readIntEntry(dom, "/kdevdebugger/display/outputradix", 10);
+    
+    switch (outputRadix)
+    {
+    case 8:
+      outputRadixOctal->setChecked(true);
+      break;
+    case 16:
+      outputRadixHexadecimal->setChecked(true);
+      break;
+    case 10:
+    default:
+      outputRadixDecimal->setChecked(true);
+      break;
+    }
+    
+    
     // ??? DomUtil::readEntry(dom, "/kdevdebugger/general/allowforcedbpset");
 
     resize(sizeHint());
@@ -91,6 +109,16 @@ void DebuggerConfigWidget::accept()
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", breakOnLoadingLibrary_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/separatetty", dbgTerminal_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", enableFloatingToolBar_box->isChecked());
+    
+    int outputRadix;
+    if (outputRadixOctal->isChecked())
+      outputRadix = 8;
+    else if (outputRadixHexadecimal->isChecked())
+      outputRadix = 16;
+    else
+      outputRadix = 10;
+      
+   DomUtil::writeIntEntry(dom, "/kdevdebugger/display/outputradix", outputRadix);
 }
 
 }

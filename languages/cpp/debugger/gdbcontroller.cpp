@@ -145,7 +145,8 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         config_displayStaticMembers_(false),
         config_asmDemangle_(true),
         config_dbgTerminal_(false),
-        config_gdbPath_()
+        config_gdbPath_(),
+        config_outputRadix_(10)
 {
     gdbSizeofBuf_ = sizeof(gdbOutput_);
 
@@ -192,9 +193,13 @@ void GDBController::configure()
     bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
     config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs",true);
 
-    if (( old_displayStatic           != config_displayStaticMembers_   ||
+    int old_outputRadix  = config_outputRadix_;
+    config_outputRadix_   = DomUtil::readIntEntry(dom, "/kdevdebugger/display/outputradix", 10);
+
+    if (( old_displayStatic             != config_displayStaticMembers_   ||
             old_asmDemangle             != config_asmDemangle_            ||
-            old_breakOnLoadingLibrary_  != config_breakOnLoadingLibrary_ )&&
+            old_breakOnLoadingLibrary_  != config_breakOnLoadingLibrary_  ||
+            old_outputRadix             != config_outputRadix_)           &&
             dbgProcess_)
     {
         bool restart = false;
@@ -232,14 +237,17 @@ void GDBController::configure()
                 queueCmd(new GDBCommand("set stop-on 0", NOTRUNCMD, NOTINFOCMD));
         }
 
-	if (!config_configGdbScript_.isEmpty()) {
-	    queueCmd(new GDBCommand("source " + config_configGdbScript_,
-				    NOTRUNCMD, NOTINFOCMD, 0));
-	}
+        if (old_outputRadix != config_outputRadix_)
+        {
+            queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",
+                                config_outputRadix_), NOTRUNCMD, NOTINFOCMD));
+        }
+        
+        if (!config_configGdbScript_.isEmpty())
+          queueCmd(new GDBCommand("source " + config_configGdbScript_, NOTRUNCMD, NOTINFOCMD, 0));
 
         if (restart)
             queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
-
     }
 }
 
@@ -1289,6 +1297,9 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
     else
         queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
+    // make sure output radix is always set to users view.
+    queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",  config_outputRadix_), NOTRUNCMD, NOTINFOCMD));
+       
     // Change the "Working directory" to the correct one
     QCString tmp( "cd " + QFile::encodeName( run_directory ));
     queueCmd(new GDBCommand(tmp, NOTRUNCMD, NOTINFOCMD));

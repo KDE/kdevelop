@@ -76,6 +76,7 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()) );
     connect( watchVarEditor_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
 //    connect( watchVarEntry_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
+
 }
 
 // **************************************************************************
@@ -130,6 +131,7 @@ void VariableWidget::slotAddWatchVariable(const QString &ident)
     }
 }
 
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
@@ -152,6 +154,7 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
+    connect( this, SIGNAL(toggleRadix(QListViewItem*)), SLOT(slotToggleRadix(QListViewItem*)) );
 
 /*
     work in progress - disabled for now
@@ -185,11 +188,14 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             idRemoveWatch = popup.insertItem( i18n("Remove Watch Variable") );
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
+        int idToggleRadix = popup.insertItem( i18n("Toggle Hex/Decimal") );
         int	idCopyToClipboard = popup.insertItem( i18n("Copy to Clipboard") );
         int res = popup.exec(QCursor::pos());
 
         if (res == idRemoveWatch)
             delete item;
+        if (res == idToggleRadix)
+            emit toggleRadix(item);
         else if (res == idCopyToClipboard)
         {
             QClipboard *qb = KApplication::clipboard();
@@ -376,6 +382,34 @@ void VariableTree::maybeTip(const QPoint &p)
     }
 }
 
+/* rgruber:
+ * this it the slot which is connected to the toggleRadix() signal
+ * it removes the given watch variable an replaces it by another
+ * watch that includes a format modifier
+ */
+void VariableTree::slotToggleRadix(QListViewItem * item)
+{
+  if (item==NULL)  //no item->nothing to do
+    return;
+
+  VarItem *pOldItem = dynamic_cast<VarItem*>(item);
+  VarItem *pNewItem = NULL;
+
+  QString strName = pOldItem->text(VarNameCol);
+  if (strName.left(3) == "/x ")   //are we already in hex-view ???
+    strName = strName.right(strName.length()-3);  //stripe the hex-formater
+  else
+    strName = QString("/x ")+strName;  //add the hex-formater
+
+  pNewItem = new VarItem((TrimmableItem *) item->parent(), strName, typeUnknown);
+  emit expandItem(pNewItem);
+
+  pNewItem->moveItem(pOldItem);  //move the new item up right under the old one
+
+  delete item;  //remove the old one so that is seam as if it was replaced by the new item
+  pOldItem=NULL;
+}
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
@@ -451,13 +485,33 @@ QListViewItem *TrimmableItem::lastChild() const
 TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) const
 {
     QListViewItem *child = firstChild();
+    bool bRenew=false;  //this indicates if the current item needs to be replaced by a new one.
+   			//the problem is, that the debugger always replaces already
+			//format-modified local item with non-mofified ones. So with every
+			//run we need to newly modify the outcome of the debugger
 
     // Check the siblings on this branch
     while (child) {
-        if (child->text(VarNameCol) == match) {
+        QString strMatch = child->text(VarNameCol);
+        bRenew=false;
+	if (strMatch.left(3) == "/x ") {  //is the current item format modified?
+	    strMatch = strMatch.right(strMatch.length()-3);
+	    bRenew=true;
+	}
+	if (strMatch == match) {
             if (TrimmableItem *item = dynamic_cast<TrimmableItem*> (child))
-                if (item->getDataType() == type)
-                    return item;
+                if (item->getDataType() == type) {
+		    if (bRenew && dynamic_cast<VarItem*>(item)) { //do we need to replace?
+			VarItem* pNewItem = new VarItem((TrimmableItem *) item->parent(),
+				 child->text(VarNameCol), typeUnknown);
+			emit ((VariableTree*)pNewItem->listView())->expandItem(pNewItem);
+			pNewItem->moveItem(item);
+			delete item;
+			item=NULL;
+			item=pNewItem;
+		    }
+		    return item;
+		}
         }
 
         child = child->nextSibling();
@@ -592,6 +646,8 @@ QString VarItem::fullName() const
 
 void VarItem::setText(int column, const QString &data)
 {
+    QString strData=data;
+
     if (!isActive() && isOpen() && dataType_ == typePointer) {
         waitingForData();
         ((VariableTree*)listView())->expandItem(this);
@@ -602,9 +658,18 @@ void VarItem::setText(int column, const QString &data)
         QString oldValue(text(column));
         if (!oldValue.isEmpty())                   // Don't highlight new items
             highlight_ = (oldValue != QString(data));
+
+/*
+        QString strTyp = text(2);
+	if (strTyp == QString("int")) {
+	  int iVal=0;
+	  sscanf(strData.ascii(), "%d", &iVal);
+	  strData = QString("0x%1").arg(iVal, 0, 16);
+	}
+*/
     }
 
-    QListViewItem::setText(column, data);
+    QListViewItem::setText(column, strData);
     repaint();
 }
 
@@ -917,4 +982,7 @@ void WatchRoot::requestWatchVars()
 
 }
 
+
 #include "variablewidget.moc"
+
+

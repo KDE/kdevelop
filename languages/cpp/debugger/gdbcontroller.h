@@ -167,6 +167,7 @@ private:
     QCString config_configGdbScript_;
     QCString config_runShellScript_;
     QCString config_runGdbScript_;
+    int config_outputRadix_;
 };
 
 }

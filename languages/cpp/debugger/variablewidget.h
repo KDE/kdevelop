@@ -70,6 +70,8 @@ private:
 class VariableTree : public KListView, public QToolTip
 {
     Q_OBJECT
+//rgruber: we need this to be able to emit expandItem() from within TrimmableItem
+friend class TrimmableItem;
 
 public:
     VariableTree( VariableWidget *parent, const char *name=0 );
@@ -104,8 +106,11 @@ signals:
     // jw
     void varItemConstructed(VarItem *item);
 
+    //rgr
+    void toggleRadix(QListViewItem *item);
 public slots:
     void slotAddWatchVariable(const QString& watchVar);
+    void slotToggleRadix(QListViewItem * item);
 
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
