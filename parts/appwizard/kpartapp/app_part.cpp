@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001  <kurt@granroth.org>
+ * Copyright (C) 2001 $AUTHOR$ <$EMAIL$>
  */
 
 #include "$APPNAMELC$_part.h"

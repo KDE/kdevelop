@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001  <kurt@granroth.org>
+ * Copyright (C) 2001 $AUTHOR$ <$EMAIL$>
  */
 
 #ifndef _$APPNAMEUC$_H_
