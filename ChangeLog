@@ -1,3 +1,8 @@
+2002-10-11 Harald Fernengel <harry@kdevelop.org>
+	* added open recent files action
+	* beautified "add tool dialog"
+	* recognize "makefile" and "Makefile" as makefile
+
 2002-10-08 Harald Fernengel <harry@kdevelop.org>
 	* compile qEditor only if Qt >= 3.0.5
 	* don't build sourcenav since it is obsoleted by history part
