@@ -1,3 +1,6 @@
+#ifndef _TEXTEDITOR_H
+#define _TEXTEDITOR_H
+
 #include "kwview.h"
 #include "kwdoc.h"
 
@@ -40,3 +43,5 @@ public:
     QString fileName() const;
     QList<TextEditorView> editorViews() const;
 };
+
+#endif
