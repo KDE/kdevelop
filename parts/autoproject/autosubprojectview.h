@@ -26,6 +26,13 @@ class KAction;
 
 class AutoProjectWidget;
 class AutoProjectPart;
+class TargetItem;
+class SubprojectItem;
+
+namespace AutoProjectPrivate
+{
+    bool isHeader( const QString& fileName );
+}
 
 
 class AutoSubprojectView : public KListView
@@ -40,6 +47,8 @@ class AutoSubprojectView : public KListView
 		void loadMakefileams ( const QString& dir );
 
 		void parse(SubprojectItem *item);
+
+        TargetItem *findNoinstHeaders(SubprojectItem *item);
 
 	protected:
 		void initActions ();

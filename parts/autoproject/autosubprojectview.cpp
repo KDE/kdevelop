@@ -47,9 +47,9 @@
 namespace AutoProjectPrivate
 {
 
-static bool isHeader( const QString& fileName )
+bool isHeader( const QString& fileName )
 {
-    return QStringList::split( ";", "h;H;hh;hxx;hpp;tcc" ).contains( QFileInfo(fileName).extension() );
+    return QStringList::split( ";", "h;H;hh;hxx;hpp;tcc;h++" ).contains( QFileInfo(fileName).extension(false) );
 }
 
 static QString cleanWhitespace( const QString &str )
@@ -708,22 +708,7 @@ void AutoSubprojectView::parse( SubprojectItem *item )
 	}
 
 	/// @todo only if in a c++ project
-	TargetItem* noinst_HEADERS_item = 0;
-	QPtrListIterator<TargetItem> itemIt( item->targets );
-	while( itemIt.current() ){
-	    TargetItem* titem = itemIt.current();
-	    ++itemIt;
-
-	    if( titem->prefix == "noinst" && titem->primary == "HEADERS" ){
-	        noinst_HEADERS_item = titem;
-		break;
-	    }
-	}
-
-	if( !noinst_HEADERS_item ){
-	    noinst_HEADERS_item = m_widget->createTargetItem( "", "noinst", "HEADERS" );
-	    item->targets.append( noinst_HEADERS_item );
-	}
+	TargetItem* noinst_HEADERS_item = findNoinstHeaders(item);
 
 	QDir dir( item->path );
 	QStringList headersList = QStringList::split( "[ \t]", item->variables[ "noinst_HEADERS" ] );
@@ -778,6 +763,28 @@ void AutoSubprojectView::slotInstallSuSubproject( )
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "install", true );
 
 	m_part->mainWindow() ->lowerView( m_widget );
+}
+
+TargetItem * AutoSubprojectView::findNoinstHeaders( SubprojectItem *item )
+{
+	TargetItem* noinst_HEADERS_item = 0;
+	QPtrListIterator<TargetItem> itemIt( item->targets );
+	while( itemIt.current() ){
+	    TargetItem* titem = itemIt.current();
+	    ++itemIt;
+
+	    if( titem->prefix == "noinst" && titem->primary == "HEADERS" ){
+	        noinst_HEADERS_item = titem;
+		break;
+	    }
+	}
+
+	if( !noinst_HEADERS_item ){
+	    noinst_HEADERS_item = m_widget->createTargetItem( "", "noinst", "HEADERS" );
+	    item->targets.append( noinst_HEADERS_item );
+	}
+
+    return noinst_HEADERS_item;
 }
 
 #include "autosubprojectview.moc"

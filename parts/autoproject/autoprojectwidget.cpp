@@ -564,6 +564,18 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 
 void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem)
 {
+    //FIXME: a quick hack to prevent adding header files to _SOURCES
+    //and display them in noinst_HEADERS
+    if (AutoProjectPrivate::isHeader(fileName))
+    {
+        kdDebug ( 9020 ) << "Ignoring header file and adding it to noinst_HEADERS: " << fileName << endl;
+        TargetItem* noinst_HEADERS_item = getSubprojectView()->findNoinstHeaders(spitem);
+        FileItem *fitem = createFileItem( fileName, spitem );
+        noinst_HEADERS_item->sources.append( fitem );
+        noinst_HEADERS_item->insertItem( fitem );
+        return;
+    }
+
 	FileItem * fitem = createFileItem( fileName, spitem );
 	titem->sources.append( fitem );
 	titem->insertItem( fitem );

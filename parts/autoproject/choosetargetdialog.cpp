@@ -20,6 +20,7 @@
 #include <qptrlist.h>
 #include <qradiobutton.h>
 #include <qstringlist.h>
+#include <qfileinfo.h>
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -33,6 +34,7 @@
 
 #include "autodetailsview.h"
 #include "autolistviewitems.h"
+#include "autosubprojectview.h"
 
 #include "misc.h"
 #include "autoprojectwidget.h"
@@ -289,19 +291,31 @@ void ChooseTargetDialog::accept ()
 
 		if ( !found )
 		{
-			fitem = m_widget->createFileItem( fileName,m_choosenSubproject );
-			m_choosenTarget->sources.append( fitem );
-			m_choosenTarget->insertItem( fitem );
+            //FIXME: a quick hack to prevent adding header files to _SOURCES
+            //and display them in noinst_HEADERS
+            if (AutoProjectPrivate::isHeader(fileName))
+            {
+                kdDebug ( 9020 ) << "Ignoring header file and adding it to noinst_HEADERS: " << fileName << endl;
+                TargetItem* noinst_HEADERS_item = m_widget->getSubprojectView()->findNoinstHeaders(m_choosenSubproject);
+                FileItem *fitem = m_widget->createFileItem( fileName, m_choosenSubproject );
+                noinst_HEADERS_item->sources.append( fitem );
+                noinst_HEADERS_item->insertItem( fitem );
+            }
+            else
+            {
+                fitem = m_widget->createFileItem( fileName,m_choosenSubproject );
+                m_choosenTarget->sources.append( fitem );
+                m_choosenTarget->insertItem( fitem );
 
-			QString canontargetname = AutoProjectTool::canonicalize( m_choosenTarget->name );
-			QString varname = canontargetname + "_SOURCES";
-			m_choosenSubproject->variables[ varname ] += ( " " + fileName );
+                QString canontargetname = AutoProjectTool::canonicalize( m_choosenTarget->name );
+                QString varname = canontargetname + "_SOURCES";
+                m_choosenSubproject->variables[ varname ] += ( " " + fileName );
 
-			QMap<QString, QString> replaceMap;
-			replaceMap.insert( varname, m_choosenSubproject->variables[ varname ] );
+                QMap<QString, QString> replaceMap;
+                replaceMap.insert( varname, m_choosenSubproject->variables[ varname ] );
 
-			AutoProjectTool::modifyMakefileam( m_choosenSubproject->path + "/Makefile.am", replaceMap );
-
+                AutoProjectTool::modifyMakefileam( m_choosenSubproject->path + "/Makefile.am", replaceMap );
+            }
 			newFileList.append ( m_choosenSubproject->path.mid ( m_part->projectDirectory().length() + 1 ) + "/" + fileName );
 		}
 
