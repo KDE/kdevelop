@@ -777,13 +777,9 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDevelop Manual", "ctx_kdevelop") )
         ->setFileName("help:/kdevelop/index.html");
 
-//				historyMap[name] = item;
-//			historyList.append  ( name );
-
-//	completionCombo.setHistoryItems ( historyList, true );
 
 	docConfigAction = new KAction(i18n("Customize..."), "configure", 0,
-									  this, SLOT(slotConfigure()), actions, "documentation options");
+		this, SLOT(slotConfigure()), actions, "documentation options");
 
 	connect ( showButton, SIGNAL ( toggled ( bool ) ), this, SLOT ( slotShowButtonToggled ( bool ) ) );
 	connect ( docConfigButton, SIGNAL ( clicked() ), this, SLOT ( slotConfigure() ) );
@@ -797,8 +793,6 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     connect( docView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 	connect ( docView, SIGNAL ( selectionChanged ( QListViewItem* ) ), this, SLOT ( slotSelectionChanged ( QListViewItem* ) ) );
-			 
-	completionCombo->setHistoryItems ( historyList );
 
     m_part = part;
 }
@@ -809,13 +803,30 @@ DocTreeViewWidget::~DocTreeViewWidget()
 
 void DocTreeViewWidget::searchForItem ( const QString& currentText )
 {
-	QListViewItemIterator  docViewIterator( docView );
-	while( docViewIterator.current() )
-	{
-		if( docViewIterator.current()->text(0).contains( currentText )>0) {
-			searchResultList.append( docViewIterator.current() );
+	completionCombo->addToHistory( currentText );
+	QListViewItem* current = docView->currentItem();
+	if( current->firstChild() ) 
+	{  //only allow items with childs to be searched in
+		if( !current->parent() )
+		{// current is a toplevel item, so we must initialize all childs
+			QListViewItem * myChild = current->firstChild();
+        		while( myChild ) 
+			{
+				myChild->setOpen( true );
+				myChild->setOpen( false );
+				myChild = myChild->itemBelow();
+			}
 		}
-		++docViewIterator;
+		
+		QListViewItemIterator  docViewIterator( current );
+		while( docViewIterator.current() )
+		{// now we do the search
+			if( docViewIterator.current()->text(0).find( currentText, false )>=0 ) 
+			{
+				searchResultList.append( docViewIterator.current() );
+			}
+			++docViewIterator;
+		}
 	}
 }
 
@@ -930,6 +941,20 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
     contextItem = item;
     KPopupMenu popup(i18n("Documentation Tree"), this);
     popup.insertItem(i18n("Properties..."), this, SLOT(slotConfigure()));
+    
+    QListViewItem* i = contextItem;
+    while(i->parent()) // go to folder
+    {
+        i = i->parent();
+    }
+    if ( i == folder_kdelibs && contextItem->parent() && contextItem->parent()->parent() )
+    {
+        popup.insertItem(i18n("Add to Bookmarks"), this, SLOT(slotAddBookmark()));
+    }
+    if (  contextItem->parent() && contextItem->parent() == folder_bookmarks )
+    {
+        popup.insertItem(i18n("Remove"), this, SLOT(slotRemoveBookmark()));   
+    }
     popup.exec(p);
 }
 
@@ -1027,6 +1052,32 @@ QString DocTreeViewWidget::locatehtml(const QString &fileName)
        path = locate("html", "default/" + fileName);
 
     return path;
+}
+
+
+void DocTreeViewWidget::slotAddBookmark()
+{
+	DocTreeItem *item = dynamic_cast<DocTreeItem*>( contextItem );
+	if( item ) 
+	{
+		DocTreeViewTool::addBookmark( item->text(0), item->fileName() );
+		folder_bookmarks->refresh();
+	}
+}
+
+void DocTreeViewWidget::slotRemoveBookmark()
+{
+	DocTreeItem *item = dynamic_cast<DocTreeItem*>( contextItem );
+	if( item ) 
+	{
+		int posFolder = docView->itemIndex( folder_bookmarks );
+		int i = docView->itemIndex( item ) - posFolder;
+		//kdDebug(9002) << "remove item: " << i << endl;
+		
+		DocTreeViewTool::removeBookmark( i );
+
+		folder_bookmarks->refresh();
+	}
 }
 
 #include "doctreeviewwidget.moc"

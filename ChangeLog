@@ -1,3 +1,7 @@
+2002-10-28 Victor Röder <victor_roeder@gmx.de>
+	* applied Sebastian Kratzert's search improvements
+		for the docViewPart
+
 2002-10-28 F@lk Brettschneider <falk@kdevelop.org>
 	* compiles with KDE-3.0.3 again
 	

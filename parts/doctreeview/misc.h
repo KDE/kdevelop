@@ -31,6 +31,8 @@ public:
     // Returns the list of items for the Others tree
     static void getBookmarks(QStringList *itemNames, QStringList *fileNames);
     static void setBookmarks(const QStringList &itemNames, const QStringList &fileNames);
+    static void addBookmark(const QString& itemName, const QString & fileName);
+    static void removeBookmark( int index );
 };
 
 #endif

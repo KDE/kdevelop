@@ -61,7 +61,9 @@ private slots:
 	void slotHistoryReturnPressed ( const QString& );
 	void slotSelectionChanged ( QListViewItem* );
 	void slotShowButtonToggled ( bool );
-	
+	void slotAddBookmark();
+	void slotRemoveBookmark();
+
 protected:
 	void searchForItem ( const QString& );
 
@@ -93,9 +95,6 @@ private:
 	
 	DocTreeItem* m_activeTreeItem;
 	
-	QStringList historyList;
-	QMap < QString, DocTreeItem* > historyMap;
-
 	KAction* docConfigAction;
 };
 #endif

@@ -112,3 +112,30 @@ void DocTreeViewTool::setBookmarks(const QStringList &itemNames, const QStringLi
     config->writeEntry("BookmarksTitle", itemNames);
     config->writeEntry("BookmarksURL", fileNames);
 };
+
+void DocTreeViewTool::addBookmark(const QString& itemName, const QString & fileName)
+{
+    KConfig *config = instanceConfig();
+    config->setGroup("DocTreeView");
+    QStringList iNames = config->readListEntry("BookmarksTitle");
+    QStringList fNames = config->readListEntry("BookmarksURL");
+    
+    iNames.append( itemName );
+    fNames.append( fileName );
+    
+    setBookmarks( iNames, fNames );
+}
+void DocTreeViewTool::removeBookmark(int index)
+{
+    
+    KConfig *config = instanceConfig();
+    config->setGroup("DocTreeView");
+    QStringList itemNames = config->readListEntry("BookmarksTitle");
+    QStringList fileNames = config->readListEntry("BookmarksURL");
+    
+    fileNames.remove( fileNames.at( fileNames.size() - index ) );
+    itemNames.remove( itemNames.at( itemNames.size() - index ) );
+    
+    setBookmarks( itemNames, fileNames );
+}
+
