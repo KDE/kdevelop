@@ -136,14 +136,9 @@ protected slots:
                            THType parentType, THType itemType );
   void slotClassWizard();
 
-  // Added by Pau Estalella pau.estalella@upcnet.es
-  void slotClassFolderNew();
-  void slotClassFolderDelete();
-
 signals:
   void selectedFileNew();
   void selectedClassNew();
-
   void selectedProjectOptions();
   void selectedViewDeclaration(const char *, const char *,THType,THType);
   void selectedViewDefinition(const char *, const char *,THType,THType);
@@ -201,10 +196,6 @@ private: // Popupmenus
 
   /** Popupmenu for folders. */
   KPopupMenu folderPopup;
-
-  // Added by Pau Estalella pau.estalella@upcnet.es
-  /** Popupmenu for folders in Classes tree. */
-  KPopupMenu classfolderPopup;
 
 private: // Private attributes
 
@@ -267,19 +258,6 @@ private: // Private methods
   void asTreeStr( QString &str );
 
   bool validClassDecl( const char *className, const char *declName, THType type );
-   //  Added by Pau Estalella pau.estalella@upcnet.es
-   /** @return The current item's root (Classes,Globals,etc.) */
-   QListViewItem * rootItem();
-
-   /** @return A string containing the path from the base source code directory to
-       the current folder selected */
-   QString pathFromRoot();
-   /** Creates a subdirectory below the current folder directory */
-   bool createFolderSubdir(const char *folderName);
-   /** Creates a folder hierarchy in the class view tree according to the folder string */
-   QListViewItem * createFolderHierarchy(QString foldStr);
-   /** Tells whether item already has a child labeled folder */
-   QListViewItem * searchChildFolder(QListViewItem *item, QString folder);
 };
 
 #endif

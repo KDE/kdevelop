@@ -190,9 +190,6 @@
 #define ID_CV_ADD_SLOT_SIGNAL           14531
 #define ID_CV_CLASSWIZARD               14532
 
-// Added by Pau Estalella pau.estalella@upcnet.es
-#define ID_CV_FOLDER_NEW_CLASS          14533
-
 #define	ID_CV_TOOLBAR_CLASS_CHOICE	14540
 #define	ID_CV_TOOLBAR_METHOD_CHOICE	14541
 #define	ID_CV_TOOLBAR_WIZARD_CHOICE	14542

@@ -691,9 +691,6 @@ public:
                              THType parentType,
                              THType itemType );
 
-  // Added by Pau Estalella pau.estalella@upcnet.es
-  /** Sets the folder name for the new class to be added */
-  void slotNewClassFolder(QString foldername);
 protected: // Protected methods
 
   /** The user selected a class in the classcombo.
@@ -996,11 +993,6 @@ private:
 
   /** memory effect on open file dialog box*/
   QString _LastOpenDir;
-
-// Addedd by Pau Estalella pau.estalella@upcnet.es
-/* This shouldn't be done this way... The signal CClassView::selectedClassNew should
-   carry the folder's name directly to the CKDevelop::slotProjectNewClass slot. */
-  QString newClassFolder;
 
   bool useGlimpse;
   bool useHtDig;

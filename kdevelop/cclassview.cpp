@@ -25,7 +25,6 @@
 #include <qprogressdialog.h> 
 #include <qmessagebox.h>
 #include <qstrlist.h>
-#include <qdir.h>
 
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
@@ -219,15 +218,6 @@ void CClassView::initPopups()
   folderPopup.setTitle( i18n( "Folder" ) );
   folderPopup.insertItem( i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
   id = folderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
-
-  // Added by Pau Estalella pau.estalella@upcnet.es
-  // Class folder popup
-  classfolderPopup.setTitle( i18n( "Folder" ) );
-  classfolderPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_CV_FOLDER_NEW_CLASS);
-  classfolderPopup.insertItem( i18n("Add Folder..."), this, SLOT( slotClassFolderNew()),0, ID_CV_FOLDER_NEW);
-// Not yet...
-//  classfolderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotClassFolderDelete()),0, ID_CV_FOLDER_DELETE);
-
 
   connect(&attributePopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
   connect(&classPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
@@ -634,9 +624,6 @@ KPopupMenu *CClassView::getCurrentPopup()
     case THFOLDER:
       if( strcmp( currentItem()->text(0), i18n( CLASSROOTNAME ) ) == 0 )
         popup = &projectPopup;
-      // Added by Pau Estalella pau.estalella@upcnet.es
-			else if ( strcmp( rootItem()->text(0), i18n( CLASSROOTNAME ) ) == 0 )
-			  popup = &classfolderPopup;
       else
         popup = &folderPopup;
       break;
@@ -919,16 +906,15 @@ void CClassView::buildInitalClassTree()
 
   delete list;
 
-  QListViewItem *lastFolder = classesItem;
   // Add all classes with a folder.
-  for( dictI.toFirst(); dictI.current(); ++dictI )
+  for( dictI.toFirst();
+       dictI.current();
+       ++dictI )
   {
     // Add folder.
-    folder = createFolderHierarchy( dictI.currentKey() );
+    folder = treeH->addItem( dictI.currentKey(), THFOLDER, classesItem );
     ((CClassTreeHandler *)treeH)->addClasses( dictI.current(), folder );
-    if (folder->parent() == classesItem)  // This is a first level folder
-      lastFolder = folder;
-    treeH->setLastItem( lastFolder );
+    treeH->setLastItem( folder );
   }
 
   // Add all classes without a folder.
@@ -1038,25 +1024,7 @@ void CClassView::slotFileNew()
 
 void CClassView::slotClassNew()
 {
-  // Modified by Pau Estalella pau.estalella@upcnet.es
-  THType type;
-  QString path;
-
-  cerr << "CClassView::slotClassNew()" << endl;
-
-  type = treeH->itemType();
-  if (type == THFOLDER)
-  {
-    path = pathFromRoot();
-    cerr << "Path from root:" << ((const char *)path) << endl;
-    emit signalNewClassFolderChanged(pathFromRoot());
-    emit selectedClassNew();
-  }
-  else
-  {
-    emit signalNewClassFolderChanged(0);
-    emit selectedClassNew();
-  }
+  emit selectedClassNew();
 }
 
 void CClassView::slotClassDelete()
@@ -1261,148 +1229,6 @@ void CClassView::slotClassWizard()
 
   dlg.setStore( store );
   dlg.exec();
-}
-
-
-// Added by Pau Estalella pau.estalella@upcnet.es
-
-/** @return The current item's root (Classes,Globals) */
-QListViewItem *CClassView::rootItem()
-{
-  QListViewItem *ret;
-
-  ret = currentItem();
-  if (ret == 0) return 0; // Is this really needed?
-  while (ret->parent() != 0)
-  {
-    ret = ret->parent();
-  }
-  cerr << endl;
-  return ret;
-}
-
-// Question: Does this routine leak memory from QString?
-QString CClassView::pathFromRoot()
-{
-  QString ret;
-  QListViewItem *cur;
-
-  cur = currentItem();
-  if (cur == 0) return 0; // Is this really needed? Naah...
-  while ((cur != 0) && (strcmp( cur->text(0), i18n( CLASSROOTNAME )) != 0))
-  // Hmm... Order dependent. Why isn't there in C++ an "and then" operator like in Eiffel?
-  {
-    ret = cur->text(0) + ("/" + ret);
-    cur = cur->parent();
-  }
-  if (ret.length() > 0) ret = ret.left(ret.length()-1);
-  return ret;
-}
-
-void CClassView::slotClassFolderNew()
-{
-  cerr << "CClassView::slotClassFolderNew()" << endl;
-  CCVAddFolderDlg dlg;
-  QListViewItem *item;
-
-  if( dlg.exec() )
-  {
-    if (createFolderSubdir( dlg.folderEdit.text() ))
-    {
-      item = ((CClassTreeHandler *)treeH)->addItem( dlg.folderEdit.text(),
-                                                    THFOLDER,
-                                                    currentItem() );
-      setOpen( item, true );
-    }
-    else
-    {
-      // Emit an error message?
-    }
-  }
-}
-
-void CClassView::slotClassFolderDelete()
-{
-  cerr << "CClassView::slotClassFolderDelete()" << endl;
-}
-
-/** Creates a subdirectory below the current folder directory */
-bool CClassView::createFolderSubdir(const char *folderName)
-{
-  if (treeH->itemType() != THFOLDER) // Sanity check
-  {
-    cerr << "AARGH! Precondition violation in CClassView::createFolderSubdir!" << endl;
-    cerr << "ClassView does not have a folder selected!" << endl;
-    return false;
-  }
-
-  QDir baseDir;
-  QString path = project->getProjectDir() + project->getSubDir() +
-    pathFromRoot() + "/" + folderName;
-
-  if (baseDir.exists(path,TRUE))
-  {
-    // cerr << "  Subdir already exists. Do nothing" << endl;
-    return true;
-  }
-  else
-  {
-    // cerr << "  Subdir does not exist. Create it" << endl;
-    if (baseDir.mkdir(path,TRUE))
-    {
-      // cerr << "  Subdir created." << endl;
-      return true;
-    }
-    else
-    {
-      // cerr << "  Subdir creation FAILED." << endl;
-      return false;
-    }
-  }
-}
-/** Creates a folder hierarchy in the class view tree according to the folder string
- *  foldStr is supposed to be in fold/subfold/subsubfold/etc format, with no
- *  slash at the beggining or the end.
-*/
-QListViewItem * CClassView::createFolderHierarchy(const QString foldStr)
-{
-  QListViewItem *ret,*child;
-  uint i;
-  int nexti;
-  QString folder;
-
-  cerr << "CClassView::createFolderHierarchy(\"" << foldStr << "\")" << endl;
-  i = 0;
-  ret = classesItem;
-  while (i < foldStr.length())
-  {
-    nexti = foldStr.find('/', i);
-    if (nexti < 0) nexti = foldStr.length();
-    folder = foldStr.mid(i, nexti-i);
-    child = searchChildFolder(ret,folder);
-    if (child == 0)  // Subfolder does not yet exist
-      ret = treeH->addItem( folder, THFOLDER, ret );
-    else
-      ret = child;
-    i = nexti+1;
-  }
-  return ret;
-}
-/** Tells whether item already has a child folder labeled folder */
-QListViewItem *CClassView::searchChildFolder(QListViewItem *item, QString folder)
-{
-  QListViewItem *cur, *ret;
-
-  ret = 0;
-  cur = item->firstChild();
-  while (cur && ret==0)
-  {
-    if (treeH->itemType(cur)==THFOLDER && cur->text(0)==folder)
-      ret = cur;
-    else
-      cur = item->nextSibling();
-  }
-  return ret;
 }
 
 

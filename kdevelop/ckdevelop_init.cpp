@@ -65,9 +65,7 @@ CKDevelop::CKDevelop(bool witharg)
       frameStack(0),
       disassemble(0),
       dbg_widget(0),
-      dbgInternal(false),
-// Added by Pau Estalella pau.estalella@upcnet.es
-      newClassFolder(0)
+      dbgInternal(false)
 {
   version = VERSION;
   project=false;// no project
@@ -387,10 +385,7 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem("CloseProject", this, SLOT(slotProjectClose()), true, ID_PROJECT_CLOSE );
   
   accel->insertItem(i18n("New Class"), "NewClass", (unsigned int) 0);
-  // Modif. by Pau Estalella pau.estalella@upcnet.es
-  // All new class additions now go through CClassView, where we know in which
-  // folder the new class should be put.
-  accel->connectItem("NewClass", class_tree, SLOT(slotClassNew()), true, ID_PROJECT_NEW_CLASS );
+  accel->connectItem("NewClass", this, SLOT(slotProjectNewClass()), true, ID_PROJECT_NEW_CLASS );
   
   accel->insertItem(i18n("Add existing File(s)"), "AddExistingFiles", (unsigned int) 0);
   accel->connectItem("AddExistingFiles",this, SLOT(slotProjectAddExistingFiles()), true, ID_PROJECT_ADD_FILE_EXIST );
@@ -653,11 +648,8 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
 
   project_menu->insertSeparator();
-  // Modif. by Pau Estalella pau.estalella@upcnet.es
-  // All new class additions now go through CClassView, where we know in which
-  // folder the new class should be put.
-  project_menu->insertItem(i18n("&New Class..."), class_tree,
-			   SLOT(slotClassNew()),0,ID_PROJECT_NEW_CLASS);
+  project_menu->insertItem(i18n("&New Class..."), this,
+			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   
   project_menu->insertItem(Icon("mini/locale.xpm"),i18n("Add new &Translation File..."), this,
@@ -873,11 +865,8 @@ void CKDevelop::initMenuBar(){
   classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( i18n("Goto class declaration"), this,
                                   SLOT(slotClassbrowserViewClass()), 0, ID_CV_VIEW_CLASS_DECLARATION);
-  // Modif. by Pau Estalella pau.estalella@upcnet.es
-  // All new class additions now go through CClassView, where we know in which
-  // folder the new class should be put.
-  classbrowser_popup->insertItem( i18n("New class..."), class_tree,
-                                  SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+  classbrowser_popup->insertItem( i18n("New class..."), this,
+                                  SLOT(slotProjectNewClass()), 0, ID_PROJECT_NEW_CLASS);
   classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( i18n("Add member function..."), this,
                                   SLOT(slotClassbrowserNewMethod()), 0, ID_CV_METHOD_NEW);
@@ -1126,9 +1115,6 @@ void CKDevelop::initConnections(){
   connect(class_tree,SIGNAL(resetStatusbarProgress()),statProg,SLOT(reset()));
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
   connect(class_tree, SIGNAL(selectedClassNew()), SLOT(slotProjectNewClass()));
-// Added by Pau Estalella pau.estalella@upcnet.es
-  connect(class_tree, SIGNAL(signalNewClassFolderChanged(QString)), SLOT(slotNewClassFolder(QString)));
-
   connect(class_tree, SIGNAL(selectedProjectOptions()), SLOT(slotProjectOptions()));
   connect(class_tree, 
           SIGNAL(selectedViewDeclaration(const char *, const char *,THType,THType)), 
@@ -1143,12 +1129,7 @@ void CKDevelop::initConnections(){
   connect(class_tree, SIGNAL(selectFile(const QString &, int)), SLOT(slotSwitchToFile(const QString &, int)));
 
   connect(log_file_tree, SIGNAL(logFileTreeSelected(QString)), SLOT(slotLogFileTreeSelected(QString)));
-
-  // Modif by Pau Estalella pau.estalella@upcnet.es
-  // All new class additions now go through CClassView, where we know in which
-  // folder the new class should be put.
-  connect(log_file_tree, SIGNAL(selectedNewClass()), class_tree, SLOT(slotClassNew()));
-
+  connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
   connect(log_file_tree, SIGNAL(selectedNewFile()), SLOT(slotProjectAddNewFile()));
   connect(log_file_tree, SIGNAL(selectedFileRemove(QString)), SLOT(delFileFromProject(QString)));
   connect(log_file_tree, SIGNAL(showFileProperties(QString)),SLOT(slotShowFileProperties(QString)));

@@ -3947,10 +3947,6 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_CV_CLASS_TOOL,													i18n("Opens the classtool dialog"))
   ON_STATUS_MSG(ID_CV_CLASS_BASE_CLASSES,									i18n("Displays the inherited classes of the current class"))
   ON_STATUS_MSG(ID_CV_CLASS_DERIVED_CLASSES,							i18n("Displays the classes who inherit the current class"))
-
-// Added by Pau Estalella pau.estalella@upcnet.es
-  ON_STATUS_MSG(ID_CV_FOLDER_NEW_CLASS,										i18n("Creates a new class in the current folder"))
-
   ON_STATUS_MSG(ID_CV_FOLDER_NEW,													i18n("Creates a new folder"))
   ON_STATUS_MSG(ID_CV_FOLDER_DELETE,											i18n("Deletes the current folder"))
   ON_STATUS_MSG(ID_CV_CLASS_DELETE,												i18n("Deletes the current class"))
@@ -3989,10 +3985,4 @@ void CKDevelop::statusCallback(int id_){
 	
 	default: slotStatusMsg(i18n("Ready"));
 	}
-}
-
-// Added by Pau Estalella pau.estalella@upcnet.es
-void CKDevelop::slotNewClassFolder(QString folderName)
-{
-  newClassFolder = folderName;
 }

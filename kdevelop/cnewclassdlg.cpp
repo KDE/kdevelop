@@ -23,17 +23,11 @@
 #include "cnewclassdlg.h"
 #include "cproject.h"
 #include "cgeneratenewfile.h"
-// Just for testing purposes!!
-#include <iostream>
 
 // SETUP DIALOG
-// Modif. by Pau Estalella pau.estalella@upcnet.es
-CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj, const char *folderName )
+CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
     : QDialog( parent, name,TRUE )
 {
-  subdirName = folderName;
-  cerr << "Folder name: \"" << folderName << "\"\n";
-
   prj_info = prj;
   header_modified =false;
   impl_modified = false;
@@ -438,10 +432,10 @@ QString CNewClassDlg::getImplFile(){
 void CNewClassDlg::slotClassEditChanged(const char* text){
   QString str = text;
   if(!header_modified){
-    header_edit->setText(subdirName + ("/" + str.lower()) + ".h");
+    header_edit->setText(str.lower() + ".h");
   }
   if(!impl_modified){
-    impl_edit->setText(subdirName + ("/" + str.lower()) +".cpp");
+    impl_edit->setText(str.lower() +".cpp");
   }
   
 }
