@@ -57,7 +57,8 @@ remove the "Hello World" line in main() and construct your classes the same way 
 <P>Further, KDevelop allows you to create projects for KDE 2 and Qt 2.x. These projects require installing the 
 required libraries as well as setting the according installation path in the KDevelop Setup dialog (see 
 <A HREF="index-14.html#General Configuration">General Configuration</A>) before generating a project to ensure everything 
-will work automatically. 
+will work automatically. The KDevelop 1.2 Appwizard adds a GNOME-template so that developers wanting to use KDevelop to create
+GTK+-based applications can do so as well.
 <P>Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
 configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
 as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
@@ -76,17 +77,18 @@ Here are a few guidelines and workarounds:
 <LI>Whenever your project subdirectory gets another subdirectory that contains source files, KDevelop will build a static library of
 these. That means static libraries are already supported by automatic creation in order to sort project sourcefiles.
 Mind that the static library is part of the binary later and won't get installed.</LI>
-<LI>to create a shared library, you have the option to create another project subdirectory. The sourcefiles that are created in this
-subdirectory are included in the project and are therefore available in the classviewer as root classes. To create the shared library,
-the 
-<A HREF="programming/index-19.html">KDevelop Programming Handbook</A> offers a Makefile.am template. If the subdirectory's
-Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
-build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
-project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original project-subdirectory
-according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter 
-<A HREF="#Project Hacking">Project Hacking</A>.</LI>
-<LI>for installing a shared library, you have to watch the KDE-File-system Standard as explained in 
-<A HREF="programming/index-13.html">The KDevelop Programming Handbook</A></LI>
+<LI>to create a shared library KDevelop offers an easy way to turn a such created static library into a shared: Open the RFV on the
+left of KDevelop´s main window and browse to the created subdirectory. There, use the right mouse button over the subdirectory. The
+popup-menu offers the following options:
+<UL>
+<LI>update Makefile.am</LI>
+<LI>change to static lib</LI>
+<LI>change to shared lib</LI>
+</UL>
+
+Use "change to shared lib" to convert the default generated static library into a shared one. You can reverse your decision later if
+you decide that using it as a static library will work as well for your project- just do the same steps again and select "change to
+static lib".</LI>
 </UL>
 <P>
 <H4>Multiple Targets</H4>
@@ -126,7 +128,7 @@ Makefile.am outside the write area according to the needed settings</LI>
 </H3>
 
 <P>
-<P>The KDevelop Application Wizard allows the creation of thirteen different types of projects, constructing a framework for each. All
+<P>The KDevelop Application Wizard allows the creation of different types of projects, constructing a framework for each. All
 projects use the GNU standard development tools as described in the requirements section of this handbook.
 <P>For KDE applications there are six different frameworks:
 <UL>
@@ -152,6 +154,8 @@ document interface (MDI) model.</LI>
 Requires the QextMDI library, see 
 <A HREF="http://www.geocities.com/gigafalk/qextmdi.htm">http://www.geocities.com/gigafalk/qextmdi.htm</A> for more information.</LI>
 </UL>
+<P>Further, the Application Wizard offers a template for creating GNOME-compliant applications with the GTK+ C-library with a ready-to-run
+mainwindow containing a menubar, toolbar and statusbar.
 <P>The two C and C++ -Application types offer a framework for creating commandline applications.
 <P>And last but not least you can create an empty projekt, e.g. to work with existing projects.
 <P>The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
