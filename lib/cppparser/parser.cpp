@@ -1212,7 +1212,7 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 		ast->setConstant( constant );
 	    }
 
-	    AST::Node except;
+	    GroupAST::Node except;
 	    if( parseExceptionSpecification(except) ){
 		ast->setExceptionSpecification( except );
 	    }
@@ -1309,7 +1309,7 @@ bool Parser::parseAbstractDeclarator( DeclaratorAST::Node& node )
 	    ast->setConstant( constant );
 	}
 
-	AST::Node except;
+	GroupAST::Node except;
 	if( parseExceptionSpecification(except) ){
 	    ast->setExceptionSpecification( except );
 	}
@@ -1982,7 +1982,7 @@ bool Parser::parseDeclaratorId( NameAST::Node& node )
     return parseName( node );
 }
 
-bool Parser::parseExceptionSpecification( AST::Node& node )
+bool Parser::parseExceptionSpecification( GroupAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseExceptionSpecification()" << endl;
 
@@ -1994,7 +1994,7 @@ bool Parser::parseExceptionSpecification( AST::Node& node )
     ADVANCE( '(', "(" );
     parseTypeIdList( node );
     ADVANCE( ')', ")" );
-
+    
     return true;
 }
 
@@ -2151,25 +2151,32 @@ bool Parser::parseMemInitializer( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseTypeIdList( AST::Node& /*node*/ )
+bool Parser::parseTypeIdList( GroupAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTypeIdList()" << endl;
 
+    int start = lex->index();
+        
     AST::Node typeId;
     if( !parseTypeId(typeId) ){
 	return false;
     }
+    
+    GroupAST::Node ast = CreateNode<GroupAST>();
+    ast->addNode( typeId );
 
     while( lex->lookAhead(0) == ',' ){
 	lex->nextToken();
 	if( parseTypeId(typeId) ){
-	    // ...
+	    ast->addNode( typeId );
 	} else {
 	    reportError( i18n("Type id expected") );
 	    break;
 	}
     }
 
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     return true;
 }
 

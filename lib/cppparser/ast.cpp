@@ -705,7 +705,7 @@ void DeclaratorAST::setConstant( AST::Node& constant )
     if( m_constant.get() ) m_constant->setParent( this );
 }
 
-void DeclaratorAST::setExceptionSpecification( AST::Node& exceptionSpecification )
+void DeclaratorAST::setExceptionSpecification( GroupAST::Node& exceptionSpecification )
 {
     m_exceptionSpecification = exceptionSpecification;
     if( m_exceptionSpecification.get() ) m_exceptionSpecification->setParent( this );

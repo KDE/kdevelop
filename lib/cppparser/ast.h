@@ -645,8 +645,8 @@ public:
     AST* constant() { return m_constant.get(); }
     void setConstant( AST::Node& constant );
 
-    AST* exceptionSpecification() { return m_exceptionSpecification.get(); }
-    void setExceptionSpecification( AST::Node& exceptionSpecification );
+    GroupAST* exceptionSpecification() { return m_exceptionSpecification.get(); }
+    void setExceptionSpecification( GroupAST::Node& exceptionSpecification );
 
 private:
     QPtrList<AST> m_ptrOpList;
@@ -656,7 +656,7 @@ private:
     QPtrList<AST> m_arrayDimensionList;
     std::auto_ptr<class ParameterDeclarationClauseAST> m_parameterDeclarationClause;
     AST::Node m_constant;
-    AST::Node m_exceptionSpecification;
+    GroupAST::Node m_exceptionSpecification;
 
 private:
     DeclaratorAST( const DeclaratorAST& source );
