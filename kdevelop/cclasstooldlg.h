@@ -33,6 +33,7 @@
 
 enum{ CTPARENT, CTCHILD, CTCLIENT, CTSUPP, CTATTR, CTMETH, CTVIRT, CTNONE };
 
+/** */
 class CClassToolDlg : public QDialog
 {
   Q_OBJECT

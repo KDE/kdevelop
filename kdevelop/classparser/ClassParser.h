@@ -47,7 +47,7 @@
 #include <fstream.h>
 #include "tokenizer.h"
 #include "ClassStore.h"
-
+/** */
 class CClassParser
 {
 public: // Constructor & Destructor

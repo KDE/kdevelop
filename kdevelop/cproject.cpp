@@ -663,7 +663,8 @@ void CProject::getSources(QString rel_name_makefileam,QStrList& sources){
   
   for(file = files.first();file != 0;file = files.next()){
     if(file.right(4) == ".cpp" || file.right(3) == ".cc" || file.right(2) == ".C"
-       || file.right(2) == ".c" || file.right(4) == ".cxx" ){   
+       || file.right(2) == ".c" || file.right(4) == ".cxx" 
+       || file.right(3) == ".ec" || file.right(5) == ".ecpp" ){   
       info = getFileInfo(file);
       if(info.type == "SOURCE"){
 	sources.append(getName(file));
@@ -684,7 +685,7 @@ void CProject::setSourcesHeaders(){
 
   for(file = files.first();file != 0;file = files.next()){
     if(file.right(4) == ".cpp" || file.right(3) == ".cc" || file.right(2) == ".C"
-       || file.right(2) == ".c" || file.right(4) == ".cxx" ){    // added .cxx    990204 rnolden
+       || file.right(2) == ".c" || file.right(4) == ".cxx" || file.right(3) == ".ec" || file.right(5) == ".ecpp" ){    // added .cxx    990204 rnolden
       info = getFileInfo(file);
       if(info.type == "SOURCE"){
 	cpp_files.append(getProjectDir()+file);

@@ -26,6 +26,7 @@
 #include <qcombobox.h>
 #include <qstrlist.h>
 #include <qpopupmenu.h>
+#include <qframe.h>
 
 #include <htmlview.h>
 #include <kiconloader.h>

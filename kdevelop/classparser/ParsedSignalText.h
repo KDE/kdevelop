@@ -41,7 +41,7 @@
 #define _PARSEDSIGNALTEXT_H_INCLUDED
 
 #include <qstring.h>
-
+/** */
 class CParsedSignalText
 {
 public: // Constructor & Destructor

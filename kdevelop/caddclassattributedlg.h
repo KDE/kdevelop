@@ -33,6 +33,7 @@
 #include <qmultilinedit.h>
 #include "./classparser/ParsedAttribute.h"
 
+/** */
 class CAddClassAttributeDlg : public QDialog
 {
   Q_OBJECT

@@ -106,7 +106,12 @@ void CErrorMessageParser::parse(QString makeoutput,QString startdir){
 	if(stack_str->right(1) != "/"){
 	  *stack_str += "/";
 	}
+	if(error_str.left(1) == "/"){ // absolute
+	  error_info->filename = error_str;
+	}
+	else{
 	error_info->filename = *stack_str + error_str;
+	}
 	error_info->errorline = error_line;
 	error_info->makeoutputline = makeoutputline;
 	m_info_list.append( error_info);
@@ -158,6 +163,21 @@ TErrorMessageInfo CErrorMessageParser::getPrev(){
     temp_info.filename = "";
     return temp_info;
   }
+}
+
+bool CErrorMessageParser::hasNext(){
+  int tmp = current +1;
+  if(int(m_info_list.count()) > tmp){ // if a next exists  
+    return true;
+  }
+  return false;
+}
+bool CErrorMessageParser::hasPrev(){
+  int tmp = current -1;
+  if(int(m_info_list.count()) > current && tmp > -1){ // if a prev exists  
+    return true;
+  }
+  return false;
 }
 void CErrorMessageParser::out(){
   TErrorMessageInfo* info;

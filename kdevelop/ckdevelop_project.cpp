@@ -345,7 +345,7 @@ void CKDevelop::slotAddExistingFiles(){
       dest_name = dest + source_name;
       
       type = "DATA";
-      if (dest_name.right(2) == ".h"){
+      if (dest_name.right(2) == ".h" || dest_name.right(4) == ".hxx"){
         type = "HEADER";
       }
       if (getTabLocation(dest_name) == CPP){

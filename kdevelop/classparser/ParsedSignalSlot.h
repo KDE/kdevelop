@@ -42,7 +42,7 @@
 
 #include <qstring.h>
 #include "ParsedMethod.h"
-
+/** */
 class CParsedSignalSlot
 {
 public: // Constructor & Destructor

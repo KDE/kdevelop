@@ -43,7 +43,7 @@
 #include <qlist.h>
 #include "ParsedAttribute.h"
 #include "ParsedArgument.h"
-
+/** */
 class CParsedMethod : public CParsedAttribute
 {
 public: // Constructor & Destructor

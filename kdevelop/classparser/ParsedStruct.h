@@ -44,7 +44,7 @@
 #include <qdict.h>
 #include <qstring.h>
 #include "ParsedAttribute.h"
-
+/** */
 class CParsedStruct
 {
 public: // Constructor & Destructor

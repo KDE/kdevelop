@@ -43,7 +43,7 @@
 #include "ParsedClass.h"
 #include "PersistantClassStore.h"
 #include "ParsedStruct.h"
-
+/** */
 class CClassStore
 {
 public: // Constructor & Destructor

@@ -380,6 +380,21 @@ void CKDevelop::slotViewNextError(){
   else{
     XBell(kapp->getDisplay(),100); // not a next found, beep
   }
+
+  //enable/disable the menus/toolbars
+  if(error_parser->hasNext()){
+    enableCommand(ID_VIEW_NEXT_ERROR);
+  }
+  else{
+    disableCommand(ID_VIEW_NEXT_ERROR);
+  }
+  
+  if(error_parser->hasPrev()){
+    enableCommand(ID_VIEW_PREVIOUS_ERROR);
+  }
+  else{
+    disableCommand(ID_VIEW_PREVIOUS_ERROR);
+  }
 }
 /** jump to the previews error, based on the make output*/
 void CKDevelop::slotViewPreviousError(){
@@ -390,6 +405,20 @@ void CKDevelop::slotViewPreviousError(){
   }
   else{
     XBell(kapp->getDisplay(),100); // not a previous found, beep
+  }
+  //enable/disable the menus/toolbars
+  if(error_parser->hasNext()){
+    enableCommand(ID_VIEW_NEXT_ERROR);
+  }
+  else{
+    disableCommand(ID_VIEW_NEXT_ERROR);
+  }
+  
+  if(error_parser->hasPrev()){
+    enableCommand(ID_VIEW_PREVIOUS_ERROR);
+  }
+  else{
+    disableCommand(ID_VIEW_PREVIOUS_ERROR);
   }
 }
 
@@ -1356,6 +1385,20 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
   error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+  //enable/disable the menus/toolbars
+  if(error_parser->hasNext()){
+    enableCommand(ID_VIEW_NEXT_ERROR);
+  }
+  else{
+    disableCommand(ID_VIEW_NEXT_ERROR);
+  }
+  
+  if(error_parser->hasPrev()){
+    enableCommand(ID_VIEW_PREVIOUS_ERROR);
+  }
+  else{
+    disableCommand(ID_VIEW_PREVIOUS_ERROR);
+  }
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
@@ -1364,6 +1407,20 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
   error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+  //enable/disable the menus/toolbars
+  if(error_parser->hasNext()){
+    enableCommand(ID_VIEW_NEXT_ERROR);
+  }
+  else{
+    disableCommand(ID_VIEW_NEXT_ERROR);
+  }
+  
+  if(error_parser->hasPrev()){
+    enableCommand(ID_VIEW_PREVIOUS_ERROR);
+  }
+  else{
+    disableCommand(ID_VIEW_PREVIOUS_ERROR);
+  }
 }
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   int x,y;

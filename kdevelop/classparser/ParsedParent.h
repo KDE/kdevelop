@@ -42,7 +42,7 @@
 
 #include "tokenizer.h"
 #include <qstring.h>
-
+/** */
 class CParsedParent
 {
 public: // Constructor & Destructor

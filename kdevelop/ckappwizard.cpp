@@ -1176,11 +1176,15 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.c");
   group_filters.append("*.cc");
   group_filters.append("*.C");
+  group_filters.append("*.cxx");
+  group_filters.append("*.ec");
+  group_filters.append("*.ecpp");
   project->addLFVGroup ("Sources","");
   project->setFilters("Sources",group_filters);
  
   group_filters.clear();
   group_filters.append("*.h");
+  group_filters.append("*.hxx");
   project->addLFVGroup ("Header","");
   project->setFilters("Header",group_filters);
 

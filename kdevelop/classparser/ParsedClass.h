@@ -49,7 +49,7 @@
 #include "ParsedMethod.h"
 #include "ParsedSignalSlot.h"
 #include "ParsedSignalText.h"
-
+/** */
 class CParsedClass
 {
 public: // Constructor & Destructor

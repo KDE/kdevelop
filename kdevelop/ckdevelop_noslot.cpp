@@ -41,7 +41,8 @@ void CKDevelop::refreshTrees(){
 int CKDevelop::getTabLocation(QString filename){
   if(filename.right(4) == ".cpp" || filename.right(4) == ".CPP" || filename.right(2) == ".c"
      || filename.right(2) == ".C" || filename.right(3) == ".cc"|| filename.right(3) == ".CC"
-     || filename.right(4) == ".cxx"|| filename.right(4) == ".CXX"){
+     || filename.right(4) == ".cxx"|| filename.right(4) == ".CXX"  || filename.right(3) == ".ec"
+     || filename.right(5) == ".ecpp"){
     return CPP;
   }
   else{

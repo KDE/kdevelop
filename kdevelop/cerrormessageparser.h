@@ -22,6 +22,7 @@
 #include <qstring.h>
 #include <qlist.h>
 
+/** */
 struct TErrorMessageInfo {
   QString filename;
   int errorline;
@@ -31,7 +32,6 @@ struct TErrorMessageInfo {
 /** a small "parser" for the makeoutput
   *@author Sandy Meier
   */
-
 class CErrorMessageParser {
 public: 
   CErrorMessageParser();
@@ -45,6 +45,9 @@ public:
 
   /** get the next error/warning*/
   TErrorMessageInfo getNext();
+
+  bool hasNext();
+  bool hasPrev();
 
   /** get the previous error/warning*/
   TErrorMessageInfo getPrev();

@@ -34,6 +34,7 @@ typedef enum
   THSTRUCT, THC_FILE, THINSTALLED_FILE, THEND_POS
 } THType;
 
+/** */
 class CTreeHandler
 {
 public: // Constructor & destructor

@@ -28,7 +28,7 @@
 #include <kapp.h>
 
 #include "cproject.h"
-
+/** */
 class CNewProjectDlg : public QDialog{
     Q_OBJECT
 

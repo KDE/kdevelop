@@ -41,7 +41,7 @@
 #define _PARSEDARGUMENT_H_INCLUDED
 
 #include <qstring.h>
-
+/** */
 class CParsedArgument
 {
 public: // Constructor & Destructor

@@ -31,6 +31,7 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
+  //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
   pop->insertItem(i18n("Undo"),this,SLOT(undo()),0,4);
   pop->insertItem(i18n("Redo"),this,SLOT(redo()),0,5);
   pop->insertSeparator();
@@ -93,7 +94,7 @@ void CEditWidget::gotoPos(int pos,QString text_str){
   // calculate the line
   QString last_textpart = text_str.right(text_str.size()-pos); // the second part of the next,after the pos
   int line = text_str.contains("\n") - last_textpart.contains("\n");
-   //  cerr << endl << "LINE:" << line;
+  //  cerr << endl << "LINE:" << line;
   setCursorPosition(line,0);
   setFocus();
 }
@@ -124,29 +125,29 @@ void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
 {
   assert( toInsert != NULL );
   assert( atLine >= 0 );
-
+  
   uint line=0;
   int pos=0;
   QString txt;
-
+  
   txt = text();
   while( line < atLine )
-  {
+    {
     pos++;
     if( txt[ pos ] == '\n' )
       line++;
-  }
-
+    }
+  
   // Insert the text after the last return.
   txt.insert( pos + 1, toInsert );
   setText( txt );
 }
-  
+
 /** Append a text at the end of the file. */
 void CEditWidget::append( const char *toAdd )
 {
   QString txt;
-
+  
   txt = text();
   txt.append( toAdd );
   setText( txt );
@@ -169,7 +170,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
       emit bufferMenu(this->mapToGlobal(event->pos()));
       return;
     }
-
+    
     int state;
     state = undoState();
     //undo
@@ -186,23 +187,25 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     else{
       pop->setItemEnabled(5,false);
     }
-
+    
     QString str = markedText();
-		if(!str.isEmpty()){
-			pop->setItemEnabled(1,true);
-			pop->setItemEnabled(2,true);
-		}
-		else{
-			pop->setItemEnabled(1,false);
-			pop->setItemEnabled(2,false);
-		}		
-		QClipboard *cb = kapp->clipboard();
-		QString text=cb->text();
-		if(text.isEmpty())
-			pop->setItemEnabled(3,false);
-		else
-			pop->setItemEnabled(3,true);
+    if(!str.isEmpty()){
+      pop->setItemEnabled(1,true);
+      pop->setItemEnabled(2,true);
+    }
+    else{
+      pop->setItemEnabled(1,false);
+      pop->setItemEnabled(2,false);
+    }		
 
+
+    QClipboard *cb = kapp->clipboard();
+    QString text=cb->text();
+    if(text.isEmpty())
+      pop->setItemEnabled(3,false);
+    else
+      pop->setItemEnabled(3,true);
+    
     if(str == ""){
       str = word(event->x(),event->y());
     }
@@ -211,6 +214,8 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
       str = str.left(20) + "...";
     }
     pop->changeItem(i18n("look up: ") + str,0); // the lookup entry
+
+
     pop->popup(this->mapToGlobal(event->pos()));
   }
 }

@@ -44,7 +44,7 @@
 #include <gdbm.h>
 #include <qstring.h>
 #include "ParsedClass.h"
-
+/** */
 class CPersistantClassStore
 {
 

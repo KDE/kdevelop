@@ -43,6 +43,7 @@
 #include <qstring.h>
 #include "tokenizer.h"
 
+/** */
 class CParsedAttribute
 {
 public: // Constructor && Destructor

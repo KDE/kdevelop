@@ -33,6 +33,7 @@
 #include <qmultilinedit.h>
 #include "./classparser/ParsedMethod.h"
 
+/** */
 class CAddClassMethodDlg : public QDialog
 {
   Q_OBJECT

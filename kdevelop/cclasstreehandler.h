@@ -29,6 +29,7 @@ typedef enum
   CTHPRIVATE = PRIVATE
 } CTHFilter;
 
+/** */
 class CClassTreeHandler : public CTreeHandler
 {
 public: // Constructor & destructor

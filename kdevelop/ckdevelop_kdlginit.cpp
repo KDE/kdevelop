@@ -267,6 +267,9 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_FILE_NEW);
   disableCommand(ID_FILE_PRINT);
 
+  disableCommand(ID_VIEW_NEXT_ERROR);
+  disableCommand(ID_VIEW_PREVIOUS_ERROR);
+
   disableCommand(ID_EDIT_UNDO);
   disableCommand(ID_EDIT_REDO);
   disableCommand(ID_KDLG_EDIT_UNDO);

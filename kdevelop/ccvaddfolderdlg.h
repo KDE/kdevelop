@@ -27,7 +27,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-
+/** */
 class CCVAddFolderDlg : public QDialog
 {
   Q_OBJECT

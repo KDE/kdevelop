@@ -183,8 +183,8 @@ ok = new QPushButton( this, "ok" );
   list_manuals->setCurrentItem(0);
   
   list_cpp = new QListBox( tab, "list_cpp" );
-  list_cpp->insertItem(i18n("C/C++ Header (*.h)"));
-  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C)"));
+  list_cpp->insertItem(i18n("C/C++ Header (*.h,*.hxx)"));
+  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)"));
   list_cpp->insertItem(i18n("Empty Textfile"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
@@ -232,13 +232,13 @@ void CNewFileDlg::slotOKClicked(){
   QString text = edit->text();
   if ( (fileType() == "CPP") && 
        !(text.right(4) == ".cpp" || text.right(3) == ".cc" 
-	|| text.right(2) == ".C" || text.right(2) == ".c")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .cpp,.c,.cc or .C !")
+	|| text.right(2) == ".C" || text.right(2) == ".c" || text.right(4) == ".cxx" || text.right(3) == ".ec" || text.right(5) == ".ecpp" )){
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!")
 		     ,KMsgBox::EXCLAMATION);
     return;
   }
-  if ( (fileType() == "HEADER") && (text.right(2) != ".h")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .h !"),KMsgBox::EXCLAMATION);
+  if ( (fileType() == "HEADER") && !(text.right(2) == ".h" || (text.right(4) == ".hxx"))){
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .h or .hxx!"),KMsgBox::EXCLAMATION);
     return;
   }
   if ( (fileType() == "LSM") && (text.right(4) != ".lsm")){
@@ -333,10 +333,10 @@ QString CNewFileDlg::fileType(){
   QString str;
   if (current == 0){ // cpp/header
     str = list_cpp->text(list_cpp->currentItem());
-    if (str == i18n("C/C++ File (*.cpp,*.c,*.cc,*.C)")){
+    if (str == i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)")){
       return "CPP";
     }
-    if (str == i18n("C/C++ Header (*.h)")){
+    if (str == i18n("C/C++ Header (*.h,*.hxx)")){
       return "HEADER";
     }
     if (str == i18n("Empty Textfile")){

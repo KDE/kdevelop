@@ -25,6 +25,7 @@
 #include "cproject.h"
 #include "ctreehandler.h"
 
+/** */
 class CTreeView : public QListView
 {
   Q_OBJECT

@@ -43,6 +43,9 @@ CTreeView::CTreeView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
   header()->hide();
   setSorting(-1,false);
 
+  setFrameStyle( Panel | Sunken );
+  setLineWidth( 2 );
+
   // Add callback for clicks in the listview.
   connect(this,
           SIGNAL(rightButtonPressed( QListViewItem *, const QPoint &, int)),
