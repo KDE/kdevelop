@@ -19,7 +19,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kparts/partmanager.h>
-#include <kprinter.h>
+//#include <kprinter.h>
 #include <kprocess.h>
 #include <kstdaction.h>
 
@@ -308,8 +308,8 @@ void EditorPart::slotPrint()
     QStringList fileList;
     fileList << fileName;
     
-    KPrinter printer;
-    printer.printFiles(fileList, true);
+//    KPrinter printer;
+//    printer.printFiles(fileList, true);
 }
 
 
