@@ -348,7 +348,7 @@ void CFilePropDlg::slotOk(){
   for(info = file_list->first();info !=0;info = file_list->next()){
     prj->writeFileInfo(*info);
   }
-  prj->createMakefilesAm();
+  prj->updateMakefilesAm();
   accept();
   
 }

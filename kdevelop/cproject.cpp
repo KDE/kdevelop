@@ -16,12 +16,16 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qdir.h>
 #include "cproject.h"
 #include <iostream.h>
 #include <qregexp.h>
+#include <kprocess.h>
+
 
 CProject::CProject(){
   valid = false;
+  config = 0;
 }
 
 CProject::~CProject(){
@@ -77,10 +81,14 @@ QString CProject::getProjectDir(){
   return dir;
 }
 void CProject::setProjectName(QString name){
+  
   config->setGroup("General");
   config->writeEntry("project_name",name);
 }
 QString CProject::getProjectName(){
+  if(config == 0){
+    return "";
+  }
   config->setGroup("General");
   return config->readEntry("project_name");
 }
@@ -267,6 +275,7 @@ void CProject::addFileToProject(QString rel_name){
 
   QStrList list_files;
   QString makefile_name;
+  QStrList sub_dirs;
 
   // find the correspond. Makefile.am, store it into makefile_name
   int slash_pos = rel_name.findRev('/');
@@ -292,14 +301,13 @@ void CProject::addFileToProject(QString rel_name){
   int slash2_pos;
   check_makefile_list.append(makefile_name);
 
-  cerr << endl << "*check:*" << makefile_name;
+  //  cerr << endl << "*check:*" << makefile_name;
   
   while((slash_pos = makefile_name.findRev('/')) != -1){ // if found
     slash2_pos = makefile_name.findRev('/',slash_pos-1);
     if(slash2_pos != -1){
       makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
       check_makefile_list.append(makefile_name);
-      cerr << endl << "*check:*" << makefile_name;
     } 
     else{
       makefile_name = "";
@@ -318,10 +326,49 @@ void CProject::addFileToProject(QString rel_name){
   //++++++++++++++++add Makefile to the project if needed (end)
   
   // and at last: modify the subdir entry in every Makefile.am if needed
-  
-    
+
+  makefile_name = check_makefile_list.first(); // get the complete makefilename
+
+  QString subdir;
+  bool new_subdir=false;
+
+  while((slash_pos = makefile_name.findRev('/')) != -1){ // if found
+    slash2_pos = makefile_name.findRev('/',slash_pos-1);
+    if(slash2_pos != -1){
+      subdir = makefile_name.mid(slash2_pos+1,slash_pos-slash2_pos-1);
+      cerr << endl << "SUBDIR" << subdir << endl;
+      makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
+      config->setGroup(makefile_name);
+      sub_dirs.clear();
+      config->readListEntry("sub_dirs",sub_dirs);
+      
+      if(sub_dirs.find(subdir) == -1){
+	new_subdir = true;
+	sub_dirs.append(subdir);
+	config->writeEntry("sub_dirs",sub_dirs);
+      }
+    }
+    else{
+      // the subdirs of the topdir are special
+      subdir = makefile_name.left(slash_pos);
+      config->setGroup("Makefile.am");
+      sub_dirs.clear();
+      config->readListEntry("sub_dirs",sub_dirs);
+      
+      if(sub_dirs.find(subdir) == -1){
+	new_subdir = true;
+	sub_dirs.append(subdir);
+	config->writeEntry("sub_dirs",sub_dirs);
+      
+      }
+      makefile_name = "";
+    }
+  }
+  if(new_subdir){
+    updateConfigureIn();
+  }
   setSourcesHeaders();
-  createMakefilesAm(); // do some magic
+  //  createMakefilesAm(); // do some magic generation
 }
 void CProject::removeFileFromProject(QString rel_name){
   QStrList list_files;
@@ -343,19 +390,19 @@ void CProject::removeFileFromProject(QString rel_name){
   // remove the fileinfo
   config->deleteGroup(rel_name);
   setSourcesHeaders();
-  createMakefilesAm();
+  updateMakefilesAm();
 }
-void CProject::createMakefilesAm(){
+void CProject::updateMakefilesAm(){
   QString makefile;
   QStrList makefile_list;
   config->setGroup("General");
   config->readListEntry("makefiles",makefile_list);  
   for(makefile = makefile_list.first();makefile !=0;makefile =makefile_list.next()){ // every Makefile
     config->setGroup(makefile);
-    createMakefileAm(makefile); 
+    updateMakefileAm(makefile); 
   }
 }
-void CProject::createMakefileAm(QString makefile){
+void CProject::updateMakefileAm(QString makefile){
   setKDevelopWriteArea(makefile);
   config->setGroup(makefile);
 
@@ -603,3 +650,54 @@ bool CProject::isDirInProject(QString rel_name){
 }
 
 
+void CProject::updateConfigureIn(){
+  QString abs_filename = getProjectDir() + "/configure.in";
+  QFile file(abs_filename);
+  QStrList list;
+  QTextStream stream(&file);
+  QString str;
+  QStrList makefile_list;
+  QString makefile;
+    
+
+  if(file.open(IO_ReadOnly)){ // read the configure.in
+    while(!stream.eof()){
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+
+  file.open(IO_WriteOnly);
+  
+  for(str = list.first();str != 0;str = list.next()){
+    if(str.find("AC_OUTPUT(") != -1){ // if found
+      stream << "AC_OUTPUT(";
+      config->setGroup("General");
+      config->readListEntry("makefiles",makefile_list);  
+      for(makefile = makefile_list.first();makefile !=0;makefile =makefile_list.next()){
+	stream << makefile.remove(makefile.length()-3,3) << " ";
+      }
+      stream << ")\n";
+      
+    }
+    else if(str.find("KDE_DO_IT_ALL(") != -1){
+      stream << "KDE_DO_IT_ALL(";
+      stream << getProjectName().lower() << "," << getVersion();
+      stream << ")\n";
+    }
+    else if(str.find("AM_INIT_AUTOMAKE(") != -1){
+      stream << "AM_INIT_AUTOMAKE(";
+      stream << getProjectName().lower() << "," << getVersion();
+      stream << ")\n";
+    }
+    else{
+      stream << str + "\n";
+    }
+  }
+  
+ //  KProcess process;
+//   QDir::setCurrent(getProjectDir()); 
+//   process.clearArguments();
+//   process << "automake";
+//   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+}

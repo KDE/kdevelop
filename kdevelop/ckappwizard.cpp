@@ -807,7 +807,7 @@ void CKAppWizard::slotProcessExited() {
   cerr << makeAmInfo.type;
   sub_dir_list.clear();
   if (userdoc->isChecked()) {
-    sub_dir_list.append("docs");
+    //    sub_dir_list.append("docs");
   }
   makeAmInfo.sub_dirs = sub_dir_list;
   project->writeMakefileAmInfo (makeAmInfo);
@@ -818,7 +818,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
   cerr << makeAmInfo.type;
   sub_dir_list.clear();
-  sub_dir_list.append("en");
+  //  sub_dir_list.append("en");
   makeAmInfo.sub_dirs = sub_dir_list;
   project->writeMakefileAmInfo (makeAmInfo);
   project->addMakefileAmToProject (makeAmInfo.rel_name);
@@ -1087,7 +1087,7 @@ void CKAppWizard::slotProcessExited() {
   
 
   project->writeProject ();
-  project->createMakefilesAm ();
+  project->updateMakefilesAm ();
 
   q = new KProcess();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));

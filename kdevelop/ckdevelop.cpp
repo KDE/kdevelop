@@ -684,7 +684,7 @@ void CKDevelop::slotDocAPI(){
 }
 void CKDevelop::slotDocManual(){
   slotStatusMsg(i18n("Switching to project Manual..."));
-  prj.createMakefilesAm();
+  //  prj.updateMakefilesAm();
   unsigned int index = prj.getSGMLFile().length()-4;
   QString name = prj.getSGMLFile().copy();
   name.remove(index,4);

@@ -354,6 +354,7 @@ void CKDevelop::addFileToProject(QString complete_filename,QString type,bool ref
   info.install_location = "";
   prj.writeFileInfo(info);
   prj.writeProject();
+  prj.updateMakefilesAm();
   if(refresh){
     refreshTrees();
   }
@@ -437,7 +438,7 @@ void CKDevelop::slotProjectNewClass(){
     file_info.install = false;
     prj.writeFileInfo(file_info);
     
-    prj.createMakefilesAm();
+    prj.updateMakefilesAm();
     slotOptionsRefresh();
   }
 }

@@ -1,7 +1,7 @@
-please use only new generated projects,the old ones are incompatible
+
+-please delete your $HOME/.kde/share/config/kdeveloprc before you test a new version of KDevelop
 
 +++++++++++++++++++++++++++
-KDevelop:
 
 KDevelop will be an easy to use IDE (Intergrated Development Enviroment) for
 Unix/X11.At the moment there are only unstable alpha-versions.

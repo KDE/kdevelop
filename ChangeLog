@@ -1,3 +1,8 @@
+1999-02-10  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* several changes and bugfixes in the projectmanagment
+	 KDevelop can now modify the configure.in and all Makefiles.am
+
 1999-02-10  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* changed the documentation update to use qt2kdoc
 	  to crossreference the documentation as well as building

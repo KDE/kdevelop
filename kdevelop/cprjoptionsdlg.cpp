@@ -1027,6 +1027,6 @@ void CPrjOptionsDlg::ok(){
   prj_info->setLDADD(text);
   // write it to the disk
   prj_info->writeProject();
-  prj_info->createMakefilesAm();
+  prj_info->updateMakefilesAm();
 }
 

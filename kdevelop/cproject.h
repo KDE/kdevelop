@@ -156,9 +156,10 @@ public:
   /** check if a subdir is in the project (registered)*/
   bool isDirInProject(QString rel_name);
 
-  void createMakefilesAm();
+  void updateConfigureIn();
+  void updateMakefilesAm();
   //  void createBinMakefileAm();
-  void createMakefileAm(QString makefile);
+  void updateMakefileAm(QString makefile);
   /** read the projectfile */
   bool readProject(QString file); 
   /** write the projectfile to the disk*/
