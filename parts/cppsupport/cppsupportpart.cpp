@@ -422,7 +422,7 @@ static QStringList reorder(const QStringList &list)
 {
     QStringList headers, others;
 
-    QStringList headerExtensions = QStringList::split(",", "h,H,hh,hxx,hpp");
+    QStringList headerExtensions = QStringList::split(",", "h,H,hh,hxx,hpp,tlh");
 
     QStringList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it)
@@ -480,7 +480,7 @@ void CppSupportPart::slotSwitchHeader()
     QString base = path.left(path.length()-ext.length());
     kdDebug(9007) << "base: " << base << ", ext: " << ext << endl;
     QStringList candidates;
-    if (ext == "h" || ext == "hxx" || ext == "hpp" ) {
+    if (ext == "h" || ext == "H" || ext == "hh" || ext == "hxx" || ext == "hpp" || ext == "tlh") {
         candidates << (base + "c");
         candidates << (base + "cc");
         candidates << (base + "cpp");
@@ -490,10 +490,14 @@ void CppSupportPart::slotSwitchHeader()
         candidates << (base + "m");
         candidates << (base + "mm");
         candidates << (base + "M");
-    } else if (QStringList::split(',', "c,cc,cpp,c++,cxx,C,m,mm,M").contains(ext)) {
+	candidates << (base + "inl");
+    } else if (QStringList::split(',', "c,cc,cpp,c++,cxx,C,m,mm,M,inl").contains(ext)) {
         candidates << (base + "h");
+        candidates << (base + "H");
+        candidates << (base + "hh");
         candidates << (base + "hxx");
         candidates << (base + "hpp");
+        candidates << (base + "tlh");
     }
 
     QStringList::ConstIterator it;
@@ -528,7 +532,7 @@ KDevLanguageSupport::Features CppSupportPart::features()
 QStringList CppSupportPart::fileFilters()
 {
     if (withcpp)
-        return QStringList::split(",", "*.c,*.C,*.cc,*.cpp,*.c++,*.cxx,*.m,*.mm,*.M,*.h,*.H,*.hh,*.hxx,*.hpp");
+        return QStringList::split(",", "*.c,*.C,*.cc,*.cpp,*.c++,*.cxx,*.m,*.mm,*.M,*.h,*.H,*.hh,*.hxx,*.hpp,*.inl,*.tlh,*.diff");
     else
         return QStringList::split(",", "*.c,*.h");
 }
@@ -553,7 +557,7 @@ QString CppSupportPart::unformatClassName(const QString &name)
 QStringList CppSupportPart::fileExtensions()
 {
     if (withcpp)
-        return QStringList::split(",", "c,C,cc,cpp,c++,cxx,m,mm,M,h,H,hh,hxx,hpp");
+        return QStringList::split(",", "c,C,cc,cpp,c++,cxx,m,mm,M,h,H,hh,hxx,hpp,inl,tlh,diff");
     else
         return QStringList::split(",", "c,h");
 }
