@@ -1695,9 +1695,13 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
   QDir::setCurrent(prj->getProjectDir()); 
+  QString makefile("Makefile.dist");
+  if(!QFileInfo(QDir::current(), makefile).exists())
+    makefile="Makefile.cvs";
+
   shell_process.clearArguments();
   shell_process << make_cmd << "distclean && " << make_cmd 
-		<< " -f Makefile.dist && ";
+		<< " -f "+makefile+" && ";
   shell_process << flaglabel;
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
   {
@@ -1752,10 +1756,11 @@ void CKDevelop::slotBuildAutoconf(){
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
-  if(QFileInfo(QDir::current(),"Makefile.dist").exists())
-    shell_process << make_cmd << " -f Makefile.dist";
-  else
-    shell_process << make_cmd << " -f Makefile.cvs";
+  QString makefile("Makefile.dist");
+  if(!QFileInfo(QDir::current(), makefile).exists())
+    makefile="Makefile.cvs";
+
+  shell_process << make_cmd << " -f "+makefile;
 
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;

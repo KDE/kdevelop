@@ -440,8 +440,11 @@ void CKDevelop::slotProjectOptions(){
       messages_widget->clear();
       showOutputView(true);
       QDir::setCurrent(prj->getProjectDir());
+      QString makefile("Makefile.dist");
+      if(!QFileInfo(QDir::current(), makefile).exists())
+        makefile="Makefile.cvs";
       shell_process.clearArguments();
-      shell_process << make_cmd << " -f Makefile.dist  && ";
+      shell_process << make_cmd << " -f "+makefile+" && ";
       // C++
       shell_process << flagcpplabel;
       if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
@@ -1201,7 +1204,6 @@ void CKDevelop::newSubDir(){
   showOutputView(true);
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
-//  shell_process << make_cmd << " -f Makefile.dist  && ./configure";
 
   QString shell = getenv("SHELL");
   QString flagclabel;
@@ -1215,7 +1217,10 @@ void CKDevelop::newSubDir(){
     flagcpplabel= "env CXXFLAGS=\"";
   }
 
-  shell_process << make_cmd << " -f Makefile.dist  && ";
+  QString makefile("Makefile.dist");
+  if(!QFileInfo(QDir::current(), makefile).exists())
+    makefile="Makefile.cvs";
+  shell_process << make_cmd << " -f "+makefile+" && ";
   //C++
   shell_process << flagcpplabel;
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
