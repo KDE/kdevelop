@@ -93,14 +93,16 @@ int main(int argc, char *argv[])
 
   splash->showMessage( i18n( "Loading Project" ) );
   delete splash;
-  
-  ProjectManager::getInstance()->loadDefaultProject();
 
-  kapp->dcopClient()->registerAs("gideon");
+  if( args->count() == 0 ){
+      ProjectManager::getInstance()->loadDefaultProject();
+  }
 
   for( int a=0; a<args->count(); ++a ){
      PartController::getInstance()->editDocument( KURL(args->url(a)) );
   }
+
+  kapp->dcopClient()->registerAs("gideon");
 
   return app.exec();
 }
