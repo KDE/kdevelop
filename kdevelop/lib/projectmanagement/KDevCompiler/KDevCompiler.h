@@ -26,10 +26,10 @@
   *@author Omid Givi
   */
 
-class KDevCompiler;
 
 // A compiler object
-class KDevCompiler {
+class KDevCompiler : public QObject{
+  Q_OBJECT
 public:
 	KDevCompiler();
 	~KDevCompiler();
@@ -37,36 +37,17 @@ public:
 	KDevCompiler(const QString &name, const QString &icon);
 	KDevCompiler(const QString &name, const QString &icon, QWidget &qw);
 
-  enum CompilerID{
-    Gcc = 0,
-    Cpp,
-    Fortran,
-    Modula3
-  };
-	
-	KDevCompiler(CompilerID cid);
-	
 	QString* name();
 	QString* flags();
 	QWidget* optionsWidget();
 	QString* icon();
-	int id();
 	void setName(const QString &name);
 	void setFlags(const QString &flags);
 	void setIcon(const QString &icon);
-	void setID(CompilerID cid);
 	void setOptionsWidget(QWidget &qw);
-	QWidget* initOptionsWidget(QWidget* parent = 0, QWidget* pdlg = 0);
+  virtual QWidget* initOptionsWidget(QWidget* parent=0, QWidget* pdlg=0);
 		
 private:
-// gcc compiler
-	void initGcc();
-	QWidget* initGccOptionsWidget(QWidget* parent = 0, const char* name = 0, QWidget* pdlg = 0);
-// cpp compiler
-	void initCpp();
-	QWidget* initCppOptionsWidget(QWidget* parent = 0, const char* name = 0, QWidget* pdlg = 0);
-	
-	CompilerID compilerID;
 	QString* compilerName;
 	QString* compilerFlags;
 	QString* compilerIcon;

@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "KDevCompiler.h"
-#include "KDevCompilerGcc.h"
 #include "kdebug.h"
 
 /* Class KDevCompiler
@@ -46,19 +45,6 @@ KDevCompiler::KDevCompiler(const QString &name, const QString &icon, QWidget &qw
 	optionsPageWidget = &qw;
 }
 
-KDevCompiler::KDevCompiler(CompilerID cid){
-	compilerID = cid;
-	compilerFlags = new QString("");
-	switch (cid){
-		case Gcc:
-			initGcc();
-			break;
-		case Cpp:
-			initCpp();
-			break;
-	}
-}
-
 // destructor
 KDevCompiler::~KDevCompiler(){
 	delete compilerName;
@@ -70,11 +56,6 @@ KDevCompiler::~KDevCompiler(){
 // returns the name of the compiler
 QString* KDevCompiler::name(){
 	return compilerName;
-}
-
-// returns the name of the compiler
-int KDevCompiler::id(){
-	return compilerID;
 }
 
 // returns the compiler flags
@@ -107,26 +88,13 @@ void KDevCompiler::setIcon(const QString &icon){
 	compilerIcon = new QString(icon);
 }
 
-// set the compiler ID
-void KDevCompiler::setID(CompilerID cid){
-	compilerID = cid;
-}
-
 // set the compiler icon
 void KDevCompiler::setOptionsWidget(QWidget &qw){
 	optionsPageWidget = &qw;
 }
 
 QWidget* KDevCompiler::initOptionsWidget(QWidget* parent, QWidget* pdlg){
-	switch (compilerID){
-		case Gcc:
-			return initGccOptionsWidget(parent, *compilerName, pdlg);
-			break; // just consequation ;-), we never come here anyway
-		case Cpp:
-			return initCppOptionsWidget(parent, *compilerName, pdlg);
-			break;
-	}
-	// none
 	return 0;
 }
 
+#include "KDevCompiler.moc"
