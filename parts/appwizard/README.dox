@@ -14,8 +14,8 @@ Comment:   a small comment for the template, longer comments should go
 ShowFilesAfterGeneration:
            this comma separated list of files will be opened after the project
            generation, for instance a readme, path is relative to the project dir,
-           APPNAMELC will be replaced with the project name in uppercase,
-           APPNAMEUP will be replaced with the project name in lowercase,
+           APPNAMEUC will be replaced with the project name in uppercase,
+           APPNAMELC will be replaced with the project name in lowercase,
            APPNAME will be replaced with the project name.
            (example: ShowFilesAfterGeneration=README.devel,APPNAMELC_plugin.cpp)
 DefaultDestinatonDir:
