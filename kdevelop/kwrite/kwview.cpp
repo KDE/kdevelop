@@ -1371,6 +1371,8 @@ void KWriteView::paintEvent(QPaintEvent *e) {
       TextLine *textLine = kWriteDoc->textLine(line);
       if (line > 0)
         ctxNum = kWriteDoc->textLine(line - 1)->getContext();
+      if ( CTX_UNDEF == ctxNum )
+        ctxNum = 0;
       ctxNum = kWriteDoc->highlight->doHighlight(ctxNum,textLine);
       textLine->setContext(ctxNum);
     }
@@ -2856,7 +2858,7 @@ int KWrite::getHl() {
 }
 
 void KWrite::setHl(int n) {
-  kWriteDoc->setHighlight(n);
+  kWriteDoc->setPreHighlight(n);
   kWriteDoc->updateViews();
 }
 

@@ -1142,6 +1142,10 @@ int Highlight::doHighlight(int, TextLine *textLine) {
   return 0;
 }
 
+int Highlight::doPreHighlight( QList<TextLine> & /*contents*/ ) {
+  return 0;
+}
+
 void Highlight::createItemData(ItemDataList &list) {
 
   list.append(new ItemData("Normal Text",dsNormal));
@@ -1184,6 +1188,7 @@ HlContext::HlContext(int attribute, int lineEndContext)
 // ---------------------------------------------------------------------------
 
 GenHighlight::GenHighlight(const char *name) : Highlight(name) {
+  for ( int z = 0; z < nContexts; z++) contextList[z] = 0L;
 }
 
 
@@ -1227,18 +1232,101 @@ int GenHighlight::doHighlight(int ctxNum, TextLine *textLine) {
   return context->ctx;
 }
 
+int GenHighlight::doPreHighlight( QList<TextLine> &contents )
+{
+  HlContext *context;
+  HlItem *item;
+  TextLine *textLine;
+  const char *str, *s1, *s2;
+  char lastChar;
+  int ctxNum= 0;
+
+  context = contextList[0];
+
+#define LOCAL_CONTEXT
+#ifdef LOCAL_CONTEXT
+  // cache only those context items locally that lead to a context switch
+  // test only those possibilities that lead to a context switch
+  HlContext *localContext[nContexts];
+  for (int i= 0; i < nContexts; ++i )
+  {
+    if ( contextList[i] ) {
+      HlContext *c;
+      context = contextList[i];
+      localContext[i] = c = new HlContext( context->attr, context->ctx );
+      c->items.setAutoDelete(false);
+      for (item = context->items.first(); item != 0L; item = context->items.next()) {
+        if ( item->ctx == i )
+          continue; // not interested in this one
+        c->items.append(item);
+      }
+    } else
+      localContext[i] = 0L;
+  }
+#endif
+
+  int lastLine = (int) contents.count() -1;
+  for (int line= 0; line < lastLine; ++line ) {
+    textLine = contents.at(line);
+    str = textLine->getString();
+    s1 = str;
+    lastChar = 0;
+
+#ifdef LOCAL_CONTEXT
+    context = localContext[ctxNum];
+#else
+    context = contextList[ctxNum];
+#endif
+    while (*s1) {
+      for (item = context->items.first(); item != 0L; item = context->items.next()) {
+        if (item->startEnable(lastChar) || isCSymbol(*s1)) {
+          s2 = item->checkHgl(s1);
+          if (s2 > s1) {
+            if (item->endEnable(*s2) || isCSymbol(*s1)) {
+              ctxNum = item->ctx;
+#ifdef LOCAL_CONTEXT
+              context = localContext[ctxNum];
+#else
+              context = contextList[ctxNum];
+#endif
+              s1 = s2 - 1;
+              goto found;
+            }
+          }
+        }
+      }
+found:
+      lastChar = *s1;
+      s1++;
+    }
+    //set "end of line"-properties
+    ctxNum= context->ctx;
+    textLine->setContext(ctxNum);
+  }
+#ifdef LOCAL_CONTEXT
+  for (int i = 0; i < nContexts; ++i )
+  {
+    delete localContext[i];
+    localContext[i] = 0L;
+  }
+#endif
+  return 0;
+}
 
 void GenHighlight::init() {
   int z;
 
-  for (z = 0; z < nContexts; z++) contextList[z] = 0L;
+  for (z = 0; z < nContexts; z++) {
+    delete contextList[z];
+    contextList[z] = 0L;
+  }
   makeContextList();
 }
 
 void GenHighlight::done() {
   int z;
 
-  for (z = 0; z < nContexts; z++) delete contextList[z];
+  for (z = 0; z < nContexts; z++) { delete contextList[z]; contextList[z] = 0L; }
 }
 
 // ---------------------------------------------------------------------------
@@ -2379,7 +2467,7 @@ DefaultsDialog::DefaultsDialog(HlManager *hlManager, ItemStyleList *styleList,
   QLabel *label;
   FontChanger *fontChanger;
   QPushButton *button;
-  QRect r;
+//  QRect r;
   int z;
 
   QGridLayout *grid1 = new QGridLayout( this, 2, 2,15,7);

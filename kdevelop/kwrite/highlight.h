@@ -9,6 +9,8 @@
 
 #include <kcolorbtn.h>
 
+#define CTX_UNDEF   -1
+
 class TextLine;
 class Attribute;
 
@@ -357,6 +359,7 @@ class Highlight {
     void release();
     virtual bool isInWord(char c) {return !testWw(c);}
     virtual int doHighlight(int ctxNum, TextLine *textLine);
+    virtual int doPreHighlight( QList<TextLine> & /*contents*/ );
 
     bool containsFiletype(const QString& ext);
     bool containsMimetype(const QString& mimetype);
@@ -390,6 +393,7 @@ class GenHighlight : public Highlight {
     GenHighlight(const char *name);
 
     virtual int doHighlight(int ctxNum, TextLine *);
+    virtual int doPreHighlight( QList<TextLine> &contents );
   protected:
     virtual void makeContextList() = 0;
     virtual void init();
@@ -397,8 +401,6 @@ class GenHighlight : public Highlight {
 //    const int nContexts = 32;
     HlContext *contextList[nContexts];
 };
-
-
 
 class CHighlight : public GenHighlight {
   public:

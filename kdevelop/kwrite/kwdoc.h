@@ -21,7 +21,7 @@
 
 class TextLine {
   public:
-    TextLine(int attribute = 0, int context = 0);
+    TextLine(int attribute = 0, int context = CTX_UNDEF);
     ~TextLine();
     void insert(int pos, const char *, int l);
     void overwrite(int pos, const char *, int l);
@@ -207,6 +207,7 @@ class KWriteDoc : QObject {
   	int getFontHeight() {return fontHeight;}
   protected:
     void setHighlight(int n);
+    void setPreHighlight(int n = -1);
     void makeAttribs();
     void updateFontData();
     void setTabWidth(int);

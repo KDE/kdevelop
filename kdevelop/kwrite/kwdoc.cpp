@@ -652,7 +652,7 @@ void KWriteDoc::insertFile(KWriteView *view, VConfig &c, QIODevice &dev) {
     len = dev.readBlock(buf,256);
     s = buf;
     while (len > 0) {
-      if ( (*s !='\r' && *s != '\n')  || *s == '\t') {
+      if ( *s !='\r' && *s != '\n' ) {
 //      if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
@@ -745,10 +745,10 @@ void KWriteDoc::loadFile(QIODevice &dev) {
     len = dev.readBlock(buf,512);
     s = buf;
     while (len > 0) {
-      if ( (*s !='\r' && *s != '\n')  || *s == '\t') {
+      if ( *s !='\r' && *s != '\n' ) {
 //      if ((unsigned char) *s >= 32 || *s == '\t') {
         textLine->append(*s);
-      } else if (*s == '\n' || *s == '\r') {
+      } else /*if (*s == '\n' || *s == '\r')*/ {
         textLine = new TextLine();
         contents.append(textLine);
         if (*s == '\r') {
@@ -764,6 +764,7 @@ void KWriteDoc::loadFile(QIODevice &dev) {
       len--;
     }
   } while (s != buf);
+  highlight->doPreHighlight( contents );
 #endif
 
 //  updateLines();
@@ -1139,12 +1140,30 @@ void KWriteDoc::hlChanged() { //slot
   updateViews();
 }
 
+void KWriteDoc::setPreHighlight(int n)
+{
+  Highlight *h;
+  if ( n != -1 )
+    h = hlManager->getHl(n);
+  else
+    h = highlight;
+  if ( h != highlight || n == -1 )
+  {
+    if (highlight)
+      highlight->release();
+    h->use();
+    highlight = h;
+    highlight->doPreHighlight( contents );
+  }
+  makeAttribs();
+}
+
 void KWriteDoc::setHighlight(int n)
 {
 	Highlight *h = hlManager->getHl(n);
-  if (h == highlight)
-    updateLines();
-  else
+  if (h != highlight)
+//    updateLines();
+//  else
   {
     if (highlight)
       highlight->release();
@@ -1155,10 +1174,9 @@ void KWriteDoc::setHighlight(int n)
 }
 
 void KWriteDoc::makeAttribs() {
-
   hlManager->makeAttribs(highlight,attribs,nAttribs);
   updateFontData();
-  updateLines();
+  // updateLines();
 }
 
 void KWriteDoc::updateFontData() {
@@ -1241,10 +1259,11 @@ void KWriteDoc::updateLines(int startLine, int endLine, int flags)
     }
 
     endCtx = textLine->getContext();
-//    ctxNum = highlight->doHighlight(ctxNum,textLine);
-    if(endLine-line<4)
-			ctxNum = highlight->doHighlight(ctxNum,textLine);
+    ctxNum = highlight->doHighlight(ctxNum,textLine);
+//    if(endLine-line<4)
+//      ctxNum = highlight->doHighlight(ctxNum,textLine);
     textLine->setContext(ctxNum);
+
     line++;
   } while (line <= lastLine && (line <= endLine || endCtx != ctxNum));
 
@@ -1844,7 +1863,8 @@ void KWriteDoc::setText(const char *s) {
       s++;	// skip the newline
     }
   }
-  updateLines();
+  setPreHighlight();
+//  updateLines();
 }
 
 
@@ -2521,7 +2541,7 @@ void KWriteDoc::setFileName(const QString& s)
     emit view->kWrite->newCaption();
 
   int hl = hlManager->getHighlight(fName);
-  setHighlight(hl);
+  setPreHighlight(hl);
 	// Read bookmarks, breakpoints, ...
 	readFileConfig();
   updateViews();
