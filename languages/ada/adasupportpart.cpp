@@ -8,10 +8,9 @@
 #include <qwhatsthis.h>
 
 #include <kgenericfactory.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kapplication.h>
 #include <kstatusbar.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
@@ -23,7 +22,6 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
-#include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "codemodel.h"
 #include "adasupportpart.h"

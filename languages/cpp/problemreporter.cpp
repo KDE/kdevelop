@@ -45,7 +45,6 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kdialogbase.h>
-#include <kurl.h>
 
 #include <kconfig.h>
 

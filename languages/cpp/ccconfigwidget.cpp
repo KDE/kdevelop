@@ -37,7 +37,6 @@
 #include <domutil.h>
 #include <kdevcoderepository.h>
 #include <kdevmainwindow.h>
-#include <kdevcoderepository.h>
 #include <catalog.h>
 
 #include "ccconfigwidget.h"

@@ -27,7 +27,7 @@
  * We provide an Implementation of the interface.
  */
 #include <qwidget.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <qpe/taskbarappletinterface.h>
 

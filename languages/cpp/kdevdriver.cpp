@@ -1,6 +1,6 @@
 #include <lexer.h>
 
-#include <kdevdriver.h>
+#include "kdevdriver.h"
 #include <unistd.h>
 
 KDevDriver::KDevDriver( CppSupportPart* cppSupport )

@@ -66,7 +66,6 @@
 #include <kdialogbase.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <kconfig.h>

@@ -25,7 +25,6 @@
 #include "settingsdialog.h"
 
 #include <qfile.h>
-#include <qdir.h>
 #include <qregexp.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
