@@ -46,3 +46,5 @@ int KComboView::defaultWidth( )
 {
     return m_defaultWidth;
 }
+
+#include "kcomboview.moc"

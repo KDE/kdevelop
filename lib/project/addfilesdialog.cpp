@@ -13,6 +13,7 @@
 #include <qcombobox.h>
 
 #include "addfilesdialog.h"
+#include "addfilesdialog.moc"
 
 AddFilesDialog::AddFilesDialog(const QString& startDir, const QString& filter,
     QWidget *parent, const char *name, bool modal):

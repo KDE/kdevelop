@@ -99,3 +99,5 @@ void SqlListAction::refresh()
     }
 }
 
+
+#include "sqlactions.moc"
