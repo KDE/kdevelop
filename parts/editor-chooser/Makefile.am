@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdeveditorchooser.la
 libkdeveditorchooser_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdeveditorchooser_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdeveditorchooser_la_SOURCES = editorchooser_factory.cpp editorchooser_part.cpp editchooser.ui editorchooser_widget.cpp
+libkdeveditorchooser_la_SOURCES = editorchooser_part.cpp editchooser.ui editorchooser_widget.cpp
 
 METASOURCES = AUTO
 

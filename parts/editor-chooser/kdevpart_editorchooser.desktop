@@ -5,6 +5,6 @@ Exec=blubb
 Comment=Editor Selection
 Name=KDevEditorChooser
 Icon=kdevelop
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdeveditorchooser
 X-KDevelop-Scope=Global

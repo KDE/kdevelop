@@ -4,18 +4,19 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdialogbase.h>
-
+#include <kgenericfactory.h>
 
 #include <kdevcore.h>
 
 
-#include "editorchooser_factory.h"
 #include "editorchooser_part.h"
 #include "editorchooser_widget.h"
 
+typedef KGenericFactory<EditorChooserPart> EditorChooserFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( "kdeveditorchooser" ) );
 
-EditorChooserPart::EditorChooserPart(KDevApi *api, QObject *parent, const char *name)
-  : KDevPart(api, parent, name)
+EditorChooserPart::EditorChooserPart(QObject *parent, const char *name, const QStringList &)
+  : KDevPlugin(parent, name)
 {
   setInstance(EditorChooserFactory::instance());
 

@@ -10,16 +10,16 @@
 class KDialogBase;
 
 
-#include <kdevpart.h>
+#include <kdevplugin.h>
 
 
-class EditorChooserPart : public KDevPart
+class EditorChooserPart : public KDevPlugin
 {
   Q_OBJECT
 
 public:
    
-  EditorChooserPart(KDevApi *api, QObject *parent=0, const char *name=0);
+  EditorChooserPart(QObject *parent, const char *name, const QStringList &);
   ~EditorChooserPart();
 
   
