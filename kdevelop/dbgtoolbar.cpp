@@ -268,22 +268,14 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
   DbgButton*    bNext       = new DbgButton(0, pm, this);
 
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
-  // Single character "i" means a machine instruction. We
-  // rely on the icon to give meaning to this button. This button is
-  // partnered with the source code "next" button, and not used in the toolbar
-  // size routine.
-  DbgButton*    bNexti      = new DbgButton(i18n("i"), pm, this);
+  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnextinst.xpm");
+  DbgButton*    bNexti      = new DbgButton(0, pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
   DbgButton*    bStep       = new DbgButton(0, pm, this);
 
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
-  // Single character "i" means a machine instruction. We
-  // rely on the icon to give meaning to this button. This button is
-  // partnered with the source code "step" button, and not used in the toolbar
-  // size routine.
-  DbgButton*    bStepi      = new DbgButton(i18n("i"), pm, this);
+  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepinst.xpm");
+  DbgButton*    bStepi      = new DbgButton(0, pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepout.xpm");
   DbgButton*    bFinish     = new DbgButton(i18n("Step out"), pm, this);
