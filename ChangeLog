@@ -1,3 +1,9 @@
+2000-01-29 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* implementing new automake/autoconf framework
+	  with NetBSD compatibility
+	  (many thanks to Berndt J. Wulf <wulf@ping.net.au>
+	   for his help)
+ 
 2000-01-28 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* pressing <ctrl>-"8" causes on systems the insertion
 	  of char 0x7f inside the sources.
