@@ -28,6 +28,7 @@
 
 class QToolButton;
 class QLabel;
+class CKDevelop;
 
 #define MAX_BUTTONS 64
 
@@ -37,7 +38,7 @@ class KDlgWidgets : public QWidget  {
      class myScrollView : public QScrollView
        {
          public:
-           myScrollView ( QWidget * parent=0, const char * name=0, WFlags f=0 );
+           myScrollView (QWidget * parent=0, const char * name=0, WFlags f=0 );
 
            void addButton(const QPixmap &, QString, bool isKDE = false);
            void setIsKDEProject(bool isKDE = true) { isKDEProject = isKDE; }
@@ -53,13 +54,23 @@ class KDlgWidgets : public QWidget  {
            void resizeEvent ( QResizeEvent * );
        };
    public:
-     KDlgWidgets(QWidget *parent=0, const char *name=0);
+     KDlgWidgets(CKDevelop *parCKD, QWidget *parent=0, const char *name=0);
      ~KDlgWidgets();
 
    protected:
      QScrollView *scrview;
 
      void resizeEvent ( QResizeEvent * );
+     CKDevelop *pCKDevel;
+
+   public slots:
+     void clicked_QWidget();
+     void clicked_QLabel();
+     void clicked_QPushButton();
+     void clicked_QLineEdit();
+     void clicked_QCheckBox();
+     void clicked_QLCDNumber();
+     void clicked_QRadioButton();
 };
 
 #endif

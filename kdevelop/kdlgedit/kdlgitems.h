@@ -63,7 +63,7 @@ class KDlgItems : public QWidget  {
     void addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm=0);
 
   public slots:
-    void itemSelected ();
+    void itemSelected();
 };
 
 #endif

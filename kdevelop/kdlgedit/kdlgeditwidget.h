@@ -40,7 +40,7 @@ class KDlgEditWidget : public QWidget  {
 
     KDlgItemDatabase *database() { return dbase; }
 
-    bool addItem(int type);
+    bool addItem(QString);
     KDlgItem_Widget *mainWidget() { return main_widget; }
     KDlgItem_Base *selectedWidget() { return selected_widget; }
 
@@ -52,7 +52,6 @@ class KDlgEditWidget : public QWidget  {
     KRuler *horizontalRuler() { return rulh; }
     KRuler *verticalRuler() { return rulv; }
   public slots:
-    void choiseAndAddItem();
   protected:
     virtual void resizeEvent ( QResizeEvent * );
 

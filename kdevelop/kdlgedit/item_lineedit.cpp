@@ -42,6 +42,7 @@ void KDlgItem_LineEdit::MyWidget::paintEvent ( QPaintEvent *e )
 KDlgItem_LineEdit::KDlgItem_LineEdit( KDlgEditWidget* editwid, QWidget *parent , const char* name )
   : KDlgItem_Base(editwid, parent,false,name)
 {
+  parentWidgetItem = 0;
   item = new MyWidget(this, parent);
   item->show();
   item->setMouseTracking(true);

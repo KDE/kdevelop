@@ -87,6 +87,7 @@ void KDlgItem_Widget::MyWidget::paintEvent ( QPaintEvent *e )
 KDlgItem_Widget::KDlgItem_Widget( KDlgEditWidget *editwid, QWidget *parent , bool ismainwidget = false, const char* name )
    : KDlgItem_Base(editwid, parent,ismainwidget,name)
 {
+  parentWidgetItem = 0;
   childs = new KDlgItemDatabase();
   item = new MyWidget(this, parent, ismainwidget);
   item->show();

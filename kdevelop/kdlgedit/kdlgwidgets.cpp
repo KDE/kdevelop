@@ -20,12 +20,14 @@
 #include <kapp.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
+#include "../ckdevelop.h"
 
-#define btnsize 32
+#define btnsize 34
 
 
-KDlgWidgets::KDlgWidgets(QWidget *parent, const char *name ) : QWidget(parent,name) 
+KDlgWidgets::KDlgWidgets(CKDevelop *parCKD, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
+  pCKDevel = parCKD;
   scrview = new myScrollView(this);
 }
 
@@ -45,13 +47,51 @@ void KDlgWidgets::myScrollView::addButton(const QPixmap &pix, QString name, bool
 
   buttons[btnsCount] = new QToolButton( this );
   buttons[btnsCount] -> setPixmap(pix);
-  buttons[btnsCount] -> setText(name);
+  if (pix.isNull())
+    buttons[btnsCount] -> setText(name);
   buttons[btnsCount] -> setGeometry(0,0,btnsize,btnsize);
+  buttons[btnsCount] -> setUsesBigPixmap(true);
   addChild(buttons[btnsCount]);
   btnsKDE[btnsCount] = isKDE;
 
   btnsCount++;
 }
+
+void KDlgWidgets::clicked_QWidget()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QWidget");
+}
+
+void KDlgWidgets::clicked_QLabel()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QLabel");
+}
+
+void KDlgWidgets::clicked_QPushButton()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QPushButton");
+}
+
+void KDlgWidgets::clicked_QLineEdit()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QLineEdit");
+}
+
+void KDlgWidgets::clicked_QCheckBox()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QCheckBox");
+}
+
+void KDlgWidgets::clicked_QLCDNumber()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QLCDNumber");
+}
+
+void KDlgWidgets::clicked_QRadioButton()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QRadioButton");
+}
+
 
 KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WFlags f )
   : QScrollView(parent,name,f)
@@ -70,24 +110,19 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
 
   btnsCount = 0;
 
+  #define macroAddButton(fn, wd, mt) \
+    addButton(QPixmap(KApplication::kde_datadir() + QString("/kdevelop/pics/mini/") + fn), wd); \
+    connect(buttons[btnsCount-1], SIGNAL(clicked()), parent, SLOT(mt()));
 
-  addButton(QPixmap(), "0");
-  addButton(QPixmap(), "1");
-  addButton(QPixmap(), "2");
-  addButton(QPixmap(), "3");
-  addButton(QPixmap(), "4");
-  addButton(QPixmap(), "5");
-  addButton(QPixmap(), "6");
-  addButton(QPixmap(), "7",true);
-  addButton(QPixmap(), "8",true);
-  addButton(QPixmap(), "9",true);
-  addButton(QPixmap(), "10",true);
-  addButton(QPixmap(), "11",true);
-  addButton(QPixmap(), "12",true);
-  addButton(QPixmap(), "13",true);
-  addButton(QPixmap(), "14",true);
-  addButton(QPixmap(), "15",true);
-  addButton(QPixmap(), "16",true);
+  macroAddButton("kdlg_QWidget.xpm",        "QWidget",         clicked_QWidget);
+  macroAddButton("kdlg_QLabel.xpm",         "QLabel",          clicked_QLabel);
+  macroAddButton("kdlg_QPushButton.xpm",    "QPushButton",     clicked_QPushButton);
+  macroAddButton("kdlg_QLineEdit.xpm",      "QLineEdit",       clicked_QLineEdit);
+  macroAddButton("kdlg_QCheckBox.xpm",      "QCheckBox",       clicked_QCheckBox);
+  macroAddButton("kdlg_QLCDNumer.xpm",      "QLCDNumber",      clicked_QLCDNumber);
+  macroAddButton("kdlg_QRadioButton.xpm",   "QRadioButton",    clicked_QRadioButton);
+
+  #undef macroAddButton
 
   QFont f;
   f.setItalic(true);

@@ -33,10 +33,6 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 {
   pCKDevel = parCKD;
 
-  QPushButton *btn = new QPushButton("add", this);
-  btn->setGeometry(400,350,100,50);
-  connect (btn, SIGNAL(clicked()), this, SLOT(choiseAndAddItem()));
-
   dbase = new KDlgItemDatabase();
 
   setBackgroundMode(PaletteLight);
@@ -84,11 +80,6 @@ void KDlgEditWidget::resizeEvent ( QResizeEvent *e )
 }
 
 
-void KDlgEditWidget::choiseAndAddItem()
-{
-  addItem(0);
-}
-
 void KDlgEditWidget::deselectWidget()
 {
   if (selected_widget)
@@ -116,23 +107,61 @@ void KDlgEditWidget::selectWidget(KDlgItem_Base *i)
 }
 
 
-bool KDlgEditWidget::addItem(int type)
+bool KDlgEditWidget::addItem(QString Name)
 {
-  KDlgItem_Widget *wid2 = new KDlgItem_Widget( this, main_widget->getItem(), false );
+  KDlgItem_Base *par = main_widget;
+  bool setPWI = false;
 
-  wid2->getProps()->setProp_Value("X","150");
-  wid2->getProps()->setProp_Value("Y","50");
-  wid2->getProps()->setProp_Value("Width","150");
-  wid2->getProps()->setProp_Value("Height","100");
-  wid2->addChild( new KDlgItem_PushButton ( this, wid2->getItem() ) );
-  KDlgItem_LineEdit* btn1 = new KDlgItem_LineEdit ( this, wid2->getItem() );
-  btn1->getProps()->setProp_Value("X","50");
-  btn1->getProps()->setProp_Value("Y","50");
-  btn1->repaintItem();
-  wid2->addChild( btn1 );
-  wid2->repaintItem();
+  if (selectedWidget())
+    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem))
+      {
+        switch( QMessageBox::information( this, i18n("Add item"),
+                     i18n("Into which widget do you want to insert this item ?\n\n"
+                     "You either may add it to the main widget or to the selected\n"
+                     "widget respectively to the selected items' parent widget."),
+                     i18n("&Main"), i18n("&Selected"), i18n("&Cancel"),0,2 ) )
+          {
+            case 0: // "Main Widget" clicked
+            break;
+            case 1: // "Selected Widget" clicked
+              if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
+                  par = selectedWidget();
+              else if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+                  par = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem;
+              setPWI = true;
+            break;
+            case 2: // "Cancel clicked"
+            return true;
+          }
 
-  main_widget->addChild( wid2 );
+
+      }
+
+  if (!par)
+    return false;
+
+  KDlgItem_Widget *wid = 0;
+
+  #define macro_CreateIfRightOne(a,typ) \
+    if (QString(a).upper() == Name.upper()) \
+      wid = (KDlgItem_Widget*)new typ( this, par->getItem() );
+
+  if ("QWIDGET" == Name.upper())
+    wid = new KDlgItem_Widget( this, par->getItem(), false );
+
+  macro_CreateIfRightOne("QPushButton", KDlgItem_PushButton )
+  macro_CreateIfRightOne("QLineEdit", KDlgItem_LineEdit )
+
+  #undef macro_CreateIfRightOne
+
+  if (!wid)
+    return false;
+
+  par->addChild( wid );
+  if (setPWI)
+    wid->parentWidgetItem = (KDlgItem_Widget*)par;
+
+//  wid->repaintItem();
 
   if ((pCKDevel) && ((CKDevelop*)pCKDevel)->kdlg_get_items_view())
     ((CKDevelop*)pCKDevel)->kdlg_get_items_view()->addWidgetChilds(main_widget);

@@ -44,7 +44,7 @@
   noMainWidget = KDlgItemsGetResizeCoords(pressedEdge, x, y, w, h, diffx, diffy); \
   if ((!noMainWidget) || (!parentObject->isMainWidget)) \
     setGeometry(x,y,w,h); \
-  if (isMainwidget) { parentObject->getEditWidget()->verticalRuler()->setRange(0,h); parentObject->getEditWidget()->horizontalRuler()->setRange(0,w);} \
+  if (isMainwidget && !noMainWidget) { parentObject->getEditWidget()->verticalRuler()->setRange(0,h); parentObject->getEditWidget()->horizontalRuler()->setRange(0,w);} \
   lastPnt = e->pos();
 
 
@@ -83,9 +83,8 @@
     virtual void repaintItem(widgettype *it = 0); \
     virtual void select() { if (item) item->select(); } \
     virtual void selectMe() { if (item) item->selectMe(); } \
-    virtual void deselect() { if (item) item->deselect(); }
-
-
+    virtual void deselect() { if (item) item->deselect(); } \
+    KDlgItem_Widget *parentWidgetItem;
 
 #endif
 

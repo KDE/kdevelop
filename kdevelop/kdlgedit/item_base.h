@@ -19,14 +19,13 @@
 #ifndef ITEM_BASE_H
 #define ITEM_BASE_H
 
-#include <qobject.h>
+#include <qwidget.h>
 #include "itemsglobal.h"
 /**
   *@author Pascal Krahmer <pascal@beast.de>
   */
 
 class KDlgEditWidget;
-
 
 class KDlgItem_Base : public QObject
 {

@@ -1,3 +1,12 @@
+1999-04-07 Pascal Krahmer <pascal@beast.de>
+        * added Pixmaps to buttons in the "Widgets"-Tab
+        * added functionality to the buttons in the "Widgets"-Tab
+          (Note : only QWidget, QPushButton and QLineEdit are available for now)
+        * removed the temporary add button
+        * fixed the rulers behaviour when trying to move/resize the main widget
+          (when trying to resize it using the left/upper resize points)
+
+
 1999-04-03 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed so that the classtool dialogs' treeview is resized when the
 	  window is resized.

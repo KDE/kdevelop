@@ -27,7 +27,7 @@ void CKDevelop::initKDlg(){
   kdlg_tabctl= new CTabCtl(top_panner);
   kdlg_tabctl->setFocusPolicy(QWidget::ClickFocus);
 
-  kdlg_widgets_view= new KDlgWidgets(kdlg_tabctl,"widgets_view");
+  kdlg_widgets_view= new KDlgWidgets(this,kdlg_tabctl,"widgets_view");
   kdlg_dialogs_view = new KDlgDialogs(kdlg_tabctl,"dialogs_view");
   kdlg_items_view = new KDlgItems(this,kdlg_tabctl,"items_view");
 

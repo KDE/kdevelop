@@ -42,6 +42,7 @@ void KDlgItem_PushButton::MyWidget::paintEvent ( QPaintEvent *e )
 KDlgItem_PushButton::KDlgItem_PushButton( KDlgEditWidget* editwid, QWidget *parent , const char* name )
   : KDlgItem_Base(editwid, parent,false,name)
 {
+  parentWidgetItem = 0;
   item = new MyWidget(this, parent);
   item->show();
   item->setMouseTracking(true);
