@@ -5,7 +5,9 @@
 
 #include <qpopupmenu.h>
 #include <qfile.h>
-
+#include <qlayout.h>
+#include <qmap.h>
+#include <qlabel.h>
 
 #include <kmimetype.h>
 #include <kservice.h>
@@ -26,6 +28,10 @@
 #include <khtml_part.h>
 #include <kpopupmenu.h>
 #include <kio/netaccess.h>
+#include <kdialogbase.h>
+#include <klineedit.h>
+#include <kshortcut.h>
+#include <kcompletion.h>
 
 #include "toplevel.h"
 #include "api.h"
@@ -120,6 +126,10 @@ void PartController::setupActions()
     ac, "browser_back");
   m_backAction->setEnabled( false );
 
+  m_switchToAction = new KAction(i18n("Switch to..."), KShortcut("CTRL+/"),
+    this, SLOT(slotSwitchTo()),
+    ac, "file_switchto");
+
   connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
          this, SLOT(slotBackAboutToShow()));
   connect(m_backAction->popupMenu(), SIGNAL(activated(int)),
@@ -148,7 +158,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
 {
   KURL url = inputUrl;
   bool localUrl = url.url().startsWith("file:/");
-  
+
   // Make sure the URL exists
   if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
     // Try to find this file in the current project's list instead
@@ -156,31 +166,31 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
 
     if (project) {
       QStringList fileList = project->allFiles();
-      
+
       for (QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it) {
         if ((*it).endsWith(url.url())) {
           // Match! The first one is as good as any one, I guess...
           url = project->projectDirectory() + "/" + *it;
           break;
-        } 
+        }
       }
     }
-    
+
     localUrl = url.url().startsWith("file:/");
     if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
       // See if this url is relative to the current project's directory
       url = project->projectDirectory() + "/" + url.url();
     }
-    
+
     localUrl = url.url().startsWith("file:/");
     if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
       // Here perhaps we should prompt the user to find the file?
       return;
     }
   }
-  
+
   url.cleanPath(true);
-    
+
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
   {
@@ -677,7 +687,7 @@ bool PartController::closeDocuments(const QStringList &documents)
   return true;
 }
 
-void PartController::slotClosePartForWidget( const QWidget* w) 
+void PartController::slotClosePartForWidget( const QWidget* w)
 {
   closePartForWidget(w);
 }
@@ -718,6 +728,39 @@ void PartController::slotActivePartChanged( KParts::Part* part )
     if( !part || QString(part->name()) != "DocumentationPart" ){
         m_backAction->setEnabled( false );
 	m_forwardAction->setEnabled( false );
+    }
+}
+
+void PartController::slotSwitchTo()
+{
+    QMap<QString,KParts::ReadOnlyPart*> parts_map;
+    QStringList part_list;
+    QPtrList<KParts::Part> pl = *parts();
+    KParts::Part *part;
+    for(part=pl.first();part;part=pl.next()) {
+        kdDebug(9000) << "Part..." << endl;
+	if (part->inherits("KParts::ReadOnlyPart")) {
+	    KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(part);
+            QString name = ro_part->url().fileName();
+	    part_list.append(name);
+            parts_map[name] = ro_part;
+            kdDebug(9000) << "Found part for URL " << ro_part->url().prettyURL() << endl;
+	}
+    }
+
+    KDialogBase dialog(KDialogBase::Plain, i18n("Switch to..."), KDialogBase::Ok|KDialogBase::Cancel,
+		       KDialogBase::Ok, 0, "Switch to", true);
+    QGridLayout *grid = new QGridLayout( dialog.plainPage(), 2, 1, 10, 10);
+    KLineEdit *editbox = new KLineEdit(dialog.plainPage());
+    grid->addWidget(new QLabel( i18n("Switch to buffer:"), dialog.plainPage() ), 0, 0);
+    grid->addWidget(editbox, 1, 0);
+    editbox->completionObject()->setItems( part_list );
+    editbox->setFocus();
+    int result = dialog.exec();
+    if (result==KDialogBase::KDialogBase::Accepted) {
+        if (parts_map.contains(editbox->text())) {
+            activatePart(parts_map[editbox->text()]);
+        }
     }
 }
 

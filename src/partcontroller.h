@@ -79,6 +79,8 @@ private slots:
   void slotBackPopupActivated( int id );
   void slotForwardAboutToShow();
   void slotForwardPopupActivated( int id );
+  
+  void slotSwitchTo();
 
   void slotUploadFinished();
 
@@ -112,7 +114,7 @@ private:
   static PartController *s_instance;
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
-  KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
+  KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction, *m_switchToAction;
   KRecentFilesAction *m_openRecentAction;
   QString m_presetEncoding;
 

@@ -20,6 +20,7 @@
     <DefineGroup name="close_merge"/>
     <Action name="file_close_all"/>
     <Action name="file_closeother"/>
+    <Action name="file_switchto"/>
     <Separator/>
     <Action name="file_quit"/>
   </Menu>
