@@ -23,6 +23,7 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qfont.h>
+#include <qstylesheet.h>
 
 COutputWidget::COutputWidget(QWidget* parent, const char* name) :
 //  KEdit(parent,name)
@@ -111,6 +112,10 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     int row = (numLines() < 1)? 0 : numLines()-1;
     int col = qstrlen(textLine(row));
     bool displayAdditions=atEnd();
+    
+    // escapes the string 
+    line = QStyleSheet::convertFromPlainText( line );
+
     insertAt(line, row, col);
     if (displayAdditions)
       setCursorPosition(numLines()+1,0);
@@ -121,6 +126,9 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     getCursorPosition(&currentPara, &index);
     int paraCount = paragraphs()-1;
     bool displayAdditions = (paraCount == currentPara);
+
+    // escape rich edit tags like "&", "<", ">"
+    line = QStyleSheet::escape( line );
 
     switch (lineType(paraCount))
     {
