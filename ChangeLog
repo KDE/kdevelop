@@ -1,3 +1,7 @@
+2001-12-07 Ralf Nolden <nolden@kde.org>
+    * bugfix from Bernd Lachner <dev@lachner-net.de> to prevent ui files from being parsed which caused segfaults on 
+	some projects while loading
+
 2001-12-05  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: grottenh‰ﬂliches flickering removed when switching between maximized MDI editor views
       Thanks to QextMDI-superguru Lars Beikirch <lars.beikirch@gmx.net>
