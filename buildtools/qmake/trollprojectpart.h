@@ -37,7 +37,7 @@ public:
 
     bool isTMakeProject() const { return m_tmakeProject; }
     bool isDirty();
-    virtual Options options();
+    virtual Options options() const;
     QStringList distFiles() const;
 
 protected:

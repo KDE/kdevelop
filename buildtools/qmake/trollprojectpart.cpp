@@ -536,7 +536,7 @@ bool TrollProjectPart::isDirty()
     return false;
 }
 
-KDevProject::Options TrollProjectPart::options( )
+KDevProject::Options TrollProjectPart::options( ) const
 {
     return UsesQMakeBuildSystem;
 }
