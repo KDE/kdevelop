@@ -1,3 +1,7 @@
+2001-04-18  jbb <jbb@kdevelop.org>
+    * Horizontal scroll bar patch from Jens Zurheide <jens.zurheide@gmx.de>
+    * null pointer test in closeWindow()
+    
 2001-04-17  rokrau@yahoo.com
     * fixed one crash in docviewman.cpp
     * some more integration work on the ctags support

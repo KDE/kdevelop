@@ -586,14 +586,14 @@ void KWriteView::changeYPos(int p) {
   startLine = yPos / kWriteDoc->fontHeight;
   endLine = (yPos + height() -1) / kWriteDoc->fontHeight;
   if (QABS(dy) < height())
-	{
-		leftBorder->scroll(0,dy);
+  {
+    leftBorder->scroll(0,dy);
     scroll(0,dy);
-	}
+  }
   else
-	{
+  {
     QWidget::update();
-	}
+  }
 }
 
 void KWriteView::getVConfig(VConfig &c) {
@@ -888,7 +888,6 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
 
     if (b) {
       repaint(0, 0, width(), height(), false);
-
     } else {
       if(dy) leftBorder->scroll(0,dy);
 
@@ -1367,7 +1366,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   y = line*h - yPos;
   yEnd = updateR.y() + updateR.height();
 
- int textLineCount = kWriteDoc->getTextLineCount()-1;
+  int textLineCount = kWriteDoc->getTextLineCount()-1;
   while (y < yEnd)
   {
     if (textLineCount>line)

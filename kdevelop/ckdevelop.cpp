@@ -3823,7 +3823,12 @@ void CKDevelop::slotToolbarClicked(int item){
 void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 {
   // get the embedded view
-  QObjectList* pL = (QObjectList*) pWnd->children();
+  QObjectList* pL = (QObjectList*) (pWnd->children());
+  if (!pL)
+  {
+    kdDebug() << "pl is zero implies QextMdiChildView *pWnd has no children?" << endl;
+    return;
+  }
   QWidget* pView = 0L;
   QObject* pChild;
   for ( pChild = pL->first(); pChild && !pView; pChild = pL->next()) {  // the first is the layout, the second test should be successful
