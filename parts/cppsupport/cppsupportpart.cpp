@@ -446,7 +446,7 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 	QString path = fileInfo.absFilePath();
 	maybeParse( path, classStore( ) );
 
-	partController()->editDocument ( KURL ( path ) );
+	//partController()->editDocument ( KURL ( path ) );
     }
 
     m_projectFileList = project()->allFiles();
