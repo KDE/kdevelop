@@ -32,6 +32,7 @@
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
+#include <qtoolbutton.h>
 #include <qdict.h>
 
 #include "qextmdichildfrmcaption.h" //cross ref
@@ -61,23 +62,38 @@ public:
 	*/
 	~QextMdiChildFrm();	
 public:
-	QextMdiChildView     *m_pClient;
+	QextMdiChildView       *m_pClient;
 protected:
-	QextMdiChildArea *m_pManager;
+	QextMdiChildArea       *m_pManager;
 	QextMdiChildFrmCaption *m_pCaption;
-	QPushButton *m_pMinimize;
-	QPushButton *m_pMaximize;
-	QPushButton *m_pClose;
-	QPushButton *m_pUndock;
+#ifdef WIN32
+	/**
+	* This is a POINTER to an icon 16x16. If this is 0 no icon is painted.
+	*/
+	QPushButton   *m_pIcon;
+	QPushButton   *m_pMinimize;
+	QPushButton   *m_pMaximize;
+	QPushButton   *m_pClose;
+	QPushButton   *m_pUndock;
+#else	// in case of UNIX: KDE look
+	QToolButton   *m_pIcon;
+	QToolButton   *m_pMinimize;
+	QToolButton   *m_pMaximize;
+	QToolButton   *m_pClose;
+	QToolButton   *m_pUndock;
+#endif
 	MdiWindowState m_state;
 	QRect          m_restoredRect;
 	int            m_iResizeCorner;
 	int            m_iLastCursorCorner;
-	bool           m_resizeMode;  //F.B.
+	bool           m_resizeMode;
+   QPixmap*       m_pIconButtonPixmap;
    QPixmap*       m_pMinButtonPixmap;
    QPixmap*       m_pMaxButtonPixmap;
    QPixmap*       m_pRestoreButtonPixmap;
    QPixmap*       m_pCloseButtonPixmap;
+   /** every child frame window has an temporary ID in the Window menu of the main frame. */
+   int 				m_windowMenuID;
    QPixmap*       m_pUndockButtonPixmap;
 public:
 	/**
@@ -95,7 +111,7 @@ public:
 	* Sets the window icon ponter : assumes 16x16 pixmaps that SHOULD BE NOT DELETED
 	* until this object is destroyed.
 	*/
-	void setIconPointer(QPixmap *ptr);
+	void setIcon(QPixmap *ptr);
 	/**
 	* Enables or disables the close button
 	*/
@@ -125,6 +141,8 @@ public:
 	* It may be useful when setting the mdiCaptionFont of the MdiManager
 	*/
 	void updateRects(){ resizeEvent(0); };
+  /** sets an ID that is submitted to QextMdiChildArea::menuActivated( int) when the menu item for this child frame was clicked */
+  void setWindowMenuID( int id);
 private:
 	void linkChildren( QDict<FocusPolicy>* pFocPolDict);
 	QDict<QWidget::FocusPolicy>* unlinkChildren();
@@ -146,6 +164,12 @@ protected:
 	void resizeWindow(int resizeCorner, int x, int y);
 	void moveWindow(QPoint diff, QPoint relativeMousePos);
 	void setResizeCursor(int resizeCorner);
+public slots: // Public slots
+  /** called if someone click on the "Window" menu item for this child frame window */
+  void slot_clickedInWindowMenu();
+signals: // Signals
+  /** is automatically emitted when slot_clickedInWindowMenu is called */
+  void clickedInWindowMenu(int);
 };
 
 
