@@ -1286,7 +1286,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   QLabel* binary = new QLabel(w6,"binary_label");
   binary->setGeometry(30,40,500,30);
   binary->setMinimumSize(0,0);
-  binary->setText(i18n("Filename of binary that will be started on \"Execute\":"));
+  binary->setText(i18n("Path and Filename of binary:"));
 
   binary_edit= new QLineEdit(w6,"binary_edit");
   binary_edit->setGeometry(30,70,470,30);
@@ -1295,9 +1295,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
   QString underDir=prj->pathToBinPROGRAM();
   if (underDir.isEmpty())
+  {
     underDir = prj->getProjectDir() + prj->getSubDir();
-  if (!underDir.isEmpty() && underDir.right(1)!='/')
-    underDir+='/';
+    if (underDir[0] == '/')
+      underDir = CToolClass::getRelativePath(prj_info->getProjectDir(), underDir);
+  }
+
+  if (underDir.right(1)!="/")
+    underDir+="/";
 
   binary_edit->setText(underDir+prj->getBinPROGRAM());
 
@@ -1308,9 +1313,8 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 
   KQuickHelp::add(binary_edit,
   KQuickHelp::add(binary_button,
-  KQuickHelp::add(binary,i18n("Set the directory path leading to your binary that is expected to be started on Run.\n"
-                              "This is useful in projects for a dynamical library!\n"
-			      "Hint: Use a relative path starting from your source directory to be location independent."))));
+  KQuickHelp::add(binary,i18n("Set the path and filename of the binary that will be started on Run or Debug.\n"
+			      "Hint: Use a relative path starting from your project base directory to be location independent."))));
 
 
   connect(binary_button,SIGNAL(clicked()),SLOT(slotBinaryClicked()));
