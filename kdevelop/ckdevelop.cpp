@@ -3815,7 +3815,6 @@ void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
   }
 
   m_docViewManager->closeView( pView);
-  QextMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
 }
 
 QString CKDevelop::getProjectName()

@@ -1,3 +1,6 @@
+2001-04-17  F@lk Brettschneider <falk@kdevelop.org>
+    * likely the bugfix for the crash when closing an MDI view
+
 2001-04-16  rokrau@yahoo.com
     * Added preliminary ctags support, not functional yet but good enough 
       for benchmarking.
