@@ -1693,20 +1693,31 @@ void CPrjOptionsDlg::ok(){
   prj_info->setDirWhereMakeWillBeCalled(makeDir);
 
   /******** binary options *********/
-  QString binaryDir = binary_edit->text();
-  if (!binaryDir.isEmpty()) {
-    if (binaryDir[0] == '/') {
+  QString binaryPath = binary_edit->text();
+  if (!binaryPath.isEmpty()) {
+    if (binaryPath[0] == '/') {
       if(QMessageBox::warning(this,i18n("Path decision"),
-                i18n("The path\n\n") + binaryDir +
+                i18n("The path\n\n") + binaryPath +
                 i18n("\n\nto your binary which should be run on 'Execute' "
                       "is not a relative path.\nThis can cause problems, "
                       "if you move the project.\nWhat path do you want to "
                       "save to your project file?"),
                 i18n("&Absolute path"),i18n("&Relative path")))
-        binaryDir = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryDir);
+        binaryPath = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryPath);
     }
   }
-  prj_info->setBinPROGRAM( binaryDir);
+  // split the path into dir and program
+  QString binaryDir;
+  QString binaryProgram;
+  int sepPos = binaryPath.findRev('/', binaryPath.length()-1);
+  if (sepPos != -1) {
+    binaryDir = binaryPath.left( sepPos);
+    binaryProgram = binaryPath.right( binaryPath.length()-sepPos-1);
+  }
+  else
+    binaryProgram = binaryPath;  // we've got only the binary name
+  prj_info->setBinPROGRAM( binaryProgram);
+  prj_info->setPathToBinPROGRAM( binaryPath);
 
   // write it to the disk
   prj_info->writeProject();
