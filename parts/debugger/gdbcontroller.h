@@ -19,6 +19,8 @@
 #define _GDBCONTROLLER_H_
 
 #include "dbgcontroller.h"
+
+#include <qcstring.h>
 #include <qdom.h>
 #include <qobject.h>
 #include <qptrlist.h>
@@ -139,6 +141,7 @@ private:
     int               gdbSizeofBuf_;          // size of the output buffer
     int               gdbOutputLen_;          // amount of data in the output buffer
     char*             gdbOutput_;             // buffer for the output from kprocess
+    QCString          holdingZone_;
 
     QPtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;

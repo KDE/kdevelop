@@ -150,7 +150,10 @@ void FramestackWidget::parseGDBBacktraceList(char *str)
     if (!viewedThread_)
         clear();
 
-    if(!strlen(str) || strstr(str, "No stack."))
+    if(!strlen(str))
+        return;
+    
+    if (strncmp(str, "No stack.", 9) == 0)
         return;
 
     while (char* end = strchr(str, '\n'))

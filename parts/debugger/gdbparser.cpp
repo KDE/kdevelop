@@ -43,6 +43,7 @@ GDBParser *GDBParser::getGDBParser()
 void GDBParser::destroy()
 {
     delete GDBParser_;
+    GDBParser_ = 0;
 }
 
 // **************************************************************************
