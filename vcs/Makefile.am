@@ -1,3 +1,7 @@
+
+#kdevelop: CVSSERVICE_SUBDIR = cvsservice
+#kdevelop: SVN_SUBDIR = svn
+
 if include_cvsservice
 CVSSERVICE_SUBDIR = cvsservice
 endif
