@@ -61,7 +61,7 @@ void $APPNAME$::resizeEvent(QResizeEvent *e)
 
 extern "C"
 {
-    KPanelApplet* init( QWidget *parent, const QString configFile)
+    KPanelApplet* init( QWidget *parent, const QString& configFile)
     {
         KGlobal::locale()->insertCatalogue("$APPNAMELC$");
         return new $APPNAME$(configFile, KPanelApplet::Normal,
