@@ -21,8 +21,6 @@
 #include "addattributedialog.h"
 #include "cppsupportpart.h"
 #include "backgroundparser.h"
-#include "tree_parser.h"
-#include "ast.h"
 #include "cppsupport_utils.h"
 
 #include <kdevpartcontroller.h>
@@ -41,85 +39,6 @@
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qtextstream.h>
-
-namespace AddAttribute
-{
-
-class FindInsertionPoint: public TreeParser
-{
-public:
-    FindInsertionPoint( const QString& className )
-	: TreeParser(), m_line(0), m_column(0)
-    {
-	m_className = className.stripWhiteSpace();
-    }
-
-    void parseTranslationUnit( TranslationUnitAST* ast )
-    {
-	m_line = 0;
-	m_column = 0;
-	m_scope.clear();
-	TreeParser::parseTranslationUnit( ast );
-    }
-
-    void parseNamespace( NamespaceAST* ast )
-    {
-	QString name = ast->namespaceName() ? ast->namespaceName()->text() : QString::null; // hmm
-	name = name.stripWhiteSpace();
-
-	m_scope.push_back( name );
-	TreeParser::parseNamespace( ast );
-	m_scope.pop_back();
-    }
-
-    void parseClassSpecifier( ClassSpecifierAST* ast )
-    {
-	QString name = ast->name() ? ast->name()->text() : QString::null; // hmm
-	name = name.stripWhiteSpace();
-
-	m_scope.push_back( name );
-	//kdDebug(9007) << "----------------------------> current scope is " << m_scope.join(".") << endl;
-
-	if( m_scope.join(".") == m_className ){
-	    //kdDebug(9007) << "----------------------------> found class" << endl;
-	    ast->getEndPosition( &m_line, &m_column );
-	}
-
-	TreeParser::parseClassSpecifier( ast );
-
-	m_scope.pop_back();
-    }
-
-    void parseSimpleDeclaration( SimpleDeclarationAST* ast )
-    {
-	TypeSpecifierAST* typeSpec = ast->typeSpec();
-
-	if( typeSpec )
-	    parseTypeSpecifier( typeSpec );
-
-	TreeParser::parseSimpleDeclaration( ast );
-    }
-
-    void parseAccessDeclaration( AccessDeclarationAST* ast )
-    {
-	if( m_scope.join(".") == m_className ){
-	    //kdDebug(9007) << "------------------> found insertion point" << endl;
-	}
-
-	TreeParser::parseAccessDeclaration( ast );
-    }
-
-    int line() const { return m_line; }
-    int column() const { return m_column-1; }
-
-private:
-    QString m_className;
-    QStringList m_scope;
-    int m_line;
-    int m_column;
-};
-
-}
 
 AddAttributeDialog::AddAttributeDialog(CppSupportPart* cppSupport, ClassDom klass,
 				 QWidget* parent, const char* name, bool modal, WFlags fl)
@@ -156,46 +75,91 @@ void AddAttributeDialog::reject()
 
 void AddAttributeDialog::accept()
 {
-    QString fileName = m_klass->fileName();
-    //kdDebug(9007) << "-------------> fileName = " << fileName << endl;
-
-    m_cppSupport->backgroundParser()->lock();
-
-    int line = 0, column = 0;
-
-    TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( fileName );
-    if( translationUnit ){
-	AddAttribute::FindInsertionPoint findInsertionPoint( m_klass->name() ); // FIXME: ROBE klass->path()
-	findInsertionPoint.parseTranslationUnit( translationUnit );
-	line = findInsertionPoint.line();
-	column = findInsertionPoint.column();
+    m_cppSupport->partController()->editDocument( m_klass->fileName() );
+    KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
+    if( !editIface ){
+	/// @todo show messagebox
+	QDialog::accept();
+	return;
     }
-    m_cppSupport->backgroundParser()->unlock();
 
+    int line, column;
+    m_klass->getEndPosition( &line, &column );
+
+    // compute the insertion point map
+    QMap<QString, QPair<int,int> > points;
+    QStringList accessList;
+
+    const VariableList variableList = m_klass->variableList();
+    for( VariableList::ConstIterator it=variableList.begin(); it!=variableList.end(); ++it )
     {
-	QString str;
-	QTextStream stream( &str, IO_WriteOnly );
-	QListViewItem* item = attributes->firstChild();
-	stream << "\n";
-	while( item ){
-	    /// @todo check item
-	    stream << "    " << item->text(0).lower() << ": ";
-	    if( item->text(1) == "Static" )
-		stream << "static ";
-	    stream << item->text( 2 ) << " " << item->text( 3 );
-	    stream << ";\n";
-	    item = item->nextSibling();
+	int varEndLine, varEndColumn;
+	(*it)->getEndPosition( &varEndLine, &varEndColumn );
+	QString access = accessID( *it );
+	QPair<int, int> varEndPoint = qMakePair( varEndLine, varEndColumn );
+
+	if( !points.contains(access) || points[access] < varEndPoint ){
+            accessList.remove( access );
+            accessList.push_back( access ); // move 'access' at the end of the list
+
+	    points[ access ] = varEndPoint;
 	}
-
-
-	m_cppSupport->partController()->editDocument( m_klass->fileName() );
-	KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
-	if( editIface )
-	    editIface->insertText( line, column, str );
     }
+
+    int insertedLine = 0;
+
+    accessList += newAccessList( accessList );
+
+    for( QStringList::iterator it=accessList.begin(); it!=accessList.end(); ++it )
+    {
+	QListViewItem* item = attributes->firstChild();
+	while( item ){
+	    QListViewItem* currentItem = item;
+
+	    item = item->nextSibling();
+
+	    if( currentItem->text(0) != *it )
+		continue;
+
+            QString access = (*it).lower();
+
+            QString str = variableDeclaration( currentItem );
+
+	    QPair<int, int> pt;
+            if( points.contains(*it) ) {
+                pt = points[ *it ];
+            } else {
+                str.prepend( access + ":\n" );
+                points[ *it ] = qMakePair( line-1, 0 );
+                pt = points[ *it ]; // end of class declaration
+            }
+
+	    editIface->insertText( pt.first + insertedLine + 1, 0 /*pt.second*/, str );
+            insertedLine += str.contains( QChar('\n') );
+	}
+    }
+
+    m_cppSupport->backgroundParser()->addFile( m_klass->fileName() );
 
     QDialog::accept();
 }
+
+QString AddAttributeDialog::variableDeclaration( QListViewItem* item ) const
+{
+    QString str;
+    QTextStream stream( &str, IO_WriteOnly );
+    QString ind;
+    ind.fill( QChar(' '), 4 );
+
+    stream << ind;
+    if( item->text(1) == "Static" )
+        stream << "static ";
+    stream << item->text( 2 ) << " " << item->text( 3 );
+    stream << ";\n";
+
+    return str;
+ }
+
 
 void AddAttributeDialog::updateGUI()
 {
@@ -246,6 +210,41 @@ void AddAttributeDialog::currentChanged( QListViewItem* item )
     }
 
     updateGUI();
+}
+
+QStringList AddAttributeDialog::newAccessList( const QStringList& accessList ) const
+{
+    QStringList newAccessList;
+
+    QListViewItem* item = attributes->firstChild();
+    while( item ){
+        QListViewItem* currentItem = item;
+
+        item = item->nextSibling();
+
+        QString access = currentItem->text( 0 );
+        if( !(accessList.contains(access) || newAccessList.contains(access)) )
+            newAccessList.push_back( access );
+    }
+
+    return newAccessList;
+}
+
+QString AddAttributeDialog::accessID( VariableDom var ) const
+{
+    switch( var->access() )
+    {
+	case CodeModelItem::Public:
+	    return QString::fromLatin1( "Public" );
+
+	case CodeModelItem::Protected:
+	    return QString::fromLatin1( "Protected" );
+
+	case CodeModelItem::Private:
+	    return QString::fromLatin1( "Private" );
+    }
+
+    return QString::null;
 }
 
 #include "addattributedialog.moc"

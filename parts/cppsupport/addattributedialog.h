@@ -44,6 +44,11 @@ protected:
     virtual void accept();
 
 private:
+    QString accessID( VariableDom var ) const;
+    QStringList newAccessList( const QStringList& accessList ) const;
+    QString variableDeclaration( QListViewItem* item ) const;
+
+private:
     CppSupportPart* m_cppSupport;
     ClassDom m_klass;
     int m_count;

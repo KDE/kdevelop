@@ -112,7 +112,7 @@ private slots:
     void slotProjectCompiled();
     void setupCatalog();
     void codeCompletionConfigStored();
-    void recomputeCodeModel();
+    void recomputeCodeModel( const QString& fileName );
     void slotNewClass();
     void slotSwitchHeader();
     void slotGotoIncludeFile();

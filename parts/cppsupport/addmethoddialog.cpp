@@ -21,15 +21,16 @@
 #include "addmethoddialog.h"
 #include "cppsupportpart.h"
 #include "backgroundparser.h"
-#include "tree_parser.h"
-#include "ast.h"
 #include "cppsupport_utils.h"
 
 #include <kdevpartcontroller.h>
+#include <kdevcreatefile.h>
 
+#include <klocale.h>
 #include <kfiledialog.h>
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
+#include <kdebug.h>
 
 #include <qregexp.h>
 #include <qfileinfo.h>
@@ -41,91 +42,11 @@
 #include <qtoolbutton.h>
 #include <qtextstream.h>
 
-namespace AddMethod
-{
-
-class FindInsertionPoint: public TreeParser
-{
-public:
-    FindInsertionPoint( const QString& className )
-	: TreeParser(), m_line(0), m_column(0)
-    {
-	m_className = className.stripWhiteSpace();
-    }
-
-    void parseTranslationUnit( TranslationUnitAST* ast )
-    {
-	m_line = 0;
-	m_column = 0;
-	m_scope.clear();
-	TreeParser::parseTranslationUnit( ast );
-    }
-
-    void parseNamespace( NamespaceAST* ast )
-    {
-	QString name = ast->namespaceName() ? ast->namespaceName()->text() : QString::null; // hmm
-	name = name.stripWhiteSpace();
-
-	m_scope.push_back( name );
-	TreeParser::parseNamespace( ast );
-	m_scope.pop_back();
-    }
-
-    void parseClassSpecifier( ClassSpecifierAST* ast )
-    {
-	QString name = ast->name() ? ast->name()->text() : QString::null; // hmm
-	name = name.stripWhiteSpace();
-
-	m_scope.push_back( name );
-	//kdDebug(9007) << "----------------------------> current scope is " << m_scope.join(".") << endl;
-
-	if( m_scope.join(".") == m_className ){
-	    //kdDebug(9007) << "----------------------------> found class" << endl;
-	    ast->getEndPosition( &m_line, &m_column );
-	}
-
-	TreeParser::parseClassSpecifier( ast );
-
-	m_scope.pop_back();
-    }
-
-    void parseSimpleDeclaration( SimpleDeclarationAST* ast )
-    {
-	TypeSpecifierAST* typeSpec = ast->typeSpec();
-
-	if( typeSpec )
-	    parseTypeSpecifier( typeSpec );
-
-	TreeParser::parseSimpleDeclaration( ast );
-    }
-
-    void parseAccessDeclaration( AccessDeclarationAST* ast )
-    {
-	if( m_scope.join(".") == m_className ){
-	    //kdDebug(9007) << "------------------> found insertion point" << endl;
-	}
-
-	TreeParser::parseAccessDeclaration( ast );
-    }
-
-    int line() const { return m_line; }
-    int column() const { return m_column-1; }
-
-private:
-    QString m_className;
-    QStringList m_scope;
-    int m_line;
-    int m_column;
-};
-
-}
-
 AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ClassDom klass,
 				 QWidget* parent, const char* name, bool modal, WFlags fl)
     : AddMethodDialogBase(parent,name, modal,fl), m_cppSupport( cppSupport ), m_klass( klass ), m_count( 0 )
 {
     QString fileName = m_klass->fileName();
-    m_cppSupport->partController()->editDocument( fileName );
 
     // setup sourceFile combo
     QMap<QString, bool> m;
@@ -185,109 +106,129 @@ void AddMethodDialog::reject()
     QDialog::reject();
 }
 
+QString AddMethodDialog::accessID( FunctionDom fun ) const
+{
+    if( fun->isSignal() )
+	return QString::fromLatin1( "Signals" );
+
+    switch( fun->access() )
+    {
+	case CodeModelItem::Public:
+	    if( fun->isSlot() )
+		return QString::fromLatin1( "Public Slots" );
+	    return QString::fromLatin1( "Public" );
+
+	case CodeModelItem::Protected:
+	    if( fun->isSlot() )
+		return QString::fromLatin1( "Protected Slots" );
+	    return QString::fromLatin1( "Protected" );
+
+	case CodeModelItem::Private:
+	    if( fun->isSlot() )
+		return QString::fromLatin1( "Private Slots" );
+	    return QString::fromLatin1( "Private" );
+    }
+
+    return QString::null;
+}
+
 void AddMethodDialog::accept()
 {
-    QString fileName = m_klass->fileName();
-    //kdDebug(9007) << "-------------> fileName = " << fileName << endl;
-
-    m_cppSupport->backgroundParser()->lock();
-
-    int line = 0, column = 0;
-
-    TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( fileName );
-    if( translationUnit ){
-	AddMethod::FindInsertionPoint findInsertionPoint( m_klass->name() );  // FIXME: ROBE klass->path()
-	findInsertionPoint.parseTranslationUnit( translationUnit );
-	line = findInsertionPoint.line();
-	column = findInsertionPoint.column();
+    m_cppSupport->partController()->editDocument( m_klass->fileName() );
+    KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
+    if( !editIface ){
+	/// @todo show messagebox
+	QDialog::accept();
+	return;
     }
-    m_cppSupport->backgroundParser()->unlock();
 
+    int line, column;
+    m_klass->getEndPosition( &line, &column );
+
+    // compute the insertion point map
+    QMap<QString, QPair<int,int> > points;
+    QStringList accessList;
+
+    const FunctionList functionList = m_klass->functionList();
+    for( FunctionList::ConstIterator it=functionList.begin(); it!=functionList.end(); ++it )
     {
-	QString str;
-	QTextStream stream( &str, IO_WriteOnly );
+	int funEndLine, funEndColumn;
+	(*it)->getEndPosition( &funEndLine, &funEndColumn );
+	QString access = accessID( *it );
+	QPair<int, int> funEndPoint = qMakePair( funEndLine, funEndColumn );
+
+	if( !points.contains(access) || points[access] < funEndPoint ){
+            accessList.remove( access );
+            accessList.push_back( access ); // move 'access' at the end of the list
+
+	    points[ access ] = funEndPoint;
+	}
+    }
+
+    int insertedLine = 0;
+
+    accessList += newAccessList( accessList );
+
+    for( QStringList::iterator it=accessList.begin(); it!=accessList.end(); ++it )
+    {
 	QListViewItem* item = methods->firstChild();
-	stream << "\n";
 	while( item ){
-	    /// @todo check item
-	    stream << "    " << item->text(1).lower() << ": ";
-	    if( item->text(2) == "Virtual" || storage->currentText() == "Pure Virtual" )
-		stream << "virtual ";
-	    else if( item->text(2) == "Friend" )
-		stream << "friend ";
-	    else if( item->text(2) == "Static" )
-		stream << "static ";
-	    stream << item->text( 3 ) << " " << item->text( 4 );
-	    if( item->text(2) == "Pure Virtual" )
-		stream << " = 0";
-	    stream << ";\n";
+	    QListViewItem* currentItem = item;
+
 	    item = item->nextSibling();
+
+	    if( currentItem->text(1) != *it )
+		continue;
+
+            QString access = (*it).lower();
+
+            bool isInline = currentItem->text( 0 ) == i18n("True");
+            QString str = isInline ? functionDefinition( currentItem ) : functionDeclaration( currentItem );
+
+	    QPair<int, int> pt;
+            if( points.contains(*it) ) {
+                pt = points[ *it ];
+            } else {
+                str.prepend( access + ":\n" );
+                points[ *it ] = qMakePair( line-1, 0 );
+                pt = points[ *it ]; // end of class declaration
+            }
+
+	    editIface->insertText( pt.first + insertedLine + 1, 0 /*pt.second*/, str );
+            insertedLine += str.contains( QChar('\n') );
 	}
-
-
-	m_cppSupport->partController()->editDocument( m_klass->fileName() );
-	KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
-	if( editIface )
-	    editIface->insertText( line, column, str );
     }
 
-    {
-	    QListViewItem* item = methods->firstChild();
-	    QString className = m_klass->name(); // FIXME: ROBE klass->path()
-	    while( item ){
-		if( item->text(2) == "Friend" || item->text(2) == "Pure Virtual" ){
-		    item = item->nextSibling();
-                    continue;
-		}
+    m_cppSupport->backgroundParser()->addFile( m_klass->fileName() );
 
-		QString implementationFile = item->text( 5 );
-		if( item->text(0) == "True" )
-		    implementationFile = m_klass->fileName();
+    QString str;
+    QListViewItem* item = methods->firstChild();
+    while( item ){
+        QListViewItem* currentItem = item;
 
-		m_cppSupport->partController()->editDocument( implementationFile );
-                m_cppSupport->backgroundParser()->addFile( implementationFile ); // reparse
+        item = item->nextSibling();
 
-		KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
-		if( !editIface ){
-		    /// @todo report error
-		    item = item->nextSibling();
-		    continue;
-		}
+        QString implementationFile = currentItem->text( 5 );
+        if( currentItem->text(0) == i18n("True") )
+            implementationFile = m_klass->fileName();
 
-		// sync
-		while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
-		    m_cppSupport->backgroundParser()->isEmpty().wait();
+        QFileInfo fileInfo( implementationFile );
+        if( !QFile::exists(fileInfo.absFilePath()) ){
+            m_cppSupport->createFileSupport()->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.baseName() );
+        }
 
-		int line = editIface->numLines() - 1, column = 0;
+        m_cppSupport->partController()->editDocument( implementationFile );
+        editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
+        if( !editIface )
+            continue;
 
-                m_cppSupport->backgroundParser()->lock();
-		TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( implementationFile );
-		//kdDebug(9007) << "-----------> unit = " << translationUnit << endl;
-		if( translationUnit ){
-		    translationUnit->getEndPosition( &line, &column );
-                    //kdDebug(9007) << "------> line = " << line << " column = " << column << endl;
-                }
-		m_cppSupport->backgroundParser()->unlock();
-
-		QString str;
-		QTextStream stream( &str, IO_WriteOnly );
-		stream << "\n\n"
-                    << "/*!\n"
-		    << "    \\fn " << className << "::" << item->text( 4 ) << "\n"
-                    << " */\n";
-
-                if( item->text(0) == "True" )
-                    stream << "inline ";
-
-                stream
-		    << item->text( 3 ) << " " << className << "::" << item->text( 4 ) << "\n{\n"
-                    << "#warning \"not implemented yet!!\"\n"
-                    << "}\n";
-		editIface->insertText( line, column, str );
-
-		item = item->nextSibling();
-	    }
-	}
+        bool isInline = currentItem->text( 0 ) == i18n("True");
+        if( !isInline ){
+            editIface->insertLine( editIface->numLines(), QString::fromLatin1("") );
+            editIface->insertText( editIface->numLines()-1, 0, functionDefinition( currentItem ) );
+            m_cppSupport->backgroundParser()->addFile( implementationFile );
+        }
+    }
 
     QDialog::accept();
 }
@@ -309,14 +250,14 @@ void AddMethodDialog::updateGUI()
 
     if( enable ){
 	QListViewItem* item = methods->selectedItem();
-	item->setText( 0, isInline->isChecked() ? "True" : "False" );
+	item->setText( 0, isInline->isChecked() ? i18n("True") : i18n("False") );
 	item->setText( 1, access->currentText() );
 	item->setText( 2, storage->currentText() );
 	item->setText( 3, returnType->currentText() );
 	item->setText( 4, declarator->text() );
 	item->setText( 5, sourceFile->currentText() );
 
-	if( isInline->isChecked() || storage->currentText() == "Friend" || storage->currentText() == "Pure Virtual" ){
+	if( isInline->isChecked() || storage->currentText() == i18n("Friend") || storage->currentText() == i18n("Pure Virtual") ){
 	    sourceFile->setEnabled( false );
 	    browseButton->setEnabled( false );
 	}
@@ -325,7 +266,7 @@ void AddMethodDialog::updateGUI()
 
 void AddMethodDialog::addMethod()
 {
-    QListViewItem* item = new QListViewItem( methods, "False", "Public", "Normal", "void", QString("method_%1()").arg(++m_count),
+    QListViewItem* item = new QListViewItem( methods, i18n("False"), "Public", "Normal", "void", QString("method_%1()").arg(++m_count),
     		sourceFile->currentText() );
     methods->setCurrentItem( item );
     methods->setSelected( item, true );
@@ -349,7 +290,7 @@ void AddMethodDialog::currentChanged( QListViewItem* item )
         QString _declarator = item->text( 4 );
         QString _sourceFile = item->text( 5 );
 
-	isInline->setChecked( _isInline == "True" ? true : false );
+	isInline->setChecked( _isInline == i18n("True") ? true : false );
 	access->setCurrentText( _access );
 	storage->setCurrentText( _storage );
 	returnType->setCurrentText( _returnType );
@@ -366,4 +307,79 @@ void AddMethodDialog::browseImplementationFile()
     sourceFile->setCurrentText( fileName );
     updateGUI();
 }
+
+QString AddMethodDialog::functionDeclaration( QListViewItem * item ) const
+{
+    QString str;
+    QTextStream stream( &str, IO_WriteOnly );
+
+    QString access = item->text( 1 ).lower();
+
+    stream << "    "; /// @todo use AStyle
+    if( item->text(2) == "Virtual" || storage->currentText() == i18n("Pure Virtual") )
+	stream << "virtual ";
+    else if( item->text(2) == i18n("Friend") )
+	stream << "friend ";
+    else if( item->text(2) == "Static" )
+	stream << "static ";
+    stream << item->text( 3 ) << " " << item->text( 4 );
+    if( item->text(2) == i18n("Pure Virtual") )
+	stream << " = 0";
+    stream << ";\n";
+
+    return str;
+}
+
+QString AddMethodDialog::functionDefinition( QListViewItem* item ) const
+{
+    if( item->text( 1 ) == "Signals" )
+        return QString::null;
+
+    QString className = m_klass->name();
+    QString fullName = m_klass->scope().join( "::" );
+    if( !fullName.isEmpty() )
+        fullName += "::";
+    fullName += className;
+
+    QString str;
+    QTextStream stream( &str, IO_WriteOnly );
+
+    bool isInline = item->text(0) == i18n("True");
+
+    QString ind;
+    if( isInline )
+        ind.fill( QChar(' '), 4 );
+
+    stream << "\n"
+       << ind << "/*!\n"
+       << ind << "    \\fn " << fullName << "::" << item->text( 4 ) << "\n"
+       << ind << " */\n";
+
+    stream
+        << ind << item->text( 3 ) << " " << (isInline ? QString::fromLatin1("") : fullName + "::") << item->text( 4 ) << "\n"
+        << ind << "{\n"
+        << ind << "    /// @todo implement me\n"
+        << ind << "}\n";
+
+    return str;
+}
+
+QStringList AddMethodDialog::newAccessList( const QStringList& accessList ) const
+{
+    QStringList newAccessList;
+
+    QListViewItem* item = methods->firstChild();
+    while( item ){
+        QListViewItem* currentItem = item;
+
+        item = item->nextSibling();
+
+        QString access = currentItem->text( 1 );
+        if( !(accessList.contains(access) || newAccessList.contains(access)) )
+            newAccessList.push_back( access );
+    }
+
+    return newAccessList;
+}
+
 #include "addmethoddialog.moc"

@@ -289,7 +289,8 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	        m_problemReporter->reportProblem( fileName, p );
 	    }
 
-	    QTimer::singleShot( 0, this, SLOT(recomputeCodeModel()) );
+            recomputeCodeModel( fileName );
+	    //QTimer::singleShot( 0, this, SLOT(recomputeCodeModel()) );
 	}
 
 	emit fileParsed( fileName );
@@ -1413,25 +1414,24 @@ void CppSupportPart::gotoLine( int line )
         m_activeViewCursor->setCursorPositionReal( line, 0 );
 }
 
-void CppSupportPart::recomputeCodeModel( )
+void CppSupportPart::recomputeCodeModel( const QString& fileName )
 {
-	if( codeModel()->hasFile(m_activeFileName) ){
-		FileDom file = codeModel()->fileByName( m_activeFileName );
-		removeWithReferences( m_activeFileName );
+	if( codeModel()->hasFile(fileName) ){
+		FileDom file = codeModel()->fileByName( fileName );
+		removeWithReferences( fileName );
 	}
 
 	m_backgroundParser->lock();
-	if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(m_activeFileName) ){
+	if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
 
 		if( true /*!hasErrors*/ ){
-			StoreWalker walker( m_activeFileName, codeModel() );
+			StoreWalker walker( fileName, codeModel() );
 			walker.parseTranslationUnit( ast );
 			codeModel()->addFile( walker.file() );
-		    	emit addedSourceInfo( m_activeFileName );
+		    	emit addedSourceInfo( fileName );
 		}
 	}
 	m_backgroundParser->unlock();
-	QTimer::singleShot( 0, this, SLOT(emitFileParsed()) );
 }
 
 void CppSupportPart::emitFileParsed( )

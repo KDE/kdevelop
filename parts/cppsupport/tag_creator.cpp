@@ -95,8 +95,9 @@ void TagCreator::parseNamespace( NamespaceAST* ast )
     m_currentScope.pop_back();
 }
 
-void TagCreator::parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* )
+void TagCreator::parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* ast )
 {
+    TreeParser::parseElaboratedTypeSpecifier( ast );
 }
 
 void TagCreator::parseUsingDirective( UsingDirectiveAST* ast )
