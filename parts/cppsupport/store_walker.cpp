@@ -206,7 +206,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     method->setIsConstructor( isConstructor );
     
     if( isConstructor || isDestructor )
-	method->setType( id + "*" );
+	method->setType( cl->name() + "*" );
     else
 	method->setType( typeOfDeclaration(typeSpec, d) );
     
@@ -491,7 +491,7 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 	method->setIsConstructor( isConstructor );
 	
 	if( isConstructor || isDestructor )
-	    method->setType( id + "*" );	
+	    method->setType( m_currentClass->name() + "*" );	
     }
     method->setIsConst( d->constant() != 0 );
  

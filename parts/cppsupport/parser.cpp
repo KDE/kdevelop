@@ -2908,10 +2908,6 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	// no type specifier, maybe a constructor or a cast operator??
 
 	lex->setIndex( index );
-	NestedNameSpecifierAST::Node nestedName;
-	parseNestedNameSpecifier( nestedName );
-	QString nestedNameText = toString( index, lex->index() );
-	lex->setIndex( index );
 
 	InitDeclaratorAST::Node declarator;
 	if( parseInitDeclarator(declarator) ){
@@ -2920,7 +2916,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 
 	    switch( lex->lookAhead(0) ){
 	    case ';':
-		if( !nestedNameText ){
+		if( !declarator->declarator()->declaratorId()->nestedName() ){
 		    lex->nextToken();
 
 		    InitDeclaratorListAST::Node declarators = CreateNode<InitDeclaratorListAST>();
@@ -2936,7 +2932,6 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    declarators->addInitDeclarator( declarator );
 
 		    SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
-		    ast->setNestedName( nestedName );
 		    ast->setInitDeclaratorList( declarators );
 		    ast->setText( toString(start, endSignature) );
 		    node = ast;
@@ -2951,7 +2946,8 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    StatementListAST::Node funBody;
 		    if( parseCtorInitializer(ctorInit) && parseFunctionBody(funBody) ){
 			FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
-			ast->setNestedName( nestedName );
+			ast->setStorageSpecifier( storageSpec );
+			ast->setFunctionSpecifier( funSpec );
 			ast->setInitDeclarator( declarator );
 			ast->setFunctionBody( funBody );
 			ast->setText( toString(start, endSignature) );
@@ -2967,7 +2963,8 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    StatementListAST::Node funBody;
 		    if( parseFunctionBody(funBody) ){
 			FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
-			ast->setNestedName( nestedName );
+			ast->setStorageSpecifier( storageSpec );
+			ast->setFunctionSpecifier( funSpec );
 			ast->setInitDeclarator( declarator );
 			ast->setText( toString(start, endSignature) );
 			ast->setFunctionBody( funBody );
@@ -3064,6 +3061,8 @@ start_decl:
 	        StatementListAST::Node funBody;
 	        if ( parseFunctionBody(funBody) ) {
 		    FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
+		    ast->setStorageSpecifier( storageSpec );
+		    ast->setFunctionSpecifier( funSpec );
 		    ast->setText( toString(start, endSignature) );
 		    ast->setTypeSpec( spec );
 		    ast->setFunctionBody( funBody );

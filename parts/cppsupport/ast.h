@@ -840,9 +840,6 @@ public:
     GroupAST* storageSpecifier() { return m_storageSpecifier.get(); }
     void setStorageSpecifier( GroupAST::Node& storageSpecifier );
 
-    NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
-    void setNestedName( NestedNameSpecifierAST::Node& nestedName );
-
     TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
 
@@ -852,7 +849,6 @@ public:
 private:
     GroupAST::Node m_functionSpecifier;
     GroupAST::Node m_storageSpecifier;
-    NestedNameSpecifierAST::Node m_nestedName;
     TypeSpecifierAST::Node m_typeSpec;
     InitDeclaratorListAST::Node m_initDeclaratorList;
 
@@ -1076,7 +1072,13 @@ public:
 
 public:
     FunctionDefinitionAST();
+    
+    GroupAST* functionSpecifier() { return m_functionSpecifier.get(); }
+    void setFunctionSpecifier( GroupAST::Node& functionSpecifier );
 
+    GroupAST* storageSpecifier() { return m_storageSpecifier.get(); }
+    void setStorageSpecifier( GroupAST::Node& storageSpecifier );
+    
     TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
     
@@ -1090,6 +1092,8 @@ public:
     void setFunctionBody( StatementListAST::Node& functionBody );
     
 private:
+    GroupAST::Node m_functionSpecifier;
+    GroupAST::Node m_storageSpecifier;
     TypeSpecifierAST::Node m_typeSpec;
     NestedNameSpecifierAST::Node m_nestedName;
     InitDeclaratorAST::Node m_initDeclarator;

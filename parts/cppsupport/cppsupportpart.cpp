@@ -1162,7 +1162,7 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store, CClassPar
         return;
 
     store->removeWithReferences( fileName );
-#if 1
+#if 0
     parser->parse( fileName );
 #else
     m_backgroundParser->lock();

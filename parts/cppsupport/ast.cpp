@@ -560,12 +560,6 @@ void SimpleDeclarationAST::setStorageSpecifier( GroupAST::Node& storageSpecifier
     if( m_storageSpecifier.get() ) m_storageSpecifier->setParent( this );
 }
 
-void SimpleDeclarationAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
-{
-    m_nestedName = nestedName;
-    if( m_nestedName.get() ) m_nestedName->setParent( this );
-}
-
 void SimpleDeclarationAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
 {
     m_typeSpec = typeSpec;
@@ -675,6 +669,18 @@ void InitDeclaratorAST::setInitializer( AST::Node& initializer )
 // --------------------------------------------------------------------------
 FunctionDefinitionAST::FunctionDefinitionAST()
 {
+}
+
+void FunctionDefinitionAST::setFunctionSpecifier( GroupAST::Node& functionSpecifier )
+{
+    m_functionSpecifier = functionSpecifier;
+    if( m_functionSpecifier.get() ) m_functionSpecifier->setParent( this );
+}
+
+void FunctionDefinitionAST::setStorageSpecifier( GroupAST::Node& storageSpecifier )
+{
+    m_storageSpecifier = storageSpecifier;
+    if( m_storageSpecifier.get() ) m_storageSpecifier->setParent( this );
 }
 
 void FunctionDefinitionAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
