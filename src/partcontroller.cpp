@@ -953,11 +953,13 @@ bool PartController::saveFile( const KURL & url, bool force )
 			;
 	}
 
-	part->save();
-	_dirtyDocuments.remove( part );
-	emit documentChangedState( url, Clean );
-	emit savedFile( url );
-	
+	if ( part->save() )
+	{
+		_dirtyDocuments.remove( part );
+		emit documentChangedState( url, Clean );
+		emit savedFile( url );
+	}
+		
 	return true;
 }
 
