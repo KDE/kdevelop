@@ -37,7 +37,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
 
 CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & ) : KDevPlugin( parent, name ? name : "CvsPart" ),
         default_cvs("-f"),default_commit(""),default_update("-dP"),default_add(""),
-default_remove("-f"),default_diff("-u3 -p"),default_log(""),default_rsh("") {
+default_remove("-f"),default_replace("-C -d -P"),default_diff("-u3 -p"),default_log(""),default_rsh("") {
     setInstance(CvsFactory::instance());
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
@@ -73,6 +73,9 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context) {
 			 this, SLOT(slotAdd()) );
 	sub->insertItem( i18n("Remove From Repository"),
 			 this, SLOT(slotRemove()) );
+	sub->insertSeparator();
+	sub->insertItem( i18n("Replace with latest from Repository"),
+	                 this, SLOT(slotReplace()) );
 	sub->insertSeparator();
 	sub->insertItem( i18n("Diff Against Repository"),
 			 this, SLOT(slotDiff()) );
@@ -192,6 +195,33 @@ void CvsPart::slotRemove() {
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " remove ";
     command += DomUtil::readEntry(dom,"/kdevcvs/removeoptions",default_remove);
+    command += " ";
+    command += KShellProcess::quote(name);
+
+//    makeFrontend()->queueCommand(dir, command);
+    m_widget->startCommand(dir,command);
+}
+
+
+void CvsPart::slotReplace() {
+    QString dir, name;
+    QFileInfo fi(popupfile);
+    if (fi.isDir()) {
+        dir = fi.absFilePath();
+        name = ".";
+    } else {
+        dir = fi.dirPath();
+        name = fi.fileName();
+    }
+
+    QDomDocument &dom = *this->projectDom();
+
+    QString command("cd ");
+    command += KShellProcess::quote(dir);
+    command += " && " + cvs_rsh() + " cvs ";
+    command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
+    command += " update ";
+    command += default_replace;
     command += " ";
     command += KShellProcess::quote(name);
 

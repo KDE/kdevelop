@@ -33,6 +33,7 @@ public:
     const QString default_update;
     const QString default_add;
     const QString default_remove;
+    const QString default_replace;
     const QString default_diff;
     const QString default_log;
     const QString default_rsh;
@@ -43,6 +44,7 @@ private slots:
     void slotUpdate();
     void slotAdd();
     void slotRemove();
+    void slotReplace();
     void slotLog();
     void slotDiff();
     void slotDiffFinished( const QString& diff, const QString& err );
