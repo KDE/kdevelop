@@ -225,6 +225,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     cancel_button->setAutoResize( FALSE );
 
 
+  bUpdated=false;
 
   resize( 530,380 );
   setMinimumSize( 0, 0 );
@@ -253,8 +254,8 @@ void CUpdateKDEDocDlg::OK(){
   if(kdelibs_path.right(1) != "/"){
     kdelibs_path = kdelibs_path +"/";
   }
-  // check if path set corectly
-  QString kde_testfile=kdelibs_path+"/kdecore/index.html"; // test if the path really is the kdelibs path
+  // check if path (TO GENERATE the doc from the sources) is set correctly
+  QString kde_testfile=kdelibs_path+"kdecore/kapp.h"; // test if the path really is the kdelibs path
   if(!QFileInfo(kde_testfile).exists()){
     KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path for the KDE-Libs does not\n"
 									 "lead to the KDE Libraries. Please choose the\n"
@@ -269,18 +270,78 @@ void CUpdateKDEDocDlg::OK(){
     conf->setGroup("Doc_Location");
     conf->writeEntry("doc_kde",new_doc_path);
   }
+
+  if(new_doc_path.right(1) != "/"){
+    new_doc_path += "/";
+  }
+
+  if(doc_path.right(1) != "/"){
+    doc_path += "/";
+  }
+  QDir().mkdir(new_doc_path);
+  if(!QFileInfo(new_doc_path).isWritable()){
+    KMsgBox::message(this,i18n("Error in creating documentation!"),
+                         i18n("You need write permission to create\n"
+			 "the documentation in\n")+new_doc_path, KMsgBox::STOP);
+    return;
+  }
+
   if(!leave_new_radio_button->isChecked()){ // ok,let's delete it,attentation!!!
       proc_rm.clearArguments();
-      if(QDir::setCurrent(doc_path)){
-	  proc_rm << "rm -f -r kdoc-reference/;rm -f -r kdecore/;rm -f -r kdeui/;rm -f -r kio/;
-								rm -f -r kimgio/;rm -f -r mediatool/;rm -f -r kdeutils/;rm -f -r jscript/;rm -f -r kfile/;
-								rm -f -r khtmlw/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell/";
-	  proc_rm.start(KShellProcess::Block,KShellProcess::AllOutput);
+      if(!QFileInfo(doc_path).exists())
+      {
+         KMsgBox::message(this,i18n("Old documentation deletion!"),
+                i18n("The old documentation path\n")+
+                doc_path+
+                i18n("\ndoesn´t exist anymore.")+
+                i18n("\nProcess will continue without deletion...")
+              );
       }
-  }
+      else
+      {
+        if(!QFileInfo(doc_path).isWritable())
+        {
+         KMsgBox::message(this,i18n("Old documentation deletion!"),
+                i18n("You have no write permission to delete\n"
+                "the old documentation in\n")+doc_path+
+                i18n("\nProcess will continue without deletion...")
+              );
+        }
+        else
+        {
+          if(QDir::setCurrent(doc_path)){
+            QString command;
+// protect the rest of the files in the directory...
+//   maybe someone installs the htmls in the source dir of the
+//   kdelib
+	    command= "rm -f -r kdoc-reference/;rm -f -r kdecore/*.htm*;"
+                  "rm -f -r kdeui/*.htm*;rm -f -r kio/*.htm*;"
+		  "rm -f -r kimgio/*.htm*;rm -f -r mediatool/*.htm*;"
+                  "rm -f -r kdeutils/*.htm*;"
+                  "rm -f -r jscript/*.htm*;rm -f -r kfile/*.htm*;"
+                  "rm -f -r khtmlw/*.htm*;rm -f -r kfmlib/*.htm*;"
+                  "rm -f -r kab/*.htm*;rm -f -r kspell/*.htm*;"
+// use here rmdir (so the directory won't be deleted if there are other
+//  files than the documentation
+                  "rmdir kdecore; rmdir kdeui;rmdir kio;"
+                  "rmdir kimgio; rmdir mediatool; rmdir kdeutils;"
+                  "rmdir jscript; rmdir kfile; rmdir khtmlw; rmdir kfmlib;"
+                  "rmdir kab; rmdir kspell";
+            //  if the old path and the new doc path differs then
+            //  delete the old doc dir
+            if (doc_path!=new_doc_path)
+               command += "; cd ~; rmdir "+doc_path;
+
+            proc_rm << command;
+	    proc_rm.start(KShellProcess::Block,KShellProcess::AllOutput);
+           }
+        }
+      }
+    }
+
   proc->clearArguments();
   QDir::setCurrent(kdelibs_path);
-  QDir().mkdir(new_doc_path.data());
+
   
   conf->setGroup("Doc_Location");
   QString qtPath=conf->readEntry("doc_qt", QT_DOCDIR);
@@ -332,65 +393,67 @@ void CUpdateKDEDocDlg::OK(){
     if(qt_set==1)
       return;  // exit the update dialog
     else{  // don't return to the setup to set the qt-path and index without qt
-      *proc << "mkdir "+new_doc_path+"kdoc-reference;
-  			  	cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
-  			 	  + new_doc_path +"kdoc-reference kdecore *.h;
-  			  	cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
-  			  	+ new_doc_path +"kdoc-reference kdeui *.h -lkdecore;
-  		  		cd ../kio;kdoc -d "+ new_doc_path + "/kio -ufile:" + new_doc_path + "kio/ -L"
-  			  	+ new_doc_path +"kdoc-reference kio *.h -lkdecore -lkdeui;
-  		  		cd ../kimgio;kdoc -d "+ new_doc_path + "/kimgio -ufile:" + new_doc_path + "kimio/ -L"
-  			  	+ new_doc_path +"kdoc-reference kimgio *.h -lkdecore -lkdeui -lkio;
-  		  		cd ../mediatool;kdoc -d "+ new_doc_path + "/mediatool -ufile:" + new_doc_path + "mediatool/ -L"
-  	  			+ new_doc_path +"kdoc-reference mediatool *.h -lkdecore -lkdeui -lkio;
-  				  cd ../kdeutils;kdoc -d "+ new_doc_path + "/kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
-  			  	+ new_doc_path +"kdoc-reference kdeutils *.h -lkdecore -lkdeui;
-  		  		cd ../jscript;kdoc -d "+ new_doc_path + "/jscript -ufile:" + new_doc_path + "jscript/ -L"
-  	  			+ new_doc_path +"kdoc-reference jscript *.h -lkdecore -lkdeui;
-    				cd ../khtmlw;kdoc -d "+ new_doc_path + "/khtmlw -ufile:" + new_doc_path + "khtmlw/ -L"
-  				  + new_doc_path +"kdoc-reference khtmlw *.h -lkdecore -lkdeui -ljscript;
-  			  	cd ../kfile;kdoc -d "+ new_doc_path + "/kfile -ufile:" + new_doc_path + "kfile/ -L"
-  		  		+ new_doc_path +"kdoc-reference kfile *.h -lkdecore -lkdeui;
-  	  			cd ../kfmlib;kdoc -d "+ new_doc_path + "/kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
-  				  + new_doc_path +"kdoc-reference kfmlib *.h -lkdecore -lkdeui;
-  			  	cd ../kab;kdoc -d "+ new_doc_path + "/kab -ufile:" + new_doc_path + "kab/ -L"
-  		  		+ new_doc_path +"kdoc-reference kab *.h -lkdecore -lkdeui;
-  	  			cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
-    				+ new_doc_path +"kdoc-reference kspell *.h -lkdecore -lkdeui";
+      *proc << "mkdir "+new_doc_path+"kdoc-reference;"
+	       "cd kdecore;kdoc -d "+ new_doc_path + "kdecore -ufile:" + new_doc_path + "kdecore/ -L"
+               + new_doc_path +"kdoc-reference kdecore *.h;"
+               "cd ../kdeui;kdoc -d " + new_doc_path + "kdeui -ufile:" + new_doc_path + "kdeui/ -L"
+               + new_doc_path +"kdoc-reference kdeui *.h -lkdecore;"
+               "cd ../kio;kdoc -d "+ new_doc_path + "kio -ufile:" + new_doc_path + "kio/ -L"
+               + new_doc_path +"kdoc-reference kio *.h -lkdecore -lkdeui;"
+               "cd ../kimgio;kdoc -d "+ new_doc_path + "kimgio -ufile:" + new_doc_path + "kimio/ -L"
+               + new_doc_path +"kdoc-reference kimgio *.h -lkdecore -lkdeui -lkio;"
+               "cd ../mediatool;kdoc -d "+ new_doc_path + "mediatool -ufile:" + new_doc_path + "mediatool/ -L"
+               + new_doc_path +"kdoc-reference mediatool *.h -lkdecore -lkdeui -lkio;"
+               "cd ../kdeutils;kdoc -d "+ new_doc_path + "kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
+               + new_doc_path +"kdoc-reference kdeutils *.h -lkdecore -lkdeui;"
+               "cd ../jscript;kdoc -d "+ new_doc_path + "jscript -ufile:" + new_doc_path + "jscript/ -L"
+               + new_doc_path +"kdoc-reference jscript *.h -lkdecore -lkdeui;"
+               "cd ../khtmlw;kdoc -d "+ new_doc_path + "khtmlw -ufile:" + new_doc_path + "khtmlw/ -L"
+               + new_doc_path +"kdoc-reference khtmlw *.h -lkdecore -lkdeui -ljscript;"
+               "cd ../kfile;kdoc -d "+ new_doc_path + "kfile -ufile:" + new_doc_path + "kfile/ -L"
+               + new_doc_path +"kdoc-reference kfile *.h -lkdecore -lkdeui;"
+               "cd ../kfmlib;kdoc -d "+ new_doc_path + "kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
+               + new_doc_path +"kdoc-reference kfmlib *.h -lkdecore -lkdeui;"
+               "cd ../kab;kdoc -d "+ new_doc_path + "kab -ufile:" + new_doc_path + "kab/ -L"
+               + new_doc_path +"kdoc-reference kab *.h -lkdecore -lkdeui;"
+               "cd ../kspell;kdoc -d "+ new_doc_path + "kspell -ufile:" + new_doc_path + "kspell/ -L"
+               + new_doc_path +"kdoc-reference kspell *.h -lkdecore -lkdeui";
     }
   }
   else{  // cross-reference to qt
     *proc << "mkdir "+new_doc_path+"kdoc-reference; qt2kdoc -ufile:" + qtPath + " -o" + new_doc_path +
-  		 		  "kdoc-reference " + qtPath + "classes.html;
-  			  	cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
-  		  	 	+ new_doc_path +"kdoc-reference kdecore *.h -lqt;
-  	  			cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
-    				+ new_doc_path +"kdoc-reference kdeui *.h -lqt -lkdecore;
-  					cd ../kio;kdoc -d "+ new_doc_path + "/kio -ufile:" + new_doc_path + "kio/ -L"
-  					+ new_doc_path +"kdoc-reference kio *.h -lqt -lkdecore -lkdeui;
-  				  cd ../kimgio;kdoc -d "+ new_doc_path + "/kimgio -ufile:" + new_doc_path + "kimio/ -L"
-  			  	+ new_doc_path +"kdoc-reference kimgio *.h -lqt -lkdecore -lkdeui -lkio;
-  		  		cd ../mediatool;kdoc -d "+ new_doc_path + "/mediatool -ufile:" + new_doc_path + "mediatool/ -L"
-  	  			+ new_doc_path +"kdoc-reference mediatool *.h -lqt -lkdecore -lkdeui -lkio;
-    				cd ../kdeutils;kdoc -d "+ new_doc_path + "/kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
-  					+ new_doc_path +"kdoc-reference kdeutils *.h -lqt -lkdecore -lkdeui;
-  					  cd ../jscript;kdoc -d "+ new_doc_path + "/jscript -ufile:" + new_doc_path + "jscript/ -L"
-  			  	+ new_doc_path +"kdoc-reference jscript *.h -lqt -lkdecore -lkdeui;
-  		  		cd ../khtmlw;kdoc -d "+ new_doc_path + "/khtmlw -ufile:" + new_doc_path + "khtmlw/ -L"
-  	  			+ new_doc_path +"kdoc-reference khtmlw *.h -lqt -lkdecore -lkdeui -ljscript;
-    				cd ../kfile;kdoc -d "+ new_doc_path + "/kfile -ufile:" + new_doc_path + "kfile/ -L"
-  					+ new_doc_path +"kdoc-reference kfile *.h -lqt -lkdecore -lkdeui;
-  					cd ../kfmlib;kdoc -d "+ new_doc_path + "/kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
-  				  + new_doc_path +"kdoc-reference kfmlib *.h -lqt -lkdecore -lkdeui;
-  			  	cd ../kab;kdoc -d "+ new_doc_path + "/kab -ufile:" + new_doc_path + "kab/ -L"
-  		  		+ new_doc_path +"kdoc-reference kab *.h -lqt -lkdecore -lkdeui;
-  	  			cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
-    				+ new_doc_path +"kdoc-reference kspell *.h -lqt -lkdecore -lkdeui";
+               "kdoc-reference " + qtPath + "classes.html;"
+               "cd kdecore;kdoc -d "+ new_doc_path + "kdecore -ufile:" + new_doc_path + "kdecore/ -L"
+               + new_doc_path +"kdoc-reference kdecore *.h -lqt;"
+               "cd ../kdeui;kdoc -d " + new_doc_path + "kdeui -ufile:" + new_doc_path + "kdeui/ -L"
+               + new_doc_path +"kdoc-reference kdeui *.h -lqt -lkdecore;"
+               "cd ../kio;kdoc -d "+ new_doc_path + "kio -ufile:" + new_doc_path + "kio/ -L"
+               + new_doc_path +"kdoc-reference kio *.h -lqt -lkdecore -lkdeui;"
+               "cd ../kimgio;kdoc -d "+ new_doc_path + "kimgio -ufile:" + new_doc_path + "kimio/ -L"
+               + new_doc_path +"kdoc-reference kimgio *.h -lqt -lkdecore -lkdeui -lkio;"
+               "cd ../mediatool;kdoc -d "+ new_doc_path + "mediatool -ufile:" + new_doc_path + "mediatool/ -L"
+               + new_doc_path +"kdoc-reference mediatool *.h -lqt -lkdecore -lkdeui -lkio;"
+               "cd ../kdeutils;kdoc -d "+ new_doc_path + "kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
+               + new_doc_path +"kdoc-reference kdeutils *.h -lqt -lkdecore -lkdeui;"
+               "cd ../jscript;kdoc -d "+ new_doc_path + "jscript -ufile:" + new_doc_path + "jscript/ -L"
+               + new_doc_path +"kdoc-reference jscript *.h -lqt -lkdecore -lkdeui;"
+               "cd ../khtmlw;kdoc -d "+ new_doc_path + "khtmlw -ufile:" + new_doc_path + "khtmlw/ -L"
+               + new_doc_path +"kdoc-reference khtmlw *.h -lqt -lkdecore -lkdeui -ljscript;"
+               "cd ../kfile;kdoc -d "+ new_doc_path + "kfile -ufile:" + new_doc_path + "kfile/ -L"
+               + new_doc_path +"kdoc-reference kfile *.h -lqt -lkdecore -lkdeui;"
+               "cd ../kfmlib;kdoc -d "+ new_doc_path + "kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
+               + new_doc_path +"kdoc-reference kfmlib *.h -lqt -lkdecore -lkdeui;"
+               "cd ../kab;kdoc -d "+ new_doc_path + "kab -ufile:" + new_doc_path + "kab/ -L"
+               + new_doc_path +"kdoc-reference kab *.h -lqt -lkdecore -lkdeui;"
+               "cd ../kspell;kdoc -d "+ new_doc_path + "kspell -ufile:" + new_doc_path + "kspell/ -L"
+               + new_doc_path +"kdoc-reference kspell *.h -lqt -lkdecore -lkdeui";
   } // end cross-reference qt
 
 #endif
   
   proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  bUpdated=true;
+  doc_path=new_doc_path; // all went ok... so set the new doc_path
   accept();
 }
 
@@ -427,15 +490,7 @@ void CUpdateKDEDocDlg::slotDocButtonClicked(){
 void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   QString dir = KDirDialog::getDirectory(source_edit->text(),this,i18n("KDE Libs Directory..."));
   if(!dir.isEmpty()){
-    QString kde_testfile=dir+"/kdecore/index.html"; // test if the path really is the kdelibs path
-    if(QFileInfo(kde_testfile).exists()){
       source_edit->setText(dir);
-    }
-    else{
-      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-									   "KDE Libraries. Please choose the\n"
-									   "correct path."),KMsgBox::EXCLAMATION);
-    }
   }
 
 }

@@ -41,6 +41,9 @@ class CUpdateKDEDocDlg : public QDialog  {
 public: 
    CUpdateKDEDocDlg(QWidget *parent=0, const char *name=0,KShellProcess* proc=0,KConfig* config=0);
   ~CUpdateKDEDocDlg();
+  bool isUpdated() const {return bUpdated;};
+  QString getDocPath() const {return doc_path;};
+
   QButtonGroup* install_box;
   QLineEdit* source_edit;
   QLabel* source_label;
@@ -54,7 +57,7 @@ public:
   QRadioButton* del_new_radio_button;
   QRadioButton* leave_new_radio_button;
   KConfig* conf;
-  
+
  public slots:
  void OK();
   void slotLeaveNewRadioButtonClicked();
@@ -65,6 +68,7 @@ public:
 protected:
   KShellProcess* proc;
   QString doc_path;
+  bool bUpdated;
 };
 
 #endif

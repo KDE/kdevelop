@@ -842,8 +842,9 @@ void CKDevInstall::slotAuto() // proceed >>
       slotProcessExited(shell_process);
     }
 
+    if (dlg.isUpdated())
+        config->writeEntry("doc_kde",dlg.getDocPath());
 
-    
     auto_button->setEnabled(false);
     hint_label->setText(i18n("                Creating KDE documentation                           "
 			     "                                                             "
