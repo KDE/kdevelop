@@ -107,35 +107,40 @@ public:
 
 };
 
-void parseDirectory( Driver& driver, QDir& dir, bool rec )
+void parseDirectory( Driver& driver, QDir& dir, bool rec, bool parseAllFiles )
 {
-  {
-    QStringList fileList = dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tlh" );
-    QStringList::Iterator it = fileList.begin();
-    while( it != fileList.end() ){
-        QString fn = dir.path() + "/" + (*it);
-        ++it;
-
-        std::cout << "parsing file " << fn << std::endl; 
-        driver.parseFile( fn );
+    {
+	QStringList fileList;
+	if( parseAllFiles )
+	    fileList = dir.entryList( QDir::Files );
+	else
+	    fileList = dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tlh" );
+	    
+	QStringList::Iterator it = fileList.begin();
+	while( it != fileList.end() ){
+	    QString fn = dir.path() + "/" + (*it);
+	    ++it;
+	    
+	    std::cout << "parsing file " << fn << std::endl; 
+	    driver.parseFile( fn );
+	}
     }
-  }
-
-  if( rec ) {
-    QStringList fileList = dir.entryList( QDir::Dirs );
-    QStringList::Iterator it = fileList.begin();
-    while( it != fileList.end() ){
-        if( (*it).startsWith(".") ){
-            ++it;
-            continue;
-        }
-
-        QDir subdir( dir.path() + "/" + (*it) );
-        ++it; 
-
-        parseDirectory( driver, subdir, rec );
+    
+    if( rec ) {
+	QStringList fileList = dir.entryList( QDir::Dirs );
+	QStringList::Iterator it = fileList.begin();
+	while( it != fileList.end() ){
+	    if( (*it).startsWith(".") ){
+		++it;
+		continue;
+	    }
+	    
+	    QDir subdir( dir.path() + "/" + (*it) );
+	    ++it; 
+	    
+	    parseDirectory( driver, subdir, rec, parseAllFiles );
+	}
     }
-  }
 }
 
 int main( int argc, char* argv[] )
@@ -150,6 +155,7 @@ int main( int argc, char* argv[] )
     }
 
     bool rec = false;
+    bool parseAllFiles = false;
 
     QString datadir = stddir.localkdedir() + "/" + KStandardDirs::kde_default( "data" );
 
@@ -170,14 +176,17 @@ int main( int argc, char* argv[] )
         if( s == "-r" || s == "--recursive" ){
            rec = true;
            continue;
-        }
+       } else if( s == "-a" || s == "--all" ){
+	   parseAllFiles = true;
+	   continue;
+       }
 
         QDir dir( s );
         if( !dir.exists() ){
             std::cerr<< "*error* " << "the directory " << dir.path() << " doesn't exists!" << std::endl << std::endl;
             continue;
         }
-        parseDirectory( driver, dir, rec );
+        parseDirectory( driver, dir, rec, parseAllFiles );
     }
 
     Catalog catalog;
