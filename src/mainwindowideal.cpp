@@ -140,6 +140,12 @@ void MainWindowIDEAl::init() {
 
     createGUI(0);
 
+    KAction *a = actionCollection()->action("help_report_bug");
+    disconnect(a, SIGNAL(activated()), 0, 0);
+    connect(a, SIGNAL(activated()), m_pMainWindowShare, SLOT(slotReportBug()));
+    //actionCollection()->remove(a);
+    if(a) qDebug("HI");
+
     m_pWindowMenu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
 
     if( !m_pWindowMenu ){
@@ -164,7 +170,6 @@ void MainWindowIDEAl::init() {
     kdDebug(9000) << "-> kapp = " << kapp << endl;
     kapp->installEventFilter( new IDEAlEventFilter(this) );
 }
-
 
 MainWindowIDEAl::~MainWindowIDEAl() {
     TopLevel::invalidateInstance( this );

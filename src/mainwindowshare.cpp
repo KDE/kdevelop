@@ -21,6 +21,7 @@
 #include <qradiobutton.h>
 
 #include <kaction.h>
+#include <kaboutdata.h>
 #include <kstdaction.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -31,6 +32,7 @@
 #include <kkeydialog.h>
 #include <kmenubar.h>
 #include <kedittoolbar.h>
+#include <kbugreport.h>
 
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
@@ -134,6 +136,14 @@ void MainWindowShare::createActions()
   action = new KAction( i18n("&First Accessed Window"), ALT+Key_Down, this, SIGNAL(gotoFirstWindow()), m_pMainWnd->actionCollection(), "view_first_window");
   action->setStatusText( i18n("Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key") );
 
+}
+
+void MainWindowShare::slotReportBug()
+{
+  const KAboutData *ad = m_pMainWnd->instance()->aboutData();
+  KAboutData d2("kdevelop", ad->programName(), ad->version());
+  KBugReport a(m_pMainWnd, true, &d2);  
+  a.exec();
 }
 
 void MainWindowShare::slotToggleMainToolbar()
