@@ -1052,6 +1052,23 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
     return;
 }
 
+void TrollProjectWidget::slotRemoveSubproject(SubprojectItem *spitem)
+{
+  if (spitem==0 && m_shownSubproject==0)
+    return;
+  else
+  {
+    if ( ( spitem = m_shownSubproject->parent() ) != NULL  )
+    {
+    QString subdirname = m_shownSubproject->subdir;
+    spitem->subdirs.remove(subdirname);
+    delete m_shownSubproject;
+    m_shownSubproject = spitem;
+    updateProjectFile(spitem);
+    }
+  }
+}
+
 void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
     if (!item)
@@ -1065,6 +1082,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     int idQmake = -2;
     int idProjectConfiguration = -2;
     int idAddSubproject = -2;
+    int idRemoveSubproject = -2;
     int idRemoveScope = -2;
     int idAddScope = -2;
 
@@ -1077,6 +1095,9 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
       idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
       if (spitem->configuration.m_template != QTMP_SUBDIRS)
         popup.setItemEnabled(idAddSubproject, false);
+      idRemoveSubproject = popup.insertItem(SmallIcon("remove_subdir"),i18n("Remove Subproject..."));
+      if (spitem->parent() == NULL)
+        popup.setItemEnabled(idRemoveSubproject, false);
       idAddScope = popup.insertItem(SmallIcon("qmake_scopenew"),i18n("Create Scope..."));
       popup.insertSeparator();
       idProjectConfiguration = popup.insertItem(SmallIcon("configure"),i18n("Subproject Settings"));
@@ -1093,6 +1114,10 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     if (r == idAddSubproject)
     {
       slotAddSubdir(spitem);
+    }
+    if (r == idRemoveSubproject)
+    {
+      slotRemoveSubproject(spitem);
     }
     if (r == idAddScope)
     {

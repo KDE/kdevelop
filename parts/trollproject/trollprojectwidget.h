@@ -299,6 +299,7 @@ private slots:
     void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void slotConfigureFile();
     void slotAddSubdir(SubprojectItem *spitem=0);
+    void slotRemoveSubproject(SubprojectItem *spitem=0);
     void slotCreateScope(SubprojectItem *spitem=0);
 
 private:
