@@ -236,7 +236,13 @@ void CClassTreeHandler::addMethodsFromClass( CParsedClass *aClass,
   assert( aClass != NULL );
   assert( parent != NULL );
 
-  addMethods( aClass->getSortedMethodList(), parent, filter );
+  QList<CParsedMethod> *list;
+
+  list = aClass->getSortedMethodList();
+
+  addMethods( list, parent, filter );
+
+  delete list;
 }
 
 /*------------------------------------ CClassTreeHandler::addMethods()
@@ -318,7 +324,13 @@ void CClassTreeHandler::addAttributesFromClass( CParsedClass *aClass,
   assert( aClass != NULL );
   assert( parent != NULL );
 
-  addAttributes( aClass->getSortedAttributeList(), parent, filter );
+  QList<CParsedAttribute> *list;
+
+  list = aClass->getSortedAttributeList();
+
+  addAttributes( list, parent, filter );
+
+  delete list;
 }
 
 /*--------------------------------- CClassTreeHandler::addAttributes()
@@ -412,6 +424,8 @@ void CClassTreeHandler::addSlotsFromClass( CParsedClass *aPC, QListViewItem *par
     aMethod->asString( str );
     addItem( str, type, parent );
   }
+
+  delete list;
 }
 
 /*------------------------- CClassTreeHandler::addSignalsFromClass()
@@ -447,6 +461,8 @@ void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *p
     aMethod->asString( str );
     addItem( str, type, parent );
   }
+
+  delete list;
 }
 
 /*--------------------------- CClassTreeHandler::addGlobalFunctions()
@@ -580,15 +596,21 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
                                    QListViewItem *parent )
 {
   QListViewItem *root;
+  CParsedAttribute *anAttr;
+  QList<CParsedAttribute> *list;
 
   root = addItem( aStruct->name, THSTRUCT, parent );
 
-  for( aStruct->memberIterator.toFirst();
-       aStruct->memberIterator.current();
-       ++aStruct->memberIterator )
+  list = aStruct->getSortedAttributeList();
+
+  for( anAttr = list->first();
+       anAttr != NULL;
+       anAttr = list->next() )
   {
-    addAttribute( aStruct->memberIterator.current(), root );
+    addAttribute( anAttr, root );
   }
+
+  delete list;
 }
 
 /*------------------------------- CClassTreeHandler::getCurrentNames()
@@ -638,7 +660,7 @@ void CClassTreeHandler::getCurrentNames( const char **className,
   }
   else if( itemType( parent ) == THSTRUCT )
   {
-    aStruct = store->getGlobalStructByName( parent->text(0) );
+    aStruct = store->globalContainer.getStructByName( parent->text(0) );
     if( aStruct != NULL )
     {
       *className = aStruct->name;
