@@ -242,7 +242,11 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_bUiModeSwitchPending(false)
   ,m_bRemoveViewPending(false)
 {
-//  setIDEAlModeStyle(1); // KDEV3 style of KMultiTabBar
+  KConfig *config = kapp->config();
+  config->setGroup("UI");
+  mdiStyle = config->readNumEntry("MDIStyle", 0);
+
+  setIDEAlModeStyle(mdiStyle); // KDEV3 style of KMultiTabBar
   setStandardMDIMenuEnabled();
   setManagedDockPositionModeEnabled(true);
 
@@ -250,7 +254,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   m_pMainWindowShare = new MainWindowShare(this);
 
   previous_output_view = NULL;
-  
+
   m_pDockbaseAreaOfDocumentViews->dockManager()->setReadDockConfigMode(KDockManager::RestoreAllDockwidgets);
 }
 
@@ -721,7 +725,7 @@ void MainWindow::loadMDISettings()
     {
       switchToIDEAlMode();
     }
-    
+
   default:
     break;
   }
@@ -757,6 +761,8 @@ void MainWindow::saveMDISettings()
   config->setGroup("UI");
 
   config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
+  config->writeEntry("MDIStyle", mdiStyle);
+  config->writeEntry("MDIMode", mdiMode());
 }
 
 

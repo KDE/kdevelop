@@ -176,7 +176,7 @@ The newly created KMdiChildView is not yet connected to any other widget of KDev
 
   void clearWindowMenu();
   void checkAndFixToolViewObjectName(QWidget* view, const QString& shortName);
-  
+
 // attributes (private)
 
   QMap<QWidget*,KMdiChildView*> m_widgetMap;       //!< Key: QWidget* --> Data:KMdiChildView*.\n
@@ -203,9 +203,11 @@ The newly created KMdiChildView is not yet connected to any other widget of KDev
   MainWindowShare*   m_pMainWindowShare;
 
   QValueList<int>  m_windowMenus;
-  
+
   bool             m_bUiModeSwitchPending;
   bool             m_bRemoveViewPending;
+
+  int mdiStyle;
 };
 
 //=========================
