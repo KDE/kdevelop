@@ -568,14 +568,14 @@ sub changeNormalApp {
   condCopyKdelnkFile();
   condCopyProgIcons();
   condCreateApiDoc();
-    
+
 }
 
 
 sub changeMiniApp {
 
 #   unpackFiles("mini.tar");
-#    
+#
   #renamed the directory
   printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
   chdir ($overDirectory);
@@ -630,10 +630,10 @@ sub changeMiniApp {
     if ($processes{CPP} eq "yes") {
       processCppTemplate("$nameLittle.cpp");
     }
-    
+
     if ($processes{HEADER} eq "yes") {
        processHeaderTemplate("$nameLittle.h");
-    }  
+    }
   }
   else
   {
@@ -646,14 +646,14 @@ sub changeMiniApp {
       processCppTemplate("main.cpp");
       processCppTemplate("$nameLittle.cpp");
     }
-    
+
     if ($processes{HEADER} eq "yes") {
        processHeaderTemplate("$nameLittle.h");
     }
   }
 
   replaceValuesInFile(\%changings, "Makefile.am");
-  
+
   chdir ($underDirectory."/docs/en");
   replaceValuesInFile(\%changings, "Makefile.am");
 
@@ -672,19 +672,29 @@ sub changeMiniApp {
 sub changeTerminalCPPApp {
 
 #    unpackFiles("cpp.tar");
-#    
+#
     #renamed the directory
     printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
-    
+
     #create the templatedirectory
     condCopyTemplateFiles();
-    
+
     #replaced skel with the projectname in different files
     chdir ($overDirectory);
     replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
+
+    # The "in.in" will generate the "in" file, so make sure we
+    # look for that first
+    if ( -f "configure.in.in")
+    {
+      replaceValuesInFile(\%changings, "configure.in.in");
+    }
+    elsif ( -f "configure.in")
+    {
+      replaceValuesInFile(\%changings, "configure.in");
+    }
 
     chdir ($underDirectory);
     replaceValuesInFile(\%changings, "Makefile.am");
@@ -696,15 +706,15 @@ sub changeTerminalCPPApp {
     condCopyGNUFiles();
     condCopyLsmFile();
     condCopyUserDocFiles();
-    
+
     if ($processes{CPP} eq "yes") {
         processCppTemplate("main.cpp");
     }
-    
+
     condCopyKdelnkFile();
     condCopyProgIcons();
     condCreateApiDoc();
-    
+
 }
 
 
@@ -723,7 +733,17 @@ sub changeTerminalCApp {
     #replaced skel with the projectname in different files
     chdir ($overDirectory);
     replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
+
+    # The "in.in" will generate the "in" file, so make sure we
+    # look for that first
+    if ( -f "configure.in.in")
+    {
+      replaceValuesInFile(\%changings, "configure.in.in");
+    }
+    elsif ( -f "configure.in")
+    {
+      replaceValuesInFile(\%changings, "configure.in");
+    }
 
     chdir ($underDirectory);
     replaceValuesInFile(\%changings, "Makefile.am");
@@ -749,7 +769,7 @@ sub changeTerminalCApp {
 sub changeQtApp {
 
 #    unpackFiles("qt.tar");
-#    
+#
   #renamed the directory
   printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
   chdir ($overDirectory);
@@ -816,7 +836,7 @@ sub changeQtApp {
     processCppTemplate("${nameLittle}view.cpp");
     processCppTemplate("${nameLittle}doc.cpp");
   }
-    
+
   if ($processes{HEADER} eq "yes") {
     processHeaderTemplate("$nameLittle.h");
     processHeaderTemplate("${nameLittle}view.h");
@@ -828,7 +848,7 @@ sub changeQtApp {
   condCopyKdelnkFile();
   condCopyProgIcons();
   condCreateApiDoc();
-    
+
 }
 
 
@@ -841,7 +861,7 @@ sub changeCustomApp {
 
   condCopyGNUFiles();
   condCopyLsmFile();
-    
+
 }
 
 sub changeGnomeApp {
