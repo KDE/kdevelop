@@ -2,8 +2,8 @@
                           kdlgwidgets.h  -  description                              
                              -------------------                                         
     begin                : Wed Mar 17 1999                                           
-    copyright            : (C) 1999 by                          
-    email                :                                      
+    copyright            : (C) 1999 by Pascal Krahmer
+    email                : pascal@beast.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -20,16 +20,45 @@
 #define KDLGWIDGETS_H
 
 #include <qwidget.h>
+#include <qscrollview.h>
 
 /**
   *@author 
   */
 
+class QToolButton;
+class QLabel;
+
+#define MAX_BUTTONS 64
+
 class KDlgWidgets : public QWidget  {
    Q_OBJECT
-public: 
-	KDlgWidgets(QWidget *parent=0, const char *name=0);
-	~KDlgWidgets();
+   protected:
+     class myScrollView : public QScrollView
+       {
+         public:
+           myScrollView ( QWidget * parent=0, const char * name=0, WFlags f=0 );
+
+           void addButton(const QPixmap &, QString, bool isKDE = false);
+           void setIsKDEProject(bool isKDE = true) { isKDEProject = isKDE; }
+         protected:
+
+           QToolButton *buttons[MAX_BUTTONS];
+           QLabel *qtlab, *kdelab;
+           bool isKDEProject;
+           int btnsCount;
+           int qtCount;
+
+           void resizeEvent ( QResizeEvent * );
+       };
+   public:
+     KDlgWidgets(QWidget *parent=0, const char *name=0);
+     ~KDlgWidgets();
+
+   protected:
+     QScrollView *scrview;
+
+     void resizeEvent ( QResizeEvent * );
 };
 
 #endif

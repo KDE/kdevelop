@@ -1,3 +1,8 @@
+1999-03-31 Pascal Krahmer <pascal@beast.de>
+        * added functionality to "widgets" tab (still buggy ! you have
+          to move the slider to the right and back to the left for now :-( )
+          ToDo : painting the pixmaps for the buttons (anyone interested in doing that ?)
+
 1999-03-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added commandline options to run a project program
 
