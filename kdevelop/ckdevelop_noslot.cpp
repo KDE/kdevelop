@@ -241,6 +241,10 @@ bool CKDevelop::fileSaveAs(){
   TEditInfo* search_info;
   int msg_result=KMessageBox::Ok; // simulate ok state... this could change by one of the following messageboxes
 
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+      return false;
+
   oldName=edit_widget->getName();
   if (bAutosave)
     saveTimer->stop();
@@ -479,7 +483,8 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 }
 
 void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox){
-  lastfile = edit_widget->getName();
+  if (edit_widget)
+    lastfile = edit_widget->getName();
   lasttab = s_tab_view->getCurrentTab();
 
   TEditInfo* info;
@@ -1081,7 +1086,7 @@ void CKDevelop::readOptions(){
   int kdlg_tabctl_pos=config->readNumEntry("KDlgTabCtlWidth", size.width()*20/100);
   int kdlg_editview_pos=config->readNumEntry("KDlgEditWidth", size.width()*60/100);
   int properties_view_pos=config->readNumEntry("PropertiesWidth", size.width()*20/100);
-  kdlg_sizes.clear;
+  kdlg_sizes.clear();
   kdlg_sizes << kdlg_tabctl_pos;
   kdlg_sizes << kdlg_editview_pos;
   kdlg_sizes << properties_view_pos;

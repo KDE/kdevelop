@@ -133,6 +133,11 @@ void CKDevelop::slotFileOpen( int id_ ){
 }
 
 void CKDevelop::slotFileClose(){
+
+    // if edit_widget isn't shown don't proceed
+    if (edit_widget==0l)
+       return;
+
     slotStatusMsg(i18n("Closing file..."));
     QString filename = edit_widget->getName();
     int msg_result;
@@ -296,6 +301,10 @@ void CKDevelop::slotFileCloseAll()
 }
 
 bool CKDevelop::saveFileFromTheCurrentEditWidget(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
+
   QString filename=edit_widget->getName();
   TEditInfo* actual_info;
   QFileInfo file_info(filename);
@@ -321,6 +330,9 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
 
 
 void CKDevelop::slotFileSave(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+     return;
 
   QString filename=edit_widget->getName();
   QString sShownFilename=QFileInfo(filename).fileName();
@@ -363,7 +375,7 @@ void CKDevelop::slotFileSaveAll(){
     TEditInfo* actual_info;
     bool mod = false;
     // save current filename to switch back after saving
-    QString visibleFile = edit_widget->getName();
+    QString visibleFile = (edit_widget) ? edit_widget->getName() : QString("");
     // ooops...autosave switches tabs...
     int visibleTab=s_tab_view->getCurrentTab();
     // first the 2 current edits
@@ -432,6 +444,10 @@ void CKDevelop::slotFileSaveAll(){
 
 
 void CKDevelop::slotFilePrint(){
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+       return;
+
   QString file;
   slotFileSave();
 /*  if (s_tab_view->getCurrentTab() == BROWSER) {
@@ -2018,7 +2034,7 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   if(!bKDevelop)
     switchToKDevelop();
   showOutputView(false);
-  //  s_tab_view->setCurrentTab(BROWSER);
+  s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
   QString url_str = url;
   if(url_str.contains("kdevelop/search_result.html") != 0){
