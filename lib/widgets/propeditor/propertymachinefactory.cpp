@@ -35,7 +35,6 @@
 #include "pdoublenuminput.h"
 #include "pcheckbox.h"
 #include "pstringlistedit.h"
-#include "pcolorcombo.h"
 #include "pdummywidget.h"
 #include "pcombobox.h"
 #include "psymbolcombo.h"
@@ -55,6 +54,7 @@
 #ifndef PURE_QT
 #include "pfontbutton.h"
 #include "purledit.h"
+#include "pcolorcombo.h"
 #endif
 
 namespace PropertyLib{

@@ -34,6 +34,7 @@ HEADERS += childproperty.h pcombobox.h \
 	psymbolcombo.h pstringlistedit.h \
 	pcheckbox.h plinestyleedit.h \
 	qeditlistbox.h pcolorbutton.h \
-	pdoublenuminput.h qfloatinput.h
+	pdoublenuminput.h qfloatinput.h \
+	compat_tools.h
 
 IMAGES += undo.xpm
