@@ -1,3 +1,4 @@
+#include <qapplication.h>
 #include <qvariant.h>
 #include <qgroupbox.h>
 #include <qheader.h>
@@ -177,6 +178,8 @@ void ImportExistingDialog::resizeEvent ( QResizeEvent* ev )
 
 void ImportExistingDialog::init()
 {
+	progressBar->hide();
+
 	importView->setMode ( KIconView::Select );
     importView->setItemsMovable ( false );
 
@@ -279,8 +282,10 @@ void ImportExistingDialog::importItems()
 
 void ImportExistingDialog::slotOk()
 {
-	//progressBar->show();
+	progressBar->show();
 	progressBar->setFormat ( i18n ( "Importing... %p%" ) );
+	
+	qApp->processEvents();
 
 	KFileItemListIterator items ( *importView->items() );
 
@@ -354,8 +359,7 @@ void ImportExistingDialog::slotOk()
 	{
 		m_spitem->variables [ varname ] += ( " " + ( *items )->name() );
 		replaceMap.insert ( varname, m_spitem->variables [ varname ] );
-		AutoProjectTool::modifyMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
-		
+
 		fitem = m_widget->createFileItem ( ( *items )->name() );
 		m_titem->sources.append ( fitem );
 		m_titem->insertItem ( fitem );
@@ -364,6 +368,8 @@ void ImportExistingDialog::slotOk()
 
 		progressBar->setValue ( progressBar->value() + 1 );
 	}
+
+	AutoProjectTool::modifyMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
 
 	QDialog::accept();
 
@@ -419,23 +425,38 @@ void ImportExistingDialog::slotRemoveAll()
 
 	importView->somethingDropped ( false );
 
-	importView->update();
+	importView->viewport()->update();
 }
 
 void ImportExistingDialog::slotRemoveSelected()
 {
-	importView->update();
+	KFileItemListIterator items ( *importView->items() );
 
-	KFileItemListIterator it ( *importView->selectedItems() );
+	KFileItemList* selectedList = importView->selectedItems();
 
-	kdDebug ( 9000 ) << "Selected items:" << it.count() << endl;
+	KFileItem * deleteItem = 0L;
 
-	for ( ; it.current(); ++it )
+	for ( ; items.current(); ++items )
 	{
-		if ( (*it ) ) importView->removeItem ( *it );
+		deleteItem = selectedList->first();
+
+		while ( deleteItem )
+		{
+			if ( deleteItem == ( *items ) )
+			{
+				importView->removeItem ( deleteItem );
+				deleteItem = selectedList->current();
+			}
+			else
+			{
+				deleteItem = selectedList->next();
+			}
+		}
 	}
 
-	importView->update();
+	if ( importView->items()->count() == 0 ) importView->somethingDropped ( false );
+
+	importView->viewport()->update();
 }
 
 
