@@ -356,7 +356,7 @@ void QEditorView::proceed()
     // Start point
     QTextParagraph * firstParagraph = m_editor->document()->firstParagraph();
     int firstIndex = 0;
-    QTextParagraph * startParagraph = 0L;
+    QTextParagraph * startParagraph = firstParagraph;
     int startIndex = 0;
     QTextParagraph * lastParagraph;
     int lastIndex;
@@ -415,6 +415,9 @@ void QEditorView::proceed()
 bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,
                              QTextParagraph* lastParagraph, int lastIndex )
 {
+    Q_ASSERT( firstParagraph );
+    Q_ASSERT( lastParagraph );
+
     m_currentParag = firstParagraph;
     m_offset = 0;
 
