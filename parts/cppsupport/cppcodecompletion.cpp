@@ -40,15 +40,19 @@ void CppCodeCompletion::slotDocumentActivated ( KEditor::Document* pDoc )
 	kdDebug ( 9007 ) << "CppCodeCompletion::slotDocumentActivated" << endl;
 
 	KEditor::CursorDocumentIface* pCursorIface = KEditor::CursorDocumentIface::interface ( pDoc );
+	kdDebug ( 9007 ) << "yo 1" << endl;
 	if ( !pCursorIface )
 	{
 		kdDebug ( 9007 ) << "The editor doesn't support the CursorDocumentIface!" << endl;
 		return;
 	}
+	kdDebug ( 9007 ) << "yo 2" << endl;
 
 	disconnect ( pCursorIface, 0, this, 0 ); // to make sure that it isn't connected twice or more
+	kdDebug ( 9007 ) << "yo 3" << endl;
 	connect ( pCursorIface, SIGNAL ( cursorPositionChanged ( KEditor::Document*, int, int ) ),
 		this, SLOT ( slotCursorPositionChanged ( KEditor::Document*, int, int ) ) );
+	kdDebug ( 9007 ) << "yo 4" << endl;
 }
 
 void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol )

@@ -157,8 +157,8 @@ void Editor::activePartChanged(KParts::Part *part)
 {
   if (!part || !part->inherits("KEditor::Document"))
     _currentDocument = 0;
-  else 
+  else {
     _currentDocument = static_cast<Document*>(part);
-  
-  emit documentActivated(_currentDocument);
+    emit documentActivated(_currentDocument);
+  }
 }

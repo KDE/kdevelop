@@ -1,6 +1,8 @@
 2001-07-30 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
 	* interfaces/keditor: moc files are compiled separately, #include's
 	removed from cpp files.
+	* fix: KEditor::Editor don't emit documentActivated when there
+	isn't one.
 	
 2001-07-29 Victor Röder <victor_roeder@gmx.de>
 	* KDevArgHint improved, i.e. positioning, ui
