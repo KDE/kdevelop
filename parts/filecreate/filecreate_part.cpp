@@ -13,6 +13,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 
+#include <kdeversion.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -288,7 +289,12 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     if (dir==QString::null)
       dir=project()->projectDirectory();
 
+#if (KDE_VERSION >= 310)
     fileDialogWidget = new KFileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
+#else
+    // ###TODO: what about KDE 3.0.x???
+    fileDialogWidget = new KFileDialog(dir, "*." + ext, 0, "New file", true);
+#endif
     projectURL = fileDialogWidget->baseURL();
 
     dialogBase = fileDialogWidget;
