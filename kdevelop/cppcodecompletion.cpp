@@ -76,15 +76,13 @@ static QString purify( const QString& decl )
 
     QRegExp rx1( "\\*" );
     QRegExp rx2( "&" );
-    QRegExp rx3( "[ \t\b\f]+const[ \t\n\r\f]+" );
-    s = s.replace( rx1, "" ).replace( rx2, "" ).replace( rx3, "" ).simplifyWhiteSpace();
+    s = s.replace( rx1, "" ).replace( rx2, "" ).simplifyWhiteSpace();
     return s;
 }
 
 static QString remove( QString text, const QChar& l, const QChar& r )
 {
     QString s;
-
 
     unsigned int index = 0;
     int count = 0;
@@ -98,6 +96,31 @@ static QString remove( QString text, const QChar& l, const QChar& r )
         }
         ++index;
     }
+    return s;
+}
+
+static QString remove_keywords( QString text ){
+    QRegExp ide_rx( "[_a-zA-Z0-9][_a-zA-Z0-9]*" );
+    QStringList keywords = QStringList::split( "|",
+            "unsigned|signed|case|delete|return|if|then|else|for|while|do|"
+            "const|static|volatile|extern|struct" );
+
+    QString s;
+    int index = 0;
+    while( index < text.length() ){
+        int len = 0;
+        int pos = ide_rx.match( text, index, &len );
+        if( pos == -1 ){
+            break;
+        }
+        s += text.mid( index, pos - index );
+        QString ide = text.mid( pos, len );
+        if( keywords.findIndex(ide) == -1 ){
+            s += ide;
+        }
+        index = pos + ide.length();
+    }
+    s += text.mid( index );
     return s;
 }
 
@@ -878,13 +901,12 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
 {
     kdDebug() << "CppCodeCompletion::getMethodBody()" << endl;
 
-    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+)[ \t]*::[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*[:{]" );
+    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+?)[ \t]*(::)?[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^;)]*)\\)[ \t]*[:{]" );
 
     QRegExp qt_rx( "Q_[A-Z]+" );
     QRegExp strconst_rx( "\"[^\"]*\"" );
     QRegExp chrconst_rx( "'[^']*'" );
     QRegExp newline_rx( "\n" );
-    QRegExp const_rx( "[ \t]*const[ \t]*" );
     QRegExp comment_rx( "//[^\n]*" );
     QRegExp preproc_rx( "^[ \t]*#[^\n]*$" );
 
@@ -900,22 +922,17 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
 
             kdDebug() << ".... 2 " << endl;
 
-            contents = remove_comment( contents );
-
             contents = contents
-                       .replace( qt_rx, "" )
-                       .replace( const_rx, "" )
+                       // .replace( qt_rx, "" )
                        .replace( comment_rx, "" )
                        .replace( preproc_rx, "" )
                        .replace( strconst_rx, "\"\"" )
                        .replace( chrconst_rx, "''" )
                        .replace( newline_rx, " " );
 
+            contents = remove_comment( contents );
+            contents = remove_keywords( contents );
             contents = remove( contents, '[', ']' );
-
-
-
-            // kdDebug() << "----> contents = " << contents << endl;
 
             kdDebug() << ".... 3 " << endl;
 
@@ -926,10 +943,10 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
 
                 KDevRegExpCap m = methods.last();
 
-                kdDebug() << "------------------------> m.start = " << m.start() << endl;
                 contents = contents.mid( m.start() );
                 regMethod.search( m.text() );
-                contents.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
+                contents.prepend( regMethod.cap( 3 ).replace( QRegExp(","), ";" ) + ";\n" );
+                kdDebug() << "-----> text = " << m.text() << endl;
                 if( classname ){
                     *classname = regMethod.cap( 1 );
                 }

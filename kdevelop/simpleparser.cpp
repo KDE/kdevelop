@@ -81,7 +81,7 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
     QRegExp strconst( "\"[^\"]*\"" );
     QRegExp chrconst( "'[^']*'" );
     QRegExp assign( "=[^,;]*" );
-    QStringList keywords = QStringList::split( "|", "case|new|delete|const|static|struct|if|else|return|while|for|do" );
+//    QStringList keywords = QStringList::split( "|", "case|new|delete|const|static|struct|if|else|return|while|for|do" );
 
 //    contents = remove_comment( contents );
 //    contents = remove( contents, '[', ']' );
@@ -91,12 +91,6 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
         .replace( rx, "" )
         .replace( strconst, "" )
         .replace( chrconst, "" )
-        .replace( QRegExp("[ \t]*struct[ \t]*"), "" )
-        .replace( QRegExp("[ \t]*static[ \t]*"), "" )
-        .replace( QRegExp("[ \t]*unsigned[ \t]*"), "" )
-        .replace( QRegExp("[ \t]*signed[ \t]*"), "" )
-        .replace( QRegExp("[ \t]*volatile[ \t]*"), "" )
-        .replace( QRegExp("[ \t]*extern[ \t]*"), "" )
         .replace( QRegExp("\\{"), "{;" )
         .replace( QRegExp("\\}"), ";};" )
         ;
@@ -141,7 +135,7 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
             QString type = QString::fromLatin1( decl_rx.cap( 1 ) );
             QString rest = simplifyLine.mid( decl_rx.pos(2) )
                            .replace( ws, "" );
-            if( keywords.findIndex(type) == -1 ){
+            //if( keywords.findIndex(type) == -1 ){
 
                 QStringList vlist = QStringList::split( ",", rest);
                 for( QStringList::Iterator it=vlist.begin(); it!=vlist.end(); ++it ){
@@ -155,7 +149,7 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
                         lev,
                         type.latin1(),
                         vlist.join(", ").latin1() );
-            }
+            //}
         }
     }
 

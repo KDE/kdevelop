@@ -1,4 +1,7 @@
 2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
+    * codecompletion: now code completions works inside functions
+	
+2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
     * codecompletion: added struct support
     * added menu entries for code completion
 
