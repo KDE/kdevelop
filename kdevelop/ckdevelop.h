@@ -785,6 +785,7 @@ private:
   QPopupMenu* kdlg_view_menu;
   QPopupMenu* kdlg_project_menu;
   QPopupMenu* kdlg_build_menu;
+  QPopupMenu* kdlg_debug_menu;
   QPopupMenu* kdlg_tools_menu;
   QPopupMenu* kdlg_options_menu;
   QPopupMenu* kdlg_help_menu;
@@ -951,8 +952,6 @@ private:
   bool dbgInternal;
   /** The external debugger command to run */
   QString dbgExternalCmd;
-  /** Initiates a variety of debugging sessions. */
-  QPopupMenu* debugPopup;
   /** Protect the gdbcontroller deletion. */
   bool dbgShuttingDown;
   /** Have both float and normal toolbar */

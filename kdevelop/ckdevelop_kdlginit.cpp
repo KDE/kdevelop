@@ -206,13 +206,40 @@ void CKDevelop::initKDlgMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Debug-menu entries - It's exactly the same as the other menu
 
-  kdlg_menubar->insertItem(i18n("&Debug"), debug_menu);
+  QPopupMenu* debugPopup = new QPopupMenu();
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
+  connect(debugPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
+  kdlg_debug_menu = new QPopupMenu;
+  kdlg_debug_menu->insertItem(Icon("debugger.xpm"),    i18n("&Start"),           ID_DEBUG_START);  //this, SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
+  kdlg_debug_menu->insertItem(Icon("debugger.xpm"),    i18n("Start (other)..."), debugPopup, ID_DEBUG_START_OTHER);
+  kdlg_debug_menu->insertSeparator();
+
+  kdlg_debug_menu->insertItem(Icon("dbgrun.xpm"),      i18n("Run"),              ID_DEBUG_RUN);
+  kdlg_debug_menu->insertItem(Icon("dbgrun.xpm"),      i18n("Run to cursor"),    ID_DEBUG_RUN_CURSOR);
+  kdlg_debug_menu->insertItem(Icon("dbgnext.xpm"),     i18n("Step over"),        ID_DEBUG_NEXT);
+  kdlg_debug_menu->insertItem(Icon("dbgnextinst.xpm"), i18n("Step over instr."), ID_DEBUG_NEXT_INST);
+  kdlg_debug_menu->insertItem(Icon("dbgstep.xpm"),     i18n("Step into"),        ID_DEBUG_STEP);
+  kdlg_debug_menu->insertItem(Icon("dbgstepinst.xpm"), i18n("Step into instr."), ID_DEBUG_STEP_INST);
+  kdlg_debug_menu->insertItem(Icon("dbgstepout.xpm"),  i18n("Step out"),         ID_DEBUG_FINISH);
+  kdlg_debug_menu->insertSeparator();
+
+  kdlg_debug_menu->insertItem(Icon("dbgmemview.xpm"),  i18n("Viewers"),          this, SLOT(slotDebugMemoryView()), 0, ID_DEBUG_MEMVIEW);
+  kdlg_debug_menu->insertSeparator();
+
+  kdlg_debug_menu->insertItem(Icon("dbgbreak.xpm"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
+  kdlg_debug_menu->insertItem(Icon("stop_proc.xpm"),   i18n("Stop"),             ID_DEBUG_STOP);
+
+  kdev_menubar->insertItem(i18n("&Debug"), kdlg_debug_menu);
+  connect(kdlg_debug_menu,SIGNAL(activated(int)), SLOT(slotDebugActivator(int)));
 
   ///////////////////////////////////////////////////////////////////
   // Tools-menu entries
   kdlg_tools_menu= new QPopupMenu;
   kdlg_menubar->insertItem(i18n("&Tools"), kdlg_tools_menu);
-
 
   ///////////////////////////////////////////////////////////////////
   // Options-menu entries

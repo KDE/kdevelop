@@ -83,18 +83,6 @@ CKDevelop::CKDevelop(bool witharg)
   dbgInternal = !config->readBoolEntry("Use external debugger");
   dbgExternalCmd = config->readEntry("External debugger program","kdbg");
   dbgEnableFloatingToolbar = config->readBoolEntry("Enable floating toolbar", false);
-
-
-  debugPopup = new QPopupMenu();
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
-
-  connect(debugPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-
-//  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug this project's executable"),this,SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
-//  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set remote target"),this,SLOT(slotDebugSetRemote()),0,ID_DEBUG_SET_REMOTE);
   // ************ END DEBUGGER STUFF
 
   initView();
@@ -671,6 +659,13 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Debug-menu entries
 
+  QPopupMenu* debugPopup = new QPopupMenu();
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
+  connect(debugPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
   debug_menu = new QPopupMenu;
   debug_menu->insertItem(Icon("debugger.xpm"),    i18n("&Start"),           ID_DEBUG_START);  //this, SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
   debug_menu->insertItem(Icon("debugger.xpm"),    i18n("Start (other)..."), debugPopup, ID_DEBUG_START_OTHER);
@@ -882,7 +877,14 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(Icon("debugger.xpm"),ID_DEBUG_START, false, i18n("Debug"));
-  toolBar()->setDelayedPopup(ID_DEBUG_START, debugPopup);
+  QPopupMenu* debugToolPopup = new QPopupMenu();
+  debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
+  debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
+  debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
+  debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
+  connect(debugToolPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
+
   toolBar()->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(Icon("stop_proc.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
@@ -906,11 +908,15 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
   toolBar()->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
 
-//  toolBar()->insertButton(Icon("dbgnextinst.xpm"),ID_DEBUG_NEXT_INST, false,i18n("Execute one assembler instruction, but run through functions"));
-//  toolBar()->insertButton(Icon("dbgstepinst.xpm"),ID_DEBUG_STEP_INST, false,i18n("Execute one assembler instruction, stepping into fn if appropriate"));
-//  toolBar()->insertButton(Icon("dbgmemview.xpm"),ID_DEBUG_MEMVIEW, false,i18n("Memory, dissemble, registers, library viewer"));
-//  toolBar()->insertButton(Icon("dbgbreak.xpm"),ID_DEBUG_BREAK_INTO, false, i18n("Interrupt the app execution"));
-//  toolBar()->insertButton(Icon("stop_proc.xpm"),ID_DEBUG_STOP, false, i18n("Stop debugging the app"));
+  QPopupMenu* stepOverMenu = new QPopupMenu();
+  stepOverMenu->insertItem(Icon("dbgnextinst.xpm"),i18n("Step over instr."),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_NEXT_INST);
+  connect(stepOverMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  toolBar()->setDelayedPopup(ID_DEBUG_NEXT, stepOverMenu);
+
+  QPopupMenu* stepIntoMenu = new QPopupMenu();
+  stepIntoMenu->insertItem(Icon("dbgstepinst.xpm"),i18n("Step into instr."),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_STEP_INST);
+  connect(stepIntoMenu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  toolBar()->setDelayedPopup(ID_DEBUG_STEP, stepIntoMenu);
 
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
