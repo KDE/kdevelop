@@ -24,30 +24,6 @@
 #define MYITEMCLASS_BEGIN(mytype) protected: class MyWidget : public mytype {
 #define MYITEMCLASS_END };
 
-#define MYITEMCLASS_MOUSEMOVEEVENT \
-  moveRulers(e); \
-  if (isItemActive) \
-    { \
-       int pE;\
-       if (isMBPressed) pE = pressedEdge; else pE = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), width(), height()); \
-       KDlgItemsSetMouseCursor(this, pE); \
-    } \
-  else setCursor(KCursor::arrowCursor()); \
-  if ((!isMBPressed) || (e->pos() == lastPnt)) return; \
-  int x = origRect.x(); \
-  int y = origRect.y(); \
-  int w = origRect.width(); \
-  int h = origRect.height(); \
-  int diffx = e->globalPos().x() - startPnt.x(); \
-  int diffy = e->globalPos().y() - startPnt.y(); \
-  bool noMainWidget; \
-  noMainWidget = KDlgItemsGetResizeCoords(pressedEdge, x, y, w, h, diffx, diffy); \
-  if ((!noMainWidget) || (!parentObject->isMainWidget)) \
-    setGeometry(x,y,w,h); \
-  if (isMainwidget && !noMainWidget) { parentObject->getEditWidget()->verticalRuler()->setRange(0,h); parentObject->getEditWidget()->horizontalRuler()->setRange(0,w);} \
-  lastPnt = e->pos();
-
-
 #define MYITEMCLASS_STDSTUFF(wrappertype) \
  public: \
    MyWidget(wrappertype* wid, QWidget* parent = 0, const char* name = 0); \
@@ -64,11 +40,11 @@
    QPoint startPnt, lastPnt; \
    QRect origRect; \
    int pressedEdge; \
-   void moveRulers( QMouseEvent *e ) { if (!parentObject) return; parentObject->getEditWidget()->horizontalRuler()->setValue(e->pos().x()+recPosX(0));parentObject->getEditWidget()->verticalRuler()->setValue(e->pos().y()+recPosY(0)); } \
+   void moveRulers( QMouseEvent *e ) { if (!parentObject) return; parentObject->getEditWidget()->horizontalRuler()->slotNewValue(e->pos().x()+recPosX(0));parentObject->getEditWidget()->verticalRuler()->slotNewValue(e->pos().y()+recPosY(0)); } \
    virtual void paintEvent ( QPaintEvent * ); \
-   virtual void mousePressEvent ( QMouseEvent *e ) { selectMe(); isMBPressed = true; startPnt = e->globalPos(); lastPnt = e->globalPos(); origRect = geometry(); pressedEdge = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), width(), height()); } \
-   virtual void mouseReleaseEvent ( QMouseEvent * ) { isMBPressed = false; } \
-   virtual void mouseMoveEvent ( QMouseEvent *e ) { MYITEMCLASS_MOUSEMOVEEVENT }
+   virtual void mousePressEvent ( QMouseEvent *e ); \
+   virtual void mouseReleaseEvent ( QMouseEvent * ); \
+   virtual void mouseMoveEvent ( QMouseEvent *e );
 
 
 

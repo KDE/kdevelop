@@ -1,4 +1,4 @@
-/********************++*******************************************************
+/*****************************************************************************
                           kdlgeditwidget.cpp  -  description                              
                              -------------------                                         
     begin                : Wed Mar 17 1999                                           
@@ -22,10 +22,10 @@
 #include <qmessagebox.h>
 #include <kapp.h>
 #include <qpushbutton.h>
+#include <qdatetime.h>
 #include <kruler.h>
-#include "item_widget.h"
-#include "item_pushbutton.h"
-#include "item_lineedit.h"
+#include <stdio.h>
+#include "items.h"
 
 
 KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
@@ -71,6 +71,76 @@ KDlgEditWidget::~KDlgEditWidget()
 {
 }
 
+bool KDlgEditWidget::saveToFile( QString fname )
+{
+  QFile f;
+  if ( f.open(IO_WriteOnly, stderr) )
+    {
+      QTextStream t( &f );
+
+      t << "//" << "KDevelop Dialog Editor File (.kdevdlg)\n";
+      t << "//" << "\n";
+      t << "//" << "Created by KDlgEdit Version " << KDLGEDIT_VERSION_STR << " (C) 1999 by Pascal Krahmer\n";
+      t << "//" << "Get KDevelop including KDlgEdit at \"www.beast.de/kdevelop\"\n";
+      t << "//" << "\n";
+      t << "//" << "This file is free software; you can redistribute it and/or modify\n";
+      t << "//" << "it under the terms of the GNU General Public License as published by\n";
+      t << "//" << "the Free Software Foundation; either version 2 of the License, or\n";
+      t << "//" << "(at your option) any later version.\n\n";
+      t << "information\n";
+      t << "{\n";
+      t << "   Filename=\"" << fname << "\"\n";
+      t << "   EditorVersion=\"KDevelop: " << KDEVELOP_VERSION_STR << "; DlgEdit: " << KDLGEDIT_VERSION_STR << "\"\n";
+      t << "   LastChangedDate=\"" << QDateTime(QDate().currentDate(), QTime().currentTime()).toString() << "\"\n";
+      t << "}\n";
+
+      saveWidget(mainWidget(), &t);
+      f.close();
+    }
+  else
+    return false;
+
+  return true;
+}
+
+void KDlgEditWidget::saveWidget( KDlgItem_Widget *wid, QTextStream *t, int deep = 0)
+{
+  if ((!wid) || (!t))
+    return;
+
+  int i;
+  QString sDeep = "";
+
+  for (i = 0; i<deep; i++)
+    sDeep = sDeep + "   ";
+
+  *t << "\n";
+  *t << sDeep << "item " << wid->itemClass() << " \"" << wid->getProps()->getProp("Name")->value << "\"\n";
+  *t << sDeep << "{\n";
+
+  for (i=1; i<=wid->getProps()->getEntryCount(); i++)
+    {
+      if (wid->getProps()->getProp(i)->value.length() > 0)
+        *t << sDeep << "  " << wid->getProps()->getProp(i)->name << "=\"" << wid->getProps()->getProp(i)->value << "\"\n";
+    }
+
+  if (wid->itemClass().upper() == "QWIDGET")
+    {
+      KDlgItemDatabase *cdb = wid->getChildDb();
+      if (cdb)
+        {
+          KDlgItem_Base *cdit = cdb->getFirst();
+          while (cdit)
+            {
+              saveWidget( (KDlgItem_Widget*)cdit, t, deep+1 );
+              cdit = cdb->getNext();
+            }
+        }
+    }
+
+  *t << sDeep << "}\n";
+}
+
 void KDlgEditWidget::resizeEvent ( QResizeEvent *e )
 {
   QWidget::resizeEvent(e);
@@ -104,6 +174,7 @@ void KDlgEditWidget::selectWidget(KDlgItem_Base *i)
       if ((pCKDevel) && pCKDevel->kdlg_get_prop_widget())
          pCKDevel->kdlg_get_prop_widget()->refillList(selected_widget);
     }
+
 }
 
 
@@ -146,9 +217,7 @@ bool KDlgEditWidget::addItem(QString Name)
     if (QString(a).upper() == Name.upper()) \
       wid = (KDlgItem_Widget*)new typ( this, par->getItem() );
 
-  if ("QWIDGET" == Name.upper())
-    wid = new KDlgItem_Widget( this, par->getItem(), false );
-
+  macro_CreateIfRightOne("QWidget", KDlgItem_Widget )
   macro_CreateIfRightOne("QPushButton", KDlgItem_PushButton )
   macro_CreateIfRightOne("QLineEdit", KDlgItem_LineEdit )
 

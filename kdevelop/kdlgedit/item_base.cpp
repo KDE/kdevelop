@@ -16,8 +16,9 @@
  ***************************************************************************/
 
 
-#include "item_base.h"
+#include "items.h"
 #include <qwidget.h>
+#include <qpixmap.h>
 #include "itemsglobal.h"
 
 KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool ismainwidget, const char* name )
@@ -41,8 +42,51 @@ void KDlgItem_Base::repaintItem(QWidget *it)
   if ((!itm) || (!props))
     return;
 
+  int b=0;
+  int x=0,y=0;
+  QString str;
+
+  #define Prop2Bool(name) (KDlgItemsIsValueTrue( props->getProp(name)->value ))
+  #define Prop2Str(name) (props->getProp(name)->value)
+  #define setB2Prop(name) b = Prop2Bool(name);
+  #define setStr2Prop(name) str = Prop2Str(name);
+  #define ifBValid(name) setB2Prop(name); if ((b==0) || (b==1))
+  #define ifBTrue(name) setB2Prop(name); if (b==1)
+  #define ifBFalse(name) setB2Prop(name); if (b==0)
+  #define strNotEmpty(str) (str.length()!=0)
+
+  itm->setMinimumWidth(props->getIntFromProp("MinWidth",0));
+  itm->setMaximumWidth(props->getIntFromProp("MaxWidth",32767));
+  itm->setMinimumHeight(props->getIntFromProp("MinHeight",0));
+  itm->setMaximumHeight(props->getIntFromProp("MaxHeight",32767));
+
+  ifBTrue("IsFixedSize")
+    itm->setFixedSize( props->getIntFromProp("Width",itm->width()),
+                       props->getIntFromProp("Height",itm->height()) );
+
+  x=props->getIntFromProp("SizeIncX",1);
+  y=props->getIntFromProp("SizeIncY",1);
+
+  if ((x!=1) || (y!=1))
+    itm->setSizeIncrement(x,y);
+
+
   itm->setGeometry(isMainWidget ? RULER_WIDTH : (props->getIntFromProp("X",itm->x())),
                    isMainWidget ? RULER_HEIGHT : (props->getIntFromProp("Y",itm->y())),
                    props->getIntFromProp("Width",itm->width()),
                    props->getIntFromProp("Height",itm->height()));
+
+  ifBTrue("IsHidden")
+    itm->hide();
+  else
+    itm->show();
+
+  ifBValid("IsEnabled")
+    itm->setEnabled(b);
+
+  setStr2Prop("BgPixmap");
+  if (strNotEmpty(str))
+    itm->setBackgroundPixmap( QPixmap( str ) );
+  else
+    itm->setBackgroundPixmap( QPixmap() );
 }

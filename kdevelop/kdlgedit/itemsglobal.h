@@ -31,6 +31,7 @@ void KDlgItemsPaintRects(QWidget *wid, QPaintEvent *e);
 int  KDlgItemsGetClickedRect(int x, int y, int winw, int winh);
 bool KDlgItemsGetResizeCoords(int pressedEdge, int &x, int &y, int &w, int &h, int diffx, int diffy);
 void KDlgItemsSetMouseCursor(QWidget* caller, int pressedEdge);
+int KDlgItemsIsValueTrue(QString val);
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>

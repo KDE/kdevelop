@@ -2,8 +2,8 @@
                           kdlgedit.cpp  -  description                              
                              -------------------                                         
     begin                : Thu Mar 18 1999                                           
-    copyright            : (C) 1999 by                          
-    email                :                                      
+    copyright            : (C) 1999 by Pascal Krahmer
+    email                : pascal@beast.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -17,43 +17,65 @@
 
 
 #include "kdlgedit.h"
+#include "../ckdevelop.h"
 
-KDlgEdit::KDlgEdit(QObject *parent, const char *name ) : QObject(parent,name) {
-}
-KDlgEdit::~KDlgEdit(){
-}
-
-
-void KDlgEdit::slotFileNew(){
-}
-void KDlgEdit::slotFileOpen(){
-}
-void KDlgEdit::slotFileClose(){
-}
-void KDlgEdit::slotFileSave(){
+KDlgEdit::KDlgEdit(QObject *parent, const char *name ) : QObject(parent,name)
+{
 }
 
+KDlgEdit::~KDlgEdit()
+{
+}
+
+
+void KDlgEdit::slotFileNew()
+{
+}
+
+void KDlgEdit::slotFileOpen()
+{
+}
+
+void KDlgEdit::slotFileClose()
+{
+}
+
+void KDlgEdit::slotFileSave()
+{
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile("");
+}
 	
-void KDlgEdit::slotEditUndo(){
+void KDlgEdit::slotEditUndo()
+{
 }
-void KDlgEdit::slotEditRedo(){
+
+void KDlgEdit::slotEditRedo()
+{
 }
-void KDlgEdit::slotEditCut(){
+
+void KDlgEdit::slotEditCut()
+{
 }
-void KDlgEdit::slotEditCopy(){
+
+void KDlgEdit::slotEditCopy()
+{
 }
-void KDlgEdit::slotEditPaste(){
+
+void KDlgEdit::slotEditPaste()
+{
 }
-void KDlgEdit::slotEditProperties(){
+
+void KDlgEdit::slotEditProperties()
+{
 } 	
 
-
-void KDlgEdit::slotViewRefresh(){
+void KDlgEdit::slotViewRefresh()
+{
 }
 
-void KDlgEdit::slotBuildGenerate(){
+void KDlgEdit::slotBuildGenerate()
+{
 }
-
 
 
 

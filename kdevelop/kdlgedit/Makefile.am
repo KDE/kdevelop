@@ -22,5 +22,5 @@ libkdlgedit_a_METASOURCES = USE_AUTOMOC
 libkdlgedit_a_SOURCES = kdlgedit.cpp kdlgeditwidget.cpp kdlgpropwidget.cpp kdlgwidgets.cpp kdlgdialogs.cpp kdlgitems.cpp kdlgnewwidget.cpp item_base.cpp item_widget.cpp item_pushbutton.cpp itemsglobal.cpp item_lineedit.cpp
 
 
-noinst_HEADERS = kdlgedit.h kdlgeditwidget.h kdlgpropwidget.h kdlgwidgets.h kdlgdialogs.h kdlgitems.h kdlgnewwidget.h kdlgproplvis.h kdlgproplv.h item_base.h item_widget.h item_pushbutton.h itemsglobal.h item_lineedit.h
+noinst_HEADERS = kdlgedit.h kdlgeditwidget.h kdlgpropwidget.h kdlgwidgets.h kdlgdialogs.h kdlgitems.h kdlgnewwidget.h kdlgproplvis.h kdlgproplv.h items.h itemsglobal.h
 

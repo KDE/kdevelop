@@ -24,7 +24,7 @@
 #include <qstring.h>
 #include "kdlgproplvis.h"
 #include "../ckdevelop.h"
-#include "item_widget.h"
+#include "items.h"
 
 KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
@@ -64,8 +64,16 @@ KDlgItems::~KDlgItems()
 {
 }
 
+void KDlgItems::refreshList()
+{
+  addWidgetChilds( pCKDevel->kdlg_get_edit_widget()->mainWidget());
+
+}
+
+
 void KDlgItems::itemSelected ()
 {
+  setCursor(KCursor::waitCursor());
   if (!treelist->currentItem())
     return;
 
@@ -75,6 +83,7 @@ void KDlgItems::itemSelected ()
     return;
 
   pCKDevel->kdlg_get_edit_widget()->selectWidget((KDlgItem_Base*)itm);
+  setCursor(KCursor::arrowCursor());
 }
 
 void KDlgItems::resizeEvent ( QResizeEvent *e )

@@ -16,9 +16,11 @@
  ***************************************************************************/
 
 
-#include "item_lineedit.h"
+#include "items.h"
 #include "itemsglobal.h"
 
+#define CALLER_ITEMCLASS_NAME KDlgItem_LineEdit
+#include "item_all.cpp.inc"
 
 KDlgItem_LineEdit::MyWidget::MyWidget(KDlgItem_LineEdit* wid, QWidget* parent, const char* name )
   : QLineEdit(parent,name)

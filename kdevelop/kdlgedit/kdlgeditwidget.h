@@ -31,6 +31,7 @@ class KDlgItem_Widget;
 class KDlgItem_Base;
 class CKDevelop;
 class KRuler;
+class QTextStream;
 
 class KDlgEditWidget : public QWidget  {
   Q_OBJECT
@@ -51,6 +52,10 @@ class KDlgEditWidget : public QWidget  {
 
     KRuler *horizontalRuler() { return rulh; }
     KRuler *verticalRuler() { return rulv; }
+    CKDevelop *getCKDevelClass() { return pCKDevel; }
+
+    bool saveToFile( QString fname );
+    void saveWidget( KDlgItem_Widget *, QTextStream *, int deep = 0);
   public slots:
   protected:
     virtual void resizeEvent ( QResizeEvent * );

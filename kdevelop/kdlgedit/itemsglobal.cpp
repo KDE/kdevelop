@@ -20,7 +20,7 @@
 #include <kapp.h>
 #include <kcursor.h>
 #include <qmsgbox.h>
-#include "item_base.h"
+#include "items.h"
 #include <qpainter.h>
 
 
@@ -381,4 +381,17 @@ void KDlgItemsPaintRects(QWidget *wid, QPaintEvent *e)
   p.setClipRect(e->rect());
 
   KDlgItemsPaintRects(&p, wid->width(), wid->height());
+}
+
+
+int KDlgItemsIsValueTrue(QString val)
+{
+  QString v(val.upper());
+
+  if (v=="FALSE" || v=="0" || v=="NO" || v=="NULL")
+    return 0;
+  if (v=="TRUE" || v=="1" || v=="YES")
+    return 1;
+
+  return -1;
 }

@@ -16,10 +16,13 @@
  ***************************************************************************/
 
 
-#include "item_pushbutton.h"
+#include "items.h"
 #include <qpushbutton.h>
 #include "itemsglobal.h"
 
+
+#define CALLER_ITEMCLASS_NAME KDlgItem_PushButton
+#include "item_all.cpp.inc"
 
 KDlgItem_PushButton::MyWidget::MyWidget(KDlgItem_PushButton* wid, QWidget* parent, const char* name )
   : QPushButton("Button", parent,name)

@@ -36,6 +36,7 @@ public:
 	~KDlgPropWidget();
 
         void refillList(KDlgItem_Base* source);
+        AdvListView *getListView() { return lv; }
 protected:
         virtual void resizeEvent ( QResizeEvent * );
 

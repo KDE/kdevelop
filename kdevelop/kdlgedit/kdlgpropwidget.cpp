@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include "../ckdevelop.h"
 #include "kdlgproplv.h"
-#include "item_base.h"
+#include "items.h"
 #include "defines.h"
 
 
@@ -137,6 +137,28 @@ void AdvListView::updateWidgets()
 
   while (i) {
     i->updateWidgets();
+    i = (AdvListViewItem*)i->nextSibling();
+  }
+}
+
+void AdvListView::setGeometryEntrys(int x, int y, int w, int h)
+{
+  AdvListViewItem* i = (AdvListViewItem*)firstChild();
+
+  while (i) {
+    AdvListViewItem* n = (AdvListViewItem*)i->firstChild();
+    while (n) {
+      if (QString(n->text(0)).upper()=="X")
+        n->setText(1, (const char*)(QString().setNum(x)));
+      if (QString(n->text(0)).upper()=="Y")
+        n->setText(1, (const char*)(QString().setNum(y)));
+      if (QString(n->text(0)).upper()=="WIDTH")
+        n->setText(1, (const char*)(QString().setNum(w)));
+      if (QString(n->text(0)).upper()=="HEIGHT")
+        n->setText(1, (const char*)(QString().setNum(h)));
+      n = (AdvListViewItem*)n->nextSibling();
+    }
+
     i = (AdvListViewItem*)i->nextSibling();
   }
 }
@@ -515,31 +537,31 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
       switch (prop->allowed)
         {
           case ALLOWED_STRING:
-            lvi->setColumnWidget(1, new AdvLvi_String( lv, prop ));
+            lvi->setColumnWidget(1, new AdvLvi_String( lv, pCKDevel, prop ));
             break;
           case ALLOWED_BOOL:
-            lvi->setColumnWidget(1, new AdvLvi_Bool( lv, prop ));
+            lvi->setColumnWidget(1, new AdvLvi_Bool( lv, pCKDevel, prop ));
             break;
           case ALLOWED_INT:
-            lvi->setColumnWidget(1, new AdvLvi_Int( lv, prop ));
+            lvi->setColumnWidget(1, new AdvLvi_Int( lv, pCKDevel, prop ));
             break;
           case ALLOWED_FILE:
-            lvi->setColumnWidget(1, new AdvLvi_Filename( lv, prop ));
+            lvi->setColumnWidget(1, new AdvLvi_Filename( lv, pCKDevel, prop ));
             break;
           case ALLOWED_COLOR:
-            lvi->setColumnWidget(1, new AdvLvi_ColorEdit( lv, prop ));
+            lvi->setColumnWidget(1, new AdvLvi_ColorEdit( lv, pCKDevel, prop ));
             break;
           case ALLOWED_FONT:
-            lvi->setColumnWidget(1, new AdvLvi_Font( lv, prop ));
+            lvi->setColumnWidget(1, new AdvLvi_Font( lv, pCKDevel, prop ));
             break;
           case ALLOWED_CONNECTIONS:
-    //        lvi->setColumnWidget(1, new AdvLvi_Connections( lv, prop ));
+    //        lvi->setColumnWidget(1, new AdvLvi_Connections( lv, pCKDevel, prop ));
             break;
           case ALLOWED_CURSOR:
-            lvi->setColumnWidget(1, new AdvLvi_Cursor( lv, prop ));
+            lvi->setColumnWidget(1, new AdvLvi_Cursor( lv, pCKDevel, prop ));
             break;
           case ALLOWED_BGMODE:
-            lvi->setColumnWidget(1, new AdvLvi_BgMode( lv, prop ));
+            lvi->setColumnWidget(1, new AdvLvi_BgMode( lv, pCKDevel, prop ));
             break;
        }
 
@@ -568,9 +590,10 @@ void KDlgPropWidget::resizeEvent ( QResizeEvent *e )
 
 
 
-AdvLvi_Base::AdvLvi_Base(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
+AdvLvi_Base::AdvLvi_Base(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
   : QWidget( parent, name )
 {
+  pCKDevel = parCKD;
   setGeometry(0,0,0,0);
   propEntry = dpe;
   setBackgroundColor( colorGroup().base() );
@@ -584,10 +607,18 @@ void AdvLvi_Base::paintEvent ( QPaintEvent * e )
   QWidget::paintEvent( e );
 }
 
+void AdvLvi_Base::refreshItem()
+{
+  KDlgItem_Base *selit = pCKDevel->kdlg_get_edit_widget()->selectedWidget();
+  if (selit)
+    selit->repaintItem(selit->getItem());
 
+  if (propEntry->name.upper() == "NAME")
+    pCKDevel->kdlg_get_items_view()->refreshList();
+}
 
-AdvLvi_String::AdvLvi_String(QWidget *parent, KDlgPropertyEntry *dpe, const char *name )
-  : AdvLvi_Base( parent, dpe, name )
+AdvLvi_String::AdvLvi_String(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name )
+  : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
   leInput = new QLineEdit( this );
@@ -615,11 +646,12 @@ void AdvLvi_String::resizeEvent ( QResizeEvent *e )
 void AdvLvi_String::returnPressed()
 {
   propEntry->value = leInput->text();
+  refreshItem();
 }
 
 
-AdvLvi_Int::AdvLvi_Int(QWidget *parent, KDlgPropertyEntry *dpe, const char *name )
-  : AdvLvi_Base( parent, dpe, name )
+AdvLvi_Int::AdvLvi_Int(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name )
+  : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
 
@@ -652,6 +684,7 @@ void AdvLvi_Int::valInc()
 
   dest++;
   leInput->setText(QString().setNum(dest));
+
 }
 
 void AdvLvi_Int::valDec()
@@ -701,12 +734,13 @@ void AdvLvi_Int::resizeEvent ( QResizeEvent *e )
 void AdvLvi_Int::returnPressed()
 {
   propEntry->value = leInput->text();
+  refreshItem();
 }
 
 
 
-AdvLvi_ExtEdit::AdvLvi_ExtEdit(QWidget *parent, KDlgPropertyEntry *dpe, const char *name )
-  : AdvLvi_Base( parent, dpe, name )
+AdvLvi_ExtEdit::AdvLvi_ExtEdit(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name )
+  : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
   btnMore = new QPushButton("...",this);
@@ -739,11 +773,12 @@ void AdvLvi_ExtEdit::resizeEvent ( QResizeEvent *e )
 void AdvLvi_ExtEdit::returnPressed()
 {
   propEntry->value = leInput->text();
+  refreshItem();
 }
 
 
-AdvLvi_Filename::AdvLvi_Filename(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
-  : AdvLvi_ExtEdit( parent, dpe, name )
+AdvLvi_Filename::AdvLvi_Filename(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_ExtEdit( parent, parCKD, dpe, name )
 {
   connect( btnMore, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
 }
@@ -759,8 +794,8 @@ void AdvLvi_Filename::btnPressed()
 
 
 
-AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
-  : AdvLvi_Base( parent, dpe, name )
+AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
   cbBool = new QComboBox( FALSE, this );
@@ -789,10 +824,11 @@ QString AdvLvi_Bool::getText()
 void AdvLvi_Bool::activated( const char* s )
 {
   propEntry->value = cbBool->currentItem() ? "FALSE" : "TRUE";
+  refreshItem();
 }
 
-AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
-  : AdvLvi_Base( parent, dpe, name )
+AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
   btn = new KColorButton(this);
@@ -829,11 +865,12 @@ void AdvLvi_ColorEdit::changed ( const QColor &newColor )
 //  QColor myColor(QColor((unsigned char)(l>>16),(unsigned char)(l>>8),(unsigned char)(l)));
 //  int res = KColorDialog::getColor( myColor );
   propEntry->value = "0x"+AdvLvi_intToHex(newColor.red())+AdvLvi_intToHex(newColor.green())+AdvLvi_intToHex(newColor.blue());
+  refreshItem();
 }
 
 
-AdvLvi_Font::AdvLvi_Font(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
-  : AdvLvi_ExtEdit( parent, dpe, name )
+AdvLvi_Font::AdvLvi_Font(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_ExtEdit( parent, parCKD, dpe, name )
 {
   connect( btnMore, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
 }
@@ -851,13 +888,14 @@ void AdvLvi_Font::btnPressed()
                               QString(myFont.bold() ? QString("TRUE") : QString("FALSE")) + QString("\"");
       leInput->setText(st);
       propEntry->value=st;
+      refreshItem();
     }
 }
 
 
 
-AdvLvi_BgMode::AdvLvi_BgMode(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
-  : AdvLvi_Base( parent, dpe, name )
+AdvLvi_BgMode::AdvLvi_BgMode(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
   cbBool = new QComboBox( FALSE, this );
@@ -891,6 +929,7 @@ QString AdvLvi_BgMode::getText()
     {
       QString s = cbBool->currentItem() ? QString(cbBool->currentText()) : QString();
       propEntry->value = s;
+      refreshItem();
       return s;
     }
   else
@@ -900,11 +939,12 @@ QString AdvLvi_BgMode::getText()
 void AdvLvi_BgMode::activated( const char* s )
 {
   propEntry->value = getText();
+  refreshItem();
 }
 
 
-AdvLvi_Cursor::AdvLvi_Cursor(QWidget *parent, KDlgPropertyEntry *dpe, const char *name)
-  : AdvLvi_Base( parent, dpe, name )
+AdvLvi_Cursor::AdvLvi_Cursor(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
   cbBool = new QComboBox( TRUE, this );
@@ -939,6 +979,7 @@ void AdvLvi_Cursor::btnPressed()
       cbBool->changeItem(fname,0);
       cbBool->setCurrentItem(0);
       propEntry->value = fname;
+      refreshItem();
     }
 }
 
@@ -965,6 +1006,7 @@ QString AdvLvi_Cursor::getText()
 
       QString s = cbBool->currentItem() != 1 ? QString(cbBool->currentText()) : QString();
       propEntry->value = s;
+      refreshItem();
 
       return s;
     }

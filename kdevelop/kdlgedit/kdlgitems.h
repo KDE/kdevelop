@@ -61,6 +61,7 @@ class KDlgItems : public QWidget  {
     QListView *getTreeList() { return treelist; }
 
     void addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm=0);
+    void refreshList();
 
   public slots:
     void itemSelected();

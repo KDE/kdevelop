@@ -16,10 +16,14 @@
  ***************************************************************************/
 
 
-#include "item_widget.h"
+#include "items.h"
 #include <qpainter.h>
 
 class QWidget;
+
+#define CALLER_ITEMCLASS_NAME KDlgItem_Widget
+#include "item_all.cpp.inc"
+
 
 KDlgItem_Widget::MyWidget::MyWidget( KDlgItem_Widget* wid, QWidget* parent , bool isMainWidget, const char* name )
   : QFrame(parent,name)
@@ -39,6 +43,7 @@ KDlgItem_Widget::MyWidget::MyWidget( KDlgItem_Widget* wid, QWidget* parent , boo
     }
   show();
 }
+
 
 
 /*void KDlgItem_Widget::MyWidget::mouseMoveEvent ( QMouseEvent *e )
@@ -90,6 +95,18 @@ KDlgItem_Widget::KDlgItem_Widget( KDlgEditWidget *editwid, QWidget *parent , boo
   parentWidgetItem = 0;
   childs = new KDlgItemDatabase();
   item = new MyWidget(this, parent, ismainwidget);
+  item->show();
+  item->setMouseTracking(true);
+  repaintItem();
+}
+
+
+KDlgItem_Widget::KDlgItem_Widget( KDlgEditWidget *editwid, QWidget *parent , const char* name )
+   : KDlgItem_Base(editwid, parent,false,name)
+{
+  parentWidgetItem = 0;
+  childs = new KDlgItemDatabase();
+  item = new MyWidget(this, parent, false);
   item->show();
   item->setMouseTracking(true);
   repaintItem();

@@ -78,6 +78,8 @@ class AdvListView : public QListView
     virtual void hideAll();
     virtual void saveOpenStats();
     virtual void restoreOpenStats();
+    virtual void setGeometryEntrys(int x, int y, int w, int h);
+    void updateWidgets();
   protected:
 
     virtual void mousePressEvent ( QMouseEvent * );
@@ -87,8 +89,6 @@ class AdvListView : public QListView
     virtual void moveEvent ( QMoveEvent * );
     virtual void resizeEvent ( QResizeEvent * );
     virtual void paintEvent ( QPaintEvent * );
-
-    void updateWidgets();
 
     QString openStats[MAX_MAIN_ENTRYS];
 

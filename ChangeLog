@@ -1,3 +1,14 @@
+1999-04-08 Pascal Krahmer <pascal@beast.de>
+        * removed flickering of the panners
+        * wait cursor now appears when switching between items in the "Items" view
+          (what can take up to a second in complex dialogs)
+        * added saving capabilities (to stdout for now)
+        * now updates properties (x,y,width, height) when moving/resizing the item.
+        * if properties are changed the item and the "items" tab is updated now
+          (new : the items take care of most of the values set in the properties widget!)
+        * merged all item_*.h files into the items.h file.
+        * much more, just try it out :-)
+
 1999-04-08 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed problem with structs in variable declarations.
 	
