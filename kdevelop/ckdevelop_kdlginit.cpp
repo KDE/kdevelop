@@ -37,7 +37,10 @@ extern KGuiCmdManager cmdMngr;
 void CKDevelop::initKDlg(){
   kdlg_caption="KDevelop Dialogeditor:";
 
-  kdlg_tabctl= new CTabCtl(top_panner);
+#warning kdlg_top_panner was a KNewPanner
+  kdlg_top_panner = new QSplitter(Qt::Horizontal, top_panner, "kdlg_top_panner");
+
+  kdlg_tabctl= new CTabCtl(kdlg_top_panner);
   kdlg_tabctl->setFocusPolicy(QWidget::ClickFocus);
 
   kdlg_widgets_view= new KDlgWidgets(this,kdlg_tabctl,"widgets_view");
@@ -49,11 +52,8 @@ void CKDevelop::initKDlg(){
   kdlg_tabctl->addTab(kdlg_dialogs_view,i18n("Dialogs"));
   kdlg_tabctl->addTab(kdlg_items_view,i18n("Items"));
 
-#warning kdlg_top_panner was a KNewPanner
-  kdlg_top_panner = new QSplitter(Vertical, top_panner, "kdlg_top_panner");
-
-  kdlg_prop_widget = new KDlgPropWidget(this,kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
-  kdlg_edit_widget = new KDlgEditWidget(this,kdlg_top_panner,"KDlg_edit_widget"); // the editing view of kdlg
+  kdlg_edit_widget = new KDlgEditWidget(this, kdlg_top_panner,"KDlg_edit_widget"); // the editing view of kdlg
+  kdlg_prop_widget = new KDlgPropWidget(this, kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
 
 #warning QSplitter doesnt have labels. Simply delete this stuff?
 #if 0
@@ -61,8 +61,8 @@ void CKDevelop::initKDlg(){
   kdlg_top_panner->setLabels(i18n("Widget Editor"),i18n("Widget Properties"));
 #endif
 
-  kdlg_edit_widget->hide();
-  kdlg_prop_widget->hide();
+//  kdlg_edit_widget->hide();
+//  kdlg_prop_widget->hide();
   kdlg_tabctl->setTabEnabled("widgets_view",false);
   kdlg_tabctl->setTabEnabled("items_view",false);
   kdlg_tabctl->setTabEnabled("dialogs_view",false);
@@ -73,6 +73,7 @@ void CKDevelop::initKDlg(){
   initKDlgToolBar();
   
   initKDlgStatusBar();
+  kdlg_top_panner->setSizes(kdlg_sizes);
 
   connect(kdlg_dialogs_view,SIGNAL(newDialog()),SLOT(slotFileNew()));
 }

@@ -1021,13 +1021,14 @@ void CKDevelop::readOptions(){
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop/KDlgEdit
   bool outputview= config->readBoolEntry("show_output_view", true);
-  output_view_pos=config->readNumEntry("OutputViewHeight", size.height()*20/100);
+  int output_view_pos=config->readNumEntry("OutputViewHeight", size.height()*20/100);
   int edit_view_pos=config->readNumEntry("EditViewHeight", size.height()-output_view_pos);
 
-  sizes=view->sizes();
-  sizes[0]=edit_view_pos;
-  sizes[1]=output_view_pos;
+  sizes.clear();
+  sizes << edit_view_pos;
+  sizes << output_view_pos;
   view->setSizes(sizes);
+
   if(outputview){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
@@ -1038,11 +1039,11 @@ void CKDevelop::readOptions(){
     o_tab_view->hide();
 
   bool treeview=config->readBoolEntry("show_tree_view", true);
-  tree_view_pos=config->readNumEntry("ClassViewWidth", size.width()*20/100);
+  int tree_view_pos=config->readNumEntry("ClassViewWidth", size.width()*20/100);
   edit_view_pos=config->readNumEntry("EditViewWidth", size.width()-tree_view_pos);
-  sizes=top_panner->sizes();
-  sizes[0]=tree_view_pos;
-  sizes[1]=edit_view_pos;
+  sizes.clear();
+  sizes << tree_view_pos;
+  sizes << edit_view_pos;
   top_panner->setSizes(sizes);
   if(treeview){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
@@ -1054,17 +1055,21 @@ void CKDevelop::readOptions(){
     t_tab_view->hide();
 
 	
-  QValueList<int> kdlg_panner_sizes;
+  int kdlg_tabctl_pos=config->readNumEntry("KDlgTabCtlWidth", size.width()*20/100);
+  int kdlg_editview_pos=config->readNumEntry("KDlgEditWidth", size.width()*60/100);
+  int properties_view_pos=config->readNumEntry("PropertiesWidth", size.width()*20/100);
+  kdlg_sizes.clear;
+  kdlg_sizes << kdlg_tabctl_pos;
+  kdlg_sizes << kdlg_editview_pos;
+  kdlg_sizes << properties_view_pos;
+  kdlg_top_panner->setSizes(kdlg_sizes);
+/*  QValueList<int> kdlg_panner_sizes;
   kdlg_panner_sizes << config->readNumEntry("kdlg_top_panner_pos", 80);
   kdlg_top_panner->setSizes(kdlg_panner_sizes);
+*/
   if(config->readBoolEntry("show_properties_view",true)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
-    properties_view_pos=kdlg_top_panner->sizes()[0];
   }	
-  else{
-    properties_view_pos=config->readNumEntry("properties_view_pos", 80);
-  }
-
 
 	/////////////////////////////////////////
 	// RUNTIME VALUES AND FILES
@@ -1141,11 +1146,14 @@ void CKDevelop::saveOptions(){
 
   config->writeEntry("EditViewHeight",view->sizes()[0]);
   config->writeEntry("OutputViewHeight",view->sizes()[1]);
+
   config->writeEntry("ClassViewWidth",top_panner->sizes()[0]);
   config->writeEntry("EditViewWidth",top_panner->sizes()[1]);
 
-  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->sizes()[0]);
-  config->writeEntry("properties_view_pos", properties_view_pos);
+  kdlg_sizes = kdlg_top_panner->sizes();
+  config->writeEntry("KDlgTabCtlWidth", kdlg_sizes[0]);
+  config->writeEntry("KDlgEditWidth", kdlg_sizes[1]);
+  config->writeEntry("PropertiesWidth",kdlg_sizes[2]);
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
   config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));

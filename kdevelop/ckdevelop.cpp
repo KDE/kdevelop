@@ -42,6 +42,8 @@
 #include <qtabdialog.h>
 
 #include "./kdlgedit/kdlgedit.h"
+#include "./kdlgedit/kdlgpropwidget.h"
+#include "./kdlgedit/kdlgproplv.h"
 #include "ctoolsconfigdlg.h"
 #include "ktipofday.h"
 
@@ -1712,21 +1714,24 @@ void CKDevelop::slotHelpAbout(){
 void CKDevelop::slotKDlgViewPropView(){
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,false);
-    properties_view_pos=kdlg_top_panner->sizes()[0];
+
+/*  properties_view_pos=kdlg_top_panner->sizes()[0];
     QValueList<int> sizes;
     sizes << 100;
     kdlg_top_panner->setSizes(sizes);
+*/  kdlg_prop_widget->getListView()->hide();
   }
   else{
-    QValueList<int> sizes;
+/*    QValueList<int> sizes;
     sizes << properties_view_pos;
     kdlg_top_panner->setSizes(sizes);
+*/  kdlg_prop_widget->getListView()->show();
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
   }
-  QRect rMainGeom= kdlg_top_panner->geometry();
+/*  QRect rMainGeom= kdlg_top_panner->geometry();
   kdlg_top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
   kdlg_top_panner->resize(rMainGeom.width(),rMainGeom.height());
-
+*/
 }
 void CKDevelop::slotKDlgViewToolbar(){
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR)){
