@@ -1,3 +1,11 @@
+2001-03-06  F@lk Brettschneider <falk@kdevelop.org>
+    * initial code for QextMDI-based MDI feature added:
+        - The DocViewMan is the MDI manager which is responsible for creating documents and multiple views on such documents ;
+        - CKDevelop::initView() adapted
+        - CKDevelop::switchToFile(..) adapted
+        - CEditWidget adapted a little bit, some methods are public now in KWriteDoc, KWriteView and KWrite
+    * the whole thing is very unusable, I just give other developers the chance to contribute, stay tuned for further development...
+
 2001-03-06  jbb <jbb@kdevelop.org>
     * Fixed: Dirs containing "++" would cause kimport to fail.
 
