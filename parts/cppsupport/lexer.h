@@ -206,6 +206,7 @@ public:
 
 private:
     void tokenize();
+    bool isValid( const QChar* ptr ) const;
     void newline( const QChar* ptr );
     const QChar* skip( const QChar* ptr, const QChar& l, const QChar& r );
     const QChar* readIdentifier( const QChar* ptr);
@@ -420,6 +421,10 @@ inline int Lexer::tokenPosition( const Token& token ) const
     return token.position() - m_buffer;
 }
 
+inline bool Lexer::isValid( const QChar* ptr ) const
+{
+    return ptr < m_endPtr;
+}
 
 
 #endif
