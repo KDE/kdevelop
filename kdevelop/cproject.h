@@ -102,15 +102,6 @@ struct TFileInfo {
   QString install_location;
 };
 
-struct TWorkspace {
-  int id; // 1, 2 or 3
-  QStrList openfiles;
-  QString header_file;
-  QString cpp_file;
-  QString browser_file;
-  bool show_treeview;
-  bool show_output_view;  
-};
 
 /** this class includes the properties of a project and some methods to read
   * and write these props,all Makefiles.am are registered in the [General] Group,every Makefile.am
@@ -361,10 +352,6 @@ public: // Public methods
   void writeProject(); 
   /** true if the project was read*/
   bool valid;
-  void  writeWorkspace(TWorkspace ws);
-  TWorkspace getWorkspace(int id);
-  void setCurrentWorkspaceNumber(int id);
-  int getCurrentWorkspaceNumber();
 
 /** method to fill up a string template with actual project info
   *@author Walter Tasin

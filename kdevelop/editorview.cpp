@@ -27,9 +27,7 @@
 
 
 EditorView::EditorView(QWidget* parent,const char* name) : QextMdiChildView(name,parent){
-    split = new QSplitter(this);
-
-    
+    split = new QSplitter(this);    
     editorfirstview = new  CEditWidget(split,name);
     split_submenu = new QPopupMenu;
     editorfirstview->popup()->insertSeparator();
@@ -49,6 +47,7 @@ EditorView::EditorView(QWidget* parent,const char* name) : QextMdiChildView(name
     editorsecondview=0;
 
     
+    ask_by_closing = true;
     
 }
 
@@ -120,23 +119,32 @@ void EditorView::slotUnSplit(){
     editorsecondview=0;
 }
 void EditorView::closeEvent(QCloseEvent* e){
-   
-    int msg_result=0;
-
-    if(currentEditor()->isModified()){
-	
-	msg_result = KMessageBox::warningYesNoCancel(this, i18n("The document was modified,save?"));
-	
-	if (msg_result == KMessageBox::Yes){ // yes
+    
+    if(ask_by_closing){
+	if(currentEditor()->isModified()){
+	    int msg_result=0;
+	    msg_result = KMessageBox::warningYesNoCancel(this, i18n("The document was modified,save?"));
+	    
+	    if (msg_result == KMessageBox::Yes){ // yes
+		if (currentEditor()->modifiedOnDisk()) {
+		    if (KMessageBox::questionYesNo(this, 
+						   i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(currentEditor()->getName()))
+			== KMessageBox::No){
+			return;
+		    }
+		}
 	    currentEditor()->doSave();
-	}
-	if (msg_result == KMessageBox::Cancel){ // cancel
-	    e->ignore();
-	    currentEditor()->setFocus();
-	    return;
+	    emit fileSaved(this);
+	    }
+	    if (msg_result == KMessageBox::Cancel){ // cancel
+		e->ignore();
+		currentEditor()->setFocus();
+		return;
+	    }
 	}
     }
+    
     emit closing(this);
     QextMdiChildView::closeEvent(e);
-	
+    
 }

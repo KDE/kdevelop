@@ -147,12 +147,7 @@ void CKDevelop::initKDlgMenuBar(){
   //  kdlg_project_menu->insertSeparator();		
 
 
-  //  workspaces_submenu = new QPopupMenu;
-  //workspaces_submenu->insertItem(i18n("Workspace 1"),ID_PROJECT_WORKSPACES_1);
-  //  workspaces_submenu->insertItem(i18n("Workspace 2"),ID_PROJECT_WORKSPACES_2);
-  //  workspaces_submenu->insertItem(i18n("Workspace 3"),ID_PROJECT_WORKSPACES_3);
-  //  kdlg_project_menu->insertItem(i18n("Workspaces"),workspaces_submenu,ID_PROJECT_WORKSPACES);
-  //  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
+
   
   
   kdlg_menubar->insertItem(i18n("&Project"), kdlg_project_menu);

@@ -438,10 +438,13 @@ void KDlgNewDialogDlg::slotOKClicked(){
 
 
 void KDlgNewDialogDlg::slotLocButtonClicked(){
-  QString str=  KFileDialog::getExistingDirectory(loc_edit->text(),this,"test");
+  #warning FIXME with new KDE
+  
+  /*  QString str=  KFileDialog::getExistingDirectory(loc_edit->text(),this,"test");
   if(!str.isEmpty()){
     loc_edit->setText(str);
   }
+  */
 }
 
 

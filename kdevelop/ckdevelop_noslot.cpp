@@ -396,6 +396,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   connect(new_editorview, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(new_editorview, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
   connect(new_editorview->editorfirstview->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+  connect(new_editorview,SIGNAL(closing(EditorView*)),SLOT(slotFileWillBeClosed(EditorView*)));
 
   
   
@@ -632,34 +633,6 @@ void CKDevelop::setToolMenuProcess(bool enable){
 	}
 }
 
-void CKDevelop::switchToWorkspace(int id){
-  workspace = id;
-  if(id == 1){
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,true);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,false);
-  }
-  if(id == 2){
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,false);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,true);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,false);
-  }
-  if(id == 3){
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,false);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
-    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,true);
-  }
-  TWorkspace ws = prj->getWorkspace(id);
-  if(ws.show_output_view){
-    showOutputView(true);
-  }
-  else{showOutputView(false);}
-  
-  if(ws.show_treeview){
-    showTreeView(true);
-  }
-  else{showTreeView(false);}
-}
 
 void CKDevelop::showTreeView(bool show){
 
@@ -966,8 +939,6 @@ bool CKDevelop::queryClose(){
   config->setGroup("Files");
   if(project){
     config->writeEntry("project_file",prj->getProjectFile());
-    prj->setCurrentWorkspaceNumber(workspace);
-    saveCurrentWorkspaceIntoProject();
     prj->writeProject();
     if(!slotProjectClose()){ // if not ok,pressed cancel
       return false; //not close!
@@ -1041,8 +1012,6 @@ void CKDevelop::saveProperties(KConfig* sess_config){
 	
   if(project){
     sess_config->writeEntry("project_file",prj->getProjectFile());
-    prj->setCurrentWorkspaceNumber(workspace);
-    saveCurrentWorkspaceIntoProject();
     prj->writeProject();
   }	
   if(bAutosave)
@@ -1061,16 +1030,7 @@ void CKDevelop::saveProperties(KConfig* sess_config){
   }
 }
 
-bool  CKDevelop::isFileInBuffer(QString abs_filename){
- #warning FIXME MDI stuff
-  // TEditInfo* info;
-//   for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-//     if (info->filename == abs_filename ){
-//       return true;
-//     }
-//   }
-//   return false;
-}
+
 
 
 

@@ -38,6 +38,7 @@ class EditorView : public QextMdiChildView, public Component {
 public: // Constructor and destructor
 
   EditorView (QWidget* parent=0,const char* name=0);
+  virtual ~EditorView() {};
   
   CEditWidget* editorfirstview;
   CEditWidget* currentEditor();
@@ -52,12 +53,12 @@ protected slots:
  protected:
   virtual void resizeEvent (QResizeEvent *e); 
   virtual void closeEvent(QCloseEvent* e);
- signals:
-  void closing(EditorView* editorview);
+ 
 
  public:
   QPopupMenu* split_submenu;
   CEditWidgetPrivate* shared_data;
+  bool  ask_by_closing;
   
   QSplitter* split;
 
@@ -71,6 +72,8 @@ protected slots:
   void newStatus();
   void newMarkStatus();
   void newUndo();
+  void closing(EditorView* editorview);
+  void fileSaved(EditorView* editorview);
 };
 
 #endif

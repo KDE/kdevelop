@@ -27,7 +27,6 @@
 #include <qwhatsthis.h>
 #include <qmessagebox.h>
 #include <dcopclient.h>
-//#include <kaccel.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kmenubar.h>
@@ -175,7 +174,6 @@ void CKDevelop::initView(){
   browser_view = new DocBrowserView(mdi_main_frame,"browser");
   // let's go
   browser_widget = browser_view->browser;
-  //  browser_widget->setFocusPolicy(QWidget::StrongFocus);
   mdi_main_frame->addWindow(browser_view, // the view pointer
                             true,         // show it
 			    true,         // attach it
@@ -498,7 +496,7 @@ void CKDevelop::initMenuBar(){
   view_menu = new KGuiCmdPopup(kdev_dispatcher);//QPopupMenu;
   view_menu->addCommand(ctFindCommands, cmGotoLine, this, SLOT(slotViewGotoLine()), ID_VIEW_GOTO_LINE);
 //  view_menu->insertItem(i18n("Goto &Line..."), this,
-//			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
+//			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE)
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Next Error"),this,
 			SLOT(slotViewNextError()),0,ID_VIEW_NEXT_ERROR);
@@ -567,14 +565,7 @@ void CKDevelop::initMenuBar(){
   project_menu->insertSeparator();
   
   project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
-  //  project_menu->insertSeparator();		
 
-  workspaces_submenu = new QPopupMenu;
-  //workspaces_submenu->insertItem(i18n("Workspace 1"),ID_PROJECT_WORKSPACES_1);
-  //  workspaces_submenu->insertItem(i18n("Workspace 2"),ID_PROJECT_WORKSPACES_2);
-  //  workspaces_submenu->insertItem(i18n("Workspace 3"),ID_PROJECT_WORKSPACES_3);
-  //  project_menu->insertItem(i18n("Workspaces"),workspaces_submenu,ID_PROJECT_WORKSPACES);
-  //  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
 
   kdev_menubar->insertItem(i18n("&Project"), project_menu);
   
@@ -1032,23 +1023,23 @@ void CKDevelop::initConnections(){
 
 void CKDevelop::initProject()
 {
-
+    QString filename;
   config->setGroup("General Options");
-  bool bLastProject;
+  bool bLastProject =true;
   if(!kapp->argc() > 1)
     bLastProject= config->readBoolEntry("LastProject",true);
   else
     bLastProject=false;
 
-  QString filename;
   if(bLastProject){
     config->setGroup("Files");
-    filename = config->readEntry("project_file","");
+    filename = config->readEntry("project_file");
   }
-  else
-    filename="";
+
   QFile file(filename);
+  
   if (file.exists()){
+   
     if(!(readProjectFile(filename))){
       KMessageBox::sorry(0, "This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
                          "Please use only new generated projects!");
@@ -1093,25 +1084,17 @@ void CKDevelop::initProject()
 void CKDevelop::setKeyAccel(){
 if(bKDevelop){
     accel->disconnectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()));
-//    accel->disconnectItem(accel->stdAction( KAccel::Open ),(QObject*)kdlgedit, SLOT(slotFileOpen()) );
+
     accel->disconnectItem(accel->stdAction( KAccel::Close ) , (QObject*)kdlgedit, SLOT(slotFileClose()) );
     accel->disconnectItem(accel->stdAction( KAccel::Save ) , (QObject*)kdlgedit, SLOT(slotFileSave()) );
-//    accel->disconnectItem(accel->stdAction( KAccel::Undo ), (QObject*)kdlgedit, SLOT(slotEditUndo()) );
-//    accel->disconnectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()) );
-//    accel->disconnectItem(accel->stdAction( KAccel::Cut ), (QObject*)kdlgedit, SLOT(slotEditCut()) );
-//    accel->disconnectItem(accel->stdAction( KAccel::Copy ), (QObject*)kdlgedit, SLOT(slotEditCopy()) );
-//    accel->disconnectItem(accel->stdAction( KAccel::Paste ), (QObject*)kdlgedit, SLOT(slotEditPaste()) );
+
     accel->setItemEnabled("KDevKDlg", false );
     accel->setItemEnabled("Dialog Editor", true );
 
     accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
     accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
     accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
-//    accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()), true, ID_EDIT_UNDO );
-//    accel->connectItem( "Redo" , this, SLOT(slotEditRedo()), true, ID_EDIT_REDO );
-//    accel->connectItem( KAccel::Cut , this, SLOT(slotEditCut()), true, ID_EDIT_CUT );
-//    accel->connectItem( KAccel::Copy , this, SLOT(slotEditCopy()), true, ID_EDIT_COPY );
-//    accel->connectItem( KAccel::Paste , this, SLOT(slotEditPaste()), true, ID_EDIT_PASTE );
+
 
     accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
     accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
@@ -1120,18 +1103,9 @@ if(bKDevelop){
     accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KAccel::Print );
     accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KAccel::Quit );
 
-/*    accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KAccel::Cut );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KAccel::Copy );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KAccel::Paste );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KAccel::Find );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KAccel::Replace );*/
     accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
 
-		
-//    accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
+
     accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
     accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
     accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
@@ -1153,38 +1127,22 @@ if(bKDevelop){
     accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
   }
   else{
-//    accel->disconnectItem(accel->stdAction( KAccel::Open ), this, SLOT(slotFileOpen()) );
+
     accel->disconnectItem(accel->stdAction( KAccel::Close ) , this, SLOT(slotFileClose()) );
     accel->disconnectItem(accel->stdAction( KAccel::Save ) , this, SLOT(slotFileSave()) );
-//    accel->disconnectItem(accel->stdAction( KAccel::Undo ), this, SLOT(slotEditUndo()) );
-//    accel->disconnectItem( "Redo" , this, SLOT(slotEditRedo()) );
-//    accel->disconnectItem(accel->stdAction( KAccel::Cut ), this, SLOT(slotEditCut()) );
-//    accel->disconnectItem(accel->stdAction( KAccel::Copy ), this, SLOT(slotEditCopy()) );
-//    accel->disconnectItem(accel->stdAction( KAccel::Paste ), this, SLOT(slotEditPaste()) );
+
     accel->setItemEnabled("KDevKDlg", true );
     accel->setItemEnabled("Dialog Editor", false );
 
     accel->connectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()), true, ID_VIEW_PREVIEW);
-//    accel->connectItem( KAccel::Open , (QObject*)kdlgedit, SLOT(slotFileOpen()), true, ID_FILE_OPEN );
+
     accel->connectItem( KAccel::Close , (QObject*)kdlgedit, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
     accel->connectItem( KAccel::Save , (QObject*)kdlgedit, SLOT(slotFileSave()), true, ID_FILE_SAVE);
-//    accel->connectItem( KAccel::Undo , (QObject*)kdlgedit, SLOT(slotEditUndo()), true, ID_EDIT_UNDO );
-//    accel->connectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()), true, ID_EDIT_REDO);
-//    accel->connectItem( KAccel::Cut , (QObject*)kdlgedit, SLOT(slotEditCut()), true, ID_EDIT_CUT);
-//    accel->connectItem( KAccel::Copy , (QObject*)kdlgedit, SLOT(slotEditCopy()), true, ID_EDIT_COPY);
-//    accel->connectItem( KAccel::Paste , (QObject*)kdlgedit, SLOT(slotEditPaste()), true, ID_EDIT_PASTE);
+
 
     accel->changeMenuAccel(kdlg_file_menu, ID_FILE_NEW, KAccel::New );
-    //    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_OPEN, KAccel::Open );
-    //    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_CLOSE, KAccel::Close );
     accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_SAVE, KAccel::Save );
     accel->changeMenuAccel(kdlg_file_menu, ID_FILE_QUIT, KAccel::Quit );
-
-//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_UNDO, KAccel::Undo );
-//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_REDO,"Redo" );
-//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_CUT, KAccel::Cut );
-//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_COPY, KAccel::Copy );
-//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_PASTE, KAccel::Paste );
 
     accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
     accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
@@ -1196,8 +1154,8 @@ if(bKDevelop){
     accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
     accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_MAKE ,"Make" );
     accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN ,"Run" );
-		accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
-		accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_STOP,"Stop_proc");
+    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
+    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_STOP,"Stop_proc");
 
     accel->changeMenuAccel(kdlg_help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
     accel->changeMenuAccel(kdlg_help_menu, ID_HELP_CONTENTS, KAccel::Help );

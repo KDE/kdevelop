@@ -105,7 +105,7 @@ public:
    *  @return true if it succeeded
    */
   bool fileSaveAs();
-  bool saveFileFromTheCurrentEditWidget();
+  bool saveFile(QString abs_filename);
 
   void refreshTrees();
   void refreshTrees(TFileInfo *info);
@@ -137,7 +137,6 @@ public:
    */
   bool addFileToProject(QString complete_filename,ProjectFileType type,bool refreshTrees=true);
   void addRecentProject(const char* file);
-  void switchToWorkspace(int id);
 
   /** Switch the view to a certain file.
    * @param filename the absolute filename
@@ -188,7 +187,7 @@ public:
   void slotFileOpen( int id_ );
   /** close the current file*/
   void slotFileClose();
-  void slotFileCloseAll();
+  bool slotFileCloseAll();
   /** save the current file,if Untitled a dialog ask for a valid name*/
   void slotFileSave();
   /** save all files*/
@@ -199,6 +198,8 @@ public:
   void slotFilePrint();
   /** quit kdevelop*/
   void slotFileQuit();
+  /** called from the EditorView to inform the mainapplication*/
+  void slotFileWasSaved(EditorView* editor);
 
   ////////////////////////
   // EDIT-Menu entries  (most of the slots are not needed any more (jochen))
@@ -297,8 +298,6 @@ public:
   void slotShowFileProperties(QString rel_name);
   /** opens the project options dialog */
   void slotProjectOptions();
-  /** selects the project workspace */
-  void slotProjectWorkspaces(int);
   void slotProjectMessages();
   void slotProjectAPI();
   void slotProjectManual();
@@ -610,13 +609,11 @@ protected: // Protected methods
   void CVRefreshMethodCombo( CParsedClass *aClass );
 
 public: // Public methods
-  bool isFileInBuffer(QString abs_filename);
 
   /** a tool meth,used in the search engine*/
   int searchToolGetNumber(QString str);
   QString searchToolGetTitle(QString str);
   QString searchToolGetURL(QString str);
-  void saveCurrentWorkspaceIntoProject();
   // returns the current editor (mdi) or 0L
   EditorView* getCurrentEditorView();
 
@@ -649,7 +646,6 @@ private:
   QPopupMenu* doc_bookmarks;
 
   QPopupMenu* project_menu;
-  QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
@@ -765,7 +761,6 @@ private:
   OutputView *outputview;
 
   QValueList<int> kdlg_sizes;
-  int workspace;
 
     //  CErrorMessageParser* error_parser;
   QString version;

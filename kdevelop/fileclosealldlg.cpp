@@ -125,3 +125,16 @@ void FileCloseAllDlg::slotSelectNone(){
 void FileCloseAllDlg::slotOK(){
     accept();
 }
+
+void FileCloseAllDlg::getSelectedFiles(QStringList* list){
+  list->clear();
+  QCheckListItem* item = static_cast<QCheckListItem*>(files_listview->firstChild());
+  if(item->isOn()){
+    list->append(item->text(0));
+  }
+  for(;item != 0;item = static_cast<QCheckListItem*>(item->nextSibling())){
+    if(item->isOn()){
+      list->append(item->text(0));
+    }
+  }
+}

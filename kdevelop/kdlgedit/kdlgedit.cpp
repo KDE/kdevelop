@@ -370,11 +370,12 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
       ///////////////////////////// datafile ///////////////////////////////////////////
 	////////first generate the datafile and then the header for the datafile//////////
 
-  if( ckdev->isFileInBuffer(prj->getProjectDir() + info.data_file)){
-      ckdev->switchToFile(prj->getProjectDir() + info.data_file);
-      ckdev->slotFileSave();
-      ckdev->slotFileClose();
-  }
+  #warning FIXME file handling
+  //  if( ckdev->isFileInBuffer(prj->getProjectDir() + info.data_file)){
+  //      ckdev->switchToFile(prj->getProjectDir() + info.data_file);
+  //      ckdev->slotFileSave();
+  //      ckdev->slotFileClose();
+  //  }
 
   cerr << "generate";
   QFile file(prj->getProjectDir() + info.data_file);
@@ -435,12 +436,13 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
 		 || kdlg_get_edit_widget()->wasVarnameChanged()){
     QString var;
     bool was_in_buffer = false;
-    if( ckdev->isFileInBuffer(prj->getProjectDir() + info.header_file)){
-      ckdev->switchToFile(prj->getProjectDir() + info.header_file);
-      ckdev->slotFileSave();
-      ckdev->slotFileClose();
-      was_in_buffer = true;
-    }
+    #warning FIXME file handling
+    // if( ckdev->isFileInBuffer(prj->getProjectDir() + info.header_file)){
+//       ckdev->switchToFile(prj->getProjectDir() + info.header_file);
+//       ckdev->slotFileSave();
+//       ckdev->slotFileClose();
+//       was_in_buffer = true;
+//     }
     
     file.setName(prj->getProjectDir() + info.header_file);
     QStrList list;

@@ -29,8 +29,9 @@ class FileCloseAllDlg : public QDialog
 public:
 
     FileCloseAllDlg(QWidget* parent =0,const char* name = 0,QStringList* files=0);
-    
- protected:
+    void getSelectedFiles(QStringList* list);
+	
+	protected:
     QPushButton* sellect_all_button;
     QPushButton* sellect_none_button;
     QPushButton* ok_button;

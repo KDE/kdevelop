@@ -111,241 +111,137 @@ void CKDevelop::doStateCommand(int cmdNum) {
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotFileNew(){
-  
-  slotStatusMsg(i18n("Creating new file..."));
-  newFile(false);
-  slotStatusMsg(i18n("Ready."));
+    slotStatusMsg(i18n("Creating new file..."));
+    newFile(false);
+    slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotFileOpen(){
-  slotStatusMsg(i18n("Opening file..."));
-
-  QString str;
-  if(project){
-    str = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this);
-  }
-  else{
+    slotStatusMsg(i18n("Opening file..."));
+    QString str;
+    if(project){
+	str = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this);
+    }
+    else{
     str = KFileDialog::getOpenFileName(0,"*",this);
-  }  
-  if (!str.isEmpty()) // nocancel
-  {
-    switchToFile(str);
-  }
-
-  slotStatusMsg(i18n("Ready."));
+    }  
+    if (!str.isEmpty()) // nocancel
+	{
+	    switchToFile(str);
+	}
+    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileOpen( int id_ ){
-  slotStatusMsg(i18n("Opening file..."));
-
-  QString str=file_open_list.at(id_);
-	
-  switchToFile(str);
-
-  slotStatusMsg(i18n("Ready."));
-
+    slotStatusMsg(i18n("Opening file..."));
+    QString str=file_open_list.at(id_);
+    switchToFile(str);
+    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileClose(){
    //  // if editor_view->editor isn't shown don't proceed
     if (editor_view==0)
 	return;
-    
     slotStatusMsg(i18n("Closing file..."));
-    QString filename = editor_view->currentEditor()->getName();
-    int msg_result;
-
-    if(editor_view->currentEditor()->isModified()){
-	
-	// no autosave if the user intends to save a file
-	if (bAutosave)
-	    saveTimer->stop();
-	
-	msg_result = KMessageBox::warningYesNoCancel(this, i18n("The document was modified,save?"));
-	// restart autosaving
-	if (bAutosave)
-	    saveTimer->start(saveTimeout);
-	
-	if (msg_result == KMessageBox::Yes){ // yes
-	
-	    {
-		saveFileFromTheCurrentEditWidget();
-		if (editor_view->currentEditor()->isModified())
-		    msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
-	    }
-	}
-	
-	if (msg_result == KMessageBox::Cancel) // cancel
-	    {
-		slotStatusMsg(i18n("Ready."));
-		return;
-	    }
-    }
-
+    editor_view->close();
     setMainCaption();
     slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotFileCloseAll(){
+bool CKDevelop::slotFileCloseAll(){
     QStringList files;
-    files.append("KJKL");
-    files.append("KJKL");
-    files.append("KJKL");
-    FileCloseAllDlg dlg(this,"DLG",&files);
-    dlg.exec();
-    return;
+    QStringList selected_files;
+    EditorView *tmp_editor_view =0;
+    slotStatusMsg(i18n("Closing all files..."));
+
+
+    // get all modified files
     
-#warning FIXME MDI stuff
-  // slotStatusMsg(i18n("Closing all files..."));
-//   TEditInfo* actual_info;
-//   QStrList handledNames;
-//   bool cont=true;
-
-//   setInfoModified(header_widget->getName(), header_widget->isModified());
-//   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
-
-//   for(actual_info=edit_infos.first();cont && actual_info != 0;)
-//   {
-//     TEditInfo *next_info=edit_infos.next();
-//     if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
-//     {
-// #warning FIXME: QMessageBox has 3 buttons maximum
-// #if 0
-//         KMsgBox *files_close=new KMsgBox(this,i18n("Save changed files ?"),
-//                                          i18n("The project\n\n%1\n\ncontains changed files."
-//                                               "Save modified file\n\n%2?\n\n")
-//                                          .arg(prj->getProjectName).arg(actual_info->filename),
-//                                          KMsgBox::QUESTION,
-//                                          i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
-
-//       // show the messagea and store result in result:
-
-//       files_close->show();
-
-//       int result=files_close->result();
-// #else
-//       int result = 0; // until problem above is resolved
-// #endif
-
-//       // create the save project messagebox
-
-//       // what to do
-//       if(result==1) // Yes- only save the actual file
-//       {
-//         // save file as if Untitled and close file
-//         if(isUntitled(actual_info->filename))
-//         {
-//           switchToFile(actual_info->filename);
-//           handledNames.append(actual_info->filename);
-// 	        cont=fileSaveAs();
-//           next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-//         }				
-//         else // Save file and close it
-//         {
-//           switchToFile(actual_info->filename);
-//           handledNames.append(actual_info->filename);
-//           slotFileSave();
-//           actual_info->modified=editor_view->currentEditor()->isModified();
-//           cont=!actual_info->modified; //something went wrong
-//         }
-//       }
-
-//       if(result==2) // No - no save but close
-//       {
-//         handledNames.append(actual_info->filename);
-//         actual_info->modified=false;
-//         removeFileFromEditlist(actual_info->filename); // immediate remove
-//         next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-//       }
-
-//       if(result==3) // Save all
-//       {
-//         slotFileSaveAll();
-//         break;
-//       }
-
-//       if(result==4) // Cancel
-//       {
-//         cont=false;
-// 	      break;
-//       }	
-//     }  // end actual file close
-
-//     actual_info=next_info;
-//   } // end for-loop
-
-//   // check if something went wrong with saving
-//   if ( cont )
-//   {
-//     for( actual_info=edit_infos.first();
-//          cont && actual_info != 0;
-//          actual_info=edit_infos.next())
-//     {
-//       if ( actual_info->modified )
-//         cont=false;
-//     } // end for-loop
-
-//     if(cont)
-//     {
-//       header_widget->clear();
-//       cpp_widget->clear();
-//       menu_buffers->clear();
-
-//       //clear all edit_infos before starting a new project
-//       edit_infos.clear();
-
-//       header_widget->setName(i18n("Untitled.h"));
-//       cpp_widget->setName(i18n("Untitled.cpp"));
-//       TEditInfo* edit1 = new TEditInfo;
-//       TEditInfo* edit2 = new TEditInfo;
-//       edit1->filename = header_widget->getName();
-//       edit2->filename = cpp_widget->getName();
-
-//       edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
-//       edit1->modified=false;
-//       edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
-//       edit2->modified=false;
-//       edit_infos.append(edit1);
-//       edit_infos.append(edit2);
-//     }
-//   }
-
-//   slotStatusMsg(i18n("Ready."));
-}
-
-bool CKDevelop::saveFileFromTheCurrentEditWidget(){
-    if (editor_view==0)
-	return false;
-    
-    QString filename=editor_view->currentEditor()->getName();
-	
-    if (editor_view->currentEditor()->modifiedOnDisk()) {
-	if (KMessageBox::questionYesNo(this, 
-				       i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(filename))
-	    == KMessageBox::No)
-	    return false;
+    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    QListIterator<QextMdiChildView> it(editorviews);
+    for (; it.current(); ++it) {
+	tmp_editor_view = static_cast<EditorView*>(it.current());
+	if (tmp_editor_view->currentEditor()->isModified() ) { 
+	    files.append(tmp_editor_view->currentEditor()->getName());
+	}
     }
-    editor_view->currentEditor()->doSave();
+    if(files.count() > 0){  // only if files are modified
+	FileCloseAllDlg dlg(this,"DLG",&files);
+	if(dlg.exec()){
+	    // save all selected files
+	    dlg.getSelectedFiles(&selected_files);
+	    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+	    QListIterator<QextMdiChildView> it(editorviews);
+		    
+	    for (; it.current(); ++it) {
+		tmp_editor_view = static_cast<EditorView*>(it.current());
+		if(selected_files.contains(tmp_editor_view->currentEditor()->getName())){  
+		    saveFile(tmp_editor_view->currentEditor()->getName());
+		}
+		tmp_editor_view->ask_by_closing = false; // questions,no dlg boxes just closing :-)
+		tmp_editor_view->close();    
+	    }
+	}
+	else{
+	    return false;
+	}
+	
+    }
+    else {
+	QListIterator<QextMdiChildView> it2(editorviews);
+	for (; it2.current(); ++it2) {
+	    EditorView *tmp_editor_view = static_cast<EditorView*>(it2.current());
+	    tmp_editor_view->close();
+	}
+    }
+    
+    slotStatusMsg(i18n("Ready."));
+
     return true;
 }
 
+void CKDevelop::slotFileWasSaved(EditorView* editor){
+     ComponentManager::self()->notifySavedFile(editor->currentEditor()->getName());
+}
 
+
+bool CKDevelop::saveFile(QString abs_filename){
+    // Editors...
+    cerr << "\nsaving " << abs_filename; 
+    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    QListIterator<QextMdiChildView> it(editorviews);
+    
+    for (; it.current(); ++it) {
+	EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
+	if(tmp_editor_view->currentEditor()->isEditing(abs_filename)){  
+	    if (tmp_editor_view->currentEditor()->modifiedOnDisk()) {
+		if (KMessageBox::questionYesNo(this, 
+					       i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(abs_filename))
+		    == KMessageBox::No){
+		    return false;
+		}
+	    }
+	    QString sShownFilename=QFileInfo(abs_filename).fileName();
+	    slotStatusMsg(i18n("Saving file ")+sShownFilename);
+	    tmp_editor_view->currentEditor()->doSave();
+	    ComponentManager::self()->notifySavedFile(abs_filename);
+	    slotStatusMsg(i18n("Ready."));
+	    return true;
+	}
+    }
+}
+    
+    
 void CKDevelop::slotFileSave(){
     // if editor_view->editor isn't shown don't proceed
     if (editor_view==0)
 	return;
     
    QString filename=editor_view->currentEditor()->getName();
-   QString sShownFilename=QFileInfo(filename).fileName();
-   slotStatusMsg(i18n("Saving file ")+sShownFilename);
-
-   saveFileFromTheCurrentEditWidget(); // save the current file
-   ComponentManager::self()->notifySavedFile(filename);
-
-   slotStatusMsg(i18n("Ready."));
-   QString sHelpMsg = editor_view->currentEditor()->isModified()? i18n("File %1 not saved.") : i18n("File %1 saved.");
-   slotStatusHelpMsg(sHelpMsg.arg(sShownFilename));
+   saveFile(filename);
+   //   saveFileFromTheCurrentEditWidget(); // save the current file
 }
 
 void CKDevelop::slotFileSaveAs(){
