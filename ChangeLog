@@ -1,3 +1,7 @@
+2001-07-09  rokrau@yahoo.com
+    * Fix a null pointer crash in main.cpp. I cant leave you guys alone for 
+      a single week, can I? :-) 
+
 2001-07-07  jbb <jbb@kdevelop.org>
     * Added qt3 string support
     
