@@ -33,19 +33,22 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
     : RunOptionsWidgetBase(parent, name),
       m_dom(dom), m_configGroup(configGroup)
 {
+    // Create the "Environment Variables" GUI
     env_var_group->setColumnLayout( 1, Qt::Vertical );
     m_environmentVariablesWidget = new EnvironmentVariablesWidget( dom, configGroup + "/run/envvars", env_var_group );
 
-    // Store the build directory in a KURL
+    // Store the BUILD directory in a KURL
     if (buildDirectory.right(1) == "/")
-      m_buildDirectory = buildDirectory;
+        m_buildDirectory = buildDirectory;
     else
-      m_buildDirectory = buildDirectory + "/";
+        m_buildDirectory = buildDirectory + "/";
     m_buildDirectory.cleanPath();
 
+    // Display the BUILD directory in a label
     buildDirectory_label->setText(m_buildDirectory.directory(false, false));
 
-
+    // Update the "Run Directory" radio buttons
+    // "Directory where the executable is" is set by default
     QString directoryRadioString = DomUtil::readEntry(dom, configGroup + "/run/directoryradio");
     if ( directoryRadioString == "build" )
         buildDirectory_radio->setChecked(true);
@@ -54,12 +57,31 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
             customDirectory_radio->setChecked(true);
         else
             executableDirectory_radio->setChecked(true);
-    directoryRadioChanged();
-    
-    customRunDirectory_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/customdirectory"));
-    mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
-    mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
+
+    // Read the custom directory, store it in a KURL and update it's edit box
+    QString customRunDirectory = DomUtil::readEntry(dom, configGroup + "/run/customdirectory");
+    if (customRunDirectory.right(1) == "/")
+        m_customRunDirectory = customRunDirectory;
+    else
+        m_customRunDirectory = customRunDirectory + "/";
+    m_customRunDirectory.cleanPath();
+    customRunDirectory_edit->setText(m_customRunDirectory.directory(false, false));
+
+    // Read the main program path, store it in a KURL and update it's edit box
+    QString mainProgramPath = DomUtil::readEntry(dom, configGroup + "/run/mainprogram");
+    if ( customDirectory_radio->isChecked() )
+        m_mainProgramAbsolutePath = mainProgramPath;
+    else
+        m_mainProgramAbsolutePath = m_buildDirectory.directory(false, false) + mainProgramPath;
+    m_mainProgramAbsolutePath.cleanPath();
+    if ( customDirectory_radio->isChecked() )
+        mainprogram_edit->setText(m_mainProgramAbsolutePath.path());
+    else
+        mainprogram_edit->setText(URLUtil::relativePath(m_buildDirectory.directory(false, false), m_mainProgramAbsolutePath.path(), false));
+
+    // Read the main program command line arguments and store them in the edit box
     progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
+
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
     autocompile_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/autocompile", true));
 }
@@ -95,14 +117,12 @@ void RunOptionsWidget::directoryRadioChanged()
         customRunDirectory_edit->setEnabled(true);
         browseCustomButton->setEnabled(true);
         mainProgram_relativeness_label->setText("( absolute path )");
-        /// FIXME: Adjust mainprogram_edit text
-        // mainprogram_edit->setText( absolute path to executable );
+        mainprogram_edit->setText( m_mainProgramAbsolutePath.path() );
     } else {
         customRunDirectory_edit->setEnabled(false);
         browseCustomButton->setEnabled(false);
         mainProgram_relativeness_label->setText("( relative to BUILD directory )");
-        /// FIXME: Adjust mainprogram_edit text
-        // mainprogram_edit->setText( path to executable relative to BUILD directory );
+        mainprogram_edit->setText( URLUtil::relativePath(m_buildDirectory.directory(false, false), m_mainProgramAbsolutePath.path(), false) );
     }  
 }
 
@@ -130,12 +150,6 @@ void RunOptionsWidget::browseCustomDirectory()
 
 void RunOptionsWidget::browseMainProgram()
 {
-    /// FIXME: Adjust mainprogram_edit text in the end of this function
-    /// mainprogram_edit->setText( path to executable relative to BUILD directory );
-    /// or
-    /// mainprogram_edit->setText( absolute path to executable );
-    /// depending on the current selected run directory
-    
     QString start_directory;
     if ( customDirectory_radio->isChecked() )
         start_directory = mainprogram_edit->text().stripWhiteSpace();
@@ -178,15 +192,24 @@ void RunOptionsWidget::browseMainProgram()
     // if after the dialog execution the OK button was selected:
         path = dlg->selectedFile().stripWhiteSpace();
         if (!path.isEmpty()) {
-            QString relative = URLUtil::relativePath(m_buildDirectory.directory(false, false), path, false);
+          
+            m_mainProgramAbsolutePath = path;
 
-            // if it's relative, uses it (if it's absolute don't touch it)
-            if (relative.isEmpty() == false) {
-                // add the necessary "./" to make sure it
-                // executes the correct (local) file
-                path = "./" + relative;
+            if ( customDirectory_radio->isChecked() ) {
+            // Store the absolute path
+
+                mainprogram_edit->setText(path);
+
+            } else {
+            // Store the path relative to BUILD directory
+            
+                QString relative = URLUtil::relativePath(m_buildDirectory.directory(false, false), path, false);
+
+                if (relative.isEmpty() == false) {
+                    mainprogram_edit->setText(relative);
+                }
             }
-            mainprogram_edit->setText(path);
+            
         }
     }
     delete dlg;
