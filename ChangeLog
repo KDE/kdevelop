@@ -1,3 +1,8 @@
+2003-01-06  Victor Röder  <victor_roeder@gmx.de>
+	* Applied patch of Richard Lärkäng for top source directory support (only in Autoprojectpart yet!)
+	* Applied patch of Hamish Rodda for a more stable PartController::editDocument(...)
+	* Minor changes to Autoprojectpart
+
 2003-01-05 F@lk Brettschneider <falk@kdevelop.org>
 	* MDI taskbar is back as Viewbar (TODO: read config if on/off on startup)
 	* switching the QextMDI user-interface modes now immediately and properly via Options dialog again (extended KDevTopLevel interface therefore), fixed names in the ui mode chooser dialog
