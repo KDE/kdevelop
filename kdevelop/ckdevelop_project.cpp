@@ -604,6 +604,17 @@ void CKDevelop::slotProjectOpen(){
 void CKDevelop::slotProjectOpenRecent(int id_)
 {
   slotProjectOpenCmdl(recent_projects.at(id_));
+  // --- added by Olaf Hartig (olaf@punkbands.de) 06.Jun.2000
+  QString szTmp = recent_projects.at(id_);
+  recent_projects.remove(id_);
+  recent_projects.insert(0,szTmp);
+  
+  recent_projects_menu->clear();
+  uint i;
+  for ( i =0 ; i < recent_projects.count(); i++){
+    recent_projects_menu->insertItem(recent_projects.at(i));
+  }
+  // ---
 }
 
 void CKDevelop::slotProjectOpenCmdl(QString prjname)
