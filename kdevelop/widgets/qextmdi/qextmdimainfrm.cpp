@@ -502,6 +502,11 @@ void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
 
 void QextMdiMainFrm::setSysButtonsAtMenuPosition()
 {
+   if( m_pMainMenuBar == 0)
+      return;
+   if( m_pMainMenuBar->parentWidget() == 0)
+      return;
+      
    int menuW = m_pMainMenuBar->parentWidget()->width();
 #ifdef _OS_WIN32_
    int h = 16;
