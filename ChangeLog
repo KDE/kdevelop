@@ -1,3 +1,7 @@
+2002-05-19  F@lk Brettschneider <falk@kdevelop.org>
+	* applied patch of Marcus Gruendler which workarounds changed (maybe buggy) Qt behaviour on text output in output tool-view
+	  (reviewed by Harald Fernengel)
+
 2002-04-27  August Hörandl  <august.hoerandl@gmx.at>
 	* kdevelop/cclassview.cpp: fixed wrong path for new file
 	  reviewed by Roland Krause
