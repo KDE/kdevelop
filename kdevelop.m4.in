@@ -164,7 +164,7 @@ dnl
 AC_DEFUN(KDEV_PATH_GNUSTEPDOCDIR,
 [
 AC_MSG_CHECKING([for GNUstep documentation])
-if test -z $GNUSTEP_SYSTEM_ROOT ; then
+if test -z ${GNUSTEP_SYSTEM_ROOT:-""} ; then
 GNUSTEPDOCDIR=
 AC_MSG_RESULT(not found)
 else
