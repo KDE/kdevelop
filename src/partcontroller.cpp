@@ -78,6 +78,7 @@ PartController::PartController(QWidget *parent)
   connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(updateMenuItems()));
   connect(this, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
   connect(dirWatcher, SIGNAL(dirty(const QString&)), this, SLOT(dirty(const QString&)));
+  connect(this, SIGNAL(fileDirty(const KURL& )), this, SLOT(slotFileDirty(const KURL&)) );
 
   m_history.setAutoDelete( true );
   m_restoring = false;
@@ -468,7 +469,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
   connect(part, SIGNAL(completed()), this, SLOT(slotRestoreStatus()));
-  connect(part, SIGNAL(fileNameChanged(const KURL &)), this, SLOT(slotFileNameChanged()));
+  connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotFileNameChanged()));
 
   // Connect to the document's views newStatus() signal in order to keep track of the
   // modified-status of the document.
@@ -526,7 +527,7 @@ void PartController::slotFileNameChanged()
 
   QString path = ro_part->url().path();
   accessTimeMap[ ro_part ] = dirWatcher->ctime( path );
-  emit fileDirty( path );
+  emit fileDirty( ro_part->url() );
 }
 
 QPopupMenu *PartController::contextPopupMenu()
@@ -1062,7 +1063,7 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
 void PartController::dirty( const QString& fileName )
 {
 //  kdDebug(9000) << "DIRRRRRTY: " << fileName << " " << dirWatcher->ctime( fileName ).toString( "mm:ss:zzz" ) << endl;
-  emit fileDirty( fileName );
+  emit fileDirty( KURL( fileName ) );
 }
 
 bool PartController::isDirty( KParts::ReadOnlyPart* part )
@@ -1123,6 +1124,23 @@ void PartController::slotRestoreStatus( )
 
   if (!isDirty(ro_part))
     restorePartWidgetIcon(ro_part);
+}
+
+void PartController::slotFileDirty( const KURL & url )
+{
+	kdDebug(9000) << k_funcinfo << endl;
+	
+	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( partForURL( url ) );
+	if ( !ro_part || !ro_part->widget() ) return;
+	
+	if ( isDirty( ro_part ) ) 
+	{
+		ro_part->widget()->setIcon( SmallIcon("revert") );
+	} 
+	else 
+	{
+		ro_part->widget()->setIcon( SmallIcon("kdevelop") );
+	}
 }
 
 #include "partcontroller.moc"

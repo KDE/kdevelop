@@ -92,7 +92,6 @@ public slots:
   void gotoPreviousWindow();
   void gotoFirstWindow();
   void gotoLastWindow();
-  void fileDirty(const QString&);
   /** Reimplemented from KMdiMainFrm*/
   virtual void fillWindowMenu();
   /** Reimplemented from KMdiMainFrm to save chosen mode */

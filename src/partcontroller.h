@@ -102,6 +102,7 @@ private slots:
   void addHistoryEntry( HistoryEntry* entry );
 
   void dirty( const QString& fileName );
+  void slotFileDirty( const KURL & url );
   void slotNewStatus();
   void slotRestoreStatus();
 

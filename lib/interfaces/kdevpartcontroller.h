@@ -46,6 +46,8 @@ signals:
    * Emitted when a file has been modified outside of KDevelop
    */
   void fileDirty(const QString &fileName);
+  void fileDirty( const KURL & url );
+  
 
 };
 
