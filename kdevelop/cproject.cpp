@@ -414,7 +414,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
     makefile_name += "Makefile.am";
   }
 
-  //add the file into the filesentry in the Makefileam group
+  //add the file into the filesentry in the Makefile.am group
   config.setGroup(makefile_name);
   config.readListEntry("files",list_files);
   list_files.append(rel_name);
@@ -431,10 +431,12 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
   //  cerr << endl << "*check:*" << makefile_name;
   
   while((slash_pos = makefile_name.findRev('/')) != -1){ // if found
+
     slash2_pos = makefile_name.findRev('/',slash_pos-1);
-    if(slash2_pos != -1){
+    if(slash2_pos != -1 && makefile_name != "/"){
       makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
       check_makefile_list.append(makefile_name);
+      cerr << "append to check_makefile_list: " << makefile_name << endl;
     } 
     else{
       makefile_name = "";

@@ -32,8 +32,10 @@ AM_PROG_LEX
 dnl don't build libraries. This mainly disables the configure switches
 dnl --enable-shared and --enable-static, since they don't make that much
 dnl sense then :)
-AM_DISABLE_LIBRARIES
+dnl AM_DISABLE_LIBRARIES
 
+
+AM_ENABLE_SHARED
 dnl let libtool configure. Checks for the way to handle your compiler
 dnl to do some magic 
 KDE_PROG_LIBTOOL
@@ -62,7 +64,7 @@ dnl examples are specific headers, libraries, etc.
 dnl everything to compile and run a KDE program is already checked
 
 dnl add here all your Makefiles. This are created by configure
-AC_OUTPUT(Makefile kdevelop/Makefile kdevelop/docs/Makefile kdevelop/docs/en/Makefile kdevelop/docs/pl/Makefile kdevelop/docs/sv/Makefile kdevelop/docs/ru/Makefile kdevelop/docs/pt/Makefile po/Makefile kdevelop/classparser/Makefile kdevelop/kdlgedit/Makefile kdevelop/kwrite/Makefile kdevelop/docs/de/Makefile kdevelop/pics/mini/Makefile kdevelop/pics/Makefile kdevelop/vc/Makefile kdevelop/print/Makefile kdevelop/templates/Makefile kdevelop/toolbar/Makefile kdevelop/tools/Makefile kdevelop/gfxview/Makefile )
+AC_OUTPUT(Makefile kdevelop/Makefile kdevelop/docs/Makefile kdevelop/docs/en/Makefile kdevelop/docs/pl/Makefile kdevelop/docs/sv/Makefile kdevelop/docs/ru/Makefile kdevelop/docs/pt/Makefile po/Makefile kdevelop/classparser/Makefile kdevelop/kdlgedit/Makefile kdevelop/kwrite/Makefile kdevelop/docs/de/Makefile kdevelop/pics/mini/Makefile kdevelop/pics/Makefile kdevelop/vc/Makefile kdevelop/print/Makefile kdevelop/templates/Makefile kdevelop/toolbar/Makefile kdevelop/tools/Makefile kdevelop/gfxview/Makefile kdlgloader/Makefile )
 
 AC_MSG_WARN("")
 AC_MSG_WARN("")

@@ -1,3 +1,7 @@
+1999-06-18  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* fixed Makefile.am-problem for the kdlgloader
+ 	* fixed problem in cproject.cpp, infinite loop on some systems
+
 1999-06-17  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added KDE-FSS usage to the programming handbook
 	* added almost all menucommands to the accelerator configuration as empty accelerators
