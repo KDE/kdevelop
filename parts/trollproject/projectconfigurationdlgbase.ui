@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>513</width>
-            <height>330</height>
+            <height>345</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -255,7 +255,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Build &amp;mode</string>
+                    <string>Build &amp;Mode</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -672,7 +672,7 @@
                                     <cstring>TextLabel3_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>library path:</string>
+                                    <string>Library path:</string>
                                 </property>
                             </widget>
                         </grid>

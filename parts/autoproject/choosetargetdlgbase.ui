@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>393</width>
-            <height>423</height>
+            <width>456</width>
+            <height>478</height>
         </rect>
     </property>
     <property name="caption">
@@ -24,7 +24,7 @@
                 <cstring>activeTargetRadioButton</cstring>
             </property>
             <property name="text">
-                <string>Add new &amp;files to my Active Target</string>
+                <string>Add new &amp;files to my active target</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -97,7 +97,6 @@
                     </property>
                     <property name="font">
                         <font>
-                            <bold>1</bold>
                         </font>
                     </property>
                     <property name="text">

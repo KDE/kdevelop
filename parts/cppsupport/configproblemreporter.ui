@@ -74,7 +74,7 @@
                 <cstring>groupBox3</cstring>
             </property>
             <property name="title">
-                <string>Special words</string>
+                <string>Special Words</string>
             </property>
             <grid>
                 <property name="name">
@@ -128,15 +128,24 @@
                         <property name="text">
                             <string>Word</string>
                         </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Skip arguments</string>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
                         </property>
                     </column>
                     <column>
                         <property name="text">
-                            <string>Replace word with</string>
+                            <string>Skip Arguments</string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Replace Word With</string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
                         </property>
                     </column>
                     <property name="name">

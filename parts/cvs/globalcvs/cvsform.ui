@@ -132,7 +132,7 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>init_check</cstring>
             </property>
             <property name="text">
-                <string>Init Root</string>
+                <string>Init root</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Check if you defined a new CVS Root</string>

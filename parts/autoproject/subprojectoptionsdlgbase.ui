@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>404</width>
+            <width>442</width>
             <height>437</height>
         </rect>
     </property>
@@ -52,7 +52,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -136,7 +135,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -212,7 +210,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -326,7 +323,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -361,7 +357,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -594,7 +589,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -777,7 +771,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">

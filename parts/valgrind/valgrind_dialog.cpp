@@ -13,7 +13,7 @@
 
 
 ValgrindDialog::ValgrindDialog( QWidget* parent )
-  : KDialogBase( parent, "valgrind dialog", true, i18n("Valgrind memory check"), Ok|Cancel )
+  : KDialogBase( parent, "valgrind dialog", true, i18n("Valgrind Memory Check"), Ok|Cancel )
 {
   w = new DialogWidget( this );
   w->valExecutableEdit->setURL( "valgrind" );

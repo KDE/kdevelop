@@ -308,7 +308,7 @@
                             <cstring>edittemplate_button</cstring>
                         </property>
                         <property name="text">
-                            <string>C&amp;hange target...</string>
+                            <string>C&amp;hange Target...</string>
                         </property>
                     </widget>
                     <widget class="QPushButton" row="2" column="1">

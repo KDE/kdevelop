@@ -24,7 +24,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Subclass properties</string>
+                <string>Subclass Properties</string>
             </property>
             <grid>
                 <property name="name">
@@ -74,7 +74,7 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>Return type</string>
+                            <string>Return Type</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -108,7 +108,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Class name</string>
+                        <string>Class name:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -116,7 +116,7 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>File name</string>
+                        <string>File name:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="1">

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>448</width>
-            <height>235</height>
+            <width>521</width>
+            <height>240</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -106,7 +106,6 @@
                             </property>
                             <property name="font">
                                 <font>
-                                    <bold>1</bold>
                                 </font>
                             </property>
                             <property name="text">
@@ -127,7 +126,6 @@
                             </property>
                             <property name="font">
                                 <font>
-                                    <bold>1</bold>
                                 </font>
                             </property>
                             <property name="text">
@@ -205,11 +203,10 @@
                     </property>
                     <property name="font">
                         <font>
-                            <bold>1</bold>
                         </font>
                     </property>
                     <property name="text">
-                        <string>Enter a new file name (with extension)</string>
+                        <string>Enter a new file name (with extension):</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>fileEdit</cstring>
@@ -281,7 +278,7 @@
                         <cstring>cancelButton</cstring>
                     </property>
                     <property name="text">
-                        <string>C&amp;ancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>

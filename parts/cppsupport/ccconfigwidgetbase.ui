@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>551</width>
-            <height>472</height>
+            <height>489</height>
         </rect>
     </property>
     <property name="caption">
@@ -976,7 +976,7 @@
                                                 <cstring>TextLabel1_2</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Filename:</string>
+                                                <string>File name:</string>
                                             </property>
                                         </widget>
                                         <widget class="KURLRequester">

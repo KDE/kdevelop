@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>378</width>
-            <height>176</height>
+            <height>182</height>
         </rect>
     </property>
     <property name="caption">
@@ -144,7 +144,7 @@
                         <cstring>cancelButton</cstring>
                     </property>
                     <property name="text">
-                        <string>C&amp;ancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>AddIconDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>301</width>
-            <height>202</height>
+            <height>218</height>
         </rect>
     </property>
     <property name="caption">
@@ -34,7 +34,6 @@
             </property>
             <property name="font">
                 <font>
-                    <bold>1</bold>
                 </font>
             </property>
             <property name="text">
@@ -53,7 +52,6 @@
             </property>
             <property name="font">
                 <font>
-                    <bold>1</bold>
                 </font>
             </property>
             <property name="text">
@@ -77,7 +75,6 @@
             </property>
             <property name="font">
                 <font>
-                    <bold>1</bold>
                 </font>
             </property>
             <property name="text">
@@ -96,7 +93,6 @@
             </property>
             <property name="font">
                 <font>
-                    <bold>1</bold>
                 </font>
             </property>
             <property name="text">
@@ -146,6 +142,12 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">

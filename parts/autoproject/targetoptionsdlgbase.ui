@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>TargetOptionsDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>489</width>
+            <width>627</width>
             <height>474</height>
         </rect>
     </property>
@@ -55,7 +55,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -128,7 +127,6 @@
                                         </property>
                                         <property name="font">
                                             <font>
-                                                <bold>1</bold>
                                             </font>
                                         </property>
                                         <property name="text">
@@ -153,6 +151,12 @@
                         </property>
                         <property name="sizeType">
                             <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                     <spacer row="1" column="0">
@@ -183,7 +187,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -217,6 +220,12 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
                     </spacer>
                 </grid>
             </widget>
@@ -243,7 +252,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -278,7 +286,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -295,7 +303,6 @@
                         </property>
                         <property name="font">
                             <font>
-                                <bold>1</bold>
                             </font>
                         </property>
                         <property name="text">
@@ -329,6 +336,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                             <widget class="QPushButton">
                                 <property name="name">
@@ -356,6 +369,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                         </vbox>
                     </widget>
@@ -367,7 +386,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -401,6 +420,12 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QPushButton">
@@ -445,6 +470,12 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
                             </spacer>
                         </vbox>
                     </widget>
@@ -474,6 +505,12 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">

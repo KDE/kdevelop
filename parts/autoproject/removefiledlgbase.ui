@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>447</width>
-            <height>250</height>
+            <height>270</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -112,7 +112,6 @@
                             </property>
                             <property name="font">
                                 <font>
-                                    <bold>1</bold>
                                 </font>
                             </property>
                             <property name="text">
@@ -133,7 +132,6 @@
                             </property>
                             <property name="font">
                                 <font>
-                                    <bold>1</bold>
                                 </font>
                             </property>
                             <property name="text">
