@@ -82,10 +82,10 @@ void AutoProjectTool::parseMakefileam(const QString &filename, QMap<QCString,QCS
     
     KRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
 
-    while (!stream.eof()) {
+    while (!stream.atEnd()) {
         QString line;
         QString s = stream.readLine();
-        while (!s.isEmpty() && s[s.length()-1] == '\\' && !stream.eof()) {
+        while (!s.isEmpty() && s[s.length()-1] == '\\' && !stream.atEnd()) {
             // Read continuation lines
             line += s.left(s.length()-1);
             s = stream.readLine();
@@ -119,7 +119,7 @@ void AutoProjectTool::modifyMakefileam(const QString &filename, QMap<QCString,QC
     
     KRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \\t]*:?=[ \\t]*(.*)$");
     
-    while (!ins.eof()) {
+    while (!ins.atEnd()) {
         QString line;
         QString s = ins.readLine();
         if (re.match(s)) {
@@ -131,12 +131,12 @@ void AutoProjectTool::modifyMakefileam(const QString &filename, QMap<QCString,QC
                     break;
             if (it != variables.end()) {
                 // Skip continuation lines
-                while (!s.isEmpty() && s[s.length()-1] == '\\' && !ins.eof())
+                while (!s.isEmpty() && s[s.length()-1] == '\\' && !ins.atEnd())
                     s = ins.readLine();
                 s = it.key() + " = " + it.data();
                 variables.remove(it);
             } else {
-                while (!s.isEmpty() && s[s.length()-1] == '\\' && !ins.eof()) {
+                while (!s.isEmpty() && s[s.length()-1] == '\\' && !ins.atEnd()) {
                     outs << s << endl;
                     s = ins.readLine();
                 }

@@ -11,7 +11,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qlcdnumber.h>
 #include <qpopupmenu.h>
 #include <qwhatsthis.h>
 #include <kaction.h>

@@ -17,12 +17,14 @@
 #include <kprocess.h>
 
 #include "appwizarddlg.h"
+#include "appwizardfactory.h"
 #include "appwizardpart.h"
 
 
 AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
     : KDevPart(api, parent, name)
 {
+    setInstance(AppWizardFactory::instance());
     setXMLFile("kdevappwizard.rc");
 
 #if 0

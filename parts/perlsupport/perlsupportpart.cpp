@@ -142,7 +142,7 @@ void PerlSupportPart::parse(const QString &fileName)
 
     QCString line;
     int lineNo = 0;
-    while (!stream.eof()) {
+    while (!stream.atEnd()) {
         line = stream.readLine().stripWhiteSpace().latin1();
         if (subre.match(line)) {
             ParsedMethod *sub = new ParsedMethod;

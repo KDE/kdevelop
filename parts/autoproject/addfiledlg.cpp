@@ -40,7 +40,7 @@ static void copyFile(const QString &src, const QString &dest)
 
     QTextStream ins(&inf);
     QTextStream outs(&outf);
-    while (!ins.eof()) {
+    while (!ins.atEnd()) {
         QString s = ins.readLine();
         outs << s << endl;
     }

@@ -51,7 +51,8 @@ private:
 
 
 
-DocTreeConfigWidget::DocTreeConfigWidget(DocTreeViewWidget *widget, QWidget *parent, const char *name)
+DocTreeConfigWidget::DocTreeConfigWidget(DocTreeViewWidget *widget,
+                                         QWidget *parent, const char *name)
     : QTabWidget(parent, name)
 {
     m_widget = widget;

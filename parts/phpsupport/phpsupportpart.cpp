@@ -156,9 +156,9 @@ void PHPSupportPart::parse(const QString &fileName)
 	bracketOpen += line.contains("{");
 	bracketClose += line.contains("}");
 
-	//        kdDebug(9014) << "try match line: " << line << endl;
+	//        kdDebug(9018) << "try match line: " << line << endl;
         if (classre.match(line)) {
-	  //kdDebug(9014) << "regex match line: " << line << endl;
+	  //kdDebug(9018) << "regex match line: " << line << endl;
 	  inClass= true;
 	  bracketOpen = line.contains("{");
 	  bracketClose = line.contains("}");
@@ -191,7 +191,7 @@ void PHPSupportPart::parse(const QString &fileName)
 
 	     
         } else if (methodre.match(line)) {
-	  //	  kdDebug(9014) << "regex match line ( method ): " << line << endl;
+	  //	  kdDebug(9018) << "regex match line ( method ): " << line << endl;
 	  ParsedMethod *method = new ParsedMethod;
 	  method->setName(methodre.group(1));
 	  ParsedArgument* anArg = new ParsedArgument();
@@ -203,7 +203,7 @@ void PHPSupportPart::parse(const QString &fileName)
 	  method->setDefinedOnLine(lineNo);
             
 	  if (lastClass && inClass) {
-	    //	    kdDebug(9014) << "in Class: " << line << endl;
+	    //	    kdDebug(9018) << "in Class: " << line << endl;
 	    ParsedMethod *old = lastClass->getMethod(method);
 	    if (!old)
 	      lastClass->addMethod(method);
@@ -214,7 +214,7 @@ void PHPSupportPart::parse(const QString &fileName)
 	  }
         }
 	else if (varre.match(line)) {
-	  kdDebug(9014) << "###########regex match line ( var ): " << varre.group(1) << endl;
+	  kdDebug(9018) << "###########regex match line ( var ): " << varre.group(1) << endl;
 	  if (lastClass && inClass) {
 	    ParsedAttribute* anAttr = new ParsedAttribute();
 	    anAttr->setName(varre.group(1));

@@ -42,7 +42,7 @@ PHPSupportFactory::~PHPSupportFactory()
 KDevPart *PHPSupportFactory::createPartObject(KDevApi *api, QObject *parent,
                                                const QStringList &/*args*/)
 {
-    kdDebug(9016) << "Building PHPSupport" << endl;
+    kdDebug(9018) << "Building PHPSupport" << endl;
     return new PHPSupportPart(api, parent, "php support part");
 }
 

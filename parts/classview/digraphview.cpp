@@ -242,7 +242,7 @@ void DigraphView::process()
 #endif
     ::system(QString("dot -Tplain %1 -o %2").arg(ifile.name()).arg(ofile.name()));
     QTextStream &os = *ofile.textStream();
-    while (!os.eof()) 
+    while (!os.atEnd()) 
         results << os.readLine();
     ofile.close();
 

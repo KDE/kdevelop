@@ -144,7 +144,7 @@ void PythonSupportPart::parse(const QString &fileName)
     QString rawline;
     QCString line;
     int lineNo = 0;
-    while (!stream.eof()) {
+    while (!stream.atEnd()) {
         rawline = stream.readLine();
         line = rawline.stripWhiteSpace().latin1();
         //        kdDebug(9014) << "regex match line: " << line << endl;

@@ -467,7 +467,7 @@ void AutoProjectWidget::parseSubdirs(SubprojectItem *item, QCString /*lhs*/, QCS
         QFile subdirsfile(item->path + "/subdirs");
         if (subdirsfile.open(IO_ReadOnly)) {
             QTextStream subdirsstream(&subdirsfile);
-            while (!subdirsstream.eof()) {
+            while (!subdirsstream.atEnd()) {
                 QString dir = subdirsstream.readLine();
                 dirs.append(dir);
                 dirs.append(" ");

@@ -1,9 +1,15 @@
 Bernd Gehrmann <bernd@physik.hu-berlin.de>
 
+Debugger frontend:
+  John Birch <jbb@kdevelop.org>
+
 C++ source parser:
   Jonas Nordin <jonas.nordin@cenacle.se>
 
-Context menu stuff:
+Java support:
+  Richard Dale <>
+
+Context menu stuff, PHP support:
   Sandy Meier <smeier@kdevelop.org>
 
 htdig searching & indexing:

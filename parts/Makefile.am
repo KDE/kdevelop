@@ -2,9 +2,9 @@
 # interfaces in kdevelop/lib/interfaces which are in turn derived
 # from KPart. 
 
-SUBDIRS = doctreeview classview appwizard outputviews grepview \
-	  debugger javadebugger konsole astyle partselector manager \
-	  cppsupport javasupport pythonsupport perlsupport \
+SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
+	  cppsupport javasupport pythonsupport perlsupport phpsupport \
+	  debugger javadebugger konsole astyle ctags manager tools \
 	  autoproject scriptproject \
-	  kwrite-part simple-editor tools phpsupport
+	  kwrite-part simple-editor
 	  $(PYTHON_SUBDIR)

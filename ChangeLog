@@ -1,13 +1,22 @@
+2001-05-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added a new part 'FileView' which shows all files of
+	  a project sorted in groups like 'Sources' and
+	  'User Interface'. The groups can be configured
+	  by the user. A default setting is provided by the
+	  application wizard.
+
 2001-05-20 Sandy Meier   <smeier@kdevelop.org>
+	
 	* added initial PHP support including a simple php parser
 	* added "hello world" PHP template to AppWizard
 
 2001-05-20  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
-    * Added a new editor interface for debugging 
-      (breakpoints etc.)
-    * Added cast methods to the editor interfaces, so
-      you don't have to pass strings around any longer
+	* Added a new editor interface for debugging
+	  (breakpoints etc.)
+	* Added cast methods to the editor interfaces, so
+          you don't have to pass strings around any longer
 
 2001-05-19  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
