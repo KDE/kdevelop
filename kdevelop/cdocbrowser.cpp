@@ -222,9 +222,7 @@ void CDocBrowser::setDocBrowserOptions(){
 }
 
 void CDocBrowser::slotDocFontSize(int size){
-    int fontSizes[7];
-    const int *oldFontSizes = KHTMLPart::fontSizes();
-    memcpy(fontSizes, oldFontSizes, 7*sizeof(int));
+    QValueList<int> fontSizes = KHTMLPart::fontSizes();
     fontSizes[3] = size;
     KHTMLPart::setFontSizes( fontSizes );
   //  htmlview->parse();
@@ -279,7 +277,6 @@ void CDocBrowser::slotPopupMenu(const QString &, const QPoint & pnt){
   QString text;
 
   if(hasSelection()){
-
     text = selectedText();
     text.replace(QRegExp("^\n"), "");
     int pos=text.find("\n");
