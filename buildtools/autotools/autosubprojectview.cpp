@@ -742,6 +742,31 @@ void AutoSubprojectView::parseSUBDIRS( SubprojectItem *item,
 		}
 		subdirs.replace( QRegExp( "\\$\\(\\s*" + varname + "\\s*\\)" ), varvalue );
 	}
+	
+	//search for AC_SUBST variables and try to replace them with variables 
+	//that have been already defined e.g. in a "kdevelop hint"
+	varre = QRegExp( "\\@(.*)\\@" );
+	varre.setMinimal( true );
+	while ( varre.search( subdirs ) != -1 )
+	{
+		QString varname = varre.cap( 1 );
+		QString varvalue;
+
+		// Search the whole Makefile(.am?)
+		// Note that if the variable isn't found it just disappears
+		// (Perhaps we should add it back in this case?)
+		QMap<QString, QString>::ConstIterator varit = item->variables.find( varname );
+		if ( varit != item->variables.end() )
+		{
+			kdDebug( 9020 ) << "Found Makefile var " << varname << ", adding dirs <" << varit.data() << ">" << endl;
+			varvalue = varit.data();
+		}
+		else
+		{
+			kdDebug( 9020 ) << "Not found Makefile var " << varname << endl;
+		}
+		subdirs.replace( QRegExp( "\\@" + varname + "\\@" ), varvalue );
+	}
 
 	QStringList l = QStringList::split( QRegExp( "[ \t]" ), subdirs );
 	l.sort();
