@@ -7,7 +7,8 @@ kioslave_DATA = slave.cpp slave.h slave.protocol src-Makefile.am \
                 kioslave.png subdirs
 template_DATA = kioslave
 
-BUILT_SOURCES = script.local
+DISTCLEANFILES = script.local
+EXTRA_DIST = script
 
 perl = perl
 
@@ -15,6 +16,6 @@ script.local: ${srcdir}/script
 	cp ${srcdir}/script script.local ; \
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
-install-data-local:
+install-data-local: script.local
 	$(INSTALL_DATA) script.local $(kioslavedir)/script
 

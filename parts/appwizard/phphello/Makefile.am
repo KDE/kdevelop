@@ -3,10 +3,11 @@ commondatadir = ${appwizarddatadir}/template-common
 phphellodir = ${appwizarddatadir}/template-phphello
 templatedir = ${appwizarddatadir}/templates
 
-phphello_DATA = app.php app.kdevelop script
+phphello_DATA = app.php app.kdevelop
 template_DATA = phphello
 
-BUILT_SOURCES = script.local
+DISTCLEANFILES = script.local
+EXTRA_DIST = script
 
 perl = perl
 
@@ -14,5 +15,5 @@ script.local: ${srcdir}/script
 	cp ${srcdir}/script script.local ; \
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
-install-data-local:
+install-data-local: script.local
 	$(INSTALL_DATA) script.local $(phphellodir)/script

@@ -8,7 +8,9 @@ kapp_DATA = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
 	    kapp.png app.kdevelop subdirs
 template_DATA = kapp
 
-BUILT_SOURCES = script.local
+
+DISTCLEANFILES = script.local
+EXTRA_DIST = script
 
 perl = perl
 
@@ -16,6 +18,5 @@ script.local: ${srcdir}/script
 	cp ${srcdir}/script script.local ; \
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
-install-data-local:
+install-data-local: script.local
 	$(INSTALL_DATA) script.local $(kappdir)/script
-

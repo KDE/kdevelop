@@ -6,10 +6,10 @@ templatedir = ${appwizarddatadir}/templates
 kdevpartjava_DATA = src-Makefile.am kdevpartjava_part.java \
 	kdevpartjava_factory.h kdevpartjava_factory.cpp kdevpartjava_factory.java kdevpartjava_widget.java \
 	kdevpartjava_part.rc kdevpartjava.desktop
-
 template_DATA = kdevpartjava
 
-BUILT_SOURCES = script.local
+DISTCLEANFILES = script.local
+EXTRA_DIST = script
 
 perl = perl
 
@@ -17,5 +17,5 @@ script.local: ${srcdir}/script
 	cp ${srcdir}/script script.local ; \
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
-install-data-local:
+install-data-local: script.local
 	$(INSTALL_DATA) ${srcdir}/script.local $(kdevpartjavadir)/script

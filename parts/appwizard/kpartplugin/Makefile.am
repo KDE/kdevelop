@@ -8,7 +8,8 @@ kpartplugin_DATA = src-Makefile.am plugin_app.cpp plugin_app.h \
                    kpartplugin.png plugin.kdevelop subdirs
 template_DATA = kpartplugin
 
-BUILT_SOURCES = script.local
+DISTCLEANFILES = script.local
+EXTRA_DIST = script
 
 perl = perl
 
@@ -16,5 +17,5 @@ script.local: ${srcdir}/script
 	cp ${srcdir}/script script.local ; \
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
-install-data-local:
+install-data-local: script.local
 	$(INSTALL_DATA) script.local $(kpartplugindir)/script

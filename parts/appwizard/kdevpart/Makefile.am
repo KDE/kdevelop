@@ -8,7 +8,8 @@ kdevpart_DATA = src-Makefile.am kdevpart_part.cpp kdevpart_part.h \
 		kdevpart_part.rc kdevpart.desktop
 template_DATA = kdevpart
 
-BUILT_SOURCES = script.local
+DISTCLEANFILES = script.local
+EXTRA_DIST = script
 
 perl = perl
 
@@ -16,5 +17,5 @@ script.local: ${srcdir}/script
 	cp ${srcdir}/script script.local ; \
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
-install-data-local:
+install-data-local: script.local
 	$(INSTALL_DATA) script.local $(kdevpartdir)/script
