@@ -63,3 +63,4 @@ ServiceTypes=KDevelop/AppFrontend
 X-KDE-Library=libkdevappview
 X-KDevelop-Version=3
 X-KDevelop-Scope=Core
+X-KDevelop-Properties=OutputTool
