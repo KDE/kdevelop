@@ -60,6 +60,19 @@ inline QValueList<QCString> GCatalog<Tp>::indexList() const
     return l;
 }
 
+template <class Tp>
+bool GCatalog<Tp>::enabled() const
+{
+    return d->enabled;
+}
+
+template <class Tp>
+void GCatalog<Tp>::setEnabled( bool enabled )
+{
+   d->enabled = enabled;
+}
+
+
 /*!
     \fn GCatalog<Tp>::hasIndex( const QString& name ) const
  */

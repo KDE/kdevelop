@@ -64,6 +64,9 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
     while( it != m_catalogs.end() ){
         Catalog* catalog = it.data();
         ++it;
+	
+	if( !catalog->enabled() )
+	    continue;
 
         tags += catalog->query( args );
     }

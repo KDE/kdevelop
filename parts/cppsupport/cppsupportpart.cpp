@@ -165,7 +165,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     setXMLFile( "kdevcppsupport.rc" );
 
     m_catalogList.setAutoDelete( true );
-    setupCatalog();
 
     m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
     m_backgroundParser->start();
@@ -361,10 +360,12 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 void CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
-
+    
     m_projectDirectory = URLUtil::canonicalPath( project()->projectDirectory() );
     m_projectFileList = project()->allFiles();
 
+    setupCatalog();
+    
     m_problemReporter = new ProblemReporter( this );
     m_problemReporter->setIcon( SmallIcon("info") );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
@@ -396,6 +397,16 @@ void CppSupportPart::projectClosed( )
 {
     kdDebug( 9007 ) << "projectClosed( )" << endl;
 
+    QStringList enabledPCSs;
+    QValueList<Catalog*> catalogs = codeRepository()->registeredCatalogs();
+    for( QValueList<Catalog*>::Iterator it=catalogs.begin(); it!=catalogs.end(); ++it )
+    {
+	Catalog* c = *it;
+	if( c->enabled() )
+	    enabledPCSs.push_back( QFileInfo(c->dbName()).baseName() );
+    }
+    DomUtil::writeListEntry( *project()->projectDom(), "kdevcppsupport/references", "pcs", enabledPCSs );
+    
     saveProjectSourceInfo();
 
     m_pCompletionConfig->store();
@@ -1114,6 +1125,7 @@ void CppSupportPart::setupCatalog( )
 {
     kdDebug(9007) << "CppSupportPart::setupCatalog()" << endl;
 
+    QStringList enabledPCSs = DomUtil::readListEntry( *project()->projectDom(), "kdevcppsupport/references", "pcs" );
     QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
 
     KStandardDirs *dirs = CppSupportFactory::instance()->dirs();
@@ -1140,6 +1152,7 @@ void CppSupportPart::setupCatalog( )
     while( it != pcsList.end() ){
         Catalog* catalog = new Catalog();
         catalog->open( *it );
+	catalog->setEnabled( enabledPCSs.contains(QFileInfo(*it).baseName()) );
         ++it;
 
         for( QStringList::Iterator idxIt=indexList.begin(); idxIt!=indexList.end(); ++idxIt )
@@ -1425,22 +1438,22 @@ void CppSupportPart::gotoLine( int line )
 
 void CppSupportPart::recomputeCodeModel( const QString& fileName )
 {
-	if( codeModel()->hasFile(fileName) ){
-		FileDom file = codeModel()->fileByName( fileName );
-		removeWithReferences( fileName );
+    if( codeModel()->hasFile(fileName) ){
+	FileDom file = codeModel()->fileByName( fileName );
+	removeWithReferences( fileName );
+    }
+    
+    m_backgroundParser->lock();
+    if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
+	
+	if( true /*!hasErrors*/ ){
+	    StoreWalker walker( fileName, codeModel() );
+	    walker.parseTranslationUnit( ast );
+	    codeModel()->addFile( walker.file() );
+	    emit addedSourceInfo( fileName );
 	}
-
-	m_backgroundParser->lock();
-	if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
-
-		if( true /*!hasErrors*/ ){
-			StoreWalker walker( fileName, codeModel() );
-			walker.parseTranslationUnit( ast );
-			codeModel()->addFile( walker.file() );
-		    	emit addedSourceInfo( fileName );
-		}
-	}
-	m_backgroundParser->unlock();
+    }
+    m_backgroundParser->unlock();
 }
 
 void CppSupportPart::emitFileParsed( )

@@ -39,9 +39,10 @@ struct _GCatalog_Private
     DB* dbp;
     QMap<QCString, DB*> indexList;
     KRandomSequence rnd;
+    bool enabled;
 
     _GCatalog_Private()
-	: dbp( 0 )
+	: dbp( 0 ), enabled( true )
     {
     }
 
@@ -234,6 +235,9 @@ public:
 
     bool isValid() const;
     QString dbName() const;
+    
+    bool enabled() const;
+    void setEnabled( bool enabled );
 
     virtual void open( const QString& dbName );
     virtual void close();

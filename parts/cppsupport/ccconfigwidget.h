@@ -13,9 +13,12 @@
 #define _CCCONFIGWIDGET_H_
 
 #include "ccconfigwidgetbase.h"
+#include <qmap.h>
 
 class CppSupportPart;
+class Catalog;
 class QCheckListItem;
+
 class CCConfigWidget : public CCConfigWidgetBase
 {
     Q_OBJECT
@@ -25,7 +28,6 @@ public:
     virtual ~CCConfigWidget( );
 
 public slots:
-
     void accept( );
 
 private:
@@ -41,6 +43,7 @@ private:
     QCheckListItem* m_includeTypes;
     QCheckListItem* m_includeEnums;
     QCheckListItem* m_includeTypedefs;
+    QMap<QCheckListItem*, Catalog*> m_catalogs;
 };
 
 #endif

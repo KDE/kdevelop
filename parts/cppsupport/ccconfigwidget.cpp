@@ -34,6 +34,8 @@
 
 // gideon includes
 #include <domutil.h>
+#include <kdevcoderepository.h>
+#include <catalog.h>
 
 #include "ccconfigwidget.h"
 #include "cppsupportpart.h"
@@ -105,6 +107,18 @@ void CCConfigWidget::initCodeCompletionTab( )
 
     m_includeTypedefs = new QCheckListItem( codeCompletionOptions, i18n("Include Typedefs"), QCheckListItem::CheckBox );
     m_includeTypedefs->setOn( c->includeTypedefs() );
+    
+    QListViewItem* pcsOptions = new QListViewItem( advancedOptions, i18n("Persistant Class Store") );
+    QValueList<Catalog*> catalogs = m_pPart->codeRepository()->registeredCatalogs();
+    for( QValueList<Catalog*>::Iterator it=catalogs.begin(); it!=catalogs.end(); ++it )
+    {
+	Catalog* c = *it;
+	QFileInfo dbInfo( c->dbName() );
+	QCheckListItem* item = new QCheckListItem( pcsOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
+	item->setOn( c->enabled() );
+	
+	m_catalogs[ item ] = c;
+    }
 }
 
 void CCConfigWidget::saveCodeCompletionTab( )
@@ -121,7 +135,12 @@ void CCConfigWidget::saveCodeCompletionTab( )
     c->setIncludeTypes( m_includeTypes->isOn() );
     c->setIncludeEnums( m_includeEnums->isOn() );
     c->setIncludeTypedefs( m_includeTypedefs->isOn() );
-
+    
+    for( QMap<QCheckListItem*, Catalog*>::Iterator it=m_catalogs.begin(); it!=m_catalogs.end(); ++it )
+    {
+	it.data()->setEnabled( it.key()->isOn() );
+    }
+    
     c->store();
 }
 
