@@ -571,7 +571,11 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
       }
       docIdStr.setNum(nDocs);
       QDomElement docEl = domdoc.createElement("Doc" + docIdStr);
-      docEl.setAttribute( "FileName", pDoc->currentURL());
+      QString fname = pDoc->currentURL();
+      if (fname.left(5) == QString("file:")) {
+        fname = fname.right(fname.length()-5); // store without 'file:'
+      }
+      docEl.setAttribute( "FileName", fname);
       docsAndViewsEl.appendChild( docEl);
       // save the document itself
 //???         if (pDoc->bIsModified())
