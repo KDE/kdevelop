@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KDevDesignerPart
+Name[sv]=KDevelop designerdel
+Name[ta]=கேமேம்பாட்டு வடிவமைப்பாளர் பகுதி
 Name[xx]=xxKDevDesignerPartxx
 MimeType=application/x-designer
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
