@@ -95,8 +95,10 @@ void PColorButton::updateProperty(const QColor &color)
 
 void PColorButton::changeColor()
 {
+#ifdef PURE_QT
    m_color = QColorDialog::getColor(m_color,this);
    updateProperty(m_color);
+#endif 
 }
 
 }
