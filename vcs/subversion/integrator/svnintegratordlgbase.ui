@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SvnIntegratorDlgBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -15,114 +15,117 @@
     <property name="caption">
         <string>Form1</string>
     </property>
-    <widget class="QButtonGroup">
+    <grid>
         <property name="name">
-            <cstring>buttonGroup1</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>620</width>
-                <height>410</height>
-            </rect>
+        <property name="margin">
+            <number>0</number>
         </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="title">
-            <string></string>
-        </property>
-        <vbox>
+        <widget class="QButtonGroup" row="0" column="0">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>buttonGroup1</cstring>
             </property>
-            <widget class="QRadioButton">
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <vbox>
                 <property name="name">
-                    <cstring>doNothing</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="text">
-                    <string>Do not do anything</string>
+                <property name="margin">
+                    <number>0</number>
                 </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>createProject</cstring>
-                </property>
-                <property name="text">
-                    <string>Create a project tree and import new project into trunk/</string>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>importProject</cstring>
-                </property>
-                <property name="text">
-                    <string>Import project at given url</string>
-                </property>
-            </widget>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>layout5</cstring>
-                </property>
-                <hbox>
+                <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>doNothing</cstring>
                     </property>
-                    <widget class="QLabel">
+                    <property name="text">
+                        <string>Don't do anything</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>createProject</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Create a project tree and import new project into trunk/</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>importProject</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Import project at given url</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <hbox>
                         <property name="name">
-                            <cstring>repositoryLabel1</cstring>
+                            <cstring>unnamed</cstring>
                         </property>
-                        <property name="enabled">
-                            <bool>false</bool>
-                        </property>
-                        <property name="text">
-                            <string>Repository :</string>
-                        </property>
-                    </widget>
-                    <widget class="KURLRequester">
-                        <property name="name">
-                            <cstring>repos1</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>false</bool>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>spacer9</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Vertical</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>21</width>
-                        <height>131</height>
-                    </size>
-                </property>
-            </spacer>
-        </vbox>
-    </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>repositoryLabel1</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>Repository :</string>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester">
+                            <property name="name">
+                                <cstring>repos1</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer9</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>21</width>
+                            <height>131</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
+        </widget>
+    </grid>
 </widget>
 <connections>
     <connection>

@@ -24,9 +24,15 @@
 #include <kurlrequester.h>
 #include <kdebug.h>
 #include <qradiobutton.h>
-#include <kio/netaccess.h>
 #include <kio/scheduler.h>
 #include <kprocess.h>
+#include <kdeversion.h>
+
+#if KDE_VERSION <= KDE_MAKE_VERSION(3,3,90)
+#include "../../compat/netaccess/netaccess.h"
+#else
+#include <kio/netaccess.h>
+#endif
 
 using namespace KIO;
 
@@ -49,7 +55,11 @@ void SvnIntegratorDlg::accept()
 		int cmd = 5;
 		s << cmd << servURL << KURL::fromPathOrURL( m_projectLocation );
 		SimpleJob * job = KIO::special(servURL, parms, true);
+#if KDE_VERSION <= KDE_MAKE_VERSION(3,3,90)
+		KIO_COMPAT::NetAccess::synchronousRun(job, 0);
+#else
 		NetAccess::synchronousRun(job, 0);
+#endif
 	} else if ( createProject->isChecked() ) {
 /*		KURL miscURL = servURL;
 		miscURL.setPath(servURL.path() + "/tags/");
@@ -75,15 +85,22 @@ void SvnIntegratorDlg::accept()
 		int cmd = 10; // MKDIR(list)
 		s << cmd << list;
 		SimpleJob *job = KIO::special(servURL, parms, true);
+#if KDE_VERSION <= KDE_MAKE_VERSION(3,3,90)
+		KIO_COMPAT::NetAccess::synchronousRun(job, 0);
+#else
 		NetAccess::synchronousRun(job, 0);
-
+#endif
 		QByteArray parms2;
 		QDataStream s2( parms2, IO_WriteOnly );
 		cmd = 5; //IMPORT
 		servURL.setPath(servURL.path()+ "/trunk/");
 		s2 << cmd << servURL << KURL::fromPathOrURL( m_projectLocation );
 		job = KIO::special(servURL, parms2, true);
+#if KDE_VERSION <= KDE_MAKE_VERSION(3,3,90)
+		KIO_COMPAT::NetAccess::synchronousRun(job, 0);
+#else
 		NetAccess::synchronousRun(job, 0);
+#endif
 	}
 
 	//delete the template directory and checkout a fresh one from the server
@@ -99,7 +116,11 @@ void SvnIntegratorDlg::accept()
 	//servURL should be set correctly above
 	s3 << cmd2 << servURL << KURL::fromPathOrURL( m_projectLocation ) << rev << QString( "HEAD" );
 	SimpleJob *job2 = KIO::special(servURL, parms3, true);
+#if KDE_VERSION <= KDE_MAKE_VERSION(3,3,90)
+	KIO_COMPAT::NetAccess::synchronousRun(job2, 0);
+#else
 	NetAccess::synchronousRun(job2, 0);
+#endif
 }
 
 void SvnIntegratorDlg::init(const QString &projectName, const QString &projectLocation)

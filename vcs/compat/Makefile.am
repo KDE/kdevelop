@@ -1,1 +1,1 @@
-SUBDIRS=svn
+SUBDIRS=svn netaccess
