@@ -310,6 +310,7 @@ void KDevelopCore::newFile()
 }
 
 void KDevelopCore::unloadProjectSpace(){
+  kdDebug(9000) << "KDevelopCore::unloadProjectSpace" << endl;
   QDomDocument* pDoc=0;
   pDoc = m_pProjectSpace->writeGlobalDocument();
   QListIterator<KDevComponent> it6(m_components);
@@ -360,8 +361,8 @@ void KDevelopCore::unloadProjectSpace(){
   
 }
 
-bool KDevelopCore::loadProjectSpace(const QString &fileName)
-{
+bool KDevelopCore::loadProjectSpace(const QString &fileName){
+  kdDebug(9000) << "KDevelopCore::loadProjectSpace" << endl;  
   // project must define a version control system
   // hack until implemented
   QString vcservice = QString::fromLatin1("CVSInterface");
@@ -472,9 +473,18 @@ void KDevelopCore::slotFileNew()
 
 void KDevelopCore::slotProjectNew(){
   // if m_pProjectSpace == 0, create a new one
-  NewProjectDlg* dlg = new NewProjectDlg(m_pProjectSpace);
-  dlg->show();
-  delete dlg;
+  NewProjectDlg* pDlg = new NewProjectDlg(m_pProjectSpace);
+  if (pDlg->exec()){
+    if(pDlg->newProjectSpaceCreated()){
+      if (m_pProjectSpace !=0){
+        unloadProjectSpace();
+      }
+      QString file = pDlg->projectSpaceFile();
+      kdDebug(9000) << "FILE" << file << endl;
+      loadProjectSpace(file);
+    }
+  }
+  delete pDlg;
 }
 
 void KDevelopCore::slotProjectOpen()

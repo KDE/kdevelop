@@ -51,6 +51,8 @@ public:
 	NewProjectDlg(ProjectSpace* projectSpace=0,QWidget *parent=0, const char *name=0,bool modal=true);
 	virtual	~NewProjectDlg();
 	void initDialog();
+	bool newProjectSpaceCreated();
+	QString projectSpaceFile();
 
 	protected slots:
 	void slotProjectSpaceSelected (QListViewItem *item );
@@ -64,6 +66,7 @@ public:
 	void slotProjectNameEdit(const QString& text);
 	void slotProjectLocationEdit(const QString& text);
 	void slotProjectDirClicked();
+
 	
 	protected:
 	
@@ -75,12 +78,15 @@ public:
 	QString m_current_prjspace_name;
 	QPixmap* m_pixmap;
 	ProjectSpace* m_pProjectSpace;
+	ProjectSpace* m_pSelectedProjectSpace;
+	
 	
 	// others
 	bool m_project_name_modified;
 	bool m_project_location_modified;
 	bool m_projectspace_location_modified;
 	QString m_default_location;
+	bool m_newProjectSpace;
 };
 
 

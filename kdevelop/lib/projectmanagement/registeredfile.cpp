@@ -58,7 +58,7 @@ bool RegisteredFile::shouldBeInstalled(){
 }
 
 void RegisteredFile::writeConfig(QDomDocument& doc, QDomElement& fileElement){
-   cerr << "\nenter RegisteredFile::writeConfig";
+  //cerr << "\nenter RegisteredFile::writeConfig";
    fileElement.setAttribute("file",m_file);
    if(m_dist) {
      fileElement.setAttribute("dist","true");

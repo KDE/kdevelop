@@ -50,6 +50,10 @@ NewProjectDlg::NewProjectDlg(ProjectSpace* projectSpace,QWidget *parent, const c
   m_default_location = QDir::homeDirPath() + "/testprj";
   m_pixmap = new QPixmap();
   m_pProjectSpace = projectSpace;
+  m_newProjectSpace = true;
+  m_pSelectedProjectSpace =0;
+
+
   
   //  QStringList::Iterator it;		
   KStandardDirs* std_dirs = KGlobal::dirs();
@@ -217,33 +221,22 @@ void NewProjectDlg::slotProjectSpaceNameEdit(const QString &text){
   
 }
 void NewProjectDlg::slotOk(){
-  bool new_projectspace = true;
-  ProjectSpace* selected_prjspace;
   QString relProjectPath;
   if(current_radio_button->isChecked()){
-    new_projectspace = false;
+    m_newProjectSpace = false;
   }
-  if (new_projectspace) {
-    QString constraint = QString("[Name] == '%1'").arg(m_current_prjspace_name);
-    KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
-    KService *service = *offers.begin();
-    kdDebug(9000) << "Found ProjectSpace Component " << service->name() << endl;
-    
-    KLibFactory *factory = KLibLoader::self()->factory(service->library());
-    QObject *obj = factory->create(this, service->name().latin1(),
-				   "ProjectSpace");
-    
-    if (!obj->inherits("ProjectSpace")) {
-      kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
+  if (m_newProjectSpace) {
+    m_pSelectedProjectSpace = ProjectSpace::createNewProjectSpace(m_current_prjspace_name);
+    if(m_pSelectedProjectSpace == 0){
+      KMessageBox::sorry(0, i18n("Sorry can't create ProjectSpace with type %1")
+		       .arg(m_current_prjspace_name));
       return;
     }
     
-    selected_prjspace = (ProjectSpace*) obj;
-    
     // name, path
-    selected_prjspace->setAbsolutePath(m_prjspace_location_linedit->text());
-    selected_prjspace->setName(m_prjspace_name_linedit->text());
-    m_current_appwizard_plugin->init(true,selected_prjspace,m_prjname_linedit->text(),
+    m_pSelectedProjectSpace->setAbsolutePath(m_prjspace_location_linedit->text());
+    m_pSelectedProjectSpace->setName(m_prjspace_name_linedit->text());
+    m_current_appwizard_plugin->init(true,m_pSelectedProjectSpace,m_prjname_linedit->text(),
 				     m_prjlocation_linedit->text());
   }
   else { // use current ProjectSpace
@@ -298,6 +291,15 @@ void NewProjectDlg::slotNewProjectSpaceClicked(){
   m_prjspace_name_linedit->setEnabled(true);
   m_prjspace_dir_button->setEnabled(true);
   m_prjspace_location_linedit->setEnabled(true);
+}
+bool NewProjectDlg::newProjectSpaceCreated(){
+  return m_newProjectSpace;
+}
+QString NewProjectDlg::projectSpaceFile() {
+  if(m_pSelectedProjectSpace != 0){
+    return m_pSelectedProjectSpace->projectSpaceFile();
+  }
+  return "";
 }
 
 

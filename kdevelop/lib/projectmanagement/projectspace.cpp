@@ -149,6 +149,9 @@ void ProjectSpace::setName(QString name){
 void ProjectSpace::setAbsolutePath(QString path){
   m_path = path;
 }
+QString ProjectSpace::projectSpaceFile(){
+  return m_projectspaceFile;
+}
 
 QString ProjectSpace::absolutePath(){
   return m_path;
@@ -497,19 +500,20 @@ QDomDocument* ProjectSpace::readUserDocument(){
 }
 
 bool ProjectSpace::saveConfig(){
-  QString filename = m_path + "/" + m_name + ".kdevpsp";
-  kdDebug(9000)  << "filename::" << filename << endl;
-  QFile file(filename);
+  m_projectspaceFile = m_path + "/" + m_name + ".kdevpsp";
+  
+  kdDebug(9000)  << "filename::" << m_projectspaceFile << endl;
+  QFile file(m_projectspaceFile);
   if (!file.open(IO_WriteOnly)){
     KMessageBox::sorry(0, i18n("Can't save file %1")
-		       .arg(filename));
+		       .arg(m_projectspaceFile));
     return false;
   }
   QTextStream s(&file);
   m_pGlobalDoc->save(s,4);
   file.close();
 
-  filename = m_path + "/." + m_name + ".kdevpsp";
+  QString filename = m_path + "/." + m_name + ".kdevpsp";
   kdDebug(9000)  << "filename::" << filename << endl;
   file.setName(filename);
   if (!file.open(IO_WriteOnly)){

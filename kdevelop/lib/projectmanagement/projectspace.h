@@ -55,6 +55,8 @@ class ProjectSpace : public KDevComponent {
   void setName(QString name);
   void setAbsolutePath(QString path);
   QString absolutePath();
+  /** returns the absolute filelocation*/
+  QString projectSpaceFile();
   void setVersion(QString version);
   
   /** Store the name of version control system */
