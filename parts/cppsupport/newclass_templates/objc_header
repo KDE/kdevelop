@@ -1,0 +1,11 @@
+#ifndef _$HEADERGUARD$_
+#define _$HEADERGUARD$_
+
+$INCLUDEBASEHEADER$
+#include <Foundation/NSObject.h>
+
+$DOC$
+@interface $CLASSNAME$ : $BASECLASS$
+@end
+
+#endif
