@@ -41,7 +41,7 @@ public:
     {
         hideOrShow();
     }
-
+    
     virtual void paintCell(QPainter *p, const QColorGroup &cg,
                            int column, int width, int alignment);
     void hideOrShow();
@@ -138,6 +138,12 @@ public:
    {
    }
    
+   ~MyFileTreeBranch()
+   {
+       if( root() )
+           delete( root()->fileItem() );
+   }
+
    virtual KFileTreeViewItem* createTreeViewItem( KFileTreeViewItem* parent, KFileItem* fileItem )
    {
        if( !parent || !fileItem )
