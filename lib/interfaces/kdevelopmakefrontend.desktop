@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/MakeFrontend
+X-KDE-Derived=KDevelop/Part
 Name=Make frontend interface
 
-[PropertyDef::X-KDevelop-Args]
-Type=QString
