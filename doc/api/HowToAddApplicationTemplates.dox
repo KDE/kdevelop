@@ -19,6 +19,7 @@ applications like kedit as well as plugins for example for kdevelop or noatun.\n
     .
 \ref templates_2\n
 \ref templates_3\n
+\ref templates_4\n
 <!-- @todo <b>Developer information:</b> The documentation for the related
 <code>"Project"->"Import Existing Project..."</code> is available here: \ref appwizard_imports
 -->
@@ -52,15 +53,15 @@ Create a directory <code>template-khello</code> with the files
 Have a look into the files! There are some variables which the application
 wizard will replace:
 <code><pre>
-    - %{AUTHOR} ...... by the author
-    - %{EMAIL} ....... by the e-mail address 
-    - %{VERSION} ..... by the version
-    - %{APPNAME} ..... by the project name (KHello)
-    - %{APPNAMELC} ... by the project name in lowercase (khello)
-    - %{APPNAMEUC} ... by the project name in uppercase (KHELLO)
-    - %{LICENSE} ..... by the license (GPL, BSD, QPL, LGPL, ...)
-    - %{LICENSEFILE} . by the licensefile
-    - %{YEAR} ........ by the year
+    - \%{AUTHOR} ...... by the author
+    - \%{EMAIL} ....... by the e-mail address 
+    - \%{VERSION} ..... by the version
+    - \%{APPNAME} ..... by the project name (KHello)
+    - \%{APPNAMELC} ... by the project name in lowercase (khello)
+    - \%{APPNAMEUC} ... by the project name in uppercase (KHELLO)
+    - \%{LICENSE} ..... by the license (GPL, BSD, QPL, LGPL, ...)
+    - \%{LICENSEFILE} . by the licensefile
+    - \%{YEAR} ........ by the year
     .
 </pre></code>
 All this can be found in <code>$KDEDIR/share/apps/kdevappwizard/template-common/kdevelop.pm</code>.
@@ -183,9 +184,8 @@ Finally add <code>"template-khello"</code> to "SUBDIRS = " in <code>kdevelop/lan
 Test, test and test again! It works? Well - now talk to the kdevelop guys so
 that they know what's going on and probably you may commit. ;)
 
-That's all! :)
+\section templates_4 IV. Changes to the template system (VERY IMPORTANT)
 
-Edit:
 The entire app template system described above has been changed.
 To port a template to the new system the
 information from the script file will need to be moved into the ini file.
