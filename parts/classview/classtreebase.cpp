@@ -337,13 +337,12 @@ ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *l
     setPixmap(0, UserIcon(icon, KIcon::DefaultState, ClassViewFactory::instance()));
 }
 
-
 QString ClassTreeMethodItem::text( int ) const
 {
     QString str;
-    
-    ParsedMethod* method = dynamic_cast<ParsedMethod*>(m_item);
-    
+ 
+    ParsedMethod* method = static_cast<ParsedMethod*>(m_item);
+
     str = method->name();
     
     if( method->arguments.count() > 0 ) {
