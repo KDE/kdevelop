@@ -1,24 +1,20 @@
 			**** Subversion KPart ****
 
 
-******* WARNING *************
-This is really unstable/experimental for now !
+	******* WARNING *************
+*) This is really unstable/experimental for now !
 Don't use it with important projects, you may lose files.
 
 You need a recent version of Subversion (apparently >= 0.14.2) to
 compile this kpart.
 I develop it against recent Subversion snapshots.
 
-For now it does not provide user interaction, but I hope to fix this 
-soon.
-It features : update,commit,add,remove and cleanup, other actions are
-disabled for now.
+*) Problems you can encounter :
+->remote repositeries work (http:///) but not local ones (file:///) :
+	=>that means you have a db3 around which overrides your libdb4, you need to remove libdb3-dev from
+		your system and recompile the kpart so that it links first with db4 (ldd will still show you libdb3 but db4 has to be the first one !)
+		Subversion client is also linked with db3 though it should not, Subversion authors are working on this
 
-Hope you'll enjoy it :)
-
-Mickael
-
-
-Code stolen :) :
+*) Code stolen :
 ->there are some important parts of the code imported from the 'svn' command line source code
 ->the commitdlg has been copied from the cvs part

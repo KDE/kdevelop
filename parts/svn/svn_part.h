@@ -43,9 +43,15 @@ class SvnPart : public KDevPlugin
 		
 	protected:
 		svn_client_auth_baton_t* createAuthBaton();
+		//ask for login/pass if needed
+		static svn_error_t *promptUser(char **result, const char *prompt, svn_boolean_t hide, 
+				void *baton, apr_pool_t *pool);
 		//debug and info messages
-		static void svnDebug(const char *dbg);
-		static void svnMsg(const char *msg);
+		void svnDebug(const char *dbg);
+		void svnMsg(const char *msg);
+		//to receive logs from the lib
+		static svn_error_t *log_msg_receiver(void *baton, apr_hash_t *changed_paths, svn_revnum_t rev, 
+				const char *author, const char *date, const char *msg, apr_pool_t *pool);
 		//to create logs for the lib
 		static svn_error_t *get_log_message (const char **log_msg, apr_array_header_t *commit_items,
 				void *baton, apr_pool_t *pool);
@@ -57,11 +63,21 @@ class SvnPart : public KDevPlugin
 		void get_notifier(svn_wc_notify_func_t *notify_func_p, void **notify_baton_p,
 				svn_boolean_t is_checkout, svn_boolean_t suppress_final_line, 
 				apr_pool_t *pool);
+		//display SVN errors in kdevelop (wrapper function for handleSvnError)
+		void Error(svn_error_t *err);
+		//get infos about a svn error and display it
+		void handleSvnError(svn_error_t *, int, apr_status_t);
+		void generate_status_codes (char *str_status, enum svn_wc_status_kind text_status,
+				enum svn_wc_status_kind prop_status, svn_boolean_t locked, svn_boolean_t copied);
+		void print_short_format (const char *path, svn_wc_status_t *status);
+		void print_long_format (const char *path, svn_boolean_t show_last_committed, 
+				svn_wc_status_t *status);
 
 	private slots:
 		void contextMenu(QPopupMenu *popup, const Context *context);
 		//actions
 		void slotCommit();
+		void slotRevert();
 		void slotUpdate();
 		void slotAdd();
 		void slotRemove();
@@ -69,6 +85,9 @@ class SvnPart : public KDevPlugin
 		void slotDiff();
 		void slotCleanup();
 		void projectConfigWidget(KDialogBase *dlg);
+		void slotStatus(bool remote);
+		void slotStatusRemote();
+		void slotStatusLocal();
 
 	private:
 		QString popupfile;  
@@ -94,6 +113,10 @@ class SvnPart : public KDevPlugin
 			apr_pool_t *pool;
 		};
 
+		struct log_message_receiver_baton
+		{
+			svn_boolean_t first_call;
+		};
 };
 
 #endif
