@@ -33,7 +33,7 @@
 #include "documentationpart.h"
 #include "ksavealldialog.h"
 
-#include "../lib/interfaces/kdevproject.h"
+#include "kdevproject.h"
 
 #include "partcontroller.h"
 
