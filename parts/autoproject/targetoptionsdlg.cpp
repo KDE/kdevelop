@@ -128,13 +128,12 @@ void TargetOptionsDialog::storeConfig()
         flagslist.append("-no-undefined");
     flagslist.append(ldflagsother_edit->text());
     QString new_ldflags = flagslist.join(" ");
-        
-    QString new_dependencies = dependencies_edit->text();
-    
+
     QStringList liblist;
     QCheckListItem *clitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
     while (clitem) {
-        liblist.append("$(top_builddir)/" + clitem->text());
+        if( clitem->isOn() )
+            liblist.append("$(top_builddir)/" + clitem->text());
         clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
     }
     clitem = static_cast<QCheckListItem*>(outsidelib_listview->firstChild());
@@ -169,10 +168,12 @@ void TargetOptionsDialog::storeConfig()
         replaceMap.insert(canonname + "_LDFLAGS", new_ldflags);
     }
 
+    QString new_dependencies = dependencies_edit->text();
     QString old_dependencies = target->dependencies;
     if (new_dependencies != old_dependencies) {
         target->dependencies = new_dependencies;
-        replaceMap.insert(canonname + "_DEPENDENCIES", new_dependencies);
+//        if( !new_dependencies.isEmpty() )
+            replaceMap.insert(canonname + "_DEPENDENCIES", new_dependencies);
     }
 
     // We can safely assume that this target is in the active sub project
