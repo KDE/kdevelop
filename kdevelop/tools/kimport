@@ -170,7 +170,7 @@ sub processDir($)
         addSource("$reldir$file"), next
             if ($file =~ /\.cpp$|\.cc$|\.cxx$|\.C$|\.c$|\.ui$|\.CPP$|\.CC$|\.CXX\+\+$/);
         addHeader("$reldir$file"), next
-            if ($file =~ /\.h$|\.H$|\.hh$|\.hxx$|\.h$|\.HPP$|\.HH$|\.HXX\+\+$/);
+            if ($file =~ /\.h$|\.H$|\.hh$|\.hxx$|\.h$|\.hpp$|\.HPP$|\.HH$|\.HXX\+\+$/);
         addData("$reldir$file"), next;
     }
 
