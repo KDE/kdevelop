@@ -41,7 +41,6 @@ signals:
 
 private slots:
     void slotStopButtonClicked(KDevPlugin*);
-    void slotProcessExited();
     void slotProcessExited( KProcess * );
 
 private:
