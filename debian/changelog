@@ -1,3 +1,15 @@
+kdevelop-cvs (1:1.0-19991013-1) unstable; urgency=low
+
+  * Changing package name to kdevelop-cvs to denote that this is not a stable
+    version.
+  * Reworking rules script to make use of newer debianrules scripting
+  * Redoing postinst and prerm scripts to conform more with debian policy
+  * Adding in postrm and preinst scripts to work cleanly with debian policy
+  * Changing dependency information to fit in with qt2/kde2 provided packages
+    as well as qt1/kde1 packages.
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 13 Oct 1999 23:00:03 -0400
+
 kdevelop (1:1.0-19990924-1) unstable; urgency=low
 
   * New upstream version
