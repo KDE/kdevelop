@@ -271,6 +271,7 @@ void TrollProjectPart::slotClean()
 void TrollProjectPart::slotExecute()
 {
     QString program = mainProgram();
+    program += " " + DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/programargs");
 
     if ( program.isEmpty() ) {
         KMessageBox::sorry(m_widget, i18n("Please specify the executable name in the "
