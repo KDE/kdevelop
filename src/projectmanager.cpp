@@ -217,6 +217,7 @@ bool ProjectManager::closeProject()
   // TODO, if this fails, user is screwed
   saveProjectFile();
 
+  API::getInstance()->setProjectDom(0);
   API::getInstance()->classStore()->wipeout();
   API::getInstance()->ccClassStore()->wipeout();
 
@@ -278,8 +279,6 @@ bool ProjectManager::saveProjectFile()
   QTextStream stream(&fout);
   API::getInstance()->projectDom()->save(stream, 2);
   fout.close();
-
-  API::getInstance()->setProjectDom(0);
 
   return true;
 }
