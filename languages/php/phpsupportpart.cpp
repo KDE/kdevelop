@@ -101,7 +101,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 	  this, SLOT(slotPHPExeExited(KProcess*)));
 
   m_htmlView = new PHPHTMLView();
-  mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"));
+  mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"), "PHP");	// @fixme after stringfreeze - last argument should be i18n() 
   connect(m_htmlView,  SIGNAL(started(KIO::Job*)),
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
@@ -215,6 +215,7 @@ void PHPSupportPart::slotRun(){
   configData = new PHPConfigData(projectDom());
   if(validateConfig()){
     mainWindow()->raiseView(m_phpErrorView);
+    mainWindow()->raiseView(m_htmlView->view());
     PHPConfigData::InvocationMode mode = configData->getInvocationMode() ;
     if(mode == PHPConfigData::Web){
       executeOnWebserver();
