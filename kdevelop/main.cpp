@@ -120,6 +120,7 @@ int main(int argc, char* argv[])
   aboutData.addCredit ("Harald Fernengel",I18N_NOOP("Patches/Bugfixes"), "harry@bnro.de");
   aboutData.addCredit ("Christian Chouder",I18N_NOOP("Patches/Bugfixes"), "chcouder@club-internet.fr");
   aboutData.addCredit ("Ravikiran Rajagopal",I18N_NOOP("Patches/Bugfixes"), "ravi@ee.eng.ohio-state.edu");
+  aboutData.addCredit ("Carsten Wolff",I18N_NOOP("Patches/Bugfixes"), "AirWulf666@gmx.net");
 
   aboutData.addCredit ("Jacek Wojdel",I18N_NOOP("Startlogo KDevelop 1.0"), "wojdel@kbs.twi.tudelft.nl");
   aboutData.addCredit ("Ralph Kocher",I18N_NOOP("Startlogo KDevelop 1.1, 1.2"), "RKocher@t-online.de");
@@ -195,7 +196,10 @@ int main(int argc, char* argv[])
   if (args->count()) {
     // need full path name to find project and session files (rokrau 6/11/01)
     QFileInfo arg0(args->arg(0));
-    kdevelop->slotProjectOpenCmdl(arg0.absFilePath());
+    CProject* pProj = kdevelop->projectOpenCmdl_Part1(arg0.absFilePath());
+    if (pProj != 0L) {
+      kdevelop->projectOpenCmdl_Part2(pProj);
+    }
   }
 
   kdevelop->bStartupIsPending = false;  // see queryClose()

@@ -3387,32 +3387,36 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     if( next_job == "load_new_prj")
     {
 
-      if(project)    //now that we know that a new project will be built we can close the previous one   {
-      {
+      if(project) {  //now that we know that a new project will be built we can close the previous one   {
         QString old_project = prj->getProjectFile();
-        if(!slotProjectClose())        //the user may have pressed cancel in which case the state is undetermined
-        {
-          if (readProjectFile(old_project))
+        if(!slotProjectClose()) {      //the user may have pressed cancel in which case the state is undetermined
+          CProject* pProj = prepareToReadProjectFile(old_project);
+          if (pProj != 0L) {
+            readProjectFile(old_project, pProj);
             slotViewRefresh();
+					}
         }
-        else
-        {
+        else {
           QDir dir(QDir::current());
-          if (readProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj"))
+          CProject* pProj = prepareToReadProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj");
+          if (pProj != 0L) {
+            readProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj", pProj);
             slotViewRefresh();    // a new project started, this is legitimate
+          }
         }
       }
-      else
-      {
+      else {
         QDir dir(QDir::current());
-        if (readProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj"))
+        CProject* pProj = prepareToReadProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj");
+        if (pProj != 0L) {
+          readProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj", pProj);
           slotViewRefresh();    // a new project started, this is legitimate
+        }
       }
     }
     next_job = "";
   }
-  else
-  {
+  else {
     result= i18n("*** process exited with error(s) ***\n");
     next_job = "";
   }

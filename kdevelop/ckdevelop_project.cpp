@@ -513,7 +513,11 @@ void CKDevelop::slotProjectOpen()
   config->setGroup("General Options");
   QString defDir=config->readEntry("ProjectDefaultDir", QDir::homeDirPath());
   str = KFileDialog::getOpenFileName( defDir, "*.kdevprj");
-  slotProjectOpenCmdl(str);
+
+  CProject* pProj = projectOpenCmdl_Part1(str);
+  if (pProj != 0L) {
+    projectOpenCmdl_Part2(pProj);
+  }
 }
 
 void CKDevelop::slotProjectOpenRecent(int id)
@@ -521,7 +525,10 @@ void CKDevelop::slotProjectOpenRecent(int id)
   QString proj = getProjectAsString(id);
 
   if (QFile::exists(proj)) {
-    slotProjectOpenCmdl(proj);
+    CProject* pProj = projectOpenCmdl_Part1(proj);
+    if (pProj != 0L) {
+      projectOpenCmdl_Part2(pProj);
+    }
     shuffleProjectToTop(id);
   } else {
     int answer=KMessageBox::questionYesNo(this,i18n("This project does no longer exist. Do you want to remove it from the list?"),
@@ -533,14 +540,14 @@ void CKDevelop::slotProjectOpenRecent(int id)
   }
 }
 
-void CKDevelop::slotProjectOpenCmdl(QString prjname)
+CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
 {
   prjname.replace(QRegExp("file:"),"");
   QFileInfo info(prjname);
 
   //if the new project file is not valid, do nothing
   if (!info.isFile())
-    return;
+    return 0L;
 
   // Make sure we have the right permissions to read and write to the prj file
   if (!(info.isWritable() && info.isReadable()))
@@ -549,7 +556,7 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
       i18n("Unable to read the project file because you\n"
       "do not have read/write permissions for this project"),
       prjname);
-    return;
+    return 0L;
   }
 
   project_menu->setEnabled(false);
@@ -566,31 +573,44 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
     if (!slotProjectClose())
       prjname = old_project; // just reset the prjname to the old one
   }
-  if (readProjectFile(prjname)) {
+  CProject* pProj = prepareToReadProjectFile(prjname);
+  if (pProj != 0L) {
+    // first restore the project session stored in a .kdevses file
     QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
     projSessionFileName += "kdevses"; // suffix for a KDeveop session file
     if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
       debug("error during restoring of the KDevelop session !\n");
     }
-    slotViewRefresh();
+    return pProj; // but it's unfinished here, we will call projectOpenCmdl_Part2 later
   }
   else {
     KMessageBox::error(0,
     i18n("This does not appear to be a valid or\n"
       "supported kdevelop project file"),
       prjname);
-    // If there is an old project then try to restore it. (I wonder why - jbb)
-    if (!old_project.isEmpty())
-    {
-      prjname = old_project; // just reset the prjname to the old one
-      if (readProjectFile(prjname))
-        slotViewRefresh();
-    }
+
+    // enable the GUI again
+    project_menu->setEnabled(true);
+    enableCommand(ID_PROJECT_OPEN);
+    accel->setEnabled(true);
+    slotStatusMsg(i18n("Ready."));
   }
+  return 0L;
+}
+
+/** actually loading the project */
+void CKDevelop::projectOpenCmdl_Part2(CProject* pProj)
+{
+  // now parse the .kdevprj file
+  readProjectFile(pProj->getProjectFile(), pProj);
+  slotViewRefresh();
+
   // load CTags database
   if (bCTags) {
     slotProjectLoadTags();
   }
+
+  // enable the GUI again
   project_menu->setEnabled(true);
   enableCommand(ID_PROJECT_OPEN);
   accel->setEnabled(true);
@@ -634,16 +654,22 @@ void CKDevelop::slotProjectNewAppl(){
     
     if(project)        //now that we know that a new project will be built we can close the previous one
     {
-        old_project = prj->getProjectFile();
-        if(!slotProjectClose())                //the user may have pressed cancel in which case the state is undetermined
+      old_project = prj->getProjectFile();
+      if(!slotProjectClose())                //the user may have pressed cancel in which case the state is undetermined
       {
-        if (readProjectFile(old_project))
+        CProject* pProj = prepareToReadProjectFile(old_project);
+        if (pProj != 0L) {
+          readProjectFile(old_project, pProj);
           slotViewRefresh();
+        }
         return;
       }
     }
 
-    if (!readProjectFile(file))
+    CProject* pProj = prepareToReadProjectFile(file);
+    if (pProj != 0L)
+      readProjectFile(file, pProj);
+    else
       return;
 
     QString type=prj->getProjectType();
@@ -1366,14 +1392,20 @@ void CKDevelop::delFileFromProject(QString rel_filename){
   refreshTrees(&lDeletedFile);
 }
 
-bool CKDevelop::readProjectFile(QString file)
+CProject* CKDevelop::prepareToReadProjectFile(QString file)
 {
-  CProject * lNewProject = new CProject(file);
-  if(!(lNewProject->readProject()))
-  {
+  CProject* lNewProject = new CProject(file);
+	if (!(lNewProject->prepareToReadProject())) {
     delete lNewProject;
-    return false;
-  }
+    return 0L;
+	}
+	return lNewProject;
+}
+
+void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
+{
+	// everything seems to be OK
+  lNewProject->readProject();
 
   QString str;
 
@@ -1431,7 +1463,6 @@ bool CKDevelop::readProjectFile(QString file)
     enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
   }
   addRecentProject(file);
-  return true;
 }
 
 

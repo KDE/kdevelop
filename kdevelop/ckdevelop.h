@@ -137,7 +137,7 @@ public:
   void initToolBar();
   void initStatusBar();
   void initWhatsThis();
-  void initProject(bool ignoreLastProject);
+  CProject* initProject(bool ignoreLastProject);
   void initDebugger();
   void completeStartup(bool ignoreLastProject);
 
@@ -176,8 +176,11 @@ public:
   void setMainCaption(int item=-1);
   			
   void newFile(bool add_to_project,const char* dir=0);
-  /** read the projectfile from the disk*/
-  bool readProjectFile(QString file);
+
+  /** prepare readProjectFile(..), creates and inits the project object */
+  CProject* prepareToReadProjectFile(QString file);
+  /** read the projectfile from the disk (time consuming) */
+  void readProjectFile(QString file, CProject* lNewProject);
 
   /** Add a file with a specified type to the project. 
    *  
@@ -244,6 +247,13 @@ public:
 
   /** shared helper method for slotViewTTreeView and slotViewTOutputView */
   void toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolViewCoverList);
+  /** First part of opening a .kdevprj project from file using prjfile as filename.
+   *  Between part 1 and 2 we can place other stuff
+   *  (e.g.: as it is needed during KDevelop's startup)
+   */
+  CProject* projectOpenCmdl_Part1(QString prjfile);
+  /** Second part of opening a .kdevprj project from file using prjfile as filename. */
+  void projectOpenCmdl_Part2(CProject* pProj);
 
  public slots:
 
@@ -337,7 +347,7 @@ public:
   /** opens a projectfile and close the old one*/
   void slotProjectOpen();
   /** opens a project file from the recent project menu in the project menu by getting the project entry and
-   * calling slotProjectOpenCmdl()
+   * calling projectOpenCmdl()
    */
   void slotProjectOpenRecent(int id_);
   /** opens a project committed by comandline or kfm */
@@ -348,7 +358,6 @@ public:
   /** Configures Doxygen */
   void slotConfigureDoxygen();
   //MB end
-  void slotProjectOpenCmdl(QString prjfile);
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
   /** add a new file to the project-same as file new */

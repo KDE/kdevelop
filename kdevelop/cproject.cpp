@@ -67,7 +67,7 @@ CProject::~CProject(){
 }
 
 
-bool CProject::readProject()
+bool CProject::prepareToReadProject()
 {
   // if we re-read this file then get rid of these
   delete vc;
@@ -89,10 +89,14 @@ bool CProject::readProject()
     return false;
 
   dir = fileinfo.dirPath() + "/";
+  valid = true;
+	return true;
+}
+
+void CProject::readProject()
+{
   setSourcesHeaders();
   vc = VersionControl::getVersionControl(getVCSystem());
-  valid = true;
-  return true;
 }
 
 bool CProject::createEmptyProject()

@@ -150,7 +150,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   // read the previous dock szenario from kdeveloprc
   // (this has to be after all creation of dockwidget-covered tool-views
-//DISABLED_UNTIL_SOME_BUGFIXES_ARE_MADE  readDockConfig(config);
+//DISABLED_UNTIL_SOME_BUGS_ARE_FIXED  readDockConfig(config);
 
   show();
 
@@ -1058,7 +1058,11 @@ void CKDevelop::initConnections(){
 
 void CKDevelop::completeStartup(bool ignoreLastProject)
 {
-  initProject(ignoreLastProject);
+  CProject* pProj = initProject(ignoreLastProject);
+  // XXXXXXXXXXXX
+  if (pProj != 0L) {
+    projectOpenCmdl_Part2(pProj);
+  }
 
   config->setGroup("TipOfTheDay");
   if( !kapp->isRestored())
@@ -1077,10 +1081,11 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
   moveToolBar( m_pTaskBar, taskBarEdge);
 }
 
-void CKDevelop::initProject(bool ignoreLastProject)
+CProject* CKDevelop::initProject(bool ignoreLastProject)
 {
-  config->setGroup("General Options");
+  CProject* pProj = 0L;
 
+  config->setGroup("General Options");
   bool bLastProject;
   if(!ignoreLastProject)
     bLastProject=false;
@@ -1099,9 +1104,10 @@ void CKDevelop::initProject(bool ignoreLastProject)
     {
       config->setGroup("Files");
       filename = config->readEntry("project_file","");
-      slotProjectOpenCmdl(filename);
+      pProj = projectOpenCmdl_Part1(filename);
     }
   }
+  return pProj;
 }
 
 void CKDevelop::setKeyAccel()

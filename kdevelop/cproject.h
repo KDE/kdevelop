@@ -471,8 +471,10 @@ public: // Public methods
   void updateMakefileAm(const QString& makefile);
   void refreshMakefileAm(TMakefileAmInfo* info);
 
-  /** read the projectfile */
-  bool readProject();
+  /** prepare everything for readProject() */
+  bool prepareToReadProject();
+  /** read the projectfile (this will take some time) */
+  void readProject();
   /** create a new project file ready for entries to be added */
   bool createEmptyProject();
   /** write the projectfile to the disk*/

@@ -1281,6 +1281,7 @@ QString CPrintDlg::createFileString() {
   settings->setGroup("Files");
   prj_str2 = settings->readEntry("project_file");
   CProject *project = new CProject(prj_str2);
+	project->prepareToReadProject();
   project->readProject();
   prj_str2.truncate(prj_str2.findRev("/"));
   test = prj_str2;

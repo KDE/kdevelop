@@ -817,6 +817,7 @@ void CFilePrintDlg::slotOkClicked() {
     settings->setGroup("Files");
     prj_str = settings->readEntry("project_file");
     CProject project (prj_str);
+		project.prepareToReadProject();
     project.readProject();
     prj_str.truncate(prj_str.findRev("/")); 
     directory = prj_str;
