@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces 	   -I$(top_srcdir)/lib/sourceinfo 	   $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/compat  -I$(top_srcdir)/lib/interfaces  -I$(top_srcdir)/lib/sourceinfo  $(all_includes)
 
 noinst_LTLIBRARIES = libkdevutil.la
 

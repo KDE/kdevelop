@@ -8,13 +8,15 @@ class KdevKURL : public KURL {
 public:
   KdevKURL();
   KdevKURL( const KURL& u );
+  KdevKURL( const QString& url );
   KdevKURL( const QString& url, int encoding_hint = 0 );
   static KdevKURL fromPathOrURL(const QString& text );
 };
 
 KdevKURL::KdevKURL() : KURL() {};
 KdevKURL::KdevKURL( const KURL& u ) : KURL(u) {};
-KdevKURL::KdevKURL( const QString& url, int encoding_hint = 0 ) : KURL(url, encoding_hint) {};
+KdevKURL::KdevKURL( const QString& url ) : KURL(url) {};
+KdevKURL::KdevKURL( const QString& url, int encoding_hint /*= 0*/ ) : KURL(url, encoding_hint) {};
 
 KdevKURL KdevKURL::fromPathOrURL(const QString& text )
   {

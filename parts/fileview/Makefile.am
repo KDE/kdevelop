@@ -1,6 +1,6 @@
 # Here resides the file view part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces 	   -I$(top_srcdir)/lib/sourceinfo 	   -I$(top_srcdir)/lib/util 	   $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevfileview.la libkdevfilegroups.la
 
