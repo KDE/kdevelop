@@ -1,3 +1,8 @@
+2001-07-13  Richard Dale <duke@tipitina.demon.co.uk
+
+	* Fixed bug causing 'precondition violated' messages in the C++
+          class parser
+
 2001-07-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Store relative instead of absolute file names in custom project
