@@ -31,11 +31,15 @@
 #include <kmessagebox.h>
 #include <kdevplugininfo.h>
 #include <kdevgenericfactory.h>
-
+#include <kaboutdata.h>
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
+#include <kurl.h>
 #include <configwidgetproxy.h>
 
+#include <kdebug.h>
+#include <codemodel.h>
+#include <codemodel_utils.h>
 #include "annotationwidget.h"
 #include "annotationglobalconfig.h"
 #include "annotationprojectconfig.h"
@@ -55,7 +59,7 @@ annotationPart::annotationPart(QObject *parent, const char *name, const QStringL
 
     m_widget = new annotationWidget(this);
     m_widget->setCaption("Annotations");
-    m_widget->setIcon(SmallIcon(info()->icon()));
+    m_widget->setIcon(SmallIcon("notes"));
 
     QWhatsThis::add(m_widget, i18n("some annotation about the code"));
     
@@ -64,7 +68,7 @@ annotationPart::annotationPart(QObject *parent, const char *name, const QStringL
     
     // if you want to embed your widget as an outputview, simply uncomment
     // the following line.
-    mainWindow()->embedOutputView( m_widget, "Annotations", "Annotations" );
+    //mainWindow()->embedOutputView( m_widget, "Annotations", "Annotations" );
     
     // if you want to embed your widget as a selectview (at the left), simply uncomment
     // the following line.
@@ -72,7 +76,7 @@ annotationPart::annotationPart(QObject *parent, const char *name, const QStringL
     
     // if you want to embed your widget as a selectview (at the right), simply uncomment
     // the following line.
-    // mainWindow()->embedSelectViewRight( m_widget, "name that should appear", "enter a tooltip" );
+     mainWindow()->embedSelectViewRight( m_widget, "Annotations", "annotations" );
     
     setupActions();
     
@@ -109,10 +113,7 @@ void annotationPart::init()
 void annotationPart::setupActions()
 {
 // create XMLGUI actions here
-    action = new KAction(i18n("&Do Something..."), 0,
-        this, SLOT(doSomething()), actionCollection(), "plugin_action" );
-    action->setToolTip(i18n("Do something"));
-    action->setWhatsThis(i18n("<b>Do something</b><p>Describe here what does this action do."));
+  
 }
 
 void annotationPart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo)
@@ -148,37 +149,29 @@ void annotationPart::contextMenu(QPopupMenu *popup, const Context *context)
         
         // or create menu items on the fly
          int id = -1;
-         id = popup->insertItem(i18n("Add Annotations")),this, SLOT(SlotDoAnnotate());
-         popup->setWhatsThis(id, i18n("<b>Do something here</b><p>Describe here what does this action do."));
+	 KURL tmpurl = econtext->url();
+	 m_itemAnnotationFilename = tmpurl.filename(true);
+	 m_itemAnnotationName = econtext->currentWord();
+	 popup->insertSeparator();
+	 id = popup->insertItem(i18n("Add Annotation"),this, SLOT(SlotDoAnnotate( ) ) );
+         popup->setWhatsThis(id, i18n("<b>Add Annotation</b><p>Add out of source comment"));
     }
-    else if (context->hasType(Context::FileContext)) 
-    {
-        // file context menu
-        const FileContext *fcontext = static_cast<const FileContext*>(context);
-        
-        //use context and plug actions here
-    }
-    else if (context->hasType(Context::ProjectModelItemContext)) 
-    {
-        // project tree context menu
-        const ProjectModelItemContext *pcontext = static_cast<const ProjectModelItemContext*>(context);
-        
-        // use context and plug actions here
-    }
+   
     else if (context->hasType(Context::CodeModelItemContext)) 
     {
         // class tree context menu
         const CodeModelItemContext *mcontext = static_cast<const CodeModelItemContext*>(context);
         
         // use context and plug actions here
-    }
-    else if (context->hasType(Context::DocumentationContext)) 
-    {
-        // documentation viewer context menu
-        const DocumentationContext *dcontext = static_cast<const DocumentationContext*>(context);
+	int id = -1;
+	m_itemAnnotationName = mcontext->item()->name();
+	m_itemAnnotationFilename = mcontext->item()->fileName();
+	
+	id = popup->insertItem(i18n("Add Annotations"),this, SLOT(SlotDoAnnotate()) );
+	popup->setWhatsThis(id, i18n("<b>Do something here</b><p>Describe here what does this action do."));
         
-        // use context and plug actions here
     }
+  
 }
 
 void annotationPart::projectOpened()
@@ -205,5 +198,28 @@ void annotationPart::doSomething()
  */
 void annotationPart::SlotDoAnnotate()
 {
-    /// @todo implement me
+  kdDebug()<< "Annotation: Editor Windows";
+  KMessageBox::information(m_widget,m_itemAnnotationFilename +":"+  m_itemAnnotationName , i18n("annotation Plugin"));
+}
+
+void annotationPart::SlotDoAnnotate(QString itemname)
+{
+  kdDebug()<< "Annotation: "<<itemname;
+
+  KMessageBox::information(0 ,itemname,i18n("annotation Plugin"));
+//  kdDebug()<< context->item()->name();
+}
+/*!
+    \fn annotationPart::aboutData()
+ */
+KAboutData* annotationPart::aboutData()
+{
+  KAboutData *data = new KAboutData  ("annotationpart", I18N_NOOP("annotationPart"), "0.3",
+				      I18N_NOOP( "AnnotationPart for KDevelop" ),
+				      KAboutData::License_LGPL_V2,
+				      I18N_NOOP( "(c) 2005" ), 0, "http://www.kdevelop.org");
+  data->addAuthor ("Mathieu Chouinard", I18N_NOOP("Author"), "mchoui@e-c.qc.ca", "http://ulyx.ath.cx");
+
+
+  return data;
 }

@@ -31,7 +31,8 @@ class KDialogBase;
 class Context;
 class ConfigWidgetProxy;
 class annotationWidget;
-
+class KAboutData;
+class CodeModelItemContext;
 /**
 Please read the README.dox file for more info about this part
 */
@@ -41,6 +42,7 @@ class annotationPart: public KDevPlugin
 public:
     annotationPart(QObject *parent, const char *name, const QStringList &args);
     ~annotationPart();
+    KAboutData* aboutData();
   
 private slots:
     void init();
@@ -57,10 +59,14 @@ private:
     
     KAction *action;
     
+    QString m_itemAnnotationName;
+    QString m_itemAnnotationFilename;
+    
     QGuardedPtr<annotationWidget> m_widget;
     ConfigWidgetProxy *m_configProxy;
 public slots:
     void SlotDoAnnotate();
+    void SlotDoAnnotate(QString itemname);
 };
 
 #endif

@@ -23,19 +23,24 @@
 
 #include <qwidget.h>
 #include <qstring.h>
+#include <klistview.h>
+#include <qtooltip.h>
+#include <qrect.h>
 
 class KDevProject;
 class annotationPart;
+class annotationItem;
 
-class annotationWidget: public QWidget
+class annotationWidget: public KListView
 {
     Q_OBJECT
 public:  
     annotationWidget(annotationPart *part);
     ~annotationWidget();
-
+    void AnnotShowPopup(QListViewItem* item, const QPoint &p,int);
 private:
     annotationPart *m_part;
+    QPtrList<annotationItem> m_list;
 };
 
 
