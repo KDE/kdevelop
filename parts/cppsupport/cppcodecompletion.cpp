@@ -519,7 +519,7 @@ QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* 
 
 QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprList, const QStringList & scope, SimpleContext * ctx )
 {
-    kdDebug(9007) << "evaluateExpression " << exprList << " in " << scope << endl;
+    //kdDebug(9007) << "evaluateExpression " << exprList << " in " << scope << endl;
     
     if( exprList.isEmpty() )
 	return scope;
@@ -767,7 +767,7 @@ CppCodeCompletion::completeText( )
 		    var.type = scope;
 		    var.name = "this";
 		    ctx->add( var );
-		    kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
+		    //kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
 		}
 		
 		type = evaluateExpression( expr, ctx );
@@ -954,7 +954,7 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 
 		    if( !var.type.isEmpty() ){
 			ctx->add( var );
-			kdDebug(9007) << "add argument " << var.name << " with type " << var.type << endl;
+			//kdDebug(9007) << "add argument " << var.name << " with type " << var.type << endl;
 		    }
 		}
 	    }
@@ -1080,7 +1080,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 	    var.type = type;
 	    var.name = toSimpleName( d->declaratorId() );
 	    ctx->add( var );
-            kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
+            //kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
         }
    }
 }
