@@ -1,5 +1,5 @@
 /*
-* $Id:$
+* $Id$
 *  Copyright (C) 2003 Ian Reinhart Geiser <geiseri@kde.org>
 */
 #include <qwhatsthis.h>
@@ -200,7 +200,7 @@ void BashSupportPart::parse(const QString &fileName)
 		QString rawline;
 		QString line;
 		uint lineNo = 0;
-		KRegExp methodre("^[\\d\\S\\w]+\\(\\)");
+		KRegExp methodre("\\b[\\d\\w]+[\\s]*\\([\\s]*\\)");
 		QTextStream stream(&f);
 		while (!stream.atEnd())
 		{
