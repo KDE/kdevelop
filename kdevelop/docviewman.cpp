@@ -690,13 +690,13 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& i
   else {
     flags = QextMdi::Hide;
   }
+  // set the accelerators for Toplevel MDI mode (each toplevel window needs its own accels
+  connect( m_pParent, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(initKeyAccel(QWidget*)) );
+
   m_pParent->addWindow( pMDICover, flags);
   // correct the default settings of QextMDI ('cause we haven't a tab order for subwidget focuses)
   pMDICover->setFirstFocusableChildWidget(0L);
   pMDICover->setLastFocusableChildWidget(0L);
-
-  // set the accelerators for Toplevel MDI mode (each toplevel window needs its own accels
-  connect( m_pParent, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(initKeyAccel(QWidget*)) );
 }
 
 //-----------------------------------------------------------------------------
