@@ -106,7 +106,7 @@ KDevPart *PartLoader::loadService(KService *service, const char *className, KDev
             QString errorMessage = KLibLoader::self()->lastErrorMessage();
             KMessageBox::error(0, i18n("There was an error loading the module %1.\n"
                                        "The diagnostics is:\n%2").arg(service->name()).arg(errorMessage));
-            exit(1);
+            return 0;
         }
         kdDebug(9000) << "Does not have a KDevFactory" << endl;
         return 0;
