@@ -735,6 +735,7 @@ void CKDevelop::slotAddFileToProject(QString abs_filename){
     class_tree->addFile( abs_filename );
 
   log_file_tree->refresh( prj );
+  real_file_tree->refresh( prj );
 }
 
 void CKDevelop::slotProjectMessages(){
@@ -1024,6 +1025,12 @@ bool CKDevelop::addFileToProject(QString complete_filename,
     refreshTrees(&info);
   
   return new_subdir;
+}
+
+void CKDevelop::slotRemoveFileFromEditlist(const QString &absFilename)
+{
+  removeFileFromEditlist(absFilename);
+  setMainCaption();
 }
 
 void CKDevelop::delFileFromProject(QString rel_filename){

@@ -66,6 +66,12 @@ signals:
    * context menu is selected. It gives back the selected filename relative to
    * the project directory. */
   void removeFileFromProject(QString filename);
+
+  /**
+   * This signal is a helper to remove the file also from the actual editlist
+   */
+  void removeFileFromEditlist(const QString &absfilename);
+
   /**
    * This signal is emitted when the "File Properties..." entry of the context
    * menu is selected. It gives back the selected filename relative to the

@@ -408,17 +408,19 @@ void CRealFileView::slotRemoveFileFromProject() {
 void CRealFileView::slotDeleteFilePhys() {
 
   QString filename=getRelFilename(currentItem());
+  QString fullfilename=getFullFilename(currentItem());
   QString msg;
   msg.sprintf(i18n("Do you really want to delete the file\n%s\nfrom the disk?\nThere is no way to restore it!"), filename.data());
   if(KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
     return;
 
-  QFile::remove(getFullFilename(currentItem()));
+  QFile::remove(fullfilename);
 
   if (isInstalledFile(filename)) 
     emit removeFileFromProject(filename);
-
-  refresh(project);
+  else
+    refresh(project);
+  emit removeFileFromEditlist(fullfilename);
 }
 
 void CRealFileView::slotShowFileProperties() {
@@ -449,6 +451,7 @@ void CRealFileView::slotUpdate()
     }
     if(file_info.isDir()){
       emit updateDirFromVCS(file_dir_name);
+      refresh(project);
     }
 }
 
