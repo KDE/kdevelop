@@ -31,12 +31,14 @@
 #define _KDEVCORE_H_
 
 #include <qstringlist.h>
+#include <qdict.h>
 #include <qobject.h>
 
 #include <kurl.h>
 
 class KDialogBase;
 class KDevPlugin;
+class KDevLicense;
 class KAction;
 class CodeModelItem;
 
@@ -340,6 +342,11 @@ public:
      */
     virtual void running( KDevPlugin *which, bool runs ) = 0;
 
+    /**
+     * Returns a list of all available licenses.
+     */
+    virtual QDict< KDevLicense > licenses() = 0;
+    
 signals:
 
     /**
