@@ -166,6 +166,9 @@ void KIconBorder::paintBookmark(int line)
 
 void KIconBorder::paintBreakpoint(int line)
 {
+	if (line < 0 || line>kWriteDoc->lastLine())
+		return;
+
   // A breakpoint is on this line - draw it
 	if ( kWriteDoc->textLine(line)->getBPId() != 0 )
 	{
