@@ -1,3 +1,7 @@
+2000-11-20 Walter Tasin  <tasin@kdevelop.de>
+	* changing c and c++ template for using libtool
+	  to support shared libs creation
+
 2000-11-19  Ralf Funken <RFunken@KDevelop.org>
 	* Updated de.po and kdevelop.pot
 
