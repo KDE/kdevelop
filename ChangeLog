@@ -1,3 +1,8 @@
+2002-11-28 F@lk Brettschneider <falk@kdevelop.org>
+    * QEditor defaults to KDevelop-2 syntax highlighting colours
+    * some bugfixes for the QextMDI-based UI modes
+    * properly installs and loads the toolbar icons also when compiling Gideon on KDE-3.0.x
+    
 2002-11-26 Caleb Tennis <caleb@aei-tech.com
     * Added documentation to KDevelop 3.0 Manual
     * Reworked doc directories for doctreeviewpart - now external
