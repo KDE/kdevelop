@@ -76,25 +76,7 @@
   </Menu>
   <Menu name="debug" >
    <text>&amp;Debug</text>
-   <Action name="debug_start" />
-   <Menu icon="debug" name="debug_start_other" >
-    <text>S&amp;tart (other)...</text>
-    <Action name="debug_examine_core" />
-    <Action name="debug_debug_other_exe" />
-    <Action name="debug_attatch_to_process" />
-    <Action name="debug_debug_with_args" />
-   </Menu>
-   <Separator/>
-   <Action name="debug_run" />
-   <Action name="debug_run_to_cursor" />
-   <Action name="debug_step_over" />
-   <Action name="debug_step_over_instr" />
-   <Action name="debug_step_into" />
-   <Action name="debug_step_into_instr" />
-   <Action name="debug_step_out" />
-   <Separator/>
-   <Action name="debug_interrupt" />
-   <Action name="debug_stop" />
+   <Merge/>
   </Menu>
   <Menu name="settings" >
    <text>&amp;Settings</text>

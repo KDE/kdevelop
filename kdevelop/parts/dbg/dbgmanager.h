@@ -3,19 +3,40 @@
 
 #include "kdevcomponent.h"
 
+class BreakpointManager;
+
 class DbgManager : public KDevComponent
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    DbgManager( QObject *parent=0, const char *name=0 );
-    virtual ~DbgManager();
+  DbgManager( QObject *parent=0, const char *name=0 );
+  virtual ~DbgManager();
 
 protected:
-    virtual void setupGUI();
-    virtual void compilationAborted();
-    virtual void projectClosed();
-    virtual void projectOpened(CProject *prj);
+  virtual void setupGUI();
+  virtual void compilationAborted();
+  virtual void projectClosed();
+  virtual void projectOpened(CProject *prj);
+  
+private slots:
+  void slotDebugStart();
+  void slotDebugExamineCore();
+  void slotDebugNamedFile();
+  void slotDebugAttach();
+  void slotDebugExecuteWithArgs();
+  void slotDebugRun();
+  void slotDebugRunToCursor();
+  void slotDebugStepOver();
+  void slotDebugStepOverInstr();
+  void slotDebugStepInto();
+  void slotDebugStepIntoInstr();
+  void slotDebugStepOut();
+  void slotDebugInterrupt();
+  void slotDebugStop();
+
+private:
+  BreakpointManager* m_BPManager;
 };
 
 #endif

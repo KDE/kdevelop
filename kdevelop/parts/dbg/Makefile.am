@@ -31,5 +31,5 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevelopdbg.desktop
 
 rcdir = $(kde_datadir)/kdevelopdbg
-rc_DATA = kdevelopdbg.rc
+rc_DATA = kdevelopdbgui.rc
 

@@ -40,7 +40,7 @@ KInstance *DbgFactory::s_instance = 0;
 KInstance *DbgFactory::instance()
 {
     if (!s_instance)
-        s_instance = new KInstance("kdevdbg");
+        s_instance = new KInstance("kdevelopdbg");
 
     return s_instance;
 }
