@@ -1230,6 +1230,7 @@ void CProject::createLibraryMakefileAm(const QString &makefile, const QString &t
     for(str = list.first();str != 0;str = list.next())
     {
       str.replace(QRegExp("\\|LIBNAME\\|"), dir.dirName());
+      str.replace(QRegExp("\\|LIBADD\\|"), getLDADD());
       streamDest << str << "\n";
     }
   }
