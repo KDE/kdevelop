@@ -2,13 +2,15 @@
 apidox-am-yes:
 	@if test "$(subdir)" == "."; then \
 		$(mkinstalldirs) $(top_builddir)/apidocs/$(subdir) ;\
-		if test ! -x $(top_builddir)/apidocs/common; then \
-			if test -d $(top_srcdir)/doc/common; then \
-				common_dir=`cd $(top_srcdir)/doc/common && pwd` ;\
-			else \
-				common_dir=$(kde_libs_htmldir)/en/common ;\
+		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
+			if test ! -x $(top_builddir)/apidocs/common; then \
+				if test -d $(top_srcdir)/doc/common; then \
+					common_dir=`cd $(top_srcdir)/doc/common && pwd` ;\
+				else \
+					common_dir=$(kde_libs_htmldir)/en/common ;\
+				fi ;\
+				$(LN_S) $$common_dir $(top_builddir)/apidocs/common; \
 			fi ;\
-			$(LN_S) $$common_dir $(top_builddir)/apidocs/common; \
 		fi ;\
 		cp $(top_srcdir)/admin/Doxyfile.global Doxyfile; \
 		##--------------------------------------------------------------------------- \
@@ -154,7 +156,7 @@ apidox-am-yes:
 		##--------------------------------------------------------------------------- \
 		echo "SEARCHENGINE = $(DOXYGEN_SEARCHENGINE)" >> Doxyfile ; \
 		##--------------------------------------------------------------------------- \
-		## Run doxygen                                                                \
+		## create a link to the KDE common documentation directory                    \
 		##--------------------------------------------------------------------------- \
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
 			rm -f $(top_builddir)/apidocs/common ; \
@@ -165,6 +167,11 @@ apidox-am-yes:
 			fi ;\
 			$(LN_S) $$common_dir $(top_builddir)/apidocs/common ;\
 		fi ;\
+		## Make a nice looking Doxyfile out of the mess that we just did
+		$(DOXYGEN) -s -u Doxyfile; \
+		##--------------------------------------------------------------------------- \
+		## Run doxygen                                                                \
+		##--------------------------------------------------------------------------- \
 		$(DOXYGEN) Doxyfile; \
 		rm -f Doxyfile; \
 	fi
