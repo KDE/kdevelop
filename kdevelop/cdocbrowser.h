@@ -59,13 +59,13 @@ public slots:
   void slotDocFixedFont(const char *);
   void slotDocColorsChanged(const QColor&, const QColor&,
             		const QColor&, const QColor&, const bool, const bool);
-  void slotPopupMenu(KHTMLWidget*, QString , const QPoint & );
+  void slotPopupMenu(const QString &, const QPoint & );
   void slotCopyText();
   void slotURLBack();
   void slotURLForward();
   void slotSearchText();
 	void slotGrepText();
-	void slotSetFileTitle(QString);
+	void slotSetFileTitle(const QString&);
 	void slotViewInKFM();
 		
  signals:

@@ -1343,9 +1343,8 @@ void CKDevelop::slotBookmarksClear(){
 }
 
 void CKDevelop::slotBoomarksBrowserSelected(int id_){
-	slotStatusMsg(i18n("Opening bookmark..."));
-	QString file= doc_bookmarks_list.at(id_);
-	slotURLSelected( browser_widget, file,1,"test");	
+  slotStatusMsg(i18n("Opening bookmark..."));
+  slotURLSelected(doc_bookmarks_list.at(id_), QString(), 1);
   slotStatusMsg(i18n("Ready."));
 }	
 
@@ -1494,14 +1493,14 @@ void CKDevelop::slotHelpReference(){
   QString file = CToolClass::locatehtml("kdevelop/reference/C/cref.html");
   if (file.isNull())
     file = CToolClass::locatehtml("kdevelop/cref.html");
-  slotURLSelected(browser_widget,"file:" + file,1,"test");
+  slotURLSelected("file:" + file, QString(), 1);
 }
 
 
 void CKDevelop::slotHelpQtLib(){
   config->setGroup("Doc_Location");
   QString doc_qt = config->readEntry("doc_qt", QT_DOCDIR);
-  slotURLSelected(browser_widget,"file:" + doc_qt + "/index.html",1,"test");
+  slotURLSelected("file:" + doc_qt + "/index.html", QString(), 1);
 }
 
 
@@ -1510,7 +1509,7 @@ void CKDevelop::showLibsDoc(const char *libname)
   config->setGroup("Doc_Location");
   QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
   QString url = "file:" + doc_kde + "/" + libname + "/index.html";
-  slotURLSelected(browser_widget, url,1,"test");
+  slotURLSelected(url, QString(), 1);
 }
     
 void CKDevelop::slotHelpKDECoreLib(){
@@ -1532,7 +1531,7 @@ void CKDevelop::slotHelpKDEHTMLLib(){
   config->setGroup("Doc_Location");
   QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
   QString file = doc_kde + "/khtml/index.html";
-  slotURLSelected(browser_widget,"file:" +file  ,1,"test");
+  slotURLSelected("file:" + file, QString(), 1);
 }
 
 
@@ -1549,7 +1548,7 @@ void CKDevelop::slotHelpAPI(){
     }
     else{
         slotStatusMsg(i18n("Switching to project API Documentation..."));
-        slotURLSelected(browser_widget,api_file,1,"test");     
+        slotURLSelected(api_file, QString(), 1);     
         slotStatusMsg(i18n("Ready.")); 
     }
   }
@@ -1573,7 +1572,7 @@ void CKDevelop::slotHelpManual(){
     }
     else{
         slotStatusMsg(i18n("Switching to project Manual..."));
-        slotURLSelected(browser_widget,doc_file,1,"test");
+        slotURLSelected(doc_file, QString(), 1);
     	slotStatusMsg(i18n("Ready."));
     }
   }
@@ -1581,13 +1580,13 @@ void CKDevelop::slotHelpManual(){
 
 void CKDevelop::slotHelpContents(){
   QString file = CToolClass::locatehtml("kdevelop/index.html");
-  slotURLSelected(browser_widget,"file:" + file,1,"test");
+  slotURLSelected("file:" + file, QString(), 1);
 
 }
 
 void CKDevelop::slotHelpTutorial(){
   QString file = CToolClass::locatehtml("kdevelop/programming/index.html");
-  slotURLSelected(browser_widget,"file:" + file,1,"test");
+  slotURLSelected("file:" + file, QString(), 1);
 	
 }
 
@@ -1909,7 +1908,7 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
   }
 }
 */
-void CKDevelop::slotBROWSERMarkStatus(KHTMLWidget *, bool bMarked)
+void CKDevelop::slotBROWSERMarkStatus(bool bMarked)
 {
 #warning FIXME MDI stuff
   // int item=s_tab_view->getCurrentTab();
@@ -1971,13 +1970,12 @@ void CKDevelop::slotNewUndo(){
 }
 
 
-void CKDevelop::slotURLSelected(KHTMLWidget* ,QString url,int,QString){
+void CKDevelop::slotURLSelected(const QString &url, const QString &, int){
 //	enableCommand(ID_HELP_BROWSER_STOP);
   if(!bKDevelop)
       switchToKDevelop();
   browser_widget->setFocus();
-  QString url_str = url;
-  if(url_str.contains("kdevelop/search_result.html") != 0){
+  if(url.contains("kdevelop/search_result.html") != 0){
       browser_widget->showURL(url,true); // with reload if equal
   }
   else{
@@ -1994,19 +1992,12 @@ void CKDevelop::slotURLSelected(KHTMLWidget* ,QString url,int,QString){
 
 }
 
-void CKDevelop::slotURLonURL(KHTMLWidget*, QString url)
+void CKDevelop::slotURLonURL(const QString &url)
 {
-	if ( url )
-	{
-		statusBar()->changeItem(url,ID_STATUS_MSG);
-	}
-	else
-	{
-		statusBar()->changeItem(i18n("Ready."), ID_STATUS_MSG);
-	}
+    statusBar()->changeItem(url.isNull()? i18n("Ready.") : url, ID_STATUS_MSG);
 }
 
-void CKDevelop::slotDocumentDone( KHTMLWidget * ){
+void CKDevelop::slotDocumentDone(){
   QString actualURL=browser_widget->currentURL();
   QString actualTitle=browser_widget->currentTitle();
   int cur =  history_list.at()+1; // get the current index
@@ -2182,7 +2173,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
    stream << "\n</TABLE></BODY></HTML>";
 
    file.close();
-   slotURLSelected(browser_widget,"file:" + filename,1,"test");
+   slotURLSelected("file:" + filename, QString(), 1);
 
 }
 
@@ -2355,7 +2346,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
     return;
   }
 
-  slotURLSelected(browser_widget,"file:"+ url_file,1,"test");
+  slotURLSelected("file:" + url_file, QString(), 1);
   
 }
 

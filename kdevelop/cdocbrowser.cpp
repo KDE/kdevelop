@@ -68,10 +68,10 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLWidget(parent,n
   doc_pop->insertItem(BarIcon("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   doc_pop->insertItem(BarIcon("lookup"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
 	
-//  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
-  connect( this, SIGNAL( popupMenu(KHTMLWidget *, QString, const QPoint & ) ),
-           this, SLOT( slotPopupMenu(KHTMLWidget *, QString, const QPoint & ) ) );
-  connect(this, SIGNAL( setTitle ( QString) ), this, SLOT( slotSetFileTitle( QString) ) );
+  connect( this, SIGNAL( popupMenu(const QString &, const QPoint &) ),
+           this, SLOT( slotPopupMenu(const QString &, const QPoint &) ) );
+  connect(this, SIGNAL( setTitle(const QString &) ),
+          this, SLOT( slotSetFileTitle(const QString &) ) );
 
 }
 
@@ -260,14 +260,13 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 //	emit enableMenuItems();){
 }
 
-void CDocBrowser::slotPopupMenu(KHTMLWidget*, QString, const QPoint & pnt){
+void CDocBrowser::slotPopupMenu(const QString &, const QPoint & pnt){
   QString text;
-  int pos;
   if(this->isTextSelected()){
 
     text = selectedText();
     text.replace(QRegExp("^\n"), "");
-    pos=text.find("\n");
+    int pos=text.find("\n");
     if (pos>-1)
      text=text.left(pos);
   }
@@ -315,7 +314,7 @@ void CDocBrowser::slotURLForward(){
   emit signalURLForward();
 }
 
-void CDocBrowser::slotSetFileTitle( QString title){
+void CDocBrowser::slotSetFileTitle( const QString &title){
 	m_title= title;
 }
 

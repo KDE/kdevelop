@@ -20,7 +20,7 @@
 #include "cdocbrowser.h"
 #include "docbrowserview.h"
 
-DocBrowserView::DocBrowserView(QWidget* parent=0,char* name=0) : QextMdiChildView(name){
+DocBrowserView::DocBrowserView(QWidget* parent,char* name) : QextMdiChildView(name){
   browser = new CDocBrowser(this,name);
 }
 

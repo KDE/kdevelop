@@ -578,7 +578,7 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   
-  project_menu->insertItem(loader->loadApplicationMiniIcon("locale.png"),i18n("Add new &Translation File..."), this,
+  project_menu->insertItem(loader->loadApplicationIcon("mini/locale.png"),i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,
@@ -1036,21 +1036,21 @@ void CKDevelop::initConnections(){
 
   // connect Docbrowser rb menu
 
-  connect(browser_widget, SIGNAL(URLSelected(KHTMLWidget*,QString,int,QString)), this, SLOT(slotURLSelected(KHTMLWidget*,QString,int,QString))); 	
-
-  connect(browser_widget, SIGNAL(documentDone(KHTMLWidget*)), this, SLOT(slotDocumentDone(KHTMLWidget*)));
+  connect(browser_widget, SIGNAL(urlClicked(const QString&,const QString&,int)),
+          this, SLOT(slotURLSelected(const QString&,const QString&,int)));
+  connect(browser_widget, SIGNAL(onURL(const QString&)),
+          this, SLOT(slotURLonURL(const QString&)));
+  connect(browser_widget, SIGNAL(textSelected(bool)),
+          this, SLOT(slotBROWSERMarkStatus(bool)));
+  connect(browser_widget, SIGNAL(completed()),
+          this, SLOT(slotDocumentDone()));
   connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
   connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
   connect(browser_widget, SIGNAL(signalBookmarkAdd()),this,SLOT(slotBookmarksAdd()));
-
-  connect(browser_widget, SIGNAL(onURL(KHTMLWidget*, QString)),this,SLOT(slotURLonURL(KHTMLWidget*, QString)));
   connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
-  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
-  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
   connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
   connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-  connect(browser_widget, SIGNAL(textSelected(KHTMLWidget*, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLWidget*, bool)));
   
   connect(browser_view,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
 

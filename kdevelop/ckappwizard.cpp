@@ -1747,7 +1747,8 @@ void CKAppWizard::slotMiniIconButtonClicked() {
   KIconLoaderDialog  mload;
   mload.selectIcon(name2,"*");
   if (!name2.isNull() )
-    miniload->setPixmap(KGlobal::iconLoader()->loadApplicationMiniIcon(name2));
+#warning FIXME mini icons?
+    miniload->setPixmap(KGlobal::iconLoader()->loadApplicationIcon(name2));
 }
 
 // activate and deactivate the iconbutton

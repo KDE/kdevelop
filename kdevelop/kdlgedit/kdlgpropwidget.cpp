@@ -173,7 +173,7 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
   int numGrp;
   AdvLvi_Base *adv = 0;
 
-  QPixmap folder_pix = KGlobal::iconLoader()->loadApplicationMiniIcon("folder.png");
+  QPixmap folder_pix = KGlobal::iconLoader()->loadApplicationIcon("mini/folder.png");
 
   KDlgPropertyEntry *prop;
   int i,n;

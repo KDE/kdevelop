@@ -512,7 +512,7 @@ public:
   void slotMarkStatus();
 //  void slotCPPMarkStatus(KWriteView *, bool);
 //  void slotHEADERMarkStatus(KWriteView *, bool);
-  void slotBROWSERMarkStatus(KHTMLWidget *, bool);
+  void slotBROWSERMarkStatus(bool);
   /** recognize change of Clipboard data */
   void slotClipboardChanged();
   /** change Statusbar status of Line and Column */
@@ -529,9 +529,9 @@ public:
   // editorview related
   void   slotEditorViewClosing(EditorView*);
 
-  void slotURLSelected(KHTMLWidget* widget,QString url,int, QString);
-  void slotDocumentDone( KHTMLWidget * );
-  void slotURLonURL(KHTMLWidget*,QString);
+  void slotURLSelected(const QString &url, const QString&, int button);
+  void slotDocumentDone();
+  void slotURLonURL(const QString &url);
 
   void switchToKDevelop();
   void switchToKDlgEdit();
