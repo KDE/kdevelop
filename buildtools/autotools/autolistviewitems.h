@@ -91,12 +91,12 @@ private:
 class TargetItem : public ProjectItem
 {
 public:
-	//    enum TargetKind { Program, Library, DataGroup, IconGroup, DocGroup };
+	//enum TargetKind { Program, Library, DataGroup, IconGroup, DocGroup };
 
 	TargetItem(QListView *lv, bool group, const QString &text);
 
-	//! Target kind - not used currently
-	//!    TargetKind kind;
+	// Target kind - not used currently
+	//TargetKind kind;
 	//! Name of target, e.g. foo
 	QString name;
 	//! One of PROGRAMS, LIBRARIES, LTLIBRARIES, SCRIPTS, HEADERS, DATA, JAVA

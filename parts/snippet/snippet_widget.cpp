@@ -166,8 +166,8 @@ void SnippetWidget::slotRemove()
         == KMessageBox::Cancel)
 #else
         KMessageBox::warningContinueCancel(this, i18n("Do you really want to remove this group and all its snippets?"),
-		QString::null,KGuiItem( "&Delete", "editdelete",
-                   "Delete item(s)"))
+		QString::null,KGuiItem( i18n( "&Delete" ), "editdelete",
+                   i18n( "Delete item(s)" )))
         == KMessageBox::Cancel)
 #endif
       return;

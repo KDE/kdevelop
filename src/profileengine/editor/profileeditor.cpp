@@ -256,7 +256,7 @@ void ProfileEditor::removeProfile()
         i18n("Remove Profile"),KStdGuiItem::del()) == KMessageBox::Continue)
 #else
     if (KMessageBox::warningContinueCancel(this, i18n("Remove selected profile and all its subprofiles?"),
-        i18n("Remove Profile"),KGuiItem( "&Delete", "editdelete", "Delete item(s)")) == KMessageBox::Continue)
+        i18n("Remove Profile"),KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ))) == KMessageBox::Continue)
 #endif
     {
         Profile *profile = currentProfile();

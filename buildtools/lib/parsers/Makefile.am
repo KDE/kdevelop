@@ -2,7 +2,7 @@
 # project management for the sole purpose that they
 # can be shared between parts.
 
-SUBDIRS = parsers widgets base
+SUBDIRS = qmake
 
 DOXYGEN_EMPTY = YES
-include ../../Doxyfile.am
+include ../../../Doxyfile.am

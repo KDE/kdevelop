@@ -1,0 +1,10 @@
+/** \class annotation
+This annotation support for kdevelop. Currently very broken it's why I created a branch for it.
+\authors <a href="mailto:mchoui@e-c.qc.ca">Mathieu Chouinard</a>
+d
+\maintainer <a href="mailto:mchoui@e-c.qc.ca">Mathieu Chouinard</a>
+
+\feature Use of the classview to add annotation
+
+
+*/

@@ -820,7 +820,7 @@ void CvsServicePartImpl::removedFilesFromProject(const QStringList &filesToRemov
     int s = KMessageBox::warningContinueCancel( 0,
         i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too."),
         i18n("CVS - Files Removed From Project"),
-        KGuiItem( "&Delete", "editdelete", "Delete item(s)"),
+        KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" )),
         i18n("askWhenRemovingFiles") );
 #endif
     if (s == KMessageBox::Continue)

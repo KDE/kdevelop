@@ -23,7 +23,7 @@ libkdevautoproject_la_SOURCES = autoprojectpart.cpp autoprojectwidget.cpp \
 		removetargetdlgbase.ui choosetargetdialog.cpp choosetargetdlgbase.ui addexistingdlgbase.ui \
 		addexistingfilesdlg.cpp addexistingdirectoriesdlg.cpp kimporticonview.cpp \
 		autosubprojectview.cpp autodetailsview.cpp autolistviewitems.cpp automakemanager.cpp \
-	managecustomcommandsbase.ui managecustomcommand.cpp
+		managecustomcommandsbase.ui managecustomcommand.cpp autoprojectviewbase.ui autotoolsaction.cpp
 
 METASOURCES = AUTO
 
@@ -33,4 +33,4 @@ service_DATA = kdevautoproject.desktop kdevkdeautoproject.desktop
 rcdir = $(kde_datadir)/kdevautoproject
 rc_DATA = kdevautoproject.rc
 
-noinst_HEADERS = managecustomcommand.h
+noinst_HEADERS = managecustomcommand.h autotoolsaction.h

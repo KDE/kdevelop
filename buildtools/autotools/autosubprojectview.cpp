@@ -1,18 +1,17 @@
-/***************************************************************************
-                             -------------------
-    begin                : 19.01.2003
-    copyright            : (C) 2002 by Victor Rder
-    email                : victor_roeder@gmx.de
- ***************************************************************************/
+/*
+   KDevelop Autotools Support
+   Copyright (c) 2002 by Victor Roeder <victor_roeder@gmx.de>
+   Copyright (c) 2005 by Matt Rogers <mattr@kde.org>
 
-/***************************************************************************
+ ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
- ***************************************************************************/
+ ***************************************************************************
+*/
 
 /** Qt */
 #include <qregexp.h>
@@ -31,6 +30,7 @@
 #include <kprocess.h>
 #include <ksqueezedtextlabel.h>
 #include <kdialogbase.h>
+#include <klistview.h>
 
 /** KDevelop */
 #include <kdevmainwindow.h>
@@ -48,6 +48,7 @@
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
 #include "autosubprojectview.h"
+#include "autotoolsaction.h"
 #include "removesubprojectdialog.h"
 #include "managecustomcommand.h"
 
@@ -104,12 +105,19 @@ static void removeDir( const QString& dirName )
 
 
 AutoSubprojectView::AutoSubprojectView(AutoProjectWidget* widget, AutoProjectPart* part, QWidget *parent, const char *name)
-  : KListView(parent, name)
+: AutoProjectViewBase(parent, name)
 {
+	
 	m_widget = widget;
 	m_part = part;
-	setAllColumnsShowFocus( true );
-
+	
+	m_listView->setSorting(-1);
+	m_listView->header()->hide();
+	m_listView->addColumn( QString::null );
+	
+	connect( m_listView, SIGNAL( selectionChanged( QListViewItem* ) ),
+	         this, SLOT( slotSelectionChanged( QListViewItem* ) ) );
+	
 	initActions();
 }
 
@@ -118,89 +126,145 @@ AutoSubprojectView::~AutoSubprojectView()
 {
 }
 
+void AutoSubprojectView::slotSelectionChanged( QListViewItem* item )
+{
+	if ( m_listView->selectedItems().count() <= 0 )
+	{
+		subProjectOptionsAction->setEnabled( false );
+		addSubprojectAction->setEnabled( false );
+		addTargetAction->setEnabled( false );
+		addServiceAction->setEnabled( false );
+		addApplicationAction->setEnabled( false );
+		buildSubprojectAction->setEnabled( false );
+	}
+	else
+	{
+		subProjectOptionsAction->setEnabled( true );
+		addSubprojectAction->setEnabled( true );
+		addTargetAction->setEnabled( true );
+		addServiceAction->setEnabled( true );
+		addApplicationAction->setEnabled( true );
+		buildSubprojectAction->setEnabled( true );
+	}
+	
+	emit selectionChanged( item );
+}
+
 void AutoSubprojectView::loadMakefileams ( const QString& dir )
 {
-	SubprojectItem * item = new SubprojectItem( this, m_part->projectName() );
+	SubprojectItem * item = new SubprojectItem( m_listView, m_part->projectName() );
 	item->setPixmap ( 0, SmallIcon ( "kdevelop" ) );
 	item->subdir = "/";
 	item->path = dir;
 	parse( item );
 	item->setOpen( true );
 
-	setSelected( item, true );
+	//setSelected( item, true );
 	
-	expandCollapseFirst( firstChild(), false );
+	expandCollapseFirst( m_listView->firstChild(), false );
 }
 
 
 void AutoSubprojectView::initActions()
 {
 	KActionCollection * actions = new KActionCollection( this );
-
-	subProjectOptionsAction = new KAction( i18n( "Options..." ), "configure", 0,
+	
+	subProjectOptionsAction = new AutoToolsAction( i18n( "Options..." ), "configure", 0,
 	                                       this, SLOT( slotSubprojectOptions() ), actions, "subproject options" );
-    subProjectOptionsAction->setWhatsThis(i18n("<b>Options</b><p>Shows subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
-	addSubprojectAction = new KAction( i18n( "Add Subproject..." ), "folder_new", 0,
+	subProjectOptionsAction->setWhatsThis(i18n("<qt><b>Options</b><p>Shows subproject options dialog "
+	                                           "that provides settings for compiler, include paths, "
+	                                           "prefixes and build order.</qt>"));
+	subProjectOptionsAction->plug( m_optionsButton );
+	
+	addSubprojectAction = new AutoToolsAction( i18n( "Add Subproject..." ), "folder_new", 0,
 	                                   this, SLOT( slotAddSubproject() ), actions, "add subproject" );
-    addSubprojectAction->setWhatsThis(i18n("<b>Add subproject</b><p>Creates a new subproject in currently selected subproject."));
+	addSubprojectAction->setWhatsThis(i18n("<qt><b>Add subproject</b><p>Creates a new "
+	                                       "subproject in currently selected subproject.</qt>"));
+	addSubprojectAction->plug( m_button1 );
+	
 	removeSubprojectAction = new KAction( i18n( "Remove Subproject..." ), "remove_subdir", 0,
-	                                   this, SLOT( slotRemoveSubproject() ), actions, "remove subproject" );
-    removeSubprojectAction->setWhatsThis(i18n("<b>Remove subproject</b><p>Removes the subproject. Asks if the subproject should be also removed from disk. Only subprojects which do not hold other subprojects can be removed."));
-    addExistingSubprojectAction = new KAction( i18n( "Add Existing Subprojects..." ), "fileimport", 0,
+	                                      this, SLOT( slotRemoveSubproject() ), actions, "remove subproject" );
+	removeSubprojectAction->setWhatsThis(i18n("<qt><b>Remove subproject</b><p>Removes the subproject. Asks if the "
+	                                          "subproject should be also removed from disk. Only subprojects "
+	                                          "which do not hold other subprojects can be removed.</qt>"));
+	addExistingSubprojectAction = new KAction( i18n( "Add Existing Subprojects..." ), "fileimport", 0,
 	                                           this, SLOT( slotAddExistingSubproject() ), actions, "add existing subproject" );
-    addExistingSubprojectAction->setWhatsThis(i18n("<b>Add existing subprojects</b><p>Imports existing subprojects containing Makefile.am."));
-    addTargetAction = new KAction( i18n( "Add Target..." ), "targetnew_kdevelop", 0,
+	addExistingSubprojectAction->setWhatsThis(i18n("<qt><b>Add existing subprojects</b><p>Imports existing "
+	                                               "subprojects containing Makefile.am.</qt>"));
+	
+	addTargetAction = new AutoToolsAction( i18n( "Add Target..." ), "targetnew_kdevelop", 0,
 	                               this, SLOT( slotAddTarget() ), actions, "add target" );
-    addTargetAction->setWhatsThis(i18n("<b>Add target</b><p>Adds a new target to the currently selected subproject. Target can be a binary program, library, script, also a collection of data or header files."));
-    addServiceAction = new KAction( i18n( "Add Service..." ), "servicenew_kdevelop", 0,
-	                                this, SLOT( slotAddService() ), actions, "add service" );
-    addServiceAction->setWhatsThis(i18n("<b>Add service</b><p>Creates a .desktop file describing the service."));
-    addApplicationAction = new KAction( i18n( "Add Application..." ), "window_new", 0,
-	                                    this, SLOT( slotAddApplication() ), actions, "add application" );
-    addApplicationAction->setWhatsThis(i18n("<b>Add application</b><p>Creates an application .desktop file."));
-    buildSubprojectAction = new KAction( i18n( "Build" ), "launch", 0,
-	                                     this, SLOT( slotBuildSubproject() ), actions, "add build subproject" );
-    buildSubprojectAction->setWhatsThis(i18n("<b>Build</b><p>Runs <b>make</b> from the directory of the selected subproject.<br>"
-                                             "Environment variables and make arguments can be specified "
-                                             "in the project settings dialog, <b>Make Options</b> tab."));
-    forceReeditSubprojectAction = new KAction( i18n( "Force Reedit" ), 0, 0,
-	                                     this, SLOT( slotForceReeditSubproject() ), actions, "force-reedit subproject" );
-    forceReeditSubprojectAction->setWhatsThis(i18n("<b>Force Reedit</b><p>Runs <b>make force-reedit</b> from the directory of the selected subproject.<br>"
-                                                   "This recreates makefile (tip: and solves most of .moc related problems)<br>"
-                                                   "Environment variables and make arguments can be specified "
-                                                   "in the project settings dialog, <b>Make Options</b> tab."));
-    cleanSubprojectAction = new KAction( i18n( "Clean" ), 0, 0,
-	                                     this, SLOT( slotCleanSubproject() ), actions, "clean subproject" );
-    cleanSubprojectAction->setWhatsThis(i18n("<b>Clean</b><p>Runs <b>make clean</b> from the directory of the selected subproject.<br>"
-                                             "Environment variables and make arguments can be specified "
-                                             "in the project settings dialog, <b>Make Options</b> tab."));
-    if (!m_part->isKDE())
-        forceReeditSubprojectAction->setEnabled(false);
-	installSubprojectAction = new KAction( i18n( "Install" ), 0, 0,
-	                                     this, SLOT( slotInstallSubproject() ), actions, "install subproject" );
-    installSubprojectAction->setWhatsThis(i18n("<b>Install</b><p>Runs <b>make install</b> from the directory of the selected subproject.<br>"
-                                             "Environment variables and make arguments can be specified "
-                                             "in the project settings dialog, <b>Make Options</b> tab."));
+	addTargetAction->setWhatsThis(i18n( "<qt><b>Add target</b><p>Adds a new target to "
+	                                    "the currently selected subproject. Target can be a "
+	                                    "binary program, library, script, also a collection of "
+	                                    "data or header files.</qt>"));
+	addTargetAction->plug( m_button2 );
+	
+	addServiceAction = new AutoToolsAction( i18n( "Add Service..." ), "servicenew_kdevelop", 0, this,
+	                                SLOT( slotAddService() ), actions, "add service" );
+	addServiceAction->setWhatsThis(i18n("<qt><b>Add service</b><p>Creates a .desktop file describing the service.</qt>"));
+	addServiceAction->plug( m_button3 );
+	
+	addApplicationAction = new AutoToolsAction( i18n( "Add Application..." ), "window_new", 0, this,
+	                                    SLOT( slotAddApplication() ), actions, "add application" );
+	addApplicationAction->setWhatsThis(i18n("<qt><b>Add application</b><p>Creates an application .desktop file.</qt>"));
+	addApplicationAction->plug( m_button4 );
+	
+	buildSubprojectAction = new AutoToolsAction( i18n( "Build" ), "launch", 0, this,
+	                                     SLOT( slotBuildSubproject() ), actions, "add build subproject" );
+	buildSubprojectAction->setWhatsThis(i18n("<qt><b>Build</b><p>Runs <b>make</b> from the directory of "
+	                                         "the selected subproject.<br> Environment variables and "
+	                                         "make arguments can be specified in the project settings "
+	                                         "dialog, <b>Make Options</b> tab.</qt>"));
+	buildSubprojectAction->plug( m_button5 );
+	
+	forceReeditSubprojectAction = new KAction( i18n( "Force Reedit" ), 0, 0, this,
+	                                           SLOT( slotForceReeditSubproject() ), actions, "force-reedit subproject" );
+	forceReeditSubprojectAction->setWhatsThis(i18n("<qt><b>Force Reedit</b><p>Runs <b>make force-reedit</b> "
+	                                               "from the directory of the selected subproject.<br>This "
+	                                               "recreates makefile (tip: and solves most of .moc related "
+	                                               "problems)<br>Environment variables and make arguments can "
+	                                               "be specified in the project settings dialog, "
+	                                               "<b>Make Options</b> tab.</qt>"));
+	
+	if (!m_part->isKDE())
+		forceReeditSubprojectAction->setEnabled(false);
+	
+	cleanSubprojectAction = new KAction( i18n( "Clean" ), 0, 0, this,
+	                                     SLOT( slotCleanSubproject() ), actions, "clean subproject" );
+	cleanSubprojectAction->setWhatsThis(i18n("<qt><b>Clean</b><p>Runs <b>make clean</b> from the directory of "
+	                                         "the selected subproject.<br> Environment variables and make "
+	                                         "arguments can be specified in the project settings dialog, "
+	                                         "<b>Make Options</b> tab.</qt>"));
+	
+	installSubprojectAction = new KAction( i18n( "Install" ), 0, 0, this,
+	                                       SLOT( slotInstallSubproject() ), actions, "install subproject" );
+	installSubprojectAction->setWhatsThis(i18n("<qt><b>Install</b><p>Runs <b>make install</b> from the directory "
+	                                           "of the selected subproject.<br> Environment variables and "
+	                                           "make arguments can be specified in the project settings "
+	                                           "dialog, <b>Make Options</b> tab.</qt>"));
 	installSuSubprojectAction = new KAction( i18n( "Install (as root user)" ), 0, 0,
-	                                     this, SLOT( slotInstallSuSubproject() ), actions, "install subproject as root" );
-    installSuSubprojectAction->setWhatsThis(i18n("<b>Install as root user</b><p>Runs <b>make install</b> command from the directory of the selected subproject with root privileges.<br>"
-                              "It is executed via kdesu command.<br>"
-                              "Environment variables and make arguments can be specified "
-                              "in the project settings dialog, <b>Make Options</b> tab."));
-
-	expandAction = new KAction( i18n( "Expand Subtree" ), 0, 0, this, SLOT(slotExpandTree()), actions, "expandAction" );
-	collapseAction = new KAction( i18n( "Collapse Subtree" ), 0, 0, this, SLOT(slotCollapseTree()), actions, "collapseAction" );
-
-	otherAction = new KAction( i18n( "Manage Custom Commands..." ), 0, 0,
-		this, SLOT( slotManageBuildCommands() ), actions, "manage custom commands" );
-	otherAction->setWhatsThis(i18n("<b>Manage custom commands</b><p>Allows to create, edit and delete custom build commands which appears in the subproject context menu.<br>"));
-
-	connect( this, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
+	                                         this, SLOT( slotInstallSuSubproject() ), actions, "install subproject as root" );
+	installSuSubprojectAction->setWhatsThis(i18n("<qt><b>Install as root user</b><p>Runs <b>make install</b> "
+	                                             "command from the directory of the selected subproject "
+	                                             "with root privileges.<br> It is executed via kdesu "
+	                                             "command.<br> Environment variables and make arguments "
+	                                             "can be specified in the project settings dialog, "
+	                                             "<b>Make Options</b> tab.</qt>"));
+	
+	expandAction = new KAction( i18n( "Expand Subtree" ), 0, 0, this,
+	                            SLOT(slotExpandTree()), actions, "expandAction" );
+	collapseAction = new KAction( i18n( "Collapse Subtree" ), 0, 0, this,
+	                              SLOT(slotCollapseTree()), actions, "collapseAction" );
+	
+	otherAction = new KAction( i18n( "Manage Custom Commands..." ), 0, 0, this,
+	                           SLOT( slotManageBuildCommands() ), actions, "manage custom commands" );
+	otherAction->setWhatsThis(i18n("<qt><b>Manage custom commands</b><p>Allows to create, edit and "
+	                               "delete custom build commands which appears in the subproject "
+	                               "context menu.<br></qt>"));
+	
+	connect( m_listView, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( slotContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
-/*	connect ( this, SIGNAL ( executed ( QListViewItem* ),
-			this, SLOT ( slotSubprojectExecuted ( QListViewItem* ) ) );
-	connect ( this, SIGNAL ( returnPressed ( QListViewItem* ),
-			this, SLOT ( slotSubprojectExecuted ( QListViewItem* ) ) );*/
 }
 
 void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, const QPoint &p )
@@ -253,17 +317,12 @@ void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, cons
 
 	popup.exec( p );
 }
-/*
-void AutoSubprojectView::slotSubprojectExecuted ( QListViewItem* item )
-{
-	emit selectionChanged ( item );
-}*/
 
 void AutoSubprojectView::slotSubprojectOptions()
 {
 	kdDebug( 9020 ) << "AutoSubprojectView::slotSubprojectOptions()" << endl;
 
-	SubprojectItem* spitem = static_cast <SubprojectItem*> ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	SubprojectOptionsDialog dlg( m_part, m_widget, spitem, this, "subproject options dialog" );
@@ -273,7 +332,7 @@ void AutoSubprojectView::slotSubprojectOptions()
 
 void AutoSubprojectView::slotAddSubproject()
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	AddSubprojectDialog dlg( m_part, this, spitem, this, "add subproject dialog" );
@@ -285,7 +344,7 @@ void AutoSubprojectView::slotAddSubproject()
 
 void AutoSubprojectView::slotAddExistingSubproject()
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	AddExistingDirectoriesDialog dlg ( m_part, m_widget, spitem, this, "add existing subprojects" );
@@ -300,7 +359,7 @@ void AutoSubprojectView::slotAddExistingSubproject()
 
 void AutoSubprojectView::slotAddTarget()
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	AddTargetDialog dlg( m_widget, spitem, this, "add target dialog" );
@@ -315,7 +374,7 @@ void AutoSubprojectView::slotAddTarget()
 
 void AutoSubprojectView::slotAddService()
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	AddServiceDialog dlg( m_widget, spitem, this, "add service dialog" );
@@ -330,7 +389,7 @@ void AutoSubprojectView::slotAddService()
 
 void AutoSubprojectView::slotAddApplication()
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	AddApplicationDialog dlg( m_widget, spitem, this, "add application dialog" );
@@ -345,7 +404,7 @@ void AutoSubprojectView::slotAddApplication()
 
 void AutoSubprojectView::slotBuildSubproject()
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
@@ -357,7 +416,7 @@ void AutoSubprojectView::slotRemoveSubproject()
 {
     kdDebug(9020) << "AutoSubprojectView::slotRemoveSubproject()" << endl;
 
-    SubprojectItem* spitem = static_cast<SubprojectItem*>( selectedItem() );
+	SubprojectItem* spitem = static_cast<SubprojectItem*>( m_listView->selectedItem() );
     if( !spitem )
 	return;
 
@@ -855,7 +914,7 @@ void AutoSubprojectView::parse( SubprojectItem *item )
 
 void AutoSubprojectView::slotForceReeditSubproject( )
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast <SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
@@ -865,7 +924,7 @@ void AutoSubprojectView::slotForceReeditSubproject( )
 
 void AutoSubprojectView::slotInstallSubproject( )
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
@@ -875,7 +934,7 @@ void AutoSubprojectView::slotInstallSubproject( )
 
 void AutoSubprojectView::slotInstallSuSubproject( )
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
@@ -907,7 +966,7 @@ TargetItem * AutoSubprojectView::findNoinstHeaders( SubprojectItem *item )
 
 void AutoSubprojectView::slotCleanSubproject( )
 {
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
@@ -967,7 +1026,7 @@ void AutoSubprojectView::slotCustomBuildCommand(int val)
 	QString cmd = m_commandList[val].section(":::", 0, 0);
 	int type = m_commandList[val].section(":::", 1, 1).toInt();
 	
-	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	SubprojectItem* spitem = dynamic_cast<SubprojectItem*>( m_listView->selectedItem() );
 	if ( !spitem )	return;
 	
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
@@ -1000,19 +1059,19 @@ void AutoSubprojectView::slotCustomBuildCommand(int val)
 
 void AutoSubprojectView::slotExpandTree()
 {
-	expandCollapseFirst( currentItem(), true );
+	expandCollapseFirst( m_listView->currentItem(), true );
 }
 
 void AutoSubprojectView::slotCollapseTree()
 {
-	expandCollapseFirst( currentItem(), false );
+	expandCollapseFirst( m_listView->currentItem(), false );
 }
 
 void AutoSubprojectView::expandCollapseFirst( QListViewItem * item, bool expand )
 {
 	if ( !item ) return;
 	
-	if ( item == firstChild() )	// special case for root node
+	if ( item == m_listView->firstChild() )	// special case for root node
 	{
 		item = item->firstChild();
 		while ( item )
@@ -1041,9 +1100,6 @@ void AutoSubprojectView::expandCollapse( QListViewItem * item, bool expand )
 	}
 }
 
-
-
-
 #include "autosubprojectview.moc"
 
-// kate: space-indent off; indent-width 8; tab-width 8; show-tabs on;
+// kate: indent-mode csands; tab-width 4; space-indent off;

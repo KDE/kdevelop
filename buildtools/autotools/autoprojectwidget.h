@@ -1,16 +1,18 @@
-/***************************************************************************
-*   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
-*   bernd@kdevelop.org                                                    *
-*                                                                         *
-*   Copyright (C) 2002 by Victor Rder                                    *
-*   victor_roeder@gmx.de                                                  *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-***************************************************************************/
+/*
+   KDevelop Autotools Support
+   Copyright (c) 2001-2002 by Bernd Gehrmann <bernd@kdevelop.org>
+   Copyright (c) 2002 by Victor Roeder <victor_roeder@gmx.de>
+   Copyright (c) 2005 by Matt Rogers <mattr@kde.org>
+
+ ***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************
+*/
 
 #ifndef _AUTOPROJECTWIDGET_H_
 #define _AUTOPROJECTWIDGET_H_
@@ -37,6 +39,8 @@ class KAction;
 class QDomElement;
 class QToolButton;
 class QStringList;
+class KListViewItem;
+class QListViewItem;
 
 
 class AutoProjectWidget : public QVBox
@@ -190,7 +194,6 @@ public:
 
 public slots:
 	void slotOverviewSelectionChanged(QListViewItem *item);
-	void slotDetailsSelectionChanged(QListViewItem *item);
 
 protected:
 	void initOverview ( QWidget* parent );
@@ -200,12 +203,6 @@ protected:
         virtual void focusInEvent(QFocusEvent *e);
 
 private:
-
-	QToolButton *subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton;
-	QToolButton *addTargetButton, *addServiceButton, *addApplicationButton;
-	QToolButton *buildSubprojectButton, *targetOptionsButton;
-	QToolButton *addNewFileButton, *addExistingFileButton;
-	QToolButton *buildTargetButton, *executeTargetButton, *removeButton;
 
 	AutoSubprojectView* m_subprojectView;
 	AutoDetailsView* m_detailView;

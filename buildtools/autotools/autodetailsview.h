@@ -1,25 +1,22 @@
-/***************************************************************************
-                             -------------------
-    begin                : 19.01.2003
-    copyright            : (C) 2002 by Victor Rder
-    email                : victor_roeder@gmx.de
- ***************************************************************************/
+/*
+   KDevelop Autotools Support
+   Copyright (c) 2002 by Victor Roeder <victor_roeder@gmx.de>
+   Copyright (c) 2005 by Matt Rogers <mattr@kde.org>
 
-/***************************************************************************
+ ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
- ***************************************************************************/
+ ***************************************************************************
+*/
 
 #ifndef AUTODETAILSVIEW_H
 #define AUTODETAILSVIEW_H
 
-#include <qwidget.h>
-
-#include <klistview.h>
+#include "autoprojectviewbase.h"
 
 #include "domutil.h"
 #include "autolistviewitems.h"
@@ -28,8 +25,9 @@ class KAction;
 
 class AutoProjectPart;
 class AutoProjectWidget;
+class AutoToolsAction;
 
-class AutoDetailsView : public KListView
+class AutoDetailsView : protected AutoProjectViewBase
 {
 	friend class RemoveFileDialog;
 	friend class FileItem;
@@ -40,7 +38,14 @@ class AutoDetailsView : public KListView
 		virtual ~AutoDetailsView();
 
 		QString getUiFileLink(const QString &path, const QString& filename);
+		KListView* listView() { return m_listView; }
+
+	public slots:
+		void slotSelectionChanged( QListViewItem* item );
 	
+	signals:
+		void selectionChanged( QListViewItem* );
+
 	protected:
 		void initActions ();
 		virtual void focusOutEvent(QFocusEvent *e);
@@ -64,14 +69,14 @@ class AutoDetailsView : public KListView
 
 		DomUtil::PairList m_subclasslist;
 		
-		KAction* targetOptionsAction;
-		KAction* addNewFileAction;
-		KAction* addExistingFileAction;
+		AutoToolsAction* targetOptionsAction;
+		AutoToolsAction* addNewFileAction;
+		AutoToolsAction* addExistingFileAction;
 		KAction* addIconAction;
-		KAction* buildTargetAction;
-		KAction* executeTargetAction;		
+		AutoToolsAction* buildTargetAction;
+		AutoToolsAction* executeTargetAction;
 		KAction* setActiveTargetAction;
-		KAction* removeDetailAction;
+		AutoToolsAction* removeDetailAction;
 
 };
 

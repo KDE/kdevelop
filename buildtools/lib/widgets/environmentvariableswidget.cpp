@@ -30,7 +30,7 @@
 
 void EnvironmentVariablesWidget::addVarClicked()
 {
-    AddEnvvarDialog dlg;
+    AddEnvvarDialog dlg( this, "add env dialog" ) ;
     if (QListViewItem *Item = listview->selectedItem())
     {
         dlg.setvarname(Item->text(0));
@@ -45,7 +45,7 @@ void EnvironmentVariablesWidget::addVarClicked()
 
 void EnvironmentVariablesWidget::editVarClicked()
 {
-    AddEnvvarDialog dlg;
+    AddEnvvarDialog dlg( this, "edit env dialog" );
     QListViewItem *item = listview->selectedItem();
     if (  !item )
         return;

@@ -181,7 +181,7 @@ void CCConfigWidget::slotRemovePCS()
         if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n("Remove Database"), KStdGuiItem::del() ) )
 #else
         if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( 0, question, i18n("Remove Database"),
-	 KGuiItem( "&Delete", "editdelete", "Delete item(s)" ) ) )
+	 KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" )) ) )
 #endif
 	{
 		m_pPart->removeCatalog( dbName );
