@@ -1120,14 +1120,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   if (item->configuration.m_libadd.count()>0)
     Buffer->setValues("TARGETDEPS",item->configuration.m_prjdeps,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
 
-  if (!item->configuration.m_target_install_path.isEmpty() &&
-      item->configuration.m_target_install)
-  {
-    Buffer->removeValues("target.path");
-    Buffer->removeValues("INSTALLS");
-    Buffer->setValues("target.path",item->configuration.m_target_install_path,FileBuffer::VSM_RESET,VALUES_PER_ROW);
-    Buffer->setValues("INSTALLS",QString("target"),FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  }
+  updateInstallObjects(item,Buffer);
+
     
   // Write to .pro file
 //  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
@@ -1206,8 +1200,46 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
       subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
       subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
   }
+  
+  updateInstallObjects(spitem,subBuffer);
 //  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
   m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());  
+}
+
+void TrollProjectWidget::updateInstallObjects(SubprojectItem* item, FileBuffer* subBuffer)
+{
+  // Install objects
+  GroupItem* instroot = getInstallRoot(item);
+  QPtrListIterator<GroupItem> it(instroot->installs);
+  QStringList instobjects;
+  
+  for (;it.current();++it)
+  {
+    GroupItem* iobj = *it;
+    if (!iobj->str_files.isEmpty())
+    {
+      instobjects.append(iobj->install_objectname);
+      subBuffer->removeValues(iobj->install_objectname+".path");
+      subBuffer->removeValues(iobj->install_objectname+".files");
+      subBuffer->setValues(iobj->install_objectname+".path",iobj->install_path,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+      subBuffer->setValues(iobj->install_objectname+".files",iobj->str_files,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+      subBuffer->setValues(iobj->install_objectname+".files",iobj->str_files_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+    }
+  }
+  
+  if (!item->configuration.m_target_install_path.isEmpty() &&
+      item->configuration.m_target_install)
+  {
+    instobjects.append("target");
+    subBuffer->removeValues("target.path");
+    subBuffer->setValues("target.path",item->configuration.m_target_install_path,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+    subBuffer->setValues("INSTALLS",QString("target"),FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  }
+
+  subBuffer->removeValues("INSTALLS");
+  subBuffer->setValues("INSTALLS",instobjects,FileBuffer::VSM_APPEND,VALUES_PER_ROW);   
+
+  
 }
 
 QString TrollProjectWidget::getHeader()
@@ -1238,7 +1270,8 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
 {
   FileItem *fitem = createFileItem(filename);
   fitem->uiFileLink = getUiFileLink(titem->owner->relpath+"/",filename);
-  titem->files.append(fitem);
+  if (titem->groupType != GroupItem::InstallObject)
+    titem->files.append(fitem);
   switch (titem->groupType)
   {
     case GroupItem::Sources:
@@ -1254,6 +1287,10 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
       break;
     case GroupItem::Images:
       titem->owner->images.append(filename);
+      break;
+    case GroupItem::InstallObject:
+      titem->str_files.append(filename);
+      titem->files.append(fitem);
       break;
     default:
       break;
@@ -1297,6 +1334,31 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
     case GroupItem::Images:
       m_shownSubproject->images.append(filename);
       break;
+    /*
+    case GroupItem::InstallObject:
+      GroupItem *gitem = 0;
+
+      QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
+      for (; it.current(); ++it)
+      {
+        if ((*it)->groupType == GroupItem::InstallRoot)
+        {
+          gitem = *it;
+          break;
+        }
+      }      
+      QPtrListIterator<GroupItem> it2(gitem->installs);
+      for (; it2.current(); ++it2)
+      {
+        if ((*it2)->install_objectname == )
+        {
+          if ();
+        }
+      }      
+
+      m_shownSubproject->files.append(fitem);
+      break;
+    */
     default:
       break;
   }
@@ -1333,7 +1395,6 @@ void TrollProjectWidget::addFile(const QString &fileName)
   QString noPathFileName = info.fileName();
 
   addFileToCurrentSubProject(GroupItem::groupTypeForExtension(ext), noPathFileName);
-
   updateProjectFile(m_shownSubproject);
   slotOverviewSelectionChanged(m_shownSubproject);
   emitAddedFile ( fileName );
@@ -1370,8 +1431,55 @@ void TrollProjectWidget::slotAddFiles()
   }
 }
 
+GroupItem* TrollProjectWidget::getInstallRoot(SubprojectItem* item)
+{
+  QPtrListIterator<GroupItem> it(item->groups);
+  for (;it.current();++it)
+  {
+    if ((*it)->groupType == GroupItem::InstallRoot)
+      return *it;
+  }
+  return 0;
+}
+
+GroupItem* TrollProjectWidget::getInstallObject(SubprojectItem* item, const QString& objectname)
+{
+  GroupItem* instroot = getInstallRoot(item);
+  if (!instroot)
+    return 0;
+  QPtrListIterator<GroupItem> it(instroot->installs);
+  for (;it.current();++it)
+  {
+    if ((*it)->groupType == GroupItem::InstallObject &&
+        (*it)->install_objectname == objectname )
+      return *it;
+  }
+  return 0;
+  
+}
+
 void TrollProjectWidget::slotNewFile()
 {
+    GroupItem *gitem = static_cast<GroupItem*>(details->currentItem());
+    if (gitem)
+    {
+      if (gitem->groupType == GroupItem::InstallRoot)
+      {
+          // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+          bool ok = FALSE;
+          QString filepattern = KLineEditDlg::getText(
+                              i18n( "Insert new install object" ),
+                              i18n( "Please enter a name for the new object:" ),
+                              QString::null, &ok, this );
+          if ( ok && !filepattern.isEmpty() )
+          {
+            addFileToCurrentSubProject(gitem,filepattern);
+            updateProjectFile(gitem->owner);
+            slotOverviewSelectionChanged(m_shownSubproject);
+          }
+          return;        
+      }
+    }
     KDevCreateFile * createFileSupport = m_part->createFileSupport();
     if (createFileSupport)
     {
@@ -1443,16 +1551,42 @@ void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
 {
     if (!item)
         return;
+    addfilesButton->setEnabled(false);
+    newfileButton->setEnabled(false);
+    removefileButton->setEnabled(false);
+    configurefileButton->setEnabled(false);
+    buildTargetButton->setEnabled(false);
+    rebuildTargetButton->setEnabled(false);
+    executeTargetButton->setEnabled(false);
+
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
     if (pvitem->type() == ProjectItem::Group)
     {
-        removefileButton->setEnabled(false);
-        configurefileButton->setEnabled(false);
+      GroupItem* gitem = static_cast<GroupItem*>(item);
+      if (gitem->groupType == GroupItem::InstallObject)
+      {
+        configurefileButton->setEnabled(true);
+        newfileButton->setEnabled(true);
+      }
+      else if (gitem->groupType == GroupItem::InstallRoot)
+      {
+        newfileButton->setEnabled(true);
+      }
+      else
+      {
+        addfilesButton->setEnabled(true);
+        newfileButton->setEnabled(true);
+      }
+        
+        
     }
     else if (pvitem->type() == ProjectItem::File)
     {
         removefileButton->setEnabled(true);
         configurefileButton->setEnabled(true);
+        buildTargetButton->setEnabled(true);
+        rebuildTargetButton->setEnabled(true);
+        executeTargetButton->setEnabled(true);
     }
 }
 
@@ -1486,15 +1620,68 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             title = i18n("Images");
             ext = "*.jpg *.png *.xpm *.gif";
             break;
+        case GroupItem::InstallRoot:
+            title = i18n("Installs");
+            break;
+        case GroupItem::InstallObject:
+            title = i18n("Install object");
+            break;
+
         default: ;
         }
 
         KPopupMenu popup(title, this);
+        // insert all possible
         int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Existing Files..."));
         int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
+        int idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert install object..."));
+        int idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert installpattern item..."));
+        int idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Choose install path..."));
+
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
+        if (titem->groupType == GroupItem::InstallRoot)            
+        {
+          popup.removeItem(idInsExistingFile);
+          popup.removeItem(idInsNewFile);
+          popup.removeItem(idInsNewFilepatternItem);
+          popup.removeItem(idSetInstObjPath);
+        }
+        else if (titem->groupType == GroupItem::InstallObject)
+        {
+          popup.removeItem(idInsInstallObject);
+          popup.removeItem(idInsExistingFile);
+          popup.removeItem(idInsNewFile);
+        }
+        else // File group containing files
+        {
+          popup.removeItem(idInsNewFilepatternItem);        
+          popup.removeItem(idInsInstallObject);
+          popup.removeItem(idSetInstObjPath);
+        }
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+        
+        if (r == idSetInstObjPath)
+        {
+          titem->install_path = (KFileDialog::getExistingDirectory());
+          updateProjectFile(titem->owner);
+        }
+        
+        if (r == idInsNewFilepatternItem)
+        {
+          // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+          bool ok = FALSE;
+          QString filepattern = KLineEditDlg::getText(
+                              i18n( "Insert new install object" ),
+                              i18n( "Please enter a name for the new object:" ),
+                              QString::null, &ok, this );
+          if ( ok && !filepattern.isEmpty() )
+          {
+            addFileToCurrentSubProject(titem,filepattern);
+            updateProjectFile(titem->owner);
+            slotOverviewSelectionChanged(m_shownSubproject);
+          }
+        }
         if (r == idInsExistingFile)
         {
           KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
@@ -1569,7 +1756,23 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 }
             }
         }
-
+        if (r == idInsInstallObject)
+        {
+//          QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+          bool ok = FALSE;
+          QString install_obj = KLineEditDlg::getText(
+                              i18n( "Insert new install object" ),
+                              i18n( "Please enter a name for the new object:" ),
+                              QString::null, &ok, this );
+          if ( ok && !install_obj.isEmpty() )
+          {
+            GroupItem* institem = createGroupItem(GroupItem::InstallObject, install_obj ,titem->scopeString);
+            institem->owner = m_shownSubproject;
+            institem->install_objectname = install_obj;
+            titem->installs.append(institem);
+            slotOverviewSelectionChanged(m_shownSubproject);
+          }
+        }
     } else if (pvitem->type() == ProjectItem::File) {
 
         removefileButton->setEnabled(true);
@@ -1833,18 +2036,23 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
       {
         if ((*it)=="target")
           continue;
-        QStringList files,files_excl,path,path_excl;
-        subBuffer->getValues((*it)+".files",files,files_excl);        
+        QStringList path,path_excl;
+        QString path_str;
         subBuffer->getValues((*it)+".path",path,path_excl);        
-        
-        GroupItem* institem = createGroupItem(GroupItem::InstallGroup, *it ,scopeString);
+        if (!path.isEmpty())
+          path_str = path[0];
+               
+        GroupItem* institem = createGroupItem(GroupItem::InstallObject, (*it)  ,scopeString);
+        subBuffer->getValues((*it)+".files",institem->str_files,institem->str_files_exclude);        
+        institem->install_path = path_str;
+        institem->install_objectname = *it;
         institem->owner = item;
         titem->installs.append(institem);
-        
-        if (!files.isEmpty())
+               
+        if (!institem->str_files.isEmpty())
         {
-          QStringList::iterator it2 = files.begin();
-          for (;it2!=files.end();it2++)
+          QStringList::iterator it2 = institem->str_files.begin();
+          for (;it2!=institem->str_files.end();it2++)
           {
             FileItem *fitem = createFileItem(*it2);
             institem->files.append(fitem);

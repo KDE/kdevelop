@@ -66,6 +66,33 @@ QStringList* FilePropertyDlg::getExcludeList(SubprojectItem *spitem)
       return &(spitem->headers_exclude);
     if (m_gtype == GroupItem::Forms)
       return &(spitem->forms_exclude);
+    if (m_gtype == GroupItem::InstallObject)
+    {
+    /*
+      GroupItem *gitem = 0;
+
+      QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
+      for (; it.current(); ++it)
+      {
+        if ((*it)->groupType == GroupItem::InstallRoot)
+        {
+          gitem = *it;
+          break;
+        }
+      }      
+      QPtrListIterator<GroupItem> it2(gitem->installs);
+      for (; it2.current(); ++it2)
+      {
+        if ((*it2)->install_objectname == )
+        {
+          if ();
+        }
+      }      
+      */
+      GroupItem* gitem = (GroupItem*) m_fileItem->parent();
+      return &(gitem->str_files_exclude);
+      
+    }
     return NULL;
 }
 

@@ -171,16 +171,23 @@ public:
 class GroupItem : public ProjectItem
 {
 public:
-    enum GroupType {NoType, Sources, Headers, Forms,Images,IDLs, InstallRoot, InstallGroup};
+    enum GroupType {NoType, Sources, Headers, Forms,Images,IDLs, InstallRoot, InstallObject};
 
     static GroupType groupTypeForExtension(const QString &ext);
 
     GroupItem(QListView *lv, GroupType type, const QString &text,const QString &scopeString);
 
+    // qmake INSTALLS support
+    QString             install_objectname;
+    QString             install_path;
     QPtrList<GroupItem> installs;
-    QPtrList<FileItem> files;
-    GroupType groupType;
-    SubprojectItem *owner;
+    QPtrList<FileItem>  files;
+    
+    QStringList         str_files;
+    QStringList         str_files_exclude;
+    // end qmake INSTALLS support
+    GroupType           groupType;
+    SubprojectItem*     owner;
 };
 
 
@@ -242,6 +249,7 @@ public:
     SubprojectItem* getScope(SubprojectItem *baseItem,const QString &scopeString); // baseItem must be ansister
     void updateProjectFile(QListViewItem *item);
     void updateProjectConfiguration(SubprojectItem *item);
+    void updateInstallObjects(SubprojectItem* item, FileBuffer *subBuffer);
     void addFileToCurrentSubProject(GroupItem *titem,const QString &filename);
     void addFileToCurrentSubProject(GroupItem::GroupType gtype,const QString &filename);
     void addFile(const QString &fileName);
@@ -283,6 +291,8 @@ private:
     void setupContext();
     void parseScope(SubprojectItem *item,QString scopeString, FileBuffer *buffer);
     void parse(SubprojectItem *item);
+    GroupItem* getInstallRoot(SubprojectItem *item);
+    GroupItem* getInstallObject(SubprojectItem *item,const QString& objectname);
     QString getUiFileLink(const QString &path, const QString& filename);
     QString getHeader();
 
