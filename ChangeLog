@@ -1,7 +1,10 @@
 2001-06-01  Harald Fernengel  <harry@bnro.de>
-
     * added parenthesis highlighting code (stole it from quanta, so if it isn't working
       please don't blame me ;). Very primitive, works only for () [] and {}
+
+2001-05-30  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: focus problems when starting KDevelop in TabPage mode
+    * bugfix: 0L access crash in DocViewMan::slot_gotFocus (reported by Peter Zimmermann)
 
 2001-05-30  F@lk Brettschneider <falk@kdevelop.org>
     * kdevelop-speed-drop bug fixed (wandering through the popup menu)
