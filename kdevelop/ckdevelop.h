@@ -249,10 +249,12 @@ public:
   void slotBuildCleanRebuildAll();
   void slotBuildStop();
   void slotBuildRun();
+  void slotBuildRunWithArgs();
   void slotBuildDebug();
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
+	void slotBuildSetExecuteArgs();
   void slotBuildMessages();
   void slotBuildAPI();
   void slotBuildManual();
@@ -565,6 +567,9 @@ private:
 };
 
 #endif
+
+
+
 
 
 

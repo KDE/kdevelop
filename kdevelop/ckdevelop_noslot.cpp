@@ -295,6 +295,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     }
     enableCommand(ID_KDLG_BUILD_GENERATE);
     enableCommand(ID_BUILD_RUN);
+    enableCommand(ID_BUILD_RUN_WITH_ARGS);
+    enableCommand(ID_BUILD_SET_ARGS);
     enableCommand(ID_BUILD_DEBUG);
     enableCommand(ID_BUILD_MAKE);
     enableCommand(ID_BUILD_REBUILD_ALL);
@@ -315,6 +317,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     // set the popupmenus enable or disable
     disableCommand(ID_KDLG_BUILD_GENERATE);
     disableCommand(ID_BUILD_COMPILE_FILE);
+    disableCommand(ID_BUILD_RUN_WITH_ARGS);
+    disableCommand(ID_BUILD_SET_ARGS);
     disableCommand(ID_BUILD_RUN);
     disableCommand(ID_BUILD_DEBUG);
     disableCommand(ID_BUILD_MAKE);
@@ -471,6 +475,8 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   KDEBUG(KDEBUG_INFO,CKDEVELOP,"KTMainWindow::closeEvent()");
   KTMainWindow::closeEvent(e);
 }
+
+
 
 
 

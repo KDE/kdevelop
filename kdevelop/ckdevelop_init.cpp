@@ -359,8 +359,10 @@ void CKDevelop::initKeyAccel(){
 //   accel->insertItem( i18n("Make with"), "MakeWith", IDK_BUILD_MAKE_WITH );
 //   accel->connectItem( "MakeWith", this, SLOT(slotBuildMakeWith() ) );
 
-  accel->insertItem( i18n("Run"), "Run", IDK_BUILD_RUN);
+  accel->insertItem( i18n("Execute"), "Run", IDK_BUILD_RUN);
   accel->connectItem( "Run", this, SLOT(slotBuildRun() ) );
+  accel->insertItem( i18n("Execute with arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
+  accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ) );
 
 
   // Tools-menu
@@ -581,13 +583,14 @@ void CKDevelop::initMenu(){
   build_menu->insertSeparator();
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
-
+	build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments"),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
   build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
   build_menu->insertItem(i18n("&Autoconf"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
   build_menu->insertSeparator();
+	build_menu->insertItem(i18n("Execution &arguments"),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
 	build_menu->insertItem(i18n("Make &messages"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
   build_menu->insertItem(i18n("Make &API-Doc"), this,
 			 SLOT(slotBuildAPI()),0,ID_BUILD_MAKE_PROJECT_API);
@@ -1010,6 +1013,7 @@ if(bKDevelop){
     accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
     accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
     accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
+		accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
 
     accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_ADD ,"Add_Bookmarks" );
     accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
@@ -1057,11 +1061,18 @@ if(bKDevelop){
     accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
     accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_MAKE ,"Make" );
     accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN ,"Run" );
+		accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
 
     accel->changeMenuAccel(kdlg_help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
     accel->changeMenuAccel(kdlg_help_menu, ID_HELP_CONTENTS, KAccel::Help );
   }
 }
+
+
+
+
+
+
 
 
 

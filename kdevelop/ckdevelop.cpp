@@ -44,6 +44,7 @@
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
 #include "cfinddoctextdlg.h"
+#include "cexecuteargdlg.h"
 #include "debug.h"
 #include "./kwrite/kwdoc.h"
 #include "kswallow.h"
@@ -470,6 +471,13 @@ void CKDevelop::slotBuildRun(){
   beep=false;
   next_job = "run";
 }
+
+void CKDevelop::slotBuildRunWithArgs(){
+  slotBuildMake();
+  slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
+  beep=false;
+  next_job = "run_with_args";
+}
 void CKDevelop::slotBuildDebug(){
 
   if(!CToolClass::searchProgram("kdbg")){
@@ -638,6 +646,12 @@ void CKDevelop::slotBuildConfigure(){
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
    beep = true;
 }
+void CKDevelop::slotBuildSetExecuteArgs(){
+  slotStatusMsg(i18n("Setting execution arguments..."));
+  CExecuteArgDlg* argdlg= new CExecuteArgDlg(this,"Arguments",prj);
+  argdlg->show();
+}
+
 void CKDevelop::slotBuildStop(){
   slotStatusMsg(i18n("Killing current process..."));
   setToolMenuProcess(true);
@@ -1497,6 +1511,31 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       next_job = "";
       ready = false;
     }
+    if (next_job == "run_with_args" && process.exitStatus() == 0){ // rest from the buildRun
+      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+      stdin_stdout_widget->clear();
+      stderr_widget->clear();
+      if(prj->getProjectType() == "normal_cpp"){
+      	o_tab_view->setCurrentTab(STDINSTDOUT);
+      }
+      else{
+      	o_tab_view->setCurrentTab(STDERR);
+      }
+
+      appl_process.clearArguments();
+			cerr<<"running with arguments"<< prj->getExecuteArgs()<<endl;
+      // Warning: not every user has the current directory in his path !
+//      appl_process << "./" + prj->getBinPROGRAM().lower()+" "+prj->getExecuteArgs();
+			QString args=prj->getExecuteArgs();
+			if(args.isEmpty())
+      	appl_process << "./" + prj->getBinPROGRAM().lower();
+			else
+      	appl_process << "./" + prj->getBinPROGRAM().lower() <<args;				
+      setToolMenuProcess(false);
+      appl_process.start(KProcess::NotifyOnExit,KProcess::All);
+      next_job = "";
+      ready = false;
+    }
     if (next_job == "refresh"){ // rest from the add projectfile
       refreshTrees();
     }
@@ -1843,6 +1882,13 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
 
 
 

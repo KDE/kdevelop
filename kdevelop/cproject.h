@@ -121,7 +121,12 @@ public:
   /**options for make( f.e. "-k" for "make -k"*/
   void setMakeOptions(QString options);
   QString getMakeOptions();
-  
+
+	/** sets the commandline execution arguments for the project binary */
+  void setExecuteArgs(QString args);
+  /** returns the arguments from the config file */
+  QString getExecuteArgs();
+
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
   void getLFVGroups(QStrList& groups);
@@ -201,3 +206,4 @@ protected:
   
 };
 #endif
+

@@ -148,6 +148,15 @@ QString CProject::getMakeOptions(){
   return config->readEntry("make_options");
 }
 
+void CProject::setExecuteArgs(QString args){
+  config->setGroup("General");
+  config->writeEntry("execute_args",args);
+}
+QString CProject::getExecuteArgs(){
+  config->setGroup("General");
+  return config->readEntry("execute_args");
+}
+
 QStrList& CProject::getSources(){
   return cpp_files;
 } 
@@ -904,3 +913,4 @@ void CProject::getAllStaticLibraries(QStrList& libs){
     }
   }
 }
+

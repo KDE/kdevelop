@@ -2,8 +2,6 @@
 
 SUBDIRS = kdevelop 
 
-EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO kdevelop.lsm 
-
 ####### kdevelop will overwrite this part!!! (end)############
 # This file you have to edit. Change the name here
 SUBDIRS = kdevelop  po

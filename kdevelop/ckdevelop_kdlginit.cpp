@@ -185,6 +185,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_build_menu->insertSeparator();
 
   kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
+	kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments"),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
 
   kdlg_build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   kdlg_build_menu->insertSeparator();
@@ -192,6 +193,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_build_menu->insertItem(i18n("&Autoconf"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   kdlg_build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
   kdlg_build_menu->insertSeparator();
+	kdlg_build_menu->insertItem(i18n("Execution &arguments"),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
 	kdlg_build_menu->insertItem(i18n("Make &messages"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
   kdlg_build_menu->insertItem(i18n("Make &API-Doc"), this,
 			 SLOT(slotBuildAPI()),0,ID_BUILD_MAKE_PROJECT_API);
@@ -284,6 +286,7 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_PROJECT_WORKSPACES);
 
   disableCommand(ID_BUILD_RUN);
+  disableCommand(ID_BUILD_RUN_WITH_ARGS);
   disableCommand(ID_BUILD_DEBUG);
   disableCommand(ID_BUILD_MAKE);
   disableCommand(ID_BUILD_REBUILD_ALL);
@@ -296,6 +299,7 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_BUILD_MAKE_PROJECT_API);
   disableCommand(ID_BUILD_MAKE_USER_MANUAL);
   disableCommand(ID_BUILD_COMPILE_FILE);
+  disableCommand(ID_BUILD_SET_ARGS);
 
   disableCommand(ID_HELP_BACK);
   disableCommand(ID_HELP_FORWARD);
@@ -435,6 +439,9 @@ void CKDevelop::initKDlgKeyAccel(){
 void CKDevelop::setKDlgCaption(){
   setCaption(kdlg_caption);
 }
+
+
+
 
 
 

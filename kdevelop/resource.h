@@ -119,12 +119,14 @@
 #define ID_BUILD_STOP               14060
   
 #define ID_BUILD_RUN                14070
+#define ID_BUILD_RUN_WITH_ARGS			14075
 #define ID_BUILD_DEBUG              14080
 
 #define ID_BUILD_AUTOCONF           14090
 #define ID_BUILD_CONFIGURE          14100
 #define ID_BUILD_DISTCLEAN          14110
 
+#define ID_BUILD_SET_ARGS						14115
 #define ID_BUILD_MESSAGES	          14120
 #define ID_BUILD_MAKE_PROJECT_API   14130
 #define ID_BUILD_MAKE_USER_MANUAL   14140
@@ -300,6 +302,7 @@
 #define IDK_BUILD_MAKE								Key_F9
 #define IDK_BUILD_MAKE_WITH						ALT+Key_F9
 #define IDK_BUILD_RUN									CTRL+Key_F9
+#define IDK_BUILD_RUN_WITH_ARGS       ALT+Key_F10
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
@@ -368,6 +371,10 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
+
+
+
 
 
 
