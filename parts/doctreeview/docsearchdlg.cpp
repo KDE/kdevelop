@@ -99,9 +99,9 @@ void qt_leave_modal( QWidget *widget );
 
 bool DocSearchDialog::performSearch()
 {
-    KConfig config("khelpcenterrc", true);
+    KConfig config("kdevdoctreeviewrc", true);
     config.setGroup("htdig");
-    QString exe = config.readPathEntry("htsearch", kapp->dirs()->findExe("htsearch"));
+    QString exe = config.readPathEntry("htsearchbin", kapp->dirs()->findExe("htsearch"));
     if (exe.isEmpty()) {
         // Check for htsearch in /usr/lib/cgi-bin (for Debian systems)
         exe = "/usr/lib/cgi-bin/htsearch";
