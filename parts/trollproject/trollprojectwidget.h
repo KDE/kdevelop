@@ -132,7 +132,6 @@ public:
 private slots:
     void slotOverviewSelectionChanged(QListViewItem *item);
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-    void slotDetailsSelectionChanged(QListViewItem *item);
     void slotDetailsExecuted(QListViewItem *item);
     void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 

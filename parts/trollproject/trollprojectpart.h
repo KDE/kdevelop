@@ -45,12 +45,11 @@ private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotBuild();
     void slotClean();
-    void slotQMake();
     void slotExecute();
     
 private:
     void startMakeCommand(const QString &dir, const QString &target);
-    void startQMakeCommand(const QString &dir, const QString &fileName);
+    void startQMakeCommand(const QString &dir);
     
     QGuardedPtr<TrollProjectWidget> m_widget;
     QString m_projectName;

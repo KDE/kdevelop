@@ -151,7 +151,7 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
         int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run configure first?"));
         if (r == KMessageBox::No)
             return;
-        slotQMake();
+        startQMakeCommand(dir);
     }
     QDomDocument &dom = *projectDom();
 
@@ -179,13 +179,15 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 }
 
 
-void TrollProjectPart::startQMakeCommand(const QString &dir, const QString &fileName)
+void TrollProjectPart::startQMakeCommand(const QString &dir)
 {
+    QFileInfo fi(dir);
+    
     QString cmdline = "qmake ";
-    cmdline += fileName;
+    cmdline += fi.baseName() + ".pro";
     
     QString dircmd = "cd ";
-    dircmd += projectDirectory();
+    dircmd += dir;
     dircmd += " && ";
 
     makeFrontend()->queueCommand(dir, dircmd + cmdline);

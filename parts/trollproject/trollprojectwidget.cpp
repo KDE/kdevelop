@@ -119,14 +119,14 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     connect( overview, SIGNAL(selectionChanged(QListViewItem*)),
              this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
     connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+             this, SLOT(slotOverviewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
     
-    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
-             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
+    //    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
+    //             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
     connect( details, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotDetailsExecuted(QListViewItem*)) );
     connect( details, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+             this, SLOT(slotDetailsContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
     m_part = part;
     m_shownSubproject = 0;
@@ -288,8 +288,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
         m_part->topLevel()->lowerView(this);
     } else if (r == idQmake) {
         QString relpath = spitem->path.mid(projectDirectory().length());
-        QString fileName = QFileInfo(spitem->path).baseName() + ".pro";
-        m_part->startQMakeCommand(projectDirectory() + relpath, fileName);
+        m_part->startQMakeCommand(projectDirectory() + relpath);
         m_part->topLevel()->lowerView(this);
     }
 }

@@ -4,7 +4,6 @@
   <Menu name="build" >
     <Action name="build_build" />
     <Action name="build_clean" />
-    <Action name="build_qmake" />
     <Separator/>
     <Action name="build_execute" />
   </Menu>
