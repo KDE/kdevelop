@@ -45,17 +45,17 @@ class ModuleListViewItem : public KListViewItem
 {
 public:
     ModuleListViewItem( KListView *listview,
-        const QString &moduleName, const QString &moduleComment )
+        const QString &moduleAlias, const QString &moduleRealPath )
         : KListViewItem( listview )
     {
-        setName( moduleName );
-        setComment( moduleComment );
+        setAlias( moduleAlias );
+        setRealPath( moduleRealPath );
     }
 
-    void setName( const QString &aName ) { setText( 0, aName); }
-    QString name() const { return text(0); }
-    void setComment( const QString &aComment ) { setText(1, aComment); }
-    QString comment() const { return text(1); }
+    void setAlias( const QString &aName ) { setText( 0, aName); }
+    QString alias() const { return text(0); }
+    void setRealPath( const QString &aRealPath ) { setText(1, aRealPath); }
+    QString realPath() const { return text(1); }
 
 //    virtual QString text() const { return name(); }
 };
@@ -219,7 +219,7 @@ void CheckoutDialog::slotModuleSelected( QListViewItem * )
     if (!aModuleItem)
         return;
 
-    m_base->moduleEdit->setText( aModuleItem->name() );
+    m_base->moduleEdit->setText( aModuleItem->alias() );
 }
 
 
