@@ -64,17 +64,8 @@ void AppWizardPart::slotNewProject()
 {
     kdDebug(9010) << "new project" << endl;
     AppWizardDialog dlg(this, 0, "app wizard");
-    connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
-             this, SLOT(slotCommandFinished(const QString&)) );
     dlg.templates_listview->setFocus();
-    if (dlg.exec()) {
-        m_creationCommand = dlg.getCommandLine();
-        m_projectLocation = dlg.getProjectLocation() + "/";
-        m_projectFileName = m_projectLocation + dlg.getProjectName().lower() + ".kdevelop";
-        m_openFilesAfterGeneration = dlg.getFilesToOpenAfterGeneration();
-    } else {
-      disconnect(makeFrontend(), 0, this, 0);
-    }
+    dlg.exec();
 }
 
 
@@ -84,28 +75,6 @@ void AppWizardPart::slotImportProject()
     dlg.exec();
 }
 
-void AppWizardPart::openSpecifiedFiles()
-{
-    for ( QStringList::Iterator it = m_openFilesAfterGeneration.begin();
-          it != m_openFilesAfterGeneration.end(); ++it ) {
-        if ( !(*it).isNull() ) {
-            KURL url(m_projectLocation + *it);
-            kdDebug(9010) << "Try to open: " << url.url() << endl;
-            partController()->editDocument(url);
-        }
-    }
-}
-
-void AppWizardPart::slotCommandFinished(const QString &command)
-{
-    if (m_creationCommand == command){
-        // load the created project and maybe the first file (README...)
-        core()->openProject(m_projectFileName);  // opens the project
-
-        openSpecifiedFiles();
-
-        disconnect(makeFrontend(), 0, this, 0);
-    }
-}
-
 #include "appwizardpart.moc"
+
+// kate: indent-width 4; replace-tabs off; tab-width 4; space-indent off;

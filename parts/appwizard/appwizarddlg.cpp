@@ -64,6 +64,7 @@
 
 #include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
+#include "kdevpartcontroller.h"
 #include "kdevlicense.h"
 #include "kdevcore.h"
 #include "appwizardfactory.h"
@@ -583,9 +584,7 @@ void AppWizardDialog::accept()
     
 	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
 	
-	QString projectFile( finalLoc_label->text() + "/" + appname_edit->text() + ".kdevelop" );
-	
-	m_part->core()->openProject( projectFile );
+	openAfterGeneration();
 	
 	QWizard::accept();
 }
@@ -812,15 +811,28 @@ ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
     return 0;
 }
 
-QStringList AppWizardDialog::getFilesToOpenAfterGeneration()
+void AppWizardDialog::openAfterGeneration()
 {
-    for ( QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
-          it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it ) {
-        (*it).replace("APPNAMEUC", getProjectName().upper());
-        (*it).replace("APPNAMELC", getProjectName().lower());
-        (*it).replace("APPNAME", getProjectName());
-    }
-    return m_pCurrentAppInfo->openFilesAfterGeneration;
+	QString prjName( appname_edit->text() );
+	QString prjNameLC( prjName.lower() );
+	QString prjNameUC( prjName.upper() );
+	
+	m_part->core()->openProject( finalLoc_label->text() + "/" + prjNameLC + ".kdevelop" );
+	
+	QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
+	for( ; it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it )
+	{
+		QString fileName( *it );
+		if ( !fileName.isNull() )
+		{
+			fileName.replace("APPNAMEUC", prjNameUC );
+			fileName.replace("APPNAMELC", prjNameLC );
+			fileName.replace("APPNAME", prjName );
+			KURL url( finalLoc_label->text() + "/" + fileName );
+			kdDebug(9010) << "Try to open: " << url.url() << endl;
+			m_part->partController()->editDocument(url);
+		}
+	}
 }
 
 void AppWizardDialog::pageChanged()

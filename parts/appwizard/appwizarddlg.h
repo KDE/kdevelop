@@ -114,8 +114,6 @@ public:
     ~AppWizardDialog();
     QString getProjectName() { return appname_edit->text(); }
     QString getProjectLocation() { return finalLoc_label->text(); }
-    QString getCommandLine() { return m_cmdline; }
-    QStringList getFilesToOpenAfterGeneration();
 
 protected:
     virtual void accept();
@@ -149,6 +147,7 @@ private: //methods
 	void unpackArchive( const KArchiveDirectory *dir, const QString &dest, const QMap<QString,QString> &subMap, bool process );
 	bool copyFile( const QString &source, const QString &dest, const QMap<QString,QString> &subMap, bool process );
 	QString kdevRoot(const QString &templateName ) const;
+	void openAfterGeneration();
 	
 private: //data
 
@@ -163,7 +162,6 @@ private: //data
     AutoForm *m_customOptions;
     AppWizardPart *m_part;
     QWidget *m_lastPage;
-    QString m_cmdline;
     QPtrList<KTempFile> m_tempFiles;
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
@@ -174,3 +172,5 @@ private: //data
 };
 
 #endif
+
+// kate: indent-width 4; replace-tabs off; tab-width 4; space-indent off;

@@ -31,16 +31,6 @@ public:
 private slots:
     void slotNewProject();
     void slotImportProject();
-    void slotCommandFinished(const QString &command);
-
-private:
-    //! opens all files specified in the template-information file with "ShowFilesAfterGeneration="
-    void openSpecifiedFiles();
-    AppWizardDialog *m_dialog;
-    QStringList m_openFilesAfterGeneration;
-    QString m_creationCommand;
-    QString m_projectFileName;
-    QString m_projectLocation;
 };
 
 #endif
