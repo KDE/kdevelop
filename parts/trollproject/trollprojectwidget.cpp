@@ -144,17 +144,17 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectTools->setSpacing ( 2 );
     // build
     buildButton = new QToolButton ( projectTools, "Build button" );
-    buildButton->setPixmap ( SmallIcon ( "make_kdevelop.png",22 ) );
+    buildButton->setPixmap ( SmallIcon ( "qmake_build.png",22 ) );
     buildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildButton->sizePolicy().hasHeightForWidth() ) );
     buildButton->setEnabled ( true );
     // rebuild
     rebuildButton = new QToolButton ( projectTools, "Rebuild button" );
-    rebuildButton->setPixmap ( SmallIcon ( "rebuild.png",22 ) );
+    rebuildButton->setPixmap ( SmallIcon ( "qmake_rebuild.png",22 ) );
     rebuildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildButton->sizePolicy().hasHeightForWidth() ) );
     rebuildButton->setEnabled ( true );
     // run
     runButton = new QToolButton ( projectTools, "Run button" );
-    runButton->setPixmap ( SmallIcon ( "run.png",22 ) );
+    runButton->setPixmap ( SmallIcon ( "qmake_run.png",22 ) );
     runButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, runButton->sizePolicy().hasHeightForWidth() ) );
     runButton->setEnabled ( true );
     // spacer
@@ -164,6 +164,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectconfButton = new QToolButton ( projectTools, "Project configuration button" );
     projectconfButton->setPixmap ( SmallIcon ( "configure.png",22 ) );
     projectconfButton->setText("Configure");
+    projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
     projectconfButton->setEnabled ( true );
 
     // Project button connections
@@ -184,6 +185,11 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
              this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
     connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotOverviewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    buildButton->setEnabled(false);
+    rebuildButton->setEnabled(false);
+    runButton->setEnabled(false);
+    projectconfButton->setEnabled(false);
+
 
     /////////////////
     // DETAIL VIEW //
@@ -201,19 +207,19 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
     // Add existing files button
     addfilesButton = new QToolButton ( fileTools, "Add existing files" );
-    addfilesButton->setPixmap ( SmallIcon ( "fileopen",22 ) );
+    addfilesButton->setPixmap ( SmallIcon ( "qmake_addexisting.png",22 ) );
     addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
     addfilesButton->setEnabled ( true );
 
     // Add new file button
     newfileButton = new QToolButton ( fileTools, "Add new file" );
-    newfileButton->setPixmap ( SmallIcon ( "filenew",22 ) );
+    newfileButton->setPixmap ( SmallIcon ( "qmake_addnew.png",22 ) );
     newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
     newfileButton->setEnabled ( true );
 
     // remove file button
     removefileButton = new QToolButton ( fileTools, "remove file" );
-    removefileButton->setPixmap ( SmallIcon ( "filenew",22 ) );
+    removefileButton->setPixmap ( SmallIcon ( "qmake_remove.png",22 ) );
     removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
     removefileButton->setEnabled ( true );
 
@@ -222,7 +228,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectTools->setStretchFactor(spacer, 1);
 
     // detail tree
-    details = new KListView(splitter, "details widget");
+    details = new KListView(detailContainer, "details widget");
     details->setRootIsDecorated(true);
     details->setResizeMode(QListView::LastColumn);
     details->setSorting(-1);
@@ -235,6 +241,8 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     connect ( removefileButton, SIGNAL ( clicked () ), this, SLOT ( slotRemoveFile () ) );
 
     // Detail tree connections
+    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
+             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
     connect( details, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotDetailsExecuted(QListViewItem*)) );
     connect( details, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
@@ -679,12 +687,14 @@ void TrollProjectWidget::addFile(const QString &fileName)
 void TrollProjectWidget::slotAddFiles()
 {
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-  QString ext = "*.cpp *.c *.hpp *.h *.ui";
+  QString  sourceFiles = "Source files (*.cpp *.c *.hpp *.h *.ui)";
+  QString  allFiles = "All files (*)";
   QFileDialog *dialog = new QFileDialog(projectDirectory()+relpath,
-                                        "Files ("+ext+")",
+                                        sourceFiles,
                                         this,
                                         "Insert existing files",
                                         TRUE);
+  dialog->addFilter(allFiles);
   dialog->setMode(QFileDialog::ExistingFiles);
   dialog->exec();
   QStringList files = dialog->selectedFiles();
@@ -705,12 +715,55 @@ void TrollProjectWidget::slotAddFiles()
 
 void TrollProjectWidget::slotNewFile()
 {
+  bool ok = FALSE;
+  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+  QString filename = QInputDialog::getText(
+                     tr( "Insert New File"),
+                     tr( "Please enter a name for the new file." ),
+                     QLineEdit::Normal, QString::null, &ok, this );
+  if ( ok && !filename.isEmpty() )
+  {
+    QFile newfile(projectDirectory()+relpath+'/'+filename);
+    if (!newfile.open(IO_WriteOnly))
+    {
+      KMessageBox::error(this,i18n("Failed to create new file. "
+                                   "Do you have write permission "
+                                   "in the projectfolder?" ));
+      return;
+    }
+    newfile.close();
+    addFile(projectDirectory()+relpath+'/'+filename);
+  }
 }
 
 void TrollProjectWidget::slotRemoveFile()
 {
+  QListViewItem *selectedItem = details->currentItem();
+  if (!selectedItem)
+    return;
+  ProjectItem *pvitem = static_cast<ProjectItem*>(selectedItem);
+  // Check that it is a file (just in case)
+  if (pvitem->type() != ProjectItem::File)
+    return;
+  FileItem *fitem = static_cast<FileItem*>(pvitem);
+  removeFile(m_shownSubproject, fitem);
 }
 
+
+void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
+{
+    if (!item)
+        return;
+    ProjectItem *pvitem = static_cast<ProjectItem*>(item);
+    if (pvitem->type() == ProjectItem::Group)
+    {
+        removefileButton->setEnabled(false);
+    }
+    else if (pvitem->type() == ProjectItem::File)
+    {
+        removefileButton->setEnabled(true);
+    }
+}
 
 void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
@@ -719,7 +772,6 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
     if (pvitem->type() == ProjectItem::Group) {
-
         GroupItem *titem = static_cast<GroupItem*>(pvitem);
         QString title,ext;
         switch (titem->groupType) {
@@ -789,6 +841,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                                            "in the projectfolder?" ));
               return;
             }
+            newfile.close();
             addFileToCurrentSubProject(titem,filename);
             updateProjectFile(titem->owner);
             slotOverviewSelectionChanged(m_shownSubproject);
@@ -797,6 +850,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
     } else if (pvitem->type() == ProjectItem::File) {
 
+        removefileButton->setEnabled(true);
         FileItem *fitem = static_cast<FileItem*>(pvitem);
 
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
