@@ -1,4 +1,8 @@
 2001-07-01  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: initial toolbutton state fixed
+    * bugfix: prevented startup from flickering
+
+2001-07-01  F@lk Brettschneider <falk@kdevelop.org>
     * startlogo solution of gallium reactivated plus a little change by me
       (now it as cool as Gallium programmed it but acts as Ralf wanted it to be.
        Additionally, one can click it away to background if he dislikes it)

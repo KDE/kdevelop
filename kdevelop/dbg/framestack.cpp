@@ -38,7 +38,7 @@ FrameStack::FrameStack(QWidget * parent, const char * name, WFlags f) :
   connect( this,  SIGNAL(highlighted(int)), SLOT(slotHighlighted(int)));
   connect( this,  SIGNAL(selected(int)), SLOT(slotHighlighted(int)));
 //  setCaption( "Frame stack" );
-  show();
+//FB  show();
 }
 
 /***************************************************************************/

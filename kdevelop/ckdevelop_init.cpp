@@ -1300,7 +1300,6 @@ void CKDevelop::initDebugger()
   // Enable or disable the tabs, if they exist...
   if (var_viewer)
   {
-    dockManager->findWidgetParentDock(brkptManager->parentWidget())->undock();
     dockManager->findWidgetParentDock(frameStack->parentWidget())->undock();
     dockManager->findWidgetParentDock(disassemble->parentWidget())->undock();
     dockManager->findWidgetParentDock(var_viewer->parentWidget())->undock();
