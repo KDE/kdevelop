@@ -1285,12 +1285,12 @@ void CKDevelop::readOptions()
 	config->setGroup("dock_setting_default");
 	// settings just turned around...true is false and false is true ;-)
 	bool outputview= config->readBoolEntry("Output-View:visible", true);
-	if(!outputview){
+	if(outputview){
 	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
 	}
 	bool treeview=config->readBoolEntry("Tree-View:visible", true);
-	if(!treeview){
+	if(treeview){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
 	}
