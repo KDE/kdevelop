@@ -306,6 +306,15 @@ public: // Public queries
   /** return the headers(.h.) */
   QStrList& getHeaders()   { return header_files; }
 
+  /** return true if a Makefile.am was changed
+      the user of this method has to take care that the flag
+      is resetted after query to get a new situation.
+
+      to do so use:
+        clearMakefileAmchanged();
+  */
+  bool getMakefileAmChanged() const {return bMakefileamHasChanged; }
+
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
   void getAllTopLevelDialogs(QStrList& list);
@@ -374,6 +383,7 @@ public: // Public methods
   *@author Walter Tasin
   */
   QString& setInfosInString(QString& strtemplate, bool basics=true);
+  void clearMakefileAmChanged() {bMakefileamHasChanged=false;};
 
 
 protected:
@@ -395,6 +405,9 @@ protected:
   QString getName(QString rel_name);
 
 protected: // Protected attributes
+
+  /** help flag to check if a Makefile.am  */
+  bool bMakefileamHasChanged;
 
   /** The actual project file. */
   QString prjfile;
