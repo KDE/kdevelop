@@ -2,7 +2,7 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
-lib_LTLIBRARIES = libkdevdoctreeview.la
+kde_module_LTLIBRARIES = libkdevdoctreeview.la
 libkdevdoctreeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdoctreeview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 

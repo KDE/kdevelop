@@ -17,6 +17,7 @@
 	* moved the duplicated code for extracting the X-KDevelop-Args
 	property of a service into a QStringList into a static private
 	method of PluginController
+	* install kdevelop components as KDE modules, not as libraries
 
 2002-04-08  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* emit loadedFile and savedFile again

@@ -6,7 +6,7 @@ SUBDIRS = imports common kapp kpartapp kpartplugin kappjava kcmodule kicker kios
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
-lib_LTLIBRARIES = libkdevappwizard.la
+kde_module_LTLIBRARIES = libkdevappwizard.la
 libkdevappwizard_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevappwizard_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
