@@ -15,9 +15,10 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
-#include <qlistview.h>
 #include <qcombobox.h>
 #include <qmultilineedit.h>
+#include <qslider.h>
+#include <qheader.h>
 
 // kde includes
 #include <kdevproject.h>
@@ -28,12 +29,14 @@
 #include <kstandarddirs.h>
 #include <kfileitem.h>
 #include <kurlrequester.h>
+#include <klistview.h>
 
 // gideon includes
 #include <domutil.h>
 
 #include "ccconfigwidget.h"
 #include "cppsupportpart.h"
+#include "cppcodecompletionconfig.h"
 
 using namespace std;
 
@@ -42,28 +45,12 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
     : CCConfigWidgetBase( parent, name )
 {
     m_pPart = part;
-    m_bChangedCC = false;
     
-    codecompletion_tab->removePage( pageCS );
-    codecompletion_tab->removePage( pageCC );
-    
-    // initCCTab( );
-    initFTTab( );
+    initFileTemplatesTab( );
+    initCodeCompletionTab( );
 }
 
-void
-CCConfigWidget::initCCTab( )
-{
-    QDomDocument dom = *m_pPart->projectDom();
-
-    // cbEnableCC->setChecked( DomUtil::readBoolEntry( dom, "/cppsupportpart/codecompletion/enablecc" ) );
-
-    QDomElement chPart = dom.documentElement( )
-                            .namedItem( "cppsupportpart" ).toElement( )
-    			    .namedItem( "codecompletion" ).toElement( );    
-}
-
-void CCConfigWidget::initFTTab( )
+void CCConfigWidget::initFileTemplatesTab( )
 {
     QDomDocument dom = *m_pPart->projectDom();
     bool files = DomUtil::readBoolEntry(dom, "/cppsupportpart/filetemplates/choosefiles");
@@ -94,57 +81,13 @@ CCConfigWidget::~CCConfigWidget( )
 {
 }
 
-
-void
-CCConfigWidget::accept( )
+void CCConfigWidget::accept( )
 {
-    saveCCTab( );
-    saveCSTab( );    
-    saveFTTab( );    
-
-//    if( m_bChangedCC )
-//	emit enableCodeCompletion( cbEnableCC->isChecked( ) );
+    saveFileTemplatesTab();    
+    saveCodeCompletionTab();
 }
 
-
-void
-CCConfigWidget::saveCSTab( )
-{
-    QDomDocument dom     = *m_pPart->projectDom( );
-    QDomElement  element = dom.documentElement( );
-    QDomElement  apPart  = element.namedItem( "cppsupportpart" ).toElement( );
-			 
-    if( apPart.isNull( ) ){
-	apPart = dom.createElement( "cppsupportpart" );
-	element.appendChild( apPart );
-    }    
-}
-
-
-void
-CCConfigWidget::saveCCTab( )
-{
-
-    QDomDocument dom     = *m_pPart->projectDom( );
-    QDomElement  element = dom.documentElement( );
-    QDomElement  apPart  = element.namedItem( "cppsupportpart" ).toElement( );
-			 
-    if( apPart.isNull( ) ){
-	apPart = dom.createElement( "cppsupportpart" );
-	element.appendChild( apPart );
-    }
-
-    QDomElement codecompletion = apPart.namedItem( "codecompletion" ).toElement( );
-    if( codecompletion.isNull( ) ){
-	codecompletion = dom.createElement( "codecompletion" );
-	apPart.appendChild( codecompletion );
-    }
-
-    // DomUtil::writeBoolEntry( dom, "cppsupportpart/codecompletion/enablecc", cbEnableCC->isChecked( ) );
-}
-
-
-void CCConfigWidget::saveFTTab( )
+void CCConfigWidget::saveFileTemplatesTab( )
 {
     QDomDocument dom = *m_pPart->projectDom();
     DomUtil::writeBoolEntry(dom, "/cppsupportpart/filetemplates/choosefiles", choose_files->isChecked());
@@ -183,13 +126,6 @@ void CCConfigWidget::implementationFile()
     }
 }
 
-void
-CCConfigWidget::slotEnableCC( )
-{
-    kdDebug( 9007 ) << "slot EnableCC" << endl;
-    m_bChangedCC = true;
-}
-
 void CCConfigWidget::slotEnableChooseFiles(bool c)
 {
     choose_files->setChecked(c);
@@ -204,6 +140,53 @@ void CCConfigWidget::slotSelectTemplateGroup( const QString & str)
     interfaceFile();
     implementation_url->setURL(str + ".cpp");
     implementationFile();
+}
+
+void CCConfigWidget::initCodeCompletionTab( )
+{
+    advancedOptions->header()->hide();
+    
+    CppCodeCompletionConfig* c = m_pPart->codeCompletionConfig();
+    
+    sliderCodeCompletion->setValue( c->codeCompletionDelay() );
+    sliderArgumentsHint->setValue( c->argumentsHintDelay() );
+    checkAutomaticCodeCompletion->setChecked( c->automaticCodeCompletion() );
+    checkAutomaticArgumentsHint->setChecked( c->automaticArgumentsHint() );
+    
+    QListViewItem* codeCompletionOptions = new QListViewItem( advancedOptions, i18n("Code Completion options") );
+    codeCompletionOptions->setExpandable( true );
+    
+    //QListViewItem* argumentsHintOptions = new QListViewItem( advancedOptions, i18n("Arguments Hint options") );
+    
+    m_includeGlobalFunctions = new QCheckListItem( codeCompletionOptions, i18n("Include Global Functions"), QCheckListItem::CheckBox );
+    m_includeGlobalFunctions->setOn( c->includeGlobalFunctions() );
+    
+    m_includeTypes = new QCheckListItem( codeCompletionOptions, i18n("Include Types"), QCheckListItem::CheckBox );
+    m_includeTypes->setOn( c->includeTypes() );
+    
+    m_includeEnums = new QCheckListItem( codeCompletionOptions, i18n("Include Enums"), QCheckListItem::CheckBox );
+    m_includeEnums->setOn( c->includeEnums() );
+    
+    m_includeTypedefs = new QCheckListItem( codeCompletionOptions, i18n("Include Typedefs"), QCheckListItem::CheckBox );
+    m_includeTypedefs->setOn( c->includeTypedefs() );
+}
+
+void CCConfigWidget::saveCodeCompletionTab( )
+{
+    CppCodeCompletionConfig* c = m_pPart->codeCompletionConfig();
+    
+    c->setCodeCompletionDelay( sliderCodeCompletion->value() );
+    c->setAutomaticArgumentsHint( sliderArgumentsHint->value() );
+    
+    c->setAutomaticCodeCompletion( checkAutomaticCodeCompletion->isChecked() );
+    c->setAutomaticArgumentsHint( checkAutomaticArgumentsHint->isChecked() );
+    
+    c->setIncludeGlobalFunctions( m_includeGlobalFunctions->isOn() );
+    c->setIncludeTypes( m_includeTypes->isOn() );
+    c->setIncludeEnums( m_includeEnums->isOn() );
+    c->setIncludeTypedefs( m_includeTypedefs->isOn() );
+    
+    c->store();
 }
 
 #include "ccconfigwidget.moc"

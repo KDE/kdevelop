@@ -147,6 +147,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     setInstance(CppSupportFactory::instance());
 
     m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
+    connect( m_pCompletionConfig, SIGNAL(stored()), this, SLOT(codeCompletionConfigStored()) );
     
     m_driver = new CppDriver( this );
     
@@ -1124,6 +1125,11 @@ QString CppSupportPart::formatTag( const Tag & inputTag )
         break;
     }
     return tag.name();
+}
+
+void CppSupportPart::codeCompletionConfigStored( )
+{
+    partController()->setActivePart( partController()->activePart() );
 }
 
 #include "cppsupportpart.moc"

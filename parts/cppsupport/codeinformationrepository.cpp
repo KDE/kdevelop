@@ -64,12 +64,8 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
     while( it != m_catalogs.end() ){
         Catalog* catalog = it.data();
         ++it;
-
-	kdDebug(9020) << "try with the catalog " << catalog->dbName() << endl;
-
-        tags = catalog->query( args );
-        if( tags.size() )
-            break;
+	
+        tags += catalog->query( args );
     }
 
     return tags;
@@ -103,6 +99,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
     QValueList<Tag> tags;
     QValueList<Catalog::QueryArgument> args;
 
+#if 0
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Namespace )
 	<< Catalog::QueryArgument( "scope", scope );
@@ -112,7 +109,8 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
     args << Catalog::QueryArgument( "kind", Tag::Kind_Class )
 	<< Catalog::QueryArgument( "scope", scope );
     tags += query( args );
-
+#endif
+    
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
 	<< Catalog::QueryArgument( "scope", scope );
@@ -210,14 +208,13 @@ QValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStrin
     QValueList<Tag> tags;
     QValueList<Catalog::QueryArgument> args;
 
-    args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Namespace )
 	<< Catalog::QueryArgument( "scope", scope );
     tags += query( args );
 
+    args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Class )
     	<< Catalog::QueryArgument( "scope", scope );
-
     tags += query( args );
 
     return tags;
@@ -240,6 +237,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name,
 QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryList( const QValueList<Tag> & tags )
 {
     QValueList<KTextEditor :: CompletionEntry> entryList;
+    QMap<QString, bool> ns;
 
     QValueList<Tag>::ConstIterator it = tags.begin();
     while( it != tags.end() ){
@@ -250,19 +248,21 @@ QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryLis
 	switch( tag.kind() ){
 	    case Tag::Kind_Class:
 		entry.prefix = "class";
-		entry.text = tag.name();
-		break;
-
+	        entry.text = tag.name();
+	        break;
+	    
 	    case Tag::Kind_Namespace:
-		entry.prefix = "namespace";
-		entry.text = tag.name();
+		if( !ns.contains(tag.name()) ){
+		    ns.insert( tag.name(), true );
+		    entry.prefix = "namespace";
+		    entry.text = tag.name();
+		}
 		break;
 
 	    case Tag::Kind_FunctionDeclaration:
 	    case Tag::Kind_Function:
 	    {
 		entry.text = tag.name();
-
 		entry.text += "(";
 
 		CppFunction<Tag> tagInfo( tag );

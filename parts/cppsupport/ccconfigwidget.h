@@ -15,38 +15,36 @@
 #include "ccconfigwidgetbase.h"
 
 class CppSupportPart;
-
+class QCheckListItem;
 class CCConfigWidget : public CCConfigWidgetBase
 {
     Q_OBJECT
     
 public:
     CCConfigWidget( CppSupportPart* part, QWidget* parent = 0, const char* name = 0 );
-    ~CCConfigWidget( );
+    virtual ~CCConfigWidget( );
 
 public slots:
-    void slotEnableCC ( );
-    
-    void slotSelectTemplateGroup(const QString &);
+    void slotSelectTemplateGroup( const QString & );
     void interfaceFile();
     void implementationFile();
-    void slotEnableChooseFiles(bool c);
+    void slotEnableChooseFiles( bool c );
 
     void accept( );
-    
-signals:
-    void enableCodeCompletion( bool setEnable );
 
 private:
-    void initCCTab( );
-    void initFTTab( );
-    void saveCCTab( );
-    void saveCSTab( );
-    void saveFTTab( );
+    void initFileTemplatesTab();
+    void saveFileTemplatesTab();
+    
+    void initCodeCompletionTab();
+    void saveCodeCompletionTab();
     
 private:
     CppSupportPart* m_pPart;
-    bool m_bChangedCC;    
+    QCheckListItem* m_includeGlobalFunctions;
+    QCheckListItem* m_includeTypes;
+    QCheckListItem* m_includeEnums;
+    QCheckListItem* m_includeTypedefs;
 };
 
 #endif

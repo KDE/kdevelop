@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>CCConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>551</width>
-            <height>489</height>
+            <height>497</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,423 +19,13 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QTabWidget">
             <property name="name">
                 <cstring>codecompletion_tab</cstring>
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>pageCS</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Class Store</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>GroupBox4</cstring>
-                        </property>
-                        <property name="frameShape">
-                            <enum>Box</enum>
-                        </property>
-                        <property name="frameShadow">
-                            <enum>Sunken</enum>
-                        </property>
-                        <property name="title">
-                            <string>Persistent Class Store</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>cbEnablePCS</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Enable persistent &amp;class store</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer65</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Minimum</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>lbPCSFile</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Persistent class store &amp;file (information only):</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>lePCSFile</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit">
-                                <property name="name">
-                                    <cstring>lePCSFile</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer14</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Fixed</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>gbPP</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Pre-Parsing</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>cbEnablePP</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Enable &amp;pre-parsing</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer70</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Minimum</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>TextLabel2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Include these paths for pre-parsing:</string>
-                                </property>
-                            </widget>
-                            <widget class="QListView">
-                                <column>
-                                    <property name="text">
-                                        <string>With Subdirectories</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <column>
-                                    <property name="text">
-                                        <string>Directory</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>lvPCSPaths</cstring>
-                                </property>
-                                <property name="hScrollBarMode">
-                                    <enum>AlwaysOff</enum>
-                                </property>
-                                <property name="allColumnsShowFocus">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>Layout25</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>0</number>
-                                    </property>
-
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>Spacer68</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>0</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>btAddPath</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Add Path...</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>Spacer67</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>0</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>btRemovePath</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Remove Selected Path</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>Spacer69</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>0</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </hbox>
-                            </widget>
-                        </vbox>
-                    </widget>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>pageCC</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Code Completion</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer72_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>noname</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Code Hinting</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-
-                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>cbEnableCH</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Enable code &amp;hinting</string>
-                                </property>
-                            </widget>
-                            <widget class="QButtonGroup" row="2" column="1">
-                                <property name="name">
-                                    <cstring>bgCodeHinting</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>3</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="title">
-                                    <string>Show Code Hinting In</string>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>rbOutputView</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Bottom side</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>rbSelectView</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Left side</string>
-                                        </property>
-                                    </widget>
-                                </vbox>
-                            </widget>
-                            <spacer row="2" column="0">
-                                <property name="name">
-                                    <cstring>Spacer27</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Fixed</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <spacer row="1" column="1">
-                                <property name="name">
-                                    <cstring>Spacer74</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Fixed</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </grid>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer52</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>0</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>fileTemplatesPage</cstring>
                 </property>
                 <attribute name="title">
                     <string>File Templates</string>
@@ -444,7 +34,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>Layout8</cstring>
@@ -456,7 +45,6 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-
                             <widget class="QGroupBox">
                                 <property name="name">
                                     <cstring>files</cstring>
@@ -476,7 +64,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-
                                     <widget class="QComboBox">
                                         <property name="name">
                                             <cstring>template_groups</cstring>
@@ -517,7 +104,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-
                                     <widget class="QLineEdit" row="0" column="1">
                                         <property name="name">
                                             <cstring>interface_suffix</cstring>
@@ -571,7 +157,6 @@
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-
                                 <widget class="QLayoutWidget">
                                     <property name="name">
                                         <cstring>Layout7</cstring>
@@ -583,7 +168,6 @@
                                         <property name="margin">
                                             <number>0</number>
                                         </property>
-
                                         <widget class="QLabel">
                                             <property name="name">
                                                 <cstring>TextLabel1</cstring>
@@ -890,7 +474,6 @@
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-
                                 <widget class="QLayoutWidget">
                                     <property name="name">
                                         <cstring>Layout6</cstring>
@@ -902,7 +485,6 @@
                                         <property name="margin">
                                             <number>0</number>
                                         </property>
-
                                         <widget class="QLabel">
                                             <property name="name">
                                                 <cstring>TextLabel1_2</cstring>
@@ -1201,22 +783,146 @@
                     </widget>
                 </vbox>
             </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>codeCompletionPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Code Completion</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout4</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="3" column="1">
+                                <property name="name">
+                                    <cstring>labelArgumentsHintDelay</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="1">
+                                <property name="name">
+                                    <cstring>labelCodeCompletionDelay</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QSlider" row="3" column="0">
+                                <property name="name">
+                                    <cstring>sliderArgumentsHint</cstring>
+                                </property>
+                                <property name="maxValue">
+                                    <number>2000</number>
+                                </property>
+                                <property name="lineStep">
+                                    <number>100</number>
+                                </property>
+                                <property name="pageStep">
+                                    <number>250</number>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="tickmarks">
+                                    <enum>Below</enum>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>checkAutomaticCodeCompletion</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Automatic Code Completion</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="0">
+                                <property name="name">
+                                    <cstring>checkAutomaticArgumentsHint</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Automatic Arguments Hint</string>
+                                </property>
+                            </widget>
+                            <widget class="QSlider" row="1" column="0">
+                                <property name="name">
+                                    <cstring>sliderCodeCompletion</cstring>
+                                </property>
+                                <property name="maxValue">
+                                    <number>2000</number>
+                                </property>
+                                <property name="lineStep">
+                                    <number>100</number>
+                                </property>
+                                <property name="pageStep">
+                                    <number>250</number>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="tickmarks">
+                                    <enum>Below</enum>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer1</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Minimum</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>31</width>
+                                <height>51</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QListView">
+                        <column>
+                            <property name="text">
+                                <string>Column 1</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>advancedOptions</cstring>
+                        </property>
+                        <property name="rootIsDecorated">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
-    <connection>
-        <sender>btAddPath</sender>
-        <signal>clicked()</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotAddPPPath()</slot>
-    </connection>
-    <connection>
-        <sender>btRemovePath</sender>
-        <signal>clicked()</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotRemovePPPath()</slot>
-    </connection>
     <connection>
         <sender>choose_files</sender>
         <signal>toggled(bool)</signal>
@@ -1253,36 +959,9 @@
         <receiver>CCConfigWidgetBase</receiver>
         <slot>implementationFile()</slot>
     </connection>
-    <connection>
-        <sender>cbEnablePCS</sender>
-        <signal>clicked()</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotEnablePCS()</slot>
-    </connection>
-    <connection>
-        <sender>cbEnablePP</sender>
-        <signal>clicked()</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotEnablePP()</slot>
-    </connection>
-    <connection>
-        <sender>cbEnableCH</sender>
-        <signal>clicked()</signal>
-        <receiver>CCConfigWidgetBase</receiver>
-        <slot>slotEnableCH()</slot>
-    </connection>
 </connections>
 <tabstops>
     <tabstop>codecompletion_tab</tabstop>
-    <tabstop>cbEnablePCS</tabstop>
-    <tabstop>lePCSFile</tabstop>
-    <tabstop>cbEnablePP</tabstop>
-    <tabstop>lvPCSPaths</tabstop>
-    <tabstop>btAddPath</tabstop>
-    <tabstop>btRemovePath</tabstop>
-    <tabstop>cbEnableCH</tabstop>
-    <tabstop>rbOutputView</tabstop>
-    <tabstop>rbSelectView</tabstop>
     <tabstop>template_groups</tabstop>
     <tabstop>choose_files</tabstop>
     <tabstop>interface_suffix</tabstop>
@@ -1293,8 +972,15 @@
     <tabstop>interface_file</tabstop>
     <tabstop>implementation_url</tabstop>
     <tabstop>implementation_file</tabstop>
+    <tabstop>checkAutomaticCodeCompletion</tabstop>
+    <tabstop>sliderCodeCompletion</tabstop>
+    <tabstop>checkAutomaticArgumentsHint</tabstop>
+    <tabstop>sliderArgumentsHint</tabstop>
 </tabstops>
-
+<includes>
+    <include location="global" impldecl="in implementation">kurlrequester.h</include>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">implementationFile()</slot>
     <slot access="protected">interfaceFile()</slot>
@@ -1308,18 +994,10 @@
     <slot access="protected">slotSelectTemplateGroup( const QString &amp; )</slot>
     <slot access="protected">slotSetCHWindow( )</slot>
 </slots>
-<includes>
-<include location="global" impldecl="in implementation">kurlrequester.h</include>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

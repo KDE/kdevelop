@@ -103,6 +103,7 @@ private slots:
     void changedFilesInProject( const QStringList & fileList );
     void slotProjectCompiled();
     void setupCatalog();
+    void codeCompletionConfigStored();
 
     void slotNewClass();
     void slotSwitchHeader();

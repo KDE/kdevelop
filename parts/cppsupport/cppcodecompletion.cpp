@@ -828,7 +828,7 @@ CppCodeCompletion::completeText( )
 	if( showArguments ){
 	    QStringList functionList = getSignatureListForClass( type, word, isInstance );
 
-	    if( expr.isEmpty() /*|| functionList.count() == 0 */){
+	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() && expr.isEmpty() /*|| functionList.count() == 0 */){
 		functionList += getGlobalSignatureList( word );
 	    }
 
@@ -838,20 +838,23 @@ CppCodeCompletion::completeText( )
 	} else {
 	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type, true, isInstance );
 
-	    if( expr.isEmpty() ){
-		entryList += m_repository->getEntriesInScope( QStringList(), true );
+	    if( m_pSupport->codeCompletionConfig()->includeTypes() && expr.isEmpty() ){
+		kdDebug(9007) << "include types" << endl;
+		entryList += CodeInformationRepository::toEntryList( m_repository->getClassOrNamespaceList(QStringList()) );
+	    }
+	    
+	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() && expr.isEmpty() ){
+		kdDebug(9007) << "include global function declarations" << endl;
+ 		QValueList<Catalog::QueryArgument> args;
+		args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
+		    << Catalog::QueryArgument( "scope", QStringList() );
+		entryList += CodeInformationRepository::toEntryList( m_repository->query(args) );
 	    }
 
 	    if( entryList.size() )
 		m_activeCompletion->showCompletionBox( entryList, word.length() );
 	}
     } else {
-	// maybe, you're tring to complete a C function
-	// NOTE: this can be a very huge task!
-
-	kdDebug(9007) << "expr = " << expr << endl;
-	kdDebug(9007) << "word = " << word << endl;
-
 	if( word.isEmpty() )
 	    word = expr;
 
@@ -859,7 +862,7 @@ CppCodeCompletion::completeText( )
 
 	    QStringList functionList = getSignatureListForClass( QString::null, word, false );
 
-	    if( functionList.count() == 0 ){
+	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() && functionList.count() == 0 ){
 		functionList = getGlobalSignatureList( word );
 	    }
 
@@ -868,7 +871,20 @@ CppCodeCompletion::completeText( )
 	    }
 
 	} else if( !showArguments && word.length() ) {
-	    QValueList<KTextEditor::CompletionEntry> entryList = m_repository->getEntriesInScope( QStringList(), false );
+	    QValueList<KTextEditor::CompletionEntry> entryList;
+	    
+	    if( m_pSupport->codeCompletionConfig()->includeTypes() && expr.isEmpty() ){
+		kdDebug(9007) << "include types" << endl;
+		entryList += CodeInformationRepository::toEntryList( m_repository->getClassOrNamespaceList(QStringList()) );
+	    }
+	    
+	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() ){
+		kdDebug(9007) << "include global function declarations" << endl;
+		QValueList<Catalog::QueryArgument> args;
+		args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
+		    << Catalog::QueryArgument( "scope", QStringList() );
+		entryList += CodeInformationRepository::toEntryList( m_repository->query(args) );
+	    }
 
 	    if( entryList.size() )
 		m_activeCompletion->showCompletionBox( entryList, word.length() );
