@@ -102,7 +102,7 @@ KIconBorder::KIconBorder(KWrite *write, KWriteDoc *doc, KWriteView *view) :
 	menuId_editBrkpoint(0)
 {
 	setBackgroundColor(colorGroup().background());
-	setGeometry ( 2, 2, iconBorderWidth, 800);
+	setGeometry ( 2, 2, iconBorderWidth, iconBorderHeight);
 
 	selectMenu.insertItem(i18n("Toggle bookmark"), this, SLOT(slotToggleBookmark()));
 	selectMenu.insertItem(i18n("Clear all bookmarks"), kWrite, SLOT(clearBookmarks()));
@@ -135,27 +135,35 @@ void KIconBorder::showIcon(const QPixmap& icon, int y)
   paint.end();
 }
 
-void KIconBorder::clearLine(int line)
+void KIconBorder::clearPixelLines(int startPixelLine, int numberPixelLine)
 {
 	QPainter paint;
 
 	paint.begin(this);
 
-	int y = line * kWriteDoc->getFontHeight() - kWriteView->getYPos();
-
-  paint.fillRect(0, y, iconBorderWidth-2, kWriteDoc->getFontHeight(), colorGroup().background());
+  paint.fillRect(0, startPixelLine, iconBorderWidth-2, numberPixelLine, colorGroup().background());		
 
   paint.setPen(white);
-  paint.drawLine(iconBorderWidth-2, y, iconBorderWidth-2, y + kWriteDoc->getFontHeight());
+  paint.drawLine(iconBorderWidth-2, startPixelLine, iconBorderWidth-2, startPixelLine + numberPixelLine);
   paint.setPen(QColor(colorGroup().background()).dark());
-  paint.drawLine(iconBorderWidth-1, y, iconBorderWidth-1, y + kWriteDoc->getFontHeight());
-
+  paint.drawLine(iconBorderWidth-1, startPixelLine, iconBorderWidth-1, startPixelLine + numberPixelLine);
 	paint.end();
+}
+
+void KIconBorder::clearLine(int line)
+{
+	int y = line * kWriteDoc->getFontHeight() - kWriteView->getYPos();
+
+	clearPixelLines(y, kWriteDoc->getFontHeight());
+}
+
+void KIconBorder::clearAll()
+{
+	clearPixelLines(0, iconBorderHeight);
 }
 
 void KIconBorder::paintBookmark(int line)
 {
-
   if (kWrite->bookmarked(line))
 	{
     #include "pix/bookmark.xpm"
@@ -706,6 +714,8 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
   int cXPosMin, cXPosMax, cYPosMin, cYPosMax;
   int dx, dy;
 
+	debug("KWriteView::updateView\n");
+
   if (exposeCursor || flags & ufDocGeometry) {
     emit kWrite->newCurPos();
   } else if (updateState == 0) return;
@@ -835,11 +845,13 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     }
 
     if (b) {
+			debug("KWriteView::updateView: repainting\n");
       repaint(0, 0, width(), height(), false);
 
     } else {
 			if(dy) leftBorder->scroll(0,dy);
 
+			debug("KWriteView::updateView: updateState: %d\n", updateState);
       if (updateState > 0) paintTextLines(oldXPos,oldYPos);
 
       if (dx || dy) {				
@@ -925,6 +937,7 @@ void KWriteView::paintTextLines(int xPos, int yPos) {
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
     bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h);
 
+		debug("KWriteView::paintTextLines: line: %d", line);
 		leftBorder->paintLine(line);
   }
   paint.end();

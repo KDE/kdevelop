@@ -1295,6 +1295,7 @@ void KWriteDoc::clear() {
   for (view = views.first(); view != 0L; view = views.next()) {
     view->updateCursor(cursor);
     view->tagAll();
+		view->leftBorder->clearAll();
   }
 
   eolMode = eolUnix;
