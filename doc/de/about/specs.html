@@ -1,0 +1,215 @@
+<HTML>
+
+<HEAD>
+	<title>Willkommen zu KDevelop!</title>
+	<link rel="stylesheet" href="konq.css" type="text/css" />
+</HEAD>
+
+<BODY BGCOLOR=#3679AD LEFTMARGIN=0 TOPMARGIN=5>
+
+<TABLE BORDER=0 WIDTH=100% CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+     <COLGROUP>
+        <COL WIDTH=170>
+        <COL WIDTH=20>
+        <COL WIDTH=309>
+	<COL WIDTH=*>
+     </COLGROUP>
+	<TR HEIGHT=24>
+		<TD BGCOLOR=#505050 ALIGN=RIGHT></TD>
+		<TD class="deco" BGCOLOR=#505050 HEIGHT=22 COLSPAN=3></TD>
+	</TR>
+	<TR>
+		<TD WIDTH=190 COLSPAN=2 ROWSPAN=2> &nbsp;</TD>
+		<TD BGCOLOR=#DDDDDD><IMG WIDTH=309 HEIGHT=77 SRC="kdevelop.png"></TD>
+		<TD BGCOLOR=#DDDDDD BACKGROUND="lines.png">&nbsp;</TD>
+	</TR>
+
+	<TR>
+
+		<TD COLSPAN=2 BGCOLOR=#505050 ALIGN=RIGHT HEIGHT=22>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+	<TR>
+		<TD HEIGHT=20 class="menu">&nbsp; <A class="menu" HREF="intro.html">Einführung</A>
+&nbsp;</TD> 		<TD HEIGHT=20 class="menu">|</TD>
+		<TD HEIGHT=20 class="menu">&nbsp; <A class="menu" HREF="tips.html">Tipps</A> &nbsp;</TD>
+		<TD HEIGHT=20 class="menu">|</TD>
+		<TD HEIGHT=20 class="menuactive">&nbsp; Spezifikationen &nbsp;</TD>
+		<TD HEIGHT=20 class="menu">&nbsp</TD>
+	</TR>
+</TABLE>
+		</TD>
+	</TR>
+
+	<TR>
+		<TD COLSPAN=2 WIDTH=190></TD>
+		<TD COLSPAN=2 class="shadow1" HEIGHT=9 COLSPAN=4></TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=2 WIDTH=190></TD>
+		<TD COLSPAN=2 HEIGHT=41 COLSPAN=4></TD>
+	</TR>
+</TABLE>
+
+<!-- end of header -->
+
+
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+<TR>
+	<TD WIDTH=190></TD>
+	<TD  class="trans" BGCOLOR=#D0DFEC>
+
+		<TABLE WIDTH= 100% BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+		<TR>
+			<TD HEIGHT=20 WIDTH=20>&nbsp;</TD>
+			<TD>&nbsp;</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=20>&nbsp;</TD>
+			<TD VALIGN=TOP>
+
+<!-- here comes the content -->
+
+
+    <H3>Spezifikationen<H3>
+<P>Das Design von KDevelop wurde speziell darauf abgestimmt, Entwicklern eine Integrierte
+Entwicklungsumgebung (IDE) unter UNIX Systemen zur Verfügung zu stellen, die gleichzeitig
+ein Maximum an Flexibilität bietet. Sie integriert als solche die Funktionalität vieler
+anderer Applikationen, die allgemein von Entwicklern unter UNIX eingesetzt werden: der GNU
+C/C++ Compiler, GNU make und die GNU autoconf/automake Utilities. Im Hinblick auf KDE und
+Qt Programmierung erfüllen die Projekte, die mit KDevelop generiert wurden, automatisch den
+KDE 2.1 Desktop Standard und verwenden das /admin Setup-Verzeichnis, das ebenfalls vom KDE
+Projekt verwendet wird um den KDE-Code zu verwalten; somit können Entwickler ihre Projekte
+einfach über KDE aktualisieren, um dadurch aktualisierte Versionsanforderungen und 
+erweiterte Unterstützung für Betriebssysteme zu verwenden. Durch die Integration von
+TrollTech´s Qt Designer wird die Erstellung von Graphischen Benutzerschnittstellen (GUI)
+innerhalb von KDevelop stark vereinfacht. </P>
+<P>
+KDevelop bietet weiterhin:
+</P>
+<BR>
+<TABLE class="vnice" BGCOLOR=#FFFFFF BORDER=1 CELLSPACING=0 CELLPADDING=1>
+        <TR ALIGN=LEFT VALIGN=MIDDLE BGCOLOR="000000" HEIGHT=6>
+                <TD>
+                        <FONT COLOR=#FFFFFF>&nbsp; S P E Z I F I K A T I O N E N</FONT>
+                </TD>
+        </TR><TR><TD>
+
+
+
+<TABLE class="vnice" BORDER=0 CELLSPACING=0 CELLPADDING=2>
+        <TR BGCOLOR="#DADADA">
+                <TH WIDTH=40%>Unterstützte Funktionalität</TH>
+		<TH WIDTH=2%>&nbsp;</TD>
+                <TH WIDTH=58%>Zusätzliche Anforderungen</TH>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Projektgenerierung</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>enthalten: C, C++ (Terminal), KDE 2, Qt 2.2, GNOME, bestehende Projekte.
+Erfordert <b>Perl</b>, <b>GNU-Tools</b>, <b>GCC 2.95.2</b> und
+Projekt-spezifische Bibliotheken/Headerdateien</TD>
+</TR>         <TR BGCOLOR="#FFFFFF">
+                <TD>KDE 2.1 Templates</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>enthalten: KDE mini, normal, MDI und Kicker (KDE panel) applet</TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Qt 2.2.x Templates</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>enthalten: Qt SDI, Qt MDI (QWorkspace) und Qt MDI (QextMDI)</TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>automake/autoconf kompatible existierende Projekte</TD>
+                                <TD WIDTH=2%>&nbsp;</TD>
+                <TD>enthalten: Projektdatei-Generator</TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Integrierterl Debugger</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>enthalten, erfordert gdb</TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>Externe Debugger</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>erfordert gdb und entweder kdbg oder ddd.</TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Klassenbrowser</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>enthalten</TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>KDE API Dokumentations-Generator</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>enthalten, erfordert KDoc 2.0a40</TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Qt Designer Integration</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>erfordert Qt Designer (kommt mit Qt > 2.2.1), KDevelop Projekt
+generiert mit KDevelop > 1.3</A></TD>         </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>Internationalisierungsunterstützung</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>erfordert zusätzlich:
+                        <UL>
+                                <LI>GNU gettext Paket</LI>
+                                <LI>KBabel zur KDE 2.x Internationalisierung</LI>
+                                <LI>Qt Linguist zurQt 2.x internationalisierung</LI>
+                        </UL>
+                </TD>
+        </TR>
+        <TR BGCOLOR="#fff4c9">
+                <TD>Projekt-API Dokumentation</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>erfordert zusätzlich (entweder/oder):
+                        <UL>
+                                <LI>KDoc 2.0a40 (kommt mit KDE > 2.0.1)</LI>
+                                <LI>Doxygen</LI>
+                        </UL>
+                </TD>
+        </TR>
+        <TR BGCOLOR="#FFFFFF">
+                <TD>Suchdatenbank zur API/Dokumenationssuche</TD>
+		<TD WIDTH=2%>&nbsp;</TD>
+                <TD>erfordert zusätzlich (entweder/oder):
+                        <UL>
+                                <LI>glimpse (nur für nichtkommerzielle Nutzung)</LI>
+                                <LI>Ht://Dig</LI>
+                        </UL>
+                </TD>
+        </TR>
+
+</TABLE>
+
+	</TD></TR>
+</TABLE>
+
+<BR>
+<P>&nbsp; <A HREF="intro.html">Zurück </A> &nbsp; zur Einführung</P>
+
+<!-- End of text -->
+
+
+  		</TD>
+		<TD WIDTH=20>&nbsp;</TD>
+ 	</TR>
+	<TR>
+		<TD HEIGHT=20 WIDTH=20>&nbsp;</TD>
+		<TD>&nbsp;</TD>
+	</TR>
+
+</TABLE>
+
+		</TD>
+		<TD WIDTH=20>&nbsp;</TD>
+	</TR>
+	<TR>
+		<TD HEIGHT=50 COLSPAN=3>&nbsp;</TD>
+	</TR>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>

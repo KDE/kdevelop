@@ -3,7 +3,7 @@
 <titlepag>
 <title>Benutzerhandbuch zu KDevelop
 <subtitle>Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.4
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>" >
+<author>Ralf Nolden <htmlurl url="mailto:nolden@kde.org" name = "<nolden@kde.org>" >
 <newline>Übersetzung: Ralf Funken <htmlurl url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">
 <inst>The KDevelop Team
 <date>Version 1.4 , Feb 12,2001
@@ -83,46 +83,41 @@ Methode von Klassen bietet.
 <bf>KDevelop 1.3:</bf>
 
 <itemize>
-<item>rewritten templates for Qt 2.x, now based on Qt-2.2.1 only as they make use of the QAction
-class and the configure script searches
-for the <bf>uic</bf> which processes Qt Designer files
-<item>rewritten templates for KDE 2.0 which make use of the new API now fully and who are also
-using the uic for desinger files
-<item>support for the new <bf>Qt Designer</bf> in KDE 2.0/Qt-2.2.x projects.
-<item>the new <bf>Qt Linguist</bf> and its tools coming with it to create internationalization files
-for Qt applications is fully supported. The handling of internationalization is done the same way as
-for KDE project with KDevelop, just that you have to use tr() instead of i18(). Create an example Qt
-application to see the details. Also mind that all Qt utilities have to be in your $PATH variable,
-usually this is $QTDIR/bin.
-<item>all KDE 2.0 and Qt 2.2.x templates make use of KDE´s
-autoconf/automake system, this enables developers to convert their automatic configuration system to
-KDE easily if they decide to use KDE features for their application.
-<item>KDevelop ships with three additional scripts to make your life easier; these are installed in
-$prefix/bin (usually $KDEDIR/bin):
+<item>neu geschriebene Templates für QT 2.x, jetzt ausschließlich basierend auf QT-2.2.1, da sie die QAction-Klasse nutzen und das
+configure SKript nach <bf>uic</bf> sucht, welches QT Designer Dateien verarbeitet.
+<item>Unterstützung des neuen <bf>QT Designers</bf> in KDE 2.0/Qt-2.2.x Projekten.
+<item>der neue <bf>Qt Linguist</bf> und seine zugehörigen Werkzeuge um Internationalisierungsdateien zuerstellen ist vollständig
+unterstützt. Die Arbeitsweise bei der Internationalisierung wird auf die gleiche Weise durchgeführt, wie bei KDE Projekten, nur
+das tr() anstatt i18() benutzt werden muß. Erstellen Sie eine Beispiel-QT-Anwendung um die Details zu sehen. Bedenken Sie, daß
+alle Qt Werkzeuge im $PATH stehen müssen, üblicher Weise ist dies $QTDIR/bin.
+ <item>alle KDE 2.0 und Qt 2.2.x Templates benutzen das KDE autoconf/automake-System, dies erlaubt es Entwicklern auf einfache
+Weise ihr Konfigurationssystem umzustellen, wenn KDE Elemente in ihrer Anwendung benutzt werden.
+<item>KDevelop wird mit drei zusätzlichen Skripten verteilt, die Ihnen das Leben erleichern; Diese werden in $prefix/bin
+(gewöhnlich $KDEDIR/bin) installiert:
 	<itemize>
-	<item><bf>extractrc:</bf> this is a script that is originally located in the KDE CVS module kdesdk
-(KDE Software Development Kit). It is called automatically for creating the pot-file of your
-application and extracts the strings from your XML resource file that is used to build the GUI in
-KDE 2.0 applications
-	<item><bf>kimport:</bf> kimport is a perl script that enables you to create a *.kdevprj (KDevelp
-Project File) from almost any automake/autoconf compatible already existing project. Usage: go to
-your project directory and call kimport &gt; &lt;yourprojectname&gt;.kdevprj. This will redirect the
-output to a projectfile that you can load into KDevelop.
-	<item><bf>kdevdlg2ui:</bf> converts an existing *.kdevdlg file that has been created with
-KDevelop´s Dialogeditor into a *.ui file that can be edited with Qt´s Designer.
+	<item><bf>extractrc:</bf>dies ist ein Skript, welches ursprünglich zum KDE CVS Modul kdesdk (KDE Software Development Kit)
+gehört. Es wird automatisch aufgerufen, um die pot-Datei für Ihre Anwendung zu erstellen und extrahiert die Zeichenketten aus
+Ihrer XML Resource Datei und wird verwendet um die GUI in KDE 2.0-Anwendungen zu erstellen.
+ 	<item><bf>kimport:</bf>kimport ist ein perl Skript welches es Ihnen erlaubt, eine *.kdevprj (KDevelop Project File) Datei aus
+fast jedem beliebigen, automake/autoconf-Projekt zu erstellen. Verwendung: wechseln Sie in Ihr Projektverzeichnis und starten Sie
+kimport &gt;&lt;IhrProjektName&gt;.kdevprj. Damit wird die Ausgabe in eine Projektdatei umgeleitet, welche Sie mit KDevelop laden
+können.
+ 	<item><bf>kdevdlg2ui:</bf>wandelt eine existierende *.kdevdlg Datei, die mit KDevelop's Dialogeditor erstellt wurde in eine
+*.ui, die mit dem Qt Designer bearbeitet werden kann.
 	</itemize>
-<item>several bugfixes regarding bugs in the
-kwrite code and KDevelop itself </itemize>
+<item>einige Fehlerbereinigugen im kwrite Quellcode und KDevelop selbst</itemize>
 
 <bf>KDevelop 1.4:</bf>
 
 <itemize>
-<item>porting over to KDE 2.1. KDevelop is now a true KDE 2.x application and ships with KDE 2.1
-<item>removal of KDE 1.x templates and the internal dialogeditor. Graphical user interface design is now based on using Qt Designer only.
-<item>improved functionality in regards to the classbrowser such as providing the "grep" function over the class-tree and autocompletion in the browser toolbar
-that allows easy selection of classes, methods and member attributes as well as global functions, attributes and structs.
-<item>overall GUI enhancements like geometry-managed dialogs; usage of KDE 2´s new dialog classes and dockwidgets.
-</itemize>
+<item>Portierung nach KDE 2.1. KDevelop ist nun eine wirkliche KDE 2.x Anwendung und wird mit KDE 2.1 verteilt.
+<item>Entfernung der KDE 1.x Templates und des internen Dialogeditors. Das Design von Grafische Benutzeroberflächen basiert
+nun völlig auf dem Qt Designer.
+<item>verbesserte Funktionalität in Bezug auf den Klassenbrowser wie z.B. die "grep"-Funktion über den Klassenbaum und
+automatische Vervollständigung in der Browser-Werkzeugleiste, die eine einfache Auswahl von Klassen, Methoden und
+Member-Attributen wie auch globalen Funktionen, Attributen und Strukturen erlaubt.
+<item>generelle GUI-Verbesserungen wie geometrie-bezogen verwaltete Dialoge; Verwendung der neuen KDE 2 Dialogklassen und
+Dockwidgets.</itemize>
 
 Kommentare und Verbesserungsvorschläge zur IDE und ihrer Dokumentation sind willkommen.
 
@@ -146,7 +141,7 @@ Dieses Handbuch ist daher unterteilt in folgende Abschnitte:
 <item>Kapitel <ref id="Projekte" name="Projekte">, beschreibt die Erzeugung und Überwachung von Software Projekten.
 <item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und Linker Flags und der Projekteinstellungen.
 <item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt Ihnen ausführlich, wie Sie den KDevelop Klassenbrowser benutzen.
-<item>Chapter <ref id="Verwendung des QT Designers in Ihrem Projekt" name="Der Dialogeditor"> beschreibt Ihnen wie sie den
+<item>Kapitle <ref id="Verwendung des QT Designers in Ihrem Projekt" name="Verwendung des QT Designers in Ihrem Projekt"> beschreibt Ihnen wie sie den
 Qt Desinger in Zusammenarbeit mit KDevelop verwenden um grafische Oberflächen ihres Programms zu gestalten.
 <item>Kapitel <ref id="Der interne Debugger" name="Der interne Debugger">, gibt eine Übersicht über die Einstellungen zum Debuggen und die Verwendung des internen Debugggers.
 <item>Kapitel <ref id="CVS Integration" name="CVS Integration">, erkärt, wie die Revisions-Kontrollsysteme CVS und RCS mit Ihrem KDevelop Projekt verwendet werden.
@@ -691,20 +686,19 @@ don't have to watch for several ones spread all over your desktop.
 
 <sect2>Qt's Designer
 <p>
-In its current release, KDevelop makes use of the Qt Designer for all KDE 2.0/Qt 2.x project templates.
-Mind that the Designer has to be included in your PATH variable to be automatically called from within
-KDevelop. The configure scripts of KDE 2.0/Qt 2.x templates will search for the uic as well to generate
-C++ output from your .ui files created with Designer. KDevelop takes care of automatically adding .ui files
-to Makefile.am under the _SOURCES line while dependencies are automatically resolved by the am_edit script.
+In dem aktuellen Release verwendet KDevelop den Qt Designer für alle KDE 2.0/Qt 2.x Projekt-Schablonen. Bedenken Sie, daß der
+Designer in ihrer PATH Variable enthalten sein muß, um aus KDevelop heraus automatisch aufgerufen werden zu können. Das configure
+Skript von KDE 2.0/Qt 2.x Schablonen sucht außerdem automatisch nach uic um C++ Code aus Ihrer .ui Datei, die mit dem Designer
+erstellt wurde, zu erstellen. KDevelop achtet automatisch darauf, .ui Dateien zu der Makefile.am in der _SOURCES Zeile
+hinzuzufügen, wobei Abhängigkeiten automatsich durch das am_edit Skript aufgelöst werden.
 
-However, KDevelop comes with a converter script (kdlgdesinger) that helps you port existing
-*.kdevdlg files created with KDevelop´s internal dialogeditor to *.ui files that can be processed
-with the Qt desinger. you can find it in the "tools" subdirectory of your kdevelop installation.
+Zudem enthält KDevelop ein Konverter-Skriot (kdlgdesigner), welches bei der Umsetzung von existierenden *.kdevdlg Dateien, die mit
+dem KDevelop eigenen Dialogeditor erstellt wurdem, in *.ui Dateien, die mit dem Qt Designer weiter bearbeitet werden können,
+hilfreich ist. Sie finden es im "tools" Unterverzeichnis Ihrer KDevelop Installation.
 
-Note that can add native support for KDE in Qt Designer by reconfiguring Qt with the "-kde" switch
-once KDE has been installed. After recompiling Qt's tools directory, you will get a Designer
-that has native support for most of the KDE widgets and integrates seamlessly into KDE in concerns
-of look and feel.
+Beachten Sie das Unterstützung für KDE innerhalb des Qt Designers durch Neukonfigurierung mit dem "-kde" Schalter erfolgen kann,
+sobald KDE installiert wurde. Nach der erneuten Erstellung des tools Verzeichnisses, werden Sie einen Qt Designer vorfinden, der
+die meisten KDE Widgets unterstützt und sich nahtlos in KDE  in Bezug auf Aussehen und Bedienung einfügt.
 
 
 <sect1>KAppWizard und die Klassenwerkzeuge
@@ -982,7 +976,7 @@ KDevelop Entwicklungsumgebung und anderen Dokumentation behandelt:
 Applikationsdesign und der Programmierung mit den Qt und <idx/KDE/ Bibliotheken,
 <item>dieses Handbuch, Abschnitte <ref id="Übersicht" name="Übersicht"> bis <ref id="Projekte">, die alle zur Verfügung stehenden
 Funktionen innerhalb von KDevelop beschreiben,
-<item>dieses Handbuch, Abschnitt <ref id="Der Dialogeditor" name="Der Dialogeditor">, erklärt die Benutzung des Dialogeditors, um
+<item>dieses Handbuch, Abschnitt <ref id="Verwendung des QT Designers in Ihrem Projekt" name="Verwendung des QT Designers in Ihrem Projekt">, erklärt die Benutzung des Dialogeditors, um
 eigene Widgets zu erstellen,
 <item>Die <em/Online-Reference Documentation/ zur Qt Bibliothek, die Beispiele zur Benutzung des Qt-GUI Toolkits als auch eine
 Klassenreferenz und Screenshots der wichtigsten sofort benutzbaren Widgets enthält,
@@ -2076,7 +2070,7 @@ Da KDevelop so entworfen wurde, daß Entwicklern der bestmögliche Zugriff auf Dat
 die Anzahl der Entwicklungszyklen zu verringern, enthält es auch ein Druck Utility das Gebrauch von <em/enscript/ macht. 
 Außerdem können Sie auch mit Hilfe von lpr direkt auf dem Druckerport ausgeben. Da die Verwendung von enscript ein Höchstmaß 
 an Druckeroptionen zur Verfügung stellt, sollten Sie es installieren. Es wird bei den meisten Distributionen mitgeliefert, es sollte 
-also kein Problem sein es zu bekommen. Bevor Sie jedoch drucken, sollten Sie einen Blick auf die verfügbaren 
+also kein Problem sein es zu bekommen. Bevor Sie jedoch drucken, sollten Sie einen Blick auf die verfügbaren
 Konfigurationsdialoge werfen, um die Ausgabe Ihren Bedürfnissen anzupassen. Der folgende Abschnitt beschreibt die Konfiguration 
 von KDevelop zum Ausdrucken von Dateien.
 
@@ -2349,7 +2343,7 @@ Bibliothek zu verwenden- wiederholen Sie einfach die selben Schritte und wählen 
 <p>
 Für manche Projekte reichen die Möglichkeiten von KDevelop zur Zeit noch nicht aus. Dies sind Projekte, die mehrere Zielobjekte beinhalten, wie 
 Pakete, die mehrere Anwendung enthalten. Da Kommandos wie "Ausführen" erfordern, daß nur <em/ein/ Ziel vom Entwickler erstellt  wird, werden 
-solche Projekte nur in der Weise unterstützt, daß Sie Ihre eigenen Einträge in die <idx/Makefile.am/'s vornehmen und Ihre eigenen Verzeichnisse für 
+solche Projekte nur in der Weise unterstützt, daß Sie Ihre eigenen Einträge in die <idx/Makefile.am/'s vornehmen und Ihre eigenen Verzeichnisse für
 die zu erstellenden zusätzlichen Bibliotheken oder ausführbaren Dateien erstellen müssen. Dennoch ruft ein Erstellungsprozeß immer Ihr 
 Makeprogramm auf, unabhängig davon welche Ziele tatsächlich erstellt werden; diese Funktionen können also weiterhin verwendet werden (mit der 
 Einschränkung, daß das Erstellen aus dem Haupt-Projektverzeichnis heraus aufgerufen wird).
@@ -2532,7 +2526,7 @@ aber keine Gedanken zu machen; dies wird alles von KDevelop automatisch gemacht.
 
 Weitere Informationen zur Unterstützung der Internationalisierung finden Sie auf <htmlurl url="http://www.kde.org" name="http://www.kde.org">; eine Menge Leute machen
 Übersetzungen für Sie. Sie finden dort auch eine Liste mit EMail Adressen der Übersetzer, denen Sie schreiben könnten und die Ihnen dabei helfen können. Lesen Sie
-auch  <ref id="Der Dialogeditor" name="Der Dialogeditor"> und <htmlurl url="programming/index-11.html" name="The KDevelop Programming Handbook">
+auch  <ref id="Verwendung des QT Designers in Ihrem Projekt" name="Verwendung des QT Designers in Ihrem Projekt"> und <htmlurl url="programming/index-11.html" name="The KDevelop Programming Handbook">
 wo Fragen der Internationalisierung auch wieder behandelt werden.
 
 <sect1>Erweitern der Projekt Dokumentation<label id="Erweitern der Projekt Dokumentation">
@@ -2544,7 +2538,7 @@ Hilfebrowser hinzugefügt werden, erlaubt direkten Zugriff auf spezielle Tags und
 SGML hat eine Reihe von Vorteilen und <idx/KDE/ macht häufig Gebrauch von diesem Dokumentationstyp zusammen mit dem ksgml2html Programm. Dieses Werkzeug erzeugt
 die typische Dokumentation im <idx/KDE/ Stil und sorgt dafür, daß sie schöner aussieht. Trotzdem sind auch die sgmtools alleine schon ausreichend, die html Ausgabe zu
 erzeugen, die Ihre Applikation beinhaltet. Wenn Sie die Dokumentation mit ksgml2html erzeugen wollen, installieren Sie dieses Programm und rufen "Benutzerhandbuch erstellen" 
-aus dem Projektmenü auf. Der Dokumentationsbrowser ermöglicht die sofortige Kontrolle der Ausgabe, indem Sie entweder "Benutzerhandbuch des Projekts" aus dem Hilfemenü 
+aus dem Projektmenü auf. Der Dokumentationsbrowser ermöglicht die sofortige Kontrolle der Ausgabe, indem Sie entweder "Benutzerhandbuch des Projekts" aus dem Hilfemenü
 oder das entsprechende Icon aus der DOC Baumansicht wählen. Dadurch können Sie direkt in KDevelop durch die Dokumentation browsen und haben so eine bessere 
 Übersicht über die Fehler, die durch fehlende Tags entstehen.
 
@@ -2556,7 +2550,7 @@ Dokumentation erzeugt haben, wechseln Sie zum RFV und kontrollieren Ihr Dokument
 Dann müssen Sie "Dateieigenschaften" entweder aus dem Projektmenü oder mit Hilfe des Popup Menüs in den Ansichten wählen. Der einfachste Weg den Installationspfad zu 
 setzen, ist eine bereits zur Installation vorgesehene Dokumentationsdatei zu wählen, wie <tt/index.html/. Sie sehen, daß "Installieren" angekreuzt ist und "Installationsverzeichnis 
 und Dateiname" bereits ein Ziel enthält. Markieren Sie diesen Eintrag und geben Sie STRG+C ein um den Eintrag in's Clipboard zu kopieren. Dann wählen Sie die Datei die Sie 
-als zu installieren spezifizieren wollen. Markieren Sie "Installieren", dies wird das "Installationsverzeichnis und Dateiname" Feld aktivieren, welches dann schon den 
+als zu installieren spezifizieren wollen. Markieren Sie "Installieren", dies wird das "Installationsverzeichnis und Dateiname" Feld aktivieren, welches dann schon den
 Dateinamen enthält. Plazieren Sie den Cursor vor dem Dateinamen und geben Sie STRG+V zum Einfügen des Clipboardinhalts ein. Dies ist die schnellste Methode, den 
 Installationspfad einzugeben. Weitere Informationen zur Angabe von Installationszielen finden Sie im <htmlurl url="programming/index-14.html" name="KDevelop Programming Handbook">.
 
@@ -2583,7 +2577,7 @@ Existierende Projekte können in KDevelop Projekte konvertiert werden, indem sie 
 Dialog erstellt eine leere Projektdatei mit dem Projektnamen, Versionsnummer und Typinformation, sowie Ihrem Namen und Ihrer EMailadresse. Kopieren Sie dann alle Ihre 
 Kompilations- und Konstruktionsdateien in das neue Projektverzeichnis und wählen Sie "Dateien hinzufügen" aus dem Projektmenü. Die ausgewählten Dateien werden in Ihr 
 Projektverzeichnis kopiert und die Makefile.am's werden aktualisiert. Bitte ändern Sie alle Makefile.am Einträge, die vor der Konvertierung schon bestanden, gemäß den 
-Einträgen die KDevelop in der KDevelop write area vorgenommen hat. Testen Sie, ob sich Ihr Programm nach der Konvertierung immer noch kompilieren und installieren läßt, 
+Einträgen die KDevelop in der KDevelop write area vorgenommen hat. Testen Sie, ob sich Ihr Programm nach der Konvertierung immer noch kompilieren und installieren läßt,
 um so die Konsistenz des Projekts zu prüfen.
 
 <chapt>Erstellungsoptionen<label id="Erstellungsoptionen">
@@ -2622,7 +2616,7 @@ Unter Compileroptionen können Sie die Compilerflags für Zielcomputer, Debuggen u
 Unter Ziel können Sie zwei Optionen einstellen:
 
 Zielcomputer : Sie können hier den Maschinentyp für Ihr Programm eingeben. Andere Typen als Ihre Maschine werden gewöhnlich 
-nur benötigt, um vorcompilierte Pakete zu erstellen. i386v übergibt <em/-b/ an den Compiler und ist für Cross-Compiler gedacht, 
+nur benötigt, um vorcompilierte Pakete zu erstellen. i386v übergibt <em/-b/ an den Compiler und ist für Cross-Compiler gedacht,
 um ein Binary für ein Intel-System, das mit Unix System V läuft, zu erstellen. Normalerweise können Sie die Standardeinstellung 
 verwenden.
 
@@ -2634,7 +2628,7 @@ Für eine Release Version Ihrer Anwendung schalten Sie die Optimierung ein und wä
 
 <sect1>Debuggen
 <p>
-Rechts vom Zielkasten sehen Sie die Debug-Einstellungen. Dies bedeutet, daß Sie den Compiler dazu veranlassen können, 
+Rechts vom Zielkasten sehen Sie die Debug-Einstellungen. Dies bedeutet, daß Sie den Compiler dazu veranlassen können,
 Informationen für Debugger in die ausführbare Datei zu schreiben, so daß der Programmierer in der Lage ist, die Anwendung 
 im Kontext mit dem Quellcode zu debuggen (Symbolisches Debuggen).
 
@@ -2751,7 +2745,7 @@ Für eine Release Version Ihrer Anwendung sollten Sie <bf/-Wall/ einschalten.
 <p>
 Die Linker Optionen für Ihr aktuelles Projekt können Sie auf der nächsten Seite der Projektoptionen eingeben. Sie müssen die
 Bibliotheken anwählen, die Ihr Programm verwendet. Wenn Ihr Programm z.B. die Klasse KFileDialog benutzt, müssen Sie KFile 
-wählen, da KFileDialog ein Teil dieser Bibliothek ist. Für Klassen oder Funktionen die Sie nicht ankreuzen können, verwenden 
+wählen, da KFileDialog ein Teil dieser Bibliothek ist. Für Klassen oder Funktionen die Sie nicht ankreuzen können, verwenden
 Sie das <bf/"Zusätzliche Bibliotheken"/ Feld.
 
 <sect1>Linker Flags
@@ -2983,7 +2977,7 @@ das Hinzufügen einer Methode wird die Methodendeklaration und der Implementation
 sich selbst aktualisiert, haben Sie direkten Zugang zu der Implementation der neuen Methode, so daß Sie nur die Methode anspringen
 müssen, um den auszuführenden Code einzugeben.
 
-<chapt>Verwendung des QT Designers in Ihrem Projekt<label id="Der Dialogeditor">
+<chapt>Verwendung des QT Designers in Ihrem Projekt<label id="Verwendung des QT Designers in Ihrem Projekt">
 <p>
 Der <idx/Qt Designer/ erlaube die Einfache Konstruktion von <idx/Widgets/ und Dialogen, die Ihre Anwendung verwendet in jeglicher,
 grafischer Hinsicht. Die sehen direkt das Aussehen Ihres Dialoges, wie er dem Benutzer präsentiert wird. Das Benutzen des
@@ -3180,7 +3174,7 @@ Sobald der Gültigkeitsbereich verlassen werden soll, wird das Programm angehalte
 
 WARNUNG: Dies ist als problematisch bekannt. Seien Sie also vorsichtig, wenn Sie Unterbrechungen auf lokale Variablen setzen.
 
-Eine Unterbrechung kann auch gesetzt werden, indem Sie mit der rechten Maustaste auf eine vorher eingegebene Unterbrechung 
+Eine Unterbrechung kann auch gesetzt werden, indem Sie mit der rechten Maustaste auf eine vorher eingegebene Unterbrechung
 klicken und "Watchpoint umschalten" auswählen.
 
 <sect2>Setzen/Löschen von Watch Variablen
@@ -3363,7 +3357,7 @@ Neustart von KDevelop zur Verfügung steht.
 <sect>Optionen der Dateiansicht
 <p>
 Die logische Dateiansicht (LFV) kann komplett über Kontextmenüs konfiguriert werden. Da die Intention die ist, Dateien logisch zu 
-trennen um eine bessere Übersicht über komplexe Projekte zu erhalten, ist eine der meistgenutzten Konfigurationmöglichkeiten das 
+trennen um eine bessere Übersicht über komplexe Projekte zu erhalten, ist eine der meistgenutzten Konfigurationmöglichkeiten das
 Erzeugen von Dateigruppen. Diese Gruppen können gebildet werden, indem Sie das Kontextmenü, durch einen Klick mit der rechten 
 Maustaste über dem Projekt-Icon am Beginn des Baumes, öffnen. Das Menü bietet folgende Punkte an:
 <itemize>
@@ -3453,7 +3447,7 @@ gelöscht und Sie können einen neuen Pfad für die Kdelibs-Dokumentation eingeben.
 Ihre jetzige Dokumentation installiert ist - dadurch könnten alte und neue Dateien vermischt werden!
 </itemize>
 
-Der "neue" Pfad zu den KDE Bibliotheksdokumentationen muß für die Optionen 2 und 3 angegeben werden. Es ist außerdem empfohlen 
+Der "neue" Pfad zu den KDE Bibliotheksdokumentationen muß für die Optionen 2 und 3 angegeben werden. Es ist außerdem empfohlen
 für Benutzer, die eine komplett neue Dokumentation generieren wollen.
 
 Nachdem Sie OK gedrückt haben, wird KDevelop ein Unterverzeichnis "kdoc-reference" im Dokumentationspfad erzeugen, das die 
@@ -3480,7 +3474,7 @@ Bibliotheksdokumentation, als auch die der Qt Dokumentation, wobei davon ausgega
 wurden. Es können auch noch zusätzlich zu indizierende Verzeichnisse angegeben werden. Nach Eingabe eines zusätzlichen Pfades 
 muß die Hinzufügen Taste betätigt werden. Ein so gesetzter Pfad kann durch Auswählen des Eintrages und Betätigen der Entfernen 
 Taste wieder aus der Liste entfernt werden. Außerdem werden dem Benutzer drei verschiedene Indexgrößen zur Auswahl angeboten: 
-winzig, klein und mittel. Je höher die Indexgröße gewählt wird, um so größer werden auch die Indexdateien. Auf der anderen Seite wird 
+winzig, klein und mittel. Je höher die Indexgröße gewählt wird, um so größer werden auch die Indexdateien. Auf der anderen Seite wird
 die Suche in einer größeren Suchdatenbank beschleunigt und die Trefferquote ist höher, so daß wir eine mittlere Größe empfehlen. Zur 
 Verwendung der Suchfunktion, sehen Sie unter 
 <ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers"> nach.
@@ -3531,7 +3525,7 @@ Sie das gewünschte Verzeichnis unter Standard Projektpfad eintragen.
 
 <chapt>Fragen und Antworten<label id="Fragen und Antworten">
 <p>
-Dieses Kapitel behandelt sowohl Fragen von Benutzern die aktuelle KDevelop Version betreffend,die vom KDevelop Team oder seinen Helfern 
+Dieses Kapitel behandelt sowohl Fragen von Benutzern die aktuelle KDevelop Version betreffend,die vom KDevelop Team oder seinen Helfern
 in der KDevelop Mailingliste beantwortet wurden, als auch das Melden von Fehlern generell.
 
 <sect>Melden von Fehlern <label id="Melden von Fehlern">
@@ -3558,7 +3552,7 @@ auch an den Diskusionen teilnehmen. Alle Fragen sollten dorthin gehen und werden
 beantwortet. Wenn Sie sich daran halten, werden Sie die gößtmögliche Hilfe von den Entwicklern und den anderen 
 Benutzern erhalten, gleichzeitig helfen Sie die FAQs aktuell zu halten. 
 Die KDevelop Homepage unter <htmlurl url="http://www.kdevelop.org" name="http://www.kdevelop.org"> enthält ebenfalls ein Mailinglist 
-Archiv in dem Sie in den bereits eingegangenen Mails stöbern können. Sie sollten also zuerst dort nachsehen, da die meisten Fragen bereits 
+Archiv in dem Sie in den bereits eingegangenen Mails stöbern können. Sie sollten also zuerst dort nachsehen, da die meisten Fragen bereits
 von den Entwicklern oder anderen Benutzern beantwortet wurden.
 
 <sect>Bibliotheken und System Probleme
@@ -3570,7 +3564,7 @@ von den Entwicklern oder anderen Benutzern beantwortet wurden.
 <enum>
 <item> Wenn die kdelibs installiert werden, werden auch die Headerdateien für die jpeg Bibliotheken installiert, und zwar Version 61. 
 Die meisten Distributionen (RedHat) verwenden jedoch 62er Bibliotheken. Um den Fehler zu beheben entfernen Sie jpeglib.h aus 
-$KDEDIR/include. Die Headerdatei für Version 62 sollte jetzt gefunden werden. Wenn man sich jedoch obige Fehlermeldung betrachtet, 
+$KDEDIR/include. Die Headerdatei für Version 62 sollte jetzt gefunden werden. Wenn man sich jedoch obige Fehlermeldung betrachtet,
 könnte es auch umgekehrt sein, stellen Sie also in jedem Fall sicher, daß Sie nur eine Version der Headerdatei und der Bibliothek haben 
 und daß diese konsistent sind. Es ist nützlich das locate Kommando zu verwenden, um dies herauszufinden, z.B. updatedb, locate libjpeg, 
 locate jpeglib.
@@ -3758,7 +3752,7 @@ Sandy Meier 			<htmlurl url="mailto:smeier@kdevelop.de" name = "<smeier@kdevelop
 Stefan Heidrich			<htmlurl url="mailto:sheidric@rz.uni-potsdam.de" name = "<sheidric@rz.uni-potsdam.de>">
 <quote/Hauptentwicklung von: KAppWizard, Druckfunktionen/
 
-Ralf Nolden			<htmlurl url="mailto:rnolden@kdevelop.de" name = "<rnolden@kdevelop.de>">
+Ralf Nolden			<htmlurl url="mailto:nolden@kde.org" name = "<nolden@kde.org>">
 <quote/Hauptentwicklung von: KDevelop<->Dialogeditor Schnittstelle, Konfigurationsfunktionen, Online-Hilfe und Handbücher/
 
 Jonas Nordin			<htmlurl url="mailto:jonas.nordin@cenacle.se" name="<jonas.nordin@cenacle.se>">
@@ -3866,11 +3860,6 @@ Martin Piskernig		<htmlurl url="mailto:mpiskernig@kdevelop.de" name = "<mpiskern
 
 <bf/GrapeFruit/	&copy 1999 	by Bernd Gehrmann <htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
 
-<bf/KSwallow/	&copy 		by Matthias Hoelzer  <htmlurl url="mailto:hoelzer@physik.uni-wuerzburg.de"
-name="<hoelzer@physik.uni-wuerzburg.de>">
-
-<bf/kcmlocale/	&copy 1998 	by Matthias Hoelzer <htmlurl url="mailto:hoelzer@physik.uni-wuerzburg.de"
-name="<hoelzer@physik.uni-wuerzburg.de>">
 
 <chapt>Dank
 <p>

@@ -81,46 +81,42 @@ Methode von Klassen bietet.</LI>
 <P><B>KDevelop 1.3:</B>
 <P>
 <UL>
-<LI>rewritten templates for Qt 2.x, now based on Qt-2.2.1 only as they make use of the QAction
-class and the configure script searches
-for the <B>uic</B> which processes Qt Designer files</LI>
-<LI>rewritten templates for KDE 2.0 which make use of the new API now fully and who are also
-using the uic for desinger files</LI>
-<LI>support for the new <B>Qt Designer</B> in KDE 2.0/Qt-2.2.x projects.</LI>
-<LI>the new <B>Qt Linguist</B> and its tools coming with it to create internationalization files
-for Qt applications is fully supported. The handling of internationalization is done the same way as
-for KDE project with KDevelop, just that you have to use tr() instead of i18(). Create an example Qt
-application to see the details. Also mind that all Qt utilities have to be in your $PATH variable,
-usually this is $QTDIR/bin.</LI>
-<LI>all KDE 2.0 and Qt 2.2.x templates make use of KDE´s
-autoconf/automake system, this enables developers to convert their automatic configuration system to
-KDE easily if they decide to use KDE features for their application.</LI>
-<LI>KDevelop ships with three additional scripts to make your life easier; these are installed in
-$prefix/bin (usually $KDEDIR/bin):
+<LI>neu geschriebene Templates für QT 2.x, jetzt ausschließlich basierend auf QT-2.2.1, da sie die QAction-Klasse nutzen und das
+configure SKript nach <B>uic</B> sucht, welches QT Designer Dateien verarbeitet.</LI>
+<LI>Unterstützung des neuen <B>QT Designers</B> in KDE 2.0/Qt-2.2.x Projekten.</LI>
+<LI>der neue <B>Qt Linguist</B> und seine zugehörigen Werkzeuge um Internationalisierungsdateien zuerstellen ist vollständig
+unterstützt. Die Arbeitsweise bei der Internationalisierung wird auf die gleiche Weise durchgeführt, wie bei KDE Projekten, nur
+das tr() anstatt i18() benutzt werden muß. Erstellen Sie eine Beispiel-QT-Anwendung um die Details zu sehen. Bedenken Sie, daß
+alle Qt Werkzeuge im $PATH stehen müssen, üblicher Weise ist dies $QTDIR/bin.</LI>
+<LI>alle KDE 2.0 und Qt 2.2.x Templates benutzen das KDE autoconf/automake-System, dies erlaubt es Entwicklern auf einfache
+Weise ihr Konfigurationssystem umzustellen, wenn KDE Elemente in ihrer Anwendung benutzt werden.</LI>
+<LI>KDevelop wird mit drei zusätzlichen Skripten verteilt, die Ihnen das Leben erleichern; Diese werden in $prefix/bin
+(gewöhnlich $KDEDIR/bin) installiert:
 <UL>
-<LI><B>extractrc:</B> this is a script that is originally located in the KDE CVS module kdesdk
-(KDE Software Development Kit). It is called automatically for creating the pot-file of your
-application and extracts the strings from your XML resource file that is used to build the GUI in
-KDE 2.0 applications</LI>
-<LI><B>kimport:</B> kimport is a perl script that enables you to create a *.kdevprj (KDevelp
-Project File) from almost any automake/autoconf compatible already existing project. Usage: go to
-your project directory and call kimport &gt; &lt;yourprojectname&gt;.kdevprj. This will redirect the
-output to a projectfile that you can load into KDevelop.</LI>
-<LI><B>kdevdlg2ui:</B> converts an existing *.kdevdlg file that has been created with
-KDevelop´s Dialogeditor into a *.ui file that can be edited with Qt´s Designer.</LI>
+<LI><B>extractrc:</B>dies ist ein Skript, welches ursprünglich zum KDE CVS Modul kdesdk (KDE Software Development Kit)
+gehört. Es wird automatisch aufgerufen, um die pot-Datei für Ihre Anwendung zu erstellen und extrahiert die Zeichenketten aus
+Ihrer XML Resource Datei und wird verwendet um die GUI in KDE 2.0-Anwendungen zu erstellen.</LI>
+<LI><B>kimport:</B>kimport ist ein perl Skript welches es Ihnen erlaubt, eine *.kdevprj (KDevelop Project File) Datei aus
+fast jedem beliebigen, automake/autoconf-Projekt zu erstellen. Verwendung: wechseln Sie in Ihr Projektverzeichnis und starten Sie
+kimport &gt;&lt;IhrProjektName&gt;.kdevprj. Damit wird die Ausgabe in eine Projektdatei umgeleitet, welche Sie mit KDevelop laden
+können.</LI>
+<LI><B>kdevdlg2ui:</B>wandelt eine existierende *.kdevdlg Datei, die mit KDevelop's Dialogeditor erstellt wurde in eine
+*.ui, die mit dem Qt Designer bearbeitet werden kann.</LI>
 </UL>
 </LI>
-<LI>several bugfixes regarding bugs in the
-kwrite code and KDevelop itself </LI>
+<LI>einige Fehlerbereinigugen im kwrite Quellcode und KDevelop selbst</LI>
 </UL>
 <P><B>KDevelop 1.4:</B>
 <P>
 <UL>
-<LI>porting over to KDE 2.1. KDevelop is now a true KDE 2.x application and ships with KDE 2.1</LI>
-<LI>removal of KDE 1.x templates and the internal dialogeditor. Graphical user interface design is now based on using Qt Designer only.</LI>
-<LI>improved functionality in regards to the classbrowser such as providing the "grep" function over the class-tree and autocompletion in the browser toolbar
-that allows easy selection of classes, methods and member attributes as well as global functions, attributes and structs.</LI>
-<LI>overall GUI enhancements like geometry-managed dialogs; usage of KDE 2´s new dialog classes and dockwidgets.</LI>
+<LI>Portierung nach KDE 2.1. KDevelop ist nun eine wirkliche KDE 2.x Anwendung und wird mit KDE 2.1 verteilt.</LI>
+<LI>Entfernung der KDE 1.x Templates und des internen Dialogeditors. Das Design von Grafische Benutzeroberflächen basiert
+nun völlig auf dem Qt Designer.</LI>
+<LI>verbesserte Funktionalität in Bezug auf den Klassenbrowser wie z.B. die "grep"-Funktion über den Klassenbaum und
+automatische Vervollständigung in der Browser-Werkzeugleiste, die eine einfache Auswahl von Klassen, Methoden und
+Member-Attributen wie auch globalen Funktionen, Attributen und Strukturen erlaubt.</LI>
+<LI>generelle GUI-Verbesserungen wie geometrie-bezogen verwaltete Dialoge; Verwendung der neuen KDE 2 Dialogklassen und
+Dockwidgets.</LI>
 </UL>
 <P>Kommentare und Verbesserungsvorschläge zur IDE und ihrer Dokumentation sind willkommen.
 <P>
@@ -153,8 +149,8 @@ generierten Rahemenapplikationen oder wie vollständige KDE Applikationen erstell
 <A HREF="index-9.html#Erstellungsoptionen">Erstellungsoptionen</A>, enthält eine Referenz über die Einstellung von Compiler und Linker Flags und der Projekteinstellungen.</LI>
 <LI>Kapitel 
 <A HREF="index-10.html#Der Klassenbrowser">Der Klassenbrowser</A>, beschreibt Ihnen ausführlich, wie Sie den KDevelop Klassenbrowser benutzen.</LI>
-<LI>Chapter 
-<A HREF="index-10.html#Der Klassenbrowser">Der Klassenbrowser</A><@@ref>Verwendung des QT Designers in Ihrem ProjektDer Dialogeditor</A> beschreibt Ihnen wie sie den
+<LI>Kapitle 
+<A HREF="index-11.html#Verwendung des QT Designers in Ihrem Projekt">Verwendung des QT Designers in Ihrem Projekt</A> beschreibt Ihnen wie sie den
 Qt Desinger in Zusammenarbeit mit KDevelop verwenden um grafische Oberflächen ihres Programms zu gestalten.</LI>
 <LI>Kapitel 
 <A HREF="index-12.html#Der interne Debugger">Der interne Debugger</A>, gibt eine Übersicht über die Einstellungen zum Debuggen und die Verwendung des internen Debugggers.</LI>

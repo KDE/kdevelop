@@ -86,18 +86,17 @@ don't have to watch for several ones spread all over your desktop.
 <P>
 <H4>Qt's Designer</H4>
 
-<P>In its current release, KDevelop makes use of the Qt Designer for all KDE 2.0/Qt 2.x project templates.
-Mind that the Designer has to be included in your PATH variable to be automatically called from within
-KDevelop. The configure scripts of KDE 2.0/Qt 2.x templates will search for the uic as well to generate
-C++ output from your .ui files created with Designer. KDevelop takes care of automatically adding .ui files
-to Makefile.am under the _SOURCES line while dependencies are automatically resolved by the am_edit script.
-<P>However, KDevelop comes with a converter script (kdlgdesinger) that helps you port existing
-*.kdevdlg files created with KDevelop´s internal dialogeditor to *.ui files that can be processed
-with the Qt desinger. you can find it in the "tools" subdirectory of your kdevelop installation.
-<P>Note that can add native support for KDE in Qt Designer by reconfiguring Qt with the "-kde" switch
-once KDE has been installed. After recompiling Qt's tools directory, you will get a Designer
-that has native support for most of the KDE widgets and integrates seamlessly into KDE in concerns
-of look and feel.
+<P>In dem aktuellen Release verwendet KDevelop den Qt Designer für alle KDE 2.0/Qt 2.x Projekt-Schablonen. Bedenken Sie, daß der
+Designer in ihrer PATH Variable enthalten sein muß, um aus KDevelop heraus automatisch aufgerufen werden zu können. Das configure
+Skript von KDE 2.0/Qt 2.x Schablonen sucht außerdem automatisch nach uic um C++ Code aus Ihrer .ui Datei, die mit dem Designer
+erstellt wurde, zu erstellen. KDevelop achtet automatisch darauf, .ui Dateien zu der Makefile.am in der _SOURCES Zeile
+hinzuzufügen, wobei Abhängigkeiten automatsich durch das am_edit Skript aufgelöst werden.
+<P>Zudem enthält KDevelop ein Konverter-Skriot (kdlgdesigner), welches bei der Umsetzung von existierenden *.kdevdlg Dateien, die mit
+dem KDevelop eigenen Dialogeditor erstellt wurdem, in *.ui Dateien, die mit dem Qt Designer weiter bearbeitet werden können,
+hilfreich ist. Sie finden es im "tools" Unterverzeichnis Ihrer KDevelop Installation.
+<P>Beachten Sie das Unterstützung für KDE innerhalb des Qt Designers durch Neukonfigurierung mit dem "-kde" Schalter erfolgen kann,
+sobald KDE installiert wurde. Nach der erneuten Erstellung des tools Verzeichnisses, werden Sie einen Qt Designer vorfinden, der
+die meisten KDE Widgets unterstützt und sich nahtlos in KDE  in Bezug auf Aussehen und Bedienung einfügt.
 <P>
 <P>
 <H4>KAppWizard und die Klassenwerkzeuge</H4>
@@ -373,7 +372,7 @@ Applikationsdesign und der Programmierung mit den Qt und KDE Bibliotheken,</LI>
 , die alle zur Verfügung stehenden
 Funktionen innerhalb von KDevelop beschreiben,</LI>
 <LI>dieses Handbuch, Abschnitt 
-<A HREF="index-11.html#Der Dialogeditor">Der Dialogeditor</A>, erklärt die Benutzung des Dialogeditors, um
+<A HREF="index-11.html#Verwendung des QT Designers in Ihrem Projekt">Verwendung des QT Designers in Ihrem Projekt</A>, erklärt die Benutzung des Dialogeditors, um
 eigene Widgets zu erstellen,</LI>
 <LI>Die <EM>Online-Reference Documentation</EM> zur Qt Bibliothek, die Beispiele zur Benutzung des Qt-GUI Toolkits als auch eine
 Klassenreferenz und Screenshots der wichtigsten sofort benutzbaren Widgets enthält,</LI>

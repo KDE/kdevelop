@@ -103,7 +103,7 @@ Bibliothek zu verwenden- wiederholen Sie einfach die selben Schritte und wählen 
 
 <P>Für manche Projekte reichen die Möglichkeiten von KDevelop zur Zeit noch nicht aus. Dies sind Projekte, die mehrere Zielobjekte beinhalten, wie 
 Pakete, die mehrere Anwendung enthalten. Da Kommandos wie "Ausführen" erfordern, daß nur <EM>ein</EM> Ziel vom Entwickler erstellt  wird, werden 
-solche Projekte nur in der Weise unterstützt, daß Sie Ihre eigenen Einträge in die Makefile.am's vornehmen und Ihre eigenen Verzeichnisse für 
+solche Projekte nur in der Weise unterstützt, daß Sie Ihre eigenen Einträge in die Makefile.am's vornehmen und Ihre eigenen Verzeichnisse für
 die zu erstellenden zusätzlichen Bibliotheken oder ausführbaren Dateien erstellen müssen. Dennoch ruft ein Erstellungsprozeß immer Ihr 
 Makeprogramm auf, unabhängig davon welche Ziele tatsächlich erstellt werden; diese Funktionen können also weiterhin verwendet werden (mit der 
 Einschränkung, daß das Erstellen aus dem Haupt-Projektverzeichnis heraus aufgerufen wird).
@@ -272,7 +272,7 @@ aber keine Gedanken zu machen; dies wird alles von KDevelop automatisch gemacht.
 <A HREF="http://www.kde.org">http://www.kde.org</A>; eine Menge Leute machen
 Übersetzungen für Sie. Sie finden dort auch eine Liste mit EMail Adressen der Übersetzer, denen Sie schreiben könnten und die Ihnen dabei helfen können. Lesen Sie
 auch  
-<A HREF="index-11.html#Der Dialogeditor">Der Dialogeditor</A> und 
+<A HREF="index-11.html#Verwendung des QT Designers in Ihrem Projekt">Verwendung des QT Designers in Ihrem Projekt</A> und 
 <A HREF="programming/index-11.html">The KDevelop Programming Handbook</A>
 wo Fragen der Internationalisierung auch wieder behandelt werden.
 <P>
@@ -285,7 +285,7 @@ Hilfebrowser hinzugefügt werden, erlaubt direkten Zugriff auf spezielle Tags und
 SGML hat eine Reihe von Vorteilen und KDE macht häufig Gebrauch von diesem Dokumentationstyp zusammen mit dem ksgml2html Programm. Dieses Werkzeug erzeugt
 die typische Dokumentation im KDE Stil und sorgt dafür, daß sie schöner aussieht. Trotzdem sind auch die sgmtools alleine schon ausreichend, die html Ausgabe zu
 erzeugen, die Ihre Applikation beinhaltet. Wenn Sie die Dokumentation mit ksgml2html erzeugen wollen, installieren Sie dieses Programm und rufen "Benutzerhandbuch erstellen" 
-aus dem Projektmenü auf. Der Dokumentationsbrowser ermöglicht die sofortige Kontrolle der Ausgabe, indem Sie entweder "Benutzerhandbuch des Projekts" aus dem Hilfemenü 
+aus dem Projektmenü auf. Der Dokumentationsbrowser ermöglicht die sofortige Kontrolle der Ausgabe, indem Sie entweder "Benutzerhandbuch des Projekts" aus dem Hilfemenü
 oder das entsprechende Icon aus der DOC Baumansicht wählen. Dadurch können Sie direkt in KDevelop durch die Dokumentation browsen und haben so eine bessere 
 Übersicht über die Fehler, die durch fehlende Tags entstehen.
 <P>Nun, während Sie die Dokumentation erweitern, ergibt es sich zwangsläufig, daß zusätzliche Dateien erzeugt werden, die zum Projekt hinzugefügt werden müssen, da jeder 
@@ -296,7 +296,7 @@ Dokumentation erzeugt haben, wechseln Sie zum RFV und kontrollieren Ihr Dokument
 Dann müssen Sie "Dateieigenschaften" entweder aus dem Projektmenü oder mit Hilfe des Popup Menüs in den Ansichten wählen. Der einfachste Weg den Installationspfad zu 
 setzen, ist eine bereits zur Installation vorgesehene Dokumentationsdatei zu wählen, wie <CODE>index.html</CODE>. Sie sehen, daß "Installieren" angekreuzt ist und "Installationsverzeichnis 
 und Dateiname" bereits ein Ziel enthält. Markieren Sie diesen Eintrag und geben Sie STRG+C ein um den Eintrag in's Clipboard zu kopieren. Dann wählen Sie die Datei die Sie 
-als zu installieren spezifizieren wollen. Markieren Sie "Installieren", dies wird das "Installationsverzeichnis und Dateiname" Feld aktivieren, welches dann schon den 
+als zu installieren spezifizieren wollen. Markieren Sie "Installieren", dies wird das "Installationsverzeichnis und Dateiname" Feld aktivieren, welches dann schon den
 Dateinamen enthält. Plazieren Sie den Cursor vor dem Dateinamen und geben Sie STRG+V zum Einfügen des Clipboardinhalts ein. Dies ist die schnellste Methode, den 
 Installationspfad einzugeben. Weitere Informationen zur Angabe von Installationszielen finden Sie im 
 <A HREF="programming/index-14.html">KDevelop Programming Handbook</A>.
@@ -326,7 +326,7 @@ verwenden, die so nicht eingebunden werden. Dann müssen Sie Ihr Projekt mit Hilf
 Dialog erstellt eine leere Projektdatei mit dem Projektnamen, Versionsnummer und Typinformation, sowie Ihrem Namen und Ihrer EMailadresse. Kopieren Sie dann alle Ihre 
 Kompilations- und Konstruktionsdateien in das neue Projektverzeichnis und wählen Sie "Dateien hinzufügen" aus dem Projektmenü. Die ausgewählten Dateien werden in Ihr 
 Projektverzeichnis kopiert und die Makefile.am's werden aktualisiert. Bitte ändern Sie alle Makefile.am Einträge, die vor der Konvertierung schon bestanden, gemäß den 
-Einträgen die KDevelop in der KDevelop write area vorgenommen hat. Testen Sie, ob sich Ihr Programm nach der Konvertierung immer noch kompilieren und installieren läßt, 
+Einträgen die KDevelop in der KDevelop write area vorgenommen hat. Testen Sie, ob sich Ihr Programm nach der Konvertierung immer noch kompilieren und installieren läßt,
 um so die Konsistenz des Projekts zu prüfen.
 <P>
 <P ALIGN="RIGHT">

@@ -3,7 +3,7 @@
 <titlepag>
 <title>The User Manual to KDevelop
 <subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.4
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<nolden@kde.org>">
+<author>Ralf Nolden <htmlurl url="mailto:nolden@kde.org" name = "<nolden@kde.org>">
 <inst>The KDevelop Team
 <date>Version 1.4 , Feb 12, 2001
 <abstract>
@@ -3757,7 +3757,7 @@ Sandy Meier 			<htmlurl url="mailto:smeier@kdevelop.de" name = "<smeier@kdevelop
 Stefan Heidrich			<htmlurl url="mailto:sheidric@rz.uni-potsdam.de" name = "<sheidric@rz.uni-potsdam.de>">
 <quote/Main development of: <idx/KAppWizard/, <idx/printing/ functionality/
 
-Ralf Nolden			    <htmlurl url="mailto:rnolden@kdevelop.de" name = "<rnolden@kdevelop.de>">
+Ralf Nolden			    <htmlurl url="mailto:nolden@kde.org" name = "<nolden@kde.org>">
 <quote/Main development of: KDevelop<->Dialog Editor interface, configuration functionality, online-help and handbooks/
 
 Jonas Nordin			  <htmlurl url="mailto:jonas.nordin@cenacle.se" name="<jonas.nordin@cenacle.se>">
@@ -3864,11 +3864,6 @@ Martin Piskernig		<htmlurl url="mailto:mpiskernig@kdevelop.de" name = "<mpiskern
 
 <bf/KDE Help/ &copy		by Martin R. Jones 		<htmlurl url="mailto:mjones@kde.org" name="<mjones@kde.org>">
 
-<bf/KSwallow/	&copy 		by Matthias Hoelzer  <htmlurl url="mailto:hoelzer@physik.uni-wuerzburg.de"
-name="<hoelzer@physik.uni-wuerzburg.de>">
-
-<bf/kcmlocale/	&copy 1998 	by Matthias Hoelzer <htmlurl url="mailto:hoelzer@physik.uni-wuerzburg.de"
-name="<hoelzer@physik.uni-wuerzburg.de>">
 
 <chapt>Thanks
 <p>
