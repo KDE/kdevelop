@@ -62,7 +62,7 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
         patterns = "*.o,*.lo,CVS";
     m_filter->insertItem( patterns );
     // m_hidePatterns = QStringList::split(",", patterns);
-    slotFilterChange( patterns );
+//    slotFilterChange( patterns );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
