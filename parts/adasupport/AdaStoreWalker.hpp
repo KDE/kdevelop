@@ -64,12 +64,26 @@ public:
     ParsedScopeContainer * insertScopeContainer
 			  (ParsedScopeContainer* scope, const QString & name ) {
 	ParsedScopeContainer* ns = scope->getScopeByName( name );
-	if (!ns) {
-	    ns = new ParsedScopeContainer();
-	    ns->setName( name );
-	    scope->addScope( ns );
-	    m_store->addScope( ns );
+	if (ns)
+	    return ns;
+	QString nm = name;
+	int last_dot;
+	while ((last_dot = nm.findRev('.')) > 0) {
+	    QString basename = nm.left( last_dot );
+	    ns = scope->getScopeByName( basename );
+	    if ( ns ) {
+	        ParsedScopeContainer* inner = new ParsedScopeContainer( false );
+		inner->setName( nm.mid( last_dot+1 ) );
+		ns->addScope( inner );
+		//scope->addScope( ns );
+	        return inner;
+	    }
+	    nm = basename;
 	}
+	ns = new ParsedScopeContainer( false );
+	ns->setName( name );
+	scope->addScope( ns );
+	m_store->addScope( ns );
 	return ns;
     }
 
