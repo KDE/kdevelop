@@ -20,6 +20,7 @@
 #include <qlabel.h>
 #include <qstrlist.h>
 #include <qtooltip.h>
+#include <qtimer.h>
 
 #include <kiconloader.h>
 #include <kurlcombobox.h>
@@ -29,7 +30,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kcombobox.h>
-
+#include <kpopupmenu.h>
 #include <kdebug.h>
 
 
@@ -41,7 +42,7 @@
 
 
 FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
-    : QWidget(0, "file selector widget")
+    : QWidget(0, "file selector widget"), m_popup(0)
 {
 
 	// widgets and layout
@@ -110,11 +111,65 @@ FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
 
 
     m_part = part;
+
+  KActionMenu *menu = (KActionMenu*)dir->actionCollection()->action("popupMenu");
+  if (menu)
+  {
+    m_popup = menu->popupMenu();
+    if (m_popup)
+    {
+      connect(m_popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
+      connect(m_popup, SIGNAL(aboutToHide()), this, SLOT(popupAboutToHide()));
+    }
+  }
 }
 
 
 FileSelectorWidget::~FileSelectorWidget()
 {}
+
+
+void FileSelectorWidget::popupAboutToShow()
+{
+  // ugly hack: mark the "original" items
+  m_popupIds.resize(m_popup->count());
+  for (uint index=0; index < m_popup->count(); ++index)
+    m_popupIds[index] = m_popup->idAt(index);
+   
+  KFileItem *item = const_cast<KFileItemList*>(dir->selectedItems())->first();
+  if (item)
+  {
+    FileContext context(item->url().path());
+    m_part->core()->fillContextMenu(m_popup, &context);
+  }
+}
+
+
+void FileSelectorWidget::popupAboutToHide()
+{
+  QTimer::singleShot(0, this, SLOT(popupDelete()));
+}
+
+
+void FileSelectorWidget::popupDelete()
+{
+  if (!m_popup)
+    return;
+
+  // ugly hack: remove all but the "original" items
+  for (int index=m_popup->count()-1; index >= 0; --index)
+  {
+    int id = m_popup->idAt(index);
+    if (m_popupIds.contains(id) == 0)
+    {
+      QMenuItem *item = m_popup->findItem(id);
+      if (item->popup())
+        delete item->popup();
+      m_popup->removeItemAt(index);
+    }
+  }
+}
+
 
 void FileSelectorWidget::slotFilterChange( const QString & nf )
 {

@@ -55,6 +55,11 @@ private slots:
 	void dirFinishedLoading();
 //	void setCurrentDocDir();
 
+	void popupAboutToShow();
+        void popupAboutToHide();
+	void popupDelete();
+
+
 protected:
     void focusInEvent(QFocusEvent*);
 
@@ -66,6 +71,10 @@ private:
 	QLabel* filterIcon;
 	KDirOperator * dir;
 	QPushButton *home, *up, *back, *forward, *cfdir;
+
+    QArray<int> m_popupIds;
+
+    QPopupMenu *m_popup;
 
 };
 
