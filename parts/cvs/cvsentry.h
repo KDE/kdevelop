@@ -9,6 +9,9 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 
+#ifndef CVSENTRY_H
+#define CVSENTRY_H
+
 #include <qstring.h>
 
 class QTextStream;
@@ -42,3 +45,6 @@ struct CvsEntry
     static const QString fileMarker;
     static const QString entrySeparator;
 };
+
+#endif
+

@@ -12,6 +12,9 @@
 #include <qstring.h>
 #include <qdom.h>
 
+#ifndef CVSOPTIONS_H
+#define CVSOPTIONS_H
+
 class CvsPart;
 
 /* This class represents the command line options for the used cvs commands.
@@ -81,3 +84,6 @@ private:
 #define default_log        QString::fromLatin1("")
 #define default_rsh        QString::fromLatin1("")
 */
+
+#endif
+
