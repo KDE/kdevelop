@@ -72,6 +72,10 @@ class KDlgWidgets : public QWidget  {
      void clicked_QCheckBox();
      void clicked_QLCDNumber();
      void clicked_QRadioButton();
+  void clicked_QComboBox();
+  void clicked_QListBox();
+  void clicked_QMultiLineEdit();
+  void clicked_QProgressBar();
 };
 
 #endif

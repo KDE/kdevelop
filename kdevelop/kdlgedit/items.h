@@ -32,6 +32,10 @@
 #include <qlcdnumber.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qlistbox.h>
+#include <qprogressbar.h>
+#include <qmultilinedit.h>
 
 class KDlgEditWidget;
 
@@ -227,6 +231,44 @@ class KDlgItem_CheckBox : public KDlgItem_Base
   #include "item_class.cpp.inc"
 };
 
+class KDlgItem_ComboBox : public KDlgItem_Base
+{
+  Q_OBJECT
 
+  #define classname KDlgItem_ComboBox
+  #define widgettype QComboBox
+  #define classdesc "QComboBox"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+class KDlgItem_ListBox : public KDlgItem_Base
+{
+  Q_OBJECT
 
+  #define classname KDlgItem_ListBox
+  #define widgettype QListBox
+  #define classdesc "QListBox"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+class KDlgItem_MultiLineEdit : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_MultiLineEdit
+  #define widgettype QMultiLineEdit
+  #define classdesc "QMultiLineEdit"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+class KDlgItem_ProgressBar : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_ProgressBar
+  #define widgettype QProgressBar
+  #define classdesc "QProgressBar"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
 #endif

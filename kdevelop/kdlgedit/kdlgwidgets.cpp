@@ -99,7 +99,10 @@ void KDlgWidgets::clicked_QCheckBox()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("QCheckBox");
 }
-
+void KDlgWidgets::clicked_QListBox()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QListBox");
+}
 void KDlgWidgets::clicked_QLCDNumber()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("QLCDNumber");
@@ -110,6 +113,18 @@ void KDlgWidgets::clicked_QRadioButton()
   pCKDevel->kdlg_get_edit_widget()->addItem("QRadioButton");
 }
 
+void KDlgWidgets::clicked_QComboBox()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QComboBox");
+}
+void KDlgWidgets::clicked_QProgressBar()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QProgressBar");
+}
+void KDlgWidgets::clicked_QMultiLineEdit()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QMultiLineEdit");
+}
 KDlgWidgets::myScrollView::~myScrollView()
 {
   int i;
@@ -158,6 +173,10 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   macroAddButton("kdlg_QCheckBox.xpm",      "QCheckBox",       clicked_QCheckBox      ,i18n("Lets user can (de-)select some settings."));
   macroAddButton("kdlg_QLCDNumer.xpm",      "QLCDNumber",      clicked_QLCDNumber     ,i18n("Displays a number in the style of LC-displays\noften used in clocks."));
   macroAddButton("kdlg_QRadioButton.xpm",   "QRadioButton",    clicked_QRadioButton   ,i18n("Lets the user choose between several options."));
+  macroAddButton("kdlg_QComboBox.xpm",      "QComboBox",       clicked_QComboBox      ,i18n(""));
+  macroAddButton("kdlg_QListBox.xpm",      "QListBox",       clicked_QListBox      ,i18n(""));
+  macroAddButton("kdlg_QMultiLineEdit.xpm",      "QMultiLineEdit",       clicked_QMultiLineEdit      ,i18n(""));
+  macroAddButton("kdlg_QProgressBar.xpm",      "QProgressBar",       clicked_QProgressBar      ,i18n(""));
 
   #undef macroAddButton
 

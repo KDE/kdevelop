@@ -77,6 +77,10 @@ void slotFileNew();
   void generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQProgressBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
 
   void slotOpenDialog(QString file);
 protected:

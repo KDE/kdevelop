@@ -433,54 +433,28 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
   if ((!wid) || (!stream)){
     return;
   }
-  //QPushButton
-  if(wid->itemClass() == "QPushButton"){
-    variables.append("QPushButton *"+wid->getProps()->getPropValue("VarName")+";");
-    if(includes.contains("#include <qpushbutton.h>") == 0){
-      includes.append("#include <qpushbutton.h>");
-    }
-    generateQPushButton(wid,stream,parent);
+#define generateIfWidget(type,include,gen_meth) \
+  if(wid->itemClass() == type){\
+    variables.append(QString(type)+  " *"+wid->getProps()->getPropValue("VarName")+";");\
+    if(includes.contains("#include <"+QString(include)+">") == 0){\
+      includes.append("#include <"+QString(include)+">");\
+    }\
+    gen_meth(wid,stream,parent);\
   }
-  //QLineEdit
-  if(wid->itemClass() == "QLineEdit"){
-    variables.append("QLineEdit *"+wid->getProps()->getPropValue("VarName")+";");
-    if(includes.contains("#include <qlineedit.h>") == 0){
-      includes.append("#include <qlineedit.h>");
-    }
-    generateQLineEdit(wid,stream,parent);
-  }
-  //QLCDNumber
-  if(wid->itemClass() == "QLCDNumber"){
-    variables.append("QLCDNumber *"+wid->getProps()->getPropValue("VarName")+";");
-    if(includes.contains("#include <qlcdnumber.h>") == 0){
-      includes.append("#include <qlcdnumber.h>");
-    }
-    generateQLCDNumber(wid,stream,parent);
-  }
-  //QLabel
-  if(wid->itemClass() == "QLabel"){
-    variables.append("QLabel *"+wid->getProps()->getPropValue("VarName")+";");
-    if(includes.contains("#include <qlabel.h>") == 0){
-      includes.append("#include <qlabel.h>");
-    }
-    generateQLabel(wid,stream,parent);
-  }
-  //QRadiobutton
-  if(wid->itemClass() == "QRadioButton"){
-    variables.append("QRadioButton *"+wid->getProps()->getPropValue("VarName")+";");
-    if(includes.contains("#include <qradiobutton.h>") == 0){
-      includes.append("#include <qradiobutton.h>");
-    }
-    generateQRadioButton(wid,stream,parent);
-  }
-  //QCheckBox
-  if(wid->itemClass() == "QCheckBox"){
-    variables.append("QCheckBox *"+wid->getProps()->getPropValue("VarName")+";");
-    if(includes.contains("#include <qcheckbox.h>") == 0){
-      includes.append("#include <qcheckbox.h>");
-    }
-    generateQCheckBox(wid,stream,parent);
-  }
+
+  generateIfWidget("QPushButton","qpushbutton.h",generateQPushButton);
+  generateIfWidget("QLineEdit","qlineedit.h",generateQLineEdit);
+  generateIfWidget("QLCDNumber","qlcdnumber.h",generateQLCDNumber);
+  generateIfWidget("QLabel","qlabel.h",generateQLabel);
+  generateIfWidget("QRadioButton","qradiobutton.h",generateQRadioButton);
+  generateIfWidget("QCheckBox","qcheckbox.h",generateQCheckBox);
+  generateIfWidget("QComboBox","qcombobox.h",generateQComboBox);
+  generateIfWidget("QListBox","qlistbox.h",generateQListBox);
+  generateIfWidget("QProgressBar","qprogressbar.h",generateQProgressBar);
+  generateIfWidget("QMultiLineEdit","qmultilinedit.h",generateQMultiLineEdit);
+  
+#undef generateIfWidget
+
 
   if (wid->itemClass().upper() == "QWIDGET"){
     if(wid->getProps()->getPropValue("VarName") != "this"){
@@ -541,10 +515,58 @@ void KDlgEdit::generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QStri
   if(props->getPropValue("isTextSelected") != "FALSE"){
     *stream << varname_p + "selectAll();\n";
   }
+  
   // CursorPosition
   if(props->getPropValue("CursorPosition") != ""){
     *stream << varname_p + "setCursorPosition(" + props->getPropValue("CursorPosition") +");\n";
   }
+  *stream << "\n";
+}
+void KDlgEdit::generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  KDlgPropertyBase* props = wid->getProps();
+  *stream << "\t" + props->getPropValue("VarName") +" = new QMultiLineEdit(" + parent +",\"" 
+    +props->getPropValue("Name") + "\");\n";
+  generateQWidget(wid,stream,parent);
+
+  QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  //setText
+  *stream << varname_p + "setText(\""+ props->getPropValue("Text") +"\");\n";
+
+  //isTextSelected
+  if(props->getPropValue("isTextSelected") != "FALSE"){
+    *stream << varname_p + "selectAll();\n";
+  }
+  //isAutoUpdate
+  if(props->getPropValue("isAutoUpdate") == "FALSE"){
+    *stream << varname_p + "setAutoUpdate(false);\n";
+  }
+  //isReadOnly
+   if(props->getPropValue("isReadOnly") == "TRUE"){
+     *stream << varname_p + "setReadOnly(true);\n";
+   }
+   //isOverWriteMode
+   if(props->getPropValue("isOverWriteMode") == "TRUE"){
+     *stream << varname_p + "setOverwriteMode(true);\n";
+   }
+   if(props->getPropValue("setFixedVisibleLines") != ""){
+     *stream << varname_p + "setFixedVisibleLines("+props->getPropValue("setFixedVisibleLines")+");\n";
+   }
+  *stream << "\n";
+}
+void KDlgEdit::generateQProgressBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  KDlgPropertyBase* props = wid->getProps();
+  *stream << "\t" + props->getPropValue("VarName") +" = new QProgressBar(" + parent +",\"" 
+    +props->getPropValue("Name") + "\");\n";
+  generateQWidget(wid,stream,parent);
+
+  QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  
+
+  //setTotalSteps
+  if(props->getPropValue("TotalSteps") != ""){
+    *stream << varname_p + "setTotalSteps("+ props->getPropValue("TotalSteps") +");\n";
+  }
+  
   *stream << "\n";
 }
 void KDlgEdit::generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
@@ -611,6 +633,22 @@ void KDlgEdit::generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
   }
   *stream << "\n";
 }
+void KDlgEdit::generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  KDlgPropertyBase* props = wid->getProps();
+  *stream << "\t" + props->getPropValue("VarName") +" = new QComboBox(" + parent +",\"" 
+    +props->getPropValue("Name") + "\");\n";
+  generateQWidget(wid,stream,parent);
+  
+  QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  
+  //isAutoResize
+  if(props->getPropValue("isAutoResize") == "TRUE"){
+    *stream << varname_p + "setAutoResize(true);\n";
+  }
+  
+  *stream << "\n";
+}
+
 void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
   KDlgPropertyBase* props = wid->getProps();
   *stream << "\t" + props->getPropValue("VarName") +" = new QLabel(" + parent +",\"" 
@@ -630,7 +668,48 @@ void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString 
   }
   *stream << "\n";
 }
+void KDlgEdit::generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  KDlgPropertyBase* props = wid->getProps();
+   *stream << "\t" + props->getPropValue("VarName") +" = new QListBox(" + parent +",\"" 
+     +props->getPropValue("Name") + "\");\n";
+   generateQWidget(wid,stream,parent);
 
+   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+
+   //isAutoUpdate
+   if(props->getPropValue("isAutoUpdate") == "FALSE"){
+     *stream << varname_p + "setAutoUpdate(false);\n";
+   }
+   //isAutoScroll
+   if(props->getPropValue("isAutoScroll") == "FALSE"){
+     *stream << varname_p + "setAutoScroll(false);\n";
+   }
+   //isAutoScrollBar
+   if(props->getPropValue("isAutoScrollBar") == "FALSE"){
+     *stream << varname_p + "setAutoScrollBar(false);\n";
+   }
+   //isAutoBottomScrollBar
+   if(props->getPropValue("isBottomAutoScrollBar") == "FALSE"){
+     *stream << varname_p + "setBottomAutoScrollBar(false);\n";
+   }
+   //isBottomScrollBar
+   if(props->getPropValue("isBottomScrollBar") == "TRUE"){
+     *stream << varname_p + "setBottomScrollBar(true);\n";
+   }
+   //isDragSelect
+   if(props->getPropValue("isDragSelect") == "FALSE"){
+     *stream << varname_p + "setDragSelect(false);\n";
+   }
+   //isSmoothScrolling
+   if(props->getPropValue("isSmoothScrolling") == "FALSE"){
+     *stream << varname_p + "setSmoothScrolling(false);\n";
+   }
+   if(props->getPropValue("setFixedVisibleLines") != ""){
+     *stream << varname_p + "setFixedVisibleLines("+props->getPropValue("setFixedVisibleLines")+");\n";
+   }
+
+   *stream << "\n";
+}
 void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
   KDlgPropertyBase* props = wid->getProps();
   *stream << "\t" + props->getPropValue("VarName") +" = new QPushButton(" + parent +",\"" 
@@ -741,5 +820,12 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
     }
     *stream << varname_p + "setBackgroundPixmap(QPixmap(\""+props->getPropValue("BgPixmap")+"\"));\n";
   }
-
+  //MaskBitmap
+  if(props->getPropValue("MaskBitmap") != ""){
+    if(local_includes.contains("#include <qbitmap.h>") == 0){
+      local_includes.append("#include <qbitmap.h>");
+      *stream << "#include <qbitmap.h>\n";
+    }
+    *stream << varname_p + "setMask(QBitmap(\""+props->getPropValue("MaskBitmap")+"\"));\n";
+  }
 }

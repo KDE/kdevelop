@@ -756,16 +756,20 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
             wid->getProps()->setProp_Value("VarName", typeCounter.countString(a)); \
           } \
       }
-
+  
   macro_CreateIfRightOne("QWidget", KDlgItem_Widget )
-  macro_CreateIfRightOne("QPushButton", KDlgItem_PushButton )
-  macro_CreateIfRightOne("QLineEdit", KDlgItem_LineEdit )
-  macro_CreateIfRightOne("QLabel", KDlgItem_Label )
-  macro_CreateIfRightOne("QLCDNumber", KDlgItem_LCDNumber )
-  macro_CreateIfRightOne("QCheckBox", KDlgItem_CheckBox )
-  macro_CreateIfRightOne("QRadioButton", KDlgItem_RadioButton )
-
-  #undef macro_CreateIfRightOne
+    macro_CreateIfRightOne("QPushButton", KDlgItem_PushButton )
+    macro_CreateIfRightOne("QLineEdit", KDlgItem_LineEdit )
+    macro_CreateIfRightOne("QLabel", KDlgItem_Label )
+    macro_CreateIfRightOne("QLCDNumber", KDlgItem_LCDNumber )
+    macro_CreateIfRightOne("QCheckBox", KDlgItem_CheckBox )
+    macro_CreateIfRightOne("QRadioButton", KDlgItem_RadioButton )
+    macro_CreateIfRightOne("QComboBox", KDlgItem_ComboBox )
+    macro_CreateIfRightOne("QListBox", KDlgItem_ListBox )
+    macro_CreateIfRightOne("QProgressBar", KDlgItem_ProgressBar )
+    macro_CreateIfRightOne("QMultiLineEdit", KDlgItem_MultiLineEdit )
+    
+#undef macro_CreateIfRightOne
 
   setModified(true);
   setWidgetAdded(true);
