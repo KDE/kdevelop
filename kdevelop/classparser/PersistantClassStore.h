@@ -81,6 +81,12 @@ public: // Public methods
 
 public: // Public queries
 
+  /** Has the store been created? */
+  bool exists();
+
+  /** Check if a class exists in the store. */
+  bool hasClass( const char *aName );
+
   /** Fetch a class from the database using its' name. */
   CParsedClass *getClassByName( const char *aName );
 

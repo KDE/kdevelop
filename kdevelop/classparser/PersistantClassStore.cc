@@ -30,9 +30,13 @@
 
 #include "PersistantClassStore.h"
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
+#define CLASSPREFIX "[CLASS]"
 
 /*********************************************************************
  *                                                                   *
@@ -111,7 +115,8 @@ bool CPersistantClassStore::create()
 {
   assert( !isOpen );
 
-  file = gdbm_open( filename.data(), -1, GDBM_NEWDB, O_WRONLY, NULL );
+  file = gdbm_open( filename.data(), -1, GDBM_WRCREAT, 
+                    S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH, NULL );
 
   isOpen = ( file != NULL );
 
@@ -123,7 +128,8 @@ bool CPersistantClassStore::open()
 {
   assert( !isOpen );
 
-  file = gdbm_open( filename.data(), -1, GDBM_READER, O_RDONLY, NULL );
+  file = gdbm_open( filename.data(), -1, GDBM_WRITER, 
+                    S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH, NULL );
 
   isOpen = ( file != NULL );
 
@@ -144,22 +150,51 @@ void CPersistantClassStore::storeClass( CParsedClass *aClass )
 {
   assert( isOpen );
   assert( aClass != NULL );
+  assert( !aClass->name.isEmpty() );
 
   datum key;
   datum data;
+  QString keyStr;
   QString dataStr;
   int retVal;
 
   // Initialize the key
-  key.dptr = aClass->name.data();
-  key.dsize = aClass->name.length() + 1;
+  keyStr = CLASSPREFIX + aClass->name;
+  key.dptr = keyStr.data();
+  key.dsize = keyStr.length() + 1;
 
   // Initilize the data.
   aClass->asPersistantString( dataStr );
   data.dptr = dataStr.data();
   data.dsize = dataStr.length() + 1;
 
+  // Store the class in the database.
   retVal = gdbm_store( file, key, data, GDBM_REPLACE );
+
+  if( retVal != 0 )
+  {
+    debug( "Couldn't store class %s", aClass->name.data() );
+    debug( "%s", gdbm_strerror(gdbm_errno) );
+  }
+}
+
+/** Has the store been created? */
+bool CPersistantClassStore::exists()
+{
+  assert( !filename.isEmpty() );
+
+  FILE *aFile;
+  bool retVal;
+  
+  // Try to open the file.
+  aFile = fopen( filename, "r" );
+  retVal = ( aFile != NULL );
+
+  // If the file exists, make sure we close it again.
+  if( retVal )
+    fclose( aFile );
+
+  return retVal;
 }
 
 /*********************************************************************
@@ -168,11 +203,51 @@ void CPersistantClassStore::storeClass( CParsedClass *aClass )
  *                                                                   *
  ********************************************************************/
 
+/** Check if a class exists in the store. */
+bool CPersistantClassStore::hasClass( const char *aName )
+{
+  assert( isOpen );
+
+  QString keyStr;
+  datum key;
+  bool retVal = false;
+
+  if( aName != NULL && strlen( aName ) > 0 )
+  {
+    keyStr = CLASSPREFIX;
+    keyStr += aName;
+    key.dptr = keyStr.data();
+    key.dsize = keyStr.length() + 1;
+
+    retVal = ( gdbm_exists( file, key ) == 1 );
+  }
+
+  return retVal;
+}
+
 /** Fetch a class from the database using its' name. */
 CParsedClass *CPersistantClassStore::getClassByName( const char *aName )
 {
   assert( isOpen );
   assert( aName != NULL && strlen( aName ) > 0 );
 
-  return NULL;
+  QString keyStr;
+  datum key;
+  datum content;
+  CParsedClass *aClass = NULL;
+
+  keyStr = CLASSPREFIX;
+  keyStr += aName;
+  key.dptr = keyStr.data();
+  key.dsize = keyStr.length() + 1;
+
+  content = gdbm_fetch( file, key );
+  if( content.dptr != NULL )
+  {
+    aClass = new CParsedClass();
+    aClass->fromPersistantString( content.dptr, 0 );
+    free( content.dptr );
+  }
+  
+  return aClass;
 }
