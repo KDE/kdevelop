@@ -14,14 +14,16 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qlistbox.h>
-#include <qdragobject.h>
 #include <qtimer.h>
+
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurl.h>
+#include <kurldrag.h>
+
 #include "addtooldlg.h"
 
 
@@ -233,20 +235,20 @@ bool ToolsConfigWidget::eventFilter(QObject *o, QEvent *e)
 {
     if (e->type() == QEvent::DragEnter || e->type() == QEvent::DragMove) {
         QDragMoveEvent *dme = static_cast<QDragMoveEvent*>(e);
-        if (QUriDrag::canDecode(dme))
+        if (KURLDrag::canDecode(dme))
             dme->accept();
         return true;
     } else if (e->type() == QEvent::Drop) {
         QDropEvent *de = static_cast<QDropEvent*>(e);
-        QStringList fileList;
-        if (QUriDrag::decodeLocalFiles(de, fileList)) {
-            QStringList::ConstIterator it;
+        KURL::List fileList;
+        if (KURLDrag::decode(de, fileList)) {
+            KURL::List::ConstIterator it;
             for (it = fileList.begin(); it != fileList.end(); ++it) {
-                if (KDesktopFile::isDesktopFile(*it)) {
-                    KDesktopFile df(*it);
+                if ((*it).isLocalFile() && KDesktopFile::isDesktopFile((*it).path())) {
+                    KDesktopFile df((*it).path());
                     ToolsConfigEntry *entry = new ToolsConfigEntry;
                     entry->menutext = df.readName();
-                    entry->cmdline = *it;
+                    entry->cmdline = (*it).path();
                     entry->isdesktopfile = true;
                     entry->captured = false;
                     addEntry(entry, &m_toolsmenuEntries);

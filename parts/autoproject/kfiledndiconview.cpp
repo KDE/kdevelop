@@ -183,7 +183,7 @@ void KFileDnDIconView::setDnDEnabled( bool useDnD ){
 }
 //-----------------------------------------------
 bool KFileDnDIconView::acceptDrag(QDropEvent* e ) const {
-	return QUriDrag::canDecode( e ) &&
+	return KURLDrag::canDecode( e ) &&
 				( e->action() == QDropEvent::Copy
 				|| e->action() == QDropEvent::Move
 				|| e->action() == QDropEvent::Link );
