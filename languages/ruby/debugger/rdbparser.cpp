@@ -52,7 +52,7 @@ void RDBParser::parseVariables(LazyFetchItem *parent, char *buf)
 	}
 		
 	QRegExp var_re("\\s*([^\\n\\s]+) => ([^\\n]+)");
-	QRegExp ref_re("(#<[^:]+:0x[\\da-f]+)\\s*([^=]*)>?");
+	QRegExp ref_re("(#<([^:]|::)+:0x[\\da-f]+)\\s*([^=]*)>?");
 	QRegExp struct_re("#<struct Struct::(\\w+)");
 	
 	// Look for 'dataitem => value' pairs. For example:
@@ -106,12 +106,12 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 		//		@sleeper=#<Thread:0x3008fd18 sleep>,
 		//		@temp={"z"=>"zed", "p"=>"pee"}>
 		//
-		QRegExp ppref_re("(#<[^:]+:0x[\\da-f]+)([^\\n>]*)(>?)");
+		QRegExp ppref_re("(#<([^:]|::)+:0x[\\da-f]+)([^\\n>]*)(>?)");
 		QRegExp ppvalue_re("\\s*([^\\n\\s=]+)=([^\\n]+)[,>]");
 	
 		pos = ppref_re.search(buf);
 		if (pos != -1) {
-			if (ppref_re.cap(3) != "" && ppvalue_re.search(ppref_re.cap(0)) != -1) {
+			if (ppref_re.cap(4) != "" && ppvalue_re.search(ppref_re.cap(0)) != -1) {
 				// The line ends with a '>', but we have this case now..
 				// If there is only one instance variable, pp puts everything
 				// on a single line:
