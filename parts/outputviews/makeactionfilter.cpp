@@ -18,7 +18,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#define DEBUG
+//#define DEBUG
 
 MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, const QString& _tool, const char * regExp, int file )
 	: action( _action )
