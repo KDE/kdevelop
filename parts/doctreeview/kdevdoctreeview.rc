@@ -2,7 +2,6 @@
 <kpartgui name="KDevDocTreeView" version="1">
 <MenuBar>
  <Menu name="help">
-  <Action name="help_lookupindex"/>
   <Action name="help_fulltextsearch"/>
   <Action name="help_manpage"/>
  </Menu>

@@ -27,6 +27,7 @@
 #include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+#include <qlistview.h>
 #include <qvbox.h>
 
 #include <kaction.h>
@@ -51,7 +52,7 @@
 #include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
 #include "doctreeglobalconfigwidget.h"
-
+#include "doctreeprojectconfigwidget.h"
 
 class DocTreeItem : public QListViewItem
 {
@@ -230,7 +231,7 @@ void DocTreeKDELibsBook::readKdoc2Index(FILE *f)
               filename.replace(QRegExp("::"), "__");
               if (classItem) {
                   DocTreeItem *item = new DocTreeItem(classItem, Doc, membername, context());
-				  kdDebug ( 9000 ) << "++++++++++++++ " << membername << endl;
+//              kdDebug ( 9000 ) << "++++++++++++++ " << membername << endl;
                   item->setFileName(DocTreeItem::fileName() + "/" + filename);
               }
           }
@@ -423,8 +424,9 @@ public:
 
     QString tocName() const
     { return toc_name; }
-
+    
 private:
+    QString base;
     QString toc_name;
 };
 
@@ -432,9 +434,12 @@ private:
 DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, const QString &context)
     : DocTreeItem(parent, Folder, fileName, context)
 {
+    setFileName( fileName );
+    
     QFileInfo fi(fileName);
     toc_name = fi.baseName();
-
+    base = DocTreeViewTool::tocLocation( fileName );
+    
     QFile f(fileName);
     if (!f.open(IO_ReadOnly)) {
         kdDebug(9002) << "Could not read doc toc: " << fileName << endl;
@@ -446,14 +451,12 @@ DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, c
         kdDebug() << "Not a valid kdeveloptoc file: " << fileName << endl;
         return;
     }
-    
     f.close();
     
     QDomElement docEl = doc.documentElement();
     QDomElement titleEl = docEl.namedItem("title").toElement();
     setText(0, titleEl.firstChild().toText().data());
 
-    QString base;
     QListViewItem *lastChildItem = 0;
     QDomElement childEl = docEl.firstChild().toElement();
     while (!childEl.isNull()) {
@@ -501,16 +504,10 @@ DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, c
                 }
                 grandchildEl = grandchildEl.nextSibling().toElement();
             }
-        } else if (childEl.tagName() == "base") {
-            base = childEl.attribute("href");
-            if (!base.isEmpty())
-                base += "/";
         }
-
         childEl = childEl.nextSibling().toElement();
     }
 }
-
 
 DocTreeTocFolder::~DocTreeTocFolder()
 {}
@@ -880,8 +877,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     // doctocs
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
     QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
-    QStringList::Iterator tit;
-    for (tit = tocs.begin(); tit != tocs.end(); ++tit)
+    for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit)
         folder_toc.append(new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit)));
 
     initKDocKDELibs();
@@ -1116,15 +1112,16 @@ void DocTreeViewWidget::slotConfigure()
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize documentation tree"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                     "customization dialog");
-    QVBox *vbox1 = dlg.addVBoxPage(i18n("Documentation Tree Global"));
-    DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget(this, vbox1, "doctreeview config widget2");
+    QVBox *vbox1 = dlg.addVBoxPage(i18n("Documentation Tree: Global"));
+    QVBox *vbox2 = dlg.addVBoxPage(i18n("Documentation Tree: Project"));
+    DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget( m_part, this, vbox1, "doctreeview global config widget");
+    DocTreeProjectConfigWidget *w2 = new DocTreeProjectConfigWidget(this, vbox2, m_part->project(),"doctreeview project config widget");
     connect(&dlg, SIGNAL(okClicked()), w1, SLOT(accept()));
+    connect(&dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
     dlg.exec();
     delete w1;
-
+    delete w2;
 }
-
-
 
 void DocTreeViewWidget::configurationChanged()
 {
@@ -1144,6 +1141,23 @@ void DocTreeViewWidget::refresh()
         folder_kdelibs->refresh();
     if( folder_qt )    
         folder_qt->refresh();
+    
+    DocTreeTocFolder *item;
+    for ( item = folder_toc.first(); item; item = folder_toc.next() )
+        delete item;
+            
+    folder_toc.clear();
+    
+    KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+    QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
+    QStringList ignore( DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc") );
+    
+    for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit)
+    {
+        if( !ignore.contains( QFileInfo(*tit).baseName() ) ) 
+            folder_toc.append(new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit)));
+    }
+
 }
 
 
@@ -1168,20 +1182,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
 //    docView->takeItem(folder_kdevelop);
 
     // .. and insert all again except for ignored items
-    QDomElement docEl = m_part->projectDom()->documentElement();
-    QDomElement doctreeviewEl = docEl.namedItem("kdevdoctreeview").toElement();
-
-    // ignoretocs
-    QStringList ignoretocs;
-    if (project) {
-        QDomElement ignoretocsEl = doctreeviewEl.namedItem("ignoretocs").toElement();
-        QDomElement tocEl = ignoretocsEl.firstChild().toElement();
-        while (!tocEl.isNull()) {
-            if (tocEl.tagName() == "toc")
-                ignoretocs << tocEl.firstChild().toText().data();
-            tocEl = tocEl.nextSibling().toElement();
-        }
-    }
+    QStringList ignoretocs = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc");
     
     docView->insertItem(folder_bookmarks);
     docView->insertItem(folder_project);

@@ -17,23 +17,26 @@
 #include <kconfig.h>
 #include <kprocess.h>
 #include <kurlrequester.h>
-//#include <kdebug.h>
+#include <kdebug.h>
 #include "../../config.h"
 #include "doctreeviewpart.h"
 #include "doctreeviewwidget.h"
 #include "doctreeviewfactory.h"
-#include "kdevproject.h"
 #include "adddocitemdlg.h"
 #include "misc.h"
+#include "domutil.h"
+#include "librarydocdlg.h"
 #include <qfileinfo.h>
 #include <kapp.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 
-DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewWidget *widget,
+DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocTreeViewWidget *widget,
                                                      QWidget *parent, const char *name)
     : DocTreeGlobalConfigWidgetBase(parent, name)
 {
+    m_part = part;
+    m_ignoreTocs = DomUtil::readListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc");
     m_widget = widget;
     readConfig();
 }
@@ -78,8 +81,24 @@ void DocTreeGlobalConfigWidget::readConfig()
          ++oit1, ++oit2) {
         new KListViewItem( bListView, *oit1, *oit2);
     }
+    
+    readTocConfigs();
 }
 
+void DocTreeGlobalConfigWidget::readTocConfigs()
+{
+    KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+    QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
+    for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit) 
+    {
+        const QString name( QFileInfo(*tit).baseName() );
+        const QString location( DocTreeViewTool::tocLocation( *tit ) );
+        if( m_ignoreTocs.contains( name ) )
+            new KListViewItem( extListView, name, "false", location);
+        else
+            new KListViewItem( extListView, name, "true", location);
+    }
+}
 
 void DocTreeGlobalConfigWidget::storeConfig()
 {
@@ -150,5 +169,54 @@ void DocTreeGlobalConfigWidget::accept()
     storeConfig();
     m_widget->configurationChanged();
 }
+
+void DocTreeGlobalConfigWidget::extEdit()
+{
+    QListViewItem *item = extListView->currentItem();
+    if( item )
+    {
+        const QString name( item->text(0) );
+        const QString location( item->text(2) );
+        KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+        QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
+        QString filePath;
+        for( QStringList::Iterator it = tocs.begin(); it!=tocs.end(); ++it)
+        {
+            if(QFileInfo(*it).baseName() == name)
+                filePath = *it;
+        }
+        const QString _default( DocTreeViewTool::tocDocDefaultLocation( filePath ) );
+        LibraryDocDlg *dlg = new LibraryDocDlg( this, name, location, _default);
+        dlg->exec();
+        
+        delete dlg;
+    }
+    extListView->clear();
+    readTocConfigs();
+}
+
+void DocTreeGlobalConfigWidget::extEnable()
+{
+    QListViewItem *item( extListView->selectedItem() );
+    if( item && item->text(1) == "false" ) 
+    {
+        m_ignoreTocs.remove( item->text( 0 ) );
+        DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc", m_ignoreTocs );
+        item->setText(1, "true");
+    }
+
+}
+void DocTreeGlobalConfigWidget::extDisable()
+{
+    //kdDebug(9002) << "disable" << endl;
+    QListViewItem *item( extListView->selectedItem() );
+    if( item && item->text(1) == "true" ) 
+    {
+        m_ignoreTocs << item->text( 0 );
+        DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc", m_ignoreTocs );
+        item->setText(1, "false");
+    }
+}
+
 
 #include "doctreeglobalconfigwidget.moc"

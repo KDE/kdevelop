@@ -25,6 +25,7 @@
 #include <kaction.h>
 
 #include "kdevcore.h"
+#include "misc.h"
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
 #include <kdevpartcontroller.h>
@@ -119,14 +120,13 @@ void DocTreeViewPart::projectClosed()
     m_widget->projectChanged(0);
 }
 
-
 void DocTreeViewPart::configWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
 
     vbox = dlg->addVBoxPage(i18n("Documentation Tree"));
     DocTreeGlobalConfigWidget *w1 = 
-        new DocTreeGlobalConfigWidget(m_widget, vbox, "doc tree config widget");
+        new DocTreeGlobalConfigWidget( this, m_widget, vbox, "doc tree config widget");
 
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
 }

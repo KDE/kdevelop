@@ -15,13 +15,14 @@
 #include <kglobal.h>
 #include <kinstance.h>
 #include <klocale.h>
+#include <qdom.h>
 
+#include "domutil.h"
 #ifndef INDEXER
 #include "doctreeviewfactory.h"
 #endif
 #include "misc.h"
 #include "../../config.h"
-
 
 static KConfig *instanceConfig()
 {
@@ -58,7 +59,7 @@ void DocTreeViewTool::readLibraryDocs(QString dir, QStringList *itemNames, QStri
     for (QStringList::Iterator it = globalentries.begin(); it != globalentries.end(); ++it) {
         *itemNames += QFileInfo(*it).baseName();
         *fileNames += globaldir.filePath(*it);
-        //        kdDebug(9002) << "Global: " << globaldir.filePath(*it) << endl;
+                kdDebug(9002) << "Global: " << globaldir.filePath(*it) << endl;
     }
     QDir privatedir(QDir::homeDirPath() + "/.kdoc");
     QStringList privateentries =
@@ -66,7 +67,7 @@ void DocTreeViewTool::readLibraryDocs(QString dir, QStringList *itemNames, QStri
     for (QStringList::Iterator it = privateentries.begin(); it != privateentries.end(); ++it) {
         *itemNames += i18n("%1 (private)").arg(QFileInfo(*it).baseName());
         *fileNames += privatedir.filePath(*it);
-        //        kdDebug(9002) << "Local: " << privatedir.filePath(*it) << endl;
+                kdDebug(9002) << "Local: " << privatedir.filePath(*it) << endl;
     } 
 }
 
@@ -74,7 +75,7 @@ void DocTreeViewTool::getAllLibraries(QStringList *itemNames, QStringList *fileN
 {
     KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
-    QString idx_path = config->readEntry("KDEDocDir", KDELIBS_DOCDIR) + "/kdoc-reference";
+    QString idx_path = config->readEntry("KDEDocDir", KDELIBS_DOCDIR);// + "/kdoc-reference";
 
     readLibraryDocs(idx_path, itemNames, fileNames);
 }
@@ -127,7 +128,6 @@ void DocTreeViewTool::addBookmark(const QString& itemName, const QString & fileN
 }
 void DocTreeViewTool::removeBookmark(int index)
 {
-    
     KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     QStringList itemNames = config->readListEntry("BookmarksTitle");
@@ -137,5 +137,44 @@ void DocTreeViewTool::removeBookmark(int index)
     itemNames.remove( itemNames.at( itemNames.size() - index ) );
     
     setBookmarks( itemNames, fileNames );
+}
+
+QString DocTreeViewTool::tocDocDefaultLocation(const QString& fileName)
+{
+    QFile f(fileName);
+    if (!f.open(IO_ReadOnly)) {
+        kdDebug(9002) << "Could not read doc toc: " << fileName << endl;
+        return QString::null;
+    }
+    QDomDocument doc;
+    if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
+        kdDebug(9002) << "Not a valid kdeveloptoc file: " << fileName << endl;
+        return QString::null;
+    }
+    f.close();
+    
+    QDomElement docEl = doc.documentElement();
+    QDomElement childEl = docEl.firstChild().toElement();
+    QString base;
+    while (!childEl.isNull()) 
+    {
+        if (childEl.tagName() == "base") 
+        {
+            base = childEl.attribute("href");
+            if (!base.isEmpty())
+                base += "/";
+            break;
+        }
+        childEl = childEl.nextSibling().toElement();
+    }
+    return base;
+}
+
+QString DocTreeViewTool::tocLocation(const QString& fileName)
+{
+    KConfig *config = instanceConfig();
+    config->setGroup("TocDirs");
+    const QString docName( QFileInfo( fileName ).baseName() );
+    return config->readEntry( docName, DocTreeViewTool::tocDocDefaultLocation( fileName ));
 }
 

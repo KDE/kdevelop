@@ -83,7 +83,7 @@ private:
     DocTreeBookmarksFolder *folder_bookmarks;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
-    QList<DocTreeTocFolder> folder_toc;
+    QPtrList<DocTreeTocFolder> folder_toc;
     DocTreeViewPart *m_part;
 
 	QHBox* docToolbar;

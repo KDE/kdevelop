@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>447</width>
-            <height>386</height>
+            <width>589</width>
+            <height>394</height>
         </rect>
     </property>
     <property name="caption">
@@ -373,6 +373,113 @@
                     </spacer>
                 </grid>
             </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>External Documentation</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QPushButton" row="0" column="1">
+                        <property name="name">
+                            <cstring>extEditButton</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Edit</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton" row="1" column="1">
+                        <property name="name">
+                            <cstring>extEnableButton</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>true</bool>
+                        </property>
+                        <property name="text">
+                            <string>Enable</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton" row="2" column="1">
+                        <property name="name">
+                            <cstring>extDisableButton</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>true</bool>
+                        </property>
+                        <property name="text">
+                            <string>Disable</string>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>spacer8</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>31</width>
+                                <height>101</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="KListView" row="0" column="0" rowspan="4" colspan="1">
+                        <column>
+                            <property name="text">
+                                <string>Name</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Enabled</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Location</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>extListView</cstring>
+                        </property>
+                        <property name="resizePolicy">
+                            <enum>AutoOne</enum>
+                        </property>
+                        <property name="allColumnsShowFocus">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
         </widget>
     </grid>
 </widget>
@@ -395,11 +502,32 @@
         <receiver>doctreeview_global_config_widget</receiver>
         <slot>updateIndexClicked()</slot>
     </connection>
+    <connection>
+        <sender>extEditButton</sender>
+        <signal>clicked()</signal>
+        <receiver>doctreeview_global_config_widget</receiver>
+        <slot>extEdit()</slot>
+    </connection>
+    <connection>
+        <sender>extEnableButton</sender>
+        <signal>clicked()</signal>
+        <receiver>doctreeview_global_config_widget</receiver>
+        <slot>extEnable()</slot>
+    </connection>
+    <connection>
+        <sender>extDisableButton</sender>
+        <signal>clicked()</signal>
+        <receiver>doctreeview_global_config_widget</receiver>
+        <slot>extDisable()</slot>
+    </connection>
 </connections>
 <slots>
     <slot access="protected">addBookmarkClicked()</slot>
     <slot access="protected">removeBookmarkClicked()</slot>
     <slot access="protected">updateIndexClicked()</slot>
+    <slot access="protected">extEdit()</slot>
+    <slot access="protected">extEnable()</slot>
+    <slot access="protected">extDisable()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
@@ -418,6 +546,7 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klistview.h</includehint>
     <includehint>klistview.h</includehint>
 </includehints>
 </UI>

@@ -13,6 +13,7 @@
 #define _MISC_H_
 
 #include <qstringlist.h>
+class QDomDocument;
 
 class DocTreeViewTool
 {
@@ -33,6 +34,9 @@ public:
     static void setBookmarks(const QStringList &itemNames, const QStringList &fileNames);
     static void addBookmark(const QString& itemName, const QString & fileName);
     static void removeBookmark( int index );
+        
+    static QString tocDocDefaultLocation(const QString& fileName);
+    static QString tocLocation(const QString& fileName);
 };
 
 #endif

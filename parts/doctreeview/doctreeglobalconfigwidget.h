@@ -15,13 +15,14 @@
 #include "doctreeglobalconfigwidgetbase.h"
 
 class DocTreeViewWidget;
+class DocTreeViewPart;
 
 class DocTreeGlobalConfigWidget : public DocTreeGlobalConfigWidgetBase
 {
     Q_OBJECT
 
 public:
-    DocTreeGlobalConfigWidget( DocTreeViewWidget *widget, QWidget *parent, const char *name=0 );
+    DocTreeGlobalConfigWidget( DocTreeViewPart *part, DocTreeViewWidget *widget, QWidget *parent, const char *name=0 );
     ~DocTreeGlobalConfigWidget();
 
 public slots:
@@ -31,12 +32,18 @@ private slots:
     void updateIndexClicked();
     void removeBookmarkClicked();
     void addBookmarkClicked();
+    void extEdit();
+    void extEnable();
+    void extDisable();
 
 private:
     void readConfig();
     void storeConfig();
+    void readTocConfigs();
     
     DocTreeViewWidget *m_widget;
+    QStringList m_ignoreTocs;
+    DocTreeViewPart *m_part;
 };
 
 #endif

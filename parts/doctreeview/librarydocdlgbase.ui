@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>LibraryDocDlgBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>540</width>
-            <height>239</height>
+            <width>394</width>
+            <height>129</height>
         </rect>
     </property>
     <property name="caption">
@@ -18,251 +18,149 @@
     <property name="sizeGripEnabled">
         <bool>true</bool>
     </property>
-    <widget class="QLayoutWidget">
+    <grid>
         <property name="name">
-            <cstring>Layout8</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>12</y>
-                <width>520</width>
-                <height>220</height>
-            </rect>
-        </property>
-        <vbox>
+        <widget class="QLabel" row="0" column="0">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>TextLabel1</cstring>
             </property>
-            <property name="margin">
-                <number>0</number>
+            <property name="frameShape">
+                <enum>MShape</enum>
             </property>
-            <property name="spacing">
-                <number>6</number>
+            <property name="frameShadow">
+                <enum>MShadow</enum>
             </property>
-            <widget class="QLayoutWidget">
+            <property name="text">
+                <string>Library name:</string>
+            </property>
+        </widget>
+        <widget class="KLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>libName</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>256</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <hbox>
                 <property name="name">
-                    <cstring>Layout7</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <hbox>
+                <spacer>
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>spacer3_2</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
                     </property>
-                    <property name="spacing">
-                        <number>6</number>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
                     </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>TextLabel1</cstring>
-                        </property>
-                        <property name="frameShape">
-                            <enum>MShape</enum>
-                        </property>
-                        <property name="frameShadow">
-                            <enum>MShadow</enum>
-                        </property>
-                        <property name="text">
-                            <string>Library name:</string>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer4</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                    </spacer>
-                    <widget class="KLineEdit">
-                        <property name="name">
-                            <cstring>libName</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>256</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>Layout6</cstring>
-                </property>
-                <hbox>
+                    <property name="sizeHint">
+                        <size>
+                            <width>150</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>buttonOk</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
+                    <property name="text">
+                        <string>&amp;OK</string>
                     </property>
-                    <property name="spacing">
-                        <number>6</number>
+                    <property name="accel">
+                        <string>Alt+O</string>
                     </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>TextLabel2</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Documentation path:</string>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer5</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                    </spacer>
-                    <widget class="KURLRequester">
-                        <property name="name">
-                            <cstring>docURL</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>150</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>Layout7</cstring>
-                </property>
-                <hbox>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>buttonDefault</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
+                    <property name="text">
+                        <string>Default</string>
                     </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>TextLabel3</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Library source path:</string>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer6</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                    </spacer>
-                    <widget class="KURLRequester">
-                        <property name="name">
-                            <cstring>sourceURL</cstring>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>Spacer7</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Vertical</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-            </spacer>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>Layout1</cstring>
-                </property>
-                <hbox>
+                </widget>
+                <widget class="QPushButton">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>buttonCancel</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
                     </property>
-                    <property name="spacing">
-                        <number>6</number>
+                    <property name="accel">
+                        <string>Alt+C</string>
                     </property>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>buttonHelp</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Help</string>
-                        </property>
-                        <property name="accel">
-                            <number>276824136</number>
-                        </property>
-                        <property name="autoDefault">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Horizontal Spacing2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                    </spacer>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>buttonOk</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;OK</string>
-                        </property>
-                        <property name="accel">
-                            <number>276824143</number>
-                        </property>
-                        <property name="autoDefault">
-                            <bool>true</bool>
-                        </property>
-                        <property name="default">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>buttonCancel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Cancel</string>
-                        </property>
-                        <property name="accel">
-                            <number>276824131</number>
-                        </property>
-                        <property name="autoDefault">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-        </vbox>
-    </widget>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="KURLRequester" row="1" column="1">
+            <property name="name">
+                <cstring>docLocal</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>150</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Location:</string>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <connections>
     <connection>
@@ -277,10 +175,29 @@
         <receiver>LibraryDocDlgBase</receiver>
         <slot>reject()</slot>
     </connection>
+    <connection>
+        <sender>buttonDefault</sender>
+        <signal>clicked()</signal>
+        <receiver>LibraryDocDlgBase</receiver>
+        <slot>slotDefault()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
     <include location="global" impldecl="in implementation">kurlrequester.h</include>
 </includes>
+<slots>
+    <slot specifier="pure virtual">slotDefault()</slot>
+</slots>
+<functions>
+    <function returnType="QString">url()</function>
+    <function returnType="QString">path()</function>
+</functions>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>
