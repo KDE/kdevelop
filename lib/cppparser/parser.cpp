@@ -263,6 +263,8 @@ bool Parser::skip( int l, int r )
 	    ++count;
 	else if( tk == r )
 	    --count;
+	else if( l != '{' && (tk == '{' || tk == '}' || tk == ';') )
+	    return false;
 
 	if( count == 0 )
 	    return true;
@@ -803,7 +805,7 @@ bool Parser::parseTypedef( DeclarationAST::Node& node )
 	//reportError( i18n("Need an identifier to declare") );
 	//return false;
     }
-
+    
     ADVANCE( ';', ";" );
 
     TypedefAST::Node ast = CreateNode<TypedefAST>();
@@ -1092,6 +1094,7 @@ bool Parser::parseTypeSpecifier( TypeSpecifierAST::Node& spec )
 
     return false;
 }
+
 bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseDeclarator()" << endl;
@@ -1160,6 +1163,11 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 	skipParen = true;
     }
 
+    if( ast->subDeclarator() && lex->lookAhead(0) != '(' ){
+	lex->setIndex( start );
+	return false;
+    }
+    
     int index = lex->index();
     if( lex->lookAhead(0) == '(' ){
 	lex->nextToken();
@@ -2990,7 +2998,10 @@ bool Parser::parseFunctionBody( StatementListAST::Node& node )
 	    ast->addStatement( stmt );
     }
 
-    ADVANCE( '}', "}" );
+    if( lex->lookAhead(0) != '}' ){
+	reportError( i18n("} expected") );
+    } else 
+	lex->nextToken();
 
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
@@ -3021,7 +3032,7 @@ bool Parser::parseTypeSpecifierOrClassSpec( TypeSpecifierAST::Node& node )
     return false;
 }
 
-bool Parser::parseTryBlockStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseTryBlockStatement( StatementAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTryBlockStatement()" << endl;
 
@@ -3058,6 +3069,7 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& /*node*/ )
 	}
     }
 
+    node = stmt;
     return true;
 }
 
