@@ -78,6 +78,8 @@ void AddTargetDialog::primaryChanged()
 		list.append("lib");
 		list.append("pkglib");
 		list.append("noinst");
+		if (m_widget->kdeMode())
+			list.append("kde_module");
 		break;
 	case 3: // Script
 		list.append("bin");
