@@ -320,7 +320,11 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              appFrontend(), SLOT(insertStderrLine(const QString&)) );
 
     setupController();
+    QTimer::singleShot(0, this, SLOT(setupDcop()));
+}
 
+void DebuggerPart::setupDcop()
+{
     QCStringList objects = kapp->dcopClient()->registeredApplications();
     for (QCStringList::Iterator it = objects.begin(); it != objects.end(); ++it)
         if ((*it).find("drkonqi-") == 0)

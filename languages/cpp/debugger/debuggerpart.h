@@ -54,6 +54,7 @@ k_dcop:
     virtual ASYNC slotDebugExternalProcess();
 
 private slots:
+    void setupDcop();
     void guiClientAdded(KXMLGUIClient*);
     void contextMenu(QPopupMenu *popup, const Context *context);
     void toggleBreakpoint();
