@@ -466,22 +466,74 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
 {
   bool exit=false;
   CParsedLexem *aLexem;
-  QString arrayDecl;
+  QString addDecl;
 
-  // Check for an array declaration.
-  if( lexemStack.top()->type == ']' )
+  // Check for a function pointer declaration.
+  if( lexemStack.top()->type == ')' )
+  {
+    int depth=0;
+    bool nextIsVarName=false;
+
+    exit = false;
+    while( !exit )
+    {
+      bool thisIsVarName=nextIsVarName;
+      aLexem = lexemStack.pop();
+      if (aLexem->type == ')')
+      {
+         depth++;
+         if (!lexemStack.isEmpty() && lexemStack.top()->text=="void")
+           nextIsVarName=true;
+      }
+
+      // check if the next parsed entry could be the var name
+      //
+      if (thisIsVarName)
+      {
+        nextIsVarName=false;
+      }
+      else
+      {
+        thisIsVarName= (!lexemStack.isEmpty() && aLexem->type == ID &&
+                       (lexemStack.top()->type==ID ||
+                        lexemStack.top()->type=='*' ||
+                        lexemStack.top()->type=='}' ||
+                        lexemStack.top()->type=='&'));
+      }
+
+      // save everything but the var names or single "void" combination
+      if (!thisIsVarName)
+       addDecl = aLexem->text + addDecl;
+
+      if (aLexem->type == '(')
+        depth--;
+      exit = ( lexemStack.isEmpty() || depth<=0 );
+      delete aLexem;
+    }
+
+    if (!lexemStack.isEmpty() && lexemStack.top()->type==')')
+    {
+      aLexem = lexemStack.pop();
+      addDecl = aLexem->text + addDecl;
+      delete aLexem;
+    }
+  }
+
+
+  // Check for an single or multiple array declaration.
+  while ( !lexemStack.isEmpty() && lexemStack.top()->type == ']' )
   {
     exit = false;
     while( !exit )
     {
       aLexem = lexemStack.pop();
-      arrayDecl = aLexem->text + arrayDecl;
-
+      if (aLexem->type == ']' || aLexem->type == '[')
+        addDecl = aLexem->text + addDecl;
       exit = ( lexemStack.isEmpty() || aLexem->type == '[' );
       delete aLexem;
     }
   }
-  
+
   // Check if this variable has a bit definition. If so remove it.
   if( !lexemStack.isEmpty() && lexemStack.top()->type == NUM )
   {
@@ -490,13 +542,35 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
   }
 
   // Initial checks if this variable declaration just has a type.
-  if( !lexemStack.isEmpty() && lexemStack.top()->type == ID && lexemStack.count() > 1 )
+
+  //  don't forget about "const", "register", "volatile" specifier in
+  //   an argument
+  // now if there are two ID's ... the last supposed to be the
+  //   var name
+  if( !lexemStack.isEmpty() && lexemStack.top()->type==ID )
   {
     aLexem = lexemStack.pop();
-    anAttr->setName( aLexem->text );
-    delete aLexem;
+    if (!lexemStack.isEmpty() &&
+        (lexemStack.top()->type==ID
+         || lexemStack.top()->type=='}'
+         || lexemStack.top()->type=='*' || lexemStack.top()->type=='&'))
+    {
+      /* if the next item is also an ID or it is something like
+         struct test {int a, int b} x, int &x
+         in aLexem it has to be the var name
+       */
+      anAttr->setName( aLexem->text );
+      delete aLexem;
+    }
+    else
+    {
+      // in this case the ID must be a type spec...
+      lexemStack.push(aLexem);
+      anAttr->setName( "" );
+    }
   }
 
+  anAttr->type+=addDecl;
   anAttr->setDeclaredInFile( currentFile );
   anAttr->setDeclaredOnLine( declStart );
   anAttr->setExport( declaredScope );
@@ -525,6 +599,8 @@ void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
   // Set values in the variable.
   if( !type.isEmpty() )
     anAttr->setType( type + anAttr->type );
+
+  anAttr->setNamePos( type.length() );
 
   // Skip default values
   if( lexem == '=' )
@@ -563,26 +639,29 @@ void CClassParser::fillInMultipleVariable( CParsedContainer *aContainer )
   // Make sure no attributes gets deleted.
   list.setAutoDelete( false );
 
-  while( !exit )
+  while( !lexemStack.isEmpty() && !exit )
   {
     anAttr = new CParsedAttribute();
 
     // Get the variable name.
     fillInParsedVariableHead( anAttr );
 
-    // Add pointer stuff
-    while( lexemStack.top()->type != ID && lexemStack.top()->type != ',' )
+    if (!lexemStack.isEmpty())
     {
-      aLexem = lexemStack.pop();
-      anAttr->type = aLexem->text + anAttr->type;
-      delete aLexem;
+      // Add pointer stuff
+      while(  lexemStack.top()->type != ID && lexemStack.top()->type != ',' )
+      {
+        aLexem = lexemStack.pop();
+        anAttr->type = aLexem->text + anAttr->type;
+        delete aLexem;
+      }
+
+      exit = (lexemStack.isEmpty() || lexemStack.top()->type == ID );
+
+      // Remove separating ','
+      if( !lexemStack.isEmpty() && lexemStack.top()->type == ',' )
+        delete lexemStack.pop();
     }
-
-    exit = ( lexemStack.top()->type == ID );
-
-    // Remove separating ','
-    if( lexemStack.top()->type == ',' )
-      delete lexemStack.pop();
 
     // Set endpoint of declaration.
     anAttr->setDeclarationEndsOnLine( getLineno() );
@@ -628,7 +707,9 @@ CParsedAttribute *CClassParser::parseVariable()
   {
     // Skip all default values.
     if( lexem == '=' )
+    {
       skip = true;
+    }
     else if( !skip && lexem == '(' ) // Check for function pointer
     {
       getNextLexem();
@@ -637,25 +718,47 @@ CParsedAttribute *CClassParser::parseVariable()
         lexemStack.push( new CParsedLexem( '(', "(" ));
         PUSH_LEXEM();
 
-        // Push variable name.
+        // Push variable name.(but maybe there's no var name)
         getNextLexem();
-        PUSH_LEXEM();
-
-        // Push ')'
-        getNextLexem();
-        PUSH_LEXEM();
-
-        getNextLexem();
-
-        // We'll take a chance that this declaration doesn't include function pointers.
-        while( lexem != 0 && lexem != ')' )
+        if (lexem!=0 && lexem==ID)
         {
           PUSH_LEXEM();
           getNextLexem();
         }
-        
-        // Add ')'
-        PUSH_LEXEM();
+
+        // search for ')' and push it
+        //      (0 or ; means something went wrong)
+        // it can be something like
+        //   int (*fp[10][]) (char, int)
+        while (lexem!=0 && lexem!=')' && lexem!=';')
+        {
+          PUSH_LEXEM();
+          getNextLexem();
+        }
+
+       // Add last element... hoping this was a ')'
+       PUSH_LEXEM();
+
+       // now we should be at int (*fp...)   -> going ahead to (char, int)
+       if (lexem==')')
+       {
+
+        int depth=1;
+        getNextLexem();  // now it should be a (
+
+        if ( lexem == '(')
+        {
+         while( lexem != 0 && depth>0  && lexem!=';')
+          {
+            PUSH_LEXEM();
+            if (lexem==')')
+               depth--;
+            getNextLexem();
+            if (lexem=='(')
+               depth++;
+          }
+        }
+       }
       }
     }
     else if( !skip && !isEndOfVarDecl() )
@@ -663,7 +766,8 @@ CParsedAttribute *CClassParser::parseVariable()
       PUSH_LEXEM();
     }
 
-    getNextLexem();
+    if (!isEndOfVarDecl())
+     getNextLexem();
   }
 
   if( !lexemStack.isEmpty() )
@@ -713,6 +817,7 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
       if( !anAttr->type.isEmpty() )
         anArg->setType( anAttr->type );
       
+      anArg->setNamePos( anAttr->posName );
       // Add the argument to the method.
       method->addArgument( anArg );
       delete anAttr;

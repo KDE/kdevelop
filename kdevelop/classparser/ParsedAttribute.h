@@ -27,10 +27,16 @@ public: // Public attributes
   /** Is this a const attribute */
   bool isConst;
 
+  /** where I have to place the name between type */
+  int posName;
+
 public: // Public methods to set attribute values
 
   /** Set the type. */
   void setType( const char *aType );
+
+  /** Set the pos of the name between type */
+  void setNamePos( int pos );
 
   /** Set if it is defined in the .h file. */
   void setIsInHFile( bool aState = true );
