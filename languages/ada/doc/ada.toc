@@ -1,6 +1,6 @@
 <!DOCTYPE kdeveloptoc>
 <kdeveloptoc>
-<title>ADA</title>
+<title>Ada</title>
 <base href="http://www.adahome.com/rm95"/>
 <tocsect1 name="General" url="rm9x-01.html">
 	<tocsect2 name="Scope" url="rm9x-01-01.html"></tocsect2>
