@@ -6,17 +6,17 @@
 
 \section put_sectionLabelName_here put section name here
 
-bla bla bla <code>this is code</code>, bla bla blaa blaaaaa.
+Here comes the text <code>this is code</code>, the text is continued.
 
   - This is a item list
   - This is the second item!
   .
 
-bla bla <code>BLAAAAAA</code> dsabvlskdbavlikdb.
+Here comes the text <code>this is code</code>, the text is continued.
 
 \subsection put_subSectionLabelName_here put subsection name here
 
-blaaaaa
+Subsection text.
 
 */
 
