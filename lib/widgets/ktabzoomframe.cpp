@@ -102,6 +102,12 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   QColorGroup cg = pal.active();
   cg.setColor(QColorGroup::Background, KGlobalSettings::activeTitleColor());
   pal.setActive(cg) ;
+  cg = pal.inactive();
+  cg.setColor(QColorGroup::Background, KGlobalSettings::activeTitleColor());
+  pal.setInactive(cg) ;
+  cg = pal.disabled();
+  cg.setColor(QColorGroup::Background, KGlobalSettings::activeTitleColor());
+  pal.setDisabled(cg);
   d->m_dockButton->setPalette(pal);
 
   hbox->addWidget(d->m_dockButton);
