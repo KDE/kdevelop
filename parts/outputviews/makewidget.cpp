@@ -12,6 +12,7 @@
 #include "makewidget.h"
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
+#include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "processlinemaker.h"
 #include "makeviewpart.h"
@@ -396,14 +397,30 @@ QString MakeWidget::directory(int parag) const
 	return QString::null;
 }
 
+QString MakeWidget::guessFileName( const QString& fName, int parag ) const
+{
+	if ( fName.startsWith( "/" ) )
+		// absolut path given
+		return fName;
+	if ( fName.contains( "/" ) ) {
+		// relative path to the project dir
+		if ( m_part->project() )
+			return m_part->project()->projectDirectory() + "/" + fName;
+		else
+			return fName;
+	}
+	// else - no path given, try to guess the active directory from output
+	return directory( parag ) + fName;
+}
+
 void MakeWidget::searchItem(int parag)
 {
 	ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[parag] );
 	if ( item )
 	{
 		// open the file
-		//kdDebug(9004) << "Opening file: " << directory(parag) << item->fileName << endl;
-		m_part->partController()->editDocument(item->fileName, item->lineNum);
+		kdDebug(9004) << "Opening file: " << guessFileName(item->fileName, parag) << endl;
+		m_part->partController()->editDocument(guessFileName(item->fileName, parag), item->lineNum);
 		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
 		m_part->mainWindow()->lowerView(this);
 	}

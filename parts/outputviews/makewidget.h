@@ -75,6 +75,7 @@ private slots:
 private:
     virtual void keyPressEvent(QKeyEvent *e);
     void searchItem(int parag);
+    QString guessFileName( const QString& fName, int parag ) const;
     QString directory(int parag) const;
     bool brightBg();
     void refill();
