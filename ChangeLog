@@ -1,3 +1,7 @@
+2002-04-26  Roland Krause  <roland@ca.wai.com>
+	* fixed a crash when attempting to look at parent classes in the 
+         class viewer. reviewed by HarryF
+
 2002-04-25  F@lk Brettschneider <falk@kdevelop.org>
         * applied framestack patch, reviewed by Harald
 	
@@ -5,17 +9,13 @@
         * fixed an evil crash after QextMDI gets confused in the view-focus control.
 	  (reason for that bug was changed event behaviour in the latest Qt versions.
 	   Sometimes optimizing the code makes it very sensitive, too)
-
 2002-04-10  Harald Fernengel <harry@kdevelop.org>
         * Jumping to error messages now also works on localized versions of "make"
           Error messages that contain Utf8 characters only work under KDE3,
           the non-Utf8 strings under KDE2 as well as KDE3.
           Workaround for KDE2: "export LANG=C"
-
 2002-04-03  Richard Dale <duke@tipitina.demon.co.uk>
-
 	* Removed Objective-C support (moving the changes to KDEVELOP_2_BRANCH).
-
 2002-04-02  Richard Dale <duke@tipitina.demon.co.uk>
 	* Added Objective-C support.
 2002-03-26  F@lk Brettschneider <falk@kdevelop.org>
