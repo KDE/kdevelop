@@ -73,6 +73,9 @@ private:
     T deepcopy;
 };
 
+#else
+#include <qdeepcopy.h>
+
 #endif // QT_VERSION
 
 #endif
