@@ -140,7 +140,6 @@ QList<KDevPart> PartLoader::loadAllByQuery(const QString &serviceType, const QSt
                                            KDevApi *api, QObject *parent, bool filter)
 {
     KConfig *config = kapp->config();
-    config->setGroup("Plugins");
   
     QList<KDevPart> list;
     
@@ -151,6 +150,7 @@ QList<KDevPart> PartLoader::loadAllByQuery(const QString &serviceType, const QSt
     for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it) {
         KService *service = *it;
 
+	config->setGroup("Plugins");
         if (filter && !config->readBoolEntry(service->name(), true))
           continue;
 
