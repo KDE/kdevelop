@@ -13,7 +13,7 @@ Dialog {
 }
 WidgetLayout {
 InitialPos {-1 -1}
-Size {390 310}
+Size {280 410}
 MinSize {0 0}
 MaxSize {32767 32767}
 Grid {10}
@@ -22,7 +22,7 @@ ButtonGroup {
 		Title {Modifiers}
 		Alignment {Left}
 		Style {49}
-		Rect {10 240 260 60}
+		Rect {10 310 260 50}
 		Name {ButtonGroup_3}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -41,7 +41,7 @@ ButtonGroup {
 		Title {Access}
 		Alignment {Left}
 		Style {49}
-		Rect {10 170 260 60}
+		Rect {10 250 260 50}
 		Name {accessGrp}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -60,7 +60,7 @@ ButtonGroup {
 		Title {Variable}
 		Alignment {Left}
 		Style {49}
-		Rect {10 10 260 150}
+		Rect {10 10 260 230}
 		Name {varGrp}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -118,7 +118,7 @@ Label {
 		Text {Name:}
 		AutoResize {FALSE}
 		Margin {-1}
-		Rect {20 90 40 20}
+		Rect {20 80 40 20}
 		Name {nameLbl}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -138,7 +138,7 @@ LineEdit {
 		EchoMode {Normal}
 		MaxLength {32767}
 		FrameShown {TRUE}
-		Rect {20 110 240 30}
+		Rect {20 100 240 30}
 		Name {nameEdit}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -158,7 +158,7 @@ RadioButton {
 		Text {Public}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {20 190 70 30}
+		Rect {20 270 70 20}
 		Name {publicRb}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -178,7 +178,7 @@ RadioButton {
 		Text {Protected}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {110 190 80 30}
+		Rect {100 270 80 20}
 		Name {protectedRb}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -198,7 +198,7 @@ RadioButton {
 		Text {Private}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {200 190 60 30}
+		Rect {190 270 60 20}
 		Name {privateRb}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -218,7 +218,7 @@ CheckBox {
 		Text {static}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {20 260 60 30}
+		Rect {20 330 60 20}
 		Name {staticCb}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -238,7 +238,7 @@ CheckBox {
 		Text {const}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {110 260 60 30}
+		Rect {100 330 60 20}
 		Name {constCb}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -260,7 +260,7 @@ PushButton {
 		Text {OK}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {280 10 100 30}
+		Rect {10 370 100 30}
 		Name {okBtn}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -282,7 +282,7 @@ PushButton {
 		Text {Cancel}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {280 50 100 30}
+		Rect {170 370 100 30}
 		Name {cancelBtn}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -296,5 +296,43 @@ PushButton {
 		BackgroundMode {PaletteBackground}
 		FontPropagation {NoChildren}
 		PalettePropagation {NoChildren}
+}
+Label {
+		Text {Documentation:}
+		AutoResize {FALSE}
+		Margin {-1}
+		Rect {20 130 100 20}
+		Name {docLbl}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {NoChildren}
+		PalettePropagation {NoChildren}
+}
+MultiLineEdit {
+		Line {}
+		ReadOnly {FALSE}
+		OverwriteMode {FALSE}
+		Rect {20 150 240 80}
+		Name {documentationEdit}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {StrongFocus}
+		BackgroundMode {PaletteBase}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
 }
 }
