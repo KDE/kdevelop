@@ -30,7 +30,8 @@
 #include "cproject.h"
 #include "doctreeview.h"
 #include <stdio.h>
-
+#define BEN_QLISTVIEW_BYPASS			//define this symbol for using my solution to the docview bug
+																	//undefine it to use jbb's
 
 /**
  * A list view item that is decorated with a doc icon.
@@ -112,13 +113,15 @@ void ListViewFolderItem::setOpen(bool o)
 
 void ListViewFolderItem::refresh()
 {
-//    QListViewItem *child = firstChild();
-//    while (child)
-//        {
-//            QListViewItem *old = child;
-//            child = child->nextSibling();
-//            delete old;
-//        }
+#ifdef BEN_QLISTVIEW_BYPASS
+    QListViewItem *child = firstChild();
+    while (child)
+        {
+            QListViewItem *old = child;
+            child = child->nextSibling();
+            delete old;
+        }
+#endif //BEN_QLISTVIEW_BYPASS
 }
 
 
@@ -236,7 +239,13 @@ void DocTreeKDevelopFolder::refresh()
                                    "addendum/index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
                                    "reference/C/cref.html");
-//    setOpen(false);
+
+    //horrible hack to counter the QListView bug DO NOT CHANGE without thinking about it
+    //and looking closely at the implementation of QListView, expacially how are the pointers
+    //in QListView::d->drawables are managed!!!   Benoit Cerrina <benoit.cerrina@writeme.com>
+    listView()->setOpen(this, !isOpen());
+    listView()->setOpen(this, !isOpen());
+    //end of the horrible hack
 }
 
 
@@ -608,7 +617,7 @@ void DocTreeProjectFolder::refresh()
 
 
 DocTreeView::DocTreeView(QWidget *parent, const char *name)
-    : KListView(parent, name), _initialized(false)
+    : KListView(parent, name)
 {
     setRootIsDecorated(true);
     setSorting(-1);
@@ -652,24 +661,26 @@ QString DocTreeView::selectedText()
 
 void DocTreeView::refresh(CProject *prj)
 {
-    clear();
+#ifndef BEN_QLISTVIEW_BYPASS	
+	clear();
 
     folder_kdevelop = new DocTreeKDevelopFolder(this);
     folder_kdelibs  = new DocTreeKDELibsFolder(this);
-#ifdef WITH_DOCBASE
-    folder_docbase  = new DocTreeDocbaseFolder(this);
-#endif
+//#ifdef WITH_DOCBASE
+//    folder_docbase  = new DocTreeDocbaseFolder(this);
+//#endif
     folder_others   = new DocTreeOthersFolder(this);
     folder_project  = new DocTreeProjectFolder(this);
 
     folder_kdevelop->setOpen(true);
     folder_kdelibs->setOpen(true);
-
+#endif //BEN_QLISTVIEW_BYPASS
     folder_project->setProject(prj);
     folder_kdevelop->refresh();
     folder_kdelibs->refresh();
     folder_others->refresh();
     folder_project->refresh();
+
 }
 
 void DocTreeView::changePathes()

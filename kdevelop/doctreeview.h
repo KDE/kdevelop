@@ -19,7 +19,7 @@
 
 #ifndef _DOCTREEVIEW_H_
 #define _DOCTREEVIEW_H_
-
+#define OLD
 #include "klistview.h"
 
 
@@ -65,7 +65,6 @@ private:
     DocTreeOthersFolder *folder_others;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
-    bool _initialized;
 };
 #endif
 
