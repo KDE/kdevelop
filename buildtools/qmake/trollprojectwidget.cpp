@@ -978,7 +978,6 @@ void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
     return;
   else
     spitem = m_shownSubproject;
-  QString relpath = spitem->path.mid(projectDirectory().length());
   bool ok = FALSE;
   QString scopename = KLineEditDlg::getText(
                       i18n( "Create Scope" ),
@@ -1630,17 +1629,17 @@ void TrollProjectWidget::addFile(const QString &fileName, bool noPathTruncate)
 
 void TrollProjectWidget::slotAddFiles()
 {
-  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+  QString cleanSubprojectDir = QDir::cleanDirPath(m_shownSubproject->path);
   QString  filter = "*.cpp *.cc *.c *.hpp *.h *.ui|" + i18n("Source Files");
   filter += "\n*|" + i18n("All Files");
 #if KDE_VERSION >= 310
-  AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
+  AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectDir,
                                         filter,
                                         this,
                                         "Insert existing files",
                                         true, new QComboBox(false));
 #else
-  AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
+  AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectDir,
                                         filter,
                                         this,
                                         i18n("Insert Existing Files").ascii(),
@@ -1660,11 +1659,11 @@ void TrollProjectWidget::slotAddFiles()
         proc->addArgument( "cp" );
         proc->addArgument( "-f" );
         proc->addArgument( files[i] );
-        proc->addArgument( projectDirectory()+relpath );
+        proc->addArgument( cleanSubprojectDir );
         proc->start();
         QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
         // and add them to the filelist
-        QFile testExist(projectDirectory()+relpath+"/"+filename);
+        QFile testExist(cleanSubprojectDir+"/"+filename);
         if (testExist.exists())
           addFile(filename);
         }
@@ -1677,11 +1676,11 @@ void TrollProjectWidget::slotAddFiles()
         proc->addArgument( "ln" );
         proc->addArgument( "-s" );
         proc->addArgument( files[i] );
-        proc->addArgument( projectDirectory()+relpath );
+        proc->addArgument( cleanSubprojectDir );
         proc->start();
         QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
         // and add them to the filelist
-        QFile testExist(projectDirectory()+relpath+"/"+filename);
+        QFile testExist(cleanSubprojectDir+"/"+filename);
         if (testExist.exists())
           addFile(filename);
         }
@@ -1689,7 +1688,7 @@ void TrollProjectWidget::slotAddFiles()
 
       case AddFilesDialog::Relative:
         // Form relative path to current subproject folder
-        addFile(URLUtil::relativePathToFile(projectDirectory()+relpath , files[i]), true);
+        addFile(URLUtil::relativePathToFile(cleanSubprojectDir , files[i]), true);
         break;
     }
   }
@@ -2010,7 +2009,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             "add them with the relative path."));
         }
         int r = popup.exec(p);
-        QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+        QString cleanSubprojectPath = QDir::cleanDirPath(m_shownSubproject->path);
 
         if (r == idSetInstObjPath)
         {
@@ -2024,9 +2023,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             updateProjectFile(titem->owner);
           }
         }
-	else if (r == idInsNewFilepatternItem)
+	    else if (r == idInsNewFilepatternItem)
         {
-          // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
           QString filepattern = KLineEditDlg::getText(
                               i18n( "Add Pattern of Files to Install" ),
@@ -2043,13 +2041,13 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         else if (r == idInsExistingFile)
         {
 #if KDE_VERSION >= 310
-          AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
+          AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectPath,
                                                 ext + "|" + title + " (" + ext + ")",
                                                 this,
                                                 "Add existing files",
                                                 true, new QComboBox(false));
 #else
-          AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
+          AddFilesDialog *dialog = new AddFilesDialog(cleanSubprojectPath,
                                                 ext + "|" + title + " (" + ext + ")",
                                                 this,
                                                 "Add existing files",
@@ -2070,7 +2068,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 proc->addArgument( "cp" );
                 proc->addArgument( "-f" );
                 proc->addArgument( files[i] );
-                proc->addArgument( projectDirectory()+relpath );
+                proc->addArgument( cleanSubprojectPath );
                 proc->start();
                 QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
                 // and add them to the filelist
@@ -2085,7 +2083,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 proc->addArgument( "ln" );
                 proc->addArgument( "-s" );
                 proc->addArgument( files[i] );
-                proc->addArgument( projectDirectory()+relpath );
+                proc->addArgument( cleanSubprojectPath );
                 proc->start();
                 QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
                 // and add them to the filelist
@@ -2095,7 +2093,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
             case AddFilesDialog::Relative:
                 // Form relative path to current subproject folder
-                addFileToCurrentSubProject(titem,URLUtil::relativePathToFile(projectDirectory()+relpath , files[i]));
+                addFileToCurrentSubProject(titem,URLUtil::relativePathToFile(cleanSubprojectPath , files[i]));
                 break;
             }
           }
@@ -2134,7 +2132,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     fcext = QString::null;
                 }
                 KDevCreateFile::CreatedFile crFile =
-                    createFileSupport->createNewFile(fcext, projectDirectory()+m_shownSubproject->path.mid(projectDirectory().length()));
+                    createFileSupport->createNewFile(fcext, cleanSubprojectPath);
             } else {
                 bool ok = FALSE;
                 QString filename = KLineEditDlg::getText(
@@ -2143,7 +2141,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                                     QString::null, &ok, this );
                 if ( ok && !filename.isEmpty() )
                 {
-                    QFile newfile(projectDirectory()+relpath+'/'+filename);
+                    QFile newfile(cleanSubprojectPath+'/'+filename);
                     if (!newfile.open(IO_WriteOnly))
                     {
                     KMessageBox::error(this,i18n("Failed to create new file. "
@@ -2160,7 +2158,6 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         else if (r == idInsInstallObject)
         {
-//          QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
           QString install_obj = KLineEditDlg::getText(
                               i18n( "Add Install Object" ),
