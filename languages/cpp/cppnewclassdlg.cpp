@@ -70,7 +70,7 @@ QString QRegExp_escape(const QString& str )
 }
 
 CppNewClassDialog::CppNewClassDialog(CppSupportPart *part, QWidget *parent, const char *name)
-	: CppNewClassDialogBase(parent, name)
+	: CppNewClassDialogBase(parent, name), myModel(0)
 {
     headerModified = false;
     baseincludeModified = false;
@@ -118,6 +118,7 @@ CppNewClassDialog::~CppNewClassDialog()
 {
     delete compBasename;
     delete compNamespace;
+    delete myModel;
 }
 
 void CppNewClassDialog::setCompletionBasename(CodeModel *model)
@@ -963,7 +964,7 @@ void CppNewClassDialog::parsePCSClass(QString clName, QString inheritance)
     QString templateAdd = templateActualParamsFormatted(clName);
     removeTemplateParams(clName);
 
-    CodeModel *myModel = new CodeModel();
+    myModel = new CodeModel();
     StoreConverter converter(m_part, myModel);
     converter.PCSClassToCodeModel(clName, clNamespace);
     

@@ -169,6 +169,7 @@ private:
     QPopupMenu *accessMenu;
     QPopupMenu *overMenu;
     CppSupportPart *m_part;
+    CodeModel *myModel;
 
     // configuration variables
     QString interface_url;
