@@ -90,7 +90,7 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
   configData = new PHPConfigData(projectDom());
-  m_codeCompletion = new  PHPCodeCompletion(core()->editor());
+  m_codeCompletion = new  PHPCodeCompletion(core(),classStore());
 }
 
 

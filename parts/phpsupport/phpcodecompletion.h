@@ -19,9 +19,13 @@
 #define PHPCODECOMPLETION_H
 
 #include <qobject.h>
+#include <kregexp.h>
 #include "keditor/editor.h"
 #include "keditor/edit_iface.h"
+#include "keditor/codecompletion_iface.h"
 
+class KDevCore;
+class ClassStore;
 /**
  *@author Sandy Meier
  */
@@ -30,14 +34,21 @@ class PHPCodeCompletion : public QObject {
   Q_OBJECT
 
 public: 
-  PHPCodeCompletion(KEditor::Editor* editor);
+  PHPCodeCompletion(KDevCore* core,ClassStore* store);
   ~PHPCodeCompletion();
 protected slots:  
   void documentActivated(KEditor::Document* doc);
   void cursorPositionChanged(KEditor::Document *doc, int line, int col);
 
+ protected:
+  bool checkForGlobalFunction(KEditor::Document *doc,QString lineStr,int col);
+  bool checkForClassMember(KEditor::Document *doc,QString lineStr,int col,int line);
+  
  private:
   KEditor::Editor* m_editor;
+  QValueList<KEditor::CompletionEntry> m_globalFunctions;
+  KDevCore* m_core;
+  ClassStore* m_classStore;
 };
 
 #endif
