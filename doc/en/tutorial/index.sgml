@@ -41,9 +41,9 @@ programmer contributing to the KDE project.
 <sect>What you should know already
 <p>
 This handbook requires a base knowledge about the C++ programming language as a minimum to understand the code examples and their
-functionality. Further, it is assumed that you have read <htmlurl url="index.html" name="The User Manual to KDevelop"> as well as
-<htmlurl url="programming.html" name="The KDevelop Programming Handbook"> and know how the KDevelop IDE works in general and what
-generated projects are.
+functionality. Further, it is assumed that you have read <htmlurl url="../index.html" name="The User Manual to KDevelop"> as well as
+<htmlurl url="../programming/index.html" name="The KDevelop Programming Handbook"> and know how the KDevelop IDE works in general and
+what generated projects are.
 
 <chapt>Getting Started
 <p>
@@ -62,8 +62,8 @@ comfortable with the idea behind Qt- providing a library that offers:
 <item>event controlling by event loops and virtual methods
 </itemize>
 
-If that doesn't tell you anything right now, you should read about the Qt library in <htmlurl url="programming-2.html#ss2.1" name="The
-KDevelop Programming Handbook"> where the basics for a Qt application are described in detail. There, you will also find and
+If that doesn't tell you anything right now, you should read about the Qt library in <htmlurl url="../programming/index-2.html#ss2.1"
+name="The KDevelop Programming Handbook"> where the basics for a Qt application are described in detail. There, you will also find and
 introduction about the difference between a Qt and a KDE application, which is not much at the first level of the Qt tutorial step.
 
 Now, to learn about Qt first would be a good start for programming KDE applications as well, so we will create a project that will

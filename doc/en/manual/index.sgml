@@ -77,7 +77,7 @@ Any comments about the IDE, its documentation or feature requests are welcome.
 <sect>About this Handbook
 <p>
 This user manual gives the user a complete overview of the KDevelop IDE and describes the basic development process in brief. For more
-information about specific programming issues, we suggest reading the <htmlurl url="programming.html" name="KDevelop Programming
+information about specific programming issues, we suggest reading the <htmlurl url="programming/index.html" name="KDevelop Programming
 Handbook"> included with KDevelop, which covers themes such as understanding generated <idx/application framework/s and how to create
 full-featured <idx/KDE/ applications using example projects.
 
@@ -490,11 +490,11 @@ Info contents" section in KDEHelp.
 <p>
 In this chapter you will get a general overview how you can use KDevelop and the internal <idx/dialog editor/ to create own applications.
 Thereby, all tools are described by their use during the development process. If you are a beginner in C++/<idx/GUI/ design and
-programming, you should read <htmlurl url="programming.html" name="The KDevelop Programming Handbook">, which describes some basics for
-program design and shows a more detailed use of KDevelop by sample projects which you can follow step-by-step to get used with the way
-applications are created using KDevelop. Also you should have read chapter <ref id="Programs" name="Programs"> to gain a general
-understanding why Unix applications should make use of provided development tools; this will make things easier when you hit references
-to what <idx/Makefile/s are etc.
+programming, you should read <htmlurl url="programming/index.html" name="The KDevelop Programming Handbook">, which describes some
+basics for program design and shows a more detailed use of KDevelop by sample projects which you can follow step-by-step to get used
+with the way applications are created using KDevelop. Also you should have read chapter <ref id="Programs" name="Programs"> to gain a
+general understanding why Unix applications should make use of provided development tools; this will make things easier when you hit
+references to what <idx/Makefile/s are etc.
 
 <sect>What are KDevelop Project Applications ?
 <p>
@@ -688,7 +688,7 @@ the <idx/dialog editor/ and the project management will take care of the rest. Y
 Execute, this will build your application including your new sources. But don't expect that dialogs are already usable- this is a
 matter of <idx/implementation/ that is the usual way a developer works. Don't worry- this isn't too difficult, too. For more information
 about creating dialogs, see <ref id="The Dialog Editor" name="The Dialog Editor">, examples and guidelines can also be found in
-<htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
+<htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook">.
 
 <sect2>Binding New Elements
 <p>
@@ -800,8 +800,8 @@ execution stops, so you can control critical <idx/implementation/s and by this d
 the real cause is another task; it depends on the programmer to locate this. The <bf/gdb/ is a debugger that is provided with the
 GNU <idx/Compiler/ and programs like <em/ddd/ or <em/<idx/KDbg// are frontends that allow an easier use. KDevelop therefore uses <idx/KDbg/ and lets
 you invoke the <idx/debugging/ process by the commands "Debug" in the Build-menu or by the "Debug" symbol in the toolbar. For more
-information about <idx/debugging/ applications, see <ref id="Projects" name="Projects"> and <htmlurl url="programming-12.html" name="The
-KDevelop Programming Handbook">.
+information about <idx/debugging/ applications, see <ref id="Projects" name="Projects"> and <htmlurl url="programming/index-12.html"
+name="The KDevelop Programming Handbook">.
 
 <sect>Additional Information
 <p>
@@ -809,8 +809,8 @@ The topics addressed within this chapter are described im more detail within the
 in other documentations:
 
 <itemize>
-<item><htmlurl url="programming.html" name="The KDevelop Programming Handbook">, covering a complete introduction into <idx/GUI/ application
-design and programming with the Qt and <idx/KDE/ libraries,
+<item><htmlurl url="programming/index.html" name="The KDevelop Programming Handbook">, covering a complete introduction into <idx/GUI/
+application design and programming with the Qt and <idx/KDE/ libraries,
 <item>this handbook, sections <ref id="Overview" name="Overview"> to <ref id="Projects" name="Projects">, describing all avaliable
 functions within KDevelop, <item>this handbook, section <ref id="The Dialog Editor" name="The Dialog Editor">, addressing the use of the
 <idx/dialog editor/ to create your own <idx/widgets/, <item>The <em/Online-<idx/Reference/ Documentation/ to the <idx/Qt-library/, which covers examples of
@@ -1113,8 +1113,8 @@ help on.
 <p>
 <item><bf/<idx/User Manual/		<idx/F1// Opens the User's Manual to KDevelop index page so you have access to this manual.
 <p>
-<item><bf/<idx/Programming Handbook/ / Opens the <htmlurl url="programming.html" name="KDevelop Programming Handbook"> index page to
-access the programming manuals
+<item><bf/<idx/Programming Handbook/ / Opens the <htmlurl url="programming/index.html" name="KDevelop Programming Handbook"> index
+page to access the programming manuals
 <p>
 <item><bf/<idx/Tip of the Day// Opens the Tip of the Day dialog to inform you about KDevelop's
 features.
@@ -1468,12 +1468,12 @@ the provided search functions see <ref id="Using the Searchindex" name="Using th
 The KDevelop IDE comes with two sets of online-documentation, which can be accessed either via the Help-menu or by the Doc-tree in
 the Tree-View in the KDevelop folder. The first book provided is this online-handbook containing all information you need towards
 installation, configuration, available functionality and introduction to application development. The second book is <htmlurl
-url="programming.html" name="The KDevelop Programming Handbook"> in it's first edition. The programming handbook covers most questions
-related to the creation and extension of projects that work with KDevelop. By tutorials the user gets an introduction to the rich
-facilities that applications created with the Qt- and/or <idx/KDE-libraries/ have to offer as well as given a guideline for ensuring
-<idx/KDE/-compliance, which covers the same instructions given on the Internet site at <url url="http://developer.kde.org">. However,
-the programming handbook cannot replace any additional documentation available in printed or electronic form about the C++ programming
-language as well as about the usage of the Qt-library in certain terms.
+url="programming/index.html" name="The KDevelop Programming Handbook"> in it's first edition. The programming handbook covers most
+questions related to the creation and extension of projects that work with KDevelop. By tutorials the user gets an introduction to the
+rich facilities that applications created with the Qt- and/or <idx/KDE-libraries/ have to offer as well as given a guideline for
+ensuring <idx/KDE/-compliance, which covers the same instructions given on the Internet site at <url url="http://developer.kde.org">.
+However, the programming handbook cannot replace any additional documentation available in printed or electronic form about the C++
+programming language as well as about the usage of the Qt-library in certain terms.
 
 The C/C++-<idx/Reference/ used with KDevelop is currently only available on the KDevelop homepage at <url
 url="http://www.kdevelop.org">. On distributions the reference may be included, see your distribution installation program index for
@@ -2157,14 +2157,14 @@ these. That means static libraries are already supported by automatic creation i
 Mind that the static library is part of the binary later and won't get installed.
 <item>to create a shared library, you have the option to create another project subdirectory. The sourcefiles that are created in this
 subdirectory are included in the project and are therefore available in the classviewer as root classes. To create the shared library,
-the <htmlurl url="programming-15.html" name="KDevelop Programming Handbook"> offers a Makefile.am template. If the subdirectory's
+the <htmlurl url="programming/index-19.html" name="KDevelop Programming Handbook"> offers a Makefile.am template. If the subdirectory's
 Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
 build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
 project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original project-subdirectory
 according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter <ref
 id="Project Hacking" name="Project Hacking">.
-<item>for installing a shared library, you have to watch the KDE-File-system Standard as explained in <htmlurl url="programming-13.html"
-name="The KDevelop Programming Handbook">
+<item>for installing a shared library, you have to watch the KDE-File-system Standard as explained in <htmlurl
+url="programming/index-13.html" name="The KDevelop Programming Handbook">
 </itemize>
 
 <sect1>Multiple Targets
@@ -2348,7 +2348,7 @@ all done by KDevelop automatically.
 
 For more information about internationalization support, see <url url="http://www.kde.org">; a lot of people are doing translations for
 you to support their language. You will find a list of email-addresses of the translators you could write to and who will help you with
-this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <htmlurl url="programming-11.html" name="The KDevelop
+this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <htmlurl url="programming/index-11.html" name="The KDevelop
 Programming Handbook"> where questions about internationalization are covered again.
 
 <sect1>Extending the Project Documentation<label id="Extending the Project Documentation">
@@ -2378,7 +2378,7 @@ CTRL+C to copy the installation path to the clipboard. Then select the file you 
 <tt/Install/, this will enable the installdir-entry field, already containing the filename. Place the cursor in front of the
 filename and enter CTRL+V to insert the clipboard contents (which was the installation path copied before). This is the fastest
 way to specify the installation path. For more options about specifying installation destinations, see <htmlurl
-url="programming-14.html" name="The KDevelop Programming Handbook">.
+url="programming/index-14.html" name="The KDevelop Programming Handbook">.
 
 <sect1>Project Hacking<label id="Project Hacking">
 <p>
@@ -2834,7 +2834,7 @@ While changing widget size, the statusbar shows the current values for width and
 After creating your project skeleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
 the project types KDE and Qt application, the <idx/dialog editor/ recognizes this and offers widget construction by the <idx/widgets/ that are
 provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
-information about widget design, see <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
+information about widget design, see <htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook">.
 
 To create a new dialog, select "New" from the <idx/"File"-menu/ or select "New" from the context menu in the "Dialogs" tab. The "New
 Dialog" menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
@@ -2885,7 +2885,7 @@ For generating the widget's sources, the <idx/dialog editor/ needs to know the l
 After pressing "OK", your default values are generated and an empty Widget constructor is opened. Then you are ready to go for creating
 your own widget. Mind that the <idx/dialog editor/ currently only supports static <idx/widgets/ without geometry management. If you're about to use
 geometry management for your <idx/widgets/, you should make yourself accustomed with the <idx/classes/ that Qt provides for this, create a new
-class with the classgenerator and write your widget by hand. For more information, see <htmlurl url="programming.html" name="The
+class with the classgenerator and write your widget by hand. For more information, see <htmlurl url="programming/index.html" name="The
 KDevelop Programming Handbook">.
 
 <sect>Adding Widgets<label id="Adding Widgets">
@@ -2982,7 +2982,7 @@ automatically to include the new widget in the compiling process; therefore, aft
 project again within the <idx/dialog editor/. The <idx/output/ window pops up below the Widget-Editor window as in Project Editor mode.
 
 Now that your project contains a new widget, your work as a programmer is to implement functionality to the used slots and eventually
-add other methods you may need. <footnote>See <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook, The
+add other methods you may need. <footnote>See <htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook, The
 Dialogeditor"> for more information about widget properties and sourcecode generation.</footnote>
 
 
@@ -3446,3 +3446,4 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+

@@ -39,7 +39,6 @@ void CKDevelop::addRecentProject(const char* file)
 {
   if(recent_projects.find(file) == -1){
     if( recent_projects.count() < 5)
-    	if(recent_projects.containsRef(file)>0)
       recent_projects.insert(0,file);
     else{
       recent_projects.remove(4);

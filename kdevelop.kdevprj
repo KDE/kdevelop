@@ -98,12 +98,12 @@ dist=true
 install=false
 type=DATA
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/doc/en/tutorial/index.sgml,/home/rnolden/Development/kdevelop/doc/en/programming/index.sgml,/home/rnolden/Development/kdevelop/doc/en/manual/index.sgml,/home/rnolden/Development/kdevelop/doc/en/kde_libref/index.sgml,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_kdlginit.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_init.cpp,
-show_outputview=false
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_noslot.cpp,/home/rnolden/Development/kdevelop/ChangeLog,
+show_outputview=true
 show_treeview=true
-header_file=/home/rnolden/Development/kdevelop/doc/en/kde_libref/index.sgml
-cpp_file=/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_init.cpp
-browser_file=file:/home/rnolden/Development/kde_112/kdelibs/srcdoc/kdecore/KShellProcess.html
+header_file=/home/rnolden/Development/kdevelop/ChangeLog
+cpp_file=/home/rnolden/Development/kdevelop/kdevelop/ckdevelop_noslot.cpp
+browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/programming/index-14.html
 [kdevelop/print/cprintdlg.cpp]
 install_location=
 dist=true
@@ -303,7 +303,7 @@ ldflags=
 addcxxflags=
 ldadd=
 bin_program=kdevelop
-cxxflags= -O0 -g3 -Wall
+cxxflags=-O0 -g3 -Wall
 [kdevelop/cclasstooltreeview.cpp]
 install_location=
 dist=true
@@ -895,6 +895,11 @@ install_location=
 dist=true
 install=false
 type=DATA
+[doc/en/welcome/index.sgml]
+install_location=
+dist=true
+install=false
+type=DATA
 [kdevelop/docs/en/programming-6.html]
 install_location=
 dist=true
@@ -952,7 +957,7 @@ install=false
 type=SOURCE
 [doc/en/Makefile.am]
 type=normal
-sub_dirs=addendum,kde_libref,manual,programming,tutorial,
+sub_dirs=addendum,kde_libref,manual,programming,tutorial,welcome,
 [kdevelop/docs/en/add_kdedoc-5.html]
 install_location=
 dist=true
@@ -1271,7 +1276,7 @@ dist=true
 install=false
 type=SOURCE
 [kdevelop/docs/de/Makefile.am]
-files=kdevelop/docs/de/tipdatabase,
+files=
 sub_dirs=
 type=normal
 [kdevelop/templates/preview2]
@@ -1359,11 +1364,6 @@ install_location=
 dist=true
 install=false
 type=SOURCE
-[kdevelop/docs/de/tipdatabase]
-install_location=
-dist=true
-install=false
-type=DATA
 [kdevelop/templates/README_template]
 install_location=
 dist=true
@@ -1533,6 +1533,10 @@ install_location=
 dist=true
 install=false
 type=HEADER
+[doc/en/welcome/Makefile.am]
+files=doc/en/welcome/index.sgml,
+type=normal
+sub_dirs=
 [kdevelop/templates/kdelnk_template]
 install_location=
 dist=true
@@ -1679,8 +1683,8 @@ dist=false
 install=false
 type=PO
 [General]
-make_options= -j1
-makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/docs/en/Makefile.am,po/Makefile.am,kdlgloader/Makefile.am,kdevelop/classparser/Makefile.am,kdevelop/classwizard/Makefile.am,kdevelop/gfxview/Makefile.am,kdevelop/kdlgedit/Makefile.am,kdevelop/kwrite/Makefile.am,kdevelop/pics/Makefile.am,kdevelop/print/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/pics/mini/Makefile.am,kdevelop/toolbar/Makefile.am,kdevelop/tools/Makefile.am,kdevelop/templates/Makefile.am,kdevelop/docs/de/Makefile.am,kdevelop/dlgs/Makefile.am,doc/de/manual/Makefile.am,doc/de/Makefile.am,doc/Makefile.am,doc/en/addendum/Makefile.am,doc/en/Makefile.am,doc/en/kde_libref/Makefile.am,doc/en/manual/Makefile.am,doc/en/programming/Makefile.am,doc/en/tutorial/Makefile.am,
+make_options=-j1
+makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/docs/en/Makefile.am,po/Makefile.am,kdlgloader/Makefile.am,kdevelop/classparser/Makefile.am,kdevelop/classwizard/Makefile.am,kdevelop/gfxview/Makefile.am,kdevelop/kdlgedit/Makefile.am,kdevelop/kwrite/Makefile.am,kdevelop/pics/Makefile.am,kdevelop/print/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/pics/mini/Makefile.am,kdevelop/toolbar/Makefile.am,kdevelop/tools/Makefile.am,kdevelop/templates/Makefile.am,kdevelop/docs/de/Makefile.am,kdevelop/dlgs/Makefile.am,doc/de/manual/Makefile.am,doc/de/Makefile.am,doc/Makefile.am,doc/en/addendum/Makefile.am,doc/en/Makefile.am,doc/en/kde_libref/Makefile.am,doc/en/manual/Makefile.am,doc/en/programming/Makefile.am,doc/en/tutorial/Makefile.am,doc/en/welcome/Makefile.am,
 version_control=CVS
 project_type=normal_empty
 author=The KDevelop Team
@@ -1688,8 +1692,8 @@ sub_dir=kdevelop/
 lfv_open_groups=SGML Sources,Others,
 workspace=1
 project_name=KDevelop
-version=0.4
-sgml_file=/home/rnolden/Development/kdevelop/kdevelop/docs/en/index.sgml
+version='1.0 Beta 1'
+sgml_file=/home/rnolden/Development/kdevelop/doc/en/welcome/index.sgml
 short_info=,
 email=
 kdevprj_version=0.3
@@ -1794,21 +1798,9 @@ dist=true
 install=false
 type=HEADER
 [kdevelop/dlgs/Makefile.am]
-files=kdevelop/dlgs/makemandlg.kdevdlg,
+files=
 sub_dirs=
 type=normal
-[kdevelop/dlgs/makemandlg.kdevdlg]
-widget_files=
-data_file=kdevelop/cmakemanualdlgdata.cpp
-install_location=
-classname=CMakeManualDlg
-baseclass=QDialog
-header_file=kdevelop/cmakemanualdlg.h
-dist=true
-cpp_file=kdevelop/cmakemanualdlg.h
-install=false
-is_toplevel_dialog=true
-type=KDEV_DIALOG
 [kdevelop/templates/normal.tar.gz]
 install_location=
 dist=true

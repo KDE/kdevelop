@@ -1,3 +1,7 @@
+1999-07-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * fixed recent projects menu
+  * added welcome chapter to doctree
+
 1999-07-29 Stefan Bartel   <bartel@rz.uni-potsdam.de>
 	* fixed bug with lib-checkboxes in the project/options/linker-options dialog
 	* changed KNumericSpinBoxes to QSpinBoxes in the project/options/gcc-options dialog

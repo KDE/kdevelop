@@ -795,7 +795,11 @@ void CKDevelop::slotBuildAutoconf(){
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
-  shell_process << make_cmd << " -f Makefile.dist";
+  if(QFileInfo("Makefile.dist").exists())
+    shell_process << make_cmd << " -f Makefile.dist";
+  else
+    shell_process << make_cmd << " -f Makefile.cvs";
+
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
 }

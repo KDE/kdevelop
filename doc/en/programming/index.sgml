@@ -32,8 +32,8 @@ should make yourself familiar with that first. Information about C++ is availabl
 your local bookstore or by tutorials found on the Internet. Knowledge about the design of Graphical User Interfaces is not required, as
 this handbook tries to cover the application design for KDE programs, which also includes an introduction into the <idx/Qt/ toolkit as well
 as the <idx/KDE libraries/ and the design of User Interfaces. Also, you should have made yourself comfortable with KDevelop by reading
-<htmlurl url="index.html" name="The User Manual to KDevelop">, which contains a descriptive review of the functionality provided by the
-IDE.
+<htmlurl url="../index.html" name="The User Manual to KDevelop">, which contains a descriptive review of the functionality provided by
+the IDE.
 
 <sect>About this Handbook
 <p>
@@ -74,7 +74,7 @@ Additional information about <idx/Qt//KDE programming is available by various so
 <itemize>
 <item><em/Programming with <idx/Qt// by Matthias Kalle Dalheimer, published by O'Reilly (see <url url="http://www.oreilly.com" >, covering
 almost all aspects of the <idx/Qt/ GUI toolkit and contains examples as well.
-<item><htmlurl url="index.html" name="The User Manual to KDevelop">, provided with the KDevelop IDE,
+<item><htmlurl url="../index.html" name="The User Manual to KDevelop">, provided with the KDevelop IDE,
 <item><em/Online-Reference/ to the <idx/Qt/-library, provided with your copy of the <idx/Qt/ toolkit in
 HTML and available as PostScript on <url url="http://www.troll.no">
 <item>On the Internet, see
@@ -232,7 +232,7 @@ means to the programmer and what <idx/Qt/ offers to process user events.
 
 (For already advanced users: The button has no parent declared in the constructor, therefore it is a top-level widget alone and runs in
 a local event loop which doesn't need to wait for the main event loop, see the <tt/<cdx/QWidget// <idx/class documentation/ and <htmlurl
-url="kde_libref.html" name="The KDE Library Reference Guide">)
+url="../kde_libref/index.html" name="The KDE Library Reference Guide">)
 
 <bf/Summary:/
 
@@ -370,8 +370,8 @@ provides a slot, followed by the member function which actually <em/is/ the slot
 
 By using signals and slots, your program's objects can interact with each other easily without explicitely depending on the type of
 the receiver object. You will learn more about using this mechanism for productive usage later in this handbook. More information about
-the Signals/Slot mechanism can also be found in <htmlurl url="kde_libref.html" name="The KDE Library Reference Guide"> and the <idx/Qt/
-online reference.
+the Signals/Slot mechanism can also be found in <htmlurl url="../kde_libref/index.html" name="The KDE Library Reference Guide"> and the
+<idx/Qt/ online reference.
 
 <sect>What KDE provides
 <p>
@@ -435,7 +435,7 @@ which was mentioned before and see the effects.
 
 What you should have looked into additionally until now is the reference documentation for <idx/Qt/, especially the <tt/<cdx/QApplication//,
 <tt/<cdx/QWidget// and <tt/QObject/ class and the KDE-Core library documentation for the <tt/<cdx/KApplication// class. The <htmlurl
-url="kde_libref-3.html" name="KDE Library Reference"> handbook also covers a complete description about the invocation of the
+url="../kde_libref/index-3.html" name="KDE Library Reference"> handbook also covers a complete description about the invocation of the
 <tt/<cdx/QApplication// and <tt/<cdx/KApplication// constructors including command-line argument processing.
 
 <chapt>Creating new Applications<label id="Creating new Applications">
@@ -2340,8 +2340,8 @@ which is almost the same as with QToolTip. When constructing a dialog with the K
 in the implementation file- NOT within the data sourcefile as this is rebuild by the dialogeditor every time you edit the widget.
 
 The <tt/<cdx/KQuickHelp// class provides also formatting text by using tags. It allows hyperlinks including Internet protocols, colors,
-font types and sizes. See the <htmlurl url="kde_libref.html" name="KDE Library Reference Guide"> and the <idx/class documentation/ for
-<tt/<cdx/KQuickTip// for more information.
+font types and sizes. See the <htmlurl url="../kde_libref/index.html" name="KDE Library Reference Guide"> and the <idx/class
+documentation/ for <tt/<cdx/KQuickTip// for more information.
 
 <sect>Extending the Statusbar Help
 <p>
@@ -3549,9 +3549,9 @@ is one of the most important practical features of the Qt library and you should
 
 <tag/Debugging/
 When it comes to debugging, you should make use of the macros <tt/KDebug/ provides. Those are similar to the Qt macros, but can be
-retrieved by the keycode STRG+ALT+F12. See the <htmlurl url="kde_libref-4.html#ss4.4" name="KDE Library Reference Guide"> for more
-information about the event filtering of these Macros. You could as well use <tt/assert()/, but should try to be consistent with your
-debugging code.
+retrieved by the keycode STRG+ALT+F12. See the <htmlurl url="../kde_libref/index-4.html#ss4.4" name="KDE Library Reference Guide"> for
+more information about the event filtering of these Macros. You could as well use <tt/assert()/, but should try to be consistent with
+your debugging code.
 
 <tag/<tt/const/-declarations/
 Further, you should use <tt/const/ declarations for member functions that should or do not change any private member. This would be the

@@ -402,8 +402,8 @@ application objects, their behavior and creation.You will learn about:
 More information about KDE applications can be found in the following sections:
 
 <list>
-<item><htmlurl url="programming.html" name="The KDevelop Programming Handbook">
-<item><htmlurl url="tutorial.html" name="KDE Application Tutorials Handbook">
+<item><htmlurl url="../programming/index.html" name="The KDevelop Programming Handbook">
+<item><htmlurl url="../tutorial/index.html" name="KDE Application Tutorials Handbook">
 </list>
 
 For information about Qt application design, see the Qt online reference documentation.
@@ -454,9 +454,9 @@ charset. Retrieve the charsets instance with <tt/kapp->getCharsets()/.<footnote>
 <p>
 
 Furthermore, the KApplication class provides you with the needed methods to access files according to the KDE File System Standard. This will prevent you from
-problems that will always occur when hard-coding any directories into the code (see <htmlurl url="programming.html" name="The KDevelop
-Programming Handbook"> for information about the KDE-FSS). The class also provides the needed access for the application icon and mini
-icon, current KDE fonts and session management support.
+problems that will always occur when hard-coding any directories into the code (see <htmlurl url="../programming/index.html" name="The
+KDevelop Programming Handbook"> for information about the KDE-FSS). The class also provides the needed access for the application icon
+and mini icon, current KDE fonts and session management support.
 
 To use the clipboard, the according <tt/QApplication/ class already provides a clipboard object, <tt/QApplication::clipboard()/, which
 can be used to exchange text and image data between applications (see <tt/QClipboard/).
