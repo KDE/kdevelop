@@ -1,3 +1,6 @@
+2003-05-01 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Changed closerpart to work on KURLs. Also moved it into Core scope.
+
 2003-04-30 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added "Core" scope plugins alternative
     * Updated the plugin selection to be more userfriendly 
