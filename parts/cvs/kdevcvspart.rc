@@ -2,7 +2,10 @@
 <kpartgui name="KDevCvsPart" version="1">
 <MenuBar>
 	<Menu name="project" >
-		<Action name="cvs_import" />
+		<Menu name="checkout_repositories">
+			<Text>&amp;Check out from ...</Text>
+			<Action name="cvs_checkout" />
+		</Menu>
 	</Menu>
 	<Menu name="tools">
 		<Menu name="version_control">
@@ -15,8 +18,12 @@
 				<Action name="cvs_log" />
 				<Action name="cvs_add" />
 				<Action name="cvs_remove" />
+				<Separator />
 				<Action name="cvs_update" />
-				<Action name="cvs_replace" />
+				<Action name="cvs_revert" />
+				<Separator />
+				<Action name="cvs_ignore" />
+				<Action name="cvs_donot_ignore" />
 			</Menu>
 		</Menu>
 	</Menu>

@@ -1,15 +1,15 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>CvsOptionsWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>cvs_options_widget</cstring>
+        <cstring>CvsOptionsWidget</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
             <width>448</width>
-            <height>384</height>
+            <height>408</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,10 +19,9 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QLabel">
             <property name="name">
-                <cstring>cvs_label</cstring>
+                <cstring>m_cvsLabel</cstring>
             </property>
             <property name="text">
                 <string>CVS options:</string>
@@ -30,12 +29,12 @@
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>cvs_edit</cstring>
+                <cstring>m_cvsEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>commit_label</cstring>
+                <cstring>m_commitLabel</cstring>
             </property>
             <property name="text">
                 <string>Commit options:</string>
@@ -43,12 +42,12 @@
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>commit_edit</cstring>
+                <cstring>m_commitEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>update_label</cstring>
+                <cstring>m_updateLabel</cstring>
             </property>
             <property name="text">
                 <string>Update options:</string>
@@ -56,12 +55,12 @@
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>update_edit</cstring>
+                <cstring>m_updateEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>add_label</cstring>
+                <cstring>m_addLabel</cstring>
             </property>
             <property name="text">
                 <string>Add options:</string>
@@ -69,12 +68,12 @@
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>add_edit</cstring>
+                <cstring>m_addEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>remove_label</cstring>
+                <cstring>m_removeLabel</cstring>
             </property>
             <property name="text">
                 <string>Remove options:</string>
@@ -82,12 +81,12 @@
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>remove_edit</cstring>
+                <cstring>m_removeEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>diff_label</cstring>
+                <cstring>m_diffLabel</cstring>
             </property>
             <property name="text">
                 <string>Diff options:</string>
@@ -95,7 +94,7 @@
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>diff_edit</cstring>
+                <cstring>m_diffEdit</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -108,7 +107,7 @@
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>log_label</cstring>
+                <cstring>m_logLabel</cstring>
             </property>
             <property name="text">
                 <string>Log options:</string>
@@ -116,12 +115,12 @@
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>log_edit</cstring>
+                <cstring>m_logEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>rsh_label</cstring>
+                <cstring>m_rshLabel</cstring>
             </property>
             <property name="text">
                 <string>Remote shell (CVS_RSH):</string>
@@ -129,7 +128,7 @@
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>rsh_edit</cstring>
+                <cstring>m_rshEdit</cstring>
             </property>
             <property name="toolTip" stdset="0">
                 <string>sets the CVS_RSH variable</string>
@@ -141,7 +140,7 @@
     </vbox>
 </widget>
 <tabstops>
-    <tabstop>cvs_edit</tabstop>
+    <tabstop>m_cvsEdit</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
