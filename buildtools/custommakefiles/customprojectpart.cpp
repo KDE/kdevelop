@@ -672,11 +672,14 @@ void CustomProjectPart::updateTargetMenu()
             //}
             if (re.search(str) != -1)
             {
-	        kdDebug(9025) << "Adding target: " << re.cap(1) << endl;
-		m_targets += re.cap(1).simplifyWhiteSpace();
+                QString tmpTarget=re.cap(1).simplifyWhiteSpace();
+	        kdDebug(9025) << "Adding target: " << tmpTarget << endl;
+                if (m_targets.find(tmpTarget)==m_targets.end())
+                   m_targets += tmpTarget;
             }
         }
         f.close();
+        m_targets.sort();
     }
 
     int id = 0;
