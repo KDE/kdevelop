@@ -14,8 +14,6 @@ High priority tasks!
     to add to targets.
   - Doesn't always get lib path relative to $top_buildir correct.
     (projectDirectory() != $(top_builddir) in general)
-  - Probably some Makefile.am entries should not be written if they are
-    empty (DEPENDENCIES, ... what else?)
 
 * UI bugs:
   - GUI redraw blocked on Gideon startup for the time of project loading 
@@ -23,7 +21,6 @@ High priority tasks!
     UI Childframe mode, view-taskbar missing
   - docking state of all toolviews not restored after Gideon restart
   - editor options dialog missing when all views are closed
-  - editor view must detect and warn about changes made outside gideon
   - messages view should hold place when scrolled but new output is
     being added
   - If you click an error in the output view, "Next Error"/"Previous Error"
