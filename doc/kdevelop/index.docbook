@@ -28,6 +28,11 @@
 <surname>Gehrmann</surname>
 <affiliation><address><email>bernd@kdevelop.org</email></address></affiliation>
 </author>
+<author>
+<firstname>Caleb</firstname>
+<surname>Tennis</surname>
+<affiliation><address><email>caleb@aei-tech.com</email></address></affiliation>
+</author>
 </authorgroup>
 
 <copyright>
@@ -87,53 +92,186 @@ Development Environment (Gideon)</para>
 
 
 <chapter id="userinterface">
-<title>Overview: &kdevelop;'s user interface</title>
+<title>Overview: &kdevelop;'s Features</title>
 
-<sect1 id="mainwindow">
-<title>Main window</title>
+<sect1 id="uimodes">
+<title>User Interface Modes</title>
+
+<para>
+&kdevelop; 3.0 offers developers four separate interface modes: <link linkend="mdi-desc">Multiple Document</link>, 
+<link linkend="tabbed-desc">Tabbed Document</link>, <link linkend="toplevel-desc">Toplevel Window</link>
+, and <link linkend="ideal-desc">IDEAl</link>. 
+</para>
+
+<sect2 id="mdi-desc">
+<title>Multiple Document Interface (MDI)</title>
 
 <para>
 </para>
 
-</sect1>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="gideon-mdi-mode.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Screenshot</phrase></textobject>
+</mediaobject></screenshot>
+
+</sect2>
 
 
-<sect1 id="leftside">
-<title>Left side</title>
+<sect2 id="tabbed-desc">
+<title>Tabbed Document Mode</title>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="gideon-tabbed-mode.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Screenshot</phrase></textobject>
+</mediaobject></screenshot>
 
 <para>
 </para>
 
-</sect1>
+</sect2>
 
-
-<sect1 id="bottomside">
-<title>Bottom side</title>
-
-<para>
-</para>
-
-</sect1>
-
-<sect1 id="statusbar">
-<title>Status bar</title>
+<sect2 id="toplevel-desc">
+<title>Toplevel Window Mode</title>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="gideon-toplevel-mode.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Screenshot</phrase></textobject>
+</mediaobject></screenshot>
 
 <para>
 </para>
 
+</sect2>
+
+<sect2 id="ideal-desc">
+<title>IDEAl Window Mode</title>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="gideon-ideal-mode.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Screenshot</phrase></textobject>
+</mediaobject></screenshot>
+
+<para>
+</para>
+
+
+</sect2>
 </sect1>
 
+<sect1 id="parts">
+<title>Plugin Parts</title>
+<para>KDevelop 3.0 offers extensible modules, or parts, to be loaded at runtime and on demand.  This 
+allows developers to only turn on features that they need or want for their development.
+</para>
+<para>
+Some of the parts are considered global - that is, they effect the entire operation of &kdevelop;.
+For example, the uimode part allows a developer to select which user interface they wish to use.
+</para>
+
+<para>
+Other parts are project specfic, and are only utilized when a project of that type is loaded.  The 
+Automake Manager, for example, only needs to be active when an Automake based project is currently 
+loaded.  Otherwise, this part will not be active.
+</para>
+
+<para>
+Active parts can have many effects on the &kdevelop.  Depending on their function, they may add extra menus,
+extra menu items, extra tool buttons, etc.
+</para>
+
+<table>
+<title>Available Parts in KDevelop 3.0</title>
+<tgroup cols="2">
+<tbody>
+<row><entry>Part Name</entry><entry>Description</entry></row>
+<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
+<row><entry>antproject</entry><entry></entry></row>
+<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
+<row><entry>astyle</entry><entry></entry></row>
+<row><entry>autoproject</entry><entry>Automake Project Manager</entry></row>
+<row><entry>buglist</entry><entry></entry></row>
+<row><entry>classview</entry><entry>Classview Manager</entry></row>
+<row><entry>cppsupport</entry><entry></entry></row>
+<row><entry>ctags</entry><entry></entry></row>
+<row><entry>customproject</entry><entry>Custom Project Manager</entry></row>
+<row><entry>cvs</entry><entry>CVS Support</entry></row>
+<row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
+<row><entry>diff</entry><entry></entry></row>
+<row><entry>distpart</entry><entry></entry></row>
+<row><entry>doctreeview</entry><entry></entry></row><row><entry>antproject</entry><entry></entry></row>
+<row><entry>doxygen</entry><entry></entry></row>
+<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
+<row><entry>fileselector</entry><entry></entry></row>
+<row><entry>fileview</entry><entry></entry></row>
+<row><entry>filter</entry><entry></entry></row>
+<row><entry>fortransupport</entry><entry></entry></row>
+<row><entry>grepview</entry><entry></entry></row>
+<row><entry>history</entry><entry></entry></row>
+<row><entry>javadebugger</entry><entry></entry></row>
+<row><entry>javasupport</entry><entry></entry></row>
+<row><entry>konsole</entry><entry></entry></row>
+<row><entry>manager</entry><entry></entry></row>
+<row><entry>nedit</entry><entry></entry></row>
+<row><entry>openwith</entry><entry></entry></row>
+<row><entry>outputviews</entry><entry></entry></row>
+<row><entry>perforce</entry><entry></entry></row>
+<row><entry>perlsupport</entry><entry></entry></row>
+<row><entry>phpsupport</entry><entry></entry></row>
+<row><entry>pythonsupport</entry><entry></entry></row>
+<row><entry>qeditor</entry><entry></entry></row>
+<row><entry>regexptest</entry><entry></entry></row>
+<row><entry>scripting</entry><entry></entry></row>
+<row><entry>scriptproject</entry><entry></entry></row>
+<row><entry>sourcenav</entry><entry></entry></row>
+<row><entry>svn</entry><entry></entry></row>
+<row><entry>texttools</entry><entry></entry></row>
+<row><entry>tipofday</entry><entry></entry></row>
+<row><entry>tools</entry><entry></entry></row>
+<row><entry>trollproject</entry><entry></entry></row>
+<row><entry>uimode</entry><entry></entry></row>
+<row><entry>visualboyadvance</entry><entry></entry></row>
+<row><entry>windowmenu</entry><entry></entry></row>
+
+
+</tbody></tgroup>
+</table>
+
+</sect1>
 </chapter>
 
 
 
 <chapter id="appwizard">
-<title>Getting started: The application wizard</title>
+<title>Getting Started: The Application Wizard</title>
 
 <sect1 id="newprojects">
 <title>New projects</title>
 
 <para>
+To create a new project in &kdevelop; 3.0, select <guimenuitem>New Project</guimenuitem> from the 
+<guimenu>Project</guimenu> menu.  You should see the New Project Wizard, as seen below:
+</para>
+
+<figure id="screenshot-newprojectwizard" float="1">
+<title>A screenshot of the Create New Project Wizard</title>
+<mediaobject>
+<imageobject><imagedata fileref="createnewproject.png"/></imageobject>
+</mediaobject>
+</figure>
+
+<para>
+Fill out the appropriate information, and select <guibutton>Next</guibutton>
 </para>
 
 </sect1>
@@ -143,15 +281,28 @@ Development Environment (Gideon)</para>
 <title>Importing existing projects</title>
 
 <para>
+To import an existing directory in &kdevelop; 3.0, select <guimenuitem>Import Existing Directory</guimenuitem>
+from the <guimenu>Project</guimenu> menu.  You should see the Import Directory Wizard, as seen below:
 </para>
+
+<figure id="screenshot-importdirectory" float="1">
+<title>The Import Directory Dialog</title>
+<mediaobject>
+<imageobject><imagedata fileref="importdirectory.png"/></imageobject>
+</mediaobject>
+</figure>
+
+
 
 </sect1>
 
 
-<sect1 id="filetemplates">
-<title>File templates</title>
+<sect1 id="convertingold">
+<title>Converting old &kdevelop; project files</title>
 
 <para>
+&kdevelop; 3.0 ships with a utility called <filename>kdevprj2kdevelop</filename>.
+This utility can be used to convert older &kdevelop; project files to 3.0 files.
 </para>
 
 </sect1>
