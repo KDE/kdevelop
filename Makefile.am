@@ -28,9 +28,9 @@ $(top_srcdir)/subdirs:
 	@cd $(top_srcdir) && echo pics >> subdirs
 	@cd $(top_srcdir) && echo doc >> subdirs
 
-$(top_srcdir)/configure.in:
+$(top_srcdir)/configure.in: configure.in.in
 	@cd $(top_srcdir) && cat admin/configure.in.min configure.in.in > configure.in
-	
+
 
 MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 SUBDIRS
 

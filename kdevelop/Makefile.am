@@ -1,7 +1,5 @@
 SUBDIRS = widgets lib plugin parts tools templates kwrite_part
 
-UIC = uic
-
 INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
 	   -I$(top_srcdir)/kdevelop/lib/sourceinfo \
 	   -I$(top_srcdir)/kdevelop/lib/projectmanagement \
@@ -9,25 +7,15 @@ INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
 
 LFLAGS = -+
 
-# until am_edit can handle uic
-newprojectdlgbase.h : $(srcdir)/newprojectdlg.ui
-	$(UIC) -o newprojectdlgbase.h newprojectdlg.ui;\
-	$(MOC) newprojectdlgbase.h -o newprojectdlgbase.moc
-
-newprojectdlgbase.cpp : $(srcdir)/newprojectdlg.ui
-	$(UIC) -i newprojectdlgbase.h -o newprojectdlgbase.cpp $(srcdir)/newprojectdlg.ui
-
-BUILT_SOURCES = newprojectdlgbase.h newprojectdlgbase.cpp
-CLEANFILES = $(BUILT_SOURCES)
-
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
 bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = main.cpp kdevelop.cpp kdevelopcore.cpp kdevelopfactory.cpp projectoptionsdlg.cpp newprojectdlg.cpp newprojectdlgbase.cpp
+kdevelop_SOURCES = main.cpp kdevelop.cpp kdevelopcore.cpp kdevelopfactory.cpp projectoptionsdlg.cpp \
+		   newprojectdlg.cpp newprojectdlgbase.ui
 
-kdevelop_METASOURCES = kdevelop.moc kdevelopcore.moc projectoptionsdlg.moc newprojectdlg.moc  newprojectdlgbase.moc
+kdevelop_METASOURCES = kdevelop.moc kdevelopcore.moc projectoptionsdlg.moc newprojectdlg.moc
 
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -37,12 +25,11 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevelop_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
 
 # this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h projectoptionsdlg.h newprojectdlg.h \
-		 newprojectdlgbase.h
+noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h projectoptionsdlg.h newprojectdlg.h
 
 EXTRA_DIST = kdeveloprc kdevelopui.rc\
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \
-	los-app-development_package.png lom-app-kdevelop.png los-app-kdevelop.png lom-app-kdevelop_project.png  	
+	los-app-development_package.png lom-app-kdevelop.png los-app-kdevelop.png lom-app-kdevelop_project.png
 
 appsdir   = $(kde_appsdir)/Development
 KDE_ICON  = kdevelop kdevelop_project development_package

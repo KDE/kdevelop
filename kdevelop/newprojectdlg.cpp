@@ -263,5 +263,3 @@ void NewProjectDlg::initDialog(){
 
 
 #include "newprojectdlg.moc"
-
-#include "newprojectdlgbase.moc"
