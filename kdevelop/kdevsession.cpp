@@ -135,7 +135,7 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
   QFile f(sessionFileName);
   if ( f.open(IO_WriteOnly) ) {    // file opened successfully
     QTextStream t( &f );        // use a text stream
-    t << pOutFile->toString();
+    t << pOutFile->toCString();
     f.close();
   }
 

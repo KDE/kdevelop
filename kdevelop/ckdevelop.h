@@ -534,11 +534,20 @@ public:
   ////////////////////////
   // BOOKMARKS-Menu entries
   ///////////////////////
+  /** toggle bookmark on the current document */
   void slotBookmarksToggle();
+  /** clear bookmarks on the current document */
   void slotBookmarksClear();
-  void slotBookmarksBrowserSelected(int);
+  /** goto the next bookmark in the current document */
   void slotBookmarksNext();
+  /** goto the previous bookmark in the current document */
   void slotBookmarksPrevious();
+	/**
+	 * Open an URL in the Documentation Browser.
+	 *
+	 * @param file The URL to open.
+	 */
+	void openBrowserBookmark(const QString& file);
 
   ////////////////////////
   // HELP-Menu entries
@@ -748,6 +757,15 @@ public:
    * Creates and shows a new MDI view window depending on the last focused view type
    */
   void slotCreateNewViewWindow();
+
+  /**
+   * Goto the line in the file of the tag
+   */
+  // void slotTagGotoFile(const CTag* tag);
+  /**
+   * Open the file that corresponds to tag
+   */
+  // void slotTagOpenFile(QString tag);
   /**
    * Switch between corresponding source and header files. Assumes that
    * the files exist and that they have the same basename.
@@ -812,13 +830,6 @@ protected: // Protected methods
    */
   CParsedContainer *CVGetContainer( const char *parentPath, 
                                     THType parentType );
-
-	/**
-	 * Open an URL in the Documentation Browser.
-	 *
-	 * @param file The URL to open.
-	 */
-	void openBrowserBookmark(const QString& file);
 
   /** Update the class combo with all classes in alpabetical order. */
   void CVRefreshClassCombo();
@@ -899,7 +910,7 @@ private:
   QPopupMenu* view_menu;
   QPopupMenu* view_tab_menu;
   QPopupMenu* bookmarks_menu;
-  QPopupMenu* doc_bookmarks;
+	//  QPopupMenu* doc_bookmarks;
 
   KStatusBarLabel *m_statusLabel;
 
@@ -966,8 +977,8 @@ private:
   // for the browser
   QStrList history_list;
   QStrList history_title_list;
-  QStrList doc_bookmarks_list;
-  QStrList doc_bookmarks_title_list;
+	//  QStrList doc_bookmarks_list;
+  //  QStrList doc_bookmarks_title_list;
 	
   ///////////////////////////////
   //some widgets for the mainview

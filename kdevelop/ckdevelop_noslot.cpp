@@ -899,15 +899,19 @@ void CKDevelop::readOptions()
       doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,true);
   }
     //MB end
+	
+	m_docViewManager->readBookmarkConfig(config);
+
+	/*
+	doc_bookmarks_list.setAutoDelete(TRUE);
+	doc_bookmarks_title_list.setAutoDelete(TRUE);
     
-    doc_bookmarks_list.setAutoDelete(TRUE);
-    doc_bookmarks_title_list.setAutoDelete(TRUE);
-    
-    config->readListEntry("doc_bookmarks",doc_bookmarks_list);
-    config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
-    for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
+	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
+	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
+	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
     doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
-  }
+	}
+	*/
 
    // restore MDI mode
    config->setGroup("General Options");
@@ -970,8 +974,13 @@ void CKDevelop::saveOptions(){
 
   config->setGroup("Files");
   config->writeEntry("browser_file",history_list.current());
+
+	m_docViewManager->writeBookmarkConfig(config);
+/*
   config->writeEntry("doc_bookmarks", doc_bookmarks_list);
   config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
+*/
+
   saveRecentProjectMenu();
 
   //MB serializes menuoptions

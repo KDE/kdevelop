@@ -610,6 +610,9 @@ void CKDevelop::initMenuBar(){
   bookmarks_menu->insertSeparator();
 
   // Changed by Christian
+  m_docViewManager->installBMPopup(bookmarks_menu);
+
+/*
   QPopupMenu* code_bookmarks = new QPopupMenu();
   m_docViewManager->installBMPopup(code_bookmarks);
   //   QPopupMenu* cpp_bookmarks = new QPopupMenu();
@@ -621,6 +624,7 @@ void CKDevelop::initMenuBar(){
   doc_bookmarks = new QPopupMenu();
 
   bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("&Browser Window"), doc_bookmarks,31010);
+*/
 	
   menuBar()->insertItem(i18n("Book&marks"),bookmarks_menu);
 
@@ -1004,7 +1008,12 @@ void CKDevelop::initConnections(){
 
   // connect the windowsmenu with a method
   //  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
-  connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));
+
+  // m_docViewManager->connectBMPopup();
+
+/*
+	  connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));
+*/
 
   connect(grep_dlg,SIGNAL(itemSelected(QString,int)),this,SLOT(slotGrepDialogItemSelected(QString,int)));
   // connect ctag search dialog signal

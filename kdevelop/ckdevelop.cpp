@@ -2304,66 +2304,32 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
 // BOOKMARK-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////
 
-/*  
-void CKDevelop::slotBookmarksSet(){
-  if (m_docViewManager->currentDocType() == DocViewMan::Browser)
-    slotBookmarksAdd();
-  else{
-    m_docViewManager->currentEditView()->setBookmark();
-  }
-}
-*/
-
 void CKDevelop::slotBookmarksToggle()
 {
   debug("CKDevelop::slotBookmarksToggle !\n");
 
-  if (m_docViewManager->curDocIsBrowser())
-  {
-    doc_bookmarks->clear();
-
-    // Check if the current URL is bookmarked
-    int pos = doc_bookmarks_list.find(m_docViewManager->currentBrowserDoc()->currentURL());
-    if(pos > -1)
-    {
-      // The current URL is bookmarked, let's remove the bookmark
-      doc_bookmarks_list.remove(pos);
-      doc_bookmarks_title_list.remove(pos);
-    }
-    else
-    {
-      CDocBrowser* pCurBrowserDoc = m_docViewManager->currentBrowserDoc();
-      // The current URL is not bookmark, let's bookmark it
-      doc_bookmarks_list.append(pCurBrowserDoc->currentURL());
-      doc_bookmarks_title_list.append(pCurBrowserDoc->currentTitle());
-    }
-    
-    // Recreate thepopup menu
-    for (uint i = 0 ; i < doc_bookmarks_list.count(); i++){
-      doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
-    }
-  }
-  else
-  {
-    if (m_docViewManager->currentEditView())
-      m_docViewManager->currentEditView()->toggleBookmark();
-  }
+	m_docViewManager->doBookmarksToggle();
 }
 
 void CKDevelop::slotBookmarksClear(){
 
   debug("CKDevelop::slotBookmarksClear !\n");
 
-  if (m_docViewManager->curDocIsBrowser())
-    {
-      doc_bookmarks_list.clear();
-      doc_bookmarks_title_list.clear();
-      doc_bookmarks->clear();
-    }    
-  else
-    {
-      m_docViewManager->doClearBookmarks();
-    }
+	m_docViewManager->doBookmarksClear();
+}
+
+void CKDevelop::slotBookmarksNext()
+{
+  debug("CKDevelop::slotBookmarksNext !\n");
+
+	m_docViewManager->doBookmarksNext();
+}
+
+void CKDevelop::slotBookmarksPrevious()
+{
+  debug("CKDevelop::slotBookmarksPrevious !\n");
+
+	m_docViewManager->doBookmarksPrevious();
 }
 
 void CKDevelop::openBrowserBookmark(const QString& file)
@@ -2371,55 +2337,6 @@ void CKDevelop::openBrowserBookmark(const QString& file)
   slotStatusMsg(i18n("Opening bookmark..."));
   slotURLSelected(file);
   slotStatusMsg(i18n("Ready."));
-}
-
-void CKDevelop::slotBookmarksBrowserSelected(int id_)
-{
-  int id_index = doc_bookmarks->indexOf(id_);
-
-  openBrowserBookmark(doc_bookmarks_list.at(id_index));
-}  
-
-void CKDevelop::slotBookmarksNext()
-{
-  debug("CKDevelop::slotBookmarksNext !\n");
-
-  if (m_docViewManager->curDocIsBrowser())
-  {
-    if(doc_bookmarks_list.count() > 0)
-    {
-      QString file = doc_bookmarks_list.next();
-      if (file.isEmpty())
-        file = doc_bookmarks_list.first();
-      openBrowserBookmark(file);  
-    }
-  }
-  else
-  {
-    if (m_docViewManager->currentEditView())
-      m_docViewManager->currentEditView()->nextBookmark();
-  }
-}
-
-void CKDevelop::slotBookmarksPrevious()
-{
-  debug("CKDevelop::slotBookmarksPrevious !\n");
-
-  if (m_docViewManager->curDocIsBrowser())
-  {
-    if(doc_bookmarks_list.count() > 0)
-    {
-      QString file = doc_bookmarks_list.prev();
-      if(file.isEmpty())
-        file = doc_bookmarks_list.last();
-      openBrowserBookmark(file);  
-    }
-  }
-  else
-  {
-    if (m_docViewManager->currentEditView())
-      m_docViewManager->currentEditView()->previousBookmark();
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

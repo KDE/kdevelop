@@ -58,6 +58,9 @@ DocViewMan::DocViewMan( CKDevelop* parent)
 
   m_MDICoverList.setAutoDelete(true);
 
+	doc_bookmarks_list.setAutoDelete(TRUE);
+	doc_bookmarks_title_list.setAutoDelete(TRUE);
+	
   connect( this, SIGNAL(sig_viewGotFocus(QWidget*)), m_pParent, SLOT(slotViewSelected(QWidget*)) );
 }
 
@@ -1035,68 +1038,6 @@ QObject* DocViewMan::findDocFromFilename(const QString& strFileName) const
 }
 
 //-----------------------------------------------------------------------------
-// Connect to the signals of the bookmark popup menu
-//-----------------------------------------------------------------------------
-void DocViewMan::installBMPopup(QPopupMenu *p)
-{
-  debug("DocViewMan::installBMPopup");
-
-  connect(p,SIGNAL(aboutToShow()),SLOT(updateBMPopup()));
-  connect(p,SIGNAL(activated(int)),SLOT(gotoBookmark(int)));
-}
-
-//-----------------------------------------------------------------------------
-// Updates the bookmarks for each document
-//-----------------------------------------------------------------------------
-void DocViewMan::updateBMPopup()
-{
-  debug("DocViewMan::installBMPopup");
-
-  QPopupMenu* popup = (QPopupMenu *) sender();
-
-  // Remove all menu items
-  popup->clear();
-
-  // Insert separator
-  popup->insertSeparator();
-
-  // Update bookmarks for each document
-  QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
-    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-    if(pDoc) {
-      pDoc->updateBMPopup(popup);
-    }
-  }
-}
-
-//-----------------------------------------------------------------------------
-// shows the desired bookmark (eventually, switches to file and activates it)
-//-----------------------------------------------------------------------------
-void DocViewMan::gotoBookmark(int n) {
-
-  debug("DocViewMan::gotoBookmark : %d !\n", n);
-
-  QPopupMenu* popup = (QPopupMenu *) sender();
-
-  QString text = popup->text(n);
-
-  // Find the KWriteDoc for this bookmark
-  QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
-    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-    if(pDoc) {
-      if(text.startsWith(pDoc->fileName())) {
-        m_pParent->switchToFile(pDoc->fileName());
-        pDoc->gotoBookmark(text);
-        return;
-      }
-    }
-  }
-}
-
-
-//-----------------------------------------------------------------------------
 // Find if no documents have been modified 
 //-----------------------------------------------------------------------------
 bool DocViewMan::noDocModified()
@@ -1513,6 +1454,224 @@ QString DocViewMan::docName(QObject* pDoc) const
   }
 
   return QString("");
+}
+
+//-----------------------------------------------------------------------------
+// Connect to the signals of the bookmark popup menus
+//-----------------------------------------------------------------------------
+void DocViewMan::installBMPopup(QPopupMenu * bm_menu)
+{
+  debug("DocViewMan::installBMPopup");
+
+	// Install editor bookmark popup menu
+  QPopupMenu* code_bookmarks = new QPopupMenu();
+
+  connect(code_bookmarks,SIGNAL(aboutToShow()),
+					this,SLOT(updateCodeBMPopup()));
+  connect(code_bookmarks,SIGNAL(activated(int)),
+					this,SLOT(gotoCodeBookmark(int)));
+
+	
+  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
+											i18n("Code &Window"),code_bookmarks,31000);
+
+	// Install browser bookmark popup menu
+  doc_bookmarks = new QPopupMenu();
+
+  connect(doc_bookmarks,SIGNAL(activated(int)),
+					this,SLOT(gotoDocBookmark(int)));
+
+  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
+											i18n("&Browser Window"), doc_bookmarks,31010);
+
+}
+
+//-----------------------------------------------------------------------------
+// Updates the bookmarks for each editor document
+//-----------------------------------------------------------------------------
+void DocViewMan::updateCodeBMPopup()
+{
+  debug("DocViewMan::updateCodeBMPopup !\n");
+
+  QPopupMenu* popup = (QPopupMenu *) sender();
+
+  // Remove all menu items
+  popup->clear();
+
+  // Insert separator
+  popup->insertSeparator();
+
+  // Update bookmarks for each document
+  QListIterator<QObject> itDoc(m_documentList);
+  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if(pDoc) {
+      pDoc->updateBMPopup(popup);
+    }
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Shows the desired editor bookmark 
+// (eventually, switches to file and activates it)
+//-----------------------------------------------------------------------------
+void DocViewMan::gotoCodeBookmark(int n) {
+
+  debug("DocViewMan::gotoCodeBookmark : %d !\n", n);
+
+  QPopupMenu* popup = (QPopupMenu *) sender();
+
+  QString text = popup->text(n);
+
+  // Find the KWriteDoc for this bookmark
+  QListIterator<QObject> itDoc(m_documentList);
+  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if(pDoc) {
+      if(text.startsWith(pDoc->fileName())) {
+        m_pParent->switchToFile(pDoc->fileName());
+        pDoc->gotoBookmark(text);
+        return;
+      }
+    }
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Shows the desired browser bookmark 
+// (eventually, switches to file and activates it)
+//-----------------------------------------------------------------------------
+void DocViewMan::gotoDocBookmark(int id_)
+{
+  debug("DocViewMan::gotoDocBookmark : id : %d !\n", id_);
+
+	int id_index = doc_bookmarks->indexOf(id_);
+
+  m_pParent->openBrowserBookmark(doc_bookmarks_list.at(id_index));
+}
+
+//-----------------------------------------------------------------------------
+// Toggles a bookmark in the current document
+//-----------------------------------------------------------------------------
+void DocViewMan::doBookmarksToggle()
+{
+  debug("DocViewMan::doBookmarksToggle !\n");
+
+  if (curDocIsBrowser())
+  {
+    doc_bookmarks->clear();
+
+    // Check if the current URL is bookmarked
+    int pos = doc_bookmarks_list.find(currentBrowserDoc()->currentURL());
+    if(pos > -1)
+    {
+      // The current URL is bookmarked, let's remove the bookmark
+      doc_bookmarks_list.remove(pos);
+      doc_bookmarks_title_list.remove(pos);
+    }
+    else
+    {
+      CDocBrowser* pCurBrowserDoc = currentBrowserDoc();
+      // The current URL is not bookmark, let's bookmark it
+      doc_bookmarks_list.append(pCurBrowserDoc->currentURL());
+      doc_bookmarks_title_list.append(pCurBrowserDoc->currentTitle());
+    }
+
+    // Recreate thepopup menu
+    for (uint i = 0 ; i < doc_bookmarks_list.count(); i++){
+      doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
+    }
+  }
+  else
+  {
+    if (currentEditView())
+      currentEditView()->toggleBookmark();
+  }
+
+}
+
+//-----------------------------------------------------------------------------
+// Clears bookmarks in the current document
+//-----------------------------------------------------------------------------
+void DocViewMan::doBookmarksClear()
+{
+  if (curDocIsBrowser())
+    {
+      doc_bookmarks_list.clear();
+      doc_bookmarks_title_list.clear();
+      doc_bookmarks->clear();
+    }    
+  else
+    {
+      doClearBookmarks();
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Goes to the next bookmark in the current document
+//-----------------------------------------------------------------------------
+void DocViewMan::doBookmarksNext()
+{
+  if (curDocIsBrowser())
+  {
+    if(doc_bookmarks_list.count() > 0)
+    {
+      QString file = doc_bookmarks_list.next();
+      if (file.isEmpty())
+        file = doc_bookmarks_list.first();
+      m_pParent->openBrowserBookmark(file);  
+    }
+  }
+  else
+  {
+    if (currentEditView())
+      currentEditView()->nextBookmark();
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Goes to the previous bookmark in the current document
+//-----------------------------------------------------------------------------
+void DocViewMan::doBookmarksPrevious()
+{
+  if (curDocIsBrowser())
+  {
+    if(doc_bookmarks_list.count() > 0)
+    {
+      QString file = doc_bookmarks_list.prev();
+      if(file.isEmpty())
+        file = doc_bookmarks_list.last();
+      m_pParent->openBrowserBookmark(file);  
+    }
+  }
+  else
+  {
+    if (currentEditView())
+      currentEditView()->previousBookmark();
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Reads bookmarks from the config
+//-----------------------------------------------------------------------------
+void DocViewMan::readBookmarkConfig(KConfig* theConfig)
+{
+	theConfig->readListEntry("doc_bookmarks",doc_bookmarks_list);
+	theConfig->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
+	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++)
+		{
+			doc_bookmarks->insertItem(SmallIconSet("html"),
+																doc_bookmarks_title_list.at(i));
+		}
+}
+
+//-----------------------------------------------------------------------------
+// Writes bookmarks from the config
+//-----------------------------------------------------------------------------
+void DocViewMan::writeBookmarkConfig(KConfig* theConfig)
+{
+  theConfig->writeEntry("doc_bookmarks", doc_bookmarks_list);
+  theConfig->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
 }
 
 /**

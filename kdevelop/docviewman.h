@@ -71,9 +71,6 @@ public:
   void doSearchText(QString &text);
 
   /** */
-  void doClearBookmarks();
-
-  /** */
   void doOptionsEditor();
   /** */
   void doOptionsEditorColors();  
@@ -104,8 +101,35 @@ public:
   /** */
   void doCloseAllDocs();
 
+  ///////////////////////////
+  // Bookmark stuff
+  ///////////////////////////
+
+  /** */
+	void doBookmarksToggle();
+
+  /** */
+	void doBookmarksClear();
+
+  /** */
+	void doBookmarksNext();
+
+  /** */
+	void doBookmarksPrevious();
+
+  /** */
+  void doClearBookmarks();
+
   /** Install the new bookmark popup */
   void installBMPopup(QPopupMenu *p);
+
+  /** */
+	void connectBMPopup();
+
+  /** */
+	void readBookmarkConfig(KConfig* theConfig);
+  /** */
+	void writeBookmarkConfig(KConfig* theConfig);
 
   ///////////////////////////
   // Doc stuff
@@ -214,17 +238,21 @@ public slots:
   /** Is called whenever the MDI view gets focus. 
    * The update of pointers for the "current..."-methods is made here */
   void slot_gotFocus(QextMdiChildView* pMDICover);
-  /** Updates the bookmarks for each document */
-  void updateBMPopup();
-  /** shows the desired bookmark 
-   * (eventually, switches to file and activates it) */
-  void gotoBookmark(int n);
   /** Helper method for initKeyAccel(CKDevAccel* accel, QWidget* pTopLevelWidget), acts as slot entry with
    *  the right interface for signals from the QextMDI mainframe class. */
   void initKeyAccel( QWidget* pTopLevelWidget);
   /**
    * Called when a file is removed via RMB in the LFV or RFV. */
   void slotRemoveFileFromEditlist(const QString &absFilename);
+
+  /** Updates the bookmarks for each editor document */
+  void updateCodeBMPopup();
+  /** shows the desired editor bookmark 
+   * (eventually, switches to file and activates it) */
+  void gotoCodeBookmark(int n);
+  /** shows the desired document bookmark 
+   * (eventually, switches to file and activates it) */
+  void gotoDocBookmark(int n);
 
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
@@ -251,6 +279,10 @@ private:
 
   CKDevelop*                m_pParent;
   HlManager                 m_highlightManager;
+
+  QStrList                  doc_bookmarks_list;
+  QStrList                  doc_bookmarks_title_list;
+	QPopupMenu*               doc_bookmarks;
 
   KWriteDoc*                m_pCurEditDoc;
   CEditWidget*              m_pCurEditView;
