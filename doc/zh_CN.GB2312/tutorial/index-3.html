@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>KDEÓ¦ÓÃ³ÌÐò½Ì³Ì: ½¨Á¢Qt½Ì³Ì</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Next</A>
+ <A HREF="index-2.html">Previous</A>
+ <A HREF="index.html#toc3">Table of Contents</A>
+</P>
+<H3><A NAME="s3">3. ½¨Á¢Qt½Ì³Ì</A></H3>
+
+<P>
+<H3><A NAME="ss3.1">3.1 µÚÒ»²½£ºHello World!</A>
+</H3>
+
+<P>ÕýÈçÔÚÉÏÒ»ÕÂ½²µ½µÄ£¬ÎÒÃÇ´´½¨ÁËÒ»¸ö½Ð<CODE>MyWidget</CODE>µÄÏîÄ¿¡ª¡ªÏÖÔÚ£¬Èç¹û¿´Ò»ÏÂQtÎÄµµ½Ì³ÌµÄµÚ
+Ò»Ò³£¬Äã»á·¢ÏÖµÚÒ»¸öÓ¦ÓÃ³ÌÐòÖ»°üº¬<CODE>main()</CODE>º¯Êý¡£Òò´Ë£¬ÎÒÃÇÖ»ÐèÒªÐÞ¸ÄÏîÄ¿µÄ<CODE>main()</CODE>
+º¯Êý¾Í¿ÉÒÔÊ¹½Ì³ÌµÄµÚÒ»²½ÔËÐÐÁË¡£
+<P>Òª·ÃÎÊ<CODE>main()</CODE>º¯Êý£¬´Ó¡°CV¡±ÖÐÑ¡Ôñ¡°È«¾Ö¡±ÎÄ¼þ¼Ð£¬ÆäÖÐÓÖ°üº¬ÁËÒ»¸ö¡°º¯Êý¡±×ÓÎÄ¼þ¼Ð£¬
+ËùÓÐµÄ·ÇÀàº¯Êý¶¼ÂÞÁÐÔÚÕâÀï¡£ÔÚÓÒ±ßµÄ¡°C/C++ÎÄ¼þ¡°´°¿ÚÖÐ»á´ò¿ª<CODE>main.cpp</CODE>£¬¶ø¹â±êÒÑ¾­
+±»ÉèÖÃÔÚÁË<CODE>main()</CODE>µÄµÄµÚÒ»ÐÐ¡£
+<P>
+<H4>Ê×ÏÈ¸ÄÊ²Ã´</H4>
+
+<P>ÎÒÃÇ¿ÉÒÔ´ÓÏÖÓÐµÄ´úÂë¿ªÊ¼°ÑËü¸Ä³ÉÐèÒªµÄÑù×Ó¡ª¡ªµ«ÊÇÓÐ¸üÈÝÒ×µÄ°ì·¨¡£ÓÃÊó±ê»ò°´×¡ShiftÓÃÏÂ¼ýÍ·
+Ñ¡ÔñÕû¸ö<CODE>main()</CODE>¡£È»ºóÔÙ´Ó¡±±à¼­¡°ÖÐÑ¡Ôñ¡±¼ôÇÐ¡°»òÕß°´DEL¼üÉ¾³ýËùÑ¡µÄ´úÂë¡£ÔÚÇå³ýÕû¸ömain
+º¯Êýºó£¬ÎÒÃÇ¾Í¿ÉÒÔ´ÓÍ·¿ªÊ¼½¨Á¢ÎÒÃÇµÄµÚÒ»¸ö½Ì³Ì¡£
+<P>
+<H4>ÊäÈë½Ì³Ì´úÂë</H4>
+
+<P>ÏÖÔÚ£¬ÊäÈë½Ì³ÌÖÐµÄ´úÂë¡£Äã¿ÉÒÔÏÈ×ÐÏ¸µØ¶ÁÒ»±é²¢ÊÔ×Å¼Ç×¡ÄÇÒ»ÐÐÓÐÄÇÐ©´úÂë¡£È»ºó£¬ÔÚÒÀ´Î¶ÁÍê½Ì³Ì
+µÄÐðÊöÒÔºó£¬Äã¾Í¿ÉÒÔ°ÑËüµ±×÷Àý×ÓÍê³ÉÕâ¸ö½Ì³Ì¡£
+<P>»¹ÓÐ¸ü¼òµ¥µÄ°ì·¨£º´ÓÎÄµµä¯ÀÀÆ÷ÖÐÑ¡ÔñÕû¸ö<CODE>main()</CODE>º¯Êý²¢°´Ò»ÏÂ¹¤¾ßÌõÉÏµÄ¡±¸´ÖÆ¡°Í¼±ê¡£ÁíÍâ£¬
+ÄãÒ²¿ÉÒÔÊ¹ÓÃÓÒ¼üµÄµ¯³öÊ½²Ëµ¥»òÕßÓÃ¡±±à¼­¡°²Ëµ¥¡£ÕâÐ©¶¼»á½«ÄÚÈÝ¸´ÖÆµ½¼ôÌù°åÖÐ£¬ÇÐ»»»ØÔ´´úÂë
+´°¿ÚÒÔºóÔÙÑ¡Ôñ¡±Õ³Ìù¡°¡££¨¿ÉÒÔÓÃ¹¤¾ßÌõ£¬ÓÒ¼üµÄµ¯³öÊ½²Ëµ¥»òÕß¡±±à¼­¡°²Ëµ¥£©
+<P>
+<P>×îºó£¬ÔÚ<CODE>main()</CODE>º¯ÊýÍâ¼ÓÈëÏàÓ¦µÄÍ·ÎÄ¼þ£º
+<BLOCKQUOTE><CODE>
+<PRE>
+#include &lt;qapplication.h>
+#include &lt;qpushbutton.h>
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>ºÃÁË£¡µÚÒ»¸ö½Ì³ÌÓ¦ÓÃµÄÔ´´úÂëÒÑ¾­×¼±¸Íê±Ï¡£
+<P>
+<H4>½¨Á¢Hello World!</H4>
+
+<P>Òª½¨Á¢µÚÒ»¸ö½Ì³Ì£¬´Ó¡±½¨Á¢¡°²Ëµ¥ÖÐÑ¡Ôñ¡°Á¬±à¡±»òÕß°´¹¤¾ßÌõÉÏÏàÓ¦µÄ°´Å¥¡£ÁíÍâ£¬ÄãÒ²¿ÉÒÔÑ¡Ôñ
+¡°Ö´ÐÐ¡±£¬Ëü»áÔÚ½¨Á¢³É¹¦ÒÔºóÖ´ÐÐÓ¦ÓÃ³ÌÐò¡£
+<P>Èç¹ûÔÚ½¨Á¢¹ý³ÌÖÐÓÉÓÚ´íÎó¶øÍ£ÁËÏÂÀ´£¬ÇëÏàÐÅÕâÊÇÓÉÓÚÄãµÄÊ§Îó¶øÓë½Ì³ÌÎÞ¹Ø£¡Ì«´ò»÷ÁË°É£¬ÎÒ²Å
+¸Õ¸Õ¾ö¶¨Ð´KDE/Qt³ÌÐòÄØ£¡µ«ÊÇ£¬ÄãÈ´¿ÉÒÔÒò´ËÀ´ÊìÏ¤Ê¹ÓÃKDevelop¡£ÎªÁË·¢ÏÖ´íÎóËùÔÚ£¬ÄãÓÐÁ½¸ö
+Ñ¡Ôñ£º»òÕßµã»÷Êä³ö´°¿ÚÖÐÏàÓ¦µÄ´íÎóÐÅÏ¢£¬Ëü»á°ÑÄã´øµ½³ö´íËùÔÚµÄÐÐ£¬»òÕß°´F4¼ü£»ÁíÍâ£¬Äã»¹
+¿ÉÒÔÔÚ¡°²é¿´¡±²Ëµ¥ÖÐÑ¡Ôñ¡°ÏÂÒ»¸ö´íÎó¡±¡£
+<P>
+<H4>Á·Ï°</H4>
+
+<P>Äã¿ÉÄÜ»áÎÊ¡°Á·Ï°£¿Ì«¼òµ¥ÁË°É£¬ÎÒ²»ÐèÒª×öÊ²Ã´Á·Ï°£¡¡±£¬µ«ÊÇÇëÏàÐÅ£¬ÒÔºóµÄÀý×Ó»á±äµÃÔ½À´Ô½¸´
+ÔÓµÄ¡£ËäÈ»Õâ¸ö³ÌÐòÊÇ×î¼òµ¥µÄÀý×Ó£¬µ«ÊÇËüÃÇÔ½¸´ÔÓÄã¾ÍÐèÒª»¨·ÑÔ½¶àµÄ¾«Á¦È¥Ë¼¿¼²ÅÄÜ¸ã¶®ÕâÐ©½Ì
+³ÌÖÐµÄ´úÂë¡£¶øÇÒ×öÒ»×öÁ·Ï°Ò²¿ÉÒÔÊ¹ÄãÑ§»áÈçºÎÔÚÊµ¼ùÖÐÊ¹ÓÃKDevelopºÍËüµÄ¸÷ÏîÌØÕ÷¡£
+<P>ÎªÁËÔÚµÚÒ»¸ö½Ì³ÌÖÐÑ§µ½¸ü¶àµÄÖªÊ¶£¬ÄãÓ¦¸ÃÊÔ×Å°´ÕÕÏÂÃæËùÊöµÄÌáÊ¾¸Ä±ä´úÂë£¬È»ºó¿´Ò»¿´ÕâÐ©±ä»¯
+ÊÇÈçºÎÓ°Ïì³ÌÐòÐÐÎªµÄ£º
+<OL>
+<LI>°Ñ°´Å¥±ä³ÉQLabel</LI>
+<LI>ÓÃ<CODE>setText()</CODE>´úÌæÔÚ¹¹Ôìº¯ÊýÖÐÖ±½ÓÎª°´Å¥ÉèÖÃÎÄ±¾</LI>
+<LI>ÓÃ<CODE>QPushButton::resize ( const QSize &amp; s )</CODE>´úÌæ
+Ö±½ÓÉèÖÃ¿íºÍ¸ß¡£´´½¨Ò»¸ö<CODE>QSize</CODE>µÄÊµÀý£¬ÆäÖÐ°üº¬size</LI>
+<LI>¸Ä±äÕâÐ©´óÐ¡£¬¿´Ò»¿´ÄÄ¸öÊÇ¿í£¬ÄÄ¸öÊÇ¸ß</LI>
+</OL>
+<P>
+<H3><A NAME="ss3.2">3.2 µÚ¶þ²½ºÍµÚÈý²½£ºÍØÕ¹</A>
+</H3>
+
+<P>½Ì³ÌµÄµÚ¶þ²½ºÍµÚÈý²½ÊÇµÚÒ»²½µÄÕ¹¿ª£¬Äã¿ÉÒÔ´ÓÖÐÑ§µ½signalºÍslotÒÔ¼°ÔÚwidget¼äµÄ¸¸×Ó¹ØÏµ¡£
+<P>ÎªÊ²Ã´ÒªÑ§ÕâÐ©ÄØ£¿signalºÍslotÊÇQt¿âºÍÆäËüwidget¿âÖ®¼ä×î´óµÄÇø±ð¡£µ±ÄãÉæ¼°µ½ÐèÒªÊµÏÖÔÚ¸÷¸ö
+¶ÔÏóÖ®¼äÍ¨ÐÅÊ±£¬Ëü»áÏÔÖøµØËõ¶Ì¹¤×÷Ê±¼ä¡£Èç¹û·¢ÉúÁË´íÎóÊÇ²»»áµ¼ÖÂÑÏÖØºó¹ûµÄ£¬¼´Ê¹´íÎóµÄÁ¬½Ó
+Ò²²»»áµ¼ÖÂ¡°segmentation fault¡±ÕâÑùµÄ´íÎó¡£Õâ¾ÍÊÇQtµÄÁ¦Á¿£¬¶øÕýÒòÎªÆäÁé»îÐÔ£¬Ðí¶àµÄKDE/Qt
+¿ª·¢Õß¶¼²»ÏëÊ§È¥Ëü¡£Òò´Ë£¬Ã÷°×signal/slot»úÖÆÊÇ´´½¨ÈÎºÎKDE/Qt³ÌÐòµÄÒªµã¡£
+<P>ÁíÒ»¼þÐèÒª×¢ÒâµÄÊÂÊÇ£¬°´Å¥µ÷ÓÃ<CODE>quit()</CODE>À´½áÊø<CODE>QApplication</CODE>ÊµÀý¡£ÄãÔÚÊ¹ÓÃ<CODE>QApplication</CODE>
+µÄKDE×°ÊÎÎï»ò<CODE>KApplication</CODE>Ê±»áÔÙ´ÎÓöµ½<CODE>quit()</CODE>
+<P>
+<H3><A NAME="ss3.3">3.3 ±àÐ´Äã×Ô¼ºµÄWidget</A>
+</H3>
+
+<P>ÔÚ³É¹¦µÄ¸ü¸Ä²¢ÍØÕ¹<CODE>main()</CODE>º¯Êýºó£¬Äã½«Éú³ÉÒ»¸öÐÂµÄwidget¡ª¡ªÒ»¸öÎ¨Ò»µÄÄãÔÚµÚËÄ²½ÖÐ¿ÉÒÔ
+´´½¨µÄwideget¡£ÊÂÊµÉÏ£¬Õâ¸öÀàÒÑ¾­ÓÉÓ¦ÓÃ³ÌÐòÏòµ¼Éú³ÉÁË£¬ËùÒÔ²¢²»ÐèÒªÌí¼ÓºÜ¶àµÄ´úÂë¡ª¡ªÄãÖ»
+ÐèÒª°ÑÔÚµÚËÄ¿Î<CODE>main.cpp</CODE>ÎÄ¼þÖÐµÄ´úÂë²åÈëµ½<CODE>MyWidget</CODE>ÀàµÄÍ·ÎÄ¼þºÍÊµÏÖÎÄ¼þ¾Í¿ÉÒÔÁË¡£
+ÐÒÔËµÄÊÇ£¬Êµ¼ÊÉÏÄãÖ»ÓÃ°ÑÊµÏÖ²¿·ÖÌí¼Óµ½¹¹Ôìº¯ÊýÖÐ¡£
+<P>´ÓÀàÊÓÍ¼ÖÐÑ¡ÔñÒª·ÃÎÊµÄ¹¹Ôìº¯Êý¡£Õâ»á×Ô¶¯°ÑÄã´øµ½ÐèÒªÌí¼Ó´úÂëµÄÊµÏÖ²¿·Ö¡£
+<P>Òª×¢Òâ°üÀ¨<CODE>qfont.h>¡ª¡ª<CODE>QFont</CODE>Ö»ÓÃÔÚ<CODE>MyWidget</CODE>µÄ¹¹Ôìº¯ÊýÖÐ¡£Òò´Ë£¬ÔÚ<CODE>mywidget.cpp>
+µÄ¶¥²¿Ìí¼Ó<CODE>#include &lt;qfont.h&gt;</CODE>
+ÒªÔËÐÐ³ÌÐò£¬Ö»Òª°´Ò»ÏÂ¡°Ö´ÐÐ¡±¾Í¿ÉÒÔÁË¡£Ëü»áÔÚ×Ô¶¯±£´æºó±àÒë¸ü¸ÄºóµÄ´úÂë¡£
+<H3><A NAME="ss3.4">3.4 À©Õ¹WidgetÀà</A>
+</H3>
+
+<P>µÚÎå¿ÎµÄÄ¿±êÊÇÀ©Õ¹widgetÀà¡£Òò¶ø£¬Äã»áÑ§µ½ÓÐ¹ØÐéÄâº¯ÊýµÄÖªÊ¶¡£ÔÚÕâÀï<CODE>resizeEvent()</CODE>±»ÖØ
+Ð´¡£ÁíÒ»¸öÐèÒªÖØµãÑ§Ï°µÄÊÇ£¨³ýÁËÈçºÎÀ©Õ¹Àà£©QtÊ¹ÓÃÐéº¯ÊýÀ´´¦ÀíÓÃ»§ÊÂ¼þ£¬¶ø°ÑÊÂ¼þ±¾Éí×÷Îª
+²ÎÊý¡£Òò´Ë£¬Äã±ØÐëÊìÏ¤ÒÔÏÂµÄQtÀà£º
+<UL>
+<LI>QEvent</LI>
+<LI>QChildEvent</LI>
+<LI>QCloseEvent</LI>
+<LI>QFocusEvent</LI>
+<LI>QKeyEvent</LI>
+<LI>QMouseEvent</LI>
+<LI>QMoveEvent</LI>
+<LI>QPaintEvent</LI>
+<LI>QResizeEvent</LI>
+<LI>QTimerEvent</LI>
+</UL>
+<P>ÎÞÂÛºÎÊ±Ð´×Ô¼ºµÄwidget£¬ÌØ±ðÊÇÓ¦ÓÃ³ÌÐòµÄ¿ÉÊÓÇøÓò£¬Äã¶¼µÃ×Ô¼ºÖØÐ´ÄÇÐ©ÐèÒª´¦ÀíµÄwidgetÊÂ¼þ·½
+·¨£¬ÒÔÌæ´úÈ±Ê¡µÄÊµÏÖ¡£ÀýÈç£º
+<P><CODE>virtual void mousePressEvent ( QMouseEvent *)</CODE>´¦ÀíÊó±êÊÂ¼þ¡£ÔÚÊµÏÖÊ±£¬Äã±ØÐëÔÚº¯ÊýÍ·ÖÐ
+ÊäÈëÒ»¸ö²ÎÊýÃû£¬´ó¶àÊý³ÌÐòÔ±ÓÃ<CODE>event</CODE>»òÕß¸É´àÓÃ<CODE>e</CODE>×÷Îª²ÎÊýÃû¡£
+<P>È»ºóÄã¾Í¿ÉÒÔ´¦ÀíÊÂ¼þ²ÎÊýÁË¡£¶Ô<CODE>QMouseEvent</CODE>¶øÑÔ£¬Äã¿ÉÒÔÖªµÀÒý·¢¸ÃÊÂ¼þµÄ°´Å¥ÊÇ×ó¼ü£¬ÖÐ¼ü
+»òÕßÓÒ¼ü¡£
+<P>
+<H3><A NAME="ss3.5">3.5 Ìí¼ÓÐÂÀà</A>
+</H3>
+
+<P>ÔÚµÚÁù¿ÎÀï£¬ÄãÐèÒªÎª½Ì³Ì³ÌÐòÌí¼ÓÒ»¸öÐÂÀà¡£Ò»°ãÄã¿ÉÄÜ»áÏë¡°ÎÒÖ»ÐèÒª´´½¨Ò»¸öÍ·ÎÄ¼þºÍÒ»¸öÊµÏÖ
+ÎÄ¼þ¾Í¿ÉÒÔÁË¡±¡ª¡ªµ«ÊÇKDevelopÊ¹Äã×öÆðÀ´¸üÇáËÉ¡£µ±Ìí¼ÓÒ»¸öÀàÊ±£¬ÄãÓ¦¸Ã×ÜÊ¹ÓÃÀàÉú³ÉÆ÷¡£Ëü»á
+ÎªÄã×öËùÓÐµÄ¹¤×÷¶øÄãÖ»ÐèÒªÌí¼Ó±ØÐèµÄ´úÂë¡£
+<P>ÒªÊ¹ÓÃÀàÉú³ÉÆ÷Ìí¼ÓÀà£¬Ñ¡Ôñ¡°ÏîÄ¿¡±¡ª¡ª¡°ÐÂ½¨Àà¡±£¬ÔÚ´ò¿ªµÄ¶Ô»°¿òÖÐÊäÈëÄãÐèÒªµÄÖµ¡£Ê×ÏÈÒªÊä
+ÈëÀàÃû¡£½Ì³ÌÓÃ<CODE>LCDRange</CODE>£¬ËùÒÔÊ×ÏÈÊäÈëÕâ¸öÃû×Ö¡£È»ºóÊÇ»ùÀà¡£»ùÀà¾ÍÊÇÐÂÀàËùÒª¼Ì³ÐµÄÀà¡£
+¿´Ò»ÏÂ½Ì³Ì£¨Qt 1.42£©£¬ÕâÊÇ<CODE>QWidget</CODE>¡£ÓÉÓÚ´ó²¿·ÖµÄGUIÀà¶¼ÊÇ´ÓQWidget¼Ì³Ð£¬ÀàÉú³ÉÆ÷¼ò»¯
+ÁËÕâ¸ö²½×à¡£²»ÊäÈë»ùÀàÀàÃû¶øÔÚ¡°¸½¼ÓÑ¡Ïî¡±²¿·ÖÑ¡ÉÏ¡°QWidgetµÄ×ÓÀà¡±Õâ»á×Ô¶¯ÔÚÍ·ÎÄ¼þÖÐ¼ÓÈë<CODE>Q_OBJECT</CODE>ºê£¬Ê¹ÓÃslotºÍsignal±ØÐè´Ëºê¡££¨¼ûÔÚµÚÆßÕÂ£©
+<P>ÒòÎªÎÄ¼þÃûÊÇ×Ô¶¯ÊäÈëµÄ£¬Äã²»±ØÈ¥¹ÜËü¡£Î¨Ò»ÐèÒªÌáÐÑµÄÊÇÌí¼ÓÎÄµµ¡£ÎªÀàÌí¼ÓÃèÊöÐÔµÄÎÄµµ×ÜÊÇÒ»
+¸öºÃµÄ·ç¸ñ£¬ÌØ±ðÊÇÀàÃû<CODE>LCDRange</CODE>²¢²»¸æËßÄã¸ÃwidgetµÄÓÃÍ¾¡£
+<P>
+<H3><A NAME="ss3.6">3.6 µÚÆßµ½Ê®ËÄ²½</A>
+</H3>
+
+<P>ÔÚ½Ì³ÌµÄÊ£Óà¸÷²½ÖÐ£¬Äã»áÑ§µ½ËùÓÐ±ØÐèµÄÖªÊ¶¡ª¡ªÌí¼ÓËùÐèµÄÀà²¢×ö¸÷ÖÖ¸Ä¶¯¡£
+<P>ÔÚÃ¿Ò»´Î¸ü¸Äºó£¬Äã¶¼Ó¦¸ÃÖØÐÂ½¨Á¢²¢¼ì²é´íÎó¡£ÔËÐÐÒ»ÏÂÓ¦ÓÃ³ÌÐò£¬¿´¿´ËüÊÇÈçºÎÖ´ÐÐµÄ£»ÁíÍâ£¬ÄãÓ¦
+¸ÃÍæÒ»ÍæKDevelop¡°½¨Á¢¡±µÄ²ÎÊý¡ªÔËÐÐÓ¦ÓÃ³ÌÐòÊ±¼ÓÉÏÃüÁîÐÐ²ÎÊýÈç¡ªgeometry£¬ÓÃ¹¤¾ß´°¿ÚÖÐµÄKDbg
+½øÐÐµ÷ÊÔ¡£È»ºóÄã¾ÍÄÜ¹»½øÐÐQtÀý×Ó£¬ËüÃÇÔÚÏÂÒ»ÕÂÖÐÌÖÂÛ¡£
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Next</A>
+ <A HREF="index-2.html">Previous</A>
+ <A HREF="index.html#toc3">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
