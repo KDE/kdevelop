@@ -18,6 +18,7 @@
 #include "kdevplugin.h"
 #include "ktexteditor/editinterface.h"
 #include "ktexteditor/viewcursorinterface.h"
+#include "ktexteditor/codecompletioninterface.h"
 
 
 class KDialogBase;
@@ -44,12 +45,14 @@ public:
     QAsciiDictIterator<CodeTemplate> templates() const;
     
 private slots:
+    void slotExpandText();
     void slotExpandAbbrev();
     void configWidget(KDialogBase *dlg);
 
 private:
     void load();
     void save();
+    QValueList<KTextEditor::CompletionEntry> findAllWords(const QString &text, const QString &prefix);
     void insertChars(KTextEditor::EditInterface *editiface,
                      KTextEditor::ViewCursorInterface *cursoriface,
                      const QString &chars);

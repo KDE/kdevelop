@@ -54,7 +54,6 @@ public:
     /**
      * return persistant classstore File Extension
     void slotCompleteText();
-    void slotExpandText();
     void slotTypeOfExpression();
      * meant for the project's own classes
      */
@@ -90,7 +89,6 @@ private slots:
     void slotSwitchHeader();
     void slotGotoIncludeFile();
     void slotCompleteText();
-    void slotExpandText();
     void slotTypeOfExpression();
 
     // code completion related slots - called from config-widget

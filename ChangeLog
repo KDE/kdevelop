@@ -1,3 +1,7 @@
+2002-05-18  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Ported "Expand text" into abbrev part
+
 2002-05-16  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Fixed KDevelop compilation error by adding missing 
@@ -834,6 +838,4 @@
         automake support (ie the _JAVA primary). Fixed bug in class browser where a 
         method's arguments were not being displayed (was that a bug or a feature?). 
         Clicking on a class's instance variables in the class browser now works and 
-        takes you to the source file.
-les in the class browser now works and 
         takes you to the source file.

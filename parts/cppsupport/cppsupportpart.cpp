@@ -58,6 +58,17 @@
 #include "config.h"
 #include "domutil.h"
 
+#if 1
+#include <malloc.h>
+void showMemUsage()
+{
+    struct mallinfo mi = mallinfo();
+    kdDebug() << "Mem usage: " << mi.uordblks;
+}
+#else
+void showMemUsage()
+{}
+#endif
 
 typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
@@ -96,13 +107,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
                          actionCollection(), "edit_complete_text");
     action->setStatusText( i18n("Complete current expression") );
     action->setWhatsThis( i18n("Complete current expression.") );
-    action->setEnabled(false);
-
-    action = new KAction(i18n("Expand Text"), CTRL+Key_J,
-                         this, SLOT(slotExpandText()),
-                         actionCollection(), "edit_expand_text");
-    action->setStatusText( i18n("Expand current word") );
-    action->setWhatsThis( i18n("Expand current word.") );
     action->setEnabled(false);
 
     action = new KAction(i18n("Type of Expression"), CTRL+Key_T,
@@ -255,7 +259,6 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     actionCollection()->action("edit_switchheader")->setEnabled(enabled);
     actionCollection()->action("edit_complete_text")->setEnabled(enabled);
-    actionCollection()->action("edit_expand_text")->setEnabled(enabled);
     actionCollection()->action("edit_type_of_expression")->setEnabled(enabled);
 }
 
@@ -365,6 +368,9 @@ void CppSupportPart::maybeParse(const QString fileName, ClassStore *store, CClas
 void
 CppSupportPart::initialParse( )
 {
+    // For debugging
+    showMemUsage();
+    
     if( !project( ) ){
     	// messagebox ?
 	kdDebug( 9007 ) << "No project" << endl;
@@ -443,6 +449,9 @@ CppSupportPart::initialParse( )
 	kapp->restoreOverrideCursor( );
     }
 
+    // For debugging
+    showMemUsage();
+
     if( createPreParseCS ){
 	if( DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepp" ) == false ) {
             delete label;
@@ -497,6 +506,7 @@ CppSupportPart::initialParse( )
     
     topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
 }
+
 
 // better idea needed for not always calling with QProgressBar & QLabel
 void CppSupportPart::parseDirectory(const QString &startDir, bool withSubDir,
@@ -872,11 +882,6 @@ QString CppSupportPart::asHeaderCode(ParsedAttribute *pa)
 void CppSupportPart::slotCompleteText()
 {
     m_pCompletion->completeText();
-}
-
-void CppSupportPart::slotExpandText()
-{
-    m_pCompletion->expandText();
 }
 
 void CppSupportPart::slotTypeOfExpression()

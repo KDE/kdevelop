@@ -69,10 +69,8 @@ void ClassListAction::refresh()
     list << i18n("(Globals)");
 
     QStringList::ConstIterator it;
-    for (it = rawList.begin(); it != rawList.end(); ++it) {
-        kdDebug() << (*it) << endl;
+    for (it = rawList.begin(); it != rawList.end(); ++it)
         list << ls->formatClassName(*it);
-    }
 
     int idx = list.findIndex(KSelectAction::currentText());
     if (idx == -1 && !list.isEmpty())

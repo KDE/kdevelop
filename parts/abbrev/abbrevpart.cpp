@@ -14,6 +14,7 @@
 #include "abbrevpart.h"
 
 #include <qfile.h>
+#include <qregexp.h>
 #include <qvbox.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -56,7 +57,13 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
     KAction *action;
-    action = new KAction( i18n("Expand Abbreviation..."), SHIFT + Key_Space,
+    action = new KAction( i18n("Expand Text"), CTRL + Key_J,
+                          this, SLOT(slotExpandText()),
+                          actionCollection(), "edit_expandtext" );
+    action->setStatusText( i18n("Expand current word") );
+    action->setWhatsThis( i18n("Expand current word") );
+    
+    action = new KAction( i18n("Expand Abbreviation"), SHIFT + Key_Space,
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
 
@@ -150,10 +157,77 @@ void AbbrevPart::configWidget(KDialogBase *dlg)
 }
 
 
+void AbbrevPart::slotExpandText()
+{
+    KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    if (!part || !part->widget()) {
+        kdDebug() << "no rw part" << endl;
+        return;
+    }
+    KTextEditor::EditInterface *editiface
+        = dynamic_cast<KTextEditor::EditInterface*>(part);
+    if (!editiface) {
+        kdDebug() << "no editiface" << endl;
+        return;
+    }
+    KTextEditor::ViewCursorInterface *cursoriface
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+    if (!cursoriface) {
+        kdDebug() << "no viewcursoriface" << endl;
+        return;
+    }
+    KTextEditor::CodeCompletionInterface *completioniface
+        = dynamic_cast<KTextEditor::CodeCompletionInterface*>(part->widget());
+    if (!completioniface) {
+        kdDebug() << "no codecompletioniface" << endl;
+        return;
+    }
+
+    QString word = currentWord(editiface, cursoriface);
+    kdDebug(9028) << "Expanding text " << word << endl;
+    if (word.isEmpty())
+        return;
+
+    QValueList<KTextEditor::CompletionEntry> entries = findAllWords(editiface->text(), word);
+    if (entries.count() == 0) {
+        ; // some statusbar message?
+    } else if (entries.count() == 1) {
+        uint line, col;
+        cursoriface->cursorPositionReal(&line, &col);
+        editiface->insertText(line, col, entries[0].text.mid(word.length()));
+    } else {
+        completioniface->showCompletionBox(entries, word.length());
+    }
+}
+
+
+QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString &text, const QString &prefix)
+{
+    QMap<QString, bool> map;
+    QValueList<KTextEditor::CompletionEntry> entries;
+    QRegExp rx( QString("\\b") + prefix + "[a-zA-Z0-9_]+\\b" );
+
+    int idx = 0;
+    int pos = 0;
+    int len = 0;
+    while ( (pos = rx.match(text, idx, &len)) != -1 ) {
+	QString word = text.mid(pos, len);
+        if (map.find(word) == map.end()) {
+            KTextEditor::CompletionEntry e;
+            e.text = word;
+            entries << e;
+            map[ word ] = TRUE;
+        }
+        idx = pos + len + 1;
+    }
+    return entries;
+}
+
+
 void AbbrevPart::slotExpandAbbrev()
 {
     KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    if (!part) {
+    if (!part || !part->widget()) {
         kdDebug() << "no rw part" << endl;
         return;
     }
@@ -166,13 +240,13 @@ void AbbrevPart::slotExpandAbbrev()
     KTextEditor::EditInterface *editiface
         = dynamic_cast<KTextEditor::EditInterface*>(part);
     if (!editiface) {
-        kdDebug() << "no edit" << endl;
+        kdDebug() << "no editiface" << endl;
         return;
     }
     KTextEditor::ViewCursorInterface *cursoriface
         = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
     if (!cursoriface) {
-        kdDebug() << "no viewcursor" << endl;
+        kdDebug() << "no viewcursoriface" << endl;
         return;
     }
 

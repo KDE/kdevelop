@@ -46,7 +46,6 @@ public:
     virtual ~CppCodeCompletion();
 
 public slots:
-    void expandText();
     void completeText();
     void typeOf();
     QString typingTypeOf( int, int );

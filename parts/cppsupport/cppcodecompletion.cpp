@@ -909,64 +909,6 @@ CppCodeCompletion::getEntryListForExpr( const QString& expr,
     return entries;
 }
 
-static QValueList<KTextEditor::CompletionEntry>
-getAllWords( const QString& text, const QString& prefix )
-{
-    QMap<QString, bool> map;
-    QValueList<KTextEditor::CompletionEntry> entries;
-    QRegExp rx( QString("\\b") + prefix + "[a-zA-Z0-9_]+\\b" );
-    int idx = 0;
-    int pos = 0;
-    int len = 0;
-    while( (pos = rx.match(text, idx, &len)) != -1 ){
-        QString word = text.mid( pos, len );
-        if( map.find(word) == map.end() ){
-            KTextEditor::CompletionEntry e;
-            e.text = word;
-            entries << e;
-            map[ word ] = TRUE;
-        }
-        idx = pos + len + 1;
-    }
-    return entries;
-}
-
-void
-CppCodeCompletion::expandText( )
-{
-    kdDebug() << "CEditWidget::expandText()" << endl;
-
-    if( !m_pCursorIface || !m_pEditIface )
-    {
-	kdDebug( 9007 ) << "Editor does not support the cursor and edit interfaces" << endl;
-        return;
-    }
-    
-    if( !m_pCompletionIface ){
-        kdDebug( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface" << endl;
-        return;
-    }
-
-
-    uint parag, index;
-    m_pCursorIface->cursorPosition( &parag, &index );
-    QString textLine = m_pEditIface->textLine( parag );
-    kdDebug(9007) << "TEXTLINE:" << textLine << endl;
-
-    int pos = index - 1;
-    while( pos>0 && (textLine[pos].isLetterOrNumber() || textLine[pos] == '_') )
-        --pos;
-    if( pos < (int)index )
-        ++pos;
-
-    QString prefix = textLine.mid( pos, index - pos + 1 );
-    if( !prefix.isEmpty() ){
-        QValueList<KTextEditor::CompletionEntry> entries;
-        entries = getAllWords( m_pEditIface->text(), prefix );
-        m_pCompletionIface->showCompletionBox( entries, prefix.length() );
-    }
-}
-
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN };
 
 int
