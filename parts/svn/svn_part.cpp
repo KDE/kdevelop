@@ -95,9 +95,9 @@ void SvnPart::contextMenu(QPopupMenu *popup, const Context *context) {
 		KPopupMenu *sub = new KPopupMenu(popup);
 		QString name = fi.fileName();
 		sub->insertTitle( i18n("Actions for %1").arg(name) );
-		sub->insertItem( i18n("Commit (repositery)"),
+		sub->insertItem( i18n("Commit (repository)"),
 				this, SLOT(slotCommit()) );
-		sub->insertItem( i18n("Update (repositery)"),
+		sub->insertItem( i18n("Update (repository)"),
 				this, SLOT(slotUpdate()) );
 		sub->insertSeparator();
 		sub->insertItem( i18n("Add to Repository (local)"),
@@ -112,9 +112,9 @@ void SvnPart::contextMenu(QPopupMenu *popup, const Context *context) {
 		sub->insertItem( i18n("Status (remote)") ,
 				this, SLOT(slotStatusRemote()) );
 		sub->insertSeparator();
-		sub->insertItem( i18n("Diff to Repository (repositery)"),
+		sub->insertItem( i18n("Diff to Repository (repository)"),
 				this, SLOT(slotDiff()) );
-		sub->insertItem( i18n("Log (repositery)"),
+		sub->insertItem( i18n("Log (repository)"),
 				this, SLOT(slotLog()) );
 		if (fi.isDir())
 			sub->insertItem( i18n("Cleanup (local)"),
@@ -256,7 +256,7 @@ svn_error_t *SvnPart::promptUser(char **result, const char *prompt, svn_boolean_
 	QString text;
 	bool ok = FALSE;
 	if (!hide) {
-		text = QInputDialog::getText( i18n("Subversion authentification"), i18n(prompt_native),
+		text = QInputDialog::getText( i18n("Subversion authentication"), i18n(prompt_native),
 				QLineEdit::Normal, QString::null, &ok, NULL );
 		if (!ok)
 			return svn_error_create (0, 0, NULL, pool, "Authentification aborted"); 
