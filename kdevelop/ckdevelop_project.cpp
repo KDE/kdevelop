@@ -160,17 +160,21 @@ bool CKDevelop::readProjectFile(QString file){
     return false;
   }
   
-  str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";
+  // str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";
+  //   if(QFile::exists(str)){
+  //     switchToFile(str);
+  //   }
+  str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".h";
   if(QFile::exists(str)){
     switchToFile(str);
   }
-  str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".h";
+  str = prj.getProjectDir() + prj.getSubDir() + "main.cpp";
   if(QFile::exists(str)){
     switchToFile(str);
   }
   // set the menus enable
   // file menu
-
+  
   enableCommand(ID_FILE_NEW_FILE);
   // doc menu
   enableCommand(ID_DOC_PROJECT_API_DOC);

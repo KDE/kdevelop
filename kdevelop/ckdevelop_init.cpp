@@ -61,9 +61,14 @@ void CKDevelop::initConnections(){
   // connections for the proc -processes
   connect(&search_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
   	  this,SLOT(slotSearchReceivedStdout(KProcess*,char*,int)) );
+
+  connect(&search_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+  	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+
   connect(&search_process,SIGNAL(processExited(KProcess*)),
 	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
   
+
   connect(&process,SIGNAL(receivedStdout(KProcess*,char*,int)),
   	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
 
@@ -72,11 +77,28 @@ void CKDevelop::initConnections(){
 
   connect(&process,SIGNAL(processExited(KProcess*)),
 	  this,SLOT(slotProcessExited(KProcess*) )) ;
-  
+
+  // shellprocess  
   connect(&shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
 	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+
+  connect(&shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+
   connect(&shell_process,SIGNAL(processExited(KProcess*)),
 	  this,SLOT(slotProcessExited(KProcess*) )) ;
+  
+  //application process
+
+  connect(&appl_process,SIGNAL(processExited(KProcess*)),
+	  this,SLOT(slotProcessExited(KProcess*) ));
+
+  connect(&appl_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
+	  this,SLOT(slotApplReceivedStdout(KProcess*,char*,int)) );
+
+  connect(&appl_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+	  this,SLOT(slotApplReceivedStderr(KProcess*,char*,int)) );
+
   
   // connect the windowsmenu with a method
   connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
@@ -104,16 +126,27 @@ void CKDevelop::init(){
   // create the main view
 
   view = new KNewPanner(this,"view",KNewPanner::Horizontal,KNewPanner::Absolute,
-  			config->readNumEntry("view_panner_pos", 337));
+  			config->readNumEntry("view_panner_pos",337));  
+  o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
+  
+  messages_widget = new COutputWidget(kapp,o_tab_view);
 
-  output_widget = new COutputWidget(kapp,view);
 //  output_widget->setFillColumnMode(80,true);
 //  output_widget->setWordWrap(true);
-  output_widget->setReadOnly(TRUE);
+  messages_widget->setReadOnly(TRUE);
 //  output_widget->setAutoIndentMode(true);
 //  output_widget->setFocusPolicy(QWidget::ClickFocus);
-  connect(output_widget,SIGNAL(clicked()),this,SLOT(slotClickedOnOutputWidget()));
+  connect(messages_widget,SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
 
+  stdin_stdout_widget = new COutputWidget(kapp,o_tab_view);
+
+  connect(stdin_stdout_widget,SIGNAL(keyPressed(int)),this,SLOT(slotKeyPressedOnStdinStdoutWidget(int)));
+  stderr_widget = new COutputWidget(kapp,o_tab_view);
+  stderr_widget->setReadOnly(TRUE);
+  o_tab_view->addTab(messages_widget,"messages");
+  o_tab_view->addTab(stdin_stdout_widget,"stdin/stdout");
+  o_tab_view->addTab(stderr_widget,"stderr");
+  
   
   //  s_tab_current = 0;
 
@@ -216,7 +249,7 @@ void CKDevelop::init(){
   s_tab_view->addTab(swallow_widget,"Tools");
 
   top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-  view->activate(top_panner,output_widget); 
+  view->activate(top_panner,o_tab_view); 
   
   output_view_pos=view->separatorPos();
   tree_view_pos=top_panner->separatorPos();
@@ -616,6 +649,23 @@ void CKDevelop::initProject(){
   }
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

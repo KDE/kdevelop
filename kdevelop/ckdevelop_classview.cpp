@@ -136,6 +136,9 @@ int CKDevelop::CVGotoClassDecl(QString classname){
       count++;
     }
   }
+  if(info_found == 0){ // not found !!!
+    return 0; // prevent a segfault in the next line
+  }
   switchToFile(prj.getProjectDir() + prj.getSubDir() + info_found->filename);
   text = edit_widget->text();
   class_tree->CVRemoveAllComments(&text);

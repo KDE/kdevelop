@@ -1,3 +1,7 @@
+1999-01-31 Sandy Meier <smeier@rz.uni-potsdam.de>
+
+       * added a tabview in the outputwidget (messages,stdin/stdout,sterr),stdin is needed for terminal-application
+       * some internal changes in the CProject class, not completed
 
 1999-01-31  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
        * added popups to the class-viewer, some Members for Class and Method Menu already created empty.
@@ -21,12 +25,16 @@
           including changes in resource.h: TODO: review the ID_ values
 
 1999-01-27 Sandy Meier <smeier@rz.uni-potsdam.de>
+
 	* commit a patch from Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 	 kdevelop should now compile on gcc 2.7.2 too
 
 1999-01-26  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+
 	* added Options-Documentation Browser dialog for configuring the Doc-Browser look
+
 1999-01-25 Sandy Meier <smeier@rz.uni-potsdam.de>
+
 	* kdevelop/cproject.h: added setProjectType(),setKDevPrjVersion()
 
 1999-01-24  Sandy Meier  <smeier@rz.uni-potsdam.de>

@@ -200,8 +200,14 @@ public:
   void slotHelpAbout();
   void slotToolbarClicked(int);
   void slotURLSelected(KHTMLView* widget,const char* url,int,const char*);
+
   void slotReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotReceivedStderr(KProcess* proc,char* buffer,int buflen);
+
+  void slotApplReceivedStdout(KProcess* proc,char* buffer,int buflen);
+  void slotApplReceivedStderr(KProcess* proc,char* buffer,int buflen);
+  
+
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotDocumentDone( KHTMLView *_view );
   void slotProcessExited(KProcess* proc);
@@ -217,7 +223,8 @@ public:
 
   void slotSTabSelected(int item);
   void slotMenuBuffersSelected(int id);
-  void slotClickedOnOutputWidget();
+  void slotClickedOnMessagesWidget();
+  void slotKeyPressedOnStdinStdoutWidget(int key);
 
   void slotClassChoiceCombo(int index);
   void slotMethodChoiceCombo(int index);
@@ -267,7 +274,8 @@ private:
   
   
   KIconLoader icon_loader;
-  KProcess process;
+  KProcess process; // for tools,compiler,make,kodc
+  KProcess appl_process; //only for selfmade appl
   KShellProcess shell_process;
   CProject prj; // at the moment only one project at the same time
 
@@ -285,6 +293,8 @@ private:
 
   CTabCtl* s_tab_view; // the tabbar for the sourcescode und browser 
   CTabCtl* t_tab_view; // the tabbar for the trees
+  CTabCtl* o_tab_view; // the tabbar for the output_widgets 
+  
   CEditWidget* edit_widget; // a pointer to the actual editwidget
  
   CEditWidget* header_widget; // the editwidget for the headers/resources
@@ -297,6 +307,11 @@ private:
   CLogFileView* log_file_tree; // the logical filetree
   CRealFileView* real_file_tree; // the real filetree
   CDocTree* doc_tree; // the documentation tre
+ 
+
+  COutputWidget* messages_widget; // output for the compiler ...
+  COutputWidget* stdin_stdout_widget;
+  COutputWidget* stderr_widget;
 
   int tree_view_pos;
   int output_view_pos;
@@ -308,7 +323,7 @@ private:
 
   bool  prev_was_search_result;
 
-  COutputWidget* output_widget; // output for the compiler ...
+  
 
 
   //some vars for the searchengine

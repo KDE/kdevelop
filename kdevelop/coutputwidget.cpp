@@ -23,3 +23,7 @@ COutputWidget::COutputWidget(KApplication* a,QWidget* parent) : KEdit(a,parent){
 void COutputWidget::mouseReleaseEvent(QMouseEvent*){
   emit clicked();
 }
+void COutputWidget::keyPressEvent ( QKeyEvent* event){
+  KEdit::keyPressEvent(event);
+  emit keyPressed(event->ascii());
+}

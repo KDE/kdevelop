@@ -263,6 +263,7 @@ void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFilePrint(){
+  appl_process.writeStdin("5\n",3);
 }
 
 void CKDevelop::closeEvent(QCloseEvent* e){
@@ -736,7 +737,7 @@ void CKDevelop::slotBuildMake(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
-  output_widget->clear();
+  messages_widget->clear();
   QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
   process.clearArguments();
   if(!prj.getMakeOptions().isEmpty()){
@@ -766,7 +767,7 @@ void CKDevelop::slotBuildRebuildAll(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
-  output_widget->clear();
+  messages_widget->clear();
   QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
   process.clearArguments();
   process << "make";
@@ -791,7 +792,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
 
   setToolMenuProcess(false);
   slotFileSaveAll();
-  output_widget->clear();
+  messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
   QDir::setCurrent(prj.getProjectDir()); 
   process.clearArguments();
@@ -822,8 +823,9 @@ void CKDevelop::slotBuildConfigure(){
     view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
   setToolMenuProcess(false);
+  slotFileSave();
+  messages_widget->clear();
   slotFileSaveAll();
-  output_widget->clear();
   QDir::setCurrent(prj.getProjectDir()); 
   process.clearArguments();
   process << "./configure";
@@ -852,7 +854,7 @@ void CKDevelop::slotBuildAPI(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
-  output_widget->clear();
+  messages_widget->clear();
   QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
   shell_process.clearArguments();
   shell_process << "kdoc";
@@ -865,7 +867,6 @@ void CKDevelop::slotBuildAPI(){
 }
 
 void CKDevelop::slotBuildManual(){
-
   if(!CToolClass::searchProgram("sgml2html")){
     return;
   }
@@ -882,7 +883,7 @@ void CKDevelop::slotBuildManual(){
   setToolMenuProcess(false);
   //  slotFileSaveAll();
   slotStatusMsg(i18n("Creating project Manual..."));
-  output_widget->clear();
+  messages_widget->clear();
   QDir::setCurrent(prj.getProjectDir() + prj.getSubDir() + "/docs/en/");
   process.clearArguments();
   process << "sgml2html";
@@ -929,36 +930,52 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   }
   // insert into the history-list
   history_list.append(url);
- 
-  
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){ 
   int x,y;
-  output_widget->cursorPosition(&x,&y);
+  messages_widget->cursorPosition(&x,&y);
   QString str(buffer,buflen+1);
-  output_widget->insertAt(str,x,y);
+  messages_widget->insertAt(str,x,y);
+  o_tab_view->setCurrentTab(MESSAGES);
 }
-void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){ 
- 
+void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){  
   int x,y;
-  output_widget->cursorPosition(&x,&y);
+  messages_widget->cursorPosition(&x,&y);
   QString str(buffer,buflen+1);
-  output_widget->insertAt(str,x,y);
+  messages_widget->insertAt(str,x,y);
+  o_tab_view->setCurrentTab(MESSAGES);
+}
+void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){ 
+  int x,y;
+  stdin_stdout_widget->cursorPosition(&x,&y);
+  QString str(buffer,buflen+1);
+  stdin_stdout_widget->insertAt(str,x,y);
+}
+void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
+  int x,y;
+  stderr_widget->cursorPosition(&x,&y);
+  QString str(buffer,buflen+1);
+  stderr_widget->insertAt(str,x,y);
 }
 
-void CKDevelop::slotClickedOnOutputWidget(){
+
+void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
+  char a = key;
+  appl_process.writeStdin(&a,1);
+}
+void CKDevelop::slotClickedOnMessagesWidget(){
   int x,y;
   int error_line;
   QString text;
   QString error_line_str;
   QString error_filename;
   int pos1,pos2; // positions in the string
-  QRegExp reg(":[0-9]*:"); // is it a error line?, I hope it works
+  QRegExp reg(":[0-9]*:"); // is it an error line?, I hope it works
 
-  output_widget->cursorPosition(&x,&y);
-  text = output_widget->textLine(x);
-  if((pos1=reg.match(text)) == -1) return; // not a error line
+  messages_widget->cursorPosition(&x,&y);
+  text = messages_widget->textLine(x);
+  if((pos1=reg.match(text)) == -1) return; // not an error line
 
   // extract the error-line
   pos2 = text.find(':',pos1+1);
@@ -1004,11 +1021,14 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     }
     if (next_job == "run" && process.exitStatus() == 0){ // rest from the buildRun
       QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
-      process.clearArguments();
+      stdin_stdout_widget->clear();
+      o_tab_view->setCurrentTab(STDINSTDOUT);
+      stderr_widget->clear();
+      appl_process.clearArguments();
       // Warning: not every user has the current directory in his path !
-      process << "./" + prj.getBinPROGRAM().lower();
+      appl_process << "./" + prj.getBinPROGRAM().lower();
       setToolMenuProcess(false);
-      process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      appl_process.start(KProcess::NotifyOnExit,KProcess::All);
       next_job = "";
     }
     if (next_job == "refresh"){ // rest from the add projectfile

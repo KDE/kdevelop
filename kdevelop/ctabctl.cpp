@@ -18,10 +18,16 @@
  ***************************************************************************/
 #include "ctabctl.h"
 
-CTabCtl::CTabCtl(QWidget* parent,char* name) : KTabCtl(parent,name){
+CTabCtl::CTabCtl(QWidget* parent,char* name,QString type) : KTabCtl(parent,name){
   setFocusPolicy(QWidget::NoFocus);
-//tabs->setFocusPolicy(QWidget::NoFocus);
-  setShape(QTabBar::RoundedAbove);
+  tabs->setFocusPolicy(QWidget::NoFocus);
+  if(type == "normal"){
+    setShape(QTabBar::RoundedAbove);
+  }
+  if(type == "output_widget"){
+    setShape(QTabBar::RoundedAbove);
+    //    tabs->setFont(QFont("helvetica",10));
+  }
   
 }
 void CTabCtl::setCurrentTab(int id){

@@ -29,8 +29,11 @@
 class CTabCtl : public KTabCtl {
   Q_OBJECT
 public:
-  /**constructor*/
-  CTabCtl(QWidget* parent=0,char* name=0);
+  /**constructor
+   type = normal,output_widget
+  */
+  
+  CTabCtl(QWidget* parent=0,char* name=0,QString type="normal");
   /**destructor*/
   ~CTabCtl(){};
  

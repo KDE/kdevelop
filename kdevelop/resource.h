@@ -1,5 +1,5 @@
 /***************************************************************************
-                          resource.h  -  description                              
+                          resource.h  - 
                              -------------------                                         
 
     version              :                                   
@@ -160,12 +160,14 @@
 
 // for the setCurrentTab(int);
 
+#define HEADER 0
+#define CPP 1
+#define TOOLS 3 
+#define BROWSER 2 
 
-#define HEADER  0
-#define CPP 	1
-#define TOOLS 	3
-#define BROWSER 2
-
+#define MESSAGES 0
+#define STDINSTDOUT 1
+#define STDERR 2
 
 #define ID_BROWSER_TOOLBAR 1
 

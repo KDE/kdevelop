@@ -34,10 +34,13 @@ public:
   ~COutputWidget(){};
  
 protected:
-  void mouseReleaseEvent(QMouseEvent* event);
+  virtual void mouseReleaseEvent(QMouseEvent* event);
+  virtual void keyPressEvent ( QKeyEvent* event);
+  
   signals:
   /** emited, if the mouse was clicked over the widget*/
   void clicked();
+  void keyPressed(int key);
   
 };
 
