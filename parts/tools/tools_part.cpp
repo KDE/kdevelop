@@ -66,7 +66,8 @@ void ToolsPart::updateMenu()
 	  if (df.readName().isNull())
 		continue;
 
-	  KAction *action = new KAction(df.readName(), df.readIcon(), 0, this, SLOT(slotToolActivated()), 0, name.latin1());
+	  KAction *action = new KAction(df.readName(), df.readIcon(), 0,
+                                        this, SLOT(slotToolActivated()), (QObject*)0, name.latin1());
 	  actions.append(action);
 	}
 
