@@ -20,6 +20,7 @@ Comment[ru]=Модуль импорта проектов для KDevelop
 Comment[sr]=KDevelop-ов прилагођени увозник
 Comment[sr@Latn]=KDevelop-ов прилагођени увозник
 Comment[sv]=KDevelop egen import
+Comment[xx]=xxKDevelop Custom Importerxx
 Icon=gear
 ServiceTypes=KDevelop/ProjectImporter
 X-KDE-Library=libkdevcustomimporter

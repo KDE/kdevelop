@@ -12,6 +12,7 @@ Name[pt]=Importador de VCS do KDevelop
 Name[pt_BR]=Integrador VCS para o KDevelop
 Name[ru]=Модуль работы с системами контроля версий для KDevelop
 Name[sv]=KDevelop VCS-import
+Name[xx]=xxKDevelop VCS Integratorxx
 
 [PropertyDef::X-KDevelop-VCS]
 Type=QString

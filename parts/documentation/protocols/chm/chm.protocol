@@ -14,4 +14,5 @@ Description[pt]=A 'kioslave' para mostrar ficheiros WinHelp
 Description[pt_BR]=Um kioslave para exibir arquivos WinHelp
 Description[ru]=Обработчик ввода-вывода для файлов WinHelp
 Description[sv]=En I/O-slav för att visa WinHelp-filer
+Description[xx]=xxA kioslave for displaying WinHelp filesxx
 Icon=help
