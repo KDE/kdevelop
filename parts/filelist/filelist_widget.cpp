@@ -82,7 +82,7 @@ void FileListWidget::maybeTip( QPoint const & p )
 					message = i18n("This file has changed on disk since it was last saved.");
 					break;
 				case DirtyAndModified:
-					message = i18n("Conflict! This file has changed on disk and has unsaved changes.");
+					message = i18n("Conflict: this file has changed on disk and has unsaved changes.");
 					break;
 				default:
 					message = item->url().prettyURL();
