@@ -1,4 +1,9 @@
 # KDE Config File
 [General]
 Comment=Qt C++ Application (QMake based)
-Comment[fr]=Une application C++ pour Qt (Makefiles basés sur QMake)
+Comment[fr]=Une application C++ pour Qt (Makefiles basï¿½ sur QMake)
+
+[Infrastructure]
+Comment=Attempt to generate QMake build system infrastructure
+Command=qmake -project
+ExistingProjectPattern=*.pro

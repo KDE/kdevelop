@@ -18,6 +18,12 @@
 
 class AppWizardPart;
 
+struct InfrastructureCmd{
+    bool isOn;
+    QString comment;
+    QString command;
+    QString existingPattern;
+};
 
 class ImportDialog : public ImportDialogBase
 {
@@ -29,7 +35,11 @@ public:
 
 protected:
     virtual void accept();
+    
+protected slots:
     virtual void dirChanged();
+    virtual void projectTypeChanged(const QString &type);
+    virtual void projectTypeChanged(int type);
 
 private slots:
     void slotFinishedCheckout( QString destinationDir );
@@ -41,9 +51,13 @@ private:
     void scanLegacyStudioProject(const QString &fileName);
     void scanAutomakeProject(const QString &dirName);
     void setProjectType(const QString &type);
+    
+    void createProjectInfrastructure();
 
     QStringList importNames;
     AppWizardPart *m_part;
+    
+    QMap<QString, InfrastructureCmd> m_infrastructure;
 };
 
 #endif

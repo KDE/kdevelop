@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include "importdlg.h"
+#include <stdlib.h>
 #include <qcombobox.h>
 #include <qdir.h>
 #include <qfile.h>
@@ -20,6 +21,7 @@
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <qtooltip.h>
+#include <qcheckbox.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kdialog.h>
@@ -31,6 +33,7 @@
 #include <kcursor.h>
 #include <kfile.h>
 #include <kurlrequester.h>
+#include <kprocess.h>
 
 #include "kdevcore.h"
 #include "kdevversioncontrol.h"
@@ -58,14 +61,28 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     for (it = importNames.begin(); it != importNames.end(); ++it) {
         KConfig config(KGlobal::dirs()->findResource("appimports", *it));
         config.setGroup("General");
-        project_combo->insertItem(config.readEntry("Comment"));
+        QString type = config.readEntry("Comment");
+        project_combo->insertItem(type);
+        
+        if (config.hasGroup("Infrastructure"))
+        {
+            config.setGroup("Infrastructure");
+            m_infrastructure[type].isOn = true;
+            m_infrastructure[type].comment = config.readEntry("Comment");
+            m_infrastructure[type].command = config.readEntry("Command");
+            m_infrastructure[type].existingPattern = config.readEntry("ExistingProjectPattern");
+        }
+        else
+            m_infrastructure[type].isOn = false;
     }
 
+    infrastructureBox->setEnabled(false);
     setProjectType("c");
     connect( name_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotProjectNameChanged( const QString & ) ) );
     scanAvailableVCS();
     connect( fetchModuleButton, SIGNAL(clicked()),
         this, SLOT(slotFetchModulesFromRepository()) );
+    connect(urlinput_edit, SIGNAL(urlSelected(const QString& )), this, SLOT(dirChanged()));
     slotProjectNameChanged( name_edit->text() );
 }
 
@@ -97,6 +114,9 @@ void ImportDialog::accept()
             KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers."));
             return;
         }
+        
+    if (infrastructureBox->isVisible() && infrastructureBox->isChecked())
+        createProjectInfrastructure();
 
     QString author = author_edit->text();
     QString email = email_edit->text();
@@ -172,6 +192,7 @@ static bool dirHasFiles(QDir &dir, const QString &patterns)
 
 void ImportDialog::dirChanged()
 {
+    kdDebug() << "ImportDialog::dirChanged" << endl;
     QString dirName = urlinput_edit->url();
     QDir dir(dirName);
     if (!dir.exists())
@@ -364,6 +385,44 @@ void ImportDialog::slotFetchModulesFromRepository()
     //restore cursor if we can't fetch repository
     if ( !vcs->fetchFromRepository() )
         setCursor( KCursor::arrowCursor() );
+}
+
+void ImportDialog::projectTypeChanged( const QString &type )
+{
+    if (m_infrastructure[type].isOn)
+    {
+        infrastructureBox->setEnabled(true);
+        infrastructureBox->setText(m_infrastructure[type].comment);
+    }
+    else
+    {
+        infrastructureBox->setEnabled(false);
+        infrastructureBox->setText(i18n("Generate build system infrastrucure"));
+    }
+}
+
+void ImportDialog::createProjectInfrastructure( )
+{
+    kdDebug() << "ImportDialog::createProjectInfrastructure" << endl;
+    InfrastructureCmd cmd = m_infrastructure[project_combo->currentText()];
+    if (!cmd.isOn)
+        return;
+    
+    QDir dir (urlinput_edit->url());
+    QStringList files = dir.entryList(cmd.existingPattern);
+    if (!files.isEmpty()) {
+        if (KMessageBox::questionYesNo(this, i18n("Project infrastrucure already exists in target directory.\nGenerate new project infrastructure and overwrite old?")) == KMessageBox::No)
+            return;
+    }
+    
+    QString command = "cd " + urlinput_edit->url() + " && " + cmd.command;
+    kdDebug() << "executing " << command.ascii() << endl;
+    system(command.ascii());
+}
+
+void ImportDialog::projectTypeChanged( int type )
+{
+    projectTypeChanged(project_combo->text(type));
 }
 
 
