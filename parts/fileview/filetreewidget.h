@@ -30,10 +30,12 @@ public:
     bool shouldBeShown( KFileTreeViewItem* item );
     QString projectDirectory();
     QStringList projectFiles();
-    
+
 public slots:
     void hideOrShow();
-    
+    void addProjectFiles( QStringList const & fileList, bool constructing = false );
+    void removeProjectFiles( QStringList const & fileList );
+
 private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
@@ -41,10 +43,12 @@ private slots:
 
 private:
     bool matchesHidePattern(const QString &fileName);
-    
+
     FileViewPart *m_part;
     QStringList m_hidePatterns;
+    QStringList m_projectFiles;
     bool m_showNonProjectFiles;
+
 };
 
 #endif

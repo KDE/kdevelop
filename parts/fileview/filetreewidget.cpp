@@ -31,13 +31,13 @@
 class MyFileTreeViewItem : public KFileTreeViewItem
 {
 public:
-    MyFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
-       : KFileTreeViewItem( parent, item, branch )
+    MyFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch, bool pf )
+       : KFileTreeViewItem( parent, item, branch ), _isProjectFile( pf )
     {
         hideOrShow();
     }
     MyFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
-       : KFileTreeViewItem( parent, item, branch )
+       : KFileTreeViewItem( parent, item, branch ), _isProjectFile( false )
     {
         hideOrShow();
     }
@@ -46,18 +46,29 @@ public:
                            int column, int width, int alignment);
     void hideOrShow();
 
+    FileTreeWidget* listView()
+    {
+        return static_cast<FileTreeWidget*>(QListViewItem::listView());
+    }
+
+    bool isProjectFile()
+    {
+        return _isProjectFile;
+    }
+
+    bool setProjectFile( QString const & path, bool pf );
+
 protected:
     virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
 private:
-    FileTreeWidget* listView()
-    { return static_cast<FileTreeWidget*>(QListViewItem::listView()); }
+
+    bool _isProjectFile;
 };
 
 void MyFileTreeViewItem::hideOrShow()
 {
     setVisible( listView()->shouldBeShown( this ) );
-    repaint();
 
     MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
     while( item ) {
@@ -66,16 +77,41 @@ void MyFileTreeViewItem::hideOrShow()
     }
 }
 
+bool MyFileTreeViewItem::setProjectFile( QString const & path, bool pf )
+{
+    if ( this->path() == path )
+    {
+        _isProjectFile = pf;
+        setVisible( listView()->shouldBeShown( this ) );
+        repaint();
+        return true;
+    }
+
+    MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
+    while( item )
+    {
+        if ( item->setProjectFile( path, pf ) )
+        {
+            return true;
+        }
+        else
+        {
+            item = static_cast<MyFileTreeViewItem*>(item->nextSibling());
+        }
+    }
+    return false;
+}
+
 void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
                              int column, int width, int alignment)
 {
-    QString prunedPath = path().replace( QRegExp( listView()->projectDirectory() + "/" ), "" );
-    if ( listView()->m_showNonProjectFiles && listView()->projectFiles().contains( prunedPath ) )
+    if ( listView()->m_showNonProjectFiles && isProjectFile() )
     {
         QFont font(p->font());
         font.setBold(true);
         p->setFont(font);
     }
+
     QListViewItem::paintCell(p, cg, column, width, alignment);
 }
 
@@ -99,25 +135,27 @@ int MyFileTreeViewItem::compare( QListViewItem *i, int col, bool ascending ) con
 class MyFileTreeBranch : public KFileTreeBranch
 {
 public:
-   MyFileTreeBranch( KFileTreeView* view, const KURL& url, const QString& name, const QPixmap& pix )
-       : KFileTreeBranch( view, url, name, pix, false,
-           new MyFileTreeViewItem(
-               view, new KFileItem( url, "inode/directory", S_IFDIR  ), this ) )
-   {
-   }
+    MyFileTreeBranch( KFileTreeView* view, const KURL& url, const QString& name, const QPixmap& pix )
+        : KFileTreeBranch( view, url, name, pix, false,
+            new MyFileTreeViewItem(
+                view, new KFileItem( url, "inode/directory", S_IFDIR  ), this ) )
+    {
+    }
 
-   ~MyFileTreeBranch()
-   {
-       if( root() )
-           delete( root()->fileItem() );
-   }
+    ~MyFileTreeBranch()
+    {
+        if( root() )
+            delete( root()->fileItem() );
+    }
 
-   virtual KFileTreeViewItem* createTreeViewItem( KFileTreeViewItem* parent, KFileItem* fileItem )
-   {
-       if( !parent || !fileItem )
-           return 0;
-       return new MyFileTreeViewItem( parent, fileItem, this );
-   }
+    virtual KFileTreeViewItem* createTreeViewItem( KFileTreeViewItem* parent, KFileItem* fileItem )
+    {
+        if( !parent || !fileItem )
+            return 0;
+
+        FileTreeWidget * lv = static_cast<MyFileTreeViewItem*>(parent)->listView();
+        return new MyFileTreeViewItem( parent, fileItem, this, lv->projectFiles().contains( fileItem->url().path() ) > 0 );
+    }
 };
 
 FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *name)
@@ -158,6 +196,8 @@ FileTreeWidget::~FileTreeWidget()
 
 void FileTreeWidget::openDirectory( const QString& dirName )
 {
+    addProjectFiles( m_part->project()->allFiles(), true );
+
     KURL url;
     url.setPath( dirName );
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
@@ -166,8 +206,8 @@ void FileTreeWidget::openDirectory( const QString& dirName )
 
 bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
 {
-    QString prunedItemPath = item->path().replace( QRegExp( projectDirectory() + "/" ), "" );
-    return( (m_showNonProjectFiles || item->isDir() || projectFiles().contains( prunedItemPath ))
+    MyFileTreeViewItem * i = static_cast<MyFileTreeViewItem *>( item );
+    return( (m_showNonProjectFiles || item->isDir() || i->isProjectFile() )
              && !matchesHidePattern( item->text(0) ) );
 }
 
@@ -241,7 +281,45 @@ QString FileTreeWidget::projectDirectory()
 
 QStringList FileTreeWidget::projectFiles()
 {
-    return m_part->project()->allFiles();
+    return m_projectFiles;
+}
+
+void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constructing )
+{
+    QStringList::ConstIterator it;
+    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    {
+        QString file = m_part->project()->projectDirectory() + "/" + ( *it );
+        if ( ! m_projectFiles.contains( file ) )
+        {
+            m_projectFiles.append( file );
+        }
+
+        if ( ! constructing )
+        {
+            MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
+            if( item )
+            {
+                item->setProjectFile( file, true );
+            }
+        }
+    }
+}
+
+void FileTreeWidget::removeProjectFiles( QStringList const & fileList )
+{
+    QStringList::ConstIterator it;
+    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    {
+        QString file = m_part->project()->projectDirectory() + "/" + ( *it );
+        m_projectFiles.remove( file );
+
+        MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
+        if( item )
+        {
+            item->setProjectFile( file, false );
+        }
+    }
 }
 
 #include "filetreewidget.moc"

@@ -45,10 +45,11 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     mainWindow()->embedSelectView(m_filetree, i18n("File Tree"), i18n("view on the project directory"));
         
     // File tree
-    connect( project(), SIGNAL(addedFilesToProject(const QStringList&)),
-             m_filetree, SLOT(hideOrShow()) );
-    connect( project(), SIGNAL(removedFilesFromProject(const QStringList&)),
-             m_filetree, SLOT(hideOrShow()) );
+    connect( project(), SIGNAL( addedFilesToProject( const QStringList & ) ),
+             m_filetree, SLOT( addProjectFiles( const QStringList & ) ) );
+    connect( project(), SIGNAL( removedFilesFromProject( const QStringList & ) ),
+             m_filetree, SLOT( removeProjectFiles( const QStringList & ) ) );
+
     m_filetree->openDirectory(project()->projectDirectory());
 }
 
