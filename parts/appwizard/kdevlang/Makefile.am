@@ -3,7 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kdevlangdir = ${appwizarddatadir}/template-kdevlang
 templatedir = ${appwizarddatadir}/templates
 
-kdevpart2_DATA = src-Makefile.am kdevlang_part.cpp kdevlang_part.h
+kdevlang_DATA = src-Makefile.am kdevlang_part.cpp kdevlang_part.h
 		kdevlang.rc kdevlang.desktop app.kdevelop kdevlang-configure.in.in
 template_DATA = kdevlang
 
