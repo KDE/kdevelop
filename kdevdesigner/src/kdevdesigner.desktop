@@ -1,10 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=KDevDesigner
-Name[xx]=xxKDevDesignerxx
+Name=KDevelop Designer
+Name[sv]=KDevelop designer
+GenericName=KDevelop Designer
 Exec=kdevdesigner %i %m -caption "%c"
-Icon=kdevdesigner
+Icon=kdevelop
 Type=Application
 DocPath=kdevdesigner/kdevdesigner.html
 Comment=GUI Designer for Qt/KDE
+Comment[et]=Qt/KDE graafilise kasutajaliidese disainer
+Comment[sv]=Grafisk gränssnittsdesign för Qt och KDE
 Terminal=0
+Categories=Qt;KDE;Development
