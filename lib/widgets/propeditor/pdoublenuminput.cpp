@@ -38,8 +38,10 @@ PDoubleNumInput::PDoubleNumInput(MultiProperty *property, QWidget *parent, const
 #ifndef PURE_QT
     m_edit = new KDoubleNumInput(-999999.0, 999999.0, 0.0, 0.01, 2, this);
     m_edit->setLabel(QString::null);
+    connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
 #else
     m_edit = new QFloatInput(-999999, 999999, 0.01, 2, this );
+    connect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
 #endif
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 /*    m_edit->setMinValue(-999999999);
@@ -47,7 +49,6 @@ PDoubleNumInput::PDoubleNumInput(MultiProperty *property, QWidget *parent, const
     m_edit->setPrecision(2);*/
     l->addWidget(m_edit);
 
-    connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
 }
 
 QVariant PDoubleNumInput::value() const
@@ -57,18 +58,24 @@ QVariant PDoubleNumInput::value() const
 
 void PDoubleNumInput::setValue(const QVariant &value, bool emitChange)
 {
-    disconnect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
 #ifndef PURE_QT
+    disconnect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
     m_edit->setValue(value.toDouble());
-#else
-    m_edit->setValue(int(value.toDouble()*pow(m_edit->digits(),10)));
-#endif
     connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
+#else
+    disconnect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
+    m_edit->setValue(int(value.toDouble()*pow(m_edit->digits(),10)));
+    connect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
+#endif
     if (emitChange)
         emit propertyChanged(m_property, value);
 }
 
 void PDoubleNumInput::updateProperty(double val)
+{
+    emit propertyChanged(m_property, QVariant(val));
+}
+void PDoubleNumInput::updateProperty(int val)
 {
     emit propertyChanged(m_property, QVariant(val));
 }

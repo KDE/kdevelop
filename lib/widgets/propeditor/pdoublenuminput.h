@@ -46,7 +46,10 @@ public:
     virtual void setValue(const QVariant &value, bool emitChange=true);
 
 private slots:
+    //because of a bug in moc which doesn't detect conditional slots
+    //we need them both
     void updateProperty(double val);
+    void updateProperty(int val);
 
 private:
 #ifndef PURE_QT
