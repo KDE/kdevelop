@@ -25,6 +25,7 @@
 
 #ifdef NO_KDE
 #include "kmdidummy.h"
+#include "qapplication.h"
 #else
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -116,12 +117,16 @@ KMdiDockContainer::KMdiDockContainer(QWidget *parent, QWidget *win, int position
 
 KMdiDockContainer::~KMdiDockContainer()
 {	
-  for (QMap<KMdiDockWidget*,int>::iterator it=m_map.begin();it!=m_map.end();++it) {
+  QMap<KMdiDockWidget*,int>::iterator it;
+  while (m_map.count()) {
+	it = m_map.begin();
 	KMdiDockWidget *w=it.key();
 	  if (m_overlapButtons.contains(w)) {
 	    (static_cast<KDockWidgetHeader*>(w->getHeader()->qt_cast("KDockWidget_Compat::KDockWidgetHeader")))->removeButton(m_overlapButtons[w]);
 	    m_overlapButtons.remove(w);
 	  }
+    m_map.remove(w);
+    w->undock();
   }
 	deactivated(this);
 }
@@ -262,6 +267,7 @@ void KMdiDockContainer::removeWidget(KDockWidget* dwdg)
   m_tb->setTab(id,false);
   tabClicked(id);
   m_tb->removeTab(id);
+  m_ws->removeWidget(w);
   m_map.remove(w);
   m_revMap.remove(id);
   if (m_overlapButtons.contains(w)) {
@@ -437,7 +443,11 @@ void KMdiDockContainer::load(QDomElement& dockEl)
   {
     m_tb->setTab(it1.current()->id(),false);
   }
+#ifdef NO_KDE
+  qApp->syncX();
+#else
   kapp->syncX();
+#endif
   m_delayedRaise=-1;
 
   for (QMap<KMdiDockWidget*,KDockButton_Private*>::iterator it=m_overlapButtons.begin();
