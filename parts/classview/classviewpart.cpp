@@ -13,6 +13,7 @@
 
 #include "classviewpart.h"
 
+#include <qtimer.h>
 #include <qpopupmenu.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
@@ -153,9 +154,7 @@ void ClassViewPart::projectOpened()
     KDevLanguageSupport *ls = languageSupport();
     if (ls)
         connect(ls, SIGNAL(updatedSourceInfo()), this, SLOT(updatedSourceInfo()));
-    updatedSourceInfo();
-    emit setLanguageSupport(ls);
-    setupPopup();
+    QTimer::singleShot( 0, this, SLOT(initialize()) );
 }
 
 
@@ -443,6 +442,13 @@ void ClassViewPart::gotoImplementation(const QString &className, const QString &
         kdDebug(9003) << "Classview switching to file " << toFile << "@ line " << toLine << endl;
 	partController()->editDocument(toFile, toLine);
     }
+}
+
+void ClassViewPart::initialize( )
+{
+    updatedSourceInfo();
+    emit setLanguageSupport( languageSupport() );
+    setupPopup();
 }
 
 #include "classviewpart.moc"

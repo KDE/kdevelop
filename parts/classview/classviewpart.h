@@ -73,6 +73,7 @@ private slots:
     void selectedAddMethod();
     void selectedAddAttribute();
     void dumpTree();
+    void initialize();
     
 private:
     QGuardedPtr<QWidget> m_classtree;
