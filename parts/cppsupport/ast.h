@@ -69,6 +69,9 @@ enum NodeType
     NodeType_TranslationUnit,
     NodeType_FunctionDefinition,
     NodeType_ExpressionStatement,
+    NodeType_ParameterDeclaration,
+    NodeType_ParameterDeclarationList,
+    NodeType_ParameterDeclarationClause,
 
     NodeType_Custom = 2000
 };
@@ -551,41 +554,121 @@ public:
 public:
     DeclaratorAST();
     virtual ~DeclaratorAST();
-    
+
     QPtrList<AST> ptrOpList();
     void addPtrOp( AST::Node& ptrOp );
-    
+
     DeclaratorAST* subDeclarator();
     void setSubDeclarator( std::auto_ptr<DeclaratorAST>& subDeclarator );
-    
+
     NameAST* declaratorId();
     void setDeclaratorId( NameAST::Node& declaratorId );
-    
+
     AST* bitfieldInitialization();
     void setBitfieldInitialization( AST::Node& bitfieldInitialization );
-    
+
     QPtrList<AST> arrayDimensionList();
     void addArrayDimension( AST::Node& arrayDimension );
-    
-    AST* parameterDeclarationClause();
-    void setParameterDeclarationClause( AST::Node& parameterDeclarationClause );
-    
+
+    class ParameterDeclarationClauseAST* parameterDeclarationClause();
+    void setParameterDeclarationClause( std::auto_ptr<class ParameterDeclarationClauseAST>& parameterDeclarationClause );
+
     bool isConstMethod();
     void setIsConstMethod( bool isConstMethod );
-    
+
     AST* exceptionSpecification();
     void setExceptionSpecification( AST::Node& exceptionSpecification );
-    
+
 private:
     QPtrList<AST> m_ptrOpList;
     std::auto_ptr<DeclaratorAST> m_subDeclarator;
     NameAST::Node m_declaratorId;
     AST::Node m_bitfieldInitialization;
     QPtrList<AST> m_arrayDimensionList;
-    AST::Node m_parameterDeclarationClause;
+    std::auto_ptr<class ParameterDeclarationClauseAST> m_parameterDeclarationClause;
     bool m_isConstMethod;
     AST::Node m_exceptionSpecification;
+
+private:
+    DeclaratorAST( const DeclaratorAST& source );
+    void operator = ( const DeclaratorAST& source );
 };
+
+class ParameterDeclarationAST: public AST
+{
+public:
+    typedef std::auto_ptr<ParameterDeclarationAST> Node;
+    enum { Type = NodeType_ParameterDeclaration };
+
+public:
+    ParameterDeclarationAST();
+    virtual ~ParameterDeclarationAST();
+
+    TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
+    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
+
+    DeclaratorAST* declarator() { return m_declarator.get(); }
+    void setDeclarator( DeclaratorAST::Node& declarator );
+
+    AST* expression() { return m_expression.get(); }
+    void setExpression( AST::Node& expression );
+
+private:
+    TypeSpecifierAST::Node m_typeSpec;
+    DeclaratorAST::Node m_declarator;
+    AST::Node m_expression;
+
+private:
+    ParameterDeclarationAST( const ParameterDeclarationAST& source );
+    void operator = ( const ParameterDeclarationAST& source );
+};
+
+class ParameterDeclarationListAST: public AST
+{
+public:
+    typedef std::auto_ptr<ParameterDeclarationListAST> Node;
+    enum { Type = NodeType_ParameterDeclarationList };
+
+public:
+    ParameterDeclarationListAST();
+    virtual ~ParameterDeclarationListAST();
+
+    QPtrList<ParameterDeclarationAST> parameters() { return m_parameters; }
+    void addParameter( ParameterDeclarationAST::Node& parameter );
+
+private:
+    QPtrList<ParameterDeclarationAST> m_parameters;
+
+private:
+    ParameterDeclarationListAST( const ParameterDeclarationListAST& source );
+    void operator = ( const ParameterDeclarationListAST& source );
+};
+
+class ParameterDeclarationClauseAST: public AST
+{
+public:
+    typedef std::auto_ptr<ParameterDeclarationClauseAST> Node;
+    enum { Type = NodeType_ParameterDeclarationClause };
+
+public:
+    ParameterDeclarationClauseAST();
+    virtual ~ParameterDeclarationClauseAST();
+
+    ParameterDeclarationListAST* parameterDeclarationList() { return m_parameterDeclarationList.get(); }
+    void setParameterDeclarationList( ParameterDeclarationListAST::Node& parameterDeclarationList );
+
+    AST* ellipsis() { return m_ellipsis.get(); }
+    void setEllipsis( AST::Node& ellipsis );
+
+private:
+    ParameterDeclarationListAST::Node m_parameterDeclarationList;
+    AST::Node m_ellipsis;
+
+private:
+    ParameterDeclarationClauseAST( const ParameterDeclarationClauseAST& source );
+    void operator = ( const ParameterDeclarationClauseAST& source );
+};
+
 
 class InitDeclaratorAST: public AST
 {
@@ -606,6 +689,10 @@ public:
 private:
     DeclaratorAST::Node m_declarator;
     AST::Node m_initializer;
+    
+private:
+    InitDeclaratorAST( const InitDeclaratorAST& source );
+    void operator = ( const InitDeclaratorAST& source );
 };
 
 class InitDeclaratorListAST: public AST

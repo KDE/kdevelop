@@ -112,7 +112,7 @@ public /*rules*/ :
     bool parseFunctionSpecifier( AST::Node& node );
     bool parseInitDeclaratorList( InitDeclaratorListAST::Node& node );
     bool parseInitDeclarator( InitDeclaratorAST::Node& node );
-    bool parseParameterDeclarationClause( AST::Node& node );
+    bool parseParameterDeclarationClause( ParameterDeclarationClauseAST::Node& node );
     bool parseCtorInitializer( AST::Node& node );
     bool parsePtrToMember( AST::Node& node );
     bool parseEnumSpecifier( TypeSpecifierAST::Node& node );
@@ -122,10 +122,10 @@ public /*rules*/ :
     bool parseExceptionSpecification( AST::Node& node );
     bool parseEnumerator( EnumeratorAST::Node& node );
     bool parseTypeParameter( AST::Node& node );
-    bool parseParameterDeclaration( AST::Node& node );
+    bool parseParameterDeclaration( ParameterDeclarationAST::Node& node );
     bool parseTypeId( AST::Node& node );
     bool parseAbstractDeclarator( DeclaratorAST::Node& node );
-    bool parseParameterDeclarationList( AST::Node& node );
+    bool parseParameterDeclarationList( ParameterDeclarationListAST::Node& node );
     bool parseMemberSpecification( DeclarationAST::Node& node );
     bool parseAccessSpecifier( AST::Node& node );
     bool parseTypeIdList( AST::Node& node );

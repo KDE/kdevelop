@@ -88,6 +88,12 @@ QString nodeTypeToString( NodeType type )
 	return "FunctionDefinition";
     case NodeType_ExpressionStatement:
 	return "ExpressionStatement";
+    case NodeType_ParameterDeclaration:
+	return "ParameterDeclaration";
+    case NodeType_ParameterDeclarationList:
+	return "ParameterDeclarationList";
+    case NodeType_ParameterDeclarationClause:
+	return "ParameterDeclarationClause";
     case NodeType_Custom:
 	return "Custom";
     }
@@ -841,12 +847,12 @@ void DeclaratorAST::addArrayDimension( AST::Node& arrayDimension )
     m_arrayDimensionList.append( arrayDimension.release() );
 }
 
-AST* DeclaratorAST::parameterDeclarationClause()
+ParameterDeclarationClauseAST* DeclaratorAST::parameterDeclarationClause()
 {
     return m_parameterDeclarationClause.get();
 }
 
-void DeclaratorAST::setParameterDeclarationClause( AST::Node& parameterDeclarationClause )
+void DeclaratorAST::setParameterDeclarationClause( ParameterDeclarationClauseAST::Node& parameterDeclarationClause )
 {
     m_parameterDeclarationClause = parameterDeclarationClause;
     if( m_parameterDeclarationClause.get() ) m_parameterDeclarationClause->setParent( this );
@@ -1123,3 +1129,74 @@ void ExpressionStatementAST::setExpression( AST::Node& expression )
     m_expression = expression;
     if( m_expression.get() ) m_expression->setParent( this );
 }
+
+
+// --------------------------------------------------------------------------
+ParameterDeclarationAST::ParameterDeclarationAST()
+{
+}
+
+ParameterDeclarationAST::~ParameterDeclarationAST()
+{
+}
+
+void ParameterDeclarationAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
+{
+    m_typeSpec = typeSpec;
+    if( m_typeSpec.get() ) m_typeSpec->setParent( this );
+}
+
+void ParameterDeclarationAST::setDeclarator( DeclaratorAST::Node& declarator )
+{
+    m_declarator = declarator;
+    if( m_declarator.get() ) m_declarator->setParent( this );
+}
+
+void ParameterDeclarationAST::setExpression( AST::Node& expression )
+{
+    m_expression = expression;
+    if( m_expression.get() ) m_expression->setParent( this );
+}
+
+
+// --------------------------------------------------------------------------
+ParameterDeclarationListAST::ParameterDeclarationListAST()
+{
+    m_parameters.setAutoDelete( true );
+}
+
+ParameterDeclarationListAST::~ParameterDeclarationListAST()
+{
+}
+
+void ParameterDeclarationListAST::addParameter( ParameterDeclarationAST::Node& parameter )
+{
+    if( !parameter.get() )
+        return;
+
+    parameter->setParent( this );
+    m_parameters.append( parameter.release() );
+}
+
+
+// --------------------------------------------------------------------------
+ParameterDeclarationClauseAST::ParameterDeclarationClauseAST()
+{
+}
+
+ParameterDeclarationClauseAST::~ParameterDeclarationClauseAST()
+{
+}
+
+void ParameterDeclarationClauseAST::setParameterDeclarationList( ParameterDeclarationListAST::Node& parameterDeclarationList )
+{
+    m_parameterDeclarationList = parameterDeclarationList;
+    if( m_parameterDeclarationList.get() ) m_parameterDeclarationList->setParent( this );
+}
+
+void ParameterDeclarationClauseAST::setEllipsis( AST::Node& ellipsis )
+{
+    m_ellipsis = ellipsis;
+    if( m_ellipsis.get() ) m_ellipsis->setParent( this );
+}
+
