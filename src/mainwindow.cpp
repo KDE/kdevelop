@@ -235,6 +235,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_pShowTreeViews(0L)
   ,m_toggleViewbar(0L)
 {
+  resize( 800, 600 );
   m_pMainWindowShare = new MainWindowShare(this);
 }
 
