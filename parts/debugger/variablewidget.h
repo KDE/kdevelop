@@ -82,7 +82,8 @@ public:
     QListViewItem *findRoot(QListViewItem *item) const;
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
     WatchRoot *findWatch();
-    void setCurrentThread(int currentThread)     { currentThread_ = currentThread; }
+    void setCurrentThread(int currentThread)
+                                        { currentThread_ = currentThread; }
 
     // Remove items that are not active
     void trim();
@@ -215,6 +216,7 @@ public:
     virtual ~VarFrameRoot();
 
     void setLocals(char *locals);
+    void setParams(char *params);
     void setOpen(bool open);
 
     void setFrameName(const QString &frameName)

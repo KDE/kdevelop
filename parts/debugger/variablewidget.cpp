@@ -321,6 +321,7 @@ void VariableTree::trim()
 
 void VariableTree::trimExcessFrames()
 {
+    viewport()->setUpdatesEnabled(false);
     QListViewItem *child = firstChild();
 
     while (child) {
@@ -331,6 +332,8 @@ void VariableTree::trimExcessFrames()
         }
         child = nextChild;
     }
+    viewport()->setUpdatesEnabled(true);
+    repaint();
 }
 
 // **************************************************************************
@@ -770,6 +773,14 @@ VarFrameRoot::VarFrameRoot(VariableTree *parent, int frameNo, int threadNo)
 
 VarFrameRoot::~VarFrameRoot()
 {
+}
+
+// **************************************************************************
+
+void VarFrameRoot::setParams(char *params)
+{
+    setActive();
+    params_ = params;
 }
 
 // **************************************************************************

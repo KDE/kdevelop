@@ -167,17 +167,23 @@ void FramestackWidget::parseGDBBacktraceList(char *str)
         str = end+1;                          // next string
     }
 
-    // Make sure the first frame in the stopped thread is selected
+    // Make sure the first frame in the stopped backtrace is selected
     // and open
     if (viewedThread_)
         viewedThread_->setOpen(true);
+    else
+    {
+        FrameStackItem* frame = (FrameStackItem*) firstChild();
+        frame->setOpen(true);
+    }
 }
 
 /***************************************************************************/
 
 QString FramestackWidget::getFrameName(int frameNo, int threadNo)
 {
-    if (FrameStackItem *frame = findFrame(frameNo, threadNo))
+    FrameStackItem *frame = findFrame(frameNo, threadNo);
+    if (frame)
     {
         QString frameStr = frame->text(0);
         char *frameData = (char*) frameStr.latin1();
@@ -198,7 +204,8 @@ QString FramestackWidget::getFrameName(int frameNo, int threadNo)
             }
 
             QString frameName("#%1 %2(...)");
-            return frameName.arg(frameNo).arg(QCString(fnstart, paramStart-fnstart+1));
+            return frameName.arg(frameNo).arg(
+                                QCString(fnstart, paramStart-fnstart+1));
         }
     }
     return i18n("No stack");
@@ -235,8 +242,7 @@ FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
             return 0;     // no matching thread?
         frameItem = thread->firstChild();
     }
-
-    if (frameItem == 0)
+    else
         frameItem = firstChild();
 
     while (frameItem)
