@@ -174,10 +174,10 @@ FileItem::FileItem( QListView *lv, const QString &text )
 AutoProjectWidget::AutoProjectWidget( AutoProjectPart *part, bool kde )
 		: QVBox( 0, "auto project widget" )
 {
-	//QSplitter *splitter = new QSplitter(Vertical, this);
+	QSplitter *splitter = new QSplitter(Vertical, this);
 
-	initOverview ( new QSplitter ( Vertical, this ) );
-	initDetailview ( new QSplitter ( Vertical, this ) );
+	initOverview ( splitter );
+	initDetailview ( splitter );
 
 	initActions ();
 
@@ -200,11 +200,6 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	QHBox *overviewButtonBox = new QHBox( overviewBox, "subproject button box" );
 	overviewButtonBox->setMargin( 2 );
 	overviewButtonBox->setSpacing( 2 );
-
-	subProjectOptionsButton = new QToolButton( overviewButtonBox );
-	subProjectOptionsButton->setPixmap( SmallIcon( "configure" ) );
-	QToolTip::add
-		( subProjectOptionsButton, i18n( "Show Options" ) );
 
 	addSubprojectButton = new QToolButton( overviewButtonBox );
 	addSubprojectButton->setPixmap( SmallIcon( "folder_new" ) );
@@ -235,10 +230,15 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	QToolTip::add
 		( buildSubprojectButton, i18n( "Build" ) );
 
-	overviewButtonBox->setMaximumHeight( subProjectOptionsButton->height() );
-
 	QWidget *spacer1 = new QWidget( overviewButtonBox );
 	overviewButtonBox->setStretchFactor( spacer1, 1 );
+
+	subProjectOptionsButton = new QToolButton( overviewButtonBox );
+	subProjectOptionsButton->setPixmap( SmallIcon( "configure" ) );
+	QToolTip::add
+		( subProjectOptionsButton, i18n( "Show Options" ) );
+
+	overviewButtonBox->setMaximumHeight( subProjectOptionsButton->height() );
 
 	overview = new KListView( overviewBox, "project overview widget" );
 
@@ -256,10 +256,6 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	targetButtonBox->setMargin( 2 );
 	targetButtonBox->setSpacing( 2 );
 
-	targetOptionsButton = new QToolButton( targetButtonBox );
-	targetOptionsButton->setPixmap( SmallIcon( "configure" ) );
-	QToolTip::add ( targetOptionsButton, i18n( "Show Options" ) );
-
 	addNewFileButton = new QToolButton( targetButtonBox );
 	addNewFileButton->setPixmap( SmallIcon( "filenew" ) );
 	QToolTip::add ( addNewFileButton, i18n( "Create New File" ) );
@@ -276,6 +272,13 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	buildTargetButton->setPixmap( SmallIcon( "launch" ) );
 	QToolTip::add ( buildTargetButton, i18n( "Build" ) );
 
+	QWidget *spacer2 = new QWidget( targetButtonBox );
+	targetButtonBox->setStretchFactor( spacer2, 1 );
+
+	targetOptionsButton = new QToolButton( targetButtonBox );
+	targetOptionsButton->setPixmap( SmallIcon( "configure" ) );
+	QToolTip::add ( targetOptionsButton, i18n( "Show Options" ) );
+
 	targetButtonBox->setMaximumHeight( addNewFileButton->height() );
 
 	targetOptionsButton->setEnabled( false );
@@ -283,9 +286,6 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	addExistingFileButton->setEnabled( false );
 	removeButton->setEnabled( true );
 	buildTargetButton->setEnabled( true );
-
-	QWidget *spacer2 = new QWidget( targetButtonBox );
-	targetButtonBox->setStretchFactor( spacer2, 1 );
 
 	details = new KListView( targetBox, "project details widget" );
 	details->setRootIsDecorated( true );
