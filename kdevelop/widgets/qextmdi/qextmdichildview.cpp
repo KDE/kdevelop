@@ -368,6 +368,14 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          }
       }
    }
+   else if( e->type() == QEvent::FocusIn) {
+      if (obj->inherits("QWidget")) {
+         QObjectList *list = queryList( "QWidget" );
+         if (list->find(obj) != -1) {
+            m_focusedChildWidget = (QWidget*)obj;
+         }
+      }
+   }
    return FALSE;                           // standard event processing
 }
 
