@@ -55,6 +55,7 @@
     <slot>slotReadStdout()</slot>
     <slot>slotReadStderr()</slot>
     <slot>setText( const QString &amp; text )</slot>
+    <slot>linkClicked( const QString &amp; link )</slot>
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
