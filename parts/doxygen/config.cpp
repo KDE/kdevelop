@@ -2567,6 +2567,41 @@ void Config::substituteEnvironmentVars()
   }
 }
 
+static void cleanUpPaths(QStrList &str)
+{
+  char *sfp = str.first();
+  while (sfp)
+  {
+    register char *p = sfp;
+    if (p)
+    {
+      char c;
+      while ((c=*p))
+      {
+	if (c=='\\') *p='/';
+	p++;
+      }
+    }
+    QCString path = sfp;
+    if ((path.at(0)!='/' && (path.length()<=2 || path.at(1)!=':')) ||
+	path.at(path.length()-1)!='/'
+       )
+    {
+      QFileInfo fi(path);
+      if (fi.exists() && fi.isDir())
+      {
+	int i = str.at();
+	str.remove();
+	if (str.at()==i) // did not remove last item
+	  str.insert(i,QFile::encodeName(fi.absFilePath()+"/"));
+	else
+	  str.append(QFile::encodeName(fi.absFilePath()+"/"));
+      }
+    }
+    sfp = str.next();
+  }
+}
+
 void Config::check()
 {
   //if (!projectName.isEmpty())
@@ -2641,36 +2676,12 @@ void Config::check()
   }
   else
   {
-    while (sfp)
-    {
-      register char *p = sfp;
-      if (p)
-      {
-	char c;
-	while ((c=*p))
-	{
-	  if (c=='\\') *p='/';
-	  p++;
-	}
-      }
-      QCString path = sfp;
-      if (path.at(0)!='/' && (path.length()<=2 || path.at(1)!=':'))
-      {
-	QFileInfo fi(path);
-	if (fi.exists() && fi.isDir())
-	{
-	  int i = stripFromPath.at();
-	  stripFromPath.remove();
-	  if (stripFromPath.at()==i) // did not remove last item
-	    stripFromPath.insert(i,QFile::encodeName(fi.absFilePath()+"/"));
-	  else
-	    stripFromPath.append(QFile::encodeName(fi.absFilePath()+"/"));
-	}
-      }
-      sfp = stripFromPath.next();
-    }
+    cleanUpPaths(stripFromPath);
   }
 
+  // expand the relative stripFromPath values
+  QStrList &stripFromIncPath = Config_getList("STRIP_FROM_INC_PATH");
+  cleanUpPaths(stripFromIncPath);
 
   // Test to see if HTML header is valid
   QCString &headerFile = Config_getString("HTML_HEADER");
@@ -2840,6 +2851,22 @@ void Config::check()
     filePatternList.append("*.inc");
     filePatternList.append("*.m");
     filePatternList.append("*.mm");
+#if !defined(_WIN32)
+    // unix => case sensitive match => also include useful uppercase versions
+    filePatternList.append("*.C");
+    filePatternList.append("*.CC"); 
+    filePatternList.append("*.C++");
+    filePatternList.append("*.II");
+    filePatternList.append("*.I++");
+    filePatternList.append("*.H");
+    filePatternList.append("*.HH");
+    filePatternList.append("*.H++");
+    filePatternList.append("*.CS");
+    filePatternList.append("*.PHP");
+    filePatternList.append("*.PHP3");
+    filePatternList.append("*.M");
+    filePatternList.append("*.MM");
+#endif
   }
 
   // add default pattern if needed
@@ -3057,6 +3084,16 @@ void Config::create()
                  "where doxygen was started. If left blank the current directory will be used.\n"
 		);
   cs->setWidgetType(ConfigString::Dir);
+  cb = addBool(
+                 "CREATE_SUBDIRS",
+                 "If the CREATE_SUBDIRS tag is set to YES, then doxygen will create \n"
+                 "2 levels of 10 sub-directories under the output directory of each output \n"
+		 "format and will distribute the generated files over these directories. \n"
+		 "Enabling this option can be useful when feeding doxygen a huge amount of source \n"
+		 "files, where putting all generated files in the same directory would otherwise \n"
+		 "cause performance problems for the file system. \n",
+		 FALSE
+                );
   ce = addEnum(
                     "OUTPUT_LANGUAGE",
                     "The OUTPUT_LANGUAGE tag is used to specify the language in which all \n"
@@ -3222,16 +3259,25 @@ void Config::create()
                     "If the FULL_PATH_NAMES tag is set to YES then the STRIP_FROM_PATH tag \n"
                     "can be used to strip a user-defined part of the path. Stripping is \n"
                     "only done if one of the specified strings matches the left-hand part of \n"
-                    "the path. It is allowed to use relative paths in the argument list. \n"
+                    "the path. The tag can be used to show relative paths in the file list. \n"
 		    "If left blank the directory from which doxygen is run is used as the \n"
 		    "path to strip. \n"
                  );
   cl->addDependency("FULL_PATH_NAMES");
+  cl = addList(
+                    "STRIP_FROM_INC_PATH",
+                    "The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of \n"
+		    "the path mentioned in the documentation of a class, which tells \n"
+		    "the reader which header file to include in order to use a class. \n"
+		    "If left blank only the name of the header file containing the class \n"
+		    "definition is used. Otherwise one should specify the include paths that \n"
+		    "are normally passed to the compiler using the -I flag.\n"
+                 );
   cb = addBool(
                     "SHORT_NAMES",
 		    "If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter \n"
 		    "(but less readable) file names. This can be useful is your file systems \n"
-		    "does not support long names like on DOS, Mac, or CD-ROM. \n",
+		    "doesn't support long names like on DOS, Mac, or CD-ROM. \n",
 		    FALSE
                  );
   cb = addBool(
@@ -3344,6 +3390,14 @@ void Config::create()
 		    "defined locally in source files will be included in the documentation. \n"
 		    "If set to NO only classes defined in header files are included. \n",
                     TRUE
+                 );
+  cb = addBool(
+                    "EXTRACT_LOCAL_METHODS",
+                    "This flag is only useful for Objective-C code. When set to YES local \n"
+		    "methods, which are defined in the implementation section but not in \n"
+		    "the interface are included in the documentation. \n"
+		    "If set to NO (the default) only methods in the interface are included. \n",
+                    FALSE
                  );
   cb = addBool(
                     "HIDE_UNDOC_MEMBERS",

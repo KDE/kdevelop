@@ -30,6 +30,7 @@ QString message(const QCString &key)
     addMessage("PROJECT_NAME", i18n("Project name"));
     addMessage("PROJECT_NUMBER", i18n("Project version"));
     addMessage("OUTPUT_DIRECTORY", i18n("Output path"));
+    addMessage("CREATE_SUBDIRS", i18n("Distribute the generated docs in 10 subdirectories"));
     addMessage("OUTPUT_LANGUAGE", i18n("Output language"));
     addMessage("USE_WINDOWS_ENCODING", i18n("Use MS Windows(tm) font encoding"));
     addMessage("BRIEF_MEMBER_DESC", i18n("Include brief member descriptions"));
@@ -39,6 +40,7 @@ QString message(const QCString &key)
     addMessage("INLINE_INHERITED_MEMB", i18n("Inline inherited members"));
     addMessage("FULL_PATH_NAMES", i18n("Always use full path names"));
     addMessage("STRIP_FROM_PATH", i18n("Prefix to strip from path names"));
+    addMessage("STRIP_FROM_INC_PATH", i18n("Strip from include path"));
     addMessage("SHORT_NAMES", i18n("Generate short file names"));
     addMessage("JAVADOC_AUTOBRIEF", i18n("Use JavaDoc-style brief descriptions"));
     addMessage("MULTILINE_CPP_IS_BRIEF", i18n("Multiline cpp is brief"));
@@ -59,6 +61,7 @@ QString message(const QCString &key)
     addMessage("EXTRACT_PRIVATE", i18n("Extract private entities"));
     addMessage("EXTRACT_STATIC", i18n("Extract static entities"));
     addMessage("EXTRACT_LOCAL_CLASSES", i18n("Extract local classes"));
+    addMessage("EXTRACT_LOCAL_METHODS", i18n("Extract local methods"));
     addMessage("HIDE_UNDOC_MEMBERS", i18n("Hide undocumented members"));
     addMessage("HIDE_UNDOC_CLASSES", i18n("Hide undocumented classes"));
     addMessage("HIDE_FRIEND_COMPOUNDS", i18n("Hide friend compounds"));
@@ -69,6 +72,7 @@ QString message(const QCString &key)
     addMessage("SHOW_INCLUDE_FILES", i18n("Show included files"));
     addMessage("INLINE_INFO", i18n("Make inline functions"));
     addMessage("SORT_MEMBER_DOCS", i18n("Sort member documentation alphabetically"));
+    addMessage("SORT_BY_SCOPE_NAME", i18n("Sort the class list by fully-qualified names"));
     addMessage("SORT_BRIEF_DOCS", i18n("Sort brief documentation alphabetically"));
     addMessage("ENABLED_SECTIONS", i18n("Enable conditional sections"));
     addMessage("GENERATE_TODOLIST", i18n("Generate TODO-list"));
