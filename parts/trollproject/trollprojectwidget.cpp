@@ -1117,6 +1117,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
         int idRemoveFile = popup.insertItem(i18n("Remove File"));
         int idFileProperties = popup.insertItem(i18n("Properties..."));
+        int idViewUIH = popup.insertItem(i18n("Open ui.h File"));
+        if(!fitem->name.contains("ui")) popup.removeItem(idViewUIH);
 
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
@@ -1141,7 +1143,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                updateProjectFile(scope);
           }
         }
-
+        else if(r == idViewUIH) {
+          m_part->partController()->editDocument(KURL(m_shownSubproject->path + "/" +
+             QString(fitem->name + ".h")));
+	}
     }
 }
 
