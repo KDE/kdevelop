@@ -40,7 +40,7 @@ public:
   KParts::Part* findOpenDocument(const KURL& url);
 
   bool closeDocuments(const QStringList &list);
-  bool closePartForWidget( const QWidget* widget );
+  virtual bool closePartForWidget( const QWidget* widget );
 
   static void createInstance(QWidget *parent);
   static PartController *getInstance();

@@ -28,6 +28,7 @@ public:
   virtual void revertAllFiles() = 0;
   /** true if the file has been modified outside KDevelop */
   virtual bool isDirty(KParts::ReadOnlyPart*) = 0;
+  virtual bool closePartForWidget( const QWidget* widget ) = 0;
 
 signals:
 
