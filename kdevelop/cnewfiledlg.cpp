@@ -280,7 +280,7 @@ void CNewFileDlg::slotOKClicked(){
     KMessageBox::error(this,i18n("The filename must end with .ui !"));
     return;
   }
-  if ( (fileType() == "ICON") && (text.right(4) != ".png" || text.right(4) != ".xpm")){
+  if ( (fileType() == "ICON") && !(text.right(4) == ".png" || text.right(4) == ".xpm")){
     KMessageBox::error(this,i18n("The filename must end with .png or .xpm !"));
     return;
   }
