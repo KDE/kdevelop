@@ -2,6 +2,9 @@
 #define __EDITOR_H__
 
 
+#include <sys/stat.h>
+
+
 #include <qstring.h>
 
 
@@ -57,6 +60,13 @@ protected:
   Editor *parent() const { return _parent; };
 
 
+  /// resets the time of last modification
+  void resetModifiedTime();
+
+  /// Should the file be saved?
+  bool shouldBeSaved();
+  
+  
 protected slots:
 
   void slotSaveAs();
@@ -67,6 +77,8 @@ private:
 
   Editor *_parent;
 
+  time_t _mtime;
+  
 };
 
 

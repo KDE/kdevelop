@@ -9,6 +9,7 @@
 #include <kstdaction.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 
 #include "editor.h"
@@ -52,6 +53,41 @@ void Document::slotSaveAs()
 void Document::slotSave()
 {
   save();
+}
+
+
+void Document::resetModifiedTime()
+{
+  if (!url().isLocalFile())
+    return;
+
+  struct stat buf;
+  ::stat(url().path(), &buf);
+  _mtime = buf.st_mtime;  
+}
+
+
+bool Document::shouldBeSaved()
+{
+  // Note: I don't test if the file has been modified in
+  // the editor. This is a matter of opinion, but I think
+  // if the users says "Save!", the file should be saved.     
+        
+  // we don't know about remote files, so better save
+  if (!url().isLocalFile())
+    return true;
+
+  // if the file has not been modified on disk, save as well
+  struct stat buf;
+  ::stat(url().path(), &buf);
+  if (buf.st_mtime == _mtime)
+    return true;
+
+  // it the file has been modified on disk, ask the user
+  return KMessageBox::Yes == KMessageBox::warningYesNo(0, 
+        i18n("The file %1 was modified on disk.\n"
+             "Save the file anyway?").arg(url().path()));
+  
 }
 
 

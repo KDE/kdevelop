@@ -50,12 +50,17 @@ bool DocumentImpl::openFile()
 
   f.close();
 
+  resetModifiedTime();
+  
   return true;
 }
 
 
 bool DocumentImpl::saveFile()
 {
+  if (!shouldBeSaved())
+    return false;
+  
   QFile f(m_file);
   if (!f.open(IO_WriteOnly))
     return false;
@@ -65,6 +70,8 @@ bool DocumentImpl::saveFile()
 
   f.close();
 
+  resetModifiedTime();
+  
   return true;
 }
 
