@@ -3,23 +3,19 @@
 <MenuBar noMerge="1">
 
   <Menu name="file" noMerge="1"><text>&amp;File</text>
-	<Action name="file_save" group="save_operations" />
-	<Action name="file_save_as" group="save_operations" />
+    <Action name="file_save" group="save_merge" />
+    <Action name="file_save_as" group="save_merge" />
   </Menu>
 
   <Menu name="edit" noMerge="1"><text>&amp;Edit</text>
-	<Action name="edit_undo" group="edit_operations" />
-	<Action name="edit_redo" group="edit_operations" />
-	<Separator group="edit_operations" />
-	<Action name="edit_cut" group="edit_operations" />
-	<Action name="edit_copy" group="edit_operations" />
-	<Action name="edit_paste" group="edit_operations" />
-	<Separator group="edit_operations" />
-	<Action name="edit_indent" group="edit_indent" />
-	<Separator group="edit_operations" />
-	<Action name="go_goto_line" group="edit_operations" />
-	<Action name="edit_find" group="find_operations" />
-	<Action name="edit_replace" group="find_operations" />
+    <Action name="edit_undo" group="edit_undo_merge" />
+    <Action name="edit_redo" group="edit_undo_merge" />
+    <Action name="edit_cut" group="edit_paste_merge" />
+    <Action name="edit_copy" group="edit_paste_merge" />
+    <Action name="edit_paste" group="edit_paste_merge" />
+    <Action name="edit_find" group="edit_find_merge" />
+    <Action name="edit_replace" group="edit_find_merge" />
+    <Action name="go_goto_line" />
   </Menu>
 
   <Menu name="view" noMerge="1"><text>&amp;View</text>
@@ -31,7 +27,7 @@
   </Menu>
 
   <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
-    <Action name="settings_configure_editor" group="settings_operations">
+    <Action name="settings_configure_editor" group="configure_merge">
   </Menu>
 </MenuBar>
 
