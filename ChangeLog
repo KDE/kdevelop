@@ -1,4 +1,14 @@
 2000-02-07 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	*  including the following patches
+	   R. Imura <imura@cs.titech.ac.jp>
+	   activating inverted chars for non-printables, also for asian people
+	   Achim Bohnet <ach@mpe.mpg.de>
+	   tokenizer.cc will not be found if builddir != srcdir
+	   Joachim Ansorg <Jockel123@gmx.de>
+	   adding .png support (and also .gif and .jpg)
+	   Thank you all for your help...
+
+2000-02-07 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* restore automake stuff and implementing
 	  an official solution of acinclude.m4.in and libtool.m4.in
 	  (thanks to Stephan Kulow for the great help)
