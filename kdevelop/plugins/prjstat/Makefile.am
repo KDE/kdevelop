@@ -1,5 +1,5 @@
 
-INCLUDES= $(KDE_INCLUDES) $(QT_INCLUDES) $(X_INCLUDES) -I../../ -I../ -I.
+INCLUDES= $(KDE_INCLUDES) $(QT_INCLUDES) $(X_INCLUDES) -I$(top_srcdir)/kdevelop -I$(top_srcdir)/plugins -I$(srcdir)
 
 lib_LTLIBRARIES  = libprjstat_kdevplg.la
 

@@ -12,8 +12,6 @@
 # kde_toolbardir    Where general toolbar icons should go to.
 # kde_wallpaperdir  Where general wallpapers should go to.
 
-# just set the variable
-APPSDIR = $(kde_appsdir)
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
@@ -75,7 +73,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 
 EXTRA_DIST = kdeveloprc \
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \
-	development-package.png kdevelop.png mini-kdevelop.png kdevelop-project.png  	
+	los-app-development_package.png lom-app-kdevelop.png los-app-kdevelop.png lom-app-kdevelop_project.png  	
 
 # if you "make distclean", this files get removed. If you want to remove
 # them while "make clean", use CLEANFILES
@@ -86,31 +84,12 @@ DISTCLEANFILES = $(kdevelop_METASOURCES)
 messages:
 	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc`  && mv messages.po ../po/kdevelop.pot 
 
-# just install datas here. Use install-exec-local for scripts and etc.
-# the binary itself is already installed from automake
-# use mkinstalldirs, not "install -d"
-# don't install a list of file. Just one file per install.
-# if you have more of them, create a subdirectory with an extra Makefile 
-install-data-local: 
-	$(mkinstalldirs) $(APPSDIR)/Programs/Development
-	$(INSTALL_DATA) $(srcdir)/kdevelop.desktop $(APPSDIR)/Programs/Development
-	$(INSTALL_DATA) $(srcdir/kdevelop-setup.desktop $(APPSDIR)/Programs/Development
-	$(INSTALL_DATA) $(srdir/.directory $(APPSDIR)/Programs/Development
-	$(mkinstalldirs) $(kde_icondir)/locolor
-	$(INSTALL_DATA) $(srcdir)/kdevelop.png $(kde_icondir)/locolor
-	$(INSTALL_DATA) $(srcdir)/kdevelop-project.png $(kde_icondir)/locolor	
-#	$(mkinstalldirs) $(kde_minidir)
-	$(INSTALL_DATA) $(srcdir)/mini-kdevelop.png $(kde_icondir)/mini/kdevelop.png
-	$(INSTALL_DATA) $(srcdir/development-package.png $(kde_icondir)/mini/development-package.png
-	$(mkinstalldirs) $(kde_confdir)
-	$(INSTALL_DATA) $(srcdir)/kdeveloprc $(kde_confdir)/kdeveloprc
-	$(mkinstalldirs) $(kde_mimedir)/application	
-	$(INSTALL_DATA) $(srcdir9/x-kdevelop-project.desktop $(kde_mimedir)/application/
+appsdir   = $(kde_appsdir)/Applications/Development
+KDE_ICON  = kdevelop kdevelop_project development_package
+apps_DATA = kdevelop.desktop kdevelop-setup.desktop .directory
 
-# remove ALL you have installed in install-data-local or install-exec-local
-uninstall-local:
-	-rm -f $(APPSDIR)/Programs/Development/kdevelop.desktop
-	-rm -f $(APPSDIR)/Programs/Development/kdevelop-setup.desktop
-	-rm -f $(kde_icondir)/kdevelop.png
-	-rm -f $(kde_minidir)/kdevelop.png
+confdir   = $(kde_confdir)
+conf_DATA = kdeveloprc
 
+mimedir   = $(kde_mimedir)/application
+mime_DATA = x-kdevelop-project.desktop

@@ -3,8 +3,7 @@ BinaryPattern=kdevelop;
 Type=Application
 Exec=kdevelop --setup
 MimeType=
-Icon=application_settings.png
-MiniIcon=application_settings.png
+Icon=application_settings
 DocPath=kdevelop/index.html
 Comment=KDevelop Setup
 Comment[fr]=Configuration de KDevelop
@@ -12,4 +11,3 @@ Terminal=0
 Name=KDevelop Setup
 Name[de]=KDevelop Setup
 Name[fr]=KDevelop Configuration
-

@@ -80,9 +80,9 @@ kdevelop/toolbar/Makefile \
 kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
 doc/Makefile \
+doc/pt/Makefile \
 doc/pt/manual/Makefile \
 doc/pt/programming/Makefile \
-doc/pt/Makefile \
 doc/ru/Makefile \
 doc/ru/cref/Makefile \
 doc/ru/manual/Makefile \
