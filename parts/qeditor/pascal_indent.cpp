@@ -10,6 +10,7 @@
  ***************************************************************************/
 #include "pascal_indent.h"
 #include "qeditor.h"
+#include "paragdata.h"
 #include <kdebug.h>
 
 PascalIndent::PascalIndent( QEditor* ed )
@@ -28,7 +29,7 @@ int PascalIndent::indentForLine( int line )
         return 0;
 
     int prevLine = QMAX( 0, previousNonBlankLine( line ) );
-    int sw = 4;
+    const int sw = 4;
 
     QString lineText = editor()->text( line );
     QString prevLineText = editor()->text( prevLine );
@@ -36,14 +37,32 @@ int PascalIndent::indentForLine( int line )
     int lineInd = indentation( lineText );
     int prevLineInd = indentation( prevLineText );
 
+    int extraInd = 0;
+    
+    ParagData* data = (ParagData*) editor()->document()->paragAt( prevLine )->extraData();
+    if( data ){
+	QValueList<Symbol> symbolList = data->symbolList();
+	QValueList<Symbol>::Iterator it = symbolList.begin();
+	while( it != symbolList.end() ){
+	    const Symbol& sym = *it;
+	    ++it;
+	    
+	    if ( sym.type() == Symbol::Left )
+		extraInd += 4;
+	    else if( sym.type() == Symbol::Right )
+		extraInd -= 4;
+	}
+    }
+    
     kdDebug() << "lineText=" << lineText << "  prevLineText=" << prevLineText << " indent prev=" << lineInd << endl;
+    kdDebug() << "extraInd is " << extraInd << endl;
 
     if (rxCompoundStmt.exactMatch(prevLineText))
     {
         kdDebug() << "exact match for compound statement match" << endl;
-        return prevLineInd + sw;
+        return QMAX( prevLineInd + sw + extraInd, 0 );
     }
     else
-        return prevLineInd;
+        return QMAX( prevLineInd + extraInd, 0 );
 }
 

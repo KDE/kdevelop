@@ -20,6 +20,7 @@
 
 #include "python_indent.h"
 #include "qeditor.h"
+#include "paragdata.h"
 #include <kdebug.h>
 
 PythonIndent::PythonIndent( QEditor* ed )
@@ -49,20 +50,37 @@ int PythonIndent::indentForLine( int line )
     int lineInd = indentation( lineText );
     int prevLineInd = indentation( prevLineText );
     
+    int extraInd = 0;
+    
+    ParagData* data = (ParagData*) editor()->document()->paragAt( prevLine )->extraData();
+    if( data ){
+	QValueList<Symbol> symbolList = data->symbolList();
+	QValueList<Symbol>::Iterator it = symbolList.begin();
+	while( it != symbolList.end() ){
+	    const Symbol& sym = *it;
+	    ++it;
+	    
+	    if ( sym.type() == Symbol::Left )
+		extraInd += 4;
+	    else if( sym.type() == Symbol::Right )
+		extraInd -= 4;
+	}
+    }    
+    
     if( rxLineEndedWithAColon.exactMatch(prevLineText) ){
-	return prevLineInd + sw;
+	return QMAX( prevLineInd + sw + extraInd, 0 );
     
     } else if( rxStopExecutionStmt.exactMatch(prevLineText) ){
-	return prevLineInd - sw;
+	return QMAX( prevLineInd + sw + extraInd, 0 );
 	
     } else if( rxHeaderKeyword.exactMatch(lineText) ){
 	
 	if( rxOneLinerStmt.exactMatch(prevLineText) )
-	    return prevLineInd;
+	    return QMAX( prevLineInd + extraInd, 0 );
 	
-	return prevLineInd - sw;
+	return QMAX( prevLineInd - sw + extraInd, 0 );
 	
     } else    
-	return prevLineInd;
+	return QMAX( prevLineInd + extraInd, 0 );
 }
 
