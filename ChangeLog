@@ -1,3 +1,8 @@
+2000-11-10 Falk Brettschneider <falk@kdevelop.org>
+  * fixed all slotBuild...() methods, proper usage of CProject::getDirWhereMakeWillBeCalled()
+  * added QMessageBoxes which will warn and give hints, if there's no Makefile
+  * Ralf hopefully wont make clean his kdevelop anymore (saw the problem ;-), is fixed)
+
 2000-11-07 Sandy Meier    <smeier@kdevelop.org>
 	* commited patch by Micha Bieber <micha@ani.de> (support for doxygen www.doxygen.org)
 
