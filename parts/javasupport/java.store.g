@@ -6,6 +6,7 @@ header "pre_include_hpp" {
 
 	#include <qstring.h>
 	#include <qstringlist.h>
+        #include <qfileinfo.h>
 }
 
 header "post_include_hpp" {
@@ -14,7 +15,7 @@ header "post_include_hpp" {
 	#include "parsedattribute.h"
 	#include "parsedargument.h"
 
-	#include <kdebug.h>
+	#include <kdebug.h>    
 }
 
 options {
@@ -68,7 +69,7 @@ compilationUnit { ParsedClass* kl; }
 	: { init(); }
 		(packageDefinition)?
 		(importDefinition)*
-		(kl=typeDefinition  { m_store->addClass( kl ); } )*
+		(kl=typeDefinition  { m_store->globalScope()->addClass( kl ); m_store->addClass( kl ); } )*
 	;
 
 packageDefinition { QString id; }
@@ -191,7 +192,7 @@ objBlock [ ParsedClass* klass ] { ParsedClass* kl; ParsedMethod* meth; ParsedAtt
 			(	meth=ctorDef			{ klass->addMethod( meth ); }
 			|	meth=methodDef			{ klass->addMethod( meth ); }
 			|	attr=variableDef		{ klass->addAttribute( attr ); }
-			|	kl=typeDefinition		{ klass->addClass( kl ); }
+			|	kl=typeDefinition		{ m_store->globalScope()->addClass( kl ); klass->addClass( kl ); }
 			|	#(STATIC_INIT slist)
 			|	#(INSTANCE_INIT slist)
 			)*

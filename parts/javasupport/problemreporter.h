@@ -23,6 +23,8 @@
 
 class JavaSupportPart;
 class QTimer;
+class KDialogBase;
+class BackgroundParser;
 
 namespace KParts{
     class Part;
@@ -30,6 +32,7 @@ namespace KParts{
 
 namespace KTextEditor{
     class EditInterface;
+	class MarkInterface;
     class Document;
 }
 
@@ -51,8 +54,11 @@ public:
 public slots:
     void reparse();
     void configure();
+    void configWidget( KDialogBase* );
 
 private slots:
+    void slotPartAdded( KParts::Part* );
+    void slotPartRemoved( KParts::Part* );
     void slotActivePartChanged( KParts::Part* );
     void slotTextChanged();
     void slotSelected( QListViewItem* );
@@ -61,10 +67,12 @@ private:
     JavaSupportPart* m_javaSupport;
     KTextEditor::EditInterface* m_editor;
     KTextEditor::Document* m_document;
+    KTextEditor::MarkInterface* m_markIface;
     QTimer* m_timer;
     QString m_filename;
     int m_active;
     int m_delay;
+    BackgroundParser* m_bgParser;
 };
 
 #endif

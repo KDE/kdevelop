@@ -15,7 +15,8 @@ libkdevjavasupport_la_SOURCES = javasupportpart.cpp \
 				addclassdlg.ui addclass.cpp \
 				JavaLexer.cpp JavaRecognizer.cpp \
 				JavaStoreWalker.cpp problemreporter.cpp \
-				configurejavasupport.ui
+				backgroundparser.cpp \
+				configproblemreporter.ui
 
 METASOURCES = AUTO
 

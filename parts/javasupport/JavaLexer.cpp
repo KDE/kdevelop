@@ -1101,7 +1101,7 @@ void JavaLexer::mWS_(bool _createToken) {
 		}
 		
 		}
-#line 1080 "java.g"
+#line 1082 "java.g"
 		newline();
 #line 1107 "JavaLexer.cpp"
 		break;
@@ -1112,7 +1112,7 @@ void JavaLexer::mWS_(bool _createToken) {
 	}
 	}
 	}
-#line 1082 "java.g"
+#line 1084 "java.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
 #line 1118 "JavaLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1169,7 +1169,7 @@ void JavaLexer::mSL_COMMENT(bool _createToken) {
 	}
 	}
 	}
-#line 1089 "java.g"
+#line 1091 "java.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP; newline();
 #line 1175 "JavaLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1191,7 +1191,7 @@ void JavaLexer::mML_COMMENT(bool _createToken) {
 		if ((LA(1)==static_cast<unsigned char>('\r')) && (LA(2)==static_cast<unsigned char>('\n')) && ((LA(3) >= static_cast<unsigned char>('\3') && LA(3) <= static_cast<unsigned char>('\377'))) && ((LA(4) >= static_cast<unsigned char>('\3') && LA(4) <= static_cast<unsigned char>('\377')))) {
 			match(static_cast<unsigned char>('\r'));
 			match(static_cast<unsigned char>('\n'));
-#line 1107 "java.g"
+#line 1109 "java.g"
 			newline();
 #line 1197 "JavaLexer.cpp"
 		}
@@ -1200,13 +1200,13 @@ void JavaLexer::mML_COMMENT(bool _createToken) {
 		}
 		else if ((LA(1)==static_cast<unsigned char>('\r')) && ((LA(2) >= static_cast<unsigned char>('\3') && LA(2) <= static_cast<unsigned char>('\377'))) && ((LA(3) >= static_cast<unsigned char>('\3') && LA(3) <= static_cast<unsigned char>('\377'))) && (true)) {
 			match(static_cast<unsigned char>('\r'));
-#line 1108 "java.g"
+#line 1110 "java.g"
 			newline();
 #line 1206 "JavaLexer.cpp"
 		}
 		else if ((LA(1)==static_cast<unsigned char>('\n'))) {
 			match(static_cast<unsigned char>('\n'));
-#line 1109 "java.g"
+#line 1111 "java.g"
 			newline();
 #line 1212 "JavaLexer.cpp"
 		}
@@ -1223,7 +1223,7 @@ void JavaLexer::mML_COMMENT(bool _createToken) {
 	_loop247:;
 	}
 	match("*/");
-#line 1113 "java.g"
+#line 1115 "java.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
 #line 1229 "JavaLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1694,7 +1694,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
 	_ttype = NUM_INT;
 	int _saveIndex;
-#line 1197 "java.g"
+#line 1199 "java.g"
 	bool isDecimal=false;
 #line 1700 "JavaLexer.cpp"
 	
@@ -1702,7 +1702,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 	case static_cast<unsigned char>('.'):
 	{
 		match(static_cast<unsigned char>('.'));
-#line 1199 "java.g"
+#line 1201 "java.g"
 		_ttype = DOT;
 #line 1708 "JavaLexer.cpp"
 		{
@@ -1737,7 +1737,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 			}
 			
 			}
-#line 1200 "java.g"
+#line 1202 "java.g"
 			_ttype = NUM_FLOAT;
 #line 1743 "JavaLexer.cpp"
 		}
@@ -1763,7 +1763,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 		case static_cast<unsigned char>('0'):
 		{
 			match(static_cast<unsigned char>('0'));
-#line 1201 "java.g"
+#line 1203 "java.g"
 			isDecimal = true;
 #line 1769 "JavaLexer.cpp"
 			{
@@ -1862,7 +1862,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 			}
 			_loop287:;
 			}
-#line 1216 "java.g"
+#line 1218 "java.g"
 			isDecimal=true;
 #line 1868 "JavaLexer.cpp"
 			break;
@@ -1958,7 +1958,7 @@ void JavaLexer::mNUM_INT(bool _createToken) {
 			}
 			}
 			}
-#line 1226 "java.g"
+#line 1228 "java.g"
 			_ttype = NUM_FLOAT;
 #line 1964 "JavaLexer.cpp"
 		}

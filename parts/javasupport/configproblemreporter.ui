@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
-<class>ConfigureJavaSupport</class>
+<class>ConfigureProblemReporter</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>ConfigureJavaSupport</cstring>
+        <cstring>ConfigureProblemReporter</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -79,12 +79,12 @@
     <connection>
         <sender>bgParserCheckbox</sender>
         <signal>toggled(bool)</signal>
-        <receiver>ConfigureJavaSupport</receiver>
+        <receiver>ConfigureProblemReporter</receiver>
         <slot>bgParserCheckbox_toggled(bool)</slot>
     </connection>
 </connections>
 <includes>
-    <include location="local" impldecl="in implementation">configurejavasupport.ui.h</include>
+    <include location="local" impldecl="in implementation">configproblemreporter.ui.h</include>
 </includes>
 <slots>
     <slot>init()</slot>

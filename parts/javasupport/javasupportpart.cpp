@@ -24,7 +24,7 @@
 #include "addclass.h"
 #include "javasupportpart.h"
 #include "problemreporter.h"
-#include "configurejavasupport.h"
+#include "configproblemreporter.h"
 
 #include "JavaLexer.hpp"
 #include "JavaRecognizer.hpp"
@@ -51,6 +51,9 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     setInstance(JavaSupportPartFactory::instance());
 
     d->problemReporter = new ProblemReporter( this );
+    connect( core(), SIGNAL(configWidget(KDialogBase*)),
+             d->problemReporter, SLOT(configWidget(KDialogBase*)) );
+
 
     setXMLFile("javasupportpart.rc");
 
@@ -63,6 +66,11 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     topLevel()->embedOutputView( d->problemReporter, i18n("Problems") );
 
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
+    
+    // a small hack (robe)
+    classStore()->globalScope()->setName( "(default packages)" );
+    classStore()->addScope( classStore()->globalScope() );
+    classStore()->globalScope()->setName( QString::null );
 }
 
 
@@ -157,6 +165,7 @@ void JavaSupportPart::addedFileToProject(const QString &fileName)
 
 void JavaSupportPart::removedFileFromProject(const QString &fileName)
 {
+    kdDebug(9013) << "JavaSupportPart::removedFileFromProject() -- " << fileName << endl;
     QString path = project()->projectDirectory() + "/" + fileName;
     classStore()->removeWithReferences(path);
     emit updatedSourceInfo();
@@ -276,14 +285,6 @@ void JavaSupportPart::savedFile( const QString& fileName )
         maybeParse( fileName );
         emit updatedSourceInfo();
     }
-}
-
-void JavaSupportPart::configWidget( KDialogBase* dlg )
-{
-    QVBox *vbox = dlg->addVBoxPage(i18n("Java Support"));
-    ConfigureJavaSupport* w = new ConfigureJavaSupport( vbox );
-    connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
-    connect(dlg, SIGNAL(okClicked()), d->problemReporter, SLOT(configure()));
 }
 
 #include "javasupportpart.moc"

@@ -384,11 +384,13 @@ field!
 
 
 variableDefinitions[RefJavaAST mods, RefJavaAST t]
-	:	variableDeclarator[mods,t]
-		(	COMMA!
-			variableDeclarator[mods,t]
-		)*
-	;
+        :       variableDeclarator[(RefJavaAST)getASTFactory().dupTree((antlr::RefAST)mods),
+                                   (RefJavaAST)getASTFactory().dupTree((antlr::RefAST)t)]
+                (       COMMA!
+                        variableDeclarator[(RefJavaAST)getASTFactory().dupTree((antlr::RefAST)mods),
+                                           (RefJavaAST)getASTFactory().dupTree((antlr::RefAST)t)]
+                )*
+        ;
 
 /** Declaration of a variable.  This can be a class/instance variable,
  *   or a local variable in a method

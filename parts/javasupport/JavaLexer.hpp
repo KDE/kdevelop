@@ -25,7 +25,7 @@
 #include "antlr/CharScanner.hpp"
 class JavaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public JavaTokenTypes
  {
-#line 989 "java.g"
+#line 991 "java.g"
 
 private:
 	ProblemReporter* m_problemReporter;

@@ -8,23 +8,24 @@
 
 	#include <qstring.h>
 	#include <qstringlist.h>
+        #include <qfileinfo.h>
 
-#line 13 "JavaStoreWalker.hpp"
+#line 14 "JavaStoreWalker.hpp"
 #include "antlr/config.hpp"
 #include "JavaStoreWalkerTokenTypes.hpp"
 /* $ANTLR 2.7.1: "java.store.g" -> "JavaStoreWalker.hpp"$ */
 #include "antlr/TreeParser.hpp"
 
-#line 11 "java.store.g"
+#line 12 "java.store.g"
 
 	#include "parsedmethod.h"
 	#include "parsedclass.h"
 	#include "parsedattribute.h"
 	#include "parsedargument.h"
 
-	#include <kdebug.h>
+	#include <kdebug.h>    
 
-#line 28 "JavaStoreWalker.hpp"
+#line 29 "JavaStoreWalker.hpp"
 /** Java 1.2 AST Recognizer Grammar
  *
  * Author:
@@ -40,7 +41,7 @@
  */
 class JavaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public JavaStoreWalkerTokenTypes
  {
-#line 44 "java.store.g"
+#line 45 "java.store.g"
 
 private:
 	ClassStore* m_store;
@@ -62,7 +63,7 @@ public:
 	void wipeout()						{ m_store->wipeout(); }
 	void out()						{ m_store->out(); }
 	void removeWithReferences( const QString& fileName )	{ m_store->removeWithReferences( fileName ); }
-#line 45 "JavaStoreWalker.hpp"
+#line 46 "JavaStoreWalker.hpp"
 public:
 	JavaStoreWalker();
 	public: void compilationUnit(RefJavaAST _t);

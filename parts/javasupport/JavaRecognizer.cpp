@@ -680,7 +680,8 @@ void JavaRecognizer::variableDefinitions(
 	RefJavaAST variableDefinitions_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		variableDeclarator(mods,t);
+		variableDeclarator((RefJavaAST)getASTFactory().dupTree((antlr::RefAST)mods),
+                                   (RefJavaAST)getASTFactory().dupTree((antlr::RefAST)t));
 		if (inputState->guessing==0) {
 			astFactory.addASTChild(currentAST, ANTLR_USE_NAMESPACE(antlr)RefAST(returnAST));
 		}
@@ -690,7 +691,8 @@ void JavaRecognizer::variableDefinitions(
 				RefJavaAST tmp17_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				tmp17_AST = astFactory.create(LT(1));
 				match(COMMA);
-				variableDeclarator(mods,t);
+				variableDeclarator((RefJavaAST)getASTFactory().dupTree((antlr::RefAST)mods),
+                                           (RefJavaAST)getASTFactory().dupTree((antlr::RefAST)t));
 				if (inputState->guessing==0) {
 					astFactory.addASTChild(currentAST, ANTLR_USE_NAMESPACE(antlr)RefAST(returnAST));
 				}
@@ -888,7 +890,7 @@ void JavaRecognizer::classTypeSpec(
 				if ( inputState->guessing==0 ) {
 #line 208 "java.g"
 					lb_AST->setType(ARRAY_DECLARATOR);
-#line 892 "JavaRecognizer.cpp"
+#line 894 "JavaRecognizer.cpp"
 				}
 				RefJavaAST tmp29_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				tmp29_AST = astFactory.create(LT(1));
@@ -909,7 +911,7 @@ void JavaRecognizer::classTypeSpec(
 							classTypeSpec_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(TYPE,"TYPE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(classTypeSpec_AST))));
 						}
 					
-#line 913 "JavaRecognizer.cpp"
+#line 915 "JavaRecognizer.cpp"
 			currentAST.root = classTypeSpec_AST;
 			if ( classTypeSpec_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				classTypeSpec_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -958,7 +960,7 @@ void JavaRecognizer::builtInTypeSpec(
 				if ( inputState->guessing==0 ) {
 #line 219 "java.g"
 					lb_AST->setType(ARRAY_DECLARATOR);
-#line 962 "JavaRecognizer.cpp"
+#line 964 "JavaRecognizer.cpp"
 				}
 				RefJavaAST tmp30_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				tmp30_AST = astFactory.create(LT(1));
@@ -979,7 +981,7 @@ void JavaRecognizer::builtInTypeSpec(
 							builtInTypeSpec_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(TYPE,"TYPE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(builtInTypeSpec_AST))));
 						}
 					
-#line 983 "JavaRecognizer.cpp"
+#line 985 "JavaRecognizer.cpp"
 			currentAST.root = builtInTypeSpec_AST;
 			if ( builtInTypeSpec_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				builtInTypeSpec_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1214,7 +1216,7 @@ void JavaRecognizer::superClassClause() {
 			superClassClause_AST = RefJavaAST(currentAST.root);
 #line 292 "java.g"
 			superClassClause_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(EXTENDS_CLAUSE,"EXTENDS_CLAUSE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(id_AST))));
-#line 1218 "JavaRecognizer.cpp"
+#line 1220 "JavaRecognizer.cpp"
 			currentAST.root = superClassClause_AST;
 			if ( superClassClause_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				superClassClause_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1291,7 +1293,7 @@ void JavaRecognizer::implementsClause() {
 			implementsClause_AST = RefJavaAST(currentAST.root);
 #line 331 "java.g"
 			implementsClause_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(IMPLEMENTS_CLAUSE,"IMPLEMENTS_CLAUSE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(implementsClause_AST))));
-#line 1295 "JavaRecognizer.cpp"
+#line 1297 "JavaRecognizer.cpp"
 			currentAST.root = implementsClause_AST;
 			if ( implementsClause_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				implementsClause_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1379,7 +1381,7 @@ void JavaRecognizer::classBlock() {
 			classBlock_AST = RefJavaAST(currentAST.root);
 #line 313 "java.g"
 			classBlock_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(OBJBLOCK,"OBJBLOCK")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(classBlock_AST))));
-#line 1383 "JavaRecognizer.cpp"
+#line 1385 "JavaRecognizer.cpp"
 			currentAST.root = classBlock_AST;
 			if ( classBlock_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				classBlock_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1457,7 +1459,7 @@ void JavaRecognizer::interfaceExtends() {
 			interfaceExtends_AST = RefJavaAST(currentAST.root);
 #line 322 "java.g"
 			interfaceExtends_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(EXTENDS_CLAUSE,"EXTENDS_CLAUSE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(interfaceExtends_AST))));
-#line 1461 "JavaRecognizer.cpp"
+#line 1463 "JavaRecognizer.cpp"
 			currentAST.root = interfaceExtends_AST;
 			if ( interfaceExtends_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				interfaceExtends_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1516,7 +1518,7 @@ void JavaRecognizer::field() {
 					field_AST = RefJavaAST(currentAST.root);
 #line 346 "java.g"
 					field_AST = cd_AST;
-#line 1520 "JavaRecognizer.cpp"
+#line 1522 "JavaRecognizer.cpp"
 					currentAST.root = field_AST;
 					if ( field_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 						field_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1537,7 +1539,7 @@ void JavaRecognizer::field() {
 					field_AST = RefJavaAST(currentAST.root);
 #line 349 "java.g"
 					field_AST = id_AST;
-#line 1541 "JavaRecognizer.cpp"
+#line 1543 "JavaRecognizer.cpp"
 					currentAST.root = field_AST;
 					if ( field_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 						field_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1562,7 +1564,7 @@ void JavaRecognizer::field() {
 						field_AST = RefJavaAST(currentAST.root);
 #line 343 "java.g"
 						field_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(4))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(CTOR_DEF,"CTOR_DEF")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(mods_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(h_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST))));
-#line 1566 "JavaRecognizer.cpp"
+#line 1568 "JavaRecognizer.cpp"
 						currentAST.root = field_AST;
 						if ( field_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 							field_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1648,7 +1650,7 @@ void JavaRecognizer::field() {
 							field_AST = RefJavaAST(currentAST.root);
 #line 363 "java.g"
 							field_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(7))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(METHOD_DEF,"METHOD_DEF")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(mods_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(TYPE,"TYPE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(rt_AST))))))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp46_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(param_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tc_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s2_AST))));
-#line 1652 "JavaRecognizer.cpp"
+#line 1654 "JavaRecognizer.cpp"
 							currentAST.root = field_AST;
 							if ( field_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 								field_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1672,7 +1674,7 @@ void JavaRecognizer::field() {
 							field_AST = RefJavaAST(currentAST.root);
 #line 372 "java.g"
 							field_AST = v_AST;
-#line 1676 "JavaRecognizer.cpp"
+#line 1678 "JavaRecognizer.cpp"
 							currentAST.root = field_AST;
 							if ( field_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 								field_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1708,7 +1710,7 @@ void JavaRecognizer::field() {
 				field_AST = RefJavaAST(currentAST.root);
 #line 378 "java.g"
 				field_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(STATIC_INIT,"STATIC_INIT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s3_AST))));
-#line 1712 "JavaRecognizer.cpp"
+#line 1714 "JavaRecognizer.cpp"
 				currentAST.root = field_AST;
 				if ( field_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 					field_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1727,7 +1729,7 @@ void JavaRecognizer::field() {
 				field_AST = RefJavaAST(currentAST.root);
 #line 382 "java.g"
 				field_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(INSTANCE_INIT,"INSTANCE_INIT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s4_AST))));
-#line 1731 "JavaRecognizer.cpp"
+#line 1733 "JavaRecognizer.cpp"
 				currentAST.root = field_AST;
 				if ( field_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 					field_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1825,9 +1827,9 @@ void JavaRecognizer::compoundStatement() {
 		}
 		match(LCURLY);
 		if ( inputState->guessing==0 ) {
-#line 498 "java.g"
+#line 500 "java.g"
 			lc_AST->setType(SLIST);
-#line 1831 "JavaRecognizer.cpp"
+#line 1833 "JavaRecognizer.cpp"
 		}
 		{
 		for (;;) {
@@ -1917,9 +1919,9 @@ void JavaRecognizer::parameterDeclarationList() {
 		}
 		if ( inputState->guessing==0 ) {
 			parameterDeclarationList_AST = RefJavaAST(currentAST.root);
-#line 466 "java.g"
+#line 468 "java.g"
 			parameterDeclarationList_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(PARAMETERS,"PARAMETERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(parameterDeclarationList_AST))));
-#line 1923 "JavaRecognizer.cpp"
+#line 1925 "JavaRecognizer.cpp"
 			currentAST.root = parameterDeclarationList_AST;
 			if ( parameterDeclarationList_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				parameterDeclarationList_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1954,9 +1956,9 @@ void JavaRecognizer::returnTypeBrackersOnEndOfMethodHead(
 	try {      // for error handling
 		if ( inputState->guessing==0 ) {
 			returnTypeBrackersOnEndOfMethodHead_AST = RefJavaAST(currentAST.root);
-#line 459 "java.g"
+#line 461 "java.g"
 			returnTypeBrackersOnEndOfMethodHead_AST = typ;
-#line 1960 "JavaRecognizer.cpp"
+#line 1962 "JavaRecognizer.cpp"
 			currentAST.root = returnTypeBrackersOnEndOfMethodHead_AST;
 			if ( returnTypeBrackersOnEndOfMethodHead_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				returnTypeBrackersOnEndOfMethodHead_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -1975,9 +1977,9 @@ void JavaRecognizer::returnTypeBrackersOnEndOfMethodHead(
 				}
 				match(LBRACK);
 				if ( inputState->guessing==0 ) {
-#line 460 "java.g"
+#line 462 "java.g"
 					lb_AST->setType(ARRAY_DECLARATOR);
-#line 1981 "JavaRecognizer.cpp"
+#line 1983 "JavaRecognizer.cpp"
 				}
 				RefJavaAST tmp57_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				tmp57_AST = astFactory.create(LT(1));
@@ -2083,9 +2085,9 @@ void JavaRecognizer::variableDeclarator(
 		}
 		if ( inputState->guessing==0 ) {
 			variableDeclarator_AST = RefJavaAST(currentAST.root);
-#line 399 "java.g"
+#line 401 "java.g"
 			variableDeclarator_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(5))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(VARIABLE_DEF,"VARIABLE_DEF")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(mods))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(TYPE,"TYPE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(d_AST))))))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(id_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(v_AST))));
-#line 2089 "JavaRecognizer.cpp"
+#line 2091 "JavaRecognizer.cpp"
 			currentAST.root = variableDeclarator_AST;
 			if ( variableDeclarator_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				variableDeclarator_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -2119,9 +2121,9 @@ void JavaRecognizer::declaratorBrackets(
 	try {      // for error handling
 		if ( inputState->guessing==0 ) {
 			declaratorBrackets_AST = RefJavaAST(currentAST.root);
-#line 403 "java.g"
+#line 405 "java.g"
 			declaratorBrackets_AST=typ;
-#line 2125 "JavaRecognizer.cpp"
+#line 2127 "JavaRecognizer.cpp"
 			currentAST.root = declaratorBrackets_AST;
 			if ( declaratorBrackets_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				declaratorBrackets_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -2140,9 +2142,9 @@ void JavaRecognizer::declaratorBrackets(
 				}
 				match(LBRACK);
 				if ( inputState->guessing==0 ) {
-#line 404 "java.g"
+#line 406 "java.g"
 					lb_AST->setType(ARRAY_DECLARATOR);
-#line 2146 "JavaRecognizer.cpp"
+#line 2148 "JavaRecognizer.cpp"
 				}
 				RefJavaAST tmp60_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				tmp60_AST = astFactory.create(LT(1));
@@ -2300,9 +2302,9 @@ void JavaRecognizer::arrayInitializer() {
 		}
 		match(LCURLY);
 		if ( inputState->guessing==0 ) {
-#line 413 "java.g"
+#line 415 "java.g"
 			lc_AST->setType(ARRAY_INIT);
-#line 2306 "JavaRecognizer.cpp"
+#line 2308 "JavaRecognizer.cpp"
 		}
 		{
 		switch ( LA(1)) {
@@ -2417,9 +2419,9 @@ void JavaRecognizer::expression() {
 		}
 		if ( inputState->guessing==0 ) {
 			expression_AST = RefJavaAST(currentAST.root);
-#line 683 "java.g"
+#line 685 "java.g"
 			expression_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(EXPR,"EXPR")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(expression_AST))));
-#line 2423 "JavaRecognizer.cpp"
+#line 2425 "JavaRecognizer.cpp"
 			currentAST.root = expression_AST;
 			if ( expression_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				expression_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -2472,9 +2474,9 @@ void JavaRecognizer::parameterDeclaration() {
 		}
 		if ( inputState->guessing==0 ) {
 			parameterDeclaration_AST = RefJavaAST(currentAST.root);
-#line 474 "java.g"
+#line 476 "java.g"
 			parameterDeclaration_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(4))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(PARAMETER_DEF,"PARAMETER_DEF")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pm_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(TYPE,"TYPE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pd_AST))))))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(id_AST))));
-#line 2478 "JavaRecognizer.cpp"
+#line 2480 "JavaRecognizer.cpp"
 			currentAST.root = parameterDeclaration_AST;
 			if ( parameterDeclaration_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				parameterDeclaration_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -2537,9 +2539,9 @@ void JavaRecognizer::parameterModifier() {
 		}
 		if ( inputState->guessing==0 ) {
 			parameterModifier_AST = RefJavaAST(currentAST.root);
-#line 485 "java.g"
+#line 487 "java.g"
 			parameterModifier_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST))));
-#line 2543 "JavaRecognizer.cpp"
+#line 2545 "JavaRecognizer.cpp"
 			currentAST.root = parameterModifier_AST;
 			if ( parameterModifier_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				parameterModifier_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -2574,9 +2576,9 @@ void JavaRecognizer::parameterDeclaratorBrackets(
 	try {      // for error handling
 		if ( inputState->guessing==0 ) {
 			parameterDeclaratorBrackets_AST = RefJavaAST(currentAST.root);
-#line 479 "java.g"
+#line 481 "java.g"
 			parameterDeclaratorBrackets_AST = t;
-#line 2580 "JavaRecognizer.cpp"
+#line 2582 "JavaRecognizer.cpp"
 			currentAST.root = parameterDeclaratorBrackets_AST;
 			if ( parameterDeclaratorBrackets_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				parameterDeclaratorBrackets_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -2595,9 +2597,9 @@ void JavaRecognizer::parameterDeclaratorBrackets(
 				}
 				match(LBRACK);
 				if ( inputState->guessing==0 ) {
-#line 480 "java.g"
+#line 482 "java.g"
 					lb_AST->setType(ARRAY_DECLARATOR);
-#line 2601 "JavaRecognizer.cpp"
+#line 2603 "JavaRecognizer.cpp"
 				}
 				RefJavaAST tmp65_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				tmp65_AST = astFactory.create(LT(1));
@@ -3000,9 +3002,9 @@ void JavaRecognizer::statement() {
 			}
 			match(SEMI);
 			if ( inputState->guessing==0 ) {
-#line 584 "java.g"
+#line 586 "java.g"
 				s_AST->setType(EMPTY_STAT);
-#line 3006 "JavaRecognizer.cpp"
+#line 3008 "JavaRecognizer.cpp"
 			}
 			statement_AST = RefJavaAST(currentAST.root);
 			break;
@@ -3079,9 +3081,9 @@ void JavaRecognizer::statement() {
 					}
 					match(COLON);
 					if ( inputState->guessing==0 ) {
-#line 530 "java.g"
+#line 532 "java.g"
 						c_AST->setType(LABELED_STAT);
-#line 3085 "JavaRecognizer.cpp"
+#line 3087 "JavaRecognizer.cpp"
 					}
 					statement();
 					if (inputState->guessing==0) {
@@ -3173,9 +3175,9 @@ void JavaRecognizer::forInit() {
 		}
 		if ( inputState->guessing==0 ) {
 			forInit_AST = RefJavaAST(currentAST.root);
-#line 619 "java.g"
+#line 621 "java.g"
 			forInit_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(FOR_INIT,"FOR_INIT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(forInit_AST))));
-#line 3179 "JavaRecognizer.cpp"
+#line 3181 "JavaRecognizer.cpp"
 			currentAST.root = forInit_AST;
 			if ( forInit_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				forInit_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -3252,9 +3254,9 @@ void JavaRecognizer::forCond() {
 		}
 		if ( inputState->guessing==0 ) {
 			forCond_AST = RefJavaAST(currentAST.root);
-#line 624 "java.g"
+#line 626 "java.g"
 			forCond_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(FOR_CONDITION,"FOR_CONDITION")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(forCond_AST))));
-#line 3258 "JavaRecognizer.cpp"
+#line 3260 "JavaRecognizer.cpp"
 			currentAST.root = forCond_AST;
 			if ( forCond_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				forCond_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -3331,9 +3333,9 @@ void JavaRecognizer::forIter() {
 		}
 		if ( inputState->guessing==0 ) {
 			forIter_AST = RefJavaAST(currentAST.root);
-#line 629 "java.g"
+#line 631 "java.g"
 			forIter_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(FOR_ITERATOR,"FOR_ITERATOR")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(forIter_AST))));
-#line 3337 "JavaRecognizer.cpp"
+#line 3339 "JavaRecognizer.cpp"
 			currentAST.root = forIter_AST;
 			if ( forIter_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				forIter_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -3385,9 +3387,9 @@ void JavaRecognizer::casesGroup() {
 		}
 		if ( inputState->guessing==0 ) {
 			casesGroup_AST = RefJavaAST(currentAST.root);
-#line 600 "java.g"
+#line 602 "java.g"
 			casesGroup_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(CASE_GROUP,"CASE_GROUP")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(casesGroup_AST))));
-#line 3391 "JavaRecognizer.cpp"
+#line 3393 "JavaRecognizer.cpp"
 			currentAST.root = casesGroup_AST;
 			if ( casesGroup_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				casesGroup_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -3613,9 +3615,9 @@ void JavaRecognizer::caseSList() {
 		}
 		if ( inputState->guessing==0 ) {
 			caseSList_AST = RefJavaAST(currentAST.root);
-#line 609 "java.g"
+#line 611 "java.g"
 			caseSList_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(SLIST,"SLIST")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(caseSList_AST))));
-#line 3619 "JavaRecognizer.cpp"
+#line 3621 "JavaRecognizer.cpp"
 			currentAST.root = caseSList_AST;
 			if ( caseSList_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				caseSList_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -3668,9 +3670,9 @@ void JavaRecognizer::expressionList() {
 		}
 		if ( inputState->guessing==0 ) {
 			expressionList_AST = RefJavaAST(currentAST.root);
-#line 690 "java.g"
+#line 692 "java.g"
 			expressionList_AST = RefJavaAST(astFactory.make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory.create(ELIST,"ELIST")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(expressionList_AST))));
-#line 3674 "JavaRecognizer.cpp"
+#line 3676 "JavaRecognizer.cpp"
 			currentAST.root = expressionList_AST;
 			if ( expressionList_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				expressionList_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -4696,9 +4698,9 @@ void JavaRecognizer::unaryExpression() {
 			}
 			match(MINUS);
 			if ( inputState->guessing==0 ) {
-#line 793 "java.g"
+#line 795 "java.g"
 				tmp151_AST->setType(UNARY_MINUS);
-#line 4702 "JavaRecognizer.cpp"
+#line 4704 "JavaRecognizer.cpp"
 			}
 			unaryExpression();
 			if (inputState->guessing==0) {
@@ -4716,9 +4718,9 @@ void JavaRecognizer::unaryExpression() {
 			}
 			match(PLUS);
 			if ( inputState->guessing==0 ) {
-#line 794 "java.g"
+#line 796 "java.g"
 				tmp152_AST->setType(UNARY_PLUS);
-#line 4722 "JavaRecognizer.cpp"
+#line 4724 "JavaRecognizer.cpp"
 			}
 			unaryExpression();
 			if (inputState->guessing==0) {
@@ -4848,9 +4850,9 @@ void JavaRecognizer::unaryExpressionNotPlusMinus() {
 				}
 				match(LPAREN);
 				if ( inputState->guessing==0 ) {
-#line 810 "java.g"
+#line 812 "java.g"
 					lpb_AST->setType(TYPECAST);
-#line 4854 "JavaRecognizer.cpp"
+#line 4856 "JavaRecognizer.cpp"
 				}
 				builtInTypeSpec(true);
 				if (inputState->guessing==0) {
@@ -4892,9 +4894,9 @@ void JavaRecognizer::unaryExpressionNotPlusMinus() {
 					}
 					match(LPAREN);
 					if ( inputState->guessing==0 ) {
-#line 817 "java.g"
+#line 819 "java.g"
 						lp_AST->setType(TYPECAST);
-#line 4898 "JavaRecognizer.cpp"
+#line 4900 "JavaRecognizer.cpp"
 					}
 					classTypeSpec(true);
 					if (inputState->guessing==0) {
@@ -5112,9 +5114,9 @@ void JavaRecognizer::postfixExpression() {
 					}
 					match(LPAREN);
 					if ( inputState->guessing==0 ) {
-#line 850 "java.g"
+#line 852 "java.g"
 						lp_AST->setType(METHOD_CALL);
-#line 5118 "JavaRecognizer.cpp"
+#line 5120 "JavaRecognizer.cpp"
 					}
 					argList();
 					if (inputState->guessing==0) {
@@ -5138,9 +5140,9 @@ void JavaRecognizer::postfixExpression() {
 								}
 								match(LBRACK);
 								if ( inputState->guessing==0 ) {
-#line 839 "java.g"
+#line 841 "java.g"
 									lbc_AST->setType(ARRAY_DECLARATOR);
-#line 5144 "JavaRecognizer.cpp"
+#line 5146 "JavaRecognizer.cpp"
 								}
 								RefJavaAST tmp165_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 								tmp165_AST = astFactory.create(LT(1));
@@ -5175,9 +5177,9 @@ void JavaRecognizer::postfixExpression() {
 						}
 						match(LBRACK);
 						if ( inputState->guessing==0 ) {
-#line 843 "java.g"
+#line 845 "java.g"
 							lb_AST->setType(INDEX_OP);
-#line 5181 "JavaRecognizer.cpp"
+#line 5183 "JavaRecognizer.cpp"
 						}
 						expression();
 						if (inputState->guessing==0) {
@@ -5205,9 +5207,9 @@ void JavaRecognizer::postfixExpression() {
 				}
 				match(INC);
 				if ( inputState->guessing==0 ) {
-#line 857 "java.g"
+#line 859 "java.g"
 					in_AST->setType(POST_INC);
-#line 5211 "JavaRecognizer.cpp"
+#line 5213 "JavaRecognizer.cpp"
 				}
 				break;
 			}
@@ -5220,9 +5222,9 @@ void JavaRecognizer::postfixExpression() {
 				}
 				match(DEC);
 				if ( inputState->guessing==0 ) {
-#line 858 "java.g"
+#line 860 "java.g"
 					de_AST->setType(POST_DEC);
-#line 5226 "JavaRecognizer.cpp"
+#line 5228 "JavaRecognizer.cpp"
 				}
 				break;
 			}
@@ -5301,9 +5303,9 @@ void JavaRecognizer::postfixExpression() {
 					}
 					match(LBRACK);
 					if ( inputState->guessing==0 ) {
-#line 864 "java.g"
+#line 866 "java.g"
 						lbt_AST->setType(ARRAY_DECLARATOR);
-#line 5307 "JavaRecognizer.cpp"
+#line 5309 "JavaRecognizer.cpp"
 					}
 					RefJavaAST tmp169_AST = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 					tmp169_AST = astFactory.create(LT(1));
@@ -5757,9 +5759,9 @@ void JavaRecognizer::argList() {
 		{
 			if ( inputState->guessing==0 ) {
 				argList_AST = RefJavaAST(currentAST.root);
-#line 949 "java.g"
+#line 951 "java.g"
 				argList_AST = astFactory.create(ELIST,"ELIST");
-#line 5763 "JavaRecognizer.cpp"
+#line 5765 "JavaRecognizer.cpp"
 				currentAST.root = argList_AST;
 				if ( argList_AST!=static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 					argList_AST->getFirstChild() != static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -5878,9 +5880,9 @@ void JavaRecognizer::newArrayDeclarator() {
 				}
 				match(LBRACK);
 				if ( inputState->guessing==0 ) {
-#line 964 "java.g"
+#line 966 "java.g"
 					lb_AST->setType(ARRAY_DECLARATOR);
-#line 5884 "JavaRecognizer.cpp"
+#line 5886 "JavaRecognizer.cpp"
 				}
 				{
 				switch ( LA(1)) {

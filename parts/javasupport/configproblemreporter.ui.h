@@ -9,21 +9,23 @@
 #include <kconfig.h>
 #include <kapplication.h>
 
-void ConfigureJavaSupport::init()
+void ConfigureProblemReporter::init()
 {
     KConfig* config = kapp->config();
-    bgParserCheckbox->setChecked( config->readBoolEntry("EnableJavaBgParser") );
+    config->setGroup( "General Options" );
+    bgParserCheckbox->setChecked( config->readBoolEntry("EnableJavaBgParser", true) );
     delaySlider->setEnabled( bgParserCheckbox->isChecked() );
-    delaySlider->setValue( config->readNumEntry("JavaBgParserDelay") );
+    delaySlider->setValue( config->readNumEntry("JavaBgParserDelay", 1000) );
 }
 
-void ConfigureJavaSupport::destroy()
+void ConfigureProblemReporter::destroy()
 {
 }
 
-void ConfigureJavaSupport::accept()
+void ConfigureProblemReporter::accept()
 {
     KConfig* config = kapp->config();
+    config->setGroup( "General Options" );
     config->writeEntry( "EnableJavaBgParser", bgParserCheckbox->isChecked() );
     if( bgParserCheckbox->isChecked() )
 	config->writeEntry( "JavaBgParserDelay", delaySlider->value() );
@@ -31,7 +33,7 @@ void ConfigureJavaSupport::accept()
 }
 
 
-void ConfigureJavaSupport::bgParserCheckbox_toggled( bool b )
+void ConfigureProblemReporter::bgParserCheckbox_toggled( bool b )
 {
     delaySlider->setEnabled( b );
 }

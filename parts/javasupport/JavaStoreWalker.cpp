@@ -16,12 +16,12 @@ JavaStoreWalker::JavaStoreWalker()
 
 void JavaStoreWalker::compilationUnit(RefJavaAST _t) {
 	RefJavaAST compilationUnit_AST_in = _t;
-#line 67 "java.store.g"
+#line 68 "java.store.g"
 	ParsedClass* kl;
 #line 22 "JavaStoreWalker.cpp"
 	
 	try {      // for error handling
-#line 68 "java.store.g"
+#line 69 "java.store.g"
 		init();
 #line 27 "JavaStoreWalker.cpp"
 		{
@@ -69,8 +69,8 @@ void JavaStoreWalker::compilationUnit(RefJavaAST _t) {
 			if ((_t->getType()==CLASS_DEF||_t->getType()==INTERFACE_DEF)) {
 				kl=typeDefinition(_t);
 				_t = _retTree;
-#line 71 "java.store.g"
-				m_store->addClass( kl );
+#line 72 "java.store.g"
+				m_store->globalScope()->addClass( kl ); m_store->addClass( kl );
 #line 75 "JavaStoreWalker.cpp"
 			}
 			else {
@@ -91,7 +91,7 @@ void JavaStoreWalker::compilationUnit(RefJavaAST _t) {
 
 void JavaStoreWalker::packageDefinition(RefJavaAST _t) {
 	RefJavaAST packageDefinition_AST_in = _t;
-#line 74 "java.store.g"
+#line 75 "java.store.g"
 	QString id;
 #line 97 "JavaStoreWalker.cpp"
 	
@@ -104,7 +104,7 @@ void JavaStoreWalker::packageDefinition(RefJavaAST _t) {
 		_t = _retTree;
 		_t = __t8;
 		_t = _t->getNextSibling();
-#line 75 "java.store.g"
+#line 76 "java.store.g"
 		m_package = id;
 #line 110 "JavaStoreWalker.cpp"
 	}
@@ -117,7 +117,7 @@ void JavaStoreWalker::packageDefinition(RefJavaAST _t) {
 }
 
  QString  JavaStoreWalker::importDefinition(RefJavaAST _t) {
-#line 78 "java.store.g"
+#line 79 "java.store.g"
 	 QString id ;
 #line 123 "JavaStoreWalker.cpp"
 	RefJavaAST importDefinition_AST_in = _t;
@@ -142,13 +142,13 @@ void JavaStoreWalker::packageDefinition(RefJavaAST _t) {
 }
 
 ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
-#line 82 "java.store.g"
+#line 83 "java.store.g"
 	ParsedClass* klass ;
 #line 148 "JavaStoreWalker.cpp"
 	RefJavaAST typeDefinition_AST_in = _t;
 	RefJavaAST m = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	RefJavaAST mm = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-#line 82 "java.store.g"
+#line 83 "java.store.g"
 	QStringList bases; klass=0;
 #line 154 "JavaStoreWalker.cpp"
 	
@@ -168,7 +168,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 			RefJavaAST tmp4_AST_in = _t;
 			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENT);
 			_t = _t->getNextSibling();
-#line 84 "java.store.g"
+#line 85 "java.store.g"
 			
 									klass = new ParsedClass; 
 									klass->setName( tmp4_AST_in->getText().c_str() );
@@ -181,7 +181,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 #line 182 "JavaStoreWalker.cpp"
 			bases=extendsClause(_t);
 			_t = _retTree;
-#line 94 "java.store.g"
+#line 95 "java.store.g"
 			
 									QStringList::Iterator it = bases.begin();
 									while( it != bases.end() ){
@@ -212,7 +212,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 			RefJavaAST tmp6_AST_in = _t;
 			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENT);
 			_t = _t->getNextSibling();
-#line 106 "java.store.g"
+#line 107 "java.store.g"
 			
 									klass = new ParsedClass; 
 									klass->setName( tmp6_AST_in->getText().c_str() );
@@ -224,7 +224,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 #line 225 "JavaStoreWalker.cpp"
 			bases=extendsClause(_t);
 			_t = _retTree;
-#line 115 "java.store.g"
+#line 116 "java.store.g"
 			
 									QStringList::Iterator it = bases.begin();
 									while( it != bases.end() ){
@@ -257,7 +257,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 }
 
  QString  JavaStoreWalker::identifier(RefJavaAST _t) {
-#line 286 "java.store.g"
+#line 287 "java.store.g"
 	 QString id ;
 #line 263 "JavaStoreWalker.cpp"
 	RefJavaAST identifier_AST_in = _t;
@@ -271,7 +271,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 			RefJavaAST tmp7_AST_in = _t;
 			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENT);
 			_t = _t->getNextSibling();
-#line 287 "java.store.g"
+#line 288 "java.store.g"
 			id = tmp7_AST_in->getText().c_str();
 #line 277 "JavaStoreWalker.cpp"
 			break;
@@ -289,7 +289,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 			_t = _t->getNextSibling();
 			_t = __t74;
 			_t = _t->getNextSibling();
-#line 288 "java.store.g"
+#line 289 "java.store.g"
 			id += QString(".") + tmp9_AST_in->getText().c_str();
 #line 295 "JavaStoreWalker.cpp"
 			break;
@@ -310,7 +310,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 }
 
  QString  JavaStoreWalker::identifierStar(RefJavaAST _t) {
-#line 291 "java.store.g"
+#line 292 "java.store.g"
 	 QString id ;
 #line 316 "JavaStoreWalker.cpp"
 	RefJavaAST identifierStar_AST_in = _t;
@@ -324,7 +324,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 			RefJavaAST tmp10_AST_in = _t;
 			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENT);
 			_t = _t->getNextSibling();
-#line 292 "java.store.g"
+#line 293 "java.store.g"
 			id = tmp10_AST_in->getText().c_str();
 #line 330 "JavaStoreWalker.cpp"
 			break;
@@ -346,7 +346,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 				RefJavaAST tmp12_AST_in = _t;
 				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),STAR);
 				_t = _t->getNextSibling();
-#line 293 "java.store.g"
+#line 294 "java.store.g"
 				id += QString(".") + tmp12_AST_in->getText().c_str();
 #line 352 "JavaStoreWalker.cpp"
 				break;
@@ -356,7 +356,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 				RefJavaAST tmp13_AST_in = _t;
 				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENT);
 				_t = _t->getNextSibling();
-#line 294 "java.store.g"
+#line 295 "java.store.g"
 				id += QString(".") + tmp13_AST_in->getText().c_str();
 #line 362 "JavaStoreWalker.cpp"
 				break;
@@ -387,7 +387,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 }
 
  QStringList  JavaStoreWalker::modifiers(RefJavaAST _t) {
-#line 153 "java.store.g"
+#line 154 "java.store.g"
 	 QStringList l ;
 #line 393 "JavaStoreWalker.cpp"
 	RefJavaAST modifiers_AST_in = _t;
@@ -406,7 +406,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 				m = (_t == ASTNULL) ? static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
 				modifier(_t);
 				_t = _retTree;
-#line 154 "java.store.g"
+#line 155 "java.store.g"
 				l << m->getText().c_str();
 #line 412 "JavaStoreWalker.cpp"
 			}
@@ -430,11 +430,11 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 }
 
  QStringList  JavaStoreWalker::extendsClause(RefJavaAST _t) {
-#line 172 "java.store.g"
+#line 173 "java.store.g"
 	 QStringList l ;
 #line 436 "JavaStoreWalker.cpp"
 	RefJavaAST extendsClause_AST_in = _t;
-#line 172 "java.store.g"
+#line 173 "java.store.g"
 	QString id;
 #line 440 "JavaStoreWalker.cpp"
 	
@@ -450,7 +450,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 			if ((_t->getType()==IDENT||_t->getType()==DOT)) {
 				id=identifier(_t);
 				_t = _retTree;
-#line 173 "java.store.g"
+#line 174 "java.store.g"
 				l << id;
 #line 456 "JavaStoreWalker.cpp"
 			}
@@ -474,11 +474,11 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 }
 
  QStringList  JavaStoreWalker::implementsClause(RefJavaAST _t) {
-#line 176 "java.store.g"
+#line 177 "java.store.g"
 	 QStringList l ;
 #line 480 "JavaStoreWalker.cpp"
 	RefJavaAST implementsClause_AST_in = _t;
-#line 176 "java.store.g"
+#line 177 "java.store.g"
 	QString id;
 #line 484 "JavaStoreWalker.cpp"
 	
@@ -494,7 +494,7 @@ ParsedClass*  JavaStoreWalker::typeDefinition(RefJavaAST _t) {
 			if ((_t->getType()==IDENT||_t->getType()==DOT)) {
 				id=identifier(_t);
 				_t = _retTree;
-#line 177 "java.store.g"
+#line 178 "java.store.g"
 				l << id;
 #line 500 "JavaStoreWalker.cpp"
 			}
@@ -521,7 +521,7 @@ void JavaStoreWalker::objBlock(RefJavaAST _t,
 	 ParsedClass* klass 
 ) {
 	RefJavaAST objBlock_AST_in = _t;
-#line 189 "java.store.g"
+#line 190 "java.store.g"
 	ParsedClass* kl; ParsedMethod* meth; ParsedAttribute* attr;
 #line 527 "JavaStoreWalker.cpp"
 	
@@ -539,7 +539,7 @@ void JavaStoreWalker::objBlock(RefJavaAST _t,
 			{
 				meth=ctorDef(_t);
 				_t = _retTree;
-#line 191 "java.store.g"
+#line 192 "java.store.g"
 				klass->addMethod( meth );
 #line 545 "JavaStoreWalker.cpp"
 				break;
@@ -548,7 +548,7 @@ void JavaStoreWalker::objBlock(RefJavaAST _t,
 			{
 				meth=methodDef(_t);
 				_t = _retTree;
-#line 192 "java.store.g"
+#line 193 "java.store.g"
 				klass->addMethod( meth );
 #line 554 "JavaStoreWalker.cpp"
 				break;
@@ -557,7 +557,7 @@ void JavaStoreWalker::objBlock(RefJavaAST _t,
 			{
 				attr=variableDef(_t);
 				_t = _retTree;
-#line 193 "java.store.g"
+#line 194 "java.store.g"
 				klass->addAttribute( attr );
 #line 563 "JavaStoreWalker.cpp"
 				break;
@@ -567,8 +567,8 @@ void JavaStoreWalker::objBlock(RefJavaAST _t,
 			{
 				kl=typeDefinition(_t);
 				_t = _retTree;
-#line 194 "java.store.g"
-				klass->addClass( kl );
+#line 195 "java.store.g"
+				m_store->globalScope()->addClass( kl ); klass->addClass( kl );
 #line 573 "JavaStoreWalker.cpp"
 				break;
 			}
@@ -619,7 +619,7 @@ void JavaStoreWalker::interfaceBlock(RefJavaAST _t,
 	 ParsedClass* klass 
 ) {
 	RefJavaAST interfaceBlock_AST_in = _t;
-#line 181 "java.store.g"
+#line 182 "java.store.g"
 	ParsedMethod* meth; ParsedAttribute* attr;
 #line 625 "JavaStoreWalker.cpp"
 	
@@ -637,7 +637,7 @@ void JavaStoreWalker::interfaceBlock(RefJavaAST _t,
 			{
 				meth=methodDecl(_t);
 				_t = _retTree;
-#line 183 "java.store.g"
+#line 184 "java.store.g"
 				klass->addMethod( meth );
 #line 643 "JavaStoreWalker.cpp"
 				break;
@@ -646,7 +646,7 @@ void JavaStoreWalker::interfaceBlock(RefJavaAST _t,
 			{
 				attr=variableDef(_t);
 				_t = _retTree;
-#line 184 "java.store.g"
+#line 185 "java.store.g"
 				klass->addAttribute( attr );
 #line 652 "JavaStoreWalker.cpp"
 				break;
@@ -671,7 +671,7 @@ void JavaStoreWalker::interfaceBlock(RefJavaAST _t,
 }
 
  QString  JavaStoreWalker::typeSpec(RefJavaAST _t) {
-#line 127 "java.store.g"
+#line 128 "java.store.g"
 	 QString tp ;
 #line 677 "JavaStoreWalker.cpp"
 	RefJavaAST typeSpec_AST_in = _t;
@@ -696,7 +696,7 @@ void JavaStoreWalker::interfaceBlock(RefJavaAST _t,
 }
 
  QString  JavaStoreWalker::typeSpecArray(RefJavaAST _t) {
-#line 131 "java.store.g"
+#line 132 "java.store.g"
 	 QString tp ;
 #line 702 "JavaStoreWalker.cpp"
 	RefJavaAST typeSpecArray_AST_in = _t;
@@ -715,7 +715,7 @@ void JavaStoreWalker::interfaceBlock(RefJavaAST _t,
 			_t = _retTree;
 			_t = __t17;
 			_t = _t->getNextSibling();
-#line 132 "java.store.g"
+#line 133 "java.store.g"
 			tp += "[]";
 #line 721 "JavaStoreWalker.cpp"
 			break;
@@ -752,7 +752,7 @@ void JavaStoreWalker::interfaceBlock(RefJavaAST _t,
 }
 
  QString  JavaStoreWalker::type(RefJavaAST _t) {
-#line 136 "java.store.g"
+#line 137 "java.store.g"
 	 QString tp ;
 #line 758 "JavaStoreWalker.cpp"
 	RefJavaAST type_AST_in = _t;
@@ -782,7 +782,7 @@ void JavaStoreWalker::interfaceBlock(RefJavaAST _t,
 			b = (_t == ASTNULL) ? static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
 			builtInType(_t);
 			_t = _retTree;
-#line 138 "java.store.g"
+#line 139 "java.store.g"
 			tp = b->getText().c_str();
 #line 788 "JavaStoreWalker.cpp"
 			break;
@@ -992,12 +992,12 @@ void JavaStoreWalker::modifier(RefJavaAST _t) {
 }
 
  ParsedMethod*  JavaStoreWalker::methodDecl(RefJavaAST _t) {
-#line 211 "java.store.g"
+#line 212 "java.store.g"
 	 ParsedMethod* meth ;
 #line 998 "JavaStoreWalker.cpp"
 	RefJavaAST methodDecl_AST_in = _t;
 	RefJavaAST m = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-#line 211 "java.store.g"
+#line 212 "java.store.g"
 	QString tp; meth = new ParsedMethod;
 #line 1003 "JavaStoreWalker.cpp"
 	
@@ -1015,7 +1015,7 @@ void JavaStoreWalker::modifier(RefJavaAST _t) {
 		_t = _retTree;
 		_t = __t46;
 		_t = _t->getNextSibling();
-#line 213 "java.store.g"
+#line 214 "java.store.g"
 									
 									meth->setDeclaredInFile( getFilename().c_str() );
 									meth->setDefinedInFile( getFilename().c_str() );
@@ -1033,12 +1033,12 @@ void JavaStoreWalker::modifier(RefJavaAST _t) {
 }
 
  ParsedAttribute*  JavaStoreWalker::variableDef(RefJavaAST _t) {
-#line 229 "java.store.g"
+#line 230 "java.store.g"
 	 ParsedAttribute* attr ;
 #line 1039 "JavaStoreWalker.cpp"
 	RefJavaAST variableDef_AST_in = _t;
 	RefJavaAST m = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-#line 229 "java.store.g"
+#line 230 "java.store.g"
 	QString tp; attr = new ParsedAttribute;
 #line 1044 "JavaStoreWalker.cpp"
 	
@@ -1058,7 +1058,7 @@ void JavaStoreWalker::modifier(RefJavaAST _t) {
 		_t = _retTree;
 		_t = __t51;
 		_t = _t->getNextSibling();
-#line 231 "java.store.g"
+#line 232 "java.store.g"
 		
 									attr->setDeclaredInFile( getFilename().c_str() );
 									attr->setDefinedInFile( getFilename().c_str() );
@@ -1076,12 +1076,12 @@ void JavaStoreWalker::modifier(RefJavaAST _t) {
 }
 
  ParsedMethod*  JavaStoreWalker::ctorDef(RefJavaAST _t) {
-#line 201 "java.store.g"
+#line 202 "java.store.g"
 	 ParsedMethod* meth ;
 #line 1082 "JavaStoreWalker.cpp"
 	RefJavaAST ctorDef_AST_in = _t;
 	RefJavaAST m = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-#line 201 "java.store.g"
+#line 202 "java.store.g"
 	meth = new ParsedMethod; meth->setIsConstructor( TRUE );
 #line 1087 "JavaStoreWalker.cpp"
 	
@@ -1099,7 +1099,7 @@ void JavaStoreWalker::modifier(RefJavaAST _t) {
 		_t = _retTree;
 		_t = __t44;
 		_t = _t->getNextSibling();
-#line 205 "java.store.g"
+#line 206 "java.store.g"
 									
 									meth->setDeclaredInFile( getFilename().c_str() );
 									meth->setDefinedInFile( getFilename().c_str() );
@@ -1116,12 +1116,12 @@ void JavaStoreWalker::modifier(RefJavaAST _t) {
 }
 
  ParsedMethod*  JavaStoreWalker::methodDef(RefJavaAST _t) {
-#line 220 "java.store.g"
+#line 221 "java.store.g"
 	 ParsedMethod* meth ;
 #line 1122 "JavaStoreWalker.cpp"
 	RefJavaAST methodDef_AST_in = _t;
 	RefJavaAST m = static_cast<RefJavaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-#line 220 "java.store.g"
+#line 221 "java.store.g"
 	QString tp; meth = new ParsedMethod;
 #line 1127 "JavaStoreWalker.cpp"
 	
@@ -1159,7 +1159,7 @@ void JavaStoreWalker::modifier(RefJavaAST _t) {
 		}
 		_t = __t48;
 		_t = _t->getNextSibling();
-#line 222 "java.store.g"
+#line 223 "java.store.g"
 		
 									meth->setDeclaredInFile( getFilename().c_str() );	
 									meth->setDefinedInFile( getFilename().c_str() );
@@ -1214,7 +1214,7 @@ void JavaStoreWalker::methodHead(RefJavaAST _t,
 	 ParsedMethod* meth 
 ) {
 	RefJavaAST methodHead_AST_in = _t;
-#line 273 "java.store.g"
+#line 274 "java.store.g"
 	ParsedArgument* p;
 #line 1220 "JavaStoreWalker.cpp"
 	
@@ -1233,7 +1233,7 @@ void JavaStoreWalker::methodHead(RefJavaAST _t,
 			if ((_t->getType()==PARAMETER_DEF)) {
 				p=parameterDef(_t);
 				_t = _retTree;
-#line 274 "java.store.g"
+#line 275 "java.store.g"
 				meth->addArgument( p );
 #line 1239 "JavaStoreWalker.cpp"
 			}
@@ -1267,7 +1267,7 @@ void JavaStoreWalker::methodHead(RefJavaAST _t,
 		}
 		}
 		}
-#line 275 "java.store.g"
+#line 276 "java.store.g"
 		
 				meth->setName( tmp49_AST_in->getText().c_str() );
 				meth->setDeclaredOnLine( tmp49_AST_in->getLine() );
@@ -1297,7 +1297,7 @@ void JavaStoreWalker::variableDeclarator(RefJavaAST _t,
 			RefJavaAST tmp51_AST_in = _t;
 			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENT);
 			_t = _t->getNextSibling();
-#line 251 "java.store.g"
+#line 252 "java.store.g"
 			
 										attr->setName( tmp51_AST_in->getText().c_str() );
 										attr->setDeclaredOnLine( tmp51_AST_in->getLine() );
@@ -1367,11 +1367,11 @@ void JavaStoreWalker::varInitializer(RefJavaAST _t) {
 }
 
  ParsedArgument*  JavaStoreWalker::parameterDef(RefJavaAST _t) {
-#line 238 "java.store.g"
+#line 239 "java.store.g"
 	 ParsedArgument* arg ;
 #line 1373 "JavaStoreWalker.cpp"
 	RefJavaAST parameterDef_AST_in = _t;
-#line 238 "java.store.g"
+#line 239 "java.store.g"
 	QString tp; arg = new ParsedArgument;
 #line 1377 "JavaStoreWalker.cpp"
 	
@@ -1389,7 +1389,7 @@ void JavaStoreWalker::varInitializer(RefJavaAST _t) {
 		_t = _t->getNextSibling();
 		_t = __t53;
 		_t = _t->getNextSibling();
-#line 240 "java.store.g"
+#line 241 "java.store.g"
 									
 									arg->setName( tmp55_AST_in->getText().c_str() );
 									arg->setType( tp );

@@ -32,7 +32,6 @@ private slots:
 
     void initialParse();
     void savedFile( const QString& );
-    void configWidget( KDialogBase* );
 
 private:
     void maybeParse(const QString &fileName);
