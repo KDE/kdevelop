@@ -1,0 +1,375 @@
+1999-03-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * added an empty KProgressBar in the statusbar to use with several slots
+  * updated documentation
+  * added a tip of the day widget, checkbox in setup dialog and database.
+    if you want to add tips, edit the database file tipdatabase in docs/en
+    each line is a tip. Then replace 14 in: 	if (next < 14) ktipofday.cpp, l159 to the
+    line numbers currently in tipdatabase.
+
+
+1999-03-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * fixed "compile file" disableing during shell process
+  * added startup logo & new geometry, deleted entry LastActiveTab in kdeveloprc
+  * added configuration options to general tab of the setup dialog
+    for enable/disable startlogo, enable/disable loading of last project
+	* added standard keybindings
+  * added debugging and Search for Help icons to the toolbar
+  * added saving of the treeview tab
+		
+1999-02-25 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * completed right-button menu of the docbrowser, connected look up with
+    slotDocSText() in CKDevelop
+  * added "Search for Help on..." dialog in the help-menu
+  * marked Text in Docbrowser can be looked up with F2 as well
+
+1999-02-24 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * changed some geometry in the setup dialog
+
+1999-02-24  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* make some changes in the a2psdialog
+
+1999-02-24  Sandy Meier <smeier@rz.uni-potsdam.de>
+	* moved the KeyConfigDlg to KDevelop Setup (KeyChooser)
+	* small bugfix in CProjectOptionsDlg( the $ bug again )
+	* some bugfixes in normal.tar.gz
+	* commit a small patch by Matthias Hipp <Matthias.Hipp@gmx.de>
+	
+1999-02-23  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added an icon-generation to the newfile dlg 
+	* commit a new version of kwrite into kdevelop's sourcetree
+	
+1999-02-23 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * changed Documentation Path dialog to KDevelop Setup
+  * removed menuentries for autosave, make and added them to
+    new general tab in the setup dialog
+  * removed menuentries Update KDE documentation and Create Search Database
+    and added buttons for that in the Documentation tab of the setup dialog
+  * added autoswitch functionality
+  * made autosave timing selectable in the setup for 3,5,15 and 30 minutes
+  * changed implementation of slotEditCopy() and moved the browser part into
+    CDocBrowser
+  * changed back printer icon and menu entries -sorry, Stefan...
+
+1999-02-23  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* split enscript and a2ps in seperate dialogs
+	* fixed some little bugs
+
+1999-02-22 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * added implementation of slotProjectNew() and CNewProjectDlg class
+    with dialog for creating an empty project
+
+1999-02-21  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* fixed the $ bug in CProject
+	* added "file not found!" msgbox to the doc-browser
+	* added better integration of KIconedit, accessable via LFV
+	
+1999-02-20  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* implemented the defaultbutton ( it works :-) )
+	* added the printconfigure entry in the options menu
+
+1999-02-20  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* removed the sh-scripts "autoconfsuite","cleanrebuildall",
+	"rebuildmakefiles" and
+	replaced it with a C++ solution
+	* fixed a bug in cpp.tar.gz (doubled SOURCE in Makefile.am)
+	
+1999-02-19  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* replaced all #include <q*.h> with the longer version
+	* added a ring bell after a make
+	* added some class foward-declarartions and moved some includes to the *.cpp files,
+	it reduce the dependencies and  the compiletime
+	* added first version of workspaces (only a test)
+	
+1999-02-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * added autosave functionality. saveTimeout is set to 5 min. TODO: configuration dialog for saveTimeout.
+    until then change Autosave Timeout (in ms) in your kdeveloprc
+  * modified slotFileSaveAll() for performance, refresh trees only called on headers
+
+1999-02-18  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* replace some files in the base application
+	* now the main.cpp have also a template
+	* add the printbutton in the toolbar
+
+1999-02-18   Sandy Meier <smeier@rz.uni-potsdam.de>
+	*  commit some new patches (mostly i18n()) and an extended german translation by Martin Piskernig 
+	<martin.piskernig@stuwo.at>
+
+1999-02-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * merged Documentation menu into Help menu, search marked text into view_menu
+  * added right button menus to CDocBrowser to copy marked text to clipboard, connected to
+    slotEditCopy() as well; button menu to switch back and forward in the browser window
+  * added autosave functionality. saveTimeout is set to 5 min. TODO: configuration dialog for saveTimeout.
+    until then change Autosave Timeout (in ms) in your kdeveloprc
+  * modified slotFileSaveAll() for performance, refresh trees only called on headers
+
+1999-02-17  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* in the applicationwizard the real installationpath is printed
+	* the applications are generated in debug-mode
+
+1999-02-16 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * completed QWhatsThis help
+  * changed cut icon in front of copy icon of toolbar
+  * replaced some separators with frame lines
+  * placed lookup entry in edit window menu at the bottom
+
+1999-02-16  Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commit  the i18n() patches and the german translation by Martin Piskernig 
+	<martin.piskernig@stuwo.at>
+	
+1999-02-15  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* added the connection between buttons and dialogs to the printingdialogs
+
+1999-02-15  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* replaced all cerr/cout with the powerfull KDEBUG macros, see debug.h and 
+	 $KDEDIR/share/doc/HTML/default/kdelibs/kdebug.html for more informations
+	* added CKDevelop::showOutputView(bool) and remove some doubled sourcecodes
+	* some changes in the projectmanagment,it's now possible to add files in new subdirs,
+	  please test it
+	* fixed the "/" bug in slotProjectAddExistingFiles(),it should work now
+
+1999-02-15  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added QWhatsThis help functionality in file ckdevelop_whatsthis
+	* added rebuild-icon to the toolbar
+	* removed proof for "/" in slotProjectAddExistingFiles() because this actually adds a slash
+	    even if the slash in the destination_edit is present.
+    
+1999-02-14  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* added some slots and functions to the printdialog
+
+1999-02-14  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* keyboard accelerations are now handled by KAccel ( not completed)
+	 see CKDevelop::initKeyAccel() and CKDevelop::initMenu() for details
+	* added CKDevelop::slotOptionsKeys();
+	* fixed the segfault by closing the last file
+	* rename several methods to fit better to the new menu-structure 
+	
+
+1999-02-13  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added Make-Command selection functionality to decide if
+		make, gmake or dmake should be used to initialize the make-process
+	* replaced new file icon with open project, added undo and redo icons and edited
+		the build-command icons, added icon for compile file
+	* set project_file entry in closeEvent to "" before the actual project_file is written
+	* re-done changes for slotBuildDebug() and the processes.pl for changing the resource.h file
+		VERSION string for a generated application--otherwise it will not compile...
+		
+1999-02-12  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* added the fileprintdialog to kdevelop
+	* added the printconfigdialog to kdevelop
+	both without any functionality
+
+1999-02-11  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added KWrite's Default dialog and a Messagebox, if KDevelop couldn't find 
+	documentation for a searchkey
+	* some changes in CKDevelop::closeEvent() 
+	* many bugfixes for a more stable KDevelop
+	* commit a danish translation by Steen Rabol <rabol@get2net.dk>
+
+1999-02-10  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* several changes in the printdialog
+	* added some buttons to the printdialog
+
+1999-02-10  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* several changes and bugfixes in the projectmanagment
+	 KDevelop can now modify the configure.in and all Makefiles.am
+
+1999-02-10  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* changed the documentation update to use qt2kdoc
+	  to crossreference the documentation as well as building
+	  the reference files of kdoc in /kdoc-reference
+	* changed first documentation pages
+
+1999-02-08  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* clean up some sourcecodes (ckdevelop.cpp,ckdevelop_project.cpp)
+	* slotProjectClose() returns now a bool value,was needed for some bugfixes
+	* new kdeveloprc (new default colors(xemacs),no persistent selection...)
+	 please delete your $HOME/.kde/share/config/kdeveloprc	
+	* added some sourcecode for the printdlg(Stefan), not complete!
+	* some internal changes in the CProject class, not completed 
+	* added the qtarchitect dlgs to kdevelop/dlgs/
+
+1999-02-04 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+ 	* implemented Build->CompileFile functionality to compile the actual cpp_widget file
+	* added slotProjectClose to closeEvent
+  	* changed all keys to the resource.h file and replaced them with IDK_ macros-
+	please add any other keys this way to keep overview over used keys.
+	* found bug in slotProcessExited- if next_job is "run" and a configuration dialog is
+	 shown in kdevelop, KDE	freezes completely...anyone has the same occurence ?
+			
+1999-02-03  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* implemented a configurable doc-tree
+
+1999-02-03  Ralf Nolden  <Ralf.Nolden@post.rwth-aachen.de>
+        * added project close dialog connected to new project and Kappwizard
+        * fixed focus in Doc-Browser and outputview
+
+1999-02-02  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* fixed the tabview-bug
+	* added the russian documentation by Ilmar Habibulin <ilmar@ints.ru>
+
+1999-02-01 Sandy Meier <smeier@rz.uni-potsdam,de>
+	* commit the russian translation by Ilmar Habibulin <ilmar@ints.ru>
+
+1999-02-01 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+       * fixed the focus for the edit widgets
+       * changed slotFileSave to refresh trees only for header files (faster)
+       * fixed ouput_view_pos to show up on start depending on config file because
+         loading the html file disables output widget
+
+1999-01-31 Sandy Meier <smeier@rz.uni-potsdam.de>
+       * added a tabview in the outputwidget (messages,stdin/stdout,sterr),
+	 stdin is needed for terminal-application
+       * some internal changes in the CProject class, not completed
+
+1999-01-31  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+       * added popups to the class-viewer, some Members for Class and Method Menu already created empty.
+       * fixed some geometry- not yet completed.
+       * re-inserted Tools-menu. Will add menus to LFV and RFV for KIconedit and 
+	 KTranslator to open files in the Tools-Tab. 
+       * Toggle Outputview for Doc-browser(off), Make-commands(on), Tools(off)
+       * changed Project-menu for open, new, kappwizard
+       * added Build-slots for ./configure, make distclean and Autoconf
+       
+1999-01-30  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* added a new application (terminal application) to the KApplicationwizard
+	* bugfixed some replacements in the base applications
+	* changed the working directory in KApplicationwizard to $home/.kde/share/apps/kdevelop
+
+1999-01-28  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+        * completed Sandy's ToggleTreeView and ToggleOutputView 
+	  including saving of geometry parameters & tested it
+        * changed look of menubar and ordered items new
+          including changes in resource.h: TODO: review the ID_ values
+
+1999-01-27 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commit a patch from Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+	 kdevelop should now compile on gcc 2.7.2 too
+
+1999-01-26  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added Options-Documentation Browser dialog for configuring the Doc-Browser look
+
+1999-01-25 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* kdevelop/cproject.h: added setProjectType(),setKDevPrjVersion()
+
+1999-01-24  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added save/restore cursorposition in the edit_widgets when switching a file
+	* added a warning info, when deleting a file from LFV
+	* implemented menu->options->ToogleTreeView, it flickers a little bit, but it works
+	* moved the working directory from $HOME/.kdevelop/ to $HOME/.kde./share/apps/kdevelop/ 
+	        TODO: fixes KAppwizard to work with the new dir
+
+1999-01-23  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* kdevelop/cclassview.cpp: removed memory leaks,and some other bugs
+	* little modification of the file-prop-dlg for more space in the treeview
+	* new new-file dlg,I think it is now a little bit better :-)
+
+1999-01-22  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* kdevelop/ckappwizard.cpp: some bugfixes in the registration of files
+
+1999-01-21  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* kdevelop/ckdevelop.cpp: added messageboxes, if a program coudn't found
+	* kdevelop/cclassview.cpp : commit patches by Jost Schenck,many bug fixes
+
+1999-01-19  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* implemented "added file(s) to a project"
+	* speedup the classviewer (10x faster !!!)
+
+1999-01-18  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added a base application for C++ project without KDE/Qt (templates/cpp.tar.gz)
+	* TODO update KAppWizard to create this application
+	* commit some patches by Jost Schenck for the classviewer
+
+1999-01-14  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* again some speedups in the doc-browser,it's now usable :-)
+	* implemented auto-jump after a search with glimpse
+
+1999-01-13  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* context-menu in the editor (look up ,copy,cut,paste)
+	* some speedups in the doc-browser
+
+1999-01-10 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* added a createdocdatabase dialog
+
+1999-01-09  Sandy Meier <smeier@rz.uni-potsdam.de>
+	* intitial import of KDevelop to CVS (cvs.kde.org) modul: kdevelop
+
+1999-01-05  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added Undo/Redo,Invert Selection and KWrite-Configuration Dlgs
+
+1999-01-04  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* begin of the KWrite integration
+ 	* commit some sourcecode (ceditwidget.cpp) by Jochen Wilhelmy for this
+	integration
+
+1998-12-16  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* THE GREAT RENAMING - several class- and filename changes to provide 
+	   consistent names in kdevelop
+	* cprjoptionsdlg.cpp - some bugfixes in the linker-tab
+	* remove some redundant files in "normal.tar.gz" and "mini.tar.gz"
+
+1998-12-14  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* fixed the TAB bug in the editor
+	* Version 0.2.0.1 released
+	
+1998-12-03 KDevelop-Team
+	* Version 0.2 released
+
+1998-11-30  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* commit the patch from David Barth <dbarth@videotron.ca>
+		- build->run doesn't start the program,if "make" has errors
+		- added build->autoconf target
+		- output_widget isn't writeable now 
+
+1998-11-29  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* bugfix in the documentation-browser (it displayed <PRE>s incorrectly)
+	* change the picture in the Application-Wizard
+	
+1998-11-28  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* several bugfixes
+	* added the rest for the search-engine,I hope it works :-)
+	* added incompatible-dialog for old projects (KDevelop 0.1)
+
+1998-11-20 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* Added fillColumnMode to cpp_widget and header_widget in init.cpp because it seems
+	   the 80 coulumn preset for the output_witdget of kedit restricts the columns of the other
+	   widgets as well.   
+	* Added KQuickHelp for the KAppWizard pages as replacement for QToolTip
+	* Added INS and OVR status as well as Line and Column status into statusBar()
+	
+1998-11-19 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* Added KQuickHelp to following dialogs:
+	kappwizard.h, kappwizard.cpp
+  	(KAppWizard, first page)
+	
+	kdevsetup.h, kdevsetup.cpp
+	(Setup Dialog, also changed fixed size vertically)
+	
+	prjoptionsdlg.h, prjoptionsdlg.cpp
+	(Project Options on all 3 Tabs:General, GCC options, GCC Warnings)
+
+	cupdatekdedoc.h, cupdatekdedoc.cpp
+	(Update dialog for kde documention generator)
+	
+	cfilepropdlg.h, cfilepropdlg.cpp
+	(Quickhelp for file properties dialog)
+	* changed the statusbar setup and added resource ID for configure kdevelop in init.cpp
+	* added	statusbar help and status messages in kdevelop.h and kdevelop.cpp
+	* added	macros to the resource.h file
+	TODO: KQuickhelp still missing in KAppWizard pages, new class dialog and newfile dialog
+	
+1998-11	KDevelop-Team
+	* Adding more features and bugfixes for stability
+	
+1998-10	KDevelop-Team
+	* Several changes and bugfixes
+	
+1998-09-22 KDevelop-Team    
+	* Version 0.1 released
+	
+1998-07-20 KDevelop-Team
+  	* begin kdevelop-project (yet another IDE for Unix)
+
+
+
+
