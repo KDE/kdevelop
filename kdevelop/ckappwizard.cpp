@@ -1389,7 +1389,7 @@ void CKAppWizard::okPermited()
   QString copydes;
   QString vcsInit;
   if (vsBox->currentItem() == 1) {
-    copydes = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
+    copydes = locateLocal("appdata", "kdeveloptemp"); //QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
     dir.mkdir(copydes);
     dir.setCurrent(copydes);
 
@@ -1402,6 +1402,9 @@ void CKAppWizard::okPermited()
   else {
     copydes = prjdir;
   }
+
+  QString admindes = copydes + "/admin.tar.gz";
+  QString adminsrc = locate("appdata", "templates/admin.tar.gz");
   copydes += "/template.tar.gz";
 
   p.clearArguments();
@@ -1453,6 +1456,22 @@ void CKAppWizard::okPermited()
     p << "cp" << copysrc << copydes;
     p.start (KProcess::Block, KProcess::AllOutput);
   }
+
+  if (hasTemplate) {
+    p << "cp";
+		p << "'" + copysrc + "'";
+		p << "'" + copydes + "';";
+
+    if(kde2miniitem->isSelected()||kde2normalitem->isSelected()||kde2mdiitem->isSelected()||qt2normalitem->isSelected()||qt2mdiitem->isSelected())
+    {
+      p << "cp";
+			p << "'" + adminsrc + "'";
+			p << "'" + admindes + "'";
+    }
+    p.start (KProcess::Block,KProcess::AllOutput);
+  }
+
+
 
   q->clearArguments();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));

@@ -1,5 +1,6 @@
 require ("flush.pl");
 use File::Copy;
+use Cwd;
 
 $templatedir = _;
 $kde_icondir = _;
@@ -70,24 +71,21 @@ if ($processes{APPLICATION} eq "customproj"){
 }
 else{
   unpackFiles ("template.tar");	
-  if ($processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal"||
-  			$processes{APPLICATION} eq "kde2mdi"|| $processes{APPLICATION} eq "qt2normal" ||
-  				$processes{APPLICATION} eq "qt2mdi") {
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi/) {
     unpackFiles ("admin.tar");	
   }
-  if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kde2mini") {
+
+  if ($processes{APPLICATION} =~ /kdemini|kde2mini/) {
     changeMiniApp();
   }
-  elsif ($processes{APPLICATION} eq "kdenormal" || $processes{APPLICATION} eq "kde2normal" ||
-  			$processes{APPLICATION} eq "kde2mdi")
+  elsif ($processes{APPLICATION} =~ /kdenormal|kde2normal|kde2mdi/)
   {
     changeNormalApp();
   }
-  elsif ($processes{APPLICATION} eq "kdenormalogl") {
+  elsif ($processes{APPLICATION} =~ /kdenormalogl/) {
     changeNormalOGLApp();
   }
-  elsif ($processes{APPLICATION} eq "qtnormal" || $processes{APPLICATION} eq "qt2normal" ||
-  				$processes{APPLICATION} eq "qt2mdi" || $processes{APPLICATION} eq "qextmdi") {
+  elsif ($processes{APPLICATION} =~ /qtnormal|qt2normal|qt2mdi|qextmdi/) {
     changeQtApp();
   }
   elsif ($processes{APPLICATION} eq "cpp") {
@@ -134,9 +132,7 @@ if ($processes{VSSUPPORT} eq "cvs") {
     $copydes = $underDirectory . "/docs/en/.cvsignore";
     copy ("$copysrc", "$copydes");
 
-    if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal" ||
-    	$processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal"||
-    	$processes{APPLICATION} eq "kdenormalogl" || $processes{APPLICATION} eq "kde2mdi")
+    if ($processes{APPLICATION} -= /kdemini|kdenormal|kde2mini|kde2normal|kdenormalogl|kde2mdi/)
     {
 
       $copydes = $underDirectory . "/api/.cvsignore";
@@ -226,12 +222,12 @@ sub unpackFiles {
     my ( $tarfile ) = @_;
 
 #    chdir ($overDirectory);
-    printflush (STDOUT, "unzip file...\n");
+    $dir = cwd();
+    printflush (STDOUT, "unzip file <$tarfile.gz> in <$dir>...\n");
     system ("gunzip $tarfile.gz");
-    printflush (STDOUT, "untar file...\n");
+    printflush (STDOUT, "untar file <$tarfile.gz> in <$dir>...\n");
     system ("tar -xf $tarfile");
     unlink $tarfile;
-
 }
 
 

@@ -549,10 +549,10 @@ class HlManager : public QObject {
 //--------
 
 
-class StyleChanger : public QObject {
+class StyleChanger : public QWidget {
     Q_OBJECT
   public:
-    StyleChanger(QWidget *parent, int x, int y);
+    StyleChanger(QWidget *parent);
     void setRef(ItemStyle *);
     void setEnabled(bool);
   protected slots:
@@ -565,10 +565,10 @@ class StyleChanger : public QObject {
     QCheckBox *italic;
 };
 
-class FontChanger : public QObject {
+class FontChanger : public QWidget {
     Q_OBJECT
   public:
-    FontChanger(QWidget *parent, int x, int y);
+    FontChanger(QWidget *parent);
     void setRef(ItemFont *);
   protected slots:
     void familyChanged(const QString&);

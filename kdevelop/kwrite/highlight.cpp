@@ -20,6 +20,10 @@
 #include <qfile.h>
 #include <klocale.h>
 #include <kstddirs.h>
+#include <qgrid.h>
+#include <qlayout.h>
+#include <qvgroupbox.h>
+
 
 //#include <X11/Xlib.h> //used in getXFontList()
 
@@ -2200,37 +2204,32 @@ void HlManager::setHlDataList(HlDataList &list) {
 //}
 
 
-StyleChanger::StyleChanger(QWidget *parent, int x, int y) : QObject(parent) {
+StyleChanger::StyleChanger(QWidget *parent) :
+QWidget(parent)
+{
   QLabel *label;
-  QRect r;
+  QGridLayout *grid1 = new QGridLayout( this, 5, 3,15,7);
 
-  col = new KColorButton(parent);
-  label = new QLabel(col,i18n("Normal:"),parent);
+  col = new KColorButton(this);
+  grid1->addWidget(col,2,0);
+  label = new QLabel(i18n("Normal:"),this);
+  grid1->addWidget(label,1,0);
   connect(col,SIGNAL(changed(const QColor &)),this,SLOT(changed()));
 
-  r.setRect(x,y,80,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  col->setGeometry(r);
-//  label = new QLabel(col,i18n("Color:"),parent);
+  selCol = new KColorButton(this);
+  grid1->addWidget(selCol,4,0);
 
-  selCol = new KColorButton(parent);
-  label = new QLabel(selCol,i18n("Selected:"),parent);
+  label = new QLabel(selCol,i18n("Selected:"),this);
+  grid1->addWidget(label,3,0);
   connect(selCol,SIGNAL(changed(const QColor &)),SLOT(changed()));
-  r.moveBy(0,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  selCol->setGeometry(r);
 
-  bold = new QCheckBox(i18n("Bold"),parent);
+  bold = new QCheckBox(i18n("Bold"),this);
   connect(bold,SIGNAL(clicked()),SLOT(changed()));
-  r.setRect(r.right() + 20,y + 25,70,25);
-  bold->setGeometry(r);
+  grid1->addWidget(bold,2,1);
 
-  italic = new QCheckBox(i18n("Italic"),parent);
+  italic = new QCheckBox(i18n("Italic"),this);
+  grid1->addWidget(italic,3,1);
   connect(italic,SIGNAL(clicked()),SLOT(changed()));
-  r.moveBy(0,25);
-  italic->setGeometry(r);
 }
 
 void StyleChanger::setRef(ItemStyle *s) {
@@ -2261,46 +2260,40 @@ void StyleChanger::changed() {
   }
 }
 
-FontChanger::FontChanger(QWidget *parent, int x, int y) :
-  QObject(parent)
+FontChanger::FontChanger(QWidget *parent) :
+  QWidget(parent)
 {
-  QRect r;
   QLabel *label;
 
   QStringList fontList;
   KFontChooser::getFontList(fontList, false);
+  QVBoxLayout *box = new QVBoxLayout( this );
 
-  familyCombo = new QComboBox(true,parent);
-  label = new QLabel(familyCombo,i18n("Family:"),parent);
+  label = new QLabel(i18n("Family:"),this);
+  box->addWidget(label);
+
+  familyCombo = new QComboBox(true,this);
+  box->addWidget(familyCombo);
+
   connect(familyCombo,SIGNAL(activated(const QString&)),SLOT(familyChanged(const QString&)));
   familyCombo->insertStringList(fontList);
 
-  r.setRect(x,y,160,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  familyCombo->setGeometry(r);
+  label = new QLabel(i18n("Size:"),this);
+  box->addWidget(label);
+  sizeCombo = new QComboBox(true,this);
+  box->addWidget(sizeCombo);
 
-  sizeCombo = new QComboBox(true,parent);
-  label = new QLabel(sizeCombo,i18n("Size:"),parent);
   connect(sizeCombo,SIGNAL(activated(int)),SLOT(sizeChanged(int)));
   for( int i=0; fontSizes[i] != 0; i++ ){
     sizeCombo->insertItem(QString().setNum(fontSizes[i]),i);
   }
 
-  r.moveBy(0,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  sizeCombo->setGeometry(r);
+  label = new QLabel(i18n("Charset:"),this);
+  box->addWidget(label);
+  charsetCombo = new QComboBox(true,this);
+  box->addWidget(charsetCombo);
 
-  charsetCombo = new QComboBox(true,parent);
-  label = new QLabel(charsetCombo,i18n("Charset:"),parent);
   connect(charsetCombo,SIGNAL(activated(const QString&)),SLOT(charsetChanged(const QString&)));
-
-  r.moveBy(0,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  charsetCombo->setGeometry(r);
-
 }
 
 void FontChanger::setRef(ItemFont *f) {
@@ -2367,49 +2360,48 @@ void FontChanger::displayCharsets() {
 DefaultsDialog::DefaultsDialog(HlManager *hlManager, ItemStyleList *styleList,
   ItemFont *font, QWidget *parent) : QDialog(parent,0L,true) {
 
-  QGroupBox *group;
   QComboBox *styleCombo;
   QLabel *label;
   FontChanger *fontChanger;
   QPushButton *button;
-  QRect r, gr;
+  QRect r;
   int z;
 
-  group = new QGroupBox(i18n("Default Item Styles"),this);
-  gr.setRect(10,10,200,180);
-  group->setGeometry(gr);
-  styleCombo = new QComboBox(false,group);
-  label = new QLabel(styleCombo,i18n("Item:"),group);
+  QGridLayout *grid1 = new QGridLayout( this, 2, 2,15,7);
+
+
+  QVGroupBox *groupbox = new QVGroupBox(i18n("Default Item Styles"),this);
+  grid1->addWidget(groupbox,0,0);
+
+  label = new QLabel(i18n("Item:"),groupbox);
+  styleCombo = new QComboBox(false,groupbox);
   connect(styleCombo,SIGNAL(activated(int)),this,SLOT(changed(int)));
-  r.setRect(10,15,160,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  styleCombo->setGeometry(r);
-  styleChanger = new StyleChanger(group,r.x(),r.y() + 25);
+
+  styleChanger = new StyleChanger(groupbox);
   connect(styleCombo,SIGNAL(activated(int)),this,SLOT(changed(int)));
 
   for (z = 0; z < hlManager->defaultStyles(); z++) {
     styleCombo->insertItem(i18n(hlManager->defaultStyleName(z)),z);
   }
 
-  group = new QGroupBox(i18n("Default Font"),this);
-  gr.moveBy(gr.width() + 10,0);
-  group->setGeometry(gr);
-  fontChanger = new FontChanger(group,10,15);
+  groupbox = new QVGroupBox(i18n("Default Font"),this);
+  grid1->addWidget(groupbox,0,1);
+
+  fontChanger = new FontChanger(groupbox);
   fontChanger->setRef(font);
 
   itemStyleList = styleList;
   changed(0);
 
   button = new QPushButton(i18n("&OK"),this);
+  grid1->addWidget(button,1,0);
   button->setDefault(true);
   r.setRect(10,210,70,25);
   button->setGeometry(r);
   connect(button,SIGNAL(clicked()),this,SLOT(accept()));
 
   button = new QPushButton(i18n("&Cancel"),this);
-  r.moveBy(gr.right() - r.width() -5,0);
-  button->setGeometry(r);
+  grid1->addWidget(button,1,1);
   connect(button,SIGNAL(clicked()),this,SLOT(reject()));
 }
 
@@ -2426,66 +2418,67 @@ HighlightDialog::HighlightDialog(HlManager *hlManager,
   QPushButton *button;
   QGroupBox *group;
   QLabel *label;
-  QRect r, gr;
   int z;
+  QGridLayout *grid1 = new QGridLayout( this, 3,2 ,15,7);
 
   group = new QGroupBox(i18n("Config Select"),this);
-  gr.setRect(10,10,200,130);
-  group->setGeometry(gr);
+  grid1->addWidget(group,0,0);
+
+  QVBoxLayout *box = new QVBoxLayout( group );
+  box->setMargin( 15 );
+  box->setSpacing( 15 );
+
+
+  label = new QLabel(i18n("Highlight:"),group);
+  box->addWidget(label);
   hlCombo = new QComboBox(false,group);
-  label = new QLabel(hlCombo,i18n("Highlight:"),group);
+  box->addWidget(hlCombo);
   connect(hlCombo,SIGNAL(activated(int)),SLOT(hlChanged(int)));
-  r.setRect(10,15,180,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  hlCombo->setGeometry(r);
+
   for (z = 0; z < hlManager->highlights(); z++) {
     hlCombo->insertItem(hlManager->hlName(z),z);
   }
   hlCombo->setCurrentItem(hlNumber);
 
+  label = new QLabel(i18n("Item:"),group);
+  box->addWidget(label);
   itemCombo = new QComboBox(false,group);
-  label = new QLabel(itemCombo,i18n("Item:"),group);
+  box->addWidget(itemCombo);
+
   connect(itemCombo,SIGNAL(activated(int)),SLOT(itemChanged(int)));
-  r.moveBy(0,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  itemCombo->setGeometry(r);
 
   group = new QGroupBox(i18n("Highlight Auto Select"),this);
-  gr.moveBy(gr.width() + 10,0);
-  group->setGeometry(gr);
+  grid1->addWidget(group,0,1);
+
+  box = new QVBoxLayout( group );
+  box->setMargin( 15 );
+  box->setSpacing( 15 );
+
+  label = new QLabel(i18n("File Extensions:"),group);
+  box->addWidget(label);
   wildcards = new QLineEdit(group);
-  label = new QLabel(wildcards,i18n("File Extensions:"),group);
-  r.setRect(10,15,180,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  wildcards->setGeometry(r);
+  box->addWidget(wildcards);
 
+  label = new QLabel(i18n("Mime Types:"),group);
+  box->addWidget(label);
   mimetypes = new QLineEdit(group);
-  label = new QLabel(mimetypes,i18n("Mime Types:"),group);
-  r.moveBy(0,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  mimetypes->setGeometry(r);
+  box->addWidget(mimetypes);
 
 
-  group = new QGroupBox(i18n("Item Style"),this);
-  gr.setRect(10,gr.bottom()+1 + 15,200,205);
-  group->setGeometry(gr);
-  styleDefault = new QCheckBox(i18n("Default"),group);
+  QVGroupBox *groupbox = new QVGroupBox(i18n("Item Style"),this);
+  grid1->addWidget(groupbox,1,0);
+
+  styleDefault = new QCheckBox(i18n("Default"),groupbox);
   connect(styleDefault,SIGNAL(clicked()),SLOT(changed()));
-  r.setRect(10,15,160,25);
-  styleDefault->setGeometry(r);
-  styleChanger = new StyleChanger(group,r.x(),r.y() + 25);
+  styleChanger = new StyleChanger(groupbox);
 
-  group = new QGroupBox(i18n("Item Font"),this);
-  gr.moveBy(gr.width() + 10,0);
-  group->setGeometry(gr);
-  fontDefault = new QCheckBox(i18n("Default"),group);
+
+  groupbox = new QVGroupBox(i18n("Item Font"),this);
+  grid1->addWidget(groupbox,1,1);
+
+  fontDefault = new QCheckBox(i18n("Default"),groupbox);
   connect(fontDefault,SIGNAL(clicked()),SLOT(changed()));
-  fontDefault->setGeometry(r);
-  fontChanger = new FontChanger(group,r.x(),r.y() + 25);
+  fontChanger = new FontChanger(groupbox);
 
 
   hlDataList = highlightDataList;
@@ -2493,13 +2486,12 @@ HighlightDialog::HighlightDialog(HlManager *hlManager,
 
   button = new QPushButton(i18n("&OK"),this);
   button->setDefault(true);
-  r.setRect(10,370,70,25);
-  button->setGeometry(r);
+  grid1->addWidget(button,2,0);
   connect(button,SIGNAL(clicked()),this,SLOT(accept()));
 
   button = new QPushButton(i18n("&Cancel"),this);
-  r.moveBy(gr.right() - r.width() -5,0);
-  button->setGeometry(r);
+  grid1->addWidget(button,2,1);
+
   connect(button,SIGNAL(clicked()),this,SLOT(reject()));
 }
 

@@ -25,6 +25,7 @@
 
 #include <cproject.h>
 #include <qlist.h>
+#include <qdialog.h>
 
 class CLogFileView;
 
@@ -43,7 +44,7 @@ class QPushButton;
 
 class CFilePropDlg : public QDialog  {
   Q_OBJECT
-public: 
+public:
 	CFilePropDlg(QWidget *parent=0, const char *name=0,CProject* prj=0,QString preselecteditem="");
 	~CFilePropDlg();
  public slots:
