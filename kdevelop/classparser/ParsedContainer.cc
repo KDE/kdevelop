@@ -112,23 +112,31 @@ void CParsedContainer::addMethod( CParsedMethod *aMethod )
 
 /*------------------------------ CParsedContainer::getMethodByName()
  * getMethodByName()
- *   Get a method by using its' name.
+ *   Get all methods matching the supplied name. 
  *
  * Parameters:
- *   aName              Name of the method to fetch.
+ *   aName                   Name of the method to fetch.
  *
  * Returns:
- *   CParsedMethod *    The method.
- *   NULL               If not found.
+ *   QList<CParsedMethod> *  The methods.
+ *   NULL                    If not found.
  *-----------------------------------------------------------------*/
-CParsedMethod *CParsedContainer::getMethodByName( const char *aName )
+QList<CParsedMethod> *CParsedContainer::getMethodByName( const char *aName )
 {
-  CParsedMethod *retVal = NULL;
+  QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
+  CParsedMethod *aMethod;
 
-  for( retVal = methods.first(); 
-       retVal != NULL && retVal->name != aName;
-       retVal = methods.next() )
-    ;
+  retVal->setAutoDelete( false );
+
+  for( aMethod = methods.first(); 
+       aMethod != NULL;
+       aMethod = methods.next() )
+  {
+    // If the name matches the supplied one we append the method to the 
+    // returnvalue.
+    if( aMethod->name == aName )
+      retVal->append( aMethod );
+  }
     
   return retVal;
 }
@@ -291,6 +299,79 @@ QList<CParsedStruct> *CParsedContainer::getSortedStructList()
   }
 
   return retVal;
+}
+
+/*--------------------------- CParsedContainer::removeWithReferences()
+ * removeWithReferences()
+ *   Remove all items in the store with references to the file.
+ *
+ * Parameters:
+ *   aFile          The file.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedContainer::removeWithReferences( const char *aFile )
+{
+}
+
+/*----------------------------------- CParsedContainer::removeMethod()
+ * removeMethod()
+ *   Remove a method matching the specification. 
+ *
+ * Parameters:
+ *   aMethod        Specification of the method.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedContainer::removeMethod( CParsedMethod *aMethod )
+{
+  QString str;
+  CParsedMethod *m;
+
+  aMethod->asString( str );
+
+  m = getMethodByNameAndArg( str );
+
+  methodsByNameAndArg.remove( str );
+  methods.removeRef( m );
+}
+
+/*-------------------------------- CParsedContainer::removeAttribute()
+ * removeAttribute()
+ *   Remove an attribute with a specified name. 
+ *
+ * Parameters:
+ *   aName          Name of the attribute to remove.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedContainer::removeAttribute( const char *aName )
+{
+  assert( aName != NULL );
+  assert( strlen( aName ) > 0 );
+
+  attributes.remove( aName );
+}
+
+/*----------------------------------- CParsedContainer::removeStruct()
+ * removeStruct()
+ *   Remove a struct with a specified name. 
+ *
+ * Parameters:
+ *   aName          Name of the struct to remove.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedContainer::removeStruct( const char *aName )
+{
+  assert( aName != NULL );
+  assert( strlen( aName ) > 0 );
+
+  structs.remove( aName );
 }
 
 /*------------------------------------------ CParsedContainer::clear()

@@ -58,16 +58,24 @@ public: // Metods to set attribute values
 
 public: // Public queries
 
-  /** Get a method by using its' name. */
-  CParsedMethod *getMethodByName( const char *aName );
+  /** Get all methods matching the supplied name. 
+   * @param aName Name of the method.
+   */
+  QList<CParsedMethod> *getMethodByName( const char *aName );
 
-  /** Get a method by using its' name and arguments. */
+  /** Get a method by using its' name and arguments. 
+   * @param aName Output from a CParsedMethod->asString() call.
+   */
   CParsedMethod *getMethodByNameAndArg( const char *aName );
 
-  /** Get a struct by using it's name. */
+  /** Get a struct by using it's name. 
+   * @param aName Name of the struct to fetch.
+   */
   CParsedStruct *getStructByName( const char *aName );
 
-  /** Get a attribute by using its' name. */
+  /** Get a attribute by using its' name. 
+   * @param aName Name of the attribute to fetch.
+   */
   CParsedAttribute *getAttributeByName( const char *aName );
 
   /** Get all methods in sorted order. */
@@ -79,7 +87,37 @@ public: // Public queries
   /** Get all structs in sorted order. */
   QList<CParsedStruct> *getSortedStructList();
 
+  /** Does a attribute exist in the store? 
+   * @param aName Name of the attribute to check if it exists.
+   */
+  bool hasAttribute( const char *aName ) { return attributes.find( aName ) != NULL; }
+
+  /** Does a struct exist in the store? 
+   * @param aName Name of the struct to check if it exists.
+   */
+  bool hasStruct( const char *aName ) { return structs.find( aName ) != NULL; }
+
 public: // Public methods
+
+  /** Remove all items in the store with references to the file. 
+   * @param aFile The file to check references to.
+   */
+  void removeWithReferences( const char *aFile );
+
+  /** Remove a method matching the specification. 
+   * @param aMethod Specification of the method.
+   */
+  void removeMethod( CParsedMethod *aMethod );
+
+  /** Remove an attribute with a specified name. 
+   * @param aName Name of the attribute to remove.
+   */
+  void removeAttribute( const char *aName );
+
+  /** Remove a struct with a specified name. 
+   * @param aName Name of the struct to remove.
+   */
+  void removeStruct( const char *aName );
 
   /** Clear the internal state. */
   void clear();
