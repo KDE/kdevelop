@@ -305,7 +305,7 @@ void CustomProjectPart::removeFile(const QString &fileName)
 	QStringList fileList;
 	fileList.append ( fileName );
 
-	this->addFiles ( fileList );
+	this->removeFiles( fileList );
 }
 
 void CustomProjectPart::removeFiles ( const QStringList& fileList )
