@@ -26,6 +26,8 @@
 #include "./gfxview/GfxClassTreeWindow.h"
 #include "./classparser/ClassParser.h"
 #include "./classwizard/cclasswizarddlg.h"
+#include "wzconnectdlgimpl.h"
+
 
 #include "resource.h"
 
@@ -176,6 +178,7 @@ void CClassView::initPopups()
   // Class popup
   classPopup.insertTitle(SmallIcon("CVclass"), i18n("Class"));
   classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
+//  classPopup.insertItem(SmallIcon("CVclass"), i18n("Class Properties & tool"),this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
   classPopup.insertItem(SmallIconSet("methodnew"), i18n("Add member function..."), this, SLOT(slotMethodNew()),0, ID_CV_METHOD_NEW);
   classPopup.insertItem(SmallIconSet("variablenew"), i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0,ID_CV_ATTRIBUTE_NEW);
 //  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0,ID_CV_IMPLEMENT_VIRTUAL);
@@ -185,7 +188,7 @@ void CClassView::initPopups()
   classPopup.insertSeparator();
   classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()),0, ID_CV_CLASS_BASE_CLASSES);
   classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()),0, ID_CV_CLASS_DERIVED_CLASSES);
-  classPopup.insertItem(SmallIconSet("CVstruct"), i18n("Classtool..."), this, SLOT(slotClassTool()),0, ID_CV_CLASS_TOOL);
+  classPopup.insertItem(SmallIconSet("CVclass"), i18n("Properties"), this, SLOT(slotClassTool()),0, ID_CV_CLASS_TOOL);
   //  classPopup.insertSeparator();
   //  id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()),0, ID_CV_ADD_SLOT_SIGNAL);
   //  classPopup.setItemEnabled( id, false );
@@ -920,7 +923,8 @@ void CClassView::buildTreeStr( QListViewItem *item, QString &str )
  *-----------------------------------------------------------------*/
 void CClassView::asTreeStr(QString &str)
 {
-	str="";
+  str="";
+
   buildTreeStr( classesItem, str );
 }
 
@@ -1023,20 +1027,42 @@ void CClassView::buildInitalClassTree()
  * Returns:
  *   A newly allocated classtool dialog.
  *-----------------------------------------------------------------*/
-CClassToolDlg *CClassView::createCTDlg()
+// CClassToolDlg*
+CClassPropertiesDlgImpl *CClassView::createCTDlg(int pgn)
 {
-  CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
+  CClassPropertiesDlgImpl *ctDlg = new CClassPropertiesDlgImpl( (CTPACTION) pgn, NULL );
 
-  connect( ctDlg, 
+  cerr << "CClassView::createCTDlg() : creating CClassToolDlg as child of CClassPropertiesDlgImpl::*tpgClassView:"<< endl;
+  CClassToolDlg* tool = new CClassToolDlg( ctDlg -> CVLayout );
+  tool -> show ();
+
+  connect( tool,
            SIGNAL( signalViewDeclaration(const char *,const char *,THType,THType ) ),
            SLOT(slotViewDeclaration(const char *,const char *,THType,THType ) ) );
                    
-  connect( ctDlg, 
+  connect( tool,
            SIGNAL( signalViewDefinition(const char *, const char *, THType, THType ) ),
            SLOT(slotViewDefinition(const char *, const char *, THType, THType ) ) );
 
-  ctDlg->setStore( store );
-  ctDlg->setClass( getCurrentClass() );
+  connect ( tool,
+            SIGNAL(signalClassChanged(CParsedClass*)), ctDlg,
+            SLOT(slotClassViewChanged( CParsedClass* ) ));
+
+  connect ( ctDlg, SIGNAL(sigAddAttribute( const char*, CParsedAttribute*)),
+                        SLOT( slotAddAttribute( const char*, CParsedAttribute*)));
+  connect ( ctDlg, SIGNAL(sigAddMethod( const char*, CParsedMethod*)),
+                        SLOT( slotAddMethod( const char*, CParsedMethod*)));
+  connect ( ctDlg,
+            SIGNAL(sigSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod*)),
+            SLOT(slotSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod*)));
+
+  tool -> setStore( store );
+  tool -> setClass( getCurrentClass() );
+
+  ctDlg -> setCurrentClassName( tool -> classToString() );
+  ctDlg -> setStore ( store );
+  ctDlg -> setClass( getCurrentClass() );
+  ctDlg -> setClassToolDlg( tool );
 
   return ctDlg;
 }
@@ -1209,12 +1235,20 @@ void CClassView::slotMethodNew()
   QString itemName;
   THType parentType;
   THType itemType;
-
+    CParsedClass * aClass;
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
                                                  parentType, itemType );
   if (itemType==THCLASS)
-   emit signalAddMethod( parentPath );
+  {
+      cerr << "parentPath = " << parentPath.data() << endl;
+      aClass = store -> getClassByName ( parentPath );
+      cerr << "got class: " << aClass -> name.data() << endl;
+      CClassPropertiesDlgImpl* dlg = createCTDlg((int) CTPADDMETH);
+      dlg -> show();
+  }
+
+   //emit signalAddMethod( parentPath );
 }
 
 void CClassView::slotMethodDelete()
@@ -1237,12 +1271,20 @@ void CClassView::slotAttributeNew()
   QString itemName;
   THType parentType;
   THType itemType;
-
+  CParsedClass* aClass;
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
                                                  parentType, itemType );
   if (itemType==THCLASS)
-   emit signalAddAttribute( parentPath );
+  {
+      cerr << "parentPath = " << parentPath.data() << endl;
+      aClass = store -> getClassByName ( parentPath );
+      cerr << "got class: " << aClass -> name.data() << endl;
+      CClassPropertiesDlgImpl* dlg = createCTDlg((int) CTPADDATTR);
+      dlg -> show();
+  }
+    // Disabling hold dialog...
+   //   emit signalAddAttribute( parentPath );
 }
 
 void CClassView::slotAttributeDelete()
@@ -1294,7 +1336,7 @@ void CClassView::slotFolderDelete()
 
 void CClassView::slotClassBaseClasses()
 {
-  CClassToolDlg *ctDlg = createCTDlg();
+  CClassPropertiesDlgImpl *ctDlg = createCTDlg((int) CTPVIEW);
 
   ctDlg->viewParents();
   ctDlg->show();
@@ -1302,7 +1344,7 @@ void CClassView::slotClassBaseClasses()
 
 void CClassView::slotClassDerivedClasses() 
 {
-  CClassToolDlg *ctDlg = createCTDlg();
+  CClassPropertiesDlgImpl *ctDlg = createCTDlg((int) CTPVIEW);
 
   ctDlg->viewChildren();
   ctDlg->show();
@@ -1310,7 +1352,7 @@ void CClassView::slotClassDerivedClasses()
 
 void CClassView::slotClassTool()
 {
-  CClassToolDlg *ctDlg = createCTDlg();
+  CClassPropertiesDlgImpl *ctDlg = createCTDlg((int) CTPVIEW);
 
   ctDlg->show();
 }
@@ -1376,4 +1418,23 @@ void CClassView::slotGrepText(){
 
   emit signalGrepText(text);
 }
+
+/** Called from signal CClassPropertiesDlgImpl::sigAddxxx(const char *aClassName, CParsedxxx*)
+This method emits signal sigAddxxx(...) for CKdevelop
+ */
+void CClassView::slotAddMethod ( const char * aClassName, CParsedMethod* aMethod)
+{
+    emit sigAddMethod ( aClassName, aMethod );
+}
+
+void CClassView::slotAddAttribute( const char * aClassName, CParsedAttribute* aAttr)
+{
+    emit sigAddAttribute( aClassName, aAttr);
+}
+/**  */
+void CClassView::slotSigSlotMapImplement ( CParsedClass* aClass, const QString& toAdd, CParsedMethod* implMethod)
+{
+    emit sigSigSlotMapImplement ( aClass, toAdd, implMethod );
+}
+
 #include "cclassview.moc"

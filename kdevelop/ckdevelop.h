@@ -64,6 +64,7 @@ class KHTMLPart;
 class CParsedMethod;
 class CParsedContainer;
 class CParsedClass;
+class CParsedAttribute;
 class KStatusBar;
 class CTabCtl;
 class CEditWidget;
@@ -657,6 +658,9 @@ public:
    */
   void slotCVAddAttribute( const char *aClassName );
   
+  void slotCVAddAttribute( const char *aClassName, CParsedAttribute* aAttr );
+  /**  */
+  void slotCVSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
   /** Delete an method.
    * @param aClassName Name of the class holding the method. NULL for global functions.
    * @param aMethodName Name of the method(with arguments) to delete.

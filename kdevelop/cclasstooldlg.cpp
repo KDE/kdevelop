@@ -50,7 +50,7 @@
  *   -
  *-----------------------------------------------------------------*/
 CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
-  : QDialog( parent, name, false ),
+  : QWidget( parent, name),
     classTree( this, "classTree" ),
     classLbl( this, "classLbl" ),
     classCombo( false, this, "classCombo" ),
@@ -66,6 +66,7 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
     //    virtualsBtn( this, "virtualsBtn" ),
     exportCombo( false, this, "exportCombo" )
 {
+  resize (parent -> width() , parent -> height());
   currentOperation = CTNONE;
   comboExport = CTHALL;
   onlyVirtual = false;
@@ -77,8 +78,16 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
   readIcons();
   setCallbacks();
   setTooltips();
+  #warning Please FIX :CClassToolDlg::resizeEvent() is not called...
+  setGeometry(5,5, 480, 340);
 }
 
+void CClassToolDlg::resizeEvent( QResizeEvent* e)
+{
+    QWidget::resizeEvent(e);
+    //resize(parentWidget() -> width(), parentWidget() -> height());
+    cerr << "CClassToolDlg: new size: W:" << width() << " H:" << height() << endl;
+}
 
 /*********************************************************************
  *                                                                   *
@@ -121,7 +130,7 @@ void CClassToolDlg::setWidgetValues()
   exportCombo.insertItem(i18n("Protected"));
   exportCombo.insertItem(i18n("Private"));
 
-  classTree.setMinimumSize( 500, 400 );
+  classTree.setMinimumSize( 470, 150 );
   classTree.setRootIsDecorated( true );
   classTree.addColumn( "classes" );
   classTree.header()->hide();
@@ -312,6 +321,7 @@ void CClassToolDlg::setClass( const char *aName )
     warning += aName;
     QMessageBox::warning( this, i18n("Class error"), warning );
   }
+  emit signalClassChanged( currentClass );
 }
 
 /*---------------------------------------- CClassToolDlg::setClass()
@@ -665,12 +675,18 @@ void CClassToolDlg::slotExportComboChoice(int /*idx*/)
   }
 }
 
+QString CClassToolDlg::classToString()
+{
+    QString className =  classCombo.currentText();
+    return className;
+}
+
 void CClassToolDlg::slotClassComboChoice(int /*idx*/)
 {
   QString className=classCombo.currentText();
   // className.replace(QRegExp("::"), ".");
   setClass( className );
-
+  //emit signalClassChanged( className );
   // Update the view if the choice affected the data.
   switch( currentOperation )
   {
@@ -716,6 +732,6 @@ void CClassToolDlg::slotCTViewDef( const char *className, const char *declName, 
 
 void CClassToolDlg::OK()
 {
-  accept();
+//  accept();
 }
 #include "cclasstooldlg.moc"

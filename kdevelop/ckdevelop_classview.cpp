@@ -416,6 +416,104 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   delete aAttr;
 }
 
+/*------------------------------------- CKDevelop::slotCVAddAttribute()
+ * slotCVAddAttribute()
+ *   Event when the user adds an attribute to a class.
+ *
+ * Parameters:
+ *   aAttr           The attribute to add.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aAttr )
+{
+  REQUIRE( "Valid class name", aClassName != NULL );
+
+  CParsedClass *aClass;
+  CParsedAttribute *attr = NULL;
+  QString toAdd;
+  int atLine = -1;
+/*
+  CAddClassAttributeDlg dlg(this, "attrDlg" );
+  CParsedAttribute *aAttr;
+*/
+  if (bAutosave)
+    saveTimer->stop();
+
+  aAttr->setDeclaredInScope( aClassName );
+
+  if (bAutosave)
+    saveTimer->start(saveTimeout);
+
+  // Fetch the current class.
+  aClass = class_tree->store->getClassByName( aClassName );
+
+  for( aClass->attributeIterator.toFirst();
+       aClass->attributeIterator.current();
+       ++aClass->attributeIterator )
+  {
+    attr = aClass->attributeIterator.current();
+    if( attr->exportScope == aAttr->exportScope &&
+        atLine < attr->declarationEndsOnLine )
+      atLine = attr->declarationEndsOnLine + 1;
+  }
+
+  // Switch to the .h file.
+  CVGotoDeclaration( aClass->name, "", THCLASS, THCLASS );
+
+  // Get the code for the new attribute
+  aAttr->asHeaderCode( toAdd );
+
+  // If we found an attribute with the same export we don't need to output
+  // the label as well.
+  if( atLine == -1 )
+  {
+    switch( aAttr->exportScope )
+    {
+      case PIE_PUBLIC:
+        toAdd = "public: // Public attributes\n" + toAdd;
+        break;
+      case PIE_PROTECTED:
+        toAdd = "protected: // Protected attributes\n" + toAdd;
+        break;
+      case PIE_PRIVATE:
+        toAdd = "private: // Private attributes\n" + toAdd;
+        break;
+      default:
+        break;
+    }
+
+    atLine = aClass->declarationEndsOnLine;
+  }
+
+  // Add the code to the file.
+  edit_widget->insertAtLine( toAdd, atLine );
+  edit_widget->setCursorPosition( atLine, 0 );
+  slotFileSave();
+  // Delete the genererated attribute
+  delete aAttr;
+}
+
+/**  */
+void CKDevelop::slotCVSigSlotMapImplement ( CParsedClass* aClass, const QString& toAdd, CParsedMethod* implMethod )
+{
+    if ( implMethod == NULL || aClass == NULL ) return;
+    int atLine = implMethod -> definitionEndsOnLine ;
+    if ( atLine ==-1 )
+    {
+        cerr << "Line# not stored in implement method! Aborting SigSlotMapImplement!" << endl;
+        return;
+    }
+   QString str = "\t" + toAdd + "\n";
+    switchToFile ( aClass -> definedInFile );
+    edit_widget->insertAtLine( str, atLine );
+    edit_widget->setCursorPosition( atLine, 0 );
+    slotFileSave();
+}
+
+
+
 /*------------------------------------- CKDevelop::slotCVDeleteMethod()
  * slotCVDeleteMethod()
  *   Event when the user wants to delete a method.

@@ -36,6 +36,7 @@ class QListViewItem;
 class QPoint;
 class QRect;
 class QStrList;
+class CClassPropertiesDlgImpl;
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
@@ -107,12 +108,14 @@ public: // Public methods
 
   /** Fetches the currently selected class from the store. */
   CParsedClass *getCurrentClass();
-
 signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
   void resetStatusbarProgress();
-
+  void sigAddMethod( const char*, CParsedMethod*);
+  void sigAddAttribute( const char*, CParsedAttribute*);
+   /**  */
+  void sigSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
 protected slots:
   void slotProjectOptions();
   void slotGraphicalView();
@@ -230,7 +233,8 @@ private: // Private methods
   /** Create a new ClassTool dialog and setup its' attributes.
    * @return A newly allocated classtool dialog.
    */
-  CClassToolDlg *createCTDlg();
+  //CClassToolDlg
+  CClassPropertiesDlgImpl*createCTDlg(int pgn=0);
 
   /** Fetch one node from a tree string.
    * @param str        String containing the tree.
@@ -266,6 +270,16 @@ private: // Private methods
   void asTreeStr( QString &str );
 
   bool validClassDecl( const char *className, const char *declName, THType type );
+public slots: // Public slots
+  /** Called from signal CClassPropertiesDlgImpl::sigAddSignal( CParsedClass*, CParsedMethod*)
+This method emits signal sigAddSignalMethod(...) for CKdevelop
+ */
+  void slotAddMethod( const char *, CParsedMethod* );
+  /**  */
+  void slotSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
+
+  void slotAddAttribute( const char*, CParsedAttribute*);
+
 };
 
 #endif

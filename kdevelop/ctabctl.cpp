@@ -27,6 +27,7 @@
 CTabCtl::CTabCtl( QWidget* parent, const char* name, const QString& type) :
   QTabWidget(parent,name)
 {
+  setMinimumSize(1,1);
   setFocusPolicy(QWidget::NoFocus);
 //  tabs->setFocusPolicy(QWidget::NoFocus);
   setTabPosition(Top);

@@ -23,7 +23,9 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qlayout.h> 
+#include <qlayout.h>
+#include <qwidget.h>
+
 
 #include "./classparser/ClassStore.h"
 #include "cclasstreehandler.h"
@@ -39,7 +41,7 @@ typedef enum _CTOperations
  * based on export.
  * @author Jonas Nordin
  */
-class CClassToolDlg : public QDialog
+class CClassToolDlg : public QWidget
 {
   Q_OBJECT
 public: // Constructor & Destructor
@@ -53,6 +55,10 @@ public: // Public methods to set attribute values
   /** Set the store to use to search for classes. */
   void setStore( CClassStore *aStore );
 
+//  /** Shares current class. */
+//  CParsedClass *asClass() { return currentClass; }
+//  /** Shares current store. */
+//  CClassStore* asStore() { return store; }
   /** Set the class to view. */
   void setClass( const char *aName );
   void setClass( CParsedClass *aClass );
@@ -77,6 +83,7 @@ public: // Public methods to set attribute values
 
   /** View virtual methods in this class and parents. */
   void viewVirtuals();
+  QString classToString();
 
 public: // Public widgets
 
@@ -102,7 +109,7 @@ protected: // Private widgets
   QPushButton methodsBtn;
   //  QPushButton virtualsBtn;
   QComboBox exportCombo;
-
+  virtual void resizeEvent ( QResizeEvent* );
 protected slots:
 
   void slotParents();
@@ -131,6 +138,8 @@ signals: // Signals
 
   /** This signal is emitted when a user wants to view a definition. */
   void signalViewDefinition( const char *, const char *, THType,THType );
+  /** This signal is emitted when a user as choosed an other class */
+  void signalClassChanged( CParsedClass*  );
 
 private: // Private attribues
 

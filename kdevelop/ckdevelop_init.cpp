@@ -1239,7 +1239,12 @@ void CKDevelop::initConnections(){
   connect(class_tree, SIGNAL(popupHighlighted(int)), SLOT(statusCallback(int)));
   connect(class_tree, SIGNAL(selectFile(const QString &, int)), SLOT(slotSwitchToFile(const QString &, int)));
   connect(class_tree, SIGNAL(signalGrepText(QString)), SLOT(slotEditSearchInFiles(QString)));
-
+  connect(class_tree,
+          SIGNAL(sigAddMethod(const char *, CParsedMethod* )),
+          SLOT(slotCVAddMethod(const char * , CParsedMethod*)));
+  connect(class_tree,
+            SIGNAL(sigSigSlotMapImplement(CParsedClass*, const QString&, CParsedMethod* )),
+            SLOT(slotCVSigSlotMapImplement(CParsedClass*, const QString&, CParsedMethod* )));
   connect(log_file_tree, SIGNAL(logFileTreeSelected(QString)), SLOT(slotLogFileTreeSelected(QString)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
   connect(log_file_tree, SIGNAL(selectedNewFile()), SLOT(slotProjectAddNewFile()));
