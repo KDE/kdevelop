@@ -8,7 +8,7 @@ L'EDI KDevelop a été conçu par l'équipe KDevelop afin de fournir un environnemen
 En plus de toutes les fonctionnalités intégrées dans la version courante, la connaissance en programmation des membres de 
 l'équipe a été utilisée pour ajouter un ensemble de manuels de documentation qui aideront les débutants et les plus 
 expérimentés dans l'utilisation de leur EDI. Nous espérons vous donner l'environnement dont vous avez besoin et que vous
-prendrez plaisir à utiliser pour créer votre application qui contribuera à l'Environnement de Bureau KDE et à la
+prendrez plaisir à l'utiliser pour créer votre application qui contribuera à l'Environnement de Bureau KDE et à la
 communauté du logiciel libre ou une application à vocation commerciale.
 
 Actuellement, la Documentation de KDevelop est découpée en quatre manuels écrits de façon claire, informative et compréhensible
@@ -64,7 +64,7 @@ sur la portabilité vers Qt 2.0 / KDE 2 en ce qui concerne l'architecture d'appli
 <tag/<subtitle/<htmlurl url="../addendum/index.html" name="Guide du Développeur KDE 2">//
 <p>
 Un ensemble de documents existant déjà sur l'utilisation de l'API de KDE 2 et incluant les questions KOM/OpenParts
-par différents auteurs
+par différents auteurs.
 <p>
 <em>
 Ce manuel est un ensemble d'articles ayant déjà été écrits par différents auteurs de KDE sur le développement de KDE 2.

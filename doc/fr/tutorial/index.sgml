@@ -27,14 +27,14 @@ des applications KDE par l'exemple et des applications fonctionnelles avec l'éch
 Qt et l'EDI KDevelop.
 
 Le chapitre suivant expliquera donc comment créer, avec KDevelop, un projet qui est déjà une application complète. Ensuite, nous
-parcourerons la documentation en ligne de Qt qui contient les sources des exemples d'utilisation de la bibliothèque Qt.
+parcourrons la documentation en ligne de Qt qui contient les sources des exemples d'utilisation de la bibliothèque Qt.
 
 Cela vous donnera un premier aperçu des fonctions de la bibliothèque Qt et comment utiliser les classes fournies avec ; Qt est
 le point de départ car KDE est bâti au-dessus des classes de la bibliothèque Qt et les applications KDE en font une
 utilisation intensive.
 
 Ensuite, nous traiterons la création d'une mini-application KDE avec l'assistant d'application de KDevelop. A partir de l'architecture
-minimale fournie, nous créerons une application KDE exemple qui utilise les bibliothèques KDE et nous expliquerons en détail 
+minimale fournie, nous créerons une application KDE exemple qui utilisera les bibliothèques KDE et nous expliquerons en détail
 les différentes parties de l'application.
 
 L'Équipe KDevelop vous souhaite un bon apprentissage de KDE et Qt avec ce manuel et espère qu'il vous permettra de devenir un
@@ -52,9 +52,9 @@ globalement l'EDI KDevelop et ce que sont les projets générés.
 <p>
 Pour commencer signifie que vous devez avoir installé et configuré KDevelop pour qu'il fonctionne correctement. Assurez-vous que vous avez
 accès à la documentation de référence de Qt en ligne par le menu "Aide" ou le manuel correspondant dans l'arborescence de documentation.
-Lorsque vous regarderez la première page de la documenation de Qt, vous verrez qu'elle contient un lien vers les sections "Tutorials" et
+Lorsque vous regarderez la première page de la documentation de Qt, vous verrez qu'elle contient un lien vers les sections "Tutorials" et
 "Examples". Sous "Tutorials", vous trouverez une introduction en 14 étapes à l'utilisation de la bibliothèque Qt pour construire des 
-applications. Par ailleurs, "Examples" vous conduira à une liste de programmes exemples inclus dans Qt et pris comme référence d'exemple 
+applications. Par ailleurs, "Examples" vous conduira à une liste d'exemples de programmes inclus dans Qt et pris comme référence d'exemple
 d'utilisation de certaines classes. Maintenant, si vous débutez complètement, vous devriez vous sentir à l'aise
 avec la philosophie de Qt, à savoir fournir une bibliothèque qui offre :
 <itemize>
@@ -74,7 +74,7 @@ Commencer par apprendre Qt devrait aussi être un bon début pour la programmation
 projet qui aboutira aux applications du tutoriel après édition.
 
 Pour cela, commencez par lancer KDevelop et sélectionner "Projet" - "Nouveau" dans la barre de menus. L'assistant d'application
-s'ouvre et vouz devez sélectionner le type du projet qui vous voulez construire. Pour les applications Qt, vous choisiriez 
+s'ouvre et vouz devez sélectionner le type du projet que vous voulez construire. Pour les applications Qt, vous choisiriez
 Application Qt mais nous allons utiliser le type de projet mini-application KDE pour construire nos exemples. La raison est simple : les
 tutoriels de Qt ne contiennent pas beaucoup de code et en choisissant Application Qt dans l'assistant d'application, vous
 auriez à effectuer beaucoup de modifications sur le code fourni pour créer les "vrais" exemples.
@@ -93,7 +93,7 @@ plus tard en passant à l'étape suivante.
 Ensuite, remplissez les autres informations requises telles que votre nom, votre adresse électronique et le répertoire du projet.
 C'est tout ce dont nous avons besoin et nous pouvons sauter à la page suivante. Insérez ici votre en-tête pour les fichiers d'en-tête
 du projet ou utilisez l'exemple donné. De même pour la quatrième page où vous devez définir l'en-tête des fichiers sources. Enfin, vous
-entrez dans la dernière page où vous devez cliquer sur le bouton "Créer" pour construire le projet. Si le bouton est grisé, recommencez
+pouvez passer à la dernière page où vous devez cliquer sur le bouton "Créer" pour construire le projet. Si le bouton est grisé, recommencez
 depuis la première page et assurez-vous que vous n'avez pas oublié d'insérer une information nécessaire.
 
 Si tout s'est bien passé, le projet a été créé et la fenêtre des messages de l'assistant d'application doit contenir "PRET" sur
@@ -154,13 +154,13 @@ dans la barre d'outils. Vous pourriez aussi bien choisir "Exécuter" qui provoque
 
 Si la construction s'arrête à cause d'une erreur, vous pouvez être sûr que la faute vient du programmeur et non du tutoriel !
 Ca serait dommage de chercher une erreur alors que vous avez décidé de programmer pour KDE et/ou Qt mais vous pouvez
-utiliser cette occasion pour vous entraîner à utililiser KDevelop. Pour chercher une erreur, vous avez deux possibilités : soit
+utiliser cette occasion pour vous entraîner à utiliser KDevelop. Pour chercher une erreur, vous avez deux possibilités : soit
 en sélectionnant le message d'erreur correspondant dans la fênetre des messages, ce qui vous placera sur la ligne où l'erreur
 s'est produite, soit en appuyant sur la touche F4. Vous pourriez aussi utiliser l'entrée "Erreur suivante" du menu "Affichage".
 
 <sect1>Exercices
 <p>
-Vous pourriez vous dire "Exercices" ? C'était si simple que je n'ai pas besoin de m'exercer !" mais rassurez-vous, les choses vont
+Vous pourriez vous dire "Exercices ? C'était si simple que je n'ai pas besoin de m'exercer !" mais rassurez-vous, les choses vont
 devenir plus compliquées. Ceci était l'exemple le plus simple qui soit mais plus ce sera compliqué et plus cela demandera de réflexions
 de votre part pour assimiler et suivre les étapes du tutoriel.
 
@@ -194,7 +194,7 @@ rencontrerez <tt/quit()/> à nouveau en travaillant avec <tt/KApplication/>, l'éq
 
 <sect>Écrire vos propres widgets
 <p>
-Après avoir réussi à modifier et à étendre la fonction <tt/main()/>, vous allez vouloir créer un nouveau widget - un widget particulier
+Après avoir réussi à modifier et à étendre la fonction <tt/main()/>, vous allez créer un nouveau widget - un widget particulier
 qui peut seulement être construit avec la classe que vous allez écrire à l'étape 4. En fait, la classe a été créée pour vous par
 l'assistant d'application donc il n'y a pas grand chose à ajouter - vous devez juste insérer le code que la leçon 4 place dans les
 fichiers d'en-tête et d'implantation de la classe <tt/MyWidget/> du fichier <tt/main.cpp/>. Par chance, il suffit d'ajouter
@@ -211,7 +211,7 @@ seront compilées.
 
 <sect>Étendre la classe Widget
 <p>
-Dans la leçon 5, le but va maintenant être d'étendre la classe widget. Vous allez donc apprendre aussi les fonctions virtuelles.
+Dans la leçon 5, le but va maintenant être d'étendre la classe widget. Vous allez donc apprendre les fonctions virtuelles.
 Ici, l'événement <tt/resizeEvent()/> est réimplanté. Ce qu'il est important d'apprendre ici (au-delà de l'extension de classe),
 c'est que Qt utilise des fonctions virtuelles ayant un événement en paramètre pour gérer les événements utilisateurs. Vous 
 devriez donc vous familiariser avec les classes suivantes de la bibliothèque Qt :
@@ -264,10 +264,11 @@ spécialement lorsque le nom de classe <tt/LCDRange/> n'est pas très clair sur le
 Pour les dernières étapes du tutoriel, vous êtes prêt et vous savez tout ce que vous avez à savoir - ajouter les classes nécessaires
 et effectuer les modifications.
 
-Après chaque modification, vous devriez reconstruire et vérifier que votre code ne contient pas d'erreur. Exécutez l'application
+Après chaque modification, vous devriez reconstruire l'application et vérifier que votre code ne contient pas d'erreur. Lancez la
 et suivez son exécution ; vous pouvez aussi jouer avec les options de "Construction" de KDevelop, exécuter l'application avec une
-ligne de commande telle que --geometry et la déboguer avec KDbg dans la fenêtre des Outils. Ensuite, vous devriez être capable
-de traiter les exemples de Qt qui seront présentés dans le chapitre suivant.
+ligne de commande contenant des arguments tels que --geometry et la déboguer avec KDbg dans la fenêtre des Outils. Ensuite, vous
+devriez être capable de traiter les exemples de Qt qui seront présentés dans le chapitre suivant.
+
 
 <chapt>Copyright <label id="Copyright">
 <p>
