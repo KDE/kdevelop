@@ -91,8 +91,10 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     KConfig* config = AbbrevFactory::instance()->config();
     KConfigGroupSaver group( config, "General" );
     m_autoWordCompletionEnabled = config->readBoolEntry( "AutoWordCompletion", false );
-	
+
     updateActions();
+
+    slotActivePartChanged( partController()->activePart() );
 }
 
 
@@ -110,20 +112,20 @@ void AbbrevPart::setAutoWordCompletionEnabled( bool enabled )
 {
     if( enabled == m_autoWordCompletionEnabled )
 	return;
-    
+
     KConfig* config = AbbrevFactory::instance()->config();
     KConfigGroupSaver group( config, "General" );
 
     m_autoWordCompletionEnabled = enabled;
     config->writeEntry( "AutoWordCompletion", m_autoWordCompletionEnabled );
     config->sync();
-    
+
     if( !docIface || !docIface->widget() )
 	return;
     
     disconnect( docIface, 0, this, 0 );
     disconnect( docIface->widget(), 0, this, 0 );
-    
+
     if( m_autoWordCompletionEnabled ){
 	connect( docIface->widget(), SIGNAL(completionAborted()),
 		 this, SLOT(slotCompletionAborted()) );
@@ -135,17 +137,6 @@ void AbbrevPart::setAutoWordCompletionEnabled( bool enabled )
 	connect( docIface, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
     }
 }
-
-void AbbrevPart::slotCompletionAborted()
-{
-    m_inCompletion = false;
-}
-
-void AbbrevPart::slotCompletionDone()
-{
-    m_inCompletion = false;
-}
-
 void AbbrevPart::load()
 {
     KStandardDirs *dirs = AbbrevFactory::instance()->dirs();
@@ -429,9 +420,10 @@ QAsciiDictIterator<CodeTemplate> AbbrevPart::templates() const
 
 void AbbrevPart::slotActivePartChanged( KParts::Part* part )
 {
+    kdDebug(9028) << "AbbrevPart::slotActivePartChanged()" << endl;
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
 
-    if( doc == docIface )
+    if( !doc || !part->widget() || doc == docIface  )
         return;
 
     docIface = doc;
@@ -444,38 +436,38 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
     }
 
     editIface = dynamic_cast<KTextEditor::EditInterface*>( part );
-
-    QWidget *view = partController()->activeWidget();
-    viewCursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( view );
-    completionIface = dynamic_cast<KTextEditor::CodeCompletionInterface*>( view );
+    viewCursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( part->widget() );
+    completionIface = dynamic_cast<KTextEditor::CodeCompletionInterface*>( part->widget() );
 
     updateActions();
 
     if( !editIface || !viewCursorIface || !completionIface )
     	return;
-
-    disconnect( view, 0, this, 0 );
+    
+    disconnect( part->widget(), 0, this, 0 );
     disconnect( doc, 0, this, 0 );
 
-    connect( view, SIGNAL(filterInsertString(KTextEditor::CompletionEntry*, QString*)),
+    connect( part->widget(), SIGNAL(filterInsertString(KTextEditor::CompletionEntry*, QString*)),
 	     this, SLOT(slotFilterInsertString(KTextEditor::CompletionEntry*, QString*)) );
 
     if( autoWordCompletionEnabled() ){
-	connect( view, SIGNAL(completionAborted()),
-		 this, SLOT(slotCompletionAborted()) );
-	connect( view, SIGNAL(completionDone()),
-		 this, SLOT(slotCompletionDone()) );
-
+	connect( part->widget(), SIGNAL(completionAborted()), this, SLOT(slotCompletionAborted()) );
+	connect( part->widget(), SIGNAL(completionDone()), this, SLOT(slotCompletionDone()) );
+	connect( part->widget(), SIGNAL(aboutToShowCompletionBox()), this, SLOT(slotAboutToShowCompletionBox()) );
 	connect( doc, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
     }
 
     m_prevLine = -1;
     m_prevColumn = -1;
     m_sequenceLength = 0;
+    kdDebug(9028) << "AbbrevPart::slotActivePartChanged() -- OK" << endl;
 }
 
 void AbbrevPart::slotTextChanged()
 {
+    if( m_inCompletion )
+	return;
+
     unsigned int line, col;
     viewCursorIface->cursorPositionReal( &line, &col );
 
@@ -490,7 +482,7 @@ void AbbrevPart::slotTextChanged()
     QChar ch = textLine[ col-1 ];
     QChar currentChar = textLine[ col ];
 
-    if( m_inCompletion || currentChar.isLetterOrNumber() || currentChar == QChar('_') || !(ch.isLetterOrNumber() || ch == QChar('_')) ){
+    if( currentChar.isLetterOrNumber() || currentChar == QChar('_') || !(ch.isLetterOrNumber() || ch == QChar('_')) ){
         // reset
         m_prevLine = -1;
 	return;
@@ -528,8 +520,21 @@ void AbbrevPart::updateActions()
     actionCollection()->action( "edit_expandabbrev" )->setEnabled( docIface != 0 );
 }
 
+void AbbrevPart::slotCompletionAborted()
+{
+    kdDebug(9028) << "AbbrevPart::slotCompletionAborted()" << endl;
+    m_inCompletion = false;
+}
+
+void AbbrevPart::slotCompletionDone()
+{
+    kdDebug(9028) << "AbbrevPart::slotCompletionDone()" << endl;
+    m_inCompletion = false;
+}
+
 void AbbrevPart::slotAboutToShowCompletionBox()
 {
+    kdDebug(9028) << "AbbrevPart::slotAboutToShowCompletionBox()" << endl;
     m_inCompletion = true;
 }
 
