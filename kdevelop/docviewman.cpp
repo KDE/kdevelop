@@ -53,13 +53,14 @@ DocViewMan::DocViewMan( CKDevelop* parent)
   ,m_pCurBrowserDoc(0L)
   ,m_pCurBrowserView(0L)
   ,m_curIsBrowser(true)
+  ,m_pDocBookmarksMenu(0L)
 {
   debug("create docviewman !\n");
 
   m_MDICoverList.setAutoDelete(true);
 
-	doc_bookmarks_list.setAutoDelete(TRUE);
-	doc_bookmarks_title_list.setAutoDelete(TRUE);
+  m_docBookmarksList.setAutoDelete(TRUE);
+  m_docBookmarksTitleList.setAutoDelete(TRUE);
 	
   connect( this, SIGNAL(sig_viewGotFocus(QWidget*)), m_pParent, SLOT(slotViewSelected(QWidget*)) );
 }
@@ -1467,22 +1468,22 @@ void DocViewMan::installBMPopup(QPopupMenu * bm_menu)
   QPopupMenu* code_bookmarks = new QPopupMenu();
 
   connect(code_bookmarks,SIGNAL(aboutToShow()),
-					this,SLOT(updateCodeBMPopup()));
+          this,SLOT(updateCodeBMPopup()));
   connect(code_bookmarks,SIGNAL(activated(int)),
-					this,SLOT(gotoCodeBookmark(int)));
+          this,SLOT(gotoCodeBookmark(int)));
 
 	
   bm_menu->insertItem(SmallIconSet("bookmark_folder"),
-											i18n("Code &Window"),code_bookmarks,31000);
+                      i18n("Code &Window"),code_bookmarks,31000);
 
 	// Install browser bookmark popup menu
-  doc_bookmarks = new QPopupMenu();
+  m_pDocBookmarksMenu = new QPopupMenu();
 
-  connect(doc_bookmarks,SIGNAL(activated(int)),
-					this,SLOT(gotoDocBookmark(int)));
+  connect(m_pDocBookmarksMenu,SIGNAL(activated(int)),
+          this,SLOT(gotoDocBookmark(int)));
 
   bm_menu->insertItem(SmallIconSet("bookmark_folder"),
-											i18n("&Browser Window"), doc_bookmarks,31010);
+                      i18n("&Browser Window"), m_pDocBookmarksMenu,31010);
 
 }
 
@@ -1545,9 +1546,9 @@ void DocViewMan::gotoDocBookmark(int id_)
 {
   debug("DocViewMan::gotoDocBookmark : id : %d !\n", id_);
 
-	int id_index = doc_bookmarks->indexOf(id_);
+	int id_index = m_pDocBookmarksMenu->indexOf(id_);
 
-  m_pParent->openBrowserBookmark(doc_bookmarks_list.at(id_index));
+  m_pParent->openBrowserBookmark(m_docBookmarksList.at(id_index));
 }
 
 //-----------------------------------------------------------------------------
@@ -1559,27 +1560,29 @@ void DocViewMan::doBookmarksToggle()
 
   if (curDocIsBrowser())
   {
-    doc_bookmarks->clear();
+    m_pDocBookmarksMenu->clear();
 
     // Check if the current URL is bookmarked
-    int pos = doc_bookmarks_list.find(currentBrowserDoc()->currentURL());
+    int pos = m_docBookmarksList.find(currentBrowserDoc()->currentURL());
     if(pos > -1)
     {
       // The current URL is bookmarked, let's remove the bookmark
-      doc_bookmarks_list.remove(pos);
-      doc_bookmarks_title_list.remove(pos);
+      m_docBookmarksList.remove(pos);
+      m_docBookmarksTitleList.remove(pos);
     }
     else
     {
       CDocBrowser* pCurBrowserDoc = currentBrowserDoc();
       // The current URL is not bookmark, let's bookmark it
-      doc_bookmarks_list.append(pCurBrowserDoc->currentURL());
-      doc_bookmarks_title_list.append(pCurBrowserDoc->currentTitle());
+      m_docBookmarksList.append(pCurBrowserDoc->currentURL());
+      m_docBookmarksTitleList.append(pCurBrowserDoc->currentTitle());
     }
 
     // Recreate thepopup menu
-    for (uint i = 0 ; i < doc_bookmarks_list.count(); i++){
-      doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
+    for (uint i = 0 ; i < m_docBookmarksList.count(); i++){
+      QString bmTitle = QString ("&%1 %2").arg(i + 1)
+        .arg(m_docBookmarksTitleList.at(i));
+      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"), bmTitle);
     }
   }
   else
@@ -1597,9 +1600,9 @@ void DocViewMan::doBookmarksClear()
 {
   if (curDocIsBrowser())
     {
-      doc_bookmarks_list.clear();
-      doc_bookmarks_title_list.clear();
-      doc_bookmarks->clear();
+      m_docBookmarksList.clear();
+      m_docBookmarksTitleList.clear();
+      m_pDocBookmarksMenu->clear();
     }    
   else
     {
@@ -1614,11 +1617,11 @@ void DocViewMan::doBookmarksNext()
 {
   if (curDocIsBrowser())
   {
-    if(doc_bookmarks_list.count() > 0)
+    if(m_docBookmarksList.count() > 0)
     {
-      QString file = doc_bookmarks_list.next();
+      QString file = m_docBookmarksList.next();
       if (file.isEmpty())
-        file = doc_bookmarks_list.first();
+        file = m_docBookmarksList.first();
       m_pParent->openBrowserBookmark(file);  
     }
   }
@@ -1636,11 +1639,11 @@ void DocViewMan::doBookmarksPrevious()
 {
   if (curDocIsBrowser())
   {
-    if(doc_bookmarks_list.count() > 0)
+    if(m_docBookmarksList.count() > 0)
     {
-      QString file = doc_bookmarks_list.prev();
+      QString file = m_docBookmarksList.prev();
       if(file.isEmpty())
-        file = doc_bookmarks_list.last();
+        file = m_docBookmarksList.last();
       m_pParent->openBrowserBookmark(file);  
     }
   }
@@ -1656,13 +1659,13 @@ void DocViewMan::doBookmarksPrevious()
 //-----------------------------------------------------------------------------
 void DocViewMan::readBookmarkConfig(KConfig* theConfig)
 {
-	theConfig->readListEntry("doc_bookmarks",doc_bookmarks_list);
-	theConfig->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
-	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++)
-		{
-			doc_bookmarks->insertItem(SmallIconSet("html"),
-																doc_bookmarks_title_list.at(i));
-		}
+  theConfig->readListEntry("doc_bookmarks",m_docBookmarksList);
+  theConfig->readListEntry("doc_bookmarks_title",m_docBookmarksTitleList);
+  for ( uint i =0 ; i < m_docBookmarksTitleList.count(); i++)
+    {
+      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"),
+                                      m_docBookmarksTitleList.at(i));
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -1670,8 +1673,8 @@ void DocViewMan::readBookmarkConfig(KConfig* theConfig)
 //-----------------------------------------------------------------------------
 void DocViewMan::writeBookmarkConfig(KConfig* theConfig)
 {
-  theConfig->writeEntry("doc_bookmarks", doc_bookmarks_list);
-  theConfig->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
+  theConfig->writeEntry("doc_bookmarks", m_docBookmarksList);
+  theConfig->writeEntry("doc_bookmarks_title", m_docBookmarksTitleList);
 }
 
 /**

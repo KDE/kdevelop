@@ -1,6 +1,8 @@
 2001-05-16  Christian Couder <christian@kdevelop.org>
     * Move the browser bookmark stuff from ckdevelop to docviewman.
     * Rename some browser bookmark methods.
+    * Rename some browser bookmark attributes in docviewman.
+    * Improve browser bookmark popup menu.
 
 2001-05-15  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: statusbar resize in case of looong texts doesn't happen any more

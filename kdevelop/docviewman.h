@@ -280,9 +280,9 @@ private:
   CKDevelop*                m_pParent;
   HlManager                 m_highlightManager;
 
-  QStrList                  doc_bookmarks_list;
-  QStrList                  doc_bookmarks_title_list;
-	QPopupMenu*               doc_bookmarks;
+  QStrList                  m_docBookmarksList;
+  QStrList                  m_docBookmarksTitleList;
+  QPopupMenu*               m_pDocBookmarksMenu;
 
   KWriteDoc*                m_pCurEditDoc;
   CEditWidget*              m_pCurEditView;
