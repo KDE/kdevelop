@@ -122,6 +122,9 @@ private: // Private methods
   /** Fetch the current linenumber from the lexer and return it. */
   int getLineno()            { return lexer->lineno() - 1;  }
 
+  /** Remove all elements from the stack. */
+  void emptyStack();
+
   /** Parse a structure. */
   CParsedStruct * parseStruct();
 

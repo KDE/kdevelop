@@ -39,6 +39,7 @@
 #define CP_IS_METHOD 2
 #define CP_IS_METHOD_IMPL 3
 #define CP_IS_ATTR_IMPL 4
+#define CP_IS_STRUCT 5
 
 /*********************************************************************
  *                                                                   *
@@ -79,6 +80,21 @@ CClassParser::~CClassParser()
  *                                                                   *
  ********************************************************************/
 
+/*---------------------------------------- CClassParser::emptyStack()
+ * emptyStack()
+ *   Remove all elements from the stack.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::emptyStack()
+{
+  while( !lexemStack.isEmpty() )
+    delete lexemStack.pop();
+}
+
 /*---------------------------------------- CClassParser::parseStruct()
  * parseStruct()
  *   Parse a structure.
@@ -90,33 +106,54 @@ CClassParser::~CClassParser()
  *-----------------------------------------------------------------*/
 CParsedStruct *CClassParser::parseStruct()
 {
-  CParsedStruct *aStruct = new CParsedStruct();
+  CParsedStruct *aStruct = NULL;
   //  CParsedAttribute *aAttr;
+
+  // Save the STRUCT keyword on the stack.
+  PUSH_LEXEM();
 
   // Set the name
   getNextLexem();
 
+  PUSH_LEXEM();
+
   if( lexem == ID )
   {
+    aStruct = new CParsedStruct();
     aStruct->setName( getText() );
     aStruct->setDefinedOnLine( getLineno() );
     aStruct->setDefinedInFile( currentFile );
 
     // Skip the '{'
     getNextLexem();
-    assert( lexem == '{' );
-  }
-  else
-  {
-    delete aStruct;
-    aStruct = NULL;
-  }
 
-  skipBlock();
+    if( lexem == '{' )
+    {
+      // This is really a struct so we don't need the stuff on the stack.
+      emptyStack();
 
-  // Skip to the ';'
-  while( lexem != ';' )
-    getNextLexem();
+      skipBlock();
+
+      // Skip to the ';'
+      while( lexem != ';' )
+        getNextLexem();
+    }
+    else if( lexem == ';' ) // Forward declaration
+    {
+      emptyStack();
+
+      delete aStruct;
+      aStruct = NULL;
+    }
+    else // Part of variable declaration. 
+    {
+      delete aStruct;
+      aStruct = NULL;
+    }
+  }
+  else if( lexem == '{' ) // Anonymous struct
+    skipBlock();
+
   /*  getNextLexem();
       
 
@@ -690,11 +727,6 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
       case QTSLOT:
         methodType = lexem;
         break;
-      case CPSTRUCT:
-        aStruct = parseStruct();
-        if( aStruct )
-          store.addGlobalStruct( aStruct );
-        break;
       case CPENUM:
         parseEnum();
         break;
@@ -725,9 +757,18 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
       case STATIC:
         isStatic = true;
         break;
+      case CPSTRUCT:
+        aStruct = parseStruct();
+        if( aStruct )
+        {
+          store.addGlobalStruct( aStruct );
+          break;
+        }
+        else if( aStruct == NULL && lexemStack.isEmpty() )
+          break;
       case CONST:
       case ID:
-        // Ignore everything that haven't got any scope declarator.
+        // Ignore everything that hasn't got any scope declarator.
         if( declaredScope != CPGLOBAL )
         {
           // If the type is signal or slot we KNOW it's a method.
@@ -841,11 +882,8 @@ void CClassParser::parseToplevel()
         // Skip the typedef name.
         while( lexem != ';' )
           getNextLexem();
-        break;
-      case CPSTRUCT:
-        aStruct = parseStruct();
-        if( aStruct != NULL )
-          store.addGlobalStruct( aStruct );
+
+        emptyStack();
         break;
       case CPENUM:
         parseEnum();
@@ -863,14 +901,22 @@ void CClassParser::parseToplevel()
         break;
       case STATIC:
         break;
+      case CPSTRUCT:
+        aStruct = parseStruct();
+        if( aStruct )
+        {
+          store.addGlobalStruct( aStruct );
+          break;
+        }
+        else if( aStruct == NULL && lexemStack.isEmpty() )
+          break;
       case CONST:
       case ID:
         switch( checkClassDecl() )
         {
           case CP_IS_ATTR_IMPL:
             // Empty the stack
-            while( !lexemStack.isEmpty() )
-              delete lexemStack.pop();
+            emptyStack();
             break;
           case CP_IS_METHOD_IMPL:
             parseMethodImpl();
