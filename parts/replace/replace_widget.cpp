@@ -207,7 +207,7 @@ void ReplaceWidget::makeReplacements()
                 }
             }
             //Telling the project about the edited file
-//TODO enable this            m_part->project()->changedFile( relativeProjectPath( ( currentfile ) ) );
+            m_part->project()->changedFile( relativeProjectPath( ( currentfile ) ) );
         }
 
         fileitem = fileitem->nextSibling();
