@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=This plugin provides a frontend for the source-level debugger for Ruby.
+Name=KDevRbDebugger
+Name[da]=KDevelop Ruby Debugger
+Name[de]=Ruby Debugger (KDevelop)
+GenericName=Ruby Debugger Frontend
+Icon=
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevrbdebugger
+X-KDevelop-Version=2
+X-KDevelop-Scope=Project
+X-KDevelop-ProgrammingLanguages=Ruby
+X-KDevelop-Properties=CompiledDevelopment

@@ -15,18 +15,134 @@
     <property name="caption">
         <string>RubyConfigWidgetBase</string>
     </property>
-    <widget class="QLineEdit">
+    <widget class="QLabel">
         <property name="name">
-            <cstring>interpreterEdit</cstring>
+            <cstring>textLabel1_2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>218</x>
-                <y>13</y>
-                <width>370</width>
+                <x>10</x>
+                <y>50</y>
+                <width>200</width>
                 <height>21</height>
             </rect>
         </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>3</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>Program &amp;arguments:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>interpreterEdit</cstring>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>This is the path (or just name, if in $PATH) to Ruby interpreter. Defaults to "ruby"</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>terminalCheckbox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>90</y>
+                <width>578</width>
+                <height>40</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Run applications in terminal</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Check this if you want your applications to be opened in terminal window.</string>
+        </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>characterCodingRadioBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>180</y>
+                <width>150</width>
+                <height>160</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Character Coding</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>utf8Option</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>120</y>
+                    <width>104</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>UTF-8</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>sjisOption</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>90</y>
+                    <width>97</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>SJIS</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>eucOption</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>60</y>
+                    <width>97</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>EUC</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>asciiOption</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>30</y>
+                    <width>97</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>ASCII</string>
+            </property>
+        </widget>
     </widget>
     <widget class="QLabel">
         <property name="name">
@@ -34,8 +150,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>12</x>
-                <y>13</y>
+                <x>10</x>
+                <y>20</y>
                 <width>200</width>
                 <height>21</height>
             </rect>
@@ -58,104 +174,53 @@
             <string>This is the path (or just name, if in $PATH) to Ruby interpreter. Defaults to "ruby"</string>
         </property>
     </widget>
-    <widget class="QCheckBox">
+    <widget class="QLineEdit">
         <property name="name">
-            <cstring>terminalCheckbox</cstring>
+            <cstring>interpreterEdit</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>11</x>
-                <y>41</y>
+                <x>180</x>
+                <y>20</y>
+                <width>370</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>programArgsEdit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>180</x>
+                <y>50</y>
+                <width>370</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>enableFloatingToolBarBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>120</y>
                 <width>578</width>
                 <height>40</height>
             </rect>
         </property>
         <property name="text">
-            <string>Run applications in terminal</string>
+            <string>Enable debugger &amp;floating toolbar</string>
+        </property>
+        <property name="accel">
+            <string>Alt+F</string>
         </property>
         <property name="whatsThis" stdset="0">
             <string>Check this if you want your applications to be opened in terminal window.</string>
         </property>
-    </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>characterCodingRadioBox</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>90</y>
-                <width>150</width>
-                <height>160</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Character Coding</string>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>asciiOption</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>30</y>
-                    <width>97</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>ASCII</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>eucOption</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>60</y>
-                    <width>97</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>EUC</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>sjisOption</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>90</y>
-                    <width>97</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>SJIS</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>utf8Option</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>120</y>
-                    <width>104</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>UTF-8</string>
-            </property>
-        </widget>
     </widget>
 </widget>
 <includes>

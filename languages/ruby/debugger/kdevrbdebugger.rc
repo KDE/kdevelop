@@ -1,0 +1,68 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevRbDebugger" version="10">
+<MenuBar>
+ <Menu name="debug">
+  <text>&amp;Debug</text>
+  <Action name="debug_run" group="debug"/>
+  <Action name="debug_stop" group="debug"/>
+  <Action name="debug_pause" group="debug"/>
+  <Action name="debug_runtocursor" group="debug"/>
+  <Separator group="debug"/>
+  <Action name="debug_stepover" group="debug"/>
+  <Action name="debug_stepinto" group="debug"/>
+  <Action name="debug_stepout" group="debug"/>
+  <Separator group="debug"/>
+  <Action name="debug_toggle_breakpoint" group="debug"/>
+  <Action name="debug_disable_breakpoint" group="debug"/>
+  <Separator group="debug"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="debugToolBar">
+  <text>Debugger Toolbar</text>
+  <Action name="debug_run"/>
+  <Action name="debug_stepover"/>
+  <Action name="debug_stepinto"/>
+  <Action name="debug_stepout"/>
+  <WeakSeparator/>
+</ToolBar>
+<State name="stopped">
+  <enable>
+    <Action name="debug_run"/>
+  </enable>
+  <disable>
+    <Action name="debug_stop"/>
+    <Action name="debug_pause"/>
+    <Action name="debug_runtocursor"/>
+    <Action name="debug_stepover"/>
+    <Action name="debug_stepinto"/>
+    <Action name="debug_stepout"/>
+  </disable>
+</State>
+<State name="paused">
+  <enable>
+    <Action name="debug_run"/>
+    <Action name="debug_stop"/>
+    <Action name="debug_runtocursor"/>
+    <Action name="debug_stepover"/>
+    <Action name="debug_stepinto"/>
+    <Action name="debug_stepout"/>
+  </enable>
+  <disable>
+    <Action name="debug_pause"/>
+  </disable>
+</State>
+<State name="active">
+  <enable>
+    <Action name="debug_pause"/>
+    <Action name="debug_stop"/>
+  </enable>
+  <disable>
+    <Action name="debug_run"/>
+    <Action name="debug_runtocursor"/>
+    <Action name="debug_stepover"/>
+    <Action name="debug_stepinto"/>
+    <Action name="debug_stepout"/>
+  </disable>
+</State>
+</kpartgui>
+

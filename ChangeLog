@@ -1,3 +1,23 @@
+2004-11-20  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+
+ * Ruby Source Code Debugger initial checkin
+ * Based on John Birch's gdb front end, the UI is very similar. There are no
+   assembly language step options or disassembly viewers, but pretty much
+   everything else is much the same in ruby as for gdb/C++.
+ * You can set breakpoints on file/line or file/method, watchpoints to break when
+   a ruby expression is valid and catchpoints to break when an exception is thrown.
+ * The Watch variable viewer allows ruby expressions to be watched, and they are
+   updated on program pause.
+ * A configuration option was added to enable/disable the debugger floating toolbar.
+ * The debugger backend is written in pure ruby using the code from the 'debug.rb',
+   source included with the ruby distribution. It is started via KProcess which handles
+   redirection of stdout and stderr. The idea came from the way Laurent Julliard 
+   implemented the FreeRIDE ruby debugger - it uses Distributed Ruby (like DCOP) 
+   for messaging. DRuby is ruby-specific and couldn't be used though.
+ * The debugger communicates with the backend via a Unix domain socket;
+   commands are sent, and the replies are parsed in KDevelop in much the same way
+   as the gdb debugger uses stdin and stdout to send and receive.
+
 2004-10-30 Robert Gruber <rgruber@users.sourceforge.net>
  * Implemented "grouping of snippets" feature for SnippetPart
 
