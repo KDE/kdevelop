@@ -690,6 +690,24 @@ void CKDevelop::slotBuildStop(){
   appl_process.kill();
   slotStatusMsg(IDS_DEFAULT);
 }
+void CKDevelop::slotBuildMessages(){
+  if(!CToolClass::searchProgram("xgettext")){
+    return;
+  }
+  showOutputView(true);
+
+  setToolMenuProcess(false);
+  slotFileSaveAll();
+  slotStatusMsg(i18n("Creating pot-file in /po..."));
+  messages_widget->clear();
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+  process.clearArguments();
+  process << make_cmd;
+  process << "messages";
+  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	beep = true;
+}
+
 void CKDevelop::slotBuildAPI(){
   if(!CToolClass::searchProgram("kdoc")){
     return;
@@ -890,6 +908,8 @@ void CKDevelop::slotOptionsKDevelop(){
 
   CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel);
   setup->show();
+	accel->readSettings();
+	setKeyAccel();
   slotStatusMsg(IDS_DEFAULT);
 }
 // slots needed by the KDevelop Setup
@@ -1944,6 +1964,11 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
 
 
 

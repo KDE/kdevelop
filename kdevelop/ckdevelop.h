@@ -83,10 +83,11 @@ public:
   void initWhatsThis();
   void initProject();
   void refreshTrees();
+	void setKeyAccel();
 
   void enableCommand(int id_);
   void disableCommand(int id_);
-
+	
   void newFile(bool add_to_project);
   /** read the projectfile from the disk*/
   bool readProjectFile(QString file);
@@ -222,6 +223,7 @@ public:
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
+	void slotBuildMessages();
   void slotBuildAPI();
   void slotBuildManual();
 
@@ -479,6 +481,8 @@ private:
 };
 
 #endif
+
+
 
 
 

@@ -135,17 +135,18 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   defaultClassViewCheck = new QCheckBox( w1, "defaultClassViewCheck" );
   defaultClassViewCheck->setGeometry( 220, 210, 180, 30 );
   connect( defaultClassViewCheck,SIGNAL(toggled(bool)),parent,SLOT(slotOptionsDefaultCV(bool)));
-  defaultClassViewCheck->setText(i18n( "Class View is default"));
+  defaultClassViewCheck->setText(i18n( "use Class View as default"));
   defaultClassViewCheck->setAutoRepeat( FALSE );
   defaultClassViewCheck->setAutoResize( FALSE );
   bool defaultcv=config->readBoolEntry("DefaultClassView",true);
   defaultClassViewCheck->setChecked( defaultcv );
-  KQuickHelp::add(defaultClassViewCheck, i18n("Class View is default\n\n"
+  KQuickHelp::add(defaultClassViewCheck, i18n("use Class View as default\n\n"
 					      "If this is enabled, KDevelop\n"
 					      "will automatically switch to\n"
-					      "Class View tab.\n"
+					      "the Class Viewer when switching.\n"
 					      "When disabled, KDevelop will\n"
-					      "use Logical File View tab."));
+					      "use Logical File Viewer for\n"
+					      "autoswitching."));
 
   autoSwitchCheck = new QCheckBox( w1, "autoSwitchCheck" );
   autoSwitchCheck->setGeometry( 20, 210, 180, 30 );
@@ -465,7 +466,7 @@ void CKDevSetupDlg::ok(){
   accel->setKeyDict( *dict);
 	accel->writeSettings(config);
   config->sync();
-  close();
+  accept();
 }
 
 void CKDevSetupDlg::slotQtClicked(){
@@ -503,3 +504,7 @@ void CKDevSetupDlg::slotKDEClicked(){
     }
   }
 }
+
+
+
+

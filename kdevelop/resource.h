@@ -105,21 +105,22 @@
 // Build-menu entries 
 #define ID_BUILD_COMPILE_FILE       14010
 #define ID_BUILD_MAKE               14020
-#define ID_BUILD_MAKE_WITH          14022
-#define ID_BUILD_REBUILD_ALL        14030
-#define ID_BUILD_CLEAN_REBUILD_ALL  14040
+#define ID_BUILD_MAKE_WITH          14030
+#define ID_BUILD_REBUILD_ALL        14040
+#define ID_BUILD_CLEAN_REBUILD_ALL  14050
 
-#define ID_BUILD_STOP               14050
+#define ID_BUILD_STOP               14060
   
-#define ID_BUILD_RUN                14060
-#define ID_BUILD_DEBUG              14070
+#define ID_BUILD_RUN                14070
+#define ID_BUILD_DEBUG              14080
 
 #define ID_BUILD_AUTOCONF           14090
 #define ID_BUILD_CONFIGURE          14100
-#define ID_BUILD_DISTCLEAN          14080
+#define ID_BUILD_DISTCLEAN          14110
 
-#define ID_BUILD_MAKE_PROJECT_API   14110
-#define ID_BUILD_MAKE_USER_MANUAL   14120
+#define ID_BUILD_MESSAGES	          14120
+#define ID_BUILD_MAKE_PROJECT_API   14130
+#define ID_BUILD_MAKE_USER_MANUAL   14140
 
 
 ///////////////////////////////////////////////////////////////////

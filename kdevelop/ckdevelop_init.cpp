@@ -339,7 +339,7 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
   accel->connectItem( "SearchMarkedText", this, SLOT(slotHelpSearchText() ) );
 
-  accel->connectItem( KAccel::Help , this, SLOT(slotHelpContent()) );
+  accel->connectItem( KAccel::Help , this, SLOT(slotHelpContents()) );
 
   accel->insertItem( i18n("Show C Sources Window"), "ShowC",IDK_SHOW_C);
   accel->connectItem( "ShowC", this, SLOT(slotShowC() ) );
@@ -369,19 +369,15 @@ void CKDevelop::initMenu(){
   file_menu = new QPopupMenu;
 
   file_menu->insertItem(Icon("filenew.xpm"),i18n("&New"),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
-  accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
-  accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
 
   file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
-  accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KAccel::Close );
 
   file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
   file_menu->insertItem(pix,i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
-  accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KAccel::Save );
 
   file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
 
@@ -390,11 +386,9 @@ void CKDevelop::initMenu(){
   file_menu->insertSeparator();
 
   file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
-  accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KAccel::Print );
 
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
-  accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KAccel::Quit );
 
   menuBar()->insertItem(i18n("&File"), file_menu);
   disableCommand(ID_FILE_NEW);
@@ -407,38 +401,30 @@ void CKDevelop::initMenu(){
   edit_menu = new QPopupMenu;
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/undo.xpm");
   edit_menu->insertItem(pix, i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
-  accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
   edit_menu->insertItem(pix, i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
   edit_menu->insertSeparator();
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
   edit_menu->insertItem(pix,i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
-  accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KAccel::Cut );
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
   edit_menu->insertItem(pix,i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
-  accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KAccel::Copy );
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
   edit_menu->insertItem(pix,i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
-  accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KAccel::Close );
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
-  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH,"Search" );
 
   edit_menu->insertItem(i18n("&Repeat Search"), this,
 			SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
-  
+
   
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
-  accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,"Replace" );
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
@@ -460,17 +446,14 @@ void CKDevelop::initMenu(){
   view_menu = new QPopupMenu;
   view_menu->insertItem(i18n("&Line..."), this,
 			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
-  accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
 
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
-  accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
   view_menu->setItemChecked(ID_VIEW_TREEVIEW,config->readBoolEntry("show_tree_view",true));
 
   view_menu->insertItem(i18n("&Output-View"),this,
 			SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
-  accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
   view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,config->readBoolEntry("show_output_view",true));
 
   view_menu->insertSeparator();
@@ -484,7 +467,6 @@ void CKDevelop::initMenu(){
 
   view_menu->insertItem(i18n("Status&bar"),this,
 			   SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
-  accel->changeMenuAccel(view_menu,ID_VIEW_STATUSBAR,"Statusbar");
 
   view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
 
@@ -559,11 +541,9 @@ void CKDevelop::initMenu(){
   build_menu = new QPopupMenu;
   build_menu->insertItem(Icon("compfile.xpm"),i18n("Compile File"),
 			 this,SLOT(slotBuildCompileFile()),0,ID_BUILD_COMPILE_FILE);
-  accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
 
   build_menu->insertItem(Icon("make.xpm"),i18n("&Make"),this,
 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
-  accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
 
 //   build_menu->insertItem(Icon("make.xpm"),i18n("Make &with"),this,
 // 			 SLOT(slotBuildMakeWith()),0,ID_BUILD_MAKE_WITH);
@@ -579,7 +559,6 @@ void CKDevelop::initMenu(){
   build_menu->insertSeparator();
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
-  accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
 
   build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertSeparator();
@@ -587,7 +566,8 @@ void CKDevelop::initMenu(){
   build_menu->insertItem(i18n("&Autoconf"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
   build_menu->insertSeparator();
-  build_menu->insertItem(i18n("Make &API-Doc"), this, 
+	build_menu->insertItem(i18n("Make &messages"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
+  build_menu->insertItem(i18n("Make &API-Doc"), this,
 			 SLOT(slotBuildAPI()),0,ID_BUILD_MAKE_PROJECT_API);
   build_menu->insertItem(i18n("Make &User-Manual"), this, 
 			 SLOT(slotBuildManual()),0,ID_BUILD_MAKE_USER_MANUAL);
@@ -661,11 +641,9 @@ void CKDevelop::initMenu(){
   help_menu->insertSeparator();
   help_menu->insertItem(Icon("lookup.xpm"),i18n("&Search Marked Text"),this,
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
-  accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
   help_menu->insertItem(Icon("contents.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   help_menu->insertSeparator();
   help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-  accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
 
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
@@ -706,6 +684,9 @@ void CKDevelop::initMenu(){
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+	
+  setKeyAccel();  // initialize Keys
+
 }
 
 void CKDevelop::initToolbar(){
@@ -942,33 +923,33 @@ void CKDevelop::initProject(){
 }
 
 
+void CKDevelop::setKeyAccel(){
+  accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
+  accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
+  accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KAccel::Close );
+  accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KAccel::Save );
+  accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KAccel::Print );
+  accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KAccel::Quit );
 
+  accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KAccel::Cut );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KAccel::Copy );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KAccel::Paste );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH,"Search" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,"Replace" );
 
+  accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
+  accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
+  accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
+  accel->changeMenuAccel(view_menu,ID_VIEW_STATUSBAR,"Statusbar");
 
+  accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
+  accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
+  accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
 
+  accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
+  accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
