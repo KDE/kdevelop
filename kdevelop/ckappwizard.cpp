@@ -1358,6 +1358,9 @@ void CKAppWizard::okPermited() {
   else {
     copydes = prjdir;
   }
+
+  QString admindes = copydes + "/admin.tar.gz";
+  QString adminsrc = KApplication::kde_datadir() + "/kdevelop/templates/admin.tar.gz";
   copydes += "/template.tar.gz";
 
   p.clearArguments();
@@ -1406,7 +1409,11 @@ void CKAppWizard::okPermited() {
   }
 
   if (hasTemplate) {
-    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
+    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "';";
+    if(kde2miniitem->isSelected()||kde2normalitem->isSelected()||kde2mdiitem->isSelected()||qt2normalitem->isSelected()||qt2mdiitem->isSelected())
+    {
+      p << "cp " + (QString) "'" + adminsrc + (QString) "' '" + admindes + (QString) "'";
+    }
     p.start (KProcess::Block,KProcess::AllOutput);
   }
 

@@ -235,14 +235,14 @@ void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
       int pos2 = s.find("\">", pos1+8);
       if (pos2 == -1)
           continue;
-      int pos3 = s.find(' ', pos2+1);             
+      int pos3 = s.find(' ', pos2+1);
       if(pos3 == -1)
           continue;
-      int pos4 = s.find('<', pos2+1);             
+      int pos4 = s.find('<', pos2+1);
       if(pos4 == -1)
           continue;
-      
-      QString filename = s.mid(pos1+8, pos2-(pos1+8)); 
+
+      QString filename = s.mid(pos1+8, pos2-(pos1+8));
       QString sectname = s.mid(pos3+1, pos4-(pos3+1));
       QFileInfo fi(ident());
       QString path = fi.dirPath() + "/" + filename;

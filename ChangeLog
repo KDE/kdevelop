@@ -1,3 +1,8 @@
+2000-12-02  Ralf Nolden <nolden@kde.org>
+  * updated kde2 and qt2 templates with correct docs destination on install
+  * changed kde2 and qt2 templates to require a separate admin.tar.gz containing /admin on generating the project
+    so the /admin dir can be easily updated on the system
+
 2000-11-27  KDevelop Team <team@kdevelop.org>
 	* KDevelop1.3Beta1 released
 
