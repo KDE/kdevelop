@@ -44,7 +44,6 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kfiledialog.h>
-#include <kdir.h>
 #include <kio_job.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -2110,7 +2109,7 @@ void KWrite::open() {
 //  if (kWriteDoc->hasFileName()) s = QFileInfo(kWriteDoc->fileName()).dirPath();
 //    else s = QDir::currentDirPath();
 
-  url = KFileDialog::getOpenFileURL(kWriteDoc->fileName(),"*",this);
+  url = KFileDialog::getOpenFileName(kWriteDoc->fileName(),"*",this);
   if (url.isEmpty()) return;
 //  kapp->processEvents();
   loadURL(url);
@@ -2122,7 +2121,7 @@ void KWrite::insertFile() {
 
   QString url;
 
-  url = KFileDialog::getOpenFileURL(kWriteDoc->fileName(),"*",this);
+  url = KFileDialog::getOpenFileName(kWriteDoc->fileName(),"*",this);
   if (url.isEmpty()) return;
 //  kapp->processEvents();
   loadURL(url,lfInsert);
@@ -2143,7 +2142,7 @@ KWrite::fileResult KWrite::saveAs() {
 
   do {
     query = 0;
-    url = KFileDialog::getSaveFileURL(kWriteDoc->fileName(),"*",this);
+    url = KFileDialog::getSaveFileName(kWriteDoc->fileName(),"*",this);
     if (url.isEmpty()) return CANCEL;
 
     KURL u(url);
@@ -3138,8 +3137,6 @@ void KWrite::spellcheck()
 
 void KWrite::spellcheck2(KSpell *)
 {
-  if (kspell.kspell->isOk())
-  {
 
     kWriteDoc->setReadOnly (TRUE);
 
@@ -3175,21 +3172,6 @@ void KWrite::spellcheck2(KSpell *)
     kspell.kspell->setProgressResolution (1);
 
     kspell.kspell->check(kspell.spell_tmptext);
-  }
-  else
-  {
-    // KSpell should have an error string so we don't have to
-    // reference ISpell explicitly.  (KSpell would like to use
-    // aspell once aspell'a internationalization is mature.)
-
-    KMessageBox::error(this,
-    		i18n("Error starting KSpell.\n"\
-    		     "Please make sure you have ISpell properly configured and in your PATH."));
-
-    kdebug(KDEBUG_ERROR, 750, "Couldn't start kspell\n");
-    delete kspell.kspell;
-
-  }
 }
 
 void KWrite::misspelling (QString origword, QStrList *, unsigned pos)
