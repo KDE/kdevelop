@@ -6,13 +6,12 @@
 #define _KDEVCORE_H_
 
 #include <qstringlist.h>
-#include "kdevpart.h"
 
 class KDialogBase;
-
+class KDevPlugin;
 
 class QStatusBar;
-
+class QPopupMenu;
 
 class Context
 {
@@ -161,7 +160,7 @@ public:
      * component is running, the stop button is enabled. When it is pressed,
      * all components get a stopButtonClicked().
      */
-    virtual void running(KDevPart *which, bool runs) = 0;
+    virtual void running(KDevPlugin *which, bool runs) = 0;
    
 
 signals:
