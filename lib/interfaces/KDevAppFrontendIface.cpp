@@ -13,7 +13,7 @@ KDevAppFrontendIface::~KDevAppFrontendIface()
 {}
 
 
-void KDevAppFrontendIface::startAppCommand(const QString &command, bool inTerminal) 
+void KDevAppFrontendIface::startAppCommand(const QString &directory, const QString &command, bool inTerminal)
 {
-    m_appFrontend->startAppCommand(command, inTerminal);
+    m_appFrontend->startAppCommand(directory, command, inTerminal);
 }

@@ -168,7 +168,7 @@ void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
     cmdline.replace(QRegExp("%W"), word);
 
     if (captured)
-        appFrontend()->startAppCommand(cmdline, false);
+        appFrontend()->startAppCommand(QString::QString(), cmdline, false);
     else {
         KShellProcess proc;
         proc << cmdline;

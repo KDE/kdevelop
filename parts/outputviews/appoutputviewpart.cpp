@@ -52,32 +52,35 @@ AppOutputViewPart::~AppOutputViewPart()
 }
 
 
-void AppOutputViewPart::startAppCommand(const QString &program, bool inTerminal)
+/**
+  * If directory is empty it will use the user's home directory.
+  * If inTerminal is true, the program is started in an external
+  * konsole.
+  */
+void AppOutputViewPart::startAppCommand(const QString &directory, const QString &program, bool inTerminal)
 {
     QString cmd;
-    QString dir;
-    QString exe = program;
-    int pos = program.findRev('/');
-    if (pos != -1) {
-        dir = program.left(pos+1); // Directory here the executable is
-        exe = program.mid(pos+1);  // Executable name
-    }
 
     if (inTerminal) {
         cmd = "konsole";
-        if ( !dir.isEmpty() )
-          cmd += " --workdir " + dir;
+        if ( !directory.isNull() ) {
+          // If a directory was specified, use it
+          cmd += " --workdir " + directory;
+        }
         cmd += " -e /bin/sh -c '";
-        cmd += exe;
+        cmd += program;
         cmd += "; echo \"";
         cmd += i18n("Press Enter to continue!");
         cmd += "\";read'";
-    } else {
-        cmd = exe;
-    }
+    } else
+        cmd = program;
 
-//    m_widget->startJob(QDir::homeDirPath(), cmd);
-    m_widget->startJob(dir, cmd);
+    if ( directory.isNull() )
+      // use the user's home directory
+      m_widget->startJob(QDir::homeDirPath(), cmd);
+    else
+      // use the supplied directory
+      m_widget->startJob(directory, cmd);
     mainWindow()->raiseView(m_widget);
 }
 

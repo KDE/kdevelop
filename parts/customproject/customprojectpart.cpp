@@ -421,7 +421,15 @@ void CustomProjectPart::slotExecute()
         return;
     }
 
+    QString directory;
     QString program = project()->mainProgram();
+    int pos = program.findRev('/');
+    if (pos != -1) {
+        // Directory where the executable is
+        directory = program.left(pos+1);
+        // Executable name with a "./" prepended for execution with bash shells
+        program   = "./" + (project()->mainProgram()).mid(pos+1);
+    }
 
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
 
@@ -439,7 +447,7 @@ void CustomProjectPart::slotExecute()
     program.prepend(environstr);
 
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/terminal");
-    appFrontend()->startAppCommand(program, inTerminal);
+    appFrontend()->startAppCommand(directory, program, inTerminal);
 }
 
 

@@ -706,7 +706,16 @@ void AutoProjectPart::slotExecute()
 	return;
     }
 
+    QString directory;
     QString program = mainProgram();
+    int pos = program.findRev('/');
+    if (pos != -1) {
+        // Directory where the executable is
+        directory = program.left(pos+1);
+        // Executable name with a "./" prepended for execution with bash shells
+        program   = "./" + (mainProgram()).mid(pos+1);
+    }
+
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
 
     DomUtil::PairList envvars =
@@ -723,7 +732,7 @@ void AutoProjectPart::slotExecute()
     program.prepend(environstr);
 
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
-    appFrontend()->startAppCommand(program, inTerminal);
+    appFrontend()->startAppCommand(directory, program, inTerminal);
 }
 
 

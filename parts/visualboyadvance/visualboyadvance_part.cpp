@@ -60,7 +60,7 @@ void VisualBoyAdvancePart::slotExecute(){
 
   program += prj->projectDirectory() + "/" + binary;
 
-  appFrontend()->startAppCommand(program, terminal);
+  appFrontend()->startAppCommand(QString::QString(), program, terminal);
 }
 
 void VisualBoyAdvancePart::projectConfigWidget(KDialogBase *dlg){

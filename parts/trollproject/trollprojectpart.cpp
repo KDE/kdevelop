@@ -301,7 +301,16 @@ void TrollProjectPart::slotExecute()
         return;
     }
 
+    QString directory;
     QString program = mainProgram();
+    int pos = program.findRev('/');
+    if (pos != -1) {
+        // Directory where the executable is
+        directory = program.left(pos+1);
+        // Executable name with a "./" prepended for execution with bash shells
+        program   = "./" + (mainProgram()).mid(pos+1);
+    }
+
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevtrollproject/run/programargs");
 
     if ( program.isEmpty() ) {
@@ -327,13 +336,12 @@ void TrollProjectPart::slotExecute()
     }
     program.prepend(environstr);
 
-    QString dircmd = "cd "+m_widget->projectDirectory() + " && " ;
-
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
-    appFrontend()->startAppCommand(dircmd + program, inTerminal);
+//    appFrontend()->startAppCommand(m_widget->projectDirectory(), program, inTerminal);
+    appFrontend()->startAppCommand(directory, program, inTerminal);
 }
 
-void TrollProjectPart::execute(const QString &command)
+void TrollProjectPart::execute(const QString &directory, const QString &command)
 {
     partController()->saveAllFiles();
 
@@ -344,7 +352,7 @@ void TrollProjectPart::execute(const QString &command)
     }
 
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
-    appFrontend()->startAppCommand(command, inTerminal);
+    appFrontend()->startAppCommand(directory, command, inTerminal);
 }
 
 void TrollProjectPart::queueCmd(const QString &dir, const QString &cmd)

@@ -557,9 +557,9 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
         proc << "designer" << (dirName + "/" + QString(fitem->name));
         proc.start( KProcess::DontCare, KProcess::NoCommunication );
 
-    } else    
+    } else
 	m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
-    
+
     m_part->mainWindow()->lowerView(this);
 }
 
@@ -591,9 +591,7 @@ void TrollProjectWidget::slotRunProject()
   if (m_shownSubproject->configuration.m_template!=QTMP_APPLICATION)
     return;
 
-  QString dircmd = "cd "+subprojectDirectory() + "/" + getCurrentDestDir() + " && ";
-  QString program = getCurrentOutputFilename();
-  m_part->execute(dircmd + "./"+program);
+  m_part->execute(subprojectDirectory() + "/" + getCurrentDestDir(), "./" + getCurrentOutputFilename() );
 
 }
 

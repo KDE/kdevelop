@@ -15,7 +15,7 @@ public:
     ~KDevAppFrontendIface();
 
 k_dcop:
-    void startAppCommand(const QString &command, bool inTerminal);
+    void startAppCommand(const QString &directory, const QString &command, bool inTerminal);
 
 private:
     KDevAppFrontend *m_appFrontend;

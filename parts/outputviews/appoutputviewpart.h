@@ -29,7 +29,7 @@ public:
     ~AppOutputViewPart();
 
 protected:
-    virtual void startAppCommand(const QString &command, bool inTerminal);
+    virtual void startAppCommand(const QString &directory, const QString &command, bool inTerminal);
     virtual bool isRunning();
     virtual void insertStdoutLine(const QString &line);
     virtual void insertStderrLine(const QString &line);

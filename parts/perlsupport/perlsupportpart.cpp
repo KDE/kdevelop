@@ -448,7 +448,7 @@ QString PerlSupportPart::interpreter()
 void PerlSupportPart::startApplication(const QString &program)
 {
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevperlsupport/run/terminal");
-    appFrontend()->startAppCommand(program, inTerminal);
+    appFrontend()->startAppCommand(QString::QString(), program, inTerminal);
 }
 
 

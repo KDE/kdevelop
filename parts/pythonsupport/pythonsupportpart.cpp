@@ -291,7 +291,7 @@ QString PythonSupportPart::interpreter()
 void PythonSupportPart::startApplication(const QString &program)
 {
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevpythonsupport/run/terminal");
-    appFrontend()->startAppCommand(program, inTerminal);
+    appFrontend()->startAppCommand(QString::QString(), program, inTerminal);
 }
 
 

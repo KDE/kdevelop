@@ -27,10 +27,11 @@ public slots:
     /**
      * The component shall start to execute an app-like command.
      * Running the application is always asynchronous.
+     * If directory is empty it will use the user's home directory.
      * If inTerminal is true, the program is started in an external
      * konsole.
      */
-    virtual void startAppCommand(const QString &program, bool inTerminal) = 0;
+    virtual void startAppCommand(const QString &directory, const QString &program, bool inTerminal) = 0;
     /**
      * Inserts a string into the view.
      */
