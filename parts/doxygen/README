@@ -1,7 +1,7 @@
 What is this part?
 ------------------
 
-This is the Doxygen part. It integrates Doxygen (www.doxygen.org) into
+This is the Doxygen part. It integrates Doxygen - http://www.doxygen.org into
 KDevelop. It allows you to call the Doxygen executable from a KDevelop menu.
 It integrates a GUI into the "KDevelop Project Configuration dialog" to
 configure Doxygen (it reads and writes Doxygen Conpatible configuration files).
@@ -36,7 +36,7 @@ dependencies).
 Caveats and known bugs:
 -----------------------
 - It doesn't call the Config::check() function whenever you click "OK" in the
-  configuration dialog. So the configuration is not checked and you don't
+  configuration dialog. So the configuration is not checked so you don't
   get warning messages when you enter invalid settings.
 - It doesn't resize the configuration GUI properly.
 

@@ -174,9 +174,11 @@ QString message(const QCString &key)
     addMessage("HAVE_DOT", i18n("Use dot"));
     addMessage("CLASS_GRAPH", i18n("Generate class graphs"));
     addMessage("COLLABORATION_GRAPH", i18n("Generate collaboration graphs"));
+    addMessage("UML_LOOK", i18n("Generate UML looking inheritance and colloboration diagrams"));
     addMessage("TEMPLATE_RELATIONS", i18n("Show relations between templates and their instances"));
     addMessage("INCLUDE_GRAPH", i18n("Generate include graphs"));
     addMessage("INCLUDED_BY_GRAPH", i18n("Generate included-by graphs"));
+    addMessage("CALL_GRAPH", i18n("Generate a call dependency graph for every global function or class method"));
     addMessage("GRAPHICAL_HIERARCHY", i18n("Generate graphical hierarchy"));
     addMessage("DOT_IMAGE_FORMAT", i18n("Dot image format"));
     addMessage("DOT_PATH", i18n("Path to dot"));
