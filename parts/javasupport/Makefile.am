@@ -14,7 +14,7 @@ libkdevjavasupport_la_SOURCES = javasupportfactory.cpp \
 			       javaaddclassattributedlg.cpp
 
 EXTRA_DIST = tokenizer.l
-tokenizer.cc: tokenizer.l
+tokenizer.cpp: tokenizer.l
 	$(LEX) -+ -otokenizer.cpp $(srcdir)/tokenizer.l
 
 METASOURCES = AUTO
