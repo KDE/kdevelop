@@ -33,6 +33,7 @@ class QDomDocument;
 #include "kdevlanguagesupport.h"
 #include "kdevplugin.h"
 #include "kdevcreatefile.h"
+#include "kdevversioncontrol.h"
 
 
 #include "toplevel.h"
@@ -298,6 +299,8 @@ void ProjectManager::slotLoadProject( )
 	kapp->restoreOverrideCursor();
     return;
   }
+  
+  loadVCSSupport();
 
   TopLevel::getInstance()->statusBar()->message( i18n("Loading project plugins...") );
   loadLocalParts();
@@ -348,6 +351,7 @@ bool ProjectManager::closeProject( bool exiting )
   PluginController::getInstance()->unloadPlugins( m_info->m_loadParts );
   unloadLanguageSupport();
   unloadProjectPart();
+  unloadVCSSupport();
 
   /// @todo if this fails, user is screwed
   saveProjectFile();
@@ -471,6 +475,7 @@ void ProjectManager::getGeneralInfo()
   QDomElement generalEl = docEl.namedItem("general").toElement();
 
   m_info->m_projectPlugin = getAttribute(generalEl, "projectmanagement");
+  m_info->m_vcsPlugin = getAttribute(generalEl, "versioncontrol");
   m_info->m_language = getAttribute(generalEl, "primarylanguage");
 
   getAttributeList(generalEl, "ignoreparts", "part", m_info->m_ignoreParts);
@@ -629,6 +634,43 @@ bool ProjectManager::loadKDevelop2Project( const KURL & url )
 
     QString projectFile = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kdevelop";
     return loadProject( KURL(projectFile) );
+}
+
+void ProjectManager::loadVCSSupport()
+{
+  KService::Ptr vcsService = KService::serviceByDesktopName(m_info->m_vcsPlugin);
+  if (!vcsService) {
+    // this is for backwards compatibility with pre-alpha6 projects
+    vcsService = KService::serviceByDesktopName(m_info->m_vcsPlugin.lower());
+  }
+  if (!vcsService) {
+    KMessageBox::sorry(TopLevel::getInstance()->main(),
+        i18n("No VCS plugin %1 found.")
+            .arg(m_info->m_vcsPlugin));
+    return;
+  }
+
+  KDevVersionControl *vcsPart = KParts::ComponentFactory
+    ::createInstanceFromService< KDevVersionControl >( vcsService, API::getInstance(), 0,
+                                                  PluginController::argumentsFromService( vcsService ) );
+  if ( !vcsPart ) {
+    KMessageBox::sorry(TopLevel::getInstance()->main(),
+        i18n("Could not create VCS plugin %1.")
+            .arg(m_info->m_vcsPlugin));
+    return;
+  }
+
+  PluginController::getInstance()->integratePart( vcsPart );
+}
+
+void ProjectManager::unloadVCSSupport()
+{
+  if (KDevPlugin *vcsPlugin = PluginController::getInstance()->extension("KDevelop/VersionControl"))
+  {
+    KDevVersionControl *vcs = static_cast<KDevVersionControl*>(vcsPlugin);
+    PluginController::getInstance()->removePart( vcs );
+    delete vcs;
+  }
 }
 
 #include "projectmanager.moc"

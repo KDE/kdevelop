@@ -24,7 +24,7 @@ class ProjectInfo
 public:
   KURL         m_projectURL;
   QDomDocument m_document;
-  QString      m_projectPlugin, m_language, m_activeLanguage;
+  QString      m_projectPlugin, m_language, m_activeLanguage, m_vcsPlugin;
   QStringList  m_ignoreParts, m_loadParts, m_keywords, m_secondaryLanguages;
 
   QString sessionFile() const;
@@ -86,6 +86,9 @@ private:
   bool loadLanguageSupport(const QString& lang);
   void unloadLanguageSupport();
 
+  void loadVCSSupport();
+  void unloadVCSSupport();
+  
   ProjectInfo *m_info;
 
   KAction *m_closeProjectAction, *m_projectOptionsAction;
