@@ -24,9 +24,9 @@
 #include <kspell.h>
 #include "./kwrite/kwview.h"
 
-struct CEditWidgetPrivate;
+class CEditWidgetPrivate;
 
-/** An abstraction layer for the editwidget.
+/** An abstraction layer for the editwidget.(KWrite)
   *@author Sandy Meier
   */
 class CEditWidget : public KWrite {
@@ -35,7 +35,7 @@ class CEditWidget : public KWrite {
 public: // Constructor and destructor
 
   CEditWidget(QWidget* parent=0,const char* name=0);
-  CEditWidget(QWidget* parent,const char* name,KWriteDoc* doc);
+  CEditWidget(QWidget* parent,const char* name,KWriteDoc* doc,CEditWidgetPrivate* data,QPopupMenu* shared_pop);
   ~CEditWidget();
 
 public: // Public methods to set attribute values
@@ -170,7 +170,7 @@ public: // Method to manipulate the buffer
 
 protected: // Protected attributes
 
-  /** Current popupmenu. */
+  /** Current popupmenu., is shared in different view because of the connects */
   QPopupMenu* pop;
 
   /** Current searchtext. */
@@ -199,7 +199,7 @@ public:
  KSpell *kspell;
  KSpellConfig *ksc;
  int spell_offset;
- CEditWidgetPrivate *d;
+ CEditWidgetPrivate *d; // this date is shared with the second/third view.
     
 };
 

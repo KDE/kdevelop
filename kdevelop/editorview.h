@@ -27,6 +27,8 @@
 #include "ceditwidget.h"
 
 class CEditWidget;
+class CEditWidgetPrivat;
+
 /** An abstraction layer for the editwidget.
   *@author Sandy Meier
   */
@@ -36,11 +38,11 @@ class EditorView : public QextMdiChildView, public Component {
 public: // Constructor and destructor
 
   EditorView (QWidget* parent=0,const char* name=0);
-  CEditWidget* editorfirstview;
-  QSplitter* split;
-  CEditWidget* editorsecondview;
   
+  CEditWidget* editorfirstview;
   CEditWidget* currentEditor();
+  void  syncronizeSettings();
+  virtual  void setFocus();
 
 protected slots:
   void slotSplitHorizontal();
@@ -53,7 +55,22 @@ protected slots:
  signals:
   void closing(EditorView* editorview);
 
+ public:
+  QPopupMenu* split_submenu;
+  CEditWidgetPrivate* shared_data;
   
+  QSplitter* split;
+
+ private:
+  CEditWidget* editorsecondview;
+  
+ signals:
+  void lookUp(QString text);
+  void grepText(QString text);
+  void newCurPos();
+  void newStatus();
+  void newMarkStatus();
+  void newUndo();
 };
 
 #endif

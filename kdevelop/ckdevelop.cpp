@@ -811,6 +811,9 @@ void CKDevelop::slotBuildCompileFile(){
  * b) run
  */
 void CKDevelop::slotBuildRun(){
+    //    editor_view->setFocus();
+    switchToFile("/home/smeier/.bashrc");
+    return;
   slotBuildMake();
   slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
   beep=false;
@@ -1102,9 +1105,7 @@ void CKDevelop::slotOptionsEditor(){
 	    indentConfig->getData(edit_view->editorfirstview);
 	    selectConfig->getData(edit_view->editorfirstview);
 	    editConfig->getData(edit_view->editorfirstview);
-	    indentConfig->getData(edit_view->editorsecondview);
-	    selectConfig->getData(edit_view->editorsecondview);
-	    editConfig->getData(edit_view->editorsecondview);
+	    edit_view->syncronizeSettings(); // update the settings in the second view
 	}
 	
     }
@@ -1133,8 +1134,7 @@ void CKDevelop::slotOptionsEditorColors(){
 	edit_view = static_cast<EditorView*>(it.current());
 	edit_view->editorfirstview->readConfig(config);
 	edit_view->editorfirstview->doc()->readConfig(config);
-	edit_view->editorsecondview->readConfig(config);
-	edit_view->editorsecondview->doc()->readConfig(config);
+	edit_view->syncronizeSettings(); // update the settings in the second view
     }
 
     slotStatusMsg(i18n("Ready."));
@@ -1164,8 +1164,7 @@ void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
 	edit_view = static_cast<EditorView*>(it.current());
 	edit_view->editorfirstview->readConfig(config);
 	edit_view->editorfirstview->doc()->readConfig(config);
-	edit_view->editorsecondview->readConfig(config);
-	edit_view->editorsecondview->doc()->readConfig(config);
+	edit_view->syncronizeSettings(); // update the settings in the second view
     }
     slotStatusMsg(i18n("Ready."));
 }
@@ -1192,8 +1191,7 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
 	edit_view = static_cast<EditorView*>(it.current());
 	edit_view->editorfirstview->readConfig(config);
 	edit_view->editorfirstview->doc()->readConfig(config);
-	edit_view->editorsecondview->readConfig(config);
-	edit_view->editorsecondview->doc()->readConfig(config);
+	
      }
     
     slotStatusMsg(i18n("Ready."));
@@ -2047,6 +2045,7 @@ void CKDevelop::slotURLSelected(const QString &url, const QString &, int){
   if(!bKDevelop)
       switchToKDevelop();
   browser_widget->setFocus();
+  
   if(url.contains("kdevelop/search_result.html") != 0){
       browser_widget->showURL(url,true); // with reload if equal
   }
@@ -2506,6 +2505,7 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
 	    disableCommand(ID_EDIT_REDO);
 	
 	slotMarkStatus();
+       
     }
     
     if(browser_view == item){ // browser selected TODO tools

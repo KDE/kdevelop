@@ -131,6 +131,7 @@ QListViewItem *CTreeView::findByName( const char *aName )
  *-----------------------------------------------------------------*/
 void CTreeView::contentsMousePressEvent(QMouseEvent * event)
 {
+   
 
    // Save the mousebutton.
   mouseBtn = event->button();
@@ -143,7 +144,7 @@ void CTreeView::contentsMousePressEvent(QMouseEvent * event)
   item = itemAt(mousePos);
   if (isSelected(item) && mouseBtn != RightButton){
       emit selectionChanged ();
-	emit selectionChanged(item);
+      emit selectionChanged(item);
   }
 
   if(mouseBtn == MidButton){		

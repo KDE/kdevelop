@@ -618,11 +618,11 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   for (; it.current(); ++it) {
       EditorView *editor_view = static_cast<EditorView*>(it.current());
       if (editor_view->currentEditor()->isEditing(filename) ) { 
-	  editor_view->setFocus();
+	  
           cerr << "Already edited with name:" << editor_view->currentEditor()->fileName() << endl;
           // This looks odd:
 	  //--Falk Br.-- setFocus() sets the taskbar button, too//    mdi_main_frame->m_pTaskBar->setActiveButton(editor_view);	
-	  
+	  editor_view->setFocus();
 	  return;
       }
   }
@@ -664,34 +664,24 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   QFont font("Fixed",10);
   new_editorview->editorfirstview->setFont(font);
   config->setGroup("KWrite Options");
-  new_editorview->editorfirstview->readConfig(config);
-  new_editorview->editorfirstview->doc()->readConfig(config);
-  new_editorview->editorfirstview->loadFile(filename,1);  
-  new_editorview->editorfirstview->setName(filename);
+  new_editorview->currentEditor()->readConfig(config);
+  new_editorview->currentEditor()->doc()->readConfig(config);
+  new_editorview->currentEditor()->loadFile(filename,1);  
+  new_editorview->currentEditor()->setName(filename);
 
-  //  new_editorview->editorsecondview->copySettings(new_editorview->editorfirstview);
 
   //connections
   connect(new_editorview,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
 
   // firstview
-  connect(new_editorview->editorfirstview, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-  connect(new_editorview->editorfirstview, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-  connect(new_editorview->editorfirstview, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-  connect(new_editorview->editorfirstview, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
-  connect(new_editorview->editorfirstview, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-  connect(new_editorview->editorfirstview, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+  connect(new_editorview, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
+  connect(new_editorview, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
+  connect(new_editorview, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
+  connect(new_editorview, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
+  connect(new_editorview, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
+  connect(new_editorview, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
   connect(new_editorview->editorfirstview->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
-
-  // secondview
-  // connect(new_editorview->editorsecondview, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-//   connect(new_editorview->editorsecondview, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-//   connect(new_editorview->editorsecondview, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-//   connect(new_editorview->editorsecondview, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
-//   connect(new_editorview->editorsecondview, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-//   connect(new_editorview->editorsecondview, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-//   connect(new_editorview->editorsecondview->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
   
   
   mdi_main_frame->addWindow( new_editorview,  // the view pointer
@@ -708,9 +698,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
-  //  lasttab = s_tab_view->getCurrentTab();
   switchToFile( filename, false);
-  //  EditorView* editor_view = getCurrentEditorView();
   if(editor_view !=0){
       editor_view->currentEditor()->setCursorPosition( lineNo, 0 );
   }
@@ -1370,7 +1358,7 @@ void CKDevelop::saveProperties(KConfig* sess_config){
 }
 
 bool  CKDevelop::isFileInBuffer(QString abs_filename){
-#warning FIXME MDI stuff
+ #warning FIXME MDI stuff
   // TEditInfo* info;
 //   for(info=edit_infos.first();info != 0;info=edit_infos.next()){
 //     if (info->filename == abs_filename ){

@@ -28,55 +28,96 @@
 
 EditorView::EditorView(QWidget* parent,const char* name) : QextMdiChildView(name,parent){
     split = new QSplitter(this);
+
+    
     editorfirstview = new  CEditWidget(split,name);
-    //    editorfirstview->popup()->insertItem(BarIcon("paste"),i18n("split horizontal"),this,SLOT(slotSplitHorizontal()),0);
-    //    editorfirstview->popup()->insertItem(BarIcon("paste"),i18n("split vertical"),this,SLOT(slotSplitVertical()),0);
-    //    editorfirstview->popup()->insertItem(BarIcon("paste"),i18n("unsplit"),this,SLOT(slotUnSplit()),0);
+    split_submenu = new QPopupMenu;
+    editorfirstview->popup()->insertSeparator();
+    split_submenu->insertItem(BarIcon("paste"),i18n("split horizontal"),this,SLOT(slotSplitHorizontal()),0);
+    split_submenu->insertItem(BarIcon("paste"),i18n("split vertical"),this,SLOT(slotSplitVertical()),0);
+    split_submenu->insertItem(BarIcon("paste"),i18n("unsplit"),this,SLOT(slotUnSplit()),0);
+    editorfirstview->popup()->insertItem(BarIcon("paste"),i18n("Split View"),split_submenu);
+    editorfirstview->setFocus();
+
+    connect(editorfirstview, SIGNAL(lookUp(QString)),SIGNAL(lookUp(QString)));
+    connect(editorfirstview, SIGNAL(newCurPos()),SIGNAL(newCurPos()));
+    connect(editorfirstview, SIGNAL(newStatus()),SIGNAL(newStatus()));
+    connect(editorfirstview, SIGNAL(newMarkStatus()),SIGNAL(newMarkStatus()));
+    connect(editorfirstview, SIGNAL(newUndo()),SIGNAL(newUndo()));
+    connect(editorfirstview, SIGNAL(grepText(QString)),SIGNAL(grepText(QString)));
+    
     editorsecondview=0;
+
+    
     
 }
 
+void  EditorView::syncronizeSettings(){
+    if (editorsecondview !=0){
+	editorsecondview->copySettings(editorfirstview);
+    }
+}
+void EditorView::setFocus(){
+    cerr << "EditorView::setFocus()\n";
+    editorfirstview->setFocus();
+    QextMdiChildView::setFocus();
+}
 void EditorView::resizeEvent (QResizeEvent *e){
     //editor->resize(e->size());
     split->resize(e->size());
     
 }
 CEditWidget* EditorView::currentEditor(){
-    if(editorfirstview->hasFocus()) return editorfirstview;
-    return editorfirstview;
+    if(editorfirstview->hasFocus() || editorsecondview == 0) return editorfirstview;
+    return editorsecondview;
     
 }
 void EditorView::slotSplitHorizontal(){
     if(editorsecondview == 0){
-	editorsecondview = new CEditWidget(split,"secondview",editorfirstview->doc());
-	editorsecondview->popup()->insertItem(BarIcon("paste"),i18n("split horizontal"),this,SLOT(slotSplitHorizontal()),0);
-	editorsecondview->popup()->insertItem(BarIcon("paste"),i18n("split vertical"),this,SLOT(slotSplitVertical()),0);
-	editorsecondview->popup()->insertItem(BarIcon("paste"),i18n("unsplit"),this,SLOT(slotUnSplit()),0);
-#warning FIXME find a better solution
-	editorsecondview->d =  editorfirstview->d; // uh, it's really dirty.. :-(
+	editorsecondview = new CEditWidget(split,"newview",editorfirstview->doc(),editorfirstview->d,editorfirstview->popup());
+	editorsecondview->copySettings(editorfirstview);
+	connect(editorsecondview, SIGNAL(lookUp(QString)),SIGNAL(lookUp(QString)));
+	connect(editorsecondview, SIGNAL(newCurPos()),SIGNAL(newCurPos()));
+	connect(editorsecondview, SIGNAL(newStatus()),SIGNAL(newStatus()));
+	connect(editorsecondview, SIGNAL(newMarkStatus()),SIGNAL(newMarkStatus()));
+	connect(editorsecondview, SIGNAL(newUndo()),SIGNAL(newUndo()));
+	connect(editorsecondview, SIGNAL(grepText(QString)),SIGNAL(grepText(QString)));
+	
+	// doesn't work  :-(
+	// editorsecondview->resize(editorfirstview->width(),editorfirstview->height()/2);
 	editorsecondview->show();
     }
-    cerr << "TEST1";
-    split->setOrientation(QSplitter::Horizontal);
+    cerr << "\nSplitHorizontal";
+    split->setOrientation(QSplitter::Vertical);
   
 }
 void EditorView::slotSplitVertical(){
     if(editorsecondview == 0){
-	editorsecondview = new CEditWidget(split,"secondview",editorfirstview->doc());
-	editorsecondview->popup()->insertItem(BarIcon("paste"),i18n("split horizontal"),this,SLOT(slotSplitHorizontal()),0);
-	editorsecondview->popup()->insertItem(BarIcon("paste"),i18n("split vertical"),this,SLOT(slotSplitVertical()),0);
-	editorsecondview->popup()->insertItem(BarIcon("paste"),i18n("unsplit"),this,SLOT(slotUnSplit()),0);
-#warning FIXME find a better solution
-	editorsecondview->d =  editorfirstview->d; // uh, it's really dirty.. :-(
+	editorsecondview = new CEditWidget(split,"secondview",editorfirstview->doc(),editorfirstview->d,editorfirstview->popup());
+	editorsecondview->copySettings(editorfirstview);
+	connect(editorsecondview, SIGNAL(lookUp(QString)),SIGNAL(lookUp(QString)));
+	connect(editorsecondview, SIGNAL(newCurPos()),SIGNAL(newCurPos()));
+	connect(editorsecondview, SIGNAL(newStatus()),SIGNAL(newStatus()));
+	connect(editorsecondview, SIGNAL(newMarkStatus()),SIGNAL(newMarkStatus()));
+	connect(editorsecondview, SIGNAL(newUndo()),SIGNAL(newUndo()));
+	connect(editorsecondview, SIGNAL(grepText(QString)),SIGNAL(grepText(QString)));
+	// doesn't work. :-(
+	// editorsecondview->resize(editorfirstview->width()/2,editorfirstview->height());
 	editorsecondview->show();
     }
-    cerr << "TEST";
-    split->setOrientation(QSplitter::Vertical);
+    cerr << "\nSplitVertical";
+    split->setOrientation(QSplitter::Horizontal);
    
 }
 void EditorView::slotUnSplit(){
-   delete editorsecondview;
-   editorsecondview=0;
+    if(editorsecondview->hasFocus()){
+	delete editorfirstview;
+	editorfirstview=editorsecondview;
+    }
+    else{
+	delete editorsecondview;
+    }
+    editorsecondview=0;
 }
 void EditorView::closeEvent(QCloseEvent* e){
    

@@ -33,8 +33,9 @@
 
 
 // We don't want to clutter the global namespace with this stuff.
-struct CEditWidgetPrivate
+class CEditWidgetPrivate
 {
+public:
     dev_t dev;
     ino_t ino;
     time_t mtime;
@@ -63,48 +64,35 @@ CEditWidget::CEditWidget(QWidget* parent,const char* name)
   : KWrite(new KWriteDoc(&hlManager),parent,name)
 {  
    
-	setFocusProxy (kWriteView); 
-    pop = new QPopupMenu();
-    //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
-    pop->insertItem(BarIcon("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
-    pop->insertItem(BarIcon("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
-    pop->insertSeparator();
-    pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
-    pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
-    pop->insertItem(BarIcon("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
-    pop->setItemEnabled(ID_EDIT_CUT,false);
-    pop->setItemEnabled(ID_EDIT_COPY,false);
-    pop->setItemEnabled(ID_EDIT_PASTE,false);
-    pop->insertSeparator();
-    pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
-    pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
-
-
-    bookmarks.setAutoDelete(true);
-    d = new CEditWidgetPrivate();
+    setFocusProxy (kWriteView); 
+  pop = new QPopupMenu();
+  //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
+  pop->insertItem(BarIcon("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
+  pop->insertItem(BarIcon("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
+  pop->insertSeparator();
+  pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
+  pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
+  pop->insertItem(BarIcon("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
+  pop->setItemEnabled(ID_EDIT_CUT,false);
+  pop->setItemEnabled(ID_EDIT_COPY,false);
+  pop->setItemEnabled(ID_EDIT_PASTE,false);
+  pop->insertSeparator();
+  pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
+  pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
+  
+  
+  bookmarks.setAutoDelete(true);
+  d = new CEditWidgetPrivate();
+  
 }
 
-CEditWidget::CEditWidget(QWidget* parent,const char* name,KWriteDoc* doc)
+CEditWidget::CEditWidget(QWidget* parent,const char* name,KWriteDoc* doc,CEditWidgetPrivate* data,QPopupMenu* shared_pop)
   : KWrite(doc,parent,name)
 {  
-   
     setFocusProxy (kWriteView); 
-    pop = new QPopupMenu();
-    //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
-    pop->insertItem(BarIcon("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
-    pop->insertItem(BarIcon("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
-    pop->insertSeparator();
-    pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
-    pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
-    pop->insertItem(BarIcon("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
-    pop->setItemEnabled(ID_EDIT_CUT,false);
-    pop->setItemEnabled(ID_EDIT_COPY,false);
-    pop->setItemEnabled(ID_EDIT_PASTE,false);
-    pop->insertSeparator();
-    pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
-    pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
     bookmarks.setAutoDelete(true);
-    d = new CEditWidgetPrivate();
+    d = data;
+    pop = shared_pop;
 }
 
 /*-------------------------------------- CEditWidget::~CEditWidget()
@@ -195,8 +183,9 @@ bool CEditWidget::isEditing(const QString &filename)
  *   -
  *-----------------------------------------------------------------*/
 void CEditWidget::setFocus(){
-  KWrite::setFocus();
-  kWriteView->setFocus();
+    cerr << "CEditWidget::setFocus()\n";
+    KWrite::setFocus();
+    kWriteView->setFocus();
 }
 
 /*--------------------------------------------- CEditWidget::gotoPos()
@@ -384,6 +373,7 @@ int CEditWidget::getLinePos( const char *buf, uint aLine )
 }
 
 void CEditWidget::enterEvent ( QEvent * e){
+    KWrite::enterEvent(e);
     //  setFocus();
 }
 
@@ -454,6 +444,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 
     pop->popup(this->mapToGlobal(event->pos()));
   }
+  setFocus();
 }
 
 /*********************************************************************

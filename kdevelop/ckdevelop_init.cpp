@@ -148,13 +148,13 @@ void CKDevelop::initView(){
   class_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
-  log_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
+  //  log_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
-  real_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
+  //  real_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   doc_tree = new DocTreeView(t_tab_view,"DOC");
-  doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
+  //  doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   t_tab_view->addTab(class_tree,i18n("CV"));
   t_tab_view->addTab(log_file_tree,i18n("LFV"));
@@ -206,7 +206,7 @@ void CKDevelop::initView(){
   browser_view = new DocBrowserView(mdi_main_frame,"browser");
   // let's go
   browser_widget = browser_view->browser;
-  browser_widget->setFocusPolicy(QWidget::StrongFocus);
+  //  browser_widget->setFocusPolicy(QWidget::StrongFocus);
   mdi_main_frame->addWindow(browser_view, // the view pointer
                             true,         // show it
 			    true,         // attach it
