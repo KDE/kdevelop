@@ -1,0 +1,7 @@
+# KDE Config File
+[General]
+Name=Simple Hello world program
+Icon=adahello.png
+Category=Ada
+Comment=Generates a simple Hello world program in Ada
+FileTemplates=adb,AdaStyle
