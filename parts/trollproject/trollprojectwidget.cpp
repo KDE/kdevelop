@@ -1288,6 +1288,15 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->setValues("IMAGES",spitem->images,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->setValues("IMAGES",spitem->images_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
 
+  subBuffer->removeValues("LEXSOURCES");
+  subBuffer->setValues("LEXSOURCES",spitem->lexsources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  subBuffer->setValues("LEXSOURCES",spitem->lexsources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+
+  subBuffer->removeValues("YACCSOURCES");
+  subBuffer->setValues("YACCSOURCES",spitem->yaccsources,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  subBuffer->setValues("YACCSOURCES",spitem->yaccsources_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+
+
   subBuffer->removeValues("TRANSLATIONS");
   subBuffer->setValues("TRANSLATIONS",spitem->translations,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   subBuffer->setValues("TRANSLATIONS",spitem->translations_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
@@ -1389,6 +1398,12 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
     case GroupItem::IDLs:
       titem->owner->idls.append(filename);
       break;
+    case GroupItem::Lexsources:
+      titem->owner->lexsources.append(filename);
+      break;
+    case GroupItem::Yaccsources:
+      titem->owner->yaccsources.append(filename);
+      break;
     case GroupItem::Images:
       titem->owner->images.append(filename);
       break;
@@ -1437,6 +1452,12 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
       break;
     case GroupItem::IDLs:
       m_shownSubproject->idls.append(filename);
+      break;
+    case GroupItem::Lexsources:
+      m_shownSubproject->lexsources.append(filename);
+      break;
+    case GroupItem::Yaccsources:
+      m_shownSubproject->yaccsources.append(filename);
       break;
     case GroupItem::Translations:
       m_shownSubproject->translations.append(filename);
@@ -1823,6 +1844,14 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         case GroupItem::IDLs:
             title = i18n("Corba IDLs");
             ext = "*.idl *.kidl";
+            break;
+        case GroupItem::Lexsources:
+            title = i18n("Lexsources");
+            ext = "*.l *.ll *.lxx *.l++";
+            break;
+        case GroupItem::Yaccsources:
+            title = i18n("Yaccsources");
+            ext = "*.y *.yy *.yxx *.y++";
             break;
         case GroupItem::Images:
             title = i18n("Images");
@@ -2253,6 +2282,12 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
       case GroupItem::Forms:
         spitem->forms.remove(fitem->text(0));
         break;
+      case GroupItem::Lexsources:
+        spitem->lexsources.remove(fitem->text(0));
+        break;
+      case GroupItem::Yaccsources:
+        spitem->yaccsources.remove(fitem->text(0));
+        break;
       case GroupItem::Images:
         spitem->images.remove(fitem->text(0));
         break;
@@ -2345,6 +2380,8 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
 
     subBuffer->getValues("SOURCES",item->sources,item->sources_exclude);
     subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
+    subBuffer->getValues("LEXSOURCES",item->lexsources,item->lexsources_exclude);
+    subBuffer->getValues("YACCSOURCES",item->yaccsources,item->yaccsources_exclude);
     subBuffer->getValues("IMAGES",item->images,item->images_exclude);
     subBuffer->getValues("TRANSLATIONS",item->translations,item->translations_exclude);
     subBuffer->getValues("IDLS",item->idls,item->idls_exclude);
@@ -2391,7 +2428,30 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
     }
 
 
-
+    titem = createGroupItem(GroupItem::Lexsources, "LEXSOURCES",scopeString);
+    titem->owner = item;
+    item->groups.append(titem);
+    if (!item->lexsources.isEmpty()) {
+        QStringList l = item->lexsources;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
+            titem->files.append(fitem);
+        }
+    }
+    titem = createGroupItem(GroupItem::Yaccsources, "YACCSOURCES",scopeString);
+    titem->owner = item;
+    item->groups.append(titem);
+    if (!item->yaccsources.isEmpty()) {
+        QStringList l = item->yaccsources;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
+            titem->files.append(fitem);
+        }
+    }
     titem = createGroupItem(GroupItem::Images, "IMAGES",scopeString);
     titem->owner = item;
     item->groups.append(titem);
