@@ -83,7 +83,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevsvn, svnFactory( "kdevsvn" ) );
 
 	//output window
 	m_widget = new SvnWidget(this);
-	mainWindow()->embedOutputView((m_widget),i18n("SVN"),i18n("Subversion output"));
+	mainWindow()->embedOutputView((m_widget),"Subversion",i18n("Subversion output"));
 }
 
 SvnPart::~SvnPart()
