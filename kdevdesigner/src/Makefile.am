@@ -26,8 +26,9 @@ kdevdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 kdevdesigner_LDADD   = $(LIB_KPARTS)
 
 # this is where the desktop file will go 
-shelldesktopdir = $(kde_appsdir)/Development
-shelldesktop_DATA = kdevdesigner.desktop
+#shelldesktopdir = $(kde_appsdir)/Development
+#shelldesktop_DATA = kdevdesigner.desktop
+xdg_apps_DATA = kdevdesigner.desktop
 
 # this is where the shell's XML-GUI resource file goes
 shellrcdir = $(kde_datadir)/kdevdesigner
