@@ -2,10 +2,10 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_include
 
 kde_module_LTLIBRARIES = libkdevscripting.la
 libkdevscripting_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevscripting_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lkscript
+libkdevscripting_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevscripting_la_SOURCES = scriptingpart.cpp scriptingglobalconfigbase.ui \
-	scriptingglobalconfig.cpp kscriptactionmanager.cpp
+	scriptingglobalconfig.cpp
 
 METASOURCES = AUTO
 
@@ -17,4 +17,4 @@ service_DATA = kdevscripting.desktop
 
 rcdir = $(kde_datadir)/kdevscripting
 rc_DATA = kdevscripting.rc
-noinst_HEADERS = kscriptactionmanager.h
+noinst_HEADERS = scriptingglobalconfig.h  scriptingpart.h

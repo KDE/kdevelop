@@ -65,6 +65,7 @@ scriptingPart::scriptingPart(QObject *parent, const char *name, const QStringLis
 
 scriptingPart::~scriptingPart()
 {
+    delete m_configProxy;
     delete m_scripts;
 }
 

@@ -3,13 +3,13 @@ INCLUDES = -I$(top_srcdir)/lib/compat  -I$(top_srcdir)/lib/interfaces  -I$(top_s
 noinst_LTLIBRARIES = libkdevutil.la
 
 libkdevutil_la_SOURCES = domutil.cpp execcommand.cpp filetemplate.cpp \
-	urlutil.cpp configwidgetproxy.cpp rurl.cpp
+	urlutil.cpp configwidgetproxy.cpp rurl.cpp kscriptactionmanager.cpp
 
 METASOURCES = AUTO
 
 kdevelopincludedir = $(includedir)/kdevelop/util
 kdevelopinclude_HEADERS = domutil.h execcommand.h filetemplate.h urlutil.h \
-	configwidgetproxy.h rurl.h
+	configwidgetproxy.h rurl.h kscriptactionmanager.h
 
 DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevextensions kdevinterfaces
 DOXYGEN_PROJECTNAME = KDevelop Utility Library

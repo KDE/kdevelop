@@ -77,6 +77,7 @@ private:
     QString m_scriptFile;
     QString m_scriptMethod;
     KScriptInterface *m_interface;
+    bool m_isValid;
 };
 
 /**
