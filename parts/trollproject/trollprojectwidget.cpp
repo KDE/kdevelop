@@ -393,6 +393,11 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
       runButton->setEnabled(true);
       projectconfButton->setEnabled(true);
     }
+    QString subProjPath = m_shownSubproject->path;
+    QString relpath = subProjPath.remove(0,projectDirectory().length());
+    QDomDocument &dom = *(m_part->projectDom());
+    DomUtil::writeEntry(dom, "/kdevtrollproject/general/activedir",relpath);
+
 }
 
 QString TrollProjectWidget::getCurrentTarget()
