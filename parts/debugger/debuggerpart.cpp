@@ -14,16 +14,18 @@
 #include <qdir.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
-#include <kfiledialog.h>
+#include <kaction.h>
 #include <kdebug.h>
+#include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <kmainwindow.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
 #include "kdevappfrontend.h"
+#include "domutil.h"
 #include "variablewidget.h"
 #include "breakpointwidget.h"
 #include "framestackwidget.h"
@@ -31,6 +33,7 @@
 #include "gdbcontroller.h"
 #include "breakpoint.h"
 #include "dbgpsdlg.h"
+#include "dbgtoolbar.h"
 #include "memviewdlg.h"
 #include "debuggerfactory.h"
 #include "debuggerconfigwidget.h"
@@ -248,7 +251,7 @@ DebuggerPart::~DebuggerPart()
     delete framestackWidget;
     delete disassembleWidget;
     delete controller;
-    //    delete floatingToolBar;
+    delete floatingToolBar;
 }
 
 
@@ -337,11 +340,12 @@ void DebuggerPart::startDebugger()
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
     
-    // Floatinging tool bar can wait until later :-)
-    //    if (enableFloatingToolBar) {
-    //        floatingToolBar = new DbgToolBar(controller, this);
-    //        floatingToolBar->show();
-    //    }
+    bool enableFloatingToolBar = DomUtil::readBoolEntry(*projectDom(), "/kdevdebugger/general/floatingtoolbar");
+
+    if (enableFloatingToolBar) {
+        floatingToolBar = new DbgToolBar(this, topLevel()->main());
+        floatingToolBar->show();
+    }
 
     setupController();
     QString program;
@@ -429,8 +433,8 @@ void DebuggerPart::slotStop()
     disassembleWidget->slotActivate(false);
 
     core()->gotoExecutionPoint(QString::null, 0);
-    //    delete floatingToolBar;
-    //    floatingToolBar = 0;
+    delete floatingToolBar;
+    floatingToolBar = 0;
 
 }
 

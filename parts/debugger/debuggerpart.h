@@ -67,7 +67,7 @@ private:
     QGuardedPtr<FramestackWidget> framestackWidget;
     QGuardedPtr<DisassembleWidget> disassembleWidget;
     DbgController *controller;
-    //    QGuardedPtr<DbgToolBar> floatingToolBar;
+    QGuardedPtr<DbgToolBar> floatingToolBar;
 };
 
 #endif

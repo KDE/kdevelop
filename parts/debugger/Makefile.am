@@ -22,6 +22,7 @@ libkdevdebugger_la_SOURCES = debuggerfactory.cpp \
 			     memviewdlg.cpp \
 			     breakpointdlg.cpp \
 			     dbgpsdlg.cpp \
+			     dbgtoolbar.cpp \
 			     debuggerconfigwidget.cpp \
 			     debuggerconfigwidgetbase.ui
 
