@@ -53,6 +53,8 @@ CParsedMethod::CParsedMethod()
   setItemType( PIT_METHOD );
   arguments.setAutoDelete( true );
   isVirtual = false;
+  isSlot = false;
+  isSignal = false;
 }
 
 /*----------------------------------- CParsedMethod::~CParsedMethod()
@@ -90,21 +92,6 @@ void CParsedMethod::addArgument( CParsedArgument *anArg )
 
   if( anArg->type != "void" )
     arguments.append( anArg );
-}
-
-/*--------------------------------------- CParsedMethod::setVirtual()
- * setVirtual()
- *   Set this method as virtual.
- *
- * Parameters:
- *   aState           Tells if it is virtual or not.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedMethod::setIsVirtual( bool aState )
-{
-  isVirtual = aState;
 }
 
 /*********************************************************************
@@ -182,6 +169,12 @@ void CParsedMethod::out()
   if( isStatic )
     cout << "static ";
 
+  if( isSlot )
+    cout << "slot ";
+
+  if( isSignal )
+    cout << "signal ";
+
   cout << ( type.isEmpty() ? "" : type.data() )  << " " << name << "( "; 
 
   for( arg = arguments.first(); arg != NULL; arg = arguments.next() )
@@ -191,7 +184,7 @@ void CParsedMethod::out()
 
     arg->out();
   }
-  
+
   cout << ( isConst ? " ) const\n" : " )\n" );
   sprintf( buf, "%d", declaredOnLine );
   cout << "      declared @ line " << buf << " - ";
@@ -230,6 +223,8 @@ void CParsedMethod::copy( CParsedMethod *aMethod )
   CParsedAttribute::copy( aMethod );
 
   setIsVirtual( aMethod->isVirtual );
+  setIsSlot( aMethod->isSlot );
+  setIsSignal( aMethod->isSignal );
 
   for( anArg = aMethod->arguments.first();
        anArg != NULL;

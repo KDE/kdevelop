@@ -59,13 +59,31 @@ public: // Public attributes
   /** Is this methods declared virtual? */
   bool isVirtual;
 
+  /** Is this really an slot. */
+  bool isSlot;
+
+  /** Is this really an signal. */
+  bool isSignal;
+
 public: // Public methods to set attribute values
 
   /** Add an argument to this method. */
   void addArgument( CParsedArgument *anArg );
 
-  /** Set the status if this is a virtual method. */
-  void setIsVirtual( bool aState = true );
+  /** Set the status if this is a virtual method.
+   * @param aState The new state.
+   */
+  void setIsVirtual( bool aState = true )  { isVirtual = aState; }
+
+  /** Set the status if this is a slot. 
+   * @param aState The new state.
+   */
+  void setIsSlot( bool aState = true )     { isSlot = aState; }
+
+  /** Set the status if this is a signal. 
+   * @param aState The new state.
+   */
+  void setIsSignal( bool aState = true )   { isSignal = aState; }
 
 public: // Public attributes
 
