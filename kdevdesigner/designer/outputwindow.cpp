@@ -98,7 +98,7 @@ static void debugMessageOutput( QtMsgType type, const char *msg )
     if ( type != QtFatalMsg ) {
 	if ( debugoutput && debugoutput->isVisible() )
 	    debugoutput->append( s );
-	else if ( OutputWindow::oldMsgHandler )
+	else if ( OutputWindow::oldMsgHandler && OutputWindow::oldMsgHandler != debugMessageOutput )
 	    (*OutputWindow::oldMsgHandler)( type, msg );
 	else
 	    fputs( s.latin1(), stderr );
