@@ -69,7 +69,7 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, AutoProjectPart* p
 	}
 
 	removeLabel->setText ( i18n ( "Do you really want to remove <b>%1</b>?" ).arg ( filename ) );
-	
+
 	directoryLabel->setText ( spitem->path );
 	if ( item->name.isEmpty() )
 		targetLabel->setText ( i18n ( "%1 in %2" ).arg ( item->primary ).arg ( item->prefix ) );
@@ -112,7 +112,11 @@ void RemoveFileDialog::accept()
 					fitem = nextitem;
 				}
 				QString canontargetname = AutoProjectTool::canonicalize((*it)->name);
-				QString varname = canontargetname + "_SOURCES";
+                                QString varname;
+                                if( (*it)->primary == "PROGRAMS" || (*it)->primary == "LIBRARIES" || (*it)->primary == "LTLIBRARIES" )
+                                    varname = canontargetname + "_SOURCES";
+                                else
+                                    varname = (*it)->prefix + "_" + (*it)->primary;
 				QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
 				sources.remove(fileName);
 				subProject->variables[varname] = sources.join(" ");
@@ -134,7 +138,11 @@ void RemoveFileDialog::accept()
 		fitem = static_cast<FileItem*>(fitem->nextSibling());
 	}
 	QString canontargetname = AutoProjectTool::canonicalize(target->name);
-	QString varname = canontargetname + "_SOURCES";
+	QString varname;
+	if( target->primary == "PROGRAMS" || target->primary == "LIBRARIES" || target->primary == "LTLIBRARIES" )
+	    varname = canontargetname + "_SOURCES";
+	else
+	    varname = target->prefix + "_" + target->primary;
 	QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
 	sources.remove(fileName);
 	subProject->variables[varname] = sources.join(" ");
@@ -144,11 +152,11 @@ void RemoveFileDialog::accept()
 
 //  review configuration cleanup in the project file after removing subclassing related source
 	QDomDocument &dom = *(m_part->projectDom());
-    
+
 	QDomElement el = dom.documentElement();
 	QDomNode el2 = el.namedItem("kdevautoproject");
 	QDomNode el3 = el2.namedItem("subclassing");
-    
+
 	QDomNode n = el3.firstChild();
 	QValueList<QDomNode> nodesToRemove;
 	while ( !n.isNull() ) {

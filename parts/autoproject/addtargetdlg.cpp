@@ -53,7 +53,7 @@ AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item
 	connect( filename_edit, SIGNAL( textChanged(const QString&) ), this, SLOT( slotFileNameChanged (const QString&) ) );
 
 	setIcon ( SmallIcon ( "targetnew_kdevelop.png" ) );
-	
+
 	canonicalLabel->setText ( QString::null );
 }
 
@@ -149,25 +149,25 @@ void AddTargetDialog::accept()
 		KMessageBox::sorry(this, i18n("Libraries must have a lib prefix!"));
 		return;
 	}
-	
+
 	if (primary == "LTLIBRARIES" && !name.startsWith("lib")) {
 		KMessageBox::sorry(this, i18n("Libtool libraries must have a lib prefix!"));
 		return;
 	}
-	
+
 	if (primary == "LTLIBRARIES" && name.right(3) != ".la") {
 		KMessageBox::sorry(this, i18n("Libtool libraries must have a .la suffix!"));
 		return;
 	}
-	
+
 #endif
-	
+
 	if( primary.endsWith("LIBRARIES") && !name.startsWith("lib") )
 	    name.prepend( QString::fromLatin1("lib") );
-	
+
 	if( primary == "LTLIBRARIES" && !name.endsWith(".la") )
 	    name.append( QString::fromLatin1(".la") );
-	
+
 	QPtrListIterator<TargetItem> it(m_subproject->targets);
 	for (; it.current(); ++it)
 		if (name == (*it)->name) {
@@ -194,17 +194,20 @@ void AddTargetDialog::accept()
 	m_subproject->targets.append(titem);
 
 	QString canonname = AutoProjectTool::canonicalize(name);
-	QString varname = prefix + "_" + primary;
-	m_subproject->variables[varname] += (" " + name);
 
 	QMap<QString,QString> replaceMap;
-	replaceMap.insert(varname, m_subproject->variables[varname]);
-	replaceMap.insert(canonname + "_SOURCES", "");
+
+        if( primary == "PROGRAMS" || primary == "LIBRARIES" || primary == "LTLIBRARIES" ){
+	    QString varname = prefix + "_" + primary;
+	    m_subproject->variables[varname] += (" " + name);
+	    replaceMap.insert(varname, m_subproject->variables[varname]);
+            replaceMap.insert(canonname + "_SOURCES", "");
+        }
 	if (primary == "LTLIBRARIES" || primary == "PROGRAMS")
-		replaceMap.insert(canonname + "_LDFLAGS", ldflags);
+            replaceMap.insert(canonname + "_LDFLAGS", ldflags);
 
 	AutoProjectTool::modifyMakefileam(m_subproject->path + "/Makefile.am", replaceMap);
-	
+
 	QDialog::accept();
 }
 

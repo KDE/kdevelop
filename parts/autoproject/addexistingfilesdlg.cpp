@@ -68,7 +68,7 @@ AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProj
 	if ( titem && spitem && titem->type() == ProjectItem::Target && spitem->type() == ProjectItem::Subproject )
 	{
 		destStaticLabel->setText ( i18n ( "Target:" ) );
-		
+
 		if ( titem->name.isEmpty() )
 		{
 			QString target = i18n ( "%1 in %2" ).arg ( titem->primary ).arg ( titem->prefix );
@@ -130,7 +130,7 @@ void AddExistingFilesDialog::init()
 
     importView->setSelectionMode ( KFile::Multi );
 
-    Q_ASSERT( m_spitem );	
+    Q_ASSERT( m_spitem );
     sourceSelector->setDir ( m_spitem->path );
 }
 
@@ -138,15 +138,15 @@ void AddExistingFilesDialog::importItems()
 {
     if( !importView->items() )
 	return;
-    
+
 	// items added via button or drag 'n drop
 	KFileItemListIterator itemList ( m_importList );
-	
+
 	// items already added to the importView
 	KFileItemListIterator importedList ( *importView->items() );
 
 	QListViewItem* child = m_titem->firstChild();
-	
+
 	QStringList duplicateList;
 
 	while ( child )
@@ -202,7 +202,7 @@ void AddExistingFilesDialog::importItems()
 	}
 
 	itemList.toFirst();
-	
+
 	for ( ; itemList.current(); ++itemList )
 	{
 		if ( !( *itemList )->isDir() )
@@ -210,7 +210,7 @@ void AddExistingFilesDialog::importItems()
 			importView->insertItem ( ( *itemList ) );
 		}
 	}
-	
+
 	importView->somethingDropped ( true );
 
 	m_importList.clear();
@@ -221,10 +221,10 @@ void AddExistingFilesDialog::importItems()
 void AddExistingFilesDialog::slotOk()
 {
 	if ( importView->items()->count() == 0 ) QDialog::reject();
-    
+
 	progressBar->show();
 	progressBar->setFormat ( i18n ( "Importing... %p%" ) );
-	
+
 	qApp->processEvents();
 
 	KFileItemListIterator items ( *importView->items() );
@@ -292,7 +292,12 @@ void AddExistingFilesDialog::slotOk()
 	items.toFirst();
 
 	QString canontargetname = AutoProjectTool::canonicalize ( m_titem->name );
-	QString varname = canontargetname + "_SOURCES";
+        QString varname;
+        if( m_titem->primary == "PROGRAMS" || m_titem->primary == "LIBRARIES" || m_titem->primary == "LTLIBRARIES" )
+            varname = canontargetname + "_SOURCES";
+        else
+            varname = m_titem->prefix + "_" + m_titem->primary;
+
 	QMap<QString,QString> replaceMap;
 	FileItem* fitem = 0L;
 	QStringList fileList;
@@ -307,10 +312,10 @@ void AddExistingFilesDialog::slotOk()
 		m_titem->insertItem ( fitem );
 
 		fileList.append ( m_spitem->path.mid ( m_part->projectDirectory().length() + 1 ) + "/" + ( *items )->name() );
-		
+
 		progressBar->setValue ( progressBar->value() + 1 );
 	}
-	
+
 	m_widget->emitAddedFiles ( fileList );
 
 	AutoProjectTool::modifyMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
@@ -346,7 +351,7 @@ void AddExistingFilesDialog::slotAddAll()
 			m_importList.append ( ( *it ) );
 		}
 	}
-	
+
 	importItems();
 }
 
@@ -406,7 +411,7 @@ void AddExistingFilesDialog::slotDropped ( QDropEvent* ev )
 	KURL::List urls;
 
 	KURLDrag::decode( ev, urls );
-	
+
 	KFileItem* item = 0L;
 	KMimeType::Ptr type = 0L;
 
@@ -416,7 +421,7 @@ void AddExistingFilesDialog::slotDropped ( QDropEvent* ev )
  		if ( ( *it ).isLocalFile() ) // maybe unnecessary
  		{
 			type = KMimeType::findByURL ( ( *it ).url() );
-			
+
 			if ( type->name() != KMimeType::defaultMimeType() )
 			{
 				item = new KFileItem ( ( *it ).url() , type->name(), 0 );

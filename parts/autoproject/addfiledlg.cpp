@@ -82,7 +82,7 @@ void AddFileDialog::accept()
 		}
 		child = child->nextSibling();
 	}
-	
+
 	if (templateCheckBox->isChecked()) {
 		QString srcdir = m_part->projectDirectory();
 		QString destdir = subProject->path;
@@ -98,13 +98,13 @@ void AddFileDialog::accept()
 		QString srcdir = m_part->projectDirectory();
 		QString destdir = subProject->path;
 		QString destpath = destdir + "/" + name;
-		
+
 		if (QFileInfo(destpath).exists()) {
 			KMessageBox::sorry(this, i18n("<b>A file with this name already exists!</b><br><br>Please use the \"Add existing file\" dialog!"));
 			return;
 		}
-		
-		QFile f( destpath ); 
+
+		QFile f( destpath );
 		if( f.open(IO_WriteOnly) )
 		    f.close();
 	}
@@ -114,7 +114,11 @@ void AddFileDialog::accept()
 	target->insertItem(fitem);
 
 	QString canontargetname = AutoProjectTool::canonicalize(target->name);
-	QString varname = canontargetname + "_SOURCES";
+	QString varname;
+        if( target->primary == "PROGRAMS" || target->primary == "LIBRARIES" || target->primary == "LTLIBRARIES" )
+            varname = canontargetname + "_SOURCES";
+        else
+            varname = target->prefix + "_" + target->primary;
 	subProject->variables[varname] += (" " + name);
 
 	QMap<QString,QString> replaceMap;
