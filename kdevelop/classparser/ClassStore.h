@@ -54,7 +54,9 @@ public: // Public attributes
 
 public: // Public queries
 
-  /** Return the store as a forest(collection of trees). */
+  /** Return the store as a forest(collection of trees). 
+   * @return List of trees with the top parents as root-nodes.
+   */
   QList<CClassTreeNode> *asForest();
 
   /** Tells if a class exists in the store. 
@@ -62,20 +64,36 @@ public: // Public queries
    */
   bool hasClass( const char *aName );
 
-  /** Fetches a class from the store by using its' name. */
+  /** Fetches a class from the store by using its' name. 
+   * @return A pointer to the class(not to be deleted) or
+   *  NULL if the class wasn't found.
+   */
   CParsedClass *getClassByName( const char *aName );
 
-  /** Fetches all classes with the named parent. */
+  /** Fetches all classes with the named parent. 
+   * @return List of all classes with the named parent.
+   */
   QList<CParsedClass> *getClassesByParent( const char *aName );
 
-  /** Fetches all clients of a named class. */
+  /** Fetches all clients of a named class. 
+   * @return List of all classes that are clients of the named class.
+   */
   QList<CParsedClass> *getClassClients( const char *aName );
 
-  /** Fetches all suppliers of a named class. */
+  /** Fetches all suppliers of a named class. 
+   * @return List of all classes that are suppliers of the named class.
+   */
   QList<CParsedClass> *getClassSuppliers( const char *aName );
 
-  /** Get all classes in sorted order. */
+  /** Get all classes in sorted order. 
+   * @return A list of all classes in alpabetical order. 
+   */
   QList<CParsedClass> *getSortedClasslist();
+
+  /** Get all classnames in sorted order.
+   * @return A list of all classnames in sorted order.
+   */
+  QStrList *getSortedClassNameList();
 
   /** Fetch all virtual methods, both implemented and not.
    * @param aName The class to fetch virtual methods for
@@ -92,7 +110,9 @@ public: // Public Methods
   /** Remove all parsed classes. */
   void wipeout();
 
-  /** Add a classdefintion. */
+  /** Add a classdefintion. 
+   * @param aClass Class to add.
+   */
   void addClass( CParsedClass *aClass );
 
   /** Add a global variable. */

@@ -42,13 +42,11 @@ CClassStore::CClassStore()
   classes.setAutoDelete( true );
 
   // Initialize the persistant class store.
+  globalStore.setPath( "/tmp"  );
   globalStore.setFilename( "classes.db" );
 
   // Open the store if it exists, else create it.
-  if( globalStore.exists() )
-    globalStore.open();
-  else
-    globalStore.create();
+  globalStore.open();
 }
 
 /*---------------------------------------- CClassStore::~CClassStore()
@@ -519,6 +517,32 @@ QList<CParsedClass> *CClassStore::getSortedClasslist()
        str = srted.next() )
   {
     retVal->append( getClassByName( str ) );
+  }
+
+  return retVal;
+}
+
+/*---------------------------- CClassStore::getSortedClassNameList()
+ * getSortedClassNameList()
+ *   Get all classnames in sorted order.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QStrList * The classnames.
+ *-----------------------------------------------------------------*/
+QStrList *CClassStore::getSortedClassNameList()
+{
+  QStrList * retVal = new QStrList();
+  
+  // Iterate over all classes in the store.
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+  {
+    // Only add non-subclasses.
+    if( !classIterator.current()->isSubClass() )
+      retVal->inSort( classIterator.current()->name );
   }
 
   return retVal;
