@@ -998,7 +998,7 @@ void CKDevelop::initMenuBar(){
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  //connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(classbrowser_popup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
 }
