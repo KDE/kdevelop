@@ -46,7 +46,8 @@
 	* Fixed: Bug 'TheCore()' caused, doing all the above! ;-) There
 	  was some kind of a race condition. Now there is a protocol to
 	  communicate correctly, it'll not happen any more.
-	
+	* Moved DCOP Interfaces into lib/Interfaces.
+
 2001-02-12 Omid Givi <omid@givi.nl>
 	* Added Project Options are shown if there is a project space
 	  already open. If not: sorry message.
