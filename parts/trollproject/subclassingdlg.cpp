@@ -38,9 +38,9 @@ SlotItem::SlotItem(QListView *parent,const QString &methodName,
 {
   setOn(true);
   m_methodName = methodName;
-  m_access = access == "" ? "public" : access;
-  m_specifier = specifier == "" ? "virtual" : specifier;
-  m_returnType = returnType == "" ? "void" : returnType;
+  m_access = access == "" ? (const QString) "public" : access;
+  m_specifier = specifier == "" ? (const QString) "virtual" : specifier;
+  m_returnType = returnType == "" ? (const QString) "void" : returnType;
   setText(0,m_methodName);
   setText(1,m_access);
   setText(2,m_specifier);
