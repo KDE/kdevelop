@@ -383,10 +383,6 @@ void QextMdiChildView::activate()
    }
    s_bActivateIsPending = TRUE;
 
-   if(!m_bFocusInEventIsPending) {
-      setFocus();
-   }
-
    // raise the view and push the taskbar button
    if(!m_bMainframesActivateViewIsPending) {
      emit focusInEventOccurs( this);
@@ -399,6 +395,9 @@ void QextMdiChildView::activate()
       return;   // nothing to do, we are the active childview, already
    }
    else {
+      if(!m_bFocusInEventIsPending) {
+         setFocus();
+      }
       qDebug("QextMdiChildView::activate() called!");
       emit activated(this);
    }

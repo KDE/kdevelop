@@ -131,6 +131,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
       // << "EDITNAME:" << pCurEditWidget->getName() <<"no action---:" << endl;
       QextMdiChildView* pMDICover = (QextMdiChildView*) pCurEditWidget->parentWidget();
       pMDICover->activate();
+      pCurEditWidget->setFocus();
       return;
     }
   }
@@ -167,22 +168,17 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
   if (!pCurEditWidget)
     return;
 
-  // debug(" toggle modify cur edit widget !\n");
-  // pCurEditWidget->toggleModified(info->modified);
-
   // If the caller wanted to be positioned at a particular place in the file
   // then they have supplied the line and col. Otherwise we use the
   // current info values (0 if new) for the placement.
   if (line != -1)
     pCurEditWidget->setCursorPosition(line, col);
-  // else
-  //  pCurEditWidget->setCursorPosition(info->cursor_line,info->cursor_col);
 
   pCurEditWidget->setName(filename);
-  // info->text = pCurEditWidget->text();
 
   QextMdiChildView* pMDICover = (QextMdiChildView*) pCurEditWidget->parentWidget();
   pMDICover->activate();
+  pCurEditWidget->setFocus();
 
 	qDebug("DocViewMan::doSwitchToFile: cursor-pos(line: %d col: %d)", line, col);
 }
