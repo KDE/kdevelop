@@ -1,5 +1,9 @@
-1999-02-18   Sandy Meier <smeier@rz.uni-potsdam.de>
+1999-02-18  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* replace some files in the base application
+	* now the main.cpp have also a template
+	* add the printbutton in the toolbar
 
+1999-02-18   Sandy Meier <smeier@rz.uni-potsdam.de>
 	*  commit some new patches (mostly i18n()) and an extended german translation by Martin Piskernig 
 	<martin.piskernig@stuwo.at>
 

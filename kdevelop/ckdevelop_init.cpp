@@ -639,6 +639,8 @@ void CKDevelop::initToolbar(){
 /*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save_all.xpm");
   toolBar()->insertButton(pix,ID_FILE_SAVE_ALL,true,i18n("Save All"));
 */
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/print.xpm");
+  toolBar()->insertButton(pix,ID_FILE_PRINT,true,i18n("Print"));
 
   QFrame *separatorLine= new QFrame(toolBar());
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);

@@ -1475,6 +1475,9 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
+  case ID_FILE_PRINT:
+    slotFilePrint();
+    break;
   case ID_EDIT_UNDO:
     slotEditUndo();
     break;

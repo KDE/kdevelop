@@ -27,8 +27,6 @@ $underDirectory = $processes{DIRECTORY} . $nameLittle;
 #create the projectdirectory 
 printflush (STDOUT, "change directory...\n");
 chdir ($processes{DIRECTORY});
-#printflush (STDOUT,"make projectdirectory...\n"); 
-#mkdir("$nameLittle",0777);
 $kdedirectory = $ENV{KDEDIR};
 $date = `date`;
 @time = localtime();
@@ -39,11 +37,6 @@ chdir ($overDirectory);
 #copy the file in the projectdirectory and unpacked it
 if ($processes{APPLICATION} eq "standard") {
   
-#  printflush (STDOUT,"copy standardapp to projectdirectory...\n");
-#  chdir ($kdedirectory);
-#  $sourceDir = $kdedirectory . "/share/apps/kdevelop/templates/normal.tar";
-#  $installDir = $overDirectory . "/normal.tar";
-#  copy ($sourceDir, $installDir);
   chdir ($overDirectory);
   printflush (STDOUT,"unzip file...\n");
   system ("gunzip normal.tar.gz");
@@ -56,21 +49,12 @@ elsif ($processes{APPLICATION} eq "mini") {
 
 
   chdir ($overDirectory);
-#  printflush (STDOUT,"unzip file...\n");
   system ("gunzip mini.tar.gz");
-
   printflush (STDOUT,"untar file...\n");
   system ("tar -xf mini.tar");
-#  for($i=0;$i!=1000000;$i++){
-#  }
   unlink "mini.tar";
 }
 elsif ($processes{APPLICATION} eq "terminal") {
-#  printflush (STDOUT,"copy terminalapp to projectdirectory...\n");
-#  chdir ($kdedirectory);
-#  $sourceDir = $kdedirectory . "/share/apps/kdevelop/templates/cpp.tar";
-#  $installDir = $overDirectory . "/cpp.tar";
-#  copy ($sourceDir, $installDir);
   chdir ($overDirectory);
   printflush (STDOUT,"unzip file...\n");
   system ("gunzip cpp.tar.gz");
@@ -210,6 +194,8 @@ if ($processes{APPLICATION} eq "standard") {
   replaceOldFile($word,$replace,$oldfile);
   $oldfile = $nameLittle . "view.cpp";
   replaceOldFile($word,$replace,$oldfile);
+  $oldfile = $nameLittle . "view.h";
+  replaceOldFile($word,$replace,$oldfile);
 }
 
 chdir ($underDirectory . "/docs/en");
@@ -320,6 +306,35 @@ if ($processes{USER} eq "no") {
 
 #if cpp-template was chosen in kAppWizard
 if ($processes{CPP} eq "yes") {
+  chdir ($homedirectory);
+  copy (".kde/share/apps/kdevelop/cpp", $underDirectory);
+  chdir ($underDirectory);
+  $oldfile = "cpp";
+  $word = "FILENAME";
+  $replace = "main.cpp";
+  replaceOldFile($word,$replace,$oldfile);
+  $word = "AUTHOR";
+  $replace = $processes{AUTHOR};
+  replaceOldFile($word,$replace,$oldfile);
+  $word = "EMAIL";
+  $replace = $processes{EMAIL};
+  replaceOldFile($word,$replace,$oldfile);
+  $word = "DATE";
+  $replace = $date;
+  replaceOldFile($word,$replace,$oldfile);
+  $word = "YEAR";
+  $replace = $year;
+  replaceOldFile($word,$replace,$oldfile);
+  $file = "main.cpp";
+  open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+  open (OUTPUT,">>cpp");
+  while ( defined ($line = <INPUT> )) {
+    print OUTPUT $line;
+  }
+  close (INPUT);
+  close (OUTPUT);
+  rename ("cpp" , $file);
+  unlink ("cpp");
   if ($processes{APPLICATION} ne "terminal") {
     #copying, rename and replace in the cpp-file
     chdir ($homedirectory);
