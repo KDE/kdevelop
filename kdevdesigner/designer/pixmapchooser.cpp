@@ -154,7 +154,7 @@ QPixmap qChoosePixmap( QWidget *parent, FormWindow *fw, const QPixmap &old, QStr
 	fd.setContentsPreview( pw, pw );
 	fd.setViewMode( QFileDialog::List );
 	fd.setPreviewMode( QFileDialog::Contents );
-	fd.setCaption( qApp->translate( "qChoosePixmap", "Choose a Pixmap..." ) );
+	fd.setCaption( qApp->translate( "qChoosePixmap", "Choose Pixmap" ) );
 	if ( fd.exec() == QDialog::Accepted ) {
 	    QPixmap pix( fd.selectedFile() );
 	    if ( fn )
@@ -165,7 +165,7 @@ QPixmap qChoosePixmap( QWidget *parent, FormWindow *fw, const QPixmap &old, QStr
         QStringList mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
         KFileDialog dlg(QString::null, mimetypes.join(" "), parent, "filedialog", true);
         dlg.setOperationMode( KFileDialog::Opening );
-        dlg.setCaption( qApp->translate( "qChoosePixmap", "Choose a Pixmap..." ) );
+        dlg.setCaption( qApp->translate( "qChoosePixmap", "Choose Pixmap" ) );
         dlg.setMode( KFile::File );
         KImageFilePreview *ip = new KImageFilePreview( &dlg );
         dlg.setPreviewWidget( ip );

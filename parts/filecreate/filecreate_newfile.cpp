@@ -35,7 +35,7 @@ namespace FileCreate {
   {
       QVBoxLayout* lay = new QVBoxLayout( plainPage(), 5, 5 );
 
-      lay->addWidget( new QLabel( i18n("<b>New file creation</b>"), plainPage() ) );
+      lay->addWidget( new QLabel( i18n("<b>New File Creation</b>"), plainPage() ) );
 
       QGridLayout* grid = new QGridLayout(lay, 2, 2, 5 );
       QLabel * l = new QLabel(i18n("&Directory:"), plainPage() );

@@ -1049,14 +1049,14 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
 	 i->rtti() == HierarchyItem::VarParent ) {
 	menu.insertItem( SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()), i18n( "Edit..." ), EDIT );
     } else
-	menu.insertItem( SmallIcon( "designer_filenew.png" , KDevDesignerPartFactory::instance()), i18n( "New" ), NEW );
+	menu.insertItem( SmallIcon( "designer_filenew.png" , KDevDesignerPartFactory::instance()), i18n( "New..." ), NEW );
     if ( i->rtti() == HierarchyItem::DefinitionParent || i->rtti() == HierarchyItem::Variable ||
 	 i->rtti() == HierarchyItem::Definition ) {
 	menu.insertItem( SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()), i18n( "Edit..." ), EDIT );
     }
     if ( i->rtti() == HierarchyItem::Function || i->rtti() == HierarchyItem::Slot ) {
 	if ( formWindow->project()->isCpp() )
-	    menu.insertItem( SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()), i18n( "Properties..." ), PROPS );
+	    menu.insertItem( SmallIcon( "designer_editslots.png" , KDevDesignerPartFactory::instance()), i18n( "Properties" ), PROPS );
 	if ( MetaDataBase::hasEditor( formWindow->project()->language() ) )
 	    menu.insertItem( i18n( "Goto Implementation" ), GOIMPL );
 	insertDelete = TRUE;
@@ -1065,7 +1065,7 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
 	 i->rtti() == HierarchyItem::Function || i->rtti() == HierarchyItem::Slot ||
 	 i->rtti() == HierarchyItem::Definition ) {
 	menu.insertSeparator();
-	menu.insertItem( SmallIcon( "designer_editcut.png" , KDevDesignerPartFactory::instance()), i18n( "Delete..." ), DEL );
+	menu.insertItem( SmallIcon( "designer_editcut.png" , KDevDesignerPartFactory::instance()), i18n( "Delete" ), DEL );
     }
     popupOpen = TRUE;
     int res = menu.exec( pos );

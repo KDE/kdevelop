@@ -113,7 +113,7 @@ void ProjectManager::createActions( KActionCollection* ac )
   m_closeProjectAction->setToolTip(i18n("Close project"));
   m_closeProjectAction->setWhatsThis(i18n("<b>Close project</b><p>Closes the current project."));
 
-  m_projectOptionsAction = new KAction(i18n("Project &Options..."), "configure", 0,
+  m_projectOptionsAction = new KAction(i18n("Project &Options"), "configure", 0,
                 this, SLOT(slotProjectOptions()),
                 ac, "project_options" );
   m_projectOptionsAction->setToolTip(i18n("Project options"));
