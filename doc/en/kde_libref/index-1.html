@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDE Library Reference Guide: Introduction</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-2.html">Next</A>
+ Previous <A HREF="index.html#toc1">Table of Contents</A>
+</P>
+<H3><A NAME="s1">1. Introduction</A></H3>
+
+<P>
+<H3><A NAME="ss1.1">1.1 What KDE provides</A>
+</H3>
+
+<P>The K Desktop Environment offers an easy way for application designers to equip their products with an intuitive way of user
+interaction. It provides all means to solve common tasks using a set of library classes that extend the facilities of the Qt toolkit.
+This allows for a unique look and feel to applications as well as interaction with other programs and the window manager. This handbook
+provides an introduction to the usage of the KDE libraries, shipped with KDE, to enable developers to find
+easy solutions for common programming issues. It also explains why certain techniques and classes should be used when creating applications
+that are targeting the K Desktop Environment.
+<P>Basically, KDE offers a set of standards that allow a unique look and usage of applications that should be watched when designing
+programs. A lot of tasks are done automatically, such as:
+<P>
+<UL>
+<LI>Session Management</LI>
+<LI>Standard keyboard accelerator configuration</LI>
+<LI>Font, Color and Style changing</LI>
+<LI>Theme support (KDE 1.1.2 and higher)</LI>
+<LI>Internationalization</LI>
+</UL>
+<P>Therefore, theses issues only have to be mentioned in their functionality for complete information. Application developers only have to
+care about what their program is intended to do and where KDE can help. There, KDE offers user interfaces that extend the Qt toolkit
+where necessary. If both libraries offer similar solutions, KDE developers should (in most cases) use the methods provided by the KDE
+libraries.
+<P>KDE offers a set of widgets that can be used for creating application specific dialogs and views. Examples are
+<UL>
+<LI>KSeparator, offering a common separator line</LI>
+<LI>KColorButton, offering a push button displaying a color</LI>
+</UL>
+<P>Normally, applications ask the user to select various values. Here, the libraries provide easy means to get these values by complex
+widgets that are ready to use and are already known to the user by the KDE desktop, such as:
+<P>
+<UL>
+<LI>File dialogs,</LI>
+<LI>Color dialogs,</LI>
+<LI>Font dialogs,</LI>
+<LI>Keyboard configuration dialogs</LI>
+</UL>
+<P>These should be used wherever a user setting is required as it simplifies the programmer's work, extends the application's facilities
+dramatically and provide a common look.
+<P>The Qt library is addressed in this handbook as far as it offers solutions not provided by KDE, but as information about event handling
+and the signal/slot mechanism is hard to find for developers, this turned out to be a special chapter in this handbook.
+<P>
+<H3><A NAME="ss1.2">1.2 Notes about KDE 2 / Qt 2.0</A>
+</H3>
+
+<P>As you may have guessed, this handbook <B>explicitely</B> adresses <B>KDE 1.x</B> development using the <B>Qt 1.4x</B> libraries. You may
+ask "Hey, Qt's 2.0 version is released already, why not talk only about that ?" - but there are several issues that result in a need
+for a KDE 1.x reference.
+<P>The issues that lead to this are first of all that developers should consider the KDE 1.x series the stable desktop and development
+environment. As long as KDE 2 (which will introduce Qt 2.0 as well) is under development, programmers will have a hard time to follow
+the changes, which means a high time-consuming search for information and, if you experience bugs, error searching. There are projects
+covered by the KDE core team that ensure the KDE 2 libraries will work - the KDE itself as well as the supplying applications and the
+KOffice suite. Nevertheless, developers who are starting or developing projects for KDE now have the choice and those that want to rely
+on the stable environment will also want to port their applications to KDE 2 to make it usable on one hand and to implement
+improvements that are introduced by new library functions. Therefore information about where KDE and Qt differ from the 1.x series in
+future releases have been included as footnotes as far as changes are known to the author at the time of this writing and doesn't
+claim to be in any way complete. Explanations of classes that are still in the KDE 1.x API but are already removed in the current KDE 2
+API are left out to avoid any trouble when porting to KDE 2.
+<P>In further versions of this handbook KDE 2 development will be addressed completely and the according chapters revisited for the
+changes this implies.
+<P>
+<P>
+<H3><A NAME="ss1.3">1.3 About this Handbook</A>
+</H3>
+
+<P>This handbook has been written in order to give developers a guideline to the usage of the KDE 1.x libraries in general in conjunction
+with the Qt 1.4x library on X11 desktop systems. It cannot replace any programming knowledge that is needed for C++ programming and
+covers the Qt classes where necessary. You should in any case look at the page "Structure Overview" of the Qt online reference which
+contains a general guidance to the Qt library by class usage in general. This handbook tries to follow this structure to complete your
+knowledge about where KDE classes are appropriate and explains the technique of KDE application development by describing class usage
+on topics.
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-2.html">Next</A>
+ Previous <A HREF="index.html#toc1">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -1,0 +1,35 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (X11; I; Linux 2.0.36 i586) [Netscape]">
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
+&nbsp;
+<h1>
+ERROR:</h1>
+&nbsp;
+<h4>
+The C/C++ Reference is not installed.&nbsp; Please get the package "c_cpp_reference-1.0.tar.gz"
+from one of KDevelop's ftp mirrors. For a list of those web sites look at:</h4>
+
+<h4>
+<a href="http://www.kdevelop.org">www.kdevelop.org</a></h4>
+
+<h4>
+Do these steps to install the reference:</h4>
+
+<OL>
+<LI>If you have got an already installed old version of KDevelop, it is recommented to remove (as root) a
+probably earlier installed reference that is not working correctly.
+You can find those 2 sub-directories C and CPLUSPLUS in share/doc/HTML/your-language/kdevelop/reference
+of the global KDE directory and in the appropriate English sub-directory. Delete both ones.</LI>
+<LI>Now extract the new downloaded file with: "tar xvzf c_cpp_reference-1.0.tar.gz"</LI>
+<LI>Go to the new created directory: "cd c_cpp_reference-1.0"</LI>
+<LI>Now make the package ready for installation: "./configure; make"</LI>
+<LI>Install the package (as root): "make install"</LI>
+<LI>Restart KDevelop</LI>
+</OL>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>KDE Application Tutorials: Defining the Documents</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-9.html">Next</A>
+ <A HREF="index-7.html">Previous</A>
+ <A HREF="index.html#toc8">Table of Contents</A>
+</P>
+<H3><A NAME="s8">8. Defining the Documents</A></H3>
+
+<P>
+<P>The first step when creating an application based on the Document-View model should always be to think what kind of data the
+application has to manage. This decides how the view class will look like but especially how the document clas will read and write data
+to and from files and offer methods to manipulate the data. As <EM>KScribble</EM> will be a simple drawing application that operates on
+graphical data, we will use the Qt class <CODE>QPixmap</CODE> for storing our paintings while it is edited. <CODE>QPixmap</CODE> also offers
+simple methods to read and write pictures into files, so the serialization of the document data is done in just two lines, one for
+reading and one for writing. Further, we need to define a pen that draws into a document, set it's width and color and make it
+available for the view class to retrieve the pen - actually you want the view offering the drawing methods, but the document as the
+central element for all views has to hold the pen originally, because two views of the same document would otherwise use different
+pens!
+<P>Therefore to define how our document class should work, we will add one instance of <CODE>QPixmap</CODE>, one of <CODE>QPen</CODE> and edit the
+methods <CODE>newDocument()</CODE>, <CODE>openDocument()</CODE> and <CODE>saveDocument()</CODE>.
+<P>
+<H3><A NAME="ss8.1">8.1 Adding the Instances</A>
+</H3>
+
+<P>
+<P>Open the file <CODE>kscribbledoc.h</CODE> by selecting it in one of the fileviewers or by a click on the classviewer over the class
+<CODE>KScribbleDoc</CODE>. Then add the lines marked with -> from the following code snippet:
+<P>
+<P>
+<HR>
+<PRE>
+->  #include &lt;qpixmap.h>
+->  #include &lt;qpen.h>
+
+    class KScribbleDoc
+    {
+
+->      protected:
+
+->        QPen currentPen(){ return pen;};      
+                
+->              int penWidth()
+->                      { return pen.width(); }
+
+      public slots:
+        void updateAllViews(KScribbleView *sender);
+        
+        protected:
+        
+->              QPixmap buffer;
+        
+      private:
+->              QPen pen;
+        /** the modified flag of the current document */
+        bool modified;
+</PRE>
+<HR>
+<P>As you see, we added pen and buffer as well as <CODE>currentPen()</CODE> and <CODE>penWidth()</CODE>. As pen is declared private, we offer a
+possibility to retrive the pen as well as the pen width. As these are already implemented within the classdeclaration, we don't have to
+add them to the implementation file, where we're turning to now.
+<P>
+<H3><A NAME="ss8.2">8.2 Initialization of the Document</A>
+</H3>
+
+<P>
+<P>Select the method <CODE>newDocument()</CODE> in the <CODE>KScribbleDoc</CODE> class to jump to the method declaration. Here, we're only adding
+one line, marked with the arrow:
+<HR>
+<PRE>
+  kscribbledoc.cpp
+
+  bool KScribbleDoc::newDocument()
+  {
+    /////////////////////////////////////////////////
+    // TODO: Add your document initialization code here
+->  pen=QPen( Qt::black, 3 );
+    /////////////////////////////////////////////////
+    modified=false;
+    return true;
+  }
+</PRE>
+<HR>
+<P>This initializes the pen with the color black and width of 3 pixels; the <CODE>QPen</CODE> class has some more constructors, but this one lasts our
+needs here.
+<P>
+<H3><A NAME="ss8.3">8.3 Implementing the Serialization</A>
+</H3>
+
+<P>
+<P>What is left to do is to define how to open and save our pictures. This is done in the according methods:
+<P>
+<HR>
+<PRE>
+    bool KScribbleDoc::openDocument(const QString &amp;filename, const char *format /*=0*/)
+    {
+
+        QFile f( filename );
+->     //if ( !f.open( IO_ReadOnly ) )
+->     //       return false;
+     /////////////////////////////////////////////////
+     // TODO: Add your document opening code here
+->     if(!buffer.load( filename, "PNG" ))
+->      return false;
+     /////////////////////////////////////////////////
+->     //f.close();
+
+
+    bool KScribbleDoc::saveDocument(const QString &amp;filename, const char *format /*=0*/)
+    {
+      QFile f( filename );
+->     // if ( !f.open( IO_WriteOnly ) )
+->     //       return false;
+
+      /////////////////////////////////////////////////
+      // TODO: Add your document saving code here
+->      if(!buffer.save( filename, "PNG" ))
+->              return false;
+      /////////////////////////////////////////////////
+
+->      //f.close();
+</PRE>
+<HR>
+<P>Add the lines marked with the arrow again to your code. What we did here is to comment out the passages where the file
+<CODE>filename</CODE> is opened, because that is done automatically by the load and save methods of <CODE>QPixmap</CODE>, which we add instead. Other
+documents may open a file and read in its contents such as text lines or whatever, so the <CODE>QFile</CODE> methods are already present in the
+codeframe. As <CODE>save()</CODE> and <CODE>load()</CODE> return a boolean value if the operation was successful, we're returning false if not,
+so the rest of the framework gets a return value and can give out warnings if the operation was not successful.
+The <CODE>load()</CODE> and <CODE>save()</CODE> methods now are already provided in <CODE>QPixmap</CODE>. They require the filename and the format as
+argument; the source framework on the other hand <B>does not</B> call the document methods with the format yet. If only one format is
+used, it lasts to set the format here. other methods could detect the format for example- but we will turn to this later. For now,
+we're using "PNG" as format; see <CODE>QImageIO</CODE> for more details about the image formats that can be opened.
+<P>Now we're already finished defining our document structure. The <CODE>QPixmap</CODE> buffer serves us as a buffer storing the original picture
+contents while we're working on it, the pen is a valid pen for all views connected to the document. Note that the initialization of the
+pen is done in <CODE>newDocument()</CODE>. This method is always called after the constructor within the framework internally, so you
+should add document instances initializations there as we did with the pen.
+<P>In the next chapter we will turn to the view class to define how the view shall cooperate with the user as well as how it accesses the
+document- and then we'll be ready to paint !
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-9.html">Next</A>
+ <A HREF="index-7.html">Previous</A>
+ <A HREF="index.html#toc8">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

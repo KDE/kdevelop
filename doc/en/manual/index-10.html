@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The User Manual to KDevelop: The Class Browser</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-11.html">Next</A>
+ <A HREF="index-9.html">Previous</A>
+ <A HREF="index.html#toc10">Table of Contents</A>
+</P>
+<H3><A NAME="The Class Browser"></A> <A NAME="s10">10. The Class Browser</A></H3>
+
+<P>
+<H3><A NAME="ss10.1">10.1 The Classviewer</A>
+</H3>
+
+<P>
+<!--
+classbrowser
+-->
+
+The KDevelop Classviewer is one of the most useful and important tools that the IDE provides a developer for managing his project
+sources. When a project is loaded, a class parser reads all project sources for functions, classes etc., then displays the results in
+the CV treeview. This chapter shows you how to use the Classviewer and the provided functionality and how it can improve your work.
+<P>Classes and their methods can also be accessed by the browser toolbar. There, the left combo selects the class; the right
+lets you choose the methods of the selected class. When you select a method, the classbrowser will automatically bring you to the
+implementation file and sets the cursor to the method. Finally, the class-assistant button on the right of the method combo will bring
+you to the declaration of the method on a click; on another click to the definition. The delayed popup menu, displayed by the
+down-arrow on the button, offers additional functionality that is also available in the classviewer's context menus, such as:
+<P>
+<UL>
+<LI>Goto Declaration: browses to the declaration of the method</LI>
+<LI>Goto Definition: browses to the definition of the method</LI>
+<LI>Goto Class Declaration: browses to the class declaration</LI>
+<LI>New Class: opens the New Class dialog to construct a new class</LI>
+<LI>Add Method: adds a method to the selected class</LI>
+<LI>Add Attribute: adds an attribute to the selected class</LI>
+<LI>Show graphical classview: Opens the graphical inheritance tree</LI>
+</UL>
+<P>
+<H4>Available Objects</H4>
+
+<P>By available objects, we describe a term that means that C++ code can be seen as a collection of objects- classes, their members,
+global functions and the like. The classtree displays these objects logically and orders them by character, so they are easy to locate
+in the tree as well by their according icon. Therefore the classtree contains a "Classes" and a "Globals" folder. Thereby the "Classes"
+folder generally contains the project's classes; if your project contains subfolders to manage your sourcefiles, these are also
+displayed by their original folder name and contain all classes that are stored in the files located in the subfolder.
+<P>Further, when popping up a class, the classtree displays the class contents by separating methods and attributes. As these can have
+attributes as well like public, private and protected, these are displayed by modified icons as well. You see that a class displayed in
+the Class Browser contains all the objects that are present in the class declaration.
+<P>Now, classes are a very common thing when programming in C++ and will contain most of the code. But applications also contain objects
+that have a "Global" appearance to the program. These would be structs, functions etc. Especially the <CODE>main()</CODE> function appears in
+every application and you need to modify it in one or the other way sometimes. To access these objects, the Classviewer provides the
+"Globals" folder, containing subfolders for the following object types:
+<UL>
+<LI>Structs</LI>
+<LI>Functions</LI>
+<LI>Variables</LI>
+</UL>
+<P>As the icons displaying these items are similar to those used in the class-viewer, their meaning is easy to guess and to remember by
+the programmer.
+<P>Finally, it can be stated that the classviewer displays your project graphically by their objects related to their appearance in the
+code. In the following section you will learn how to use the classviewer and it's tools in conjunction with your code.
+<P>
+<H4>Browsing Object Declarations and Implementations</H4>
+
+<P>The Classviewer's best strength is providing a fast and good access to his code by the code's contents independent of the location
+within files. Therefore, selections by a mouse click will result in the following actions:
+<P>
+<UL>
+<LI><B>On a classname:</B>  Switches to the class declaration</LI>
+<LI><B>On a class method:</B> Switches to the method implementation</LI>
+<LI><B>On a class attribute:</B> Switches to the attribute's declaration in the class declaration</LI>
+<LI><B>On a struct:</B> Switches to the struct's declaration</LI>
+<LI><B>On a global function:</B> Switches to the function's implementation</LI>
+</UL>
+<P>Now, this provides you the most needed access towards code objects. Apparently, it may be needed to change a method's header, resulting
+that you have to change it's declaration in the class as well as the implementation. The classviewer supports this by providing
+right-button context menus over items. On a method or function, this means that you can select where to go:
+<P>
+<UL>
+<LI><B>Go to definition:</B> Switches to the implementation- this is the default for a left click as described above</LI>
+<LI><B>Go to declaration:</B> Switches to the declaration of the method or function.</LI>
+</UL>
+<P>By this behavior, the Class Browser offers you access to every place you have to go for coding your C++ application.
+<P>The following sections give you a description of the other tools that the Class Browser offers- you will find them very useful when
+working with large projects as they enhance working object-orientated on C++ programs.
+<P>
+<H3><A NAME="ss10.2">10.2 The Classtools</A>
+</H3>
+
+<P>
+<!--
+classtools
+-->
+
+The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes.
+The classviewer displays all objects by their occurrence in the code, but you sometimes want to get more information about
+classes without having to look inside the code. Therefore, the classtool dialogs are specialized on displaying specific class
+attributes.
+<P>The classtool dialog is invoked by the popup menu over a class in the classviewer. Select "Classtool", and the dialog will appear.
+To get informed about a class, select the class in the combo box on top. Then the buttons in the toolbar provide functions that give
+you specific trees for your class. These are:
+<P>
+<DL>
+<DT><B> Parents:</B><DD><P>The parents of the selected class, which means the class it inherits. This is useful for multiple inheritance as well as to see why a
+class behaves in one or the other way, e.g. for dialogs your parent class could be <CODE>QWidget</CODE> or <CODE>QDialog</CODE>.
+<DT><B>Children:</B><DD><P>Displays the children classes that inherit the current class.
+<DT><B>Clients:</B><DD><P>Classes that make use of the selected class by an attribute in their class declaration
+<DT><B>Suppliers:</B><DD><P>The suppliers that give attributes to the selected class.
+<DT><B>Attributes:</B><DD><P>The attributes of the class by their name
+<DT><B>Methods:</B><DD><P>The Methods of the selected class
+</DL>
+
+Further, the selection of the attribute public, protected, private or all shows Attributes, Methods and Virtual Methods by their
+attribute value.
+<P>
+<H3><A NAME="ss10.3">10.3 Managing Classes</A>
+</H3>
+
+<P>The Class Browser additionally allows adding methods and attributes directly by dialogs. This means you don't have to type the
+classdeclaration and the implementation header yourself. After adding a method, you only have to set the formal parameters to the
+implementation header and, if the method requires an attribute, to the declaration.
+<P><B>&raquo; How to add a method to a class</B>
+<P>
+<OL>
+<LI>select the class you want to add a method</LI>
+<LI>press the right mouse button; the popup menu appears</LI>
+<LI>select "Add member function".</LI>
+<LI>the "Add member function" dialog appears.</LI>
+<LI>insert the type, declaration and documentation for the method</LI>
+<LI>specify the access and the modifiers for the method</LI>
+<LI>press OK to exit the dialog</LI>
+</OL>
+<P>For adding a variable, this is the same action, just with selecting "Add member variable" in the popup menu.
+<P>The difference between the actions of these dialogs is that the adding of a variable will add the variable to the classdeclaration,
+the adding of a method will add the method's declaration and the method's implementation header to the sources. As the classviewer
+directly updates himself, you have a direct access to the new method implementation, so you only have to fill out the code for the
+actual purpose of the method.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-11.html">Next</A>
+ <A HREF="index-9.html">Previous</A>
+ <A HREF="index.html#toc10">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
