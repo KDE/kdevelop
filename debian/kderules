@@ -79,7 +79,9 @@ if (@ARGV && $ARGV[0] eq 'echodirs') {
   print STDOUT "export kde_partsdir=/usr/lib/parts\n";
   print STDOUT "export includedir=/usr/include/kde\n";
   print STDOUT "export libdir=/usr/lib\n";
-
+  print STDOUT "export QTDIR=/usr/lib/qt2beta\n";
+  print STDOUT "export micodir=/usr/lib\n";
+  print STDOUT "export pythondir=/usr/lib\n";
   exit
 }
 
@@ -99,8 +101,8 @@ sub docwanted {
         local $dir = $File::Find::dir;
         $dir =~ s/^$origPwd//;
 	if ($dir =~ /debian/) { return 0 ; }
-	/debian/ or /INSTALL/ and return 0 ;
-	/COPYING/ and return ;
+	if ( ( /debian/ ) or ( /^INSTALL$/ ) or ( /^LICENSE$/ ) 
+	or ( /^ARTISTIC$/ ) or ( /^COPYING$/ ) ) { return 0 ; } 
 	if ( (! /CVS/ )
 	and ( /^[A-Z]*$/ or /^README$/ or /^ChangeLog$/ or /lsm$/ or /SWALLOW/
 	or /^TODO$/ or /^kdedoc$/ or /Header/ or /Documentation/ or /Tutorial/ ) )
@@ -127,6 +129,11 @@ if (! -d "debian/tmp/usr/doc/$package") {
 	mkdir("-p", "debian/tmp/usr/doc/$package") ;
 }
 
+if (! -d "debian/tmp/usr/share/pixmaps") {
+       mkdir("-p", "debian/tmp/usr/share/pixmaps");
+}
+
+
 if (@docs) {
        chdir($origPwd);
        cp( "-aP", @docs, "debian/tmp/usr/doc/$package") ;
@@ -134,8 +141,11 @@ if (@docs) {
 	  mv("debian/tmp/usr/doc/$package/ChangeLog", 
 		"debian/tmp/usr/doc/$package/changelog");
 	}
+	if (-f "debian/tmp/usr/doc/$package/CHANGES") {
+	  mv("debian/tmp/usr/doc/$package/CHANGES",
+		"debian/tmp/usr/doc/$package/changelog");
+	}
 }
-
 
 # Create doc-base file
 
@@ -144,7 +154,7 @@ if (-d "debian/doc-base") {
                   mkdir("-p", "debian/tmp/usr/share/doc-base");
         }
         while (<debian/doc-base/*>) {
-        	  cp( "-a", $_, "debian/tmp/usr/share/doc-base")
+                  cp( "-a", $_, "debian/tmp/usr/share/doc-base")
                     unless (-d $_);
         }
 #        cp( "-a", <debian/doc-base/*>, "debian/tmp/usr/share/doc-base") ;
@@ -234,7 +244,8 @@ foreach $file (@lnkfiles) {
 		if (! -f "debian/tmp/usr/share/icons/$icon" ) {
                    $icon="";
 	        } else {
-	  	  $icon="/usr/share/icons/" . $icon ;
+		  system("/usr/bin/X11/convert -map /usr/X11R6/include/X11/pixmaps/cmap.xpm debian/tmp/usr/share/icons/$icon debian/tmp/usr/share/pixmaps/$icon");
+	  	  $icon="/usr/share/pixmaps/" . $icon ;
                }
 	}
 	($kdelnk=$file) =~ s/^.*tmp// ;
