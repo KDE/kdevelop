@@ -86,6 +86,10 @@ void scopeOfNode( AST* ast, QStringList& scope )
 	FunctionDefinitionAST* funDef = static_cast<FunctionDefinitionAST*>( ast );
 	DeclaratorAST* d = funDef->initDeclarator()->declarator();
 	
+	// hotfix for bug #68726
+	if ( !d->declaratorId() )
+		break;
+	
 	QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId()->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
 	while( nameIt.current() ){
