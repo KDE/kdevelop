@@ -23,9 +23,10 @@
 #include "qeditor_view.h"
 #include "qeditor.h"
 #include "paragdata.h"
-#include "highlightingconfigpage.h"
 #include "qsourcecolorizer.h"
 #include "qeditor_indenter.h"
+#include "highlightingconfigpage.h"
+#include "generalconfigpage.h"
 
 #include <kinstance.h>
 #include <kaction.h>
@@ -218,7 +219,7 @@ KAboutData *QEditorPart::createAboutData()
 void QEditorPart::readConfig()
 {
     KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "QEditor Part" );
+    config->setGroup( "General" );
     readConfig( config );
     config->sync();
 }
@@ -226,24 +227,18 @@ void QEditorPart::readConfig()
 void QEditorPart::writeConfig()
 {
     KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "QEditor Part" );
+    config->setGroup( "General" );
     writeConfig( config );
     config->sync();
 }
 
 void QEditorPart::readConfig( KConfig* config )
 {
-    m_currentView->setMarkerWidgetVisible( config->readBoolEntry( "ShowMarkerWidget", false ) );
-    m_currentView->setLineNumberWidgetVisible( config->readBoolEntry( "ShowLineNumberWidget", true ) );
-    m_currentView->setLevelWidgetVisible( config->readBoolEntry( "ShowLevelWidget", true ) );
     m_currentView->setTabStop( config->readNumEntry( "TabStop", 8 ) );
 }
 
 void QEditorPart::writeConfig( KConfig* config )
 {
-    config->writeEntry( "ShowMarkerWidget", m_currentView->isMarkerWidgetVisible() );
-    config->writeEntry( "ShowLineNumberWidget", m_currentView->isLineNumberWidgetVisible() );
-    config->writeEntry( "ShowLevelWidget", m_currentView->isLevelWidgetVisible() );
     config->writeEntry( "TabStop", m_currentView->tabStop() );
 }
 
@@ -767,6 +762,11 @@ void QEditorPart::configDialog()
                     KDialogBase::Ok, 0,
                     "qeditor options dialog");
 
+    GeneralConfigPage* generalPage = new GeneralConfigPage( dlg.addVBoxPage(i18n("General")) );
+    generalPage->setPart( this );
+    connect( &dlg, SIGNAL(okClicked()), generalPage, SLOT(accept()) );
+
+
     HighlightingConfigPage* hlPage = new HighlightingConfigPage( dlg.addVBoxPage(i18n("Highlighting")) );
     hlPage->setEditor( this );
     connect( &dlg, SIGNAL(okClicked()), hlPage, SLOT(accept()) );
@@ -778,7 +778,7 @@ void QEditorPart::configDialog()
     emit configWidget( &dlg );
 
     if( dlg.exec() ){
-        m_currentView->editor()->configChanged();
+        m_currentView->configChanged();
     }
 }
 
@@ -790,4 +790,74 @@ QSourceColorizer* QEditorPart::colorizer() const
 QEditorIndenter* QEditorPart::indenter() const
 {
     return dynamic_cast<QEditorIndenter*>( m_currentView->editor()->document()->indent() );
+}
+
+bool QEditorPart::wordWrap() const
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    return config->readBoolEntry( "WordWrap", FALSE );
+}
+
+void QEditorPart::setWordWrap( bool enabled )
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    config->writeEntry( "WordWrap", enabled );
+}
+
+bool QEditorPart::parenthesesMatching() const
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    return config->readBoolEntry( "ParenthesesMatching", TRUE );
+}
+
+void QEditorPart::setParenthesesMatching( bool enabled )
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    config->writeEntry( "ParenthesesMatching", enabled );
+}
+
+bool QEditorPart::showMarkers() const
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    return config->readBoolEntry( "ShowMarkers", FALSE );
+}
+
+void QEditorPart::setShowMarkers( bool enabled )
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    config->writeEntry( "ShowMarkers", enabled );
+}
+
+bool QEditorPart::showLineNumber() const
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    return config->readBoolEntry( "ShowLineNumber", TRUE );
+}
+
+void QEditorPart::setShowLineNumber( bool enabled )
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    config->writeEntry( "ShowLineNumber", enabled );
+}
+
+bool QEditorPart::showCodeFoldingMarkers() const
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    return config->readBoolEntry( "ShowCodeFoldingMarkers", FALSE );
+}
+
+void QEditorPart::setShowCodeFoldingMarkers( bool enabled )
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "General" );
+    config->writeEntry( "ShowCodeFoldingMarkers", enabled );
 }

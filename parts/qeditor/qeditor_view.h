@@ -76,6 +76,7 @@ public:
     void setTabStop( int );
 
 public slots:
+    void configChanged();
     void gotoLine();
     void setLanguage( const QString& );
     void doFind();

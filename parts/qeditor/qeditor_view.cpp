@@ -96,12 +96,22 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
 	    this,SIGNAL(completionDone(KTextEditor::CompletionEntry)));
     connect(m_pCodeCompletion,SIGNAL(filterInsertString(KTextEditor::CompletionEntry*,QString *)),
 	    this,SIGNAL(filterInsertString(KTextEditor::CompletionEntry*,QString *)) );
+
+    configChanged();
 }
 
 QEditorView::~QEditorView()
 {
     delete( m_pCodeCompletion );
     m_pCodeCompletion = 0;
+}
+
+void QEditorView::configChanged()
+{
+    setMarkerWidgetVisible( m_document->showMarkers() );
+    setLineNumberWidgetVisible( m_document->showLineNumber() );
+    setLevelWidgetVisible( m_document->showCodeFoldingMarkers() );
+    m_editor->configChanged();
 }
 
 

@@ -95,6 +95,23 @@ public:
 
     static KAboutData *createAboutData();
 
+
+    // general options
+    bool wordWrap() const;
+    void setWordWrap( bool );
+
+    bool parenthesesMatching() const;
+    void setParenthesesMatching( bool );
+
+    bool showMarkers() const;
+    void setShowMarkers( bool );
+
+    bool showLineNumber() const;
+    void setShowLineNumber( bool );
+
+    bool showCodeFoldingMarkers() const;
+    void setShowCodeFoldingMarkers( bool );
+
 public slots:
     void readConfig();
     void writeConfig();
