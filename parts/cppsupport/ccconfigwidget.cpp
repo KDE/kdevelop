@@ -86,8 +86,8 @@ void CCConfigWidget::initFTTab( )
     interface_suffix->setText(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/interfacesuffix", ".h"));
     implementation_suffix->setText(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/implementationsuffix", ".cpp"));
     lowercase_filenames->setChecked(DomUtil::readBoolEntry(dom, "/cppsupportpart/filetemplates/lowercasefilenames", true));
-    interface_url->fileDialog()->setURL(KURL(*m_pPart->project()->projectDirectory()));
-    implementation_url->fileDialog()->setURL(KURL(*m_pPart->project()->projectDirectory()));
+    interface_url->fileDialog()->setURL(KURL(m_pPart->project()->projectDirectory()));
+    implementation_url->fileDialog()->setURL(KURL(m_pPart->project()->projectDirectory()));
 }
     
 CCConfigWidget::~CCConfigWidget( )

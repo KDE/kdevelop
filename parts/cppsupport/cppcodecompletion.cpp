@@ -1239,7 +1239,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 
 	    CppBaseClass<Tag> tagInfo( tag );
 	    type = typeOf( tagInfo.baseClass(), container );
-	    if( type )
+	    if( !type.isNull() )
 		return type;
         }
     }
@@ -1293,7 +1293,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	    ParsedClassContainer* c = findContainer( p->name() );
 	    if( c != 0 ){
 		type = typeOf( name, c );
-		if( type )
+		if( !type.isNull() )
 		    return type;
 	    }
 	}

@@ -820,7 +820,7 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 	    node->getStartPosition( &startLine, &startColumn );
 	    node->getEndPosition( &endLine, &endColumn );
 
-	    if( node->text() )
+	    if( !node->text().isNull() )
 	        textHint = node->text();
 	    else
 	        textHint = m_activeEditor->textLine( startLine ).simplifyWhiteSpace();
@@ -876,7 +876,7 @@ void CppSupportPart::slotMakeMember()
 	    scopeOfNode( decl, scope );
 
 	    QString scopeStr = scope.join( "::" );
-	    if( scopeStr )
+	    if( !scopeStr.isEmpty() )
 	        scopeStr += "::";
 
 	    QString declStr = declaratorToString( declarator, scopeStr ).simplifyWhiteSpace();

@@ -1446,9 +1446,9 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
     {
       if (!it.current()->text(0).isEmpty())
 //        if ((!childClass) || (it.current()->text(0) != "QWidget"))
-          includeBaseHeader += (includeBaseHeader.isEmpty() ? QString(""): QString("\n")) + "#include " +
+          includeBaseHeader += (includeBaseHeader.isEmpty() ? QString(""): QString("\n")) + QString::fromLatin1( "#include " ) +
             (it.current()->text(2).toInt() == 0 ? QString("<") : QString("\""))
-            + it.current()->text(3) +
+            + it.current()->text(3)
             + (it.current()->text(2).toInt() == 0 ? QString(">") : QString("\""));
       ++it;
     }

@@ -200,7 +200,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     QString scopeStr = scopeOfDeclarator( d );
     ParsedClassContainer* cl = findContainer( scopeStr, 0, true );
-    if( cl == 0 && scopeStr )
+    if( cl == 0 && !scopeStr.isNull() )
         return;   // class not found!!!!!
 
 

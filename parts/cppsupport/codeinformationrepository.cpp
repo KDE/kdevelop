@@ -279,7 +279,7 @@ QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryLis
 		}
 
 		QString comment = tag.attribute("description").toString();
-		if (comment)
+		if (!comment.isNull())
 			entry.comment = comment;
 		else
 			entry.comment = "no documentation available!";

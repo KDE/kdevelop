@@ -214,7 +214,7 @@ void AdaProjectPart::listOfFiles(QStringList &result, QString path)
     {
 	++it;
 	
-        if ((fileInfo->isDir()) && (!fileInfo->filePath() == path))
+        if (fileInfo->isDir() && fileInfo->filePath() != path)
         {
             kdDebug() << "entering dir " << fileInfo->dirPath() << endl;
             listOfFiles(result, fileInfo->dirPath());
