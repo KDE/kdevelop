@@ -156,6 +156,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
 	    Macro m = m_driver->macros()[ ide ];
 	    if( m.hasArguments() ){
+                int endIde = currentPosition();
+
 		readWhiteSpaces();
 		if( currentChar() == '(' ){
 		    nextChar();
@@ -180,7 +182,14 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                         // valid macro
                         nextChar();
                     }
-		}
+		} else {
+		    tk = Token( Token_identifier, start, endIde - start );
+		    tk.setStartPosition( svLine, svColumn );
+		    tk.setEndPosition( svLine, svColumn + (endIde - start) );
+
+                    m_startLine = false;
+                    return;
+                }
 	    }
 
 	    int argsEndAtLine = currentLine();
