@@ -142,18 +142,16 @@ void VarTree::slotRightButtonClicked( QListViewItem* selectedItem,
                                       const QPoint &,
                                       int)
 {
+  if (!selectedItem)
+    return;
+
   setSelected (selectedItem, true);    // Need to select this item.
   if (selectedItem->parent())
   {
-    QListViewItem* item = findRoot(selectedItem);
     KPopupMenu popup(selectedItem->text(VarNameCol));
-#warning FIXME
-/*
-    if (dynamic_cast<WatchRoot*>(item))
-    {
+    TrimmableItem* item = static_cast<TrimmableItem*>(findRoot(selectedItem));
+    if (item && item->isA("WatchRoot"))
       popup.insertItem( i18n("Delete watch variable"), this, SLOT(slotRemoveWatchVariable()) );
-    }
-*/
     popup.insertItem( i18n("Toggle watchpoint"), this, SLOT(slotToggleWatchpoint()) );
     popup.exec(QCursor::pos());
   }
@@ -163,11 +161,9 @@ void VarTree::slotRightButtonClicked( QListViewItem* selectedItem,
 
 void VarTree::slotToggleWatchpoint()
 {
-#warning FIXME
-/*
-  if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
-    emit toggleWatchpoint(item->fullName());
-*/
+  TrimmableItem* item = static_cast<TrimmableItem*>(currentItem());
+  if (item && item->isA("VarItem"))
+    emit toggleWatchpoint((static_cast<VarItem*>(item))->fullName());
 }
 
 // **************************************************************************
@@ -193,20 +189,21 @@ void VarTree::emitSetLocalViewState(bool localsOn, int frameNo)
   // all other frames to determine whether we still need the locals.
   if (!localsOn)
   {
-    QListViewItem* sibling = firstChild();
+    TrimmableItem* sibling = static_cast<TrimmableItem*>(firstChild());
     while (sibling)
     {
-#warning FIXME
-/*
-      FrameRoot* frame = dynamic_cast<FrameRoot*> (sibling);
-      if (frame && frame->isOpen())
+      if (sibling->isA("FrameRoot"))
       {
-        localsOn = true;
-        break;
-      }
-*/
 
-      sibling = sibling->nextSibling();
+        FrameRoot* frame = static_cast<FrameRoot*> (sibling);
+        if (frame->isOpen())
+        {
+          localsOn = true;
+          break;
+        }
+      }
+
+      sibling = static_cast<TrimmableItem*>(sibling->nextSibling());
     }
   }
 
@@ -228,20 +225,20 @@ QListViewItem* VarTree::findRoot(QListViewItem* item) const
 
 FrameRoot* VarTree::findFrame(int frameNo) const
 {
-  QListViewItem* sibling = firstChild();
+  TrimmableItem* sibling = static_cast<TrimmableItem*> (firstChild());
 
   // frames only exist on th top level so we only need to
   // check the siblings
   while (sibling)
   {
-#warning FIXME
-/*
+    if (sibling->isA("FrameRoot"))
+    {
+      FrameRoot* frame = static_cast<FrameRoot*> (sibling);
+      if (frame->getFrameNo() == frameNo)
+        return frame;
+    }
 
-    FrameRoot* frame = dynamic_cast<FrameRoot*> (sibling);
-    if (frame && frame->getFrameNo() == frameNo)
-      return frame;
-*/
-    sibling = sibling->nextSibling();
+    sibling = static_cast<TrimmableItem*> (sibling->nextSibling());
   }
 
   return 0;
@@ -251,16 +248,14 @@ FrameRoot* VarTree::findFrame(int frameNo) const
 
 WatchRoot* VarTree::findWatch()
 {
-  QListViewItem* sibling = firstChild();
+  TrimmableItem* sibling = static_cast<TrimmableItem*>(firstChild());
 
   while (sibling)
   {
-#warning FIXME
-/*
-    if (WatchRoot* watch = dynamic_cast<WatchRoot*> (sibling))
-      return watch;
-*/
-    sibling = sibling->nextSibling();
+    if (sibling->isA("WatchRoot"))
+      return static_cast<WatchRoot*>(sibling);
+
+    sibling = static_cast<TrimmableItem*>(sibling->nextSibling());
   }
 
   return new WatchRoot(this);
@@ -270,26 +265,19 @@ WatchRoot* VarTree::findWatch()
 
 void VarTree::trim()
 {
-  QListViewItem* child = firstChild();
+  TrimmableItem* child = static_cast<TrimmableItem*>(firstChild());
   while (child)
   {
-    QListViewItem* nextChild = child->nextSibling();
+    TrimmableItem* nextChild = static_cast<TrimmableItem*>(child->nextSibling());
 
     // don't trim the watch root
-#warning FIXME
-/*
-
-    if (!(dynamic_cast<WatchRoot*> (child)))
+    if (!child->isA("WatchRoot"))
     {
-      if (TrimmableItem* item = dynamic_cast<TrimmableItem*> (child))
-      {
-        if (item->isActive())
-          item->trim();
-        else
-          delete item;
-      }
+      if (child->isActive())
+        child->trim();
+      else
+        delete child;
     }
-*/
     child = nextChild;
   }
 }
@@ -298,18 +286,17 @@ void VarTree::trim()
 
 void VarTree::trimExcessFrames()
 {
-  QListViewItem* child = firstChild();
+  TrimmableItem* child = static_cast<TrimmableItem*> (firstChild());
   while (child)
   {
-    QListViewItem* nextChild = child->nextSibling();
-#warning FIXME
-/*
-    if (FrameRoot* frame = dynamic_cast<FrameRoot*> (child))
+    TrimmableItem* nextChild = static_cast<TrimmableItem*> (child->nextSibling());
+    if (child->isA("FrameRoot"))
     {
+      FrameRoot* frame = static_cast<FrameRoot*> (child);
       if (frame->getFrameNo() != 0)
         delete frame;
     }
-*/
+
     child = nextChild;
   }
 }
@@ -376,22 +363,15 @@ QListViewItem* TrimmableItem::lastChild() const
 TrimmableItem* TrimmableItem::findMatch
                 (const QString& match, DataType type) const
 {
-  QListViewItem* child = firstChild();
+  TrimmableItem* child = static_cast<TrimmableItem*> (firstChild());
 
-  // Check the siblings on this branch
+ // Check the siblings on this branch
   while (child)
   {
-    if (child->text(VarNameCol) == match)
-    {
-#warning FIXME
-/*
-      if (TrimmableItem* item = dynamic_cast<TrimmableItem*> (child))
-        if (item->getDataType() == type)
-          return item;
-*/
-    }
+    if ( (child->text(VarNameCol) == match) && (child->getDataType() == type))
+      return child;
 
-    child = child->nextSibling();
+    child = static_cast<TrimmableItem*> (child->nextSibling());
   }
 
   return 0;
@@ -401,24 +381,18 @@ TrimmableItem* TrimmableItem::findMatch
 
 void TrimmableItem::trim()
 {
-  QListViewItem* child = firstChild();
+  TrimmableItem* child = static_cast<TrimmableItem*> (firstChild());
   while (child)
   {
-    QListViewItem* nextChild = child->nextSibling();
-#warning FIXME
-/*
-    if (TrimmableItem* item = dynamic_cast<TrimmableItem*>(child))
+    TrimmableItem* nextChild = static_cast<TrimmableItem*> (child->nextSibling());
+    // Never trim a branch if we are waiting on data to arrive.
+    if (!isOpen() || getDataType() != typePointer)
     {
-      // Never trim a branch if we are waiting on data to arrive.
-      if (!isOpen() || getDataType() != typePointer)
-      {
-        if (item->isActive())
-          item->trim();      // recurse
-        else
-          delete item;
-      }
+      if (child->isActive())
+        child->trim();      // recurse
+      else
+        delete child;
     }
-*/
     child = nextChild;
   }
 }
@@ -482,13 +456,14 @@ VarItem::~VarItem()
 QString VarItem::varPath() const
 {
   QString varPath("");
-  const VarItem* item = this;
+  const TrimmableItem* item = this;
 
   // This stops at the root item (FrameRoot or WatchRoot)
-#warning FIXME
-/*
-  while ((item = dynamic_cast<const VarItem*> (item->parent())))
+  while ((item = static_cast<const TrimmableItem*> (item->parent())))
   {
+    if (!item->isA("VarItem"))
+      break;
+
     if (item->getDataType() != typeArray)
     {
       if (*(item->text(VarNameCol)) != '<')
@@ -498,7 +473,6 @@ QString VarItem::varPath() const
       }
     }
   }
-*/
   return varPath;
 }
 
@@ -733,15 +707,14 @@ WatchRoot::~WatchRoot()
 
 void WatchRoot::requestWatchVars()
 {
-#warning FIXME
-/*
   for (QListViewItem* child = firstChild(); child; child = child->nextSibling())
-    if (VarItem* varItem = dynamic_cast<VarItem*>(child))
-      ((VarTree*)listView())->emitExpandItem(varItem);
-*/
+  {
+    TrimmableItem* item = static_cast<TrimmableItem*>(child);
+    if (item->isA("VarItem"))
+      ((VarTree*)listView())->emitExpandItem(static_cast<VarItem*>(item));
+  }
 }
 
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
-

@@ -133,6 +133,10 @@ public:
   virtual QString getCache();
   virtual QString key ( int column, bool ascending ) const;
 
+  virtual bool isA ( const char * className ) const
+                  { return strncmp(className, "TrimmableItem", 13) == 0; }
+//  virtual bool inherits ( const char * ) const;
+
 private:
   int activeFlag_;
 };
@@ -160,6 +164,9 @@ public:
 
   void setOpen(bool open);
   void setText (int column, const char* text);
+
+  virtual bool isA ( const char * className ) const
+                  { return strncmp(className, "VarItem", 7) == 0; }
 
 private:
   void checkForRequests();
@@ -192,6 +199,9 @@ public:
 
   bool needLocals() const                     { return needLocals_; }
 
+  virtual bool isA ( const char * className) const
+                  { return strncmp(className, "FrameRoot", 9) == 0; }
+
 private:
   bool    needLocals_;
   int     frameNo_;
@@ -210,6 +220,8 @@ public:
   virtual ~WatchRoot();
   
   void requestWatchVars();
+  virtual bool isA ( const char * className) const
+                  { return strncmp(className, "WatchRoot", 9) == 0; }
 };
 
 /***************************************************************************/
