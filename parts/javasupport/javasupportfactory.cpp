@@ -16,7 +16,6 @@
 #include <kstddirs.h>
 
 #include "javasupportfactory.h"
-#include "javasupportpart.h"
 #include "classparser.h"
 
 #include <qtjava/QtSupport.h>
