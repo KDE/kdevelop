@@ -25,9 +25,8 @@
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
 
-#include "persistantclassstore.h"
-/*#include "parsedclass.h"
-#include "parsedmethod.h"*/
+#include "parsedclass.h"
+/*#include "parsedmethod.h"*/
 
 #include "kdevcore.h"
 

@@ -79,6 +79,7 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	  delete lastClass;
 	  lastClass=0;
 	} else {
+          m_classStore->globalScope()->addClass(lastClass);
 	  m_classStore->addClass(lastClass);
 	}
       } else if (createMemberRe.match(line)) {
@@ -105,9 +106,9 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	  if (!old)
 	    lastClass->addMethod(method);
 	} else {
-	  ParsedMethod *old = m_classStore->globalContainer.getMethod(method);
+	  ParsedMethod *old = m_classStore->globalScope()->getMethod(method);
 	  if (!old)
-	    m_classStore->globalContainer.addMethod(method);
+	    m_classStore->globalScope()->addMethod(method);
 	}
       }
       else if (varre.match(line)) {

@@ -16,14 +16,19 @@
 #include <qpopupmenu.h>
 #include <qstringlist.h>
 #include <qtl.h>
+#include <kdebug.h>
+#include <klocale.h>
 #include <ktoolbar.h>
+
+#include "kdevplugin.h"
+#include "kdevlanguagesupport.h"
 #include "classstore.h"
 
 
-ClassListAction::ClassListAction(ClassStore *store, const QString &text, int accel,
+ClassListAction::ClassListAction(KDevPlugin *part, const QString &text, int accel,
                                  const QObject *receiver, const char *slot,
                                  QObject *parent, const char *name)
-    : KSelectAction(text, accel, receiver, slot, parent, name), m_store(store)
+    : KSelectAction(text, accel, receiver, slot, parent, name), m_part(part)
 {
     setComboWidth(120);
 }
@@ -37,11 +42,39 @@ void ClassListAction::setCurrentItem(const QString &item)
 }
 
 
+void ClassListAction::setCurrentClassName(const QString &name)
+{
+    setCurrentItem(m_part->languageSupport()->formatClassName(name));
+}
+
+
+QString ClassListAction::currentClassName()
+{
+    QString text = KSelectAction::currentText();
+    if (text == i18n("(Globals)"))
+        return QString::null;
+        
+    return m_part->languageSupport()->unformatClassName(text);
+}
+
+
 void ClassListAction::refresh()
 {
-    QStringList list = m_store->getSortedClassNameList();
+    ClassStore *store = m_part->classStore();
+    KDevLanguageSupport *ls = m_part->languageSupport();
+    
+    QStringList rawList = store->getSortedClassNameList();
 
-    int idx = list.findIndex(currentText());
+    QStringList list;
+    list << i18n("(Globals)");
+
+    QStringList::ConstIterator it;
+    for (it = rawList.begin(); it != rawList.end(); ++it) {
+        kdDebug() << (*it) << endl;
+        list << ls->formatClassName(*it);
+    }
+
+    int idx = list.findIndex(KSelectAction::currentText());
     if (idx == -1 && !list.isEmpty())
         idx = 0;
     setItems(list);
@@ -50,10 +83,10 @@ void ClassListAction::refresh()
 }
 
 
-MethodListAction::MethodListAction(ClassStore *store, const QString &text, int accel,
+MethodListAction::MethodListAction(KDevPlugin *part, const QString &text, int accel,
                                    const QObject *receiver, const char *slot,
                                    QObject *parent, const char *name)
-    : KSelectAction(text, accel, receiver, slot, parent, name), m_store(store)
+    : KSelectAction(text, accel, receiver, slot, parent, name), m_part(part)
 {
     setComboWidth(240);
 }
@@ -64,7 +97,17 @@ void MethodListAction::refresh(const QString &className)
     ParsedClass *pc;
     QStringList list;
 
-    if (!className.isEmpty() && (pc = m_store->getClassByName(className)) != 0) {
+    ClassStore *store = m_part->classStore();
+
+    if (className.isEmpty()) {
+        // Global functions
+        ParsedScopeContainer *psc = store->globalScope();
+        for (psc->methodIterator.toFirst(); psc->methodIterator.current(); ++psc->methodIterator) {
+            QString str = psc->methodIterator.current()->asString();
+            list << str;
+        }
+    } else if ((pc = store->getClassByName(className)) != 0) {
+        // Methods of the given class
         for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
             QString str = pc->methodIterator.current()->asString();
             list << str;
@@ -73,13 +116,20 @@ void MethodListAction::refresh(const QString &className)
             QString str = pc->slotIterator.current()->asString();
             list << str;
         }
-        qHeapSort(list);
     }
 
-    int idx = list.findIndex(currentText());
+    qHeapSort(list);
+    
+    int idx = list.findIndex(KSelectAction::currentText());
     setItems(list);
     if (idx != -1)
         setCurrentItem(idx);
+}
+
+
+QString MethodListAction::currentMethodName()
+{
+    return KSelectAction::currentText();
 }
 
 

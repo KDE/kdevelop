@@ -17,10 +17,8 @@
  ***************************************************************************/
 
 #include <iostream.h>
-//#include <qdatastream.h>
 #include <kdebug.h>
 #include "parsedparent.h"
-#include "programmingbycontract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -60,12 +58,12 @@ ParsedParent::~ParsedParent()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ParsedParent::setName( const QString &aName )
+void ParsedParent::setName(const QString &name)
 {
-    REQUIRE( "Valid name", aName != NULL );
-    REQUIRE( "Valid name length", aName.length() > 0 );
+    if (name.isEmpty())
+        kdDebug(9000) << "ParsedParent::setName() with empty name" << endl;
     
-    _name = aName;
+    _name = name;
 }
 
 /*----------------------------------------- ParsedClass::setExport()

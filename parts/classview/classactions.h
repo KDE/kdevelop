@@ -16,33 +16,38 @@
 
 #include <kaction.h>
 
-class ClassStore;
+class KDevPlugin;
 
 
 class ClassListAction : public KSelectAction
 {
 public:
-    ClassListAction(ClassStore *store, const QString &text, int accel,
-                    const QObject *receiver, const char *slot,
-                    QObject *parent, const char *name);
-    void setCurrentItem(const QString &item);
+    ClassListAction( KDevPlugin *part, const QString &text, int accel,
+                     const QObject *receiver, const char *slot,
+                     QObject *parent, const char *name );
+    void setCurrentClassName(const QString &name);
+    QString currentClassName();
     void refresh();
     
 private:
-    ClassStore *m_store;
+    QString currentText(); // only here for preventing its public use
+    void setCurrentItem(const QString &item);
+    KDevPlugin *m_part;
 };
 
 
 class MethodListAction : public KSelectAction
 {
 public:
-    MethodListAction(ClassStore *store, const QString &text, int accel,
-                     const QObject *receiver, const char *slot,
-                     QObject *parent, const char *name);
+    MethodListAction( KDevPlugin *part, const QString &text, int accel,
+                      const QObject *receiver, const char *slot,
+                      QObject *parent, const char *name );
     void refresh(const QString &className);
-
+    QString currentMethodName();
+    
 private:
-    ClassStore *m_store;
+    QString currentText(); // only here for preventing its public use
+    KDevPlugin *m_part;
 };
 
 
@@ -52,8 +57,8 @@ class DelayedPopupAction : public KAction
 
 public:
     DelayedPopupAction( const QString &text, const QString &pix, int accel,
-                            QObject *receiver, const char *slot,
-                            QObject *parent, const char* name );
+                        QObject *receiver, const char *slot,
+                        QObject *parent, const char* name );
     ~DelayedPopupAction();
     
     virtual int plug(QWidget *widget, int index=-1);

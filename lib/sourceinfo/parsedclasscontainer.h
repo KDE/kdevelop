@@ -93,10 +93,9 @@ public:
     void removeClass(const QString &aName);
 
     /** Clears the internal state. */
-    void clear(bool bAutodel=true);
+    void clear();
 
     friend QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg);
-    friend QTextStream& operator << ( QTextStream& s, const ParsedClassContainer& arg );
 };
 
 

@@ -144,6 +144,8 @@ void ClassTreeScopeItem::init()
 {
     setExpandable(true);
     setPixmap(0, UserIcon("CVnamespace", KIcon::DefaultState, ClassViewFactory::instance()));
+    if (m_item->name().isEmpty())
+        setText(0, i18n("Global"));
 }
 
 

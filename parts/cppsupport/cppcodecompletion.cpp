@@ -38,6 +38,8 @@
 #include "kdevpartcontroller.h"
 #include "kdevtoplevel.h"
 #include "kdevcore.h"
+#include "classstore.h"
+#include "parsedscopecontainer.h"
 
 
 static QValueList<KTextEditor::CompletionEntry>
@@ -790,7 +792,8 @@ CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
 {
     QValueList< KTextEditor::CompletionEntry > entryList;
 
-    ParsedScopeContainer* pScope = &m_pCCStore->globalContainer;
+    // FIXME: is this right for namespaces?
+    ParsedScopeContainer* pScope = m_pCCStore->globalScope();
     if( pScope ){
 
         ParsedStruct* pStruct = pScope->getStructByName( strStruct );

@@ -151,7 +151,7 @@ void EditorProxy::popupAboutToShow()
     QString linestr = editIface->textLine(line);
     int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
     int endPos = startPos;
-    while (startPos > 0 && linestr[startPos].isLetter())
+    while (startPos >= 0 && linestr[startPos].isLetter())
         startPos--;
     while (endPos < (int)linestr.length() && linestr[endPos].isLetter())
         endPos++;

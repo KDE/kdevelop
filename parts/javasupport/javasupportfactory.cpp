@@ -1,6 +1,4 @@
 /***************************************************************************
- *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2001 by Richard Dale                                    *
  *   Richard_Dale@tipitina.demon.co.uk                                     *
  *                                                                         *

@@ -64,12 +64,11 @@ ParsedArgument::~ParsedArgument()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ParsedArgument::setName( const QString &aName )
+void ParsedArgument::setName( const QString &name)
 {
-    REQUIRE( "Valid name", aName != NULL );
-    REQUIRE( "Valid name length", aName.length() > 0 );
+    REQUIRE( "Valid name length", name.length() > 0 );
     
-    _name = aName.stripWhiteSpace();
+    _name = name.stripWhiteSpace();
 }
 
 
@@ -83,12 +82,12 @@ void ParsedArgument::setName( const QString &aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ParsedArgument::setType( const QString &aType )
+void ParsedArgument::setType(const QString &type)
 {
-    REQUIRE( "Valid type", aType != NULL );
-    REQUIRE( "Valid type length", aType.length() > 0 );
+    if (type.isEmpty())
+        kdDebug(9000) << "ParsedArgument::setType() with empty type for " << name() << endl;
     
-    _type = aType.stripWhiteSpace();
+    _type = type.stripWhiteSpace();
 }
 
 /*------------------------------------ ParsedArgument::setNamePos()
@@ -192,7 +191,7 @@ QDataStream &operator>>(QDataStream &s, ParsedArgument &arg)
     s >> type >> name >> namePos;
     arg.setType( type );
 
-	arg.setName( name );
+    arg.setName( name );
     arg.setNamePos( namePos );
 
     return s;

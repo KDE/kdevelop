@@ -51,9 +51,9 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
     method->setDefinedInFile(fileName);
     method->setDefinedOnLine(lineNum);
             
-    ParsedMethod *old = store->globalContainer.getMethod(method);
+    ParsedMethod *old = store->globalScope()->getMethod(method);
     if (!old)
-        store->globalContainer.addMethod(method);
+        store->globalScope()->addMethod(method);
 }
 
 

@@ -31,6 +31,25 @@ public:
      * and which not.
      */
     virtual Features features();
+    /** 
+     * Returns a typical filter list for the support language
+     * should be configurable in the languagesupport dialog
+     * example "*.cpp,*.h,*.c";
+     * used in grepview?, adding files
+     */
+    virtual QStringList fileFilters();
+
+    /**
+     * Formats a canonicalized class path as used by the class store
+     * to the human-readable convention. For example, the C++ support
+     * part formats the string "KParts.Part" into "KParts::Part".
+     */
+    virtual QString formatClassName(const QString &name);
+    /**
+     * The opposite of formatClassName().
+     */
+    virtual QString unformatClassName(const QString &name);
+    
     /**
      * Opens a "New class" dialog and adds the configured
      * class to the sources.
@@ -48,13 +67,6 @@ public:
      */
     virtual void addAttribute(const QString &className);
 
-    /** 
-     * returns a typical filterlist  for the support language
-     * should be configurable in the languagesupport dialog
-     * example "*.cpp,*.h,*.c";
-     * used in grepview?, adding files
-     */
-    virtual QStringList fileFilters();
 
 signals:
     /**

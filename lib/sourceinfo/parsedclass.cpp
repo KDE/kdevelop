@@ -50,8 +50,7 @@ ParsedClass::ParsedClass()
     parents.setAutoDelete( true );
     signalList.setAutoDelete( true );
     slotList.setAutoDelete( true );
-    //signalMaps.setAutoDelete( true );
-    classes.setAutoDelete( false );
+    //    classes.setAutoDelete( false );
 
     _isSubClass = false;
 }
@@ -90,7 +89,6 @@ ParsedClass::~ParsedClass()
  *-----------------------------------------------------------------*/
 void ParsedClass::removeWithReferences( const QString &aFile )
 {
-    REQUIRE( "Valid filename", aFile != NULL );
     REQUIRE( "Valid filename length", aFile.length() > 0 );
 
     ParsedMethod *aMethod = NULL;

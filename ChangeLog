@@ -1,3 +1,13 @@
+2002-05-15  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Big cleanup in class store, see my mail in kdevelop-devel
+	* Fixed persistant class store to not store
+	  namespaced classes twice
+	* Fixed ClassStore::removeWithReferences() to delete
+	  classes from all namespaces, not only the global one
+	* Class combo boxes can show global functions now
+	* Class combo boxes handle namespaced classes now
+
 2002-05-13  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Added .mm and .M source file extensions for Objective-C++

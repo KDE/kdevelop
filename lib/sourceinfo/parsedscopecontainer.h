@@ -94,10 +94,9 @@ public:
     void clear();
     
     /** Outputs this object to stdout. */
-    void out();
+    virtual void out();
 
     friend QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg);
-    friend QTextStream& operator << ( QTextStream& s, const ParsedScopeContainer& arg );
 };
 
 

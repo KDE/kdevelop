@@ -193,9 +193,9 @@ void PerlSupportPart::parse(const QString &fileName)
             sub->setDefinedInFile(fileName);
             sub->setDefinedOnLine(lineNo);
             
-            ParsedMethod *old = classStore()->globalContainer.getMethod(sub);
+            ParsedMethod *old = classStore()->globalScope()->getMethod(sub);
             if (!old)
-                classStore()->globalContainer.addMethod(sub);
+                classStore()->globalScope()->addMethod(sub);
         }
         ++lineNo;
     }

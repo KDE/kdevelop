@@ -82,7 +82,8 @@ static struct {
 
 static const int templatescount = sizeof templatesdata/(sizeof templatesdata[0]);
 
-CCloneFunctionDlg::CCloneFunctionDlg( ClassStore * store,const QString& currentClass, QWidget *parent, const char *name )
+CCloneFunctionDlg::CCloneFunctionDlg( ClassStore *store, const QString& currentClass,
+                                      QWidget *parent, const char *name )
   : QDialog(parent,name,true),
     classname(currentClass),
     classtree(store)
@@ -110,14 +111,12 @@ CCloneFunctionDlg::CCloneFunctionDlg( ClassStore * store,const QString& currentC
 //  methods->setAutoResize(TRUE);
 
   // Buttons
-  okBtn = new QPushButton( this, i18n("OK"));
+  okBtn = new QPushButton( i18n("OK"), this );
   okBtn->setDefault( TRUE );
-  okBtn->setText( i18n( "OK" ) );
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 
-  cancelBtn = new QPushButton( this, i18n("Cancel"));
-  cancelBtn->setText( i18n("Cancel") );
+  cancelBtn = new QPushButton( i18n("Cancel"), this );
 
   // Layout
   LayoutButton->addWidget( okBtn );

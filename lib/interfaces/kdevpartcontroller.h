@@ -14,7 +14,7 @@ public:
 
   KDevPartController(QWidget *parent);
 
-  virtual void setServiceType(const QString &serviceType) = 0;
+  virtual void setEncoding(const QString &serviceType) = 0;
   virtual void editDocument(const KURL &url, int lineNum=-1) = 0;
   virtual void showDocument(const KURL &url, const QString &context = QString::null) = 0;
 

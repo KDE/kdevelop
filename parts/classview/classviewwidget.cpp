@@ -114,7 +114,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
     
     clear();
     
-    ParsedScopeContainer *scope = &m_part->classStore()->globalContainer;
+    ParsedScopeContainer *scope = m_part->classStore()->globalScope();
     
     ClassTreeItem *ilastItem, *lastItem = 0;
 
@@ -194,10 +194,14 @@ void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
     clear();
 
     ClassTreeItem *lastItem = 0;
-    
-    // Global namespace?
-    
-    QValueList<ParsedScopeContainer*> scopeList = m_part->classStore()->globalContainer.getSortedScopeList();
+
+    // Global namespace
+    lastItem = new ClassTreeScopeItem(this, lastItem, m_part->classStore()->globalScope());
+    if (fromScratch)
+        lastItem->setOpen(true);
+
+    // Namespaces just below the global one
+    QValueList<ParsedScopeContainer*> scopeList = m_part->classStore()->globalScope()->getSortedScopeList();
     QValueList<ParsedScopeContainer*>::ConstIterator it;
     for (it = scopeList.begin(); it != scopeList.end(); ++it) {
         lastItem = new ClassTreeScopeItem(this, lastItem, *it);

@@ -56,9 +56,6 @@ public:
     /** Returns this arguments as a string. */
     QString toString();
     
-    /** Returns a string made for persistant storage. */
-    QString asPersistantString();
-    
     /** Outputs this object to stdout */
     void out();
 

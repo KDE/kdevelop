@@ -53,10 +53,10 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
 
     topLevel()->embedSelectView(m_classtree, i18n("Classes"));
 
-    classes_action = new ClassListAction(classStore(), i18n("Classes"), 0,
+    classes_action = new ClassListAction(this, i18n("Classes"), 0,
                                          this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
-    methods_action = new MethodListAction(classStore(), i18n("Methods"), 0,
+    methods_action = new MethodListAction(this, i18n("Methods"), 0,
                                           this, SLOT(selectedMethod()),
                                           actionCollection(), "method_combo");
     popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0,
@@ -139,7 +139,7 @@ void ClassViewPart::projectClosed()
 void ClassViewPart::updatedSourceInfo()
 {
     classes_action->refresh();
-    methods_action->refresh(classes_action->currentText());
+    methods_action->refresh(classes_action->currentClassName());
 }
 
 
@@ -174,9 +174,7 @@ void ClassViewPart::unregisterHierarchyDialog(HierarchyDialog *dlg)
  */
 void ClassViewPart::selectedClass()
 {
-    QString className = classes_action->currentText();
-    if (className.isEmpty())
-        return;
+    QString className = classes_action->currentClassName();
     
     kdDebug(9003) << "Class selected: " << className << endl;
     methods_action->refresh(className);
@@ -188,15 +186,12 @@ void ClassViewPart::selectedClass()
  */
 void ClassViewPart::selectedMethod()
 {
-    QString className = classes_action->currentText();
-    QString methodName = methods_action->currentText();
-    if (className.isEmpty() || methodName.isEmpty())
-        return;
+    QString className = classes_action->currentClassName();
+    QString methodName = methods_action->currentMethodName();
 
-    kdDebug(9003) << "Method selected: "
-                  << className << "::" << methodName << endl;
+    kdDebug(9003) << "ClassViewPart::selectedMethod" << endl;
     m_decl_or_impl = true;
-    gotoImplementation(className, methodName, PublicMethod);
+    gotoImplementation(className, methodName);
 }
 
 
@@ -205,20 +200,16 @@ void ClassViewPart::selectedMethod()
  */
 void ClassViewPart::switchedDeclImpl()
 {
-    QString className = classes_action->currentText();
-    QString methodName = methods_action->currentText();
+    QString className = classes_action->currentClassName();
+    QString methodName = methods_action->currentMethodName();
 
     kdDebug(9003) << "ClassViewPart::switchedDeclImpl" << endl;
     if (m_decl_or_impl) {
         m_decl_or_impl = false;
-        gotoDeclaration(className, methodName,
-                        methodName.isEmpty()? Class : PublicMethod);
+        gotoDeclaration(className, methodName);
     } else {
         m_decl_or_impl = true;
-        if (methodName.isEmpty())
-            gotoDeclaration(className, QString::null, Class);
-        else
-            gotoImplementation(className, methodName, PublicMethod);
+        gotoImplementation(className, methodName);
     }
 }
 
@@ -238,11 +229,10 @@ void ClassViewPart::selectedViewHierarchy()
  */
 void ClassViewPart::selectedGotoDeclaration()
 {
-    QString className = classes_action->currentText();
-    QString methodName = methods_action->currentText();
-    
-    gotoDeclaration(className, methodName,
-                    methodName.isEmpty()? Class : PublicMethod);
+    QString className = classes_action->currentClassName();
+    QString methodName = methods_action->currentMethodName();
+
+    gotoDeclaration(className, methodName);
 }
 
 
@@ -251,9 +241,9 @@ void ClassViewPart::selectedGotoDeclaration()
  */
 void ClassViewPart::selectedGotoClassDeclaration()
 {
-    QString className = classes_action->currentText();
-    
-    gotoDeclaration(className, QString::null, Class);
+    QString className = classes_action->currentClassName();
+
+    gotoDeclaration(className, QString::null);
 }
 
 
@@ -262,13 +252,10 @@ void ClassViewPart::selectedGotoClassDeclaration()
  */
 void ClassViewPart::selectedGotoImplementation()
 {
-    QString className = classes_action->currentText();
-    QString methodName = methods_action->currentText();
+    QString className = classes_action->currentClassName();
+    QString methodName = methods_action->currentMethodName();
 
-    if (methodName.isEmpty())
-        gotoDeclaration(className, QString::null, Class);
-    else
-        gotoImplementation(className, methodName, PublicMethod);
+    gotoImplementation(className, methodName);
 }
 
 
@@ -288,7 +275,7 @@ void ClassViewPart::selectedAddClass()
 void ClassViewPart::selectedAddMethod()
 {
     if (languageSupport())
-        languageSupport()->addMethod(classes_action->currentText());
+        languageSupport()->addMethod(classes_action->currentClassName());
 }
 
 
@@ -298,7 +285,7 @@ void ClassViewPart::selectedAddMethod()
 void ClassViewPart::selectedAddAttribute()
 {
     if (languageSupport())
-        languageSupport()->addAttribute(classes_action->currentText());
+        languageSupport()->addAttribute(classes_action->currentClassName());
 }
 
 
@@ -317,89 +304,52 @@ ParsedClass *ClassViewPart::getClass(const QString &className)
     kdDebug(9003) << "ClassViewPart::getClass " << className << endl;
     ParsedClass *pc = classStore()->getClassByName(className);
     if (pc && !pc->isSubClass())
-        classes_action->setCurrentItem(className);
+        classes_action->setCurrentClassName(className);
     
     return pc;
 }
 
 
-void ClassViewPart::gotoDeclaration(const QString &className,
-                                    const QString &memberName,
-                                    ItemType type)
+void ClassViewPart::gotoDeclaration(const QString &className, const QString &methodName)
 {
-    kdDebug(9003) << "ClassViewPart::gotoDeclaration " << className << "::" << memberName << endl;
-    
+    kdDebug(9003) << "ClassViewPart::gotoDeclaration " << className << "::" << methodName << endl;
+
     QString toFile;
     int toLine = -1;
     
-    ParsedClass *pc = getClass(className);
-    ParsedStruct *ps = 0;
-    ParsedAttribute *pa = 0;
-    
-    switch(type) {
-    case Class:
-        if (pc) {
+    if (className.isEmpty()) {
+        // Global function
+        ParsedMethod *pm = classStore()->globalScope()->getMethodByNameAndArg(methodName);
+        if (!pm)
+            return;
+        
+        toFile = pm->declaredInFile();
+        toLine = pm->declaredOnLine();
+    } else {
+        // Either the class itself or a member function
+        ParsedClass *pc = getClass(className);
+        if (!pc)
+            return;
+        
+        if (methodName.isEmpty()) {
+            // Class itself
             toFile = pc->declaredInFile();
             toLine = pc->declaredOnLine();
+        } else {
+            // Method of the class
+            ParsedMethod *pm = pc->getMethodByNameAndArg(methodName);
+            if (!pm)
+                pm = pc->getSlotByNameAndArg(methodName);
+            if (!pm)
+                pm = pc->getSignalByNameAndArg(methodName);
+            if (!pm)
+                return;
+            
+            toFile = pm->declaredInFile();
+            toLine = pm->declaredOnLine();
         }
-        break;
-    case Struct:
-        if (pc)
-            ps = pc->getStructByName(memberName);
-        else
-            ps = classStore()->globalContainer.getStructByName(memberName);
-        toFile = ps->declaredInFile();
-        toLine = ps->declaredOnLine();
-        break;
-    case PublicAttr:
-    case ProtectedAttr:
-    case PrivateAttr:
-    case PackageAttr:
-        if (pc)
-            pa = pc->getAttributeByName(memberName);
-        else {
-            ps = classStore()->globalContainer.getStructByName(className);
-            if (ps)
-                pa = ps->getAttributeByName(memberName);
-        }
-        break;
-    case PublicMethod:
-    case ProtectedMethod:
-    case PrivateMethod:
-        if (pc) {
-            pa = pc->getMethodByNameAndArg(memberName);
-            // If at first we don't succeed...
-            if (!pa)
-                pa = pc->getSlotByNameAndArg(memberName);
-        }
-        break;
-    case PublicSlot:
-    case ProtectedSlot:
-    case PrivateSlot:
-        if (pc)
-            pa = pc->getSlotByNameAndArg(memberName);
-      break;
-    case Signal:
-        if (pc)
-            pa = pc->getSignalByNameAndArg(memberName);
-      break;
-    case GlobalFunction:
-        pa = classStore()->globalContainer.getMethodByNameAndArg(memberName);
-      break;
-    case GlobalVariable:
-        pa = classStore()->globalContainer.getAttributeByName(memberName);
-        break;
-    default:
-        kdDebug(9003) << "Unknown type " << (int)type << " in ClassViewPart::gotoDeclaration." << endl;
-        break;
     }
-    
-    // Fetch the line and file from the attribute if the value is set.
-    if (pa) {
-        toFile = pa->declaredInFile();
-        toLine = pa->declaredOnLine();
-    }
-    
+
     if (toLine != -1) {
         kdDebug(9003) << "Classview switching to file " << toFile << "@ line " << toLine << endl;
 	partController()->editDocument(toFile, toLine);
@@ -407,41 +357,51 @@ void ClassViewPart::gotoDeclaration(const QString &className,
 }
 
 
-void ClassViewPart::gotoImplementation(const QString &className,
-                                       const QString &memberName,
-                                       ItemType type)
+void ClassViewPart::gotoImplementation(const QString &className, const QString &methodName)
 {
-    kdDebug(9003) << "ClassViewPart::gotoImplementation " << className << "::" << memberName << endl;
+    kdDebug(9003) << "ClassViewPart::gotoDeclaration " << className << "::" << methodName << endl;
 
-    ParsedClass *pc = getClass(className);
-    ParsedMethod *pm = 0;
+    QString toFile;
+    int toLine = -1;
     
-    switch(type) {
-    case PublicSlot:
-    case ProtectedSlot:
-    case PrivateSlot:
-        if (pc)
-            pm = pc->getSlotByNameAndArg(memberName);
-        break;
-    case PublicMethod:
-    case ProtectedMethod:
-    case PrivateMethod:
-        if (pc) {
-            pm = pc->getMethodByNameAndArg(memberName);
-            // If at first we don't succeed...
+    if (className.isEmpty()) {
+        // Global function
+        ParsedMethod *pm = classStore()->globalScope()->getMethodByNameAndArg(methodName);
+        if (!pm)
+            return;
+        
+        toFile = pm->definedInFile();
+        toLine = pm->definedOnLine();
+    } else {
+        // Either the class itself or a member function
+        ParsedClass *pc = getClass(className);
+        if (!pc)
+            return;
+        
+        if (methodName.isEmpty()) {
+            // Class itself
+            // => does not have an implementation, so go to declaration
+            toFile = pc->declaredInFile();
+            toLine = pc->declaredOnLine();
+        } else {
+            // Method of the class
+            ParsedMethod *pm = pc->getMethodByNameAndArg(methodName);
             if (!pm)
-                pm = pc->getSlotByNameAndArg(memberName); 
+                pm = pc->getSlotByNameAndArg(methodName);
+            if (!pm)
+                pm = pc->getSignalByNameAndArg(methodName);
+            if (!pm)
+                return;
+            
+            toFile = pm->definedInFile();
+            toLine = pm->definedOnLine();
         }
-        break;
-    case GlobalFunction:
-        pm = classStore()->globalContainer.getMethodByNameAndArg(memberName);
-        break;
-    default:
-        kdDebug(9003) << "Unknown type " << (int)type << "in ClassViewPart::gotoImplementation." << endl;
     }
-    
-    if (pm)
-	partController()->editDocument(pm->definedInFile(), pm->definedOnLine());
+
+    if (toLine != -1) {
+        kdDebug(9003) << "Classview switching to file " << toFile << "@ line " << toLine << endl;
+	partController()->editDocument(toFile, toLine);
+    }
 }
 
 #include "classviewpart.moc"

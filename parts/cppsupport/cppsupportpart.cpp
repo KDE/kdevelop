@@ -294,27 +294,9 @@ CppSupportPart::projectClosed( )
 
     if( enablePCS == true ){
 	QString projectFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
-/*
-	if( !QFile::exists( projectFile + pcsFileExt( ) ) ){
-	    if( classStore( )->open( projectFile + pcsFileExt( ), IO_WriteOnly ) ){
-		classStore( )->storeAll( );
-		classStore( )->close( );
-	    }
-	}
-	else {
-	    // what happens if .pcs - file exists ? no update ?
-	}
-*/
 	QString pcsFile = projectFile + pcsFileExt( );
-	if( QFile::exists( pcsFile ) )
-	    QFile::remove( pcsFile );
-	    
-	if( classStore( )->open( pcsFile, IO_WriteOnly ) ){
-	    classStore( )->storeAll( );
-	    classStore( )->close( );
-	}
-	else
-	    kdDebug( 9007 ) << "EE: can't write file '" << pcsFile << "'" << endl;
+	if ( !classStore()->storeAll(pcsFile) )
+	    kdDebug(9007) << "EE: can't write file '" << pcsFile << "'" << endl;
     }
 
     // todo: save -pp file from new slot
@@ -400,62 +382,43 @@ CppSupportPart::initialParse( )
     label->show( );    
     
     if( enablePCS == true ){
-	if ( QFile::exists( pcsFile + pcsFileExt( ) ) ){
-	    if( classStore( )->open( pcsFile + pcsFileExt( ), IO_ReadOnly ) ){
+        
+        label->setText( i18n("Wait please - loading classstore-file: %1")
+                        .arg(pcsFile + pcsFileExt()) );
+        kapp->processEvents();
+        kapp->setOverrideCursor(waitCursor);
 
-		kdDebug ( 9007 ) << "loading pcs-file '" << pcsFile << pcsFileExt( ) << "'" << endl;
-		label->setText( i18n( "Wait please - loading classstore-file: " )
-		                      + pcsFile + pcsFileExt( ) );
+        if ( classStore()->restoreAll(pcsFile + pcsFileExt()) ) {
+            kdDebug(9007) << "loaded pcs-file '"
+                          << pcsFile << pcsFileExt( ) << "'" << endl;
+            createProjectPCS = false;
+            emit updatedSourceInfo( );
+	} else {
+            kdDebug(9007) << "pcs-file: '" << pcsFile << pcsFileExt( ) << "' couldn't be opened" << endl;
+        }
 
-		kapp->processEvents( );
-		kapp->setOverrideCursor( waitCursor );
+        label->setText( i18n("Wait please - loading preparsed file: %1")
+                        .arg(pcsFile + ppFileExt()) );
+        kapp->processEvents();
 
-		classStore( )->restoreAll( );
-		classStore( )->close( );
-
-		emit updatedSourceInfo( );
-		kapp->restoreOverrideCursor( );
-
-		createProjectPCS = false;
-	    }
-	    else
-		cerr << "pcs-file: '" << pcsFile << pcsFileExt( ) << "' couldn't be opened" << endl;
+        if ( ccClassStore()->restoreAll(pcsFile + ppFileExt()) ) {
+            kdDebug(9007) << "loaded persistant preparsed classstore: '"
+                          << pcsFile << ppFileExt( ) << "'" << endl;
+            createPreParseCS = false;
+        } else {
+            kdDebug(9007) << "persistant preparse file: '" << pcsFile << ppFileExt( )
+                          << "' couldn't be opened" << endl;
 	}
-
-	if( QFile::exists( pcsFile + ppFileExt( ) ) ){
-	    if( ccClassStore( )->open( pcsFile + ppFileExt( ), IO_ReadOnly ) ){
-
-		kdDebug( 9007 ) << "loading persistant preparsed classstore: '"
-                                << pcsFile << ppFileExt( ) << "'" << endl;
-
-		label->setText( i18n( "Wait please - loading preparsed file: ")
-                                      + pcsFile + ppFileExt( ) );
-
-		kapp->processEvents( );
-		kapp->setOverrideCursor( waitCursor );
-
-		ccClassStore( )->restoreAll( );
-		ccClassStore( )->close( );
-
-		kapp->restoreOverrideCursor( );
-
-		createPreParseCS = false;
-	    }
-	    else
-		cerr << "persistant preparse file: '" << pcsFile << ppFileExt( )
-                     << "' couldn't be opened" << endl;
-	}
-	else
-    	    cerr << "persistant preparse file: '" << pcsFile << ppFileExt( )
-                 << "' doesn't exist" << endl;
-
-	label->setText( i18n( "Done" ) );
+        
+	label->setText( i18n("Done") );
+	kapp->restoreOverrideCursor();
+        
     }
 
     if( createProjectPCS ){
 	// pcsFiles don't exist or couldn't be opened - normal procedure
-        kdDebug( 9007 ) << "no persistant classstore - starting to parse" << endl;
-	kapp->setOverrideCursor( waitCursor );
+        kdDebug(9007) << "no persistant classstore - starting to parse" << endl;
+	kapp->setOverrideCursor(waitCursor);
 
         QStringList files = project( )->allFiles( );
 
@@ -520,12 +483,8 @@ CppSupportPart::initialParse( )
 	dirObject.cd( startDir );
 	
 	label->setText( i18n( "Saving ccClassStore: " ) + pcsFile + ppFileExt( ) );
-	if( ccClassStore( )->open( pcsFile + ppFileExt( ), IO_WriteOnly ) ){
-	    ccClassStore( )->storeAll( );
-	    ccClassStore( )->close( );
-	}
-	else
-	    kdDebug( 9007 ) << "EE: saving ccclassstore not successful!" << endl;
+	if ( !ccClassStore()->storeAll(pcsFile + ppFileExt()) )
+	    kdDebug(9007) << "EE: saving ccclassstore not successful!" << endl;
 
 	topLevel( )->statusBar( )->removeWidget( bar );
 	delete bar;
@@ -673,6 +632,22 @@ QStringList CppSupportPart::fileFilters()
         return QStringList::split(",", "*.c,*.cpp,*.cxx,*.cc,*.C,*.m,*.mm,*.M,*.h,*.hxx,*.hpp");
     else
         return QStringList::split(",", "*.c,*.h");
+}
+
+
+QString CppSupportPart::formatClassName(const QString &name)
+{
+    QString res = name;
+    res.replace(QRegExp("\\."), "::");
+    return res;
+}
+
+
+QString CppSupportPart::unformatClassName(const QString &name)
+{
+    QString res = name;
+    res.replace(QRegExp("::"), ".");
+    return res;
 }
 
 
@@ -863,13 +838,9 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
     QString str = pm->comment();
     str += "\n";
 
-    // Take the path and replace all . with ::
-    QString path = pm->path();
-    path.replace( QRegExp( "\\." ), "::" );
-
     str += pm->type();
     str += " ";
-    str += path;
+    str += formatClassName(pm->path());
 
     if (pm->isConst())
         str += " const";

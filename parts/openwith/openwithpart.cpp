@@ -92,7 +92,7 @@ void OpenWithPart::openWithDialog()
 
 void OpenWithPart::openAsEncoding(int /*id*/)
 {
-  partController()->setServiceType("utf8");
+  partController()->setEncoding("utf8");
   partController()->editDocument(m_url);
 }
 

@@ -31,8 +31,8 @@ public:
 
 private slots:
     void setLanguageSupport(KDevLanguageSupport *ls);
-    void slotClassComboChoice(const QString &name);
-    void classSelected(const QString &name);
+    void slotClassComboChoice(const QString &text);
+    void classSelected(const QString &className);
     
 private:
     void refresh();

@@ -69,13 +69,18 @@ void HierarchyDialog::refresh()
     class_combo->clear();
     digraph->clear();
 
+    KDevLanguageSupport *ls = m_part->languageSupport();
+    
     QValueList<ParsedClass*> list = m_part->classStore()->getSortedClassList();
     QValueList<ParsedClass*>::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it) {
-        class_combo->insertItem((*it)->name());
+        QString formattedName = ls->formatClassName((*it)->name());
+        class_combo->insertItem(formattedName);
         QListIterator<ParsedParent> it2((*it)->parents);
-        for (; it2.current(); ++it2)
-            digraph->addEdge(it2.current()->name(), (*it)->name());
+        for (; it2.current(); ++it2) {
+            QString formattedParentName = ls->formatClassName(it2.current()->name());
+            digraph->addEdge(formattedParentName, formattedName);
+        }
     }
 
     digraph->process();
@@ -91,18 +96,20 @@ void HierarchyDialog::setLanguageSupport(KDevLanguageSupport *ls)
 }
 
 
-void HierarchyDialog::slotClassComboChoice(const QString &name)
+void HierarchyDialog::slotClassComboChoice(const QString &text)
 {
-    QString className = class_combo->currentText();
+    KDevLanguageSupport *ls = m_part->languageSupport();
+    
+    QString className = ls->unformatClassName(text);
     digraph->setSelected(className);
     digraph->ensureVisible(className);
-    classSelected(name);
+    classSelected(className);
 }
 
 
-void HierarchyDialog::classSelected(const QString &name)
+void HierarchyDialog::classSelected(const QString &className)
 {
-    ParsedClass *currentClass = m_part->classStore()->getClassByName(name);
+    ParsedClass *currentClass = m_part->classStore()->getClassByName(className);
     member_tree->clear();
     if (currentClass) {
         KDevLanguageSupport::Features features = m_part->languageSupport()->features();

@@ -36,7 +36,7 @@ public:
 
   PartController(QWidget *toplevel);
 
-  void setServiceType(const QString &serviceType);
+  void setEncoding(const QString &encoding);
   void editDocument(const KURL &url, int lineNum=-1);
   void showDocument(const KURL &url, const QString &context = QString::null);
 

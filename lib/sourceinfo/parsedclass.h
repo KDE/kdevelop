@@ -40,20 +40,6 @@ public:
     ParsedClass();
     ~ParsedClass();
     
-private:
-    
-    /** List of all slots. */
-    QPtrList<ParsedMethod> slotList;
-    
-    /** All slots ordered by name and argument. */
-    QDict<ParsedMethod> slotsByNameAndArg;
-    
-    /** List of all signals. */
-    QPtrList<ParsedMethod> signalList;
-    
-    /** All signals ordered by name and argument. */
-    QDict<ParsedMethod> signalsByNameAndArg;
-    
 public:
     
     /** List with names of parent classes(if any). */
@@ -121,7 +107,9 @@ public:
     bool isSubClass() const
         { return _isSubClass; }
 
-public:
+    //
+    // APIs for querying members of the class
+    //
     
     /**
      * Gets a method by comparing with another method. 
@@ -159,16 +147,28 @@ public:
     /** Check if the class has any virtual methods. */
     bool hasVirtual();
     
-public:
-
     /** Outputs the class as text on stdout. */
-    void out();
+    virtual void out();
 
     friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
 
 private:
+    
+    /** List of all slots. */
+    QPtrList<ParsedMethod> slotList;
+    
+    /** All slots ordered by name and argument. */
+    QDict<ParsedMethod> slotsByNameAndArg;
+    
+    /** List of all signals. */
+    QPtrList<ParsedMethod> signalList;
+    
+    /** All signals ordered by name and argument. */
+    QDict<ParsedMethod> signalsByNameAndArg;
+    
     /** List with names of friend classes(if any). */
     QStringList _friends;
+    
     /** Tells if this class is declared inside another class. */
     bool _isSubClass;
 };

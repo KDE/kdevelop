@@ -224,6 +224,7 @@ void PythonSupportPart::parse(const QString &fileName)
                 lastClass = old;
             } else {
                 kdDebug(9014) << "Add class " << lastClass->name() << endl;
+                classStore()->globalScope()->addClass(lastClass);
                 classStore()->addClass(lastClass);
             }
            
@@ -240,10 +241,10 @@ void PythonSupportPart::parse(const QString &fileName)
                 if (!old)
                     lastClass->addMethod(method);
             } else {
-                ParsedMethod *old = classStore()->globalContainer.getMethod(method);
+                ParsedMethod *old = classStore()->globalScope()->getMethod(method);
                 kdDebug(9014) << "Add global method " << method->name() << endl;
                 if (!old)
-                    classStore()->globalContainer.addMethod(method);
+                    classStore()->globalScope()->addMethod(method);
                 lastClass = 0;
             }
             

@@ -848,21 +848,23 @@ bool JavaClassParser::parseClassLexem( ParsedClass *aClass )
       {
         childClass->setDeclaredInScope( aClass->path() );
 
-        if( store->hasClass( childClass->path() ) ) {
+        bool inStore = store->hasClass( childClass->path() );
+        if (inStore) {
   	      ParsedClass *	parsedClassRef = store->getClassByName( childClass->path() );
   	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine() );
   	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile() );
   	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope() );
   	      delete childClass;
   	      childClass = parsedClassRef;
-        } else {
-          store->addClass( childClass );
         }
 
         // When the childclass gets added to its parent class
         // the declaredInScope attribute gets set which gives it the
         // correct path.
         aClass->addClass( childClass );
+
+        if (!inStore)
+            store->addClass( childClass );
 
         // Check for class inheritance
         if ( lexem == JAVAEXTENDS ) {
@@ -1122,27 +1124,26 @@ void JavaClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
         kdDebug(9013) << "Storing class with path: " << aClass->path() << endl;
 
         // Check if class is in the global store, add it if missing
-        if( store->hasClass( aClass->path() ) ) {
+        bool inStore = store->hasClass( aClass->path() );
+        if (inStore) {
   	      ParsedClass *	parsedClassRef = store->getClassByName( aClass->path() );
   	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine() );
   	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile() );
   	      delete aClass;
   	      aClass = parsedClassRef;
-        } else {
-          store->addClass( aClass );
         }
-
+            
         // Restore the 'declared in scope' path, so that 'aClass'
         // can be given the correct parent in the scope hierarchy
         aClass->setDeclaredInScope( savedClassPath );
         QString scopePath = scope->path();
 
-        if( aClass->declaredInScope().isEmpty() && !scopePath.isEmpty() )
+        if( aClass->declaredInScope().isEmpty() )
         {
           aClass->setDeclaredInScope(scopePath);
           scope->addClass( aClass );
         }
-        else if( !scopePath.isEmpty() )
+        else
         {
           // Get the parent class;
           parentClass = store->getClassByName( scopePath );
@@ -1159,6 +1160,9 @@ void JavaClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
           else
             parentClass->addClass( aClass );
         }
+
+        if (!inStore)
+            store->addClass( aClass );
 
         // Check for inheritance
         if ( lexem == JAVAEXTENDS ) {

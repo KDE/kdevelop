@@ -18,7 +18,8 @@
 #ifndef _CLASSTORE_H_
 #define _CLASSTORE_H_
 
-class QFile;
+#include <qdatastream.h>
+#include <qmap.h>
 
 #include "parsedscopecontainer.h"
 #include "classtreenode.h"
@@ -36,95 +37,75 @@ class ClassStore
 public:
     ClassStore();
     ~ClassStore();
-    
-private:
 
-    /** Store for global pre-parsed classes(like Qt and KDE). */
-//    PersistantClassStore globalStore;
-    ClassStoreIface *dcopIface;
-
-public:
+    //
+    // The following APIs are for clients like the class view
+    //
     
     /**
-     * Container that holds all global scopes, classes, functions, 
-     * variables and structures.
+     * Returns a pointer to the global namespace.
+     * The global namespace recursively contains all namespaces
+     * and classes.
      */
-    ParsedScopeContainer globalContainer;
-    
-public:
-
+    ParsedScopeContainer *globalScope()
+        { return m_globalScope; }
     /**
-     * Checks if a scope exists in the store.
+     * Tells if a class exists in the store. The name
+     * argument must specify the full scoped name in
+     * the form "KParts.Part".
+     */
+    bool hasClass(const QString &name);
+    /**
+     * Returns a class from the store using its name.
+     * The name argument must specify the full scoped name in
+     * the form "KParts.Part". The class object remains owned
+     * by the class store, so it must not be deleted by the
+     * caller.
      *
-     * @param aName Scope to check for.
+     * Returns 0 if the class is not in the store.
      */
-    bool hasScope(const QString &aName);
-    
+    ParsedClass *getClassByName(const QString &name);
     /**
-     * Tells if a class exists in the store. 
-     * @param aName Classname to check if it exists.
+     * Checks if a scope exists in the store. The name
+     * argument must specify the full scoped name in
+     * the "Foo.Bar".
      */
-    bool hasClass(const QString &aName);
-    
+    bool hasScope(const QString &name);
     /**
-     * Tells if a struct exists in the store. 
-     * @param aName Classname to check if it exists.
-     */
-    bool hasStruct(const QString &aName)
-    { return globalContainer.hasStruct(aName); }
-    
-    /**
-     * Fetches a scope from the store using its name.
-     * 
-     * @param aName Name of the scope to fetch.
+     * Returns a scope from the store using its name.
+     * The name argument must specify the full scoped name in
+     * the form "Foo.Bar". The scope object remains owned
+     * by the class store, so it must not be deleted by the
+     * caller.
      *
-     * @return A pointer to the scope(not to be deleted) or
-     * NULL if the scope wasn't found. 
+     * Returns 0 if the class is not in the store.
      */
-    ParsedScopeContainer *getScopeByName( const QString &aName );
-    
-    /**
-     * Fetches a class from the store by using its' name. 
-     * @return A pointer to the class(not to be deleted) or
-     *  NULL if the class wasn't found.
-     */
-    ParsedClass *getClassByName(const QString &aName);
-    
-    /**
-     * Return the store as a forest(collection of trees). 
-     * @return List of trees with the top parents as root-nodes.
-     */
-    QList<ClassTreeNode> *asForest();
-    
-    /**
-     * Fetches all classes with the named parent. 
-     * @return List of all classes with the named parent.
-     */
-    QValueList<ParsedClass*> getClassesByParent(const QString &aName);
-    
-    /**
-     * Fetches all clients of a named class. 
-     * @return List of all classes that are clients of the named class.
-     */
-    QValueList<ParsedClass*> getClassClients(const QString &aName);
-    
-    /**
-     * Fetches all suppliers of a named class. 
-     * @return List of all classes that are suppliers of the named class.
-     */
-    QValueList<ParsedClass*> getClassSuppliers(const QString &aName);
-    
-    /**
-     * Get all classes in sorted order. 
-     * @return A list of all classes in alpabetical order. 
-     */
-    QValueList<ParsedClass*> getSortedClassList();
+    ParsedScopeContainer *getScopeByName(const QString &name);
     
     /**
      * Get all classnames in sorted order.
      * @return A list of all classnames in sorted order.
      */
     QStringList getSortedClassNameList();
+    /**
+     * Get all classes in sorted order. 
+     * @return A list of all classes in alpabetical order. 
+     */
+    QValueList<ParsedClass*> getSortedClassList();
+    /**
+     * Returns a list of all classes with the named parent. 
+     */
+    QValueList<ParsedClass*> getClassesByParent(const QString &name);
+    /**
+     * Returns a list of all classes which have a given class
+     * as a member variable (aka "clients" of the class).
+     */
+    QValueList<ParsedClass*> getClassClients(const QString &name);
+    /**
+     * Returns a list of all classes which appear as types of
+     * member variables of a given class (aka "suppliers" of the class).
+     */
+    QValueList<ParsedClass*> getClassSuppliers(const QString &name);
     
     /**
      * Fetches all virtual methods, both implemented and not.
@@ -133,145 +114,108 @@ public:
      *  implemented virtual methods.
      * @param availList The list hat will contain the available virtual
      *  methods. */
-    void getVirtualMethodsForClass( const QString &aName, 
-                                    QValueList<ParsedMethod*> *implList,
-                                    QValueList<ParsedMethod*> *availList );
+    void getVirtualMethodsForClass(const QString &aName, 
+                                   QValueList<ParsedMethod*> *implList,
+                                   QValueList<ParsedMethod*> *availList);
     
     /**
-     * Gets all global structures not declared in a scope.
-     * 
-     * @return A sorted list of global structures.
+     * Return the store as a forest(collection of trees). 
+     * @return List of trees with the top parents as root-nodes.
      */
-    QValueList<ParsedStruct*> getSortedStructList();
+    QList<ClassTreeNode> *asForest();
     
-public:
+    //
+    // The following APIs are for parsers.
+    //
     
-    /** Removes all parsed classes. */
-    void wipeout();
-    
-    /** 
-     * Adds a scope to the store.
-     *
-     * @param aScope Scope to add.
+    /**
+     * Adds a class definition. Source parsers must use this method
+     * so the class store can maintain a list of all classes. They
+     * _also_ have to add the class to a namespace.
      */
-    void addScope(ParsedScopeContainer *aScope);
-    
-    /** Adds a classdefintion. 
-     * @param aClass Class to add.
+    void addClass(ParsedClass *klass);
+    /**
+     * Adds a scope definition. Source parsers must use this method
+     * so the class store can maintain a list of all scopes. They
+     * _also_ have to add the scope to the "parent" namespace.
      */
-    void addClass(ParsedClass *aClass);
-    
-    /** Adds a global variable. */
-    void addGlobalVar(ParsedAttribute *aAttr);
-    
-    /** Adds a global function. */
-    void addGlobalFunction(ParsedMethod *aFunc);
-    
-    /** Adds a global structure. */
-    void addGlobalStruct(ParsedStruct *aStruct);
-    
+    void addScope(ParsedScopeContainer *scope);
+
     /**
      * Removes all items in the store with references to the file. 
      * @param aFile The file to check references to.
      */
-    void removeWithReferences(const QString &aFile);
+    void removeWithReferences(const QString &fileName);
     
     /**
-     *  Given a list of files in the project look for any files that
-     *  depends on this
-     *  @param fileList       - The file that may have dependents
-     *  @param dependentList  - A list of files that depends on the given file
-     *  @returns              - The dependent files added in param dependentList
+     * Removes and deletes all parsed classes.
      */
-    //  void getDependentFiles( QStrList& fileList, QStrList& dependentList);
+    void wipeout();
     
-    /** Removes a class from the store. 
-     * @param aName Name of the class to remove
-     */
-    void removeClass( const QString &aName );
-
     /** Outputs this object as text on stdout */
     void out();
 
-/* here begins the persistant class store stuff */
+    /**
+     * Stores all data in a binary file.
+     */
+    bool storeAll(const QString &fileName);
+    /**
+     * Restores all data from a binary file.
+     */
+    bool restoreAll(const QString &fileName);
 
-private: // Public attributes
+    /**
+     * Stores all data into a data stream. This method
+     * is used by storeAll().
+     */
+    bool storeAll(QDataStream &stream);
+    /**
+     * Restores all data from a data stream. This method
+     * is used by restoreAll().
+     */
+    bool restoreAll(QDataStream &stream);
+    
+private:
 
-  /** Path where the persistant store file will be put. */
-  QString m_strPath;
+    /**
+     * Regenerates the mappings from class name to ParsedClass
+     * objects and from scope name to ParsedScopeContainer
+     * objects. Used by restoreAll(), but should not be used
+     * explicitly otherwise, as addClass() and addScope()
+     * should take care of the bookkeeping.
+     */ 
+    void regenerateIndex();
+    void addToIndexRecursive(ParsedScopeContainer *scope);
+    void removeWithReferences(const QString &fileName, ParsedScopeContainer *scope);
 
-  /** The filename. */
-  QString m_strFileName;
+    /**
+     * Container that holds all global scopes, classes, functions, 
+     * variables and structures.
+     */
+    ParsedScopeContainer *m_globalScope;
+    
+    /**
+     * Mapping from class name to ParsedClass objects. This container
+     * holds all classes, whether global or namespaced. Note that the
+     * key of the map is something like "KParts.Part", so it is a
+     * unique identifier for a class, even when there are several
+     * classes with the same name in different namespaces.
+     *
+     * For client code, this map is conveniently accessed through
+     * the public methods. Note that the map can at any time be
+     * regenerated with regenerateIndex().
+     */
+    QMap<QString, ParsedClass*> m_allClasses;
 
-  /** Is the file opened? */
-  bool m_bIsOpen;
-
-  /** With which mode was the file opened */
-  int m_nMode;
-
-  /** Version of the persistant class store file */
-  QString m_strFormatVersion;
-
-public: // Public methods
-
-  /** Set the path where the persistant store file should be stored.
-   * @param aPath Path to the persistant store file.
-   */
-  void setPath( const QString &aPath );
-
-  /** Set the name of the file to read/write.
-   * @param aFileName Name of the persistant store file.
-   */
-  void setFileName( const QString &aFileName );
-
-  /** Open the file. */
-  bool open ( const QString &aFileName, int nMode );
-
-  /** Close the file. */
-  void close();
-
-  /** Has the store been created? */
-  bool exists();
-
-  /** Stores all data in a binary file */
-  void storeAll();
-
-  /** Restores all data from a binary file */
-  void restoreAll();
-
-protected: // Protected methods
-
-  /** Store a class in the persistant store.
-   * @param aClass The class to store in the persistant store.
-   */
-  void storeClass ( ParsedClass *pClass );
-
-  /** Store a scope in the persistant store.
-   * @param aScope The class to store in the persistant store.
-   */
-  void storeScope ( ParsedScopeContainer* pScope );
-
-  /** Store a Method in the persistant store.
-   * @param aMethod The class to store in the persistant store.
-   */
-  void storeMethod ( ParsedMethod* pMethod );
-
-  /** Store a attribute in the persistant store.
-   * @param aAttribute The class to store in the persistant store.
-   */
-  void storeAttribute ( ParsedAttribute* pAttribute );
-
-  /** Store a struct in the persistant store.
-   * @param aStruct The class to store in the persistant store.
-   */
-  void storeStruct ( ParsedStruct* pStruct );
-
-
-private: // Private attributes
-
-	QFile* m_pFile;
-	
-	QDataStream* m_pStream;
+    /**
+     * Mapping from scope name to ParsedScopeContainer objects. See
+     * also m_allClasses.
+     */
+    QMap<QString, ParsedScopeContainer*> m_allScopes;
+     
+    /** Store for global pre-parsed classes(like Qt and KDE). */
+//    PersistantClassStore globalStore;
+    ClassStoreIface *dcopIface;
 };
 
 #endif

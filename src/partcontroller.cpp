@@ -94,9 +94,9 @@ void PartController::setupActions()
 }
 
 
-void PartController::setServiceType(const QString &serviceType)
+void PartController::setEncoding(const QString &encoding)
 {
-  m_presetEncoding = serviceType;
+  m_presetEncoding = encoding;
 }
 
 

@@ -74,17 +74,9 @@ ParsedClassContainer::~ParsedClassContainer()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ParsedClassContainer::clear(bool bAutodel)
+void ParsedClassContainer::clear()
 {
     ParsedContainer::clear();
-    
-    ParsedClass *act;
-    if (bAutodel)
-        for ( classIterator.toFirst();
-              (act=classIterator.current());
-              ++classIterator )
-            delete act;
-    
     classes.clear();
 }
 
@@ -103,7 +95,7 @@ void ParsedClassContainer::addClass( ParsedClass *aClass )
 {
     REQUIRE( "Valid class", aClass != NULL );
     REQUIRE( "Valid classname", !aClass->name().isEmpty() );
-    REQUIRE( "Unique class", !hasClass( useFullPath()? aClass->path() : aClass->name() ) );
+    REQUIRE( "Unique class", !hasClass( aClass->name() ) );
 
     if ( !path().isEmpty() )
         aClass->setDeclaredInScope( path() );
@@ -112,7 +104,7 @@ void ParsedClassContainer::addClass( ParsedClass *aClass )
     // is a subclass.
     aClass->setIsSubClass( itemType() == PIT_CLASS );
 
-    classes.insert( useFullPath()? aClass->path() : aClass->name(), aClass );
+    classes.insert( aClass->name(), aClass );
 }
 
 /*------------------------------ ParsedClassContainer::removeClass()
@@ -205,7 +197,7 @@ ParsedClass *ParsedClassContainer::getClassByName( const QString &aName )
  *-----------------------------------------------------------------*/
 QValueList<ParsedClass*> ParsedClassContainer::getSortedClassList()
 {
-    return getSortedDictList<ParsedClass>( classes, useFullPath() );
+    return getSortedDictList<ParsedClass>( classes );
 }
 
 

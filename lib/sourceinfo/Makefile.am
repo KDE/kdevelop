@@ -4,7 +4,7 @@ noinst_LTLIBRARIES = libkdevsourceinfo.la
 
 libkdevsourceinfo_la_SOURCES = classstore.cpp parsedclass.cpp parsedmethod.cpp \
 			       parsedattribute.cpp parsedargument.cpp parsedparent.cpp \
-			       persistantclassstore.cpp parsedstruct.cpp classtreenode.cpp parsedcontainer.cpp \
+			       parsedstruct.cpp classtreenode.cpp parsedcontainer.cpp \
 			       parsedclasscontainer.cpp parseditem.cpp parsedscopecontainer.cpp \
 			       ClassStoreIface.skel ClassStoreIface.cpp
 

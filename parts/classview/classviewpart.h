@@ -80,8 +80,8 @@ private:
     bool langHasFeature(KDevLanguageSupport::Features feature);
     void setupPopup();
     ParsedClass *getClass(const QString &className);
-    void gotoDeclaration(const QString &className, const QString &memberName, ItemType type);
-    void gotoImplementation(const QString &className, const QString &memberName, ItemType type);
+    void gotoDeclaration(const QString &className, const QString &memberName);
+    void gotoImplementation(const QString &className, const QString &memberName);
 
     ClassListAction *classes_action;
     MethodListAction *methods_action;

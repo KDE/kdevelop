@@ -239,9 +239,12 @@ void CClassParser::fillInParsedStruct( ParsedContainer *aContainer )
   {
     aContainer->addStruct( aStruct );
 
+    // This was done in prior versions to maintain a list
+    // of all structs in all namespaces. Doesn't seem
+    // need currently.
     // Always add structs to the global container.
-    if( aContainer != &store->globalContainer )
-      store->globalContainer.addStruct( aStruct );
+    //    if( aContainer != &store->globalContainer )
+    //      store->globalContainer.addStruct( aStruct );
 
   }
 }
@@ -388,13 +391,9 @@ void CClassParser::parseNamespace( ParsedScopeContainer *scope )
     // this is a namespace declaration
     scope->addScope( ns );
 
-    // Always add namespaces to the global container.
-    // EO why?
-    // it is possible to have namespaces inside namespaces
-    //    if( scope != &store.globalContainer )
-    //       store.addScope( ns );
+    // Register namespace in index
+    store->addScope( ns );
   }
-  // EO end
 
   while(lexem != 0 && lexem != '}') 
   {
@@ -1498,7 +1497,8 @@ ParsedClass *CClassParser::parseClassHeader()
   aLexem = lexemStack.pop();
 
   if(aLexem == 0) {
-      kdDebug(9007) << "ERROR in classparser: ParsedClass *CClassParser::parseClassHeader()" << endl;
+    kdDebug(9007) << "ERROR in classparser: ParsedClass *CClassParser::parseClassHeader()" << endl;
+    delete aClass;
     return 0;
   }
 
@@ -1586,15 +1586,14 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
       {
         childClass->setDeclaredInScope( aClass->path() );
 
-        if( store->hasClass( childClass->path() ) ) {
+        bool inStore = store->hasClass( childClass->path() );
+        if (inStore) {
   	      ParsedClass *	parsedClassRef = store->getClassByName( childClass->path() );
   	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine() );
   	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile() );
   	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope() );
   	      delete childClass;
   	      childClass = parsedClassRef;
-        } else {
-          store->addClass( childClass );
         }
 
         // When the childclass gets added to its parent class
@@ -1602,6 +1601,10 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
         // correct path.
         aClass->addClass( childClass );
 
+        // Do we put nested classes into the index?
+        //        if (!inStore)
+        //            store->addClass( childClass );
+        
         // Check for inheritance
         if( lexem == ':' ) {
           parseClassInheritance( childClass );
@@ -1648,15 +1651,15 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
           }
           if( aMethod && methodType == QTSLOT)
           {
-          kdDebug(9007) << "slot: " << aMethod->name().data() << endl;
+            kdDebug(9007) << "slot: " << aMethod->name().data() << endl;
 
-          ParsedMethod *pm = aClass->getMethod(aMethod);
-          if (pm != NULL) {
+            ParsedMethod *pm = aClass->getMethod(aMethod);
+            if (pm != NULL) {
                aMethod->setDefinedInFile( pm->definedInFile() );
                aMethod->setDefinedOnLine( pm->definedOnLine() );
                aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine() );
                aClass->removeMethod(pm);
-		    }
+	    }
             aMethod->setIsSlot( true );
             aClass->addSlot( aMethod );
           }
@@ -2267,7 +2270,7 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
       	// don't put the class into the scope hierarchy yet, in case
       	// it is already in the store (when 'aClass' will need to be
       	// deleted, and the existing parsed class used instead).
-        QString savedClassPath = QString( aClass->declaredInScope() );
+        QString savedClassPath = aClass->declaredInScope();
         QString classPath = aClass->declaredInScope();
 
         if( classPath.isEmpty() && !scope->path().isEmpty() )
@@ -2294,14 +2297,13 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
         kdDebug(9007) << "Storing class with path: " << aClass->path() << endl;
         
         // Check if class is in the global store, add it if missing
-        if( store->hasClass( aClass->path() ) ) {
-  	      ParsedClass *	parsedClassRef = store->getClassByName( aClass->path() );
-  	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine() );
-  	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile() );
-  	      delete aClass;
-  	      aClass = parsedClassRef;
-        } else {
-          store->addClass( aClass );
+        bool inStore = store->hasClass( aClass->path() );
+        if (inStore) {
+            ParsedClass *parsedClassRef = store->getClassByName( aClass->path() );
+            parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine() );
+            parsedClassRef->setDeclaredInFile( aClass->declaredInFile() );
+            delete aClass;
+            aClass = parsedClassRef;
         }
 
         // Restore the 'declared in scope' path, so that 'aClass'
@@ -2309,28 +2311,32 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
         aClass->setDeclaredInScope( savedClassPath );
         QString scopePath = scope->path();
 
-        if( aClass->declaredInScope().isEmpty() && !scopePath.isEmpty() )
+        if( aClass->declaredInScope().isEmpty())
         {
-          aClass->setDeclaredInScope(scopePath);
           scope->addClass( aClass );
         }
-        else if( !scopePath.isEmpty() )
+        else
         {
           // Get the parent class;
           parentClass = store->getClassByName( scopePath );
 
           // If we didn't find a parent class, try to find a namespace.
-          if( parentClass == NULL )
+          if( parentClass != NULL )
+            parentClass->addClass( aClass );
+          else
           {
             parentScope = store->getScopeByName( scopePath );
 
             if( parentScope != NULL )
               parentScope->addClass( aClass );
-            // ### else globalScope->addClass( aClass );
+            else
+                // formerly uncommented
+                store->globalScope()->addClass( aClass );
           }
-          else
-            parentClass->addClass( aClass );
         }
+        
+        if (!inStore)
+            store->addClass( aClass );
 
         // Check for inheritance
         if( lexem == ':' ) {
@@ -2400,9 +2406,9 @@ void CClassParser::parseToplevel()
     declStart = getLineno();
 
     if( isGenericLexem() )
-      parseGenericLexem( &store->globalContainer );
+      parseGenericLexem( store->globalScope() );
     else
-      parseTopLevelLexem( &store->globalContainer );
+      parseTopLevelLexem( store->globalScope() );
 
   	kapp->processEvents(500);
     getNextLexem();

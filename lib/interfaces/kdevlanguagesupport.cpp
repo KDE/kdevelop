@@ -15,6 +15,23 @@ KDevLanguageSupport::Features KDevLanguageSupport::features()
     return Features(0);
 }
 
+QStringList KDevLanguageSupport::fileFilters()
+{
+    QStringList list;
+    list << "*";
+    return list;
+}
+
+QString KDevLanguageSupport::formatClassName(const QString &name)
+{
+    return name;
+}
+
+QString KDevLanguageSupport::unformatClassName(const QString &name)
+{
+    return name;
+}
+
 void KDevLanguageSupport::addClass()
 {
 }
@@ -25,13 +42,6 @@ void KDevLanguageSupport::addMethod(const QString &/*className*/)
 
 void KDevLanguageSupport::addAttribute(const QString &/*className*/)
 {
-}
-
-QStringList KDevLanguageSupport::fileFilters()
-{
-    QStringList list;
-    list << "*";
-    return list;
 }
 
 #include "kdevlanguagesupport.moc"

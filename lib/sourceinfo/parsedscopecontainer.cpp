@@ -28,8 +28,6 @@ using namespace std;
  *                     CREATION RELATED METHODS                      *
  *                                                                   *
  ********************************************************************/
- // arrghh... global Variable
- int ScopeLevel;
 
 /*-------------------- ParsedScopeContainer::ParsedScopeContainer()
  * ParsedScopeContainer()
@@ -77,10 +75,7 @@ ParsedScopeContainer::~ParsedScopeContainer()
  *-----------------------------------------------------------------*/
 void ParsedScopeContainer::clear()
 {
-    int templevel=ScopeLevel;
-    
-    ScopeLevel=1;
-    ParsedClassContainer::clear(templevel==0);
+    ParsedClassContainer::clear();
     scopes.clear();
 }
 
@@ -95,7 +90,6 @@ void ParsedScopeContainer::clear()
  *-----------------------------------------------------------------*/
 bool ParsedScopeContainer::hasScope( const QString &aName )
 {
-    REQUIRE1( "Valid scope name", aName != NULL, false ); 
     REQUIRE1( "Valid scope name length", aName.length() > 0, false ); 
     
     return ( scopes.find( aName ) != NULL );
@@ -130,12 +124,12 @@ void ParsedScopeContainer::addScope( ParsedScopeContainer *aScope )
 {
     REQUIRE( "Valid scope", aScope != NULL );
     REQUIRE( "Valid scope name", !aScope->name().isEmpty() );
-    REQUIRE( "Unique scope", !hasScope( useFullPath()? aScope->path() : aScope->name() ) );
+    REQUIRE( "Unique scope", !hasScope( aScope->name() ) );
     
     if ( !path().isEmpty() )
         aScope->setDeclaredInScope( path() );
     
-    scopes.insert( ( useFullPath()? aScope->path() : aScope->name() ), aScope );
+    scopes.insert( aScope->name(), aScope );
 }
 
 /*------------------------------ ParsedScopeContainer::removeScope()
@@ -166,7 +160,7 @@ void ParsedScopeContainer::removeScope( const QString &aName )
  *-----------------------------------------------------------------*/
 QValueList<ParsedScopeContainer*> ParsedScopeContainer::getSortedScopeList()
 {
-    return getSortedDictList<ParsedScopeContainer>( scopes, useFullPath() );
+    return getSortedDictList<ParsedScopeContainer>( scopes );
 }
 
 

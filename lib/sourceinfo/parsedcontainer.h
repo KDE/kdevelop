@@ -65,7 +65,7 @@ QStringList getSortedIteratorNameList( QDictIterator<T> &itr )
  * @return List of sorted elements.
  */
 template<class T>
-QValueList<T*> getSortedDictList( QDict<T> &dict, bool usePath )
+QValueList<T*> getSortedDictList( QDict<T> &dict )
 {
     QValueList<T*> retVal;
 
@@ -74,7 +74,7 @@ QValueList<T*> getSortedDictList( QDict<T> &dict, bool usePath )
     // Ok... This sucks. But I'm lazy.
     QDictIterator<T> itr( dict );
     for( itr.toFirst(); itr.current(); ++itr )
-        srted << ( usePath ? itr.current()->path() : itr.current()->name() );
+        srted << itr.current()->name();
 
     srted.sort();
 
@@ -143,16 +143,6 @@ public:
      */
     void addMethod(ParsedMethod *aMethod);
     
-    /** 
-     * Tells if the container should store objects using their full path.
-     *
-     * @param state If to use full path or not.
-     */
-    inline void setUseFullpath(bool state)
-        { _useFullPath = state; }
-    bool useFullPath() const
-        { return _useFullPath; }
-
     /**
      * Gets a method by comparing with another method. 
      * @param aMethod Method to compare with.
@@ -254,13 +244,6 @@ public:
     virtual void out() {}
 
     friend QDataStream &operator<<(QDataStream &s, const ParsedContainer &arg);
-
-private:
-    /**
-     * Tells if objects stored in the container should use the 
-     * full path as the key(default is no).
-     */
-    bool _useFullPath;
 };
 
 

@@ -40,8 +40,7 @@ using namespace std;
 ParsedContainer::ParsedContainer()
     : methodIterator( methods ),
       attributeIterator( attributes ),
-      structIterator( structs ),
-      _useFullPath( false )
+      structIterator( structs )
 {
     attributes.setAutoDelete( true );
     methods.setAutoDelete( true );
@@ -86,7 +85,7 @@ void ParsedContainer::addStruct( ParsedStruct *aStruct )
     if ( !path().isEmpty() )
         aStruct->setDeclaredInScope( path() );
 
-    structs.insert( ( _useFullPath ? aStruct->path() : aStruct->name() ), aStruct );
+    structs.insert( aStruct->name(), aStruct );
 }
 
 /*-------------------------------------- ParsedContainer::addAttribute()
@@ -293,7 +292,7 @@ QStringList ParsedContainer::getSortedAttributeAsStringList()
  *-----------------------------------------------------------------*/
 QValueList<ParsedAttribute*> ParsedContainer::getSortedAttributeList()
 {
-    return getSortedDictList<ParsedAttribute>( attributes, false );
+    return getSortedDictList<ParsedAttribute>( attributes );
 }
 
 /*--------------------------- ParsedContainer::getStructByName()
@@ -340,7 +339,7 @@ QStringList ParsedContainer::getSortedStructNameList()
  *-----------------------------------------------------------------*/
 QValueList<ParsedStruct*> ParsedContainer::getSortedStructList()
 {
-    return getSortedDictList<ParsedStruct>( structs, _useFullPath );
+    return getSortedDictList<ParsedStruct>( structs );
 }
 
 /*--------------------------- ParsedContainer::removeWithReferences()
@@ -355,7 +354,6 @@ QValueList<ParsedStruct*> ParsedContainer::getSortedStructList()
  *-----------------------------------------------------------------*/
 void ParsedContainer::removeWithReferences( const QString &aFile )
 {
-    REQUIRE( "Valid filename", aFile != NULL );
     REQUIRE( "Valid filename length", aFile.length() > 0 );
 }
 

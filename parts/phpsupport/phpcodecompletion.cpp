@@ -337,7 +337,7 @@ bool PHPCodeCompletion::checkForGlobalFunctionArgHint(QString lineStr,int col,in
 	  functionList.append((*it).prototype);
 	}
       }
-      QValueList<ParsedMethod*> methodList = m_classStore->globalContainer.getSortedMethodList();
+      QValueList<ParsedMethod*> methodList = m_classStore->globalScope()->getSortedMethodList();
       QValueList<ParsedMethod*>::ConstIterator methodIt;
       for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
 	if((*methodIt)->name() == name){
@@ -399,7 +399,7 @@ bool PHPCodeCompletion::doGlobalMethodCompletion(QString methodStart){
     }
   }
   
-  QValueList<ParsedMethod*> methodList = m_classStore->globalContainer.getSortedMethodList();
+  QValueList<ParsedMethod*> methodList = m_classStore->globalScope()->getSortedMethodList();
   QValueList<ParsedMethod*>::ConstIterator methodIt;
   for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
     if ((*methodIt)->name().startsWith(methodStart)){
@@ -467,7 +467,7 @@ bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/
     if(start.right(2) == classStart){
       QValueList<KTextEditor::CompletionEntry> list;
 
-      QValueList<ParsedClass*> classList = m_classStore->globalContainer.getSortedClassList();
+      QValueList<ParsedClass*> classList = m_classStore->globalScope()->getSortedClassList();
       QValueList<ParsedClass*>::ConstIterator classIt;
       for (classIt = classList.begin(); classIt != classList.end(); ++classIt) {
 	if((*classIt)->name().startsWith(classStart)){

@@ -18,11 +18,9 @@
 
 #include <stdio.h>
 #include <iostream>
-//#include <qdatastream.h>
 #include <qstring.h>
 #include <kdebug.h>
 #include "parsedattribute.h"
-#include "programmingbycontract.h"
 
 using namespace std;
 
@@ -80,11 +78,12 @@ ParsedAttribute::~ParsedAttribute()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ParsedAttribute::setType( const QString &aType )
+void ParsedAttribute::setType(const QString &type)
 {
-    REQUIRE( "Valid type", aType != NULL );
+    if (type.isEmpty())
+        kdDebug(9000) << "ParsedAttribute::setType() with empty type for " << name() << endl;
 
-    _type = aType;
+    _type = type;
     _type = _type.stripWhiteSpace();
 }
 

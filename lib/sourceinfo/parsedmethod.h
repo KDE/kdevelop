@@ -116,10 +116,10 @@ public:
     bool isEqual(ParsedMethod *method);
 
     /** Returns the object as a string(for tooltips etc) */
-    QString asString();
+    virtual QString asString();
     
     /** Outputs this object to stdout */
-    void out();
+    virtual void out();
 
 private:
     /** Is this methods declared virtual? */
