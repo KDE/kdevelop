@@ -20,7 +20,6 @@
 #include <qbuttongroup.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qlineedit.h>
 #include <qmultilineedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
@@ -40,13 +39,14 @@
 #include <qtextview.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
-
+#include <qtoolbutton.h>
 #include "kdevmakefrontend.h"
 
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
 #include "appwizarddlg.h"
 #include "filepropspage.h"
+#include <qregexp.h>
 
 static void guessAuthorAndEmail(QString *author, QString *email)
 {
@@ -69,12 +69,14 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     : AppWizardDialogBase(parent, name), m_pCurrentAppInfo(0)
 {
   templates_listview->header()->hide();
+  m_projectLocationWasChanged=false;
 
   KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
   m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
-
+  
   kdDebug(9010) << "Templates: " << endl;
   QString category;
+  QString destDir;
   QStringList categories;
   QStringList::Iterator it;
   for (it = m_templateNames.begin(); it != m_templateNames.end(); ++it) {
@@ -86,6 +88,10 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     pInfo->name = config.readEntry("Name");
     pInfo->icon = config.readEntry("Icon");
     pInfo->comment = config.readEntry("Comment");
+    pInfo->showFileAfterGeneration = config.readEntry("ShowFileAfterGeneration","");
+    destDir = config.readEntry("DefaultDestinatonDir","HOMEDIR");
+    destDir = destDir.replace(QRegExp("HOMEDIR"),QDir::homeDirPath());
+    pInfo->defaultDestDir = destDir;
     category = config.readEntry("Category");
     // format category to a unique status
     if(category.right(1) == "/"){
@@ -122,7 +128,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
   guessAuthorAndEmail(&author, &email);
   author_edit->setText(author);
   email_edit->setText(email);
-  dest_edit->setText(QDir::homeDirPath());
+  dest_edit->setText(QDir::homeDirPath()+"/");
   filetemplate_edit->setFont(KGlobalSettings::fixedFont());
   QFontMetrics fm(filetemplate_edit->fontMetrics());
   filetemplate_edit->setMinimumSize(fm.width("X")*81, fm.lineSpacing()*22);
@@ -172,12 +178,18 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
              this, SLOT(textChanged()) );
     connect( dest_edit, SIGNAL(textChanged(const QString&)),
              this, SLOT(textChanged()) );
+    connect( appname_edit, SIGNAL(textChanged(const QString&)),
+             this, SLOT(projectNameChanged()) );
+    connect( dest_edit, SIGNAL(textChanged(const QString&)),
+             this, SLOT(projectLocationChanged()) );
     connect( author_edit, SIGNAL(textChanged(const QString&)),
              this, SLOT(textChanged()) );
     connect( version_edit, SIGNAL(textChanged(const QString&)),
              this, SLOT(textChanged()) );
     connect( license_combo, SIGNAL(activated(int)),
              this, SLOT(licenseChanged()) );
+    connect( dest_button, SIGNAL(clicked()),
+             this, SLOT(destButtonClicked()) );
     licenseChanged();
     tempFile = 0;
     m_part = part;
@@ -322,7 +334,7 @@ void AppWizardDialog::accept()
 
     if (!tempFile) {
         tempFile = new KTempFile();
-        tempFile->setAutoDelete(true);
+	//        tempFile->setAutoDelete(true);
     }
     // KTempFile sucks
     QFile f;
@@ -332,7 +344,7 @@ void AppWizardDialog::accept()
     f.flush();
 
 
-    QString cmdline = "perl ";
+    cmdline = "perl ";
     cmdline += script;
     cmdline += " --author=";
     cmdline += KShellProcess::quote(author_edit->text());
@@ -402,12 +414,16 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem* pItem){
         icon_label->clear();
       }
       desc_textview->setText(pInfo->comment);
+      dest_edit->setText(pInfo->defaultDestDir);
       m_pCurrentAppInfo = pInfo;
+      m_projectLocationWasChanged = false;
+      projectNameChanged(); // set the dest new
       return;
     }
   }
   icon_label->setPixmap(QPixmap());
   desc_textview->setText(QString());
+
 }
 
 
@@ -419,4 +435,25 @@ void AppWizardDialog::destButtonClicked(){
   }
 }
 
+QString AppWizardDialog::getShowFileAfterGeneration(){
+  if(m_pCurrentAppInfo !=0){
+    if(m_pCurrentAppInfo->showFileAfterGeneration !=""){
+      return dest_edit->text() + "/" + m_pCurrentAppInfo->showFileAfterGeneration;
+    }
+  }
+  return "";
+}
+void AppWizardDialog::projectNameChanged(){
+  if(!m_projectLocationWasChanged){
+    if(m_pCurrentAppInfo !=0){
+      dest_edit->setText(m_pCurrentAppInfo->defaultDestDir + "/" + QString(appname_edit->text()).lower());
+    }
+  }
+  
+}
+void AppWizardDialog::projectLocationChanged(){
+  if(dest_edit->hasFocus()){
+    m_projectLocationWasChanged = true;
+  }
+}
 #include "appwizarddlg.moc"

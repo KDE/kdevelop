@@ -73,5 +73,8 @@ bool MakeViewPart::isRunning()
 {
     return m_widget->isRunning();
 }
+void MakeViewPart::sendSignalCommandFinished(QString command){
+  emit commandFinished(command);
+}
 
 #include "makeviewpart.moc"

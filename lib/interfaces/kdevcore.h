@@ -159,6 +159,11 @@ public:
      * which other parts can use to hook in.
      */
     virtual void fillContextMenu(QPopupMenu *popup, const Context *context) = 0;
+
+    /**
+       close the current project and opens the new one
+     */
+    virtual void openProject(const QString& projectFileName)=0;
     /**
      * "Goes" to a file. This is a generic method that is used
      * e.g. by file trees. For non-text files (i.e. files which

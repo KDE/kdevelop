@@ -27,6 +27,8 @@ public slots:
 //  void refresh();
 	void fileSelected(const KFileItem *file);
 
+ private slots:
+   void slotProjectOpened();
 private:
     QGuardedPtr<FileSelectorWidget> m_filetree;
 

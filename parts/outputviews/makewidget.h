@@ -61,6 +61,7 @@ private:
 
     QStringList commandList;
     QStringList dirList;
+    QString currentCommand;
     KProcess *childproc;
     QString stdoutbuf;
     QString stderrbuf;

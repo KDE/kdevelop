@@ -43,7 +43,7 @@ public:
     Core();
     ~Core();
 
-protected:
+public:
     virtual void embedWidget(QWidget *w, Role role, const QString &shortCaption);
     virtual void raiseWidget(QWidget *w);
     virtual void gotoFile(const KURL &url);
@@ -60,6 +60,7 @@ protected:
     virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
     virtual void message(const QString &str);
     virtual KParts::PartManager *partManager() const { return manager; };
+    virtual void openProject(const QString& projectFileName);
 
     KEditor::Editor *editor();
     

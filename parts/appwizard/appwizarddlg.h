@@ -22,6 +22,7 @@ class KTempFile;
 #include <qlist.h>
 #include <qdict.h>
 #include <qlistview.h>
+#include <qlineedit.h>
 
 #include "appwizarddlgbase.h"
 
@@ -32,6 +33,8 @@ public:
   QString comment;
   QString icon;
   QString category;
+  QString defaultDestDir;
+  QString showFileAfterGeneration;
   QListViewItem* pItem; // item pointer to the listview
 };
 
@@ -44,13 +47,19 @@ public:
     AppWizardDialog( AppWizardPart *part, QWidget *parent=0, const char *name=0 );
     ~AppWizardDialog();
     virtual void templatesTreeViewClicked(QListViewItem*);
-    virtual void destButtonClicked();
-protected:
+    QString getProjectName(){ return appname_edit->text();}
+    QString getProjectLocation(){ return dest_edit->text();}
+    QString getShowFileAfterGeneration();
+    QString getCommandLine(){ return cmdline;}
+ protected:
     virtual void accept();
 
 private slots:
     void textChanged();
     void licenseChanged();
+    void destButtonClicked();
+    void projectNameChanged();    
+    void projectLocationChanged();
     
 private:
     void insertIntoTreeView(ApplicationInfo* pInfo);
@@ -62,6 +71,9 @@ private:
 
     AppWizardPart *m_part;
     ApplicationInfo* m_pCurrentAppInfo;
+    /** the cmdline for the makefrontend*/
+    QString cmdline;
+    bool m_projectLocationWasChanged;
 };
 
 #endif

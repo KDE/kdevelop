@@ -1,3 +1,10 @@
+2001-12-15  Sandy Meier  <smeier@kdevelop.org>
+
+	* added some new options to the Appwizard (see README) and make it more intuitive: name completion, 
+	project loading after generation...
+	* added "void openProject(const QString& projectFileName)" to the KDevCore Interface, used by AppWizard
+	* fileselect part reacts now on signal KDevCore::projectOpen()
+
 2001-12-12  August Hörandl <august.hoerandl@gmx.at>
 
 	* Add Class dialog rewritten using designer

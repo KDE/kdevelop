@@ -35,6 +35,11 @@ public:
      * Returns whether the application is currently running.
      */
     virtual bool isRunning() = 0;
+
+    /** only emited if the command was succesfully finished
+     */
+    signals:
+      void commandFinished(QString command);
 };
 
 #endif

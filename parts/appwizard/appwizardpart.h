@@ -14,6 +14,7 @@
 
 #include <qguardedptr.h>
 #include "kdevpart.h"
+#include <qstring.h>
 
 class AppWizardDialog;
 
@@ -29,9 +30,13 @@ public:
 private slots:
     void slotNewProject();
     void slotImportProject();
+    void slotCommandFinished(QString command);
     
 private:
     AppWizardDialog *m_dialog;
+    QString m_creationCommand;
+    QString m_projectFileName;
+    QString m_showFileAfterGeneration;
 };
 
 #endif

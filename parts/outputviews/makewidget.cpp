@@ -79,7 +79,7 @@ void MakeWidget::startNextJob()
     if (it == commandList.end())
         return;
 
-    QString command = *it;
+    currentCommand = *it;
     commandList.remove(it);
     
     it =  dirList.begin();
@@ -91,9 +91,9 @@ void MakeWidget::startNextJob()
     parags = 0;
     moved = false;
     
-    insertLine2(command, Diagnostic);
+    insertLine2(currentCommand, Diagnostic);
     childproc->clearArguments();
-    *childproc << command;
+    *childproc << currentCommand;
     childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
     
     dirstack.clear();
@@ -263,6 +263,7 @@ void MakeWidget::slotProcessExited(KProcess *)
         } else {
             s = i18n("*** Success ***");
             t = Diagnostic;
+	    m_part->sendSignalCommandFinished(currentCommand);
         }
     } else {
         s = i18n("*** Compilation aborted ***");

@@ -478,7 +478,7 @@ void Core::openProject()
 {
     QFile fin(projectFile);
     if (!fin.open(IO_ReadOnly)) {
-        KMessageBox::sorry(win, "Could not read project file.");
+        KMessageBox::sorry(win, i18n("Could not read project file: ") + projectFile);
         return;
     }
 
@@ -1154,6 +1154,11 @@ void Core::slotProjectOpen()
     openProject();
 }
 
+void Core::openProject(const QString& projectFileName){
+    closeProject();
+    projectFile = projectFileName;
+    openProject();
+}
 
 void Core::slotProjectClose()
 {

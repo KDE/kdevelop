@@ -15,11 +15,13 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
+#include <kdevcore.h>
 
 #include "importdlg.h"
 #include "appwizarddlg.h"
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
+#include <kdevmakefrontend.h>
 
 
 AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
@@ -44,23 +46,26 @@ AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
                           actionCollection(), "project_import" );
     action->setStatusText( i18n("Creates a project file for a given directory.") );
     
-    m_dialog = 0;
 }
 
 
 AppWizardPart::~AppWizardPart()
 {
-    delete m_dialog;
 }
 
 
 void AppWizardPart::slotNewProject()
 {
     kdDebug(9010) << "new project" << endl;
-    if (!m_dialog)
-        m_dialog = new AppWizardDialog(this, 0, "app wizard");
-
-    m_dialog->show();
+    AppWizardDialog dlg(this, 0, "app wizard");
+    connect(makeFrontend(),SIGNAL(commandFinished(QString)),this,SLOT(slotCommandFinished(QString)));
+    if(dlg.exec() == QDialog::Accepted){
+      m_creationCommand = dlg.getCommandLine();
+      m_projectFileName = dlg.getProjectLocation() +"/" + dlg.getProjectName() + ".kdevelop";
+      m_showFileAfterGeneration = dlg.getShowFileAfterGeneration();
+    }else{
+      disconnect(makeFrontend(),0,this,0);
+    }
 }
 
 
@@ -70,4 +75,16 @@ void AppWizardPart::slotImportProject()
     dlg.exec();
 }
 
+void AppWizardPart::slotCommandFinished(QString command){
+  if(m_creationCommand == command){
+    // load the created project and maybe the first file (README...)
+    core()->openProject(m_projectFileName);  // opens the project
+    if(m_showFileAfterGeneration != ""){
+      KURL u;
+      u.setPath(m_showFileAfterGeneration);
+      core()->gotoSourceFile(u);
+    }
+    disconnect(makeFrontend(),0,this,0);
+  }
+}
 #include "appwizardpart.moc"

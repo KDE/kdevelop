@@ -13,5 +13,5 @@ and doesn't show the "Run Options" in the project configuration.
 
 Now you can implement this features with your own special plugin.
 For an example please look at the projects generated for GBA using the VisualBoy Advance Plugin. 
-This plugin start the GBA binary. -- smeier@kdevelop.org
+This plugin starts the GBA binary. -- smeier@kdevelop.org
 ---
