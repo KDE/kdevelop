@@ -55,13 +55,75 @@ messages:
 $(top_srcdir)/Makefile.am.in: # faking
 include admin/deps.am
 
+
+##
 ## Doxygen stuff
-include admin/Doxyfile.am
+##
+
+## Use KDE Libs tag files
 DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces kmdi kutils arts
 
-apidox-am-toplevel-yes: apidox-am-toplevel-kdevelop
+## Exclude the application wizard templates
+DOXYGEN_EXCLUDE = parts/appwizard/adahello/ \
+                  parts/appwizard/qtopiasimple/ \
+                  parts/appwizard/kdevpartjava/ \
+                  parts/appwizard/adahello/ \
+                  parts/appwizard/chello_gba/ \
+                  parts/appwizard/chello/ \
+                  parts/appwizard/bashhello/ \
+                  parts/appwizard/javahello/ \
+                  parts/appwizard/imports/ \
+                  parts/appwizard/gnomeapp/ \
+                  parts/appwizard/fpcsharedlib/ \
+                  parts/appwizard/fpchello/ \
+                  parts/appwizard/fpcgtk/ \
+                  parts/appwizard/fortranhello/ \
+                  parts/appwizard/dcopservice/ \
+                  parts/appwizard/cppsdlhello/ \
+                  parts/appwizard/cpphello/ \
+                  parts/appwizard/wxhello/ \
+                  parts/appwizard/superwaba/ \
+                  parts/appwizard/rubyhello/ \
+                  parts/appwizard/qtopiaapp/ \
+                  parts/appwizard/qmakesimple/ \
+                  parts/appwizard/qmakeapp/ \
+                  parts/appwizard/pythonhello/ \
+                  parts/appwizard/pyqt/ \
+                  parts/appwizard/prc-tool/ \
+                  parts/appwizard/phphello/ \
+                  parts/appwizard/perlhello/ \
+                  parts/appwizard/pascalhello/ \
+                  parts/appwizard/noatunui/ \
+                  parts/appwizard/noatunvisual/ \
+                  parts/appwizard/kscreensaver/ \
+                  parts/appwizard/kpartplugin/ \
+                  parts/appwizard/kpartapp/ \
+                  parts/appwizard/konqnavpanel/ \
+                  parts/appwizard/kofficepart/ \
+                  parts/appwizard/kioslave/ \
+                  parts/appwizard/kicker/ \
+                  parts/appwizard/khello/ \
+                  parts/appwizard/kdevpart2/ \
+                  parts/appwizard/kdevpart/ \
+                  parts/appwizard/kdedcop/ \
+                  parts/appwizard/kcmodule/ \
+                  parts/appwizard/kateplugin/ \
+                  parts/appwizard/kateplugin2/ \
+                  parts/appwizard/common/ \
+                  parts/appwizard/kapp/ \
+                  parts/appwizard/haskellhello/ \
+                  parts/appwizard/xulhello/ \
+                  parts/appwizard/kappjava/ \
+                  parts/appwizard/kdevlang \
+                  parts/cppsupport/subclassing_template \
+                  parts/pascalsupport/ \
+                  parts/javasupport \
+                  lib/antlr
+include Doxyfile.am
 
-apidox-am-toplevel-kdevelop: $(top_builddir)/apidocs/qt/qt.tag
+apidox-am-yes: apidox-am-kdevelop
+
+apidox-am-kdevelop: $(top_builddir)/apidocs/qt/qt.tag
 
 $(top_builddir)/apidocs/qt/qt.tag:
 	@echo "*** Creating a tag file for the Qt library:"; \
@@ -78,8 +140,10 @@ install-apidox-kdevelop:
 		$(INSTALL_DATA) $(top_builddir)/apidocs/qt/qt.tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt; \
 	fi
 
-## Install KDE Libs tag files
-
-
-## Coolo: I also need to add this on the make install command
-## ln -s $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon
+## We need this until we change the application name from gideon back to kdevelop
+##install-am:
+	if test -d $(DESTDIR)$(kde_htmldir)/en/gideon; then \
+		@echo "*** Creating a softlink from kdevelop to gidon to make the menu item Help -> Gideon Handbook work:"; \
+		echo $(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon; \
+		$(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon; \
+	fi
