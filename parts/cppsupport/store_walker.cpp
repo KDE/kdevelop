@@ -28,6 +28,7 @@ StoreWalker::~StoreWalker()
 
 void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
 {
+    kdDebug(9007) << "-----------------------> m_fileName = " << m_fileName << endl;
     m_currentScope.clear();    
     m_currentScopeContainer = m_store->globalScope();
     m_currentClass = 0;
@@ -71,6 +72,9 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
     ns->setDeclaredOnLine( startLine );
     ns->setDeclaredInFile( m_fileName );
     ns->setDeclarationEndsOnLine( endLine );
+    
+    ns->setDefinedOnLine( startLine );
+    ns->setDefinedInFile( m_fileName );
     
     ParsedScopeContainer* old_scope = m_currentScopeContainer;
     m_currentScopeContainer = ns;
@@ -292,6 +296,9 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     ParsedClass* klass = new ParsedClass();
     klass->setDeclaredOnLine( startLine );
     klass->setDeclaredInFile( m_fileName );
+    klass->setDefinedOnLine( startLine );
+    klass->setDefinedInFile( m_fileName );
+    
     klass->setName( className );
     klass->setDeclaredInScope( m_currentScope.join(".") );
     
