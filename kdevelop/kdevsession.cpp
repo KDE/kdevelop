@@ -289,6 +289,9 @@ void KDevSession::recreateViews( QObject* pDoc, QDomElement docEl)
 
   // restore focus
   if (pFocusedView != 0L) {
+    if (pFocusedView->parentWidget()->inherits("QextMdiChildView")) {
+        ((QextMdiChildView*)pFocusedView->parentWidget())->activate();
+    }
     pFocusedView->setFocus();
   }
 

@@ -1034,7 +1034,7 @@ bool DocViewMan::doFileClose()
   QString filename = pCurEditView->getName();
 
   // close the current view of the document (this will ask the user in case of being modified)
-  bool bClosed = closeView(m_MDICoverList.last());
+  bool bClosed = closeView((QextMdiChildView*)pCurEditView->parentWidget());
 
   if (!bClosed) // action was cancelled
     return false;
