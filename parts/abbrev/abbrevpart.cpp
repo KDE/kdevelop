@@ -259,7 +259,7 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
     KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
     QWidget *view = partController()->activeWidget();
     if (!part || !view) {
-        kdDebug() << "no rw part" << endl;
+        kdDebug(9028) << "no rw part" << endl;
         return entries;
     }
 
@@ -267,7 +267,7 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
     int pos = suffix.findRev('.');
     if (pos != -1)
         suffix.remove(0, pos+1);
-    kdDebug() << "AbbrevPart::findAllWords with suffix " << suffix << endl;
+    kdDebug(9028) << "AbbrevPart::findAllWords with suffix " << suffix << endl;
 
     QMap<QString, bool> map;
     QRegExp rx( QString("\\b") + prefix + "[a-zA-Z0-9_]+\\b" );
@@ -304,7 +304,7 @@ void AbbrevPart::slotExpandAbbrev()
     KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
     QWidget *view = partController()->activeWidget();
     if (!part || !view) {
-        kdDebug() << "no rw part" << endl;
+        kdDebug(9028) << "no rw part" << endl;
         return;
     }
 
@@ -316,13 +316,13 @@ void AbbrevPart::slotExpandAbbrev()
     KTextEditor::EditInterface *editiface
         = dynamic_cast<KTextEditor::EditInterface*>(part);
     if (!editiface) {
-        kdDebug() << "no editiface" << endl;
+        kdDebug(9028) << "no editiface" << endl;
         return;
     }
     KTextEditor::ViewCursorInterface *cursoriface
         = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
     if (!cursoriface) {
-        kdDebug() << "no viewcursoriface" << endl;
+        kdDebug(9028) << "no viewcursoriface" << endl;
         return;
     }
 
@@ -507,7 +507,7 @@ void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QS
     KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
     QWidget *view = partController()->activeWidget();
     if (!part || !view) {
-        kdDebug() << "no rw part" << endl;
+        kdDebug(9028) << "no rw part" << endl;
         return;
     }
 
@@ -515,7 +515,7 @@ void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QS
     int pos = suffix.findRev('.');
     if (pos != -1)
         suffix.remove(0, pos+1);
-    kdDebug() << "AbbrevPart::slotFilterInsertString with suffix " << suffix << endl;
+    kdDebug(9028) << "AbbrevPart::slotFilterInsertString with suffix " << suffix << endl;
 
     if( !entry || !text || !viewCursorIface || !editIface )
 	return;
@@ -566,19 +566,19 @@ CodeTemplateList::~ CodeTemplateList( )
 
 QMap< QString, CodeTemplate * > CodeTemplateList::operator [ ]( QString suffix )
 {
-    kdDebug() << "CodeTemplateList::operator []" << endl;
+    kdDebug(9028) << "CodeTemplateList::operator []" << endl;
     QMap< QString, CodeTemplate * > selectedTemplates;
     for (QMap<QString, QMap<QString, CodeTemplate* > >::const_iterator it = templates.begin(); it != templates.end(); ++it)
     {
-        kdDebug() << "CodeTemplateList::operator [] - suffixes " << it.key() << endl;
+        kdDebug(9028) << "CodeTemplateList::operator [] - suffixes " << it.key() << endl;
         if (QStringList::split(",", it.key()).contains(suffix))
         {
-            kdDebug() << "CodeTemplateList::operator [] - suffixes " << it.key() << " contains " << suffix << endl;
+            kdDebug(9028) << "CodeTemplateList::operator [] - suffixes " << it.key() << " contains " << suffix << endl;
 
             QMap<QString, CodeTemplate* > m = it.data();
             for (QMap<QString, CodeTemplate* >::const_iterator itt = m.begin(); itt != m.end(); ++itt)
             {
-                kdDebug() << "x" << endl;
+                kdDebug(9028) << "x" << endl;
                 selectedTemplates[itt.key()] = itt.data();
             }
         }
@@ -603,12 +603,12 @@ void CodeTemplateList::insert( QString name, QString description, QString code, 
     CodeTemplate *t;
     if (templates.contains(suffixes) && templates[suffixes].contains(name))
     {
-        kdDebug() << "found template for suffixes " << suffixes << " and name " << name << endl;
+        kdDebug(9028) << "found template for suffixes " << suffixes << " and name " << name << endl;
         t = templates[suffixes][name];
     }
     else
     {
-        kdDebug() << "creating template for suffixes " << suffixes << " and name " << name << endl;
+        kdDebug(9028) << "creating template for suffixes " << suffixes << " and name " << name << endl;
         t = new CodeTemplate();
         allCodeTemplates.append(t);
         templates[suffixes][name] = t;
