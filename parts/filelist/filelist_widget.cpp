@@ -38,10 +38,10 @@ FileListWidget::FileListWidget(FileListPart *part)
 	
 	setSelectionMode( QListView::Extended );
 
-//	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
-//	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(partRemoved()) );
-	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(refreshFileList()) );
-	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(refreshFileList()) );
+	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
+	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(partRemoved()) );
+//	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(refreshFileList()) );
+//	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(refreshFileList()) );
 	connect( _part->partController(), SIGNAL( activePartChanged(KParts::Part*) ), this, SLOT( activePartChanged(KParts::Part* )) );
 
 	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
@@ -129,7 +129,7 @@ void FileListWidget::refreshFileList( )
 	activePartChanged( _part->partController()->activePart() );
 }
 
-/*
+
 void FileListWidget::partAdded( KParts::Part * part )
 {
 	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part );
@@ -146,7 +146,7 @@ void FileListWidget::partRemoved()
 	FileListItem * item = static_cast<FileListItem*>( firstChild() );
 	while ( item )
 	{
-		if ( ! _part->partController()->findOpenDocument( item->url() ) )
+		if ( ! _part->partController()->partForURL( item->url() ) )
 		{
 			delete item;
 			break;
@@ -156,7 +156,7 @@ void FileListWidget::partRemoved()
 
 	activePartChanged( _part->partController()->activePart() );
 }
-*/
+
 
 void FileListWidget::itemClicked( QListViewItem * item )
 {
@@ -176,15 +176,13 @@ void FileListWidget::activePartChanged( KParts::Part * part )
 		{
 			if ( item->url() == ro_part->url() )
 			{
-				setSelected( item, true );
-			}
-			else 
-			{
-				setSelected( item, false );
+				FileListItem::setActive( item );
+				break;
 			}
 			item = static_cast<FileListItem*>( item->nextSibling() );
 		}
 	}
+	repaintContents();
 }
 
 void FileListWidget::documentChangedState( const KURL & url, DocumentState state )

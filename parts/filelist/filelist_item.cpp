@@ -14,6 +14,7 @@
 		 
 #include "filelist_item.h"
 
+FileListItem * FileListItem::s_activeItem = 0;
 
 FileListItem::FileListItem( QListView * parent, KURL const & url, DocumentState state )
 	: QListViewItem( parent, QString(" ") + url.fileName() ), 
@@ -56,6 +57,29 @@ void FileListItem::setState( DocumentState state )
 void FileListItem::setHeight( int )
 {
 	QListViewItem::setHeight( KIcon::SizeSmall > listView()->fontMetrics().height() ? KIcon::SizeSmall : listView()->fontMetrics().height() );
+}
+
+void FileListItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
+{
+	QColorGroup mcg = cg;
+	
+	if ( isActive() )
+	{
+		mcg.setColor( QColorGroup::Base, Qt::yellow );
+	}
+	
+	QListViewItem::paintCell( p, mcg, column, width, align );
+}
+
+bool FileListItem::isActive( )
+{
+	return ( s_activeItem == this );
+}
+
+//static
+void FileListItem::setActive( FileListItem * item )
+{
+	s_activeItem = item;
 }
 
 

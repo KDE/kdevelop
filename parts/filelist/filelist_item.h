@@ -25,13 +25,21 @@ public:
 	FileListItem( QListView * parent, KURL const & url, DocumentState = Clean );
 	
 	KURL url();
+	
 	DocumentState state();
 	void setState( DocumentState );
-	virtual void setHeight( int );	// override of QListViewItem::setHeight()
+	
+	bool isActive();
+	static void setActive( FileListItem * item );
 	
 private:
+	virtual void setHeight( int );	// override of QListViewItem::setHeight()
+    virtual void paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align ); 	// override of QListViewItem::paintCell()
+	
 	KURL _url;
 	DocumentState _state;
+	
+	static FileListItem * s_activeItem;
 	
 };
 
