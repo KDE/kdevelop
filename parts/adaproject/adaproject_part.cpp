@@ -208,7 +208,7 @@ QString AdaProjectPart::runDirectory()
   *   if run/directoryradio == custom or relative == false
   *        The absolute path to executable
   */
-QString AdaProjectPart::mainProgram(bool relative = false)
+QString AdaProjectPart::mainProgram(bool relative)
 {
     QFileInfo fi(mainSource());
     return buildDirectory() + "/" + fi.baseName();
