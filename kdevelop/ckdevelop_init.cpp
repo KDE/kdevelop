@@ -673,7 +673,7 @@ void CKDevelop::initMenuBar(){
   help->insertItem(SmallIconSet("contents"),i18n("Project &User-Manual"),this,
                         SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
   help->insertSeparator();	
-	help->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay(bool)), 0, ID_HELP_TIP_OF_DAY);
+	help->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
   help->insertItem(SmallIconSet("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help->insertItem( i18n( "&Report Bug..." ),help_menu, SLOT(reportBug()),0,ID_HELP_BUG_REPORT);
   help->insertSeparator();	
@@ -824,8 +824,8 @@ void CKDevelop::initToolBar(){
   // Class combo
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Compile Configuration"),
                                            ID_CV_TOOLBAR_COMPILE_CHOICE,true,
-                                           SIGNAL(activated(const QString&))
-                                           ,this,
+                                           SIGNAL(activated(const QString&)),
+                                           this,
                                            SLOT(slotCompileCombo(const QString&)),
                                            true,i18n("Compile Configuration"),110 );
   KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
@@ -1094,7 +1094,7 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
 
   config->setGroup("TipOfTheDay");
   if( !kapp->isRestored())
-    slotHelpTipOfDay(false);
+    showHelpTipOfDay(false);
 
   // set the right default position for the MDI view taskbar
   config->setGroup("CKDevelop Toolbar QextMdiTaskBar");

@@ -571,8 +571,8 @@ public:
   void slotHelpKDELibRef();
   /** shows the C/C++-referenc */
   void slotHelpReference();
-  /** shows the tip of the day */
-  void slotHelpTipOfDay(bool force=true);
+  /** calls showHelpTipOfDay() */
+  void slotHelpTipOfDay() { showHelpTipOfDay(true); };
   /**  open the KDevelop Homepage with kfm/konqueror*/
   void slotHelpHomepage();
   /** shows the API of the current project */
@@ -894,6 +894,8 @@ private:
 	void adjustTTreesToolButtonState();
   /** */
   void adjustTOutputToolButtonState();
+  /** shows the tip of the day */
+  void showHelpTipOfDay(bool force=true);
 
 public:
   /** this attribute is true from construction until qApp->exec().
@@ -1132,6 +1134,8 @@ private slots:
   void slotViewODisassembleView();
   void slotViewOFrameStackView();
   void slotViewODebuggerView();
+
+  void slotCompileCombo(const QString&) {};
 };
 
 #endif

@@ -547,10 +547,10 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
   for (; itViews.current() != 0; ++itViews) {
     CEditWidget* pView = (CEditWidget*) itViews.current()->parentWidget();
     if (!pView) continue;
-    disconnect(pView, SIGNAL(activated(QextMdiChildView*)),
-               this, SLOT(slot_viewActivated(QextMdiChildView*)));
     // remove the view from MDI and delete the view
     QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
+    disconnect(pMDICover, SIGNAL(activated(QextMdiChildView*)),
+               this, SLOT(slot_viewActivated(QextMdiChildView*)));
     m_pParent->removeWindowFromMdi( pMDICover);
     m_MDICoverList.remove( pMDICover);
   }

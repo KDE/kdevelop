@@ -2736,7 +2736,7 @@ void CKDevelop::slotHelpReference() {
   showDocHelp("reference/C/cref.html");
 }
 
-void CKDevelop::slotHelpTipOfDay(bool force){
+void CKDevelop::showHelpTipOfDay(bool force){
   KTipDialog::showTip(locate("data", "kdevelop/tips"), force);
 }
 

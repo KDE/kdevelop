@@ -3,6 +3,7 @@
       (bug has been since adding of compiler settings)
     * bugfix: CMakeOutputView text output repaired on KDE3, still needs colour fix though
     * kdDebug() output of classparser fixed, no grumbling about missing 'endl' anymore
+    * broken slot connections fixed (slotTipOfDay, slotCompileCombo, activated)
 
 2002-01-15  Walter Tasin <tasin@kdevelop.org>
     * admin-tarball is now in sync with the actual version of KDE
