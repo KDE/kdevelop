@@ -624,7 +624,7 @@
                             <cstring>projectDescriptionLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Description :</string>
+                            <string>Description:</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="8" column="1">
@@ -632,7 +632,7 @@
                             <cstring>TextLabel1</cstring>
                         </property>
                         <property name="text">
-                            <string>ChangeLog :</string>
+                            <string>ChangeLog:</string>
                         </property>
                     </widget>
                     <widget class="QMultiLineEdit" row="9" column="0" rowspan="4" colspan="1">

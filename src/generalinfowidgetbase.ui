@@ -41,7 +41,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>Description :</string>
+            <string>Description:</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -57,7 +57,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>Author :</string>
+            <string>Author:</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -99,7 +99,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>Version :</string>
+            <string>Version:</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -115,7 +115,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>Email :</string>
+            <string>Email:</string>
         </property>
     </widget>
     <widget class="QLineEdit">
