@@ -87,7 +87,7 @@
                 </property>
                 <property stdset="1">
                     <name>text</name>
-                    <string>&lt;H1&gt;Project Packageing and Publishing&lt;/H1&gt;</string>
+                    <string>&lt;H1&gt;Project Packaging and Publishing&lt;/H1&gt;</string>
                 </property>
             </widget>
             <spacer>
@@ -263,7 +263,7 @@
             </property>
             <attribute>
                 <name>title</name>
-                <string>Source Distrabution</string>
+                <string>Source Distribution</string>
             </attribute>
             <widget>
                 <class>QCheckBox</class>
