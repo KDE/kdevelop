@@ -55,7 +55,7 @@ void CKDevelop::addRecentProject(const char* file)
     recent_projects_menu->clear();
 		uint i;
     for ( i =0 ; i < recent_projects.count(); i++){
-      recent_projects_menu->insertItem(recent_projects.at(i));
+      recent_projects_menu->insertItem(recent_projects.at(i), i);
     }
 	}
 }
@@ -1146,7 +1146,7 @@ void CKDevelop::readOptions(){
 	
 	uint i;
 	for ( i =0 ; i < recent_projects.count(); i++){
-    recent_projects_menu->insertItem(recent_projects.at(i));
+    recent_projects_menu->insertItem(recent_projects.at(i), i);
   }
 
 	doc_bookmarks_list.setAutoDelete(TRUE);
