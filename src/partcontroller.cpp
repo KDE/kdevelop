@@ -388,7 +388,6 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 			}
 		
 			integratePart(editorpart, url, widget, true, activate);
-		
 			EditorProxy::getInstance()->setLineNumber(editorpart, lineNum, col);
 			
 			addHistoryEntry( url, lineNum, col );
@@ -428,7 +427,17 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 		if ( part )
 		{
 			part->openURL( url );
-			integratePart( part, url );
+			
+			if ( dynamic_cast<KTextEditor::Editor*>( part ) ) // we can have ended up with a texteditor, in which case need to treat it as such
+			{
+				integratePart(part, url, part->widget(), true, activate);		
+				EditorProxy::getInstance()->setLineNumber(part, lineNum, col);
+			}
+			else
+			{
+				integratePart( part, url );
+			}
+			
 			addHistoryEntry( url, lineNum, col );
 		
 			m_openRecentAction->addURL( url );
