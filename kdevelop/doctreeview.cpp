@@ -322,6 +322,11 @@ void DocTreeKDevelopFolder::refresh()
   (void) new DocTreeKDevelopBook(this, programming,             "programming/index.html", true);
   (void) new DocTreeKDevelopBook(this, tutorial,                "tutorial/index.html",    true);
   (void) new DocTreeKDevelopBook(this, kdelibref,               "kde_libref/index.html",  true);
+  KConfig* config=KGlobal::config();
+  config->setGroup("Doc_Location");
+  QString designer = config->readEntry("doc_qt", QT_DOCDIR)+"designer/book1.html";
+  if(QFileInfo(designer).exists())
+  (void) new ListViewBookItem(this, i18n("Qt Designer Manual"), designer);
   (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"), "reference/C/cref.html");
 
     //horrible hack to counter the QListView bug DO NOT CHANGE without thinking about it
