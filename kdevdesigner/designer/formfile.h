@@ -115,6 +115,7 @@ signals:
 private slots:
     void formWindowChangedSomehow();
     void notifyFormWindowChange();
+    void emitNewStatus(FormFile* file);
 
 private:
     bool isFormWindowModified() const;

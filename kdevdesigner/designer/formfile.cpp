@@ -76,6 +76,8 @@ FormFile::FormFile( const QString &fn, bool temp, Project *p, const char *name )
     loadCode();
     if ( !temp )
 	checkFileName( FALSE );
+    
+    connect(this, SIGNAL(somethingChanged(FormFile* )), this, SLOT(emitNewStatus(FormFile* )));
 }
 
 FormFile::~FormFile()
@@ -895,4 +897,9 @@ void FormFile::notifyFormWindowChange()
 {
     if ( fw )
 	pro->formOpened( fw );
+}
+
+void FormFile::emitNewStatus(FormFile *file)
+{
+    fw->mainWindow()->part()->emitNewStatus(fileName(), isModified());
 }

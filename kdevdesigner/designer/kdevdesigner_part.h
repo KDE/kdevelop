@@ -60,6 +60,8 @@ public:
     void emitEditFunction(const QString &formName, const QString &functionName);
     void emitEditSource(const QString &formName);
     
+    void emitNewStatus(const QString &formName, int status);
+    
 protected:
     virtual bool openFile();
     virtual bool saveFile();

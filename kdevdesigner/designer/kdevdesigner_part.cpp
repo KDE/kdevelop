@@ -551,4 +551,9 @@ void KDevDesignerPart::emitEditSource(const QString &formName)
     emit editSource(designerType(), formName);
 }
 
+void KDevDesignerPart::emitNewStatus(const QString &formName, int status)
+{
+    emit newStatus(formName, status);
+}
+
 #include "kdevdesigner_part.moc"
