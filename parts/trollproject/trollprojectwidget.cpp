@@ -1006,8 +1006,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   }                          
     
 
- 
-    
+
+
 
   // Config variable
   Buffer->removeValues("CONFIG");
@@ -1913,16 +1913,18 @@ void TrollProjectWidget::parse(SubprojectItem *item)
       item->configuration.m_libraryversion = lst[0];
 
     item->configuration.m_inheritconfig = true;
-    FileBuffer::ValueSetMode* configvaluesetmodes = NULL;
-    int vsm_number = item->m_FileBuffer.getVariableValueSetModes("CONFIG",configvaluesetmodes);
-    for(int i=0; i<vsm_number; ++i)
+    QPtrList<FileBuffer::ValueSetMode> configvaluesetmodes;
+    item->m_FileBuffer.getVariableValueSetModes("CONFIG",configvaluesetmodes);
+
+    FileBuffer::ValueSetMode* ConfigSetMode = NULL;
+    for(ConfigSetMode = configvaluesetmodes.first(); ConfigSetMode; ConfigSetMode = configvaluesetmodes.next())
     {
-      if(!configvaluesetmodes[i])
+      if(ConfigSetMode != NULL)
       {
-        if(configvaluesetmodes[i] == FileBuffer::VSM_RESET)
+        if(ConfigSetMode[0] == FileBuffer::VSM_RESET)
         {
           item->configuration.m_inheritconfig = false;
-        }
+	}
       }
     }
       
