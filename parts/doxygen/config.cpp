@@ -539,7 +539,7 @@ char *yytext;
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qptrstack.h>
-
+  
 #include "config.h"
 #include "version.h"
 
@@ -575,7 +575,6 @@ void config_warn(const char *fmt, ...)
 
 #define MAX_INCLUDE_DEPTH 10
 #define YY_NEVER_INTERACTIVE 1
-#define YY_NO_UNPUT
 
 /* -----------------------------------------------------------------
  */
@@ -918,6 +917,7 @@ static void readIncludeFile(const char *incName)
 }
 
 
+#define YY_NO_UNPUT 1
 #define Start 1
 
 #define SkipComment 2
@@ -4213,7 +4213,7 @@ void Config::create()
                     "TEMPLATE_RELATIONS",
 		    "If set to YES, the inheritance and collaboration graphs will show the \n"
 		    "relations between templates and their instances. \n",
-                    TRUE
+                    FALSE
                  );
   cb->addDependency("HAVE_DOT");
   cb = addBool(
@@ -4452,6 +4452,6 @@ bool Config::parse(const char *fn)
   return TRUE;
 }
 
-//extern "C" { // some bogus code to keep the compiler happy
-//  int  configYYwrap() { return 1 ; }
-//}
+extern "C" { // some bogus code to keep the compiler happy
+  //int  configYYwrap() { return 1 ; }
+}

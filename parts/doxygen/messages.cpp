@@ -47,7 +47,6 @@ QString message(const QCString &key)
     addMessage("CASE_SENSE_NAMES", i18n("Use case-sensitive file names"));
     addMessage("SHORT_NAMES", i18n("Generate short file names"));
     addMessage("HIDE_SCOPE_NAMES", i18n("Hide name scopes"));
-    addMessage("VERBATIM_HEADERS", i18n("Include headers verbatim"));
     addMessage("SHOW_INCLUDE_FILES", i18n("Show included files"));
     addMessage("MULTILINE_CPP_IS_BRIEF", i18n("Multiline cpp is brief"));
     addMessage("DETAILS_AT_TOP", i18n("Details at top"));
@@ -93,6 +92,7 @@ QString message(const QCString &key)
     addMessage("STRIP_CODE_COMMENTS", i18n("Hide special comment blocks"));
     addMessage("REFERENCED_BY_RELATION", i18n("Referenced by relation"));
     addMessage("REFERENCES_RELATION", i18n("References relation"));
+    addMessage("VERBATIM_HEADERS", i18n("Include headers verbatim"));
     addMessage("Index", i18n("Index"));
     addMessage("ALPHABETICAL_INDEX", i18n("Generate alphabetical index"));
     addMessage("COLS_IN_ALPHA_INDEX", i18n("Columns in index"));
