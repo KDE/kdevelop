@@ -46,7 +46,10 @@ QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormats()
 	<< ActionFormat( i18n("generating"), "uic", ".*/uic\\b.*\\s-o\\s([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link .* -o ([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("linking"), "g++", "g\\+\\+ (?:\\S* )*-o ([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("installing"), "", "^\\s*(?:/usr/bin/install|/bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 );
+	<< ActionFormat( i18n("installing"), "", "^\\s*(?:/usr/bin/install|/bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 )
+	<< ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 )
+	<< ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 )
+	;
 
 	return formats;
 }
@@ -163,6 +166,13 @@ void MakeActionFilter::test()
 		"`test -f '/home/andris/cvs-developement/head/quanta/quanta/project/project.cpp' || "
 		"echo '/home/andris/cvs-developement/head/quanta/quanta/project/'`/home/andris/cvs-developement/head/quanta/quanta/project/project.cpp	",
 		"compiling", "g++", "project.cpp")
+	<< TestItem(
+		"/usr/local/kde/bin/dcopidl /home/john/src/kde/kdevelop/lib/interfaces/KDevAppFrontendIface.h > KDevAppFrontendIface.kidl "
+		"|| ( rm -f KDevAppFrontendIface.kidl ; /bin/false )",
+		"generating", "dcopidl", "KDevAppFrontendIface.kidl" )
+	<< TestItem(
+		"/usr/local/kde/bin/dcopidl2cpp --c++-suffix cpp --no-signals --no-stub KDevAppFrontendIface.kidl",
+		"compiling", "dcopidl2cpp", "KDevAppFrontendIface.kidl" )
 	;
 
 	QValueList<TestItem>::const_iterator it = testItems.begin();
