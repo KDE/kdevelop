@@ -276,7 +276,7 @@ hello.resize( 100, 30 );
 
 a.setMainWidget( &amp;hello );
 
-connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );
+connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));
 
 hello.show();
 return a.exec();
@@ -285,7 +285,7 @@ return a.exec();
 <HR>
 </CODE></BLOCKQUOTE>
 <P>You see, the only addition to give the button more interaction is to use a <CODE>connect()</CODE> method:
-<CODE>connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );</CODE> is all you have to add. What is the meaning now ? The class
+<CODE>connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));</CODE> is all you have to add. What is the meaning now ? The class
 declaration of <CODE>QObject</CODE> says about the <CODE>connect()</CODE> method:
 <P><CODE>bool connect ( const QObject * sender, const char * signal, const QObject * receiver, const char * member )</CODE>
 <P>This means, you have to specify a QObject instance pointer that is the sender of the signal, meaning that it can emit this signal as
@@ -343,7 +343,7 @@ hello.resize( 100, 30 );
 
 a.setTopWidget( &amp;hello );
 
-connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );
+connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));
 
 hello.show();
 return a.exec();

@@ -179,7 +179,7 @@ the messages it gives us:
 </PRE>
 <HR>
 </CODE></BLOCKQUOTE>
-<P>As you see, we've put line-numbers in front of each line, which won't appear in your output; it just makes it easier to describe what
+<P>As you see, we've put line numbers in front of each line, which won't appear in your output; it just makes it easier to describe what
 happened during the build now. First of all, <CODE>make</CODE> works recursively. That means, it starts from the directory it is invoked in and
 then goes into the subdirectories first, returns and processes the next directory. Finally, the directory it was started is processed
 and <CODE>make</CODE> finishes. Therefore, <CODE>make</CODE> started in the main project directory containing the sources first. In line 1 and 2, you
@@ -192,9 +192,9 @@ current directory, the main project directory (by <CODE>-I..</CODE>) and the inc
 directories for these include files were determined by the <CODE>configure</CODE> script and set in the Makefiles, therefore, the compiler
 knows where these are located. Finally, <CODE>-O0</CODE> sets the optimization to zero (no optimization), <CODE>-g</CODE> enables debugging, <CODE>-Wall</CODE>
 sets the compiler warnings to <CODE>all</CODE> and <CODE>-c</CODE> tells the compiler to produce an object file, so only compile the file.
-<P>This is done for the other source-files of our project as well in lines 13-15. Obviously, our sources are compiled, but instead of
+<P>This is done for the other source files of our project as well in lines 13-15. Obviously, our sources are compiled, but instead of
 linking the object files of the sources to the final binary, we see some other commands. In line 16, you see that the program "moc" is
-called to process the header-file  <CODE>kscribble.h</CODE>, with it's output in <CODE>kscribble.moc.cpp</CODE>. Then, in line 17, this source file is
+called to process the header file  <CODE>kscribble.h</CODE>, with its output in <CODE>kscribble.moc.cpp</CODE>. Then, in line 17, this source file is
 compiled as well. The same happens with the other project header files until line 21. Now, as the Qt toolkit contains the signal/slot
 mechanism, but still stays a C++ implementation, you're using certain keywords that are not originally C++ language, such as the
 <CODE>signals:</CODE> and <CODE>slots:</CODE> declaration in your classes. This gives you the ability to easily allow object communication for all

@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>KDevelop. òÕËÏ×ÏÄÓÔ×Ï ÐÒÏÇÒÁÍÍÉÓÔÁ: óÔÁÎÄÁÒÔ ÆÁÊÌÏ×ÏÊ ÓÉÓÔÅÍÙ KDE</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-14.html">Next</A>
+ <A HREF="index-12.html">Previous</A>
+ <A HREF="index.html#toc13">Table of Contents</A>
+</P>
+<H3><A NAME="s13">13. óÔÁÎÄÁÒÔ ÆÁÊÌÏ×ÏÊ ÓÉÓÔÅÍÙ KDE</A></H3>
+
+<P>üÔÁ ÇÌÁ×Á - ËÏÐÉÑ ÓÔÁÎÄÁÒÔÁ ÆÁÊÌÏ×ÏÊ ÓÉÓÔÅÍÙ KDE, ÏÐÕÂÌÉËÏ×ÁÎÎÏÇÏ ÎÁ web-ÓÁÊÔÅ KDE 
+<A HREF="http://www.kde.org">http://www.kde.org</A>. óÔÁÎÄÁÒÔ ÎÁÐÉÓÁÎ
+Richard Moore 
+<A HREF="rich@kde.org">rich@kde.org</A><P><B>óÔÁÎÄÁÒÔ ÆÁÊÌÏ×ÏÊ ÓÉÓÔÅÍÙ KDE</B>
+<P>üÔÏÔ ÄÏËÕÍÅÎÔ ÏÐÒÅÄÅÌÑÅÔ ÓÔÒÕËÔÕÒÕ ËÁÔÁÌÏÇÏ×, ËÏÔÏÒÕÀ ÄÏÌÖÎÙ ÉÓÐÏÌØÚÏ×ÁÔØ ×ÓÅ ÐÒÏÇÒÁÍÍÙ KDE. üÔÏ ×ÅÒÓÉÑ 0.0.4 ÓÔÁÎÄÁÒÔÁ.
+<P>
+<H3><A NAME="ss13.1">13.1 ÷×ÅÄÅÎÉÅ</A>
+</H3>
+
+<P>ãÅÌØ KDE FSSTD - ÓÏÚÄÁÔØ Õ×ÅÒÅÎÎÏÓÔØ, ÞÔÏ ×ÓÅ ÒÅÓÕÒÓÙ (ÉËÏÎËÉ, mime-ÔÉÐÙ É Ô.Ð.), ÎÅÏÂÈÏÄÉÍÙÅ ÐÒÉÌÏÖÅÎÉÀ KDE, ÒÁÓÐÏÌÏÖÅÎÙ
+× ÓÏÏÔ×ÅÔÓÔ×ÕÀÝÉÈ ÄÉÒÅËÔÏÒÉÑÈ. óÌÅÄÏ×ÁÎÉÅ ÜÔÏÊ ÓÔÒÕËÔÕÒÅ ÐÏÚ×ÏÌÉÔ ÐÒÉÌÏÖÅÎÉÑÍ ÉÓÐÏÌØÚÏ×ÁÔØ ÔÁËÉÅ ÉÎÓÔÒÕÍÅÎÔÙ, ËÁË ËÌÁÓÓ KIconLoader, É
+ÒÅÁÌÉÚÕÅÔ ÏÔÄÅÌÅÎÉÅ ÐÌÁÔÆÏÒÍÅÎÎÏÚÁ×ÉÓÉÍÙÈ ÄÁÎÎÙÈ, ÎÅÏÂÈÏÄÉÍÙÈ KDE, ÏÔ ÐÌÁÔÆÏÒÍÅÎÎÏÎÅÚÁ×ÉÓÉÍÙÈ ÄÁÎÎÙÈ (ÓÄÅÌÁ× ×ÏÚÍÏÖÎÏÊ ÉÎÓÔÁÌÌÑÃÉÀ ÄÌÑ ÒÁÚÌÉÞÎÙÈ
+ÁÒÈÉÔÅËÔÕÒ). ÷ ÜÔÏÍ ÄÏËÕÍÅÎÔÅ ÉÍÅÎÁ ËÁÔÁÌÏÇÏ× ÏËÁÎÞÉ×ÁÀÔÓÑ '/'. ëÏÇÄÁ ÕÐÏÔÒÅÂÌÑÅÔÓÑ ÓÌÏ×Ï 'appname', ×ÚÑÔÏÅ × ÕÇÌÏ×ÙÅ ÓËÏÂËÉ
+&lt;×ÏÔ ÔÁË&gt;, ÔÏ ÜÔÏ ÚÎÁÞÉÔ, ÞÔÏ ÎÁ ÅÇÏ ÍÅÓÔÅ ÍÏÇÕÔ ÂÙÔØ ×ÈÏÄÙ, ÓÏÏÔ×ÅÔÓÔ×ÕÀÝÉÅ ÌÀÂÏÍÕ ÕÓÔÁÎÏ×ÌÅÎÎÏÍÕ ÐÒÉÌÏÖÅÎÉÀ KDE.
+óÌÏ×Ï 'lang' ÉÓÐÏÌØÚÕÅÔÓÑ ÁÎÁÌÏÇÉÞÎÏ, ÞÔÏÂÙ ÐÏËÁÚÁÔØ, ÞÔÏ ÚÄÅÓØ ÄÏÌÖÎÙ ÂÙÔØ ×ÈÏÄÙ ÄÌÑ ×ÓÅÈ ÐÏÄÄÅÒÖÉ×ÁÅÍÙÈ ÑÚÙËÏ×, ÓÏÓÔÏÑÝÉÅ ÉÚ Ä×ÕÈ ÂÕË×,
+ÎÁÐÒÉÍÅÒ, 'fr' ÄÌÑ ÆÒÁÎÃÕÚÓËÏÇÏ, 'ru' ÄÌÑ ÒÕÓÓËÏÇÏ.
+<P>
+<H3><A NAME="ss13.2">13.2 óÔÒÕËÔÕÒÁ ËÁÔÁÌÏÇÏ×</A>
+</H3>
+
+<P>óÔÒÕËÔÕÒÁ ËÁÔÁÌÏÇÏ× KDE ÐÏËÁÚÁÎÁ ÎÉÖÅ, ËÏÒÎÅ×ÏÊ ËÁÔÁÌÏÇ ÉÎÓÔÁÌÌÑÃÉÉ KDE ÏÂÙÞÎÏ '/opt/kde', É ÍÏÖÅÔ ÂÙÔØ ÐÏÌÕÞÅÎ × ÐÒÏÃÅÓÓÅ ×ÙÐÏÌÎÅÎÉÑ
+×ÙÚÏ×ÏÍ ÍÅÔÏÄÁ kdedir() ËÌÁÓÓÁ KApplication (ÜÔÏ ÚÁÍÅÎÑÅÔ ÐÅÒÅÍÅÎÎÕÀ ÏËÒÕÖÅÎÉÑ KDEDIR, ËÏÔÏÒÕÀ ÐÏÓÔÅÐÅÎÎÏ ÐÅÒÅÓÔÁÀÔ ÉÓÐÏÌØÚÏ×ÁÔØ).
+÷ ÄÁÎÎÏÍ ÄÏËÕÍÅÎÔÅ ÜÔÏÔ ËÁÔÁÌÏÇ ÏÂÏÚÎÁÞÁÅÔÓÑ kdedir().
+<!--
+KDE File System
+-->
+<!--
+.kdelnk files
+-->
+<P>
+<UL>
+<LI>kdedir()/
+<UL>
+<LI>bin/
+<UL>
+<LI>âÉÎÁÒÎÙÅ ÆÁÊÌÙ ÐÒÉÌÏÖÅÎÉÊ</LI>
+</UL>
+</LI>
+<LI>lib/
+<UL>
+<LI>ÓÔÁÎÄÁÒÔÎÙÅ ÂÉÂÌÉÏÔÅËÉ KDE (libkdecore, ÎÁÐÒÉÍÅÒ)</LI>
+<LI><EM>&lt;appname&gt;</EM>/
+<UL>
+<LI>ðÌÁÔÆÏÒÍÅÎÎÏÚÁ×ÉÓÉÍÙÅ ÄÁÎÎÙÅ ÐÒÉÌÏÖÅÎÉÑ</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>include/
+<UL>
+<LI>óÔÁÎÄÁÒÔÎÙÅ ÆÁÊÌÙ ÚÁÇÏÌÏ×ËÏ× KDE</LI>
+</UL>
+</LI>
+<LI>parts/</LI>
+<LI>cgi-bin/
+<UL>
+<LI>CGI ÐÒÏÇÒÁÍÍÙ ÄÌÑ kdehelp</LI>
+</UL>
+</LI>
+<LI>share/
+<UL>
+<LI>doc/
+<UL>
+<LI>HTML/
+<UL>
+<LI>default --> ÓÓÙÌËÁ ÎÁ kdedir()/share/doc/HTML/en</LI>
+<LI><EM>&lt;lang&gt;</EM>/
+<UL>
+<LI><EM>&lt;appname&gt;</EM>/
+<UL>
+<LI>index.html</LI>
+<LI>äÒÕÇÉÅ ÆÁÊÌÙ ÐÏÍÏÝÉ</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>config/</LI>
+<LI>applnk/
+<UL>
+<LI>System/</LI>
+<LI>Utilities/</LI>
+<LI>Applications/</LI>
+<LI>Games/</LI>
+<LI>kfind.kdelnk</LI>
+<LI>khelp.kdelnk</LI>
+<LI>khome.kdelnk</LI>
+<LI>krefresh.kdelnk</LI>
+</UL>
+</LI>
+<LI>mimelnk/
+<UL>
+<LI>magic</LI>
+<LI>text/</LI>
+<LI>audio/</LI>
+</UL>
+</LI>
+<LI>partlnk/
+<UL>
+<LI><EM>&lt;partname&gt;</EM>.kdelnk</LI>
+</UL>
+</LI>
+<LI>icons/
+<UL>
+<LI>éËÏÎËÉ, ÉÓÐÏÌØÚÕÅÍÙÅ × kdelnk ÆÁÊÌÁÈ</LI>
+<LI><EM>&lt;appname&gt;</EM>.xpm</LI>
+<LI>mini/
+<UL>
+<LI>íÉÎÉ-ÉËÏÎËÉ ÄÌÑ kpanel</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>toolbar/
+<UL>
+<LI>óÔÁÎÄÁÒÔÎÙÅ ÉËÏÎËÉ ÐÁÎÅÌÉ ÉÎÓÔÒÕÍÅÎÔÏ× (ÎÁÐÒÉÍÅÒ, fileopen.xpm)</LI>
+</UL>
+</LI>
+<LI>wallpapers/
+<UL>
+<LI>ïÂÏÉ, ÉÓÐÏÌØÚÕÅÍÙÅ kdisplay</LI>
+</UL>
+</LI>
+<LI>apps/
+<UL>
+<LI><EM>&lt;appname&gt;</EM>/
+<UL>
+<LI>toolbar/
+<UL>
+<LI>éËÏÎËÉ ÐÁÎÅÌÉ ÉÎÓÔÒÕÍÅÎÔÏ×</LI>
+</UL>
+</LI>
+<LI>pics/
+<UL>
+<LI>äÒÕÇÉÅ ÒÉÓÕÎËÉ ÐÒÉÌÏÖÅÎÉÑ</LI>
+</UL>
+</LI>
+<LI>ðÌÁÔÆÏÒÍÅÎÎÏÎÅÚÁ×ÉÓÉÍÙÅ ÄÁÎÎÙÅ ÐÒÉÌÏÖÅÎÉÑ</LI>
+</UL>
+                                </LI>
+<LI><EM>&lt;libname&gt;</EM>/
+<UL>
+<LI>pics/</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>locale/
+<UL>
+<LI><EM>&lt;lang&gt;</EM>/
+<UL>
+<LI>LC_MESSAGES/
+<UL>
+<LI><EM>&lt;appname&gt;</EM>.mo</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H3><A NAME="ss13.3">13.3 þÔÏ ÜÔÏ ÚÎÁÞÉÔ ÄÌÑ ÒÁÚÒÁÂÏÔÞÉËÁ?</A>
+</H3>
+
+<P>óÔÁÎÄÁÒÔÎÏÅ ÐÒÉÌÏÖÅÎÉÅ KDE ÉÎÓÔÁÌÌÉÒÕÅÔ ÆÁÊÌÙ × ÒÁÚÌÉÞÎÙÅ ÍÅÓÔÁ ×ÙÛÅÐÒÉ×ÅÄÅÎÎÏÊ ÓÔÒÕËÔÕÒÙ. âÅÚÕÓÌÏ×ÎÏ ÎÅÏÂÈÏÄÉÍÙÅ ÆÁÊÌÙ - ÉÓÐÏÌÎÉÍÙÅ ÆÁÊÌÙ ÐÒÉÌÏÖÅÎÉÑ,
+ÆÁÊÌ kdelnk, ÉËÏÎËÁ ÐÒÉÌÏÖÅÎÉÑ É ÆÁÊÌÙ ÐÏÍÏÝÉ - ×ÓÅ ÏÓÔÁÌØÎÙÅ ÎÅ ÏÂÑÚÁÔÅÌØÎÙ. æÁÊÌÙ ÉÎÓÔÁÌÌÉÒÕÀÔÓÑ × ÓÌÅÄÕÀÝÉÅ ËÁÔÁÌÏÇÉ:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+ôÉÐ ÆÁÊÌÁ                                         òÁÓÐÏÌÏÖÅÎÉÅ
+
+âÉÎÁÒÎÙÅ ÆÁÊÌÙ ÐÒÉÌÏÖÅÎÉÑ (ÎÅÏÂÈÏÄÉÍÏ             kdedir()/bin/
+æÁÊÌ kdelnk ÐÒÉÌÏÖÅÎÉÑ (ÎÅÏÂÈÏÄÉÍÏ)               kdedir()/share/applnk/
+éËÏÎËÁ ÐÒÉÌÏÖÅÎÉÑ (ÎÅÏÂÈÏÄÉÍÏ)                    kdedir()/share/icons/&lt;appname&gt;.xpm
+æÁÊÌÙ ÐÏÍÏÝÉ ÐÒÉÌÏÖÅÎÉÑ (ÎÅÏÂÈÏÄÉÍÏ)              kdedir()/share/doc/default/HTML/&lt;appname&gt;/&lt;index&gt;.html
+éËÏÎËÉ ÐÁÎÅÌÉ ÉÎÓÔÒÕÍÅÎÔÏ× ÐÒÉÌÏÖÅÎÉÑ             kdedir()/share/apps/&lt;appname&gt;/toolbar/
+ðÌÁÔÆÏÒÍÅÎÎÏÎÅÚÁ×ÉÓÉÍÙÅ ÄÁÎÎÙÅ ÐÒÉÌÏÖÅÎÉÑ         kdedir()/share/apps/&lt;appname&gt;/
+ðÌÁÔÆÏÒÍÅÎÎÏÚÁ×ÉÓÉÍÙÅ ÄÁÎÎÙÅ ÐÒÉÌÏÖÅÎÉÑ           kdedir()/lib/&lt;appname&gt;/
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<!--
+KDE File System
+-->
+<P>
+<H3><A NAME="ss13.4">13.4 äÏËÕÍÅÎÔÁÃÉÑ ÐÒÉÌÏÖÅÎÉÑ</A>
+</H3>
+
+<P>ñ ÓÏ×ÅÔÕÀ ÐÏÍÅÓÔÉÔØ ÈÏÔÑ ÂÙ ÏÄÎÕ ÓÔÒÁÎÉÃÕ ×
+<P>kdedir()/doc/default/HTML/&lt;appname&gt;/&lt;appname&gt;.html
+<P>ÄÌÑ ÓÏÏÔ×ÅÔÓÔ×ÉÑ ÓÔÁÎÄÁÒÔÁÍ KDE. ðÒÉÌÏÖÅÎÉÅ ÍÏÖÅÔ ÉÓÐÏÌØÚÏ×ÁÔØ ËÁÔÁÌÏÇ ÄÌÑ ÈÒÁÎÅÎÉÑ × ÎÅÍ ÌÀÂÙÈ ÎÅÏÂÈÏÄÉÍÙÈ ÆÁÊÌÏ× ÐÏÍÏÝÉ. 
+<P>ðÒÉÌÏÖÅÎÉÑ, ÐÏÄÄÅÒÖÉ×ÁÀÝÉÅ ÎÅÓËÏÌØËÏ ÑÚÙËÏ×, ÄÏÌÖÎÙ ÐÏÍÅÓÔÉÔØ ÆÁÊÌÙ ÎÁ ÜÔÉÈ ÑÚÙËÁÈ × 
+kdedir()/doc/&lt;lang&gt;/HTML/&lt;appname&gt;/&lt;appname&gt;.html,
+ÓÏÚÄÁ×ÁÑ ÏÄÉÎ 'lang' ËÁÔÁÌÏÇ ÄÌÑ ËÁÖÄÏÇÏ ÑÚÙËÁ, ÉÓÐÏÌØÚÕÑ ÅÇÏ Ä×ÕÈÂÕË×ÅÎÎÙÊ ËÏÄ, ËÁË ÏÂÙÞÎÏ. ôÁËÏÅ ÒÁÓÐÏÌÏÖÅÎÉÅ ÆÁÊÌÏ× ÐÏÚ×ÏÌÉÔ ÓÏÚÄÁÔØ ÓÓÙÌËÉ
+ÍÅÖÄÕ ÆÁÊÌÁÍÉ ÐÏÍÏÝÉ Ä×ÕÈ ÒÁÚÌÉÞÎÙÈ ÐÒÉÌÏÖÅÎÉÊ, ÐÏÄÄÅÒÖÉ×ÁÀÝÉÈ ÄÁÎÎÙÊ ÑÚÙË. 
+<P>ñ ÎÅ ÓÏ×ÓÅÍ ÕÄÏ×ÌÅÔ×ÏÒÅÎ ÐÒÅÄÌÁÇÁÅÍÙÍ ÒÅÛÅÎÉÅÍ, ÐÏÓËÏÌØËÕ ÏÎÏ ÎÅ ÐÏÚ×ÏÌÑÅÔ ×ÅÒÎÕÔØÓÑ Ë ÑÚÙËÕ ÐÏ ÕÍÏÌÞÁÎÉÀ, ÅÓÌÉ ÔÒÅÂÕÅÍÙÊ ÐÅÒÅ×ÏÄ ÏÔÓÕÔÓÔ×ÕÅÔ.
+<P>
+<H3><A NAME="ss13.5">13.5 þÔÏ ÜÔÏ ÚÎÁÞÉÔ ÄÌÑ ÒÁÚÒÁÂÏÔÞÉËÏ× ÂÉÂÌÉÏÔÅË?</A>
+</H3>
+
+<P>
+<P>
+<UL>
+<LI>kdedir()/share/apps/&lt;libname&gt;/toolbar</LI>
+</UL>
+
+éËÏÎËÉ ÐÁÎÅÌÉ ÉÎÓÔÒÕÍÅÎÔÏ× ÄÌÑ ÜÌÅÍÅÎÔÏ× ÂÉÂÌÉÏÔÅËÉ.
+<P>
+<UL>
+<LI>kdedir()/share/apps/&lt;libname&gt;/pics</LI>
+</UL>
+
+äÒÕÇÉÅ ËÁÒÔÉÎËÉ (bitmaps) ÄÌÑ ÜÌÅÍÅÎÔÏ× ÂÉÂÌÉÏÔÅËÉ.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-14.html">Next</A>
+ <A HREF="index-12.html">Previous</A>
+ <A HREF="index.html#toc13">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
