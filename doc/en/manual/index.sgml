@@ -1129,6 +1129,7 @@ sgml2html will be used to do this.<p>
 containing the sources of your project. The end-user has to <tt/tar zxvf yourproject.tar.gz / to unpack it to a source directory and
 use the standard commands <tt>./configure, make </tt>and <tt/make install/.<p>
 </itemize>
+<item><bf/Load Tags File/ Generates and loads the file containing the tags needed for source code navigation.<p>
 <item><bf/Options  F7/ Opens the Project Options dialog that
 lets you change various settings for your project. This could be a new version number or the <idx/compiler options/ to set to -02 for a
 release with optimization.<p>
@@ -1469,8 +1470,12 @@ Symbol "Search Marked Text"                      F2
 
 <sect1>Window Management
 <p>
-To switch to a certain window, press ALT plus the underlined letter in the window title, e.g. <idx/Tools/ would be Alt+T
-Press F12 to switch between corresponding header and source files
+<code>
+Goto Next Window                                 ALT+PgUp
+Goto Next Window                                 ALT+PgDown
+</code>
+<p>Press F12 to switch between corresponding header and source files
+<p>To switch to a certain menu, press ALT plus the underlined letter in the menu title, e.g. <idx/Tools/ would be Alt+T
 <p>
 
 <sect1>Shortcuts to Compilation Processes
@@ -1776,8 +1781,8 @@ window actually on top, either the Header window, the C++ window or the browser 
 
 <enum>
 <item>Select the "Bookmarks"-menu and open the popup menu containing the <idx/bookmarks/ for the window containing the bookmark you want
-to view; either the C++-Window or the Header-Window entry.
-<item>Select the bookmarked line.
+to view.
+<item>Press ALT+number (of the bookmark)
 </enum>
 
 Selecting a bookmark for the browser window will open the browser and loads the page.
@@ -3872,7 +3877,8 @@ Martin Piskernig		<htmlurl url="mailto:mpiskernig@kdevelop.de" name = "<mpiskern
 <item>Nich Hudson             <htmlurl url="mailto:nick@nthcliff.demon.co.uk" name="<nick@nthcliff.demon.co.uk>">
 <item>R. Imura                <htmlurl url="mailto:imura@cs.titech.ac.jp" name="<imura@cs.titech.ac.jp>">
 <item>Falk Brettschneider     <htmlurl url="mailto:gigafalk@yahoo.com" name="<gigafalk@yahoo.com>">
-<item>Ralf Funken             <htmlurl url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">
+<item>Ralf Funken             <htmlurl url="mailto:rfunken@kdevelop.de" name="<rfunken@kdevelop.de>">
+<item>Harald Fernengel        <htmlurl url="mailto:harry@bnro.de" name="<harry@bnro.de>">
 
 </itemize>
 
