@@ -20,12 +20,52 @@
 CKDevAccel::CKDevAccel( QWidget * parent, const char *name )
  : KAccel ( parent, name )
 {
-  assoc.setAutoDelete(true);
+  m_Assoc.setAutoDelete(true);
 }
 
 CKDevAccel::~CKDevAccel()
 {
-  assoc.clear();
+  m_Assoc.clear();
+}
+
+QString CKDevAccel::getActionString(uint uMenuId) const
+{
+   QString action;
+   if ( m_Assoc.find(uMenuId) )
+       action=m_Assoc[uMenuId]->m_sAction;
+
+   return action;
+}
+
+uint CKDevAccel::getMenuID(const QString &action) const
+{
+  QIntDictIterator<SActionInfo> it(m_Assoc);
+  uint uMenuId=0;
+
+  if (!action.isEmpty())
+  {
+    while ( it.current() && uMenuId==0)
+    {
+      if (it.current()->m_sAction == action)
+        uMenuId=it.currentKey();
+      ++it;
+    }
+  }
+
+  return uMenuId;
+}
+
+void CKDevAccel::setEnableByMenuItems(const QMenuData *menu)
+{
+  QIntDictIterator<SActionInfo> it(m_Assoc);
+
+  while ( it.current() )
+  {
+    if (menu->indexOf(it.currentKey()) != -1)
+      setItemEnabled(it.currentKey(), menu->isItemEnabled(it.currentKey()));
+    ++it;
+  }
+
 }
 
 void CKDevAccel::connectItem(const QString& action,
@@ -34,9 +74,9 @@ void CKDevAccel::connectItem(const QString& action,
 
   if (uMenuId!=0)
   {
-   if ( assoc.find(uMenuId) )
-       assoc.remove( uMenuId );
-   assoc.insert( uMenuId, new QString(action) );
+   if ( m_Assoc.find(uMenuId) )
+       m_Assoc.remove( uMenuId );
+   m_Assoc.insert( uMenuId, new SActionInfo(action, activate) );
   }
 
   KAccel::connectItem(action, receiver, member, activate);
@@ -47,13 +87,80 @@ void CKDevAccel::connectItem(KAccel::StdAccel accel,
 {
   if (uMenuId!=0)
   {
-   if ( assoc.find(uMenuId) )
-       assoc.remove( uMenuId );
-   assoc.insert( uMenuId, new QString(KAccel::stdAction(accel)) );
+   if ( m_Assoc.find(uMenuId) )
+       m_Assoc.remove( uMenuId );
+   m_Assoc.insert( uMenuId, new SActionInfo(KAccel::stdAction(accel), activate) );
   }
 
   KAccel::connectItem(accel, receiver, member, activate);
 }
+
+void CKDevAccel::disconnectItem(const QString& action,
+	const QObject* receiver, const char *member)
+{
+  int uMenuId=getMenuID(action);
+  if (uMenuId!=0)
+       m_Assoc.remove( uMenuId );
+
+  KAccel::disconnectItem(action, receiver, member);
+}
+
+void CKDevAccel::reconnectItem(const QString& action,
+	const QObject* receiver, const char *member)
+{
+  uint uMenuId=getMenuID(action);
+  bool activate=true;
+
+  if (uMenuId!=0)
+    activate=m_Assoc[uMenuId]->m_bEnabled;
+
+  KAccel::connectItem(action, receiver, member, activate);
+}
+
+void CKDevAccel::reconnectItem(KAccel::StdAccel accel,
+	const QObject* receiver, const char *member)
+{
+  uint uMenuId=getMenuID(KAccel::stdAction(accel));
+  bool activate=true;
+
+  if (uMenuId!=0)
+    activate=m_Assoc[uMenuId]->m_bEnabled;
+
+  KAccel::connectItem(accel, receiver, member, activate);
+}
+
+bool CKDevAccel::reconnectItemByID(uint uMenuId,
+	const QObject* receiver, const char *member)
+{
+  bool bFound=false;
+  if ( m_Assoc.find(uMenuId) )
+  {
+       bool activated=m_Assoc[uMenuId]->m_bEnabled;
+       QString action=m_Assoc[uMenuId]->m_sAction;
+
+       KAccel::connectItem(action, receiver, member, activated);
+       bFound=true;
+  }
+  return bFound;
+}
+
+void CKDevAccel::readSettings(KConfig* config, bool setEnableStruct)
+{
+   KAccel::readSettings(config);
+   if (setEnableStruct)
+   {
+     QIntDictIterator<SActionInfo> it(m_Assoc);
+     while ( it.current())
+     {
+       QString action=it.current()->m_sAction;
+       if (!action.isEmpty())
+        KAccel::setItemEnabled(action, it.current()->m_bEnabled);
+       ++it;
+     }
+
+   }
+}
+
 
 /**
     like KAccel::setItemEnabled()
@@ -65,9 +172,10 @@ void CKDevAccel::connectItem(KAccel::StdAccel accel,
 bool CKDevAccel::setItemEnabled( uint uMenuId, bool activate )
 {
   bool bRetVal=false;
-  if ( assoc.find(uMenuId) )
+  if ( m_Assoc.find(uMenuId) )
   {
-    KAccel::setItemEnabled(*(assoc[uMenuId]), activate);
+    m_Assoc[uMenuId]->m_bEnabled=activate;
+    KAccel::setItemEnabled(m_Assoc[uMenuId]->m_sAction, activate);
     bRetVal=true;
   }
 
@@ -76,5 +184,9 @@ bool CKDevAccel::setItemEnabled( uint uMenuId, bool activate )
 
 void CKDevAccel::setItemEnabled( const QString &action, bool activate )
 {
+    uint uMenuId=getMenuID(action);
+    if (uMenuId != 0)
+      m_Assoc[uMenuId]->m_bEnabled=activate;
+
     KAccel::setItemEnabled(action, activate);
 }
