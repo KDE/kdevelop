@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 //      install->show();
 //      delete install;
 //    }
-  KDevelop *kdevelop = new KDevelop("kdevelop gui");
+  KDevelop *kdevelop = new KDevelop( 0L, "kdevelop gui");
   kdevelop->show();
 
 //
