@@ -114,7 +114,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "\n"         {line_num++;}
  
     /*==============> Strip preprocessor stuff <==============*/   
-"#"[aceimpsuw ](.)*"\n" {line_num++;}
+"#"[aceimpsuw ](.)*[\n|<<EOF>>] {line_num++;}
 
     /*==============> Skip defines <==============*/   
 "#define"              BEGIN(define);
@@ -126,7 +126,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
                           BEGIN(INITIAL);}
  
     /*==============> Strip // comments <==============*/
-"//"(.)*"\n" {line_num++;}
+"//"(.)*[\n<<EOF>>] {line_num++;}
 
     /*==============> Strip comments <==============*/
 "/*"                   BEGIN(comment);
