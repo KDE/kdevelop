@@ -21,7 +21,7 @@
 
 
 #include "cclasstooldlg.h"
-#include <qmessagebox.h>
+#include <kmsgbox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <qtooltip.h>
@@ -60,7 +60,7 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
     filler( this, "filler" ),
     attributesBtn( this, "attributesBtn" ),
     methodsBtn( this, "methodsBtn" ),
-    virtualsBtn( this, "virtualsBtn" ),
+    //    virtualsBtn( this, "virtualsBtn" ),
     exportCombo( false, this, "exportCombo" )
 {
   currentOperation = CTNONE;
@@ -108,7 +108,7 @@ void CClassToolDlg::setWidgetValues()
 
   attributesBtn.setFixedSize( 30, 30 );
   methodsBtn.setFixedSize( 30, 30 );
-  virtualsBtn.setFixedSize( 30, 30 );
+  //  virtualsBtn.setFixedSize( 30, 30 );
 
   exportCombo.setMinimumWidth( 100 );
   exportCombo.setFixedHeight( 30 );
@@ -141,7 +141,7 @@ void CClassToolDlg::setWidgetValues()
   btnLayout.addWidget( &filler );
   btnLayout.addWidget( &attributesBtn );
   btnLayout.addWidget( &methodsBtn );
-  btnLayout.addWidget( &virtualsBtn );
+  //  btnLayout.addWidget( &virtualsBtn );
   btnLayout.addWidget( &exportCombo );
 
   topLayout.addWidget( &classTree, 10);
@@ -180,8 +180,8 @@ void CClassToolDlg::readIcons()
   pm.load( pixDir + "CVpublic_meth.xpm" );
   methodsBtn.setPixmap( pm );
 
-  pm.load( pixDir + "CTvirtuals.xpm" );
-  virtualsBtn.setPixmap( pm );
+  //  pm.load( pixDir + "CTvirtuals.xpm" );
+  //  virtualsBtn.setPixmap( pm );
 }
 
 /*---------------------------------- CClassToolDlg::setTooltips()
@@ -201,7 +201,7 @@ void CClassToolDlg::setTooltips()
   QToolTip::add( &suppliersBtn, i18n("Show suppliers") );
   QToolTip::add( &attributesBtn, i18n("Show attributes") );
   QToolTip::add( &methodsBtn, i18n("Show methods") );
-  QToolTip::add( &virtualsBtn, i18n("Show virtual methods") );
+  //  QToolTip::add( &virtualsBtn, i18n("Show virtual methods") );
 }
 
 /*-------------------------------------- CClassToolDlg::setCallbacks()
@@ -223,7 +223,7 @@ void CClassToolDlg::setCallbacks()
   connect( &suppliersBtn, SIGNAL(clicked()), SLOT(slotSuppliers()));
   connect( &methodsBtn, SIGNAL(clicked()), SLOT(slotMethods()));
   connect( &attributesBtn, SIGNAL(clicked()), SLOT(slotAttributes()));
-  connect( &virtualsBtn, SIGNAL(clicked()), SLOT(slotVirtuals()));
+  //  connect( &virtualsBtn, SIGNAL(clicked()), SLOT(slotVirtuals()));
   connect( &classTree, 
            SIGNAL( signalViewDeclaration(const char *, const char *, THType ) ),
            SLOT(slotCTViewDecl(const char *, const char *, THType ) ) );
@@ -662,5 +662,4 @@ void CClassToolDlg::OK()
 {
   accept();
 }
-
 

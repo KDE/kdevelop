@@ -166,20 +166,20 @@ void CClassView::initPopups()
   classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),ID_CV_VIEW_DECLARATION);
   classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()), ID_CV_METHOD_NEW);
   classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0, ID_CV_ATTRIBUTE_NEW);
-  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0, ID_CV_IMPLEMENT_VIRTUAL);
-  classPopup.setItemEnabled( id, false );
+  //  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0, ID_CV_IMPLEMENT_VIRTUAL);
+  //  classPopup.setItemEnabled( id, false );
 
   classPopup.insertSeparator();
   classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()),0, ID_CV_CLASS_BASE_CLASSES);
   classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()),0, ID_CV_CLASS_DERIVED_CLASSES);
   classPopup.insertItem( i18n("Classtool..."), this, SLOT(slotClassTool()),0, ID_CV_CLASS_TOOL);
-  classPopup.insertSeparator();
-  id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()),0, ID_CV_ADD_SLOT_SIGNAL);
-  classPopup.setItemEnabled( id, false );
-  id = classPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete class"), this, SLOT(slotClassDelete()), ID_CV_CLASS_DELETE);
-  classPopup.setItemEnabled(id, false );
-  classPopup.insertSeparator();
-  classPopup.insertItem( i18n( "ClassWizard" ), this, SLOT( slotClassWizard()),0, ID_CV_CLASSWIZARD );
+  //  classPopup.insertSeparator();
+  //  id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()),0, ID_CV_ADD_SLOT_SIGNAL);
+  //  classPopup.setItemEnabled( id, false );
+  //  id = classPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete class"), this, SLOT(slotClassDelete()), ID_CV_CLASS_DELETE);
+  //  classPopup.setItemEnabled(id, false );
+  //  classPopup.insertSeparator();
+  //  classPopup.insertItem( i18n( "ClassWizard" ), this, SLOT( slotClassWizard()),0, ID_CV_CLASSWIZARD );
 
   // Struct popup
   structPopup.setTitle( i18n( "Struct" ) );
@@ -195,9 +195,9 @@ void CClassView::initPopups()
   // Attribute popup
   attributePopup.setTitle( i18n( "Attribute" ) );
   attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION);
-  attributePopup.insertSeparator();
-  id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()),0, ID_CV_ATTRIBUTE_DELETE);
-  attributePopup.setItemEnabled( id, false );
+  //  attributePopup.insertSeparator();
+  //  id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()),0, ID_CV_ATTRIBUTE_DELETE);
+  //  attributePopup.setItemEnabled( id, false );
 
   // Slot popup
   slotPopup.setTitle( i18n( "Slot" ) );
