@@ -12,8 +12,6 @@
 #include "driver.h"
 #include <kdebug.h>
 
-using namespace CppSupport;
-
 Driver::Driver()
 {
 

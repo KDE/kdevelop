@@ -15,26 +15,23 @@
 #include <qstring.h>
 
 
-namespace CppSupport{
+struct Error{
+    int code;
+    int level;
+    QString text;
 
-    struct Error{
-        int code;
-        int level;
-        QString text;
+    Error( int c, int l, const QString& s )
+        : code( c ), level( l ), text( s )
+        {}
+};
 
-        Error( int c, int l, const QString& s )
-            : code( c ), level( l ), text( s )
-            {}
-    };
-
-    class Errors{
-    public:
-        static const Error& InternalError;
-        static const Error& SyntaxError;
-        static const Error& ParseError;
-    };
+class Errors{
+public:
+    static const Error& InternalError;
+    static const Error& SyntaxError;
+    static const Error& ParseError;
+};
 
 
-} // CppSupport namespace
 
 #endif

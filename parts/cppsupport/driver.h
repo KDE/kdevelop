@@ -15,8 +15,6 @@
 #include <qvaluestack.h>
 #include <qstringlist.h>
 
-namespace CppSupport{
-
 class Driver{
 public:
     Driver();
@@ -29,6 +27,5 @@ public:
 private:
     QStringList m_currentScope;
 };
-}
 
 #endif

@@ -21,7 +21,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-using namespace CppSupport;
 using namespace std;
 
 

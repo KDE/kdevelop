@@ -18,8 +18,6 @@
 
 class ProblemReporter;
 
-namespace CppSupport{
-
 class Driver;
 class Lexer;
 class Token;
@@ -160,7 +158,5 @@ inline void Parser::resetErrors()
     m_errors = 0;
 }
 
-
-}
 
 #endif

@@ -12,7 +12,6 @@
 #include "lexer.h"
 #include <kdebug.h>
 
-using namespace CppSupport;
 using namespace std;
 
 static struct {

@@ -16,8 +16,6 @@
 #include <qmemarray.h>
 #include <qmap.h>
 
-namespace CppSupport {
-
 enum Type {
     Token_eof = 0,
     Token_identifier = 1000,
@@ -362,7 +360,5 @@ inline int Lexer::tokenPosition( const Token& token ) const
 {
     return token.position() - m_buffer;
 }
-
-} // namespace CppSupport
 
 #endif

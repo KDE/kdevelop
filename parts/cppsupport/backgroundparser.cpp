@@ -31,9 +31,8 @@ BackgroundParser::~BackgroundParser()
 
 void BackgroundParser::run()
 {
-    using namespace CppSupport;
-
     Driver driver;
+
     Lexer lexer;
     // stl
     lexer.addSkipWord( "__STL_BEGIN_NAMESPACE" );
@@ -48,14 +47,14 @@ void BackgroundParser::run()
     lexer.addSkipWord( "QM_EXPORT_NETWORK" );
     lexer.addSkipWord( "QMAC_PASCAL" );
     lexer.addSkipWord( "QT_STATIC_CONST" );
-    lexer.addSkipWord( "Q_OVERRIDE", CppSupport::SkipWordAndArguments );
-    lexer.addSkipWord( "Q_ENUMS", CppSupport::SkipWordAndArguments );
-    lexer.addSkipWord( "Q_PROPERTY", CppSupport::SkipWordAndArguments );
+    lexer.addSkipWord( "Q_OVERRIDE", SkipWordAndArguments );
+    lexer.addSkipWord( "Q_ENUMS", SkipWordAndArguments );
+    lexer.addSkipWord( "Q_PROPERTY", SkipWordAndArguments );
     lexer.addSkipWord( "Q_INLINE_TEMPLATES" );
     lexer.addSkipWord( "Q_TYPENAME" );
 
     // kde
-    lexer.addSkipWord( "K_EXPORT_COMPONENT_FACTORY", CppSupport::SkipWordAndArguments );
+    lexer.addSkipWord( "K_EXPORT_COMPONENT_FACTORY", SkipWordAndArguments );
 
     lexer.setSource( m_source );
     Parser parser( m_reporter, &driver,  &lexer );
