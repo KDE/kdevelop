@@ -42,6 +42,8 @@
 #include <private/qrichtext_p.h>
 
 #include <kdebug.h>
+//default size for codecompletionlistbox, value may not be ideal, change later
+QSize CCListBox::m_size = QSize(300,200);
 
 static QColor getColor( const QString &type )
 {
@@ -154,7 +156,7 @@ QEditorCodeCompletion::QEditorCodeCompletion( QEditorView* view )
     m_completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
     m_completionPopup->setLineWidth( 1 );
 
-    m_completionListBox = new QListBox( m_completionPopup );
+    m_completionListBox = new CCListBox( m_completionPopup );
     m_completionListBox->setFrameStyle( QFrame::NoFrame );
     m_completionListBox->installEventFilter( this );
     m_completionListBox->setHScrollBarMode( QScrollView::AlwaysOn );
@@ -332,9 +334,7 @@ void QEditorCodeCompletion::updateBox( bool newCoordinate )
         int h = cursor->paragraph()->lineHeightOfChar( cursor->index(), &dummy, &y );
         y += cursor->paragraph()->rect().y();
 
-        m_completionPopup->resize( m_completionListBox->sizeHint() +
-                                   QSize( m_completionListBox->verticalScrollBar()->width() + 4,
-                                          m_completionListBox->horizontalScrollBar()->height() + 4 ) );
+        m_completionPopup->resize( m_completionListBox->sizeHint()+ QSize(2,2))
 
         QPoint pt = curEditor->contentsToViewport( QPoint(x, y) );
         int yy = curEditor->mapToGlobal( pt ).y() + h + m_completionListBox->height();

@@ -55,6 +55,33 @@ public:
     }
 };
 
+/**
+ *This class is used for providing a codecompletionbox with the same size in all editorwindows.
+ *Therefor the size is stored statically and provided over sizeHint().
+ *@short Codecompletion-Listbox
+ */
+class CCListBox : public QListBox{
+public:
+    CCListBox(QWidget* parent = 0, const char* name = 0, WFlags f = 0):QListBox(parent, name, f){
+    	resize(m_size);
+	//resize the frame containing the listbox (bad "style" but i don't know a better way)
+	if (parent)
+		parent->resize(m_size +  QSize(2,2));
+    };
+
+    QSize sizeHint()  const {
+	return m_size;
+    };
+
+protected:
+   void resizeEvent(QResizeEvent* rev){
+	m_size = rev->size();
+	QListBox::resizeEvent(rev);
+    };
+
+private:
+    static QSize m_size;
+};
 
 class QEditorCodeCompletion : public QObject
 {
@@ -88,7 +115,7 @@ private:
   QEditorArgHint*    m_pArgHint;
   QEditorView*       m_view;
   QVBox*          m_completionPopup;
-  QListBox*       m_completionListBox;
+  CCListBox*      m_completionListBox;
   QValueList<KTextEditor::CompletionEntry> m_complList;
   uint            m_lineCursor;
   uint            m_colCursor;
