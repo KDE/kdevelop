@@ -213,6 +213,7 @@ protected slots:
     virtual void paintEvent(QPaintEvent *);
     virtual void resizeEvent(QResizeEvent *);
     virtual void timerEvent(QTimerEvent *);
+    virtual bool focusNextPrevChild( bool next);
 
     KWrite *kWrite;
     KWriteDoc *kWriteDoc;

@@ -427,6 +427,12 @@ bool KWriteView::event( QEvent *e )
   return QWidget::event( e );
 }
 
+bool KWriteView::focusNextPrevChild( bool )
+{
+  // avoids a focus out event on Tab key
+  return false;
+}
+
 void KWriteView::cursorLeft(VConfig &c) {
 
   cursor.x--;
