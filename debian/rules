@@ -89,13 +89,15 @@ build-stamp: configure-stamp
 debian-clean:
 	dh_testdir
 	dh_testroot
+	
+	rm -f install-stamp
 
 	dh_clean
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp debian/debiandirs
+	rm -f build-stamp configure-stamp install-stamp debian/debiandirs
 
 	# Remove Debian specific patches
 	if test -f patch-stamp; then \
@@ -121,6 +123,9 @@ clean:
 	dh_clean
 
 install: DH_OPTIONS=
+install-stamp: install
+	touch install-stamp
+
 install: build
 	dh_testdir
 	dh_testroot
@@ -129,9 +134,19 @@ install: build
 
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 
-	-install -d $(CURDIR)/debian/tmp/usr/share/kdevelop
-	-install debian/update_doc_index.sh $(CURDIR)/debian/tmp/usr/share/kdevelop
+	-install -d $(CURDIR)/debian/tmp/usr/share/kdevelop3
+	-install debian/update_doc_index.sh $(CURDIR)/debian/tmp/usr/share/kdevelop3
 	-rm -f debian/tmp/usr/share/mimelnk/text/x-pascal.desktop
+	rm -f debian/tmp/usr/lib/libkdevcatalog.so
+	rm -f debian/tmp/usr/lib/libkdevcppparser.so
+	rm -f debian/tmp/usr/lib/libkdevelop.so
+	rm -f debian/tmp/usr/lib/libkdevelopqextmdi.so
+	rm -f debian/tmp/usr/lib/libpropertyeditor.so
+	mv debian/tmp/etc/kde3/kdeveloprc debian/tmp/etc/kde3/kdevelop3rc
+	mv debian/tmp/usr/bin/kdevelop debian/tmp/usr/bin/kdevelop3
+	mv debian/tmp/usr/share/applnk/Development/kdevelop.desktop debian/tmp/usr/share/applnk/Development/kdevelop3.desktop
+	mv debian/tmp/usr/share/apps/kdevelop debian/tmp/usr/share/apps/kdevelop3
+	mv debian/tmp/usr/share/doc/kde/HTML/en/kdevelop debian/tmp/usr/share/doc/kde/HTML/en/kdevelop3
 
 	dh_install --list-missing
 
@@ -169,15 +184,15 @@ binary-common:
 	dh_builddeb
 
 # Build architecture independant packages using the common target.
-binary-indep: build install
+binary-indep: build install-stamp
 	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
 # Build architecture dependant packages using the common target.
-binary-arch: build install
+binary-arch: build install-stamp
 	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
 
 # Any other binary targets build just one binary package at a time.
-binary-%: build install
+binary-%: build install-stamp
 	$(MAKE) -f debian/rules binary-common DH_OPTIONS=-p$*
 
 binary: binary-indep binary-arch

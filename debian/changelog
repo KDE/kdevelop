@@ -1,3 +1,11 @@
+kdevelop3 (4:3.0-00cvs20031013) unstable; urgency=low
+
+  * Updated CVS sources
+  * Change the package names again to kdevelop3*
+    - Now KDevelop 3 and KDevelop 2 can be installed at the same time
+
+ -- Norman Jordan <njordan@debian.org>  Mon, 13 Oct 2003 23:05:06 -0700
+
 kdevelop (4:2.999-0cvs20031006) unstable; urgency=low
 
   * Updated CVS sources

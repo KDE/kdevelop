@@ -1,4 +1,5 @@
-This package was debianized by Bernd Gehrmann <bernd@physik.hu-berlin.de> 
+This package was debianized by Bernd Gehrmann <bernd@physik.hu-berlin.de>,
+and is now maintained by Norman Jordan <njordan@debian.org>.
 Package configuration is based on those for the KDE packages.
 
 Copyright:

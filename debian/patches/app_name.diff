@@ -1,0 +1,24 @@
+diff -rNu kdevelop.old/kdevelop.desktop kdevelop/kdevelop.desktop
+--- kdevelop.old/kdevelop.desktop	2003-10-13 22:54:53.000000000 -0700
++++ kdevelop/kdevelop.desktop	2003-10-13 22:57:12.000000000 -0700
+@@ -2,7 +2,7 @@
+ Encoding=UTF-8
+ BinaryPattern=kdevelop;
+ Type=Application
+-Exec=kdevelop %u
++Exec=kdevelop3 %u
+ MimeType=application/x-kdevelop;
+ Icon=kdevelop
+ DocPath=kdevelop/index.html
+diff -rNu kdevelop.old/src/main.cpp kdevelop/src/main.cpp
+--- kdevelop.old/src/main.cpp	2003-10-13 22:33:58.000000000 -0700
++++ kdevelop/src/main.cpp	2003-10-13 22:32:32.000000000 -0700
+@@ -28,7 +28,7 @@
+ int main(int argc, char *argv[])
+ {
+   static const char description[] = I18N_NOOP("The KDevelop Integrated Development Environment.");
+-  KAboutData aboutData("kdevelop", I18N_NOOP("KDevelop"),
++  KAboutData aboutData("kdevelop3", I18N_NOOP("KDevelop"),
+                        VERSION, description, KAboutData::License_GPL,
+                        I18N_NOOP("(c) 1999-2003, The KDevelop developers"), "", "http://www.kdevelop.org");
+   aboutData.addAuthor("Caleb Tennis", I18N_NOOP("Current Maintainer and release coordinator, KTabBar, bugfixes"), "caleb@aei-tech.com");

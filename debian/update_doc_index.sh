@@ -10,7 +10,7 @@ QTDOC_PACKAGE="qt3-doc"
 QTDOC_DIR="/usr/share/qt3/doc/html"
 KDELIBSDOC_PACKAGE="kdelibs4-doc"
 KDELIBSDOC_DIR="/usr/share/doc/kde/HTML/en/kdelibs-apidocs"
-KDEVELOPDOC_PACKAGE="kdevelop-doc"
+KDEVELOPDOC_PACKAGE="kdevelop3-doc"
 KDEVELOPDOC_DIR="/usr/share/doc/kde/HTML/en/kdevelop"
 
 # Checks if a package is installed
@@ -24,7 +24,7 @@ check_package_status() {
   fi
 }
 
-GLOBAL_KDEVDOCTREEVIEW_DIR="/var/lib/kdevelop"
+GLOBAL_KDEVDOCTREEVIEW_DIR="/var/lib/kdevelop3"
 GLOBAL_HTDIG_DIR="$GLOBAL_KDEVDOCTREEVIEW_DIR/helpindex"
 HTDIG_DATA_DIR="/usr/share/apps/kdevdoctreeview"
 

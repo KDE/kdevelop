@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+if [ -d "/var/lib/gideon" ]; then
+  mv "/var/lib/gideon" "/var/lib/kdevelop3"
+elif [ -d "/var/lib/kdevelop" ]; then
+  mv "/var/lib/kdevelop" "/var/lib/kdevelop3"
+fi
+
+test -f "/usr/share/kdevelop3/update_doc_index.sh" && "/usr/share/kdevelop3/update_doc_index.sh" > /dev/null 2>&1 &
+
+#DEBHELPER#
+
+exit 0
+
