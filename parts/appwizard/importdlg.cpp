@@ -193,7 +193,7 @@ void ImportDialog::dirChanged()
     // QMake based?
     files = dir.entryList("*.pro");
     if (!files.isEmpty()) {
-        setProjectType("qttmake");
+        setProjectType("qtqmake");
         return;
     }
 
