@@ -78,7 +78,6 @@ private:
     QWaitCondition m_isEmpty;
     QWaitCondition* m_consumed;
     QMutex m_mutex;
-    QMutex m_fileListMutex;
 
     CppSupportPart* m_cppSupport;
     bool m_close;

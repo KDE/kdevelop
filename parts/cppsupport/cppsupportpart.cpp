@@ -833,12 +833,12 @@ void CppSupportPart::implementVirtualMethods( const QString& className )
 
 void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 {
-    if( !m_activeEditor )
+    if( 1 || !m_activeEditor )
 	return;
 
     // sync
-    while( m_backgroundParser->filesInQueue() > 0 )
-         m_backgroundParser->isEmpty().wait();
+    //while( m_backgroundParser->filesInQueue() > 0 )
+    //     m_backgroundParser->isEmpty().wait();
 
     m_backgroundParser->lock();
     TranslationUnitAST* ast = m_backgroundParser->translationUnit( m_activeFileName );
