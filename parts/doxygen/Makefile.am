@@ -11,7 +11,8 @@ libkdevdoxygen_la_SOURCES = doxygenpart.cpp \
 			    input.cpp \
 			    config.cpp \
 			    version.cpp \
-			    messages.cpp
+			    messages.cpp \
+			    config.h
 
 METASOURCES = AUTO
 
