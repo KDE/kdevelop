@@ -1,0 +1,30 @@
+...att KDevelop ger en Snabbhjälp med höger musknapp?
+...att du kan välja autosparningstid i inställningsdialogen?
+Om du vill lägga till ytterligare kommandorads villkor till ditt 'make' program kan du lägga till dem i inställningsdialogen.
+Om du vill använda funktioner i bibliotek som ej länkas med programmet, kan du lägga till dem i projektets alternativdialog.
+Om du vil ändra versionsnummret på din applikation, kan du ändra den i projektets alternativdialog eller låta KDevelop automatiskt uppdatera ditt projekt.
+Om du vill skapa ett nytt projekt, välj "Projekt"->"Applikation Wizard" från menyn.
+Om du inte har dokumentationen till KDE-biblioteket, skapa en genom att välj "Uppdatera" från dokumentationsdelen i KDevelops inställningsdialog.
+Om du ändrade dina applikations klasser bör du uppdater din API dokumentation genom att välja "Skapa API-Doc" från projektmenyn.
+Du kan spara tid om du väljer att "Kompilera fil" från projektmenyn eller verktygsfältet enbart skall kompilera din aktuella implementationsfil. 
+Om du söker efter information om klasser eller klassmedlemmar, välj "Sök hjälp om..." från hjäpmenyn.
+Om du vill ha information om något i KDevelops fönster, välj "Vad är detta ?" knappen i verktygsfältet och tryck på den sak du inte vet något om.
+Tips: Du kan söka i dokumentationen efter ett nyckelord genom att markera ordet och välja "slå upp" i popupmenyn som du får genom att trycka höger musknapp.
+KDevelopteamet önskar dig en trevlig dag !
+Om du hittar ett fel i KDevelop, var då snäll och låt oss veta det. Kontaktadresser finns i KDevelops användarhandbok.
+Om du vill att lägga till ditt egen dokumentation till dokumentationsträdet, tryck höger musknapp eller välj "Andra"-tillägg i trädet. Konfigurera sedan sökvägen och tillägsnamnet.
+...att du kan skapa en ny klass med "ny klass" från projektmenyn ?
+att du kan skriva ut dina filer med antingen a2ps eller enscript inifrån KDevelop ?
+För att öppna ett projekt, välj "Öppna" från projektmenyn.
+Om du kompilerat ditt projekt och fick ett felmeddelande, kan du trycka på felmeddelandet och hoppa till den fil och dess rad där felet uppstod.
+...att du kan använda tangentbordets snabbkommandon för att stänga av / på utdata och trädfönstret ?
+...att du kan felsöka ditt program inifrån KDevelop genom att markera "Felsök" i Projektmenyn eller genom att välja Felsökningsikonen ?
+...att du kan byta mellan klasser genom att välja bland klasslistan i verktygsfältet ?
+...att du kan redigera xmp:er med kiconedit genom att välja dem i filvisarens träd ?
+...att du kan välja bland kompilatorvarningar i projektets alternativdialog ?
+...att du även kan söka efter markerad text inifrån dokumentationsläsaren i popupmenyn som du får genom att trycka höger musknapp ?
+...att du kan kopiera text från dokumentationläsaren till utklippshanteraren med popupmenyn som du får genom att trycka höger musknapp och klistra in dem i din källkod ?
+...att du bör hålla dokumentationen till ditt bibliotek uppdaterad efter att du installerat ett nytt bibliotek?
+...att du kan konfigurera redigerarens syntaxfärgläggningen ?
+...att du kan ångra och göra om dina redigeringskommandon och välja antalet steg i redigerarens dialogruta ?
+
