@@ -4,6 +4,7 @@ INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
 	   -I$(top_srcdir)/kdevelop/lib/sourceinfo \
 	   -I$(top_srcdir)/kdevelop/lib/projectmanagement \
 	   -I$(top_srcdir)/kdevelop/widgets/qextmdi/include \
+	   -I$(top_builddir)/kdevelop/lib/projectmanagement \
 	   $(all_includes)
 
 LFLAGS = -+
