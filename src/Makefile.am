@@ -27,5 +27,3 @@ gideon_LDADD = $(top_builddir)/parts/doctreeview/libkdevdoctreeview.la \
 rcdir = $(kde_datadir)/gideon
 rc_DATA = gideonui.rc
 
-messages: 
-	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp` -o $(podir)/gideon.pot
