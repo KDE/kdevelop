@@ -609,16 +609,48 @@ void CKDevelop::slotViewTTreeView()
 	view_menu->setItemChecked(ID_VIEW_TREEVIEW, willshow);
 	toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, willshow);
 	if (willshow) {
-		if(dockbase_t_tab_view->isTopLevel() && dockbase_t_tab_view->isMinimized())
-			dockbase_t_tab_view->showNormal();
+		if(dockbase_class_tree->isTopLevel() && dockbase_class_tree->isMinimized())
+			dockbase_class_tree->showNormal();
 		else
-			makeDockVisible(dockbase_t_tab_view);
+			makeDockVisible(dockbase_class_tree);
+		if(dockbase_log_file_tree->isTopLevel() && dockbase_log_file_tree->isMinimized())
+			dockbase_log_file_tree->showNormal();
+		else
+			makeDockVisible(dockbase_log_file_tree);
+		if(dockbase_real_file_tree->isTopLevel() && dockbase_real_file_tree->isMinimized())
+			dockbase_real_file_tree->showNormal();
+		else
+			makeDockVisible(dockbase_real_file_tree);
+		if(dockbase_doc_tree->isTopLevel() && dockbase_doc_tree->isMinimized())
+			dockbase_doc_tree->showNormal();
+		else
+			makeDockVisible(dockbase_doc_tree);
+		if(dockbase_widprop_split_view->isTopLevel() && dockbase_widprop_split_view->isMinimized())
+			dockbase_widprop_split_view->showNormal();
+		else
+			makeDockVisible(dockbase_widprop_split_view);
 	}
 	else {
-		if(dockbase_t_tab_view->isTopLevel())
-			dockbase_t_tab_view->showMinimized();
+		if(dockbase_class_tree->isTopLevel())
+			dockbase_class_tree->showMinimized();
 		else
-			makeDockInvisible(dockbase_t_tab_view);
+			makeDockInvisible(dockbase_class_tree);
+		if(dockbase_log_file_tree->isTopLevel())
+			dockbase_log_file_tree->showMinimized();
+		else
+			makeDockInvisible(dockbase_log_file_tree);
+		if(dockbase_real_file_tree->isTopLevel())
+			dockbase_real_file_tree->showMinimized();
+		else
+			makeDockInvisible(dockbase_real_file_tree);
+		if(dockbase_doc_tree->isTopLevel())
+			dockbase_doc_tree->showMinimized();
+		else
+			makeDockInvisible(dockbase_doc_tree);
+		if(dockbase_widprop_split_view->isTopLevel())
+			dockbase_widprop_split_view->showMinimized();
+		else
+			makeDockInvisible(dockbase_widprop_split_view);
 	}
 }
 
@@ -628,16 +660,32 @@ void CKDevelop::slotViewTOutputView()
 	view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, willshow);
 	toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, willshow);
 	if (willshow) {
-		if(dockbase_o_tab_view->isTopLevel() && dockbase_o_tab_view->isMinimized())
-			dockbase_o_tab_view->showNormal();
-		else
-			makeDockVisible(dockbase_o_tab_view);
+			if( dockbase_messages_widget->isTopLevel() && dockbase_messages_widget->isMinimized())
+			  dockbase_messages_widget->showNormal();
+			else
+  			makeDockVisible(dockbase_messages_widget);
+			if( dockbase_grepview->isTopLevel() && dockbase_grepview->isMinimized())
+			  dockbase_grepview->showNormal();
+			else
+    	  makeDockVisible(dockbase_grepview);
+			if( dockbase_outputview->isTopLevel() && dockbase_outputview->isMinimized())
+			  dockbase_outputview->showNormal();
+			else
+  	    makeDockVisible(dockbase_outputview);
 	}
 	else {
-		if(dockbase_o_tab_view->isTopLevel())
-			dockbase_o_tab_view->showMinimized();
-		else
-			makeDockInvisible(dockbase_o_tab_view);
+			if(dockbase_messages_widget->isTopLevel())
+			  dockbase_messages_widget->showMinimized();
+			else
+  			makeDockInvisible(dockbase_messages_widget);
+			if(dockbase_grepview->isTopLevel())
+			  dockbase_grepview->showMinimized();
+			else
+    	  makeDockInvisible(dockbase_grepview);
+			if(dockbase_outputview->isTopLevel())
+			  dockbase_outputview->showMinimized();
+			else
+  	    makeDockInvisible(dockbase_outputview);
 	}
 }
 
@@ -2338,20 +2386,6 @@ void CKDevelop::slotDocTreeSelected(const QString &filename){
   slotURLSelected("file:" + filename, QString(), 1);
 }
 
-void CKDevelop::slotTCurrentTab(int idOfTabPage){
-//FALK	if( idOfTabPage == -1)	// is it the default value?
-//FALK		// yes, set DOC to current page/show it
-//FALK		dockbase_doc_tree->makeDockVisible();
-//FALK	else if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
-//FALK		// no, try to show the according tab page in the tree group
-//FALK		KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();	// get tab control
-//FALK		pTabGroup->setVisiblePage(idOfTabPage);
-//FALK	}
-//FALK	else
-//FALK		qDebug("warning: (in CKDevelop::slotTCurrentTab) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
-}
-
-
 void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
   switchToFile(filename,linenumber);
 }
@@ -2610,8 +2644,15 @@ void CKDevelop::slotToolbarClicked(int item){
 void CKDevelop::slotSwitchToChildframeMode() {
   showMaximized();
 
-	dockbase_o_tab_view->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom);
-	dockbase_t_tab_view->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft);
+  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom, 70/*size relation in %*/);
+  dockbase_grepview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+  dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+	// ...the tree views
+  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft, 35/*size relation in %*/);
+  dockbase_log_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_real_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_doc_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_widprop_split_view->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
 }
 
 void CKDevelop::slotSwitchToToplevelMode() {
