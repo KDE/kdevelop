@@ -91,11 +91,14 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParag* parag, int,
     int oldState = parag->endState();
     parag->setEndState( state );
     parag->setFirstPreProcess( FALSE );
-    extra->setLevel( computeLevel(parag, startLevel) );
+
+    int oldLevel = extra->level();
+    int level = computeLevel( parag, startLevel );
+    extra->setLevel( level );
 
     if ( invalidate && parag->next() &&
 	 !parag->next()->firstPreProcess() &&
-         oldState != parag->endState() &&
+         (oldState != parag->endState() || oldLevel != level) &&
          parag->next()->endState() != -1 ) {
 	QTextParag *p = parag->next();
 	while ( p ) {

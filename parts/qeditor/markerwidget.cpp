@@ -194,6 +194,8 @@ MarkerWidget::MarkerWidget( QEditor* editor, QWidget* parent, const char* name )
 			 this, SLOT( doRepaint() ) );
 	connect( m_editor, SIGNAL( textChanged() ),
 			 this, SLOT( doRepaint() ) );
+
+        doRepaint();
 }
 
 MarkerWidget::~MarkerWidget()

@@ -93,8 +93,7 @@ K_EXPORT_COMPONENT_FACTORY( libqeditorpart, QEditorPartFactory );
 using namespace std;
 
 QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
-								  QObject *parent, const char *name,
-								  const QStringList & /*args*/ )
+		QObject *parent, const char *name, const QStringList & /*args*/ )
 	: KTextEditor::Document( parent, name )
 {
 	kdDebug() << "QEditorPart::QEditorPart()" << endl;
@@ -153,11 +152,11 @@ void QEditorPart::setReadWrite(bool rw)
 	m_editor->editor()->setReadOnly(!rw);
 	if (rw)
 		connect(m_editor->editor(), SIGNAL(textChanged()),
-				this,     SLOT(setModified()));
+				this, SLOT(setModified()));
 	else
 	{
 		disconnect(m_editor->editor(), SIGNAL(textChanged()),
-				   this,     SLOT(setModified()));
+				   this, SLOT(setModified()));
 	}
 
 	ReadWritePart::setReadWrite(rw);
@@ -210,9 +209,9 @@ bool QEditorPart::openFile()
 	file.close();
 
 	m_editor->editor()->setText( str );
-
 	int hl = findMode( m_file );
 	setHlMode( hl>=0 ? hl : 0 );
+
 	setModified( false );
 	emit fileNameChanged();
 
@@ -271,16 +270,21 @@ QString QEditorPart::text() const
 }
 
 QString QEditorPart::text( unsigned int startLine, unsigned int startCol,
-						   unsigned int endLine, unsigned int endCol ) const
+	   unsigned int endLine, unsigned int endCol ) const
 {
-#warning "TODO: QEditorPart::text( unsigned int startLine, unsigned int startCol, unsigned int endLine, unsigned int endCol ) const"
-	kdDebug() << "EditInterface::text() -- not implemented yet!!" << endl;
-	return QString::null;
+        int selNum = 1000;
+        QTextDocument* textDoc = m_editor->editor()->document();
+
+        m_editor->editor()->setSelection( startLine, startCol, endLine, endCol, selNum );
+        QString txt = textDoc->selectedText( selNum );
+        textDoc->removeSelection( selNum );
+
+	return textDoc->selectedText( selNum );
 }
 
 QString QEditorPart::textLine( unsigned int line ) const
 {
-	return m_editor->editor()->text( line );
+	return m_editor->editor()->textLine( line );
 }
 
 unsigned int QEditorPart::numLines() const
@@ -381,14 +385,14 @@ unsigned int QEditorPart::redoCount() const
 
 unsigned int QEditorPart::undoSteps() const
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
-    return textDoc->commands()->undoDepth();
+	QTextDocument* textDoc = m_editor->editor()->document();
+	return textDoc->commands()->undoDepth();
 }
 
 void QEditorPart::setUndoSteps( unsigned int steps )
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
-    textDoc->commands()->setUndoDepth( steps );
+	QTextDocument* textDoc = m_editor->editor()->document();
+	textDoc->commands()->setUndoDepth( steps );
 }
 
 void QEditorPart::undo()
@@ -469,7 +473,7 @@ void QEditorPart::setupHighlighting()
 	mode = new HLMode;
 	mode->name = "c++";
 	mode->section = "Programming";
-	mode->extensions = QStringList() << "*.cpp" << "*.cxx" << "*.cc" << "*.C" << "*.c++" <<
+	mode->extensions = QStringList() << "*.cpp" << "*.cxx" << "*.cc" << "*.C" << "*.c++" << "*.c" <<
 					   "*.h" << "*.hh" << "*.hxx" << "*.h++" << "*.H";
 	m_modes.append( mode );
 
@@ -590,7 +594,6 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 
 uint QEditorPart::mark (uint line)
 {
-#warning "TODO: implement uint QEditorPart::mark (uint line)"
 	QTextDocument* textDoc = m_editor->editor()->document();
 	QTextParag* parag = textDoc->paragAt( line );
 	if( parag ){

@@ -30,6 +30,8 @@ ParagData::ParagData()
 	lastLengthForCompletion = 0;
 	m_level = 0;
 	m_mark = 0;
+        m_open = true;
+        m_blockStart = false;
 }
 
 ParagData::~ParagData()
@@ -72,3 +74,22 @@ void ParagData::setMark( uint mark )
 	m_mark = mark;
 }
 
+bool ParagData::isOpen() const
+{
+    return m_open;
+}
+
+void ParagData::setOpen( bool open )
+{
+    m_open = open;
+}
+
+bool ParagData::isBlockStart() const
+{
+    return m_blockStart;
+}
+
+void ParagData::setBlockStart( bool blockStart )
+{
+    m_blockStart = blockStart;
+}

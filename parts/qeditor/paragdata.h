@@ -69,16 +69,22 @@ public:
 	ParagData();
 	virtual ~ParagData();
 
-	virtual void clear();
+	void clear();
 	QValueList<Symbol> symbolList() const { return m_symbolList; }
-	virtual void add( int, const QChar&, int );
-	virtual void join( QTextParagData* );
+	void add( int, const QChar&, int );
+	void join( QTextParagData* );
 
-	virtual int level() const;
-	virtual void setLevel( int );
-	
-	virtual uint mark() const;
-	virtual void setMark( uint );
+	int level() const;
+	void setLevel( int );
+
+	bool isOpen() const;
+	void setOpen( bool );
+
+	bool isBlockStart() const;
+	void setBlockStart( bool );
+
+	uint mark() const;
+	void setMark( uint );
 
 	int lastLengthForCompletion;
 
@@ -86,6 +92,8 @@ private:
 	QValueList<Symbol> m_symbolList;
 	int m_level;
 	int m_mark;
+    	bool m_open;
+    	bool m_blockStart;
 };
 
 #endif

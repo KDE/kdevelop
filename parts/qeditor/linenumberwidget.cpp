@@ -55,6 +55,7 @@ LineNumberWidget::LineNumberWidget( QEditor* editor, QWidget* parent, const char
 			 this, SLOT( doRepaint() ) );
 	connect( m_editor, SIGNAL( textChanged() ),
 			 this, SLOT( doRepaint() ) );
+        doRepaint();
 }
 
 LineNumberWidget::~LineNumberWidget()
@@ -81,10 +82,10 @@ void LineNumberWidget::paintEvent( QPaintEvent* /*e*/ )
 			break;
 		//ParagData *paragData = (ParagData*)p->extraData();
 
-		painter.drawText( 3, p->rect().y() - yOffset,
-								  buffer.width(), p->rect().height(),
-								  AlignLeft | AlignVCenter,
-								  QString::number(p->paragId()) );
+		painter.drawText( 0, p->rect().y() - yOffset,
+				  buffer.width() - 10, p->rect().height(),
+				  AlignRight | AlignVCenter,
+				  QString::number(p->paragId()) );
 		p = p->next();
 	}
 

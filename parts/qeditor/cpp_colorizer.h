@@ -32,6 +32,7 @@ public:
     virtual ~CppColorizer();
 
     virtual void refresh();
+    virtual int computeLevel( QTextParag*, int );
 
 private:
     QFont font;

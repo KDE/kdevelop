@@ -143,3 +143,10 @@ void PythonColorizer::refresh()
     m_formats.insert( Definition, new QTextFormat( font, QColor( 0x00, 0x00, 0xff ) ) );
     m_formats.insert( Hilite, new QTextFormat( font, QColor( 0x00, 0x00, 0x68 ) ) );
 }
+
+int PythonColorizer::computeLevel( QTextParag* parag, int startLevel )
+{
+    int level = startLevel;
+
+    return level;
+}

@@ -18,7 +18,7 @@
  *  Boston, MA 02111-1307, USA.
  *
  */
- 
+
 #ifndef QEDITORPART_H
 #define QEDITORPART_H
 
@@ -84,13 +84,13 @@ public:
 	virtual bool isModified() const;
 
 	static KAboutData *createAboutData();
-	
+
 private:
 	void setupActions();
 
 signals:
 	void fileNameChanged();
-	
+
 // -- MarkInterface ------------------------------------------------------------------------
 public:
 	virtual uint mark (uint line);
@@ -103,20 +103,20 @@ public:
 
 	virtual QPtrList<KTextEditor::Mark> marks ();
 	virtual void clearMarks ();
-	
+
 signals:
 	void marksChanged();
-	
+
 // -- SearchInterface ----------------------------------------------------------------------
 public:
-	virtual bool searchText (unsigned int startLine, unsigned int startCol, 
-			const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol, 
+	virtual bool searchText (unsigned int startLine, unsigned int startCol,
+			const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol,
 			unsigned int *matchLen, bool casesensitive = true, bool backwards = false);
-			
-	virtual bool searchText (unsigned int startLine, unsigned int startCol, 
-			const QRegExp &regexp, unsigned int *foundAtLine, 
+
+	virtual bool searchText (unsigned int startLine, unsigned int startCol,
+			const QRegExp &regexp, unsigned int *foundAtLine,
 			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards = false);
-	
+
 // -- Document ------------------------------------------------------------------------------
 public:
 	/**

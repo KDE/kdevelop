@@ -22,6 +22,7 @@
 
 
 #include "java_colorizer.h"
+#include "paragdata.h"
 
 #include <qfont.h>
 #include <qapplication.h>
@@ -106,17 +107,19 @@ JavaColorizer::JavaColorizer()
     context0->appendChild( new StringHLItem( "'", String, 3 ) );
     context0->appendChild( new KeywordsHLItem( keywords, Keyword, 0 ) );
     context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "\\w+", Normal, 0 ) );
+    context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
 
     // comment context
     HLItemCollection* context1 = new HLItemCollection( Comment );
     context1->appendChild( new StringHLItem( "*/", Comment, 0 ) );
 
     HLItemCollection* context2 = new HLItemCollection( String );
+    context2->appendChild( new StringHLItem( "\\\\", String, 2 ) );
     context2->appendChild( new StringHLItem( "\\\"", String, 2 ) );
     context2->appendChild( new StringHLItem( "\"", String, 0 ) );
 
     HLItemCollection* context3 = new HLItemCollection( String );
+    context1->appendChild( new StringHLItem( "\\\\", String, 3 ) );
     context3->appendChild( new StringHLItem( "\\'", String, 3 ) );
     context3->appendChild( new StringHLItem( "'", String, 0 ) );
 
@@ -153,4 +156,33 @@ void JavaColorizer::refresh()
     m_formats.insert( String, new QTextFormat( font, QColor( 0x00, 0xaa, 0x00 ) ) );
     m_formats.insert( Definition, new QTextFormat( font, QColor( 0x00, 0x00, 0xff ) ) );
     m_formats.insert( Hilite, new QTextFormat( font, QColor( 0x00, 0x00, 0x68 ) ) );
+}
+
+int JavaColorizer::computeLevel( QTextParag* parag, int startLevel )
+{
+    int level = startLevel;
+
+    ParagData* data = (ParagData*) parag->extraData();
+    if( !data ){
+        return startLevel;
+    }
+
+    data->setBlockStart( false );
+
+    QValueList<Symbol> symbols = data->symbolList();
+    QValueList<Symbol>::Iterator it = symbols.begin();
+    while( it != symbols.end() ){
+        Symbol sym = *it++;
+        if( sym.ch() == '{' ){
+            ++level;
+        } else if( sym.ch() == '}' ){
+            --level;
+        }
+    }
+
+    if( level > startLevel ){
+        data->setBlockStart( true );
+    }
+
+    return level;
 }

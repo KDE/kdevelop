@@ -50,6 +50,7 @@
 #include "python_colorizer.h"
 #include "xml_colorizer.h"
 #include "qmake_colorizer.h"
+#include "paragdata.h"
 
 #include <private/qrichtext_p.h>
 #include <qregexp.h>
@@ -211,9 +212,9 @@ void QEditor::drawCursor( bool visible )
 
 void QEditor::configChanged()
 {
-	document()->invalidate();
-	viewport()->repaint( FALSE );
 	updateStyles();
+	document()->invalidate();
+	viewport()->repaint( TRUE );
 }
 
 void QEditor::zoomIn()
@@ -360,7 +361,9 @@ void QEditor::setLanguage( const QString& l )
 	} else {
 		document()->setPreProcessor( 0 );
 	}
+
 	configChanged();
+	sync();
 }
 
 QString QEditor::language() const
@@ -386,7 +389,25 @@ void QEditor::slotCursorPositionChanged( int line, int )
 		}
 		m_currentLine = line;
 		setParagraphBackgroundColor( m_currentLine,
-											 palette().active().mid() );
+			palette().active().mid() );
 	}
 #endif
+}
+
+int QEditor::level( int line) const
+{
+    ParagData* data = (ParagData*) document()->paragAt( line )->extraData();
+    if( data ){
+        return data->level();
+    }
+    return 0;
+}
+
+
+void QEditor::setLevel( int line, int lev )
+{
+    ParagData* data = (ParagData*) document()->paragAt( line )->extraData();
+    if( data ){
+        return data->setLevel( lev );
+    }
 }
