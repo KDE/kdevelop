@@ -505,7 +505,7 @@ void CKDevInstall::slotAuto() // proceed >>
 
     config->setGroup("KWrite Options");
     config->writeEntry("WrapAt","78");
-    config->writeEntry("ConfigFlags","1040");
+    config->writeEntry("ConfigFlags","1073");
     config->writeEntry("UndoSteps","50");
     config->writeEntry("Highlight","C++");
     config->writeEntry("SearchFlags","32");

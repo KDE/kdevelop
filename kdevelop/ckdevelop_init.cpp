@@ -625,7 +625,7 @@ void CKDevelop::initMenuBar(){
   // Options-menu entries
   // submenu for setting printprograms
   QPopupMenu* p3 = new QPopupMenu;
-  p3->insertItem(i18n("&A2ps..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_OPTIONS_PRINT_A2PS);
+  //p3->insertItem(i18n("&A2ps..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_OPTIONS_PRINT_A2PS);
   p3->insertItem(i18n("&Enscript..."), this,
 		  SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_PRINT_ENSCRIPT);
 
