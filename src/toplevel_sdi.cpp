@@ -516,7 +516,7 @@ void TopLevelSDI::raiseBottomTabbar() {
 }
 
 void TopLevelSDI::raiseEditor() {
-    m_tabWidget->currentPage()->setFocus();
+    if(m_tabWidget->currentPage()) m_tabWidget->currentPage()->setFocus();
 }
 
 void TopLevelSDI::slotTextChanged() {
