@@ -1,4 +1,7 @@
 2001-06-20  F@lk Brettschneider <falk@kdevelop.org>
+   * revised view focus/activation handling:
+     Now QextMdiChildView seems to emit the activated(this) signal properly
+     (not too less and not too often)
    * synchronized with QextMDI CVS version of Dr. Baldeweg AG Dresden
      - signal gotFocus(..) is renamed to activated(..) now!
      - doubleclick on icon button closes view
