@@ -231,7 +231,7 @@ void AppWizardDialog::textChanged()
         || author_edit->text().isEmpty()
         || version_edit->text().isEmpty();
     setFinishEnabled(m_lastPage, !invalid);
-    nextButton()->setEnabled(!appname_edit->text().isEmpty()&&!invalid);
+    nextButton()->setEnabled(!invalid);
 
 }
 
@@ -332,11 +332,13 @@ void AppWizardDialog::licenseChanged()
 void AppWizardDialog::accept()
 {
     QFileInfo fi(finalLoc_label->text());
+    // check /again/ whether the dir already exists; maybe users create it in the meantime
     if (fi.exists()) {
         KMessageBox::sorry(this, i18n("The directory you have chosen as the location for "
                                       "the project already exists."));
         showPage(generalPage);
-        dest_edit->setFocus();
+        appname_edit->setFocus();
+        projectLocationChanged();
         return;
     }
 
@@ -529,19 +531,25 @@ void AppWizardDialog::projectLocationChanged()
   // This version insures WYSIWYG and checks pathvalidity
   finalLoc_label->setText(dest_edit->text() + (dest_edit->text().right(1)=="/" ? "":"/") + appname_edit->text().lower());
   QDir qd(dest_edit->text());
-  if (!qd.exists() || appname_edit->displayText().isEmpty())
+  QFileInfo fi(dest_edit->text() + "/" + appname_edit->text().lower());
+  if (!qd.exists() || appname_edit->displayText().isEmpty()||fi.exists())
   {
-    finalLoc_label->setText(finalLoc_label->text() + i18n("invalid location", " (invalid)"));
+    if (!fi.exists() || appname_edit->displayText().isEmpty()) {
+      finalLoc_label->setText(finalLoc_label->text() + i18n("invalid location", " (invalid)"));
+    } else {
+      finalLoc_label->setText(finalLoc_label->text() + i18n(" (dir/file already exist)"));
+    }
     m_pathIsValid=false;
-    nextButton()->setEnabled(false);
-  }
-  else
-  {
+  } else {
     m_pathIsValid=true;
-    if (m_pCurrentAppInfo)
-        nextButton()->setEnabled(true);
   }
-
+    bool invalid = !m_pCurrentAppInfo
+       || appname_edit->text().isEmpty()
+       || !m_pathIsValid
+       || author_edit->text().isEmpty()
+       || version_edit->text().isEmpty();
+    setFinishEnabled(m_lastPage, !invalid);
+    nextButton()->setEnabled(!invalid);
 }
 
 
