@@ -111,3 +111,4 @@ FileItem::FileItem( QListView *lv, const QString &text )
 	setPixmap( 0, SmallIcon( "document" ) );
 }
 
+

@@ -119,7 +119,6 @@ public:
 // Not sure if this complexity is really necessary...
 class FileItem : public ProjectItem
 {
-//	Q_OBJECT
 
 public:
 	FileItem(QListView *lv, const QString &text);
