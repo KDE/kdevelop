@@ -27,7 +27,7 @@ state in respect to repository.
 
 struct VCSFileInfo
 {
-    enum FileState { Unknown, Added, Uptodate, Modified, Conflict, Sticky };
+    enum FileState { Unknown, Added, Uptodate, Modified, Conflict, Sticky, Directory };
 
     VCSFileInfo() {}
     VCSFileInfo( QString fn, QString workRev, QString repoRev, FileState aState )
@@ -72,7 +72,7 @@ public:
     * @param dirPath relative (to project dir) directory path to stat
     * @return status for all <u>registered</u> files
     */
-    virtual VCSFileInfoMap status( const QString &dirPath ) const = 0;
+    virtual const VCSFileInfoMap *status( const QString &dirPath ) const = 0;
 
     /**
     * <b>Async interface for requesting data</b>

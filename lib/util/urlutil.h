@@ -97,6 +97,7 @@ namespace URLUtil
   * If @p url is a directory will return true, false otherwise.
   */
   bool isDirectory( const KURL &url );
+  bool isDirectory( const QString &absFilePath );
 
   /**
   * Will dump the list of KURL @p urls on standard output, eventually printing @ aMessage if it

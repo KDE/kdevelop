@@ -155,7 +155,14 @@ QString URLUtil::extractPathNameAbsolute( const KURL &url )
 
 bool URLUtil::isDirectory( const KURL &url )
 {
-  return QDir( url.path() ).exists();
+  return isDirectory( url.path() );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool URLUtil::isDirectory( const QString &absFilePath )
+{
+  return QDir( absFilePath ).exists();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
