@@ -1138,7 +1138,7 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 	    if( !parseConstantExpression(expr) ){
 		reportError( i18n("Constant expression expected") );
 	    }
-	    goto update_node;
+	    goto UPDATE_POS;
 	}
     }
 
@@ -1176,13 +1176,13 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 	if( !parseParameterDeclarationClause(params) ){
 	    //kdDebug(9007)<< "----------------------> not a parameter declaration, maybe an initializer!?" << endl;
 	    lex->setIndex( index );
-	    goto update_node;
+	    goto UPDATE_POS;
 	}
 	ast->setParameterDeclarationClause( params );
 
 	if( lex->lookAhead(0) != ')' ){
 	    lex->setIndex( index );
-	    goto update_node;
+	    goto UPDATE_POS;
 	}
 
 	lex->nextToken();  // skip ')'
@@ -1210,7 +1210,7 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 
     }
 
-update_node:
+UPDATE_POS:
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
 
@@ -1274,13 +1274,13 @@ bool Parser::parseAbstractDeclarator( DeclaratorAST::Node& node )
 	ParameterDeclarationClauseAST::Node params;
 	if( !parseParameterDeclarationClause(params) ){
 	    lex->setIndex( index );
-	    goto update_node;
+	    goto UPDATE_POS;
 	}
 	ast->setParameterDeclarationClause( params );
 
 	if( lex->lookAhead(0) != ')' ){
 	    lex->setIndex( index );
-	    goto update_node;
+	    goto UPDATE_POS;
 	} else
 	    lex->nextToken();
 
@@ -1307,7 +1307,7 @@ bool Parser::parseAbstractDeclarator( DeclaratorAST::Node& node )
 
     }
 
-update_node:
+UPDATE_POS:
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
 
@@ -2398,28 +2398,44 @@ bool Parser::parseStatement( StatementAST::Node& node ) // thanks to fiore@8080.
     return skipExpressionStatement( node );
 }
 
-bool Parser::parseCondition( AST::Node& /*node*/ )
+bool Parser::parseCondition( ConditionAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseCondition()" << endl;
 
-    int index = lex->index();
+    int start = lex->index();
+
+    ConditionAST::Node ast = CreateNode<ConditionAST>();
 
     TypeSpecifierAST::Node spec;
     if( parseTypeSpecifier(spec) ){
-
     	DeclaratorAST::Node decl;
 	if( parseDeclarator(decl) && lex->lookAhead(0) == '=' ) {
 	    lex->nextToken();
 
 	    AST::Node expr;
-	    if( skipExpression(expr) )
+	    if( skipExpression(expr) ){
+                ast->setTypeSpec( spec );
+                ast->setDeclarator( decl );
+                ast->setExpression( expr );
+
+                UPDATE_POS( ast, start, lex->index() );
+                node = ast;
+
 		return true;
+            }
 	}
     }
 
-    lex->setIndex( index );
+    lex->setIndex( start );
+
     AST::Node expr;
-    return skipCommaExpression( expr );
+    if( !skipCommaExpression(expr) )
+        return false;
+
+    ast->setExpression( expr );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    return true;
 }
 
 
@@ -2431,7 +2447,7 @@ bool Parser::parseWhileStatement( StatementAST::Node& node )
     ADVANCE( Token_while, "while" );
     ADVANCE( '(' , "(" );
 
-    AST::Node cond;
+    ConditionAST::Node cond;
     if( !parseCondition(cond) ){
 	reportError( i18n("condition expected") );
 	return false;
@@ -2501,7 +2517,7 @@ bool Parser::parseForStatement( StatementAST::Node& node )
 	return false;
     }
 
-    AST::Node cond;
+    ConditionAST::Node cond;
     parseCondition( cond );
     ADVANCE( ';', ";" );
 
@@ -2585,7 +2601,7 @@ bool Parser::parseIfStatement( StatementAST::Node& node )
 
     IfStatementAST::Node ast = CreateNode<IfStatementAST>();
 
-    AST::Node cond;
+    ConditionAST::Node cond;
     if( !parseCondition(cond) ){
 	reportError( i18n("condition expected") );
 	return false;
@@ -2625,7 +2641,7 @@ bool Parser::parseSwitchStatement( StatementAST::Node& node )
 
     ADVANCE( '(' , "(" );
 
-    AST::Node cond;
+    ConditionAST::Node cond;
     if( !parseCondition(cond) ){
 	reportError( i18n("condition expected") );
 	return false;
@@ -3059,7 +3075,7 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& node )
     while( lex->lookAhead(0) == Token_catch ){
 	lex->nextToken();
 	ADVANCE( '(', "(" );
-	AST::Node cond;
+	ConditionAST::Node cond;
 	if( !parseCondition(cond) ){
 	    reportError( i18n("condition expected") );
 	    return false;

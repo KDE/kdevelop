@@ -140,7 +140,7 @@ public /*rules*/ :
     bool parseThrowExpression( AST::Node& node );
 
     // statement
-    bool parseCondition( AST::Node& node );
+    bool parseCondition( ConditionAST::Node& node );
     bool parseStatement( StatementAST::Node& node );
     bool parseWhileStatement( StatementAST::Node& node );
     bool parseDoStatement( StatementAST::Node& node );

@@ -83,6 +83,7 @@ enum NodeType
     NodeType_TypeParameter,
     NodeType_TemplateParameter,
     NodeType_TemplateParameterList,
+    NodeType_Condition,
 
     NodeType_Custom = 2000
 };
@@ -947,6 +948,33 @@ private:
     void operator = ( const ExpressionStatementAST& source );
 };
 
+class ConditionAST: public AST
+{
+public:
+    typedef std::auto_ptr<ConditionAST> Node;
+    enum { Type = NodeType_Condition };
+
+public:
+    ConditionAST();
+
+    TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
+    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
+
+    DeclaratorAST* declarator() { return m_declarator.get(); }
+    void setDeclarator( DeclaratorAST::Node& declarator );
+
+    AST* expression() { return m_expression.get(); }
+    void setExpression( AST::Node& expression );
+
+private:
+    TypeSpecifierAST::Node m_typeSpec;
+    DeclaratorAST::Node m_declarator;
+    AST::Node m_expression;
+
+private:
+    ConditionAST( const ConditionAST& source );
+    void operator = ( const ConditionAST& source );
+};
 
 class IfStatementAST: public StatementAST
 {
@@ -957,8 +985,8 @@ public:
 public:
     IfStatementAST();
 
-    AST* condition() const { return m_condition.get(); }
-    void setCondition( AST::Node& condition );
+    ConditionAST* condition() const { return m_condition.get(); }
+    void setCondition( ConditionAST::Node& condition );
 
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
@@ -967,7 +995,7 @@ public:
     void setElseStatement( StatementAST::Node& statement );
 
 private:
-    AST::Node m_condition;
+    ConditionAST::Node m_condition;
     StatementAST::Node m_statement;
     StatementAST::Node m_elseStatement;
 
@@ -985,14 +1013,14 @@ public:
 public:
     WhileStatementAST();
 
-    AST* condition() const { return m_condition.get(); }
-    void setCondition( AST::Node& condition );
+    ConditionAST* condition() const { return m_condition.get(); }
+    void setCondition( ConditionAST::Node& condition );
 
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
 
 private:
-    AST::Node m_condition;
+    ConditionAST::Node m_condition;
     StatementAST::Node m_statement;
 
 private:
@@ -1009,14 +1037,14 @@ public:
 public:
     DoStatementAST();
 
-    AST* condition() const { return m_condition.get(); }
-    void setCondition( AST::Node& condition );
+    ConditionAST* condition() const { return m_condition.get(); }
+    void setCondition( ConditionAST::Node& condition );
 
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
 
 private:
-    AST::Node m_condition;
+    ConditionAST::Node m_condition;
     StatementAST::Node m_statement;
 
 private:
@@ -1036,8 +1064,8 @@ public:
     StatementAST* initStatement() { return m_initStatement.get(); }
     void setInitStatement( StatementAST::Node& statement );
 
-    AST* condition() const { return m_condition.get(); }
-    void setCondition( AST::Node& condition );
+    ConditionAST* condition() const { return m_condition.get(); }
+    void setCondition( ConditionAST::Node& condition );
 
     AST* expression() const { return m_expression.get(); }
     void setExpression( AST::Node& expression );
@@ -1046,7 +1074,7 @@ public:
     void setStatement( StatementAST::Node& statement );
 
 private:
-    AST::Node m_condition;
+    ConditionAST::Node m_condition;
     StatementAST::Node m_initStatement;
     StatementAST::Node m_statement;
     AST::Node m_expression;
@@ -1065,14 +1093,14 @@ public:
 public:
     SwitchStatementAST();
 
-    AST* condition() const { return m_condition.get(); }
-    void setCondition( AST::Node& condition );
+    ConditionAST* condition() const { return m_condition.get(); }
+    void setCondition( ConditionAST::Node& condition );
 
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
 
 private:
-    AST::Node m_condition;
+    ConditionAST::Node m_condition;
     StatementAST::Node m_statement;
 
 private:

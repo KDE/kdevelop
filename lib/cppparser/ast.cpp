@@ -111,6 +111,8 @@ QString nodeTypeToString( NodeType type )
 	return "TemplateParameter";
     case NodeType_TemplateParameterList:
 	return "TemplateParameterList";
+    case NodeType_Condition:
+	return "Condition";
     case NodeType_Custom:
 	return "Custom";
     }
@@ -791,7 +793,7 @@ IfStatementAST::IfStatementAST()
 {
 }
 
-void IfStatementAST::setCondition( AST::Node& condition )
+void IfStatementAST::setCondition( ConditionAST::Node& condition )
 {
     m_condition = condition;
     if( m_condition.get() ) m_condition->setParent( this );
@@ -814,7 +816,7 @@ WhileStatementAST::WhileStatementAST()
 {
 }
 
-void WhileStatementAST::setCondition( AST::Node& condition )
+void WhileStatementAST::setCondition( ConditionAST::Node& condition )
 {
     m_condition = condition;
     if( m_condition.get() ) m_condition->setParent( this );
@@ -831,7 +833,7 @@ DoStatementAST::DoStatementAST()
 {
 }
 
-void DoStatementAST::setCondition( AST::Node& condition )
+void DoStatementAST::setCondition( ConditionAST::Node& condition )
 {
     m_condition = condition;
     if( m_condition.get() ) m_condition->setParent( this );
@@ -848,7 +850,7 @@ ForStatementAST::ForStatementAST()
 {
 }
 
-void ForStatementAST::setCondition( AST::Node& condition )
+void ForStatementAST::setCondition( ConditionAST::Node& condition )
 {
     m_condition = condition;
     if( m_condition.get() ) m_condition->setParent( this );
@@ -877,7 +879,7 @@ SwitchStatementAST::SwitchStatementAST()
 {
 }
 
-void SwitchStatementAST::setCondition( AST::Node& condition )
+void SwitchStatementAST::setCondition( ConditionAST::Node& condition )
 {
     m_condition = condition;
     if( m_condition.get() ) m_condition->setParent( this );
@@ -1129,5 +1131,28 @@ void TemplateParameterListAST::addTemplateParameter( TemplateParameterAST::Node&
 
     templateParameter->setParent( this );
     m_templateParameterList.append( templateParameter.release() );
+}
+
+// --------------------------------------------------------------------------
+ConditionAST::ConditionAST()
+{
+}
+
+void ConditionAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
+{
+    m_typeSpec = typeSpec;
+    if( m_typeSpec.get() ) m_typeSpec->setParent( this );
+}
+
+void ConditionAST::setDeclarator( DeclaratorAST::Node& declarator )
+{
+    m_declarator = declarator;
+    if( m_declarator.get() ) m_declarator->setParent( this );
+}
+
+void ConditionAST::setExpression( AST::Node& expression )
+{
+    m_expression = expression;
+    if( m_expression.get() ) m_expression->setParent( this );
 }
 
