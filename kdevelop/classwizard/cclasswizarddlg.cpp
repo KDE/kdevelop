@@ -76,6 +76,16 @@ void CClassWizardDlg::setCallbacks()
  *                                                                   *
  ********************************************************************/
 
+/*--------------------------------------- CClassWizardDlg::setStore()
+ * setStore()
+ *   Set the classtore.
+ *
+ * Parameters:
+ *   aStore         The store.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassWizardDlg::setStore( CClassStore *aStore )
 {
   assert( aStore != NULL );
@@ -104,5 +114,3 @@ void CClassWizardDlg::slotAddMethod( const char *aClassName,
 {
   emit addMethod( aClassName, aMethod );
 }
-
-
