@@ -24,8 +24,9 @@
 #include <kconfig.h>
 #include <kprocess.h>
 
-#include "ckdevinstall.h"
 #include "ccreatedocdatabasedlg.h"
+#include "ckdevinstallstate.h"
+#include "wizardindexdocupage.h"
 
 WizardIndexDocuPage::WizardIndexDocuPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
@@ -74,3 +75,5 @@ void WizardIndexDocuPage::indexingFinished(const QString& searchEngine)
   m_pInstallState->searchEngine = searchEngine;
   setValid(true);	// enable the Next button again
 }
+
+#include "wizardindexdocupage.moc"

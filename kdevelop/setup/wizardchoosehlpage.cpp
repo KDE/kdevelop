@@ -20,41 +20,62 @@
 #include <qvbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qwhatsthis.h>
 
 #include <klocale.h>
 #include <kconfig.h>
 
-#include "ckdevinstall.h"
+#include "ckdevinstallstate.h"
+#include "wizardchoosehlpage.h"
 
 WizardSyntaxHlPage::WizardSyntaxHlPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
 {
-  QVBox * vbox = new QVBox(this);
-  QLabel* label = new QLabel(vbox);
+  m_vbox = new QVBox(this);
+  QLabel* label = new QLabel(m_vbox);
   label = new QLabel(i18n("Now you can choose the Syntax-Highlighting style which KDevelop will use.") + "\n" +
-                     i18n("Which one do you want to use?"), vbox );
+										 i18n("Which one do you want to use?"), m_vbox );
+   										
+  QButtonGroup* bg = new QButtonGroup(m_vbox);
 
-  QButtonGroup* bg = new QButtonGroup(vbox);
-
-  QGridLayout* grid = new QGridLayout(bg,2,1,15,7);
+  QGridLayout* grid = new QGridLayout(bg,3,1,15,7);
+  QRadioButton* newKDevelop20Style = new QRadioButton( i18n("KDevelop 2.0 style"), bg );
   QRadioButton* emacsStyle = new QRadioButton( i18n("Emacs style"), bg );
   QRadioButton* kWriteDefault = new QRadioButton( i18n("KWrite default"), bg );
-  grid->addWidget(emacsStyle,0,0);
-  grid->addWidget(kWriteDefault,1,0);
-  bg->setFixedHeight(bg->sizeHint().height());
+  grid->addWidget(newKDevelop20Style,0,0);
+  grid->addWidget(emacsStyle,1,0);
+  grid->addWidget(kWriteDefault,2,0);
+	bg->setFixedHeight(bg->sizeHint().height());
 
-  QObject::connect(emacsStyle, SIGNAL(clicked(int)), this, SLOT(slotSetSyntaxHl(int)));
-  QObject::connect(kWriteDefault, SIGNAL(clicked(int)), this, SLOT(slotSetSyntaxHl(int)));
+  QObject::connect(bg, SIGNAL(clicked(int)), this, SLOT(slotSetSyntaxHl(int)));
+  QObject::connect(bg, SIGNAL(clicked(int)), this, SLOT(slotSetSyntaxHl(int)));
+  QObject::connect(bg, SIGNAL(clicked(int)), this, SLOT(slotSetSyntaxHl(int)));
 
-  if (m_pInstallState->highlightStyle == 0)
-    emacsStyle->setChecked(true);
-  else
-    kWriteDefault->setChecked(true);
+  switch (m_pInstallState->highlightStyle) {
+  case 0:
+    newKDevelop20Style->setChecked(true);
+    break;
+  case 1:
+	  emacsStyle->setChecked(true);
+    break;
+  case 2:
+	  kWriteDefault->setChecked(true);
+    break;
+  default:
+    break;
+  }
 
-  label = new QLabel(vbox);
+  QWhatsThis::add(newKDevelop20Style, i18n("The source files are almost like MS Visual C++ but a little bit more colored."
+                                           " The rest is like in KWrite."));
+  QWhatsThis::add(emacsStyle, i18n("Like used from Emacs."));
+  QWhatsThis::add(kWriteDefault, i18n("Like used from the KWrite editor."));
+
+  label = new QLabel(m_vbox);
 }
 
 void WizardSyntaxHlPage::slotSetSyntaxHl(int highl_style)
 {
-  m_pInstallState->highlightStyle = highl_style;
+	m_pInstallState->highlightStyle = highl_style;
 }
+
+#include "wizardchoosehlpage.moc"

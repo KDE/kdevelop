@@ -24,7 +24,8 @@
 #include <klocale.h>
 #include <kconfig.h>
 
-#include "ckdevinstall.h"
+#include "ckdevinstallstate.h"
+#include "wizardlastpage.h"
 
 WizardLastPage::WizardLastPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)

@@ -23,7 +23,8 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 
-#include "ckdevinstall.h"
+#include "ckdevinstallstate.h"
+#include "wizardkdedocpage.h"
 
 WizardKDEDocPage::WizardKDEDocPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
@@ -115,3 +116,5 @@ void WizardKDEDocPage::slotKDEpressed()
     }
   }
 }
+
+#include "wizardkdedocpage.moc"

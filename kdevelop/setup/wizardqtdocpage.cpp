@@ -20,12 +20,14 @@
 #include <qpushbutton.h>
 #include <qvbox.h>
 #include <qlayout.h>
+#include <qstring.h>
 
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 
-#include "ckdevinstall.h"
+#include "ckdevinstallstate.h"
+#include "wizardqtdocpage.h"
 
 WizardQtDocPage::WizardQtDocPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
@@ -164,3 +166,5 @@ void WizardQtDocPage::slotQTpressed()
     }
   }
 }
+
+#include "wizardqtdocpage.moc"

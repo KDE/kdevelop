@@ -27,7 +27,8 @@
 #include <kiconloader.h>
 #include <kstddirs.h>
 
-#include "ckdevinstall.h"
+#include "ckdevinstallstate.h"
+#include "wizarduimodepage.h"
 
 WizardUIModePage::WizardUIModePage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
@@ -38,13 +39,10 @@ WizardUIModePage::WizardUIModePage(QWidget* parent, const char* name, const QStr
 
   KGlobal::instance()->iconLoader()->loadIcon( "window_list", KIcon::NoGroup, KIcon::SizeMedium );
 
-  QGridLayout* grid = new QGridLayout(m_vbox,3,1,15,7);
   label = new QLabel(i18n("What kind of user interface do you want?"),m_vbox);
-  grid->addWidget(label,0,0);
 
   QButtonGroup* bg = new QButtonGroup(m_vbox);
   QObject::connect(bg, SIGNAL(clicked(int)), SLOT(slotModeChanged(int)) );
-  grid->addWidget(bg,1,0);
   QGridLayout* innerGrid = new QGridLayout(bg,3,2,15,7);
   QPixmap pm;
 
@@ -91,8 +89,6 @@ WizardUIModePage::WizardUIModePage(QWidget* parent, const char* name, const QStr
   bg->setMargin(8);
   bg->setFixedHeight(bg->sizeHint().height());
 
-  grid->setRowStretch(2,1);
-
   QString cfTxt = i18n("All tool views are initially docked to the mainframe.\nEditor and browser views will live within a view area of the mainframe.");
   QWhatsThis::add(childframe, cfTxt);
   QString tlTxt = i18n("All editor, browser and tool views will be toplevel windows (directly on desktop).");
@@ -107,3 +103,5 @@ void WizardUIModePage::slotModeChanged(int userInterfaceMode)
 {
   m_pInstallState->userInterfaceMode = userInterfaceMode;
 }
+
+#include "wizarduimodepage.moc"

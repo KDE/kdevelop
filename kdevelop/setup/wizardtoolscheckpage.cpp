@@ -19,21 +19,23 @@
 #include <qlistbox.h>
 #include <qvbox.h>
 #include <qlabel.h>
+#include <qvbox.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
 
 #include "ctoolclass.h"
-#include "ckdevinstall.h"
 #include "ccreatedocdatabasedlg.h"
+#include "ckdevinstallstate.h"
+#include "wizardtoolscheckpage.h"
 
 WizardToolsCheckPage::WizardToolsCheckPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
 {
-  QVBox * vbox = new QVBox(this);
-  new QLabel(i18n("The following results have been determined for your system:")+"\n", vbox);
-  QListBox* lb = new QListBox(vbox);
+  m_vbox = new QVBox(this);
+  new QLabel(i18n("The following results have been determined for your system:")+"\n", m_vbox);
+  QListBox* lb = new QListBox(m_vbox);
   searchForAllTools(lb);
 }
 

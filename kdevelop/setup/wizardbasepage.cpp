@@ -18,12 +18,14 @@
 #include <qvbox.h>
 #include <qlabel.h>
 #include <qpixmap.h>
+#include <qwidget.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstddirs.h>
 
 #include "ckdevinstall.h"
+#include "wizardbasepage.h"
 
 WizardBasePage::WizardBasePage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : QHBox(parent, name)
@@ -47,7 +49,8 @@ WizardBasePage::WizardBasePage(QWidget* parent, const char* name, const QString&
    else {
       labelPict->setBackgroundColor(QColor(206,102,57));
       labelText->setBackgroundColor(QColor(206,102,57));
-      labelText->setFixedWidth(116);
+      labelPict->setFixedWidth(120);
+      labelText->setFixedWidth(120);
    }
 
    setSpacing(8);
@@ -70,3 +73,5 @@ void WizardBasePage::setHelpTextBackgroundColor( const QColor& bgcolor)
 {
    labelText->setBackgroundColor( bgcolor);
 }
+
+#include "wizardbasepage.moc"

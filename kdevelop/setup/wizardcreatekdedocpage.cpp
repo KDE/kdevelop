@@ -25,8 +25,9 @@
 #include <kstddirs.h>
 #include <kprocess.h>
 
-#include "ckdevinstall.h"
 #include "cupdatekdedocdlg.h"
+#include "ckdevinstallstate.h"
+#include "wizardcreatekdedocpage.h"
 
 WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
@@ -77,3 +78,5 @@ void WizardCreateKDEDocPage::slotSetKDEDocPath(const QString& newKDEDocPath)
   m_pInstallState->kde = newKDEDocPath;
   setValid(true);	// enable the Next button again
 }
+
+#include "wizardcreatekdedocpage.moc"

@@ -1,9 +1,11 @@
 /***************************************************************************
-                          ckdevinstall.cpp  -  description
+                          ckdevinstall.h  -  description
                              -------------------
     begin                : Thu Mar 4 1999
     copyright            : (C) 1999 by Ralf Nolden
+    rewrite              : (C) Jun 2001 by Falk Brettschneider
     email                : Ralf.Nolden@post.rwth-aachen.de
+                         : falk.brettschneider@gmx.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,18 +17,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ckdevinstall.h"
-#include "ctoolclass.h"
-#include "cupdatekdedocdlg.h"
-#include "ccreatedocdatabasedlg.h"
-
-#include <kapp.h>
-#include <kmessagebox.h>
-#include <kfiledialog.h>
-#include <klocale.h>
-#include <kprocess.h>
-#include <kstddirs.h>
-
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -36,35 +26,31 @@
 #include <qprogressdialog.h>
 #include <qpushbutton.h>
 #include <qstringlist.h>
-//#include <qtimer.h>
+
+#include <kapp.h>
+#include <kmessagebox.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kstddirs.h>
+#include <kprocess.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-CKDevInstallState::CKDevInstallState(const QString& qtDocuPath, const QString& kdeDocuPath)
- : highlightStyle(0)	// emacs
-  ,qt_test(false)
-  ,kde_test(false)
-  ,successful(false)
+#include "ctoolclass.h"
+#include "wizardwelcomepage.h"
+#include "wizardchoosehlpage.h"
+#include "wizardcreatekdedocpage.h"
+#include "wizardindexdocupage.h"
+#include "wizardkdedocpage.h"
+#include "wizardlastpage.h"
+#include "wizardqtdocpage.h"
+#include "wizardtoolscheckpage.h"
+#include "wizarduimodepage.h"
 
-  ,glimpse(false)
-  ,glimpseindex(false)
-  ,htdig(false)
-  ,htsearch(false)
-  ,finished_glimpse(false)
-
-  ,make(false)
-  ,gmake(false)
-
-  ,install(true)	// we are installing at the moment
-  ,finish_dir(0L)
-  ,userInterfaceMode(1)	// childframe mode is default
-{
-  shell_process = new KShellProcess();
-  qt = qtDocuPath;
-  kde = kdeDocuPath;
-}
+#include "ckdevinstall.h"
+#include "ckdevinstallstate.h"
 
 void CKDevInstall::slotReceivedStdout(KProcess*,char* buffer,int count)
 {
@@ -101,15 +87,15 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name )
 
   setCaption(i18n("KDevelop Installation"));
 
-  WizardWelcomePage* pWizWelcomePage            = new WizardWelcomePage(this,"welcome_page", i18n("Welcome"), "pics/test.png");
-  WizardSyntaxHlPage* pWizSyntaxHlPage          = new WizardSyntaxHlPage(this, "syntaxhl_page", i18n("Syntax highlighting style"), "pics/test.png", m_pInstallState);
-  WizardUIModePage* pWizUIModePage              = new WizardUIModePage(this,"uimode_page", i18n("User interface mode"), "pics/test.png", m_pInstallState);
-  WizardToolsCheckPage* pWizToolsCheckPage      = new WizardToolsCheckPage(this, "toolscheck_page", i18n("Program test results"), "pics/test.png", m_pInstallState);
-  WizardQtDocPage* pWizQtDocPage                = new WizardQtDocPage(this, "qtdoc_page", i18n("Qt documentation"), "pics/test.png", m_pInstallState);
-  WizardKDEDocPage* pWizKDEDocPage              = new WizardKDEDocPage(this, "kdedoc_page", i18n("KDE documentation"), "pics/test.png", m_pInstallState);
-  WizardCreateKDEDocPage* pWizCreateKDEDocPage  = new WizardCreateKDEDocPage(this, "createkdedoc_page", i18n("Creating the KDE documentation"), "pics/test.png", m_pInstallState);
-  WizardIndexDocuPage* pWizIndexDocuPage        = new WizardIndexDocuPage(this, "indexdocu_page", i18n("Indexing the documentation"), "pics/test.png", m_pInstallState);
-  WizardLastPage* pWizLastPage                  = new WizardLastPage(this,"last_page", i18n("Installation finished"), "pics/test.png", m_pInstallState);
+  WizardWelcomePage* pWizWelcomePage            = new WizardWelcomePage(this,"welcome_page", i18n("Welcome"), "/home/falk/kdevinstall/kdevinstall/pics/test.png");
+  WizardSyntaxHlPage* pWizSyntaxHlPage          = new WizardSyntaxHlPage(this, "syntaxhl_page", i18n("Syntax highlighting style"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
+  WizardUIModePage* pWizUIModePage              = new WizardUIModePage(this,"uimode_page", i18n("User interface mode"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
+  WizardToolsCheckPage* pWizToolsCheckPage      = new WizardToolsCheckPage(this, "toolscheck_page", i18n("Program test results"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
+  WizardQtDocPage* pWizQtDocPage                = new WizardQtDocPage(this, "qtdoc_page", i18n("Qt documentation"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
+  WizardKDEDocPage* pWizKDEDocPage              = new WizardKDEDocPage(this, "kdedoc_page", i18n("KDE documentation"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
+  WizardCreateKDEDocPage* pWizCreateKDEDocPage  = new WizardCreateKDEDocPage(this, "createkdedoc_page", i18n("Creating the KDE documentation"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
+  WizardIndexDocuPage* pWizIndexDocuPage        = new WizardIndexDocuPage(this, "indexdocu_page", i18n("Indexing the documentation"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
+  WizardLastPage* pWizLastPage                  = new WizardLastPage(this,"last_page", i18n("Installation finished"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
 
   addPage(pWizWelcomePage, "Step 1 of 9");
   addPage(pWizSyntaxHlPage, "Step 2 of 9");
@@ -126,6 +112,7 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name )
   connect( pWizKDEDocPage, SIGNAL(enableCreateKDEDocPage(bool)), SLOT(slotEnableCreateKDEDocPage(bool)) );
   connect( helpButton(), SIGNAL(clicked()), SLOT(slotHelp()) );
   connect( cancelButton(), SIGNAL(clicked()), SLOT(slotCancel()) );
+  connect( finishButton(), SIGNAL(clicked()), SLOT(slotFinished()) );
   connect( pWizCreateKDEDocPage, SIGNAL(validData(QWidget*,bool)), SLOT(setNextEnabled(QWidget*,bool)) );
   connect( pWizIndexDocuPage, SIGNAL(validData(QWidget*,bool)), SLOT(setNextEnabled(QWidget*,bool)) );
 
@@ -149,7 +136,7 @@ void CKDevInstall::slotCancel()
                  "installation values manually in the KDevelop Setup\n"
                  "dialog available in the options menu.\n\n "),
             i18n("Warning"),i18n("Continue"),i18n("Back"));
-  if(result==KMessageBox::Yes)
+  if (result==KMessageBox::Yes)
   {
     m_config->setGroup("General Options");
     m_config->writeEntry("Install",false);
@@ -168,7 +155,57 @@ void CKDevInstall::slotProcessExited(KProcess*)
 void CKDevInstall::slotFinished()
 {
   // 1.) write the results of the syntax highlight mode page
-  if (m_pInstallState->highlightStyle == 0) {
+  if (m_pInstallState->highlightStyle == 0) {  // new KDevelop-2.0 style
+    m_config->setGroup("KWrite Options");
+    m_config->writeEntry("WrapAt","78");
+    m_config->writeEntry("ConfigFlags","1040");
+    m_config->writeEntry("UndoSteps","5000");
+    m_config->writeEntry("Highlight","C++");
+    m_config->writeEntry("SearchFlags","32");
+    m_config->writeEntry("Color0","255,255,255");
+    m_config->writeEntry("Color1","0,0,128");
+    m_config->writeEntry("Color2","0,0,0");
+    m_config->writeEntry("Color3","0,0,0");
+    m_config->writeEntry("TabWidth","2");
+    m_config->writeEntry("Color4","255,255,255");
+
+    m_config->setGroup("C Highlight");
+    m_config->writeEntry("Char","0,FFDE1907,FFFF1E09,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Comment","0,FF067817,FF1FD718,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Data Type","0,FFAD466A,FFE65D8D,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Decimal","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Float","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Hex","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Keyword","0,FF0E23AD,FF1534FF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Mimetypes","text/x-c-src");
+    m_config->writeEntry("Normal Text","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Octal","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Prep. Lib","0,FF808000,FF00FFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Preprocessor","0,FF800080,FFFF00FF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("String","0,FFDE1907,FFFF1E09,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("String Char","0,FFDE1907,FFFF1E09,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Symbol","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,\s");
+    m_config->writeEntry("Wildcards","*.c;*.C;*.ec");
+
+    m_config->setGroup("C++ Highlight");
+    m_config->writeEntry("Char","0,FFDE1907,FFFF1E09,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Comment","0,FF067817,FF1FD718,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Data Type","0,FFAD466A,FFE65D8D,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Decimal","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Float","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Hex","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Keyword","0,FF0E23AD,FF1534FF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Mimetypes","text/x-c++-src;text/x-c++-hdr;text/x-c-hdr");
+    m_config->writeEntry("Normal Text","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Octal","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Prep. Lib","0,FF808000,FF00FFFF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Preprocessor","0,FF800080,FFFF00FF,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("String","0,FFDE1907,FFFF1E09,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("String Char","0,FFDE1907,FFFF1E09,0,0,1,adobe-courier,12,Èñf@");
+    m_config->writeEntry("Symbol","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,\s");
+    m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp");
+  }
+  else if (m_pInstallState->highlightStyle == 1) {
     m_config->setGroup("Perl Highlight");
     m_config->writeEntry("Mimetypes","application/x-perl");
     m_config->writeEntry("Wildcards","");
@@ -314,7 +351,7 @@ void CKDevInstall::slotFinished()
     m_config->setGroup("KWrite Options");
     m_config->writeEntry("WrapAt","78");
     m_config->writeEntry("ConfigFlags","1073");
-    m_config->writeEntry("UndoSteps","50");
+    m_config->writeEntry("UndoSteps","5000");
     m_config->writeEntry("Highlight","C++");
     m_config->writeEntry("SearchFlags","32");
     m_config->writeEntry("Color0","255,255,255");
@@ -324,11 +361,11 @@ void CKDevInstall::slotFinished()
     m_config->writeEntry("TabWidth","2");
     m_config->writeEntry("Color4","255,255,255");
   }
-  else if (m_pInstallState->highlightStyle == 1) {
+  else if (m_pInstallState->highlightStyle == 2) {
     m_config->setGroup("KWrite Options");
     m_config->writeEntry("WrapAt","78");
     m_config->writeEntry("ConfigFlags","1040");
-    m_config->writeEntry("UndoSteps","50");
+    m_config->writeEntry("UndoSteps","5000");
     m_config->writeEntry("Highlight","C++");
     m_config->writeEntry("SearchFlags","32");
     m_config->writeEntry("Color0","255,255,255");
