@@ -1,1 +1,1 @@
-SUBDIRS = rubyhello qtruby
+SUBDIRS = rubyhello qtruby kapp

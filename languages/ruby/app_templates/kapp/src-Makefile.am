@@ -1,0 +1,5 @@
+bin_PROGRAMS = %{APPNAMELC}
+%{APPNAMELC}_SOURCES = %{APPNAMELC}.rb main.rb pref.rb %{APPNAMELC}view.rb %{APPNAMELC}iface.rb %{APPNAMELC}_client.rb
+
+%.rb: %.ui
+	rbuic $< >$@
