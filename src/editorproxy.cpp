@@ -52,7 +52,7 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
 }
 
 
-void EditorProxy::installPopup(KParts::Part *part, QPopupMenu *popup)
+void EditorProxy::installPopup(KParts::Part *part, QPopupMenu *popup, bool revalidate /*= false*/ )
 {
   kdDebug( 9000 ) << "EditorProxy::installPopup called with popup = " << popup << endl;
 
@@ -67,10 +67,18 @@ void EditorProxy::installPopup(KParts::Part *part, QPopupMenu *popup)
     }
   }
 
-  // ugly hack: mark the "original" items
-  m_popupIds.resize(popup->count());
-  for (uint index=0; index < popup->count(); ++index)
-    m_popupIds[index] = popup->idAt(index);
+  static bool forcerevalidation = true;
+  
+  if( forcerevalidation || revalidate ){
+  
+    forcerevalidation = false;
+  
+    // ugly hack: mark the "original" items
+    m_popupIds.resize(popup->count());
+    for (uint index=0; index < popup->count(); ++index)
+        m_popupIds[index] = popup->idAt(index);
+        
+  }
 
 }
 

@@ -472,7 +472,7 @@ void PartController::reinstallPopups( ){
 
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
-    editorProxy->installPopup( it.current(), popup );
+    editorProxy->installPopup( it.current(), popup, true );
 }
 
 void PartController::slotUploadFinished()

@@ -26,7 +26,7 @@ public:
 
   void setLineNumber(KParts::Part *part, int lineNum, int col);
 
-  void installPopup(KParts::Part *part, QPopupMenu *popup);
+  void installPopup(KParts::Part *part, QPopupMenu *popup, bool revalidate = false);
 
 private slots:
 
