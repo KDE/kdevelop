@@ -102,8 +102,7 @@ subversionPart::~subversionPart() {
 }
 
 void subversionPart::setupActions() {
-	actionCommit = new KAction( i18n("&Commit to Repository"), 0, this,
-			SLOT(slotActionCommit()), actionCollection(), "subversion_commit" );
+	actionCommit = new KAction( i18n("&Commit to Repository"), 0, this, SLOT(slotActionCommit()), actionCollection(), "subversion_commit" );
 	actionCommit->setToolTip( i18n("Commit file(s)") );
 	actionCommit->setWhatsThis( i18n("<b>Commit file(s)</b><p>Commits file to repository if modified.") );
 
@@ -112,13 +111,11 @@ void subversionPart::setupActions() {
 				actionDiff->setToolTip( i18n("Build difference") );
 				actionDiff->setWhatsThis( i18n("<b>Build difference</b><p>Builds difference between releases.") );
 				*/
-	actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()),
-			actionCollection(), "subversion_add" );
+	actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()), actionCollection(), "subversion_add" );
 	actionAdd->setToolTip( i18n("Add file to repository") );
 	actionAdd->setWhatsThis( i18n("<b>Add file to repository</b><p>Adds file to repository.") );
 
-	actionRemove = new KAction( i18n("&Remove From Repository"), 0, this,
-			SLOT(slotActionRemove()), actionCollection(), "subversion_remove" );
+	actionRemove = new KAction( i18n("&Remove From Repository"), 0, this, SLOT(slotActionRemove()), actionCollection(), "subversion_remove" );
 	actionRemove->setToolTip( i18n("Remove from repository") );
 	actionRemove->setWhatsThis( i18n("<b>Remove from repository</b><p>Removes file(s) from repository.") );
 
@@ -266,8 +263,20 @@ void subversionPart::slotActionCommit() {
 	}
 }
 
+void subversionPart::slotActionAdd() {
+	kdDebug() << "subversion: slotActionAdd()" << endl;
+	KURL doc;
+	if (urlFocusedDocument( doc )) {
+		m_impl->add( doc );
+	}
+}
+
 void subversionPart::slotCommit() {
 	m_impl->commit (m_urls);
+}
+
+void subversionPart::slotAdd() {
+	m_impl->add (m_urls);
 }
 
 void subversionPart::slotProjectOpened() {

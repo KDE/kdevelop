@@ -56,8 +56,10 @@ private slots:
 		void contextMenu( QPopupMenu *popup, const Context *context );
 		void slotActionUpdate();
 		void slotActionCommit();
+		void slotActionAdd();
 		void slotUpdate();
 		void slotCommit();
+		void slotAdd();
 		void slotProjectClosed();
 		void slotProjectOpened();
 		void projectConfigWidget( KDialogBase *dlg );
