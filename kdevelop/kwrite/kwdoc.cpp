@@ -21,11 +21,6 @@
 #include "kwview.h"
 #include "kwdoc.h"
 
-// set this to 0, if you want color printing
-//   (take care the background on printing is always set to white)
-#define BW_PRINTING      1
-
-
 //text attribute constants
 const int taSelected = 0x40;
 const int taFound = 0x80;
@@ -460,6 +455,8 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   ,printFontHeight(0)
   ,fontAscent(0)
   ,printFontAscent(0)
+  ,indentLength(2)
+  ,bwPrinting(true)
   ,newDocGeometry(false)
   ,longestLine(0L)
   ,maxLength(0)
@@ -596,6 +593,7 @@ void KWriteDoc::readConfig(KConfig *config) {
 
   setTabWidth(config->readNumEntry("TabWidth",8));
   setIndentLength(config->readNumEntry("IndentLength",2));
+  setBWPrinting(config->readBoolEntry("BlackAndWhitePrinting",true));
   setUndoSteps(config->readNumEntry("UndoSteps",5000));
   for (z = 0; z < 5; z++) {
     sprintf(s,"Color%d",z);
@@ -609,6 +607,7 @@ void KWriteDoc::writeConfig(KConfig *config) {
 
   config->writeEntry("TabWidth",tabChars);
   config->writeEntry("IndentLength",indentLength);
+  config->writeEntry("BlackAndWhitePrinting",bwPrinting);
   config->writeEntry("UndoSteps",undoSteps);
   for (z = 0; z < 5; z++) {
     sprintf(s,"Color%d",z);
@@ -1608,6 +1607,12 @@ void KWriteDoc::setIndentLength(int length){
   indentLength = length;
 }
 
+/** Set black and white printing width */
+void KWriteDoc::setBWPrinting(bool bw)
+{
+  bwPrinting=bw;
+}
+
 void KWriteDoc::updateLines(int startLine, int curLine, int endLine, int flags)
 {
   TextLine *textLine;
@@ -2512,7 +2517,7 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int y, int xStart, int 
           attr = nextAttr;
           a = &attribs[attr & taAttrMask];
 
-          if (printing && BW_PRINTING)
+          if (printing && bwPrinting)
              paint.setPen(black);
           else
           {
@@ -2555,7 +2560,7 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int y, int xStart, int 
         attr = nextAttr;
         a = &attribs[attr & taAttrMask];
 
-        if (printing && BW_PRINTING)
+        if (printing && bwPrinting)
            paint.setPen(black);
         else
         {

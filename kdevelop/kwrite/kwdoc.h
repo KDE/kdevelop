@@ -242,6 +242,7 @@ class KWriteDoc : public QObject {
     void updateFontData();
     void setTabWidth(int);
     void setIndentLength(int length);
+    void setBWPrinting(bool);
     void updateLines(int startLine = 0, int curLine = -1, int endLine = 0xffffff, int flags = 0);
     void updateMaxLength(const TextLine *);
     void updateMaxLengthSimple(  QList<TextLine> &contents );
@@ -332,6 +333,7 @@ class KWriteDoc : public QObject {
     int fontHeight, printFontHeight;
     int fontAscent, printFontAscent;
     int indentLength;
+    bool bwPrinting;
 
     QList<KWriteView> views;
     bool newDocGeometry;
