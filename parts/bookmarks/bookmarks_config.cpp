@@ -89,7 +89,7 @@ unsigned int BookmarksConfig::context()
 
 
 /*!
-    \fn BookmarksConfig::setCodeline( uint )
+    \fn BookmarksConfig::setCodeline( unsigned int )
  */
 void BookmarksConfig::setCodeline( unsigned int codeline )
 {
@@ -97,7 +97,7 @@ void BookmarksConfig::setCodeline( unsigned int codeline )
 }
 
 /*!
-    \fn BookmarksConfig::setContext( uint )
+    \fn BookmarksConfig::setContext( unsigned int )
  */
 void BookmarksConfig::setContext( unsigned int context )
 {
