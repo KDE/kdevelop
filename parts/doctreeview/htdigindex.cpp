@@ -441,7 +441,7 @@ bool ProgressDialog::generateIndex()
     // run htdig
     KConfig config("kdevdoctreeviewrc", true);
     config.setGroup("htdig");
-    exe = config.readPathEntry("htdig", kapp->dirs()->findExe("htdig"));
+    exe = config.readPathEntry("htdigbin", kapp->dirs()->findExe("htdig"));
     if (exe.isEmpty())
     {
         done(1);
@@ -508,7 +508,7 @@ void ProgressDialog::htdigExited(KProcess *proc)
       KConfig config("kdevdoctreeviewrc", true);
       config.setGroup("htdig");
       // run htmerge -----------------------------------------------------
-      exe = config.readPathEntry("htmerge", kapp->dirs()->findExe("htmerge"));
+      exe = config.readPathEntry("htmergebin", kapp->dirs()->findExe("htmerge"));
       if (exe.isEmpty())
       {
           done(1);
