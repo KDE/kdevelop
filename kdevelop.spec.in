@@ -1,0 +1,94 @@
+# You might want to change the next 2 lines, the rest should be ok
+%define qtdir /usr/lib/qt-2.1.0
+Prefix: /opt/kde2
+
+Name: kdevelop
+Summary: Integrated Development Environment for C++/C
+Version: @VERSION@
+Release: 1
+Source: http://fara3.cs.uni-potsdam.de/~smeier/kdevelop_home/kdevelop-%{version}.tar.bz2
+Source1: ftp://ftp.e-technik.fh-muenchen.de/pub/unix/ide/KDevelop/documentation/c_c++_reference.tar.gz
+URL: http://www.kdevelop.org/
+Group: Development/Tools
+BuildRoot: /var/tmp/%{name}-buildroot
+License: GPL
+Requires: kdesupport-devel kdelibs-devel make perl >= 5.004 autoconf >= 2.13
+Requires: automake >= 1.4 flex >= 2.5.4
+BuildPrereq: autoconf, automake, libtool, kdesupport-devel, kdelibs-devel
+Obsoletes: kdevelop-c_c++_ref
+
+%description
+The KDevelop Integrated Development Environment provides many features
+that developers need as well as providing a unified interface to programs
+like gdb, the C/C++ compiler, and make. KDevelop manages or provides:
+
+All development tools needed for C++ programming like Compiler,
+Linker, automake and autoconf; KAppWizard, which generates complete,
+ready-to-go sample applications; Classgenerator, for creating new
+classes and integrating them into the current project; File management
+for sources, headers, documentation etc. to be included in the
+project; The creation of User-Handbooks written with SGML and the
+automatic generation of HTML-output with the KDE look and feel;
+Automatic HTML-based API-documentation for your project's classes with
+cross-references to the used libraries; Internationalization support
+for your application, allowing translators to easily add their target
+language to a project;
+
+KDevelop also includes WYSIWYG (What you see is what you get)-creation
+of user interfaces with a built-in dialog editor; Debugging your
+application by integrating KDbg; Editing of project-specific pixmaps
+with KIconEdit; The inclusion of any other program you need for
+development by adding it to the "Tools"-menu according to your
+individual needs.
+
+%prep
+rm -rf $RPM_BUILD_ROOT
+
+%setup -q
+make -f Makefile.cvs
+
+%build
+export QTDIR=%{qtdir}
+export KDEDIR=%{prefix}
+CXXFLAGS="$RPM_OPT_FLAGS -DNO_DEBUG -DNDEBUG" ./configure \
+	--prefix=%{prefix} \
+	--with-qtdoc-dir=/usr/doc/qt-devel-2.1.0/html \
+	--with-kdelibsdoc-dir=%{prefix}/doc/kdelibs-devel-1.89.* \
+	--enable-kdoc2
+
+make CXXFLAGS="$RPM_OPT_FLAGS -DNO_DEBUG -DNDEBUG"
+
+%install
+make DESTDIR=$RPM_BUILD_ROOT install-strip
+
+(
+	cd $RPM_BUILD_ROOT
+	tar xzf %{SOURCE1}
+	rm -rf .%{prefix}/doc/kde/HTML/*/kdevelop/reference
+	rm -rf share/doc/HTML/en/kdevelop/reference/EXAMPLES/*/a.out
+	mv share/doc/HTML/en/kdevelop/reference .%{prefix}/doc/kde/HTML/en/kdevelop
+	rm -rf share
+)
+
+cd $RPM_BUILD_ROOT
+find . -type d | sed '1,2d;s,^\.,\%attr(-\,root\,root) \%dir ,' > \
+	$RPM_BUILD_DIR/file.list.%{name}
+
+find . -type f | sed -e 's,^\.,\%attr(-\,root\,root) ,' \
+	-e '/\/config\//s|^|%config|' >> \
+	$RPM_BUILD_DIR/file.list.%{name}
+
+find . -type l | sed 's,^\.,\%attr(-\,root\,root) ,' >> \
+	$RPM_BUILD_DIR/file.list.%{name}
+
+echo "%docdir %{prefix}/doc/kde" >> \
+	$RPM_BUILD_DIR/file.list.%{name}
+
+%clean
+rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/file.list.%{name}
+
+%files -f ../file.list.%{name}
+
+%changelog
+* Thu May 11 2000 Bernhard Rosenkraenzer <bero@redhat.com>
+- initial
