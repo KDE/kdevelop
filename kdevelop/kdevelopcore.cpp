@@ -18,6 +18,7 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 
+
 #include "classstore.h"
 #include "cproject.h"
 #include "projectoptionsdlg.h"
@@ -78,20 +79,13 @@ void KDevelopCore::initActions()
 {
     KAction *pAction;
     
-//    pAction = KStdAction::print( this, SLOT( slotFilePrint() ),
-//                                m_pKDevelopGUI->actionCollection(), "file_print");
-//    pAction->setStatusText( i18n("Prints the current document") );
-//    pAction->setWhatsThis( i18n("Print\n\n"
-//                               "Opens the printing dialog. There, you can "
-//                               "configure which printing program you wish "
-//                               "to use, and print your project files.") );
-    
-//    pAction = new KAction( i18n("&New"), 0, this, SLOT( slotFileNew() ),
-//                          m_pKDevelopGUI->actionCollection(), "file_new");
-//    pAction->setStatusText( i18n("Creates a new file and opens a default view, automatically") );
-//    pAction->setWhatsThis(  i18n("New file\n\n"
-//                                "Creates a new file "
-//                                "and opens a default view, automatically") );
+   pAction = KStdAction::print( this, SLOT( slotFilePrint() ),
+                               m_pKDevelopGUI->actionCollection(), "file_print_advanced");
+   pAction->setStatusText( i18n("Prints the current document") );
+   pAction->setWhatsThis( i18n("Print\n\n"
+                              "Opens the printing dialog. There, you can "
+                              "configure which printing program you wish "
+                              "to use, and print your project files.") );
 
     
     pAction = new KAction( i18n("&New..."),0, this, SLOT( slotProjectNew() ),
@@ -124,6 +118,7 @@ void KDevelopCore::initActions()
     pAction = new KAction( i18n("&Options..."), 0, this, SLOT( slotProjectOptions() ),
                           m_pKDevelopGUI->actionCollection(), "project_options");
     pAction->setStatusText( i18n("Sets project and compiler options") );
+
 
     pAction = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
                           m_pKDevelopGUI->actionCollection(), "options_kdevelop_setup");
@@ -553,6 +548,7 @@ void KDevelopCore::slotOptionsKDevelopSetup()
     pDlg->exec();
     delete pDlg;
 }
+
 
 
 void KDevelopCore::executeMakeCommand(const QString &command)

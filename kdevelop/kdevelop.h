@@ -51,120 +51,15 @@ signals:
   void addView( QWidget*);
 
 private:
-  /** sets up the KActions designed User Interface
-			for the toolbars and menubar */
-  void initActions();
+
+ void initActions(); 
   /** initializes the help messages (whats this and
-      statusbar help) on the KActions */
+      statusbar help) on the KActions 
+      !!! isn't used anymore, exists for saving the help texts :-)) !!!
+  */ 
   void initHelp();
 
-  // File Actions
-
-#ifdef removed
-  //  KAction* m_paFileNew;
-  KAction* m_paFileOpen;
-  KAction* m_paFileClose;
-  KAction* m_paFileCloseAll;
-  KAction* m_paFileSave;
-  KAction* m_paFileSaveAs;
-  KAction* m_paFileSaveAll;
-  KAction* m_paFileQuit;
-  // Edit Actions
-  KAction* m_paEditUndo;
-  KAction* m_paEditRedo;
-  KAction* m_paEditUndoHistory;
-  KAction* m_paEditCut;
-  KAction* m_paEditCopy;
-  KAction* m_paEditPaste;
-  KAction* m_paEditIndent;
-  KAction* m_paEditUnindent;
-  KAction* m_paEditComment;
-  KAction* m_paEditUncomment;
-  KAction* m_paEditInsertFile;
-  KAction* m_paEditSearch;
-  KAction* m_paEditRepeatSearch;
-  KAction* m_paEditReplace;
-  KAction* m_paEditSelectAll;
-  KAction* m_paEditDeselectAll;
-  KAction* m_paEditInvertSelection;
-  // ??? View Actions
-  KAction* m_paViewGotoLine;
-#endif
-  
-  // View Actions
-  KToggleAction* m_paViewTreeView;
-  KToggleAction* m_paViewOutputView;
-  KToggleAction* m_paViewToolbar;
-  KToggleAction* m_paViewBrowserToolbar;
-  KToggleAction* m_paViewMDITaskbar;
-  KToggleAction* m_paViewStatusbar;
-  KAction* m_paViewDebugVar;
-  KAction* m_paViewDebugBreakpoints;
-  KAction* m_paViewDebugFrameStack;
-  KAction* m_paViewDebugDisassemble;
-  KAction* m_paViewDebugDebugger;
-  KAction* m_paViewRefresh;
-  // Project Actions
-  KAction* m_paProjectOpen;
-  KAction* m_paProjectOpenRecent;
-  KAction* m_paProjectClose;
-  KAction* m_paProjectNewClass;
-  KAction* m_paProjectAddExistingFiles;
-  KAction* m_paProjectAddNewTranslationFile;
-  KAction* m_paProjectFileProperties;
-  KAction* m_paProjectMessages;
-  KAction* m_paProjectAPI;
-  KAction* m_paProjectManual;
-  KAction* m_paProjectMakeDistSourceTgz;
-  KAction* m_paProjectOptions;
-  // Build Actions
-  KAction* m_paBuildCompileFile;
-  KAction* m_paBuildMake;
-  KAction* m_paBuildRebuildAll;
-  KAction* m_paBuildCleanRebuildAll;
-  KAction* m_paBuildStop;
-  KAction* m_paBuildExecute;
-  KAction* m_paBuildExecuteWithArgs;
-  KAction* m_paBuildDistClean;
-  KAction* m_paBuildAutoconf;
-  KAction* m_paBuildConfigure;
-  // Debug Actions
-  KAction* m_paDebugStart;
-  KAction* m_paDebugExamineCore;
-  KAction* m_paDebugNamedFile;
-  KAction* m_paDebugAttatch;
-  KAction* m_paDebugExecuteWithArgs;
-  // Options Actions
-  KAction* m_paOptionsEditor;
-  KAction* m_paOptionsEditorColors;
-  KAction* m_paOptionsEditorDefaults;
-  KAction* m_paOptionsSyntaxHighlighting;
-  KAction* m_paOptionsDocumentationBrowser;
-  KAction* m_paOptionsConfigureEnscript;
-  KAction* m_paOptionsEditToolbars;
-  // Bookmark Actions
-  KAction* m_paBookmarksToggle;
-  KAction* m_paBookmarksNext;
-  KAction* m_paBookmarksPrevious;
-  KAction* m_paBookmarksClear;
-  // Help Actions
-  KAction* m_paHelpBack;
-  KAction* m_paHelpForward;
-  KAction* m_paHelpSearchMarkedText;
-  KAction* m_paHelpSearchForHelpOn;
-  KAction* m_paHelpWhatsThis;
-  KAction* m_paHelpWelcome;
-  KAction* m_paHelpUserManual;
-  KAction* m_paHelpProgramming;
-  KAction* m_paHelpTutorial;
-  KAction* m_paHelpKDELibRef;
-  KAction* m_paHelpCReference;
-  KAction* m_paHelpTipOfTheDay;
-  KAction* m_paHelpHomepage;
-  KAction* m_paHelpReportBug;
-  KAction* m_paHelpAboutApp;
-  KAction* m_paHelpAboutKDE;
-
+ 
   //
   // the covering dockwidgets for all views
   //

@@ -61,7 +61,6 @@ private slots:
     void slotProjectOptions();
     void slotStop();
     void slotOptionsKDevelopSetup();
-
     // Handling of component requests
     void executeMakeCommand(const QString &command);
     void executeAppCommand(const QString &command);

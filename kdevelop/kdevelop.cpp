@@ -28,13 +28,13 @@
 #include <kmenubar.h>
 #include <klibloader.h>
 #include <ktrader.h>
-#include <kedittoolbar.h>
 #include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevelopfactory.h"
 #include "kdevelopcore.h"
 #include "kdevviewhandler.h"
 #include <kparts/event.h>
+#include <kedittoolbar.h>
 
 KDevelop::KDevelop(const char *name) :
   KParts::DockMainWindow( name )
@@ -44,10 +44,9 @@ KDevelop::KDevelop(const char *name) :
    ,m_pCore(0L)
 {
   initActions();
-  initHelp();
+  //  initHelp();
 
   setXMLFile( "kdevelopui.rc" );
-
   m_pCore = new KDevelopCore(this);
   createGUI(0);
   m_pCore->loadInitialComponents();
@@ -59,258 +58,16 @@ KDevelop::~KDevelop()
 }
 
 
-/** sets up the KActions designed User Interface
-for the toolbars and menubar */
 void KDevelop::initActions(){
-  /////////////////////////////////////
-  // File Menu
-  ////////////////////////////////////
-#ifdef removed
-//  m_paFileNew = KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new");
-  m_paFileOpen = KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
-  m_paFileClose = KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(),  "file_close");
-  m_paFileCloseAll = new KAction( i18n("Close All"), 0, this, SLOT( slotFileCloseAll() ), actionCollection(), "file_close_all");
-  // Separator
-  m_paFileSave = KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
-  m_paFileSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
-  m_paFileSaveAll = new KAction( i18n("Save A&ll"), "save_all", 0, this, SLOT( slotFileSaveAll() ), actionCollection(), "file_save_all");
-  // Separator
-  m_paFileQuit = KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(),  "file_quit");
-
-  /////////////////////////////////////
-  // Edit Menu
-  ////////////////////////////////////
-  m_paEditUndo = KStdAction::undo( this, SLOT( slotEditUndo() ), actionCollection(), "edit_undo" );
-  m_paEditRedo = KStdAction::redo( this, SLOT( slotEditRedo() ), actionCollection(),"edit_redo" );
-  m_paEditUndoHistory = new KAction( i18n("Undo/Redo &History..."), 0, this, SLOT( slotEditUndoHistory() ),
-      actionCollection(), "edit_undo_history");
-  // Separator
-  m_paEditCut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
-  m_paEditCopy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(),"edit_copy" );
-  m_paEditPaste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(),"edit_paste" );
-  // Separator
-
-  m_paEditIndent = new KAction( i18n("In&dent"), "indent", CTRL+Key_I, this, SLOT( slotEditIndent() ),
-      actionCollection(), "edit_indent");
-  m_paEditUnindent = new KAction( i18n("Uninden&t"), "unindent", CTRL+Key_U, this, SLOT( slotEditUnindent() ),
-      actionCollection(), "edit_unindent");
-  // Separator
-  m_paEditComment = new KAction( i18n("Comment"), CTRL+Key_M, this, SLOT( slotEditComment() ),
-      actionCollection(), "edit_comment");
-  m_paEditUncomment = new KAction( i18n("Uncomment"), CTRL+ALT+Key_M, this, SLOT( slotEditUncomment() ),
-      actionCollection(), "edit_uncomment");
-  // Separator
-  m_paEditInsertFile = new KAction(i18n("&Insert File"), 0, this, SLOT( slotEditInsertFile() ),
-      actionCollection(), "edit_insert_file");
-  // Separator
-  m_paEditSearch = KStdAction::find( this, SLOT( slotEditSearch() ), actionCollection(),"edit_search" );
-  m_paEditRepeatSearch = KStdAction::findNext( this, SLOT(slotEditRepeatSearch()),
-      actionCollection(), "edit_repeat_search" );
-  m_paEditReplace = KStdAction::replace( this, SLOT( slotEditReplace() ), actionCollection(), "edit_replace" );
-  // Separator
-  m_paEditSelectAll = KStdAction::selectAll( this, SLOT( slotEditSelectAll() ), actionCollection(),"edit_select_all" );
-  m_paEditDeselectAll = new KAction( i18n("&Deselect All"), 0, this, SLOT( slotEditDeselectAll() ),
-      actionCollection(), "edit_deselect_all");
-  m_paEditInvertSelection = new KAction( i18n("In&vert Selection"), 0, this, SLOT( slotEditInvertSelection() ),
-      actionCollection(), "edit_invert_selection");
-
-#endif
-
-  /////////////////////////////////////
-  // View Menu
-  ////////////////////////////////////
-//  m_paViewGotoLine = KStdAction::gotoLine( this, SLOT(  slotViewGotoLine() ), actionCollection(), "view_goto_line");
-  // Separator
-  m_paViewTreeView = new KToggleAction( i18n("&Tree-View"), "tree_win", CTRL+Key_T, actionCollection(), "view_treeview");
-  m_paViewOutputView = new KToggleAction( i18n("&Output-View"), "output_win",
-        CTRL+Key_B, actionCollection(), "view_output_view");
-  // Separator
-  m_paViewToolbar = KStdAction::showToolbar( this, SLOT( slotViewToolbar() ), actionCollection() );
-  m_paViewBrowserToolbar = new KToggleAction( i18n("&Browser-Toolbar"), 0, actionCollection(), "view_browser_toolbar");
-  m_paViewMDITaskbar = new KToggleAction( i18n("Tas&kbar"), 0, actionCollection(), "view_taskbar");
-  m_paViewStatusbar = KStdAction::showStatusbar( this, SLOT( slotViewStatusbar() ), actionCollection(), "view_statusbar" );
-  // Separator
-  m_paViewTreeView->setChecked( true );
-  m_paViewOutputView->setChecked( true );
-  m_paViewBrowserToolbar->setChecked( true );
-  m_paViewMDITaskbar->setChecked( true );
-  connect( m_paViewTreeView, SIGNAL( activated() ), this, SLOT( slotViewTreeView() ) );
-  connect( m_paViewOutputView, SIGNAL( activated() ), this, SLOT( slotViewOutputView() ) );
-  connect( m_paViewBrowserToolbar, SIGNAL( activated() ), this, SLOT( slotViewBrowserToolbar() ) );
-  connect( m_paViewMDITaskbar, SIGNAL( activated() ), this, SLOT( slotViewMDITaskbar() ) );
-  ////////////////
-
-
-#ifdef removed
-  // Debug Viewers submenu
-  m_paViewDebugVar = new KAction( i18n("&Variables"), 0, this, SLOT( slotViewDebugVar() ),
-          actionCollection(), "view_debug_variables");
-  m_paViewDebugBreakpoints = new KAction( i18n("&Breakpoints"), 0, this, SLOT( slotViewDebugBreakpoints() ),
-          actionCollection(), "view_debug_breakpoints");
-  m_paViewDebugFrameStack = new KAction( i18n("&Frame Stack"), 0, this, SLOT( slotViewDebugFrameStack() ),
-          actionCollection(), "view_debug_framestack");
-  m_paViewDebugDisassemble = new KAction( i18n("&Disassemble"), 0, this, SLOT( slotViewDebugDisassemble() ),
-          actionCollection(), "view_debug_disassemble");
-  m_paViewDebugDebugger = new KAction( i18n("Debu&gger"), 0, this, SLOT( slotViewDebugDebugger() ),
-          actionCollection(), "view_debug_debugger");
-  ////////////////
-  // Separator
-#endif
-
-
-  /////////////////////////////////////
-  // Project Menu
-  ////////////////////////////////////
-  
-  m_paProjectFileProperties = new KAction( i18n("&File Properties..."), "file_properties", 0,
-          this, SLOT( slotProjectFileProperties() ), actionCollection(), "project_file_properties");
-  // Separator
-  m_paProjectMessages = new KAction( i18n("Make &messages and merge"), 0, this, SLOT( slotProjectMessages() ),
-          actionCollection(), "project_make_messages");
-  m_paProjectAPI = new KAction( i18n("Make AP&I-Doc"), 0, this, SLOT( slotProjectAPI() ),
-          actionCollection(), "project_make_api_doc");
-  m_paProjectManual = new KAction( i18n("Make &User-Manual..."), "mini-book1",0, this, SLOT( slotProjectManual() ),
-          actionCollection(), "project_make_user_doc");
-  m_paProjectMakeDistSourceTgz = new KAction( i18n("&Source-tgz"), 0, this, SLOT( slotProjectMakeDistSourceTgz() ),
-          actionCollection(), "project_dist_targz");
-
-  /////////////////////////////////////
-  // Build Menu
-  ////////////////////////////////////
-  m_paBuildCompileFile = new KAction( i18n("Compile &File"), "compfile",0, this, SLOT( slotBuildCompileFile() ),
-          actionCollection(), "build_compile_file");
-  m_paBuildMake = new KAction( i18n("&Make"), "make_kdevelop", 0, this, SLOT( slotBuildMake() ), actionCollection(), "build_build");
-  m_paBuildRebuildAll = new KAction( i18n("&Rebuild all"), "rebuild", 0, this, SLOT( slotBuildRebuildAll() ),
-          actionCollection(), "build_rebuild");
-  m_paBuildCleanRebuildAll = new KAction( i18n("&Clean/Rebuild all"), 0, this, SLOT( slotBuildCleanRebuildAll() ),
-          actionCollection(), "build_clean_rebuild_all");
-  // Separator
-  m_paBuildStop = new KAction( i18n("&Stop Build"), "stop_proc", 0, this, SLOT( slotBuildStop() ), actionCollection(), "build_stop");
-  // Separator
-  m_paBuildExecute = new KAction( i18n("&Execute"), "run", 0, this, SLOT( slotBuildExecute() ), actionCollection(), "build_execute");
-  m_paBuildExecuteWithArgs = new KAction( i18n("Execute &with Arguments..."), "run", 0, this, SLOT( slotBuildExecuteWithArgs() ),
-          actionCollection(), "build_execute_with_arguments");
-  // Separator
-  m_paBuildDistClean = new KAction( i18n("DistC&lean"), 0, this, SLOT( slotBuildDistClean() ),
-          actionCollection(), "build_distclean");
-  m_paBuildAutoconf = new KAction( i18n("&Autoconf and automake"), 0, this, SLOT( slotBuildAutoconf() ),
-          actionCollection(), "build_autoconf_automake");
-  m_paBuildConfigure = new KAction( i18n("C&onfigure..."), 0, this, SLOT( slotBuildConfigure() ),
-          actionCollection(), "build_configure");
-
-#ifdef removed
-  /////////////////////////////////////
-  // Debug Menu
-  ////////////////////////////////////
-  // Debug menu
-  // slotBuildDebug -> slotDebugStart
-  m_paDebugStart = new KAction( i18n("&Start"), 0, this, SLOT( slotDebugStart() ), actionCollection(),"debug_start" );
-  //////////////
-  // Debug "Start (other)..." submenu
-  m_paDebugExamineCore = new KAction( i18n("Examine core file"), "debugger", 0, this, SLOT( slotDebugExamineCore() ),
-          actionCollection(),"debug_examine_core" );
-  m_paDebugNamedFile = new KAction( i18n("Debug another executable"), "debugger", 0, this, SLOT( slotDebugNamedFile() ),
-          actionCollection(), "debug_debug_other_exe");
-  m_paDebugAttatch = new KAction( i18n("Attach to process"), "debugger", 0, this, SLOT( slotDebugAttach() ),
-          actionCollection(), "debug_attatch_to_process");
-  m_paDebugExecuteWithArgs = new KAction( i18n("Debug with arguments"), "debugger", 0, this, SLOT( slotDebugExecuteWithArgs() ),
-          actionCollection(), "debug_debug_with_args");
-  /////////////
-  // Separator
-#endif
-
-//  ***********************
-//   METHODS NEEDED
-//  ***********************
-//  m_pa = new KAction( i18n("Run"), 0, this, SLOT( () ), actionCollection(), "debug_run");
-//  m_pa = new KAction( i18n("Run to cursor"), 0, this, SLOT( () ), actionCollection(), "debug_run_to_cursor");
-//  m_pa = new KAction( i18n("Step over"), 0, this, SLOT( () ), actionCollection(), "debug_step_over");
-//  m_pa = new KAction( i18n("Step over instr."), 0, this, SLOT( () ), actionCollection(), "debug_step_over_instr");
-//  m_pa = new KAction( i18n("Step into"), 0, this, SLOT( () ), actionCollection(), "debug_step_into");
-//  m_pa = new KAction( i18n("Step into instr."), 0, this, SLOT( () ), actionCollection(), "debug_step_into_instr");
-//  m_pa = new KAction( i18n("Step out"), 0, this, SLOT( () ), actionCollection(), "debug_step_out");
-//  // Separator
-//  m_pa = new KAction( i18n("Interrupt"), 0, this, SLOT( () ), actionCollection(), "debug_interrupt");
-//  m_pa = new KAction( i18n("Stop"), 0, this, SLOT( () ), actionCollection(), "debug_stop");
-
-
-  /////////////////////////////////////
-  // Options Menu
-  ////////////////////////////////////
-  m_paOptionsEditor = new KAction( i18n("&Editor..."), 0, this, SLOT( slotOptionsEditor() ),
-				   actionCollection(), "options_editor");
-  m_paOptionsEditorColors = new KAction( i18n("Editor &Colors..."), 0, this, SLOT( slotOptionsEditorColors() ),
-					 actionCollection(), "options_editor_colors");
-  m_paOptionsEditorDefaults = new KAction( i18n("Editor &Defaults..."), 0, this, SLOT( slotOptionsEditorDefaults() ),
-					   actionCollection(), "options_editor_defaults");
-  m_paOptionsSyntaxHighlighting = new KAction( i18n("&Syntax Highlighting..."), 0, this, SLOT( slotOptionsSyntaxHighlighting() ),
-					       actionCollection(), "options_syntax_highlighting");
-  // Separator
-  m_paOptionsDocumentationBrowser = new KAction( i18n("Documentation &Browser..."), 0, this, SLOT( slotOptionsDocumentationBrowser() ),
-						 actionCollection(), "options_documentation_browser");
-  /////////////
-  // Configure Printer submenu
-  m_paOptionsConfigureEnscript = new KAction( i18n("&Enscript..."), 0, this, SLOT( slotOptionsConfigureEnscript() ),
-					      actionCollection(), "options_configure_printer_enscript");
-  m_paOptionsEditToolbars = KStdAction::configureToolbars(this, SLOT(slotOptionsEditToolbars()), actionCollection(),"options_configure_toolbars");
-
-  /////////////////////////////////////
-  // Bookmarks Menu
-  ////////////////////////////////////
-  m_paBookmarksToggle = new KAction( i18n("&Toggle Bookmark"), "bookmark_add", 0, this, SLOT( slotBookmarksToggle() ),
-         actionCollection(), "bookmarks_toggle");
-  m_paBookmarksNext = new KAction( i18n("&Next Bookmark"), "bookmark", 0, this, SLOT( slotBookmarksNext() ),
-         actionCollection(), "bookmarks_next");
-  m_paBookmarksPrevious = new KAction( i18n("&Previous Bookmark"), "bookmark", 0, this, SLOT( slotBookmarksPrevious() ),
-         actionCollection(), "bookmarks_previous");
-  m_paBookmarksClear = new KAction( i18n("&Clear Bookmarks"), 0, this, SLOT( slotBookmarksClear() ),
-         actionCollection(), "bookmarks_clear");
-
-  /////////////////////////////////////
-  // Help Menu
-  ////////////////////////////////////
-  KHelpMenu * m_helpMenu = new KHelpMenu( this, KDevelopFactory::aboutData() );
-
-  m_paHelpBack = KStdAction::back( this, SLOT( slotHelpBack() ), actionCollection(), "help_back");
-  m_paHelpForward = KStdAction::forward( this, SLOT( slotHelpForward() ), actionCollection(), "help_forward");
-  // Separator
-  m_paHelpSearchMarkedText = new KAction( i18n("&Search Marked Text"), "lookup", 0, this, SLOT( slotHelpSearchMarkedText() ),
-          actionCollection(), "help_search_marked_text");
-  m_paHelpSearchForHelpOn = new KAction( i18n("Search for Help on..."), "contents", 0, this, SLOT( slotHelpSearchForHelpOn() ),
-          actionCollection(), "help_search_for_help_on");
-  m_paHelpWhatsThis = KStdAction::whatsThis( m_helpMenu, SLOT( contextHelpActivated() ), actionCollection(), "help_whats_this");
-  // Separator
-  m_paHelpWelcome = new KAction( i18n("&Welcome to KDevelop"), "mini-book1", 0,
-          this, SLOT( slotHelpWelcome() ), actionCollection(), "help_welcome");
-  m_paHelpUserManual = KStdAction::helpContents( this, SLOT( slotHelpContents() ), actionCollection(), "help_user_manual");
-  m_paHelpProgramming = new KAction( i18n("Programming Handbook"), "mini-book1", 0, this, SLOT( slotHelpProgramming() ),
-          actionCollection(), "help_programming");
-  m_paHelpTutorial = new KAction( i18n("Tutorial Handbook"), "mini-book1", 0, this, SLOT( slotHelpTutorial() ),
-          actionCollection(), "help_tutorial");
-  m_paHelpKDELibRef = new KAction( i18n("KDE Library Reference"), "mini-book1", 0, this, SLOT( slotHelpKDELibRef() ),
-          actionCollection(), "help_library_reference");
-  m_paHelpCReference = new KAction( i18n("C/C++-Reference"), "mini-book1", 0, this, SLOT( slotHelpCReference() ),
-          actionCollection(), "help_c_reference");
-  // Separator
-  m_paHelpTipOfTheDay = new KAction( i18n("Tip of the Day"), "idea", 0, this, SLOT( slotHelpTipOfTheDay() ),
-          actionCollection(), "help_tip_of_the_day");
-  m_paHelpHomepage = KStdAction::home( this, SLOT( slotHelpHomepage() ), actionCollection(), "help_kdevelop_homepage");
-  // Separator
-  m_paHelpReportBug = KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "help_report_bug");
-  m_paHelpAboutApp = KStdAction::aboutApp( m_helpMenu, SLOT( aboutApplication() ), actionCollection(), "help_about_app");
-
-  m_paHelpAboutKDE = KStdAction::aboutKDE( m_helpMenu, SLOT( aboutKDE() ), actionCollection(), "help_about_kde");
-
+  KAction *pAction;
+  pAction = KStdAction::configureToolbars (this,SLOT(slotOptionsEditToolbars()),actionCollection());
 }
-
-#ifdef removed
-/** reimplemented from KParts::MainWindow
- */
-void KDevelop::slotSetStatusBarText( const QString &text){
+void KDevelop::slotOptionsEditToolbars(){
+  KEditToolbar dlg(factory());
+  if (dlg.exec()){
+    createGUI(0);
+  }
 }
-#endif
-
-
 /** initializes the help messages (whats this and
 statusbar help) on the KActions */
 void KDevelop::initHelp(){
@@ -319,7 +76,7 @@ void KDevelop::initHelp(){
                                   "Opens the New file dialog to let you create "
                                   "a new project file. You can choose between "
                                   "several templates for creating the new file.") );
-*/
+
 #ifdef removed
   m_paFileOpen->setStatusText( i18n("Opens an existing file") );
   m_paFileOpen->setWhatsThis( i18n("Open file\n\n"
@@ -652,7 +409,7 @@ void KDevelop::initHelp(){
 
   m_paHelpAboutKDE->setStatusText( i18n("Information about the KDE Project") );
 //  m_paHelpAboutKDE->setWhatsThis(  );
-
+*/
 }
 
 void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation)
@@ -745,12 +502,5 @@ void KDevelop::stackView( QWidget* w)
 
 
 
-
-void KDevelop::slotOptionsEditToolbars(){
-  KEditToolbar dlg(actionCollection());
-  
-  if (dlg.exec())
-    createGUI(0);
-}
 
 #include "kdevelop.moc"

@@ -16,7 +16,7 @@ kdevelop_SOURCES = main.cpp newprojectdlg.cpp kdevelop.cpp \
             kdevelopcore.cpp kdevelopfactory.cpp projectoptionsdlg.cpp \
 		    newprojectdlgbase.ui
 
-kdevelop_METASOURCES = kdevelop.moc kdevelopcore.moc projectoptionsdlg.moc newprojectdlg.moc
+kdevelop_METASOURCES = AUTO
 
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -46,16 +46,5 @@ rc_DATA = kdevelopui.rc
 mimedir   = $(kde_mimedir)/application
 mime_DATA = x-kdevelop-project.desktop
 
-servicetypedir = $(kde_servicetypesdir)
-servicetype_DATA = kdevelopcomponent.desktop \
-		   kdevelopcomponentviewhandler.desktop \
-		   kdevelopversioncontrol.desktop \
-		   kdeveloplanguagesupport.desktop \
-		   kdevelopcompileroptions.desktop \
-		kdevelopprojectspace.desktop \
-		kdevelopappwizard.desktop \
-		kdevelopproject.desktop
-
 messages:
 	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o $(podir)/kdevelop.pot
-

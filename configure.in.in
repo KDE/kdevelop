@@ -32,11 +32,11 @@ kdevelop/parts/kdeprojectspace/Makefile \
 kdevelop/parts/kdeprojectspace/res/Makefile \
 kdevelop/kwrite_part/Makefile \
 kdevelop/lib/Makefile \
+kdevelop/lib/servicetypes/Makefile \
 kdevelop/lib/general/Makefile \
 kdevelop/lib/kidetexteditor/Makefile \
 kdevelop/lib/projectmanagement/Makefile \
 kdevelop/lib/sourceinfo/Makefile \
-kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
 pics/Makefile \
 pics/mini/Makefile \

@@ -4,35 +4,16 @@
   <Menu name="file" >
    <text>&amp;File</text>
    <Merge/>
+   <Separator/>
+   <Action name="file_print_advanced" />
   </Menu>
   <Menu name="edit" >
    <text>&amp;Edit</text>
    <Merge/>
-   <Separator/>
-   <Action name="edit_select_all" />
-   <Action name="edit_deselect_all" />
-   <Action name="edit_invert_selection" />
   </Menu>
   <Menu name="view" >
    <text>&amp;View</text>
    <Merge/>
-   <Separator/>
-   <Action name="view_treeview" />
-   <Action name="view_output_view" />
-   <Separator/>
-   <Action name="view_toolbar" />
-   <Action name="view_browser_toolbar" />
-   <Action name="view_taskbar" />
-   <Action name="view_statusbar" />
-   <Separator/>
-   <Menu name="view_debug" >
-    <text>&amp;Debugger Views...</text>
-    <Action name="view_debug_variables" />
-    <Action name="view_debug_breakpoints" />
-    <Action name="view_debug_framestack" />
-    <Action name="view_debug_disassemble" />
-    <Action name="view_debug_debugger" />
-   </Menu>
    <Separator/>
    <Action name="view_refresh" />
   </Menu>
@@ -43,10 +24,7 @@
    <Action name="project_open_recent" />
    <Action name="project_close" />
    <Separator/>
-   <Action name="project_new_class" />
    <Action name="project_add_existing_files" />
-   <Action name="project_add_translation" />
-   <Action name="project_file_properties" />
    <Separator/>
    <Action name="project_make_messages" />
    <Action name="project_make_api_doc" />
@@ -80,54 +58,23 @@
   </Menu>
   <Menu name="settings" >
    <text>&amp;Settings</text>
-   <Action name="options_editor" />
-   <Action name="options_editor_colors" />
-   <Action name="options_editor_defaults" />
-   <Action name="options_syntax_highlighting" />
+   <Action name="settings_treeview" />
+   <Action name="settings_output_view" />
    <Separator/>
-   <Action name="options_documentation_browser" />
+   <Action name="settings_toolbar" />
+   <Action name="settings_browser_toolbar" />
+   <Action name="settings_taskbar" />
+   <Action name="settings_statusbar" />
    <Menu name="options_printer" >
     <text>Configure &amp;Printer</text>
     <Action name="options_configure_printer_enscript" />
    </Menu>
    <Separator/>
-   <Action name="options_kdevelop_setup" />
-   <Action name="options_configure_toolbars" />
+   <Action name="settings_kdevelop_setup" />
   </Menu>
   <Menu name="window" >
    <text>&amp;Window</text>
    <Merge/>
-  </Menu>
-  <Menu name="bookmarks" >
-   <text>Book&amp;marks</text>
-   <Action name="bookmarks_toggle" />
-   <Action name="bookmarks_next" />
-   <Action name="bookmarks_previous" />
-   <Action name="bookmarks_clear" />
-  </Menu>
-  <Menu name="help" >
-   <text>&amp;Help</text>
-   <Merge/>
-   <Action name="help_back" />
-   <Action name="help_forward" />
-   <Separator/>
-   <Action name="help_search_marked_text" />
-   <Action name="help_search_for_help_on" />
-   <Action name="help_whats_this" />
-   <Separator/>
-   <Action name="help_welcome" />
-   <Action name="help_user_manual" />
-   <Action name="help_programming" />
-   <Action name="help_tutorial" />
-   <Action name="help_library_reference" />
-   <Action name="help_c_reference" />
-   <Separator/>
-   <Action name="help_tip_of_the_day" />
-   <Action name="help_kdevelop_homepage" />
-   <Action name="help_report_bug" />
-   <Separator/>
-   <Action name="help_about_app" />
-   <Action name="help_about_kde" />
   </Menu>
  </MenuBar>
  <ToolBar position="Top" iconText="IconOnly" noMerge="1" name="mainToolBar" fullWidth="false" >
@@ -151,28 +98,8 @@
   <Action name="view_treeview" />
   <Action name="view_output_view" />
  </ToolBar>
- <ToolBar name="debuggerToolBar" fullWidth="false" >
-  <Action name="debug_run" />
-  <Action name="debug_run_to_cursor" />
-  <Action name="debug_step_over" />
-  <Action name="debug_step_over_instr" />
-  <Action name="debug_step_into" />
-  <Action name="debug_step_into_instr" />
-  <Action name="debug_step_out" />
-  <Action name="debug_interrupt" />
-  <Action name="debug_stop" />
- </ToolBar>
  <ToolBar name="browserToolBar" fullWidth="false" >
   <Merge/>
-  <Separator/>
-  <Action name="help_back" />
-  <Action name="help_forward" />
-  <Action name="help_stop" />
-  <Action name="help_reload" />
-  <Action name="help_user_manual" />
-  <Separator/>
-  <Action name="help_search_marked_text" />
-  <Action name="help_search_for_help_on" />
   <Separator/>
   <Action name="help_whats_this" />
  </ToolBar>
