@@ -405,29 +405,35 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CSharpColorizer(this) );
 	document()->setIndent( new CIndent(this) );
+        setBackgroundParser( 0 );
 #if defined(HAVE_PERL_MODE)
     } else if( m_language == "perl" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new PerlColorizer(this) );
 	document()->setIndent( new CIndent(this) );
+        setBackgroundParser( 0 );
 #endif
     } else if( m_language == "python" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new PythonColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
+        setBackgroundParser( 0 );
         //setBackgroundParser( new PythonParser(this) );
     } else if( m_language == "xml" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new XMLColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
+        setBackgroundParser( 0 );
     } else if( m_language == "qmake" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new QMakeColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
+        setBackgroundParser( 0 );
     } else {
         setElectricKeys( QString::null );
 	document()->setPreProcessor( 0 );
 	document()->setIndent( new SimpleIndent(this) );
+        setBackgroundParser( 0 );
     }
 
     configChanged();

@@ -109,11 +109,6 @@ JspColorizer::JspColorizer( QEditor* editor )
     HLItemCollection* context3 = new HLItemCollection( String );
     context3->appendChild( new StringHLItem( "\\\"", String, 3 ) );
     context3->appendChild( new StringHLItem( "\"", String, 2 ) );
-
-    m_items.append( context0 );
-    m_items.append( context1 );
-    m_items.append( context2 );
-    m_items.append( context3 );
     
     // begin java 
     
@@ -142,6 +137,10 @@ JspColorizer::JspColorizer( QEditor* editor )
     context7->appendChild( new StringHLItem( "\\'", String, 7 ) );
     context7->appendChild( new StringHLItem( "'", String, 4 ) );
 
+    m_items.append( context0 );
+    m_items.append( context1 );
+    m_items.append( context2 );
+    m_items.append( context3 );
     m_items.append( context4 );
     m_items.append( context5 );
     m_items.append( context6 );

@@ -101,7 +101,7 @@ using namespace std;
 QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
                           QObject *parent, const char *name,
                           const QStringList & /*args*/ )
-    : KTextEditor::Document( parent, "QEditorPart" ), m_currentView( 0 )
+    : KTextEditor::Document( parent, name == 0 ? "QEditorPart" : name ), m_currentView( 0 )
 {
     kdDebug(9032) << "QEditorPart::QEditorPart()" << endl;
     // we need an instance
@@ -587,6 +587,15 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
                               const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol,
                               unsigned int *matchLen, bool casesensitive, bool backwards )
 {
+    Q_UNUSED( startLine );
+    Q_UNUSED( startCol );
+    Q_UNUSED( text );
+    Q_UNUSED( foundAtLine );
+    Q_UNUSED( foundAtCol );
+    Q_UNUSED( matchLen );
+    Q_UNUSED( casesensitive );
+    Q_UNUSED( backwards );
+    
 #warning "TODO: QEditorPart::searchText()"
     kdDebug(9032) << "TODO: QEditorPart::searchText()" << endl;
     return false;
@@ -602,9 +611,9 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
         QString str = p->string()->toString();
         int pos = -1;
         if( backwards ){
-            pos = regexp.searchRev( str, p->paragId() == startLine ? startCol : p->length() );
+            pos = regexp.searchRev( str, p->paragId() == (int)startLine ? startCol : p->length() );
         } else {
-            pos = regexp.search( str, p->paragId() == startLine ? startCol : 0 );
+            pos = regexp.search( str, p->paragId() == (int)startLine ? startCol : 0 );
         }
 
         if( pos != -1 ){
@@ -783,7 +792,7 @@ bool QEditorPart::showMarkers() const
 {
     KConfig* config = QEditorPartFactory::instance()->config();
     config->setGroup( "General" );
-    return config->readBoolEntry( "ShowMarkers", FALSE );
+    return config->readBoolEntry( "ShowMarkers", TRUE );
 }
 
 void QEditorPart::setShowMarkers( bool enabled )
@@ -797,7 +806,7 @@ bool QEditorPart::showLineNumber() const
 {
     KConfig* config = QEditorPartFactory::instance()->config();
     config->setGroup( "General" );
-    return config->readBoolEntry( "ShowLineNumber", TRUE );
+    return config->readBoolEntry( "ShowLineNumber", FALSE );
 }
 
 void QEditorPart::setShowLineNumber( bool enabled )
@@ -811,7 +820,7 @@ bool QEditorPart::showCodeFoldingMarkers() const
 {
     KConfig* config = QEditorPartFactory::instance()->config();
     config->setGroup( "General" );
-    return config->readBoolEntry( "ShowCodeFoldingMarkers", FALSE );
+    return config->readBoolEntry( "ShowCodeFoldingMarkers", TRUE );
 }
 
 void QEditorPart::setShowCodeFoldingMarkers( bool enabled )

@@ -50,144 +50,15 @@
 
 using namespace std;
 
-const char*bookmark_xpm[]={
-"12 16 4 1",
-"b c #808080",
-"a c #000080",
-"# c #0000ff",
-". c None",
-"............",
-"............",
-"........###.",
-".......#...a",
-"......#.##.a",
-".....#.#..aa",
-"....#.#...a.",
-"...#.#.a.a..",
-"..#.#.a.a...",
-".#.#.a.a....",
-"#.#.a.a.....",
-"#.#a.a...bbb",
-"#...a..bbb..",
-".aaa.bbb....",
-"............",
-"............"};
-
-const char* breakpoint_xpm[]={
-"11 16 6 1",
-"c c #c6c6c6",
-". c None",
-"# c #000000",
-"d c #840000",
-"a c #ffffff",
-"b c #ff0000",
-"...........",
-"...........",
-"...#####...",
-"..#aaaaa#..",
-".#abbbbbb#.",
-"#abbbbbbbb#",
-"#abcacacbd#",
-"#abbbbbbbb#",
-"#abcacacbd#",
-"#abbbbbbbb#",
-".#bbbbbbb#.",
-"..#bdbdb#..",
-"...#####...",
-"...........",
-"...........",
-"..........."};
-
-const char*breakpoint_bl_xpm[]={
-"11 16 7 1",
-"a c #c0c0ff",
-"# c #000000",
-"c c #0000c0",
-"e c #0000ff",
-"b c #dcdcdc",
-"d c #ffffff",
-". c None",
-"...........",
-"...........",
-"...#####...",
-"..#ababa#..",
-".#bcccccc#.",
-"#acccccccc#",
-"#bcadadace#",
-"#acccccccc#",
-"#bcadadace#",
-"#acccccccc#",
-".#ccccccc#.",
-"..#cecec#..",
-"...#####...",
-"...........",
-"...........",
-"..........."};
-
-const char*breakpoint_gr_xpm[]={
-"11 16 6 1",
-"c c #c6c6c6",
-"d c #2c2c2c",
-"# c #000000",
-". c None",
-"a c #ffffff",
-"b c #555555",
-"...........",
-"...........",
-"...#####...",
-"..#aaaaa#..",
-".#abbbbbb#.",
-"#abbbbbbbb#",
-"#abcacacbd#",
-"#abbbbbbbb#",
-"#abcacacbd#",
-"#abbbbbbbb#",
-".#bbbbbbb#.",
-"..#bdbdb#..",
-"...#####...",
-"...........",
-"...........",
-"..........."};
-
-const char*exec_xpm[]={
-"11 16 4 1",
-"a c #00ff00",
-"b c #000000",
-". c None",
-"# c #00c000",
-"...........",
-"...........",
-"...........",
-"#a.........",
-"#aaa.......",
-"#aaaaa.....",
-"#aaaaaaa...",
-"#aaaaaaaaa.",
-"#aaaaaaa#b.",
-"#aaaaa#b...",
-"#aaa#b.....",
-"#a#b.......",
-"#b.........",
-"...........",
-"...........",
-"..........."};
-
-
-static QPixmap *bookmarkPixmap = 0;
-static QPixmap *breakpointPixmap = 0;
-static QPixmap *execPixmap = 0;
-
-
-
 MarkerWidget::MarkerWidget( QEditor* editor, QWidget* parent, const char* name )
     : QWidget( parent, name, WRepaintNoErase | WStaticContents | WResizeNoErase ),
       m_editor( editor )
 {
-    if ( !bookmarkPixmap ){
-        bookmarkPixmap = new QPixmap( bookmark_xpm );
-        breakpointPixmap = new QPixmap( breakpoint_xpm );
-        execPixmap = new QPixmap( exec_xpm );
-    }
+    bookmarkPixmap = SmallIcon( "bookmark" );
+    breakpointPixmap = SmallIcon( "breakpoint" );
+    execPixmap = SmallIcon( "exec" );
+    problemPixmap = SmallIcon( "stop" );
+    funStartPixmap = SmallIcon( "start" );
 
     setFixedWidth( 20 );
 
@@ -223,26 +94,37 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
             break;
 
 
-        //painter.drawLine( 0, p->rect().y() - yOffset,
-        //				  0, p->rect().y() - yOffset + p->rect().height() );
-
         ParagData* paragData = (ParagData*) p->extraData();
         if( paragData ){
             switch( paragData->mark() ){
             case 0x01:
                 painter.drawPixmap( 3, p->rect().y() +
-                                    ( p->rect().height() - bookmarkPixmap->height() ) / 2 -
-                                    yOffset, *bookmarkPixmap );
+                                    ( p->rect().height() - bookmarkPixmap.height() ) / 2 -
+                                    yOffset, bookmarkPixmap );
                 break;
+		
             case 0x02:
                 painter.drawPixmap( 3, p->rect().y() +
-                                    ( p->rect().height() - breakpointPixmap->height() ) / 2 -
-                                    yOffset, *breakpointPixmap );
+                                    ( p->rect().height() - breakpointPixmap.height() ) / 2 -
+                                    yOffset, breakpointPixmap );
                 break;
+		
             case 0x05:
                 painter.drawPixmap( 3, p->rect().y() +
-                                    ( p->rect().height() - execPixmap->height() ) / 2 -
-                                    yOffset, *execPixmap );
+                                    ( p->rect().height() - execPixmap.height() ) / 2 -
+                                    yOffset, execPixmap );
+                break;
+		
+            case 0x200:
+                painter.drawPixmap( 3, p->rect().y() +
+                                    ( p->rect().height() - problemPixmap.height() ) / 2 -
+                                    yOffset, problemPixmap );
+                break;
+		
+	    case 0x400:
+                painter.drawPixmap( 3, p->rect().y() +
+                                    ( p->rect().height() - funStartPixmap.height() ) / 2 -
+                                    yOffset, funStartPixmap );
                 break;
 		
             default:

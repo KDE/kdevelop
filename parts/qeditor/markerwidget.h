@@ -65,6 +65,11 @@ protected:
 private:
     QEditor* m_editor;
     QPixmap buffer;
+    QPixmap bookmarkPixmap;
+    QPixmap breakpointPixmap;
+    QPixmap execPixmap;
+    QPixmap problemPixmap;
+    QPixmap funStartPixmap;
 };
 
 #endif // __markerwidget_h
