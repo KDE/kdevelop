@@ -82,6 +82,7 @@ kdevelop/toolbar/Makefile \
 kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
 doc/de/manual/Makefile \
+doc/de/welcome/Makefile \
 doc/de/Makefile \
 doc/fr/Makefile \
 doc/pl/Makefile \
