@@ -348,13 +348,13 @@ void CKDevelop::initMenuBar(){
                   SLOT(slotEditCopy()),actionCollection(),"edit_copy");
         pAction = KStdAction::paste(m_docViewManager,
                   SLOT(slotEditPaste()),actionCollection(),"edit_paste");
-        pAction = new KAction(i18n("In&dent"),SmallIconSet("increaseindent"),0,this,
+        pAction = new KAction(i18n("In&dent"),SmallIconSet("increaseindent"),CTRL+Key_I,this,
                   SLOT(slotEditIndent()),actionCollection(),"edit_indent");
-        pAction = new KAction(i18n("Uninden&t"),SmallIconSet("decreaseindent"),0,this,
+        pAction = new KAction(i18n("Uninden&t"),SmallIconSet("decreaseindent"),CTRL+SHIFT+Key_I,this,
                   SLOT(slotEditUnIndent()),actionCollection(),"edit_unindent");
-        pAction = new KAction(i18n("C&omment"),0,this,
+        pAction = new KAction(i18n("C&omment"),CTRL+Key_NumberSign,this,
                   SLOT(slotEditComment()),actionCollection(),"edit_comment");
-        pAction = new KAction(i18n("Unco&mment"),0,this,
+        pAction = new KAction(i18n("Unco&mment"),CTRL+SHIFT+Key_NumberSign,this,
                   SLOT(slotEditUncomment()),actionCollection(),"edit_uncomment");
         pAction = new KAction(i18n("&Insert File..."),0,m_docViewManager,
                   SLOT(slotEditInsertFile()),actionCollection(),"edit_insert_file");
@@ -364,15 +364,15 @@ void CKDevelop::initMenuBar(){
                   SLOT(slotEditSearch()),actionCollection(),"edit_find_next");
         pAction = KStdAction::replace(m_docViewManager,
                   SLOT(slotEditSearch()),actionCollection(),"edit_replace");
-        pAction = new KAction(i18n("Search in &Files..."),SmallIconSet("grep"),0,this,
+        pAction = new KAction(i18n("Search in &Files..."),SmallIconSet("grep"),Key_F2,this,
                   SLOT(slotEditSearchInFiles()),actionCollection(),"edit_find_files");
         pAction = new KAction(i18n("Search &CTags Database..."),0,this,
                   SLOT(slotTagSearch()),actionCollection(),"edit_find_tag");
-        pAction = new KAction(i18n("Switch to Header/Source..."),0,this,
+        pAction = new KAction(i18n("Switch to Header/Source..."),Key_F12,this,
                   SLOT(slotTagSwitchTo()),actionCollection(),"edit_switch_header");
         pAction = KStdAction::selectAll(m_docViewManager,
                   SLOT(slotEditSelectAll()),actionCollection(),"edit_select_all");
-        pAction = new KAction(i18n("Deselect All"),0,m_docViewManager,
+        pAction = new KAction(i18n("Deselect All"),CTRL+SHIFT+Key_A,m_docViewManager,
                   SLOT(slotEditDeselectAll()),actionCollection(),"edit_deslect_all");
         pAction = new KAction(i18n("Invert Selection"),0,m_docViewManager,
                   SLOT(slotEditInvertSelection()),actionCollection(),"edit_invert_selection");
@@ -381,9 +381,9 @@ void CKDevelop::initMenuBar(){
         // View-menu entries
         pAction = KStdAction::gotoLine(this,
                   SLOT(slotViewGotoLine()),actionCollection(),"view_goto");
-        pAction = new KAction(i18n("&Next Error"),0,this,
+        pAction = new KAction(i18n("&Next Error"),Key_F4,this,
                   SLOT(slotViewNextError()),actionCollection(),"view_next_error");
-        pAction = new KAction(i18n("&Previous Error"),0,this,
+        pAction = new KAction(i18n("&Previous Error"),SHIFT+Key_F4,this,
                   SLOT(slotViewPreviousError()),actionCollection(),"view_prev_error");
         pAction = new KAction(i18n("&Dialog Editor"),SmallIconSet("newwidget"),0,this,
                   SLOT(startDesigner()),actionCollection(),"view_designer");
@@ -478,7 +478,7 @@ void CKDevelop::initMenuBar(){
 // we really should reimplement this
 //  pAction = new KAction(i18n("&Remove File from Project"),0,this,
 //  //                           SLOT(slotProjectRemoveFile()),actionCollection(),"project_rm_file");
-        pAction = new KAction(i18n("&File Properties..."),SmallIconSet("file_properties"),0,this,
+        pAction = new KAction(i18n("&File Properties..."),SmallIconSet("file_properties"),SHIFT+Key_F7,this,
                   SLOT(slotProjectFileProperties()),actionCollection(),"project_file_prop");
         pAction = new KAction(i18n("Make &messages and merge"),0,this,
                   SLOT(slotProjectMessages()),actionCollection(),"project_make_msg");
@@ -503,14 +503,14 @@ void CKDevelop::initMenuBar(){
                   SLOT(slotConfigMakeDistRPM()),actionCollection(),"project_conf_rpm");
         pAction = new KAction(i18n("Load &tags file"),0,this,
                   SLOT(slotProjectLoadTags()),actionCollection(),"project_load_tags");
-        pAction = new KAction(i18n("O&ptions..."),SmallIconSet("configure"),0,this,
+        pAction = new KAction(i18n("O&ptions..."),SmallIconSet("configure"),Key_F7,this,
                   SLOT(slotProjectOptions()),actionCollection(),"project_options");
 
         ///////////////////////////////////////////////////////////////////
         // Build-menu entries
-        pAction = new KAction(i18n("Compile &File"),SmallIconSet("compfile"),0,this,
+        pAction = new KAction(i18n("Compile &File"),SmallIconSet("compfile"),SHIFT+Key_F8,this,
                   SLOT(slotBuildCompileFile()),actionCollection(),"build_compile");
-        pAction = new KAction(i18n("&Make"),SmallIconSet("make_kdevelop"),0,this,
+        pAction = new KAction(i18n("&Make"),SmallIconSet("make_kdevelop"),Key_F8,this,
                   SLOT(slotBuildMake()),actionCollection(),"build_make");
         pAction = new KAction(i18n("Clea&n"),0,this,
                   SLOT(slotBuildMakeClean()),actionCollection(),"build_clean");
@@ -518,11 +518,11 @@ void CKDevelop::initMenuBar(){
                   SLOT(slotBuildRebuildAll()),actionCollection(),"build_rebuild");
         pAction = new KAction(i18n("Dist&Clean/Rebuild All"),0,this,
                   SLOT(slotBuildCleanRebuildAll()),actionCollection(),"build_rebuild_all");
-        pAction = new KAction(i18n("&Stop Build"),SmallIconSet("stop"),0,this,
+        pAction = new KAction(i18n("&Stop Build"),SmallIconSet("stop"),Key_F10,this,
                   SLOT(slotBuildStop()),actionCollection(),"build_stop");
-        pAction = new KAction(i18n("&Execute"),SmallIconSet("exec"),0,this,
+        pAction = new KAction(i18n("&Execute"),SmallIconSet("exec"),Key_F9,this,
                   SLOT(slotBuildRun()),actionCollection(),"build_exec");
-        pAction = new KAction(i18n("Execute &with Arguments..."),SmallIconSet("exec"),0,this,
+        pAction = new KAction(i18n("Execute &with Arguments..."),SmallIconSet("exec"),ALT+Key_F9,this,
                   SLOT(slotBuildRunWithArgs()),actionCollection(),"build_exec_args");
         pAction = new KAction(i18n("DistC&lean"),0,this,
                   SLOT(slotBuildDistClean()),actionCollection(),"build_distclean");
@@ -615,11 +615,11 @@ void CKDevelop::initMenuBar(){
 
         ///////////////////////////////////////////////////////////////////
         // Bookmarks-menu entries
-        pAction = new KAction(i18n("&Toggle Bookmark"),SmallIconSet("bookmark_add"),0,this,
+        pAction = new KAction(i18n("&Toggle Bookmark"),SmallIconSet("bookmark_add"),CTRL+Key_B,this,
                   SLOT(slotBookmarksToggle()),actionCollection(),"bookmarks_toggle");
-        pAction = new KAction(i18n("&Next Bookmark"),0,this,
+        pAction = new KAction(i18n("&Next Bookmark"),Key_F5,this,
                   SLOT(slotBookmarksNext()),actionCollection(),"bookmarks_next");
-        pAction = new KAction(i18n("&Previous Bookmark"),0,this,
+        pAction = new KAction(i18n("&Previous Bookmark"),SHIFT+Key_F6,this,
                   SLOT(slotBookmarksPrevious()),actionCollection(),"bookmarks_prev");
         pAction = new KAction(i18n("&Clear Bookmarks"),0,this,
                   SLOT(slotBookmarksClear()),actionCollection(),"bookmarks_clear");
