@@ -129,7 +129,7 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
     QDomDocument dom = *m_part->projectDom();
     QString prefix = "/kdevautoproject/configurations/" + config + "/";
     kdDebug(9020) << "Reading config from " << prefix << endl;
-    
+
     configargs_edit->setText(DomUtil::readEntry(dom, prefix + "configargs"));
     QString builddir = DomUtil::readEntry(dom, prefix + "builddir");
     if (builddir.isEmpty() && config != "default")
@@ -137,6 +137,9 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
     builddir_edit->setText(builddir);
 
     topsourcedir_edit->setText(DomUtil::readEntry(dom, prefix + "topsourcedir"));
+
+    cppflags_edit->setText(DomUtil::readEntry(dom, prefix + "cppflags"));
+    ldflags_edit->setText(DomUtil::readEntry(dom, prefix + "ldflags"));
 
     QString ccompiler = DomUtil::readEntry(dom, prefix + "ccompiler");
     QString cxxcompiler = DomUtil::readEntry(dom, prefix + "cxxcompiler");
@@ -183,7 +186,7 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
     cbinary_edit->setText(DomUtil::readEntry(dom, prefix + "ccompilerbinary"));
     cxxbinary_edit->setText(DomUtil::readEntry(dom, prefix + "cxxcompilerbinary"));
     f77binary_edit->setText(DomUtil::readEntry(dom, prefix + "f77compilerbinary"));
-    
+
     cflags_edit->setText(DomUtil::readEntry(dom, prefix + "cflags"));
     cxxflags_edit->setText(DomUtil::readEntry(dom, prefix + "cxxflags"));
     f77flags_edit->setText(DomUtil::readEntry(dom, prefix + "f77flags"));
@@ -200,6 +203,11 @@ void ConfigureOptionsWidget::saveSettings(const QString &config)
     DomUtil::writeEntry(dom, prefix + "configargs", configargs_edit->text());
     DomUtil::writeEntry(dom, prefix + "builddir", builddir_edit->text());
     DomUtil::writeEntry(dom, prefix + "topsourcedir", topsourcedir_edit->text());
+
+    qWarning("!!!!!!!!!!!!!!!!!!!!!!CPPFLAGS=", cppflags_edit->text().latin1());
+    qWarning("!!!!!!!!!!!!!!!!!!!!!!LDFLAGS=", ldflags_edit->text().latin1());
+    DomUtil::writeEntry(dom, prefix + "cppflags", cppflags_edit->text());
+    DomUtil::writeEntry(dom, prefix + "ldflags", ldflags_edit->text());
 
     QFileInfo fi(m_part->buildDirectory());
     QDir dir(fi.dir());
@@ -377,7 +385,7 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
         kdDebug(9020) << "Can't find service " << name;
         return 0;
     }
-    
+
     KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
     if (!factory) {
         QString errorMessage = KLibLoader::self()->lastErrorMessage();
@@ -390,7 +398,7 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
     QVariant prop = service->property("X-KDevelop-Args");
     if (prop.isValid())
         args = QStringList::split(" ", prop.toString());
-    
+
     QObject *obj = factory->create(this, service->name().latin1(),
                                    "KDevCompilerOptions", args);
 
@@ -399,7 +407,7 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
         return 0;
     }
     KDevCompilerOptions *dlg = (KDevCompilerOptions*) obj;
-    
+
     return dlg;
 }
 

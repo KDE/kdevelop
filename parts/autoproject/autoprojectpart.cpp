@@ -615,6 +615,12 @@ QString AutoProjectPart::configureCommand()
     QString fflags = DomUtil::readEntry(dom, prefix + "f77flags");
     if (!fflags.isEmpty())
         cmdline.prepend(QString("FFLAGS=\"%1\" ").arg(fflags));
+    QString cppflags = DomUtil::readEntry(dom, prefix + "cppflags");
+    if (!cppflags.isEmpty())
+        cmdline.prepend(QString("CPPFLAGS=\"%1\" ").arg(cppflags));
+    QString ldflags = DomUtil::readEntry(dom, prefix + "ldflags");
+    if (!ldflags.isEmpty())
+        cmdline.prepend(QString("LDFLAGS=\"%1\" ").arg(ldflags));
 
     QString configargs = DomUtil::readEntry(dom, prefix + "configargs");
     if (!configargs.isEmpty()) {

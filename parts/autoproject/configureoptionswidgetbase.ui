@@ -138,7 +138,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="2" column="3">
+                    <spacer row="2" column="4">
                         <property name="name">
                             <cstring>Spacer26</cstring>
                         </property>
@@ -155,12 +155,12 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="4">
+                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="5">
                         <property name="name">
                             <cstring>configargs_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QLabel" row="0" column="0" rowspan="1" colspan="5">
+                    <widget class="QLabel" row="0" column="0" rowspan="1" colspan="6">
                         <property name="name">
                             <cstring>configargs_label</cstring>
                         </property>
@@ -168,7 +168,7 @@
                             <string>Configure arguments:</string>
                         </property>
                     </widget>
-                    <widget class="QLabel" row="3" column="0" rowspan="1" colspan="5">
+                    <widget class="QLabel" row="3" column="0" rowspan="1" colspan="6">
                         <property name="name">
                             <cstring>builddir_label</cstring>
                         </property>
@@ -201,12 +201,12 @@
                             <string>Top source directory:</string>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="3">
+                    <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="4">
                         <property name="name">
                             <cstring>builddir_edit</cstring>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="4" column="4">
+                    <widget class="QPushButton" row="4" column="5">
                         <property name="name">
                             <cstring>builddir_button</cstring>
                         </property>
@@ -226,23 +226,6 @@
                             <string>...</string>
                         </property>
                     </widget>
-                    <spacer row="7" column="2">
-                        <property name="name">
-                            <cstring>spacer16</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <spacer row="4" column="0">
                         <property name="name">
                             <cstring>Spacer24</cstring>
@@ -257,6 +240,48 @@
                             <size>
                                 <width>20</width>
                                 <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton" row="6" column="5">
+                        <property name="name">
+                            <cstring>topsourcedir_button</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>30</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>30</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>...</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="6" column="1" rowspan="1" colspan="4">
+                        <property name="name">
+                            <cstring>topsourcedir_edit</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="7" column="2">
+                        <property name="name">
+                            <cstring>spacer16</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>16</height>
                             </size>
                         </property>
                     </spacer>
@@ -277,29 +302,103 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QPushButton" row="6" column="4">
+                    <widget class="QLabel" row="10" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>topsourcedir_button</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>30</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>30</width>
-                                <height>32767</height>
-                            </size>
+                            <cstring>ldflags_label</cstring>
                         </property>
                         <property name="text">
-                            <string>...</string>
+                            <string>Linker flags (LDFLAGS):</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>ldflags_edit</cstring>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Linker flags, e.g. -L&lt;lib dir&gt; if you have libraries in a
+nonstandard directory &lt;lib dir&gt;</string>
                         </property>
                     </widget>
-                    <widget class="QLineEdit" row="6" column="1" rowspan="1" colspan="3">
+                    <spacer row="11" column="0">
                         <property name="name">
-                            <cstring>topsourcedir_edit</cstring>
+                            <cstring>spacer17_2_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <spacer row="12" column="3">
+                        <property name="name">
+                            <cstring>Spacer12_3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLineEdit" row="11" column="1" rowspan="1" colspan="5">
+                        <property name="name">
+                            <cstring>ldflags_edit</cstring>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Linker flags, e.g. -L&lt;lib dir&gt; if you have libraries in a
+nonstandard directory &lt;lib dir&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="9" column="1" rowspan="1" colspan="5">
+                        <property name="name">
+                            <cstring>cppflags_edit</cstring>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>C/C++ preprocessor flags, e.g. -I&lt;include dir&gt; if you have
+headers in a nonstandard directory &lt;include dir&gt;</string>
+                        </property>
+                    </widget>
+                    <spacer row="9" column="0">
+                        <property name="name">
+                            <cstring>spacer17_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="8" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>cppflags_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>C/C++ preprocessor flags (CPPFLAGS):</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>cppflags_edit</cstring>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>C/C++ preprocessor flags, e.g. -I&lt;include dir&gt; if you have
+headers in a nonstandard directory &lt;include dir&gt;</string>
                         </property>
                     </widget>
                 </grid>
@@ -314,12 +413,6 @@
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
                     </property>
                     <widget class="QLabel" row="0" column="0">
                         <property name="name">
@@ -337,36 +430,6 @@
                     <spacer row="1" column="1">
                         <property name="name">
                             <cstring>Spacer11</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Fixed</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QLabel" row="2" column="0">
-                        <property name="name">
-                            <cstring>cbinary_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Compiler command (CC):</string>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="2" column="1">
-                        <property name="name">
-                            <cstring>cbinary_edit</cstring>
-                        </property>
-                    </widget>
-                    <spacer row="3" column="1">
-                        <property name="name">
-                            <cstring>Spacer12</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -425,6 +488,36 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>168</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>cbinary_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Compiler command (CC):</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
+                            <cstring>cbinary_edit</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>Spacer12</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
                         </property>
                         <property name="sizeHint">
                             <size>
@@ -827,8 +920,31 @@
         <receiver>configure_options_widget</receiver>
         <slot>setDirty()</slot>
     </connection>
+    <connection>
+        <sender>cppflags_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
+    <connection>
+        <sender>ldflags_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>setDirty()</slot>
+    </connection>
 </connections>
 <tabstops>
+    <tabstop>configargs_edit</tabstop>
+    <tabstop>builddir_edit</tabstop>
+    <tabstop>builddir_button</tabstop>
+    <tabstop>topsourcedir_edit</tabstop>
+    <tabstop>topsourcedir_button</tabstop>
+    <tabstop>cppflags_edit</tabstop>
+    <tabstop>ldflags_edit</tabstop>
+    <tabstop>tabwidget</tabstop>
+    <tabstop>config_combo</tabstop>
+    <tabstop>addconfig_button</tabstop>
+    <tabstop>removeconfig_button</tabstop>
     <tabstop>cservice_combo</tabstop>
     <tabstop>cbinary_edit</tabstop>
     <tabstop>cflags_edit</tabstop>
