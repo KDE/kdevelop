@@ -122,7 +122,7 @@ BookmarkView::BookmarkView(DocumentationWidget *parent, const char *name)
     l->addWidget(m_view);
     QHBoxLayout *l2 = new QHBoxLayout(l, KDialog::spacingHint());
     m_addButton = new KPushButton(i18n("Add"), this);
-    m_editButton = new KPushButton(i18n("Edit"), this);
+    m_editButton = new KPushButton(i18n("Edit..."), this);
     m_removeButton = new KPushButton(i18n("Remove"), this);
     l2->addWidget(m_addButton);
     l2->addWidget(m_editButton);

@@ -165,9 +165,9 @@ void ProgressDialog::addDir(const QString &dir)
     QDir d2(dir, QString::null, QDir::Name|QDir::IgnoreCase, QDir::Dirs);
     QStringList dlist = d2.entryList();
 
-    for ( it=dlist.begin(); it != dlist.end(); ++it ) 
+    for ( it=dlist.begin(); it != dlist.end(); ++it )
     {
-        if (*it != "." && *it != "..") 
+        if (*it != "." && *it != "..")
         {
             addDir(dir + "/" + *it);
             kapp->processEvents();
@@ -188,9 +188,9 @@ void ProgressDialog::scanDirectories()
     if (!f.open(IO_ReadOnly))
         return;
     QTextStream str(&f);
-    
+
     filesScanned = 0;
-    
+
     while (!str.eof())
     {
         QString loc = str.readLine();
@@ -228,7 +228,7 @@ bool ProgressDialog::createConfig()
     images = images.left(images.length()-8);
 
     QFile f(indexdir + "/htdig.conf");
-    if (f.open(IO_WriteOnly)) 
+    if (f.open(IO_WriteOnly))
     {
         QTextStream ts(&f);
 
@@ -270,9 +270,9 @@ void ProgressDialog::startHtdigProcess(bool initial)
     }
     connect(proc, SIGNAL(processExited(KProcess *)),
             this, SLOT(htdigExited(KProcess *)));
-    
+
     htdigRunning = true;
-    
+
     // write out file
     QFile f(indexdir+"/files");
     if (!f.open(IO_WriteOnly)) {
@@ -290,9 +290,9 @@ void ProgressDialog::startHtdigProcess(bool initial)
         ts << "http://localhost/" + files[count] << endl;
     }
     f.close();
-    
+
     // execute htdig
-    proc->start(KProcess::NotifyOnExit, KProcess::Stdout);   
+    proc->start(KProcess::NotifyOnExit, KProcess::Stdout);
 }
 
 bool ProgressDialog::generateIndex()
@@ -345,7 +345,7 @@ void ProgressDialog::htdigExited(KProcess *proc)
         done(1);
         return;
     }
-    if (proc && proc->exitStatus() != 0) 
+    if (proc && proc->exitStatus() != 0)
     {
         KMessageBox::sorry(0, i18n("Running htdig failed"));
         delete proc;
@@ -364,7 +364,7 @@ void ProgressDialog::htdigExited(KProcess *proc)
     {
         setFilesDigged(filesToDig);
         setState(2);
-        
+
         KConfig config("kdevdocumentation", true);
         config.setGroup("htdig");
         // run htmerge -----------------------------------------------------
@@ -406,7 +406,7 @@ void ProgressDialog::htmergeExited(KProcess *proc)
         done(1);
         return;
     }
-    if (proc && proc->exitStatus() != 0) 
+    if (proc && proc->exitStatus() != 0)
     {
         KMessageBox::sorry(0, i18n("Running htmerge failed"));
         delete proc;
@@ -467,7 +467,7 @@ int main(int argc, char *argv[])
         ProgressDialog *search = new ProgressDialog( false, 0, "progress dialog");
 
         if (search->createConfig())
-            KMessageBox::information(0, i18n("Configuration file updated"));
+            KMessageBox::information(0, i18n("Configuration file updated."));
         else
             KMessageBox::error(0, i18n("Configuration file update failed."));
     }
