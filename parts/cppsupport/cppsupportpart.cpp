@@ -31,7 +31,6 @@
 #include "tag_creator.h"
 #include "cppsupport_utils.h"
 #include "classgeneratorconfig.h"
-#include "setupqtpage.h"
 #include "urlutil.h"
 
 // wizards
@@ -298,11 +297,6 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
     vbox = dlg->addVBoxPage( i18n( "C++ Specific" ) );
     CCConfigWidget* w = new CCConfigWidget( this, vbox );
     connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
-#if 0  /// @todo implement me
-    vbox = dlg->addVBoxPage( i18n("Qt") );
-    SetupQtPage* qtPage = new SetupQtPage( this, vbox );
-    connect( qtPage, SIGNAL(okClicked()), qtPage, SLOT(accept()) );
-#endif
 }
 
 void CppSupportPart::configWidget(KDialogBase *dlg)
