@@ -725,6 +725,7 @@ void CKDevSetupDlg::addUserInterfaceTab()
   childframe->setChecked(false);
   toplevel->setChecked(false);
   tabpage->setChecked(false);
+  tabpage->setEnabled(false);//until it is usuable
 
   switch (mdiMode) {
   case QextMdi::ToplevelMode:
