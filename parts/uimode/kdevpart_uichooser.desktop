@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=User-Interface Selection
+Name=KDevUIChooser
+Icon=kdevelop
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevuichooser
+X-KDevelop-Scope=Global
