@@ -1128,24 +1128,18 @@ void CKAppWizard::generateEntries(const QString &filename) {
 
   // Create filename to open in a secure manner
 
-  QString tmpname( QDir::homeDirPath() );
-  tmpname.append( "/.kde/share/apps/kdevelop/" );
-  tmpname.append( entriesfilename );
-
   // Open file and attach stream
-  QFile entriesfile( tmpname );
+  QFile entriesfile( locateLocal("appdata", entriesfilename));
 
-  if ( entriesfile.open(IO_ReadWrite) ) {
-
-#warning FIXME Check this code?
+  if ( entriesfile.open(IO_ReadWrite) )
+  {
     QTextStream entries( &entriesfile );
     entries << "TEMPLATESDIR\n";
+    entries << KStandardDirs::kde_default("data") + "kdevelop/templates";
+    entries << "\nKDEICONDIR\n";
+	  entries << KStandardDirs::kde_default("icon");
+    entries << "\nAPPLICATION\n";
 
-    QString templatesNow = locate("data", "kdevelop/templates");
-    entries << templatesNow << "\n";
-    entries << "KDEICONDIR\n";
-
-    entries << "APPLICATION\n";
     if (kdeminiitem->isSelected()) {
       entries << "kdemini\n";
     }

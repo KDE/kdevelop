@@ -31,7 +31,6 @@
 #include "doctreeview.h"
 #include "grepdialog.h"
 #include "kstartuplogo.h"
-#include "kswallow.h"
 
 #include "./dbg/dbgcontroller.h"
 #include "./dbg/vartree.h"
@@ -255,19 +254,11 @@ void CKDevelop::initView()
   //init
   browser_widget->setDocBrowserOptions();
 
-
-  swallow_widget = new KSwallowWidget(s_tab_view);
-  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
-//  swallow_widget->setFocusPolicy(QWidget::NoFocus);
-
-
-
   s_tab_view->addTab(header_widget,i18n("Header/Reso&urce Files"));
   s_tab_view->addTab(cpp_widget,i18n("&C/C++ Files"));
   s_tab_view->addTab(browser_widget->view(),i18n("&Documentation-Browser"));
-  s_tab_view->addTab(swallow_widget,i18n("Tool&s"));
 
-
+#warning FIXME QSplitter activate
 //  topSplitter->activate(t_tab_view,s_tab_view);// activate the topSplitter
 //  view->activate(topSplitter,o_tab_view);
 
@@ -1408,7 +1399,7 @@ void CKDevelop::setToolmenuEntries(){
 	
 	uint items;
 	for(items=0;items<tools_entry.count();items++)
-		tools_menu->insertItem(tools_entry.at(items));
+		tools_menu->insertItem(tools_entry.at(items),items);
 	
 	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 }

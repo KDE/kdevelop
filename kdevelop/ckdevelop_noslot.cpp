@@ -28,7 +28,6 @@
 #include "ctoolclass.h"
 #include "debug.h"
 #include "doctreeview.h"
-#include "kswallow.h"
 #include "./dbg/brkptmanager.h"
 
 #include <kcursor.h>
@@ -711,12 +710,9 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     if(!CToolClass::searchProgram("kiconedit")){
       return;
     }
-    showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("kiconedit " + filename);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
+    KShellProcess process("/bin/sh");
+    process << "kiconedit " << filename;
+    process.start(KProcess::DontCare);
     return;
   }
 
@@ -749,14 +745,11 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   //load ktranslator if clicked/loaded an po file
   if(ext == "po"){
     if(CToolClass::searchInstProgram("ktranslator")){
-    showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("ktranslator "+ filename);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
-    return;
-		}
+      KShellProcess process("/bin/sh");
+      process << "ktranslator " << filename;
+      process.start(KProcess::DontCare);
+      return;
+    }
   }
 
   //load kpaint for graphics files
@@ -764,34 +757,38 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     bool gimp=true;
     if(!CToolClass::searchInstProgram("gimp")){
       if(!CToolClass::searchInstProgram("kpaint"))
-  			return;
-		}
-    showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    if(gimp)
-      swallow_widget->setExeString("gimp "+ filename);
-    else
-      swallow_widget->setExeString("kpaint "+ filename);
-
-    swallow_widget->sWExecute();
-    swallow_widget->init();
-    return;
+        return;
+      }
+      QString tool;
+      if(gimp)
+        tool="gimp";
+      else
+        tool="kpaint";
+      KShellProcess process("/bin/sh");
+      process << tool << " " << filename;
+      process.start(KProcess::DontCare);
+      return;
   }
 
   if(ext == "ps"){
     if(!CToolClass::searchInstProgram("kghostview")){
 			return;
 		}
-    showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("kghostview "+ filename);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
+    KShellProcess process("/bin/sh");
+    process << "kghostview " << filename;
+    process.start(KProcess::DontCare);
     return;
   }
-  
+  if((filename).right(6) == ".glade"){
+    if(!CToolClass::searchInstProgram("glade")){
+      return;
+    }
+    KShellProcess process("/bin/sh");
+    process << "glade " << filename;
+    process.start(KProcess::DontCare);
+    return;
+  }
+ 
   // set the correct edit_widget
   if (CProject::getType(filename) == CPP_SOURCE){
     edit_widget = cpp_widget;
@@ -1348,7 +1345,6 @@ bool CKDevelop::queryExit(){
 }
 
 bool CKDevelop::queryClose(){
-  swallow_widget->sWClose(false); // close the tools in the tools-tab
   config->setGroup("Files");
   if(project){
     config->writeEntry("project_file",prj->getProjectFile());

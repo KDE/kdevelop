@@ -41,7 +41,6 @@
 #include "debug.h"
 #include "doctreeview.h"
 #include "grepdialog.h"
-#include "kswallow.h"
 #include "structdef.h"
 
 #include "print/cprintdlg.h"
@@ -575,13 +574,12 @@ void CKDevelop::slotEditSearch(){
 }
 void CKDevelop::slotEditRepeatSearch(){
   slotStatusMsg(i18n("Repeating last search..."));
-#warning FIXME KHTML changes.
-//  if(s_tab_view->getCurrentTab()==BROWSER){
-//    browser_widget->findTextNext(QRegExp(doc_search_text));
-//  }
-//  else{
-//    edit_widget->searchAgain();
-//  }
+  if(s_tab_view->getCurrentTab()==BROWSER){
+    browser_widget->findTextNext(QRegExp(doc_search_text),true);
+  }
+  else{
+    edit_widget->searchAgain();
+  }
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditSearchInFiles(){
@@ -740,16 +738,14 @@ void CKDevelop::slotViewTTreeView(){
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
     toolBar()->setButton(ID_VIEW_TREEVIEW,false);
-#warning FIXME Splitter separator problems
-//    tree_view_pos=topSplitter->separatorPos();
-//    topSplitter->setSeparatorPos(0);
+    t_tab_view->hide();
   }
   else{
-#warning FIXME Splitter separator problems
-//    topSplitter->setSeparatorPos(tree_view_pos);
+    t_tab_view->show();
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     toolBar()->setButton(ID_VIEW_TREEVIEW,true);
   }
+
   QRect rMainGeom= topSplitter->geometry();
   topSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
   topSplitter->resize(rMainGeom.width(),rMainGeom.height());
@@ -759,13 +755,10 @@ void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
-#warning FIXME Splitter separator problems
-//    output_view_pos=view->separatorPos();
-//    view->setSeparatorPos(100);
+    o_tab_view->hide();
   }
   else{
-#warning FIXME Splitter separator problems
-//    view->setSeparatorPos(output_view_pos);
+    o_tab_view->show();
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
@@ -952,7 +945,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
   stderr_widget->clear();
 
   QString args = prj->getExecuteArgs();
-  QString program = prj->getBinPROGRAM();
+  QString program = "./"+prj->getBinPROGRAM();
 
   if(bWithArgs)
   {
@@ -976,9 +969,10 @@ void CKDevelop::slotStartRun(bool bWithArgs)
     // Warning: not every user has the current directory in his path !
     if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
     {
+        QDir::setCurrent(underDir);
        o_tab_view->setCurrentTab(STDINSTDOUT);
        QString term = "xterm";
-       QString exec_str = term + " -e sh -c '" + underDir+program + "'";
+       QString exec_str = term + " -e sh -c '" + program + "'";
 
        if(CToolClass::searchInstProgram("konsole"))
        {
@@ -986,42 +980,57 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        }
        if(CToolClass::searchInstProgram("ksh"))
        {
-         exec_str = term + " -e ksh -c '" + underDir+program +
+         exec_str = term + " -e ksh -c '" + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        if(CToolClass::searchInstProgram("csh"))
        {
-         exec_str = term +" -e csh -c '" + underDir+program +
+         exec_str = term +" -e csh -c '" + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("tcsh"))
        {
-          exec_str =  term +" -e tcsh -c '" + underDir+program +
+          exec_str =  term +" -e tcsh -c '" + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("bash"))
        {
-          exec_str =  term +" -e bash -c '" + underDir+program +
+          exec_str =  term +" -e bash -c '" + program +
           ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        appl_process << exec_str;
        cerr << endl << "EXEC:" << exec_str;
     }
-    else if (prj->getProjectType().find("kde2", 0, false) != -1) {
+    else if (prj->isKDE2Project()) {
        //a KDE2 application
+       // set the underDir the current dir, otherwise the resource file for XML
+       // GUI
+       // set the underDir the current dir, otherwise the resource file for XML
+       // GUI construction isn´t loaded on KDE 2 apps.
+       // the current dir is resetted to the project dir at the end of this 
+       // function after the kprocess call.
+       QDir::setCurrent(underDir);
+
        const QString oldGroup = config->group();
        config->setGroup("QT2");
-       QString kde2dir =  QString("KDEDIR=") + config->readEntry("kde2dir") + " ";
+       QString kde2dir =  QString("KDEDIRS=") + config->readEntry("kde2dir") + " ";
        config->setGroup(oldGroup);
 
-       appl_process << kde2dir << underDir + program;
-       cerr << endl << "EXEC:" << kde2dir << underDir + program;
+       appl_process << kde2dir << program;
+       cerr << endl << "EXEC:" << kde2dir << program;
        o_tab_view->setCurrentTab(STDERR);
+    }
+    else if(prj->isKDEProject() || prj->isQtProject() || prj->isQt2Project())
+    {
+      QDir::setCurrent(underDir);
+      appl_process << program;
+      cerr << endl << "EXEC:" << program;
+      o_tab_view->setCurrentTab(STDERR);
     }
     else
     {
       appl_process << underDir + program;
-      cerr << endl << "EXEC:" << underDir +program;
+      cerr << endl << "EXEC:" << underDir + program;
       o_tab_view->setCurrentTab(STDERR);
     }
 
@@ -1304,7 +1313,7 @@ void CKDevelop::slotDebugAttach()
       underDir+="/";
 
     QString libtool= prj->getProjectDir() +"libtool";
-    QString binProgram=prj->getBinPROGRAM();
+    QString binProgram="./"+prj->getBinPROGRAM();
 
     if (dbgController)
       slotDebugStop();
@@ -1321,10 +1330,21 @@ void CKDevelop::slotDebugAttach()
                             pid, dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        dbgController->slotStart(underDir+binProgram, QString(),
-             (isAScript(underDir+binProgram)) ? libtool : QString());
-        dbgController->slotAttachTo(pid);
-      }
+        if(prj->isCustomProject()){
+          dbgController->slotStart(underDir+binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+          dbgController->slotAttachTo(pid);
+        }
+        else{
+          // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
+          // the current dir is resetted to the project dir at the end of this function after the kprocess call.
+          QDir::setCurrent(underDir);
+          dbgController->slotStart(binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+          dbgController->slotAttachTo(pid);
+          QDir::setCurrent(prj->getProjectDir());
+        }
+     }
     }
   }
   else
@@ -1344,7 +1364,7 @@ void CKDevelop::slotDebugExamineCore()
       underDir+="/";
 
     QString libtool= prj->getProjectDir() +"libtool";
-    QString binProgram=prj->getBinPROGRAM();
+    QString binProgram="./"+prj->getBinPROGRAM();
 
     if (dbgController)
       slotDebugStop();
@@ -1359,10 +1379,18 @@ void CKDevelop::slotDebugExamineCore()
                                 coreFile.data(), dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        dbgController->slotStart(underDir+binProgram, QString(),
-             (isAScript(underDir+binProgram)) ? libtool : QString());
-        dbgController->slotCoreFile(coreFile);
-      }
+        if(prj->isCustomProject()){
+         dbgController->slotStart(underDir+binProgram, QString(),
+             (isAScript(binProgram)) ? libtool : QString());
+        }
+        else{
+        QDir::setCurrent(underDir);
+        dbgController->slotStart(binProgram, QString(),
+             (isAScript(binProgram)) ? libtool : QString());
+        }
+         dbgController->slotCoreFile(coreFile);
+        QDir::setCurrent(prj->getProjectDir());
+     }
     }
   }
   else
@@ -1455,7 +1483,7 @@ void CKDevelop::slotStartDebugRunWithArgs()
   if (!underDir.isEmpty() && underDir.right(1)!="/")
     underDir+="/";
 
-  QString binProgram=prj->getBinPROGRAM();
+  QString binProgram="./"+prj->getBinPROGRAM();
   QString libtool= prj->getProjectDir() +"libtool";
 
   QString args=prj->getDebugArgs();
@@ -1474,9 +1502,17 @@ void CKDevelop::slotStartDebugRunWithArgs()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    dbgController->slotStart(underDir+binProgram, args,
-             (isAScript(underDir+binProgram)) ? libtool : QString());
+    if(prj->isCustomProject()){
+      dbgController->slotStart(underDir+binProgram, args,
+               (isAScript(binProgram)) ? libtool : QString());
+    }
+    else{
+      QDir::setCurrent(underDir);
+      dbgController->slotStart(binProgram, args,
+               (isAScript(binProgram)) ? libtool : QString());
+    }
     brkptManager->slotSetPendingBPs();
+    QDir::setCurrent(prj->getProjectDir());
     slotDebugRun();
   }
 }
@@ -1491,7 +1527,7 @@ void CKDevelop::slotStartDebug()
   if (!underDir.isEmpty() && underDir.right(1)!="/")
     underDir+="/";
 
-  QString binProgram=prj->getBinPROGRAM();
+  QString binProgram="./"+prj->getBinPROGRAM();
   QString libtool= prj->getProjectDir() +"libtool";
 
   // if we can run the application, so we can clear the Makefile.am-changed-flag
@@ -1506,9 +1542,17 @@ void CKDevelop::slotStartDebug()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    dbgController->slotStart(underDir+binProgram, QString(),
-             (isAScript(underDir+binProgram)) ? libtool : QString());
+    if(prj->isCustomProject()){
+      dbgController->slotStart(underDir+binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+    }
+    else{
+      QDir::setCurrent(underDir);
+      dbgController->slotStart(binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+    }
     brkptManager->slotSetPendingBPs();
+    QDir::setCurrent(prj->getProjectDir());
     slotDebugRun();
     return;
   }
@@ -1517,18 +1561,12 @@ void CKDevelop::slotStartDebug()
     return;
   }
 
-  showOutputView(false);
-  showTreeView(false);
-
   slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
                 binProgram.data(), dbgExternalCmd.data()));
 
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
-//  QDir::setCurrent(prj->getProjectDir());
-  swallow_widget->setExeString(dbgExternalCmd+ " " + binProgram);
-  swallow_widget->sWExecute();
-  swallow_widget->init();
+  KShellProcess process("/bin/sh");
+  process << dbgExternalCmd+ " " + binProgram;
+  process.start(KProcess::DontCare);
 }
 
 void CKDevelop::setDebugMenuProcess(bool enable)
@@ -2144,7 +2182,7 @@ void CKDevelop::slotToolsTool(int tool){
   if(!bKDevelop)
     switchToKDevelop();
     
-  showOutputView(false);
+//  showOutputView(false);
 
   QString argument=tools_argument.at(tool);
      
@@ -2155,16 +2193,15 @@ void CKDevelop::slotToolsTool(int tool){
   if(project){
     argument.replace( QRegExp("%D"), prj->getProjectDir() );
   }
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
+  QString process_call;
   if(argument.isEmpty()){
-    swallow_widget->setExeString(tools_exe.at(tool));
-
-  } else {
-    swallow_widget->setExeString(tools_exe.at(tool)+argument);
-  }
-  swallow_widget->sWExecute();
-  swallow_widget->init();
+      process_call=tools_exe.at(tool);
+   } else {
+      process_call=tools_exe.at(tool)+argument;
+   }
+  KShellProcess process("/bin/sh");
+  process << process_call;
+  process.start(KProcess::DontCare);
 }
 
 
@@ -3199,11 +3236,10 @@ void CKDevelop::slotDocumentDone()
   int pos = actualURL.findRev('#');
   QString url_wo_ref=actualURL; // without ref
 
-#warning FIXME KHTML changes.
-//  if(prev_was_search_result){
-//    browser_widget->findTextBegin();
-//    browser_widget->findTextNext(QRegExp(doc_search_text));
-//  }
+  if(prev_was_search_result){
+    browser_widget->findTextBegin();
+    browser_widget->findTextNext(QRegExp(doc_search_text),true);
+  }
 
   if (s_tab_view->getCurrentTab()==BROWSER)
     setMainCaption(BROWSER);

@@ -33,6 +33,7 @@ $thisProg           = "$0";     # This programs name
 $topdir             = "";
 $outfile            = "/dev/stdout";
 $binfile            = "";
+$binreldir          = "";
 @all_Makefiles      = ();
 $add_kidl_group     = 0;
 $add_desktop_group  = 0;
@@ -129,15 +130,29 @@ sub processDir()
 
     while ( defined ($file = readdir DIR))
     {
-        next if ($file =~ /Makefile|^\.|\.lo$|\.closure$|\.o$|\.la$|\.P$|\.moc$|\.moc\.(.*)$|meta_unload.cpp$/);
+        next if ($file =~ /Makefile|^\.|\.lo$|\.closure$|\.o$|\.a$|\.la$|\.P$|\.moc$|\.moc\.(.*)$|meta_unload.cpp$/);
 
         if (-d $file)
         {
-            push @subdirs, $file            if (-f "$file/Makefile.am");
+            # If you need to restrict the subdirs then add the
+            # check in here (note the example code commented out)
+            push @subdirs, $file; #            if (-f "$file/Makefile.am");
             next;
         }
 
-        $type="prog_main",  next if ($file =~ /^$binfile$/);
+        if ($file =~ /^$binfile$/)
+        {
+          if ($reldir)
+          {
+            $binreldir=$reldir;
+          }
+          else
+          {
+            $binreldir="./";
+          }
+          $type="prog_main";
+          next;
+        }
 
         $add_kidl_group     = 1   if ($file =~ /\.kidl$/); 
         $add_desktop_group  = 1   if ($file =~ /\.desktop$/); 
@@ -220,7 +235,8 @@ sub addGeneral()
     print FILEOUT "version_control=CVS\n";
     print FILEOUT "project_type=normal_empty\n";
     print FILEOUT "author=",$ENV{'USER'},"\n";
-    print FILEOUT "sub_dir=",join(",",@root_subdirs),",\n";
+    # print FILEOUT "sub_dir=",join(",",@root_subdirs),",\n";
+    print FILEOUT "sub_dir=$binreldir\n";
     print FILEOUT "lfv_open_groups=\n";
     print FILEOUT "workspace=1\n";
     print FILEOUT "project_name=",basename($topdir),"\n";
