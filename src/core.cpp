@@ -2,6 +2,7 @@
 #include <kdebug.h>
 #include <kstatusbar.h>
 #include <dcopclient.h>
+#include <kmainwindow.h>
 
 
 #include "KDevCoreIface.h"
@@ -127,7 +128,7 @@ void Core::fillContextMenu(QPopupMenu *popup, const Context *context)
 
 void Core::message(const QString &str)
 {
-  TopLevel::getInstance()->statusBar()->message(str);
+  TopLevel::getInstance()->main()->statusBar()->message(str);
 }
 
 
@@ -139,7 +140,7 @@ void Core::openProject(const QString& projectFileName)
 
 QStatusBar *Core::statusBar() const
 {
-  return TopLevel::getInstance()->statusBar();
+  return TopLevel::getInstance()->main()->statusBar();
 }
 
 

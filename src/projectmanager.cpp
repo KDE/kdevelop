@@ -13,6 +13,7 @@ class QDomDocument;
 #include <kservice.h>
 #include <ktrader.h>
 #include <kfiledialog.h>
+#include <kmainwindow.h>
 
 
 #include "kdevproject.h"
@@ -103,13 +104,13 @@ bool ProjectManager::loadProjectFile(const QString &fileName)
   QFile fin(fileName);
   if (!fin.open(IO_ReadOnly))
   {
-    KMessageBox::sorry(TopLevel::getInstance(), i18n("Could not read project file: %1").arg(fileName));
+    KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not read project file: %1").arg(fileName));
     return false;
   }
 
   if (!m_info->m_document.setContent(&fin) || m_info->m_document.doctype().name() != "kdevelop")
   {
-    KMessageBox::sorry(TopLevel::getInstance(), "This is not a valid project file.");
+    KMessageBox::sorry(TopLevel::getInstance()->main(), "This is not a valid project file.");
     fin.close();
     return false;
   }
@@ -171,7 +172,7 @@ void ProjectManager::loadProjectPart()
     integratePart(part);
   }
   else
-    KMessageBox::sorry(TopLevel::getInstance(), i18n("No project management plugin %1 found.").arg(m_info->m_projectPlugin));
+    KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("No project management plugin %1 found.").arg(m_info->m_projectPlugin));
 }
 
 
@@ -191,7 +192,7 @@ void ProjectManager::loadLanguageSupport()
     integratePart(part);
   }
   else
-    KMessageBox::sorry(TopLevel::getInstance(), i18n("No language plugin for %1 found.").arg(m_info->m_language));
+    KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("No language plugin for %1 found.").arg(m_info->m_language));
 }
 
 
@@ -281,13 +282,13 @@ void ProjectManager::initializeProjectSupport()
 
 void ProjectManager::integratePart(KDevPart *part)
 {
-  TopLevel::getInstance()->guiFactory()->addClient(part);
+  TopLevel::getInstance()->main()->guiFactory()->addClient(part);
 }
 
 
 void ProjectManager::removePart(KDevPart *part)
 {
-  TopLevel::getInstance()->guiFactory()->removeClient(part);
+  TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
   delete part;
 }
 
@@ -411,7 +412,7 @@ void ProjectManager::saveProjectFile()
       API::getInstance()->projectDom()->save(stream, 2);
     }
     else
-      KMessageBox::sorry(TopLevel::getInstance(), i18n("Could not write the project file."));
+      KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
 
     fout.close();
 

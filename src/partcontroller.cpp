@@ -14,6 +14,7 @@
 #include <kparts/factory.h>
 #include <kparts/partmanager.h>
 #include <kfiledialog.h>
+#include <kmainwindow.h>
 
 #include <ktexteditor/viewcursorinterface.h>
 
@@ -64,10 +65,8 @@ PartController *PartController::s_instance = 0;
 PartController::PartController(QWidget *parent)
   : KDevPartController(parent)
 {
-  m_partManager = new KParts::PartManager(parent);
-  connect(m_partManager, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
-  connect(m_partManager, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part*)));
-  connect(m_partManager, SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
+  connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part*)));
+  connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
 
   setupActions();
 }
@@ -91,40 +90,36 @@ PartController *PartController::getInstance()
 }
 
 
-KParts::Part *PartController::activePart()
-{
-  return m_partManager->activePart();
-}
-
-
 void PartController::setupActions()
 {
+  KActionCollection *ac = TopLevel::getInstance()->main()->actionCollection();
+
   (void) KStdAction::open(this, SLOT(slotOpenFile()), 
-    TopLevel::getInstance()->actionCollection(), "file_open");
+    ac, "file_open");
 
   m_saveAllFilesAction = new KAction(i18n("Save &all"), 0,
     this, SLOT(slotSaveAllFiles()),
-    TopLevel::getInstance()->actionCollection(), "file_save_all");
+    ac, "file_save_all");
   m_saveAllFilesAction->setEnabled(false);
 
   m_revertAllFilesAction = new KAction(i18n("&Revert all"), 0,
     this, SLOT(slotRevertAllFiles()),
-    TopLevel::getInstance()->actionCollection(), "file_revert_all");
+    ac, "file_revert_all");
   m_revertAllFilesAction->setEnabled(false);
 
   m_closeWindowAction = new KAction(i18n("&Close window"), Key_F4,
     this, SLOT(slotCloseWindow()),
-    TopLevel::getInstance()->actionCollection(), "file_closewindow");
+    ac, "file_closewindow");
   m_closeWindowAction->setEnabled(false);
 
   m_closeAllWindowsAction = new KAction(i18n("Close all &windows"), 0,
     this, SLOT(slotCloseAllWindows()),
-    TopLevel::getInstance()->actionCollection(), "file_closeall");
+    ac, "file_closeall");
   m_closeAllWindowsAction->setEnabled(false);
 
   m_closeOtherWindowsAction = new KAction(i18n("Close all &other windows"), 0,
     this, SLOT(slotCloseOtherWindows()),
-    TopLevel::getInstance()->actionCollection(), "file_closeother");
+    ac, "file_closeother");
   m_closeOtherWindowsAction->setEnabled(false);
 }
 
@@ -154,7 +149,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
 
   if (factory)
   {
-    KParts::ReadWritePart *part = static_cast<KParts::ReadWritePart*>(factory->createPart(TopLevel::getInstance(), "KParts/ReadWritePart"));
+    KParts::ReadWritePart *part = static_cast<KParts::ReadWritePart*>(factory->createPart(TopLevel::getInstance()->main(), "KParts/ReadWritePart"));
     part->openURL(url);
     integratePart(part, url);
     setLineNumber(lineNum);
@@ -183,7 +178,7 @@ void PartController::showDocument(const KURL &url, int lineNum)
 
   if (factory)
   {
-    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance(), "KParts/ReadOnlyPart"));
+    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), "KParts/ReadOnlyPart"));
     part->openURL(url);
     integratePart(part, url);
     setLineNumber(lineNum);
@@ -198,7 +193,7 @@ void PartController::showDocument(const KURL &url, int lineNum)
 
 void PartController::setLineNumber(int lineNum)
 {
-  KParts::Part *part = m_partManager ->activePart();
+  KParts::Part *part = activePart();
 
   if (!part->inherits("KTextEditor::Document") || !part->widget())
     return;
@@ -229,15 +224,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
 
   m_partList.append(new PartListEntry(part, url));
 
-  m_partManager->addPart(part);
-}
-
-
-void PartController::removePart(KParts::Part *part)
-{
-  m_partManager->removePart(part);
-
-  delete part;
+  addPart(part);
 }
 
 
@@ -251,17 +238,9 @@ KParts::Part *PartController::partForURL(const KURL &url)
 }
 
 
-void PartController::slotActivePartChanged(KParts::Part *part)
-{
-  kdDebug() << "ACTIVE PART: " << part << endl;
-
-  emit activePartChanged(part);
-}
-
-
 void PartController::activatePart(KParts::Part *part)
 {
-  m_partManager->setActivePart(part);
+  setActivePart(part);
 
   if (part->widget())
   {
@@ -275,7 +254,7 @@ void PartController::updateBufferMenu()
 {
   QPtrList<KAction> bufferActions;
 
-  TopLevel::getInstance()->unplugActionList("buffer_list");
+  TopLevel::getInstance()->main()->unplugActionList("buffer_list");
 
   QPtrListIterator<PartListEntry> it(m_partList);
   for ( ; it.current(); ++it)
@@ -287,7 +266,7 @@ void PartController::updateBufferMenu()
     bufferActions.append(action);
   }
 
-  TopLevel::getInstance()->plugActionList("buffer_list", bufferActions);
+  TopLevel::getInstance()->main()->plugActionList("buffer_list", bufferActions);
 }
 
 
@@ -305,11 +284,10 @@ void PartController::slotBufferSelected()
 
 void PartController::closeActivePart()
 {
-  KParts::Part *activePart = m_partManager->activePart();
-  if (!activePart)
+  if (!activePart())
     return;
 
-  closePart(activePart);
+  closePart(activePart());
 }
 
 
@@ -321,7 +299,7 @@ void PartController::closePart(KParts::Part *part)
 
     if (rw_part->isModified())
     {
-      int res = KMessageBox::warningYesNo(TopLevel::getInstance(),
+      int res = KMessageBox::warningYesNo(TopLevel::getInstance()->main(),
                   i18n("The document %1 is modified.\n"
                        "Close this window anyway?").arg(rw_part->url().url()));
       if (res == KMessageBox::No)
@@ -347,19 +325,15 @@ void PartController::slotPartRemoved(KParts::Part *part)
 
   updateBufferMenu();
   updateMenuItems();
-
-  emit partRemoved(part);
 }
 
 
-void PartController::slotPartAdded(KParts::Part *part)
+void PartController::slotPartAdded(KParts::Part *)
 {
   kdDebug() << "PART ADDED!!!!" << endl;
 
   updateBufferMenu();
   updateMenuItems();
-
-  emit partAdded(part);
 }
 
 
@@ -392,7 +366,7 @@ void PartController::slotSaveAllFiles()
 
 void PartController::saveAllFiles()
 {
-  QPtrListIterator<KParts::Part> it(*m_partManager->parts());
+  QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
     if (it.current()->inherits("KParts::ReadWritePart"))
     {
@@ -412,7 +386,7 @@ void PartController::slotRevertAllFiles()
 
 void PartController::revertAllFiles()
 {
-  QPtrListIterator<KParts::Part> it(*m_partManager->parts());
+  QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
     if (it.current()->inherits("KParts::ReadWritePart"))
     {
@@ -437,15 +411,14 @@ void PartController::slotCloseAllWindows()
 
 void PartController::slotCloseOtherWindows()
 {
-  KParts::Part *activePart = m_partManager->activePart();
-  if (!activePart)
+  if (!activePart())
     return;
 
   while (m_partList.count() > 1)
   {
     QPtrListIterator<PartListEntry> it(m_partList);
     for ( ; it.current(); ++it)
-      if (it.current()->part() != activePart)
+      if (it.current()->part() != activePart())
         closePart(it.current()->part());
   }
 }
@@ -457,7 +430,7 @@ void PartController::slotCurrentChanged(QWidget *w)
   for ( ; it.current(); ++it)
     if (it.current()->part()->widget() == w)
     {
-      m_partManager->setActivePart(it.current()->part(), w);
+      setActivePart(it.current()->part(), w);
       break;
     }
 }
@@ -465,7 +438,7 @@ void PartController::slotCurrentChanged(QWidget *w)
 
 void PartController::slotOpenFile()
 {
-  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.*", TopLevel::getInstance(), i18n("Open file"));
+  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.*", TopLevel::getInstance()->main(), i18n("Open file"));
   if (fileName.isNull())
     return;
 
@@ -485,7 +458,7 @@ bool PartController::closeDocuments(const QStringList &documents)
     KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
     if (rw_part->isModified())
     {
-      int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance(),
+      int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(),
         i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
 	i18n("Save file?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
       if (res == KMessageBox::Cancel)

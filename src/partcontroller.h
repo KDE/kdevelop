@@ -45,8 +45,6 @@ public:
   void saveAllFiles();
   void revertAllFiles();
 
-  KParts::Part *activePart();
-
 
 public slots:
 
@@ -61,7 +59,6 @@ protected:
 
 private slots:
 
-  void slotActivePartChanged(KParts::Part *part);
   void slotPartAdded(KParts::Part *part);
   void slotPartRemoved(KParts::Part *part);
 
@@ -88,7 +85,6 @@ private:
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType);
 
   void integratePart(KParts::Part *part, const KURL &url);
-  void removePart(KParts::Part *part);
 
   KParts::Part *partForURL(const KURL &url);
   void activatePart(KParts::Part *part);

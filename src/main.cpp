@@ -5,6 +5,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <kmainwindow.h>
 
 
 #include "toplevel.h"
@@ -38,12 +39,11 @@ int main(int argc, char *argv[])
 
   KApplication app;
 
-  app.setTopWidget(TopLevel::getInstance());
   TopLevel::getInstance()->loadSettings();
   
   (void) PluginController::getInstance();
 
-  TopLevel::getInstance()->show();
+  TopLevel::getInstance()->main()->show();
 
   Core::getInstance()->doEmitCoreInitialized();
 

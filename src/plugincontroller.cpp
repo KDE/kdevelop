@@ -9,6 +9,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmainwindow.h>
 
 
 #include "kdevapi.h"
@@ -140,5 +141,5 @@ KDevPart *PluginController::loadPlugin(KService *service, const char *className,
 
 void PluginController::integratePart(KDevPart *part)
 {
-  TopLevel::getInstance()->guiFactory()->addClient(part);
+  TopLevel::getInstance()->main()->guiFactory()->addClient(part);
 }
