@@ -43,8 +43,7 @@ apidox-am-yes:
 	##--------------------------------------------------------------------------- \
 	## configuration options related to the input files                           \
 	##--------------------------------------------------------------------------- \
-	echo "INPUT                  = src lib parts plugins Mainpage.dox" >> Doxyfile ;\
-	echo "FILE_PATTERNS         += *.H" >> Doxyfile ;\
+	echo "INPUT                  = src lib parts plugins doc/api" >> Doxyfile ;\
 	if test -n "$(DOXYGEN_EXCLUDE)"; then \
 		patterns= ;\
 		dirs= ;\

@@ -1,8 +1,8 @@
-/** \file newplugin.dox.h
+/** \file HowToAddPlugins.dox
   * \brief How to extend KDevelop via plugins
   */
 
-/** \page howToExtend How to extend KDevelop via plugins
+/** \page howToAddPlugins How to extend KDevelop via plugins
 
 \section createDesktop Step 1: Make your plugin loadable
 

@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = KDevelop
-PROJECT_NUMBER         = "Version 3.0.0a6"
+PROJECT_NUMBER         = "Version 3.0.0a7"
 OUTPUT_DIRECTORY       = ./apidocs
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
@@ -70,7 +70,7 @@ INPUT                  = src \
                          lib \
                          parts \
                          plugins \
-                         Mainpage.dox
+                         doc/api
 FILE_PATTERNS          = *.h \
                          *.cpp \
                          *.cc \
@@ -79,8 +79,7 @@ FILE_PATTERNS          = *.h \
                          *.c++ \
                          *.cxx \
                          *.h++ \
-                         *.hh \
-                         *.H
+                         *.hh
 RECURSIVE              = YES
 EXCLUDE                = parts/appwizard/adahello/ \
                          parts/appwizard/qtopiasimple/ \
@@ -145,7 +144,7 @@ EXCLUDE_PATTERNS       = *.moc.* \
                          *unload.* \
                          */test/* \
                          */tests/*
-EXAMPLE_PATH           = 
+EXAMPLE_PATH           = parts/appwizard/khello
 EXAMPLE_PATTERNS       = 
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             = ./doc/api
@@ -172,7 +171,7 @@ IGNORE_PREFIX          = K
 GENERATE_HTML          = YES
 HTML_OUTPUT            = ./html
 HTML_FILE_EXTENSION    = .html
-HTML_HEADER            = apidocs/common/header.html
+HTML_HEADER            = 
 HTML_FOOTER            = apidocs/common/footer.html
 HTML_STYLESHEET        = apidocs/common/doxygen.css
 HTML_ALIGN_MEMBERS     = YES
@@ -182,7 +181,7 @@ HHC_LOCATION           =
 GENERATE_CHI           = NO
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
-DISABLE_INDEX          = YES
+DISABLE_INDEX          = NO
 ENUM_VALUES_PER_LINE   = 4
 GENERATE_TREEVIEW      = NO
 TREEVIEW_WIDTH         = 250

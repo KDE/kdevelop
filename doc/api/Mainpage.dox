@@ -1,5 +1,9 @@
+/** \file Mainpage.dox
+    \brief The main page of the doxygen generated API Documentation
+*/
+
 /**
-@mainpage The KDevelop API Reference
+\mainpage The KDevelop API Documentation
 
 KDevelop is an easy to use IDE for developing applications under X11.
 
@@ -26,8 +30,8 @@ There is also a \ref LangSupportStatus page.
 \section expand How to expand KDevelop
 
 First of all read the \ref KDev3Arch then you can find more information on how to expand KDevelop:
-  - \ref howToExtend
-  - \ref howToAddNewLanguage
+  - \ref howToAddPlugins
+  - \ref howToAddProgrammingLanguages
   - \ref howToAddTemplates
 
 Additionally you may also want to find out \ref howToDocument.

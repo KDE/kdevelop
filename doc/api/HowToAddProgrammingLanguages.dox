@@ -1,8 +1,8 @@
-/** \file newlanguage.dox.h
-  * \brief How to add support for a language in KDevelop
+/** \file HowToAddProgrammingLanguages.dox
+  * \brief How to add support for a programming language in KDevelop
   */
 
-/** \page howToAddNewLanguage How to add support for a language in KDevelop
+/** \page howToAddProgrammingLanguages How to add support for a programming language in KDevelop
 
 \section LSupport List of things to have "complete" support of a given language in KDevelop
 
