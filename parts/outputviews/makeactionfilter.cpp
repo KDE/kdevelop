@@ -18,6 +18,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#define DEBUG
 
 MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, const QString& _tool, const char * regExp, int file )
 	: action( _action )
@@ -50,7 +51,7 @@ MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 		ActionFormat( i18n("compiling"), "unknown", "^compiling (.*)", 1 ),
 		ActionFormat( i18n("generating"), "moc", "/moc\\b.*\\s-o\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("generating"), "uic", "/uic\\b.*\\s-o\\s([^\\s;]+)", 1 ),
-		ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link .* -o ([^\\s;]+)", 1 ),
+		ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
 		ActionFormat( i18n("linking"), "g++", "g\\+\\+\\S* (?:\\S* )*-o ([^\\s;]+)", 1 ),
 		ActionFormat( i18n("linking"), "gcc", "g\\c\\c\\S* (?:\\S* )*-o ([^\\s;]+)", 1 ),
 		ActionFormat( i18n("installing"), "", "^/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
@@ -90,9 +91,12 @@ ActionItem* MakeActionFilter::matchLine( const QString& line )
 
 	while ( !format->action.isNull() )
 	{
+		kdDebug(9004) << "Testing filter: " << format->action << ": " << format->tool << endl;
 		QRegExp& regExp = format->expression;
 		if ( regExp.search( line ) != -1 )
-			return new ActionItem( format->action, regExp.cap( format->fileGroup ), format->tool, line );
+		{
+                   return new ActionItem( format->action, regExp.cap( format->fileGroup ), format->tool, line );
+		} 
 #ifdef DEBUG
 		if ( t.elapsed() > 100 )
 			kdDebug(9004) << "MakeActionFilter::processLine: SLOW regexp matching: " << t.elapsed() << " ms \n";
@@ -173,6 +177,22 @@ void MakeActionFilter::test()
 		"appoutputviewpart.lo appoutputwidget.lo directorystatusmessagefilter.lo outputfilter.lo compileerrorfilter.lo "
 		"commandcontinuationfilter.lo makeitem.lo makeactionfilter.lo otherfilter.lo ../../lib/libkdevelop.la",
 		"linking", "libtool", "libkdevoutputviews.la.closure" )
+	<< TestItem( //libtool, linking 2
+		"/bin/sh ../libtool --silent --mode=link --tag=CXX g++  -Wnon-virtual-dtor -Wno-long-long -Wundef -Wall -pedantic "
+		"-W -Wpointer-arith -Wwrite-strings -ansi -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -Wcast-align -Wconversion -Wchar-subscripts "
+		"-fno-builtin -g3 -fno-exceptions -fno-check-new -fno-common    -o libkfilereplacepart.la.closure libkfilereplacepart_la_closure.lo "
+		"-module -no-undefined  -L/usr/X11R6/lib -L/usr/lib/qt3/lib -L/opt/kde3/lib  -version-info 1:0:0 kfilereplacepart.lo kfilereplacedoc.lo "
+		"kfilereplaceview.lo kaboutkfilereplace.lo kaddstringdlg.lo kconfirmdlg.lo kernel.lo kexpression.lo kfilereplacepref.lo "
+		"klistviewstring.lo knewprojectdlg.lo koptionsdlg.lo kresultview.lo filelib.lo knewprojectdlgs.lo -lkio -lkparts -lkhtml",
+		"linking", "libtool", "libkfilereplacepart.la.closure")
+	<< TestItem( //libtool, linking 3
+		"/bin/sh ../libtool --silent --mode=link --tag=CXX g++  -Wnon-virtual-dtor -Wno-long-long -Wundef -Wall -pedantic "
+		"-W -Wpointer-arith -Wwrite-strings -ansi -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -Wcast-align -Wconversion -Wchar-subscripts "
+		"-fno-builtin -g3 -fno-exceptions -fno-check-new -fno-common    -o libkfilereplacepart.la -rpath /opt/kde3/lib/kde3 "
+		"-module -no-undefined  -L/usr/X11R6/lib -L/usr/lib/qt3/lib -L/opt/kde3/lib  -version-info 1:0:0 kfilereplacepart.lo "
+		"kfilereplacedoc.lo kfilereplaceview.lo kaboutkfilereplace.lo kaddstringdlg.lo kconfirmdlg.lo kernel.lo kexpression.lo "
+		"kfilereplacepref.lo klistviewstring.lo knewprojectdlg.lo koptionsdlg.lo kresultview.lo filelib.lo knewprojectdlgs.lo -lkio -lkparts -lkhtml",
+		"linking", "libtool", "libkfilereplacepart.la")						
 	<< TestItem( //automake, builddir!=srcdir, libtool=no, compiling
 		" g++ -DHAVE_CONFIG_H -I. -I/home/andris/cvs-developement/head/quanta/quanta/project "
 		"-I../.. -I/home/andris/cvs-developement/head/quanta/quanta/dialogs -I/opt/kde3/include -I/usr/lib/qt3/include -I/usr/X11R6/include  "
@@ -217,7 +237,8 @@ void MakeActionFilter::test()
 			kdError( 9004 ) << "MakeActionFilter::test(): match failed (expected file "
 			                << (*it).file << ", got " << actionItem->m_file << endl;
 			kdError( 9004 ) << (*it).line << endl;
-		}
+		} else
+		kdDebug( 9004 ) << "Test passed, " << actionItem->m_file << " (" << actionItem->m_tool << ") found." << endl;
 		if ( actionItem != NULL )
 			delete actionItem;
 	}

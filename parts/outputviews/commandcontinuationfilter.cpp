@@ -11,6 +11,7 @@
 
 #include "commandcontinuationfilter.h"
 #include <qregexp.h>
+#include <kdebug.h>
 
 CommandContinuationFilter::CommandContinuationFilter( OutputFilter& next )
 	: OutputFilter( next )

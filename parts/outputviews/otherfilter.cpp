@@ -13,6 +13,8 @@
 #include "otherfilter.moc"
 #include "makeitem.h"
 
+#include <kdebug.h>
+
 OtherFilter::OtherFilter()
 	: OutputFilter( *this )
 {

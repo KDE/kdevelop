@@ -13,6 +13,8 @@
 #include "compileerrorfilter.moc"
 #include "makeitem.h"
 
+#include <kdebug.h>
+
 CompileErrorFilter::ErrorFormat::ErrorFormat( const char * regExp, int file, int line, int text )
 	: expression( regExp )
 	, fileGroup( file )
@@ -31,7 +33,9 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 	/// @todo could get these from emacs compile.el
 	static ErrorFormat formats[] = {
 		// GCC
-		ErrorFormat( "([^: \t]+):([0-9]+):(.*)", 1, 2, 3 ),
+		ErrorFormat( "([^: \t]+):([0-9]+):([^0-9]+)", 1, 2, 3 ),
+		//libtool link
+		ErrorFormat( "(libtool):( link):( warning): ", 0, 0, 0 ),
 		// Fortran
 		ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
 		// Jade
@@ -45,7 +49,7 @@ CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 
 void CompileErrorFilter::processLine( const QString& line )
 {
-	bool hasmatch = false;
+       	bool hasmatch = false;
 	QString file;
 	int lineNum = 0;
 	QString text;

@@ -1,3 +1,7 @@
+2003-07-13 Andras Mantia <amantia@freemail.hu>
+     * don't treat libtool link messages for modules as errors.
+     * recognize libtool warning messages.
+
 2003-07-12 F@lk Brettschneider <falkbr@kdevelop.org>
     * compiles and runs on KDE-3.0.3/Qt-3.0.5 again
 

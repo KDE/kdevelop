@@ -14,6 +14,7 @@
 #include "makeitem.h"
 
 #include <qregexp.h>
+#include <kdebug.h>
 
 DirectoryStatusMessageFilter::DirectoryStatusMessageFilter( OutputFilter& next )
 	: OutputFilter( next )
@@ -22,7 +23,7 @@ DirectoryStatusMessageFilter::DirectoryStatusMessageFilter( OutputFilter& next )
 
 void DirectoryStatusMessageFilter::processLine( const QString& line )
 {
-	QString dir;
+       	QString dir;
 	if ( matchEnterDir( line, dir ) )
 	{
 		emit item( new EnteringDirectoryItem( dir, line ) );
