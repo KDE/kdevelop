@@ -6,5 +6,5 @@ Comment=
 Comment[xx]=xxxx
 Exec=%{APPNAMELC}
 Icon=%{APPNAMELC}-logo
-Terminal=0
+Terminal=false
 Type=Application
