@@ -1,3 +1,6 @@
+2004-04-15 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Added Thomas Nagy's KConfig XT based apptemplate.
+
 2004-04-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Rewrote and documented the KDevPartController interface to reduce the duplication of a lot of common but 
       trivial code all over the codebase.
