@@ -27,9 +27,11 @@
 #include <kurl.h>
 #include <ktoolbar.h>
 #include <qframe.h>
+#include <kdiroperator.h>
 
 class KDevMainWindow;
 class KDevPartController;
+class FileSelectorPart;
 class KActionCollection;
 class KActionSelector;
 class KDirOperator;
@@ -61,7 +63,7 @@ class KDevFileSelectorToolBar: public KToolBar
 public:
     KDevFileSelectorToolBar(QWidget *parent);
     virtual ~KDevFileSelectorToolBar();
-    
+
     virtual void setMovingEnabled( bool b );
 };
 
@@ -72,12 +74,28 @@ public:
     KDevFileSelectorToolBarParent(QWidget *parent);
     ~KDevFileSelectorToolBarParent();
     void setToolBar(KDevFileSelectorToolBar *tb);
-    
+
 private:
     KDevFileSelectorToolBar *m_tb;
-    
+
 protected:
     virtual void resizeEvent ( QResizeEvent * );
+};
+
+class KDevDirOperator: public KDirOperator
+{
+    Q_OBJECT
+public:
+    KDevDirOperator(FileSelectorPart *part, const KURL &urlName=KURL(), QWidget *parent=0, const char *name=0)
+        :KDirOperator(urlName, parent, name), m_part(part)
+    {
+    }
+
+protected slots:
+    virtual void activatedMenu (const KFileItem *fi, const QPoint &pos);
+
+private:
+    FileSelectorPart *m_part;
 };
 
 class KDevFileSelector : public QWidget
@@ -90,7 +108,7 @@ public:
     /* When to sync to current document directory */
     enum AutoSyncEvent { DocumentChanged=1, DocumentOpened=2, GotVisible=4 };
 
-    KDevFileSelector( KDevMainWindow *mainWindow=0, KDevPartController *partController=0,
+    KDevFileSelector( FileSelectorPart *part, KDevMainWindow *mainWindow=0, KDevPartController *partController=0,
                       QWidget * parent = 0, const char * name = 0 );
     ~KDevFileSelector();
 
@@ -98,7 +116,7 @@ public:
     void writeConfig( KConfig *, const QString & );
     void setupToolbar( KConfig * );
     void setView( KFile::FileView );
-    KDirOperator *dirOperator(){ return dir; }
+    KDevDirOperator *dirOperator(){ return dir; }
     KActionCollection *actionCollection() { return mActionCollection; };
 
 public slots:
@@ -116,24 +134,25 @@ private slots:
     void btnFilterClick();
     void autoSync();
     void autoSync( KParts::Part * );
-    
+
 protected:
     void focusInEvent( QFocusEvent * );
     void showEvent( QShowEvent * );
     bool eventFilter( QObject *, QEvent * );
     void initialDirChangeHack();
     KURL activeDocumentUrl();
-    
+
 private:
     class KDevFileSelectorToolBar *toolbar;
     KActionCollection *mActionCollection;
     class KBookmarkHandler *bookmarkHandler;
     KURLComboBox *cmbPath;
-    KDirOperator * dir;
+    KDevDirOperator * dir;
     class KAction *acSyncDir;
     KHistoryCombo * filter;
     class QToolButton *btnFilter;
 
+    FileSelectorPart *m_part;
     KDevMainWindow *mainwin;
     KDevPartController *partController;
 
@@ -156,7 +175,7 @@ private:
     of the path and file filter combos, and how to handle
     user closed session.
 */
-class KFSConfigPage : public QWidget 
+class KFSConfigPage : public QWidget
 {
     Q_OBJECT
 public:

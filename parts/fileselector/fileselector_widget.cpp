@@ -1,18 +1,19 @@
 /* This file is part of the KDE project
+   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
    Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
    Copyright (C) 2001 Christoph Cullmann <cullmann@kde.org>
    Copyright (C) 2001 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2001 Anders Lund <anders.lund@lund.tdcadsl.dk>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -20,10 +21,12 @@
 */
 
 //BEGIN Includes
+#include "fileselector_part.h"
 #include "fileselector_widget.h"
 #include "kactionselector.h"
 #include "kbookmarkhandler.h"
 
+#include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
 
@@ -53,7 +56,6 @@
 #include <kurlcombobox.h>
 #include <kurlcompletion.h>
 #include <kprotocolinfo.h>
-#include <kdiroperator.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kcombobox.h>
@@ -110,10 +112,11 @@ void KDevFileSelectorToolBarParent::resizeEvent ( QResizeEvent * )
 
 //BEGIN Constructor/destructor
 
-KDevFileSelector::KDevFileSelector( KDevMainWindow *mainWindow,
+KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *mainWindow,
                                     KDevPartController *partController,
                                     QWidget * parent, const char * name )
         : QWidget(parent, name),
+        m_part(part),
         mainwin(mainWindow),
         partController(partController)
 {
@@ -138,7 +141,7 @@ KDevFileSelector::KDevFileSelector( KDevMainWindow *mainWindow,
     lo->addWidget(cmbPath);
     cmbPath->listBox()->installEventFilter( this );
 
-    dir = new KDirOperator(QString::null, this, "operator");
+    dir = new KDevDirOperator(m_part, QString::null, this, "operator");
     dir->setView(KFile::/*Simple*/Detail);
 
     KActionCollection *coll = dir->actionCollection();
@@ -178,7 +181,7 @@ KDevFileSelector::KDevFileSelector( KDevMainWindow *mainWindow,
              filter, SLOT( addToHistory(const QString&) ) );
 
     // kaction for the dir sync method
-    acSyncDir = new KAction( i18n("Current Document Directory"), "curfiledir", 0,
+    acSyncDir = new KAction( i18n("Current Document Directory"), "dirsynch", 0,
                              this, SLOT( setActiveDocumentDir() ), mActionCollection, "sync_dir" );
     toolbar->setIconText( KToolBar::IconOnly );
     toolbar->setIconSize( 16 );
@@ -220,7 +223,6 @@ KDevFileSelector::KDevFileSelector( KDevMainWindow *mainWindow,
         ( btnFilter,
                 i18n("<p>This button clears the name filter when toggled off, or "
                      "reapplies the last filter used when toggled on.") );
-
 }
 
 KDevFileSelector::~KDevFileSelector()
@@ -786,5 +788,29 @@ void KFSConfigPage::slotChanged()
 
 //END KFSConfigPage
 
+
+//BEGIN KDevDirOperator
+
+void KDevDirOperator::activatedMenu( const KFileItem *fi, const QPoint & pos )
+{
+    setupMenu();
+    updateSelectionDependentActions();
+
+    KActionMenu * am = dynamic_cast<KActionMenu*>(actionCollection()->action("popupMenu"));
+    if (!am)
+        return;
+    KPopupMenu *popup = am->popupMenu();
+
+    if (fi)
+    {
+        FileContext context( KURL::List(fi->url()));
+        if ( (m_part) && (m_part->core()))
+            m_part->core()->fillContextMenu(popup, &context);
+    }
+
+    popup->popup(pos);
+}
+
+//END KDevDirOperator
 
 #include "fileselector_widget.moc"
