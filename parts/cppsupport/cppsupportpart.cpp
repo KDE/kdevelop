@@ -34,6 +34,7 @@
 #include "catalog.h"
 #include "cpp_tags.h"
 #include "kdevdriver.h"
+#include "cppcodecompletionconfig.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -145,6 +146,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 {
     setInstance(CppSupportFactory::instance());
 
+    m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
+    
     m_driver = new CppDriver( this );
     
     setXMLFile("kdevcppsupport.rc");
@@ -225,13 +228,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     // daniel
     connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,
              SLOT( projectConfigWidget( KDialogBase* ) ) );
-
-    m_bEnableCC = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/codecompletion/enablecc", true );
-
-
-    QDomElement element = projectDom( )->documentElement( )
-                          .namedItem( "cppsupportpart" ).toElement( )
-                          .namedItem( "codecompletion" ).toElement( );
+    
     new KDevCppSupportIface( this );
     //(void) dcopClient();
 }
@@ -318,10 +315,6 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
     QVBox* vbox = dlg->addVBoxPage( i18n( "C++ Specific" ) );
     CCConfigWidget* w = new CCConfigWidget( this, vbox );
     connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
-
-    connect( w, SIGNAL( enableCodeCompletion( bool ) ),
-             this, SLOT( slotEnableCodeCompletion( bool ) ) );
-
 }
 
 void CppSupportPart::configWidget(KDialogBase *dlg)
@@ -329,15 +322,6 @@ void CppSupportPart::configWidget(KDialogBase *dlg)
   QVBox *vbox = dlg->addVBoxPage(i18n("C++ New Class Generator"));
   ClassGeneratorConfig *w = new ClassGeneratorConfig(vbox, "classgenerator config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(storeConfig()));
-}
-
-void
-CppSupportPart::slotEnableCodeCompletion( bool setEnable )
-{
-    kdDebug( 9007 ) << "slotEnableCodeCompletion" << endl;
-
-    if( m_pCompletion )
-        m_pCompletion->setEnabled( setEnable );
 }
 
 void CppSupportPart::activePartChanged(KParts::Part *part)
@@ -410,7 +394,7 @@ CppSupportPart::projectOpened( )
 
     m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
     m_backgroundParser->start();
-
+    
     QTimer::singleShot( 500, this, SLOT( initialParse( ) ) );
 }
 
@@ -420,6 +404,8 @@ CppSupportPart::projectClosed( )
 {
     kdDebug( 9007 ) << "projectClosed( )" << endl;
     
+    m_pCompletionConfig->store();
+
     if( m_backgroundParser )
 	m_backgroundParser->removeAllFiles();
 

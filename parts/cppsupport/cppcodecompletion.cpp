@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "cppcodecompletion.h"
+#include "cppcodecompletionconfig.h"
 #include "backgroundparser.h"
 #include "ast.h"
 #include "ast_utils.h"
@@ -307,7 +308,7 @@ void CppCodeCompletion::slotTimeout()
     QChar ch = textLine[ nCol ];;
     if( ch.isLetterOrNumber() || ch == '_' )
 	return;
-
+    
     completeText();
 }
 
@@ -373,7 +374,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     }
 
     // here we have to investigate :)
-    if( m_pSupport && m_pSupport->codeCompletionEnabled( ) == true ){
+    if( m_pSupport && m_pSupport->codeCompletionConfig()->automaticCodeCompletion() ){
         kdDebug( 9007 ) << "enabling code completion" << endl;
 	connect(part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 	connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
@@ -403,10 +404,11 @@ CppCodeCompletion::slotTextChanged()
     m_ccLine = 0;
     m_ccColumn = 0;
 
-    if ( ch == "(" || ch == "." || ch2 == "->" || ch2 == "::" ){
-        m_ccLine = nLine;
-        m_ccColumn = nCol;
-    	m_ccTimer->start( 250, true );
+    if( (m_pSupport->codeCompletionConfig()->automaticCodeCompletion() && (ch == "." || ch2 == "->" || ch2 == "::")) ||
+	(m_pSupport->codeCompletionConfig()->automaticArgumentsHint() && ch == "(") ){
+	m_ccLine = nLine;
+	m_ccColumn = nCol;
+	m_ccTimer->start( ch == "(" ? m_pSupport->codeCompletionConfig()->argumentsHintDelay() : m_pSupport->codeCompletionConfig()->codeCompletionDelay(), true );
     }
 }
 

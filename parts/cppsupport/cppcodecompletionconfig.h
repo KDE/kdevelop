@@ -96,12 +96,12 @@ private:
 private:
     CppSupportPart* m_part;
     QDomDocument* m_dom;
-    int m_includeGlobalFunctions: 1;
-    int m_includeTypes: 1;
-    int m_includeEnums: 1;
-    int m_includeTypedefs: 1;
-    int m_automaticCodeCompletion: 1;
-    int m_automaticArgumentsHint: 1;
+    bool m_includeGlobalFunctions;
+    bool m_includeTypes;
+    bool m_includeEnums;
+    bool m_includeTypedefs;
+    bool m_automaticCodeCompletion;
+    bool m_automaticArgumentsHint;
     int m_codeCompletionDelay;
     int m_argumentsHintDelay;
     

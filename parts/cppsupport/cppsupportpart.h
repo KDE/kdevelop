@@ -31,6 +31,7 @@ class ParsedAttribute;
 class ClassStore;
 class Context;
 class CppCodeCompletion;
+class CppCodeCompletionConfig;
 class ProblemReporter;
 class BackgroundParser;
 class Catalog;
@@ -56,12 +57,10 @@ public:
     
     Catalog* projectCatalog() { return m_projectCatalog; }
 
-    void setCodeCompletionEnabled( bool b ){ m_bEnableCC = b;    };
-    bool codeCompletionEnabled( void   ){ return m_bEnableCC; };
-
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
     CppCodeCompletion* codeCompletion() { return m_pCompletion; }
+    CppCodeCompletionConfig* codeCompletionConfig() { return m_pCompletionConfig; }
 
     const QPtrList<Catalog>& catalogList() { return m_catalogList; }
 
@@ -112,7 +111,6 @@ private slots:
     void slotMakeMember();
 
     // code completion related slots - called from config-widget
-    void slotEnableCodeCompletion( bool setEnabled );
     void slotNodeSelected( QListViewItem* item );
     void slotNeedTextHint( int, int, QString& );
 
@@ -139,11 +137,11 @@ private:
     void setPcsVersion( int version );
 
     CppCodeCompletion* m_pCompletion;
+    CppCodeCompletionConfig* m_pCompletionConfig;
 
     bool withcpp;
     QString m_contextFileName;
 
-    bool m_bEnableCC;
     QGuardedPtr< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
 

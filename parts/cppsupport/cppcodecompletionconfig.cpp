@@ -32,26 +32,26 @@ CppCodeCompletionConfig::~CppCodeCompletionConfig()
 
 void CppCodeCompletionConfig::init( )
 {
-    m_includeGlobalFunctions = DomUtil::readIntEntry( *m_dom, defaultPath + "/includeGlobalFunctions", false );
-    m_includeTypes = DomUtil::readIntEntry( *m_dom, defaultPath + "/includeTypes", false );
-    m_includeEnums = DomUtil::readIntEntry( *m_dom, defaultPath + "/includeEnums", false );
-    m_includeTypedefs = DomUtil::readIntEntry( *m_dom, defaultPath + "/includeTypedefs", false );
-    m_automaticCodeCompletion = DomUtil::readIntEntry( *m_dom, defaultPath + "/automaticCodeCompletion", true );
-    m_automaticArgumentsHint = DomUtil::readIntEntry( *m_dom, defaultPath + "/automaticArgumentsHint", true );
-    m_codeCompletionDelay  = DomUtil::readIntEntry( *m_dom, defaultPath + "/codeCompletionDelay", 250 );
-    m_argumentsHintDelay = DomUtil::readIntEntry( *m_dom, defaultPath + "/argumentsHintDelay", 400 );
+    m_includeGlobalFunctions =	DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeGlobalFunctions", true );
+    m_includeTypes =		DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeTypes", true );
+    m_includeEnums =		DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeEnums", true );
+    m_includeTypedefs =		DomUtil::readBoolEntry( *m_dom, defaultPath + "/includeTypedefs", false );
+    m_automaticCodeCompletion = DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticCodeCompletion", true );
+    m_automaticArgumentsHint =	DomUtil::readBoolEntry( *m_dom, defaultPath + "/automaticArgumentsHint", true );
+    m_codeCompletionDelay =	DomUtil::readIntEntry( *m_dom, defaultPath + "/codeCompletionDelay", 250 );
+    m_argumentsHintDelay =	DomUtil::readIntEntry( *m_dom, defaultPath + "/argumentsHintDelay", 400 );
 }
 
 void CppCodeCompletionConfig::store( )
 {
-    DomUtil::readIntEntry( *m_dom, defaultPath + "/includeGlobalFunctions", m_includeGlobalFunctions );
-    DomUtil::readIntEntry( *m_dom, defaultPath + "/includeTypes", m_includeTypes );
-    DomUtil::readIntEntry( *m_dom, defaultPath + "/includeEnums", m_includeEnums );
-    DomUtil::readIntEntry( *m_dom, defaultPath + "/includeTypedefs", m_includeTypedefs );
-    DomUtil::readIntEntry( *m_dom, defaultPath + "/automaticCodeCompletion", m_automaticCodeCompletion );
-    DomUtil::readIntEntry( *m_dom, defaultPath + "/automaticArgumentsHint", m_automaticArgumentsHint );
-    DomUtil::readIntEntry( *m_dom, defaultPath + "/codeCompletionDelay", m_codeCompletionDelay );
-    DomUtil::readIntEntry( *m_dom, defaultPath + "/argumentsHintDelay", m_argumentsHintDelay );
+    DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeGlobalFunctions", m_includeGlobalFunctions );
+    DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeTypes", m_includeTypes );
+    DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeEnums", m_includeEnums );
+    DomUtil::writeBoolEntry( *m_dom, defaultPath + "/includeTypedefs", m_includeTypedefs );
+    DomUtil::writeBoolEntry( *m_dom, defaultPath + "/automaticCodeCompletion", m_automaticCodeCompletion );
+    DomUtil::writeBoolEntry( *m_dom, defaultPath + "/automaticArgumentsHint", m_automaticArgumentsHint );
+    DomUtil::writeIntEntry( *m_dom, defaultPath + "/codeCompletionDelay", m_codeCompletionDelay );
+    DomUtil::writeIntEntry( *m_dom, defaultPath + "/argumentsHintDelay", m_argumentsHintDelay );
     
     emit stored();
 }
