@@ -8,12 +8,15 @@
       <type ext="py" name="Python" create="template" icon="source_py">
         <descr>A new empty Python source file.</descr>
       </type>
+      <type ext="rb" name="Ruby" create="template" icon="template_source">
+        <descr>A new empty Ruby source file.</descr>
+      </type>
       <type ext="ui" name="QT Designer" create="no" icon="widget_doc">
         <descr>
         </descr>
-	<subtype ref="widget" name="Widget" icon="widget_doc">
-	  <descr>A new widget.</descr>
-	</subtype>
+        <subtype ref="widget" name="Widget" icon="widget_doc">
+          <descr>A new widget.</descr>
+        </subtype>
         <subtype ref="dialog" name="Dialog" icon="widget_doc">
           <descr>A new empty Dialog box.</descr>
         </subtype>
@@ -75,10 +78,10 @@
       <type ext="fpp" name="Fortran source" create="template" icon="source_f">
         <descr>A new empty Fortran source file.</descr>
       </type>
-      <type ext="pl" name="Perl script" create="template" icon="source_f">
+      <type ext="pl" name="Perl script" create="template" icon="template_source">
         <descr>A new Perl script.</descr>
       </type>
-      <type ext="pm" name="Perl module" create="template" icon="source_f">
+      <type ext="pm" name="Perl module" create="template" icon="template_source">
         <descr>A new perl module.</descr>
       </type>
     </filetypes>
