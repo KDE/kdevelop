@@ -251,13 +251,17 @@ void CvsPart::createNewProject( const QString& dirName )
     // FIXME: Store rsh setting. Here doesn't store it in CvsOptions because:
     // createNewProject() is called _before_ projectOpened() signal is emitted.
     g_tempEnvRsh = m_cvsConfigurationForm->cvs_rsh->text();
+    QString rsh;
+    if ( !g_tempEnvRsh.isEmpty() )
+        rsh = "CVS_RSH=" + KShellProcess::quote( g_tempEnvRsh );
+
 
     if (m_cvsConfigurationForm->init_check->isChecked())
     {
-        init = "cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->root_edit->text()) + " init && ";
+        init = rsh + " cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->root_edit->text()) + " init && ";
     }
     QString command = init + "cd " + KShellProcess::quote(dirName) +
-        " && " + cvs_rsh() +
+        " && " + rsh +
         " cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->root_edit->text()) +
         " import -m " + KShellProcess::quote(m_cvsConfigurationForm->message_edit->text()) + " " +
         KShellProcess::quote(m_cvsConfigurationForm->repository_edit->text()) + " " +
