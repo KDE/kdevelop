@@ -35,6 +35,7 @@ public:
     virtual void parseTranslationUnit( TranslationUnitAST* );
 
     // declarations
+    virtual void parseDeclaration( DeclarationAST* );
     virtual void parseNamespace( NamespaceAST* );
     virtual void parseUsingDirective( UsingDirectiveAST* );
     virtual void parseTypedef( TypedefAST* );

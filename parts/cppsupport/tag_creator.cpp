@@ -40,6 +40,17 @@ void TagCreator::setDocumentationDirectories(const QStringList& str){
 	m_documentation = new DoxyDoc(str);
 }
 
+void TagCreator::parseDeclaration( DeclarationAST* ast )
+{
+    if( ast->nodeType() == NodeType_AccessDeclaration || 
+	m_currentAccess.isEmpty() || 
+	m_currentAccess.contains("public") || 
+	m_currentAccess.contains("protected") || 
+	m_currentAccess.contains("signals") )
+	
+	   TreeParser::parseDeclaration( ast );
+}
+
 void TagCreator::parseTranslationUnit( TranslationUnitAST* ast )
 {
     m_currentScope.clear();

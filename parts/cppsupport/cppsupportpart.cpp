@@ -105,7 +105,7 @@ void showMemUsage()
 {}
 #endif
 
-enum { PCS_VERSION = 1 };
+enum { PCS_VERSION = 2 };
 
 class CppDriver: public KDevDriver
 {
