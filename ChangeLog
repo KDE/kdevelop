@@ -1,3 +1,6 @@
+2003-07-04 Amílcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
+	Added debug and optimized build configurations to all C and C++ autoproject based templates 
+
 2003-07-04 Andras Mantia <amantia@freemail.hu>
     * Restore search in documentation functionality
 

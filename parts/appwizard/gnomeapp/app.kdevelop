@@ -19,6 +19,23 @@
   <run>
    <mainprogram>src/$APPNAMELC$</mainprogram>
   </run>
+    <configurations>
+      <optimized>
+        <builddir>optimized</builddir>
+        <ccompiler>GccOptions</ccompiler>
+        <cxxcompiler>GppOptions</cxxcompiler>
+        <f77compiler>G77Options</f77compiler>
+        <cflags>-O2 -g0</cflags>
+      </optimized>
+      <debug>
+        <configargs>--enable-debug=full</configargs>
+        <builddir>debug</builddir>
+        <ccompiler>GccOptions</ccompiler>
+        <cxxcompiler>GppOptions</cxxcompiler>
+        <f77compiler>G77Options</f77compiler>
+        <cflags>-O0 -g3</cflags>
+      </debug>
+    </configurations>
  </kdevautoproject>
  <kdevfileview>
   <groups>

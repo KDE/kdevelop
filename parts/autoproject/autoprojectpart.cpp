@@ -666,8 +666,17 @@ QString AutoProjectPart::configureCommand()
     }
 
     QString builddir = buildDirectory();
+    QString dircmd;
 
-    QString dircmd = "cd ";
+    // if the build directory doesn't exist, add it's creation to the configureCommand
+    if ( !QFile::exists(builddir)) {
+        dircmd = "mkdir ";
+        dircmd += builddir;
+        dircmd += " && ";
+    }
+
+    // add "cd into the build directory" to the configureCommand
+    dircmd += "cd ";
     dircmd += builddir;
     dircmd += " && ";
 
