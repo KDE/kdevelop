@@ -39,10 +39,12 @@ else {
   system ("make -f Makefile.dist");
   
   #start configure
+  printflush (STDOUT,"KDEHOME=$ENV{KDEHOME}; KDEDIR=$ENV{KDEDIR}; QTDIR=$ENV{QTDIR};\n");
   printflush (STDOUT,"make configure...\n");
-  printflush (STDOUT,">LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\"\n>./configure $confargs\n");
+
+  printflush (STDOUT,">LDFLAGS=\"\" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\"\n>./configure $confargs\n");
   chdir ($overDirectory);
-  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure " . $confargs);	
+  system ("LDFLAGS=\"\" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure " . $confargs);	
 }
 
 #if API-Files was chosen in kAppWizard
