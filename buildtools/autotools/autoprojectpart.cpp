@@ -927,6 +927,11 @@ void AutoProjectPart::slotInstall()
 
 void AutoProjectPart::slotInstallWithKdesu()
 {
+    // First issue "make" to build the entire project with the current user
+    // This way we make sure all files are up to date before we do the "make install"
+    slotBuild();
+
+    // After that issue "make install" with the root user
     startMakeCommand(buildDirectory(), QString::fromLatin1("install"), true);
 }
 
