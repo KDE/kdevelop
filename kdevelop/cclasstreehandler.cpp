@@ -103,6 +103,7 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
   
   current = parent->firstChild();
   
+  // Remove all items belonging to this class.
   while( current != NULL )
   {
     next = current->nextSibling();
@@ -111,10 +112,11 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
   }
 
   // Add parts of the class
+  addSubclassesFromClass( aClass, parent );
   addMethodsFromClass( aClass, parent, CTHALL );
   addSlotsFromClass( aClass, parent );
-  addAttributesFromClass( aClass, parent, CTHALL );
   addSignalsFromClass( aClass, parent );
+  addAttributesFromClass( aClass, parent, CTHALL );
 }
 
 /*---------------------------------- CClassTreeHandler::addClass()
@@ -155,6 +157,38 @@ QListViewItem *CClassTreeHandler::addClass( const char *aName,
   assert( parent != NULL );
 
   return addItem( aName, THCLASS, parent );
+}
+
+/*------------------------ CClassTreeHandler::addSubclassesFromClass()
+ * addSubclassesFromClass()
+ *   Add all subclasses from the class to the view.
+ *
+ * Parameters:
+ *   aClass       Class with subclasses to add.
+ *   parent       The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addSubclassesFromClass( CParsedClass *aClass,
+                                                QListViewItem *parent )
+{
+  const char *str;
+  CParsedClass *sc;
+  QListViewItem *ci;
+
+  for( str = aClass->childClasses.first();
+       str != NULL;
+       str = aClass->childClasses.next() )
+  {
+    sc = store->getClassByName( str );
+    if( sc != NULL )
+    {
+      ci = addClass( sc->name, parent );
+      updateClass( sc, ci );
+      setLastItem( ci );
+    }
+  }
 }
 
 /*-------------------------- CClassTreeHandler::addMethodsFromClass()
@@ -318,6 +352,77 @@ void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr,
   addItem( aAttr->name, type, parent );
 }
 
+/*------------------------------------- CClassTreeHandler::addSlots()
+ * addSlots()
+ *   Add all slots from a class to the view.
+ *
+ * Parameters:
+ *   aPC             Class that holds the data.
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addSlotsFromClass( CParsedClass *aPC, QListViewItem *parent )
+{
+  CParsedMethod *aMethod;
+  QString str;
+  QList<CParsedMethod> *list;
+
+  THType type = THPUBLIC_SLOT;
+  
+  list = aPC->getSortedSlotList();
+
+  // Add the methods
+  for( aMethod = list->first();
+       aMethod != NULL;
+       aMethod = list->next() )
+  {
+    if( aMethod->isProtected() )
+      type = THPROTECTED_SLOT;
+    else if( aMethod->isPrivate() )
+      type = THPRIVATE_SLOT;
+
+    aMethod->toString( str );
+    addItem( str, type, parent );
+  }
+}
+
+/*------------------------- CClassTreeHandler::addSignalsFromClass()
+ * addSignalsFromClass()
+ *   Add all signals from a class to the view.
+ *
+ * Parameters:
+ *   aPC             Class that holds the data.
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *parent )
+{
+  CParsedMethod *aMethod;
+  QString str;
+  QList<CParsedMethod> *list;
+
+  THType type = THPUBLIC_SIGNAL;
+
+  list = aPC->getSortedSignalList();
+  // Add the methods
+  for( aMethod = list->first();
+       aMethod != NULL;
+       aMethod = list->next() )
+  {
+    if( aMethod->isProtected() )
+      type = THPROTECTED_SIGNAL;
+    else if( aMethod->isPrivate() )
+      type = THPRIVATE_SIGNAL;
+
+    aMethod->toString( str );
+    addItem( str, type, parent );
+  }
+}
+
 /*--------------------------- CClassTreeHandler::addGlobalFunctions()
  * addGlobalFunctions()
  *   Add a list of global functions to the view.
@@ -411,64 +516,42 @@ void CClassTreeHandler::addGlobalVar( CParsedAttribute *aAttr,
   addItem( aAttr->name, THGLOBAL_VARIABLE, parent );
 }
 
-/*------------------------------------- CClassTreeHandler::addSlots()
- * addSlots()
- *   Add all slots from a class to the view.
+
+/*------------------------------ CClassTreeHandler::addGlobalStructs()
+ * addGlobalStructs()
+ *   Add a list of global structures to the view.
  *
  * Parameters:
- *   aPC             Class that holds the data.
+ *   list            List of global structures.
  *   parent          The parent item.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSlotsFromClass( CParsedClass *aPC, QListViewItem *parent )
+void CClassTreeHandler::addGlobalStructs( QList<CParsedStruct> *list,
+                                          QListViewItem *parent )
 {
-  CParsedMethod *aMethod;
-  QString str;
-  QList<CParsedMethod> *list;
+  CParsedStruct *aStruct;
 
-  THType type = THPUBLIC_SLOT;
-  
-  list = aPC->getSortedSlotList();
-
-  // Add the methods
-  for( aMethod = list->first();
-       aMethod != NULL;
-       aMethod = list->next() )
-  {
-    if( aMethod->isProtected() )
-      type = THPROTECTED_SLOT;
-    else if( aMethod->isPrivate() )
-      type = THPRIVATE_SLOT;
-
-    aMethod->toString( str );
-    addItem( str, type, parent );
-  }
+  for( aStruct = list->first();
+       aStruct != NULL;
+       aStruct = list->next() )
+    addStruct( aStruct, parent );
 }
 
-/*----------------------------------- CClassTreeHandler::addSignals()
- * addSignals()
- *   Add all signals from a class to the view.
+/*------------------------------------ CClassTreeHandler::addStruct()
+ * addStruct()
+ *   Add a global struct to the view.
  *
  * Parameters:
- *   aPC             Class that holds the data.
+ *   aStruct         Structure to add
  *   parent          The parent item.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *parent )
+void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
+                                   QListViewItem *parent )
 {
-  CParsedMethod *aMethod;
-  QString str;
-
-  // Add the methods
-  for( aMethod = aPC->signalList.first();
-       aMethod != NULL;
-       aMethod = aPC->signalList.next() )
-  {
-    aMethod->toString( str );
-    addItem( str, THSTRUCT, parent );
-  }
+  addItem( aStruct->name, THSTRUCT, parent );
 }

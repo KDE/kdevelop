@@ -50,6 +50,10 @@ public: // Public methods
   QListViewItem *addClass( CParsedClass *aClass, QListViewItem *parent );
   QListViewItem *addClass( const char *aClass, QListViewItem *parent );
 
+  /** Add all subclasses from the class. */
+  void addSubclassesFromClass( CParsedClass *aClass,
+                               QListViewItem *parent );
+
   /** Add the selected methods from the class. */
   void addMethodsFromClass( CParsedClass *aClass, QListViewItem *parent,
                             CTHFilter filter = CTHALL );
@@ -84,6 +88,14 @@ public: // Public methods
 
   /** Add a global variable to the view. */
   void addGlobalVar( CParsedAttribute *aAttr, QListViewItem *parent );
+
+  /** Add a list of global structures to the view. */
+  void addGlobalStructs( QList<CParsedStruct> *list,
+                         QListViewItem *parent );
+
+  /** Add a structure to the view. */
+  void addStruct( CParsedStruct *aStruct,
+                  QListViewItem *parent );
 
   /** Add all signals to the view. */
   void addSlotsFromClass( CParsedClass *aPC, QListViewItem *parent );
