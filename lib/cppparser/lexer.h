@@ -199,6 +199,12 @@ public:
 
     bool recordWhiteSpaces() const;
     void setRecordWhiteSpaces( bool record );
+    
+    bool reportWarnings() const;
+    void setReportWarnings( bool enable );
+    
+    bool reportMessages() const;
+    void setReportMessages( bool enable );
 
     bool skipWordsEnabled() const;
     void enableSkipWords();
@@ -207,7 +213,7 @@ public:
     bool preprocessorEnabled() const;
     void enablePreprocessor();
     void disablePreprocessor();
-
+    
     void resetSkipWords();
     void addSkipWord( const QString& word, SkipType skipType=SkipWord, const QString& str = QString::null );
 
@@ -305,6 +311,9 @@ private:
     int m_ifLevel;
     bool m_preprocessorEnabled;
     bool m_inPreproc;
+    
+    bool m_reportWarnings;
+    bool m_reportMessages;
 
 private:
     Lexer( const Lexer& source );
@@ -540,8 +549,26 @@ inline void Lexer::readWhiteSpaces( bool skipNewLine )
 
 inline void Lexer::readLineComment()
 {
-    while( !currentChar().isNull() && currentChar() != '\n' )
-        nextChar();
+    while( !currentChar().isNull() && currentChar() != '\n' ){
+	if( m_reportMessages && currentChar() == '@' && m_source.mid(currentPosition()+1, 4).lower() == "todo" ){
+	    nextChar( 5 );
+	    QString msg;
+	    int line = m_currentLine;
+	    int col = m_currentColumn;
+	    
+	    while( currentChar() ){
+		if( currentChar() == '*' && peekChar() == '/' )
+		    break;
+		else if( currentChar() == '\n' )
+		    break;
+		
+		msg += currentChar();
+		nextChar();
+	    }
+	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col) );
+	} else 
+	    nextChar();
+    }    
 }
 
 inline void Lexer::readMultiLineComment()
@@ -550,8 +577,23 @@ inline void Lexer::readMultiLineComment()
         if( currentChar() == '*' && peekChar() == '/' ){
             nextChar( 2 );
             return;
-        }
-        nextChar();
+	} else if( m_reportMessages && currentChar() == '@' && m_source.mid(currentPosition()+1, 4).lower() == "todo" ){
+	    nextChar( 5 );
+	    QString msg;
+	    int line = m_currentLine;
+	    int col = m_currentColumn;
+	    
+	    while( currentChar() ){
+		if( currentChar() == '*' && peekChar() == '/' )
+		    break;
+		else if( currentChar() == '\n' )
+		    break;
+		msg += currentChar();
+		nextChar();
+	    }
+	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col) );
+	} else 
+	    nextChar();
     }
 }
 
@@ -712,5 +754,26 @@ inline bool Lexer::eof() const
 {
     return m_ptr >= m_endPtr;
 }
+
+inline bool Lexer::reportWarnings() const
+{
+    return m_reportWarnings;
+}
+
+inline void Lexer::setReportWarnings( bool enable )
+{
+    m_reportWarnings = enable;
+}
+
+inline bool Lexer::reportMessages() const
+{
+    return m_reportMessages;
+}
+
+inline void Lexer::setReportMessages( bool enable )
+{
+    m_reportMessages = enable;
+}
+
 
 #endif
