@@ -261,7 +261,7 @@ void CKDevelop::slotFileSaveAll(){
  	slotStatusMsg(i18n("Autosaving..."));
     }
     
-    view->setUpdatesEnabled(false);
+//??? F.B.   view->setUpdatesEnabled(false);
     
     // Editors...
     QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
@@ -294,7 +294,7 @@ void CKDevelop::slotFileSaveAll(){
     statProg->hide();
     statProg->reset();
     
-    view->setUpdatesEnabled(true);
+//??? F.B.    view->setUpdatesEnabled(true);
     slotStatusMsg(i18n("Ready."));
 }
 

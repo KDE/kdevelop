@@ -34,7 +34,6 @@
 #include <qprogressbar.h>
 
 #include <kapp.h>
-#include <ktmainwindow.h>
 #include <kprocess.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -71,6 +70,7 @@ class DocBrowserView;
 #include "structdef.h"
 #include "resource.h"
 #include "./print/cprintdlg.h"
+#include "./widgets/dockwidgets/dockmainwindow.h"
 
 class CParsedMethod;
 class CParsedClass;
@@ -85,7 +85,7 @@ class KDlgItems;
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
-class CKDevelop : public KTMainWindow {
+class CKDevelop : public DockMainWindow {
   Q_OBJECT
 public:
   /**constructor*/
@@ -690,10 +690,9 @@ private:
   KStatusBar* kdev_statusbar;
   KStatusBar* kdlg_statusbar;
 
-  QSplitter* view;
-  QSplitter* top_panner;
   /** Divides the top_panner for edit and properties widget 
    * of the dialogeditor */
+  DockWidget* dockbase_kdlg_top_panner;
   QSplitter* kdlg_top_panner;  
   
   /** main class for the dialogeditor- 
@@ -729,10 +728,11 @@ private:
   ///////////////////////////////
 
   /** The tabbar for the trees. */
+  DockWidget* dockbase_t_tab_view;
   CTabCtl* t_tab_view;
   /** The tabbar for the output_widgets. */
+  DockWidget* dockbase_o_tab_view;
   CTabCtl* o_tab_view;
-
 
   MdiFrame* mdi_main_frame;
 
@@ -806,7 +806,3 @@ private:
 };
 
 #endif
-
-
-
-

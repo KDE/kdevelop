@@ -111,14 +111,10 @@ void CKDevelop::initView(){
   QFont font("Fixed",10);
 
   ////////////////////////
-  // Main view panner
-  ////////////////////////
-  view = new QSplitter(Qt::Vertical,this, "view");
-
-  ////////////////////////
   // Outputwindow
   ////////////////////////
-  o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
+  dockbase_o_tab_view = createDockWidget(i18n("Output messages"), BarIcon("filenew"));
+  o_tab_view = new CTabCtl(dockbase_o_tab_view,"output_tabview","output_widget");
 	
   messages_widget = new MakeView(o_tab_view, "messages_widget");
   grepview = new GrepView(o_tab_view, "grepview");
@@ -128,16 +124,13 @@ void CKDevelop::initView(){
   o_tab_view->addTab(grepview, i18n("search"));
   o_tab_view->addTab(outputview, i18n("output"));
 
-
-  top_panner = new QSplitter(Qt::Horizontal, view, "top_panner");
-  view->moveToFirst(top_panner);
-
   ////////////////////////
   // Top Panner
   ////////////////////////
 
   //  s_tab_current = 0;
-  t_tab_view = new CTabCtl(top_panner);
+  dockbase_t_tab_view = createDockWidget(i18n("Tree views"), BarIcon("filenew"));
+  t_tab_view = new CTabCtl(dockbase_t_tab_view);
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
   ////////////////////////
@@ -161,15 +154,11 @@ void CKDevelop::initView(){
   t_tab_view->addTab(real_file_tree,i18n("RFV"));
   t_tab_view->addTab(doc_tree,i18n("DOC"));
 
-  top_panner->moveToFirst(t_tab_view);
-
-
   ////////////////////////
   // Right main window
   ////////////////////////
 
-
-  mdi_main_frame = new MdiFrame(top_panner, "mdi_frame");
+  mdi_main_frame = new MdiFrame( this, "mdi_frame");
 
   browser_view = new DocBrowserView(mdi_main_frame,"browser");
   // let's go
@@ -177,7 +166,7 @@ void CKDevelop::initView(){
   mdi_main_frame->addWindow(browser_view, // the view pointer
                             true,         // show it
 			    true,         // attach it
-			    false,        // don't show it maximized
+			    true,         // show it maximized
 			    0);           // initial geometry rectangle, 0 means minimumSize()
 
   // maybe we should make this configurable :-)
@@ -204,14 +193,19 @@ void CKDevelop::initView(){
   manager->registerComponent(grepview);
 
 
+  //
+  // dock the 3 base widgets
+  //
+  dockIn(dockbase_o_tab_view,DockBottom);
+  dockIn(dockbase_t_tab_view,DockLeft);
+
   // set the mainwidget
-  setView(view);
+  setView(mdi_main_frame);
   initKeyAccel();
   initMenuBar();
   initToolBar();
   initStatusBar();
 
-  
 }
 
 /*--------------------------------------- CKDevelop::initKeyAccel()

@@ -96,5 +96,6 @@ doc/zh_CN.GB2312/manual/Makefile \
 kdevelop/plugins/Makefile \
 kdevelop/plugins/prjstat/Makefile \
 kdevelop/widgets/Makefile \
-kdevelop/widgets/qextmdi/Makefile 
+kdevelop/widgets/qextmdi/Makefile \
+kdevelop/widgets/dockwidgets/Makefile
 ) 

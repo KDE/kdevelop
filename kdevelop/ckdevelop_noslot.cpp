@@ -398,12 +398,15 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   connect(new_editorview->editorfirstview->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
   connect(new_editorview,SIGNAL(closing(EditorView*)),SLOT(slotFileWillBeClosed(EditorView*)));
 
+  // default view size is 3/4 of mdi mainframe
+  new_editorview->resize(int(double(mdi_main_frame->width()*3)/4.0),
+                         int(double(mdi_main_frame->height()*3)/4.0) );  
   
-  
+#warning FIXME size handling when adding MDI views
   mdi_main_frame->addWindow( new_editorview,  // the view pointer
                              true,            // show it
 			     true,            // attach it
-			     false,           // don't show it maximized
+			     true,            // show it maximized
 			     0);              // initial geometry rectangle, 0 means minimumSize()
   if(maximize){
     new_editorview->maximize(true);
@@ -433,10 +436,10 @@ void CKDevelop::switchToKDevelop(){
   mdi_main_frame->show();
   t_tab_view->show();
 
-  top_panner->hide();
+//F.B.  top_panner->hide();
   //  top_panner->deactivate();
   //  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-  top_panner->show();
+//F.B.  top_panner->show();
 
   //////// change the event dispatchers ///////////
   kdlg_dispatcher->setEnabled(false);
@@ -512,10 +515,10 @@ void CKDevelop::switchToKDlgEdit(){
   kdlgedit->kdlg_get_dialogs_view()->show();
   kdlg_top_panner->show();
 
-  top_panner->hide();
+//F.B.  top_panner->hide();
   //  top_panner->deactivate();
   //  top_panner->activate(kdlg_tabctl,kdlg_top_panner);// activate the top_panner
-  top_panner->show();
+//F.B.  top_panner->show();
 
   //////// change the event dispatchers ///////////
   kdev_dispatcher->setEnabled(false);
@@ -694,7 +697,6 @@ void CKDevelop::showOutputView(bool show){
 
 void CKDevelop::readOptions(){
   config->setGroup("General Options");
-  QValueList<int> sizes;
 
 	/////////////////////////////////////////
 	// GEOMETRY
@@ -775,10 +777,10 @@ void CKDevelop::readOptions(){
   int output_view_pos=config->readNumEntry("OutputViewHeight", size.height()*20/100);
   int edit_view_pos=config->readNumEntry("EditViewHeight", size.height()-output_view_pos);
 
-  sizes.clear();
-  sizes << edit_view_pos;
-  sizes << output_view_pos;
-  view->setSizes(sizes);
+  // set initial heights of trees, mdi and output views
+  t_tab_view->resize(t_tab_view->width(),edit_view_pos);
+  mdi_main_frame->resize(mdi_main_frame->width(),edit_view_pos);
+  o_tab_view->resize(o_tab_view->width(),output_view_pos);
 
   if(outputview){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
@@ -792,10 +794,11 @@ void CKDevelop::readOptions(){
   bool treeview=config->readBoolEntry("show_tree_view", true);
   int tree_view_pos=config->readNumEntry("ClassViewWidth", size.width()*20/100);
   edit_view_pos=config->readNumEntry("EditViewWidth", size.width()-tree_view_pos);
-  sizes.clear();
-  sizes << tree_view_pos;
-  sizes << edit_view_pos;
-  top_panner->setSizes(sizes);
+
+  // set initial widths of trees and  mdi views
+  t_tab_view->resize(tree_view_pos,t_tab_view->height());
+  mdi_main_frame->resize(edit_view_pos,mdi_main_frame->height());
+
   if(treeview){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
@@ -891,11 +894,11 @@ void CKDevelop::saveOptions(){
   config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
 
 
-  config->writeEntry("EditViewHeight",view->sizes()[0]);
-  config->writeEntry("OutputViewHeight",view->sizes()[1]);
+  config->writeEntry("EditViewHeight",mdi_main_frame->height());
+  config->writeEntry("OutputViewHeight",o_tab_view->height());
 
-  config->writeEntry("ClassViewWidth",top_panner->sizes()[0]);
-  config->writeEntry("EditViewWidth",top_panner->sizes()[1]);
+  config->writeEntry("ClassViewWidth",t_tab_view->width());
+  config->writeEntry("EditViewWidth",mdi_main_frame->width());
 
   kdlg_sizes = kdlg_top_panner->sizes();
   config->writeEntry("KDlgTabCtlWidth", kdlg_sizes[0]);

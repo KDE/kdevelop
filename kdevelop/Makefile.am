@@ -50,7 +50,7 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-kdevelop_LDADD   = ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
+kdevelop_LDADD   = ./widgets/dockwidgets/libdockwidgets.a ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
 	./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a \
 	./classparser/libclassparser.a ./classwizard/libclasswizard.a \
 	$(LIB_KHTML) -lkspell -lkfile -lkio -lkdeui -lkdecore -lqt -lXext -lX11 -lfl -ldl $(LIBSOCKET) 

@@ -33,7 +33,8 @@ extern KGuiCmdManager cmdMngr;
 void CKDevelop::initKDlg(){
   kdlg_caption="KDevelop Dialogeditor:";
 
-  kdlg_top_panner = new QSplitter(Qt::Horizontal, top_panner, "kdlg_top_panner");
+  dockbase_kdlg_top_panner = createDockWidget("Dialog editor", BarIcon("filenew"));
+  kdlg_top_panner = new QSplitter(Qt::Horizontal, dockbase_kdlg_top_panner, "kdlg_top_panner"); //F.B.
 
   kdlgedit = new KDlgEdit(this, kdlg_top_panner, "kdlgedit");
   ComponentManager::self()->registerComponent(kdlgedit);
