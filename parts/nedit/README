@@ -1,0 +1,11 @@
+this is a KTextEditor interface for nedit.
+It is very basic and doesn't really embed
+well into KDevelop, that's why it is
+disabled by default.
+
+I'm waiting for the NEdit guys to provide
+two-way communication between the embedding
+app and NEdit in order to get it usable.
+
+Maintainer: Harald Fernengel <harry@kdevelop.org>
+
