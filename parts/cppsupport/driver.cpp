@@ -23,6 +23,8 @@
 #include <kdebug.h>
 #include <stdlib.h>
 #include <qfile.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 
 Driver::Driver()
     : depresolv( FALSE ), lexer( 0 )
@@ -60,22 +62,27 @@ void Driver::removeAllMacrosInFile( const QString& fileName )
 
 void Driver::addDependence( const QString & fileName, const Dependence & dep )
 {
-    QString fn = dep.first;
+    QFileInfo fileInfo( dep.first );
+    QString fn = fileInfo.absFilePath();
+
     findOrInsertDependenceList( fileName ).insert( fn, dep );
 
     if ( !depresolv )
 	return;
 
-    if ( parsedDeps.find( dep.first ) != parsedDeps.end() )
+    QString file = findIncludeFile( dep );
+
+    if ( parsedDeps.find(file) != parsedDeps.end() )
 	return;
-    QString file = findIncludeFile( dep.first );
+
     if ( !QFile::exists( file ) ) {
 	Problem p( "Couldn't find include file " + dep.first,
 		   lexer ? lexer->currentLine() : -1,
 		   lexer ? lexer->currentColumn() : -1 );
-	addProblem( dep.first,p );
+	addProblem( fileName, p );
 	return;
     }
+
     QFile f( file );
     f.open( IO_ReadOnly );
     QTextStream s( &f );
@@ -83,10 +90,10 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep )
     f.close();
     QString cfn = m_currentFileName;
     Lexer *l = lexer;
-    TranslationUnitAST::Node tu = parseFile( dep.first, contents );
+    TranslationUnitAST::Node tu = parseFile( file, contents );
     m_currentFileName = cfn;
     lexer = l;
-    parsedDeps.insert( dep.first, tu.release() );
+    parsedDeps.insert( file, tu.release() );
 }
 
 void Driver::addMacro( const Macro & macro )
@@ -296,13 +303,24 @@ void Driver::addIncludePath( const QString &path )
     includePaths << path;
 }
 
-QString Driver::findIncludeFile( const QString &fileName ) const
+QString Driver::findIncludeFile( const Dependence& dep ) const
 {
-    for ( QStringList::ConstIterator it = includePaths.begin(); it != includePaths.end(); ++it ) {
-	QString f = *it + "/" + fileName;
-	if ( QFile::exists( f ) )
-	    return f;
+    QString fileName = dep.first;
+
+    if( dep.second == Dep_Local ){
+        QString path = QFileInfo( currentFileName() ).dirPath( true );
+        QFileInfo fileInfo( QFileInfo(path, fileName) );
+	if ( fileInfo.exists() && fileInfo.isFile() )
+	    return fileInfo.absFilePath();
+
     }
+
+    for ( QStringList::ConstIterator it = includePaths.begin(); it != includePaths.end(); ++it ) {
+        QFileInfo fileInfo( *it, fileName );
+	if ( fileInfo.exists() && fileInfo.isFile() )
+	    return fileInfo.absFilePath();
+    }
+
     return QString::null;
 }
 
