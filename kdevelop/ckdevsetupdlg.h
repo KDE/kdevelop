@@ -47,6 +47,11 @@ public:
     CKDevSetupDlg( QWidget *parent=0, const char *name=0,KAccel* accel=0 );
   
 private:
+  QWidget *w;
+  QWidget *w1;
+  QWidget *w2;
+  KKeyChooser* w21;
+
   QDict<KKeyEntry>* dict;
   KConfig* config;
   KAccel* accel;

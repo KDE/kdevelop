@@ -43,3 +43,23 @@ bool CToolClass::searchProgram(QString name){
   }
   return found;
 }
+
+// this is for the installation process
+bool CToolClass::searchInstProgram(QString name){
+  StringTokenizer tokener;
+  bool found=false;
+  QString file;
+  QString complete_path = getenv("PATH");
+
+  tokener.tokenize(complete_path,":");
+
+  while(tokener.hasMoreTokens()){
+    file = QString(tokener.nextToken()) + "/" + name;
+    if(QFile::exists(file)){
+      found = true;
+      break;
+    }
+  }
+  return found;
+}
+

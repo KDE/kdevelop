@@ -31,8 +31,11 @@
 class CToolClass {
 public:
   /** search the program in the $PATH*/
-static  bool  searchProgram(QString name);
-  
+  static bool searchProgram(QString name);
+  /** same as above but without warning message*/
+  static bool searchInstProgram(QString name);
 };
 
 #endif
+
+

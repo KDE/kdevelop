@@ -35,7 +35,9 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
 		   ctoolclass.cpp cdoctreepropdlg.cpp cprintdlg.cpp cfileprintdlg.cpp \
 		   cconfigenscriptdlg.cpp cconfiga2psdlg.cpp ckdevelop_whatsthis.cpp \
-		   cnewprojectdlg.cpp cfinddoctextdlg.cpp kstartuplogo.cpp 	ktipofday.cpp
+		   cnewprojectdlg.cpp cfinddoctextdlg.cpp kstartuplogo.cpp 	ktipofday.cpp \
+		   ckdevinstall.cpp
+
 kdevelop_METASOURCES = USE_AUTOMOC
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -52,7 +54,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
 		ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
 		cprintdlg.h cfileprintdlg.h cconfigenscriptdlg.h cconfiga2psdlg.h debug.h \
-		cnewprojectdlg.h cfinddoctextdlg.h kstartuplogo.h ktipofday.h
+		cnewprojectdlg.h cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm
 

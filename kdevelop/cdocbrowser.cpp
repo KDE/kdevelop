@@ -74,6 +74,10 @@ CDocBrowser::~CDocBrowser(){
 void CDocBrowser::showURL(QString url,bool reload){
  //read the htmlfile
   //cerr << "URL:" << url << "\n";
+  KHTMLWidget* htmlview;
+  htmlview=getKHTMLWidget();
+  htmlview->setCursor( KCursor::waitCursor() );
+
   QString ref = url;
   QString url_wo_ref; // without ref
   int pos = ref.findRev('#');
@@ -113,6 +117,7 @@ void CDocBrowser::showURL(QString url,bool reload){
       KMsgBox::message(0,i18n("Not found!"),"file: \"" + str + i18n("\" not found!"),KMsgBox::INFORMATION);
        return;
     }
+  htmlview->setCursor( KCursor::arrowCursor() );
   }
   
 

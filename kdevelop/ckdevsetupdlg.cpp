@@ -16,12 +16,16 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "ckdevsetupdlg.h"
+#include "resource.h"
+
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qbuttongroup.h>
+#include <qfileinfo.h>
 
-#include "ckdevsetupdlg.h"
-#include "resource.h"
+#include <kmsgbox.h>
+
 
 // SETUP DIALOG
 CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa )
@@ -34,7 +38,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   config=app->getConfig();
   
   // ****************** the General Tab ********************
-  QWidget *w1 = new QWidget( this, "general" );
+  w1 = new QWidget( this, "general" );
   
   config->setGroup("General Options");
   
@@ -64,8 +68,10 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   KQuickHelp::add(makeSelectLabel,
   KQuickHelp::add(makeSelectLineEdit,i18n("Make-Command\n\n"
 								       "Select your system's make-command.\n"
-								       "At the moment, make, gmake and dmake\n"
-								       "are available."))));
+								       "Usually, this is make, FreeBSD users\n"
+								       "may use gmake. Mind that you can also\n"
+								       "add option parameters to your make-binary\n"
+								       "as well."))));
   
   bool autoSave=config->readBoolEntry("Autosave",true);
   QLabel* autosaveTimeLabel;
@@ -214,24 +220,21 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 
   dict = new QDict<KKeyEntry>( accel->keyDict() );
 //  KKeyChooser* w2 = new KKeyChooser ( dict,this);
-  QWidget *w2 = new QWidget( this, "keys" );
-  KKeyChooser* w21 = new KKeyChooser ( dict,w2,true);
+  w2 = new QWidget( this, "keys" );
+  w21 = new KKeyChooser ( dict,w2,true);
   w21->setGeometry(15,10,395,320);
 
 
   // ****************** the Documentation Tab ********************
-  QWidget *w = new QWidget( this, "documentaion" );
+  w = new QWidget( this, "documentaion" );
   config->setGroup("Doc_Location");
   
   
   KQuickHelp::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
-		          "Documentation for the Documentation Browser.\n"
+		                      "Documentation for the Documentation Browser.\n"
                           "QT usually comes with complete Documentation\n"
-			  "whereas for KDE you can create the Documentation\n"
-			  "easiely by switching to menuentry"
-			  "<i>Documentation -> \n Update KDE-Documentation</i>."
-			  "Please use the Update dialog whenever you update \n"
-			  "your KDE Libs."));
+			                    "whereas for KDE you can create the Documentation\n"
+			                    "easiely by pressing the Update button below."));
   
   qt_edit = new QLineEdit( w, "qt_edit" );
   qt_edit->setGeometry( 170, 40, 190, 30 );
@@ -252,11 +255,11 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   KQuickHelp::add(qt_edit,
   KQuickHelp::add(qt_button,
-		  KQuickHelp::add(qt_label,
-				  i18n("Enter the path to your QT-Documentation\n"
+  KQuickHelp::add(qt_label, i18n("Enter the path to your QT-Documentation\n"
 				       "here. To access the path easier please\n"
 				       "press the pushbutton on the right to change\n"
-				       "directories.\n\nUsually the QT-Documentation is\n"
+				       "directories.\n\n"
+				       "Usually the QT-Documentation is\n"
 				       "located in <i><blue>$QTDIR/html</i>"))));	
   
   kde_edit = new QLineEdit( w, "kde_edit");
@@ -278,20 +281,19 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   kde_label->setText( i18n("KDE-libraries:") );
   
   KQuickHelp::add(kde_edit,
-		  KQuickHelp::add(kde_button,
-  KQuickHelp::add(kde_label,
-		i18n("Enter the path to your KDE-Documentation\n"
-		     "here. To access the path easier please\n"
-		     "press the pushbutton on the right to change\n"
-		     "directories.\n\n"
-		     "If you have no kdelibs Documentation installed,\n"
-		     "switch to menuentry <blue><i>Documentation ->\n"
-		     "Update KDE-Documentation</i><black> to create it."))));  
+  KQuickHelp::add(kde_button,
+  KQuickHelp::add(kde_label,i18n("Enter the path to your KDE-Documentation\n"
+		                              "here. To access the path easier please\n"
+		                              "press the pushbutton on the right to change\n"
+		                              "directories.\n\n"
+		                              "If you have no kdelibs Documentation installed,\n"
+		                              "you can create it by selecting the Update button\n"
+		                              "below."))));
 
   QLabel* update_label;
   update_label = new QLabel( w, "update_label" );
   update_label->setGeometry( 20, 190, 260, 30 );
-  update_label->setText(i18n("Create KDE-Documentation :"));
+  update_label->setText(i18n("Update KDE-Documentation :"));
   update_label->setAlignment( 289 );
   update_label->setMargin( -1 );
   
@@ -304,13 +306,16 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   update_button->setAutoResize( FALSE );
   
   KQuickHelp::add(update_label,
-		  KQuickHelp::add(update_button,i18n("Create KDE-Documentation\n\n"
+  KQuickHelp::add(update_button,i18n("Update KDE-Documentation\n\n"
 						     "This lets you create or update the\n"
 						     "HTML-documentation of the KDE-libs.\n"
 						     "Mind that you have kdoc installed to\n"
 						     "use this function. Also, the kdelibs\n"
 						     "sources have to be available to create\n"
-						     "the documentation.")));
+						     "the documentation, as well as the \n"
+						     "Qt-Documentation path has to be set to\n"
+						     "cross-reference the KDE-Documentation\n"
+						     "with the Qt-classes.")));
   
   QLabel* create_label;
   create_label = new QLabel( w, "create_label" );
@@ -326,7 +331,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   create_button->setText(i18n("Create..."));
   create_button->setAutoRepeat( FALSE );
   create_button->setAutoResize( FALSE );
-  
+
   KQuickHelp::add(create_label,
   KQuickHelp::add(create_button,i18n("Create Search Database\n\n"
                                     "This will create a search database for glimpse\n"
@@ -335,7 +340,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
                                     "database each time you've changed the documentation\n"
                                     "e.g. after a kdelibs-update or installing a new\n"
                                     "Qt-library version.")));
-	
+
   QButtonGroup* docOptionsGroup;
   docOptionsGroup = new QButtonGroup( w, "docOptionsGroup" );
   docOptionsGroup->setGeometry( 10, 160, 400, 110 );
@@ -374,15 +379,22 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 
 void CKDevSetupDlg::slotDefault(){
 
-  makeSelectLineEdit->setText("make");
+  // General tab
+  if(w1->isVisible()){
+    makeSelectLineEdit->setText("make");
 
-  autoSaveCheck->setChecked(true);
-  autosaveTimeCombo->setCurrentItem(1);
+    autoSaveCheck->setChecked(true);
+    autosaveTimeCombo->setCurrentItem(1);
 
-  autoSwitchCheck->setChecked(true);
-  logoCheck->setChecked(true);
-  lastProjectCheck->setChecked(true);
-  tipDayCheck->setChecked(true);
+    autoSwitchCheck->setChecked(true);
+    logoCheck->setChecked(true);
+    lastProjectCheck->setChecked(true);
+    tipDayCheck->setChecked(true);
+  }
+  // keychooser tab
+  if(w2->isVisible())
+    w21->allDefault();
+
 }
 
 void CKDevSetupDlg::ok(){
@@ -434,9 +446,17 @@ void CKDevSetupDlg::slotQtClicked(){
   QString dir;
   dir = KFileDialog::getDirectory(config->readEntry("doc_qt"));
   if (!dir.isEmpty()){
-  qt_edit->setText(dir);
-  config->setGroup("Doc_Location");
-  config->writeEntry("doc_qt",dir);
+    qt_edit->setText(dir);
+    config->setGroup("Doc_Location");
+
+    QString qt_testfile=dir+"classes.html"; // test if the path really is the qt-doc path
+    if(QFileInfo(qt_testfile).exists())
+      config->writeEntry("doc_qt",dir);
+    else{
+      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
+                                                              "Qt-library documentation. Please choose the\n"
+                                                              "correct path."),KMsgBox::EXCLAMATION);
+    }
   }
 }
 void CKDevSetupDlg::slotKDEClicked(){
@@ -445,32 +465,15 @@ void CKDevSetupDlg::slotKDEClicked(){
   if (!dir.isEmpty()){
     kde_edit->setText(dir);
     config->setGroup("Doc_Location");
-    config->writeEntry("doc_kde",dir);
+
+    QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the qt-doc path
+    if(QFileInfo(kde_testfile).exists())
+      config->writeEntry("doc_kde",dir);
+    else{
+      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
+                                                              "KDE-library documentation. Please choose the\n"
+                                                              "correct path or choose 'Update' to create a new\n"
+                                                              "documentation"),KMsgBox::EXCLAMATION);
+    }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,3 +1,15 @@
+1999-03-04  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * added waitCursor to the browser widget while loading an URL
+  * extended kde-documentation update wether to cross-reference or not,
+    depending on the qt-path. As well for the API-documentation.
+  * added messageboxes for the library paths' signaling if the path chosen is valid
+  * added khtml/khtmlw choosing option for kdelibs update
+  * added doctree entry selection for khtml/or khtmlw, depending what is installed
+  * added kdeutils library to the doctree if installed.
+  * updated some KQuickhelp in the setupdialog
+  * added default button functionality for the setup dialog
+  * started Installation dialog (not complete)
+
 1999-03-03 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* changed the changed files section in the filedialog
 	* fixed some bugs
@@ -404,6 +416,7 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
 
 
 

@@ -15,10 +15,14 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include "cdoctree.h"
 #include <iostream.h>
+
+#include <qfileinfo.h>
+
 #include <kmsgbox.h>
+
 #include "cdoctreepropdlg.h"
+#include "cdoctree.h"
 
 CDocTree::CDocTree(QWidget*parent,const char* name,KConfig* config) : KTreeList(parent,name){
   config_kdevelop = config;
@@ -85,6 +89,14 @@ void CDocTree::refresh(CProject* prj){
   addChildItem(i18n("Tutorial"),&book_pix,&path);
   addChildItem(i18n("C/C++ Reference"),&book_pix,&path);
   
+
+  //check for khtml or khtmlw installed in documentation. If no documentation present, use khtml
+  config_kdevelop->setGroup("Doc_Location");
+  QString kde_path=config_kdevelop->readEntry("doc_kde");
+  // check for library documentations
+  QString chk_khtmlw_file=kde_path+"khtmlw/index.html";
+  QString chk_kdeutils_file=kde_path+"kdeutils/index.html";
+
   //  add the Libraries
   str_path = i18n("Qt/KDE Libraries");
   path.pop();
@@ -93,8 +105,13 @@ void CDocTree::refresh(CProject* prj){
   addChildItem(i18n("KDE-Core-Library"),&book_pix,&path);
   addChildItem(i18n("KDE-UI-Library"),&book_pix,&path);
   addChildItem(i18n("KDE-KFile-Library"),&book_pix,&path);
-  addChildItem(i18n("KDE-HTMLW-Library"),&book_pix,&path);
+  if(QFileInfo(chk_khtmlw_file).exists())
+    addChildItem(i18n("KDE-KHTMLW-Library"),&book_pix,&path);    //insert khtmlw if exists
+  else
+    addChildItem(i18n("KDE-KHTML-Library"),&book_pix,&path);     // else insert khtml per default
   addChildItem(i18n("KDE-KFM-Library"),&book_pix,&path);
+  if(QFileInfo(chk_kdeutils_file).exists())
+    addChildItem(i18n("KDE-KDEutils-Library"),&book_pix,&path);  // also insert the kdeutils library if exists
   addChildItem(i18n("KDE-KAB-Library"),&book_pix,&path);
   addChildItem(i18n("KDE-KSpell-Library"),&book_pix,&path);
 
@@ -118,8 +135,8 @@ void CDocTree::refresh(CProject* prj){
   path.push(&str_path);
   if(project){
     if(prj->valid){
+      addChildItem(i18n("API-Documentation"),&book_pix,&path);
       addChildItem(i18n("User-Manual"),&book_pix,&path);
-      addChildItem(i18n("API-Documentation"),&book_pix,&path);  
     }
   }
   
@@ -194,4 +211,6 @@ void CDocTree::slotDocumentationProp(){
     config_kdevelop->sync();
   }
 }
+
+
 

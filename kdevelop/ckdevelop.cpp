@@ -18,31 +18,36 @@
 
 
 
-#include <kmsgbox.h>
-#include <qfile.h>
-#include <qtextstream.h>
 #include <iostream.h>
-#include <kfiledialog.h>
-#include <qfont.h>
-#include <qfileinfo.h>
-#include <ktabctl.h>
-#include <qregexp.h>
-#include <qevent.h>
-#include <qtoolbar.h>
+
+//#include <X11/Xlib.h>
+
 #include <qclipboard.h>
-#include "ckdevsetupdlg.h"
-#include "ckdevelop.h"
-#include "cupdatekdedocdlg.h"
+#include <qevent.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qfont.h>
+#include <qregexp.h>
+#include <qtextstream.h>
+#include <qtoolbar.h>
+
+#include <kcursor.h>
+#include <kfiledialog.h>
 #include <kkeydialog.h>
-#include "./kwrite/kwdoc.h"
+#include <kmsgbox.h>
+#include <ktabctl.h>
+
+#include "ckdevelop.h"
+#include "ckdevsetupdlg.h"
+#include "cupdatekdedocdlg.h"
 #include "ccreatedocdatabasedlg.h"
 #include "ctoolclass.h"
-#include "debug.h"
-#include "kswallow.h"
 #include "cdocbrowser.h"
 #include "cfinddoctextdlg.h"
+#include "debug.h"
+#include "./kwrite/kwdoc.h"
+#include "kswallow.h"
 
-#include <X11/Xlib.h>
 
 void CKDevelop::slotFileNew(){
   
@@ -325,6 +330,7 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   KDEBUG(KDEBUG_INFO,CKDEVELOP,"KTMainWindow::closeEvent()");
   KTMainWindow::closeEvent(e);
 }
+
 
 void CKDevelop::slotFileQuit(){
   slotStatusMsg(i18n("Exiting..."));
@@ -1027,17 +1033,35 @@ void CKDevelop::slotBuildAPI(){
   messages_widget->clear();
   config->setGroup("Doc_Location");
   QString doc_kde=config->readEntry("doc_kde");
+  QString ref_file=doc_kde+"kdoc-reference/qt.kdoc";
 
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-  shell_process.clearArguments();
-  shell_process << "kdoc";
-  shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-  shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
-  shell_process << "-L" + doc_kde + "kdoc-reference";
-  shell_process << prj->getProjectName();
-  shell_process << "*.h";
-  shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
-  shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  if(doc_kde.isEmpty() || !QFileInfo(ref_file).exists()){
+    KMsgBox::message(this,i18n("Warning"),i18n("The KDE-library documentation is not installed.\n"
+                                                "Please update your documentation with the options\n"
+                                                "given in theKDevelop Setup dialog, Documentation tab.\n\n"
+                                                "Your API-documentation will be created without\n"
+                                                "cross-references to the KDE and Qt libraries."),KMsgBox::EXCLAMATION);
+
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    shell_process.clearArguments();
+    shell_process << "kdoc";
+    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+    shell_process << prj->getProjectName();
+    shell_process << "*.h";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  }
+  else{
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    shell_process.clearArguments();
+    shell_process << "kdoc";
+    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
+    shell_process << "-L" + doc_kde + "kdoc-reference";
+    shell_process << prj->getProjectName();
+    shell_process << "*.h";
+    shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  }
 }
 
 void CKDevelop::slotBuildManual(){
@@ -1186,10 +1210,10 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
       process.clearArguments();
       if(!prj->getMakeOptions().isEmpty()){
-	process << make_cmd << prj->getMakeOptions();
+      	process << make_cmd << prj->getMakeOptions();
       }
       else{
-	process << make_cmd;
+      	process << make_cmd;
       }
       setToolMenuProcess(false);
       process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -1201,10 +1225,10 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       stdin_stdout_widget->clear();
       stderr_widget->clear();
       if(prj->getProjectType() == "normal_cpp"){
-	o_tab_view->setCurrentTab(STDINSTDOUT);
+      	o_tab_view->setCurrentTab(STDINSTDOUT);
       }
       else{
-	o_tab_view->setCurrentTab(STDERR);
+      	o_tab_view->setCurrentTab(STDERR);
       }
 
       appl_process.clearArguments();
@@ -1392,7 +1416,7 @@ void CKDevelop::slotDocTreeSelected(int index){
     return;
   }
   if(*str == i18n("Qt-Library") ){
-    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_qt") + "index.html",1,"test");
+    slotURLSelected(browser_widget,"file:" +config->readEntry("doc_qt") + "index.html",1,"test");
     return;
   }
   if(*str == i18n("KDE-Core-Library") ){
@@ -1407,12 +1431,20 @@ void CKDevelop::slotDocTreeSelected(int index){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfile/index.html",1,"test");
     return;
   }
-  if(*str == i18n("KDE-HTMLW-Library") ){
+  if(*str == i18n("KDE-KHTMLW-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "khtmlw/index.html",1,"test");
+     return;
+  }
+  if(*str == i18n("KDE-KHTML-Library") ){
+    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "khtml/index.html",1,"test");
      return;
   }
   if(*str == i18n("KDE-KFM-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfmlib/index.html",1,"test");
+     return;
+  }
+  if(*str == i18n("KDE-KDEutils-Library") ){
+    slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdeutils/index.html",1,"test");
      return;
   }
   if(*str == i18n("KDE-KAB-Library") ){
@@ -1423,12 +1455,12 @@ void CKDevelop::slotDocTreeSelected(int index){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kspell/index.html",1,"test");
      return;
   }
-  if(*str == i18n("User-Manual") ){
-    slotDocManual();
-     return;
-  }
   if(*str == i18n("API-Documentation") ){
     slotDocAPI();
+     return;
+  }
+  if(*str == i18n("User-Manual") ){
+    slotDocManual();
      return;
   }
   //
@@ -1781,6 +1813,13 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
 
 
 

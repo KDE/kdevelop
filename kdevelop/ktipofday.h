@@ -26,7 +26,7 @@
 #include <qframe.h>
 
 /**"Tip of the Day" dialog" for KDE/Qt applications
-  *@author 
+  *@author Ralf Nolden
   */
 
 class KTipofDay : public QDialog  {
@@ -55,6 +55,8 @@ protected:
 };
 
 #endif
+
+
 
 
 

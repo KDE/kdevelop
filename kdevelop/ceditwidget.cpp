@@ -22,7 +22,6 @@
 #include "./kwrite/highlight.h"
 #include <qpopupmenu.h>
 
-
 HlManager hlManager; //highlight manager
 
 CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
@@ -148,6 +147,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+
 
 
 

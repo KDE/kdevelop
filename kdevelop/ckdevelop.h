@@ -283,7 +283,7 @@ public:
 protected:
   virtual void closeEvent(QCloseEvent* e);
   //  void mousePressEvent(QMouseEvent* event);
- 
+
 private:
   //the menus
   QPopupMenu* file_menu;
@@ -372,6 +372,8 @@ private:
 };
 
 #endif
+
+
 
 
 

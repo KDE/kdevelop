@@ -19,6 +19,7 @@
 #include "ckdevelop.h"
 #include "kstartuplogo.h"
 #include "ktipofday.h"
+#include "ckdevinstall.h"
 #include <kwmmapp.h>
 
 
@@ -26,14 +27,20 @@ int main(int argc, char* argv[]) {
 
     KStartupLogo* start_logo=0L;
     KTipofDay* tipdlg=0L;
+//    CKDevInstall* install=0L;
     KWMModuleApplication a(argc,argv,"kdevelop");
     a.getConfig()->setGroup("General Options");
     bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
-
+//    bool bInstall=a.getConfig()->readBoolEntry("Install",false);  // this is incomplete, so leave it false everybody -Ralf
     if(bStartLogo){
       start_logo= new KStartupLogo;
       start_logo->show();
     }
+/*    if(bInstall){
+      install=new CKDevInstall;
+      start_logo->hide();
+      install->exec();
+    }*/
     a.connectToKWM();
 
     if (a.isRestored()){
@@ -63,10 +70,11 @@ int main(int argc, char* argv[]) {
     delete start_logo;
     delete tipdlg;
     int rc = a.exec();
-
-
     return rc;
 }
+
+
+
 
 
 
