@@ -1,3 +1,11 @@
+2001-04-07  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: ignore queryClose() and queryExit() at application startup time (which actually belongs to the
+      closing of the KMessageBox widget), this also speeds up the startup of KDevelop because we don't save the
+      whole program state to KConfig any more which is useless. And this seems to fix the problem with saving
+      toolbar states (QextMdiTaskBar) that aint already processed but are only pending in this moment.
+    * bugfix: added missing flag WDestructiveClose in the QextMdiMainFrm constructor
+    * bugfix: remove the according MDI covers from their control list when closing views
+
 2001-04-07  Christian Couder <christian@kdevelop.org>
     * Clean the DocViewManager class.
 
