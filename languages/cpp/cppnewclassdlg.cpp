@@ -763,7 +763,7 @@ void CppNewClassDialog::reloadAdvancedInheritance(bool clean)
     QListViewItemIterator it( baseclasses_view );
     while ( it.current() )
     {
-        if (! (it.current()->text(0).isNull()) )
+        if (! (it.current()->text(0).isEmpty()) )
         {
             parseClass(it.current()->text(0), it.current()->text(1));
         }
@@ -975,7 +975,7 @@ void CppNewClassDialog::setAccessForItem(QListViewItem *curr, QString newAccess,
         curr->setText(1, isPublic ? "public" : "protected");
     else
         curr->setText(1, newAccess);
-    if (!curr->text(2).isNull())
+    if (!curr->text(2).isEmpty())
     {
         if ( (curr->text(2) == "private") && ((newAccess == "public") || (newAccess == "protected")) )
             curr->setText(2, QString::null);
@@ -993,7 +993,7 @@ void CppNewClassDialog::setAccessForBase(QString baseclass, QString newAccess)
         QListViewItemIterator it( base );
         while ( it.current() )
         {
-            if ( !it.current()->text(1).isNull() )
+            if ( !it.current()->text(1).isEmpty() )
             {
                 PListViewItem<VariableDom> *curr;
                 PListViewItem<FunctionDom> *curr_m;
@@ -1035,7 +1035,7 @@ void CppNewClassDialog::access_view_mouseButtonPressed( int button, QListViewIte
 
 void CppNewClassDialog::methods_view_mouseButtonPressed(int button ,QListViewItem * item, const QPoint&p ,int /*c*/)
 {
-    if (item && ( button == RightButton ) && (item->depth() > 1) && (! item->text(1).isNull()) )
+    if (item && ( button == RightButton ) && (item->depth() > 1) && (! item->text(1).isEmpty()) )
     {
         overMenu->exec(p);
     }
@@ -1304,7 +1304,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
         if (curr->item()->access() == CodeModelItem::Public)
           adv_h = curr->item()->isSlot() ? &advH_public_slots : &advH_public;
 
-//        if (advCpp.isNull()) advCpp += "\n\n";
+//        if (advCpp.isEmpty()) advCpp += "\n\n";
 
         QString bcName = curr->parent()->parent()->text(0);
         PListViewItem<ClassDom> *bc;
@@ -1327,14 +1327,14 @@ void CppNewClassDialog::ClassGenerator::common_text()
     PListViewItem<FunctionDom> *curr_m;
     if ( (curr = dynamic_cast<PListViewItem<VariableDom>* >(ita.current())) )
     {
-        if ((!curr->text(2).isNull()) && (curr->parent()) && (curr->parent()->parent()) )
+        if ((!curr->text(2).isEmpty()) && (curr->parent()) && (curr->parent()->parent()) )
         {
             QString *adv_h = 0;
             if (curr->text(2) == "private") adv_h = &advH_private;
             if (curr->text(2) == "public") adv_h = &advH_public;
             if (curr->text(2) == "protected") adv_h = &advH_protected;
 
-/*    if ((*adv_h).isNull())
+/*    if ((*adv_h).isEmpty())
             *adv_h += "\n\n";*/
 
             *adv_h += QString("    using ") + curr->parent()->parent()->text(0) + "::"  + curr->item()->name() + ";\n";
@@ -1342,14 +1342,14 @@ void CppNewClassDialog::ClassGenerator::common_text()
     }
     else if ( (curr_m = dynamic_cast<PListViewItem<FunctionDom>* >(ita.current())) )
     {
-        if ((!curr_m->text(2).isNull())  && (curr_m->parent()) && (curr_m->parent()->parent()) )
+        if ((!curr_m->text(2).isEmpty())  && (curr_m->parent()) && (curr_m->parent()->parent()) )
         {
             QString *adv_h = 0;
             if (curr_m->text(2) == "private") adv_h = &advH_private;
             if (curr_m->text(2) == "public") adv_h = &advH_public;
             if (curr_m->text(2) == "protected") adv_h = &advH_protected;
 
-/*    if ((*adv_h).isNull())
+/*    if ((*adv_h).isEmpty())
         *adv_h += "\n\n";*/
 
             QString methodName = curr_m->item()->name();
@@ -1374,7 +1374,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
 void CppNewClassDialog::ClassGenerator::genMethodDeclaration(FunctionDom method,
     QString className, QString templateStr, QString *adv_h, QString *adv_cpp, bool extend, QString baseClassName )
 {
-/*    if ((*adv_h).isNull())
+/*    if ((*adv_h).isEmpty())
         *adv_h += "\n\n";*/
     QString methodName = method->name();
     if (!methodName.contains(QRegExp("^[a-zA-z_]")))
@@ -1452,7 +1452,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 			 "\n"
 			 "\n")
       + namespaceBeg
-      + ( advConstructorsSource.isNull() ? QString("$CLASSNAME$::$CLASSNAME$($ARGS$)\n"
+      + ( advConstructorsSource.isEmpty() ? QString("$CLASSNAME$::$CLASSNAME$($ARGS$)\n"
 		"$BASEINITIALIZER$"
 		"{\n"
 		"}\n") : advConstructorsSource )
@@ -1468,7 +1468,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   for (int i = implementation.findRev('/'); i != -1; i = implementation.findRev('/', --i))
     relPath += "../";
 
-  QString constructors = (advConstructorsSource.isNull() ? QString("$TEMPLATESTR$\n$CLASSNAME$$TEMPLATEPARAMS$::$CLASSNAME$($ARGS$)\n"
+  QString constructors = (advConstructorsSource.isEmpty() ? QString("$TEMPLATESTR$\n$CLASSNAME$$TEMPLATEPARAMS$::$CLASSNAME$($ARGS$)\n"
     "$BASEINITIALIZER$"
     "{\n"
     "}") : advConstructorsSource)
@@ -1477,10 +1477,12 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
         "{\n"
         "}\n");
 
+  qWarning("NEW CLASS: constructors = %s", constructors.latin1());
+
   if (childClass)
   {
-    argsH = "QWidget *parent = 0, const char *name = 0, WFlags f = 0";
-    argsCpp = "QWidget *parent, const char *name, WFlags f";
+    argsH = "QWidget *parent = 0, const char *name = 0";
+    argsCpp = "QWidget *parent, const char *name";
   }
   else if (qobject)
   {
@@ -1495,7 +1497,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   QString baseInitializer;
 
   if (childClass && (dlg.baseclasses_view->childCount() == 0))
-    baseInitializer = "  : QWidget(parent, name, f)";
+    baseInitializer = "  : QWidget(parent, name)";
   else if (qobject && (dlg.baseclasses_view->childCount() == 0))
     baseInitializer = "  : QObject(parent, name)";
   else if (dlg.baseclasses_view->childCount() != 0)
@@ -1504,12 +1506,12 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
     baseInitializer += " : ";
     while ( it.current() )
     {
-      if (!it.current()->text(0).isNull())
+      if (!it.current()->text(0).isEmpty())
       {
         if (baseInitializer != " : ")
           baseInitializer += ", ";
         if (childClass && (baseInitializer == " : "))
-          baseInitializer += it.current()->text(0) + "(parent, name, f)";
+          baseInitializer += it.current()->text(0) + "(parent, name)";
         else if (qobject && (baseInitializer == " : "))
           baseInitializer += it.current()->text(0) + "(parent, name)";
         else
@@ -1522,6 +1524,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 
   constructors.replace(QRegExp("\\$BASEINITIALIZER\\$"), baseInitializer);
   constructors.replace(QRegExp("\\$CLASSNAME\\$"), className);
+//  qWarning("NEW CLASS: constructors = %s", constructors.latin1());
   if (templateStr.isEmpty())
   {
     constructors.replace(QRegExp("\\$TEMPLATESTR\\$\\n"), "");
@@ -1533,7 +1536,9 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
     constructors.replace(QRegExp("\\$TEMPLATEPARAMS\\$"), templateParams);
     classImpl.replace(QRegExp("#include \"\\$HEADER\\$\"\\n"), "");
   }
+//  qWarning("NEW CLASS: constructors = %s", constructors.latin1());
   constructors.replace(QRegExp("\\$ARGS\\$"), argsCpp);
+//  qWarning("NEW CLASS: constructors = %s", constructors.latin1());
 
 
   //remove unnesessary carriadge returns
@@ -1614,14 +1619,14 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 		"{\n"
 		"$QOBJECT$"
 		"public:\n")
-      + ( advConstructorsHeader.isNull() ? QString("    $CLASSNAME$($ARGS$);\n") : advConstructorsHeader )
+      + ( advConstructorsHeader.isEmpty() ? QString("    $CLASSNAME$($ARGS$);\n") : advConstructorsHeader )
       + QString("\n    ~$CLASSNAME$();\n")
       + advH_public
-      + (advH_public_slots.isNull() ? QString::fromLatin1("") : ("\n\npublic slots:" + advH_public_slots))
-      + (advH_protected.isNull() ? QString::fromLatin1("") : ("\n\nprotected:" + advH_protected))
-      + (advH_protected_slots.isNull() ? QString::fromLatin1("") : ("\n\nprotected slots:" + advH_protected_slots))
-      + (advH_private.isNull() ? QString::fromLatin1("") : ("\n\nprivate:" + advH_private))
-      + (advH_private_slots.isNull() ? QString::fromLatin1("") : ("\n\nprivate slots:" + advH_private_slots))
+      + (advH_public_slots.isEmpty() ? QString::fromLatin1("") : ("\n\npublic slots:" + advH_public_slots))
+      + (advH_protected.isEmpty() ? QString::fromLatin1("") : ("\n\nprotected:" + advH_protected))
+      + (advH_protected_slots.isEmpty() ? QString::fromLatin1("") : ("\n\nprotected slots:" + advH_protected_slots))
+      + (advH_private.isEmpty() ? QString::fromLatin1("") : ("\n\nprivate:" + advH_private))
+      + (advH_private_slots.isEmpty() ? QString::fromLatin1("") : ("\n\nprivate slots:" + advH_private_slots))
       + QString("};\n"
 		"\n")
       + namespaceEnd
@@ -1707,7 +1712,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   else if (qobject)
     inheritance += ": public QObject";
     
-  QString constructors = QString(advConstructorsHeader.isNull() ?
+  QString constructors = QString(advConstructorsHeader.isEmpty() ?
     QString("    $CLASSNAME$($ARGS$);") : advConstructorsHeader )
     + QString("\n\n    ~$CLASSNAME$();");
 
