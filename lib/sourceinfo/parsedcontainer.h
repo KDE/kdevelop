@@ -181,8 +181,8 @@ public:
     QValueList<ParsedMethod*> getSortedMethodList();
 
     /**
-     * Returns a list of the signatures of all methods,
-     * in sorted order.
+     * Returns a list of the signatures of all (overloaded) methods with the
+     * given name, in sorted order.
      */
     QStringList getSortedMethodSignatureList(const QString &name);
 

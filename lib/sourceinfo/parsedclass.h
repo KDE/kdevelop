@@ -141,8 +141,8 @@ public:
     QValueList<ParsedMethod*> getSortedSignalList();
 
     /**
-     * Returns a list of the signatures
-     * of all signals in sorted order.
+     * Returns a list of the signatures of all (overloaded) signals with the
+     * given name, in sorted order.
      */
     QStringList getSortedSignalSignatureList(const QString &name);
     
@@ -150,8 +150,8 @@ public:
     QValueList<ParsedMethod*> getSortedSlotList();
     
     /**
-     * Returns a list of the signatures
-     * of all slots in sorted order.
+     * Returns a list of the signatures of all (overloaded) slots with the 
+     * given name, in sorted order.
      */
     QStringList getSortedSlotSignatureList(const QString &name);
 
