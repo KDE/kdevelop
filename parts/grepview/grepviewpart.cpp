@@ -9,20 +9,22 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "grepviewpart.h"
+
 #include <qvbox.h>
 #include <qwhatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <kiconloader.h>
 #include <kdialogbase.h>
 #include <kgenericfactory.h>
+#include <kiconloader.h>
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
-#include "grepconfigwidget.h"
+//#include "grepconfigwidget.h"
 #include "grepviewwidget.h"
-#include "grepviewpart.h"
+
 
 typedef KGenericFactory<GrepViewPart> GrepViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevgrepview, GrepViewFactory( "kdevgrepview" ) );
@@ -90,8 +92,8 @@ void GrepViewPart::slotRaiseWidget()
 
 void GrepViewPart::configWidget(KDialogBase *dlg)
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Grep"));
-    (void) new GrepConfigWidget(vbox, "grep config widget");
+    //    QVBox *vbox = dlg->addVBoxPage(i18n("Grep"));
+    //    (void) new GrepConfigWidget(vbox, "grep config widget");
 }
 
 

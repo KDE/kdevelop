@@ -8,8 +8,7 @@ libkdevgrepview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevgrepview_la_SOURCES = grepviewpart.cpp \
 			     grepviewwidget.cpp \
-			     grepdlg.cpp \
-			     grepconfigwidget.cpp
+			     grepdlg.cpp
 
 METASOURCES = AUTO
 

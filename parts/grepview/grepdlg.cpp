@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "grepdlg.h"
+
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
@@ -25,7 +27,6 @@
 #include <kdebug.h>
 #include <qlabel.h>
 
-#include "grepdlg.h"
 
 const char *template_desc[] = {
     "verbatim",
