@@ -440,25 +440,40 @@ void MainWindow::embedSelectView(QWidget *view, const QString &name, const QStri
 
     KMdiChildView *child = wrapper(view, name);
 
-    KMdiToolViewAccessor *tmp=KMdiMainFrm::addToolWindow(child,KDockWidget::DockLeft,getMainDockWidget(),25);
+    KMdiToolViewAccessor *tmp = 
+        KMdiMainFrm::addToolWindow(child,
+                                   KDockWidget::DockLeft,
+                                   getMainDockWidget(),
+                                   25,
+                                   toolTip,
+                                   mdiMode() != KMdi::IDEAlMode ? "" : 0 // empty tab caption, only icons - otherwise it'll be too wide!
+                                  );
 
-//    addToolWindow(TreeView, child, name, toolTip);
     m_selectViews.append(child);
 }
 
 void MainWindow::embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip)
 {
-  //we do not have a right pane so we insert it in the default pos
-//  embedSelectView( view, title, toolTip );
-    KMdiToolViewAccessor *tmp=KMdiMainFrm::addToolWindow(view,KDockWidget::DockRight,getMainDockWidget(),25);
-
+    if (mdiMode() != KMdi::IDEAlMode) {
+        //we don't like a right pane in several UI modes, dock to default
+        embedSelectView( view, title, toolTip );
+    }
+    else {
+        KMdiToolViewAccessor *tmp=KMdiMainFrm::addToolWindow(view,KDockWidget::DockRight,getMainDockWidget(),25);
+    }
 }
 
 void MainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip)
 {
   KMdiChildView *child = wrapper(view, name);
 //  addToolViewWindow(OutputView, child, name, toolTip);
-    KMdiToolViewAccessor *tmp=KMdiMainFrm::addToolWindow(child,KDockWidget::DockBottom,getMainDockWidget(),25);
+    KMdiToolViewAccessor *tmp =
+        KMdiMainFrm::addToolWindow(child,
+                                   KDockWidget::DockBottom,
+                                   getMainDockWidget(),
+                                   25,
+                                   toolTip
+                                   );
 
   m_outputViews.append(child);
 }
