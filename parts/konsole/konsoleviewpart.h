@@ -19,12 +19,6 @@ public:
   ~KonsoleViewPart();
 
   
-private slots:
-  
-  void projectOpened();
-  void projectClosed();
-
-  
 private:
     
   QGuardedPtr<KonsoleViewWidget> m_widget;
