@@ -20,6 +20,7 @@
 #include <kgenericfactory.h>
 #include <kaction.h>
 #include <kmessagebox.h>
+#include <kprocess.h>
 
 #include "kdevproject.h"
 #include "kdevmakefrontend.h"
@@ -187,12 +188,12 @@ void DoxygenPart::slotDoxygen()
 
     QString dir = project()->projectDirectory();
     QString cmdline = "cd ";
-    cmdline += dir;
+    cmdline += KShellProcess::quote( dir );
     cmdline += " && doxygen Doxyfile";
     if (searchDatabase)
     {
       cmdline += " && doxytag -s search.idx ";
-      cmdline += htmlDirectory;
+      cmdline += KShellProcess::quote( htmlDirectory );
     }
 
     kdDebug(9026) << "Doxygen command line: " << cmdline << endl;
