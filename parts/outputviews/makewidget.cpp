@@ -313,18 +313,30 @@ void MakeWidget::copy()
 
 	QString selection;
 	for(int i = parafrom; i<=parato; i++)
-		selection += text(i) + "\n";
+	   selection += text(i) + "\n";
 
-	selection.remove(0, indexfrom);
-	int removeend = text(parato).length() - indexto;
+   	   
+	if(m_compilerOutputLevel == eShort || 
+	   m_compilerOutputLevel == eVeryShort )
+	{
+	   QRegExp regexp("<.*>");
+	   regexp.setMinimal(true);
+	   selection.remove(regexp);
+	}
+	else
+	{ //FIXME: Selections should be precise in the eShort and eVeryShort modes, too.
+	  selection.remove(0, indexfrom);
+	  int removeend = text(parato).length() - indexto;
 
-	selection.remove((selection.length()-1) - removeend, removeend);
-
-#if QT_VERSION >= 0x030100
+	  selection.remove((selection.length()-1) -  removeend, removeend);	   
+	}		
+	   
+	selection.replace("&lt;","<");
+	selection.replace("&gt;",">");
+	selection.replace("&quot;","\"");
+	selection.replace("&amp;","&");	
+	   
 	kapp->clipboard()->setText(selection, QClipboard::Clipboard);
-#else
-	kapp->clipboard()->setText(selection);
-#endif
 }
 
 void MakeWidget::nextError()
@@ -798,11 +810,7 @@ void MakeWidget::updateSettingsFromConfig()
 bool MakeWidget::scanErrorForward( int parag )
 {
 	for ( int it = parag + 1;
-#if QT_VERSION >= 0x030100
 	      it < (int)m_items.count();
-#else
-	      it < m_items.size();
-#endif
 	      ++it )
 	{
 		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
