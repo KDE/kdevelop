@@ -92,20 +92,21 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
             constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Project'");
             break;
     }
-    constraint += " and ( ";
+    QString constraint_add = "";
     Profile::EntryList properties = profile->list(Profile::Properties);
     int i = 0;
     for (Profile::EntryList::const_iterator it = properties.begin(); it != properties.end(); ++it)
-        constraint += QString::fromLatin1(" %1 '%2' in [X-KDevelop-Properties]").
+        constraint_add += QString::fromLatin1(" %1 '%2' in [X-KDevelop-Properties]").
             arg((i++)==0?"":"or").arg((*it).name);
-    constraint += " ) ";
+    if (!constraint_add.isEmpty())
+        constraint += " and ( " + constraint_add + " ) ";
     
-/*//BEGIN debug
+//BEGIN debug
     kdDebug() << "=============" << endl
         << "    =============" << endl
         << "        =============   Query for Profile:" << endl
         << "        " << constraint << endl << endl << endl;
-//END debug*/ 
+//END debug
     
     KTrader::OfferList list = KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
     QStringList names;
