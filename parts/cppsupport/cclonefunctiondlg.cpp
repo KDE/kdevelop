@@ -18,7 +18,6 @@
 
 #include "cclonefunctiondlg.h"
 #include "parsedclass.h"
-#include "classparser.h"
 #include "parsedattribute.h"
 #include "parsedmethod.h"
 //#include "cclassview.h"
