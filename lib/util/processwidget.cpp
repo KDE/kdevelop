@@ -12,6 +12,7 @@
 #include "processwidget.h"
 #include "processlinemaker.h"
 
+#include <kdeversion.h>
 #include <qdir.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -50,7 +51,9 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
     setPalette(pal);
 
     childproc = new KProcess();
+#if (KDE_VERSION > 304)
     childproc->setUseShell(true);
+#endif
     
     procLineMaker = new ProcessLineMaker( childproc );
 
