@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ScriptOptionsWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>600</width>
-            <height>480</height>
+            <height>482</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,13 +19,15 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QLabel">
             <property name="name">
                 <cstring>includepatterns_label</cstring>
             </property>
             <property name="text">
-                <string>Include files into the project with the following patterns:</string>
+                <string>&amp;Include files into the project with the following patterns:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>includepatterns_edit</cstring>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -39,7 +41,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>Spacer4</cstring>
@@ -49,6 +50,12 @@
                     </property>
                     <property name="sizeType">
                         <enum>Minimum</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QLineEdit">
@@ -68,13 +75,22 @@
             <property name="sizeType">
                 <enum>Minimum</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <widget class="QLabel">
             <property name="name">
                 <cstring>excludepatterns_label</cstring>
             </property>
             <property name="text">
-                <string>Exclude the following patterns:</string>
+                <string>&amp;Exclude the following patterns:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>excludepatterns_edit</cstring>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -88,7 +104,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>Spacer4_2</cstring>
@@ -98,6 +113,12 @@
                     </property>
                     <property name="sizeType">
                         <enum>Minimum</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QLineEdit">
@@ -117,6 +138,12 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
     </vbox>
 </widget>
@@ -125,5 +152,4 @@
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-
 </UI>

@@ -39,6 +39,8 @@ SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QString
 
     KAction *action;
     action = new KAction( i18n( "&Run" ), "exec", Key_F9, this, SLOT( slotRun() ), actionCollection(), "build_execute" );
+    action->setToolTip(i18n("Run"));
+    action->setWhatsThis(i18n("<b>Run</b><p>Executes a SQL script."));
 
     dbAction = new SqlListAction( this, i18n( "&Database Connections" ), 0, this, SLOT(activeConnectionChanged()), actionCollection(), "connection_combo" );
 
@@ -53,11 +55,13 @@ SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QString
 
     m_widget = new SqlOutputWidget();
     mainWindow()->embedOutputView( m_widget, "SQL", "Output of SQL commands" );
+    QWhatsThis::add(m_widget, i18n("<b>Output of SQL commands</b><p>This window shows the output of SQL commands being executed. It can display results of SQL \"select\" commands in a table."));
 }
 
 
 SQLSupportPart::~SQLSupportPart()
 {
+    mainWindow()->removeView(m_widget);
     delete m_widget;
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="subversion" library="libsubversionplugin" version="1">
+<kpartplugin name="subversion" library="libsubversionplugin" version="2">
 <MenuBar>
  <Menu name="tools"><Text>&amp;Tools</Text>
  	<Menu name="version_control"><Text>&amp;Version Control</Text>
@@ -20,9 +20,9 @@
                 <Separator />
                 <Action name="subversion_ignore" />
                 <Action name="subversion_donot_ignore" />
-                <Separator />
+<!--                <Separator />
                 <Action name="subversion_login" />
-                <Action name="subversion_logout" />
+                <Action name="subversion_logout" /> -->
             </Menu>
 	</Menu>
  </Menu>

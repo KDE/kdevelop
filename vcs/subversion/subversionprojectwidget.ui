@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>438</width>
-            <height>147</height>
+            <height>149</height>
         </rect>
     </property>
     <property name="caption">
@@ -32,7 +32,10 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Import address :</string>
+                        <string>&amp;Import address :</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>importURL</cstring>
                     </property>
                 </widget>
                 <widget class="KURLRequester">
@@ -47,7 +50,7 @@
                 <cstring>init</cstring>
             </property>
             <property name="title">
-                <string>Create Standard Directories (tags/trunk/branches/)?</string>
+                <string>Create &amp;Standard Directories (tags/trunk/branches/)?</string>
             </property>
             <vbox>
                 <property name="name">
@@ -76,10 +79,11 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

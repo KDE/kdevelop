@@ -101,13 +101,15 @@ void ProjectManager::createActions( KActionCollection* ac )
   action = new KAction(i18n("&Open Project..."), "project_open", 0,
                        this, SLOT(slotOpenProject()),
                        ac, "project_open");
-  action->setStatusText( i18n("Opens a project"));
+  action->setToolTip( i18n("Open project"));
+  action->setWhatsThis(i18n("<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project."));
 
   m_openRecentProjectAction =
     new KRecentFilesAction(i18n("Open &Recent Project..."), 0,
                           this, SLOT(loadProject(const KURL &)),
                           ac, "project_open_recent");
-  m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
+  m_openRecentProjectAction->setToolTip(i18n("Open recent project"));
+  m_openRecentProjectAction->setWhatsThis(i18n("<b>Open recent project</b><p>Opens recently opened project."));
   m_openRecentProjectAction->loadEntries(kapp->config(), "RecentProjects");
 
   m_closeProjectAction =
@@ -115,15 +117,18 @@ void ProjectManager::createActions( KActionCollection* ac )
                 this, SLOT(closeProject()),
                 ac, "project_close");
   m_closeProjectAction->setEnabled(false);
-  m_closeProjectAction->setStatusText(i18n("Closes the current project"));
+  m_closeProjectAction->setToolTip(i18n("Close project"));
+  m_closeProjectAction->setWhatsThis(i18n("<b>Close project</b><p>Closes the current project."));
 
   m_projectOptionsAction = new KAction(i18n("Project &Options..."), "configure", 0,
                 this, SLOT(slotProjectOptions()),
                 ac, "project_options" );
+  m_projectOptionsAction->setToolTip(i18n("Project options"));
+  m_projectOptionsAction->setWhatsThis(i18n("<b>Project options</b><p>Lets you customize project options."));
   m_projectOptionsAction->setEnabled(false);
 
   m_activeLanguage = new KSelectAction(i18n("&Active Language"), 0, ac, "project_active_language");
-  m_activeLanguage->setWhatsThis(i18n("Sets the active programming language"));
+  m_activeLanguage->setWhatsThis(i18n("<b>Active language</b><p>Sets the active programming language."));
   m_activeLanguage->setEnabled(false);
   connect(m_activeLanguage, SIGNAL(activated(const QString&)),
           this, SLOT(switchLanguage(const QString&)));

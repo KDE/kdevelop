@@ -28,12 +28,19 @@ public:
                        QWidget *parent=0, const char *name=0 );
     ~EnvironmentVariablesWidget();
 
+    /// read in a set of environment variables from the DOM document
+    void readEnvironment(QDomDocument &dom, const QString &configGroup);
+
+    /// changes the path in the DOM structure where the environment variables are stored
+    void changeConfigGroup( const QString &configGroup);
+
 public slots:
     void accept();
 
 private:
     virtual void addVarClicked();
     virtual void removeVarClicked();
+    virtual void editVarClicked();
 
     QDomDocument &m_dom;
     QString m_configGroup;

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>509</width>
-            <height>358</height>
+            <height>360</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -59,7 +59,10 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Checkout from:</string>
+                                <string>Checkout &amp;from:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>serverURL</cstring>
                             </property>
                         </widget>
                         <widget class="KURLRequester">
@@ -90,7 +93,10 @@
                                 <cstring>textLabel1_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Revision:</string>
+                                <string>&amp;Revision:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>revision</cstring>
                             </property>
                         </widget>
                         <widget class="KLineEdit">
@@ -122,7 +128,7 @@
                         <enum>Sunken</enum>
                     </property>
                     <property name="title">
-                        <string>This Project has Standard Trunk/Branches/Tags/Directories</string>
+                        <string>This Project has Standard &amp;Trunk/Branches/Tags/Directories</string>
                     </property>
                     <property name="exclusive">
                         <bool>true</bool>
@@ -196,7 +202,10 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Checkout in:</string>
+                                <string>C&amp;heckout in:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>localDir</cstring>
                             </property>
                         </widget>
                         <widget class="KURLRequester">
@@ -227,7 +236,10 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Name of the newly created directory:</string>
+                                <string>&amp;Name of the newly created directory:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>newDir</cstring>
                             </property>
                         </widget>
                         <widget class="KLineEdit">
@@ -279,6 +291,12 @@
                             <property name="text">
                                 <string>&amp;OK</string>
                             </property>
+                            <property name="accel">
+                                <string>Alt+O</string>
+                            </property>
+                            <property name="default">
+                                <bool>true</bool>
+                            </property>
                         </widget>
                         <widget class="QPushButton">
                             <property name="name">
@@ -287,6 +305,9 @@
                             <property name="text">
                                 <string>&amp;Cancel</string>
                             </property>
+                            <property name="accel">
+                                <string>Alt+C</string>
+                            </property>
                         </widget>
                     </hbox>
                 </widget>
@@ -294,6 +315,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>ok</sender>
@@ -311,12 +334,8 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

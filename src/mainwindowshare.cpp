@@ -20,6 +20,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qdir.h>
+#include <qregexp.h>
 
 #include <kaction.h>
 #include <kaboutdata.h>
@@ -57,6 +58,8 @@
 #include "kdevmakefrontend.h"
 
 #include "mainwindowshare.h"
+
+using namespace MainWindowUtils;
 
 MainWindowShare::MainWindowShare(QObject* pParent, const char* name)
   :QObject(pParent, name)
@@ -103,7 +106,8 @@ void MainWindowShare::createActions()
   m_stopProcesses = new KToolBarPopupAction( i18n( "&Stop" ), "stop",
                                  Key_Escape, this, SLOT(slotStopButtonPressed()),
                                  m_pMainWnd->actionCollection(), "stop_processes" );
-  m_stopProcesses->setStatusText(i18n("Stop all running processes"));
+  m_stopProcesses->setToolTip(i18n("Stop"));
+  m_stopProcesses->setWhatsThis(i18n("<b>Stop</b><p>Stops all running processes (like building process, grep command, etc.). When placed onto a toolbar provides a popup menu to choose a process to stop."));
   m_stopProcesses->setEnabled( false );
   connect(m_stopProcesses->popupMenu(), SIGNAL(aboutToShow()),
          this, SLOT(slotStopMenuAboutToShow()));
@@ -116,69 +120,84 @@ void MainWindowShare::createActions()
   action = KStdAction::showMenubar(
                 this, SLOT(slotShowMenuBar()),
                 m_pMainWnd->actionCollection(), "settings_show_menubar" );
-  action->setStatusText(i18n("Lets you switch the menubar on/off"));
+  action->setToolTip(beautifyToolTip(action->text()));
+  action->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(action->text())).arg(i18n("Lets you switch the menubar on/off.")));
 
   action = KStdAction::keyBindings(
                 this, SLOT(slotKeyBindings()),
                 m_pMainWnd->actionCollection(), "settings_configure_shortcuts" );
-  action->setStatusText(i18n("Lets you configure shortcut keys"));
+  action->setToolTip(beautifyToolTip(action->text()));
+  action->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(action->text())).arg(i18n("Lets you configure shortcut keys.")));
 
   action = KStdAction::configureToolbars(
                 this, SLOT(slotConfigureToolbars()),
                 m_pMainWnd->actionCollection(), "settings_configure_toolbars" );
-  action->setStatusText(i18n("Lets you configure toolbars"));
+  action->setToolTip(beautifyToolTip(action->text()));
+  action->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(action->text())).arg(i18n("Lets you configure toolbars.")));
 
 #if (KDE_VERSION > 305)
 
   action = KStdAction::configureNotifications(
                 this, SLOT(slotConfigureNotifications()),
                 m_pMainWnd->actionCollection(), "settings_configure_notifications" );
-  action->setStatusText(i18n("Lets you configure system notifications"));
+  action->setToolTip(beautifyToolTip(action->text()));
+  action->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(action->text())).arg(i18n("Lets you configure system notifications.")));
 #endif
 
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 m_pMainWnd->actionCollection(), "settings_configure" );
-  action->setStatusText( i18n("Lets you customize KDevelop") );
+  action->setToolTip(beautifyToolTip(action->text()));
+  action->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(action->text())).arg(i18n("Lets you customize KDevelop.")));
 
 
 #if (KDE_VERSION <= 305)
   m_toggleMainToolbar = KStdAction::showToolbar(this, SLOT(slotToggleMainToolbar()), m_pMainWnd->actionCollection(), "settings_main_toolbar");
   m_toggleMainToolbar->setText(i18n("Show &Main Toolbar"));
-  m_toggleMainToolbar->setStatusText( i18n("Hides or shows the main toolbar") );
+  m_toggleMainToolbar->setToolTip( i18n("Show Main Toolbar") );
+  m_toggleMainToolbar->setWhatsThis(i18n("<b>Show Main Toolbar</b><p>Hides or shows the main toolbar."));
 
   m_toggleBuildToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBuildToolbar()),m_pMainWnd->actionCollection(), "settings_build_toolbar");
   m_toggleBuildToolbar->setText(i18n("Show &Build Toolbar"));
-  m_toggleBuildToolbar->setStatusText( i18n("Hides or shows the build toolbar") );
+  m_toggleBuildToolbar->setToolTip( i18n("Show Build Toolbar") );
+  m_toggleBuildToolbar->setWhatsThis(i18n("<b>Show Build Toolbar</b><p>Hides or shows the build toolbar."));
 
   m_toggleViewToolbar = KStdAction::showToolbar(this, SLOT(slotToggleViewToolbar()),m_pMainWnd->actionCollection(), "settings_view_toolbar");
   m_toggleViewToolbar->setText(i18n("Show &View Toolbar"));
-  m_toggleViewToolbar->setStatusText( i18n("Hides or shows the view toolbar") );
+  m_toggleViewToolbar->setToolTip( i18n("Show View Toolbar") );
+  m_toggleViewToolbar->setWhatsThis(i18n("<b>Show View Toolbar</b><p>Hides or shows the view toolbar."));
 
   m_toggleBrowserToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBrowserToolbar()),m_pMainWnd->actionCollection(), "settings_browser_toolbar");
   m_toggleBrowserToolbar->setText(i18n("Show &Browser Toolbar"));
-  m_toggleBrowserToolbar->setStatusText( i18n("Hides or shows the browser toolbar") );
+  m_toggleBrowserToolbar->setToolTip( i18n("Show Browser Toolbar") );
+  m_toggleBrowserToolbar->setWhatsThis(i18n("<b>Show Browser Toolbar</b><p>Hides or shows the browser toolbar."));
 #endif
 
   m_toggleStatusbar = KStdAction::showToolbar(this, SLOT(slotToggleStatusbar()),m_pMainWnd->actionCollection(), "settings_statusbar");
   m_toggleStatusbar->setText(i18n("Show &Statusbar"));
-  m_toggleStatusbar->setStatusText( i18n("Hides or shows the statusbar") );
+  m_toggleStatusbar->setToolTip( i18n("Show statusbar") );
+  m_toggleStatusbar->setWhatsThis(i18n("<b>Show statusbar</b><p>Hides or shows the statusbar."));
 
   action = new KAction( i18n("&Next Window"), ALT+Key_Right, this, SIGNAL(gotoNextWindow()),m_pMainWnd->actionCollection(), "view_next_window");
-  action->setStatusText( i18n("Switches to the next window") );
+  action->setToolTip( i18n("Next window") );
+  action->setWhatsThis(i18n("<b>Next window</b><p>Switches to the next window."));
 
   action = new KAction( i18n("&Previous Window"), ALT+Key_Left, this, SIGNAL(gotoPreviousWindow()),m_pMainWnd->actionCollection(), "view_previous_window");
-  action->setStatusText( i18n("Switches to the previous window") );
+  action->setToolTip( i18n("Previous window") );
+  action->setWhatsThis(i18n("<b>Previous window</b><p>Switches to the previous window."));
 
   action = new KAction( i18n("&Last Accessed Window"), ALT+Key_Up, this, SIGNAL(gotoLastWindow()), m_pMainWnd->actionCollection(), "view_last_window");
-  action->setStatusText( i18n("Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key") );
+  action->setToolTip( i18n("Last accessed window") );
+  action->setWhatsThis(i18n("<b>Last accessed window</b><p>Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key)."));
 
   action = new KAction( i18n("&First Accessed Window"), ALT+Key_Down, this, SIGNAL(gotoFirstWindow()), m_pMainWnd->actionCollection(), "view_first_window");
-  action->setStatusText( i18n("Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key") );
+  action->setToolTip( i18n("First accessed window") );
+  action->setWhatsThis(i18n("<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key)."));
 
   m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
-  m_configureEditorAction->setStatusText( i18n("Configure editors settings") );
+  m_configureEditorAction->setToolTip( i18n("Configure editor settings") );
+  m_configureEditorAction->setWhatsThis(i18n("<b>Configure editor</b><p>Opens editor configuration dialog."));
   m_configureEditorAction->setEnabled( false );
-  
+
   KDevPartController * partController = API::getInstance()->partController();
   connect( partController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
 }
@@ -441,7 +460,8 @@ void MainWindowShare::contextMenu(QPopupMenu* popup, const Context *)
   if ( m_pMainWnd->menuBar()->isVisible() )
     return;
 
-  popup->insertItem( i18n("Show &Menubar"), m_pMainWnd->menuBar(), SLOT(show()) );
+  int id = popup->insertItem( i18n("Show &Menubar"), m_pMainWnd->menuBar(), SLOT(show()) );
+  popup->setWhatsThis(id, i18n("<b>Show menubar</b><p>Lets you switch the menubar on/off."));
 }
 
 void MainWindowShare::slotActivePartChanged( KParts::Part * part )

@@ -86,6 +86,7 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 	connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 
 	mainWindow()->embedOutputView( (QWidget*)m_impl->processWidget(), i18n( "Subversion" ), i18n( "Subversion messages" ) );
+    QWhatsThis::add((QWidget*)m_impl->processWidget(), i18n("<b>Subversion</b><p>Subversion operations window."));
 	setVersionControl( this );
 }
 
@@ -101,37 +102,37 @@ void subversionPart::setupActions() {
 	actionCommit = new KAction( i18n("&Commit to Repository"), 0, this,
 			SLOT(slotActionCommit()), actionCollection(), "subversion_commit" );
 	actionCommit->setToolTip( i18n("Commit file(s)") );
-	actionCommit->setWhatsThis( i18n("Commit file(s)<p>Commit file to repository if modified") );
+	actionCommit->setWhatsThis( i18n("<b>Commit file(s)</b><p>Commits file to repository if modified.") );
 
 	/*    actionDiff = new KAction( i18n("&Difference Between Revisions"), 0, this, SLOT(slotActionDiff()),
 				actionCollection(), "subversion_diff" );
 				actionDiff->setToolTip( i18n("Build difference") );
-				actionDiff->setWhatsThis( i18n("Build difference<p>Build difference between releases") );
+				actionDiff->setWhatsThis( i18n("<b>Build difference</b><p>Builds difference between releases.") );
 				*/
 	actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()),
 			actionCollection(), "subversion_add" );
 	actionAdd->setToolTip( i18n("Add file to repository") );
-	actionAdd->setWhatsThis( i18n("Add file <p>Add file to repository") );
+	actionAdd->setWhatsThis( i18n("<b>Add file to repository</b><p>Adds file to repository.") );
 
 	actionRemove = new KAction( i18n("&Remove From Repository"), 0, this,
 			SLOT(slotActionRemove()), actionCollection(), "subversion_remove" );
 	actionRemove->setToolTip( i18n("Remove from repository") );
-	actionRemove->setWhatsThis( i18n("Remove from repository<p>Remove file(s) from repository") );
+	actionRemove->setWhatsThis( i18n("<b>Remove from repository</b><p>Removes file(s) from repository.") );
 
 	actionUpdate = new KAction( i18n("&Update"), 0, this,
 			SLOT(slotActionUpdate()), actionCollection(), "subversion_update" );
 	actionUpdate->setToolTip( i18n("Update") );
-	actionUpdate->setWhatsThis( i18n("Update<p>Update file(s) from repository") );
+	actionUpdate->setWhatsThis( i18n("<b>Update</b><p>Updates file(s) from repository.") );
 
 	actionAddToIgnoreList = new KAction( i18n("&Ignore in Subversion Operations"), 0,
 			this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "subversion_ignore" );
 	actionAddToIgnoreList->setToolTip( i18n("Ignore in Subversion operations") );
-	actionAddToIgnoreList->setWhatsThis( i18n("Ignore in Subversion operations<p>Ignore file(s)") );
+	actionAddToIgnoreList->setWhatsThis( i18n("<b>Ignore in Subversion operations</b><p>Ignores file(s).") );
 
 	actionRemoveFromIgnoreList = new KAction( i18n("Do &Not Ignore in Subversion Operations"), 0,
 			this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "subversion_donot_ignore" );
 	actionRemoveFromIgnoreList->setToolTip( i18n("Do not ignore in Subversion operations") );
-	actionRemoveFromIgnoreList->setWhatsThis( i18n("Do not ignore in Subversion operations<p>Do not ignore file(s)") );
+	actionRemoveFromIgnoreList->setWhatsThis( i18n("<b>Do not ignore in Subversion operations</b><p>Do not ignore file(s).") );
 }
 
 QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
@@ -191,22 +192,28 @@ void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
 		KPopupMenu *subMenu = new KPopupMenu( popup );
 		popup->insertSeparator();
 
-		subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
+		int id = subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
 		// CvsService let to do log and diff operations only on one file (or directory) at time
 		/*        if (m_urls.count() == 1)
 							{
 							subMenu->insertItem( actionDiff->text(), this, SLOT(slotDiff()) );
 							subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
 							}*/
-		subMenu->insertItem( actionAdd->text(), this, SLOT(slotAdd()) );
-		subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
+        subMenu->setWhatsThis(id, i18n("<b>Commit file(s)</b><p>Commits file to repository if modified."));
+		id = subMenu->insertItem( actionAdd->text(), this, SLOT(slotAdd()) );
+        subMenu->setWhatsThis(id, i18n("<b>Add file to repository</b><p>Adds file to repository."));
+		id = subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
+        subMenu->setWhatsThis(id, i18n("<b>Remove from repository</b><p>Removes file(s) from repository."));
 
 		subMenu->insertSeparator();
-		subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
+		id = subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
+        subMenu->setWhatsThis(id, i18n("<b>Update</b><p>Updates file(s) from repository."));
 
 		subMenu->insertSeparator();
-		subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
-		subMenu->insertItem( actionRemoveFromIgnoreList->text(), this, SLOT(slotRemoveFromIgnoreList()) );
+		id = subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
+        subMenu->setWhatsThis(id, i18n("<b>Ignore in Subversion operations</b><p>Ignores file(s)."));
+		id = subMenu->insertItem( actionRemoveFromIgnoreList->text(), this, SLOT(slotRemoveFromIgnoreList()) );
+        subMenu->setWhatsThis(id, i18n("<b>Do not ignore in Subversion operations</b><p>Do not ignore file(s)."));
 
 		// Now insert in parent menu
 		popup->insertItem( i18n("Subversion"), subMenu );

@@ -57,22 +57,26 @@ PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QS
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_exec" );
-    action->setStatusText( i18n("Runs the Python program") );
+    action->setToolTip( i18n("Execute program") );
+    action->setWhatsThis(i18n("<b>Execute program</b><p>Runs the Python program."));
 
     action = new KAction( i18n("Execute String..."), "exec", 0,
                           this, SLOT(slotExecuteString()),
                           actionCollection(), "build_execstring" );
-    action->setStatusText( i18n("Executes a string as Python code") );
+    action->setToolTip( i18n("Execute string") );
+    action->setWhatsThis(i18n("<b>Execute String</b><p>Executes a string as Python code."));
 
     action = new KAction( i18n("Start Python Interpreter"), "exec", 0,
                           this, SLOT(slotStartInterpreter()),
                           actionCollection(), "build_runinterpreter" );
-    action->setStatusText( i18n("Starts the Python interpreter without a program") );
+    action->setToolTip( i18n("Start python interpreter") );
+    action->setWhatsThis(i18n("<b>Start python interpreter</b><p>Starts the Python interpreter without a program"));
 
     action = new KAction( i18n("Python Documentation..."), 0,
                           this, SLOT(slotPydoc()),
                           actionCollection(), "help_pydoc" );
-    action->setStatusText( i18n("Show a Python documentation page") );
+    action->setToolTip( i18n("Python documentation") );
+    action->setWhatsThis(i18n("<b>Python documentation</b><p>Shows a Python documentation page."));
 }
 
 

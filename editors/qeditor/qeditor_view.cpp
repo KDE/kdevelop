@@ -667,52 +667,78 @@ void QEditorView::setupActions()
     KStdAction::saveAs( doc(), SLOT(fileSaveAs()), actionCollection() );
     KStdAction::save( doc(), SLOT(save()), actionCollection() );
 
-    new KAction( i18n("Reloa&d"), "reload", Key_F5,
+    KAction *action = new KAction( i18n("Reloa&d"), "reload", Key_F5,
                  doc(), SLOT(fileReload()), actionCollection(), "file_reload" );
+    action->setToolTip(i18n("Reload"));
+    action->setWhatsThis(i18n("<b>Reload</b><p>Reloads the current document from disk."));
 
-    KStdAction::undo( doc(), SLOT(undo()), actionCollection() );
-    KStdAction::redo( doc(), SLOT(redo()), actionCollection() );
+    action = KStdAction::undo( doc(), SLOT(undo()), actionCollection() );
+    action->setWhatsThis(i18n("Reverts the most recent editing actions."));
+    action = KStdAction::redo( doc(), SLOT(redo()), actionCollection() );
+    action->setWhatsThis(i18n("Reverts the most recent undo operation."));
 
-    KStdAction::cut( this, SLOT(cut()), actionCollection() );
-    KStdAction::copy( this, SLOT(copy()), actionCollection() );
+    action = KStdAction::cut( this, SLOT(cut()), actionCollection() );
+    action->setWhatsThis(i18n("Cuts the selected text and moves it to the clipboard."));
+    action = KStdAction::copy( this, SLOT(copy()), actionCollection() );
+    action->setWhatsThis(i18n("Copies the selected text to the clipboard."));
 #if KDE_IS_VERSION(3,1,90)
-    KStdAction::pasteText( this, SLOT(paste()), actionCollection() );
+    action = KStdAction::pasteText( this, SLOT(paste()), actionCollection() );
+    action->setWhatsThis(i18n("Pastes previously copied or cut clipboard contents."));
 #else
-    KStdAction::paste( this, SLOT(paste()), actionCollection() );
-#endif    
-    KStdAction::selectAll( this, SLOT(selectAll()), actionCollection() );
+    action = KStdAction::paste( this, SLOT(paste()), actionCollection() );
+    action->setWhatsThis(i18n("Pastes previously copied or cut clipboard contents."));
+#endif
+    action = KStdAction::selectAll( this, SLOT(selectAll()), actionCollection() );
+    action->setWhatsThis(i18n("Selects the entire text of the current document."));
 
-    KStdAction::gotoLine( this, SLOT(gotoLine()), actionCollection() );
-    KStdAction::find( this, SLOT(doFind()), actionCollection() );
-    KStdAction::replace( this, SLOT(doReplace()), actionCollection() );
+    action = KStdAction::gotoLine( this, SLOT(gotoLine()), actionCollection() );
+    action->setWhatsThis(i18n("Opens a dialog and lets you choose a line that you want the cursor to move to."));
+    action = KStdAction::find( this, SLOT(doFind()), actionCollection() );
+    action->setWhatsThis(i18n("Looks up the first occurence of a piece of text or regular expression."));
+    action = KStdAction::replace( this, SLOT(doReplace()), actionCollection() );
+    action->setWhatsThis(i18n("Looks up a piece of text or regular expression and replace the result with some given text."));
 
-    new KAction( i18n("&Indent"), "indent", CTRL + Key_I,
+    action = new KAction( i18n("&Indent"), "indent", CTRL + Key_I,
 		 editor(), SLOT(indent()),
                  actionCollection(), "edit_indent" );
+    action->setToolTip(i18n("Indent"));
+    action->setWhatsThis(i18n("<b>Indent</b><p>Indents a selected block of text."));
 
-    new KAction( i18n("Collapse All Blocks"), "collapse all blocks", 0,
+    action = new KAction( i18n("Collapse All Blocks"), "collapse all blocks", 0,
 		 this, SLOT(collapseAllBlocks()),
                  actionCollection(), "edit_collapse_all_blocks" );
+    action->setToolTip(i18n("Collapse all blocks"));
+    action->setWhatsThis(i18n("<b>Collapse all blocks</b><p>Collapses all blocks in the current document."));
 
-    new KAction( i18n("Expand All Blocks"), "collapse all blocks", 0,
+    action = new KAction( i18n("Expand All Blocks"), "collapse all blocks", 0,
 		 this, SLOT(expandAllBlocks()),
                  actionCollection(), "edit_expand_all_blocks" );
+    action->setToolTip(i18n("Expand all blocks"));
+    action->setWhatsThis(i18n("<b>Expand all blocks</b><p>Expands all blocks in the current document."));
 
-    new KAction( i18n("Start Macro"), "start macro", CTRL + Key_ParenLeft,
+    action = new KAction( i18n("Start Macro"), "start macro", CTRL + Key_ParenLeft,
 		 editor(), SLOT(startMacro()),
                  actionCollection(), "tools_start_macro" );
+    action->setToolTip(i18n("Start macro"));
+    action->setWhatsThis(i18n("<b>Start macro</b><p>Starts recording a macro based on the editor input."));
 
-    new KAction( i18n("Stop Macro"), "stop macro", CTRL + Key_ParenRight,
+    action = new KAction( i18n("Stop Macro"), "stop macro", CTRL + Key_ParenRight,
 		 editor(), SLOT(stopMacro()),
                  actionCollection(), "tools_stop_macro" );
+    action->setToolTip(i18n("Stop macro"));
+    action->setWhatsThis(i18n("<b>Stop macro</b><p>Stops recording a macro."));
 
-    new KAction( i18n("Execute Macro"), "execute macro", CTRL + Key_E,
+    action = new KAction( i18n("Execute Macro"), "execute macro", CTRL + Key_E,
 		 editor(), SLOT(executeMacro()),
                  actionCollection(), "tools_execute_macro" );
+    action->setToolTip(i18n("Execute macro"));
+    action->setWhatsThis(i18n("<b>Execute macro</b><p>Executes previously recorded macro."));
 
-    new KAction( i18n("&Configure Editor..."), "configure editor", 0,
+    action = new KAction( i18n("&Configure Editor..."), "configure editor", 0,
 		 doc(), SLOT(configDialog()),
                  actionCollection(), "set_confdlg" );
+    action->setToolTip(i18n("Configure editor"));
+    action->setWhatsThis(i18n("<b>Configure editor</b><p>Opens an editor configuration dialog."));
 //                 actionCollection(), "settings_configure_editor" );
 }
 

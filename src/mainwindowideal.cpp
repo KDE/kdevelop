@@ -109,18 +109,26 @@ MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
     m_raiseLeftBar = new KAction( i18n("Switch &Left Tabbar"), ALT+Key_L,
                                   this, SLOT(raiseLeftTabbar()),
                                   actionCollection(), "raise_left_tabbar");
+    m_raiseLeftBar->setToolTip(i18n("Switch left tabbar"));
+    m_raiseLeftBar->setWhatsThis(i18n("<b>Switch left tabbar</b><p>Shows or hides the left tabbar."));
 
     m_raiseRightBar = new KAction( i18n("Switch &Right Tabbar"), ALT+Key_R,
                                    this, SLOT(raiseRightTabbar()),
                                    actionCollection(), "raise_right_tabbar");
+    m_raiseRightBar->setToolTip(i18n("Switch right tabbar"));
+    m_raiseRightBar->setWhatsThis(i18n("<b>Switch right tabbar</b><p>Shows or hides the right tabbar."));
 
     m_raiseBottomBar = new KAction( i18n("Switch &Bottom Tabbar"), ALT+Key_U,
                                     this, SLOT(raiseBottomTabbar()),
                                     actionCollection(), "raise_bottom_tabbar");
+    m_raiseBottomBar->setToolTip(i18n("Switch bottom tabbar"));
+    m_raiseBottomBar->setWhatsThis(i18n("<b>Switch bottom tabbar</b><p>Shows or hides the bottom tabbar."));
 
     m_raiseEditor = new KAction( i18n("Raise &Editor"), ALT+Key_C,
                                  this, SLOT(raiseEditor()),
                                  actionCollection(), "raise_editor");
+    m_raiseEditor->setToolTip(i18n("Raise editor"));
+    m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
 
     m_raiseLeftBar->setEnabled( false );
     m_raiseRightBar->setEnabled( false );

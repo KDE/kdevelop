@@ -5,6 +5,7 @@
 #include <qtimer.h>
 #include <qvbox.h>
 #include <qprogressbar.h>
+#include <qwhatsthis.h>
 
 #include <kgenericfactory.h>
 #include <kapp.h>
@@ -57,6 +58,8 @@ AdaSupportPart::AdaSupportPart (QObject *parent, const char *name, const QString
              d->problemReporter, SLOT (configWidget (KDialogBase*)));
     d->problemReporter->setIcon( SmallIcon("info") );
     mainWindow( )->embedOutputView( d->problemReporter, i18n("Problems"), i18n("Problem reporter"));
+    QWhatsThis::add(d->problemReporter, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
+        "It displays errors reported by a language parser."));
 
     setXMLFile ("adasupportpart.rc");
 

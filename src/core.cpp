@@ -89,4 +89,14 @@ void Core::openProject(const QString& projectFileName)
   ProjectManager::getInstance()->loadProject(projectFileName);
 }
 
+namespace MainWindowUtils{
+QString beautifyToolTip(const QString& text)
+{
+    QString temp = text;
+    temp.replace(QRegExp("&"), "");
+    temp.replace(QRegExp("\\.\\.\\."), "");
+    return temp;
+}
+};
+
 #include "core.moc"

@@ -1,12 +1,17 @@
 #ifndef _CORE_H_
 #define _CORE_H_
 
+#include <qregexp.h>
 
 #include <kparts/partmanager.h>
 
 
 #include "kdevcore.h"
 
+namespace MainWindowUtils{
+
+QString beautifyToolTip(const QString& text);
+};
 
 class Core : public KDevCore
 {

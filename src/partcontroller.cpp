@@ -56,6 +56,8 @@
 
 PartController *PartController::s_instance = 0;
 
+using namespace MainWindowUtils;
+
 struct HistoryEntry {
     KURL url;
     QString context;
@@ -103,51 +105,61 @@ void PartController::setupActions()
 
   KAction* newAction = KStdAction::open(this, SLOT(slotOpenFile()),
     ac, "file_open");
-  newAction->setToolTip( i18n("Open an existing file") );
+  newAction->setToolTip( i18n("Open file") );
   newAction->setWhatsThis( i18n("<b>Open file</b><p>Opens an existing file without adding it to the project.</p>") );
 
   m_openRecentAction = KStdAction::openRecent( this, SLOT(slotOpenRecent(const KURL&) ),
     ac, "file_open_recent" );
-  m_openRecentAction->setToolTip( i18n("Open a recent file") );
+  m_openRecentAction->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(m_openRecentAction->text())).arg(i18n("Opens recently opened file.")));
   m_openRecentAction->loadEntries( kapp->config(), "RecentFiles" );
 
   m_saveAllFilesAction = new KAction(i18n("Save Al&l"), 0,
     this, SLOT(slotSaveAllFiles()),
     ac, "file_save_all");
   m_saveAllFilesAction->setToolTip( i18n("Save all modified files") );
+  m_saveAllFilesAction->setWhatsThis(i18n("<b>Save all</b><p>Saves all modified files."));
   m_saveAllFilesAction->setEnabled(false);
 
   m_revertAllFilesAction = new KAction(i18n("Rever&t All"), 0,
     this, SLOT(slotRevertAllFiles()),
     ac, "file_revert_all");
+  m_revertAllFilesAction->setToolTip(i18n("Revert all changes"));
+  m_revertAllFilesAction->setWhatsThis(i18n("<b>Revert all</b><p>Reverts all changes in opened files. Prompts to save changes so the revert can be cancelled for each modified file."));
   m_revertAllFilesAction->setEnabled(false);
 
   m_closeWindowAction = KStdAction::close(
     this, SLOT(slotCloseWindow()),
     ac, "file_close");
   m_closeWindowAction->setToolTip( i18n("Close current file") );
+  m_closeWindowAction->setWhatsThis(QString("<b>%1</b><p>%2").arg(beautifyToolTip(m_closeWindowAction->text())).arg(i18n("Closes current file.")));
   m_closeWindowAction->setEnabled(false);
 
   m_closeAllWindowsAction = new KAction(i18n("Close All"), 0,
     this, SLOT(slotCloseAllWindows()),
     ac, "file_close_all");
   m_closeAllWindowsAction->setToolTip( i18n("Close all files") );
+  m_closeAllWindowsAction->setWhatsThis(i18n("<b>Close all</b><p>Close all opened files."));
   m_closeAllWindowsAction->setEnabled(false);
 
   m_closeOtherWindowsAction = new KAction(i18n("Close All Others"), 0,
     this, SLOT(slotCloseOtherWindows()),
     ac, "file_closeother");
   m_closeOtherWindowsAction->setToolTip( i18n("Close other files") );
+  m_closeOtherWindowsAction->setWhatsThis(i18n("<b>Close all others</b><p>Close all opened files except current."));
   m_closeOtherWindowsAction->setEnabled(false);
 
   m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0,
     this, SLOT(slotBack()),
     ac, "browser_back");
   m_backAction->setEnabled( false );
+  m_backAction->setToolTip(i18n("Back"));
+  m_backAction->setWhatsThis(i18n("<b>Back</b><p>Moves backwards one step in the <b>documentation</b> browsing history."));
 
   m_switchToAction = new KAction(i18n("Switch To..."), KShortcut("CTRL+/"),
     this, SLOT(slotSwitchTo()),
     ac, "file_switchto");
+  m_switchToAction->setToolTip(i18n("Switch to"));
+  m_switchToAction->setWhatsThis(i18n("<b>Switch to</b><p>Prompts to enter the name of previously opened file to switch to."));
 
   new KActionSeparator(ac, "dummy_separator");
 
@@ -161,6 +173,8 @@ void PartController::setupActions()
     this, SLOT(slotForward()),
     ac, "browser_forward");
   m_forwardAction->setEnabled( false );
+  m_forwardAction->setToolTip(i18n("Forward"));
+  m_forwardAction->setWhatsThis(i18n("<b>Forward</b><p>Moves forward one step in the <b>documentation</b> browsing history."));
 
   connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()),
          this, SLOT(slotForwardAboutToShow()));

@@ -365,10 +365,14 @@ void MainWindow::createActions()
   connect(manager(), SIGNAL(change()),this, SLOT(updateActionState()));
 
   m_pOutputToolViewsMenu = new KActionMenu( i18n("Output Tool Views"), 0, "view_output_tool_views");
+  m_pOutputToolViewsMenu->setToolTip(i18n("Output tool views"));
+  m_pOutputToolViewsMenu->setWhatsThis(i18n("<b>Output tool views</b><p>Shows all output views available."));
   connect(m_pOutputToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillOutputToolViewsMenu()));
   actionCollection()->insert(m_pOutputToolViewsMenu);
 
   m_pTreeToolViewsMenu = new KActionMenu( i18n("Tree Tool Views"), 0, "view_tree_tool_views");
+  m_pTreeToolViewsMenu->setToolTip(i18n("Tree tool views"));
+  m_pTreeToolViewsMenu->setWhatsThis(i18n("<b>Tree tool views</b><p>Shows all tool views available."));
   connect(m_pTreeToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillTreeToolViewsMenu()));
   actionCollection()->insert(m_pTreeToolViewsMenu);
 
@@ -380,7 +384,8 @@ void MainWindow::createActions()
 
   m_toggleViewbar = KStdAction::showToolbar(this, SLOT(slotToggleViewbar()),actionCollection(), "settings_viewbar");
   m_toggleViewbar->setText(i18n("Show &Viewbar"));
-  m_toggleViewbar->setStatusText( i18n("Hides or shows the viewbar") );
+  m_toggleViewbar->setToolTip( i18n("Show viewbar") );
+  m_toggleViewbar->setWhatsThis(i18n("<b>Show viewbar</b><p>Hides or shows the viewbar."));
   showViewTaskBar(); // because start state must be equal to the action state
   if (m_mdiMode == KMdi::TabPageMode) {
     slotToggleViewbar();

@@ -36,6 +36,23 @@ void EnvironmentVariablesWidget::addVarClicked()
 }
 
 
+void EnvironmentVariablesWidget::editVarClicked()
+{
+    AddEnvvarDialog dlg;
+    QListViewItem *item;
+    if (item = listview->selectedItem())
+    {
+        dlg.setvarname(item->text(0));
+        dlg.setvalue(item->text(1));
+    }
+    if (!dlg.exec())
+        return;
+
+    item->setText(0,dlg.varname());
+    item->setText(1,dlg.value());
+}
+
+
 void EnvironmentVariablesWidget::removeVarClicked()
 {
     delete listview->selectedItem();
@@ -47,9 +64,23 @@ EnvironmentVariablesWidget::EnvironmentVariablesWidget(QDomDocument &dom, const 
     : EnvironmentVariablesWidgetBase(parent, name),
       m_dom(dom), m_configGroup(configGroup)
 {
+    readEnvironment(dom, configGroup);
+}
+
+
+EnvironmentVariablesWidget::~EnvironmentVariablesWidget()
+{}
+
+void EnvironmentVariablesWidget::readEnvironment(QDomDocument &dom, const QString &configGroup)
+{
+    m_dom = dom;
+    m_configGroup = configGroup;
+
+    listview->clear();
+
     DomUtil::PairList list =
-        DomUtil::readPairListEntry(dom, configGroup, "envvar", "name", "value");
-    
+        DomUtil::readPairListEntry(dom, m_configGroup, "envvar", "name", "value");
+        
     QListViewItem *lastItem = 0;
 
     DomUtil::PairList::ConstIterator it;
@@ -61,10 +92,10 @@ EnvironmentVariablesWidget::EnvironmentVariablesWidget(QDomDocument &dom, const 
     }
 }
 
-
-EnvironmentVariablesWidget::~EnvironmentVariablesWidget()
-{}
-
+void EnvironmentVariablesWidget::changeConfigGroup( const QString &configGroup)
+{
+    m_configGroup = configGroup;
+}
 
 void EnvironmentVariablesWidget::accept()
 {

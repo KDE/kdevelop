@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="qeditor_part" version="11">
+<kpartgui name="qeditor_part" version="13">
 <MenuBar noMerge="1">
 
   <Menu name="file" noMerge="1"><text>&amp;File</text>
@@ -19,13 +19,15 @@
     <Action name="edit_replace" group="edit_find_merge" />
     <Action name="go_goto_line" group="edit_find_merge"/>
   </Menu>
-  
+
   <Menu name="view" noMerge="1"><text>&amp;View</text>
     <Action name="edit_expand_all_blocks" group="view_operations"/>
     <Action name="edit_collapse_all_blocks" group="view_operations" />  
   </Menu>
 
   <Menu name="tools" noMerge="1"><text>&amp;Tools</text>
+<!--    <Action name="edit_indent" group="tools_operations"/>
+    <Separator group="tools_operations"/> -->
     <Action name="tools_start_macro" group="tools_operations"/>
     <Action name="tools_stop_macro" group="tools_operations"/>
     <Action name="tools_execute_macro" group="tools_operations"/>

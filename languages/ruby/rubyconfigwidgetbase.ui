@@ -9,48 +9,54 @@
             <x>0</x>
             <y>0</y>
             <width>600</width>
-            <height>480</height>
+            <height>482</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
     </property>
-    <widget class="QLineEdit">
+    <grid>
         <property name="name">
-            <cstring>interpreterEdit</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>160</x>
-                <y>10</y>
-                <width>201</width>
-                <height>31</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>30</x>
-                <y>20</y>
-                <width>107</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Ruby interpreter:</string>
-        </property>
-    </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Ruby &amp;interpreter:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>interpreterEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>interpreterEdit</cstring>
+            </property>
+        </widget>
+        <spacer row="1" column="1">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-<includehints>
-    <includehint>qwidget.h</includehint>
-</includehints>
 </UI>
