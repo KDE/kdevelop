@@ -492,43 +492,43 @@ void ParsedClass::out()
     char *str;
 
     if ( !comment().isEmpty() )
-        kdDebug(9007) << comment() << endl;
+        kdDebug(9005) << comment() << endl;
 
 
-    kdDebug(9007) << "Class " << path() << " @ line " << declaredOnLine();
-    kdDebug(9007) << " - " << declarationEndsOnLine() << endl;
-    kdDebug(9007) << "  Defined in files:" << endl;
-    kdDebug(9007) << "    " << declaredInFile() << endl;
-    kdDebug(9007) << "    " << definedInFile() << endl;
-    kdDebug(9007) << "  Parents:" << endl;
+    kdDebug(9005) << "Class " << path() << " @ line " << declaredOnLine()
+                  << " - " << declarationEndsOnLine() << endl;
+    kdDebug(9005) << "  Defined in files:" << endl;
+    kdDebug(9005) << "    " << declaredInFile() << endl;
+    kdDebug(9005) << "    " << definedInFile() << endl;
+    kdDebug(9005) << "  Parents:" << endl;
     for ( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
         aParent->out();
-    kdDebug(9007) << "  Friends:" << endl;
+    kdDebug(9005) << "  Friends:" << endl;
     QStringList::ConstIterator friendsIt;
     for ( friendsIt = _friends.begin(); friendsIt != _friends.end(); ++friendsIt )
-        kdDebug(9007) << "   " << *friendsIt << endl;
-    kdDebug(9007) << "  Attributes:" << endl;
+        kdDebug(9005) << "   " << *friendsIt << endl;
+    kdDebug(9005) << "  Attributes:" << endl;
     for ( ait.toFirst(); ait.current(); ++ait )
         ait.current()->out();
-    kdDebug(9007) << "  Methods:" << endl;
+    kdDebug(9005) << "  Methods:" << endl;
     for ( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() )
         aMethod->out();
-    kdDebug(9007) << "  Signals:" << endl;
+    kdDebug(9005) << "  Signals:" << endl;
     for ( aMethod = signalList.first(); aMethod != NULL; aMethod = signalList.next() )
         aMethod->out();
-    kdDebug(9007) << "  Slots:" << endl;
+    kdDebug(9005) << "  Slots:" << endl;
     for ( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
         aMethod->out();
-    //    kdDebug(9007) << "  Signal to slot mappings:" << endl;
+    //    kdDebug(9005) << "  Signal to slot mappings:" << endl;
     //    for ( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
     //        aSS->out();
-    kdDebug(9007) << "  Classes:" << endl;
+    kdDebug(9005) << "  Classes:" << endl;
     for ( classIterator.toFirst();
           classIterator.current();
           ++classIterator )
         classIterator.current()->out();
 
-    kdDebug(9007) << endl;
+    kdDebug(9005) << "" << endl;
 }
 
 

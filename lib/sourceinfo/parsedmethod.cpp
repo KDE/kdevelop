@@ -146,54 +146,54 @@ void ParsedMethod::out()
     char buf[10];
 
     if ( !comment().isEmpty() )
-        kdDebug(9007) << "    " << comment() << "\n";
+        kdDebug(9005) << "    " << comment() << endl;
 
-    kdDebug(9007) << "    ";
+    kdDebug(9005) << "    " << endl;
     switch( access() )
         {
         case PIE_PUBLIC:
-            kdDebug(9007) << (isObjectiveC() ? "" : "public ");
+            kdDebug(9005) << (isObjectiveC() ? "" : "public ") << endl;
             break;
         case PIE_PROTECTED:
-            kdDebug(9007) << "protected ";
+            kdDebug(9005) << "protected " << endl;
             break;
         case PIE_PRIVATE:
-            kdDebug(9007) << "private ";
+            kdDebug(9005) << "private " << endl;
             break;
         case PIE_PACKAGE:
-            kdDebug(9007) << "";
+            kdDebug(9005) << "" << endl;
             break;
         case PIE_GLOBAL:
-            kdDebug(9007) << "";
+            kdDebug(9005) << "" << endl;
             break;
         }
 
     if ( isVirtual() )
-        kdDebug(9007) << "virtual ";
+        kdDebug(9005) << "virtual " << endl;
 
     if ( isStatic() )
-        kdDebug(9007) << "static ";
+        kdDebug(9005) << "static " << endl;
 
     if ( isSlot() )
-        kdDebug(9007) << "slot ";
+        kdDebug(9005) << "slot " << endl;
 
     if ( isSignal() )
-        kdDebug(9007) << "signal ";
+        kdDebug(9005) << "signal " << endl;
 
-    kdDebug(9007) << type()  << " " << name() << "( ";
+    kdDebug(9005) << type()  << " " << name() << "( " << endl;
 
     for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
         if ( arg != arguments.getFirst() )
-            kdDebug(9007) << ", ";
+            kdDebug(9005) << ", " << endl;
 
         arg->out();
     }
 
-    kdDebug(9007) << ( isConst()? " ) const\n" : " )\n" );
-    kdDebug(9007) << "      declared @ line " << declaredOnLine()
+    kdDebug(9005) << ( isConst()? " ) const\n" : " )\n" ) << endl;
+    kdDebug(9005) << "      declared @ line " << declaredOnLine()
                   << " - " << declarationEndsOnLine() << endl;
-    kdDebug(9007) << "      defined(in " << ( isInHFile()? ".h" : ( isObjectiveC()? ".m" : ".cc" ) ) << ")";
-    kdDebug(9007) << "@ line " << definedOnLine()
+    kdDebug(9005) << "      defined(in " << ( isInHFile()? ".h" : ( isObjectiveC()? ".m" : ".cc" ) ) << ")"
+                  << "@ line " << definedOnLine()
                   << " - " << definitionEndsOnLine() << endl;
 }
 

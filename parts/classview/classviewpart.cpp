@@ -52,11 +52,14 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
 
     topLevel()->embedSelectView(m_classtree, i18n("Classes"));
 
-    classes_action = new ClassListAction(classStore(), i18n("Classes"), 0, this, SLOT(selectedClass()),
+    classes_action = new ClassListAction(classStore(), i18n("Classes"), 0,
+                                         this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
-    methods_action = new MethodListAction(classStore(), i18n("Methods"), 0, this, SLOT(selectedMethod()),
+    methods_action = new MethodListAction(classStore(), i18n("Methods"), 0,
+                                          this, SLOT(selectedMethod()),
                                           actionCollection(), "method_combo");
-    popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0, this, SLOT(switchedDeclImpl()),
+    popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0,
+                                           this, SLOT(switchedDeclImpl()),
                                            actionCollection(), "class_wizard");
     setupPopup();
     m_decl_or_impl = false;

@@ -173,7 +173,7 @@ QString ParsedArgument::toString()
  *-----------------------------------------------------------------*/
 void ParsedArgument::out()
 {
-    kdDebug(9007) << toString() << endl;
+    kdDebug(9005) << toString() << endl;
 }
 
 

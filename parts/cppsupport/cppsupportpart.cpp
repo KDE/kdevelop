@@ -286,7 +286,7 @@ CppSupportPart::projectClosed( )
 	    classStore( )->close( );
 	}
 	else
-	    kdDebug( 9001 ) << "EE: can't write file '" << pcsFile << "'" << endl;
+	    kdDebug( 9007 ) << "EE: can't write file '" << pcsFile << "'" << endl;
     }
 
     // todo: save -pp file from new slot

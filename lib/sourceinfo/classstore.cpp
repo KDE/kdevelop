@@ -208,7 +208,7 @@ void ClassStore::out()
     ParsedStruct *aStruct;
 
     // Output all namespaces
-    kdDebug(9007) << "Global namespaces" << endl;
+    kdDebug(9005) << "Global namespaces" << endl;
     QValueList<ParsedScopeContainer*> globalScopes = globalContainer.getSortedScopeList();
     QValueList<ParsedScopeContainer*>::ConstIterator scopeIt;
     for (scopeIt = globalScopes.begin(); scopeIt != globalScopes.end(); ++scopeIt)
@@ -216,21 +216,21 @@ void ClassStore::out()
 
 
     // Output all classes.
-    kdDebug(9007) << "Global classes\n";
+    kdDebug(9005) << "Global classes\n" << endl;
     QValueList<ParsedClass*> classes = getSortedClassList();
     QValueList<ParsedClass*>::ConstIterator classIt;
     for (classIt = classes.begin(); classIt != classes.end(); ++classIt)
         aClass->out();
 
     // Global methods
-    kdDebug(9007) << "Global functions\n";
+    kdDebug(9005) << "Global functions\n" << endl;
     QValueList<ParsedMethod*> globalMethods = globalContainer.getSortedMethodList();
     QValueList<ParsedMethod*>::ConstIterator methodIt;
     for (methodIt = globalMethods.begin(); methodIt != globalMethods.end(); ++methodIt)
         aMethod->out();
 
     // Global structures
-/*    kdDebug(9007) << "Global variables\n";
+/*    kdDebug(9005) << "Global variables" << endl;
     globalAttributes = globalContainer.getSortedAttributeList();
     for ( aAttr = globalAttributes->first();
           aAttr != NULL;
@@ -240,7 +240,7 @@ void ClassStore::out()
     delete globalAttributes;
 */
     // Global structures
-/*    kdDebug(9007) << "Global structs\n";
+/*    kdDebug(9005) << "Global structs" << endl;
     globalStructs = getSortedStructList();
     for ( aStruct = globalStructs->first();
           aStruct != NULL;
@@ -575,7 +575,7 @@ QValueList<ParsedClass*> ClassStore::getClassSuppliers( const QString &aName )
         
         // If this isn't the class and the string contains data, we check for it.
         if ( str != aName && !str.isEmpty() ) {
-            qDebug( "Checking if '%s' is a class", str.data() );
+            kdDebug(9005) << "Checking if '" << str << "' is a class" << endl;
             toAdd = getClassByName( str );
             if ( toAdd )
                 retVal.append( toAdd );
@@ -792,7 +792,8 @@ void ClassStore::storeAll()
 	ParsedStruct* pStruct;
 
 	/* serialize the global scopes, their scopes and their classes, methods, structs, attributes */
-	kdDebug(9005) << "Number of globals to store : " << globalContainer.getSortedScopeList().count() << endl;
+	kdDebug(9005) << "Number of globals to store : "
+                      << globalContainer.getSortedScopeList().count() << endl;
 
 	/* serialize global classes */
 	( *m_pStream ) << globalContainer.getSortedClassList().count();

@@ -100,27 +100,27 @@ void ParsedParent::setAccess( PIAccess aAccess )
  *-----------------------------------------------------------------*/
 void ParsedParent::out()
 {
-    kdDebug(9007) << "    " << name() << "(";
+    kdDebug(9005) << "    " << name() << "(" << endl;
 
     switch (access())
         {
         case PIE_PUBLIC:
-            kdDebug(9007) << "public";
+            kdDebug(9005) << "public" << endl;
             break;
         case PIE_PROTECTED:
-            kdDebug(9007) << "protected";
+            kdDebug(9005) << "protected" << endl;
             break;
         case PIE_PRIVATE:
-            kdDebug(9007) << "private";
+            kdDebug(9005) << "private" << endl;
             break;
         case PIE_PACKAGE:
-            kdDebug(9007) << "";
+            kdDebug(9005) << "" << endl;
             break;
         default:
-            kdDebug(9007) << "Internal error";
+            kdDebug(9005) << "Internal error" << endl;
         }
     
-    kdDebug(9007) << ")\n";
+    kdDebug(9005) << ")" << endl;
 }
 
 

@@ -221,31 +221,31 @@ void ParsedAttribute::out()
     QString attrString;
     
     if ( !comment().isEmpty() )
-        kdDebug(9007) << "    " << comment() << "\n";
+        kdDebug(9005) << "    " << comment() << endl;
     
-    kdDebug(9007) << "    ";
+    kdDebug(9005) << "    " << endl;
     
     switch ( access() )
         {
         case PIE_PUBLIC:
-            kdDebug(9007) << "public ";
+            kdDebug(9005) << "public " << endl;
             break;
         case PIE_PROTECTED:
-            kdDebug(9007) << "protected ";
+            kdDebug(9005) << "protected " << endl;
             break;
         case PIE_PRIVATE:
-            kdDebug(9007) << "private ";
+            kdDebug(9005) << "private " << endl;
             break;
         case PIE_PACKAGE:
-            kdDebug(9007) << "";
+            kdDebug(9005) << "" << endl;
             break;
         case PIE_GLOBAL:
-            kdDebug(9007) << "";
+            kdDebug(9005) << "" << endl;
             break;
         }
     
-    // kdDebug(9007) << ( type.isEmpty() ? " " : type.data() ) << " " << name;
-    kdDebug(9007) << asString() << " @ line " << declaredOnLine()
+    // kdDebug(9005) << ( type.isEmpty() ? " " : type.data() ) << " " << name;
+    kdDebug(9005) << asString() << " @ line " << declaredOnLine()
                   << " - " << declarationEndsOnLine() << endl;
 }
 

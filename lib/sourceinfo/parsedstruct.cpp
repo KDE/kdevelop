@@ -72,9 +72,9 @@ ParsedStruct::~ParsedStruct()
 void ParsedStruct::out()
 {
     if ( !comment().isEmpty() )
-        kdDebug(9007) << "   " << comment() << "\n";
+        kdDebug(9005) << "   " << comment() << endl;
     
-    kdDebug(9007) << "   " << path() << "\n";
+    kdDebug(9005) << "   " << path() << endl;
     for ( attributeIterator.toFirst();
           attributeIterator.current();
           ++attributeIterator )

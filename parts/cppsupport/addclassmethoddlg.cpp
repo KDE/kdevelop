@@ -174,7 +174,7 @@ void AddClassMethodDialog::slotDelPara(){
     
 /** update current parameter in listbox */
 void AddClassMethodDialog::slotUpdateParameter(const QString& s){
-   kdDebug() << "slot UpdatePara called "<< editactive << " " << s << endl;
+   kdDebug(9007) << "slot UpdatePara called "<< editactive << " " << s << endl;
    if (! editactive) {
       editactive = true;
       QString p(paraType->text() + " " + paraName->text());
@@ -214,7 +214,7 @@ void AddClassMethodDialog::slotDownPara()
 }
 /** click onto Parameter */
 void AddClassMethodDialog::slotParaHighLight( QListBoxItem * ){
-   kdDebug() << "slot ParaHighlight called "<< editactive << endl;
+   kdDebug(9007) << "slot ParaHighlight called "<< editactive << endl;
    if (! editactive) {
       editactive = true;
       QString txt = lbPara->currentText();

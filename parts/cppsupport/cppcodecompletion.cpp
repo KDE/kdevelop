@@ -226,14 +226,14 @@ CppCodeCompletion::slotCursorPositionChanged()
 QString
 CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 {
-    kdDebug() << "CppCodeCompletion::typingTypeOf( )" << endl;
+    kdDebug(9007) << "CppCodeCompletion::typingTypeOf( )" << endl;
 
     QString strCurLine = m_pEditIface->textLine( nLine );
     QValueList<KTextEditor::CompletionEntry> entries;
 
     QString className;
     QString contents = getMethodBody( nLine, nCol, &className );
-    kdDebug() << "contents = " << contents << endl;
+    kdDebug(9007) << "contents = " << contents << endl;
 
     QValueList<SimpleVariable> variableList = SimpleParser::localVariables( contents );
     SimpleVariable v;
@@ -249,11 +249,11 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
         expr = expr.simplifyWhiteSpace();
     }
 
-    kdDebug() << "expr = |" << expr << "|" << endl;
+    kdDebug(9007) << "expr = |" << expr << "|" << endl;
 
     QString type = evaluateExpression( expr, variableList, m_pStore );
 
-    kdDebug() << "the type of expression is " << type << endl;
+    kdDebug(9007) << "the type of expression is " << type << endl;
 
     return ( type.isEmpty() ? QString( "" ) : type );
 }
@@ -272,7 +272,7 @@ CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& text )
     int nNodePos = getNodePos( nLine, nCol );
     // daniel - avoid additional scope in if's
     if( !nNodePos ){
-	kdDebug( ) << "nNodePos = 0" << endl;
+	kdDebug(9007) << "nNodePos = 0" << endl;
         return;
     }
 
@@ -942,7 +942,7 @@ CppCodeCompletion::expandText( )
     }
     
     if( !m_pCompletionIface ){
-        kdDebug( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
+        kdDebug( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface" << endl;
         return;
     }
 
@@ -950,7 +950,7 @@ CppCodeCompletion::expandText( )
     uint parag, index;
     m_pCursorIface->cursorPosition( &parag, &index );
     QString textLine = m_pEditIface->textLine( parag );
-kdDebug() << "TEXTLINE:" << textLine << endl;
+    kdDebug(9007) << "TEXTLINE:" << textLine << endl;
 
     int pos = index - 1;
     while( pos>0 && (textLine[pos].isLetterOrNumber() || textLine[pos] == '_') )
@@ -971,7 +971,7 @@ enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN };
 int
 CppCodeCompletion::expressionAt( const QString& text, int index )
 {
-    kdDebug() << "CppCodeCompletion::expressionAt()" << endl;
+    kdDebug(9007) << "CppCodeCompletion::expressionAt()" << endl;
 
     int last = T_UNKNOWN;
     int start = index;
@@ -1102,7 +1102,7 @@ CppCodeCompletion::evaluateExpression( const QString& expr,
 
     QStringList exprs = splitExpression( expr );
     for( QStringList::Iterator it=exprs.begin(); it!=exprs.end(); ++it ){
-        kdDebug() << "expr " << (*it) << endl;
+        kdDebug(9007) << "expr " << (*it) << endl;
     }
 
     SimpleVariable v_this = SimpleParser::findVariable( roo, "this" );
@@ -1169,7 +1169,7 @@ CppCodeCompletion::evaluateExpression( const QString& expr,
         }
     }
 
-    kdDebug() << "-------------> last type = " << type << endl;
+    kdDebug(9007) << "-------------> last type = " << type << endl;
 
     return type;
 }
@@ -1177,7 +1177,7 @@ CppCodeCompletion::evaluateExpression( const QString& expr,
 void
 CppCodeCompletion::completeText( )
 {
-    kdDebug() << "CppCodeCompletion::completeText()" << endl;
+    kdDebug(9007) << "CppCodeCompletion::completeText()" << endl;
 
     if( !m_pCursorIface || !m_pEditIface || !m_pCompletionIface ){
         return;
@@ -1197,9 +1197,9 @@ CppCodeCompletion::completeText( )
     }
 
     contents = getMethodBody( nLine, nCol, &className );
-    kdDebug() << "contents = " << contents << endl;
+    kdDebug(9007) << "contents = " << contents << endl;
 
-    kdDebug() << "classname = " << className << endl;
+    kdDebug(9007) << "classname = " << className << endl;
     QValueList<SimpleVariable> variableList = SimpleParser::localVariables( contents );
     SimpleVariable v;
     v.name = "this";
@@ -1225,8 +1225,8 @@ CppCodeCompletion::completeText( )
         expr = expr.left( idx ).stripWhiteSpace();
     }
 
-    kdDebug() << "prefix = |" << word << "|" << endl;
-    kdDebug() << "expr = |" << expr << "|" << endl;
+    kdDebug(9007) << "prefix = |" << word << "|" << endl;
+    kdDebug(9007) << "expr = |" << expr << "|" << endl;
 
     if( showArguments ){
         QString type = evaluateExpression( expr, variableList, m_pStore );
@@ -1244,7 +1244,7 @@ CppCodeCompletion::completeText( )
 void
 CppCodeCompletion::typeOf( )
 {
-    kdDebug() << "CppCodeCompletion::completeText()" << endl;
+    kdDebug(9007) << "CppCodeCompletion::completeText()" << endl;
 
     if( !m_pCursorIface || !m_pEditIface || !m_pCompletionIface ){
         return;
@@ -1259,7 +1259,7 @@ CppCodeCompletion::typeOf( )
 
     QString className;
     QString contents = getMethodBody( nLine, nCol, &className );
-    kdDebug() << "contents = " << contents << endl;
+    kdDebug(9007) << "contents = " << contents << endl;
 
     QValueList<SimpleVariable> variableList = SimpleParser::localVariables( contents );
     SimpleVariable v;
@@ -1275,14 +1275,14 @@ CppCodeCompletion::typeOf( )
         expr = expr.simplifyWhiteSpace();
     }
 
-    kdDebug() << "expr = |" << expr << "|" << endl;
+    kdDebug(9007) << "expr = |" << expr << "|" << endl;
 
     QString type = evaluateExpression( expr, variableList, m_pStore );
     if( type.isEmpty() ){
         type = "unknown";
     }
 
-    kdDebug() << "the type of expression is " << type << endl;
+    kdDebug(9007) << "the type of expression is " << type << endl;
     m_pSupport->topLevel()->statusBar()->message( type.isEmpty() ? i18n("no type for expression") : type );
 
     QStringList functionList;

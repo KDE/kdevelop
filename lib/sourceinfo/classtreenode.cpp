@@ -123,9 +123,9 @@ void ClassTreeNode::out()
     ClassTreeNode *aChild;
     
     if (theClass)
-      kdDebug(9007) << "(" << theClass->name() << endl;
+      kdDebug(9005) << "(" << theClass->name() << endl;
     else
-      kdDebug(9007) << "(??" << endl;
+      kdDebug(9005) << "(??" << endl;
 
     for ( aChild = children.first();
           aChild != NULL;
@@ -133,7 +133,7 @@ void ClassTreeNode::out()
         aChild->out();
     }
 
-    kdDebug(9007) << ")" << endl;
+    kdDebug(9005) << ")" << endl;
 }
 
 

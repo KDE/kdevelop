@@ -76,7 +76,7 @@ KTabZoomWidget::~KTabZoomWidget()
 
 void KTabZoomWidget::addTab(QWidget *widget, const QString &title)
 {
-  kdDebug() << "AddTab: " << widget << endl;
+  kdDebug(9000) << "AddTab: " << widget << endl;
 
   KWidgetInfo *info = new KWidgetInfo;
   info->m_widget = widget;
@@ -94,7 +94,7 @@ void KTabZoomWidget::widgetDeleted()
 {
   const QWidget *w = static_cast<const QWidget*>(sender());
 
-  kdDebug() << "Widget deleted: " << w << endl;
+  kdDebug(9000) << "Widget deleted: " << w << endl;
 
   for (KWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == w)
@@ -183,7 +183,7 @@ void KTabZoomWidget::calculateGeometry()
 
 void KTabZoomWidget::unselected()
 {
-  kdDebug() << "Unselected" << endl;
+  kdDebug(9000) << "Unselected" << endl;
 
   d->m_popup->hide();
 }

@@ -146,7 +146,7 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
 QValueList<SimpleVariable> SimpleParser::parseFile( const QString& filename ){
     QValueList<SimpleVariable> vars;
-    qDebug( "-----------------------------------------------------------" );
+    kdDebug(9007) << "-----------------------------------------------------------" << endl;
     QFile f( filename );
     if( f.open(IO_ReadOnly) ){
         QTextStream in( &f );
@@ -154,7 +154,7 @@ QValueList<SimpleVariable> SimpleParser::parseFile( const QString& filename ){
         vars = localVariables( contents );
         f.close();
     }
-    qDebug( "-----------------------------------------------------------" );
+    kdDebug(9007) << "-----------------------------------------------------------" << endl;
     return vars;
 }
 

@@ -1187,8 +1187,8 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
       }
       else
       {
-        qWarning( "No method by the name %s found in class %s", 
-                  name.data(), className.data() );
+        kdDebug(9007) << "No method by the name " << name
+                      << "found in class " << className << endl;
         aMethod.out();
       }
     }
@@ -1214,8 +1214,8 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
         }
         else
         {
-          qWarning( "No method by the name %s found in class %s",
-                    name.data(), path.data() );
+            kdDebug(90007) << "No method by the name " << name
+                           << "found in class " << path << endl;
           aMethod.out();
         }
       }
@@ -1517,7 +1517,7 @@ ParsedClass *CClassParser::parseClassHeader()
       aLexem = lexemStack.pop();
 #if 1
       if(aLexem == 0) {
-         kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+         kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()" << endl;
          return 0;
       }
 #endif
@@ -2352,7 +2352,8 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 		aClass = parseObjcImplementation();
 		
 		if (aClass != NULL && !store->hasClass(aClass->name())) {
-                    kdDebug(9007) << "Storing objective implementation with path: " << aClass->path().latin1() << endl;
+                    kdDebug(9007) << "Storing objective implementation with path: "
+                                  << aClass->path() << endl;
                     store->addClass(aClass);
 		}
 		break;
@@ -2361,7 +2362,8 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 		aClass = parseObjcClass();
 		
 		if (aClass != NULL && !store->hasClass(aClass->name())) {
-                    kdDebug(9007) << "Storing objective interface with path: " << aClass->path().latin1() << endl;
+                    kdDebug(9007) << "Storing objective interface with path: "
+                                  << aClass->path() << endl;
                     store->addClass(aClass);
 		}
     		break;
