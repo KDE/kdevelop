@@ -26,6 +26,8 @@
 #include <kcolorbutton.h>
 #else
 #include <qpushbutton.h>
+#include <qpixmap.h>
+#include <qiconset.h>
 #endif
 #include <qcolordialog.h>
 
@@ -82,6 +84,10 @@ void PColorButton::setValue(const QVariant& value, bool emitChange)
 #else
     m_color = value.toColor();
     m_edit->setText(m_color.name());
+    QPixmap px;
+    px.resize(14,14);
+    px.fill(m_color);
+    m_edit->setIconSet(px);
 #endif
     if (emitChange)
         emit propertyChanged(m_property, value);
@@ -98,6 +104,12 @@ void PColorButton::changeColor()
 #ifdef PURE_QT
    m_color = QColorDialog::getColor(m_color,this);
    updateProperty(m_color);
+   m_edit->setText(m_color.name());
+   QPixmap px;
+   px.resize(14,14);
+   px.fill(m_color);
+   m_edit->setIconSet(px);
+
 #endif 
 }
 
