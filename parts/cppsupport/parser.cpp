@@ -29,7 +29,7 @@ using namespace std;
 { \
   Token token = lex->lookAhead( 0 ); \
   if( token != tk ){ \
-      reportError( i18n("'%1' expected found '%2'").arg(descr).arg(lex->lookAhead(0).toString()) ); \
+      reportError( i18n("'%1' expected found '%2'").arg(descr).arg(lex->toString(lex->lookAhead(0))) ); \
       return false; \
   } \
   lex->nextToken(); \
@@ -98,14 +98,14 @@ bool Parser::reportError( const Error& err )
 	const Token& token = lex->lookAhead( 0 );
 	lex->getTokenPosition( token, &line, &col );
 
-	QString s = lex->lookAhead( 0 ).toString();
+	QString s = lex->toString( lex->lookAhead(0) );
 	s = s.left( 30 ).stripWhiteSpace();
 	if( s.isEmpty() )
 	    s = i18n( "<eof>" );
-	
+
 	m_driver->addProblem( m_driver->currentFileName(), Problem(err.text.arg(s), line, col) );
     }
-        
+
     return true;
 }
 
@@ -960,8 +960,8 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
 bool Parser::parseOperator( AST::Node& /*node*/ )
 {
     //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseOperator()" << endl;
-    QString text = lex->lookAhead( 0 ).toString();
-    
+    QString text = lex->toString( lex->lookAhead(0) );
+
     switch( lex->lookAhead(0) ){
     case Token_new:
     case Token_delete:
@@ -972,7 +972,7 @@ bool Parser::parseOperator( AST::Node& /*node*/ )
 	    text += "[]";
 	}
 	return true;
-	
+
     case '+':
     case '-':
     case '*':
@@ -2334,7 +2334,7 @@ bool Parser::parseStringLiteral( AST::Node& /*node*/ )
 {
     while( !lex->lookAhead(0).isNull() ) {
 	if( lex->lookAhead(0) == Token_identifier &&
-	    lex->lookAhead(0).toString() == "L" && lex->lookAhead(1) == Token_string_literal ) {
+	    lex->toString(lex->lookAhead(0)) == "L" && lex->lookAhead(1) == Token_string_literal ) {
 
 	    lex->nextToken();
 	    lex->nextToken();
@@ -3036,7 +3036,7 @@ QString Parser::toString( int start, int end, const QString& sep ) const
     QStringList l;
 
     for( int i=start; i<end; ++i ){
-	l << lex->tokenAt( i ).toString();
+	l << lex->toString( lex->tokenAt(i) );
     }
 
     return l.join( sep ).stripWhiteSpace();

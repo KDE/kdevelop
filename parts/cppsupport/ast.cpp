@@ -96,6 +96,8 @@ QString nodeTypeToString( NodeType type )
 	return "Group";
     case NodeType_AccessDeclaration:
 	return "AccessDeclaration";
+    case NodeType_TypeParameter:
+	return "TypeParameterAST";
     case NodeType_Custom:
 	return "Custom";
     }
@@ -912,3 +914,21 @@ void AccessDeclarationAST::addAccess( AST::Node& access )
     access->setParent( this );
     m_accessList.append( access.release() );
 }
+
+// --------------------------------------------------------------------------
+TypeParameterAST::TypeParameterAST()
+{
+}
+
+void TypeParameterAST::setKind( AST::Node& kind )
+{
+    m_kind = kind;
+    if( m_kind.get() ) m_kind->setParent( this );
+}
+
+void TypeParameterAST::setName( NameAST::Node& name )
+{
+    m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
+}
+

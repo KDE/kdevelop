@@ -73,6 +73,7 @@ enum NodeType
     NodeType_ParameterDeclarationClause,
     NodeType_Group,
     NodeType_AccessDeclaration,
+    NodeType_TypeParameter,
 
     NodeType_Custom = 2000
 };
@@ -212,6 +213,30 @@ private:
 private:
     NameAST( const NameAST& source );
     void operator = ( const NameAST& source );
+};
+
+class TypeParameterAST: public AST
+{
+public:
+    typedef std::auto_ptr<TypeParameterAST> Node;
+    enum { Type = NodeType_TypeParameter };
+
+public:
+    TypeParameterAST();
+
+    AST* kind() { return m_kind.get(); }
+    void setKind( AST::Node& kind );
+
+    NameAST* name() { return m_name.get(); }
+    void setName( NameAST::Node& name );
+
+private:
+    AST::Node m_kind;
+    NameAST::Node m_name;
+
+private:
+    TypeParameterAST( const TypeParameterAST& source );
+    void operator = ( const TypeParameterAST& source );
 };
 
 class DeclarationAST: public AST

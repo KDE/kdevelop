@@ -208,9 +208,9 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "GDKVAR" );
     lexer->addSkipWord( "G_GNUC_PRINTF", SkipWordAndArguments );
 
-
     // windows
     lexer->addSkipWord( "WINAPI" );
+    lexer->addSkipWord( "__declspec", SkipWordAndArguments );
     lexer->addSkipWord( "__stdcall" );
     lexer->addSkipWord( "__cdecl" );
     lexer->addSkipWord( "_cdecl" );
