@@ -680,7 +680,7 @@ CppCodeCompletion::completeText( )
 			expr = expr.left( idx ).stripWhiteSpace();
 		    }
 		    
-		    if( !expr.isNull() ){
+		    if( !expr.isEmpty() ){
 			kdDebug(9007) << "expr = " << expr << endl;
 		    } else {
 			kdDebug(9007) << "no expr found!!" << endl;
@@ -703,7 +703,7 @@ CppCodeCompletion::completeText( )
 		    
 		    QString s = nested.join( "::" );
 		    
-		    if( !scope.isNull() ){
+		    if( !scope.isEmpty() ){
 			scope += QString::fromLatin1( "::" ) + s;
 		    } else {
 			scope += s;
@@ -717,7 +717,7 @@ CppCodeCompletion::completeText( )
 			scope = scope.mid( 2 );
 		    }
 		    
-		    if( !scope.isNull() ){
+		    if( !scope.isEmpty() ){
 			SimpleVariable var;
 			this_type = typeName( scope );
 			var.type = this_type;
@@ -757,7 +757,7 @@ CppCodeCompletion::completeText( )
 		    expr = expr.stripWhiteSpace();
 		}
 		
-		if( !expr.isNull() ){
+		if( !expr.isEmpty() ){
 		    kdDebug(9007) << "expr = " << expr << endl;
 		} else {
 		    kdDebug(9007) << "no expr found!!" << endl;
