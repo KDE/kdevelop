@@ -9,15 +9,23 @@
  ***************************************************************************/
 #include <qlineedit.h>
 #include "fctemplateedit.h"
-
+#include <qpushbutton.h>
 
 FCTemplateEdit::FCTemplateEdit(QWidget *parent, const char *name):
     FCTemplateEditBase(parent, name)
 {
+    connect( templatename_edit, SIGNAL(textChanged ( const QString & )),
+             this, SLOT( slotTemplateNameChanged( )));
+    slotTemplateNameChanged();
 }
 
 FCTemplateEdit::~FCTemplateEdit()
 {
+}
+
+void FCTemplateEdit::slotTemplateNameChanged( )
+{
+    ok_button->setEnabled( !templatename_edit->text().isEmpty() );
 }
 
 void FCTemplateEdit::accept()
