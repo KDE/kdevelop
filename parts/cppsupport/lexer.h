@@ -196,6 +196,11 @@ public:
     void enableSkipWords();
     void disableSkipWords();
     
+    bool preprocessorEnabled() const;
+    void enablePreprocessor();
+    void disablePreprocessor();
+    
+    
     void resetSkipWords();
     void addSkipWord( const QString& word, SkipType skipType=SkipWord, const QString& str = QString::null );
 
@@ -222,7 +227,7 @@ private:
     int currentPosition() const;
 
     void tokenize();
-    void nextToken( Token& token );
+    void nextToken( Token& token, bool stopOnNewline=false );
     void addToken( const Token& tk );
     void nextChar();
     void nextChar( int n );
@@ -239,9 +244,33 @@ private:
     int findOperator2() const;
     bool eof() const;
     
-    // preprocessor
+    // preprocessor (based on an article of Al Stevens on Dr.Dobb's journal)
+    int testDefined();
+    int testIfLevel();
+    int macroDefined();
+    
+    int macroPrimary();
+    int macroMultiplyDivide();
+    int macroAddSubtract();
+    int macroRelational();
+    int macroEquality();
+    int macroBoolAnd();
+    int macroBoolXor();
+    int macroBoolOr();
+    int macroLogicalAnd();
+    int macroLogicalOr();
+    int macroExpression();
+    
     void handleDirective( const QString& directive );
-    void handleDefineDirective( Macro& macro );
+    void processDefine( Macro& macro );
+    void processElse();
+    void processElif();
+    void processEndif();
+    void processIf();
+    void processIfdef();
+    void processIfndef();
+    void processInclude();
+    void processUndef();
 
 private:
     Driver* m_driver;
@@ -254,12 +283,17 @@ private:
     bool m_recordComments;
     bool m_recordWhiteSpaces;
     bool m_startLine;
-    QValueStack<int> m_directiveStack;
     QMap< QString, QPair<SkipType, QString> > m_words;
 
     int m_currentLine;
     int m_currentColumn;
     bool m_skipWordsEnabled;
+
+    // preprocessor
+    QMemArray<bool> m_skipping;
+    QMemArray<bool> m_trueTest;
+    int m_ifLevel;
+    bool m_preprocessorEnabled;
 
 private:
     Lexer( const Lexer& source );
@@ -601,6 +635,22 @@ inline void Lexer::disableSkipWords()
 {
     m_skipWordsEnabled = false;
 }
+
+inline bool Lexer::preprocessorEnabled() const
+{
+    return m_preprocessorEnabled;
+}
+
+inline void Lexer::enablePreprocessor()
+{
+    m_preprocessorEnabled = true;
+}
+
+inline void Lexer::disablePreprocessor()
+{
+    m_preprocessorEnabled = false;
+}
+
 
 inline QString Lexer::toString( const Token& token ) const
 {

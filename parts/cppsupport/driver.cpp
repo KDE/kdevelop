@@ -253,3 +253,8 @@ void Driver::setupParser( Parser * parser )
 {
     Q_UNUSED( parser );
 }
+
+void Driver::removeMacro( const QString& fileName, const QString& macroName )
+{
+    findOrInsertMacroList( fileName ).remove( macroName );
+}

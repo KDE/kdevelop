@@ -143,6 +143,8 @@ public:
     QMap<QString, Macro> macros( const QString& fileName ) const;
     QValueList<Problem> problems( const QString& fileName ) const;
 
+    virtual void removeMacro( const QString& fileName, const QString& macroName );
+
 protected:
     virtual void setupLexer( Lexer* lexer );
     virtual void setupParser( Parser* parser );
