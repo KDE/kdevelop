@@ -72,8 +72,6 @@ private slots:
     void slotExecute();
     void updateTargetMenu();
     void targetMenuActivated(int id);
-    void targetObjectFilesMenuActivated(int id);
-    void targetOtherFilesMenuActivated(int id);
     void updateMakeEnvironmentsMenu();
     void makeEnvironmentsMenuActivated(int id);
     void slotCommandFinished( const QString& command );
@@ -89,12 +87,8 @@ private:
     QString m_projectName;
     QStringList m_sourceFiles;
     QPopupMenu *m_targetMenu;
-    QPopupMenu *m_targetObjectFilesMenu;
-    QPopupMenu *m_targetOtherFilesMenu;
     KSelectAction *m_makeEnvironmentsSelector;
     QStringList m_targets;
-    QStringList m_targetsObjectFiles;
-    QStringList m_targetsOtherFiles;
     QStringList m_contextAddFiles;
     QStringList m_contextRemoveFiles;
     QString m_contextDirName;
