@@ -41,7 +41,10 @@ if (-d "debian/doc-base") {
         if (! -d "debian/tmp/usr/share/doc-base") {
                   mkdir("-p", "debian/tmp/usr/share/doc-base");
         }
-        cp( "-a", <debian/doc-base/*>, "debian/tmp/usr/share/doc-base") ;
+        while (<debian/doc-base/*>) {
+        	  cp( "-a", $_, "debian/tmp/usr/share/doc-base")
+                    unless (-d $_);
+        }
 }
 
 
