@@ -2,9 +2,10 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop 3</application>">
   <!ENTITY apache "<application>Apache</application>">
-  <!ENTITY appwizard "application wizard">
+  <!ENTITY appwizard "Application Wizard">
   <!ENTITY autoconf "<command>autoconf</command>">
   <!ENTITY automake "<command>automake</command>">
+  <!ENTITY automanag "Automake Manager">
   <!ENTITY ctags "<command>ctags</command>">
   <!ENTITY CVS "<application>CVS</application>">
   <!ENTITY cvs "<acronym>CVS</acronym>">
@@ -38,7 +39,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2003-09-27</date>
+  <date>2003-09-28</date>
   <releaseinfo>3.0.0a7</releaseinfo>
 
   <authorgroup>
@@ -110,7 +111,10 @@ You will here find information on the following topics:
 </para>
 <itemizedlist>
   <listitem><para>
-  <link linkend="unixdev">Development on UNIX</link> - a historical overview on UNIX program development, the main tools necessary and why you need an <acronym>IDE</acronym>.
+  <link linkend="nutshell">In a nutshell</link> - a quick reference of the most used commands and actions.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="unixdev">Development on UNIX</link> - a historical overall view of UNIX program development, the main tools necessary and why you need an <acronym>IDE</acronym>.
   </para></listitem>
   <listitem><para>
   <link linkend="kdevelopinstall">Installing &kdevelop;</link> - tells you where to obtain &kdevelop; and how to get it up and running.
@@ -166,6 +170,127 @@ You will here find information on the following topics:
   </para></listitem>
 </itemizedlist>
 </chapter>
+
+<!-- ====================================================================== -->
+
+<!-- ### Traditionally, most of this stuff will have be put in a FAQ section. It  is more useful, however, to put it at the very start of a manual, as this is the place the (inexperienced) user first looks for. -->
+
+<chapter id="nutshell">
+<title>In a nutshell</title>
+
+<para>
+The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept.
+</para>
+
+<itemizedlist>
+  <title>Projects</title>
+  <listitem>
+    <formalpara id="nutshell-new-project">
+    <title>Create new project</title>
+
+    <para>
+    <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project...</guimenuitem></menuchoice> will start the <link linkend="appwizard">&appwizard;</link>
+    </para>
+    </formalpara>
+  </listitem>
+</itemizedlist>
+
+<itemizedlist>
+  <title>&automanag;</title>
+    <listitem>
+      <formalpara id="nutshell-new-project-file">
+      <title>Create new files in a project</title>
+
+      <indexterm zone="nutshell-new-project-file">
+        <primary>project</primary>
+        <secondary>create new project</secondary>
+        <tertiary>file</tertiary></indexterm>
+      <indexterm zone="nutshell-new-project-file">
+        <primary>project</primary>
+        <secondary>new file</secondary></indexterm>
+      <indexterm zone="nutshell-new-project-file">
+        <primary>new file</primary>
+        <secondary>project</secondary></indexterm>
+      <indexterm zone="nutshell-new-project-file">
+        <primary>file</primary>
+        <secondary>new in project</secondary></indexterm>
+
+      <para>
+      Select the subproject in the upper half of the &automanag;, then right click in the lower half on the groups title you want to have the files added and select <guimenuitem>Create New File...</guimenuitem>.
+      </para>
+      </formalpara>
+    </listitem>
+
+    <listitem>
+      <formalpara id="nutshell-add-project-file">
+      <title>Add existing files to a project</title>
+
+      <indexterm zone="nutshell-add-project-file">
+        <primary>project</primary>
+        <secondary>add existing file</secondary></indexterm>
+      <indexterm zone="nutshell-add-project-file">
+        <primary>add file</primary>
+        <secondary>project</secondary></indexterm>
+      <indexterm zone="nutshell-add-project-file">
+        <primary>file</primary>
+        <secondary>add to project</secondary></indexterm>
+
+      <para>
+      Select the subproject in the upper half of the &automanag;, then right click in the lower half on the groups title you want to have the files added and select <guimenuitem>Add Existing Files...</guimenuitem>.
+      </para>
+      </formalpara>
+    </listitem>
+
+    <listitem>
+      <formalpara id="nutshell-del-project-file">
+      <title>Remove a file from a project</title>
+
+      <indexterm zone="nutshell-del-project-file">
+        <primary>project</primary>
+        <secondary>remove file</secondary></indexterm>
+      <indexterm zone="nutshell-del-project-file">
+        <primary>remove file</primary>
+        <secondary>project</secondary></indexterm>
+      <indexterm zone="nutshell-del-project-file">
+        <primary>file</primary>
+        <secondary>remove from project</secondary></indexterm>
+
+      <para>
+      Select the subproject in the upper half of the &automanag;, then in the lower half open the groups list you want to have the file removed from, right click on the file in this list and select <guimenuitem>Remove</guimenuitem>.
+      </para>
+      </formalpara>
+    </listitem>
+  </itemizedlist>
+
+<itemizedlist>
+  <title>Compile/make problems</title>
+
+  <listitem>
+    <formalpara id="nutshell-autoconf-problem">
+    <title><quote>Wrong <command>autoconf</command> version</quote> etc. error</title>
+
+    <indexterm zone="nutshell-autoconf-problem">
+      <primary>compiling</primary>
+      <secondary>problems</secondary>
+      <tertiary>autoconf</tertiary></indexterm>
+    <indexterm zone="nutshell-autoconf-problem">
+      <primary>compiling</primary>
+      <secondary>problems</secondary>
+      <tertiary>old versions</tertiary></indexterm>
+    <indexterm zone="nutshell-autoconf-problem">
+      <primary>configure</primary>
+      <secondary>problems</secondary></indexterm>
+    <indexterm zone="nutshell-autoconf-problem">
+      <primary>autoreconf</primary></indexterm>
+
+    <para>
+    There are several error messages concerning too old versions of <application>autoconf</application> etc. prohibiting <command>configure</command> to work properly. Run <command>autoreconf</command> in the directory tree where the <filename>configure.in</filename> files in question are. This command will try to update the information in the &GNU; Build System files. See <command>man autoreconf</command> for more information.
+    </para>
+    </formalpara>
+  </listitem>
+</itemizedlist>
+
+</chapter> <!-- nutshell -->
 
 <!-- ====================================================================== -->
 
@@ -1127,7 +1252,7 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 <title>How to obtain a &kdevelop; API documentation</title>
 
 <para>
-<acronym>API</acronym> is the short form of <quote>Application Program Interface</quote>. Actually such an application program interface is a series of descriptions (i.e. calling conventions) by which an application program accesses operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, to be used like a dictionary to navigate the sources.
+<acronym>API</acronym> is the short form of <quote>Application Program Interface</quote>. Actually such an application program interface is a series of descriptions (i.e. calling conventions) by which an application program accesses operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
 </para>
 <para>
 There is a version of the most current API available at the <ulink url="http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/index.html">KDevelop-Home website</ulink>. It will be automaticaly updated every 24 hours so you can keep up.
@@ -1628,10 +1753,11 @@ Let's look at all this in more detail now ...
 
 <indexterm zone="newprojects-start">
   <primary>dialog</primary>
-  <secondary>Create New Project</secondary></indexterm>
+  <secondary>create new project</secondary></indexterm>
 <indexterm zone="newprojects-start">
   <primary>project</primary>
-  <secondary>Create New Project dialog</secondary></indexterm>
+  <secondary>create new project</secondary>
+  <tertiary>dialog</tertiary></indexterm>
 <indexterm zone="newprojects-start">
   <primary>project</primary>
   <secondary>templates</secondary></indexterm>
