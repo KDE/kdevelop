@@ -70,7 +70,7 @@ public:
 ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *parent, const char *name)
     : ConfigureOptionsWidgetBase(parent, name)
 {
-    config_combo->setValidator(new QRegExpValidator(QRegExp("^[A-Za-z]"), this));
+    config_combo->setValidator(new QRegExpValidator(QRegExp("^[A-Za-z]*"), this));
 
     m_part = part;
 
@@ -181,7 +181,7 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
             }
         }
     }
-    
+
     ServiceComboBox::setCurrentText(cservice_combo, ccompiler, cservice_names);
     ServiceComboBox::setCurrentText(cxxservice_combo, cxxcompiler, cxxservice_names);
     ServiceComboBox::setCurrentText(f77service_combo, f77compiler, f77service_names);
@@ -269,7 +269,7 @@ void ConfigureOptionsWidget::configChanged(const QString &config)
 {
     if (config == currentConfig || !allConfigs.contains(config))
         return;
-    
+
     if (!currentConfig.isNull() && dirty)
         saveSettings(currentConfig);
 
@@ -286,7 +286,7 @@ void ConfigureOptionsWidget::configChanged(const QString &config)
 void ConfigureOptionsWidget::configAdded()
 {
     QString config = config_combo->currentText();
-    
+
     allConfigs.append(config);
 
     config_combo->clear();
@@ -307,7 +307,7 @@ void ConfigureOptionsWidget::configRemoved()
 
     config_combo->clear();
     config_combo->insertStringList(allConfigs);
-    
+
     currentConfig = QString::null;
     configChanged("default");
 }
