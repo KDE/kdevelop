@@ -1,3 +1,8 @@
+2001-06-02  rokrau@yahoo.com
+    * some minor reorganization of the ctags code and a little enhancement
+      so that not only cpp files but also cxx files are found in header/source
+      switching
+
 2001-06-01  jbb <jbb@kdevelop.org>
     * Patch from August Hörandl <august.hoerandl@gmx.at>
         just a little "adjustment" to the clone functionalities "templates"
