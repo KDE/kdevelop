@@ -3,7 +3,6 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Tool to design and test regular expressions against common regexp syntaxes.
-Comment[xx]=xxTool to design and test regular expressions against common regexp syntaxes.xx
 Name=KDevRegexpTest
 Name[sv]=KDevelop test av reguljära uttryck
 Name[xx]=xxKDevRegexpTestxx
@@ -14,5 +13,6 @@ GenericName[sv]=Test av reguljära uttryck
 GenericName[xx]=xxRegular Expression Testerxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevregexptest
+X-KDevelop-Version=1
 X-KDevelop-Scope=Global
 

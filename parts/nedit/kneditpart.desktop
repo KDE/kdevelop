@@ -1,11 +1,20 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=NEdit support
-Comment[fr]=Un module externe pour la gestion du programme � nedit �.
+Comment[hu]=NEdit-támogatás
+Comment[pt_BR]=Suporte ao NEdit
+Comment[sv]=Nedit-stöd
+Comment[xx]=xxNEdit supportxx
 Name=NEdit
+Name[sv]=Nedit
+Name[xx]=xxNEditxx
 GenericName=NEdit support
-GenericName[fr]=Gestion de NEdit
+GenericName[hu]=NEdit-támogatás
+GenericName[pt_BR]=Suporte ao NEdit
+GenericName[sv]=Nedit-stöd
+GenericName[xx]=xxNEdit supportxx
 X-KDE-Library=libkneditpart
+X-KDevelop-Version=1
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;text/x-diff;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KTextEditor/Document,KTextEditor/Editor
 Type=Service

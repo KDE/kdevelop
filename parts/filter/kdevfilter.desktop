@@ -3,7 +3,6 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Provides a way of manipulating editor text using commandline tools. Appears in the Tools menu.
-Comment[xx]=xxProvides a way of manipulating text using commandline tools. Appears in the Tools menu.xx
 Name=KDevFilter
 Name[sv]=KDevelop filter
 Name[xx]=xxKDevFilterxx
@@ -14,5 +13,6 @@ GenericName[sv]=Skalfiltrering och infogning
 GenericName[xx]=xxShell Filtering and Insertionxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevfilter
+X-KDevelop-Version=1
 X-KDevelop-Scope=Global
 

@@ -42,6 +42,9 @@ namespace KParts
     class Part;
 }
 
+// increase this if you want old plugins to stop working
+#define KDEVELOP_PLUGIN_VERSION 1
+
 /**
  * This is the base class for all components like doc tree view, LFV, RFV
  * and so on.

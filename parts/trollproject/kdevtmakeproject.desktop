@@ -2,11 +2,20 @@
 Type=Service
 Exec=blubb
 Comment=TMake Project
-Comment[fr]=Un module externe pour la gestion de projet avec le programme « TMake ».
+Comment[hu]=TMake-projekt
+Comment[pt_BR]=Projeto TMake
+Comment[sv]=Tmake-projekt
+Comment[xx]=xxTMake Projectxx
 Name=KDevTMakeProject
+Name[sv]=KDevelop Tmake-projekt
+Name[xx]=xxKDevTMakeProjectxx
 GenericName=TMake Project
-GenericName[fr]=Projet avec TMake
+GenericName[hu]=TMake-projekt
+GenericName[pt_BR]=Projeto TMake
+GenericName[sv]=Tmake-projekt
+GenericName[xx]=xxTMake Projectxx
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevtrollproject
+X-KDevelop-Version=1
 X-KDevelop-Args=TMake
 

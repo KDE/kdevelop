@@ -1,13 +1,22 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=Bug Tracking Application
-Comment[fr]=Un module externe pour la recherche de bogues dans une application.
+Comment[hu]=Hibanyilvántartó alkalmazás
+Comment[pt_BR]=Aplicativo de Rastreamento de Erro
+Comment[sv]=Program för att spåra fel
+Comment[xx]=xxBug Tracking Applicationxx
 Exec=blubb
 Icon=find
 Name=KDevBugList
+Name[sv]=KDevelop fellista
+Name[xx]=xxKDevBugListxx
 GenericName=Bug Tracking Application
-GenericName[fr]=Recherche de bogues
+GenericName[hu]=hibanyilvántartó
+GenericName[pt_BR]=Aplicativo de Rastreamento de Erro
+GenericName[sv]=Program för att spåra fel
+GenericName[xx]=xxBug Tracking Applicationxx
 ServiceTypes=KDevelop/Plugin
 Type=Service
 X-KDE-Library=libkdevbuglist
+X-KDevelop-Version=1
 X-KDevelop-Scope=Global

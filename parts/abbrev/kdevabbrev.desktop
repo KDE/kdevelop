@@ -3,7 +3,6 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Provides support for customizable abbrevations - short words which expand into commonly needed code structures.
-Comment[xx]=xxProvides support for customizable abbrevations - short words which expand into commonly needed code structures.xx
 Name=KDevAbbrev
 Name[sv]=KDevelop förkortningar
 Name[xx]=xxKDevAbbrevxx
@@ -14,5 +13,6 @@ GenericName[sv]=Expansion av förkortningar
 GenericName[xx]=xxAbbrevation Expansionxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevabbrev
+X-KDevelop-Version=1
 X-KDevelop-Scope=Global
 

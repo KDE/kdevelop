@@ -2,7 +2,14 @@
 Type=Service
 Exec=foobar
 Comment=Embeddable HTMLHelp Viewer
+Comment[hu]=Beágyazható HTML-es dokumentációnézegető
+Comment[pt_BR]=Visualizador de Ajuda HTML Embutido
+Comment[sv]=Inbäddningsbar HTML-hjälpvisning
+Comment[xx]=xxEmbeddable HTMLHelp Viewerxx
 MimeType=application/chm
 Name=KChmPart
+Name[sv]=Kchm-del
+Name[xx]=xxKChmPartxx
 ServiceTypes=KParts/ReadOnlyPart,Browser/View
 X-KDE-Library=libkchmpart
+X-KDevelop-Version=1

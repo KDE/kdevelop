@@ -40,7 +40,7 @@ namespace
   template <class ComponentType>
   ComponentType *loadDefaultPart( const QString &serviceType )
   {
-    KTrader::OfferList offers = KTrader::self()->query( serviceType, QString::null );
+    KTrader::OfferList offers = KTrader::self()->query(serviceType, QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
     KTrader::OfferList::ConstIterator serviceIt = offers.begin();
     for ( ; serviceIt != offers.end(); ++serviceIt ) {
       KService::Ptr service = *serviceIt;
@@ -48,7 +48,7 @@ namespace
       ComponentType *part = KParts::ComponentFactory
         ::createInstanceFromService< ComponentType >( service, API::getInstance(), 0,
                                                       PluginController::argumentsFromService( service ) );
-      
+
       if ( part )
         return part;
     }
@@ -236,8 +236,8 @@ KService::List PluginController::pluginServices( const QString &scope )
     QString constraint;
 
     if ( !scope.isEmpty() )
-	constraint = QString::fromLatin1( "[X-KDevelop-Scope] == '%1'" ).arg( scope );
-    return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ), 
+	constraint = QString::fromLatin1( "[X-KDevelop-Scope] == '%1' and [X-KDevelop-Version] == %2" ).arg( scope ).arg(KDEVELOP_PLUGIN_VERSION);
+    return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ),
 	                           constraint );
 }
 

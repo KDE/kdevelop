@@ -3,6 +3,14 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 Name=KDevelop Plugin
+Name[hu]=KDevelop-bővítőmodul
+Name[pt_BR]=Plugin do KDevelop
+Name[sv]=KDevelop insticksmodul
+Name[xx]=xxKDevelop Pluginxx
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
 
 [PropertyDef::X-KDevelop-Scope]
 Type=QString

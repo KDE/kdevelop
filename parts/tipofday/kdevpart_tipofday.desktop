@@ -18,4 +18,5 @@ GenericName[xx]=xxTip of the Dayxx
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtipofday
+X-KDevelop-Version=1
 X-KDevelop-Scope=Core
