@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Type=Service
-Exec=blubb
-Comment=Plugin Selector
-Name=KDevPartSelector
-Icon=kdevelop
-ServiceTypes=KDevelop/Part
-X-KDE-Library=libkdevpartselector
