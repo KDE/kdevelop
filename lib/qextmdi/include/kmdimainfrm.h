@@ -497,6 +497,11 @@ public slots:
    */
    virtual void switchToTabPageMode();
    virtual void finishTabPageMode();
+   /**
+    * Docks all view windows. Toolviews use dockcontainers
+    */
+    virtual void switchToIDEAlMode();
+    virtual void finishIDEAlMode();
    /*
    * @return if the view taskbar should be shown if there are MDI views
    */

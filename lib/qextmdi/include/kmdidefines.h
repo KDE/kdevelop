@@ -78,7 +78,8 @@ namespace KMdi
       Hide        = 4,
       Detach      = 8,
       ToolWindow  = 16,
-      UseQextMDISizeHint = 32
+      UseQextMDISizeHint = 32,
+      AddWindowFlags = 0xff
    };
 
    enum FrameDecor {
@@ -91,7 +92,8 @@ namespace KMdi
    enum MdiMode {
       ToplevelMode   = 0,
       ChildframeMode = 1,
-      TabPageMode    = 2
+      TabPageMode    = 2,
+      IDEAlMode      = 3
    };
 
 }; //namespace

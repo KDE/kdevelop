@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef _WIN_MINBUTTON_XPM_
+#define _WIN_MINBUTTON_XPM_
+
 static const char *win_minbutton[] = {
 /* width height num_colors chars_per_pixel */
 "    16    14        4            1",
@@ -23,3 +26,5 @@ static const char *win_minbutton[] = {
 "b##############.",
 "................"
 };
+
+#endif

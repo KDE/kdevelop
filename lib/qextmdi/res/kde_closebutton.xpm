@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef _KDE_CLOSEBUTTON_XPM_
+#define _KDE_CLOSEBUTTON_XPM_
+
 static const char *kde_closebutton[] = {
 /* width height num_colors chars_per_pixel */
 "16 16 3 1",
@@ -23,3 +26,5 @@ static const char *kde_closebutton[] = {
 "  .X        .X  ",
 "                ",
 "                "};
+
+#endif

@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef _WIN_UNDOCKBUTTON_XPM_
+#define _WIN_UNDOCKBUTTON_XPM_
+
 static const char* win_undockbutton[]={
 "16 14 4 1",
 "b c #808080",
@@ -19,3 +22,5 @@ static const char* win_undockbutton[]={
 ".aaaaaaaaaaaaab#",
 ".bbbbbbbbbbbbbb#",
 "################"};
+
+#endif

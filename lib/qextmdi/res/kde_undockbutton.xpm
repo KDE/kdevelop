@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef _KDE_UNDOCKBUTTON_XPM_
+#define _KDE_UNDOCKBUTTON_XPM_
+
 static const char *kde_undockbutton[]={
 "16 16 3 1",
 ". c None",
@@ -20,3 +23,5 @@ static const char *kde_undockbutton[]={
 "............#...",
 "................",
 "................"};
+
+#endif

@@ -40,6 +40,7 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <qtabwidget.h>
+#include <kipc.h>
 #endif
 
 #include <qtoolbutton.h>
@@ -1059,7 +1060,11 @@ void KMdiMainFrm::switchToToplevelMode()
    }
    else if (oldMdiMode == KMdi::TabPageMode) { // if tabified, release all views from their docking covers
       finishTabPageMode();
+    } else if (m_mdiMode == KMdi::IDEAlMode) {
+      finishIDEAlMode();
    }
+
+//   if (hasMenuBar()) menuBar()->setTopLevelMenu(false);
 
    // 3.) undock all these found oldest ancestors (being KDockWidgets)
    QPtrListIterator<KDockWidget> it3( rootDockWidgetList);
@@ -1121,6 +1126,7 @@ void KMdiMainFrm::switchToToplevelMode()
 void KMdiMainFrm::finishToplevelMode()
 {
    m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
+   //KIPC::sendMessage(KIPC::ToolbarStyleChanged,winId());
 }
 
 /**
@@ -1148,7 +1154,10 @@ void KMdiMainFrm::switchToChildframeMode()
    }
    else if (m_mdiMode == KMdi::ToplevelMode) {
       finishToplevelMode();
+   } else if (m_mdiMode == KMdi::IDEAlMode) {
+      finishIDEAlMode();
    }
+
 
    if (!m_pDockbaseAreaOfDocumentViews) {
       // cover KMdi's childarea by a dockwidget
@@ -1245,6 +1254,8 @@ void KMdiMainFrm::switchToTabPageMode()
    }
    else if (m_mdiMode == KMdi::ToplevelMode) {
       finishToplevelMode();
+   } else if (m_mdiMode == KMdi::IDEAlMode) {
+      finishIDEAlMode();
    }
 
    // resize to childframe mode size of the mainwindow if we were in toplevel mode
@@ -1325,6 +1336,135 @@ void KMdiMainFrm::finishTabPageMode()
 {
    // if tabified, release all views from their docking covers
    if (m_mdiMode == KMdi::TabPageMode) {
+      m_pClose->hide();
+      QObject::disconnect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
+
+      QPtrListIterator<KMdiChildView> it( *m_pWinList);
+      for( ; it.current(); ++it) {
+         KMdiChildView* pView = it.current();
+         if( pView->isToolView())
+            continue;
+         QSize mins = pView->minimumSize();
+         QSize maxs = pView->maximumSize();
+         QSize sz = pView->size();
+         QWidget* pParent = pView->parentWidget();
+         QPoint p(pParent->mapToGlobal(pParent->pos())-pParent->pos()+m_undockPositioningOffset);
+         pView->reparent(0,0,p);
+         pView->reparent(0,0,p);
+         pView->resize(sz);
+         pView->setMinimumSize(mins.width(),mins.height());
+         pView->setMaximumSize(maxs.width(),maxs.height());
+         ((KDockWidget*)pParent)->undock(); // this destroys the dockwiget cover, too
+         pParent->close();
+         delete pParent;
+         if (centralWidget() == pParent) {
+            setCentralWidget(0L); // avoid dangling pointer
+         }
+      }
+      m_pTaskBar->switchOn(TRUE);
+   }
+}
+
+
+/**
+ * Docks all view windows (Windows-like)
+ */
+void KMdiMainFrm::switchToIDEAlMode()
+{
+   KMdiChildView* pRemActiveWindow = activeWindow();
+
+   if (m_mdiMode == KMdi::IDEAlMode)
+      return;  // nothing need to be done
+
+   // make sure that all MDI views are detached
+   if (m_mdiMode == KMdi::ChildframeMode) {
+      finishChildframeMode();
+   }
+   else if (m_mdiMode == KMdi::ToplevelMode) {
+      finishToplevelMode();
+   } else if (m_mdiMode == KMdi::TabPageMode) {
+      finishTabPageMode();
+   }
+
+   // resize to childframe mode size of the mainwindow if we were in toplevel mode
+   if( (m_mdiMode == KMdi::ToplevelMode) && !parentWidget()) {
+      setMinimumHeight( m_oldMainFrmMinHeight);
+      setMaximumHeight( m_oldMainFrmMaxHeight);
+      resize( width(), m_oldMainFrmHeight);
+      m_oldMainFrmHeight = 0;
+      //qDebug("TopLevelMode off");
+      emit leftTopLevelMode();
+      QApplication::sendPostedEvents();
+
+      // restore the old dock szenario which we memorized at the time we switched to toplevel mode
+      QDomElement oldDockState = m_pTempDockSession->namedItem("cur_dock_state").toElement();
+      readDockConfig( oldDockState);
+   }
+
+   if (m_pDockbaseOfTabPage != m_pDockbaseAreaOfDocumentViews) {
+      delete m_pDockbaseOfTabPage;
+      m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
+   }
+
+   m_mdiMode = KMdi::IDEAlMode;
+
+   // tabify all MDI views covered by a KDockWidget
+   KDockWidget* pCover = 0L;
+   QPtrListIterator<KMdiChildView> it4( *m_pWinList);
+   for( ; it4.current(); ++it4) {
+      KMdiChildView* pView = it4.current();
+      if( pView->isToolView())
+         continue;
+      const QPixmap& wndIcon = pView->icon() ? *(pView->icon()) : QPixmap();
+      pCover = createDockWidget( pView->name(),
+                                 wndIcon,
+                                 0L,  // parent
+                                 pView->caption(),
+                                 pView->tabCaption());
+      pCover->setWidget( pView);
+      pCover->setToolTipString( pView->caption());
+      m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockFullSite);
+      // dock as tab-page
+      pCover->manualDock( m_pDockbaseOfTabPage, KDockWidget::DockCenter);
+      // update the dockbase
+      pCover->setEnableDocking(KDockWidget::DockNone);
+      if (m_pDockbaseOfTabPage == m_pDockbaseAreaOfDocumentViews) {
+         m_pMdi->reparent(0,QPoint(0,0));
+         m_pDockbaseAreaOfDocumentViews->close();
+         delete m_pDockbaseAreaOfDocumentViews;
+         m_pDockbaseAreaOfDocumentViews = 0L;
+         QApplication::sendPostedEvents();
+      }
+      else {
+         m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockCorner);
+      }
+      m_pDockbaseOfTabPage = pCover;
+      setMainDockWidget(pCover);
+   }
+   if (pCover) {
+      if (m_pWinList->count() > 1) { // note: with only 1 page we haven't already tabbed widgets
+         // set the first page as active page
+         QTabWidget* pTab = (QTabWidget*) pCover->parentWidget()->parentWidget();
+         if (pTab)
+            pTab->showPage(pRemActiveWindow);
+      }
+      pRemActiveWindow->setFocus();
+   }
+
+   m_pTaskBar->switchOn(FALSE);
+
+   QObject::connect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
+   if (m_pWinList->count() > 0) {
+      m_pClose->show();
+   }
+   //qDebug("TabPageMode on");
+}
+
+
+void KMdiMainFrm::finishIDEAlMode()
+{
+   // if tabified, release all views from their docking covers
+   if (m_mdiMode == KMdi::IDEAlMode) {
       m_pClose->hide();
       QObject::disconnect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
 
@@ -1728,6 +1868,7 @@ void KMdiMainFrm::fillWindowMenu()
    m_pMdiModeMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
    m_pMdiModeMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
    m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
+   m_pMdiModeMenu->insertItem(tr("I&DEAl  mode"), this, SLOT(switchToIDEAlMode()));
    switch (m_mdiMode) {
    case KMdi::ToplevelMode:
       m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
@@ -1737,6 +1878,9 @@ void KMdiMainFrm::fillWindowMenu()
       break;
    case KMdi::TabPageMode:
       m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
+      break;
+   case KMdi::IDEAlMode:
+      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(3),TRUE);
       break;
    default:
       break;

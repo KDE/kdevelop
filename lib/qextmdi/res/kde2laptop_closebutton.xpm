@@ -1,4 +1,7 @@
 /* XPM */
+#ifndef _KDE2LAPTOP_CLOSEBUTTON_XPM_
+#define _KDE2LAPTOP_CLOSEBUTTON_XPM_
+
 static const char* kde2laptop_closebutton[]={
 "20 8 2 1",
 ". s None c None",
@@ -11,3 +14,5 @@ static const char* kde2laptop_closebutton[]={
 ".......######.......",
 "......###..###......",
 ".......#....#......."};
+
+#endif
