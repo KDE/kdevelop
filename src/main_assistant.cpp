@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
   KAboutData aboutData("kdevassistant", I18N_NOOP("KDevelop Assistant"),
                        VERSION, description, KAboutData::License_GPL,
                        I18N_NOOP("(c) 1999-2004, The KDevelop developers"), "", "http://www.kdevelop.org");
-  aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Release coordinator, Overall improvements, Pascal support, C++ support, New File and Documentation parts"), "cloudtemple@mksat.net");
+  aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Release coordinator, Overall improvements, Pascal support, C++ support, New File and Documentation parts"), "adymo@mksat.net");
   aboutData.addAuthor("Amilcar do Carmo Lucas", I18N_NOOP("Release coordinator, API documentation, Doxygen and autoproject patches"), "amilcar@ida.ing.tu-bs.de");
   aboutData.addAuthor("Bernd Gehrmann", I18N_NOOP("Initial idea, basic architecture, much initial source code"), "bernd@kdevelop.org");
   aboutData.addAuthor("Caleb Tennis", I18N_NOOP("KTabBar, bugfixes"), "caleb@aei-tech.com");
