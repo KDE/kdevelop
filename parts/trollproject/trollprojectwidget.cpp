@@ -1513,6 +1513,9 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
     case GroupItem::Images:
       m_shownSubproject->images.append(filename);
       break;
+    case GroupItem::Translations:
+      m_shownSubproject->translations.append(filename);
+      break;
     /*
     case GroupItem::InstallObject:
       GroupItem *gitem = 0;
