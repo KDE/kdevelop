@@ -1,3 +1,7 @@
+2000-03-11 Falk Brettschneider <gigafalk@yahoo.com>
+	* synchronized with latest QextMDI cvs version, some important bugfixes, addWindow interface changed
+	* synchronized with DockWidgets (version 29/02/2000), dockback button temporary lost
+
 2000-03-11 Ralf Nolden <rnolden@kdevelop.de>
         * fixed kdevelop to make it compile again, fixed docbrowser to resize with htmlview
 
