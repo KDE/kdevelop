@@ -257,7 +257,6 @@ The information in this chapter is meant as a quick reference for a head start o
       There is no direct way to create a custom project (&ie; a project which does use its own makefiles). Use <menuchoice><guimenu>Project</guimenu> <guimenuitem>Import Existing Project</guimenuitem></menuchoice> instead. Remember to set the appropriate <guilabel>Project Type</guilabel>, labeled by an additional <quote>(Custom Makefiles)</quote>, in the dialog.
       </para>
     </formalpara>
-    <para>If there is no existing project to import, create a new automake-based one first, then re-import it as custom project.</para>
   </listitem>
 
   <listitem>
