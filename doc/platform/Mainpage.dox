@@ -56,10 +56,7 @@ KDevelop Technotes</a>.
    <i>A collection of facilities to store and edit the properties of various objects.</i>
 - <a href="kdevcatalog/html/index.html"><b>Catalog Library</b></a>
    (<a href="kdevcatalog/html/classes.html">classes</a>)\n
-   <i>The persistant symbol store library working with BerleleyDb backend.</i>
-- <a href="/html/index.html"><b></b></a>
-   (<a href="/html/classes.html">classes</a>)\n
-   <i></i>
+   <i>The persistant symbol store library working with BerkeleyDb backend.</i>
 .
 
 \section designerapi GUI Designer Integration API
@@ -74,7 +71,43 @@ KDevelop Technotes</a>.
 
 \section pluginsapi Platform Plugins API
 
+- <a href="kdevdocinterfaces/html/index.html"><b>Documentation Part Interfaces Library</b></a>
+   (<a href="kdevdocinterfaces/html/classes.html">classes</a>)\n
+   <i>Interfaces to implement KDevelop documentation plugins.</i>
+.
+
+\section langapi Programming Language Support API
+
+- <a href="kdevlanginterfaces/html/index.html"><b>Language Support Interfaces Library</b></a>
+   (<a href="kdevlanginterfaces/html/classes.html">classes</a>)\n
+   <i>Interfaces for KDevelop language support facilities.</i>
+- <a href="kdevlangdebugger/html/index.html"><b>Debugger Support Library</b></a>
+   (<a href="kdevlangdebugger/html/classes.html">classes</a>)\n
+   <i>Classes to implement debugger support for a programming language.</i>
+.
+
+\section buildtoolapi Buildtool Support API
+
+- <a href="kdevbtbase/html/index.html"><b>Buildtool Base Library</b></a>
+   (<a href="kdevbtbase/html/classes.html">classes</a>)\n
+   <i>Base classes for KDevelop builtool support plugins.</i>
+- <a href="kdevpminterfaces/html/index.html"><b>Project Manager Interfaces Library</b></a>
+   (<a href="kdevpminterfaces/html/classes.html">classes</a>)\n
+   <i>Interfaces to implement plugins for the KDevelop generic project manager.</i>
+- <a href="kdevbtwidgets/html/index.html"><b>Buildtool Widgets Library</b></a>
+   (<a href="kdevbtwidgets/html/classes.html">classes</a>)\n
+   <i>Widgets commonly used in buildtool support plugins.</i>
+.
+
 \section shellapi Shell API
+
+- <a href="kdevshellsrc/html/index.html"><b>Generic Shell</b></a>
+   (<a href="kdevshellsrc/html/classes.html">classes</a>)\n
+   <i>The Shell - a profile-based implementation of KDevelop plugin architecture.</i>
+- <a href="kdevprofileslib/html/index.html"><b>Shell Profiles Library</b></a>
+   (<a href="kdevprofileslib/html/classes.html">classes</a>)\n
+   <i>Plugin profiles implementation for KDevelop shell.</i>
+.
 
 \section PlannedTasks Planned tasks
 
