@@ -436,7 +436,7 @@ void CKAppWizard::initPages()
   datalink->setBackgroundMode( QWidget::PaletteBackground );
   datalink->setFontPropagation( QWidget::NoChildren );
   datalink->setPalettePropagation( QWidget::NoChildren );
-  datalink->setText( i18n(".kdelnk-File") );
+  datalink->setText( i18n(".desktop-File") );
   datalink->setAutoRepeat( FALSE );
   datalink->setAutoResize( FALSE );
 
