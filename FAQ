@@ -1,64 +1,376 @@
 KDevelop-FAQ
 
 Q: The configure script doesn't find my Qt library.
-A: Use the options 
+A: Use the options
      --with-qt-includes=path_to_your_qt_includes
-   and 
+   and
      --with-qt-libraries=path_to_your_qt_library
 
+
 Q: I get the message: "Wrong JPEG library version: library is 61, caller expects 62 "
+A: There are 2 ways.
 
-A:  There are 2 ways.
+   1: When the kdelibs are installed it installs header files for the
+      jpeg libraries, these are version 61,  however most distributions
+      (Redhat) use version 62 libraries. To fix  this just remove jpeglib.h
+      from /opt/kde/include. The pukka include  file for version 62 should
+      then be picked up. However looking at the  error message above it may
+      be the other way round, in any case ensure  you only have on version
+      of the header file, the library and that  they are consistent.
 
-	1. : When the kdelibs are installed it installs header files for the
-	jpeg libraries, these are version 61,  however most distributions
-	(Redhat) use version 62 libraries. To fix  this just remove jpeglib.h
-	from /opt/kde/include. The pukka include  file for version 62 should
-	then be picked up. However looking at the  error message above it may
-	be the other way round, in any case ensure  you only have on version
-	of the header file, the library and that  they are consistent.
+      It is useful to use the locate command to verify that I have
+      the correct version of a library and header files e.g.
+      updatedb
+      locate libjpeg
+      locate jpeglib
 
-	It is useful to use the locate command to verify that I have 
-	the correct version of a library and header files e.g.
-	updatedb 
-	locate libjpeg
-	locate jpeglib
-
-	2: You must recompiled kdesupport without jpeg
-	library (configure --with-libjpeg --with-libgif).
-
-	
-
-Q:  make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po' 
-    cd .. && automake --gnu --include-deps po/Makefile 
-    aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL' 
-    make[2]: *** [Makefile.in] Error 1 
-A:  Workaround for automake-1.4/automake-2.13 users: Just run 
-    "aclocal" manually, then it will compile. 
+   2: You must recompiled kdesupport without jpeg
+      library (configure --with-libjpeg --with-libgif).
 
 
-Q:  What must i do, if configure said ,that i need giflib23.
-A:  Try a newer snap of kdesupport, or maybe you have another giflib installed?
+Q: make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
+   cd .. && automake --gnu --include-deps po/Makefile
+   aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
+   make[2]: *** [Makefile.in] Error 1
+A: Workaround for automake-1.4/automake-2.13 users: Just run
+   "aclocal" manually, then it will compile.
+
+
+Q: What must i do if configure said that i need giflib23.
+A: Try a newer snap of kdesupport, or maybe you have another giflib installed?
 
 
 Q: How can I convert a KDevelop 0.2 project to a 0.3 one?
 A: Please change the AC_OUTPUT in the configure.in to a oneline version
 
-   for example: 
-   old version AC_OUTPUT(Makefile \
+   for example:
+   old version:
+      AC_OUTPUT(Makefile \
 		kdevelop/kwrite/Makefile \
 		kdevelop/templates/Makefile
-   )
-   new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
+      )
+   new version:
+      AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
 
 
 Q: Configure complains about the Qt version not being between 1.44
-and 2.00
+   and 2.00
 A: You probably have Qt2.00 installed on your system, and this
-messes up ./configure. For the purpose of compiling KDevelop you should
-temporarily uninstall all Qt2.00 components from your system.
+   messes up ./configure. For the purpose of compiling KDevelop you should
+   set QTDIR to the correct directory.
+
 
 Q: Configure complains about not being able to compile a small KDE
-application. Examining config.log reveals that it can't find the library
-libXext.
+   application. Examining config.log reveals that it can't find the library
+   libXext.
 A: Install the package xdevel
+
+
+Q: I´m developing an application where I need to set -D options to the preprocessor.
+   If I add these in KDevelop to my project options, everything is ok, but when I
+   distribute my package, the -D options set in KDevelop are not used. What do I have
+   to do to make this work ?
+A: Edit the file configure.in in your toplevel source directory. Here, you
+   have to enter after the AC_CHECK_COMPILERS macro:
+     CPPFLAGS="$CPPFLAGS -DMYDEFINE"
+   and after that you have to recreate your new "configure" by invoking
+   "make -f Makefile.dist" and then rerun the configure script
+   (or inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
+
+
+Q: Is there another possibility to publish my own defines?
+A: Another version to include DEFINEs in your project is to publish
+   them by config.h.
+   To do so you have to patch the following files:
+   Add to acconfig.h of your toplevel project directory the following line:
+     #undef MYDEFINE
+
+   and insert in the configure.in, after the macro call
+   AC_CONFIG_HEADER(config.h):
+     AC_DEFINE_UNQUOTED(MYDEFINE)
+
+   (So it will be defined in config.h after updating your framework with
+    "make -f Makefile.dist; configure [your options]"
+    or inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
+
+   Requirements for this solutions are:
+     AC_CONFIG_HEADER(config.h)
+   inside configure.in and in the sourcecode a
+     #ifdef HAVE_CONFIG_H
+     #include <config.h>
+     #endif
+   before the other includes will be done
+   (normally this is already done in our project templates).
+
+   BTW: An advantage of this solution is to make MYDEFINE dependable on
+        certain situations (like creating an option for configure).
+        This needs of course writing an own macro function.
+
+
+Q: I´m developing an application which needs exception handling.
+   How can I make it?
+A: Edit the file configure.in in your toplevel source directory. Here, you
+   have to enter after the AC_CHECK_COMPILERS() macro:
+     CXXFLAGS="$CXXFLAGS $USE_EXCEPTIONS"
+   and after that you have to recreate your new "configure" by invoking
+   "make -f Makefile.dist" at the toplevel source directory and then restart
+   the configure script
+   (or inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
+
+
+Q: I´m developing an application which needs run-time-type-info compiled within.
+   How can I make it?
+A: Edit the file configure.in in your toplevel source directory. Here, you
+   have to enter after the AC_CHECK_COMPILERS macro:
+     CXXFLAGS="$CXXFLAGS $USE_RTTI"
+   and after that you have to recreate your new "configure" by invoking
+   "make -f Makefile.dist" at the toplevel source directory and then restart
+   the configure script
+   (or inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
+
+
+Q: The solutions above are nice, but I want this only for a certain subdirectory
+   (e.g. a static lib of my project)
+   How can I make it?
+A: Edit the file Makefile.am in the desired source directory. Here, you
+   have to enter somewhere outside the KDevelop specific part:
+     KDE_CXXFLAGS=$(USE_RTTI)
+   Take care this works only if your project is using am_edit.
+   (It works only for newer acinclude.m4 & am_edit, AFAWK they must be
+    younger than 12-09-1999, formerly it was known as APPEND_CXXFLAGS -
+    in this KDevelop release you will find the right once.)
+
+   You have to update your Makefile-framework as described above
+   (make -f Makefile.dist; ./configure [options] or
+    inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
+
+
+Q: What is the difference between CPPFLAGS and CXXFLAGS?
+A: CPPFLAGS is used for defines (means flags you need only for compiling)
+   CXXFLAGS is used for compiler switches (e.g. -frtti), which apply also
+   in the linking process.
+
+
+Q: I have seen some solutions like patching Makefile.am with
+     DEFS+=-DMYDEFINE
+   or
+     CXXFLAGS+=-fsigned-char
+   or
+     LD_FLAGS+=-L/usr/local/lib
+   Why don't you consider this?
+A: There is a bug inside automake 1.4, which doesn't add flags to the already
+   existing one. With this command inside Makefile.am, you would delete the existing
+   settings of the named flag.
+   If you want these flags only for the project subdirectory use:
+     AM_CPPFLAGS=-DMYDEFINE
+   or
+     AM_CXXFLAGS=-fsigned-char
+   or
+     AM_LDFLAGS=-L/usr/local/lib
+
+   Take care, these flags are only published by automake version 1.4.
+
+   For setting one of these flags for the whole project, please patch the
+   configure.in in the toplevel source directory instead.
+
+
+Q: How can I guarantee that a user of my project will build it with automake
+   version 1.4?
+A: Add to the AUTOMAKE_OPTIONS variable at the Makefile.am of the toplevel
+   source directory the string "1.4". E.g.:
+   AUTOMAKE_OPTIONS = foreign 1.4
+
+
+Q: Can AM_CXXFLAGS (inside a Makefile.am) be used for flags like -frtti or
+   -fexceptions?
+A: No! In these cases there is an ordering problem. The standard CXXFLAGS variable
+   published by acinclude.m4.in already contains a -fno-rtti (-fno_exceptions).
+   If you did apply it to AM_CXXFLAGS the compiler command would insert
+   these flags before the CXXFLAGS, e.g. here for -frtti:
+   gpp ... -frtti ... -fno-exceptions -fno-rtti ......
+   So the last flag (in this case, still -fno-rtti) will be used.
+   KDE_CXXFLAGS instead will be inserted after the standard CXXFLAGS, so it
+   would look like:
+   gpp ..... -fno-exceptions -fno-rtti ...... -frtti...
+   and voilà it works fine.
+
+   Take care: KDE_CXXFLAGS are only published by projects, which use am_edit
+   and acinclude.m4.
+
+
+Q: Why patching configure.in with CXXFLAGS="$USE_RTTI $CXXFLAGS" doesn't work?
+A: Look at the answer to the question "Can AM_CXXFLAGS (inside a Makefile.am)
+   be used for flags like -frtti or -fexceptions?" ;-)
+
+
+Q: I am using CXXFLAGS="$USE_RTTI" inside configure.in and it works fine,
+   why should I use your solution?
+A: If you would use your version before AC_CHECK_COMPILERS() a call like
+     CXXFLAGS="-pedantic" ./configure
+   wouldn't work correctly.
+   If you did use it after AC_CHECK_COMPILERS() the CXXFLAGS setted in
+   AC_CHECK_COMPILERS() would be cleared.
+   (For example in a "configure --enable-debug" call CXXFLAGS would be
+    changed to insert also debug information to your code.)
+   So please use CXXFLAGS="$CXXFLAGS $USE_RTTI" instead.
+
+Q: I'm using additional headers and libs for my KDE/QT project. Putting
+   -I/usr/include/foo in the compiler options and -L/usr/lib/foo to the
+   linker options won't distribute the settings into the tarball.
+   What do I have to do?
+A: This is the most difficult part to do it the right way.
+   An easy, but not correct solution would be to add to the configure.in:
+
+   all_includes="$all_includes -I/usr/include/foo"
+   all_libraries="$all_libraries -L/usr/lib/foo"
+
+   [the best place for that is before the lines:
+    AC_ARG_PROGRAM
+    AC_OUTPUT( ..... )
+    at the end of the file.]
+
+   Problems here:
+   - Who can guarantee that the includes would always be in
+     /usr/include/foo... maybe on some systems it could be in /usr/local/foo/include
+     (and maybe the libs would be there in /usr/local/foo/lib)??
+   - Maybe I haven't installed the foo-stuff so building would fail, but it would be
+     better if configure did already fail with a more helpful message.
+
+   So to make it right you would have to add a macro function to
+   configure.in, which do certain tests and searches for an installed "foo".
+
+   If you want to do so, we can give you here only a hint... try to
+   understand the acinclude.m4.in or create a KDE-normal-ogl project,
+   there you find a file called qgl.m4, which will be concatenated to
+   acinclude.m4 (see "Makefile.dist"). This shows you an extensive example
+   to search for QT-OpenGL-Lib, you have to rewrite it for your problem.
+
+   Maybe you have luck and find already a solution for your problem inside
+   acinclude.m4.in, so you could use an already created function.
+
+
+Q: On C/C++ terminal application $all_includes and $all_libraries are not used.
+   How can I use the solution above for these project types?
+A: The best way would be to use the same concept also for your terminal project.
+   The only thing you have to do patch configure.in:
+
+   all_includes="$all_includes -I/usr/include/foo"
+   all_libraries="$all_libraries -L/usr/lib/foo"
+   AC_SUBST(all_includes)
+   AC_SUBST(all_libraries)
+
+   and add the following lines to the Makefile.am of the sources' directory
+   (e.g. for project "test_cpp" this would be "test_cpp/test_cpp/Makefile.am"):
+
+   --- snip ---
+   # the include search path.
+   INCLUDES= $(all_includes)
+   # the library search path.
+   <binary_name>_LDFLAGS = $(all_libraries)
+   --- snap ---
+   (Substitute <binary_name> with the real binary name (e.g. test_cpp) and
+    the additions should be done outside the KDevelop specific section of the Makefile.am.)
+
+   After that, don´t forget to update configure and all Makefiles.
+   (Inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
+
+
+Q: I'm already running a KDE 2 snapshot and I want to use KDevelop under KDE 2.
+   What is the best way to do this ?
+A: As KDevelop for KDE 2 is currently under development, you should consider using
+   the current stable 1.x release of KDevelop for production usage. Running KDevelop 1.x
+   under KDE 2 can be done by creating a shell-script:
+
+   #/bin/bash
+   QTDIR=/usr/lib/qt-1.44 export QTDIR
+   KDEDIR=/opt/kde export KDEDIR
+   exec /opt/kde/bin/kdevelop
+
+   Save this file as e.g. kdevelop1 and set this file to executable with
+
+   chmod 755 kdevelop1
+
+   Then you can run KDevelop 1.x under KDE 2 by calling kdevelop1.
+   For developing KDE 2 applications with KDevelop 1.x you have to set the correct
+   path in the KDevelop Setup even if you´re running KDevelop under KDE 2 !
+
+Q: I'm using a KDevelop 1.4 which is already KDE2 enabled. There is no dialog editor any
+    more. How do I create my dialogs ?
+A: Since KDevelop 1.4 the QT designer is used for creating dialogs. But not only the tool
+    has changed but also the way how dialogs are designed and used from within KDevelop.
+    To create a new dialog choose new from the file dialog and create a new QT designer (*.ui)
+    file. Now the designer is opened and you can develop your dialog. ATTENTION: most
+    QT packages (*.deb,*.rpm) does not include support for KDE widgets. You need this to
+    use e.g. KListView or other KDE widgets in your dialogs.
+    After creating the dialog, you inherit your dialog class from the newly created dialog.
+
+Q: I have downloaded the QT-2.2.x packages from ftp.kde.org and there are now KDE
+    widgets available in the designer. How can I get them ?
+A: You have to recompile QT with ./configure -kde as additional option. Remember to set
+    $KDEDIR and $QTDIR to the appropriate directories. After doing so you have an option
+    KDE in the tools menue of the designer.
+
+Q: I use RedHat Linux with KDevelop and tried to recompile the QT library with -kde in
+    order to use the designer with KDE widget support but  during configure it says that
+    $KDEDIR does not contain a valid KDE installation ?
+A: RedHat uses a non-standard directory setting with KDE. The normal case would be that
+    the libs are in $KDEDIR/lib, binaries in $KDEDIR/bin and includes in $KDEDIR/include.
+    RedHat uses /usr as $KDEDIR but $KDEDIR/include/kde as directory for  header files.
+    Therefore configure from QT fails to detect the correct directories. It searches dcopserver
+    in the binaries folder and the header files in their folder. So if you choose $KDEDIR to be
+    /usr, configure can't find the includes. A possible solution for this is to create a /usr/local/kde
+    directory and set symlinks to /usr/bin and /usr/include/kde in this "pseudo" kde dir.
+    Then export KDEDIR=/usr/local/kde and do the ./configure -kde. After compiling QT you have
+    the KDE entries in the tools menu of the QT designer.
+
+Q: Is there any HOWTO available on how to work with QT designer made dialogs ?
+A: Yes, there is a great tutorial on http://women.kde.org/docs/tut_kdevelop/
+
+Q: I have installed htdig but there is now htsearch available ?
+A: On e.g. RedHat systems the htsearch executable is placed in the /cgi-bin dir of apache.
+    You can create symlinks in /usr/bin or simply add this path ro ~/.bashrc
+
+Q: I have htdig, htmerge and htsearch available but I get an error message thet the config
+    file of htdig could not be found or is invalid ?
+A: Read README.htdig in the source directory tree and create a htdig.conf file. Then copy
+    it to $KDEDIR/share/apps/kdevelop/tools. Now create your search index with the kdevelop
+    setup menu.
+
+Q: How to change my project framework (aka autotool-project-files) to compile it for KDE/QT version 3
+   after project creation?
+A: With the actual admin/-content it is possible to select the kde version by changing one line inside 
+   configure.in.in:
+   #MIN_CONFIG
+   for the recent qt/kde version
+   #MIN_CONFIG(3)
+   for the recent qt/kde 3 version
+   #MIN_CONFIG(2)
+   for the last known qt/kde 2 version (i.e. QT 2.2.2)
+   #MIN_CONFIG(2.2)
+   for at least kde/qt version 2.2
+   #MIN_CONFIG(2.0)
+   for at least kde/qt version 2.0.2 
+
+   On QT projects this can be also done by searching the line:
+   KDE_USE_QT(2) inside configure.in and change this to 
+   KDE_USE_QT or revert this to a comment, for QT 3.x usage.
+
+Q: I have changed my project like above to develop for another KDE/QT version, but configure still 
+   uses the wrong kde directories, what has to be done?
+A: If you want to develop for another kde/qt version, you have to give configure the correct pathes,
+   like e.g.
+   ./configure --with-qt-dir=/usr/lib/qt3
+   ./configure --prefix=/opt/kde2 --with-qt-dir=/usr/local/qt2
+   Of course you must have installed the desired qt/kde version on your system.
+ 
+Q: I have two KDE versions on my system. If I try to create a KDE 2 project on KDevelop 2.1 (made for
+   KDE 2) a configure-call without parameters always uses /opt/kde3 (or /opt/kde) instead of /opt/kde2.
+   What's wrong?
+A: Please check first your actual KDEDIR environment variable. In some cases it still points to
+   the wrong directory. 
+   Another solution is to use always --prefix= option within the configure call.
+
+Q: I've done so, but the configure call still uses the wrong directory?
+A: Now you have to "DistClean" (i.e. either "Project->DistClean" from within KDevelop or 
+   "make distclean" from console) your project.
+ 
