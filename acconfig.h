@@ -1,3 +1,0 @@
-#undef QT_DOCDIR
-#undef KDELIBS_DOCDIR
-#undef WITH_DOCBASE
