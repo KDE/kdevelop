@@ -142,7 +142,7 @@ static QString currentWord(KTextEditor::EditInterface *editiface,
     QString str = editiface->textLine(line);
     int i;
     for (i = col-1; i >= 0; --i)
-        if (!str[i].isLetter())
+        if( ! (str[i].isLetter() || str[i] == '_') )
             break;
 
     return str.mid(i+1, col-i-1);
