@@ -3947,6 +3947,10 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_CV_CLASS_TOOL,													i18n("Opens the classtool dialog"))
   ON_STATUS_MSG(ID_CV_CLASS_BASE_CLASSES,									i18n("Displays the inherited classes of the current class"))
   ON_STATUS_MSG(ID_CV_CLASS_DERIVED_CLASSES,							i18n("Displays the classes who inherit the current class"))
+
+// Added by Pau Estalella pau.estalella@upcnet.es
+  ON_STATUS_MSG(ID_CV_FOLDER_NEW_CLASS,										i18n("Creates a new class in the current folder"))
+
   ON_STATUS_MSG(ID_CV_FOLDER_NEW,													i18n("Creates a new folder"))
   ON_STATUS_MSG(ID_CV_FOLDER_DELETE,											i18n("Deletes the current folder"))
   ON_STATUS_MSG(ID_CV_CLASS_DELETE,												i18n("Deletes the current class"))
@@ -3977,8 +3981,18 @@ void CKDevelop::statusCallback(int id_){
 	ON_STATUS_MSG(ID_FILE_DELETE,														i18n("Deletes the selected file"))
 
 	// RFV popups
-	ON_STATUS_MSG(ID_RFV_SHOW_NONPRJFILES,									i18n("Shows files, that aren't registered in the project"))
+	ON_STATUS_MSG(ID_RFV_SHOW_NONPRJFILES,									i18n("Show files that aren't registered as project files"))
+	ON_STATUS_MSG(ID_PROJECT_CVS_UPDATE,                    i18n("Updates file/directory from repository"))
+	ON_STATUS_MSG(ID_PROJECT_CVS_COMMIT,                    i18n("Commits file/directory to the repository"))
+	ON_STATUS_MSG(ID_PROJECT_CVS_ADD,                       i18n("Adds file/directory to the repository"))
+	ON_STATUS_MSG(ID_PROJECT_CVS_REMOVE,                     i18n("Deletes file from disk and removes it from the repository"))
 	
 	default: slotStatusMsg(i18n("Ready"));
 	}
+}
+
+// Added by Pau Estalella pau.estalella@upcnet.es
+void CKDevelop::slotNewClassFolder(QString folderName)
+{
+  newClassFolder = folderName;
 }

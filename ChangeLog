@@ -19,6 +19,8 @@
     KAppWizard and Open Project, fixed layout and KAppWizard to use it.
    -->Ralf: update de.po and kdevelop.pot again ;-) (copied that from below ;-)
   * added ClassParser.cc patch for namespaces by Eric OURSEL <eric_oursel@bigfoot.com>
+  * added folder management patch by Pau Estalella <pau.estalella@upcnet.es>
+    to create folders and classes within the classparser by creating subdirectories
 
 2000-02-23 Ralf Funken <funken.ruk@netcologne.de>
 	* Updated de.po and kdevelop.pot

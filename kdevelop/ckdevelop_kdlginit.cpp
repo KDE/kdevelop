@@ -133,8 +133,11 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
 
   kdlg_project_menu->insertSeparator();
-  kdlg_project_menu->insertItem(i18n("&New Class..."), this,
-			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
+// Modif. by Pau Estalella pau.estalella@upcnet.es
+// All new class additions now go through CClassView, where we know in which
+// folder the new class should be put.
+  kdlg_project_menu->insertItem(i18n("&New Class..."), (QObject *)class_tree,
+			   SLOT(slotClassNew()),0,ID_PROJECT_NEW_CLASS);
   kdlg_project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   //  kdlg_project_menu->insertItem(i18n("&Remove File from Project"), this,
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);

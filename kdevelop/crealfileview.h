@@ -77,6 +77,7 @@ signals:
 
   void commitDirToVCS(QString dir);
   void updateDirFromVCS(QString dir);
+  void menuItemHighlighted(int);
 
 protected slots:
   /** emits signal "fileSelected" when it gets the selectionChanged-signal from itself */

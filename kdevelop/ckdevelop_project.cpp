@@ -360,15 +360,15 @@ void CKDevelop::slotAddExistingFiles(){
       if (add_dlg->isTemplateChecked())
       {
        if (CProject::getType(file)==CPP_HEADER)
-        {
+       {
          temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,source_name);
          add_process << temp_template;
-        }
-        else if (CProject::getType(file)==CPP_SOURCE)
-              {
-               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, source_name);
-               add_process << temp_template;
-              }
+       }
+       else if (CProject::getType(file)==CPP_SOURCE)
+       {
+         temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, source_name);
+         add_process << temp_template;
+       }
       }
       add_process << file;
       add_process << ">";
@@ -509,9 +509,9 @@ void CKDevelop::slotProjectOptions(){
   
 }
 
-
 void CKDevelop::slotProjectNewClass(){
-  CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",prj);
+// Modif by Pau Estalella pau.estalella@upcnet.es
+  CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",prj,newClassFolder);
   if(dlg->exec()){
     QString source_file=dlg->getImplFile() ;
     QString header_file=dlg->getHeaderFile();

@@ -118,6 +118,10 @@
 #define ID_PROJECT_MAKE_DISTRIBUTION  14200
 #define ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ  14210
 
+#define ID_PROJECT_CVS_UPDATE         14220
+#define ID_PROJECT_CVS_COMMIT         14230
+#define ID_PROJECT_CVS_ADD            14240
+#define ID_PROJECT_CVS_REMOVE         14250
 
 ///////////////////////////////////////////////////////////////////
 // Build-menu entries 
@@ -185,6 +189,9 @@
 #define ID_CV_IMPLEMENT_VIRTUAL         14530
 #define ID_CV_ADD_SLOT_SIGNAL           14531
 #define ID_CV_CLASSWIZARD               14532
+
+// Added by Pau Estalella pau.estalella@upcnet.es
+#define ID_CV_FOLDER_NEW_CLASS          14533
 
 #define	ID_CV_TOOLBAR_CLASS_CHOICE	14540
 #define	ID_CV_TOOLBAR_METHOD_CHOICE	14541

@@ -238,90 +238,83 @@ KPopupMenu *CRealFileView::getCurrentPopup()
 {
   if (popup)
     delete popup;
-  
+  bool cvs=project->getVersionControl();
+
   switch( treeH->itemType() )
   {
-    
   case THPROJECT :
     popup = new KPopupMenu(i18n("RFV Options"));
-    popup->insertItem( i18n("Show non-project Files"),
-		       this, SLOT(slotShowNonPrjFiles()), 0, ID_RFV_SHOW_NONPRJFILES );
+    popup->insertItem( i18n("Show non-project Files"),this,
+        SLOT(slotShowNonPrjFiles()), 0, ID_RFV_SHOW_NONPRJFILES );
     popup->setCheckable(true);
     if(showNonPrjFiles) popup->setItemChecked(ID_RFV_SHOW_NONPRJFILES, true);
-    if (project->getVersionControl())
-      {
-	popup->insertSeparator(-1);
-	popup->insertItem( i18n("Update"),
-			   this, SLOT(slotUpdate()) );
-	popup->insertItem( i18n("Commit"),
-			   this, SLOT(slotCommit()) );
-	popup->insertItem( i18n("Add to Repository"),
-			   this, SLOT(slotAddToRepository()) );
-	popup->insertItem( i18n("Remove from Repository (and Disk)"),
-			   this, SLOT(slotRemoveFromRepository()) );
-	break;
-      }
+    if (cvs)
+    {
+    	popup->insertSeparator();
+      popup->insertItem( i18n("Update"),this, SLOT(slotUpdate()),0,ID_PROJECT_CVS_UPDATE );
+    	popup->insertItem( i18n("Commit"), this, SLOT(slotCommit()),0,ID_PROJECT_CVS_COMMIT );
+    	popup->insertItem( i18n("Add to Repository"),this,
+    	    SLOT(slotAddToRepository()),0,ID_PROJECT_CVS_ADD );
+    	popup->insertItem( i18n("Remove from Repository (and Disk)"), this,
+    	    SLOT(slotRemoveFromRepository()),0,ID_PROJECT_CVS_REMOVE );
+     }
     break;
-
 
   case THINSTALLED_FILE:
     popup = new KPopupMenu(i18n("File (Registered)"));
-    popup->insertItem( i18n("Remove File from Project..."),
-		       this, SLOT(slotRemoveFileFromProject()));
-    popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),
-		       this, SLOT(slotDeleteFilePhys()));
+    popup->insertItem( i18n("Remove File from Project..."), this,
+          SLOT(slotRemoveFileFromProject()),0,ID_PROJECT_REMOVE_FILE);
+    popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),this,
+          SLOT(slotDeleteFilePhys()),0,ID_FILE_DELETE);
     popup->insertSeparator();
-    popup->insertItem( i18n("Properties..."),
-		       this, SLOT(slotShowFileProperties()));
+    popup->insertItem( i18n("Properties..."),this,
+          SLOT(slotShowFileProperties()),0,ID_PROJECT_FILE_PROPERTIES);
     break;
 
   case THC_FILE:
-      popup = new KPopupMenu(i18n("File"));
-      popup->insertItem( i18n("Add File to Project..."),
-                         this, SLOT(slotAddFileToProject()));
-      popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),
-                         this, SLOT(slotDeleteFilePhys()));
-      break;
+    popup = new KPopupMenu(i18n("File"));
+    popup->insertItem( i18n("Add File to Project..."), this,
+        SLOT(slotAddFileToProject()),0,ID_PROJECT_ADD_FILE_EXIST );
+    popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),this,
+        SLOT(slotDeleteFilePhys()),0,ID_FILE_DELETE);
+    break;
+
   case THFOLDER:
-      if (project->getVersionControl())
-          {
-              popup = new KPopupMenu(i18n("Folder"));
-              popup->insertItem( i18n("Update"),
-                                 this, SLOT(slotUpdate()) );
-              popup->insertItem( i18n("Commit"),
-                                 this, SLOT(slotCommit()) );
-              popup->insertItem( i18n("Add to Repository"),
-                                 this, SLOT(slotAddToRepository()) );
-              popup->insertItem( i18n("Remove from Repository (and Disk)"),
-                                 this, SLOT(slotRemoveFromRepository()) );
-              break;
-          }
-    default:
-      popup = 0;
+    if (cvs)
+    {
+      popup = new KPopupMenu(i18n("Folder"));
+      popup->insertItem( i18n("Update"),this, SLOT(slotUpdate()),0,ID_PROJECT_CVS_UPDATE);
+      popup->insertItem( i18n("Commit"),this, SLOT(slotCommit()),0,ID_PROJECT_CVS_COMMIT );
+      popup->insertItem( i18n("Add to Repository"),this,
+          SLOT(slotAddToRepository()),0,ID_PROJECT_CVS_ADD);
+      popup->insertItem( i18n("Remove from Repository (and Disk)"),this,
+          SLOT(slotRemoveFromRepository()),0,ID_PROJECT_CVS_REMOVE );
+      break;
+     }
+  default:
+    popup = 0;
   }
 
   VersionControl *vc = project->getVersionControl();
   if ( (treeH->itemType() == THINSTALLED_FILE || treeH->itemType() == THC_FILE)
        && vc)
-      {
-          VersionControl::State reg =
-              vc->registeredState(getFullFilename(currentItem()));
-          int id;
-          popup->insertSeparator();
-          id = popup->insertItem( i18n("Update"),
-                                  this, SLOT(slotUpdate()) );
-          popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
-          id = popup->insertItem( i18n("Commit"),
-                                  this, SLOT(slotCommit()) );
-          popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
-          id = popup->insertItem( i18n("Add to Repository"),
-                                  this, SLOT(slotAddToRepository()) );
-          popup->setItemEnabled(id, reg & VersionControl::canBeAdded);
-          id = popup->insertItem( i18n("Remove from Repository (and disk)"),
-                                  this, SLOT(slotRemoveFromRepository()) );
-          popup->setItemEnabled(id, !(reg & VersionControl::canBeAdded));
-      }
-              
+  {
+    VersionControl::State reg = vc->registeredState(getFullFilename(currentItem()));
+    int id;
+    popup->insertSeparator();
+    id = popup->insertItem( i18n("Update"), this, SLOT(slotUpdate()),0,ID_PROJECT_CVS_UPDATE );
+    popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
+    id = popup->insertItem( i18n("Commit"),this, SLOT(slotCommit()),0,ID_PROJECT_CVS_COMMIT );
+    popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
+    id = popup->insertItem( i18n("Add to Repository"),this, SLOT(slotAddToRepository()),0,ID_PROJECT_CVS_ADD );
+    popup->setItemEnabled(id, reg & VersionControl::canBeAdded);
+    id = popup->insertItem( i18n("Remove from Repository (and disk)"),this, SLOT(slotRemoveFromRepository()),0,ID_PROJECT_CVS_REMOVE);
+    popup->setItemEnabled(id, !(reg & VersionControl::canBeAdded));
+  }
+
+  if (popup)
+      connect(popup, SIGNAL(highlighted(int)), SIGNAL(menuItemHighlighted(int)));
+
   return popup;
 }
 

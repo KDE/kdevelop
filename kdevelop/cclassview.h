@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -70,7 +70,7 @@ public: // Public attributes
   CClassStore *store;
 
 public: // Public refreshmethods
-  
+
   /** Refresh the whole view using the project. */
   void refresh( CProject *proj );
 
@@ -102,6 +102,8 @@ signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
   void resetStatusbarProgress();
+ // Added by Pau Estalella pau.estalella@upcnet.es
+  void signalNewClassFolderChanged(QString);
 
 protected slots:
   void slotProjectOptions();
@@ -126,17 +128,22 @@ protected slots:
   /** Views a class definition. */
   void slotViewClassDefinition(CParsedClass *);
   /** Views the definition. */
-  void slotViewDefinition( const char *parentPath, const char *itemName, 
+  void slotViewDefinition( const char *parentPath, const char *itemName,
                            THType parentType, THType itemType );
-  
+
   /** Views the declaration. */
-  void slotViewDeclaration( const char *parentPath, const char *itemName, 
+  void slotViewDeclaration( const char *parentPath, const char *itemName,
                            THType parentType, THType itemType );
   void slotClassWizard();
+
+  // Added by Pau Estalella pau.estalella@upcnet.es
+  void slotClassFolderNew();
+  void slotClassFolderDelete();
 
 signals:
   void selectedFileNew();
   void selectedClassNew();
+
   void selectedProjectOptions();
   void selectedViewDeclaration(const char *, const char *,THType,THType);
   void selectedViewDefinition(const char *, const char *,THType,THType);
@@ -164,7 +171,7 @@ protected: // Implementations of virtual methods.
   /** Initialize popupmenus. */
   void initPopups();
 
-  /** Get the current popupmenu. 
+  /** Get the current popupmenu.
    * @return Pointer to the current popupmenu or NULL if none applicable.
    */
   KPopupMenu *getCurrentPopup();
@@ -194,6 +201,10 @@ private: // Popupmenus
 
   /** Popupmenu for folders. */
   KPopupMenu folderPopup;
+
+  // Added by Pau Estalella pau.estalella@upcnet.es
+  /** Popupmenu for folders in Classes tree. */
+  KPopupMenu classfolderPopup;
 
 private: // Private attributes
 
@@ -248,15 +259,27 @@ private: // Private methods
   /** Fetches the currently selected class from the store. */
   CParsedClass *getCurrentClass();
 
-  /** 
-   * Return this view as a treestring. 
-   * 
+  /**
+   * Return this view as a treestring.
+   *
    * @param str String to return the tree in.
    */
   void asTreeStr( QString &str );
 
   bool validClassDecl( const char *className, const char *declName, THType type );
+   //  Added by Pau Estalella pau.estalella@upcnet.es
+   /** @return The current item's root (Classes,Globals,etc.) */
+   QListViewItem * rootItem();
+
+   /** @return A string containing the path from the base source code directory to
+       the current folder selected */
+   QString pathFromRoot();
+   /** Creates a subdirectory below the current folder directory */
+   bool createFolderSubdir(const char *folderName);
+   /** Creates a folder hierarchy in the class view tree according to the folder string */
+   QListViewItem * createFolderHierarchy(QString foldStr);
+   /** Tells whether item already has a child labeled folder */
+   QListViewItem * searchChildFolder(QListViewItem *item, QString folder);
 };
 
 #endif
-
