@@ -11,6 +11,7 @@
 	* ported the konsole plugin to KDevPlugin
 	* ported the editor chooser plugin to KDevPlugin
 	* ported the code abbreviation plugin to KDevPlugin
+	* ported the astyle plugin to KDevPlugin
 	* extended gideon to load global KDevPlugin components
 	* centralized the trader queries for KDevelop/Part (Plugin) with
 	the additional constraint for the plugin scope into a static
