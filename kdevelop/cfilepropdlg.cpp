@@ -316,7 +316,8 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
 
   QString str;
   TFileInfo* info;
-  if (item->childCount() != 0) return; // no action
+  if (item == 0 || item->childCount() != 0)
+    return; // no action
   
   // save the old-one
   if(saved_info !=0 ){ //ok,there is a old one,it !=0
