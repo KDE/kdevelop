@@ -39,6 +39,7 @@ High priority tasks!
     border as other items.
   - Browser tool bar should truncate long menu entries so it doesn't take so
     much space.
+  - Open last open panel in the sidebars on startup, if possible
 
 * misc:
   - Printing files not supported
@@ -128,7 +129,6 @@ Other Issues
   - load plugins dynamically
 
 * modularity:
-  - move function areas of kdevcore into separate classes
   - make the KDevPart template work standalone
   - make sure all lib interfaces are available via DCOP
 
