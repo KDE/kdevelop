@@ -17,6 +17,7 @@
  ***************************************************************************/
 #include "cnewfiledlg.h"
 #include "cgeneratenewfile.h"
+#include "cproject.h"
 #include <kmsgbox.h>
 #include <iostream.h>
 #include <kfiledialog.h>

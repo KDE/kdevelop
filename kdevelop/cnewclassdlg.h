@@ -32,8 +32,10 @@
 #include <kmsgbox.h>
 #include <kfiledialog.h>
 #include <qcheckbox.h>
-#include "cproject.h"
 #include "cgeneratenewfile.h"
+
+//#include "cproject.h"
+class CProject;
 
 /** generates new class-skeletons (a header and a implementation file)
   *@author Sandy Meier

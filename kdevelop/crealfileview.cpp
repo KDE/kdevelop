@@ -19,12 +19,13 @@
 
 #include "qdir.h"
 #include "qstrlist.h"
-#include "crealfileview.h"
 #include <kmsgbox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <iostream.h>
 #include <assert.h>
+#include "crealfileview.h"
+#include "cproject.h"
 
 /*********************************************************************
  *                                                                   *

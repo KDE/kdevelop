@@ -46,6 +46,7 @@
 #include "ccreatedocdatabasedlg.h"
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
+#include "doctreeview.h"
 #include "cfinddoctextdlg.h"
 #include "cexecuteargdlg.h"
 #include "debug.h"

@@ -22,10 +22,12 @@
 
 #include <qwidget.h>
 #include <kapp.h>
-#include "cproject.h"
 #include <kpopmenu.h>
 #include "ctreeview.h"
 #include <qptrdict.h>
+
+//#include "cproject.h"
+class CProject;
 
 /** the logical-file-view,draw the contents of 
   * a cprojectinfo into a tree

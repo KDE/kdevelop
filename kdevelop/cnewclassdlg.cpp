@@ -16,8 +16,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "cnewclassdlg.h"
 #include <kquickhelp.h>
+#include "cnewclassdlg.h"
+#include "cproject.h"
 
 // SETUP DIALOG
 CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )

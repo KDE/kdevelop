@@ -16,16 +16,17 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include "clogfileview.h"
 #include <iostream.h>
 #include <kmsgbox.h>
 #include <qregexp.h>
 #include <kprocess.h>
-#include "cgrouppropertiesdlg.h"
 #include "debug.h"
 #include <assert.h>
 #include <qfileinfo.h>
 #include "resource.h"
+#include "clogfileview.h"
+#include "cgrouppropertiesdlg.h"
+#include "cproject.h"
 
 
 /*********************************************************************

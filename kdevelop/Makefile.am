@@ -1,11 +1,11 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kdevelop
-kdevelop_SOURCES = cctviewdeclarationcmd.cpp cclasstooltreeview.cpp klangcombo.cpp grepdialog.cpp ctreeview.cpp ctreehandler.cpp cerrormessageparser.cpp ccvaddfolderdlg.cpp cclasstreehandler.cpp cbugreportdlg.cpp caddnewtranslationdlg.cpp ctoolsconfigdlg.cpp cexecuteargdlg.cpp main.cpp ktipofday.cpp kswallow.cpp kstartuplogo.cpp cupdatekdedocdlg.cpp ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp coutputwidget.cpp cnewfiledlg.cpp cnewclassdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp ckdevelop_kdlginit.cpp ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp cfinddoctextdlg.cpp cfilepropdlg.cpp ceditwidget.cpp cdoctreepropdlg.cpp cdoctree.cpp cdocbrowser.cpp ccreatedocdatabasedlg.cpp cclassview.cpp cclasstooldlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp 
-kdevelop_LDADD   = ./classparser/libclassparser.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./vc/libvc.a ./print/libprint.a -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+kdevelop_SOURCES = klistview.cpp cctviewdeclarationcmd.cpp cclasstooltreeview.cpp klangcombo.cpp grepdialog.cpp ctreeview.cpp ctreehandler.cpp cerrormessageparser.cpp ccvaddfolderdlg.cpp cclasstreehandler.cpp cbugreportdlg.cpp caddnewtranslationdlg.cpp ctoolsconfigdlg.cpp cexecuteargdlg.cpp main.cpp ktipofday.cpp kswallow.cpp kstartuplogo.cpp cupdatekdedocdlg.cpp ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp coutputwidget.cpp cnewfiledlg.cpp cnewclassdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp ckdevelop_kdlginit.cpp ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp cfinddoctextdlg.cpp cfilepropdlg.cpp ceditwidget.cpp cdoctreepropdlg.cpp doctreeview.cpp cdocbrowser.cpp ccreatedocdatabasedlg.cpp cclassview.cpp cclasstooldlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp 
+kdevelop_LDADD   = ./classparser/libclassparser.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./classwizard/libclasswizard.a -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
-SUBDIRS = docs classparser kdlgedit kwrite pics vc print templates toolbar tools 
+SUBDIRS = docs classparser kdlgedit kwrite pics vc print templates toolbar tools gfxview classwizard 
 
-EXTRA_DIST = caddclassattributedlg.cpp caddclassattributedlg.h caddclassmethoddlg.cpp caddclassmethoddlg.h caddexistingfiledlg.cpp caddexistingfiledlg.h cclasstooldlg.cpp cclasstooldlg.h cclassview.cpp cclassview.h ccreatedocdatabasedlg.cpp ccreatedocdatabasedlg.h cdocbrowser.cpp cdocbrowser.h cdoctree.cpp cdoctree.h cdoctreepropdlg.cpp cdoctreepropdlg.h ceditwidget.cpp ceditwidget.h cfilepropdlg.cpp cfilepropdlg.h cfinddoctextdlg.cpp cfinddoctextdlg.h cgeneratenewfile.cpp cgeneratenewfile.h cgrouppropertiesdlg.cpp cgrouppropertiesdlg.h ckappwizard.cpp ckappwizard.h ckdevelop.cpp ckdevelop.h ckdevelop_classview.cpp ckdevelop_init.cpp ckdevelop_kdlginit.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp ckdevelop_whatsthis.cpp ckdevinstall.cpp ckdevinstall.h ckdevsetupdlg.cpp ckdevsetupdlg.h clogfileview.cpp clogfileview.h cnewclassdlg.cpp cnewclassdlg.h cnewfiledlg.cpp cnewfiledlg.h coutputwidget.cpp coutputwidget.h cprjoptionsdlg.cpp cprjoptionsdlg.h cproject.cpp cproject.h crealfileview.cpp crealfileview.h ctabctl.cpp ctabctl.h ctoolclass.cpp ctoolclass.h cupdatekdedocdlg.cpp cupdatekdedocdlg.h debug.h kdevelop-project.xpm kdevelop.kdelnk kdevelop.xpm kdeveloprc kstartuplogo.cpp kstartuplogo.h kswallow.cpp kswallow.h ktipofday.cpp ktipofday.h main.cpp mini-kdevelop.xpm resource.h structdef.h x-kdevelop-project.kdelnk cexecuteargdlg.cpp cexecuteargdlg.h ctoolsconfigdlg.cpp ctoolsconfigdlg.h caddnewtranslationdlg.cpp caddnewtranslationdlg.h cbugreportdlg.cpp cbugreportdlg.h cclasstreehandler.cpp cclasstreehandler.h ccvaddfolderdlg.cpp ccvaddfolderdlg.h cerrormessageparser.cpp cerrormessageparser.h ctreehandler.cpp ctreehandler.h ctreeview.cpp ctreeview.h grepdialog.cpp grepdialog.h kdevelop-setup.kdelnk klangcombo.cpp klangcombo.h cctviewdeclarationcmd.h cclasstooltreeview.h cclasstooltreeview.cpp ccommand.h cctviewdeclarationcmd.cpp 
+EXTRA_DIST = caddclassattributedlg.cpp caddclassattributedlg.h caddclassmethoddlg.cpp caddclassmethoddlg.h caddexistingfiledlg.cpp caddexistingfiledlg.h cclasstooldlg.cpp cclasstooldlg.h cclassview.cpp cclassview.h ccreatedocdatabasedlg.cpp ccreatedocdatabasedlg.h cdocbrowser.cpp cdocbrowser.h doctreeview.cpp doctreeview.h cdoctreepropdlg.cpp cdoctreepropdlg.h ceditwidget.cpp ceditwidget.h cfilepropdlg.cpp cfilepropdlg.h cfinddoctextdlg.cpp cfinddoctextdlg.h cgeneratenewfile.cpp cgeneratenewfile.h cgrouppropertiesdlg.cpp cgrouppropertiesdlg.h ckappwizard.cpp ckappwizard.h ckdevelop.cpp ckdevelop.h ckdevelop_classview.cpp ckdevelop_init.cpp ckdevelop_kdlginit.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp ckdevelop_whatsthis.cpp ckdevinstall.cpp ckdevinstall.h ckdevsetupdlg.cpp ckdevsetupdlg.h clogfileview.cpp clogfileview.h cnewclassdlg.cpp cnewclassdlg.h cnewfiledlg.cpp cnewfiledlg.h coutputwidget.cpp coutputwidget.h cprjoptionsdlg.cpp cprjoptionsdlg.h cproject.cpp cproject.h crealfileview.cpp crealfileview.h ctabctl.cpp ctabctl.h ctoolclass.cpp ctoolclass.h cupdatekdedocdlg.cpp cupdatekdedocdlg.h debug.h kdevelop-project.xpm kdevelop.kdelnk kdevelop.xpm kdeveloprc kstartuplogo.cpp kstartuplogo.h kswallow.cpp kswallow.h ktipofday.cpp ktipofday.h main.cpp mini-kdevelop.xpm resource.h structdef.h x-kdevelop-project.kdelnk cexecuteargdlg.cpp cexecuteargdlg.h ctoolsconfigdlg.cpp ctoolsconfigdlg.h caddnewtranslationdlg.cpp caddnewtranslationdlg.h cbugreportdlg.cpp cbugreportdlg.h cclasstreehandler.cpp cclasstreehandler.h ccvaddfolderdlg.cpp ccvaddfolderdlg.h cerrormessageparser.cpp cerrormessageparser.h ctreehandler.cpp ctreehandler.h ctreeview.cpp ctreeview.h grepdialog.cpp grepdialog.h kdevelop-setup.kdelnk klangcombo.cpp klangcombo.h cctviewdeclarationcmd.h cclasstooltreeview.h cclasstooltreeview.cpp ccommand.h cctviewdeclarationcmd.cpp klistview.cpp klistview.h foo.h 
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
@@ -34,13 +34,13 @@ LFLAGS = -+
 bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
+kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 	ckdevelop_init.cpp ctabctl.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp \
 	cclassview.cpp ceditwidget.cpp ckdevsetupdlg.cpp  ckdevelop_classview.cpp \
 	cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
 	clogfileview.cpp cdocbrowser.cpp cproject.cpp \
 	kswallow.cpp cgeneratenewfile.cpp \
-	cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
+	doctreeview.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
 	cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
 	ctoolclass.cpp cdoctreepropdlg.cpp \
 	ckdevelop_whatsthis.cpp \
@@ -65,7 +65,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
 	clogfileview.h structdef.h cdocbrowser.h cproject.h \
 	cclassview.h kswallow.h cgeneratenewfile.h \
-	cdoctree.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
+	doctreeview.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
 	cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
 	ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
 	debug.h \

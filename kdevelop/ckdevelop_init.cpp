@@ -31,6 +31,7 @@
 #include "ckdevelop.h"
 #include "cclassview.h"
 #include "cdocbrowser.h"
+#include "doctreeview.h"
 #include "ctoolclass.h"	
 #include "kswallow.h"
 #include "ctabctl.h"
@@ -123,7 +124,7 @@ void CKDevelop::initView(){
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
   real_file_tree->setFocusPolicy(QWidget::NoFocus);
 
-  doc_tree = new CDocTree(t_tab_view,"DOC",config);
+  doc_tree = new DocTreeView(t_tab_view,"DOC");
   doc_tree->setFocusPolicy(QWidget::NoFocus);
 
   t_tab_view->addTab(class_tree,i18n("CV"));

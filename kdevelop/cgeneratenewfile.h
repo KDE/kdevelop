@@ -19,9 +19,11 @@
 #ifndef CGENERATENEWFILE_H
 #define CGENERATENEWFILE_H
 
-#include "cproject.h"
 #include <kapp.h>
 #include <qregexp.h>
+
+//#include "cproject.h"
+class CProject;
 
 /**
   * tool class for generating new files with templates

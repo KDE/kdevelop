@@ -19,9 +19,9 @@
 #ifndef CKDEVELOP_H
 #define CKDEVELOP_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+//#ifdef HAVE_CONFIG_H
+//#include <config.h>
+//#endif
 
 class CKDevelop;
 #include <iostream.h>
@@ -50,6 +50,7 @@ class CKDevelop;
 
 class CDocBrowser;
 class CClassView;
+class DocTreeView;
 class KSwallowWidget;
 class CAddExistingFileDlg;
 class QListViewItem;
@@ -61,7 +62,7 @@ class GrepDialog;
 #include "crealfileview.h"
 #include "clogfileview.h"
 #include "cproject.h"
-#include "cdoctree.h"
+//#include "cdoctree.h"
 #include "structdef.h"
 #include "resource.h"
 #include "./print/cprintdlg.h"
@@ -703,7 +704,7 @@ private:
   /** The real filetree. */
   CRealFileView* real_file_tree;
   /** The documentation tree. */
-  CDocTree* doc_tree;
+  DocTreeView* doc_tree;
   
   /** Output for the compiler ... */
   COutputWidget* messages_widget;

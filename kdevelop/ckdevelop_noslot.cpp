@@ -29,6 +29,7 @@
 #include "kswallow.h"
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
+#include "doctreeview.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgreadmedlg.h"
 

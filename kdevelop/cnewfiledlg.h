@@ -28,7 +28,9 @@
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <ktabctl.h>
-#include "cproject.h"
+
+//#include "cproject.h"
+class CProject;
 
 /** the new file dialog
   *@author Sandy Meier

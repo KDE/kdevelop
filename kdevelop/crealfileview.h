@@ -24,7 +24,9 @@
 #include "ctreeview.h"
 #include <kpopmenu.h>
 #include <qstrlist.h>
-#include "cproject.h"
+
+//#include "cproject.h"
+class CProject;
 
 /**
   *display all files and dirs in the projectdir, a little filemanager

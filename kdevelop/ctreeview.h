@@ -22,8 +22,10 @@
 #include <qheader.h>
 #include <kpopmenu.h>
 #include <qpoint.h> 
-#include "cproject.h"
 #include "ctreehandler.h"
+
+//#include "cproject.h"
+class CProject;
 
 /** */
 class CTreeView : public QListView

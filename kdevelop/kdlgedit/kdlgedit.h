@@ -20,9 +20,11 @@
 #define KDLGEDIT_H
 
 #include <qobject.h>
-#include "../cproject.h"
 #include "items.h"
+
+//#include "../cproject.h"
 class CProject;
+class TDialogFileInfo;
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>

@@ -19,6 +19,7 @@
 #include "ckdevelop.h"
 #include "cclassview.h"
 #include "cdocbrowser.h"
+#include "doctreeview.h"
  
 void CKDevelop::initWhatsThis(){
 	whats_this->add(toolBar()->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
