@@ -343,8 +343,7 @@ void ConfigureOptionsWidget::cflagsClicked()
 
     if (plugin) {
         QString flags = plugin->exec(this, cflags_edit->text());
-        if (!flags.isNull())
-            cflags_edit->setText(flags);
+        cflags_edit->setText(flags);
         delete plugin;
     }
 }
@@ -357,8 +356,7 @@ void ConfigureOptionsWidget::cxxflagsClicked()
 
     if (plugin) {
         QString flags = plugin->exec(this, cxxflags_edit->text());
-        if (!flags.isNull())
-            cxxflags_edit->setText(flags);
+        cxxflags_edit->setText(flags);
         delete plugin;
     }
 }
@@ -371,8 +369,7 @@ void ConfigureOptionsWidget::f77flagsClicked()
 
     if (plugin) {
         QString flags = plugin->exec(this, f77flags_edit->text());
-        if (!flags.isNull())
-            f77flags_edit->setText(flags);
+        f77flags_edit->setText(flags);
         delete plugin;
     }
 }

@@ -68,8 +68,7 @@ void PascalGlobalOptionsDlg::optionsButtonClicked()
 
     if (plugin) {
         QString flags = plugin->exec(this, options_edit->text());
-        if (!flags.isNull())
-            options_edit->setText(flags);
+        options_edit->setText(flags);
         delete plugin;
     }
 }
