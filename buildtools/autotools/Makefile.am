@@ -13,16 +13,17 @@ libkdevautoproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/buildtools/lib/base/libkdevbuildbase.la
 
 libkdevautoproject_la_SOURCES = autoprojectpart.cpp autoprojectwidget.cpp \
-	configureoptionswidget.cpp configureoptionswidgetbase.ui subprojectoptionsdlg.cpp \
-	subprojectoptionsdlgbase.ui targetoptionsdlg.cpp targetoptionsdlgbase.ui addservicedlg.cpp \
-	addservicedlgbase.ui addapplicationdlg.cpp addapplicationdlgbase.ui addtargetdlg.cpp \
-	addtargetdlgbase.ui addsubprojectdlg.cpp addfiledlgbase.ui addfiledlg.cpp \
-	removefiledlgbase.ui removefiledlg.cpp addicondlgbase.ui addicondlg.cpp \
-	addtranslationdlg.cpp addprefixdlg.cpp kfilednddetailview.cpp kfiledndiconview.cpp \
-	fileselectorwidget.cpp misc.cpp addsubprojectdlgbase.ui removetargetdlg.cpp \
-	removetargetdlgbase.ui choosetargetdialog.cpp choosetargetdlgbase.ui addexistingdlgbase.ui \
-	addexistingfilesdlg.cpp addexistingdirectoriesdlg.cpp kimporticonview.cpp \
-	autosubprojectview.cpp autodetailsview.cpp autolistviewitems.cpp automakemanager.cpp
+		configureoptionswidget.cpp configureoptionswidgetbase.ui subprojectoptionsdlg.cpp \
+		subprojectoptionsdlgbase.ui targetoptionsdlg.cpp targetoptionsdlgbase.ui addservicedlg.cpp \
+		addservicedlgbase.ui addapplicationdlg.cpp addapplicationdlgbase.ui addtargetdlg.cpp \
+		addtargetdlgbase.ui addsubprojectdlg.cpp addfiledlgbase.ui addfiledlg.cpp \
+		removefiledlgbase.ui removefiledlg.cpp addicondlgbase.ui addicondlg.cpp \
+		addtranslationdlg.cpp addprefixdlg.cpp kfilednddetailview.cpp kfiledndiconview.cpp \
+		fileselectorwidget.cpp misc.cpp addsubprojectdlgbase.ui removetargetdlg.cpp \
+		removetargetdlgbase.ui choosetargetdialog.cpp choosetargetdlgbase.ui addexistingdlgbase.ui \
+		addexistingfilesdlg.cpp addexistingdirectoriesdlg.cpp kimporticonview.cpp \
+		autosubprojectview.cpp autodetailsview.cpp autolistviewitems.cpp automakemanager.cpp \
+	managecustomcommandsbase.ui managecustomcommand.cpp
 
 METASOURCES = AUTO
 
@@ -32,3 +33,4 @@ service_DATA = kdevautoproject.desktop kdevkdeautoproject.desktop
 rcdir = $(kde_datadir)/kdevautoproject
 rc_DATA = kdevautoproject.rc
 
+noinst_HEADERS = managecustomcommand.h
