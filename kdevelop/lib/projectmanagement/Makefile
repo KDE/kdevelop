@@ -201,10 +201,10 @@ libkdevprojectmanagement_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
 
 #>- METASOURCES = AUTO
 
-libkdevprojectmanagement_la_SOURCES = appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp 		plugin.cpp pmc.cpp project.cpp projectspace.cpp qobjectplugin.cpp 				registeredfile.cpp newprojectdlg.cpp pluginloader.cpp
+libkdevprojectmanagement_la_SOURCES = appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp 		plugin.cpp pmc.cpp project.cpp projectspace.cpp qobjectplugin.cpp 				registeredfile.cpp  pluginloader.cpp
 
 
-noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h 				 plugin.h pmc.h project.h projectspace.h qobjectplugin.h 				registeredfile.h newprojectdlg.h pluginloader.h
+noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h 				 plugin.h pmc.h project.h projectspace.h qobjectplugin.h 				registeredfile.h  pluginloader.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/admin/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
@@ -221,13 +221,13 @@ $(top_builddir)/kdevelop/lib/libkdevelop.la
 #>- libkdevprojectmanagement_la_OBJECTS =  appwizard.lo \
 #>- automakeprojectspace.lo cppbinaryprojectplugin.lo plugin.lo pmc.lo \
 #>- project.lo projectspace.lo qobjectplugin.lo registeredfile.lo \
-#>- newprojectdlg.lo pluginloader.lo
+#>- pluginloader.lo
 #>+ 8
 libkdevprojectmanagement_la_OBJECTS = appwizard.lo \
 automakeprojectspace.lo cppbinaryprojectplugin.lo plugin.lo pmc.lo \
 project.lo projectspace.lo qobjectplugin.lo registeredfile.lo \
-newprojectdlg.lo pluginloader.lo\
-pmc.moc.lo newprojectdlg.moc.lo automakeprojectspace.moc.lo appwizard.moc.lo projectspace.moc.lo qobjectplugin.moc.lo project.moc.lo  \
+pluginloader.lo\
+pmc.moc.lo automakeprojectspace.moc.lo appwizard.moc.lo projectspace.moc.lo qobjectplugin.moc.lo project.moc.lo  \
 libkdevprojectmanagement_la_meta_unload.lo 
 #libkdevprojectmanagement_la_OBJECTS = libkdevprojectmanagement_la.all_cpp.lo 
 libkdevprojectmanagement_la_final_OBJECTS = libkdevprojectmanagement_la.all_cpp.lo 
@@ -252,19 +252,19 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = tar
 GZIP_ENV = --best
 #>- DEP_FILES =  .deps/appwizard.P .deps/automakeprojectspace.P \
-#>- .deps/cppbinaryprojectplugin.P .deps/newprojectdlg.P .deps/plugin.P \
-#>- .deps/pluginloader.P .deps/pmc.P .deps/project.P .deps/projectspace.P \
-#>- .deps/qobjectplugin.P .deps/registeredfile.P
+#>- .deps/cppbinaryprojectplugin.P .deps/plugin.P .deps/pluginloader.P \
+#>- .deps/pmc.P .deps/project.P .deps/projectspace.P .deps/qobjectplugin.P \
+#>- .deps/registeredfile.P
 #>+ 10
-#DEP_FILES =  $(DEPDIR)/pmc.moc.P $(DEPDIR)/newprojectdlg.moc.P $(DEPDIR)/automakeprojectspace.moc.P $(DEPDIR)/appwizard.moc.P $(DEPDIR)/projectspace.moc.P $(DEPDIR)/qobjectplugin.moc.P $(DEPDIR)/project.moc.P  $(DEPDIR)/libkdevprojectmanagement_la.all_cpp.P \
+#DEP_FILES =  $(DEPDIR)/pmc.moc.P $(DEPDIR)/automakeprojectspace.moc.P $(DEPDIR)/appwizard.moc.P $(DEPDIR)/projectspace.moc.P $(DEPDIR)/qobjectplugin.moc.P $(DEPDIR)/project.moc.P  $(DEPDIR)/libkdevprojectmanagement_la.all_cpp.P \
 	  .deps/appwizard.P .deps/automakeprojectspace.P \
-.deps/cppbinaryprojectplugin.P .deps/newprojectdlg.P .deps/plugin.P \
-.deps/pluginloader.P .deps/pmc.P .deps/project.P .deps/projectspace.P \
-.deps/qobjectplugin.P .deps/registeredfile.P
-DEP_FILES =  $(DEPDIR)/pmc.moc.P $(DEPDIR)/newprojectdlg.moc.P $(DEPDIR)/automakeprojectspace.moc.P $(DEPDIR)/appwizard.moc.P $(DEPDIR)/projectspace.moc.P $(DEPDIR)/qobjectplugin.moc.P $(DEPDIR)/project.moc.P   .deps/appwizard.P .deps/automakeprojectspace.P \
-.deps/cppbinaryprojectplugin.P .deps/newprojectdlg.P .deps/plugin.P \
-.deps/pluginloader.P .deps/pmc.P .deps/project.P .deps/projectspace.P \
-.deps/qobjectplugin.P .deps/registeredfile.P
+.deps/cppbinaryprojectplugin.P .deps/plugin.P .deps/pluginloader.P \
+.deps/pmc.P .deps/project.P .deps/projectspace.P .deps/qobjectplugin.P \
+.deps/registeredfile.P
+DEP_FILES =  $(DEPDIR)/pmc.moc.P $(DEPDIR)/automakeprojectspace.moc.P $(DEPDIR)/appwizard.moc.P $(DEPDIR)/projectspace.moc.P $(DEPDIR)/qobjectplugin.moc.P $(DEPDIR)/project.moc.P   .deps/appwizard.P .deps/automakeprojectspace.P \
+.deps/cppbinaryprojectplugin.P .deps/plugin.P .deps/pluginloader.P \
+.deps/pmc.P .deps/project.P .deps/projectspace.P .deps/qobjectplugin.P \
+.deps/registeredfile.P
 
 SOURCES = $(libkdevprojectmanagement_la_SOURCES)
 OBJECTS = $(libkdevprojectmanagement_la_OBJECTS)
@@ -530,13 +530,11 @@ mostlyclean distclean maintainer-clean
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
 
+
+
 #>+ 3
 pmc.moc.cpp: $(srcdir)/pmc.h
 	$(MOC) $(srcdir)/pmc.h -o pmc.moc.cpp
-
-#>+ 3
-newprojectdlg.moc.cpp: $(srcdir)/newprojectdlg.h
-	$(MOC) $(srcdir)/newprojectdlg.h -o newprojectdlg.moc.cpp
 
 #>+ 3
 automakeprojectspace.moc.cpp: $(srcdir)/automakeprojectspace.h
@@ -560,7 +558,7 @@ project.moc.cpp: $(srcdir)/project.h
 
 #>+ 3
 clean-metasources:
-	-rm -f  pmc.moc.cpp newprojectdlg.moc.cpp automakeprojectspace.moc.cpp appwizard.moc.cpp projectspace.moc.cpp qobjectplugin.moc.cpp project.moc.cpp
+	-rm -f  pmc.moc.cpp automakeprojectspace.moc.cpp appwizard.moc.cpp projectspace.moc.cpp qobjectplugin.moc.cpp project.moc.cpp
 
 #>+ 8
 libkdevprojectmanagement.la.closure: $(libkdevprojectmanagement_la_OBJECTS) $(libkdevprojectmanagement_la_DEPENDENCIES)
@@ -581,11 +579,11 @@ force-reedit:
 
 
 #>+ 10
-libkdevprojectmanagement_la_meta_unload.cpp:  newprojectdlg.moc.cpp pmc.moc.cpp appwizard.moc.cpp automakeprojectspace.moc.cpp projectspace.moc.cpp project.moc.cpp qobjectplugin.moc.cpp
+libkdevprojectmanagement_la_meta_unload.cpp:  pmc.moc.cpp appwizard.moc.cpp automakeprojectspace.moc.cpp projectspace.moc.cpp project.moc.cpp qobjectplugin.moc.cpp
 	@echo 'creating libkdevprojectmanagement_la_meta_unload.cpp'
 	-rm -f libkdevprojectmanagement_la_meta_unload.cpp
 	@echo 'static const char * _metalist_libkdevprojectmanagement_la[] = {' > libkdevprojectmanagement_la_meta_unload.cpp
-	cat  newprojectdlg.moc.cpp pmc.moc.cpp appwizard.moc.cpp automakeprojectspace.moc.cpp projectspace.moc.cpp project.moc.cpp qobjectplugin.moc.cpp | grep 'char.*className' | sed -e 's/.*[^A-Za-z0-9_:]\([A-Za-z0-9_:]*\)::className.*$$/\"\1\",/' | sort | uniq >> libkdevprojectmanagement_la_meta_unload.cpp
+	cat  pmc.moc.cpp appwizard.moc.cpp automakeprojectspace.moc.cpp projectspace.moc.cpp project.moc.cpp qobjectplugin.moc.cpp | grep 'char.*className' | sed -e 's/.*[^A-Za-z0-9_:]\([A-Za-z0-9_:]*\)::className.*$$/\"\1\",/' | sort | uniq >> libkdevprojectmanagement_la_meta_unload.cpp
 	@echo '0};' >> libkdevprojectmanagement_la_meta_unload.cpp
 	@echo '#include <kunload.h>' >> libkdevprojectmanagement_la_meta_unload.cpp
 	@echo '_UNLOAD(libkdevprojectmanagement_la)' >> libkdevprojectmanagement_la_meta_unload.cpp
@@ -596,11 +594,11 @@ clean-moc-classes:
 	-rm -f  libkdevprojectmanagement_la_meta_unload.cpp
 
 #>+ 11
-libkdevprojectmanagement_la.all_cpp.cpp: $(srcdir)/Makefile.in $(srcdir)/appwizard.cpp $(srcdir)/automakeprojectspace.cpp $(srcdir)/cppbinaryprojectplugin.cpp $(srcdir)/plugin.cpp $(srcdir)/pmc.cpp $(srcdir)/project.cpp $(srcdir)/projectspace.cpp $(srcdir)/qobjectplugin.cpp $(srcdir)/registeredfile.cpp $(srcdir)/newprojectdlg.cpp $(srcdir)/pluginloader.cpp $(srcdir)/libkdevprojectmanagement_la_meta_unload.cpp  pmc.moc.cpp newprojectdlg.moc.cpp automakeprojectspace.moc.cpp appwizard.moc.cpp projectspace.moc.cpp qobjectplugin.moc.cpp project.moc.cpp
+libkdevprojectmanagement_la.all_cpp.cpp: $(srcdir)/Makefile.in $(srcdir)/appwizard.cpp $(srcdir)/automakeprojectspace.cpp $(srcdir)/cppbinaryprojectplugin.cpp $(srcdir)/plugin.cpp $(srcdir)/pmc.cpp $(srcdir)/project.cpp $(srcdir)/projectspace.cpp $(srcdir)/qobjectplugin.cpp $(srcdir)/registeredfile.cpp $(srcdir)/pluginloader.cpp $(srcdir)/libkdevprojectmanagement_la_meta_unload.cpp  pmc.moc.cpp automakeprojectspace.moc.cpp appwizard.moc.cpp projectspace.moc.cpp qobjectplugin.moc.cpp project.moc.cpp
 	@echo 'creating libkdevprojectmanagement_la.all_cpp.cpp ...'; \
 	rm -f libkdevprojectmanagement_la.all_cpp.files libkdevprojectmanagement_la.all_cpp.final; \
 	echo "#define KDE_USE_FINAL 1" >> libkdevprojectmanagement_la.all_cpp.final; \
-	for file in appwizard.cpp automakeprojectspace.cpp cppbinaryprojectplugin.cpp plugin.cpp pmc.cpp project.cpp projectspace.cpp qobjectplugin.cpp registeredfile.cpp newprojectdlg.cpp pluginloader.cpp libkdevprojectmanagement_la_meta_unload.cpp  pmc.moc.cpp newprojectdlg.moc.cpp automakeprojectspace.moc.cpp appwizard.moc.cpp projectspace.moc.cpp qobjectplugin.moc.cpp project.moc.cpp; do \
+	for file in appwizard.cpp automakeprojectspace.cpp cppbinaryprojectplugin.cpp plugin.cpp pmc.cpp project.cpp projectspace.cpp qobjectplugin.cpp registeredfile.cpp pluginloader.cpp libkdevprojectmanagement_la_meta_unload.cpp  pmc.moc.cpp automakeprojectspace.moc.cpp appwizard.moc.cpp projectspace.moc.cpp qobjectplugin.moc.cpp project.moc.cpp; do \
 	  echo "#include \"$$file\"" >> libkdevprojectmanagement_la.all_cpp.files; \
 	  test ! -f $(srcdir)/$$file || egrep '^#pragma +implementation' $(srcdir)/$$file >> libkdevprojectmanagement_la.all_cpp.final; \
 	done; \

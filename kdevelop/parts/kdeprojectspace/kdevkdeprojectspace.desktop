@@ -2,8 +2,8 @@
 Type=Service
 Exec=blubb
 Comment=KDE ProjectSpace (handels KDE Projects,po files...)
-Name=KDEProjectSpace
+Name=KDE
 Icon=find
 ServiceTypes=KDevelop/ProjectSpace
 X-KDE-Library=libkdevkdeprojectspace
-X-KDevelop-ProjectSpace=KDE
+X-KDevelop-Language=C++

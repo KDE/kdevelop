@@ -29,7 +29,7 @@
 #include <klibloader.h>
 #include <ktrader.h>
 #include <kedittoolbar.h>
-#include "lib/projectmanagement/newprojectdlg.h"
+#include "newprojectdlg.h"
 #include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevelopfactory.h"

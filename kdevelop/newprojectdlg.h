@@ -30,6 +30,7 @@
 #include <qlabel.h>
 #include <qlist.h>
 #include <klistbox.h>
+#include <klistview.h>
 
 #include "projectspace.h"
 #include "appwizard.h"
@@ -53,7 +54,7 @@ public:
 	void initDialog();
 
 	protected slots:
-	void slotProjectSpaceSelected ( const QString& name);
+	void slotProjectSpaceSelected (QListViewItem *item );
 	void slotAppwizardSelected (QIconViewItem* item);
 	virtual void slotOk(); // from the KDialogBase
 	void slotProjectSpaceDirClicked();
@@ -74,7 +75,7 @@ public:
 	QRadioButton *new_radio_button;
 	QWidget *preview_widget;
 	QLabel *description_label;
-	QListBox *prjspace_listbox;
+	KListView *prjspace_listview;
 	QLineEdit *m_prjspace_name_linedit;
 	QLabel *m_prjspace_location_label;
 	QLabel *m_prjspace_name_label;
@@ -88,6 +89,7 @@ public:
 	QList<ProjectSpace>* m_prjspace_list;
 	QList<AppWizard>* m_appwizard_list;
 	AppWizard* m_current_appwizard_plugin;
+	QString m_current_prjspace_name;
 	QPixmap* m_pixmap;
 	
 	// others

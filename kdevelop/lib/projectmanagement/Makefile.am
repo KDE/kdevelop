@@ -10,9 +10,9 @@ METASOURCES = AUTO
 
 libkdevprojectmanagement_la_SOURCES =  appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp \
 		plugin.cpp pmc.cpp project.cpp projectspace.cpp qobjectplugin.cpp \
-				registeredfile.cpp newprojectdlg.cpp pluginloader.cpp
+				registeredfile.cpp  pluginloader.cpp
 
 
 noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 				 plugin.h pmc.h project.h projectspace.h qobjectplugin.h \
-				registeredfile.h newprojectdlg.h pluginloader.h
+				registeredfile.h  pluginloader.h

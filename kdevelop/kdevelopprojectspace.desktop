@@ -5,5 +5,5 @@ Name=KDevelop ProjectSpace Interface
 
 [PropertyDef::X-KDevelop-Args]
 Type=QString
-[PropertyDef::X-KDevelop-ProjectSpace]
+[PropertyDef::X-KDevelop-Language]
 Type=QString

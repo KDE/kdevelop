@@ -4,7 +4,7 @@
 
 extern "C" {
   
-  void *init_libkdebinary_project(){
+  void *init_libkdevkdebinaryproject(){
     return new KDEBinaryProjectFactory;
   }
   

@@ -5,3 +5,7 @@ Name=KDevelop AppWizard Interface
 
 [PropertyDef::X-KDevelop-Args]
 Type=QString
+[PropertyDef::X-KDevelop-ProjectSpace-Name]
+Type=QString
+[PropertyDef::X-KDevelop-Project-Name]
+Type=QString

@@ -12,9 +12,9 @@ LFLAGS = -+
 bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = main.cpp kdevelop.cpp kdevelopcore.cpp kdevelopfactory.cpp projectoptionsdlg.cpp
+kdevelop_SOURCES = main.cpp kdevelop.cpp kdevelopcore.cpp kdevelopfactory.cpp projectoptionsdlg.cpp newprojectdlg.cpp
 
-kdevelop_METASOURCES = kdevelop.moc kdevelopcore.moc projectoptionsdlg.moc
+kdevelop_METASOURCES = kdevelop.moc kdevelopcore.moc projectoptionsdlg.moc newprojectdlg.moc
 
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -26,7 +26,7 @@ kdevelop_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
 		$(LIB_KFILE)
 
 # this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h projectoptionsdlg.h
+noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h projectoptionsdlg.h newprojectdlg.h
 
 EXTRA_DIST = kdeveloprc kdevelopui.rc\
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \

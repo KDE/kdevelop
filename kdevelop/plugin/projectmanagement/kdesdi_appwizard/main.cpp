@@ -4,7 +4,7 @@
 
 extern "C" {
 
-  void *init_libkdesdi_appwizard()
+  void *init_libkdevkdesdiappwizard()
   {
     return new KDESDIAppWizardFactory;
     }

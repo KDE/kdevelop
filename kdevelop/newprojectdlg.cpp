@@ -3,7 +3,7 @@
                              -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
+    email                : smeier@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -28,31 +28,15 @@
 #include <projectspace.h>
 #include <qfiledialog.h>
 #include <qdir.h>
-
+#include <ktrader.h>
+#include <qvariant.h>
+#include <qheader.h>
+#include <kmessagebox.h>
 #include "plugin.h"
 #include "newprojectdlg.h"
 #include "appwizard.h"
 #include "pluginloader.h"
 
-// from the JanusWidget
-
-class IconListItem : public QListBoxItem
-{
-  public:
-    IconListItem( QListBox *listbox, const QPixmap &pixmap,
-		   const QString &text );
-    virtual int height( const QListBox *lb ) const;
-    virtual int width( const QListBox *lb ) const;
-    int expandMinimumWidth( int width );
-
-  protected:
-    const QPixmap &defaultPixmap();
-    void paint( QPainter *painter );
-
-  private:
-    QPixmap mPixmap;
-    int mMinimumWidth;
-};
 
 
 NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
@@ -65,7 +49,7 @@ NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
   m_default_location = QDir::homeDirPath() + "/testprj";
   m_pixmap = new QPixmap();
   
-  QStringList::Iterator it;		
+  //  QStringList::Iterator it;		
   KStandardDirs* std_dirs = KGlobal::dirs();
   QStringList plugin_list;
   ProjectSpace* space;
@@ -74,43 +58,56 @@ NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
   m_prjspace_list = new QList<ProjectSpace>;
   m_appwizard_list = new QList<AppWizard>;
   initDialog();
-  
-  m_prjspace_list = PluginLoader::getAllProjectSpaces(this);
-  m_appwizard_list = PluginLoader::getAllAppWizards(this);
-  
-  // test output
-  for(space = m_prjspace_list->first();space != 0;space = m_prjspace_list->next()){
-    cerr << endl << "Name:" << space->getPluginName() << endl;
-    cerr << "Version:" << space->getPluginVersion() << endl;
-    cerr << "Copyright:" << space->getPluginCopyright() << endl;
+
+  // all offers for ProjectSpace
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace");
+  if (offers.isEmpty()){
+    kdDebug(9000) << "No KDevelop projectspace found" << endl;
+  }
+  KTrader::OfferList::ConstIterator offer_it;
+  QString name;
+  QString lang;
+  QStringList lang_list;
+  QVariant prop;
+  // colltect all languages, (toplevel folders)
+  for (offer_it = offers.begin(); offer_it != offers.end(); ++offer_it) {
+    kdDebug(9000) << "Found Projectspace " << (*offer_it)->name() << endl;
+    prop = (*offer_it)->property("X-KDevelop-Language");
+    if (prop.isValid()){
+      lang = prop.toString();
+      lang_list.append(lang);
+      kdDebug(9000) << "added Language " << lang << endl;
+    }
+  }
+  QStringList::Iterator lang_it;
+  QListViewItem* lang_item;
+  QListViewItem* tmp_item;
+  for (lang_it = lang_list.begin(); lang_it != lang_list.end(); ++lang_it) { // for every lang
+    // new lang
+    lang_item = new QListViewItem( prjspace_listview,*lang_it);
+    lang_item->setPixmap(0, KGlobal::iconLoader()->loadIcon("folder", 
+							    KIcon::Desktop, KIcon::SizeSmall));
+    lang_item->setOpen(true);
+
+    for (offer_it = offers.begin(); offer_it != offers.end(); ++offer_it) {
+      prop = (*offer_it)->property("X-KDevelop-Language");
+      if(prop.toString() == *lang_it){
+	prop = (*offer_it)->property("Name");
+	// new projectspace
+	name = prop.toString();
+	tmp_item =  new QListViewItem( lang_item,name);
+	tmp_item->setPixmap(0, KGlobal::iconLoader()->loadIcon((*offer_it)->icon(), 
+							    KIcon::Desktop, KIcon::SizeSmall));
+	kdDebug(9000) << "Name " << name << endl;
+      }
+    }
   }
   
-				// test output
-  for(appwizard_plg = m_appwizard_list->first();appwizard_plg != 0;
-      appwizard_plg = m_appwizard_list->next()){
-    
-    cerr << endl << "Name:" << appwizard_plg->getPluginName() << endl;
-    cerr << "Version:" << appwizard_plg->getPluginVersion() << endl;
-    cerr << "Copyright:" << appwizard_plg->getPluginCopyright() << endl;
-    cerr << "Picture:" << appwizard_plg->getPreviewPicture() << endl;
-  }
-  
-  cerr << "PI" << std_dirs->findResource("appdata","appwizard_pics/normalApp.bmp");
-  plugin_list = std_dirs->allTypes();
-  for(it = plugin_list.begin();it != plugin_list.end();it++){
-    cerr << "RE:" << *it << endl;
-				}
-  // fill the project_space list
-  for(space = m_prjspace_list->first();space != 0;space = m_prjspace_list->next()){
-    new IconListItem(prjspace_listbox,space->getPluginIcon(),space->getPluginName());	 	
-  }
-  
-  connect(prjspace_listbox,SIGNAL(highlighted( const QString & )),
-	  SLOT(slotProjectSpaceSelected  ( const QString & )));
+  connect(prjspace_listview,SIGNAL(executed(QListViewItem*)),
+	  SLOT(slotProjectSpaceSelected(QListViewItem*)));
   connect(appwizard_iconview,SIGNAL(selectionChanged (QIconViewItem*)),
 	  SLOT(slotAppwizardSelected (QIconViewItem*) ) );
   connect(m_prjspace_dir_button,SIGNAL(clicked()),SLOT(slotProjectSpaceDirClicked()));	 			
-  
   connect(m_prjspace_name_linedit, SIGNAL(textChanged(const QString &)),
           SLOT(slotProjectSpaceNameEdit(const QString &)));
   connect(m_prjspace_location_linedit, SIGNAL(textChanged(const QString &)),
@@ -121,7 +118,7 @@ NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
           SLOT(slotProjectLocationEdit(const QString &)));
   
   // init the first one
-  prjspace_listbox->setSelected(0,true);
+  //  prjspace_listbox->setSelected(0,true);
   new_radio_button->setChecked(true);
   resize(637,489);
   
@@ -144,34 +141,60 @@ void NewProjectDlg::slotProjectLocationEdit(const QString &){
     m_project_location_modified = true;
   }
 }
-void NewProjectDlg::slotProjectSpaceSelected ( const QString& name){
-  AppWizard* appwizard_plg;
-  appwizard_iconview->clear();
-  for(appwizard_plg = m_appwizard_list->first();appwizard_plg != 0;
-      appwizard_plg = m_appwizard_list->next()){
-    // add all related appwizard plugins
-    if (appwizard_plg->getProjectSpaceName() == name){
-      new QIconViewItem(appwizard_iconview,appwizard_plg->getPluginName(),
-			appwizard_plg->getPluginIcon());
-    }
+void NewProjectDlg::slotProjectSpaceSelected (QListViewItem *item){
+  if(item->depth() != 1){
+    cerr << item->depth();
+    return; // no Projectspace selected
   }
+  m_current_prjspace_name = item->text(0);
+  QString constraint = QString("[X-KDevelop-ProjectSpace-Name] == '%1'").arg(m_current_prjspace_name);
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/AppWizard", constraint);
+    if (offers.isEmpty()) {
+        KMessageBox::sorry(this,
+                           i18n("No Applicationwizards for %1 found!").arg(m_current_prjspace_name));
+        return;
+    }
+
+    KTrader::OfferList::ConstIterator offer_it;
+    appwizard_iconview->clear();
+    QVariant prop;
+    QString name;
+    for (offer_it = offers.begin(); offer_it != offers.end(); ++offer_it) {
+      prop = (*offer_it)->property("Name");
+	name = prop.toString();
+	new QIconViewItem(appwizard_iconview,name,KGlobal::iconLoader()->loadIcon((*offer_it)->icon(), 
+							    KIcon::Desktop));
+      }
 }
 
 void NewProjectDlg::slotAppwizardSelected (QIconViewItem* item){
   AppWizard* appwizard_plg;
+  QString constraint = QString("([Name] == '%1') and [X-KDevelop-ProjectSpace-Name] == '%2'").arg(item->text()).arg(m_current_prjspace_name);
+
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/AppWizard",constraint );
+  KService *service = *offers.begin();
+  kdDebug(9000) << "Found Appwizard Component " << service->name() << endl;
   
-  for(appwizard_plg = m_appwizard_list->first();appwizard_plg != 0;
-      appwizard_plg = m_appwizard_list->next()){
-    // find the selected appwizard plugins
-    if (appwizard_plg->getPluginName() == item->text()){
-      m_current_appwizard_plugin = appwizard_plg; // set current plugin
-      description_label->setText(appwizard_plg->getPluginDescription());
-      m_pixmap->load(appwizard_plg->getPreviewPicture());
-      preview_widget->setBackgroundPixmap(*m_pixmap);
-      cerr << "Picture:" << appwizard_plg->getPreviewPicture() << endl;
-    }
+  KLibFactory *factory = KLibLoader::self()->factory(service->library());
+  if(m_current_appwizard_plugin != 0){
+    delete m_current_appwizard_plugin; // just remove the current one
   }
+  QObject *obj = factory->create(this, service->name().latin1(),
+				 "AppWizard");
+        
+  if (!obj->inherits("AppWizard")) {
+    kdDebug(9000) << "Component does not inherit AppWizard" << endl;
+    return;
+  }
+  
+  appwizard_plg = (AppWizard*) obj; 
+  m_current_appwizard_plugin = appwizard_plg; // set current plugin
+  description_label->setText(appwizard_plg->getPluginDescription());
+  m_pixmap->load(appwizard_plg->getPreviewPicture());
+  preview_widget->setBackgroundPixmap(*m_pixmap);
+  cerr << "Picture:" << appwizard_plg->getPreviewPicture() << endl;
 }
+
 void NewProjectDlg::slotProjectSpaceNameEdit(const QString &text){
   QString str = text;
   if(!m_project_name_modified){
@@ -187,25 +210,32 @@ void NewProjectDlg::slotProjectSpaceNameEdit(const QString &text){
 }
 void NewProjectDlg::slotOk(){
   bool new_projectspace = true;
-  ProjectSpace* prjspace;
   ProjectSpace* selected_prjspace;
-  QString name = prjspace_listbox->currentText();
-  
-  
   if(current_radio_button->isChecked()) new_projectspace = false;
   
-  for(prjspace = m_prjspace_list->first();prjspace != 0;prjspace = m_prjspace_list->next()){
-    if(prjspace->getPluginName() == name){
-      selected_prjspace = prjspace;
-    }
+  
+  QString constraint = QString("[Name] == '%1'").arg(m_current_prjspace_name);
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
+  KService *service = *offers.begin();
+  kdDebug(9000) << "Found ProjectSpace Component " << service->name() << endl;
+
+  KLibFactory *factory = KLibLoader::self()->factory(service->library());
+  QObject *obj = factory->create(this, service->name().latin1(),
+				 "ProjectSpace");
+        
+  if (!obj->inherits("ProjectSpace")) {
+    kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
+    return;
   }
+
+  selected_prjspace = (ProjectSpace*) obj;
+    
   // name, path
   selected_prjspace->setAbsolutePath(m_prjspace_location_linedit->text());
   selected_prjspace->setName(m_prjspace_name_linedit->text());
   
-  
   m_current_appwizard_plugin->init(new_projectspace,selected_prjspace);
-  Project* prj = m_current_appwizard_plugin->getProject();
+  //  Project* prj = m_current_appwizard_plugin->getProject();
   //  prj->setName(m_prjname_linedit->text());
   //  prj->setAbsolutePath(m_prjlocation_linedit->text());
   
@@ -262,9 +292,12 @@ void NewProjectDlg::initDialog(){
   description_label->setText(i18n("Description"));
   description_label->setMargin(0);
 
-  prjspace_listbox= new QListBox(this,"NoName");
-  prjspace_listbox->setGeometry(10,10,110,460);
-  prjspace_listbox->setMinimumSize(0,0);
+  prjspace_listview= new KListView(this,"NoName");
+  prjspace_listview->setGeometry(10,10,110,460);
+  prjspace_listview->setMinimumSize(0,0);
+  prjspace_listview->addColumn("");
+  prjspace_listview->header()->hide();
+  prjspace_listview->setRootIsDecorated(true);
   m_prjspace_name_linedit= new QLineEdit(this,"NoName");
   m_prjspace_name_linedit->setGeometry(290,300,200,30);
   m_prjspace_name_linedit->setMinimumSize(0,0);
@@ -304,33 +337,6 @@ void NewProjectDlg::initDialog(){
 }
 
 
-IconListItem::IconListItem( QListBox *listbox, const QPixmap &pixmap,
-			    const QString &text )
-  : QListBoxItem( listbox )
-{
-  mPixmap = pixmap;
-  setText( text );
-  mMinimumWidth = 0;
-}
 
 
-void IconListItem::paint( QPainter *painter )
-{
-  QFontMetrics fm = painter->fontMetrics();
-  int wt = fm.boundingRect(text()).width();
-  int wp = mPixmap.width();
-  int ht = fm.lineSpacing();
-  int hp = mPixmap.height();
-
-  painter->drawPixmap( wp, 5, mPixmap );
-  if( text().isEmpty() == false )
-  {
-    painter->save();
-    QFont f( painter->font() );
-    f.setBold( true );
-    painter->setFont(f);
-    painter->drawText(wt, hp+ht+5, text() );
-    painter->restore();
-  }
-}
-
+#include "newprojectdlg.moc"
