@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
+ 
 // c++ support
 #include "parser.h"
 #include "driver.h"
@@ -32,9 +32,7 @@ using namespace std;
 { \
     Token token = lex->lookAhead( 0 ); \
     if( token != tk ){ \
-        QString s = token.toString(); \
-        if( s.isEmpty() ) s = i18n("<eof>"); \
-        reportError( i18n("%1 expected found %2").arg(descr).arg(s) ); \
+        reportError( i18n("'%1' expected found '%2'").arg(descr).arg(lex->lookAhead(0).toString()) ); \
         return false; \
     } \
     lex->nextToken(); \
@@ -79,7 +77,7 @@ class SymbolTable{
 public:
 	SymbolTable( const QString& name, SymbolTable* parent=0 )
 		: m_name( name ), m_parent( parent )
-	{
+	{ 
 		m_children.setAutoDelete( true );
 		m_symbols.setAutoDelete( true );
 
@@ -90,7 +88,7 @@ public:
 
 	~SymbolTable()
 	{
-		if( m_parent && m_parent->m_children.findRef(this) ){
+		if( m_parent && m_parent->m_children.findRef(this) ){ 
 			m_parent->m_children.take();
 		}
 	}
@@ -112,7 +110,7 @@ public:
 
 	Symbol* bind( const QString& name, int kind ){
 		Symbol* sym = new Symbol( name, kind );
-		m_symbols.insert( name, sym );
+		m_symbols.insert( name, sym ); 
 		return sym;
 	}
 
@@ -186,8 +184,13 @@ bool Parser::reportError( const Error& err )
         int line=0, col=0;
         const Token& token = lex->lookAhead( 0 );
         lex->getTokenPosition( token, &line, &col );
+		
+		QString s = lex->lookAhead( 0 ).toString();
+		s = s.left( 30 ).stripWhiteSpace();
+		if( s.isEmpty() )
+			s = i18n( "<eof>" );
 
-        m_problemReporter->reportError( err.text.arg(lex->lookAhead(0).toString()),
+        m_problemReporter->reportError( err.text.arg(s),
                                         m_fileName,
                                         line,
                                         col );
@@ -205,7 +208,7 @@ bool Parser::reportError( const QString& msg )
         int line=0, col=0;
         const Token& token = lex->lookAhead( 0 );
         lex->getTokenPosition( token, &line, &col );
-
+		
         m_problemReporter->reportError( msg,
                                         m_fileName,
                                         line,
@@ -291,23 +294,48 @@ bool Parser::skipUntilDeclaration()
 
 bool Parser::skipUntilStatement()
 {
-    //kdDebug(9007) << "Parser::skipUntilStatement()" << endl;
+    //kdDebug(9007) << "Parser::skipUntilStatement() -- token = " << lex->lookAhead(0).toString() << endl;
 	
-	lex->nextToken();
     while( !lex->lookAhead(0).isNull() ){
         switch( lex->lookAhead(0) ){
-        case ';':
-        case '{':
-        case '}':
-        case Token_if:
-        case Token_for:
-        case Token_while:
-        case Token_do:
-		case Token_throw:
-		case Token_new:
-		case Token_delete:
+		case ';':
+		case '{':
+		case '}':
+		case Token_const:
+		case Token_volatile:
 		case Token_identifier:
+		case Token_case:
+		case Token_default:
+		case Token_if:
 		case Token_switch:
+		case Token_while:
+		case Token_do:
+		case Token_for:
+		case Token_break:
+		case Token_continue:
+		case Token_return:
+		case Token_goto:
+		case Token_try:
+		case Token_catch:
+		case Token_throw:
+		case Token_char:
+		case Token_wchar_t:
+		case Token_bool:
+		case Token_short:
+		case Token_int:
+		case Token_long:
+		case Token_signed:
+		case Token_unsigned:
+		case Token_float:
+		case Token_double:
+		case Token_void:
+		case Token_class:
+		case Token_struct:
+		case Token_union:
+		case Token_enum:
+		case Token_scope:
+		case Token_template:
+		case Token_using:
             return true;
 
         default:
@@ -1941,30 +1969,44 @@ bool Parser::parseExpression()
 {
     //kdDebug(9007) << "Parser::parseExpression()" << endl;
 
-    bool ok = false;
     while( !lex->lookAhead(0).isNull() ){
         int tk = lex->lookAhead( 0 );
-
-        if( tk == '(' ){
-            if( !skip('(', ')') ){
-                return false;
-            } else
-                lex->nextToken();
-        } else if( tk == '[' ){
-            if( !skip('[', ']') ){
-                return false;
-            } else
-                lex->nextToken();
-        } else if( tk == ';' || tk == ',' ||
-                   tk == ']' || tk == ')' ){
-            break;
-        } else
+		
+		switch( tk ){
+		case '(':
+            skip( '(', ')' );
             lex->nextToken();
+			break;
+			
+        case '[':
+            skip( '[', ']' );
+            lex->nextToken();
+			break;
+		
+		case ';':
+		case ',':
+		case ']':
+		case ')':
+		case '{':
+		case '}':
+		case Token_case:
+		case Token_default:
+		case Token_if:
+		case Token_while:
+		case Token_do:
+		case Token_for:
+		case Token_break:
+		case Token_continue:
+		case Token_return:
+		case Token_goto:
+			return true;
+			
+		default:
+            lex->nextToken();
+    	}
+	}
 
-        ok = true;
-    }
-
-    return ok;
+    return false;
 }
 
 
@@ -2201,7 +2243,11 @@ bool Parser::parseSwitchStatement( SymbolTable* symtab )
     }
     ADVANCE( ')', ")" );
 
-    return parseStatement( my );
+    if( !parseCompoundStatement(my) ){
+		syntaxError();
+		return false;
+	}
+	return true;
 }
 
 bool Parser::parseLabeledStatement( SymbolTable* symtab )
@@ -2303,6 +2349,7 @@ bool Parser::parseDeclarationStatement( SymbolTable* symtab )
 
 bool Parser::parseDeclaration( SymbolTable* symtab, DeclarationAST*& decl )
 {
+#warning "TODO: Parser::parseDeclaration() -- fill abstract syntax tree"
 	QStringList functionSpec;
 	QString s;
 	while( parseFunctionSpecifier(s) )
