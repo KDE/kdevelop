@@ -238,10 +238,15 @@ void AddAttributeDialog::deleteCurrentAttribute()
 void AddAttributeDialog::currentChanged( QListViewItem* item )
 {
     if( item ){
-	access->setCurrentText( item->text(0) );
-	storage->setCurrentText( item->text(1) );
-	returnType->setCurrentText( item->text(2) );
-	declarator->setText( item->text(3) );
+        QString _access = item->text( 0 );
+        QString _storage = item->text( 1 );
+        QString _returnType = item->text( 2 );
+        QString _declarator = item->text( 3 );
+
+	access->setCurrentText( _access );
+	storage->setCurrentText( _storage );
+	returnType->setCurrentText( _returnType );
+	declarator->setText( _declarator );
     }
 
     updateGUI();

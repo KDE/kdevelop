@@ -349,12 +349,19 @@ void AddMethodDialog::deleteCurrentMethod()
 void AddMethodDialog::currentChanged( QListViewItem* item )
 {
     if( item ){
-	isInline->setChecked( item->text(0) == "True" ? true : false );
-	access->setCurrentText( item->text(1) );
-	storage->setCurrentText( item->text(2) );
-	returnType->setCurrentText( item->text(3) );
-	declarator->setText( item->text(4) );
-	sourceFile->setCurrentText( item->text(5) );
+        QString _isInline = item->text( 0 );
+        QString _access = item->text( 1 );
+        QString _storage = item->text( 2 );
+        QString _returnType = item->text( 3 );
+        QString _declarator = item->text( 4 );
+        QString _sourceFile = item->text( 5 );
+
+	isInline->setChecked( _isInline == "True" ? true : false );
+	access->setCurrentText( _access );
+	storage->setCurrentText( _storage );
+	returnType->setCurrentText( _returnType );
+	declarator->setText( _declarator );
+	sourceFile->setCurrentText( _sourceFile );
     }
 
     updateGUI();
