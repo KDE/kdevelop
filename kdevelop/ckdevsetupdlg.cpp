@@ -393,6 +393,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   QString dbg_cmd=config->readEntry("External debugger program","kdbg");
   bool displayMangledNames = config->readBoolEntry("Display mangled names", false);
   bool displayStaticMembers = config->readBoolEntry("Display static members", false);
+  bool setBPsOnLibLoad = config->readBoolEntry("Break on loading libs", false);
 
   w3 = new QWidget( this, "debug" );
 
@@ -432,7 +433,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
 	                  "as your debugger")));
 
   dbgInternalGroup = new QButtonGroup( w3, "dbgInternalGroup" );
-  dbgInternalGroup->setGeometry( 10, 120, 400, 90 );
+  dbgInternalGroup->setGeometry( 10, 120, 400, 130 );
   dbgInternalGroup->setFrameStyle( 49 );
   dbgInternalGroup->setTitle(i18n( "Internal" ));
   dbgInternalGroup->setAlignment( 1 );
@@ -462,6 +463,20 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
 	                  "When displaying the disassembled code you\n"
 	                  "can elect to see the methods mangled names\n"
                     "However, non-mangled names are easier to read." ));
+
+  dbgLibCheck = new QCheckBox( w3, "dbgMembers" );
+  dbgLibCheck->setGeometry( 20, 210, 310, 25 );
+  dbgLibCheck->setText(i18n("Try setting BPs on lib load"));
+  dbgLibCheck->setAutoRepeat( FALSE );
+  dbgLibCheck->setAutoResize( FALSE );
+  dbgLibCheck->setChecked(setBPsOnLibLoad);
+  KQuickHelp::add(dbgLibCheck, i18n("Set pending breakpoints on loading a library\n\n"
+	                  "If GDB hasn't seen a library that will be loaded via\n"
+	                  "\"dlopen\" then it'll refuse to set a breakpoint in that code.\n"
+                    "We can get gdb to stop on a library load and hence\n"
+                    "try to set the pending breakpoints. See docs for more\n"
+                    "details and a \"gotcha\" relating to this behaviour.\n\n"
+                    "If you are not \"dlopen\"ing libs leave this off." ));
 
   slotSetDebug();
   connect( dbgExternalCheck, SIGNAL(toggled(bool)), SLOT(slotSetDebug()));
@@ -584,6 +599,7 @@ void CKDevSetupDlg::slotOkClicked(){
   config->writeEntry("External debugger program", dbgExternalSelectLineEdit->text());
   config->writeEntry("Display mangled names", dbgAsmCheck->isChecked());
   config->writeEntry("Display static members", dbgMembersCheck->isChecked());
+  config->writeEntry("Break on loading libs", dbgLibCheck->isChecked());
 
   accel->setKeyDict( *dict);
   accel->writeSettings(config);
@@ -651,4 +667,5 @@ void CKDevSetupDlg::slotSetDebug()
   dbgInternalGroup->setEnabled(!externalDbg);
   dbgMembersCheck->setEnabled(!externalDbg);
   dbgAsmCheck->setEnabled(!externalDbg);
+  dbgLibCheck->setEnabled(!externalDbg);
 }

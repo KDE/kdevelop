@@ -1084,7 +1084,7 @@ void CKDevelop::readOptions(){
     output_view_pos=config->readNumEntry("output_view_pos", 80);
 	}
 	
-  top_panner->setSeparatorPos(config->readNumEntry("top_panner_pos", 213));
+  top_panner->setSeparatorPos(config->readNumEntry("top_panner_pos", 263));
 	bool treeview=config->readBoolEntry("show_tree_view", true);
 	if(treeview){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
@@ -1094,7 +1094,7 @@ void CKDevelop::readOptions(){
     tree_view_pos=top_panner->separatorPos();
 	}
   else{
-    tree_view_pos=config->readNumEntry("tree_view_pos", 213);
+    tree_view_pos=config->readNumEntry("tree_view_pos", 263);
   }
 	
 

@@ -83,6 +83,7 @@ private:
   QButtonGroup* dbgInternalGroup;
   QCheckBox* dbgMembersCheck;
   QCheckBox* dbgAsmCheck;
+  QCheckBox* dbgLibCheck;
 
  private slots:
   void slotOkClicked();
