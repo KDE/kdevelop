@@ -30,15 +30,13 @@
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
 #define ID_FILE_NEW_FILE            10010
-#define ID_FILE_NEW_PROJECT         10020
 #define ID_FILE_OPEN_FILE           10030
-#define ID_FILE_OPEN_PROJECT        10040
 
 #define ID_FILE_SAVE                10050
 #define ID_FILE_SAVE_AS             10060
 #define ID_FILE_SAVE_ALL            10065
+
 #define ID_FILE_CLOSE               10070
-#define ID_FILE_CLOSE_ALL           10075
 
 #define ID_FILE_PRINT               10077
 
@@ -61,8 +59,6 @@
 #define ID_EDIT_SEARCH              11060
 #define ID_EDIT_REPEAT_SEARCH       11070
 #define ID_EDIT_REPLACE             11080
-
-
 
 #define ID_EDIT_SELECT_ALL          11040
 #define ID_EDIT_DESELECT_ALL        11041
@@ -119,7 +115,10 @@
 ///////////////////////////////////////////////////////////////////
 // project-menu entries 
 
+#define ID_FILE_NEW_PROJECT         10020
 #define ID_PROJECT_NEW              14003
+#define ID_FILE_OPEN_PROJECT        10040
+#define ID_PROJECT_CLOSE            14004
 #define ID_PROJECT_NEW_CLASS        14005
 #define ID_PROJECT_ADD_FILE         14010
 #define ID_PROJECT_ADD_FILE_NEW     14020
@@ -159,6 +158,12 @@
 #define ID_HELP_ABOUT               17030
 
 // for the setCurrentTab(int);
+
+
+#define HEADER  0
+#define CPP 	1
+#define TOOLS 	3
+#define BROWSER 2
 
 #define HEADER 0
 #define CPP 1

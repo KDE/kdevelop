@@ -26,7 +26,11 @@
 
 
 void CKDevelop::slotProjectNew(){
-/* TODO: add a dialog to create empty project file, just set
+  if(project=true)
+  slotProjectClose();
+
+/* TODO:
+  add a dialog to create empty project file, just set
   the project name, directory and project Type (application (KDE; QT; X11; Terminal; Library)).
   Then create directory and project file
   - then call slotProjectAddExistingFiles to add all files needed by the new app.
@@ -35,8 +39,13 @@ void CKDevelop::slotProjectNew(){
 
 }
 
-void CKDevelop::slotProjectCompileFile(){
+void CKDevelop::slotProjectClose(){
 
+ /* TODO: close the actual project and remove files from windows menu*/
+
+}
+void CKDevelop::slotProjectCompileFile(){
+/* TODO: add a process reading the filename and compiler options->gcc -options -filename ...*/
 }
 
 void CKDevelop::slotProjectAddNewFile(){
@@ -182,6 +191,7 @@ bool CKDevelop::readProjectFile(QString file){
   // build menu
   setToolMenuProcess(true);  
   // prj menu
+  enableCommand(ID_PROJECT_CLOSE);
   enableCommand(ID_PROJECT_ADD_FILE);
   enableCommand(ID_PROJECT_ADD_FILE_NEW);
   enableCommand(ID_PROJECT_ADD_FILE_EXIST);
@@ -231,6 +241,14 @@ void CKDevelop::slotProjectFileProperties(){
   CFilePropDlg dlg(this,"DLG",&prj);
   dlg.show();
 }
+
+
+
+
+
+
+
+
 
 
 

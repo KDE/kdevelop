@@ -29,30 +29,26 @@ CKDevelop::CKDevelop(){
   init();
   initConnections();
   initProject(); 
-  
-  // read the three last files
 
-   config->setGroup("Files");
-   filename = config->readEntry("header_file");
-   if (QFile::exists(filename)){
-     switchToFile(filename);
-   }
-   config->setGroup("Files");
-   filename = config->readEntry("cpp_file");
-   if (QFile::exists(filename)){
-     switchToFile(filename);
-   }
+//  config->setGroup("General Options");
+
    config->setGroup("Files");
    filename = config->readEntry("browser_file");
    if(!filename.isEmpty()){
      slotURLSelected(browser_widget,filename,1,"test");
    }
    else{
-   slotHelpContent();
+     slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() +
+		  "/en/kdevelop/index.html",1,"test");
+
    }
-  config->setGroup("General Options");
-  int lastActiveTab=config->readNumEntry("LastActiveTab", BROWSER);
-  slotSTabSelected(lastActiveTab);
+
+//  This all doesn't work, don't know why
+
+//  config->setGroup("General Options");
+//  int lastActiveTab=config->readNumEntry("LastActiveTab", BROWSER);
+//  slotSTabSelected(lastActiveTab);
+//  s_tab_view->setCurrentTab(config->readNumEntry("LastActiveTab", BROWSER));
 
 }
 
@@ -154,21 +150,22 @@ void CKDevelop::init(){
   			      config->readNumEntry("top_panner_pos", 213));
 
   t_tab_view = new CTabCtl(top_panner);
+  t_tab_view->setFocusPolicy(QWidget::NoFocus);
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv");
   log_file_tree->setIndentSpacing(15);
-  log_file_tree->setFocusPolicy(QWidget::ClickFocus);
+//  log_file_tree->setFocusPolicy(QWidget::ClickFocus);
   
   class_tree = new CClassView(t_tab_view,"cv");
   class_tree->setIndentSpacing(15);
-  class_tree->setFocusPolicy(QWidget::ClickFocus);
+//  class_tree->setFocusPolicy(QWidget::ClickFocus);
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
-  real_file_tree->setFocusPolicy(QWidget::ClickFocus);
+//  real_file_tree->setFocusPolicy(QWidget::ClickFocus);
   real_file_tree->setIndentSpacing(15);
 
   doc_tree = new CDocTree(t_tab_view,"DOC");
-  doc_tree->setFocusPolicy(QWidget::ClickFocus);
+//  doc_tree->setFocusPolicy(QWidget::ClickFocus);
   doc_tree->setIndentSpacing(15);
 
   t_tab_view->addTab(class_tree,"CV");
@@ -196,9 +193,13 @@ void CKDevelop::init(){
 
   // the tabbar + tabwidgets for edit and browser
   s_tab_view = new CTabCtl(top_panner);
+  s_tab_view->setFocusPolicy(QWidget::NoFocus);
+
   connect(s_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotSTabSelected(int)));
 
   header_widget = new CEditWidget(kapp,s_tab_view,"header");
+  header_widget->setFocusPolicy(QWidget::StrongFocus);
+
   header_widget->setFont(font);
   header_widget->setName("Untitled.h");
   config->setGroup("KWrite Options");
@@ -212,6 +213,7 @@ void CKDevelop::init(){
 
   edit_widget=header_widget;
   cpp_widget = new CEditWidget(kapp,s_tab_view,"cpp");
+  cpp_widget->setFocusPolicy(QWidget::StrongFocus);
   cpp_widget->setFont(font);
   cpp_widget->setName("Untitled.cpp");
   config->setGroup("KWrite Options");
@@ -231,7 +233,9 @@ void CKDevelop::init(){
   
 
 
-  browser_widget = new CDocBrowser(s_tab_view,"browser");  
+  browser_widget = new CDocBrowser(s_tab_view,"browser");
+  browser_widget->setFocusPolicy(QWidget::StrongFocus);
+  
   prev_was_search_result= false;
   //init
   browser_widget->setDocBrowserOptions();
@@ -241,6 +245,8 @@ void CKDevelop::init(){
   connect(browser_widget,SIGNAL(documentDone(KHTMLView*)),
 	  this,SLOT(slotDocumentDone(KHTMLView*)));
   swallow_widget = new KSwallowWidget(s_tab_view);
+  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
+
   
 
   s_tab_view->addTab(header_widget,"Header/Resource Files");
@@ -259,6 +265,25 @@ void CKDevelop::init(){
   initMenu();
   initToolbar();
   initStatusBar();
+
+  // initialize output_view_pos
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    output_view_pos=view->separatorPos();
+  }
+  else{
+    config->setGroup("General Options");
+    output_view_pos=config->readNumEntry("output_view_pos", 337);
+  }
+
+  // initialize tree_view_pos
+
+  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+    tree_view_pos=top_panner->separatorPos();
+  }
+  else{
+    config->setGroup("General Options");
+    tree_view_pos=config->readNumEntry("tree_view_pos", 213);
+  }
 
   // the rest of the init for the kedits
   edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
@@ -300,7 +325,6 @@ void CKDevelop::initMenu(){
   menuBar()->insertItem(i18n("&File"), file_menu);
 
   disableCommand(ID_FILE_NEW_FILE);
-  disableCommand(ID_FILE_CLOSE_ALL);
   menuBar()->insertSeparator();
 
   // edit menu
@@ -387,8 +411,9 @@ void CKDevelop::initMenu(){
 
   project_menu = new QPopupMenu;
   project_menu->insertItem(i18n("KAppWizard..."), this, SLOT(slotFileNewAppl()),0,ID_FILE_NEW_PROJECT);
-  project_menu->insertItem(i18n("New..."), this, SLOT(slotProjectNew()),0, ID_PROJECT_NEW);
-  project_menu->insertItem(i18n("Open &Project..."), this, SLOT(slotFileOpenPrj()),0,ID_FILE_OPEN_PROJECT);
+  project_menu->insertItem(i18n("New"), this, SLOT(slotProjectNew()),0, ID_PROJECT_NEW);
+  project_menu->insertItem(i18n("&Open..."), this, SLOT(slotFileOpenPrj()),0,ID_FILE_OPEN_PROJECT);
+  project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
   project_menu->insertSeparator();		
   project_menu->insertItem(i18n("Compile File "),this, SLOT(slotProjectCompileFile()),CTRL+Key_F8,ID_PROJECT_COMPILE_FILE);
   
@@ -407,7 +432,7 @@ void CKDevelop::initMenu(){
 
   menuBar()->insertItem(i18n("&Project"), project_menu);
   disableCommand(ID_PROJECT_ADD_FILE_NEW);
-  disableCommand(ID_PROJECT_NEW);
+  disableCommand(ID_PROJECT_CLOSE);
   disableCommand(ID_PROJECT_COMPILE_FILE);
   disableCommand(ID_PROJECT_ADD_FILE_EXIST);
   disableCommand(ID_PROJECT_ADD_FILE);
@@ -541,11 +566,13 @@ void CKDevelop::initMenu(){
 
   connect(file_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(edit_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(documentation_menu,SIGNAL(highlighted(int)),SLOT(statusCallback(int)));
-  connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(view_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(project_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(p2,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(documentation_menu,SIGNAL(highlighted(int)),SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
 }
@@ -641,13 +668,26 @@ void CKDevelop::initProject(){
       KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
       refreshTrees();
     }
-    
-    
-  }  
+    // read the two last files
+    config->setGroup("Files");
+    filename = config->readEntry("header_file");
+    if (QFile::exists(filename)){
+     switchToFile(filename);
+    }
+    config->setGroup("Files");
+    filename = config->readEntry("cpp_file");
+    if (QFile::exists(filename)){
+      switchToFile(filename);
+    }
+
+  }
   else{
     refreshTrees(); // this refresh only the documentation tab,tree
   }
-  
+
+
+
+<<<<<<< ckdevelop_init.cpp
 }
 
 
@@ -656,6 +696,7 @@ void CKDevelop::initProject(){
 
 
 
+=======
 
 
 
@@ -676,6 +717,11 @@ void CKDevelop::initProject(){
 
 
 
+
+
+
+
+>>>>>>> 1.13
 
 
 

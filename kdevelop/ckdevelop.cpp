@@ -49,7 +49,8 @@ void CKDevelop::slotFileNewAppl(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
-  
+
+
   slotStatusMsg(i18n("Creating a new frame application..."));
   CKAppWizard* kappw  = new CKAppWizard (this,"zutuz");
   kappw->exec();
@@ -278,6 +279,8 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("view_panner_pos",view->absSeparatorPos());
   config->writeEntry("top_panner_pos",top_panner->absSeparatorPos());
 
+  config->writeEntry("tree_view_pos",tree_view_pos);
+  config->writeEntry("output_view_pos",output_view_pos);
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
   config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
@@ -286,6 +289,7 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
+
 
   config->setGroup("Files");
   if(project){
@@ -696,6 +700,7 @@ void CKDevelop::slotDocUpdateKDEDocumentation(){
 
 void CKDevelop::slotBuildRun(){
   slotBuildMake();
+  slotStatusMsg(i18n("Running "+prj.getBinPROGRAM()));
   next_job = "run";
 }
 void CKDevelop::slotBuildDebug(){
@@ -711,6 +716,7 @@ void CKDevelop::slotBuildDebug(){
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
+  slotStatusMsg(i18n("Running  "+prj.getBinPROGRAM()+"  in KDbg"));
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
@@ -803,10 +809,53 @@ void CKDevelop::slotBuildCleanRebuildAll(){
 }
 
 void CKDevelop::slotBuildDistClean(){
+  if(!CToolClass::searchProgram("make")){
+    return;
+  }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view->setSeparatorPos(output_view_pos);
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
+  setToolMenuProcess(false);
+  slotFileSaveAll();
   slotStatusMsg(i18n("Running make distclean..."));
+  output_widget->clear();
+  QDir::setCurrent(prj.getProjectDir());
+  process.clearArguments();
+  process << "make";
+  process << "distclean";
+  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+
 }
 void CKDevelop::slotBuildAutoconf(){
-  slotStatusMsg(i18n("Running autoconf & friends..."));
+  if(!CToolClass::searchProgram("automake")){
+    return;
+  }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view->setSeparatorPos(output_view_pos);
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
+  setToolMenuProcess(false);
+  slotFileSaveAll();
+  slotStatusMsg(i18n("Running autoconf suite..."));
+  output_widget->clear();
+  QDir::setCurrent(prj.getProjectDir());
+  process.clearArguments();
+  QString path = kapp->kde_datadir()+"/kdevelop/tools/";
+  process << "sh" << path + "autoconfsuite";
+  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 
 }
 
@@ -1368,17 +1417,14 @@ void CKDevelop::slotToolbarClicked(int item){
 
 BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_FILE_NEW_FILE,    i18n("Creates a new file"))
-  ON_STATUS_MSG(ID_FILE_NEW_PROJECT, i18n("Generate a new project"))
-  ON_STATUS_MSG(ID_FILE_OPEN_FILE,   i18n("Opens an existing file"))  
-  ON_STATUS_MSG(ID_FILE_OPEN_PROJECT,i18n("Opens an existing project"))
-  
+  ON_STATUS_MSG(ID_FILE_OPEN_FILE,   i18n("Opens an existing file"))
+
   ON_STATUS_MSG(ID_FILE_SAVE,        i18n("Save the actual document"))
   ON_STATUS_MSG(ID_FILE_SAVE_AS,     i18n("Save the document as..."))
   ON_STATUS_MSG(ID_FILE_SAVE_ALL,    i18n("Save all changed files"))
   ON_STATUS_MSG(ID_FILE_CLOSE,       i18n("Closes the actual file"))
-  ON_STATUS_MSG(ID_FILE_CLOSE_ALL,   i18n("Closes all open files"))
 
-//  ON_STATUS_MSG(ID_FILE_PRINT,       i18n("Prints the current document"))
+  ON_STATUS_MSG(ID_FILE_PRINT,       i18n("Prints the current document"))
 
 //  ON_STATUS_MSG(ID_FILE_CLOSE_WINDOW,i18n("Closes the current window"))
 
@@ -1390,52 +1436,52 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_EDIT_PASTE,                   i18n("Pastes the clipboard contents to actual position"))
   ON_STATUS_MSG(ID_EDIT_SELECT_ALL,              i18n("Selects the whole document contents"))
   ON_STATUS_MSG(ID_EDIT_INSERT_FILE,             i18n("Inserts a file at the current position"))
-  ON_STATUS_MSG(ID_EDIT_SEARCH,                  i18n("Search the file for an expression"))
-  ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,           i18n("Repeat the last search"))
-  ON_STATUS_MSG(ID_EDIT_REPLACE,                 i18n("Search and replace expression"))
+  ON_STATUS_MSG(ID_EDIT_SEARCH,                  i18n("Searchs the file for an expression"))
+  ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,           i18n("Repeats the last search"))
+  ON_STATUS_MSG(ID_EDIT_REPLACE,                 i18n("Searchs and replace expression"))
 
 
-  ON_STATUS_MSG(ID_DOC_BACK,                      i18n("Switch to last browser page"))
-  ON_STATUS_MSG(ID_DOC_FORWARD,                   i18n("Switch to next browser page"))
-  ON_STATUS_MSG(ID_DOC_SEARCH_TEXT,              i18n("Search the selected text in the documentation"))
-  ON_STATUS_MSG(ID_DOC_QT_LIBRARY,                i18n("Switch to the QT-Documentation"))
-  ON_STATUS_MSG(ID_DOC_KDE_CORE_LIBRARY,          i18n("Switch to the KDE-Core-Documentation"))
-  ON_STATUS_MSG(ID_DOC_KDE_GUI_LIBRARY,           i18n("Switch to the KDE-GUI-Documentation"))
-  ON_STATUS_MSG(ID_DOC_KDE_KFILE_LIBRARY,          i18n("Switch to the KDE-File-Documentation"))
-  ON_STATUS_MSG(ID_DOC_KDE_HTML_LIBRARY,          i18n("Switch to the KDE-Html-Documentation"))
-  ON_STATUS_MSG(ID_DOC_PROJECT_API_DOC,           i18n("Switch to the project's API-Documentation"))
-  ON_STATUS_MSG(ID_DOC_USER_MANUAL,               i18n("Switch to the project's User-Manual"))
-
-
-  ON_STATUS_MSG(ID_BUILD_RUN,                     i18n("Invoke make-command and run the program"))
-  ON_STATUS_MSG(ID_BUILD_MAKE,                    i18n("Invoke make-command"))
-  ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,             i18n("Rebuild the program"))
-  ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,       i18n("Invoke make clean and rebuild all"))
-  ON_STATUS_MSG(ID_BUILD_STOP,                    i18n("Stop make immediately"))
-  ON_STATUS_MSG(ID_BUILD_MAKE_PROJECT_API,        i18n("Create the Project's API with KDoc"))
-  ON_STATUS_MSG(ID_BUILD_MAKE_USER_MANUAL,        i18n("Create the Project's User Manual with the sgml-file"))
-
-
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE,              i18n("Add a file to the current project"))
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_NEW,          i18n("Add a new file to the project"))
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,        i18n("Add an existing file to the project"))
-  ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,           i18n("Remove file from the project"))
-
-  ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,             i18n("Create a new Class frame structure and files"))
-
-  ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,       i18n("Show the current file properties"))
-  ON_STATUS_MSG(ID_PROJECT_OPTIONS,               i18n("Set project and compiler options"))
-
-
-  ON_STATUS_MSG(ID_VIEW_REFRESH,               i18n("Refresh current view"))
-  ON_STATUS_MSG(ID_VIEW_GOTO_LINE,               i18n("Go to Line Number..."))
-
-  ON_STATUS_MSG(ID_VIEW_TOOLBAR,           i18n("Enables / disables the standard toolbar"))
-  ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,       i18n("Enables / disables the browser toolbar"))
-  ON_STATUS_MSG(ID_VIEW_STATUSBAR,             i18n("Enables / disables the statusbar"))
+  ON_STATUS_MSG(ID_VIEW_GOTO_LINE,               i18n("Goes to Line Number..."))
 
   ON_STATUS_MSG(ID_VIEW_TREEVIEW,              i18n("Enables / disables the treeview"))
   ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,            i18n("Enables / disables the outputview"))
+
+  ON_STATUS_MSG(ID_VIEW_TOOLBAR,                  i18n("Enables / disables the standard toolbar"))
+  ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,       i18n("Enables / disables the browser toolbar"))
+  ON_STATUS_MSG(ID_VIEW_STATUSBAR,             i18n("Enables / disables the statusbar"))
+
+  ON_STATUS_MSG(ID_VIEW_REFRESH,                i18n("Refreshes current view"))
+
+
+  ON_STATUS_MSG(ID_FILE_NEW_PROJECT,              i18n("Generates a new project with KAppWizard"))
+  ON_STATUS_MSG(ID_PROJECT_NEW,                   i18n("Creates a new project"))
+  ON_STATUS_MSG(ID_FILE_OPEN_PROJECT,             i18n("Opens an existing project"))
+  ON_STATUS_MSG(ID_PROJECT_CLOSE,                 i18n("Closes the current project"))
+  ON_STATUS_MSG(ID_PROJECT_ADD_FILE,              i18n("Adds a file to the current project"))
+  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_NEW,          i18n("Adds a new file to the project"))
+  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,        i18n("Adds an existing file to the project"))
+  ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,           i18n("Removes file from the project"))
+
+  ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,             i18n("Creates a new Class frame structure and files"))
+
+  ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,       i18n("Shows the current file properties"))
+  ON_STATUS_MSG(ID_PROJECT_OPTIONS,               i18n("Sets project and compiler options"))
+
+  ON_STATUS_MSG(ID_BUILD_RUN,                     i18n("Invokes make-command and runs the program"))
+  ON_STATUS_MSG(ID_BUILD_DEBUG,                   i18n("Invokes make and KDbg debugging the binary"))
+  ON_STATUS_MSG(ID_BUILD_MAKE,                    i18n("Invokes make-command"))
+  ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,             i18n("Rebuilds the program"))
+  ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,       i18n("Invokes make clean and rebuild all"))
+  ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               i18n("Invokes make distclean and deletes all compiled files"))
+  ON_STATUS_MSG(ID_BUILD_AUTOCONF,                i18n("Invokes automake and co."))
+  ON_STATUS_MSG(ID_BUILD_CONFIGURE,               i18n("Invokes ./configure"))
+  ON_STATUS_MSG(ID_BUILD_STOP,                    i18n("Stops make immediately"))
+  ON_STATUS_MSG(ID_BUILD_MAKE_PROJECT_API,        i18n("Creates the Project's API with KDoc"))
+  ON_STATUS_MSG(ID_BUILD_MAKE_USER_MANUAL,        i18n("Creates the Project's User Manual with the sgml-file"))
+
+  ON_STATUS_MSG(ID_TOOLS_KDBG,                    i18n("Starts KDbg in the tools window"))
+  ON_STATUS_MSG(ID_TOOLS_KTRANSLATOR,             i18n("Starts KTranslator in the tools window"))
+  ON_STATUS_MSG(ID_TOOLS_KICONEDIT,               i18n("Starts KIconedit in the tools window"))
 
   ON_STATUS_MSG(ID_OPTIONS_EDITOR,              i18n("Sets the Editor's behavoir"))
   ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       i18n("Sets the Editor's colors"))
@@ -1445,12 +1491,25 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_OPTIONS_UPDATE_KDE_DOCUMENTATION,  i18n("Update your KDE-Libs Documentation"))
   ON_STATUS_MSG(ID_OPTIONS_CREATE_SEARCHDATABASE,    i18n("Create a search database of the current Documentation"))
 
+  ON_STATUS_MSG(ID_DOC_BACK,                      i18n("Switchs to last browser page"))
+  ON_STATUS_MSG(ID_DOC_FORWARD,                   i18n("Switchs to next browser page"))
+  ON_STATUS_MSG(ID_DOC_SEARCH_TEXT,              i18n("Searchs the selected text in the documentation"))
+  ON_STATUS_MSG(ID_DOC_QT_LIBRARY,                i18n("Switchs to the QT-Documentation"))
+  ON_STATUS_MSG(ID_DOC_KDE_CORE_LIBRARY,          i18n("Switchs to the KDE-Core-Documentation"))
+  ON_STATUS_MSG(ID_DOC_KDE_GUI_LIBRARY,           i18n("Switchs to the KDE-GUI-Documentation"))
+  ON_STATUS_MSG(ID_DOC_KDE_KFILE_LIBRARY,          i18n("Switchs to the KDE-File-Documentation"))
+  ON_STATUS_MSG(ID_DOC_KDE_HTML_LIBRARY,          i18n("Switchs to the KDE-Html-Documentation"))
+  ON_STATUS_MSG(ID_DOC_PROJECT_API_DOC,           i18n("Switchs to the project's API-Documentation"))
+  ON_STATUS_MSG(ID_DOC_USER_MANUAL,               i18n("Switchs to the project's User-Manual"))
 
   ON_STATUS_MSG(ID_HELP_CONTENT,                  i18n("Switch to KDevelop's User Manual"))
   ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 i18n("Enter the KDevelop Homepage"))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
 
 
 

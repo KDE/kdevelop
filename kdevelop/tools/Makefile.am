@@ -1,4 +1,4 @@
-tools_DATA = cleanrebuildall processes.pl processesend.pl
+tools_DATA = cleanrebuildall autoconfsuite processes.pl processesend.pl
 
 toolsdir = $(kde_datadir)/kdevelop/tools/
 

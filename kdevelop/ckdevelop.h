@@ -57,6 +57,7 @@ class CKDevelop;
 
 
 
+
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
@@ -147,6 +148,7 @@ public:
   void slotProjectNew();
   /** open a projectfile and close the old one*/
   void slotFileOpenPrj();
+  void slotProjectClose();
   /** compile the actual sourcefile using setted options */
   void slotProjectCompileFile();
   void slotProjectAddNewFile();
@@ -338,6 +340,10 @@ private:
 };
 
 #endif
+
+
+
+
 
 
 
