@@ -142,6 +142,7 @@ sub setupDefaultChangings
   $changings{"|AUTHOR|"}=$processes{AUTHOR};
   $changings{"|EMAIL|"}=$processes{EMAIL};
   $changings{"|VERSION|"}=$processes{VERSION};
+  $changings{"|KDE_QTVER|"}=$processes{KDE_QTVER};
   $changings{"|DATE|"}=$date;
   $changings{"|YEAR|"}=$year;
   $changings{"|SUBDIR|"}= $nameLittle;
