@@ -1,3 +1,9 @@
+2000-05-22 Falk Brettschneider <gigafalk@yahoo.com>
+        * added a patch by Lars Beikirch <Lars.Beikirch@gmx.net> for QextMDI
+	  (added (set)internalGeometry for better placing/resizing childviews
+	   without knowing anything about the frame geometry)
+	* some bugfixes&Co. in QextMDI
+	
 2000-05-21 Falk Brettschneider <gigafalk@yahoo.com>
         * debugger views are only visible when one is debugging
 	  (now there are 2 dock configurations, 1 for edit mode and 1 for debug mode)
