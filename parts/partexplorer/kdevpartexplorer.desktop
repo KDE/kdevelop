@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=A Graphical tool for performing KTrader-like queries about registered services
+Name=PartExplorer
+GenericName=Part Explorer tool
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevpartexplorer
+X-KDevelop-Scope=Global
