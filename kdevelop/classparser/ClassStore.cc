@@ -107,7 +107,7 @@ void CClassStore::removeWithReferences( const char *aFile )
 
     // Remove the class if any of the files are the supplied one.
     if( aClass->declaredInFile == aFile                       &&
-        ( aClass->definedInFile == (const char *) NULL        ||
+        ( (aClass->definedInFile).isEmpty()                   ||
           aClass->declaredInFile == aClass->definedInFile) )
       removeClass( aClass->name);
   }
