@@ -268,6 +268,7 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 	styleSheet += "none; }\n";
     styleSheet += "a:visited { color: " + vlink.name() + "; }\n";
 
+    setUserStyleSheet(styleSheet);
   //  htmlview->parse();
     openURL(complete_url);//, true);
 //	busy = true;

@@ -2454,8 +2454,7 @@ void CKDevelop::slotToolbarClicked(int item){
 		slotHelpBrowserReload();
 		break;
 	case ID_HELP_BROWSER_STOP:
-#warning Simon, how is this done now?
-	    //browser_widget->cancelAllRequests();
+	        browser_widget->closeURL();
 	        messages_widget->killJob();
 		disableCommand(ID_HELP_BROWSER_STOP);
 		break;
