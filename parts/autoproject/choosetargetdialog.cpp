@@ -239,7 +239,7 @@ void ChooseTargetDialog::slotChooseTargetToggled(bool on)
 
 void ChooseTargetDialog::accept ()
 {
-	if ( !m_choosenSubproject && !m_choosenTarget )
+	if ( !m_choosenSubproject || !m_choosenTarget )
 		return;
 
 	//kdDebug ( 9000 ) << "3) Choosen target is " << m_choosenTarget->name << endl;
