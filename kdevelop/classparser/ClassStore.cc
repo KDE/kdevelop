@@ -584,26 +584,13 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
             implList->append( aMethod );
             added.insert( aMethod->asString( str ), "" );
           }
-          else
+          else if( !aMethod->isConstructor && !aMethod->isDestructor )
             availList->append( aMethod );
         }
         
         delete list;
       }
 
-    }
-
-    // Add all virtual methods defined in THIS class.
-    for( aClass->methodIterator.toFirst();
-         aClass->methodIterator.current();
-         ++aClass->methodIterator )
-    {
-      aMethod = aClass->methodIterator.current();
-      if( aMethod->isVirtual && 
-          added.find( aMethod->asString( str ) ) == NULL )
-      {
-        availList->append( aMethod );
-      }
     }
   }
 }

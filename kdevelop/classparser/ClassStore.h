@@ -39,7 +39,7 @@ private: // Private attributes
 
 public: // Public attributes
 
-  /** Container that holds all functions, variables and structures. */
+  /** Container that holds all global classes, functions, variables and structures. */
   CParsedClassContainer globalContainer;
 
 public: // Public queries
@@ -48,6 +48,11 @@ public: // Public queries
    * @param aName Classname to check if it exists.
    */
   bool hasClass( const char *aName );
+
+  /** Tells if a struct exists in the store. 
+   * @param aName Classname to check if it exists.
+   */
+  bool hasStruct( const char *aName ) { return globalContainer.hasStruct( aName ); }
 
   /** Fetches a class from the store by using its' name. 
    * @return A pointer to the class(not to be deleted) or
