@@ -1101,6 +1101,7 @@ void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
     c.cursor.y++;
     c.cursor.x = 0;
     if (pos > 0) {
+      // TODO: need a working record here now
       //recordReplace(c.cursor,0,textLine->getText(),pos);
       c.cursor.x = pos;
     }
@@ -1125,13 +1126,20 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
     // NB: accessing the list like that is expensive
 
     // compute where to indent to
-    int indentPos = 0; // first non-ws char
+    bool setCursor = false;
+    int indentPos = 0;		// first non-ws char
+    int indent = 0;		// how many chars to indent
+    if (textLine->getChar(textLine->firstChar())=='}') {
+      // closing brace
+      indent -= indentLength;
+      setCursor = true;
+    }
     // seek a first char in previous lines
     textLine = contents.prev();
     while (textLine) {
       indentPos = textLine->firstChar();
       if (textLine->getChar(textLine->lastChar())=='{') // opening brace
-        indentPos += indentLength;
+        indent += indentLength;
       #ifdef DEBUG
       cerr << "indent pos=" << indentPos << endl;
       #endif
@@ -1139,6 +1147,7 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
         break;     // terminate loop
       textLine = contents.prev();
     }
+    indentPos += indent;
 
     if (indentPos > 0) {
 
@@ -1149,6 +1158,7 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
       // if the line does not start on indent pos align it there
       textLine = contents.at(c.cursor.y);
       int curPos = textLine->firstChar();
+      // TODO: need to record what we do here
       if (curPos < indentPos) {
         int len = indentPos-curPos;
         char buf[len];
@@ -1158,6 +1168,11 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
       else if (curPos > indentPos)
         textLine->del(indentPos, curPos-indentPos);
     }
+
+    if (setCursor) {
+      c.cursor.x = indentPos;
+    }
+
   }
 
   recordEnd(view,c);

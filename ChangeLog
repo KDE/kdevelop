@@ -4,6 +4,7 @@
     * special handling for tab key, in autoindentation
       mode tab key behaves like emacs (indents text)
     * improved AutoIndent mode: indent open braces.
+    * improved AutoIndent mode: indent close braces.
 
 2001-12-07 Ralf Nolden <nolden@kde.org>
     * bugfix from Bernd Lachner <dev@lachner-net.de> to prevent ui files from being parsed which caused segfaults on 
