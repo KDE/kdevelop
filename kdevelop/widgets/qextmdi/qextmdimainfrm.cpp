@@ -63,6 +63,11 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    ,m_pDockMenu(0L)
    ,m_pPlacingMenu(0L)
    ,m_pMainMenuBar(0L)
+   ,m_bTopLevelMode(false)
+   ,m_bMaximizedChildFrmMode(false)
+   ,m_oldMainFrmHeight(0)
+   ,m_oldMainFrmMinHeight(0)
+   ,m_oldMainFrmMaxHeight(0)
 {
    setRightJustification( TRUE);
 
@@ -132,6 +137,7 @@ void QextMdiMainFrm::createTaskBar()
 {
    m_pTaskBar = new QextMdiTaskBar(this,QMainWindow::Bottom);
    m_pTaskBar->show();
+   m_pTaskBar->installEventFilter( this);
 }
 
 void QextMdiMainFrm::slot_toggleTaskBar()
@@ -143,12 +149,32 @@ void QextMdiMainFrm::slot_toggleTaskBar()
    }
 }
 
-//============ closeEvent ============//
-void QextMdiMainFrm::closeEvent(QCloseEvent *e)
+////============ closeEvent ============//
+//void QextMdiMainFrm::closeEvent(QCloseEvent *e)
+//{
+//   e->accept();
+//   delete this;
+//}
+//
+void QextMdiMainFrm::resizeEvent(QResizeEvent *e)
 {
-   e->accept();
-   delete this;
+   if( m_bTopLevelMode && !parentWidget())
+      if( e->oldSize().height() != e->size().height()) {
+         return;
+      }
+   QMainWindow::resizeEvent(e);
 }
+
+//================ setMinimumSize ===============//
+
+void QextMdiMainFrm::setMinimumSize( int minw, int minh)
+{
+   if( m_bTopLevelMode && !parentWidget())
+      return;
+   QMainWindow::setMinimumSize( minw, minh);
+}
+
+//================ addWindow ===============//
 
 void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
 {
@@ -176,7 +202,7 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
    QextMdiTaskBarButton* but = m_pTaskBar->addWinButton(pWnd);
    QObject::connect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
 
-   if( flags & QextMdi::Detach) {
+   if( (flags & QextMdi::Detach) || m_bTopLevelMode) {
       detachWindow( pWnd, false /*bShow*/ ); // false to avoid flickering
    } else {
       attachWindow( pWnd, false /*bShow*/);
@@ -246,6 +272,15 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 //   if (pWnd->minimumHeight() == pWnd->maximumHeight())
 //      lpC->setFixedHeight (lpC->height());
    pWnd->youAreAttached(lpC);
+   if( m_bTopLevelMode && !parentWidget()) {
+      setMinimumHeight( m_oldMainFrmMinHeight);
+      setMaximumHeight( m_oldMainFrmMaxHeight);
+      resize( width(), m_oldMainFrmHeight);
+      m_oldMainFrmHeight = 0;
+      m_bTopLevelMode = false;
+      qDebug("TopLevelMode off");
+      emit leavedTopLevelMode();
+   }
 
    // this is done in activateView
    //  m_pTaskBar->setActiveButton(pWnd);
@@ -292,6 +327,11 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
       lpC->unsetClient( m_undockPositioningOffset);
 
       m_pMdi->destroyChildButNotItsView(lpC,FALSE); //Do not focus the new top child , we loose focus...
+   }
+   else {
+      if( pWnd->geometry() == QRect(0,0,1,1)) {
+         pWnd->setGeometry( QRect( m_pMdi->getCascadePoint(m_pWinList->count()-1), defaultChildFrmSize()));
+      }
    }
 
    // there should be an equivalent of manageChild... here
@@ -523,6 +563,17 @@ void QextMdiMainFrm::switchToToplevelMode()
          detachWindow( pView, TRUE);
       }
    }
+   if(!parentWidget()) {
+      m_oldMainFrmMinHeight = minimumHeight();
+      m_oldMainFrmMaxHeight = maximumHeight();
+      m_oldMainFrmHeight = height();
+      if( m_pWinList->count())
+         setFixedHeight( height() - m_pMdi->height());
+      else  // consider space for the taskbar
+         setFixedHeight( height() - m_pMdi->height() + 27);
+   }
+   m_bTopLevelMode = true;
+   qDebug("ToplevelMode on");
 }
 
 /**
@@ -536,6 +587,15 @@ void QextMdiMainFrm::switchToChildframeMode()
       if( !pView->isToolView())
          if( !pView->isAttached())
             attachWindow( pView, TRUE);
+   }
+   if( m_bTopLevelMode && !parentWidget()) {
+      setMinimumHeight( m_oldMainFrmMinHeight);
+      setMaximumHeight( m_oldMainFrmMaxHeight);
+      resize( width(), m_oldMainFrmHeight);
+      m_oldMainFrmHeight = 0;
+      m_bTopLevelMode = false;
+      qDebug("TopLevelMode off");
+      emit leavedTopLevelMode();
    }
 }
 
@@ -626,6 +686,9 @@ void QextMdiMainFrm::setMaximizeModeOn()
    if( !pCurrentChild)
       return;
 
+   m_bMaximizedChildFrmMode = true;
+   qDebug("MaximizeMode on");
+
    // if there is no menubar given, those system buttons aren't possible
    if( m_pMainMenuBar == 0L)
       return;
@@ -647,6 +710,9 @@ void QextMdiMainFrm::setMaximizeModeOff(QextMdiChildFrm* oldChild)
 {
    if( !oldChild)
       return;
+
+   m_bMaximizedChildFrmMode = true;
+   qDebug("MaximizeMode off");
 
    // if there is no menubar given, those system buttons aren't possible
    if( m_pMainMenuBar == 0L)
@@ -804,6 +870,8 @@ void QextMdiMainFrm::dockMenuItemActivated(int id)
       attachWindow( pView, TRUE);
    }
 }
+
+//================ popupWindowMenu ===============//
 
 void QextMdiMainFrm::popupWindowMenu(QPoint p)
 {

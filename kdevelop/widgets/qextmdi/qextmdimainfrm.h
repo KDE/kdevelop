@@ -47,7 +47,7 @@
 namespace QextMdi {
 
 /** 
-* During addWindow(..) the enum AddWindowFlags is used to determine how the view is initialy being added to the MDI system 
+* During @ref QextMdiMainFrm::addWindow the enum AddWindowFlags is used to determine how the view is initialy being added to the MDI system 
 */
 typedef enum {
       /** 
@@ -133,7 +133,12 @@ protected:
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
 #endif
-   QPoint                      m_undockPositioningOffset;
+   QPoint                  m_undockPositioningOffset;
+   bool                    m_bTopLevelMode;
+   bool                    m_bMaximizedChildFrmMode;
+   int                     m_oldMainFrmHeight;
+   int                     m_oldMainFrmMinHeight;
+   int                     m_oldMainFrmMaxHeight;
 
 // methods
 public:
@@ -145,7 +150,17 @@ public:
    * Destructor.
    */
    ~QextMdiMainFrm();
-   /** 
+   /**
+   * Returns whether the application's MDI views are in maximized state or not.
+   */
+   bool isInMaximizedChildFrmMode() { return m_bMaximizedChildFrmMode; };
+   /**
+   * Returns whether the MDI application is in Toplevel mode or not. Toplevel mode means that
+   * all MDI views are undocked by one method call @ref QextMdiMainFrm::switchToToplevelMode .
+   * You can call this 'event' via 'Window' menu.
+   */
+   bool isInTopLevelMode() { return m_bTopLevelMode; };
+   /**
    * Returns the focused attached MDI view.
    */
    QextMdiChildView * activeWindow();
@@ -153,13 +168,13 @@ public:
    * Returns a popup menu filled according to the MDI view state. You can override this
    * method to insert additional entries there. The popup menu is usually popuped when the user
    * clicks with the right mouse button on a taskbar entry. The default entries are:
-   * Undock/Dock, Restore/Maximize/Minimize, Close and an empty sub-popup ( @ref windowPopup(..)
+   * Undock/Dock, Restore/Maximize/Minimize, Close and an empty sub-popup ( @ref QextMdiMainFrm::windowPopup )
    * menu called Operations.
    */
    virtual QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = FALSE);
    /** 
    * Returns a popup menu with only a title "Window". You can fill it with own operations entries
-   * on the MDI view. This popup menu is inserted as last menu item in @ref taskBarPopup(..).
+   * on the MDI view. This popup menu is inserted as last menu item in @ref QextMdiMainFrm::taskBarPopup .
    */
    virtual QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = TRUE);
    /** 
@@ -171,20 +186,20 @@ public:
    */
    QextMdiChildView * findWindow(const QString& caption);
    /** 
-   * Returns whether this MDI child view is under MDI control (using addWindow(..)) or not.
+   * Returns whether this MDI child view is under MDI control (using @ref QextMdiMainFrm::addWindow ) or not.
    */
    bool windowExists(QextMdiChildView *pWnd);
    /** 
    * Catches certain Qt events and processes it here.
-   * Currently, here this catches only the QextMdiViewCloseEvent (a QextMDI user event) which is sent
-   * from itself in childWindowCloseRequest(..) right after a QextMdiChildView::closeEvent().
+   * Currently, here this catches only the @ref QextMdiViewCloseEvent (a QextMDI user event) which is sent
+   * from itself in @ref QextMdiMainFrm::childWindowCloseRequest right after a @ref QextMdiChildView::closeEvent .
    * The reason for this event to itself is simple: It just wants to break the function call stack.
-   * It continues the processing with calling @ref closeWindow(..).
-   * You see, a QextMdiChildView::close() is translated to a QextMdiMainFrm::closeWindow(..).
+   * It continues the processing with calling @ref QextMdiMainFrm::closeWindow .
+   * You see, a @ref QextMdiChildView::close is translated to a @ref QextMdiMainFrm::closeWindow .
    * It is necessary that the main frame has to start an MDI view close action because it must
    * remove the MDI view from MDI control, additionally.
    *
-   * This method calls QMainWindow::event(..), additionally.
+   * This method calls QMainWindow::event , additionally.
    */
    virtual bool event(QEvent* e);
    /** 
@@ -196,7 +211,7 @@ public:
    */
    virtual int taskBarHeight() { return m_pTaskBar->height(); };
    /** 
-   * Sets an offset value that is used on @ref detachWindow(..). The undocked window
+   * Sets an offset value that is used on @ref QextMdiMainFrm::detachWindow . The undocked window
    * is visually moved on the desktop by this offset.
    */
    virtual void setUndockPositioningOffset( QPoint offset) { m_undockPositioningOffset = offset; };
@@ -227,16 +242,24 @@ public:
    */
    virtual void setBackgroundPixmap( const QPixmap &pm) { m_pMdi->setBackgroundPixmap( pm); };
    /** 
-   * Sets a size that is used as the default size for a newly to the MDI system added @ref QextMdiChildView.
+   * Sets a size that is used as the default size for a newly to the MDI system added @ref QextMdiChildView .
    *  By default this size is 600x400. So all non-resized added MDI views appear in that size.
    */
    void setDefaultChildFrmSize( const QSize& sz)
       { m_pMdi->m_defaultChildFrmSize = sz; };
    /** 
-   * Returns the default size for a newly added QextMdiChildView. See @ref setDefaultChildFrmSize(..).
+   * Returns the default size for a newly added QextMdiChildView. See @ref QextMdiMainFrm::setDefaultChildFrmSize .
    */
    QSize defaultChildFrmSize()
       { return m_pMdi->m_defaultChildFrmSize; };
+   /**
+   * Do nothing when in Toplevel mode
+   */
+   virtual void setMinimumSize( int minw, int minh);
+   /**
+   * Returns the Childframe mode height of this. Makes only sense when in Toplevel mode.
+   */
+   int childFrameModeHeight() { return m_oldMainFrmHeight; };
 
 public slots:
    /**
@@ -284,7 +307,7 @@ public slots:
    virtual void detachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
    /** 
    * Someone wants that the MDI view to be closed. This method sends a QextMdiViewCloseEvent to itself
-   * to break the function call stack. See also @ref QextMdiMainFrm::event().
+   * to break the function call stack. See also @ref QextMdiMainFrm::event .
    */
    virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
    /** 
@@ -355,26 +378,29 @@ public slots:
    * Tile Vertically 
    */
    virtual void tileVertically() { m_pMdi->tileVertically(); };
-
 protected:
+//   /**
+//   * Calls the destructor by delete.
+//   */
+//   virtual void closeEvent(QCloseEvent *e);
    /** 
-   * Calls the destructor by delete.
-   */
-   virtual void closeEvent(QCloseEvent *e);
-   /** 
-   * Redirect the focus to the MDI area widget (@ref QextMdiChildArea).
+   * Redirect the focus to the MDI area widget ( @ref QextMdiChildArea ).
    */
    virtual void focusInEvent(QFocusEvent *);
-   /** 
+   /**
+   *
+   */
+   virtual void resizeEvent(QResizeEvent * );
+   /**
    * Creates a new MDI taskbar (showing the MDI views as taskbar entries) and shows it.
    */
    virtual void createTaskBar();
-   /** 
+   /**
    * Creates the MDI view area and connects some signals and slots with the QextMdiMainFrm widget.
    */
    virtual void createMdiManager();
    /** 
-   * Usually called from addWindow(..) when adding a tool view window. It reparents the given widget
+   * Usually called from @ref QextMdiMainFrm::addWindow when adding a tool view window. It reparents the given widget
    * as toplevel and stay-on-top on the application's main widget.
    */
    virtual void addToolWindow( QextMdiChildView* pWnd);
@@ -386,7 +412,7 @@ protected slots: // Protected slots
    */
    virtual void activateView(QextMdiChildView *pWnd);
    /** 
-   * Activates the MDI view (see @ref activateView(..)) and popups the taskBar popup menu (see @ref taskBarPopup(..)).
+   * Activates the MDI view (see @ref QextMdiMainFrm::activateView ) and popups the taskBar popup menu (see @ref QextMdiMainFrm::taskBarPopup ).
    */
    virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
    /** 
@@ -410,7 +436,7 @@ protected slots: // Protected slots
    */
    void dockMenuItemActivated(int id);
    /** 
-   * Popups the "Window" menu. See also @ref windowPopup(..).
+   * Popups the "Window" menu. See also @ref QextMdiMainFrm::windowPopup .
    */
    void popupWindowMenu(QPoint p);
 
@@ -423,6 +449,10 @@ signals:
    * Signals the last QextMdiChildView (that is under MDI control) has been closed 
    */
    void lastChildViewClosed();
+   /**
+   * Signals that the Toplevel mode has been leaved
+   */
+   void leavedTopLevelMode();
 };
 
 #endif //_QEXTMDIMAINFRM_H_

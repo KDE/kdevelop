@@ -78,7 +78,7 @@ protected:
    */
    virtual void mousePressEvent(QMouseEvent *);
    /** 
-   * Calls maximizePressed of the parent widget (@ref QextMdiChildFrm) 
+   * Calls maximizePressed of the parent widget (@ref QextMdiChildFrm ) 
    */
    virtual void mouseDoubleClickEvent(QMouseEvent *);
    /** 

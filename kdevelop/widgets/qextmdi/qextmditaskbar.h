@@ -131,7 +131,7 @@ public:
    */
    ~QextMdiTaskBar();
    /** 
-   *Add a new @ref QextMdiTaskBarButton. The width doesn't change.
+   *Add a new @ref QextMdiTaskBarButton . The width doesn't change.
    * If there's not enough space, all taskbar buttons will be resized to a new smaller size.
    * Probably button texts must be abbreviated now. 
    */

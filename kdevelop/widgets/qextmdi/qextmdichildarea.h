@@ -63,7 +63,7 @@ public:
    */
    QSize                   m_defaultChildFrmSize;
 
-private:
+protected:
    /** 
    * The MDI childframe window caption font 
    */
@@ -92,7 +92,7 @@ private:
 // methods
 public:
    /** 
-   * Consruction. Note: This class needn't to know about @ref QextMdiMainFrm. 
+   * Consruction. Note: This class needn't to know about @ref QextMdiMainFrm . 
    */
    QextMdiChildArea(QWidget *parent);
    /**
@@ -232,18 +232,21 @@ signals:
    * Signalizes that the child frames are maximized now
    */
    void nowMaximized();
-   /** Internally used.
+   /**
+   * Internally used.
    * Signalizes from QextMdiChildArea to QextMdiMainFrm
    * that the signal/slot connections of the system buttons in the menubar (only in Maximize mode)
    * must be updated to another MDI view because the focused MDI view has changed 
    */
    void sysButtonConnectionsMustChange(QextMdiChildFrm*, QextMdiChildFrm*);
-   /** Internally used.
+   /**
+   * Internally used.
    * Signalizes from QextMdiChildArea to QextMdiMainFrm
    * that the 'Window' popup menu must be shown 
    */
    void popupWindowMenu( QPoint);
-   /** Signalizes that the last attached (docked) MDI view has been closed.
+   /**
+   * Signalizes that the last attached (docked) MDI view has been closed.
    * Note: Detached MDI views can remain. 
    */
    void lastChildFrmClosed();

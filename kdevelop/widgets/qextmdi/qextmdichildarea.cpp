@@ -168,7 +168,7 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
 
 //============== resizeEvent ================//
 
-void QextMdiChildArea::resizeEvent(QResizeEvent* /*e*/)
+void QextMdiChildArea::resizeEvent(QResizeEvent* e)
 {
    //If we have a maximized children at the top , adjust its size
    QextMdiChildFrm *lpC=m_pZ->last();
@@ -178,6 +178,7 @@ void QextMdiChildArea::resizeEvent(QResizeEvent* /*e*/)
                       height() + lpC->height() - lpC->m_pClient->height());
    }
    layoutMinimizedChildren();
+   QWidget::resizeEvent(e);
 }
 
 //=============== mousePressEvent =============//
@@ -198,10 +199,18 @@ QPoint QextMdiChildArea::getCascadePoint(int indexOfWindow)
    }
    QPoint pnt(0,0);
    if(indexOfWindow==0)return pnt;
+
+   bool bTopLevelMode = false;
+   if( height() == 1)	// hacky?!
+   		bTopLevelMode = true;
+
    QextMdiChildFrm *lpC=m_pZ->first();
    int step=(lpC ? lpC->m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_BORDER : 20);
-   int availableHeight=height()-(lpC ? lpC->minimumSize().height() : m_defaultChildFrmSize.height());
-   int availableWidth=width()-(lpC ? lpC->minimumSize().width() : m_defaultChildFrmSize.width());
+   int h=(bTopLevelMode ? QApplication::desktop()->height() : height());
+   int w=(bTopLevelMode ? QApplication::desktop()->width() : width());
+
+   int availableHeight=h-(lpC ? lpC->minimumSize().height() : m_defaultChildFrmSize.height());
+   int availableWidth=w-(lpC ? lpC->minimumSize().width() : m_defaultChildFrmSize.width());
    int ax=0;
    int ay=0;
    for(int i=0;i<indexOfWindow;i++){
@@ -247,7 +256,6 @@ void QextMdiChildArea::focusTopChild()
       emit lastChildFrmClosed();
       return;
    }
-//REMOVE?   if(lpC->m_state==QextMdiChildFrm::Minimized)return;
    //disable the labels of all the other children
    for(QextMdiChildFrm *pC=m_pZ->first();pC;pC=m_pZ->next()){
       if(pC != lpC)pC->m_pCaption->setActive(FALSE);

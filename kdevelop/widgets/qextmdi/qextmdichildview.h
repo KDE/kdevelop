@@ -232,13 +232,13 @@ public slots:
    /** 
    * Mimimizes the MDI view. If attached, the covering childframe widget is minimized (only a mini widget
    * showing the caption bar and the system buttons will remain visible). If detached, it will use the
-   * minimize of the underlying system (@ref QWidget::showMinimized).
+   * minimize of the underlying system ( @ref QWidget::showMinimized ).
    */
    virtual void minimize();
    /** 
    * Maximizes the MDI view. If attached, this widget will fill the whole MDI view area widget. The system buttons
-   * move to the main menubar (if set by @ref QextMdiMainFrm::setMenuForSDIModeSysButtons).
-   * If detached, it will use the minimize of the underlying system (@ref QWidget::showMaximized).
+   * move to the main menubar (if set by @ref QextMdiMainFrm::setMenuForSDIModeSysButtons ).
+   * If detached, it will use the minimize of the underlying system (@ref QWidget::showMaximized ).
    */
    virtual void maximize();
    /**
@@ -268,17 +268,17 @@ public slots:
    */
    virtual void show();
    /** 
-   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMinimizedNow, additionally.
+   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMinimizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system minimizing.
    */
    virtual void showMinimized();
    /** 
-   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMaximizedNow, additionally.
+   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMaximizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system maximizing.
    */
    virtual void showMaximized();
    /** 
-   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isRestoredNow, additionally.
+   * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isRestoredNow , additionally.
    * Note that this method is not used by an external windows manager call on system normalizing.
    */
    virtual void showNormal();

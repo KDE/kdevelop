@@ -663,7 +663,8 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
     QWidget* widg = (QWidget*)obj;
     ++it;
     FocusPolicy* pFocPol = pFocPolDict->find( widg->name()); // remember the focus policy from before the reparent
-    widg->setFocusPolicy( *pFocPol);
+    if( pFocPol)
+       widg->setFocusPolicy( *pFocPol);
     // reset focus to old position (doesn't work :-( for its own unexplicable reasons)
     if( widg->name() == nameOfFocusedWidget) {
       widg->setFocus();

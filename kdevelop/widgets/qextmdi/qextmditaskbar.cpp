@@ -255,7 +255,8 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
    int allButtonsWidthHint = 0;
    for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
       QFontMetrics fm = b->fontMetrics();
-      QSize sz = fm.size(ShowPrefix, b->actualText());
+      QString s = b->actualText();
+      QSize sz = fm.size(ShowPrefix, s);
       int w = sz.width()+6;
       int h = sz.height()+sz.height()/8+10;
       w += h;
@@ -264,8 +265,9 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 
    // if there's enough space, use actual width
    int buttonCount = m_pButtonList->count();
-   if( (allButtonsWidthHint + 15) <= taskBarWidth) {
+   if( ((allButtonsWidthHint + 15) <= taskBarWidth) || (width() < parentWidget()->width())) {
       for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
+         b->setText( b->actualText());
          b->setFixedWidth( b->sizeHint().width());
          b->show();
       }
