@@ -1,7 +1,7 @@
 /* $Id$
  *
  *  This file is part of Klint
- *  Copyright (C) 2002 Roberto Raggi (raggi@cli.di.unipi.it)
+ *  Copyright (C) 2002 Roberto Raggi (roberto@kdevelop.org)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public
@@ -58,6 +58,7 @@
 
 #include "qeditor_indenter.h"
 #include "simple_indent.h"
+#include "python_indent.h"
 #include "cindent.h"
 
 #include "parenmatcher.h"
@@ -166,9 +167,9 @@ QPopupMenu* QEditor::createPopupMenu( const QPoint& pt )
 {
     QPopupMenu* menu = KTextEdit::createPopupMenu( pt );
     if( m_applicationMenu ){
-	    menu->insertSeparator();
-	    menu->insertItem( i18n("&Application"), m_applicationMenu );
-	}
+	menu->insertSeparator();
+	menu->insertItem( i18n("&Application"), m_applicationMenu );
+    }
     return menu;
 }
 
@@ -190,17 +191,15 @@ void QEditor::keyPressEvent( QKeyEvent* e )
     //kdDebug(9032) << "QEditor::keyPressEvent()" << endl;
     if( e->key() == Key_Tab ){
 	if( tabIndentEnabled() ){
-	    int parag, index;
-	    getCursorPosition( &parag, &index );
-	    QString s = textLine( parag ).mid( index ).stripWhiteSpace();
-	    if( s.isEmpty() ){
-		insert( "\t" );
-	    } else {
+	    int line, col;
+	    getCursorPosition( &line, &col );
+	    QString s = text( line );
+	    if( hasSelectedText() || s.stripWhiteSpace().isEmpty() || !s.mid( col ).stripWhiteSpace().isEmpty() )
 		indent();
-	    }
-	} else {
+	    else
+		insert( "\t" );
+	} else 
 	    insert( "\t" );
-	}
 	e->accept();
     } else if( m_electricKeys.contains( e->ascii() ) ){
 	insert( e->text(), FALSE );
@@ -426,7 +425,7 @@ void QEditor::setLanguage( const QString& l )
     } else if( m_language == "python" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new PythonColorizer(this) );
-	document()->setIndent( new SimpleIndent(this) );
+	document()->setIndent( new PythonIndent(this) );
     } else if( m_language == "xml" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new XMLColorizer(this) );
@@ -559,4 +558,11 @@ QEditorIndenter* QEditor::indenter() const
   return dynamic_cast<QEditorIndenter*>( document()->indent() );
 }
 
+void QEditor::indent()
+{
+    KTextEdit::indent();
+    if( !hasSelectedText() && text( textCursor()->paragraph()->paragId() ).stripWhiteSpace().isEmpty() )
+	moveCursor( MoveLineEnd, false );
+}
+    
 #include "qeditor.moc"

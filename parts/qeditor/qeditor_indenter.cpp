@@ -20,7 +20,7 @@
 
 
 /* 
- *  Copyright (C) 2002 Roberto Raggi (raggi@cli.di.unipi.it)
+ *  Copyright (C) 2002 Roberto Raggi (roberto@kdevelop.org)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public
@@ -140,3 +140,13 @@ void QEditorIndenter::indent( QTextDocument*, QTextParagraph* parag, int* oldInd
     if( oldIndent ) *oldIndent = oi;
     if( newIndent ) *newIndent = ind;
 }
+
+int QEditorIndenter::previousNonBlankLine( int line )
+{
+    while( --line >=0 ){
+	if( !editor()->text( line ).stripWhiteSpace().isEmpty() )
+	    break;
+    }
+    return line;
+}
+

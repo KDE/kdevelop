@@ -1,7 +1,7 @@
 /* $Id$
  *
  *  This file is part of Klint
- *  Copyright (C) 2002 Roberto Raggi (raggi@cli.di.unipi.it)
+ *  Copyright (C) 2002 Roberto Raggi (roberto@kdevelop.org)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public
@@ -111,9 +111,11 @@ public:
 
     virtual void setApplicationMenu( QPopupMenu* menu ) { m_applicationMenu = menu; }
     virtual QPopupMenu* createPopupMenu( const QPoint& );
+    
+    virtual void indent();
 
     QSourceColorizer* colorizer() const;
-
+    
 signals:
     void parsed();
 

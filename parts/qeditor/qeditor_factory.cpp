@@ -201,7 +201,7 @@ KInstance *QEditorPartFactory::instance()
     if ( !s_instance )
     {
         s_about = new KAboutData("qeditorpart", I18N_NOOP("Qt Designer Based Text Editor"), "0.1");
-        s_about->addAuthor("Roberto Raggi", 0, "raggi@cli.di.unipi.it");
+        s_about->addAuthor("Roberto Raggi", 0, "roberto@kdevelop.org");
         s_about->addAuthor("Trolltech AS", 0, "info@trolltech.com");
         s_about->addAuthor("The Kate authors", 0, "kwrite-devel@kde.org");
         s_instance = new KInstance( s_about );

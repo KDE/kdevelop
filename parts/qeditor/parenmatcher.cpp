@@ -18,7 +18,7 @@
 **
 **********************************************************************/
 
-// porting for klint by Roberto Raggi (raggi@cli.di.unipi.it)
+// porting for klint by Roberto Raggi (roberto@kdevelop.org)
 
 #include "parenmatcher.h"
 #include "paragdata.h"

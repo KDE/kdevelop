@@ -1,5 +1,5 @@
 /*
-   Copyright (C) 2002 by Roberto Raggi <raggi@cli.di.unipi.it>
+   Copyright (C) 2002 by Roberto Raggi <roberto@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

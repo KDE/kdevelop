@@ -20,7 +20,7 @@
 
 
 /*
- *  Copyright (C) 2001 Roberto Raggi (raggi@cli.di.unipi.it)
+ *  Copyright (C) 2001 Roberto Raggi (roberto@kdevelop.org)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public
@@ -67,6 +67,7 @@ public:
     virtual void indentLine( QTextParagraph *p, int &oldIndent, int &newIndent );
     virtual int indentation( const QString& s );
 
+    virtual int previousNonBlankLine( int line );
     virtual int indentForLine( int line ) = 0;
     virtual void indent( QTextDocument*, QTextParagraph*, int* =0, int* =0 );
 
