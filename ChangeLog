@@ -1,3 +1,11 @@
+1999-02-11  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* added KWrite's Default dialog and a Messagebox, if KDevelop couldn't find 
+	documentation for a searchkey
+	 * some changes in CKDevelop::closeEvent() 
+	 * many bugfixes for a more stable KDevelop
+	* commit a danish translation by Steen Rabol <rabol@get2net.dk>
+
 1999-02-10  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* several changes in the printdialog
 	* added some buttons to the printdialog

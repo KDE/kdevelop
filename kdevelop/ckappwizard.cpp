@@ -759,8 +759,8 @@ void CKAppWizard::slotProcessExited() {
 
   QString directory = directoryline->text();
   QString prj_str = directory + "/" + namelow + "/" + namelow + ".kdevprj";
-  project = new CProject();
-  project->readProject (prj_str);
+  project = new CProject(prj_str);
+  project->readProject();
   project->setKDevPrjVersion("0.2");
   if (ta->isChecked()) {
     project->setProjectType("normal_cpp");

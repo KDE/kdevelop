@@ -37,7 +37,7 @@
 #include "cprintdlg.h"
 
 void CKDevelop::slotFileNewAppl(){
-  
+  QString old_project="";
   if(!CToolClass::searchProgram("perl")){
     return;
   }
@@ -47,16 +47,21 @@ void CKDevelop::slotFileNewAppl(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
-  if(project)
-			slotProjectClose();
-	 
+  if(project){
+    old_project = prj->getProjectFile();
+    slotProjectClose();
+  }
+  
   slotStatusMsg(i18n("Creating a new frame application..."));
   CKAppWizard* kappw  = new CKAppWizard (this,"zutuz");
   kappw->exec();
   QString file = kappw->getProjectFile();
-
+  
   if(kappw->generatedProject()){
     readProjectFile(file);
+  }
+  else if (old_project != ""){ // if cancel load the old project again
+    readProjectFile(old_project);
   }
   
   //cerr << kappw->getProjectFile();
@@ -74,7 +79,13 @@ void CKDevelop::slotFileOpenFile(){
   slotStatusMsg(i18n("Opening file..."));
 
   QString str;
-  str = KFileDialog::getOpenFileName(prj.getProjectDir(),"*",this);
+  if(project){
+    str = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this);
+  }
+  else{
+    str = KFileDialog::getOpenFileName(0,"*",this);
+  }
+  
   if (str.isEmpty()) return; //cancel
   switchToFile(str);
   
@@ -83,23 +94,23 @@ void CKDevelop::slotFileOpenFile(){
 }
 void CKDevelop::slotFileOpenPrj(){
   if(project)
-			slotProjectClose();
-
-	slotStatusMsg(i18n("Opening project..."));
-	QString str;
-	str = KFileDialog::getOpenFileName(prj.getProjectDir(),"*.kdevprj",this);
-	if (str.isEmpty()) return; //cancel
-	QFileInfo info(str);
+    slotProjectClose();
   
-	if (info.isFile()){
-		if(!(readProjectFile(str))){
-		  KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
-		}
-
-		slotStatusMsg(IDS_DEFAULT);
-	}	
-
-
+  slotStatusMsg(i18n("Opening project..."));
+  QString str;
+  str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
+  if (str.isEmpty()) return; //cancel
+  QFileInfo info(str);
+  
+  if (info.isFile()){
+    if(!(readProjectFile(str))){
+      KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+    }
+    
+    slotStatusMsg(IDS_DEFAULT);
+  }	
+  
+  
 }
 
 void CKDevelop::slotFileSave(){
@@ -174,7 +185,12 @@ void CKDevelop::slotFileSaveAs(){
   slotStatusMsg(i18n("Save file as..."));
   QString name;
   TEditInfo* actual_info;
-  name = KFileDialog::getSaveFileName(prj.getProjectDir(),0,this,edit_widget->getName());
+  if(project){
+    name = KFileDialog::getSaveFileName(prj->getProjectDir(),0,this,edit_widget->getName());
+  }
+  else{
+    name = KFileDialog::getSaveFileName(0,0,this,edit_widget->getName());
+  }
   if (name.isNull()){
     cerr << "CANCEL\n";
     return;
@@ -280,20 +296,6 @@ void CKDevelop::slotSCurrentTab(int item){
 }
 
 void CKDevelop::closeEvent(QCloseEvent* e){
-  
-  config->setGroup("Files");
-  if(project){
-    config->writeEntry("project_file",prj.getProjectFile());
-    prj.writeProject();
-    if(!slotProjectClose()){ // if not ok,pressed cancel
-      e->ignore();
-      return; //not close!
-    }
-  }
-  e->accept();
-  cerr << "QUIT5";
-  swallow_widget->sWClose(false);
-
   config->setGroup("General Options");
   config->writeEntry("width",width());
   config->writeEntry("height",height());
@@ -311,13 +313,25 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
-
-
   
   config->setGroup("Files");
   config->writeEntry("cpp_file",cpp_widget->getName());
   config->writeEntry("header_file",header_widget->getName());
   config->writeEntry("browser_file",history_list.current());
+  
+  config->setGroup("Files");
+  if(project){
+    config->writeEntry("project_file",prj->getProjectFile());
+    prj->writeProject();
+    if(!slotProjectClose()){ // if not ok,pressed cancel
+      e->ignore();
+      return; //not close!
+    }
+  }
+  e->accept();
+  cerr << "QUIT5";
+  swallow_widget->sWClose(false);
+  
   cerr << "QUIT3";
   config->sync();
   cerr << "QUIT2";
@@ -468,6 +482,15 @@ void CKDevelop::slotOptionsEditorColors(){
   slotStatusMsg(IDS_DEFAULT);
 
 }
+void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
+  slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
+  cpp_widget->hlDef();
+  header_widget->copySettings(cpp_widget);
+  config->setGroup("KWrite Options");
+  edit_widget->writeConfig(config);
+  edit_widget->doc()->writeConfig(config);
+  slotStatusMsg(IDS_DEFAULT);
+}
 void CKDevelop::slotOptionsSyntaxHighlighting(){
   slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
   cpp_widget->hlDlg();
@@ -560,6 +583,11 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
     str = search_output.mid(pos,nextpos-pos);
     list.append(str);
     pos = nextpos+1;
+  }
+  if (list.isEmpty()){
+
+     KMsgBox::message(0,"Information","\"" + doc_search_text + "\" not found in documenation!",KMsgBox::INFORMATION);
+    return;
   }
   
   // //lets sort it a little bit
@@ -679,18 +707,21 @@ void CKDevelop::slotDocKDEHTMLLib(){
 
 
 void CKDevelop::slotDocAPI(){
-  slotStatusMsg(i18n("Switching to project API Documentation..."));
-  slotURLSelected(browser_widget,prj.getProjectDir() + prj.getSubDir() +  "api/index.html",1,"test");
-  slotStatusMsg(IDS_DEFAULT);
+  if(project){
+    slotStatusMsg(i18n("Switching to project API Documentation..."));
+    slotURLSelected(browser_widget,prj->getProjectDir() + prj->getSubDir() +  "api/index.html",1,"test");
+    slotStatusMsg(IDS_DEFAULT);
+  }
 }
 void CKDevelop::slotDocManual(){
-  slotStatusMsg(i18n("Switching to project Manual..."));
-  //  prj.updateMakefilesAm();
-  unsigned int index = prj.getSGMLFile().length()-4;
-  QString name = prj.getSGMLFile().copy();
-  name.remove(index,4);
-  slotURLSelected(browser_widget,prj.getProjectDir() + prj.getSubDir() + "docs/en/" + name + "html",1,"test");
-  slotStatusMsg(IDS_DEFAULT);
+  if(project){
+    slotStatusMsg(i18n("Switching to project Manual..."));
+    unsigned int index = prj->getSGMLFile().length()-4;
+    QString name = prj->getSGMLFile().copy();
+    name.remove(index,4);
+    slotURLSelected(browser_widget,prj->getProjectDir() + prj->getSubDir() + "docs/en/" + name + "html",1,"test");
+    slotStatusMsg(IDS_DEFAULT);
+  }
 }
 void CKDevelop::slotDocUpdateKDEDocumentation(){
   if(!CToolClass::searchProgram("kdoc")){
@@ -719,7 +750,7 @@ void CKDevelop::slotBuildCompileFile(){
   slotStatusMsg(i18n("Compiling "+edit_widget->getName()));
   messages_widget->clear();
   process.clearArguments();
-  QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   // get the filename of the implementation file to compile and change extension for make
   QFileInfo fileinfo(cpp_widget->getName());
   cerr << "ObjectFile= " << fileinfo.baseName()+".o";
@@ -730,7 +761,7 @@ void CKDevelop::slotBuildCompileFile(){
 
 void CKDevelop::slotBuildRun(){
   slotBuildMake();
-  slotStatusMsg(i18n("Running "+prj.getBinPROGRAM()));
+  slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
   next_job = "run";
 }
 void CKDevelop::slotBuildDebug(){
@@ -738,7 +769,7 @@ void CKDevelop::slotBuildDebug(){
   if(!CToolClass::searchProgram("kdgb")){
     return;
   }
-  if(!prj.getBinPROGRAM()){
+  if(!prj->getBinPROGRAM()){
     slotBuildMake();
   }
   
@@ -750,11 +781,11 @@ void CKDevelop::slotBuildDebug(){
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
-  slotStatusMsg(i18n("Running  "+prj.getBinPROGRAM()+"  in KDbg"));
+  slotStatusMsg(i18n("Running  "+prj->getBinPROGRAM()+"  in KDbg"));
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
-  swallow_widget->setExeString("kdbg "+prj.getBinPROGRAM());
+  swallow_widget->setExeString("kdbg "+prj->getBinPROGRAM());
   swallow_widget->sWExecute();
   swallow_widget->init();
   
@@ -776,10 +807,10 @@ void CKDevelop::slotBuildMake(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
   messages_widget->clear();
-  QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   process.clearArguments();
-  if(!prj.getMakeOptions().isEmpty()){
-    process << "make" << prj.getMakeOptions();
+  if(!prj->getMakeOptions().isEmpty()){
+    process << "make" << prj->getMakeOptions();
   }
   else{
     process << "make";
@@ -803,7 +834,7 @@ void CKDevelop::slotBuildRebuildAll(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
   messages_widget->clear();
-  QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   process.clearArguments();
   process << "make";
   process << "clean";
@@ -827,7 +858,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   slotFileSaveAll();
   messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
-  QDir::setCurrent(prj.getProjectDir()); 
+  QDir::setCurrent(prj->getProjectDir()); 
   process.clearArguments();
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
   process << "sh" << path + "cleanrebuildall";
@@ -851,7 +882,7 @@ void CKDevelop::slotBuildDistClean(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make distclean..."));
   messages_widget->clear();
-  QDir::setCurrent(prj.getProjectDir());
+  QDir::setCurrent(prj->getProjectDir());
   process.clearArguments();
   process << "make";
   process << "distclean";
@@ -874,7 +905,7 @@ void CKDevelop::slotBuildAutoconf(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf suite..."));
   messages_widget->clear();
-  QDir::setCurrent(prj.getProjectDir());
+  QDir::setCurrent(prj->getProjectDir());
   process.clearArguments();
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
   process << "sh" << path + "autoconfsuite";
@@ -895,7 +926,7 @@ void CKDevelop::slotBuildConfigure(){
   slotFileSave();
   messages_widget->clear();
   slotFileSaveAll();
-  QDir::setCurrent(prj.getProjectDir()); 
+  QDir::setCurrent(prj->getProjectDir()); 
   process.clearArguments();
   process << "./configure";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -922,11 +953,11 @@ void CKDevelop::slotBuildAPI(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
   messages_widget->clear();
-  QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   shell_process.clearArguments();
   shell_process << "kdoc";
-  shell_process << "-p -d" + prj.getProjectDir() + prj.getSubDir() +  "api";
-  shell_process << prj.getProjectName();
+  shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+  shell_process << prj->getProjectName();
   shell_process << "*.h";
   
   shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
@@ -948,10 +979,10 @@ void CKDevelop::slotBuildManual(){
   //  slotFileSaveAll();
   slotStatusMsg(i18n("Creating project Manual..."));
   messages_widget->clear();
-  QDir::setCurrent(prj.getProjectDir() + prj.getSubDir() + "/docs/en/");
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir() + "/docs/en/");
   process.clearArguments();
   process << "sgml2html";
-  process << prj.getSGMLFile();
+  process << prj->getSGMLFile();
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput); 
 
 }
@@ -970,7 +1001,6 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
-
   }
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
@@ -991,7 +1021,13 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
   // insert into the history-list
-  history_list.append(url);
+  int cur =  history_list.at(); // get the current index
+  if(cur == -1){
+     history_list.append(url);
+  }
+  else{
+    history_list.insert(cur+1,url);
+  }
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){ 
@@ -1055,7 +1091,7 @@ void CKDevelop::slotClickedOnMessagesWidget(){
 
   // switch to the file
   if (error_filename.find('/') == -1){ // it is a file outer the projectdir ?
-    error_filename = prj.getProjectDir() + prj.getSubDir() + error_filename;
+    error_filename = prj->getProjectDir() + prj->getSubDir() + error_filename;
   }
   if (QFile::exists(error_filename)){
     switchToFile(error_filename);
@@ -1069,10 +1105,10 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   slotStatusMsg(IDS_DEFAULT);
   if (process.normalExit()) {
     if (next_job == "make"){ // rest from the rebuild all
-      QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
+      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
       process.clearArguments();
-      if(!prj.getMakeOptions().isEmpty()){
-	process << "make" << prj.getMakeOptions();
+      if(!prj->getMakeOptions().isEmpty()){
+	process << "make" << prj->getMakeOptions();
       }
       else{
 	process << "make";
@@ -1082,13 +1118,13 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       next_job = "";
     }
     if (next_job == "run" && process.exitStatus() == 0){ // rest from the buildRun
-      QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
+      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
       stdin_stdout_widget->clear();
       o_tab_view->setCurrentTab(STDINSTDOUT);
       stderr_widget->clear();
       appl_process.clearArguments();
       // Warning: not every user has the current directory in his path !
-      appl_process << "./" + prj.getBinPROGRAM().lower();
+      appl_process << "./" + prj->getBinPROGRAM().lower();
       setToolMenuProcess(false);
       appl_process.start(KProcess::NotifyOnExit,KProcess::All);
       next_job = "";
@@ -1125,7 +1161,9 @@ void CKDevelop::slotSTabSelected(int item){
     setCaption("KDevelop " + version + ": " + edit_widget->getName());
   }
   if (item == CPP){
-    enableCommand(ID_BUILD_COMPILE_FILE);
+    if(project){
+      enableCommand(ID_BUILD_COMPILE_FILE);
+    }
     edit_widget = cpp_widget;
     edit_widget->setFocus();
     slotNewUndo();
@@ -1167,7 +1205,7 @@ void CKDevelop::slotLogFileTreeSelected(int index){
   QString* str;
   path = log_file_tree->itemPath(index);
   str = path->pop();
-  switchToFile(prj.getProjectDir() + *str);
+  switchToFile(prj->getProjectDir() + *str);
   cerr << "SELECTED2\n";
 }
 
@@ -1570,6 +1608,7 @@ BEGIN_STATUS_MSG(CKDevelop)
 
   ON_STATUS_MSG(ID_OPTIONS_EDITOR,              			i18n("Sets the Editor's behavoir"))
   ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       			i18n("Sets the Editor's colors"))
+  ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS, 			i18n("Sets the highlighting default colors"))
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, 			i18n("Sets the highlighting colors"))
   ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              			i18n("Set up the KDevelop environment"))
   ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  				i18n("Configures the Browser options"))

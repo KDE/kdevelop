@@ -116,9 +116,11 @@ void CDocTree::refresh(CProject* prj){
   str_path = "Current Project";
   path.pop();
   path.push(&str_path);
-  if(prj->valid){
-    addChildItem("User-Manual",&book_pix,&path);
-    addChildItem("API-Documentation",&book_pix,&path);  
+  if(project){
+    if(prj->valid){
+      addChildItem("User-Manual",&book_pix,&path);
+      addChildItem("API-Documentation",&book_pix,&path);  
+    }
   }
   
   setExpandLevel(2);

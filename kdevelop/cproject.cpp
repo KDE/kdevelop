@@ -23,17 +23,18 @@
 #include <kprocess.h>
 
 
-CProject::CProject(){
+CProject::CProject(QString file){
   valid = false;
-  config = 0;
+  config = new KSimpleConfig(file);
+  prjfile = file;
 }
 
 CProject::~CProject(){
 }
 
-bool CProject::readProject(QString file){
+bool CProject::readProject(){
   
-  QFile qfile(file);
+  QFile qfile(prjfile);
   QTextStream stream(&qfile);
   qfile.open(IO_ReadOnly);
   QString str = stream.readLine();
@@ -41,10 +42,8 @@ bool CProject::readProject(QString file){
     return false;
 
   }
-  config = new KSimpleConfig(file);
   
-  prjfile = file;
-  QFileInfo fileinfo(file);
+  QFileInfo fileinfo(prjfile);
   dir = fileinfo.dirPath() + "/";
   setSourcesHeaders();
   valid = true;
@@ -86,9 +85,6 @@ void CProject::setProjectName(QString name){
   config->writeEntry("project_name",name);
 }
 QString CProject::getProjectName(){
-  if(config == 0){
-    return "";
-  }
   config->setGroup("General");
   return config->readEntry("project_name");
 }

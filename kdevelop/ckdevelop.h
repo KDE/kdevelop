@@ -184,6 +184,7 @@ public:
 
   void slotOptionsEditor();
   void slotOptionsEditorColors();
+  void slotOptionsSyntaxHighlightingDefaults();
   void slotOptionsSyntaxHighlighting();
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
@@ -291,7 +292,7 @@ private:
   KProcess process; // for tools,compiler,make,kodc
   KProcess appl_process; //only for selfmade appl
   KShellProcess shell_process;
-  CProject prj; // at the moment only one project at the same time
+  CProject* prj; // at the moment only one project at the same time
 
   KConfig* config;
   int act_outbuffer_len;

@@ -85,7 +85,7 @@ class CProject  {
 
 public: 
   /** construtor */
-  CProject(); 
+  CProject(QString file); 
   /** destructor */
   ~CProject();
   /** the version of the kdevprj file format*/
@@ -161,7 +161,7 @@ public:
   //  void createBinMakefileAm();
   void updateMakefileAm(QString makefile);
   /** read the projectfile */
-  bool readProject(QString file); 
+  bool readProject(); 
   /** write the projectfile to the disk*/
   void writeProject(); 
   /** true if the project was read*/

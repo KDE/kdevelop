@@ -139,7 +139,7 @@ int CKDevelop::CVGotoClassDecl(QString classname){
   if(info_found == 0){ // not found !!!
     return 0; // prevent a segfault in the next line
   }
-  switchToFile(prj.getProjectDir() + prj.getSubDir() + info_found->filename);
+  switchToFile(prj->getProjectDir() + prj->getSubDir() + info_found->filename);
   text = edit_widget->text();
   class_tree->CVRemoveAllComments(&text);
 
@@ -181,9 +181,9 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
     compl_name.truncate( pos );
   debug( compl_name );
   
-  if (!prj.getSources().isEmpty()){
-    for(filename = prj.getSources().first();filename != 0;filename = prj.getSources().next()){
-      file.setName(prj.getProjectDir() + prj.getSubDir() + filename);
+  if (!prj->getSources().isEmpty()){
+    for(filename = prj->getSources().first();filename != 0;filename = prj->getSources().next()){
+      file.setName(prj->getProjectDir() + prj->getSubDir() + filename);
       file.open(IO_ReadOnly);
       // while(!in_stream.eof()){
 // 	stream = stream + in_stream.readLine() + "\n"; // read it
@@ -193,7 +193,7 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
       file.readBlock(stream.data(),file.size());
       file.close(); 
       if (stream.find(compl_name) != -1){
-	switchToFile(prj.getProjectDir() + prj.getSubDir() + filename);
+	switchToFile(prj->getProjectDir() + prj->getSubDir() + filename);
 	stream = edit_widget->text();
 	class_tree->CVRemoveAllComments(&stream);
 	pos = stream.find(compl_name);
@@ -230,6 +230,9 @@ void CKDevelop::CVGotoClassVarDecl(QString classname,QString var_name){
 }
 
 void CKDevelop::slotClassChoiceCombo(int index){
+  if(!project){
+    return;
+  }
   KCombo* class_combo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   KCombo* method_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   
@@ -256,6 +259,9 @@ void CKDevelop::slotClassChoiceCombo(int index){
    
 }
 void CKDevelop::slotMethodChoiceCombo(int index){
+  if(!project){
+    return;
+  }
   KCombo* class_combo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   KCombo* method_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   

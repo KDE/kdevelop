@@ -22,14 +22,14 @@
 
 
 void CKDevelop::refreshTrees(){
-  doc_tree->refresh(&prj);
+  doc_tree->refresh(prj);
   if (!project){
     return; // no project
   }
-  class_tree->refresh(&prj);
+  class_tree->refresh(prj);
   refreshClassCombos();
-  log_file_tree->refresh(&prj);
-  real_file_tree->refresh(prj.getProjectDir());
+  log_file_tree->refresh(prj);
+  real_file_tree->refresh(prj->getProjectDir());
   real_file_tree->setExpandLevel(1);
  
 }
@@ -107,7 +107,7 @@ void CKDevelop::switchToFile(QString filename){
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
 
       //      output_widget->append ("File: was was already there");
-      setCaption("KDevelop " + version + ":  "+prj.getProjectName()+":  " + filename);
+      setCaption("KDevelop " + version + ":  "+prj->getProjectName()+":  " + filename);
       return;
     }
   }
@@ -131,8 +131,13 @@ void CKDevelop::switchToFile(QString filename){
   edit_widget->setFocus();
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
-
-  setCaption("KDevelop " + version + ":  "+prj.getProjectName()+":  "+ filename);
+  if(project){
+    setCaption("KDevelop " + version + ":  "+prj->getProjectName()+":  "+ filename);
+  }
+  else{
+    setCaption("KDevelop " + version + ": "+ filename);
+  }
+  
  
 }
 

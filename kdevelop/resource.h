@@ -125,6 +125,7 @@
 
 #define ID_OPTIONS_EDITOR          	      	     16010
 #define ID_OPTIONS_EDITOR_COLORS           	     16020
+#define ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS	     16025
 #define ID_OPTIONS_SYNTAX_HIGHLIGHTING 	  	     16030
 
 #define ID_OPTIONS_KDEVELOP  			               16040

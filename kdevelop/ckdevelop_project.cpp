@@ -47,7 +47,7 @@ bool CKDevelop::slotProjectClose(){
   // check if header widget contains modified file
   if(header_widget->isModified()){
     cerr << "header_widget modified file" << endl;
-    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
+    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
 				       +i18n("\n\ncontains changed files. Save modified file\n\n")+header_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
 				       i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
     // show the messagea and store result in result:
@@ -89,7 +89,7 @@ bool CKDevelop::slotProjectClose(){
   } // end header widge close
   
   if(cpp_widget->isModified()){
-    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
+    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
 				       +i18n("\n\ncontains changed files. Save modified file\n\n")+cpp_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
 				       i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
     // show the messagea and store result in result:
@@ -137,7 +137,7 @@ bool CKDevelop::slotProjectClose(){
       cerr << "check file:" << actual_info->filename << endl;
       if(actual_info->modified){
 	
-	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
+	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
 					   +i18n("\n\ncontains changed files. Save modified file\n\n")+actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
 					   i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
  				// show the messagea and store result in result:
@@ -219,7 +219,9 @@ bool CKDevelop::slotProjectClose(){
     
     // set project to false and disable all ID_s related to project=true	
     project=false;
-    prj.valid = false;
+    prj->valid = false;
+    delete prj;
+
     
     switchToFile(header_widget->getName());
     
@@ -247,6 +249,7 @@ bool CKDevelop::slotProjectClose(){
   if(mod){
     refreshTrees();
   }
+  
   return mod; // false if pressed cancel
 }
 
@@ -256,9 +259,9 @@ void CKDevelop::slotProjectAddNewFile(){
 
 void CKDevelop::slotProjectAddExistingFiles(){
   QString type;
-  CAddExistingFileDlg dlg(this,"test",&prj);
+  CAddExistingFileDlg dlg(this,"test",prj);
   
-  dlg.destination_edit->setText(prj.getProjectDir()+ prj.getSubDir());
+  dlg.destination_edit->setText(prj->getProjectDir()+ prj->getSubDir());
   if(dlg.exec()){
     QString token;
     QStrList files;
@@ -271,6 +274,9 @@ void CKDevelop::slotProjectAddExistingFiles(){
       files.append(token);
     }
     QString dest = dlg.destination_edit->text();
+    if(dest.right(1) != '/'){
+      dest = dest + '/';
+    }
     QString source_name;
     QString dest_name ;
     QString file;
@@ -308,12 +314,12 @@ void CKDevelop::slotProjectRemoveFile(){
 }
 
 void CKDevelop::slotProjectOptions(){
-  CPrjOptionsDlg prj(this,"optdialog",&prj);
-  prj.show();
+  CPrjOptionsDlg prjdlg(this,"optdialog",prj);
+  prjdlg.show();
 }
 
 void CKDevelop::newFile(bool add_to_project){
-  CNewFileDlg dlg(this,"test",true,0,&prj);
+  CNewFileDlg dlg(this,"test",true,0,prj);
   dlg.setUseTemplate();
   if (add_to_project){
     dlg.setAddToProject();
@@ -344,42 +350,43 @@ void CKDevelop::newFile(bool add_to_project){
 }
 void CKDevelop::addFileToProject(QString complete_filename,QString type,bool refresh){
   QString rel_name = complete_filename;
-  rel_name.replace(QRegExp(prj.getProjectDir()),"");
-  prj.addFileToProject(rel_name);
+  rel_name.replace(QRegExp(prj->getProjectDir()),"");
+  prj->addFileToProject(rel_name);
   TFileInfo info;
   info.rel_name = rel_name;
   info.type = type;
   info.dist = true;
   info.install=false;
   info.install_location = "";
-  prj.writeFileInfo(info);
-  prj.writeProject();
-  prj.updateMakefilesAm();
+  prj->writeFileInfo(info);
+  prj->writeProject();
+  prj->updateMakefilesAm();
   if(refresh){
     refreshTrees();
   }
 }
 void CKDevelop::delFileFromProject(QString rel_filename){
 
-  prj.removeFileFromProject(rel_filename);
-  prj.writeProject();
+  prj->removeFileFromProject(rel_filename);
+  prj->writeProject();
   refreshTrees();
 }
 bool CKDevelop::readProjectFile(QString file){
   QString str;
-  if(!(prj.readProject(file))){
+  prj = new CProject(file);
+  if(!(prj->readProject())){
     return false;
   }
-  
+
   // str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";
   //   if(QFile::exists(str)){
   //     switchToFile(str);
   //   }
-  str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".h";
+  str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
   if(QFile::exists(str)){
     switchToFile(str);
   }
-  str = prj.getProjectDir() + prj.getSubDir() + "main.cpp";
+  str = prj->getProjectDir() + prj->getSubDir() + "main.cpp";
   if(QFile::exists(str)){
     switchToFile(str);
   }
@@ -414,7 +421,7 @@ bool CKDevelop::readProjectFile(QString file){
 
 
 void CKDevelop::slotProjectNewClass(){
-  CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",&prj);
+  CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",prj);
   if(dlg->exec()){
     QString source_file=dlg->getImplFile() ;
     QString header_file=dlg->getHeaderFile();
@@ -423,28 +430,28 @@ void CKDevelop::slotProjectNewClass(){
 
     QFileInfo header_info(header_file);
     QFileInfo source_info(source_file);
-    prj.addFileToProject(prj.getSubDir() + source_info.fileName());
+    prj->addFileToProject(prj->getSubDir() + source_info.fileName());
     TFileInfo file_info;
-    file_info.rel_name = prj.getSubDir() + source_info.fileName();
+    file_info.rel_name = prj->getSubDir() + source_info.fileName();
     file_info.type = "SOURCE";
     file_info.dist = true;
     file_info.install = false;
-    prj.writeFileInfo(file_info);
+    prj->writeFileInfo(file_info);
     
-    prj.addFileToProject(prj.getSubDir() + header_info.fileName());
-    file_info.rel_name = prj.getSubDir() + header_info.fileName();
+    prj->addFileToProject(prj->getSubDir() + header_info.fileName());
+    file_info.rel_name = prj->getSubDir() + header_info.fileName();
     file_info.type = "HEADER";
     file_info.dist = true;
     file_info.install = false;
-    prj.writeFileInfo(file_info);
+    prj->writeFileInfo(file_info);
     
-    prj.updateMakefilesAm();
+    prj->updateMakefilesAm();
     slotOptionsRefresh();
   }
 }
 
 void CKDevelop::slotProjectFileProperties(){
-  CFilePropDlg dlg(this,"DLG",&prj);
+  CFilePropDlg dlg(this,"DLG",prj);
   dlg.show();
 }
 

@@ -104,6 +104,7 @@ void CKDevelop::initConnections(){
 void CKDevelop::init(){
   
   act_outbuffer_len=0;
+  prj = 0;
 
   QFont font("Fixed",10);
   KApplication *app=KApplication::getKApplication();
@@ -510,6 +511,9 @@ void CKDevelop::initMenu(){
 			   SLOT(slotOptionsEditor()),0,ID_OPTIONS_EDITOR);
   options_menu->insertItem(i18n("Editor-&Colors..."),this,
 			   SLOT(slotOptionsEditorColors()),0,ID_OPTIONS_EDITOR_COLORS);
+  options_menu->insertItem(i18n("Syntax &Highlighting Defaults..."),this,
+			   SLOT(slotOptionsSyntaxHighlightingDefaults())
+			   ,0,ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS);
   options_menu->insertItem(i18n("&Syntax Highlighting..."),this,
 			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING); 
   options_menu->insertSeparator();
