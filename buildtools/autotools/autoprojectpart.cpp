@@ -247,7 +247,7 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
         //ok we handle the execute in this kpart
         vbox = dlg->addVBoxPage(i18n("Run Options"));
         RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), vbox);
-        w3->programGroupBox->setTitle(i18n("Program (if emtpy automatically uses active target and active target's arguments)"));
+        w3->programGroupBox->setTitle(i18n("Program (if empty automatically uses active target and active target's arguments)"));
         connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
     }
     vbox = dlg->addVBoxPage(i18n("Make Options"));
