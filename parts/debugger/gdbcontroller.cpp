@@ -717,7 +717,7 @@ void GDBController::parseProgramLocation(char *buf)
     //  "/opt/qt/src/widgets/qlistview.cpp:1558:42771:beg:0x401b22f2"
     QRegExp regExp1("(.*):(\\d+):\\d+:[a-z]+:(0x[abcdef0-9]+)$");
     regExp1.setMinimal(true);
-    if ( regExp1.match(buf, 0) >= 0 )
+    if ( regExp1.search(buf, 0) >= 0 )
     {
         actOnProgramPause(QString());
         emit showStepInSource( regExp1.cap(1),
@@ -736,7 +736,7 @@ void GDBController::parseProgramLocation(char *buf)
     QRegExp regExp3("^0x[abcdef0-9]+ ");
     regExp3.setMinimal(true);
     int start;
-    if ((start = regExp3.match(buf, 0)) >= 0)
+    if ((start = regExp3.search(buf, 0)) >= 0)
         emit showStepInSource(QString(), -1,
                               QCString(buf, (strchr(buf, ' ')-buf)+1));
     else

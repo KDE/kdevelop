@@ -334,7 +334,7 @@ QStringList TrollProjectWidget::allSubprojects()
 
 QStringList TrollProjectWidget::allFiles()
 {
-    QStack<QListViewItem> s;
+    QPtrStack<QListViewItem> s;
     QStringList res;
 
     for ( QListViewItem *item = overview->firstChild(); item;

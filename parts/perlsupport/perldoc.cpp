@@ -62,7 +62,7 @@ void PerldocProtocol::get(const KURL& url)
     if (plain)
         data(QCString("<blockquote>"));
 
-    FILE *fd = popen(cmd.data(), "r");
+    FILE *fd = popen(cmd.local8Bit().data(), "r");
     char buffer[4090];
     QByteArray array;
 

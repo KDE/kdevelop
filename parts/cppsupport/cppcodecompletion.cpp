@@ -119,8 +119,8 @@ static QString remove_keywords( QString text ){
     QString s;
     int index = 0;
     while( index < (int)text.length() ){
-        int len = 0;
-        int pos = ide_rx.match( text, index, &len );
+        int pos = ide_rx.search( text, index );
+        int len = ide_rx.matchedLength();
         if( pos == -1 ){
             break;
         }

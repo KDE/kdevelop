@@ -362,7 +362,7 @@ QStringList AutoProjectWidget::allLibraries()
 
 QStringList AutoProjectWidget::allFiles()
 {
-	QStack<QListViewItem> s;
+	QPtrStack<QListViewItem> s;
 	QMap<QString, bool> dict;
 
 	for ( QListViewItem * item = m_subprojectView->firstChild(); item;

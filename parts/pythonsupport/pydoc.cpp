@@ -47,7 +47,7 @@ void PydocProtocol::get(const KURL& url)
     cmd += KShellProcess::quote(key);
 #endif
 
-    FILE *fd = popen(cmd.data(), "r");
+    FILE *fd = popen(cmd.local8Bit().data(), "r");
     char buffer[4096];
     QByteArray array;
 

@@ -446,9 +446,8 @@ FrameStackItem::FrameStackItem(FramestackWidget *parent, const QString &frameDes
     setText(VarNameCol, frameDesc);
     QRegExp num("[0-9]*");
     int start;
-    int len;
-    if ((start=num.match(frameDesc,1,&len))>=0)
-        frameNo_ = frameDesc.mid(start,len).toInt();
+    if ((start=num.search(frameDesc,1))>=0)
+        frameNo_ = frameDesc.mid(start, num.matchedLength()).toInt();
 }
 
 // **************************************************************************
@@ -461,9 +460,8 @@ FrameStackItem::FrameStackItem(ThreadStackItem *parent, const QString &frameDesc
     setText(VarNameCol, frameDesc);
     QRegExp num("[0-9]*");
     int start;
-    int len;
-    if ((start=num.match(frameDesc,1,&len))>=0)
-        frameNo_ = frameDesc.mid(start,len).toInt();
+    if ((start=num.search(frameDesc,1))>=0)
+        frameNo_ = frameDesc.mid(start, num.matchedLength()).toInt();
 }
 
 // **************************************************************************
@@ -505,9 +503,8 @@ ThreadStackItem::ThreadStackItem(FramestackWidget *parent, const QString &thread
     setExpandable(true);
     QRegExp num("[0-9]*");
     int start;
-    int len;
-    if ((start=num.match(threadDesc,2,&len))>=0)
-        threadNo_ = threadDesc.mid(start,len).toInt();
+    if ((start=num.search(threadDesc,2))>=0)
+        threadNo_ = threadDesc.mid(start, num.matchedLength()).toInt();
 }
 
 // **************************************************************************
