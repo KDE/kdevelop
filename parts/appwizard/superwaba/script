@@ -8,7 +8,7 @@ installLicense();
 installGNU();
 
 print "Installing project file\n";
-install( "${src}/template-superwaba/sw.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
+installHTML( "${src}/template-superwaba/sw.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
 install( "${src}/template-superwaba/sw.filelist",    "${dest}/${APPNAMELC}.filelist" );
 
 print "Installing application framework\n";

@@ -9,7 +9,7 @@ installIncAdmin();
 installGNU();
 
 print "Installing project file\n";
-install( "${src}/template-chellogba/app.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
+installHTML( "${src}/template-chellogba/app.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
 install( "${src}/template-chellogba/README.devel",    "${dest}/README.devel" );
 
 print "Installing application framework\n";

@@ -11,7 +11,7 @@ installGNU();
 installDocbook();
 
 print "Installing project file\n";
-install( "${src}/template-khello/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
+installHTML( "${src}/template-khello/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application\n";
 mkdir( "${dest}/src", 0777 );

@@ -5,7 +5,7 @@ use gideon;
 initGideon();
 
 print "Installing project file\n";
-install( "${src}/template-bashhello/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
+installHTML( "${src}/template-bashhello/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application sources\n";
 install( "${src}/template-bashhello/app.sh",       "${dest}/${APPNAMELC}.sh" );

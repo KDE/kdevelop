@@ -6,7 +6,7 @@ initGideon();
 installLicense();
 
 print "Installing project file\n";
-install( "${src}/template-kpartapp/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
+installHTML( "${src}/template-kpartapp/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application sources\n";
 install( "${src}/template-kdevpart/src-Makefile.am", "${dest}/Makefile.am" );

@@ -6,7 +6,7 @@ initGideon();
 installLicense();
 
 print "Installing project file\n";
-install( "${src}/template-qmakesimple/app.kdevelop",     "${dest}/${APPNAMELC}.kdevelop" );
+installHTML( "${src}/template-qmakesimple/app.kdevelop",     "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );

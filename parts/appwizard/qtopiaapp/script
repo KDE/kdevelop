@@ -6,7 +6,7 @@ initGideon();
 installLicense();
 
 print "Installing project file\n";
-install( "${src}/template-qtopiaapp/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
+installHTML( "${src}/template-qtopiaapp/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );
