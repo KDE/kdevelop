@@ -11,6 +11,7 @@ Archive=kdevpart.tar.gz
 
 [FILE1]
 Type=install
+EscapeXML=true
 Source=%{src}/template-kpartapp/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -41,6 +42,7 @@ Dest=%{dest}/%{APPNAMELC}_widget.h
 
 [FILE7]
 Type=install
+EscapeXML=true
 Source=%{src}/kdevpart_part.rc
 Dest=%{dest}/kdevpart_%{APPNAMELC}.rc
 

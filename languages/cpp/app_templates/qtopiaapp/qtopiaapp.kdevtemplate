@@ -1,4 +1,4 @@
-# TMake application
+# KDE Config File
 [General]
 Name=Qtopia Application
 Name[fr]=Une Application Qtopia
@@ -13,6 +13,7 @@ Archive=qtopiaapp.tar.gz
 
 [FILE1]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -38,6 +39,7 @@ Dest=%{dest}/%{APPNAMELC}.h
 
 [FILE6]
 Type=install
+EscapeXML=true
 Source=%{src}/examplebase.ui
 Dest=%{dest}/%{APPNAMELC}base.ui
 
@@ -53,6 +55,7 @@ Dest=%{dest}/%{APPNAMELC}.desktop
 
 [FILE9]
 Type=install
+EscapeXML=true
 Source=%{src}/example.html
 Dest=%{dest}/%{APPNAMELC}.html
 

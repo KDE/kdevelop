@@ -44,6 +44,7 @@ Dest=%{dest}/doc/en/index.docbook
 
 [FILE4]
 Type=install
+EscapeXML=true
 Source=%{src}/module.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 

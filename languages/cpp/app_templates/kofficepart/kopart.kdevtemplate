@@ -44,6 +44,7 @@ Dest=%{dest}/doc/en/index.docbook
 
 [FILE4]
 Type=install
+EscapeXML=true
 Source=%{src}/template-kopart/kopart.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -127,6 +128,7 @@ Dest=%{dest}/src/%{APPNAMELC}_aboutdata.h
 
 [FILE19]
 Type=install
+EscapeXML=true
 Source=%{src}/template-kopart/kopart.rc
 Dest=%{dest}/src/%{APPNAMELC}.rc
 

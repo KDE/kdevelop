@@ -31,6 +31,7 @@ Dest=%{dest}
 
 [PROJECT]
 Type=install
+EscapeXML=true
 Source=%{src}/sw.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 

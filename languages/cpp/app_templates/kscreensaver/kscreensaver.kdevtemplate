@@ -28,6 +28,7 @@ Dir=%{dest}/doc/en
 
 [FILE1]
 Type=install
+EscapeXML=true
 Source=%{kdevelop}/template-common/kde-doc-Makefile.am
 Dest=%{dest}/doc/Makefile.am
 
@@ -44,6 +45,7 @@ Dest=%{dest}/doc/en/index.docbook
 
 [FILE4]
 Type=install
+EscapeXML=true
 Source=%{src}/kscreensaver.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -107,6 +109,7 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 
 [FILE15]
 Type=install
+EscapeXML=true
 Source=%{src}/kscreensaverui.ui
 Dest=%{dest}/src/%{APPNAMELC}ui.ui
 

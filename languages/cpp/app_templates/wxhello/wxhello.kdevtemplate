@@ -1,4 +1,4 @@
-# wxWidgets Config File
+# KDE Config File
 [General]
 Name=Simple Hello wxWidgets Application
 Name[fr]=Un simple programme de test « Hello world »
@@ -45,12 +45,14 @@ Option=INSTALL_DOCS
 
 [DOCS]
 Type=install
+EscapeXML=true
 Source=%{src}/template-common/kde-index.docbook
 Dest=%{dest}/doc/en/index.docbook
 Option=INSTALL_DOCS
 
 [PROJECT]
 Type=install
+EscapeXML=true
 Source=%{src}/template-wxhello/app.kdevelop
 Dest=%{dest}/${APPNAMELC}.kdevelop
 
@@ -115,18 +117,11 @@ Dir=%{dest}/doc
 [MKDIR_DOCBOOK2]
 Type=mkdir
 Dir=%{dest}/doc/en
-[MkDir1]
-Type=mkdir
-Dir=%{dest}/doc
 
 [FILE1]
 Type=install
 Source=%{kdevelop}/template-common/kde-doc-Makefile.am
 Dest=%{dest}/doc/Makefile.am
-
-[MkDir2]
-Type=mkdir
-Dir=%{dest}/doc/en
 
 [FILE2]
 Type=install

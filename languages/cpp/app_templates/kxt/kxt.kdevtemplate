@@ -44,6 +44,7 @@ Dest=%{dest}/doc/en/index.docbook
 
 [FILE4]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -117,6 +118,7 @@ Dest=%{dest}/src/%{APPNAMELC}.h
 
 [FILE17]
 Type=install
+EscapeXML=true
 Source=%{src}/appview_base.ui
 Dest=%{dest}/src/%{APPNAMELC}view_base.ui
 
@@ -132,6 +134,7 @@ Dest=%{dest}/src/%{APPNAMELC}view.h
 
 [FILE20]
 Type=install
+EscapeXML=true
 Source=%{src}/prefs-base.ui
 Dest=%{dest}/src/prefs-base.ui
 
@@ -152,6 +155,7 @@ Dest=%{dest}/src/main.cpp
 
 [FILE24]
 Type=install
+EscapeXML=true
 Source=%{src}/appui.rc
 Dest=%{dest}/src/%{APPNAMELC}ui.rc
 

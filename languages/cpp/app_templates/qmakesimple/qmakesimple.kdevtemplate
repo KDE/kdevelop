@@ -13,6 +13,7 @@ Archive=qmakesimple.tar.gz
 
 [FILE1]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 

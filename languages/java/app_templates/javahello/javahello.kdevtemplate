@@ -1,4 +1,4 @@
-# Java application
+# KDE Config File
 [General]
 Name=Application
 Name[fr]=Une application JAVA / Ant
@@ -13,6 +13,7 @@ Archive=javahello.tar.gz
 
 [FILE1]
 Type=install
+EscapeXML=true
 Source=%{src}/javahello.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 

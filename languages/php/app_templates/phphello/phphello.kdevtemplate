@@ -12,6 +12,7 @@ Archive=phphello.tar.gz
 
 [PROJECT]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 

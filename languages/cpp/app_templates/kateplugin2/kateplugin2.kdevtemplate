@@ -42,6 +42,7 @@ Dest=%{dest}/doc/en/index.docbook
 
 [FILE4]
 Type=install
+EscapeXML=true
 Source=%{src}/plugin.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -105,6 +106,7 @@ Dest=%{dest}/src/plugin_%{APPNAMELC}.h
 
 [FILE15]
 Type=install
+EscapeXML=true
 Source=%{src}/plugin_app.rc
 Dest=%{dest}/src/plugin_%{APPNAMELC}.rc
 

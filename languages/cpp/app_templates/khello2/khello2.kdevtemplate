@@ -42,6 +42,7 @@ Dest=%{dest}/doc/en/index.docbook
 
 [FILE4]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -120,6 +121,7 @@ Dest=%{dest}/src/%{APPNAMELC}widget.h
 
 [FILE18]
 Type=install
+EscapeXML=true
 Source=%{src}/widgetbase.ui
 Dest=%{dest}/src/%{APPNAMELC}widgetbase.ui
 
@@ -130,6 +132,7 @@ Dest=%{dest}/src/main.cpp
 
 [FILE20]
 Type=install
+EscapeXML=true
 Source=%{src}/appui.rc
 Dest=%{dest}/src/%{APPNAMELC}ui.rc
 

@@ -24,6 +24,7 @@ File=%{kdevelop}/template-common/dockbook.kdevtemplate
 
 [FILE4]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 

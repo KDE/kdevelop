@@ -17,6 +17,7 @@ File=%{kdevelop}/template-common/gnu.kdevtemplate
 
 [FILE1]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -61,6 +62,7 @@ Dest=%{dest}/src/%{APPNAMELC}_part.h
 
 [FILE9]
 Type=install
+EscapeXML=true
 Source=%{src}/kdevlang.rc
 Dest=%{dest}/src/kdev%{APPNAMELC}.rc
 

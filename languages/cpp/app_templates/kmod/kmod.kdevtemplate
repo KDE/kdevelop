@@ -16,6 +16,7 @@ File=%{kdevelop}/template-common/gnu.kdevtemplate
 
 [FILE1]
 Type=install
+EscapeXML=true
 Source=%{src}/kmod.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 

@@ -44,6 +44,7 @@ Dest=%{dest}/doc/en/index.docbook
 
 [FILE4]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -137,11 +138,13 @@ Dest=%{dest}/src/main.cpp
 
 [FILE21]
 Type=install
+EscapeXML=true
 Source=%{src}/app_part.rc
 Dest=%{dest}/src/%{APPNAMELC}_part.rc
 
 [FILE22]
 Type=install
+EscapeXML=true
 Source=%{src}/app_shell.rc
 Dest=%{dest}/src/%{APPNAMELC}_shell.rc
 

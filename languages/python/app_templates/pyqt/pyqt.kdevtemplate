@@ -16,6 +16,7 @@ File=%{kdevelop}/template-common/gnu.kdevtemplate
 
 [FILE1]
 Type=install
+EscapeXML=true
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
@@ -26,6 +27,7 @@ Dest=%{dest}/%{APPNAMELC}.py
 
 [FILE3]
 Type=install
+EscapeXML=true
 Source=%{src}/documentdetails.ui
 Dest=%{dest}/documentdetails.ui
 
