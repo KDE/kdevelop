@@ -43,39 +43,6 @@
 #include <qdir.h>
 
 // namespace ?!?
-struct FindOp
-{
-   FindOp( const FunctionDom& dom ): m_dom( dom ) {}
-
-   bool operator() ( const FunctionDefinitionDom& def ) const
-   {
-       if( m_dom->name() != def->name() )
-           return false;
-
-       if( m_dom->isConstant() != m_dom->isConstant() )
-           return false;
-
-       QString scope1 = QString("::") + m_dom->scope().join("::");
-       QString scope2 = QString("::") + def->scope().join("::");
-       if( !scope1.endsWith(scope2) )
-           return false;
-
-       const ArgumentList args = m_dom->argumentList();
-       const ArgumentList args2 = def->argumentList();
-       if( args.size() != args2.size() )
-           return false;
-
-       for( uint i=0; i<args.size(); ++i ){
-           if( args[i]->type() != args[i]->type() )
-	       return false;
-       }
-
-       return true;
-   }
-
-private:
-   const FunctionDom& m_dom;
-};
 
 ClassViewWidget::ClassViewWidget( ClassViewPart * part )
     : KListView( 0, "ClassViewWidget" ), m_part( part ), m_projectDirectoryLength( 0 )

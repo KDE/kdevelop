@@ -21,6 +21,7 @@
 
 #include <qwhatsthis.h>
 #include <qlistview.h>
+#include <qfileinfo.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -32,6 +33,8 @@
 #include <kdevlanguagesupport.h>
 #include <kcomboview.h>
 #include <kdevpartcontroller.h>
+
+#include <codemodel_utils.h>
 
 #include "classviewwidget.h"
 #include "classviewpart.h"
@@ -205,9 +208,25 @@ void ClassViewPart::goToFunctionDefinition( )
         if (!fi)
             return;
         int startLine, startColumn;
-	//FIXME: robe
-        //fi->dom()->getImplementationStartPosition( &startLine, &startColumn );
-        //partController()->editDocument( KURL(fi->dom()->implementedInFile()), startLine );
+
+        FunctionDefinitionList lst;
+        FileList fileList = codeModel()->fileList();
+        CodeModelUtils::findFunctionDefinitions( FindOp(fi->dom()), fileList, lst );
+
+        if( lst.isEmpty() )
+            return;
+
+        FunctionDefinitionDom fun = lst.front();
+        QString path = QFileInfo( fi->dom()->fileName() ).dirPath( true );
+
+        for( FunctionDefinitionList::Iterator it=lst.begin(); it!=lst.end(); ++it ){
+        if( path == QFileInfo((*it)->fileName()).dirPath(true) )
+            fun = *it;
+        }
+
+        fun->getStartPosition( &startLine, &startColumn );
+        partController()->editDocument( KURL(fun->fileName()), startLine );
+
     }
 }
 
