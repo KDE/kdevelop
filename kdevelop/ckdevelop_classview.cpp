@@ -317,22 +317,24 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   aClass = class_tree->store->getClassByName( aClassName );
   
   for( aClass->attributeIterator.toFirst();
-       aClass->attributeIterator.current() && attr == NULL;
+       aClass->attributeIterator.current();
        ++aClass->attributeIterator )
   {
-    if( aClass->attributeIterator.current()->exportScope == aAttr->exportScope )
-      attr = aClass->attributeIterator.current();
+    attr = aClass->attributeIterator.current();
+    if( attr->exportScope == aAttr->exportScope && 
+        atLine < attr->declarationEndsOnLine )
+      atLine = attr->declarationEndsOnLine + 1;
   }
 
   // Switch to the .h file.
-  CVGotoDefinition( aClass->name, NULL, THCLASS );  
+  CVGotoDeclaration( aClass->name, aClass->name, THCLASS );  
 
-  // If we find an attribute with the same export we don't need to output
-  // the label as well.
+  // Get the code for the new attribute
   aAttr->asHeaderCode( toAdd );
-  if( attr )
-    atLine = attr->declaredOnLine + 1;
-  else
+
+  // If we found an attribute with the same export we don't need to output
+  // the label as well.
+  if( atLine == -1 )
   {
     switch( aAttr->exportScope )
     {
@@ -355,6 +357,9 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   // Add the code to the file.
   edit_widget->insertAtLine( toAdd, atLine );
   edit_widget->setCursorPosition( atLine, 0 );
+
+  // Delete the genererated attribute
+  delete aAttr;
 }
 
 /*------------------------------------- CKDevelop::slotCVDeleteMethod()
@@ -571,7 +576,9 @@ void CKDevelop::CVGotoDeclaration( const char *className,
       CVClassSelected( className );
 
     // Check if this is a subclass, if so fetch it.
-    if( type == THCLASS && strcmp( className, declName ) != 0 )
+    if( type == THCLASS && 
+        declName != NULL && strlen( declName ) > 0 &&
+        strcmp( className, declName ) != 0 )
       aClass = aClass->getClassByName( declName );
   }
 
