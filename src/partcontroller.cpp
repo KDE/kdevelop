@@ -292,33 +292,14 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 		return;
 	}
   
-	// if we've been called with an encoding set - open in editor as encoded text
 	if ( !m_presetEncoding.isNull() )
 	{
-		KTextEditor::Editor * editorpart = createEditorPart();
-
-		if ( editorpart )
-		{
-			KParts::BrowserExtension * extension = KParts::BrowserExtension::childObject( editorpart );
-			if ( extension )
-			{
-				KParts::URLArgs args;
-				args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
-				extension->setURLArgs(args);
-			}
-
-			editorpart->openURL( url );
-			integratePart( editorpart, url, true );
-			EditorProxy::getInstance()->setLineNumber( editorpart, lineNum, col );
-			addHistoryEntry( url, lineNum, col );
-		}
-		m_presetEncoding = QString::null;
-		return;
+		m_openNextAsText = true;
 	}
-  
+	
 	// we generally prefer embedding, but if Qt-designer is the preferred application for this mimetype
 	// make sure we launch designer instead of embedding KUIviewer
-	if ( MimeType->is( "application/x-designer" ) )
+	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
 	{
 		KService::Ptr preferredApp = KServiceTypeProfile::preferredService( MimeType->name(), "Application" );
 		if ( preferredApp->desktopEntryName() == "designer" )
@@ -343,6 +324,18 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 
 		if ( editorpart )
 		{
+			if ( !m_presetEncoding.isNull() )
+			{
+				KParts::BrowserExtension * extension = KParts::BrowserExtension::childObject( editorpart );
+				if ( extension )
+				{
+					KParts::URLArgs args;
+					args.serviceType = QString( "text/plain;" ) + m_presetEncoding;
+					extension->setURLArgs(args);
+				}
+				m_presetEncoding = QString::null;
+			}
+				
 			editorpart->openURL( url );
 
 			integratePart( editorpart, url, true );
@@ -408,7 +401,6 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 				}
 				m_openNextAsText = true;
 				editDocument( url, lineNum, col );
-				m_openNextAsText = false;
 			}
 		}
 	}
