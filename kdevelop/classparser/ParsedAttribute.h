@@ -59,7 +59,7 @@ public: // Public attributes
   QString type;
 
   /** Declared in file. */
-  QString declaredInFile;
+  QString definedInFile;
 
   /** Declared in class. NULL for global declarations. */
   QString declaredInClass;
@@ -94,7 +94,7 @@ public: // Public methods to set attribute values
   void setDeclaredInClass( const char *aName );
 
   /** Set the file this attribute belongs to. */
-  void setDeclaredInFile( const char *aName );
+  void setDefinedInFile( const char *aName );
 
   /** Set the line. */
   void setDefinedOnLine( int aLine );

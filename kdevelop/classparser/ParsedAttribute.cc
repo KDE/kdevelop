@@ -109,8 +109,8 @@ void CParsedAttribute::setDeclaredInClass( const char *aName )
 }
 
 
-/*---------------------------- CParsedAttribute::setDeclaredInFile()
- * setDeclaredInFile()
+/*---------------------------- CParsedAttribute::setDefinedInFile()
+ * setDefinedInFile()
  *   Set the name of the file.
  *
  * Parameters:
@@ -119,11 +119,11 @@ void CParsedAttribute::setDeclaredInClass( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedAttribute::setDeclaredInFile( const char *aName )
+void CParsedAttribute::setDefinedInFile( const char *aName )
 {
   assert( aName != NULL && strlen( aName ) > 0 );
 
-  declaredInFile = aName;
+  definedInFile = aName;
 }
 
 /*--------------------------------------- CParsedAttribute::setType()
