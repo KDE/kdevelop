@@ -38,6 +38,7 @@
 
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"
+#include "phpconfigparserwidget.h"
 #include "phpcodecompletion.h"
 #include "phpparser.h"
 #include "phpnewclassdlg.h"
@@ -99,8 +100,11 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
   configData = new PHPConfigData(projectDom());
+  connect(configData,  SIGNAL(configStored()),
+	  this, SLOT(slotConfigStored()));
+  
   m_parser = new  PHPParser(core(),classStore());
-  m_codeCompletion = new  PHPCodeCompletion(this, core(),classStore());
+  m_codeCompletion = new  PHPCodeCompletion(configData, core(),classStore());
 
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(slotActivePartChanged(KParts::Part *)));
@@ -110,24 +114,30 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 PHPSupportPart::~PHPSupportPart()
 {}
 
-void PHPSupportPart::slotActivePartChanged(KParts::Part *part)
-{
+void PHPSupportPart::slotActivePartChanged(KParts::Part *part){
+  kdDebug(9018) << "enter slotActivePartChanged" << endl;
   if (!part || !part->widget())
     return;
-
   m_editInterface = dynamic_cast<KTextEditor::EditInterface*>(part);
-  disconnect(part, 0, this, 0 ); // to make sure that it is't connected twice
-  connect(part,SIGNAL(textChanged()),this,SLOT(slotTextChanged()));
+  if(m_editInterface){ // connect to the editor
+    disconnect(part, 0, this, 0 ); // to make sure that it is't connected twice
+    if(configData->getRealtimeParsing()){
+      connect(part,SIGNAL(textChanged()),this,SLOT(slotTextChanged()));
+    }
+    m_codeCompletion->setActiveEditorPart(part);
+  }
+  kdDebug(9018) << "exit slotActivePartChanged" << endl;
 }
 
 void PHPSupportPart::slotTextChanged(){
-  kdDebug(9018) << "text changed" << endl;
+  kdDebug(9018) << "enter text changed" << endl;
 
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
   if (!ro_part)
     return;
 
   QString fileName = ro_part->url().directory() + "/" + ro_part->url().fileName();
+  kdDebug(9018) << "filename:" << fileName << endl;
   int numLines = m_editInterface->numLines();
 
   QStringList lines;
@@ -136,10 +146,15 @@ void PHPSupportPart::slotTextChanged(){
   }
   classStore()->removeWithReferences(fileName);
   m_parser->parseLines(&lines,fileName);
+
   emit updatedSourceInfo();
+  kdDebug(9018) << "exit text changed" << endl;
 }
 
-
+void PHPSupportPart::slotConfigStored(){
+  // fake a changing, this will read the configuration again and install the connects
+  slotActivePartChanged(partController()->activePart()); 
+}
 
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
@@ -150,6 +165,10 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
   QVBox *vbox = dlg->addVBoxPage(i18n("PHP Settings"));
   PHPConfigWidget* w = new PHPConfigWidget(configData,vbox, "php config widget");
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+  
+  vbox = dlg->addVBoxPage(i18n("PHP Parser"));
+  PHPConfigParserWidget* wp = new PHPConfigParserWidget(configData,vbox, "php parser config widget");
+  connect( dlg, SIGNAL(okClicked()), wp, SLOT(accept()) );
 }
 
 void PHPSupportPart::slotNewClass(){
@@ -312,35 +331,34 @@ void PHPSupportPart::maybeParse(const QString fileName)
 }
 
 
-void PHPSupportPart::initialParse()
-{
-    kdDebug(9018) << "initialParse()" << endl;
-
-    if (project()) {
-      //  kdDebug(9016) << "project" << endl;
-        kapp->setOverrideCursor(waitCursor);
-        QStringList files = project()->allFiles();
-	int n = 0;
-        QProgressBar *bar = new QProgressBar(files.count(), topLevel()->statusBar());
-        bar->setMinimumWidth(120);
-        bar->setCenterIndicator(true);
-        topLevel()->statusBar()->addWidget(bar);
-        bar->show();
-
-        for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
-	  //kdDebug(9016) << "maybe parse " << (*it) << endl;
-	  bar->setProgress(n);
-	  kapp->processEvents();
-	  maybeParse(*it);
-	  ++n;
-        }
-        topLevel()->statusBar()->removeWidget(bar);
-        delete bar;
-        emit updatedSourceInfo();
-        kapp->restoreOverrideCursor();
-    } else {
-        kdDebug(9018) << "No project" << endl;
+void PHPSupportPart::initialParse(){
+  kdDebug(9018) << "initialParse()" << endl;
+  
+  if (project()) {
+    kdDebug(9018) << "project" << endl;
+    kapp->setOverrideCursor(waitCursor);
+    QStringList files = project()->allFiles();
+    int n = 0;
+    QProgressBar *bar = new QProgressBar(files.count(), topLevel()->statusBar());
+    bar->setMinimumWidth(120);
+    bar->setCenterIndicator(true);
+    topLevel()->statusBar()->addWidget(bar);
+    bar->show();
+    
+    for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
+      kdDebug(9018) << "maybe parse " << (*it) << endl;
+      bar->setProgress(n);
+      kapp->processEvents();
+      maybeParse(*it);
+      ++n;
     }
+    topLevel()->statusBar()->removeWidget(bar);
+    delete bar;
+    emit updatedSourceInfo();
+    kapp->restoreOverrideCursor();
+  } else {
+    kdDebug(9018) << "No project" << endl;
+  }
 }
 
 

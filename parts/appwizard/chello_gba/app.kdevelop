@@ -18,7 +18,7 @@
    <activetarget>src/$APPNAMELC$</activetarget>
   </general>
   <run>
-   <default_implementation>no</default_implementation>
+   <disable_default>true</disable_default>
   </run>
   <compiler>
    <ccompiler>GccOptions</ccompiler>

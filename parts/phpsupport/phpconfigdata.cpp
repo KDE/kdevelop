@@ -25,12 +25,15 @@ PHPConfigData::PHPConfigData(QDomDocument* dom){
   document = dom;
   invocationMode = (InvocationMode) DomUtil::readIntEntry(*dom, "/kdevphpsupport/general/invocationMode");
 
-  webURL = DomUtil::readEntry(*dom, "/kdevphpsupport/webInvocation/weburl");
-  webFileMode = (WebFileMode)DomUtil::readIntEntry(*dom, "/kdevphpsupport/webInvocation/webFileMode");
-  webDefaultFile = DomUtil::readEntry(*dom, "/kdevphpsupport/webInvocation/defaultFile");
+  webURL = DomUtil::readEntry(*document, "/kdevphpsupport/webInvocation/weburl");
+  webFileMode = (WebFileMode)DomUtil::readIntEntry(*document, "/kdevphpsupport/webInvocation/webFileMode");
+  webDefaultFile = DomUtil::readEntry(*document, "/kdevphpsupport/webInvocation/defaultFile");
 
-  phpExePath = DomUtil::readEntry(*dom, "/kdevphpsupport/shell/phpexe");  
-
+  phpExePath = DomUtil::readEntry(*document, "/kdevphpsupport/shell/phpexe");  
+  
+  m_codeCompletion = DomUtil::readBoolEntry(*document,"kdevphpsupport/codeHelp/codeCompletion");
+  m_codeHinting = DomUtil::readBoolEntry(*document,"kdevphpsupport/codeHelp/codeHinting");;
+  m_realtimeParsing = DomUtil::readBoolEntry(*document,"kdevphpsupport/codeHelp/realtimeParsing");
   
 }
 PHPConfigData::~PHPConfigData(){
@@ -44,6 +47,10 @@ void PHPConfigData::storeConfig(){
   DomUtil::writeEntry(*document, "/kdevphpsupport/webInvocation/defaultFile",webDefaultFile);
 
   DomUtil::writeEntry(*document, "/kdevphpsupport/shell/phpexe",phpExePath);  
+  DomUtil::writeBoolEntry(*document,"kdevphpsupport/codeHelp/codeCompletion",m_codeCompletion);
+  DomUtil::writeBoolEntry(*document,"kdevphpsupport/codeHelp/codeHinting",m_codeHinting);
+  DomUtil::writeBoolEntry(*document,"kdevphpsupport/codeHelp/realtimeParsing",m_realtimeParsing);
+  emit configStored(); // inform all others
   
 }
 
@@ -66,3 +73,4 @@ bool PHPConfigData::validateConfig(){
   }
   return valid;
 }
+#include "phpconfigdata.moc"

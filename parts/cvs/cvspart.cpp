@@ -13,6 +13,7 @@
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
+#include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -46,16 +47,20 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context)
         const FileContext *fcontext = static_cast<const FileContext*>(context);
         popupfile = fcontext->fileName();
         QFileInfo fi(popupfile);
-        QString name = fi.fileName();
 	popup->insertSeparator();
-        popup->insertItem( i18n("Commit: %1").arg(name),
+
+	KPopupMenu *sub = new KPopupMenu(popup);
+        QString name = fi.fileName();
+        sub->insertItem( i18n("Commit: %1").arg(name),
                            this, SLOT(slotCommit()) );
-        popup->insertItem( i18n("Update: %1").arg(name),
+        sub->insertItem( i18n("Update: %1").arg(name),
                            this, SLOT(slotUpdate()) );
-        popup->insertItem( i18n("Add to Repository: %1").arg(name),
+        sub->insertItem( i18n("Add to Repository: %1").arg(name),
                            this, SLOT(slotAdd()) );
-        popup->insertItem( i18n("Remove From Repository: %1").arg(name),
+        sub->insertItem( i18n("Remove From Repository: %1").arg(name),
                            this, SLOT(slotRemove()) );
+	popup->insertItem(i18n("CVS"), sub);
+	
     }
 }
 

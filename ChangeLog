@@ -1,3 +1,9 @@
+2002-04-28  Sandy Meier  <smeier@kdevelop.org>
+	
+	* fixed some broken stuff (load project on startup,GBA support,php code completion)
+	* codeCompletion/realtimeparser is now configurable (GUI)
+	* readded gideonrc
+
 2002-04-28  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Renamed KDevProject::allSourceFiles() to allFiles(),

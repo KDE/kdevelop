@@ -30,6 +30,7 @@
 class KDevCore;
 class ClassStore;
 class PHPSupportPart;
+class PHPConfigData;
 
 /**
  *@author Sandy Meier
@@ -44,10 +45,11 @@ class PHPCodeCompletion : public QObject {
   Q_OBJECT
 
 public: 
-  PHPCodeCompletion(PHPSupportPart *part, KDevCore* core,ClassStore* store);
+  PHPCodeCompletion(PHPConfigData *config, KDevCore* core,ClassStore* store);
   ~PHPCodeCompletion();
+  void setActiveEditorPart(KParts::Part *part);
+
 protected slots:  
-  void activePartChanged(KParts::Part *part);
   void cursorPositionChanged();
   void argHintHided();
   void completionBoxHided();
@@ -67,6 +69,7 @@ protected slots:
   QString getClassName(QString varName,QString maybeInstanceOf);
   QString searchCurrentClassName();
   QString searchClassNameForVariable(QString varName);
+  bool doGlobalMethodCompletion(QString methodStart);
  private:
   int m_currentLine;
   QValueList<FunctionCompletionEntry> m_globalFunctions;
@@ -77,6 +80,7 @@ protected slots:
   KTextEditor::EditInterface *m_editInterface;
   KTextEditor::CodeCompletionInterface *m_codeInterface;
   KTextEditor::ViewCursorInterface *m_cursorInterface;
+  PHPConfigData* m_config;
 };
 
 #endif

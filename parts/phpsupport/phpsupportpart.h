@@ -60,6 +60,10 @@ private slots:
     void initialParse();
     void slotActivePartChanged(KParts::Part *part);
     void slotTextChanged();
+    /* the configuration was written, mostly after a config dialog call
+       -> reorder connects
+     */
+    void slotConfigStored();
 
 private:
     void maybeParse(const QString fileName);

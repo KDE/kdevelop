@@ -101,7 +101,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
         action->setEnabled(false);
 
     QDomDocument &dom = *projectDom();
-    if (DomUtil::readBoolEntry(dom, "/kdevautoproject/run/default_implementation")) {
+    if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
         action = new KAction( i18n("Execute Program"), "exec", 0,
                               this, SLOT(slotExecute()),
@@ -131,7 +131,7 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
     ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
     QDomDocument &dom = *projectDom();
-    if (DomUtil::readEntry(dom, "/kdevautoproject/run/default_implementation")) {
+    if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
         vbox = dlg->addVBoxPage(i18n("Run Options"));
         RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", vbox);

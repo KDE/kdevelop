@@ -28,4 +28,11 @@
    <toc>perl</toc>
   </ignoretocs>
  </kdevdoctreeview>
+<kdevphpsupport>
+	<codeHelp>
+	   <codeCompletion>true</codeCompletion>
+	   <codeHinting>true</codeHinting>
+	   <realtimeParsing>false</realtimeParsing>
+	  </codeHelp>
+</kdevphpsupport>
 </kdevelop>

@@ -1,17 +1,17 @@
 ---
-If you want to disable the default implemention for runing/starting the binary 
+If you want to change  the default implemention for running/starting the binary 
 please add the following to your project file
 
 <kdevautoproject>
   <run>
-   <default_implementation>no</default_implementation>
+   <disable_default>true</disable_default>
   </run>
 </kdevautoproject>
 
-with this configuration KDevAutoproject doesn't insert the menuentry "execute program" 
+with this configuration the "Automake Project Manager" doesn't insert the menuentry "execute program" 
 and doesn't show the "Run Options" in the project configuration.
 
 Now you can implement this features with your own special plugin.
 For an example please look at the projects generated for GBA using the VisualBoy Advance Plugin. 
-This plugin starts the GBA binary. -- smeier@kdevelop.org
+This plugin starts a GBA binary with an emulator. -- smeier@kdevelop.org
 ---

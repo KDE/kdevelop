@@ -18,12 +18,19 @@
 
 #include <qstring.h>
 #include <qdom.h>
+#include <qobject.h>
 
 /**
   *@author Sandy Meier
   */
 
-class PHPConfigData {
+class PHPConfigData : public QObject {
+
+Q_OBJECT
+
+  signals:
+ void  configStored(); 
+
 public: 
   enum InvocationMode {Web=1,Shell=2};
   enum WebFileMode {Current=1,Default=2};
@@ -74,6 +81,27 @@ public:
   void setPHPExePath(QString path){
     phpExePath = path;
   }
+
+  // code help
+  void setCodeCompletion(bool enable){
+    m_codeCompletion = enable; 
+  }
+  bool getCodeCompletion(){
+    return m_codeCompletion;
+  }
+  void setCodeHinting(bool enable){
+    m_codeHinting = enable;
+  }
+  bool getCodeHinting(){
+    return m_codeHinting;
+  }
+  void setRealtimeParsing(bool enable){
+    m_realtimeParsing = enable;
+  }
+  bool getRealtimeParsing(){
+    return m_realtimeParsing;
+  }
+  
   
  private:
   QDomDocument* document;
@@ -86,6 +114,10 @@ public:
   // shell
   QString phpExePath;
   
+  // code help
+  bool m_codeCompletion;
+  bool m_codeHinting;
+  bool m_realtimeParsing;
   
 };
 
