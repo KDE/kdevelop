@@ -43,7 +43,7 @@ class CppCodeCompletionParser
 		QString getNodeDelimiter ( int nNode );
 		QString getTypeOfObject ( const QString& strObject, int nLine );
 		QString getCurrentClassname ( int nLine );
-		QString getReturnTypeOfMethod ( const QString& strMethod, int nNodePos );
+		QString getReturnTypeOfMethod ( int nLine, int nCol );
 		bool isMethod ( const QString& strNodeText );
 		bool isObject ( const QString& strNodeText );
 		bool isClass ( const QString& strNodeText );

@@ -95,6 +95,8 @@ QString CppCodeCompletionParser::getNodeText ( int nNode )
 	if ( nNode <= 0 )
 		return "";
 
+	KRegExp reNode ( "[ \t]*([A-Za-z_\\(\\),]*)" );
+
 	int nFrom = 0;
 	int nTo = 0;
 	int nNodePos = 0;
@@ -133,7 +135,8 @@ QString CppCodeCompletionParser::getNodeText ( int nNode )
 					m_strCurLine[nTo] == ':' && m_strCurLine[nTo + 1] == ':' )
 				{
 					kdDebug ( 9007 ) << "strNodeText: " << m_strCurLine.mid ( nFrom, ( nTo - nFrom ) ) << endl;
-					return m_strCurLine.mid ( nFrom, ( nTo - nFrom ) );
+					if ( reNode.match ( m_strCurLine.mid ( nFrom, ( nTo - nFrom ) ) ) )
+						return reNode.group ( 1 );
 				}
 			}
 		}
@@ -224,48 +227,245 @@ QString CppCodeCompletionParser::getCurrentClassname ( int nLine )
 
 QString CppCodeCompletionParser::getTypeOfObject ( const QString& strObject, int nLine )
 {
+	// Lets look if its a Member of actuall class
+
+	QString strCurrentClassname;
+
+	strCurrentClassname = getCurrentClassname (nLine);
+
+	if (strCurrentClassname.isEmpty())
+		return "";
+
+	if (!m_pStore->hasClass (strCurrentClassname))
+		return "";
+
+	ParsedClass *pClass = m_pStore->getClassByName (strCurrentClassname);
+
+	QList<ParsedAttribute>* pAttributeList = pClass->getSortedAttributeList();
+
+	for ( ParsedAttribute* pAttribute = pAttributeList->first(); pAttribute != 0; pAttribute = pAttributeList->next() )
+	{
+		if (pAttribute->name() == strObject)
+		{
+			// check if it is an Object
+			QString strType;
+
+			strType = pAttribute->type();
+
+			if (strType.find ('*') > -1)
+			{
+				// Type is a pointer, but the user want to access it as an object, who's false?
+				return "";
+			}
+			else
+			{
+				return strType;
+			}
+		}
+	}
+
+	// If we are here now seems that the object isn't a member of class, so look if its declared local
+
+	QString strRegDef;
+
+	//strRegDef.sprintf ("([ \t]+)([A-Za-z_]+)([ \t]+)([A-Za-z_,]*)(%s)([A-Za-z_,]*;)", strObject);
+	strRegDef += "([ \t]*)([A-Za-z_]+)([ \t]+)([A-Za-z_]+)([, \t]*)(";
+	strRegDef += strObject;
+	strRegDef += ")([A-Za-z_, \t=]*;)";
+
+	KRegExp regObject (strRegDef);
+	QString strLine;
+
+	// Find out on wich line the function begins and whats the name of it.
+
+	KRegExp reMethod ( "[ \t]*([A-Za-z_]+)::([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\) " ); // finds "blabla::blabla(blabla) "
+	KRegExp reConstructor ( "[ \t]*([A-Za-z_]+)::([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\)[ \t\\{:]+" );
+
+	int iBeginOfFunction = 0;
+	QString strFunctionName;
+
+	for (int i = nLine; i >= 0; i--)
+	{
+		strLine = m_pEditIface->line (i);
+
+		if ( reMethod.match ( ( m_pEditIface->line ( i ) + " " ) ) )
+		{
+			strFunctionName = reMethod.group ( 2 );
+			iBeginOfFunction = i;
+			kdDebug (9007) << "Methoden deklaration gefunden. Zeile: " << i << "Methode: " << strFunctionName;
+			break;
+		}
+		if ( reConstructor.match ( m_pEditIface->line ( i ) ) )
+		{
+			strFunctionName = reConstructor.group ( 2 );
+			iBeginOfFunction = i;
+			kdDebug (9007) << "Konstruktor deklaration gefunden. Zeile: " << i << "Methode: " << strFunctionName;
+			break;
+		}
+	}
+
+	// Start searching for declaration
+
+	for ( int i = nLine; i >= 0; i-- )
+	{
+		strLine = m_pEditIface->line (i);
+
+		kdDebug (9007) << "Current Line #:" << i << "line:" << strLine;
+
+		/*if (strLine.contains ('{') > 0)
+		{
+			// local objects are living only between { and }
+			kdDebug (9007) << "Parsed till found {";
+			break;
+		}*/
+
+		if (iBeginOfFunction <= i)
+		{
+			kdDebug (9007) << "Parsed till function";
+			break;
+		}
+
+		if ( regObject.match (strLine) )
+		{
+			// check if it is an Object
+			QString strType;
+
+			strType = regObject.group (2);
+
+			kdDebug (9007) << "local object found type:" << strType;
+
+			return strType;
+		}
+	}
+
+	// Last chance: Let's look if its a param in actual function
+	if (!strFunctionName.isEmpty() && pClass != NULL)
+	{
+		QList<ParsedMethod>* pMethodList;
+
+		pMethodList = pClass->getSortedMethodList();
+		ParsedMethod* pMethod;
+
+		bool bFound = false;
+
+		for ( pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+		{
+			if (pMethod->name() == strFunctionName)
+			{
+				bFound = true;
+				break;
+			}
+		}
+
+		if (!bFound)
+		{
+			pClass->getSortedSlotList();
+
+			for ( pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+			{
+				if (pMethod->name() == strFunctionName)
+				{
+					bFound = true;
+					break;
+				}
+			}
+		}
+
+		if (!bFound)
+		{
+			pClass->getSortedSignalList();
+
+			for ( pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+			{
+				if (pMethod->name() == strFunctionName)
+				{
+					bFound = true;
+					break;
+				}
+			}
+		}
+
+		if (bFound)
+		{
+			for (ParsedArgument *pArgument = pMethod->arguments.first(); pArgument != 0; pMethod->arguments.next())
+			{
+				if (pArgument->name() == strObject)
+				{
+					kdDebug (9007) << "Found object in argument of function";
+					return pArgument->type();
+				}
+			}
+		}
+	}
+
+	// We haven't found anything
 	return "";
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-QString CppCodeCompletionParser::getReturnTypeOfMethod ( const QString& strMethod, int nNodePos )
+QString CppCodeCompletionParser::getReturnTypeOfMethod ( int nLine, int nCol )
 {
-/*	KRegExp reMethod ( "[ \t]*([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\)" );
+	KRegExp reMethod ( "[ \t]*([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\)" );
 	QValueList<KEditor::CompletionEntry> entryList;
+	QString strMethod = getNodeText ( getNodePos ( nCol ) );
+	int nNodePosOfMethod = getNodePos ( nCol ) - 1;
 
-	QString strMethodn;
+	QString strMethodName;
+	QString strNodeTextOfMethod = getNodeText ( nNodePosOfMethod );
 
 	if ( reMethod.match ( strMethod ) )
-		strMethodn = reMethod.group ( 1 );
+		strMethodName = reMethod.group ( 1 );
+	else	// it's not a function call
+		return "";
 
-	ParsedScopeContainer scope = m_pStore->globalContainer;
-	QList<ParsedMethod>* pMethodList;
+	kdDebug ( 9007 ) << "getReturnTypeOfMethod => nNodePosOfMethod: " << nNodePosOfMethod << endl;
 
-	pMethodList = scope.getSortedMethodList();
-
-	for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+	if ( nNodePosOfMethod == 0 ) // might be a member function
 	{
-		KEditor::CompletionEntry entry;
-		entry.text = pMethod->name();
-		entry.postfix = "()";
-		entryList << entry;
+		QString strCurClass = getCurrentClassname ( nLine );
+
+		kdDebug ( 9007 ) << "getReturnTypeOfMethod => Current class: " << strCurClass << endl;
+
+		ParsedClass* pClass = m_pStore->getClassByName ( strCurClass );
+
+		if ( pClass )
+		{
+			QList<ParsedMethod>* pMethodList = pClass->getSortedMethodList();
+			for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+			{
+				if ( strMethodName == pMethod->name() )
+				{
+					return pMethod->type();
+				}
+			}
+		}
+	}
+	else if ( nNodePosOfMethod > 0 )
+	{
+		QString strType;
+		/*if ( getNodeDelimiter ( nNodePosOfMethod ) == "->" )
+			strType = getTypeOfPointerOnObject ( strNodeTextOfMethod, nLine );*/
+		if ( getNodeDelimiter ( nNodePosOfMethod ) == "." )
+			strType = getTypeOfObject ( strNodeTextOfMethod, nLine );
+
+		if ( !strType.isEmpty() )
+		{
+			ParsedClass* pClass = m_pStore->getClassByName ( strType );
+
+			if ( pClass )
+			{
+				QList<ParsedMethod>* pMethodList = pClass->getSortedMethodList();
+				for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+				{
+					if ( strMethodName == pMethod->name() )
+					{
+						return pMethod->type();
+					}
+				}
+			}
+		}
 	}
 
-	return entryList;*/
 	return "";
 }
 
