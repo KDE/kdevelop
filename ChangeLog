@@ -1,3 +1,8 @@
+2002-01-20  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix (for Roland): Minimized KDevelop doesn't restore back during compiling,
+      was the same reason that the messages output view was activated again and again with every new line inserted in it
+    * bugfix: accel clash with bookmarks and views repaired (Alt+0..9 is for Bookmarks again, Ctrl+0..9 is for views now)
+
 2002-01-18  Walter Tasin <tasin@kdevelop.org>
     * bugfix: configure didn't recognize the argument given by the dialogbox the first
       time (only after reloading the project)
