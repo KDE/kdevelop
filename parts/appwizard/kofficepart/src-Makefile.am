@@ -3,8 +3,8 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
 ## The part
 kde_module_LTLIBRARIES = lib$APPNAMELC$part.la
-lib$APPNAME$part_la_SOURCES = $APPNAMELC$_part.cc \
-	$APPNAMELC$_view.cc $APPNAMELC$_factory.cc
+lib$APPNAME$part_la_SOURCES = $APPNAMELC$_part.cpp \
+	$APPNAMELC$_view.cpp $APPNAMELC$_factory.cpp
 lib$APPNAMELC$part_la_LDFLAGS = $(KDE_PLUGIN)
 lib$APPNAMELC$part_la_LIBADD = -lkofficeui
 
@@ -37,4 +37,4 @@ rc_DATA = $APPNAMELC$.rc
 rcdir = $(kde_datadir)/$APPNAMELC$
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc $APPNAMELC$_aboutdata.h -o $(podir)$APPNAMELC$.pot
+	$(XGETTEXT) rc.cpp *.cpp $APPNAMELC$_aboutdata.h -o $(podir)$APPNAMELC$.pot
