@@ -5,11 +5,12 @@
 <subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.1
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 2.2 , July 29,1999
+<date>Version 3.0 , March 16,2000
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
 </abstract>
+
 <toc>
 
 <chapt>Introduction
@@ -100,14 +101,51 @@ editing.
 <item>Chapter <ref id="The Dialog Editor" name="The Dialog Editor">, features the integrated visual <idx/GUI/ constructor and how it
 generates C++ <idx/output/.
 <item>Chapter<ref id="The Internal Debugger" name="The Internal Debugger">,gives an overview over debugging setup and use of the internal debugger
-<item>Chapter <ref id="General Configuration" name="General Configuration"> shows how you can set overall preferences for using KDevelop.
-<item>Chapter <ref id="Questions and Answers" name="Questions and Answers">, covers questions that regard to the usage of KDevelop
-under different flavors of Unix systems and problem solutions in general.
+<item>Chapter<ref id="CVS Integration" name="CVS Integration">, tells you how to use the revision control 
+system CVS and RCS with your KDevelop project.
+<item>Chapter <ref id="General Configuration" name="General Configuration"> shows how you  can set overall 
+preferences for using KDevelop. 
+<item>Chapter <ref id="Questions and Answers" name="Questions and Answers">, covers questions that regard to 
+the usage of KDevelop under different flavors of Unix systems and problem solutions in general. 
 </itemize>
 
 For programming beginners and new users of this product we recommend to read yourself into this manual before starting to actually
 work with the IDE as it covers the usage in depth. The understanding of how things are done the quickest way will save you a lot
 of time searching for functions and features as it will enable you to make use of first-class development tools even more simple.
+
+<sect>About the KDevelop Project
+<p>
+The KDevelop project was started in summer of 1998 after KDE 1.0 was available on Linux/Unix to make the 
+attempt of creating an easy to use C/C++ IDE for programmers, especially targeting on the KDE desktop. Since 
+then the project has found a lot of helpers and supporters as well as sponsors who want to help the team 
+continue their work on this now widely recognized programming environment. Within one and a half year, the IDE 
+developed to a full-featured KDE application with the most possible functionality and stability as the 
+creators started to develop the IDE with the IDE itself at the time enough usability was given. Therefore bugs 
+were mostly found by the authors and could be fixed very quickly as well as needed extensions for programming 
+KDE applications. 
+
+The first official stable release was made with version 1.0 on December 6, 1999. Thereafter, the KDevelop Team 
+introduced more features and stability into the IDE by new code or code that was unstable before, which lead 
+to the second release as version 1.1 on February 28, 2000. 
+ 
+Since then, the project continues to integrate more functionality and simplifying the current codebase along 
+with many translators who transfer KDevelop to as most languages as possible to provide the international 
+developer community the IDE in their own language, including the handbooks that ship with it. Many users 
+contributed their experience and knowledge to the project as one of the most promising products for Linux/Unix 
+developers to make it even more stable and portable to other Unices.
+ 
+<sect>Printed Versions
+<p>
+A printed version of the complete KDevelop Documentation is available as the book titled <bf>Developing 
+Applications for Linux: KDE Edition</bf>, which can be ordered either online from the KDevelop website at 
+<htmlurl url="http://www.kdevelop.org" name="http://www.kdevelop.org"> or at <htmlurl 
+url="http://www.opendocs.org" name="http://www.opendocs.org">. A share of the Gross Profits from the sales of 
+this book goes back to the KDevelop project to support continuing the further development of KDevelop.
+
+Printable versions of the KDevelop Documentation can also be obtained from the KDevelop website at <htmlurl 
+url="http://www.kdevelop.org" name="http://www.kdevelop.org"> in DVI, PostScript and PDF format both in A4 and 
+Letter size.
+
 
 <chapt><idx/Installation/<label id="Installation">
 <p>
@@ -2102,6 +2140,11 @@ remove the "Hello World" line in main() and construct your <idx/classes/ the sam
 <item>a C program framework for C programmers. This is as well a terminal based application but only uses the C compiler.
 </itemize>
 
+Further, KDevelop allows you to create projects for KDE 2 and Qt 2.x. These projects require installing the 
+required libraries as well as setting the according installation path in the KDevelop Setup dialog (see <ref 
+id="General Configuration" name="General Configuration">) before generating a project to ensure everything 
+will work automatically. 
+
 Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
 configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
 as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
@@ -2196,7 +2239,8 @@ document-view interface (SDI) model.
 <item>QT 2.1 MDI: Creates a Qt-2.1 Application with a main window containing a menubar, toolbar and statusbar, including support for a multiple 
 document interface (MDI) model.
 <item>QextMDI: Creates an MDI framework based on the QextMDI library and Qt2.0x. Allows to switch between both modes, Toplevel and Childframe. 
-Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm).
+Requires the QextMDI library, see <htmlurl url="http://www.geocities.com/gigafalk/qextmdi.htm" 
+name="http://www.geocities.com/gigafalk/qextmdi.htm"> for more information.
 </itemize>
 
 The two C and C++ -Application types offer a framework for creating commandline applications.
@@ -2206,6 +2250,8 @@ And last but not least you can create an empty projekt, e.g. to work with existi
 The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
 Email address are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
 *.lsm file.
+
+For adding revision control to your project, see <ref id="CVS Integration" name="CVS Integration">.
 
 <sect>Opening and Closing of Projects
 <p>
@@ -3167,17 +3213,65 @@ break on the library load, and, normally the debugger would do a "continue" (ie 
 however, is expecting the program to stop at the next line, so in this situation we do not continue, but leave it at that point (which will be somewhere 
 inside a dlopen command). This is disconcerting but cannot be helped.
 
-<chapt>CVS Integration
+<chapt>CVS Integration<label id="CVS Integration">
 <p>
-KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent version control) is to enable
-groups of developers to work on the same source-tree independently and to merge changes into the repository. Usually, the repository is
-located at a server. The initial repository contains the base set of files that the project includes; directories and files are then
-added or removed to the CVS by the developers.
 
-Locally, the developer works on his copy of the CVS tree. He writes his changes into his files and tests, if his project still works,
-at least to a certain extend where incomplete sources don't prevent other developers from still working on the CVS repository if they
-receive the changes.
+KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent 
+version control) is to enable groups of developers to work on the same source-tree independently and to merge 
+changes into the repository. Usually, the repository is located at a server. The initial repository contains 
+the base set of files that the project includes; directories and files are then added or removed to the CVS by 
+the developers. Locally, the developer works on his copy of the CVS tree. He writes his changes into his files 
+and tests, if his project still works, at least to a certain extend where incomplete sources don't prevent 
+other developers from still working on the CVS repository if they receive the changes. 
 
+<sect>Creating a Repository
+<p>
+When creating a new project with KDevelop, you can directly import the project as a CVS module. To enable 
+this, you have to have CVS installed (which should be already, if not, revise your system installation or 
+contact your system administrator).
+
+On the third page of the KAppWizard (VCS support), choose "CVS". Then the editing fields of this page get 
+active and you can specify the import parameters, see below for the given options. The KAppWizard will then 
+import the project source tree as a module into the CVS root directory and create your new project as a local 
+copy of the CVS source tree that you will be working on.
+ 
+<bf>Attention:</bf> to create an initial repository, you have to have write  access to the CVS root directory 
+! Also the CVS root directory has to be on the same machine where you´re running KDevelop ! If you want to 
+have the repository on a dedicated CVS server either contact this servers´ system administrator to create the 
+project with KDevelop on the server machine or do the following steps: 
+
+<itemize>
+<item>create your project locally
+<item>import the project source tree as a module on the CVS server
+<item>delete local project source tree
+<item>check out the project source tree from CVS 
+<item>enable CVS support in the project options dialog as described below after loading the project file of 
+your CVS copy you checked out.
+</itemize>   
+
+For more details on CVS commands, please revise your system help on cvs, e.g. by doing a <tt>man cvs</tt>.
+
+In the following we will discuss the options when creating a repository with the KAppWizard
+
+<descrip>
+<tag/VCS Location:/ This is the CVS root directory where the project source tree will be imported and where 
+commits, checkouts and updates take place.
+<tag/Repository in CVS/ This is the module name given for your project. As this is the same as your project 
+directory you can´t change that.
+<tag/Vendor Tag/ this is a tag for the entire branch
+<tag/Log Message/ is the first log message entry of the new module. When adding or commiting to the 
+repository, you will be asked for a log message each time to document your changes to the repository source 
+tree.
+<tag/Release Tag/ this specifies the tag under which your project source tree can be found, meaning that you 
+can create several projects with the same module name in the CVS root which differ in the tag, so you can work 
+on different branches of the same project. Example: KDE 2 is developed under the tag HEAD (default tag), KDE 
+1.1.2. can be found in the tag KDE_1_1_2_RELEASE.
+</descrip> 
+
+After creating your project with the KAppWizard, the CVS support option is already set for your project, so 
+you can commit and add changes in the way described below in the section "Using CVS Commands".
+
+ 
 <sect>Enabling CVS Support
 <p>
 As CVS support is most often only needed by professionals or companies as well as by KDE developers maintaining their project over the
@@ -3348,6 +3442,13 @@ medium.  The higher the index size, the more the index files will grow. On the o
 will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
 <ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
 
+<sect2>Create also KDOC-reference of your project
+<p>
+This option allows you to create a cross-reference file for your project when generating the API documentation 
+with KDoc. The cross-reference file will be placed in the references directory and make your project available 
+in the documentation tree. If you don´t have write access to the directory containing the reference files you 
+have to uncheck this option to generate the API documentation without errors.  
+ 
 <sect>Debugger <label id="Debugger">
 <p>
 The default setup for KDevelop is to use the internal debugger. Click on "Use external debugger" if you wish to use a different 
@@ -3638,18 +3739,18 @@ name="<hoelzer@physik.uni-wuerzburg.de>">
 
 <chapt>Thanks
 <p>
-We like to express special thanks to all of our family members and friends who supported us in several ways to let us construct
-and improve KDevelop.
+We like to express special thanks to all of our family members and friends who supported us in several ways 
+to let us construct and improve KDevelop.
 
 Further, we thank  Jochen Wilhelmy  for offering his program kwrite and his help on integrating it into KDevelop.
 
 Thanks also to the KDE team and Stephan Kulow, who gave us the possibility to work on KDevelop via CVS
-
-We hope that our free work on this product will lead to a better acceptance of Free Software and its development. Without the help
-and idealism of many, the KDevelop IDE would never have been realized in such a short period of time and we're proud that so many
-users already have reported good experience and brought KDevelop to it's destiny: helping free software programmers to build a
-better world where users have the freedom of choice.
-
+ 
+We hope that our free work on this product will lead to a better acceptance of Free Software and its 
+development. Without the help and idealism of many, the KDevelop IDE would never have been realized in such a 
+short period of time and we're proud that so many users already have reported good experience and brought 
+KDevelop to it's destiny: helping free software programmers to build a better world where users have the 
+freedom of choice. 
 
 <chapt>Copyright <label id="Copyright">
 <p>
