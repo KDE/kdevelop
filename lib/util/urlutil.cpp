@@ -214,3 +214,31 @@ QString URLUtil::canonicalPath( const QString & path )
     return r;
 }
 
+
+//written by "Dawit A." <adawit@kde.org>
+//borrowed from his patch to KShell
+QString URLUtil::envExpand ( const QString& str )
+{
+    uint len = str.length();
+
+    if (len > 1 && str[0] == '$')
+    {
+      int pos = str.find ('/');
+
+      if (pos < 0)
+        pos = len;
+
+      char* ret = getenv( QConstString(str.unicode()+1, pos-1).string().local8Bit().data() );
+
+      if (ret)
+      {
+        QString expandedStr ( QFile::decodeName( ret ) );
+        if (pos < len)
+          expandedStr += str.mid(pos);
+        return expandedStr;
+      }
+    }
+
+    return str;
+}
+

@@ -109,6 +109,14 @@ namespace URLUtil
    */
   QString canonicalPath( const QString & path );
 
+    /**
+     * Performs environment variable expansion on @p variable.
+     *
+     * @param variable the string with the environment variable to expand.
+     * @return the expanded environment variable value. if the variable
+     *         cannot be expanded, @p variable itself is returned.
+     */
+    QString envExpand ( const QString &variable );
 
 };
 

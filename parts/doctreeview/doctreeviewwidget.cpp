@@ -45,6 +45,7 @@
 
 #include "kdevcore.h"
 #include "domutil.h"
+#include "urlutil.h"
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
@@ -1110,10 +1111,11 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
         config->setGroup("General KDoc");
         QMap<QString, QString> dmap = config->entryMap("General KDoc");
         QString kdocdir(KDELIBS_DOCDIR);
+        kdocdir = URLUtil::envExpand(kdocdir);
         if (dmap.empty() && (!kdocdir.isEmpty()))
         {
-            config->writePathEntry("KDE Libraries (KDoc)", QString(KDELIBS_DOCDIR));
-            dmap["KDE Libraries (KDoc)"] = QString(KDELIBS_DOCDIR);
+            config->writePathEntry("KDE Libraries (KDoc)", kdocdir);
+            dmap["KDE Libraries (KDoc)"] = kdocdir;
         }
 
         QMap<QString, QString>::Iterator it;
@@ -1130,10 +1132,11 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
         config->setGroup("General Doxygen");
         QMap<QString, QString> xmap = config->entryMap("General Doxygen");
         QString doxydir(KDELIBS_DOXYDIR);
+        doxydir = URLUtil::envExpand(doxydir);
         if (xmap.empty() && (!doxydir.isEmpty()))
         {
-            config->writePathEntry("KDE Libraries (Doxygen)", QString(KDELIBS_DOXYDIR));
-            xmap["KDE Libraries (Doxygen)"] = QString(KDELIBS_DOXYDIR);
+            config->writePathEntry("KDE Libraries (Doxygen)", doxydir);
+            xmap["KDE Libraries (Doxygen)"] = doxydir;
         }
 
         QMap<QString, QString>::Iterator it;
@@ -1162,30 +1165,31 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
         QMap<QString, QString> emap = config->entryMap("General Qt");
 
         QString qtdocdir(config->readPathEntry("qtdocdir", QT_DOCDIR));
+        qtdocdir = URLUtil::envExpand(qtdocdir);
         if (emap.empty() && (!qtdocdir.isEmpty()))
         {
 #if QT_VERSION >= 0x030200
-            config->writePathEntry("Qt Reference Documentation", QString(QT_DOCDIR) + QString("/qt.dcf"));
-            emap["Qt Reference Documentation"] = QString(QT_DOCDIR) + QString("/qt.dcf");
-            config->writePathEntry("Qt Assistant Manual", QString(QT_DOCDIR) + QString("/assistant.dcf"));
-            emap["Qt Assistant Manual"] = QString(QT_DOCDIR) + QString("/assistant.dcf");
-            config->writePathEntry("Qt Designer Manual", QString(QT_DOCDIR) + QString("/designer.dcf"));
-            emap["Qt Designer Manual"] = QString(QT_DOCDIR) + QString("/designer.dcf");
-            config->writePathEntry("Guide to the Qt Translation Tools", QString(QT_DOCDIR) + QString("/linguist.dcf"));
-            emap["Guide to the Qt Translation Tools"] = QString(QT_DOCDIR) + QString("/linguist.dcf");
-            config->writePathEntry("qmake User Guide", QString(QT_DOCDIR) + QString("/qmake.dcf"));
-            emap["qmake User Guide"] = QString(QT_DOCDIR) + QString("/qmake.dcf");
+            config->writePathEntry("Qt Reference Documentation", qtdocdir + QString("/qt.dcf"));
+            emap["Qt Reference Documentation"] = qtdocdir + QString("/qt.dcf");
+            config->writePathEntry("Qt Assistant Manual", qtdocdir + QString("/assistant.dcf"));
+            emap["Qt Assistant Manual"] = qtdocdir + QString("/assistant.dcf");
+            config->writePathEntry("Qt Designer Manual", qtdocdir + QString("/designer.dcf"));
+            emap["Qt Designer Manual"] = qtdocdir + QString("/designer.dcf");
+            config->writePathEntry("Guide to the Qt Translation Tools", qtdocdir + QString("/linguist.dcf"));
+            emap["Guide to the Qt Translation Tools"] = qtdocdir + QString("/linguist.dcf");
+            config->writePathEntry("qmake User Guide", qtdocdir + QString("/qmake.dcf"));
+            emap["qmake User Guide"] = qtdocdir + QString("/qmake.dcf");
 #else
-            config->writePathEntry("Qt Reference Documentation", QString(QT_DOCDIR) + QString("/qt.xml"));
-            emap["Qt Reference Documentation"] = QString(QT_DOCDIR) + QString("/qt.xml");
-            config->writePathEntry("Qt Assistant Manual", QString(QT_DOCDIR) + QString("/assistant.xml"));
-            emap["Qt Assistant Manual"] = QString(QT_DOCDIR) + QString("/assistant.xml");
-            config->writePathEntry("Qt Designer Manual", QString(QT_DOCDIR) + QString("/designer.xml"));
-            emap["Qt Designer Manual"] = QString(QT_DOCDIR) + QString("/designer.xml");
-            config->writePathEntry("Guide to the Qt Translation Tools", QString(QT_DOCDIR) + QString("/linguist.xml"));
-            emap["Guide to the Qt Translation Tools"] = QString(QT_DOCDIR) + QString("/linguist.xml");
-            config->writePathEntry("qmake User Guide", QString(QT_DOCDIR) + QString("/qmake.xml"));
-            emap["qmake User Guide"] = QString(QT_DOCDIR) + QString("/qmake.xml");
+            config->writePathEntry("Qt Reference Documentation", qtdocdir + QString("/qt.xml"));
+            emap["Qt Reference Documentation"] = qtdocdir + QString("/qt.xml");
+            config->writePathEntry("Qt Assistant Manual", qtdocdir + QString("/assistant.xml"));
+            emap["Qt Assistant Manual"] = qtdocdir + QString("/assistant.xml");
+            config->writePathEntry("Qt Designer Manual", qtdocdir + QString("/designer.xml"));
+            emap["Qt Designer Manual"] = qtdocdir + QString("/designer.xml");
+            config->writePathEntry("Guide to the Qt Translation Tools", qtdocdir + QString("/linguist.xml"));
+            emap["Guide to the Qt Translation Tools"] = qtdocdir + QString("/linguist.xml");
+            config->writePathEntry("qmake User Guide", qtdocdir + QString("/qmake.xml"));
+            emap["qmake User Guide"] = qtdocdir + QString("/qmake.xml");
 #endif
         }
 
