@@ -24,6 +24,11 @@
 void EnvironmentVariablesWidget::addVarClicked()
 {
     AddEnvvarDialog dlg;
+    if (QListViewItem *Item = listview->selectedItem())
+    {
+        dlg.setvarname(Item->text(0));
+        dlg.setvalue(Item->text(1));
+    }
     if (!dlg.exec())
         return;
 
@@ -33,7 +38,7 @@ void EnvironmentVariablesWidget::addVarClicked()
 
 void EnvironmentVariablesWidget::removeVarClicked()
 {
-    delete listview->currentItem();
+    delete listview->selectedItem();
 }
 
 
@@ -42,7 +47,7 @@ EnvironmentVariablesWidget::EnvironmentVariablesWidget(QDomDocument &dom, const 
     : EnvironmentVariablesWidgetBase(parent, name),
       m_dom(dom), m_configGroup(configGroup)
 {
-	DomUtil::PairList list =
+    DomUtil::PairList list =
         DomUtil::readPairListEntry(dom, configGroup, "envvar", "name", "value");
     
     QListViewItem *lastItem = 0;

@@ -28,7 +28,11 @@ public:
         { return varname_edit->text(); }
     QString value() const
         { return value_edit->text(); }
-    
+    void setvarname(const QString name) const
+        { varname_edit->setText(name); }
+    void setvalue(const QString value) const
+        { value_edit->setText(value); }
+
 private:
     QLineEdit *varname_edit;
     QLineEdit *value_edit;
