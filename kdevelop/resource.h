@@ -263,6 +263,7 @@
 #define ID_LFV_REMOVE_GROUP					30120
 #define ID_LFV_GROUP_PROP						30130
 #define ID_LFV_SHOW_PATH_ITEM				30140
+#define ID_RFV_SHOW_NONPRJFILES			30150
 
 ///////////////////////////////////////////////////////////////////
 // tab-ID's for the s_tab_view

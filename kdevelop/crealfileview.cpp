@@ -19,7 +19,6 @@
 
 #include "qdir.h"
 #include "qstrlist.h"
-#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -29,6 +28,7 @@
 #include "crealfileview.h"
 #include "cproject.h"
 #include "vc/versioncontrol.h"
+#include "resource.h"
 
 /*********************************************************************
  *                                                                   *
@@ -51,12 +51,17 @@
 CRealFileView::CRealFileView(QWidget*parent,const char* name)
   : CTreeView(parent,name)
 {
+	addColumn(i18n("Project"));
+	addColumn(i18n("VCS"));
+	setColumnText(0,i18n("Files"));
+	header()->show();
+	header()->setClickEnabled(false);
+
   // Create the popupmenus.
   popup = 0;
-
+  showNonPrjFiles=false;
   file_col = 0;
-  
-  connect(this, 
+  connect(this,
           SIGNAL(selectionChanged(QListViewItem*)), 
           SLOT(slotSelectionChanged(QListViewItem*)));
 }
@@ -86,14 +91,13 @@ CRealFileView::~CRealFileView(){
 void CRealFileView::refresh(CProject* prj) 
 {
   assert( prj );
-
   project=prj;
 
   QString projectdir=project->getProjectDir();
   if(projectdir.right(1)=="/") {
     projectdir.truncate(projectdir.length()-1);
   }
-
+  this->projectDir=projectdir;
   QDir dir(projectdir);
   if (!dir.exists()) {
     return;
@@ -106,32 +110,59 @@ void CRealFileView::refresh(CProject* prj)
   project->getAllFiles(filelist);
 
   // Add the root item.
-  pRootItem = treeH->addRoot( projectdir, THFOLDER );
+  pRootItem = treeH->addRoot( projectdir, THPROJECT );
   pRootItem->setOpen(true);
 
   scanDir(projectdir, pRootItem);
 }
 
-void CRealFileView::addFilesFromDir( const QString& directory, 
-                                     QListViewItem* parent )
-{
-  QDir theDir( directory );
-  QStrList fileList;
-  QListViewItem* item;
+void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* parent ) {
 
-  // Add all files for this directory
-  theDir.setFilter(QDir::Files);
-  fileList=*(theDir.entryList());
-  for( fileList.first();
-       fileList.current();
-       fileList.next() )
-  {
-    item = treeH->addItem( fileList.current(), THC_FILE, parent );
-    
-    // If this is an installed file, we change the icon.
-    if( isInstalledFile( getRelFilename( item ) ) )
-      item->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
-  }
+    QDir theDir( directory );
+    QStrList fl;
+    QListViewItem* item;
+    QString f;
+    QString d=directory;
+    d.remove(0,projectDir.length());
+    VersionControl* vc;
+    VersionControl::State reg;
+
+    // Add all files for this directory
+    theDir.setFilter(QDir::Files);
+    fl=*(theDir.entryList());
+
+		for( fl.first(); fl.current(); fl.next() ) {
+				f=d;
+        f.append("/");
+				f.append(fl.current());
+        f.remove(0,1);
+				if( isInstalledFile(f) ) {
+						item = treeH->addItem( fl.current(), THC_FILE, parent,i18n("yes"));
+						vc=project->getVersionControl();
+						if (vc!=0) {
+								reg=vc->registeredState(directory+'/'+fl.current());
+								if (reg & VersionControl::canBeCommited) {
+										item->setText(2,i18n("yes"));
+								} else {
+										item->setText(2,i18n("no"));
+								}
+						}
+						// item->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
+				} else {
+						if (showNonPrjFiles) {
+								item = treeH->addItem( fl.current(), THC_FILE, parent,i18n("no") );
+								vc=project->getVersionControl();
+								if (vc!=0) {
+										reg=vc->registeredState(directory+'/'+fl.current());
+										if (reg & VersionControl::canBeCommited) {
+												item->setText(2,i18n("yes"));
+										} else {
+												item->setText(2,i18n("no"));
+										}
+								}
+						}
+				}
+   	}
 }
 
 void CRealFileView::scanDir(const QString& directory, QListViewItem* parent) 
@@ -145,7 +176,7 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   if (!dir.exists()) {
     return;
   }
-  
+
   dir.setSorting(QDir::Name);
   dir.setFilter(QDir::Dirs);
   dirList = *(dir.entryList());
@@ -154,15 +185,15 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   dirList.first();
   dirList.remove();
   dirList.remove();
-  
+
   // Recurse through all directories
   while( dirList.current() ) 
   {
     lastFolder = treeH->addItem( dirList.current(), THFOLDER, parent );
-    lastFolder->setOpen( true );
+    lastFolder->setOpen( false );
     
     // Recursive call to fetch subdirectories
-    currentPath = directory+"//"+dirList.current();
+    currentPath = directory+"/"+dirList.current();
     scanDir( currentPath, lastFolder );
     
     // Add the files in the recursed directory.
@@ -193,7 +224,14 @@ KPopupMenu *CRealFileView::getCurrentPopup()
 
   switch( treeH->itemType() )
   {
-    case THINSTALLED_FILE:
+    case THPROJECT :
+			popup = new KPopupMenu(i18n("RFV Options"));
+      popup->insertItem( i18n("Show non-project Files"),
+                         this, SLOT(slotShowNonPrjFiles()), 0, ID_RFV_SHOW_NONPRJFILES );
+      popup->setCheckable(true);
+      if(showNonPrjFiles) popup->setItemChecked(ID_RFV_SHOW_NONPRJFILES, true);
+      break;
+		case THINSTALLED_FILE:
       popup = new KPopupMenu(i18n("File (Registered)"));
       popup->insertItem( i18n("Remove File from Project..."),
                          this, SLOT(slotRemoveFileFromProject()));
@@ -203,7 +241,7 @@ KPopupMenu *CRealFileView::getCurrentPopup()
       popup->insertItem( i18n("Properties..."),
                          this, SLOT(slotShowFileProperties()));
       break;
-    case THC_FILE:
+		case THC_FILE:
       popup = new KPopupMenu(i18n("File"));
       popup->insertItem( i18n("Add File to Project..."),
                          this, SLOT(slotAddFileToProject()));
@@ -278,7 +316,11 @@ QString CRealFileView::getFullFilename(QListViewItem* pItem) {
 
 bool CRealFileView::isInstalledFile(QString filename) 
 {
-  return ( filelist.contains(filename) > 0 );
+	int i=0;
+	bool b=false;
+	i=filelist.contains(filename);
+	if ( i>0 ) b=true;
+	return b;
 }
 
 /*********************************************************************
@@ -376,6 +418,24 @@ void CRealFileView::slotCommit()
     }
 }
  
+void CRealFileView::slotShowNonPrjFiles() {
+	showNonPrjFiles=!showNonPrjFiles;
+	refresh(project);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -89,6 +89,7 @@ protected slots:
   void slotRemoveFromRepository();
   void slotUpdate();
   void slotCommit();
+	void slotShowNonPrjFiles();
 
 private: // Popupmenus
   KPopupMenu *popup;
@@ -96,8 +97,10 @@ private: // Popupmenus
 private: // Private attributes
   QStrList filelist;
   int file_col;
+	bool showNonPrjFiles;
   QListViewItem* pRootItem;
   CProject* project;
+	QString projectDir;
 
 private: // Private methods
   /** Adds the files from a certain directory to the view. */
@@ -111,3 +114,5 @@ private: // Private methods
 
 };
 #endif
+
+

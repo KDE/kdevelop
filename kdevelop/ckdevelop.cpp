@@ -2956,6 +2956,9 @@ void CKDevelop::statusCallback(int id_){
  	ON_STATUS_MSG(ID_LFV_GROUP_PROP,												i18n("Shows the group's properties"))
 	ON_STATUS_MSG(ID_LFV_SHOW_PATH_ITEM,										i18n("Displays the absolute / relative path"))
 	ON_STATUS_MSG(ID_FILE_DELETE,														i18n("Deletes the selected file"))
+
+	// RFV popups
+	ON_STATUS_MSG(ID_RFV_SHOW_NONPRJFILES,									i18n("Shows files, that aren't registered in the project"))
 	
 	default: slotStatusMsg(i18n("Ready"));
 	}

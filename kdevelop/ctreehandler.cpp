@@ -232,13 +232,15 @@ QListViewItem *CTreeHandler::addRoot( const char *aName,
  *-----------------------------------------------------------------*/
 QListViewItem *CTreeHandler::addItem( const char *aName, 
                                       THType iconType,
-                                      QListViewItem *parent )
+                                      QListViewItem *parent,
+																			const char* label2=0, const char* label3=0,
+																			const char* label4=0, const char* label5=0 )
 {
   assert( aName != NULL );
   assert( parent != NULL );
 
-  QListViewItem *item = new QListViewItem( parent, lastItem );
-  item->setText( 0, aName );
+  QListViewItem *item = new QListViewItem( parent, lastItem, aName, label2, label3, label4, label5 );
+  //item->setText( 0, aName );
   item->setPixmap( 0, *(getIcon( iconType )) );
 
   // Save this as the last entry.
@@ -304,4 +306,5 @@ void CTreeHandler::readIcons()
 
   CTreeHandler::iconsRead = true;
 }
+
 
