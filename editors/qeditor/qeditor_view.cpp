@@ -51,6 +51,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kcombobox.h>
+#include <kdeversion.h>
 
 QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
     : KTextEditor::View( document, parent, name ),
@@ -674,7 +675,11 @@ void QEditorView::setupActions()
 
     KStdAction::cut( this, SLOT(cut()), actionCollection() );
     KStdAction::copy( this, SLOT(copy()), actionCollection() );
+#if KDE_IS_VERSION(3,1,90)
+    KStdAction::pasteText( this, SLOT(paste()), actionCollection() );
+#else
     KStdAction::paste( this, SLOT(paste()), actionCollection() );
+#endif    
     KStdAction::selectAll( this, SLOT(selectAll()), actionCollection() );
 
     KStdAction::gotoLine( this, SLOT(gotoLine()), actionCollection() );
