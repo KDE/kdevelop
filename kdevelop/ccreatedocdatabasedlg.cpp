@@ -24,6 +24,9 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
+#include <kstddirs.h>
+
 #include "ccreatedocdatabasedlg.h"
 
 #if HAVE_CONFIG_H
@@ -280,8 +283,7 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
     return;
   }
   
-  QDir dir(KApplication::localkdedir()+"/share/apps/");
-  dir.mkdir("kdevelop");
+  KGlobal::dirs()->getSaveLocation("appdata");
  
   QString kde_doc_dir = conf->readEntry("doc_kde", KDELIBS_DOCDIR);
   QString qt_doc_dir = conf->readEntry("doc_qt", QT_DOCDIR);
@@ -294,7 +296,7 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
     dirs = dirs + " " +  qt_doc_dir;
   }
   // added for documentation search in the kdevelop html directory
-  dirs= dirs + " "+ KApplication::kde_htmldir()+"/default/kdevelop";
+  dirs= dirs + " "+ locate("html","/default/kdevelop");
 
   uint count = dir_listbox->count();
   uint i;
@@ -312,7 +314,7 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   }
   
   proc->clearArguments();
-  *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop";
+  *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KGlobal::dirs()->getSaveLocation("appdata");
   proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   accept();
 

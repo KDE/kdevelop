@@ -43,7 +43,8 @@ class CKDevelop;
 #include <kfiledialog.h>
 #include <kaccel.h>
 #include <kprogress.h>
-
+#include <kglobal.h>
+#include <klocale.h>
 #include "./kwrite/kguicommand.h"
 
 class QSplitter;

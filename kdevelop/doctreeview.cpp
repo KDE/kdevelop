@@ -25,10 +25,13 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kpopmenu.h>
+#include <kglobal.h>
+#include <kstddirs.h>
+#include <stdio.h>
+
 #include "cdoctreepropdlg.h"
 #include "cproject.h"
 #include "doctreeview.h"
-#include <stdio.h>
 
 #if HAVE_CONFIG_H
 #include "../config.h"
@@ -154,10 +157,10 @@ private:
 
 QString DocTreeKDevelopBook::locatehtml(const char *filename)
 {
-    QString pathbase = KApplication::kde_htmldir() + "/";
-    QString path = pathbase + klocale->language() + "/kdevelop/" + filename;
+
+    QString path = locate("html",KGlobal::locale()->language()+"/kdevelop/"+filename);
     if (!QFileInfo(path).exists())
-        path = pathbase + "default/kdevelop/" + filename;
+        path = locate("html",QString("default/kdevelop/")+filename);
     return path;
 }
 

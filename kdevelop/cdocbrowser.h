@@ -29,6 +29,7 @@
 #include <qframe.h>
 
 #include <khtmlview.h>
+#include <khtml.h>
 #include <kiconloader.h>
 #include <kapp.h>
 #include <kconfig.h>

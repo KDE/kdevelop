@@ -23,6 +23,8 @@
 #include <kmessagebox.h>
 #include <kcursor.h>
 #include <kmenubar.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 
 #include "debug.h"
 #include "ckdevelop.h"
@@ -1011,37 +1013,48 @@ void CKDevelop::readOptions(){
 	
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop/KDlgEdit
+#warning FIXME: no separatorPos() in QSplitter
+#if 0
 	view->setSeparatorPos(config->readNumEntry("view_panner_pos",80));
+#endif
 	bool outputview= config->readBoolEntry("show_output_view", true);
 	if(outputview){
 	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
+#if 0
     output_view_pos=view->separatorPos();
+#endif
 	}
 	else{
     output_view_pos=config->readNumEntry("output_view_pos", 80);
 	}
-	
+#if 0	
   top_panner->setSeparatorPos(config->readNumEntry("top_panner_pos", 213));
+#endif
 	bool treeview=config->readBoolEntry("show_tree_view", true);
 	if(treeview){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
+#if 0
     tree_view_pos=top_panner->separatorPos();
+#endif
 	}
   else{
     tree_view_pos=config->readNumEntry("tree_view_pos", 213);
   }
 	
-
+#if 0
   kdlg_top_panner->setSeparatorPos(config->readNumEntry("kdlg_top_panner_pos", 80));
+#endif
 	if(config->readBoolEntry("show_properties_view",true)){
 	  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
+#if 0
     properties_view_pos=kdlg_top_panner->separatorPos();
+#endif
 	}	
   else{
     properties_view_pos=config->readNumEntry("properties_view_pos", 80);
@@ -1089,14 +1102,13 @@ void CKDevelop::readOptions(){
     slotURLSelected(browser_widget,filename,1,"test");
   }
   else{
-    QString strpath = KApplication::kde_htmldir().copy() + "/";
     QString file;
     // first try the locale setting
-    file = strpath + klocale->language() + '/' + "kdevelop/welcome/index.html";
+    file = locate("html",KGlobal::locale()->language()+"/kdevelop/welcome/index.html");
 
     if( !QFileInfo( file ).exists() ){
       // not found: use the default
-      file = strpath + "default/" + "kdevelop/welcome/index.html";
+      file = locate("html","default/kdevelop/welcome/index.html");
     }
     slotURLSelected(browser_widget,"file:" + file,1,"test");
   }
@@ -1120,10 +1132,13 @@ void CKDevelop::saveOptions(){
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
   config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
-  
+
+#warning FIXME: no separatorPos() in QSplitter
+#if 0
   config->writeEntry("view_panner_pos",view->separatorPos());
   config->writeEntry("top_panner_pos",top_panner->separatorPos());
   config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->separatorPos());
+#endif
 
   config->writeEntry("tree_view_pos",tree_view_pos);
   config->writeEntry("output_view_pos",output_view_pos);

@@ -35,6 +35,8 @@
 #include <kmessagebox.h>
 #include <ktabctl.h>
 #include <stdlib.h>
+#include <kstddirs.h>
+#include <kmenubar.h>
 
 #include "./kdlgedit/kdlgedit.h"
 #include "ctoolsconfigdlg.h"
@@ -673,11 +675,17 @@ void CKDevelop::slotViewTTreeView(){
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
 		toolBar()->setButton(ID_VIEW_TREEVIEW,false);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
+#warning FIXME: no separatorPos() in QSplitter
+#if 0
     tree_view_pos=top_panner->separatorPos();
     top_panner->setSeparatorPos(0);
+#endif
   }
   else{
+#warning FIXME: no separatorPos() in QSplitter
+#if 0
     top_panner->setSeparatorPos(tree_view_pos);
+#endif
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW,true);
@@ -694,11 +702,17 @@ void CKDevelop::slotViewTOutputView(){
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
+#warning FIXME: no separatorPos() in QSplitter
+#if 0
     output_view_pos=view->separatorPos();
     view->setSeparatorPos(100);
+#endif
   }
   else{
+#warning FIXME: no separatorPos() in QSplitter
+#if 0
     view->setSeparatorPos(output_view_pos);
+#endif
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
@@ -1445,7 +1459,7 @@ void CKDevelop::slotHelpSearchText(QString text){
   doc_search_text = text.copy();
 
   slotStatusMsg(i18n("Searching selected text in documentation..."));
-  if(!QFile::exists(KApplication::localkdedir()+"/share/apps" + "/kdevelop/.glimpse_index")){
+  if(!QFile::exists(locateLocal("appdata",".glimpse_index"))){
     if(KMessageBox::questionYesNo(this, i18n("KDevelop couldn't find the search database.\n"
                                              "Do you want to generate it now?")) == KMessageBox::Yes){
       slotOptionsCreateSearchDatabase();
@@ -1455,7 +1469,7 @@ void CKDevelop::slotHelpSearchText(QString text){
 	enableCommand(ID_HELP_BROWSER_STOP);
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
-  search_process << "glimpse  -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop -U -c -y '"+ text +"'";
+  search_process << "glimpse  -H "+ KGlobal::dirs()->getSaveLocation("appdata")+" -U -c -y '"+ text +"'";
   search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 }
 void CKDevelop::slotHelpSearchText(){
@@ -1483,20 +1497,19 @@ void CKDevelop::slotHelpSearch(){
 
 void CKDevelop::slotHelpReference(){
 
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
   // first try the locale setting
-  file = strpath + klocale->language() + '/' + "kdevelop/reference/C/cref.html";
+  file = locate("html",KGlobal::locale()->language() + "/kdevelop/reference/C/cref.html");
   if( !QFileInfo( file ).exists() ){
   // not found: use the default
-  	file = strpath + "default/" + "kdevelop/reference/C/cref.html";
+  	file = locate("html","default/kdevelop/reference/C/cref.html");
   }
   if( !QFileInfo( file ).exists() ){
-  file = strpath + klocale->language() + '/' + "kdevelop/cref.html";
+  file = locate("html",KGlobal::locale()->language() + "/kdevelop/cref.html");
   }
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
-    file = strpath + "default/" + "kdevelop/cref.html";
+    file = locate("html","default/kdevelop/cref.html");
   }
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
@@ -1588,29 +1601,27 @@ void CKDevelop::slotHelpManual(){
 }
 
 void CKDevelop::slotHelpContents(){
-    
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
+
   QString file;
   // first try the locale setting
-  file = strpath + klocale->language() + '/' + "kdevelop/index.html";
+  file = locate("html",KGlobal::locale()->language()+"/kdevelop/index.html");
   
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
-    file = strpath + "default/" + "kdevelop/index.html";
+    file = locate("html","default/kdevelop/index.html");
   }
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
 
 void CKDevelop::slotHelpTutorial(){
 
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
   // first try the locale setting
-  file = strpath + klocale->language() + '/' + "kdevelop/programming/index.html";
+  file = locate("html",KGlobal::locale()->language()+"/kdevelop/programming/index.html");
 
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
-    file = strpath + "default/" + "kdevelop/programming/index.html";
+    file = locate("html","default/kdevelop/programming/index.html");
   }
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 	
@@ -1694,7 +1705,7 @@ void CKDevelop::slotHelpAbout(){
 												"See the GNU General Public License for more details."));
 
   QPixmap pm;
-  pm.load(KApplication::kde_datadir() + "/kdevelop/pics/about_logo.bmp");
+  pm.load(locate("appdata","pics/about_logo.bmp"));
   aboutmsg.setIconPixmap(pm);
   aboutmsg.show();
 }
@@ -1702,12 +1713,17 @@ void CKDevelop::slotHelpAbout(){
 void CKDevelop::slotKDlgViewPropView(){
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,false);
+#warning FIXME: no separatorPos( in QSplitter
+#if 0
     properties_view_pos=kdlg_top_panner->separatorPos();
     kdlg_top_panner->setSeparatorPos(100);
+#endif
   }
   else{
+#if 0
     kdlg_top_panner->setSeparatorPos(properties_view_pos);
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
+#endif
   }
   QRect rMainGeom= kdlg_top_panner->geometry();
   kdlg_top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -1747,7 +1763,7 @@ void CKDevelop::slotKDlgViewStatusbar(){
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewClass()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
   CVGotoDeclaration( classname, "", THCLASS );
@@ -1765,8 +1781,8 @@ void CKDevelop::slotClassbrowserViewClass()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewDeclaration()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  QComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
@@ -1786,8 +1802,8 @@ void CKDevelop::slotClassbrowserViewDeclaration()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewDefinition()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  QComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
@@ -1809,7 +1825,7 @@ void CKDevelop::slotClassbrowserViewDefinition()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserNewMethod()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
   if( !classname.isEmpty() )
@@ -1828,7 +1844,7 @@ void CKDevelop::slotClassbrowserNewMethod()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserNewAttribute()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
   if( !classname.isEmpty() )
@@ -2155,7 +2171,8 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
   int x,y;
   messages_widget->cursorPosition(&x,&y);
-  QString str(buffer,buflen+1);
+  QString str;
+	str.fromLatin1(buffer,buflen);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
@@ -2188,7 +2205,8 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
   messages_widget->cursorPosition(&x,&y);
-  QString str(buffer,buflen+1);
+  QString str;
+	str.fromLatin1(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
@@ -2220,7 +2238,8 @@ void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   int x,y;
   showOutputView(true);
   stdin_stdout_widget->cursorPosition(&x,&y);
-  QString str(buffer,buflen+1);
+  QString str;
+	str.fromLatin1(buffer,buflen+1);
   stdin_stdout_widget->insertAt(str,x,y);
 }
 
@@ -2229,13 +2248,15 @@ void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
   showOutputView(true);
   stderr_widget->cursorPosition(&x,&y);
-  QString str(buffer,buflen+1);
+  QString str;
+	str.fromLatin1(buffer,buflen+1);
   stderr_widget->insertAt(str,x,y);
 }
 
 
 void CKDevelop::slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen){
-  QString str(buffer,buflen+1);
+  QString str;
+	str.fromLatin1(buffer,buflen+1);
   search_output = search_output + str;
 }
 
@@ -2259,7 +2280,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   }
   if (list.isEmpty()){
 
-     KMesageBox::sorry(0, i18n("\"%1\" not found in documentation!").arg(doc_search_display_text));
+     KMessageBox::sorry(0, i18n("\"%1\" not found in documentation!").arg(doc_search_display_text));
     return;
   }
 
@@ -2280,7 +2301,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
 
   }
 
-   QString filename = KApplication::localkdedir()+"/share/apps" + "/kdevelop/search_result.html";
+   QString filename =locate("appdata","search_result.html");
    QFile file(filename);
    QTextStream stream(&file);
    file.open(IO_WriteOnly);
@@ -2735,7 +2756,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
   
   if(!QFile::exists(url_file)){
     if( text == i18n("Qt-Library")){
-      if(KMsgBox::yesNo(0,i18n("File not found!"),"KDevelop couldn't find the Qt documentation.\n Do you want to set the correct path?",KMsgBox::INFORMATION) == 1) {
+      if(KMessageBox::warningYesNo(0,i18n("KDevelop couldn't find the Qt documentation.\n Do you want to set the correct path?"),i18n("File not found!"))) {
 				slotOptionsKDevelop();
       }
       return;
@@ -2744,7 +2765,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
        text == i18n("KDE-KFile-Library") || text == i18n("KDE-KHTMLW-Library") ||
        text == i18n("KDE-KFM-Library") || text == i18n("KDE-KDEutils-Library") ||
        text == i18n("KDE-KAB-Library") || text == i18n("KDE-KSpell-Library")){
-      if(KMsgBox::yesNo(0,i18n("File not found!"),"KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?",KMsgBox::INFORMATION) == 1) {
+      if(KMessageBox::warningYesNo(0,i18n("KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?"),i18n("File not found!"))) {
 				slotOptionsUpdateKDEDocumentation();
       }
       return;

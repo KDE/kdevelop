@@ -199,12 +199,13 @@ void CDocBrowser::setDocBrowserOptions(){
 
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
-  htmlview->setDefaultFontBase( fSize );
+  htmlview->setFontSizes( &fSize );
   htmlview->setFixedFont( fixedFont);
   htmlview->setStandardFont( standardFont );
   htmlview->setURLCursor( KCursor::handCursor() );
   htmlview->setUnderlineLinks(underlineLinks);
-  htmlview->setForceDefault( forceDefaults );
+  #warning uncommented htmlview->setForceDefault( force );
+  //  htmlview->setForceDefault( forceDefaults );
   htmlview->setDefaultBGColor( bgColor );
 }
 
@@ -212,7 +213,7 @@ void CDocBrowser::slotDocFontSize(int size){
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
   fSize = size;
-  htmlview->setDefaultFontBase( size );
+  htmlview->setFontSizes( &size );
   htmlview->parse();
   showURL(complete_url, true);
 //	busy = true;
@@ -246,7 +247,8 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 {
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
-  htmlview->setForceDefault( force );
+  #warning uncommented htmlview->setForceDefault( force );
+  //  htmlview->setForceDefault( force );
   htmlview->setDefaultBGColor( bg );
   htmlview->setDefaultTextColors( text, link, vlink );
   htmlview->setUnderlineLinks(uline);

@@ -32,6 +32,7 @@
 
 
 #include "klangcombo.h"
+#include <kstddirs.h>
 
 
 KLanguageCombo::~KLanguageCombo ()
@@ -54,13 +55,13 @@ void KLanguageCombo::insertLanguage(const char *lang)
   int w = fontMetrics().width(output) + 24;
   QPixmap pm(w, 16);
   
-  QPixmap flag(KApplication::kde_datadir() + "/kcmlocale/pics/" + (QString("flag_")+tag(lang)+".gif"));
-  if(style() == MotifStyle){
+  QPixmap flag(locate("data" , "/kcmlocale/pics/" + (QString("flag_")+tag(lang)+".gif")));
+  //  if(style() == MotifStyle){
     pm.fill(colorGroup().background());
-  }
-  else{
-    pm.fill(kapp->windowColor);
-  }
+    //}
+  //  else{
+  //    pm.fill(kapp->windowColor);
+  //  }
   p.begin(&pm);
   p.drawText(24,1,w-24,16,AlignLeft | AlignTop,output);
   if (!flag.isNull()){

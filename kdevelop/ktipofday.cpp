@@ -19,10 +19,13 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <klocale.h>
 #include <kconfig.h>
+#include <kstddirs.h>
 #include <kapp.h>
 #include "ktipofday.h"
+#include <klocale.h>
+#include <kglobal.h>
+
 
 
 KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name, true) {
@@ -45,7 +48,7 @@ KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name,
 
 	{
 		QPixmap pixmap;
-		pixmap.load(KApplication::kde_datadir() + "/kdevelop/pics/tipday.bmp");
+		pixmap.load(locate("appdata", "/pics/tipday.bmp"));
 		bmp_frame->setBackgroundPixmap( pixmap );
 	}
 	bmp_frame->setFocusPolicy( QWidget::NoFocus );
@@ -154,13 +157,12 @@ void KTipofDay::slotOK()
 void KTipofDay::slotNext()
 {
 
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
 
-  file = strpath + klocale->language() + '/' + "kdevelop/tip.database";
+  file = locate("html",KGlobal::locale()->language() + "/kdevelop/tip.database");
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
-    file = strpath + "default/" + "kdevelop/tip.database";
+    file = locate("html","/default/kdevelop/tip.database");
   }
   if( !QFileInfo( file ).exists() ){
     tip_label->setText(i18n("Tipdatabase not found ! Please check your installation."));

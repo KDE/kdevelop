@@ -28,6 +28,9 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
+#include <kstddirs.h>
+
 #include "cbugreportdlg.h"
 
 #if HAVE_CONFIG_H
@@ -645,13 +648,10 @@ bool CBugReportDlg::generateEmail() {
   text.append("OS/Distribution\t: ");text.append(os_edit->text());text.append("\n");
   text.append("Compiler\t\t: ");text.append(compiler_edit->text());text.append("\n\n");
 
-#warning FIXME: why not create this in /tmp?
-  QDir dir(KApplication::localkdedir()+"/share/apps/");
-  dir.mkdir("kdevelop");
-  //  cerr << endl << " dir: " << dir.absPath();
-  QFile file(KApplication::localkdedir()+"/share/apps/kdevelop/bugreport."+strBugID);
-  //  cerr << endl << "file: " << KApplication::localkdedir()+"/share/apps/kdevelop/bugreport."+strBugID;
-  if (!file.open(IO_WriteOnly)) {
+  QDir dir(KGlobal::dirs()->getSaveLocation("appdata","bugreports"));
+  QFile file(locateLocal("appdata","bugreports/bugreport."+strBugID));
+
+	if (!file.open(IO_WriteOnly)) {
     return false;
   }
   file.writeBlock(text,text.length());
@@ -666,7 +666,7 @@ bool CBugReportDlg::sendEmail() {
 
   //  cerr << endl << "start sendEmail";
   QString command("cat ");
-  command.append(KApplication::localkdedir()+"/share/apps/kdevelop/bugreport."+strBugID);
+  command.append(locateLocal("appdata","bugreports/bugreport."+strBugID));
   command.append(" | mail -s \x22");
   command.append(subject_edit->text());
   command.append(" ["+strBugID+"]\x22 ");

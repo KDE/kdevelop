@@ -20,6 +20,7 @@
 #include <qprogressdialog.h>
 #include <qsplitter.h>
 #include <kcursor.h>
+#include <kstddirs.h>
 
 #include "ckdevelop.h"
 #include "ctoolclass.h"
@@ -319,12 +320,12 @@ void CKDevelop::slotAddExistingFiles(){
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
-         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,fi.fileName());
+         temp_template = genfile.genHeaderFile(locate("appdata","temp_template"), prj,fi.fileName());
          process << temp_template;
         }
         else if (CProject::getType(file)==CPP_SOURCE)
               {
-               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, fi.fileName());
+               temp_template = genfile.genCPPFile(locate("appdata","temp_template"), prj, fi.fileName());
                process << temp_template;
               }
       }
@@ -818,7 +819,10 @@ void CKDevelop::slotProjectManual(){
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+#warning FIXME: no separatorPos in QSplitter
+#if 0
     view->setSeparatorPos(output_view_pos);
+#endif
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
