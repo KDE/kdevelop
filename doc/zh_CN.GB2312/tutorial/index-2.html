@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>KDE应用程序教程: 准备开始</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=gb2312">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">下一页</A>
+ <A HREF="index-1.html">上一页</A>
+ <A HREF="index.html#toc2">内容</A>
+</P>
+<H3><A NAME="s2">2. 准备开始</A></H3>
+
+<P>准备开始——此意即你必须首先让KDevelop能够正常的工作。确信你可以通过“帮助”菜单或文档树
+访问Qt的在线文档。在文档的第一页，你会看到它包括“Tutorials（教程）”和“Examples（例子）”
+的链接。在“教程”中，你可以通过十四步的介绍学习如何用Qt库建立应用程序。另一方面，“例子”
+包含了一系列的例程，它们为如何使用这些类提供了参考。现在，如果你是一个完全的初学者，你应该
+欣赏Qt的思想——它提供了：
+<UL>
+<LI>基本的应用程序类（<CODE>QApplication</CODE>）</LI>
+<LI>图形用户界面的widget库</LI>
+<LI>一系列的图形，文件和数据处理等辅助库</LI>
+<LI>用于对象通信的signal-slot机制</LI>
+<LI>使用事件循环和虚方法来实现事件控制</LI>
+</UL>
+<P>如果目前你对这些一无所知，你应该读一读
+<A HREF="../programming/index-2.html#ss2.1">KDevelop编程手册</A>，它详细描述了Qt应用程序的
+基本概念。同时，你也会了解到Qt和KDE应用程序的区别。不过，这些区别在教程这样的初级阶段表现
+得并不明显。
+<P>既然首先学习Qt是学习编写KDE程序的良好开端，我们就用教程中的程序来生成一个项目。
+<P>为此，从菜单条中选择“项目”—“新建”。在应用程序向导中选择项目类型。对于Qt程序，就选择
+“Qt—普通”，但是我们要使用迷你KDE项目来建立例子。原因很简单：Qt的教程并没有包含多少代
+码，如果在向导中选择Qt应用程序，我们就得为生成一个“真正”的例子而作很大的改变。
+<P>而迷你KDE应用程序不但包括一个空的主窗口，还包括必要的库和头文件，它恰好符合我们的要求而有
+不用作太大的改动。
+<P>在下一向导页中，我们需要输入有关项目的信息。在那儿，我们可以不用管诸如迷你图标，主图标，文
+档等KDE专用的附加选项。我们只需要输入与教程相关的信息就可以了。教程在安排上是一步接一步的，
+所以我们从<CODE>MyWidget</CODE>开始，在第四章中会用到这个类，这样到时候就不用为此操心了。我们从教
+程的第一步开始，因而把‘1’作为项目号，以后各步依此增加就可以了。
+<P>然后，填上你的名字，电子邮件地址，项目目录等等。完成以后进入下一页。在此插入文件头。你可以
+自己选一个文件或者就用所给的例子。第四页也一样，为源文件选择文件头。在最后一页中，选择‘生成’
+就可以创建项目了。如果该按钮不可用，你就得从第一页开始检查有没有必需的信息没有填。
+<P>如果一切正常，在向导的信息窗口中的最后一行会显示“READY“。然后按”关闭“结束。
+<P>看一看左边的树状视图，你发现已经有一个"MyWidget"类——这是因为我们选择它作为应用程序名。
+再者，在类视图的“全局”中选择“函数”，你可以看到应用程序已经包含了<CODE>main()</CODE>函数，程序
+就是从这里开始执行。
+<P>现在整个应用程序已经设置好了。你可以选择“执行”或“连编”，可是我们要生成教程中的应用呀？
+所以在下一步中，我们会继续并添加代码，然后生成教程中的例子。
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-3.html">下一页</A>
+ <A HREF="index-1.html">上一页</A>
+ <A HREF="index.html#toc2">内容</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

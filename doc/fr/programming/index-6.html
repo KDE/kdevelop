@@ -1,0 +1,1029 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Le Manuel de Programmation de KDevelop: L'Éditeur de Boîtes de Dialogue : Où vos Boîtes de Dialogue sont Construites</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-7.html">Page suivante</A>
+ <A HREF="index-5.html">Page précédente</A>
+ <A HREF="index.html#toc6">Table des matières</A>
+</P>
+<H3><A NAME="s6">6. L'Éditeur de Boîtes de Dialogue : Où vos Boîtes de Dialogue sont Construites</A></H3>
+
+<P>
+<H3><A NAME="ss6.1">6.1 Ce que fournit l'Éditeur de boîtes de dialogue</A>
+</H3>
+
+<P>L'éditeur de boîtes de dialogue interne à KDevelop est conçu pour vous aider à
+construire les widgets et les boîtes de dialogue qui correspondent aux besoins
+de votre application et réduit significativement le temps nécessaire pour étendre
+l'interface graphique utilisateur (NdT : GUI) de votre application. La seule
+limitation actuelle est que l'éditeur de boîtes de dialogue ne supporte pas la
+gestion de la mise en page qui est proposée par Qt ; c'est pourquoi les boîtes
+de dialogue ont des tailles statiques et cela peut conduire à des situations où,
+par exemple, la largeur d'une étiquette (NdT : label) n'est pas assez grande pour
+contenir toute la longueur de sa traduction.
+<P>D'un autre côté, l'état courant de l'éditeur, associé à la gestion de projets de
+KDevelop, reste la façon la plus rapide de créer des applications aux fonctionnalités
+nombreuses pour l'Environnement de Bureau KDE.
+<P>
+<H3><A NAME="ss6.2">6.2 Widgets de Qt et KDE</A>
+</H3>
+
+<P>Actuellement, les widgets supportés sont :
+<P><B>Widgets de Qt :</B>
+<UL>
+<LI><B>QWidget</B> - un widget qui peut être spécifié par vous-même et peut contenir
+aussi d'autres widgets. Cela permet de créer une hiérarchie de widgets dans une boîte de
+dialogue&nbsp;;</LI>
+<LI><B>QLabel</B> - une étiquette qui représente une information de type texte sur
+le widget. Utilisez QLabel, par exemple, devant des zones de saisie pour indiquer
+l'objectif de la zone de saisie ou quelle variable, par exemple, une liste déroulante
+permet de définir&nbsp;;</LI>
+<LI><B>QPushButton</B> - un bouton qui permet, par exemple, d'appeler une autre boîte de
+dialogue (comme QFileDialog pour sélectionner un nom de fichier)&nbsp;;</LI>
+<LI><B>QCheckBox</B> - une case à cocher pour, par exempe, activer/désactiver des
+options. QCheckBox est largement utilisé dans les boîtes de dialogue de configuration&nbsp;;</LI>
+<LI><B>QLCDNumber</B> - affiche des nombres dans le style LCD. Souvent utilisé pour
+des horloges&nbsp;;</LI>
+<LI><B>QRadioButton</B> - Comme QCheckBox, souvent utilisé pour laisser l'utilisateur
+choisir des options. QRadioButton spécialise le choix des options lorsqu'elles dépendent
+les unes des autres, par exemple, vous avez trois boutons radio mais vous
+voulez que l'utilisateur sélectionne une des trois options données. Consultez
+<CODE>QButtonGroup</CODE> pour plus d'informations&nbsp;;</LI>
+<LI><B>QComboBox</B> - une liste déroulante permet à l'utilisateur de choisir
+une valeur en la sélectionnant dans un menu qui se déroule vers le bas ou en insérant
+la valeur, s'il est possible d'y écrire&nbsp;;</LI>
+<LI><B>QListBox</B> - fournit une liste à une seule colonne d'éléments qui peut défiler&nbsp;; </LI>
+<LI><B>QListView</B> - crée une liste multi-colonnes qui peut être utilisée pour
+afficher, par exemple, des arborescences de fichiers ou des tables&nbsp;;</LI>
+<LI><B>QMultiLineEdit</B> - fournit un éditeur multi-lignes&nbsp;; </LI>
+<LI><B>QProgressBar</B> - affiche la progression d'une action qui demande beaucoup
+de temps pour se terminer&nbsp;;</LI>
+<LI><B>QSpinBox</B> - permet de choisir des valeurs numériques avec des boutons
+haut/bas ou en insérant la valeur, si l'écriture est activée&nbsp;;</LI>
+<LI><B>QSlider</B> - définit, avec une glissière, une valeur dans une plage définie
+par le programme&nbsp;;</LI>
+<LI><B>QScrollBar</B> - indique l'étendue d'une valeur et définit la valeur courante
+grâce à un "ascenseur" ainsi que des boutons haut/bas ; souvent utilisé pour des
+widgets dont le contenu est plus grand que la zone de vue réellement visible. En
+utilisant la barre de défilement, la zone visible peut être déplacée vers une autre
+partie du contenu du widget&nbsp;;</LI>
+<LI><B>QGroupBox</B> - fournit une zone de cadre avec un titre pour indiquer que les
+widgets fils appartiennent à la même zone.</LI>
+</UL>
+<P><B>Widgets KDE :</B>
+<UL>
+<LI><B>KColorButton</B> - un bouton (NdT : pushbutton) affichant une couleur sélectionnée.
+Lors d'un appui sur le bouton, la boîte de dialogue de Sélection de couleur de KDE est affichée,
+dans laquelle l'utilisateur peut choisir une autre couleur. Souvent utilisé pour les applications
+de dessin ou, dans tous les cas, quand une couleur doit être définie&nbsp;;</LI>
+<LI><B>KCombo</B> - similaire à <CODE>QComboBox</CODE>. Permet à l'utilisateur de choisir une valeur dans un menu déroulant&nbsp;; </LI>
+<LI><B>KDatePicker</B> - un widget complet pour laisser l'utilisateur choisir une valeur de date&nbsp;; </LI>
+<LI><B>KDateTable</B> - une table de calendrier pour sélectionner une date dans un mois. Utilisé par <CODE>KDatePicker</CODE> pour créer la boîte de dialogue de choix de date&nbsp;; </LI>
+<LI><B>KKeyButton</B> - un bouton pour sélectionner une valeur de touche. Si le bouton est sélectionné, il devient actif. Appuyer sur une touche du clavier changera la valeur de touche du bouton. Souvent utilisé pour configurer des raccourcis clavier&nbsp;; </LI>
+<LI><B>KLed</B> - un widget de LED (Light Emitting Diode) pour afficher un certain état&nbsp;; </LI>
+<LI><B>KLedLamp</B> - une lampe LED qui supporte aussi les actions de clic&nbsp;; </LI>
+<LI><B>KProgress</B> - similaire à <CODE>QProgressBar</CODE>, <CODE>KProgress</CODE> supporte d'autres valeurs&nbsp;; </LI>
+<LI><B>KRestrictedLine</B> - un <CODE>QLineEdit</CODE> qui accepte seulement certaines entrées de l'utilisateur. Peut être utilisé pour restreindre l'accès à certaines données par des boîtes de dialogue de mot de passe&nbsp;; </LI>
+<LI><B>KSeparator</B> - un widget de séparation à utiliser, dans tous les cas, lorsque les applications KDE nécessitent un séparateur pour fournir un affichage unique. Souvent utilisé dans des boîtes de dialogue pour séparer logiquement certaines parties si <CODE>QGroupBox</CODE> ne convient pas&nbsp;; </LI>
+<LI><B>KTreeList</B> - une liste développable/réductible (NdT : collapsible list) pour afficher des arborescences comme <CODE>QListView</CODE>.</LI>
+</UL>
+<P>
+<H3><A NAME="ss6.3">6.3 Propriétés des Widgets Qt supportés</A>
+</H3>
+
+<P>Le chapitre suivant donne une vision complète des widgets de la boîte à outils Qt
+actuellement supportés. Pour avoir une meilleure compréhension des propriétés, elles
+sont séparées de leur héritage. Comme tous les widgets héritent de <CODE>QWidget</CODE>,
+cette classe est décrite en premier. Toutes les propriétés de <CODE>QWidget</CODE> sont
+disponibles pour tous les autres widgets donc elles ne seront pas listées à chaque fois.
+Pour les groupes de widgets qui héritent d'une sous-classe abstraite de <CODE>QWidget</CODE>
+comme classe de base, les propriétés de la classe de base sont listées en premier (bien que
+cette classe ne représente pas elle-même un widget dans l'éditeur de boîtes de dialogue).
+Ensuite, les propriétés du widget pour le widget disponible du groupe contiennent les
+propriétés qui lui sont spécifiques. Pour une meilleure compréhension, l'arbre d'héritage
+des widgets disponibles est donné ci-dessous :
+<P>
+<UL>
+<LI>
+<A HREF="#QWidget">QWidget</A>
+<UL>
+<LI>
+<A HREF="#QButton">QButton</A> (abstrait)
+<UL>
+<LI>
+<A HREF="#QCheckBox">QCheckBox</A></LI>
+<LI>
+<A HREF="#QPushButton">QPushButton</A></LI>
+<LI>
+<A HREF="#QRadioButton">QRadioButton</A></LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QComboBox">QComboBox</A></LI>
+<LI>
+<A HREF="#QFrame">QFrame</A> (actuellement abstrait)
+<UL>
+<LI>
+<A HREF="#QGroupBox">QGroupBox</A></LI>
+<LI>
+<A HREF="#QLCDNumber">QLCDNumber</A></LI>
+<LI>
+<A HREF="#QLabel">QLabel</A></LI>
+<LI>
+<A HREF="#QProgressBar">QProgressBar</A></LI>
+<LI>
+<A HREF="#QScrollView">QScrollView</A> (actuellement abstrait)
+<UL>
+<LI>
+<A HREF="#QListView">QListView</A></LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QSpinBox">QSpinBox</A></LI>
+<LI>
+<A HREF="#QTableView">QTableView</A> (abstrait)
+<UL>
+<LI>
+<A HREF="#QListBox">QListBox</A></LI>
+<LI>
+<A HREF="#QMultiLineEdit">QMultiLineEdit</A></LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QLineEdit">QLineEdit</A></LI>
+<LI>
+<A HREF="#QScrollBar">QScrollBar</A></LI>
+<LI>
+<A HREF="#QSlider">QSlider</A></LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4><A NAME="QWidget"></A> Propriétés de QWidget</H4>
+
+<P><CODE>QWidget</CODE> est la classe de base pour presque tous les widgets dans Qt
+et KDE. Les widgets qui héritent de <CODE>QWidget</CODE> permettront donc d'utiliser
+les mêmes paramètres dans la plupart des cas.
+<P>
+<UL>
+<LI><B>Apparence :</B>
+<UL>
+<LI><B>BgColor: </B> Couleur du fond du widget</LI>
+<LI><B>BgMode :</B> Mode du fond du widget</LI>
+<LI><B>BgPalColor :</B> Palette de couleur du fond</LI>
+<LI><B>BgPixmap :</B> Nom du fichier pour une image de fond</LI>
+<LI><B>Cursor :</B> Curseur au-dessus du widget</LI>
+<LI><B>Font :</B> Police du widget</LI>
+<LI><B>MaskBitmap :</B> Nom du fichier pour le bitmap de masque</LI>
+</UL>
+</LI>
+<LI><B>Code C++ :</B>
+<UL>
+<LI><B>AcceptsDrops :</B> si défini à true, l'élément du widget acceptera les
+"dépots" par les mécanismes de glisser-déposer (NdT : drag'n drop mechanisms )
+(le protocole de "glisser-déposer" de Qt , pas celui de KDE 1.x !)</LI>
+<LI><B>Connections :</B> connecte les signaux de l'élément aux slots</LI>
+<LI><B>FocusProxy :</B> l'élément qui donne son focus au widget.</LI>
+<LI><B>HasFocus :</B> définit si, par défaut, le widget a le focus. Notez que
+seulement un élément par boîte de dialogue peut avoir cette valeur à true</LI>
+<LI><B>ResizeToParent :</B> redimensionne le widget à la taille de son parent
+(non visible en mode édition)</LI>
+<LI><B>VarName :</B> Nom de variable de l'élément. Changez-le avec le nom qui
+décrit le but de l'élément.</LI>
+</UL>
+</LI>
+<LI><B>Général :</B>
+<UL>
+<LI><B>IsEnabled :</B> définit si le widget acceptera les événements utilisateur</LI>
+<LI><B>IsHidden :</B> définit si l'élément est visible (false) ou caché (true)</LI>
+<LI><B>Name :</B> définit le nom du widget. Notez que le nom est différent de
+VarName dans le code C++.</LI>
+</UL>
+</LI>
+<LI><B>Géométrie :</B>
+<UL>
+<LI><B>Height :</B> hauteur de l'élément</LI>
+<LI><B>IsFixedSize :</B></LI>
+<LI><B>MaxHeight :</B> valeur maximale de Height</LI>
+<LI><B>MaxWidth :</B> valeur maximale de Width</LI>
+<LI><B>MinHeight :</B> valeur minimale de Height</LI>
+<LI><B>MinWidth :</B> valeur minimale de Width</LI>
+<LI><B>SizeIncX :</B> nombre de pixels pour le redimensionnement dans la direction X</LI>
+<LI><B>SizeIncY :</B> nombre de pixels pour le redimensionnement dans la direction Y</LI>
+<LI><B>Width :</B> largeur de l'élément</LI>
+<LI><B>X :</B> position horizontale (abscisse), comptée depuis le coin gauche</LI>
+<LI><B>Y :</B> position verticale (ordonnée), comptée du haut vers le bas</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QButton"></A> Widgets qui héritent de QButton</H4>
+
+<P><CODE>QButton</CODE> est une classe de widget abstraite qui fournit des propriétés
+communes aux boutons.
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A><P>Hérité par 
+<A HREF="#QCheckBox">QCheckBox</A>, 
+<A HREF="#QPushButton">QPushButton</A>
+et 
+<A HREF="#QRadioButton">QRadioButton</A>.
+<P>
+<P>
+<UL>
+<LI><B>Apparence :</B>
+<UL>
+<LI><B>setPixmap :</B> définit le nom du fichier de pixmap à utiliser</LI>
+</UL>
+</LI>
+<LI><B>Général :</B>
+<UL>
+<LI><B>setText :</B> le texte sur les étiquettes, boutons et cases ; pré-définit aussi
+le texte pour les zones de saisie.</LI>
+<LI><B>setAutoRepeat :</B> si activé, le signal clicked() est émis à des intervalles
+réguliers lorsque le bouton est enfoncé. Aucun effet sur les boutons à bascule
+(NdT : toggle buttons).</LI>
+<LI><B>setAutoResize :</B> active l'auto-redimensionnement si true. Quand
+l'auto-redimensionnement est actif, le bouton se redimensionne lui-même lorsque
+son contenu a changé.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QCheckBox"></A> Propriétés de QCheckBox</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QButton">QButton</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>isChecked : (setChecked)</B> définit si la case à cocher est cochée lors de sa construction</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QPushButton"></A> Propriétés de QPushButton</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QButton">QButton</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>isAutoDefault : (setAutoDefault)</B> le bouton automatiquement par défaut
+(NdT : auto-default button) devient le bouton par défaut s'il reçoit le focus du clavier.</LI>
+<LI><B>isDefault : (setDefault)</B> il ne peut y a voir qu'un seul bouton par défaut
+et il est seulement autorisé dans les boîtes de dialogue (voir <CODE>QDialog</CODE>). Le bouton
+par défaut émet <CODE>clicked()</CODE> si l'utilisateur a appuyé sur la touche "Entrée".</LI>
+<LI><B>isMenuButton : (setIsMenuButton)</B> indique au bouton de dessiner un triangle
+d'indication de menu s'il est activé. Le menu doit être inséré séparément.</LI>
+<LI><B>isToggleButton : (setToggleButton)</B> fait d'un bouton un bouton à bascule,
+si bien que le bouton se comporte comme une case à cocher.</LI>
+<LI><B>isToggledOn : (setOn)</B> (public slot) bascule un bouton dans l'état "on".</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QRadioButton"></A> Propriétés de QRadioButton</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QButton">QButton</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>isChecked : (setChecked)</B> définit si le bouton radio est coché lors de la construction</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QComboBox"></A> Propriétés de QComboBox</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A><P>(aucune propriété supplémentaire)
+<P>
+<P>
+<P>
+<H4><A NAME="QFrame"></A> Widgets qui héritent de QFrame</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A><P>Pour l'instant, seulement utilisée comme une classe abstraite.
+<P>
+<UL>
+<LI><B>Apparence :</B>
+<UL>
+<LI><B>Margin (setMargin) :</B> définit la marge, qui est la distance entre le pixel le
+plus à l'intérieur du cadre et celui qui est le plus à l'extérieur du contenu.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QGroupBox"></A> Propriétés de QGroupBox</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>Title : (setTitle)</B> définit le titre du groupe d'éléments qui est affiché dans le cadre.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QLCDNumber"></A> Propriétés de QLCDNumber</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>NumDigits : (setNumDigits)</B> définit le nombre de chiffres affichés dans QLCDNumber</LI>
+<LI><B>Value : (display)</B> (public slot) définit la valeur initiale de QLCDNumber</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<P>
+<H4><A NAME="QLabel"></A> Propriétés de QLabel</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>Apparence :</B>
+<UL>
+<LI><B>Margin (setMargin) :</B> définit la marge qui est, pour QLabel, la distance
+du cadre à la première lettre du texte de l'étiquette, suivant l'alignement de l'étiquette.</LI>
+</UL>
+</LI>
+<LI><B>Code C++ : </B>
+<UL>
+<LI><B>Buddy : (setBuddy)</B> définit le widget compagnon de l'étiquette.</LI>
+</UL>
+</LI>
+<LI><B>Général :</B>
+<UL>
+<LI><B>Text : (setText)</B> définit le texte de l'étiquette.</LI>
+<LI><B>isAutoResize : (setAutoResize)</B> si true, l'étiquette se redimensionnera
+elle-même si son contenu a changé. Le coin en haut à gauche n'est pas déplacé.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<P>
+<H4><A NAME="QProgressBar"></A> Propriétés de QProgressBar</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>TotalSteps : (setTotalSteps)</B> (public slot) définit le nombre total
+d'étapes de la barre de progression. Durant l'itération de l'action dont vous
+voulez afficher la progression, vous devez appeler  setProgress(int) pour faire
+avancer l'étape de progression affichée à (int).</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QScrollView"></A> QScrollView </H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QFrame">QFrame</A><P>Hérité par 
+<A HREF="#QListBox">QListBox</A>
+(abstrait pour l'instant)
+<P>Fournit un widget que l'on peut faire défiler et qui gère l'affichage d'un widget
+fils avec des barres de défilement verticale et horizontale.
+<P>
+<H4><A NAME="QListView"></A> QListView</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QFrame">QFrame</A> et
+<A HREF="#QListView">QListView</A><P>Fournit une liste pour afficher hiérarchiquement des données, soit dans une table soit
+dans un arbre. Gère elle-même les barres de défilement à travers 
+<A HREF="#QScrollView">QScrollView</A>.
+<P>
+<UL>
+<LI><B>Apparence :</B>
+<UL>
+<LI><B>ListViewFont :</B> (setFont()) définit la police des éléments de la ListView</LI>
+<LI><B>ListViewPalette :</B> (setPalette()) définit la palette des éléments de la ListView</LI>
+<LI><B>TreeStepSize :</B> (setTreeStepSize(int)) décalage en pixels entre un
+élément fils et son élément père</LI>
+<LI><B>hScrollBarMode :</B> mode de barre de défilement fourni par 
+<A HREF="#QScrollView">QScrollView</A> pour la barre de défilement horizontale</LI>
+<LI><B>isAllColumnsShowFocus :</B> (setAllColumnsShowFocus(bool)) affiche le focus sur
+toutes les colonnes d'un élément</LI>
+<LI><B>isMultiSelection :</B> active les multi-sélections des éléments de la liste</LI>
+<LI><B>isRootDecorated :</B> active les symboles + et - pour ouvrir et fermer les arbres</LI>
+<LI><B>vScrollBarMode :</B> mode de barre de défilement fourni par 
+<A HREF="#QScrollView">QScrollView</A> pour la barre de défilement verticale</LI>
+</UL>
+</LI>
+<LI><B>Général :</B>
+<UL>
+<LI><B>Entries :</B> vous permet d'insérer une liste d'entrées qui sont pré-définies
+comme QListViewItems.</LI>
+<LI><B>isAutoUpdate :</B></LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4><A NAME="QSpinBox"></A> Propriétés de QSpinBox</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>MaxValue :</B>  définit la valeur maximale que l'utilisateur peut choisir</LI>
+<LI><B>MinValue :</B>  définit la valeur minimale que l'utilisateur peut choisir</LI>
+<LI><B>Prefix :</B></LI>
+<LI><B>Suffix :</B></LI>
+<LI><B>Value :</B>     valeur pré-définie quand le widget est affiché</LI>
+<LI><B>isWrapping :</B></LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QTableView"></A> Widgets qui héritent de QTableView</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QFrame">QFrame</A> et
+<A HREF="#QTableView">QTableView</A><P>Hérité par 
+<A HREF="#QListBox">QListBox</A> et 
+<A HREF="#QMultiLineEdit">QMultiLineEdit</A><P>
+<P>
+<H4><A NAME="QListBox"></A> Propriétés de QListBox</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QFrame">QFrame</A> et
+<A HREF="#QTableView">QTableView</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>isAutoBottomScrollBar: (setAutoBottomScrollBar)</B></LI>
+<LI><B>isAutoScroll : (setAutoScroll)</B></LI>
+<LI><B>isAutoScrollBar : (setAutoScrollBar)</B></LI>
+<LI><B>isAutoUpdate : (setAutoUpdate)</B></LI>
+<LI><B>isBottomScrollBar : (setBottomScrollBar)</B></LI>
+<LI><B>isDragSelect : (setDragSelect)</B></LI>
+<LI><B>isSmoothScrolling : (setSmoothScrolling)</B></LI>
+</UL>
+</LI>
+<LI><B>Géométrie :</B>
+<UL>
+<LI><B>setFixedVisibleLines :</B> définit une hauteur fixe pour le widget de façon
+à ce que le nombre de lignes de texte donné soit affiché en utilisant la police courante.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QMultiLineEdit"></A> Propriétés de QMultiLineEdit</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QFrame">QFrame</A>
+et 
+<A HREF="#QTableView">QTableView</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>Text : (setText) </B> (public slot) définit le texte du widget</LI>
+<LI><B>isAutoUpdate : (setAutoUpdate)</B> utilisé pour éviter le scintillement
+pendant de grandes modifications ; la vue n'est pas rafraîchie si désactivé.</LI>
+<LI><B>isOverWriteMode : (setOverwriteMode) </B>(public slot) définit si le mode
+écrasement est activé ou non.</LI>
+<LI><B>isReadOnly : (setReadOnly)</B> (public slot) rend le texte du widget en
+lecture seule ; désactive les entrées de texte.</LI>
+<LI><B>isTextSelected : (selectAll)</B>(public slot) marque tout le texte comme sélectionné</LI>
+</UL>
+</LI>
+<LI><B>Géométrie :</B>
+<UL>
+<LI><B>setFixedVisibleLines:</B> définit une hauteur fixe pour le widget de façon à
+ce que le nombre de lignes de texte donné soient affichées en utilisant la police courante.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<P>
+<H4><A NAME="QLineEdit"></A> Propriétés de QLineEdit</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>CursorPosition : (setCursorPosition)</B> définit la position du curseur par défaut</LI>
+<LI><B>MaxLength : (setMaxLength) </B> définit la longueur maximale de la chaîne de caractères</LI>
+<LI><B>Text : (setText) </B> (public slot) définit le contenu affiché lors de la construction</LI>
+<LI><B>hasFrame : (setFrame) </B> dessine la zone de saisie dans un cadre de deux pixels, si activé</LI>
+<LI><B>isTextSelected : (selectAll) </B> (public slot) définit le texte à sélectionner.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QScrollBar"></A> Propriétés de QScrollBar</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et <CODE>QRangeControl</CODE>.
+<P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>MaxValue :</B> définit la valeur maximale de la barre de défilement ; utilisé 
+dans le constructeur (optionnel)</LI>
+<LI><B>MinValue :</B> définit la valeur minimale de la barre de défilement ; utilisé 
+dans le constructeur (optionnel)</LI>
+<LI><B>Orientation : (setOrientation)</B> définit l'orientation de la barre de 
+défilement à horizontale ou verticale</LI>
+<LI><B>Value : </B> définit la valeur initiale de la barre de défilement ; utilisé 
+dans le constructeur (optionnel)</LI>
+<LI><B>isTracking : (setTracking)</B> si activé, la barre de défilement émet le 
+signal <CODE>valueChanged()</CODE> lorsque la barre est déplacée ; sinon, seulement lorsque 
+le bouton de la souris est relâché.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QSlider"></A> Propriétés de QSlider</H4>
+
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A> et <CODE>QRangeControl</CODE>.
+<P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>MaxValue :</B> définit la valeur maximale de la glissière ; utilisé dans le
+constructeur (optionnel)</LI>
+<LI><B>MinValue :</B> définit la valeur minimale de la glissière ; utilisé dans le
+constructeur (optionnel)</LI>
+<LI><B>Orientation : (setOrientation)</B> définit l'orientation de la glissière à
+horizontale ou verticale</LI>
+<LI><B>Value : (setValue)</B> (public slot) utilise <CODE>QRangeControl::setValue()</CODE>
+pour définir la valeur</LI>
+<LI><B>isTracking :(setTracking)</B> si activé, la glissière émet le signal
+<CODE>valueChanged()</CODE> lorsque la barre est déplacée ; sinon, seulement lorsque le bouton
+de la souris est relâché.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H3><A NAME="ss6.4">6.4 Propriétés des Widgets KDE supportés</A>
+</H3>
+
+<P>
+<P>
+<UL>
+<LI>
+<A HREF="#QWidget">QWidget</A>
+<UL>
+<LI>
+<A HREF="#QButton">QButton</A> (abstrait)
+<UL>
+<LI>
+<A HREF="#QPushButton">QPushButton</A>
+<UL>
+<LI>
+<A HREF="#KColorButton">KColorButton</A></LI>
+<LI>
+<A HREF="#KKeyButton">KKeyButton</A></LI>
+</UL>
+      </LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QComboBox">QComboBox</A>
+<UL>
+<LI>
+<A HREF="#KCombo">KCombo</A></LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QFrame">QFrame</A> (abstrait actuellement)
+<UL>
+<LI>
+<A HREF="#KDatePicker">KDatePicker</A></LI>
+<LI>
+<A HREF="#KLedLamp">KLedLamp</A></LI>
+<LI>
+<A HREF="#KProgress">KProgress</A></LI>
+<LI>
+<A HREF="#KSeparator">KSeparator</A></LI>
+<LI>
+<A HREF="#QTableView">QTableView</A> (abstrait)
+<UL>
+<LI>
+<A HREF="#KDateTable">KDateTable</A></LI>
+<LI>
+<A HREF="#KTreeList">KTreeList</A></LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QLineEdit">QLineEdit</A>
+<UL>
+<LI>
+<A HREF="#KRestrictedLine">KRestrictedLine</A></LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#KLed">KLed</A></LI>
+</UL>
+<P>
+<H4><A NAME="KColorButton"></A> KColorButton</H4>
+
+<P>
+<P>Hérite de 
+<A HREF="#QPushButton">QPushButton</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>DisplayedColor (setColor())</B> : la couleur affichée sur le bouton</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4><A NAME="KKeyButton"></A> KKeyButton</H4>
+
+<P>
+<P>
+<H4><A NAME="KCombo"></A> KCombo</H4>
+
+<P>
+<P>Hérite de 
+<A HREF="#QComboBox">QComboBox</A><P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>Entries</B> : liste des chaînes de caractères qui sont les entrées affichées dans la liste déroulante</LI>
+<LI><B>Text</B> : le texte affiché actuellement dans la liste déroulante</LI>
+<LI><B>isAutoResize</B> : redimensionne la liste déroulante à l'élément courant</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4><A NAME="KDatePicker"></A> KDatePicker</H4>
+
+<P>
+<P>
+<UL>
+<LI><B>Apparence :</B>
+<UL>
+<LI><B>FontSize</B> : la taille de la police pour le sélecteur de date</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4><A NAME="KLedLamp"></A> KLedLamp</H4>
+
+<P>
+<P>
+<H4><A NAME="KProgress"></A> KProgress</H4>
+
+<P>
+<P>
+<H4><A NAME="KSeparator"></A> KSeparator</H4>
+
+<P>
+<P>
+<UL>
+<LI><B>Général :</B>
+<UL>
+<LI><B>Orientation</B> : définit l'orientation du séparateur à horizontale ou verticale ; par défaut, horizontale.</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4><A NAME="KDateTable"></A> KDateTable</H4>
+
+<P>
+<P>
+<H4><A NAME="KTreeList"></A> KTreeList</H4>
+
+<P>
+<P>
+<UL>
+<LI><B>Apparence :</B>
+<UL>
+<LI><B>TreeListBgColor</B></LI>
+<LI><B>TreeListPalette</B></LI>
+<LI><B>isBottomScrollbar</B></LI>
+<LI><B>isScrollBar</B></LI>
+<LI><B>isShowItemText</B></LI>
+<LI><B>isSmoothScrolling</B></LI>
+<LI><B>isTreeDrawing</B></LI>
+</UL>
+</LI>
+<LI><B>Général :</B>
+<UL>
+<LI><B>Entries</B></LI>
+<LI><B>isAutoUpdate</B></LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<P>
+<H4><A NAME="KRestrictedLine"></A> KRestrictedLine</H4>
+
+<P>
+<P>
+<H4><A NAME="KLed"></A> KLed</H4>
+
+<P>
+<P>Hérite de 
+<A HREF="#QWidget">QWidget</A><P>
+<UL>
+<LI><B>Apparence :</B>
+<UL>
+<LI><B>LedColor : (setColor())</B> définit la couleur de la LED affichée</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H3><A NAME="ss6.5">6.5 Construire une nouvelle boîte de dialogue</A>
+</H3>
+
+<P>Élaborer une nouvelle boîte de dialogue est très facile si vous
+êtes déjà familier avec les applications de construction graphique.
+KDevelop permet de créer visuellement un widget et d'afficher
+son apparence telle qu'elle se présentera à l'utilisateur. En plus,
+vous pouvez avoir une prévisualisation de votre widget
+en sélectionnant "Aperçu" dans le menu "Affichage".
+<P>Pour commencer la construction d'une boîte de dialogue ou de n'importe
+quel widget, passez dans l'Éditeur de boîtes de dialogue et sélectionnez
+"Nouveau" dans le menu "Fichier". Sélectionnez "Boîte de dialogue Qt/KDE (*.kdevdlg)"
+dans la boîte de dialogue "Nouveau fichier" et saisissez le nom de fichier
+de la boîte de dialogue. Construisez votre boîte de dialogue et quand vous
+avez terminé, sélectionnez "Générer les fichiers sources complets" dans
+le menu "Construire".
+<P>Saisissez ensuite toutes les informations
+nécessaires dans la boîte de dialogue "Nouvelle boîte de dialogue". Ce sont :
+<P>
+<OL>
+<LI>l'héritage de la boîte de dialogue. Ceci est nécessaire parce que
+tout widget dérive au moins de <CODE>QWidget</CODE>. Au-delà des types de widgets
+fournis par Qt, vous pouvez hériter, par exemple, d'une classe abstraite que
+vous avez développée vous-même au sein de votre projet. Dans ce cas, sélectionnez
+"Personnalisé" et saisissez le chemin menant au fichier d'en-tête dans la zone
+de saisie en-dessous&nbsp;;</LI>
+<LI>le nom de la boîte de dialogue. Ceci définit le nom de la classe pour
+la boîte de dialogue générée. Sélectionnez un nom de classe décrivant explicitement
+ce que fait la boîte de dialogue ; au cas où vous héritez de <CODE>QDialog</CODE>, vous
+pourriez saisir un nom qui se termine par <CODE>Dlg</CODE> afin de vous aider à
+vous souvenir que c'est une boîte de dialogue. Les conventions de nommage devraient
+néanmoins correspondre à celles de KDE et Qt : utilisez des lettres majuscules
+pour votre nom de classe. Pour, par exemple, une boîte de sélection de taille de
+quadrillage (NdT : grid-size selection dialog), vous pourriez saisir <CODE>GridSizeDlg</CODE>.</LI>
+<LI>les noms des fichiers générés. Ceux-ci sont pré-définis lorsque vous donnez le
+nom de la boîte de dialogue mais peuvent être modifiés utlérieurement. Si vous voulez
+utiliser d'autres noms de fichiers, la convention de nommage devrait respecter celle
+de KDE et Qt : les noms des fichiers sont écrits en minuscules et contiennent
+le nom de la classe afin de se rappeler rapidement quelle classe est à l'intérieur. Les
+fichiers de données qui doivent être définis contiendront ensuite le code généré
+qui construira votre boîte de dialogue. Après, vous ne devrez pas éditer ce
+fichier manuellement ; utilisez le fichier d'implantation pour les ajouts au
+code de construction de la boîte de dialogue et à l'implantation des méthodes.</LI>
+</OL>
+<P>La boîte de dialogue s'affiche ensuite sous la forme d'un widget avec un quadrillage.
+Comme l'éditeur de boîte de dialogue utilise cette grille pour positionner les widgets
+fils, vous pouvez modifier la taille du quadrillage avec l'entrée "Taille de la grille"
+dans le menu "Affichage", si la valeur prédéfinie ne vous convient pas.
+<P>Sélectionnez ensuite l'onglet "Widgets" dans la partie gauche et cliquez sur
+le bouton du widget que vous voulez ajouter à votre widget principal. Il apparaît
+immédiatement dans le coin en haut à gauche du widget principal et il est sélectionné
+dans un cadre redimensionnable. Ensuite, déplacez ou redimensionnez le widget
+avec la souris. Le curseur changera pour indiquer quelle action peut être effectuée
+à sa position courante.
+<P>Après avoir terminé la construction, sélectionnez "Générer les fichiers" dans le menu
+"Construire" ou cliquez sur le bouton correspondant de la barre d'outils. Les
+fichiers seront ensuite générés à l'endroit prédéfini et inclus dans vos
+fichiers sources. Une reconstruction ou un "make" compilera tous les fichiers
+générés dans votre projet et vous pourrez ajouter un appel au constructeur idoine
+pour créer une instance de la boîte de dialogue ou du widget. Pour les projets KDE,
+toutes les propriétés du widget qui seront visibles, par exemple le texte d'une
+étiquette, sont définies avec la macro <CODE>i18n()</CODE> de <CODE>kapp.h</CODE> pour
+permettre l'internationalisation. C'est pourquoi, vous devriez faire un
+"Exécuter make messages et fusionner" lorsque vous avez terminé la construction
+et l'implantation.
+<P>Pendant la création d'une boîte de dialogue ou d'un widget, vous devriez
+respecter les règles suivantes :
+<P>
+<UL>
+<LI>Essayez de rester homogène ! C'est probablement la règle la plus importante
+dans la constructions d'éléments graphiques. Souvenez-vous qu'un utilisateur n'acceptera
+une application que si elle est simple à comprendre, quelle que soit la complexité des
+services qu'elle rend&nbsp;;</LI>
+<LI>Ajoutez de l'aide partout où c'est possible avec des bulles d'aide, de l'aide
+"Qu'est-ce que c'est...?" ou de l'Aide rapide. Cela permet d'obtenir directement des
+informations sur l'utilité des composants graphiques&nbsp;;</LI>
+<LI>Surveillez le <B>focus du clavier</B> ! Le générateur ne gère pas cela -
+cela doit être pris en considération lors de la construction d'un widget : sinon
+vous devrez réordonner manuellement votre code d'initialisation ce qui
+n'est pas une tâche très amusante. Le <B>focus du clavier</B> sur n'importe
+quel widget signifie l'ordre dans lequel les éléments obtiennent
+le focus d'entrée du clavier lorsque l'utilisateur appuie sue les touches
+"tab" ou "shift+tab". Ce serait très désagréable si le focus sautait d'un widget
+à un autre au lieu de passer au widget visible suivant, au-dessous ou à
+droite du widget courant. C'est pourquoi, vous devriez construire vos widgets
+de haut en bas et de gauche à droite afin de préserver une certaine homogénéité
+du focus.</LI>
+</UL>
+<P>
+<H3><A NAME="ss6.6">6.6 Définir les Propriétés des Widgets</A>
+</H3>
+
+<P>
+<!--
+propriététs de widget
+-->
+<!--
+éditeur de boîtes de dialogue
+-->
+<!--
+fenêtre de propriétés
+-->
+
+Les propriétés d'un widget peuvent facilement être définies avec les entrées de
+la fenêtre des propriétés. Quand un widget devient sélectionné, la fenêtre des propriétés
+est automatiquement mise à jour avec les propriétés du widget courant. Comme
+tous les widgets dérivent de <CODE>QWidget</CODE>, vous pouvez définir les
+propriétés <CODE>QWidget</CODE> ainsi que les propriétés qui sont spécifiques
+au widget sélectionné.
+<P>Les propriétés peuvent être des :
+<P>
+<UL>
+<LI>valeurs entières, comme la géométrie du widget ou la taille de la police</LI>
+<LI>valeurs booléennes pour activer/désactiver certains paramètres du widget.
+Définies avec des listes déroulantes contenant true et false&nbsp;;</LI>
+<LI>valeurs énumérées d'un widget, par exemple la palette. Définies avec
+des listes déroulantes contenant la liste des valeurs possibles&nbsp;;</LI>
+<LI>valeurs de couleur pour, par exemple, la couleur d'affichage. Définies
+avec la boîte de dialogue de sélection de couleur de KDE&nbsp;;</LI>
+<LI>valeurs de police pour, par exemple, des étiquettes. Veillez à utiliser
+des valeurs qui ne sont pas des valeurs par défaut si vous ne voulez pas que
+KDE rafraîchisse la police. Définies avec la boîte de dialogue de sélection
+de police de KDE&nbsp;;</LI>
+<LI>noms de fichiers pour, par exemple, des images de fond. N'utilisez pas des
+images au format gif ici car elles pourraient ne plus être supportées dans
+des versions de Qt supérieures à 1.42.</LI>
+</UL>
+<P>
+<H3><A NAME="ss6.7">6.7 Intégrer la Boîte de Dialogue</A>
+</H3>
+
+<P>Lorsque votre widget est créé, vous voulez probablement l'ajouter au
+projet afin d'exécuter l'action pour laquelle il a été conçu. Comme
+un widget peut avoir plusieurs finalités, nous allons considérer les
+deux cas : un widget héritant de <CODE>QWidget</CODE> et un autre
+de <CODE>QDialog</CODE>.
+<P>
+<H4>Héritage de <CODE>QWidget</CODE></H4>
+
+<P>Supposons que vous avez créé un widget qui est un morceau de votre vue principale.
+S'il remplit toute la zone de vue, vous devez ajouter un pointeur d'instance à
+la déclaration d'en-tête de votre instance de <CODE>KTMainWindow</CODE> qui
+remplace le widget de vue actuellement défini. Modifiez ensuite le code dans
+la méthode <CODE>initView</CODE> pour définir ce widget comme la vue principale. En plus,
+vous pouvez supprimer la classe de vue (NdT : View class) du projet généré mais
+souvenez-vous que l'instance de document et l'instance de App dépendent de
+la classe de vue. Dans ce cas, d'un point de vue technique, il est mieux de
+créer une mini application KDE et de construire votre instance de <CODE>KTMainWindow</CODE>
+vous-même.
+<P>Plus souvent, le widget est juste une partie de la zone de vue, ce qui signifie
+qu'il est combiné avec d'autres widgets. Ceci peut être réalisé en utilisant une
+des classes suivantes qui fournit une division pour séparer deux widgets.
+<P>
+<OL>
+<LI><CODE>QSplitter</CODE></LI>
+<LI><CODE>KPanner</CODE></LI>
+<LI><CODE>KNewPanner</CODE></LI>
+</OL>
+<P>Si la vue principale doit contenir plus de deux widgets, vous devez utilisez une autre
+instance du séparateur qui sera l'un des deux widgets gérés par le premier. Ajoutez
+ensuite les widgets correspondants de chaque côté et définissez le premier séparateur
+comme la zone de vue.
+<P>
+<P>
+<H4>Héritage de <CODE>QDialog</CODE></H4>
+
+<P>Si votre widget hérite de <CODE>QDialog</CODE>, il est probablement sensé
+changer une ou plusieurs valeurs ; ceci est souvent utilisé pour
+définir les préférences d'une application. Pour appeler la boîte
+de dialogue, vous devez ajouter un slot dans la classe <CODE>App</CODE>
+en ajoutant la déclaration de la méthode et le corps de son
+implantation. Ajoutez ensuite l'appel au constructeur ainsi que
+les appels à <CODE>show()</CODE> ou <CODE>exec()</CODE> de la boîte de dialogue.
+Enfin, vous devez veiller à traiter les résultats de la boîte
+de dialogue ; soit la boîte de dialogue modifie elle-même directement les
+valeurs du widget parent, soit elle retrouve les valeurs de la boîte
+de dialogue (ce qui devrait rendre votre boîte de dialogue beaucoup
+plus réutilisable dans d'autres projets). Pensez à appeler <CODE>delete</CODE>
+si vous aviez créé l'instance de la boîte de dialogue avec <CODE>new</CODE>
+pour éviter les fuites de mémoire.
+<P>Enfin, vous devez connecter une entrée de menu (avec l'aide correspondante
+dans la barre d'état) au nouveau slot qui appelle la boîte de dialogue ;
+facultativement, un raccourci clavier
+<!--
+accelerator
+-->
+ et une icône
+de barre d'outils. Pour cela, ajoutez un identificateur de ressource
+au fichier <CODE>resource.h</CODE> avec un define. Ajoutez ensuite une entrée
+de menu correspondante à l'un des menus popups déjà présents dans
+la barre de menus ou créez un nouveau popup pour ajouter l'entrée
+de menu. Une entrée de menu est constituée de :
+<P>
+<UL>
+<LI>un pixmap d'icône optionnel. Utilisez la macro <CODE>Icon("iconname.xpm")</CODE>
+de <CODE>KApplication</CODE> pour obtenir une instance de l'icône fournie par
+<CODE>KIconLoader</CODE>&nbsp;;</LI>
+<LI>le nom de l'entrée de menu. Ajoutez la avec la macro <CODE>i18n("&amp;entryname")</CODE>
+de <CODE>KApplication</CODE> pour permettre l'internationalisation. Le symbole "&amp;"
+doit être devant la lettre qui apparaîtra soulignée pour y accéder directement
+avec le clavier&nbsp;;</LI>
+<LI>l'instance du membre à appeler. Normalement, ce devrait être le pointeur <CODE>this</CODE>.</LI>
+<LI>le slot du membre à appeler. Utilisez <CODE>SLOT(yourmethod()</CODE> pour appeler le slot
+lors de l'émission du signal <CODE>activated()</CODE>.</LI>
+<LI>la touche de raccourci clavier
+<!--
+accelerator
+-->
+. Elle devrait être définie à zéro
+car ceci est fait avec une entrée dans <CODE>initKeyAccel()</CODE> où vous devez introduire une
+touche de raccourci clavier
+<!--
+accelerator
+-->
+ en même temps que le slot à appeler. Appelez
+ensuite <CODE>changeMenuAccel()</CODE> pour changer le raccourci clavier
+<!--
+accelerator
+-->
+
+de l'élément de menu. Cela sera alors configurable via la boîte de dialogue de
+configuration des raccourcis clavier. Pour des actions standards, utilisez
+les valeurs énumérées données par <CODE>KAccel</CODE>.</LI>
+<LI>l'identificateur de menu défini dans <CODE>resource.h</CODE></LI>
+</UL>
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-7.html">Page suivante</A>
+ <A HREF="index-5.html">Page précédente</A>
+ <A HREF="index.html#toc6">Table des matières</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

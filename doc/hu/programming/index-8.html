@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>A KDevelop Programozói Kézikönyv: Segítség-Súgó funkciók</TITLE>
+ <LINK HREF="index-9.html" REL=next>
+ <LINK HREF="index-7.html" REL=previous>
+ <LINK HREF="index.html#toc8" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="index-9.html">Következõ</A>
+<A HREF="index-7.html">Elõzõ</A>
+<A HREF="index.html#toc8">Tartalom</A>
+<HR>
+<H2><A NAME="s8">8. Segítség-Súgó funkciók</A></H2>
+
+<P>Az fejlesztési folyamat  fontos része, hogy a felhasználónak minden olyan segítséget biztosítsunk, ami csak lehetséges. A legtöbb fejlesztõ
+késlekedik ezzel, de jusson eszébe, hogy nem feltétlenül Unix szakemberek a felhasználók. Lehet, hogy a szoftverhasználat sötét
+oldalát ismerik csak, amelyik azzal kecsegtet, hogy a felhasználónak semmiféle segédeszközre nicsen szüksége az alkalmazás megismeréséhez.
+Ezért a KDE és a Qt minden olyan eszközt biztosít, amely egy alkalmazást tökéletessé tesz a felhasználók szemében azzal, hogy
+használható segítséget nyújt. Ezek a funkciók a következõk lehetnek egy alkalmazáson belül:
+<P>
+<UL>
+<LI>Eszköztippek</LI>
+<LI>Gyorssegély</LI>
+<LI>Állapotsor súgó</LI>
+<LI>"Mi ez...?" gombok</LI>
+</UL>
+<P>Mindemellet, az alkalmazásnak a szokásos F1 gomb lenyomására is biztosítania kell egy HTML alapú kézikönyvet.  
+<P>A KDevelop úgy biztosít minden fajta segítséget, ahogyan azt egy, az alkalmazásvarázslóval készített KDE keretalkalmazás is támogatja.
+Ez a fejezet abban fog önnek segíteni, hogy hogyan kell ezeket súgófunkciókat beépíteni a készülõ alkalmazásba.
+<P>Alkalmazásának fejlesztése közben próbáljon meg következetes lenni abban, amit csinál; tehát tegye meg a szükséges lépéseket
+már a kód írása közben. Ezzel megelõzheti azt, hogy késõbb kelljen keresgélnie és kitalálnia, hogy mit is csinál az
+alkalmazás, vagy hogy az adott kódrész mire is való pontosan.
+<P>
+<H2><A NAME="ss8.1">8.1 Eszköztippek</A>
+</H2>
+
+<P>A segítségnyújtás igen egyszerû módja az eszköztippek alkalmazása. Ezek azok a kis segédüzenetek, amelyek akkor bukkannak elõ,
+amikor az egérmutató elhalad egy olyan elem felett, amelyik támogatja ezt a funkciót, és eltûnnek akkor, amikor az egérmutató elhagyja azokat.Az eszköztipp legelterjedtebb alkalmazási módja az, amikor az eszköztárs
+-nál alkalmazzák õket õket, ahol a lehetõ legkisebb helyet szabad csak foglalniuk, hiszen az eszköztárak, tartalmának megjelenítésének szempontjából
+többféleképpen is beállítható: a szöveg a gombon, a gomb jobb oldalán, a gomb alatt van, vagy csak szöveg található. Ennek
+beállítására lehetõséget lehet adni a felhasználónak, de ez persze nem kötelezõ. A szöveg mindenféleképpen eszköztippként jelenik meg és az eszköztár
+általában gombokból, vagy más elemekbõl áll, mint pl. sorszerkesztõk és (!!!combo boxes!!!) Részletes útmutatásért nézze meg a <CODE>KToolBar</CODE> osztály útmutatóját, amely a KDE-UI könyvtárban található.
+<P>Példaként lássuk az "Új állomány" gombot egy hétköznapi alkalmazásban:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+toolBar()->insertButton(Icon("filenew.xpm"), ID_FILE_NEW, true, i18n("New File") );
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<!--
+toolBar()
+-->
+<!--
+KToolBar
+-->
+
+Itt a <CODE>i18n("New File")</CODE> rész tartalmazza az elemtipp üzenetet. Ezt az <CODE>kapp.h</CODE> biztosította i18n() makróval csatoltuk,
+hogy az elemtipp további nyelvekre is lefordítható legyen.
+<P>A Qt által biztosított <CODE>QToolTip</CODE> és <CODE>QToolTipGroup</CODE> osztályok segítségével bármely elemhez kapcsolhatunk elemtippet.
+<P>Egy példa erre:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+QToolTip::add( yourwidget, i18n("your Tip") );
+</PRE>
+</CODE></BLOCKQUOTE>
+
+További információért nézze meg a Qt-online súgóját, a <CODE>QToolTip</CODE> osztályt.
+<P>
+<P>
+<H2><A NAME="ss8.2">8.2 Gyorssegély hozzáadása</A>
+</H2>
+
+<P>A gyorssegély ablakok szintén jó példái a segítségnyújtásnak. A felhasználó úgy juthat segítséghez, hogy a
+jobb egérgombbal rákattint az elemre, és az elõreugró menübõl kiválasztja a Gyorssegélyt. Tehát a gyorssegély valahol a
+részletes kézikönyv és az eszköztipp fogalma között helyezkedik el - a dokumentáció túl részletezõ, az eszköztipp pedig
+túlságosan szûkszavú lenne. Hogy lássa hogyan mûködik a gyorssegély, nyisson meg egy dialógust a KDevelopban, és kattintson a jobb egérgombbal valamelyik párbeszédelemen.
+Ezután válassza a Gyorssegély menüpontot és máris megjelenik a segítség egy szöveges üzenet formájában. Emellett az üzenetek tartalmazhatnak URL hivatkozásokat valamely weblapra (természetesen a kézikönyvre is),
+valamint formázhatóak színekkel és különbözõ betûtípusokkal.
+<P>Hogy használható legyen a gyorssegély, a forrásállományhoz adja hozzá a segítséget tartalmazó <CODE>kquickhelp.h</CODE> állományt. Mivel
+a <CODE>KQuickHelp</CODE> osztály a KDE-UI könyvtár része, ezért valószínüleg az ön alkalmazása is használja azt; ha mégsem, akkor projektjének
+linker flagjeit állítsa be a kdeui használatára.
+<P>Egy példa:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+KQuickHelp::add( yourwidget, i18n("your Tip") );
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>amely majdnem ugyanaz, mint QToolTip-nél. Mikor a KDevelop dialógusszerkesztõjével készít dialógust, akkor a Gyorssegélyt és az Eszköztippeket az implementációs
+állományhoz adja hozzá, Ne pedig az adat-forrásállományhoz, hiszen a dialogusszerkesztõ ezt minden alkalommal frissíti, amikor ön az elemet szerkeszti.
+<P>A <CODE>KQuickHelp</CODE> osztály, tagek használatával biztosítja a szöveg formázását. Lehetõvé teszi hiperlinkek, internet protokolok,
+színek, betûtípusok és méretek használatát. További információért nézze meg a 
+<A HREF="../kde_libref/index.html">KDE Library Reference Guide</A> -ot és
+a <CODE>KQuickTip</CODE>-hez járó  osztály-dokumentációt -t.
+<P>
+<H2><A NAME="ss8.3">8.3 Az állapotsor súgó</A>
+</H2>
+
+<P>Mivel a KDeveloppal létrehozott keretalkalmazások tartalmaznak állapotsort, ezért általában használnak állapotsor üzeneteket is, szinte az
+összes menühöz és eszköztár elemhez. Az állapotsori súgóüzenet egy rövid üzenet, amely kicsit részletezi az elemtippet, vagy pedig
+helyettesíti azt a menüsor elemek fölött, és amelyik (mint ahogy a neve is utal rá) megjelenik az állapotsorban, ha a felhasználó belép egy menübe és
+kijelöl egy menüpontot; tehát minden menüpont kapcsolatban áll a jelével <CODE>highlighted(int)</CODE> (signal), ami a <CODE>statusCallback(int)</CODE> eljárás,
+amelyik kiválasztja a megfelelõ üzenetet egy döntéshelyzetben. Mikor menüpontot, vagy eszköztár elemet ad hozzá már létezõ menükhöz,
+az eljárásba vegye bele annak az eseménynek a leírását, amelyet a felhasználó elindithat a menüpont, vagy gomb megnyomásával.
+<P>Példa:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+    case ID_FILE_NEW:
+                slotStatusHelpMsg(i18n("Új dokumentum létrehozása"));
+                break;
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Ez megjeleníti az állapotsori üzenetet a <CODE>slotStatusHelpMsg()</CODE> eljárás meghívásával, a megfelelõ üzenetet kiíratva, amikor a felhasználó
+kiemel egy menüt, vagy egy eszköztár elemet az id ID_FILE_NEW-val, ami a <CODE>statusCallback()</CODE> eljáráshoz kapcsolódik.
+Az eszköztárak ehhez az eljáráshoz kapcsolódnak a <CODE>pressed(int)</CODE> jellel, ami megengedi a felhasználónak, hogy egy eszköztár
+gomb megnyomása után elmozdítsa az egeret, ha mégsem akarja végrehajtatni a parancsot. A <CODE>KToolBar</CODE> is biztosít egy <CODE>highlighted(int, bool)</CODE> jelet,
+ami az üzenet megjelenítésére használható a beállított jel helyett, ha a felhasználó  egy gombora állítja az egeret.
+<P>
+<P>
+<H2><A NAME="ss8.4">8.4 A "Mi ez...?" gomb</A>
+</H2>
+
+<P>A "mi ez...?" gomb hasonlóképpen nyújt segítséget, mint a Gyorssegély
+<!--
+KQuickHelp
+-->
+ , azonban a felhasználó a itt
+munkaterület egy adott elemérõl, vagy egy eszköztár elemrõl tudakozódhat. Ezt az eszköztár -ban helyezik el, és
+akkor aktiválódik, amikor a felhasználó rákattint. Ekkor a kurzor egy olyan kérdõjeles nyillá változik, amilyen maga a gomb is.
+A felhasználó rákattinthat bármelyik látható elemre és megjelenik egy súgó ablak. Gyakorlásképpen
+próbálja ezt ki a KDevelopban, hogy meglássa hogyan is viselkedik a "Mi ez...?" gomb.
+<P>A "Mi ez...?" gomb hozzáadásához tegye a következõket: 
+<P>
+<OL>
+<LI>a <CODE>qwhatsthis.h</CODE> -t "include"-olja bele a forráskódba</LI>
+<LI>adjon hozzá egy private elemet <CODE>QWhatsThis</CODE> whats_this, vagy más néven az Ön <CODE>KTMainWindow</CODE> leszármazott osztály
+deklarációjához</LI>
+<LI>adjon meg egy erõforrásazonosítót (resource id) a 'mi ez' nyomógomjához a <CODE>resource.h</CODE> fájlban, pl. <CODE>#define ID_HELP_WHATS_THIS
+10100</CODE></LI>
+<LI>az Ön eszköztárat létrehozó eljárásában (általában <CODE>initToolBar()</CODE> a neve) adja meg ott, ahol ki akarja rajzoltatni a gombot, a
+következõket:
+<BLOCKQUOTE><CODE>
+<PRE>
+  whats_this = new QWhatsThis;
+  QToolButton *btnwhat = whats_this->whatsThisButton(toolBar());
+  QToolTip::add(btnwhat, i18n("What's this...?"));
+  toolBar()->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
+  btnwhat->setFocusPolicy(QWidget::NoFocus);
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<!--
+setFocusPolicy()
+-->
+</LI>
+<LI>végül írja hozzá a kívánt üzeneteket a következõképpen:
+<BLOCKQUOTE><CODE>
+<PRE>
+whats_this->add(class_tree, i18n("Class Viewer\n\n"
+                        "Az osztályböngészõ megmutatja az aktuális projektállományok minden"
+                        "osztályát, eljárását és változóját, valamint átválthatunk vele a"
+                        "deklarációkra és implementációkra. A jobb egérgombbal elõreugró menü"
+                        "sokkal célirányosabb használatot tesz lehetõvé."));
+</PRE>
+</CODE></BLOCKQUOTE>
+</LI>
+</OL>
+<P>
+<P>
+<P>
+<HR>
+<A HREF="index-9.html">Következõ</A>
+<A HREF="index-7.html">Elõzõ</A>
+<A HREF="index.html#toc8">Tartalom</A>
+</BODY>
+</HTML>

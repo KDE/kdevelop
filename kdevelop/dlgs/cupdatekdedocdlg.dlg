@@ -1,0 +1,128 @@
+DlgEdit:v1.2:Dialog:
+Dialog {
+	ClassHeader {cupdatekdedocdlg.h}
+	ClassSource {cupdatekdedocdlg.cpp}
+	ClassName {cupdatekdedocdlg}
+	DataHeader {cupdatekdedocdlgData.h}
+	DataSource {cupdatekdedocdlgData.cpp}
+	DataName {cupdatekdedocdlgData}
+	WindowBaseClass {QDialog}
+	IsModal {TRUE}
+}
+WidgetLayout {
+		Rect {5 102 540 370}
+		Grid {10}
+
+ButtonGroup {
+		Title {Choose installation mode:}
+		Alignment {Left}
+		Style {49}
+		Rect {30 90 490 150}
+		Name {install_box}
+		Variable {install_box}
+}
+LineEdit {
+		Text {}
+		EchoMode {Normal}
+		MaxLength {32767}
+		FrameShown {TRUE}
+		Rect {240 30 230 30}
+		Name {source_edit}
+		Variable {source_edit}
+}
+Label {
+		Text {new KDE Libs sources path:}
+		AutoResize {FALSE}
+		Margin {-1}
+		Rect {30 30 170 30}
+		Name {source_label}
+		Variable {source_label}
+}
+LineEdit {
+		Text {}
+		EchoMode {Normal}
+		MaxLength {32767}
+		FrameShown {TRUE}
+		Rect {240 270 230 30}
+		Name {doc_edit}
+		Variable {doc_edit}
+}
+Label {
+		Text {new KDE Libs Documentation path:}
+		AutoResize {FALSE}
+		Margin {-1}
+		Rect {30 270 210 30}
+		Name {doc_label}
+		Variable {doc_label}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {FALSE}
+		Text {...}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {480 30 30 30}
+		Name {source_button}
+		Variable {source_button}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {FALSE}
+		Text {...}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {480 270 30 30}
+		Name {doc_button}
+		Variable {doc_button}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {FALSE}
+		Text {OK}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {140 320 100 30}
+		Name {ok_button}
+		Variable {ok_button}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {FALSE}
+		Text {Cancel}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {270 320 100 30}
+		Name {cancel_button}
+		Variable {cancel_button}
+}
+RadioButton {
+		Checked {TRUE}
+		Text {Delete old Documentation and install to recent Documentation path}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {40 110 430 30}
+		Name {del_recent_radio_button}
+		Variable {del_recent_radio_button}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {Delete old Documentation and install to new Documentation path}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {40 150 440 30}
+		Name {del_new_radio_button}
+		Variable {del_new_radio_button}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {Leave old Documention untouched and install to new Documention path}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {40 190 450 30}
+		Name {leave_new_radio_button}
+		Variable {leave_new_radio_button}
+}}

@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Das KDE Bibliotheks-Handbuch: KDE Applikationsklassen</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="kde bibliothek referenz klassen">
+<META NAME="description" CONTENT="KDE Bibliotheks-Referenz">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Weiter</A>
+ <A HREF="index-2.html">Zurück</A>
+ <A HREF="index.html#toc3">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="s3">3. KDE Applikationsklassen</A></H3>
+
+<P>Die KDE-Bibliotheken, in Verbindung mit der Qt-Bibliothek, bieten Entwicklern den kompletten Rahmen zur Anwendungsentwicklung. Da KDE
+auf Unix Betriebssysteme zugeschnitten ist, die das X11-System nuzen, könnte man denken, man müsse Unix und X11 beherrschen - da die
+Bibliotheken dieses komplexe Grafik-Subsystem kapseln, muß man in den meißten Klassen hierüber nichts wissen. Wenn man mit Qt bereits
+vertraut ist, wird KDE keine großen Unterschiede bezüglich Klassen und Widgets aufweisen.
+<P>Anfänger haben jedoch oft Probleme mit:
+<P>
+<UL>
+<LI>Anwendungsentwicklung mit GUI-Komponenten</LI>
+<LI>Aufteilung von Anwendungen</LI>
+<LI>Erstellung von Widgets</LI>
+<LI>Inter-widget Kommunikation (Signals und slots)</LI>
+</UL>
+<P>Das Folgende wird Ihnen helfen zu verstehen, wo Sie im Allgemeinen Klassen, wie sie in KDE-Anwendungen benutzt werden, finden können,
+einschließlich der entsprechenden Ersetzungen der Qt-Klassen, für diejenigen, die mit Qt vertraut sind und keinen Gebrauch von
+KDE-Bibliotheken gemacht haben. Da sind die Anwendungsobjekte, ihr Verhalten und ihre Erstellung. Sie werden etwas erfahren über:
+<P>
+<UL>
+<LI>die am häufigsten benötigen Objekte einer KDE-Anwendung</LI>
+<LI>den Unterschied zwischen Ihrem Code und der Rahmenanwendung</LI>
+<LI>KDE Anwendungsklassen, die die Window Manager-Kommunikation kapseln</LI>
+<LI>die Klasse <CODE>QWidget</CODE>, von denen alle GUI-Komponenten abgeleitet sind</LI>
+<LI>grafische Objekte</LI>
+<LI>die Zwischenablage</LI>
+</UL>
+<P>Mehr Informationen über KDE-Anwendungen können in den folgenden Sektionen nachgeschlagen werden:
+<P>
+<LI>
+<A HREF="../programming/index.html">The KDevelop Programming Handbook</A></LI>
+<LI>
+<A HREF="../tutorial/index.html">KDE Application Tutorials Handbook</A></LI>
+<P>Zu Informationen über Qt-Anwendungsdesign, schauen Sie bitte in die Qt-Onlinereferenz.
+<P>
+<P>
+<H3><A NAME="ss3.1">3.1 Die Anwendungs-Instanz</A>
+</H3>
+
+<P>
+<P>Im Allgemeinen wird eine KDE-Anwendung begonnen, indem man eine Instanz (und nur eine!) der Klasse <CODE>KApplication</CODE>, die von der
+<CODE>kdecore</CODE>-Bibliothek bereitgestellt wird, erstellt. Die Klasse <CODE>KApplication</CODE> ist abgeleitet von der entsprechenden Qt-Klasse
+<CODE>QApplication</CODE>.
+<P>Was genau passiert ist, das <CODE>QApplication</CODE> die Ereigniswarteschlange der Anwendung verwaltet, das bedeutet, sie wertet Ereignisse
+aus dem darunter liegenden Window-System  aus und sendet sie an ihre Kindprozesse, wie z.B. Maus-Bewegungen oder Tastaturereignisse.
+Dies ist auch der Grund, warum nur eine Instanz von <CODE>KApplication</CODE> verwendet werden darf und warum dies das Erste ist, was die
+<CODE>main()</CODE>-Funktion ausführt.
+<P>Die <CODE>KApplication</CODE>-Klasse erweitert die Qt-Klasse mit zusätzlichen Funktionen für eine Anwendung mit einem gleichartigem Aussehen,
+die sich in andere Desktop-Komponenten integriert und die daher in ihrem Verhalten von Steuerungsanwendungen (in KDE im Allgemeinen
+Bestandteil des KDE Kontrollzentrums) beeinflusst werden kann, wie z.B. Tastaturkürzelkonfiguration und GUI-Stil.
+<P>Wie in der Qt-Klasse, so bietet die <CODE>KApplication</CODE>-Klasse eine statische Funktion um auf das Anwendungsobjekt innerhalb
+der Anwendung zugreifen zu können, <CODE>KApplication::getKApplication()</CODE>. Diese Vorgehensweise löst das Problem, den Zeiger an das
+Anwendungsobject weitergeben zu müssen. Außerdem stellt die Include-Datei <CODE>kapp.h</CODE> ein Makro zur Verfügung, welches anstelle der
+statischen Funktion benutzt werden kann, <CODE>kapp</CODE>. Immer wenn Sie auf das Anwendungsobjekt zugreifen müssen, benutzen Sie bitte
+dieses Makro.
+<BLOCKQUOTE>In KDE2 kann man das Anwendungsobjekt mit mit <CODE>KApplication::kApplication()</CODE> erhalten.</BLOCKQUOTE>
+<P>Das <CODE>KApplication</CODE>-Object selbst bietet eine Anzahl von Instanzen, wie sie gewöhnlich in KDE-Anwendungen verwendet werden und
+bietet dem Programmierer hierauf Zugriff durch Funktionen. Sie werden intensiven Gebrauch hiervon machen, da hierdurch die Erstellung
+eigener Instanzen umgangen wird. Diese Objekte werden für folgende Zwecke verwendet:
+<P>
+<DL>
+<DT><B><B>KConfig</B></B><DD><P>, ein Konfigurations-Objekt, welches zum Lesen und Schreiben von Konfigurationsinformationen in einer
+Ressource-Datei verwendet wird. Benutzen Sie bitte die zugehörigen Methoden von <CODE>KConfigBase</CODE> um Werte zu lesen und zu schreiben.
+Das Konfigurationsobjekt erhalten Sie durch <CODE>kapp->getConfig()</CODE>
+<BLOCKQUOTE>In KDE2 benutzen Sie bitte <CODE>KGlobal::config()</CODE> um das
+Konfigurationsobjekt zu erhalten</BLOCKQUOTE>
+, die Session Management Konfiguration durch <CODE>kapp->getSessionConfig()</CODE> 
+<P>
+<P>
+<DT><B><B>KIconLoader</B></B><DD><P>, ein Objekt welches Icons in <CODE>QPixmap</CODE>s unter Benutzung des KDE-Dateisystems lädt. Hierdurch wird
+verhindert, daß nach einer Bilddatei im Dateisystem gesucht werden muß, denn es muß nur der Dateiname angegeben werden. Benutzen Sie
+das Makro <CODE>Icon("icon.xpm")</CODE> um ein Icon auf einfache Art und Weise zu laden. Die Iconloader-Instanz kann mittels
+<CODE>kapp->getIconLoader()</CODE> erhalten werden
+<BLOCKQUOTE>KDE 2 nutzt <CODE>KGlobal::iconLoader()</CODE> um auf die Iconloader-Instanz
+zuzugreifen</BLOCKQUOTE>
+ 
+<P>
+<DT><B><B>KLocale</B></B><DD><P>ein Objekt, welches die aktuellen Spracheinstellungen zurück gibt. Das sorgt dafür, daß die Anwendung in der
+Sprache auf dem Desktop dargestellt werden, die der Benutzer global eingestellt hat. Benutzen Sie das Makro <CODE>klocale</CODE> um auf das
+locale-Objekt zuzugreifen.Auf die  klocale-Intanz kann durch <CODE>kapp->getLocale()</CODE> zugegriffen werden (wie es das Makro klocale
+bereits tut)
+<BLOCKQUOTE>Auch dies wird in KDE2 durch eine statische Methode <CODE>KGlobal::locale()</CODE>ersetzt.</BLOCKQUOTE>
+ 
+<P>
+<P>
+<DT><B><B>KCharsets</B></B><DD><P>das Zeichensatzobjekt, z.Zt. global durch den Benutzer eingestellt. Hierdurch werden Tastaturereignisse in den
+korrekten Zeichensatz übersetzt. Die Zeichensatzinstant kann mit <CODE>kapp->getCharsets()</CODE> ermittelt werden.
+<BLOCKQUOTE>In KDE2 ersetzt
+durch <CODE>KGlobal::charsets()</CODE>.</BLOCKQUOTE>
+</DL>
+<P>
+<P>Zusätzlich bietet Ihnen die KApplication-Klasse alle benötigten Methoden um auf Dateien gemäß dem KDE-Filesystemstandard zuzugreifen.
+Dies verhindert Probleme die durch festes Einprogrammieren von Pfaden entstehen können (siehe 
+<A HREF="../programming/index.html">Das KDevelop Programmierhandbuch</A> für weitere Informationen zum KDE-FSS).
+Die Klasse stellt außerdem benötigte Zugrifssmechanismen für Anwendungs-Icons und Mini-Icons, aktuelle KDE-Schriften und
+Unterstützung zum Sitzungsmanagement.
+<P>Um die Zwischenablage zu nutzen, bietet die <CODE>QApplication</CODE>-Klasse ein Zwischenablagenobjekt, <CODE>QApplication::clipboard()</CODE>,
+welches für den Austausch von Text und Bilddaten zwischen Anwendungen genutzt werden kann (siehe <CODE>QClipboard</CODE>).
+<P>Internationalisierung ist ein weiterer Schlüsselbegriff für KDE-Anwendungen. Diese wird mit dem <CODE>KLocale</CODE>-Objekt wie bereits
+erwähnt unterstützt und wird durch das Makro <CODE>i18n()</CODE> aus <CODE>kapp.h</CODE> schon verwendet.
+<P>Dies ist eine Abkürzung für den Aufruf des KApplication-Zeigers auf den KLocale-Zeiger und wird von gettext ausgelesen um alle durch
+das Makro eingeschlossenen Zeichenketten in eine Anwendungsspezifische Nachrichtendatei zu schreiben, welches dann übersetzt werden
+kann.
+<P>Schlußendlich erzeugt <CODE>KApplication</CODE> ein Hilfe-Menü, welches in eine Menüleiste eingefügt werden kann, einen vordefinierten (an-
+und ausschaltbaren) Hinweisdialog und den "Über"-Dialog Ihrer Anwendung.
+<P>Die folgenden Ratschläge sollten im Umgang mit der <CODE>KApplication</CODE>-Klasse beherzigt werden:
+<P>
+<UL>
+<LI>erzeugen Sie das <CODE>KApplication</CODE>-Objekt am Anfang der <CODE>main()</CODE>-Funktion</LI>
+<LI>führen Sie die Anwendung mit <CODE>exec()</CODE> am Ende der <CODE>main()</CODE>-Funktion aus</LI>
+<LI>beenden Sie die Anwendung durch Aufruf der <CODE>quit()</CODE> Slot-Funktion.</LI>
+</UL>
+<P>Bei Verwendung von <CODE>KApplication</CODE> können Sie die folgenden Ereignis-Signale auswerten:
+<P>
+<UL>
+<LI>kdisplayPaletteChanged()</LI>
+<LI>kdisplayStyleChanged()</LI>
+<LI>kdisplayFontChanged()</LI>
+<LI>appearanceChanged()</LI>
+<LI>saveYourself()</LI>
+<LI>shutDown()</LI>
+</UL>
+<P>Da die Widgets Ihrer Anwendung diese Signale empfangen, aktualisieren sie sich normalerweise selbst. Die wichtigsten Signale für Sie
+sind in den meissten Fällen <CODE>saveYourself()</CODE> und <CODE>shutDown()</CODE> (wobei <CODE>KTMainWindow</CODE> bereits <CODE>saveYourself()</CODE> abfängt und
+<CODE>KTMainWindow::saveData()</CODE> aufruft).
+<P>Sie werden mittels der entsprechenden, statischen Methoden von <CODE>kwm.h</CODE> in der Lage sein, mit dem KWM Fenstermanager zu
+kommunizieren.
+<P>
+<H3><A NAME="ss3.2">3.2 Auswertung der Kommandozeilenargumente</A>
+</H3>
+
+<P>
+<P>Eine Anwendung soll normalerweise in der Lage sein, Kommandozeilenargumente auszuwerten. Diese werden durch den Benutzer angegeben,
+entweder beim Start von der Kommandozeile aus oder innerhalb einer kdelnk-Datei. Kommandozeilenargumente werden oft verwendet 
+um die Anwendung mit einer bestimmten Datei zu starten. Dies erlaubt auch Datei-Managern Ihre Anwendung korrekt aufzurufen und
+die Mime-Typ-Mechanismen in KDE zu verwenden. Um Kommandozeilenargumente verwenden zu können, sollte die <CODE>main()</CODE>-Funktion mit der
+folgenden Deklaration konstruiert werden:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+int main(int argc(), const char* argv[])
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Hierbei enthält <CODE>argc()</CODE>  die Anzahl der übergebenen Optionen und das Array <CODE>argv[]</CODE> die Optionen in Textform. 
+Wie auch der Konstruktor von <CODE>QApplication</CODE>, wird auch derjenige von <CODE>KApplication</CODE> zuerst ausgeführt. Er wertet alle Optionen
+aus, die ihn betreffen (z.B. Geometrie- oder Display-Optionen) und entfernt diese aus dem Array, so daß sie nicht mehr ausgelesen
+werden können, wenn die <CODE>KApplication</CODE>-Instanz deklariert ist:
+<P>(aus der  Qt 1.42 Online-Referenz zu <CODE>QApplication</CODE>)
+<UL>
+<LI><B>-nograb</B>, weist Qt an weder Maus noch Tastatur auszuwerten. (Wenn Sie Ihr Programm in einem Debugger, ist diese Option
+automatisch aktiviert).</LI>
+<LI><B>-sync</B> (nur unter X11), schaltet den synchronen Modus für Debug-Zwecke ein.</LI>
+<LI><B>-display</B> Anzeige, setzt das zu verwendende X-Display (standard ist $DISPLAY).</LI>
+<LI><B>-geometry</B> Geometrie, setzt die Abmessungen des Hauptfensters.</LI>
+<LI><B>-fn</B> oder -font Schriftart, definiert die  Anwendungsschriftart.</LI>
+<LI><B>-bg</B> oder -background color, setzt die standard Hintergrundfarbe und die Anwendungspalette (Hell- und Dunkelschattierungen
+werden berechnet). </LI>
+<LI><B>-fg</B> oder -foreground color, setzt die standard Vordergrundfarbe.</LI>
+<LI><B>-name</B> name, setzt den Anwendungsnamen.</LI>
+<LI><B>-title</B> title, setzt den Anwendungstitel (caption).</LI>
+<LI><B>-style=</B> style, setzt den  GUI-Stil der Anwendung. Mögliche Werte sind Motif und Windows. Standardmäßig wird die globale
+Einstellung von KDE gewählt.</LI>
+<LI><B>-visual</B> TrueColor, zwingt die Anwendunng, TrueColor auf einem 8-bit Display zu verwenden.</LI>
+<LI><B>-ncols</B> count, limitiert die Anzahl an Farben im Farbraum auf einem 8-Bit-Display, wenn die Anwendung die
+QApplication::ManyColor Spezifikation benutzt. Wenn count = 216 ist, wird ein 6x6x6-Farbraum benutzt (z.B. 6 Rot-Werte, 6 Grün-Werte
+und 6 Blau-Werte); bei 108 wird ein 3x3x3 und für andere Werte ein Farbraum, der proportional zu einem 2x3x1-Farbraum ist, benutzt.</LI>
+<LI><B>-cmap</B> läßt die Anwendung eine eigene Farbtabelle auf einem 8-Bit-Display verwenden.</LI>
+</UL>
+<P>Anschließend wertet <CODE>KApplication</CODE> Optionen aus, deren Werte innerhalb einer <CODE>.kdelnk</CODE>-Datei gesetzt werden können.
+Üblicherweise enthalten diese Link-Dateien internationalisierte Beschreibungen und den Anwendungsnamen, wie auch andere Werte wie den
+Namen des Icons und des Mini-Icons. Die Kommandozeilenargumente um diese Werte zu benutzen lautet:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+foo %i %m -caption \"%c\"
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Hierdurch wird die Anwendung mit der Option -icon irgendwas.xpm für %i und -miniicon for %m gestartet. Der Anwendungstitel kann mit
+-caption %c gesetzt werden. Die Klasse <CODE>KApplication</CODE> bietet zudem entsprechende Methoden die Rückgabewerte zu den Kommandozeilen
+argumenten zurückgeben.
+<P>Wenn Sie die Kommandozeilenargumente selbst auswerten möchten, können Sie dies direkt nach der Deklaration des
+Anwendungsobjektes tun um die o.g. Werte in der <CODE>main()</CODE>-Funktion auszuschließen. In der Anwendung selbst (z.B. der
+Hauptfensterklasse), stellt <CODE>QApplication</CODE> die Methoden <CODE>argc()</CODE> und <CODE>argv()</CODE>  um beliebige andere Optionen auszuwerten.
+Auf diese kann über die Argumentnummer zugegriffen werden, wobei das Argument <CODE>kapp->argv()[0]</CODE> der Anwendungsname ist; Auf alle
+folgenden Argumente kann man über <CODE>kapp->argv()[nummer]</CODE> zugreifen.
+<BLOCKQUOTE>KDE 2 enthält eine zusätzliche Klasse,
+<CODE>KCmdLineArgs</CODE>, um zusätzliche Kommandozeilenargumente zu verarbeiten, die bereits von KDevelop für KDE 2 Projekte verwendet
+wird.</BLOCKQUOTE>
+<P>
+<H4>Comment</H4>
+Die <CODE>KApplication</CODE>-Klasse verwendet verschiedene Methoden um den Anwendungsstil, -schriften und -farben durch X11 Atome,
+welche alle offenen Anwendungen auffordern, ihre Einstellungen rekursiv über alle Widgets zu ändern. Dies wird automatisch
+durchgeführt, wenn der Benutzer die entsprechenden Werte mittels des KDE-Kontrollzentrums ändert, was eines dieser X11-Events
+hervorruft. Die Methode <CODE>x11eventFilter()</CODE> entsendet die entsprechenden Signale um diese Werte zu ändern. So weit mir bekannt ist,
+ist der einzige Wert, der in KDE 1.x nicht verändert wird, das Doppelklick-Intervall, welches in <CODE>QApplication</CODE> standardmäßig
+auf 400ms eingestellt ist. Veränderungen hieran ist nur durch Nutzung der Methode
+<CODE>QApplication::setDoubleClickInterval()</CODE>.
+<P>
+<H3><A NAME="ss3.3">3.3 Andere Anwendungsklassen</A>
+</H3>
+
+<P>Durch "Andere Anwendungsklassen" wollen wie alle Ersetzungen der <CODE>KApplication</CODE>-Klasse beschreiben. Die KDE-Bibliothek <CODE>kdeui</CODE>
+enthält zwei weitere Klassen, die von <CODE>KApplication</CODE> für spezifischere Anwendungen innerhalb von KDE-Anwendungen  abgeleitet
+sind. Dies sind die Klassen <CODE>KControlApplication</CODE> und tt/KWMModuleApplication/.
+<P>
+<H4>KControlApplication</H4>
+
+<P><CODE>KControlApplication</CODE> ist eine Klasse für spezielle Anwendungen, die als Setup-Module geplant sind. Da sie einen Tab-Dialog zur
+Verfügung stellt, können Kontrollmodule leicht erzeugt werden. Die Unterschiede zu <CODE>KApplication</CODE> sind:
+<P>
+<UL>
+<LI>nutzt <CODE>-init</CODE> als Kommandozeilenargument um die Methode <CODE>init()</CODE> aufzurufen. Diese ist überschrieben worden um die
+Dialogeinstellungen zu initialisieren.</LI>
+<LI>Der Titel des Dialogs muß unabhängig von der Art, wie in <CODE>KApplication</CODE> verfahren wird, mittels <CODE>setTitle()</CODE> gesetzt
+werden.</LI>
+<LI>bietet einen kompletten Rahmen für Ihre Kontroll-Widgets, welche eingefügt werden müssen.</LI>
+</UL>
+<P>Um die virtuellen Methoden wie <CODE>init()</CODE> zu überschreiben, müssen sie eine anwendungsspezifische <CODE>KControlApplication</CODE>-Klasse
+von <CODE>KControlApplication</CODE> ableiten. Die Klasse wird allgemein für Kontroll- (Setup-) Anwendungen wie in KDE als auch in separaten
+Programmen verwendet.
+<P>
+<H4>KWMModuleApplication</H4>
+
+<P>KWMModuleApplication ist eine weitere Klasse, die von <CODE>KApplication</CODE> für bestimmte Zwecke abgeleitet ist: die Klasse bietet
+Methoden, die eine Interaktion mit dem Fenstermanager erlauben. Ein Beispiel für eine KWMModuleApplication ist der <CODE>kpager</CODE>,
+welcher Signale des Fenstermanagers zur Verwaltung der Fenster mittels statischen Methoden des KWM benutzt.
+<P>Um eine KWMModuleApplication zu erstellen, müssen Sie zunächst Ihre Anwendungsinstanz erzeugen und die Methode <CODE>connectToKWM()</CODE>
+aufrufen.
+<P>
+<H4>Docken von Fenstern</H4>
+
+<P>Ein weiteres Thema beim Design von KDE-Anwendungen ist die Nutzung von <CODE>kpanel</CODE> um ihre laufenden Anwendungen symbolisiert
+darzustellen. KDE-Benutzer sind wahrscheinlich vertraut mit der Anzeige der Anzeigeeigenschaften links von der Uhr im <CODE>kpanel</CODE>.
+<P>Der Weg hierzu ist recht einfach: Sie müssen ein Widget zur Verfügung stellen, das im Panel gedockt ist; hierzu muß ein Hauptfenster
+erzeuugt werden, indem der Konstruktor mit 0 als Elternfenster aufgerufen wird. Binden Sie die kwm.h Headerdatei ein und rufen Sie  
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+KWM::setDockWindow(mywidget->winID());
+</PRE>
+</CODE></BLOCKQUOTE>
+
+auf.
+<P>Bedenken Sie, daß es für das Verstecken des Widgets nicht genügt, <CODE>destroy()</CODE> aufzurufen (siehe <CODE>QWidget</CODE> für <CODE>destroy()</CODE>
+und <CODE>create()</CODE>).
+<P>
+<H3><A NAME="ss3.4">3.4 Das Hauptfenster</A>
+</H3>
+
+<P>Wie bereits erwähnt, ist das zuerst zu erstellende Objekt einer KDE-Anwendung eine Instanz von <CODE>KApplication</CODE>. Es bietet
+sicherlich keine Widgets (sichtbare Benutzerschnittstellen), außer dem "Über"-Dialog wie in der <CODE>QApplication</CODE>-Klasse als
+PopUp-Menü, das jedoch nicht sichtbar ist. Daher benötigt jede Anwendung ein Top-Widget, um sich selbst sichtbar zu machen.
+<P>Betreffend die sichtbaren Teile, ist der Programmierer frei in der Wahl des Widgets das er Benutzen oder von dem er sein Hauptfenster
+ableiten möchte. Es kann ein simples <CODE>QLabel</CODE> genauso wie das komplexe <CODE>KTMainWindow</CODE> sein, welches alle benötigten Objekte
+einer gewöhnlichen Desktop-Anwendung enthält.
+<P>
+<H4>Allgemeine Regeln</H4>
+
+<P>Im Allgemeinen werden Sie fertige Komponenten benutzen wollen, die spezialisiert sind. KDE unterstützt dies mit der Klasse
+<CODE>KTMainWindow</CODE> als ein Pendant zur Qt-Klasse <CODE>QMainWindow</CODE>. Bevor wir die allgemeine Regel betrachten, zunächst ein Blick auf
+die Ausname: die Benutzung jedes anderen Widgets.
+Wenn sie <CODE>QApplication</CODE> als Basisklasse Ihrer Anwendung verwenden wollten, würden Sie die Anwendungsinstanz erstellen, danach das
+Hauptwidget. Jetzt ist es sicher, das Widget als Top-Widget mittels <CODE>setMainWidget()</CODE> zu registrieren da der Benutzer dann den
+"Schließen"-Button des Hauptfenster zum Verlassen verwenden kann. Er erwartet, daß die Anwendung beendet wird, wenn das letzte
+Fenster geschlossen wird. Um dies jedoch zu erreichen, müssen Sie den QApplication-Slot <CODE>quit()</CODE> aufrufen
+Sie könnten dies in einer abgeleiteten Klasse durch überschreiben der Methode <CODE>QWidget::closeEvent()</CODE> tun aber mit der Methode
+<CODE>setMainWidget()</CODE> wird dies bereits getan.  In jedem Fall, in welchem <CODE>KApplication</CODE> genutzt wird, sieht es ähnlich aus, mit
+dem Unterschied, daß die entsprechende Methode von KDE <CODE>setTopWidget()</CODE> ist. Die einzige Ausnahme besteht bei Benutzung der Klasse
+<CODE>KTMainWindow</CODE>, welche dies automatisch in ihrem Konstruktor erledigt (wenn kein anderes Top-Widget vorhanden ist).
+<P>Ein weiterer Weg wäre, kein Fenster explizit als Top-Widget zu setzen, wenn Sie mehrere Top-Widgets verwenden.  Da das
+Anwendungsobjekt noch immer mit <CODE>quit()</CODE> beendet wird, Sie können stattdessen <CODE>connect()</CODE> nutzen um es automatisch aufzurufen,
+wenn das letzte Anwendungsfenster geschlossen wird (<CODE>QApplications</CODE> <CODE>lastWindowClosed()</CODE>-Signal nutzend):
+<P>
+<PRE>
+QObject::connect(kapp, SIGNAL(lastWindowClosed()), kapp, SLOT(quit()));
+</PRE>
+<P>
+<H4>Benutzung von KTMainWindow</H4>
+
+<P>Gewöhnlich besitzen Desktop-Anwendungen ein komplettes Benutzerinterface, welches üblichen Regeln für GUI-Programme folgt. KDE bietet
+eine Klasse, welche bereits  alle benötigten Funktionen enthält, aus denen eine Anwendung Nutzen ziehen kann, <CODE>KTMainWindow</CODE>,
+welche Teil der <CODE>kdeui</CODE>-Bibliothek ist. Sie ist eng verbunden mit <CODE>KApplication</CODE> und daher sehr einfach zu benutzen. Die
+Klasse bietet:
+<P>
+<UL>
+<LI>Unterstützung des Sitzungsmanagements</LI>
+<LI>ein Hauptwidget</LI>
+<LI>eine Menüleiste</LI>
+<LI>so viele Werkzeugleisten wie ihre Anwendung benötigt</LI>
+<LI>eine Statuszeile</LI>
+</UL>
+<P>Die Elemente des Widgets selbst werden bereits von <CODE>KTMainWindows</CODE> Geometrie-Implementation verwaltet, daher müssen Sie sich
+normalerweise nicht darum kümmern müssen, eine Anwendungsspezifische Instanz für Ihr Programm neu zu implementieren.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Weiter</A>
+ <A HREF="index-2.html">Zurück</A>
+ <A HREF="index.html#toc3">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

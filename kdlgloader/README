@@ -1,0 +1,94 @@
+KDLGLOADER README
+=================
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! This is a prealpha version of the dialog loader !!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+===================================================================================
+
+0. Table of contents
+--------------------
+
+1. Introduction
+2. Advantages and disadvantages
+3. How to use it
+4. Futur plans
+5. Changelog
+6. Authors
+
+===================================================================================
+
+
+1. Introduction
+---------------
+
+The KDialogLoader is a shared library allowing programs loading dialogs designed by
+KDevelop dialog editor at runtime. There is a header file available, providing a
+wrapper class for dynamically loading the library and use it to load the dialogs
+(kdlgloader.h). By the way, of course the lib must be installed together with your
+application on the user's system as long as it is not included in the kdelibs
+package.
+
+2. Advantages and disadvantages
+-------------------------------
+
+There are many advantages for using the dialog loader. The most important one is
+that it will be possible to change the dialog´s layout without having to recompile
+the application. In future versions it will also be possible to provide dialog
+definition files for every language so translators can redesign the dialog.
+Another advantage is that you will not longer have to deal with hundreds of lines
+for dialog designs because the dialog loader does all initialization for you (see
+below).
+A disadvantage may be that the time needed for loading will be a little bit longer.
+
+3. How to use it
+----------------
+For loading the dialog widgets into another (main) widget just insert the following
+lines (i.e. to the constructor of the widget) :
+
+01: KDlgLoader *ldr = new KDlgLoader(this);
+02: ldr->openDialog("dialog.kdevdlg");
+
+This will construct a new instance of the loader class and open the dialog
+"dialog.kdevdlg". Remember path have to be absolute for now. THIS WILL CHANGE IN
+THE NEXT VERSION !!
+In the destructor you should do a "delete ldr" so that the wrapper class can
+unload the lib and release the memory.
+
+There is a bug when using the loader in QDialogs. A workaround is to insert a
+QWidget to the dialog and load the dialog file into the widget.
+
+If you need an items pointer for some reasons do a (i.e.) :
+
+QPushButton *btn = (QPushButton*)ldr->getItemPtrVarName("OkButton");
+
+or a
+
+QPushButton *btn = (QPushButton*)ldr->getItemPtrName("Ok");
+
+The first version will return the pointer to the item with the varname
+"OkButton" and the second will return the one of the item named "Ok".
+
+
+4. Futur plans
+--------------
+
+- Relative path for dialog files and properties.
+- Some other features :-)
+
+5. Changelog
+------------
+
+1999-06-13 First version in cvs.
+
+6. Authors
+----------
+
+Main author :
+  Pascal Krahmer <pascal@beast.de>
+
+Provided you by :
+  The KDevelop Team.

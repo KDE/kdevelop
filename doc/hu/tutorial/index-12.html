@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>KDE Alkalmazás Tankönyv: A KImageIO használata a KScribble-nél</TITLE>
+ <LINK HREF="index-13.html" REL=next>
+ <LINK HREF="index-11.html" REL=previous>
+ <LINK HREF="index.html#toc12" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="index-13.html">Következõ</A>
+<A HREF="index-11.html">Elõzõ</A>
+<A HREF="index.html#toc12">Tartalom</A>
+<HR>
+<H2><A NAME="s12">12. A KImageIO használata a KScribble-nél</A></H2>
+
+<P>When it comes to images, the Qt and KDE libraries offer a wide variety of operations. Besides actual drawing routines, the librariessupport a whole set of image formats which they can read and write - all without any cost on our view. The main class for theseoperations is <CODE>QImageIO</CODE>, which has a support library by KDE: <CODE>KImageIO</CODE>. As a preparation before we can make use of these nice methods, wehave to add the according library to <EM>KScribble</EM>: libkimgio. Open "Project"->"Options" in KDevelop and add the line -lkimgio to theadditional libraries to link <EM>KScribble</EM> with.
+<H2><A NAME="ss12.1">12.1 Preparing the Document</A>
+</H2>
+
+<P>Now we can go on and apply our changes. First, we have to remove the current restriction in the document class to only read and writePNG files. Just replace "PNG" in the following methods with format, as given by the <CODE>openDocument()</CODE> and <CODE>saveDocument()</CODE>methods:In method <CODE>KScribbleDoc::openDocument()</CODE>:<CODE>       if(!buffer.load( filename, format ))</CODE>In method <CODE>KScribbleDoc:: saveDocument()</CODE>:<CODE>  if(!buffer.save( filename, format ))</CODE>Then we have a default behavoir of these methods. Now, for now we don´t have all available file formats yet. This will be our nexttask, together with adapting the slots in <EM>KScribble</EM> that deliver us filenames.
+<H2><A NAME="ss12.2">12.2 Registering File Formats</A>
+</H2>
+
+<P>To use <CODE>KImageIO</CODE>, we have to initialize the library first. For this, we add a call for <CODE>registerFormats()</CODE> in our<CODE>main()</CODE> function:
+<HR>
+<PRE>
+        main.cpp:............  KApplication app;  KImageIO::registerFormats();  if (app.isRestored())............
+</PRE>
+<HR>
+Note that this call is after the application is instanciated with KApplication app - without the application instance, our program willnot run, as <CODE>KImageIO</CODE> then doen´t know on which application to register the formats. The include file for this call will be added tokscribble.h, as we´re going to use some of its methods in <CODE>KScribbleApp</CODE>:kscribble.h:#include &lt;kimgio.h&gt;
+<H2><A NAME="ss12.3">12.3 Opening Images</A>
+</H2>
+
+<P>Now that we can make use of <CODE>KImageIO</CODE>, we have to apply the first change to the most important method of <CODE>KScribbleApp</CODE>:<CODE>openDocumentFile()</CODE>. This method opens us any document until now only on the behalf of the filename. It just leaves out theextension, as the format is not required by the document class by default. But as we have changed that, we just need a format - andhave to adapt the call for <CODE>KScribbleDoc::openDocument()</CODE> in the method <CODE>openDocumentFile()</CODE>:
+<HR>
+<PRE>
+kscribble.cpp:  void KScribbleApp::openDocumentFile(const char* file)  {        ...........             else    {->    QString format=KImageIO::type(file);->     if(!doc->openDocument(file,format))                   KMessageBox::error (this,i18n("Could not open document !"), i18n("Error !"));           addRecentFile(file);    }    ............  }
+</PRE>
+<HR>
+Of course, this works the same as using <CODE>QString format=QImageIO::imageFormat(file);</CODE>. Here, <CODE>KImageIO</CODE> delivers us the format ofthe image and we can call the document to open the file by filename and format. (Another possiblity would be to detect the format inthe document class as well).
+<H2><A NAME="ss12.4">12.4 Setting File Filters with KImageIO</A>
+</H2>
+
+<P>Here, we´re finishing our tutorial with the last section - we will adapt the file dialogs of <EM>KScribble</EM> to make use of file filters.For these, <CODE>KImageIO</CODE> provides nice methods to give us the needed strings for all image file formats that are available for opening andsaving. The following implementation replaces the default file filter (which is in fact none - you have to change your ownapplications´ file filter to your mime type accordingly) with the <CODE>pattern()</CODE> method of <CODE>KImageIO</CODE>:
+<HR>
+<PRE>
+  void KScribbleApp::slotFileOpen()  {    slotStatusMsg(i18n("Opening file..."));       ->    QString fileToOpen=KFileDialog::getOpenFileName(QDir::currentDirPath(),->              KImageIO::pattern(KImageIO::Reading), this, i18n("Open File..."));    if(!fileToOpen.isEmpty())    {               openDocumentFile(fileToOpen);               }    slotStatusMsg(i18n("Ready."));  }
+</PRE>
+<HR>
+Here, the mode in <CODE>pattern()</CODE> is set to Reading - which may differ from the patterns that are retrieved when set to writing. Nowwe have finished opening files by its filename and format completely. What is missing to complete this structure, is setting thepatterns as well for saving a file. For that, the <CODE>slotFileSaveAs()</CODE> is called, which itself invokes the file dialog thatretrieves a file name. There, we will set the pattern mode to Writing:
+<HR>
+<PRE>
+void KScribbleApp::slotFileSaveAs(){  slotStatusMsg(i18n("Saving file with a new filename..."));->  QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),->                               KImageIO::pattern(KImageIO::Writing), this, i18n("Save as..."));  if(!newName.isEmpty())  {    KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();    if( m )    {      KScribbleDoc* doc = m->getDocument();         QString format=QFileInfo(newName).extension();          format=format.upper();                  if(!doc->saveDocument(newName,format))          {               KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));                         return;                 }      doc->changedViewList();      setWndTitle(m);    }  }  slotStatusMsg(i18n("Ready."));}
+</PRE>
+<HR>
+<HR>
+<A HREF="index-13.html">Következõ</A>
+<A HREF="index-11.html">Elõzõ</A>
+<A HREF="index.html#toc12">Tartalom</A>
+</BODY>
+</HTML>

@@ -1,0 +1,87 @@
+<!DOCTYPE kpartgui >
+<kpartgui version="2" name="kdevelop" >
+ <MenuBar>
+  <Menu name="file" >
+   <text>&amp;File</text>
+   <Merge/>
+   <Separator/>
+   <Action name="file_print_advanced" />
+  </Menu>
+  <Menu name="edit" >
+   <text>&amp;Edit</text>
+   <Merge/>
+  </Menu>
+  <Menu name="view" >
+   <text>&amp;View</text>
+   <Merge/>
+   <Separator/>
+   <Action name="view_refresh" />
+  </Menu>
+  <Menu name="project" >
+   <text>&amp;Project</text>
+   <Action name="project_new" />
+   <Action name="project_open" />
+   <Action name="project_open_recent" />
+   <Action name="project_close" />
+   <Separator/>
+   <Merge/>
+   <Action name="project_make_messages" />
+   <Action name="project_make_api_doc" />
+   <Action name="project_make_user_doc" />
+   <Menu name="project_distribution" >
+    <text>Make D&amp;istribution</text>
+    <Action name="project_dist_targz" />
+   </Menu>
+   <Separator/>
+   <Action name="project_options" />
+  </Menu>
+  <Menu name="build" >
+   <text>&amp;Build</text>
+   <Merge/>	
+  </Menu>
+  <Menu name="debug" >
+   <text>&amp;Debug</text>
+   <Merge/>
+  </Menu>
+  <Menu name="settings" >
+   <text>&amp;Settings</text>
+   <Action name="settings_treeview" />
+   <Action name="settings_output_view" />
+   <Separator/>
+   <Action name="settings_toolbar" />
+   <Action name="settings_browser_toolbar" />
+   <Action name="settings_taskbar" />
+   <Action name="settings_statusbar" />
+   <Menu name="options_printer" >
+    <text>Configure &amp;Printer</text>
+    <Action name="options_configure_printer_enscript" />
+   </Menu>
+   <Separator/>
+   <Action name="settings_kdevelop_setup" />
+  </Menu>
+  <Menu name="window" >
+   <text>&amp;Window</text>
+   <Merge/>
+  </Menu>
+ </MenuBar>
+ <ToolBar position="Top" iconText="IconOnly" noMerge="1" name="mainToolBar" fullWidth="false" >
+  <Action name="project_open" />
+  <Separator/>
+  <Action name="file_open" />
+  <Action name="file_save" />
+  <Action name="file_print" />
+  <Separator/>
+  <Action name="edit_cut" />
+  <Action name="edit_copy" />
+  <Action name="edit_paste" />
+  <Separator/>
+  <Merge/>
+  <Action name="stop_everything" />
+  <Separator/>
+ </ToolBar>
+ <ToolBar name="browserToolBar" fullWidth="false" >
+  <Merge/>
+  <Separator/>
+  <Action name="help_whats_this" />
+ </ToolBar>
+</kpartgui>

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>KDE Alkalmazás Tankönyv: A Qt tananyag lefordítása</TITLE>
+ <LINK HREF="index-4.html" REL=next>
+ <LINK HREF="index-2.html" REL=previous>
+ <LINK HREF="index.html#toc3" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="index-4.html">Következõ</A>
+<A HREF="index-2.html">Elõzõ</A>
+<A HREF="index.html#toc3">Tartalom</A>
+<HR>
+<H2><A NAME="s3">3. A Qt tananyag lefordítása</A></H2>
+
+<P>
+<H2><A NAME="ss3.1">3.1 Elsõ lépés: Helló világ!</A>
+</H2>
+
+<P>Az elõzõ fejezet útmutatása alapján, létrehozott egy projektet, amit <CODE>MyWidget</CODE> hívnak; most, amikor a tananyag elsõ oldalát nézi a Qt leírásában, látni fogja, hogy az elsõ alkalmazás csak egy <CODE>main()</CODE> funkciót használ. Így elég megváltoztatnunk a megadott <CODE>main</CODE>()/ funkciót a létrehozott projektben, hogy elindulhassunk a példafeladat elsõ részével. A <CODE>main()</CODE> funkció eléréséhez válassza ki azt az osztályböngészõ (classviewer) "Globals" elérési útjáról, ahol  a "Funkciók" pont található, ami az összes non-class fukciót kilistázza. Ez megnyitja a <CODE>main</CODE>cpp/ állományt a "c/c++ állományok" ablakban, és a szerkesztõ kurzor már a <CODE>main()</CODE> elsõ sorában is áll.
+<H3>Min változtassunk elõszõr?</H3>
+
+<P>Kezdhetnénk az adott kód megváltoztatásával is, hogy eljussunk a kívánt változathoz, de az egész sokkal sokkal egyszerûbben is megoldható. Jelölje ki a <CODE>main()</CODE> funkció tartalmát az egérrel, vagy a Shift és a fel-le nyilak valamelyikének egyidejû lenyomásával. Ezután a "Szerkesztés" menübõl válassza a "Kivágás" pontot, vagy egyszerûen üsse le a "Del" billentyût a kijelölt kód törléséhez. Így kitörölte a main funkciót, ezért a nulláról kezdhetjük elsõ példafeladatunk összeállítását.
+<H3>A példafeladat kódjának bevitele</H3>
+
+<P>A kód példafeladatból való beillesztéséhez, elõszõr figyelmesen el kellene olvasnia azt, hogy megjegyezze melyik sor melyik kódot tartalmazza. Miután a példafeladatot sorról sorra elolvasta, példaként használhatja azt a saját gyakorlata megírásához.Akik a könnyebb megoldást alkalmaznák, jelöljék ki a  kilistázott <CODE>main()</CODE> funkció tartalmát a dokumentum-böngészõben és nyomják meg a "Másolás" ikont az eszköztáron. Használhatja még az elõreugró menüt, vagy az idevágó parancsot a "Szerkesztés" menüben. Végül a kiválasztott rész a vágólapra kerül, és miután visszavált a forráskód ablakra, a "Beillesztés" paranccsal bemásolhatja az elõzöleg kijelölt részt (ugyanígy megteheti ezt a elõreugró menübõl, az eszköztár ikonnal vagy a "Szerkesztés" menü idevágó parancsával).Végül a <CODE>main()</CODE> funkción kívül addja hozzá az idetartozó fejléc állományokat :
+<BLOCKQUOTE><CODE>
+<PRE>
+#include &lt;qapplication.h>#include &lt;qpushbutton.h>
+</PRE>
+</CODE></BLOCKQUOTE>
+Ennyi az egész! Kész is van az elsõ példafeladat forráskódja.
+<H3>A Helló világ! elkészítése</H3>
+
+<P>Az elsõ példafeladat elkészítéséhez, válassza a "Make"-et a "Build" menübõl, vagy pedig nyomja meg az ennek megfelelõ ikont az eszköztáron. Tetszõlegesen választható még a "Végrehajt" parancs is, amely futtatja a kész alkalmazást, annak sikeres elkészítése után.Amennyiben az összeállítás valamilyen hiba folytán leállna, bizonyosodjon meg róla, hogy a hiba a példafeladatban, vagy pedig önben van-e. Szomorú dolog lenne egy hibát keresgélni éppen akkor, amikor elhatározta, hogy a KDE-hez és/vagy Qt-hoz fog programozni, de ez mindenképpen jó alkalom a KDEvelop használatának gyakorlására. A hiba megtalálásához két lehetõség is a rendelkezésére áll: vagy válassza ki az odavágó hibaüzenetet a kimeneti ablakban, amely ahhoz a sorhoz visz, ahol a hiba van, vagy pedig nyomja meg az F4-es gombot. Tetszõlegesen a "Következõ Hiba" pontot is választhatja a "Nézet" menüben.
+<H3>Gyakorlatok</H3>
+
+<P>Most kérdezheti: "Gyakorlás? Eddig olyan egyszerû volt. Semmi szükségem gyakorlatokra!" Azonban meglátja, a dolgok kicsit bonyolódni fognak. Ez a lehetõ legegyszerûbb példa volt, de minél összetettebbek lesznek, annál több gondolkodást kívánnak majd öntõl, hogy megértse és követni tudja a tananyag lépéseit. A gyakorlatok képessé teszik önt arra, hogy megtanulja a KDEvelop mûködését, és megismerje tulajdonságait.Hogy az elsõ alkalmazás által is tanuljon még egy kicsit, hajtsa végre a következõ változtatásokat a meglevõ kódon, és figyelje meg, hogy ezek hogyan befolyásolják az alkalmazás viselkedését.
+<OL>
+<LI>a nyomógombot cserélje le a <CODE>QLabel</CODE> -re</LI>
+<LI>használja a <CODE>setText()</CODE> -et, a szöveg nyomógombkészítõben való közvetlen beállítása helyett</LI>
+<LI>használja QPushButton::resize ( const Qsize &amp; s ) -t a magasság és szélesség közvetlen megadása helyett. Elõször hozzon létre egy <CODE>QSize</CODE> példányt, amely tartalmazza a méretet</LI>
+<LI>játszon el a mértettekkel, hogy lássa melyik a szélesség és melyik a magasság</LI>
+</OL>
+<H2><A NAME="ss3.2">3.2 A 2. és 3. lépés: Kiterjesztések</A>
+</H2>
+
+<P>A leírás 2. és 3. részében tovább tágulnak a tananyag 1. részében feltárult lehetõségek. Ugyanúgy hallani fog most a jelekrõl (signal) és a fogadókról (slot), mint az elemek (widget) közti gyermek-szülõ kapcsolatról.Miért fontos tanulni mindezekrõl? A jelek és a fogadók alkotják azt a technológiát, amely megkülönbözteti a Qt könyvtárakat más  elemkönyvtáraktól. Ha bármikor is olyan problémába ütközne, hogy objektumok között szeretne kapcsolatot létrehozni, ez hihetetlenül lerövidíti a munkáját, és semmi végzetes nem történik, ha valami nem sikerül, még a hibás kapcsolódások sem vezetnek szegmentációs hibához. Ez a Qt könyvtár erõssége; és rugalmassasága miatt nem szívesen nélkülözné egyetlen KDE/Qt fejlesztõ sem. A jel/fogadó (signal/slot) mechanizmus megértése alapvetõ feltétele bármilyen KDE/Qt alkalmazás létrehozásának.A másik dolog amire figyelnie kell az a tény, hogy a gomb bezárja a <CODE>Qapplication</CODE> példányt a <CODE>quit()</CODE> hívásával. Ismét találkozni fog a <CODE>quit()</CODE> -el, mikor a <CODE>QApplication</CODE> KDE-s megfelelõjével, a <CODE>KApplication</CODE> -al dolgozik majd.
+<H2><A NAME="ss3.3">3.3 Saját Elemek megírása</A>
+</H2>
+
+<P>A  <CODE>main()</CODE> funkció sikeres módosítása és kibõvítése után elérte azt a pontot, hogy létrehozzon egy új, teljesen egyéni elemet, amelyet a 4. fejezet útmutatása alapján  létrehozott osztály segítségével fog megírni. Lényegében az alkalmazás varázsló már létrehozta az ön számára az osztályt, így nem marad sok hozzáírni való, csak be kell illesztenie a 4. lecke által a <CODE>main.cpp</CODE> állományba írt kódot, a <CODE>MyWidget</CODE> osztály fejlécébe és "implementation?" állományába. Szerencsére csak az "implementation?"-t kell hozzáadnia a "constructor?" kódjáhozA megnyitáshoz válassza a "constructort?" a "classviewer?"-bõl. Ez automatikusan az "implementation?"-hoz visz, ahova be kell illesztenie a kódot. Itt csak arra kell figyelnie, hogy a <CODE>qfont.h</CODE>- <CODE>QFont</CODE> tartalmát csak a <CODE>MyWidget</CODE> constructor kódja használja.Tehát a <CODE>#include &lt;qfont.h&gt;</CODE> sort illessze be a <CODE>mywidget.cpp</CODE> állomány tetejére.Az új alkalmazás futtatásához csak nyomja meg a "Végrehajt" gombot. Ez lefordítja a változásokat, miután elmentette õket.
+<H2><A NAME="ss3.4">3.4 Az Elemosztály kibõvítése</A>
+</H2>
+
+<P>Az ötödik rész célja az elemosztály kibõvítése, ezért itt a virtuális funkciókról fog tanulni. A <CODE>resizeEvent()</CODE> itt reimplementálva található. Amit fontos megtanulnia (az osztály kibõvítésén belül) az az, hogy a Qt, virtuális funkciók által foglalkozik a felhasználói eseményekkel úgy, hogy egy bekövetkezett eseményt paraméternek vesz. Éppen emiatt kényelmesebben dolgozhat a Qt könyvtár következõ osztályit felhasználva:
+<UL>
+<LI>QEvent</LI>
+<LI>QChildEvent</LI>
+<LI>QCloseEvent</LI>
+<LI>QFocusEvent</LI>
+<LI>QKeyEvent</LI>
+<LI>QMouseEvent</LI>
+<LI>QMoveEvent</LI>
+<LI>QPaintEvent</LI>
+<LI>QResizeEvent</LI>
+<LI>QTimerEvent</LI>
+</UL>
+Bármikor, amikor saját elemeket ír, különösen figyeljen arra az alkalmazások területén, hogy az alapértelmezett elemesemény-eljárás implementációját, önnek kell átírnia annak megfelelõen, hogy milyen eseményeknek kell végrehajtódnia. Ezek pl. lehetnek:<CODE>virtual void mousePressEvent (QmouseEvent * )</CODE> amely azon egéresemény végrehajtásáért felel, amikor elõreugrik egy context menu. Az implementációba be kell illesztenie egy elõírt változót. A legtöbb fejlesztõ a <CODE>event</CODE> , vagy egyszerûen a <CODE>e</CODE> -t, használja mint változónevet.Ezután végrehajtható az eseményre vonatkozó változó. Egy <CODE>QMouseEvent</CODE> -hez, rá kell kérdezni arra, hogy a középsõ, a bal- , vagy a jobboldali egérgomb váltotta-e ki az eseményt.
+<H2><A NAME="ss3.5">3.5 Új Osztály hozzáadása</A>
+</H2>
+
+<P>A 6. leckében egy új osztályt kell hozzáadnia a megírt példaalkalmazáshoz. Most bizonyára azt gondolja, hogy "csak létrehozok egy fejléc- és egy implementációs állományt, aztán készen is vagyok." A KDevelop azonban még ennél is jobban megkönnyíti ezt az ön számára. Új osztály hozzáadásához használja az osztálygenerátort, ami elvégzi ön helyett a munka dandárját, így önnek csak az egyéni kódot kell beírnia.Új osztály hozzáadásához az osztálygenerátorral, válassza a "Projekt"-"Új osztály" menüpontot, ami megjelenít egy párbeszédablakot, ahol beírhatja a hozzáadandó osztályhoz szükséges összes értéket. Az elsõ, amit be kell írnia, az osztály neve. A példafeladatban ez a <CODE>LCDRange</CODE>, tehát ezt kell beírnia elõszõr. Ezután folytassa a baseclass-el. A baseclass az egyetlen olyan dolog, ami az új osztályba is átkerül. Ha megnézi a tananyagot (Qt 1.42), akkor látja, hogy ez a <CODE>QWidget</CODE> . Mint a legtöbb hozzáadandó GUI osztálynál, a <CODE>QWidget</CODE> kerülne át itt is, de az osztálygenerátor ezt leegyszerûsíti. Hagyja a baseclass cellát üresen és inkább jelölje be az "Additional Options"-ban a "QWidget child class"-et. Ez magától csatolja a szükséges <CODE>Q_OBJECT</CODE> makrót a fejlécállományhoz, hogy a fogadók és jelek késõbb hozzáadódjanak (ami a 7. fejezetben szükséges is lesz).Az állománynevek maguktól bekerülnek, ezek miatt nem kell aggódnia. Az egyetlen dolog, amit javaslunk hozzáadni, az a leírás. Mindig jó egy részletezõ leírást mellékelni az osztályhoz, különösön akkor, ha annak neve ( <CODE>LCDRange</CODE> ) nem túlságosan beszédes.
+<H2><A NAME="ss3.6">3.6 A 7-14. lépés</A>
+</H2>
+
+<P>Most már indent tud, ami a tananyag további lépéseihez szükséges, és kellõen felkészült, hogy végre tudja hajtani a szükséges teendõket.Minden változtatás után indítson új szerkesztést és ellenõrizze, hogy a beírt kód nem hibás-e. Futtassa az alkalmazást és kísérje figyelemmel annak végrehajtódását. Ezenkívûl játszogathat még a KDevelop "Build" opcióival: hajtassa végre az alkalmazást olyan parancssori hibakeresõvel, mint pl. a KDbg a kellékek ablakban. Ezek után tudnia kell futtatni az alkalmazást azokkal a Qt példaprogramokkal, amiket a Qt-hoz mellékelnek. A következõ fejezetben megismeri a KDE 2-höz való fejlesztést  egy példaalkalmazás segítségével ( <EM>KScribble</EM> ). Ez egy kis rajzprogram, amelyiken keresztül megtanulhatja az alkalmazástervezés koncepcióját és a programozást egyedül.
+<P>
+<HR>
+<A HREF="index-4.html">Következõ</A>
+<A HREF="index-2.html">Elõzõ</A>
+<A HREF="index.html#toc3">Tartalom</A>
+</BODY>
+</HTML>

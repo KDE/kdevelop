@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Das KDE Bibliotheks-Handbuch: Einführung</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="kde bibliothek referenz klassen">
+<META NAME="description" CONTENT="KDE Bibliotheks-Referenz">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-2.html">Weiter</A>
+ Zurück <A HREF="index.html#toc1">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="s1">1. Einführung</A></H3>
+
+<P>
+<H3><A NAME="ss1.1">1.1 Was KDE bietet</A>
+</H3>
+
+<P>Das K Desktop Environment bietet Anwendungsentwicklern einen einfachen Weg, ihre Produkte mit einer intuitiven Benutzerführung
+auszustatten. Es stellt alle Mittel zur Verfügung, um gewöhnliche Aufgaben mittels einer Klassenbibliothek, die die Fähigkeiten von
+Qt erweitert,zu lösen. Dies ermöglicht eine einheitliche Bedienung (look and feel) von Anwendungen und die Interaktion mit anderen
+Programmen und dem Window Manager. Dieses Handbuch gibt eine Einführung in die Benutzung der KDE Bibliotheken, die in KDE enthalten
+sind, um Entwicklern zu einfachen Lösungen ihrer üblichen Programmieraufgaben zu verhelfen. Es erklärt zudem, warum bestimmte
+Techniken und Klassen verwendet werden sollten, um Anwendungen für das K Desktop Environment zu entwickeln.  
+Einfach gesagt bietet KDE Standards, die ein einheitliches Aussehen und eine einheitliche Bedienung von Anwendungen erlauben, wie sie
+bei der Erstellung von Programmen beachtet werden sollten. Viele Aufgaben werden automatisch gelöst, wie z.B.:
+<P>
+<UL>
+<LI>Session Management</LI>
+<LI>Konfiguration von Tastaturkürzeln</LI>
+<LI>Wechsel von Zeichensatz, Stil und Farbe</LI>
+<LI>Unterstützung von Themes (KDE 1.1.2 und höher)</LI>
+<LI>Internationalisierung</LI>
+</UL>
+<P>Aus diesem Grund werden diese Themen nur bezüglich ihrer Funktionalität erwähnt um eine vollständige Information zu gewährleisten.
+Anwendungsentwickler müssen sich lediglich darum kümmern, was ihr Programm tun soll und an welcher Stelle KDE hier helfen kann.
+Hier stellt KDE Benutzerschnittstellen zur Verfügung die die des Qt Toolkits erweitern, wo dies nötig ist. Wenn beide Bibliotheken
+gleich gute Lösungen anbieten, sollten KDE-Entwickler (in den meißten Fällen) die Möglichkeiten der KDE-Bibliotheken nutzen.
+KDE stellt eine Anzahl an Widgets zur Verfügung, die zur Erstellung von anwendungsspezifischen Dialogen und Ansichten genutzt werden
+können. Beispiele sind:
+<UL>
+<LI>KSeparator, bietet einen üblichen Trennstrich</LI>
+<LI>KColorButton, bietet einen Button mit variabler Farbe</LI>
+</UL>
+<P>Normalerweise verlangen Anwendungen vom Benutzer die Angabe verschiedener Werte. Hier bieten die Bibliotheken  die Möglichkeit,
+vorgefertigte, komplexe Widgets zu benutzen, die dem KDE-Benutzer bereits bekannt sind, wie z.B.:
+<P>
+<UL>
+<LI>Dateidialoge,</LI>
+<LI>Farbauswahldialoge,</LI>
+<LI>Zeichensatzdialoge,</LI>
+<LI>Dialoge zur Tastaturkonfiguration</LI>
+</UL>
+<P>Diese sollten genutzt werden, wo auch immer eine Benutzereinstellung vonnöten ist, da es die Arbeit des Programmierers erleichtert,
+die Möglichkeiten der Anwendung drastisch verbessert und ein einheitliches Aussehen vermittelt.
+<P>Die Qt-Bibliothek ist in diesem Handbuch erwähnt, wo immer sie Möglichkeiten bietet, die von KDE nicht zur Verfügung gestellt werden.
+Da jedoch Informationen über das Event Handling und die Signal/Slot-Mechanismen für Entwickler schwer zu finden sind, wird diesem
+Thema ein eigenes Kapitel in diesem Handbuch gewidmet.
+<P>
+<H3><A NAME="ss1.2">1.2 Anmerkungen zu KDE 2 / Qt 2.0</A>
+</H3>
+
+<P>Wie Sie vielleicht schon vermutet haben, behandelt dieses Handbuch <B>ausschließlich</B> die Entwicklung unter <B>KDE 1.x</B> unter
+Verwendung der <B>Qt 1.4x</B>-Bibliotheken. Sie werden vielleicht fragen "Qt Version 2.0 ist bereits erschienen, warum wird nicht
+ausschließlich dieses besprochen ?" - aber es gibt Gründe für eine KDE 1.x Referenz.
+<P>Diese Gründe sind zuerst einmal, daß Entwickler die KDE 1.x Serie als stabilen Desktop und Entwicklungsumgebung betrachten sollten.
+Solange KDE 2 (welches dann auch Qt 2.0 einführen wird) sich in der Entwicklung befindet, werden es Programmierer nicht leicht haben,
+den ständigen Änderungen zu folgen, die eine zeitaufwendige Recherche und, beim Auftreten von Fehlern, eine langwierige Fehlersuche 
+zur Folge haben. Es gibt Projekte des KDE Kernteams, die sicherstellen sollen, daß die KDE 2 Bibliotheken funktionieren werden - KDE
+selbst genauso wie die KOffice Suite. Trotzdem, Entwickler die jetzt anfangen, KDE-Projekte zu entwickeln oder dies bereits tun,
+haben jetzt die Auswahl. Diejenigen, die Wert auf eine stabile Umgebung haben, werden ihre Applikationen ebenfalls auf KDE 2.0
+portieren wollen, einerseits um sie benutzbar zu machen, andererseits um Erweiterungen der neuen Bibliotheksfunktionen nutzen zu
+können. Daher sind and den Stellen, wo KDE und Qt sich von zukünftigen Versionen unterscheiden, Fußnoten hinzugefügt worden, soweit
+diese dem Autor zum Zeitpunkt der Erstellung diese Dokumentation bekannt waren und erheben daher keinen Anspruch auf Vollständigkeit.
+Klassen, die in der momentanen KDE 2 API bereits entfernt wurden, sind hier nicht mehr erklärt, um Schwierigkeiten bei einer späteren
+Portierung nach KDE 2 zu vermeiden.
+<P>In späteren Versionen dieses Handbuchs wird auf die Entwicklung für KDE 2 vollständig eingegangen und die entsprechenden Kapitel
+geändert, wo dies nötig wird.
+<P>
+<H3><A NAME="ss1.3">1.3 Über dieses Handbuch</A>
+</H3>
+
+<P>Dieses Handbuch wurde geschrieben, um Entwicklern eine Richtlinie über die Benutzung der KDE 1.x Bibliotheken in Verbindung mit der
+Qt 1.4x Bibliothel auf X11-Desktopsystemen an die Hand zu geben. Es kann keine Kentnisse über die C++ Programmierung und die
+Qt-Klassen, wo diese benötigt werden, ersetzen. Sie sollten sich in jedem Fall die Seite "Structure Overview" der Qt-Onlinereferenz
+ansehen, die einen generellen Überblick über die Qt-Bibliothek und die allgemeine Benutzung der Klassen gibt. Dieses Handbuch
+versucht dieser Struktur zu folgen um Ihnen zu vermitteln, wo KDE-Klassen sinnvoll sind und erklärt die Technik der
+Anwendungsentwicklung unter KDE, indem es die Anwendung der Klassen für bestimmte Ziele erläutert.
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-2.html">Weiter</A>
+ Zurück <A HREF="index.html#toc1">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

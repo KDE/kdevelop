@@ -1,0 +1,35 @@
+...mo¿esz uzyskaæ szybk± pomoc klikaj±c prawym przyciskiem myszy na wybranej pozycji?
+...mo¿esz ustawiæ w³asny czas automatycznego zapisywania w oknie dialogowym ustawienia ?
+Je¿eli chcesz podaæ dodatkowe opcje linii komend programu make, mo¿esz je wpisaæ w oknie dialogowym ustawienia.
+Je¿eli u¿ywasz funkcji z innych bibliotek ni¿ te z którymi aktualnie jest zlinkowana twoja aplikacja, mo¿esz je podaæ w oknie opcji projektu.
+Je¿eli chcesz zmieniæ numer wersji swojej aplikacji, mo¿esz to zrobiæ w oknie opcji projektu, automatycznie go uaktualniaj±c.
+Je¿eli chcesz stworzyæ nowy projekt, wybierz z menu "Projekt"-> "Kreator aplikacji".
+Je¿eli nie posiadasz aktualnej dokumentacji bibliotek KDE, utwórz je wybieraj±c "Uaktualnij" z zak³adki "Dokumentacja" w oknie opcji KDevelop.
+Je¿eli zmienia³e¶ klasy w aplikacji, mo¿esz uaktualniæ swoj± dokumentacjê API wybieraj±c "Utwórz dokumentacjê API" z menu projektu.
+Mo¿esz zoszczêdziæ czas je¿eli wybierzesz "Kompiluj plik" z menu Buduj albo z paska narzêdzi, aby skompilowaæ tylko aktualnie edytowany plik.
+Je¿eli szukasz informacji o klasach lub ich sk³adowych, wybierz "Wyszukaj pomocy na temat..." z menu pomocy.
+Je¿eli potrzebujesz informacji o czym¶ w oknie KDevelop, wybierz przycisk "Co to jest...?" na pasku narzêdzi i kliknij na obiekcie o którym potrzebujesz informacji.
+Podpowied¼: Mo¿esz szukaæ s³owa w dokumentacji zaznaczaj±c je i wybieraj±c "wyszukaj" w menu podrêcznym.
+Zespó³ KDevelop ¿yczy ci mi³ego dnia !
+Je¿eli znajdziesz b³êdy w KDevelop, daj nam znaæ. Adres kontaktowy znajdziesz w podrêczniku KDevelop.
+Je¿eli chcesz dodaæ w³asn± dokumentacjê do drzewa dokumentacji, kliknij prawym przyciskiem na pozycji "Inne". Podaj ¶cie¿kê i nazwê dla dokumentacji.
+...mo¿esz utworzyæ now± klasê u¿ywaj±c polecenia "Nowa klasa..." w menu projektu ?
+...mo¿esz drukowaæ pliki bezpo¶redno z KDevelop u¿ywaj±c a2ps lub enscript ?
+Aby otworzyæ istniej±cy projekt, wybierz "Otwórz" z menu projektu.
+Je¿eli skompilowa³e¶ swój projekt i wyst±pi³y b³êdy, mo¿esz klikn±æ na komunikacie o b³êdzie aby prze³±czyæ siê do pliku i linii w której ten b³±d wyst±pi³.
+...mo¿esz u¿ywaæ skrótów klawiaturowych aby ukrywaæ i przywaracaæ okna widoku drzewa i wyników ?
+...mo¿esz debugowaæ program w KDevelop wybieraj±c "Debuguj" z menu Buduj lub wybieraj±c ikonê debugowania ?
+...mo¿esz prze³±czaæ siê pomiêdzy klasami wybieraj±c klasê z listy na pasku narzêdzi ?
+...mo¿esz edytowaæ plik xpm u¿ywaj±c kiconedit, wybieraj±c go w oknie widoku projektu ?
+...mo¿esz konfigurowaæ ostrze¿enia kompilatora w oknie opcji z menu projekt ?
+...mo¿esz wyszukiwaæ zaznaczonego tekstu w przegl±darce dokumentacji u¿ywaj±c prawego przycisku myszki ?
+...mo¿esz kopiowaæ tekst z okna dokumentacji do schowka u¿ywaj±c menu pod prawym przyciskiem myszki i wstawiaæ go do swojego programu ?
+...mo¿esz zawsze aktualizowaæ dokumentacjê po zainstalowaniu nowych bibliotek ?
+...mo¿esz skonfigurowaæ pod¶wietlanie sk³adni edytora?
+...mo¿esz cofaæ i przywracaæ operacje oraz ustawiæ ilo¶æ kroków cofania w oknie dialogowym edytor?
+
+
+
+
+
+

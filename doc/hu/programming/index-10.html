@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>A KDevelop Programozói Kézikönyv: Osztály dokumentáció a KDoc segítségével</TITLE>
+ <LINK HREF="index-11.html" REL=next>
+ <LINK HREF="index-9.html" REL=previous>
+ <LINK HREF="index.html#toc10" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="index-11.html">Következõ</A>
+<A HREF="index-9.html">Elõzõ</A>
+<A HREF="index.html#toc10">Tartalom</A>
+<HR>
+<H2><A NAME="s10">10. Osztály dokumentáció a KDoc segítségével</A></H2>
+
+<P>A dokumentálás egyik fontos része, egy részletes súgó hozzácsatolása az osztály felületekhez. A <CODE>KDoc</CODE> -al létrehozott HTML class documentation (osztálydokumentáció)
+segítí önt és a többi programozót abban, hogy könnyebben használhassák ezeket az osztályokat. A KDevelop teljeskörûen támogatja
+a <CODE>idx</CODE>KDoc// használatát a KDE-könyvtár dokumentálásánál, akárcsak az ön által már dokumentált alkalmazás-szerkezeteket.
+A meglevõ kódok megismeréséhez, jó elolvasni a beépített online dokumentációt.  A következõkben leírást olvashat arról, hogy hogyan
+juthat hozzá az API dokumentációjához, hogy hol segíti önt a KDevelop, és hogy milyen speciális függelékeket biztosít még a <CODE>KDoc</CODE> ezeken kívül.
+<P>
+<H2><A NAME="ss10.1">10.1 Hogyan használjuk a KDevelop dokumentációs képességeit</A>
+</H2>
+
+<P>Miután létrehozott egy projektet, válassza a "Make API-Doc" -ot a "Projekt" menübõl, hogy elkészítse a API dokumentációt.
+Így elkészül a fejléc állomány, és a HTML formátumú kimenet. Ezután bármikor hozzáférhet a dokumentációhoz, ha kiválasztja a súgó menübõl az "API-Documentation" -t, vagy az
+odavágó könyv-szimbólumot a dokumentációs fában, a "Jelenlegi projekt" útvonalon.
+<P>A KDE-hez és az Qt online-idx/class documentation/ -hoz már megvannak a dokumentáció kereszthivatkozásai, így könnyen követheti az
+inheritance-t az inheritance áttekintõvel. Ez nagymértékben segítheti ismerkedését a KDE-vel és a Qt dokumentációval.
+<P>
+<P>
+<H2><A NAME="ss10.2">10.2 Osztály- és Tagdokumentáció hozzáadása (member)</A>
+</H2>
+
+<P>A KDevelop minden eszközt biztosít a kód automatikus hozzáadásához, és a közvetlen dokumentálást is támogatja. Amikor az
+Osztálygenerátort a "Projekt"->"Új osztály"  kiválasztásával használja, adjon meg részletes leírást a dokumentációs mezõben.
+Így a dokumentáció bekerül az osztály fejlécébe.
+<P>Mikor osztálytag-funkciót, vagy attributumot csatol a classtools (osztálykellék) segítségével, akkor csatolja a tag
+dokumentációját az odavágó dokumentációs mezõbe.
+<P>Azt is gondolhatja persze, hogy a dokumentálás nem különösebben fontos része a fejlesztési folyamatnak. Gondoljon azonban arra, hogy
+ahogyan a projekt mérete nõ és egyre több ember kapcsolódik be a fejlesztésbe, akkor a class documentation (osztály-dokumentáció) a legjobb módja annak, hogy idõt spóroljunk.
+Ha a fejlesztõnek az eljárás nevébõl kell kitalálnia annak funkcióját, akkor a nevek félreértelmezése miatt könnyen elõfordulhat, hogy az eljárás teljesen
+mást csinál, mint amire a neve esetleg utal és amit fejlesztõ vár. Ezért fordítson kellõ gondot a dokumentálásra és
+frissítse azt olyan gyakran, ahogyan az lehetséges.
+<P>Mindamellett, a dokumentáció nem tartozik a projekthez, és nincs nemzetköziesítési támogatottsága sem. Ezért
+minden API dokumentációt angolul kell megadni, hogy a nemzetközi fejlesztõi csoportok dolgozhassanak ezekkel a forrásokkal.
+<P>Amennyiben kézzel szeretné a dokumentációt hozzáadni a fejlécállományhoz, akkor adja a dokumentációt <B>above</B> az eljáráshoz, vagy az osztályhoz
+C-comment stílusban, azzal a különbséggel, hogy az elsõ sornak itt perjellel és kettõ csillaggal kell kezdõdnie.
+<P>Példa:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+  /** engedélyezi a menüket/eszköztár ikonokat
+        */
+  void enableCommand(int id_);
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>
+<H2><A NAME="ss10.3">10.3 Különleges függelékek:</A>
+</H2>
+
+<P><B>NOTE:</B> Ennek a fejezetnek a dokumentációja az KDoc leírásából származik, amit Sirtaj S. Kang 
+<A HREF="mailto:taj@.kde.org">taj@.kde.org</A>), az KDoc szerzõje írt az KDoc -hoz;  Copyright (c) 1997
+<P>A dokumentáció a következõk elegye: 
+<P>
+<UL>
+<LI>Normál szöveg. A bekezdéseket legalább egy üres sorral kell elválasztani egymástól.
+</LI>
+<LI>az ív szövege
+<HR>
+<PRE>
+&lt;pre&gt;
+.....kód töredékek....
+&lt;/pre&gt;
+</PRE>
+<HR>
+</LI>
+<LI>Az ív különbözõ függelékei:
+<BLOCKQUOTE><CODE>
+<PRE>
+@tagname [tag parameters]
+</PRE>
+</CODE></BLOCKQUOTE>
+</LI>
+</UL>
+<P>
+<P>Érvényes függelékek mindenféle forráskódhoz:
+<P>
+<UL>
+<LI>Osztályok
+<BLOCKQUOTE><CODE>
+<PRE>
+  @short [a szöveg egy mondata]
+    Az osztály rövid leírása
+  @author [a szöveg egy mondata]
+    Az osztály szerzõje
+  @version [a szöveg egy mondata]
+    Osztályverzó (Én általában azt a RCS/CVS "Id" függelékben állítom be)
+  @see [hivatkozás(ok) osztályokra, eljárásokra]        
+    Hivatkozás más, kapcsolódó dokumentációkra
+</PRE>
+</CODE></BLOCKQUOTE>
+
+</LI>
+<LI>Eljárások
+
+<BLOCKQUOTE><CODE>
+<PRE>
+  @see
+    lsd. mint fent
+  @return [egy mondat]
+    Egymondatos leírás a return értékrõl
+  @param [param név azonosító] [param leírás]
+    Irja le a paramétert. A param leírás sokféle sor között lehet,
+    de mindig üres sorra végzõdik a megjegyzés végénél, vagy egy 
+    másik param elejénél. Ezért  a paraméterek jó ha a dokumentum 
+    végén szerepelnek.
+</PRE>
+</CODE></BLOCKQUOTE>
+
+</LI>
+<LI>Constants, Enums, Properties
+<BLOCKQUOTE><CODE>
+<PRE>
+  @see
+    mint fent
+</PRE>
+</CODE></BLOCKQUOTE>
+</LI>
+<LI>ALSO <CODE>@ref</CODE>
+A "@ref" metafüggelék, mint a javadoc formatum alapja, ugyanabban a formátumban van, mint a @see, azzal a különbséggel, hogy bárhol elõfordulhat a dokumentációban.
+(az összes többi függeléknek a saját sorában kell lennie).</LI>
+</UL>
+<P>
+<P>
+<HR>
+<A HREF="index-11.html">Következõ</A>
+<A HREF="index-9.html">Elõzõ</A>
+<A HREF="index.html#toc10">Tartalom</A>
+</BODY>
+</HTML>

@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>O Manual de Programação do KDevelop: The KDE File System Standard</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-14.html">Página seguinte</A>
+ <A HREF="index-12.html">Página anterior</A>
+ <A HREF="index.html#toc13">Índice geral</A>
+</P>
+<H3><A NAME="s13">13. The KDE File System Standard</A></H3>
+
+<P>This chapter is a copy of the KDE-File System Standard as published on the KDE website at 
+<A HREF="http://www.kde.org">http://www.kde.org</A>, written by
+Richard Moore 
+<A HREF="rich@kde.org">rich@kde.org</A><P><B>KDE File System Standard</B>
+<P>This file documents the directory structure that KDE and all KDE compliant applications should use. This is version 0.0.4 of the
+standard.
+<P>
+<H3><A NAME="ss13.1">13.1 Introduction</A>
+</H3>
+
+<P>The purpose of the KDE FSSTD is to ensure that all resources (icons, mimetypes etc.) needed for KDE applications are stored in a
+consistent directory structure. Following this structure allows applications to make use of tools such as the KIconLoader class and
+allows separation of the platform specific data needed by KDE from platform independent data (making installations on multiple
+architectures possible). In this document directory names have been suffixed with a `/` character. Where the word 'appname' appears in
+angle brackets &lt;like this&gt; it means that there should be an entry corresponding to every installed KDE application. The word
+'lang' is used in the same way to indicate that there should be an entry for every supported language named according to the standard
+two letter language codes eg. 'fr' for French, 'de' for German etc.
+<P>
+<H3><A NAME="ss13.2">13.2 Directory Layout</A>
+</H3>
+
+<P>The KDE directory structure is as shown below, the top of the KDE installation tree is usually '/opt/kde' and can be found at run time
+by using the kdedir() method of KApplication (this replaces the KDEDIR environment variable the use of which is now deprecated). This
+document will refer to this directory as kdedir().
+<!--
+KDE File System
+-->
+<!--
+.kdelnk files
+-->
+<P>
+<UL>
+<LI>kdedir()/
+<UL>
+<LI>bin/
+<UL>
+<LI>Application binaries</LI>
+</UL>
+</LI>
+<LI>lib/
+<UL>
+<LI>standard kde libraries (libkdecore etc.)</LI>
+<LI><EM>&lt;appname&gt;</EM>/
+<UL>
+<LI>Application specific data that is platform dependent</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>include/
+<UL>
+<LI>standard kde header files</LI>
+</UL>
+</LI>
+<LI>parts/</LI>
+<LI>cgi-bin/
+<UL>
+<LI>CGI programs for kdehelp</LI>
+</UL>
+</LI>
+<LI>share/
+<UL>
+<LI>doc/
+<UL>
+<LI>HTML/
+<UL>
+<LI>default --> Link to kdedir()/share/doc/HTML/en</LI>
+<LI><EM>&lt;lang&gt;</EM>/
+<UL>
+<LI><EM>&lt;appname&gt;</EM>/
+<UL>
+<LI>index.html</LI>
+<LI>other application help files</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>config/</LI>
+<LI>applnk/
+<UL>
+<LI>System/</LI>
+<LI>Utilities/</LI>
+<LI>Applications/</LI>
+<LI>Games/</LI>
+<LI>kfind.kdelnk</LI>
+<LI>khelp.kdelnk</LI>
+<LI>khome.kdelnk</LI>
+<LI>krefresh.kdelnk</LI>
+</UL>
+</LI>
+<LI>mimelnk/
+<UL>
+<LI>magic</LI>
+<LI>text/</LI>
+<LI>audio/</LI>
+</UL>
+</LI>
+<LI>partlnk/
+<UL>
+<LI><EM>&lt;partname&gt;</EM>.kdelnk</LI>
+</UL>
+</LI>
+<LI>icons/
+<UL>
+<LI>Icons used in kdelnk files</LI>
+<LI><EM>&lt;appname&gt;</EM>.xpm</LI>
+<LI>mini/
+<UL>
+<LI>Mini Icons for kpanel</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>toolbar/
+<UL>
+<LI>Standard toolbar pixmaps (eg. fileopen.xpm)</LI>
+</UL>
+</LI>
+<LI>wallpapers/
+<UL>
+<LI>Wallpapers used by kdisplay</LI>
+</UL>
+</LI>
+<LI>apps/
+<UL>
+<LI><EM>&lt;appname&gt;</EM>/
+<UL>
+<LI>toolbar/
+<UL>
+<LI>Toolbar pixmaps</LI>
+</UL>
+</LI>
+<LI>pics/
+<UL>
+<LI>Other application pixmaps</LI>
+</UL>
+</LI>
+<LI>application specific data (must be platform independent)</LI>
+</UL>
+                                </LI>
+<LI><EM>&lt;libname&gt;</EM>/
+<UL>
+<LI>pics/</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>locale/
+<UL>
+<LI><EM>&lt;lang&gt;</EM>/
+<UL>
+<LI>LC_MESSAGES/
+<UL>
+<LI><EM>&lt;appname&gt;</EM>.mo</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H3><A NAME="ss13.3">13.3 What does this mean to application developers?</A>
+</H3>
+
+<P>A standard KDE application will install files into several places in the above structure. The only required items are the application
+binary, the application kdelnk file, the application icon and the application help files - all others are optional. The most common
+things that are installed are:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+Type of file                                      Location
+
+Application binary (required)                     kdedir()/bin/
+Application kdelnk file (required)                kdedir()/share/applnk/
+Application icon (required)                       kdedir()/share/icons/&lt;appname&gt;.xpm
+Application help files (required)                 kdedir()/share/doc/default/HTML/&lt;appname&gt;/&lt;index&gt;.html
+Application toolbar pixmaps                       kdedir()/share/apps/&lt;appname&gt;/toolbar/
+Application platform independent data             kdedir()/share/apps/&lt;appname&gt;/
+Application platform specific data                kdedir()/lib/&lt;appname&gt;/
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<!--
+KDE File System
+-->
+<P>
+<H3><A NAME="ss13.4">13.4 Application Documentation</A>
+</H3>
+
+<P>I've suggested making putting at least a single page in
+<P>kdedir()/doc/default/HTML/&lt;appname&gt;/&lt;appname&gt;.html
+<P>a requirement for KDE compliance. The application is free to use the directory to store any help data it requires.
+<P>
+<P>Applications that support more than one language would place the other languages inkdedir()/doc/&lt;lang&gt;/HTML/&lt;appname&gt;/&lt;appname&gt;.html
+with there being one 'lang' directory for each language code as usual. Arranging the files like this would allow links between the help
+files of two different applications that both support a given language.
+<P>I am not 100% happy with the solution I've suggested as it does not allow any way to fall back to the default language if a required
+translation is not available.
+<P>
+<H3><A NAME="ss13.5">13.5 What does this mean to library developers?</A>
+</H3>
+
+<P>
+<P>
+<UL>
+<LI>kdedir()/share/apps/&lt;libname&gt;/toolbar</LI>
+</UL>
+
+Toolbar icons for library widgets.
+<P>
+<UL>
+<LI>kdedir()/share/apps/&lt;libname&gt;/pics</LI>
+</UL>
+
+Any other bitmaps for library widgets.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-14.html">Página seguinte</A>
+ <A HREF="index-12.html">Página anterior</A>
+ <A HREF="index.html#toc13">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

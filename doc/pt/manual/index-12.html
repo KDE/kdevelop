@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: Configuração Geral</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-13.html">Página seguinte</A>
+ <A HREF="index-11.html">Página anterior</A>
+ <A HREF="index.html#toc12">Índice geral</A>
+</P>
+<H3><A NAME="General Configuration"></A> <A NAME="s12">12. Configuração Geral</A></H3>
+
+<P>Este capítulo descreve como pode definir as suas preferências pessoais sobre a forma como o KDevelop trabalha. Todas as configurações descritas em baixo podem ser
+encontradas na entrada correspondente do menu de Opções.
+<P>
+<H3><A NAME="Configuring the &quot;Tools&quot; Menu"></A> <A NAME="ss12.1">12.1 Configurar o Menu "Ferramentas"</A>
+</H3>
+
+<P>Como o KDevelop suporta a utilização de programas de terceiros dentro do seu interface, é-lhe possível configurar quaisquer programas que lhe suprimam
+necessidades no sentido do desenvolvimento de aplicações. Isto pode ser feito adicionando programas aos já definidos no
+menu "Ferramentas". Para modificar o menu ferramentas, seleccione "Ferramentas" a partir do menu "Opções". Este diálogo permite especificar o nome para o menu,
+o programa e comandos de linha adicionais que deseje passar no momento da execução. Para remover um programa do menu, seleccione o nome de
+entrada e escolhe "Apagar". Para adicionar um programa, especifique a entrada de menu, em que &amp; é utilizado como um acelarador de menu; pode comparar as entradas
+já configuradas com a lista de entradas. Seleccione o binário e passe as opções de linha de comandos. Depois prima "Adicionar" e a entrada
+é adicionada à lista. Após sair do diálogo de configuração, o menu de ferramentas actualiza-se automaticamente, pelo que a nova configuração está já
+disponível sem a necessidade de reiniciar o KDevelop.
+<P>
+<H3><A NAME="ss12.2">12.2 Opções de Vista de Ficheiros</A>
+</H3>
+
+<P>O Visualizador Lógico de Ficheiros pode ser configurado completamente por menus de contexto. Como o seu objectivo é separar ficheiros logicamente para manter uma
+visão geral melhor de projectos complexos, uma das configurações mais utilizada é criar grupos de ficheiros. Estes podem ser definidos abrindo o
+menu de contexto com um clique do botão direito do rato sobre o icon do projecto apresentado na raíz da árvore. O menu disponibiliza:
+<UL>
+<LI>Novo Ficheiro: Abre o diálogo de Novo Ficheiro. Equivale ao comando da barra de menu "Ficheiro"-"Novo"</LI>
+<LI>Nova Classe: Abre o Gerador de Classes para criar uma nova classe. Equivale ao comando da barra de menu "Projecto"-"Nova Classe"</LI>
+<LI>Novo Grupo: Abre um diálogo para criar um novo grupo. Aí, defina o nome do grupo e o filtro de ficheiro para os ficheiros do projecto que serão
+apresentados neste grupo.</LI>
+<LI>Mostrar Caminho Relativo: apresenta os ficheiros com os seus caminhos a partir do directório do projecto se definido; caso contrário
+apenas o nome do ficheiro é mostrado.</LI>
+</UL>
+<P>Sobre uma pastas de grupo, o respectivo menu de contexto disponibiliza:
+<P>
+<UL>
+<LI>Novo Grupo: Abre o diálogo de Novo Grupo tal como no menu de contexto descrito acima.</LI>
+<LI>Remover grupo: remove o grupo do VFL.</LI>
+<LI>Propriedades: Abre as propriedades do grupo. Aí, pode editar os filtros de ficheiros através de uma lista com caractéres de selecção múltipla (wildcards) separados por vírgulas.</LI>
+</UL>
+<P>
+<P>
+<H3><A NAME="KDevelop Setup"></A> <A NAME="ss12.3">12.3 Configuração do KDevelop</A>
+</H3>
+
+<P><B>Comando Make:</B>
+O diálogo de Opções Gerais permite-lhe configurar definições gerais do KDevelop.
+Primeiro, deve definir o comando make disponível no seu sistema. Se o programa seleccionado não existir, o
+KDevelop avisa-lo-á da próxima vez que invocar o comando make.
+<P><B>Gravação Automática:</B>
+<P>Se a Gravação Automática estiver seleccionada, o KDevelop irá gravar todos os ficheiros modificados periodicamente. O intrevalo de tempo da gravação automática pode ser definido para 3, 5, 15 ou 30 minutos.
+<P>
+<P><B>Auto-Alternância:</B>
+<P>Se a Auto-Alternância estiver activa, a janela do KDevelop irá alternar entre estados consoante o contexto de utilização, por ex.  se for para a
+documentação no menu de Ajuda, o navegador de Documentação irá ser aberto, junto com a árvore de documentação e a janela de
+output será desligada.
+<P>
+<P><B>Iniciar:</B>
+<P>Para iniciar o KDevelop, tem a opção de activar/desactivar o logotipo de arranque a ser apresentado enquanto o KDevelop lê.
+Além disso, se não gosta que o último projecto seja aberto aquando do carregamento do programa, pode desligar o comportamento por defeito.
+<P>
+<H3><A NAME="Changing Keyboard Shortcuts"></A> <A NAME="ss12.4">12.4 Alterar Atalhos de Teclado</A>
+</H3>
+
+<P>O diálogo de Configuração de Teclas permite-lhe configurar os atalhos de teclas do KDevelop. Note que as teclas globais podem ser configuradas no
+Controlo Central do KDE, tais como abrir ficheiro e imprimir. Uma função de teclado pode ser configurada escolhendo a entrada de menu. Depois a
+configuração pode ser modificada activando valores tais como as teclas Alt / Ctrl etc.
+<P>
+<H3><A NAME="Documentation"></A> <A NAME="ss12.5">12.5 Documentação</A>
+</H3>
+
+<P>
+<H4>Directórios</H4>
+
+<P>Para configurar o navegador de documentação para funcionar correctamente, o KDevelop necessita de alguma informação sobre onde a documentação HTML
+está localizada no sistema. Assim, o diálogo de propriedades do Caminho da Documentação necessita do caminho para a documentação electrónica da Qt em HTML
+bem como o caminho para a documentação da biblioteca KDE.
+<P>Normalmente, a documentação Qt é colocada no mesmo directório que a Qt é instalada; por ex. se a Qt reside em /usr/local/qt, o caminho
+que tem de introduzir é /usr/local/qt/html. Para a documentação KDE, tem de definir o directório para a raiz da
+documentação, assumindo que toda a documentação das bibliotecas do KDE residem no mesmo directório. Ambos os caminhos podem ser seleccionados premindo os
+botões respectivos, que mostram uma selecção de caminho. Se o seu sistema não contém a documentação para as bibliotecas KDE, você deverá
+primeiro ir para o diálogo de configuração seguinte, Actualizar Documentação KDE. Isto irá criar a documentação para um caminho da sua escolha,
+também definindo o caminho da documentação da biblioteca KDE automaticamente.
+<P>
+<H4>Opções</H4>
+
+<P>
+<H4>Actualizar Documentação KDE</H4>
+
+<P>Para aqueles utilizadores que não dispõem de documentação recente das bibliotecas de KDE, especialmente a documentação para os ficheiros
+instalados no sistema, o diálogo de Actualização de Documentação KDE cria uma documentação nova ou actualiza a existente. Esta
+função requer que o seu sistem tenha o kdoc e o qt2kdoc instalados, incluídos no pacote kdesdk. Primeiro, tem de definir
+o caminho para o código fonte recente das kdelibs, que não é o caminho include para o KDE ! Basta introsuzir o caminho para o código, como:
+/home/rnolden/kdelibs-1.1/.
+<P>Depois, pode seleccionar três modos de instalação diferentes, como sendo:
+<P>
+<UL>
+<LI> Apagar Documentação antiga e instalar para o Caminho de Documentação recente:  isto assume que você já tem a documentação
+instalada e está colocada no caminho que foi inserido no diálogo de Caminho da Documentação. Isto irá apagar toda a documentação e instalar a
+documentação recentemente gerada no caminho recente.</LI>
+<LI> Apagar Documentação antiga e instalar para o novo Caminho de Documentação: isto irá resultar em apagar a documentação antiga tal como
+acima, mas dá-lhe a escolha de definir um novo local para a documentação.</LI>
+<LI> Deixar a Documentação intocada e instalar para o novo caminho de Documentação: Isto é recomendado para uma nova geração da
+documentação das kdelibs para utilizadores que antes não tinham nenhuma e para aqueles que querem guardar a última documentação para uma
+versão mais antiga das kdelibs.</LI>
+</UL>
+<P>O "novo caminho da Documentação das Bibliotecas KDE" tem de ser difinido para opções 2 e 3 do modo de instalação.  Isto é também recomendado para
+utilizadores que geram nova documentação do zero.
+<P>Após premir o botão OK, o KDevelop irá criar um subdirectório "kdoc-reference" no caminho da documentação contendo os ficheiros
+de referência do Kdoc. Primeiro, a documentação das classes da biblioteca qt serão indexadas para ligar a documentação da Qt com a
+documentação a ser gerada para as kdelibs. Assim é importanteque tenha definido o caminho da documentação Qt primeiro para assegurar
+que pode ser encontrada pelo qt2kdoc. Finalmente, as bibliotecas KDE serão indexadas e a documentação será construida com referências cruzadas para
+dar à navegação a melhor funcionalidade.
+<P>
+<H4>Criar Base de Dados de Busca</H4>
+
+<P>O diálogo Criar Base de Dados de Busca, acedido através do botão criar, permite ao programador criar uma base de dados para procurar uma
+palavra chave interactivamente. Para criar e utilizar a função de procura na documentação, tem de ter o programa glimpse 4.1 instalado.
+Pre-definidas estão as opções para indexar a documentação das bibliotecas KDE bem como a documentação Qt, assumindo que o caminho para os
+ficheiros de documentação estavam definidos no diálogo "Caminho da Documentação" do menu de opções. Adicionamente, o índice pode incluir
+directórios que o utilizador pode definir por si através do campo "directórios adicionais para o index". Após definir um caminho para um directório
+adicional, o botão "Adicionar" tem de ser premido para definir o caminho. Um caminho definido pode ser removido do index seleccionando o caminho
+no campo de caminho e premindo "Remover". Ainda mais, ao utilizador são oferecidos três modos diferentes para o tamanho do index: minúsculo, pequeno e
+médio. Quanto maior o tamanho do index, mais os ficheiros de index irão crescer. Por outro lado, uma busca numa base de dados maior
+será mais rápida e melhor sucedida, pelo que sugerimos a escolha de um tamanho "médio". Para a utilização da função de busca, veja a secção
+<A HREF="index-6.html#Using the Documentation Browser">Utilizar o Navegador de Documentação</A>.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-13.html">Página seguinte</A>
+ <A HREF="index-11.html">Página anterior</A>
+ <A HREF="index.html#toc12">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

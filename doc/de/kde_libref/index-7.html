@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Das KDE Bibliotheks-Handbuch: Provided Views</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="kde bibliothek referenz klassen">
+<META NAME="description" CONTENT="KDE Bibliotheks-Referenz">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-8.html">Weiter</A>
+ <A HREF="index-6.html">Zurück</A>
+ <A HREF="index.html#toc7">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="s7">7. Provided Views</A></H3>
+
+<P>As mentioned earlier, a usual application interface contains a so-called "view" or "content" area, usually the center widget surrounded
+by menubar, toolbars and a statusbar. Besides the required construction of a view widget by inheritance of <CODE>QWidget</CODE>, the KDE and Qt
+libraries offer several complete widgets that can serve as view areas already.  These are widgets that are used commonly over a lot of
+applications and do not necessarily have to be used as a main view; they may also get used in dialogs.
+<P>Qt only offers one of these: the <CODE>QMultiLineEdit</CODE> class, offering a text editing widget. By using a <CODE>QMultiLineEdit</CODE>, a developer
+can create a full-functional editor rapidly. The class interface may also serve you as an example what functionality a view area should
+provide.
+<P>KDE on the other hand contains two complete widgets. One is again an editor widget, derived from <CODE>QMultiLineEdit</CODE> and is
+encapsulated in the <CODE>KEdit</CODE> class of the <CODE>kdeui</CODE> library; the other a HTML- interpreter widget, <CODE>KHTMLWidget</CODE>. The following
+will discuss these classes and explain the interface usage by example.
+<P>
+<H3><A NAME="ss7.1">7.1 The KEdit View</A>
+</H3>
+
+<P>As mentioned, the <CODE>KEdit</CODE> view is a full-functional editor class that offers a complete interface to build an editor. As it inherits
+<CODE>QMultiLineEdit</CODE>, it makes use of Qt's basic functionality with the intention to complete the interface beyond the facilities a text
+editor view should provide such as insertion or clipboard communication.
+<P>The idea is to construct a <CODE>KTMainWindow</CODE> based main view with the according items like a menubar, toolbar and statusbar. The
+slots that get called by the popup menus or the toolbar icons are all placed as public methods within the <CODE>KEdit</CODE> class. This
+requires the implementation of slots on the main widget that call the according methods.
+<P>An example containing a slot implementation and the use of a slot provided already by <CODE>QMultiLineEdit</CODE>:
+<HR>
+<PRE>
+void MyEditor::initMenuBar(){
+
+  // create the "Edit" menu
+  edit_menu= new QPopupMenu();
+  // here we call a slot selectAll() provided by QMultiLineEdit to select the whole text:
+  edit_menu->insertItem(i18n("&amp;Select All"), kedit, SLOT(selectAll()), 0, ID_EDIT_SELECT_ALL);
+
+  // construct a view-menu and insert a menuentry "Font"
+  view_menu= new QPopupMenu();
+  // we have to call a self-created slot to call
+  // the public method selectFont() of KEdit
+  view_menu->insertItem(i18n("&amp;Font"), this, SLOT(slotViewFont()), 0, ID_VIEW_FONT);
+
+
+  // insert the view_menu into the menubar
+  menuBar()->insertItem(i18n("&amp;Edit"), edit_menu);
+  menuBar()->insertItem(i18n("&amp;View"), view_menu);
+}
+
+void MyEditor::slotViewFont(){
+  // call a method of KEdit to call the font selection dialog
+  selectFont ();
+}
+</PRE>
+<HR>
+<P>
+<P>
+<H3><A NAME="ss7.2">7.2 The KHTML View</A>
+</H3>
+
+<P>The second view area provided by KDE is originally the <CODE>KHTMLWidget</CODE>. This class actually is the visible widget that interprets HTML
+files including graphics, tables etc. What it doesn't offer is a scrolling functionality which limits the use of the widget. Therefore,
+the class <CODE>KHTMLView</CODE> is introduced which serves as a wrapper class that offers this and other functionality.
+<P>A lot of applications make wide use of either <CODE>KHTMLWidget</CODE>, adding the scrolling functionality by code, or using <CODE>KHTMLView</CODE>
+directly, such as KDEHelp, KDevelop and KFM.
+<P>The main reason for a complete HTML widget is that today's applications tend to use HTML-based help functionality almost everywhere, so
+a reuse of this funcitionality is very certain.
+<P>The usage can be compared to the implementation example of the last chapter for <CODE>KEdit</CODE>, as <CODE>KHTMLView</CODE> provides signals, slots
+and public methods as well that can be called similar to provide a user interface that handles the widget. When it comes to configuring
+the behavoir of the displaying <CODE>KHTMLWidget</CODE>, you have to create a pointer to a <CODE>KHTMLWidget</CODE> and retrieve the instance of your
+<CODE>KHTMLView</CODE>'s widget by calling <CODE>getKHTMLWidget()</CODE>. Then you can set options like color settings and font sizes for your view
+area.
+<H4>Comment</H4>
+In KDE2 you will have an extended KHTMLWidget that directly inherits QScrollView, so scrolling is provided by default.
+KHTMLView is removed instead. Also, the new HTML widget provides support for Java Script.
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-8.html">Weiter</A>
+ <A HREF="index-6.html">Zurück</A>
+ <A HREF="index.html#toc7">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

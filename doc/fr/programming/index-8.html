@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Le Manuel de Programmation de KDevelop: Fonctions d'Aide</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-9.html">Page suivante</A>
+ <A HREF="index-7.html">Page précédente</A>
+ <A HREF="index.html#toc8">Table des matières</A>
+</P>
+<H3><A NAME="s8">8. Fonctions d'Aide</A></H3>
+
+<P>Une partie très importante du processus de développement est de fournir
+des fonctionnalités d'aide à l'utilisateur, là où c'est possible. La plupart
+des développeurs ont tendance à reporter cela mais vous devez vous souvenir
+qu'un utilisateur normal n'est pas forcément un expert d'Unix. Il peut très
+bien venir du côté sombre des logiciels, là où l'utilisation est parsemée
+de douceurs qui permettent à l'utilisateur d'utiliser une application sans
+même toucher à une seule page du manuel. C'est pourquoi les bibliothèques de
+KDE et Qt fournissent tous les moyens permettant d'ajouter des fonctions
+d'aide prêtes à l'emploi qui rendront votre application professionnelle. Dans
+l'application, ces fonctions sont :
+<P>
+<UL>
+<LI>les bulles d'aide</LI>
+<LI>l'aide rapide</LI>
+<LI>l'aide de la barre d'état</LI>
+<LI>les boutons "Qu'est-ce que c'est...?"</LI>
+</UL>
+<P>En plus, l'application devrait fournir un accès direct à la documentation
+en ligne au format HTML en appuyant sur la touche standard d'aide F1. Comme KDevelop
+propose aussi toutes sortes d'aides, et que les applications KDE générées par
+l'assistant d'application contiennent déjà le support pour cela, ce chapitre
+vous aidera à trouver où et comment ajouter des fonctions d'aide.
+<P>Pendant le développement de votre application, vous devriez essayer d'être
+homogène dans tout ce que vous faites ; c'est pourquoi, vous devez prendre les
+mesures nécessaires directement pendant l'extension du code. Cela vous empêchera
+de plonger à nouveau dans le code et de chercher à comprendre ce que fait
+votre application ou ce que vous sous-entendiez par certains morceaux de code.
+<P>
+<H3><A NAME="ss8.1">8.1 Bulles d'aide</A>
+</H3>
+
+<P>Les bulles d'aide sont une façon très simple de donner de l'aide. Ce sont de petits
+messages d'aide qui s'affichent lorsque l'utilisateur déplace sa souris sur un
+widget qui fournit une bulle d'aide et disparaît lorsque la souris s'en va.
+L'utilisation la plus habituelle des bulles d'aide est dans les barres d'outils,
+où vos bulles d'aide devraient être aussi petites que possible, car les barres d'outils
+peuvent être configurées pour afficher leur contenu de différentes façons :
+en affichant le bouton seul, en affichant le bouton avec le texte sur la droite,
+le bouton avec le texte en-dessous ou seulement le texte. Cette possibilité
+devrait être configurable par l'utilisateur mais ce n'est pas une obligation. Dans
+tous les cas, le texte est affiché comme une bulle d'aide et une barre d'outils
+est généralement constituée de boutons et d'autres widgets comme les zones de saisie
+et les listes déroulantes. Pour une référence complète, consultez la référence de
+la classe <CODE>KToolBar</CODE> située dans la bibliothèque KDE-UI.
+<P>À titre d'exemple, nous allons considérer le bouton "Nouveau fichier" d'une application
+générique&nbsp;:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+toolBar()->insertButton(Icon("filenew.xpm"), ID_FILE_NEW, true, i18n("New File") );
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<!--
+toolBar()
+-->
+<!--
+KToolBar
+-->
+<P>Ici, la partie <CODE>i18n("New File")</CODE> définit le message de la bulle d'aide. Il est
+entouré par la macro i18n() fournie par <CODE>kapp.h</CODE> pour traduire la
+bulle d'aide dans la langue actuellement sélectionnée.
+<P>Les bulles d'aide peuvent aussi être ajoutées à n'importe quel widget personnalisé
+en utilisant les classes <CODE>QToolTip</CODE> et <CODE>QToolTipGroup</CODE> fournies par Qt.
+Voici un exemple d'utilisation :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+QToolTip::add( yourwidget, i18n("your Tip") );
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Pour plus d'informations, consultez le Manuel de Référence de Qt, classe 
+<CODE>QToolTip</CODE>.
+<P>
+<H3><A NAME="ss8.2">8.2 Ajouter une Aide Rapide</A>
+</H3>
+
+<P>Les fenêtres d'Aide Rapide sont un autre bon exemple de manière de donner de l'aide. L'utilisateur
+peut accéder à l'aide rapide sur un widget qui y est connecté en cliquant avec le bouton droit
+de la souris et en sélectionnant Aide Rapide (NdT : "Quick-Help") dans le menu contextuel. L'Aide
+Rapide est donc à mi-chemin entre une aide détaillée et des bulles d'aide - la documentation
+serait trop exhaustive et une bulle d'aide ne donnerait pas assez de détails. Pour voir comment
+fonctionne l'Aide Rapide, ouvrez n'importe quelle boîte de dialogue de KDevelop et cliquez avec
+le bouton droit sur un élément de la boîte de dialogue. Sélectionnez ensuite l'entrée "Aide Rapide"
+et vous obtiendrez le message d'aide. En plus, ces messages peuvent être formatés avec de la couleur,
+une police et peuvent même contenir des URL pour référer à une certaine page Web (et peuvent donc aussi
+pointer sur le manuel d'utilisation).
+<P>Pour utiliser l'Aide Rapide, ajoutez le fichier d'inclusion <CODE>kquickhelp.h</CODE> à votre fichier
+source contenant de l'aide rapide. Comme la classe <CODE>KQuickHelp</CODE> fait partie de la bibliothèque
+KDE-UI, il devrait déjà être utilisé par votre application ; sinon, ajoutez kdeui à l'option
+d'édition de lien de votre projet.
+<P>Voici un exemple :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+KQuickHelp::add( yourwidget, i18n("your Tip") );
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>qui est strictement identique à l'utilisation de QToolTip. Lors de la construction d'une boîte de
+dialogue avec l'éditeur de boîtes de dialogue de KDevelop, ajoutez vos bulles d'aide et votre
+aide rapide dans le fichier d'implantation - PAS dans le fichier source car il est reconstruit
+par l'éditeur de boîtes de dialogues à chaque fois que vous éditez le widget.
+<P>La classe <CODE>KQuickHelp</CODE> permet aussi de formater du texte en utilisant des balises (NdT : tags).
+Elle autorise aussi les hyperliens, tels que les protocoles Internet, les couleurs et les types
+et tailles de police. Consultez 
+<A HREF="../kde_libref/index.html">KDE Library Reference Guide</A>
+et la documentation de la classe pour plus d'informations sur <CODE>KQuickTip</CODE>.
+<P>
+<P>
+<H3><A NAME="ss8.3">8.3 Extension de l'Aide dans la Barre d'État</A>
+</H3>
+
+<P>Comme les applications graphiques générées par KDevelop contiennent déjà une
+barre d'état, elles offrent aussi un ensemble de messages de barre d'état pour tous les éléments de menu ou de barre d'outils.
+Un message d'aide de barre d'état est un message court qui étend le sens d'une bulle d'aide, ou
+peut être vu comme un remplacement d'une bulle d'aide pour les éléments des barres de menus, et
+qui est affiché dans la barre d'état lorsque l'utilisateur entre dans un menu et met la surbrillance
+sur un élément du menu ; ainsi, tous les éléments du menu connectent leur signal
+<CODE>highlighted(int)</CODE> à la méthode <CODE>statusCallback(int)</CODE> qui sélectionne le message approprié
+dans une instruction switch. Lorsque vous ajoutez un élément à un menu existant ou à une
+barre d'outils, ajoutez une entrée correspondante dans cette méthode avec une courte description
+de l'action que l'utilisateur déclenchera en activant ce bouton ou cette entrée de menu.
+<P>Exemple :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+        case ID_FILE_NEW:
+                slotStatusHelpMsg(i18n("Creates a new document"));
+                break;
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Ceci affichera un message dans la barre d'état en appelant la méthode <CODE>slotStatusHelpMsg()</CODE>,
+avec la chaîne d'aide traduite correspondante, lorsque l'utilisateur met la surbrillance
+sur un élément de menu ou de barre d'outils ayant l'identificateur ID_FILE_NEW
+qui est connecté à la méthode <CODE>statusCallback()</CODE>. Les barres d'outils se connectent à cette
+méthode avec leur signal <CODE>pressed(int)</CODE> qui permet à l'utilisateur d'appuyer sur un bouton
+de la barre d'outils et déplacer plus loin la souris s'il ne veut pas déclencher
+la commande. <CODE>KToolBar</CODE> possède aussi le signal <CODE>highlighted(int, bool)</CODE>
+qui peut être utilisé à la place du signal prédéfini pour afficher le message quand l'utilisateur
+met le bouton en surbrillance.
+<P>
+<P>
+<H3><A NAME="ss8.4">8.4 Le Bouton "What's This...?"</A>
+</H3>
+
+<P>Le bouton "What's This...?" fournit des fenêtres d'aide comme Quickhelp
+<!--
+KQuickHelp
+-->
+ mais
+avec l'hypothèse que l'utilisateur veut obtenir de l'aide sur un widget précis dans la vue
+ou sur un élément de barre d'outils. Il est placé dans la barre d'outils et est activé
+lorsque l'utilisateur clique sur le bouton. Le curseur se change en un curseur avec une flèche et
+un point d'interrogation semblable à l'apparence du bouton lui-même. Ensuite, l'utilisateur peut
+cliquer sur un widget visible et une fenêtre d'aide s'affiche. À titre d'exercice, vous
+pourriez tester ce comportement avec le bouton What's this...? (NdT : Qu'est-ce que c'est...?)
+de KDevelop. Pour ajouter le bouton What's This...?, procédez ainsi :
+<P>
+<OL>
+<LI>incluez <CODE>qwhatsthis.h</CODE> dans votre code source</LI>
+<LI>ajoutez une donnée membre privée <CODE>QWhatsThis whats_this</CODE> ou avec un autre nom
+à la déclaration de votre classe dérivant de <CODE>KTMainWindow</CODE></LI>
+<LI>définisez un identificateur de ressource pour votre bouton what's this dans le
+fichier <CODE>resource.h</CODE>, par exemple <CODE>#define ID_HELP_WHATS_THIS 10100</CODE></LI>
+<LI>dans votre méthode de création de la barre d'outils (généralement <CODE>initToolBar()</CODE>),
+ajoutez l'emplacement où vous voulez que le bouton soit affiché :
+<BLOCKQUOTE><CODE>
+<PRE>
+  whats_this = new QWhatsThis;
+  QToolButton *btnwhat = whats_this->whatsThisButton(toolBar());
+  QToolTip::add(btnwhat, i18n("What's this...?"));
+  toolBar()->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
+  btnwhat->setFocusPolicy(QWidget::NoFocus);
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<!--
+setFocusPolicy()
+-->
+</LI>
+<LI>enfin, ajoutez les messages que vous voulez voir lors d'un clic sur un certain widget comme ceci :
+<BLOCKQUOTE><CODE>
+<PRE>
+whats_this->add(class_tree, i18n("Class Viewer\n\n"
+                  "The class viewer shows all classes, methods and variables "
+                  "of the current project files and allows switching to declarations "
+                  "and implementations. The right button popup-menu allows more specialized "
+                  "functionality."));
+</PRE>
+</CODE></BLOCKQUOTE>
+</LI>
+</OL>
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-9.html">Page suivante</A>
+ <A HREF="index-7.html">Page précédente</A>
+ <A HREF="index.html#toc8">Table des matières</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

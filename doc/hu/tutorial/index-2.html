@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>KDE Alkalmazás Tankönyv: Kezdõlépések</TITLE>
+ <LINK HREF="index-3.html" REL=next>
+ <LINK HREF="index-1.html" REL=previous>
+ <LINK HREF="index.html#toc2" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="index-3.html">Következõ</A>
+<A HREF="index-1.html">Elõzõ</A>
+<A HREF="index.html#toc2">Tartalom</A>
+<HR>
+<H2><A NAME="s2">2. Kezdõlépések</A></H2>
+
+<P>Getting Started- that means, you should have set up KDevelop to work correctly first. Ensure you have access to the Qt online referencedocumentation by the "Help" menu or the according book in the documentation tree. When looking a the first page of the Otdocumentation, you will see that it contains a link to a section "Tutorials" and "Examples". Under "Tutorials", you will find a 14-stepintroduction into using the Qt library to build applications. On the other hand, "Examples" will lead you to a list of exampleprograms that Qt includes and takes for example usage reference in certain classes. Now, if you are an absolute beginner, you should becomfortable with the idea behind Qt- providing a library that offers:
+<UL>
+<LI>a base application class (<CODE>QApplication</CODE>)</LI>
+<LI>a widget library for graphical user interfaces</LI>
+<LI>a set of additional helper classes for graphics, file and data handling</LI>
+<LI>the signal-slot mechanism for object communication</LI>
+<LI>event controlling by event loops and virtual methods</LI>
+</UL>
+If that doesn't tell you anything right now, you should read about the Qt library in 
+<A HREF="programming-2.html#ss2.1">TheKDevelop Programming Handbook</A> where the basics for a Qt application are described in detail. There, you will also find andintroduction about the difference between a Qt and a KDE application, which is not much at the first level of the Qt tutorial step.Now, to learn about Qt first would be a good start for programming KDE applications as well, so we will create a project that willproduce the tutorial applications after editing.To do this, start with opening KDevelop and select "Project"-"New" from the menubar. The application wizard opens and you have toselect which type of project you want to build. For Qt applications, you would choose the Qt application, but we will use the mini-KDEproject to build our examples. The reason is simple: the Qt tutorials don't contain much code, and  by choosing the Qt application inthe application wizard, we would have to do a lot of changing on the provided code to create the "true" examples.But as the mini-KDE application only consists of an empty main window but also checks for the Qt library and header files, it will fitfor our purposes and doesn't require much changes.When entering the next wizard page, we have to enter the project-specific information. There, we can leave out any KDE-specificadditions such as a mini-icon and a main icon, documentation etc. We just fill in the information that will be useful for building asuitable base for the tutorials. As the structure of the tutorial steps builds the next step on the previously created code, we canstart with <CODE>MyWidget</CODE> as the project name. This will already build us the base class that is needed in chapter 4, so we don't haveto care for that later. As we want to start with the first tutorial step, we will use '1' as the project number, which we can increaselater when moving to the next step.Then, fill in the other required information such as your name, email address and project directory. That would be all we need and wecan flip to the next page. Insert your header for the project's header file here or use the given example. The same is done with the4th page, where the same has to be set for the source files. Finally, the last page is entered, where you have to press "Create" tobuild the project. If the button is not available, start at the first page again and make sure you didn't miss to insert any requiredinformation.If everything went OK, the project has been build and the messages window in the application wizard will have "READY" at it's lastline.  Select "Close" to finish the wizard.When looking at the treeview on the left, you will see that the project alreay includes a class "MyWidget"- this is because we chosethis to be the application name. Further, when opening "Functions" in the classviewer's "Globals" folder, you will see that theapplication already contains a <CODE>main()</CODE> function where the execution will start.Now the application is already set up. You could do an "Execute" or "Make", but as we want to create the tutorial applications, we cango ahead and change the code first to create our tutorial examples- which we'll do in the next step.
+<HR>
+<A HREF="index-3.html">Következõ</A>
+<A HREF="index-1.html">Elõzõ</A>
+<A HREF="index.html#toc2">Tartalom</A>
+</BODY>
+</HTML>

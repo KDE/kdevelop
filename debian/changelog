@@ -1,0 +1,101 @@
+kdevelop (1:1.2-20000504-1) stable; urgency=low
+
+  * New upstream release
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Thu,  4 May 2000 22:13:51 +0200
+
+kdevelop (1:1.1final-20000228-1) stable; urgency=low
+
+  * New upstream release
+  * Recommend kdelibs-doc
+  * Don't include Makefiles
+
+ -- Bernd Gehrmann <bernd@users.sourceforge.net>  Sun, 27 Feb 2000 12:00:00 +0100
+
+kdevelop (1:1.1beta2-20000206-1) stable; urgency=low
+
+  * Back to old configure arguments
+  * Mentioned debugger in control file, 
+    made kdebase a dependency
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon,  7 Feb 2000 00:10:59 +0100
+
+kdevelop (1:1.1beta2-20000131-1) stable; urgency=low
+
+  * New upstream version: 1.1beta2
+  * Use --prefix in configure, set kde_confdir, kde_htmldir explicitly
+    because of new autoconf framework
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon, 31 Jan 2000 21:15:04 +0100
+
+kdevelop (1:1.0-19991206-1) stable; urgency=low
+
+  * New upstream version: 1.0
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon,  6 Dec 1999 20:21:54 +0100
+
+kdevelop (1:1.0beta4.1-19991030-1) unstable; urgency=low
+
+  * New upstream changes
+  * Disabled debug - is stripped anyway
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Sat, 30 Oct 1999 09:02:41 +0200
+
+kdevelop (1:0.4-19990728-1) unstable; urgency=low
+
+  * Added further manuals to doc-base
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Wed, 28 Jul 1999 23:29:03 +0200
+
+kdevelop (1:0.4-19990716-1) unstable; urgency=low
+
+  * Call ldconfig in postinst
+  * configure with flag --enable-kdoc2
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Fri, 16 Jul 1999 20:47:55 +0200
+
+kdevelop (1:0.4-19990705-1) unstable; urgency=low
+
+  * configure with flag --enable-docbase
+  * install kdlgloader into the correct directories
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon,  5 Jul 1999 12:21:59 +0200
+
+kdevelop (1:0.4-19990619-1) unstable; urgency=low
+
+  * Fixed a competing problem between kderules and dh_installdocs
+  * New upstream changes
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 19 Jun 1999 02:03:38 -0400
+
+kdevelop (1:0.4-19990614-1) unstable; urgency=low
+
+  * Aiiiiiiiiiie!! Fixed the broken kderules file
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon, 14 Jun 1999 20:45:38 +0200
+
+kdevelop (1:0.4-19990613-1) unstable; urgency=low
+
+  * New upstream CVS version
+  * New kderules script
+  * Migrated from man-pages format to undocumented format
+  * Changed changelog versioning to fit the rest of the KDE package versioning
+
+ -- Ivan E. Moore II <rkrusty@debian.org>   Sun, 13 Jun 1999 09:49:48 -0400
+
+kdevelop (990531-1) experimental; urgency=low
+
+  * Use DESTDIR mechanism instead of --with-install-root
+  * Do not install subdirectories of doc-base
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon, 31 May 1999 21:49:48 +0200
+
+kdevelop (990422-1) experimental; urgency=low
+
+  * Initial Release 
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Thu, 22 Apr 1999 20:33:18 +0200
+
+Local variables:
+mode: debian-changelog
+End:

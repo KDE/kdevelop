@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Das KDE Bibliotheks-Handbuch: Process Handling</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="kde bibliothek referenz klassen">
+<META NAME="description" CONTENT="KDE Bibliotheks-Referenz">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-9.html">Weiter</A>
+ <A HREF="index-7.html">Zurück</A>
+ <A HREF="index.html#toc8">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="s8">8. Process Handling</A></H3>
+
+<P>The KDE UI library provides the classes <CODE>KProcess</CODE> and <CODE>KShellProcess</CODE> to run external processes that are invoked within the
+application that needs to run another application. This has generally two advantages:
+<P>
+<UL>
+<LI>you don't have to reinvent the wheel when commandline programs already exist</LI>
+<LI>your application's event queue is not blocked by long operations</LI>
+</UL>
+<P>A lot of applications already make wide use of these classes as they are very flexible and provide the necessary interface not only to
+start another application but to control its output and termination. As mentioned, a lot of Unix applications are already available
+but only work on commandline. The commandline arguments are hard to remember and most users won't ever touch them if they don't need
+them really. For occasional usage, the interface is too complex and therefore not very user-friendly. As KDE applications target a
+desktop system where even unexperienced users can feel themselves at home, this is the best way to write so-called front-ends for
+terminal applications.
+<P>Another possible use even for KDE programmers would be to write their target application as a commandline program and provide a
+user-friendly GUI interface.
+<P>The following sections will describe the <CODE>KProcess</CODE> class first, then the usage of <CODE>KShellProcess</CODE>, as this is a subclass of
+<CODE>KProcess</CODE>, therefore differs only in its usage.
+<P>
+<H3><A NAME="ss8.1">8.1 KProcess</A>
+</H3>
+
+<P>
+<P>The <CODE>KProcess</CODE> class is based on <CODE>QObject</CODE>, therefore able to communicate by signals and slots. It can be used to start any
+executable binary as a child process on the local system and control it by communication and run mode. To use <CODE>KProcess</CODE>, include
+<CODE>kprocess.h</CODE> and create an instance of <CODE>KProcess</CODE>. If the instance has been created and used already, you have to call
+<CODE>clearArguments()</CODE> to ensure the arguments are empty before the next usage. The actual usage is to transmit the complete commandline
+argument to the process instance using the operator &lt;&lt; as strings. Then the actual process is called with <CODE>start()</CODE>. This function
+has to be called with the run mode and communication.
+<P>
+<H4>Run mode</H4>
+
+<P>The run mode of the external application can be set when calling <CODE>start()</CODE> as the first argument. The run mode can be one of
+<CODE>DontCare, NotifyOnExit, Block</CODE>. Now, what does this mean to the application that is called and to the application that calls the
+process ?
+<P>
+<UL>
+<LI>DontCare: The child process is called and started with the given commandline arguments. Easy to guess, DontCare means that the
+caller is not interested if the child process has exited or not. The two applications run concurrently, but the invoking process
+(usually the GUI application) doesn't get notified and runs like without starting any process.
+</LI>
+<LI>NotifyOnExit: both processes run concurrently like in DontCare run mode. The difference is that the process controller can emit
+the signal <CODE>processExited()</CODE>, which can be caught to determine the child process has finished. The notification can be used to reset
+any statusbar message informing the user that the process is running, this should be used as a guideline to inform the user about the
+current state of the application. Mind that the invoking application is responsible for the child process as it is unlikely that
+non-experienced users will control and other process that they see.
+</LI>
+<LI>Block: the child process blocks the caller's event handling and program execution. This is not recommended to use within GUI
+applications as even the call <CODE>processEvents()</CODE> won't be executed; therefore the event handling cannot be called to execute even by
+event precedence.</LI>
+</UL>
+<P>The <CODE>start()</CODE> method also returns if the start has been successful or not. Therefore you should always call the method with an
+<CODE>if()</CODE> statement to display a message box if starting the process returns false. Reasons for <CODE>start()</CODE> to return false could be:
+<UL>
+<LI>the commandline argument list is empty (which is your implementations's fault)</LI>
+<LI>the process which is to be called is already running</LI>
+<LI>starting the child process failed</LI>
+</UL>
+<P>To inform the user why the process cannot be executed, you have to investigate these three possibilities. The first possibility, an
+empty commandline, depends on your GUI that provides the methods setting the commandline options. Normally, you would retrieve them
+by a dialog where the user sets the options on how to start the application. The GUI for these dialogs normally uses radio buttons to
+let the user choose one of several options (or more if the process allows this), a lineedit for filenames (with an additional
+file-selection button to call a <CODE>KFileDialog::getOpenFileName()</CODE>), eventually a lineedit for output locations, also with a
+<CODE>KFileDialog::getSaveFileName()</CODE>.
+<P>The second possibility mostly occurs in situations where the application has been started twice or the user has opened another instance
+of its main window where or by which he caused another process call. In this case, you could use <CODE>getPid()</CODE>  to determine the
+current process ID which can be used in a message box to show that the process is already running.
+<P>Finally, failing a call of a child process often means that the program is not available on the system. There, you should inform the
+user that he has to install the program to ensure functionality. Another option would be to test the <CODE>PATH</CODE> environment variable of
+the user for the directories he uses to call applications. Then you could test with <CODE>QFile::exists()</CODE>, if the binary is there even
+before trying to start it.
+<P>
+<H4>Communication</H4>
+
+<P>The communication with the caller process is another option that has to be set while calling <CODE>KProcess::start()</CODE>. With this, you can
+retrieve the output of the process where needed. The available communication modes are:
+<P>
+<UL>
+<LI>NoCommunication : Use when you don't want to communicate with the process, e.g. it runs silently without interesting output or
+requiring any input.</LI>
+<LI>Stdin : To be used if the process asks for user input. Depending on the process, you have to use this communication mode to avoid
+blocking - the process just will wait for input but can never retrieve the information if this mode isn't used.</LI>
+<LI>Stdout : The output the process sends to StdOut, which would be your terminal for example. This mode has to be used if you want
+to retrieve the output information for displaying it to the user in a widget.</LI>
+<LI>Stderr : error messages sent by the process to StdErr can be retrieved seperately by this mode. This is useful to check for
+errors.</LI>
+<LI>AllOutput : Stdout and Stderr OR'ed together. Mind that this doesn't include StdIn communication !</LI>
+<LI>All: Open all communication channels, meaning that Stdout, Stderr and Stdin are OR'ed together.</LI>
+</UL>
+<P>As mentioned for <CODE>AllOutput</CODE> and <CODE>All</CODE> communication modes, the available modes can be OR'ed together to combine the needed
+modes.
+<P>By the according signals and slots, you can connect the communication data channels to e.g. a text widget or a buffer. Displaying the
+output directly into a text widget will be used for Stdout in most cases while error messages can as well be retrieved into a
+non-visible buffer which can be processed to visualize errors by messageboxes.
+<P>
+<H3><A NAME="ss8.2">8.2 KShellProcess</A>
+</H3>
+
+<P>
+<P>The <CODE>KShellProcess</CODE> class is a specialized <CODE>KProcess</CODE> class. The main difference is that you can call your executable via a Unix
+shell which allows all options the selected shell offers. You should check for available shells as well before calling a shell process
+for a special shell; the normal constructor will check for any shell available but can be set to use e.g. /bin/bash to make use of the
+Bourne shell - but you can't expect any system to have the Bourne shell available. The use of a <CODE>KShellProcess</CODE> offers the following
+advantages:
+<UL>
+<LI>Useage of environment variables</LI>
+<LI>Setting environment variables</LI>
+<LI>pipe usage</LI>
+<LI>wildcard usage</LI>
+</UL>
+<P>The methods of <CODE>KProcess</CODE> then offer the necessary communication and runmodes the process may need.
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-9.html">Weiter</A>
+ <A HREF="index-7.html">Zurück</A>
+ <A HREF="index.html#toc8">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

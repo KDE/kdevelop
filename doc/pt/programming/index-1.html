@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>O Manual de Programação do KDevelop: Introdução</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-2.html">Página seguinte</A>
+ Página anterior <A HREF="index.html#toc1">Índice geral</A>
+</P>
+<H3><A NAME="s1">1. Introdução</A></H3>
+
+<P>Como os Sistemas Unix estão a tornar-se mais e mais populares mesmo para iniciados no trabalho com computadores, devido às suas vantagens no
+que toca a estabilidade e functionalidade, muitos estão de certo modo desapontados, porque as aplicações não têm um aspecto consistente e cada uma se
+comporta de forma diferente das restantes. Com o KDE, os programadores têm uma forma quase perfeita de criar aplicações de primeira classe para ambientes de trabalho Unix
+para obterem uma comunidade de utilizadores mais vasta apenas pela qualidade que as suas aplicações oferecem. Assim, o KDE torna-se mais e mais
+popular como uma base para o desenvolvimento de aplicações, e os programadores desejam retirar vantagens das possibilidades que o sistema tem para oferecer.
+<P>
+<P>
+<H3><A NAME="ss1.1">1.1 O que já deve saber neste momento</A>
+</H3>
+
+<P>Para obter a melhor utilização deste manual de programação, nós assumimos que você já conhece a linguagem de programação C++; se não, deve
+familiarizar-se com ela primeiro. Informação sobre C++ está disponível através de várias fontes quer em formato impresso na sua
+livraria local ou através de tutores encontrados na Internet. Conhecimentos sobre o desenho de Interfaces Gráficos de Utilizador não são requeridos, já
+que este manual tenta cobrir o desenho de aplicações para programas KDE, o que também inclui uma introdução ao conjunto de ferramentas Qt bem como
+às bibliotecas KDE e ao desenho de Interfaces de Utilizador. Também, já se deve ter familiarizado com o KDevelop tendo lido
+<A HREF="index.html">O Manual do Utilizador do KDevelop</A>, que contém uma revisão descritiva das funcionalidades disponibilizadas pelo
+ambiente de desenvolvimento (IDE).
+<P>
+<H3><A NAME="ss1.2">1.2 Sobre este Manual</A>
+</H3>
+
+<P>Este manual foi escrito para dar aos programadores uma introdução ao desenvolvimento de aplicações para o KDE utilizando o Ambiente de Desenvolvimento
+Integrado KDevelop.
+<P>Os capítulos seguintes dão-lhe assim uma introdução sobre como criar projectos, explica o código fonte já gerado e mostra
+como ampliar o código fornecido em vários aspectos tais como as barras de ferramentas, barras de menu e áreas de vista.
+<P>Depois é discutido em detalhe o editor de diálogos, explicando como os widgets são criados e cobre a definição de propriedades dos widget's em detalhe
+para todos os widgets disponibilizados.
+<P>Finalmente, você irá aprender sobre vários tópicos que irão completar o seu conhecimento no que respeita ao desenho de projectos e o ajuda a resolver
+problemas adicionais para além de programar tais como adicionar documentação API e extender os manuais electrónicos.
+<P><B>No capítulo seguinte</B>
+<P>iremos observar as bibliotecas Qt e KDE, mostrando conceitos basicos e porque são as coisas do modo que são.
+Também, iremos discutir como criar as aplicações de tutor disponibilizadas com o conjunto de ferramentas Qt utilizando o KDevelop, para que os iniciados possam ver
+já os primeiros resultados com alguns passos, e assim aprender como utilizar algumas das melhores funcionalidades do KDevelop.
+<P><B>Nos capítulos seguintes</B> você irá aprender:
+<UL>
+<LI>como criar uma aplicação com o KAppWizard,</LI>
+<LI>o que o esqueleto do projecto já disponibiliza,</LI>
+<LI>o que o código já criado significa,</LI>
+<LI>como criar as suas próprias vistas,</LI>
+<LI>como aumentar as funcionalidades da sua aplicação através de diálogos e barras de menu e ferramentas</LI>
+<LI>como tornar a sua aplicação amiga do utilizador disponibilizando funções de ajuda e</LI>
+<LI>como escrever documentação electrónica em SGML.</LI>
+</UL>
+<P>
+<P>
+<H3><A NAME="ss1.3">1.3 Informação Adicional</A>
+</H3>
+
+<P>Informação adicional sobre programação Qt/KDE é disponibilizada por várias fontes:
+<P>
+<UL>
+<LI><EM>Programar com a Qt</EM> por Matthias Kalle Dalheimer, publicado por O'Reilly (veja 
+<A HREF="http://www.oreilly.com">http://www.oreilly.com</A>, cobrindo
+quase todos os aspectos do conjunto de ferramentas GUI Qt e contendo também exemplos.</LI>
+<LI>
+<A HREF="index.html">O Manual do Utilizador do KDevelop</A>, disponibilizado com o IDE KDevelop,</LI>
+<LI><EM>Referência Electrónica</EM> para a biblioteca Qt, disponibilizada com a sua cópia do conjunto de ferramentas Qt em
+HTML e disponível em PostScript em 
+<A HREF="http://www.troll.no">http://www.troll.no</A></LI>
+<LI>Na Internet, veja
+<UL>
+<LI>a página da Troll Tech em 
+<A HREF="http://www.troll.no">http://www.troll.no</A>,</LI>
+<LI>a página do KDE em 
+<A HREF="http://www.kde.org">http://www.kde.org</A>,</LI>
+<LI>a página do programador KDE em 
+<A HREF="http://developer.kde.org">http://developer.kde.org</A></LI>
+<LI>a página do KDevelop em 
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A></LI>
+</UL>
+</LI>
+</UL>
+<P>Adicionalmente, deverá procurar ajuda subscrevendo-se nas várias listas de discussão por e-mail, cujos endereços estão disponíveis nas páginas
+mencionadas, e nos grupos de notícias da Usenet dedicados aos utilizadores do KDE e Sistemas Unix bem como sobre a linguagem de programação C e C++.
+<P>Para obter ajuda sobre o IDE KDevelop, deverá enviar pedidos para a nossa lista de discussão em 
+<A HREF="mailto:kdevelop@fara3.cs.uni-potsdam.de">kdevelop@fara3.cs.uni-potsdam.de</A>. Lembre-se que a equipa do KDevelop é dedicada a
+oferecer-lhe os meios para lhe permitir programar aplicações e assim não tem como objectivo ser uma equipa de suporte técnico em casos em que as
+aplicações que está a desenvolver não funcionam devido a erros de implementação ou más configurações do seu sistema operativo. Posto isto, nós pedimos
+a todos os utilizadores para aproveitarem a lista de discussão em todos os casos em que encontrarem problemas com a utilização do IDE em si, bem como
+para reportar erros (bugs) e sugestões para melhorar a funcionalidade do ambiente de desenvolvimento.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-2.html">Página seguinte</A>
+ Página anterior <A HREF="index.html#toc1">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The User Manual to KDevelop: Programs</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Next</A>
+ <A HREF="index-2.html">Previous</A>
+ <A HREF="index.html#toc3">Table of Contents</A>
+</P>
+<H3><A NAME="Programs"></A> <A NAME="s3">3. Programs</A></H3>
+
+<P>Now that KDevelop installed successfully and the most commonly used options are set, you are probably wondering if it keeps what
+it promises. This Chapter gives you a guideline to how programs are created using the GNU tools in general and especially what
+part KDevelop plays in this game.
+<H3><A NAME="The Compiler"></A> <A NAME="ss3.1">3.1 The Compiler</A>
+</H3>
+
+<P>The Compiler is actually the program on your system that has to be installed as a minimum to create running programs; he is the
+one that compiles the source code into object files and creates the program.
+<P>Normally, you would start like this:
+Open an editor of your choice - don't use a word-processor. Type in something like this to create the source for your first
+program:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#include &lt;iostream.h>
+
+int main(){
+
+cout &lt;&lt; "Hello World" &lt;&lt; endl;
+
+}
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Well, actually all the program will do is to print out the string "Hello World" to your standard output. But this is just the
+source code for the program to be build, not the program itself. Therefore, we need a Compiler, in this case a C++-Compiler like
+g++. Then we can save the file with the source code, as, let's say, myprogram.cpp and invoke the Compiler with the filename
+(on a console):
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+g++ -o myprogram myprogram.cpp
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Then we can start our program- just type <CODE>myprogram</CODE>  on the console, and the program prints out the string; then exits.
+<P>
+<H3><A NAME="Make"></A> <A NAME="ss3.2">3.2 Make and Makefiles</A>
+</H3>
+
+<P>I have everything I need: an editor, a Compiler and I can execute my own C++ program. But it isn't all that easy. What happens if
+you have more than one source file ? And, do you have to compile all sources over and over again only if you changed one file ?
+Compiling will become more and more complicated and time-consuming, because you have to type in all the commands and options
+yourself. Therefore, you could write a so-called "Makefile". You could also call it some other name except the name of the program
+to build. Then, you should have the tool <CODE>make</CODE> or <CODE>gmake</CODE> installed, or any other tool that is capable of keeping track of
+a project's compilation. Insert all your Compiler commands in a certain syntax into that Makefile and save it; then you will only
+have to type <CODE>make</CODE> or <CODE>gmake</CODE> on the console in the directory where your Makefile is located, and then make takes over,
+leading the Compiler to create your application. The make utility has many other advantages and can be used to a lot of purposes.
+To get a complete overview, open a console and type:
+<P><CODE>man make</CODE>
+<P>or search for "GNU Make" in KDEHelp, "System GNU Info contents".
+At least, you have an insight, why a developer needs the make utility for making it easier to compile his application.
+Now, writing Makefiles is not only handwork until now, you also have to dig yourself into the whole syntax and options. But here
+is the good news about KDevelop and any Make-utility: You just have to set the Make-Command in the 
+<A HREF="index-14.html#General Configuration">KDevelop Setup</A> dialog, and then you're done. All projects generated with KDevelop will use that Make command to build the
+target application, and no typing at all. Just hit the buttons on the toolbar of KDevelop, beginning with the one after the second
+separator line, or choose the desired function for Make in the "Build" menu.
+<P>The toolbar and the build-menu then offer the most-common functions that you need to let make do the dirty work:
+<P>
+<UL>
+<LI> Compile File: is only active if you're working on a source file. It invokes make with the correct command to compile only
+the current source.</LI>
+<LI> Make: just calls make and creates your target.</LI>
+<LI> Rebuild all: rebuilds the whole project</LI>
+<LI> Clean/Rebuild all: cleans the project directory first and then runs make again.</LI>
+<LI> Stop Build: cancels the current process- this is mostly used if you watch make working and staring at your sources. Then-
+ahh- I forgot about this line...and you have to correct your code. Just hit Stop, correct the error you found by yourself and run
+Make again.</LI>
+</UL>
+<P>But this is not the only way how KDevelop works together with make- for KDE applications, there are some things that are special,
+like creating the message files for internationalization. These functions are also included, so no worry about these things
+anymore.
+<P>Until now, you know about sources, the Compiler and why make is needed. In the next section, we'll discuss how it comes that
+projects created with KDevelop automatically can be compiled on most other Unix-platforms using the <CODE>configure-</CODE> script.
+<P>
+<H3><A NAME="Configure"></A> <A NAME="ss3.3">3.3 Configure</A>
+</H3>
+
+<P>The title of this section lets you probably question: Configure ? What has to be configured ? Or who ?
+Well, assume you have written a program including a Makefile. Then you like to distribute it, but the binary compiled does only
+run on your system or on systems that are compatible with yours. To support other platforms like different Unix-systems or
+machines like Alpha's or RISC's, you have to recompile the program. The easiest way would be to copy the source package to the
+target machine and run <CODE>make</CODE> again. But what if the target machine uses another Compiler command or has in some other way a
+problem to build your binary ? Not to mention more difficult issues like installation paths for your program and documentation-
+e.g. KDE can be installed in <CODE></CODE>opt/kde/ on one machine, while it is installed under <CODE></CODE>usr/local/kde/ on another. In this
+case, you would have to rewrite the Makefile each time to ensure a correct compilation and installation of your product.
+<P>Fortunately, GNU-tools have even more to provide than that mighty <CODE>make</CODE>- the commonly used automake and autoconf
+packages. It sounds good to hear something with "auto"- seems like something about application design can be done quick and easy,
+which exactly hits the point.
+<P>Automake's purpose is generally to create a so-called <CODE>Makefile.in</CODE> from a file <CODE>Makefile.am</CODE> which you have to write for
+your project. This Makefile.am consists of macros which can be interpreted and reduce the complexity that make offers, so a
+Makefile.am is written safer and quicker than the final Makefile.
+<P>Having this said, who is finally creating me my Makefile ? Now, here comes autoconf. Autoconf requires several macro files
+for the project. That are those Makefile.in's generated by automake and a file called <CODE>configure.in</CODE>, also containing macros.
+Hereby the Makefile.am and .in's are containing macros that are responsible for the way how to build the software in terms of
+which sources have to be compiled, which files belong to the package and what name the final binary or library will have after a
+build. Configure.in on the other hand contains macros for what the final configure-shell script will check for on the system
+configure is executed. Those could be e.g. the Compiler command, required libraries against which the final binary will be linked,
+include-files the project needs and their location.
+<P>For example you want to write a KDE application. After writing your sources,
+you want to distribute the program to the user community, and each user has to compile the binary on his own. Then you would write
+a configure.in file that contains the macros for a KDE-compliant application. That one macro finally expands to a check on the
+system whether the Qt-library is installed, checks for the Qt-header files, the KDE-libraries and headers etc.
+<P><B>Summary:</B>  To create a GNU-compliant application that is portable to different Unix-OS's and machines other than yours,
+you will need to do the following:
+<P>
+<OL>
+<LI> write the sources of your project</LI>
+<LI> write a Makefile.am for each subdirectory, including the main project directory of your project</LI>
+<LI> write a configure.in file placed in the main project directory containing the macros for system requirements</LI>
+<LI> run automake</LI>
+<LI> run autoconf</LI>
+</OL>
+<P>Then the main work is done. Automake creates the Makefile.in's, autoconf processes the configure.in and
+generates an executable shell script called <CODE>configure</CODE>. All you then have to do is to execute it with  <CODE>.</CODE>configure/ and
+the script will run the checks of your choice. Finally Makefiles will be generated that allow a final execution of make (or gmake)
+that will process all Makefiles and then you're done.
+<P>This seems to be a lot of stuff for writing a small application and much to learn especially how to write correct macros. But even
+the fact that you provide a compilation on almost all Unix-systems will be worth this work sooner or later. Finally, you only have
+to do this work once for your project and in case your project's files increase you only have to add the filenames to the macros.
+<P>
+<P>Now, how far does KDevelop support this kind of application development and how complicated does it get for the programmer ?
+The good news is, that you don't even have to know anything about macros and scripts. All details are hidden behind an easy to use
+graphical interface doing the work for you. An application is therefore created with GNU tools in a very user-friendly way:
+<P>Just generate your application with KAppWizard, by the choice of your application's needs- may it be a pure C++ terminal
+application or a kind of GUI program using Qt or the Qt/KDE libraries. All work is done automatically and your project
+already contains the Makefiles that are created by an auto-execution of the GNU-tools and the configure-script.
+<P>This is it- you're ready to extend the source of your project, may it be by adding classes, dialogs, translations or
+documentation, which is also completely automated. Just concentrate on the real work of the developer, which is providing
+functionality for the final application that you want to create. In most cases, you probably won't come in touch with Makefiles at
+all when using KDevelop.
+<P>
+<H3><A NAME="Debugging"></A> <A NAME="ss3.4">3.4 Debugging</A>
+</H3>
+
+<P>The following section covers a term that is widely used by developers: Debugging.  It means, that, although your Compiler produces
+the final application, your application may not run or crash during execution due to a so-called "bug" in the code. A program
+error described by the name of this insect comes from the history of computing; one of the first errors that caused a machine to
+crash was not obviously a malfunction- bugs were inside the computer which were responsible for it. Therefore, an error not
+detectable on the first look is called a "bug", so "debugging" means to throw out bugs where they shouldn't be. Now, you don't
+have to hunt them for real; assuming that today's computers are designed to keep them out by some kind of outer protection.
+They have to be found inside the code, mostly ending the execution of a program with the message "Segmentation fault". GNU
+provides another tool called <CODE>gdb</CODE>, the GNU debugger. This terminal program allows to watch the internal values of an
+application and the execution step by step with setting "breakpoints" in the code. Gdb stops the execution every time the program
+comes to a breakpoint while executing. But like most other tools, the debugger is handled by another program providing a frontend
+to it, allowing to easily watch values and the setting of breakpoints in the code.
+<P>For this purpose, your project's application is by default created with a Compiler option for debugging, thereby storing
+additional data in the executable to allow the localization of values and lines in the code. As a third-party frontend to gdb,
+KDevelop makes use of KDbg, the KDebugger. To debug your program, you just have to select "Debug" in the Build-menu or press the
+according toolbar button displayed by a wheel having glasses over it, signaling that you want to watch the execution.
+<P>KDevelop then opens the Tools-window and starts your application with KDbg. The KDbg interface appears inside the Tools-window and
+allows the usage just like you started it from outside.
+<P>In general, the above steps are clearly showing the need of certain steps that a developer has to do when starting to write his
+own application, and cover issues that are common to all projects. Also, we explained what part KDevelop does for a developer and
+how it supports the idea of providing an easy way to Unix programming. To get further information about the role and purpose of
+GNU tools, you should read the documentation provided with them, commonly accessed via the <CODE>man</CODE> command or by the "System GNU
+Info contents" section in KDEHelp.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Next</A>
+ <A HREF="index-2.html">Previous</A>
+ <A HREF="index.html#toc3">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

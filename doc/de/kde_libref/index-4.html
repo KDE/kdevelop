@@ -1,0 +1,1009 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Das KDE Bibliotheks-Handbuch: Event Handling</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="kde bibliothek referenz klassen">
+<META NAME="description" CONTENT="KDE Bibliotheks-Referenz">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-5.html">Weiter</A>
+ <A HREF="index-3.html">Zurück</A>
+ <A HREF="index.html#toc4">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="s4">4. Event Handling</A></H3>
+
+<P>This chapter will illuminate some of the internals of KDE/Qt programming, and will dive into the fascinating subject of event handling as well. It is meant for people who feel they need deeper insight to the more advanced topics of Qt based programming. In particular the Signals and Slots mechanism is explained in detail. This because users have indicated that resources
+about the meaning and usage of signals and slots are somehow hard to find in other 
+documentation. For non-english persons the translated version are available, offering easier access 
+than the originals.
+<P>Event handling covers the communication of an application. Withn that, we mean the interaction between different objects and between objects
+and the user. Beginners in particular have a hard time to learn the mechanisms underlying event handling. Many of the misconstructions found in beginners' code can be attributed to a lack of understanding of the Qt signals and slots framework. 
+<P>Signals and slots are formally not a part of event handling but are used during the
+event processing often and are a major reason why simple widget elements such as buttons 
+can be usd in such a simple way.
+<P>
+<P>
+<H3><A NAME="ss4.1">4.1 Signals and Slots</A>
+</H3>
+
+<P>This section covers the Qt concept of advanced object communication. 
+In this context objects are the instances of classes that are
+created during runtime by the application. The instances normally don't know about each other, but they have to communicate to allow
+method calls of other object's methods. The usual way for XWindow has been using function pointers, but this lead to very complex code. It also gives no opportunity for the compiler to check types (a function pointer is actually just a (void*) pointer).
+<P>The Qt library offers a far better solution to this by a mechanism that is called signals and slots.
+<P>Before going into the technical details, I'll explain the mechanism by a comparison to everyday-life. Imagine you have a bunch of
+people somewhere and someone looks into the sky. He sees a balloon and points with his finger to the balloon and says: "Hey, there's a
+balloon !". Now, what do other people do that are standing around him ?  One who is interested in balloons will look up as well and
+have a look at it, maybe take a picture with a camera. Others won't because they were never interested in balloons and don't want to
+know about it; they just ignore what was said.
+<P>With Signals and Slots, things are just the same, except that instead of people objects interact. Objects are instances of classes that can
+send out a signal in a certain situation. Objects which are interested in that kind of signal react to it, others do not. While humans have
+the choice to react interactively, class objects can't because they have no ears. But they can provide a kind of ears that listen to
+signals that were sent out. Then, those special kind of ears have to be connected to the signal an object emits to provide the medium
+to transmit the message to the receiver. Any kind of ears that could react won't if they are not connected with the signal and
+therefore ignore the message transmission.
+<P>I hope this made somehow clear how the signal/slot mechanism works generally. The chart shows this a bit more appropriate:
+<P>
+<HR>
+<PRE>
+Person_1                            Person_2                       Person_3
+
+signal balloon_seen();              slot i_see_it();               slot not_interested();
+
+watch_out(){                        i_see_it(){                         
+  if(balloon){                         look_where();
+    emit balloon_seen();            }
+  }
+}
+
+connect (Person_1, SIGNAL(balloon_seen()), Person_2, SLOT(i_see_it()));
+</PRE>
+<HR>
+<P>This explains more about the functionality. The class that builds Person_1 provides a signal balloon_seen(). Also it has a
+method watch_out() that symbolizes that he watches for something. If this method detects that a balloon is there, it emits the signal
+and transmits the message to the outside of its responsibility. After the emit, Person_1 is not responsible for any actions that
+follow as a reaction to this signal; it just does the message invocation.
+<P>Now, the table contains the other persons Person_2 and Person_3. Both provide methods that are slots; Person_2 has one slot that is
+called i_see_it() and Person_3 a slot not_interested().  Those slots are just like any method with the difference that they can also be
+connected to a signal and build a receiver for the connection. They will execute the slot implementation when the object
+receives the signal message. In this case, we have a typical connection method at the last line. The connect() takes Person_1 as a
+signaler object. It connects the signal balloon_seen() that the object may send out when he sees a balloon with Person_2. Person_2 is
+then the receiver object. Now, the receiver has to do something with the signal; we have to tell him, which method to execute whenever
+Person_1 sees a balloon. The implementation of the slot i_see_it() just calls another method to make this example short. look_where can
+symbolize a method to localize the coordinates, the color, the size of the balloon or how many people the balloon carries.
+<P>Person_3 then is anther object. The class that builds it provides a slot as well, the method not_interested().  The implementation
+doesn't matter for our example here, because we don't want Person_3 to react to Person_1's detection of a balloon. We could, if we add
+another connect though, just with Person_3 instead of Person_2 and the according slot Person_3's class provides.
+<P>
+<P>
+<H4>Requirements</H4>
+
+<P>This way of object communication is not provided by C++; it is a part of the Qt library.
+<P>If you want to use Signals and
+slots they have to be declared as such in the class-declaration for two good reasons:
+<P>
+<OL>
+<LI>you know which signals and slots a class provides and the parameters they need</LI>
+<LI>the moc (Meta Object Compiler) of Qt can create the implementation for signals and slots automatically and include it to the compile process (since signals and slots are not part of the C++ standard, your C++ compiler wont do that)</LI>
+</OL>
+<P>Now, we're going into the details of the Qt library. To make use of the signal/slot mechanism, you <B>have</B> to:
+<P>
+<UL>
+<LI>inherit from <CODE>QObject</CODE> or any subclass of <CODE>QObject</CODE></LI>
+<LI>add the macro Q_OBJECT at the beginning of the class-declaration (<B>without a semicolon !</B>)</LI>
+<LI>run <B>moc</B> over the header file to produce an implementation file to be compiled</LI>
+</UL>
+<P>Normally, KDE and Qt applications constructed with automake and autoconf (amongst them all programs made with KDevelop) already run moc when necessary. This is done by
+the program <CODE>automoc</CODE>, which also does everything needed to create the meta object implementation for signals and slots as well as
+incorporating the correct headers for the implementation and the inclusion into the build-process. So you don't have to take care of
+updating any moc output files after changing header file implementations nor about the integration of the moc source file output into
+the project. Those will be automatically generated by detection of the Q_OBJECT macro in the class declaration.
+<P>If you have further questions please read the page "Using The Meta Object Compiler" of you Qt Online Reference. It covers all restrictions
+on using signals and slots.
+<P>
+<P>
+<H4>Emitting Signals</H4>
+
+<P>This part describes the several ways of signal emission. It is important to know where signals are emitted and for what
+purpose you would do so.
+<P>We separate two ways of signal usage, one which is the usual way through sub-classing <CODE>QObject</CODE>, and the other to use the
+<CODE>QSignal</CODE> class from within classes that don't want to inherit from <CODE>QObject</CODE> but want to use the signal emission features.
+<P>So, when deriving from <CODE>QObject</CODE>, we already said that we have to add the <CODE>Q_OBJECT</CODE> macro into the class declaration. Then any
+signal that a class object will emit has to be inserted in the class declaration with the modifier <CODE>signals:</CODE>
+<P>Example:
+<HR>
+<PRE>
+class Foo : public QObject{
+  Q_OBJECT
+
+public:
+  Foo();
+
+signals:
+  void mySignal();
+  void myParameterSignal(int, int);
+};
+</PRE>
+<HR>
+
+This shows the insertion into the class declaration and also shows that you can use signals to emit values as well. This is one of the best features and is widely used throughout KDE and Qt.
+<P>Now, this shows one half of the work. The other is: where does the signal get emitted ? For this, you have to use the keyword
+<CODE>emit</CODE> in connection with the signal name and the transmitted actual parameters. The place where to emit is usually within a method
+that is processed and wants to inform about the state of the object by the signal to outside objects.
+<H4>Comment</H4>
+The keyword <CODE>emit</CODE> is technically only an empty #define, therefore the C++ -compiler only sees a normal method call. The
+<CODE>moc</CODE> takes care to add the according meta-object creation and initialization, which finally implements the signal as a member
+function in the moc output.
+<P>As an example, we have a look at a snippet of code where a method of <CODE>KMyClass</CODE> cuts out a part of a visible area
+the user works with:
+<P>
+<HR>
+<PRE>
+void KMyClass::cut(){
+
+  int xpos=view->xPos();
+  int ypos=view->yPos();
+  view->cut(xpos, ypos);
+
+  emit cutting(xpos, ypos);
+}
+</PRE>
+<HR>
+<P>This method could be called e.g. from a toolbar icon "Cut" or the according menu entry of the application's menu bar. We assume that we
+have a view area that we retrieve as a pointer <CODE>view</CODE>. The class providing the view area offers cutting a selection by an x and y
+integer value. The actual values can be found out with <CODE>xPos()</CODE> and <CODE>yPos()</CODE> and stored into xpos and ypos to avoid temporaries
+and to reuse the values for emitting the signal. Then, we call the cutting method via the view object by the actual parameters.
+Finally, we want to inform about what's being done by emitting a signal <CODE>cutting()</CODE>. In case anyone needs to know about what
+happened, we have also included the exact information about where we have done the action by transmitting the values with the signal.
+<P>
+<P>Another way to produce a signal is, as mentioned, possible without sub-classing <CODE>QObject</CODE>. Qt provides this by the class
+<CODE>QSignal</CODE>.  The usage is rather simple, though inheritance of <CODE>QObject</CODE> should always be preferred.
+<P>To use <CODE>QSignal</CODE>, write a normal C++ class. Then add the following:
+<P>
+<OL>
+<LI>#include &lt;qsignal.h&gt;</LI>
+<LI>add a <CODE>QSignal</CODE> member attribute to the class declaration</LI>
+<LI>add a method <CODE>void connect(QObject* receiver, const char* member);</CODE> to the class</LI>
+<LI>create the signal in the constructor with <B>new</B></LI>
+<LI>destroy the signal in the destructor with <B>delete</B></LI>
+<LI>implement the <CODE>connect()</CODE> method by calling <CODE>connect(receiver, member)</CODE> on the signal to emit</LI>
+<LI>emit the signal at any place in your class code with <CODE>yoursignal->activate()</CODE></LI>
+</OL>
+<P>
+<P>
+<H4>Slot Implementation</H4>
+
+<P>After explaining the ways of how to produce signals by objects, those can only be of important use if an application's classes provide
+slots that get connected with signals. The slots themselves are normal C++ class member functions and can therefore be called any place any
+time you need to, only depending on the class access rights. They just have an additional feature that they can be called automatically
+during runtime by their connected signals. The main difference is the declaration of the methods within the class:
+<P>
+<HR>
+<PRE>
+class Foo : public QObject{
+  Q_OBJECT
+
+public:
+  Foo();
+
+public slots:
+  void mySlot();
+  void myParameterSlot(int, int);
+};
+</PRE>
+<HR>
+<P>Above, you see that the class <CODE>Foo</CODE> has two slots declared in the class-declaration. As the modifier is also preset, here to public,
+it follows that you can also restrict slot usage by access rights to public, protected and private. The only thing to watch out for
+is that all methods after <CODE>public slots:</CODE> are slots, so you have to start with <CODE>public:</CODE> again, if you want to add public methods
+behind the slots declarations. Whe connecting signals to slots, the sender can only connect to slots the receiver allows to call
+depending on the access rights e.g. a private slot cannot be called by an instance of another class than the own (which means only
+instances of the same class can connect signals to this slot).
+<P>Another restriction is the return type. As slots are most often called by signals, where should they deliver any return values ?
+Therefore, your slots will always have <CODE>void</CODE> as return type.
+<BLOCKQUOTE>For all restrictions of implementing slots in classes, see
+the Qt online reference documentation, section <EM>The Meta Object Compiler</EM>.</BLOCKQUOTE>
+<P>
+<H4>Connections</H4>
+
+<P>The last section of this chapter deals with connecting signals and slots. As stated in the Signals section, there are two ways to
+produce signals, and in the Slots section we saw that slots are methods which have modifiers as well.
+<P>When it comes to connecting signals and slots, you generally will use the static method of <CODE>QObject</CODE> to send a signal to a method:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+bool connect(const QObject* sender, const char* signal,
+             const QObject* receiver, const char* member)
+bool disconnect(const QObject* sender, const char* signal,
+             const QObject * receiver, const char* member)
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Both are static public members of <CODE>QObject</CODE> and can be called everywhere in the code if you want to connect/disconnect a sender and
+receiver by certain signals and slots. The signal in these methods have to be used with the <CODE>SIGNAL()</CODE> macro; the slot of the
+receiver has to be used with the macro <CODE>SLOT()</CODE>.
+<P>
+<H4>Comment</H4>
+Note: within classes that inherit <CODE>QObject</CODE> you don't have to use the static variant, so instead of using
+<CODE>QObject::connect()</CODE>, you can also use the overloaded methods that either the sender provides (such as <CODE>QMenuData</CODE> to connect
+<CODE>activated()</CODE> directly to the receiver's slot while inserting a menu entry) or just call <CODE>connect()</CODE> directly.
+<P>Further, the signal and slot should have the same parameter list as parameters are translated from the signal to the slot method. Slot
+implementations that don't require using any transmitted parameter only have to declare the type but do not need a formal parameter.
+This avoids the unused parameter warnings you usually get when declaring formal parameters which aren't processed in the method. The
+slot methods itself can also have less parameters than the signal emits.
+<P>Also, signals can be forwarded. This means, you can use the <CODE>connect()</CODE> method to connect two signals, meaning that the sender's
+signal will cause the receiver to emit the connected signal.
+If several slots are connected to one signal, the slots will be ececuted one after the other, in an arbitrary order, when the signal is emitted. (Qt documentation: metaobjects.html)
+<P>
+<H3><A NAME="ss4.2">4.2 The Event Queue</A>
+</H3>
+
+<P>The previous chapter dealt with the object communication by Qt's signal/slot mechanism and we know how an application can arrange
+a certain functionality. 
+But we have not yet discussed the events produced by the user. Generally, he communicates with an
+application by the keyboard and the mouse. When running an application under XWindow, the X11 protocol ensures that the right
+application is called to process the events. Only the application object receives the event and can provide means to
+handle them. This is called event handling. The application object therefore has to keep an event queue when initialized where events
+run into and get processed to the right application window. The application itself is running in a so-called <CODE>main event loop</CODE>,
+which indicates that it waits for user interaction until the user quits the application either via the <CODE>quit()</CODE> slot or by calling
+<CODE>exit()</CODE>. The <CODE>exit()</CODE> function also returns the value to the main() function's call of <CODE>exec()</CODE> to terminate. If the number
+<CODE>exit()</CODE> is called with is higher than 0, an error has occurred. The <CODE>exec()</CODE> function call in <CODE>main()</CODE> starts the event handling.
+<P>X11 event handling starts by defining the events the window is willing to process. All other
+events are already filtered out. The events which are selected, go into the event queue and
+wait to be processed. Typical events include the XExposeEvent, XDestroyWindowEvent and XResizeRequestEvent. All these events have to be handled by the application. Fortunately (for you) Qt takes care of most of the event processing. This is done using the <CODE>QEvent</CODE> class; the Qt event abstraction.
+<P>This QEvent is then processed by <CODE>QApplication</CODE>'s <CODE>notify()</CODE> function. This sends all receivers which are derived from
+<CODE>QObject</CODE> and are part of the application the according event with <CODE>receiver->event(QEvent* event)</CODE>. The application objects
+therefore get notified about any event that happened and can process the event via the re-implemented <CODE>event()</CODE> method of
+<CODE>QObject</CODE> if needed. <CODE>QObject</CODE> also allows a self-created event filter functionality by installing an event filter on the
+class. The event filter is processed first if one is installed and then the event method returns control over the event if the event
+filter returned false. If the <CODE>event()</CODE> method doesn't find any event processing, it returns <EM>false</EM> and the application gets to
+know that the object didn't sign responsible for the event. If the event was successfully processed and the <CODE>event()</CODE> returns
+<EM>true</EM>, the event is deleted from the event queue.
+<P>
+<H4>Processing Events</H4>
+
+<P>Qt and KDE applications use a graphical interface to make themselves visible to the user. Application windows are deived from <CODE>QWidget</CODE>, the baseclass for any graphical object drawn in windows. Independent of how the widget
+is created, the application object notices all widgets that are created and keeps a list of these. Furthermore, the windows can have
+several states dependent on how they are created.
+<P>The <CODE>QWidget</CODE> class is most important to understand because it re-implements the <CODE>event()</CODE> method already to transform the
+incoming event to some commonly occurring events, e.g. a mouse event, and creates appropriate filter event functions which are easier
+to re-implement for the special purpose a widget may need. This is e.g. used for any widget that inherits the <CODE>QWidget</CODE> class,
+because those events can be used to send out signals that are avoiding any sub-classing of common widgets such as pushbuttons. The
+<CODE>pressed()</CODE> signal e.g. is emitted on the re-implementation of <CODE>QWidget</CODE>'s <CODE>mousePressEvent()</CODE>, showing that you don't have to
+subclass a simple pushbutton to find out the event and to get notified that the user pressed it.
+<P>Re-implementing these methods is one of the common tasks of a programmer writing his own widgets, therefore you will have to know about
+the virtual event functions of <CODE>QWidget</CODE> and the event queue processing very well.
+<P>Above, we mentioned that a widget can have several states. This predefines the behavior of the widget towards the user as well as
+towards the application object.
+<P>A widget can be:
+<P>
+<OL>
+<LI>a <B>main widget</B> when set as the main widget with <CODE>QApplication</CODE>'s <CODE>setMainWidget()</CODE> or <CODE>KApplication</CODE>'s
+<CODE>setTopWidget</CODE>.</LI>
+<LI>a <B>top widget</B> when the parent of the widget is 0.</LI>
+<LI>a <B>modal widget</B> usually a <CODE>QDialog</CODE> which has its own event loop</LI>
+<LI>a <B>semimodal widget</B> like a <CODE>QDialog</CODE>, but without its own event loop</LI>
+<LI>a <B>popup widget</B> when the widget flag is set to WType_Popup, is also a top widget</LI>
+</OL>
+<P>The specialized behavior of the widgets depending on their creation is then:
+<OL>
+<LI><B>main widget:</B> a main widget is the most important widget of the application, but the application doesn't need to have a main
+widget of course. If it has, and the main widget gets closed, the application terminates automatically by calling <CODE>quit()</CODE>.
+The <CODE>QApplication</CODE> method <CODE>mainWidget()</CODE> returns the pointer to the main widget.
+</LI>
+<LI><B>top widget:</B> a top widget is a widget which has no parent. All widgets that have non-zero parents are
+sub-widgets of the parent. The list of top level widgets can be found with <CODE>QApplication::topLevelWidgets()</CODE>. If an application
+doesn't have a main widget but only top widgets, connect <CODE>quit()</CODE> to <CODE>QApplication::lastWindowClosed()</CODE> to terminate the
+application, otherwise the application object will still exist even if all windows are closed. The application finds the currently
+active (focus enabled) widget with <CODE>QApplication::focusWidget()</CODE>.
+</LI>
+<LI><B>modal widget:</B> a modal widget is a widget derived from <CODE>QDialog</CODE>. <CODE>QDialog</CODE> widgets have their own local event loop
+which is entered when calling <CODE>exec()</CODE> on the dialog object. The dialog is modal, if the third widget flag is set to <EM>true</EM>,
+meaning that the dialog has to be terminated before the event processing can return to other application windows. All events are sent
+to the dialog by the application object. The current modal widget is found by the application by
+<CODE>QApplication::activeModalWidget()</CODE>.
+</LI>
+<LI><B>semimodal widget:</B> is a widget that disables events to other widgets like a modal dialog but does not have its own event
+loop. The modal flag has to be set to <EM>true</EM> like for a <CODE>QDialog</CODE>, although the semimodal dialog is derived from <CODE>QWidget</CODE>.
+</LI>
+<LI><B>popup widget:</B> a popup widget is a popup that, when it appears, makes the application object send all events to it. The popup
+has to be finished before the event returns to any other widget, except for another popup. The current popup widget is found by the
+application object by <CODE>QApplication::activePopupWidget()</CODE> to post the events to.</LI>
+</OL>
+<P>The application object itself keeps track of all widgets that it is responsible for. The list of widgets can be retrieved by
+<CODE>QApplication::allWidgets()</CODE>.
+<P><B>Summary:</B> The application object is responsible for retrieving the events that were invoked by the user from the underlying window
+system. Then it converts these events via <CODE>QEvent</CODE> and can sent the event to any widget that is currently active. The widget itself
+is responsible to process the event either by accepting the event after finding out that it has an event-handler (or to be precise: the
+event handler has to return true to the notifying of the application's event posting). The event is deleted from the queue if an event
+handler was found, if all possible event handlers return false, the application is not responsible for the event and the event is
+ignored (deleted from the queue as well).
+<P>What is left to explain about event processing is the installation of own event filters for widgets or any other object derived from
+<CODE>QObject</CODE> and the way <CODE>QWidget</CODE> contains a pre-defined event handling that has to be overwritten for processing events on custom
+widgets. Mind that as a guideline to define own event handling, you should reimplement <CODE>QObject::event()</CODE> for all classes that do
+not inherit <CODE>QWidget</CODE> and the more specialized event handlers described below for all <CODE>QWidget</CODE> inherited classes. Also, preserve
+the declarations as virtual protected to ensure reusability and consistency for your code.
+<P>
+<H4><A NAME="Event Types"></A> Event Types</H4>
+
+<P>The events sent to the application are, as described, converted by <CODE>QEvent</CODE> to Qt events. The event type can be found out by using
+the <CODE>type()</CODE> method of <CODE>QEvent</CODE>, which can then be compared with the event that you want to know about. Now, the event type that
+<CODE>type()</CODE> delivers is an integer number; those are declared with #define in the file <CODE>qevent.h</CODE>.
+<BLOCKQUOTE>Qt 2.0 uses an <CODE>enum</CODE>
+for all available event-types whose entries are similar to the current defines but generally leave out the <CODE>Event_</CODE> prefix. The
+event type can be retrieved as described above, so you only have to change the comparison of the event type.</BLOCKQUOTE>
+After filtering
+events for the specialized event class, more information can be found out by explicit conversion to the event class to retrieve exact
+data about the event.
+<P><B>Example:</B>
+<HR>
+<PRE>
+bool MyClass::event( QEvent* event ){
+
+  if( event->type() == Event_MouseButtonPress){
+    if( (QMouseEvent*)event->button() == RightButton ){
+      // do something with the event, eg. pop up a contextmenu
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  else return false;
+}
+</PRE>
+<HR>
+
+The event has been explicitely converted to <CODE>QMouseEvent*</CODE> here to find out the button type. You could also find out the position of
+the mouse pointer at the time of the event, see the following section about mouse events
+<P>As there are so many event types that can occur, I have sorted the events defined in <CODE>qevent.h</CODE> logically according to the general
+event type and the subclasses that provide an event handling and offer the exact information about specific events. The sorting
+contains:
+<P>
+<UL>
+<LI>
+<A HREF="#Window Events">Window Events</A></LI>
+<LI>
+<A HREF="#Focus Events">Focus Events</A></LI>
+<LI>
+<A HREF="#Mouse Events">Mouse Events</A></LI>
+<LI>
+<A HREF="#Keyboard Events">Keyboard Events</A></LI>
+<LI>
+<A HREF="#Drag'n Drop Events">Drag'n Drop Events</A></LI>
+</UL>
+<P>This will allow you to logically have a look at what might be interesting to reimplement or use before having to browse the Qt online
+documentation in depth.
+<P>
+<H4><A NAME="Window Events"></A> Window Events</H4>
+
+<P>By window events, all events that are produced by the window system in regards to handling any visible part of the application windows.
+This does also include the event processing in the other direction, because by methods like <CODE>QWidget::close()</CODE> or
+<CODE>QWidget::repaint()</CODE> events are sent to the window system to execute a synthetic events to manipulate the window behavior (either
+inside the window or affecting the whole window).
+<P>This is sometimes a bit hard to understand, so I will give another short example here. Assuming you have an application that has a
+window on the desktop. This window can be manipulated by the user through actions like:
+<UL>
+<LI>resizing</LI>
+<LI>moving</LI>
+<LI>obscuring with another window</LI>
+<LI>closing</LI>
+<LI>showing by execution</LI>
+</UL>
+<P>These are incoming events that are sent to the application. The event type is determined by <CODE>QWidget</CODE>'s <CODE>event()</CODE>
+re-implementation and converted to the according event class that provides methods to handle the event specifically. Now, when you have a
+look at the <CODE>QWidget</CODE> class, a lot of methods are provided for window manipulation, e.g. <CODE>resize()</CODE>. You're using these methods,
+but you probably never thought about their way of execution. In effect, these methods work the other way round: they produce an event
+that is sent to the display by <CODE>qt_</CODE> functions to execute actions like simulating a user action. This way, events can also be
+produced to gain synthetic events ( see below ).
+<P>Within a window, the widgets are arranged somehow. As each widget is treated like a separate window internally (it always is a
+<CODE>QWidget</CODE> or inherits it), the same events can be processed randomly inside the window for incoming events as well as manipulating
+internal parts of a window.
+<P>The following chart shows the according event classes with the event types they process:
+<P>
+<UL>
+<LI><B>QShowEvent:</B> Processed by <CODE>QWidget::show()</CODE>
+<UL>
+<LI>Event_Show</LI>
+</UL>
+</LI>
+<LI><B>QHideEvent:</B> Processed by <CODE>QWidget::hide()</CODE>
+<UL>
+<LI> Event_Hide</LI>
+</UL>
+</LI>
+<LI><B>QCloseEvent:</B> Processed by <CODE>QWidget::close()</CODE>
+<UL>
+<LI>Event_Close</LI>
+<LI>event handler: <CODE>QWidget::closeEvent(QCloseEvent*)</CODE></LI>
+</UL>
+</LI>
+<LI><B>QResizeEvent:</B> Processed by <CODE>QWidget::resize()</CODE>
+<UL>
+<LI>Event_Resize</LI>
+<LI>event handler: <CODE>QWidget::resizeEvent(QResizeEvent*)</CODE></LI>
+</UL>
+</LI>
+<LI><B>QPaintEvent:</B> Processed by <CODE>QWidget::repaint()</CODE> calling the event handler directly, and <CODE>QWidget::update()</CODE> which
+generates a window system paint event.
+<UL>
+<LI>Event_Paint</LI>
+<LI>event handler: <CODE>QWidget::paintEvent(QPainEvent*)</CODE></LI>
+</UL>
+</LI>
+<LI><B>QChildEvent:</B> not included in the release version of Qt; to handle these events reimplement <CODE>QObject::event()</CODE> or install
+an event filter. Child events are inserting a child widget or removing it
+<UL>
+<LI>Event_ChildInserted</LI>
+<LI>Event_ChildRemoved</LI>
+<LI>Event_LayoutHint</LI>
+</UL>
+</LI>
+</UL>
+<BLOCKQUOTE>Qt 2.0 includes another event class <CODE>QWheelEvent</CODE> to handle events that occur by wheel-mice. The <CODE>QWidget</CODE> class also
+provides an already existing event handler for this, <CODE>wheelEvent(QWheelEvent*)</CODE>. Also all drag'n drop events have their
+event-handlers already in <CODE>QWidget</CODE>, see the notes for drag'n drop</BLOCKQUOTE>
+<P>
+<H4><A NAME="Focus Events"></A> Focus Events</H4>
+
+<P>Focus events are somehow special to windows, but I have added a separate section for those due to the filtering of focus events in
+<CODE>QWidget</CODE>. A focus event is generally the fact that a window consists of several widgets who have a focus policy, which means that
+there can only be one widget at a time that can have the current input focus. The focus itself can be activated by a mouse click to
+activate the clicked widget or pressing the TAB key to forward the focus to the next widget in the tabring focus. Backwards focus
+setting can be done with SHIFT+TAB. This is a common usability and users expect windows to have this behavior so they can navigate the
+focus to the next widget. A good example for this is a dialog. If the dialog is a modal widget, it has to be finished first, otherwise
+is active when it gets the focus if it is the active window. Now, on dialogs widgets can be disabled as well to prohibit any user
+input. These disabled widgets don't get the focus either and are painted disabled.
+<P>The <CODE>QWidget</CODE> class defines the focus handling already when receiving an event. If the event type is <CODE>Event_FocusIn</CODE>, the widget
+gets the keyboard focus by <CODE>event()</CODE>'s conversion into a <CODE>QFocusEvent</CODE>.
+<P>This already catches a key event of the keys TAB and the combination SHIFT+TAB without processing these keys to <CODE>QKeyEvent</CODE> if
+there is a widget the focus can be forwarded to. Anyway, you can influence this filtering by setting focus policy. The focus policy
+can be set to:
+<UL>
+<LI><B>QWidget::TabFocus</B> TAB-focusing</LI>
+<LI><B>QWidget::ClickFocus</B> focus on mouse clicks</LI>
+<LI><B>QWidget::StrongFocus</B> focus on TAB and mouse clicks</LI>
+<LI><B>QWidget::NoFocus</B> no focus at all</LI>
+</UL>
+<P>The <CODE>QFocusEvent</CODE> class delivers information about the focus event by comparing the event type with <CODE>type()</CODE>. The method
+<CODE>gotFocus()</CODE> returns true on <CODE>Event_FocusIn</CODE> and <CODE>lostFocus()</CODE> returns true on <CODE>Event_FocusOut</CODE>. The <CODE>QWidget</CODE>
+predefined event handlers are:
+<P>
+<LI>focusInEvent(QFocusEvent*) for Event_FocusIn</LI>
+<LI>focusOutEvent(QFocusEvent*) for Event_FocusOut</LI>
+<P>You have a lot of choices to influence the default focus handling by the methods provided by <CODE>QWidget</CODE>, e.g. you can forward the
+focus to another widget with setting another focus order. Mind that the focus is arranged in a ring and your implementation of this
+manipulation should take care that it doesn't break the focus handling. The default focus ring depends on the declaration of your
+widgets while constructing; if your tests result in a fuzzy focus order you have to recheck the declaration. The default design should
+always be left to right and top to bottom for forwarding the tab-focus. When using the geometry layout management you should declare
+your widget order first and then implement the layout.
+<P><CODE>Hint:</CODE> if your widgets use multilineedits, the user expects the tab key to produce a tab in the text, not the forwarding of the
+focus. Therefore a simple method is to use <CODE>setFocusPolicy(NoFocus)</CODE> or <CODE>setFocusPolicy(ClickFocus)</CODE>on all additional widgets
+that are in the current window. Menubars and Toolbars do not have the tabfocus by default, so you don't have to set the focus policy
+there. An exception is the <CODE>QWhatsThis</CODE> button, which although mostly used in a toolbar, receives the input focus on TAB.
+<P>
+<H4><A NAME="Mouse Events"></A> Mouse Events</H4>
+
+<P>Mouse events are, as the word says, generated by the user's handling of the mouse. As these will only be of interest if the mouse is
+over a widget, the best use to process mouse events is to reimplement the virtual methods <CODE>QWidget</CODE> provides for this. Now, the
+window system sends the following event types to the application by mouse actions:
+<P>
+<LI>Event_MouseButtonPress</LI>
+<LI>Event_MouseButtonRelease</LI>
+<LI>Event_MouseButtonDblClick</LI>
+<LI>Event_MouseMove</LI>
+<P>This means, that the user can handle the mouse with moving the cursor in X and Y direction, press any button and release it. A button
+can also be doubleclicked, which is a special event and requires special handling. As the event message is filtered by the <CODE>event()</CODE>
+method of <CODE>QWidget</CODE>, these event types are converted from a <CODE>QEvent</CODE> to a <CODE>QMouseEvent</CODE>. Then, the mouse event is processed,
+whereby <CODE>QWidget</CODE> provides a set of event handlers already. What is interesting about a mouse event is not only the type, but the
+other parameters, as mentioned, to implement certain actions on specific events. One of the most recently used event types are probably
+a right button press over a widget to open a context menu to allow quick access to commands that are available. This requires the exact
+position of the event's occurrence and a comparison of the button type. Double clicks are processed by the user as producing a mouse
+press event followed by a mouse release event and another mouse press event. As the time between the release and the next press cannot
+be easily determined, the <CODE>QApplication</CODE> class has methods to define the click time which is by default 400 milliseconds:
+<CODE>QApplication::setDoubleClickInterval(int ms)</CODE> is what you need.
+<P>The <CODE>QMouseEvent</CODE> class allows finding out the exact event by providing information about:
+<B>Button type:</B> using <CODE>button()</CODE>
+<LI>NoButton</LI>
+<LI>LeftButton</LI>
+<LI>RightButton</LI>
+<LI>MidButton</LI>
+<P><B>Mouse Position:</B>
+<LI>pos() : relative mouse position within the widget (x,y)</LI>
+<LI>globalPos() : absolute mouse position on the desktop (x,y)</LI>
+<LI>globalX() : global x position of the mouse pointer from left to right</LI>
+<LI>globalY() : global y position of the mouse pointer from top to bottom</LI>
+<LI>x(): relative mouse position within the widget from left to right</LI>
+<LI>y(): relative mouse position within the widget from top to bottom</LI>
+<P><B>Additional Keyboard presses at the same time:</B> using <CODE>state()</CODE> and OR'ed with Left,Right and MidButton
+<LI>ShiftButton</LI>
+<LI>ControlButton</LI>
+<LI>AltButton</LI>
+<P>The provided event handlers are:
+<UL>
+<LI>Event_MouseButtonPress
+<UL>
+<LI>virtual void mousePressEvent ( QMouseEvent * )</LI>
+</UL>
+</LI>
+<LI>Event_MouseButtonRelease
+<UL>
+<LI>virtual void mouseReleaseEvent ( QMouseEvent * )</LI>
+</UL>
+</LI>
+<LI>Event_MouseButtonDblClick
+<UL>
+<LI>virtual void mouseDoubleClickEvent ( QMouseEvent * )</LI>
+</UL>
+</LI>
+<LI>Event_MouseMove
+<UL>
+<LI>virtual void mouseMoveEvent ( QMouseEvent * )</LI>
+</UL>
+</LI>
+</UL>
+<P>Thereby, the <CODE>mouseDoubleClickEvent()</CODE> by default only produces a mousePressEvent. You have to reimplement the
+<CODE>mouseDoubleClickEvent()</CODE> to receive the event and process it as it is produced as an hypothetic event, not produced by the window
+system under X11. Set the double click time with <CODE>QApplication::setDoubleClickInterval()</CODE>.
+<P>For MouseMove events, you have to watch that the mouse event is only handled if a button is pressed. This can be configured by
+<CODE>QWidget::setMouseTracking(true)</CODE> to receive all mouse movements as <CODE>QMouseEvent</CODE>s in the event handler. The implementation
+therefore is on QWidget: the event is raised, <CODE>event()</CODE> asks if mousetracking is set to true. If not (default), the event is
+ignored, if yes, the event is converted to a <CODE>QMouseEvent</CODE> and delivered to the <CODE>mouseMoveEvent()</CODE> event handler.
+<P>Additionally, the widget can detect if the mouse enters the widget's space. This is done by filtering out the mouse movement before
+generating the <CODE>QMouseEvent</CODE> in <CODE>QWidget::event()</CODE>:
+<P>
+<UL>
+<LI>Event_Enter
+<UL>
+<LI>virtual void enterEvent ( QEvent * )</LI>
+</UL>
+</LI>
+<LI>Event_Leave
+<UL>
+<LI>virtual void leaveEvent ( QEvent * )</LI>
+</UL>
+</LI>
+</UL>
+<P>An example for reimplementing an enter and leave event is <CODE>QToolButton</CODE>. The buttons in the toolbar have a automatic raising
+behavior in windows style, therefore the widget uses an enter event to raise the button in 3D and lowers it when the mouse leaves the
+widget area.
+<BLOCKQUOTE>Wheel mice are offering an additional functionality for scrolling by the wheel. Qt 2.0 offers solutions for
+handling wheel events in a separate event class <CODE>QWheelEvent</CODE>, therefore these are not handled as mouse-events.</BLOCKQUOTE>
+<P>
+<H4><A NAME="Keyboard Events"></A> Keyboard Events</H4>
+
+<P>A keyboard event is generally sent to the application if the user pressed or released a keyboard button, therefore can determine the
+event by:
+<LI>Event_KeyPress</LI>
+<LI>Event_KeyRelease</LI>
+<P>
+<H4>Handling</H4>
+
+<P>Now, the <CODE>QWidget</CODE> class converts a keyboard event from <CODE>QEvent</CODE> to a <CODE>QKeyEvent</CODE> if the widget has the keyboard input focus;
+if the widget has tabfocus policy, the TAB and SHIFT+TAB key-presses are filtered out to produce a <CODE>QFocusEvent</CODE> instead a
+<CODE>QKeyEvent</CODE>. The <CODE>QKeyEvent</CODE> class provides more convenient methods to process the key event. Those have some specialties which
+I want to discuss.
+<P><B>Event Handlers:</B>
+<P><CODE>QWidget</CODE> provides two event handlers for the two event types the keyboard produces:
+<LI>virtual void keyPressEvent(QKeyEvent*) for Event_KeyPress</LI>
+<LI>virtual void keyReleaseEvent(QKeyEvent*) for Event_KeyRelease</LI>
+<P><B>Acceptance:</B>
+<P>The widget that receives a <CODE>QKeyEvent</CODE> and re-implements the event handlers from <CODE>QWidget</CODE> has to determine if it wants to accept
+or ignore the keyevent, so the widget can sent it back to the parent widget. Therefore you have to know that the accept flag is set to
+true in the constructor of a <CODE>QKeyEvent</CODE>. You can clear this flag with calling <CODE>ignore()</CODE> if you don't want to process the key
+and sent it back.
+<P><B>Modifiers</B>
+<P>The user can press so-called key-modifiers. Those are the ShiftButton, ControlButton and AltButton. The currently pressed modifier keys
+can be found out with <CODE>state()</CODE>, which returns the modifiers OR'ed together.
+<P><B>Key Values</B>
+<P>The key values for all keyboard keys are defined in the include file <CODE>qkeycode.h</CODE>.
+<BLOCKQUOTE>Qt 2.0 has all keycodes coded into
+namespaces of the class <CODE>Qt</CODE> located in <CODE>qnamespace.h</CODE>, <CODE>enum keys</CODE>.</BLOCKQUOTE>
+ The key that produced the event can be
+retrieved with <CODE>key()</CODE> and then compared to the defined keycode. The ASCII value can be found with <CODE>ascii()</CODE>. Mind that the
+symbolic constants for key values are platform independent and allow the best usage as they are simple to remind.
+<P>
+<H4>Keyboard Accelerator Questions</H4>
+
+<P>A question that often occurs is the implementation of keyboard accelerators. As this handbook primarily targets KDE programming, I will
+go into that as well.
+<P>Qt has a class <CODE>QAccel</CODE> which offers connections of key presses with actions. This is done by installing an event filter that
+filters out keyboard events that match any item inserted into the <CODE>QAccel</CODE> object. The keyboard accelerator itself has to be a
+combination of the <CODE>CTRL</CODE>, <CODE>SHIFT</CODE> or <CODE>ALT</CODE> keys with a normal keyboard key. Another value can be <CODE>ASCII_ACCEL</CODE> here to use
+the ASCII keyboard value for the accelerator.
+<P>An accelerator instance is then created by using the widget that it should work for as an event filter with the widget as its parent.
+Insert the keys with <CODE>insertItem(keycode, ID )</CODE>. Although setting the ID is not necessary, you should write yourself a logical ID
+table containing integer value defines that allow using the ID later to find the accelerator item and helps keeping an overview over
+the used numbers.
+<P>Then, the item has to be connected to the object and slot it shall work for on its signal <CODE>activated(int ID)</CODE> using the
+<CODE>connectItem()</CODE> method instead of the usual <CODE>QObject::connect()</CODE> variant.
+<P>Popup menus (only within menu-bars) already provide accelerator usage without explicitely creating a <CODE>QAccel</CODE> instance. You only have
+to use <CODE>setAccel()</CODE> there; see <CODE>QMenuData</CODE> for more details.
+<P>Now, when it comes to KDE, things will be a bit different because KDE offers some additional features. First of all, you have to use
+the class <CODE>KAccel</CODE> instead of <CODE>QAccel</CODE>; the usage is almost the same. The <CODE>KAccel</CODE> class (part of <CODE>kdecore</CODE>) also offers an
+insertion into menus and configuration of accelerator keys, which then can change the menu entry as well.
+<P>Further, KDE provides globally configured accelerators for standard keys.Those are defined in <CODE>kaccel.h</CODE> and only have to be
+inserted. The class documentation also shows the usage of standard accelerators and accelerators in general by examples.
+<P>Whenever an application offers keyboard accelerators, users often feel uncomfortable with the given values and want to change them
+themselves. Also, the programmer usually sets keyboard accelerators for those slots that he thinks are the most needed functions in his
+program; in fact he should in any case add accelerators to all of his available menu entries and functions. Further, KDE has two ways to
+offer configurating the <CODE>KAccel</CODE> object as well as saving the configuration to the application config file by providing a ready-to
+use dialog for configuration as well as a widget that can be used within a custom configuration dialog (most often a tab dialog) to
+configure the keys.
+<P>For accelerator configuration dialogs, see section 
+<A HREF="index-5.html#Keyboard Accelerators">Keyboard Accelerators</A>.
+<P>
+<P>
+<H4><A NAME="Drag'n Drop Events"></A> Drag'n Drop Events</H4>
+
+<P>One of the most advanced techniques to allow application communication is drag'n drop. This offers users a cool and fast feature to
+handle the objects they work with in an application by an intuitive interface, catching it by a symbolic icon or by marking parts of a
+document and move the dragged object away from the current area. The area the dragged object comes from is therefore called a
+<CODE>dragsource</CODE>. Then the user moves the object away to another area of the application, to the desktop or into the area of another
+application. After releasing the mouse button over there, he expects the data dragged to be dropped into the drop area. Therefore the
+drop area is also called a <CODE>drop site</CODE> or a <CODE>drop sink</CODE>. The window system provides a protocol for this, the XDND protocol, which
+causes the emission of the according events. The application windows can support these events by providing methods to drag object out
+of the window and methods to accept a drop event. Qt implements this by a class <CODE>QDropSite</CODE>.
+<BLOCKQUOTE>Qt 2.0 makes this a lot
+easier. <CODE>QWidget</CODE> already contains all event handlers that are mentionend here for the class <CODE>QDropSite</CODE>, therefore you only have
+to remove the inheritance from <CODE>QDropSite</CODE> of your drag'n drop enabled widget and add a call to <CODE>setAcceptDrops(TRUE)</CODE> in the
+widget's constructor.</BLOCKQUOTE>
+ The widget that wants to use drag'n drop has to inherit this class additionally to the base widget
+class. Then, the <CODE>QDropSite</CODE> offers additional event handlers that convert the <CODE>QEvent</CODE> types for drag'n drop to one of the
+according specialized event classes. The programmer also has to take care in his re-implementation of the mouse event handlers by which
+mouse button holding a drag can occur. Also, Qt currently provides two types of data to decode, text and images, which should be the
+most common usage. The following chart contains the window system events, the event classes handling these events and the event
+handlers of <CODE>QDropSite</CODE>:
+<P>
+<UL>
+<LI>Event_DragEnter
+<UL>
+<LI>QDragEnterEvent</LI>
+<LI>event handler:virtual void dragEnterEvent(QDragEnterEvent*)</LI>
+</UL>
+</LI>
+<LI>Event_DragMove
+<UL>
+<LI>QDragMoveEvent</LI>
+<LI>event handler:virtual void dragMoveEvent(QDragMoveEvent*)</LI>
+</UL>
+</LI>
+<LI>Event_DragLeave
+<UL>
+<LI>QDragLeaveEvent</LI>
+<LI>event handler:virtual void dragLeaveEvent(QDragLeaveEvent*)</LI>
+</UL>
+</LI>
+<LI>Event_Drop
+<UL>
+<LI>QDropEvent</LI>
+<LI>event handler:virtual void dropEvent(QDropEvent*)</LI>
+</UL>
+</LI>
+</UL>
+
+The event handlers are all implemented as public and reimplementations should preserve to
+<P><B>Note:</B> the system event <CODE>Event_DragResponse</CODE> is automatically handled by the application object internally through the
+Qt implementation. It causes a <CODE>QDragResponseEvent</CODE> that accepts/rejects the drag action.
+<P>
+<H4>Comment</H4>
+KDE also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has been
+left out because this will be removed in KDE 2 and only the Qt implementation is going to be used with an extended implementation of
+the XDND protocol.
+<P>
+<H4>Comment</H4>
+There exists a zoo of DND protocols. At the moment of writing, the Qt DND protocol does
+<EM>not</EM> support the Motif DND protocol (as used by for instance Netscape and GNOME).
+Please be aware of this if you reimplement the Qt DND functions.
+<P>
+<P>
+<H3><A NAME="ss4.3">4.3 QWidget Virtual Methods</A>
+</H3>
+
+<P>
+<P>As the event handling generally is implemented by virtual protected methods, especially the <CODE>event()</CODE> method provided by
+<CODE>QObject</CODE>, the <CODE>QWidget</CODE> class reimplements this function in order to sort out the incoming event and convert it to other event
+types that can be handled by more specialized classes. Furthermore, it calls the provided additional virtual methods by default
+implementations. The programmer has a good advantage by this pre-selection of events as the widgets he creates are all derived from
+<CODE>QWidget</CODE> and therefore will need one or more special event handler implementation. The most common events that are processed are
+mouse events and for text input mostly keyboard events. The other events mostly deal with focus handling, which moves on the keyboard
+input focus from one widget to the next. Programmers need to know about focus handling well, because the user will expect a certain
+behavior over his widget when using the TAB key and the SHIFT+TAB combination to move the input focus forward.
+<P>Like explained in the Event Queue chapter, the <CODE>QApplication</CODE> takes care of converting window system events to objects of the
+<CODE>QEvent</CODE> class that are handled by the <CODE>QObject::event()</CODE> method. Therefore all classes that are derived from <CODE>QObject</CODE> can
+process event handling. The class <CODE>QWidget</CODE> already contains an overwritten <CODE>event()</CODE> method. It first checks for installed event
+filters (which are additionally created event filters by the programmer to redefine the default behavior by processing the event
+themselves or only the wanted events). Then it decides by the <CODE>type()</CODE> of the event which kind of event was called and converts it
+to one of the following event classes derived from <CODE>QEvent</CODE> who are delivered to the according virtual methods:
+<P>
+<UL>
+<LI>QCloseEvent
+<UL>
+<LI>virtual void closeEvent ( QCloseEvent * )</LI>
+</UL>
+</LI>
+<LI>QFocusEvent: keyboard input focus event; widget gets the focus and looses it due to preselection of TAB and SHIFT+TAB by
+<CODE>event()</CODE>    
+<UL>
+<LI>virtual void focusInEvent ( QFocusEvent * )</LI>
+<LI>virtual void focusOutEvent ( QFocusEvent * )</LI>
+</UL>
+</LI>
+<LI>QMouseEvent: mouse events
+<UL>
+<LI>virtual void mousePressEvent ( QMouseEvent * )</LI>
+<LI>virtual void mouseReleaseEvent ( QMouseEvent * )</LI>
+<LI>virtual void mouseDoubleClickEvent ( QMouseEvent * )</LI>
+<LI>virtual void mouseMoveEvent ( QMouseEvent * ) :with pressed mouse button by default. Use <CODE>setMouseTracking(true)</CODE> to receive
+all movements</LI>
+</UL>
+</LI>
+<LI>QMoveEvent: window move event, position change
+<UL>
+<LI>virtual void moveEvent ( QMoveEvent * )</LI>
+</UL>
+</LI>
+<LI>QKeyEvent: keyboard events
+<UL>
+<LI>virtual void keyPressEvent ( QKeyEvent * )</LI>
+<LI>virtual void keyReleaseEvent ( QKeyEvent * )</LI>
+</UL>
+</LI>
+<LI>QResizeEvent: widget is resized
+<UL>
+<LI>virtual void resizeEvent ( QResizeEvent * )</LI>
+</UL>
+</LI>
+<LI>QPaintEvent: widget needs repainting
+<UL>
+<LI>virtual void paintEvent ( QPaintEvent * )</LI>
+</UL>
+</LI>
+</UL>
+<P>Additionally, two events are called that don't match any other event type but may be important sometimes:
+<P><B>virtual void enterEvent ( QEvent * ):</B> the mouse enters the widget space
+<P><B>virtual void leaveEvent ( QEvent * ):</B> the mouse leaves the widget space
+<P>Reimplementing is always needed if your custom widget wants to process the event and react to it. The reason why the event gets split
+up to other <CODE>QEvent</CODE> types is that the other event classes provide methods that are suitable to directly retrieving the needed
+event-specific data. This means, that e.g. a <CODE>QMouseEvent</CODE> can be asked for the button that caused the event or was active at that
+particular event as well as the global and relative mouse position where the event occurred. Mouse events are always used to pop up
+context menus over widgets which need to know the button (right mousebutton) and the position, because the user expects the context
+menu to pop up at the same position the mouse cursor currently is.
+<P>The paint event is often needed if a widget has to draw something. Instead of creating a synthetic event (a logical event caused by the
+program internally), call repaint() here.
+<P>
+<P>
+<H3><A NAME="ss4.4">4.4 Event Filters</A>
+</H3>
+
+<P>In addition to the normal processing of the event queue that is provided by the application object, the programmer can influence the
+default behavior by installing event filters. As explained above, all <CODE>QObject</CODE> inherited classes use event processing through the
+<CODE>event()</CODE> method. Instead of writing a completely new event handler in situations where you only need some events processed by your
+own methods, you should write an event filter. The event filter gets installed where you like to and filters out the event directly
+when <CODE>QObject::event()</CODE> is called internally.
+<P>To write an event filter, your class has to overwrite the <CODE>QObject::eventFilter()</CODE> method and call <CODE>installEventFilter()</CODE> as
+well as <CODE>removeEventFilter()</CODE>. The declaration of these methods in <CODE>QObject</CODE> are:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+bool QObject::eventFilter ( QObject *, QEvent * ) [virtual]
+void QObject::installEventFilter ( const QObject * obj )
+void QObject::removeEventFilter ( const QObject * obj )
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>The implementation of an event filter can be done in several ways. One that is possible is to create a new class for special event
+filters and create an instance of this class in the program. Then you can install the event filter on every instance you like to to
+achieve the same event filter on all instances independent of their class as well as redefining event processing of existing classes
+without inheriting them.
+<P>An example would be:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+// Classdeclaration
+
+class KMyAppFilter: public QObject
+{
+protected:
+  virtual bool eventFilter(QObject* object, QEvent* event);
+};
+
+// Filterimplementation
+
+bool KMyAppFilter::eventFilter(QObject* object, QEvent* event){
+
+  if(event->type() == [the eventtype you like to filter])
+  {
+    [your filter implementation]
+    return true;  // the event has been caught and processed
+  }
+  else
+  {
+    return false; // return false to continue processing the event with QObject::event()
+  }
+}
+
+// installing the filter
+
+QObject* myfilter= new KMyAppFilter();
+QPushButton* mybutton= new QPushButton();
+
+mybutton->installEventFilter(myfilter);
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Another solution would be to reimplement the <CODE>eventFilter()</CODE> method in your inherited class as long as the base class is
+<CODE>QObject</CODE>, e.g. if your view area of your application wants to process a certain event that is not covered by the virtual methods
+<CODE>QWidget</CODE> provides. Then you have to install the event filter at the place you like to; normally this would be in the constructor of
+your class. With removeEventFilter() you can stop the event filter from processing the events any time.
+<P>
+<H4>Comment</H4>
+Note: <CODE>KApplication</CODE> already has a global application event filter installed to filter out CTRL+ALT+F12 for
+KDebug
+<P>
+<H3><A NAME="ss4.5">4.5 Synthetic Events</A>
+</H3>
+
+<P>Before describing what synthetic events are and how they can be used by the programmer, I want to review the last sections briefly.
+<P>We saw that the application object receives the window system events, processes them and creates event objects from the classes the
+library provides. The converted event can then be handled by event handlers that are specialized on the event class to retrieve further
+information about the event. Finally, we can influence the event handling itself by installing event filters and overwriting provided
+event handlers.
+<P>This does the "normal" job of an application to execute actions according to user invoked events. On the other side, this system offers
+another possibility: the fact that the events are converted to class instances can be reversed - a so-called synthetic event can be
+created which fakes an original window system event. The next advantage is that these events are independent of the underlying window
+system.
+<P>A good possibility where this feature could be used would be e.g. for learning programs. Those are almost non-existent for Unix but
+could offer a market to teach beginners how to handle programs similar to commercial products already available on other platforms.
+Also this could be a part of a help-system which an application can provide.
+<P>An example description how to implement this:
+<P>Provide a help window with a button that invokes a step e.g. "Show me". On pressing the button, the cursor will move to the desired
+location, e.g. to a pushbutton on the screen. The implementation then has to find out the exact position of the button and calculate
+the center coordinates the mouse pointer has to move to. Then the mouse pointer could move there by construction of a <CODE>QCursor</CODE> and
+using <CODE>setPos()</CODE>. The start position can be found out in the mouse event that called the function. Then, the cursor has to move
+visually by using <CODE>setPos()</CODE> in a loop where a <CODE>QTimer</CODE> could be used to run between positions to slow down the move so that the
+user can follow the mouse pointer.
+<P>
+<H4>Creating Events</H4>
+
+<P>Now, to come to the actual implementation of a synthetic event, you have to know the event you want to create. Therefore, you need the
+constructor parameters for the event classes. The following list contains the constructors including the event-classes hierarchy:
+<P>
+<DL>
+<DT><B>QEvent(int type)</B><DD><P><CODE>type</CODE> is one of the events declared in <CODE>qevent.h</CODE>
+<BLOCKQUOTE>Qt 2.0 uses all events from an <CODE>enum</CODE>
+instead of the #defines. See <CODE>QEvent</CODE>. The types are almost the same except they leave out the <CODE>Event_</CODE> prefix.</BLOCKQUOTE>
+<P>
+<DT><B>QCloseEvent()</B><DD><P>takes no parameter. Mind that the accept flag is set to false
+<P>
+<DT><B>QFocusEvent(int type)</B><DD><P><CODE>type</CODE> is either <CODE>Event_FocusIn</CODE> or <CODE>Event_FocusOut</CODE>.
+<P>
+<DT><B>QKeyEvent(int type, int key, int ascii, int state)</B><DD><P>takes <CODE>Event_KeyPress</CODE> and <CODE>Event_KeyRelease</CODE> as <CODE>type</CODE>.
+<CODE>key</CODE> is one of the keys defined in <CODE>qkeycode.h</CODE>. <CODE>state</CODE> is <CODE>ShiftButton, ControlButton, AltButton</CODE> OR'ed.         
+<P>
+<DT><B>QMouseEvent (int type, const QPoint &amp; pos, int button, int state)</B><DD><P>The <CODE>type</CODE> parameter must be
+<CODE>Event_MouseButtonPress, Event_MouseButtonRelease, Event_MouseButtonDblClick</CODE> or <CODE>Event_MouseMove</CODE>. The <CODE>button</CODE> is
+<CODE>LeftButton, RightButton, MidButton, NoButton</CODE>. <CODE>state</CODE> is <CODE>ShiftButton, ControlButton and AltButton</CODE> OR'ed for event
+<CODE>Event_MouseButtonRelease</CODE>, for events <CODE>Event_MouseButtonPress, Event_MouseButtonDblClick</CODE> <CODE>state</CODE> includes <CODE>LeftButton,
+RightButton, MidButton</CODE>.
+<P>
+<DT><B>QMoveEvent(const QPoint &amp; pos, const QPoint &amp; oldPos)</B><DD><P><CODE>pos</CODE> is the new position the widget shall move to, <CODE>oldPos</CODE> the
+old position. Retrieve the old position before creating the event with <CODE>QWidget::pos()</CODE>.
+<P>
+<DT><B>QPaintEvent(const QRect &amp; paintRect) </B><DD><P>raise a paint event to repaint the area <CODE>paintRect</CODE>
+<P>
+<DT><B>QResizeEvent(const QSize &amp; size, const QSize &amp; oldSize)</B><DD><P>resizes the widget from <CODE>oldSize</CODE> to <CODE>size</CODE>. Retrieve the old
+size before creating the event with <CODE>QWidget::size()</CODE>.
+</DL>
+<P>An example on how to create an event would be:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+QMouseEvent press_quit(Event_MouseButtonPress,
+                       quit_button->pos(), LeftButton, LeftButton);
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>This creates a mousePressEvent() for the widget <CODE>quit_button</CODE> with the left button.
+<P>
+<P>
+<H4>Sending Events</H4>
+
+<P>After creation, the event has to be sent to the application instance to call its execution. Thereby, two ways can be used: one that
+directly processes the event and one that will place the event in the event queue at the last position:
+<P>Direct execution:
+<BLOCKQUOTE><CODE>
+<PRE>
+QApplication::sendEvent(quit_button, &amp;press_quit);
+</PRE>
+</CODE></BLOCKQUOTE>
+
+The <CODE>sendEvent()</CODE> waits for the result and returns true or false depending if the event has been accepted or not.
+<P>
+<P>Placement into event queue:
+<BLOCKQUOTE><CODE>
+<PRE>
+QApplication::postEvent(quit_button, &amp;press_quit);
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<H4>Comment</H4>
+The event for postEvent() must be allocated on the heap as it gets deleted immediately after the posing.
+<P>
+<P>To turn a posted event into a send event, use <CODE>sendPostedEvents(QObject * receiver, int event_type)</CODE>. This requires the options
+given at the constructor. As you may see, some constructors don't need an event type, therefore the according event type can be found
+in 
+<A HREF="#Event Types">Event Types</A> but is also simple to guess as they are only responsible for one event type. Example:
+<CODE>QCloseEvent</CODE> only takes <CODE>Event_Close</CODE>, <CODE>QPaintEvent</CODE> only takes <CODE>Event_Paint</CODE>.
+<P>
+<P>
+<H3><A NAME="ss4.6">4.6 Event Precedence</A>
+</H3>
+
+<P>
+<P>In relation to influence the event behavior of the application, the programmer often faces situations where long operations block the
+<CODE>Event_Paint</CODE> and lead to a scrambled look of the application windows. These situations can be solved either by using a
+progressdialog that indicates the operation progress or by event precedence. This means that the current event gets stopped and the
+event queue is processed. The class <CODE>QApplication</CODE> offers a solution for this by two methods which are identical except the
+parameters. One is <CODE>processEvents()</CODE>, which processes pending events for 3 seconds or until there are no more events in the event
+queue. The other, more likely used method is <CODE>processEvents(int maxtime)</CODE>, where <CODE>maxtime</CODE> is the time in milliseconds during
+which pending events can be processed.
+<P>On one hand this means stopping the current long operation which then would take even longer to get finished if pending events are in
+the queue, but the user cares more about the visible state of an application than if an operation which takes some time will take a
+second longer (or even parts of a second).
+<P>KDE offers an additional library for I/O operations in the upcoming KDE 2, which is under development. This will allow running the long
+I/O operations outside the application's process as multi-threading is not supported by Qt directly.
+<P>
+<P>
+<H3><A NAME="ss4.7">4.7 Summary</A>
+</H3>
+
+<P>After this long chapter about signals, slots and events, I want to append a short summary so you can recapitulate the collected
+knowledge about application behavior.
+<P>
+<UL>
+<LI>An application can communicate internally by signals and slots</LI>
+<LI>Signals are sent out without caring about who will catch it</LI>
+<LI>Slots are normal methods that can connect to signals and react as well as they can be called where allowed by their access attribute</LI>
+<LI>Slots cannot have default arguments</LI>
+<LI>Slots return void</LI>
+<LI>The user communicates with the application through the window system</LI>
+<LI>The window system reports the events to the application</LI>
+<LI>The application converts window system events to <CODE>QEvent</CODE>s</LI>
+<LI>The events are processed through an optional application global event filter</LI>
+<LI>The event that passes the filter gets forwarded to the according window e.g. the current modal window</LI>
+<LI>The widget receives the event and can have an event filter that comes first when the reimplemented <CODE>QObject::event()</CODE> is
+called.</LI>
+<LI>If the event passes the widget event filter, <CODE>event()</CODE> proceeds to convert it to the according <CODE>Q***Event</CODE> class</LI>
+<LI>The event filters for these event types are called to react on the event</LI>
+</UL>
+<P>Further, we saw that the programmer can influence the behavior by:
+<P>
+<UL>
+<LI>reimplementing any stage of virtual methods filtering events</LI>
+<LI>creating synthetic events</LI>
+<LI>sending synthetic events directly or into the event queue</LI>
+<LI>the event queue can be given precedence that stop long processes to allow execution of waiting events to be processed</LI>
+</UL>
+<P>Finally, I hope this has given at least experienced C++ programmers a good insight and explanation on how Qt and KDE work. I have
+collected the information by working myself into the class structure and I hope that this collection makes it a lot easier for other
+programmers to get started especially in the advanced chapters of application design and programming. The information value is
+therefore not granted to be exact; if you may find any misconcepted or incorrect information, please contact me via email.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-5.html">Weiter</A>
+ <A HREF="index-3.html">Zurück</A>
+ <A HREF="index.html#toc4">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

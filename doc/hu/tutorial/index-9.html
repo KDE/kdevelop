@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>KDE Alkalmazás Tankönyv: A nézet definiálása</TITLE>
+ <LINK HREF="index-10.html" REL=next>
+ <LINK HREF="index-8.html" REL=previous>
+ <LINK HREF="index.html#toc9" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="index-10.html">Következõ</A>
+<A HREF="index-8.html">Elõzõ</A>
+<A HREF="index.html#toc9">Tartalom</A>
+<HR>
+<H2><A NAME="s9">9. A nézet definiálása</A></H2>
+
+<P>
+<H2><A NAME="ss9.1">9.1 Interactivity with the User</A>
+</H2>
+
+<P>In this chapter we'll turn to the view class of <EM>KScribble</EM> to define how the child windows shall work. First of all, we notice thatKScribbleView is derived from <CODE>QWidget</CODE> by default. That is the minimum requirement for a child window, but it lasts already to fullfillour needs. When it comes to defining a new widget's behavoir, we need to know how the user shall interact with the window. In ourexample, this would be obviously the mouse. Therefore, we have to overwrite some virtual methods from <CODE>QWidget</CODE> that process mouseevents the widget receives. What we need is to know when the user presses a mouse button, because the drawing shall only take placewhen the mouse is pressed. Then we need to know when the mouse is moved (to know where it moves to) as well as when it is released-tofinish the stroke the user has drawn. Further we want our picture to be painted on the window and resized if the user decides to resizethe window he draws into. As members we will also add a <CODE>QPointArray</CODE> polyline and a boolean value mousePressed. Add the code with thearrow to your include file for the class KScribbleView:
+<HR>
+<PRE>
+   kscribbleview.h->   #include &lt;qpointarray.h>    class KScribbleView    {    .    .     protected:        virtual void closeEvent(QCloseEvent* );->        virtual void mousePressEvent( QMouseEvent * );->        virtual void mouseReleaseEvent( QMouseEvent * );->      virtual void mouseMoveEvent( QMouseEvent * );->         virtual void resizeEvent( QResizeEvent * );->           virtual void paintEvent( QPaintEvent * );                 KScribbleDoc *doc;                    ->     private:->               bool mousePressed;->            QPointArray polyline;     }
+</PRE>
+<HR>
+<H2><A NAME="ss9.2">9.2 Reimplementing Event Handlers</A>
+</H2>
+
+<P>Now we're coming to the actual implementation of the event handlers. As explained in 
+<A HREF="../kde_libref/index.html">TheKDE Library Reference Guide</A>, Qt has a good way of handling user events, especially when they target on to widgets. <CODE>QWidget</CODE> as abaseclass preselects the events and provides basic event handlers which, as they are declared as virtual, we can overwrite to definehow our widget shall react on user actions. One is already overwritten: the <CODE>closeEvent()</CODE> method. This is needed, because ourmain window, represented in the App class, already preselects closing child windows and handles this; therefore the default eventhandler, which just accepts the closing, must be overwritten to prevent that and let the App class do the job.First of all, we have to declare the widget default behavoir in the constructor by initializing members and setting predefined values:
+<HR>
+<PRE>
+    kscribbleview.cpp    KScribbleView::KScribbleView(KScribbleDoc* pDoc, QWidget *parent, const char* name, int wflags)     : QWidget(parent, name, wflags)    {        doc=pDoc;->      setBackgroundMode( QWidget::NoBackground );->      setCursor( Qt::crossCursor );->            mousePressed=false;->      polyline=QPointArray(3);    }
+</PRE>
+<HR>
+We're setting the background to NoBackground, a cursor (crossCursor) and initialize mousePressed and polyline. Then we'll startimplementing our first event handler, <CODE>mousePressEvent()</CODE>, to recognize when the user presses the mouse and where:Note: the following implementations have to be inserted completely, so the lines to add are not marked with an arrow !
+<HR>
+<PRE>
+void KScribbleView::mousePressEvent( QMouseEvent *e ){  mousePressed = TRUE;  polyline[2] = polyline[1] = polyline[0] = e->pos();}
+</PRE>
+<HR>
+Here, we're setting mousePressed to true, so we have stored this event somehow. The second line is not so obvious: we're storing theposition where the mouse was pressed into our array's first three elements. As the array is a <CODE>QPointArray</CODE>, it can store values of thetype <CODE>QPoint</CODE> (which contain an x and y value themselves). What we will do with this array is to store positions of the mouse and createthe drawing routine from there in the mouseMoveEvent:
+<HR>
+<PRE>
+void KScribbleView::mouseMoveEvent( QMouseEvent *e ){  if ( mousePressed ) {                QPainter painter;    painter.begin( &amp;doc->buffer );    painter.setPen( doc->currentPen() );    polyline[2] = polyline[1];    polyline[1] = polyline[0];    polyline[0] = e->pos();    painter.drawPolyline( polyline );    painter.end();    QRect r = polyline.boundingRect();    r = r.normalize();    r.setLeft( r.left() - doc->penWidth() );    r.setTop( r.top() - doc->penWidth() );    r.setRight( r.right() + doc->penWidth() );    r.setBottom( r.bottom() + doc->penWidth() );         doc->setModified();    bitBlt( this, r.x(), r.y(), &amp;doc->buffer, r.x(), r.y(), r.width(), r.height() );  }}
+</PRE>
+<HR>
+This event handler is probably the most difficult, so we will do a step-by-step walkthrough to understand what's been done. First ofall, the event handler receives all mouse movements over the widget. But as we're only interested in the move if the mouse is pressed,because that is the time to draw, we have to ask if mousePressed is true. That has been done by the <CODE>mousePressEvent()</CODE> eventhandler before, so we don't have to take care for more. Now we're starting the painting action. First we create a <CODE>QPainter</CODE> and let itdraw into the buffer of the document. This is important, because the document's buffer contains the real contents, the view only actsas a communicator between the document and the user. We get the pen from the document instance as well by calling<CODE>currentPen()</CODE>. The next three lines assign the values inside the polyline <CODE>QPoint</CODE> array, setting point 2 to 1, 1 to 0 and 0 tothe point to where the move went (this is the contents of the event we're interested in). Assuming we've just pressed the mouse (so allthree values of the array contain the pressing position) and the first mouse move event appears that contains the first position todraw a line to; this value is moved into the first position in the array again. You may wonder why we need three points in the arraythen, if we're only interested to draw a line from one position to the next. The following lines explain that: after drawing into ourbuffer is finished (with <CODE>drawPolyline()</CODE> and <CODE>painter.end()</CODE>), we create a rectangle r and use <CODE>boundingRect()</CODE>from <CODE>QPointArray</CODE> to get a <CODE>QRect</CODE> that contains all three points. Therefore we need three values to have a most-complete rectangle. Thenwe use <CODE>normalize()</CODE> to have the leftmost and topmost values the smallest (as coordinates are counted from top->bottom andleft->right). The next thing to do is adapt the size of the rectangle by the size of the pen, because the pen has a thickness we getwith <CODE>penWidth()</CODE> and widen the rectangle by the width of the pen. (Imagine the mouse movement was only two pixels away but thepen thickness is set to ten- then the rectangle wouldn't contain the whole painted area).Finally, we set the document modified and use the <CODE>bitBlt()</CODE> function to copy the rectangle out of the buffer into the widget.bitBlt operates bitwise and is very fast, so that it is a good method to copy the painted area from the buffer on the widget instead ofrepainting the whole window. It's arguments are: first the object to draw to (the destination), here it is our widget, so we have touse the pointer <B>this</B>. The next two arguments give the destination topleft position to start copying to, then follows thesource to draw from with it's coordinates now including the width and height. As the pixmap coordinates are the same as the coordinatesthat the widget uses (because our pixmap is drawn into the topleft corner), the coordinates for the source and destination topleftpoint are the same. This is something to watch out for in some of the next step, so it may be mentioned here already.Next comes what happens if we release the mouse button. Then the drawing has to stop when we move the mouse again, so we setmousePressed to false here:
+<HR>
+<PRE>
+void KScribbleView::mouseReleaseEvent( QMouseEvent * ) {        mousePressed = FALSE;}
+</PRE>
+<HR>
+Now we have finished implementing the user interaction when it comes to the actual drawing operations. The example shows it's not toocomplicated to use a document-view model. Just create your document instance so that it contains the contents and copy the contents toyour view.
+<H2><A NAME="ss9.3">9.3 Painting and Resizing the Document</A>
+</H2>
+
+<P>What is left to do are two other virtual event handlers that need a reimplementation. First of all, we have to take care that ourpicture gets painted into the window when something else happens: when you open another window that obscures the painting - then youchange to your painting again, but it won't be there, unless your paint event gets processed to redraw the picture:
+<HR>
+<PRE>
+void KScribbleView::paintEvent( QPaintEvent *e ){  QWidget::paintEvent( e );  QRect r = e->rect();  bitBlt( this, r.x(), r.y(), &amp;doc->buffer, r.x(), r.y(), r.width(), r.height() );}
+</PRE>
+<HR>
+This method also uses <CODE>bitBlt()</CODE> to draw the picture from the buffer into the widget. Here, we only need the rectangle that getsrepainted, so we retrieve the geometry from the event ( <CODE>e->rect()</CODE> ) and use the coordinates for <CODE>bitBlt()</CODE>, just as wedid in the <CODE>mouseMoveEvent()</CODE>.The only thing where we didn't do anything about is the size of the pixmap. We didn't set it anywhere - we did not even use the pixmapin the document class except for loading and saving - but these methods aren't called when creating a new picture. So it seems ourpixmap doesn't have a size nor a predefined background at all (even if we would have set the size, the contents would be random colorsbecause it is uninitialized).On the other hand we have the fact that the KScribbleView instances get resized when they show up- at least with the minimum size. Thisis the point where we can add the initialization as well, because the user can change the size manually and the widget will receive aresize event as well. For reasons of simplicity, we want to set the pixmap size the same size the widget has. All this is done in theevent handler <CODE>resizeEvent()</CODE>:
+<HR>
+<PRE>
+void KScribbleView::resizeEvent( QResizeEvent *e ){  QWidget::resizeEvent( e );  int w = width() > doc->buffer.width() ?  width() : doc->buffer.width();  int h = height() > doc->buffer.height() ?  height() : doc->buffer.height();  QPixmap tmp( doc->buffer );  doc->buffer.resize( w, h );  doc->buffer.fill( Qt::white );  bitBlt( &amp;doc->buffer, 0, 0, &amp;tmp, 0, 0, tmp.width(), tmp.height() );}
+</PRE>
+<HR>
+Here, we first call the resizeEvent handler or <CODE>QWidget</CODE>. Then we calculate the size of our picture - because we can resize a window tomake it smaller or bigger, we have to separate these two cases: if we resize to a smaller geometry, the picture shall still containit's contents. On the other hand, if we resize to a bigger widget, we have to resize the pixmap as well to that bigger size. Thecalculated values are stored in w and h. But before the resize takes place, we create a copy of our pixmap in the document in tmp. Thenwe resize the buffer (the document), fill it with white color and then copy back the contents from tmp into buffer. This resizes ourpixmap always syncronous with the widget that displays it but doesn't loose contents which is outside the visible area if the resizingmakes the widget smaller.Now our first application has gained a step where we can test it's functionality. Just hit "Run" in KDevelop and after <EM>KScribble</EM> showsup, you're ready to paint your first picture with it !
+<HR>
+<A HREF="index-10.html">Következõ</A>
+<A HREF="index-8.html">Elõzõ</A>
+<A HREF="index.html#toc9">Tartalom</A>
+</BODY>
+</HTML>

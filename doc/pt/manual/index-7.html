@@ -1,0 +1,626 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: Trabalhar com o Editor</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-8.html">Página seguinte</A>
+ <A HREF="index-6.html">Página anterior</A>
+ <A HREF="index.html#toc7">Índice geral</A>
+</P>
+<H3><A NAME="Working with the Editor"></A> <A NAME="s7">7. Trabalhar com o Editor</A></H3>
+
+<P>Uma parte importante do ambiente integrado de desenvolvimento é o editor. Você usa-o para:
+<UL>
+<LI>criar, abrir e gravar ficheiros de código e do projecto</LI>
+<LI>editar código e ficheiros do projecto</LI>
+<LI>escrever a sua documentação sgml</LI>
+<LI>imprimir os ficheiros do seu projecto</LI>
+</UL>
+
+Geralmente, o editor em si não faz muita diferença em comparação com outros editores; especialmente pois é uma versão incorporada do
+popular KWrite, também conhecido como "Editor Extendido". Se está familiarizado com ele, não terá quaisquer problemas a utiliza-lo para
+gerir os seus projectos. Em adição aos editores normais, o KDevelop contém um novo sistema de impressão, que tem muitas mais características para utilização
+com código fonte- e você pode escolher qual o programa de impressão que deseja utilizar.
+<P>Esta secção dá-lhe mais informação sobre como gerir os ficheiros do seu projecto e familiariza-lo com as funcionalidades do
+editor. Muitos dos utilizadores mais antigos de Unix prefeririam utilizar o Emacs ou XEmacs- estão à vontade com eles. Mas não é necessário simplesmente
+para programar, e especialmente para iniciados, é difícil habituarem-se a editores potentes que irão, no fim de contas, apenas permitir
+introduzir o seu código.
+<P>
+<H3><A NAME="ss7.1">7.1 Gerir Ficheiros do Projecto</A>
+</H3>
+
+<P>As secções seguintes descrevem como criar, gravar, abrir e fechar os ficheiros do seu projecto que necessita editar- lembre-se que isto não inclui
+os ficheiros de tradução ou imagens. Esses são reconhecidos automaticamente e o programa de edição correspondente tal como o KTranslator abre
+esses ficheiros para sí.
+<P>Para lhe permitir um acesso fácil aos seus ficheiros, o KDevelop contém duas vistas de árvore fáceis de utilizar, similares a um gestor de ficheiros, que reconhece
+se seleccionou um ficheiro, e abre-o na janela de edição correspondente. A vista principal contém duas janelas que são utilizadas
+independentemente, mas conectadas através do Editor de Projecto, pelo que pode fazer todas as acções de menu da mesma forma. A intenção por trás disto é
+que lhe permite manusear duas janelas ao mesmo tempo, apesar de que apenas uma se encontra visível. A janela C/C++ toma assim outra
+tarefa, que lhe permite facilmente compilar o seu código ficheiro a ficheiro, para que possa verificar as implementações sem ter de executar
+um processo de construção completo do seu projecto.
+<P>Isto pode ser conseguido tendo a janela C/C++ no topo. Seleccione "Compilar Ficheiro" a partir do menu Construir ou pressione o botão correspondente na
+barra de ferramentas. O seu ficheiro é gravado e compilado, e pode controlar quaisquer erros do compilador pela janela de output.
+<P>Dentro do ambiente de desenvolvimento pode ter abertas quantos ficheiros de texto desejar. Todos os ficheiros abertos são listados no menu Janela, para que possa alternar
+entre eles seleccionando o correspondente nome de ficheiro a partir do menu. Ainda mais, o ficheiro actualmente aberto é apresentado com o seu nome na
+moldura de janela do KDevelop.
+<P>
+<H4>Criar e Gravar Ficheiros</H4>
+
+<P>Para criar um ficheiro novo, escolhe "Novo" a partir do menu Ficheiro ou seleccione "Adicionar Ficheiro(s) ao projecto"-&gt;"Novo Ficheiro". Isto abre o diálogo "Novo Ficheiro",
+onde pode especificar o nome e tipo de ficheiro. Adicionalmente, tem de definir o directório de destino bem como se o ficheiro
+é adicionado ao projecto ou não. Finalmente, pode também utilizar o seu modelo de cabeçalho para o projecto no caso de querer adicionar um novo
+ficheiro de código sem gerar uma nova classe através do Gerador de Classes.
+<P>Após o ficheiro ter sido criado, pode editar o novo ficheiro normalmente; se tem de alternar entre ficheiros diferentes, pode sempre
+voltar atrás ao ficheiro quer através da árvore de ficheiros ou do menu Janela.
+<P>Para gravar quaisquer alterações, o KDevelop oferece uma variedade de opções. A forma standard seria gravar o ficheiro seleccionando "Gravar"
+ou "Gravar Como " a partir do menu Ficheiro ou através do botão Gravar na barra de ferramentas. Para gravar todos os ficheiros alterados de uma vez, poderia também
+seleccionar "Gravar Todos" a partir do menu Ficheiro.
+<P>Agora, quando a trabalhar num projecto, é muito irritante se algo crítico acontece após ter feito imensas alterações aos seus
+ficheiros; algumas vezes irá morder-se a si próprio por se ter esquecido de gravar as alterações. O KDevelop toma conta disto oferecendo
+"Auto-gravação", que está activada por defeito e definida para gravar todos os ficheiros em intrevalos de 5 minutos. Para seleccionar outro período de gravação ou
+desactivar isto, veja 
+<A HREF="index-12.html#KDevelop Setup">Configuração do KDevelop</A>, onde as opções de configuração são descritas.
+<P>Adicionalmente, o KDevelop toma conta de todas as alterações se abrir outro projecto ou sair do KDevelop. Ser-lhe-á perguntado se deseja gravar
+os ficheiros modificados, onde poderá também ter a opção de espeificar quais gravar e quais manter como estavam anteriormente. Além disso, quando
+se invoca qualquer processo de construção, os seus ficheiros são gravados automaticamente, pelo que nunca se perguntará porque a sua aplicação não corre da
+forma que esperava após ter modificado o seu código fonte. A única excepção é o comando "Compilar Ficheiro", que apenas
+grava o ficheiro de código actualmente aberto e visível na janela de código do editor.
+<P>
+<H4>Abrir e Fechar Ficheiros</H4>
+
+<P>Para abrir um ficheiro de código, também tem imensas opções. Uma poderia ser, como é standard para os editores, seleccionar "Abrir" a partir do 
+menu Ficheiro. Ser-lhe-á apresentado um diálogo "Abrir Ficheiro", que lhe permite escolher o ficheiro que deseja editar. Outra forma, provavelmente
+mais frequentemente utilizada é seleccionar o ficheiro a partir do VLF, o Visualizador Lógico de Ficheiros, ou do VRF, o Visualizador Real de Ficheiros (veja 
+<A HREF="index-5.html#Overview">Overview</A>
+). A vantagem das árvores de ficheiro é que proporcionam um acesso visual rápido aos seus ficheiros, especialmente o VLF,
+que apenas apresenta os ficheiros do seu projecto pelo seu tipo, agregados dentro de pastas. Pode também configurar o VLF no sentido de ordenar
+os seus ficheiros de outra forma através de um clique do botão direito do rato sobre a árvore. Seleccione "Novo Grupo" a partir do menu de contexto, e pode configurar um
+novo grupo, ou seleccionar "Editar Grupo" para instalar um novo filtro de ficheiro especificando as extenções de ficheiros do grupo, separadas por vírgulas.
+<P>Os grupos de ficheiros standard para um projecto gerado pelo KAppWizard são os Headers, Código, GNU e Outros. Adicionalmente, após
+adicionar um ficheiro de tradução, o KDevelop adiciona uma pasta "Traduções", contendo os seus ficheiros *.po.
+<P>Para fechar ficheiros, seleccione o ficheiro a fechar a partir do menu Janelamenu, que lê o ficheiro aberto para o editor de topo. Depois seleccione
+"Fechar" a partir do menu Ficheiro. Se o seu ficheiro tiver sido modificado, ser-lhe-á perguntado se o deseja gravar. Quando fechar um projecto, todos os ficheiros
+correntemente abertos serão verificados por alterações e ser-lh-é também perguntado se os deseja gravar.
+<P>
+<H3><A NAME="ss7.2">7.2 Navegar dentro dos Ficheiros</A>
+</H3>
+
+<P>De seguida ser-lhe-ão dadas linhas gerais de orientação sobre como localizar certas posições dentro dos seus ficheiros para um acesso mais rápido.
+<P><B>&raquo; Como encontrar uma certa linha num ficheiro</B>
+<P>
+<OL>
+<LI>Seleccione "Linha" no menu "Ver" ou prima STRG+L. O diálogo preenchido "Ir para Linha" surge.</LI>
+<LI>Insira o número da linha para onde deseja ir.</LI>
+<LI>Prima OK.</LI>
+</OL>
+<P><B>&raquo; Como definir uma marca de leitura</B>
+<P>
+<OL>
+<LI>Coloque o cursor na linha que deseja aceder através da marca de leitura</LI>
+<LI>Seleccione "Definir Marca de Leitura" através do menu "Marcas de Leitura".</LI>
+<LI>Um menu de contexto surge que lhe permite seleccionar o número da marca de leitura que deseja definir para a nova marca.</LI>
+<LI>Seleccione o número da marca de leitura.</LI>
+</OL>
+<P>Outra forma de definir marcas de leitura seria seleccionar "Adicionar Marca de Leitura" a partir do menu "Marcas de Leitura". Isto define uma marca para a linha actual
+e acrescenta a marca à lista de marcas de leitura. O navegador de documentação também oferece a definição de marcas de leitura para a página actual através de um menu de contexto
+na entrada "Adicionar Marca de Leitura".
+<P><B>&raquo; Como apagar marcas de leitura</B>
+<P>As marcas de leitura são definidas para cada janela de edição separadamente- lembre-se que as suas marcas não estão conectadas com um dado ficheiro em que tenha definido
+uma marca de leitura. Para apagar todas as marcas de leitura, seleccione "Apagar Marcas de Leitura" a partir do menu "Marcas de Leitura". Isto apaga as marcas para a
+janela actualmente no topo, quer seja a janela de Header, a janela C++ ou a janela de navegação.
+<P><B>&raquo; Como ir para uma linha marcada</B>
+<P>
+<OL>
+<LI>Seleccione o menu "Marcas de Leitura" e abra o menu de contexto contendo as marcas de leitura para a janela cujas marcas deseja
+ver; poderá ser a entrada de janela C++ ou de janela Header.</LI>
+<LI>Seleccione a linha marcada.</LI>
+</OL>
+<P>Seleccionar uma marca de leitura para uma janela de navegação irá abrir o navegador e ler a página.
+<P>
+<H3><A NAME="ss7.3">7.3 Trabalhar com Atalhos de teclado</A>
+</H3>
+
+<P>Para utilizar o editor, deverá tornar-se acostumado com alguns atalhos de teclado que lhe tornam a vida mais fácil para posicionar o cursor
+e editar o ficheiro. A referência completa de atalhos de teclado está também listada na secção 
+<A HREF="index-5.html#Overview">Descrição Geral</A>.
+<P>
+<HR>
+<PRE>
+uma letra para a esquerda                        Seta para a Esquerda
+uma letra para a direita                         Seta para a Direita
+uma palavra para a esquerda                      CTRL+Seta para a Esquerda
+uma palavra para a direita                       CTRL+Seta para a Direita
+uma linha para cima                              Seta para Cima
+uma linha para baixo                             Seta para Baixo
+para o princípio da linha                        POS 1
+para o fim da linha                              END
+uma página para cima                             PageUp
+uma página para baixo                            PageDown
+para o princípio do ficheiro actual              CTRL+PageUp
+para o fim do ficheiro actual                    CTRL+PageDown
+uma letra para a esquerda                        SHIFT+Seta para a Esquerda
+uma letra para a direita                         SHIFT+Seta para a Direita
+uma palavra para a esquerda                      CTRL+SHIFT+Seta para a Esquerda
+uma palavra para a direita                       CTRL+SHIFT+Seta para a Direita
+uma linha para cima                              CTRL+Seta para Cima
+uma linha para baixo                             CTRL+Seta para Baixo
+para o princípio da linha                        CTRL+POS 1
+para o fim da linha                              CTRL+END
+uma página para cima                             SHIFT+PageUp
+uma página para baixo                            SHIFT+PageDown
+para o princípio do ficheiro actual              CTRL+SHIFT+PageUp
+para o fim do ficheiro actual                    CTRL+SHIFT+PageDown
+(des)activar modo de inserção                    INS
+copiar selecção para a área de transferência     CTRL+C, CTRL+INS
+inserir texto da área de transferência           CTRL+V, SHIFT+INS
+apagar a linha actual                            CTRL+K
+inserir linha após a linha actual                END, depois Enter
+inserir linha antes da linha actual              POS 1, depois Enter
+desfazer passo de edição                         CTRL+Z
+re-fazer passo de edição                         CTRL+Y
+tabulador                                        TAB
+apagar letra à esquerda da posição do cursor     Backspace
+apagar letra à direita da posição do cursor      Delete
+apagar texto seleccionado                        Seleccionar texto, depois Backspace
+</PRE>
+<HR>
+<P>
+<P>
+<H3><A NAME="ss7.4">7.4 Editar Definições de Janelas</A>
+</H3>
+
+<P>O editor dentro do KDevelop pode ser configurado no sentido de necessidades especiais de edição com efeito global para todas as janelas de edição. Assim
+pode definir modos de cores, cores de realce (também configurável em relação à linguagem de programação do ficheiro) e
+definições de texto automaticas tais como dimensão da tabulação e modos de selecção. De seguida iremos ver como definir estas opções através dos diálogos
+de configuração disponibilizados no menu de "Opções"menu.
+<P>
+<H4>Definições Gerais</H4>
+
+<P>As definições gerais do editor podem ser configuradas com a entrada "Editor" no menu de "Opções". Seleccione os valores desejados e
+prima OK após terminar com a sua configuração.
+<P>
+<H4>Opções de Edição</H4>
+
+<P>
+<DL>
+<DT><B>Indentação Automática:</B><DD><P>especifica que o editor deverá colocar o cursor por baixo do primeiro literal quando se inicia uma nova linha.
+<P>
+<DT><B>Indentação de Backspace:</B><DD><P>esta opção define que o cursor deverá ser movido para baixo do primeiro literal da linha de cima quando a tecla backspace é premida.
+<P>
+<DT><B>Translineamento:</B><DD><P>as palavras são levadas para a linha seguinte após a coluna definida em "Translinear Palavras em:"
+<P>
+<DT><B>Substituir Tabs:</B><DD><P>tabuladores no texto actual são substituidos por tabuladores do valor "Comprimento de Tab:"
+<P>
+<DT><B>Remover Espaços Finais:</B><DD><P>remove os espaços no final das linhas
+<P>
+<DT><B>Translinear Cursor:</B><DD><P>coloca o cursor no final da última linha quando o backspace leva ao início de uma linha
+<P>
+<DT><B>Parentesis Automáticos:</B><DD><P>cria um parentesis de fecho em frente do cursor sempre que (qualquer tipo de) parentesis é aberto (parentesis curvos e rectos, chavetas, etc.).
+</DL>
+<P>
+<H4>Seleccionar Opções</H4>
+
+<P>
+<DL>
+<DT><B>Selecções Persistentes:</B><DD><P>selecções feitas ficam marcadas após colocar o cursor noutro local
+<P>
+<DT><B>Selecções Multiplas:</B><DD><P>permite selecções multiplas independentes dentro de um texto
+<P>
+<DT><B>Selecções Verticais:</B><DD><P>quando a seleccionar multiplas linhas, a selecção é também feita na horizontal e não cobre
+toda a linha
+<P>
+<DT><B>Apagar na Inserção:</B><DD><P>apaga uma selecção quando se escreve na selecção.
+<P>
+<DT><B>Alternar Antiga:</B><DD><P>permite apenas uma selecção. Uma selecção feita é des-seleccionada quando outra selecção é feita.
+<P>
+<DT><B>Translinear Palavras em:</B><DD><P>define o número máximo de colunas que uma linha pode ter. A palavra que contém a letra que alcança este valor
+será automaticamente quebrada para a linha seguinte.
+</DL>
+<P>
+<H4>Cores</H4>
+
+<P>Para alterar a aparência geral do editor, pode definir um conjunto de cores que o editor utiliza através da entrada "Cores do Editor"
+a partir do menu "Opções". Pode configurar as cores para:
+<UL>
+<LI><B>fundo:      </B>        o fundo do editor</LI>
+<LI><B>fundo do texto:  </B>            o fundo do texto apresentado</LI>
+<LI><B>seleccionado:         </B>       a cor do texto seleccionado para apresentar a selecção</LI>
+<LI><B>encontrado:            </B>       a cor do texto encontrado por uma busca através do menu "Ver"-"Procurar", "Repetir Procura" e "Substituir".</LI>
+<LI><B>seleccionado + encontrado: </B>       a cor do texto seleccionado para ser procurado e encontrado</LI>
+</UL>
+<P>
+<H4>Realce de Sintaxe</H4>
+
+<P>O modo de realce de sintaxe do editor do KDevelop pode ser configurado através de dois diálogos; primeiro pode definir as cores por defeito para
+o realce de sintaxe através da entrada "Defeitos do Editor" no menu "Opções". Aí, pode definir cores e fontes bem como o tamanho
+das fontes por ex. palavras-chave. Seleccione o item por defeito e defina todas as opções necessárias.
+<P>O segundo diálogo de configuração é acedido através da entrada "Realce de Sintaxe" no menu "Opções". Isto permite-lhe definir os
+filtros de ficheiros para a linguagem de programação, por ex. *.cpp, *.h  para C++. Depois seleccione o item que deseja configurar. Se desejar
+utilizar os valores por defeito que definiu no diálogo "Defeitos do Editor", seleccione as caixas de escolha "defeito" nas selecções Estilo-Item e
+Fonte-Item. Isto lê as definições por defeito para o item seleccionado. Após premir OK, os seus novos valores serão activados e
+utilizados pelo editor.
+<P>
+<H3><A NAME="ss7.5">7.5 Procurar e Substituir</A>
+</H3>
+
+<P>
+<H4>Procura num Único Ficheiro</H4>
+
+<P><B>&raquo; Como encontrar um ou mais caracteres na janela de edição actual</B>
+<OL>
+<LI>Seleccione "Procurar" a partir do menu "Editar". Isto abre um diálogo de procura.</LI>
+<LI>Especifique a expressão a procurar no campo de edição. O menu de caixa permite a escolha de uma expressão de busca anterior.</LI>
+<LI>Seleccione opções adicionais tais como "Apenas Palavras Inteiras"</LI>
+<LI>Prima OK.</LI>
+</OL>
+<P>Para repetir a busca por uma expressão inserida no diálogo de procura, prima F3.
+<P>
+<H4>Procurar em Vários Ficheiros</H4>
+
+<P>Como a função de procura está a realizar buscas sobre apenas um ficheiro que está actualmente visível, encontra-se limitado a isto. Mas muitas vezes
+você deseja procurar a mesma expressão em todo o seu projecto. Assim, o KDevelop contém um diálogo <CODE>grep</CODE>, que lhe
+permite procurar sobre todos os ficheiros que especificar quer através da definição do directório onde iniciar a busca e/ou por tipos mime.
+Especificando o directório exacto e o tipo mime irá assim reduzir o tempo que o KDevelop necessita para ler os ficheiros e apresentar
+os resultados. Para iniciar uma busca sobre vários ficheiros, seleccione "Procurar nos ficheiros..." a partir do menu "Editar". O diálogo deprocura abre e
+permite-lhe inserir:
+<P>
+<UL>
+<LI>A expressão a procurar (o padrão)</LI>
+<LI>O modelo utilizado para a busca</LI>
+<LI>O tipo mime dos ficheiros onde procurar</LI>
+<LI>O directório onde começar</LI>
+<LI>Se a busca é recursiva sobre todos os subdirectórios incluidos</LI>
+</UL>
+<P>Por defeito, o diálogo grep está definido para iniciar no directório do seu projecto e trabalhar recursivamente sobre os ficheiros de implementação e header.
+<P>Pode até ampliar o seu padrão de busca utilizando as seguintes opções:
+<P>
+<OL>
+<LI><B>.</B> Equivale a qualquer caractere</LI>
+<LI><B>^</B> Equivale ao princípio de uma linha</LI>
+<LI><B>$</B> Equivale ao fim de uma linha</LI>
+<LI><B>\&lt; </B> Equivale ao princípio de uma palavra</LI>
+<LI><B>\> </B> Equivale ao fim de uma palavra</LI>
+</OL>
+<P>Para uma busca repetida, pode também utilizar os operadores disponíbilizados:
+<OL>
+<LI><B>?</B> O item precedente é encontrado menos de uma vez</LI>
+<LI><B>*</B> O item precedente é encontrado zero ou mais vezes</LI>
+<LI><B>+</B> O item precedente é encontrado uma ou mais vezes</LI>
+<LI><B>{ n }</B> O item precedente é encontrado exactamente <EM>n</EM> vezes</LI>
+<LI><B>{ n,}</B> O item precedente é encontrado <EM>n</EM> ou mais vezes</LI>
+<LI><B>{,n }</B> O item precedente é encontrado menos de <EM>n</EM> vezes</LI>
+<LI><B>{n,m}</B> O item precedente é encontrado pelo menos <EM>n</EM> vezes mas menos de <EM>m</EM> vezes</LI>
+</OL>
+<P>Referências anteriores a subexpressões dentro de aspas estão também disponíveis através da notação <EM>\n</EM>.
+<P>Após especificar a sua busca, prima "Procurar". Os resultados são então apresentados na janela de resultado. Para ir para um ficheiro e número de
+linha, seleccione a linha do resultado e prima Enter ou clique duplo sobre o resultado. O editor irá automaticamente abrir o ficheiro correspondente
+e colocar o cursor na linha do resultado. Isto permite uma especificação completa para qualquer acção de procura e devolve resultados
+exactos.
+<P>O KDevelop oferece também algumas funcionalidades mais específicas para a utilização do grep dentro do editor e do navegador. Seleccione a expressão que deseja
+procurar em qualquer uma das janelas e prima SHIFT+F2 ou seleccione "grep:&lt;sua_expressão&gt;" a partir do menu de contexto acessível pelo botão direito do rato.
+Isto irá pedir ao grep para procurar pela selecção nos ficheiros no directório do seu projecto e mostrará os resultados imediatamente. Ir para o
+resultado funciona como descrito acima. A partir da janela de navegação, basta colocar o cursor sobre uma palavra e iniciar a procura; a
+palavra por baixo do cursor será o padrão de procura.
+<P>
+<H4>Procurar dentro da Documentação</H4>
+
+<P>Enquanto a trabalhar num projecto, muitas vezes você necessita de ter informação sobre parâmetros de funções membras que deseja utilizar- quase
+sempre você lembra-se do nome da função que responde às suas necessidades, mas os parâmetros são algo muito difícil de memorizar.
+Assim, e para outros propósitos que possam ocorrer, o KDevelop contém uma funcionalidade de procura que combina a busca de expressões
+que surgem dentro dos seus ficheiros com o navegador de documentação. Para fazer uso desta funcionalidade de busca, você deverá ter definido o navegador de
+documentação correctamente e criado a base de dados de pesquisa. Para invocar uma procura através da documentação, faça o
+seguinte:
+<P>
+<OL>
+<LI>coloque o cursor na palavra que deseja procurar ou seleccione uma expressão</LI>
+<LI>seleccione "Procurar Texto Marcado" a partir do menu "Ajuda" ou prima o botão direito do rato para abrir o menu de contexto; depois seleccione "Procurar
+: "expressão".</LI>
+<LI>após a página de resultados da busca ser apresentada no navegador de documentação, seleccione a página que pensa conter a
+informação de que necessita.</LI>
+<LI>a página de documentação seleccionada é apresentada e o resultado da sua procura é marcado. Para observar o resultado seguinte dentro da mesma
+página de documentação, prima F3.</LI>
+</OL>
+<P>Isto permite-lhe procurar facilmente a informação de que necessita. Para utilizar os resultados, o navegador de documentação permite marcar uma
+selecção e copia-la para a área de transferência. Depois volte para o ficheiro que estava a editar e seleccione "Colar" a partir do menu "Editar".
+<P>Para uma descrição completa de como utilizar a Documentação, veja 
+<A HREF="index-6.html#Using the Search Index">Utilizar o Índice de Busca</A>.
+<P>
+<H4>Substituir Texto</H4>
+
+<P>Para substituir uma expressão, seleccione "Procurar e Substituir" a partir do menu "Editar". O diálogo de "Procurar e Substituir" permite-lhe especificar
+a expressão a ser substituida bem como a expressão de substituição. Depois prima OK. A primeira expressão que for encontrada será
+marcada, pelo que pode ver onde a expressão está e em que contexto. Depois pode especificar através de um diálogo se a expressão será
+substituida ou não. Quando a busca estiver terminada por atingir o final do ficheiro actual, ser-lhe-á perguntado se deseja re-iniciar a
+procura de novo a partir do início do ficheiro. Se tiver terminado, seleccione "Cancelar".
+<P>
+<H3><A NAME="ss7.6">7.6 Imprimir</A>
+</H3>
+
+<P>Como o KDevelop está desenhado para dar aos programadores o melhor acesso aos ficheiros e informação para reduzir o ciclo de desenvolvimento, também contém
+um novo utilitário de impressão que faz uso de dois programas de impressão comuns disponíveis para sistemas Unix, <EM>a2ps</EM> (ASCII-para-Postscript) e
+<EM>enscript</EM>. Para além destes, pode também imprimir directamente utilizando o lpr (o dispositivo de impressão linear). Como a utilização do a2ps ou enscript oferecem o
+maior número de opções de impressão, deverá instalar qualquer um deles no seu sistema; ambos os programas são normalmente enviados com as
+distribuições, pelo que não deverá ter qualquer problema em os obter. Mas antes de imprimir, deverá percorrer os diálogos de
+configuração disponíveis para preparar o resultado final de acordo com as suas necessidades. As secções seguintes descrevem como configurar o KDevelop para
+imprimir ficheiros.
+<P>
+<H4>Configurar a Impressora</H4>
+
+<P>Ambos os programas de impressão podem ser configurados seleccionando "Imprimir" a partir do menu "Ficheiro"; no diálogo de impressão, seleccione o programa
+através do menu de caixa no canto superior esquerdo. Depois prima o botão "Opções" à direita. Isto irá abrir a configuração para o
+programa seleccionado que será utilizado. Outra forma de configurar os programas é seleccionando "Configuração de Impressora..." a partir do
+menu "Opções"; depois seleccione "a2ps" ou "enscript".
+<P>
+<H4>As Opções de Configuração do a2ps</H4>
+
+<P>
+<H4>Imprimir</H4>
+
+<P>
+<UL>
+<LI><B>cabeçalho:</B>  adiciona uma moldura de cabeçalho à página</LI>
+<LI><B>nome do ficheiro:</B>  se activo, a moldura de cabeçalho conterá o nome do ficheiro como sendo o seu texto</LI>
+<LI><B>utilizador:</B>  adiciona a identificação do utilizador (User ID) ao canto superior direito da página</LI>
+<LI><B>margens:</B>  adiciona molduras de margem à página de texto</LI>
+<LI><B>Data &amp; Hora:</B>  adiciona a data e hora de impressão</LI>
+<LI><B>alinhar ficheiros:</B>  imprime os ficheiros na mesma página, disponível para modo de impressão de duas páginas</LI>
+<LI><B>definir tamanho do TAB:</B>  define o tamanho do TAB  para impressão de TABs</LI>
+<LI><B>texto de cabeçalho:</B> disponível, se nome de ficheiro está inactivo e permite inserir outro texto na moldura de cabeçalho</LI>
+<LI><B>tamanho da fonte:</B>  define o tamanho da fonte para o texto. O tamanho por defeito é 9</LI>
+</UL>
+<P>
+<H4>Impressão de Texto</H4>
+
+<P>
+<UL>
+<LI><B>cortar linhas:</B>  corta o conteudo das linhas se elas forem demasiado grandes para serem impressas. Se inactivo, as linhas serão quebradas.</LI>
+<LI><B>interpretar TAB, BS e FF:</B> interpreta os caracteres TAB, Backspace e FastForward.</LI>
+<LI><B>substituir caracteres não imprimíveis por espaços:</B> se o ficheiro contém caracteres não-imprimíveis, eles serão substituidos por caracteres
+de espaços.</LI>
+<LI><B>imprimir caracteres não-ASCII como ISO-Latin 1:</B> imprime caracteres não incluídos no formato ASCII em formato ISO-Latin 1</LI>
+<LI><B>fonte negrito:</B> imprime todo o texto em modo de fonte negrito.</LI>
+</UL>
+<P>
+<H4>Numeração</H4>
+
+<P>
+<UL>
+<LI><B>numeração de linhas:</B>  numera todas as linhas de cima para baixo, se activo</LI>
+<LI><B>numeração de páginas:</B> permite seleccionar o modo de numeração de páginas por:
+<UL>
+<LI><B>ficheiro sozinho:</B> numera as páginas de cada ficheiro a começar no 1</LI>
+<LI><B>ficheiros juntos:</B>  junta todas as páginas após a primeira para numeração de páginas</LI>
+</UL>
+</LI>
+<LI><B>linhas por página:</B>  define o número máximo de linhas por página a ser impressa.</LI>
+</UL>
+<P>
+<H4>As Opções de Configuração enscript</H4>
+
+<P>
+<H4>Cabeçalho</H4>
+
+<P>
+<UL>
+<LI><B>Cabeçalho Fantasioso:</B> adiciona um cabeçalho fantasioso</LI>
+<LI><B>Texto de Cabeçalho:</B> permite adicionar um texto de cabeçalho
+<UL>
+<LI><B>texto:</B> define o conteúdo do texto</LI>
+<LI><B>posicionamento:</B> define o posicionamento do texto à esquerda, centro ou direita</LI>
+</UL>
+</LI>
+<LI><B>Utilizador:</B> adiciona a identificação do utilizador (UserID) ao cabeçalho
+<UL>
+<LI><B>utilizador:</B> permite adicionar identificação de utilizador (UserID)</LI>
+<LI><B>posicionamento:</B> define o posicionamento para o UserID</LI>
+</UL>
+</LI>
+<LI><B>Nome de Ficheiro:</B> adiciona o nome de ficheiro ao cabeçalho
+<UL>
+<LI><B>Tamanho do Nome de Ficheiro:</B> adiciona o nome do ficheiro como completo ou curto, significando caminho completo ou apenas nome do ficheiro</LI>
+<LI><B>Posicionamento:</B> define o posicionamento do nome do ficheiro</LI>
+</UL>
+</LI>
+<LI><B>Nome do Servidor:</B> adiciona o nome do computador (hostname) ao cabeçalho
+<UL>
+<LI><B>nome do servidor:</B> permite adicionar nome do computador</LI>
+<LI><B>tamanho do nome do servidor:</B> define o tamanho do nome do servidor</LI>
+<LI><B>posicionamento:</B> define o posicionamento para o nome do servidor</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4>Data &amp; Hora</H4>
+
+<P>
+<UL>
+<LI><B>Data Actual:</B> inclui a data actual
+<UL>
+<LI><B>data actual:</B> permite adicionar a data actual</LI>
+<LI><B>posicionamento:</B> define o posicionamento para a entrada de data</LI>
+<LI><B>formato:</B> define o formato da data</LI>
+</UL>
+</LI>
+<LI><B>Data de Modificação:</B> inclui a data da última modificação
+<UL>
+<LI><B>data de modificação:</B> permite adicionar a data da última modificação</LI>
+<LI><B>posicionamento:</B> define o posicionamento para a entrada de data de modificação</LI>
+<LI><B>formato:</B> define o formato da data</LI>
+</UL>
+</LI>
+<LI><B>Hora Actual:</B> inclui a hora actual
+<UL>
+<LI><B>hora actual:</B> permite adicionar a hora actual</LI>
+<LI><B>AM</B>PM:/ utiliza o formato AM/PM ou 24h</LI>
+<LI><B>Posicionamento:</B> define o posicionamento para a entrada de hora</LI>
+<LI><B>Formato:</B> define o formato de hora</LI>
+</UL>
+</LI>
+<LI><B>Hora de Modificação:</B> inclui a hora da última modificação
+<UL>
+<LI><B>hora de modificação:</B> permite adicionar a hora de modificação</LI>
+<LI><B>AM</B>PM:/ utiliza o formato AM/PM ou 24h</LI>
+<LI><B>Posicionamento:</B> define o posicionamento para a entrada de hora</LI>
+<LI><B>Formato:</B> define o formato de hora</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4>Aspecto Final</H4>
+
+<P>
+<UL>
+<LI><B>Numeração &amp; Margens:</B>
+<UL>
+<LI><B>numeração de linhas:</B> adiciona numeração de linhas ao documento a ser impresso</LI>
+<LI><B>margens:</B> adiciona uma margem às páginas a serem impressas</LI>
+<LI><B>numeração de páginas:</B> numera as paginas para impressão</LI>
+<LI><B>alinhar ficheiros:</B> junta os ficheiros para numeração de página</LI>
+<LI><B>linhas por página:</B> o valor máximo de linhas por página</LI>
+</UL>
+</LI>
+<LI><B>Formato e TAB:</B>
+<UL>
+<LI><B>define tamanho de TAB:</B> define o tamanho do TAB para interpretar TABs</LI>
+<LI><B>fonte para cabeçalhos:</B> define a fonte utilizada para texto de cabeçalho</LI>
+<LI><B>fonte para corpo:</B> define a fonte para o corpo do texte (conteudo do ficheiro)</LI>
+</UL>
+</LI>
+<LI><B>Impressão de Texto:</B>
+<UL>
+<LI><B>cortar linhas:</B> corta as linhas se forem demasiado grandes. Se inactivo, as linhas são quebradas</LI>
+<LI><B>substituir caracteres não imprimíveis por espaços:</B> substitui caracteres não imprimíveis por caracteres de espaço</LI>
+</UL>
+</LI>
+<LI><B>Outras Opções:</B>
+<UL>
+<LI><B>índice:</B> adiciona uma página de índice que contém informação sobre os ficheiros impressos, número de páginas etc.</LI>
+<LI><B>Barras de Realce:</B>
+<UL>
+<LI><B>barras de realce:</B> realça as linhas para impressão</LI>
+<LI><B>ciclo de mudança:</B> define o número de linhas para mudar o estilo de realce</LI>
+</UL>
+</LI>
+<LI><B>Translinear Linha:</B>
+<UL>
+<LI><B>marcar linhas translineadas:</B> linhas que são quebradas são marcadas para impressão</LI>
+<LI><B>valor para linhas translineadas:</B> o valor pré-definido para para a nova linha em que a linha foi quebrada.</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4>Marca de Água</H4>
+
+<P>
+<UL>
+<LI><B>Texto:</B> define o texto para a marca de água</LI>
+<LI><B>Posicionamento:</B> define o posicionamento para o texto de marca de água</LI>
+<LI><B>Fonte:</B> define a fonte utilizada para a marca de água</LI>
+<LI><B>Ângulo:</B> define o ângulo para o texto da marca de água</LI>
+<LI><B>Escala de Cinzento:</B> define a escala de cinzento para o texto de marca de água</LI>
+<LI><B>Estilo:</B> define o texto de marca de água a ser impresso como sendo apenas bordejado ou cheio</LI>
+</UL>
+<P>
+<H4>O Diálogo de Impressão</H4>
+
+<P>
+<H4>Opções de Impressão Directa</H4>
+
+<P>
+<UL>
+<LI><B>Programa:</B> define o programa de impressão a ser utilizado: a2ps, enscript ou lpr</LI>
+<LI><B>Impressora:</B> define a impressora a ser utilizada</LI>
+<LI><B>Localização do Output:</B> para imprimir para ficheiro, selecciona a localização do output</LI>
+<LI><B>Orientação:</B> define a orientação para imprimir, ou paisagem ou retrato</LI>
+<LI><B>Copias:</B> define o número de copias a serem feitas por página</LI>
+<LI><B>Tamanho do Papel:</B> define o tamanho do papel a ser utilizado</LI>
+<LI><B>Formato do Output:</B> para utilizar o enscript como programa de impressão, pode escolher entre impressão em postscript ou html</LI>
+<LI><B>Definições de Impressão de Defeito:</B> utiliza as definições por defeito para impressão</LI>
+<LI><B>Formato de Impressão:</B>
+<UL>
+<LI><B>Impressão de Páginas:</B> define uma ou duas páginas numa folha de papel</LI>
+<LI><B>Páginas:</B> selecciona todas, ímpares ou pares para utilização com o enscript</LI>
+<LI><B>Impressão de Qualidade:</B>
+<UL>
+<LI><B>impressão de qualidade:</B> activa modo de impressão de qualidade para o enscript</LI>
+<LI><B>côr:</B> imprime a cores</LI>
+<LI><B>Modo de Impressão de Qualidade:</B> define o modo de impressão dependendo do formato do seu ficheiro</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4>Selecção de Ficheiros</H4>
+
+<P>O diálogo de selecção de ficheiros é acedido através do botão "Ficheiros" no diálog de impressão. A selecção de ficheiros permite especificar que ficheiros
+imprimir através de certos critérios:
+<UL>
+<LI><B>Selecção de Ficheiros:</B>
+<UL>
+<LI><B>actual:</B> o ficheiro actualmente aberto e visível na janela de edição</LI>
+<LI><B>todos no projecto:</B> todos os ficheiros incluidos no projecto actualmente aberto</LI>
+<LI><B>ficheiros escolhidos:</B> permite-lhe escolher que ficheiros imprimir através de selecção de ficheiros</LI>
+<LI><B>todos os ficheiros cpp:</B> imprime todos os ficheiros de código do projecto</LI>
+<LI><B>todos os headers:</B> imprime todos os ficheiros header do projecto</LI>
+<LI><B>ficheiros modificados:</B> permite especificar ficheiros que foram modificados entre datas:</LI>
+</UL>
+</LI>
+<LI><B>Ficheiros Modificados:</B>
+<UL>
+<LI><B>Entre:</B> especifica todos os ficheiros modificados depois:
+<UL>
+<LI><B>Data:</B> a data em que os ficheiros foram modificados</LI>
+<LI><B>Hora:</B> a hora a que os ficheiros foram alterados</LI>
+</UL>
+</LI>
+<LI><B>E:</B> especifica todos os ficheiros modificados antes:
+<UL>
+<LI><B>Data:</B> a data em que os ficheiros foram modificados</LI>
+<LI><B>Hora:</B> a hora a que os ficheiros foram modificados</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI><B>Ficheiros Escolhidos:</B> disponível se foi seleccionado ficheiros escolhidos (ver acima)
+<UL>
+<LI><B>adicionar:</B> prima para adicionar um ficheiro seleccionado para imprimir à lista à esquerda</LI>
+<LI><B>apagar:</B> apaga um ficheiro seleccionado da lista de impressão</LI>
+<LI><B>limpar:</B> limpa a lista de impressão</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H4>Ver Antes</H4>
+
+<P>Ver Antes está disponível para que você possa controlar qual será o aspecto do resultado final. Assim, o KDevelop utiliza o programa <EM>ghostview</EM> ou
+<EM>kghostview</EM>. Quando o botão de ver antes for premido em qualquer um dos diálogos de impressão, ser-lhe-á apresentado um modelo de output que lhe mostra
+o efeito das opções actualmente definidas.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-8.html">Página seguinte</A>
+ <A HREF="index-6.html">Página anterior</A>
+ <A HREF="index.html#toc7">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

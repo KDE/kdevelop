@@ -1,0 +1,870 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>O Manual de Programação do KDevelop: Criar Novas Aplicações</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Página seguinte</A>
+ <A HREF="index-2.html">Página anterior</A>
+ <A HREF="index.html#toc3">Índice geral</A>
+</P>
+<H3><A NAME="Creating new Applications"></A> <A NAME="s3">3. Criar Novas Aplicações</A></H3>
+
+<P>O KAppWizard, ou também denominado Assistente de Aplicações KDE, destina-se a permitir-lhe começar a trabalhar em novos projectos com o KDevelop.
+Assim, todos os seus projectos são primeiro criados através do assistente; depois você pode começar a construi-los e extender o código do esqueleto já
+disponibilizado. O KAppWizard também permite escolher entre vários tipos de projectos de acordo com os objectivos do seu projecto:
+<P>
+<UL>
+<LI>Aplicação KDE Normal: inclui código fonte para uma moldura de estrutura completa de uma aplicação KDE standard com suporte para o
+modelo Controlador-de-Vista-de-Documento, uma barra de menu, ferramentas e estados bem como um conjunto de documentação baseado em SGML, hiper-ligações KDE
+e icons de aplicações. Este é o tipo de aplicação normalmente necessária para um novo projecto KDE.</LI>
+<LI>Mini-Aplicação KDE: contém a mesma estrutura geral que a Aplicação KDE Normal mas com a diferença que o
+código da aplicação apenas disponibiliza um widget como uma janela.</LI>
+<LI>Aplicação Qt Normal: trabalha como a Aplicação KDE Normal através do seu código com a diferença de que o projecto é baseado na biblioteca
+Qt apenas e não contém suporte KDE. É destinado a projectos que têm de ser portáveis para plataformas Windows ou que não querem requerer
+as bibliotecas KDE por parte do utilizador final.</LI>
+<LI>Aplicação C: É baseada apenas no compilador C e corre numa consola.</LI>
+<LI>Aplicação C++: É baseada apenas no compilador C++ e corre numa consola tal como a aplicação C, pelo que não requer
+o X-Window.</LI>
+<LI>Projecto Costumizável: cria um projecto vazio sem qualquer código fonte. Este destina-se a projectos já existentes para serem
+convertidos para o KDevelop ou para projectos onde deseja começar de raiz. Lembre-se que tem de tomar conta dos ficheiros makefiles e dos scripts de configuração
+sozinho.</LI>
+</UL>
+<P>Neste capítulo veremos como o KAppWizard pode ser invocado e o que tem de ser feito para gerar um projecto de aplicação KDE. Isto irá ser
+também o passo inicial da nossa cobertura, onde iremos criar a versão inicial do projecto de exemplo. Para todos os outros tipos de projectos os
+passos são normalmente os mesmos, apenas que poderá não necessitar de ter certas opções disponíveis.
+<P>
+<H3><A NAME="ss3.1">3.1 Invocar o KAppWizard e a Geração do Projecto</A>
+</H3>
+
+<P>
+<H4>Iniciar o KAppWizard e a Primeira Página</H4>
+
+<P>Para começar com a sua primeira aplicação KDE, abra o KDevelop. Depois seleccione "Novo..." a partir do menu "Projecto". O KAppWizard inicia-se, e você
+vê uma árvore na primeira página, contendo os tipos de projectos. Quando um tipo é seleccionado, você vê uma antevisão de como irá funcionar após o
+processo inicial de construção. Escolha o ramo KDE, tipo Normal. Depois prima o botão "Seguinte" no fundo da primeira página do assistente. Isto
+mudará para a página seguinte, onde você tem de definir as opções gerais do projecto.
+<P>
+<H4>A Página de Geração de Definições</H4>
+
+<P>Para a nossa aplicação de exemplo, nos escolhemos o nome de projecto <CODE>KScribble</CODE>; pelo que deverá inserir isto no campo "Nome do Projecto". Depois seleccione
+o directório onde quer que o projecto seja construido; o defeito é o seu directório principal (home). Pode introduzir o caminho manualmente ou pode também
+premir o botão à direita para seleccionar o directório através de um diálogo.
+<P>De seguida, tem de introduzir o número da Versão. Para a primeira versão, defina esta como <CODE>0.1</CODE>. É normal numerar novas aplicações que estão
+em desenvolvimento para a primeira distribuição abaixo de 1, e como a versão inicial irá apenas conter a estrutura standard, diremos que esta é
+a versão 0.1.
+<P>Finalmente, adicione o seu nome ao campo "Autor" e o seu endereço de e-mail. Pode deixar todas as outras opções nos seus valores de defeito.
+<P>Para lhe dar algumas informações sobre outras opções, pode premir o botão direito do rato sobre as opções, e obterá uma janela de ajuda rápida
+que descreve o objectivo da opção.
+<P>Estes são:
+<UL>
+<LI><B>gerar código e headers:</B>  gera o código fonte da aplicação</LI>
+<LI><B>Ficheiros-Standard-GNU:</B>  adiciona uma cópia da Licença Pública Geral (GPL) GNU ao projecto bem como alguns outros ficheiros standard para informação
+do utilizador quando distribuir o pacote.</LI>
+<LI><B>Documentação do Utilizador:</B> o manual do utilizador em SGML, já preparado para o seu projecto.</LI>
+<LI><B>Documentação-API:</B> cria um conjunto de documentação HTML inicial para o <B>I</B>nterface de <B>P</B>rogramação da <B>A</B>plicação (API).</LI>
+<LI><B>Ficheiro-lsm:</B> o Mapa de Aplicações Linux, utilizado pelos servidores de distribuição e contém uma breve informação sobre os objectivos do projecto e
+requerimentos.</LI>
+<LI><B>Ficheiro-.kdelnk: </B> um atalho KDE que irá instalar a sua aplicação na árvore "Aplicações" no Painel de Controlo KDE.</LI>
+<LI><B>Icon de Programa: </B> um Icon que representa o seu projecto e pode ser utilizado para criar um atalho para o ambiente de trabalho.</LI>
+<LI><B>Mini-Icon: </B> uma versão-Mini do icon de programa que representa a sua aplicação para além do nome dela no Painel de Controlo KDE e é
+mostrado nos diálogos e janela principal da sua aplicação no canto superior esquerdo.</LI>
+</UL>
+<P>Agora vamos para a página seguinte premindo o botão "Seguinte" de novo para definir o modelo para os ficheiros header do seu projecto.
+<P>
+<P>
+<H4>Os Modelos de Header e Código</H4>
+
+<P>A página de modelo de header permite-lhe incluir automaticamente um prefácio nos seus ficheiros header, contendo o nome do ficheiro, a data de construção, 
+o ano do copyright, também o seu nome e endereço de e-mail. Você não tem de mudar essas partes em maiusculas por si, pois o
+KAppWizard faz isto automaticamente e guarda o modelo para este projecto, para que possa ser utilizado de novo mais tarde para criar novos ficheiros.
+<P>A segunda parte do modelo de header de defeito contém uma informação de licença. Por defeito, o seu projecto está sob a Licença Pública Geral
+GNU, que também é incluida no pacote. Esta licença é utilizada para proteger o seu código fonte contra qualquer pessoa que apenas
+copie o seu código para os seus propósitos. A Licença Pública Geral (GPL) oferece-lhe esta licença gratuitamente e assim protege os seus direitos
+como autor, e é comum para aplicações de distribuição livre. Para obter mais informação sobre a licença, deverá ler mais tarde o ficheiro
+COPYING no directório base do seu novo projecto que é uma cópia da GPL e é já enviada com a sua aplicação.
+<P>De qualquer modo, você pode escolher outra licença ou outro modelo de header que já esteja a utilizar para os seus projectos. Sendo assim você pode
+editar directamente o modelo de defeito dado. Para fazer isto, é-lhe dado o modelo numa janela de edição. Para limpar a página de defeito,
+seleccione "Novo", para utilizar outro modelo, seleccione "Ler...", que lhe permite escolher um ficheiro de modelo.
+<P>Quando tiver terminado, vá para a página seguinte premindo "Seguinte". Esta é a página de modelo para os seus ficheiros de código fonte e é geralmente a mesma
+que a página de modelo de header. A única diferença é que este modelo é utilizado para os seus ficheiros de implementação.
+<P>
+<H4>Criar o Projecto</H4>
+
+<P>
+<P>Agora que já definiu todas as opções para o <EM>KScribble</EM>, seleccione "Seguinte" e prima o botão "Gerar" no fundo da janela do assistente.
+Se o botão não estiver disponível, você não definiu todas as opções correctamente. Para corrigir quaisquer erros, volte atrás no Assistente com "Regressar".
+<P>Depois você verá o que o KAppWizard faz- ele copia todos os modelos para o directório do seu projecto e cria o novo projecto. Após o KAppWizard
+terminar, o botão "Cancelar" muda para um botão "Sair" para deixar o assistente.
+<P>Após este último passo, você terminou a criação do novo projecto. O KDevelop lê-o então e a vista de árvore permite-lhe navegar através
+ficheiros e classes do projecto.
+<P>
+<P>Na próxima secção, iremos discutir como construir e correr a sua primeira versão do <EM>KScribble</EM> e como o código fonte está organizado.
+<P>
+<H3><A NAME="ss3.2">3.2 A Primeira Construção</A>
+</H3>
+
+<P>Após o seu projecto ser gerado, iremos primeiro fazer uma viagem através do código fonte para obter um entendimento geral de como funciona o esqueleto
+da aplicação. Isto não só ajudará a começar como também saberemos onde mudar o quê em passos futuros.
+<P>Quando abrimos a página do VLF (Visualizador Lógico de Ficheiros)  na vista de árvore, você vê algumas pastas que já ordenam os ficheiros do projecto relevantes para
+o programador. As duas primeiras pastas são "Header" e "Código". A pasta-Header assim sendo contém logicamente todos os ficheiros header do
+projecto, a pasta-Código todo o código fonte. Todas as outras pastas não são de interesse por agora, pelo que voltaremos aqui mais tarde para ver o
+que contêm.
+<P>Essas duas pastas contêm então os seguintes ficheiros:
+<P><B>Headers:</B>
+<UL>
+<LI><B>kscribble.h :</B> contém a declaração de classe para a classe <B>KScribbleApp</B>.</LI>
+<LI><B>kscribbledoc.h :</B> contém a declaração de classe para a classe <B>KScribbleDoc</B>.</LI>
+<LI><B>kscribbleview.h :</B> contém a declaração de classe para a classe <B>KScribbleView</B>.</LI>
+<LI><B>resource.h :</B> contém uma colecção de macro para os menu-ID's</LI>
+</UL>
+<P><B>Código:</B>
+<UL>
+<LI><B>kscribble.cpp :</B> contém a implementação da classe <B>KScribbleApp</B>.</LI>
+<LI><B>kscribbledoc.cpp :</B> contém a implementação da classe <B>KScribbleDoc</B>.</LI>
+<LI><B>kscribbleview.cpp :</B> contém a implementação da classe <B>KScribbleView</B>.</LI>
+<LI><B>main.cpp :</B> contém a implementação da função <B>main()</B>.</LI>
+</UL>
+<P>Mas antes de mergulharmos no código, vamos deixar o KDevelop construir e correr a nossa nova aplicação. Para fazer isto, seleccione "Make" a partir do menu "Construir"
+ou prima o botão correspondente na barra de ferramentas. A janela de output abre na base do KDevelop e deixa-o ver o que o <CODE>make</CODE> está a fazer
+através das mensagens que nos dá:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1   Making all in docs
+2   make[1]: Entering directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs'
+3   Making all in en
+4   make[2]: Entering directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs/en'
+5   make[2]: Nothing to be done for `all'.
+6   make[2]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs/en'
+7   make[2]: Entering directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs'
+8   make[2]: Nothing to be done for `all-am'.
+9   make[2]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs'
+10  make[1]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble/docs'
+11  make[1]: Entering directory `/home/rnolden/Tutorial/kscribble1/kscribble'
+12  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribbleview.cpp
+13  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribbledoc.cpp
+14  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c                 
+    kscribble.cpp
+15  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    main.cpp
+16  /usr/bin/moc ./kscribble.h -o kscribble.moc.cpp
+17  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribble.moc.cpp           
+18  /usr/bin/moc ./kscribbledoc.h -o kscribbledoc.moc.cpp
+19  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribbledoc.moc.cpp
+20  /usr/bin/moc ./kscribbleview.h -o kscribbleview.moc.cpp
+21  g++ -DHAVE_CONFIG_H -I. -I. -I.. -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include    -O0 -g -Wall  -c
+    kscribbleview.moc.cpp
+
+22  /bin/sh ../libtool --silent --mode=link g++  -O0 -g -Wall   -o kscribble -L/opt/kde/lib  -L/usr/X11R6/lib -rpath /opt/kde/lib
+    -rpath /usr/X11R6/lib kscribbleview.o kscribbledoc.o kscribble.o main.o kscribble.moc.o kscribbledoc.moc.o kscribbleview.moc.o
+    -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11
+
+23  make[1]: Leaving directory `/home/rnolden/Tutorial/kscribble1/kscribble'
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Como pode ver, numeramos todas as linhas, o que não irá surgir no seu output; apenas torna mais fácil descrever agora o que
+aconteceu durante a construção. Primeiro que tudo, o <CODE>make</CODE> trabalha recursivamente. Isto é, comça no directório em que foi invocado e
+então vai para os subdirectórios primeiro, regressa e processa o subdirectório seguinte. Finalmente, o directório em que foi iniciado é processado
+e o <CODE>make</CODE> termina. Assim, o <CODE>make</CODE> começou primeiro no directório principal do projecto contendo o código. Nas linhas 1 e 2, você
+vê como o processo <CODE>make</CODE> entra no directório <CODE>docs</CODE>, depois no subdirectório <CODE>en</CODE>. Como não existe nada para fazer, ele
+deixa estes directórios até regressar ao directório fonte <CODE>kscribble</CODE> na linha 11. Depois, o verdadeiro trabalho começa: o <CODE>make</CODE>
+invoca o compilador, aqui o <CODE>g++</CODE> para compilar o ficheiro de código <CODE>kscribbleview.cpp</CODE>. A macro <CODE>-DHAVE_CONFIG_H</CODE> diz que o ficheiro
+<CODE>config.h</CODE> deverá ser utilizado. Este é um ficheiro que contém macros para a plataforma e aplicação específicas e está localizado no
+directório principal do projecto. Os comandos <CODE>-I</CODE> seguintes adicionam o caminho include onde o <CODE>g++</CODE> pode encontrar os includes de que necessita. O caminho é o
+directório corrente, o directório principal do projecto (através de <CODE>-I..</CODE>) e o caminho include para o KDE, Qt e ficheiros header da biblioteca X11. Os
+directórios para estes ficheiros include foram determinados pelo script <CODE>configure</CODE> e definidos nos Makefiles, pelo que, o compilador
+sabe onde estes se encontram. Finalmente, <CODE>-O0</CODE> define a optimização para zero (sem optimização), <CODE>-g</CODE> permite a depuração, <CODE>-Wall</CODE>
+define os avisos do compilador para <CODE>todos</CODE> e <CODE>-c</CODE> diz ao compilador para produzir um ficheiro de objecto, ou seja apenas compilar o ficheiro.
+<P>Isto é feito também para os outros ficheiros de código do nosso projecto nas linhas 13-15. Obviamente, o nosso código é compilado, mas em vez de
+ligar os ficheiros objecto do código ao binário final, nós vemos alguns outros comandos. Na linha 16, você vê que o programa "moc" é
+chamado para processar o ficheiro header <CODE>kscribble.h</CODE>, com o seu resultado em <CODE>kscribble.moc.cpp</CODE>. Depois, na linha 17, este ficheiro de código é
+também compilado. O mesmo acontece com os outros ficheiros header do projecto até à linha 21. Agora, como o conjunto de ferramentas Qt contém o mecanismo
+sinal/espaço, mas continua a ser uma implementação C++, você está a utilizar algumas palavras-chave que não são originalmente linguagem C++, tais como
+as declarações <CODE>signals:</CODE> e <CODE>slots:</CODE> nas suas classes. Isto dá-lhe a possibilidade de permitir facilmente comunicação entre objectos para todas
+as classes de objectos que herdem a classe <CODE>QObject</CODE>, pelo que pode evitar os normais ponteiros para funções de chamada (callback). Assim, a aplicação
+necessita do código que implementa esta funcionalidade, e é por isto que o <CODE>moc</CODE> é chamado. <CODE>Moc</CODE> é o Compilador de Objectos Meta (Meta Object Compiler) do conjunto de
+ferramentas Qt e constroi a implementação para mecanismos de sinais e espaços percorrendo os ficheiros header e produzindo um código de resultado que
+tem de ser compilado no binário. Como os projectos do KDevelop utilizam o <CODE>automoc</CODE> para determinar, que ficheiro header necessita de ser processado, você
+não tem de se preocupar com nenhuma chamada ao <CODE>moc</CODE> nem com o compilador C++ no ficheiro moc de resultado. Lembre-se apenas da regra que faz uma
+classe utilizar os sinais e espaços- hereditariedade da <CODE>QObject</CODE> ou qualquer classe que herde em si a <CODE>QObject</CODE>, inclusão da
+macro <CODE>Q_OBJECT</CODE> (sem ponto e vírgula !) no início da declaração de classe e a declaração para os sinais e espaços.
+<P>Finalmente, o seu binário é construido pelo compilador. O binário de resultado é chamado <CODE>kscribble</CODE>, o linkador inclui o caminho para as bibliotecas
+KDE e X11 e liga o código contra as bibliotecas <CODE>kfile, kfm, kdeui, kdecore, qt, Xext</CODE> e <CODE>X11</CODE>. Depois tudo está feito e
+o make termina.
+<P>
+<H3><A NAME="ss3.3">3.3 O Esqueleto de Código</A>
+</H3>
+
+<P>
+<P>Para obter um conceito de como uma aplicação KDE funciona, teremos primeiro que olhar muito atentamente para o esqueleto de código já disponibilizado pelo
+Assistente de Aplicação. Como nós já vimos, temos um conjunto de ficheiros de código e header que constroem o código inicial para a aplicação
+e a tornam pronta-a-correr. Assim, a maneira mais fácil de explicar o código é seguir a implementação linha a linha como é
+processado durante a execução do programa até entrar no ciclo principal de evento e está pronto a receber interacção do utilizador. Depois, iremos observar a
+functionalidade que permite a interacção do utilizador e como certas coisas funcionam. Esta é provavelmente a melhor forma de explicar o esqueleto
+e, como é similar a quase todas as aplicações KDE, irá permitir-lhe ler também o código fonte de outros projectos; adicionalmente,
+você saberá aqui onde alterar que parte do código para fazer com que as suas aplicações se comportem da forma para que foram desenhadas.
+<P>
+<H4><A NAME="The main() Function"></A> A Função <CODE>main()</CODE></H4>
+
+<P>Como a aplicação inicia a sua execução entrando na função <CODE>main()</CODE>, este será o ponto de partida do nosso exame ao código. A
+função <CODE>main()</CODE> do <EM>KScribble</EM> é implementada no ficheiro <CODE>main.cpp</CODE> e pode também ser encontrada utilizando o Navegador de Classes
+seleccionando a pasta "Globais", sub-pasta "Funções":
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1  #include "kscribble.h"
+2
+3  int main(int argc, char* argv[]) {
+4    KApplication app(argc,argv,"KScribble");
+5
+6    if (app.isRestored())
+7    {
+8       RESTORE(KScribbleApp);
+9    }
+10   else
+11   {
+12      KScribbleApp* kscribble = new KScribbleApp;
+13      kscribble->show();
+14      if(argc > 1){
+15        kscribble->openFile(argv[1]);
+16      }
+17    }
+18    return app.exec();
+19  }
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Agora, o que acontece primeiro é a normal criação do objecto <CODE>KApplication</CODE>, que obtém o nome da nossa aplicação <EM>KScribble</EM> como terceiro
+parâmetro. Quando se cria um novo <CODE>KApplication</CODE>, uma nova instância de <CODE>KConfig</CODE> é criada também que é conectada ao ficheiro de
+configuração em $HOME/.kde/share/config/appname + rc que guarda toda a informação que queremos utilizar quando iniciamos janelas da aplicação. O nome que
+passamos ao construtor de <CODE>app</CODE> será utilizado como o título da janela mais tarde.
+<P>Apesar do código de exemplo para tornar a primeira aplicação Qt numa KDE, o código seguinte é ligeiramente diferente. Após o
+objecto <CODE>KApplication</CODE> estar presente, nós testamos se a aplicação é iniciada através do gestor de sessões do <CODE>kwm</CODE> ou manualmente através
+do utilizador. Isto pode ser descoberto quando se chama <CODE>isRestored()</CODE> no objecto <CODE>app</CODE>, que retorna <CODE>true (verdade)</CODE> para gestão de sessão
+e <CODE>false (falso)</CODE> para um início normal.
+<P>Como a gestão de sessão é uma característica principal das aplicações KDE e vastamente utilizada pelo esqueleto mas com muito mais para explicar, nós vamos
+seguir a secção <CODE>else{}</CODE> primeiro; depois voltaremos e explicaremos a funcionalidade de sessão num passo seguinte.
+<P>
+<H4>Aplicação Iniciada pelo Utilizador</H4>
+
+<P>A secção <CODE>else{}</CODE> agora cria uma instância da classe <CODE>KScribbleApp</CODE> na linha 12. Este objecto é chamado para se mostrar a sí próprio na linha
+13 como normal; a linha 14 determina se um argumento de linha de comando foi passado e, como isto é normalmente o nome de um ficheiro, chama o
+objecto <CODE>kscribble</CODE> para o abrir com <CODE>openFile()</CODE>.
+<P>Note que nós não chamamos o método <CODE>setTopWidget(kscribble)</CODE> para a nossa aplicação- isto já foi feito pela classe que o <CODE>KScribbleApp</CODE>
+herda. Agora vamos observar o nosso objecto <CODE>KScribbleApp</CODE>- o que é e o que é que já disponibiliza? A única coisa que nós sabemos
+até agora é que tem de ser um Widget para representar o interface do utilizador na janela principal. Vamos ver a implementação da classe de
+<CODE>KScribbleApp</CODE>, que pode ser encontrada no ficheiro <CODE>kscribble.cpp</CODE> ou através de um clique no icon da classe no Navegador de Classes. Como a
+instância é criada pelo construtor.
+Primeiro que tudo, vemos que herda a classe <CODE>KTMainWindow</CODE>, que é parte da biblioteca <CODE>kdeui</CODE>. Esta classe em sí
+herda <CODE>QWidget</CODE>, pelo que, como normal, nós temos um widget normal como sendo a janela de topo. O <CODE>KTMainWindow</CODE> contém imensas functionalidades
+de que a classe <CODE>KScribbleApp</CODE> tira proveito. Disponibiliza barras de menu, ferramentas, estados e suporte para gestão de sessões. A única coisa
+que temos que fazer quando a criar sub-classes da <CODE>KTMainWindow</CODE> é criar todos os objectos de que necessitamos e criar outro widget que é gerido pela
+instância <CODE>KTMainWindow</CODE> como a vista principal no centro da janela; normalmente este é o local onde o utilizador trabalha tal como
+numa vista de edição de texto.
+<P>
+<H4>O Construtor</H4>
+
+<P>Vamos observar o código para o construtor e ver como a instância é criada:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1   KScribbleApp::KScribbleApp()
+2   {
+3     config=kapp->getConfig();
+4       
+5
+6     ///////////////////////////////////////////////////////////////////
+7     // chama inits para invocar todas as outras partes de construção
+8     initMenuBar();
+9     initToolBar();
+10    initStatusBar();
+11    initKeyAccel();
+12    initDocument();
+13    initView();
+14
+15    readOptions();
+16
+17    ///////////////////////////////////////////////////////////////////
+18    // desactiva itens de menu e barra de ferramentas no arranque
+19    disableCommand(ID_FILE_SAVE);
+20    disableCommand(ID_FILE_SAVE_AS);
+21    disableCommand(ID_FILE_PRINT);
+22
+23    disableCommand(ID_EDIT_CUT);
+24    disableCommand(ID_EDIT_COPY);
+25    disableCommand(ID_EDIT_PASTE);
+26  }
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Nós vemos que a nossa instância de configuração do <CODE>KConfig</CODE> aponta agora para a configuração da aplicação, pelo que podemos operar
+mais tarde com as entradas de configuração do ficheiro.
+<P>Depois, todas as partes da aplicação que são necessárias são criadas pela sua correspondente função membro que é especificada na nossa janela
+principal:
+<P>
+<UL>
+<LI><B>initMenuBar():</B>  constroi a barra de menu,</LI>
+<LI><B>initToolBar():</B>  constroi a barra de ferramentas,</LI>
+<LI><B>initStatusBar():</B> cria a barra de estados,</LI>
+<LI><B>initKeyAccel():</B>  define todos os atalhos de teclado
+<!--
+accelerator
+-->
+ para a nossa aplicação através da configuração de teclado global e específica
+da aplicação</LI>
+<LI><B>initDocument():</B> cria o objecto documento para a janela da aplicação</LI>
+<LI><B>initView():</B>      cria o widget principal para a nossa vista dentro da janela principal</LI>
+<LI><B>readOptions():</B>  lê todas as definições específicas da aplicação a partir do ficheiro de configuração e inicializa o resto da
+aplicação tal como a lista de ficheiros recentes, as posições das barras e tamanho da janela.</LI>
+</UL>
+<P>Finalmente, nós desactivamos alguns comandos que o utilizador pode realizar, porque não podem estar disponíveis no estado actual da aplicação.
+Como temos agora uma visão genérica de como a janela da aplicação é criada, iremos olhar para os detalhes de como os elementos do utilizador são
+construidos seguindo os métodos acima.
+<P>
+<H4>A Barra de Menu</H4>
+
+<P>Como mostrado acima, a barra de menu do <EM>KScribble</EM> é criada pelo método <CODE>initMenuBar()</CODE>. Aí, nós criamos um conjunto de
+<CODE>QPopupMenu</CODE>s que surgem quando o utilizador selecciona uma entrada de menu. Depois, nós inserimo-las na barra de menu e conectamo-las com as entradas.
+<P>Primeiro, nós criamos o nosso <CODE>recent_file_menu</CODE>, que irá conter os nomes dos últimos 5 ficheiros abertos. Temos de fazer isto primeiro, porque
+esta entrada de menu é inserida no <CODE>file_menu</CODE>. Quando adicionamos a conecção directamente- apenas obtemos o sinal que é emitido pela
+entrada de menu com o seu número de entrada e chamamos a <CODE>slotFileOpenRecent( int )</CODE>, que então chama o ficheiro correcto a partir da lista de ficheiros recentes
+para ser aberto.
+<P>Depois criamos o nosso menu "Ficheiro". Este será o menu que irá ser visível na barra de menu. As acções standard são então inseridas no
+menu de popup uma a uma- primeiro os comandos para criar um novo ficheiro, abrir um ficheiro, fechar um ficheiro etc., finalmente "S&amp;ir" para fechar a
+aplicação. Todas as entradas de menu têm de ser criadas na ordem em que surgem mais tarde, pelo que temos de manter um olho no que queremos ter
+em que lugar. Como um exemplo, nós olhamos para as seguintes entradas:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+file_menu->insertItem(Icon("fileopen.xpm"), i18n("&amp;Open..."), ID_FILE_OPEN );
+file_menu->insertItem(i18n("Open &amp;recent"), recent_files_menu, ID_FILE_OPEN_RECENT );
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>A primeira insere a entrada "Abrir...". Como nós queremos te-la como um icon, nós utilizamos o método <CODE>insertItem()</CODE> com o nome do
+icon. Para entender o processo de leitura do icon, nós necessitamos de saber o que ou onde <CODE>Icon()</CODE> é declarada- de facto, é uma macro disponibilizada
+pela classe <CODE>KApplication</CODE>:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#define Icon(x) kapp->getIconLoader()->loadIcon(x)
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Adicionalmente, utiliza a seguinte macro internamente para obter acesso ao objecto da aplicação:
+<BLOCKQUOTE><CODE>
+<PRE>
+#define kapp KApplication::getKApplication()
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Isto significa que o objecto <CODE>KApplication</CODE> já contém uma instância de um leitor de Icons- nós apenas temos de ter acesso a ela; depois irá ler
+o icon correspondente. Como os nossos icons são todos das bibliotecas KDE, nós não temos de nos preocupar com mais nada- eles são instalados no
+sistema automaticamente, pelo que também não temos de os incluir no pacote da nossa aplicação para os utilizar.
+<P>Após o parâmetro do icon (que é opcional), nós inserimos o nome da entrada de menu através de <CODE>i18n("&amp;Abrir...")</CODE>. Aí, nós temos de observar duas
+coisas: primeiro, a entrada é inserida com o método <CODE>i18n()</CODE>. Tal como a entrada <CODE>Icon()</CODE>, é uma macro também definida em <CODE>kapp.h</CODE>
+e chama o objecto <CODE>KLocale</CODE> da <CODE>KApplication</CODE> para traduzir a entrada para o idioma actualmente utilizado:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#define i18n(X) KApplication::getKApplication()->getLocale()->translate(X)
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Chegando aqui, deverá ser mencionado que uma pessoa poderia pensar "Eu não quero utilizar macros"- você pode fazer isso a maior parte dos casos. Mas aqui é
+imprescindível a utilização da <CODE>i18n()</CODE> porque para a internacionalização os ficheiros de idioma respectivos têm de ser construidos. Como este processo
+de construção depende da string (conjunto de caracteres) <CODE>i18n</CODE>, você tem de utilizar a macro.
+<P>Como já deve ter adivinhado, o &amp; (i comercial) dentro das entradas de menu é mais tarde interpretado como uma linha por baixo da letra seguinte na
+entrada de menu. isto permite um acesso rápido ao comando de menu através do teclado quando o utilizador prime a tecla <CODE>Alt</CODE> em conjunto com a
+letra sublinhada.
+<P>Finalmente, nós damos um ID (número identificativo) à entrada de menu, que é um número inteiro através do qual podemos encontrar a entrada mais tarde. Para
+manter um controlo sobre os valores utilizados, estes são definidos através de macros e são coleccionados no ficheiro <CODE>resource.h</CODE> dentro do seu projecto. Por
+consistência, estas macros são todas maiúsculas e começam por ID_, depois o nome do menu seguido pela entrada. Isto torna muito fácil
+lembramo-nos do sentido de cada entrada em qualquer ponto do código, pelo que não temos de voltar à implementação da barra de menu de novo para
+observar as entradas.
+<P>A segunda entrada de exemplo mostra outra variante do método <CODE>insertItem()</CODE>. Aqui, nós acrescentamos o menu de popup recent_files_menu como
+um item de menu. Isto significa, que a entrada mostra-se a sí própria com a string dada "Abrir recentes", seguida de uma seta para a direita. Na selecção, o
+menu de popup de ficheiros recentes surge e o utilizador pode escolher o último ficheiro.
+<P>Por fim mas não menos importante existem muitas outras formas de inserir items de menu- o esqueleto de aplicação mantém isto o mais simples possível. Mais informação
+pode ser obtida na documentação Qt sobre a classe <CODE>QMenuData</CODE>.
+<P>Agora, após termos criado os menus de popup <CODE>file_menu, edit_menu</CODE> e <CODE>view_menu</CODE>, temos de incluir também um menu "Ajuda". Nós podiamos
+fazer isto tal como os outros, mas a classe <CODE>KApplication</CODE> oferece um método mais rápido e agradável para cobrir isto:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+help_menu = kapp->getHelpMenu(true, i18n("KScribble\n" VERSION ));
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Isto é tudo o que temos de fazer para obter um menu de ajuda que contenha uma entrada para o conteudo da ajuda com o atalho
+<!--
+shortcuts
+-->
+ de teclado F1, uma caixa-sobre
+para a aplicação e uma caixa-sobre para o KDE (que pode ser desactivada chamando <CODE>getHelpMenu(false,...);</CODE>). O conteudo para a
+caixa-sobre da nossa aplicação é definida de novo com a string <CODE>i18n()</CODE> - VERSION fica com a macro que é definida para a numeração de versão do projecto
+no ficheiro <CODE>config.h</CODE>, pelo que não temos de modificar isto manualmente de cada vez que queremos fazer uma nova distribuição. Esteja à vontade para
+adicionar aqui qualquer informação sobre a sua aplicação, por ex. o seu nome, endereço email, copyright e afins.
+<P>Agora apenas temos de inserir os pop-ups na barra de menu. Como o <CODE>KTMainWindow</CODE> já constroi uma barra de menu para nós, nós apenas os inserimos
+chamando <CODE>menuBar()->insertItem();</CODE>.
+<P>O que resta fazer é conectar as entradas de menu com os métodos que irão executar. Assim, nós conectamos cada menu de popup através do seu
+sinal <CODE>activated( int )</CODE> a um método <CODE>commandCallback( int )</CODE>, que contém uma frase <CODE>switch</CODE> que chama o método correspondente
+para as entradas de menu. Adicionalmente, nós conectamos os pop-ups através do seu sinal <CODE>highlighted( int )</CODE> para disponibilizar ajuda de barra de estados
+para cada entrada. Sempre que o utilizador move o seu rato ou focus de teclado para uma entrada, a barra de estados mostra então a correspondente mensagem de ajuda.
+<P>Após termos terminado com a barra de menu, podemos continuar com a barra de ferramentas na secção seguinte. Lembre-se que uma instância de
+<CODE>KTMainWindow</CODE> apenas pode ter uma barra de menu visível de cada vez; assim se deseja construir diversas barras de menu, você tem de cria-las
+separadamente com instâncias de <CODE>KMenuBar</CODE> e definir uma delas através dos métodos correspondentes de <CODE>KTMainWindow</CODE> como sendo a barra
+de menu actual. Veja a documentação de classes da <CODE>KMenuBar</CODE> para informação mais detalhada sobre como extender as características, veja também 
+<A HREF="index-5.html#Configuring Menubars and Toolbars">Configurar Barras de Menu e Ferramentas</A>.
+<P>
+<H4>A Barra de Ferramentas</H4>
+
+<P>A criação de barras de ferramentas é agora ainda mais simples que a das barras de menu. Como a <CODE>KTMainWindow</CODE> já disponibiliza barras de ferramentas, que são criadas
+pela primeira inserção, você é livre de criar várias. Basta adicionar os botões para as funções que deseja disponibilizar:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+toolBar()->insertButton(Icon("filenew.xpm"), ID_FILE_NEW, true, i18n("New File") );
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Isto adiciona um botão alinhado à esquerda com o icon "filenew.xpm" com o respectivo ID para a barra de ferramentas. O terceiro parâmetro decide se o
+botão deverá estar activo ou não; por defeito nós definimos isto para <CODE>true (verdade)</CODE>, porque o nosso método <CODE>disableCommand()</CODE> no final do
+construtor faz isto por nós automaticamente tanto para as entradas do menu como da barra de ferramentas. Finalmente, o último parâmetro é utilizado como uma
+"Dica Rápida"- quando o utilizador move o ponteiro do rato sobre o botão de forma a ficar iluminado, uma pequena janela surge que contém uma
+pequena mensagem de ajuda, cujo conteudo pode ser definido aqui.
+<P>Finalmente, todos os botões da barra de ferramentas estão conectados novamente ao nosso método  <CODE>commandCallback()</CODE> através do seu sinal <CODE>clicked()</CODE>. Ao sinal
+<CODE>pressed()</CODE>, nós permitimos ao utilizador receber a mensagem de ajuda correspondente na barra de estados.
+<P><B>Informação Adicional:</B>
+<P>Como as barras de ferramentas são criadas utilizando a classe <CODE>KToolBar</CODE>, você deverá ler a respectiva documentação. Com a
+<CODE>KToolBar</CODE>, imensas coisas necessárias na barra de ferramentas podem ser realizadas tais como pop-ups demorados se o seu botão deseja fazer surgir um menu
+quando o botão é mantido premido ou até mesmo widgets como caixas de escolha. Também, por defeito, a barra de ferramentas preenche a largura total da
+janela, o que a faz ter um aspecto melhor utilizando apenas uma barra. Quando se usa mais do que uma, você deverá também pensar na hipótese de definir o tamanho da
+barra para terminar a seguir ao botão mais à direita, para que outras barras possam ser apresentadas na mesma linha por baixo da barra de menu. Iremos discutir algumas
+tecnicas sobre desing e extensão de barras de ferramentas na secção 
+<A HREF="index-5.html#Configuring Menubars and Toolbars">Configurar Barras de Menu e Ferramentas</A>.
+<P>
+<H4>A Barra de Estados</H4>
+
+<P>A barra de estados é, bem como as outras barras, já disponibilizada pela instância <CODE>KTMainWindow</CODE>, pelo que apenas temos de inserir os nossos itens
+como quisermos. Por defeito, o esqueleto contém apenas uma entrada que mostra a ajuda de barra de estados. Para muitas aplicações isto pode não
+chegar; então você inserirá as entradas que necessite para mostrar por ex. coordenadas e afins.
+<P>Também, uma aplicação pode apenas ter uma barra de estados de cada vez como as barras de menu. Se desejar construir várias, deverá cria-las
+separadamente e definir a barra corrente através do método correspondente da <CODE>KTMainWindow</CODE>. A barra de estados também permite inserir widgets,
+que podem ser utilizador para produzir bons hábitos de apresentar barras de progresso como o KDevelop faz. Verifique a documentação de classes da
+<CODE>KStatusBar</CODE>.
+<P>
+<H4>Atalhos de Teclado</H4>
+
+<P>Ao atingir o método <CODE>initKeyAccel()</CODE>, já construimos os itens standard da janela principal de uma aplicação- as barras de menu,
+ferramentas e estados. Na verdade, não definimos nenhuns 
+<!--
+atalhos
+-->
+ de teclado através dos quais utilizadores avançados que apenas queiram
+trabalhar com o teclado possam aceder rapidamente a certos comandos que são utilizados mais frequentemente durante a utilização do programa. Para o fazer, nós
+podiamos ter inserido as teclas de 
+<!--
+atalhos
+-->
+ na inserção dos itens de menu por exemplo, mas o KDE oferece uma boa
+solução para construir e manter 
+<!--
+atalhos
+-->
+ de teclado. Imensos utilizadores querem te-los configuráveis por um lado
+e por outro os 
+<!--
+atalhos
+-->
+ standard deverão ser os mesmos em todas as aplicações. Assim, o Centro de Controlo do KDE
+permite configurar 
+<!--
+atalhos
+-->
+ de teclado standard globalmente através da utilização da classe <CODE>KAccel</CODE>. Adicionalmente, as
+bibliotecas KDE contêm um widget que permite aos utilizadores configurar 
+<!--
+atalhos
+-->
+ de teclado específicos da aplicação facilmente. Como o
+esqueleto da aplicação apenas utiliza itens de menu que têm acções standard tais como "Novo" ou "Sair", estes são definidos pelo método
+<CODE>initKeyAccel()</CODE>. Acções standard apenas têm de ser conectadas, para os valores de teclado específicos da sua aplicação, têm de os inserir
+primeiro especificando o nome do 
+<!--
+atalho
+-->
+ de teclado e depois conecta-lo. como os nossos 
+<!--
+atalhos
+-->
+ estão
+todos presentes na barra de menu, temos de modificar os 
+<!--
+atalhos
+-->
+ para as entradas de popup. Finalmente chamamos
+<CODE>readSettings()</CODE>, que lê as definições correntes a partir da janela principal do KDE contendo as configurações de 
+<!--
+atalhos
+-->
+ standard,
+e depois as definições de 
+<!--
+atalhos
+-->
+ específicos do ficheiro de configuração da aplicação. Quando
+nós aprofundarmos mais o nosso projecto de exemplo, iremos também falar sobre como configurar os 
+<!--
+atalhos
+-->
+ específicos da nossa aplicação
+através de um diálogo de configuração, veja 
+<A HREF="index-5.html#Configuring Menubars and Toolbars">Configurar Barras de Menu e Ferramentas</A> para essa parte do processo de desenvolvimento.
+<P>
+<H4>O Modelo de Vista de Documento</H4>
+
+<P>As duas próximas chamadas de funções membros, <CODE>initDocument()</CODE> e <CODE>initView()</CODE>, vão finalmente construir a parte que é suposto as
+janelas da aplicação disponibilizarem ao utilizador: um interface para trabalhar com os dados que é suposto a aplicação manipular; e essa é também a
+razão pela qual o esqueleto da aplicação contém três classes, uma classe <CODE>*App</CODE>, <CODE>*View</CODE> e <CODE>*Doc</CODE>. Para entender, porque esta
+estrutura é útil, iremos olhar um pouco à margem do código e introduzir alguma teoria, depois voltaremos ao programa de novo para ver
+como o esqueleto feito pelo KDevelop suporta esse modelo.
+<P>Basicamente, tudo o que tem sido explicado até agora sobre a estrutura é que necessitamos de uma instância de aplicação que contenha a janela principal. Esta
+janela é responsável por disponibilizar o interface basico para o utilizador- contém as barras de menu, ferramentas e estados e o controlo
+de eventos para a interacção do utilizador. Também, contém uma área, que é descrita como uma "vista". Agora, o objecto da visra é genericamente,
+mostrar os dados que o utilizador pode manipular, por ex. uma parte de um ficheiro de texto. Apesar do ficheiro de texto ser provavelmente maior que a vista é
+capaz de mostrar no ecrã, disponibiliza ao utilizador a possibilidade de ir para a parte que deseja ver (pelo que é uma vista), e aí o utilizador
+pode modificar os dados do conteudo do ficheiro. Para dar ao programador uma maneira melhor de separar as partes da aplicação através do código, o
+Modelo Vista-Documento foi inventado. Apesar de não ser um standard, disponibiliza uma estrutura de como uma aplicação deveria funcionar:
+<P>
+<UL>
+<LI> A aplicação contém um objecto controlador,</LI>
+<LI> um objecto de Vista que mostra os dados com que o utilizador trabalha</LI>
+<LI> e um objecto Documento que contém na realidade os dados a serem manipulados.</LI>
+</UL>
+<P>De regresso ao exemplo de trabalhar com um ficheiro de texto- aí, este modelo iria funcionar de forma a que o Documento leria o conteudo do ficheiro e
+disponibilizar os métodos para modificar os dados bem como para gravar o ficheiro de novo. A Vista então processa os eventos que o utilizador produz através do
+teclado e rato e utiliza os métodos do objecto Documento para manipular os dados do documento.
+<P>Finalmente, o objecto controlador é responsável pela interacção do utilizador disponibilizando os objectos de Vista e de Documento bem como os
+interfaces para enviar comandos tais como abrir e gravar. Adicionalmente, certos métodos do objecto Vista podem ser disponibilizados por comandos que
+podem ser acedidos através de 
+<!--
+atalhos
+-->
+ de teclado ou pelo rato ou barras de menu e ferramentas.
+<P>Este Modelo Vista Documento tem algumas vantagens- separa o código do programa de uma forma mais orientada por objectos e por isso oferece mais flexibilidade
+em geral, por ex. o mesmo objecto documento poderia ser apresentadps por duas vistas ao mesmo tempo; quer através de uma nova vista numa nova janela ou através
+de mosaico da janela corrente que contém dois objectos vista que constroem a região de vista da janela actual.
+<P>Agora, se você vem dos sistemas MS-Windows poderá teralguma experiência com isso- o MFC já disponibiliza um modelo de documento que está
+pronto a utilizar. Para as aplicações KDE e Qt, as coisas são ligeiramente diferentes. A Qt é um poderoso conjunto de ferramentas pois disponibiliza as classes
+mais necessárias, widgets etc. Mas não existiu nenhuma intenção de tomar conta do modelo documento-vista, e como o KDE herda a Qt,
+também não existiram nenhumas tendências de introduzir este modelo. Isto de certa forma tem a sua justificação no facto de que normalmente as aplicações X
+não funcionam com um MDI (Interface de Documento Multiplo). Cada janela principal é responsável pelos seus dados e isso reduz a necessidade de
+um modelo de documento pelo facto de que métodos para trabalhar em documentos são sempre implícitos em widgets. A única excepção a isto actualmente é
+o projecto <EM>KOffice</EM> que tenciona disponibilizar um conjunto de aplicações de produtividade completo tais como um processador de texto, uma folha de cálculo etc.
+Tecnicamente, isto é realizado com duas alterações à utilização normal da Qt e KDE:
+<P>
+<UL>
+<LI>o KOffice utiliza KOM e a implementação gratuita de CORBA chamada MICO para comunicação de objectos,</LI>
+<LI>as aplicações KOffice utilizam o modelo documento-vista para permitir a todas as aplicações trabalhar com quaisquer objectos de dados do KOffice</LI>
+</UL>
+<P>Mas como o KDevelop actualmente se foca na utilização das actuasi bibliotecas do KDE 1.1.x e a Qt 1.4x, nós não podemos utilizar este modelo por defeito-
+isto virá em distribuições futuras de um KDE 2, que irá (esperamos) conter duas modificações principais em relação à situação
+actual:
+<OL>
+<LI>um interface MDI para a KTMainWindow</LI>
+<LI>as bibliotecas KOM que disponibilizam um modelo de documento</LI>
+</OL>
+<P>Assim, a forma actual para os programadores de aplicações pode ser ou implementarem todos os métodos de documentos necessários dentro da sua vista ou
+tentarem reproduzir um modelo de documento por si. O KDevelop assim contém essa reprodução disponibilizando as classes necessárias e
+os métodos básicos que são geralmente utilizados para o Modelo Documento-Vista com a estrutura de aplicações para Qt e KDE.
+<P>De regresso ao código, você pode agora imaginar o propósito dos dois métodos que mencionamos no início desta secção: as
+funções <CODE>initDocument()</CODE> e <CODE>initView()</CODE>. O <CODE>initDocument()</CODE> constroi o objecto documento que representa a
+janela de dados da aplicação e inicializa atributos básicos tais como definir o bit de modificação que indica se os dados correntemente
+em utilização foram modificados pelo utilizador. Depois, o método <CODE>initView()</CODE> constroi o widget <CODE>*View</CODE>, conecta-o com o documento e
+chama o método <CODE>setView()</CODE> de <CODE>KTMainWindow</CODE> para dizer à janela <CODE>*App</CODE> para utilizar o widget <CODE>*View</CODE> como a sua vista central.
+<P>Para o programador, é importante saber que durante o processo de desenvolvimento ele tem de:
+<P>
+<UL>
+<LI>re-implementar os métodos virtuais para eventos de rato e teclado disponibilizados pela <CODE>QWidget</CODE> no objecto <CODE>*View</CODE> para disponibilizar
+meios de manipular os dados,</LI>
+<LI>re-implementar o <CODE>paintEvent()</CODE> da <CODE>QWidget</CODE> no objecto <CODE>*View</CODE> para repaint() (re-desenhar) a cista após modificações,</LI>
+<LI>completar a implementação para imprimir o documento através do método de impressão do objecto <CODE>*View</CODE>,</LI>
+<LI>adicionar a serialização para o objecto <CODE>*Doc</CODE> para disponibilizar abertura e gravação de ficheiros,</LI>
+<LI>adicionar a implementação da estrutura de dados do documento ao objecto <CODE>*Doc</CODE> que está a representar os dados do documento logicamente em
+memória.</LI>
+<LI>adicionar quaiquer métodos que tenham de ser acessíveis pelo utilizador através de 
+<!--
+atalhos
+-->
+ de teclado e menus/barras de ferramentas.</LI>
+</UL>
+<P>
+<P>
+<H4>Configuração da Aplicação</H4>
+
+<P>Agora, depois de termos criado todas as instâncias da instância <CODE>KTMainWindow</CODE> da nossa aplicação para criar a primeira janela, nós temos de
+inicializar alguns valores que influenciam a aparência do programa. Para isto, chamamos <CODE>readOptions()</CODE>, que obtém todos os valores e chama
+os métodos necessários para definir os atributos correspondentes. A biblioteca KDE-Core contém a classe <CODE>KConfig</CODE> que disponibiliza uma boa
+possibilidade de guardar valores em ficheiros de configuração bem como de os ler novamente. Também, como cada instância <CODE>KApplication</CODE>
+já cria o seu ficheiro de recursos, apenas temos de aceder a este ficheiro e criar os nossos valores. Como o <CODE>KConfig</CODE> nos disponibiliza o objecto
+de ficheiro, temos de utilizar a classe <CODE>KConfigBase</CODE> para ler e escrever todas as entradas. Como escreve-lo é muito fácil de fazer com
+métodos <CODE>writeEntry()</CODE>, ler depende do tipo de atributo que queremos inicializar. Geralmente, uma entrada no ficheiro de
+configuração contém um nome de valor e o valor. Valores que pertençam conjuntamente num contexto podem ser coleccionados em grupos, pelo que temos de
+definir o nome do grupo antes de acedermos ao seu valor; o grupo tem de ser definido apenas uma vez para ler um conjunto de atributos que estão no
+mesmo grupo. Vamos observar o que queremos ler:
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1   void KScribbleApp::readOptions()
+2   {
+3
+4      config->setGroup("General Options");
+5
+6      // bar status settings
+7      bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+8      view_menu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
+9      if(!bViewToolbar)
+10       enableToolBar(KToolBar::Hide);
+11
+12     bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+13     view_menu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
+14     if(!bViewStatusbar)
+15       enableStatusBar(KStatusBar::Hide);
+16
+17     // bar position settings
+18     KMenuBar::menuPosition menu_bar_pos;
+19     menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("MenuBar Position", KMenuBar::Top);
+20
+21     KToolBar::BarPosition tool_bar_pos;
+22     tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
+23
+24     menuBar()->setMenuBarPos(menu_bar_pos);
+25     toolBar()->setBarPos(tool_bar_pos);
+26
+27     // initialize the recent file list
+28     recent_files.setAutoDelete(TRUE);
+29     config->readListEntry("Recent Files",recent_files);
+30
+31     uint i;
+32     for ( i =0 ; i &lt; recent_files.count(); i++){
+33       recent_files_menu->insertItem(recent_files.at(i));
+34     }
+35
+36     QSize size=config->readSizeEntry("Geometry");
+37     if(!size.isEmpty())
+38       resize(size);
+39   }
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+<P>Como vimos numa das partes de código acima, a primeira acção que o nosso construtor faz é:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+config=kapp->getConfig();
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>que define o ponteiro <CODE>config</CODE> tipp <CODE>KConfig</CODE> para a configuração da aplicação. Assim, não temos de nos preocupar com a localização do
+ficheiro de configuração. Na verdade, o ficheiro está, de acordo com o Standard de Sistema de Ficheiros KDE (KDE FSS), localizado em
+<CODE>$HOME/.kde/share/config/</CODE>; iremos observar mais atentamente o KDE FSS num passo futuro quando estivermos a definir localizações de ficheiros
+do projecto para instalação. Como o ficheiro de configuração é colocado no directório principal do utilizador, cada utilizador tem a sua aparência personalizada
+da aplicação excepto para valores que estão localizados num ficheiro de configuração para todo o sistema que pode ser criado opcionalmente e instalado pelo
+programador no directório do KDE. Mas, apesar de isto poder ajudar nalguns casos, devemos evitar quaiquer dependências da nossa aplicação no sentido
+da existência de entradas de ficheiro. Assim, todos os métodos de leitura disponibilizados pelo <CODE>KConfigBase</CODE> permitem adicionar um valor de defeito a ser
+utilizado quando a entrada não existe. Outra coisa importante para um programador é que o ficheiro de configuração é guardado em texto simples, e isto
+é também por algumas razões pois tem de ter em atenção alguns critérios:
+<P>
+<UL>
+<LI>o utilizador pode modificar o ficheiro de configuração através de um simples editor de texto</LI>
+<LI>se o utilizador quiser modificar valores manualmente, as entradas deverão ser muito transparentes para determinar o seu propósito</LI>
+<LI>para entradas que tenham de ser gravadas, mas são criticas em termos de segurança tal como chaves de acesso, você tem de procurar uma solução adequada
+para assegurar a segurança.</LI>
+</UL>
+<P>Agora que sabemos os básicos, vamos analizar o código. Como dissemos, apenas temos de utilizar o nosso ponteiro config para aceder aos valores.
+Primeiro, na linha 4, nós definimos o grupo actual para "Opções Gerais". Isto indica que os valores estão de certo modo atributos gerais
+para a aplicação. Depois nós lemos os valores para a barra de ferramentas e estados- estes têm de ser gravados quando a aplicação fecha para
+repor os seus estadps de novo quando o utilizador reiniciar o programa. Como as barras apenas podem estar ligadas ou desligadas, nós utilizamos um valor boolean, pelo que,
+o nosso método é <CODE>readBoolEntry()</CODE>. O processo é idêntico para ambas as barras, pelo que apenas temos de olhar para as linhas 7-10 para observar o que está
+a acontecer para a barra de ferramentas. Primeiro, nós lemos o valor para uma variável temporária <CODE>bViewToolbar</CODE> na linha 7. O nome do valor no
+ficheiro é "Mostrar Barra de Ferramentas" e, se o valor não estiver presente (o que seria o caso na primeira vez que a aplicação iniciasse), o
+valor de defeito é definido para <CODE>true (verdade)</CODE>. De seguida, nos definimos a marca de verificação da entrada de menu para (des)activar a barra de ferramentas através deste valor:
+nós chamamos <CODE>setItemChecked()</CODE> no menu ver, entrada <CODE>ID_VIEW_TOOLBAR</CODE> com o nosso atributo. Finalmente, definimos a barra de ferramentas para utilizar
+o valor. Por defeito, a barra de ferramentas é visível, pelo que, apenas temos de fazer algo se <CODE>bViewToolbar</CODE> for <CODE>false (falso)</CODE>. Com
+<CODE>enableToolBar()</CODE> (linha 10) estamos a definir a barra para se esconder automaticamente se for desactivada.
+<P>De seguida, temos de ler as posições da barra. Como o utilizador pode ter modificado a posição da barra arrastando-a com o rato para outra
+área de cista, esta tem de ser gravada também e o seu estado reposto. Olhando para as classes <CODE>KToolBar</CODE> e
+<CODE>KMenuBar</CODE>, vemos que as posições da barra podem ser:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+enum BarPosition {Top, Left, Bottom, Right, Floating, Flat}
+/* {Topo, Esquerda, Baixo, Direita, Flutuante, Fixa} */
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Como este valor foi escrito num valor numérico, temos de o ler com <CODE>readNumEntry()</CODE> e converte-lo num valor de posição. Com
+<CODE>setMenuBarPos()</CODE> e <CODE>setBarPos()</CODE> dizemos às barrass ode aparecerem.
+<P>Agora provavelmente notou que o nosso menu "Ficheiro" contém um menu para ficheiros utilizados recentemente. Os nomes de ficheiros são guardados numa lista de
+strings (conjunto de caracteres), que tem de ser gravado ao fecho da aplicação e agora tem de ser lido para repor o menu. Primeiro, inicializamos a lista com
+as entradas guardadas utilizando o <CODE>readListEntry()</CODE>. Depois, num ciclo <CODE>for</CODE>, criamos uma entrada de menu para cada item da lista.
+<P>Finalmente, apenas temos de tomar conta da geometria da nossa janela. Nós lemos na aparência através de uma variável <CODE>QSize</CODE> contendo um valor x
+e y para o comprimento e altura da janela. Como a janela é inicializada através da <CODE>KTMainWindow</CODE>, não temos de nos preocupar com o
+valor de defeito e apenas utilizamos <CODE>resize()</CODE> se a entrada não estiver vazia.
+<P>O que resta explicar na construção da nossa aplicação é que inicialmente temos de desactivar comandos do utilizador disponíveis que o não podem estar
+no caso de algumas instâncias não corresponderem aos critérios necessários. Estes são gravação de ficheiros e operações que utilizem a área de transferência. Durante
+o tempo de vida da aplicação, temos de tomar conta destes várias vezes, mas isso é bastante fácil. A estrutura apenas nos dá dois
+métodos para (des)activar itens de barras de menu e ferramentas com apenas uma chamada de método de cada vez.
+<P>
+<H4>Executar</H4>
+
+<P>Durante a secção anterior, apenas veriicaos o que acontecia durante a chamada de construção da nossa instância do <CODE>KScribbleApp</CODE> que nos disponibiliza
+a janela principal. Após regressar à função <CODE>main()</CODE>, temos de chamar <CODE>show()</CODE> para mostrar a janela. O que é diferente de
+qualquer <CODE>KApplication</CODE> ou <CODE>QApplication</CODE> aqui é que quando estamos a utilizar <CODE>KTMainWindow</CODE> como a instância para o nosso
+widget principal, não temos de o definir com <CODE>setMainWidget()</CODE>. isto é feito pelo próprio <CODE>KTMainWindow</CODE> e não temos de nos
+preocupar com isso.
+A única coisa que resta então é interpretar a linha de comandos. Obtemos a opção de linha de comandos e perguntamos, se <CODE>int argc</CODE> é > 1, o que
+indica que o utilizador chamou a nossa aplicação com <CODE>kscribble filename_to_open</CODE>. A nossa janela recebe então o pedido de abertura do ficheiro pelo
+se nome e chama <CODE>openDocumentFile()</CODE> com o nome do ficheiro.
+<P>A última linha da função <CODE>main()</CODE> faz o trabalho conhecido: executa a instância da aplicação e o programa entra no ciclo de
+evento.
+<P>Agora, na secção 
+<A HREF="#The main() Function">A Função main()</A>, nós começamos a separar o processo de execução através de
+<CODE>if( app.isRestored() )</CODE> e descrevemos o processo normal de invocação. De seguida daremos uma introdução à gestão de
+sessão e como a nossa aplicação a utiliza.
+<P>
+<H4>Invocação por Gestão de Sessão</H4>
+
+<P>Como dissemos, a função <CODE>main()</CODE> testa, se a aplicação foi invocada pelo gostor de sessão. O gestor de sessão é responsável por
+gravar o estado actual de todas as janelas de aplicação abertas no ambiente de trabalho do utilizador e tem de os repor quando o utilizador entrar da próxima
+vez, o que significa que a aplicação não é iniciada pelo utilizador mas invocada automaticamente. A parte do código executado
+foi:
+<BLOCKQUOTE><CODE>
+<PRE>
+6    if (app.isRestored())
+7    {
+8       RESTORE(KScribbleApp);
+9    }
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Em 
+<A HREF="#The main() Function">A Função main()</A>, nós afirmamos que nós testamos a invocação perguntando à
+<CODE>app.isRestored()</CODE>. Depois a linha 8 é executada. Parece uma afirmação simples, mas de facto irá resultar num processo de execução
+complexo que queremos seguir nesta secção.
+<P>A própria RESTORE() é uma macro disponibilizada pela <CODE>KTMainWindow</CODE>. Expande-se para o seguinte código:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+if (app.isRestored()){
+  int n = 1;
+  while (KTMainWindow::canBeRestored(n)){
+    (new KScribbleApp)->restore(n);
+    n++;
+  }
+}
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Isto irá repor todas as janelas de aplicação da classe <CODE>KScribbleApp</CODE> criando as instâncias e chamando <CODE>restore()</CODE> para a
+nova janela. É importante compreender que se a nossa aplicação utiliza vários widgets diferentes que herdam <CODE>KTMainWindow</CODE>, você tem de
+expandir a macro e determinar o tipo de widgets de topo utilizando <CODE>KTMainWindow::classNameOfToplevel(n)</CODE> em vez da classe
+<CODE>KScribbleApp</CODE>.
+O método <CODE>restore()</CODE> lê então a parte do ficheiro de sessão que contém a informação sobre a janela. Como a <CODE>KTMainWindow</CODE>
+guarda tudo isto por nós, não temos de nos preocupar com mais nada. Apenas informação que pertence à nossa instância específica do
+<CODE>KScribbleApp</CODE> tem de ser então encontrada. Normalmente isto seria um ficheiro temporário que foi criado para guardar o documento ou outra
+initialização de que poderiamos necessitar. Para obter esta informação de reposição, nós apenas temos de passar por cima de dois métodos virtuais de
+<CODE>KTMainWindow</CODE>, <CODE>saveProperties()</CODE> e <CODE>readProperties()</CODE>. A informação que temos de gravar no final da sessão é se o documento
+correntemente aberto está ou não modificado e o nome do ficheiro. Se o ficheiro estiver modificado, obteremos um nome de ficheiro temporário para o gravar. No
+início da sessão, esta informação é agora utilizada para repor o conteudo do documento:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+void KScribbleApp::readProperties(KConfig*)
+{
+  QString filename = config->readEntry("filename","");
+  bool modified = config->readBoolEntry("modified",false);
+  if( modified ){
+    bool b_canRecover;
+    QString tempname = kapp->checkRecoverFile(filename,b_canRecover);
+
+    if(b_canRecover){
+      doc->openDocument(tempname);
+      doc->setModified();
+      QFileInfo info(filename);
+      doc->pathName(info.absFilePath());
+      doc->title(info.fileName());
+      QFile::remove(tempname);
+    }
+  }
+  else if(!filename.isEmpty()){
+  doc->openDocument(filename);
+  }
+  setCaption(kapp->appName()+": "+doc->getTitle());
+}               
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Aqui, a linha <CODE>kapp->checkRecoverFile()</CODE> parece um pouco estranha, pois o <CODE>b_canRecover</CODE> não está inicializado. Isto é feito pelo método
+que o define para <CODE>true</CODE>, se existir um ficheiro de reposição. Como apenas gravamos um documento num ficheiro de recuperação se foi modificado, definimos o
+bit de modificado directamente para indicar que a informação não foi gravada para o ficheiro correspondente. Também temos de ter em conta que
+o ficheiro de recuperação tem outro nome de ficheiro diferente do ficheiro original que foi aberto. Assim, temos de colocar o nome de ficheiro e caminho do antigo
+nome de ficheiro. Finalmente, temos a informação que queriamos recuperar e podemos apagar o ficheiro temporário através do gestor de sessão.
+<P><B>Sumário:</B>
+<P>Durante este capítulo, ficou a saber como a aplicação se inicia quer por invocação normal do utilizador ou pelo gestor de sessão. Verificamos
+todo o código para aprender como as partes do interface visual da aplicação são construidas bem como inicializar os
+atributos através de entradas em ficheiros de configuração. Agora podemos executar a aplicação esqueleto para testar estas funções e ver como a
+janela do programa reage.
+<P>
+<H3><A NAME="ss3.4">3.4 Conteudos Adicionais de Projectos KDevelop</A>
+</H3>
+
+<P>Além do código fonte disponibilizado, os projectos KDevelop contêm imensas outras partes adicionais que são do interesse do programador. Estas
+são:
+<UL>
+<LI>um icon de programa</LI>
+<LI>um mini-icon de programa</LI>
+<LI>um ficheiro .kdelnk</LI>
+<LI>um ficheiro de documentação SGML de exemplo</LI>
+<LI>um conjunto de documentação API gerada a partir do código do esqueleto</LI>
+</UL>
+<P>Excepto a documentação API, estes elementos do projecto serão instalados juntamente com o binário da aplicação. Como o esqueleto do
+projecto tem de ser o mais aberto possível, tem de adaptar estas partes no sentido dos objectivos do seu projecto. Estas são primeiro editar os icons
+disponibilizados. Isto dará à sua aplicação um identificador único através do qual o utilizador pode determinar a sua aplicação visualmente em menus de
+gestão de janelas. O ficheiro .kdelnk é um ficheiro que instala a sua aplicação no <CODE>kpanel</CODE> no menu <CODE>Aplicações</CODE>. Este tem
+de ser editado definindo o caminho de instalação que será discutido mais tarde neste manual. Finalmente, a documentação que você irá
+disponibilizar ao utilizador está escrita em SGML. Isto torna muito fácil criar várias apresentações diferentes para a mesma fonte. Por defeito,
+o KDevelop pode criar um conjunto de ficheiros HTML a partir desta fonte, para projectos KDE isto irá automaticamente utilizar o programa <CODE>ksgml2html</CODE>
+para adicionar uma aparência e utilização consistente tipo KDE à documentação. Numa secção posterior, iremos ver como a fonte SGML é editada e
+o que temos de observar na instalação no utilizador final.
+<P>Finalmente, a documentação API (Interface de Programação da Aplicação) permite-lhe e a outros programadores entender rapidamente o código e utilizar as
+classes sem terem de adivinhar qual o objectivo de cada classe. Iremos aprender como expandir a documentação API num passo posterior,
+por ora basta saber que a documentação é gerada pelo programa <CODE>KDoc</CODE>, que processa os ficheiros de cabeçalho e cria o
+resultado final em HTML, pelo que toda a documentação é colocada nos cabeçalhos.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-4.html">Página seguinte</A>
+ <A HREF="index-2.html">Página anterior</A>
+ <A HREF="index.html#toc3">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -1,0 +1,16 @@
+# KDE Config File  
+[KDE Desktop Entry]
+BinaryPattern=kdevelop;
+Type=Application
+Exec=kdevelop -caption "%c" %i %m %u
+MimeType=application/x-kdevelop-project;
+Icon=kdevelop.xpm
+MiniIcon=kdevelop.xpm
+DocPath=kdevelop/index.html
+Terminal=0
+Name=KDevelop 1.3
+Name[de]=KDevelop 1.3
+Name[fr]=KDevelop 1.3
+Comment=The KDE Integrated Development Environment for C/C++
+Comment[de]=Die KDE Integrierte Entwicklungsumgebung für C/C++
+Comment[fr]=Un Environnement de Développement Intégré pour C/C++

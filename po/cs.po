@@ -1,0 +1,2161 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-02-16 16:38+0100\n"
+"PO-Revision-Date: 1999-06-14 HO:MI+ZONE\n"
+"Last-Translator: Martin Spirk <spirk@kla.pvt.cz>\n"
+"Language-Team: Czech <flidr@kky.zcu.cz>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Creating new file..."
+msgstr "vytváøím nový soubor..."
+
+msgid "Opening file..."
+msgstr "Otvírám soubor..."
+
+msgid "Saving file "
+msgstr "Ukládám soubor "
+
+msgid "Saving all changed files..."
+msgstr "Ukládám v¹echny zmìnìné soubory..."
+
+msgid "Save file as..."
+msgstr "Ulo¾it soubor jako..."
+
+msgid "Closing file..."
+msgstr "Zavírám soubor..."
+
+msgid "Save?"
+msgstr "Ulo¾it ?"
+
+msgid "The document was modified,save?"
+msgstr "Dokument byl zmìnìn, ulo¾it ?"
+
+msgid "Closing all files..."
+msgstr "Zavírám v¹echny soubory..."
+
+msgid "Exiting..."
+msgstr "Konec..."
+
+msgid "Cutting..."
+msgstr "Cutting..."
+
+msgid "Copying..."
+msgstr "Kopíruji..."
+
+msgid "Pasting selection..."
+msgstr "Vkládám výbìr..."
+
+msgid "Selecting all..."
+msgstr "Vybírám v¹e..."
+
+msgid "Inserting file contents..."
+msgstr "Vkládám obsah souboru..."
+
+msgid "Searching..."
+msgstr "Hledám..."
+
+msgid "Repeating last search..."
+msgstr "Opakuji poslední hledání..."
+
+msgid "Replacing..."
+msgstr "Nahrazuji..."
+
+msgid "Switching to selected line..."
+msgstr "Hledám zvolenou øádku..."
+
+msgid "Setting up the Editor..."
+msgstr "Nastavení editoru..."
+
+msgid "Setting up the Editor's colors..."
+msgstr "Nastavení barev editoru..."
+
+msgid "Setting up syntax highlighting default colors..."
+msgstr "Nastavení implicitních barev syntaktického zvýraznìní..."
+
+msgid "Setting up syntax highlighting colors..."
+msgstr "Nastavení barev syntaktického zvýraznìní..."
+
+msgid "Setting up Documentation paths..."
+msgstr "Nastavení cesty dokumentace..."
+
+msgid "Configuring Documentation Browser..."
+msgstr "Nastavení prohlí¾eèe dokumentace..."
+
+msgid "Switching to last page..."
+msgstr "Pøepínám na poslední stranu..."
+
+msgid "Switching to next page..."
+msgstr "Pøepínám na dal¹í stranu..."
+
+msgid "Creating Search Database..."
+msgstr "Vytváøím databázi pro prohledávání..."
+
+msgid "Searching selected text in documentation..."
+msgstr "Hledám vybraný text v dokumentaci..."
+
+msgid "Switching to project API Documentation..."
+msgstr "Pøepínám na programovou dokumentaci projektu..."
+
+msgid "Switching to project Manual..."
+msgstr "Pøepínám na manuál projektu..."
+
+msgid "Updating KDE-Libs documentation..."
+msgstr "Aktualizuji dokumentaci KDE-knihoven..."
+
+msgid "Generating Documentation..."
+msgstr "Generuji dokumentaci..."
+
+msgid "Compiling "
+msgstr "Pøekládám "
+
+msgid "Running "
+msgstr "Spou¹tím "
+
+msgid "Running  "
+msgstr "Spou¹tím "
+
+msgid "Running make..."
+msgstr "Spou¹tím make..."
+
+msgid "Running make clean-command "
+msgstr "Spou¹tím pøíkaz make clean "
+
+msgid "Running make clean and rebuilding all..."
+msgstr "Spou¹tím make clen a v¹e pøekompiluji..."
+
+msgid "Running make distclean..."
+msgstr "Spou¹tím make distclean..."
+
+msgid "Running autoconf suite..."
+msgstr "Spou¹tím autoconf..."
+
+msgid "Running ./configure..."
+msgstr "Spou¹tím script ./configure..."
+
+msgid "Killing current process..."
+msgstr "Zabíjím bì¾ící proces..."
+
+msgid "Creating project API-Documentation..."
+msgstr "Vytváøím programovou dokumentaci projektu..."
+
+msgid "Creating project Manual..."
+msgstr "Vytváøím manuál projektu..."
+
+msgid "About..."
+msgstr "O programu..."
+
+msgid "\tKDevelop Version "
+msgstr "\tKDevelop verze "
+
+#, c-format
+msgid "Line: %d Col: %d"
+msgstr "Øádek: %d Sloupec: %d"
+
+msgid "Creates a new file"
+msgstr "Vytvoøit nový soubor"
+
+msgid "Opens an existing file"
+msgstr "Otevøít existující soubor"
+
+msgid "Save the actual document"
+msgstr "Ulo¾it aktuální dokument"
+
+msgid "Save the document as..."
+msgstr "Ulo¾it dokument jako..."
+
+msgid "Save all changed files"
+msgstr "Ulo¾it v¹echny zmìnìné soubory"
+
+msgid "Closes the actual file"
+msgstr "Zavøít aktuální soubor"
+
+msgid "Prints the current document"
+msgstr "Vytisknout aktuální dokument"
+
+msgid "Exits the program"
+msgstr "Ukonèit program"
+
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr "Vyjmout vybranou oblast a vlo¾it ji do clipboardu"
+
+msgid "Copys the selected section to the clipboard"
+msgstr "Kopírovat vybranou oblast do clipboardu"
+
+msgid "Pastes the clipboard contents to actual position"
+msgstr "Vlo¾it obsah clipboardu na aktuální pozici kurzoru"
+
+msgid "Selects the whole document contents"
+msgstr "Vybrat celý obsah dokumentu"
+
+msgid "Inserts a file at the current position"
+msgstr "Vlo¾it soubor na aktuální pozici kurzoru"
+
+msgid "Searchs the file for an expression"
+msgstr "Vyhledat výraz v souboru"
+
+msgid "Repeats the last search"
+msgstr "Opakovat poslední hledání"
+
+msgid "Searchs and replace expression"
+msgstr "Najít a nahradit výraz"
+
+msgid "Goes to Line Number..."
+msgstr "Jít na øádku..."
+
+msgid "Enables / disables the treeview"
+msgstr "Otevøít/zavøít okno se stromem"
+
+msgid "Enables / disables the outputview"
+msgstr "Otevøít/zavøít výstupní okno"
+
+msgid "Enables / disables the standard toolbar"
+msgstr "Otevøít/zavøít standardní nástrojový pruh"
+
+msgid "Enables / disables the browser toolbar"
+msgstr "Otevøít/zavøít nástrojový pruh prohlí¾eèe"
+
+msgid "Enables / disables the statusbar"
+msgstr "Otevøít/zavøít stavový pruh"
+
+msgid "Refreshes current view"
+msgstr "Obnovit aktualní pohled"
+
+msgid "Generates a new project with KAppWizard"
+msgstr "Vygenerovat nový projekt pomocí KAppWizard"
+
+msgid "Creates a new project"
+msgstr "Vytvoøit nový projekt"
+
+msgid "Opens an existing project"
+msgstr "Otevøít existující projekt"
+
+msgid "Closes the current project"
+msgstr "Zavøít aktualní projekt"
+
+msgid "Adds a file to the current project"
+msgstr "Pøidat soubor k aktuálnímu projektu"
+
+msgid "Adds a new file to the project"
+msgstr "Pøidat k projektu nový soubor"
+
+msgid "Adds an existing file to the project"
+msgstr "Pøidat k projektu existující soubor"
+
+msgid "Removes file from the project"
+msgstr "Odebrat soubor z projektu"
+
+msgid "Creates a new Class frame structure and files"
+msgstr "Vytvoøit nový rámec tøídy a pøíslu¹né soubory"
+
+msgid "Shows the current file properties"
+msgstr "Zobrazit vlastnosti aktuálního souboru"
+
+msgid "Sets project and compiler options"
+msgstr "Nastavit parametry projektu a pøekladaèe"
+
+msgid "Compiles the current sourcefile"
+msgstr "Pøelo¾it aktuální zdrojový soubor"
+
+msgid "Invokes make-command and runs the program"
+msgstr "Spustit pøíkaz make a pak spustit program"
+
+msgid "Invokes make and KDbg debugging the binary"
+msgstr "Spustit make a pak debuger pro trasování programu"
+
+msgid "Invokes make-command"
+msgstr "Spustit pøíkaz make"
+
+msgid "Rebuilds the program"
+msgstr "Znovu pøelo¾it celý program"
+
+msgid "Invokes make clean and rebuild all"
+msgstr "Spustit make clean a v¹e znovu pøelo¾it"
+
+msgid "Invokes make distclean and deletes all compiled files"
+msgstr "Spusit make distclean a smazat v¹echny pøelo¾ené soubory"
+
+msgid "Invokes automake and co."
+msgstr "Spustit automake a co."
+
+msgid "Invokes ./configure"
+msgstr "Spustit konfiguraci"
+
+msgid "Stops make immediately"
+msgstr "Pøeru¹it pøeklad"
+
+msgid "Creates the Project's API with KDoc"
+msgstr "Vytvoøit dokumentaci projektu pou¾itím KDoc"
+
+msgid "Creates the Project's User Manual with the sgml-file"
+msgstr "Vytvoøit u¾ivatelský manuál projektu pomocí sgml"
+
+msgid "Starts KDbg in the tools window"
+msgstr "Spustit debuger v oknì nástrojù"
+
+msgid "Starts KTranslator in the tools window"
+msgstr "Spustit KTranslator v oknì nástrojù"
+
+msgid "Starts KIconedit in the tools window"
+msgstr "Spustit editor ikon v oknì nástrojù"
+
+msgid "Sets the Editor's behavoir"
+msgstr "Nastavení vlastností editoru"
+
+msgid "Sets the Editor's colors"
+msgstr "Nastavení barev editoru"
+
+msgid "Sets the highlighting default colors"
+msgstr "Nastavení implicitní barevné zvýraznìní"
+
+msgid "Sets the highlighting colors"
+msgstr "Nastavení barevného zvýraznìní"
+
+msgid "Sets the keyboard accelerators"
+msgstr "Nastavení klávesových zkratek"
+
+msgid "Set up the KDevelop environment"
+msgstr "Nastavení prostøedí programu"
+
+msgid "Configures the Browser options"
+msgstr "Nastavení prohlí¾eèe nápovìdy"
+
+msgid "Update your KDE-Libs Documentation"
+msgstr "Aktualizovat dokumentaci KDE-knihoven"
+
+msgid "Create a search database of the current Documentation"
+msgstr "Vytvoøit databázi pro prohledávání dokumentace"
+
+msgid "Switchs to last browser page"
+msgstr "Pøejít na poslední stranu prohlí¾eèe"
+
+msgid "Switchs to next browser page"
+msgstr "Pøejít na první stranu prohlí¾eèe"
+
+msgid "Searchs the selected text in the documentation"
+msgstr "Najít vybraný text v dokumentaci"
+
+msgid "Switchs to the QT-Documentation"
+msgstr "Pøejít na dokumentaci Qt"
+
+msgid "Switchs to the KDE-Core-Documentation"
+msgstr "Pøejít na dokumentaci KDE-Core"
+
+msgid "Switchs to the KDE-GUI-Documentation"
+msgstr "Pøejít na dokumentaci KDE-GUI"
+
+msgid "Switchs to the KDE-File-Documentation"
+msgstr "Pøejít na dokumentaci KDE-File"
+
+msgid "Switchs to the KDE-Html-Documentation"
+msgstr "Pøejít na dokumentaci KDE-Html"
+
+msgid "Switchs to the project's API-Documentation"
+msgstr "Pøejít na dokumentaci projektu"
+
+msgid "Switchs to the project's User-Manual"
+msgstr "Pøejít na u¾ivatelský manuál projektu"
+
+msgid "Switch to KDevelop's User Manual"
+msgstr "Pøejít na u¾ivatelský manuál programu KDevelop"
+
+msgid "Enter the KDevelop Homepage"
+msgstr "Domácí stránka programu KDevelop"
+
+msgid "Programmer's Hall of Fame..."
+msgstr "Programátorská síò slávy..."
+
+msgid "New File..."
+msgstr "Nový soubor..."
+
+msgid "Project Options"
+msgstr "Parametry projektu"
+
+msgid "use Template"
+msgstr "pou¾ít pøedlohu"
+
+msgid "add to Project"
+msgstr "pøidat k projektu"
+
+msgid "Filename:"
+msgstr "Jméno souboru:"
+
+msgid "Location:"
+msgstr "Umístìní:"
+
+msgid "General"
+msgstr "V¹eobecné"
+
+msgid "Manuals"
+msgstr "Manuály"
+
+msgid "Linux/KDE"
+msgstr "Linux/KDE"
+
+msgid "Error..."
+msgstr "Chyba..."
+
+msgid "The filename must end with .cpp,.c,.cc or .C !"
+msgstr "Jméno souboru musí konèit .cpp,.c,.cc nebo .C !"
+
+msgid "The filename must end with .h !"
+msgstr "Jméno souboru musí konèit .h !"
+
+msgid "The filename must end with .lsm !"
+msgstr "Jméno souboru musí konèit .lsm !"
+
+msgid "The filename must end with .kdelnk !"
+msgstr "Jméno souboru musí konèit .kdelnk !"
+
+msgid "The filename must end with .sgml !"
+msgstr "Jméno souboru musí konèit .sgml !"
+
+msgid "You must enter a filename!"
+msgstr "Musíte vlo¾it jméno souboru!"
+
+msgid "You must choose a location,that is in your project-dir!"
+msgstr "Musíte zadat umístìní v adresáøi va¹eho projektu!"
+
+msgid "Header/Resource Files"
+msgstr "Hlavièkové soubory"
+
+msgid "C/C++ Files"
+msgstr "C/C++ soubory"
+
+msgid "Documentation-Browser"
+msgstr "Prohlí¾eè dokumentace"
+
+msgid "Tools"
+msgstr "Nástroje"
+
+msgid "Repeat Search"
+msgstr "Opakovat hledání"
+
+msgid "Goto Line"
+msgstr "Jít na øádku"
+
+msgid "Toogle Tree-View"
+msgstr "Pøepnout okno se stromem"
+
+msgid "Toogle Output-View"
+msgstr "Pøepnout okno s výstupem"
+
+msgid "Toogle Statusbar"
+msgstr "Pøepnout stavový pruh"
+
+msgid "Compile File"
+msgstr "Pøelo¾it soubor"
+
+msgid "Make"
+msgstr "Pøelo¾it program"
+
+msgid "Run"
+msgstr "Spustit"
+
+msgid "Search Marked Text"
+msgstr "Hledat oznaèený text"
+
+msgid "&New"
+msgstr "&Nový"
+
+msgid "Save &As..."
+msgstr "&Ulo¾it jako..."
+
+msgid "Save All"
+msgstr "Ulo¾it v¹e"
+
+msgid "U&ndo"
+msgstr "Z&pìt"
+
+msgid "R&edo"
+msgstr "Z&novu"
+
+msgid "&Insert File..."
+msgstr "&Vlo¾it soubor..."
+
+msgid "&Search..."
+msgstr "&Hledat..."
+
+msgid "&Repeat Search..."
+msgstr "&Opakovat hledání..."
+
+msgid "&Replace..."
+msgstr "&Nahradit..."
+
+msgid "Select &All"
+msgstr "Vybr&at v¹e"
+
+msgid "Deselect All"
+msgstr "Zru¹it výbìr"
+
+msgid "Invert Selection"
+msgstr "Inverzní výbìr"
+
+msgid "&Goto Line..."
+msgstr "&Jít na øádek..."
+
+msgid "&Tree-View"
+msgstr "Zobrazit &strom"
+
+msgid "&Output-View"
+msgstr "Zobrazit &výstup"
+
+msgid "&Toolbar"
+msgstr "&Nástrojový pruh"
+
+msgid "&Browser-Toolbar"
+msgstr "&Pruh prohlí¾eèe"
+
+msgid "Status&bar"
+msgstr "&Stavový pruh"
+
+msgid "&Refresh"
+msgstr "&Obnovit"
+
+msgid "&New File..."
+msgstr "&Nový soubor..."
+
+msgid "&Existing File(s)..."
+msgstr "&Existující soubor(y)..."
+
+msgid "KAppWizard..."
+msgstr "KAppWizard..."
+
+msgid "New"
+msgstr "Nový"
+
+msgid "C&lose"
+msgstr "&Zavøít"
+
+msgid "&New Class..."
+msgstr "&Nová tøída..."
+
+msgid "&Add File(s) to Project"
+msgstr "&Pøidat soubor(y) k projektu"
+
+msgid "&File Properties..."
+msgstr "&Vlastnosti souboru..."
+
+msgid "&Options..."
+msgstr "&Nastavení..."
+
+msgid "&Project"
+msgstr "&Projekt"
+
+msgid "&Make"
+msgstr "&Make"
+
+msgid "&Rebuild all"
+msgstr "&Pøekompilovat v¹e"
+
+msgid "&Clean/Rebuild all"
+msgstr "&Smazat/Pøekompilovat v¹e"
+
+msgid "&Stop Build"
+msgstr "&Zastavit pøeklad"
+
+msgid "&Run"
+msgstr "&Spustit"
+
+msgid "&Debug..."
+msgstr "&Trasovat..."
+
+msgid "&DistClean"
+msgstr "&DistClean"
+
+msgid "&Autoconf"
+msgstr "&Autoconf"
+
+msgid "C&onfigure"
+msgstr "K&onfigurovat"
+
+msgid "Make &API-Doc"
+msgstr "Make &API-Doc"
+
+msgid "Make &User-Manual"
+msgstr "Make &User-Manual"
+
+msgid "&Build"
+msgstr "&Build"
+
+msgid "&KDbg"
+msgstr "&Debugger"
+
+msgid "&KIconedit"
+msgstr "&Editor ikon"
+
+msgid "KTranslator"
+msgstr "KTranslator"
+
+msgid "&Tools"
+msgstr "&Nástroje"
+
+msgid "&Editor..."
+msgstr "&Editor..."
+
+msgid "Editor &Colors..."
+msgstr "&Barvy editoru..."
+
+msgid "Editor &Defaults..."
+msgstr "&Implicitní nastavení editoru"
+
+msgid "&Syntax Highlighting..."
+msgstr "&Barevné zvýraznìní..."
+
+msgid "&Keys..."
+msgstr "&Klávesy..."
+
+msgid "Documentation &Browser..."
+msgstr "&Prohlí¾eè dokumentace..."
+
+msgid "&Documentation Path..."
+msgstr "&Umístìní dokumentace..."
+
+msgid "Update &KDE-Documentation..."
+msgstr "Aktualizovat dokumentaci &KDE..."
+
+msgid "Create &Searchdatabase..."
+msgstr "&Vytvoøit databázi pro vyhledávání..."
+
+msgid "&Gmake"
+msgstr "&Gmake"
+
+msgid "&Dmake"
+msgstr "&Dmake"
+
+msgid "&Window"
+msgstr "&Okno"
+
+msgid "Forward"
+msgstr "Vpøed"
+
+msgid "&Search Marked Text"
+msgstr "&Najít oznaèený text"
+
+msgid "&Qt-Library"
+msgstr "Knihovna &Qt"
+
+msgid "KDE-&Core-Library"
+msgstr "Knihovna KDE-&Core"
+
+msgid "KDE-&GUI-Library"
+msgstr "Knihovna KDE-&GUI"
+
+msgid "KDE-&KFile-Library"
+msgstr "Knihovna KDE-&File"
+
+msgid "KDE-&HTML-Library"
+msgstr "Knihovna KDE-&HTML"
+
+msgid "Project &API-Doc"
+msgstr "&Dokumentace projektu"
+
+msgid "Project &User-Manual"
+msgstr "&Manuál projektu"
+
+msgid "&Documentation"
+msgstr "&Dokumentace"
+
+msgid "About KDevelop..."
+msgstr "O programu..."
+
+msgid "Open Project"
+msgstr "Otevøít projekt"
+
+msgid "Open File"
+msgstr "Otevøít soubor"
+
+msgid "Save File"
+msgstr "Ulo¾it soubor"
+
+msgid "Compile file"
+msgstr "Pøelo¾it soubor"
+
+msgid "Rebuild"
+msgstr "Pøelo¾it v¹e"
+
+msgid "What's this...?"
+msgstr "Co je to...?"
+
+msgid "choice the class"
+msgstr "výbìr tøídy"
+
+msgid "choice the methods"
+msgstr "výbìr funkce"
+
+msgid "Search Text in Documenation"
+msgstr "Najít text v dokumentaci"
+
+msgid "xxxxxxxxxxxxxxxxxxxx"
+msgstr ""
+
+msgid "Line: 00000 Col: 000"
+msgstr "Øádka: 00000 Sloupec: 000"
+
+msgid " INS "
+msgstr ""
+
+msgid "Welcome to KDevelop!"
+msgstr "Vítá Vás KDevelop!"
+
+msgid "Untitled.h"
+msgstr "Nepojmenovaný.h"
+
+msgid "Untitled.cpp"
+msgstr "Nepojmenovaný.cpp"
+
+msgid "Attention"
+msgstr "Pozor"
+
+msgid "Closing project..."
+msgstr "Zavírám projekt..."
+
+msgid "Save changed project files ?"
+msgstr "Ulo¾it zmìnìné soubory projektu ?"
+
+msgid ""
+"The project\n"
+"\n"
+msgstr "Projekt\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"contains changed files. Save modified file\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"obsahuje zmìnìné soubory. Ulo¾it zmìnìný soubor\n"
+"\n"
+
+msgid "Save all"
+msgstr "Ulo¾it v¹e"
+
+msgid ""
+"You have added a new subdir to the project.\n"
+"We must now regenerate all Makefiles."
+msgstr ""
+"Pøidali jste nový podadresáø k projektu.\n"
+"Nyní musíte znovu vygenerovat v¹ecnhy Makefily."
+
+msgid "Running automake/autoconf and configure..."
+msgstr "Spou¹tím automake/autoconf a konfiguruji..."
+
+msgid "Opening project..."
+msgstr "Otvírám projekt..."
+
+msgid "Creating a new frame application..."
+msgstr "Vytváøím nový aplikaèní rámec..."
+
+msgid "Class:"
+msgstr "Tøída:"
+
+msgid "Declaration"
+msgstr "Deklarace"
+
+msgid "New Class..."
+msgstr "Nová tøída..."
+
+msgid "New Method"
+msgstr "Nová funkce"
+
+msgid "New Variable"
+msgstr "Nová promìnná"
+
+msgid "Method:"
+msgstr "Funkce:"
+
+msgid "Definition"
+msgstr "Definice"
+
+msgid "Project:"
+msgstr "Projekt:"
+
+msgid "Options..."
+msgstr "Nastavení..."
+
+msgid "look up: "
+msgstr "hledat: "
+
+msgid "KDevelop Setup"
+msgstr "Nastavení KDevelopu"
+
+msgid "Doc_Location"
+msgstr "Umístìní dokumentace"
+
+msgid ""
+"Enter the path to your QT and KDE-Libs\n"
+"Documentation for the Documentation Browser.\n"
+"QT usually comes with complete Documentation\n"
+"whereas for KDE you can create the Documentation\n"
+"easiely by switching to menuentry<i>Documentation -> \n"
+" Update KDE-Documentation</i>.Please use the Update dialog whenever you "
+"update \n"
+"your KDE Libs."
+msgstr ""
+"Zadejte cestu k dokumetaci knihoven QT a KDE\n"
+"pro prohlí¾eè dokumentace.\n"
+"Qt obvykle obsahuje kompletní dokumentaci, zatímco\n"
+"dokumentaci KDE mù¾ete snadno vytvoøit volbou\n"
+"<i>Aktualizovat dokumentaci KDE</i> v menu\n"
+"<i>Dokumentace</i>."
+
+msgid "Qt-Library Doc:"
+msgstr "Dokumetace Qt"
+
+msgid ""
+"Enter the path to your QT-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"Usually the QT-Documentation is\n"
+"located in <i><blue>$QTDIR/html</i>"
+msgstr ""
+"Zadejte cestu k dokumentaci Qt.\n"
+"Pro snaz¹í zadání cesty pou¾ijte tlaèítko\n"
+"vpravo.\n"
+"Dokumentace Qt se obvykle nachází v adresáøi\n"
+"<i><blue>$QTDIR/html</i>."
+
+msgid "KDE Library Doc:"
+msgstr "Dokumentace knihoven KDE:"
+
+msgid ""
+"Enter the path to your KDE-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"If you have no kdelibs Documentation installed,\n"
+"switch to menuentry <blue><i>Documentation ->\n"
+"Update KDE-Documentation</i><black> to create it."
+msgstr ""
+"Zadejte cestu k dokumentaci knihoven KDE.\n"
+"Pro snaz¹í zadání cesty pou¾ijte tlaèítko\n"
+"vpravo.\n"
+"Nemáte-li dokumentaci instalovánu, pou¾ijte\n"
+"volbu <blue><i>Dokumentace -> Aktualizovat \n"
+"dokumentaci KDE</i><black> pro její instalaci."
+
+msgid "Doc-Location"
+msgstr "Umístìní dokumentace"
+
+msgid ""
+"This dialog is for editing\n"
+"your project options."
+msgstr ""
+"Tento dialog slou¾í k nastavení\n"
+"parametrù va¹eho projektu."
+
+msgid "Projectname:"
+msgstr "Jméno projektu:"
+
+msgid "Set the project's name here."
+msgstr "Zde vlo¾te jméno projektu."
+
+msgid "Version:"
+msgstr "Verze:"
+
+msgid ""
+"Set your project's version\n"
+"number here."
+msgstr ""
+"Zde vlo¾te èíslo verze\n"
+"Va¹eho projektu."
+
+msgid "Author:"
+msgstr "Autor:"
+
+msgid "Insert your name here"
+msgstr "Zde vlo¾te Va¹e jméno"
+
+msgid "Email:"
+msgstr ""
+
+msgid "Insert your email-address here"
+msgstr "Zde vlo¾e Va¹i e-mailovou adresu"
+
+msgid "Handbook:"
+msgstr "Pøíruèka:"
+
+msgid ""
+"Insert your Handbook-sgml-file name.\n"
+"Usually this is index.sgml"
+msgstr ""
+"Zde vlo¾te jméno souboru s Va¹í sgml dokumentací.\n"
+"Obvykle to bývá index.sqml"
+
+msgid "Short Information:"
+msgstr "Krátká informace:"
+
+msgid ""
+"Insert some useful information about\n"
+"your project here. This is only for the\n"
+"information in the project file-<b>not</n>\n"
+"for README etc."
+msgstr ""
+"Zde vlo¾te nìkteré u¾iteèné informace\n"
+"o va¹em projektu. Je to pouze pro informaci\n"
+"v rámci projektu, ne pro soubory README\n"
+"apod."
+
+msgid "Set your Compiler options here"
+msgstr "Zde vlo¾te parametry pøekladaèe"
+
+msgid "Target"
+msgstr "Cíl"
+
+msgid ""
+"Set your target options here\n"
+"by specifying your machine type\n"
+"and GCC optimization level (0-3)"
+msgstr ""
+"Zde nastavte specifikaci va¹eho\n"
+"poèítaèe a úroveò optimalizace\n"
+"(0-3) pøi pøekladu"
+
+msgid "Target Machine"
+msgstr "Cílová architektura"
+
+msgid "your machine"
+msgstr "va¹e architektura"
+
+msgid "i386v"
+msgstr ""
+
+msgid ""
+"Specify the machine type for your program.\n"
+"Other machine types than your machine is\n"
+"usually only needed for precompiled\n"
+"distribution packages."
+msgstr ""
+
+msgid "only syntax check"
+msgstr "pouze syntaktická kontrola"
+
+msgid ""
+"This option sets the compiler\n"
+"to <i>-fsyntax-only</i>\n"
+"which lets you check your code for\n"
+"syntax-errors but doesn't do anything\n"
+"else beyond that."
+msgstr ""
+
+msgid "optimize"
+msgstr "optimalizace"
+
+msgid "Optimization-level"
+msgstr "Uroveò optimalizace"
+
+msgid ""
+"Set the -O option for the GCC\n"
+"here. Turning off optimization\n"
+"equals -O0. The higher the level\n"
+"the more time you need to compile\n"
+"but increases program speed."
+msgstr ""
+
+msgid "Debugging"
+msgstr "Debugger"
+
+msgid "Set your debugging options here."
+msgstr "Zde nastavte parametry pro debugger"
+
+msgid "generate debugging information"
+msgstr "generovat informaci pro debugger"
+
+msgid ""
+"Checking this turns on the -g flag\n"
+"to GCC to generate debugging information."
+msgstr ""
+
+msgid "Debug-level"
+msgstr ""
+
+msgid ""
+"Set the debugging level here.\n"
+"You can choose from level 1-3 which\n"
+"sets option -g1 to -g3 debugging\n"
+"level."
+msgstr ""
+
+msgid "generate extra information for gprof"
+msgstr "generovat informaci pro gprof"
+
+msgid ""
+"Generate extra code to write profile\n"
+"information for the analysis program\n"
+"<i>gprof</i>."
+msgstr ""
+
+msgid "store temporary intermediate files"
+msgstr "ukládat doèasné mezi-soubory"
+
+msgid ""
+"Store the usually temporary intermediate\n"
+"files in the current directory. This means\n"
+"compiling a file <i>foo.c</i> will produce\n"
+"the files <i>foo.o, foo.i</i> and<i>foo.s"
+msgstr ""
+
+msgid "additional options:"
+msgstr "dal¹í parametry:"
+
+msgid ""
+"Insert other GCC-options here\n"
+"to invoke GCC with by setting the\n"
+"CXXFLAGS-environment variable."
+msgstr ""
+
+msgid "Compiler Options"
+msgstr "Parametry pøekladaèe"
+
+msgid ""
+"Set the Compiler warnings here by checking\n"
+"the -W options you want to use."
+msgstr ""
+
+msgid ""
+"Compile with -Wall. This option\n"
+"includes several different warning\n"
+"parameters which are recommended to\n"
+"turn on."
+msgstr ""
+
+msgid ""
+"Compile with -W. This option\n"
+"sets options not included in -Wall\n"
+"which are very specific. Please read\n"
+"GCC-Info for more information."
+msgstr ""
+
+msgid ""
+"Warn about certain constructs\n"
+"that behave differently in traditional\n"
+"and ANSI C."
+msgstr ""
+
+msgid ""
+"Warn if an undefined identifier is\n"
+"evaluated in an `#if' directive"
+msgstr ""
+
+msgid ""
+"Warn whenever a local variable\n"
+"shadows another local variable."
+msgstr ""
+
+msgid ""
+"Warn whenever two distinct\n"
+"identifiers match in the first LEN\n"
+"characters. This may help you prepare\n"
+"a program that will compile with\n"
+"certain obsolete, brain-damaged\n"
+"compilers."
+msgstr ""
+
+msgid ""
+"Warn whenever an object\n"
+"of larger than LEN bytes \n"
+"is defined."
+msgstr ""
+
+msgid ""
+"Warn about anything that\n"
+"depends on the <i>size of</i> a\n"
+"function type or of <i>void</i>.\n"
+"GNU C assigns these types a size of 1,\n"
+"for convenience in calculations with\n"
+"<i>void *</i> pointers and pointers\n"
+"to functions."
+msgstr ""
+
+msgid ""
+"Warn whenever a function call is\n"
+"cast to a non-matching type. For\n"
+"example, warn if <i>int malloc()</i>\n"
+"is cast to <i>anything *."
+msgstr ""
+
+msgid ""
+"Warn whenever a pointer is cast\n"
+"so as to remove a type qualifier\n"
+"from the target type. For example,\n"
+"warn if a <i>const char *</i> is\n"
+"cast to an ordinary <i>char *."
+msgstr ""
+
+msgid ""
+"Warn whenever a pointer is cast such\n"
+"that the required alignment of the target\n"
+"is increased. For example, warn if a\n"
+"<i>char *</i> is cast to an <i>int *</i> on\n"
+"machines where integers can only be accessed\n"
+"at two- or four-byte boundaries."
+msgstr ""
+
+msgid ""
+"Give string constants the type <i>const char[LENGTH]</i>\n"
+"so that copying the address of one into a non-<i>const\n"
+"char *</i> pointer will get a warning. These warnings\n"
+"will help you find at compile time code that can try to\n"
+"write into a string constant, but only if you have been\n"
+"very careful about using <i>const</i> in declarations\n"
+"and prototypes. Otherwise, it will just be a nuisance;\n"
+"this is why we did not make <i>-Wall</i> request these\n"
+"warnings."
+msgstr ""
+
+msgid ""
+"Warn if a prototype causes a type conversion that is different\n"
+"from what would happen to the same argument in the absence\n"
+"of a prototype. This includes conversions of fixed point to\n"
+"floating and vice versa, and conversions changing the width\n"
+"or signedness of a fixed point argument except when the same\n"
+"as the default promotion.  Also warn if a negative integer\n"
+"constant expression is implicitly converted to an unsigned\n"
+"type."
+msgstr ""
+
+msgid ""
+"Warn when a comparison between signed and unsigned values\n"
+"could produce an incorrect result when the signed value\n"
+"is converted to unsigned."
+msgstr ""
+
+msgid ""
+"Warn if any functions that return structures or unions are\n"
+"defined or called. (In languages where you can return an\n"
+"array, this also elicits a warning.)"
+msgstr ""
+
+msgid ""
+"Warn if a function is declared or defined without specifying\n"
+"the argument types. (An old-style function definition is\n"
+"permitted without a warning if preceded by a declaration\n"
+"which specifies the argument types.)"
+msgstr ""
+
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"prototype declaration. This warning is issued even if\n"
+"the definition itself provides a prototype. The aim\n"
+"is to detect global functions that fail to be declared\n"
+"in header files."
+msgstr ""
+
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"declaration. Do so even if the definition itself pro-\n"
+"vides a prototype. Use this option to detect global\n"
+"functions that are not declared in header files."
+msgstr ""
+
+msgid ""
+"Warn if anything is declared more than once in the same scope\n"
+"even in cases where multiple declaration is valid and\n"
+"changes nothing."
+msgstr ""
+
+msgid ""
+"Warn if an <i>extern</i> declaration is\n"
+"encountered within a function."
+msgstr ""
+
+msgid ""
+"Warn if a function can not be inlined, and either\n"
+"it was declared as inline, or else the\n"
+"<i>-finline-functions</i> option was given."
+msgstr ""
+
+msgid ""
+"Warn if an old-style (C-style) cast is used\n"
+"within a program"
+msgstr ""
+
+msgid ""
+"Warn when a derived class function declaration may be an\n"
+"error in defining a virtual function (C++ only). In\n"
+"a derived class, the definitions of virtual functions\n"
+"must match the type signature of a virtual function\n"
+"declared in the base class. With this option, the\n"
+"compiler warns when you define a function with the same\n"
+"as a virtual function, but with a type signature that\n"
+"does not match any declarations from the base class."
+msgstr ""
+
+msgid ""
+"Warn when g++'s synthesis behavoir does\n"
+"not match that of cfront."
+msgstr ""
+
+msgid "make all Warnings into errors"
+msgstr ""
+
+msgid "Make all warnings into errors."
+msgstr ""
+
+msgid "Compiler Warnings"
+msgstr ""
+
+msgid ""
+"Set the Linker options and choose the\n"
+"libraries to add to your project."
+msgstr ""
+
+msgid "library flags"
+msgstr ""
+
+msgid "Set your library flags here."
+msgstr ""
+
+msgid ""
+"If you want to use a debugger, you\n"
+"should keep those informations in the object files.\n"
+"It's useless to let the compiler generate debug\n"
+"informations and to remove it with this option."
+msgstr ""
+
+msgid ""
+"On systems that support dynamic linking,\n"
+"this prevents linking with the shared libraries.\n"
+"On other systems, this option has no effect."
+msgstr ""
+
+msgid "additional flags:"
+msgstr ""
+
+msgid ""
+"Insert other linker options here\n"
+"to invoke the linker with by setting the\n"
+"LDFLAGS-environment variable."
+msgstr ""
+
+msgid "libraries"
+msgstr ""
+
+msgid "Choose your libraries here."
+msgstr ""
+
+msgid "X11 basics\n"
+msgstr ""
+
+msgid "X11 extensions\n"
+msgstr ""
+
+msgid "Qt"
+msgstr ""
+
+msgid "KDE basics"
+msgstr ""
+
+msgid "KDE user interface"
+msgstr ""
+
+msgid "KDE HTML widget"
+msgstr ""
+
+msgid "KDE kfm functionality"
+msgstr ""
+
+msgid "KDE file handling"
+msgstr ""
+
+msgid "KDE Spell checking"
+msgstr ""
+
+msgid "KDE addressbook"
+msgstr ""
+
+msgid "additional libraries:"
+msgstr "dal¹í knihovny"
+
+msgid "Add additional libraries here."
+msgstr "Dal¹í knihovny zde."
+
+msgid "Linker Options"
+msgstr "Parametry linkeru"
+
+msgid "exit the CKAppWizard"
+msgstr "ukonèit CKAppWizard"
+
+msgid "Create"
+msgstr "Vytvoøit"
+
+msgid "creating the project"
+msgstr "vytváøím projekt"
+
+msgid "set all changes back"
+msgstr "vrátit v¹echny zmìny zpìt"
+
+msgid "KWizard"
+msgstr ""
+
+msgid "Application"
+msgstr "Aplikace"
+
+msgid "KDE-Application"
+msgstr "KDE-Aplikace"
+
+msgid ""
+"Select this to create a complete framework for\n"
+"your new application. It will contain three main\n"
+"classes: one for the mainwindow, one for the\n"
+"main view and one for the application's documents\n"
+"The main window offers a menubar, toolbar and\n"
+"a statusbar including statusbar help and status\n"
+"signaling."
+msgstr ""
+
+msgid "KDE-Mini-Application"
+msgstr "KDE-Mini-Aplikace"
+
+msgid ""
+"Select this to create a mini-Application.\n"
+"This will only contain the main widget\n"
+"class which inherits QWidget until now."
+msgstr ""
+
+msgid "C/C++-Application"
+msgstr "C/C++-Aplikace"
+
+msgid "Select this to create a C/C++-Terminal-Application."
+msgstr "Zvolte tuto volbu pro vytvoøení C/C++-terminálové aplikace."
+
+msgid "Names"
+msgstr "Jména"
+
+msgid "Projectdirectory:"
+msgstr "Adresáø projektu:"
+
+msgid "Versionsnumber:"
+msgstr "Èíslo verze:"
+
+msgid ""
+"Enter the Project's name here. This is\n"
+"also the directory name under which your Project\n"
+"will be created."
+msgstr ""
+"Zde vlo¾te jméno projektu. To bude zároveò jmého\n"
+"adresáøe ve kterém bude Vá¹ projekt vytvoøen."
+
+msgid ""
+"Enter the toplevel-directory the project\n"
+"will be stored. This <b>must</b> be an\n"
+"<b>existing directory !!"
+msgstr ""
+
+msgid ""
+"Enter the Version number here.\n"
+"The number will be used in the about-dialog\n"
+"and in the main widget's topbar."
+msgstr ""
+
+msgid ""
+"Enter your name here for the about dialog.\n"
+"You may also consider using the Team-name."
+msgstr ""
+
+msgid ""
+"Enter your email adress here, so users\n"
+"can send you bug reports easiely ;-))"
+msgstr ""
+
+msgid "Projectfiles & Desktopgoodies"
+msgstr ""
+
+msgid "API-Documentation"
+msgstr "API-dokumentace"
+
+msgid ""
+"Check this if you wish to have your API\n"
+"Documentation generated automatically"
+msgstr ""
+
+msgid "User-Dokumentation"
+msgstr "U¾ivatelská dokumentace"
+
+msgid ""
+"Check this if you wish a general User\n"
+"Documentation to be generated automatically."
+msgstr ""
+
+msgid "lsm-File - Linux Software Map"
+msgstr ""
+
+msgid "Check this to create a lsm-File"
+msgstr ""
+
+msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
+msgstr "GNU - standardní soubory (INSTALL,README,...)"
+
+msgid ""
+"Check this if you wish to have\n"
+"the GNU-Standard files created like\n"
+"INSTALL and README"
+msgstr ""
+
+msgid "Program-Icon"
+msgstr "Ikona programu"
+
+msgid ""
+"Check this to create a sample icon for\n"
+"your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+msgstr ""
+
+msgid "Mini-Icon"
+msgstr "Mini ikona"
+
+msgid ""
+"Check this to create a sample mini-icon\n"
+"for your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+msgstr ""
+
+msgid ".kdelnk-File"
+msgstr "Soubor .kdelnk"
+
+msgid ""
+"Check this if you wish to have\n"
+"a .kdelnk for you application in the\n"
+"K-Menu.  The default is the Applications-\n"
+"submenu. You can change this to other menus\n"
+"by changing the file properties afterwards."
+msgstr ""
+
+msgid ""
+"Select this if you wish another\n"
+"already created icon to be used."
+msgstr ""
+
+msgid ""
+"Select this if you wish another\n"
+"already created mini-icon to be used."
+msgstr ""
+
+msgid "Headertemplate for .h-files"
+msgstr ""
+
+msgid "headertemplate for .h-files"
+msgstr ""
+
+msgid ""
+"Check this if you want a standard\n"
+"headertemplate for your headerfiles"
+msgstr ""
+
+msgid "Load..."
+msgstr ""
+
+msgid "you can load another headertemplate here"
+msgstr ""
+
+msgid "you can clear the headertemplate here"
+msgstr ""
+
+msgid "you can edit your headertemplate here"
+msgstr ""
+
+msgid "Headertemplate for .cpp-files"
+msgstr ""
+
+msgid "headertemplate for .cpp-files"
+msgstr ""
+
+msgid ""
+"Check this if you want a standard\n"
+"cpp-Template for your cpp-files."
+msgstr ""
+
+msgid "you can load another cpptemplate here"
+msgstr ""
+
+msgid "you can clear the cpptemplate here"
+msgstr ""
+
+msgid "you can edit your cpptemplate here"
+msgstr ""
+
+msgid "Processes"
+msgstr ""
+
+msgid "you can see the normal outputs here"
+msgstr ""
+
+msgid "you can see all warnings and errormessages here"
+msgstr ""
+
+msgid "Directory"
+msgstr "Adresáø"
+
+msgid "Header"
+msgstr ""
+
+msgid "Exit"
+msgstr "Konec"
+
+msgid "Remove File"
+msgstr "Odstranit soubor"
+
+msgid "Delete File..."
+msgstr "Smazat soubor..."
+
+msgid "Properties..."
+msgstr "Vlastnosti..."
+
+msgid "New LFV-Group..."
+msgstr ""
+
+msgid "Remove Group"
+msgstr "Odstranit skupinu"
+
+msgid "Group Properties..."
+msgstr "Vlastnosti skupiny..."
+
+msgid "New Group ..."
+msgstr "Nová skupina..."
+
+msgid ""
+"Do you really want to delete the selected file?\n"
+"        There is no way to restore it!"
+msgstr ""
+
+msgid "Small"
+msgstr "Malý"
+
+msgid "Medium"
+msgstr "Støední"
+
+msgid "Large"
+msgstr "Velký"
+
+msgid "Standard Font"
+msgstr "Standardní font"
+
+msgid "Fixed Font"
+msgstr ""
+
+msgid "Background Color:"
+msgstr "Barva pozadí:"
+
+msgid "Normal Text Color:"
+msgstr "Barva textu:"
+
+msgid "URL Link Color:"
+msgstr "Barva URL odkazu:"
+
+msgid "Followed Link Color:"
+msgstr "Barva pou¾itého odkazu:"
+
+msgid "Underline links"
+msgstr "Podtrhávat odkazy"
+
+msgid "Always use my colors"
+msgstr "V¾dy pou¾ívat mé bravy"
+
+msgid "Documentation Browser Options"
+msgstr "Nastavení prohlí¾eèe dokumentace"
+
+msgid "Colors"
+msgstr "Barvy"
+
+msgid "Others:"
+msgstr "Dal¹í:"
+
+msgid "Add Entry..."
+msgstr "Pøidat polo¾ku..."
+
+msgid "Remove Entry"
+msgstr "Odstranit polo¾ku"
+
+msgid "Class Generator"
+msgstr "Generátor tøíd"
+
+msgid "Additional Options"
+msgstr "Dal¹í parametry"
+
+msgid "Documentation"
+msgstr "Dokumentace"
+
+msgid "Inheritence"
+msgstr "Dìdiènost"
+
+msgid "Baseclass"
+msgstr "Základní tøída"
+
+msgid "Classname"
+msgstr "Jméno tøídy"
+
+msgid "public"
+msgstr ""
+
+msgid "protected"
+msgstr ""
+
+msgid "private"
+msgstr ""
+
+msgid "Impl."
+msgstr ""
+
+msgid "use header/cpp-templates"
+msgstr ""
+
+msgid "generate a QWidget-Childclass"
+msgstr ""
+
+msgid "You must enter a classname!"
+msgstr "Musíte vlo¾it jméno tøídy!"
+
+msgid "You must enter a name for the header-file!"
+msgstr "Musíte vlo¾it jméno hlavièkového souboru!"
+
+msgid "You must enter a name for the implementation-file!"
+msgstr "Musíte vlo¾it jméno zdrojového souboru!"
+
+msgid "You must enter a name for the baseclass!"
+msgstr "Musíte vlo¾it jméno základní tøídy!"
+
+msgid "File Properties"
+msgstr "Vlastnosti souboru"
+
+msgid "Distribution"
+msgstr ""
+
+msgid "Filetype"
+msgstr ""
+
+msgid "Installation"
+msgstr ""
+
+msgid "Install-location:"
+msgstr ""
+
+msgid "Size:"
+msgstr "Velikost:"
+
+msgid "Name:"
+msgstr "Jméno:"
+
+msgid "include in distribution"
+msgstr ""
+
+msgid "install"
+msgstr ""
+
+msgid ""
+"This option sets if the actual file\n"
+"will be included in the final distri-\n"
+"bution."
+msgstr ""
+
+msgid ""
+"This option sets if the actual file\n"
+"will be installed to the platform during\n"
+"the installation process of make install\n"
+"If the install button is checked, you have\n"
+"to set the installation path and filename\n"
+"Possible values are e.g.:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Other values can be found in the Makefile"
+msgstr ""
+
+msgid "Add existing files to project..."
+msgstr "Pøidat k projektu existující soubory..."
+
+msgid "Sourcefile(s):"
+msgstr "Zdrojový soubor(y):"
+
+msgid "Destinationdir:"
+msgstr "Cílový adresáø:"
+
+msgid ""
+"select the source files to be added\n"
+"to the project here."
+msgstr ""
+
+msgid ""
+"select the directory where the new\n"
+"source files will be copied to here."
+msgstr ""
+
+msgid "You must choose a destination,that is in your project-dir!"
+msgstr "Cílový adresáø musí být v adresáøi va¹eho projektu!"
+
+msgid "You must choose a valid dir as a destination!"
+msgstr "Cílový adresáø neexistuje!"
+
+msgid "Groupname:"
+msgstr ""
+
+msgid "Filters:"
+msgstr ""
+
+msgid "KDE Library Documentation Update..."
+msgstr ""
+
+msgid "Choose installation mode:"
+msgstr ""
+
+msgid "new KDE Libs sources path:"
+msgstr ""
+
+msgid "new KDE Libs Documentation path:"
+msgstr ""
+
+msgid ""
+"Checking this will delete the current documentation\n"
+"and replacing it with the new generated documentation\n"
+"in the same path."
+msgstr ""
+
+msgid "Delete old Documentation and install to new Documentation path"
+msgstr ""
+
+msgid ""
+"Checking this will delete the current documentation\n"
+"and lets you choose a path in the input field below\n"
+"where the new generated documentation will beinstalled."
+msgstr ""
+
+msgid "Leave old Documention untouched and install to new Documention path"
+msgstr ""
+
+msgid ""
+"This doesn't delete your current documentation and leaves it\n"
+"is now and you can select a new path for the new kdelibs\n"
+"documentation. CAUTION: Don't insert the same path where\n"
+"your recent documentation is installed- this may mess up\n"
+"the documentation by mixing old and new files!"
+msgstr ""
+
+msgid ""
+"Insert the path to the current\n"
+"KDE-Libs sourcecodes here. This is\n"
+"where you have unpacked e.g. a kdelibs\n"
+"snapshot a la /snapshot/kdelibs."
+msgstr ""
+
+msgid ""
+"Insert the path where you want to have\n"
+"the new generated documentation installed\n"
+"Note: the path information in Setup will\n"
+"be updated automatically, you don't have\n"
+"to change them to the new doc path."
+msgstr ""
+
+msgid "Index Options"
+msgstr ""
+
+msgid "additional directories to index"
+msgstr ""
+
+msgid "Index Size"
+msgstr ""
+
+msgid "index the KDE documentation"
+msgstr ""
+
+msgid "index the QT documentation"
+msgstr ""
+
+msgid "tiny size"
+msgstr ""
+
+msgid "small size"
+msgstr ""
+
+msgid "medium size"
+msgstr ""
+
+msgid "add"
+msgstr ""
+
+msgid "remove"
+msgstr ""
+
+#, c-format
+msgid ""
+"builds a medium-size index (20-30% of the size\n"
+"of all files), allowing faster search."
+msgstr ""
+
+msgid ""
+"Build a small index rather than tiny (meaning 7-9%\n"
+"of the sizes of all files - your mileage may vary)\n"
+"allowing faster search."
+msgstr ""
+
+#, c-format
+msgid "a tiny index (2-3% of the total size of all files)"
+msgstr ""
+
+msgid "No Database created!"
+msgstr ""
+
+msgid "The KDE-Documentation-Path isn't set correctly."
+msgstr ""
+
+msgid "The Qt-Documentation-Path isn't set correctly."
+msgstr ""
+
+msgid "File:"
+msgstr "Soubor:"
+
+msgid "Outputmedia"
+msgstr ""
+
+msgid "Outprinting"
+msgstr ""
+
+msgid "Pretty-print"
+msgstr ""
+
+msgid "Pretty-print mode"
+msgstr ""
+
+msgid "Pages"
+msgstr "Stránky"
+
+msgid "Page printing"
+msgstr ""
+
+msgid "Printer"
+msgstr "Tiskárna"
+
+msgid "Outputlocation"
+msgstr ""
+
+msgid "Default printsettings"
+msgstr ""
+
+msgid "Outputformat"
+msgstr ""
+
+msgid "Program"
+msgstr ""
+
+msgid "Paper format"
+msgstr "Formát papíru"
+
+msgid "printing..."
+msgstr "tisknu..."
+
+msgid "printername"
+msgstr "jméno tiskárny"
+
+msgid "pretty-print"
+msgstr ""
+
+msgid "color"
+msgstr "barevnì"
+
+msgid "files..."
+msgstr "soubory..."
+
+msgid "print to file"
+msgstr "tisk do souboru"
+
+msgid "Preview"
+msgstr "Náhled"
+
+msgid "Self choosen files"
+msgstr ""
+
+msgid "Changed files"
+msgstr "Zmìnìné soubory"
+
+msgid "Time"
+msgstr "Èas"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "File selection"
+msgstr "Výbìr souboru"
+
+msgid "clean"
+msgstr ""
+
+msgid "delete"
+msgstr ""
+
+msgid "between"
+msgstr ""
+
+msgid "since"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "current"
+msgstr ""
+
+msgid "all in buffer"
+msgstr ""
+
+msgid "all in project"
+msgstr ""
+
+msgid "self choosen files"
+msgstr ""
+
+msgid "changed files"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "Header settings"
+msgstr ""
+
+msgid "Fancy header"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Headertext"
+msgstr ""
+
+msgid "header"
+msgstr ""
+
+msgid "headertext"
+msgstr ""
+
+msgid "login"
+msgstr ""
+
+msgid "position"
+msgstr ""
+
+msgid "text"
+msgstr ""
+
+msgid "fancy header"
+msgstr ""
+
+msgid "Filename"
+msgstr ""
+
+msgid "filename"
+msgstr ""
+
+msgid "size of filename"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid "hostname"
+msgstr ""
+
+msgid "size of hostname "
+msgstr ""
+
+msgid "Current time"
+msgstr ""
+
+msgid "Modification time"
+msgstr ""
+
+msgid "Format"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Modification date"
+msgstr ""
+
+msgid "Current date"
+msgstr ""
+
+msgid "AM/PM"
+msgstr ""
+
+msgid "current date"
+msgstr ""
+
+msgid "modification date"
+msgstr ""
+
+msgid "current time"
+msgstr ""
+
+msgid "modification time"
+msgstr ""
+
+msgid "Font and TAB"
+msgstr ""
+
+msgid "Textprinting"
+msgstr ""
+
+msgid "Other options"
+msgstr ""
+
+msgid "Highlight bars"
+msgstr ""
+
+msgid "cycle of change"
+msgstr ""
+
+msgid "Wrapped line"
+msgstr ""
+
+msgid "Numbering & border"
+msgstr ""
+
+msgid "borders"
+msgstr ""
+
+msgid "table of contents"
+msgstr ""
+
+msgid "marked wrapped lines"
+msgstr ""
+
+msgid "lines per page"
+msgstr ""
+
+msgid "numbering pages"
+msgstr ""
+
+msgid "characters per line"
+msgstr ""
+
+msgid "numbering lines"
+msgstr "èíslování øádek"
+
+msgid "value for wrapped line"
+msgstr ""
+
+msgid "highlight bars"
+msgstr ""
+
+msgid "interpret TAB, BS and FF"
+msgstr ""
+
+msgid "cut lines"
+msgstr ""
+
+msgid "replace non-printing character by space"
+msgstr ""
+
+msgid "print non ascii character as ISO Latin 1"
+msgstr ""
+
+msgid "bold font"
+msgstr "tuènì"
+
+msgid "set TAB size"
+msgstr ""
+
+msgid "font for a2ps"
+msgstr ""
+
+msgid "font for header"
+msgstr ""
+
+msgid "font for body"
+msgstr ""
+
+msgid "Underlaytext"
+msgstr ""
+
+msgid "Underlaystyle"
+msgstr ""
+
+msgid "Underlayangle"
+msgstr ""
+
+msgid "Underlaygray"
+msgstr ""
+
+msgid "Underlayfont"
+msgstr ""
+
+msgid "Underlayposition"
+msgstr ""
+
+msgid "Y-Position"
+msgstr ""
+
+msgid "X-Position"
+msgstr ""
+
+msgid "underlay"
+msgstr ""
+
+msgid "underlaystyle"
+msgstr ""
+
+msgid "angle"
+msgstr ""
+
+msgid "font"
+msgstr ""
+
+msgid "default"
+msgstr ""
+
+msgid "underlaytext"
+msgstr ""
+
+msgid ""
+"Open project\n"
+"\n"
+"Shows the open project dialog to select a project to be opened"
+msgstr ""
+
+msgid ""
+"Open file\n"
+"\n"
+"Shows the open file dialog to select a file to be opened."
+msgstr ""
+
+msgid ""
+"Save file\n"
+"\n"
+"Saves the file opened in the actual editing view"
+msgstr ""
+
+msgid ""
+"Undo\n"
+"\n"
+"Reverts the last editing step."
+msgstr ""
+
+msgid ""
+"Redo\n"
+"\n"
+"If an editing step was undone, redo lets you do this step again."
+msgstr ""
+
+msgid ""
+"Class viewer\n"
+"\n"
+"The class viewer shows the project(s), classes,classmembers and variables "
+"found by scanning theheader files in the source tree.Clicking on the class "
+"name results in opening the header file,setting the cursor to the class "
+"declaration line.Clicking on the member function results in opening the "
+"source file and sets the cursor to the member implementation. Selecting a "
+"member variable switches to the variable declaration in the header file.\n"
+"You can enable/diable the treeview window by selecting Tree-View in the "
+"View-menu or use the key accelerator."
+msgstr ""

@@ -1,0 +1,4267 @@
+# SOME DESCRIPTIVE TITLE.
+# A Swedish translation of the more than useful program KDevelop 
+# 
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KDevelop\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 1999-06-12 10.00+ZONE\n"
+"Last-Translator: Patrik Adolfsson <patrik.adolfsson@iname.com>\n"
+"Language-Team: sv <sv@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO_8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Creating new file..."
+msgstr "Skapar en ny fil..."
+
+msgid "Opening file..."
+msgstr "Öppnar fil..."
+
+msgid "Closing file..."
+msgstr "Avslutar fil..."
+
+msgid "Save?"
+msgstr "Spara?"
+
+msgid "The document was modified,save?"
+msgstr "Dokumentet har ändrats, vill du spara ändringarna?"
+
+msgid "Closing all files..."
+msgstr "Stänger alla filer..."
+
+msgid "Saving file "
+msgstr "Sparar fil"
+
+msgid "Save file as..."
+msgstr "Spara fil som..."
+
+msgid "Saving all changed files..."
+msgstr "Sparar alla ändrade filer..."
+
+msgid "Autosaving..."
+msgstr "Autosparar.."
+
+msgid "Exiting..."
+msgstr "Avslutar..."
+
+msgid "Cutting..."
+msgstr "Klipper ut.."
+
+msgid "Copying..."
+msgstr "Kopierar..."
+
+msgid "Pasting selection..."
+msgstr "Klistrar in markering..."
+
+msgid "Inserting file contents..."
+msgstr "Klistrar in från fil..."
+
+msgid "Searching..."
+msgstr "Söker..."
+
+msgid "Repeating last search..."
+msgstr "Upprepar senaste sökningen..."
+
+msgid "Replacing..."
+msgstr "Ersätter..."
+
+msgid "Selecting all..."
+msgstr "Markerar allt..."
+
+msgid "Switching to selected line..."
+msgstr "Hoppar till den valda raden..."
+
+msgid "Compiling "
+msgstr "Kompilerar fil "
+
+msgid "Running "
+msgstr "Kör "
+
+msgid "Running  "
+msgstr "Kör  "
+
+msgid "Running make..."
+msgstr "Kör make..."
+
+msgid "Running make clean-command "
+msgstr "Utför 'make clean'-kommandot"
+
+msgid "Running make clean and rebuilding all..."
+msgstr "Utför 'make clean' och omskapar allt..."
+
+msgid "Running make distclean..."
+msgstr "Utför 'make distclean'"
+
+msgid "Running autoconf suite..."
+msgstr "Utför autoconf..."
+
+msgid "Running ./configure..."
+msgstr "Utför ./configure..."
+
+msgid "Killing current process..."
+msgstr "Avslutar nuvarande process"
+
+msgid "Creating pot-file in /po..."
+msgstr "Skapar ny .pot-fil i /po..."
+
+msgid "Creating project API-Documentation..."
+msgstr "Skapar projektets API-dokumentation..."
+
+msgid ""
+"The KDE-library documentation is not installed.\n"
+"Please update your documentation with the options\n"
+"given in theKDevelop Setup dialog, Documentation tab.\n"
+"\n"
+"Your API-documentation will be created without\n"
+"cross-references to the KDE and Qt libraries."
+msgstr ""
+"Dokumentationen för KDE-biblioteket är inte installerad.\n"
+"Var vänlig uppdatera din dokumentation med inställningarna\n"
+"givna i dialogrutan för KDevelop-Inställningar under Dokumentation.\n"
+"\n"
+"Din API-dokumentation kommer att bli skapad utan\n"
+"korsreferenser till KDE och Qt biblioteken."
+
+msgid "Creating project Manual..."
+msgstr "Skapar projektets användarhandbok..."
+
+msgid "Setting up the Editor..."
+msgstr "Inställningar för redigeraren..."
+
+msgid "Setting up the Editor's colors..."
+msgstr "Inställningar för redigerarens färger..."
+
+msgid "Setting up syntax highlighting default colors..."
+msgstr "Insällningar för färgkodningens standardfärger..."
+
+msgid "Setting up syntax highlighting colors..."
+msgstr "Inställningar för färgkodningens färger..."
+
+msgid "Configuring Documentation Browser..."
+msgstr "Inställningar för dokumentationsvisaren..."
+
+msgid "Setting up Documentation paths..."
+msgstr "Ställer in sökvägen till dokumenationen..."
+
+msgid "Updating KDE-Libs documentation..."
+msgstr "Uppdaterar KDE-bibliotekets dokumentation..."
+
+msgid "Generating Documentation..."
+msgstr "Skapar dokumentation..."
+
+msgid "Creating Search Database..."
+msgstr "Skapar sökdatabas..."
+
+msgid "Switching to last page..."
+msgstr "Hoppar till föregående sida..."
+
+msgid "Switching to next page..."
+msgstr "Hoppar till nästa sida..."
+
+msgid "Searching selected text in documentation..."
+msgstr "Söker i dokumentationen efter den markerade texten..."
+
+msgid "Searching for Help on..."
+msgstr "Söker efter hjälp om..."
+
+msgid "Switching to project API Documentation..."
+msgstr "Byter till projektets API-dokumentation..."
+
+msgid "Switching to project Manual..."
+msgstr "Byter till projektets manual..."
+
+msgid "About KDevelop..."
+msgstr "Om KDevelop..."
+
+msgid "\t   KDevelop Version "
+msgstr "\t   KDevelop version "
+
+#, c-format
+msgid "Line: %d Col: %d"
+msgstr "Rad: %d Kol: %d"
+
+msgid "Not found!"
+msgstr "Ej funnet!"
+
+msgid "\" not found in documentation!"
+msgstr "\" ej funnet i dokumentationen!"
+
+msgid "Documentation"
+msgstr "Dokumentation"
+
+msgid "Tutorial"
+msgstr ""
+
+msgid "Manual"
+msgstr "Användahandbok"
+
+msgid "C/C++ Referens"
+msgstr ""
+
+msgid "Qt-Library"
+msgstr "&Qt bibliotek"
+
+msgid "KDE-Core-Library"
+msgstr "KDE &Core bibliotek"
+
+msgid "KDE-UI-Library"
+msgstr "KDE &GUI bibliotek"
+
+msgid "KDE-KFile-Library"
+msgstr "KDE &File bibliotek"
+
+msgid "KDE-KHTMLW-Library"
+msgstr "KDE-KHTMLW-bibliotek"
+
+msgid "KDE-KHTML-Library"
+msgstr "KDE-KHTML-bibliotek"
+
+msgid "KDE-KFM-Library"
+msgstr "KDE-KFM-bibliotek"
+
+msgid "KDE-KDEutils-Library"
+msgstr "KDE-KDEutils-bibliotek"
+
+msgid "KDE-KAB-Library"
+msgstr "KDE-KAB-bibliotek"
+
+msgid "KDE-KSpell-Library"
+msgstr "KDE-KSpell-bibliotek"
+
+msgid "API-Documentation"
+msgstr "API dokumentation"
+
+msgid "User-Manual"
+msgstr "Användarmanual"
+
+msgid "Creates a new file"
+msgstr "Skapar en ny fil"
+
+msgid "Opens an existing file"
+msgstr "Öppnar en befintlig fil"
+
+msgid "Closes the actual file"
+msgstr "Stänger den aktuella filen"
+
+msgid "Save the actual document"
+msgstr "Sparar det aktuella dokument"
+
+msgid "Save the document as..."
+msgstr "Spara dokumentet som..."
+
+msgid "Save all changed files"
+msgstr "Spara alla ändrade filer"
+
+msgid "Prints the current document"
+msgstr "Skriver ut det aktuella dokumentet"
+
+msgid "Exits the program"
+msgstr "Avslutar programet"
+
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr "Klipper ut det markerade avsnittet och lägger den i urklippshanteraren"
+
+msgid "Copys the selected section to the clipboard"
+msgstr "Kopierar det markerade avsnittet till urklippshanteraren"
+
+msgid "Pastes the clipboard contents to actual position"
+msgstr "Klistrar in från urklippshanteraren till den aktuella positionen"
+
+msgid "Selects the whole document contents"
+msgstr "Markerar hela dokumentet"
+
+msgid "Inserts a file at the current position"
+msgstr "Sätter in en fil vid befintliga positionen"
+
+msgid "Searchs the file for an expression"
+msgstr "Söker filen efter ett uttryck"
+
+msgid "Repeats the last search"
+msgstr "Upprepar senaste sökningen"
+
+msgid "Searchs and replace expression"
+msgstr "Söker och ersätter uttrycket"
+
+msgid "Goes to Line Number..."
+msgstr "Går til radnummer..."
+
+msgid "Enables / disables the treeview"
+msgstr "Visar / gömmer klass-hierarkin"
+
+msgid "Enables / disables the outputview"
+msgstr "Visar / gömmer meddelande fönstret"
+
+msgid "Enables / disables the standard toolbar"
+msgstr "Visar / gömmer standardverktygsfältet"
+
+msgid "Enables / disables the browser toolbar"
+msgstr "Visar / gömmer verktygsfältet för läsaren"
+
+msgid "Enables / disables the statusbar"
+msgstr "Visar / gömmer statusfältet"
+
+msgid "Refreshes current view"
+msgstr "Uppdaterar aktuellt innehåll"
+
+msgid "Generates a new project with KAppWizard"
+msgstr "Skapar ett nytt projekt med KAppWizard"
+
+msgid "Creates a new project"
+msgstr "Skapar ett nytt projekt"
+
+msgid "Opens an existing project"
+msgstr "Öppnar ett befintligt projekt"
+
+msgid "Closes the current project"
+msgstr "Stänger det aktuella projektet"
+
+msgid "Adds a file to the current project"
+msgstr "Lägger till en fil till aktuella projektet"
+
+msgid "Adds a new file to the project"
+msgstr "Lägger till en ny fil till projektet"
+
+msgid "Adds an existing file to the project"
+msgstr "Lägger till en befintlig til till projektet"
+
+msgid "Removes file from the project"
+msgstr "Tar bort en fil från projektet"
+
+msgid "Creates a new Class frame structure and files"
+msgstr "Skapar en ny klass med dess tillkommande filer"
+
+msgid "Shows the current file properties"
+msgstr "Visar egenskaper till den aktuella filen"
+
+msgid "Sets project and compiler options"
+msgstr "Redigera projektet- och kompilator-inställningar"
+
+msgid "Compiles the current sourcefile"
+msgstr "Kompilerar den aktulla källfilen"
+
+msgid "Generates the sourcefiles for the dialog"
+msgstr "Skapar källfiler för dialogrutan"
+
+msgid "Invokes make-command"
+msgstr "Utför 'make'-kommandot"
+
+msgid "Rebuilds the program"
+msgstr "Omskapar programmet"
+
+msgid "Invokes make clean and rebuild all"
+msgstr "Utför 'make clean' och omskapar allt"
+
+msgid "Stops make immediately"
+msgstr "Stoppar 'make' omedelbart"
+
+msgid "Invokes make-command and runs the program"
+msgstr "Utför 'make' och kör programmet"
+
+msgid "Invokes make and KDbg debugging the binary"
+msgstr "Utför 'make' och startar programmet i felsökningsläge"
+
+msgid "Invokes make distclean and deletes all compiled files"
+msgstr "Utför 'make distclean' och raderar alla kompilerade filer"
+
+msgid "Invokes automake and co."
+msgstr "Utför 'automake'"
+
+msgid "Invokes ./configure"
+msgstr "Utför ./configure"
+
+msgid "Creates the Project's API with KDoc"
+msgstr "Skapar projektets API med KDoc"
+
+msgid "Creates the Project's User Manual with the sgml-file"
+msgstr "Skapar projektets användarmanual med sgml-filen"
+
+msgid "Starts KDbg in the tools window"
+msgstr "Startar KDbg i verktygsfönstret"
+
+msgid "Starts KTranslator in the tools window"
+msgstr "Starat KTranslator i verktygsfältet"
+
+msgid "Starts KIconedit in the tools window"
+msgstr "Startar KIconedit i verktygsfältet"
+
+msgid "Sets the Editor's behavoir"
+msgstr "Inställningar för redigerarens uppförande"
+
+msgid "Sets the Editor's colors"
+msgstr "Inställningar för redigerarens färger"
+
+msgid "Sets the highlighting default colors"
+msgstr "Inställningar för standardfärgerna för syntaxfärgning"
+
+msgid "Sets the highlighting colors"
+msgstr "Inställningar för syntaxfärgning"
+
+msgid "Configures the Browser options"
+msgstr "Inställningar för läsaren"
+
+msgid "Configures printing options"
+msgstr "Skrivarinställningar"
+
+msgid "Configures the printer to use enscript"
+msgstr "Configurerar skrivaren till att använda 'enscript'"
+
+msgid "Configures the printer to use a2ps"
+msgstr "Configurerar skrivaren till att använda 'a2ps'"
+
+msgid "Configures KDevelop"
+msgstr "Inställningar för KDevelop"
+
+msgid "Switchs to last browser page"
+msgstr "Byter till senaste lästa sidan"
+
+msgid "Switchs to next browser page"
+msgstr "Byter till nästa sida"
+
+msgid "Searchs the selected text in the documentation"
+msgstr "Söker efter den markerade texten i dokumentationen"
+
+msgid "Lets you search individually for an expression"
+msgstr "Låter dig söka individuellt efter ett uttryck"
+
+msgid "Switch to KDevelop's User Manual"
+msgstr "Byter till KDevelop's användarmanual"
+
+msgid "Switchs to the C/C++-Reference"
+msgstr "Byter till C/C++-referensen"
+
+msgid "Switchs to the QT-Documentation"
+msgstr "Byter till QT-dokumentationen"
+
+msgid "Switchs to the KDE-Core-Documentation"
+msgstr "Byter till 'KDE-Core'-dokumentationen"
+
+msgid "Switchs to the KDE-GUI-Documentation"
+msgstr "Byter till 'KDE-GUI'-dokumentationen"
+
+msgid "Switchs to the KDE-File-Documentation"
+msgstr "Byter till 'KDE-File'-dokumentationen"
+
+msgid "Switchs to the KDE-Html-Documentation"
+msgstr "Byter till 'KDE-HTML'-dokumentationen"
+
+msgid "Switchs to the project's API-Documentation"
+msgstr "Byter till projektets API-dokumentation"
+
+msgid "Switchs to the project's User-Manual"
+msgstr "Byter till projektets användarmanual"
+
+msgid "Enter the KDevelop Homepage"
+msgstr "Öppnar KDevelops hemsida"
+
+msgid "Programmer's Hall of Fame..."
+msgstr "Programmerarnas 'Hall of Fame'..."
+
+msgid "New File..."
+msgstr "Ny fil..."
+
+msgid "Project Options"
+msgstr "Projektets inställningar"
+
+msgid "use Template"
+msgstr "använd mall"
+
+msgid "add to Project"
+msgstr "lägg till projektet"
+
+msgid "Filename:"
+msgstr "Filenamn:"
+
+msgid "Location:"
+msgstr "Plats:"
+
+msgid "lsm File - Linux Software Map"
+msgstr "lsm-fil - Linux Software Map"
+
+msgid "kdelnk-File - for the KDE-Menu"
+msgstr "kdelnk-fil - för KDE menyn"
+
+msgid "Icon (*.xpm)"
+msgstr "Ikon (*.xpm)"
+
+msgid "C/C++ Header (*.h)"
+msgstr ""
+
+msgid "C/C++ File (*.cpp,*.c,*.cc,*.C)"
+msgstr "C/C++ File (*.cpp,*.c,*.cc,*.C)"
+
+msgid "Empty Textfile"
+msgstr "Tom textfil"
+
+msgid "General"
+msgstr "Generellt"
+
+msgid "Manuals"
+msgstr "Användarhandböcker"
+
+msgid "Linux/KDE"
+msgstr ""
+
+msgid "Error..."
+msgstr "Fel..."
+
+msgid "The filename must end with .cpp,.c,.cc or .C !"
+msgstr "Filnamnet måste sluta med .cpp, .c, .cc eller .C !!"
+
+msgid "The filename must end with .h !"
+msgstr "Filnamnet måste sluta med .h !"
+
+msgid "The filename must end with .lsm !"
+msgstr "Filnamnet måste sluta med .lsm !"
+
+msgid "The filename must end with .kdelnk !"
+msgstr "Filnamnet måste sluta med .kdelnk !"
+
+msgid "The filename must end with .sgml !"
+msgstr "Filnamnet måste sluta med .sgml !"
+
+msgid "The filename must end with .xpm !"
+msgstr "Filnamnet måste sluta med .lsm !"
+
+msgid "You must enter a filename!"
+msgstr "Du måste ange ett filnamn!"
+
+msgid "You must choose a location,that is in your project-dir!"
+msgstr "Du måste ange en plats som ligger i ditt projekts bibliotek!"
+
+msgid "Files exists!"
+msgstr "Filerna finns redan!"
+
+msgid ""
+"You have added a file to the project that already exists.\n"
+"Do you want overwrite the old one?"
+msgstr ""
+"Du har lagt till en fil till projektet som redan finns.\n"
+"Vill du skriva över den gamla?"
+
+msgid "english (.sgml)"
+msgstr ""
+
+msgid "messages"
+msgstr "meddelanden"
+
+msgid "stdin/stdout"
+msgstr ""
+
+msgid "stderr"
+msgstr ""
+
+msgid "Header/Resource Files"
+msgstr "Header/Resource Filer"
+
+msgid "C/C++ Files"
+msgstr "C/C++ Filer"
+
+msgid "Documentation-Browser"
+msgstr "Dokumentationsvisare"
+
+msgid "Tools"
+msgstr "Verktyg"
+
+msgid "Search"
+msgstr "Sök"
+
+msgid "Repeat Search"
+msgstr "Sök nästa"
+
+msgid "Indent"
+msgstr "Indrag"
+
+msgid "Unindent"
+msgstr "Ta bort indrag"
+
+msgid "Goto Line"
+msgstr "Gå till rad..."
+
+msgid "Toogle Tree-View"
+msgstr "Slå av/på trädvyn"
+
+msgid "Toogle Output-View"
+msgstr "Slå av/på utdatavyn"
+
+msgid "Toogle Statusbar"
+msgstr "Slå av/på statusbar"
+
+msgid "Compile File"
+msgstr "Kompilera fil"
+
+msgid "Make"
+msgstr ""
+
+msgid "Run"
+msgstr "Kör"
+
+msgid "KDevelop/KDialogEdit"
+msgstr ""
+
+msgid "Search Marked Text"
+msgstr "Söker efter den markerade texten"
+
+msgid "Show C Sources Window"
+msgstr "Visa fönster för C-källkoder"
+
+msgid "Show Header Window"
+msgstr "Visa fönstret för huvudfiler"
+
+msgid "Show Help Window"
+msgstr "Visa hjälpfönstret"
+
+msgid "Show Tools Window"
+msgstr "Visa verktygsfönstret"
+
+msgid "Toggle Last"
+msgstr "Ej översatt (Toggle Last)"
+
+msgid "&New"
+msgstr "&Ny"
+
+msgid "Save &As..."
+msgstr "Spara &som..."
+
+msgid "Save All"
+msgstr "Spara allt"
+
+msgid "U&ndo"
+msgstr "Å&ngra"
+
+msgid "R&edo"
+msgstr "Uppr&epa"
+
+msgid "In&dent"
+msgstr "In&drag"
+
+msgid "&Unindent"
+msgstr "Ta bort indrag"
+
+msgid "&Insert File..."
+msgstr "Lägg t&ill fil..."
+
+msgid "&Search..."
+msgstr "&Sök..."
+
+msgid "&Repeat Search"
+msgstr "Sö&k nästa"
+
+msgid "&Replace..."
+msgstr "E&rsätt..."
+
+msgid "Select &All"
+msgstr "&Markera allt"
+
+msgid "Deselect All"
+msgstr "Avmarkera allt"
+
+msgid "Invert Selection"
+msgstr "Invertera markering"
+
+msgid "&Line..."
+msgstr "&Gå till rad..."
+
+msgid "&Tree-View"
+msgstr "&Trädvy"
+
+msgid "&Output-View"
+msgstr "&Utdatafönster"
+
+msgid "&Toolbar"
+msgstr "&Verktygsfält"
+
+msgid "&Browser-Toolbar"
+msgstr "Läsarens verktygsfält"
+
+msgid "Status&bar"
+msgstr "&Statusfält"
+
+msgid "&Refresh"
+msgstr "&Uppdatera"
+
+msgid "&New File..."
+msgstr "&Ny fil..."
+
+msgid "&Existing File(s)..."
+msgstr "&Befintliga fil(er)..."
+
+msgid "Application Wizard..."
+msgstr "KAppWizard"
+
+msgid "New"
+msgstr "Ny"
+
+msgid "C&lose"
+msgstr "S&täng"
+
+msgid "&New Class..."
+msgstr "&Ny klass..."
+
+msgid "&Add File(s) to Project"
+msgstr "&Lägg till fil(er) till projektet"
+
+msgid "&File Properties..."
+msgstr "&Filegenskaper"
+
+msgid "&Options..."
+msgstr "&Inställningar..."
+
+msgid "&Project"
+msgstr "&Projekt"
+
+msgid "&Make"
+msgstr ""
+
+msgid "&Rebuild all"
+msgstr "&Kompilera allt"
+
+msgid "&Clean/Rebuild all"
+msgstr "&Ta bort/omskapa allt"
+
+msgid "&Stop Build"
+msgstr "&Avbryt skapa"
+
+msgid "&Execute  "
+msgstr "&Kör  "
+
+msgid "&Debug..."
+msgstr "&Felsökning"
+
+msgid "&DistClean"
+msgstr ""
+
+msgid "&Autoconf"
+msgstr ""
+
+msgid "C&onfigure"
+msgstr ""
+
+msgid "Make &messages"
+msgstr "Skapa &meddelanden"
+
+msgid "Make &API-Doc"
+msgstr "Skapa &API-dokumentation"
+
+msgid "Make &User-Manual"
+msgstr "Skapa &användahandboken"
+
+msgid "&Build"
+msgstr "&Kompilera"
+
+msgid "&KDialogEdit"
+msgstr ""
+
+msgid "K&Dbg"
+msgstr ""
+
+msgid "K&Iconedit"
+msgstr ""
+
+msgid "K&Translator"
+msgstr ""
+
+# ckdevelop_init.cpp:495
+msgid "&Tools"
+msgstr "&Verktyg"
+
+# ckdevelop_init.cpp:322
+#, fuzzy
+msgid "&A2ps..."
+msgstr ""
+
+msgid "&Enscript..."
+msgstr ""
+
+# ckdevelop_init.cpp:501
+msgid "&Editor..."
+msgstr "&Redigeraren..."
+
+# ckdevelop_init.cpp:503
+msgid "Editor &Colors..."
+msgstr "Redigerarens &färger..."
+
+# ckdevelop_init.cpp:503
+
+msgid "Editor &Defaults..."
+msgstr "Redigerarens &standardalternativ..."
+
+# ckdevelop_init.cpp:505
+msgid "&Syntax Highlighting..."
+msgstr "&Syntaxfärgläggning..."
+
+# ckdevelop_init.cpp:510
+
+msgid "Documentation &Browser..."
+msgstr "Dokumentations visare..."
+
+msgid "Configure &Printer..."
+msgstr "Inställningar för &Skrivare..."
+
+# ckdevelop_init.cpp:570
+
+msgid "&KDevelop Setup..."
+msgstr "&KDevelop inställningar..."
+
+# ckdevelop_init.cpp:525
+msgid "&Window"
+msgstr "&Fönster"
+
+# ckdevelop_init.cpp:535 ckdevelop_init.cpp:641
+msgid "Forward"
+msgstr "Framåt"
+
+# ckdevelop_init.cpp:537
+msgid "&Search Marked Text"
+msgstr "&Söker efter den markerade texten"
+
+# ckdevelop.cpp:387
+
+msgid "Search for Help on..."
+msgstr "Söker hjälp om..."
+
+msgid "C/C++-Reference"
+msgstr "C/C++-Referens"
+
+# ckdevelop_init.cpp:540
+msgid "&Qt-Library"
+msgstr "&Qt-bibliotek"
+
+# ckdevelop_init.cpp:541
+msgid "KDE-&Core-Library"
+msgstr "KDE-&Core-bibliotek"
+
+# ckdevelop_init.cpp:543
+msgid "KDE-&GUI-Library"
+msgstr "KDE-&GUI-bibliotek"
+
+# ckdevelop_init.cpp:545
+msgid "KDE-&KFile-Library"
+msgstr "KDE-&KFile-bibliotek"
+
+# ckdevelop_init.cpp:547
+msgid "KDE-&HTML-Library"
+msgstr "KDE-&HTML-bibliotek"
+
+# ckdevelop_init.cpp:550
+msgid "Project &API-Doc"
+msgstr "Projektets &API-dokumentation"
+
+# ckdevelop_init.cpp:553
+msgid "Project &User-Manual"
+msgstr "Projektets &användarmanual"
+
+# ckdevelop.cpp:105
+
+msgid "Open Project"
+msgstr "Öppnar projekt"
+
+# ckdevelop_init.cpp:596
+msgid "Open File"
+msgstr "Öppnar fil"
+
+# ckdevelop_init.cpp:598
+msgid "Save File"
+msgstr "Sparar fil"
+
+# ckdevelop_init.cpp:425
+
+msgid "Compile file"
+msgstr "Kompilerar fil"
+
+# ckdevelop_init.cpp:462
+
+msgid "Rebuild"
+msgstr "&Omskapar allt"
+
+# ckdevelop.cpp:1575
+
+msgid "Debug program"
+msgstr "Felsöker program"
+
+# ckdevelop.cpp:1602
+
+msgid "Switch to the dialogeditor"
+msgstr "Byter till dialogredigeraren"
+
+msgid "What's this...?"
+msgstr "Vad är detta...?"
+
+# ckdevelop_init.cpp:423
+
+msgid "Classes"
+msgstr "Klasser"
+
+# ckdevelop_init.cpp:632
+msgid "choice the class"
+msgstr "välj klass"
+
+# cclassview.cpp:47 cclassview.cpp:56
+
+msgid "Methods"
+msgstr "Metoder"
+
+# ckdevelop_init.cpp:636
+msgid "choice the methods"
+msgstr "Välj metod"
+
+# ckdevelop_init.cpp:644
+msgid "Search Text in Documenation"
+msgstr "Sök efter text i dokumentationen"
+
+# ckdevelop_init.cpp:656
+msgid "xxxxxxxxxxxxxxxxxxxx"
+msgstr ""
+
+# ckdevelop_init.cpp:657
+msgid "Line: 00000 Col: 000"
+msgstr "Rad: 00000 Kol: 000"
+
+# ckdevelop_init.cpp:660
+msgid " INS "
+msgstr ""
+
+msgid "yyyyyyyyyyyyyy"
+msgstr ""
+
+# ckdevelop_init.cpp:661
+msgid "Welcome to KDevelop!"
+msgstr "Välkommen till KDevelop!"
+
+# ckdevelop_init.cpp:682
+msgid "Untitled.h"
+msgstr "Namnlös.h"
+
+# ckdevelop_init.cpp:687
+msgid "Untitled.cpp"
+msgstr "Namnlös.cpp"
+
+# ckdevelop_noslot.cpp:58
+msgid "Attention"
+msgstr "Hör upp"
+
+# ckdevelop.cpp:75
+
+msgid "Creating new project..."
+msgstr "Skapar ett nytt projekt..."
+
+# ckdevelop_project.cpp:49
+msgid "Closing project..."
+msgstr "Stänger projektet..."
+
+# ckdevelop_project.cpp:59 ckdevelop_project.cpp:101
+# ckdevelop_project.cpp:149
+msgid "Save changed project files ?"
+msgstr "Spara ändrade projektfiler ?"
+
+# ckdevelop_project.cpp:59 ckdevelop_project.cpp:101
+# ckdevelop_project.cpp:149
+msgid ""
+"The project\n"
+"\n"
+msgstr ""
+"Projektet\n"
+"\n"
+
+# ckdevelop_project.cpp:60 ckdevelop_project.cpp:102
+# ckdevelop_project.cpp:150
+
+msgid ""
+"\n"
+"\n"
+"contains changed files. Save modified file\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"innehåller ändrade filer. Vill du spara dessa filer?\n"
+
+# ckdevelop_project.cpp:61 ckdevelop_project.cpp:103
+# ckdevelop_project.cpp:151
+msgid "Save all"
+msgstr "Spara allt"
+
+# ckdevelop.cpp:230
+
+msgid "Copying files..."
+msgstr "Kopierar filer..."
+
+msgid "please wait..."
+msgstr "var god vänta..."
+
+msgid ""
+"\n"
+"The file\n"
+"\n"
+msgstr ""
+"\n"
+"Filen\n"
+"\n"
+
+msgid ""
+"You have added a new subdir to the project.\n"
+"We will regenerate all Makefiles now."
+msgstr ""
+"Du har lagt till en ny underkatalog till projektet.\n"
+"Vi kommer nu att skapa nya 'Makefiler'."
+
+# ckdevelop.cpp:888
+
+msgid "Running automake/autoconf and configure..."
+msgstr "Utför 'automake'/'autoconf' och 'configure'..."
+
+msgid ""
+"You have modified the projectversion.\n"
+"We will regenerate all Makefiles now."
+msgstr ""
+"Du har ändrat projektversionen.\n"
+"Vi kommer nu att skapa nya 'Makefiler'."
+
+# ckdevelop.cpp:105
+msgid "Opening project..."
+msgstr "Öppnar projekt..."
+
+# ckdevelop.cpp:61
+msgid "Creating a new frame application..."
+msgstr "Skapar nytt program..."
+
+# ckdevelop_init.cpp:440
+
+msgid "Project"
+msgstr "&Projekt"
+
+# cclassview.cpp:61 clogfileview.cpp:34 clogfileview.cpp:51
+
+msgid "New file..."
+msgstr "Ny fil..."
+
+# cclassview.cpp:43 cclassview.cpp:62 clogfileview.cpp:52
+
+msgid "New class..."
+msgstr "Ny klass..."
+
+# cclassview.cpp:61 clogfileview.cpp:34 clogfileview.cpp:51
+
+msgid "New Folder..."
+msgstr "Ny katalog..."
+
+# cclassview.cpp:64
+msgid "Options..."
+msgstr "Inställningar..."
+
+msgid "Class"
+msgstr "Klass"
+
+msgid "Go to definition"
+msgstr "Gå till definitionen"
+
+msgid "Add member function..."
+msgstr "Lägg till 'member'-funktion"
+
+msgid "Add member variable..."
+msgstr "Lägg till 'member'-variabel..."
+
+# cclassview.cpp:45
+
+msgid "Parent classes..."
+msgstr "Deriverade klasser..."
+
+msgid "Child classes..."
+msgstr "Barnklasser"
+
+# cclassview.cpp:43 cclassview.cpp:62 clogfileview.cpp:52
+
+msgid "Classtool..."
+msgstr "Klassverktyget..."
+
+# cclassview.cpp:45
+
+msgid "Delete class"
+msgstr "Radera klass..."
+
+# cclassview.cpp:47 cclassview.cpp:56
+
+msgid "Method"
+msgstr "Ny metod"
+
+# cclassview.cpp:41 cclassview.cpp:53
+
+msgid "Go to declaration"
+msgstr "Gå till deklaration"
+
+# ckdevelop_init.cpp:636
+
+msgid "Delete method"
+msgstr "Radera metod"
+
+msgid "Attribute"
+msgstr "Attribut"
+
+# clogfileview.cpp:36
+
+msgid "Delete attribute"
+msgstr "Radera attribut"
+
+# ceditwidget.cpp:123
+msgid "look up: "
+msgstr "slå upp: "
+
+# ckdevelop.cpp:1388
+
+msgid "KDevelop Setup"
+msgstr "KDevelop inställningar"
+
+# ckdevelop.cpp:1574
+
+msgid "Select Make-Command:"
+msgstr "Välj 'make'-kommando:"
+
+# ckdevelop.cpp:1574
+
+msgid "Make-Command"
+msgstr "'make'-kommando"
+
+msgid ""
+"Make-Command\n"
+"\n"
+"Select your system's make-command.\n"
+"Usually, this is make, FreeBSD users\n"
+"may use gmake. Mind that you can also\n"
+"add option parameters to your make-binary\n"
+"as well."
+msgstr ""
+"Make-Commando\n"
+"\n"
+"Välj ditt systems 'make'-kommando.\n"
+"Vanligtvis är detta make. FreeBSD användare\n"
+"kan använda 'gmake'. Tänk på att du kan ange\n"
+"indataparametrar till ditt 'make'-program."
+
+msgid "Select Autosave time-interval:"
+msgstr "Välj tidsintervall för autospara:"
+
+msgid "3 min"
+msgstr ""
+
+msgid "5 min"
+msgstr ""
+
+msgid "15 min"
+msgstr ""
+
+msgid "30 min"
+msgstr ""
+
+msgid "enable Autosave"
+msgstr "slå på autospara"
+
+msgid "Autosave"
+msgstr "Autospara"
+
+msgid ""
+"Autosave\n"
+"\n"
+"If autosave is enabled, your currently\n"
+"changed files will be saved after the\n"
+"time-interval selected times out.\n"
+"\n"
+"Please select your timeout-value.\n"
+"Available are: 3 minutes, 5 minutes,\n"
+"15 minutes and 30 minutes."
+msgstr ""
+"Autospara\n"
+"\n"
+"Om autospara är påslaget kommer de för-\n"
+"tillfället ändrade filerna att sparas efter\n"
+"det tidsintervall du angett.\n"
+"\n"
+"Var god ange ett tidsintervall.\n"
+"Befinliga är: 3 minuter, 5 minuter,\n"
+"15 minuter och 30 minuter."
+
+msgid "use Class View as default"
+msgstr ""
+
+msgid ""
+"use Class View as default\n"
+"\n"
+"If this is enabled, KDevelop\n"
+"will automatically switch to\n"
+"the Class Viewer when switching.\n"
+"When disabled, KDevelop will\n"
+"use Logical File Viewer for\n"
+"autoswitching."
+msgstr ""
+"använd klassvisaren som standard\n"
+"\n"
+"Om detta används kommer KDevelop\n"
+"automatiskt växla till klassvisaren.\n"
+"Om den ej är valt kommer KDevelop att\n"
+"använda logiska filvisaren för automatiskt\n"
+"byte."
+
+msgid "enable Autoswitch"
+msgstr "används automatiskt byte"
+
+msgid "Autoswitch"
+msgstr "Automatiskt byte"
+
+msgid ""
+"Autoswitch\n"
+"\n"
+"If autoswitch is enabled, KDevelop\n"
+"will open windows in the working\n"
+"view automatically according to\n"
+"most needed functionality.\n"
+"\n"
+"Disableing autoswitch means you\n"
+"will have to switch to windows\n"
+"yourself, including turning on and\n"
+"off the outputwindow."
+msgstr ""
+"Automatiskt byte\n"
+"\n"
+"Om automatiskt byte är på kommer KDevelop\n"
+"automatiskt att öppna de fönster i arbetsvyn\n"
+"som ger mest funktionalitet.\n"
+"\n"
+"Slår du av automatiskt byte kommer du\n"
+"att få byta fönster själv, inkluderat\n"
+"visa / göm utdatafönstret."
+
+msgid "Startup Logo"
+msgstr "Uppstartslogotyp"
+
+msgid ""
+"Startup Logo\n"
+"\n"
+"If Startup Logo is enabled, KDevelop will show the\n"
+"logo picture while it is starting."
+msgstr ""
+"Uppstartslogotyp\n"
+"\n"
+"Om uppstartslogotyp är påslagen kommer KDevelop att visa\n"
+"logotypen under uppstart."
+
+msgid "Tip of the Day"
+msgstr "Dagens tips"
+
+msgid ""
+"Tip of the Day\n"
+"\n"
+"If Tip of the Day is enabled, KDevelop will show the\n"
+"Tip of the Day every time it starts."
+msgstr ""
+"Dagens tips\n"
+"\n"
+"Om dagens tips är påslagen kommer KDevelop att visa\n"
+"dagens tips varje gång den startas."
+
+msgid "Load last project"
+msgstr "Ladda senaste projektet"
+
+msgid ""
+"Load last project\n"
+"\n"
+"If Load last project is enabled, KDevelop will load\n"
+"the last project used."
+msgstr ""
+"Ladda senaste projektet\n"
+"\n"
+"Om ladda senaste projektet är påslagen kommer KDevelop att ladda\n"
+"det senaste använda projektet."
+
+
+msgid "Startup"
+msgstr "Uppstart"
+
+msgid ""
+"Startup\n"
+"\n"
+"The Startup group offers options for\n"
+"starting KDevelop"
+msgstr ""
+"Uppstart\n"
+"\n"
+"Uppstartsdialogen ger dig möjlighet att\n"
+"ändra inställningar under KDevelops uppstart"
+
+# ckdevsetupdlg.cpp:40
+
+msgid ""
+"Enter the path to your QT and KDE-Libs\n"
+"Documentation for the Documentation Browser.\n"
+"QT usually comes with complete Documentation\n"
+"whereas for KDE you can create the Documentation\n"
+"easiely by pressing the Update button below."
+msgstr ""
+"Ange sökvägen till ditt QT och KDE-Libs\n"
+"dokumentation för dokumentationsvisaren.\n"
+"QT kommer i regel med fullständig dokumentation\n"
+"medans för KDE kan du enkelt skapa dokumenationen\n"
+"genom att trycka Uppdatera knappen nedan."
+
+# ckdevelop_init.cpp:540
+
+msgid "Qt-Library-Doc:"
+msgstr ""
+
+# ckdevsetupdlg.cpp:69
+msgid ""
+"Enter the path to your QT-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"Usually the QT-Documentation is\n"
+"located in <i><blue>$QTDIR/html</i>"
+msgstr ""
+"Ange sökvägen till din QT-dokumentation\n"
+"här. Du kan enklare hitta sökvägen genom\n"
+"att trycka på knappen till höger och\n"
+"bläddra bland biblioteken.\n"
+"\n"
+"Vanligtvis finns QT-dokumentation\n"
+"i <i><blue>$QTDIR/html</i>"
+
+msgid "KDE-Libraries-Doc:"
+msgstr ""
+
+# ckdevsetupdlg.cpp:96
+
+msgid ""
+"Enter the path to your KDE-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"If you have no kdelibs Documentation installed,\n"
+"you can create it by selecting the Update button\n"
+"below."
+msgstr ""
+"Ange sökvägen till din KDE-dokumentation\n"
+"här. Du kan enklare hitta sökvägen genom\n"
+"att trycka på knappen till höger och\n"
+"bläddra bland biblioteken.\n"
+"\n"
+"Om du inte har kdelibs dokumentationen installerad,\n"
+"kan du skapa den genom att trycka på Uppdatera knappen\n"
+"nedan."
+
+# ckdevelop_init.cpp:513
+
+msgid "Update KDE-Documentation :"
+msgstr "Uppdatera KDE-dokumentationen :"
+
+# ckdevelop_init.cpp:355
+
+msgid "Update..."
+msgstr "Uppdatera..."
+
+msgid ""
+"Update KDE-Documentation\n"
+"\n"
+"This lets you create or update the\n"
+"HTML-documentation of the KDE-libs.\n"
+"Mind that you have kdoc installed to\n"
+"use this function. Also, the kdelibs\n"
+"sources have to be available to create\n"
+"the documentation, as well as the \n"
+"Qt-Documentation path has to be set to\n"
+"cross-reference the KDE-Documentation\n"
+"with the Qt-classes."
+msgstr ""
+"Uppdatera KDE-Dokumentationen\n"
+"\n"
+"Detta låter dig skapa eller uppdatera\n"
+"HTML-dokumentationen av KDE-libs.\n"
+"Kom ihåg att du måste ha kdoc installerad\n"
+"för att kunna använda denna funktion. Du\n"
+"måste även ha kdelibs källkod för att skapa\n"
+"dokumenationen samt ha sökvägen till\n"
+"Qt-dokumentationen satt till korsreferens\n"
+"till KDE-dokumentationen med Qt-klasserna."
+
+# ckdevelop.cpp:645
+
+msgid "Create Search Database :"
+msgstr "Skapa sökdatabas :"
+
+# ckappwizard.cpp:42
+
+msgid "Create..."
+msgstr "Skapa..."
+
+msgid ""
+"Create Search Database\n"
+"\n"
+"This will create a search database for glimpse\n"
+"which will be used to look up marked text in\n"
+"the documentation. We recommend updating the\n"
+"database each time you've changed the documentation\n"
+"e.g. after a kdelibs-update or installing a new\n"
+"Qt-library version."
+msgstr ""
+"Skapa sökdatabas\n"
+"Detta kommer att skapa en sökdatabas för 'glimpse'\n"
+"som kommer att användas då du söker markerad text i\n"
+"dokumentationen. Vi rekommenderar att du uppdaterar\n"
+"databasen varje gång du förändat dokumentationen t.ex.\n"
+"efter en kdelibs-uppdatering eller vid installation\n"
+"av en ny version av Qt-biblioteket."
+
+
+# cprjoptionsdlg.cpp:704
+
+msgid "Directories"
+msgstr "Bibliotek"
+
+msgid "Keys"
+msgstr "Tangenter"
+
+# cprjoptionsdlg.cpp:849
+
+msgid "General Options"
+msgstr "Generella inställningar"
+
+msgid "The selected path is not correct!"
+msgstr "Den valda sökvägen är inte rätt!"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"Qt-library documentation. Please choose the\n"
+"correct path."
+msgstr ""
+"Den valda sökvägen leder inte till\n"
+"dokumentationen av Qt-biblioteket. Välj\n"
+"en annan sökväg."
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Please choose the\n"
+"correct path or choose 'Update' to create a new\n"
+"documentation"
+msgstr ""
+"Den valda sökvägen leder inte till\n"
+"dokumentationen av KDE-biblioteket. Välj\n"
+"en annan sökväg eller tryck 'Uppdater' för att skapa\n"
+"en ny dokumentation."
+
+# cprjoptionsdlg.cpp:39
+msgid ""
+"This dialog is for editing\n"
+"your project options."
+msgstr ""
+"Denna dialogruta är till för\n"
+"att redigera ditt projekts inställningar."
+
+# ckappwizard.cpp:125 cprjoptionsdlg.cpp:44
+msgid "Projectname:"
+msgstr "Projektets namn:"
+
+# cprjoptionsdlg.cpp:50
+msgid "Set the project's name here."
+msgstr "Skriv ditt projekts namn här."
+
+# cprjoptionsdlg.cpp:56
+msgid "Version:"
+msgstr ""
+
+# cprjoptionsdlg.cpp:62
+msgid ""
+"Set your project's version\n"
+"number here."
+msgstr ""
+"Skriv ditt projekts versionsnummer\n"
+"här."
+
+# ckappwizard.cpp:133 cprjoptionsdlg.cpp:69
+msgid "Author:"
+msgstr "Författare:"
+
+# cprjoptionsdlg.cpp:75
+msgid "Insert your name here"
+msgstr "Skriv in ditt namn här:"
+
+# ckappwizard.cpp:135 cprjoptionsdlg.cpp:82
+msgid "Email:"
+msgstr "E-Post"
+
+# cprjoptionsdlg.cpp:88
+msgid "Insert your email-address here"
+msgstr "Skriv in din e-post adress här"
+
+# cprjoptionsdlg.cpp:95
+msgid "Handbook:"
+msgstr "Användarmanual:"
+
+# cprjoptionsdlg.cpp:101
+msgid ""
+"Insert your Handbook-sgml-file name.\n"
+"Usually this is index.sgml"
+msgstr ""
+"Skriv in din användarmanual-sqml fil.\n"
+"Vanligtvis är det index.sqml"
+
+# cprjoptionsdlg.cpp:108
+msgid "Short Information:"
+msgstr "Kort information:"
+
+# cprjoptionsdlg.cpp:118
+msgid ""
+"Insert some useful information about\n"
+"your project here. This is only for the\n"
+"information in the project file-<b>not</n>\n"
+"for README etc."
+msgstr ""
+"Skriv in en kort information om\n"
+"ditt projekt här. Detta är bara \n"
+"till för projektfilen-<b>inte</n>\n"
+"för README etc."
+
+# cprjoptionsdlg.cpp:129
+msgid "Set your Compiler options here"
+msgstr "Ställ in dina kompilatorinställningar här"
+
+# cprjoptionsdlg.cpp:134
+msgid "Target"
+msgstr "Processor"
+
+# cprjoptionsdlg.cpp:135
+msgid ""
+"Set your target options here\n"
+"by specifying your machine type\n"
+"and GCC optimization level (0-3)"
+msgstr ""
+"Sätt dina processortyper här\n"
+"genom att välja maskintyp\n"
+"och GCC-optimeringsgrad (0-3)"
+
+# cprjoptionsdlg.cpp:142
+msgid "Target Machine"
+msgstr "Tilltänkt maskin"
+
+# cprjoptionsdlg.cpp:146
+msgid "your machine"
+msgstr "din maskin"
+
+# cprjoptionsdlg.cpp:147
+msgid "i386v"
+msgstr ""
+
+# cprjoptionsdlg.cpp:156
+msgid ""
+"Specify the machine type for your program.\n"
+"Other machine types than your machine is\n"
+"usually only needed for precompiled\n"
+"distribution packages."
+msgstr ""
+"Specifiera maskintypen för ditt program.\n"
+"Andra maskintyper än din maskin behövs\n"
+"vanligtvis bara för förkompilerade\n"
+"distributitioner."
+
+# cprjoptionsdlg.cpp:163
+msgid "only syntax check"
+msgstr "bara syntaxkontroll"
+
+# cprjoptionsdlg.cpp:165
+msgid ""
+"This option sets the compiler\n"
+"to <i>-fsyntax-only</i>\n"
+"which lets you check your code for\n"
+"syntax-errors but doesn't do anything\n"
+"else beyond that."
+msgstr ""
+"Detta alternativ sätter kompilatorn\n"
+"till <i>-fsyntax-only</i>\n"
+"d.v.s kontrollerar din kod för\n"
+"syntaxfel men inget annat utöver det."
+
+# cprjoptionsdlg.cpp:173
+msgid "optimize"
+msgstr "optimering"
+
+# cprjoptionsdlg.cpp:186
+msgid "Optimization-level"
+msgstr "Optimerings grad"
+
+# cprjoptionsdlg.cpp:189
+msgid ""
+"Set the -O option for the GCC\n"
+"here. Turning off optimization\n"
+"equals -O0. The higher the level\n"
+"the more time you need to compile\n"
+"but increases program speed."
+msgstr ""
+"Sätt -O alternativet för GCC\n"
+"här. Skriv -O0 för att stänga\n"
+"av optimeringen. Dessto högre\n"
+"grad dessto längre tid tar det\n"
+"att kompilera programmet."
+
+# cprjoptionsdlg.cpp:198
+msgid "Debugging"
+msgstr "Felsökning"
+
+# cprjoptionsdlg.cpp:199
+msgid "Set your debugging options here."
+msgstr "Sätt dina felsökningsalternativ här."
+
+# cprjoptionsdlg.cpp:203
+msgid "generate debugging information"
+msgstr "skapa felsökningsinformation"
+
+# cprjoptionsdlg.cpp:209
+msgid ""
+"Checking this turns on the -g flag\n"
+"to GCC to generate debugging information."
+msgstr ""
+"Välj denna för att använda -g flaggan\n"
+"till GCC för att skapa felsökningsinformation."
+
+# cprjoptionsdlg.cpp:222
+msgid "Debug-level"
+msgstr "Felsökningsgrad"
+
+# cprjoptionsdlg.cpp:224
+msgid ""
+"Set the debugging level here.\n"
+"You can choose from level 1-3 which\n"
+"sets option -g1 to -g3 debugging\n"
+"level."
+msgstr ""
+"Sätt felsökningsgraden här.\n"
+"Du kan välja mellan grad 1-3, som\n"
+"sätter alternativet -g1 till -g3\n"
+"felsökningsgrad hos GCC."
+
+# cprjoptionsdlg.cpp:232
+msgid "generate extra information for gprof"
+msgstr "skapar extra information till gprof"
+
+# cprjoptionsdlg.cpp:238
+msgid ""
+"Generate extra code to write profile\n"
+"information for the analysis program\n"
+"<i>gprof</i>."
+msgstr ""
+"Skapar eftra kod för att skriva profil-\n"
+"information för analysprogrammet\n"
+"<i>gprof</i>."
+
+# cprjoptionsdlg.cpp:244
+msgid "store temporary intermediate files"
+msgstr "lagra temporära mellanfiler"
+
+# cprjoptionsdlg.cpp:250
+msgid ""
+"Store the usually temporary intermediate\n"
+"files in the current directory. This means\n"
+"compiling a file <i>foo.c</i> will produce\n"
+"the files <i>foo.o, foo.i</i> and<i>foo.s"
+msgstr ""
+"Lagrar den vanliga temporära mellanliggande\n"
+"filerna i det aktuella biblioteket. Detta\n"
+"betyder att kompilering av filen <i>foo.c</i>\n"
+"kommer att producera filerna <i>foo.o, foo.i</i>\n"
+"och <i>foo.s"
+
+# cprjoptionsdlg.cpp:258
+msgid "additional options:"
+msgstr "ytterligare alternativ:"
+
+# cprjoptionsdlg.cpp:264
+msgid ""
+"Insert other GCC-options here\n"
+"to invoke GCC with by setting the\n"
+"CXXFLAGS-environment variable."
+msgstr ""
+"Insätt ytterligare GCC-alternativ här\n"
+"för att starta GCC med genom att\n"
+"ange CXXFLAGS-miljövariabeln."
+
+# cprjoptionsdlg.cpp:268
+msgid "Compiler Options"
+msgstr "Kompilatoralternativ"
+
+# cprjoptionsdlg.cpp:274
+msgid ""
+"Set the Compiler warnings here by checking\n"
+"the -W options you want to use."
+msgstr ""
+"Sätt de kompilatorvarningar du vill ha genom\n"
+"att välja de -W alternativ du vill använda."
+
+# cprjoptionsdlg.cpp:285
+msgid ""
+"Compile with -Wall. This option\n"
+"includes several different warning\n"
+"parameters which are recommended to\n"
+"turn on."
+msgstr ""
+"Kompilera med -Wall. Detta alternativ\n"
+"innefattar flera olika varningsparametrar\n"
+"som rekommenderas att använda."
+
+# cprjoptionsdlg.cpp:298
+msgid ""
+"Compile with -W. This option\n"
+"sets options not included in -Wall\n"
+"which are very specific. Please read\n"
+"GCC-Info for more information."
+msgstr ""
+"Kompilera med -W. Detta alternativ\n"
+"ställer specifika alternativ som inte\n"
+"är inkluderade i -Wall. Var vänlig läs\n"
+"i GCC-info för vidare information."
+
+# cprjoptionsdlg.cpp:311
+msgid ""
+"Warn about certain constructs\n"
+"that behave differently in traditional\n"
+"and ANSI C."
+msgstr ""
+"Varna om särskilda kontruktioner\n"
+"som uppträder olika för både traditionellt\n"
+"och ANSI C."
+
+# cprjoptionsdlg.cpp:324
+msgid ""
+"Warn if an undefined identifier is\n"
+"evaluated in an `#if' directive"
+msgstr ""
+"Varna om en oidentifierad identifierare är\n"
+"utvärderas i en '#if' sats"
+
+# cprjoptionsdlg.cpp:335
+msgid ""
+"Warn whenever a local variable\n"
+"shadows another local variable."
+msgstr ""
+"Varna närhelst en lokal variabel\n"
+"överlappar en annan lokal variabel."
+
+# cprjoptionsdlg.cpp:346
+msgid ""
+"Warn whenever two distinct\n"
+"identifiers match in the first LEN\n"
+"characters. This may help you prepare\n"
+"a program that will compile with\n"
+"certain obsolete, brain-damaged\n"
+"compilers."
+msgstr ""
+"Varnar närhelst två åtskilda\n"
+"identifierare matchar i den första LEN-\n"
+"bokstaven. Detta kan hjälpa dig att förebereda\n"
+"ett program som kommer att kompileras med\n"
+"vissa förlegade, hjärnskadade\n"
+"kompilatorer."
+
+# cprjoptionsdlg.cpp:361
+msgid ""
+"Warn whenever an object\n"
+"of larger than LEN bytes \n"
+"is defined."
+msgstr ""
+"Varna närhelst ett objekt\n"
+"större än LEN-bytes \n"
+"är definierad."
+
+# cprjoptionsdlg.cpp:374
+msgid ""
+"Warn about anything that\n"
+"depends on the <i>size of</i> a\n"
+"function type or of <i>void</i>.\n"
+"GNU C assigns these types a size of 1,\n"
+"for convenience in calculations with\n"
+"<i>void *</i> pointers and pointers\n"
+"to functions."
+msgstr ""
+"Varna om allt som\n"
+"beror på <i>size of</i> en\n"
+"funktionstyp eller av <i>void</i>.\n"
+"GNU C tilldelar dessa typer storlek 1,\n"
+"för bekvämligheten när man beräknar med\n"
+"<i>void *</i> pekare och pekare\n"
+"till funktioner."
+
+# cprjoptionsdlg.cpp:391
+msgid ""
+"Warn whenever a function call is\n"
+"cast to a non-matching type. For\n"
+"example, warn if <i>int malloc()</i>\n"
+"is cast to <i>anything *."
+msgstr ""
+"Varna närhelst ett funktionsanrop är\n"
+"castad till en icke-matchande typ. T.ex.\n"
+"varna om <i>int malloc()</i>\n"
+"är castad till <i>någonting *</i>."
+
+# cprjoptionsdlg.cpp:405
+msgid ""
+"Warn whenever a pointer is cast\n"
+"so as to remove a type qualifier\n"
+"from the target type. For example,\n"
+"warn if a <i>const char *</i> is\n"
+"cast to an ordinary <i>char *."
+msgstr ""
+"Varna närhelst en pekare är castad\n"
+"för att ta bort en typkvalifikator\n"
+"från måltypen. T.ex.,\n"
+"varna om en <i>const char *</i> är\n"
+"castad till en vanlig <i>char *</i>."
+
+msgid ""
+"Warn whenever a pointer is cast such\n"
+"that the required alignment of the target\n"
+"is increased. For example, warn if a\n"
+"<i>char *</i> is cast to an <i>int *</i> on\n"
+"machines where integers can only be accessed\n"
+"at two- or four-byte boundaries."
+msgstr ""
+"Varna närhelst en pekare är castad så att\n"
+"den begärda uppställningen av målet ökas.\n"
+"T.ex., varna om en\n"
+"<i>char *</i> är castad till en <i>int *</i> på\n"
+"en dator där heltalen enbart kan fås tillträde\n"
+"vid två- eller fyra-bytes begränsningar."
+
+# cprjoptionsdlg.cpp:437
+msgid ""
+"Give string constants the type <i>const char[LENGTH]</i>\n"
+"so that copying the address of one into a non-<i>const\n"
+"char *</i> pointer will get a warning. These warnings\n"
+"will help you find at compile time code that can try to\n"
+"write into a string constant, but only if you have been\n"
+"very careful about using <i>const</i> in declarations\n"
+"and prototypes. Otherwise, it will just be a nuisance;\n"
+"this is why we did not make <i>-Wall</i> request these\n"
+"warnings."
+msgstr ""
+"Ger strängkonstanter typen <i>const char[LENGTH]</i>"
+"så att kopiering av adressen till en annan icke-<i>const\n"
+"char *</i> pekare ger en varning. Dessa varningar\n"
+"hjälper dig vid kompilering att hitta kod som försöker\n"
+"skriva till en strängkonstant, men enbart om du har varit\n"
+"mycket försiktig med att använda <i>const</i> i deklarationer\n"
+"och prototyper. Annars, kommer detta bara att vara till besvär;\n"
+"detta är varför vi inte låter <i>-Wall</i> anropa dessa\n"
+"varningar."
+
+# cprjoptionsdlg.cpp:457
+msgid ""
+"Warn if a prototype causes a type conversion that is different\n"
+"from what would happen to the same argument in the absence\n"
+"of a prototype. This includes conversions of fixed point to\n"
+"floating and vice versa, and conversions changing the width\n"
+"or signedness of a fixed point argument except when the same\n"
+"as the default promotion.  Also warn if a negative integer\n"
+"constant expression is implicitly converted to an unsigned\n"
+"type."
+msgstr ""
+"Varna om en prototyp orsakar en typkonvertering som skiljer sig\n"
+"från vad som skulle hända om samma argument är frånvarande\n"
+"en prototyp. Detta inkluderar konverteringar av fasta decimaltecken till\n"
+"flytande och vice versa och konverteringar som ändrar vidden\n"
+"eller tecknet av ett fast decimaltecken-argument förrutom när den är\n"
+"samma som standardvalet. Varna också om ett konstant negativt heltals\n"
+"uttryck är implicit konverterad till en osignerad typ."
+
+# cprjoptionsdlg.cpp:476
+msgid ""
+"Warn when a comparison between signed and unsigned values\n"
+"could produce an incorrect result when the signed value\n"
+"is converted to unsigned."
+msgstr ""
+"Varna när en jämförelse mellan 'signed' och 'unsigned'\n"
+"skulle kunna skapa ett oriktigt resultat då den 'signed'-\n"
+"värder är konverterat till 'unsigned'."
+
+# cprjoptionsdlg.cpp:490
+msgid ""
+"Warn if any functions that return structures or unions are\n"
+"defined or called. (In languages where you can return an\n"
+"array, this also elicits a warning.)"
+msgstr ""
+"Varna om varje funktion som returnerar strukturer eller unioner\n"
+"är definierade eller anropade. (I språk som du kan returnera en\n"
+"array, detta framtvingar också en varning.)"
+
+# cprjoptionsdlg.cpp:504
+msgid ""
+"Warn if a function is declared or defined without specifying\n"
+"the argument types. (An old-style function definition is\n"
+"permitted without a warning if preceded by a declaration\n"
+"which specifies the argument types.)"
+msgstr ""
+"Varna om en funktion är deklarerad eller definierad utan att\n"
+"ange argumenttyper. (En gammalmodig funktionsdefinition är\n"
+"tillåten utan en varning om den föregås av en deklaration\n"
+"som specificerar argumenttyperna.)"
+
+# cprjoptionsdlg.cpp:519
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"prototype declaration. This warning is issued even if\n"
+"the definition itself provides a prototype. The aim\n"
+"is to detect global functions that fail to be declared\n"
+"in header files."
+msgstr ""
+"Varna om en global funktion är definerad utan en föregående\n"
+"prototypdeklaration. Varningen utropas även om definitionen\n"
+"själv är en prototyp. Ideen är att hitta globala funktioner\n"
+"som inte kan deklareras i 'header'-filerna."
+
+# cprjoptionsdlg.cpp:535
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"declaration. Do so even if the definition itself pro-\n"
+"vides a prototype. Use this option to detect global\n"
+"functions that are not declared in header files."
+msgstr ""
+"Varna om en global funktion är definierad utan en\n"
+"föregående deklaration. Varna även om definitionen själv\n"
+"förser med en protoyp. Använd detta alternativ för att hitta\n"
+"globala funktioner som inte är deklarerade i header-filer."
+
+# cprjoptionsdlg.cpp:550
+msgid ""
+"Warn if anything is declared more than once in the same scope\n"
+"even in cases where multiple declaration is valid and\n"
+"changes nothing."
+msgstr ""
+"Varna om något deklareras fler än en gång i samma område\n"
+"även där multipla deklarationer är giltiga och inte\n"
+"förändrar någonting."
+
+# cprjoptionsdlg.cpp:564
+msgid ""
+"Warn if an <i>extern</i> declaration is\n"
+"encountered within a function."
+msgstr ""
+"Varna om en <i>extern</i> deklaration\n"
+"påträffas i en funktion."
+
+# cprjoptionsdlg.cpp:577
+msgid ""
+"Warn if a function can not be inlined, and either\n"
+"it was declared as inline, or else the\n"
+"<i>-finline-functions</i> option was given."
+msgstr ""
+"Varan om en funktion inte kan bli 'inlined', eller\n"
+"om den var deklaread som 'inline', eller om\n"
+"<i>-finline-functions</i> alternativet var angiven."
+
+# cprjoptionsdlg.cpp:591
+msgid ""
+"Warn if an old-style (C-style) cast is used\n"
+"within a program"
+msgstr "Advar hvis 'old-style' (C-stil) cating er brugti programmet"
+"Varna om en 'old-style' (C-stil) cast används"
+"i ett program."
+
+# cprjoptionsdlg.cpp:604
+msgid ""
+"Warn when a derived class function declaration may be an\n"
+"error in defining a virtual function (C++ only). In\n"
+"a derived class, the definitions of virtual functions\n"
+"must match the type signature of a virtual function\n"
+"declared in the base class. With this option, the\n"
+"compiler warns when you define a function with the same\n"
+"as a virtual function, but with a type signature that\n"
+"does not match any declarations from the base class."
+msgstr ""
+"Varna när en deriverad klassdeklaration kan bli ett\n"
+"fel då man definierar en virtuell funktion (gäller\n"
+"endast C++). I en deriverad klass måste definitionen\n"
+"virtuella funktioner stämma överrens med typsignaturen\n"
+"av en virtuell funktion deklaread i basklassen. Med detta\n"
+"alternativ kommer kompilatorn att varna när du definierar\n"
+"en funktion med samma namn som en virtuell funktion med\n"
+"en typsignatur som inte stämmer överrens med någon deklaration\n"
+"från basklassen."
+
+# cprjoptionsdlg.cpp:623
+msgid ""
+"Warn when g++'s synthesis behavoir does\n"
+"not match that of cfront."
+msgstr ""
+"Varna närhälst g++'s syntax inte överrens\n"
+"stämmer med cfron's."
+
+# cprjoptionsdlg.cpp:629
+msgid "make all Warnings into errors"
+msgstr "Behandla alla varningar som fel"
+
+# cprjoptionsdlg.cpp:636
+msgid "Make all warnings into errors."
+msgstr "Behandla alla varningar som fel."
+
+# cprjoptionsdlg.cpp:638
+msgid "Compiler Warnings"
+msgstr "Kompilatorvarningar"
+
+# cprjoptionsdlg.cpp:644
+msgid ""
+"Set the Linker options and choose the\n"
+"libraries to add to your project."
+msgstr ""
+"Sätter länkningsalternativ och väljer\n"
+"de bibliotek som skall läggas till ditt projekt."
+
+# cprjoptionsdlg.cpp:653
+msgid "library flags"
+msgstr "biblioteksflaggor"
+
+# cprjoptionsdlg.cpp:654
+msgid "Set your library flags here."
+msgstr "Sätt dina biblioteksflaggor här."
+
+msgid "remove all symbol table and relocation information from the executable"
+msgstr "ta bort alla symboltabeller och omskapa information från den körbara filen"
+
+# cprjoptionsdlg.cpp:667
+msgid ""
+"If you want to use a debugger, you\n"
+"should keep those informations in the object files.\n"
+"It's useless to let the compiler generate debug\n"
+"informations and to remove it with this option."
+msgstr ""
+"Om du vill använda en felsökare, skall\n"
+"du lagra informationen i objektfilerna.\n"
+"Det är meningslöst att du låter kompilatorn\n"
+"skapa felsökningsinformation och sedan ta\n"
+"bort dem med detta alternativ."
+
+msgid "prevent using shared libraries"
+msgstr "hindrar dig från att använda delade bibliotek"
+
+# cprjoptionsdlg.cpp:683
+msgid ""
+"On systems that support dynamic linking,\n"
+"this prevents linking with the shared libraries.\n"
+"On other systems, this option has no effect."
+msgstr ""
+"På system som stödjer dynamisk länkning,\n"
+"kommer detta att hindra länkning med delade bibliotek.\n"
+"På ändra system har detta alternativ ingen effekt."
+
+# cprjoptionsdlg.cpp:690
+msgid "additional flags:"
+msgstr "ytterligare flaggor:"
+
+# cprjoptionsdlg.cpp:697
+msgid ""
+"Insert other linker options here\n"
+"to invoke the linker with by setting the\n"
+"LDFLAGS-environment variable."
+msgstr ""
+"Lägg till andra länkningsalternativ här\n"
+"för att utföras under länkning genom att sätta\n"
+"LDFLAGS-miljövaribalen."
+
+# cprjoptionsdlg.cpp:704
+msgid "libraries"
+msgstr "bibliotek"
+
+# cprjoptionsdlg.cpp:705
+msgid "Choose your libraries here."
+msgstr "Välj ditt bibliotek här."
+
+# cprjoptionsdlg.cpp:718
+msgid "X11 basics\n"
+msgstr "X11 standards\n"
+
+# cprjoptionsdlg.cpp:731
+msgid "X11 extensions\n"
+msgstr "X11 utvidgningar\n"
+
+# cprjoptionsdlg.cpp:744
+msgid "Qt"
+msgstr ""
+
+# cprjoptionsdlg.cpp:757
+msgid "KDE basics"
+msgstr "KDE grundmodul"
+
+# cprjoptionsdlg.cpp:770
+msgid "KDE user interface"
+msgstr "KDE användarinterface"
+
+# cprjoptionsdlg.cpp:783
+msgid "KDE HTML widget"
+msgstr "KDE HTML gränssnittselement"
+
+# cprjoptionsdlg.cpp:796
+msgid "KDE kfm functionality"
+msgstr "KDE kfm funktioner"
+
+# cprjoptionsdlg.cpp:809
+msgid "KDE file handling"
+msgstr "KDE filhantering"
+
+# cprjoptionsdlg.cpp:822
+msgid "KDE Spell checking"
+msgstr "KDE rättstavningskontroll"
+
+# cprjoptionsdlg.cpp:835
+msgid "KDE addressbook"
+msgstr "KDE adressbok"
+
+# cprjoptionsdlg.cpp:840
+msgid "additional libraries:"
+msgstr "ytterligare biblioteker:"
+
+# cprjoptionsdlg.cpp:847
+msgid "Add additional libraries here."
+msgstr "Lägg till ytterligare bibliotek här."
+
+# cprjoptionsdlg.cpp:849
+msgid "Linker Options"
+msgstr "Läkningsalternativ"
+
+# ckappwizard.cpp:79
+
+msgid "Application Wizard"
+msgstr "Applikationskaparen"
+
+# ckappwizard.cpp:40
+msgid "exit the CKAppWizard"
+msgstr "Avsluta CKappWizard"
+
+# ckappwizard.cpp:42
+msgid "Create"
+msgstr "Skapa"
+
+# ckappwizard.cpp:45
+msgid "creating the project"
+msgstr "skapar projektet"
+
+# ckappwizard.cpp:50
+msgid "set all changes back"
+msgstr "ångrar alla ändringar"
+
+# ckappwizard.cpp:61
+msgid "KWizard"
+msgstr ""
+
+# ckappwizard.cpp:79
+msgid "Application"
+msgstr "Applikation"
+
+# ckappwizard.cpp:81
+msgid "KDE-Application"
+msgstr "KDE-applikation"
+
+# ckappwizard.cpp:85
+msgid ""
+"Select this to create a complete framework for\n"
+"your new application. It will contain three main\n"
+"classes: one for the mainwindow, one for the\n"
+"main view and one for the application's documents\n"
+"The main window offers a menubar, toolbar and\n"
+"a statusbar including statusbar help and status\n"
+"signaling."
+msgstr ""
+"Välj detta för att skapa en komplett framework för\n"
+"din nya applikation. Den kommer att innehålla tre huvud-\n"
+"klasser: en för huvudfönstret, en för huvudvyn\n"
+"och en för applikationens dokument.\n"
+"Huvudfönstret har ett menyfält, verktygsfält och\n"
+"ett statusfält med statusfält-hjälp och statusfält\n"
+"signalering."
+
+# ckappwizard.cpp:94
+msgid "KDE-Mini-Application"
+msgstr "KDE-mini-applikation"
+
+# ckappwizard.cpp:98
+msgid ""
+"Select this to create a mini-Application.\n"
+"This will only contain the main widget\n"
+"class which inherits QWidget until now."
+msgstr ""
+"Välj detta för att skapa en mini-applikation.\n"
+"Denna kommer bara att innehålla det gränssnitt\n"
+"som för tillfället bara ärver QWidget."
+
+# ckappwizard.cpp:79
+
+msgid "Qt-Application"
+msgstr "Qt-Applikation"
+
+# ckappwizard.cpp:108
+
+msgid "Select this to create a Qt-Application."
+msgstr "Välj detta för att skapa en Qt-applikation."
+
+# ckappwizard.cpp:104
+msgid "C/C++-Application"
+msgstr "C/C++-applikation"
+
+# ckappwizard.cpp:108
+msgid "Select this to create a C/C++-Terminal-Application."
+msgstr "Välj detta för att skapa en C/C++-terminal-applikation."
+
+# ckappwizard.cpp:121
+msgid "Names"
+msgstr "Namn"
+
+# ckappwizard.cpp:127
+msgid "Projectdirectory:"
+msgstr "Projektbibliotek:"
+
+# ckappwizard.cpp:129
+msgid "Versionsnumber:"
+msgstr "Versionsnummer:"
+
+# ckappwizard.cpp:159
+msgid ""
+"Enter the Project's name here. This is\n"
+"also the directory name under which your Project\n"
+"will be created."
+msgstr ""
+"Skriv in projekts namn här. Detta är\n"
+"också namnet på det bibliotek för vart ditt projekt\n"
+"kommer att skapas."
+
+# ckappwizard.cpp:165
+msgid ""
+"Enter the toplevel-directory the project\n"
+"will be stored. This <b>must</b> be an\n"
+"<b>existing directory !!"
+msgstr ""
+"Skriv in huvudbilbioteket där projektet\n"
+"skall lagras. Detta <b>måste</b> vara ett\n"
+"<b>redan befintligt bibliotek !!"
+
+# ckappwizard.cpp:170
+msgid ""
+"Enter the Version number here.\n"
+"The number will be used in the about-dialog\n"
+"and in the main widget's topbar."
+msgstr ""
+"Skriv in versionsnummret här.\n"
+"Numret kommer att användas i om-dialogrutan\n"
+"och i hvuvudfönstret."
+
+# ckappwizard.cpp:175
+msgid ""
+"Enter your name here for the about dialog.\n"
+"You may also consider using the Team-name."
+msgstr ""
+"Skriv in det namn som skall visas i om-dialogrutan.\n"
+"Du kan också använda ett team-namn."
+
+# ckappwizard.cpp:179
+msgid ""
+"Enter your email adress here, so users\n"
+"can send you bug reports easiely ;-))"
+msgstr ""
+"Skriv in din e-postaddress här så att användare\n"
+"enkelt kan skicka felrapporter ;-))"
+
+# ckappwizard.cpp:188
+msgid "Projectfiles & Desktopgoodies"
+msgstr "Projektfiler & skrivbordsfiler"
+
+# ckappwizard.cpp:195
+msgid ""
+"Check this if you wish to have your API\n"
+"Documentation generated automatically"
+msgstr ""
+"Markera dett om du önskar att din API-\n"
+"dokumentation skall skapas automatiskt"
+
+# ckappwizard.cpp:198
+
+msgid "User-Documentation"
+msgstr "Användarhandbok"
+
+# ckappwizard.cpp:201
+msgid ""
+"Check this if you wish a general User\n"
+"Documentation to be generated automatically."
+msgstr ""
+"Markera detta om du önskar att en generell\n"
+"användarhandbok skall skapas automatiskt."
+
+# ckappwizard.cpp:204
+msgid "lsm-File - Linux Software Map"
+msgstr "lsm-fil - Linux Software Map"
+
+# ckappwizard.cpp:207
+msgid "Check this to create a lsm-File"
+msgstr "Markera detta för att skapa en lsm-fil"
+
+# ckappwizard.cpp:209
+msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
+msgstr "GNU-Standard-Filer (INSTALL,README,COPYING...)"
+
+# ckappwizard.cpp:212
+msgid ""
+"Check this if you wish to have\n"
+"the GNU-Standard files created like\n"
+"INSTALL and README"
+msgstr ""
+"Markera detta om du önskar ha\n"
+"GNU-standardfiler som INSTALL och README\n"
+"skapade åt dig"
+
+# ckappwizard.cpp:218
+msgid "Program-Icon"
+msgstr "Programikon"
+
+# ckappwizard.cpp:222
+msgid ""
+"Check this to create a sample icon for\n"
+"your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+msgstr ""
+"Markera detta för att skapa en exempelikon för\n"
+"ditt program. Vi föreslår att du gör så och\n"
+"sedan ändrar dess utseende med KIconEdit."
+
+# ckappwizard.cpp:226
+msgid "Mini-Icon"
+msgstr "Mini-ikon"
+
+# ckappwizard.cpp:230
+msgid ""
+"Check this to create a sample mini-icon\n"
+"for your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+msgstr ""
+"Välj detta för att skapa en mini-icon\n"
+"till ditt program. Vi Vi föreslår att du\n"
+"gör så och sedan ändrar dess utseende med KIconEdit."
+
+# ckappwizard.cpp:234
+msgid ".kdelnk-File"
+msgstr ".kdelnk-fil"
+
+# ckappwizard.cpp:237
+msgid ""
+"Check this if you wish to have\n"
+"a .kdelnk for you application in the\n"
+"K-Menu.  The default is the Applications-\n"
+"submenu. You can change this to other menus\n"
+"by changing the file properties afterwards."
+msgstr ""
+"Markera detta om du önskar att ha en\n"
+".kdelnk för din applikation i K-Menyn\n"
+"istället för i applikationsdelmeny. Du\n"
+"kan ändra detta till andra menyer genom\n"
+"att ändra filegenskaperna efteråt."
+
+# ckappwizard.cpp:247
+msgid ""
+"Select this if you wish another\n"
+"already created icon to be used."
+msgstr ""
+"Markera denna om du önskar använda\n"
+"en annan redan skapad ikon."
+
+# ckappwizard.cpp:254
+msgid ""
+"Select this if you wish another\n"
+"already created mini-icon to be used."
+msgstr ""
+"Markera denna om du önskar använda\n"
+"en annan redan skapad mini-ikon."
+
+# ckappwizard.cpp:265
+msgid "Headertemplate for .h-files"
+msgstr "Huvudmall för .h-filer"
+
+# ckappwizard.cpp:269
+msgid "headertemplate for .h-files"
+msgstr "huvudmall för .h-filer"
+
+# ckappwizard.cpp:273
+msgid ""
+"Check this if you want a standard\n"
+"headertemplate for your headerfiles"
+msgstr ""
+"Markera denna om du vill ha en standard-\n"
+"huvudmall för dina 'header'-filer."
+
+# ckappwizard.cpp:276 ckappwizard.cpp:307
+msgid "Load..."
+msgstr "Ladda..."
+
+# ckappwizard.cpp:278
+msgid "you can load another headertemplate here"
+msgstr "du kan ladda en annan huvudmall här"
+
+# ckappwizard.cpp:282
+msgid "you can clear the headertemplate here"
+msgstr "du kan radera din huvudmall här"
+
+# ckappwizard.cpp:288
+msgid "you can edit your headertemplate here"
+msgstr "du kan redigera din huvudmall här"
+
+# ckappwizard.cpp:296
+msgid "Headertemplate for .cpp-files"
+msgstr "Huvudmall för .cpp-filer"
+
+# ckappwizard.cpp:300
+msgid "headertemplate for .cpp-files"
+msgstr "huvudmall för .cpp-filer"
+
+msgid ""
+"Check this if you want a standard\n"
+"cpp-Template for your cpp-files."
+msgstr ""
+"Markera denna om du vill använda\n"
+"en standrarmall för cpp i din cpp-filer"
+
+# ckappwizard.cpp:309
+msgid "you can load another cpptemplate here"
+msgstr "du kan ladda en annan cppmall här"
+
+# ckappwizard.cpp:313
+msgid "you can clear the cpptemplate here"
+msgstr "du kan radera cppmallen här"
+
+# ckappwizard.cpp:318
+msgid "you can edit your cpptemplate here"
+msgstr "du kan redigera din cppmall här"
+
+# ckappwizard.cpp:326
+msgid "Processes"
+msgstr "Behandlar"
+
+# ckappwizard.cpp:335
+msgid "you can see the normal outputs here"
+msgstr "här kan du se det normala utdatat"
+
+# ckappwizard.cpp:340
+msgid "you can see all warnings and errormessages here"
+msgstr "här kan du se alla varningar och felmeddelanden"
+
+# ckappwizard.cpp:127
+
+msgid "Directory"
+msgstr "Katalog"
+
+msgid "Header"
+msgstr ""
+
+# ckappwizard.cpp:389
+msgid "Exit"
+msgstr "Avsluta"
+
+# clogfileview.cpp:35
+msgid "Remove File"
+msgstr "Ta bort fil"
+
+# clogfileview.cpp:36
+msgid "Delete File..."
+msgstr "Radera fil..."
+
+# cdoctree.cpp:37 clogfileview.cpp:38 clogfileview.cpp:46
+msgid "Properties..."
+msgstr "Egenskaper..."
+
+# clogfileview.cpp:42 clogfileview.cpp:53
+msgid "New LFV-Group..."
+msgstr "Ny LFV-grupp..."
+
+# clogfileview.cpp:44
+msgid "Remove Group"
+msgstr "Ta bort grupp"
+
+# cclassview.cpp:43 cclassview.cpp:62 clogfileview.cpp:52
+msgid "New Class..."
+msgstr "Ny klass..."
+
+# cdoctree.cpp:37 clogfileview.cpp:38 clogfileview.cpp:46
+
+msgid "Group Properties..."
+msgstr "Gruppegenskaber..."
+
+# clogfileview.cpp:42 clogfileview.cpp:53
+
+msgid "New Group ..."
+msgstr "Ny grupp..."
+
+# clogfileview.cpp:231
+msgid ""
+"Do you really want to delete the selected file?\n"
+"        There is no way to restore it!"
+msgstr ""
+"Är du säker på att du vill rader markerad fil?\n"
+"        Det går inte att återsälla den!"
+
+msgid "\" not found!"
+msgstr ""
+
+# cdocbrowser.cpp:203
+msgid "Small"
+msgstr "Liten"
+
+# cdocbrowser.cpp:207
+msgid "Medium"
+msgstr "Mellan"
+
+# cdocbrowser.cpp:211
+msgid "Large"
+msgstr "Stor"
+
+# cdocbrowser.cpp:215
+msgid "Standard Font"
+msgstr "Standardtypsnitt"
+
+# cdocbrowser.cpp:232
+msgid "Fixed Font"
+msgstr "Fast typsnitt"
+
+# cdocbrowser.cpp:371
+msgid "Background Color:"
+msgstr "Bakgrundsfärg:"
+
+# cdocbrowser.cpp:379
+msgid "Normal Text Color:"
+msgstr "Normal textfärg:"
+
+# cdocbrowser.cpp:387
+msgid "URL Link Color:"
+msgstr "URL länkfärg:"
+
+# cdocbrowser.cpp:395
+msgid "Followed Link Color:"
+msgstr "Besökt länkfärg:"
+
+# cdocbrowser.cpp:403
+msgid "Underline links"
+msgstr "Understykta länkar"
+
+# cdocbrowser.cpp:411
+msgid "Always use my colors"
+msgstr "Använd alltid mina färger"
+
+# cdocbrowser.cpp:499
+msgid "Documentation Browser Options"
+msgstr "Alternativ för dokumentationläsaren"
+
+# cdocbrowser.cpp:512 cdocbrowser.cpp:513
+msgid "Colors"
+msgstr "Färger"
+
+msgid "Others:"
+msgstr "Andra:"
+
+# cdoctree.cpp:30 cdoctree.cpp:34
+msgid "Add Entry..."
+msgstr "Lägg till ämne..."
+
+# cdoctree.cpp:35
+msgid "Remove Entry"
+msgstr "Ta bort ämne"
+
+# ckdevelop_project.cpp:25
+
+msgid "Current Project"
+msgstr "Det aktuella projektet"
+
+msgid "Others"
+msgstr "Andra"
+
+# cprjoptionsdlg.cpp:704
+
+msgid "Qt/KDE Libraries"
+msgstr "Qt/KDE bibliotek"
+
+# ckdevelop_init.cpp:570
+
+msgid "KDevelop"
+msgstr "KDevelop"
+
+msgid "Class Generator"
+msgstr "Klassksaparen"
+
+msgid "Classname"
+msgstr "Klassnamn"
+
+msgid ""
+"Insert your new classname here.\n"
+"Please try to keep some standards\n"
+"like using an upper `K` as the first\n"
+"letter for your new class, if it is\n"
+"a class for a KDE-project."
+msgstr ""
+"Skriv in ditt nya klassnamn här.\n"
+"Var vänlig och använd standarden\n"
+"som att använda ett stort 'K' som\n"
+"första bokstav i en klass som är\n"
+"för ett KDE-projekt."
+
+msgid "Baseclass"
+msgstr "Basklass"
+
+msgid ""
+"Insert the baseclass from which your new class\n"
+"will be derived from. If you have checked\n"
+"`generate a QWidget-Childclass`, the new class will\n"
+"be derived from QWidget. If no baseclass is named, the\n"
+"new class will not have a parent class."
+msgstr ""
+"Skriv in basklassen från vart din nya klass\n"
+"skall deriveras från. Om du ha markerad\n"
+"'skapa en QWidget-barnklass', kommer den nya klassen\n"
+"att deriveras från QWidget. Om du inte anger någon\n"
+"basklass kommer den inte den nya klassen att ha\n"
+"någon huvudklass."
+
+msgid ""
+"Insert your header filename here.\n"
+"It is automatically inserted while\n"
+"you select the classname, but you can\n"
+"still edit it afterwards."
+msgstr ""
+"Skriv in ditt 'header'-filnamn här.\n"
+"Den sätts automatiskt in medan du\n"
+"väljer ett klassnamn, men du kan ändra\n"
+"namnet om du vill efteråt."
+
+
+msgid "Impl."
+msgstr ""
+
+msgid ""
+"Insert your implementation filename here.\n"
+"It is automatically inserted while\n"
+"you select the classname, but you can\n"
+"still edit it afterwards."
+msgstr ""
+"Skriv in din implemetationsfilnamn här.\n"
+"Den sätts in automatiskt när du väljer\n"
+"ett klassnamn, men du kan fortfarande\n"
+"ändra på den efteråt."
+
+msgid ""
+"Insert a short description for your new class\n"
+"here for documenation purposes. This will be used\n"
+"for the API-documentation you can create or update\n"
+"after the class is created."
+msgstr ""
+"Skriv in en kort beskrivning av din nya klass\n"
+"här. Detta kommer att användas för API-dokumentationen\n"
+"som du kan skapa eller uppdatera efter att klassen är skapad."
+
+msgid "Inheritence"
+msgstr "Arv"
+
+msgid "public"
+msgstr "publika"
+
+msgid "protected"
+msgstr "skyddade"
+
+# ckappwizard.cpp:42
+
+msgid "private"
+msgstr "privata"
+
+# cprjoptionsdlg.cpp:258
+
+msgid "Additional Options"
+msgstr "Ytterligare alternativ:"
+
+msgid "use header/cpp-templates"
+msgstr "använd header/cpp-mallar"
+
+msgid "generate a QWidget-Childclass"
+msgstr "skapa en QWidget-barnklass"
+
+msgid ""
+"This offers additional options to your new class.\n"
+"If you check `use header/cpp-templates`, your name and\n"
+"email adress will be added into the new generated files\n"
+"If you check `generate a QWidget-Childclass`, the new class\n"
+"will use QWidget as the baseclass. This is also useful for\n"
+"using baseclasses derived from QWidget, e.g. QDialog."
+msgstr ""
+"Här kan du ange ytterligare alternativ till din nya klass.\n"
+"Om du markerade 'använd header/cpp-mallar', kommer ditt namn\n"
+"och e-postadress att läggas till i de skapade filerna.\n"
+"Om du markerar 'skapa en QWidget-barnklass' kommer den nya\n"
+"klassen att använda QWidget som basklass. Detta är också\n"
+"användbart när man använder basklasser deriverade från QWidget\n"
+"t.ex. QDialog."
+
+msgid ""
+"Check here your inheritance from the chosen baseclass.\n"
+"You can derive from a baseclass as public,protected\n"
+"or private."
+msgstr "" 
+"Välj ditt arv från den valda basklassen.\n"
+"Du kan derivera publika, skyddade eller\n"
+"private."
+
+# cnewfiledlg.cpp:249
+
+msgid "You must enter a classname!"
+msgstr "Du måste ange ett klassnamn !"
+
+# cnewfiledlg.cpp:249
+
+msgid "You must enter a name for the header-file!"
+msgstr "Du måste ange ett namn för header-filen !"
+
+# cnewfiledlg.cpp:249
+
+msgid "You must enter a name for the implementation-file!"
+msgstr "Du måste ange ett namn för implementationsfilen!"
+
+# ckdevelop_init.cpp:436
+
+msgid "File Properties"
+msgstr "Filegenskaper"
+
+msgid "Distribution"
+msgstr ""
+
+msgid "Filetype"
+msgstr "Filtyp"
+
+msgid "Installation"
+msgstr ""
+
+msgid "Installdir + Filename:"
+msgstr "Installationskatalog + filnamn:"
+
+msgid "Size:"
+msgstr "Storlek:"
+
+# ckappwizard.cpp:121
+
+msgid "Name:"
+msgstr "Namn:"
+
+msgid "include in distribution"
+msgstr "inkludera i distributionen"
+
+msgid "install"
+msgstr "installera"
+
+# cfilepropdlg.cpp:232
+msgid ""
+"This option sets if the actual file\n"
+"will be included in the final distri-\n"
+"bution."
+msgstr ""
+"Detta alternativ bestämmer om den aktuella\n"
+"filen skall tas med i den slutgiltiga\n"
+"distributitionen."
+
+# cfilepropdlg.cpp:239
+msgid ""
+"This option sets if the actual file\n"
+"will be installed to the platform during\n"
+"the installation process of make install\n"
+"If the install button is checked, you have\n"
+"to set the installation path and filename\n"
+"Possible values are e.g.:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Other values can be found in the Makefile"
+msgstr ""
+"Detta alternativ bestämmer om den aktuella\n"
+"filen skall installeras till plattformen\n"
+"under installationsprocessen 'make install'.\n"
+"Om installationsknappen är markerad måste\n"
+"du ange installationssökväg och filnamn.\n"
+"Möjliga värden är t.ex:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Övriga värden finns i 'Makefile'."
+
+# ckdevelop.cpp:1564
+
+msgid "Add existing files to project..."
+msgstr "Lägger till en befintlig fil till projektet..."
+
+msgid "Sourcefile(s):"
+msgstr "Källkod(er):"
+
+msgid "Destinationdir:"
+msgstr "Målsökväg:"
+
+# caddexistingfiledlg.cpp:116
+msgid ""
+"select the source files to be added\n"
+"to the project here."
+msgstr ""
+"välj de källkoder som skall läggas\n"
+"till projektet här."
+
+# caddexistingfiledlg.cpp:121
+msgid ""
+"select the directory where the new\n"
+"source files will be copied to here."
+msgstr ""
+"välj den katalog som de nya\n"
+"källkoderna skall kopieras till."
+
+# caddexistingfiledlg.cpp:194
+msgid "You must choose a destination,that is in your project-dir!"
+msgstr "Du måste välja ett mål som ligger i ditt projekts sökväg!"
+
+# caddexistingfiledlg.cpp:200
+msgid "You must choose a valid dir as a destination!"
+msgstr "Du måste välja en korrekt säkväg som mål!"
+
+# ckappwizard.cpp:125 cprjoptionsdlg.cpp:44
+
+msgid "Groupname:"
+msgstr "Gruppnamn:"
+
+msgid "Filters:"
+msgstr "Filter:"
+
+# cupdatekdedocdlg.cpp:33
+msgid "KDE Library Documentation Update..."
+msgstr "KDE bibliotek dokumentationsuppdatering..."
+
+msgid "Choose installation mode:"
+msgstr "Välj installations läge:"
+
+msgid "new KDE Libs sources path:"
+msgstr "nya sökvägen för KDE libs källkoder:"
+
+# cupdatekdedocdlg.cpp:33
+
+msgid "new KDE Libs Documentation path:"
+msgstr "nya sökvägen för KDE libs dokumenatation:"
+
+msgid "Delete old Documentation and install to recent Documentation path"
+msgstr "Radera den gamla dokumentationen och installera till den gamla sökvägen."
+
+# cupdatekdedocdlg.cpp:161
+msgid ""
+"Checking this will delete the current documentation\n"
+"and replacing it with the new generated documentation\n"
+"in the same path."
+msgstr ""
+"Markerar du detta kommer den gamla aktuella dokumentationen\n"
+"raderas och ersättas med den nya skapade dokumentationen\n"
+"i samma sökväg."
+
+msgid "Delete old Documentation and install to new Documentation path"
+msgstr "Raderar den gamla dokumenatationen och installer till en ny sökväg"
+
+# cupdatekdedocdlg.cpp:178
+msgid ""
+"Checking this will delete the current documentation\n"
+"and lets you choose a path in the input field below\n"
+"where the new generated documentation will beinstalled."
+msgstr ""
+"Markerar du detta raderas den gamla aktuella dokumenatationen\n"
+"och låter dig välja en sökväg i indatafältet nedan\n"
+"där den nya skapade dokumentationen blir installerad."
+
+msgid "Leave old Documention untouched and install to new Documention path"
+msgstr "Lämna den gamla dokumentationen oberörd och installera till en ny sökväg"
+
+msgid ""
+"This doesn't delete your current documentation and leaves it\n"
+"is now and you can select a new path for the new kdelibs\n"
+"documentation. CAUTION: Don't insert the same path where\n"
+"your recent documentation is installed- this may mess up\n"
+"the documentation by mixing old and new files!"
+msgstr ""
+"Detta raderar inte din aktuella dokumentation och lämnar\n"
+"den som den är nu och låter dig välja en ny sökväg för den\n"
+"nya kdelibs-dokumentationen. VARNING: Välj inte samma sökväg\n"
+"där din aktuella dokumentation är installerad - detta kan\n"
+"förstöra dokumentationen då nya och gamla filer blandas!"
+
+msgid ""
+"Insert the path to the current\n"
+"KDE-Libs sourcecodes here. This is\n"
+"where you have unpacked e.g. a kdelibs\n"
+"snapshot a la /snapshot/kdelibs."
+msgstr ""
+"Skriv in sökvägen till den aktuella\n"
+"KDE-libs-källkoden här. Dessa finner\n"
+"du där du packade upp t.ex en kdelibs\n"
+"snapshot a la /snapshot/kdelibs."
+
+msgid ""
+"Insert the path where you want to have\n"
+"the new generated documentation installed\n"
+"Note: the path information in Setup will\n"
+"be updated automatically, you don't have\n"
+"to change them to the new doc path."
+msgstr ""
+"Skriv in sökvägen där du vill att den nya\n"
+"skapade dokumentationen skall installeras\n"
+"Obs: sökvägen kommer automatiskt att\n"
+"uppdateras för informationen till Setup, du\n"
+"behöver inte ändra dem till en nya dok. sökväg."
+
+msgid ""
+"The chosen path for the KDE-Libs does not\n"
+"lead to the KDE Libraries. Please choose the\n"
+"correct path."
+msgstr ""
+"Den valda sökvägen för KDE-libs leder inte\n"
+"till KDE-biblioteken. Välj en ny sökväg."
+
+msgid "Question"
+msgstr "Fråga"
+
+msgid ""
+"The KDE-library documentation can be\n"
+"generated using the old khtmlw library\n"
+"or the new khtml library. Would you like\n"
+"to use the new khtml library ?"
+msgstr ""
+"Dokumentationen för KDE-biblioteket kan\n"
+"skapas genom att använda den gamla khtmlw\n"
+"biblioteket eller den nya khtml biblioteket.\n"
+"Vill du använda den nya khtml biblioteket ?"
+
+msgid "use khtml"
+msgstr "använd khtml"
+
+msgid "use khtmlw"
+msgstr "använd kthmlw"
+
+msgid ""
+"The Qt-Documentation path is not set correctly.\n"
+"If you want your KDE-library documentation to\n"
+"be cross-referenced to the Qt-library, you have\n"
+"to set the correct path to your Qt-library\n"
+"documentation first.\n"
+"Do you want to set the Qt-Documentation path first ?"
+msgstr ""
+"Sökvägen till Qt-dokumentationen är inte riktigt.\n"
+"Om du vill använda dokumentationen till KDE-biblioteket\n"
+"som en kortreferens till Qt-biblioteket måste du ange\n"
+"en korrekt sökväg till dokumentationen till Qt-biblioteket."
+"Vill du ange sökvägen till Qt-dokumentationen först ?"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE Libraries. Please choose the\n"
+"correct path."
+msgstr ""
+"Den valda sökvägen leder till KDE-\n"
+"biblioteken. Välj en ny sökväg."
+
+msgid "Create Search Database..."
+msgstr "Skapa sökdatabas..."
+
+msgid "Index Options"
+msgstr "Indexalternativ"
+
+msgid "additional directories to index"
+msgstr "ytterligare bibliotek att indexera"
+
+msgid "Index Size"
+msgstr "Indexstorlek"
+
+msgid "index the KDE documentation"
+msgstr "indexera KDE-dokumentationen"
+
+msgid "index the QT documentation"
+msgstr "indexera QT-dokumentationen"
+
+msgid "tiny size"
+msgstr "pytteliten storlek"
+
+msgid "small size"
+msgstr "liten storlek"
+
+msgid "medium size"
+msgstr "mellanstorlek"
+
+msgid "add"
+msgstr "lägg till"
+
+msgid "remove"
+msgstr "ta bort"
+
+#, c-format
+msgid ""
+"builds a medium-size index (20-30% of the size\n"
+"of all files), allowing faster search."
+msgstr ""
+"skapar ett mellanstort index (20-30% av storleken\n"
+"av alla filer), ger snabbare sökning."
+
+msgid ""
+"Build a small index rather than tiny (meaning 7-9%\n"
+"of the sizes of all files - your mileage may vary)\n"
+"allowing faster search."
+msgstr ""
+"Skapar ett litet index istället för ett pyttelitet (7-9%\n"
+"av storleken av alla filer - kan variera lite)\n"
+"ger snabbare sökning."
+
+#, c-format
+msgid "a tiny index (2-3% of the total size of all files)"
+msgstr "ett litet index (2-3% av den totala storleken av filerna)"
+
+msgid "No Database created!"
+msgstr "Ingen databas skapad!"
+
+msgid "The KDE-Documentation-Path isn't set correctly."
+msgstr "Sökvägen till KDE-dokumentationen är inte korrekt angiven."
+
+msgid "The Qt-Documentation-Path isn't set correctly."
+msgstr "Sökvägen till Qt-Documentationen är inte korrekt angiven."
+
+msgid "File:"
+msgstr "Fil:"
+
+msgid ""
+"Open project\n"
+"\n"
+"Shows the open project dialog to select a project to be opened"
+msgstr ""
+"Öppna projekt\n"
+"\n"
+"Visar ett fönster där du kan välja att öppna ett projekt"
+
+msgid ""
+"New file\n"
+"\n"
+"Shows the New file dialog to create a new dialog definition file"
+msgstr ""
+"Ny fil\n"
+"\n"
+"Visar ett fönster där du kan skapa en ny definitionsfil för en dialogruta"
+
+msgid ""
+"Open file\n"
+"\n"
+"Shows the Open file dialog to select a file to be opened"
+msgstr ""
+
+msgid ""
+"Open file\n"
+"\n"
+"Shows the Open file dialog to select a *.kdevdlg file to be opened"
+msgstr ""
+"Öppna fil\n"
+"\n"
+"Visar ett fönster där du kan välja att öppna en *.kdevdlg fil"
+
+msgid ""
+"Save file\n"
+"\n"
+"Saves the file opened in the actual editing view"
+msgstr ""
+"Spara fil\n"
+"\n"
+"Sparar den aktuella fil som finns i redigerarens fönster"
+
+msgid ""
+"Print\n"
+"\n"
+"Opens the printing dialog. There, you can configure which printing program "
+"you wish to use, either a2ps or ensrcipt, and print your project files."
+msgstr ""
+"Skriv ut\n"
+"\n"
+"Öppnar utskriftdialogen där du kan konfigurera vilket utskriftprogram\n"
+"du önskar använda, antingen a2ps eller enscript, och skriver ut dina projectfiler."
+
+msgid ""
+"Undo\n"
+"\n"
+"Reverts the last editing step."
+msgstr ""
+"Ångra\n"
+"\n"
+"Tar tillbaka den senaste redigeringskommandot."
+
+msgid ""
+"Redo\n"
+"\n"
+"If an editing step was undone, redo lets you do this step again."
+msgstr ""
+"Gör om\n"
+"\n"
+"Om ett redigeringskommande ångrades, kan du göra om detta steg igen."
+
+msgid ""
+"Cut\n"
+"\n"
+"Cuts out the selected text and copies it to the system clipboard."
+msgstr ""
+"Klipp ut\n"
+"\n"
+"Klipper ut den markerade texten och kopierar den till utklippshanteraren."
+
+msgid ""
+"Cut\n"
+"\n"
+"Cuts out the selected widget and copies it to the system clipboard."
+msgstr ""
+"Klipp ut\n"
+"\n"
+"Klipper ut den markerade gränssnittselementet och kopierar den till utklippshanteraren."
+
+msgid ""
+"Copy\n"
+"\n"
+"Copies the selected text into the system clipboard."
+msgstr ""
+"Kopiera\n"
+"\n"
+"Kopierar den markerade texten till utklippshanteraren."
+
+# ckdevelop.cpp:1537
+
+msgid ""
+"Copy\n"
+"\n"
+"Copies the selected widget into the system clipboard."
+msgstr "Kopier det valgte til udklipsholder"
+"Kopiera\n"
+"\n"
+"Kopierar den markerade gränssnittselementet till utklippshanteraren."
+
+msgid ""
+"Paste\n"
+"\n"
+"Inserts the contents of the system clipboard at the current cursor position. "
+msgstr ""
+"Klistra in\n"
+"\n"
+"Klistrar in innehållet i utklippshanteraren vid textmarkören. "
+
+msgid ""
+"Compile file\n"
+"\n"
+"Only compile the file opened in the C/C++ Files- window. The output is shown "
+"in the output window. If errors occur, clicking on the error line causes the "
+"file window to show you the line the error occured."
+msgstr ""
+"Kompilera fil\n"
+"\n"
+"Kompilera enbart den öppnade filen i C/C++ filfönstret. Resultatet visas i "
+"utdatafönstret. Om det förekommer fel kan du klicka på felraden i fönstret "
+"så letas felet upp och visas i filfönstret."
+
+msgid ""
+"Generate files\n"
+"\n"
+"This will actually generate the source files for the current dialog opened. "
+"The sources will be added to the project if one is opened, otherwise you "
+"will be asked to select the output directory for the generated files."
+msgstr ""
+"Skapa filer\n"
+"\n"
+"Detta kommer att skapa källkoderna för den aktuella dialogrutan. "
+"Källkoden kommer att läggas till projektet om det finns ett sådant öppnat "
+"annars kommer du frågas efter ett utdatabibliotek för de skapade filerna."
+
+msgid ""
+"Make\n"
+"\n"
+"Invokes the make-command set in the options-menu for the current project "
+"after saving all files. This will compile all changed sources since the last "
+"compilation was invoked.\n"
+"The output window opens to show compiler messages. If errors occur, clicking "
+"on the error line will open the file where the error was found and sets the "
+"cursor to the error line."
+msgstr ""
+"Make\n"
+"\n"
+"Sparar filerna och anropar 'make'-kommandot konfigurerat för det aktuella "
+"projektet. Detta kommer att kompilera alla ändrade källkoder sedan den senaste "
+"kompilationen.\n"
+"Utdatafönstret öppnas och visar kompilatormeddelanden. Om det förekommer fel "
+"kan du klicka på felraden i fönstret så letas felet upp och visas i filfönstret."
+
+msgid ""
+"Rebuild all\n"
+"\n"
+"After saving all files, rebuild all s the make-command set with the "
+"clean-option to remove all object files. Then, configure creates new "
+"Makefiles and the make-command will rebuild the project."
+msgstr ""
+"Omskapa allt\n"
+"\n"
+"Sparar alla filer och omskapar allt via 'make'-kommandot med 'clean'- "
+"alternativet för att ta bort alla objektfiler. Sedan anropas 'configure' "
+"och skapar nya Makefiler och 'make'-kommandot omskapar projektet."
+
+msgid ""
+"Execute\n"
+"\n"
+"After saving all files,the make-command is called to build the project. Then "
+"the binary is executed out of the project directory.\n"
+"Be aware that this function is only valid for programs and that references "
+"to e.g. pixmaps or html help files that are supposed to be installed will "
+"cause some strange behavoir like testing the helpmenu will open an error "
+"message that the index.html file is not found."
+msgstr ""
+"Kör\n"
+"\n"
+"Sparar filerna anropar 'make'-kommandot som skapar projektet. Sedan "
+"körs programfilern från projektets bibliotek.\n"
+"Tänk på att denna funktion endast är giltig för program och att "
+"referenser till t.ex. pixmaps eller html hjälpfiler som antas vara "
+"installerade kan skapa oförutsägbara uppföranden t.ex. om du testar "
+"hjälpmenyn som kan skapa ett felmeddelande: index.html finns inte."
+
+msgid ""
+"Debug program\n"
+"\n"
+"Opens KDbg in the tools window with your actualprogram and allows you to "
+"execute it step by stepby setting breakpoints in the sourcecode.Note that "
+"you have to open your sourcecodes in KDbgto access it."
+msgstr ""
+"Felsök program\n"
+"\n"
+"Öppnar KDbg i vertygsfönstret med ditt program och låter dig köra "
+"det stegvis genom att sätta brytpunkter i källkoden. Notera att "
+"du måste öppna dina källkoder i KDbg för att komma åt dem."
+
+msgid ""
+"Stop\n"
+"\n"
+"If activated, the stop-command will interrupt the active process. This "
+"affects make-commands as well as documentation generation."
+msgstr ""
+"Stopp\n"
+"\n"
+"Om detta är aktiverat kommer stopp-kommandot att avbrott i den aktiva processen. "
+"Detta påverkar 'make'-kommandon och skapande av dokumentation."
+
+msgid ""
+"KDialogEdit\n"
+"\n"
+"This will switch to the internal dialog editor of kdevelop, called "
+"KDialogEdit. There, you can also switch back to the editing mode by choosing "
+"the KDevelop button or KDevelop from the Tools-menu."
+msgstr ""
+"KDialogEdit\n"
+"\n"
+"Detta startar den interna dialogredigeraren i kdevelop, KDialogEdit. "
+"Där kan du byta tillbaka till redigeringsläge genom att välj "
+"KDevelop knappen eller KDevelop från verktygsmenyn."
+
+msgid ""
+"KDevelop\n"
+"\n"
+"This will switch to KDevelop editing mode providing the usual IDE interface. "
+"You can switch back to the dialogeditor by choosing the KDialogEdit button "
+"in the KDevelop toolbar or by choosing KDialogEdit in the Tools-menu."
+msgstr ""
+"KDevelop\n"
+"\n"
+"Detta kommer att byta till KDevelops redigeringsläga med den vanliga IDE-gränsitt. "
+"Du kan byta tillbaka till dialogredigeraren genom att välja KDialogEdit knappen "
+"i verktygsfältet för KDevelop eller välja KDialogEdit i verktygsmenyn."
+
+msgid ""
+"Classes\n"
+"\n"
+"Choosing a class will switch to the header file where the class is "
+"declarated."
+msgstr ""
+"Klasser\n"
+"\n"
+"Väljer du en klass kommer öppna 'header'-filen där klassen är "
+"deklarerad."
+
+msgid ""
+"Methods\n"
+"\n"
+"Allows selecting a method of the current selected class. This will switch to "
+"the implementation of the chosen class."
+msgstr ""
+"Metoder\n"
+"\n"
+"Låter dig välja en metod från den markerade klassen. Detta kommer öppna "
+"implementationsfilen för den valda klassen."
+
+msgid ""
+"Documentation-Back\n"
+"\n"
+"This opens the previous browser page in the browser window. "
+msgstr ""
+"Dokumentation-Bakåt\n"
+"\n"
+"Detta öppnar den föregående lästa sidan i läsarfönsret. "
+
+msgid ""
+"Documentation-Forward\n"
+"\n"
+"This opens the next opened browser page after Documentation-Back was chosen."
+msgstr ""
+"Dokumentation-Framåt\n"
+"\n"
+"Detta öppnar nästa öppnade lästa sidan efter att Dokumentation-Bakåt varit valt."
+
+msgid ""
+"Search Marked Text\n"
+"\n"
+"Uses the searchdatabase to look for the selected text string and opens a "
+"summary page of found references for the selection in the browser window. "
+"There, you can select a documentation page of your choice and open it by "
+"following the link."
+msgstr ""
+"Sök efter markerad text\n"
+"\n"
+"Använder sökdatabasen för att söka efter markerad text och öppnar en\n"
+"sammanfattningssida av hittade referenser för markeringen i läsarfönstret. "
+"Där kan du markera en dokumentationssida och öppna den genom att fälja "
+"länken."
+
+msgid ""
+"Search for Help on...\n"
+"\n"
+"Opens the Search for Help on... dialog. There, you can search for a keyword "
+"in the documentation directly using the search database."
+msgstr ""
+"Sök hjälp om...\n"
+"\n"
+"Öppnar Sök hjälp om... dialogen. Där kan du söka efter ett nyckelord "
+"i dokumentationen direkt genom att använda sökdatabasen."
+
+msgid ""
+"Class Viewer\n"
+"\n"
+"The class viewer shows all classes, methods and variables of the current "
+"project files and allows switching to declarations and implementations. The "
+"right button popup-menu allows more specialized functionality."
+msgstr ""
+"Klassvisaren\n"
+"\n"
+"Klassvisaren visar alla klasser, metoder och variabler till den aktuella "
+"projektfilen och tillåter dig att byta mellan deklarationer och "
+"implementationer. Höger musknappens popup-meny ger fler specialiserade "
+"funktioner."
+
+msgid ""
+"Logical File Viewer\n"
+"\n"
+"The logical file viewer separates your project files into logical groups to "
+"allow easier access e.g.to header and implementation files.The right button "
+"popup-menu allows more specialized functionality."
+msgstr ""
+"Logisk filvisare\n"
+"\n"
+"Den logiska filvisaren separerar dina projektfiler till logiska grupper vilket "
+"tillåter enklare åtkomst till t.ex. 'huvud' och implementationsfiler. Höger "
+"musknapps popup-meny ger fler specialiserade funktioner."
+
+msgid ""
+"Real File Viewer\n"
+"\n"
+"The real file viewer shows the project directory in it's real structure and "
+"gives access to all files."
+msgstr ""
+"Reell filvisare\n"
+"\n"
+"Den reella filvisaren visar projektets bibliotek och dess struktur och "
+"ger dig åtkomst till alla filer."
+
+msgid ""
+"Documentation Tree\n"
+"\n"
+"The documentation tree gives access to library documentation and the "
+"KDevelop manuals. Can be configured individually by right-button menu."
+msgstr ""
+"Dokumentations trädet\n"
+"\n"
+"Dokumentationesträdet ger dig åtkomst till biblioteksdokumentationen och "
+"användarhandboken till KDevelop. Kan konfigureras individuellt genom "
+"högra musknappens popup-meny."
+
+msgid ""
+"Widgets\n"
+"\n"
+"Here, you can select a widget item to add to the dialog you're working on. "
+"More information about the widget items can be found by What's this help on "
+"the buttons or in the KDevelop documentation. "
+msgstr ""
+"Gränssnittselement\n"
+"\n"
+"Här kan du välja ett gränssnittselement som du kan lägga till din dialogruta "
+"du arbetar med. Mer information om gränsittselementen finns genom 'Vad är...' "
+"hjälpen eller i dokumentationen om KDevelop."
+
+msgid ""
+"Dialogs\n"
+"\n"
+"Selecting a dialog in the list will open the dialog definition file and "
+"dispay the dialog for editing."
+msgstr ""
+"Dialogrutor\n"
+"\n"
+"Markeras en dialogruta i listan kommer dialogrutans definitionsfil öppnas "
+"och visas för redigering."
+
+msgid ""
+"Properties\n"
+"\n"
+"The properties window shows the properties for the currently selected widget "
+"item. You can switch to the different items by selecting them in the editing "
+"view or by using the drop-down menu at the top of the properties window "
+"containing a list with all used widget items."
+msgstr ""
+"Egenskaper\n"
+"\n"
+"Egenskapsfönstret visar olika egenskapr för det aktuella gränssnittselementet. "
+"Du kan byta mellan de olika elementen genom att markera dem i redigerings-"
+"fönstret eller välja i listan över använda element i drop-down menyn i egenskaps-"
+"fönstret."
+
+msgid ""
+"Widget Editing Window\n"
+"\n"
+"The Widget Editing Window is the working window of the widget editor "
+"displaying a resizable widget with a grid to place selected widget items on. "
+"A click on the items will acitvate them and give a resize-frame around with "
+"draggable points to resize the item. The properties for the selected item "
+"are shown in the properties window at the right. New widget items can be "
+"added by choosing them on the widgets-window on the left."
+msgstr ""
+"Gränssnitsselementets redigeringsfönster\n"
+"\n"
+"Gränssnitsselementets redigeringsfönster är arbetsfönstret för element-"
+"redigeraren som visar ett element med rutnät där du kan placera valda "
+"element på. Klickar du på elementen aktiveras de och ger dig en "
+"storleksram med flyttbara punkter som tillåter storleksförändring. "
+"Egenskaperna för det markerade elementet visas i egenskapsfönstret "
+"till höger. Nya gränssnittselement kan läggas till genom att välja "
+"dem på elementfönstret till vänster."
+
+msgid ""
+"Header/Resource Files\n"
+"\n"
+"This window shows header and all other project files except for source "
+"files. The statusbar shows the status of the insert/overwrite key as well as "
+"the cursor position by line and column."
+msgstr ""
+"Header/Resource filer\n"
+"\n"
+"Detta fönster visar 'header'- och alla andra projektfiler utom källfilerna. "
+"Statusfältet visar status över insert/overwrite tangentera samt "
+"textmarkörens läge med rad och kolumn."
+
+msgid ""
+"C/C++ Files\n"
+"\n"
+"This window shows only source files. The statusbar shows the status of the "
+"insert/overwrite key as well as the cursor position by line and column."
+msgstr ""
+"C/C++ Filer\n"
+"\n"
+"Detta fönster visar enbart källfilerna. Statusfältet visar status över "
+"insert/overwrite tangentera samt textmarkörens läge med rad och kolumn."
+
+msgid ""
+"Documentation Browser\n"
+"\n"
+"The documentation browser window shows the online-documentation provided "
+"with kdevelop as well as library class documentation created. Use the "
+"documentation tree to switch between various parts of the documentation."
+msgstr ""
+"Dokumentationsläsaren\n"
+"\n"
+"Dokumentationsläsar-fönstret visar online-dokumentationen som medföljer "
+"kdevelop samt den skapade klassbibliotekets dokumentation. Använd "
+"dokumentationsträdet för att byta mellan oliak delar av dokumentationen."
+
+msgid ""
+"Messages\n"
+"\n"
+"The messages window shows the output of the compiler and used utilities like "
+"kdoc reference documentation. For compiler error messages, click on the "
+"error message. This will automatically open the source file and set the "
+"cursor to the line that caused the compiler error/warning. "
+msgstr ""
+"Meddelanden\n"
+"\n"
+"Meddelarfönstret visar utdata från kompilatorn och verktyg som kdocs "
+"referensdokumentation. För kompilatorns felmeddelande trycker du på "
+"felmeddelanden. Detta kommer automatiskt att öpnna källfilerna och "
+"sätta textmarkören vid raden som orsakade kompilator-felet/varningen. "
+
+msgid ""
+"StdErr\n"
+"\n"
+"The Standard Error window displays messages of running applications using "
+"the cerr function to debug."
+msgstr ""
+"StdErr\n"
+"\n"
+"Standardfelfönstret visar meddelanden under körningen av applikationen "
+"via cerr-funktionen."
+
+msgid "New Project"
+msgstr "Nytt projekt"
+
+msgid "Project Name:"
+msgstr "Projekt namn:"
+
+msgid "Insert the name for the new project here."
+msgstr "Skriv in namnet för det nya projektet här."
+
+msgid "Set the version number for the new project here."
+msgstr "Skriv in versionsnummret för det nya projektet här."
+
+msgid "Project Directory:"
+msgstr "Projektets sökväg:"
+
+msgid "Select the main project directory here."
+msgstr "Välj sökvägen för huvudprojektet."
+
+# cprjoptionsdlg.cpp:75
+
+msgid "Insert your Name or your team name here."
+msgstr "Skriv in ditt namn och ditt team här:"
+
+msgid "Insert your E-mail address here."
+msgstr "Skriv in din e-postadress här."
+
+msgid ""
+"Checking KDE-Application will execute the\n"
+"following actions:\n"
+"\n"
+"-creating the project directory and projectfile\n"
+"-creating GNU files\n"
+"-creating project subdirectories for po-files,\n"
+" and docs.\n"
+"\n"
+"Configure.in and Makefile.am's will be created\n"
+"with default values for KDE-applications."
+msgstr ""
+"Markeras KDE-applikation kommer följande att\n"
+"utföras:\n"
+"-skapa projekets katalog och projektfiler\n"
+"-skapa GNU-filer\n"
+"-skapa projektets underkataloger för po-filer,\n"
+" och dokument.\n"
+"\n"
+"'Configure.in' och 'Makefile.am'-s kommer att skapas\n"
+"med standardvärdena för KDE-applikationer."
+
+# ckappwizard.cpp:81
+
+msgid "KOM-Application"
+msgstr "KOM-applikation"
+
+msgid ""
+"Checking KOM-Application will execute the\n"
+"following actions:\n"
+"\n"
+"-creating the project directory and projectfile\n"
+"-creating GNU files\n"
+"-creating project subdirectories for po-files,\n"
+" and docs.\n"
+"\n"
+"Configure.in and Makefile.am's will be created\n"
+"with default values for KDE-applications\n"
+"using KOM (KDE Object Modell)."
+msgstr ""
+"Markeras KOM-applikation kommer följande att\n"
+"utföras:\n"
+"\n"
+"-skapa projekets katalog och projektfiler\n"
+"-skapa GNU-filer\n"
+"-skapa projektets underkataloger för po-filer,\n"
+" och dokument.\n"
+"\n"
+"'Configure.in' och 'Makefile.am'-s kommer att skapas\n"
+"med standardvärdena för KDE-applikationer under\n"
+"inverkan av KOM (KDE Object Modell)."
+
+msgid ""
+"Checking Qt-Application will execute the\n"
+"following actions:\n"
+"\n"
+"-creating the project directory and projectfile\n"
+"-creating GNU files\n"
+"-creating project subdirectories for po-files,\n"
+" and docs.\n"
+"\n"
+"Configure.in and Makefile.am's will be created\n"
+"with default values for Qt-applications."
+msgstr ""
+"Markeras Qt-applikation kommer följande\n"
+"att utföras:\n"
+"\n"
+"-skapa projekets katalog och projektfiler\n"
+"-skapa GNU-filer\n"
+"-skapa projektets underkataloger för po-filer,\n"
+" och dokument.\n"
+"\n"
+"'Configure.in' och 'Makefile.am'-s kommer att skapas\n"
+"med standardvärdena för Qt-applikationer."
+
+# ckappwizard.cpp:104
+
+msgid "C++-Application"
+msgstr "C/C++-applikation"
+
+msgid ""
+"Checking C++-Application will execute the\n"
+"following actions:\n"
+"\n"
+"-creating the project directory and projectfile\n"
+"-creating GNU files\n"
+"-creating project subdirectory.\n"
+"\n"
+"Configure.in and Makefile.am's will be created\n"
+"with default values for Qt-applications."
+msgstr ""
+"Markeras C++-applikation kommer följande\n"
+"att utföras:\n"
+"\n"
+"-skapa projekets katalog och projektfiler\n"
+"-skapa GNU-filer\n"
+"-skapa projektets underkataloger för po-filer,\n"
+" och dokument.\n"
+"\n"
+"'Configure.in' och 'Makefile.am'-s kommer att skapas\n"
+"med standardvärdena för Qt-applikationer."
+
+msgid "Shared Library"
+msgstr "Delade bibliotek"
+
+msgid ""
+"Checking Shared Library will execute the\n"
+"following actions:\n"
+"\n"
+"-creating the project directory and projectfile\n"
+"-creating GNU files\n"
+"-creating project subdirectory.\n"
+"\n"
+"Configure.in and Makefile.am's will be created\n"
+"with default values for construction of a shared\n"
+"libraries."
+msgstr ""
+"Markeras Delade bibliotek kommer följande\n"
+"att utföras:\n"
+"\n"
+"-skapa projekets katalog och projektfiler\n"
+"-skapa GNU-filer\n"
+"-skapa projektets underkataloger för po-filer,\n"
+" och dokument.\n"
+"\n"
+"'Configure.in' och 'Makefile.am'-s kommer att skapas\n"
+"med standardvärdena för konstruktion av delade\n"
+"biliotek."
+
+msgid "Static Library"
+msgstr "Statiskt bibliotek"
+
+msgid ""
+"Checking Shared Library will execute the\n"
+"following actions:\n"
+"\n"
+"-creating the project directory and projectfile\n"
+"-creating GNU files\n"
+"-creating project subdirectory.\n"
+"\n"
+"Configure.in and Makefile.am's will be created\n"
+"with default values for construction of a static\n"
+"libraries."
+msgstr ""
+"Markeras Statiska bibliotek kommer följande\n"
+"att utföras:\n"
+"\n"
+"-skapa projekets katalog och projektfiler\n"
+"-skapa GNU-filer\n"
+"-skapa projektets underkataloger för po-filer,\n"
+" och dokument.\n"
+"\n"
+"'Configure.in' och 'Makefile.am'-s kommer att skapas\n"
+"med standardvärdena för konstruktion av statiska\n"
+"biliotek."
+
+msgid "Empty Application"
+msgstr "Tom applikation"
+
+msgid ""
+"Checking Empty-Application will execute the\n"
+"following actions:\n"
+"\n"
+"-creating the project directory and projectfile."
+msgstr ""
+"Markeras Tom-applikation kommer följande att\n"
+"utföras:\n"
+"\n"
+"-skapa projekets katalog och projektfiler."
+
+msgid "Project Info"
+msgstr "Projektinformation"
+
+# ckappwizard.cpp:125 cprjoptionsdlg.cpp:44
+
+msgid "Project Type:"
+msgstr "Projektets typ:"
+
+# ckappwizard.cpp:127
+
+msgid "Select New Project Directory"
+msgstr "Välj en ny projektkatalog"
+
+# ckdevelop.cpp:1559
+
+msgid "Creation of new project failed !"
+msgstr "Skapandet av det nya projektet misslyckades !"
+
+msgid "You need to select a name for the new project"
+msgstr "Du måste välja ett namn för det nya projektet"
+
+msgid "Search for:"
+msgstr "Sök efter:"
+
+msgid "&Search"
+msgstr "&Sök"
+
+msgid "show Tip of the day on next start"
+msgstr "visa dagens tips vid nästa start"
+
+msgid "Next Tip"
+msgstr "Nästa tips"
+
+msgid "Tipdatabase not found ! Please check your installation."
+msgstr "Tipsdatabasen kan ej hittas! Kontrollera din installation."
+
+msgid ""
+"The program glimpse is not installed,\n"
+"therefore KDevelop can not index your\n"
+"documentation to provide a proper help\n"
+"functionality. We advise to install glimpse\n"
+"and create the searchdatabase later by choosing\n"
+"KDevelop Setup in the Options menu .\n"
+"\n"
+"As this is the last step of the Installation\n"
+"process, KDevelop will be started now.\n"
+"\n"
+"We hope you enjoy KDevelop and that it is a useful\n"
+"help to create new software.\n"
+"\n"
+"The KDevelop Team"
+msgstr ""
+"Programmet glimps är inte installerat och\n"
+"KDevelop kan därför inte indexera din\n"
+"dokumentaton för att ge en god hjälp\n"
+"funktionalitet. Vi rekommenderar dig att installera\n"
+"glimse och sedan skapa en sökdatabas genom att\n"
+"välja KDevelop-inställningar i egenskapsmenyn.\n"
+"\n"
+"Eftersom detta är det sista steget i installations-\n"
+"processen, kommer nu KDevelop att startas om.\n"
+"\n"
+"Vi hoppas att du glädjs åt KDevelop och att den\n"
+"är ett användbart verktyg i skapandet av ny mjukvara.\n"
+"\n"
+"The KDevelop team"
+
+msgid ""
+"Now KDevelop will perform the last step\n"
+"of the installation process with indexing\n"
+"your documentation. This will provide an extended\n"
+"help functionality and will give you the information\n"
+"you need."
+msgstr ""
+"Nu kommer KDevelop att utföra det sista steget\n"
+"av installationsprocessen genom att indexera\n"
+"din dokumentation. Detta medför en utvidgad\n"
+"hjälpfunktionalitet och ger dig den information\n"
+"du behöver."
+
+msgid ""
+"                 Creating search database                                    "
+"                                                                     Please "
+"wait...                                                                      "
+"                                                                             "
+"      "
+msgstr ""
+"                 Skapar sökdabas                                             "
+"                                                                   Var god  "
+"dröj...                                                                      "
+"                                                                             "
+"      "
+
+msgid "Installation successful !"
+msgstr "Installationen fullförd !"
+
+msgid ""
+"\n"
+"The installation process finished successfully.\n"
+"\n"
+"The KDevelop Team wishes that you will enjoy our\n"
+"program and we would be honoured for any feedback.\n"
+"\n"
+"The KDevelop Team"
+msgstr ""
+"\n"
+"Installationsprocessen utfördes utan problem.\n"
+"\n"
+"KDevelop teamet önskar att du tycker om programmet\n"
+"och vi vore tacksamma för feedback.\n"
+"\n"
+"The KDevelop Team"
+
+msgid "KDevelop Installation"
+msgstr ""
+
+# ckdevelop_init.cpp:661
+
+msgid "Welcome to the KDevelop Setup !"
+msgstr "Välkommen till KDevelop Setup!"
+
+# ckdevelop_init.cpp:508
+
+msgid "Qt-Documentation Path:"
+msgstr "Qt-dokumentationens sökväg:"
+
+msgid ""
+"This installation program will check your system for helper programs needed "
+"by KDevelop. Also your documentation will be set up automatically.  Choose "
+"'Proceed` to invoke the automatic detection and the documentation generator. "
+"'Help' will give more information about the installation. Choosing 'Cancel' "
+"will stop the installation and KDevelop will be started without setting the "
+"initialvalues needed for proper functionality."
+msgstr ""
+"Detta installationsprogram kommer att leta efter hjälprogram som behövs "
+"för KDevelop. Den kommer också att lägga upp dokumentationen. Välj 'Fortsätt' "
+"för automatisk uppspårning samt dokumentationsskaparen. 'Hjälp' ger div mer "
+"information om installationen. Väljer du 'Avbryt' stoppas installationen "
+"och KDevelop kommer startas utan de insällningar som behövs för lämplig "
+"funktionalitet."
+
+msgid "Proceed >>"
+msgstr "Fortsätt >>"
+
+msgid ""
+"\n"
+"The chosen path does not lead to the\n"
+"Qt-library documentation. Please choose the\n"
+"correct path."
+msgstr ""
+"\n"
+"Den valda sökvägen leder inte till\n"
+"dokumentationen av Qt-biblioteket. Välj\n"
+"en annan sökväg."
+
+msgid ""
+"\n"
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Please choose 'Proceed'\n"
+"in any case. If you don't have a documentation,\n"
+"it will be generated automatically in one of the\n"
+"next steps"
+msgstr ""
+"\n"
+"Den valda sökvägen leder inte till\n"
+"dokumentationen av KDE-biblioteket. Välj 'Fortsätt'\n"
+"iallafall. Om du inte ha en dokumentation,\n"
+"kommer den att skapas automatiskt om några steg"
+
+msgid "        Automatic installation in progress... "
+msgstr "        Automatisk installation..."
+
+msgid "Syntax-Highlighting"
+msgstr "Syntaxfärgning"
+
+msgid ""
+"\n"
+"Now you can choose the Syntax-Highlighting style\n"
+"KDevelop will use. The options are to set\n"
+"the highlighting to Emacs stlye or to the default\n"
+"settings of KWrite (k.a. 'Extended Editor')\n"
+"\n"
+"Which one do you want to use ?"
+msgstr ""
+"\n"
+"Du kan nu välja den stil av syntaxfärgning som\n"
+"KDevelop kommer att använda. Alternativen är att\n"
+"antingen ha Emacs syntaxfärgning eller standard-\n"
+"alternativet av KWrite (k.a 'Extended Editor')\n"
+"\n"
+"Vilken vill du använda ?"
+
+msgid "Emacs style"
+msgstr "Emacs stil"
+
+msgid "KWrite default"
+msgstr "KWrite standarden"
+
+msgid "Checking needed programs..."
+msgstr "Söker efter nödvändiga program..."
+
+msgid " was found."
+msgstr " hittades."
+
+msgid " was not found."
+msgstr " hittades inte."
+
+msgid "Program test results"
+msgstr "Test resultatet över programmen"
+
+msgid ""
+"The following results have been determined for your system:\n"
+"\n"
+" "
+msgstr ""
+"Följande resultat har funnits gälla ditt system:\n"
+"\n"
+" "
+
+msgid "Qt Documentation found"
+msgstr "Qt-Dokumentationen funnen"
+
+msgid ""
+"\n"
+"The Qt-Documentation has been found at:\n"
+"\n"
+msgstr ""
+"\n"
+"Qt-dokumentationen fanns befinna sig vid:\n"
+
+msgid ""
+"\n"
+"The Qt-library documentation could not\n"
+"be detected. Please insert the correct path\n"
+"to your Qt-documentation manually. Do you want\n"
+"to set it now ?\n"
+" "
+msgstr ""
+"\n"
+"Qt-bibliotekets dokumentation hittas inte.\n"
+"Var vänlig skriv in den rätta sökvägen till\n"
+"din Qt-dokumentation manuellt. Vill du skriva\n"
+"in den nu ?\n"
+" "
+
+msgid ""
+"    Please choose your Qt-Documentation path by pushing the selection button "
+"above."
+msgstr ""
+"    Var vänlig välj sökvägen till Qt-dokumentation genom att trycka på knapparna "
+"ovan."
+
+msgid ""
+"\n"
+"The Program KDoc was not found on your system,\n"
+"a library documentation update can not be performed.\n"
+"KDoc is part of the kdesdk package that can be obtained\n"
+"from www.kde.org.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"Programmet KDoc hittades inte på ditt system,\n"
+"d.v.s det går inte att uppdatera biblioteksdokumentation.\n"
+"KDoc är en del av kdesdk paketet och kan hämtas från\n"
+"www.kde.org.\n"
+"\n"
+" "
+
+msgid ""
+"\n"
+"Now KDevelop will create a new KDE-library\n"
+"documentation. For that, you need the kdelibs\n"
+"package as the source package. If you don't have\n"
+"the kdelibs as sources, we advise to obtain them\n"
+"from www.kde.org. Mind that the sources should match\n"
+"your installed kdelibs version.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"Nu kommer KDevelop att skapa en ny dokumentation\n"
+"för KDE-biblioteket. För att kunna göra det behövs\n"
+"kdelibs paketet i källkodsformat. Om du inte har\n"
+"källkoden till kdelibs, råder vi dig att hämta dem\n"
+"från www.kde.org. Kom ihåg att källkoden måste stämma\n"
+"överens med din installerade kdelibs version.\n"  
+"\n"
+" "
+
+msgid ""
+"                Creating KDE documentation                                   "
+"                                                                    Please "
+"wait...                                                                      "
+"                                                                             "
+"      "
+msgstr ""
+"                Skapar ny KDE dokumentation                                  "
+"                                                                Var vänlig "
+"dröj...                                                                      "
+"                                                                             "
+"      "
+
+msgid ""
+"\n"
+"\n"
+"This will exit the automatic installation process\n"
+"and start KDevelop with the default values !\n"
+"\n"
+"If you choose 'Continue', you will have to set all\n"
+"installation values manually in the KDevelop Setup\n"
+"dialog available in the options menu.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"\n"
+"Detta avslutar den automatiska installations processen\n"
+"och startar KDevelop med standard värderna !\n"
+"\n"
+"Om du väljer 'Fortsätt', måste du skriva in alla installations\n"
+"värden manuellt i KDevelop-inställningar dialogen som finns\n"
+"under egenskapsmenyn.\n"
+"\n"
+" "
+
+msgid "Widgets"
+msgstr "Gränssnittselement"
+
+msgid "Dialogs"
+msgstr "Dialogrutor"
+
+msgid "Items"
+msgstr "Objekt"
+
+msgid "Widget Editor"
+msgstr "Gränssnittselement-redigeraren"
+
+msgid "Widget Properties"
+msgstr "Gränssnittsegenskaper"
+
+msgid "&Properties"
+msgstr "Egenska&per"
+
+msgid "&Widgets-View"
+msgstr "Element-&visaren"
+
+msgid "&Properties-View"
+msgstr "Egenska&ps-visaren"
+
+# ckdevelop_init.cpp:353
+msgid "&Generate Sources..."
+msgstr "Skapa källkoder..."
+
+# ckdevelop_init.cpp:570
+
+msgid "&KDevelop"
+msgstr ""
+
+# ckdevelop.cpp:1521
+msgid "Create New Dialog"
+msgstr "Skapar en ny dialogruta"
+
+msgid "Open Dialog"
+msgstr "Öppnar dialog"
+
+msgid "Save Dialog"
+msgstr "Spara dialogrutan"
+
+msgid "Generate widget sources"
+msgstr "Skapar elementkällkoder"
+
+msgid "Switch to edit-mode"
+msgstr "Byter till redigeringsläget"
+
+msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgstr ""
+
+msgid "W:    H:    "
+msgstr ""
+
+msgid "X:    Y:    "
+msgstr ""
+
+msgid "Widget_1"
+msgstr ""
+
+# Further Translations not in the kdevelop.pot file
+msgid "Default Font"
+msgstr "Standardtypsnitt"
+
+msgid "Default Item Styles"
+msgstr ""
+
+msgid "Autoswitch"
+msgstr "Autoväxla"
+
+msgid "Startup"
+msgstr "Uppstart"
+
+msgid "enable Autosave"
+msgstr "använd Autospara"
+
+msgid "Make-Command"
+msgstr "Make-kommando"
+
+msgid "Directories"
+msgstr "Sökvägar"
+
+msgid "Update KDE-Documentation :"
+msgstr "Uppdatera KDE-Dokumentationen :"
+
+msgid "Update..."
+msgstr "Uppdatera..."
+
+msgid "Configures KDevelop"
+msgstr "Konfigurerar KDevelop"
+
+msgid "Ready."
+msgstr "Redo."
+
+msgid "Configure &Printer..."
+msgstr "Konfigurera &skrivare..."
+
+msgid "Configures printing options"
+msgstr "Konfigurerar skrivarinställningar"
+
+msgid "Configures the printer to use a2ps"
+msgstr "Konfigurerar skrivaren till att använda a2ps"
+
+msgid "Configures the printer to use enscript"
+msgstr "Konfigurerar skrivaren till att använda enscript"
+
+msgid "Files..."
+msgstr "Filer..."
+
+msgid "&Execute"
+msgstr "&Kör"
+
+msgid "Execute &with Arguments"
+msgstr "Kör med &argument"
+
+msgid "&Add existing File(s)..."
+msgstr "Lägg till befintlig&a fil(er)..."
+
+msgid "Add new &Translation File..."
+msgstr "Lägg till ny &översättningsfil..."
+
+msgid "Make &messages and merge"
+msgstr "Skapa &meddelanden och slå ihop"
+
+msgid "Make AP&I-Doc"
+msgstr "Skapa AP&I-Doc"
+
+msgid "Make D&istribution"
+msgstr "Skapa &distribution"
+
+msgid "Goto &Line..."
+msgstr "Gå till &rad..."
+
+msgid "New..."
+msgstr "Ny..."
+
+msgid "Changes to the KDevelop dialogeditor"
+msgstr "Byter till KDevelops dialogredigerare"
+
+msgid "&Search in Files..."
+msgstr "&Sök i filer..."
+
+msgid "Tools..."
+msgstr "Verktyg..."
+
+msgid "&Sourcecode Editor"
+msgstr "&Källkodsredigeraren"
+
+msgid "Change to the KDevelop project editor"
+msgstr "Byt till KDevelops projektredigerare"
+
+msgid "&Grid..."
+msgstr "&Rutnät..."
+
+msgid "Grid Size :"
+msgstr "Rutstorlek :"
+
+msgid "Horizontal Grid Size :"
+msgstr "Horisontal rutstorlek :"
+
+msgid "Vertical Grid Size :"
+msgstr "Vertikal rutstorlek :"
+
+msgid "Square Grid"
+msgstr "Kvadratiskt rutmönster"
+
+msgid "KDevelop Homepage"
+msgstr "KDevelops hemsida"
+
+msgid "Bug Report..."
+msgstr "Felrapport..."
+
+msgid "&New Dialog..."
+msgstr "&Ny dialogruta..."
+
+msgid "Printer"
+msgstr "Skrivare"
+
+msgid "printername"
+msgstr "Skrivarnamn"
+
+msgid "Outputlocation"
+msgstr "Utdataplats"
+
+msgid "Outprinting"
+msgstr "Utskrift"
+
+msgid "Page printing"
+msgstr "Sidutskrift"
+
+msgid "Paper format"
+msgstr "Pappersformat"
+
+msgid "Outputmedia"
+msgstr "Utdatamedia"
+
+msgid "Outputformat"
+msgstr "Utdataformat"
+
+msgid "Pretty-print"
+msgstr "Vacker-utskrift"
+
+msgid "pretty-print"
+msgstr "vacker-utskrift"
+
+msgid "color"
+msgstr "färg"
+
+msgid "Pretty-print mode"
+msgstr "Vacker-utskriftsläge"
+
+msgid "one page per side"
+msgstr "en sida per sida"
+
+msgid "two pages per side"
+msgstr "två sidor per sida"
+
+msgid "Default printsettings"
+msgstr "Standard skrivarinställningar"
+
+msgid "Pages"
+msgstr "Sidor"
+
+msgid "all"
+msgstr "alla"
+
+msgid "odd"
+msgstr "udda"
+
+msgid "even"
+msgstr "jämna"
+
+msgid "Preview "
+msgstr "Förhandsgranska"
+
+msgid "print to file"
+msgstr "skriv till fil"
+
+

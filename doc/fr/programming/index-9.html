@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Le Manuel de Programmation de KDevelop: Extension de la Documentation avec SGML</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-10.html">Page suivante</A>
+ <A HREF="index-8.html">Page précédente</A>
+ <A HREF="index.html#toc9">Table des matières</A>
+</P>
+<H3><A NAME="s9">9. Extension de la Documentation avec SGML</A></H3>
+
+<P>Du fait que les projets manquent souvent d'un manuel d'utilisation complet,
+tous les projets KDevelop contiennent un manuel pré-construit qui peut
+facilement être adapté ; un autre des objectifs de KDE est ainsi rempli :
+fournir suffisamment d'aide en ligne pour guider les utilisateurs qui ne sont
+pas habitués à une application. Ce chapitre vous explique donc comment étendre
+le modèle de documentation fourni et ce que vous devez faire pour le rendre
+disponible à l'utilisateur.
+<P>
+<H3><A NAME="ss9.1">9.1 Pourquoi SGML ?</A>
+</H3>
+
+<P>SGML (Standard Generalized Markup Language) est un langage avec lequel
+on peut écrire les spécifications d'un langage de marquage mais n'est pas un
+langage de marquage en lui-même. La spécification de ce langage de marquage
+est appelée une DTD (Document Type Definition) qui contient la structure d'un
+document et les balises valides utilisables. Ensuite, un système SGML fournit
+un ensemble de fichiers de remplacement qui traduisent les balises de la DTD
+dans le format de sortie désiré - et c'est de cette façon que cela fonctionne.
+Le format de sortie le plus utilisé est probablement HTML pour fournir de
+l'aide en ligne à travers des serveurs web, à une époque où les standards de
+l'Internet sont accessibles même depuis des systèmes à un seul bureau. KDE
+utilise intensivement la documentation HTML aussi bien par le biais de son application 
+KDEHelp où toutes les applications KDE sont listées et qui donne accès
+à leurs manuels d'utilisation que par le menu d'aide qui permet, depuis une
+application, d'accéder directement à l'aide en ligne.
+<P>Actuellement, KDE (et par conséquent KDevelop) utilise le paquetage des 
+SGML-Tools 1.x (voir 
+<A HREF="http://www.sgmltools.org">http://www.sgmltools.org</A>) qui était connu
+sous le nom de paquetage LinuxDoc. Il contient une DTD appelée <CODE>LinuxDoc</CODE>
+et un ensemble de fichiers de correspondance pour différents formats de
+sortie, ainsi que les outils  nécessaires pour réaliser effectivement le
+remplacement des balises <CODE>LinuxDoc</CODE>. La DTD LinuxDoc est basée sur la DTD
+Qwertz qui, elle-même, avait été écrite afin de fournir une bonne
+correpondance (remplacement de balises), spécialement pour le système de
+traitement de texte LaTeX, et qui permet donc de produire des impressions de
+bonne qualité. Le paquetage a ensuite tiré son nom de l'utilisation qui en a
+été faite pour écrire les documentations du LDP (Linux Documentation Project)
+et a ensuite changé de nom parce que c'est un système sgml qui n'a pas
+nécessairement de rapport avec le projet Linux mais peut être utilisé sur
+n'importe quel système Unix. Vous pourriez aussi écrire votre propre DTD et
+vos correspondances si le coeur vous en dit.
+<P>Pendant ce temps, une autre DTD a vu le jour pour remplir les mêmes objectifs :
+la "DTD DocBook". DocBook a évidemment de nombreux avantages sur la DTD
+LinuxDoc, notamment en offrant de meilleures balises et correspondances pour
+les tables et l'insertion de graphiques mais cela reste aussi possible avec
+LinuxDoc. C'est pourquoi, les SGML-Tools ont basculé afin de fournir le support
+de la DTD DocBook dans la série des versions 2.x, qui inclut aussi un
+convertisseur produisant un sgml DocBook à partir d'un original LinuxDoc.
+<P>Dans l'état actuel du développement de KDE, nous utilisons encore la DTD
+LinuxDoc pour certaines raisons :
+<P>
+<UL>
+<LI>écrire de la documentation LinuxDoc est facile</LI>
+<LI>installer les SGML-Tools 1.x permettant d'utiliser LinuxDoc est encore
+plus simple</LI>
+<LI>KDE fournit un outil supplémentaire appelé <CODE>ksgml2html</CODE> qui
+ajoute le style de documentation KDE à la sortie générée par le
+convertisseur <CODE>sgml2html</CODE> des SGML-Tools 1.x afin de produire
+une sortie HTML. </LI>
+</UL>
+<P>J'ai personnellement remarqué, pendant l'écriture des manuels de Kdevelop,
+qu'utiliser la DTD LinuxDoc est très facile et s'accorde bien avec les besoins
+que j'avais pour écrire la documentation. Le rythme d'apprentissage est très
+rapide et en quelques jours, vous serez devenu un expert de sgml-tools/DTD
+LinuxDoc, ce qui vous épargnera le temps que vous auriez passé à apprendre un
+système de formatage comme TeX pour les sorties papier de votre
+documentation ou un langage à balise pour les sorties HTML.
+<P>Une raison majeure de continuer à utiliser les sgml-tools 1.x est que la
+plupart des distributions contiennent ce paquetage et tous les outils
+nécessaires pour d'autres formats de sortie. Cela rend l'installation aussi
+simple que possible et l'écriture en elle-même n'est pas très compliquée, vous
+allez le voir. Les formats de sortie que vous pouvez obtenir avec les
+sgml-tools sont :
+<P>
+<UL>
+<LI>HTML avec l'apparence KDE si vous utilisez <CODE>ksgml2html</CODE></LI>
+<LI>texte brut</LI>
+<LI>GNU info</LI>
+<LI>format Lyx</LI>
+<LI>formats TeX, DVI, PostScript et PDF</LI>
+<LI>Rich Text Format (RTF).</LI>
+</UL>
+<P>
+<P>
+<H3><A NAME="ss9.2">9.2 Ce que la Documentation contient déjà</A>
+</H3>
+
+<P>Lors de la création d'un projet KDevelop, le répertoire <CODE>docs/en</CODE>
+contient déjà le fichier de documentation en anglais <CODE>index.sgml</CODE> et les
+fichiers résultant de la génération au format HTML. Ceux-ci sont déjà inclus
+dans le projet et l'emplacement d'installation est prédéfini au répertoire 
+HTML de KDE. La documentation est déjà adaptée au nom de votre projet, son
+numéro de version et les informations sur le programmeur. En plus, la sortie
+génère le fichier index.html qui contient la table des matières (qui est
+ouverte par l'Aide de KDE quand l'utilisateur demande de l'aide) ; une
+introduction à l'installation et des informations sur le copyright en relation
+avec la Licence GPL sont incluses.
+<P>Par conséquent, lorsque vous étendez la documentation, vous devez seulement
+ajouter les informations qui sont spécifiques à votre projet. Notez que pour
+les projets KDE, vous devez exécuter "Construire le manuel d'utilisation" dans
+le menu "Projet" après la création du projet. Le fichier index.sgml est à nouveau
+traité par <CODE>ksgml2html</CODE> et le style KDE est ajouté à la sortie HTML.
+Ouvrez le dossier <CODE>docs/en</CODE> dans l'onglet RFV et ajoutez le fichier 
+<CODE>logotp3.gif</CODE> au projet via le menu contextuel ; définissez ensuite
+correctement les propriétés du fichier afin qu'il s'installe au même endroit
+que les fichier HTML - dans 
+<CODE>$(kde_htmldir)/en/&lt;votre_projet&gt;/logotp3.gif</CODE>.
+<P>
+<H3><A NAME="ss9.3">9.3 Écrire de la Documentation SGML</A>
+</H3>
+
+<P>Cette section a été ajoutée car SGML (ou pour être plus précis : la DTD
+LinuxDoc) semble rester difficile pour les débutants qui souhaitent écrire de
+la documentation. En parcourant des applications KDE, j'ai remarqué que 
+certaines contenaient le fichier sgml de modèle mais l'auteur a ensuite édité
+la sortie html au lieu du fichier sgml. Il en résulte des problèmes pour les
+traducteurs - s'ils veulent fournir dans leur langue natale de la documentation
+sur votre application, ils devront éditer chaque fichier HTML et cela rend
+impossible la réutilisation de la documentation pour d'autres formats, pas
+seulement dans la version anglaise mais aussi pour toutes les versions
+internationalisées. Vous voyez donc que c'est un comportement limitant et une
+mauvaise situation ; personnellement, je pense que cela vient du fait que les
+auteurs connaissent HTML et non SGML. Comme beaucoup veulent éviter
+d'apprendre un nouveau langage de formatage, ils utilisent la sortie HTML
+qu'ils éditent comme modèle. Si vous saviez à quel point SGML est simple (et
+utile) avec LinuxDoc, vous comprendriez qu'apprendre les quelques balises
+supplémentaires nécessaires pour le formatage SGML vaut le coup.
+<P>Voilà pourquoi les sections suivantes introduiront les parties les plus
+importantes d'un fichier sgml LinuxDoc et comment étendre votre documentation.
+<P>
+<H4>La Déclaration de la DTD</H4>
+
+<P>Un fichier SGML, quelque soit la DTD utilisée, doit toujours commencer avec la
+déclaration de la DTD. Cela indique à l'analyseur syntaxique (NdT : parser)
+SGML comment doit être utilisée une DTD. C'est pourquoi, la première balise
+(une expression entre crochets, comme &lt;votrebalise&gt; votrecontenu 
+&lt;/votrebalise&gt;) est toujours le DOCTYPE :
+<P>
+<PRE>
+&lt;!doctype linuxdoc system&gt;
+</PRE>
+<P>Cela indique au formateur sgml qu'il doit utiliser la DTD LinuxDoc.
+<P>
+<H4>La Structure du Document</H4>
+
+<P>Avec LinuxDoc, la balise suivante est la balise de début du type de style de
+document. La DTD LinuxDoc permet un ensemble complet de types que vous pouvez
+sélectionner, selon le but du document ou sa longueur. Les formats
+disponibles sont :
+<P>
+<UL>
+<LI><CODE>&lt;notes&gt;</CODE> pour de brèves explications&nbsp;;</LI>
+<LI><CODE>&lt;article&gt;</CODE> pour écrire des articles d'environ 10-20 pages
+(recommandé). Ceci est utilisé par les modèles de KDevelop et la plupart
+des applications KDE&nbsp;;</LI>
+<LI><CODE>&lt;report&gt;</CODE> pour des articles qui sont plus longs que
+le type &lt;article&gt;&nbsp;;</LI>
+<LI><CODE>&lt;book&gt;</CODE> pour écrire des livres plus longs - les manuels de
+KDevelop ont été rédigés en utilisant ce type de document&nbsp;;</LI>
+<LI><CODE>&lt;slides&gt;</CODE> pour des transparents. C'est utile pour des
+présentations. Bien sur, vous utiliserez le format de sortie LaTeX dans la
+plupart des cas&nbsp;;</LI>
+<LI><CODE>&lt;letter&gt;</CODE> pour des lettres classiques&nbsp;;</LI>
+<LI><CODE>&lt;telefax&gt;</CODE> pour un fax&nbsp;;</LI>
+<LI><CODE>&lt;manpage&gt;</CODE> pour une page de manuel (NdT : manpage).</LI>
+</UL>
+<P>Remarquez que ces formats décrivent seulement la structure globale du document
+- pas le format de sortie. Comme mentionné, le modèle de documentation de
+Kdevelop généré par défaut utilise la structure &lt;article&gt;. Elle est
+utilisée par la majorité des applications hormis KDevelop qui utilise le
+format &lt;book&gt;. Cela importe peu dans la sortie HTML mais pour le format 
+LaTeX, la différence est plus nette. Les manuels sont vraiment des "livres"
+avec des pages séparées pour chaque chapitre (c'est la principale différence).
+<P>Enfin,  la fin du fichier sgml doit avoir une balise fermante pour le type de
+structure de document - pour &lt;article&gt;, ce sera &lt;/article&gt;.
+<P>
+<H4>Pages de Titre</H4>
+
+<P>La section qui suit la structure du document décrit toutes les entrées
+que l'on trouve généralement sur une page de titre. Le modèle prédéfini
+ne l'utilise pas explicitement mais définit seulement les informations pour  
+<CODE>&lt;title&gt;</CODE>, <CODE>&lt;author&gt;</CODE> et <CODE>&lt;date&gt;</CODE> car cela convient
+dans la plupart des cas. Dans le cas spécial de la structure
+<CODE>&lt;book&gt;</CODE>, vous voudrez probablement définir une page de titre
+complète. Voici la liste des balises correspondantes tirée du source sgml
+de ce manuel :
+<P>
+<HR>
+<PRE>
+&lt;!doctype linuxdoc system&gt;
+&lt;book&gt;
+&lt;titlepag&gt;
+&lt;title&gt;The KDevelop Programming Handbook
+&lt;subtitle&gt;The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.2
+&lt;author&gt;
+&lt;name&gt;Ralf Nolden &lt;htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de"
+                                                                   name = "&lt;Ralf.Nolden@post.rwth-aachen.de&gt;"&gt;
+&lt;inst&gt;The KDevelop Team
+&lt;date&gt;Version 1.2 , July 7, 1999
+&lt;abstract&gt;
+This handbook itself is part of the KDevelop Integrated Development Environment
+and is therefore also licensed under the GNU General Public License;
+see &lt;ref id="Copyright" name="Copyright"&gt; for more information.
+&lt;/abstract&gt;
+</PRE>
+<HR>
+<P>Ceci recouvre tout ce qu'une page de titre contient normalement. La balise <CODE>&lt;author&gt;</CODE>
+peut aussi inclure une balise <CODE>&lt;thanks&gt;</CODE> pour insérer des
+remerciements aux co-auteurs, relecteurs, etc. <CODE>&lt;inst&gt;</CODE> représente
+l'institut ou la société pour laquelle l'auteur a écrit la documentation ;
+vous pourriez aussi ajouter ici le nom de votre équipe, comme je l'ai fait.
+<CODE>&lt;abstract&gt;</CODE> contient une courte description qui est également
+placée sur la page de titre. Cela est un peu gênant pour les sorties imprimées
+où cette section serait imprimée au verso de la page de titre où sont regoupés
+le copyright, etc. ; cela peut être modifié dans la sortie au format LaTeX
+en éditant le fichier TeX.
+<P>
+<H4>Index</H4>
+
+<P>La DTD LinuxDoc définit un ensemble de balises pour les différents index qui
+apparaissent régulièrement dans les documents. Celles-ci sont :
+<P>
+<UL>
+<LI>&lt;toc&gt; pour la table des matières</LI>
+<LI>&lt;lof&gt; pour la liste des figures</LI>
+<LI>&lt;lot&gt; pour la liste des tableaux</LI>
+</UL>
+<P>Les balises ouvrantes correspondantes ne nécessitent pas forcément une balise
+fermante ; elles sont insérées juste après la page de titre, avant le début du
+document avec les sections et chapitres correspondants.
+<P>Lorsque vous voulez indexer des mots-clés pour un glossaire qui est placé à la
+fin du document, vous disposez de 4 balises différentes ; deux qui laissent la
+phrase indexée dans la page et deux pour les entrées d'index qui ne sont pas
+affichées.
+<P>
+<LI>&lt;idx&gt; pour une entrée d'index normale</LI>
+<LI>&lt;cdx&gt; pour une entrée d'index true-type</LI>
+<LI>&lt;nidx&gt; pour une entrée d'index n'apparaissant pas dans le document</LI>
+<LI>&lt;ncdx&gt; comme précédemment pour une entrée d'index tt</LI>
+<P>Ces balises sont ignorées par tous les moteurs (l'outil qui fait la
+correspondance des balises sgml avec leur format de document) excepté <CODE>sgml2latex</CODE>
+qui génère un fichier d'index <CODE>index.idx</CODE> qui peut être converti en fichier
+TeX-index avec <CODE>makeindex index.idx</CODE>. L'index en lui-même peut être
+inséré ultérieurement dans le fichier de sortie TeX avec <CODE>\printindex</CODE>.
+J'ai modifié (NdT : patché) ma correspondance pour la sortie LaTeX afin de
+la faire automatiquement (mais je ne sais toujours pas comment inclure l'index
+dans la table des matières...).
+<P>
+<H4>Le Contenu du Document</H4>
+
+<P>Après avoir expliqué la plupart des détails sur la structure générale, nous
+abordons le contenu réel du document. Suivant le type de structure du
+document, on trouve une balise <CODE>&lt;sect&gt;</CODE> si on utilise <CODE>&lt;book&gt;</CODE>, vous
+devez commencer vos chapitres par <CODE>&lt;chapt&gt;</CODE>.
+<P>Après la balise de début, vous pouvez structurer chaque chapitre avec
+<CODE>&lt;sect1&gt;</CODE>, <CODE>&lt;sect2&gt;</CODE> etc. jusqu'au nombre maximal de niveaux
+de sous-sections (4).
+<P>La balise ouvrante du chapitre est suivie par le titre de ce chapitre. Vous
+avez le choix d'utiliser <CODE>&lt;title&gt;</CODE> et <CODE>&lt;</CODE>title&gt;/ pour le titre
+du chapitre (optionnel). Ensuite, après le titre du chapitre, vous devez
+ajouter une balise &lt;p&gt; pour réellement commencer le contenu de la
+sous-section. Dans celle-ci, vous avez toutes les possibilités pour formater
+votre document avec des listes, des énumérations, des puces et des
+descriptions de listes. De plus, les citations, les extraits de code, etc
+peuvent être insérés avec des balises ; consultez le guide de documentation
+des <CODE>sgmltools</CODE> pour une liste complète. Vous pourrez en profiter pour
+regarder la section sur les "caractères spéciaux". Elle contient tous les
+remplacements valides pour les caractères hors des alphabets usuels comme les
+crochets, les barres obliques et les symboles comme la marque déposée etc.
+Avec ces balises, vous pouvez structurer le contenu du texte selon les besoins
+de la documentation de votre application.
+<P>
+<H3><A NAME="ss9.4">9.4 Comment appeler l'Aide dans les Boîtes de Dialogue</A>
+</H3>
+
+<P>
+<!--
+fonctions d'aide
+-->
+
+Dans les boîtes de dialogue, on appelle souvent l'aide en ajoutant un bouton
+"Aide" ; ensuite, vous ajoutez un slot qui est appelé lorsque le bouton est
+enfoncé. Dans l'implantation du slot, appelez
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+kapp->invokeHTMLHelp( QString aFilename, QString aTopic );
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>où <CODE>aFilename</CODE> est le nom du fichier à appeler dans le dossier de la
+documentation HTML de votre application ; par exemple, index-3.html. Ensuite,
+<CODE>aTopic</CODE> est la section à appeler. Le préfixe de hachage est ajouté
+automatiquement ; saisissez juste le chapitre que vous voulez avoir sur cette
+page, en fait, cela peut être le nom d'une sous-section.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-10.html">Page suivante</A>
+ <A HREF="index-8.html">Page précédente</A>
+ <A HREF="index.html#toc9">Table des matières</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

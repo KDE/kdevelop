@@ -1,0 +1,672 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: Descrição Geral</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-6.html">Página seguinte</A>
+ <A HREF="index-4.html">Página anterior</A>
+ <A HREF="index.html#toc5">Índice geral</A>
+</P>
+<H3><A NAME="Overview"></A> <A NAME="s5">5. Descrição Geral</A></H3>
+
+<P>Olhando para o KDevelop, o interface do utilizador pode ser descrito através da sua separação lógica: a janela principal, a vista de árvore e a janela
+de output, rodeadas pelas barras de menu, ferramentas e estados. Esta secção descreve o objectivo de cada parte do interface,
+começando pelas janelas, seguido das barras e das funções que disponibilizam.
+<P>
+<H3><A NAME="ss5.1">5.1 Janela Principal</A>
+</H3>
+
+<P>A janela principal consiste de quatro pastas em que as duas da esquerda são para realizar edições. Primeiro vem a janela Header/Resource
+para headers e quaisquer outros ficheiros de texto tais como a documentação em sgml, depois a janela C/C++ para o código fonte. A estas segue-se
+a janela de Documentação apresentando o conteudo em formato HTML. Por fim é a janle de Ferramentas para programas externos tais como o KIconedit
+e o KDbg que estão integrados no ambiente gráfico. Qualquer Ferramenta que esteja registada pode ser acedida através do menu de Ferramentas; pelo que o registo
+de programas de terceiros pode ser facilmente conseguido através de um diálogo de configuração (veja 
+<A HREF="index-12.html#General Configuration">Configuração Genérica</A>). Para uma descrição das funcionalidades das janelas do Editor, veja o capítulo 
+<A HREF="index-7.html#Working with the Editor">Trabalhar com o Editor</A>, e para o Navegador de Ajuda, deverá ler a secção 
+<A HREF="index-6.html#Using the Documentation Browser">O Sistema de Ajuda</A>.
+<H3><A NAME="ss5.2">5.2 O Navegador de Classes e Janelas de Ficheiros</A>
+</H3>
+
+<P>
+<P>
+<H4>O Visualizador de Classes</H4>
+
+<P>O Visualizador de Classes (VC) mostra as classes do seu projecto bem como as funções e variáveis globais. Abrindo a árvore irá mostrar todas
+as funções membras e membros com símbolos para atributos (privado, protegido e público, sinais e espaços), para que possa ver as
+propriedades dos membros visualmente sem ter de alternar para os ficheiros header. Seleccionar o nome de uma classe irá abrir o ficheiro header
+correspondente contendo a classe e colocar o cursor no início da declaração da classe. Seleccionar funções membras irá abrir o
+ficheiro de implementação e colocar o cursor no cabeçalho da função. Para elementos, o KDevelop irá procurar o ficheiro header e colocar
+o cursor na linha onde o elemento é declarado. O visualizador de classes também disponibiliza um menu de contexto (acessível pelo botão 
+direito do rato) que oferece opções mais específicas,
+veja 
+<A HREF="index-10.html#The Class Browser">O Navegador de Classes</A> para informação mais detalhada.
+<P>
+<H4>O Visualizador de Ficheiros Lógicos</H4>
+
+<P>O Visualizador de Ficheiros Lógicos (VFL) permite ordenar ficheiros por filtros em grupos. Grupos individuais podem ser adicionados pela opção de
+propriedades do menu de projecto ou através do clique do botão direito do rato no item da árvore. Isto permite uma busca mais especializada para ficheiros que
+deseja aceder rapidamente, primeiramente apenas mostrando os ficheiros incluidos no projecto. De acordo com o seu tipo Mime, os ficheiros serão abertos
+quando seleccionados. Você gostará do VFL por coisas como seleccionar ficheiros gráficos- irá iniciar o KIconEdit (se instalado no sistema) na
+janela de Ferramentas e abrir a imagem escolhida.
+<P>
+<H4>O Visualizador de Ficheiros Reais</H4>
+
+<P>O Visualizador de Ficheiros Reais (VFR) mostra a árvore de directório do projecto com todos os seus ficheiros, para que possa editar ficheiros que não pertencem ao projecto ou que estão escondidas
+no VFL tal como o configure.in e Makefiles.
+Os menus de contexto também disponibilizam funções tais como adicionar ou remover ficheiros do projecto actual.
+<P>
+<H4>A Árvore de Documentação</H4>
+
+<P>A Árvore de Documentação (ADOC) apresenta toda a documentação baseada em HTMLque está configurada como livros. Seleccionando um livro irá
+abrir a primeira página na janela de Navegação. Também, um menu de contexto permite configuração personalizada para pacotes de documentação
+adicionais baseados em HTML.
+<P>
+<H3><A NAME="ss5.3">5.3 Janela de Output</A>
+</H3>
+
+<P>A janela de Output está separada também numa janela de mensagens, uma janela stdin/stdout
+e uma janela stderr para as seguintes necessidades:
+<UL>
+<LI> janela de mensagens: mostra todo o output do compilador. Carregando numa mensagem de erro irá alterar o widget de edição para colocar o
+cursor na linha onde o compilador encontrou o erro.</LI>
+<LI> janela stdout: apresenta para aplicações baseadas em consola que enviam mensagens para o output standard do computador. Note que
+aplicações de Consola são agora iniciadas numa janela de consola externa.</LI>
+<LI> janela stderr: apresenta todas as mensagens de erro que o seu programa
+produzir. Isto é útil para realizar testes. A janela de Output está programada para surgir cada vez que um processo externo for chamado,
+tal como o make ou uma aplicação de consola (ou terminal).</LI>
+</UL>
+<P>
+<H3><A NAME="ss5.4">5.4 Comandos da Barra de Menu</A>
+</H3>
+
+<P>
+<P>
+<H4>Gestão de Ficheiros e Impressão</H4>
+
+<P>Esta secção cobre as funções que o KDevelop disponibiliza em relação a ficheiros; acedido através do menu de Ficheiros na barra de menu ou pelos respectivos itens na barra de ferramentas:
+<P>
+<UL>
+<LI><B>Novo                     Ctrl+N</B> Abre o diálogo "Novo Ficheiro", permitindo criar um novo ficheiro. O ficheiro pode ser criado utilizando diferentes modelos
+e o nome do ficheiro tem de ser dado bem como o caminho onde o ficheiro será criado.<P>
+</LI>
+<LI><B>Abrir                    Ctrl+O</B> apresenta o diálogo "Abrir Ficheiro..." e permite-lhe escolher um ficheiro para ser aberto.<P>
+</LI>
+<LI><B>Fechar           Ctrl+W</B> Fecha o ficheiro de topo na janela de edição<P>
+</LI>
+<LI><B>Gravar                   Ctrl+S</B>      Grava o ficheiro aberto no topo da janela de edição. Se o ficheiro não tiver ainda sido gravado , o diálogo "Gravar Ficheiro Como..."
+será aberto para lhe permitir escolher um caminho e nome de ficheiro para o ficheiro a ser gravado.<P>
+</LI>
+<LI><B>Gravar Como...</B> Abre o diálogo "Gravar Ficheiro Como..." para lhe permitir gravar o ficheiro actual com um novo nome de ficheiro<P>
+</LI>
+<LI><B>Gravar Todos</B> Grava todos os ficheiros modificados<P>
+</LI>
+<LI><B>Imprimir...      Ctrl+P</B> Abre o diálogo "Imprimir Ficheiro" onde pode definir várias opções de impressão quer utilizando o a2ps, o enscript ou
+o lpr<P>
+</LI>
+<LI><B>Sair                     Ctrl+Q</B> Sai do KDevelop. Se ficheiros tiverem sido modificados, ser-lhe-á perguntado se os deseja gravar.<P>
+</LI>
+</UL>
+<P>
+<P>
+<H4>Editar Ficheiros</H4>
+
+<P>Aqui, o menu "Editar" e os icons correspondentes na barra de ferramentas são cobertos o que permite editar ficheiros. As funções de edição estão
+também disponíveis através de um menu de contexto no editor.
+<UL>
+<LI><B>Desfazer                 Ctrl+Z</B> Desfaz a última operação de edição<P>
+</LI>
+<LI><B>Refazer  Ctrl+Z</B> permite-lhe fazer de novo o último passo desfeito<P>
+</LI>
+<LI><B>Cortar                   Ctrl+X</B> corta a selecção e copia-a para a área de transferência do sistema.<P>
+</LI>
+<LI><B>Copiar                   Ctrl+C</B> copia a selecção para a área de transferência do sistema. Isto também inclui selecções feitas no navegador de
+documentação.<P>
+</LI>
+<LI><B>Colar            Ctrl+V</B> insere o conteúdo da área de transferência na posição actual do cursor.<P>
+</LI>
+<LI><B>Indentar         Ctrl+I</B> Indentar move a selecção para a direita<P>
+</LI>
+<LI><B>Des-Indentar     Ctrl+U</B> Des-Indentar move a selecção para a esquerda<P>
+</LI>
+<LI><B>Inserir Ficheiro...Ctrl+Insert</B> Permite-lhe inserir um ficheiro e insere o seu conteudo na posição actual do cursor<P>
+</LI>
+<LI><B>Procurar...              Ctrl+F</B> Abre um diálogo de busca que procura uma expressão no ficheiro actual. Para uma busca através de vários
+ficheiros, "Procurar nos Ficheiros..." deverá ser utilizado.<P>
+</LI>
+<LI><B>Repetir Busca    F3</B> Repete a última busca por uma expressão. Isto também inclui buscas que foram feitas sobre a
+documentação, em que mais de uma ocorrência foi encontrada na mesma página. A ocorrência seguinte será apresentada escolhendo "Repetir Busca"
+ou F3 e assinalar como marcado.<P>
+</LI>
+<LI><B>Substituir...            Ctrl+R</B> Abre o diálogo de "Busca e Substituição" que permite a busca por uma expressão e substituir o texto
+encontrado por uma nova expressão.<P>
+<P>
+</LI>
+<LI><B>Procurar nos Ficheiros...                Ctrl+Alt+F</B> Apresenta o diálogo "Procurar nos Ficheiros...", que gere o <CODE>grep</CODE> em directorias inteiras com
+restrições (wildcards). Os resultados da busca são apresentados com uma lista de ficheiros, linhas e expressões. Escolhendo uma entrada é aberto o ficheiro
+e o cursor é colocado na linha do resultado da busca<P>
+</LI>
+<LI><B>Seleccionar Tudo  Ctrl+A</B> Selecciona todo o texto do ficheiro correntemente aberto na janela de edição de topo<P>
+</LI>
+<LI><B>Des-seleccionar Tudo</B> Des-selecciona todo o texto do ficheiro actual. Isto é utilizado para selecções múltiplas para que não tenha de 
+des-seleccionar cada um separadamente<P>
+</LI>
+<LI><B>Inverter Selecção</B> Inverte a selecção, o que significa que a selecção fica des-seleccionada e o texto que não está seleccionado
+fica seleccionado.<P>
+</LI>
+</UL>
+<P>
+<P>
+<H4>Configuração de Vista</H4>
+
+<P>O Menu Ver cobre as funções de abertura e fecho de janelas e comandos para activar/desactivar as barras de ferramentas e estados
+bem como para ir para erros no código.
+<UL>
+<LI><B>Ir Para a Linha...       Ctrl+G</B> Abre um diálogo "Ir Para Linha..." que lhe permite inserir um número de linha para mostrar no ficheiro corrente. O último
+número de linha é recordado e marcado, para que possa saltar para essa linha de novo ou apenas inserir um novo número de linha que deseje ver.<P>
+</LI>
+<LI><B>Erro Seguinte            F4</B> Salta para o erro seguinte que o KDevelop detectar a partir do output. A mensagem de output do Make ou outra ferramenta deve
+dar-lhe uma ajuda descritiva do que é o problema, para que possa corrigir o erro.<P>
+</LI>
+<LI><B>Erro Anterior            Shift+F4</B> Salta para o erro anterior que tenha sido reportado.<P>
+</LI>
+<LI><B>Editor de Diálogos   Ctrl+D</B> Alterna para o Editor de Diálogos<P>
+</LI>
+<LI><B>Vista de Árvore  Shift+T</B> (Des)Activa a janela de Árvore no lado esquerdo da vista principal contendo o Navegador de Classes, VFL, VFR e
+ADOC.<P>
+</LI>
+<LI><B>Vista de Output  Shift+O</B> (Des)Activa a janela de Output no fundo da vista principal.<P>
+</LI>
+<LI><B>Barra de Ferramentas</B> (Des)Activa a barra de ferramentas.<P>
+</LI>
+<LI><B>Barra de Navegação</B> (Des)Activa a barra de navegação, contendo os botões de Seguinte, Anterior e Procurar do Navegador<P>
+</LI>
+<LI><B>Barra de Estados Ctrl+B</B> (Des)Activa a barra de estados.<P>
+</LI>
+<LI><B>Refrescar</B> percorre novamente todos os ficheiros para reconstruir o Navegador de Classes. O progresso do processo de percorrer os ficheiros é mostrado na barra de estados.<P>
+</LI>
+</UL>
+<P>
+<P>
+<H4>Criar e Manter Projectos</H4>
+
+<P>Esta secção descreve funções que estão disponíveis no menu "Projecto" e é suposto cobrirem a criação e manutenção
+dos projectos
+<UL>
+<LI><B>Novo...</B> Inicia o KAppWizard e permite-lhe criar um novo projecto escolhendo o tipo de aplicação, nome,
+versão e outras opções.<P>
+</LI>
+<LI><B>Abrir</B> Mostra o diálogo de Abertura de Projecto, onde pode escolher um ficheiro de projecto KDevelop para ser aberto. Após a selecção, o
+projecto é aberto.<P>
+</LI>
+<LI><B>Abrir projecto recente...</B> contem um submenu com pelo menos 5 projectos que foram abertos. Pode abrir um projecto mais facilmente utilizando o
+menu de projectos recentes.<P>
+</LI>
+<LI><B>Fechar</B> Fecha o projecto actual. Isto é basicamente feito automaticamente quando sai do KDevelop, invoca o
+KAppWizard ou abre outro projecto.<P>
+</LI>
+<LI><B>Nova Classe...</B> Inicia o gerador de classes para crear uma nova classe que será adicionada ao projecto actual. O gerador
+de  classes permite-lhe especificar um nome de classe, herança e nome de ficheiro para a nova classe.<P>
+</LI>
+<LI><B>Adicionar Ficheiro(s) Existente(s)</B> Abre um diálogo de selecção onde pode escolher os ficheiros que deseja adicionar ao projecto actual e
+o caminho para onde serão copiados. Se escolher um destino que não estava actualmente incluido no projecto, por ex. criando um novo
+subdirectório, o KDevelop copiará os ficheiros a adicionar ao novoa subdirectório e criará um novo Makefile.am. Após o processo de cópia,
+o seu projecto será reconstruido pelo automake e autoconf para incluir o novo subdirectório criado no processo do make.<P>
+</LI>
+<LI><B>Adicionar novo ficheiro de tradução</B> Abre um diálogo de selecção de idioma que lhe permite escolher o idioma do ficheiro de tradução que irá ser
+adicionado ao projecto. Isto é principalmente utilizado por tradutores que podem facilmente adicionar o seu idioma ao projecto e trabalhar na
+tradução sem ter de se preocupar com os Makefile.am's<P>
+</LI>
+<LI><B>Propriedades de Ficheiros Shift+F7</B> Abre o diálogo de Propriedades de Ficheiros mostrando uma cópia do VFL e as opções do ficheiro de projecto. Aqui, as
+propriedades para os seus ficheiros têm de ser definidas tal como o caminho de instalação e tipo de ficheiro.<P>
+</LI>
+<LI><B>Fazer mensagens e juntar</B> Isto tem como objectivo criar o ficheiro de mensagens para o seu projecto. O ficheiro de mensagens é o que
+contém todas as frases que estão definidas no código para internacionalização e é utilizado pelos tradutores para criar o ficheiro .po
+para o seu idioma alvo.<P>
+</LI>
+<LI><B>Fazer Doc-API</B> Chama o KDoc sobre os seus ficheiros header e gera um output em HTML com a documentação das classes do seu
+projecto.<P>
+</LI>
+<LI><B>Fazer Manual do Utilizador</B> executa o ksgml2html sobre o ficheiro sgml do seu manual, criando um manual do utilizador em HTML. Se o ksgml2html não está instalado,
+o sgml2html será utilizado para fazer isto.<P>
+</LI>
+<LI><B>Fazer Distribuição:</B><P>
+<UL>
+<LI><B>tar.gz </B> cria um ficheiro de distribuição do seu projecto actual no directório do projecto e que está pronto para enviar aos utilizadores finais
+contendo o código fonte do projecto. O utilizador final tem de <CODE>tar zxvf seuprojecto.tar.gz </CODE> para descompactar o código para um directório e
+utilizar os comandos standard <CODE>./configure, make</CODE> e <CODE>make install</CODE>.<P>
+</LI>
+</UL>
+</LI>
+<LI><B>Opções  F7</B> Abre o diálogo de Opções do Projecto que
+lhe permite modificar várias definições para o seu projecto. Isto pode ser um novo número de versão ou as opções de compilador para definir -02 para uma
+distribuição com optimização.<P>
+</LI>
+</UL>
+<P>
+<P>
+<H4>Construir Projectos</H4>
+
+<P>Esta secção descreve o menu Construir que cobre todas as acções a serem feitas com o make ou acções como reconstruir a documentação
+ou ajuda electrónica do projecto.
+<P>
+<UL>
+<LI><B>Compilar ficheiro... Ctrl+F8</B> Activo, se a janela de topo de edição é a Janela C++. Isto apenas compila o ficheiro actual de
+implementação e permite-lhe poupar tempo no caso de suspeitar de erros.<P>
+</LI>
+<LI><B>Make  F8</B> Invoca o comando make para o seu projecto e constroi o alvo.<P>
+</LI>
+<LI><B>Reconstruir Tudo</B> Reconstroi todos os ficheiros objecto e o alvo do seu projecto.<P>
+</LI>
+<LI><B>Limpar Reconstruir Tudo</B> Limpa o directório do projecto de todos os ficheiros criados pelo make e reconstroi o alvo.<P>
+</LI>
+<LI><B>Parar Construção  F10</B> Pára o processo em curso.<P>
+</LI>
+<LI><B>Executar F9</B> Executa o seu alvo após construir o programa com o make.<P>
+</LI>
+<LI><B>Executar com Argumentos Alt+F9</B> Executa o seu alvo com argumentos. Primeiro, um diálogo surge para lhe permitir especificar os argumentos
+de execução (que são gravados no projecto para a próxima sessão), depois a sua aplicação utiliza a linha de comando inserida. Lembre-se que a
+sua aplicação é iniciada directamente do directório do projecto<P>
+</LI>
+<LI><B>Depurar...</B> Abre o KDbg na Janela de Ferramentas para depurar a sua
+aplicação. Neste caso, o KDbg abre automaticamente o ficheiro contendo a função main() e executa a sua aplicação.<P>
+</LI>
+<LI><B>Distclean</B> Remove todos os ficheiros que são gerados pelo projecto tal como ficheiros objecto etc. Distclean tem de ser feito antes
+de distribuir o seu projecto, para que o ficheiro de distribuição não contenha nenhum ficheiro específico de plataforma tal como aquelas geradas pelo seu
+compilador.<P>
+</LI>
+<LI><B>Autoconf e automake</B> Chama o Make sobre o ficheiro Makefile.dist, localizado no seu directório principal do projecto. O Makefile.dist contém
+todos os comandos para o automake, autoconf etc. para construir o seu projecto. Se adicionou ficheiros manualmente ou modificou macros, deve correr
+o Autoconf depois, seguido do Configure para recriar todos os Makefiles.<P>
+</LI>
+<LI><B>Configurar</B> Executa o script configure gerado pelo autoconf. Se este comando não puder ser executado, corra o Autoconf e depois
+o Configure de novo.<P>
+</LI>
+</UL>
+<P>
+<P>
+<H4>Chamar Ferramentas</H4>
+
+<P>O menu de Ferramentas cont´me por defeito as entradas para o Editor de Diálogos interno (que pode também ser iniciado pelo botão da barra de ferramentas) e
+os seguintes programas se instalados: KDbg, KIconEdit e KTranslator. Estes são procurados pelo programa de instalação do KDevelop e
+inseridos na ordem indicada no menu. Invocar uma ferramenta irá abrir a janela de "Ferramentas" e iniciar o programa seleccionado dentro desta
+janela. O menu de Ferramentas pode ser editado pela entrada Ferramentas no menu de Opções; veja 
+<A HREF="index-12.html#Configuring the &quot;Tools&quot; Menu">Configurar o Menu &quot;Ferramentas&quot;</A>).
+<P>
+<H4>Alterar as Definições do KDevelop</H4>
+
+<P>O menu de Opções contém todas as entradas para invocar diálogos de configuração com os quais pode alterar as definições de defeito do KDevelop.
+Definições principais tais como as do editor ou impressão têm as suas entradas específicas; definições gerais do comportamento do KDevelop podem ser feitas
+com o diálogo de 
+<A HREF="index-12.html#KDevelop Setup">Configuração do KDevelop</A>.
+<UL>
+<LI><B>Editor...</B> Permite a configuração do comportamento do editor tal como a quebra de palavras, selecções etc.<P>
+</LI>
+<LI><B>Cores do Editor...</B> Aqui, pode definir a configuração de cores do editor tal como por ex. o fundo.<P>
+</LI>
+<LI><B>Defeitos do Editor...</B> Isto define a apresentação por defeito tal como fontes e tamanho de letra do editor<P>
+</LI>
+<LI><B>Realce de Sintaxe </B> Este diálogo permite-lhe definir as fontes e cores para o realce de várias linguagens de programação,
+incluindo HTML, e o realce dos tipos-mime também será activada.<P>
+</LI>
+<LI><B>Navegador de Documentação</B> Neste diálogo de pastas, pode definir as fontes, tamanhos e cores para o navegador de ajuda interno<P>
+</LI>
+<LI><B>Configuração de Impressora...</B> Contém as entradas para o diálogo de configuração da impressora de acordo com o programa de impressão utilizado, a2ps
+ou enscript.<P>
+<UL>
+<LI><B>a2ps</B> Configura a impressora para utilização com o a2ps. Veja Imprimir para mais informações.<P>
+</LI>
+<LI><B>enscript</B> Configura a impressora para utilização com o enscript. Veja Imprimir para mais informações.<P>
+</LI>
+</UL>
+</LI>
+<LI><B>Ferramentas...</B> Abre o diálogo de Configuração de Ferramentas. Aqui, pode configurar o menu "Ferramentas" adicionando ou removendo programas que serão
+iniciados na janela de Ferramentas.<P>
+</LI>
+<LI><B>Configuração do KDevelop</B> Abre o diálogo de Configuração do KDevelop. A primeira pasta configura definições gerais, seguida das
+definições principais e de Documentação. As definições de Documentação também incluem a geração dum novo conjunto de
+documentação HTML de bibliotecas e a reconstrução do index de busca para o navegador de Ajuda.</LI>
+</UL>
+<P>
+<H4>O Menu Janela</H4>
+
+<P>O menu Janela contém uma lista com todos os ficheiros actualmente abertos. Isto permite ir rapidamente para outro ficheiro em que esteja correntemente a trabalhar.
+<P>
+<H4>Gerir Marcas de Leitura</H4>
+
+<P>O menu de Marcas de Leitura é destinado para adicionar e remover marcas de leitura que deseje colocar no ficheiro correntemente em edição. Como o KDevelop utiliza
+duas janelas de edição, cada uma configura as suas marcas de leitura separadamente.
+<UL>
+<LI><B>Definir Marca de Leitura</B> Abre um menu de contexto com até nove marcas de leitura configuráveis. Isto permite definir uma marca de leitura para uma dada entrada
+no menu de marcas de leitura por razões lógicas.<P>
+</LI>
+<LI><B>Adicionar Marca de Leitura  Ctrl+Alt+A</B> Adiciona a linha da posição actual do cursor ao menu de marcas de leitura como uma marca de leitura. tenha em atenção
+que isto pode sobrepor uma marca de leitura definida com a opção Definir Marca de Leitura. Se o navegador estiver aberto, uma marca de leitura será adicionada ao menu
+de marcas de leitura da Janela de Navegação.<P>
+</LI>
+<LI><B>Limpar Marcas de Leitura Ctrl+Alt+C</B> Limpa as entradas de marcas de leitura para a janela de edição no topo ou o navegador, por ex. se
+a Janela de Header é visível e chamar Limpar Marcas de Leitura, as entradas para a Janela de Header serão apagadas.<P>
+</LI>
+<LI><B>Janela de Header</B> Contém a lista de marcas de leitura para a Janela de Header. Seleccionando uma marca de leitura colocará o cursor na linha da
+maraca de leitura seleccionada. Tome nota que a marca de leitura só é atribuida ao ficheiro em que é definida, pelo que se mudar de ficheiro, as
+marcas de leitura não são apagadas mas escolher uma marca de leitura não irá para o ficheiro onde ela foi definida.<P>
+</LI>
+<LI><B>Janela C/C++</B> Contém a lista de marcas de leitura para a Janela C/C++. As opções são as mesmas que para a
+Janela de Header.</LI>
+<LI><B>Janela de Navegação</B> Contém as marcas de leitura do navegador. Seleccionando uma marca de leitura irá abrir o navegador na página seleccionada.</LI>
+</UL>
+<P>
+<H4>Ajuda Electrónica</H4>
+
+<P>O menu de Ajuda contém entradas para navegação no navegador de Ajuda bem como as entradas para documentação electrónica e de bibliotecas para os
+mais utilizados recentemente. Aceder a documentação electrónica adicional pode ser conseguido com a ADOC na vista de árvore
+automaticamente aberta (se a Auto-Alternância estiver activa) quando se muda para a janela do Navegador de Documentação.
+<UL>
+<LI><B>Recuar  Alt+ Seta para Esquerda</B> Abre a página aberta antes da actual.<P>
+</LI>
+<LI><B>Recuar Alt+ Seta para Direita</B> Abre a página seguinte na história do navegador, disponível após se ter feito um "Recuar".<P>
+</LI>
+<LI><B>Procurar Texto Marcado           F2</B> Procura no índice de busca o texto correntemente marcado nas janelas de edição ou na janela de navegação. Após
+a busca, uma página com os resultados é apresentada que lhe permite seleccionar a página de ajuda para onde ir. Após escolher a página, o navegador irá
+realçar a ocorrência encontrada para a expressão com que a busca foi invocada. Com a tecla F3 o próximo resultado de busca na mesma página
+será apresentado se mais de uma ocorrência foi reportada para a busca numa página.<P>
+</LI>
+<LI><B>Procurar Ajuda Sobre...</B> Abre o diálogo Procurar Ajuda Sobre... que lhe permite procurar por uma expressão específica sobre a qual deseja ajuda.<P>
+</LI>
+<LI><B>Manual do Utilizador             F1</B> Abre o Manual do Utilizador do KDevelop na página de ínice para que tenha acesso a este manual.<P>
+</LI>
+<LI><B>Manual de Programação </B> Abre o Manual de Programação do KDevelop na página de índice para aceder ao manual de programação.<P>
+</LI>
+<LI><B>Dica do Dia</B> Abre o diálogo da Dica do Dia para o informar sobre as características do KDevelop.<P>
+</LI>
+<LI><B>Página do KDevelop</B> Abre a página de internet do KDevelop na janela de navegação se existir acesso à internet.<P>
+</LI>
+<LI><B>Reporte de Erros...</B> Abre o diálogo de Reporte de Erros do KDevelop, onde pode enviar um relatório de erro directamente para a Equipa do KDevelop por e-mail.
+Veja 
+<A HREF="index-13.html#Bug Reporting">Reporte de Erros de Código (Bugs)</A><P>
+</LI>
+<LI><B>Referência C/C++</B> Apresenta a página de índice da referência da linguagem. Se a
+referência não estiver instalada, uma página de erro explica-lhe como obter a referência e como a instalar correctamente.<P>
+</LI>
+<LI><B>Biblioteca Qt</B> Vai para a página de índice da documentação da biblioteca Qt disponibilizada com a sua cópia da biblioteca Qt.<P>
+</LI>
+<LI><B>Biblioteca KDE-Core</B> Abre o ficheiro de índice de classes da documentação da biblioteca KDE-Core.<P>
+</LI>
+<LI><B>Biblioteca KDE-GUI</B>  O que acima foi dito mas para a biblioteca GUI<P>
+</LI>
+<LI><B>Biblioteca KDE-KFile</B> O que acima foi dito mas para a biblioteca KFile<P>
+</LI>
+<LI><B>Biblioteca KDE-HTML</B> O que acima foi dito mas para a biblioteca HTML<P>
+</LI>
+<LI><B>Doc da API do Projecto</B> Vai para o índice da documentação das classes do projecto.<P>
+</LI>
+<LI><B>Manual do Utilizador do Projecto</B> Abre o ficheiro de índice do manual do utilizador para o projecto actual. Isto pode ser utilizado para rever o resultado em HTML
+gerado pelo ksgml2html<P>
+</LI>
+<LI><B>Sobre o KDevelop...</B> Mostra a caixa Sobre o KDevelop contendo o número da versão utilizada e os nomes dos autores e
+endereços de e-mail bem como a referência ao licenciamento do KDevelop.</LI>
+</UL>
+<P>
+<H3><A NAME="ss5.5">5.5 Itens da Barra de Ferramentas</A>
+</H3>
+
+<P>O KDevelop disponibiliza acesso rápido a vários conjuntos de comandos através das barras de ferramentas. Estas são as barras standard e de navegação; no
+modo de edição de diálogos apenas a barra de ferramentas standard é visível. Ambas podem ser (des)activadas através das respectivas entradas de menu no menu "Ver"; também
+podem ser arrastadas para fora da janela principal e colocadas de cada lado da área de trabalho.
+<P>
+<H4>A Barra de Ferramentas Standard</H4>
+
+<P>A barra de ferramentas standard disponibiliza acesso rápido às funções mais recentemente utilizadas para processamento de ficheiros e sua edição bem como construir a sua
+aplicação. Os botões executam os seguintes comandos da esquerda para a direita:
+<P>
+<UL>
+<LI>Abrir Projecto - mostra o diálogo de abertura de projecto</LI>
+<LI>Abrir Ficheiro - mostra o diálogo de abertura de ficheiro e contém uma forma de escolher rapidamente os ficheiros header e código fonte do projecto.</LI>
+<LI>Gravar Ficheiro - grava o ficheiro correntemente aberto para o disco</LI>
+<LI>Imprimir Ficheiro - abre o diálogo de impressão</LI>
+<LI>(separador)</LI>
+<LI>Desfazer - reverte a última acção</LI>
+<LI>Refazer - executa a acção revertida de novo</LI>
+<LI>Cortar - corta a selecção corrente</LI>
+<LI>Copiar - copia a selecção corrente para a área de transferência do sistema</LI>
+<LI>Colar - cola o conteudo actual da área de transferência na posição corrente do cursor</LI>
+<LI>(separador)</LI>
+<LI>Compilar Ficheiro - compila o ficheiro correntemente visível na janela de ficheiro de código. No modo de edição de diálogos é substituido pelo botão de Gerar Ficheiros.</LI>
+<LI>Make - invoca make sobre o projecto</LI>
+<LI>Reconstruir Tudo - reconstroi o projecto</LI>
+<LI>Depurar - abre o KDbg com o binário da aplicação para depurar na janela de Ferramentas</LI>
+<LI>Executar - executa o binário da aplicação alvo</LI>
+<LI>Parar - cancela o processo actual</LI>
+<LI>(separador)</LI>
+<LI>Editor de Diálogos - vai para o modo de edição de diálogos. Aí, o botão é substituido pelo botão do Editor de Código Fonte</LI>
+<LI>Vista de Árvore - (des)activa a vista de árvore e funciona como um botão de alternância para apresentar o estado actual</LI>
+<LI>Vista de Output - (des)activa a vista de output e funciona como um botão de alternância para apresentar o estado actual</LI>
+<LI>(separador)</LI>
+<LI>Botão de Ajuda O que é isto..? - modifica o cursor para um ponto de interrogação e permite-lhe obter informação sobre os componentes do ambiênte de desenvolvimento do KDevelop</LI>
+</UL>
+<P>
+<H4>A Barra de Ferramentas de Navegação</H4>
+
+<P>A barra de ferramentas de navegação é outra barra de ferramentas que disponibiliza vários comandos úteis para navegar nos ficheiros e documentação. A barra de ferramentas
+contém:
+<P>
+<UL>
+<LI>a caixa de lista de Classes - permite-lhe seleccionar uma classe do projecto actual para ir para</LI>
+<LI>a caixa de lista de Métodos - permite-lhe seleccionar um método do da classe actual e navega até à implementação do método</LI>
+<LI>o botão do assistente de Classes - um único clique do rato leva-o para a declaração do método actualmente seleccionado. Contém uma
+forma rápida de aceder a ferramentas de classes para adicionar Classes, Métodos e Atributos bem como comandos de navegação.</LI>
+<LI>Recuar - navega para trás na história de navegação da documentação; contém uma forma rápida de seleccionar uma dada página da história.</LI>
+<LI>Avançar - navega para a frente na história de navegação da documentação; contém uma forma rápida de seleccionar uma página da história.</LI>
+<LI>Parar - pára a leitura de um ficheiro de documento pedido no navegador</LI>
+<LI>Reler - relê a página actualmente apresentada</LI>
+<LI>Casa - abre a página de índice do Manual do Utilizador do KDevelop no navegador</LI>
+<LI>Procurar Texto Marcado - procura o índice de documentação pelo texto seleccionado; funciona com as janelas de navegação e de edição</LI>
+<LI>Procurar Ajuda Sobre... - abre o diálodo Procurar Ajuda Sobre.. para lhe permitir inserir uma expressão a procurar na documentação</LI>
+</UL>
+<P>
+<H3><A NAME="ss5.6">5.6 Atalhos de Teclado</A>
+</H3>
+
+<P>Esta secção gere os valores pré-definidos bem como os valores standard para comandos de teclado configuráveis utilizados no ambiente de desenvolvimento KDevelop.
+É recomendado que veja a secção 
+<A HREF="index-12.html#Changing Keyboard Shortcuts">Alterar Atalhos de Teclado</A> para uma explicação detalhada de
+como modificar valores designados a comandos.
+<P>
+<H4>Atalhos para Processamento de Texto</H4>
+
+<P>
+<P>
+<H4>Movimentos do Cursor</H4>
+
+<P>
+<HR>
+<PRE>
+uma letra para a esquerda                        Seta Esquerda
+uma letra para a direita                         Seta Direita
+uma palavra para a esquerda                      CTRL+Seta Esquerda
+uma palavra para a direita                       CTRL+Seta Direita
+uma linha para cima                              Seta para Cima
+uma linha para baixo                             Seta para Baixo
+para o princípio da linha                        POS 1
+para o fim da linha                              END
+uma página para cima                             PageUp
+uma página para baixo                            PageDown
+para o princípio do ficheiro actual              CTRL+PageUp
+para o final do ficheiro actual                  CTRL+PageDown
+</PRE>
+<HR>
+<P>
+<P>
+<H4>Selecção de Texto</H4>
+
+<P>
+<HR>
+<PRE>
+uma letra para a esquerda                        SHIFT+Seta Esquerda
+uma letra para a direita                         SHIFT+Seta Direita
+uma palavra para a esquerda                      CTRL+SHIFT+Seta Esquerda
+uma palavra para a direita                       CTRL+SHIFT+Seta Direita
+uma linha para cima                              CTRL+Seta para Cima
+uma linha para baixo                             CTRL+Seta para Baixo
+para o princípio da linha                        CTRL+POS 1
+para o fim da linha                              CTRL+END
+uma página para cima                             SHIFT+PageUp
+uma página para baixo                            SHIFT+PageDown
+para o princípio do ficheiro actual              CTRL+SHIFT+PageUp
+para o final do ficheiro actual                  CTRL+SHIFT+PageDown
+</PRE>
+<HR>
+<P>
+<P>
+<H4>Inserir e Copiar Texto, Tabuladores</H4>
+
+<P>
+<HR>
+<PRE>
+(des)activar modo de inserção                    INS
+copiar selecção para a área de transferência     CTRL+C, CTRL+INS
+inserir texto da área de transferência           CTRL+V, SHIFT+INS
+apagar linha actual                              CTRL+K
+inserir linha após linha actual                  END, depois Enter
+inserir linha antes da linha actual              POS 1, depois Enter
+desfazer passo de edição                         CTRL+Z
+refazer passo desfeito                           CTRL+Y
+tabulador                                        TAB
+</PRE>
+<HR>
+<P>
+<P>
+<H4>Apagar Texto</H4>
+
+<P>
+<HR>
+<PRE>
+apagar letra à esquerda da posição do cursor     Backspace
+apagar letra à direita da posição do cursor      Delete
+apagar texto seleccionado                        Seleccionar texto, depois Backspace ou Delete
+</PRE>
+<HR>
+<P>
+<P>
+<H4>Procurar Texto Dentro do Editor</H4>
+
+<P>
+<HR>
+<PRE>
+abrir diálogo Ir Para Linha...                   STRG+G
+abre diálogo Procurar Texto                      STRG+F
+repete a última busca                            F3
+abre o diálogo Procurar e Substituir             STRG+R
+
+abre o diálogo Procurar em Ficheiros (grep)      STRG+ALT+F
+procurar texto marcado com o Grep                SHIFT+F2
+
+localizar erro seguinte                          F4
+localizar erro anterior                          SHIFT+F4
+</PRE>
+<HR>
+<P>
+<P>
+<H4>Procurar Texto com o Navegador de Documentação</H4>
+
+<P>
+<HR>
+<PRE>
+procurar texto seleccionado no editor na documentação          F2
+procurar texto seleccionado no navegador na documentação       F2
+apresentar ocorrência seguinte na mesma página                 F3
+
+procurar texto seleccionado no navegador dentro do projecto    SHIFT+F2
+</PRE>
+<HR>
+<P>
+<P>
+<H4>Atalhos do Navegador</H4>
+
+<P>
+<HR>
+<PRE>
+página anterior                                                                                                                                            Alt+ Seta para a Esquerda
+página seguinte                                                                                                                                                                Alt+ Seta para a Direita
+</PRE>
+<HR>
+<P>
+<P>
+<H4>Gerir Marcas de Leitura</H4>
+
+<P>
+<HR>
+<PRE>
+adicionar marcas de leitura                      STRG+ALT+A
+limpar lista de marcas de leitura                STRG+ALT+C
+</PRE>
+<HR>
+<P>     
+<P>
+<H4>Atalhos par Símbolos da Barra de Ferramentas</H4>
+
+<P>
+<HR>
+<PRE>
+Símbolo "Abrir Ficheiro"                          STRG+O
+Símbolo "Gravar Ficheiro"                         STRG+S
+Símbolo "Imprimir Ficheiro"                       STRG+P
+Símbolo "Desfazer"                                STRG+Z
+Símbolo "Refazer"                                 STRG+Y
+Símbolo "Cortar"                                  STRG+X
+Símbolo "Copiar"                                  STRG+C
+Símbolo "Colar"                                   STRG+V
+Símbolo "Compilar Ficheiro"                       STRG+F8
+Símbolo "Make"                                    F8
+Símbolo "Executar"                                F9
+Símbolo "Executar com Argumentos"                 ALT+F9
+Símbolo "Editor de Diálogos"                      STRG+D
+Símbolo "Recuar"                                  ALT+Seta para a Esquerda, se navegador aberto
+Símbolo "Avançar"                                 ALT+Seta para a Direita, se navegador aberto
+Símbolo "Procurar Texto Marcado"                  F2
+</PRE>
+<HR>
+<P>
+<P>
+<H4>Gestão de Janelas</H4>
+
+<P>Para ir para uma dada janela, prima ALT mais a letra sublinhada no título da janela, por ex. Ferramentas seria Alt+F
+<P>
+<P>
+<H4>Atalhos par o Processo de Compilação</H4>
+
+<P>
+<HR>
+<PRE>
+Compilar ficheiro de código actual               STRG+F8
+Construir projecto alvo actual                   F8
+Executar alvo após processo de construção        STRG+F9
+Executar alvo com Argumentos                     ALT+F9
+Parar o processo actual                          F10
+</PRE>
+<HR>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-6.html">Página seguinte</A>
+ <A HREF="index-4.html">Página anterior</A>
+ <A HREF="index.html#toc5">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

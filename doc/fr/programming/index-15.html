@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Le Manuel de Programmation de KDevelop: Conseils de Programmation</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-16.html">Page suivante</A>
+ <A HREF="index-14.html">Page précédente</A>
+ <A HREF="index.html#toc15">Table des matières</A>
+</P>
+<H3><A NAME="s15">15. Conseils de Programmation</A></H3>
+
+<P>
+<P>Approchant de la fin de ce manuel, j'aimerais résumer plusieurs points auxquels les
+programmeurs devraient être vigilants pendant le codage. Ceux-ci sont principalement
+des astuces de programmation C++ ayant trait à la programmation KDE et Qt en
+particulier et sont partiellement issus du Centre du Développeur KDE que vous pouvez trouver
+sur Internet à l'adresse 
+<A HREF="http://www.kde.org">http://www.kde.org</A>, d'autres sont le fruit
+de mon expérience personnelle.
+<P>
+<H3><A NAME="ss15.1">15.1 Règles générales</A>
+</H3>
+
+<P>
+<DL>
+<DT><B>Noms de fichiers</B><DD><P>Tout d'abord, lorsque vous créez des fichiers sources,
+vous devriez toujours utiliser des noms de fichiers en minuscules. KDevelop
+supporte ceci si vous utilisez l'auto-suggestion de noms de fichiers. Cela
+permet aux autres développeurs de se souvenir plus facilement des fichiers
+sources à rechercher lorsqu'ils doivent déboguer votre application.
+<P>
+<DT><B>Noms de classes</B><DD><P>Il est conseillé que les noms de classes des projets
+KDE respectent ces règles :
+<UL>
+<LI>les noms de classe devraient commencer par la lettre <B>K</B> suivie du nom
+de la classe exprimant son intérêt. Cela peut être par exemple <CODE>KMyWidget</CODE>
+pour un widget spécifique à une application&nbsp;;</LI>
+<LI>les champs de classe devraient toujours commencer par des minuscules,
+avec la première lettre en majuscule pour les mots suivants, comme par
+exemple <CODE>myWidgetPointer()</CODE>&nbsp;;</LI>
+<LI>les méthodes qui renvoient la valeur d'un champ privé ne devraient pas
+utiliser le préfixe <CODE>get</CODE>. Vous devriez lui préférer un nom descriptif.
+Exemple : <CODE>b_myboolean</CODE> est un champ privé. La méthode renvoyant la valeur
+actuelle serait par exemple <CODE>myBoolean()</CODE>.</LI>
+</UL>
+<P>
+<DT><B>Accès aux fichiers au sein du code</B><DD><P>Vous devez éviter de coder tout chemin en dur, et utiliser les Standards du
+Système de Fichiers de KDE. Vous avez juste à vérifier le chemin d'installation
+de vos fichiers par les macros de <CODE>Makefile.am</CODE> comme décrit dans le présent
+manuel. Au sein du code, vous devriez utiliser les méthodes de
+<CODE>KApplication</CODE> pour extraire le chemin réel.
+<P>
+<DT><B>Documentation des classes</B><DD><P>Autre point déjà mentionné, la documentation des classes. Vous devriez utiliser
+les règles de formatage de <CODE>KDoc</CODE> telles qu'elles sont utilisées par tous les
+développeurs KDE pour documenter leurs classes. Vous devriez ajouter au moins
+une ligne à chacun des membres de vos classes pour que vous puissiez vous
+souvenir de leur but et pour que les autres puissent réutiliser votre code.
+La réutilisation du code par la GPL est bien plus sensée si vous savez où
+trouver une solution existante et si les classes sont documentées. La Référence
+de la Bibliothèque Qt est un bon exemple d'interfaces bien documentées, bien
+qu'elle n'utilise pas <CODE>KDoc</CODE>.
+<P>
+<DT><B>Utilisez <CODE>new</CODE> pour créer des widgets</B><DD><P>Au sein de votre implantation, vous devriez toujours préférer la création
+massive de widgets avec <CODE>new</CODE>. La bibliothèque Qt a la bonne habitude
+de supprimer automatiquement tous les widgets fils créés avec <CODE>new</CODE>, vous
+n'avez donc pas à utiliser <CODE>delete</CODE> dans ces cas. C'est une des
+fonctionnalités pratiques des plus importantes de Qt et vous devriez en user
+et en abuser.
+<P>
+<DT><B>Deboguage</B><DD><P>Quand vient le moment de déboguer, vous devriez utiliser les macros fournies
+par <CODE>KDebug</CODE>. Celles-ci sont similaires aux macros Qt, mais peuvent être
+obtenues par CTRL+SHIFT+F12. Voir 
+<A HREF="../kde_libref/index-4.html#ss4.4">Référence des Bibliothèques KDE</A> pour plus d'informations sur le
+filtrage d'évenements de ces macros. Vous pourriez aussi utiliser
+<CODE>assert()</CODE>, mais vous devriez essayer d'être logique dans votre code de déboguage.
+<P>
+<DT><B>Déclarations <CODE>const</CODE></B><DD><P>Par la suite, vous devriez utiliser des déclarations <CODE>const</CODE> pour les méthodes
+qui ne devraient changer aucun champ privé. Ce serait le cas pour toutes les
+méthodes qui retournent seulement la valeur actuelle d'un champ privé. Cela
+permet d'éviter de modifier une valeur accidentellement et de détecter de telles
+erreurs dès la compilation. Maintenant, pour l'initialisation des membres const
+vous devriez combiner const avec <CODE>static</CODE> et initialiser la valeur en dehors
+du constructeur, comme ceci :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+class foo {
+        static const int value;
+};
+
+const foo::value = 10;
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Le C++ ANSI autorise l'initialisation du champ dans le constructeur mais vous
+devriez l'éviter car certains compilateurs n'offrent pas cette fonctionnalité.
+<P>
+<DT><B>Les méthodes virtuelles</B><DD><P>Comme nous l'avons vu dans la section 
+<A HREF="index-2.html#User Interaction">Interaction avec l'Utilisateur</A>, vous devriez conserver les droits d'accès
+et la déclaration par <CODE>virtual</CODE> lorsque vous surchargez des méthodes virtuelles.
+Tout au moins, vous ne devriez pas réduire l'accès d'une méthode virtuelle de
+protégé à privé.
+<P>
+<DT><B>Déclarations anticipées</B><DD><P>Les en-têtes de classe doivent être inclus lorsque vous déréférencez n'importe
+quel objet ou instance de classe dans votre code source. Cela signifie que
+si votre classe utilise un membre d'une autre classe, vous devriez remplacer
+la directive #include par une déclaration anticipée de la classe. Par exemple,
+au lieu de :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#include &lt;qpushbutton.h>
+
+class KMyWidget:public QWidget
+{
+
+private:
+  QPushButton* ok_button;
+};
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>déclarez seulement la classe <CODE>QPushButton</CODE> dans le fichier d'en-tête :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+class QPushButton;
+
+class KMyWidget:public QWidget
+{
+
+private:
+  QPushButton* ok_button;
+};
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>et placez la directive d'inclusion dans le fichier source correspondant
+où, par exemple, l'instance <CODE>ok_button</CODE> est déréférencée avec une
+méthode de la classe <CODE>QPushButton</CODE>. Cela permet de gagner du temps
+à la compilation, spécialement si vous utilisez des instances de classes
+sur lesquelles vous êtes en train de travailler. Le compilateur recompilera
+tous les sources qui incluent le fichier d'en-tête si vous avez effectué
+des modifications à l'interface de la classe, c'est pourquoi un simple
+ajout d'une méthode qui retourne seulement une valeur interne provoquera
+le recompilation de tous les sources qui incluent le fichier d'en-tête
+de cette classe.
+<P>
+<DT><B>Avertissements de Paramètres Inutiles et arguments par défaut</B><DD><P>Vous devriez aussi omettre les paramètres formels des méthodes qui
+ne nécessitent pas forcément ce paramètre pour fonctionner. Cela évite
+les avertissements de <CODE>paramètre inutilisé</CODE> de votre compilateur
+quand il voit une méthode qui attend un paramètre formel mais
+ne l'utilise pas dans son implantation. Généralement, vous définirez
+des arguments par défaut pour plusieurs méthodes. Ils devraient
+toujours être placés dans la déclaration du membre de la classe au
+lieu de les définir dans l'implantation des méthodes.
+<P>
+<DT><B>Utiliser <CODE>config.h</CODE></B><DD><P>Les projets KDevelop comme tout autre projet qui utilise <CODE>autoconf</CODE>
+pour créer les script <CODE>configure</CODE> produisent un fichier <CODE>config.h</CODE>
+après l'exécution du script <CODE>configure</CODE> sur la machine cible.
+Les valeurs trouvées par <CODE>configure</CODE> sont listées dedans et
+peuvent être utilisées dans le code source. La directive
+pour inclure le fichier <CODE>config.h</CODE> est :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#ifdef HAVE_CONFIG_H
+#include &lt;config.h>
+#endif
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Une des entrées de <CODE>config.h</CODE> les plus couramment utilisées est probablement
+le définition du type <CODE>bool</CODE> pour les compilateurs qui ne respectent pas la
+norme la plus récente du C++ ANSI.
+<P>
+<DT><B>Utiliser <CODE>0</CODE> au lieu de <CODE>NULL</CODE></B><DD><P>Vous devriez toujours utiliser directement <CODE>0</CODE> au lieu de <CODE>NULL</CODE>
+pour les valeurs prédéfinies comme le font les bibliothèques de KDE
+et Qt. Cela améliore la portabilité de vos applications pour différents
+compilateurs qui ont des problèmes avec <CODE>NULL</CODE>.
+<P>
+<DT><B>Variables temporaires</B><DD><P>Vous devriez toujours déclarer les instances temporaires avant de les utiliser.
+En général, cela est considéré comme étant meilleur. Par exemple :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+// Ne faites pas :
+for( int i=0; i&lt;n; i++){
+  // faire quelque chose
+  };
+
+// Mais écrivez :
+int i;
+
+for(i=0; i&lt;n; i++){
+  // faire quelque chose
+  };
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Cela est aussi valable pour les variables temporaires dans les appels de fonctions :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+// Ne faites pas :
+setColor( &amp;(QColor(black)) );
+
+// Mais écrivez :
+QColor color(black);
+setColor( &amp;color );
+</PRE>
+</CODE></BLOCKQUOTE>
+</DL>
+<P>
+<H3><A NAME="ss15.2">15.2 Dépendances des Systèmes d'Exploitation</A>
+</H3>
+
+<P>Comme les projets KDevelop utilisent les outils GNU pour créer les projets,
+vous êtes sûr que votre application fonctionnera sur presque tous les systèmes
+Unix. Cependant, vous pouvez rencontrer des problèmes lors de la compilation
+de votre application sur un autre Unix parce que les fichiers d'en-tête sont
+situés à des endroits différents ou bien que vous avez besoin d'une
+autre implantation, spécialement lorsque vous utilisez des fonctions
+de bas niveau de l'OS qui peuvent être différentes d'un système à l'autre.
+<P>En programmant avec C++ et Qt/KDE, vous avez du remarquer que les classes
+de Qt contiennent un grand ensemble de fonctionnalités qui sont déjà
+indépendantes du compilateur et de l'OS et rendent les choses plus simples,
+des chaînes de caractères (QString) à la lecture/écriture de fichiers (QFile) ;
+en utilisant Qt, vous rendez donc obsolètes la plupart des spécificités
+des systèmes d'exploitation.
+<P>Néanmoins, si vous utilisez Qt et que vous avez besoin d'utiliser
+des #defines pour votre application, vous devriez inclure
+<CODE>qglobal.h</CODE> et utiliser les #defines qui y sont
+déjà prédéfinis pour différents systèmes d'exploitation et
+compilateurs, comme ci-dessous.
+<P>Au lieu de laisser les distributeurs d'OS appliquer des correctifs
+à votre application (comme beaucoup le font pour construire des
+paquetages rpm ou autre), vous devriez utiliser des defines pour
+les sections qui sont spécifiques au système d'exploitation
+(mais vous n'avez pas besoin d'utiliser l'option -D à la
+compilation, les définitions de systèmes d'exploitation sont
+automatiquement prises en compte). La liste ci-dessous définit
+les systèmes disponibles et leurs définitions (les defines
+supplémentaires sont entre parenthèses) :
+<P>
+<DL>
+<DT><B>AIX :</B><DD><P>#ifdef _AIX
+<P>
+<DT><B>BSDI Unix :</B><DD><P>#if defined(bsdi) || defined(__bsdi__)
+<P>
+<DT><B>Dec Ultrix :</B><DD><P>#if defined (ultrix) || defined(__ultrix) || defined(__ultrix__)
+<P>
+<DT><B>DG Unix :</B><DD><P>#if defined(DGUX)
+<P>
+<DT><B>FreeBSD :</B><DD><P>#ifdef __FreeBSD__
+<P>
+<DT><B>GNU Hurd :</B><DD><P>#if defined(__GNU__)
+<DT><B>HP-UX :</B><DD><P>#if defined (hpux) || defined (__hpux) || defined (__hpux__)
+<DT><B>Linux :</B><DD><P>#if defined(linux) || defined(__linux) || defined(__linux__)
+<P>
+<DT><B>NetBSD :</B><DD><P>#ifdef __NetBSD__
+<P>
+<DT><B>OpenBSD :</B><DD><P>#ifdef __OpenBSD__
+<P>
+<DT><B>OSF Unix :</B><DD><P>#if defined(__osf__)
+<P>
+<DT><B>QNX :</B><DD><P>#if defined(__QNX__)
+<P>
+<DT><B>SCO UnixWare :</B><DD><P>#if defined(_UNIXWARE)
+<P>
+<DT><B>SCO UnixWare 7 :</B><DD><P>#if defined(sco) || defined(_UNIXWARE7)
+<P>
+<DT><B>SCO :</B><DD><P>#if defined(_SCO_DS) || defined(M_UNIX) || defined(M_XENIX)
+<P>
+<DT><B>SGI Irix :</B><DD><P>#if defined(sgi) || defined(__sgi)
+<P>
+<DT><B>SunOS :</B><DD><P>#if defined (sun) || defined (__sun) || defined (__sun__)
+<P>
+<DT><B>Sun Solaris :</B><DD><P>#if defined  (_OS_SUN_) || defined (__SVR4)
+</DL>
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-16.html">Page suivante</A>
+ <A HREF="index-14.html">Page précédente</A>
+ <A HREF="index.html#toc15">Table des matières</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

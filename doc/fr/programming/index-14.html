@@ -1,0 +1,362 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Le Manuel de Programmation de KDevelop: Utilisation du Système de Fichiers dans les Projets KDevelop</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-15.html">Page suivante</A>
+ <A HREF="index-13.html">Page précédente</A>
+ <A HREF="index.html#toc14">Table des matières</A>
+</P>
+<H3><A NAME="s14">14. Utilisation du Système de Fichiers dans les Projets KDevelop</A></H3>
+
+<P>Le chapitre précédent couvrait le standard du Système de Fichiers de KDE, et
+celui-ci traite de ce que vous avez à faire pour utiliser ce système de
+fichiers. Un projet KDE utilise le système de fichiers au moins pour les
+procédures d'installation ; nous parlerons donc des paramètres d'installation
+des fichiers de votre projet. Votre application peut utiliser des fichiers
+installés par la suite, il est donc important de savoir comment récupérer
+le chemin relatif par le standard. Cela permet à votre application de
+travailler où que soit le système de fichier KDE et évite d'avoir à coder
+en dur les informations sur les fichiers.
+<P>
+<H3><A NAME="ss14.1">14.1 Accéder à des Fichiers pendant l'Exécution</A>
+</H3>
+
+<P>Après l'installation de votre projet par les utilisateurs, votre application
+peut avoir besoin d'informations sur les fichiers pendant l'exécution. Lors
+de la période de développement, vous rencontrerez au moins une erreur au moment
+où vous lancerez votre application dans l'environnement KDevelop : dans
+"Aide"-"Contenu" ou en appuyant sur la touche F1, le manuel de l'application
+sera manquant. Cela se manifeste par un message indiquant que le
+fichier index.html est introuvable - si vous n'avez pas installé votre
+application dans votre système de fichiers KDE. Votre application demande
+à KDEHelp d'ouvrir votre page d'index en cherchant le répertoire d'installation
+à travers les méthodes de <CODE>KApplication</CODE> pour accéder au système de
+fichiers, nous allons donc regarder ce que <CODE>KApplication</CODE> propose
+et examiner quelques exemples d'utilisation. D'autres classes de <CODE>KDE-Core</CODE>, telles que
+<CODE>KIconLoader</CODE> et <CODE>KLocale</CODE>, font aussi usage du système de
+fichier KDE ; nous en reparlerons plus loin.
+<P>
+<H3><A NAME="ss14.2">14.2 Méthodes de KApplication</A>
+</H3>
+
+<P>
+<P>La classe KApplication offre les méthodes suivantes pour accéder au système de fichiers KDE :
+<BLOCKQUOTE><CODE>
+<PRE>
+void invokeHTMLHelp ( QString aFilename, QString aTopic ) const
+static const QString&amp; kde_htmldir ()
+static const QString&amp; kde_appsdir ()
+static const QString&amp; kde_icondir ()
+static const QString&amp; kde_datadir ()
+static const QString&amp; kde_localedir ()
+static const QString&amp; kde_cgidir ()
+static const QString&amp; kde_sounddir ()
+static const QString&amp; kde_toolbardir ()
+static const QString&amp; kde_wallpaperdir ()
+static const QString&amp; kde_bindir ()
+static const QString&amp; kde_configdir ()
+static const QString&amp; kde_mimedir ()
+static QString localkdedir ()
+static QString localconfigdir ()
+static QString findFile ( const char *file )
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<!--
+KDE File System
+-->
+
+Les méthodes sont généralement utilisées avec l'instance de <CODE>KApplication</CODE>
+de votre application, où <CODE>KApplication</CODE> offre une macro <CODE>kapp</CODE>
+destinée à recevoir le pointeur :
+<P>#define kapp KApplication::getKApplication()
+<P>Les méthodes sont donc généralement utilisées de la façon suivante :
+<BLOCKQUOTE><CODE>
+<PRE>
+QString sounddir=kapp->kde_sounddir();
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Cet exemple enregistre le chemin du répertoire son de KDE sous forme d'une
+<CODE>QString</CODE>, où vous ajouterez par exemple le nom d'un fichier son. Vous
+pouvez ensuite utiliser cette information et jouer un fichier son qui se
+trouve là. Vous devriez toujours tester l'existence d'un fichier en utilisant
+la méthode <CODE>exists()</CODE> de la classe <CODE>QFileInfo</CODE>.
+<P>Au sein de ces méthodes,
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+void invokeHTMLHelp( QString aFilename, QString aTopic ) const [public]
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>occupe une place privilégiée, puisqu'elle sert à appeler l'aide de KDE.
+Généralement, vous devriez l'employer partout où l'utilisateur peut
+avoir besoin d'aide, par exemple lorsqu'on lui présente une boîte de dialogue.
+La touche F1 ne servira pas à afficher le contenu de l'aide, mais la page
+d'aide correspondante. Pour en faire bon usage, ajoutez un bouton "Aide" à
+votre boîte de dialogue et créez un slot à connecter au signal <CODE>pressed()</CODE>.
+Dans cette méthode, utilisez <CODE>invokeHTMLHelp()</CODE> avec la page et le
+sujet correspondants ; au cas où la documentation de votre application n'est
+pas terminée, laissez cette section vide afin de la compléter par la suite.
+<P>La documentation de <CODE>KApplication</CODE> dit :
+<P>Appelle le visualiseur d'aide HTML kdehelp.
+<P>Paramètres&nbsp;:
+aTopic&nbsp;: cela permet l'aide contextuelle. Sa valeur sera concaténée au nom de fichier, précédé d'un "#" (dièse).
+<P>aFilename&nbsp;: le nom du fichier à charger. Son emplacement est déterminé automatiquement
+selon le KFSSTND. Si aFilename est vide, on utilise le nom logique de l'application
+(appname) suivi de .html.
+<P>
+<P>Les méthodes de <CODE>KApplication</CODE> extrairont les chemins suivants :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+kde_htmldir()         kdedir()/share/doc/HTML         Renvoie le répertoire où KDE enregistre
+                                                      sa documentation HTML
+
+kde_appsdir()         kdedir()/share/applnk           Renvoie le répertoire où les applications KDE
+                                                      enregistrent leur fichier .kdelnk
+
+kde_icondir()         kdedir()/share/icons            Renvoie le répertoire où les icônes KDE sont stockées
+
+kde_datadir()         kdedir()/share/apps             Renvoie le répertoire où les applications KDE
+                                                      enregistrent leurs données propres
+
+kde_localedir()       kdedir()/share/locale           Renvoie le répertoire où les information relatives aux pays
+                                                      (comme les messages traduits par exemple) sont enregistrées
+
+kde_cgidir()          kdedir()/cgi-bin                Renvoie le répertoire où sont stockés les scripts cgi
+
+kde_sounddir()        kdedir()/share/sounds           Renvoie le répertoire où les données sonores sont stockées.
+                                                      Ce répertoire est destiné aux sons spécifiques à KDE.
+                                                      Les données sonores des applications devraient aller
+                                                      dans le répertoire kde_datadir()
+
+kde_toolbardir()      kdedir()/share/toolbar          Renvoie le répertoire où les icônes de barres d'outils sont stockées
+
+kde_wallpaperdir()    kdedir()/share/wallpapers       Renvoie le répertoire où les fonds d'écran KDE sont stockés
+
+kde_bindir()          kdedir()/bin                    Renvoie le répertoire où les binaires des applications KDE sont stockés
+
+kde_configdir()       kdedir()/share/config           Renvoie le répertoire où les fichiers de configuration sont stockés
+
+kde_mimedir()         kdedir()/share/mimelnk          Renvoie le répertoire où les types MIME sont stockés
+
+localkdedir()         $HOME/.kde                      Renvoie le répertoire de base de KDE
+
+localconfigdir()      $HOME/.kde/share/config         Renvoie le répertoire de configuration local de KDE
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Pour rechercher un fichier particulier, utilisez <CODE>findFile(const char *file)</CODE> qui
+recherchera parmi plusieurs chemins du Système de Fichiers de KDE :
+<P>
+<OL>
+<LI>$KDEDIR</LI>
+<LI>$KDEPATH</LI>
+<LI>"[KDE Setup]:Path=" entrée dans un fichier de configuration</LI>
+</OL>
+<P>Si le fichier est introuvable, la méthode isEmpty() de la classe QString renverra True (Vrai)
+<P>
+<H3><A NAME="ss14.3">14.3 Les Méthodes de KIconLoader</A>
+</H3>
+
+<P>
+<P>QPixmap loadIcon ( const QString &amp;name, int w = 0, int h = 0 )
+<P>QPixmap reloadIcon ( const QString &amp;name, int w = 0, int h = 0)
+<P>QPixmap loadMiniIcon ( const QString &amp;name , int w = 0, int h = 0 )
+<P>QPixmap loadApplicationIcon ( const QString &amp;name, int w = 0, int h = 0 )
+<P>QPixmap loadApplicationMiniIcon ( const QString &amp;name, int w = 0, int h = 0 )
+<P>bool insertDirectory ( int index, const QString &amp;dir_name )
+<P>
+<P>
+<H3><A NAME="ss14.4">14.4 Configurer l'Installation des Fichiers</A>
+</H3>
+
+<P>Nous avons vu plus haut où les applications KDE devraient placer leurs fichiers
+et comment accéder à ceux-ci pendant l'exécution, nous allons maintenant voir comment
+régler les propriétés des fichiers correctement afin qu'ils s'installent au
+bon endroit. Les Makefiles supportent un ensemble de macros permettant
+d'installer vos fichiers dans le Système de Fichiers de KDE, celles-ci doivent
+être utilisées pour configurer l'installation des fichiers.
+<P>Pour définir les propriétés, ouvrez votre projet et sélectionnez
+"Projet"-"Propriétés du Fichier" ce qui ouvrira la boîte de dialogue des
+Propriétés du Fichier. Celle-ci apparaîtra si vous sélectionnez un nom de
+fichier actuellement inclus dans le projet. Tout d'abord, un fichier a un
+type, qui peut être l'un des suivants :
+<P>
+<UL>
+<LI><B>HEADER :</B>  spécifie un fichier comme fichier d'en-tête</LI>
+<LI><B>SOURCE :</B> spécifie un fichier comme fichier source</LI>
+<LI><B>SCRIPT :</B> spécifie un fichier comme fichier script</LI>
+<LI><B>DATA :</B> spécifie un fichier comme fichier de données, qui s'installe
+généralement comme une icône ou une documentation HTML</LI>
+<LI><B>PO :</B> spécifie un fichier comme fichier de traduction</LI>
+<LI><B>KDEV_DIALOG :</B> spécifie un fichier comme fichier de boîte de dialogue
+destiné à être interprété par la bibliothèque des boîtes de dialogue</LI>
+</UL>
+<P>Par la suite, un fichier est inclus dans le projet, si "Inclure dans la Distribution"
+est coché. Cela permet de s'assurer que le fichier sera inclus dans l'archive tar
+ou le paquetage.
+<P>Si un fichier doit être installé, vous devez activer "Installer". Cela permettra de
+fixer le chemin d'installation pour le fichier sélectionné, là où le nom du fichier
+est déjà inséré.
+<P>Maintenant, comme nous l'avons vu plus haut, le Makefile dispose déjà d'un ensemble
+de macros pour le Système de Fichiers Standard. Celles-ci sont utilisées pour
+fixer le chemin d'installation et s'assurer que les fichiers vont réellement se
+retrouver sur le système de fichiers de KDE et pas ailleurs. Les macros qui
+peuvent être utilisées doivent être encadrées de parenthèses et sont précédées
+d'un dollar. Lorsque le script configure construit les Makefiles sur le système
+de l'utilisateur final, il va déterminer les valeurs pour ces macros qui
+correspondent au vrai nom de répertoire et étendra la macro Makefile.am vers
+sa vraie destination.
+<P>Si vous regardez un projet d'application KDE standard, vous remarquerez dans les
+propriétés de votre fichier <CODE>index.html</CODE> qu'il utilise déjà une macro
+permettant de déterminer où il doit aller :
+<P>$(kde_htmldir)/en/kscribble/index.html
+<P>Cela signifie que make doit installer le fichier index.html dans le répertoire
+kde-html, sous-répertoire en pour English (Anglais), sous-répertoire de
+l'application et le nom du fichier. Vous pourriez tout aussi bien utiliser un
+autre nom de fichier si vous souhaitez le renommer à la destination de l'installation.
+<P>Pour la destination des binaires vous devez pour le moment éditer le Makefile.am
+du projet si vous souhaitez que la destination ne soit pas la section "Application"
+du tableau de bord :
+<P>APPSDIR = $(kde_appsdir)/Applications
+<P>Valeurs possibles (selon le Standard du Système de Fichiers de KDE) :
+<P>
+<UL>
+<LI>Applications</LI>
+<LI>Games</LI>
+<LI>Graphics</LI>
+<LI>Internet</LI>
+<LI>Multimedia</LI>
+<LI>Settings</LI>
+<LI>System</LI>
+<LI>Utilities</LI>
+</UL>
+<P>Si vous ne précisez pas de répertoire, votre lien ira directement à la racine du tableau de bord.
+<P>La liste suivante contient les macros qui peuvent être utilisées lors de la configuration
+de l'installation des fichiers :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+kde_htmldir       Où vos docs doivent aller. (contient un sous-répertoire par langue)
+kde_appsdir       Où le fichier application (.kdelnk) doit aller.
+kde_icondir       Où votre icône doit aller.
+kde_minidir       Où votre mini-icône doit aller.
+kde_datadir       Où installer les données de votre application. (Utilisez un sous-répertoire)
+kde_locale        Où les traductions doivent aller. (contient un sous-répertoire par langue)
+kde_cgidir        Où les exécutables cgi-bin doivent aller.
+kde_confdir       Où les fichiers de configuration doivent aller.
+kde_mimedir       Où les types MIME doivent aller.
+kde_toolbardir    Où les icônes de barres d'outils doivent aller.
+kde_wallpaperdir  Où les fonds d'écran doivent aller.
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Utilisez ces macros avec les sous-répertoires et les noms de fichiers adéquats
+pour configurer les propriétés d'installation. Par défaut, la destination des
+fichers de documentation HTML, du fichier kdelnk, de l'Icône, de la Mini-icône
+et des traductions est déjà configurée ; vous n'avez donc pas à faire de
+modification, puisque ceci a été réalisé par l'assistant d'application de
+KDevelop.
+<P>
+<H3><A NAME="ss14.5">14.5 Organiser les Données du Projet</A>
+</H3>
+
+<P>Un autre problème apparaît souvent dans la création d'un projet, si le développeur
+souhaite inclure des données supplémentaires qui devront être installées avec le
+projet. Vous savez où vous voudrez les installer, mais comment les organiser dans
+l'arborescence du source ?
+<P>Il est de bon conseil de rassembler toutes les données dans des répertoires qui
+correspondent plus ou moins aux Standards du Système de Fichiers de KDE. Prenons
+par exemple les icônes de barre d'outils dont peut avoir besoin votre application.
+Créer ces icônes dans le répertoire principal du projet n'est pas une très bonne
+idée car elles seront difficiles à retrouver avec un visualiseur de fichier externe
+et les supprimer serait plus ardu. Créez donc votre icône avec "Fichier"-"Nouveau"
+et choisissez le sous-répertoire <CODE>toolbar</CODE> ; si ce répertoire n'existe pas,
+il peut facilement être créé avec la boîte de dialogue "sélection du répertoire".
+Les icônes existantes peuvent être copiées et incluses dans le projet avec
+"Projet"-"Ajouter fichier(s) existant(s)", où vous devez choisir le fichier et
+sa destination. Lorsque vous sélectionnez le répertoire destination, vous pouvez
+créer le sous-répertoire <CODE>toolbar</CODE> avant tout dans la boîte de dialogue.
+Quand vous avez terminé, appuyez sur OK et les fichiers seront copiés et
+inclus dans le projet.
+<P>À titre d'exemple, une icône de barre d'outils peut aller au chemin suivant :
+<P>$(kde_datadir)/<EM>&lt;appname&gt;</EM>/toolbar/<EM>&lt;youricon&gt;</EM>.xpm
+<P>Les images et les icônes supplémentaires non utilisées comme les icônes de
+barre d'outils peuvent être stockées dans un sous-répertoire
+<EM>pics</EM> au lieu de <EM>toolbar</EM>.
+<P>
+<H3><A NAME="ss14.6">14.6 Le Fichier <CODE>kdelnk</CODE></A>
+</H3>
+
+<P>Le fichier <EM>&lt;appname&gt;</EM>.kdelnk actuellement inclu dans votre projet
+s'installera dans la structure du tableau de bord de KDE. Vous pourriez penser
+qu'il est déjà créé, et que vous n'auriez pas d'autres informations à apporter.
+Malgré les qualités avancées de KDevelop pour vous aider à créer, programmer
+et concevoir des applications, il ne peut pas déterminer le but exact de votre
+application - et c'est cette information que vous devez ajouter au fichier
+kdelnk. Comme c'est un fichier texte, sélectionnez le depuis le RFV ou le LFV ;
+il sera ouvert dans la fenêtre Fichier En-Tête/Ressources.
+<P>Le fichier kdelnk par défaut ressemblera à ça :
+<BLOCKQUOTE><CODE>
+<PRE>
+# KDE Config File
+[KDE Desktop Entry]
+Type=Application
+Exec=kscribble
+Icon=kscribble.xpm
+DocPath=kscribble/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=kscribble
+Name[de]=kscribble
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Il contient déjà la configuration de base pour les données propres à l'application
+comme l'icône, le nom du binaire, le nom de l'application, etc. Vous pouvez voir
+que la section Comment (Commentaire) est toujours vide. Vous devez ajouter la bulle
+d'aide qui sera affichée lorsque le curseur de la souris passera au dessus de
+l'icône sur le bureau ou dans le tableau de bord. Si scribble était un petit
+programme de dessin, vous écririez par exemple :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+Comment=Un simple programme de dessin
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Chaque ligne de commentaire contiendra par la suite la même description traduite
+dans la langue symbolisée par les crochets. Demandez aux traducteurs d'ajouter
+une bonne traduction dans leur langue maternelle ou incluez le fichier kdelnk
+lorsque vous demandez à ce que le fichier po soit traduit ; la même remarque
+s'applique au nom de l'application fixée dans les lignes Name.
+<P>
+<BLOCKQUOTE>Pour plus d'informations sur le but du fichier kdelnk, en particulier
+pour l'interprétation de la ligne de commande, voir
+<A HREF="kde_libref.html">Référence des Bibliothèques KDE</A></BLOCKQUOTE>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-15.html">Page suivante</A>
+ <A HREF="index-13.html">Page précédente</A>
+ <A HREF="index.html#toc14">Table des matières</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

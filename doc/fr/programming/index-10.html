@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Le Manuel de Programmation de KDevelop: Documentation de Classe avec KDoc</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-11.html">Page suivante</A>
+ <A HREF="index-9.html">Page précédente</A>
+ <A HREF="index.html#toc10">Table des matières</A>
+</P>
+<H3><A NAME="s10">10. Documentation de Classe avec KDoc</A></H3>
+
+<P>Une autre partie importante de la documentation est la description informative
+des interfaces de votre classe. Cela vous permettra, ainsi qu'à d'autres
+programmeurs, d'utiliser vos classes en lisant la documentation HTML de la
+classe qui peut être générée avec <CODE>KDoc</CODE>. KDevelop supporte pleinement
+l'utilisation de <CODE>KDoc</CODE> pour créer la documentation des bibliothèques de KDE,
+ainsi vos architectures d'applications sont déjà documentées. Un bon point de
+départ, avant que vous ne rentriez vous-même dans le code fourni, est de lire
+la documentation en-ligne qui est incluse. Dans la suite, nous décrirons
+comment obtenir la documentation de l'API (NdT : Interface de Programmation
+d'Application, littéralement Application Programming Interface), où KDevelop
+vous permet de l'ajouter et quels sont les types de balises spéciales fournies
+en plus par <CODE>KDoc</CODE>.
+<P>
+<H3><A NAME="ss10.1">10.1 Comment utiliser les Fonctionnalités de Documentation de KDevelop</A>
+</H3>
+
+<P>Pour créer la documentation de l'API après avoir généré votre projet,
+sélectionnez "Construire la documentation de l'API" dans le menu "Projet".
+Cela traitera tous les fichiers d'en-tête et créera la sortie HTML. Ensuite,
+vous pourrez accéder à la documentation en choisisant "Documentation de l'API"
+dans le menu "Aide" ou bien le symbole de livre correspondant dans l'arborescence
+"Documentation", dossier "Projet courant".
+<P>La documentation contient déjà des références croisées entre les
+documentations en-ligne des classes de Qt et de KDE. Ainsi, vous pouvez
+suivre facilement l'héritage avec l'aperçu de l'héritage. Cela peut aussi vous
+aider à débuter avec les documentations de Qt et de KDE.
+<P>
+<H3><A NAME="ss10.2">10.2 Ajouter la Documentation d'une Classe ou d'un Membre</A>
+</H3>
+
+<P>De même que KDevelop fournit tous les moyens d'ajouter automatiquement du
+code, il offre aussi directement de la documentation. Lorsque vous utilisez le
+Générateur de classe en choisissant "Projet"->"Nouvelle classe", ajoutez un
+message d'aide descriptif dans la zone de documentation. Cela ajoutera la
+documentation dans l'en-tête de la classe. 
+<P>Lorsque vous ajoutez des fonctions membres et des attributs avec les outils de
+classe, ajoutez aussi la documentation du membre de la classe dans les zones
+de documentation correspondantes. Vous pourriez penser que la documentation
+est une partie du processus de développement qui n'est pas vraiment
+nécessaire. Mais souvenez-vous que plus votre projet grandit et plus il y aura
+de personnes à prendre part au processus de développement, la documentation
+des classes est alors la meilleure façon de ne pas perdre du temps. Si les
+développeurs doivent deviner, par le nom des méthodes, ce que fait réellement
+la méthode, c'est probablement que la sémantique n'est pas comprise et la
+méthode ne réalise pas la tâche à laquelle le développeur s'attendait. C'est
+pourquoi vous devez garder une trace de votre documentation et la regénérer
+aussi souvent que possible. 
+<P>
+<P>Par ailleurs, les fichiers de documentation ne sont PAS inclus dans le projet,
+et ne supportent pas non plus l'internationalisation. C'est pourquoi la
+documentation de l'API doit être réalisée en anglais, ce qui permet à des
+groupes de développeurs internationaux de travailler sur vos sources. 
+<P>Si vous voulez ajouter manuellement de la documentation dans le fichier
+d'en-tête, ajoutez la documentation <B>au-dessus</B> de la méthode ou de la
+classe dans un commentaire de style C, avec la particularité que la première
+ligne doit commencer par une barre oblique (NdT : slash) suivie de deux
+astérisques.
+<P>Exemple :
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+  /** enables menuentries/toolbar items
+        */
+  void enableCommand(int id_);
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>
+<H3><A NAME="ss10.3">10.3 Balises Spéciales</A>
+</H3>
+
+<P><B>NOTE :</B> La documentation suivante est tirée de la
+documentation fournie avec KDoc, écrite par Sirtaj S. Kang 
+<A HREF="mailto:taj@.kde.org">taj@.kde.org</A>), l'auteur de
+KDoc ; Copyright (c) 1997
+<P>La documentation est composée de :
+<P>
+<UL>
+<LI>Texte normal. Les paragraphes doivent être séparés par au moins une ligne vide.
+</LI>
+<LI>Texte de la forme
+<HR>
+<PRE>
+&lt;pre&gt;
+.....morceaux de code....
+&lt;/pre&gt;
+</PRE>
+<HR>
+</LI>
+<LI>Différentes balises de la forme :
+<BLOCKQUOTE><CODE>
+<PRE>
+@nombalise [balise paramètres]
+</PRE>
+</CODE></BLOCKQUOTE>
+</LI>
+</UL>
+<P>Les balises valides pour chaque type d'entité de code source sont :
+<P>
+<UL>
+<LI>Classes
+<BLOCKQUOTE><CODE>
+<PRE>
+  @short [une phrase de texte]
+        Une description brève de la classe
+  @author [une phrase de texte]
+        Auteur de la classe
+  @version [une phrase de texte]
+        Version de la classe (Généralement, j'utilise la valeur "Id" de RCS/CVS)
+  @see [une ou plusieurs références à des classes ou méthodes]
+        Références à d'autres documentations
+</PRE>
+</CODE></BLOCKQUOTE>
+
+</LI>
+<LI>Méthodes
+
+<BLOCKQUOTE><CODE>
+<PRE>
+  @see
+        comme ci-dessus
+  @return [une phrase]
+        Une phrase décrivant la valeur de retour
+  @param [paramètre nom identificateur] [paramètre description]
+        Décrit un paramètre. La description du paramètre peut utiliser
+        plusieurs lignes et se termine par une ligne vide, la fin du
+        commentaire, ou une autre entrée de paramètre. Pour cette raison,
+        les entrées de paramètre devraient être la fin du commentaire.
+</PRE>
+</CODE></BLOCKQUOTE>
+
+</LI>
+<LI>Constantes, Énumérations, Propriétés
+<BLOCKQUOTE><CODE>
+<PRE>
+  @see
+        comme ci-dessus
+</PRE>
+</CODE></BLOCKQUOTE>
+</LI>
+<LI>Voir aussi <CODE>@ref</CODE>
+Contrairement au format javadoc, la méta-balise "@ref" a le
+même format que @see mais peut être utilisée n'importe où dans la documentation
+(toutes les autres balises doivent apparaître sur des lignes différentes).</LI>
+</UL>
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-11.html">Page suivante</A>
+ <A HREF="index-9.html">Page précédente</A>
+ <A HREF="index.html#toc10">Table des matières</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

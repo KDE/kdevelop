@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: O Editor de Diálogos</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-12.html">Página seguinte</A>
+ <A HREF="index-10.html">Página anterior</A>
+ <A HREF="index.html#toc11">Índice geral</A>
+</P>
+<H3><A NAME="The Dialog Editor"></A> <A NAME="s11">11. O Editor de Diálogos</A></H3>
+
+<P>O Editor de Diálogos integrado do KDevelop permite uma construção fácil de widgets e diálogos através de meios gráficos para a sua aplicação utilizar.
+Vê a aparência do seu diálogo directamente tal como será apresentado ao utilizador. Utilizar o editor de diálogos é normalmente o primeiro passo que tomará
+após criar um projecto novo com o KAppWizard para dar origem á vista principal, os diálogos de interacção com utilizador e, após terminar
+o trabalho gráfico, a geração de código. Desta forma, o seu projecto conterá todas as partes que normalmente são consideradas "difíceis" e
+levariam imenso tempo a implementar. Depois, o "resto" do seu trabalho é implementar as funcionalidades no código gerado. Este
+capítulo debate-se com a utilização do editor de diálogos para criar widgets do projecto bem como o que fazer no caso de verificar que os seus widgets necessitam
+de correcções ou adições mais à frente no processo de desenvolvimento.
+<P>Pode ir para o Editor de Diálogos quer seleccionando "Editor de Diálogos" do menu de "Ferramentas" quer através do correspondente icon da barra de ferramentas.
+Para regressar ao Editor de Projecto, seleccione "KDevelop" a partir do menu "Ferramentas" do editor de diálogos ou através do icon na barra de ferramentas.
+<P>Que mais o interface do editor de diálogos lhe oferece?  Principalmente, que a sua aparência é quase a mesma que o editor de projecto em termos
+da separação da janela principal bem como do menu e das barras de ferramentas. Isto permite-lhe acostumar-se muito mais rapidamente com o editor de diálogos
+e, como ele interage inteiramente com o gestor de projecto, permanecer no editor de diálogos se deseja controlar o seu processo de
+construção. Acções que requeiram que volte para o KDevelop farão isso automaticamente para si, tal como aceder ao navegador de
+documentação. Apenas seleccione os comandos de menu, e o KDevelop reagirá aos seus desejos.
+<P>Os capítulos seguintes dar-lhe-ão uma visão geral do interface do editor de diálogos, como criar inicialmente um diálogo novo e como definir as propriedades
+dos widgets filhos que o seu diálogo poderá conter.
+<P>
+<H3><A NAME="ss11.1">11.1 A Vista do Editor de Diálogos</A>
+</H3>
+
+<P>
+<H4>A Vista Principal</H4>
+
+<P>A vista do editor de diálogos está logicamente separada em:
+<UL>
+<LI>O separador Widgets, que contém as pastas "Widgets", "Diálogos" e "Itens". Estes são descritos em 
+<A HREF="#Adding Widgets">Adicionar Widgets</A>.</LI>
+<LI>O Editor de Widgets, representando a vista de edição para a criação do seu diálogo. Veja 
+<A HREF="#The Widget Editor">O Editor de Widgets</A></LI>
+<LI>A janela de Propriedades, contendo uma lista das propriedades e dos seus valores, dependendo do widget actualmente seleccionado no editor
+de widgets. Veja 
+<A HREF="#Setting Properties">Definir Propriedades</A> para informação sobre como especializar a aparência e comportamento dos widget's.</LI>
+</UL>
+<P>
+<H4>Diferenças para o KDevelop das Barras de Menus, Ferramentas e Estados</H4>
+
+<P>Em modo de Editor de Diálogos, o KDevelop modifica ligeiramente as barras de menu, ferramentas e estados para disponibilizar a funcionalidade que necessita para criar
+widgets. Estes são:
+<P>
+<H4>Barra de Menus</H4>
+
+<P><B>Menu "Ficheiro":</B> substitui "Novo" por "Novo Diálogo". "Abrir" permite abrir um ficheiro de definição de diálogo.
+<P><B>Menu "Ver":</B> substitui "Vista de Árvore" por "Vista de Widgets", (des/)activa os separadores de Vista de Widgets; adiciona "Vista de Propriedades" para
+(des/)activar a Vista de Propriedades e "Tamanho de Grelha" para lhe permitir especificar o tamanho da grelha em pixels para valores horizontais e verticais.
+<P><B>Menu "Construir":</B> substitui "Compilar Ficheiro" por "Gerar Código". Isto permite-lhe realmente gerar o código para o seu diálogo.
+<P>
+<H4>Barra de Ferramentas</H4>
+
+<P>A barra de ferramentas contém um novo ícon para "Novo Diálogo" bem como um substituto para "Compilar Ficheiro" por "Gerar Código".
+<P>
+<H4>Barra de Estados</H4>
+
+<P>A barra de estados disponibiliza-lhe informação sobre o widget actualmente seleccionado, especialmente apresentando os valores de tamanho X
+e Y em coordenadas do sistema. Para ajuda de Barra de Estados, e-lhe disponibilizada a mesma funcionalidade que no modo de Edição de Projecto.
+<P>Enquanto a modificar o tamanho de um widget, a barra de estados mostrará os valores actuais para o comprimento e altura do widget seleccionado.
+<P>
+<H3><A NAME="ss11.2">11.2 Criar um Novo Diálogo</A>
+</H3>
+
+<P>Após criar o seu esqueleto de projecto, é-lhe disponibilizada uma aplicação pronta a correr, de acordo com as suas preferências. Como o KDevelop disponibiliza
+os tipos de projecto de aplicação KDE e Qt, o editor de diálogos reconhece isto e oferece a construção dos widgets através dos widgets que são
+disponibilizados pelas bibliotecas utilizadas. Para poupar tempo, você já deverá ter um desenho em mente do que fará as acções desejadas. Para
+informações sobre desenho de widget's, veja <EM>O Manual de Programação do KDevelop</EM>.
+<P>Para criar um novo diálogo, seleccione "Novo" do menu "Ficheiro" ou seleccione "Novo" do menu de contexto na pasta dos diálogos. O menu "Novo Diálogo"
+surge onde tem de fornecer ao KDevelop informação específica do diálogo em relação à classe base e nomes de ficheiros de código e
+seu destino.
+<P>
+<H4>Classe de Diálogo</H4>
+
+<P>A classe de diálogo que pode seleccionar, é a classe que é herdada pelo seu novo widget, que é tecnicamente representado por uma classe também.
+Assim, tem as seguintes opções:
+<OL>
+<LI><B>QWidget:</B> a classe base para todos os widgets com interacção do utilizador disponibilizados pela Qt. Utilizado para vistas principais e widgets de nível superior.</LI>
+<LI><B>QFrame:</B> herda QWidget e é utilizado por numerosos widgets como classe base. Este é útil para widgets que já querem ter
+uma funcionalidade QFrame além dos métodos QWidget.</LI>
+<LI><B>Custom:</B> herda uma classe costumizada que tem de ser definida nas "Propriedades Costumizáveis". Pode ser uma classe já desenhada
+disponibilizada pelo seu projecto ou pelas bibliotecas.</LI>
+<LI><B>QDialog:</B> a classe base para diálogos que desejaria herdar para interacção do utilizador tal como definir propriedades ou modificar valores.</LI>
+<LI><B>QTabDialog:</B> herda QDialog e disponibiliza um diálogo com botões pré-definidos e um conjunto de pastas, que você irá disponibilizar através dos
+widgets que você criar.</LI>
+</OL>
+<P><B>Propriedades Costumizáveis</B>
+<P>Para a herança de uma classe costumizável como seleccionado no campo de diálogo de classe, tem de especificar o nome da classe, que vai para "Classe
+Costumizável". O editor de diálogos utiliza isto para a geração do código; assim, você também tem de inserir o "Header Costumizável", onde o ficheiro header
+da classe costumizável tem de ser definido.
+<P>
+<H4>Ficheiros</H4>
+
+<P>Na secção "Ficheiros", você tem de inserir a informação específica dos widget's. Esta é o nome da classe (que deverá ser por ex. KColorSelectDlg
+para um diálogo que permite a selecção de dores de uma caneta), o header, ficheiros C++ e o Data.
+Quando inserir o Nome da Classe, os nomes de ficheiros são dados pelo editor de diálogos, mas você pode também modificar os nomes de ficheiros.
+<P>Agora, e sobre os ficheiros? Quando estiver preparado com a construção de widgets visualmente, terá de gerar os ficheiros que contêm
+a implementação do seu widget. Como isto será uma classe, o diálogo irá existir através do ficheiro header contendo a declaração de classe,
+um ficheiro C++ contendo a implementação dos métodos para os métodos e espaços do widget. O ficheiro Data é o ficheiro que conterá a
+função que é chamada pelo construtor do widget,no método <EM>initDialog()</EM>. O ficheiro em sí não deverá ser modificado pois contém
+o código gerado pelo editor de diálogos para criar o widget em ecrã. Se alguma vez tiver de modificar valores, deverá fazer
+isto através do construtor ou ter a certeza de que não irá alterar o diálogo durante o processo de desenvolvimento, pois o ficheiro Data será
+substituido de cada vez que o código for gerado para o seu widget. Os ficheiros header e C++ contêm secções, onde o editor de diálogos escreve;
+estes estão marcados por comentários. Após a geração dos ficheiros, pode modificar quaisquer valores e definições fora das secções; de outra forma
+as alterações perder-se-ão na próxima geração de código.
+<P>
+<H4>Localização</H4>
+
+<P>Para gerar o código do widget, o editor de diálogos necessita de saber a localização onde este irá. Os valores de defeito para o directório de
+destino é o subdirectório que contém o código fonte do projecto actual.
+<P>Após premir "OK", os seus valores por defeito serão gerados e um construtor de Widget vazio é aberto. Então encontra-se preparado para ir criar
+o seu próprio widget. Lembre-se que o editor de diálogos actualmente apenas suporta widgets estáticos sem gestão de geometria. Se estiver para utilizar
+gestão de geometria para os seus widgets, deverá acostumar-se com as classes que a Qt disponibiliza para isto, criando uma nova
+classe com o gerador de classes e escrevendo o resto do seu widget à mão. Para mais informações, veja <EM>O Manual de Programação do KDevelop</EM>.
+<P>
+<P>
+<H3><A NAME="Adding Widgets"></A> <A NAME="ss11.3">11.3 Adicionar Widgets</A>
+</H3>
+
+<P>Após especificar a classe e nome de ficheiros dos diálogos ou widgets, está preparado para começar a criar o widget e preenchê-lo com conteudo.
+Adicionar widgets de nível-baixo ao seu diálogo é uma tarefa muito simples. Basta seleccionar o widget que deseja a partir da pasta de "Wigets" à
+esquerda através de um clique sobre o correspondente icon de widget. O widget será então colocado no canto superior esquerdo do widget principal actualmente
+aberto. Um widget adicionado então obtém o temanho de defeito de 100x30 pixels na vista de edição. Para mover um widget, carregue sobre ele para
+activar a moldura de desenho, que é apresentada em cinzento escuro com pontos quentes nos cantos e no centro dos lados superior, inferior,
+esquerdo e direito do widget. Um cursor em cruz indica que o widget pode ser movido. Para o mover, pressione o botão esquerdo do rato e mantenha-o
+premido. Depois mova o widget com o rato até ao local onde deseja que ele passe a estar.
+<P>Para redimensionar um widget, mova o cursor do rato sobre um dos pontos quentes do item já activo. O cursor do rato muda então para uma
+seta dupla, indicando as direcções, em que o redimensionamento pode ser feito. Prima o botão esquerdo do rato e mantenha-o premido. O item widget
+irá ter o seu tamanho modificado quando o rato for movido para a direcção indicada pelo cursor.
+<P>Ainda mais, o editor de widget contém imensos menus de contexto para o ajudarem a coordenar o seu trabalho. Estes estão disponíveis sobre todos os itens na
+pasta widgets e dão-lhe uma pequena janela de ajuda que mostra o nome da classe do widget seleccionado com uma breve descrição.
+Sobre um widget seleccionado, o menu de contexto mostra o nome da classe do item seleccionado e disponibiliza:
+<P>
+<UL>
+<LI>Subir</LI>
+<LI>Baixar</LI>
+<LI>Subir ao Topo</LI>
+<LI>Baixar ao Fundo</LI>
+<LI>Cortar</LI>
+<LI>Apagar</LI>
+<LI>Copiar</LI>
+<LI>Colar</LI>
+<LI>Ajuda</LI>
+</UL>
+<P>Após definir o tamanho e posição, pode editar as preferências para o item seleccionado na janela de Preferências.
+<P>
+<H4>A Pasta de Widgets</H4>
+
+<P>A pasta de widgets representa os widgets disponíveis que pode colocar no diálogo. Se deseja informação sobre um certo widget, pressione o
+botão direito do rato sobre o icon do widget e seleccione "Ajuda-Rápida" do menu de contexto. Lembre-se que o editor de diálogos determina automaticamente,
+se o seu projecto é do tipo apenas Qt ou KDE. Isto impede-o de utilizar widgets KDE em aplicações Qt.
+<P>Após ter seleccionado um item widget, ele é colocado com os valores e tamanhos de defeito sobre a janela de edição e marcado como seleccionado com a moldura
+e cantos escuros. Para redimensionar um widget, mova o seu rato sobre um dos pontos escuros e o seu cursor será modificado para apresentar que direcções de
+redimensionamento são possíveis. Depois prime-se o botão do rato e movimenta-se enquanto se mantém o botão premido. Quando terminar de redimensionar o widget,
+liberte o rato. Enquanto a redimensionar, a barra de estados apresenta a posição corrente em termos de valores X e Y e o tamanho actual em
+valore W(Comprimento) e H(Altura).
+<P>
+<H4>A Pasta de Diálogos</H4>
+
+<P>A pasta de diálogos é destinada a permitir-lhe abrir os diálogos do seu projecto através de um clique do rato. Como a estrutura de diálogos é gravada num
+ficheiro *.kdevdlg dentro do directório que contém os ficheiros gerados, apenas esses ficheiros de definição de diálogos são mostrados. Lembre-se também que você
+não apaga estes ficheiros de definição.
+<P>Ao seleccionar um diálogo, será mostrado no estado em que foi gravado no último passo de edição na vista de Edição de Widget.
+<P>
+<H4>A Pasta de Itens</H4>
+
+<P>A pasta de itens permite-lhe ter uma visão geral sobre os itens do widget actual dispostos hierarquicamente. Isto significa que, como
+o seu fundo representa o pai de todos os widgets dentro do diálogo, é mostrado no topo da árvore. Os filhos do diálogo principal
+são listados no nível de árvore seguinte.
+<P>Ao seleccionar um item, ele fica marcado na vista de edição, bem como as suas propriedades são apresentadas na janela de propriedades.
+Utilizar a vista de itens é às vezes importante se o comportamento do seu widget depende da relação pai-filho. Para mais informações
+veja <EM>O Manual de Programação do KDevelop</EM>.
+<P>
+<H3><A NAME="The Widget Editor"></A> <A NAME="ss11.4">11.4 O Editor de Widget</A>
+</H3>
+
+<P>O Editor de Widget é a vista principal que é colocada no meio e onde você constroi o seu widget. Após adicionar itens, eles podem
+ser seleccionados e redimensionados, bem como movidos para o local que necessitar. Sobre todos os itens, menus de contexto disponibilizam um acesso rápido às
+funções tais como cortar, copiar e inserir.
+<P>
+<H3><A NAME="Setting Properties"></A> <A NAME="ss11.5">11.5 Definir Propriedades</A>
+</H3>
+
+<P>A janela de propriedades à direita é o local onde define o comportamento por defeito do widget e dos seus itens. Apresenta os
+valores pré-definidos para cada item seleccionado no momentop; modificar valores resultará em alterações directas na vista do Editor de Widget, por ex. renomear
+labels (etiquetas) ou botões.
+<P>Para separar alguns valores de propriedades pelos seus efeitos, a janela de propriedades contém quatro pastas; seleccionando uma pasta mostrará todos
+os valores paea o grupo de propriedades. Todos os valores possíveis estão descritos abaixo. Lembre-se que as propriedades dependem do widget, por ex. uma
+etiqueta (label) e botão (button) terão uma propriedade para o seu nome em ecrã, enquanto que lineedits (caixa de edição multi-linha) terá propriedades para métodos tais como <EM>setText()</EM>.
+<P>Para uma lista completa dos valores disponíveis por item, deverá ver a referência de classes do widget que explica os métodos utilizados
+e todos os valores possíveis. Note que a maior parte dos valores estão implementados no QWidget e são utilizados para todos os widgets que herdam QWidget. Lembre-se também
+que o código final não contém quaisquer chamadas a métodos que sejam inalteráveis pelo utilizador e assim utiliza os valores por defeito dados no
+cosntrutor de widget's.
+<P>Para uma lista completa das propriedades suportadas que podem ser definidas na janela de propriedades para cada ietm widget, veja <EM>O Manual de Programação do KDevelop</EM>.
+<P>
+<P>
+<H3><A NAME="ss11.6">11.6 Gerar Ficheiros</A>
+</H3>
+
+<P>Após criar o widget, tem de gerar o código fonte para o tornar disponível no seu projecto. Isto pode ser feito ou com o 
+"Gerar Código" do menu "Construir" ou pelo correspondente icon na barra de ferramentas do editor de diálogos. Os seus Makefiles serão actualizados
+automaticamente para incluir o novo widget no processo de compilação; Assim, após chamar "Gerar Código", pode construir o seu
+projecto de novo dentro do editor de diálogos. A janela de output surge debaixo da janela de Edição de Widget tal como no modo de Edição de Projecto.
+<P>Agora que o seu projecto contém um novo widget, o seu trabalho como programador é implementar funcionalidades para os espaços utilizados e eventualmente
+adicionar outros métodos de que possa necessitar.
+<P>Para mais informações sobre a implementação de funções de widgets, veja <EM>O Manual de Programação do KDevelop</EM>.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-12.html">Página seguinte</A>
+ <A HREF="index-10.html">Página anterior</A>
+ <A HREF="index.html#toc11">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
