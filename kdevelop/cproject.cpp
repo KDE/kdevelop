@@ -909,6 +909,7 @@ void CProject::updateMakefileAm(const QString& makefile)
         config->setGroup(makefile);
         if(config->readEntry("type") == "shared_library" )
         {
+          
           getSources(makefile,source_files);
           for(str= source_files.first();str !=0;str = source_files.next())
             sources =  str + " " + sources ;
@@ -922,10 +923,20 @@ void CProject::updateMakefileAm(const QString& makefile)
           }
 
           QString type=getProjectType();
-          if( (type == "kio_slave") )
-            stream << "kde_module_LTLIBRARIES = kio_" << libRootName << ".la\n\n";
-          else if( (type == "kc_module") )
-            stream << "kde_module_LTLIBRARIES = libkcm_" << libRootName << ".la\n\n";
+          config->setGroup(makefile);
+          QString sharedlibLDFLAGS = config->readEntry("sharedlib_LDFLAGS");
+          
+          bool sharedLibSubDir=!sharedlibLDFLAGS.isEmpty();
+
+          if (!sharedLibSubDir)
+          {
+            if( (type == "kio_slave") )
+              stream << "kde_module_LTLIBRARIES = kio_" << libRootName << ".la\n\n";
+            else if( (type == "kc_module") )
+              stream << "kde_module_LTLIBRARIES = libkcm_" << libRootName << ".la\n\n";
+            else
+              stream << "lib_LTLIBRARIES = lib" << libRootName << ".la\n\n";
+          }
           else
             stream << "lib_LTLIBRARIES = lib" << libRootName << ".la\n\n";
 
@@ -933,24 +944,16 @@ void CProject::updateMakefileAm(const QString& makefile)
           {
             stream << "\nINCLUDES = $(all_includes)\n\n";
             stream << "\nLDFLAGS = " << getLDFLAGS() << "\n\n";
-            if( type == "kpart_plugin")
-            {
-              stream << "\nLDADD = " << getLDADD() << "\n\n";
-              stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
-              stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = -avoid-version -module -no-undefined\n\n";
-            }
           }
 
-          config->setGroup(makefile);
-          QString sharedlibLDFLAGS = config->readEntry("sharedlib_LDFLAGS");
-          if (!sharedlibLDFLAGS.isEmpty())
+          if (sharedLibSubDir)
             stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = " << sharedlibLDFLAGS << "\n\n";
 
           if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
           {
-            if( (type == "kio_slave") )
+            if( (type == "kio_slave") && !sharedLibSubDir)
               stream << "kio_" << canonicalizeDirName(libRootName) << "_la_METASOURCES=AUTO\n\n";
-            else if( (type == "kc_module") )
+            else if( (type == "kc_module") && !sharedLibSubDir)
               stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_METASOURCES=AUTO\n\n";
             else
               stream << "lib" << canonicalizeDirName(libRootName) << "_la_METASOURCES = AUTO\n\n";
@@ -959,26 +962,37 @@ void CProject::updateMakefileAm(const QString& makefile)
           {
             if (QFileInfo(getProjectDir() + "automoc").exists())
             {
-              if( (type == "kio_slave") )
+              if( (type == "kio_slave") && !sharedLibSubDir)
                 stream << "kio_" << canonicalizeDirName(libRootName) <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
-              else if( (type == "kc_module") )
+              else if( (type == "kc_module") && !sharedLibSubDir)
                 stream << "libkcm_" << canonicalizeDirName(libRootName) <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
               else
                 stream << "lib" << canonicalizeDirName(libRootName) << "_la_METASOURCES = USE_AUTOMOC\n\n";
             }
           }
 
-          if( (type == "kio_slave") )
+          if (!sharedLibSubDir)
           {
-            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
-            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
-            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
-          }
-          else if( (type == "kc_module") )
-          {
-            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
-            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
-            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            if( type == "kpart_plugin")
+            {
+              stream << "\nLDADD = " << getLDADD() << "\n\n";
+              stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
+              stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -avoid-version -module -no-undefined\n\n";
+            }
+            else if( (type == "kio_slave"))
+            {
+              stream << "kio_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
+              stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
+              stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            }
+            else if( (type == "kc_module"))
+            {
+              stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
+              stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
+              stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            }
+            else
+              stream << "lib" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
           }
           else
             stream << "lib" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
