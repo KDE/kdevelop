@@ -8,7 +8,7 @@
 		-> but not really efficient :-(
 		-> TODO: Toy with a few ideas...
 
-2002-07-15 Jakob Simon-Gaarde <jakob@jsg.dk>
+2002-07-15 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
   * trollproject:
     * trollprojectwidget:
       * The projectmanager now supports qmake scopes
@@ -24,7 +24,7 @@
 	* adapted the the look of all Automake dialogs
 	* add blue bullet to the make output view
 
-2002-07-01  Jakob Simon-Gaarde <jakob@jsg.dk>
+2002-07-01  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
   * trollprojectpart:
     * trollprojectwidget:
       * Can now insert files and subdirs (.pro files are altered dynamically)
@@ -40,7 +40,7 @@
 	* added new bullets to the make outputview
 	* everything needs a little bit code clean-up, so don't worry :-)
 
-2002-06-29  Jakob Simon-Gaarde <jakob@jsg.dk>
+2002-06-29  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
   * trollprojectpart:
     * FileBuffer:
       * added FileBuffer::removeValues() removes all values for a variable
@@ -49,7 +49,7 @@
         This enables files and subdirs to be added and removed.
       * added FileBuffer::saveBuffer() save buffer to file.
 
-2002-06-28  Jakob Simon-Gaarde <jakob@jsg.dk>
+2002-06-28  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
   * trollprojectpart:
     * filebufferclass added to buffer .pro files
       (+filebuffer.cpp, +filebuffer.h)
