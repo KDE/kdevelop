@@ -286,9 +286,8 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
     config->setGroup("Doc_Location");
 
 #ifdef WITH_KDOC2
-    QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
-    if (idx_path.isEmpty())
-        idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+    QString idx_path;
+    idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
             + "/kdoc-reference";
 
     if (!idx_path.isEmpty())

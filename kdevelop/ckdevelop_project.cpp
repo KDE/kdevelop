@@ -742,9 +742,8 @@ void CKDevelop::slotProjectAPI(){
 
 #ifdef WITH_KDOC2
   config->setGroup("Doc_Location");
-  QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
-  if (idx_path.isEmpty())
-      idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+  QString idx_path;
+  idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
           + "/kdoc-reference";
   QString link;
   if ( QFileInfo(idx_path + "/qt.kdoc").exists() ||
@@ -783,9 +782,8 @@ void CKDevelop::slotProjectAPI(){
 #else
  
   config->setGroup("Doc_Location");
-  QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
-  if (idx_path.isEmpty())
-      idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+  QString idx_path;
+  idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
           + "/kdoc-reference";
   QString qt_ref_file=idx_path+"/qt.kdoc";
   QString kde_ref_file=idx_path+"/kdecore.kdoc";
