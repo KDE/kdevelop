@@ -27,6 +27,7 @@
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kmainwindow.h>
+#include <khelpmenu.h>
 
 #include <kdockwidget.h>
 
@@ -84,7 +85,7 @@ class KStatusBarLabel;
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
-class CKDevelop : public KDockMainWindow /*KMainWindow*/{
+class CKDevelop : public KDockMainWindow{
   Q_OBJECT
 public:
   /**constructor*/
@@ -93,6 +94,7 @@ public:
   /**destructor*/
   ~CKDevelop();
 
+  /** initializer functions called by the constructor */
   void initView();
   void initConnections();
   void initKeyAccel();
@@ -180,7 +182,6 @@ public:
 
   // Mewthods for manipulating the recent project menu
   void addRecentProject(const QString& file);
-//  void refreshRecentProjectMenu();
   void shuffleProjectToTop(int id);
   QString getProjectAsString(int id);
   void setupRecentProjectMenu();
@@ -359,7 +360,6 @@ public:
   /** opens the project options dialog */
   void slotProjectOptions();
   /** selects the project workspace */
-//  void slotProjectWorkspaces(int);
   void slotProjectMessages();
   void slotProjectAPI();
   void slotProjectManual();
@@ -485,7 +485,6 @@ public:
   ////////////////////////
   // BOOKMARKS-Menu entries
   ///////////////////////
-//  void slotBookmarksSet();
   void slotBookmarksToggle();
   void slotBookmarksClear();
   void slotBookmarksBrowserSelected(int);
@@ -521,23 +520,17 @@ public:
   void slotHelpTutorial();
   /** shows the KDE library reference */
   void slotHelpKDELibRef();
-  /** shows the KDE 2 developer guide */
-  void slotHelpKDE2DevGuide();
   /** shows the C/C++-referenc */
   void slotHelpReference();
   /** shows the tip of the day */
   void slotHelpTipOfDay();
   /**  open the KDevelop Homepage with kfm/konqueror*/
   void slotHelpHomepage();
-  /** shows the bug report dialog*/
-  void slotHelpBugReport();
   /** shows the API of the current project */
   void slotHelpAPI();
   /** shows the manual of the current project */
   void slotHelpManual();
-  /** shows the aboutbox of KDevelop */
-  void slotHelpAbout();
-  /** switches to the handbook selected: manual, programming, tutorial... */  
+  /** switches to the handbook selected: manual, programming, tutorial... */
   void showDocHelp(const QString& bookname);
 
   void slotGrepDialogItemSelected(QString filename,int linenumber);
@@ -620,10 +613,7 @@ public:
   void slotNewUndo();
 
   void slotBufferMenu(const QPoint& pos);
-/*  void slotShowC();
-  void slotShowHeader();
-  void slotShowHelp();
-  void slotShowTools();*/
+
   void slotToggleLast();
 
   void slotMenuBuffersSelected(int id);
@@ -807,14 +797,13 @@ private:
   KStatusBarLabel *m_statusLabel;
 
   QPopupMenu* project_menu;
-//  QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
   QPopupMenu* debug_menu;
   QPopupMenu* debugPopup;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
   QPopupMenu* menu_buffers;
-  QPopupMenu* help_menu;
+  KHelpMenu* help_menu;
   QWhatsThis* whats_this;
 	
   QPopupMenu* history_prev;
@@ -833,12 +822,6 @@ private:
   QStrList tools_entry;
   QStrList tools_argument;
   	
-  KMenuBar* kdev_menubar;
-
-//  QSplitter* mainSplitter;
-//  QSplitter* topSplitter;
-//  QValueList<int> mainSplitterPos;
-//  QValueList<int> topSplitterPos;
   /** If this to true, the user wants a beep after a
    *  process,slotProcessExited() */
   bool beep; 
@@ -911,7 +894,6 @@ private:
 
   CErrorMessageParser* error_parser;
   QString version;
-  QString kdev_caption;
   bool project;
 
   bool  prev_was_search_result;

@@ -36,30 +36,39 @@ static KCmdLineOptions options[] =
    { 0, 0, 0 }
 };
 
-static KAboutData* aboutData;
+
 
 int main(int argc, char* argv[])
 {
-  aboutData = new KAboutData( "kdevelop",
+  KAboutData aboutData( "kdevelop",
                               I18N_NOOP("KDevelop"),
                               "1.4",
-                              i18n("kdevelop: a C++ IDE"),
+                              I18N_NOOP("The KDevelop C/C++ Integrated Development Environment"),
                               KAboutData::License_GPL,
-                              "(c) 1998-2000, The KDevelop Team",
-                              i18n("Port of kdevelop1.3 to KDE2.1 - some minor enhancements and bug fixes included"),
-                              "http://www.kdevelop.org"  );
+                              "(c) 1998-2001, The KDevelop Team",
+                              I18N_NOOP("The KDevelop C/C++ IDE - a success story "
+                                    "in the world of free software since 1998.\n\n"
+                                    "Think about joining our project to contribute "
+                                    "and enhance the product you are using for your\n"
+                                    "everyday work - or think about writing a KDE "
+                                    "application that will contribute to the KDE project.\n\n"
+                                    "For questions about this product, its usage and license issues,\n"
+                                    "please contact the KDE project (http://www.kde.org) or any \n"
+                                    "of the team officials in the Authors section."),
+                                    "http://www.kdevelop.org"  );
 
-  aboutData->addAuthor("Sandy Meier",I18N_NOOP("Maintainer"), "smeier@rz.uni-potsdam.de");
-  aboutData->addAuthor("Stefan Heidrich",I18N_NOOP("KAppWizard, Printing"), "sheidric@rz.uni-potsdam.de");
-  aboutData->addAuthor("Ralf Nolden",I18N_NOOP("KDevelop<->Dialogeditor Interface, Configuration Functionality, Online Help"), "");
-  aboutData->addAuthor("Jonas Nordin",I18N_NOOP("Classviewer and Classparser"), "jonas.nordin@syncom.se");
-  aboutData->addAuthor("Jörgen Olsson",I18N_NOOP("Graphical Classviewer"), "jorgen@trej.net");
-  aboutData->addAuthor("Stefan Bartel",I18N_NOOP("Real-File-Viewer, Project Options"), "bartel@rz.uni-potsdam.de");
-  aboutData->addAuthor("Bernd Gehrmann",I18N_NOOP("Documentation Tree"), "bernd@physik.hu-berlin.de");
-  aboutData->addAuthor("Walter Tasin",I18N_NOOP("Many, Many Bugfixes, General Enhancements"), "tasin@e-technik.fh-muenchen.de");
-  aboutData->addAuthor("John Birch",I18N_NOOP("Internal Debugger"), "jbb@kdevelop.org");
+  aboutData.addAuthor("Sandy Meier",I18N_NOOP("Maintainer"), "smeier@kdevelop.org");
+  aboutData.addAuthor("John Birch",I18N_NOOP("Internal Debugger, port of KDevelop 1.3 to KDE 2.1"), "jbb@kdevelop.org");
+  aboutData.addAuthor("Ralf Nolden",I18N_NOOP("Configuration Functionality,"
+                          "Online Help, Popups, port of KDevelop 1.3 to KDE 2.1"),"nolden@kde.org");
+  aboutData.addAuthor("Walter Tasin",I18N_NOOP("Many, Many Bugfixes, General Enhancements"), "tasin@kdevelop.org");
+  aboutData.addAuthor("Bernd Gehrmann",I18N_NOOP("Documentation Tree"), "bernd@physik.hu-berlin.de");
+  aboutData.addAuthor("Jonas Nordin",I18N_NOOP("Classviewer and Classparser"), "jonas.nordin@syncom.se");
+  aboutData.addAuthor("Jörgen Olsson",I18N_NOOP("Graphical Classviewer"),"jorgen@trej.net");
+  aboutData.addAuthor("Stefan Heidrich",I18N_NOOP("KAppWizard, Printing"), "sheidric@rz.uni-potsdam.de");
+  aboutData.addAuthor("Stefan Bartel",I18N_NOOP("Real-File-Viewer, Project Options"), "bartel@rz.uni-potsdam.de");
 
-  KCmdLineArgs::init( argc, argv, aboutData );
+  KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options );
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 

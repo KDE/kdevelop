@@ -333,34 +333,28 @@ bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
  *-----------------------------------------------------------------*/
 void CKDevelop::setMainCaption(int tab_item)
 {
-//    if (bKDevelop)
-//    {
-      switch(tab_item)
-      {
-          case BROWSER:
-	          kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
-            break;
+  QString capt;
+  switch(tab_item)
+  {
+    case BROWSER:
+      setCaption(browser_widget->currentTitle());
+      break;
 
-          default:
-	          kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-	          kdev_caption+= version +
-//             	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"] ";
-// reinserted again... to show which file is in the editor (including the path - maybe it differs only in the path)
-// (W. Tasin)
-             	" - ["+ edit_widget->getName()+"] ";
-	          if (edit_widget->isModified())
-            {
-              enableCommand(ID_FILE_SAVE);
-	            kdev_caption+= "*";
-            }
-            else
-            {
-              disableCommand(ID_FILE_SAVE);
-            }
-            break;
+    default:
+      capt=(project) ? (prj->getProjectName()+" - "+QFileInfo(edit_widget->getName()).fileName()) :
+              QFileInfo(edit_widget->getName()).fileName();
+      if (edit_widget->isModified())
+      {
+        enableCommand(ID_FILE_SAVE);
+        setCaption(capt,true);
       }
-      setCaption(kdev_caption);
-//    }
+      else
+      {
+        disableCommand(ID_FILE_SAVE);
+        setCaption(capt,false);
+      }
+      break;
+  }
 }
 
 
@@ -1002,61 +996,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 //  edit_widget->setCursorPosition( lineNo, 0 );
 //}
 
-//#warning FIXME this is now redundent??
-//void CKDevelop::switchToKDevelop(){
-//
-//  setCaption(kdev_caption);
-//
-//  bKDevelop=true;
-//  setUpdatesEnabled(false);
-//
-//  //////// change the mainview ////////
-//  s_tab_view->show();
-//  t_tab_view->show();
-//
-//  topSplitter->hide();
-//#warning FIXME QSplitter methods does not map to qt2 QSplitter
-////  topSplitter->deactivate();
-////  topSplitter->activate(t_tab_view,s_tab_view);// activate the topSplitter
-//  topSplitter->show();
-//  //////// change the bars ///////////
-//  kdev_menubar->show();
-////  setMenu(kdev_menubar);
-//
-//  toolBar(ID_BROWSER_TOOLBAR)->show();
-//
-//  // this toolbar toogle is for placing the qsplitter devider correctly
-////  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
-////  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
-//
-//	setKeyAccel();  // initialize Keys
-//  ///////// reset bar status ////////////
-//
-//  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR))
-//    toolBar()->show();
-//  else
-//    toolBar()->hide();
-//
-//  if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR))
-//    toolBar(ID_BROWSER_TOOLBAR)->show();
-//  else
-//    toolBar(ID_BROWSER_TOOLBAR)->hide();
-//
-//  ///////// reset the views status ///////////////
-//  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-//    showTreeView();
-//  else
-//    showTreeView(false);
-//
-//  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
-//    showOutputView();
-//  else
-//    showOutputView(false);
-//
-//  setUpdatesEnabled(true);
-//  repaint();
-//
-//}
 
 void CKDevelop::startDesigner()
 {
@@ -1243,46 +1182,17 @@ void CKDevelop::showOutputView(bool show){
 }
 void CKDevelop::readOptions()
 {
+  //default geometry on first startup, saved geometry is set by applyMainWindowSettings afterwards
+  setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
+  applyMainWindowSettings(config);
+
   config->setGroup("General Options");
 
-  /////////////////////////////////////////
-  // GEOMETRY
-  QSize size=config->readSizeEntry("Geometry");
-  if(!size.isEmpty())
-    resize(size);
-  else
-    setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
-
-  /////////////////////////////////////////
-  // BAR STATUS
-#warning FIXME menubars
-//	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
-//	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);
-
-  KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
-  toolBar()->setBarPos(tool_bar_pos);
-  bool std_toolbar=	config->readBoolEntry("show_std_toolbar", true);
-  if(std_toolbar){
+  if(config->readBoolEntry("show_std_toolbar", true))
     view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
-    toolBar()->show();
-  }
-  else
-    toolBar()->hide();
-
-  // Browser Toolbar
-  KToolBar::BarPosition browser_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("Browser ToolBar Position", KToolBar::Top);
-  toolBar(ID_BROWSER_TOOLBAR)->setBarPos(browser_tool_bar_pos);
-  bool browser_toolbar=config->readBoolEntry("show_browser_toolbar",true);
-  if(browser_toolbar){
+  if(config->readBoolEntry("show_browser_toolbar",true))
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
-    toolBar(ID_BROWSER_TOOLBAR)->show();
-  }
-  else
-    toolBar(ID_BROWSER_TOOLBAR)->hide();
-	
-	// Statusbar
-	bool statusbar=config->readBoolEntry("show_statusbar",true);
-	if (statusbar)
+	if (config->readBoolEntry("show_statusbar",true))
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
 
 	/////////////////////////////////////////
@@ -1302,8 +1212,6 @@ void CKDevelop::readOptions()
 		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
 	}
 /////////////////////
-
-
 
   config->setGroup("General Options");
 	/////////////////////////////////////////
@@ -1362,13 +1270,8 @@ void CKDevelop::readOptions()
 
 void CKDevelop::saveOptions(){
 	
+  saveMainWindowSettings (config);
   config->setGroup("General Options");
-  config->writeEntry("Geometry", size() );
-
-#warning FIXME save options
-//  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
-  config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
-  config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
 
   config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));

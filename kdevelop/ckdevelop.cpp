@@ -18,7 +18,7 @@
 
 #include "ckdevelop.h"
 
-#include "cbugreportdlg.h"
+
 #include "cclassview.h"
 #include "ccreatedocdatabasedlg.h"
 #include "cdocbrowser.h"
@@ -2779,10 +2779,6 @@ void CKDevelop::slotHelpKDELibRef(){
   showDocHelp("kde_libref/index.html");
 }
 
-void CKDevelop::slotHelpKDE2DevGuide(){
-  showDocHelp("addendum/index.html");
-}
-
 void CKDevelop::slotHelpReference() {
   showDocHelp("reference/C/cref.html");
 }
@@ -2798,29 +2794,6 @@ void CKDevelop::slotHelpHomepage(){
     new KRun("http://www.kdevelop.org");
 }
 
-void CKDevelop::slotHelpBugReport(){
-    
-    config->setGroup("General Options");
-    TBugReportInfo info;
-    info.author = config->readEntry("author_name","");
-    info.email = config->readEntry("author_email","");
-    info.os = config->readEntry("os","");
-    info.kde_version = config->readEntry("kde_version","");
-    info.qt_version = config->readEntry("qt_version","");
-    info.compiler = config->readEntry("compiler","");
-    info.sendmail_command = config->readEntry("sendmail_command","/usr/sbin/sendmail");
-
-    CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","submit@bugs.kde.org"));
-    if( dlg.exec()){
-      config->writeEntry("author_name",dlg.name);
-      config->writeEntry("author_email",dlg.email_address);
-      config->writeEntry("os",dlg.os);
-      config->writeEntry("qt_version",dlg.qt_version);
-      config->writeEntry("kde_version",dlg.kde_version);
-      config->writeEntry("compiler",dlg.compiler);
-      config->writeEntry("sendmail_command",dlg.sendmail_command);
-    }
-}
 
 void CKDevelop::slotHelpAPI(){
   if(project){
@@ -2881,38 +2854,6 @@ void CKDevelop::slotHelpManual(){
   }
 }
 
-void CKDevelop::slotHelpAbout(){
-  QMessageBox aboutmsg(this, "About KDevelop");
-  aboutmsg.setCaption(i18n("About KDevelop..."));
-  aboutmsg.setButtonText(1, i18n("OK"));
-  aboutmsg.setText(i18n("\t   KDevelop Version ")+version+i18n(" \n\n"
-                        "\t(c) 1998,1999,2000 The KDevelop Team \n\n"
-                        "Sandy Meier <smeier@kdevelop.de>\n"
-                        "Stefan Heidrich <sheidric@rz.uni-potsdam.de>\n"
-                        "Ralf Nolden <rnolden@kdevelop.de>\n"
-                        "Jonas Nordin <jonas.nordin@cenacle.se>\n"
-                        "Pascal Krahmer <pascal@beast.de>\n"
-                        "Bernd Gehrmann <bernd@physik.hu-berlin.de>\n"
-                        "Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
-                        "Jörgen Olsson<jorgen@cenacle.net>\n"
-                        "Martin Piskernig <mpiskernig@kdevelop.de>\n"
-                        "Walter Tasin <tasin@kdevelop.de>\n"
-                        "John Birch <jbb@ihug.co.nz>\n"
-                        "Stephan Kulow <coolo@kde.org>\n\n"
-                        "See The KDevelop User Manual, Chapter Authors\n"
-                        "for further information.\n\n"
-                        "This program is free software; you can\n"
-                        "redistribute it and/or modify it under\n"
-                        "the terms of the GNU General Public License\n"
-                        "as published by the Free Software Foundation;\n"
-                        "either version 2 of the License, or (at your\n"
-                        "option) any later version.\n\n"));
-
-  QPixmap pm;
-  pm.load(locate("data", "kdevelop/pics/about_logo.png"));
-  aboutmsg.setIconPixmap(pm);
-  aboutmsg.show();
-}
 
 /*********************************************************************
  *                                                                   *
@@ -3046,7 +2987,7 @@ void CKDevelop::slotStatusHelpMsg(const char *text)
 
 void CKDevelop::enableCommand(int id_)
 {
-  kdev_menubar->setItemEnabled(id_,true);
+  menuBar()->setItemEnabled(id_,true);
   accel->setItemEnabled(id_,true);
 
 //  menuBar()->setItemEnabled(id_,true);
@@ -3056,7 +2997,7 @@ void CKDevelop::enableCommand(int id_)
 
 void CKDevelop::disableCommand(int id_)
 {
-  kdev_menubar->setItemEnabled(id_,false);
+  menuBar()->setItemEnabled(id_,false);
   accel->setItemEnabled(id_,false);
 
 //  menuBar()->setItemEnabled(id_,false);

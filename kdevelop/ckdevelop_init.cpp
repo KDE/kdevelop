@@ -48,6 +48,8 @@
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kstdaccel.h>
+#include <kaboutdata.h>
+
 #include <qprogressbar.h>
 
 #include "./kwrite/kwdoc.h"
@@ -94,7 +96,6 @@ CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
   file_open_list.setAutoDelete(TRUE);
 
   config = KGlobal::config();
-  kdev_caption=kapp->caption();
 
   config->setGroup("General Options");
   start_logo=0L;
@@ -126,6 +127,7 @@ CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
   setKeyAccel();
 
   readOptions();
+  setAutoSaveSettings();
 
   slotViewRefresh();
   if(start_logo)
@@ -596,7 +598,7 @@ void CKDevelop::initKeyAccel()
  *-----------------------------------------------------------------*/
 void CKDevelop::initMenuBar(){
 
-  kdev_menubar=new KMenuBar(this,"KDevelop_menubar");
+
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
   file_menu = new QPopupMenu;
@@ -613,7 +615,7 @@ void CKDevelop::initMenuBar(){
   file_menu->insertSeparator();
   file_menu->insertItem(SmallIconSet("exit"),i18n("E&xit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
 
-  kdev_menubar->insertItem(i18n("&File"), file_menu);
+  menuBar()->insertItem(i18n("&File"), file_menu);
 
 
 ///////////////////////////////////////////////////////////////////
@@ -649,7 +651,7 @@ void CKDevelop::initMenuBar(){
   edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
   edit_menu->insertItem(i18n("Invert Selection"), this, SLOT(slotEditInvertSelection()),0,ID_EDIT_INVERT_SELECTION);
 
-  kdev_menubar->insertItem(i18n("&Edit"), edit_menu);
+  menuBar()->insertItem(i18n("&Edit"), edit_menu);
 
   ///////////////////////////////////////////////////////////////////
   // View-menu entries
@@ -686,7 +688,7 @@ void CKDevelop::initMenuBar(){
   view_menu->insertItem(SmallIconSet("reload"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
 
-  kdev_menubar->insertItem(i18n("&View"), view_menu);
+  menuBar()->insertItem(i18n("&View"), view_menu);
 
 
   ///////////////////////////////////////////////////////////////////
@@ -741,7 +743,7 @@ void CKDevelop::initMenuBar(){
 
   project_menu->insertItem(SmallIconSet("configure"),i18n("O&ptions..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
 
-  kdev_menubar->insertItem(i18n("&Project"), project_menu);
+  menuBar()->insertItem(i18n("&Project"), project_menu);
 
   ///////////////////////////////////////////////////////////////////
   // Build-menu entries
@@ -773,7 +775,7 @@ void CKDevelop::initMenuBar(){
   build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   build_menu->insertItem(i18n("C&onfigure..."), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
 
-  kdev_menubar->insertItem(i18n("&Build"), build_menu);
+  menuBar()->insertItem(i18n("&Build"), build_menu);
 
   ///////////////////////////////////////////////////////////////////
   // Debug-menu entries
@@ -807,13 +809,13 @@ void CKDevelop::initMenuBar(){
   debug_menu->insertItem(SmallIconSet("player_pause"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
   debug_menu->insertItem(SmallIconSet("stop"),   i18n("Stop"),             ID_DEBUG_STOP);
 
-  kdev_menubar->insertItem(i18n("Debu&g"), debug_menu);
+  menuBar()->insertItem(i18n("Debu&g"), debug_menu);
   connect(debug_menu,SIGNAL(activated(int)), SLOT(slotDebugActivator(int)));
 
   ///////////////////////////////////////////////////////////////////
   // Tools-menu entries
   tools_menu = new QPopupMenu;
-  kdev_menubar->insertItem(i18n("&Tools"), tools_menu);
+  menuBar()->insertItem(i18n("&Tools"), tools_menu);
 
   ///////////////////////////////////////////////////////////////////
   // Options-menu entries
@@ -843,13 +845,13 @@ void CKDevelop::initMenuBar(){
   options_menu->insertItem(SmallIconSet("configure"),i18n("&KDevelop Setup..."),this,
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
 
-  kdev_menubar->insertItem(i18n("&Options"), options_menu);
+  menuBar()->insertItem(i18n("&Options"), options_menu);
 
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
   menu_buffers = new QPopupMenu;
-  kdev_menubar->insertItem(i18n("&Window"), menu_buffers);
-  kdev_menubar->insertSeparator();
+  menuBar()->insertItem(i18n("&Window"), menu_buffers);
+  menuBar()->insertSeparator();
 
   ///////////////////////////////////////////////////////////////////
   // Bookmarks-menu entries
@@ -871,7 +873,7 @@ void CKDevelop::initMenuBar(){
   bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("C/C++ &Window"),cpp_bookmarks,31010);
   bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("&Browser Window"), doc_bookmarks,31020);
 	
-  kdev_menubar->insertItem(i18n("Book&marks"),bookmarks_menu);
+  menuBar()->insertItem(i18n("Book&marks"),bookmarks_menu);
 
   ///////////////////////////////////////////////////////////////////
   // Help-menu entries
@@ -881,32 +883,42 @@ void CKDevelop::initMenuBar(){
   QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));
   QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));
 
-  help_menu = new QPopupMenu();
-  help_menu->insertItem(SmallIconSet("back"),i18n("&Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
-  help_menu->insertItem(SmallIconSet("forward"),i18n("&Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
-  help_menu->insertSeparator();
-  help_menu->insertItem(SmallIconSet("help"),i18n("&Search Marked Text"),this,
+  const KAboutData *aboutData = KGlobal::instance()->aboutData();
+  help_menu = new KHelpMenu( this, aboutData);
+  KPopupMenu *help = help_menu->menu();
+  help->clear(); //clear that damn stuff in there
+  help->insertItem(SmallIconSet("back"),i18n("&Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
+  help->insertItem(SmallIconSet("forward"),i18n("&Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
+  help->insertSeparator();
+  help->insertItem(SmallIconSet("help"),i18n("&Search Marked Text"),this,
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
-  help_menu->insertItem(SmallIconSet("filefind"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
-  help_menu->insertSeparator();
-  help_menu->insertItem(SmallIconSet("contents2"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-  help_menu->insertItem(SmallIconSet("contents2"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
-  help_menu->insertItem(SmallIconSet("contents2"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
-  help_menu->insertItem(SmallIconSet("contents2"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
-  help_menu->insertItem(SmallIconSet("contents2"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
-  help_menu->insertSeparator();	
-	help_menu->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
-  help_menu->insertItem(SmallIconSet("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
-  help_menu->insertItem(SmallIconSet("mail_generic"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
-  help_menu->insertSeparator();
-  help_menu->insertItem(i18n("Project &API-Doc"),this,
+  help->insertItem(SmallIconSet("filefind"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
+  help->insertSeparator();
+  QToolButton* wtb = QWhatsThis::whatsThisButton(0);
+  help->insertItem( wtb->iconSet(),i18n( "What's &This" ), help_menu, SLOT(contextHelpActivated()),SHIFT + Key_F1);
+  delete wtb;
+  help->insertSeparator();
+  help->insertItem(SmallIconSet("contents"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
+  help->insertItem(SmallIconSet("contents"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
+  help->insertItem(SmallIconSet("contents"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
+  help->insertItem(SmallIconSet("contents"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
+  help->insertItem(SmallIconSet("contents"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
+  help->insertSeparator();	
+  help->insertItem(SmallIconSet("contents"),i18n("Project &API-Doc"),this,
                         SLOT(slotHelpAPI()),0,ID_HELP_PROJECT_API);
 
-  help_menu->insertItem(i18n("Project &User-Manual"),this,
+  help->insertItem(SmallIconSet("contents"),i18n("Project &User-Manual"),this,
                         SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
-  help_menu->insertSeparator();
-  help_menu->insertItem(SmallIconSet("kdevelop"),i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
-  kdev_menubar->insertItem(i18n("&Help"), help_menu);
+  help->insertSeparator();	
+	help->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
+  help->insertItem(SmallIconSet("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
+  help->insertItem( i18n( "&Report Bug..." ),help_menu, SLOT(reportBug()),0,ID_HELP_BUG_REPORT);
+  help->insertSeparator();	
+  QString appName = (aboutData)? aboutData->programName() : QString::fromLatin1(kapp->name());
+  help->insertItem( kapp->miniIcon(), i18n( "&About %1" ).arg(appName), help_menu, SLOT( aboutApplication() ));
+  help->insertItem( SmallIcon("go"), i18n( "About &KDE" ),help_menu, SLOT( aboutKDE() ) );
+
+  menuBar()->insertItem(i18n("&Help"), help_menu->menu());
 
   ////////////////////////////////////////////////
   // Popupmenu for the classbrowser wizard button
@@ -1425,12 +1437,12 @@ void CKDevelop::setKeyAccel()
   accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_PREVIOUS ,"Previous_Bookmarks" );
   accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
 
-  accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
-  accel->changeMenuAccel(help_menu, ID_HELP_SEARCH, "HelpSearch" );
-  accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KStdAccel::Help );
+  accel->changeMenuAccel(help_menu->menu(),ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
+  accel->changeMenuAccel(help_menu->menu(), ID_HELP_SEARCH, "HelpSearch" );
+  accel->changeMenuAccel(help_menu->menu(), ID_HELP_CONTENTS, KStdAccel::Help );
 
-  accel->changeMenuAccel(help_menu,ID_HELP_PROJECT_API , "HelpProjectAPI" );
-  accel->changeMenuAccel(help_menu,ID_HELP_USER_MANUAL ,  "HelpProjectManual");
+  accel->changeMenuAccel(help_menu->menu(),ID_HELP_PROJECT_API , "HelpProjectAPI" );
+  accel->changeMenuAccel(help_menu->menu(),ID_HELP_USER_MANUAL ,  "HelpProjectManual");
 
 }
 
