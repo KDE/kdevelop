@@ -19,6 +19,10 @@ public:
 private:
   QList<KTextEditor::View> views;
   DocManager *dm;
+
+public slots:
+  void slotDocumentNew();
+  void slotDocumentOpen();
 };
 
 #endif

@@ -14,7 +14,8 @@
 
 ViewManager::ViewManager (QWidget *parent, DocManager *dm) : QTabWidget (parent)
 {
-
+  views.setAutoDelete (true);
+  this->dm = dm;
 }
 
 ViewManager::~ViewManager()
@@ -26,10 +27,30 @@ void ViewManager::createView (KTextEditor::Document *doc)
 {
   KTextEditor::View *view = doc->createView (this, "nix");
   addTab (view, QString ("test"));
+  views.append (view);
 }
 
 void ViewManager::closeView (KTextEditor::View *view)
 {
 
+}
+
+void ViewManager::slotDocumentNew()
+{
+  KTextEditor::Document *doc = dm->createDoc ("");
+  createView (doc);
+}
+
+void ViewManager::slotDocumentOpen()
+{
+  QString path = QString::null;
+  KURL::List urls = KFileDialog::getOpenURLs(path, QString::null, 0L, i18n("Open File..."));
+
+  for (KURL::List::Iterator i=urls.begin(); i != urls.end(); ++i)
+  {
+    KTextEditor::Document *doc = dm->createDoc ("");
+    createView (doc);
+    doc->openURL( *i );
+  }
 }
 

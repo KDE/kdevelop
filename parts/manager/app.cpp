@@ -1,5 +1,6 @@
 #include <kiconloader.h>
 #include <kstddirs.h>
+#include <kstdaction.h>
 #include <kapp.h>
 #include <kaction.h>
 #include <klocale.h>
@@ -24,7 +25,10 @@ Shell::Shell()
   ViewManager *vm = new ViewManager (this, dm);
   setCentralWidget (vm );
 
-  vm->createView (dm->createDoc (QString("")));
+  KStdAction::openNew( vm, SLOT( slotDocumentNew() ), actionCollection(), "file_new" );
+  KStdAction::open( vm, SLOT( slotDocumentOpen() ), actionCollection(), "file_open" );
+
+  createGUI();
 
   resize( 600, 350 );
 }
