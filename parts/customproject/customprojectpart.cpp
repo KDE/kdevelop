@@ -53,8 +53,9 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
     : KDevProject(parent, name ? name : "CustomProjectPart")
 {
     setInstance(CustomProjectFactory::instance());
-
     setXMLFile("kdevcustomproject.rc");
+    
+    m_executeAfterBuild = false;    
 
     KAction *action;
 
@@ -86,6 +87,9 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
              this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    
+    connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
+	     this, SLOT(slotCommandFinished(const QString&)) );
 }
 
 
@@ -409,6 +413,14 @@ void CustomProjectPart::slotClean()
 
 void CustomProjectPart::slotExecute()
 {
+    partController()->saveAllFiles();
+
+    if( !m_executeAfterBuild && isDirty() ){
+        m_executeAfterBuild = true;
+        slotBuild();
+        return;
+    }
+
     QString program = projectDirectory() + "/" + project()->mainProgram();
 
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
@@ -501,6 +513,53 @@ void CustomProjectPart::targetMenuActivated(int id)
 {
     QString target = m_targets[id];
     startMakeCommand(buildDirectory(), target);
+}
+
+void CustomProjectPart::slotCommandFinished( const QString& command )
+{
+    kdDebug(9020) << "CustomProjectPart::slotProcessFinished()" << endl;
+
+    Q_UNUSED( command );
+
+    if( m_buildCommand != command )
+        return;
+
+    m_buildCommand = QString::null;
+
+    m_timestamp.clear();
+    QStringList fileList = allFiles();
+    QStringList::Iterator it = fileList.begin();
+    while( it != fileList.end() ){
+        QString fileName = *it;
+        ++it;
+
+        m_timestamp[ fileName ] = QFileInfo( projectDirectory(), fileName ).lastModified();
+    }
+
+    emit projectCompiled();
+
+    if( m_executeAfterBuild ){
+        slotExecute();
+        m_executeAfterBuild = false;
+    }
+}
+
+bool CustomProjectPart::isDirty()
+{
+    QStringList fileList = allFiles();
+    QStringList::Iterator it = fileList.begin();
+    while( it != fileList.end() ){
+        QString fileName = *it;
+        ++it;
+
+        QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
+        QDateTime t = QFileInfo( projectDirectory(), fileName ).lastModified();
+        if( it == m_timestamp.end() || *it != t ){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 #include "customprojectpart.moc"

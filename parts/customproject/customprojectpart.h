@@ -14,8 +14,10 @@
 
 #include <qdict.h>
 #include <qguardedptr.h>
+#include <qmap.h>
+#include <qdatetime.h>
 
-#include "kdevproject.h"
+#include <kdevproject.h>
 
 class QListViewItem;
 class QPopupMenu;
@@ -33,6 +35,8 @@ public:
     CustomProjectPart( QObject *parent, const char *name, const QStringList & );
     ~CustomProjectPart();
 
+    bool isDirty();
+    
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);
     virtual void closeProject();
@@ -59,7 +63,8 @@ private slots:
     void slotExecute();
     void updateTargetMenu();
     void targetMenuActivated(int id);
-    
+    void slotCommandFinished( const QString& command );
+
 private:
     void populateProject();
     void startMakeCommand(const QString &dir, const QString &target);
@@ -70,6 +75,10 @@ private:
     QPopupMenu *m_targetMenu;
     QStringList m_targets;
     QString m_contextFileName;
+    
+    QMap<QString, QDateTime> m_timestamp;
+    bool m_executeAfterBuild;
+    QString m_buildCommand;    
 };
 
 #endif
