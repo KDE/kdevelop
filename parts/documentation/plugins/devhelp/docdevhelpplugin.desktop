@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=DevHelpPlugin
+Comment=Documentation plugin for DevHelp documentation
+Exec=blubb
+ServiceTypes=KDevelop/DocumentationPlugins
+X-KDevelop-Version=1
+X-KDE-Library=libdocdevhelpplugin

@@ -25,16 +25,13 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdialog.h>
+#include <qregexp.h>
 
 #include <kurl.h>
 #include <kaboutdata.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <khtml_part.h>
-#include <khtmlview.h>
 #include <kstandarddirs.h>
-
-#include <dom/html_document.h>
 
 #include <urlutil.h>
 #include <kdevgenericfactory.h>

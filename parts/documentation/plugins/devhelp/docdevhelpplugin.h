@@ -17,38 +17,42 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef DOCDOXYGENPLUGIN_H
-#define DOCDOXYGENPLUGIN_H
+#ifndef DOCDEVHELPPLUGIN_H
+#define DOCDEVHELPPLUGIN_H
+
+#include <qvaluestack.h>
+#include <qdom.h>
 
 #include <kdevdocumentationplugin.h>
 
-class DocDoxygenPlugin: public DocumentationPlugin
+class DocDevHelpPlugin: public DocumentationPlugin
 {
     Q_OBJECT
 public:
-    DocDoxygenPlugin(QObject* parent, const char* name, const QStringList args = QStringList());
-    ~DocDoxygenPlugin();
+    DocDevHelpPlugin(QObject* parent, const char* name, const QStringList args = QStringList());
+    ~DocDevHelpPlugin();
 
     virtual QString pluginName() const;
 
-    virtual DocumentationCatalogItem *createCatalog(KListView *contents, const QString &title, const QString &url);
+    virtual QString catalogTitle(const QString& url);
+    virtual void setCatalogURL(DocumentationCatalogItem* item);
     
     virtual void createTOC(DocumentationCatalogItem* item);
-    virtual void setCatalogURL(DocumentationCatalogItem* item);
+    
+    virtual DocumentationCatalogItem* createCatalog(KListView* contents, const QString& title, const QString& url);
 
     virtual bool needRefreshIndex(DocumentationCatalogItem* item);
     virtual void createIndex(KListBox* index, DocumentationCatalogItem* item);
-
+        
     virtual QStringList fullTextSearchLocations();
-                    
-    virtual QPair<KFile::Mode, QString> catalogLocatorProps();
-    virtual QString catalogTitle(const QString& url);
-    
     virtual void autoSetupPlugin();
     
+    virtual QPair<KFile::Mode, QString> catalogLocatorProps();
+    
 protected:
-    void createBookTOC(DocumentationItem* item);
-    void createBookIndex(const QString &tagfile, KListBox* index, DocumentationCatalogItem* item);
+    void pushToScanStack(QValueStack<QString> &stack, const QString &value);
+    void scanDevHelpDir(const QString &path);
+    void addTocSect(DocumentationItem *parent, QDomElement childEl, QString baseUrl, bool book=false);
 };
 
 #endif

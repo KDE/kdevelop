@@ -432,7 +432,7 @@ void DocumentationPlugin::reinit(KListView *contents, KListBox *index, QStringLi
                 && (!indexes.contains(namedCatalogs[it.key()])) )
             {
                  kdDebug() << "    index requested " << endl;
-                 createIndex(index, namedCatalogs[it.key()]);
+                 loadIndex(index, namedCatalogs[it.key()]);
             }
             else if (indexEnabled(namedCatalogs[it.key()]))
                 kdDebug() << "    1" << endl;

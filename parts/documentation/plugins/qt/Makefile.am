@@ -5,3 +5,4 @@ libdocqtplugin_la_LDFLAGS = $(all_libraries)
 noinst_HEADERS = docqtplugin.h
 libdocqtplugin_la_SOURCES = docqtplugin.cpp
 kde_services_DATA =  docqtplugin.desktop
+libdocqtplugin_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
