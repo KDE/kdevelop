@@ -43,6 +43,7 @@
 #include "releaseinputdialog.h"
 #include "cvslogdialog.h"
 #include "editorsdialog.h"
+#include "annotatedialog.h"
 
 #include "changelog.h"
 #include "cvsoptions.h"
@@ -470,6 +471,45 @@ void CvsServicePartImpl::add( const KURL::List& urlList, bool binary )
 
     m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
+
+    doneOperation();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePartImpl::annotate( const KURL::List& urlList )
+{
+    kdDebug(9006) << k_funcinfo << endl;
+
+    if (!prepareOperation( urlList, opAnnotate ))
+        return;
+
+    //get the directory of the file we want to annotate
+    QString tagFilename = URLUtil::directory(projectDirectory()+"/"+fileList()[0]);
+    //CVS stores tag information in the ./CVS/Tag file
+    tagFilename += "/CVS/Tag";
+
+
+    //Check if such a Tag file exists, and try to read the tag/branch from it
+    QFile fileTag(tagFilename);
+    QString strRev = "";  //default revision is empty ...
+    if (fileTag.exists()) { //... but if there is a Tag file, we get the revision from there
+        if ( fileTag.open( IO_ReadOnly ) ) {
+            QTextStream stream( &fileTag );
+            QString line;
+            line = stream.readLine();
+            if (line.startsWith("T")) { //the line always starts with a "T"...
+                strRev = line.right(line.length()-1); //...and after this there is the tag name
+                kdDebug(9006) << "The found revision is:  >>" << strRev << "<<" <<endl;
+            }
+            fileTag.close();
+        }
+    }
+    
+    AnnotateDialog * f = new AnnotateDialog( m_cvsService );
+    f->show();
+    //the dialog will do all the work, just give him the file and the revision to start with
+    f->startFirstAnnotate( fileList()[0], strRev );
 
     doneOperation();
 }

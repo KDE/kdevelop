@@ -83,7 +83,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( data ) )
 CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QStringList & )
 	: KDevVersionControl( &data, parent,
 						  name ? name : "CvsService" ),
-    actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ),
+    actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAnnotate(0), actionAdd( 0 ),
     actionAddBinary( 0 ), actionRemove( 0 ), actionUpdate( 0 ),
     actionRemoveSticky( 0 ), actionEdit( 0 ), actionEditors(0), actionUnEdit(0),
     actionAddToIgnoreList( 0 ), actionRemoveFromIgnoreList( 0 ),
@@ -157,6 +157,11 @@ void CvsServicePart::setupActions()
         actionCollection(), "cvsservice_log" );
     actionLog->setToolTip( i18n("Generate log") );
     actionLog->setWhatsThis( i18n("<b>Generate log</b><p>Produces log for this file.") );
+
+    actionAnnotate = new KAction( i18n("&Annotate"), 0, this, SLOT(slotActionAnnotate()),
+        actionCollection(), "cvsservice_annotate" );
+    actionAnnotate->setToolTip( i18n("Generate annotations") );
+    actionAnnotate->setWhatsThis( i18n("<b>Annotate</b><p>Produces annotations for this file.") );
 
     actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()),
         actionCollection(), "cvsservice_add" );
@@ -324,6 +329,8 @@ void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
             subMenu->setWhatsThis(id, i18n("<b>Build difference</b><p>Builds difference between releases."));
             id = subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
             subMenu->setWhatsThis(id, i18n("<b>Generate log</b><p>Produces log for this file."));
+            id = subMenu->insertItem( actionAnnotate->text(), this, SLOT(slotAnnotate()) );
+            subMenu->setWhatsThis(id, i18n("<b>Generate Annotate</b><p>Produces annotation output for this file."));
         }
         id = subMenu->insertItem( actionEditors->text(), this, SLOT(slotEditors()) );
         subMenu->setWhatsThis(id, i18n("<b>Show editors</b><p>Shows the list of users who are editing files."));
@@ -438,6 +445,17 @@ void CvsServicePart::slotActionAdd()
     if (urlFocusedDocument( currDocument ))
     {
         m_impl->add( currDocument, false );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePart::slotActionAnnotate()
+{
+    KURL currDocument;
+    if (urlFocusedDocument( currDocument ))
+    {
+        m_impl->annotate( currDocument );
     }
 }
 
@@ -591,6 +609,13 @@ void CvsServicePart::slotUpdate()
 void CvsServicePart::slotAdd()
 {
     m_impl->add( m_urls, false );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePart::slotAnnotate()
+{
+    m_impl->annotate( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -51,7 +51,7 @@ public:
     //! Available Cvs operations
     enum CvsOperation
     {
-        opFakeStub, opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff, opTag, opUnTag, opEdit, opUnEdit, opEditors
+        opFakeStub, opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff, opTag, opUnTag, opEdit, opUnEdit, opEditors, opAnnotate
     };
 
     /**
@@ -97,6 +97,11 @@ public:
     * @param binary is the file binary or plain text
     */
     virtual void add( const KURL::List& urlList, bool binary = false );
+    /**
+    * Annotate the specified file (as KURL).
+    * @param urlList
+    */
+    virtual void annotate( const KURL::List& urlList);
     /**
     * Mark the specified files (as KURL) for beeing edited
     * @param urlList

@@ -15,14 +15,14 @@ libkdevcvsservice_la_SOURCES = cvspart.cpp cvspartimpl.cpp cvsformbase.ui \
 	diffdialogbase.ui diffdialog.cpp releaseinputdialogbase.ui releaseinputdialog.cpp \
 	cvslogdialog.cpp cvslogpage.cpp cvsdiffpage.cpp diffwidget.cpp jobscheduler.cpp \
 	bufferedstringreader.cpp cvsfileinfoprovider.cpp cvsservicedcopIface.skel editorsdialogbase.ui \
-	editorsdialog.cpp
+	editorsdialog.cpp annotatedialog.cpp annotatepage.cpp annotateview.cpp
 
 noinst_HEADERS = changelog.h checkoutdialog.h checkoutdialogbase.h commitdlg.h \
 	cvsentry.h cvsform.h cvsformbase.h cvsoptions.h cvsoptionswidget.h \
 	cvsoptionswidgetbase.h cvspart.h cvspartimpl.h cvsprocesswidget.h tagdialog.h tagdialogbase.h \
 	diffdialog.h cvsdir.h cvslogpage.h cvslogdialog.h jobscheduler.h diffwidget.h \
 	cvsfileinfoprovider.h cvsservicedcopIface.h bufferedstringreader.h editorsdialog.h \
-	editorsdialogbase.h
+	editorsdialogbase.h annotatedialog.h annotatepage.h annotateview.h
     
 METASOURCES = AUTO
 

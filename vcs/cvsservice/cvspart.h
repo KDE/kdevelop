@@ -88,6 +88,7 @@ private slots:
     void slotActionEdit();
     void slotActionUnEdit();
     void slotActionAdd();
+    void slotActionAnnotate();
     void slotActionAddBinary();
     void slotActionRemove();
     void slotActionRemoveSticky();
@@ -105,6 +106,7 @@ private slots:
     void slotEdit();
     void slotUnEdit();
     void slotAdd();
+    void slotAnnotate();
     void slotAddBinary();
     void slotRemove();
     void slotRemoveSticky();
@@ -149,13 +151,14 @@ private:
     KAction *actionCommit,
         *actionDiff,
         *actionLog,
+        *actionAnnotate,
         *actionAdd,
         *actionAddBinary,
         *actionRemove,
         *actionUpdate,
         *actionRemoveSticky,
-        *actionEditors,
         *actionEdit,
+        *actionEditors,
         *actionUnEdit,
         *actionAddToIgnoreList,
         *actionRemoveFromIgnoreList,
