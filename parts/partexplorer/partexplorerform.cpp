@@ -21,6 +21,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kcombobox.h>
+#include <kservicetype.h> 
 
 #include "partexplorerformbase.h"
 #include "partexplorerform.h"
@@ -121,7 +123,7 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     m_base->resultsLabel->setBuddy(m_resultsList);
     m_base->layout()->add( m_resultsList );
     setMainWidget( m_base );
-    m_base->typeEdit->setFocus();
+    m_base->typeCombo->lineEdit()->setFocus();
 
     // User1 button text
     setButtonText( User1, i18n("&Search") );
@@ -129,12 +131,24 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     // Resize dialog
     resize( 480, 512 );
 
-    connect( m_base->typeEdit, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
-    connect( m_base->costraintsText, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+    connect( m_base->typeCombo->lineEdit(), SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+//    connect( m_base->constraintsText, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
 
     connect( actionButton(User1), SIGNAL(clicked()), this, SLOT(slotSearchRequested()) );
-    connect( m_base->typeEdit, SIGNAL( textChanged ( const QString & ) ), this,  SLOT( slotServicetypeChanged( const QString&  ) ) );
-    slotServicetypeChanged( m_base->typeEdit->text() );
+//    connect( m_base->typeCombo->lineEdit(), SIGNAL( textChanged ( const QString & ) ), this,  SLOT( slotServicetypeChanged( const QString&  ) ) );
+//    slotServicetypeChanged( m_base->typeCombo->lineEdit()->text() );
+
+	// populating with all known servicetypes
+	KServiceType::List serviceList = KServiceType::allServiceTypes();
+	QStringList list;
+	KServiceType::List::Iterator it = serviceList.begin();
+	while( it != serviceList.end() )
+	{
+		list << (*it)->name();
+		++it;
+	}
+	list.sort();
+	m_base->typeCombo->insertStringList( list );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -143,49 +157,18 @@ PartExplorerForm::~PartExplorerForm()
 {
 }
 
-void PartExplorerForm::slotServicetypeChanged( const QString& _text )
-{
-    enableButton( KDialogBase::User1, !_text.isEmpty() );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QString PartExplorerForm::serviceType() const
-{
-    QString st = m_base->typeEdit->text();
-
-    return st.isEmpty()? QString::null : st;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QString PartExplorerForm::costraints() const
-{
-    QString c = m_base->costraintsText->text();
-    return c.isEmpty()? QString::null : c;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 
 void PartExplorerForm::slotSearchRequested()
 {
-    if ( m_base->typeEdit->text().isEmpty() )
-        return;
-
-    QString serviceType = this->serviceType(),
-        costraints = this->costraints();
+	QString serviceType = m_base->typeCombo->lineEdit()->text();
+	QString constraints = m_base->constraintsText->text();
 
     kdDebug(9000) << "===> PartExplorerForm::slotSearchRequested(): " <<
-        " serviceType = " << serviceType << ", costraints = " << costraints << endl;
-
-    if (serviceType.isNull())  // It is mandatory
-    {
-        slotDisplayError( i18n("You must fill at least the service type.") );
-        return;
-    }
+        " serviceType = " << serviceType << ", constraints = " << constraints << endl;
 
     // Query for requested services
-    KTrader::OfferList foundServices = KTrader::self()->query( serviceType, costraints );
+    KTrader::OfferList foundServices = KTrader::self()->query( serviceType, constraints );
     fillServiceList( foundServices );
 }
 

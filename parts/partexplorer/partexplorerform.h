@@ -35,15 +35,11 @@ public:
     */
     void fillServiceList( const KTrader::OfferList &services );
 
-    QString serviceType() const;
-    QString costraints() const;
-
 public slots:
     void slotDisplayError( QString );
 
 protected slots:
     void slotSearchRequested();
-    void slotServicetypeChanged( const QString& );
 
 private:
     ResultsList *m_resultsList;

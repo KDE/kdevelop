@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>PartExplorerFormBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>429</width>
-            <height>246</height>
+            <width>335</width>
+            <height>241</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -52,23 +52,15 @@
                 <string></string>
             </property>
         </widget>
-        <widget class="QLineEdit">
+        <widget class="KComboBox">
             <property name="name">
-                <cstring>typeEdit</cstring>
+                <cstring>typeCombo</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
+            <property name="editable">
+                <bool>true</bool>
             </property>
-            <property name="toolTip" stdset="0">
-                <string></string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>&lt;b&gt;Service type&lt;/b&gt;&lt;p&gt;Put here the Service type (e.g. &lt;i&gt;KDevelop/Plugin, KParts/ReadWritePart, ...&lt;/i&gt;).</string>
+            <property name="autoCompletion">
+                <bool>false</bool>
             </property>
         </widget>
         <widget class="QLabel">
@@ -95,7 +87,7 @@
         </widget>
         <widget class="QTextEdit">
             <property name="name">
-                <cstring>costraintsText</cstring>
+                <cstring>constraintsText</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -130,13 +122,18 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
-    <tabstop>typeEdit</tabstop>
-    <tabstop>costraintsText</tabstop>
+    <tabstop>constraintsText</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>
