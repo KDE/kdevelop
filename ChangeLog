@@ -1,3 +1,8 @@
+1999-09-19 Stefan Bartel <bartel@rz.uni-potsdam.de>
+	* RFV can now hide non-project files
+	* pathbox in newfiledialog will not be disabled,
+	  if you deselect add to project
+
 1999-09-18 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* fixed bug, now you can have spaces in directory
 

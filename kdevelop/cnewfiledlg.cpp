@@ -18,7 +18,6 @@
 #include "cnewfiledlg.h"
 #include "cgeneratenewfile.h"
 #include "cproject.h"
-#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <iostream.h>
 #include <kfiledialog.h>
@@ -252,43 +251,45 @@ void CNewFileDlg::slotOKClicked(){
   if ( (fileType() == "CPP") && 
        !(text.right(4) == ".cpp" || text.right(3) == ".cc" 
 	|| text.right(2) == ".C" || text.right(2) == ".c" || text.right(4) == ".cxx" || text.right(3) == ".ec" || text.right(5) == ".ecpp" )){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"));
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!")
+		     ,KMsgBox::EXCLAMATION);
     return;
   }
   if ( (fileType() == "HEADER") && !(text.right(2) == ".h" || (text.right(4) == ".hxx"))){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .h or .hxx!"));
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .h or .hxx!"),KMsgBox::EXCLAMATION);
     return;
   }
   if ( (fileType() == "LSM") && (text.right(4) != ".lsm")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .lsm !"));
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .lsm !"),KMsgBox::EXCLAMATION);
     return;
    }
   if ( (fileType() == "KDELNK") && (text.right(7) != ".kdelnk")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .kdelnk !"));
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .kdelnk !"),KMsgBox::EXCLAMATION);
     return;
   }
   if ( (fileType() == "EN_SGML") && (text.right(5) != ".sgml")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .sgml !"));
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .sgml !"),KMsgBox::EXCLAMATION);
     return;
   }
   if ( (fileType() == "DIALOG") && (text.right(8) != ".kdevdlg")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .kdevdlg !"));
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .kdevdlg !"),KMsgBox::EXCLAMATION);
     return;
   }
   if ( (fileType() == "ICON") && (text.right(4) != ".xpm")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .xpm !"));
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .xpm !"),KMsgBox::EXCLAMATION);
     return;
   }
   if ( (fileType() == "LEXICAL") && !(text.right(4) == ".l++" || text.right(4) == ".lxx" || text.right(3) == ".ll" || text.right(2) == ".l")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .l, .ll, .lxx or .l++ !"));
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .l, .ll, .lxx or .l++ !"), KMsgBox::EXCLAMATION);
     return;
   }
   if (text.isEmpty()){
-    QMessageBox::warning(this,i18n("Error..."),i18n("You must enter a filename!"));
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a filename!"),KMsgBox::EXCLAMATION);
     return;
   }
   if(addToProject() == true && (location().contains(prj->getProjectDir())) == 0 ){
-    QMessageBox::warning(this,i18n("Error..."),i18n("You must choose a location,that is in your project-dir!"));
+    KMsgBox::message(this,i18n("Error..."),i18n("You must choose a location,that is in your project-dir!")
+		     ,KMsgBox::EXCLAMATION);
     return;
   }
   QString filename = fileName();
@@ -342,7 +343,8 @@ void CNewFileDlg::slotOKClicked(){
       if ((prj->getLDADD()).contains( "@LEXLIB@", FALSE ) == 0){
 	prj->setLDADD( prj->getLDADD() + " @LEXLIB@ ");
       }
-      QMessageBox::information(this,i18n("Information..."),i18n("Please make sure, that you have added\n\"AM_LEX_PROG\" to your configure.in!"));
+      KMsgBox::message(this,i18n("Information..."),i18n("Please make sure, that you have added\n\"AM_LEX_PROG\" to your configure.in!")
+			,KMsgBox::EXCLAMATION);
     }
   }
   else { // no template, -> empty file or icon
@@ -438,14 +440,6 @@ QString CNewFileDlg::location(){
   return str;
 }
 void CNewFileDlg::slotAddToProject(){
-  if(check_add_project->isChecked()){
-    prj_loc_edit->setEnabled(true);
-    loc_button->setEnabled(true);
-  }
-  else{
-    prj_loc_edit->setEnabled(false);
-    loc_button->setEnabled(false);
-  }
 }
 
 void CNewFileDlg::slotEditTextChanged(const char* text){
@@ -494,7 +488,6 @@ void CNewFileDlg::slotListHighlighted(int){
   edit->setFocus();
   autocompletion = true;
 }
-
 
 
 

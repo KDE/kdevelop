@@ -152,7 +152,7 @@ void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* pa
 				f.append(fl.current());
         f.remove(0,1);
 				if( isInstalledFile(f) ) {
-						item = treeH->addItem( fl.current(), THC_FILE, parent);
+						item = treeH->addItem( fl.current(), THINSTALLED_FILE, parent);
 						if (showNonPrjFiles) {
 								item->setText(1,i18n("registered"));
 								vc=project->getVersionControl();
@@ -165,7 +165,6 @@ void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* pa
 										}
 								}
 						}
-						// item->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
 				} else {
 						if (showNonPrjFiles) {
 								item = treeH->addItem( fl.current(), THC_FILE, parent,i18n("registered") );
@@ -362,7 +361,6 @@ void CRealFileView::slotAddFileToProject() {
   if (KMsgBox::yesNo(0, i18n("Question"), msg, KMsgBox::QUESTION) == 2)
     return;
 
-  currentItem()->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
   emit addFileToProject(filename);
 }
 
