@@ -55,8 +55,6 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
 
     connect( core(), SIGNAL(stopButtonClicked()),
              m_widget, SLOT(killJob()) );
-    connect( core(), SIGNAL(configWidget(KDialogBase*)),
-             m_widget, SLOT(configWidget(KDialogBase*)) );
 }
 
 

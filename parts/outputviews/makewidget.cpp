@@ -124,24 +124,24 @@ MakeWidget::MakeWidget(MakeViewPart *part)
  ,m_part(part)
  ,m_vertScrolling(false)
  ,m_horizScrolling(false)
- ,m_pErrorGccRx("([^: \t]+):([0-9]+):(.*)")
+ ,m_errorGccRx("([^: \t]+):([0-9]+):(.*)")
  ,m_errorGccFileGroup(1)
  ,m_errorGccRowGroup(2)
  ,m_errorGccTextGroup(3)
- ,m_pErrorFtnchekRx("\"(.*)\", line ([0-9]+):(.*)")
+ ,m_errorFtnchekRx("\"(.*)\", line ([0-9]+):(.*)")
  ,m_errorFtnchekFileGroup(1)
  ,m_errorFtnchekRowGroup(2)
  ,m_errorFrnchekTextGroup(3)
- ,m_pErrorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)")
+ ,m_errorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)")
  ,m_errorJadeFileGroup(1)
  ,m_errorJadeRowGroup(2)
  ,m_errorJadeTextGroup(3)
- ,m_pCompileFile1("(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).*`.*`(.+)")
- ,m_pCompileFile2("(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).* -c ([^\\s;]+)")
- ,m_pCompileFile3("(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).* -c -.*")
- ,m_pMocFile(".*/moc\\b.*\\s-o\\s([^\\s;]+)")
- ,m_pLinkFile("(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=link).* -o ([^\\s;]+)")
- ,m_pInstallFile("(?:/usr/bin/install|/bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)")
+ ,m_compileFile1("(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).*`.*`(.+)")
+ ,m_compileFile2("(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).* -c ([^\\s;]+)")
+ ,m_compileFile3("(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=compile).* -c -.*")
+ ,m_mocFile(".*/moc\\b.*\\s-o\\s([^\\s;]+)")
+ ,m_linkFile("(?:g\\+\\+|/bin/sh\\s.*libtool.*--mode=link).* -o ([^\\s;]+)")
+ ,m_installFile("(?:/usr/bin/install|/bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)")
  ,m_fileNameGroup(1)
 {
     updateSettingsFromConfig();
@@ -588,27 +588,27 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     QString text;
 
     bool hasmatch = false;
-    if (m_pErrorGccRx.search(line) != -1)
+    if (m_errorGccRx.search(line) != -1)
     {
         hasmatch = true;
-        fn = m_pErrorGccRx.cap(m_errorGccFileGroup);
-        row = QString(m_pErrorGccRx.cap(m_errorGccRowGroup)).toInt()-1;
-        text = QString(m_pErrorGccRx.cap(m_errorGccTextGroup));
+        fn = m_errorGccRx.cap(m_errorGccFileGroup);
+        row = QString(m_errorGccRx.cap(m_errorGccRowGroup)).toInt()-1;
+        text = QString(m_errorGccRx.cap(m_errorGccTextGroup));
     }
-    else if (m_pErrorFtnchekRx.search(line) != -1)
+    else if (m_errorFtnchekRx.search(line) != -1)
     {
         kdDebug() << "Matching " << line << endl;
         hasmatch = true;
-        fn = m_pErrorFtnchekRx.cap(m_errorFtnchekFileGroup);
-        row = QString(m_pErrorFtnchekRx.cap(m_errorFtnchekRowGroup)).toInt()-1;
-        text = QString(m_pErrorFtnchekRx.cap(m_errorFrnchekTextGroup));
+        fn = m_errorFtnchekRx.cap(m_errorFtnchekFileGroup);
+        row = QString(m_errorFtnchekRx.cap(m_errorFtnchekRowGroup)).toInt()-1;
+        text = QString(m_errorFtnchekRx.cap(m_errorFrnchekTextGroup));
     }
-    else if (m_pErrorJadeRx.search(line) != -1)
+    else if (m_errorJadeRx.search(line) != -1)
     {
         hasmatch = true;
-        fn = m_pErrorGccRx.cap(m_errorJadeFileGroup);
-        row = QString(m_pErrorJadeRx.cap(m_errorJadeRowGroup)).toInt()-1;
-        text = QString(m_pErrorJadeRx.cap(m_errorJadeTextGroup));
+        fn = m_errorGccRx.cap(m_errorJadeFileGroup);
+        row = QString(m_errorJadeRx.cap(m_errorJadeRowGroup)).toInt()-1;
+        text = QString(m_errorJadeRx.cap(m_errorJadeTextGroup));
     }
 
     if( hasmatch )
@@ -631,43 +631,38 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         items.append(new MakeItem(parags, fn, row, text));
 	insertLine2(line, Error);
     }
-    else if (m_bShortCompilerOutput && m_pCompileFile1.search(line) != -1) {
-	QString explain(i18n("compiling ")); // FIXME: not i18n safe
+    else if (m_bShortCompilerOutput && m_compileFile1.search(line) != -1) {
 	QString tool;
-	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(explain + "<b>" + m_pCompileFile1.cap(m_fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	if (!line.startsWith("g++")) { tool = "(libtool)"; }
+	insertLine2(i18n("compiling <b>%1</b> %2").arg(m_compileFile1.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
 	return;
     }
-    else if (m_bShortCompilerOutput && m_pCompileFile3.search(line) != -1) {
-	QString explain(i18n("compiling ")); // FIXME: not i18n safe
-	QString tool;
+    else if (m_bShortCompilerOutput && m_compileFile3.search(line) != -1) {
 	int i = line.findRev(" ");
 	QString filename = line.right(line.length()-i);
-	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(explain + "<b>" + filename + "</b>" + tool, StyledDiagnostic);
-	return;
-    }
-    else if (m_bShortCompilerOutput && m_pCompileFile2.search(line) != -1) {
-	QString explain(i18n("compiling ")); // FIXME: not i18n safe
 	QString tool;
 	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(explain + "<b>" + m_pCompileFile2.cap(m_fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	insertLine2(i18n("compiling <b>%1</b> %2").arg(filename).arg(tool), StyledDiagnostic);
 	return;
     }
-    else if (m_bShortCompilerOutput && m_pMocFile.search(line) != -1) {
-	insertLine2(i18n("compiling <b>%1</b> (moc)").arg(m_pMocFile.cap(m_fileNameGroup)), StyledDiagnostic);
-	return;
-    }
-   else if (m_bShortCompilerOutput && m_pLinkFile.search(line) != -1) {
-	QString explain(i18n("linking ")); // FIXME: not i18n safe
+    else if (m_bShortCompilerOutput && m_compileFile2.search(line) != -1) {
 	QString tool;
 	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(explain + "<b>" + m_pLinkFile.cap(m_fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	insertLine2(i18n("compiling <b>%1</b> %2").arg(m_compileFile2.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
 	return;
     }
-    else if (m_bShortCompilerOutput && m_pInstallFile.search(line) != -1) {
-	QString explain(i18n("installing ")); // FIXME: not i18n safe
-	insertLine2(explain + "<b>" + m_pInstallFile.cap(m_fileNameGroup) + "</b>", StyledDiagnostic);
+    else if (m_bShortCompilerOutput && m_mocFile.search(line) != -1) {
+	insertLine2(i18n("generating <b>%1</b> (moc)").arg(m_mocFile.cap(m_fileNameGroup)), StyledDiagnostic);
+	return;
+    }
+   else if (m_bShortCompilerOutput && m_linkFile.search(line) != -1) {
+	QString tool;
+	if (!line.startsWith("g++")) { tool = " (libtool)"; }
+	insertLine2(i18n("linking <b>%1</b> %2").arg(m_linkFile.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
+	return;
+    }
+    else if (m_bShortCompilerOutput && m_installFile.search(line) != -1) {
+	insertLine2(i18n("installing <b>%1</b>").arg(m_installFile.cap(m_fileNameGroup)), StyledDiagnostic);
 	return;
     }
     else {

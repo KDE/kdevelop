@@ -56,7 +56,7 @@ private slots:
     void toggleLineWrapping();
     void toggleCompilerOutput();
     void toggleShowDirNavigMessages();
-
+    
 private:
     virtual void contentsMousePressEvent(QMouseEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
@@ -89,27 +89,27 @@ private:
     bool m_bShortCompilerOutput;
     bool m_bShowDirNavMsg;
     
-    QRegExp m_pErrorGccRx;
+    QRegExp m_errorGccRx;
     int m_errorGccFileGroup;
     int m_errorGccRowGroup;
     int m_errorGccTextGroup;
 
-    QRegExp m_pErrorFtnchekRx;
+    QRegExp m_errorFtnchekRx;
     int m_errorFtnchekFileGroup;
     int m_errorFtnchekRowGroup;
     int m_errorFrnchekTextGroup;
 
-    QRegExp m_pErrorJadeRx;
+    QRegExp m_errorJadeRx;
     int m_errorJadeFileGroup;
     int m_errorJadeRowGroup;
     int m_errorJadeTextGroup;
 
-    QRegExp m_pCompileFile1;
-    QRegExp m_pCompileFile2;
-    QRegExp m_pCompileFile3;
-    QRegExp m_pMocFile;
-    QRegExp m_pLinkFile;
-    QRegExp m_pInstallFile;
+    QRegExp m_compileFile1;
+    QRegExp m_compileFile2;
+    QRegExp m_compileFile3;
+    QRegExp m_mocFile;
+    QRegExp m_linkFile;
+    QRegExp m_installFile;
     int m_fileNameGroup;
 };
 
