@@ -17,6 +17,7 @@
 <kdevautoproject>
   <general>
    <activetarget>src/lib$APPNAMELC$.la</activetarget>
+   <useconfiguration>debug</useconfiguration>
   </general>
     <configurations>
       <optimized>

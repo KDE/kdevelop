@@ -14,9 +14,10 @@
  <kdevautoproject>
   <general>
    <activetarget>src/$APPNAMELC$</activetarget>
+   <useconfiguration>debug</useconfiguration>
   </general>
   <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
+   <mainprogram>debug/src/$APPNAMELC$</mainprogram>
    <terminal>true</terminal>
   </run>
     <configurations>

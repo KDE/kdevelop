@@ -23,10 +23,8 @@
       <useconfiguration>debug</useconfiguration>
     </general>
     <run>
-      <mainprogram>src/$APPNAMELC$</mainprogram>
-      <programargs></programargs>
+      <mainprogram>debug/src/$APPNAMELC$</mainprogram>
       <terminal>false</terminal>
-      <envvars/>
     </run>
     <make>
       <envvars>
