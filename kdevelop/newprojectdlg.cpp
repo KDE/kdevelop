@@ -154,6 +154,9 @@ void NewProjectDlg::slotProjectLocationEdit(const QString &){
   }
 }
 void NewProjectDlg::slotProjectSpaceSelected (QListViewItem *item){
+	
+	if(! item) return; // not a valid item? do nothing!
+	
   if(item->depth() != 1){
     cerr << item->depth();
     return; // no Projectspace selected
