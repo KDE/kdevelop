@@ -350,8 +350,8 @@ void CClassParser::skipBlock()
   }
 }
 
-/*-------------------------------- CClassParser::parseClassTemplate()
- * parseClassTemplate()
+/*-------------------------------------- CClassParser::parseTemplate()
+ * parseTemplate()
  *   Skip a template declaration.
  *
  * Parameters:
@@ -1071,6 +1071,13 @@ CParsedClass *CClassParser::parseClassHeader()
   // Skip to the identifier
   if( lexem == CPCLASS )
     getNextLexem();
+
+  // Skip class template variable name.
+  if( lexem == '<' )
+  {
+    parseTemplate();
+    getNextLexem();
+  }
 
   // Ok, this seems to be a class definition so allocate the
   // the new object and set some values.
