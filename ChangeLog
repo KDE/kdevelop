@@ -1,4 +1,9 @@
 2001-02-25  jbb <jbb@kdevelop.org>
+    * Fixed: CPrint dialog had problems with null params.
+             based on patch from 
+             Ravikiran Rajagopal <ravi@ee.eng.ohio-state.edu> 
+
+2001-02-25  jbb <jbb@kdevelop.org>
     * Fixed: Creating a cpp project didn't work.
 
 2001-02-24  jbb <jbb@kdevelop.org>

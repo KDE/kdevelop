@@ -24,6 +24,7 @@
 #include "../cproject.h"
 
 //#include <kapp.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstddirs.h>
@@ -35,8 +36,26 @@
 #include <qwhatsthis.h>
 #include <qgrid.h>
 
-//#include <kdebug.h>
 //#include <string.h>
+
+// Remove all null parameters (ie of the form "xyz= ")
+QString removeNullParams(const QString& params)
+{
+  QStringList paramsList = QStringList::split(" ", params, false);
+  QStringList::Iterator paramsListIt = paramsList.begin();
+  QString returnParams = *paramsListIt;   // WARNING: There's must be a nice first param
+
+  while ( ++paramsListIt != paramsList.end())
+  {
+    if ((*paramsListIt).right(1) != "=")
+      returnParams += " " + *paramsListIt;
+  }
+
+  kdDebug() << "params <" << params << ">" << endl;
+  kdDebug() << "return <" << returnParams << ">" << endl;
+
+  return returnParams;
+}
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool html) :
   QDialog(parent, name, true)
@@ -1009,14 +1028,14 @@ void CPrintDlg::slotPreviewClicked() {
       settings->setGroup("LastSettings");
       globalpara = settings->readEntry("EnscriptSettings");
       slotCreateParameters();
-      *process << "enscript " + string + (QString) " " + text + " " + files;
+      *process << removeNullParams("enscript " + string + " " + text + " " + files);
     }
     else {
       //settings = KGlobal::config();
       //settings->setGroup("LastSettings");
       //  globalpara = settings->readEntry("A2psSettings");
       slotCreateParameters();
-      *process << "a2ps " + string + " -o " + dir + " " + files;
+      *process << removeNullParams("a2ps " + string + " -o " + dir + " " + files);
     }
     process->start(KProcess::Block,KProcess::AllOutput);
     delete (process);
@@ -1074,13 +1093,13 @@ void CPrintDlg::slotPrintingConfClicked() {
   }
   else
     if (prog==1) {
-    if (!CToolClass::searchProgram("enscript")) {
-      return;
-    }
-    enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
+      if (!CToolClass::searchProgram("enscript")) {
+        return;
+      }
+      enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
       enscriptconf->resize(610,510);
       enscriptconf->setCaption("Enscript Configdialog");
-      enscriptconf->exec(); 
+      enscriptconf->exec();
       settings = KGlobal::config();
       settings->setGroup("LastSettings");
       globalpara = settings->readEntry("EnscriptSettings");
@@ -1161,7 +1180,7 @@ void CPrintDlg::slotOkClicked() {
 	globalpara = settings->readEntry("EnscriptSettings");
 	slotCreateParameters();
 	process->clearArguments();
-	*process << "enscript " + string + text + " " + files;
+	*process << removeNullParams("enscript " + string + text + " " + files);
 //	cerr << "enscript " + string + text + " " + files << endl;
 	process->start(KProcess::Block,KProcess::AllOutput);
       }
@@ -1172,7 +1191,7 @@ void CPrintDlg::slotOkClicked() {
 	slotCreateParameters();
 	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
 	  process->clearArguments();
-	  *process << "enscript " + string + " " + files;
+	  *process << removeNullParams("enscript " + string + " " + files);
 	  process->start(KProcess::Block,KProcess::AllOutput);
 	}
       }
@@ -1188,13 +1207,13 @@ void CPrintDlg::slotOkClicked() {
 	dir =  printToFileLine->text();
 	process->clearArguments();
 //	cerr << "a2ps " + string + " -o " + dir + " " + files << endl;
-	*process << "a2ps " + string + " -o " + dir + " " + files;
+	*process << removeNullParams("a2ps " + string + " -o " + dir + " " + files);
 	process->start(KProcess::Block,KProcess::AllOutput);
       }
       else {
 	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
 	  process->clearArguments();
-	  *process << "a2ps " + string + " " + files;
+	  *process << removeNullParams("a2ps " + string + " " + files);
 	  process->start(KProcess::Block,KProcess::AllOutput);
 	}
       }
@@ -1203,14 +1222,14 @@ void CPrintDlg::slotOkClicked() {
       if (printToFileButton->isChecked()) {
 	dir =  printToFileLine->text();
 	process->clearArguments();
-	*process << "lpr " + string + " " + files + " > " + dir;
+	*process << removeNullParams("lpr " + string + " " + files + " > " + dir);
 //	cerr << "lpr " + string + " " + files + " > " + dir << endl;
 	process->start(KProcess::Block,KProcess::AllOutput);
       }
       else {
       	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
 	  process->clearArguments();
-	  *process << "lpr " + string + " " + files;
+	  *process << removeNullParams("lpr " + string + " " + files);
 //	  cerr << "lpr " + string + " " + files << endl;
 	  process->start(KProcess::Block,KProcess::AllOutput);
 	}
@@ -1316,22 +1335,5 @@ void CPrintDlg::loadSettings() {
   formatCombBox->setCurrentItem(settings->readNumEntry("OutputFormat"));
   defaultCombBox->setCurrentItem(settings->readNumEntry("Default"));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #include "cprintdlg.moc"
