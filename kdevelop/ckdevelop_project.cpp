@@ -46,108 +46,18 @@ bool CKDevelop::slotProjectClose(){
   // R.Nolden 03.02.99
   slotStatusMsg(i18n("Closing project..."));
   TEditInfo* actual_info;
-  bool mod=true;
-  bool headerCancel=false;
-  bool cppCancel=false;
-  
+  QStrList handledNames;
+  bool cont=true;
+
   log_file_tree->storeState(prj);
-  
-  // check if header widget contains modified file
-  if(header_widget->isModified()){
-//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header_widget modified file");
-    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
-				       i18n("The project\n\n")+prj->getProjectName()
-				       +i18n("\n\ncontains changed files. Save modified file\n\n")
-				       +header_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
-				       i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
-    // show the messagea and store result in result:
-    project_close->show();
-    int result=project_close->result();
-    edit_widget=header_widget;
-    
-    // then show the messagebox
-//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header msgbox result");
-    // yes- save headerwidget
-    if(result== 1){			 	
-      if(edit_widget->getName() == i18n("Untitled.h")){
-				slotFileSaveAs();
-        slotFileClose();
-      }
-      else{
-				slotFileSave();
-        slotFileClose();
-      }
-      edit_widget->toggleModified(false);      
-      mod=true;
-    } 
-    if(result==2){   // No - no save but close
-//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close header widget file");
-      edit_widget->toggleModified(false);
-      slotFileClose();
-      mod=true;
-    }
-    if(result==3){  // Save all
-//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
-      slotFileSaveAll();
-      mod=true;
-    }
-    if(result==4){ // Cancel
-//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
-      mod=false;
-      headerCancel=true;
-    }
-  } // end header widge close
-  
-  if(cpp_widget->isModified()){
-    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
-				       i18n("The project\n\n")+prj->getProjectName()
-				       +i18n("\n\ncontains changed files. Save modified file\n\n")+
-				       cpp_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
-				       i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
-    // show the messagea and store result in result:
-    project_close->show();
-    int result=project_close->result();
-    
-//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp_widget modified file");
-//    KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp msgbox result");
-    // yes- save cpp widget
-    edit_widget=cpp_widget;
-    if(result== 1){			 	
-      if(edit_widget->getName() == i18n("Untitled.cpp") || edit_widget->getName() == i18n("Untitled.c")){
-	slotFileSaveAs();    
-        slotFileClose();
-      }
-      else{
-	slotFileSave();
-        slotFileClose();
-      }
-      edit_widget->toggleModified(false);      
-      mod=true;
-    }  
-    if(result==2){   // No - no save but close
-//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close header widget file");
-      edit_widget->toggleModified(false);
-      slotFileClose();
-      mod=true;
-    }
-    if(result==3){  // Save all
-//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
-      slotFileSaveAll();
-      mod=true;
-    }
-    if(result==4){ // Cancel
-//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
-      cppCancel=true;
-      mod=false;
-    }
-    
-  }  // end cppwidget close
-  
-  if(!headerCancel && !cppCancel){
-    // for -loop for actual infos
-    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+
+  setInfoModified(header_widget->getName(), header_widget->isModified());
+  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+
+  for(actual_info=edit_infos.first();cont && actual_info != 0;){
 //      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
-      if(actual_info->modified){
+      TEditInfo *next_info=edit_infos.next();
+      if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
 	
 	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
 					   i18n("The project\n\n")+prj->getProjectName()
@@ -168,44 +78,56 @@ bool CKDevelop::slotProjectClose(){
             {
 //	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- untitled");
 	    switchToFile(actual_info->filename);
-	    slotFileSaveAs();
-	    slotFileClose();
+            handledNames.append(actual_info->filename);
+	    cont=fileSaveAs();
+            next_info=edit_infos.first(); // start again... 'cause we deleted an entry
 	  }
 				// Save file and close it
 	  else{
 //	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- save");
 	    switchToFile(actual_info->filename);
+            handledNames.append(actual_info->filename);
 	    slotFileSave();
-	    slotFileClose();
-	    //					if(edit_infos.removeRef(actual_info));
+            actual_info->modified=edit_widget->isModified();
+            cont=!actual_info->modified; //something went wrong
 	  }
-	  mod = true;
-	} 
+	}
 	
 	if(result==2){   // No - no save but close
 //	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close file");
+          handledNames.append(actual_info->filename);
 	  actual_info->modified=false;
-	  slotFileClose();
-	  mod=true;
+          removeFileFromEditlist(actual_info->filename); // immediate remove
+          next_info=edit_infos.first(); // start again... 'cause we deleted an entry
 	}
 	if(result==3){  // Save all
 //	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
 	  slotFileSaveAll();
-	  mod=true;
 	  break;
 	}
 	if(result==4){ // Cancel
-	  mod=false;
+	  cont=false;
 //	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
 	  break;
 	}
 	
       }  // end actual file close
+     actual_info=next_info;
     } // end for-loop
-  } // end the if cppCancel && headerCancel
-  
-  if(mod){
-    // not cancel pressed - project closed
+
+  // check if something went wrong with saving
+  if (cont)
+  {
+    for(actual_info=edit_infos.first(); cont && actual_info != 0;
+	actual_info=edit_infos.next())
+    {
+        if (actual_info->modified)
+           cont=false;
+    } // end for-loop
+  }
+
+  if(cont){
+    // cancel wasn't pressed and all sources are saved - project closed
     // clear all widgets
 
     if(!bKDevelop){
@@ -293,12 +215,19 @@ bool CKDevelop::slotProjectClose(){
     file_open_popup->clear();
     file_open_list.clear();
   }
+
   slotStatusMsg(i18n("Ready."));
-  if(mod){
-    refreshTrees();
+  refreshTrees();
+
+  if (!cont)
+  {
+   kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+   kdev_caption+= version +
+             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
+   setCaption(kdev_caption);
   }
-  
-  return mod; // false if pressed cancel
+
+  return cont; // false if pressed cancel
 }
 
 void CKDevelop::slotProjectAddNewFile(){
