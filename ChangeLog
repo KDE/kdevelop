@@ -1,3 +1,6 @@
+1999-05-01  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added sgml2html mode to the error-message-parser
+
 1999-04-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Fixed crash when clicking on DOC root item
 	* Added search path for Qt docs on Debian

@@ -29,14 +29,60 @@ CErrorMessageParser::CErrorMessageParser(){
 }
 CErrorMessageParser::~CErrorMessageParser(){
 }
-void CErrorMessageParser::parse(QString makeoutput,QString startdir){
+void  CErrorMessageParser::parseInSgml2HtmlMode(QString sgmloutput,QString sgmlfile){
+  if(!isOn()) return;
+  QStrList outputlist;
+  QString str;
+  int next =0;
+  int pos =0;
+  TErrorMessageInfo* error_info;
+  m_info_list.clear();
+  
+  // fill the outputlist
+  while(next != -1){
+    next = sgmloutput.find('\n',pos);
+    if(next != -1){
+      str = sgmloutput.mid(pos,next-pos);
+      outputlist.append(str);
+    }
+    pos = next+1;
+  }
 
+  int pos1;
+  int pos2;
+  int error_line;
+  bool ok;
+  int makeoutputline=0;
+  QString error_str;
+  QRegExp error_reg(":*:[0-9]*:*:"); // is it an error line for sgml2html?, I hope it works
+  
+  for(str = outputlist.first();str != 0;str = outputlist.next()){
+    makeoutputline++;
+    if((pos1=error_reg.match(str)) != -1){ // error ?
+      pos2 = str.find(':',pos1+1);
+      error_str = str.mid(pos1+1,pos2-pos1-1);
+      error_line = error_str.toInt(&ok);
+      if(ok){ // was it a number?
+	// ok we will create now a new entry
+	error_info = new TErrorMessageInfo;
+	error_info->filename = sgmlfile;
+	error_info->errorline = error_line;
+	error_info->makeoutputline = makeoutputline;
+	m_info_list.append( error_info);
+      }
+    }
+  }
+  out();
+  cerr << endl << endl << ":::::::::";
+}
+void CErrorMessageParser::parseInMakeMode(QString makeoutput,QString startdir){
   if(!isOn()) return;
   QStack<QString> stack;
   QStrList outputlist;
   QString str;
   int next =0;
   int pos =0;
+  
   TErrorMessageInfo* error_info;
 
   m_info_list.clear();
@@ -196,7 +242,8 @@ void CErrorMessageParser::reset(){
   m_info_list.clear();
 }
 /**toogle the parser on*/
-void CErrorMessageParser::toogleOn(){
+void CErrorMessageParser::toogleOn(TEPMode mode){
+  m_mode = mode;
   state = true;
 }
 /**toogle the parser off, in this state the parse command, return without doing anything*/
@@ -206,4 +253,7 @@ void CErrorMessageParser::toogleOff(){
 /** returns the state*/
 bool CErrorMessageParser::isOn(){
   return state;
+}
+CErrorMessageParser::TEPMode CErrorMessageParser::getMode(){
+  return m_mode;
 }

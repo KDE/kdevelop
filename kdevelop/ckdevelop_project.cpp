@@ -556,6 +556,7 @@ void CKDevelop::slotProjectNewAppl(){
   else if (old_project != ""){ // if cancel load the old project again
     readProjectFile(old_project);
   }
+  slotViewRefresh();
   //cerr << kappw->getProjectFile();
   slotStatusMsg(IDS_DEFAULT); 
 }

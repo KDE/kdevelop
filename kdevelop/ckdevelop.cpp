@@ -702,6 +702,9 @@ void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
+  if(!CToolClass::searchProgram("autoconf")){
+    return;
+  }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
@@ -714,7 +717,7 @@ void CKDevelop::slotBuildAutoconf(){
   error_parser->toogleOff();
   setToolMenuProcess(false);
   slotFileSaveAll();
-  slotStatusMsg(i18n("Running autoconf suite..."));
+  slotStatusMsg(i18n("Running autoconf/automake suite..."));
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
@@ -829,36 +832,35 @@ void CKDevelop::slotBuildAPI(){
 }
 
 void CKDevelop::slotBuildManual(){
-	bool ksgml=true;
+  bool ksgml=true;
   if(!CToolClass::searchProgram("sgml2html")){
     return;
   }
-  if(!CToolClass::searchProgram("ksgml2html")){
-		ksgml=false;
-		KMsgBox::message(this,i18n("The program ksgml2html wasn't found, therefore your documentation won't have
-		the usual KDE logo and look. The manual will be build using sgml2html."));
+  if(!CToolClass::searchInstProgram("ksgml2html")){
+    ksgml=false;
+    KMsgBox::message(this,i18n("Warning..."),i18n("The program ksgml2html wasn't found, therefore your documentation\nwon't have the usual KDE logo and look.\n\nThe manual will be build using sgml2html."));
   }
-
+  
   showOutputView(true);
-  error_parser->toogleOff();
+  error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
   setToolMenuProcess(false);
   //  slotFileSaveAll();
   slotStatusMsg(i18n("Creating project Manual..."));
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir() + "/docs/en/");
-	if(ksgml==false){
-	  process.clearArguments();
-		process << "sgml2html";
-  	process << prj->getSGMLFile();
-  	process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-	}
-	else{
-	  process.clearArguments();
-		process << "ksgml2html";
-  	process << prj->getSGMLFile();
-  	process << "en";
-  	process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-	}
+  if(ksgml==false){
+    process.clearArguments();
+    process << "sgml2html";
+    process << prj->getSGMLFile();
+    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  }
+  else{
+    process.clearArguments();
+    process << "ksgml2html";
+    process << prj->getSGMLFile();
+    process << "en";
+    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1169,6 +1171,11 @@ void CKDevelop::slotHelpSearchText(QString text){
   if(!CToolClass::searchProgram("glimpse")){
     return;
   }
+  if(text == "" || text.isNull()){
+    KMsgBox::message(this,i18n("Error..."),i18n("You must select a text for searching the documentation!"));
+    return;
+  }
+  cerr << ":" << text << ":" << endl;
   slotStatusMsg(i18n("Searching selected text in documentation..."));
   doc_search_text = text.copy(); // save the text
 
@@ -1474,7 +1481,12 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
 
-  error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+  if(error_parser->getMode() == CErrorMessageParser::MAKE){
+    error_parser->parseInMakeMode(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+  }
+  if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+    error_parser->parseInSgml2HtmlMode(messages_widget->text(),prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+  }
 
   //enable/disable the menus/toolbars
   if(error_parser->hasNext()){
@@ -1498,7 +1510,12 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
 
-  error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+  if(error_parser->getMode() == CErrorMessageParser::MAKE){
+    error_parser->parseInMakeMode(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
+  }
+  if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+    error_parser->parseInSgml2HtmlMode(messages_widget->text(),prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+  }
 
   //enable/disable the menus/toolbars
   if(error_parser->hasNext()){

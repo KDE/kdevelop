@@ -153,10 +153,10 @@ void CKDevelop::init(){
   doc_tree = new CDocTree(t_tab_view,"DOC",config);
   doc_tree->setFocusPolicy(QWidget::NoFocus);
 
-  t_tab_view->addTab(class_tree,"CV");
-  t_tab_view->addTab(log_file_tree,"LFV");
-  t_tab_view->addTab(real_file_tree,"RFV");
-  t_tab_view->addTab(doc_tree,"DOC");
+  t_tab_view->addTab(class_tree,i18n("CV"));
+  t_tab_view->addTab(log_file_tree,i18n("LFV"));
+  t_tab_view->addTab(real_file_tree,i18n("RFV"));
+  t_tab_view->addTab(doc_tree,i18n("DOC"));
 
   connect(class_tree, SIGNAL(selectionChanged()), SLOT(slotClassTreeSelected()));
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
@@ -243,10 +243,10 @@ void CKDevelop::init(){
 
   
 
-  s_tab_view->addTab(header_widget,i18n("Header/Resource Files"));
-  s_tab_view->addTab(cpp_widget,i18n("C/C++ Files"));
-  s_tab_view->addTab(browser_widget,i18n("Documentation-Browser"));
-  s_tab_view->addTab(swallow_widget,i18n("Tools"));
+  s_tab_view->addTab(header_widget,i18n("Header/Reso&urce Files"));
+  s_tab_view->addTab(cpp_widget,i18n("&C/C++ Files"));
+  s_tab_view->addTab(browser_widget,i18n("&Documentation-Browser"));
+  s_tab_view->addTab(swallow_widget,i18n("Tool&s"));
 
 
 
@@ -620,15 +620,15 @@ void CKDevelop::initMenu(){
   build_menu->insertItem(Icon("stop.xpm"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
   build_menu->insertSeparator();
 
-  build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
+  build_menu->insertItem(Icon("run.xpm"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
 	build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments"),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
   build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
-  build_menu->insertItem(i18n("&Autoconf"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
+  build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
   build_menu->insertSeparator();
-	build_menu->insertItem(i18n("Execution &arguments"),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
+	build_menu->insertItem(i18n("Execution &arguments..."),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
 	build_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
   build_menu->insertItem(i18n("Make &API-Doc"), this,
 			 SLOT(slotBuildAPI()),0,ID_BUILD_MAKE_PROJECT_API);

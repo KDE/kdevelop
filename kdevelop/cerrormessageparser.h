@@ -29,33 +29,40 @@ struct TErrorMessageInfo {
   int makeoutputline;
 };
 
-/** a small "parser" for the makeoutput
+/** a small "parser" for the makeoutput,sgml2html output ...
   *@author Sandy Meier
   */
 class CErrorMessageParser {
 public: 
   CErrorMessageParser();
   ~CErrorMessageParser();
-  /** set the counter to -1, called if "make" was started and the outputwidget was cleared*/
+  /** the mode in which the parser will operate*/
+  typedef  enum {MAKE,SGML2HTML} TEPMode; // ErrorMessageParser Mode
+  /** set the counter to -1, called if "make", or sgml2html was started and the outputwidget was cleared*/
   void reset();
-  void parse(QString makeoutput,QString startdir);
 
+  /** parse the string in the  make mode*/
+  void parseInMakeMode(QString makeoutput,QString startdir);
+  /** parse the string in the  sgml2html mode*/
+  void parseInSgml2HtmlMode(QString sgmloutput,QString sgmlfile);
+  CErrorMessageParser::TEPMode getMode();
+  
   /** get the error info for a specific line from the parse "makeoutput")*/
   TErrorMessageInfo getInfo(int makeoutputline);
-
+  
   /** get the next error/warning*/
   TErrorMessageInfo getNext();
 
   bool hasNext();
   bool hasPrev();
-
+  
   /** get the previous error/warning*/
   TErrorMessageInfo getPrev();
   /** print out the parsed informations*/
   void out();
-
-  /**toogle the parser on*/
-  void toogleOn();
+  
+  /**toogle the parser on, default mode is make/compiler*/
+  void toogleOn(TEPMode mode = MAKE);
   /**toogle the parser off, in this state the parse command, return without doing anything*/
   void toogleOff();
   /** returns the state*/
@@ -64,6 +71,7 @@ protected:
   int current; // used to store infos for getNext() ...
   QList<TErrorMessageInfo> m_info_list;
   bool state;
+  TEPMode m_mode;
 };
 
 
