@@ -1,5 +1,15 @@
-// TODO: Clean up the different usages of the different indices!
+/***************************************************************************
+ *   Copyright (C) 2001-2003                                               *
+ *   The KDevelop Team                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
+// TODO: Clean up the different usages of the different indices!
 
 #include <qptrlist.h>
 #include <qlayout.h>
@@ -38,8 +48,8 @@ public:
   QBoxLayout                 *m_layout;
   KTabZoomFrame              *m_popup;
   QPtrList<KTZWidgetInfo>    m_info;
-  bool 			     m_docked;
-  QWidget		     *m_strut;
+  bool                       m_docked;
+  QWidget                    *m_strut;
   QGuardedPtr<QWidget>       m_lastActiveWidget;
 };
 
@@ -66,6 +76,11 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
     d->m_layout = new QVBoxLayout(this);
 
   d->m_popup = new KTabZoomFrame(parent, pos);
+  
+  if(pos == KTabZoomPosition::Left || pos == KTabZoomPosition::Right)
+    d->m_popup->setMinimumWidth(100);
+  else
+    d->m_popup->setMinimumHeight(125);
 
   connect(d->m_popup, SIGNAL(closeClicked()), this, SLOT(unselected()));
   connect(d->m_popup, SIGNAL(dockToggled(bool)), this, SLOT(setDockMode(bool)));
@@ -97,6 +112,20 @@ void KTabZoomWidget::addTab(QWidget *widget, const QString &title, const QString
 
   d->m_info.append(info);
 
+  switch (d->m_tabPosition)
+  {
+  case KTabZoomPosition::Bottom:
+  case KTabZoomPosition::Top:
+    if(widget->minimumSizeHint().height() > d->m_popup->minimumHeight() + 12)
+      d->m_popup->setMinimumHeight(widget->minimumSizeHint().height() + 12);
+    break;
+  case KTabZoomPosition::Left:
+  case KTabZoomPosition::Right:
+    if(widget->minimumSizeHint().width() > d->m_popup->minimumWidth() + 12)
+      d->m_popup->setMinimumWidth(widget->minimumSizeHint().width() + 12);
+    break;
+  }  
+   
   emit tabsChanged();
 }
 

@@ -1,9 +1,21 @@
+/***************************************************************************
+ *   Copyright (C) 2001-2003                                               *
+ *   The KDevelop Team                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef __K_TABWIDGET_H__
 #define __K_TABWIDGET_H__
 
 #include <qtabwidget.h>
 #include <qtabbar.h>
 #include <qevent.h>
+
 class QPopupMenu;
 
 class KTabBar : public QTabBar
@@ -12,7 +24,6 @@ class KTabBar : public QTabBar
 
 public:
   KTabBar(QWidget *parent=0, const char *name=0);
-  ~KTabBar();
 signals:
   void closeWindow(const QWidget *);
   void closeOthers(QWidget *);
@@ -31,7 +42,6 @@ class KTabWidget : public QTabWidget
   
 public:
   KTabWidget(QWidget *parent=0, const char *name=0);
-  ~KTabWidget();
 signals:
   void closeWindow(const QWidget *);
   void closeOthers(QWidget *);

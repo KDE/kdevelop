@@ -1,3 +1,14 @@
+/***************************************************************************
+ *   Copyright (C) 2001-2003                                               *
+ *   The KDevelop Team                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include <qintdict.h>
 #include <qpainter.h>
 #include <qlayout.h>
@@ -11,8 +22,6 @@
 
 #include "ktabzoombutton.h"
 #include "ktabzoombarlayout.h"
-
-
 #include "ktabzoombar.h"
 
 

@@ -1,9 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2001-2003                                               *
+ *   The KDevelop Team                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include <qpopupmenu.h>
 
+#include <kglobalsettings.h>
+#include <kglobal.h>
 #include <klocale.h>
-#include <kapplication.h>
+#include <kicontheme.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+
 #include "ktabwidget.h"
 
 KTabWidget::KTabWidget(QWidget *parent, const char *name) : QTabWidget(parent,name)
@@ -12,10 +25,6 @@ KTabWidget::KTabWidget(QWidget *parent, const char *name) : QTabWidget(parent,na
   setTabBar(m_pTabBar);
   connect(m_pTabBar, SIGNAL(closeWindow(const QWidget*)), this, SIGNAL(closeWindow(const QWidget*)));
   connect(m_pTabBar, SIGNAL(closeOthers(QWidget*)), this, SIGNAL(closeOthers(QWidget*)));
-}
-
-KTabWidget::~KTabWidget()
-{
 }
 
 KTabBar::KTabBar(QWidget *parent, const char *name) : QTabBar(parent,name)
@@ -42,19 +51,22 @@ void KTabBar::closeOthersSlot()
 
 void KTabBar::mousePressEvent(QMouseEvent *e)
 {
-  if(e->button() == RightButton) {
+  bool rb = (e->button() == RightButton);
+  bool lb = (e->button() == LeftButton);
+  int handed = KGlobalSettings::mouseSettings().handed;
+
+  if((rb && handed == KGlobalSettings::KMouseSettings::RightHanded) || 
+     (lb && handed == KGlobalSettings::KMouseSettings::LeftHanded)) {
+
     QTab *tab = selectTab(e->pos() );
-	if( tab== 0L ) return;
-	m_pPage = ((KTabWidget*)parent())->page(indexOf(tab->identifier() ) );
-	if(m_pPage == 0L) return;
-    //(KTabWidget*)parent())->showPage(m_pPage);    
-	m_pPopupMenu->exec(mapToGlobal(e->pos()));
+    if( tab == 0L ) return;
+    
+    m_pPage = ((KTabWidget*)parent())->page(indexOf(tab->identifier() ) );
+    if(m_pPage == 0L) return;
+
+    m_pPopupMenu->exec(mapToGlobal(e->pos()));
   }
   QTabBar::mousePressEvent(e);
-}
-
-KTabBar::~KTabBar()
-{
 }
 
 #include "ktabwidget.moc"

@@ -1,3 +1,14 @@
+/***************************************************************************
+ *   Copyright (C) 2001-2003                                               *
+ *   The KDevelop Team                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qwidgetstack.h>
@@ -102,13 +113,6 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   QColorGroup cg = pal.active();
   cg.setColor(QColorGroup::Background, KGlobalSettings::activeTitleColor());
   pal.setActive(cg) ;
-  cg = pal.inactive();
-  cg.setColor(QColorGroup::Background, KGlobalSettings::activeTitleColor());
-  pal.setInactive(cg) ;
-  cg = pal.disabled();
-  cg.setColor(QColorGroup::Background, KGlobalSettings::activeTitleColor());
-  pal.setDisabled(cg);
-  d->m_dockButton->setPalette(pal);
 
   hbox->addWidget(d->m_dockButton);
 
@@ -122,7 +126,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
 
   hbox->addWidget(d->m_closeButton);
 
-  connect(d->m_closeButton, SIGNAL(clicked()), this, SLOT(slotCloseButtonClicked()));
+  connect(d->m_closeButton, SIGNAL(clicked()), this, SIGNAL(closeClicked()));
 
   hbox->addSpacing(4);
 
@@ -184,12 +188,6 @@ KTabZoomFrame::~KTabZoomFrame()
 }
 
 
-void KTabZoomFrame::slotCloseButtonClicked()
-{
-  emit closeClicked();
-}
-
-
 void KTabZoomFrame::setDockMode(bool docked)
 {
   d->m_dockButton->setOn(docked);
@@ -216,9 +214,6 @@ int KTabZoomFrame::addTab(QWidget *widget, const QString &title)
 
   d->m_info.append(info);
   
-  if(minimumWidth() < widget->sizeHint().width() + 10) 
-    setMinimumWidth(widget->sizeHint().width() + 10);
- 
   return index;
 }
 
@@ -228,7 +223,7 @@ void KTabZoomFrame::removeTab(int index)
   for (KTZFWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
 	if (i->m_index == index)
     {
-	  if(d->m_title->text()==i->m_title) slotCloseButtonClicked();
+	  if(d->m_title->text()==i->m_title) emit closeClicked();
 	  d->m_info.remove(i);
 	  return;
     }
@@ -288,11 +283,11 @@ void KTabZoomFrame::mouseReleaseEvent(QMouseEvent *)
   emit sizeChanged();
 }
 
-
 void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
 {
   if (!d->m_sliding)
     return;
+
 
   int extend;
   switch (d->m_position)
@@ -300,30 +295,31 @@ void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
   case KTabZoomPosition::Left:
     extend = ev->globalPos().x() - d->m_slideStart.x() + d->m_initialSize;
     if (extend < minimumWidth()) extend = minimumWidth();  
-    else if(extend > 600) extend = 600;
+    else if(extend > (int)(kapp->mainWidget()->width() / 2)) extend = (int)(kapp->mainWidget()->width() / 2);
     resize(extend, height());
     break;
 
   case KTabZoomPosition::Right:
     extend = d->m_slideStart.x() - ev->globalPos().x() + d->m_initialSize;
     if (extend < minimumWidth()) extend = minimumWidth(); 
-    else if(extend > 600) extend = 600;
+    else if(extend > (int)(kapp->mainWidget()->width() / 2)) extend = (int)(kapp->mainWidget()->width() / 2);
     setGeometry(d->m_initialPos - extend, y(), extend, height());
     break;
 
   case KTabZoomPosition::Top:
     extend = ev->globalPos().y() - d->m_slideStart.y() + d->m_initialSize;
-    if (extend < 125) extend = 125;  else if(extend > 500) extend = 500;
+    if (extend < minimumHeight()) extend = minimumHeight();  
+    else if(extend > (int)(kapp->mainWidget()->height() / 2)) extend = (int)(kapp->mainWidget()->height() / 2);
     resize(width(), extend);
     break;
 
   case KTabZoomPosition::Bottom:
     extend = d->m_slideStart.y() - ev->globalPos().y() + d->m_initialSize;
-    if (extend < 125) extend = 125;  else if(extend > 500) extend = 500;
+    if (extend < minimumHeight()) extend = minimumHeight();  
+    else if(extend > (int)(kapp->mainWidget()->height() / 2)) extend = (int)(kapp->mainWidget()->height() / 2);
     setGeometry(x(), d->m_initialPos - extend, width(), extend);
     break;
   }
-
   emit sizeChanged();
 }
 
