@@ -108,9 +108,6 @@ To add support for a new programming language check the \ref howToAddProgramming
   - languages/sql = Support for SQL
     - (see SQLSupportPart)
     .
-  - languages/xul = Support for XUL
-    - (see XulSupportPart)
-    .
   .
 
 \subsubsection buildtool-parts Build tools Parts
