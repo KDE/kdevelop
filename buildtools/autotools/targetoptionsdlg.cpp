@@ -55,9 +55,11 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
     // Insert all convenience libraries as possible linked libraries
     QStringList l = widget->allLibraries();
     QStringList::ConstIterator it;
+    QString fulltargetname = m_widget->subprojectDirectory() + "/" + item->name;
     for (it = l.begin(); it != l.end(); ++it)
-        (void) new QCheckListItem(insidelib_listview, *it, QCheckListItem::CheckBox);
-
+        // Do not list the target itself (a target can not link with itself)
+        if ( !fulltargetname.endsWith(*it) )
+            (void) new QCheckListItem(insidelib_listview, *it, QCheckListItem::CheckBox);
     readConfig();
 }
 
