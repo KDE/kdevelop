@@ -412,6 +412,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             m_fileTemplates.append(fileTemplate);
         }
         licenseChanged(); // update template editors
+	textChanged(); // update Next button state
     } else {
         icon_label->clear();
         desc_textview->clear();

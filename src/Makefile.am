@@ -12,7 +12,8 @@ gideon_SOURCES = main.cpp toplevel_mdi.cpp core.cpp partcontroller.cpp \
 		 partselectwidget.cpp settingswidget.ui toplevel.cpp \
 		 toplevel_sdi.cpp statusbar.cpp editorproxy.cpp \
 		 debugger.cpp documentationpart.cpp splashscreen.cpp \
-		 projectworkspace.cpp
+		 projectworkspace.cpp \
+		 generalinfowidgetbase.ui generalinfowidget.cpp
 
 gideon_METASOURCES = AUTO
 gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH) 

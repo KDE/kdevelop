@@ -32,6 +32,7 @@ class QDomDocument;
 #include "partcontroller.h"
 #include "classstore.h"
 #include "partselectwidget.h"
+#include "generalinfowidget.h"
 #include "projectworkspace.h"
 
 #include "projectmanager.h"
@@ -106,6 +107,10 @@ void ProjectManager::slotProjectOptions()
                   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
                   "project options dialog");
 
+    QVBox *box = dlg.addVBoxPage(i18n("General"));
+    GeneralInfoWidget *g = new GeneralInfoWidget(*API::getInstance()->projectDom(), box, "general informations widget");
+    connect (&dlg, SIGNAL(okClicked()), g, SLOT(accept()));
+  
   QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );

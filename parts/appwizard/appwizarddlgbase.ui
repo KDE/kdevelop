@@ -370,6 +370,12 @@
         <receiver>AppWizardDlgBase</receiver>
         <slot>licenseChanged()</slot>
     </connection>
+    <connection>
+        <sender>email_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>templates_listview</tabstop>
@@ -385,7 +391,7 @@
     <slot access="protected">destButtonClicked()</slot>
     <slot access="protected">projectLocationChanged()</slot>
     <slot access="protected">projectNameChanged()</slot>
-    <slot access="protected">templatesTreeViewClicked(QListViewItem*)</slot>
+    <slot access="protected">templatesTreeViewClicked( QListViewItem * )</slot>
     <slot access="protected">textChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
