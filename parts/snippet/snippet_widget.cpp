@@ -65,7 +65,7 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
     // init the KListView
     setSorting( -1 );
     addColumn( "" );
-    setFullWidth();
+    setFullWidth(true);
     header()->hide();
 
     _cfg = NULL;
