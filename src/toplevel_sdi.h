@@ -73,6 +73,10 @@ private slots:
 
   void slotBufferSelected();      // One entry of the Windows menu has been selected
   void slotFillWindowMenu();
+  void slotPartAdded(KParts::Part*);
+  void slotTextChanged();
+  void slotUpdateModifiedFlags();
+
 private:
 
   virtual bool queryClose();

@@ -66,7 +66,7 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
    m_pWindowMenu->setCheckable( TRUE);
    menuBar()->insertItem(tr("&Window"),m_pWindowMenu);
 
-//   QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotfillWindowMenu()) );
+   QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotFillWindowMenu()) );
 
 }
 
@@ -158,9 +158,11 @@ void TopLevelSDI::createFramework()
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(createGUI(KParts::Part*)));
 
+  connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
   connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
   connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+  connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags()));
 }
 
 
@@ -453,6 +455,48 @@ void TopLevelSDI::slotBufferSelected()
     }
   }
   slotFillWindowMenu();  // To check the correct entry
+}
+
+void TopLevelSDI::slotPartAdded(KParts::Part* part)
+{
+  if ( !part || !part->inherits("KTextEditor::Document") )
+    return;
+
+  connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+}
+
+void TopLevelSDI::slotTextChanged()
+{
+  QWidget* w = m_tabWidget->currentPage();
+  if ( !w )
+    return;
+
+  QString t = m_tabWidget->tabLabel( w );
+  if ( t.right( 1 ) != "*" )
+    t += "*";
+
+  m_tabWidget->setTabLabel( w, t ); 
+}
+
+void TopLevelSDI::slotUpdateModifiedFlags()
+{
+  QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+  for ( ; it.current(); ++it) {
+    KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
+    if ( rw_part && rw_part->widget() ) {
+      int idx = m_tabWidget->indexOf( rw_part->widget() );
+      if ( idx < 0 )
+        continue;
+      QString t = m_tabWidget->tabLabel( rw_part->widget() );
+      bool titleMod = (t.right( 1 ) == "*");
+      if ( rw_part->isModified() && !titleMod ) {
+	m_tabWidget->setTabLabel( rw_part->widget(), t + "*" );
+      } else if ( !rw_part->isModified() && titleMod ) {
+        t.truncate( t.length() - 1 );
+        m_tabWidget->setTabLabel( rw_part->widget(), t );
+      }
+    }
+  }
 }
 
 #include "toplevel_sdi.moc"
