@@ -53,6 +53,24 @@ void CProject::writeProject(){
     config->sync();
   }
 }
+void CProject::setProjectType(QString type){
+  config->setGroup("General");
+  config->writeEntry("project_type",type);
+}
+QString CProject::getProjectType(){
+  config->setGroup("General");
+  return config->readEntry("project_type");
+}
+void CProject::setKDevPrjVersion(QString version){
+  config->setGroup("General");
+  config->writeEntry("kdevprj_version",version);
+}
+
+QString CProject::getKDevPrjVersion(){
+  config->setGroup("General");
+  return config->readEntry("kdevprj_version");
+}
+
 QString CProject::getProjectFile(){
   return prjfile;
 }
@@ -315,7 +333,13 @@ void CProject::createMakefileAm(QString makefile){
 	  stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
 	  stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
 	  stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
-	  stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD() << " $(LIBSOCKET)" << "\n";
+	  stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();
+	  if(getProjectType() != "normal_cpp") {
+	    stream << " $(LIBSOCKET)" << "\n";
+	  }
+	  else{
+	    stream << "\n";
+	  }
 	}
 
 	//************SUBDIRS***************

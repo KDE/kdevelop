@@ -63,7 +63,10 @@ public:
   CProject(); 
   /** destructor */
   ~CProject();
-  
+  /** the version of the kdevprj file format*/
+  void setKDevPrjVersion(QString version);
+  /** at the moment there exists 3 types: normal_cpp,normal_kde,mini_kde*/
+  void setProjectType(QString type);
   void setProjectName(QString name);
   void setSubDir(QString dirname);
   void setAuthor(QString name);
@@ -98,8 +101,9 @@ public:
   void removeFileFromProject(QString rel_name);
   void setKDevelopWriteArea(QString makefile);
   void addMakefileAmToProject(QString rel_name);
-  
 
+  QString getKDevPrjVersion();
+  QString getProjectType();
   QString getProjectFile();
   QString getProjectDir();
   QString getSubDir();

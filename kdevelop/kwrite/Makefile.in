@@ -163,8 +163,7 @@ noinst_LIBRARIES = libkwrite.a
 
 libkwrite_a_METASOURCES =  highlight.moc.cpp kwdialog.moc.cpp kwdoc.moc.cpp kwview.moc.cpp 
 
-libkwrite_a_SOURCES = highlight.cpp kmimemagic.cpp kwdialog.cpp kwdoc.cpp kwview.cpp highlight.moc.cpp \
-		      kwdialog.moc.cpp kwdoc.moc.cpp kwview.moc.cpp
+libkwrite_a_SOURCES = highlight.cpp kmimemagic.cpp kwdialog.cpp kwdoc.cpp kwview.cpp highlight.moc.cpp kwdialog.moc.cpp kwdoc.moc.cpp kwview.moc.cpp
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 
