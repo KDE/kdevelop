@@ -1,5 +1,5 @@
 Source: kdevelop-cvs
-Build-Depends: automake, autoconf, debhelper, libqt2.1-dev, kdelibs3-dev-cvs, docbook, jade, sgml-base
+Build-Depends: automake, autoconf, debhelper, libqt2.1-dev, kdelibs3-dev-cvs, docbook, jade, sgml-base, gcc, zlib1g-dev, libpng2-dev, libjpeg62-dev, kdoc, libtiff3g-dev
 Section: devel
 Priority: optional
 Maintainer: Bernd Gehrmann <bernd@physik.hu-berlin.de>
@@ -10,7 +10,7 @@ Architecture: any
 Section: devel
 Replaces: kdevelop
 Depends: ${shlibs:Depends}, autoconf, automake, make, ${perl:Depends}
-Suggests: libqt2.1-dev, qt2.1-doc, kdelibs3-dev-cvs, kdelibs-doc, glimpse, kdebase, sgmltools, a2ps, enscript, gv
+Suggests: libqt2.1-dev, qt2.1-doc, kdelibs3-dev-cvs, kdelibs-doc, glimpse, kdebase, sgml-tools, a2ps, enscript, gv, htdig, glimpse, ktranslator
 Conflicts: kdevelop
 Description: An IDE for Unix/X11
  KDevelop is an easy to use Integrated Development Environment

@@ -4,41 +4,45 @@
 
 SHELL=/bin/sh
 
-build: build-stamp
+BUILDDIR = ./build
+ 
+build: $(BUILDDIR)/build-stamp
 
 -include debian/debiandirs
 
 debian/debiandirs: admin/debianrules
 	perl -w admin/debianrules echodirs > debian/debiandirs
 
-build-stamp:
+$(BUILDDIR)/build-stamp:
 	dh_testdir
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi
+	test -d $(BUILDDIR) || mkdir $(BUILDDIR) ;\
+	cd $(BUILDDIR) ;\
 	CFLAGS="-g -O2 -pipe -Wall" \
 	CXXFLAGS="$$CFLAGS" \
-	$$PWD/configure $(configkdevelop) 
+	$$PWD/../configure $(configkdevelop) 
 
-	$(MAKE)
+	$(MAKE) -C $(BUILDDIR)
 
-	touch build-stamp
+	touch $(BUILDDIR)/build-stamp
 
 debian-clean:
 	dh_testdir
-	-rm -f build-stamp
-
+	-rm -f $(BUILDDIR)/build-stamp
+ 
 clean: debian-clean
+	-rm -rf $(BUILDDIR)
+	-rm -f debian/debiandirs
 	if test -d CVS; then \
 	  make -f admin/Makefile.common cvs-clean ;\
 	else \
-	 -make distclean; \
-	 dh_clean ;\
-	 -rm -f debian/debiandirs debian/menu debian/mailcap ;\
-	 -rm -f `find . -name "*~"` ;\
-	 -rm -rf config.log libtool config.status config.cache ;\
+	  -rm -rf $(BUILDDIR) ;\
+	  -rm -rf debian/debiandirs ;\
+	  dh_clean ; \
 	fi
-	
+
 binary-indep:	build
 	dh_testroot
 	dh_testdir
@@ -48,7 +52,7 @@ binary-arch:	build
 	dh_testdir
 	dh_clean
 	dh_installdirs
-	make DESTDIR=`pwd`/debian/tmp/ install
+	make -C $(BUILDDIR) DESTDIR=`pwd`/debian/tmp/ install
 	perl -w admin/debianrules
 	dh_undocumented 
 	dh_installdocs
@@ -56,6 +60,7 @@ binary-arch:	build
 	dh_strip
 	dh_compress
 	dh_fixperms
+	chmod 755 $(kde_datadir)/kdevelop/tools/processesend.pl
 	dh_perl
 	dh_suidregister
 	dh_makeshlibs
