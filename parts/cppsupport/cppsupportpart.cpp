@@ -160,7 +160,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setWhatsThis( i18n("Type of current expression") );
     action->setEnabled(false);
 
-    action = new KAction(i18n("Make Member"), "makermember", 0,
+    action = new KAction(i18n("Make Member"), "makermember", Key_F2,
                          this, SLOT(slotMakeMember()),
                          actionCollection(), "edit_make_member");
 

@@ -35,13 +35,14 @@ public:
     virtual void parseSimpleDeclaration( SimpleDeclarationAST* );
     virtual void parseFunctionDefinition( FunctionDefinitionAST* );
     virtual void parseLinkageBody( LinkageBodyAST* );
-    
+    virtual void parseAccessDeclaration( AccessDeclarationAST* );
+
     // type-specifier
     virtual void parseTypeSpecifier( TypeSpecifierAST* );
     virtual void parseClassSpecifier( ClassSpecifierAST* );
     virtual void parseEnumSpecifier( EnumSpecifierAST* );
     virtual void parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* );
-    
+
 private:
     TreeParser( const TreeParser& source );
     void operator = ( const TreeParser& source );

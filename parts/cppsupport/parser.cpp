@@ -1769,8 +1769,14 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
 	lex->nextToken();
 	return true;
     } else if( lex->lookAhead(0) == Token_signals || lex->lookAhead(0) == Token_k_dcop || lex->lookAhead(0) == Token_k_dcop_signals ){
+        AccessDeclarationAST::Node ast = CreateNode<AccessDeclarationAST>();
 	lex->nextToken();
+	AST::Node n = CreateNode<AST>();
+	UPDATE_POS( n, start, lex->index() );
+	ast->addAccess( n );
 	ADVANCE( ':', ":" );
+	UPDATE_POS( ast, start, lex->index() );
+	node = ast;
 	return true;
     } else if( parseTypedef(node) ){
 	return true;
@@ -1790,6 +1796,7 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
 	    ast->addAccess( sl );
 	}
 	ADVANCE( ':', ":" );
+	UPDATE_POS( ast, start, lex->index() );
 	node = ast;
 	return true;
     }

@@ -41,39 +41,43 @@ void TreeParser::parseDeclaration( DeclarationAST* declaration )
     case NodeType_LinkageSpecification:
 	parseLinkageSpecification( static_cast<LinkageSpecificationAST*>(declaration) );
 	break;
-	
+
     case NodeType_Namespace:
 	parseNamespace( static_cast<NamespaceAST*>(declaration) );
 	break;
-	
+
     case NodeType_NamespaceAlias:
 	parseNamespaceAlias( static_cast<NamespaceAliasAST*>(declaration) );
 	break;
-	
+
     case NodeType_Using:
 	parseUsing( static_cast<UsingAST*>(declaration) );
 	break;
-	
+
     case NodeType_UsingDirective:
 	parseUsingDirective( static_cast<UsingDirectiveAST*>(declaration) );
 	break;
-	
+
     case NodeType_Typedef:
 	parseTypedef( static_cast<TypedefAST*>(declaration) );
 	break;
-	
+
     case NodeType_TemplateDeclaration:
 	parseTemplateDeclaration( static_cast<TemplateDeclarationAST*>(declaration) );
 	break;
-	
+
     case NodeType_SimpleDeclaration:
 	parseSimpleDeclaration( static_cast<SimpleDeclarationAST*>(declaration) );
 	break;
-	
+
     case NodeType_FunctionDefinition:
 	parseFunctionDefinition( static_cast<FunctionDefinitionAST*>(declaration) );
 	break;
-    }
+
+    case NodeType_AccessDeclaration:
+        parseAccessDeclaration( static_cast<AccessDeclarationAST*>(declaration) );
+	break;
+   }
 }
 
 void TreeParser::parseLinkageSpecification( LinkageSpecificationAST* ast )
@@ -183,5 +187,11 @@ void TreeParser::parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* typeS
 {
     //kdDebug(9007) << "TreeParser::parseElaboratedTypeSpecifier()" << endl;
     Q_UNUSED( typeSpec );
+}
+
+void TreeParser::parseAccessDeclaration ( AccessDeclarationAST * access )
+{
+    //kdDebug(9007) << "TreeParser::parseAccessDeclaration()" << endl;
+    Q_UNUSED( access );
 }
 
