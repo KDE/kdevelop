@@ -2008,6 +2008,8 @@ void KWrite::gotoPos(int cursorXPos, int cursorYPos)
 
 void KWrite::initSearch(SConfig &s, int flags) {
  const char *searchFor = searchForList.getFirst();
+ if ( !searchFor )
+   return;
   s.flags = flags;
   if (s.flags & sfFromCursor) {
     s.cursor = kWriteView->cursor;
