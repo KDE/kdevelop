@@ -382,7 +382,11 @@ bool ProjectManager::loadProjectPart()
 
   QFileInfo fi(m_info->m_fileName);
   QDomDocument& dom = *API::getInstance()->projectDom();
+#if KDE_IS_VERSION(3,1,3)
   QString path = DomUtil::readPathEntry(dom,"/general/projectdirectory", ".");
+#else
+  QString path = DomUtil::readEntry(dom,"/general/projectdirectory", ".");
+#endif
   bool absolute = DomUtil::readBoolEntry(dom,"/general/absoluteprojectpath",false);
   QString projectDir = projectDirectory( path, absolute );
   QString projectName = fi.baseName();
