@@ -317,6 +317,8 @@ void TopLevelSDI::gotoPreviousWindow()
 
 void TopLevelSDI::createGUI(KParts::Part *part)
 {
+  if ( !part )
+    setCaption( QString::null );
   KParts::MainWindow::createGUI(part);
 }
 
