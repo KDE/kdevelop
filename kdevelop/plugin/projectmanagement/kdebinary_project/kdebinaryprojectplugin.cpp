@@ -17,12 +17,21 @@
 
 #include "kdebinaryprojectplugin.h"
 #include <iostream.h>
-
+#include <kiconloader.h>
 
 KDEBinaryProjectPlugin::KDEBinaryProjectPlugin(QObject *parent, const char *name) 
   : Project(parent,name){
   cerr  << "enter KDEBinaryProjectPlugin::KDEBinaryProjectPlugin" << endl;
-  m_projecttype_name = "KDEBinaryProject";
+  // init, every plugin should do this
+  // Plugin infos
+  m_plugin_author = "KDevelop Team";
+  m_plugin_name = "KDEBinaryProject";
+  m_plugin_copyright = "(C) 2000 by KDevelop Team";
+  m_plugin_version = "0.1";
+  m_plugin_description = "KDE Binary plugin";
+  m_plugin_homepage = "http://www.kdevelop.org";
+  m_plugin_icon = DesktopIcon("java_src");
+ 
 }
 KDEBinaryProjectPlugin::~KDEBinaryProjectPlugin(){
 }

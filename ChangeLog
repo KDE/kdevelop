@@ -1,3 +1,7 @@
+2000-09-11   Sandy Meier <smeier@kdevelop.org>
+	* many changes on project creation (Appwizard) and loading 
+	(it is now possible to create a KDE-SDI project)
+
 2000-09-04 John Birch <jbb@kdevelop.org>
 	* A little bit of experimental code for the editor handling.
 

@@ -41,7 +41,7 @@ private:
     void loadLanguageSupport(const QString &lang);
     void unloadLanguageSupport();
     void newFile();
-    void loadProjectSpace(const QString &name);
+    bool loadProjectSpace(const QString &name);
     void unloadProjectSpace();
     void loadProject(const QString &fileName);
     void unloadProject();
@@ -50,6 +50,7 @@ private slots:
     // Handling of actions
     void slotFilePrint();
     void slotFileNew();
+    void slotProjectNew();
     void slotProjectOpen();
     void slotProjectOpenRecent(const KURL &url);
     void slotProjectClose();

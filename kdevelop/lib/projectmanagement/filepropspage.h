@@ -12,6 +12,8 @@ class ClassFileProp {
   QString m_headerfile;
   QString m_baseclass;
   QString m_description; // rich text
+  /** to idetify this object*/
+  QString m_key; 
   bool m_change_baseclass;
 };
 

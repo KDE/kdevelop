@@ -122,7 +122,6 @@ bool Project::readGeneralConfig(KSimpleConfig* config){
   config->setGroup("General");
   m_name = config->readEntry("name","");
   m_plugin_name = config->readEntry("plugin_name",""); 
-  m_projecttype_name = config->readEntry("projecttype_name","");
   QStringList files = config->readListEntry("files");
   QStringList::Iterator it;
   QString name;
@@ -162,7 +161,6 @@ bool Project::writeGeneralConfig(KSimpleConfig* config){
   config->setGroup("General");
   config->writeEntry("name",m_name);
   config->writeEntry("plugin_name", m_plugin_name); // the projectspacetype name
-  config->writeEntry("projecttype_name",m_projecttype_name);
   QStringList file_list;
   RegisteredFile* file;
   for(file = m_files->first(); file != 0; file= m_files->next() ){

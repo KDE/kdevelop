@@ -47,6 +47,7 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   /** set the projectspace name*/
   void setName(QString name);
   void setAbsolutePath(QString path);
+  void setVersion(QString version);
   
   /** Store the name of version control system */
   void setVCSystem(QString vcsystem);
@@ -57,9 +58,11 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   /** set the email, stored in the *_local file */
   void setEmail(QString email);
 
+  void setCompany(QString company);
+
   /** method to fill up a string template with actual projectspace info
    */
-  QString& setInfosInString(QString& strtemplate, bool basics=true);
+  void setInfosInString(QString& text);
 
   /*_____some get methods_____*/
 	// member
@@ -75,8 +78,12 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   /** Fetch the authors eMail-address,  stored in the *_local files */
   QString getEmail();
   
+  QString getCompany();
+  QString getProgrammingLanguage();
+  
   /***/
   virtual void generateDefaultFiles();
+  virtual void modifyDefaultFiles();
 	
   /** writes a NAME.kdevpsp and .NAME.kdevpsp
       NAME.kdevpsp contains options for all users, like cvs system
@@ -100,6 +107,10 @@ protected:
   /** the current absolute path to the projectspace */
   QString m_path;
 	
+  /** the programming language for the projectspace
+      needed to load the correct languagesupport*/
+  
+  QString m_language;
   // static
   /** projectspace template, name*/
   QString m_projectspace_template;
@@ -115,6 +126,15 @@ protected:
   QString m_user_projectspace_file;
   /** absolute */
   QString m_projectspace_file;
+  QString m_version;
+
+  // current User profile
+  QString m_email;
+  QString m_company;
+  QString m_author;
+ 
+ 
+  
 };
 
 #endif

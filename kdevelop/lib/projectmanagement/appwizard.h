@@ -51,7 +51,7 @@ public:
  
  AppWizard(QWidget* parent=0, const char* name=0);
  virtual ~AppWizard();
- virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0);
+ virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0,QString projectname="");
  // for which workspace is this plugin
  QString  getProjectSpaceName();
  // the picture for the newProjectDialog, the QString contains the absolute path
@@ -61,6 +61,11 @@ public:
  
  /** generates default files/app, properties from configwidgets set in AppWizard*/
  virtual void generateDefaultFiles();
+
+ virtual void generateFile(QString abs_oldpos,QString abs_newpos);
+
+ /** replace |VERSION|, |AUTHOR| and so on...*/
+ virtual void setInfosInString(QString& text);
  
  protected slots:
   virtual void accept();

@@ -12,7 +12,7 @@
             <x>0</x>
             <y>0</y>
             <width>414</width>
-            <height>360</height>
+            <height>366</height>
         </rect>
     </property>
     <property stdset="1">
@@ -132,13 +132,6 @@
                 <string>Classes:</string>
             </property>
         </widget>
-        <widget row="1"  column="1" >
-            <class>QTextView</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>desc_textview</cstring>
-            </property>
-        </widget>
         <widget row="0"  column="1" >
             <class>QLabel</class>
             <property stdset="1">
@@ -155,6 +148,29 @@
             <property stdset="1">
                 <name>name</name>
                 <cstring>classes_listbox</cstring>
+            </property>
+        </widget>
+        <widget row="1"  column="1" >
+            <class>QMultiLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>desc_textview</cstring>
+            </property>
+            <property stdset="1">
+                <name>enabled</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string></string>
+            </property>
+            <property stdset="1">
+                <name>wordWrap</name>
+                <enum>WidgetWidth</enum>
+            </property>
+            <property stdset="1">
+                <name>readOnly</name>
+                <bool>true</bool>
             </property>
         </widget>
     </grid>
@@ -177,7 +193,6 @@
 </connections>
 <tabstops>
     <tabstop>classes_listbox</tabstop>
-    <tabstop>desc_textview</tabstop>
     <tabstop>classname_edit</tabstop>
     <tabstop>headerfile_edit</tabstop>
     <tabstop>baseclass_edit</tabstop>

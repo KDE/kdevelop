@@ -3,7 +3,7 @@
                              -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
+    email                : smeier@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,7 +36,7 @@ Q_OBJECT
  virtual bool writeGeneralConfig(KSimpleConfig* config);
  virtual bool writeUserConfig(KSimpleConfig* config);
  
- 
+ virtual void modifyDefaultFiles();
  /** Store the additional arguments for configure,stored in the *_user files */
   void setConfigureArgs(QString args);
   /** Fetch the commandline additional arguments for configure */

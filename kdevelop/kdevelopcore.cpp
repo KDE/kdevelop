@@ -28,6 +28,7 @@
 #include "kdevelopcore.h"
 #include "kdevviewhandler.h"
 #include "projectspace.h"
+#include "newprojectdlg.h"
 
 KDevelopCore::KDevelopCore(KDevelop *gui)
     : QObject(gui, "kdevelop core")
@@ -91,12 +92,15 @@ void KDevelopCore::initActions()
 //                                "Creates a new file "
 //                                "and opens a default view, automatically") );
 
+    
+    action = new KAction( i18n("&New..."),0, this, SLOT( slotProjectNew() ),
+                          m_kdevelopgui->actionCollection(), "project_new");
+    action->setStatusText( i18n("Creates a new Projectspace/Project") );
+    action->setWhatsThis(  i18n("new project...") );
+
     action = new KAction( i18n("&Open..."), "openprj", 0, this, SLOT( slotProjectOpen() ),
                           m_kdevelopgui->actionCollection(), "project_open");
     action->setStatusText( i18n("Opens an existing project") );
-    action->setWhatsThis(  i18n("Open project\n\n"
-                                "Shows the open project dialog "
-                                "to select a project to be opened") );
 
     action = new KRecentFilesAction( i18n("Open &recent project..."), 0, this, SLOT( slotProjectOpenRecent(const KURL&) ),
                                      m_kdevelopgui->actionCollection(), "project_open_recent");
@@ -302,13 +306,13 @@ void KDevelopCore::unloadLanguageSupport()
   m_languagesupport = 0;
 }
 
-void KDevelopCore::loadProjectSpace(const QString &name){
-  QString constraint = QString("[X-KDevelop-ProjectSpace] == '%1'").arg(name);
+bool KDevelopCore::loadProjectSpace(const QString &name){
+  QString constraint = QString("[Name] == '%1'").arg(name);
   KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
   if (offers.isEmpty()) {
     KMessageBox::sorry(m_kdevelopgui,
 		       i18n("No ProjectSpace component for %1 found").arg(name));
-    return;
+    return false;
   }
   
   KService *service = *offers.begin();
@@ -326,11 +330,12 @@ void KDevelopCore::loadProjectSpace(const QString &name){
         
   if (!obj->inherits("ProjectSpace")) {
     kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
-    return;
+    return false;
   }
   ProjectSpace *comp = (ProjectSpace*) obj;
   m_projectspace = comp;
   initComponent(comp);
+  return true;
 }
 
 
@@ -350,17 +355,21 @@ void KDevelopCore::unloadProjectSpace(){
 
 void KDevelopCore::loadProject(const QString &fileName)
 {
-    m_project = new CProject("../kdevelop.kdevprj");
+
+  m_project = new CProject("../kdevelop.kdevprj"); // will be removed soon 
     // project must define a version control system
     // hack until implemented
     QString vcservice = QString::fromLatin1("CVSInterface");
-    QString lang = QString::fromLatin1("C++");
-    // name will be stored in the projectspace file
-    QString projectspace = QString::fromLatin1("KDE");
-    
-    loadProjectSpace(projectspace);
-    loadVersionControl(vcservice);
-    loadLanguageSupport(lang);
+
+    //ok, a little bit bootstrapping
+    KConfig config(fileName);
+    config.setGroup("General");
+    QString projectspace = config.readEntry("plugin_name");
+    if(loadProjectSpace(projectspace)){
+      m_projectspace->readConfig(fileName);
+      loadLanguageSupport(m_projectspace->getProgrammingLanguage());
+      loadVersionControl(vcservice);
+    }
 
     QListIterator<KDevComponent> it1(m_components);
     for (; it1.current(); ++it1)
@@ -464,11 +473,20 @@ void KDevelopCore::slotFileNew()
   newFile();
 }
 
+void KDevelopCore::slotProjectNew(){
+  NewProjectDlg* dlg = new NewProjectDlg();
+  dlg->show();
+  delete dlg;
+}
 
 void KDevelopCore::slotProjectOpen()
 {
-    QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevprj",
+    QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevpsp",
                                                     m_kdevelopgui, i18n("Open project"));
+    if (fileName ==""){
+      return; // cancel
+      
+    }
 
     if (m_project)
         unloadProject();

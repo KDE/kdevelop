@@ -21,9 +21,30 @@
 #include <iostream.h>
 #include <kprocess.h>
 #include <kdebug.h>
+#include <qdatetime.h>
+#include <pwd.h>
+#include <unistd.h>
+#include <qfile.h>
+#include <qtextstream.h>
 
 
 AppWizard::AppWizard(QWidget* parent, const char* obj_name) : AppWizardBase(parent,obj_name,true){
+  // code from kbugreport by David Faure
+  KConfig emailConf( QString::fromLatin1("emaildefaults") );
+  emailConf.setGroup( QString::fromLatin1("UserInfo") );
+  QString fromaddr = emailConf.readEntry( QString::fromLatin1("EmailAddress") );
+  if (fromaddr.isEmpty()) {
+     struct passwd *p;
+     p = getpwuid(getuid());  
+     fromaddr = QString::fromLatin1(p->pw_name) + "@";
+  }
+  QString name = emailConf.readEntry( QString::fromLatin1("FullName"));
+  QString company = emailConf.readEntry( QString::fromLatin1("Organization"));
+  
+  email_edit->setText( fromaddr );
+  author_edit->setText( name );
+  company_edit->setText( company );
+  
   // conntects
   m_project=0;
   
@@ -31,7 +52,7 @@ AppWizard::AppWizard(QWidget* parent, const char* obj_name) : AppWizardBase(pare
 AppWizard::~AppWizard(){
 }
 
-void AppWizard::init(bool new_projectspace,ProjectSpace* projectspace){
+void AppWizard::init(bool new_projectspace,ProjectSpace* projectspace,QString projectname){
   kdDebug(9000) << "enter AppWizard::init" << endl;
   m_new_projectspace = new_projectspace;
   m_projectspace = projectspace;
@@ -46,11 +67,15 @@ void AppWizard::init(bool new_projectspace,ProjectSpace* projectspace){
 void AppWizard::accept(){
   kdDebug(9000) << "start generation" << endl;
   if(m_new_projectspace){ // only if a new one was selected
+    m_projectspace->setAuthor(author_edit->text());
+    m_projectspace->setEmail(email_edit->text());
+    m_projectspace->setCompany(company_edit->text());
+    m_projectspace->setVersion(version_edit->text());
     m_projectspace->generateDefaultFiles();
   }
   m_projectspace->addProject(m_project);
-  m_projectspace->writeConfig();
   generateDefaultFiles();
+  m_projectspace->writeConfig();
   QWizard::accept();
 }
 
@@ -87,6 +112,40 @@ void AppWizard::slotNewHeader(){
   header_multiedit->clear();
 }
 void AppWizard::slotLoadHeader(){
+}
+
+
+void AppWizard::setInfosInString(QString& text){
+  QDate date;
+  text.replace(QRegExp("|NAME|"),m_project->getName());
+  text.replace(QRegExp("|NAMELITTLE|"),m_project->getName().lower());
+  text.replace(QRegExp("|YEAR|"),QString::number(date.year()));
+  text.replace(QRegExp("|EMAIL|"),email_edit->text());
+  text.replace(QRegExp("|AUTHOR|"),author_edit->text());
+  text.replace(QRegExp("|VERSION|"),version_edit->text());
+}
+
+void AppWizard::generateFile(QString abs_oldpos,QString abs_newpos){
+  QFile file(abs_oldpos);
+  if ( file.open(IO_ReadOnly) ) {    // file opened successfully
+    QTextStream t( &file );        // use a text stream
+    QString text = t.read();
+    file.close();
+    setInfosInString(text);
+    // save
+    file.setName(abs_newpos);
+    if ( file.open(IO_WriteOnly) ){
+      QTextStream tw( &file );
+      tw << text;
+      file.close();
+    }
+    else {
+      cerr << "\nERROR! couldn't open file to write:" << abs_newpos;
+    }
+  }
+  else {
+    cerr << "\nERROR! couldn't open file to read:" << abs_oldpos;
+  }
 }
 
 #include "appwizard.moc"

@@ -29,7 +29,6 @@
 #include <klibloader.h>
 #include <ktrader.h>
 #include <kedittoolbar.h>
-#include "newprojectdlg.h"
 #include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevelopfactory.h"
@@ -160,8 +159,7 @@ void KDevelop::initActions(){
   /////////////////////////////////////
   // Project Menu
   ////////////////////////////////////
-  m_paProjectNew = new KAction( i18n("&New..."), 0, this, SLOT( slotProjectNew() ),
-          actionCollection(), "project_new");
+  
   m_paProjectFileProperties = new KAction( i18n("&File Properties..."), "file_properties", 0,
           this, SLOT( slotProjectFileProperties() ), actionCollection(), "project_file_properties");
   // Separator
@@ -475,9 +473,6 @@ void KDevelop::initHelp(){
 //  m_paViewStatusbar->setWhatsThis(  );
 //
 
-  // Project Actions
-  m_paProjectNew->setStatusText( i18n("Generates a new project with Application Wizard") );
-//  m_paProjectNew->setWhatsThis(  );
 
   m_paProjectFileProperties->setStatusText( i18n("Shows the file properties dialog") );
 //  m_paProjectFileProperties->setWhatsThis(  );
@@ -744,11 +739,7 @@ void KDevelop::stackView( QWidget* w)
   nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockCenter);
 }
 
-void KDevelop::slotProjectNew(){
-  NewProjectDlg* dlg = new NewProjectDlg();
-  dlg->show();
-  delete dlg;
-}
+
 
 
 void KDevelop::slotOptionsEditToolbars(){

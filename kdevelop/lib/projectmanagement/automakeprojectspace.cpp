@@ -3,7 +3,7 @@
                              -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
+    email                : smeier@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -16,12 +16,38 @@
  ***************************************************************************/
 
 #include "automakeprojectspace.h"
+#include <qfile.h>
+#include <qtextstream.h>
+#include <iostream.h>
 
 AutomakeProjectSpace::AutomakeProjectSpace(QObject* parent,const char* name)
   : ProjectSpace(parent,name){
 }
 AutomakeProjectSpace::~AutomakeProjectSpace(){
 }
+void AutomakeProjectSpace::modifyDefaultFiles(){
+  ProjectSpace::modifyDefaultFiles();
+  QFile file(m_path + "/configure.in");
+  if ( file.open(IO_ReadOnly) ) {    // file opened successfully
+    QTextStream t( &file );        // use a text stream
+    QString text = t.read();
+    file.close();
+    setInfosInString(text);
+    // save
+    if ( file.open(IO_WriteOnly) ){
+      QTextStream tw( &file );
+      tw << text;
+      file.close();
+    }
+    else {
+      cerr << "\nERROR! couldn't open file to write:" << file.name();
+    }
+  }
+  else {
+    cerr << "\nERROR! couldn't open file to read:" << file.name();
+  }
+}
+
 /** Store the additional arguments for configure,stored in the *_user files */
 void AutomakeProjectSpace::setConfigureArgs(QString args){
 }

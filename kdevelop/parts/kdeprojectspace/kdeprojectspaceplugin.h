@@ -33,6 +33,7 @@ public:
 	~KDEProjectSpace();
 	virtual bool readGeneralConfig(KSimpleConfig* config);
 	virtual bool readUserConfig(KSimpleConfig* config);
+	virtual	void modifyDefaultFiles();
 
   virtual bool writeGeneralConfig(KSimpleConfig* config);
 	virtual bool writeUserConfig(KSimpleConfig* config);

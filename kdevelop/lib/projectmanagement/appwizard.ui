@@ -13,7 +13,7 @@
             <x>0</x>
             <y>0</y>
             <width>414</width>
-            <height>433</height>
+            <height>435</height>
         </rect>
     </property>
     <property stdset="1">
@@ -139,6 +139,10 @@
                         <property stdset="1">
                             <name>name</name>
                             <cstring>version_edit</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>0.1</string>
                         </property>
                     </widget>
                     <widget row="2"  column="0"  rowspan="1"  colspan="2" >
@@ -289,7 +293,7 @@
                             <rect>
                                 <x>168</x>
                                 <y>5</y>
-                                <width>39</width>
+                                <width>137</width>
                                 <height>20</height>
                             </rect>
                         </property>

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
+    email                : smeier@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -39,38 +39,37 @@ KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 	m_plugin_libraryname = "libkde_projectspace";
 	// projectspace
 	m_projectspace_template = std_dirs->findResource("data","kdevelop/projectspaces/kde_projectspace.tar.gz");
+	m_language = "C++";
 }
 KDEProjectSpace::~KDEProjectSpace(){
 }
+void KDEProjectSpace::modifyDefaultFiles(){
+  AutomakeProjectSpace::modifyDefaultFiles();
+}
 
 bool KDEProjectSpace::readGeneralConfig(KSimpleConfig* config){
-		config->setGroup("KDEProjectSpace Config");
-
-
-		AutomakeProjectSpace::readGeneralConfig(config);
-		return true;
+  config->setGroup("KDEProjectSpace Config");
+  AutomakeProjectSpace::readGeneralConfig(config);
+  return true;
 }
 
 bool KDEProjectSpace::readUserConfig(KSimpleConfig* config){
-		config->setGroup("KDEProjectSpace Config");
-
-		AutomakeProjectSpace::readUserConfig(config);
-		return true;
+  config->setGroup("KDEProjectSpace Config");
+  AutomakeProjectSpace::readUserConfig(config);
+  return true;
 }
 
 bool KDEProjectSpace::writeGeneralConfig(KSimpleConfig* config){
-		config->setGroup("KDEProjectSpace Config");
- 		config->writeEntry("test_general","value");
-
-		AutomakeProjectSpace::writeGeneralConfig(config);
-		return true;
+  config->setGroup("KDEProjectSpace Config");
+  config->writeEntry("test_general","value");
+  AutomakeProjectSpace::writeGeneralConfig(config);
+  return true;
 }
 
 bool KDEProjectSpace::writeUserConfig(KSimpleConfig* config){
-		config->setGroup("KDEProjectSpace Config");
- 		config->writeEntry("test_user","value");
-
-		AutomakeProjectSpace::writeUserConfig(config);
-		return true;
+  config->setGroup("KDEProjectSpace Config");
+  config->writeEntry("test_user","value");
+  AutomakeProjectSpace::writeUserConfig(config);
+  return true;
 }
 

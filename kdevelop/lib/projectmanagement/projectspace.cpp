@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "projectspace.h"
+#include "pluginloader.h"
 #include <kprocess.h>
 #include <kstddirs.h>
 #include <iostream.h>
@@ -25,6 +26,7 @@
 #include <qdir.h>
 #include <ctoolclass.h>
 #include <qfileinfo.h>
+#include <qdatetime.h>
 
 
 ProjectSpace::ProjectSpace(QObject* parent,const char* name,QString file) : KDevComponent(parent,name){
@@ -64,8 +66,12 @@ void ProjectSpace::generateDefaultFiles(){
   proc << "tar";
   proc << args;
   proc.start(KProcess::Block,KProcess::AllOutput);
+  
+  modifyDefaultFiles();
 }
-
+void ProjectSpace::modifyDefaultFiles(){
+  
+}
 /*_____some get methods_____*/
 
 /** returns the name of the projectspace*/
@@ -78,10 +84,15 @@ QString ProjectSpace::getVCSystem(){
 
 /** Fetch the authors name. stored in the *_user files*/
 QString ProjectSpace::getAuthor(){
+  return m_author;
 }
 
 /** Fetch the authors eMail-address,  stored in the *_user files */
 QString ProjectSpace::getEmail(){
+  return m_email;
+}
+QString ProjectSpace::getCompany(){
+  return m_company;
 }
 
 /** set the projectspace name*/
@@ -98,15 +109,32 @@ void ProjectSpace::setVCSystem(QString vcsystem){
 
 /** stored in the *_user files*/
 void ProjectSpace::setAuthor(QString name){
+  m_author = name;
 }
 
 /** set the email, stored in the *_user file */
 void ProjectSpace::setEmail(QString email){
+  m_email = email;
+}
+void ProjectSpace::setCompany(QString company){
+  m_company = company;
+}
+void ProjectSpace::setVersion(QString version){
+  m_version = version;
 }
 
 /** method to fill up a string template with actual projectspace info
  */
-QString& ProjectSpace::setInfosInString(QString& strtemplate, bool basics){
+void ProjectSpace::setInfosInString(QString& text){
+  QDate date;
+  text.replace(QRegExp("|EMAIL|"),m_email);
+  text.replace(QRegExp("|YEAR|"),QString::number(date.year()));
+  text.replace(QRegExp("|AUTHOR|"),m_author);
+  text.replace(QRegExp("|VERSION|"),m_version);
+  text.replace(QRegExp("|COMPANY|"),m_company);
+  text.replace(QRegExp("|NAME|"),m_name);
+  text.replace(QRegExp("|NAMELITTLE|"),m_name.lower());
+  	      
 }
 
 /** writes a NAME.kdevpsp and .NAME.kdevpsp
@@ -137,28 +165,43 @@ bool ProjectSpace::readConfig(QString abs_filename){
 
 bool ProjectSpace::readGeneralConfig(KSimpleConfig* config){
   config->setGroup("General");
-  m_name = config->readEntry("name","");
-  m_path = config->readEntry("path","");
-  m_plugin_name = config->readEntry("plugin_name","");
-  
+  m_name = config->readEntry("name");
+  m_path = config->readEntry("path");
+  m_plugin_name = config->readEntry("plugin_name");
+  m_version = config->readEntry("version","0.1");
+  m_language = config->readEntry("programming_language");
 
   // read all projects
   QStringList files = config->readListEntry("projectfiles");
   QStringList::Iterator it;
   QString filename;
   QFileInfo fileinfo;
-  Project* prj;
+  QString abs_filename;
+  Project* prj=0;
   for(it = files.begin(); it != files.end(); ++it){
     fileinfo.setFile(*it);
     filename = fileinfo.fileName();
-    prj = new Project(this,"",CToolClass::getAbsolutePath(m_path,fileinfo.dirPath()) + filename);
-    addProject(prj);
+    abs_filename = CToolClass::getAbsolutePath(m_path,fileinfo.dirPath()) + filename;
+    // bootstrapping
+    KConfig prj_config(abs_filename);
+    prj_config.setGroup("General");
+    prj = PluginLoader::getNewProject(prj_config.readEntry("plugin_name"));
+    if(prj != 0){
+      prj->readConfig(abs_filename);
+      addProject(prj);
+    }
+    else {
+      cerr << "\nProjectSpace::readGeneralConfig: prj not created!";
+    }
   }
   return true;
 }
 
 bool ProjectSpace::readUserConfig(KSimpleConfig* config){
   config->setGroup("General");
+  m_email = config->readEntry("email");
+  m_company = config->readEntry("company");
+  m_author = config->readEntry("author_name");
   return true;
 }
 
@@ -194,6 +237,8 @@ bool ProjectSpace::writeGeneralConfig(KSimpleConfig* config){
   config->writeEntry("name",m_name);
   config->writeEntry("path",m_path);
   config->writeEntry("plugin_name", m_plugin_name); // the projectspacetype name
+  config->writeEntry("version", m_version);
+  config->writeEntry("programming_language",m_language);
   QStringList projectfiles;
   Project* prj;
   for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
@@ -208,7 +253,14 @@ bool ProjectSpace::writeGeneralConfig(KSimpleConfig* config){
 bool ProjectSpace::writeUserConfig(KSimpleConfig* config){
   config->setGroup("General");
   config->writeEntry("user", m_plugin_libraryname);
+  config->writeEntry("email", m_email);
+  config->writeEntry("company", m_company);
+  config->writeEntry("author_name", m_author);
   return true;
+}
+
+QString ProjectSpace::getProgrammingLanguage(){
+  return m_language;
 }
 
 #include "projectspace.moc"

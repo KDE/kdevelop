@@ -63,6 +63,7 @@ class Project : public QObjectPlugin  {
   virtual void updateMakefile();
 
   virtual void addFile(RegisteredFile* file);
+  /** include in distribution,install no*/
   virtual void addFile(QString abs_filename);
   virtual void removeFile(RegisteredFile* file);
 
@@ -85,7 +86,6 @@ class Project : public QObjectPlugin  {
   QString m_user_project_file;
   /** absolute */
   QString m_project_file;
-  QString m_projecttype_name;
 };
 
 #endif

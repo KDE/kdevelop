@@ -105,7 +105,6 @@ private:
   KAction* m_paViewDebugDebugger;
   KAction* m_paViewRefresh;
   // Project Actions
-  KAction* m_paProjectNew;
   KAction* m_paProjectOpen;
   KAction* m_paProjectOpenRecent;
   KAction* m_paProjectClose;
@@ -178,7 +177,6 @@ private:
   KDockWidget* m_dockOnBottom;
 
 private slots:
- void slotProjectNew();
  void slotOptionsEditToolbars();
 };
 

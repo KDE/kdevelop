@@ -27,7 +27,7 @@
 
 class RegisteredFile {
 public: 
-  RegisteredFile(QString rel_name,bool dist=false,bool install=false,QString install_file="");
+  RegisteredFile(QString rel_name,bool dist=true,bool install=false,QString install_file="");
   ~RegisteredFile();
   
   /** set the filename
