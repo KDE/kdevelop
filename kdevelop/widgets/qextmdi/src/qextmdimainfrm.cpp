@@ -1355,14 +1355,12 @@ void QextMdiMainFrm::activatePrevWin()
 /** Activates the view with a certain index (TabPage mode only) */
 void QextMdiMainFrm::activateView(int index)
 {
-   if (m_pDockbaseOfTabPage && (m_mdiMode == QextMdi::TabPageMode)) {
-#if !defined(NO_KDE2) && (QT_VERSION >= 300)
-      QTabWidget* pTab = (QTabWidget*) m_pDockbaseOfTabPage->parentWidget()->parentWidget();
-      pTab->setCurrentPage(index);
-#else
-      KDockTabCtl* pTab = (KDockTabCtl*) m_pDockbaseOfTabPage->parentWidget()->parentWidget();
-      pTab->setVisiblePage(index);
-#endif
+   QextMdiChildView* pView = m_pWinList->first();
+   for (int i = 0; pView && (i < index); i++) {
+      pView = m_pWinList->next();
+   }
+   if (pView) {
+      pView->activate();
    }
 }
 
