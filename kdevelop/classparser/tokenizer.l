@@ -28,9 +28,20 @@
     int yyinput() { return yyFlexLexer::yyinput(); }
   };
 
-  int cont=0;           /* Continue parsing defines. */
-  int line_num=1;       /* Counter for the current line being parsed         */
-  int comment_start=0;  /* Line where a comment starts (for nested comments) */
+  /* Continue parsing defines. */
+  int cont = 0;
+
+  /* Counter for the current line being parsed. */
+  int line_num = 1;
+
+  /* Line where a comment starts. */
+  int comment_start = -1;
+
+  /* Line where a comment ends. */
+  int comment_end = -1;
+
+  /* Last parsed comment. */
+  char comment[2048];
 
   /* Function prototypes */
   void eatPreparser(MyLexer *lex);
@@ -192,11 +203,21 @@ void eatComment(MyLexer *lex)
 {
   bool done = false;  /* Tells when to exit the loop */
   bool asteriscFound = false; /* Flags that we have found an asterisc. */
-  char c='\0'; /* The current character from the input stream */
+  char c = '\0'; /* The current character from the input stream */
+  int offset = 2; /* Offset in the comment buffer. */
  
-  while ( !done )
+  /* Set the line where the comment starts. */
+  comment_start = lex->lineno();
+
+  /* Initialize the comment string. */
+  strcpy( comment, "/*" );
+
+  while( !done )
   {
-    c=lex->yyinput();
+    c = lex->yyinput();
+
+    /* Copy the character to the comment string. */
+    comment[ offset++ ] = c;
 
     switch( c )
     {
@@ -215,4 +236,10 @@ void eatComment(MyLexer *lex)
         break;
     }
   }
+
+  /* Add a NULL character at the end of the string. */
+  comment[ offset ] = '\0';
+
+  /* Set the line at which the comment ends. */
+  comment_end = lex->lineno();
 }
