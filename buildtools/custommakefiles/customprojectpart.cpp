@@ -298,6 +298,11 @@ void CustomProjectPart::populateProject()
 
 void CustomProjectPart::closeProject()
 {
+    saveProject();
+}
+
+void CustomProjectPart::saveProject()
+{
     QFile f(m_projectDirectory + "/" + m_projectName + ".filelist");
     if (!f.open(IO_WriteOnly))
         return;
@@ -444,6 +449,8 @@ void CustomProjectPart::addFiles ( const QStringList& fileList )
 	{
 		m_sourceFiles.append ( *it );
 	}
+	
+	saveProject();
 
 	kdDebug(9025) << "Emitting addedFilesToProject" << endl;
 	emit addedFilesToProject ( fileList );
@@ -468,6 +475,8 @@ void CustomProjectPart::removeFiles ( const QStringList& fileList )
 	{
 		m_sourceFiles.remove ( *it );
 	}
+	
+	saveProject();
 }
 
 QString CustomProjectPart::buildDirectory() const
