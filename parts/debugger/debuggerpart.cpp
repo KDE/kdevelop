@@ -227,7 +227,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                          actionCollection(), "debug_attach");
     action->setStatusText( i18n("Attaches the debugger to a running process") );
     
-    stateChanged( QString("stopped") );
+    connect( topLevel()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
+             this, SLOT(guiClientAdded(KXMLGUIClient*)) );
     
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -269,6 +270,15 @@ DebuggerPart::~DebuggerPart()
     delete statusBarIndicator;
 
     GDBParser::destroy();
+}
+
+
+void DebuggerPart::guiClientAdded( KXMLGUIClient* client )
+{
+    // Can't change state until after XMLGUI has been loaded...
+    // Anyone know of a better way of doing this?
+    if( client == this )
+        stateChanged( QString("stopped") );
 }
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevDebugger" version="4">
+<kpartgui name="KDevDebugger" version="5">
 <MenuBar>
  <Menu name="debug">
   <text>&amp;Debug</text>
@@ -25,7 +25,7 @@
   <Action name="debug_stepout"/>
   <Separator/>
   <Action name="debug_memview"/>
-  </WeakSeparator/>
+  <WeakSeparator/>
 </ToolBar>
 <State name="stopped">
   <enable>

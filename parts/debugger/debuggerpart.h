@@ -39,6 +39,7 @@ public:
     ~DebuggerPart();
 
 private slots:
+    void guiClientAdded(KXMLGUIClient*);
     void contextMenu(QPopupMenu *popup, const Context *context);
     void toggleBreakpoint();
     void contextWatch();
