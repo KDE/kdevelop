@@ -1,3 +1,23 @@
+/* $Id$
+ *
+ *  Copyright (C) 2002 Roberto Raggi (raggi@cli.di.unipi.it)
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; see the file COPYING.LIB.  If not, write to
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
+ *
+ */
 
 #include "kdevcoreimpl.h"
 #include "partloader.h"
@@ -10,25 +30,22 @@
 #include "KDevCoreIface.h"
 #include "ckdevelop.h"
 
-#include <qhbox.h>
+#include <qstatusbar.h>
 
 #include <kparts/partmanager.h>
 #include <kparts/factory.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kstatusbar.h>
 #include <dcopclient.h>
 
 KDevCoreImpl::KDevCoreImpl( CKDevelop* pDev )
     : KDevCore(),
       m_pDevelop( pDev )
 {
-    kdDebug() << "KDevCoreImpl::KDevCoreImpl()" << endl;
     api = new KDevApi();
     api->core = this;
-    kdDebug() << "KDevCoreImpl::KDevCoreImpl() - 1" << endl;
     api->classStore = new ClassStore();
-    kdDebug() << "KDevCoreImpl::KDevCoreImpl() - 2" << endl;
-
 
     // added by daniel
     api->ccClassStore = new ClassStore( );
@@ -36,13 +53,10 @@ KDevCoreImpl::KDevCoreImpl( CKDevelop* pDev )
     api->projectDom = 0;
     api->project = 0;
 
-    kdDebug() << "-------------> before KDevCoreIface()" << endl;
     dcopIface = new KDevCoreIface(this);
-    kdDebug() << "------------> dcopIface attached" << endl;
     kapp->dcopClient()->registerAs( "kdevelop" );
 
     manager = new KParts::PartManager( m_pDevelop );
-    kdDebug() << "-----------> parts manager created" << endl;
     connect( manager, SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(activePartChanged(KParts::Part*)) );
     connect( manager, SIGNAL(partAdded(KParts::Part*)),
@@ -51,7 +65,6 @@ KDevCoreImpl::KDevCoreImpl( CKDevelop* pDev )
              this, SLOT(partCountChanged()));
 
     initGlobalParts();
-    kdDebug() << "---------> global parts created" << endl;
 
     emit coreInitialized();
 }
@@ -113,13 +126,13 @@ void KDevCoreImpl::initGlobalParts()
 void KDevCoreImpl::embedWidget( QWidget* w, Role r,
                                 const QString& description )
 {
-    kdDebug() << "------------------> KDevCoreImpl::embedWidget()" << endl;
+    kdDebug() << "KDevCoreImpl::embedWidget()" << endl;
     m_pDevelop->embedToolWidget( w, r, description );
 }
 
 void KDevCoreImpl::raiseWidget( QWidget* w )
 {
-    kdDebug() << "------------------> KDevCoreImpl::raiseWidget()" << endl;
+    kdDebug() << "KDevCoreImpl::raiseWidget()" << endl;
     w->show();
 }
 
@@ -137,11 +150,13 @@ void KDevCoreImpl::fillContextMenu(QPopupMenu *popup, const Context *context)
 void KDevCoreImpl::openProject(const QString& projectFileName)
 {
     kdDebug() << "KDevCoreImpl::openProject()" << endl;
+    m_pDevelop->slotOpenProject( KURL(projectFileName) );
 }
 
-void KDevCoreImpl::gotoFile(const KURL &url)
+void KDevCoreImpl::gotoFile( const KURL &url )
 {
     kdDebug() << "KDevCoreImpl::gotoFile()" << endl;
+    m_pDevelop->switchToFile( url.path() );
 }
 
 void KDevCoreImpl::gotoDocumentationFile(const KURL& url,
@@ -154,11 +169,13 @@ void KDevCoreImpl::gotoSourceFile(const KURL& url, int lineNum,
                                   Embedding embed )
 {
     kdDebug() << "KDevCoreImpl::gotoSourceFile()" << endl;
+    m_pDevelop->switchToFile( url.path(), lineNum );
 }
 
 void KDevCoreImpl::gotoExecutionPoint(const QString &fileName, int lineNum )
 {
     kdDebug() << "KDevCoreImpl::gotoExecutionPoint()" << endl;
+    m_pDevelop->switchToFile( fileName, lineNum );
 }
 
 void KDevCoreImpl::saveAllFiles()
@@ -185,6 +202,7 @@ void KDevCoreImpl::running(KDevPart *which, bool runs)
 void KDevCoreImpl::message(const QString &str)
 {
     kdDebug() << "KDevCoreImpl::message()" << endl;
+    m_pDevelop->statusBar()->message( str, 2000 );
 }
 
 KParts::PartManager * KDevCoreImpl::partManager() const
@@ -202,7 +220,7 @@ KEditor::Editor * KDevCoreImpl::editor()
 QStatusBar * KDevCoreImpl::statusBar() const
 {
     kdDebug() << "KDevCoreImpl::statusBar()" << endl;
-    return 0;
+    return m_pDevelop->statusBar();
 }
 
 void KDevCoreImpl::initPart(KDevPart* part)
