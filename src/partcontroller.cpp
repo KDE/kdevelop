@@ -130,7 +130,7 @@ void PartController::setupActions()
     this, SLOT(slotRevertAllFiles()),
     ac, "file_revert_all");
   m_revertAllFilesAction->setToolTip(i18n("Revert all changes"));
-  m_revertAllFilesAction->setWhatsThis(i18n("<b>Revert all</b><p>Reverts all changes in opened files. Prompts to save changes so the revert can be cancelled for each modified file."));
+  m_revertAllFilesAction->setWhatsThis(i18n("<b>Revert all</b><p>Reverts all changes in opened files. Prompts to save changes so the reversion can be canceled for each modified file."));
   m_revertAllFilesAction->setEnabled(false);
 
   m_closeWindowAction = KStdAction::close(
