@@ -30,6 +30,7 @@
 
 #include <assert.h>
 #include <iostream.h>
+#include <qstring.h>
 #include "ParsedArgument.h"
 
 /*********************************************************************
@@ -49,6 +50,7 @@
  *-----------------------------------------------------------------*/
 CParsedArgument::CParsedArgument()
 {
+  posName=-1;
 }
 
 /*------------------------------- CParsedArgument::~CParsedArgument()
@@ -106,6 +108,22 @@ void CParsedArgument::setType( const char *aType )
   type = type.stripWhiteSpace();
 }
 
+/*------------------------------------ CParsedArgument::setNamePos()
+ * setNamePos()
+ *   Set the name of the class.
+ *
+ * Parameters:
+ *   pos            The new name.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedArgument::setNamePos( int pos )
+{
+  posName = pos;
+}
+
+
 /*********************************************************************
  *                                                                   *
  *                           PUBLIC METHODS                          *
@@ -126,6 +144,7 @@ void CParsedArgument::copy( CParsedArgument *anArg )
 {
   assert( anArg != NULL );
 
+  setNamePos( anArg->posName );
   setName( anArg->name );
   setType( anArg->type );
 }
@@ -142,7 +161,21 @@ void CParsedArgument::copy( CParsedArgument *anArg )
  *-----------------------------------------------------------------*/
 void CParsedArgument::toString( QString &str )
 {
-  str = type + " " + name;
+  str=type;
+
+  if (posName>=0 && ((unsigned)posName)<type.length())
+    str=str.left(posName);
+  else
+    str+=" ";
+
+  if (!name.isEmpty())
+  {
+    str+=name;
+  }
+
+  if (posName>=0 && ((unsigned)posName)<type.length())
+    str+=type.mid(posName, type.length()-posName);
+
 }
 
 /*---------------------------------------------- CParsedArgument::out()
@@ -156,10 +189,9 @@ void CParsedArgument::toString( QString &str )
  *-----------------------------------------------------------------*/
 void CParsedArgument::out()
 {
-  cout << type;
-
-  if( !name.isEmpty() )
-    cout << " " << name;
+  QString argString;
+  toString(argString);
+  cout << argString;
 }
 
 /*----------------------------- CParsedArgument::asPersistantString()

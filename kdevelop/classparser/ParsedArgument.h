@@ -59,6 +59,9 @@ public: // Public attributes
   /** The type of the argument. */
   QString type;
 
+  /** where I have to place the name between type */
+  int posName;
+
 public: // Public methods to set attribute values
 
   /** Set the argument name */
@@ -66,6 +69,9 @@ public: // Public methods to set attribute values
 
   /** Set the type */
   void setType( const char *aType );
+
+  /** Set the pos of the name between type */
+  void setNamePos( int pos );
 
 public: // Public queries
 

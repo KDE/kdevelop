@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <iostream.h>
 #include <assert.h>
+#include <qstring.h>
 #include "ParsedAttribute.h"
 
 /*********************************************************************
@@ -54,6 +55,7 @@ CParsedAttribute::CParsedAttribute()
   isConst = false;
   isStatic = false;
   isInHFile = true;
+  posName=-1; // place it at the end
 }
 
 /*----------------------------- CParsedAttribute::~CParsedAttribute()
@@ -91,6 +93,21 @@ void CParsedAttribute::setType( const char *aType )
 
   type = aType;
   type = type.stripWhiteSpace();
+}
+
+/*------------------------------------ CParsedAttribute::setNamePos()
+ * setNamePos()
+ *   Set the name of the class.
+ *
+ * Parameters:
+ *   pos            The new name.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedAttribute::setNamePos( int pos )
+{
+  posName = pos;
 }
 
 /*---------------------------------- CParsedAttribute::setIsInHFile()
@@ -158,6 +175,7 @@ void CParsedAttribute::copy( CParsedAttribute *anAttribute )
 {
   CParsedItem::copy( anAttribute );
 
+  setNamePos( anAttribute->posName );
   setType( anAttribute->type );
   setIsStatic( anAttribute->isStatic );
   setIsConst( anAttribute->isConst );
@@ -175,6 +193,7 @@ void CParsedAttribute::copy( CParsedAttribute *anAttribute )
  *-----------------------------------------------------------------*/
 void CParsedAttribute::asHeaderCode( QString &str )
 {
+  QString attrString;
   str = "  " + comment + "\n  ";
 
   if( isConst )
@@ -183,7 +202,8 @@ void CParsedAttribute::asHeaderCode( QString &str )
   if( isStatic )
     str += "static ";
 
-  str += type + " " + name + ";\n";
+  asString(attrString);
+  str += attrString + ";\n";
 }
 
 /*-------------------------------------- CParsedAttribute::asString()
@@ -198,7 +218,20 @@ void CParsedAttribute::asHeaderCode( QString &str )
  *-----------------------------------------------------------------*/
 const char * CParsedAttribute::asString( QString &str )
 {
-  str.sprintf( "%s %s", type.data(), name.data() );
+  str=type;
+
+  if (posName>=0 && ((unsigned)posName)<type.length())
+    str=str.left(posName);
+  else
+    str+=" ";
+
+  if (!name.isEmpty())
+  {
+    str+=name;
+  }
+
+  if (posName>=0 && ((unsigned)posName)<type.length())
+    str+=type.mid(posName, type.length()-posName);
 
   return str;
 }
@@ -214,7 +247,8 @@ const char * CParsedAttribute::asString( QString &str )
  *-----------------------------------------------------------------*/
 void CParsedAttribute::out()
 {
-  char buf[10];
+  QString buf;
+  QString attrString;
 
   if( !comment.isEmpty() )
     cout << "    " << comment << "\n";
@@ -237,10 +271,12 @@ void CParsedAttribute::out()
       break;
   }
 
-  cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
-  sprintf( buf, "%d", declaredOnLine );
+  // cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
+  asString(attrString);
+  cout << attrString;
+  buf.sprintf("%d", declaredOnLine );
   cout << " @ line " << buf << " - ";
-  sprintf( buf, "%d", declarationEndsOnLine );
+  buf.sprintf("%d", declarationEndsOnLine );
   cout << buf << "\n";
 }
 
@@ -286,6 +322,8 @@ const char *CParsedAttribute::asPersistantString( QString &dataStr )
   dataStr += definedInFile + "\n";
   dataStr += declaredInClass + "\n";
   intStr.sprintf( "%d", definedOnLine );
+  dataStr += intStr + "\n";
+  intStr.sprintf( "%d", posName );
   dataStr += intStr + "\n";
   dataStr += ( isInHFile ? "true" : "false" );
   dataStr += "\n";

@@ -116,6 +116,7 @@ void CParsedMethod::addArgument( CParsedArgument *anArg )
 const char *CParsedMethod::asString( QString &str )
 {
   CParsedArgument *arg;
+  QString argString;
 
   str = name;
   str += "(";
@@ -125,10 +126,12 @@ const char *CParsedMethod::asString( QString &str )
     if( arg != arguments.getFirst() )
       str += ", ";
 
-    str += arg->type;
+    arg->toString(argString);
+    str+=argString;
+/*    str += arg->type;
     str += " ";
     str += arg->name;
-  }
+*/  }
 
   str += ")";
 
