@@ -21,11 +21,10 @@
 
 
 #include "caddclassattributedlg.h"
-#include <qmessagebox.h>
-#include <qwhatsthis.h>
+#include <kmsgbox.h>
 #include <kapp.h>
+#include <kquickhelp.h>
 #include <klocale.h>
-
 
 CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -72,18 +71,14 @@ void CAddClassAttributeDlg::setWidgetValues()
   // Modifier group
   modifierGrp.setFrameStyle( 49 );
   modifierGrp.setTitle( i18n("Modifiers") );
-
-  QString text;
-  text = i18n("You can set modifiers for the member variable here.");
-  QWhatsThis::add(&modifierGrp, text);
+  KQuickHelp::add(&modifierGrp,i18n("You can set modifiers for the member variable here."));
   
   // Access group
   accessGrp.setFrameStyle( 49 );
   accessGrp.setTitle( i18n("Access") );
-
-  text = i18n("You can choose here whether you want the member variable\n"
-              "be declared as public, protected or private.");
-  QWhatsThis::add(&accessGrp, text);
+  KQuickHelp::add(&accessGrp,i18n(
+  "You can choose here whether you want the member variable\n"
+  "be declared as public, protected or private."));
 
   typeLbl.setMinimumSize( 40, 20 );
   typeLbl.setFixedHeight( 20 );
@@ -92,10 +87,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   typeEdit.setMinimumSize( 40, 30 );
   typeEdit.setFixedHeight( 30 );
   typeEdit.setFrame( TRUE );
-
-  text = i18n("Enter the type of the member variable here.");
-  QWhatsThis::add(&typeLbl, text);
-  QWhatsThis::add(&typeEdit, text);
+  KQuickHelp::add(&typeLbl,KQuickHelp::add(&typeEdit,i18n("Enter the type of the member variable here.")));
 
   nameLbl.setMinimumSize( 70, 20 );
   nameLbl.setFixedHeight( 20 );
@@ -104,18 +96,12 @@ void CAddClassAttributeDlg::setWidgetValues()
   nameEdit.setMinimumSize( 240, 30 );
   nameEdit.setFixedHeight( 30 );
   nameEdit.setFrame( TRUE );
-
-  text = i18n("Enter the name of the member variable here.");
-  QWhatsThis::add(&nameLbl, text);
-  QWhatsThis::add(&nameEdit, text);
+  KQuickHelp::add(&nameLbl,KQuickHelp::add(&nameEdit,i18n("Enter the name of the member variable here.")));
 
   docLbl.setMinimumSize( 100, 20 );
   docLbl.setFixedHeight( 20 );
   docLbl.setText( i18n("Documentation:") );
-
-  text = i18n("You can enter a description of the member variable here.");
-  QWhatsThis::add(&docLbl, text);
-  QWhatsThis::add(&docEdit, text);
+  KQuickHelp::add(&docLbl,KQuickHelp::add(&docEdit,i18n("You can enter a description of the member variable here.")));
   
   docEdit.setMinimumSize( 240, 80 );
 
@@ -235,10 +221,10 @@ void CAddClassAttributeDlg::OK()
 {
 
   if( strlen( typeEdit.text() ) == 0 )
-    QMessageBox::information( this, i18n("No type"),
+    KMsgBox::message( this, i18n("No type"),
                       i18n("You have to specify a variable type.") );
   else if( strlen( nameEdit.text() ) == 0 )
-    QMessageBox::information( this, i18n("No name"),
+    KMsgBox::message( this, i18n("No name"),
                       i18n("You have to specify a variable name.") );
   else
     accept();
