@@ -28,6 +28,7 @@
 #include "cppcodecompletion.h"
 #include "ccconfigwidget.h"
 #include "subclassingdlg.h"
+#include "addmethoddialog.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -611,12 +612,18 @@ void CppSupportPart::slotNewClass()
 
 void CppSupportPart::addMethod(const QString &className)
 {
-    ParsedClass *pc = classStore()->getClassByName(className);
-
+    ParsedClass* pc = classStore()->getClassByName( className );
     if (!pc) {
 	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
 	return;
     }
+    
+#ifdef __ROBIDEON
+    
+    AddMethodDialog dlg( this, pc, mainWindow()->main() );
+    dlg.exec();
+#else
+
 
     CppAddMethodDialog dlg( classStore(), ccClassStore(),
 			    className, 0, "methodDlg"); //TODO: Leak ?
@@ -711,6 +718,7 @@ void CppSupportPart::addMethod(const QString &className)
         kdDebug(9007) << "no edit" << endl;
 
     delete pm;
+#endif
 }
 
 
