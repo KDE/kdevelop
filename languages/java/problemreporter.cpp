@@ -80,7 +80,7 @@ public:
 };
 
 ProblemReporter::ProblemReporter( JavaSupportPart* part, QWidget* parent, const char* name )
-    : KListView( parent, name ),
+    : KListView( parent, name ? name : "problemreporter" ),
       m_javaSupport( part ),
       m_document( 0 ),
       m_markIface( 0 )
@@ -207,7 +207,7 @@ void ProblemReporter::slotSelected( QListViewItem* item )
     int line = item->text( 2 ).toInt();
     // int column = item->text( 3 ).toInt();
     m_javaSupport->partController()->editDocument( url, line-1 );
-    m_javaSupport->mainWindow()->lowerView( this );
+//    m_javaSupport->mainWindow()->lowerView( this );
 }
 
 void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )

@@ -79,7 +79,7 @@ public:
 };
 
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
-    : KListView( parent, name ),
+    : KListView( parent, name ? name : "problemreporter" ),
       m_cppSupport( part ),
       m_document( 0 ),
       m_markIface( 0 )
@@ -214,7 +214,7 @@ void ProblemReporter::slotSelected( QListViewItem* item )
     int line = item->text( 2 ).toInt();
     // int column = item->text( 3 ).toInt();
     m_cppSupport->partController()->editDocument( url, line-1 );
-    m_cppSupport->mainWindow()->lowerView( this );
+//    m_cppSupport->mainWindow()->lowerView( this );
 }
 
 void ProblemReporter::reportProblem( const QString& fileName, const Problem& p )
