@@ -120,7 +120,8 @@ void TreeParser::parseUsingDirective( UsingDirectiveAST* decl )
 void TreeParser::parseTypedef( TypedefAST* decl )
 {
     //kdDebug(9007) << "TreeParser::parseTypedef()" << endl;    
-    Q_UNUSED( decl );
+    if( decl->typeSpec() )
+	parseTypeSpecifier( decl->typeSpec() );
 }
 
 void TreeParser::parseTemplateDeclaration( TemplateDeclarationAST* decl )
