@@ -141,7 +141,7 @@ public: // Metods to set attribute values
   /** Add a signal->slot mapping. */
   void addSignalTextMap( CParsedSignalText *aST );
 
-public: // Public methods
+public: // Public queries
 
   QList<CParsedMethod> *getMethods() { return &methods; }
 
@@ -156,6 +156,11 @@ public: // Public methods
 
   /** Get a attribute by using its' name. */
   CParsedAttribute *getAttributeByName( const char *aName );
+
+  /** Check if this class has the named parent. */
+  bool hasParent( const char *aName );
+
+public: // Public methods
 
   /** Output the class as text on stdout. */
   void out();

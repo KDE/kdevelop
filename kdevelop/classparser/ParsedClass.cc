@@ -362,6 +362,28 @@ CParsedAttribute *CParsedClass::getAttributeByName( const char *aName )
   return attributes.find( aName );
 }
 
+/*-------------------------------- CParsedClass::hasParent()
+ * hasParent()
+ *   Check if this class has the named parent. 
+ *
+ * Parameters:
+ *   aName              Name of the parent to check.
+ *
+ * Returns:
+ *   bool               If the parent exists or not.
+ *-----------------------------------------------------------------*/
+bool CParsedClass::hasParent( const char *aName )
+{
+  CParsedParent *aParent;
+
+  for( aParent = parents.first();
+       aParent != NULL && aParent->name != aName;
+       aParent = parents.next() )
+    ;
+
+  return aParent != NULL;
+}
+
 /*----------------------------------------------- CParsedClass::out()
  * out()
  *   Output this object as text.
