@@ -632,9 +632,9 @@ QStringList AppWizardDialog::getFilesToOpenAfterGeneration()
 {
     for ( QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
           it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it ) {
-        (*it) = (*it).replace(QRegExp("APPNAMEUC"), getProjectName().upper());
-        (*it) = (*it).replace(QRegExp("APPNAMELC"), getProjectName().lower());
-        (*it) = (*it).replace(QRegExp("APPNAME"), getProjectName());
+        (*it).replace(QRegExp("APPNAMEUC"), getProjectName().upper());
+        (*it).replace(QRegExp("APPNAMELC"), getProjectName().lower());
+        (*it).replace(QRegExp("APPNAME"), getProjectName());
     }
     return m_pCurrentAppInfo->openFilesAfterGeneration;
 }
