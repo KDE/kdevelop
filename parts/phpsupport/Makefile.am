@@ -6,8 +6,8 @@ kde_module_LTLIBRARIES = libkdevphpsupport.la
 libkdevphpsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevphpsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevphpsupport_la_SOURCES = phpsupportfactory.cpp \
-				phpsupportpart.cpp
+libkdevphpsupport_la_SOURCES = phpsupportfactory.cpp
+# \ phpsupportpart.cpp
 
 METASOURCES = AUTO
 
