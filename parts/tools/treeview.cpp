@@ -43,25 +43,41 @@
 #include <kdebug.h>
 
 
-TreeItem::TreeItem(QListViewItem *parent, const QString& file)
-    : QListViewItem(parent), _file(file)
-{}
+TreeItem::TreeItem(QListViewItem *parent, KService* service)
+    : QListViewItem(parent)
+{
+  init( service );
+}
 
 
-TreeItem::TreeItem(QListViewItem *parent, QListViewItem *after, const QString& file)
-    : QListViewItem(parent, after), _file(file)
-{}
+TreeItem::TreeItem(QListViewItem *parent, QListViewItem *after, KService* service)
+    : QListViewItem(parent, after)
+{
+  init( service );
+}
 
 
-TreeItem::TreeItem(QListView *parent, const QString& file)
-    : QListViewItem(parent), _file(file)
-{}
+TreeItem::TreeItem(QListView *parent, KService* service)
+    : QListViewItem(parent)
+{
+  init( service );
+}
 
 
-TreeItem::TreeItem(QListView *parent, QListViewItem *after, const QString& file)
-    : QListViewItem(parent, after), _file(file)
-{}
+TreeItem::TreeItem(QListView *parent, QListViewItem *after, KService* service)
+    : QListViewItem(parent, after)
+{
+  init( service );
+}
 
+void TreeItem::init( KService* service )
+{
+  if ( !service )
+    return;
+  _file = service->desktopEntryPath();
+  _exec = service->exec();
+  _caption = service->name();
+}
 
 TreeView::TreeView( QWidget *parent, const char *name )
     : KListView(parent, name)
@@ -116,26 +132,28 @@ void TreeView::fillBranch(const QString& rPath, TreeItem *parent)
       TreeItem *item = 0;
 
       if (parent)
-	item = new TreeItem(parent, "");
+	item = new TreeItem(parent);
       else
-	item = new TreeItem(this, "");
+	item = new TreeItem(this);
 
       decorateItem(item, g);
 
       fillBranch(g->name(), item);
     }
-    else
+    else if (e->isType(KST_KService))
     {
        KService::Ptr s(static_cast<KService *>(e));
       
        TreeItem *item = 0;
 
        if (parent)
-         item = new TreeItem(parent, s->desktopEntryPath());
+         item = new TreeItem(parent, s);
        else
-         item = new TreeItem(this, s->desktopEntryPath());
+         item = new TreeItem(this, s);
 
        decorateItem(item, s);
+    } else {
+         kdWarning() << "KServiceGroup: Unexpected object in list!" << endl;
     }
   }
 }

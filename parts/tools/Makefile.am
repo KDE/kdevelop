@@ -7,7 +7,7 @@ libkdevtools_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevtools_la_SOURCES = tools_part.cpp toolsconfig.cpp treeview.cpp \
 			  toolsconfigwidgetbase.ui \
 			  toolsconfigwidget.cpp \
-			  addtooldlg.ui
+			  addtooldlg.ui addtooldlg.ui.h
 
 METASOURCES = AUTO
 

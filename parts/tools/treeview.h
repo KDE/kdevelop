@@ -35,22 +35,19 @@ class TreeItem : public QListViewItem
   {
 
 public:
-    TreeItem(QListViewItem *parent, const QString& file);
-    TreeItem(QListViewItem *parent, QListViewItem *after, const QString& file);
-    TreeItem(QListView *parent, const QString& file);
-    TreeItem(QListView *parent, QListViewItem* after, const QString& file);
+    TreeItem(QListViewItem *parent, KService* service = 0);
+    TreeItem(QListViewItem *parent, QListViewItem *after, KService* service = 0);
+    TreeItem(QListView *parent, KService* service = 0);
+    TreeItem(QListView *parent, QListViewItem* after, KService* service = 0);
+    
+    void init( KService* service );
 
-    QString file() const
-      {
-        return _file;
-      };
-    void setFile(const QString& file)
-    {
-      _file = file;
-    }
-
+    QString file() const { return _file; }
+    QString exec() const { return _exec; }
+    QString caption() const { return _caption; }
+    
 private:
-    QString _file;
+    QString _file, _exec, _caption;
   };
 
 
