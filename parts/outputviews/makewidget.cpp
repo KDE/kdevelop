@@ -305,7 +305,7 @@ void MakeWidget::nextError()
 	else
 		parag = 0;
 
-	for ( int it = parag;
+	for ( int it = parag + 1;
 #if QT_VERSION >= 0x030100
 	      it < (int)m_items.count();
 #else
@@ -339,7 +339,7 @@ void MakeWidget::prevError()
 	else
 		parag = 0;
 
-	for ( int it = parag; it >= 0; --it)
+	for ( int it = parag - 1; it >= 0; --it)
 	{
 		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
 		if ( !item )
