@@ -34,6 +34,7 @@
 #include <kdirwatch.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
+#include <kuserprofile.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -291,7 +292,19 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
     encoding = m_presetEncoding;
     m_presetEncoding = QString::null;
   }
-
+  
+  // we generally prefer embedding, but if Qt-designer is the preferred application for this mimetype
+  // make sure we launch designer instead of embedding KUIviewer
+  if ( mimeType == "application/x-designer" )
+  {
+    KService::Ptr preferredApp = KServiceTypeProfile::preferredService( mimeType, "Application" );
+    if ( preferredApp->desktopEntryName() == "designer" )
+    {
+      KRun::runURL(url, mimeType);
+      return;
+    }
+  }
+  
   kdDebug(9000) << "mimeType = " << mimeType << endl;
 
   if ( mimeType.startsWith("text/")
@@ -853,12 +866,6 @@ void PartController::slotOpenRecent( const KURL& url )
 void PartController::slotClosePartForWidget( const QWidget* w)
 {
   closePartForWidget(w);
-}
-
-void PartController::slotCloseAllButPartForWidget(QWidget* w)
-{
-  slotCurrentChanged(w);
-  slotCloseOtherWindows();
 }
 
 bool PartController::closePartForWidget( const QWidget* w )
