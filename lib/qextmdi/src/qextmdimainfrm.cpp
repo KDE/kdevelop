@@ -303,7 +303,7 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
          detachWindow( pWnd, !(flags & QextMdi::Hide));
          emit childViewIsDetachedNow(pWnd); // fake it because detach won't call it in this case of addWindow-to-MDI
       } else {
-         attachWindow( pWnd, !(flags & QextMdi::Hide));
+         attachWindow( pWnd, !(flags & QextMdi::Hide), flags & QextMdi::UseQextMDISizeHint);
       }
 
       if ((m_bMaximizedChildFrmMode && !(m_bSDIApplication && (flags & QextMdi::Detach)) && (m_mdiMode != QextMdi::ToplevelMode))
@@ -413,7 +413,7 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
 }
 
 //============ attachWindow ============//
-void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
+void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow, bool bAutomaticResize)
 {
    pWnd->installEventFilter(this);
 
@@ -436,7 +436,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
    if (!bCascade) {
       lpC->move(topLeftMdiChildArea);
    }
-   lpC->setClient(pWnd);
+   lpC->setClient(pWnd, bAutomaticResize);
    lpC->setFocus();
    pWnd->youAreAttached(lpC);
    if( (m_mdiMode == QextMdi::ToplevelMode) && !parentWidget()) {

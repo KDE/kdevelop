@@ -631,7 +631,7 @@ QPixmap* QextMdiChildFrm::icon()
 }
 
 //============ setClient ============//
-void QextMdiChildFrm::setClient(QextMdiChildView *w)
+void QextMdiChildFrm::setClient(QextMdiChildView *w, bool bAutomaticResize)
 {
    m_pClient=w;
 
@@ -640,7 +640,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 
    //resize to match the client
    int clientYPos=m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER;
-   if (w->size().isEmpty() || (w->size() == QSize(1,1))) {
+   if (bAutomaticResize || w->size().isEmpty() || (w->size() == QSize(1,1))) {
       if (m_pManager->topChild()) {
          resize(m_pManager->topChild()->size());
       }

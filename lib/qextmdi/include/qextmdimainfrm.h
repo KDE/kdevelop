@@ -446,7 +446,7 @@ public slots:
     * Doesn't work on QextMdiChildView which aren't added to the MDI system.
     * Use addWindow() for that.
     */
-   virtual void attachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
+   virtual void attachWindow(QextMdiChildView *pWnd,bool bShow=TRUE,bool bAutomaticResize=FALSE);
    /**
     * Makes a docked QextMdiChildView undocked.
     * The view window still remains under the main frame's MDI control.

@@ -199,7 +199,7 @@ public:
    * Installs an event filter to catch focus events.
    * Resizes this mdi child in a way that the child fits perfectly in.
    */
-   void setClient(QextMdiChildView *w);
+   void setClient(QextMdiChildView *w, bool bAutomaticResize = FALSE);
    /**
    * Reparents the client widget to 0 (desktop), moves with an offset from the original position
    * Removes the event filter.
