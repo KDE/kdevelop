@@ -1,0 +1,841 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Python</title>
+<base href="http://epoxy.mrs.umn.edu/doc/python2.2-doc/html"/>
+<tocsect1 name="Tutorial" url="tut/tut.html">
+<tocsect2 name="Front Matter" url="tut/node1.html"/>
+<tocsect2 name="Contents" url="tut/node2.html"/>
+<tocsect2 name="1. Whetting Your Appetite " url="tut/node3.html">
+<tocsect3 name="1.1 Where From Here " url="tut/node3.html#SECTION003100000000000000000"/>
+</tocsect2>
+<tocsect2 name="2. Using the Python Interpreter " url="tut/node4.html">
+<tocsect3 name="2.1 Invoking the Interpreter " url="tut/node4.html#SECTION004100000000000000000">
+<tocsect4 name="2.1.1 Argument Passing " url="tut/node4.html#SECTION004110000000000000000"/>
+<tocsect4 name="2.1.2 Interactive Mode " url="tut/node4.html#SECTION004120000000000000000"/>
+</tocsect3>
+<tocsect3 name="2.2 The Interpreter and Its Environment " url="tut/node4.html#SECTION004200000000000000000">
+<tocsect4 name="2.2.1 Error Handling " url="tut/node4.html#SECTION004210000000000000000"/>
+<tocsect4 name="2.2.2 Executable Python Scripts " url="tut/node4.html#SECTION004220000000000000000"/>
+<tocsect4 name="2.2.3 The Interactive Startup File " url="tut/node4.html#SECTION004230000000000000000"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="3. An Informal Introduction to Python " url="tut/node5.html">
+<tocsect3 name="3.1 Using Python as a Calculator " url="tut/node5.html#SECTION005100000000000000000">
+<tocsect4 name="3.1.1 Numbers " url="tut/node5.html#SECTION005110000000000000000"/>
+<tocsect4 name="3.1.2 Strings " url="tut/node5.html#SECTION005120000000000000000"/>
+<tocsect4 name="3.1.3 Unicode Strings " url="tut/node5.html#SECTION005130000000000000000"/>
+<tocsect4 name="3.1.4 Lists " url="tut/node5.html#SECTION005140000000000000000"/>
+</tocsect3>
+<tocsect3 name="3.2 First Steps Towards Programming " url="tut/node5.html#SECTION005200000000000000000"/>
+</tocsect2>
+<tocsect2 name="4. More Control Flow Tools " url="tut/node6.html">
+<tocsect3 name="4.1 if Statements " url="tut/node6.html#SECTION006100000000000000000"/>
+<tocsect3 name="4.2 for Statements " url="tut/node6.html#SECTION006200000000000000000"/>
+<tocsect3 name="4.3 The range() Function " url="tut/node6.html#SECTION006300000000000000000"/>
+<tocsect3 name="4.5 pass Statements " url="tut/node6.html#SECTION006500000000000000000"/>
+<tocsect3 name="4.6 Defining Functions " url="tut/node6.html#SECTION006600000000000000000"/>
+<tocsect3 name="4.7 More on Defining Functions " url="tut/node6.html#SECTION006700000000000000000">
+<tocsect4 name="4.7.1 Default Argument Values " url="tut/node6.html#SECTION006710000000000000000"/>
+<tocsect4 name="4.7.2 Keyword Arguments " url="tut/node6.html#SECTION006720000000000000000"/>
+<tocsect4 name="4.7.3 Arbitrary Argument Lists " url="tut/node6.html#SECTION006730000000000000000"/>
+<tocsect4 name="4.7.4 Lambda Forms " url="tut/node6.html#SECTION006740000000000000000"/>
+<tocsect4 name="4.7.5 Documentation Strings " url="tut/node6.html#SECTION006750000000000000000"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="5. Data Structures " url="tut/node7.html">
+<tocsect3 name="5.1 More on Lists " url="tut/node7.html#SECTION007100000000000000000">
+<tocsect4 name="5.1.1 Using Lists as Stacks " url="tut/node7.html#SECTION007110000000000000000"/>
+<tocsect4 name="5.1.2 Using Lists as Queues " url="tut/node7.html#SECTION007120000000000000000"/>
+<tocsect4 name="5.1.3 Functional Programming Tools " url="tut/node7.html#SECTION007130000000000000000"/>
+<tocsect4 name="5.1.4 List Comprehensions" url="tut/node7.html#SECTION007140000000000000000"/>
+</tocsect3>
+<tocsect3 name="5.2 The del statement " url="tut/node7.html#SECTION007200000000000000000"/>
+<tocsect3 name="5.3 Tuples and Sequences " url="tut/node7.html#SECTION007300000000000000000"/>
+<tocsect3 name="5.4 Dictionaries " url="tut/node7.html#SECTION007400000000000000000"/>
+<tocsect3 name="5.5 More on Conditions " url="tut/node7.html#SECTION007500000000000000000"/>
+<tocsect3 name="5.6 Comparing Sequences and Other Types " url="tut/node7.html#SECTION007600000000000000000"/>
+</tocsect2>
+<tocsect2 name="6. Modules " url="tut/node8.html">
+<tocsect3 name="6.1 More on Modules " url="tut/node8.html#SECTION008100000000000000000">
+<tocsect4 name="6.1.1 The Module Search Path " url="tut/node8.html#SECTION008110000000000000000"/>
+<tocsect4 name="6.1.2 ``Compiled'' Python files" url="tut/node8.html#SECTION008120000000000000000"/>
+</tocsect3>
+<tocsect3 name="6.2 Standard Modules " url="tut/node8.html#SECTION008200000000000000000"/>
+<tocsect3 name="6.3 The dir() Function " url="tut/node8.html#SECTION008300000000000000000"/>
+<tocsect3 name="6.4 Packages " url="tut/node8.html#SECTION008400000000000000000">
+<tocsect4 name="6.4.1 Importing * From a Package " url="tut/node8.html#SECTION008410000000000000000"/>
+<tocsect4 name="6.4.2 Intra-package References" url="tut/node8.html#SECTION008420000000000000000"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="7. Input and Output " url="tut/node9.html">
+<tocsect3 name="7.1 Fancier Output Formatting " url="tut/node9.html#SECTION009100000000000000000"/>
+<tocsect3 name="7.2 Reading and Writing Files " url="tut/node9.html#SECTION009200000000000000000">
+<tocsect4 name="7.2.1 Methods of File Objects " url="tut/node9.html#SECTION009210000000000000000"/>
+<tocsect4 name="7.2.2 The pickle Module " url="tut/node9.html#SECTION009220000000000000000"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="8. Errors and Exceptions " url="tut/node10.html">
+<tocsect3 name="8.1 Syntax Errors " url="tut/node10.html#SECTION0010100000000000000000"/>
+<tocsect3 name="8.2 Exceptions " url="tut/node10.html#SECTION0010200000000000000000"/>
+<tocsect3 name="8.3 Handling Exceptions " url="tut/node10.html#SECTION0010300000000000000000"/>
+<tocsect3 name="8.4 Raising Exceptions " url="tut/node10.html#SECTION0010400000000000000000"/>
+<tocsect3 name="8.5 User-defined Exceptions " url="tut/node10.html#SECTION0010500000000000000000"/>
+<tocsect3 name="8.6 Defining Clean-up Actions " url="tut/node10.html#SECTION0010600000000000000000"/>
+</tocsect2>
+<tocsect2 name="9. Classes " url="tut/node11.html">
+<tocsect3 name="9.1 A Word About Terminology " url="tut/node11.html#SECTION0011100000000000000000"/>
+<tocsect3 name="9.2 Python Scopes and Name Spaces " url="tut/node11.html#SECTION0011200000000000000000"/>
+<tocsect3 name="9.3 A First Look at Classes " url="tut/node11.html#SECTION0011300000000000000000">
+<tocsect4 name="9.3.1 Class Definition Syntax " url="tut/node11.html#SECTION0011310000000000000000"/>
+<tocsect4 name="9.3.2 Class Objects " url="tut/node11.html#SECTION0011320000000000000000"/>
+<tocsect4 name="9.3.3 Instance Objects " url="tut/node11.html#SECTION0011330000000000000000"/>
+<tocsect4 name="9.3.4 Method Objects " url="tut/node11.html#SECTION0011340000000000000000"/>
+</tocsect3>
+<tocsect3 name="9.4 Random Remarks " url="tut/node11.html#SECTION0011400000000000000000"/>
+<tocsect3 name="9.5 Inheritance " url="tut/node11.html#SECTION0011500000000000000000">
+<tocsect4 name="9.5.1 Multiple Inheritance " url="tut/node11.html#SECTION0011510000000000000000"/>
+</tocsect3>
+<tocsect3 name="9.6 Private Variables " url="tut/node11.html#SECTION0011600000000000000000"/>
+<tocsect3 name="9.7 Odds and Ends " url="tut/node11.html#SECTION0011700000000000000000">
+<tocsect4 name="9.7.1 Exceptions Can Be Classes " url="tut/node11.html#SECTION0011710000000000000000"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="10. What Now? " url="tut/node12.html">
+<tocsect3 name="A.1 Line Editing " url="tut/node13.html#SECTION0013100000000000000000"/>
+<tocsect3 name="A.2 History Substitution " url="tut/node13.html#SECTION0013200000000000000000"/>
+<tocsect3 name="A.3 Key Bindings " url="tut/node13.html#SECTION0013300000000000000000"/>
+<tocsect3 name="A.4 Commentary " url="tut/node13.html#SECTION0013400000000000000000"/>
+</tocsect2>
+<tocsect2 name="About this document ..." url="tut/node14.html"/>
+</tocsect1>
+<tocsect1 name="Language Reference" url="ref/ref.html">
+<tocsect2 name="Front Matter" url="ref/front.html"/>
+<tocsect2 name="Contents" url="ref/contents.html"/>
+<tocsect2 name="1. Introduction" url="ref/introduction.html">
+<tocsect3 name="1.1 Notation" url="ref/notation.html"/>
+</tocsect2>
+<tocsect2 name="2. Lexical analysis" url="ref/lexical.html">
+<tocsect3 name="2.1 Line structure" url="ref/line-structure.html">
+<tocsect4 name="2.1.1 Logical lines" url="ref/logical.html"/>
+<tocsect4 name="2.1.2 Physical lines" url="ref/physical.html"/>
+<tocsect4 name="2.1.3 Comments" url="ref/comments.html"/>
+<tocsect4 name="2.1.4 Explicit line joining" url="ref/explicit-joining.html"/>
+<tocsect4 name="2.1.5 Implicit line joining" url="ref/implicit-joining.html"/>
+<tocsect4 name="2.1.6 Blank lines " url="ref/blank-lines.html"/>
+<tocsect4 name="2.1.7 Indentation" url="ref/indentation.html"/>
+<tocsect4 name="2.1.8 Whitespace between tokens" url="ref/whitespace.html"/>
+</tocsect3>
+<tocsect3 name="2.2 Other tokens" url="ref/other-tokens.html"/>
+<tocsect3 name="2.3 Identifiers and keywords" url="ref/identifiers.html">
+<tocsect4 name="2.3.1 Keywords" url="ref/keywords.html"/>
+<tocsect4 name="2.3.2 Reserved classes of identifiers" url="ref/id-classes.html"/>
+</tocsect3>
+<tocsect3 name="2.4 Literals" url="ref/literals.html">
+<tocsect4 name="2.4.1 String literals" url="ref/strings.html"/>
+<tocsect4 name="2.4.2 String literal concatenation" url="ref/string-catenation.html"/>
+<tocsect4 name="2.4.3 Numeric literals" url="ref/numbers.html"/>
+<tocsect4 name="2.4.4 Integer and long integer literals" url="ref/integers.html"/>
+<tocsect4 name="2.4.5 Floating point literals" url="ref/floating.html"/>
+<tocsect4 name="2.4.6 Imaginary literals" url="ref/imaginary.html"/>
+</tocsect3>
+<tocsect3 name="2.5 Operators" url="ref/operators.html"/>
+<tocsect3 name="2.6 Delimiters" url="ref/delimiters.html"/>
+</tocsect2>
+<tocsect2 name="3. Data model" url="ref/datamodel.html">
+<tocsect3 name="3.1 Objects, values and types" url="ref/objects.html"/>
+<tocsect3 name="3.2 The standard type hierarchy" url="ref/types.html"/>
+<tocsect3 name="3.3 Special method names" url="ref/specialnames.html">
+<tocsect4 name="3.3.1 Basic customization" url="ref/customization.html"/>
+<tocsect4 name="3.3.2 Customizing attribute access" url="ref/attribute-access.html"/>
+<tocsect4 name="3.3.3 Emulating callable objects" url="ref/callable-types.html"/>
+<tocsect4 name="3.3.4 Emulating sequence and mapping types" url="ref/sequence-types.html"/>
+<tocsect4 name="3.3.5 Additional methods for emulation of sequence types " url="ref/sequence-methods.html"/>
+<tocsect4 name="3.3.6 Emulating numeric types" url="ref/numeric-types.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="4. Execution model " url="ref/execmodel.html">
+<tocsect3 name="4.1 Code blocks, execution frames, and namespaces " url="ref/execframes.html"/>
+<tocsect3 name="4.2 Exceptions " url="ref/exceptions.html"/>
+</tocsect2>
+<tocsect2 name="5. Expressions" url="ref/expressions.html">
+<tocsect3 name="5.1 Arithmetic conversions" url="ref/conversions.html"/>
+<tocsect3 name="5.2 Atoms" url="ref/atoms.html">
+<tocsect4 name="5.2.1 Identifiers (Names)" url="ref/atom-identifiers.html"/>
+<tocsect4 name="5.2.2 Literals" url="ref/atom-literals.html"/>
+<tocsect4 name="5.2.3 Parenthesized forms" url="ref/parenthesized.html"/>
+<tocsect4 name="5.2.4 List displays" url="ref/lists.html"/>
+<tocsect4 name="5.2.5 Dictionary displays" url="ref/dict.html"/>
+<tocsect4 name="5.2.6 String conversions" url="ref/string-conversions.html"/>
+</tocsect3>
+<tocsect3 name="5.3 Primaries" url="ref/primaries.html">
+<tocsect4 name="5.3.1 Attribute references" url="ref/attribute-references.html"/>
+<tocsect4 name="5.3.2 Subscriptions" url="ref/subscriptions.html"/>
+<tocsect4 name="5.3.3 Slicings" url="ref/slicings.html"/>
+<tocsect4 name="5.3.4 Calls" url="ref/calls.html"/>
+</tocsect3>
+<tocsect3 name="5.4 The power operator" url="ref/power.html"/>
+<tocsect3 name="5.5 Unary arithmetic operations " url="ref/unary.html"/>
+<tocsect3 name="5.6 Binary arithmetic operations" url="ref/binary.html"/>
+<tocsect3 name="5.7 Shifting operations" url="ref/shifting.html"/>
+<tocsect3 name="5.8 Binary bit-wise operations" url="ref/bitwise.html"/>
+<tocsect3 name="5.9 Comparisons" url="ref/comparisons.html"/>
+<tocsect3 name="5.10 Boolean operations" url="ref/lambda.html"/>
+<tocsect3 name="5.11 Expression lists" url="ref/exprlists.html"/>
+<tocsect3 name="5.12 Summary" url="ref/summary.html"/>
+</tocsect2>
+<tocsect2 name="6. Simple statements " url="ref/simple.html">
+<tocsect3 name="6.1 Expression statements " url="ref/exprstmts.html"/>
+<tocsect3 name="6.2 Assert statements " url="ref/assert.html"/>
+<tocsect3 name="6.3 Assignment statements " url="ref/assignment.html">
+<tocsect4 name="6.3.1 Augmented Assignment statements " url="ref/augassign.html"/>
+</tocsect3>
+<tocsect3 name="6.4 The pass statement " url="ref/pass.html"/>
+<tocsect3 name="6.5 The del statement " url="ref/del.html"/>
+<tocsect3 name="6.6 The print statement " url="ref/print.html"/>
+<tocsect3 name="6.7 The return statement " url="ref/return.html"/>
+<tocsect3 name="6.8 The raise statement " url="ref/raise.html"/>
+<tocsect3 name="6.9 The break statement " url="ref/break.html"/>
+<tocsect3 name="6.10 The continue statement " url="ref/continue.html"/>
+<tocsect3 name="6.11 The import statement " url="ref/import.html"/>
+<tocsect3 name="6.12 The global statement " url="ref/global.html"/>
+<tocsect3 name="6.13 The exec statement " url="ref/exec.html"/>
+</tocsect2>
+<tocsect2 name="7. Compound statements" url="ref/compound.html">
+<tocsect3 name="7.1 The if statement" url="ref/if.html"/>
+<tocsect3 name="7.2 The while statement" url="ref/while.html"/>
+<tocsect3 name="7.3 The for statement" url="ref/for.html"/>
+<tocsect3 name="7.4 The try statement" url="ref/try.html"/>
+<tocsect3 name="7.5 Function definitions" url="ref/function.html"/>
+<tocsect3 name="7.6 Class definitions" url="ref/class.html"/>
+</tocsect2>
+<tocsect2 name="8. Top-level components" url="ref/top-level.html">
+<tocsect3 name="8.1 Complete Python programs" url="ref/programs.html"/>
+<tocsect3 name="8.2 File input" url="ref/file-input.html"/>
+<tocsect3 name="8.3 Interactive input" url="ref/interactive.html"/>
+<tocsect3 name="8.4 Expression input" url="ref/expression-input.html"/>
+</tocsect2>
+<tocsect2 name="Index" url="ref/genindex.html"/>
+<tocsect2 name="About this document ..." url="ref/about.html"/>
+</tocsect1>
+<tocsect1 name="Extending and Embedding" url="ext/ext.html">
+<tocsect2 name="Front Matter" url="ext/front.html"/>
+<tocsect2 name="Contents" url="ext/contents.html"/>
+<tocsect2 name="1. Extending Python with C or C++ " url="ext/intro.html">
+<tocsect3 name="1.1 A Simple Example " url="ext/simpleExample.html"/>
+<tocsect3 name="1.2 Intermezzo: Errors and Exceptions " url="ext/errors.html"/>
+<tocsect3 name="1.3 Back to the Example " url="ext/backToExample.html"/>
+<tocsect3 name="1.4 The Module's Method Table and Initialization Function " url="ext/methodTable.html"/>
+<tocsect3 name="1.5 Compilation and Linkage " url="ext/compilation.html"/>
+<tocsect3 name="1.6 Calling Python Functions from C " url="ext/callingPython.html"/>
+<tocsect3 name="1.7 Format Strings for PyArg_ParseTuple() " url="ext/parseTuple.html"/>
+<tocsect3 name="1.8 Keyword Parsing with PyArg_ParseTupleAndKeywords() " url="ext/parseTupleAndKeywords.html"/>
+<tocsect3 name="1.9 The Py_BuildValue() Function " url="ext/buildValue.html"/>
+<tocsect3 name="1.10 Reference Counts " url="ext/refcounts.html">
+<tocsect4 name="1.10.1 Reference Counting in Python " url="ext/refcountsInPython.html"/>
+<tocsect4 name="1.10.2 Ownership Rules " url="ext/ownershipRules.html"/>
+<tocsect4 name="1.10.3 Thin Ice " url="ext/thinIce.html"/>
+<tocsect4 name="1.10.4 NULL Pointers " url="ext/nullPointers.html"/>
+</tocsect3>
+<tocsect3 name="1.11 Writing Extensions in C++ " url="ext/cplusplus.html"/>
+<tocsect3 name="1.12 Providing a C API for an Extension Module " url="ext/using-cobjects.html"/>
+</tocsect2>
+<tocsect2 name="2. Building C and C++ Extensions on Unix " url="ext/building-on-unix.html">
+<tocsect3 name="2.1 Building Custom Interpreters " url="ext/custom-interps.html"/>
+<tocsect3 name="2.2 Module Definition Options " url="ext/module-defn-options.html"/>
+<tocsect3 name="2.3 Example " url="ext/module-defn-example.html"/>
+<tocsect3 name="2.4 Distributing your extension modules " url="ext/distributing.html"/>
+</tocsect2>
+<tocsect2 name="3. Building C and C++ Extensions on Windows " url="ext/building-on-windows.html">
+<tocsect3 name="3.1 A Cookbook Approach " url="ext/win-cookbook.html"/>
+<tocsect3 name="3.2 Differences Between Unix and Windows " url="ext/dynamic-linking.html"/>
+<tocsect3 name="3.3 Using DLLs in Practice " url="ext/win-dlls.html"/>
+</tocsect2>
+<tocsect2 name="4. Embedding Python in Another Application " url="ext/embedding.html">
+<tocsect3 name="4.1 Embedding Python in C++ " url="ext/embeddingInCplusplus.html"/>
+<tocsect3 name="4.2 Linking Requirements " url="ext/link-reqs.html"/>
+</tocsect2>
+<tocsect2 name="A. Reporting Bugs" url="ext/reporting-bugs.html"/>
+<tocsect2 name="About this document ..." url="ext/about.html"/>
+</tocsect1>
+<tocsect1 name="Python/C API Reference" url="api/api.html">
+<tocsect2 name="Front Matter" url="api/front.html"/>
+<tocsect2 name="Contents" url="api/contents.html"/>
+<tocsect2 name="1. Introduction " url="api/intro.html">
+<tocsect3 name="1.1 Include Files " url="api/includes.html"/>
+<tocsect3 name="1.2 Objects, Types and Reference Counts " url="api/objects.html">
+<tocsect4 name="1.2.1 Reference Counts " url="api/refcounts.html"/>
+<tocsect4 name="1.2.2 Types " url="api/types.html"/>
+</tocsect3>
+<tocsect3 name="1.3 Exceptions " url="api/exceptions.html"/>
+<tocsect3 name="1.4 Embedding Python " url="api/embedding.html"/>
+</tocsect2>
+<tocsect2 name="2. The Very High Level Layer " url="api/veryhigh.html"/>
+<tocsect2 name="3. Reference Counting " url="api/countingRefs.html"/>
+<tocsect2 name="4. Exception Handling " url="api/exceptionHandling.html">
+<tocsect3 name="4.1 Standard Exceptions " url="api/standardExceptions.html"/>
+<tocsect3 name="4.2 Deprecation of String Exceptions" url="api/node15.html"/>
+</tocsect2>
+<tocsect2 name="5. Utilities " url="api/utilities.html">
+<tocsect3 name="5.1 OS Utilities " url="api/os.html"/>
+<tocsect3 name="5.2 Process Control " url="api/processControl.html"/>
+<tocsect3 name="5.3 Importing Modules " url="api/importing.html"/>
+</tocsect2>
+<tocsect2 name="6. Abstract Objects Layer " url="api/abstract.html">
+<tocsect3 name="6.1 Object Protocol " url="api/object.html"/>
+<tocsect3 name="6.2 Number Protocol " url="api/number.html"/>
+<tocsect3 name="6.3 Sequence Protocol " url="api/sequence.html"/>
+<tocsect3 name="6.4 Mapping Protocol " url="api/mapping.html"/>
+</tocsect2>
+<tocsect2 name="7. Concrete Objects Layer " url="api/concrete.html">
+<tocsect3 name="7.1 Fundamental Objects " url="api/fundamental.html">
+<tocsect4 name="7.1.1 Type Objects " url="api/typeObjects.html"/>
+<tocsect4 name="7.1.2 The None Object " url="api/noneObject.html"/>
+</tocsect3>
+<tocsect3 name="7.2 Sequence Objects " url="api/sequenceObjects.html">
+<tocsect4 name="7.2.1 String Objects " url="api/stringObjects.html"/>
+<tocsect4 name="7.2.2 Unicode Objects " url="api/unicodeObjects.html"/>
+<tocsect4 name="7.2.3 Buffer Objects " url="api/bufferObjects.html"/>
+<tocsect4 name="7.2.4 Tuple Objects " url="api/tupleObjects.html"/>
+<tocsect4 name="7.2.5 List Objects " url="api/listObjects.html"/>
+</tocsect3>
+<tocsect3 name="7.3 Mapping Objects " url="api/mapObjects.html">
+<tocsect4 name="7.3.1 Dictionary Objects " url="api/dictObjects.html"/>
+</tocsect3>
+<tocsect3 name="7.4 Numeric Objects " url="api/numericObjects.html">
+<tocsect4 name="7.4.1 Plain Integer Objects " url="api/intObjects.html"/>
+<tocsect4 name="7.4.2 Long Integer Objects " url="api/longObjects.html"/>
+<tocsect4 name="7.4.3 Floating Point Objects " url="api/floatObjects.html"/>
+<tocsect4 name="7.4.4 Complex Number Objects " url="api/complexObjects.html"/>
+</tocsect3>
+<tocsect3 name="7.5 Other Objects " url="api/otherObjects.html">
+<tocsect4 name="7.5.1 File Objects " url="api/fileObjects.html"/>
+<tocsect4 name="7.5.2 Module Objects " url="api/moduleObjects.html"/>
+<tocsect4 name="7.5.3 CObjects " url="api/cObjects.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="8. Initialization, Finalization, and Threads " url="api/initialization.html">
+<tocsect3 name="8.1 Thread State and the Global Interpreter Lock " url="api/threads.html"/>
+</tocsect2>
+<tocsect2 name="9. Memory Management " url="api/memory.html">
+<tocsect3 name="9.1 Overview " url="api/memoryOverview.html"/>
+<tocsect3 name="9.2 Memory Interface " url="api/memoryInterface.html"/>
+<tocsect3 name="9.3 Examples " url="api/memoryExamples.html"/>
+</tocsect2>
+<tocsect2 name="10. Defining New Object Types " url="api/newTypes.html">
+<tocsect3 name="10.1 Common Object Structures " url="api/common-structs.html"/>
+<tocsect3 name="10.2 Mapping Object Structures " url="api/mapping-structs.html"/>
+<tocsect3 name="10.3 Number Object Structures " url="api/number-structs.html"/>
+<tocsect3 name="10.4 Sequence Object Structures " url="api/sequence-structs.html"/>
+<tocsect3 name="10.5 Buffer Object Structures " url="api/buffer-structs.html"/>
+</tocsect2>
+<tocsect2 name="A. Reporting Bugs" url="api/reporting-bugs.html"/>
+<tocsect2 name="Index" url="api/genindex.html"/>
+<tocsect2 name="About this document ..." url="api/about.html"/>
+</tocsect1>
+<tocsect1 name="Library" url="lib/lib.html">
+<tocsect2 name="Front Matter" url="lib/front.html"/>
+<tocsect2 name="Contents" url="lib/contents.html"/>
+<tocsect2 name="1. Introduction" url="lib/intro.html"/>
+<tocsect2 name="2. Built-in Types, Exceptions and Functions" url="lib/builtin.html">
+<tocsect3 name="2.1 Built-in Types " url="lib/types.html">
+<tocsect4 name="2.1.1 Truth Value Testing " url="lib/truth.html"/>
+<tocsect4 name="2.1.2 Boolean Operations " url="lib/boolean.html"/>
+<tocsect4 name="2.1.3 Comparisons " url="lib/comparisons.html"/>
+<tocsect4 name="2.1.4 Numeric Types " url="lib/typesnumeric.html"/>
+<tocsect4 name="2.1.5 Sequence Types " url="lib/typesseq.html"/>
+<tocsect4 name="2.1.6 Mapping Types " url="lib/typesmapping.html"/>
+<tocsect4 name="2.1.7 Other Built-in Types " url="lib/typesother.html"/>
+<tocsect4 name="2.1.8 Special Attributes " url="lib/specialattrs.html"/>
+</tocsect3>
+<tocsect3 name="2.2 Built-in Exceptions" url="lib/module-exceptions.html"/>
+<tocsect3 name="2.3 Built-in Functions " url="lib/built-in-funcs.html"/>
+</tocsect2>
+<tocsect2 name="3. Python Runtime Services " url="lib/python.html">
+<tocsect3 name="3.1 sys -- System-specific parameters and functions" url="lib/module-sys.html"/>
+<tocsect3 name="3.2 gc -- Garbage Collector interface" url="lib/module-gc.html"/>
+<tocsect3 name="3.3 atexit -- Exit handlers" url="lib/module-atexit.html">
+<tocsect4 name="3.3.1 atexit Example " url="lib/atexit-example.html"/>
+</tocsect3>
+<tocsect3 name="3.4 types -- Names for all built-in types" url="lib/module-types.html"/>
+<tocsect3 name="3.5 UserDict -- Class wrapper for dictionary objects" url="lib/module-UserDict.html"/>
+<tocsect3 name="3.6 UserList -- Class wrapper for list objects" url="lib/module-UserList.html"/>
+<tocsect3 name="3.7 UserString -- Class wrapper for string objects" url="lib/module-UserString.html"/>
+<tocsect3 name="3.8 operator -- Standard operators as functions." url="lib/module-operator.html"/>
+<tocsect3 name="3.9 traceback -- Print or retrieve a stack traceback" url="lib/module-traceback.html">
+<tocsect4 name="3.9.1 Traceback Example " url="lib/traceback-example.html"/>
+</tocsect3>
+<tocsect3 name="3.10 linecache -- Random access to text lines" url="lib/module-linecache.html"/>
+<tocsect3 name="3.11 pickle -- Python object serialization" url="lib/module-pickle.html">
+<tocsect4 name="3.11.1 Example " url="lib/pickle-example.html"/>
+</tocsect3>
+<tocsect3 name="3.12 cPickle -- Alternate implementation of pickle" url="lib/module-cPickle.html"/>
+<tocsect3 name="3.13 copy_reg -- Register pickle support functions" url="lib/module-copyreg.html"/>
+<tocsect3 name="3.14 shelve -- Python object persistence" url="lib/module-shelve.html"/>
+<tocsect3 name="3.15 copy -- Shallow and deep copy operations" url="lib/module-copy.html"/>
+<tocsect3 name="3.16 marshal -- Alternate Python object serialization" url="lib/module-marshal.html"/>
+<tocsect3 name="3.17 imp -- Access the import internals" url="lib/module-imp.html">
+<tocsect4 name="3.17.1 Examples" url="lib/examples-imp.html"/>
+</tocsect3>
+<tocsect3 name="3.18 code -- Interpreter base classes" url="lib/module-code.html">
+<tocsect4 name="3.18.1 Interactive Interpreter Objects " url="lib/interpreter-objects.html"/>
+<tocsect4 name="3.18.2 Interactive Console Objects " url="lib/console-objects.html"/>
+</tocsect3>
+<tocsect3 name="3.19 codeop -- Compile Python code" url="lib/module-codeop.html"/>
+<tocsect3 name="3.20 pprint -- Data pretty printer" url="lib/module-pprint.html">
+<tocsect4 name="3.20.1 PrettyPrinter Objects" url="lib/PrettyPrinter_Objects.html"/>
+</tocsect3>
+<tocsect3 name="3.21 repr -- Alternate repr() implementation" url="lib/module-repr.html">
+<tocsect4 name="3.21.1 Repr Objects " url="lib/Repr-objects.html"/>
+<tocsect4 name="3.21.2 Subclassing Repr Objects " url="lib/subclassing-reprs.html"/>
+</tocsect3>
+<tocsect3 name="3.22 new -- Creation of runtime internal objects" url="lib/module-new.html"/>
+<tocsect3 name="3.23 site -- Site-specific configuration hook" url="lib/module-site.html"/>
+<tocsect3 name="3.24 user -- User-specific configuration hook" url="lib/module-user.html"/>
+<tocsect3 name="3.25 __builtin__ -- Built-in functions" url="lib/module-builtin.html"/>
+<tocsect3 name="3.26 __main__ -- Top-level script environment" url="lib/module-main.html"/>
+</tocsect2>
+<tocsect2 name="4. String Services" url="lib/strings.html">
+<tocsect3 name="4.1 string -- Common string operations" url="lib/module-string.html"/>
+<tocsect3 name="4.2 re -- Regular expression operations" url="lib/module-re.html">
+<tocsect4 name="4.2.1 Regular Expression Syntax " url="lib/re-syntax.html"/>
+<tocsect4 name="4.2.2 Matching vs. Searching " url="lib/matching-searching.html"/>
+<tocsect4 name="4.2.3 Module Contents" url="lib/Contents_of_Module_re.html"/>
+<tocsect4 name="4.2.4 Regular Expression Objects " url="lib/re-objects.html"/>
+<tocsect4 name="4.2.5 Match Objects " url="lib/match-objects.html"/>
+</tocsect3>
+<tocsect3 name="4.3 struct -- Interpret strings as packed binary data" url="lib/module-struct.html"/>
+<tocsect3 name="4.4 fpformat -- Floating point conversions" url="lib/module-fpformat.html"/>
+<tocsect3 name="4.5 StringIO -- Read and write strings as files" url="lib/module-StringIO.html"/>
+<tocsect3 name="4.6 cStringIO -- Faster version of StringIO" url="lib/module-cStringIO.html"/>
+<tocsect3 name="4.7 codecs -- Codec registry and base classes" url="lib/module-codecs.html">
+<tocsect4 name="4.7.1 Codec Base Classes" url="lib/node80.html"/>
+</tocsect3>
+<tocsect3 name="4.8 unicodedata -- Unicode Database" url="lib/module-unicodedata.html"/>
+</tocsect2>
+<tocsect2 name="5. Miscellaneous Services" url="lib/misc.html">
+<tocsect3 name="5.1 math -- Mathematical functions" url="lib/module-math.html"/>
+<tocsect3 name="5.2 cmath -- Mathematical functions for complex numbers" url="lib/module-cmath.html"/>
+<tocsect3 name="5.3 random -- Generate pseudo-random numbers" url="lib/module-random.html">
+<tocsect4 name="5.3.1 The Random Number Generator Interface " url="lib/rng-objects.html"/>
+</tocsect3>
+<tocsect3 name="5.4 whrandom -- Pseudo-random number generator" url="lib/module-whrandom.html"/>
+<tocsect3 name="5.5 bisect -- Array bisection algorithm" url="lib/module-bisect.html">
+<tocsect4 name="5.5.1 Example" url="lib/bisect-example.html"/>
+</tocsect3>
+<tocsect3 name="5.6 array -- Efficient arrays of numeric values" url="lib/module-array.html"/>
+<tocsect3 name="5.7 ConfigParser -- Configuration file parser" url="lib/module-ConfigParser.html">
+<tocsect4 name="5.7.1 ConfigParser Objects " url="lib/ConfigParser-objects.html"/>
+</tocsect3>
+<tocsect3 name="5.8 fileinput -- Iterate over lines from multiple input streams" url="lib/module-fileinput.html"/>
+<tocsect3 name="5.9 calendar -- General calendar-related functions" url="lib/module-calendar.html"/>
+<tocsect3 name="5.10 cmd -- Support for line-oriented command interpreters" url="lib/module-cmd.html">
+<tocsect4 name="5.10.1 Cmd Objects" url="lib/Cmd-objects.html"/>
+</tocsect3>
+<tocsect3 name="5.11 shlex -- Simple lexical analysis" url="lib/module-shlex.html">
+<tocsect4 name="5.11.1 shlex Objects " url="lib/shlex-objects.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="6. Generic Operating System Services " url="lib/allos.html">
+<tocsect3 name="6.1 os -- Miscellaneous OS interfaces" url="lib/module-os.html">
+<tocsect4 name="6.1.1 Process Parameters " url="lib/os-procinfo.html"/>
+<tocsect4 name="6.1.2 File Object Creation " url="lib/os-newstreams.html"/>
+<tocsect4 name="6.1.3 File Descriptor Operations " url="lib/os-fd-ops.html"/>
+<tocsect4 name="6.1.4 Files and Directories " url="lib/os-file-dir.html"/>
+<tocsect4 name="6.1.5 Process Management " url="lib/os-process.html"/>
+<tocsect4 name="6.1.6 Miscellaneous System Information " url="lib/os-path.html"/>
+</tocsect3>
+<tocsect3 name="6.2 os.path -- Common pathname manipulations" url="lib/module-os.path.html"/>
+<tocsect3 name="6.3 dircache -- Cached directory listings" url="lib/module-dircache.html"/>
+<tocsect3 name="6.4 stat -- Interpreting stat() results" url="lib/module-stat.html"/>
+<tocsect3 name="6.5 statcache -- An optimization of os.stat()" url="lib/module-statcache.html"/>
+<tocsect3 name="6.6 statvfs -- Constants used with os.statvfs()" url="lib/module-statvfs.html"/>
+<tocsect3 name="6.7 filecmp -- File and Directory Comparisons" url="lib/module-filecmp.html">
+<tocsect4 name="6.7.1 The dircmp class " url="lib/dircmp-objects.html"/>
+</tocsect3>
+<tocsect3 name="6.8 popen2 -- Subprocesses with accessible I/O streams" url="lib/module-popen2.html">
+<tocsect4 name="6.8.1 Popen3 and Popen4 Objects " url="lib/popen3-objects.html"/>
+</tocsect3>
+<tocsect3 name="6.9 time -- Time access and conversions" url="lib/module-time.html"/>
+<tocsect3 name="6.10 sched -- Event scheduler" url="lib/module-sched.html">
+<tocsect4 name="6.10.1 Scheduler Objects " url="lib/scheduler-objects.html"/>
+</tocsect3>
+<tocsect3 name="6.11 getpass -- Portable password input" url="lib/module-getpass.html"/>
+<tocsect3 name="6.12 curses -- Terminal handling for character-cell displays" url="lib/module-curses.html">
+<tocsect4 name="6.12.1 Functions " url="lib/curses-functions.html"/>
+<tocsect4 name="6.12.2 Window Objects " url="lib/curses-window-objects.html"/>
+<tocsect4 name="6.12.3 Constants" url="lib/node128.html"/>
+</tocsect3>
+<tocsect3 name="6.13 curses.textpad -- Text input widget for curses programs" url="lib/module-curses.textpad.html">
+<tocsect4 name="6.13.1 Textbox objects " url="lib/curses-textpad-objects.html"/>
+</tocsect3>
+<tocsect3 name="6.14 curses.wrapper -- Terminal handler for curses programs" url="lib/module-curses.wrapper.html"/>
+<tocsect3 name="6.15 curses.ascii -- Utilities for ASCII characters" url="lib/module-curses.ascii.html"/>
+<tocsect3 name="6.16 getopt -- Parser for command line options" url="lib/module-getopt.html"/>
+<tocsect3 name="6.17 tempfile -- Generate temporary file names" url="lib/module-tempfile.html"/>
+<tocsect3 name="6.18 errno -- Standard errno system symbols" url="lib/module-errno.html"/>
+<tocsect3 name="6.19 glob -- Unix style pathname pattern expansion" url="lib/module-glob.html"/>
+<tocsect3 name="6.20 fnmatch -- Unix filename pattern matching" url="lib/module-fnmatch.html"/>
+<tocsect3 name="6.21 shutil -- High-level file operations" url="lib/module-shutil.html">
+<tocsect4 name="6.21.1 Example " url="lib/shutil-example.html"/>
+</tocsect3>
+<tocsect3 name="6.22 locale -- Internationalization services" url="lib/module-locale.html">
+<tocsect4 name="6.22.1 Background, details, hints, tips and caveats" url="lib/node141.html"/>
+<tocsect4 name="6.22.2 For extension writers and programs that embed Python" url="lib/embedding-locale.html"/>
+</tocsect3>
+<tocsect3 name="6.23 gettext -- Multilingual internationalization services" url="lib/module-gettext.html">
+<tocsect4 name="6.23.1 GNU gettext API" url="lib/node144.html"/>
+<tocsect4 name="6.23.2 Class-based API" url="lib/node145.html"/>
+<tocsect4 name="6.23.3 Internationalizing your programs and modules" url="lib/node150.html"/>
+<tocsect4 name="6.23.4 Acknowledgements" url="lib/node155.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="7. Optional Operating System Services" url="lib/someos.html">
+<tocsect3 name="7.1 signal -- Set handlers for asynchronous events" url="lib/module-signal.html">
+<tocsect4 name="7.1.1 Example" url="lib/Signal_Example.html"/>
+</tocsect3>
+<tocsect3 name="7.2 socket -- Low-level networking interface" url="lib/module-socket.html">
+<tocsect4 name="7.2.1 Socket Objects " url="lib/socket-objects.html"/>
+<tocsect4 name="7.2.2 Example " url="lib/socket-example.html"/>
+</tocsect3>
+<tocsect3 name="7.3 select -- Waiting for I/O completion" url="lib/module-select.html">
+<tocsect4 name="7.3.1 Polling Objects " url="lib/poll-objects.html"/>
+</tocsect3>
+<tocsect3 name="7.4 thread -- Multiple threads of control" url="lib/module-thread.html"/>
+<tocsect3 name="7.5 threading -- Higher-level threading interface" url="lib/module-threading.html">
+<tocsect4 name="7.5.1 Lock Objects " url="lib/lock-objects.html"/>
+<tocsect4 name="7.5.2 RLock Objects " url="lib/rlock-objects.html"/>
+<tocsect4 name="7.5.3 Condition Objects " url="lib/condition-objects.html"/>
+<tocsect4 name="7.5.4 Semaphore Objects " url="lib/semaphore-objects.html"/>
+<tocsect4 name="7.5.5 Event Objects " url="lib/event-objects.html"/>
+<tocsect4 name="7.5.6 Thread Objects " url="lib/thread-objects.html"/>
+</tocsect3>
+<tocsect3 name="7.6 mutex -- Mutual exclusion support" url="lib/module-mutex.html">
+<tocsect4 name="7.6.1 Mutex Objects " url="lib/mutex-objects.html"/>
+</tocsect3>
+<tocsect3 name="7.7 Queue -- A synchronized queue class" url="lib/module-Queue.html">
+<tocsect4 name="7.7.1 Queue Objects" url="lib/QueueObjects.html"/>
+</tocsect3>
+<tocsect3 name="7.8 mmap -- Memory-mapped file support" url="lib/module-mmap.html"/>
+<tocsect3 name="7.9 anydbm -- Generic access to DBM-style databases" url="lib/module-anydbm.html"/>
+<tocsect3 name="7.10 dumbdbm -- Portable DBM implementation" url="lib/module-dumbdbm.html"/>
+<tocsect3 name="7.11 dbhash -- DBM-style interface to the BSD database library" url="lib/module-dbhash.html">
+<tocsect4 name="7.11.1 Database Objects " url="lib/dbhash-objects.html"/>
+</tocsect3>
+<tocsect3 name="7.12 whichdb -- Guess which DBM module created a database" url="lib/module-whichdb.html"/>
+<tocsect3 name="7.13 bsddb -- Interface to Berkeley DB library" url="lib/module-bsddb.html">
+<tocsect4 name="7.13.1 Hash, BTree and Record Objects " url="lib/bsddb-objects.html"/>
+</tocsect3>
+<tocsect3 name="7.14 zlib -- Compression compatible with gzip" url="lib/module-zlib.html"/>
+<tocsect3 name="7.15 gzip -- Support for gzip files" url="lib/module-gzip.html"/>
+<tocsect3 name="7.16 zipfile -- Work with ZIP archives" url="lib/module-zipfile.html">
+<tocsect4 name="7.16.1 ZipFile Objects " url="lib/zipfile-objects.html"/>
+<tocsect4 name="7.16.2 PyZipFile Objects " url="lib/pyzipfile-objects.html"/>
+<tocsect4 name="7.16.3 ZipInfo Objects " url="lib/zipinfo-objects.html"/>
+</tocsect3>
+<tocsect3 name="7.17 readline -- GNU readline interface" url="lib/module-readline.html">
+<tocsect4 name="7.17.1 Example " url="lib/readline-example.html"/>
+</tocsect3>
+<tocsect3 name="7.18 rlcompleter -- Completion function for GNU readline" url="lib/module-rlcompleter.html">
+<tocsect4 name="7.18.1 Completer Objects " url="lib/completer-objects.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="8. Unix Specific Services" url="lib/unix.html">
+<tocsect3 name="8.1 posix -- The most common POSIX system calls" url="lib/module-posix.html">
+<tocsect4 name="8.1.1 Large File Support " url="lib/posix-large-files.html"/>
+<tocsect4 name="8.1.2 Module Contents " url="lib/posix-contents.html"/>
+</tocsect3>
+<tocsect3 name="8.2 pwd -- The password database" url="lib/module-pwd.html"/>
+<tocsect3 name="8.3 grp -- The group database" url="lib/module-grp.html"/>
+<tocsect3 name="8.4 crypt -- Function to check Unix passwords" url="lib/module-crypt.html"/>
+<tocsect3 name="8.5 dl -- Call C functions in shared objects" url="lib/module-dl.html">
+<tocsect4 name="8.5.1 Dl Objects " url="lib/dl-objects.html"/>
+</tocsect3>
+<tocsect3 name="8.6 dbm -- Simple ``database'' interface" url="lib/module-dbm.html"/>
+<tocsect3 name="8.7 gdbm -- GNU's reinterpretation of dbm" url="lib/module-gdbm.html"/>
+<tocsect3 name="8.8 termios -- POSIX style tty control" url="lib/module-termios.html">
+<tocsect4 name="8.8.1 Example" url="lib/termios_Example.html"/>
+</tocsect3>
+<tocsect3 name="8.9 TERMIOS -- Constants used with the termios module" url="lib/module-TERMIOSuppercase.html"/>
+<tocsect3 name="8.10 tty -- Terminal control functions" url="lib/module-tty.html"/>
+<tocsect3 name="8.11 pty -- Pseudo-terminal utilities" url="lib/module-pty.html"/>
+<tocsect3 name="8.12 fcntl -- The fcntl() and ioctl() system calls" url="lib/module-fcntl.html"/>
+<tocsect3 name="8.13 pipes -- Interface to shell pipelines" url="lib/module-pipes.html">
+<tocsect4 name="8.13.1 Template Objects " url="lib/template-objects.html"/>
+</tocsect3>
+<tocsect3 name="8.14 posixfile -- File-like objects with locking support" url="lib/module-posixfile.html"/>
+<tocsect3 name="8.15 resource -- Resource usage information" url="lib/module-resource.html">
+<tocsect4 name="8.15.1 Resource Limits" url="lib/node215.html"/>
+<tocsect4 name="8.15.2 Resource Usage" url="lib/node216.html"/>
+</tocsect3>
+<tocsect3 name="8.16 nis -- Interface to Sun's NIS (Yellow Pages)" url="lib/module-nis.html"/>
+<tocsect3 name="8.17 syslog -- Unix syslog library routines" url="lib/module-syslog.html"/>
+<tocsect3 name="8.18 commands -- Utilities for running commands" url="lib/module-commands.html"/>
+</tocsect2>
+<tocsect2 name="9. The Python Debugger" url="lib/module-pdb.html">
+<tocsect3 name="9.1 Debugger Commands " url="lib/debugger-commands.html"/>
+<tocsect3 name="9.2 How It Works" url="lib/node222.html"/>
+</tocsect2>
+<tocsect2 name="10. The Python Profiler " url="lib/profile.html">
+<tocsect3 name="10.1 Introduction to the profiler" url="lib/Profiler_Introduction.html"/>
+<tocsect3 name="10.2 How Is This Profiler Different From The Old Profiler?" url="lib/Profiler_Changes.html"/>
+<tocsect3 name="10.3 Instant Users Manual " url="lib/profile-instant.html"/>
+<tocsect3 name="10.4 What Is Deterministic Profiling?" url="lib/Deterministic_Profiling.html"/>
+<tocsect3 name="10.5 Reference Manual" url="lib/module-profile.html">
+<tocsect4 name="10.5.1 The Stats Class " url="lib/profile-stats.html"/>
+</tocsect3>
+<tocsect3 name="10.6 Limitations " url="lib/profile-limits.html"/>
+<tocsect3 name="10.7 Calibration " url="lib/profile-calibration.html"/>
+<tocsect3 name="10.8 Extensions -- Deriving Better Profilers" url="lib/Profiler_Extensions.html">
+<tocsect4 name="10.8.1 OldProfile Class " url="lib/profile-old.html"/>
+<tocsect4 name="10.8.2 HotProfile Class " url="lib/profile-HotProfile.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="11. Internet Protocols and Support " url="lib/internet.html">
+<tocsect3 name="11.1 webbrowser -- Convenient Web-browser controller" url="lib/module-webbrowser.html">
+<tocsect4 name="11.1.1 Browser Controller Objects " url="lib/browser-controllers.html"/>
+</tocsect3>
+<tocsect3 name="11.2 cgi -- Common Gateway Interface support." url="lib/module-cgi.html">
+<tocsect4 name="11.2.1 Introduction" url="lib/cgi-intro.html"/>
+<tocsect4 name="11.2.2 Using the cgi module" url="lib/Using_the_cgi_module.html"/>
+<tocsect4 name="11.2.3 Old classes" url="lib/node241.html"/>
+<tocsect4 name="11.2.4 Functions" url="lib/Functions_in_cgi_module.html"/>
+<tocsect4 name="11.2.5 Caring about security" url="lib/node243.html"/>
+<tocsect4 name="11.2.6 Installing your CGI script on a Unix system" url="lib/node244.html"/>
+<tocsect4 name="11.2.7 Testing your CGI script" url="lib/node245.html"/>
+<tocsect4 name="11.2.8 Debugging CGI scripts" url="lib/node246.html"/>
+<tocsect4 name="11.2.9 Common problems and solutions" url="lib/node247.html"/>
+</tocsect3>
+<tocsect3 name="11.3 urllib -- Open arbitrary resources by URL" url="lib/module-urllib.html">
+<tocsect4 name="11.3.1 URLopener Objects " url="lib/urlopener-objs.html"/>
+<tocsect4 name="11.3.2 Examples" url="lib/Urllib_Examples.html"/>
+</tocsect3>
+<tocsect3 name="11.4 httplib -- HTTP protocol client" url="lib/module-httplib.html">
+<tocsect4 name="11.4.1 HTTP Objects" url="lib/node252.html"/>
+<tocsect4 name="11.4.2 Examples" url="lib/HTTP_Examples.html"/>
+</tocsect3>
+<tocsect3 name="11.5 ftplib -- FTP protocol client" url="lib/module-ftplib.html">
+<tocsect4 name="11.5.1 FTP Objects " url="lib/ftp-objects.html"/>
+</tocsect3>
+<tocsect3 name="11.6 gopherlib -- Gopher protocol client" url="lib/module-gopherlib.html"/>
+<tocsect3 name="11.7 poplib -- POP3 protocol client" url="lib/module-poplib.html">
+<tocsect4 name="11.7.1 POP3 Objects " url="lib/pop3-objects.html"/>
+<tocsect4 name="11.7.2 POP3 Example " url="lib/pop3-example.html"/>
+</tocsect3>
+<tocsect3 name="11.8 imaplib -- IMAP4 protocol client" url="lib/module-imaplib.html">
+<tocsect4 name="11.8.1 IMAP4 Objects " url="lib/imap4-objects.html"/>
+<tocsect4 name="11.8.2 IMAP4 Example " url="lib/imap4-example.html"/>
+</tocsect3>
+<tocsect3 name="11.9 nntplib -- NNTP protocol client" url="lib/module-nntplib.html">
+<tocsect4 name="11.9.1 NNTP Objects " url="lib/nntp-objects.html"/>
+</tocsect3>
+<tocsect3 name="11.10 smtplib -- SMTP protocol client" url="lib/module-smtplib.html">
+<tocsect4 name="11.10.1 SMTP Objects " url="lib/SMTP-objects.html"/>
+<tocsect4 name="11.10.2 SMTP Example " url="lib/SMTP-example.html"/>
+</tocsect3>
+<tocsect3 name="11.11 telnetlib -- Telnet client" url="lib/module-telnetlib.html">
+<tocsect4 name="11.11.1 Telnet Objects " url="lib/telnet-objects.html"/>
+<tocsect4 name="11.11.2 Telnet Example " url="lib/telnet-example.html"/>
+</tocsect3>
+<tocsect3 name="11.12 urlparse -- Parse URLs into components" url="lib/module-urlparse.html"/>
+<tocsect3 name="11.13 SocketServer -- A framework for network servers" url="lib/module-SocketServer.html"/>
+<tocsect3 name="11.14 BaseHTTPServer -- Basic HTTP server" url="lib/module-BaseHTTPServer.html"/>
+<tocsect3 name="11.15 SimpleHTTPServer -- Simple HTTP request handler" url="lib/module-SimpleHTTPServer.html"/>
+<tocsect3 name="11.16 CGIHTTPServer -- CGI-capable HTTP request handler" url="lib/module-CGIHTTPServer.html"/>
+<tocsect3 name="11.17 Cookie -- HTTP state management" url="lib/module-Cookie.html">
+<tocsect4 name="11.17.1 Cookie Objects " url="lib/cookie-objects.html"/>
+<tocsect4 name="11.17.2 Morsel Objects " url="lib/morsel-objects.html"/>
+<tocsect4 name="11.17.3 Example " url="lib/cookie-example.html"/>
+</tocsect3>
+<tocsect3 name="11.18 asyncore -- Asynchronous socket handler" url="lib/module-asyncore.html">
+<tocsect4 name="11.18.1 Example basic HTTP client " url="lib/asyncore-example.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="12. Internet Data Handling " url="lib/netdata.html">
+<tocsect3 name="12.1 formatter -- Generic output formatting" url="lib/module-formatter.html">
+<tocsect4 name="12.1.1 The Formatter Interface " url="lib/formatter-interface.html"/>
+<tocsect4 name="12.1.2 Formatter Implementations " url="lib/formatter-impls.html"/>
+<tocsect4 name="12.1.3 The Writer Interface " url="lib/writer-interface.html"/>
+<tocsect4 name="12.1.4 Writer Implementations " url="lib/writer-impls.html"/>
+</tocsect3>
+<tocsect3 name="12.2 rfc822 -- Parse RFC 822 mail headers" url="lib/module-rfc822.html">
+<tocsect4 name="12.2.1 Message Objects " url="lib/message-objects.html"/>
+<tocsect4 name="12.2.2 AddressList Objects " url="lib/addresslist-objects.html"/>
+</tocsect3>
+<tocsect3 name="12.3 mimetools -- Tools for parsing MIME messages" url="lib/module-mimetools.html">
+<tocsect4 name="12.3.1 Additional Methods of Message Objects " url="lib/mimetools-message-objects.html"/>
+</tocsect3>
+<tocsect3 name="12.4 MimeWriter -- Generic MIME file writer" url="lib/module-MimeWriter.html">
+<tocsect4 name="12.4.1 MimeWriter Objects " url="lib/MimeWriter-objects.html"/>
+</tocsect3>
+<tocsect3 name="12.5 multifile -- Support for files containing distinct parts" url="lib/module-multifile.html">
+<tocsect4 name="12.5.1 MultiFile Objects " url="lib/MultiFile-objects.html"/>
+<tocsect4 name="12.5.2 MultiFile Example " url="lib/multifile-example.html"/>
+</tocsect3>
+<tocsect3 name="12.6 binhex -- Encode and decode binhex4 files" url="lib/module-binhex.html">
+<tocsect4 name="12.6.1 Notes " url="lib/binhex-notes.html"/>
+</tocsect3>
+<tocsect3 name="12.7 uu -- Encode and decode uuencode files" url="lib/module-uu.html"/>
+<tocsect3 name="12.8 binascii -- Convert between binary and ASCII" url="lib/module-binascii.html"/>
+<tocsect3 name="12.9 xdrlib -- Encode and decode XDR data" url="lib/module-xdrlib.html">
+<tocsect4 name="12.9.1 Packer Objects " url="lib/xdr-packer-objects.html"/>
+<tocsect4 name="12.9.2 Unpacker Objects " url="lib/xdr-unpacker-objects.html"/>
+<tocsect4 name="12.9.3 Exceptions " url="lib/xdr-exceptions.html"/>
+</tocsect3>
+<tocsect3 name="12.10 mailcap -- Mailcap file handling." url="lib/module-mailcap.html"/>
+<tocsect3 name="12.11 mimetypes -- Map filenames to MIME types" url="lib/module-mimetypes.html"/>
+<tocsect3 name="12.12 base64 -- Encode and decode MIME base64 data" url="lib/module-base64.html"/>
+<tocsect3 name="12.13 quopri -- Encode and decode MIME quoted-printable data" url="lib/module-quopri.html"/>
+<tocsect3 name="12.14 mailbox -- Read various mailbox formats" url="lib/module-mailbox.html">
+<tocsect4 name="12.14.1 Mailbox Objects " url="lib/mailbox-objects.html"/>
+</tocsect3>
+<tocsect3 name="12.15 mhlib -- Access to MH mailboxes" url="lib/module-mhlib.html">
+<tocsect4 name="12.15.1 MH Objects " url="lib/mh-objects.html"/>
+<tocsect4 name="12.15.2 Folder Objects " url="lib/mh-folder-objects.html"/>
+<tocsect4 name="12.15.3 Message Objects " url="lib/mh-message-objects.html"/>
+</tocsect3>
+<tocsect3 name="12.16 mimify -- MIME processing of mail messages" url="lib/module-mimify.html"/>
+<tocsect3 name="12.17 netrc -- netrc file processing" url="lib/module-netrc.html">
+<tocsect4 name="12.17.1 netrc Objects " url="lib/netrc-objects.html"/>
+</tocsect3>
+<tocsect3 name="12.18 robotparser -- Parser for robots.txt" url="lib/module-robotparser.html"/>
+</tocsect2>
+<tocsect2 name="13. Structured Markup Processing Tools " url="lib/markup.html">
+<tocsect3 name="13.1 sgmllib -- Simple SGML parser" url="lib/module-sgmllib.html"/>
+<tocsect3 name="13.2 htmllib -- A parser for HTML documents" url="lib/module-htmllib.html">
+<tocsect4 name="13.2.1 HTMLParser Objects " url="lib/html-parser-objects.html"/>
+</tocsect3>
+<tocsect3 name="13.3 htmlentitydefs -- Definitions of HTML general entities" url="lib/module-htmlentitydefs.html"/>
+<tocsect3 name="13.4 xml.parsers.expat -- Fast XML parsing using the Expat library" url="lib/module-xml.parsers.expat.html">
+<tocsect4 name="13.4.1 Example " url="lib/expat-example.html"/>
+<tocsect4 name="13.4.2 Expat error constants " url="lib/expat-errors.html"/>
+</tocsect3>
+<tocsect3 name="13.5 xml.sax -- Support for SAX2 parsers" url="lib/module-xml.sax.html">
+<tocsect4 name="13.5.1 SAXException Objects " url="lib/sax-exception-objects.html"/>
+</tocsect3>
+<tocsect3 name="13.6 xml.sax.handler -- Base classes for SAX handlers" url="lib/module-xml.sax.handler.html">
+<tocsect4 name="13.6.1 ContentHandler Objects " url="lib/content-handler-objects.html"/>
+<tocsect4 name="13.6.2 DTDHandler Objects " url="lib/dtd-handler-objects.html"/>
+<tocsect4 name="13.6.3 EntityResolver Objects " url="lib/entity-resolver-objects.html"/>
+</tocsect3>
+<tocsect3 name="13.7 xml.sax.saxutils -- SAX Utilities" url="lib/module-xml.sax.saxutils.html"/>
+<tocsect3 name="13.8 xml.sax.xmlreader -- Interface for XML parsers" url="lib/module-xml.sax.xmlreader.html">
+<tocsect4 name="13.8.1 XMLReader Objects " url="lib/xmlreader-objects.html"/>
+<tocsect4 name="13.8.2 IncrementalParser Objects " url="lib/incremental-parser-objects.html"/>
+<tocsect4 name="13.8.3 Locator Objects " url="lib/locator-objects.html"/>
+<tocsect4 name="13.8.4 InputSource Objects " url="lib/input-source-objects.html"/>
+<tocsect4 name="13.8.5 AttributesImpl Objects " url="lib/attributes-impl-objects.html"/>
+<tocsect4 name="13.8.6 AttributesNSImpl Objects " url="lib/attributes-ns-impl-objects.html"/>
+</tocsect3>
+<tocsect3 name="13.9 xmllib -- A parser for XML documents" url="lib/module-xmllib.html">
+<tocsect4 name="13.9.1 XML Namespaces " url="lib/xml-namespace.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="14. Multimedia Services" url="lib/mmedia.html">
+<tocsect3 name="14.1 audioop -- Manipulate raw audio data" url="lib/module-audioop.html"/>
+<tocsect3 name="14.2 imageop -- Manipulate raw image data" url="lib/module-imageop.html"/>
+<tocsect3 name="14.3 aifc -- Read and write AIFF and AIFC files" url="lib/module-aifc.html"/>
+<tocsect3 name="14.4 sunau -- Read and write Sun AU files" url="lib/module-sunau.html">
+<tocsect4 name="14.4.1 AU_read Objects " url="lib/au-read-objects.html"/>
+<tocsect4 name="14.4.2 AU_write Objects " url="lib/au-write-objects.html"/>
+</tocsect3>
+<tocsect3 name="14.5 wave -- Read and write WAV files" url="lib/module-wave.html">
+<tocsect4 name="14.5.1 Wave_read Objects " url="lib/Wave-read-objects.html"/>
+<tocsect4 name="14.5.2 Wave_write Objects " url="lib/Wave-write-objects.html"/>
+</tocsect3>
+<tocsect3 name="14.6 chunk -- Read IFF chunked data" url="lib/module-chunk.html"/>
+<tocsect3 name="14.7 colorsys -- Conversions between color systems" url="lib/module-colorsys.html"/>
+<tocsect3 name="14.8 rgbimg -- Read and write ``SGI RGB'' files" url="lib/module-rgbimg.html"/>
+<tocsect3 name="14.9 imghdr -- Determine the type of an image" url="lib/module-imghdr.html"/>
+<tocsect3 name="14.10 sndhdr -- Determine type of sound file" url="lib/module-sndhdr.html"/>
+</tocsect2>
+<tocsect2 name="15. Cryptographic Services" url="lib/crypto.html">
+<tocsect3 name="15.1 md5 -- MD5 message digest algorithm" url="lib/module-md5.html"/>
+<tocsect3 name="15.2 sha -- SHA message digest algorithm" url="lib/module-sha.html"/>
+<tocsect3 name="15.3 mpz -- GNU arbitrary magnitude integers" url="lib/module-mpz.html"/>
+<tocsect3 name="15.4 rotor -- Enigma-like encryption and decryption" url="lib/module-rotor.html"/>
+</tocsect2>
+<tocsect2 name="16. Restricted Execution " url="lib/restricted.html">
+<tocsect3 name="16.1 rexec -- Restricted execution framework" url="lib/module-rexec.html">
+<tocsect4 name="16.1.1 An example" url="lib/node366.html"/>
+</tocsect3>
+<tocsect3 name="16.2 Bastion -- Restricting access to objects" url="lib/module-Bastion.html"/>
+</tocsect2>
+<tocsect2 name="17. Python Language Services " url="lib/language.html">
+<tocsect3 name="17.1 parser -- Access Python parse trees" url="lib/module-parser.html">
+<tocsect4 name="17.1.1 Creating AST Objects " url="lib/Creating_ASTs.html"/>
+<tocsect4 name="17.1.2 Converting AST Objects " url="lib/Converting_ASTs.html"/>
+<tocsect4 name="17.1.3 Queries on AST Objects " url="lib/Querying_ASTs.html"/>
+<tocsect4 name="17.1.4 Exceptions and Error Handling " url="lib/AST_Errors.html"/>
+<tocsect4 name="17.1.5 AST Objects " url="lib/AST_Objects.html"/>
+<tocsect4 name="17.1.6 Examples " url="lib/AST_Examples.html"/>
+</tocsect3>
+<tocsect3 name="17.2 symbol -- Constants used with Python parse trees" url="lib/module-symbol.html"/>
+<tocsect3 name="17.3 token -- Constants used with Python parse trees" url="lib/module-token.html"/>
+<tocsect3 name="17.4 keyword -- Testing for Python keywords" url="lib/module-keyword.html"/>
+<tocsect3 name="17.5 tokenize -- Tokenizer for Python source" url="lib/module-tokenize.html"/>
+<tocsect3 name="17.6 tabnanny -- Detection of ambiguous indentation" url="lib/module-tabnanny.html"/>
+<tocsect3 name="17.7 pyclbr -- Python class browser support" url="lib/module-pyclbr.html">
+<tocsect4 name="17.7.1 Class Descriptor Objects " url="lib/pyclbr-class-objects.html"/>
+</tocsect3>
+<tocsect3 name="17.8 py_compile -- Compile Python source files" url="lib/module-pycompile.html"/>
+<tocsect3 name="17.9 compileall -- Byte-compile Python libraries" url="lib/module-compileall.html"/>
+<tocsect3 name="17.10 dis -- Disassembler for Python byte code" url="lib/module-dis.html">
+<tocsect4 name="17.10.1 Python Byte Code Instructions" url="lib/bytecodes.html"/>
+</tocsect3>
+</tocsect2>
+<tocsect2 name="18. SGI IRIX Specific Services" url="lib/sgi.html">
+<tocsect3 name="18.1 al -- Audio functions on the SGI" url="lib/module-al.html">
+<tocsect4 name="18.1.1 Configuration Objects " url="lib/al-config-objects.html"/>
+<tocsect4 name="18.1.2 Port Objects " url="lib/al-port-objects.html"/>
+</tocsect3>
+<tocsect3 name="18.2 AL -- Constants used with the al module" url="lib/module-al-constants.html"/>
+<tocsect3 name="18.3 cd -- CD-ROM access on SGI systems" url="lib/module-cd.html">
+<tocsect4 name="18.3.1 Player Objects" url="lib/player-objects.html"/>
+<tocsect4 name="18.3.2 Parser Objects" url="lib/cd-parser-objects.html"/>
+</tocsect3>
+<tocsect3 name="18.4 fl -- FORMS library interface for GUI applications" url="lib/module-fl.html">
+<tocsect4 name="18.4.1 Functions Defined in Module fl" url="lib/FL_Functions.html"/>
+<tocsect4 name="18.4.2 Form Objects" url="lib/form-objects.html"/>
+<tocsect4 name="18.4.3 FORMS Objects" url="lib/forms-objects.html"/>
+</tocsect3>
+<tocsect3 name="18.5 FL -- Constants used with the fl module" url="lib/module-fl-constants.html"/>
+<tocsect3 name="18.6 flp -- Functions for loading stored FORMS designs" url="lib/module-flp.html"/>
+<tocsect3 name="18.7 fm -- Font Manager interface" url="lib/module-fm.html"/>
+<tocsect3 name="18.8 gl -- Graphics Library interface" url="lib/module-gl.html"/>
+<tocsect3 name="18.9 DEVICE -- Constants used with the gl module" url="lib/module-DEVICE.html"/>
+<tocsect3 name="18.10 GL -- Constants used with the gl module" url="lib/module-gl-constants.html"/>
+<tocsect3 name="18.11 imgfile -- Support for SGI imglib files" url="lib/module-imgfile.html"/>
+<tocsect3 name="18.12 jpeg -- Read and write JPEG files" url="lib/module-jpeg.html"/>
+</tocsect2>
+<tocsect2 name="19. SunOS Specific Services" url="lib/sunos.html">
+<tocsect3 name="19.1 sunaudiodev -- Access to Sun audio hardware" url="lib/module-sunaudiodev.html">
+<tocsect4 name="19.1.1 Audio Device Objects " url="lib/audio-device-objects.html"/>
+</tocsect3>
+<tocsect3 name="19.2 SUNAUDIODEV -- Constants used with sunaudiodev" url="lib/module-sunaudiodev-constants.html"/>
+</tocsect2>
+<tocsect2 name="20. MS Windows Specific Services" url="lib/node413.html">
+<tocsect3 name="20.1 msvcrt - Useful routines from the MS VC++ runtime" url="lib/module-msvcrt.html">
+<tocsect4 name="20.1.1 File Operations " url="lib/msvcrt-files.html"/>
+<tocsect4 name="20.1.2 Console I/O " url="lib/msvcrt-console.html"/>
+<tocsect4 name="20.1.3 Other Functions " url="lib/msvcrt-other.html"/>
+</tocsect3>
+<tocsect3 name="20.2 _winreg - Windows registry access" url="lib/module--winreg.html">
+<tocsect4 name="20.2.1 Registry handle objects " url="lib/handle-object.html"/>
+</tocsect3>
+<tocsect3 name="20.3 winsound -- Sound-playing interface for Windows" url="lib/module-winsound.html"/>
+</tocsect2>
+<tocsect2 name="A. Undocumented Modules " url="lib/undoc.html">
+<tocsect3 name="A.1 Frameworks" url="lib/node422.html"/>
+<tocsect3 name="A.2 Miscellaneous useful utilities" url="lib/node423.html"/>
+<tocsect3 name="A.3 Platform specific modules" url="lib/node424.html"/>
+<tocsect3 name="A.4 Multimedia" url="lib/node425.html"/>
+<tocsect3 name="A.5 Obsolete " url="lib/obsolete-modules.html"/>
+<tocsect3 name="A.6 SGI-specific Extension modules" url="lib/node427.html"/>
+</tocsect2>
+<tocsect2 name="B. Reporting Bugs" url="lib/reporting-bugs.html"/>
+<tocsect2 name="Module Index" url="lib/modindex.html"/>
+<tocsect2 name="Index" url="lib/genindex.html"/>
+<tocsect2 name="About this document ..." url="lib/about.html"/>
+</tocsect1>
+</kdeveloptoc>
+
