@@ -1,3 +1,9 @@
+2004-10-27 Alexander Dymo <adymo@kdevelop.org>
+    The first step in creating RubyQt/Korundum RAD environment -
+    started to implement KDevDesigner integration for Ruby:
+    works: automatic and manual subclass creation;
+    doesn't work: function adding, editing and removing.
+
 2004-10-25  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
  * Added a ruby DCOP service project template
