@@ -61,7 +61,7 @@ QString AutoProjectTool::canonicalize( const QString &str )
 {
 	QString res;
 	for ( uint i = 0; i < str.length(); ++i )
-		res += str[ i ].isLetterOrNumber() ? str[ i ] : QChar( '_' );
+		res += ( str[ i ].isLetterOrNumber() || str[ i ] == '@' ) ? str[ i ] : QChar( '_' );
 
 	return res;
 }
@@ -74,7 +74,7 @@ void AutoProjectTool::parseMakefileam( const QString &fileName, QMap<QString, QS
 		return ;
 	QTextStream stream( &f );
 
-	QRegExp re( "^(#kdevelop:[ \t]*)?([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
+	QRegExp re( "^(#kdevelop:[ \t]*)?([A-Za-z][@A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
 
 	while ( !stream.atEnd() )
 	{
@@ -116,7 +116,7 @@ void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, Q
 	}
 	QTextStream outs( &fout );
 
-	QRegExp re( "^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
+	QRegExp re( "^([A-Za-z][@A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
 
 	while ( !ins.atEnd() )
 	{
@@ -180,7 +180,7 @@ void AutoProjectTool::removeFromMakefileam ( const QString &fileName, QMap <QStr
 	}
 	QTextStream outs( &fout );
 
-	QRegExp re( "^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
+	QRegExp re( "^([A-Za-z][@A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$" );
 
 	while ( !ins.atEnd() )
 	{
