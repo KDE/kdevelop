@@ -1547,6 +1547,9 @@ void CKAppWizard::removeSources(const QString &dir)
     file.remove (dir + "/" + nametext + "/app.c");
     file.remove (dir + "/" + nametext + "/app.h");
   }
+  if( kickeritem->isSelected()){
+        file.remove (dir + "/" + nametext + "/main.cpp");
+  }
 }
 
 // connection of this ( m_finishButton)
@@ -2383,7 +2386,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + ".lsm",fileInfo);
   }
 
-  if (generatesource->isChecked()) {
+  if (generatesource->isChecked() && !kickeritem->isSelected()) {
     QString extension= (citem->isSelected() || gnomenormalitem->isSelected()) ? "c" : "cpp";
     fileInfo.rel_name = namelow + "/main."+extension;
     fileInfo.type = CPP_SOURCE;
@@ -2505,15 +2508,7 @@ void CKAppWizard::slotProcessExited() {
         fileInfo.install_location = "";
         project->addFileToProject (namelow + "/resource.h",fileInfo);
       }
-      if(kickeritem->isSelected()){
-        fileInfo.rel_name = namelow + "/" + namelow + "myview.ui";
-        fileInfo.rel_name = namelow + "/" + namelow + "myview.ui";
-        fileInfo.type = DATA;
-        fileInfo.dist = true;
-        fileInfo.install = false;
-        fileInfo.install_location = "";
-        project->addFileToProject (namelow + "/" + namelow + "myview.ui",fileInfo);
-      }
+
       if(kde2normalitem->isSelected() || kde2mdiitem->isSelected()){
         fileInfo.rel_name = namelow + "/" + namelow + "ui.rc";
         fileInfo.type = DATA;
@@ -2538,6 +2533,15 @@ void CKAppWizard::slotProcessExited() {
         project->addFileToProject (namelow + "/" + "tabprocessingeditwidget.h",fileInfo);
       }
     }
+  }
+
+  if(kickeritem->isSelected()){
+        fileInfo.rel_name = namelow + "/" + namelow + "/myview.ui";
+        fileInfo.type = DATA;
+        fileInfo.dist = true;
+        fileInfo.install = false;
+        fileInfo.install_location = "";
+        project->addFileToProject (namelow + "/" + namelow + "/myview.ui",fileInfo);
   }
 
   if (datalink->isChecked()) {
