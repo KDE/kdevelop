@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=TipOfDay
+Name=KDevTipOfDay
+Icon=kdevelop
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevtipofday
