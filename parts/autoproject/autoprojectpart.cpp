@@ -2,7 +2,7 @@
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
-*   Copyright (C) 2002 by Victor Röder                                    *
+*   Copyright (C) 2002 by Victor Rder                                    *
 *   victor_roeder@gmx.de                                                  *
 *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -253,7 +253,7 @@ void AutoProjectPart::addFile(const QString &fileName)
 {
 	QStringList fileList;
 	fileList.append ( fileName );
-	
+
 	this->addFiles ( fileList );
 }
 
@@ -262,7 +262,7 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
 	QString directory, name;
 	QStringList::ConstIterator it;
 	bool messageBoxShown = false;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		int pos = ( *it ).findRev('/');
@@ -276,7 +276,7 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
                         directory = "";
 			name = ( *it );
 		}
-		
+
 		if (directory != m_widget->activeDirectory() ||
 			directory.isEmpty())
 		{
@@ -285,7 +285,7 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
 				KMessageBox::information(m_widget, i18n("It seems that you don't have an Active Target specified!\n"
 														"Automake Manager supports this feature to 'activate' the target your currently working on.\n"
 														"Just right-click a target and choose 'Make Target Active'."),
-														i18n ( "No Active Target found" ) );
+														i18n ( "No Active Target found" ), "No automake manager active target warning" );
 				messageBoxShown = true;
 			}
 		}
