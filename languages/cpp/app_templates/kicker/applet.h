@@ -1,6 +1,6 @@
 
-#ifndef $APPNAMEUC$_H
-#define $APPNAMEUC$_H
+#ifndef %{APPNAMEUC}_H
+#define %{APPNAMEUC}_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -11,7 +11,7 @@
 #include <kconfig.h>
 
 
-class $APPNAME$ : public KPanelApplet
+class %{APPNAME} : public KPanelApplet
 {
     Q_OBJECT
     
@@ -25,10 +25,10 @@ public:
      * @param parent The pointer to the parent widget handed over in the factory function.
      * @param name A Qt object name for your applet.
      **/
-    $APPNAME$(const QString& configFile, Type t = Normal, int actions = 0,
+    %{APPNAME}(const QString& configFile, Type t = Normal, int actions = 0,
         QWidget *parent = 0, const char *name = 0);
     /** destructor */
-    ~$APPNAME$();
+    ~%{APPNAME}();
     
     /**
      * Retrieve a suggested width for a given height.

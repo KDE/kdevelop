@@ -1,6 +1,6 @@
 
-#ifndef __KDEVPART_$APPNAMEUC$_H__
-#define __KDEVPART_$APPNAMEUC$_H__
+#ifndef __KDEVPART_%{APPNAMEUC}_H__
+#define __KDEVPART_%{APPNAMEUC}_H__
 
 
 #include <kdevelop/kdevplugin.h>
@@ -14,12 +14,12 @@ class KAction;
 /*
  Please read the README.dox file for more info about this part
  */
-class $APPNAME$Part : public KDevLanguageSupport
+class %{APPNAME}Part : public KDevLanguageSupport
 {
 	Q_OBJECT
 	public:
-		$APPNAME$Part(QObject *parent, const char *name, const QStringList &);
-		~$APPNAME$Part();
+		%{APPNAME}Part(QObject *parent, const char *name, const QStringList &);
+		~%{APPNAME}Part();
 	protected:
 		virtual Features features();
 		virtual KMimeType::List mimeTypes();

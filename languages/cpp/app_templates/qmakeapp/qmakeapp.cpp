@@ -1,5 +1,5 @@
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 #include <qimage.h>
 #include <qpixmap.h>
@@ -24,8 +24,8 @@
 #include "fileopen.xpm"
 #include "fileprint.xpm"
 
-$APPNAME$::$APPNAME$()
-    : QMainWindow( 0, "$APPNAME$", WDestructiveClose )
+%{APPNAME}::%{APPNAME}()
+    : QMainWindow( 0, "%{APPNAME}", WDestructiveClose )
 {
     printer = new QPrinter;
     QPixmap openIcon, saveIcon, printIcon;
@@ -123,21 +123,21 @@ $APPNAME$::$APPNAME$()
 }
 
 
-$APPNAME$::~$APPNAME$()
+%{APPNAME}::~%{APPNAME}()
 {
     delete printer;
 }
 
 
 
-void $APPNAME$::newDoc()
+void %{APPNAME}::newDoc()
 {
-    $APPNAME$ *ed = new $APPNAME$;
+    %{APPNAME} *ed = new %{APPNAME};
     ed->setCaption(tr("Qt Example - Application"));
     ed->show();
 }
 
-void $APPNAME$::choose()
+void %{APPNAME}::choose()
 {
     QString fn = QFileDialog::getOpenFileName( QString::null, QString::null,
 					       this);
@@ -148,7 +148,7 @@ void $APPNAME$::choose()
 }
 
 
-void $APPNAME$::load( const QString &fileName )
+void %{APPNAME}::load( const QString &fileName )
 {
     QFile f( fileName );
     if ( !f.open( IO_ReadOnly ) )
@@ -162,7 +162,7 @@ void $APPNAME$::load( const QString &fileName )
 }
 
 
-void $APPNAME$::save()
+void %{APPNAME}::save()
 {
     if ( filename.isEmpty() ) {
 	saveAs();
@@ -189,7 +189,7 @@ void $APPNAME$::save()
 }
 
 
-void $APPNAME$::saveAs()
+void %{APPNAME}::saveAs()
 {
     QString fn = QFileDialog::getSaveFileName( QString::null, QString::null,
 					       this );
@@ -202,7 +202,7 @@ void $APPNAME$::saveAs()
 }
 
 
-void $APPNAME$::print()
+void %{APPNAME}::print()
 {
     // ###### Rewrite to use QSimpleRichText to print here as well
     const int Margin = 10;
@@ -241,7 +241,7 @@ void $APPNAME$::print()
     }
 }
 
-void $APPNAME$::closeEvent( QCloseEvent* ce )
+void %{APPNAME}::closeEvent( QCloseEvent* ce )
 {
     if ( !e->isModified() ) {
 	ce->accept();
@@ -268,7 +268,7 @@ void $APPNAME$::closeEvent( QCloseEvent* ce )
 }
 
 
-void $APPNAME$::about()
+void %{APPNAME}::about()
 {
     QMessageBox::about( this, tr("Qt Application Example"),
 			tr("This example demonstrates simple use of "
@@ -276,7 +276,7 @@ void $APPNAME$::about()
 }
 
 
-void $APPNAME$::aboutQt()
+void %{APPNAME}::aboutQt()
 {
     QMessageBox::aboutQt( this, tr("Qt Application Example") );
 }

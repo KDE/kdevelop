@@ -1,6 +1,6 @@
 
-#ifndef __$APPNAMEUC$_WIDGET_H__
-#define __$APPNAMEUC$_WIDGET_H__
+#ifndef __%{APPNAMEUC}_WIDGET_H__
+#define __%{APPNAMEUC}_WIDGET_H__
 
 
 #include <qwidget.h>
@@ -8,17 +8,17 @@
 
 
 class KDevProject;
-class $APPNAME$Part;
+class %{APPNAME}Part;
 
 
-class $APPNAME$Widget : public QWidget
+class %{APPNAME}Widget : public QWidget
 {
   Q_OBJECT
     
 public:
 		  
-  $APPNAME$Widget($APPNAME$Part *part);
-  ~$APPNAME$Widget();
+  %{APPNAME}Widget(%{APPNAME}Part *part);
+  ~%{APPNAME}Widget();
 
 };
 

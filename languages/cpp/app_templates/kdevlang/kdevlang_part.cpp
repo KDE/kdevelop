@@ -12,22 +12,22 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-//#include "$APPNAMELC$_widget.h"
-#include "$APPNAMELC$_part.h"
+//#include "%{APPNAMELC}_widget.h"
+#include "%{APPNAMELC}_part.h"
 
-typedef KGenericFactory<$APPNAME$Part> $APPNAME$Factory;
-K_EXPORT_COMPONENT_FACTORY( libkdev$APPNAMELC$, $APPNAME$Factory( "kdev$APPNAMELC$" ) );
+typedef KGenericFactory<%{APPNAME}Part> %{APPNAME}Factory;
+K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( "kdev%{APPNAMELC}" ) );
 
-$APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringList& )
-: KDevLanguageSupport("KDevPart", "kdevpart", parent, name ? name : "$APPNAME$Part" )
+%{APPNAME}Part::%{APPNAME}Part(QObject *parent, const char *name, const QStringList& )
+: KDevLanguageSupport("KDevPart", "kdevpart", parent, name ? name : "%{APPNAME}Part" )
 {
-	setInstance($APPNAME$Factory::instance());
-	setXMLFile("kdevlang_$APPNAMELC$.rc");
+	setInstance(%{APPNAME}Factory::instance());
+	setXMLFile("kdevlang_%{APPNAMELC}.rc");
 
 
 	m_build = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
 
-	kdDebug() << "Creating $APPNAMELC$ Part" << endl;
+	kdDebug() << "Creating %{APPNAMELC} Part" << endl;
 
 	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 		this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -39,16 +39,16 @@ $APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringLis
 }
 
 
-$APPNAME$Part::~$APPNAME$Part()
+%{APPNAME}Part::~%{APPNAME}Part()
 {
 	delete m_build;
 }
 
-KDevLanguageSupport::Features $APPNAME$Part::features()
+KDevLanguageSupport::Features %{APPNAME}Part::features()
 {
 	return Features(Variables | Functions);
 }
-KMimeType::List $APPNAME$Part::mimeTypes()
+KMimeType::List %{APPNAME}Part::mimeTypes()
 {
     KMimeType::List list;
 
@@ -58,16 +58,16 @@ KMimeType::List $APPNAME$Part::mimeTypes()
 
     return list;
 }
-void $APPNAME$Part::slotRun()
+void %{APPNAME}Part::slotRun()
 {
 	// Execute the application here.
 }
-void $APPNAME$Part::projectConfigWidget(KDialogBase *dlg)
+void %{APPNAME}Part::projectConfigWidget(KDialogBase *dlg)
 {
 	Q_UNUSED( dlg );
 	// Create your config dialog here.
 }
-void $APPNAME$Part::projectOpened()
+void %{APPNAME}Part::projectOpened()
 {
 	kdDebug(9014) << "projectOpened()" << endl;
 
@@ -80,11 +80,11 @@ void $APPNAME$Part::projectOpened()
 	// properly initialized
 	QTimer::singleShot(0, this, SLOT(parse()));
 }
-void $APPNAME$Part::projectClosed()
+void %{APPNAME}Part::projectClosed()
 {
 
 }
-void $APPNAME$Part::savedFile(const QString &fileName)
+void %{APPNAME}Part::savedFile(const QString &fileName)
 {
 
 
@@ -94,7 +94,7 @@ void $APPNAME$Part::savedFile(const QString &fileName)
 		emit addedSourceInfo( fileName );
 	}
 }
-void $APPNAME$Part::addedFilesToProject(const QStringList &fileList)
+void %{APPNAME}Part::addedFilesToProject(const QStringList &fileList)
 {
 	kdDebug(9014) << "addedFilesToProject()" << endl;
 
@@ -107,7 +107,7 @@ void $APPNAME$Part::addedFilesToProject(const QStringList &fileList)
 
 	emit updatedSourceInfo();
 }
-void $APPNAME$Part::removedFilesFromProject(const QStringList &fileList)
+void %{APPNAME}Part::removedFilesFromProject(const QStringList &fileList)
 {
 
 
@@ -125,7 +125,7 @@ void $APPNAME$Part::removedFilesFromProject(const QStringList &fileList)
 	}
 
 }
-void $APPNAME$Part::parse()
+void %{APPNAME}Part::parse()
 {
 	kdDebug(9014) << "initialParse()" << endl;
 
@@ -143,9 +143,9 @@ void $APPNAME$Part::parse()
 		kdDebug(9014) << "No project" << endl;
 	}
 }
-void $APPNAME$Part::slotActivePartChanged(KParts::Part *part)
+void %{APPNAME}Part::slotActivePartChanged(KParts::Part *part)
 {
 	kdDebug() << "Changeing active part..." << endl;
 }
 
-#include "$APPNAMELC$_part.moc"
+#include "%{APPNAMELC}_part.moc"

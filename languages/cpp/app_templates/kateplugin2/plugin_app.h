@@ -1,6 +1,6 @@
 
-#ifndef _PLUGIN_$APPNAMEUC$_H_
-#define _PLUGIN_$APPNAMEUC$_H_
+#ifndef _PLUGIN_%{APPNAMEUC}_H_
+#define _PLUGIN_%{APPNAMEUC}_H_
 
 #include <kate/application.h>
 #include <kate/documentmanager.h>
@@ -15,7 +15,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 
-class $APPNAME$ConfigPage;
+class %{APPNAME}ConfigPage;
 
 class KatePluginFactory : public KLibFactory
 {
@@ -31,13 +31,13 @@ private:
     static KInstance* s_instance;
 };
 
-class KatePlugin$APPNAME$ : public Kate::Plugin, Kate::PluginViewInterface, Kate::PluginConfigInterfaceExtension
+class KatePlugin%{APPNAME} : public Kate::Plugin, Kate::PluginViewInterface, Kate::PluginConfigInterfaceExtension
 {
     Q_OBJECT
 
 public:
-    KatePlugin$APPNAME$( QObject* parent = 0, const char* name = 0 );
-    virtual ~KatePlugin$APPNAME$();
+    KatePlugin%{APPNAME}( QObject* parent = 0, const char* name = 0 );
+    virtual ~KatePlugin%{APPNAME}();
 
     void addView (Kate::MainWindow *win);
     void removeView (Kate::MainWindow *win);
@@ -45,30 +45,30 @@ public:
     /** overwrite some functions  */
     uint configPages () const { return 1; }
     Kate::PluginConfigPage *configPage (uint , QWidget *w, const char *name=0);
-    QString configPageName(uint) const { return i18n("$APPNAME$"); };
-    QString configPageFullName(uint) const { return i18n("Configure KatePlugin$APPNAME$"); };
+    QString configPageName(uint) const { return i18n("%{APPNAME}"); };
+    QString configPageFullName(uint) const { return i18n("Configure KatePlugin%{APPNAME}"); };
     QPixmap configPagePixmap (uint number = 0, int size = KIcon::SizeSmall) const { return 0L; };
 
 public slots:
     void slotInsertHello();
-    void slotApplyConfig($APPNAME$ConfigPage*);
+    void slotApplyConfig(%{APPNAME}ConfigPage*);
 
 private:
-    void initConfigPage( $APPNAME$ConfigPage* );
+    void initConfigPage( %{APPNAME}ConfigPage* );
 
 private:
     QPtrList<class PluginView> m_views;
 };
 
 
-class $APPNAME$ConfigPage : public Kate::PluginConfigPage
+class %{APPNAME}ConfigPage : public Kate::PluginConfigPage
 {
     Q_OBJECT
-    friend class KatePlugin$APPNAME$;
+    friend class KatePlugin%{APPNAME};
 
 public:
-    $APPNAME$ConfigPage (QObject* parent = 0L, QWidget *parentWidget = 0L);
-    ~$APPNAME$ConfigPage ();
+    %{APPNAME}ConfigPage (QObject* parent = 0L, QWidget *parentWidget = 0L);
+    ~%{APPNAME}ConfigPage ();
 
     /** Reimplemented from Kate::PluginConfigPage; just emits configPageApplyRequest( this ).  */
     virtual void apply();
@@ -78,13 +78,13 @@ public:
 
 signals:
     /** Ask the plugin to set initial values  */
-    void configPageApplyRequest( $APPNAME$ConfigPage* );
+    void configPageApplyRequest( %{APPNAME}ConfigPage* );
     /** Ask the plugin to apply changes  */
-    void configPageInitRequest( $APPNAME$ConfigPage* );
+    void configPageInitRequest( %{APPNAME}ConfigPage* );
 
 private: // variables
 
 };
 
-#endif // _PLUGIN_$APPNAMEUC$_H_
+#endif // _PLUGIN_%{APPNAMEUC}_H_
 

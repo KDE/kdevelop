@@ -1,6 +1,6 @@
 
-#ifndef $APPNAMEUC$_H
-#define $APPNAMEUC$_H
+#ifndef %{APPNAMEUC}_H
+#define %{APPNAMEUC}_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -11,7 +11,7 @@
 #include <kconfig.h>
 
 
-class $APPNAME$ : public KonqSidebarPlugin
+class %{APPNAME} : public KonqSidebarPlugin
 {
     Q_OBJECT
     
@@ -25,10 +25,10 @@ public:
      * @param desktopName The filename of the configuration file.
      * @param name A Qt object name for your plugin.
      **/
-     $APPNAME$(KInstance *inst,QObject *parent,QWidget *widgetParent, QString &desktopName, const char* name=0);
+     %{APPNAME}(KInstance *inst,QObject *parent,QWidget *widgetParent, QString &desktopName, const char* name=0);
 
     /** destructor */
-    ~$APPNAME$();
+    ~%{APPNAME}();
     
    virtual QWidget *getWidget(){return widget;}
    virtual void *provides(const QString &) {return 0;}

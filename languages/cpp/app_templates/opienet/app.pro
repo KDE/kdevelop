@@ -1,8 +1,8 @@
 TEMPLATE	= lib
 CONFIG		= qt dll qtopia warn_on release zecke-libqpe zecke-libopie opie-network
-HEADERS		= $APPNAMELC$module.h $APPNAMELC$iface.h
-SOURCES		= $APPNAMELC$module.cpp $APPNAMELC$iface.cpp
-TARGET		= $APPNAMELC$
+HEADERS		= %{APPNAMELC}module.h %{APPNAMELC}iface.h
+SOURCES		= %{APPNAMELC}module.cpp %{APPNAMELC}iface.cpp
+TARGET		= %{APPNAMELC}
 LIBS		      += -linterfaces
 
 

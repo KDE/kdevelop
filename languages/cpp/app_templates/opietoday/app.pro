@@ -1,8 +1,8 @@
 TEMPLATE	= lib
 CONFIG		= qt dll qtopia warn_on release zecke-libqpe zecke-libopie opie-todayplugin
-HEADERS		= $APPNAMELC$.h $APPNAMELC$widget.h $APPNAMELC$impl.h
-SOURCES		= $APPNAMELC$.cpp $APPNAMELC$widget.cpp $APPNAMELC$impl.cpp
-TARGET		= $APPNAMELC$
+HEADERS		= %{APPNAMELC}.h %{APPNAMELC}widget.h %{APPNAMELC}impl.h
+SOURCES		= %{APPNAMELC}.cpp %{APPNAMELC}widget.cpp %{APPNAMELC}impl.cpp
+TARGET		= %{APPNAMELC}
 
 
 QUICK_SPEC_FOO = $$(OPIE_BUILD_QUICK_APP)

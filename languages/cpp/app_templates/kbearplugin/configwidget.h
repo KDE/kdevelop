@@ -1,16 +1,16 @@
 
-#ifndef __$APPNAMEUC$_CONFIGWIDGET_H__
-#define __$APPNAMEUC$_CONFIGWIDGET_H__
+#ifndef __%{APPNAMEUC}_CONFIGWIDGET_H__
+#define __%{APPNAMEUC}_CONFIGWIDGET_H__
 
 #include <kbear/kbearconfigwidgetiface.h>
 #include <qstring.h>
 
-class KBear$APPNAME$ConfigWidget : public KBear::KBearConfigWidgetIface
+class KBear%{APPNAME}ConfigWidget : public KBear::KBearConfigWidgetIface
 {
     Q_OBJECT
 public:
-    KBear$APPNAME$ConfigWidget( QWidget* parent, const char* name  );
-    virtual ~KBear$APPNAME$ConfigWidget();
+    KBear%{APPNAME}ConfigWidget( QWidget* parent, const char* name  );
+    virtual ~KBear%{APPNAME}ConfigWidget();
 
     /**
     * Reimplement from @ref KBear::KBearConfigWidgetIface
@@ -28,5 +28,5 @@ public slots:
     void slotSaveSettings();
 };
 
-#endif // __$APPNAMEUC$_CONFIGWIDGET_H__
+#endif // __%{APPNAMEUC}_CONFIGWIDGET_H__
 

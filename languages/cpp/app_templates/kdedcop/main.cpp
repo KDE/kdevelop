@@ -1,5 +1,5 @@
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -18,17 +18,17 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char **argv)
 {
-    KAboutData about("$APPNAMELC$", I18N_NOOP("$APPNAME$"), version, description,
-                     KAboutData::License_GPL, "(C) $YEAR$ $AUTHOR$", 0, 0, "$EMAIL$");
-    about.addAuthor( "$AUTHOR$", 0, "$EMAIL$" );
+    KAboutData about("%{APPNAMELC}", I18N_NOOP("%{APPNAME}"), version, description,
+                     KAboutData::License_GPL, "(C) %{YEAR} %{AUTHOR}", 0, 0, "%{EMAIL}");
+    about.addAuthor( "%{AUTHOR}", 0, "%{EMAIL}" );
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions( options );
     KApplication app;
-    $APPNAME$ *mainWin = 0;
+    %{APPNAME} *mainWin = 0;
 
     if (app.isRestored())
     {
-        RESTORE($APPNAME$);
+        RESTORE(%{APPNAME});
     }
     else
     {
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
         /// @todo do something with the command line args here
 
-        mainWin = new $APPNAME$();
+        mainWin = new %{APPNAME}();
         app.setMainWidget( mainWin );
         mainWin->show();
 

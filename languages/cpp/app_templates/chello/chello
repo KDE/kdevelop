@@ -38,10 +38,10 @@ Value=INSTALL_DOCS
 Comment= Install Docbook documentation templates.
 Default=true
 
-[LICENSE]
-Type=install
-Source=%{kdevelop}/template-common/%{LICENSEFILE}
-Dest=%{dest}/%{LICENSEFILE}
+#[LICENSE]
+#Type=install
+#Source=%{kdevelop}/template-common/%{LICENSEFILE}
+#Dest=%{dest}/%{LICENSEFILE}
 
 [ADMIN]
 Type=install archive

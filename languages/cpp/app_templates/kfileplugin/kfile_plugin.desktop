@@ -1,23 +1,25 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-Name=$APPNAME$ Info
-Name[ca]=Informació $APPNAME$
-Name[de]=$APPNAME$-Information
-Name[es]=Información de $APPNAME$
-Name[et]=$APPNAME$ info
-Name[hu]=$APPNAME$ jellemzői
-Name[it]=Informazioni su $APPNAME$
-Name[nl]=Info over $APPNAME$
-Name[pt]=Informação do $APPNAME$
-Name[pt_BR]=Informações de $APPNAME$
-Name[ru]=Информация о $APPNAME$
-Name[sr]=$APPNAME$ информације
-Name[sv]=$APPNAME$ information
-Name[xx]=xx$APPNAME$ Infoxx
-Name[zh_CN]=$APPNAME$的信息
+Name=%{APPNAME} Info
+Name[ca]=Informació %{APPNAME}
+Name[de]=%{APPNAME}-Information
+Name[es]=Información de %{APPNAME}
+Name[et]=%{APPNAME} info
+Name[hi]=%{APPNAME} इन्फो
+Name[hu]=%{APPNAME} jellemzői
+Name[it]=Informazioni su %{APPNAME}
+Name[nl]=Info over %{APPNAME}
+Name[pt]=Informação do %{APPNAME}
+Name[pt_BR]=Informações de %{APPNAME}
+Name[ru]=Информация о %{APPNAME}
+Name[sl]=Informacije o %{APPNAME}
+Name[sr]=%{APPNAME} информације
+Name[sv]=%{APPNAME} information
+Name[xx]=xx%{APPNAME} Infoxx
+Name[zh_CN]=%{APPNAME}的信息
 ServiceTypes=KFilePlugin
-X-KDE-Library=kfile_$APPNAMELC$
+X-KDE-Library=kfile_%{APPNAMELC}
 # change MimeType here! (example: inode/directory)
 MimeType=
 # change PreferredGroups here! (example: FolderInfo)

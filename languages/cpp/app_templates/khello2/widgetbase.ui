@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>$APPNAME$WidgetBase</class>
+<class>%{APPNAME}WidgetBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>$APPNAMELC$widgetbase</cstring>
+        <cstring>%{APPNAMELC}widgetbase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -41,7 +41,7 @@
     <connection>
         <sender>button</sender>
         <signal>clicked()</signal>
-        <receiver>$APPNAMELC$widgetbase</receiver>
+        <receiver>%{APPNAMELC}widgetbase</receiver>
         <slot>button_clicked()</slot>
     </connection>
 </connections>

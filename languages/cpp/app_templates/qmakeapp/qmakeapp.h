@@ -1,18 +1,18 @@
 
-#ifndef $APPNAMEUC$_H
-#define $APPNAMEUC$_H
+#ifndef %{APPNAMEUC}_H
+#define %{APPNAMEUC}_H
 
 #include <qmainwindow.h>
 
 class QTextEdit;
 
-class $APPNAME$: public QMainWindow
+class %{APPNAME}: public QMainWindow
 {
     Q_OBJECT
 
 public:
-    $APPNAME$();
-    ~$APPNAME$();
+    %{APPNAME}();
+    ~%{APPNAME}();
 
 protected:
     void closeEvent( QCloseEvent* );

@@ -16,7 +16,7 @@ main_window_glade::main_window_glade(
    
    Gtk::AccelGroup *main_window_accgrp = Gtk::AccelGroup::create();
    gmm_data = new GlademmData(main_window_accgrp);
-   main_window->set_title("$APPNAME$ Project");
+   main_window->set_title("%{APPNAME} Project");
    main_window->set_modal(false);
    main_window->add_accel_group(*(gmm_data->getAccelGroup()));
    main_window->show();

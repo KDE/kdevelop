@@ -6,33 +6,33 @@
 #include <qcheckbox.h>
 #include <qcolor.h>
 #include <kglobal.h>
-#include "$APPNAMELC$.h"
-#include "$APPNAMELC$ui.h"
+#include "%{APPNAMELC}.h"
+#include "%{APPNAMELC}ui.h"
 
 //! libkscreensaver interface
 extern "C"
 {
-    const char *kss_applicationName = "$APPNAMELC$.kss";
-    const char *kss_description = I18N_NOOP( "$APPNAME$" );
+    const char *kss_applicationName = "%{APPNAMELC}.kss";
+    const char *kss_description = I18N_NOOP( "%{APPNAME}" );
     const char *kss_version = "2.2.0";
 
-    $APPNAME$ *kss_create( WId id )
+    %{APPNAME} *kss_create( WId id )
     {
-        KGlobal::locale()->insertCatalogue("$APPNAMELC$");
-        return new $APPNAME$( id );
+        KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+        return new %{APPNAME}( id );
     }
 
     QDialog *kss_setup()
     {
-        KGlobal::locale()->insertCatalogue("$APPNAMELC$");
-        return new $APPNAME$Setup();
+        KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+        return new %{APPNAME}Setup();
     }
 }
 
 //-----------------------------------------------------------------------------
 //! dialog to setup screen saver parameters
-$APPNAME$Setup::$APPNAME$Setup( QWidget *parent, const char *name )
-        : $APPNAME$UI( parent, name, TRUE )
+%{APPNAME}Setup::%{APPNAME}Setup( QWidget *parent, const char *name )
+        : %{APPNAME}UI( parent, name, TRUE )
 {
     /// @todo
     //Connect your signals and slots here to configure the screen saver.
@@ -44,7 +44,7 @@ $APPNAME$Setup::$APPNAME$Setup( QWidget *parent, const char *name )
 
 
 //! read settings from config file
-void $APPNAME$Setup::readSettings()
+void %{APPNAME}Setup::readSettings()
 {
     KConfig *config = KGlobal::config();
     config->setGroup( "Settings" );
@@ -55,7 +55,7 @@ void $APPNAME$Setup::readSettings()
 
 
 //! Ok pressed - save settings and exit
-void $APPNAME$Setup::slotOkPressed()
+void %{APPNAME}Setup::slotOkPressed()
 {
     KConfig *config = KGlobal::config();
     config->setGroup( "Settings" );
@@ -67,25 +67,25 @@ void $APPNAME$Setup::slotOkPressed()
     accept();
 }
 
-void $APPNAME$Setup::slotCancelPressed()
+void %{APPNAME}Setup::slotCancelPressed()
 {
     reject();
 }
 //-----------------------------------------------------------------------------
 
 
-$APPNAME$::$APPNAME$( WId id ) : KScreenSaver( id )
+%{APPNAME}::%{APPNAME}( WId id ) : KScreenSaver( id )
 {
     readSettings();
     blank();
 }
 
-$APPNAME$::~$APPNAME$()
+%{APPNAME}::~%{APPNAME}()
 {}
 
 
 //! read configuration settings from config file
-void $APPNAME$::readSettings()
+void %{APPNAME}::readSettings()
 {
     KConfig *config = KGlobal::config();
     config->setGroup( "Settings" );
@@ -95,7 +95,7 @@ void $APPNAME$::readSettings()
 }
 
 
-void $APPNAME$::blank()
+void %{APPNAME}::blank()
 {
     /// @todo
     //Add your code to render the screen.

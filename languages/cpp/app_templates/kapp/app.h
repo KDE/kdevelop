@@ -1,6 +1,6 @@
 
-#ifndef _$APPNAMEUC$_H_
-#define _$APPNAMEUC$_H_
+#ifndef _%{APPNAMEUC}_H_
+#define _%{APPNAMEUC}_H_
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -9,33 +9,33 @@
 #include <kapplication.h>
 #include <kmainwindow.h>
 
-#include "$APPNAMELC$view.h"
+#include "%{APPNAMELC}view.h"
 
 class KPrinter;
 class KToggleAction;
 class KURL;
 
 /**
- * This class serves as the main window for $APPNAME$.  It handles the
+ * This class serves as the main window for %{APPNAME}.  It handles the
  * menus, toolbars, and status bars.
  *
  * @short Main window class
- * @author $AUTHOR$ <$EMAIL$>
- * @version $VERSION$
+ * @author %{AUTHOR} <%{EMAIL}>
+ * @version %{VERSION}
  */
-class $APPNAME$ : public KMainWindow
+class %{APPNAME} : public KMainWindow
 {
     Q_OBJECT
 public:
     /**
      * Default Constructor
      */
-    $APPNAME$();
+    %{APPNAME}();
 
     /**
      * Default Destructor
      */
-    virtual ~$APPNAME$();
+    virtual ~%{APPNAME}();
 
     /**
      * Use this method to load whatever file/URL you have
@@ -85,11 +85,11 @@ private:
     void setupActions();
 
 private:
-    $APPNAME$View *m_view;
+    %{APPNAME}View *m_view;
 
     KPrinter   *m_printer;
     KToggleAction *m_toolbarAction;
     KToggleAction *m_statusbarAction;
 };
 
-#endif // _$APPNAMEUC$_H_
+#endif // _%{APPNAMEUC}_H_

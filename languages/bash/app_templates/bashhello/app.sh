@@ -1,6 +1,6 @@
 #!/bin/bash
 # $Id$
-# $APPNAME$ - Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
+# %{APPNAME} - Copyright (C) %{YEAR} %{AUTHOR} <%{EMAIL}>
 
 
 hello()

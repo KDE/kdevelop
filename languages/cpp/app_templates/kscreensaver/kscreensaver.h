@@ -1,26 +1,26 @@
 
-#ifndef __$APPNAME$_H__
-#define __$APPNAME$_H__
+#ifndef __%{APPNAME}_H__
+#define __%{APPNAME}_H__
 
 #include "kscreensaver.h"
-#include "$APPNAMELC$ui.h"
+#include "%{APPNAMELC}ui.h"
 
-class $APPNAME$ : public KScreenSaver
+class %{APPNAME} : public KScreenSaver
 {
     Q_OBJECT
 public:
-    $APPNAME$( WId drawable );
-    virtual ~$APPNAME$();
+    %{APPNAME}( WId drawable );
+    virtual ~%{APPNAME}();
 private:
     void readSettings();
     void blank();
 };
 
-class $APPNAME$Setup : public $APPNAME$UI
+class %{APPNAME}Setup : public %{APPNAME}UI
 {
     Q_OBJECT
 public:
-    $APPNAME$Setup( QWidget *parent = NULL, const char *name = NULL );
+    %{APPNAME}Setup( QWidget *parent = NULL, const char *name = NULL );
 
 private slots:
     void slotOkPressed();
@@ -28,7 +28,7 @@ private slots:
 
 private:
     void readSettings();
-    $APPNAME$ *saver;
+    %{APPNAME} *saver;
 };
 
 #endif

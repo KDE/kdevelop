@@ -1,4 +1,4 @@
-program $APPNAMELC$;
+program %{APPNAMELC};
 
 {$mode objfpc}
 

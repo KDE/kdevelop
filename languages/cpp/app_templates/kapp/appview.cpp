@@ -1,5 +1,5 @@
 
-#include "$APPNAMELC$view.h"
+#include "%{APPNAMELC}view.h"
 
 #include <qpainter.h>
 #include <qlayout.h>
@@ -12,9 +12,9 @@
 #include <krun.h>
 #include <klocale.h>
 
-$APPNAME$View::$APPNAME$View(QWidget *parent)
+%{APPNAME}View::%{APPNAME}View(QWidget *parent)
     : QWidget(parent),
-      DCOPObject("$APPNAME$Iface")
+      DCOPObject("%{APPNAME}Iface")
 {
     // setup our layout manager to automatically add our widgets
     QHBoxLayout *top_layout = new QHBoxLayout(this);
@@ -69,38 +69,38 @@ $APPNAME$View::$APPNAME$View(QWidget *parent)
 
 }
 
-$APPNAME$View::~$APPNAME$View()
+%{APPNAME}View::~%{APPNAME}View()
 {
 }
 
-void $APPNAME$View::print(QPainter *p, int height, int width)
+void %{APPNAME}View::print(QPainter *p, int height, int width)
 {
     // do the actual printing, here
     // p->drawText(etc..)
 }
 
-QString $APPNAME$View::currentURL()
+QString %{APPNAME}View::currentURL()
 {
     return m_html->url().url();
 }
 
-void $APPNAME$View::openURL(QString url)
+void %{APPNAME}View::openURL(QString url)
 {
     openURL(KURL(url));
 }
 
-void $APPNAME$View::openURL(const KURL& url)
+void %{APPNAME}View::openURL(const KURL& url)
 {
     m_html->openURL(url);
 }
 
-void $APPNAME$View::slotOnURL(const QString& url)
+void %{APPNAME}View::slotOnURL(const QString& url)
 {
     emit signalChangeStatusbar(url);
 }
 
-void $APPNAME$View::slotSetTitle(const QString& title)
+void %{APPNAME}View::slotSetTitle(const QString& title)
 {
     emit signalChangeCaption(title);
 }
-#include "$APPNAMELC$view.moc"
+#include "%{APPNAMELC}view.moc"

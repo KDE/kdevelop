@@ -1,11 +1,11 @@
-library $APPNAMELC$;
+library %{APPNAMELC};
 
-function $APPNAMELC$_test: integer; cdecl; export;
+function %{APPNAMELC}_test: integer; cdecl; export;
 begin
-    $APPNAMELC$_test := 0;
+    %{APPNAMELC}_test := 0;
 end;
 
 exports
-    $APPNAMELC$_test;
+    %{APPNAMELC}_test;
 
 end.

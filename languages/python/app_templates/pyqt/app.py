@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #############################################################################
-# $APPNAME$ - PyQT application template for KDevelop
+# %{APPNAME} - PyQT application template for KDevelop
 #
 # Translated from C++ qmakeapp.cpp
 # (qmakeapp.cpp - Copyright (C) 1992-2002 Trolltech AS.  All rights reserved.)
@@ -26,11 +26,11 @@ def load_QPixMap(fileName):
     f.close()
     return result
 
-class $APPNAME$(QMainWindow):
-    """An application called $APPNAME$."""
+class %{APPNAME}(QMainWindow):
+    """An application called %{APPNAME}."""
 
     def __init__(self):
-        QMainWindow.__init__(self, None, "$APPNAME$")
+        QMainWindow.__init__(self, None, "%{APPNAME}")
         self.initIcons()
         self.setup()
         self.initPrinter()
@@ -41,7 +41,7 @@ class $APPNAME$(QMainWindow):
 
     def setup(self):
 
-        self.appTitle = "$APPNAME$ - PyQT Application Example"
+        self.appTitle = "%{APPNAME} - PyQT Application Example"
 
         self.menu = [
             ('&File',
@@ -127,7 +127,7 @@ class $APPNAME$(QMainWindow):
         
 
     def slotNewFile(self):
-        ed = $APPNAME$()
+        ed = %{APPNAME}()
         ed.setCaption(self.appTitle)
         ed.show()
 
@@ -260,7 +260,7 @@ class $APPNAME$(QMainWindow):
 
 def main(args):
     app=QApplication(args)
-    mainWindow = $APPNAME$()
+    mainWindow = %{APPNAME}()
     mainWindow.show()
     app.connect(app, SIGNAL("lastWindowClosed()"), app, SLOT("quit()"))
     app.exec_loop()

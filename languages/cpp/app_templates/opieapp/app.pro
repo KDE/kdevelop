@@ -1,9 +1,9 @@
 TEMPLATE	= quick-template
 CONFIG		= qt qtopia warn_on release zecke-libqpe zecke-libopie
-HEADERS		= $APPNAMELC$.h
-SOURCES		= $APPNAMELC$.cpp
-INTERFACES	= $APPNAMELC$base.ui
-TARGET		= $APPNAMELC$
+HEADERS		= %{APPNAMELC}.h
+SOURCES		= %{APPNAMELC}.cpp
+INTERFACES	= %{APPNAMELC}base.ui
+TARGET		= %{APPNAMELC}
 
 QMAKE_LIBDIR = $(OPIEDIR)/lib
 OPIE-SPEC=6

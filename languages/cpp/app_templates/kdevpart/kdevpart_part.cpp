@@ -11,19 +11,19 @@
 #include "kdevmainwindow.h"
 
 
-#include "$APPNAMELC$_widget.h"
-#include "$APPNAMELC$_part.h"
+#include "%{APPNAMELC}_widget.h"
+#include "%{APPNAMELC}_part.h"
 
-typedef KGenericFactory<$APPNAME$Part> $APPNAME$Factory;
-K_EXPORT_COMPONENT_FACTORY( libkdev$APPNAMELC$, $APPNAME$Factory( "kdev$APPNAMELC$" ) );
+typedef KGenericFactory<%{APPNAME}Part> %{APPNAME}Factory;
+K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( "kdev%{APPNAMELC}" ) );
 
-$APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin("$APPNAME$", "$APPNAMELC$", parent, name ? name : "$APPNAME$Part" )
+%{APPNAME}Part::%{APPNAME}Part(QObject *parent, const char *name, const QStringList& )
+  : KDevPlugin("%{APPNAME}", "%{APPNAMELC}", parent, name ? name : "%{APPNAME}Part" )
 {
-  setInstance($APPNAME$Factory::instance());
-  setXMLFile("kdevpart_$APPNAMELC$.rc");
+  setInstance(%{APPNAME}Factory::instance());
+  setXMLFile("kdevpart_%{APPNAMELC}.rc");
 
-  m_widget = new $APPNAME$Widget(this);
+  m_widget = new %{APPNAME}Widget(this);
 
   QWhatsThis::add(m_widget, i18n("WHAT DOES THIS PART DO?"));
 
@@ -38,7 +38,7 @@ $APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringLis
 }
 
 
-$APPNAME$Part::~$APPNAME$Part()
+%{APPNAME}Part::~%{APPNAME}Part()
 {
 // if you embed a widget, you need to tell the mainwindow when you remove it
 //  if ( m_widget )
@@ -49,4 +49,4 @@ $APPNAME$Part::~$APPNAME$Part()
 }
 
 
-#include "$APPNAMELC$_part.moc"
+#include "%{APPNAMELC}_part.moc"

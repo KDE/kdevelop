@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevCustomProject</projectmanagement>
   <primarylanguage>Ada</primarylanguage>
   <keywords>
@@ -15,7 +15,7 @@
     <run>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>$APPNAMELC$</mainprogram>
+      <mainprogram>%{APPNAMELC}</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>false</autocompile>

@@ -3,12 +3,12 @@
 
 #include <interfaces/interface.h>
 
-class $APPNAME$Interface : public Interface {
+class %{APPNAME}Interface : public Interface {
     Q_OBJECT
 
 public:
-    $APPNAME$Interface(QObject* parent, const char* name = "vpn", bool up = false );
-    ~$APPNAME$Interface();
+    %{APPNAME}Interface(QObject* parent, const char* name = "vpn", bool up = false );
+    ~%{APPNAME}Interface();
 
 public slots:
     bool refresh(); // refresh information

@@ -1,15 +1,15 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
-kde_module_LTLIBRARIES = libkdev$APPNAMELC$.la
-libkdev$APPNAMELC$_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdev$APPNAMELC$_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
+kde_module_LTLIBRARIES = libkdev%{APPNAMELC}.la
+libkdev%{APPNAMELC}_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkdev%{APPNAMELC}_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdev$APPNAMELC$_la_SOURCES = $APPNAMELC$_part.cpp $APPNAMELC$_widget.cpp
+libkdev%{APPNAMELC}_la_SOURCES = %{APPNAMELC}_part.cpp %{APPNAMELC}_widget.cpp
 
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpart_$APPNAMELC$.desktop
+service_DATA = kdevpart_%{APPNAMELC}.desktop
 
-rcdir = $(kde_datadir)/kdev$APPNAMELC$
-rc_DATA = kdevpart_$APPNAMELC$.rc
+rcdir = $(kde_datadir)/kdev%{APPNAMELC}
+rc_DATA = kdevpart_%{APPNAMELC}.rc

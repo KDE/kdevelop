@@ -1,10 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=$APPNAME$
-Name[xx]=xx$APPNAME$xx
+Name=%{APPNAME}
+Name[xx]=xx%{APPNAME}xx
 Comment=
 Comment[xx]=xxxx
-Exec=$APPNAMELC$
-Icon=$APPNAMELC$-logo.png
+Exec=%{APPNAMELC}
+Icon=%{APPNAMELC}-logo.png
 Terminal=0
 Type=Application

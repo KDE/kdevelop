@@ -1,5 +1,5 @@
 
-#include "plugin_$APPNAMELC$_impl.h"
+#include "plugin_%{APPNAMELC}_impl.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -61,7 +61,7 @@ void Bitmap<Type>::fadeStar()
     } while(--i > 0);
 }
 
-$APPNAME$View::$APPNAME$View(int in) : mFd(in), outputBmp(0), fullscreen(false)
+%{APPNAME}View::%{APPNAME}View(int in) : mFd(in), outputBmp(0), fullscreen(false)
 {
     surface = 0;
     width = 320;
@@ -130,7 +130,7 @@ static SDL_Surface *CreateScreen(Uint16 w, Uint16 h, Uint8 bpp, Uint32 flags)
     return screen;
 }
 
-void $APPNAME$View::startVideo()
+void %{APPNAME}View::startVideo()
 {
     if(surface)
     {
@@ -144,7 +144,7 @@ void $APPNAME$View::startVideo()
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
         exit(0);
 
-    SDL_WM_SetCaption("$APPNAME$","$APPNAMELC$");
+    SDL_WM_SetCaption("%{APPNAME}","%{APPNAMELC}");
 
     /* See if we try to get a hardware colormap */
     videoflags = SDL_SWSURFACE | (fullscreen?SDL_FULLSCREEN:0);
@@ -158,12 +158,12 @@ void $APPNAME$View::startVideo()
     if(!surface)
         SDL_Quit();
 
-    SDL_WM_SetCaption("$APPNAME$", 0);
+    SDL_WM_SetCaption("%{APPNAME}", 0);
     SDL_ShowCursor(0);
 
 }
 
-void $APPNAME$View::setupPalette(double)
+void %{APPNAME}View::setupPalette(double)
 {
 #define BOUND(x) ((x) > 255 ? 255 : (x))
 #define PEAKIFY(x) int(BOUND((x) - (x)*(255-(x))/255/2))
@@ -191,7 +191,7 @@ void $APPNAME$View::setupPalette(double)
 #undef MAX
 }
 
-void $APPNAME$View::checkInput()
+void %{APPNAME}View::checkInput()
 {
     SDL_Event myEvent;
 
@@ -220,7 +220,7 @@ void $APPNAME$View::checkInput()
 
 #define output2 ((unsigned char*)outputBmp.data)
 
-void $APPNAME$View::repaint()
+void %{APPNAME}View::repaint()
 {
     SDL_LockSurface(surface);
     TEST();
@@ -270,7 +270,7 @@ void $APPNAME$View::repaint()
 
 }
 
-$APPNAME$View::~$APPNAME$View()
+%{APPNAME}View::~%{APPNAME}View()
 {
     ::close(mFd);
 }

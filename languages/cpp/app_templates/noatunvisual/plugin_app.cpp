@@ -2,30 +2,30 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-#include "plugin_$APPNAMELC$.h"
-#include "plugin_$APPNAMELC$_impl.h"
+#include "plugin_%{APPNAMELC}.h"
+#include "plugin_%{APPNAMELC}_impl.h"
 
 extern "C"
 {
     Plugin *create_plugin()
     {
-        return new $APPNAME$Scope();
+        return new %{APPNAME}Scope();
     }
 }
 
-$APPNAME$Scope::$APPNAME$Scope()
+%{APPNAME}Scope::%{APPNAME}Scope()
     : MonoScope(50), Plugin()
 {
     setSamples(320);
 }
 
-$APPNAME$Scope::~$APPNAME$Scope()
+%{APPNAME}Scope::~%{APPNAME}Scope()
 {
     ::close(mOutFd);
     wait(0);
 }
 
-void $APPNAME$Scope::init()
+void %{APPNAME}Scope::init()
 {
     int pipes[2];
     ::pipe(pipes);
@@ -33,7 +33,7 @@ void $APPNAME$Scope::init()
     if (!fork())
     {
         ::close(pipes[1]);
-        new $APPNAME$View(pipes[0]);
+        new %{APPNAME}View(pipes[0]);
         exit(0);
     }
     else
@@ -44,7 +44,7 @@ void $APPNAME$Scope::init()
     }    
 }
 
-void $APPNAME$Scope::scopeEvent(float *d, int size)
+void %{APPNAME}Scope::scopeEvent(float *d, int size)
 {
     if (::write(mOutFd, (char *)d, size * sizeof(float))==-1)
     {

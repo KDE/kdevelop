@@ -3,20 +3,20 @@
    It was converted to a KDevelop template by Ian Reinhart Geiser <geiseri@yahoo.com>
 */
 
-#ifndef $APPNAME$_FACTORY_H
-#define $APPNAME$_FACTORY_H
+#ifndef %{APPNAME}_FACTORY_H
+#define %{APPNAME}_FACTORY_H
 
 #include <koFactory.h>
 
 class KInstance;
 class KAboutData;
 
-class $APPNAME$Factory : public KoFactory
+class %{APPNAME}Factory : public KoFactory
 {
     Q_OBJECT
 public:
-    $APPNAME$Factory( QObject* parent = 0, const char* name = 0 );
-    ~$APPNAME$Factory();
+    %{APPNAME}Factory( QObject* parent = 0, const char* name = 0 );
+    ~%{APPNAME}Factory();
 
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
 

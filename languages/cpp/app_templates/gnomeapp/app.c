@@ -2,7 +2,7 @@
 /*** gnomehello-app */
 
 #include <config.h>
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 #include "menus.h"
 
 /* Keep a list of all open application windows */
@@ -23,7 +23,7 @@ hello_app_new(const gchar* message,
   GtkWidget* frame;
 
   /*** gnomehello-widgets */
-  app = gnome_app_new(PACKAGE, _("$APPNAME$"));
+  app = gnome_app_new(PACKAGE, _("%{APPNAME}"));
 
   frame = gtk_frame_new(NULL);
 
@@ -33,7 +33,7 @@ hello_app_new(const gchar* message,
 
   gtk_window_set_policy(GTK_WINDOW(app), FALSE, TRUE, FALSE);
   gtk_window_set_default_size(GTK_WINDOW(app), 250, 350);
-  gtk_window_set_wmclass(GTK_WINDOW(app), "hello", "$APPNAME$");
+  gtk_window_set_wmclass(GTK_WINDOW(app), "hello", "%{APPNAME}");
 
   gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_IN);
 

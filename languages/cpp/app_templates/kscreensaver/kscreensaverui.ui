@@ -1,10 +1,10 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
-<class>$APPNAME$UI</class>
+<class>%{APPNAME}UI</class>
 <comment>This is the main UI for setting up your screen saver.</comment>
 <author>Ian Reinhart Geiser</author>
 <widget class="QDialog">
     <property name="name">
-        <cstring>$APPNAMELC$cfg</cstring>
+        <cstring>%{APPNAMELC}cfg</cstring>
     </property>
     <property name="geometry">
         <rect>

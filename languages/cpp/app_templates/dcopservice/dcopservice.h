@@ -1,12 +1,12 @@
 
-#ifndef _$APPNAME$_H
-#define _$APPNAME$_H
+#ifndef _%{APPNAME}_H
+#define _%{APPNAME}_H
 
 #include <qstringlist.h>
 #include <qstring.h>
 #include <dcopobject.h>
 
-class $APPNAME$ :  public DCOPObject
+class %{APPNAME} :  public DCOPObject
 {
 	K_DCOP
 
@@ -14,9 +14,9 @@ class $APPNAME$ :  public DCOPObject
 		QStringList m_List;
 
 	public:
-		$APPNAME$();
+		%{APPNAME}();
 
-		~$APPNAME$();
+		~%{APPNAME}();
 
 	k_dcop:
 		QString string(int);

@@ -14,11 +14,11 @@
 #
 # please let me know about any improvements you make
 
-VERSION                = $VERSION$
+VERSION                = %{VERSION}
 # What are we building? We put the names here at the
 # top to make it easy to change
 
-MAINCLASSNAME          = $APPNAME$
+MAINCLASSNAME          = %{APPNAME}
 
 # ExtraClassList will be blank if the app consists of
 # only one class

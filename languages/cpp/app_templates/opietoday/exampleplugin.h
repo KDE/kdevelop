@@ -1,5 +1,5 @@
-#ifndef $APPNAME$_PLUGIN_H
-#define $APPNAME$_PLUGIN_H
+#ifndef %{APPNAME}_PLUGIN_H
+#define %{APPNAME}_PLUGIN_H
 
 #include <qwidget.h>
 #include <qguardedptr.h>
@@ -7,14 +7,14 @@
 #include <opie/todayplugininterface.h>
 #include <opie/todayconfigwidget.h>
 
-#include "$APPNAMELC$widget.h"
+#include "%{APPNAMELC}widget.h"
 
 // implementation of the today plugin interface
-class $APPNAME$ : public TodayPluginObject {
+class %{APPNAME} : public TodayPluginObject {
 
 public:
-    $APPNAME$();
-    ~$APPNAME$();
+    %{APPNAME}();
+    ~%{APPNAME}();
 
     QString pluginName()  const;
     double versionNumber() const;
@@ -28,7 +28,7 @@ public:
     void reinitialize();
 
  private:
-   QGuardedPtr<$APPNAME$Widget> m_widget;
+   QGuardedPtr<%{APPNAME}Widget> m_widget;
 };
 
 #endif

@@ -1,17 +1,17 @@
 
-#ifndef _$APPNAMEUC$_H_
-#define _$APPNAMEUC$_H_
+#ifndef _%{APPNAMEUC}_H_
+#define _%{APPNAMEUC}_H_
 
 #include <kcmodule.h>
 #include <kaboutdata.h>
 
-class $APPNAME$: public KCModule
+class %{APPNAME}: public KCModule
 {
     Q_OBJECT
 
 public:
-    $APPNAME$( QWidget *parent=0, const char *name=0, const QStringList& = QStringList() );
-    ~$APPNAME$();
+    %{APPNAME}( QWidget *parent=0, const char *name=0, const QStringList& = QStringList() );
+    ~%{APPNAME}();
 
     virtual void load();
     virtual void save();

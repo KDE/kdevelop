@@ -1,6 +1,6 @@
 
-#include "plugin_$APPNAMELC$_impl.h"
-#include "plugin_$APPNAMELC$_impl.moc"
+#include "plugin_%{APPNAMELC}_impl.h"
+#include "plugin_%{APPNAMELC}_impl.moc"
 
 #include <noatun/playlist.h>
 #include <noatun/stdaction.h>
@@ -25,7 +25,7 @@
 //#include <kfiledialog.h>
 //#include <kconfig.h>
 
-$APPNAME$UI::$APPNAME$UI() : QWidget(0,"$APPNAME$UI"), UserInterface()
+%{APPNAME}UI::%{APPNAME}UI() : QWidget(0,"%{APPNAME}UI"), UserInterface()
 {
     setAcceptDrops(true);
     static const int buttonSize=32;
@@ -135,28 +135,28 @@ $APPNAME$UI::$APPNAME$UI() : QWidget(0,"$APPNAME$UI"), UserInterface()
     setFixedSize(minimumSize());
 }
 
-$APPNAME$UI::~$APPNAME$UI()
+%{APPNAME}UI::~%{APPNAME}UI()
 {
     /** save settings here  */
 }
 
-void $APPNAME$UI::closeEvent(QCloseEvent*)
+void %{APPNAME}UI::closeEvent(QCloseEvent*)
 {
     unload();
 }
 
-void $APPNAME$UI::showEvent(QShowEvent*e)
+void %{APPNAME}UI::showEvent(QShowEvent*e)
 {
     QWidget::showEvent(e);
 }
 
-void $APPNAME$UI::dragEnterEvent(QDragEnterEvent *event)
+void %{APPNAME}UI::dragEnterEvent(QDragEnterEvent *event)
 {
     // accept uri drops only
     event->accept(KURLDrag::canDecode(event));
 }
 
-void $APPNAME$UI::dropEvent(QDropEvent *event)
+void %{APPNAME}UI::dropEvent(QDropEvent *event)
 {
     KURL::List uri;
     if (KURLDrag::decode(event, uri))
@@ -166,14 +166,14 @@ void $APPNAME$UI::dropEvent(QDropEvent *event)
     }
 }
 
-void $APPNAME$UI::mouseReleaseEvent(QMouseEvent *e)
+void %{APPNAME}UI::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mouseReleaseEvent(e);
     if (e->button()!=RightButton) return;
     NoatunStdAction::ContextMenu::showContextMenu();
 }
 
-void $APPNAME$UI::changeStatusbar(const QString& text, const QString &text2)
+void %{APPNAME}UI::changeStatusbar(const QString& text, const QString &text2)
 {
     if (!text2.isNull())
         statusBar()->changeItem(text2, 1);
@@ -181,18 +181,18 @@ void $APPNAME$UI::changeStatusbar(const QString& text, const QString &text2)
     statusBar()->message(!text.isNull() ? text : napp->player()->current().title());
 }
 
-void $APPNAME$UI::changeCaption(const QString& text)
+void %{APPNAME}UI::changeCaption(const QString& text)
 {
     setCaption(text);
 }
 
-void $APPNAME$UI::popup()
+void %{APPNAME}UI::popup()
 {
     NoatunStdAction::ContextMenu::showContextMenu(
         mapToGlobal(mPopup->geometry().bottomLeft()) );
 }
 
-void $APPNAME$UI::slotPlaying()
+void %{APPNAME}UI::slotPlaying()
 {
     changeStatusbar(napp->player()->current().title(), napp->player()->lengthString());
     mPlay->setOn(true);
@@ -200,7 +200,7 @@ void $APPNAME$UI::slotPlaying()
     mPlay->setPixmap(BarIcon("noatunpause"));
 }
 
-void $APPNAME$UI::slotStopped()
+void %{APPNAME}UI::slotStopped()
 {
     if (!napp->player()->current()) return;
     changeStatusbar(i18n("No File Loaded"), napp->player()->lengthString());
@@ -210,14 +210,14 @@ void $APPNAME$UI::slotStopped()
     mPlay->setPixmap(BarIcon("noatunplay"));
 }
 
-void $APPNAME$UI::slotPaused()
+void %{APPNAME}UI::slotPaused()
 {
     mStop->setEnabled(true);
     mPlay->setOn(false);
     mPlay->setPixmap(BarIcon("noatunplay"));
 }
 
-void $APPNAME$UI::slotTimeout()
+void %{APPNAME}UI::slotTimeout()
 {
     mVolume->setValue(napp->player()->volume());
 
@@ -231,18 +231,18 @@ void $APPNAME$UI::slotTimeout()
     changeStatusbar(0, napp->player()->lengthString());
 }
 
-void $APPNAME$UI::sliderMoved(int seconds)
+void %{APPNAME}UI::sliderMoved(int seconds)
 {
     if (napp->player()->current())
         changeStatusbar(0, napp->player()->lengthString(seconds*1000));
 }
 
-void $APPNAME$UI::skipToWrapper(int second)
+void %{APPNAME}UI::skipToWrapper(int second)
 {
     emit skipTo((long)(second*1000));
 }
 
-void $APPNAME$UI::changeLoopType(int t)
+void %{APPNAME}UI::changeLoopType(int t)
 {
     static const int time=2000;
     switch (t)
@@ -265,7 +265,7 @@ void $APPNAME$UI::changeLoopType(int t)
     }
 }
 
-bool $APPNAME$UI::eventFilter(QObject *o, QEvent *e)
+bool %{APPNAME}UI::eventFilter(QObject *o, QEvent *e)
 {
     if ((e->type() == QEvent::MouseButtonRelease)
             && ((static_cast<QMouseEvent*>(e))->button()==RightButton))
@@ -282,17 +282,17 @@ bool $APPNAME$UI::eventFilter(QObject *o, QEvent *e)
     return QWidget::eventFilter(o, e);
 }
 
-void $APPNAME$UI::playlistShown()
+void %{APPNAME}UI::playlistShown()
 {
     mPlaylist->setOn(true);
 }
 
-void $APPNAME$UI::playlistHidden()
+void %{APPNAME}UI::playlistHidden()
 {
     mPlaylist->setOn(false);
 }
 
-void $APPNAME$UI::wheelEvent(QWheelEvent *e)
+void %{APPNAME}UI::wheelEvent(QWheelEvent *e)
 {
     int delta=e->delta();
     mVolume->setValue(mVolume->value()+(delta/120));

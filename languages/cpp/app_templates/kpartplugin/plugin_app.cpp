@@ -1,5 +1,5 @@
 
-#include "plugin_$APPNAMELC$.h"
+#include "plugin_%{APPNAMELC}.h"
 
 #include <khtml_part.h>
 #include <kaction.h>
@@ -8,21 +8,21 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-Plugin$APPNAME$::Plugin$APPNAME$( QObject* parent, const char* name )
+Plugin%{APPNAME}::Plugin%{APPNAME}( QObject* parent, const char* name )
     : Plugin( parent, name )
 {
     // Instantiate all of your actions here.  These will appear in
     // Konqueror's menu and toolbars.
-    (void) new KAction( i18n("&Plugin Action"), "$APPNAMELC$", 0,
+    (void) new KAction( i18n("&Plugin Action"), "%{APPNAMELC}", 0,
                         this, SLOT(slotAction()),
                         actionCollection(), "plugin_action" );
 }
 
-Plugin$APPNAME$::~Plugin$APPNAME$()
+Plugin%{APPNAME}::~Plugin%{APPNAME}()
 {
 }
 
-void Plugin$APPNAME$::slotAction()
+void Plugin%{APPNAME}::slotAction()
 {
     // This plugin assumes KHTMLPart.  If your plugin can handle more
     // than this or a different Part than this, simply delete or
@@ -72,38 +72,38 @@ void Plugin$APPNAME$::slotAction()
     part->openURL( work );
 }
 
-$APPNAME$Factory::$APPNAME$Factory()
+%{APPNAME}Factory::%{APPNAME}Factory()
   : KParts::Factory()
 {
 }
 
-$APPNAME$Factory::~$APPNAME$Factory()
+%{APPNAME}Factory::~%{APPNAME}Factory()
 {
   delete s_instance;
   s_instance = 0;
 }
 
-QObject* $APPNAME$Factory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* %{APPNAME}Factory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
-  return new Plugin$APPNAME$( parent, name );
+  return new Plugin%{APPNAME}( parent, name );
 }
 
-KInstance *$APPNAME$Factory::instance()
+KInstance *%{APPNAME}Factory::instance()
 {
   if ( !s_instance )
-    s_instance = new KInstance( "$APPNAMELC$" );
+    s_instance = new KInstance( "%{APPNAMELC}" );
   return s_instance;
 }
 
 extern "C"
 {
-  void* init_lib$APPNAMELC$plugin()
+  void* init_lib%{APPNAMELC}plugin()
   {
-    KGlobal::locale()->insertCatalogue("$APPNAMELC$");
-    return new $APPNAME$Factory;
+    KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+    return new %{APPNAME}Factory;
   }
 }
 
-KInstance* $APPNAME$Factory::s_instance = 0L;
+KInstance* %{APPNAME}Factory::s_instance = 0L;
 
-#include "plugin_$APPNAMELC$.moc"
+#include "plugin_%{APPNAMELC}.moc"

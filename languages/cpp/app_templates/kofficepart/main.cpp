@@ -9,7 +9,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <dcopclient.h>
-#include "$APPNAMELC$_aboutdata.h"
+#include "%{APPNAMELC}_aboutdata.h"
 
 
 static const KCmdLineOptions options[]=
@@ -20,12 +20,12 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, new$APPNAME$AboutData() );
+    KCmdLineArgs::init( argc, argv, new%{APPNAME}AboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
     KoApplication app;
 
     app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "$APPNAMELC$" );
+    app.dcopClient()->registerAs( "%{APPNAMELC}" );
 
     if (!app.start()) // parses command line args, create initial docs and shells
 	return 1;

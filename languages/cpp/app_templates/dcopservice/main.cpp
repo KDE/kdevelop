@@ -6,7 +6,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <dcopclient.h>
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 static const char description[] =
     I18N_NOOP("A KDE KPart Application");
@@ -21,10 +21,10 @@ static KCmdLineOptions options[] =
 int main (int argc, char *argv[])
 {
 	KLocale::setMainCatalogue("kdelibs");
-	KAboutData aboutdata("$APPNAMELC$", I18N_NOOP("KDE"),
+	KAboutData aboutdata("%{APPNAMELC}", I18N_NOOP("KDE"),
 				version, description,
-				KAboutData::License_GPL, "(C) $YEAR$, $AUTHOR$");
-	aboutdata.addAuthor("$AUTHOR$",I18N_NOOP("Developer"),"$EMAIL$");
+				KAboutData::License_GPL, "(C) %{YEAR}, %{AUTHOR}");
+	aboutdata.addAuthor("%{AUTHOR}",I18N_NOOP("Developer"),"%{EMAIL}");
 
 	KCmdLineArgs::init( argc, argv, &aboutdata );
 	KCmdLineArgs::addCmdLineOptions( options );
@@ -32,16 +32,16 @@ int main (int argc, char *argv[])
 
 	if (!KUniqueApplication::start())
 	{
-		kdDebug() << "$APPNAMELC$ is already running!" << endl;
+		kdDebug() << "%{APPNAMELC} is already running!" << endl;
 		return (0);
 	}
 
 	KUniqueApplication app;
-	kdDebug() << "starting $APPNAMELC$ " << endl;
+	kdDebug() << "starting %{APPNAMELC} " << endl;
 	// This app is started automatically, no need for session management
 	app.disableSessionManagement();
-	$APPNAME$ *service = new $APPNAME$;
-	kdDebug() << "starting $APPNAMELC$ " << endl;
+	%{APPNAME} *service = new %{APPNAME};
+	kdDebug() << "starting %{APPNAMELC} " << endl;
 	return app.exec();
 
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>Java</primarylanguage>
   <keywords>
@@ -18,7 +18,7 @@
    <activetarget>src/java</activetarget>
   </general>
   <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
+   <mainprogram>src/%{APPNAMELC}</mainprogram>
   </run>
  </kdevautoproject>
  <kdevfileview>

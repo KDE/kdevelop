@@ -18,27 +18,27 @@
 #include <kbear/kbearcore.h>
 #include <kbear/kbearmainwiniface.h>
 
-#include "kbear$APPNAMELC$outputwidget.h"
-#include "kbear$APPNAMELC$configwidget.h"
-#include "kbear$APPNAMELC$plugin.h"
+#include "kbear%{APPNAMELC}outputwidget.h"
+#include "kbear%{APPNAMELC}configwidget.h"
+#include "kbear%{APPNAMELC}plugin.h"
 
 
 using namespace KBear;
 
 
-typedef KGenericFactory<KBear$APPNAME$Plugin> KBear$APPNAME$PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkbear$APPNAMELC$, KBear$APPNAME$PluginFactory( "kbear$APPNAMELC$" ) );
+typedef KGenericFactory<KBear%{APPNAME}Plugin> KBear%{APPNAME}PluginFactory;
+K_EXPORT_COMPONENT_FACTORY( libkbear%{APPNAMELC}, KBear%{APPNAME}PluginFactory( "kbear%{APPNAMELC}" ) );
 
-KBear$APPNAME$Plugin::KBear$APPNAME$Plugin(QObject *parent, const char*, const QStringList& )
-    : KBearPlugin( parent, "KBear$APPNAME$Plugin" )
+KBear%{APPNAME}Plugin::KBear%{APPNAME}Plugin(QObject *parent, const char*, const QStringList& )
+    : KBearPlugin( parent, "KBear%{APPNAME}Plugin" )
 {
-    setInstance(KBear$APPNAME$PluginFactory::instance());
-    setXMLFile("kbear$APPNAMELC$.rc");
+    setInstance(KBear%{APPNAME}PluginFactory::instance());
+    setXMLFile("kbear%{APPNAMELC}.rc");
 
-    m_outputWidget = new KBear$APPNAME$OutputWidget( 0L, "KBear$APPNAME$OutputWidget" );
+    m_outputWidget = new KBear%{APPNAME}OutputWidget( 0L, "KBear%{APPNAME}OutputWidget" );
 }
 
-KBear$APPNAME$Plugin::~KBear$APPNAME$Plugin()
+KBear%{APPNAME}Plugin::~KBear%{APPNAME}Plugin()
 {
     // if you have an embedded outputview you need to remove it here
 //    mainWindow()->removeOutputPluginView( m_widget );
@@ -46,7 +46,7 @@ KBear$APPNAME$Plugin::~KBear$APPNAME$Plugin()
 	delete m_outputWidget;
 }
 
-void KBear$APPNAME$Plugin::slotInit()
+void KBear%{APPNAME}Plugin::slotInit()
 {
     connect( actionCollection(), SIGNAL( actionStatusText(const QString &) ), mainWindow()->statusBar(), SLOT( message(const QString &) ) );
     connect( actionCollection(), SIGNAL( clearStatusText() ), mainWindow()->statusBar(), SLOT( clear() ) );
@@ -58,28 +58,28 @@ void KBear$APPNAME$Plugin::slotInit()
 //    mainWindow()->embedOutputPluginView( m_outputWidget, "name that should appear", "enter a tooltip" ) );
 }
 
-QString KBear$APPNAME$Plugin::unloadWarning() const
+QString KBear%{APPNAME}Plugin::unloadWarning() const
 {
     return i18n("This unique feature will not work if this plugin is unloaded" );
 }
 
-void KBear$APPNAME$Plugin::slotConfigWidget( KDialogBase* dlg )
+void KBear%{APPNAME}Plugin::slotConfigWidget( KDialogBase* dlg )
 {
     // If you don't need a config widget just remove this code
-    QVBox* vbox = dlg->addVBoxPage(i18n("$APPNAME$ Settings"), QString::null,
-        KGlobal::iconLoader()->loadIcon("kbear$APPNAMELC$", KIcon::NoGroup, KIcon::SizeMedium) );
-    KBear$APPNAME$ConfigWidget* w = new KBear$APPNAME$ConfigWidget( vbox, "$APPNAME$SettingsWidget" );
+    QVBox* vbox = dlg->addVBoxPage(i18n("%{APPNAME} Settings"), QString::null,
+        KGlobal::iconLoader()->loadIcon("kbear%{APPNAMELC}", KIcon::NoGroup, KIcon::SizeMedium) );
+    KBear%{APPNAME}ConfigWidget* w = new KBear%{APPNAME}ConfigWidget( vbox, "%{APPNAME}SettingsWidget" );
     connect( dlg, SIGNAL( okClicked() ), w, SLOT( slotSaveSettings() ) );
 }
 
-void KBear$APPNAME$Plugin::slotConfigWidget( KWizard* wiz )
+void KBear%{APPNAME}Plugin::slotConfigWidget( KWizard* wiz )
 {
     // If you don't need a config widget just remove this code
-    KBear$APPNAME$ConfigWidget* w = new KBear$APPNAME$ConfigWidget( wiz, "$APPNAME$SettingsWidget" );
-    wiz->addPage( w, i18n("$APPNAME$ Settings") );
+    KBear%{APPNAME}ConfigWidget* w = new KBear%{APPNAME}ConfigWidget( wiz, "%{APPNAME}SettingsWidget" );
+    wiz->addPage( w, i18n("%{APPNAME} Settings") );
     // when embedded in wizard, saveSettings() will be called automatically if needed
 }
 
 
-#include "kbear$APPNAMELC$plugin.moc"
+#include "kbear%{APPNAMELC}plugin.moc"
 

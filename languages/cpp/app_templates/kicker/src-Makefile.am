@@ -1,14 +1,14 @@
 INCLUDES= $(all_includes)
 METASOURCES = AUTO
 
-lib_LTLIBRARIES = lib$APPNAMELC$.la
+lib_LTLIBRARIES = lib%{APPNAMELC}.la
 
-lib$APPNAMELC$_la_SOURCES = $APPNAMELC$.cpp
-lib$APPNAMELC$_la_LDFLAGS = -module -avoid-version $(all_libraries)
-lib$APPNAMELC$_la_LIBADD = $(LIB_KDEUI) 
+lib%{APPNAMELC}_la_SOURCES = %{APPNAMELC}.cpp
+lib%{APPNAMELC}_la_LDFLAGS = -module -avoid-version $(all_libraries)
+lib%{APPNAMELC}_la_LIBADD = $(LIB_KDEUI) 
 
-$APPNAMELC$_DATA = $APPNAMELC$.desktop
-$APPNAMELC$dir = $(kde_datadir)/kicker/applets
+%{APPNAMELC}_DATA = %{APPNAMELC}.desktop
+%{APPNAMELC}dir = $(kde_datadir)/kicker/applets
 
 messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/$APPNAMELC$.pot
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot

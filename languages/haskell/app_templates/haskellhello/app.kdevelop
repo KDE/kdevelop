@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevHaskellProject</projectmanagement>
   <primarylanguage>Haskell</primarylanguage>
   <keywords>
@@ -17,7 +17,7 @@
   </general>
   <configurations>
    <default>
-     <mainsource>src/$APPNAMELC$.hs</mainsource>
+     <mainsource>src/%{APPNAMELC}.hs</mainsource>
    </default>
   </configurations>
   <run>

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
   <general>
-    <author>$AUTHOR$</author>
-    <email>$EMAIL$</email>
-    <version>$VERSION$</version>
+    <author>%{AUTHOR}</author>
+    <email>%{EMAIL}</email>
+    <version>%{VERSION}</version>
     <projectmanagement>KDevTMakeProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -81,7 +81,7 @@
       <activedir></activedir>
     </general>
     <run>
-      <mainprogram>./$APPNAMELC$</mainprogram>
+      <mainprogram>./%{APPNAMELC}</mainprogram>
       <programargs>-qws</programargs>
     </run>
     <envvars/>

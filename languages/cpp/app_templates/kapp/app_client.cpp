@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv)
 {
-    KApplication app(argc, argv, "$APPNAMELC$_client", false);
+    KApplication app(argc, argv, "%{APPNAMELC}_client", false);
 
     // get our DCOP client and attach so that we may use it
     DCOPClient *client = app.dcopClient();
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
         ds << QString(argv[1]);
     else
         ds << QString("http://www.kde.org");
-    client->send("$APPNAMELC$", "$APPNAME$Iface", "openURL(QString)", data);
+    client->send("%{APPNAMELC}", "%{APPNAME}Iface", "openURL(QString)", data);
 
     return app.exec();
 }

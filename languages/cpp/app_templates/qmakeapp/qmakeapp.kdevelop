@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
   <general>
-    <author>$AUTHOR$</author>
-    <email>$EMAIL$</email>
-    <version>$VERSION$</version>
+    <author>%{AUTHOR}</author>
+    <email>%{EMAIL}</email>
+    <version>%{VERSION}</version>
     <projectmanagement>KDevTrollProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -78,7 +78,7 @@
   </kdevdebugger>  
   <kdevtrollproject>
     <run>
-      <mainprogram>./bin/$APPNAMELC$</mainprogram>
+      <mainprogram>./bin/%{APPNAMELC}</mainprogram>
       <programargs/>
     </run>
   </kdevtrollproject>

@@ -1,22 +1,22 @@
 
-#include "$APPNAMELC$view.h"
+#include "%{APPNAMELC}view.h"
 #include "settings.h"
 
 #include <klocale.h>
 #include <qlabel.h>
 
-$APPNAME$View::$APPNAME$View(QWidget *parent)
-    : $APPNAME$view_base(parent)
+%{APPNAME}View::%{APPNAME}View(QWidget *parent)
+    : %{APPNAME}view_base(parent)
 {
 	settingsChanged();
 }
 
-$APPNAME$View::~$APPNAME$View()
+%{APPNAME}View::~%{APPNAME}View()
 {
 
 }
 
-void $APPNAME$View::switchColors()
+void %{APPNAME}View::switchColors()
 {
 	// switch the foreground/background colors of the label
 	QColor color = Settings::col_background();
@@ -26,7 +26,7 @@ void $APPNAME$View::switchColors()
 	settingsChanged();
 }
 
-void $APPNAME$View::settingsChanged()
+void %{APPNAME}View::settingsChanged()
 {
 	sillyLabel->setPaletteBackgroundColor( Settings::col_background() );
 	sillyLabel->setPaletteForegroundColor( Settings::col_foreground() );
@@ -36,5 +36,5 @@ void $APPNAME$View::settingsChanged()
 	emit signalChangeStatusbar( i18n("Settings changed") );
 }
 
-#include "$APPNAMELC$view.moc"
+#include "%{APPNAMELC}view.moc"
 

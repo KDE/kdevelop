@@ -1,9 +1,9 @@
 [Protocol]
-exec=kio_$APPNAMELC$
-protocol=$APPNAMELC$
+exec=kio_%{APPNAMELC}
+protocol=%{APPNAMELC}
 input=none
 output=stream
 reading=true
 defaultMimetype=text/plain
 Icon=remote
-Description=A kioslave for $APPNAMELC$
+Description=A kioslave for %{APPNAMELC}

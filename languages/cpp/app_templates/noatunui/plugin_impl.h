@@ -1,6 +1,6 @@
 
-#ifndef $APPNAMEUC$_IMPL_H
-#define $APPNAMEUC$_IMPL_H
+#ifndef %{APPNAMEUC}_IMPL_H
+#define %{APPNAMEUC}_IMPL_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -19,16 +19,16 @@ class KStatusBar;
 
 /**
  * @short Main window class
- * @author $AUTHOR$ <$EMAIL$>
+ * @author %{AUTHOR} <%{EMAIL}>
  * @version 0.1
  * Note: You can user _every_ widget for implementing your userinterface.
  */
-class $APPNAME$UI : public QWidget, public UserInterface
+class %{APPNAME}UI : public QWidget, public UserInterface
 {
 Q_OBJECT
 public:
-    $APPNAME$UI();
-    virtual ~$APPNAME$UI();
+    %{APPNAME}UI();
+    virtual ~%{APPNAME}UI();
     void load(const QString& url);
 
 protected:
@@ -74,5 +74,5 @@ private:
     KStatusBar *mStatusBar;
 };
 
-#endif // $APPNAMEUC$_IMPL_H
+#endif // %{APPNAMEUC}_IMPL_H
 

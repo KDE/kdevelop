@@ -6,8 +6,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
-$APPNAME$Preferences::$APPNAME$Preferences()
-    : KDialogBase(TreeList, i18n("$APPNAME$ Preferences"),
+%{APPNAME}Preferences::%{APPNAME}Preferences()
+    : KDialogBase(TreeList, i18n("%{APPNAME} Preferences"),
                   Help|Default|Ok|Apply|Cancel, Ok)
 {
     // this is the base class for your preferences dialog.  it is now
@@ -15,13 +15,13 @@ $APPNAME$Preferences::$APPNAME$Preferences()
     // possibilities (including Tab, Swallow, and just Plain)
     QFrame *frame;
     frame = addPage(i18n("First Page"), i18n("Page One Options"));
-    m_pageOne = new $APPNAME$PrefPageOne(frame);
+    m_pageOne = new %{APPNAME}PrefPageOne(frame);
 
     frame = addPage(i18n("Second Page"), i18n("Page Two Options"));
-    m_pageTwo = new $APPNAME$PrefPageTwo(frame);
+    m_pageTwo = new %{APPNAME}PrefPageTwo(frame);
 }
 
-$APPNAME$PrefPageOne::$APPNAME$PrefPageOne(QWidget *parent)
+%{APPNAME}PrefPageOne::%{APPNAME}PrefPageOne(QWidget *parent)
     : QFrame(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -30,7 +30,7 @@ $APPNAME$PrefPageOne::$APPNAME$PrefPageOne(QWidget *parent)
     new QLabel(i18n("Add something here"), this);
 }
 
-$APPNAME$PrefPageTwo::$APPNAME$PrefPageTwo(QWidget *parent)
+%{APPNAME}PrefPageTwo::%{APPNAME}PrefPageTwo(QWidget *parent)
     : QFrame(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);

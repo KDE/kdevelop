@@ -1,9 +1,9 @@
 
 INCLUDES = -I$(top_srcdir) -I$(includedir) $(GNOME_INCLUDEDIR) \
-         -DG_LOG_DOMAIN=\"$APPNAMELC$\" -DGNOMELOCALEDIR=\""$(datadir)/locale"\" 
+         -DG_LOG_DOMAIN=\"%{APPNAMELC}\" -DGNOMELOCALEDIR=\""$(datadir)/locale"\" 
 
-bin_PROGRAMS = $APPNAMELC$
-$APPNAMELC$_SOURCES = main.c $APPNAMELC$.c menus.c
-$APPNAMELC$_LDADD = $(GNOMEUI_LIBS) $(GNOME_LIBDIR)
+bin_PROGRAMS = %{APPNAMELC}
+%{APPNAMELC}_SOURCES = main.c %{APPNAMELC}.c menus.c
+%{APPNAMELC}_LDADD = $(GNOMEUI_LIBS) $(GNOME_LIBDIR)
 
-noinst_HEADERS = $APPNAMELC$.h menus.h
+noinst_HEADERS = %{APPNAMELC}.h menus.h

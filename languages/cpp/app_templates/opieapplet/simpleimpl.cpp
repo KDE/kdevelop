@@ -5,11 +5,11 @@
 #include <qpe/applnk.h> // for AppLnk
 #include <qpe/resource.h> // for Resource loading
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 
-$APPNAME$::$APPNAME$(QWidget *parent)
-    : QWidget( parent,  "$APPNAME$ Applet" ) {
+%{APPNAME}::%{APPNAME}(QWidget *parent)
+    : QWidget( parent,  "%{APPNAME} Applet" ) {
 /*
  * we will load an Image, scale it for the right usage
  * remember your applet might be used by different
@@ -19,7 +19,7 @@ $APPNAME$::$APPNAME$(QWidget *parent)
  * the only class that allows scaling.
  */
 
-    QImage image = Resource::loadImage("$APPNAMELC$/$APPNAMELC$");
+    QImage image = Resource::loadImage("%{APPNAMELC}/%{APPNAMELC}");
     /*
      * smooth scale to AppLnk smallIconSize for applest
      * smallIconSize gets adjusted to the resolution
@@ -44,7 +44,7 @@ $APPNAME$::$APPNAME$(QWidget *parent)
 
 }
 
-$APPNAME$::~$APPNAME$() {
+%{APPNAME}::~%{APPNAME}() {
     delete m_pix;
 }
 
@@ -56,14 +56,14 @@ $APPNAME$::~$APPNAME$() {
  * global with mapToGlobal(). Then you might also need to
  * move the widgets so it is visible
  */
-void $APPNAME$::mousePressEvent(QMouseEvent* ) {
+void %{APPNAME}::mousePressEvent(QMouseEvent* ) {
     QMessageBox::information(this, tr("No action taken"),
                              tr("<qt>This Plugin does not yet support anything usefule aye.</qt>"),
                              QMessageBox::Ok );
 
 }
 
-void $APPNAME$::paintEvent( QPaintEvent* ) {
+void %{APPNAME}::paintEvent( QPaintEvent* ) {
     QPainter p(this);
 
     /* simpy draw the pixmap from the start of this widget */
@@ -73,10 +73,10 @@ void $APPNAME$::paintEvent( QPaintEvent* ) {
 /*
  * Here comes the implementation of the interface
  */
-$APPNAME$Impl::$APPNAME$Impl() {
+%{APPNAME}Impl::%{APPNAME}Impl() {
 }
 /* needed cause until it is only pure virtual */
-$APPNAME$Impl::~$APPNAME$Impl() {
+%{APPNAME}Impl::~%{APPNAME}Impl() {
     /*
      * we will delete our applets as well
      * setAUtoDelete makes the QList free
@@ -89,12 +89,12 @@ $APPNAME$Impl::~$APPNAME$Impl() {
 /*
  * For the taskbar interface return a Widget
  */
-QWidget* $APPNAME$Impl::applet( QWidget* parent ) {
+QWidget* %{APPNAME}Impl::applet( QWidget* parent ) {
     /*
      * There are problems with ownership. So we add
      * our ownlist and clear this;
      */
-    $APPNAME$* ap = new $APPNAME$( parent );
+    %{APPNAME}* ap = new %{APPNAME}( parent );
     m_applets.append( ap );
 
     return ap;
@@ -103,7 +103,7 @@ QWidget* $APPNAME$Impl::applet( QWidget* parent ) {
 /*
  * A small hint where the Applet Should be displayed
  */
-int $APPNAME$Impl::position()const {
+int %{APPNAME}Impl::position()const {
     return 1;
 }
 
@@ -114,7 +114,7 @@ int $APPNAME$Impl::position()const {
  * @param uuid The uuid of the interface
  * @param iface The pointer to the interface ptr
  */
-QRESULT $APPNAME$Impl::queryInterface( const QUuid& uuid, QUnknownInterface** iface) {
+QRESULT %{APPNAME}Impl::queryInterface( const QUuid& uuid, QUnknownInterface** iface) {
     /* set the pointer to the interface to 0 */
     *iface = 0;
 
@@ -157,6 +157,6 @@ QRESULT $APPNAME$Impl::queryInterface( const QUuid& uuid, QUnknownInterface** if
  * included in a library so it's ok that the linker complains
  */
 Q_EXPORT_INTERFACE() {
-    Q_CREATE_INSTANCE( $APPNAME$Impl )
+    Q_CREATE_INSTANCE( %{APPNAME}Impl )
 }
 

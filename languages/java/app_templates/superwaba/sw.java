@@ -5,14 +5,14 @@ import waba.fx.*;
 import waba.sys.*;
 import waba.ui.*;
 
-public class $APPNAME$ extends MainWindow
+public class %{APPNAME} extends MainWindow
 {
 	MenuBar mbar;
 	Button pushB;
 
-public $APPNAME$()
+public %{APPNAME}()
 {
-	super( "$APPNAME$", TAB_ONLY_BORDER );
+	super( "%{APPNAME}", TAB_ONLY_BORDER );
 
 	setDoubleBuffer( true );
 	// use native style?
@@ -72,7 +72,7 @@ public void onEvent( Event event )
 
 private void showAbout( )
 {
-	MessageBox mb = new MessageBox( "$APPNAME$", "This is a small test app." );
+	MessageBox mb = new MessageBox( "%{APPNAME}", "This is a small test app." );
 	mb.setDoubleBuffer( true );
 	popupBlockingModal( mb );
 }

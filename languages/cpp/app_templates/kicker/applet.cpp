@@ -6,10 +6,10 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 
-$APPNAME$::$APPNAME$(const QString& configFile, Type type, int actions, QWidget *parent, const char *name)
+%{APPNAME}::%{APPNAME}(const QString& configFile, Type type, int actions, QWidget *parent, const char *name)
     : KPanelApplet(configFile, type, actions, parent, name)
 {
     // Get the current application configuration handle
@@ -22,39 +22,39 @@ $APPNAME$::$APPNAME$(const QString& configFile, Type type, int actions, QWidget 
 }
 
 
-$APPNAME$::~$APPNAME$()
+%{APPNAME}::~%{APPNAME}()
 {
 }
 
 
-void $APPNAME$::about()
+void %{APPNAME}::about()
 {
     KMessageBox::information(0, i18n("This is an about box"));
 }
 
 
-void $APPNAME$::help()
+void %{APPNAME}::help()
 {
     KMessageBox::information(0, i18n("This is a help box"));
 }
 
 
-void $APPNAME$::preferences()
+void %{APPNAME}::preferences()
 {
     KMessageBox::information(0, i18n("This is a preferences box"));
 }
 
-int $APPNAME$::widthForHeight(int height) const
+int %{APPNAME}::widthForHeight(int height) const
 {
     return width();
 }
 
-int $APPNAME$::heightForWidth(int width) const
+int %{APPNAME}::heightForWidth(int width) const
 {
     return height();
 }
 
-void $APPNAME$::resizeEvent(QResizeEvent *e)
+void %{APPNAME}::resizeEvent(QResizeEvent *e)
 {
 }
 
@@ -63,9 +63,9 @@ extern "C"
 {
     KPanelApplet* init( QWidget *parent, const QString& configFile)
     {
-        KGlobal::locale()->insertCatalogue("$APPNAMELC$");
-        return new $APPNAME$(configFile, KPanelApplet::Normal,
+        KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+        return new %{APPNAME}(configFile, KPanelApplet::Normal,
                              KPanelApplet::About | KPanelApplet::Help | KPanelApplet::Preferences,
-                             parent, "$APPNAMELC$");
+                             parent, "%{APPNAMELC}");
     }
 }

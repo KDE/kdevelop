@@ -1,20 +1,15 @@
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-bashhellodir = ${appwizarddatadir}/template-bashhello
-templatedir = ${appwizarddatadir}/templates
 
-bashhello_DATA = app.sh app.kdevelop
+dataFiles = app.sh app.kdevelop
+
+templatedir = ${appwizarddatadir}/templates
 template_DATA = bashhello
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+chello.tar.gz:
+	$(TAR) -cf chello.tar -C $(srcdir) ${dataFiles}
+	gzip bashhello.tar
 
-perl = perl
+archivedir = ${appwizarddatadir}
+archive_DATA = bashhello.tar.gz
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(bashhellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(bashhellodir)/script
+CLEANFILES = *.tar.gz

@@ -1,5 +1,5 @@
-#ifndef $APPNAMEUC$_H
-#define $APPNAMEUC$_H
+#ifndef %{APPNAMEUC}_H
+#define %{APPNAMEUC}_H
 
 
 /**
@@ -34,26 +34,26 @@
 
 /*
  * Because we only draw an Icon in a fixed width and height
- * we declare and define  $APPNAME$ here and you could use QLabel
+ * we declare and define  %{APPNAME} here and you could use QLabel
  * setPixmap or use QWidget and draw yourself.
  * You might also want to reimplement mouse*Event to use some simple actions
  */
-class  $APPNAME$ : public QWidget {
+class  %{APPNAME} : public QWidget {
     Q_OBJECT
 public:
-     $APPNAME$(QWidget *parent);
-    ~$APPNAME$();
+     %{APPNAME}(QWidget *parent);
+    ~%{APPNAME}();
 private:
     void mousePressEvent( QMouseEvent* );
     void paintEvent( QPaintEvent* );
     QPixmap *m_pix;
 };
 
-class $APPNAME$Impl : public TaskbarAppletInterface {
+class %{APPNAME}Impl : public TaskbarAppletInterface {
 public:
 
-    $APPNAME$Impl();
-    virtual ~$APPNAME$Impl();
+    %{APPNAME}Impl();
+    virtual ~%{APPNAME}Impl();
 
     QRESULT queryInterface( const QUuid&, QUnknownInterface** );
 
@@ -68,7 +68,7 @@ public:
     Q_REFCOUNT
 
 private:
-    QList<$APPNAME$> m_applets;
+    QList<%{APPNAME}> m_applets;
 };
 
 

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevPascalProject</projectmanagement>
   <primarylanguage>Pascal</primarylanguage>
   <keywords>
@@ -17,7 +17,7 @@
   </general>
   <configurations>
    <default>
-     <mainsource>src/$APPNAMELC$.pp</mainsource>
+     <mainsource>src/%{APPNAMELC}.pp</mainsource>
    </default>
   </configurations>
   <run>

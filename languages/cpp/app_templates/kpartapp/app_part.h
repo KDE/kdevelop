@@ -1,6 +1,6 @@
 
-#ifndef _$APPNAMEUC$PART_H_
-#define _$APPNAMEUC$PART_H_
+#ifndef _%{APPNAMEUC}PART_H_
+#define _%{APPNAMEUC}PART_H_
 
 #include <kparts/part.h>
 #include <kparts/factory.h>
@@ -15,23 +15,23 @@ class QMultiLineEdit;
  * application.
  *
  * @short Main Part
- * @author $AUTHOR$ <$EMAIL$>
- * @version $VERSION$
+ * @author %{AUTHOR} <%{EMAIL}>
+ * @version %{VERSION}
  */
-class $APPNAME$Part : public KParts::ReadWritePart
+class %{APPNAME}Part : public KParts::ReadWritePart
 {
     Q_OBJECT
 public:
     /**
      * Default constructor
      */
-    $APPNAME$Part(QWidget *parentWidget, const char *widgetName,
+    %{APPNAME}Part(QWidget *parentWidget, const char *widgetName,
                     QObject *parent, const char *name);
 
     /**
      * Destructor
      */
-    virtual ~$APPNAME$Part();
+    virtual ~%{APPNAME}Part();
 
     /**
      * This is a virtual function inherited from KParts::ReadWritePart.  
@@ -67,12 +67,12 @@ private:
 class KInstance;
 class KAboutData;
 
-class $APPNAME$PartFactory : public KParts::Factory
+class %{APPNAME}PartFactory : public KParts::Factory
 {
     Q_OBJECT
 public:
-    $APPNAME$PartFactory();
-    virtual ~$APPNAME$PartFactory();
+    %{APPNAME}PartFactory();
+    virtual ~%{APPNAME}PartFactory();
     virtual KParts::Part* createPartObject( QWidget *parentWidget, const char *widgetName,
                                             QObject *parent, const char *name,
                                             const char *classname, const QStringList &args );
@@ -83,4 +83,4 @@ private:
     static KAboutData* s_about;
 };
 
-#endif // _$APPNAMEUC$PART_H_
+#endif // _%{APPNAMEUC}PART_H_

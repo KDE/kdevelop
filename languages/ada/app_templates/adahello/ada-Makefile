@@ -1,2 +1,2 @@
 all:
-	gnatmake src/$APPNAMELC$.adb -o $APPNAMELC$
+	gnatmake src/%{APPNAMELC}.adb -o %{APPNAMELC}

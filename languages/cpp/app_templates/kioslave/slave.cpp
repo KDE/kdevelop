@@ -21,27 +21,27 @@
 #include <kurl.h>
 #include <ksock.h>
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 using namespace KIO;
 
 
-kio_$APPNAMELC$Protocol::kio_$APPNAMELC$Protocol(const QCString &pool_socket, const QCString &app_socket)
-    : SlaveBase("kio_$APPNAMELC$", pool_socket, app_socket)
+kio_%{APPNAMELC}Protocol::kio_%{APPNAMELC}Protocol(const QCString &pool_socket, const QCString &app_socket)
+    : SlaveBase("kio_%{APPNAMELC}", pool_socket, app_socket)
 {
-    kdDebug() << "kio_$APPNAMELC$Protocol::kio_$APPNAMELC$Protocol()" << endl;
+    kdDebug() << "kio_%{APPNAMELC}Protocol::kio_%{APPNAMELC}Protocol()" << endl;
 }
 
 
-kio_$APPNAMELC$Protocol::~kio_$APPNAMELC$Protocol()
+kio_%{APPNAMELC}Protocol::~kio_%{APPNAMELC}Protocol()
 {
-    kdDebug() << "kio_$APPNAMELC$Protocol::~kio_$APPNAMELC$Protocol()" << endl;
+    kdDebug() << "kio_%{APPNAMELC}Protocol::~kio_%{APPNAMELC}Protocol()" << endl;
 }
 
 
-void kio_$APPNAMELC$Protocol::get(const KURL& url )
+void kio_%{APPNAMELC}Protocol::get(const KURL& url )
 {
-    kdDebug() << "kio_$APPNAMELC$::get(const KURL& url)" << endl ;
+    kdDebug() << "kio_%{APPNAMELC}::get(const KURL& url)" << endl ;
     
     kdDebug() << "Seconds: " << url.query() << endl;
     QString remoteServer = url.host();
@@ -52,14 +52,14 @@ void kio_$APPNAMELC$Protocol::get(const KURL& url )
     // Send the mimeType as soon as it is known
     mimeType("text/plain");
     // Send the data
-    QString theData = "This is a test of kio_$APPNAMELC$";
+    QString theData = "This is a test of kio_%{APPNAMELC}";
     data(QCString(theData.local8Bit()));
     data(QByteArray()); // empty array means we're done sending the data
     finished();
 }
 
 
-void kio_$APPNAMELC$Protocol::mimetype(const KURL & /*url*/)
+void kio_%{APPNAMELC}Protocol::mimetype(const KURL & /*url*/)
 {
     mimeType("text/plain");
     finished();
@@ -70,19 +70,19 @@ extern "C"
 {
     int kdemain(int argc, char **argv)
     {
-        KInstance instance( "kio_$APPNAMELC$" );
+        KInstance instance( "kio_%{APPNAMELC}" );
         
-        kdDebug(7101) << "*** Starting kio_$APPNAMELC$ " << endl;
+        kdDebug(7101) << "*** Starting kio_%{APPNAMELC} " << endl;
         
         if (argc != 4) {
-            kdDebug(7101) << "Usage: kio_$APPNAMELC$  protocol domain-socket1 domain-socket2" << endl;
+            kdDebug(7101) << "Usage: kio_%{APPNAMELC}  protocol domain-socket1 domain-socket2" << endl;
             exit(-1);
         }
         
-        kio_$APPNAMELC$Protocol slave(argv[2], argv[3]);
+        kio_%{APPNAMELC}Protocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
         
-        kdDebug(7101) << "*** kio_$APPNAMELC$ Done" << endl;
+        kdDebug(7101) << "*** kio_%{APPNAMELC} Done" << endl;
         return 0;
     }
 } 

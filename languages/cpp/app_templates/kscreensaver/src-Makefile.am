@@ -1,4 +1,4 @@
-# Makefile.am for $APPNAMELC$.
+# Makefile.am for %{APPNAMELC}.
 #
 
 AM_CPPFLAGS = -UQT_NO_ASCII_CAST
@@ -7,17 +7,17 @@ METASOURCES = AUTO
 INCLUDES = $(all_includes)
 LDFLAGS = $(all_libraries) $(KDE_RPATH)
 LDADD = $(LIB_KDEUI) -lkscreensaver -lm
-bin_PROGRAMS = $APPNAMELC$.kss
+bin_PROGRAMS = %{APPNAMELC}.kss
 
-$APPNAMELC$_kss_SOURCES = $APPNAMELC$ui.ui $APPNAMELC$.cpp
-$APPNAMELC$_kss_LDADD = $(LIB_QT) $(LIB_KDECORE) $(LDADD)  $(LIB_KSYCOCA)
+%{APPNAMELC}_kss_SOURCES = %{APPNAMELC}ui.ui %{APPNAMELC}.cpp
+%{APPNAMELC}_kss_LDADD = $(LIB_QT) $(LIB_KDECORE) $(LDADD)  $(LIB_KSYCOCA)
 
-datadir = $(kde_datadir)/k$APPNAMELC$
+datadir = $(kde_datadir)/k%{APPNAMELC}
 
-desktop_DATA = $APPNAMELC$.desktop
+desktop_DATA = %{APPNAMELC}.desktop
 desktopdir = $(kde_appsdir)/System/ScreenSavers
 
 EXTRA_DIST = $(desktop_DATA)
 
 messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/$APPNAMELC$.pot
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot

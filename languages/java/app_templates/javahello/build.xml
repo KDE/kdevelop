@@ -1,4 +1,4 @@
-<project name="$APPNAME$" default="dist" basedir=".">
+<project name="%{APPNAME}" default="dist" basedir=".">
     <description>
         hello application
     </description>
@@ -25,7 +25,7 @@
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
 
-    <jar jarfile="${dist}/lib/$APPNAMELC$.jar" basedir="${build}"/>
+    <jar jarfile="${dist}/lib/%{APPNAMELC}.jar" basedir="${build}"/>
   </target>
 
   <target name="clean"

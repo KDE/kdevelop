@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
   <general>
-    <author>$AUTHOR$</author>
-    <email>$EMAIL$</email>
-    <version>$VERSION$</version>
+    <author>%{AUTHOR}</author>
+    <email>%{EMAIL}</email>
+    <version>%{VERSION}</version>
     <projectmanagement>KDevTrollProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -74,13 +74,13 @@
     <packaging>
 	<template>2</template>
 	<owner>
-		<package>$APPNAMELC$</package>
+		<package>%{APPNAMELC}</package>
         	<prio>0</prio>
 	        <section>opie/applets</section>
-        	<maintainer>$AUTHOR$ $EMAIL$</maintainer>
+        	<maintainer>%{AUTHOR} %{EMAIL}</maintainer>
 	        <arch>arm</arch>
 	        <depends>task-opie-minimal</depends>
-	        <version>$VERSION$</version>
+	        <version>%{VERSION}</version>
 	        <desc>Empty</desc>
 	</owner>
 	<scripts>
@@ -104,7 +104,7 @@ fi
       <activedir></activedir>
     </general>
     <run>
-      <mainprogram>./$APPNAMELC$</mainprogram>
+      <mainprogram>./%{APPNAMELC}</mainprogram>
       <programargs>-qws</programargs>
     </run>
     <envvars/>

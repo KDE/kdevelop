@@ -1,5 +1,5 @@
-#ifndef $APPNAME$IMPL_H
-#define $APPNAME$IMPL_H
+#ifndef %{APPNAME}IMPL_H
+#define %{APPNAME}IMPL_H
 
 #include <qhbox.h>
 
@@ -7,11 +7,11 @@
 
 class QPixmap;
 class QCheckBox;
-class $APPNAME$ : public QHBox {
+class %{APPNAME} : public QHBox {
 	Q_OBJECT
 public:
-	$APPNAME$( QWidget *par, WFlags f );
-	~$APPNAME$();
+	%{APPNAME}( QWidget *par, WFlags f );
+	~%{APPNAME}();
 	void resetState();
 private slots:
 	void slotKey(int);
@@ -25,11 +25,11 @@ private:
 	QCheckBox *m_alt,*m_shi,*m_ctrl;
 };
 
-class $APPNAME$Impl : public InputMethodInterface
+class %{APPNAME}Impl : public InputMethodInterface
 {
 public:
-    $APPNAME$Impl();
-    virtual ~$APPNAME$Impl();
+    %{APPNAME}Impl();
+    virtual ~%{APPNAME}Impl();
 
 #ifndef QT_NO_COMPONENT
     QRESULT queryInterface( const QUuid&, QUnknownInterface** );
@@ -43,7 +43,7 @@ public:
     virtual void onKeyPress( QObject *receiver, const char *slot );
 
 private:
-    $APPNAME$ *m_pickboard;
+    %{APPNAME} *m_pickboard;
     QPixmap *m_icn;
 };
 

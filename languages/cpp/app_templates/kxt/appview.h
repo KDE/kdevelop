@@ -1,36 +1,36 @@
 
-#ifndef _$APPNAMEUC$VIEW_H_
-#define _$APPNAMEUC$VIEW_H_
+#ifndef _%{APPNAMEUC}VIEW_H_
+#define _%{APPNAMEUC}VIEW_H_
 
 #include <qwidget.h>
 
-#include "$APPNAME$view_base.h"
+#include "%{APPNAME}view_base.h"
 
 class QPainter;
 class KURL;
 
 /**
- * This is the main view class for $APPNAME$.  Most of the non-menu,
+ * This is the main view class for %{APPNAME}.  Most of the non-menu,
  * non-toolbar, and non-statusbar (e.g., non frame) GUI code should go
  * here.
  *
  * @short Main view
- * @author $AUTHOR$ <$EMAIL$>
- * @version $VERSION$
+ * @author %{AUTHOR} <%{EMAIL}>
+ * @version %{VERSION}
  */
-class $APPNAME$View : public $APPNAME$view_base
+class %{APPNAME}View : public %{APPNAME}view_base
 {
     Q_OBJECT
 public:
 	/**
 	 * Default constructor
 	 */
-    $APPNAME$View(QWidget *parent);
+    %{APPNAME}View(QWidget *parent);
 
 	/**
 	 * Destructor
 	 */
-    virtual ~$APPNAME$View();
+    virtual ~%{APPNAME}View();
 
 signals:
     /**
@@ -48,4 +48,4 @@ private slots:
     void settingsChanged();
 };
 
-#endif // _$APPNAMEUC$VIEW_H_
+#endif // _%{APPNAMEUC}VIEW_H_

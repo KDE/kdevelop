@@ -2,7 +2,7 @@
 #include <config.h>
 #include <gnome.h>
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 
 static gint session_die(GnomeClient* client, gpointer client_data);

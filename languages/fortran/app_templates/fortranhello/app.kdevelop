@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>Fortran77</primarylanguage>
   <keywords>
@@ -16,10 +16,10 @@
  </general>
  <kdevautoproject>
   <general>
-   <activetarget>src/$APPNAMELC$</activetarget>
+   <activetarget>src/%{APPNAMELC}</activetarget>
   </general>
   <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
+   <mainprogram>src/%{APPNAMELC}</mainprogram>
    <terminal>true</terminal>
   </run>
     <makeenvvars>

@@ -1,1 +1,1 @@
-src/$APPNAMELC$
+src/%{APPNAMELC}

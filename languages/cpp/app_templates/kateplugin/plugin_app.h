@@ -1,6 +1,6 @@
 
-#ifndef _PLUGIN_$APPNAMEUC$_H_
-#define _PLUGIN_$APPNAMEUC$_H_
+#ifndef _PLUGIN_%{APPNAMEUC}_H_
+#define _PLUGIN_%{APPNAMEUC}_H_
 
 #include <kate/application.h>
 #include <kate/documentmanager.h>
@@ -27,13 +27,13 @@ class KatePluginFactory : public KLibFactory
     static KInstance* s_instance;
 };
 
-class KatePlugin$APPNAME$ : public Kate::Plugin, Kate::PluginViewInterface
+class KatePlugin%{APPNAME} : public Kate::Plugin, Kate::PluginViewInterface
 {
   Q_OBJECT
 
   public:
-    KatePlugin$APPNAME$( QObject* parent = 0, const char* name = 0 );
-    virtual ~KatePlugin$APPNAME$();
+    KatePlugin%{APPNAME}( QObject* parent = 0, const char* name = 0 );
+    virtual ~KatePlugin%{APPNAME}();
 
     void addView (Kate::MainWindow *win);
     void removeView (Kate::MainWindow *win);
@@ -45,4 +45,4 @@ class KatePlugin$APPNAME$ : public Kate::Plugin, Kate::PluginViewInterface
     QPtrList<class PluginView> m_views;
 };
 
-#endif // _PLUGIN_$APPNAMEUC$_H_
+#endif // _PLUGIN_%{APPNAMEUC}_H_

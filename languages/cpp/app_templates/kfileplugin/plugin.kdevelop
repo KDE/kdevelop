@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevKDEAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
@@ -15,7 +15,7 @@
  </general>
 <kdevautoproject>
   <general>
-   <activetarget>src/kfile_$APPNAMELC$.la</activetarget>
+   <activetarget>src/kfile_%{APPNAMELC}.la</activetarget>
    <useconfiguration>debug</useconfiguration>
   </general>
     <configurations>

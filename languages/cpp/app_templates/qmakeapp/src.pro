@@ -1,9 +1,9 @@
-SOURCES += $APPNAMELC$.cpp \
+SOURCES += %{APPNAMELC}.cpp \
            main.cpp
-HEADERS += $APPNAMELC$.h
+HEADERS += %{APPNAMELC}.h
 TEMPLATE = app
 CONFIG += release \
           warn_on \
 	  thread \
           qt
-TARGET = ../bin/$APPNAMELC$
+TARGET = ../bin/%{APPNAMELC}

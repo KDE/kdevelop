@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="$APPNAMELC$" library="lib$APPNAMELC$plugin" version="1">
+<kpartplugin name="%{APPNAMELC}" library="lib%{APPNAMELC}plugin" version="1">
 <MenuBar>
  <Menu name="tools"><Text>&amp;Tools</Text>
   <Action name="plugin_action"/>

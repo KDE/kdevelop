@@ -1,5 +1,5 @@
 /*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
+ * Copyright (C) %{YEAR} %{AUTHOR} <%{EMAIL}>
  */
 
 import java.util.*;
@@ -7,22 +7,22 @@ import org.kde.qt.*;
 import org.kde.koala.*;
 
 /**
- * This is the main view class for $APPNAME$.  Most of the non-menu,
+ * This is the main view class for %{APPNAME}.  Most of the non-menu,
  * non-toolbar, and non-statusbar (e.g., non frame) GUI code should go
  * here.
  *
- * This $APPNAMELC$ uses an HTML component as an example.
+ * This %{APPNAMELC} uses an HTML component as an example.
  *
  * @short Main view
- * @author $AUTHOR$ <$EMAIL$>
- * @version $VERSION$
+ * @author %{AUTHOR} <%{EMAIL}>
+ * @version %{VERSION}
  */
-public class $APPNAME$View extends QWidget
+public class %{APPNAME}View extends QWidget
 {
 
     QHBoxLayout top_layout;
 
-public $APPNAME$View(QWidget parent)
+public %{APPNAME}View(QWidget parent)
 {
     super(parent, null);
     // setup our layout manager to automatically add our widgets

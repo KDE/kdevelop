@@ -1,5 +1,5 @@
 
-#include "plugin_$APPNAMELC$.h"
+#include "plugin_%{APPNAMELC}.h"
 
 #include <kaction.h>
 #include <klocale.h>
@@ -11,7 +11,7 @@
 
 class PluginView : public KXMLGUIClient
 {
-    friend class KatePlugin$APPNAME$;
+    friend class KatePlugin%{APPNAME};
 
 public:
     Kate::MainWindow *win;
@@ -19,9 +19,9 @@ public:
 
 extern "C"
 {
-    void* init_lib$APPNAMELC$plugin()
+    void* init_lib%{APPNAMELC}plugin()
     {
-        KGlobal::locale()->insertCatalogue("kate$APPNAMELC$");
+        KGlobal::locale()->insertCatalogue("kate%{APPNAMELC}");
         return new KatePluginFactory;
     }
 }
@@ -38,38 +38,38 @@ KatePluginFactory::~KatePluginFactory()
 
 QObject* KatePluginFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
-    return new KatePlugin$APPNAME$( parent, name );
+    return new KatePlugin%{APPNAME}( parent, name );
 }
 
 KInstance* KatePluginFactory::s_instance = 0L;
 
-KatePlugin$APPNAME$::KatePlugin$APPNAME$( QObject* parent, const char* name )
+KatePlugin%{APPNAME}::KatePlugin%{APPNAME}( QObject* parent, const char* name )
     : Kate::Plugin ( (Kate::Application*)parent, name )
 {
 }
 
-KatePlugin$APPNAME$::~KatePlugin$APPNAME$()
+KatePlugin%{APPNAME}::~KatePlugin%{APPNAME}()
 {
 }
 
-void KatePlugin$APPNAME$::addView(Kate::MainWindow *win)
+void KatePlugin%{APPNAME}::addView(Kate::MainWindow *win)
 {
     /// @todo doesn't this have to be deleted?
     PluginView *view = new PluginView ();
 
     (void) new KAction ( i18n("Insert Hello World"), 0, this,
                          SLOT( slotInsertHello() ), view->actionCollection(),
-                         "edit_insert_$APPNAMELC$" );
+                         "edit_insert_%{APPNAMELC}" );
 
     view->setInstance (new KInstance("kate"));
-    view->setXMLFile("plugins/$APPNAMELC$/plugin_$APPNAMELC$.rc");
+    view->setXMLFile("plugins/%{APPNAMELC}/plugin_%{APPNAMELC}.rc");
     win->guiFactory()->addClient (view);
     view->win = win;
 
     m_views.append (view);
 }
 
-void KatePlugin$APPNAME$::removeView(Kate::MainWindow *win)
+void KatePlugin%{APPNAME}::removeView(Kate::MainWindow *win)
 {
     for (uint z=0; z < m_views.count(); z++)
         if (m_views.at(z)->win == win)
@@ -81,7 +81,7 @@ void KatePlugin$APPNAME$::removeView(Kate::MainWindow *win)
         }
 }
 
-void KatePlugin$APPNAME$::slotInsertHello()
+void KatePlugin%{APPNAME}::slotInsertHello()
 {
     Kate::View *kv = application()->activeMainWindow()->viewManager()->activeView();
 
@@ -89,51 +89,51 @@ void KatePlugin$APPNAME$::slotInsertHello()
         kv->insertText ("Hello World");
 }
 
-Kate::PluginConfigPage* KatePlugin$APPNAME$::configPage (uint, QWidget *w, const char* name)
+Kate::PluginConfigPage* KatePlugin%{APPNAME}::configPage (uint, QWidget *w, const char* name)
 {
-    $APPNAME$ConfigPage* p = new $APPNAME$ConfigPage(this, w);
+    %{APPNAME}ConfigPage* p = new %{APPNAME}ConfigPage(this, w);
     initConfigPage( p );
-    connect( p, SIGNAL(configPageApplyRequest($APPNAME$ConfigPage*)), this, SLOT(slotApplyConfig($APPNAME$ConfigPage*)) );
+    connect( p, SIGNAL(configPageApplyRequest(%{APPNAME}ConfigPage*)), this, SLOT(slotApplyConfig(%{APPNAME}ConfigPage*)) );
     return (Kate::PluginConfigPage*)p;
 }
 
-void KatePlugin$APPNAME$::initConfigPage( $APPNAME$ConfigPage* p )
+void KatePlugin%{APPNAME}::initConfigPage( %{APPNAME}ConfigPage* p )
 {
-    // TODO: initialize $APPNAME$ConfigPage here
-    // NOTE: KatePlugin$APPNAME$ is friend of $APPNAME$ConfigPage
+    // TODO: initialize %{APPNAME}ConfigPage here
+    // NOTE: KatePlugin%{APPNAME} is friend of %{APPNAME}ConfigPage
 }
 
-void KatePlugin$APPNAME$::slotApplyConfig( $APPNAME$ConfigPage* p )
+void KatePlugin%{APPNAME}::slotApplyConfig( %{APPNAME}ConfigPage* p )
 {
-    // TODO: save $APPNAME$ConfigPage here
-    // NOTE: KatePlugin$APPNAME$ is friend of $APPNAME$ConfigPage
+    // TODO: save %{APPNAME}ConfigPage here
+    // NOTE: KatePlugin%{APPNAME} is friend of %{APPNAME}ConfigPage
 }
 
 
 /**
- * $APPNAME$ConfigPage
+ * %{APPNAME}ConfigPage
  */
-$APPNAME$ConfigPage::$APPNAME$ConfigPage (QObject* parent /*= 0L*/, QWidget *parentWidget /*= 0L*/)
+%{APPNAME}ConfigPage::%{APPNAME}ConfigPage (QObject* parent /*= 0L*/, QWidget *parentWidget /*= 0L*/)
     : Kate::PluginConfigPage( parentWidget )
 {
     QVBoxLayout* lo = new QVBoxLayout( this, 0, 0, "config_page_layout" );
     lo->setSpacing(KDialogBase::spacingHint());
 
-    QLabel* lab = new QLabel("KatePlugin$APPNAME$'s config page", this);
+    QLabel* lab = new QLabel("KatePlugin%{APPNAME}'s config page", this);
 
     lo->addWidget(lab);
 
     // TODO: add connection to emit SLOT( changed() )
 }
 
-$APPNAME$ConfigPage::~$APPNAME$ConfigPage()
+%{APPNAME}ConfigPage::~%{APPNAME}ConfigPage()
 {
 }
 
-void $APPNAME$ConfigPage::apply()
+void %{APPNAME}ConfigPage::apply()
 {
     emit configPageApplyRequest( this );
 }
 
-#include "plugin_$APPNAMELC$.moc"
+#include "plugin_%{APPNAMELC}.moc"
 

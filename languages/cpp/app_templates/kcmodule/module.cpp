@@ -5,12 +5,12 @@
 #include <kglobal.h>
 #include <kparts/genericfactory.h>
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
-typedef KGenericFactory<$APPNAME$, QWidget> $APPNAME$Factory;
-K_EXPORT_COMPONENT_FACTORY( kcm_$APPNAME$, $APPNAME$Factory("kcm$APPNAMELC$"))
+typedef KGenericFactory<%{APPNAME}, QWidget> %{APPNAME}Factory;
+K_EXPORT_COMPONENT_FACTORY( kcm_%{APPNAME}, %{APPNAME}Factory("kcm%{APPNAMELC}"))
 
-$APPNAME$::$APPNAME$(QWidget *parent, const char *name, const QStringList&)
+%{APPNAME}::%{APPNAME}(QWidget *parent, const char *name, const QStringList&)
     : KCModule(parent, name), myAboutData(0)
 {
     // place widgets here
@@ -18,48 +18,48 @@ $APPNAME$::$APPNAME$(QWidget *parent, const char *name, const QStringList&)
 };
 
 
-$APPNAME$::~$APPNAME$()
+%{APPNAME}::~%{APPNAME}()
 {
 }
 
 
-void $APPNAME$::load()
+void %{APPNAME}::load()
 {
     // insert your loading code here...
 }
 
 
-void $APPNAME$::defaults()
+void %{APPNAME}::defaults()
 {
     // insert your default settings code here...
     emit changed(true);
 }
 
 
-void $APPNAME$::save()
+void %{APPNAME}::save()
 {
     // insert your saving code here...
     emit changed(true);
 }
 
 
-int $APPNAME$::buttons()
+int %{APPNAME}::buttons()
 {
     return KCModule::Default|KCModule::Apply|KCModule::Help;
 }
 
 
-void $APPNAME$::configChanged()
+void %{APPNAME}::configChanged()
 {
     // insert your saving code here...
     emit changed(true);
 }
 
 
-QString $APPNAME$::quickHelp() const
+QString %{APPNAME}::quickHelp() const
 {
-    return i18n("Helpful information about the $APPNAMELC$ module.");
+    return i18n("Helpful information about the %{APPNAMELC} module.");
 }
 
 
-#include "$APPNAMELC$.moc"
+#include "%{APPNAMELC}.moc"

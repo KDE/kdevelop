@@ -1,15 +1,15 @@
 INCLUDES = $(all_includes)
 
-kde_module_LTLIBRARIES = libkbear$APPNAMELC$importfilter.la
+kde_module_LTLIBRARIES = libkbear%{APPNAMELC}importfilter.la
 
-libkbear$APPNAMELC$importfilter_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -lkbearcore
-libkbear$APPNAMELC$importfilter_la_SOURCES = $APPNAMELC$importfilterplugin.cpp
-libkbear$APPNAMELC$importfilter_la_METASOURCES = AUTO
+libkbear%{APPNAMELC}importfilter_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -lkbearcore
+libkbear%{APPNAMELC}importfilter_la_SOURCES = %{APPNAMELC}importfilterplugin.cpp
+libkbear%{APPNAMELC}importfilter_la_METASOURCES = AUTO
 
-noinst_HEADERS = $APPNAMELC$importfilterplugin.h
+noinst_HEADERS = %{APPNAMELC}importfilterplugin.h
 
 servicedir = $(kde_servicesdir)
-service_DATA = kbear$APPNAMELC$importfilter.desktop
+service_DATA = kbear%{APPNAMELC}importfilter.desktop
 
 AM_CFLAGS =
 AM_CXXFLAGS = -DQT_CLEAN_NAMESPACE -UQT_NO_COMPAT -DQT_NO_ASCII_CAST

@@ -1,9 +1,9 @@
 #include <qpe/config.h>
 #include <qpe/qcopenvelope_qws.h>
 
-#include "$APPNAMELC$widget.h"
+#include "%{APPNAMELC}widget.h"
 
-$APPNAME$Widget::$APPNAME$Widget( QWidget *parent,  const char* name)
+%{APPNAME}Widget::%{APPNAME}Widget( QWidget *parent,  const char* name)
     : QWidget(parent,  name ) {
 
     m_exampleLabel = 0l;
@@ -30,26 +30,26 @@ $APPNAME$Widget::$APPNAME$Widget( QWidget *parent,  const char* name)
 }
 
 
-$APPNAME$Widget::~$APPNAME$Widget() {
+%{APPNAME}Widget::~%{APPNAME}Widget() {
     delete m_exampleLabel;
     delete m_layout;
 }
 
 
-void $APPNAME$Widget::readConfig() {
+void %{APPNAME}Widget::readConfig() {
 // we dont have any config entries in this plugin
 // normally this method is used after today config was used
 }
 
 
-void $APPNAME$Widget::refresh()  {
+void %{APPNAME}Widget::refresh()  {
 
 }
 
-void $APPNAME$Widget::getInfo() {
-    m_exampleLabel->setText(  tr("$APPNAME$ text")  );
+void %{APPNAME}Widget::getInfo() {
+    m_exampleLabel->setText(  tr("%{APPNAME} text")  );
 }
 
-void $APPNAME$Widget::slotClicked() {
+void %{APPNAME}Widget::slotClicked() {
    getInfo();
 }

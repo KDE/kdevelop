@@ -1,6 +1,6 @@
  
-#ifndef __KBEAR_$APPNAMEUC$_IMPORT_FILTER_H__
-#define __KBEAR_$APPNAMEUC$_IMPORT_FILTER_H__
+#ifndef __KBEAR_%{APPNAMEUC}_IMPORT_FILTER_H__
+#define __KBEAR_%{APPNAMEUC}_IMPORT_FILTER_H__
 
 //////////////////////////////////////////////////////////////////////
 // Qt specific include files
@@ -11,12 +11,12 @@
 
 class QDomDocument;
 
-class $APPNAME$ImportFilterPlugin : public KBear::SiteImportFilterPluginIface
+class %{APPNAME}ImportFilterPlugin : public KBear::SiteImportFilterPluginIface
 {
     Q_OBJECT
 public:
-    $APPNAME$ImportFilterPlugin(QObject *parent=0, const char *name=0, const QStringList &args = QStringList());
-    virtual ~$APPNAME$ImportFilterPlugin();
+    %{APPNAME}ImportFilterPlugin(QObject *parent=0, const char *name=0, const QStringList &args = QStringList());
+    virtual ~%{APPNAME}ImportFilterPlugin();
 
     /**
      * This function should return a @ref QDomDocument containing the imported bookmarks.
@@ -56,5 +56,5 @@ private:
     bool m_hasError;
 };
 
-#endif // __KBEAR_$APPNAMEUC$_IMPORT_FILTER_H__
+#endif // __KBEAR_%{APPNAMEUC}_IMPORT_FILTER_H__
 

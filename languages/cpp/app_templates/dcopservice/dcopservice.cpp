@@ -1,36 +1,36 @@
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 #include <kdebug.h>
 #include <kapplication.h>
 
-$APPNAME$::$APPNAME$() : DCOPObject("serviceInterface")
+%{APPNAME}::%{APPNAME}() : DCOPObject("serviceInterface")
 {
 	kdDebug() << "Starting new service... " << endl;
 	m_List = QStringList();
 }
 
-$APPNAME$::~$APPNAME$()
+%{APPNAME}::~%{APPNAME}()
 {
 	kdDebug() << "Going away... " << endl;
 }
 
-QString $APPNAME$::string(int idx)
+QString %{APPNAME}::string(int idx)
 {
 	return *m_List.at(idx);
 }
 
-QStringList $APPNAME$::list()
+QStringList %{APPNAME}::list()
 {
 	return m_List;
 }
 
-void $APPNAME$::add(QString arg)
+void %{APPNAME}::add(QString arg)
 {
 	kdDebug() << "Adding " << arg << " to the list" << endl;
 	m_List << arg;
 }
 
-bool $APPNAME$::remove(QString arg)
+bool %{APPNAME}::remove(QString arg)
 {
 	QStringList::Iterator it = m_List.find(arg);
 	if (it != m_List.end())
@@ -42,7 +42,7 @@ bool $APPNAME$::remove(QString arg)
 	return true;
 }
 
-bool $APPNAME$::exit()
+bool %{APPNAME}::exit()
 {
 	kapp->quit();
 }

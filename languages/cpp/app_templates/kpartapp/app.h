@@ -1,6 +1,6 @@
 
-#ifndef _$APPNAMEUC$_H_
-#define _$APPNAMEUC$_H_
+#ifndef _%{APPNAMEUC}_H_
+#define _%{APPNAMEUC}_H_
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -16,22 +16,22 @@ class KToggleAction;
  * statusbar but relies on the "Part" to do all the real work.
  *
  * @short Application Shell
- * @author $AUTHOR$ <$EMAIL$>
- * @version $VERSION$
+ * @author %{AUTHOR} <%{EMAIL}>
+ * @version %{VERSION}
  */
-class $APPNAME$ : public KParts::MainWindow
+class %{APPNAME} : public KParts::MainWindow
 {
     Q_OBJECT
 public:
     /**
      * Default Constructor
      */
-    $APPNAME$();
+    %{APPNAME}();
 
     /**
      * Default Destructor
      */
-    virtual ~$APPNAME$();
+    virtual ~%{APPNAME}();
 
     /**
      * Use this method to load whatever file/URL you have
@@ -73,4 +73,4 @@ private:
     KToggleAction *m_statusbarAction;
 };
 
-#endif // _$APPNAMEUC$_H_
+#endif // _%{APPNAMEUC}_H_

@@ -1,5 +1,5 @@
 
-#include "$APPNAMELC$_part.h"
+#include "%{APPNAMELC}_part.h"
 
 #include <kinstance.h>
 #include <kaction.h>
@@ -10,12 +10,12 @@
 #include <qtextstream.h>
 #include <qmultilineedit.h>
 
-$APPNAME$Part::$APPNAME$Part( QWidget *parentWidget, const char *widgetName,
+%{APPNAME}Part::%{APPNAME}Part( QWidget *parentWidget, const char *widgetName,
                                   QObject *parent, const char *name )
     : KParts::ReadWritePart(parent, name)
 {
     // we need an instance
-    setInstance( $APPNAME$PartFactory::instance() );
+    setInstance( %{APPNAME}PartFactory::instance() );
 
     // this should be your custom internal widget
     m_widget = new QMultiLineEdit( parentWidget, widgetName );
@@ -29,7 +29,7 @@ $APPNAME$Part::$APPNAME$Part( QWidget *parentWidget, const char *widgetName,
     KStdAction::save(this, SLOT(save()), actionCollection());
 
     // set our XML-UI resource file
-    setXMLFile("$APPNAMELC$_part.rc");
+    setXMLFile("%{APPNAMELC}_part.rc");
 
     // we are read-write by default
     setReadWrite(true);
@@ -38,11 +38,11 @@ $APPNAME$Part::$APPNAME$Part( QWidget *parentWidget, const char *widgetName,
     setModified(false);
 }
 
-$APPNAME$Part::~$APPNAME$Part()
+%{APPNAME}Part::~%{APPNAME}Part()
 {
 }
 
-void $APPNAME$Part::setReadWrite(bool rw)
+void %{APPNAME}Part::setReadWrite(bool rw)
 {
     // notify your internal widget of the read-write state
     m_widget->setReadOnly(!rw);
@@ -58,7 +58,7 @@ void $APPNAME$Part::setReadWrite(bool rw)
     ReadWritePart::setReadWrite(rw);
 }
 
-void $APPNAME$Part::setModified(bool modified)
+void %{APPNAME}Part::setModified(bool modified)
 {
     // get a handle on our Save action and make sure it is valid
     KAction *save = actionCollection()->action(KStdAction::stdName(KStdAction::Save));
@@ -76,7 +76,7 @@ void $APPNAME$Part::setModified(bool modified)
     ReadWritePart::setModified(modified);
 }
 
-bool $APPNAME$Part::openFile()
+bool %{APPNAME}Part::openFile()
 {
     // m_file is always local so we can use QFile on it
     QFile file(m_file);
@@ -101,7 +101,7 @@ bool $APPNAME$Part::openFile()
     return true;
 }
 
-bool $APPNAME$Part::saveFile()
+bool %{APPNAME}Part::saveFile()
 {
     // if we aren't read-write, return immediately
     if (isReadWrite() == false)
@@ -121,7 +121,7 @@ bool $APPNAME$Part::saveFile()
     return true;
 }
 
-void $APPNAME$Part::fileOpen()
+void %{APPNAME}Part::fileOpen()
 {
     // this slot is called whenever the File->Open menu is selected,
     // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
@@ -132,7 +132,7 @@ void $APPNAME$Part::fileOpen()
         openURL(file_name);
 }
 
-void $APPNAME$Part::fileSaveAs()
+void %{APPNAME}Part::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
     QString file_name = KFileDialog::getSaveFileName();
@@ -146,15 +146,15 @@ void $APPNAME$Part::fileSaveAs()
 #include <kaboutdata.h>
 #include <klocale.h>
 
-KInstance*  $APPNAME$PartFactory::s_instance = 0L;
-KAboutData* $APPNAME$PartFactory::s_about = 0L;
+KInstance*  %{APPNAME}PartFactory::s_instance = 0L;
+KAboutData* %{APPNAME}PartFactory::s_about = 0L;
 
-$APPNAME$PartFactory::$APPNAME$PartFactory()
+%{APPNAME}PartFactory::%{APPNAME}PartFactory()
     : KParts::Factory()
 {
 }
 
-$APPNAME$PartFactory::~$APPNAME$PartFactory()
+%{APPNAME}PartFactory::~%{APPNAME}PartFactory()
 {
     delete s_instance;
     delete s_about;
@@ -162,12 +162,12 @@ $APPNAME$PartFactory::~$APPNAME$PartFactory()
     s_instance = 0L;
 }
 
-KParts::Part* $APPNAME$PartFactory::createPartObject( QWidget *parentWidget, const char *widgetName,
+KParts::Part* %{APPNAME}PartFactory::createPartObject( QWidget *parentWidget, const char *widgetName,
                                                         QObject *parent, const char *name,
                                                         const char *classname, const QStringList &args )
 {
     // Create an instance of our Part
-    $APPNAME$Part* obj = new $APPNAME$Part( parentWidget, widgetName, parent, name );
+    %{APPNAME}Part* obj = new %{APPNAME}Part( parentWidget, widgetName, parent, name );
 
     // See if we are to be read-write or not
     if (QCString(classname) == "KParts::ReadOnlyPart")
@@ -176,12 +176,12 @@ KParts::Part* $APPNAME$PartFactory::createPartObject( QWidget *parentWidget, con
     return obj;
 }
 
-KInstance* $APPNAME$PartFactory::instance()
+KInstance* %{APPNAME}PartFactory::instance()
 {
     if( !s_instance )
     {
-        s_about = new KAboutData("$APPNAMELC$part", I18N_NOOP("$APPNAME$Part"), "$VERSION$");
-        s_about->addAuthor("$AUTHOR$", 0, "$EMAIL$");
+        s_about = new KAboutData("%{APPNAMELC}part", I18N_NOOP("%{APPNAME}Part"), "%{VERSION}");
+        s_about->addAuthor("%{AUTHOR}", 0, "%{EMAIL}");
         s_instance = new KInstance(s_about);
     }
     return s_instance;
@@ -189,10 +189,10 @@ KInstance* $APPNAME$PartFactory::instance()
 
 extern "C"
 {
-    void* init_lib$APPNAMELC$part()
+    void* init_lib%{APPNAMELC}part()
     {
-        return new $APPNAME$PartFactory;
+        return new %{APPNAME}PartFactory;
     }
 };
 
-#include "$APPNAMELC$_part.moc"
+#include "%{APPNAMELC}_part.moc"

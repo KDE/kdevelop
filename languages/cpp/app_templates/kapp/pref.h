@@ -1,36 +1,36 @@
 
-#ifndef _$APPNAMEUC$PREF_H_
-#define _$APPNAMEUC$PREF_H_
+#ifndef _%{APPNAMEUC}PREF_H_
+#define _%{APPNAMEUC}PREF_H_
 
 #include <kdialogbase.h>
 #include <qframe.h>
 
-class $APPNAME$PrefPageOne;
-class $APPNAME$PrefPageTwo;
+class %{APPNAME}PrefPageOne;
+class %{APPNAME}PrefPageTwo;
 
-class $APPNAME$Preferences : public KDialogBase
+class %{APPNAME}Preferences : public KDialogBase
 {
     Q_OBJECT
 public:
-    $APPNAME$Preferences();
+    %{APPNAME}Preferences();
 
 private:
-    $APPNAME$PrefPageOne *m_pageOne;
-    $APPNAME$PrefPageTwo *m_pageTwo;
+    %{APPNAME}PrefPageOne *m_pageOne;
+    %{APPNAME}PrefPageTwo *m_pageTwo;
 };
 
-class $APPNAME$PrefPageOne : public QFrame
+class %{APPNAME}PrefPageOne : public QFrame
 {
     Q_OBJECT
 public:
-    $APPNAME$PrefPageOne(QWidget *parent = 0);
+    %{APPNAME}PrefPageOne(QWidget *parent = 0);
 };
 
-class $APPNAME$PrefPageTwo : public QFrame
+class %{APPNAME}PrefPageTwo : public QFrame
 {
     Q_OBJECT
 public:
-    $APPNAME$PrefPageTwo(QWidget *parent = 0);
+    %{APPNAME}PrefPageTwo(QWidget *parent = 0);
 };
 
-#endif // _$APPNAMEUC$PREF_H_
+#endif // _%{APPNAMEUC}PREF_H_

@@ -1,6 +1,6 @@
 
-#ifndef $APPNAMEUC$_IMPL_H
-#define $APPNAMEUC$_IMPL_H
+#ifndef %{APPNAMEUC}_IMPL_H
+#define %{APPNAMEUC}_IMPL_H
 
 struct SDL_Surface;
 
@@ -43,11 +43,11 @@ public:
  * o set up view
  * o drawing routines.
  */
-class $APPNAME$View
+class %{APPNAME}View
 {
 public:
-    $APPNAME$View(int in);
-    ~$APPNAME$View();
+    %{APPNAME}View(int in);
+    ~%{APPNAME}View();
     
 protected:
     /** Screen initialization with SDL. Note, that you can initialize OpenGL with SDL!  */
@@ -73,5 +73,5 @@ private:
     int height;
 };
 
-#endif // $APPNAMEUC$_IMPL_H
+#endif // %{APPNAMEUC}_IMPL_H
 

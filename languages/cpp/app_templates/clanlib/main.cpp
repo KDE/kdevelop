@@ -5,7 +5,7 @@
 #include <ClanLib/gl.h>
 #include <ClanLib/sound.h>
 
-class $APPNAME$Application : public CL_ClanApplication
+class %{APPNAME}Application : public CL_ClanApplication
 {
 public:
 	virtual int main(int argc, char** argv)

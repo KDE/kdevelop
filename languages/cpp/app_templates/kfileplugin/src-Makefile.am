@@ -3,19 +3,19 @@
 INCLUDES         = $(all_includes)
 
 # these are the headers for your project
-noinst_HEADERS   = kfile_$APPNAMELC$.h
+noinst_HEADERS   = kfile_%{APPNAMELC}.h
 
-kde_module_LTLIBRARIES = kfile_$APPNAMELC$.la
+kde_module_LTLIBRARIES = kfile_%{APPNAMELC}.la
 
-kfile_$APPNAMELC$_la_SOURCES = kfile_$APPNAMELC$.cpp
-kfile_$APPNAMELC$_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kfile_$APPNAMELC$_la_LIBADD = $(LIB_KIO)
+kfile_%{APPNAMELC}_la_SOURCES = kfile_%{APPNAMELC}.cpp
+kfile_%{APPNAMELC}_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kfile_%{APPNAMELC}_la_LIBADD = $(LIB_KIO)
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
-services_DATA = kfile_$APPNAMELC$.desktop
+services_DATA = kfile_%{APPNAMELC}.desktop
 servicesdir = $(kde_servicesdir)
 
 messages:
-	$(XGETTEXT) *.cpp -o $(podir)/kfile_$APPNAMELC$.pot
+	$(XGETTEXT) *.cpp -o $(podir)/kfile_%{APPNAMELC}.pot

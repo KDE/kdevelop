@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>$APPNAME$view_base</class>
+<class>%{APPNAME}view_base</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>$APPNAME$view_base</cstring>
+        <cstring>%{APPNAME}view_base</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>$APPNAME$_base</string>
+        <string>%{APPNAME}_base</string>
     </property>
     <grid>
         <property name="name">

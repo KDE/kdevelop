@@ -1,21 +1,21 @@
 /*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
+ * Copyright (C) %{YEAR} %{AUTHOR} <%{EMAIL}>
  */
 
 #include <kmainwindow.h>
 #include <klocale.h>
 
-#include "$APPNAMELC$.h"
-#include "$APPNAMELC$widget.h"
+#include "%{APPNAMELC}.h"
+#include "%{APPNAMELC}widget.h"
 
-$APPNAME$::$APPNAME$()
-    : KMainWindow( 0, "$APPNAME$" )
+%{APPNAME}::%{APPNAME}()
+    : KMainWindow( 0, "%{APPNAME}" )
 {
-    setCentralWidget( new $APPNAME$Widget( this ) );
+    setCentralWidget( new %{APPNAME}Widget( this ) );
 }
 
-$APPNAME$::~$APPNAME$()
+%{APPNAME}::~%{APPNAME}()
 {
 }
 
-#include "$APPNAMELC$.moc"
+#include "%{APPNAMELC}.moc"

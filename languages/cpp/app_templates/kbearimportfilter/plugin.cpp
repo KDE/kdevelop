@@ -11,33 +11,33 @@
 #include <kdebug.h>
 //////////////////////////////////////////////////////////////////////
 // Application specific include files
-#include "$APPNAMELC$importfilterplugin.h"
+#include "%{APPNAMELC}importfilterplugin.h"
 #include <kbear/kbeartags.h>
 #include <kbear/misc.h>
 
 using namespace KBear;
 
 
-typedef KGenericFactory<$APPNAME$ImportFilterPlugin> $APPNAME$ImportFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkbear$APPNAMELC$importfilter, $APPNAME$ImportFilterPluginFactory( "kbear$APPNAMELC$importfilter" ) );
+typedef KGenericFactory<%{APPNAME}ImportFilterPlugin> %{APPNAME}ImportFilterPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( libkbear%{APPNAMELC}importfilter, %{APPNAME}ImportFilterPluginFactory( "kbear%{APPNAMELC}importfilter" ) );
 
-$APPNAME$ImportFilterPlugin::$APPNAME$ImportFilterPlugin(QObject *parent, const char *name, const QStringList& )
+%{APPNAME}ImportFilterPlugin::%{APPNAME}ImportFilterPlugin(QObject *parent, const char *name, const QStringList& )
     : SiteImportFilterPluginIface( parent, name ), m_hasError( false )
 {
     KGlobal::locale()->insertCatalogue("kbear");
-    m_domDocument.setContent( QString("<%1 %2=\"%3\"/>").arg( TAG_GROUP ).arg( ATT_LABEL ).arg(i18n("$APPNAME$ import")) );
+    m_domDocument.setContent( QString("<%1 %2=\"%3\"/>").arg( TAG_GROUP ).arg( ATT_LABEL ).arg(i18n("%{APPNAME} import")) );
 }
 
-$APPNAME$ImportFilterPlugin::~$APPNAME$ImportFilterPlugin()
+%{APPNAME}ImportFilterPlugin::~%{APPNAME}ImportFilterPlugin()
 {
 }
 
-QString $APPNAME$ImportFilterPlugin::getDomDocument()
+QString %{APPNAME}ImportFilterPlugin::getDomDocument()
 {
     return m_domDocument.toString();
 }
 
-void $APPNAME$ImportFilterPlugin::import( const QString& fileName )
+void %{APPNAME}ImportFilterPlugin::import( const QString& fileName )
 {
     // This method will be automatically called to start the import
     // If supplied fileName will contain the absolute path to the file to import
@@ -57,5 +57,5 @@ void $APPNAME$ImportFilterPlugin::import( const QString& fileName )
     emit progress( 100 );
 }
 
-#include "$APPNAMELC$importfilterplugin.moc"
+#include "%{APPNAMELC}importfilterplugin.moc"
 

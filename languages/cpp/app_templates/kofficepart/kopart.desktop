@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=$APPNAME$
-Name[xx]=xx$APPNAME$xx
-Exec=$APPNAMELC$
-X-KDE-Library=lib$APPNAMELC$part
-MimeType=application/x-$APPNAMELC$
+Name=%{APPNAME}
+Name[xx]=xx%{APPNAME}xx
+Exec=%{APPNAMELC}
+X-KDE-Library=lib%{APPNAMELC}part
+MimeType=application/x-%{APPNAMELC}
 Type=Application
-Icon=$APPNAMELC$
+Icon=%{APPNAMELC}
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
-X-KDE-NativeMimeType=application/x-$APPNAMELC$
+X-KDE-NativeMimeType=application/x-%{APPNAMELC}

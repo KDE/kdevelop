@@ -1,38 +1,38 @@
 
-#ifndef _$APPNAMEUC$VIEW_H_
-#define _$APPNAMEUC$VIEW_H_
+#ifndef _%{APPNAMEUC}VIEW_H_
+#define _%{APPNAMEUC}VIEW_H_
 
 #include <qwidget.h>
 #include <kparts/part.h>
-#include <$APPNAMELC$iface.h>
+#include <%{APPNAMELC}iface.h>
 
 class QPainter;
 class KURL;
 
 /**
- * This is the main view class for $APPNAME$.  Most of the non-menu,
+ * This is the main view class for %{APPNAME}.  Most of the non-menu,
  * non-toolbar, and non-statusbar (e.g., non frame) GUI code should go
  * here.
  *
- * This $APPNAMELC$ uses an HTML component as an example.
+ * This %{APPNAMELC} uses an HTML component as an example.
  *
  * @short Main view
- * @author $AUTHOR$ <$EMAIL$>
- * @version $VERSION$
+ * @author %{AUTHOR} <%{EMAIL}>
+ * @version %{VERSION}
  */
-class $APPNAME$View : public QWidget, public $APPNAME$Iface
+class %{APPNAME}View : public QWidget, public %{APPNAME}Iface
 {
     Q_OBJECT
 public:
 	/**
 	 * Default constructor
 	 */
-    $APPNAME$View(QWidget *parent);
+    %{APPNAME}View(QWidget *parent);
 
 	/**
 	 * Destructor
 	 */
-    virtual ~$APPNAME$View();
+    virtual ~%{APPNAME}View();
 
     /**
      * Random 'get' function
@@ -73,4 +73,4 @@ private:
     KParts::ReadOnlyPart *m_html;
 };
 
-#endif // _$APPNAMEUC$VIEW_H_
+#endif // _%{APPNAMEUC}VIEW_H_

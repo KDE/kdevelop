@@ -1,5 +1,5 @@
-#ifndef $APPNAME$_NETWORK_MODULE_H
-#define $APPNAME$_NETWORK_MODULE_H
+#ifndef %{APPNAME}_NETWORK_MODULE_H
+#define %{APPNAME}_NETWORK_MODULE_H
 
 #include <module.h>
 

@@ -2,9 +2,9 @@
 /* This template is based off of the KOffice example written by Torben Weis <weis@kde.org
    It was converted to a KDevelop template by Ian Reinhart Geiser <geiseri@yahoo.com>
 */
-#include <$APPNAMELC$_factory.h>
-#include <$APPNAMELC$_part.h>
-#include <$APPNAMELC$_aboutdata.h>
+#include <%{APPNAMELC}_factory.h>
+#include <%{APPNAMELC}_part.h>
+#include <%{APPNAMELC}_aboutdata.h>
 #include <kinstance.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -13,23 +13,23 @@
 
 extern "C"
 {
-    void* init_lib$APPNAMELC$part()
+    void* init_lib%{APPNAMELC}part()
     {
-        KGlobal::locale()->insertCatalogue("$APPNAMELC$");
-        return new $APPNAME$Factory;
+        KGlobal::locale()->insertCatalogue("%{APPNAMELC}");
+        return new %{APPNAME}Factory;
     }
 };
 
-KInstance* $APPNAME$Factory::s_global = 0L;
-KAboutData* $APPNAME$Factory::s_aboutData = 0L;
+KInstance* %{APPNAME}Factory::s_global = 0L;
+KAboutData* %{APPNAME}Factory::s_aboutData = 0L;
 
-$APPNAME$Factory::$APPNAME$Factory( QObject* parent, const char* name )
+%{APPNAME}Factory::%{APPNAME}Factory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
     global();
 }
 
-$APPNAME$Factory::~$APPNAME$Factory()
+%{APPNAME}Factory::~%{APPNAME}Factory()
 {
     delete s_aboutData;
     s_aboutData = 0L;
@@ -37,14 +37,14 @@ $APPNAME$Factory::~$APPNAME$Factory()
     s_global = 0L;
 }
 
-KParts::Part* $APPNAME$Factory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* %{APPNAME}Factory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     // If classname is "KoDocument", our host is a koffice application
     // otherwise, the host wants us as a simple part, so switch to readonly and single view.
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     // parentWidget and widgetName are used by KoDocument for the "readonly+singleView" case.
-    $APPNAME$Part *part = new $APPNAME$Part( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    %{APPNAME}Part *part = new %{APPNAME}Part( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       part->setReadWrite( false );
@@ -52,15 +52,15 @@ KParts::Part* $APPNAME$Factory::createPartObject( QWidget *parentWidget, const c
     return part;
 }
 
-KAboutData* $APPNAME$Factory::aboutData()
+KAboutData* %{APPNAME}Factory::aboutData()
 {
     if ( !s_aboutData )
         // Change this, of course
-        s_aboutData = new$APPNAME$AboutData();
+        s_aboutData = new%{APPNAME}AboutData();
     return s_aboutData;
 }
 
-KInstance* $APPNAME$Factory::global()
+KInstance* %{APPNAME}Factory::global()
 {
     if ( !s_global )
     {
@@ -73,4 +73,4 @@ KInstance* $APPNAME$Factory::global()
     return s_global;
 }
 
-#include <$APPNAMELC$_factory.moc>
+#include <%{APPNAMELC}_factory.moc>

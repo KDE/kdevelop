@@ -1,5 +1,5 @@
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -8,7 +8,7 @@
 static const char description[] =
     I18N_NOOP("A KDE KPart Application");
 
-static const char version[] = "$VERSION$";
+static const char version[] = "%{VERSION}";
 
 static KCmdLineOptions options[] =
 {
@@ -18,9 +18,9 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char **argv)
 {
-    KAboutData about("$APPNAMELC$", I18N_NOOP("$APPNAME$"), version, description,
-                     KAboutData::License_$LICENSE$, "(C) $YEAR$ $AUTHOR$", 0, 0, "$EMAIL$");
-    about.addAuthor( "$AUTHOR$", 0, "$EMAIL$" );
+    KAboutData about("%{APPNAMELC}", I18N_NOOP("%{APPNAME}"), version, description,
+                     KAboutData::License_$LICENSE$, "(C) %{YEAR} %{AUTHOR}", 0, 0, "%{EMAIL}");
+    about.addAuthor( "%{AUTHOR}", 0, "%{EMAIL}" );
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions( options );
     KApplication app;
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     // see if we are starting with session management
     if (app.isRestored())
     {
-        RESTORE($APPNAME$);
+        RESTORE(%{APPNAME});
     }
     else
     {
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
         if ( args->count() == 0 )
         {
-        $APPNAME$ *widget = new $APPNAME$;
+        %{APPNAME} *widget = new %{APPNAME};
         widget->show();
         }
         else
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
             int i = 0;
             for (; i < args->count(); i++ )
             {
-                $APPNAME$ *widget = new $APPNAME$;
+                %{APPNAME} *widget = new %{APPNAME};
                 widget->show();
                 widget->load( args->url( i ) );
             }

@@ -1,19 +1,19 @@
 INCLUDES    = $(all_includes)
 METASOURCES = AUTO
 
-KDE_ICON = $APPNAMELC$
+KDE_ICON = %{APPNAMELC}
 
 # Install this plugin in the KDE modules directory
-kde_module_LTLIBRARIES = lib$APPNAMELC$plugin.la
+kde_module_LTLIBRARIES = lib%{APPNAMELC}plugin.la
 
-lib$APPNAMELC$plugin_la_SOURCES = plugin_$APPNAMELC$.cpp
-lib$APPNAMELC$plugin_la_LIBADD = -lkateinterfaces
-lib$APPNAMELC$plugin_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+lib%{APPNAMELC}plugin_la_SOURCES = plugin_%{APPNAMELC}.cpp
+lib%{APPNAMELC}plugin_la_LIBADD = -lkateinterfaces
+lib%{APPNAMELC}plugin_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 
-pluginsdir = $(kde_datadir)/kate/plugins/$APPNAMELC$
-plugins_DATA = plugin_$APPNAMELC$.rc
+pluginsdir = $(kde_datadir)/kate/plugins/%{APPNAMELC}
+plugins_DATA = plugin_%{APPNAMELC}.rc
 
-kde_services_DATA = $APPNAMELC$.desktop
+kde_services_DATA = %{APPNAMELC}.desktop
 
 messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/$APPNAMELC$.pot
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot

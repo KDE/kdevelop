@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="$APPNAMELC$" library="lib$APPNAMELC$plugin" version="1">
+<kpartplugin name="%{APPNAMELC}" library="lib%{APPNAMELC}plugin" version="1">
 <MenuBar>
  <Menu name="tools"><Text>&amp;Tools</Text>
-  <Action name="edit_insert_$APPNAMELC$"/>
+  <Action name="edit_insert_%{APPNAMELC}"/>
  </Menu>
 </MenuBar>
 <ToolBar name="extraToolBar">
-  <Action name="edit_insert_$APPNAMELC$"/>
+  <Action name="edit_insert_%{APPNAMELC}"/>
 </ToolBar>
 </kpartplugin>

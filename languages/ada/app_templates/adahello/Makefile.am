@@ -1,20 +1,15 @@
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-adahellodir = ${appwizarddatadir}/template-adahello
-templatedir = ${appwizarddatadir}/templates
 
-adahello_DATA = main.adb app.kdevelop ada-Makefile app.kdevelop.filelist
+dataFiles = main.adb app.kdevelop ada-Makefile app.kdevelop.filelistp
+
+templatedir = ${appwizarddatadir}/templates
 template_DATA = adahello
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+chello.tar.gz:
+	$(TAR) -cf adahello.tar -C $(srcdir) ${dataFiles}
+	gzip adahello.tar
 
-perl = perl
+archivedir = ${appwizarddatadir}
+archive_DATA = adahello.tar.gz
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(adahellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(adahellodir)/script
+CLEANFILES = *.tar.gz

@@ -1,16 +1,16 @@
-#include "$APPNAMELC$iface.h"
+#include "%{APPNAMELC}iface.h"
 
-$APPNAME$Interface::$APPNAME$Interface( QObject* parent,
+%{APPNAME}Interface::%{APPNAME}Interface( QObject* parent,
                                     const char* name,
                                     bool status )
     : Interface(parent, name, status )
 {
 }
 
-$APPNAME$Interface::~$APPNAME$Interface() {
+%{APPNAME}Interface::~%{APPNAME}Interface() {
 }
 
-bool $APPNAME$Interface::refresh() {
+bool %{APPNAME}Interface::refresh() {
 /* we do VPN over ppp
  * so replace the interfaceName with
  * something actual existing
@@ -29,14 +29,14 @@ bool $APPNAME$Interface::refresh() {
 }
 
 
-void $APPNAME$Interface::start() {
+void %{APPNAME}Interface::start() {
 // call pptp
     setStatus(true);
     refresh();
     emit updateMessage("VPN started");
 }
 
-void $APPNAME$Interface::stop() {
+void %{APPNAME}Interface::stop() {
     setStatus(false );
     refresh();
     emit updateMessage("VPN halted");

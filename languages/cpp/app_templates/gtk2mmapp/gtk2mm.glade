@@ -8,7 +8,7 @@
   <property agent="glademm" name="cxx_separate_file">True</property>
   <property agent="glademm" name="cxx_visibility">public</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">$APPNAME$ Project</property>
+  <property name="title" translatable="yes">%{APPNAME} Project</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_CENTER</property>
   <property name="modal">False</property>

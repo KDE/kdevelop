@@ -1,4 +1,4 @@
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 #include <qpe/applnk.h>
 #include <qpe/resource.h>
@@ -9,31 +9,31 @@
 #include <qmessagebox.h>
 
 
-$APPNAME$::$APPNAME$()
-             :QObject( 0, "$APPNAME$" )
+%{APPNAME}::%{APPNAME}()
+             :QObject( 0, "%{APPNAME}" )
 {
 }
 
-$APPNAME$::~$APPNAME$ ( )
+%{APPNAME}::~%{APPNAME} ( )
 {}
 
-int $APPNAME$::position() const
+int %{APPNAME}::position() const
 {
     return 3;
 }
 
-QString $APPNAME$::name() const
+QString %{APPNAME}::name() const
 {
     return tr( "MenuApplet Example Name" );
 }
 
-QString $APPNAME$::text() const
+QString %{APPNAME}::text() const
 {
     return tr( "Click the white rabbit" );
 }
 
 
-QIconSet $APPNAME$::icon() const
+QIconSet %{APPNAME}::icon() const
 {
     QPixmap pix;
     QImage img = Resource::loadImage( "Tux" );
@@ -42,13 +42,13 @@ QIconSet $APPNAME$::icon() const
     return pix;
 }
 
-QPopupMenu* $APPNAME$::popup(QWidget*) const
+QPopupMenu* %{APPNAME}::popup(QWidget*) const
 {
     /* no subdir */
     return 0;
 }
 
-void $APPNAME$::activated()
+void %{APPNAME}::activated()
 {
     QMessageBox::information(0,tr("No white rabbit found"),
 			     tr("<qt>No white rabbit was seen near Opie."
@@ -57,7 +57,7 @@ void $APPNAME$::activated()
 }
 
 
-QRESULT $APPNAME$::queryInterface( const QUuid &uuid, QUnknownInterface **iface )
+QRESULT %{APPNAME}::queryInterface( const QUuid &uuid, QUnknownInterface **iface )
 {
     *iface = 0;
     if ( uuid == IID_QUnknown )
@@ -74,5 +74,5 @@ QRESULT $APPNAME$::queryInterface( const QUuid &uuid, QUnknownInterface **iface 
 
 Q_EXPORT_INTERFACE()
 {
-    Q_CREATE_INSTANCE( $APPNAME$ )
+    Q_CREATE_INSTANCE( %{APPNAME} )
 }

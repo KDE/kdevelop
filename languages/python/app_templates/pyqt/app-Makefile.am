@@ -7,8 +7,8 @@ pyui_files= documentdetails.py
 	pyuic $< >$@
 
 
-bin_PROGRAMS = $APPNAMELC$
-$APPNAMELC$_SOURCES = $APPNAMELC$.py documentdetails.ui
+bin_PROGRAMS = %{APPNAMELC}
+%{APPNAMELC}_SOURCES = %{APPNAMELC}.py documentdetails.ui
 
-$APPNAMELC$$(EXEEXT): $(pyui_files)
+%{APPNAMELC}$(EXEEXT): $(pyui_files)
 	echo "Done"

@@ -2,11 +2,11 @@
 #ifndef MAINCLASS_H
 #define MAINCLASS_H
 
-#include "$APPNAMELC$_iface.h"
+#include "%{APPNAMELC}_iface.h"
 
 /**
  *
- * @author $AUTHOR$
+ * @author %{AUTHOR}
  **/
 class MainClass : virtual public DCOPDemoIface
 {

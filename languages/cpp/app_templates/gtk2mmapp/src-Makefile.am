@@ -1,7 +1,7 @@
-bin_PROGRAMS = $APPNAMELC$
+bin_PROGRAMS = %{APPNAMELC}
 
-$APPNAMELC$_SOURCES = \
-	$APPNAMELC$.cc\
+%{APPNAMELC}_SOURCES = \
+	%{APPNAMELC}.cc\
 	main_window_glade.cc \
 	main_window.cc 
 
@@ -11,4 +11,4 @@ noinst_HEADERS = \
 
 AM_CXXFLAGS = @CXXFLAGS@ @GTKMM_CFLAGS@ 
 
-$APPNAMELC$_LDADD = @LIBS@ @GTKMM_LIBS@ 
+%{APPNAMELC}_LDADD = @LIBS@ @GTKMM_LIBS@ 

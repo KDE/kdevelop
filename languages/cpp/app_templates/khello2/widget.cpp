@@ -1,20 +1,20 @@
 /*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
+ * Copyright (C) %{YEAR} %{AUTHOR} <%{EMAIL}>
  */
 
 #include <qlabel.h>
 
-#include "$APPNAMELC$widget.h"
+#include "%{APPNAMELC}widget.h"
 
-$APPNAME$Widget::$APPNAME$Widget(QWidget* parent, const char* name, WFlags fl)
-        : $APPNAME$WidgetBase(parent,name,fl)
+%{APPNAME}Widget::%{APPNAME}Widget(QWidget* parent, const char* name, WFlags fl)
+        : %{APPNAME}WidgetBase(parent,name,fl)
 {}
 
-$APPNAME$Widget::~$APPNAME$Widget()
+%{APPNAME}Widget::~%{APPNAME}Widget()
 {}
 
 /*$SPECIALIZATION$*/
-void $APPNAME$Widget::button_clicked()
+void %{APPNAME}Widget::button_clicked()
 {
     if ( label->text().isEmpty() )
     {
@@ -28,5 +28,5 @@ void $APPNAME$Widget::button_clicked()
 
 
 
-#include "$APPNAMELC$widget.moc"
+#include "%{APPNAMELC}widget.moc"
 

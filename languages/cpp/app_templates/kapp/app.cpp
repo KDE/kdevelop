@@ -1,5 +1,5 @@
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 #include "pref.h"
 
 #include <qdragobject.h>
@@ -28,9 +28,9 @@
 #include <kaction.h>
 #include <kstdaction.h>
 
-$APPNAME$::$APPNAME$()
-    : KMainWindow( 0, "$APPNAME$" ),
-      m_view(new $APPNAME$View(this)),
+%{APPNAME}::%{APPNAME}()
+    : KMainWindow( 0, "%{APPNAME}" ),
+      m_view(new %{APPNAME}View(this)),
       m_printer(0)
 {
     // accept dnd
@@ -58,11 +58,11 @@ $APPNAME$::$APPNAME$()
 
 }
 
-$APPNAME$::~$APPNAME$()
+%{APPNAME}::~%{APPNAME}()
 {
 }
 
-void $APPNAME$::load(const KURL& url)
+void %{APPNAME}::load(const KURL& url)
 {
     QString target;
     // the below code is what you should normally do.  in this
@@ -88,7 +88,7 @@ void $APPNAME$::load(const KURL& url)
     m_view->openURL(url);
 }
 
-void $APPNAME$::setupActions()
+void %{APPNAME}::setupActions()
 {
     KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
     KStdAction::open(this, SLOT(fileOpen()), actionCollection());
@@ -112,7 +112,7 @@ void $APPNAME$::setupActions()
     createGUI();
 }
 
-void $APPNAME$::saveProperties(KConfig *config)
+void %{APPNAME}::saveProperties(KConfig *config)
 {
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
@@ -127,7 +127,7 @@ void $APPNAME$::saveProperties(KConfig *config)
     }
 }
 
-void $APPNAME$::readProperties(KConfig *config)
+void %{APPNAME}::readProperties(KConfig *config)
 {
     // the 'config' object points to the session managed
     // config file.  this function is automatically called whenever
@@ -140,13 +140,13 @@ void $APPNAME$::readProperties(KConfig *config)
         m_view->openURL(KURL(url));
 }
 
-void $APPNAME$::dragEnterEvent(QDragEnterEvent *event)
+void %{APPNAME}::dragEnterEvent(QDragEnterEvent *event)
 {
     // accept uri drops only
     event->accept(KURLDrag::canDecode(event));
 }
 
-void $APPNAME$::dropEvent(QDropEvent *event)
+void %{APPNAME}::dropEvent(QDropEvent *event)
 {
     // this is a very simplistic implementation of a drop event.  we
     // will only accept a dropped URL.  the Qt dnd code can do *much*
@@ -164,17 +164,17 @@ void $APPNAME$::dropEvent(QDropEvent *event)
     }
 }
 
-void $APPNAME$::fileNew()
+void %{APPNAME}::fileNew()
 {
     // this slot is called whenever the File->New menu is selected,
     // the New shortcut is pressed (usually CTRL+N) or the New toolbar
     // button is clicked
 
     // create a new window
-    (new $APPNAME$)->show();
+    (new %{APPNAME})->show();
 }
 
-void $APPNAME$::fileOpen()
+void %{APPNAME}::fileOpen()
 {
     // this slot is called whenever the File->Open menu is selected,
     // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
@@ -189,7 +189,7 @@ void $APPNAME$::fileOpen()
         m_view->openURL(url);
 }
 
-void $APPNAME$::fileSave()
+void %{APPNAME}::fileSave()
 {
     // this slot is called whenever the File->Save menu is selected,
     // the Save shortcut is pressed (usually CTRL+S) or the Save toolbar
@@ -198,7 +198,7 @@ void $APPNAME$::fileSave()
     // save the current file
 }
 
-void $APPNAME$::fileSaveAs()
+void %{APPNAME}::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
     KURL file_url = KFileDialog::getSaveURL();
@@ -208,7 +208,7 @@ void $APPNAME$::fileSaveAs()
     }
 }
 
-void $APPNAME$::filePrint()
+void %{APPNAME}::filePrint()
 {
     // this slot is called whenever the File->Print menu is selected,
     // the Print shortcut is pressed (usually CTRL+P) or the Print toolbar
@@ -231,7 +231,7 @@ void $APPNAME$::filePrint()
     }
 }
 
-void $APPNAME$::optionsShowToolbar()
+void %{APPNAME}::optionsShowToolbar()
 {
     // this is all very cut and paste code for showing/hiding the
     // toolbar
@@ -241,7 +241,7 @@ void $APPNAME$::optionsShowToolbar()
         toolBar()->hide();
 }
 
-void $APPNAME$::optionsShowStatusbar()
+void %{APPNAME}::optionsShowStatusbar()
 {
     // this is all very cut and paste code for showing/hiding the
     // statusbar
@@ -251,12 +251,12 @@ void $APPNAME$::optionsShowStatusbar()
         statusBar()->hide();
 }
 
-void $APPNAME$::optionsConfigureKeys()
+void %{APPNAME}::optionsConfigureKeys()
 {
-    KKeyDialog::configureKeys(actionCollection(), "$APPNAMELC$ui.rc");
+    KKeyDialog::configureKeys(actionCollection(), "%{APPNAMELC}ui.rc");
 }
 
-void $APPNAME$::optionsConfigureToolbars()
+void %{APPNAME}::optionsConfigureToolbars()
 {
     // use the standard toolbar editor
 #if defined(KDE_MAKE_VERSION)
@@ -270,7 +270,7 @@ void $APPNAME$::optionsConfigureToolbars()
 #endif
 }
 
-void $APPNAME$::newToolbarConfig()
+void %{APPNAME}::newToolbarConfig()
 {
     // this slot is called when user clicks "Ok" or "Apply" in the toolbar editor.
     // recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
@@ -287,25 +287,25 @@ void $APPNAME$::newToolbarConfig()
 #endif
 }
 
-void $APPNAME$::optionsPreferences()
+void %{APPNAME}::optionsPreferences()
 {
     // popup some sort of preference dialog, here
-    $APPNAME$Preferences dlg;
+    %{APPNAME}Preferences dlg;
     if (dlg.exec())
     {
         // redo your settings
     }
 }
 
-void $APPNAME$::changeStatusbar(const QString& text)
+void %{APPNAME}::changeStatusbar(const QString& text)
 {
     // display the text on the statusbar
     statusBar()->message(text);
 }
 
-void $APPNAME$::changeCaption(const QString& text)
+void %{APPNAME}::changeCaption(const QString& text)
 {
     // display the text on the caption
     setCaption(text);
 }
-#include "$APPNAMELC$.moc"
+#include "%{APPNAMELC}.moc"

@@ -3,21 +3,21 @@
    It was converted to a KDevelop template by Ian Reinhart Geiser <geiseri@yahoo.com>
 */
 
-#ifndef $APPNAME$_VIEW
-#define $APPNAME$_VIEW
+#ifndef %{APPNAME}_VIEW
+#define %{APPNAME}_VIEW
 
 #include <koView.h>
 
 class KAction;
 class QPaintEvent;
 
-class $APPNAME$Part;
+class %{APPNAME}Part;
 
-class $APPNAME$View : public KoView
+class %{APPNAME}View : public KoView
 {
     Q_OBJECT
 public:
-    $APPNAME$View( $APPNAME$Part* part, QWidget* parent = 0, const char* name = 0 );
+    %{APPNAME}View( %{APPNAME}Part* part, QWidget* parent = 0, const char* name = 0 );
 
 protected slots:
     void cut();

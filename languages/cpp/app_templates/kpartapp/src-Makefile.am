@@ -2,15 +2,15 @@
 INCLUDES = $(all_includes)
 
 # these are the headers for your project
-noinst_HEADERS = $APPNAMELC$.h $APPNAMELC$_part.h
+noinst_HEADERS = %{APPNAMELC}.h %{APPNAMELC}_part.h
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
 messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/$APPNAMELC$.pot
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
 
-KDE_ICON = $APPNAMELC$
+KDE_ICON = %{APPNAMELC}
 
 # this Makefile creates both a KPart application and a KPart
 #########################################################################
@@ -18,35 +18,35 @@ KDE_ICON = $APPNAMELC$
 #########################################################################
 # this is the program that gets installed.  it's name is used for all
 # of the other Makefile.am variables
-bin_PROGRAMS = $APPNAMELC$
+bin_PROGRAMS = %{APPNAMELC}
 
 # the application source, library search path, and link libraries
-$APPNAMELC$_SOURCES = main.cpp $APPNAMELC$.cpp
-$APPNAMELC$_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-$APPNAMELC$_LDADD   = $(LIB_KPARTS)
+%{APPNAMELC}_SOURCES = main.cpp %{APPNAMELC}.cpp
+%{APPNAMELC}_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+%{APPNAMELC}_LDADD   = $(LIB_KPARTS)
 
 # this is where the desktop file will go 
 shelldesktopdir   = $(kde_appsdir)/Utilities
-shelldesktop_DATA = $APPNAMELC$.desktop
+shelldesktop_DATA = %{APPNAMELC}.desktop
 
 # this is where the shell's XML-GUI resource file goes
-shellrcdir   = $(kde_datadir)/$APPNAMELC$
-shellrc_DATA = $APPNAMELC$_shell.rc
+shellrcdir   = $(kde_datadir)/%{APPNAMELC}
+shellrc_DATA = %{APPNAMELC}_shell.rc
 
 #########################################################################
 # KPART SECTION
 #########################################################################
-kde_module_LTLIBRARIES = lib$APPNAMELC$part.la
+kde_module_LTLIBRARIES = lib%{APPNAMELC}part.la
 
 # the Part's source, library search path, and link libraries
-lib$APPNAMELC$part_la_SOURCES = $APPNAMELC$_part.cpp
-lib$APPNAMELC$part_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
-lib$APPNAMELC$part_la_LIBADD  = $(LIB_KPARTS) $(LIB_KFILE)
+lib%{APPNAMELC}part_la_SOURCES = %{APPNAMELC}_part.cpp
+lib%{APPNAMELC}part_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+lib%{APPNAMELC}part_la_LIBADD  = $(LIB_KPARTS) $(LIB_KFILE)
 
 # this is where the desktop file will go 
 partdesktopdir   = $(kde_servicesdir)
-partdesktop_DATA = $APPNAMELC$_part.desktop
+partdesktop_DATA = %{APPNAMELC}_part.desktop
 
 # this is where the part's XML-GUI resource file goes
-partrcdir   = $(kde_datadir)/$APPNAMELC$part
-partrc_DATA = $APPNAMELC$_part.rc
+partrcdir   = $(kde_datadir)/%{APPNAMELC}part
+partrc_DATA = %{APPNAMELC}_part.rc

@@ -1,6 +1,6 @@
 @todo:
 
-1. add information to src/kfile_$APPNAMELC$.desktop
+1. add information to src/kfile_%{APPNAMELC}.desktop
 MimeType=
 PreferredGroups=
 PreferredItems=

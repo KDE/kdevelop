@@ -1,5 +1,5 @@
 /*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
+ * Copyright (C) %{YEAR} %{AUTHOR} <%{EMAIL}>
  */
 
 import java.util.*;
@@ -7,25 +7,25 @@ import org.kde.qt.*;
 import org.kde.koala.*;
 
 /**
- * This class serves as the main window for $APPNAME$.  It handles the
+ * This class serves as the main window for %{APPNAME}.  It handles the
  * menus, toolbars, and status bars.
  *
  * @short Main window class
  * @author $AUTHOR <$EMAIL>
  * @version $APP_VERSION
  */
-public class $APPNAME$ extends KMainWindow
+public class %{APPNAME} extends KMainWindow
 {
-    private $APPNAME$View m_view;
+    private %{APPNAME}View m_view;
 
     private QPrinter   m_printer;
     private KToggleAction m_toolbarAction;
     private KToggleAction m_statusbarAction;
 
-$APPNAME$()
+%{APPNAME}()
 {
-    super( null, "$APPNAME$" );
-    m_view = new $APPNAME$View(this);
+    super( null, "%{APPNAME}" );
+    m_view = new %{APPNAME}View(this);
     m_printer = new QPrinter();
     // accept dnd
     setAcceptDrops(true);
@@ -151,7 +151,7 @@ private void fileNew()
     // button is clicked
 
     // create a new window
-    (new $APPNAME$()).show();
+    (new %{APPNAME}()).show();
 }
 
 private void fileOpen()
@@ -228,7 +228,7 @@ private void optionsShowStatusbar()
 
 private void optionsConfigureKeys()
 {
-    KKeyDialog.configureKeys(actionCollection(), "$APPNAMELC$ui.rc");
+    KKeyDialog.configureKeys(actionCollection(), "%{APPNAMELC}ui.rc");
 }
 
 private void optionsConfigureToolbars()
@@ -245,7 +245,7 @@ private void optionsConfigureToolbars()
 private void optionsPreferences()
 {
     // popup some sort of preference dialog, here
-    $APPNAME$Preferences dlg = new $APPNAME$Preferences();
+    %{APPNAME}Preferences dlg = new %{APPNAME}Preferences();
     if (dlg.exec() != 0)
     {
         // redo your settings
@@ -267,7 +267,7 @@ private void changeCaption(String text)
 static String description =
     "A KDE Application";
 
-static String version = "$VERSION$";
+static String version = "%{VERSION}";
 
 static String[][] options =
 {
@@ -276,23 +276,23 @@ static String[][] options =
 
 static void main(String[] cmdLineArgs)
 {
-    KAboutData about = new KAboutData("$APPNAMELC$", "$APPNAME$", version, description,
-                     KAboutData.License_$LICENSE$, "(C) $YEAR$ $AUTHOR$", null, null, "$EMAIL$");
-    about.addAuthor( "$AUTHOR$", null, "$EMAIL$" );
+    KAboutData about = new KAboutData("%{APPNAMELC}", "%{APPNAME}", version, description,
+                     KAboutData.License_$LICENSE$, "(C) %{YEAR} %{AUTHOR}", null, null, "%{EMAIL}");
+    about.addAuthor( "%{AUTHOR}", null, "%{EMAIL}" );
     KCmdLineArgs.init(cmdLineArgs, about);
     KCmdLineArgs.addCmdLineOptions(options);
     KApplication app = new KApplication();
 
     // see if we are starting with session management
     if (app.isRestored())
-        RESTORE("$APPNAME$");
+        RESTORE("%{APPNAME}");
     else
     {
         // no session.. just start up normally
         KCmdLineArgs args = KCmdLineArgs.parsedArgs();
         if (args.count() == 0)
         {
-            $APPNAME$ widget = new $APPNAME$();
+            %{APPNAME} widget = new %{APPNAME}();
             widget.show();
         }
         else
@@ -300,7 +300,7 @@ static void main(String[] cmdLineArgs)
             int i = 0;
             for (; i < args.count(); i++)
             {
-                $APPNAME$ widget = new $APPNAME$();
+                %{APPNAME} widget = new %{APPNAME}();
                 widget.show();
                 widget.load(args.url(i));
             }

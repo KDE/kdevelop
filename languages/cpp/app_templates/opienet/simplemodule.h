@@ -1,16 +1,16 @@
-#ifndef $APPNAME$_NETWORK_MODULE_H
-#define $APPNAME$_NETWORK_MODULE_H
+#ifndef %{APPNAME}_NETWORK_MODULE_H
+#define %{APPNAME}_NETWORK_MODULE_H
 
 #include <module.h>
 
-class $APPNAME$Module : Module {
+class %{APPNAME}Module : Module {
 
 signals:
     void updateInterface(Interface* i );
 
 public:
-    $APPNAME$Module();
-    ~$APPNAME$Module();
+    %{APPNAME}Module();
+    ~%{APPNAME}Module();
 
     const QString type() {return QString::fromLatin1("vpn" );}
     void setProfile( const QString& ) {}
@@ -29,7 +29,7 @@ private:
 
 extern "C" {
     void* create_plugin() {
-        return new $APPNAME$Module();
+        return new %{APPNAME}Module();
     }
 };
 

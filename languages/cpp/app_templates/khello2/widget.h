@@ -1,19 +1,19 @@
 /*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
+ * Copyright (C) %{YEAR} %{AUTHOR} <%{EMAIL}>
  */
 
-#ifndef _$APPNAMEUC$WIDGET_H_
-#define _$APPNAMEUC$WIDGET_H_
+#ifndef _%{APPNAMEUC}WIDGET_H_
+#define _%{APPNAMEUC}WIDGET_H_
 
-#include "$APPNAMELC$widgetbase.h"
+#include "%{APPNAMELC}widgetbase.h"
 
-class $APPNAME$Widget : public $APPNAME$WidgetBase
+class %{APPNAME}Widget : public %{APPNAME}WidgetBase
 {
     Q_OBJECT
 
 public:
-    $APPNAME$Widget(QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
-    ~$APPNAME$Widget();
+    %{APPNAME}Widget(QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    ~%{APPNAME}Widget();
     /*$PUBLIC_FUNCTIONS$*/
 
 public slots:

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="$APPNAMELC$_part" version="1">
+<kpartgui name="%{APPNAMELC}_part" version="1">
 <MenuBar>
   <Menu name="file">
     <Action name="file_open"/>

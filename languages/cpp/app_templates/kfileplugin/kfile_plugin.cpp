@@ -1,6 +1,6 @@
 
 #include <config.h>
-#include "kfile_$APPNAMELC$.h"
+#include "kfile_%{APPNAMELC}.h"
 
 #include <kgenericfactory.h>
 //#include <kio/global.h>
@@ -8,11 +8,11 @@
 //#include <qfileinfo.h>
 //#include <qdir.h>
 
-typedef KGenericFactory<$APPNAME$Plugin> $APPNAME$Factory;
+typedef KGenericFactory<%{APPNAME}Plugin> %{APPNAME}Factory;
 
-K_EXPORT_COMPONENT_FACTORY(kfile_$APPNAME$, $APPNAME$Factory( "kfile_$APPNAMELC$" ))
+K_EXPORT_COMPONENT_FACTORY(kfile_%{APPNAME}, %{APPNAME}Factory( "kfile_%{APPNAMELC}" ))
 
-$APPNAME$Plugin::$APPNAME$Plugin(QObject *parent, const char *name,
+%{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const char *name,
                        const QStringList &args)
     : KFilePlugin(parent, name, args)
 {
@@ -22,7 +22,7 @@ $APPNAME$Plugin::$APPNAME$Plugin(QObject *parent, const char *name,
 
     // our new group
     KFileMimeTypeInfo::GroupInfo* group = 0L;
-    group = addGroupInfo(info, "$APPNAME$Info", i18n("$APPNAME$ Information"));
+    group = addGroupInfo(info, "%{APPNAME}Info", i18n("%{APPNAME} Information"));
 
     KFileMimeTypeInfo::ItemInfo* item;
 
@@ -35,9 +35,9 @@ $APPNAME$Plugin::$APPNAME$Plugin(QObject *parent, const char *name,
     //addItemInfo(group, "Text", i18n("Document type"), QVariant::String);
 }
 
-bool $APPNAME$Plugin::readInfo( KFileMetaInfo& info, uint /*what*/)
+bool %{APPNAME}Plugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 {
-    KFileMetaInfoGroup group = appendGroup(info, "$APPNAME$Info");
+    KFileMetaInfoGroup group = appendGroup(info, "%{APPNAME}Info");
 
     // add your "calculations" here
     // if something goes wrong, "return false;"
@@ -50,5 +50,5 @@ bool $APPNAME$Plugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     return true;
 }
 
-#include "kfile_$APPNAMELC$.moc"
+#include "kfile_%{APPNAMELC}.moc"
 

@@ -2,8 +2,8 @@
 <!DOCTYPE glade-project SYSTEM "http://glade.gnome.org/glade-project-2.0.dtd">
 
 <glade-project>
-  <name>$APPNAME$</name>
-  <program_name>$APPNAMELC$</program_name>
+  <name>%{APPNAME}</name>
+  <program_name>%{APPNAMELC}</program_name>
   <language>C++</language>
   <gnome_support>FALSE</gnome_support>
 </glade-project>

@@ -5,7 +5,7 @@ use warnings;
 
 
 #program version
-my $VERSION="$VERSION$";
+my $VERSION="%{VERSION}";
 
 #For CVS , use following line
 #my $VERSION=sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
@@ -22,7 +22,7 @@ __END__
 
 =head1 NAME
 
-$APPNAME$ - short discription of your program
+%{APPNAME} - short discription of your program
 
 =head1 SYNOPSIS
 
@@ -38,6 +38,6 @@ $APPNAME$ - short discription of your program
 
 =head1 AUTHOR
 
- $AUTHOR$
+ %{AUTHOR}
 
 =cut

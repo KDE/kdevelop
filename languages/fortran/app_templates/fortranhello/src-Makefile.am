@@ -1,8 +1,8 @@
-bin_PROGRAMS = $APPNAMELC$
-$APPNAMELC$_SOURCES = $APPNAMELC$.f
+bin_PROGRAMS = %{APPNAMELC}
+%{APPNAMELC}_SOURCES = %{APPNAMELC}.f
 
 # set the include path found by configure
 INCLUDES= $(all_includes)
 
 # the library search path.
-$APPNAMELC$_LDFLAGS = $(all_libraries) 
+%{APPNAMELC}_LDFLAGS = $(all_libraries) 

@@ -1,5 +1,5 @@
 
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 #include <kkeydialog.h>
 #include <kfiledialog.h>
@@ -16,11 +16,11 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 
-$APPNAME$::$APPNAME$()
-    : KParts::MainWindow( 0L, "$APPNAME$" )
+%{APPNAME}::%{APPNAME}()
+    : KParts::MainWindow( 0L, "%{APPNAME}" )
 {
     // set the shell's ui resource file
-    setXMLFile("$APPNAMELC$_shell.rc");
+    setXMLFile("%{APPNAMELC}_shell.rc");
 
     // then, setup our actions
     setupActions();
@@ -31,13 +31,13 @@ $APPNAME$::$APPNAME$()
     // this routine will find and load our Part.  it finds the Part by
     // name which is a bad idea usually.. but it's alright in this
     // case since our Part is made for this Shell
-    KLibFactory *factory = KLibLoader::self()->factory("lib$APPNAMELC$part");
+    KLibFactory *factory = KLibLoader::self()->factory("lib%{APPNAMELC}part");
     if (factory)
     {
         // now that the Part is loaded, we cast it to a Part to get
         // our hands on it
         m_part = static_cast<KParts::ReadWritePart *>(factory->create(this,
-                                "$APPNAMELC$_part", "KParts::ReadWritePart" ));
+                                "%{APPNAMELC}_part", "KParts::ReadWritePart" ));
 
         if (m_part)
         {
@@ -65,16 +65,16 @@ $APPNAME$::$APPNAME$()
     setAutoSaveSettings();
 }
 
-$APPNAME$::~$APPNAME$()
+%{APPNAME}::~%{APPNAME}()
 {
 }
 
-void $APPNAME$::load(const KURL& url)
+void %{APPNAME}::load(const KURL& url)
 {
     m_part->openURL( url );
 }
 
-void $APPNAME$::setupActions()
+void %{APPNAME}::setupActions()
 {
     KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
     KStdAction::open(this, SLOT(fileOpen()), actionCollection());
@@ -88,14 +88,14 @@ void $APPNAME$::setupActions()
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
 }
 
-void $APPNAME$::saveProperties(KConfig* /*config*/)
+void %{APPNAME}::saveProperties(KConfig* /*config*/)
 {
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
     // later when this app is restored
 }
 
-void $APPNAME$::readProperties(KConfig* /*config*/)
+void %{APPNAME}::readProperties(KConfig* /*config*/)
 {
     // the 'config' object points to the session managed
     // config file.  this function is automatically called whenever
@@ -103,7 +103,7 @@ void $APPNAME$::readProperties(KConfig* /*config*/)
     // in 'saveProperties'
 }
 
-void $APPNAME$::fileNew()
+void %{APPNAME}::fileNew()
 {
     // this slot is called whenever the File->New menu is selected,
     // the New shortcut is pressed (usually CTRL+N) or the New toolbar
@@ -115,12 +115,12 @@ void $APPNAME$::fileNew()
     // in its initial state.  This is what we do here..
     if ( ! m_part->url().isEmpty() || m_part->isModified() )
     {
-        (new $APPNAME$)->show();
+        (new %{APPNAME})->show();
     };
 }
 
 
-void $APPNAME$::optionsShowToolbar()
+void %{APPNAME}::optionsShowToolbar()
 {
     // this is all very cut and paste code for showing/hiding the
     // toolbar
@@ -130,7 +130,7 @@ void $APPNAME$::optionsShowToolbar()
         toolBar()->hide();
 }
 
-void $APPNAME$::optionsShowStatusbar()
+void %{APPNAME}::optionsShowStatusbar()
 {
     // this is all very cut and paste code for showing/hiding the
     // statusbar
@@ -140,12 +140,12 @@ void $APPNAME$::optionsShowStatusbar()
         statusBar()->hide();
 }
 
-void $APPNAME$::optionsConfigureKeys()
+void %{APPNAME}::optionsConfigureKeys()
 {
-    KKeyDialog::configureKeys(actionCollection(), "$APPNAMELC$_shell.rc");
+    KKeyDialog::configureKeys(actionCollection(), "%{APPNAMELC}_shell.rc");
 }
 
-void $APPNAME$::optionsConfigureToolbars()
+void %{APPNAME}::optionsConfigureToolbars()
 {
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
@@ -164,7 +164,7 @@ void $APPNAME$::optionsConfigureToolbars()
     dlg.exec();
 }
 
-void $APPNAME$::applyNewToolbarConfig()
+void %{APPNAME}::applyNewToolbarConfig()
 {
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
@@ -177,7 +177,7 @@ void $APPNAME$::applyNewToolbarConfig()
 #endif
 }
 
-void $APPNAME$::fileOpen()
+void %{APPNAME}::fileOpen()
 {
     // this slot is called whenever the File->Open menu is selected,
     // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
@@ -199,11 +199,11 @@ void $APPNAME$::fileOpen()
         else
         {
             // we open the file in a new window...
-            $APPNAME$* newWin = new $APPNAME$;
+            %{APPNAME}* newWin = new %{APPNAME};
             newWin->load( url );
             newWin->show();
         }
     }
 }
 
-#include "$APPNAMELC$.moc"
+#include "%{APPNAMELC}.moc"

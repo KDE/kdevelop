@@ -3,7 +3,7 @@
 
 #include <config.h>
 #include "menus.h"
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
 static void nothing_cb(GtkWidget* widget, gpointer data);
 static void new_app_cb(GtkWidget* widget, gpointer data);
@@ -13,8 +13,8 @@ static void about_cb  (GtkWidget* widget, gpointer data);
 
 
 static GnomeUIInfo file_menu [] = {
-  GNOMEUIINFO_MENU_NEW_ITEM(N_("_New $APPNAME$"),
-                            N_("Create a new $APPNAME$"),
+  GNOMEUIINFO_MENU_NEW_ITEM(N_("_New %{APPNAME}"),
+                            N_("Create a new %{APPNAME}"),
                             new_app_cb, NULL),
 
   GNOMEUIINFO_MENU_OPEN_ITEM(nothing_cb, NULL),
@@ -63,7 +63,7 @@ static GnomeUIInfo menu [] = {
 };
 
 static GnomeUIInfo toolbar [] = {
-  GNOMEUIINFO_ITEM_STOCK (N_("New"), N_("Create a new $APPNAME$"), nothing_cb, GNOME_STOCK_PIXMAP_NEW),
+  GNOMEUIINFO_ITEM_STOCK (N_("New"), N_("Create a new %{APPNAME}"), nothing_cb, GNOME_STOCK_PIXMAP_NEW),
 
   GNOMEUIINFO_SEPARATOR,
 
@@ -138,14 +138,14 @@ about_cb(GtkWidget* widget, gpointer data)
   else
     {        
       const gchar *authors[] = {
-        "$AUTHOR$ <$EMAIL$>",
+        "%{AUTHOR} <%{EMAIL}>",
         NULL
       };
 
-      gchar* logo = gnome_pixmap_file("$APPNAMELC$.png");
+      gchar* logo = gnome_pixmap_file("%{APPNAMELC}.png");
 
-      dialog = gnome_about_new (_("$APPNAME$"), VERSION,
-                                "(C) $AUTHOR$",
+      dialog = gnome_about_new (_("%{APPNAME}"), VERSION,
+                                "(C) %{AUTHOR}",
                                 authors,
                                 _("A sample GNOME application."),
                                 logo);
