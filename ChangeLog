@@ -1,3 +1,10 @@
+2002-16-02  Daniel Engelschalt (daniel.engelschalt@gmx.net)
+	* added codecompletion-classstore
+	* added removeWidget( )
+	* added config-dialogues for codecompletion/classstores
+	* improved codecompletion
+	* added cc-stuff from roberto raggi
+
 2002-10-02  Harald Fernengel <harry@kdevelop.org>
 	* Fixed KWrite Part and reenabled it again
 	* Added the Qt Editor Part (Qt Designer's Editor)
