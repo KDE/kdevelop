@@ -7,6 +7,8 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+#ifndef FILECREATE_NEWFILE_H
+#define FILECREATE_NEWFILE_H
 
 #include <qptrlist.h>
 #include <qmap.h>
@@ -50,3 +52,5 @@ namespace FileCreate {
   };
 
 }
+
+#endif

@@ -22,7 +22,6 @@ namespace GDBDebugger
 {
 
 class Breakpoint;
-class QMouseEvent;
 class BreakpointItem;
 
 /***************************************************************************/
