@@ -1439,7 +1439,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
       m_shownSubproject->idls.append(filename);
       break;
     case GroupItem::Translations:
-      m_shownSubproject->images.append(filename);
+      m_shownSubproject->translations.append(filename);
       break;
     case GroupItem::Images:
       m_shownSubproject->images.append(filename);
@@ -1843,42 +1843,36 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
 
         KPopupMenu popup(title, this);
-        // insert all possible
-        int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Existing Files..."));
-        int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
-        int idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Install Object..."));
-        int idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Installpattern Item..."));
-        int idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Choose Install Path..."));
-        int idLUpdate;
-        int idLRelease;
+
+        int idInsExistingFile = -2;
+	int idInsNewFile = -2;
+	int idInsInstallObject = -2;
+	int idInsNewFilepatternItem = -2;
+	int idSetInstObjPath = -2;
+	int idLUpdate = -2;
+	int idLRelease = -2;
 
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         if (titem->groupType == GroupItem::InstallRoot)
         {
-          popup.removeItem(idInsExistingFile);
-          popup.removeItem(idInsNewFile);
-          popup.removeItem(idInsNewFilepatternItem);
-          popup.removeItem(idSetInstObjPath);
+	  idInsInstallObject = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Install Object..."));
         }
         else if (titem->groupType == GroupItem::InstallObject)
         {
-          popup.removeItem(idInsInstallObject);
-          popup.removeItem(idInsExistingFile);
-          popup.removeItem(idInsNewFile);
+	  idInsNewFilepatternItem = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Installpattern Item..."));
+	  idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Choose Install Path..."));
         }
         else if(titem->groupType == GroupItem::Translations)
         {
+	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Existing Files..."));
+	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
 	  idLUpdate = popup.insertItem(SmallIconSet("konsole"),i18n("Update translation files"));
 	  idLRelease = popup.insertItem(SmallIconSet("konsole"),i18n("Release binary translations"));
-          popup.removeItem(idInsNewFilepatternItem);
-          popup.removeItem(idInsInstallObject);
-          popup.removeItem(idSetInstObjPath);
         }
         else // File group containing files
         {
-          popup.removeItem(idInsNewFilepatternItem);
-          popup.removeItem(idInsInstallObject);
-          popup.removeItem(idSetInstObjPath);
+	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Existing Files..."));
+ 	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
         }
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
@@ -2064,30 +2058,34 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 	else
         popup.insertTitle(i18n("Pattern: %1").arg(fitem->name));
 
-        int idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove File"));
-        int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass Widget..."));
-        int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
-        int idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
-        int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
-        int idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
+        int idRemoveFile = -2;
+	int idSubclassWidget = -2;
+	int idUpdateWidgetclass = -2;
+	int idUISubclasses = -2;
+	int idViewUIH = -2;
+	int idFileProperties = -2;
+	int idEditInstallPattern = -2;
 
-        if (fitem->uiFileLink.isEmpty())
+        if (!fitem->uiFileLink.isEmpty())
         {
-          popup.removeItem(idUpdateWidgetclass);
+          idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
         }
-        if(!fitem->name.contains(".ui"))
+        if(fitem->name.contains(".ui"))
         {
-          popup.removeItem(idUISubclasses);
-          popup.removeItem(idViewUIH);
-          popup.removeItem(idSubclassWidget);
+	  idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
+	  idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
+	  idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass Widget..."));
         }
-
-	if(gtype == GroupItem::InstallObject)
+	if(!(gtype == GroupItem::InstallObject))
 	{
-          popup.removeItem(idRemoveFile);
-          popup.removeItem(idFileProperties);
+	  idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove File"));
+	  idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
 	}
-
+	else
+	{
+	  idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove Pattern"));
+	  idEditInstallPattern = popup.insertItem(SmallIconSet("configure_file"),i18n("Edit Pattern"));
+	}
 	if(!(gtype == GroupItem::InstallObject))
 	{
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
@@ -2185,6 +2183,24 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     "subclass","sourcefile", "uifile");
             }
         }
+        else if (r == idEditInstallPattern)
+        {
+	GroupItem *titem = static_cast<GroupItem*>(item->parent());
+
+          bool ok = FALSE;
+          QString filepattern = KLineEditDlg::getText(
+                              i18n( "Edit Filepattern" ),
+                              i18n( "Please enter a filepattern relative the current "
+                                    "subproject (example docs/*.html):" ),
+                              fitem->name , &ok, this );
+          if ( ok && !filepattern.isEmpty() )
+          {
+	    removeFile(m_shownSubproject, fitem);
+            addFileToCurrentSubProject(titem,filepattern);
+            updateProjectFile(titem->owner);
+            slotOverviewSelectionChanged(m_shownSubproject);
+          }
+        }
     }
 }
 
@@ -2193,6 +2209,7 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
 {
     GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
 
+    if(gitem->groupType != GroupItem::InstallObject)
     emitRemovedFile(spitem->path + "/" + fitem->text(0));
 
 
@@ -2245,6 +2262,9 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
       case GroupItem::IDLs:
         spitem->idls.remove(fitem->text(0));
         break;
+      case GroupItem::InstallObject:
+	gitem->str_files.remove(fitem->text(0));
+	break;
       default: ;
     }
     gitem->files.remove(fitem);
