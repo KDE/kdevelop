@@ -28,12 +28,14 @@ class SlotItem : public QCheckListItem
                            const QString &specifier, const QString &Access,
                            const QString &returnType,bool isFunc,
                            bool callBaseClass=false);
+  void            setAllreadyInSubclass();
   QString         m_access;
   QString         m_methodName;
   QString         m_returnType;
   QString         m_specifier;
   bool            m_isFunc;
   bool            m_callBaseClass;
+  bool            m_allreadyInSubclass;
 };
 
 
@@ -55,6 +57,7 @@ private:
   void                  replace(QString &string, const QString& search, const QString& replace);
   bool                  saveBuffer(QString &buffer, const QString& filename);
   bool                  loadBuffer(QString &buffer, const QString& filename);
+  bool                  allreadyInSubclass(const QString &method);
   bool                  m_creatingNewSubclass;
 
 public slots:
@@ -63,12 +66,14 @@ public slots:
 
 protected:
   QStringList           &m_newFileNames;
+  QString               m_filename;
   QString               m_formFile;
   QString               m_baseClassName;
   QString               m_qtBaseClassName;
   QString               m_baseCaption;
   QString               m_formName;
   QString               m_formPath;
+  QStringList           m_parsedMethods;
   bool                  m_canBeModal;
   QValueList<SlotItem*> m_slots;
   QValueList<SlotItem*> m_functions;

@@ -44,7 +44,7 @@
 SlotItem::SlotItem(QListView *parent,const QString &methodName,
                    const QString &specifier,
                    const QString &access, const QString &returnType,
-                   bool isFunc, bool callBaseClass)
+                   bool isFunc,bool callBaseClass)
 : QCheckListItem(parent,methodName,QCheckListItem::CheckBox)
 {
   setOn(true);
@@ -70,7 +70,14 @@ SlotItem::SlotItem(QListView *parent,const QString &methodName,
     setOn(true);
     setEnabled(false);
   }
+  m_allreadyInSubclass = false;
+}
 
+void SlotItem::setAllreadyInSubclass()
+{
+  setOn(true);
+  setEnabled(false);
+  m_allreadyInSubclass = true;
 }
 
 
@@ -93,28 +100,39 @@ m_newFileNames(dummy)
 //=================================================
 {
   m_formFile = formFile;
-  readUiFile();
   m_creatingNewSubclass = false;
-
+  m_filename = filename;
   ClassStore classcontainer;
   CClassParser parser(&classcontainer);
   parser.parse(filename + ".h");
+  QStringList pathsplit(QStringList::split('/',filename));
+
   QStringList classes(classcontainer.getSortedClassNameList());
   typedef QValueList<ParsedMethod*> SlotList;
   for (uint i=0; i<classes.count(); i++)
   {
-    QMessageBox::information(0,"Class",classes[i]);
     ParsedClass *cls = classcontainer.getClassByName(classes[i]);
+    m_edClassName->setText(cls->name());
+    m_edFileName->setText(pathsplit[pathsplit.count()-1]);
     cls->out();
     SlotList slotlist = cls->getSortedMethodList();
     SlotList::iterator it;
     for ( it = slotlist.begin(); it != slotlist.end(); ++it )
     {
       ParsedMethod *method = *it;
+      m_parsedMethods << method->name()+"(";
     }
   }
+  readUiFile();
 }
 
+bool SubclassingDlg::allreadyInSubclass(const QString &method)
+{
+  for (uint i=0;i<m_parsedMethods.count();i++)
+    if (method.find(m_parsedMethods[i])==0)
+      return true;
+  return false;
+}
 
 void SubclassingDlg::readUiFile()
 {
@@ -142,10 +160,14 @@ void SubclassingDlg::readUiFile()
     m_canBeModal = true;
   newSlot = new SLOT_ACCEPT;
   newSlot->setOn(false);
+  if (allreadyInSubclass("accept()"))
+    newSlot->setAllreadyInSubclass();
   m_slotView->insertItem(newSlot);
   m_slots << newSlot;
   newSlot = new SLOT_REJECT;
   newSlot->setOn(false);
+  if (allreadyInSubclass("reject()"))
+    newSlot->setAllreadyInSubclass();
   m_slotView->insertItem(newSlot);
   m_slots << newSlot;
 
@@ -153,12 +175,18 @@ void SubclassingDlg::readUiFile()
   {
     newSlot = new SLOT_NEXT;
     m_slotView->insertItem(newSlot);
+    if (allreadyInSubclass("next()"))
+      newSlot->setAllreadyInSubclass();
     m_slots << newSlot;
     newSlot = new SLOT_BACK;
     m_slotView->insertItem(newSlot);
+    if (allreadyInSubclass("back()"))
+      newSlot->setAllreadyInSubclass();
     m_slots << newSlot;
     newSlot = new SLOT_HELP;
     newSlot->setOn(false);
+    if (allreadyInSubclass("help()"))
+      newSlot->setAllreadyInSubclass();
     m_slotView->insertItem(newSlot);
     m_slots << newSlot;
   }
@@ -174,6 +202,8 @@ void SubclassingDlg::readUiFile()
                            slotelem.attributeNode("access").value(),
                            slotelem.attributeNode("returnType").value(),false);
     m_slotView->insertItem(newSlot);
+    if (allreadyInSubclass(slotelem.text()))
+      newSlot->setAllreadyInSubclass();
     m_slots << newSlot;
   }
 
@@ -188,13 +218,11 @@ void SubclassingDlg::readUiFile()
                            funcelem.attributeNode("access").value(),
                            funcelem.attributeNode("returnType").value(),true);
     m_slotView->insertItem(newFunc);
+    if (allreadyInSubclass(funcelem.text()))
+      newSlot->setAllreadyInSubclass();
     m_slots << newFunc;
   }
-
-
 }
-
-
 
 SubclassingDlg::~SubclassingDlg()
 //===============================
@@ -265,7 +293,7 @@ bool SubclassingDlg::saveBuffer(QString &buffer, const QString& filename)
   // save buffer
 
   QFile dataFile(filename);
-  if (!dataFile.open(IO_WriteOnly))
+  if (!dataFile.open(IO_WriteOnly | IO_Truncate))
     return false;
   dataFile.writeBlock((buffer+"\n").ascii(),(buffer+"\n").length());
   dataFile.close();
@@ -293,12 +321,16 @@ void SubclassingDlg::accept()
     "/*$PROTECTED_FUNCTIONS$*/\n  ";
 
   QString buffer;
-  loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.h"));
+  if (m_creatingNewSubclass)
+    loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.h"));
+  else
+    loadBuffer(buffer,m_filename+".h");
   replaceKeywords(buffer,m_canBeModal);
   for (i=0; i<m_slots.count(); i++)
   {
     SlotItem *slitem = m_slots[i];
-    if (!slitem->isOn())
+    if (!slitem->isOn() ||
+        slitem->m_allreadyInSubclass)
       continue;
     QString declBuild;
     if (slitem->m_access=="public")
@@ -343,7 +375,10 @@ void SubclassingDlg::accept()
     }
   }
 
-  saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".h");
+  if (m_creatingNewSubclass)
+    saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".h");
+  else
+    saveBuffer(buffer,m_filename+".h");
 
   // cpp - file
 
@@ -361,12 +396,16 @@ void SubclassingDlg::accept()
     "}\n";
 
 
-  loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.cpp"));
+  if (m_creatingNewSubclass)
+    loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.cpp"));
+  else
+    loadBuffer(buffer,m_filename+".cpp");
   replaceKeywords(buffer,m_canBeModal);
   for (i=0; i<m_slots.count(); i++)
   {
     SlotItem *slitem = m_slots[i];
-    if (!slitem->isOn())
+    if (!slitem->isOn() ||
+         slitem->m_allreadyInSubclass)
       continue;
     QString impl = slitem->m_callBaseClass ? implementation_callbase : implementation;
     replace(impl,"$RETURNTYPE$",slitem->m_returnType);
@@ -375,7 +414,10 @@ void SubclassingDlg::accept()
     replace(impl,"$QTBASECLASS$", m_qtBaseClassName);
     replace(buffer,"/*$SPECIALIZATION$*/",impl);
   }
-  saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".cpp");
+  if (m_creatingNewSubclass)
+    saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".cpp");
+  else
+    saveBuffer(buffer,m_filename+".cpp");
 
   if (m_creatingNewSubclass)
   {

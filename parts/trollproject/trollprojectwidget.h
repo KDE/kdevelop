@@ -28,6 +28,7 @@
 #include "filepropertydlg.h"
 #include "newwidgetdlg.h"
 #include "subclassingdlg.h"
+#include "domutil.h"
 
 class TrollProjectPart;
 class KListView;
@@ -92,6 +93,7 @@ public:
     ~SubprojectItem();
 
     QString subdir;
+    QString relpath;
     QString path;
     QList<GroupItem> groups;
     QList<SubprojectItem> scopes;
@@ -105,7 +107,7 @@ public:
     QStringList headers_exclude;
     QStringList forms;
     QStringList forms_exclude;
-    
+
     ProjectConfiguration configuration;
 
     FileBuffer m_FileBuffer;
@@ -136,6 +138,7 @@ class FileItem : public ProjectItem
 public:
     FileItem(QListView *lv, const QString &text,bool exclude=false);
 
+    QString uiFileLink;
     QString name;
     bool excluded;
 };
@@ -217,6 +220,7 @@ private:
     void setupContext();
     void parseScope(SubprojectItem *item,QString scopeString, FileBuffer *buffer);
     void parse(SubprojectItem *item);
+    QString getUiFileLink(const QString &path, const QString& filename);
     QString getHeader();
 
     QVBox     *overviewContainer;
@@ -237,6 +241,7 @@ private:
     QToolButton *removefileButton;
     QToolButton *configurefileButton;
 
+    DomUtil::PairList m_subclasslist;
     SubprojectItem *m_shownSubproject;
     TrollProjectPart *m_part;
 };

@@ -42,7 +42,6 @@
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
-#include "domutil.h"
 #include "trollprojectpart.h"
 
 
@@ -294,6 +293,9 @@ TrollProjectWidget::~TrollProjectWidget()
 
 void TrollProjectWidget::openProject(const QString &dirName)
 {
+    QDomDocument &dom = *(m_part->projectDom());
+    m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
+                                                    "subclass","sourcefile", "uifile");
     SubprojectItem *item = new SubprojectItem(overview, "/","");
     item->subdir = dirName.right(dirName.length()-dirName.findRev('/')-1);
     item->path = dirName;
@@ -686,6 +688,9 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
     newitem->subdir = subdirname;
     newitem->m_RootBuffer = &(newitem->m_FileBuffer);
     newitem->path = spitem->path + "/" + subdirname;
+    newitem->relpath = newitem->path;
+    newitem->relpath.remove(0,projectDirectory().length());
+
     parse(newitem);
   }
   else
@@ -1186,16 +1191,14 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
         int idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove File"));
         int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass widget..."));
+        int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
         int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
-        int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit subclass"));
         int idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
 
-        if(!fitem->name.contains(".h") &&
-           !fitem->name.contains(".cpp"))
+        if (fitem->uiFileLink.isEmpty())
         {
           popup.removeItem(idUpdateWidgetclass);
         }
-
         if(!fitem->name.contains(".ui"))
         {
           popup.removeItem(idViewUIH);
@@ -1238,8 +1241,12 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           QDomDocument &dom = *(m_part->projectDom());
           for (uint i=0; i<newFileNames.count(); i++)
           {
-            DomUtil::PairList list;
-            list << DomUtil::Pair(newFileNames[i],m_shownSubproject->path + "/" + fitem->name);
+            QString srcfile_relpath = newFileNames[i].remove(0,projectDirectory().length());
+            QString uifile_relpath = QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length());
+            DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
+                                                       "subclass","sourcefile", "uifile");
+
+            list << DomUtil::Pair(srcfile_relpath,uifile_relpath);
             DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
             newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
           }
@@ -1248,7 +1255,18 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         else if (r == idUpdateWidgetclass)
         {
-         // SubclassingDlg *subclsdlg = new SubclassingDlg(
+          QString noext = m_shownSubproject->path + "/" + fitem->name;
+          if (noext.findRev('.')>-1)
+            noext = noext.left(noext.findRev('.'));
+          QStringList dummy;
+          QString uifile = fitem->uiFileLink;
+          if (uifile.findRev('/')>-1)
+          {
+            QStringList uisplit = QStringList::split('/',uifile);
+            uifile=uisplit[uisplit.count()-1];
+          }
+          SubclassingDlg *dlg = new SubclassingDlg(m_shownSubproject->path + "/" + uifile,noext,dummy);
+          dlg->exec();
         }
 
 
@@ -1315,6 +1333,17 @@ void TrollProjectWidget::emitRemovedFile(const QString &fileName)
 }
 
 
+QString TrollProjectWidget::getUiFileLink(const QString &relpath, const QString& filename)
+{
+  DomUtil::PairList::iterator it;
+  for (it=m_subclasslist.begin();it != m_subclasslist.end(); ++it)
+  {
+    if ((*it).first==relpath+filename)
+      return (*it).second;
+  }
+  return "";
+}
+
 void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, FileBuffer *buffer)
 {
     if (scopeString!="")
@@ -1328,6 +1357,9 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
       item->scopes.append(sitem);
       item=sitem;
     }
+
+    item->relpath = item->path;
+    item->relpath.remove(0,projectDirectory().length());
 
     QStringList minusListDummy;
     FileBuffer *subBuffer = buffer->getSubBuffer(scopeString);
@@ -1354,7 +1386,9 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
         QStringList l = item->sources;
         QStringList::Iterator it;
         for (it = l.begin(); it != l.end(); ++it) {
+            getUiFileLink(item->relpath+"/",*it);
             FileItem *fitem = createFileItem(*it);
+            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
             titem->files.append(fitem);
         }
     }
@@ -1366,6 +1400,7 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
         QStringList::Iterator it;
         for (it = l.begin(); it != l.end(); ++it) {
             FileItem *fitem = createFileItem(*it);
+            fitem->uiFileLink = getUiFileLink(item->relpath+"/",*it);
             titem->files.append(fitem);
         }
     }
