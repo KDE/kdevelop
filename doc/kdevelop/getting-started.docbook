@@ -16,7 +16,7 @@ Now that you have installed your &kdevelop; IDE, how are you going to make good 
 We will try to soften this learning curve a bit by stepping through the makings of a simple KDE C++ application. Thereby we will have a (cursory) look at:
 </para>
 <simplelist>
-  <member><link linkend="gettingstarted-overview">What is there seen on the surface of the &kdevelop; application.</link></member>
+  <member><link linkend="gettingstarted-overview">What is there seen on the surface of the &kdevelop; IDE.</link></member>
   <member><link linkend="gettingstarted-configure">Some initial configuration steps.</link></member>
   <member><link linkend="gettingstarted-new">How to create a new project.</link></member>
   <member><link linkend="gettingstarted-edit">How to work with documents.</link></member>
@@ -151,7 +151,7 @@ There are ten menus selectable on the menubar. Most of them get fully populated 
   <varlistentry>
   <term><guimenu>Project</guimenu></term>
   <listitem>
-    <para>All work of &kdevelop; is based on <emphasis>projects</emphasis> which basically collect source files, build management files, and other information in one project directory. In this menu you control which project to use, which properties it has, and some other manageging actions. In particular:</para>
+    <para>All work of &kdevelop; is based on <emphasis>projects</emphasis> which basically collect source files, build management files, and other information in one project directory. In this menu you control which project to use, which properties it has, and some other managing actions. In particular:</para>
     <formalpara><title>Open a Project</title>
     <para>Allows to create new projects, open existing ones, and import projects from other environments.</para>
     </formalpara>
@@ -169,7 +169,7 @@ There are ten menus selectable on the menubar. Most of them get fully populated 
   <varlistentry>
   <term><guimenu>Build</guimenu></term>
   <listitem>
-    <para>This menu is all about compiling and documenting the project. thus it is of use only when a project is actually open. In this case it provides the following actions:</para>
+    <para>This menu is all about compiling and documenting the project. Thus it is of use only when a project is actually open. In this case it provides the following actions:</para>
     <formalpara><title>Compile, Link, Execute</title>
     <para>Allows to compile and link the whole project or parts of it as well as run the application from within the IDE.</para>
     </formalpara>
@@ -188,32 +188,54 @@ There are ten menus selectable on the menubar. Most of them get fully populated 
   <varlistentry>
   <term><guimenu>Debug</guimenu></term>
   <listitem>
-    <para></para>
+    <para>Although this menu will be filled once a project is active, it of course is useful only if the actual project has been previously compiled with debugging information (this is basically set up in <menuchoice><guimenu>Project</guimenu> <guimenuitem>Project Options..</guimenuitem></menuchoice>). There are the following actions available in this case:</para>
+    <formalpara><title>Usual Debugger Actions</title>
+    <para>The first section in the <guimenu>Debug</guimenu> provides a graphical interface to the GDB &GNU; symbolic debugger. It allows to start and stop your application in the debugger and step through it in various ways.</para>
+    </formalpara>
+    <formalpara><title>Breakpoints</title>
+    <para>&kdevelop; provides several means to set breakpoints in your application sources. One is through the use of the <guimenuitem>Toggle Breakpoint</guimenuitem> menu entry.</para>
+    </formalpara>
+    <formalpara><title>Advanced Debugging</title>
+    <para>Other <guimenu>Debug</guimenu> menu entries allow more sophisticated program analysis. Use <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more information about their purpose.</para>
+    </formalpara>
   </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Window</guimenu></term>
-  <listitem><para>
-  </para></listitem>
+  <listitem>
+    <para>This is fairly standard. You may select any open document window as well as close one or more documents windows in here. You may even select a set of document windows to be closed in one single turn.</para>
+  </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Tools</guimenu></term>
-  <listitem><para>
-  </para></listitem>
+  <listitem>
+    <para>&kdevelop; is highly customizable. You may select a favorite editor for your documents as well as provide external and plugged-in tools to extend the basic IDE capabilities. The <guimenu>Tools</guimenu> menu reflects most of this setup.</para>
+    <formalpara><title>Advanced Editing</title>
+    <para>The upper set of <guimenu>Tools</guimenu> menu entries will be provided by the editor plugin which is in use. You may select your favorite editor via <menuchoice><guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> <guilabel>Editor</guilabel></menuchoice>. Once an editable document file is selected, the upper part of the  <guimenu>Tools</guimenu> menu will provide advanced editing commands specific to the editor part in use.</para>
+    </formalpara>
+    <formalpara><title>Web Side Handling</title>
+    <para>In case the active document window contains a HTML page (&eg; displayed from a <guilabel>Documentation</guilabel> selection), the <guimenu>Tools</guimenu> will show additional menu entries which provide various means to handle Web pages.</para>
+    </formalpara>
+    <formalpara><title>Other Tools</title>
+    <para>Usually there will be a bunch of other entries according to the currently available tools. Use <keycombo><keycap>&Shift;</keycap><keycap>F1</keycap></keycombo> to get more information about their purposes.</para>
+    </formalpara>
+  </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Settings</guimenu></term>
-  <listitem><para>
-  </para></listitem>
+  <listitem>
+    <para></para>
+  </listitem>
   </varlistentry>
   
   <varlistentry>
   <term><guimenu>Help</guimenu></term>
-  <listitem><para>
-  </para></listitem>
+  <listitem>
+    <para></para>
+  </listitem>
   </varlistentry>
 </variablelist>
 
