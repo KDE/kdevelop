@@ -149,11 +149,13 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
                         ctx->add( var );
                     }
                 }
+/*
                 qDebug( "ctx = %p - lev = %d - type = %s - vars = %s",
                         ctx,
                         lev,
                         type.latin1(),
                         vlist.join(", ").latin1() );
+*/
             //}
         }
     }

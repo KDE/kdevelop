@@ -91,7 +91,7 @@
 void showMemUsage()
 {
     struct mallinfo mi = mallinfo();
-    kdDebug() << "Mem usage: " << mi.uordblks << endl;
+    kdDebug(9007) << "Mem usage: " << mi.uordblks << endl;
 }
 #else
 void showMemUsage()

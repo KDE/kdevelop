@@ -71,19 +71,15 @@ void CCConfigWidget::initFTTab( )
     slotEnableChooseFiles(files);
     // read in template groups
     QStringList interface_files = KGlobal::dirs()->findAllResources( "data", "kdevcppsupport/templates/*.h", false, true);
-    kdDebug() << "** Interface file templates:";
     QStringList::iterator i;
     for (i=interface_files.begin();i!=interface_files.end();i++) {
       QString & file = *i;
-      kdDebug() << file << endl;
       QString interface_file = file;
       file.remove(file.length()-2, 2);
       QString impl_filename = file + ".cpp";
-      kdDebug() << impl_filename << endl;
       KFileItem impl_file(KFileItem::Unknown, KFileItem::Unknown, impl_filename);
       if (impl_file.isReadable()) {
         template_groups->insertItem(file);
-        kdDebug() << "inserted " << file << endl;
       }
     }
     interface_url->setURL(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/interfaceURL"));

@@ -77,10 +77,10 @@ public:
 	name = name.stripWhiteSpace();
 
 	m_scope.push_back( name );
-	kdDebug(9007) << "----------------------------> current scope is " << m_scope.join(".") << endl;
+	//kdDebug(9007) << "----------------------------> current scope is " << m_scope.join(".") << endl;
 
 	if( m_scope.join(".") == m_className ){
-	    kdDebug(9007) << "----------------------------> found class" << endl;
+	    //kdDebug(9007) << "----------------------------> found class" << endl;
 	    ast->getEndPosition( &m_line, &m_column );
 	}
 
@@ -102,7 +102,7 @@ public:
     void parseAccessDeclaration( AccessDeclarationAST* ast )
     {
 	if( m_scope.join(".") == m_className ){
-	    kdDebug(9007) << "------------------> found insertion point" << endl;
+	    //kdDebug(9007) << "------------------> found insertion point" << endl;
 	}
 
 	TreeParser::parseAccessDeclaration( ast );
@@ -188,7 +188,7 @@ void AddMethodDialog::reject()
 void AddMethodDialog::accept()
 {
     QString fileName = m_klass->declaredInFile();
-    kdDebug(9007) << "-------------> fileName = " << fileName << endl;
+    //kdDebug(9007) << "-------------> fileName = " << fileName << endl;
 
     // sync
     while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
@@ -270,10 +270,10 @@ void AddMethodDialog::accept()
 
                 m_cppSupport->backgroundParser()->lock();
 		TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( implementationFile );
-		kdDebug(9007) << "-----------> unit = " << translationUnit << endl;
+		//kdDebug(9007) << "-----------> unit = " << translationUnit << endl;
 		if( translationUnit ){
 		    translationUnit->getEndPosition( &line, &column );
-                    kdDebug(9007) << "------> line = " << line << " column = " << column << endl;
+                    //kdDebug(9007) << "------> line = " << line << " column = " << column << endl;
                 }
 		m_cppSupport->backgroundParser()->unlock();
 
