@@ -1,4 +1,4 @@
-# Here resides the gcc compiler plugin.
+# Here resides the Gcc compiler plugin.
 
 INCLUDES = 	$(all_includes) \
 					-I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler \
@@ -6,11 +6,11 @@ INCLUDES = 	$(all_includes) \
 
 lib_LTLIBRARIES = libKDevCompilerGcc.la
 libKDevCompilerGcc_la_SOURCES = flagboxes.cpp GccCompilerOptionsWidgetBase.ui GccCompilerOptionsWidget.cpp \
-																KDevCompilerGcc.cpp main.cpp
+																 KDevCompilerGcc.cpp main.cpp
 libKDevCompilerGcc_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
 libKDevCompilerGcc_la_LIBADD  = $(top_builddir)/kdevelop/lib/libkdevelop.la
 
-noinst_HEADERS = main.h GccCompilerOptionsWidgetBase.h GccCompilerOptionsWidget.h \
+noinst_HEADERS = GccCompilerOptionsWidgetBase.h GccCompilerOptionsWidget.h main.h \
 																KDevCompilerGcc.h flagboxes.h
 
 METASOURCES = AUTO
