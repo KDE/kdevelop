@@ -536,7 +536,7 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
      //  the event. So manually forward the event the the eventFilter() functions
      //  (but only if the sending object is not this object; avoid deadlock).
      //  The main frame is one of the filtering objects for this one.
-     //  However this does not work for toplevel windows, but they don't distribute 
+     //  However this does not work for toplevel windows, but they don't distribute
      //  any events anyway (like Alt+F,... )
      qApp->sendEvent( this, e ); 
 #endif
@@ -642,13 +642,19 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
       }
    }
    else
-        if (e->type()==QEvent::IconChange) {
-            qDebug("KMDiChildView:: QEvent:IconChange intercepted\n");
-	    if  (obj==this)
-		iconOrCaptionUdpated(this,icon()?(*icon()):QPixmap(),caption());
-	    else if (obj==m_trackChanges)
-		setIcon(m_trackChanges->icon()?(*(m_trackChanges->icon())):QPixmap());
-        }
+   {
+       if (e->type()==QEvent::IconChange) {
+          if  (obj==this)
+             iconUpdated(this,icon()?(*icon()):QPixmap());
+          else if (obj==m_trackChanges)
+             setIcon(m_trackChanges->icon()?(*(m_trackChanges->icon())):QPixmap());
+       }
+       if (e->type()==QEvent::CaptionChange) {
+          if (obj==this)
+             captionUpdated(this,caption());
+       }
+   }
+
 
    return false;                           // standard event processing
 }

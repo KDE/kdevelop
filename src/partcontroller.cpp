@@ -33,6 +33,10 @@
 #include <kcompletion.h>
 #include <kdirwatch.h>
 #include <kdeversion.h>
+#include <kiconloader.h>
+
+#include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
 
 #include "toplevel.h"
 #include "api.h"
@@ -438,6 +442,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
   }
 
   TopLevel::getInstance()->embedPartView(part->widget(), url.filename(), url.url());
+  savePartWidgetIcon(part);
 
   addPart(part);
 
@@ -462,7 +467,29 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
 
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
+  connect(part, SIGNAL(completed()), this, SLOT(slotRestoreStatus()));
   connect(part, SIGNAL(fileNameChanged(const KURL &)), this, SLOT(slotFileNameChanged()));
+
+  // Connect to the document's views newStatus() signal in order to keep track of the
+  // modified-status of the document.
+
+  // What's potentially problematic is that this signal isn't officially part of the
+  // KTextEditor::View interface. It is nevertheless there, and used in kate and kwrite.
+  // There doesn't seem to be any othere way of making this work with katepart, and since
+  // signals are dynamic, if we try to connect to an editorpart that lacks this signal,
+  // all we get is a runtime warning. At this point in time we are only really supported
+  // by katepart anyway so IMHO this hack is justified. //teatime
+  if (isTextEditor)
+  {
+    KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( part );
+    QPtrList<KTextEditor::View> list = doc->views();
+    QPtrListIterator<KTextEditor::View> it( list );
+    while ( it.current() )
+    {
+      connect( it, SIGNAL( newStatus() ), this, SLOT( slotNewStatus() ) );
+      ++it;
+    }
+  }
 }
 
 void PartController::reinstallPopups( ){
@@ -574,6 +601,7 @@ bool PartController::closePart(KParts::Part *part)
       return false;
     }
   }
+  partWidgetIcons.remove(part);
 
   // If we didn't call removePart(), KParts::PartManager::slotObjectDestroyed would
   // get called from the destroyed signal of the part being deleted below.
@@ -643,6 +671,7 @@ void PartController::saveFile(KParts::Part *part)
     rw_part->save();
     TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
   }
+  restorePartWidgetIcon(part);
 }
 
 void PartController::saveAllFiles()
@@ -662,6 +691,8 @@ void PartController::revertFile(KParts::Part *part)
 {
   if ( !part )
     return;
+
+  restorePartWidgetIcon(part);
 
   if (part->inherits("KParts::ReadWritePart")) {
       KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
@@ -1024,6 +1055,7 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
 
   // embed the part
   TopLevel::getInstance()->embedPartView( part->widget(), name, shortDescription );
+  savePartWidgetIcon(part);
   addPart( part );
 }
 
@@ -1045,6 +1077,52 @@ bool PartController::isDirty( KParts::ReadOnlyPart* part )
 
   accessTimeMap[ part ] = dirWatcher->ctime( part->url().path() );
   return false;
+}
+
+void PartController::savePartWidgetIcon( KParts::Part * part )
+{
+    if ((!part->widget()) || (!part->widget()->icon()))
+        return;
+    QPixmap m(*(part->widget()->icon()));
+    partWidgetIcons[part] = m;
+}
+
+void PartController::restorePartWidgetIcon( KParts::Part * part )
+{
+    if (!part->widget())
+        return;
+    if (partWidgetIcons.contains(part))
+        part->widget()->setIcon(partWidgetIcons[part]);
+}
+
+void PartController::slotNewStatus( )
+{
+    kdDebug(9000) << "PartController::slotNewStatus()" << endl;
+
+    QObject * senderobj = const_cast<QObject*>( sender() );
+    KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( senderobj );
+
+    if ( view )
+    {
+        KParts::ReadWritePart * rw_part = view->document();
+        if ( isDirty( rw_part ) ) {
+        } else if ( rw_part->isModified() ) {
+            rw_part->widget()->setIcon(SmallIcon("filesave"));
+        } else {
+            restorePartWidgetIcon(rw_part);
+        }
+    }
+}
+
+void PartController::slotRestoreStatus( )
+{
+  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(const_cast<QObject*>(sender()));
+
+  if ( !ro_part )
+    return;
+
+  if (!isDirty(ro_part))
+    restorePartWidgetIcon(ro_part);
 }
 
 #include "partcontroller.moc"

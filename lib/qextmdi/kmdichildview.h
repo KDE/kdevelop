@@ -516,7 +516,8 @@ signals:
    */
    void isDetachedNow();
 
-   void iconOrCaptionUdpated(QWidget*,QPixmap,const QString&);
+   void iconUpdated(QWidget*,QPixmap);
+   void captionUpdated(QWidget*,const QString&);
 
 
   private:

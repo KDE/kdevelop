@@ -22,7 +22,8 @@ public:
 private slots:
 	void closeTab(QWidget* w);
 public slots:
-	void updateView(QWidget*,QPixmap,const QString&);
+	void updateIconInView(QWidget*,QPixmap);
+	void updateCaptionInView(QWidget*,const QString&);
 };
 
 

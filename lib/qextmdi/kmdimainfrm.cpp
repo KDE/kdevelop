@@ -417,8 +417,10 @@ void KMdiMainFrm::addWindow( KMdiChildView* pWnd, int flags)
 //      const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
      
       m_documentTabWidget->addTab(pWnd, pWnd->icon() ? *(pWnd->icon()) : QPixmap(),pWnd->tabCaption());
-	connect(pWnd,SIGNAL(iconOrCaptionUdpated(QWidget*,QPixmap,const QString&)),
-		m_documentTabWidget,SLOT(updateView(QWidget*,QPixmap,const QString&)));
+	connect(pWnd,SIGNAL(iconUpdated(QWidget*,QPixmap)),
+		m_documentTabWidget,SLOT(updateIconInView(QWidget*,QPixmap)));
+	connect(pWnd,SIGNAL(captionUpdated(QWidget*,const QString&)),
+		m_documentTabWidget,SLOT(updateCaptionInView(QWidget*,const QString&)));
 
 #if 0
       KDockWidget* pCover = createDockWidget( pWnd->name(),

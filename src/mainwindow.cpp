@@ -363,10 +363,10 @@ void MainWindow::fileDirty(const QString& fileName)
         if (!ro_part || !ro_part->url().isLocalFile())
             continue;
         if ( ro_part->url().path() == fileName ) { /// @todo URL comparison sucks...
-             if ( PartController::getInstance()->isDirty( ro_part ) ) 
-		ro_part->widget()->setIcon(SmallIcon("revert"));
-	     else
-                ro_part->widget()->setIcon(QPixmap());
+            if ( PartController::getInstance()->isDirty( ro_part ) )
+                ro_part->widget()->setIcon(SmallIcon("revert"));
+            else
+                PartController::getInstance()->restorePartWidgetIcon(ro_part);
         }
     }
 }
@@ -448,6 +448,7 @@ void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QSt
 
   const QPixmap* wndIcon = view->icon();
   if (!wndIcon || (wndIcon && (wndIcon->size().height() > 16))) {
+    view->setIcon(SmallIcon("kdevelop"));
     child->setIcon(SmallIcon("kdevelop")); // was empty or too big, take something useful
   }
 
@@ -527,7 +528,7 @@ void MainWindow::embedSelectViewRight(QWidget* view, const QString& title, const
         return;
     }
     
-    
+
     const QPixmap* wndIcon = view->icon();
     kdDebug(9000) << "icon = " << wndIcon << endl;
     if (!wndIcon ) { // || (wndIcon && (wndIcon->size().height() > 16))) {
@@ -538,7 +539,7 @@ void MainWindow::embedSelectViewRight(QWidget* view, const QString& title, const
     int length = shortName.length();
     shortName = shortName.right(length - (shortName.findRev('/') +1)).stripWhiteSpace();
     checkAndFixToolViewObjectName(view, shortName);
-    
+
     KMdiToolViewAccessor *tmp=KMdiMainFrm::addToolWindow(view,
                                                          KDockWidget::DockRight,
                                                          getMainDockWidget(),

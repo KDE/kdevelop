@@ -71,6 +71,12 @@ KMdiChildArea::~KMdiChildArea()
 void KMdiChildArea::manageChild(KMdiChildFrm *lpC,bool bShow,bool bCascade)
 {
    KMdiChildFrm * top=topChild();
+   if (m_pZ->findRef(lpC)!=-1) { //first, remove old references
+       m_pZ->take();
+       while (m_pZ->findNext(lpC)!=-1) //sanity check
+           m_pZ->take();
+   }
+
    if (bShow)
       m_pZ->append(lpC); //visible -> first in the Z order
    else
@@ -168,7 +174,7 @@ void KMdiChildArea::setTopChild(KMdiChildFrm *lpC,bool /* bSetFocus */)
       }
 
       KMdiChildFrm *pMaximizedChild = m_pZ->last();
-      if (pMaximizedChild->m_state != KMdiChildFrm::Maximized) {
+      if (pMaximizedChild && pMaximizedChild->m_state != KMdiChildFrm::Maximized) {
          pMaximizedChild = 0L;
       }
       m_pZ->setAutoDelete(true);
