@@ -1,0 +1,39 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>ClassPathWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ClassPathWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>471</width>
+            <height>288</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="KEditListBox">
+            <property name="name">
+                <cstring>ClassPath</cstring>
+            </property>
+            <property name="title">
+                <string>Classpath</string>
+            </property>
+        </widget>
+    </hbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
