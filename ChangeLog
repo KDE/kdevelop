@@ -1,3 +1,6 @@
+2002-12-01 Sebastian Kratzert <skratzert@gmx.de>
+    * New configuration for external documentation (toc docs)
+    
 2002-12-01 F@lk Brettschneider <falk@kdevelop.org>
     * ported KDevSession (.kdevses) over from KDevelop-2, now called ProjectSession.
       Not finished but already does what removed ProjectWorkspace did. More to come...
