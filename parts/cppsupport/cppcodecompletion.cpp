@@ -152,20 +152,14 @@ CppCodeCompletion::setEnableCodeCompletion( bool setEnable )
 }
 
 void
-CppCodeCompletion::slotCompletionBoxHided( /* int completionTextLine */ )
+CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
 {
-    // should get an int for showing the ArgHint ?
-    // QStringList functionList;
-    // functionList.append( m_CHCommentList[ completionTextLine ] );
-    // m_pCompletionIface->showArgHint( functionList, "( )", "," );
-    // hint form josef wenninger: the new KTextEditor has an additional signal which
-    // returns the selected entry - there we can store the index
-    if ( m_pSupport->getCHWidget() ) {
-        m_pSupport->getCHWidget( )->setCHText( "Note: That's currently a test and NOT real\n\n" + m_CHCommentList[ 0 ] );
+    // we use the QString type in entry for this
+    if( m_pSupport->getCHWidget( ) ) {
+        m_pSupport->getCHWidget( )->setCHText( m_CHCommentList[ entry.type.toInt( ) ] );
     }
     m_CHCommentList.clear( );
 
-    kdDebug( 9007 ) << "m_bCompletionBoxShow = false;" << endl;
     m_bCompletionBoxShow = false;
 }
 
@@ -175,7 +169,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 {
     kdDebug( 9007 ) << "CppCodeCompletion::slotDocumentActivated" << endl;
 
-    if (!part)
+    if( !part )
       return;
 
     // if the interface stuff fails we should disable codecompletion automatically
@@ -200,19 +194,19 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     // here we have to investigate :)
     if( m_pSupport->getEnableCC( ) == true ){
         kdDebug( 9007 ) << "enabling code completion" << endl;
-
+/*
 	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged() ), this,
                  SLOT( slotCursorPositionChanged() ) );
-
+*/
 	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)), 
-		this, SLOT(slotTextChangedRoberto(int,int,const QString&)));
+		this, SLOT(slotTextChanged( int, int, const QString& ) ) );
 
 /*
         connect( m_pCompletionIface, SIGNAL( argHintHided( ) ), this,
                  SLOT( slotArgHintHided( ) ) );
 */
-	QObject::connect(part->widget(), SIGNAL( completionAborted( ) ), this,
-                 SLOT( slotCompletionBoxHided( ) ) );
+	QObject::connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
+                 SLOT( slotCompletionBoxHided( KTextEditor::CompletionEntry ) ) );
     }
 }
 
@@ -264,27 +258,11 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 }
 
 
-#if 0
 void
-CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol )
+//CppCodeCompletion::slotTextChanged( KTextEditor::Document *pDoc, int nLine, int nCol )
+CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& text )
 {
-    /* the code from slotCursorPositionChanged has to be placed here */
-    kdDebug( 9007 ) << "slotTextChanged" << endl;
-
-    // isn't it possible to check these 2 once ?
-    m_pEditIface = KEditor::EditDocumentIface::interface( pDoc );
-    if( !m_pEditIface ){
-        kdDebug( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
-        return;
-    }
-
-    m_pCompletionIface = KEditor::CodeCompletionDocumentIface::interface( pDoc );
-    if( !m_pCompletionIface ){
-        kdDebug( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
-        return;
-    }
-
-    QString strCurLine = m_pEditIface->line( nLine );
+    QString strCurLine = m_pEditIface->textLine( nLine );
 
     // should be done once and destroyed by destructor, shouldn't it ?
     if( !m_pParser ) m_pParser = new CppCCParser( );
@@ -292,14 +270,16 @@ CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol
     // we use more than once
     int nNodePos = getNodePos( nLine, nCol );
     // daniel - avoid additional scope in if's
-    if( !nNodePos )
+    if( !nNodePos ){
+	kdDebug( ) << "nNodePos = 0" << endl;
         return;
+    }
 
     // CC for "Namespace::" or "Class::" for example
     // each case could be an extra method so the source is more readable
     if( strCurLine.right( 2 ) == "::" ){
         QString strNodeText = getNodeText( nNodePos, nLine );
-        QValueList< KEditor::CompletionEntry > completionList;
+        QValueList< KTextEditor::CompletionEntry > completionList;
 
         completionList = getEntryListForNamespace( strNodeText );
         if( completionList.count( ) > 0 ){
@@ -408,7 +388,6 @@ CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol
         m_pParser->variableList.clear( );
     }
 }
-#endif 
 
 /**** TODO: replace this method with a parsing mechanism - very buggy! ****/
 // problem 1: recognizes static method calls as method implementation begin
@@ -424,6 +403,7 @@ CppCodeCompletion::createTmpFileForParser( int iLine )
     for( int i = iLine; i > 0; i-- ){
         strLine = m_pEditIface->textLine( i );
 
+	// something can cause a SIGSEGFAULT here ...
         if( regMethod.match( strLine.latin1( ) ) ){
             iMethodBegin = i;
 
@@ -502,8 +482,11 @@ CppCodeCompletion::getNodePos( int nLine, int nCol )
     int nNodePos = 0;
 
     QString strCurLine = m_pEditIface->textLine( nLine );
+    kdDebug( ) << "getNodePos( int nLine = " << nLine << ", int nCol = " << nCol << " )" << endl;
+    kdDebug( ) << "currentLine '" << endl << strCurLine << endl << "'" << endl;
 
-    while( nOffset < nCol ){
+    // changed from < to <= ; new KTextEditor that starts with col 0
+    while( nOffset <= nCol ){
         if ( strCurLine[ nOffset ] == '.' ||
              strCurLine[ nOffset ] == '-' && strCurLine[ nOffset + 1 ] == '>' ||
              strCurLine[ nOffset ] == ':' && strCurLine[ nOffset + 1 ] == ':' )
@@ -662,6 +645,7 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
     getParentMethodListForClass( pClass, &methodList );
 
     // create the completion list
+    int i = 0;
     for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
         KTextEditor::CompletionEntry entry;
 
@@ -686,6 +670,7 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
         }
         text += ")";
         entry.postfix = text;
+	entry.type.setNum( i++ );
 	m_CHCommentList.append( (*methodIt)->comment( ) );
 
         entryList << entry;

@@ -15,8 +15,6 @@
 #include "ccconfigwidgetbase.h"
 
 class CppSupportPart;
-class QButtonGroup;
-
 
 class CCConfigWidget : public CCConfigWidgetBase
 {
@@ -26,17 +24,30 @@ public:
     CCConfigWidget( CppSupportPart* part, QWidget* parent = 0, const char* name = 0 );
     ~CCConfigWidget( );
 
+
 public slots:
     void accept( );
-    void slotEnableCH( );
+    void slotEnableCH( bool );
+    void slotEnableCC( bool );
+    void slotAddPPPath( void );
+    void slotEnablePCS( bool );
+    void slotEnablePP( bool );
+    void slotRemovePPPath( void );
+    void slotSetCHWindow( int );
+
     
 signals:
     void enableCodeCompletion( bool setEnable );
     void enableCodeHinting( bool setEnable, bool setOutputView );
 
+
 private:
+    void initCCTab( );
+    void initCSTab( );
+    void saveCCTab( );
+    void saveCSTab( );
+    
     CppSupportPart* m_pPart;
-    QButtonGroup *bgCodeHinting;
 };
 
 #endif

@@ -2,7 +2,7 @@
  * file     : dbg.h
  * begin    : 2001
  * copyright: (c) by daniel engelschalt
- * email    : daniel.engelschalt@htw-dresden.de
+ * email    : daniel.engelschalt@gmx.net
  * license  : gpl version >= 2
  *
  */

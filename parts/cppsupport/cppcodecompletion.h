@@ -55,8 +55,9 @@ public slots:
 protected slots:
     void slotActivePartChanged(KParts::Part *part);
     void slotArgHintHided();
-    void slotCompletionBoxHided( /* int completionTextLine */ );
+    void slotCompletionBoxHided( KTextEditor::CompletionEntry entry );
     //void slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol );
+    void slotTextChanged( int nLine, int nCol, const QString& text );
     void slotTextChangedRoberto(int nLine, int nCol, const QString &text );
     void slotCursorPositionChanged();
 

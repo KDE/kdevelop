@@ -7,7 +7,9 @@
  */
 
 #include <qstring.h>
+
 #include <keditcl.h>
+#include <klocale.h>
 
 #include "cppsupportwidget.h"
 #include "cppsupportpart.h"
@@ -30,7 +32,10 @@ void
 CppSupportWidget::setCHText( const QString& text )
 {
     clear( );
-    setText( text );
+    if( text.isEmpty( ) )
+	setText( i18n( "No code hinting available for this method !" ) );
+    else
+	setText( text );
 }
 
 #include "cppsupportwidget.moc"
