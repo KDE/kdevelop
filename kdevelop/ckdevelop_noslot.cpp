@@ -269,6 +269,10 @@ void CKDevelop::switchToKDlgEdit(){
 
   setKeyAccel();  // initialize Keys
 
+  // this toolbar toogle is for placing the panner devider correctly
+  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
+  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
+
   ///////// reset the views status ///////////////
   if(kdlg_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
     showTreeView();
@@ -357,6 +361,7 @@ void CKDevelop::switchToWorkspace(int id){
   }
   else{showTreeView(false);}
 }
+
 
 
 

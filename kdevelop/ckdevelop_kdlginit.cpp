@@ -261,6 +261,47 @@ void CKDevelop::initKDlgMenuBar(){
   connect(kdlg_tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
+  disableCommand(ID_FILE_NEW);
+  disableCommand(ID_FILE_PRINT);
+
+  disableCommand(ID_EDIT_UNDO);
+  disableCommand(ID_EDIT_REDO);
+  disableCommand(ID_KDLG_EDIT_UNDO);
+  disableCommand(ID_KDLG_EDIT_REDO);
+  disableCommand(ID_KDLG_EDIT_CUT);
+  disableCommand(ID_KDLG_EDIT_COPY);
+  disableCommand(ID_KDLG_EDIT_PASTE);
+
+  disableCommand(ID_PROJECT_ADD_FILE_NEW);
+  disableCommand(ID_PROJECT_CLOSE);
+  disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+  disableCommand(ID_PROJECT_ADD_FILE);
+  //  disableCommand(ID_PROJECT_REMOVE_FILE);
+  disableCommand(ID_PROJECT_NEW_CLASS);
+  disableCommand(ID_PROJECT_FILE_PROPERTIES);
+  disableCommand(ID_PROJECT_OPTIONS);
+  disableCommand(ID_PROJECT_WORKSPACES);
+
+  disableCommand(ID_BUILD_RUN);
+  disableCommand(ID_BUILD_DEBUG);
+  disableCommand(ID_BUILD_MAKE);
+  disableCommand(ID_BUILD_REBUILD_ALL);
+  disableCommand(ID_BUILD_STOP);
+  disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
+  disableCommand(ID_BUILD_DISTCLEAN);
+  disableCommand(ID_BUILD_AUTOCONF);
+  disableCommand(ID_BUILD_CONFIGURE);
+  disableCommand(ID_BUILD_MESSAGES);  	
+  disableCommand(ID_BUILD_MAKE_PROJECT_API);
+  disableCommand(ID_BUILD_MAKE_USER_MANUAL);
+  disableCommand(ID_BUILD_COMPILE_FILE);
+
+  disableCommand(ID_HELP_BACK);
+  disableCommand(ID_HELP_FORWARD);
+  disableCommand(ID_HELP_PROJECT_API);
+  disableCommand(ID_HELP_USER_MANUAL);
+
 }
 
 void CKDevelop::initKDlgToolBar(){
@@ -394,6 +435,11 @@ void CKDevelop::initKDlgKeyAccel(){
 void CKDevelop::setKDlgCaption(){
   setCaption(kdlg_caption);
 }
+
+
+
+
+
 
 
 

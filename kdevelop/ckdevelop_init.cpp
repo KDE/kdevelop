@@ -391,7 +391,11 @@ void CKDevelop::initKeyAccel(){
   accel->readSettings();
 }
 void CKDevelop::initMenu(){
-//  KDEVELOP MENUBAR //
+  //  KDEVELOP MENUBAR //
+  // NOTE: ALL disableCommand(ID_XX) are placed in initKDlgMenuBar() at the end !!!
+  // NEW DISABLES HAVE TO BE ADDED THERE AFTER BOTH MENUBARS ARE CREATED COMPLETELY,
+  // OTHERWISE KDEVELOP CRASHES !!!
+
   kdev_menubar=new KMenuBar(this,"KDevelop_menubar");
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
@@ -422,8 +426,6 @@ void CKDevelop::initMenu(){
   file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
 
   kdev_menubar->insertItem(i18n("&File"), file_menu);
-  disableCommand(ID_FILE_NEW);
-  disableCommand(ID_FILE_PRINT);
 
 
 ///////////////////////////////////////////////////////////////////
@@ -464,8 +466,6 @@ void CKDevelop::initMenu(){
   
   kdev_menubar->insertItem(i18n("&Edit"), edit_menu);
 
-  disableCommand(ID_EDIT_UNDO);
-  disableCommand(ID_EDIT_REDO);
 
 
 ///////////////////////////////////////////////////////////////////
@@ -556,16 +556,7 @@ void CKDevelop::initMenu(){
 
   kdev_menubar->insertItem(i18n("&Project"), project_menu);
 
-  disableCommand(ID_PROJECT_ADD_FILE_NEW);
-  disableCommand(ID_PROJECT_CLOSE);
-  disableCommand(ID_PROJECT_ADD_FILE_EXIST);
-  disableCommand(ID_PROJECT_ADD_FILE);
-  //  disableCommand(ID_PROJECT_REMOVE_FILE);
-  disableCommand(ID_PROJECT_NEW_CLASS);
-  disableCommand(ID_PROJECT_FILE_PROPERTIES);
-  disableCommand(ID_PROJECT_OPTIONS);
-  disableCommand(ID_PROJECT_WORKSPACES);
-  
+
 ///////////////////////////////////////////////////////////////////
 // Build-menu entries
 
@@ -605,19 +596,6 @@ void CKDevelop::initMenu(){
   
   kdev_menubar->insertItem(i18n("&Build"), build_menu);
 
-  disableCommand(ID_BUILD_RUN);
-  disableCommand(ID_BUILD_DEBUG);
-  disableCommand(ID_BUILD_MAKE);
-  disableCommand(ID_BUILD_REBUILD_ALL);
-  disableCommand(ID_BUILD_STOP);
-  disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
-  disableCommand(ID_BUILD_DISTCLEAN);
-  disableCommand(ID_BUILD_AUTOCONF);
-  disableCommand(ID_BUILD_CONFIGURE);
-  disableCommand(ID_BUILD_MESSAGES);  	
-  disableCommand(ID_BUILD_MAKE_PROJECT_API);
-  disableCommand(ID_BUILD_MAKE_USER_MANUAL);
-  disableCommand(ID_BUILD_COMPILE_FILE);
 
 
 ///////////////////////////////////////////////////////////////////
@@ -700,10 +678,6 @@ void CKDevelop::initMenu(){
   help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
   kdev_menubar->insertItem(i18n("&Help"), help_menu);
 
-  disableCommand(ID_HELP_BACK);
-  disableCommand(ID_HELP_FORWARD);
-  disableCommand(ID_HELP_PROJECT_API);
-  disableCommand(ID_HELP_USER_MANUAL);
 
 ///////////////////////////////////////////////////////////////////
 // connects for the statusbar help
@@ -717,7 +691,8 @@ void CKDevelop::initMenu(){
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-	
+
+
 }
 
 void CKDevelop::initToolbar(){
@@ -1061,6 +1036,9 @@ if(bKDevelop){
     accel->changeMenuAccel(kdlg_help_menu, ID_HELP_CONTENTS, KAccel::Help );
   }
 }
+
+
+
 
 
 

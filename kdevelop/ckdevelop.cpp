@@ -1229,7 +1229,9 @@ void CKDevelop::slotStatusHelpMsg(const char *text)
 
 void CKDevelop::enableCommand(int id_)
 {
-  menuBar()->setItemEnabled(id_,true);
+  kdev_menubar->setItemEnabled(id_,true);
+  kdlg_menubar->setItemEnabled(id_,true);
+//  menuBar()->setItemEnabled(id_,true);
   toolBar()->setItemEnabled(id_,true);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,true);
   toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(id_,true);
@@ -1237,7 +1239,9 @@ void CKDevelop::enableCommand(int id_)
 
 void CKDevelop::disableCommand(int id_)
 {
-  menuBar()->setItemEnabled(id_,false);
+  kdev_menubar->setItemEnabled(id_,false);
+  kdlg_menubar->setItemEnabled(id_,false);
+//  menuBar()->setItemEnabled(id_,false);
   toolBar()->setItemEnabled(id_,false);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,false);
   toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(id_,false);
@@ -2057,6 +2061,8 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
 
 
 
