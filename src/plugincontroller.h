@@ -36,6 +36,8 @@ public:
   void integratePart(KXMLGUIClient *part);
   void removePart(KXMLGUIClient* part);
 
+  const QDict<KDevPlugin>& globalParts() { return m_globalParts; }
+
 signals:
   void loadingPlugin(const QString &plugin);
 
