@@ -123,7 +123,7 @@ private:
   QButton *okButton,*cancelButton,*defaultButton, *prevButton;
   KIconLoader* loader;
   QMultiLineEdit *errOutput,*output;
-  KShellProcess *p,*q;
+  KShellProcess *q;
   KSimpleConfig* settings;
   CProject *project;
   QStrList sub_dir_list;

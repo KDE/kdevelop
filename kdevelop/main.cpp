@@ -36,36 +36,43 @@ int main(int argc, char* argv[]) {
       start_logo->show();
     }
     a.connectToKWM();
-
+    
     if (a.isRestored()){
     	RESTORE(CKDevelop);
     }
     else {
-      CKDevelop* kdevelop = new CKDevelop;
-      a.setMainWidget(kdevelop);
-      a.setTopWidget(kdevelop);
-      if(bInstall){
-        CKDevInstall* install=new CKDevInstall(kdevelop,"install");
-        install->show();
-        delete install;
-	kdevelop->refreshTrees();  // this is because of the new documentation
-      }
-      kdevelop->show();
-      a.getConfig()->setGroup("General Options");
-      kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
-      kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
-      if (argc > 1)
-        kdevelop->slotProjectOpenCmdl(argv[1]);
-      
-      a.getConfig()->setGroup("TipOfTheDay");
-      bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
-      if(showTip){
-        tipdlg=new KTipofDay;
-        tipdlg->exec();
-      }
+	
+	if(bInstall){
+	    CKDevInstall* install=new CKDevInstall(0,"install");
+	    install->show();
+	    delete install;
+	    
+	}
+	
+	CKDevelop* kdevelop = new CKDevelop;
+	if(bInstall){
+	    kdevelop->refreshTrees();  // this is because of the new documentation
+	}
+
+	a.setMainWidget(kdevelop);
+	a.setTopWidget(kdevelop);
+	kdevelop->show();
+
+	a.getConfig()->setGroup("General Options");
+	kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
+	kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
+	if (argc > 1)
+	    kdevelop->slotProjectOpenCmdl(argv[1]);
+	
+	a.getConfig()->setGroup("TipOfTheDay");
+	bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
+	if(showTip){
+	    tipdlg=new KTipofDay;
+	    tipdlg->exec();
+	}
     }
     if(bStartLogo){
-      start_logo->close();
+	start_logo->close();
     }
     delete start_logo;
     delete tipdlg;

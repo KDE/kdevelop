@@ -523,6 +523,7 @@ void CKDevelop::showOutputView(bool show){
 void CKDevelop::slotViewRefresh(){
   refreshTrees();
 }
+
 void CKDevelop::slotOptionsEditor(){
   slotStatusMsg(i18n("Setting up the Editor..."));
   cpp_widget->optDlg();

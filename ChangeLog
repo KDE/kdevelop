@@ -1,3 +1,8 @@
+1999-03-10   Sandy Meier <smeier@rz.uni-potsdam.de>
+
+	* fixed a "choose syntaxhighlighting" (emacs/kwrite) bug
+	* fixed a bug in the Application Wizard,produced segfault by closing kdevelop
+
 1999-03-10  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* fixed many bugs like overwriting existing files, memorylinks, no settingdefault in printdialog...
 

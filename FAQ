@@ -1,6 +1,6 @@
 KDevelop-FAQ
 
-Q: Wrong JPEG library version: library is 61, caller expects 62 
+Q: I get the message: "Wrong JPEG library version: library is 61, caller expects 62 "
 
 A:  There are 2 ways.
 
@@ -45,7 +45,8 @@ A: Please change the AC_OUTPUT in the configure.in to a oneline version
    )
    new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
 
-Q:  I can get the following linker errors, what must i do?
+
+Q:  I get the following linker errors, what must i do?
 	/usr/lib/libqt.so:
 	warning: multiple common of `QArrayT<char> type_info node'     
 ckdevelop.o: warning: previous common is here      
@@ -71,14 +72,8 @@ make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
 `/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'  
 make: *** [all-recursive-am] Error 2 
 
-A: If you have the SuSE rpm´s of KDE-1.1, you must compile KDE-1.1
+A: If you have the SuSE RPM´s of KDE-1.1, you must compile KDE-1.1
 yourself.:-(
-   It's a bug in the SuSE rpm's. 
-
-Q: I see the KDevelop does not allow for usage of the delete key.
-A: I've had the same problem with the new version of KDE, but I have 
-   found that the delete key works properly when the "International 
-   Keyboard" utility is running.  Just always keep it open and make sure 
-   that it is configured properly for your keyboard. 
+   It's a bug in the SuSE RPM's. 
 
 

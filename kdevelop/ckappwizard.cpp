@@ -26,21 +26,16 @@
 #include <kmsgbox.h>
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name) : KWizard(parent,name,true){
-  
-  gen_prj = false;
-setCaption(i18n("Application Wizard"));
-  init();
-  initPages();
-  slotDefaultClicked();    
+    q = new KShellProcess();
+    gen_prj = false;
+    setCaption(i18n("Application Wizard"));
+    init();
+    initPages();
+    slotDefaultClicked();    
 }
 
 CKAppWizard::~CKAppWizard () {
-  delete (page0);
-  delete (page1);
-  delete (page2);
-  delete (page3);
-  delete (page4);
-  delete (page5);
+  
 }
 
 void CKAppWizard::init(){
@@ -406,26 +401,25 @@ void CKAppWizard::slotNewCppButtonClicked() {
 // connection of this (defaultButton)
 void CKAppWizard::slotOkClicked() {
   QDir dir;
+  KShellProcess p;
   dir.setPath(directoryline->text());
   if (dir.exists()) {
     if(KMsgBox::yesNo(0,"Directory exists!","WARNING!!! If you click 'OK', all files and subdirs will removed.",KMsgBox::EXCLAMATION,"Ok","Cancel")==2) {
       return;
     }
     else {
-      p = new KShellProcess();
+      p.clearArguments();
       QString copydes = (QString) "rm -r -f " + directoryline->text() + QString ("/");
-      *p << copydes;
-      p->start(KProcess::Block,KProcess::AllOutput);
-      delete (p);
+      p << copydes;
+      p.start(KProcess::Block,KProcess::AllOutput);
       okPermited();
     }
   }
   else {
-    p = new KShellProcess();
+    p.clearArguments();
     QString copydes = (QString ) "rm -r -f " + directoryline->text() + QString ("/");
-    *p << copydes;
-    p->start(KProcess::Block,KProcess::AllOutput);
-    delete (p);
+    p << copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
     okPermited();
   }
 }
@@ -516,38 +510,38 @@ void CKAppWizard::okPermited() {
   namelow = namelow.lower();
   QDir directory;
   directory.mkdir(directoryline->text() + QString("/"));
-  p = new KShellProcess();
+  KShellProcess p;
   QString copysrc;
   QString copydes = directoryline->text() + QString ("/");
   if (kma->isChecked()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
-    *p << "cp " + copysrc + (QString) " " + copydes;
-    p->start(KProcess::Block,KProcess::AllOutput);
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (kna->isChecked()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
-    *p << "cp " + copysrc + (QString) " " + copydes;
-    p->start(KProcess::Block,KProcess::AllOutput);
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
   }
   else if (qta->isChecked()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt.tar.gz";
-    *p << "cp " + copysrc + (QString) " " + copydes;
-    p->start(KProcess::Block,KProcess::AllOutput);
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
   }
   else {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
-    *p << "cp " + copysrc + (QString) " " + copydes;
-    p->start(KProcess::Block,KProcess::AllOutput);
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
   }
-  p->clearArguments();
-  connect(p,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
-  connect(p,SIGNAL(receivedStdout(KProcess *, char *, int)),
+  q->clearArguments();
+  connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
+  connect(q,SIGNAL(receivedStdout(KProcess *, char *, int)),
 	  this,SLOT(slotPerlOut(KProcess *, char *, int)));
-  connect(p,SIGNAL(receivedStderr(KProcess *, char *, int)),
+  connect(q,SIGNAL(receivedStderr(KProcess *, char *, int)),
 	  this,SLOT(slotPerlErr(KProcess *, char *, int)));
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
-  *p << "perl" << path + "processes.pl";
-  p->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+  *q << "perl" << path + "processes.pl";
+  q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
   okButton->setEnabled(false);
   gotoPage(5);
   int i;
@@ -587,8 +581,7 @@ void CKAppWizard::okPermited() {
 void CKAppWizard::slotAppEnd() {
   nametext = nameline->text();
   if ((!(okButton->isEnabled())) && (nametext.length() >= 1)) {
-    delete (p);
-    delete (q);
+
     delete (project);
   }
   delete (errOutput);
@@ -1208,13 +1201,11 @@ void CKAppWizard::slotProcessExited() {
   project->writeProject ();
   project->updateMakefilesAm ();
 
-  q = new KShellProcess();
+  disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
-  connect(q,SIGNAL(receivedStdout(KProcess *, char *, int)),
-          this,SLOT(slotPerlOut(KProcess *, char *, int)));
-  connect(q,SIGNAL(receivedStderr(KProcess *, char *, int)),
-          this,SLOT(slotPerlErr(KProcess *, char *, int)));
+  
   QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
+  q->clearArguments();
   *q << "perl" << path1 + "processesend.pl";
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
 }

@@ -481,7 +481,7 @@ void CKDevInstall::slotAuto() // proceed >>
 
     config->setGroup("KWrite Options");
     config->writeEntry("WrapAt","78");
-    config->writeEntry("ConfigFlags","16");
+    config->writeEntry("ConfigFlags","1040");
     config->writeEntry("UndoSteps","50");
     config->writeEntry("Highlight","C++");
     config->writeEntry("SearchFlags","32");
@@ -495,7 +495,7 @@ void CKDevInstall::slotAuto() // proceed >>
   if(highl_style==2){
     config->setGroup("KWrite Options");
     config->writeEntry("WrapAt","78");
-    config->writeEntry("ConfigFlags","16");
+    config->writeEntry("ConfigFlags","1040");
     config->writeEntry("UndoSteps","50");
     config->writeEntry("Highlight","C++");
     config->writeEntry("SearchFlags","32");
@@ -505,7 +505,8 @@ void CKDevInstall::slotAuto() // proceed >>
     config->writeEntry("Color3","0,0,0");
     config->writeEntry("TabWidth","2");
     config->writeEntry("Color4","255,255,255");
-	}
+  }
+  config->sync();
   QProgressDialog progress( i18n("Checking needed programs..."), i18n("Cancel"), numProgs, this );
   progress.setMinimumDuration ( 0 );
 
