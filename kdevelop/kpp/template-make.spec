@@ -56,6 +56,6 @@ echo %%name%% has been removed from your system.
 
 
 %changelog
-*Sun Jan 21 20001 Ian Reinhart Geiser <geiseri@linuxppc.com>
+*Sun Jan 21 2001 Ian Reinhart Geiser <geiseri@linuxppc.com>
 - created inital template.
 - all changes should go here after this date.
