@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=
+Comment=This plugins allows to store codesnippets and add the to your code
+Comment[de]=Mit diesem Plugin können Sie Code Teile speichern und jederzeit in ihren Code einfügen
+Name=Code Snippets
+Name[de]=Code Snippets
+GenericName=Code Snippets
+GenericName[de]=Code Snippets
+Icon=editcut
+ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Global
+X-KDE-Library=libkdevsnippet
+X-KDevelop-Version=1

@@ -1,0 +1,193 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>SnippetDlg</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>SnippetDlg</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>344</width>
+            <height>285</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Add Snippet</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>btnCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>btnAdd</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Add</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer row="3" column="0">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>149</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="KLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>snippetName</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Courier</family>
+                            <pointsize>11</pointsize>
+                        </font>
+                    </property>
+                </widget>
+                <widget class="KTextEdit" row="1" column="1" rowspan="3" colspan="1">
+                    <property name="name">
+                        <cstring>snippetText</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Courier</family>
+                            <pointsize>11</pointsize>
+                        </font>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Snippet</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignTop</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>snippetText</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Name</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>snippetName</cstring>
+                    </property>
+                </widget>
+                <widget class="QToolButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>toolBtnHelp</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>image0</iconset>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Click here to get to know how to use variables in a snippet</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<images>
+    <image name="image0">
+        <data format="XPM.GZ" length="660">789c85cfcd6e83300c07f03b4f11c10d4d29014241d51e61d38e93a61dec24145a3ea4ad3b4cd3de7dd809a587490d87e6f7afed24bb54bcbe3c8974177d5ee0d21b613af810a9fd1ac7efb7f7c79f28569550b5507ba1e2872896c288e77972b4c7659f64bc88e059d41a88c9ca2a27b69e6556f1bf7d60b92f88ce536735126da06e4ae21cd83486688879532ba389e740edd9110bb5722096aa51c6124f449d2f939847620500968bc72bf98113b14674aee2b72f2b01fa1071d9870c8c5d6c1d52eab3f6481142e7e8d767fd0979c1d95db3845b25b6c35687c04db21db63a0cad238f0de7fa689af126935ce5a3f57e74453e932ebd65feec9b77ac2329ba9349001fddcee337dfeffd77de1ac9f8f710fd0115979f14</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>btnAdd</sender>
+        <signal>clicked()</signal>
+        <receiver>SnippetDlg</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>btnCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>SnippetDlg</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>toolBtnHelp</sender>
+        <signal>clicked()</signal>
+        <receiver>SnippetDlg</receiver>
+        <slot>slotHelp()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">snippetdlg.ui.h</include>
+</includes>
+<slots>
+    <slot>slotHelp()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>ktextedit.h</includehint>
+</includehints>
+</UI>

@@ -1,0 +1,190 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>SnippetSettingsBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SnippetSettingsBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>405</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Snippet Settings</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Tooltips</string>
+            </property>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>cbToolTip</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>19</y>
+                        <width>556</width>
+                        <height>18</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Show snippet's text in &amp;tooltip</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+T</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Decides if a tooltip should be shown containing text from the bookmarked line</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup1</cstring>
+            </property>
+            <property name="title">
+                <string>Variables</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup" row="1" column="0">
+                    <property name="name">
+                        <cstring>btnGroup</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Input method for variables</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>rbSingle</cstring>
+                            </property>
+                            <property name="text">
+                                <string>single dialog for each variable of a snippet</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>You will get an inputdialog for every variable of a snippet</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="1" column="0">
+                            <property name="name">
+                                <cstring>rbAll</cstring>
+                            </property>
+                            <property name="text">
+                                <string>one dialog for all variables of a snippet</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>You will get a single dialog where you can enter the values for all variables of a snippet</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Delimiter</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>kLineEdit1</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>leDelimiter</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>40</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="maxLength">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer3</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+            </grid>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>181</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+</includehints>
+</UI>
