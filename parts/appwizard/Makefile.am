@@ -1,7 +1,7 @@
 
 # Here resides the app wizard part.
 
-SUBDIRS = . imports common kapp kpartapp kpartplugin kappjava kcmodule kicker kioslave \
+SUBDIRS = . imports common kapp kpartapp kpartplugin kappjava javahello kcmodule kicker kioslave \
 	  kdevpart pythonhello pyqt phphello chello cpphello gnomeapp kscreensaver \
 	  kofficepart chello_gba dcopservice konqnavpanel qmakesimple qmakeapp khello kateplugin
 
