@@ -166,7 +166,7 @@ void Navigator::slotCursorPositionChanged()
 {
     //FIXME: we assume that background parser delay is set globally in kdeveloprc file
     //for all available language supports
-    //this is reasonable suggestion because problem reporter should be the same for all languages
+    //this is reasonable assumption because problem reporter should be the same for all languages
     KConfig* config = kapp->config();
     config->setGroup( "General Options" );
     int m_delay = config->readNumEntry( "BgParserDelay", 250 );

@@ -95,13 +95,15 @@ ClassViewPart::~ClassViewPart()
 
 void ClassViewPart::slotProjectOpened( )
 {
-    connect( languageSupport(), SIGNAL(updatedSourceInfo()), navigator, SLOT(refresh()) );
+//    connect( languageSupport(), SIGNAL(updatedSourceInfo()), navigator, SLOT(refresh()) );
     connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), navigator, SLOT(addFile(const QString& )));
+    navigator->refresh();
 }
 
 void ClassViewPart::slotProjectClosed( )
 {
-    disconnect( languageSupport(), SIGNAL(updatedSourceInfo()), navigator, SLOT(refresh()) );
+//    navigator->refresh();
+//    disconnect( languageSupport(), SIGNAL(updatedSourceInfo()), navigator, SLOT(refresh()) );
 }
 
 void ClassViewPart::setupActions( )
@@ -113,7 +115,8 @@ void ClassViewPart::setupActions( )
     connect(m_functionsnav->view(), SIGNAL(focusLost()), navigator, SLOT(functionNavUnFocused()));
     m_functionsnav->setToolTip(i18n("Functions in file"));
     m_functionsnav->setWhatsThis(i18n("<b>Function navigator</b><p>Navigates over functions contained in the file."));
-    m_functionsnav->view()->setCurrentText(NAV_NODEFINITION);
+//    m_functionsnav->view()->setCurrentText(NAV_NODEFINITION);
+    m_functionsnav->view()->setDefaultText(NAV_NODEFINITION);
     
     if (langHasFeature(KDevLanguageSupport::Classes))
     {
