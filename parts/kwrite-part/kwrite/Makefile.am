@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(top_srcdir)/lib/util
+INCLUDES = -I$(top_srcdir)/lib/util $(all_includes)
 
 KDE_CXXFLAGS = $(USE_RTTI) -DNO_NEW_CODE
 

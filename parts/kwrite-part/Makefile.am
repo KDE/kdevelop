@@ -1,6 +1,6 @@
 SUBDIRS = kwrite
 
-INCLUDES = $(all_includes) -I$(top_srcdir)/lib/interfaces 
+INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libkwriteeditorpart.la

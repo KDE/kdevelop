@@ -1,9 +1,7 @@
 # Here resides the python scripting part
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces \
-	   -I$(top_srcdir)/lib/util \
-	   $(all_includes) \
-	   $(PYTHONINC)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
+	   $(all_includes) $(PYTHONINC)
 
 kde_module_LTLIBRARIES = libkdevscripting.la
 libkdevscripting_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
