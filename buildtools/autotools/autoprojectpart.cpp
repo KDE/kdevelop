@@ -1017,6 +1017,10 @@ void AutoProjectPart::slotExecute2()
         environstr += " ";
     }
 
+    if (mainProgram(true).isEmpty())
+    // Do not execute non executable targets
+        return;
+
     QString program = environstr;
     // Adds the ./ that is necessary to execute the program in bash shells
     if (!mainProgram(true).startsWith("/"))
