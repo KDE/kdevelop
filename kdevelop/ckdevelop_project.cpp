@@ -80,7 +80,7 @@ bool CKDevelop::slotProjectClose()
   log_file_tree->storeState(prj);
 
   // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
-  QList<int> allDocs = m_docViewManager->docs();
+  QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
   QListIterator<int> docIter(allDocs);
   for ( ; docIter.current(); ++docIter) { // for all kwrite documents
     int curDocId = *(docIter.current());

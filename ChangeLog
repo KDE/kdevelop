@@ -1,4 +1,7 @@
 2001-03-12  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfixes: crash on exit (wrong type casts, forgot to remove browser view from MDI control)
+
+2001-03-12  F@lk Brettschneider <falk@kdevelop.org>
     * further work on MDI, some connect()s from init...() moved to DocViewMan::createView()
     * some bugfixes in the DocViewMan
 

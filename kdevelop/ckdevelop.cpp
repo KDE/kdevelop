@@ -218,7 +218,7 @@ void CKDevelop::slotFileCloseAll()
   bool cont=true;
 
   // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
-  QList<int> allDocs = m_docViewManager->docs();
+  QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
   QListIterator<int> docIter(allDocs);
   for ( ; docIter.current(); ++docIter) { // for all kwrite documents
     int curDocId = *(docIter.current());
@@ -421,7 +421,7 @@ void CKDevelop::slotFileSaveAll()
 //    mainSplitter->setUpdatesEnabled(false);
 
     // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
-    QList<int> allDocs = m_docViewManager->docs();
+    QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
     QListIterator<int> docIter(allDocs);
     for ( ; docIter.current(); ++docIter) { // for all kwrite documents
       int curDocId = *(docIter.current());
@@ -1948,23 +1948,20 @@ void CKDevelop::globalTakeOverOfEditorOptions( CEditWidget* pEW)
   pEW->writeConfig(config);
   pEW->doc()->writeConfig(config);
 
-  QList<int> allDocs = m_docViewManager->docs();
+  QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
   QListIterator<int> docIter(allDocs);
   // for all kwrite documents
   for ( ; docIter.current(); ++docIter) {
     int curDocId = *(docIter.current());
-    int curDocType = m_docViewManager->docType( curDocId);
-    if ( (curDocType == DocViewMan::Header) || (curDocType == DocViewMan::Source)) {
-      QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
-      QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
-      // for all views of the current kwrite document
-      for ( ; viewIter.current(); ++viewIter) {
-        CEditWidget* pCurEW = (CEditWidget*) viewIter.current();
-        pCurEW->copySettings(pEW);
-        config->setGroup("KWrite Options");
-        pCurEW->readConfig(config);
-        pCurEW->doc()->readConfig(config);
-      }
+    QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
+    QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
+    // for all views of the current kwrite document
+    for ( ; viewIter.current(); ++viewIter) {
+      CEditWidget* pCurEW = (CEditWidget*) viewIter.current();
+      pCurEW->copySettings(pEW);
+      config->setGroup("KWrite Options");
+      pCurEW->readConfig(config);
+      pCurEW->doc()->readConfig(config);
     }
   }
   slotStatusMsg(i18n("Ready."));
@@ -2183,7 +2180,7 @@ void CKDevelop::slotBookmarksClear(){
   }    
   else{
     // clear all bookmarks
-    QList<int> allDocs = m_docViewManager->docs();
+    QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
     QListIterator<int> docIter(allDocs);
     for ( ; docIter.current(); ++docIter) { // for all kwrite documents
       int curDocId = *(docIter.current());

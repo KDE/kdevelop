@@ -74,8 +74,8 @@ public:
 
   /** Get number of documents */
   int countDocs() const;
-  /** Get the ids of all documents */
-  QList<int> docs() const;
+  /** get the ids of all documents of this type or a combination of types */
+  QList<int> docs( int type = DocViewMan::Undefined) const;
   /** Get the id of a document displayed by a given view */
   int docOfView(QWidget* pView) const;
   /** Get the type of a document. Returns one of the DocViewMan::ContentsType enum. */

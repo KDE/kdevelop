@@ -214,6 +214,14 @@ void DocViewMan::closeDoc(int docId)
   case DocViewMan::HTML:
     {
       CDocBrowser* pDoc = (CDocBrowser*) pCurDocViewNode->pDoc;
+      KHTMLView* pView = pDoc->view();
+      // remove the view from MDI and delete the view
+      QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
+      m_pParent->removeWindowFromMdi( pMDICover);
+      pCurDocViewNode->existingViews.clear();
+      if (countViews() == 0) {
+        emit sig_lastViewClosed();
+      }
       delete pDoc;
     }
     break;
@@ -252,15 +260,21 @@ int DocViewMan::countDocs() const
 }
 
 //------------------------------------------------------------------------------
-// get the ids of all documents
+// get the ids of all documents of this type or a combination of types
 //------------------------------------------------------------------------------
-QList<int> DocViewMan::docs() const
+QList<int> DocViewMan::docs( int type) const
 {
   QListIterator<DocViewNode>    itDoc(m_docsAndViews);
   QList<int> listDocIds;
-  for (; itDoc.current() != 0; ++itDoc) {
-    listDocIds.append(&(itDoc.current()->docId));
-  }
+  if (type == DocViewMan::Undefined)
+    for (; itDoc.current() != 0; ++itDoc) {
+      listDocIds.append(&(itDoc.current()->docId));
+    }
+  else
+    for (; itDoc.current() != 0; ++itDoc) {
+      if (itDoc.current()->docType & type)
+        listDocIds.append(&(itDoc.current()->docId));
+    }
   return listDocIds;
 }
 
