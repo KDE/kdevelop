@@ -7907,17 +7907,17 @@ install_location=
 type=DATA
 
 [parts/appwizard/kpartplugin/Makefile.am]
-files=parts/appwizard/kpartplugin/hi16-action-plugin.png,parts/appwizard/kpartplugin/hi22-action-plugin.png,parts/appwizard/kpartplugin/kpartplugin,parts/appwizard/kpartplugin/kpartplugin.png,parts/appwizard/kpartplugin/plugin.kdevelop,parts/appwizard/kpartplugin/plugin_app.cpp,parts/appwizard/kpartplugin/plugin_app.h,parts/appwizard/kpartplugin/plugin_app.rc,parts/appwizard/kpartplugin/script,parts/appwizard/kpartplugin/subdirs,
+files=parts/appwizard/kpartplugin/cr16-action-plugin.png,parts/appwizard/kpartplugin/cr22-action-plugin.png,parts/appwizard/kpartplugin/kpartplugin,parts/appwizard/kpartplugin/kpartplugin.png,parts/appwizard/kpartplugin/plugin.kdevelop,parts/appwizard/kpartplugin/plugin_app.cpp,parts/appwizard/kpartplugin/plugin_app.h,parts/appwizard/kpartplugin/plugin_app.rc,parts/appwizard/kpartplugin/script,parts/appwizard/kpartplugin/subdirs,
 sub_dirs=
 type=normal
 
-[parts/appwizard/kpartplugin/hi16-action-plugin.png]
+[parts/appwizard/kpartplugin/cr16-action-plugin.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[parts/appwizard/kpartplugin/hi22-action-plugin.png]
+[parts/appwizard/kpartplugin/cr22-action-plugin.png]
 dist=true
 install=false
 install_location=
@@ -11884,11 +11884,11 @@ install_location=
 type=HEADER
 
 [parts/tipofday/Makefile.am]
-files=parts/tipofday/hi16-action-ktip.png,parts/tipofday/hi32-action-ktip.png,parts/tipofday/hi48-action-ktip.png,parts/tipofday/kdevpart_tipofday.desktop,parts/tipofday/kdevpart_tipofday.rc,parts/tipofday/lo16-action-kdevelop_tip.png,parts/tipofday/lo32-action-kdevelop_tip.png,parts/tipofday/tipofday_factory.cpp,parts/tipofday/tipofday_factory.h,parts/tipofday/tipofday_part.cpp,parts/tipofday/tipofday_part.h,parts/tipofday/tips,
+files=parts/tipofday/cr16-action-ktip.png,parts/tipofday/hi32-action-ktip.png,parts/tipofday/hi48-action-ktip.png,parts/tipofday/kdevpart_tipofday.desktop,parts/tipofday/kdevpart_tipofday.rc,parts/tipofday/lo16-action-kdevelop_tip.png,parts/tipofday/lo32-action-kdevelop_tip.png,parts/tipofday/tipofday_factory.cpp,parts/tipofday/tipofday_factory.h,parts/tipofday/tipofday_part.cpp,parts/tipofday/tipofday_part.h,parts/tipofday/tips,
 sub_dirs=
 type=normal
 
-[parts/tipofday/hi16-action-ktip.png]
+[parts/tipofday/cr16-action-ktip.png]
 dist=true
 install=false
 install_location=
@@ -12079,11 +12079,11 @@ install_location=
 type=HEADER
 
 [pics/Makefile.am]
-files=pics/hi16-app-kdevelop.png,pics/hi32-app-kdevelop.png,pics/hi48-app-kdevelop.png,
+files=pics/cr16-app-kdevelop.png,pics/hi32-app-kdevelop.png,pics/hi48-app-kdevelop.png,
 sub_dirs=mini,toolbar,
 type=normal
 
-[pics/hi16-app-kdevelop.png]
+[pics/cr16-app-kdevelop.png]
 dist=true
 install=false
 install_location=
@@ -12263,197 +12263,197 @@ install_location=
 type=DATA
 
 [pics/toolbar/Makefile.am]
-files=pics/toolbar/hi16-action-brace.png,pics/toolbar/hi16-action-classnew.png,pics/toolbar/hi16-action-dbgwatchvar.png,pics/toolbar/hi16-action-make_kdevelop.png,pics/toolbar/hi16-action-methodnew.png,pics/toolbar/hi16-action-newwidget.png,pics/toolbar/hi16-action-project_open.png,pics/toolbar/hi16-action-rebuild.png,pics/toolbar/hi16-action-reload_page.png,pics/toolbar/hi16-action-variablenew.png,pics/toolbar/hi22-action-classwiz.png,pics/toolbar/hi22-action-dbgmemview.png,pics/toolbar/hi22-action-dbgnext.png,pics/toolbar/hi22-action-dbgnextinst.png,pics/toolbar/hi22-action-dbgparam.png,pics/toolbar/hi22-action-dbgrestart.png,pics/toolbar/hi22-action-dbgrun.png,pics/toolbar/hi22-action-dbgrunto.png,pics/toolbar/hi22-action-dbgstep.png,pics/toolbar/hi22-action-dbgstepinst.png,pics/toolbar/hi22-action-dbgstepout.png,pics/toolbar/hi22-action-dbgvar.png,pics/toolbar/hi22-action-debugger.png,pics/toolbar/hi22-action-grep.png,pics/toolbar/hi22-action-make_kdevelop.png,pics/toolbar/hi22-action-newwidget.png,pics/toolbar/hi22-action-output_win.png,pics/toolbar/hi22-action-project_open.png,pics/toolbar/hi22-action-rebuild.png,pics/toolbar/hi22-action-reload_page.png,pics/toolbar/hi22-action-save_all.png,pics/toolbar/hi22-action-tree_win.png,pics/toolbar/hi32-mime-kdevelop_project.png,pics/toolbar/lo16-action-brace.png,
+files=pics/toolbar/cr16-action-brace.png,pics/toolbar/cr16-action-classnew.png,pics/toolbar/cr16-action-dbgwatchvar.png,pics/toolbar/cr16-action-make_kdevelop.png,pics/toolbar/cr16-action-methodnew.png,pics/toolbar/cr16-action-newwidget.png,pics/toolbar/cr16-action-project_open.png,pics/toolbar/cr16-action-rebuild.png,pics/toolbar/cr16-action-reload_page.png,pics/toolbar/cr16-action-variablenew.png,pics/toolbar/cr22-action-classwiz.png,pics/toolbar/cr22-action-dbgmemview.png,pics/toolbar/cr22-action-dbgnext.png,pics/toolbar/cr22-action-dbgnextinst.png,pics/toolbar/cr22-action-dbgparam.png,pics/toolbar/cr22-action-dbgrestart.png,pics/toolbar/cr22-action-dbgrun.png,pics/toolbar/cr22-action-dbgrunto.png,pics/toolbar/cr22-action-dbgstep.png,pics/toolbar/cr22-action-dbgstepinst.png,pics/toolbar/cr22-action-dbgstepout.png,pics/toolbar/cr22-action-dbgvar.png,pics/toolbar/cr22-action-debugger.png,pics/toolbar/cr22-action-grep.png,pics/toolbar/cr22-action-make_kdevelop.png,pics/toolbar/cr22-action-newwidget.png,pics/toolbar/cr22-action-output_win.png,pics/toolbar/cr22-action-project_open.png,pics/toolbar/cr22-action-rebuild.png,pics/toolbar/cr22-action-reload_page.png,pics/toolbar/cr22-action-save_all.png,pics/toolbar/cr22-action-tree_win.png,pics/toolbar/hi32-mime-kdevelop_project.png,pics/toolbar/lo16-action-brace.png,
 sub_dirs=
 type=normal
 
-[pics/toolbar/hi16-action-brace.png]
+[pics/toolbar/cr16-action-brace.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-classnew.png]
+[pics/toolbar/cr16-action-classnew.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-dbgwatchvar.png]
+[pics/toolbar/cr16-action-dbgwatchvar.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-make_kdevelop.png]
+[pics/toolbar/cr16-action-make_kdevelop.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-methodnew.png]
+[pics/toolbar/cr16-action-methodnew.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-newwidget.png]
+[pics/toolbar/cr16-action-newwidget.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-project_open.png]
+[pics/toolbar/cr16-action-project_open.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-rebuild.png]
+[pics/toolbar/cr16-action-rebuild.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-reload_page.png]
+[pics/toolbar/cr16-action-reload_page.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi16-action-variablenew.png]
+[pics/toolbar/cr16-action-variablenew.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-classwiz.png]
+[pics/toolbar/cr22-action-classwiz.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgmemview.png]
+[pics/toolbar/cr22-action-dbgmemview.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgnext.png]
+[pics/toolbar/cr22-action-dbgnext.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgnextinst.png]
+[pics/toolbar/cr22-action-dbgnextinst.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgparam.png]
+[pics/toolbar/cr22-action-dbgparam.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgrestart.png]
+[pics/toolbar/cr22-action-dbgrestart.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgrun.png]
+[pics/toolbar/cr22-action-dbgrun.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgrunto.png]
+[pics/toolbar/cr22-action-dbgrunto.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgstep.png]
+[pics/toolbar/cr22-action-dbgstep.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgstepinst.png]
+[pics/toolbar/cr22-action-dbgstepinst.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgstepout.png]
+[pics/toolbar/cr22-action-dbgstepout.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-dbgvar.png]
+[pics/toolbar/cr22-action-dbgvar.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-debugger.png]
+[pics/toolbar/cr22-action-debugger.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-grep.png]
+[pics/toolbar/cr22-action-grep.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-make_kdevelop.png]
+[pics/toolbar/cr22-action-make_kdevelop.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-newwidget.png]
+[pics/toolbar/cr22-action-newwidget.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-output_win.png]
+[pics/toolbar/cr22-action-output_win.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-project_open.png]
+[pics/toolbar/cr22-action-project_open.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-rebuild.png]
+[pics/toolbar/cr22-action-rebuild.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-reload_page.png]
+[pics/toolbar/cr22-action-reload_page.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-save_all.png]
+[pics/toolbar/cr22-action-save_all.png]
 dist=true
 install=false
 install_location=
 type=DATA
 
-[pics/toolbar/hi22-action-tree_win.png]
+[pics/toolbar/cr22-action-tree_win.png]
 dist=true
 install=false
 install_location=

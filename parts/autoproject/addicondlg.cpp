@@ -30,7 +30,7 @@ const char *type_map[] = {
 
 
 const char *size_map[] = {
-    "hi16", "hi22", "hi32", "hi48", "hi64"
+    "cr16", "cr22", "cr32", "cr48", "cr64"
 };
 
 
