@@ -26,6 +26,9 @@
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
 #include "cclasstooldlg.h"
+#include "ccvaddfolderdlg.h"
+//#include "ccvadminfolderdlg.h"
+
 
 // Initialize static members
 QString CClassView::CLASSROOTNAME = "Classes";
@@ -90,8 +93,8 @@ void CClassView::initPopups()
   projectPopup.setTitle(i18n ("Project"));
   projectPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()));
   projectPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()));
-  id = projectPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
-  projectPopup.setItemEnabled(id, false );
+  projectPopup.insertSeparator();
+  projectPopup.insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()));
   projectPopup.insertSeparator();
   projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()));
 
@@ -108,8 +111,6 @@ void CClassView::initPopups()
   id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()));
   classPopup.setItemEnabled( id, false );
   id = classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
-  classPopup.setItemEnabled(id, false );
-  id = classPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
   classPopup.setItemEnabled(id, false );
 
   // Method popup
@@ -135,6 +136,13 @@ void CClassView::initPopups()
   id = slotPopup.insertItem( i18n( "Delete slot" ), this, SLOT(slotMethodDelete()));
   slotPopup.setItemEnabled( id, false );
 
+  // Folder popup
+  folderPopup.setTitle( i18n( "Folder" ) );
+  folderPopup.insertItem( i18n("Add Folder..."), this, SLOT( slotFolderNew()));
+  folderPopup.insertItem( i18n("Delete Folder..."), this, SLOT( slotFolderDelete()));
+  folderPopup.insertSeparator();
+  folderPopup.insertItem( i18n( "Move items to/from folder..." ), this, SLOT(slotMoveToFolder()));
+
 }
 
 /*********************************************************************
@@ -157,27 +165,21 @@ void CClassView::initPopups()
 void CClassView::refresh( CProject *proj )
 {
   QProgressDialog progressDlg(NULL, "progressDlg", true );
-  QStrList list;
   QStrList src;
   QStrList header;
   char *str;
-  QString projDir;
   int i;
 
   debug( "CClassView::refresh( proj )" );
+
+  project = proj;
 
   // Reset the classparser and the view.
   ((CClassTreeHandler *)treeH)->clear();
   cp.wipeout();
 
-  projDir = proj->getProjectDir();
-  
-  // Get the lists containing the files for the project.
-  proj->getAllFiles( list );
-  src = proj->getSources();
-  header = proj->getHeaders();
-
   // Parse headerfiles.
+  header = proj->getHeaders();
   progressDlg.setLabelText( i18n("Parsing headers...") );
   progressDlg.setTotalSteps( header.count() );
   progressDlg.setProgress( 0 );
@@ -192,6 +194,7 @@ void CClassView::refresh( CProject *proj )
   }
   
   // Parse sourcefiles.
+  src = proj->getSources();
   progressDlg.setLabelText( i18n("Parsing sources...") );
   progressDlg.setTotalSteps( src.count() );
   progressDlg.setProgress( 0 );
@@ -204,7 +207,7 @@ void CClassView::refresh( CProject *proj )
     i++;
     progressDlg.setProgress( i );
   }
-  
+
   refresh();
 }
 
@@ -219,47 +222,44 @@ void CClassView::refresh( CProject *proj )
  *-----------------------------------------------------------------*/
 void CClassView::refresh()
 {
-  QList<CParsedClass> *list;
-  CParsedClass *aPC;
   QString str;
-  QListViewItem *ci;
-  QListViewItem *classes; 
-  QListViewItem *globals;
+  QListViewItem *item;
+  QString treeStr;
 
-  // Insert root item
-  str = i18n( CLASSROOTNAME );
-  classes = treeH->addRoot( str, THFOLDER );
+  debug( "CClassView::refresh()" );
 
-  list = store->getSortedClasslist();
+  // Try to fetch a stored classview tree.
+  treeStr = project->getClassViewTree();
 
-  // Add all parsed classes to the view
-  for( aPC = list->first();
-       aPC != NULL;
-       aPC = list->next() )
-  {
-    ci = ((CClassTreeHandler *)treeH)->addClass( aPC, classes );
-
-    ((CClassTreeHandler *)treeH)->updateClass( aPC, ci );
-    treeH->setLastItem( ci );
-  }
+  // If there doesn't exists a stored tree we build one.
+  if( treeStr.isEmpty() )
+    buildInitalClassTree();
+  else // Build the tree using the stored string.
+    buildTree( treeStr );
 
   // Add the globals folder.
   str = i18n( GLOBALROOTNAME );
-  globals = treeH->addRoot( str, THFOLDER );
+  globalsItem = treeH->addRoot( str, THFOLDER );
 
   // Add all global items.
-  ((CClassTreeHandler *)treeH)->addGlobalStructs( store->getSortedGlobalStructList(), globals );
-  ((CClassTreeHandler *)treeH)->addGlobalFunctions( store->getGlobalFunctions(), globals );
-  ((CClassTreeHandler *)treeH)->addGlobalVariables( store->getSortedGlobalVarList(), globals );
+  item = treeH->addItem( i18n( "Structures" ), THFOLDER, globalsItem );
+  ((CClassTreeHandler *)treeH)->addGlobalStructs( store->getSortedGlobalStructList(), item );
+  treeH->setLastItem( item );
+  item = treeH->addItem( i18n( "Functions" ), THFOLDER, globalsItem );
+  ((CClassTreeHandler *)treeH)->addGlobalFunctions( store->getGlobalFunctions(), item );
+  treeH->setLastItem( item );
+  item = treeH->addItem( i18n( "Variables" ), THFOLDER, globalsItem );
+  ((CClassTreeHandler *)treeH)->addGlobalVariables( store->getSortedGlobalVarList(), item );
+  treeH->setLastItem( item );
 
   // Open the classes and globals folder.
-  setOpen( classes, true );
-  setOpen( globals, true );
+  setOpen( classesItem, true );
+  setOpen( globalsItem, true );
 }
 
 /*---------------------------------- CClassView::refreshClassByName()
  * refreshClassByName()
- *   Reparse and redraw a classes by using its' name.
+ *   Reparse and redraw a class by using its' name.
  *
  * Parameters:
  *   aName          The classname
@@ -269,6 +269,20 @@ void CClassView::refresh()
  *-----------------------------------------------------------------*/
 void CClassView::refreshClassByName( const char *aName )
 {
+  QListViewItem *classItem;
+  CParsedClass *aClass;
+
+  classItem = firstChild();
+  while( classItem != NULL && strcmp( classItem->text(0), aName ) != 0 )
+    classItem = classItem->nextSibling();
+
+  // If the item was found we reparse and update.
+  if( classItem )
+  {
+    // cp->reparseClass( aName );
+    aClass = store->getClassByName( aName );
+    ((CClassTreeHandler *)treeH)->updateClass( aClass , classItem );
+  }
 }
 
 /*********************************************************************
@@ -316,6 +330,8 @@ KPopupMenu *CClassView::getCurrentPopup()
     case THFOLDER:
       if( strcmp( currentItem()->text(0), i18n( CLASSROOTNAME ) ) == 0 )
         popup = &projectPopup;
+      else
+        popup = &folderPopup;
       break;
     case THCLASS:
       popup = &classPopup;
@@ -342,6 +358,206 @@ KPopupMenu *CClassView::getCurrentPopup()
   }
 
   return popup;
+}
+
+int CClassView::getTreeStrItem( const char *str, int pos, char *buf )
+{
+  int idx = 0;
+
+  // Skip first '.
+  pos++;
+  while( str[pos] != '\'' )
+  {
+    buf[idx]=str[pos];
+    idx++;
+    pos++;
+  }
+
+  // Add a null termination.
+  buf[ idx ] = '\0';
+
+  // Skip to next ' or to ')'.
+  pos++;
+  
+  return pos;
+}
+
+void CClassView::buildTree( const char *str )
+{
+  uint pos=0;
+  QListViewItem *root=NULL;
+  QListViewItem *parent=NULL;
+  QListViewItem *ci;
+  CParsedClass *aPC;
+  char buf[50];
+
+  debug( "CClassView::buildtree( treeStr )" );
+
+  while( pos < strlen( str ) )
+  {
+    if( str[ pos ] == '(' )
+    {
+      pos++;
+      pos = getTreeStrItem( str, pos, buf );
+
+      if( parent == NULL )
+      {
+        parent = ((CClassTreeHandler *)treeH)->addRoot( buf, THFOLDER );
+        root = parent;
+      }
+      else
+        parent = ((CClassTreeHandler *)treeH)->addItem( buf, THFOLDER, parent );
+    }
+
+    while( str[ pos ] == '\'' )
+    {
+      pos = getTreeStrItem( str, pos, buf );
+      aPC = store->getClassByName( buf );
+      if( aPC )
+      {
+        ci = ((CClassTreeHandler *)treeH)->addClass( aPC, parent );
+        ((CClassTreeHandler *)treeH)->updateClass( aPC, ci );
+        treeH->setLastItem( ci );
+      }
+      else
+        ((CClassTreeHandler *)treeH)->addItem( buf, THCLASS, parent );
+    }
+
+    if( str[ pos ] == ')' )
+    {
+      pos++;
+      parent = parent->parent();
+
+      if( parent != NULL && parent != root )
+        treeH->setLastItem( parent );
+    }
+  }
+}
+
+void CClassView::buildTreeStr( QListViewItem *item, QString &str )
+{
+  THType type;
+
+  if( item != NULL )
+  {
+    while( item != NULL )
+    {
+      type = treeH->itemType( item );
+      if( item != NULL && type == THFOLDER )
+      {
+        str += "('";
+        str += item->text( 0 );
+        str += "'";
+        
+        buildTreeStr( item->firstChild(), str );
+        str += ")";
+      }
+      else if( type == THCLASS )
+      {
+        str += "'";
+        str += item->text( 0 );
+        str += "'";
+      }
+
+      // Ignore globals folder.
+      if( item->parent() == NULL )
+        item = NULL;
+      else
+        item = item->nextSibling();
+    }
+  }
+}
+
+/*-------------------------------------------- CClassView::asTreeStr()
+ * asTreeStr()
+ *   Return this view as a treestring.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QString        The tree as a string.
+ *-----------------------------------------------------------------*/
+const char *CClassView::asTreeStr()
+{
+  QString str="";
+
+  buildTreeStr( classesItem, str );
+
+  return str;
+}
+
+void CClassView::buildInitalClassTree()
+{
+  QString str;
+  CParsedClass *aPC;
+  QListViewItem *folder;
+  QList<CParsedClass> *list;
+  QList<CParsedClass> *iterlist;
+  QString projDir;
+  QDict< QList<CParsedClass> > dict;
+  QDictIterator< QList<CParsedClass> > dictI( dict );
+  QList<CParsedClass> rootList;
+
+  debug( "buildInitalClassTree" );
+
+  dict.setAutoDelete( true );
+
+  // Insert root item
+  str = i18n( CLASSROOTNAME );
+  classesItem = treeH->addRoot( str, THFOLDER );
+
+  list = store->getSortedClasslist();
+  projDir = project->getProjectDir();
+
+  // Add all parsed classes to the correct list;
+  for( aPC = list->first();
+       aPC != NULL;
+       aPC = list->next() )
+  {
+    // Try to determine if this is a subdirectory.
+    str = aPC->hFilename;
+    str = str.remove( 0, projDir.length() );
+    str = str.remove( 0, str.find( '/', 1 ) );
+    str = str.remove( str.findRev( '/' ), 10000 );
+
+    if( str.isEmpty() )
+      rootList.append( aPC );
+    else
+    {
+      // Remove heading /
+      str = str.remove( 0, 1 );
+
+      iterlist = dict.find( str );
+
+      if( iterlist == NULL )
+      {
+        iterlist = new QList<CParsedClass>();
+        dict.insert( str, iterlist );
+      }
+
+      iterlist->append( aPC );
+    }
+  }
+
+  delete list;
+
+  // Add all classes with a folder.
+  for( dictI.toFirst();
+       dictI.current();
+       ++dictI )
+  {
+    // Add folder.
+    folder = treeH->addItem( dictI.currentKey(), THFOLDER, classesItem );
+    ((CClassTreeHandler *)treeH)->addClasses( dictI.current(), folder );
+    treeH->setLastItem( folder );
+  }
+
+  // Add all classes without a folder.
+  ((CClassTreeHandler *)treeH)->addClasses( &rootList, classesItem );
+
+  // Save the tree. FOR SOME REASON ONLY 1974 CHARACTERS ARE SAVED. :-(
+  //  str = asTreeStr();
+  //  project->setClassViewTree( str );
 }
 
 /*********************************************************************
@@ -418,8 +634,8 @@ void CClassView::slotAttributeNew()
 
 void CClassView::slotAttributeDelete()
 {
-  if( KMsgBox::yesNo( this, "Delete attribute", 
-                      "Are you sure you want to delete this attribute?",
+  if( KMsgBox::yesNo( this, i18n("Delete attribute"), 
+                      i18n("Are you sure you want to delete this attribute?"),
                       KMsgBox::QUESTION ) == 1 )
   {
     KMsgBox::message( this, "Not implemented",
@@ -433,6 +649,29 @@ void CClassView::slotAddSlotSignal()
 
 void CClassView::slotFolderNew() 
 {
+  CCVAddFolderDlg dlg;
+  QListViewItem *item;
+
+  if( dlg.exec() )
+  {
+    item = ((CClassTreeHandler *)treeH)->addItem( dlg.folderEdit.text(),
+                                                  THFOLDER,
+                                                  currentItem() );
+    setOpen( item, true );
+  }
+}
+
+void CClassView::slotFolderDelete() 
+{
+  QListViewItem *parent;
+
+  if( KMsgBox::yesNo( this, i18n("Delete folder"), 
+                      i18n("Are you sure you want to delete this folder?"),
+                      KMsgBox::QUESTION ) == 1 )
+  {
+    parent = currentItem()->parent();
+    parent->removeItem( currentItem() );
+  }
 }
 
 void CClassView::slotClassBaseClasses()
@@ -474,3 +713,23 @@ void CClassView::slotViewDeclaration()
   emit selectedViewDeclaration();
 }
 
+void CClassView::slotMoveToFolder()
+{
+//   CParsedClass *aClass;
+//   QList<CParsedClass> *list;
+//   CCVAdminFolderDlg dlg;
+
+//   list = store->getSortedClasslist();
+
+//   for( aClass = list->first();
+//        aClass != NULL;
+//        aClass = list->next() )
+//   {
+//     dlg.outsideLb.inSort( aClass->name );
+//   }
+
+//   if( dlg.exec() )
+//   {
+//     debug( "Moving items." );
+//   }
+}

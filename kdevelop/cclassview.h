@@ -25,6 +25,7 @@
 #include "ctreeview.h"
 #include "./classparser/ClassParser.h"
 #include "cclasstreehandler.h"
+#include "cstrtree.h"
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
@@ -75,12 +76,13 @@ protected: // Protected signals and slots
     void slotAttributeDelete();
     void slotAddSlotSignal();
     void slotFolderNew();
+    void slotFolderDelete();
     void slotClassBaseClasses();
     void slotClassDerivedClasses();
     void slotClassTool();
     void slotViewDefinition();
     void slotViewDeclaration();
-
+    void slotMoveToFolder();
   signals:
     void selectedFileNew();
     void selectedClassNew();
@@ -115,16 +117,37 @@ private: // Popupmenus
   /** Popupmenu for slots. */
   KPopupMenu slotPopup;
 
+  /** Popupmenu for folders. */
+  KPopupMenu folderPopup;
+
 private: // Private attributes
 
   /** The classparser. */	
   CClassParser cp;
 
+  /** The class item. */
+  QListViewItem *classesItem;
+
+  /** The globals item. */
+  QListViewItem *globalsItem;
+
+  /** The project. */
+  CProject *project;
+
 private: // Private methods
+
+  int getTreeStrItem( const char *str, int pos, char *buf );
+  void buildTree( const char *treeStr );
+  void buildInitalClassTree();
+
+  /** Make a string of the tree. */
+  void buildTreeStr( QListViewItem *item, QString &str );
 
   /** Fetches the currently selected class from the store. */
   CParsedClass *getCurrentClass();
-  
+
+  /** Return this view as a treestring. */
+  const char *asTreeStr();
 };
 
 #endif
