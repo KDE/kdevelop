@@ -138,7 +138,7 @@ void GrepViewWidget::showDialog()
     grepdlg->show();
 }
 
-
+// @todo - put this somewhere common - or just use Qt if possible
 static QString escape(const QString &str)
 {
     QString escaped("[]{}()\\^$?.+-*");
@@ -234,6 +234,7 @@ void GrepViewWidget::childFinished(bool normal, int status)
         status = 0;
 
     insertItem(new ProcessListBoxItem(i18n("*** %n match found. ***", "*** %n matches found. ***", m_matchCount), ProcessListBoxItem::Diagnostic));
+    maybeScrollToBottom();
 
     ProcessWidget::childFinished(normal, status);
     m_part->core()->running(m_part, false);
@@ -269,14 +270,16 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
                     // filename will be displayed only once
                     // selecting filename will display line 1 of file,
                     // otherwise, line of requested search
-                    if (findItem(filename,BeginsWith|ExactMatch) == 0)
-							{
-							 insertItem(new GrepListBoxItem(filename, "1", str, true));
-							 insertItem(new GrepListBoxItem(filename, linenumber, str, false));
-
-							}
-						else insertItem(new GrepListBoxItem(filename, linenumber, str, false));
-
+                    if (findItem(filename,CaseSensitive|ExactMatch) == 0)
+                    {
+                        insertItem(new GrepListBoxItem(filename, "1", str, true));
+                        insertItem(new GrepListBoxItem(filename, linenumber, str, false));
+                    }
+                    else 
+                    {
+                        insertItem(new GrepListBoxItem(filename, linenumber, str, false));
+                    }
+                    maybeScrollToBottom();
                 }
             m_matchCount++;
         }
