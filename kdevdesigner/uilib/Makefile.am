@@ -1,4 +1,3 @@
-AM_CXXFLAGS=$(SHORTCXXFLAGS)
 KDE_CXXFLAGS=-UQT_NO_ASCII_CAST
 
 INCLUDES = -I$(top_srcdir)/kdevdesigner/shared $(all_includes)

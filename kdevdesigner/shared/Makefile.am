@@ -1,4 +1,3 @@
-AM_CXXFLAGS=$(SHORTCXXFLAGS)
 KDE_CXXFLAGS = -UQT_NO_ASCII_CAST
 INCLUDES = $(all_includes) -I$(top_srcdir)/lib/external_interfaces
 METASOURCES = AUTO

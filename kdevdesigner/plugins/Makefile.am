@@ -1,4 +1,3 @@
-AM_CXXFLAGS=$(SHORTCXXFLAGS)
 INCLUDES = -I$(top_srcdir)/interfaces $(all_includes)
 METASOURCES = AUTO
 kdevdesignerdir = $(kde_moduledir)/plugins/kdevdesigner
