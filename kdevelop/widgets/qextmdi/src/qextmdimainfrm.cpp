@@ -520,9 +520,84 @@ void QextMdiMainFrm::closeActiveView()
  */
 void QextMdiMainFrm::switchToToplevelMode()
 {
-   QListIterator<QextMdiChildView> it( *m_pWinList);
-   for( ; it.current(); ++it) {
-      QextMdiChildView* pView = it.current();
+   // since we set some windows to toplevel, we must consider the window manager's window frame
+   const int frameBorderWidth  = 7;  // TODO: Can we / do we need to ask the window manager?
+   const int windowTitleHeight = 10; // TODO:    -"-
+   setUndockPositioningOffset( QPoint( 0, m_pTaskBar->height() + frameBorderWidth));
+
+   // 1.) select the dockwidgets to be undocked and store their geometry
+   QObjectList* pObjList = queryList( "KDockWidget");
+   QObjectListIt it( *pObjList);
+   QObject* pObj;
+   QValueList<QRect> positionList;
+   QList<KDockWidget> rootDockWidgetList;
+   // for all dockwidgets (which are children of this mainwindow)
+   while ((pObj = it.current()) != 0L) {
+       ++it;
+       KDockWidget* pDockW = (KDockWidget*) pObj;
+       KDockWidget* pRootDockW = 0L;
+       KDockWidget* pUndockCandidate = 0L;
+       QWidget* pW = pDockW;
+       // find the oldest ancestor of the current dockwidget that can be undocked
+       while (!pW->isTopLevel()) {
+           if (pW->inherits("KDockWidget")) {
+               pUndockCandidate = (KDockWidget*) pW;
+               if (pUndockCandidate->enableDocking() != KDockWidget::DockNone)
+                   pRootDockW = pUndockCandidate;
+           }
+           pW = pW->parentWidget();
+       }
+       if (pRootDockW) {
+           // if that oldest ancestor is not already in the list, append it
+           bool found = FALSE;
+           QListIterator<KDockWidget> it2( rootDockWidgetList);
+           if (!rootDockWidgetList.isEmpty()) {
+               for ( ; it2.current() && !found; ++it2 ) {
+                   KDockWidget* pDockW = it2.current();
+                   if (pDockW == pRootDockW)
+                       found = TRUE;
+               }
+               if (!found) {
+                   rootDockWidgetList.append( pDockW);
+                   QPoint p = pDockW->mapToGlobal( pDockW->pos())-pDockW->pos();
+                   QRect r( p.x(),
+                            p.y()+m_undockPositioningOffset.y(),
+                            pDockW->width()  - windowTitleHeight - frameBorderWidth*2,
+                            pDockW->height() - windowTitleHeight - frameBorderWidth*2);
+                   positionList.append( r);
+               }
+           }
+           else {
+               rootDockWidgetList.append( pRootDockW);
+               QPoint p = pRootDockW->mapToGlobal( pRootDockW->pos())-pRootDockW->pos();
+               QRect r( p.x(),
+                        p.y()+m_undockPositioningOffset.y(),
+                        pRootDockW->width()  - windowTitleHeight - frameBorderWidth*2,
+                        pRootDockW->height() - windowTitleHeight - frameBorderWidth*2);
+               positionList.append( r);
+           }
+       }
+   }
+
+   // 2.) undock the MDI views of QextMDI
+   QextMdiIterator<QextMdiChildView*>* pItMdi = createIterator();
+   for (pItMdi->first(); !pItMdi->isDone(); pItMdi->next()) {
+       pItMdi->currentItem()->detach();
+   }
+   delete pItMdi;
+
+   // 3.) undock all these found oldest ancestors (being KDockWidgets)
+   QListIterator<KDockWidget> it3( rootDockWidgetList);
+   for (; it3.current(); ++it3 ) {
+       KDockWidget* pDockW = it3.current();
+       pDockW->undock();
+   }
+
+   // 4.) hide the MDI-view area
+   QApplication::sendPostedEvents();
+   QListIterator<QextMdiChildView> it4( *m_pWinList);
+   for( ; it4.current(); ++it4) {
+      QextMdiChildView* pView = it4.current();
       if( pView->isToolView())
          continue;
       if( pView->isAttached()) {
@@ -542,6 +617,15 @@ void QextMdiMainFrm::switchToToplevelMode()
          setFixedHeight( height() - m_pMdi->height() + 27);
       }
    }
+
+   // 5.) reset all memorized positions of the undocked ones and show them again
+   QValueList<QRect>::Iterator it5;
+   for (it3.toFirst(), it5 = positionList.begin() ; it3.current(), it5 != positionList.end(); ++it3, ++it5 ) {
+       KDockWidget* pDockW = it3.current();
+       pDockW->setGeometry( (*it5));
+       pDockW->show();
+   }
+
    m_bTopLevelMode = TRUE;
    qDebug("ToplevelMode on");
 }
