@@ -135,7 +135,7 @@ void SnippetWidget::slotEdit()
   //init the dialog
   m_dialog->snippetName->setText(pSnippet->getName());
   m_dialog->snippetText->setText(pSnippet->getText());
-  m_dialog->btnAdd->setText(i18n("Apply"));
+  m_dialog->btnAdd->setText(i18n("&Apply"));
 
   if (m_dialog->exec() == QDialog::Accepted) {
     //update the KListView and the SnippetItem
@@ -493,13 +493,13 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
   layout->addMultiCellLayout( layoutVar, 1, 1, 0, 1 );
 
   KPushButton * btn1 = new KPushButton( &dlg, "pushButton1" );
-  btn1->setText(i18n("Cancel"));
+  btn1->setText(i18n("&Cancel"));
   btn1->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0,
                          btn1->sizePolicy().hasHeightForWidth() ) );
   layoutBtn->addWidget( btn1, 0, 0 );
 
   KPushButton * btn2 = new KPushButton( &dlg, "pushButton2" );
-  btn2->setText(i18n("Apply"));
+  btn2->setText(i18n("&Apply"));
   btn2->setDefault( TRUE );
   btn2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0,
                          btn2->sizePolicy().hasHeightForWidth() ) );
@@ -572,7 +572,7 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
   QGridLayout * layout = new QGridLayout( &dlg, 1, 1, 11, 6, "layout");
   QGridLayout * layoutTop = new QGridLayout( 0, 1, 1, 0, 6, "layoutTop");
   QGridLayout * layoutVar = new QGridLayout( 0, 1, 1, 0, 6, "layoutVar");
-  QGridLayout * layoutBtn = new QGridLayout( 0, 1, 1, 0, 6, "layoutBtn");
+  QGridLayout * layoutBtn = new QGridLayout( 0, 2, 1, 0, 6, "layoutBtn");
 
   KTextEdit *te = NULL;
   QLabel * labTop = NULL;
@@ -580,18 +580,17 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
 
   labTop = new QLabel( &dlg, "label" );
   layoutTop->addWidget(labTop, 0, 0);
-  labTop->setText(i18n("Enter the replacement values for the variable:"));
+  labTop->setText((QString(i18n("Enter the replacement values for ")) + var + ":"));
   layout->addMultiCellLayout( layoutTop, 0, 0, 0, 1 );
 
 
   cb = new QCheckBox( &dlg, "cbVar" );
   cb->setChecked( FALSE );
-  cb->setText(var);
-  layoutVar->addWidget( cb, 0 ,0, Qt::AlignTop);
+  cb->setText("make value &default");
 
   te = new KTextEdit( &dlg, "teVar" );
   layoutVar->addWidget( te, 0, 1, Qt::AlignTop);
-
+  layoutVar->addWidget( cb, 1, 1, Qt::AlignTop);
   if ((*mapSave)[var].length() > 0) {
     cb->setChecked( TRUE );
     te->setText((*mapSave)[var]);
@@ -605,15 +604,16 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
   layout->addMultiCellLayout( layoutVar, 1, 1, 0, 1 );
 
   KPushButton * btn1 = new KPushButton( &dlg, "pushButton1" );
-  btn1->setText(i18n("Cancel"));
+  btn1->setText(i18n("&Cancel"));
   layoutBtn->addWidget( btn1, 0, 0 );
 
   KPushButton * btn2 = new KPushButton( &dlg, "pushButton2" );
-  btn2->setText(i18n("Apply"));
+  btn2->setText(i18n("&Apply"));
   btn2->setDefault( TRUE );
   layoutBtn->addWidget( btn2, 0, 1 );
 
   layout->addMultiCellLayout( layoutBtn, 2, 2, 0, 1 );
+  te->setFocus();
   // --END-- building a dynamic dialog
 
   //connect the buttons to the QDialog default slots
