@@ -989,19 +989,23 @@ void CppCodeCompletion::completeText( )
 	
 				if ( keyword == "virtual" )
 				{
-					ctx = new SimpleContext();
-					
-					showArguments = false;
-					m_completionMode = VirtualDeclCompletion;
-
-					QPtrList<BaseSpecifierAST> baseList = clazz->baseClause()->baseSpecifierList();
-					QPtrList<BaseSpecifierAST>::iterator it = baseList.begin();
-
-					for ( ; it != baseList.end(); ++it )
-						type.append( ( *it )->name()->text() );
-
-					kdDebug(9007) << "------> found virtual keyword for class specifier '" 
-							      << clazz->text() << "'" << endl;
+					BaseClauseAST *baseClause = clazz->baseClause();
+					if ( baseClause )
+					{
+						QPtrList<BaseSpecifierAST> baseList = baseClause->baseSpecifierList();
+						QPtrList<BaseSpecifierAST>::iterator it = baseList.begin();
+	
+						for ( ; it != baseList.end(); ++it )
+							type.append( ( *it )->name()->text() );
+						
+						ctx = new SimpleContext();
+						
+						showArguments = false;
+						m_completionMode = VirtualDeclCompletion;
+	
+						kdDebug(9007) << "------> found virtual keyword for class specifier '" 
+									<< clazz->text() << "'" << endl;
+					}
 				}
 				else if ( QString("virtual").find( keyword ) != -1 )
 					m_blockForKeyword = true;
