@@ -117,9 +117,6 @@ int main(int argc, char* argv[])
   }
 
     CKDevelop* kdevelop = new CKDevelop();
-    /* rokrau: i believe this has to be set by hand           *
-     * and i hope this doesnt screw things up badly,           *
-     * the guys on #kde wouldn't give me an answer, no really */
     a.setMainWidget(kdevelop);
 
    if (start_logo)

@@ -818,7 +818,7 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
 //-----------------------------------------------------------------------------
 // close a view
 //-----------------------------------------------------------------------------
-void DocViewMan::closeView(QWidget* pWnd)
+bool DocViewMan::closeView(QWidget* pWnd)
 {
   debug("DocViewMan::closeView !\n");
 
@@ -836,16 +836,19 @@ void DocViewMan::closeView(QWidget* pWnd)
 
   if (CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView)) {
     if (!pEditView)
-      return;
+      return true;
 
-    if (doFileSave() != KMessageBox::Cancel)
+    if (checkAndSaveFileOfCurrentEditView(true) != KMessageBox::Cancel)
       closeEditView(pEditView);
+    else
+      return false;
   }
   else if (KHTMLView* pHTMLView = dynamic_cast<KHTMLView*> (pView)) {
     if(pHTMLView) {
       closeBrowserView(pHTMLView);
     }
   }
+  return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -1055,30 +1058,32 @@ bool DocViewMan::noDocModified()
   return true;
 }
 
-
-int DocViewMan::doFileSave()
+bool DocViewMan::doFileClose()
 {
-  debug("DocViewMan::doFileSave !\n");
+  // we want to close a whole document,
+  // this means to save and close all views!
 
-  QString filename = docName(m_pCurEditDoc);
+  // get the current view (one of possibly many view of the document)
+  CEditWidget* pCurEditView = currentEditView();
+  if (!pCurEditView) return true;
+  QString filename = pCurEditView->getName();
 
-  // save the current file
-  int ret = saveFileFromTheCurrentEditWidget();
-  if (ret == KMessageBox::Cancel) return ret;
+  // close the current view of the document (this will ask the user in case of being modified)
+  bool bClosed = closeView(pCurEditView);
+  if (!bClosed) // action was cancelled
+    return false;
 
-  // setInfoModified(filename, currentEditView()->isModified());
-  QStrList lSavedFile;
-  lSavedFile.append(filename);
-#ifdef WITH_CPP_REPARSE
-  if (m_pParent->hasProject())
-#else
-    if (m_pParent->hasProject() && getKWriteDocType(m_pCurEditDoc) == CPP_HEADER)
-#endif
-      m_pParent->refreshClassViewByFileList(&lSavedFile);
-  return ret;
+  // if there was only one view of a document, the call of closeView() has closed the document as well.
+  // That's why for closing of possible other views we must check if the document is still alive
+  KWriteDoc* pDoc = findKWriteDoc(filename);
+  if (pDoc) {
+     // now close all other open views of this document
+     closeKWriteDoc( pDoc);
+  }
+  return true;
 }
 
-// closes all KWrite documents and their views 
+// closes all KWrite documents and their views
 // but not the document browser views
 void DocViewMan::doFileCloseAll()
 {
@@ -1244,7 +1249,7 @@ void DocViewMan::doCloseAllDocs()
   }
 }
 
-int DocViewMan::saveFileFromTheCurrentEditWidget()
+int DocViewMan::checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck)
 {
   debug("DocViewMan::saveFileFromTheCurrentEditWidget !\n");
 
@@ -1267,6 +1272,9 @@ int DocViewMan::saveFileFromTheCurrentEditWidget()
     bModifiedOutside = true;
   }
 
+  if (!bModifiedInside && !bModifiedOutside)
+     return KMessageBox::No;  // nothing to save
+
   int button=KMessageBox::Yes;
   if (bModifiedInside && bModifiedOutside) {
     button = KMessageBox::warningYesNoCancel(m_pParent
@@ -1275,18 +1283,13 @@ int DocViewMan::saveFileFromTheCurrentEditWidget()
              .arg(filename), i18n("File modified")
              ,i18n("&Overwrite"), i18n("&Reject"));
   }
-// (rokrau 05/14/01 late...)
-// Sorry, but this is complete nonsense!!!
-// If I have already decided to save the file,
-// then why would I need to be asked again?
-//
-//  else if (bModifiedInside) {
-//    button = KMessageBox::warningYesNoCancel(m_pParent
-//             ,i18n("The file %1 was modified.\n"
-//                  "Do you want to save your changes?")
-//             .arg(filename), i18n("File modified")
-//             ,i18n("&Yes"), i18n("&No"));
-//  }
+  else if (bDoModifiedInsideCheck && bModifiedInside) {
+    button = KMessageBox::warningYesNoCancel(m_pParent
+             ,i18n("The file %1 was modified.\n"
+                  "Do you want to save your changes?")
+             .arg(filename), i18n("File modified")
+             ,i18n("&Yes"), i18n("&No"));
+  }
 
   switch (button) {
   case KMessageBox::No:
@@ -1301,6 +1304,15 @@ int DocViewMan::saveFileFromTheCurrentEditWidget()
   QFileInfo file_info2(filename);
   pCurEditDoc->setLastFileModifDate(file_info2.lastModified());
 
+  // refresh class tree-view
+  QStrList lSavedFile;
+  lSavedFile.append(filename);
+#ifdef WITH_CPP_REPARSE
+  if (m_pParent->hasProject())
+#else
+    if (m_pParent->hasProject() && getKWriteDocType(m_pCurEditDoc) == CPP_HEADER)
+#endif
+       m_pParent->refreshClassViewByFileList(&lSavedFile);
   return KMessageBox::Yes;
 }
 

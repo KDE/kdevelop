@@ -167,60 +167,24 @@ void CKDevelop::slotFileOpen( int id_ )
 void CKDevelop::slotFileCloseAll()
 {
   debug("CKDevelop::slotFileCloseAll !\n");
-
+  if (bAutosave)
+    saveTimer->stop();
   slotStatusMsg(i18n("Closing all files..."));
   m_docViewManager->doFileCloseAll();
+  if (bAutosave)
+    saveTimer->start(saveTimeout);
   slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileClose()
 {
-  if (!m_docViewManager->currentEditView()) return;
-  debug("CKDevelop::slotFileClose !\n");
-  slotStatusMsg(i18n("Closing file..."));
-  QString filename = m_docViewManager->currentEditView()->getName();
-  int message_result;
-
-  debug("Test modified !\n");
-  if(m_docViewManager->currentEditView()->isModified())
-  {
-    // no autosave if the user intends to save a file
-    if (bAutosave)
-      saveTimer->stop();
-  
-    message_result = KMessageBox::warningYesNoCancel(this,
-                        i18n("The document was modified,save?"),
-                        i18n("Save?"));
-    // restart autosaving
-    if (bAutosave)
-      saveTimer->start(saveTimeout);
-
-    debug("KMessageBox::Yes !\n");
-    if (message_result == KMessageBox::Yes)
-    { // yes
-      if (isUntitled(filename))
-      {
-        if (!fileSaveAs())
-          message_result=KMessageBox::Cancel;    // simulate here cancel because fileSaveAs failed....
-      }
-      else
-      {
-        m_docViewManager->saveFileFromTheCurrentEditWidget();
-        if (m_docViewManager->currentEditView()->isModified())
-          message_result=KMessageBox::Cancel;       // simulate cancel because doSave went wrong!
-      }
-    }
-
-    debug("KMessageBox::Cancel !\n");
-    if (message_result == KMessageBox::Cancel) // cancel
-    {
-      slotStatusMsg(i18n("Ready."));
-      return;
-    }
-  }
-
-  debug("Removing file from edit list !\n");
-  setMainCaption();
+  // no autosave if the user intends to save a file
+  if (bAutosave)
+    saveTimer->stop();
+  m_docViewManager->doFileClose();
+  // restart autosaving
+  if (bAutosave)
+    saveTimer->start(saveTimeout);
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -234,7 +198,7 @@ void CKDevelop::slotFileSave()
   if (isUntitled(filename)) {
     slotFileSaveAs();
   } else {
-    m_docViewManager->doFileSave();
+    m_docViewManager->checkAndSaveFileOfCurrentEditView(false);
   }
 
   slotStatusMsg(i18n("Ready."));

@@ -89,13 +89,12 @@ public:
   void reloadModifiedFiles();
 
   /** */
-  int saveFileFromTheCurrentEditWidget();
+  int checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck = true);
 
   /** */
-  int doFileSave();
+  bool doFileClose();
   /** */
   void doFileCloseAll();
-
   /** */
   bool doProjectClose();
   /** */
@@ -216,7 +215,7 @@ public:
   CEditWidget* getFirstEditView(KWriteDoc* pDoc) const;
 
   /** Close a view, automatically disconnects document. */
-  void closeView(QWidget* pView);
+  bool closeView(QWidget* pView);
 
   /** */
   void closeEditView(CEditWidget* pView);
