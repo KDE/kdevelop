@@ -61,3 +61,9 @@ KURL URLUtil::mergeURL(const KURL & source, const KURL & dest, const KURL & chil
   return KURL(sourceStemStr.append( childUrlStr.mid( destStemStr.length() ) ) );
 
 }
+
+QString URLUtil::getExtension(const QString & path) {
+  int dotPos = path.findRev('.');
+  if (dotPos<0) return QString("");
+  return path.mid(dotPos+1);
+}

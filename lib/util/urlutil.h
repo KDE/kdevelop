@@ -50,6 +50,10 @@ public:
    *   returns /home/me/dir1/fil1
    */
   static KURL mergeURL(const KURL & source, const KURL & dest, const KURL & child);
+  /**
+   * Returns the file extension for a filename or path
+   */
+  static QString getExtension(const QString & path);
 };
 
 #endif
