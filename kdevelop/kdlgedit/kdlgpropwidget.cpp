@@ -18,6 +18,7 @@
 
 #include "kdlgpropwidget.h"
 #include "kdlgproplvis.h"
+#include <kcolorbtn.h>
 
 AdvListView::AdvListView( QWidget * parent , const char * name )
   : QListView( parent, name )
@@ -106,7 +107,7 @@ void AdvListViewItem::init()
 /**
  *
 */
-void AdvListViewItem::setColumnWidget( int col, AdvLvi_Widget *wp, bool activated )
+void AdvListViewItem::setColumnWidget( int col, AdvLvi_Base *wp, bool activated )
 {
   if ( (col < 0) || (col > MAX_WIDGETCOLS_PER_LINE) )
     return;
@@ -392,7 +393,7 @@ void KDlgPropWidget::resizeEvent ( QResizeEvent *e )
 
 
 
-AdvLvi_Widget::AdvLvi_Widget(QWidget *parent, const char *name)
+AdvLvi_Base::AdvLvi_Base(QWidget *parent, const char *name)
   : QWidget( parent, name )
 {
   setBackgroundColor( colorGroup().base() );
@@ -400,7 +401,7 @@ AdvLvi_Widget::AdvLvi_Widget(QWidget *parent, const char *name)
   setEnabled(false);
 }
 
-void AdvLvi_Widget::paintEvent ( QPaintEvent * e )
+void AdvLvi_Base::paintEvent ( QPaintEvent * e )
 {
   setBackgroundColor( colorGroup().base() );
   QWidget::paintEvent( e );
@@ -409,17 +410,17 @@ void AdvLvi_Widget::paintEvent ( QPaintEvent * e )
 
 
 AdvLvi_ExtEdit::AdvLvi_ExtEdit(QWidget *parent, const char *name )
-  : AdvLvi_Widget( parent, name )
+  : AdvLvi_Base( parent, name )
 {
   btnMore = new QPushButton("...",this);
   leInput = new QLineEdit( this );
-  connect( leInput, SIGNAL( textChanged ( const char * ) ), SLOT( updateParentLvi() ) );
+//  connect( leInput, SIGNAL( textChanged ( const char * ) ), SLOT( updateParentLvi() ) );
 }
 
 
 void AdvLvi_ExtEdit::resizeEvent ( QResizeEvent *e )
 {
-  AdvLvi_Widget::resizeEvent( e );
+  AdvLvi_Base::resizeEvent( e );
   if (btnMore)
     btnMore->setGeometry(width()-15,0,15,height());
 
@@ -446,7 +447,7 @@ void AdvLvi_Filename::btnPressed()
 
 
 AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, const char *name)
-  : AdvLvi_Widget( parent, name )
+  : AdvLvi_Base( parent, name )
 {
   cbBool = new QComboBox( FALSE, this );
   cbBool->insertItem("TRUE");
@@ -455,7 +456,7 @@ AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, const char *name)
 
 void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
 {
-  AdvLvi_Widget::resizeEvent( e );
+  AdvLvi_Base::resizeEvent( e );
 
   if (cbBool)
     cbBool->setGeometry(0,0,width(),height()+1);
@@ -464,11 +465,30 @@ void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
 
 
 AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, const char *name)
-  : AdvLvi_ExtEdit( parent, name )
+  : AdvLvi_Base( parent, name )
 {
-  connect( btnMore, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
+  btn = new KColorButton(this);
+
+//  connect( btn, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
 }
 
+void AdvLvi_ColorEdit::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+
+  if (btn)
+    btn->setGeometry(0,0,width(),height()+1);
+}
+
+QString AdvLvi_ColorEdit::getText()
+{
+  if (!btn) return QString();
+  char s[255];
+  sprintf(s,"0x%.2x%.2x%.2x",btn->color().red(),btn->color().green(),btn->color().blue());
+  return QString(s);
+}
+
+/*
 QString AdvLvi_intToHex(int i)
 {
   char s[10];
@@ -488,5 +508,5 @@ void AdvLvi_ColorEdit::btnPressed()
       QString st = "0x"+AdvLvi_intToHex(myColor.red())+AdvLvi_intToHex(myColor.green())+AdvLvi_intToHex(myColor.blue());
       leInput->setText(st);
     }
-}
+}     */
 

@@ -20,6 +20,8 @@
 #include <ktreelist.h>
 #include <kiconloader.h>
 #include <kapp.h>
+#include "kdlgproplvis.h"
+#include "../ckdevelop.h"
 
 KDlgItems::KDlgItems(QWidget *parent, const char *name ) : QWidget(parent,name)
 {
@@ -68,6 +70,8 @@ KDlgItems::KDlgItems(QWidget *parent, const char *name ) : QWidget(parent,name)
   treelist->setExpandLevel(2);
   treelist->setUpdatesEnabled( TRUE );
   treelist->repaint();
+
+//  ((CKDevelop*)parent)->kdlg_get_items_view()->addWidgetChilds(
 }
 
 KDlgItems::~KDlgItems()
@@ -80,3 +84,18 @@ void KDlgItems::resizeEvent ( QResizeEvent *e )
 
   treelist->setGeometry( 0,0, width(), height() );
 }
+
+void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd)
+{
+  if ((!wd) || (!wd->getChildDb()))
+    return;
+
+  KDlgItem_Widget *w = (KDlgItem_Widget*)wd->getChildDb()->getFirst();
+//  do {
+//    if ((w) && (w->getProps()))
+//      if (w->getProps());// w->getProps()->getProp("Name");
+//      printf("****** %s\n",(const char*)w->getProps()->getProp("Name"));
+//    w = (KDlgItem_Widget*)wd->getChildDb()->getNext();
+//  } while (w);
+}
+

@@ -124,6 +124,13 @@ public:
     */
   void setToolMenuProcess(bool enable);
 
+  KDlgEditWidget* kdlg_get_edit_widget() { return kdlg_edit_widget; }
+  KDlgPropWidget* kdlg_get_prop_widget() { return kdlg_prop_widget; }
+  KDlgWidgets* kdlg_get_widgets_view() { return kdlg_widgets_view; }
+  KDlgDialogs* kdlg_get_dialogs_view() { return kdlg_dialogs_view; }
+  KDlgItems*   kdlg_get_items_view() { return kdlg_items_view; }
+
+
  public slots:
 
  ////////////////////////

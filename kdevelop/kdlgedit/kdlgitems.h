@@ -22,6 +22,7 @@
 #include <qwidget.h>
 
 class KTreeList;
+class KDlgItem_Widget;
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>
@@ -34,6 +35,8 @@ class KDlgItems : public QWidget  {
     ~KDlgItems();
 
     KTreeList *getTreeList() { return treelist; }
+
+    void addWidgetChilds(KDlgItem_Widget *wd);
   protected:
     virtual void resizeEvent ( QResizeEvent * );
 

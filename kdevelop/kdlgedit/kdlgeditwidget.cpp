@@ -17,20 +17,36 @@
 
 
 #include "kdlgeditwidget.h"
+#include "kdlgproplvis.h"
+#include "../ckdevelop.h"
 #include <qmessagebox.h>
 #include <kapp.h>
 #include <qpushbutton.h>
 
-KDlgEditWidget::KDlgEditWidget(QWidget *parent, const char *name )
+KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
    : QWidget(parent,name)
 {
+  pCKDevel = parCKD;
+
   QPushButton *btn = new QPushButton("add", this);
-  btn->setGeometry(200,200,100,50);
+  btn->setGeometry(400,350,100,50);
   connect (btn, SIGNAL(clicked()), this, SLOT(choiseAndAddItem()));
 
   dbase = new KDlgItemDatabase();
 
   setBackgroundMode(PaletteLight);
+
+  main_widget = new KDlgItem_Widget( this );
+
+  main_widget->getProps()->setProp_Value("X","0");
+  main_widget->getProps()->setProp_Value("Y","0");
+  main_widget->getProps()->setProp_Value("Width","400");
+  main_widget->getProps()->setProp_Value("Height","300");
+//  main_widget->addChild( new KDlgItem_PushButton ( wid->getItem() ) );
+  main_widget->repaintItem();
+
+  if ((parCKD) && ((CKDevelop*)parCKD)->kdlg_get_items_view())
+    ((CKDevelop*)parCKD)->kdlg_get_items_view()->addWidgetChilds(main_widget);
 }
 
 KDlgEditWidget::~KDlgEditWidget()
@@ -44,8 +60,17 @@ void KDlgEditWidget::choiseAndAddItem()
 
 bool KDlgEditWidget::addItem(int type)
 {
-  if (!dbase->addItem( new KDlgItem_PushButton( this ) ))
-    return false;
+
+  KDlgItem_Widget *wid2 = new KDlgItem_Widget( this );
+
+  wid2->getProps()->setProp_Value("X","200");
+  wid2->getProps()->setProp_Value("Y","100");
+  wid2->getProps()->setProp_Value("Width","200");
+  wid2->getProps()->setProp_Value("Height","200");
+  wid2->addChild( new KDlgItem_PushButton ( wid2->getItem() ) );
+  wid2->repaintItem();
+
+//  wid->addChild( wid2 );
 
   return true;
 }
@@ -120,10 +145,82 @@ KDlgItem_Base *KDlgItemDatabase::getNext()
 
 KDlgPropertyBase::KDlgPropertyBase(bool fillWithStdEntrys)
 {
+  for (int i = 0; i<=MAX_ENTRYS_PER_WIDGET; i++)
+    setProp(i,"","","",0);
+
   if (fillWithStdEntrys)
     fillWithStandardEntrys();
-
 }
+
+int KDlgPropertyBase::getIntFromProp(int nr, int defaultval)
+{
+  if ((nr 	> getNumEntrys()) || (nr < 0))
+    return 0;
+
+  QString val = getProp(nr)->value.stripWhiteSpace();
+
+  if (val.length() == 0)
+    return defaultval;
+
+
+  bool ok = true;
+  int dest = getProp(nr)->value.toInt(&ok);
+
+  return ok ? dest : defaultval;
+}
+
+KDlgPropertyEntry* KDlgPropertyBase::getProp(QString name)
+{
+exit(0);
+  for (int i=0; i<=getNumEntrys(); i++)
+    {
+      if (getProp(i)->name.upper() == name.upper())
+        return getProp(i);
+    }
+
+  return 0;
+}
+
+int KDlgPropertyBase::getIntFromProp(QString name, int defaultval)
+{
+  for (int i=0; i<=getNumEntrys(); i++)
+    {
+      if (getProp(i)->name.upper() == name.upper())
+        return getIntFromProp(i,defaultval);
+    }
+
+  return defaultval;
+}
+
+void KDlgPropertyBase::setProp_Name   (QString n, QString name)
+{
+  for (int i=0; i<=getNumEntrys(); i++)
+    if (getProp(i)->name.upper() == n.upper())
+      setProp_Name(i,name);
+}
+
+void KDlgPropertyBase::setProp_Value  (QString n, QString value)
+{
+  for (int i=0; i<=getNumEntrys(); i++)
+    if (getProp(i)->name.upper() == n.upper())
+      setProp_Value(i,value);
+}
+
+void KDlgPropertyBase::setProp_Group  (QString n, QString group)
+{
+  for (int i=0; i<=getNumEntrys(); i++)
+    if (getProp(i)->name.upper() == n.upper())
+      setProp_Group(i,group);
+}
+
+void KDlgPropertyBase::setProp_Allowed(QString n, int allowed)
+{
+  for (int i=0; i<=getNumEntrys(); i++)
+    if (getProp(i)->name.upper() == n.upper())
+      setProp_Allowed(i,allowed);
+}
+
+
 
 void KDlgPropertyBase::fillWithStandardEntrys()
 {
@@ -142,7 +239,7 @@ void KDlgPropertyBase::fillWithStandardEntrys()
   addProp("X",                  "10",           "Geometry",       ALLOWED_INT);
   addProp("Y",                  "10",           "Geometry",       ALLOWED_INT);
   addProp("Width",              "100",          "Geometry",       ALLOWED_INT);
-  addProp("Height",             "50",           "Geometry",       ALLOWED_INT);
+  addProp("Height",             "30",           "Geometry",       ALLOWED_INT);
   addProp("MinimumWidth",       "0",            "Geometry",       ALLOWED_INT);
   addProp("MinimumHeight",      "0",            "Geometry",       ALLOWED_INT);
   addProp("MaximumWidth",       "",             "Geometry",       ALLOWED_INT);
@@ -165,21 +262,62 @@ KDlgItem_Base::KDlgItem_Base( QWidget *parent , const char* name )
   : QObject(parent,name)
 {
   item = new QWidget(parent);
-  item->setGeometry(10,10,100,50);
+//  item->setGeometry(10,10,100,50);
   item->setBackgroundMode(QWidget::PaletteDark);
+
+  props = new KDlgPropertyBase();
+  repaintItem();
 }
 
-void KDlgItem_Base::repaintItem()
+void KDlgItem_Base::repaintItem(QWidget *it)
 {
+  QWidget *itm = it ? it : item;
+
+  if ((!itm) || (!props))
+    return;
+
+  itm->setGeometry(props->getIntFromProp("X",itm->x()),
+                   props->getIntFromProp("Y",itm->y()),
+                   props->getIntFromProp("Width",itm->width()),
+                   props->getIntFromProp("Height",itm->height()));
 }
 
+KDlgItem_Widget::KDlgItem_Widget( QWidget *parent , const char* name )
+   : KDlgItem_Base(parent,name)
+{
+  childs = new KDlgItemDatabase();
+  item = new QWidget(parent);
+  item->show();
+  props = new KDlgPropertyBase();
+  repaintItem();
+}
+
+void KDlgItem_Widget::repaintItem(QWidget *it)
+{
+  QWidget *itm = it ? it : item;
+
+  if ((!itm) || (!props))
+    return;
+
+  KDlgItem_Base::repaintItem(itm);
+}
 
 
 KDlgItem_PushButton::KDlgItem_PushButton( QWidget *parent , const char* name )
   : KDlgItem_Base(0,name)
 {
-  item = new QPushButton("Test",parent);
-  item->setGeometry(10,10,100,50);
-  item->show;
+  item = new QPushButton("Button",parent);
+//  item->setGeometry(10,10,100,50);
+  item->show();
+  repaintItem();
 }
 
+void KDlgItem_PushButton::repaintItem(QPushButton *it)
+{
+  QWidget *itm = it ? it : item;
+
+  if ((!itm) || (!props))
+    return;
+
+  KDlgItem_Base::repaintItem(itm);
+}

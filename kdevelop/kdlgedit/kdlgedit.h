@@ -2,8 +2,8 @@
                           kdlgedit.h  -  description                              
                              -------------------                                         
     begin                : Thu Mar 18 1999                                           
-    copyright            : (C) 1999 by                          
-    email                :                                      
+    copyright            : (C) 1999 by Pascal Krahmer
+    email                : pascal@beast.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -22,7 +22,7 @@
 #include <qobject.h>
 
 /**
-  *@author 
+  *@author Pascal Krahmer <pascal@beast.de>
   */
 
 class KDlgEdit : public QObject  {

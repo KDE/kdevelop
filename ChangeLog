@@ -1,3 +1,8 @@
+1999-03-24  Pascal Krahmer  <pascal@breast.de>
+        * added some kdlg_* methods to ckdevelop in order to make it possible to get the pointers to the KDlg* widgets
+        * first steps to a widget structure in kdlgedit...
+        * there is still a chaos in the code !!!
+
 1999-03-24  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
 	* fixed a update bug in all slotOptionsEditor...() methods, 
