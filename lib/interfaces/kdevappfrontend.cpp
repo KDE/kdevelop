@@ -2,7 +2,7 @@
 
 
 KDevAppFrontend::KDevAppFrontend(QObject *parent, const char *name)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "KDevAppFrontend")
 {
 }
 

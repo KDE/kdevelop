@@ -16,7 +16,7 @@ static QMap<QString,KDevGlobalVersionControl*> vcs_map;
 
 
 KDevGlobalVersionControl::KDevGlobalVersionControl(QObject *parent, const char *name, QString id)
-        : KDevPlugin(parent, name), m_id(id) {
+        : KDevPlugin(parent, name ? name : "KDevGlobalVersionControl"), m_id(id) {
     vcs_map.insert(m_id,this);
 }
 

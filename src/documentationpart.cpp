@@ -5,7 +5,7 @@
 
 
 DocumentationPart::DocumentationPart()
-  : KHTMLPart()
+  : KHTMLPart(0L, 0L, 0L, "DocumentationPart")
 {
   connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KURL &,const KParts::URLArgs &)),
           this, SLOT(openURLRequest(const KURL &)) );

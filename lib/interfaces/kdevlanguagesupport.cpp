@@ -2,7 +2,7 @@
 
 
 KDevLanguageSupport::KDevLanguageSupport(QObject *parent, const char *name)
-    : KDevPlugin(parent, name)
+    : KDevPlugin(parent, name ? name : "KDevLanguageSupport")
 {
 }
 
