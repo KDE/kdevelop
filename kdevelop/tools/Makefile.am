@@ -6,9 +6,9 @@ EXTRA_DIST = kdevdlg2ui kimport one2two processesend.pl processes.pl.in
 ####### kdevelop will overwrite this part!!! (end)############
 
 
-tools_DATA =  processesend.pl processes.pl
+tools_DATA =  processesend.pl processes.pl kimport
 
-bin_SCRIPTS = kimport kdevdlg2ui one2two
+bin_SCRIPTS = kdevdlg2ui one2two
 
 toolsdir = $(kde_datadir)/kdevelop/tools
 

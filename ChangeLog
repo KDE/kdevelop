@@ -1,4 +1,10 @@
 2001-02-24  jbb <jbb@kdevelop.org>
+    * Fixed: kimport was run directly requiring perl to be in
+      /usr/bin. This was incorrect. When this failed it revealed
+      a crash in the classparser which should not be called if
+      reading the project files failed.
+
+2001-02-24  jbb <jbb@kdevelop.org>
     * Remove restriction on version numbers
 
 2001-02-24  jbb <jbb@kdevelop.org>

@@ -605,41 +605,42 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 {
 //  kdDebug() << "Here " << prjname;
 
-	QString old_project = "";
+  QString old_project = "";
 
-	prjname.replace(QRegExp("file:"),"");
-	QFileInfo info(prjname);
+  prjname.replace(QRegExp("file:"),"");
+  QFileInfo info(prjname);
 
-	if (info.isFile())		//if the new project file is not valid, do nothing
-	{
-		project_menu->setEnabled(false);
+  if (info.isFile())		//if the new project file is not valid, do nothing
+  {
+    project_menu->setEnabled(false);
     disableCommand(ID_PROJECT_OPEN);
     accel->setEnabled(false);
-		if(project)
-		{
-			old_project = prj->getProjectFile();
-			if(!slotProjectClose())		//the user may have pressed cancel in which case the state is undetermined
-			{
-				readProjectFile(old_project);
-				slotViewRefresh();
-				return;
-			}
-  		}
+    if(project)
+    {
+      old_project = prj->getProjectFile();
+      if(!slotProjectClose())		//the user may have pressed cancel in which case the state is undetermined
+      {
+        if (readProjectFile(old_project))
+          slotViewRefresh();
+        return;
+      }
+    }
   
-    	if(!(readProjectFile(prjname)))		//the readProjectFile is now garanteed not to modify the state if it fails
-		{
+    if(!(readProjectFile(prjname)))   //the readProjectFile is now garanteed not to modify the state if it fails
+    {
+        KMessageBox::error(0,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"),
+                                prjname);
+//      readProjectFile(old_project);		//not needed anymore
+        return;
+    }
+    else
+      slotViewRefresh();
 
-		    KMessageBox::error(0,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"),
-		                            prjname);
-//		    readProjectFile(old_project);		//not needed anymore
-    	}
-		else
-			slotViewRefresh();
-		slotStatusMsg(i18n("Ready."));
-		project_menu->setEnabled(true);
-	  enableCommand(ID_PROJECT_OPEN);
+    slotStatusMsg(i18n("Ready."));
+    project_menu->setEnabled(true);
+    enableCommand(ID_PROJECT_OPEN);
     accel->setEnabled(true);
-	}	
+  }
 }
 
 void CKDevelop::slotProjectNewAppl(){
@@ -682,13 +683,15 @@ void CKDevelop::slotProjectNewAppl(){
     	old_project = prj->getProjectFile();
     	if(!slotProjectClose())				//the user may have pressed cancel in which case the state is undetermined
       {
-        readProjectFile(old_project);
-        slotViewRefresh();
+        if (readProjectFile(old_project))
+          slotViewRefresh();
         return;
       }
     }
 
-    readProjectFile(file);
+    if (!readProjectFile(file))
+      return;
+
     QString type=prj->getProjectType();
 
     /* transferred to processesend.pl
@@ -710,10 +713,12 @@ void CKDevelop::slotProjectNewAppl(){
 /** calls kimport to generate a new project by
 requesting a project directory, writes project file
 and loads the new project */
-void CKDevelop::slotProjectGenerate(){
-  if(!CToolClass::searchProgram("kimport")){
+void CKDevelop::slotProjectGenerate()
+{
+  QString kimport = locate("appdata", "tools/kimport");
+  if (kimport.isEmpty())
     return;
-  }
+
   slotStatusMsg(i18n("Generating project file..."));
   messages_widget->clear();
 
@@ -769,7 +774,8 @@ void CKDevelop::slotProjectGenerate(){
   shell_process << "cd"
                 << "'"+dir+"'"
                 << "&&";
-  shell_process <<  "kimport"
+  shell_process <<  "perl"
+                << kimport
                 << "-o="+file
                 << "-b="+relDir;
   shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);

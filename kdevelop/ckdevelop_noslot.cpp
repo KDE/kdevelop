@@ -1290,6 +1290,7 @@ void CKDevelop::readProperties(KConfig* sess_config){
     if(!(readProjectFile(filename))){
       KMessageBox::error(0,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"),
                             filename);
+      return;
     }
     else{  // projectfile successfully read
       filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
