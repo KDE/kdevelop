@@ -1,5 +1,5 @@
 /***************************************************************************
-                          cproject.cpp  -  description
+                          ckdevelProject.cpp  -  description
                              -------------------
     begin                : Sun Oct 10 1999
     copyright            : (C) 1999 by ian geiser
@@ -15,20 +15,20 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "cproject.h"
+#include "cdevproject.h"
 #include <qfile.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <iostream.h>
 #include <qtextstream.h>
 
-cProject::cProject(){
+ckdevelProject::ckdevelProject(){
 }
-cProject::~cProject(){
+ckdevelProject::~ckdevelProject(){
 }
 
 /** This will load the selected project file and populate the internal data structure. */
-bool cProject::loadProject(QString qsFileName){
+bool ckdevelProject::loadProject(QString qsFileName){
   bool bGoodFile = false;
   bool bFlag = false; // States when the [General] tag has been found
   QRegExp regexAuthor( "^author=*", TRUE, FALSE );
@@ -68,13 +68,13 @@ bool cProject::loadProject(QString qsFileName){
 }
 
 /** Return the version number of the current project. */
-QString cProject::getVersion(){
+QString ckdevelProject::getVersion(){
   return qsVersion;
 }
 
 /** Returns the author & email of the current project.
 It will be formatted as AuthorName <emailaddress> */
-QString cProject::getAuthor(){
+QString ckdevelProject::getAuthor(){
   QString tempAuthor;
   tempAuthor += qsAuthor;
   tempAuthor += " <";
@@ -84,7 +84,7 @@ QString cProject::getAuthor(){
 }
 
 /** Returns the short info from the current project. */
-QString cProject::getInfo(){
+QString ckdevelProject::getInfo(){
 /*
     We may have to clean up the info.
     Convert the following:
@@ -98,14 +98,14 @@ QString cProject::getInfo(){
 }
 
 /** Returns the current project name. */
-QString cProject::getProjectName(){
+QString ckdevelProject::getProjectName(){
   return qsProjectName;
 }
 
 
 
 /** The configure options */
-QString cProject::getConfig(){
+QString ckdevelProject::getConfig(){
   return qsConfig;
 
 }

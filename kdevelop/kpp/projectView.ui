@@ -11,13 +11,13 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>456</width>
-            <height>430</height>
+            <width>454</width>
+            <height>434</height>
         </rect>
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>NoName</string>
+        <string>KDevelop Project Packager</string>
     </property>
     <widget>
         <class>QLabel</class>
@@ -236,26 +236,6 @@
         </property>
     </widget>
     <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>QPushButton_1</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>380</x>
-                <y>70</y>
-                <width>70</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Edit</string>
-        </property>
-    </widget>
-    <widget>
         <class>QLabel</class>
         <property stdset="1">
             <name>name</name>
@@ -273,26 +253,6 @@
         <property stdset="1">
             <name>text</name>
             <string>Description:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>QPushButton_2</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>380</x>
-                <y>190</y>
-                <width>70</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Exit</string>
         </property>
     </widget>
     <widget>
@@ -329,86 +289,6 @@
                 <width>250</width>
                 <height>20</height>
             </rect>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>QPushButton_3</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>380</x>
-                <y>40</y>
-                <width>70</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Save</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>QPushButton_4</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>380</x>
-                <y>10</y>
-                <width>70</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Import</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>QPushButton_5</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>380</x>
-                <y>160</y>
-                <width>70</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Help</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>QPushButton_6</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>380</x>
-                <y>100</y>
-                <width>70</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Template</string>
         </property>
     </widget>
     <widget>
@@ -668,6 +548,102 @@
         </property>
     </widget>
     <widget>
+        <class>QMultiLineEdit</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QMultiLineEdit_1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>295</y>
+                <width>440</width>
+                <height>130</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>wordWrap</name>
+            <enum>WidgetWidth</enum>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Enter the description of you application here.</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_3</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>380</x>
+                <y>40</y>
+                <width>70</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Save</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Save the spec file and add it to the project</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_4</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>380</x>
+                <y>10</y>
+                <width>70</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Import</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Import KDevelop information</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_6</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>380</x>
+                <y>100</y>
+                <width>70</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Template</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Select a different template here</string>
+        </property>
+    </widget>
+    <widget>
         <class>QPushButton</class>
         <property stdset="1">
             <name>name</name>
@@ -685,6 +661,66 @@
         <property stdset="1">
             <name>text</name>
             <string>Build RPM</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Start the RPM buld process</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_2</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>380</x>
+                <y>240</y>
+                <width>70</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Done</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Go back to kdevelop</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>380</x>
+                <y>70</y>
+                <width>70</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Edit SPEC</string>
+        </property>
+        <property stdset="1">
+            <name>flat</name>
+            <bool>false</bool>
+        </property>
+        <property stdset="1">
+            <name>enabled</name>
+            <bool>false</bool>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Manually edit the spec file</string>
         </property>
     </widget>
     <widget>
@@ -706,21 +742,9 @@
             <name>text</name>
             <string>Include Changelog</string>
         </property>
-    </widget>
-    <widget>
-        <class>QMultiLineEdit</class>
         <property stdset="1">
-            <name>name</name>
-            <cstring>QMultiLineEdit_1</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>295</y>
-                <width>440</width>
-                <height>130</height>
-            </rect>
+            <name>enabled</name>
+            <bool>false</bool>
         </property>
     </widget>
 </widget>

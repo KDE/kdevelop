@@ -22,13 +22,13 @@
 #include <qwidget.h>
 #include <kprocess.h>
 #include "projectView.h"
-#include "cproject.h"
+#include "cdevproject.h"
 #include "cspec.h"
 class Kpp : public projectview {
-  Q_OBJECT 
-public: 
+  Q_OBJECT
+public:
   /** construtor */
-  Kpp(QWidget*parent=0,const char* name=0); 
+  Kpp(QWidget*parent=0,const char* name=0, bool modal=false);
   /** destructor */
   ~Kpp();
   /** Save the current enviroment information for the application. */
@@ -45,9 +45,6 @@ public:
 private: // Private methods
   /** Update the spec object to the current data in the dialog */
   void updateSpec();
-  /** This will create a spec file in the $RPM/SPEC directory */
-
-  /** This will copy the source code to the $RPM/SOURCE directory. */
 
   /** Generates a spec file from a template. */
   bool generateSpec(QString fileName);
@@ -55,8 +52,6 @@ private: // Private methods
 
   /** The spec file of the current project */
   cSpec currentSpec;
-  /** The project from the current working directory */
-  cProject currentProject;
   /** The current progress of the RPM build */
  // buildView *bldView;
   /** The base for the rpm build directories. */
@@ -76,6 +71,8 @@ private: // Private methods
   KConfig *kcConfig;
   /** the rpm build process */
   KShellProcess *rpmBuild;
+  /** The project from the current working directory */
+  ckdevelProject *currentProject;
 
 public slots: // Public slots
 
@@ -96,16 +93,13 @@ public slots: // Public slots
   void notYet();
   /** Change the template that we will use to generate the spec file. */
   void changeSpec();
-//Del by KDevelop: 
-  /** Stops the build process */
-//Del by KDevelop: 
-  /** Tells the program the build is done */
-//Del by KDevelop: 
-  /** Starts the build */
-//Del by KDevelop: 
-  /** Parse the data from the output. */
-//Del by KDevelop: 
 
+signals:
+        // done withthe dialog, so tell the main app to destroy me
+        void finished();
+        // building, so hide the dialog but keep the build process
+        // going
+        void building();
 
 private slots: // Private slots
   /** done building... */

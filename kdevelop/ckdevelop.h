@@ -4,7 +4,7 @@
 
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -23,7 +23,7 @@
 #include "ctreehandler.h"
 #include "structdef.h"      // needed for TEditInfo
 #include "resource.h"
-
+#include "./kpp/kpp.h" // this should not be this way
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kmainwindow.h>
@@ -82,7 +82,7 @@ class Breakpoint;
 class Disassemble;
 class DbgToolbar;
 class KStatusBarLabel;
-
+class Kpp;
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
@@ -963,6 +963,12 @@ private:
   bool lastShutdownOK;
   KStatusBar* m_statusBar;
   KStartupLogo* start_logo;
+
+/** RPM stuff **/
+      Kpp *rpmbuilder;
+private slots:
+    void slotdoneWithKpp();
+    void slotrpmBuildProcess();
 };
 
 class SaveAllDialog : public KDialog
@@ -985,6 +991,7 @@ class SaveAllDialog : public KDialog
 
   private:
     SaveAllResult m_result;
+
 };
 
 #endif

@@ -37,6 +37,7 @@
 #include "ctoolclass.h"
 #include "ctabctl.h"
 #include "debug.h"
+#include "./kpp/kpp.h"
 #include <iostream.h>
 #include <kcursor.h>
 #include <kbuttonbox.h>
@@ -1138,6 +1139,18 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
 
 void CKDevelop::slotProjectMakeDistRPM(){
  cerr << "Lets build and RPM!!!" << endl;
+ rpmbuilder = new Kpp(0,"KPP",true);
+ connect(rpmbuilder, SIGNAL(finished()), this, SLOT(slotdoneWithKpp()));
+ connect(rpmbuilder, SIGNAL(building()), this, SLOT(slotrpmbuildProcess()));
+ rpmbuilder->show();
+}
+
+void CKDevelop::slotdoneWithKpp(){
+ delete rpmbuilder;
+}
+
+void CKDevelop::slotrpmBuildProcess(){
+
 }
 
 /*********************************************************************

@@ -1,5 +1,5 @@
 /***************************************************************************
-                          cproject.h  -  description
+                          ckdevelProject.h  -  description
                              -------------------
     begin                : Sun Oct 10 1999
     copyright            : (C) 1999 by ian geiser
@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CPROJECT_H
-#define CPROJECT_H
+#ifndef ckdevelProject_H
+#define ckdevelProject_H
 
 #include <qstring.h>
 
@@ -35,10 +35,10 @@
   We will need to get the entire line.
   */
 
-class cProject {
+class ckdevelProject {
 public: 
-	cProject();
-	~cProject();
+	ckdevelProject();
+	~ckdevelProject();
   /** This will load the selected project file and populate the internal data structure. */
   bool loadProject(QString qsFileName);
   /** Returns the short info from the current project. */

@@ -32,16 +32,16 @@
 #include <kprocess.h>
 #include "kpp.h"
 
-Kpp::Kpp(QWidget*parent,const char* name):projectview(parent,name){
+Kpp::Kpp(QWidget*parent,const char* name, bool modal):projectview(parent,name,modal){
 
 connect (QPushButton_1, SIGNAL(clicked()), SLOT(notYet()));
 connect (QPushButton_2, SIGNAL(clicked()), SLOT(exitApp()));
 connect (QPushButton_3, SIGNAL(clicked()), SLOT(saveFile()));
 connect (QPushButton_4, SIGNAL(clicked()), SLOT(openFile()));
-connect (QPushButton_5, SIGNAL(clicked()), SLOT(helpMe()));
+//connect (QPushButton_5, SIGNAL(clicked()), SLOT(helpMe()));
 connect (QPushButton_6, SIGNAL(clicked()), SLOT(changeSpec()));
 connect (QPushButton_7, SIGNAL(clicked()), SLOT(rpmBuildSlot()));
-
+currentProject = new ckdevelProject();
 kcConfig = kapp->config();
 loadPrefs();
 
@@ -76,19 +76,19 @@ void Kpp::openFile(){
     {
       // read the file
       cout << "Opening File" << endl;
-      if(currentProject.loadProject(open_filename))
+      if(currentProject->loadProject(open_filename))
       {
-        //cout << "Project Name: " << currentProject.getProjectName() << endl;
-        //cout << "Author: " << currentProject.getAuthor() << endl;
-        //cout << "Version: " << currentProject.getVersion() << endl;
-        //cout << "Info: " << currentProject.getInfo() << endl;
-        //cout << "Configure Options:" << currentProject.getConfig() << endl;
-        QMultiLineEdit_1->setText(currentProject.getInfo());
-        QLineEdit_1->setText(currentProject.getProjectName());
-        QLineEdit_4->setText(currentProject.getAuthor());
-        QLineEdit_9->setText(currentProject.getAuthor());
-        QLineEdit_2->setText(currentProject.getVersion());
-        QLineEdit_5->setText(currentProject.getConfig());
+        //cout << "Project Name: " << currentProject->getProjectName() << endl;
+        //cout << "Author: " << currentProject->getAuthor() << endl;
+        //cout << "Version: " << currentProject->getVersion() << endl;
+        //cout << "Info: " << currentProject->getInfo() << endl;
+        //cout << "Configure Options:" << currentProject->getConfig() << endl;
+        QMultiLineEdit_1->setText(currentProject->getInfo());
+        QLineEdit_1->setText(currentProject->getProjectName());
+        QLineEdit_4->setText(currentProject->getAuthor());
+        QLineEdit_9->setText(currentProject->getAuthor());
+        QLineEdit_2->setText(currentProject->getVersion());
+        QLineEdit_5->setText(currentProject->getConfig());
         updateSpec();
       }
       else
@@ -107,7 +107,8 @@ kapp->invokeHTMLHelp("/kpp/index-3.html", "");
 void Kpp::exitApp(){
 savePrefs();
 cout << "Exit App" << endl;
-exit(0);
+hide();
+emit( "finished()" );
 }
 
 
