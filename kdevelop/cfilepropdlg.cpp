@@ -235,7 +235,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
   bb->layout();
-  grid1->addWidget(bb,3,1);
+  grid1->addWidget(bb,3,2);
 
 
   QString incdist_checkMsg = i18n("This option sets if the actual file\n"

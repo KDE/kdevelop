@@ -193,7 +193,6 @@ protected:
     QButtonGroup* qtarch_ButtonGroup_33;
     KFontDialog* fontDialog;
     QString parameters,globalpara,leftstr,middlestr,rightstr,headerstr;
-    QPushButton* previewButton;
     KShellProcess *process,*process2;
     KConfig *settings;
     QWidget *tab1;

@@ -42,6 +42,7 @@
 #include <qgrid.h>
 #include <qlayout.h>
 #include <klineedit.h>
+#include <kbuttonbox.h>
 
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 
@@ -108,26 +109,27 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   QWhatsThis::add(template_checkbox, i18n("Check this if you want to insert your template to the added files."));
    grid1->addMultiCellWidget(template_checkbox,2,2,0,1);
 
-   ok_button = new QPushButton( this, "ok_button" );
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  ok_button  = bb->addButton( i18n("OK") );
   ok_button->setFocusPolicy( QWidget::TabFocus );
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
   ok_button->setFontPropagation( QWidget::NoChildren );
   ok_button->setPalettePropagation( QWidget::NoChildren );
-  ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
   ok_button->setDefault( TRUE );
-  grid1->addWidget(ok_button,3,0);
-
-  cancel_button = new QPushButton( this, "cancel_button" );
+  
+  cancel_button =  bb->addButton( i18n("Cancel") );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
   cancel_button->setFontPropagation( QWidget::NoChildren );
   cancel_button->setPalettePropagation( QWidget::NoChildren );
-  cancel_button->setText(i18n("Cancel") );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
-  grid1->addWidget(cancel_button,3,1);
+  bb->layout();
+  grid1->addWidget(bb,3,1);
+
 
   connect(ok_button,SIGNAL(clicked()),SLOT(OK()));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));

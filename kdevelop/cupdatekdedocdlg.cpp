@@ -34,6 +34,9 @@
 #include <qradiobutton.h>
 #include <qwhatsthis.h>
 #include <qwidget.h>
+#include <qlayout.h>
+#include <qgrid.h>
+#include <kbuttonbox.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -48,11 +51,8 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   this->proc = proc;
 
   setCaption(i18n("KDE Library Documentation Update..."));
-
+  QGridLayout *grid1 = new QGridLayout(this,6,3,15,7);  
   install_box = new QButtonGroup( this, "install_box" );
-  install_box->setGeometry( 20, 80, 490, 170 );
-  install_box->setMinimumSize( 0, 0 );
-  install_box->setMaximumSize( 32767, 32767 );
   install_box->setFocusPolicy( QWidget::NoFocus );
   install_box->setBackgroundMode( QWidget::PaletteBackground );
   install_box->setFontPropagation( QWidget::NoChildren );
@@ -60,11 +60,10 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   install_box->setFrameStyle( 49 );
   install_box->setTitle(i18n("Choose installation mode:") );
   install_box->setAlignment( 1 );
+  grid1->addMultiCellWidget(install_box,1,3,0,2);
+
 
   source_label = new QLabel( this, "source_label" );
-  source_label->setGeometry( 30, 30, 210, 30 );
-  source_label->setMinimumSize( 0, 0 );
-  source_label->setMaximumSize( 32767, 32767 );
   source_label->setFocusPolicy( QWidget::NoFocus );
   source_label->setBackgroundMode( QWidget::PaletteBackground );
   source_label->setFontPropagation( QWidget::NoChildren );
@@ -72,11 +71,9 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   source_label->setText(i18n("new KDE Libs sources path:") );
   source_label->setAlignment( 289 );
   source_label->setMargin( -1 );
+  grid1->addWidget(source_label,0,0);
 
   source_edit = new QLineEdit( this, "source_edit" );
-  source_edit->setGeometry( 240, 30, 230, 30 );
-  source_edit->setMinimumSize( 0, 0 );
-  source_edit->setMaximumSize( 32767, 32767 );
   source_edit->setFocusPolicy( QWidget::StrongFocus );
   source_edit->setBackgroundMode( QWidget::PaletteBase );
   source_edit->setFontPropagation( QWidget::NoChildren );
@@ -85,11 +82,9 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   source_edit->setMaxLength( 32767 );
   source_edit->setEchoMode( QLineEdit::Normal );
   source_edit->setFrame( TRUE );
+  grid1->addWidget(source_edit,0,1);
 
   source_button = new QPushButton( this, "source_button" );
-  source_button->setGeometry( 480, 30, 30, 30 );
-  source_button->setMinimumSize( 0, 0 );
-  source_button->setMaximumSize( 32767, 32767 );
   source_button->setFocusPolicy( QWidget::TabFocus );
   source_button->setBackgroundMode( QWidget::PaletteBackground );
   source_button->setFontPropagation( QWidget::NoChildren );
@@ -98,11 +93,12 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   source_button->setPixmap(pix);
   source_button->setAutoRepeat( FALSE );
   source_button->setAutoResize( FALSE );
+  grid1->addWidget(source_button,0,2);
 
-  del_recent_radio_button = new QRadioButton( this, "del_recent_radio_button" );
-  del_recent_radio_button->setGeometry( 40, 110, 450, 30 );
-  del_recent_radio_button->setMinimumSize( 0, 0 );
-  del_recent_radio_button->setMaximumSize( 32767, 32767 );
+  QGridLayout *grid2 = new QGridLayout(install_box,3,1,15,7); 
+
+
+  del_recent_radio_button = new QRadioButton( install_box, "del_recent_radio_button" );
   del_recent_radio_button->setFocusPolicy( QWidget::TabFocus );
   del_recent_radio_button->setBackgroundMode( QWidget::PaletteBackground );
   del_recent_radio_button->setFontPropagation( QWidget::NoChildren );
@@ -115,12 +111,10 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
       i18n("Checking this will delete the current documentation\n"
      "and replace it with the new generated documentation\n"
      "in the same path."));
+  grid2->addWidget(del_recent_radio_button,0,0);
 
 
-  del_new_radio_button = new QRadioButton( this, "del_new_radio_button" );
-  del_new_radio_button->setGeometry( 40, 150, 440, 30 );
-  del_new_radio_button->setMinimumSize( 0, 0 );
-  del_new_radio_button->setMaximumSize( 32767, 32767 );
+  del_new_radio_button = new QRadioButton( install_box, "del_new_radio_button" );
   del_new_radio_button->setFocusPolicy( QWidget::TabFocus );
   del_new_radio_button->setBackgroundMode( QWidget::PaletteBackground );
   del_new_radio_button->setFontPropagation( QWidget::NoChildren );
@@ -134,10 +128,9 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
      "where the new generated documentation will be"
      "installed."));
 
-  leave_new_radio_button = new QRadioButton( this, "leave_new_radio_button" );
-  leave_new_radio_button->setGeometry( 40, 190, 450, 30 );
-  leave_new_radio_button->setMinimumSize( 0, 0 );
-  leave_new_radio_button->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(del_new_radio_button,1,0);
+
+  leave_new_radio_button = new QRadioButton( install_box, "leave_new_radio_button" );
   leave_new_radio_button->setFocusPolicy( QWidget::TabFocus );
   leave_new_radio_button->setBackgroundMode( QWidget::PaletteBackground );
   leave_new_radio_button->setFontPropagation( QWidget::NoChildren );
@@ -151,11 +144,9 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
      "documentation. CAUTION: Don't insert the same path as\n"
      "for your recent documentation - this may mess up\n"
      "the documentation by mixing old and new files!"));
+  grid2->addWidget(leave_new_radio_button,2,0);
 
   doc_label = new QLabel( this, "doc_label" );
-  doc_label->setGeometry( 30, 270, 210, 30 );
-  doc_label->setMinimumSize( 0, 0 );
-  doc_label->setMaximumSize( 32767, 32767 );
   doc_label->setFocusPolicy( QWidget::NoFocus );
   doc_label->setBackgroundMode( QWidget::PaletteBackground );
   doc_label->setFontPropagation( QWidget::NoChildren );
@@ -164,11 +155,9 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   doc_label->setAlignment( 289 );
   doc_label->setMargin( -1 );
   doc_label->setEnabled(false);
+  grid1->addWidget( doc_label,4,0);
 
   doc_edit = new QLineEdit( this, "doc_edit" );
-  doc_edit->setGeometry( 240, 270, 230, 30 );
-  doc_edit->setMinimumSize( 0, 0 );
-  doc_edit->setMaximumSize( 32767, 32767 );
   doc_edit->setFocusPolicy( QWidget::StrongFocus );
   doc_edit->setBackgroundMode( QWidget::PaletteBase );
   doc_edit->setFontPropagation( QWidget::NoChildren );
@@ -178,11 +167,9 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   doc_edit->setEchoMode( QLineEdit::Normal );
   doc_edit->setFrame( TRUE );
   doc_edit->setEnabled(false);
+  grid1->addWidget( doc_edit,4,1);
 
   doc_button = new QPushButton( this, "doc_button" );
-  doc_button->setGeometry( 480, 270, 30, 30 );
-  doc_button->setMinimumSize( 0, 0 );
-  doc_button->setMaximumSize( 32767, 32767 );
   doc_button->setFocusPolicy( QWidget::TabFocus );
   doc_button->setBackgroundMode( QWidget::PaletteBackground );
   doc_button->setFontPropagation( QWidget::NoChildren );
@@ -191,10 +178,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   doc_button->setAutoRepeat( FALSE );
   doc_button->setAutoResize( FALSE );
   doc_button->setEnabled(false);
-
-  install_box->insert( del_recent_radio_button );
-  install_box->insert( del_new_radio_button );
-  install_box->insert( leave_new_radio_button );
+  grid1->addWidget(doc_button,4,2);
 
 
   QString sourceHelp = i18n("Insert the path to the current\n"
@@ -214,35 +198,31 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, KConfig* config, QWidget
   QWhatsThis::add(doc_edit, docMsg);
   QWhatsThis::add(doc_button, docMsg);
 
-  ok_button = new QPushButton( this, "ok_button" );
-  ok_button->setGeometry( 140, 320, 100, 30 );
-  ok_button->setMinimumSize( 0, 0 );
-  ok_button->setMaximumSize( 32767, 32767 );
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  ok_button =bb->addButton( i18n("OK") );
   ok_button->setFocusPolicy( QWidget::TabFocus );
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
   ok_button->setFontPropagation( QWidget::NoChildren );
   ok_button->setPalettePropagation( QWidget::NoChildren );
-  ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
   ok_button->setDefault( true );
 
-  cancel_button = new QPushButton( this, "cancel_button" );
-  cancel_button->setGeometry( 270, 320, 100, 30 );
-  cancel_button->setMinimumSize( 0, 0 );
-  cancel_button->setMaximumSize( 32767, 32767 );
+  cancel_button =bb->addButton( i18n("Cancel") );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
   cancel_button->setFontPropagation( QWidget::NoChildren );
   cancel_button->setPalettePropagation( QWidget::NoChildren );
-  cancel_button->setText(i18n("Cancel"));
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
+  bb->layout();
+  grid1->addWidget(bb,5,1);
 
 
   bUpdated=false;
 
-  resize( 530,380 );
+  resize( 500,380 );
   setMinimumSize( 0, 0 );
   setMaximumSize( 32767, 32767 );
   

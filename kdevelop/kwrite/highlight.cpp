@@ -22,6 +22,7 @@
 #include <qlabel.h>
 #include <qstringlist.h>
 #include <qfileinfo.h>
+#include <kbuttonbox.h>
 
 
 //#include <X11/Xlib.h> //used in getXFontList()
@@ -2406,17 +2407,16 @@ DefaultsDialog::DefaultsDialog(HlManager *hlManager, ItemStyleList *styleList,
 
   itemStyleList = styleList;
   changed(0);
+  
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  button  = bb->addButton( i18n("&OK") );
 
-  button = new QPushButton(i18n("&OK"),this);
-  grid1->addWidget(button,1,0);
-  button->setDefault(true);
-  r.setRect(10,210,70,25);
-  button->setGeometry(r);
   connect(button,SIGNAL(clicked()),this,SLOT(accept()));
-
-  button = new QPushButton(i18n("&Cancel"),this);
-  grid1->addWidget(button,1,1);
+  button  = bb->addButton( i18n("&Cancel") );
   connect(button,SIGNAL(clicked()),this,SLOT(reject()));
+  bb->layout();
+  grid1->addWidget(bb,1,1);
 }
 
 void DefaultsDialog::changed(int z) {
@@ -2498,16 +2498,16 @@ HighlightDialog::HighlightDialog(HlManager *hlManager,
 
   hlDataList = highlightDataList;
   hlChanged(hlNumber);
-
-  button = new QPushButton(i18n("&OK"),this);
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  button  = bb->addButton( i18n("OK") );
   button->setDefault(true);
-  grid1->addWidget(button,2,0);
   connect(button,SIGNAL(clicked()),this,SLOT(accept()));
 
-  button = new QPushButton(i18n("&Cancel"),this);
-  grid1->addWidget(button,2,1);
-
+  button = bb->addButton(i18n("&Cancel"));
   connect(button,SIGNAL(clicked()),this,SLOT(reject()));
+  bb->layout();
+  grid1->addWidget(bb,2,1);
 }
 
 void HighlightDialog::hlChanged(int z) {

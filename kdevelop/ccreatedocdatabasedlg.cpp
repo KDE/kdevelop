@@ -36,6 +36,9 @@
 #include <qlistbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qlayout.h>
+#include <qgrid.h>
+#include <kbuttonbox.h> 
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -48,260 +51,229 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   setCaption(i18n("Create Search Database..."));
   this->proc = proc;
   this->conf = config;
+  QGridLayout *grid2 = new QGridLayout(this,10,2,15,7); 
+ 
 
-	QButtonGroup *bg = new QButtonGroup( this, 0 );
+  QButtonGroup *bg = new QButtonGroup( this, 0 );
   bg->setFrameStyle( QFrame::NoFrame );
   bg->setExclusive( TRUE );
-  bg->setGeometry( 20, 20, 380, 50 );
+  grid2->addMultiCellWidget(bg,0,0,0,1);
 
+  QGridLayout *grid1 = new QGridLayout(bg,1,3,15,7); 
   QLabel* lbl;
   lbl = new QLabel( bg, "index_engine" );
-  lbl->setGeometry( 0, 0, 100, 20 );
   lbl->setText(i18n("Index engine :") );
   lbl->setAlignment( 289 );
   lbl->setMargin( -1 );
+  grid1->addWidget(lbl,0,0);
 
   useGlimpse = new QRadioButton( i18n("Glimpse"), bg );
-  useGlimpse->setGeometry( 140, 0, 80, 20 );
+ 
   if (foundGlimpse)
     useGlimpse->setChecked( true );
   else
     useGlimpse->setEnabled( false );
+  grid1->addWidget(useGlimpse,0,1);
 
   useHtDig = new QRadioButton( i18n("ht://Dig"), bg );
-  useHtDig->setGeometry( 220, 0, 80, 20 );
+
   if (foundGlimpse)
     useHtDig->setChecked( false );
   else if (foundHtDig)
     useHtDig->setChecked( true );
+  grid1->addWidget(useHtDig,0,2);
 
-	QButtonGroup* qtarch_ButtonGroup_1;
-	qtarch_ButtonGroup_1 = new QButtonGroup( this, "ButtonGroup_1" );
-	qtarch_ButtonGroup_1->setGeometry( 20, 50, 190, 120 );
-	qtarch_ButtonGroup_1->setMinimumSize( 0, 0 );
-	qtarch_ButtonGroup_1->setMaximumSize( 32767, 32767 );
-	qtarch_ButtonGroup_1->setFocusPolicy( QWidget::NoFocus );
-	qtarch_ButtonGroup_1->setBackgroundMode( QWidget::PaletteBackground );
-	qtarch_ButtonGroup_1->setFontPropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_1->setPalettePropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_1->setFrameStyle( 49 );
-	qtarch_ButtonGroup_1->setTitle( i18n("Index Size") );
-	qtarch_ButtonGroup_1->setAlignment( 1 );
+  QButtonGroup* qtarch_ButtonGroup_1;
+  qtarch_ButtonGroup_1 = new QButtonGroup( this, "ButtonGroup_1" );
+  qtarch_ButtonGroup_1->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_1->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_1->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_1->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_1->setFrameStyle( 49 );
+  qtarch_ButtonGroup_1->setTitle( i18n("Index Size") );
+  qtarch_ButtonGroup_1->setAlignment( 1 );
+  grid2->addMultiCellWidget(qtarch_ButtonGroup_1,1,3,0,0);
 
-	tiny_radio_button = new QRadioButton( this, "RadioButton_2" );
-	tiny_radio_button->setGeometry( 40, 70, 100, 30 );
-	tiny_radio_button->setMinimumSize( 0, 0 );
-	tiny_radio_button->setMaximumSize( 32767, 32767 );
-	tiny_radio_button->setFocusPolicy( QWidget::TabFocus );
-	tiny_radio_button->setBackgroundMode( QWidget::PaletteBackground );
-	tiny_radio_button->setFontPropagation( QWidget::NoChildren );
-	tiny_radio_button->setPalettePropagation( QWidget::NoChildren );
-	tiny_radio_button->setText(i18n("tiny size") );
-	tiny_radio_button->setAutoRepeat( FALSE );
-	tiny_radio_button->setAutoResize( FALSE );
-	tiny_radio_button->setChecked( TRUE );
 
-	small_radio_button = new QRadioButton( this, "RadioButton_3" );
-	small_radio_button->setGeometry( 40, 100, 100, 30 );
-	small_radio_button->setMinimumSize( 0, 0 );
-	small_radio_button->setMaximumSize( 32767, 32767 );
-	small_radio_button->setFocusPolicy( QWidget::TabFocus );
-	small_radio_button->setBackgroundMode( QWidget::PaletteBackground );
-	small_radio_button->setFontPropagation( QWidget::NoChildren );
-	small_radio_button->setPalettePropagation( QWidget::NoChildren );
-	small_radio_button->setText(i18n("small size") );
-	small_radio_button->setAutoRepeat( FALSE );
-	small_radio_button->setAutoResize( FALSE );
+  grid1 = new QGridLayout(qtarch_ButtonGroup_1,3,1,15,7); 
+  tiny_radio_button = new QRadioButton(  qtarch_ButtonGroup_1, "RadioButton_2" );
+  tiny_radio_button->setFocusPolicy( QWidget::TabFocus );
+  tiny_radio_button->setBackgroundMode( QWidget::PaletteBackground );
+  tiny_radio_button->setFontPropagation( QWidget::NoChildren );
+  tiny_radio_button->setPalettePropagation( QWidget::NoChildren );
+  tiny_radio_button->setText(i18n("tiny size") );
+  tiny_radio_button->setAutoRepeat( FALSE );
+  tiny_radio_button->setAutoResize( FALSE );
+  tiny_radio_button->setChecked( TRUE );
+  grid1->addWidget(tiny_radio_button,0,0);
 
-	medium_radio_button = new QRadioButton( this, "RadioButton_4" );
-	medium_radio_button->setGeometry( 40, 130, 100, 30 );
-	medium_radio_button->setMinimumSize( 0, 0 );
-	medium_radio_button->setMaximumSize( 32767, 32767 );
-	medium_radio_button->setFocusPolicy( QWidget::TabFocus );
-	medium_radio_button->setBackgroundMode( QWidget::PaletteBackground );
-	medium_radio_button->setFontPropagation( QWidget::NoChildren );
-	medium_radio_button->setPalettePropagation( QWidget::NoChildren );
-	medium_radio_button->setText(i18n("medium size") );
-	medium_radio_button->setAutoRepeat( FALSE );
-	medium_radio_button->setAutoResize( FALSE );
+  small_radio_button = new QRadioButton( qtarch_ButtonGroup_1, "RadioButton_3" );
+  small_radio_button->setFocusPolicy( QWidget::TabFocus );
+  small_radio_button->setBackgroundMode( QWidget::PaletteBackground );
+  small_radio_button->setFontPropagation( QWidget::NoChildren );
+  small_radio_button->setPalettePropagation( QWidget::NoChildren );
+  small_radio_button->setText(i18n("small size") );
+  small_radio_button->setAutoRepeat( FALSE );
+  small_radio_button->setAutoResize( FALSE );
+  grid1->addWidget(small_radio_button,1,0);
+  
+  medium_radio_button = new QRadioButton( qtarch_ButtonGroup_1, "RadioButton_4" );
+  medium_radio_button->setFocusPolicy( QWidget::TabFocus );
+  medium_radio_button->setBackgroundMode( QWidget::PaletteBackground );
+  medium_radio_button->setFontPropagation( QWidget::NoChildren );
+  medium_radio_button->setPalettePropagation( QWidget::NoChildren );
+  medium_radio_button->setText(i18n("medium size") );
+  medium_radio_button->setAutoRepeat( FALSE );
+  medium_radio_button->setAutoResize( FALSE );
+  grid1->addWidget( medium_radio_button,2,0);
 
   QButtonGroup* qtarch_ButtonGroup_3;
-	qtarch_ButtonGroup_3 = new QButtonGroup( this, "ButtonGroup_3" );
-	qtarch_ButtonGroup_3->setGeometry( 230, 50, 240, 120 );
-	qtarch_ButtonGroup_3->setMinimumSize( 0, 0 );
-	qtarch_ButtonGroup_3->setMaximumSize( 32767, 32767 );
-	qtarch_ButtonGroup_3->setFocusPolicy( QWidget::NoFocus );
-	qtarch_ButtonGroup_3->setBackgroundMode( QWidget::PaletteBackground );
-	qtarch_ButtonGroup_3->setFontPropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_3->setPalettePropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_3->setFrameStyle( 49 );
-	qtarch_ButtonGroup_3->setTitle( i18n("Index Options") );
-	qtarch_ButtonGroup_3->setAlignment( 1 );
+  qtarch_ButtonGroup_3 = new QButtonGroup( this, "ButtonGroup_3" );
+  qtarch_ButtonGroup_3->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_3->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_3->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_3->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_3->setFrameStyle( 49 );
+  qtarch_ButtonGroup_3->setTitle( i18n("Index Options") );
+  qtarch_ButtonGroup_3->setAlignment( 1 );
+  grid2->addMultiCellWidget(qtarch_ButtonGroup_3,1,3,1,1);
 
-	qt_checkbox = new QCheckBox( this, "CheckBox_3" );
-	qt_checkbox->setGeometry( 250, 70, 210, 30 );
-	qt_checkbox->setMinimumSize( 0, 0 );
-	qt_checkbox->setMaximumSize( 32767, 32767 );
-	qt_checkbox->setFocusPolicy( QWidget::TabFocus );
-	qt_checkbox->setBackgroundMode( QWidget::PaletteBackground );
-	qt_checkbox->setFontPropagation( QWidget::NoChildren );
-	qt_checkbox->setPalettePropagation( QWidget::NoChildren );
-	qt_checkbox->setText( i18n("index the QT documentation") );
-	qt_checkbox->setAutoRepeat( FALSE );
-	qt_checkbox->setAutoResize( FALSE );
-	qt_checkbox->setChecked( TRUE );
-
-	kde_checkbox = new QCheckBox( this, "CheckBox_1" );
-	kde_checkbox->setGeometry( 250, 100, 210, 30 );
-	kde_checkbox->setMinimumSize( 0, 0 );
-	kde_checkbox->setMaximumSize( 32767, 32767 );
-	kde_checkbox->setFocusPolicy( QWidget::TabFocus );
-	kde_checkbox->setBackgroundMode( QWidget::PaletteBackground );
-	kde_checkbox->setFontPropagation( QWidget::NoChildren );
-	kde_checkbox->setPalettePropagation( QWidget::NoChildren );
-	kde_checkbox->setText(i18n("index the KDE documentation") );
-	kde_checkbox->setAutoRepeat( FALSE );
-	kde_checkbox->setAutoResize( FALSE );
-	kde_checkbox->setChecked( TRUE );
-
-	QButtonGroup* qtarch_ButtonGroup_2;
-	qtarch_ButtonGroup_2 = new QButtonGroup( this, "ButtonGroup_2" );
-	qtarch_ButtonGroup_2->setGeometry( 20, 180, 450, 210 );
-	qtarch_ButtonGroup_2->setMinimumSize( 0, 0 );
-	qtarch_ButtonGroup_2->setMaximumSize( 32767, 32767 );
-	qtarch_ButtonGroup_2->setFocusPolicy( QWidget::NoFocus );
-	qtarch_ButtonGroup_2->setBackgroundMode( QWidget::PaletteBackground );
-	qtarch_ButtonGroup_2->setFontPropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_2->setPalettePropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_2->setFrameStyle( 49 );
-	qtarch_ButtonGroup_2->setTitle(i18n("additional directories to index"));
-	qtarch_ButtonGroup_2->setAlignment( 1 );
-
-	dir_edit = new QLineEdit( this, "LineEdit_1" );
-	dir_edit->setGeometry( 40, 210, 280, 30 );
-	dir_edit->setMinimumSize( 0, 0 );
-	dir_edit->setMaximumSize( 32767, 32767 );
-	dir_edit->setFocusPolicy( QWidget::StrongFocus );
-	dir_edit->setBackgroundMode( QWidget::PaletteBase );
-	dir_edit->setFontPropagation( QWidget::NoChildren );
-	dir_edit->setPalettePropagation( QWidget::NoChildren );
-	dir_edit->setText( "" );
-	dir_edit->setMaxLength( 32767 );
-	dir_edit->setEchoMode( QLineEdit::Normal );
-	dir_edit->setFrame( TRUE );
-
-	dir_button = new QPushButton( this, "PushButton_3" );
-	dir_button->setGeometry( 340, 210, 30, 30 );
-	dir_button->setMinimumSize( 0, 0 );
-	dir_button->setMaximumSize( 32767, 32767 );
-	dir_button->setFocusPolicy( QWidget::TabFocus );
-	dir_button->setBackgroundMode( QWidget::PaletteBackground );
-	dir_button->setFontPropagation( QWidget::NoChildren );
-	dir_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix = BarIcon("open");
-	dir_button->setPixmap(pix);
-	dir_button->setAutoRepeat( FALSE );
-	dir_button->setAutoResize( FALSE );
-
-	dir_listbox = new QListBox( this, "ListBox_1" );
-	dir_listbox->setGeometry( 40, 260, 280, 110 );
-	dir_listbox->setMinimumSize( 0, 0 );
-	dir_listbox->setMaximumSize( 32767, 32767 );
-	dir_listbox->setFocusPolicy( QWidget::StrongFocus );
-	dir_listbox->setBackgroundMode( QWidget::PaletteBase );
-	dir_listbox->setFontPropagation( QWidget::SameFont );
-	dir_listbox->setPalettePropagation( QWidget::SameFont );
-	dir_listbox->setFrameStyle( 51 );
-	dir_listbox->setLineWidth( 2 );
-	dir_listbox->setMultiSelection( FALSE );
-
-	add_button = new QPushButton( this, "PushButton_4" );
-	add_button->setGeometry( 340, 260, 100, 30 );
-	add_button->setMinimumSize( 0, 0 );
-	add_button->setMaximumSize( 32767, 32767 );
-	add_button->setFocusPolicy( QWidget::TabFocus );
-	add_button->setBackgroundMode( QWidget::PaletteBackground );
-	add_button->setFontPropagation( QWidget::NoChildren );
-	add_button->setPalettePropagation( QWidget::NoChildren );
-	add_button->setText(i18n("add") );
-	add_button->setAutoRepeat( FALSE );
-	add_button->setAutoResize( FALSE );
-
-	remove_button = new QPushButton( this, "PushButton_5" );
-	remove_button->setGeometry( 340, 300, 100, 30 );
-	remove_button->setMinimumSize( 0, 0 );
-	remove_button->setMaximumSize( 32767, 32767 );
-	remove_button->setFocusPolicy( QWidget::TabFocus );
-	remove_button->setBackgroundMode( QWidget::PaletteBackground );
-	remove_button->setFontPropagation( QWidget::NoChildren );
-	remove_button->setPalettePropagation( QWidget::NoChildren );
-	remove_button->setText(i18n("remove") );
-	remove_button->setAutoRepeat( FALSE );
-	remove_button->setAutoResize( FALSE );
-
-	qtarch_ButtonGroup_3->insert( kde_checkbox );
-	qtarch_ButtonGroup_3->insert( qt_checkbox );
-
-	qtarch_ButtonGroup_2->insert( dir_button );
-	qtarch_ButtonGroup_2->insert( add_button );
-	qtarch_ButtonGroup_2->insert( remove_button );
-
-	qtarch_ButtonGroup_1->insert( tiny_radio_button );
-	qtarch_ButtonGroup_1->insert( small_radio_button );
-	qtarch_ButtonGroup_1->insert( medium_radio_button );
-	
-	ok_button = new QPushButton( this, "PushButton_1" );
-	ok_button->setGeometry( 100, 400, 100, 30 );
-	ok_button->setMinimumSize( 0, 0 );
-	ok_button->setMaximumSize( 32767, 32767 );
-	ok_button->setFocusPolicy( QWidget::TabFocus );
-	ok_button->setBackgroundMode( QWidget::PaletteBackground );
-	ok_button->setFontPropagation( QWidget::NoChildren );
-	ok_button->setPalettePropagation( QWidget::NoChildren );
-	ok_button->setText( i18n("OK") );
-	ok_button->setAutoRepeat( FALSE );
-	ok_button->setAutoResize( FALSE );
-	ok_button->setDefault(true);
-	
-	cancel_button = new QPushButton( this, "PushButton_2" );
-	cancel_button->setGeometry( 280, 400, 100, 30 );
-	cancel_button->setMinimumSize( 0, 0 );
-	cancel_button->setMaximumSize( 32767, 32767 );
-	cancel_button->setFocusPolicy( QWidget::TabFocus );
-	cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-	cancel_button->setFontPropagation( QWidget::NoChildren );
-	cancel_button->setPalettePropagation( QWidget::NoChildren );
-	cancel_button->setText( i18n("Cancel") );
-	cancel_button->setAutoRepeat( FALSE );
-	cancel_button->setAutoResize( FALSE );
-
-	resize( 490,440 );
-	setMinimumSize( 0, 0 );
-	setMaximumSize( 32767, 32767 );
+  grid1 = new QGridLayout(qtarch_ButtonGroup_3,2,1,15,7); 
 
 
+  qt_checkbox = new QCheckBox( qtarch_ButtonGroup_3, "CheckBox_3" );
+  qt_checkbox->setFocusPolicy( QWidget::TabFocus );
+  qt_checkbox->setBackgroundMode( QWidget::PaletteBackground );
+  qt_checkbox->setFontPropagation( QWidget::NoChildren );
+  qt_checkbox->setPalettePropagation( QWidget::NoChildren );
+  qt_checkbox->setText( i18n("index the QT documentation") );
+  qt_checkbox->setAutoRepeat( FALSE );
+  qt_checkbox->setAutoResize( FALSE );
+  qt_checkbox->setChecked( TRUE );
+  grid1->addWidget(qt_checkbox,0,0);
 
-	/*****************Connections******************/
-	connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
-	connect(ok_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
-	connect(add_button,SIGNAL(clicked()),SLOT(slotAddButtonClicked()));
-	connect(remove_button,SIGNAL(clicked()),SLOT(slotRemoveButtonClicked()));
-	connect(dir_button,SIGNAL(clicked()),SLOT(slotDirButtonClicked()));
+  kde_checkbox = new QCheckBox( qtarch_ButtonGroup_3, "CheckBox_1" );
+  kde_checkbox->setFocusPolicy( QWidget::TabFocus );
+  kde_checkbox->setBackgroundMode( QWidget::PaletteBackground );
+  kde_checkbox->setFontPropagation( QWidget::NoChildren );
+  kde_checkbox->setPalettePropagation( QWidget::NoChildren );
+  kde_checkbox->setText(i18n("index the KDE documentation") );
+  kde_checkbox->setAutoRepeat( FALSE );
+  kde_checkbox->setAutoResize( FALSE );
+  kde_checkbox->setChecked( TRUE );
+  grid1->addWidget( kde_checkbox,1,0);
 
-	dir_edit->setFocus();
+  QButtonGroup* qtarch_ButtonGroup_2;
+  qtarch_ButtonGroup_2 = new QButtonGroup( this, "ButtonGroup_2" );
+  qtarch_ButtonGroup_2->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_2->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_2->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_2->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_2->setFrameStyle( 49 );
+  qtarch_ButtonGroup_2->setTitle(i18n("additional directories to index"));
+  qtarch_ButtonGroup_2->setAlignment( 1 );
+  grid2->addMultiCellWidget(qtarch_ButtonGroup_2,4,8,0,1);
 
-	/*doc*/
-	QWhatsThis::add(medium_radio_button,
-	i18n("builds a medium-size index (20-30% of the size\n"
-	     "of all files), allowing faster search."));
-	QWhatsThis::add(small_radio_button,
-			i18n("Build a small index rather than tiny (meaning 7-9%\n"
-			     "of the sizes of all files - your mileage may vary)\n"
-			     "allowing faster search."));
-	QWhatsThis::add(tiny_radio_button,
-			i18n("a tiny index (2-3% of the total size of all files)"));
-	
-	
+  grid1 = new QGridLayout(qtarch_ButtonGroup_2,4,2,15,7); 
+  dir_edit = new QLineEdit( qtarch_ButtonGroup_2, "LineEdit_1" );
+  dir_edit->setFocusPolicy( QWidget::StrongFocus );
+  dir_edit->setBackgroundMode( QWidget::PaletteBase );
+  dir_edit->setFontPropagation( QWidget::NoChildren );
+  dir_edit->setPalettePropagation( QWidget::NoChildren );
+  dir_edit->setText( "" );
+  dir_edit->setMaxLength( 32767 );
+  dir_edit->setEchoMode( QLineEdit::Normal );
+  dir_edit->setFrame( TRUE );
+  grid1->addWidget(dir_edit,0,0);
+
+  dir_button = new QPushButton( qtarch_ButtonGroup_2, "PushButton_3" );
+  dir_button->setFocusPolicy( QWidget::TabFocus );
+  dir_button->setBackgroundMode( QWidget::PaletteBackground );
+  dir_button->setFontPropagation( QWidget::NoChildren );
+  dir_button->setPalettePropagation( QWidget::NoChildren );
+  QPixmap pix = BarIcon("open");
+  dir_button->setPixmap(pix);
+  dir_button->setAutoRepeat( FALSE );
+  dir_button->setAutoResize( FALSE );
+  grid1->addWidget(dir_button,0,1);
+
+  dir_listbox = new QListBox(  qtarch_ButtonGroup_2, "ListBox_1" );
+  dir_listbox->setFocusPolicy( QWidget::StrongFocus );
+  dir_listbox->setBackgroundMode( QWidget::PaletteBase );
+  dir_listbox->setFontPropagation( QWidget::SameFont );
+  dir_listbox->setPalettePropagation( QWidget::SameFont );
+  dir_listbox->setFrameStyle( 51 );
+  dir_listbox->setLineWidth( 2 );
+  dir_listbox->setMultiSelection( FALSE );
+  grid1->addMultiCellWidget(dir_listbox,1,3,0,0);
+
+  add_button = new QPushButton( qtarch_ButtonGroup_2, "PushButton_4" );
+  add_button->setFocusPolicy( QWidget::TabFocus );
+  add_button->setBackgroundMode( QWidget::PaletteBackground );
+  add_button->setFontPropagation( QWidget::NoChildren );
+  add_button->setPalettePropagation( QWidget::NoChildren );
+  add_button->setText(i18n("add") );
+  add_button->setAutoRepeat( FALSE );
+  add_button->setAutoResize( FALSE );
+  grid1->addWidget(add_button,1,1);
+  
+  remove_button = new QPushButton(qtarch_ButtonGroup_2 , "PushButton_5" );
+  remove_button->setFocusPolicy( QWidget::TabFocus );
+  remove_button->setBackgroundMode( QWidget::PaletteBackground );
+  remove_button->setFontPropagation( QWidget::NoChildren );
+  remove_button->setPalettePropagation( QWidget::NoChildren );
+  remove_button->setText(i18n("remove") );
+  remove_button->setAutoRepeat( FALSE );
+  remove_button->setAutoResize( FALSE );
+  grid1->addWidget(remove_button,2,1);
+
+ KButtonBox *bb = new KButtonBox( this );
+ bb->addStretch();
+ ok_button  = bb->addButton( i18n("OK") );
+
+ ok_button->setFocusPolicy( QWidget::TabFocus );
+ ok_button->setBackgroundMode( QWidget::PaletteBackground );
+ ok_button->setFontPropagation( QWidget::NoChildren );
+ ok_button->setPalettePropagation( QWidget::NoChildren );
+ 
+ ok_button->setAutoRepeat( FALSE );
+ ok_button->setAutoResize( FALSE );
+ ok_button->setDefault(true);
+ cancel_button  = bb->addButton( i18n("Cancel") );	
+
+ cancel_button->setFocusPolicy( QWidget::TabFocus );
+ cancel_button->setBackgroundMode( QWidget::PaletteBackground );
+ cancel_button->setFontPropagation( QWidget::NoChildren );
+ cancel_button->setPalettePropagation( QWidget::NoChildren );
+ cancel_button->setAutoRepeat( FALSE );
+ cancel_button->setAutoResize( FALSE );
+ bb->layout();
+ grid2->addWidget(bb,9,1);
+ resize( 490,440 );
+ setMinimumSize( 0, 0 );
+ setMaximumSize( 32767, 32767 );
+
+
+ 
+ /*****************Connections******************/
+ connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
+ connect(ok_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
+ connect(add_button,SIGNAL(clicked()),SLOT(slotAddButtonClicked()));
+ connect(remove_button,SIGNAL(clicked()),SLOT(slotRemoveButtonClicked()));
+ connect(dir_button,SIGNAL(clicked()),SLOT(slotDirButtonClicked()));
+
+ dir_edit->setFocus();
+ 
+ /*doc*/
+ QWhatsThis::add(medium_radio_button,
+		 i18n("builds a medium-size index (20-30% of the size\n"
+		      "of all files), allowing faster search."));
+ QWhatsThis::add(small_radio_button,
+		 i18n("Build a small index rather than tiny (meaning 7-9%\n"
+		      "of the sizes of all files - your mileage may vary)\n"
+		      "allowing faster search."));
+ QWhatsThis::add(tiny_radio_button,
+		 i18n("a tiny index (2-3% of the total size of all files)"));
 	
 }
 CCreateDocDatabaseDlg::~CCreateDocDatabaseDlg(){

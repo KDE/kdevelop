@@ -135,13 +135,12 @@ CConfigEnscriptDlg::~CConfigEnscriptDlg(){
   delete (tab3);
   delete (tab2);
   delete (tab1);
-  delete (previewButton);
 }
 
 void CConfigEnscriptDlg::init() {
-  previewButton = new QPushButton(i18n("Preview"),this,"hallo");
-  previewButton->setGeometry(5,478,100,26);
-  connect (previewButton,SIGNAL(clicked()),SLOT(slotPreviewClicked()));
+  setApplyButton(i18n("Preview"));
+
+  connect (this,SIGNAL(applyButtonPressed()),SLOT(slotPreviewClicked()));
   tab1 = new QWidget(this,"header");
   initTab1(tab1);
   addTab (tab1,i18n("Header"));
@@ -244,70 +243,12 @@ void CConfigEnscriptDlg::selectedProgram() {
 }
 
 void CConfigEnscriptDlg::initTab1(QWidget*parent) {
-  qtarch_ButtonGroup_59 = new QButtonGroup( parent, "ButtonGroup_59" );
-  qtarch_ButtonGroup_59->setGeometry( 20, 40, 560, 380 );
-  qtarch_ButtonGroup_59->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_59->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_59->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_59->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_59->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_59->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_59->setFrameStyle( 49 );
-  qtarch_ButtonGroup_59->setTitle(i18n( "Header settings") );
-  qtarch_ButtonGroup_59->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_62 = new QButtonGroup( parent, "ButtonGroup_62" );
-  qtarch_ButtonGroup_62->setGeometry( 30, 60, 270, 60 );
-  qtarch_ButtonGroup_62->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_62->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_62->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_62->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_62->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_62->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_62->setFrameStyle( 49 );
-  qtarch_ButtonGroup_62->setTitle( i18n("Fancy header") );
-  qtarch_ButtonGroup_62->setAlignment( 1 );
-  
-  fancyHeaderButton = new QCheckBox( parent, "fancyHeaderButton" );
-  fancyHeaderButton->setGeometry( 40, 80, 250, 30 );
-  fancyHeaderButton->setMinimumSize( 0, 0 );
-  fancyHeaderButton->setMaximumSize( 32767, 32767 );
-  fancyHeaderButton->setFocusPolicy( QWidget::TabFocus );
-  fancyHeaderButton->setBackgroundMode( QWidget::PaletteBackground );
-  fancyHeaderButton->setFontPropagation( QWidget::NoChildren );
-  fancyHeaderButton->setPalettePropagation( QWidget::NoChildren );
-  fancyHeaderButton->setText( i18n("fancy header") );
-  fancyHeaderButton->setAutoRepeat( FALSE );
-  fancyHeaderButton->setAutoResize( FALSE );
 
-  qtarch_ButtonGroup_60 = new QButtonGroup( parent, "ButtonGroup_60" );
-  qtarch_ButtonGroup_60->setGeometry( 30, 130, 270, 160 );
-  qtarch_ButtonGroup_60->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_60->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_60->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_60->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_60->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_60->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_60->setFrameStyle( 49 );
-  qtarch_ButtonGroup_60->setTitle( i18n("Headertext") );
-  qtarch_ButtonGroup_60->setAlignment( 1 );
+  QVBoxLayout *box = new QVBoxLayout( parent );
+  box->setMargin( 15 );
+  box->setSpacing( 10 );
 
-  qtarch_ButtonGroup_61 = new QButtonGroup( parent, "ButtonGroup_61" );
-  qtarch_ButtonGroup_61->setGeometry( 30, 300, 270, 110 );
-  qtarch_ButtonGroup_61->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_61->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_61->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_61->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_61->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_61->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_61->setFrameStyle( 49 );
-  qtarch_ButtonGroup_61->setTitle( i18n("Login") );
-  qtarch_ButtonGroup_61->setAlignment( 1 );
-  
   headerButton = new QCheckBox( parent, "headerButton" );
-  headerButton->setGeometry( 20, 10, 100, 30 );
-  headerButton->setMinimumSize( 0, 0 );
-  headerButton->setMaximumSize( 32767, 32767 );
   headerButton->setFocusPolicy( QWidget::TabFocus );
   headerButton->setBackgroundMode( QWidget::PaletteBackground );
   headerButton->setFontPropagation( QWidget::NoChildren );
@@ -316,24 +257,59 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   headerButton->setAutoRepeat( FALSE );
   headerButton->setAutoResize( FALSE );
   connect(headerButton,SIGNAL(clicked()),SLOT(slotHeaderClicked()));
-  
-  headertextLine = new QLineEdit( parent, "headertextLine" );
-  headertextLine->setGeometry( 90, 190, 200, 30 );
-  headertextLine->setMinimumSize( 0, 0 );
-  headertextLine->setMaximumSize( 32767, 32767 );
-  headertextLine->setFocusPolicy( QWidget::StrongFocus );
-  headertextLine->setBackgroundMode( QWidget::PaletteBase );
-  headertextLine->setFontPropagation( QWidget::NoChildren );
-  headertextLine->setPalettePropagation( QWidget::NoChildren );
-  headertextLine->setText( "" );
-  headertextLine->setMaxLength( 32767 );
-  headertextLine->setEchoMode( QLineEdit::Normal );
-  headertextLine->setFrame( TRUE );
-  
-  headertextButton = new QCheckBox( parent, "headertextButton" );
-  headertextButton->setGeometry( 40, 150, 250, 30 );
-  headertextButton->setMinimumSize( 0, 0 );
-  headertextButton->setMaximumSize( 32767, 32767 );
+  box->addWidget(headerButton);
+
+  qtarch_ButtonGroup_59 = new QButtonGroup( parent, "ButtonGroup_59" );
+  qtarch_ButtonGroup_59->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_59->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_59->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_59->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_59->setFrameStyle( 49 );
+  qtarch_ButtonGroup_59->setTitle(i18n( "Header settings") );
+  qtarch_ButtonGroup_59->setAlignment( 1 );
+  box->addWidget(qtarch_ButtonGroup_59);
+
+
+  QGridLayout *grid1 = new QGridLayout( qtarch_ButtonGroup_59,6,2,15,7);
+  qtarch_ButtonGroup_62 = new QButtonGroup(qtarch_ButtonGroup_59 , "ButtonGroup_62" );
+  qtarch_ButtonGroup_62->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_62->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_62->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_62->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_62->setFrameStyle( 49 );
+  qtarch_ButtonGroup_62->setTitle( i18n("Fancy header") );
+  qtarch_ButtonGroup_62->setAlignment( 1 );
+  grid1->addWidget(qtarch_ButtonGroup_62,0,0);
+
+
+  box = new QVBoxLayout( qtarch_ButtonGroup_62 );
+  box->setMargin( 15 );
+  box->setSpacing( 10 );
+
+  fancyHeaderButton = new QCheckBox( qtarch_ButtonGroup_62, "fancyHeaderButton" );
+  fancyHeaderButton->setFocusPolicy( QWidget::TabFocus );
+  fancyHeaderButton->setBackgroundMode( QWidget::PaletteBackground );
+  fancyHeaderButton->setFontPropagation( QWidget::NoChildren );
+  fancyHeaderButton->setPalettePropagation( QWidget::NoChildren );
+  fancyHeaderButton->setText( i18n("fancy header") );
+  fancyHeaderButton->setAutoRepeat( FALSE );
+  fancyHeaderButton->setAutoResize( FALSE );
+  box->addWidget(fancyHeaderButton);
+
+
+  qtarch_ButtonGroup_60 = new QButtonGroup(qtarch_ButtonGroup_59 , "ButtonGroup_60" );
+  qtarch_ButtonGroup_60->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_60->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_60->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_60->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_60->setFrameStyle( 49 );
+  qtarch_ButtonGroup_60->setTitle( i18n("Headertext") );
+  qtarch_ButtonGroup_60->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_60,1,3,0,0);
+
+  QGridLayout *grid2 = new QGridLayout( qtarch_ButtonGroup_60,3,2,15,7);
+
+  headertextButton = new QCheckBox( qtarch_ButtonGroup_60, "headertextButton" );
   headertextButton->setFocusPolicy( QWidget::TabFocus );
   headertextButton->setBackgroundMode( QWidget::PaletteBackground );
   headertextButton->setFontPropagation( QWidget::NoChildren );
@@ -342,24 +318,21 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   headertextButton->setAutoRepeat( FALSE );
   headertextButton->setAutoResize( FALSE );
   connect(headertextButton,SIGNAL(clicked()),SLOT(slotHeadertextClicked()));
+  grid2->addWidget(headertextButton,0,0);
 
-  loginButton = new QCheckBox( parent, "loginButton" );
-  loginButton->setGeometry( 40, 320, 250, 30 );
-  loginButton->setMinimumSize( 0, 0 );
-  loginButton->setMaximumSize( 32767, 32767 );
-  loginButton->setFocusPolicy( QWidget::TabFocus );
-  loginButton->setBackgroundMode( QWidget::PaletteBackground );
-  loginButton->setFontPropagation( QWidget::NoChildren );
-  loginButton->setPalettePropagation( QWidget::NoChildren );
-  loginButton->setText( i18n("login") );
-  loginButton->setAutoRepeat( FALSE );
-  loginButton->setAutoResize( FALSE );
-  connect(loginButton,SIGNAL(clicked()),SLOT(slotLoginClicked()));
+  headertextLine = new QLineEdit(qtarch_ButtonGroup_60 , "headertextLine" );
+  headertextLine->setFocusPolicy( QWidget::StrongFocus );
+  headertextLine->setBackgroundMode( QWidget::PaletteBase );
+  headertextLine->setFontPropagation( QWidget::NoChildren );
+  headertextLine->setPalettePropagation( QWidget::NoChildren );
+  headertextLine->setText( "" );
+  headertextLine->setMaxLength( 32767 );
+  headertextLine->setEchoMode( QLineEdit::Normal );
+  headertextLine->setFrame( TRUE );
+  grid2->addWidget(headertextLine,1,1);
 
-  headertextPosition = new QComboBox( FALSE, parent, "headertextPosition" );
-  headertextPosition->setGeometry( 90, 240, 200, 30 );
-  headertextPosition->setMinimumSize( 0, 0 );
-  headertextPosition->setMaximumSize( 32767, 32767 );
+
+  headertextPosition = new QComboBox( FALSE, qtarch_ButtonGroup_60, "headertextPosition" );
   headertextPosition->setFocusPolicy( QWidget::StrongFocus );
   headertextPosition->setBackgroundMode( QWidget::PaletteBackground );
   headertextPosition->setFontPropagation( QWidget::NoChildren );
@@ -369,11 +342,9 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   headertextPosition->insertItem(i18n("left"));
   headertextPosition->insertItem(i18n("center"));
   headertextPosition->insertItem(i18n("right"));
+  grid2->addWidget(headertextPosition,2,1);
   
-  qtarch_Label_19 = new QLabel( parent, "Label_19" );
-  qtarch_Label_19->setGeometry( 40, 240, 50, 30 );
-  qtarch_Label_19->setMinimumSize( 0, 0 );
-  qtarch_Label_19->setMaximumSize( 32767, 32767 );
+  qtarch_Label_19 = new QLabel( qtarch_ButtonGroup_60, "Label_19" );
   qtarch_Label_19->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_19->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_19->setFontPropagation( QWidget::NoChildren );
@@ -381,11 +352,9 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_Label_19->setText(i18n("position") );
   qtarch_Label_19->setAlignment( 289 );
   qtarch_Label_19->setMargin( -1 );
-  
-  qtarch_Label_20 = new QLabel( parent, "Label_20" );
-  qtarch_Label_20->setGeometry( 40, 190, 50, 30 );
-  qtarch_Label_20->setMinimumSize( 0, 0 );
-  qtarch_Label_20->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(qtarch_Label_19,2,0);
+
+  qtarch_Label_20 = new QLabel(  qtarch_ButtonGroup_60, "Label_20" );
   qtarch_Label_20->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_20->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_20->setFontPropagation( QWidget::NoChildren );
@@ -393,11 +362,37 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_Label_20->setText( i18n("text") );
   qtarch_Label_20->setAlignment( 289 );
   qtarch_Label_20->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_20,1,0);
+
+
+
+
+  qtarch_ButtonGroup_61 = new QButtonGroup(qtarch_ButtonGroup_59 , "ButtonGroup_61" );
+  qtarch_ButtonGroup_61->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_61->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_61->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_61->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_61->setFrameStyle( 49 );
+  qtarch_ButtonGroup_61->setTitle( i18n("Login") );
+  qtarch_ButtonGroup_61->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_61,4,5,0,0);
+ 
+  grid2 = new QGridLayout( qtarch_ButtonGroup_61,2,2,15,7);
+
   
-  qtarch_Label_24 = new QLabel( parent, "Label_24" );
-  qtarch_Label_24->setGeometry( 40, 360, 50, 30 );
-  qtarch_Label_24->setMinimumSize( 0, 0 );
-  qtarch_Label_24->setMaximumSize( 32767, 32767 );
+  loginButton = new QCheckBox(  qtarch_ButtonGroup_61, "loginButton" );
+  loginButton->setFocusPolicy( QWidget::TabFocus );
+  loginButton->setBackgroundMode( QWidget::PaletteBackground );
+  loginButton->setFontPropagation( QWidget::NoChildren );
+  loginButton->setPalettePropagation( QWidget::NoChildren );
+  loginButton->setText( i18n("login") );
+  loginButton->setAutoRepeat( FALSE );
+  loginButton->setAutoResize( FALSE );
+  connect(loginButton,SIGNAL(clicked()),SLOT(slotLoginClicked()));
+  grid2->addWidget(loginButton,0,0);
+  
+  qtarch_Label_24 = new QLabel( qtarch_ButtonGroup_61, "Label_24" );
+ 
   qtarch_Label_24->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_24->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_24->setFontPropagation( QWidget::NoChildren );
@@ -405,11 +400,9 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_Label_24->setText( i18n("position") );
   qtarch_Label_24->setAlignment( 289 );
   qtarch_Label_24->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_24,1,0);
   
-  loginPosition = new QComboBox( FALSE, parent, "loginPosition" );
-  loginPosition->setGeometry( 90, 360, 200, 30 );
-  loginPosition->setMinimumSize( 0, 0 );
-  loginPosition->setMaximumSize( 32767, 32767 );
+  loginPosition = new QComboBox( FALSE,  qtarch_ButtonGroup_61, "loginPosition" );
   loginPosition->setFocusPolicy( QWidget::StrongFocus );
   loginPosition->setBackgroundMode( QWidget::PaletteBackground );
   loginPosition->setFontPropagation( QWidget::NoChildren );
@@ -419,11 +412,10 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   loginPosition->insertItem(i18n("left"));
   loginPosition->insertItem(i18n("center"));
   loginPosition->insertItem(i18n("right"));
+  grid2->addWidget(loginPosition,1,1);
+
   
-  qtarch_ButtonGroup_65 = new QButtonGroup( parent, "ButtonGroup_65" );
-  qtarch_ButtonGroup_65->setGeometry( 310, 60, 260, 170 );
-  qtarch_ButtonGroup_65->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_65->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_65 = new QButtonGroup( qtarch_ButtonGroup_59, "ButtonGroup_65" );
   qtarch_ButtonGroup_65->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_65->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_65->setFontPropagation( QWidget::NoChildren );
@@ -431,11 +423,10 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_ButtonGroup_65->setFrameStyle( 49 );
   qtarch_ButtonGroup_65->setTitle( i18n("Filename") );
   qtarch_ButtonGroup_65->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_65,0,2,1,1);
   
-  filenameLine = new QCheckBox( parent, "filenameLine" );
-  filenameLine->setGeometry( 320, 80, 240, 30 );
-  filenameLine->setMinimumSize( 0, 0 );
-  filenameLine->setMaximumSize( 32767, 32767 );
+  grid2 = new QGridLayout( qtarch_ButtonGroup_65,3,2,15,7);
+  filenameLine = new QCheckBox( qtarch_ButtonGroup_65, "filenameLine" );
   filenameLine->setFocusPolicy( QWidget::TabFocus );
   filenameLine->setBackgroundMode( QWidget::PaletteBackground );
   filenameLine->setFontPropagation( QWidget::NoChildren );
@@ -444,11 +435,10 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   filenameLine->setAutoRepeat( FALSE );
   filenameLine->setAutoResize( FALSE );
   connect(filenameLine,SIGNAL(clicked()),SLOT(slotFilenameClicked()));
+  grid2->addWidget(filenameLine,0,0);
+
   
-  qtarch_Label_21 = new QLabel( parent, "Label_21" );
-  qtarch_Label_21->setGeometry( 320, 130, 100, 30 );
-  qtarch_Label_21->setMinimumSize( 0, 0 );
-  qtarch_Label_21->setMaximumSize( 32767, 32767 );
+  qtarch_Label_21 = new QLabel( qtarch_ButtonGroup_65, "Label_21" );
   qtarch_Label_21->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_21->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_21->setFontPropagation( QWidget::NoChildren );
@@ -456,11 +446,9 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_Label_21->setText( i18n("size of filename") );
   qtarch_Label_21->setAlignment( 289 );
   qtarch_Label_21->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_21,1,0);
   
-  qtarch_Label_25 = new QLabel( parent, "Label_25" );
-  qtarch_Label_25->setGeometry( 320, 180, 100, 30 );
-  qtarch_Label_25->setMinimumSize( 0, 0 );
-  qtarch_Label_25->setMaximumSize( 32767, 32767 );
+  qtarch_Label_25 = new QLabel( qtarch_ButtonGroup_65, "Label_25" );
   qtarch_Label_25->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_25->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_25->setFontPropagation( QWidget::NoChildren );
@@ -468,11 +456,9 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_Label_25->setText( i18n("position") );
   qtarch_Label_25->setAlignment( 289 );
   qtarch_Label_25->setMargin( -1 );
+  grid2->addWidget( qtarch_Label_25,2,0);
   
-  filenameSize = new QComboBox( FALSE, parent, "filenameSize" );
-  filenameSize->setGeometry( 430, 130, 130, 30 );
-  filenameSize->setMinimumSize( 0, 0 );
-  filenameSize->setMaximumSize( 32767, 32767 );
+  filenameSize = new QComboBox( FALSE,qtarch_ButtonGroup_65 , "filenameSize" );
   filenameSize->setFocusPolicy( QWidget::StrongFocus );
   filenameSize->setBackgroundMode( QWidget::PaletteBackground );
   filenameSize->setFontPropagation( QWidget::NoChildren );
@@ -481,11 +467,10 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   filenameSize->setAutoResize( FALSE );
   filenameSize->insertItem(i18n("short"));
   filenameSize->insertItem(i18n("full"));
-  
-  filenamePosition = new QComboBox( FALSE, parent, "filenamePosition" );
-  filenamePosition->setGeometry( 430, 180, 130, 30 );
-  filenamePosition->setMinimumSize( 0, 0 );
-  filenamePosition->setMaximumSize( 32767, 32767 );
+  grid2->addWidget( filenameSize,1,1);
+
+
+  filenamePosition = new QComboBox( FALSE, qtarch_ButtonGroup_65, "filenamePosition" );
   filenamePosition->setFocusPolicy( QWidget::StrongFocus );
   filenamePosition->setBackgroundMode( QWidget::PaletteBackground );
   filenamePosition->setFontPropagation( QWidget::NoChildren );
@@ -495,11 +480,10 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   filenamePosition->insertItem(i18n("left")); 
   filenamePosition->insertItem(i18n("center"));
   filenamePosition->insertItem(i18n("right"));
-  
-  qtarch_ButtonGroup_66 = new QButtonGroup( parent, "ButtonGroup_66" );
-  qtarch_ButtonGroup_66->setGeometry( 310, 240, 260, 170 );
-  qtarch_ButtonGroup_66->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_66->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(filenamePosition,2,1);
+
+
+  qtarch_ButtonGroup_66 = new QButtonGroup( qtarch_ButtonGroup_59 , "ButtonGroup_66" );
   qtarch_ButtonGroup_66->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_66->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_66->setFontPropagation( QWidget::NoChildren );
@@ -507,11 +491,11 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_ButtonGroup_66->setFrameStyle( 49 );
   qtarch_ButtonGroup_66->setTitle(i18n("Hostname") );
   qtarch_ButtonGroup_66->setAlignment( 1 );
-  
-  hostnameButton = new QCheckBox( parent, "hostnameButton" );
-  hostnameButton->setGeometry( 320, 260, 240, 30 );
-  hostnameButton->setMinimumSize( 0, 0 );
-  hostnameButton->setMaximumSize( 32767, 32767 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_66,3,5,1,1);
+
+  grid2 = new QGridLayout( qtarch_ButtonGroup_66,3,2,15,7);
+
+  hostnameButton = new QCheckBox( qtarch_ButtonGroup_66, "hostnameButton" );
   hostnameButton->setFocusPolicy( QWidget::TabFocus );
   hostnameButton->setBackgroundMode( QWidget::PaletteBackground );
   hostnameButton->setFontPropagation( QWidget::NoChildren );
@@ -520,11 +504,10 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   hostnameButton->setAutoRepeat( FALSE );
   hostnameButton->setAutoResize( FALSE );
   connect(hostnameButton,SIGNAL(clicked()),SLOT(slotHostnameClicked()));
+  grid2->addWidget(hostnameButton,0,0);
+
   
-  qtarch_Label_23 = new QLabel( parent, "Label_23" );
-  qtarch_Label_23->setGeometry( 320, 310, 100, 30 );
-  qtarch_Label_23->setMinimumSize( 0, 0 );
-  qtarch_Label_23->setMaximumSize( 32767, 32767 );
+  qtarch_Label_23 = new QLabel( qtarch_ButtonGroup_66, "Label_23" );
   qtarch_Label_23->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_23->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_23->setFontPropagation( QWidget::NoChildren );
@@ -532,11 +515,9 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_Label_23->setText(i18n("size of hostname") );
   qtarch_Label_23->setAlignment( 289 );
   qtarch_Label_23->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_23,1,0);
   
-  qtarch_Label_22 = new QLabel( parent, "Label_22" );
-  qtarch_Label_22->setGeometry( 320, 360, 100, 30 );
-  qtarch_Label_22->setMinimumSize( 0, 0 );
-  qtarch_Label_22->setMaximumSize( 32767, 32767 );
+  qtarch_Label_22 = new QLabel( qtarch_ButtonGroup_66, "Label_22" );
   qtarch_Label_22->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_22->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_22->setFontPropagation( QWidget::NoChildren );
@@ -544,11 +525,9 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   qtarch_Label_22->setText( i18n("position") );
   qtarch_Label_22->setAlignment( 289 );
   qtarch_Label_22->setMargin( -1 );
+  grid2->addWidget( qtarch_Label_22,2,0);
   
-  hostnamePosition = new QComboBox( FALSE, parent, "hostnamePosition" );
-  hostnamePosition->setGeometry( 430, 360, 130, 30 );
-  hostnamePosition->setMinimumSize( 0, 0 );
-  hostnamePosition->setMaximumSize( 32767, 32767 );
+  hostnamePosition = new QComboBox( FALSE,  qtarch_ButtonGroup_66, "hostnamePosition" );
   hostnamePosition->setFocusPolicy( QWidget::StrongFocus );
   hostnamePosition->setBackgroundMode( QWidget::PaletteBackground );
   hostnamePosition->setFontPropagation( QWidget::NoChildren );
@@ -558,11 +537,9 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   hostnamePosition->insertItem(i18n("left"));
   hostnamePosition->insertItem(i18n("center"));
   hostnamePosition->insertItem(i18n("right"));
+  grid2->addWidget(hostnamePosition,2,1);
   
-  hostnameSize = new QComboBox( FALSE, parent, "hostnameSize" );
-  hostnameSize->setGeometry( 430, 310, 130, 30 );
-  hostnameSize->setMinimumSize( 0, 0 );
-  hostnameSize->setMaximumSize( 32767, 32767 );
+  hostnameSize = new QComboBox( FALSE,qtarch_ButtonGroup_66 , "hostnameSize" );
   hostnameSize->setFocusPolicy( QWidget::StrongFocus );
   hostnameSize->setBackgroundMode( QWidget::PaletteBackground );
   hostnameSize->setFontPropagation( QWidget::NoChildren );
@@ -571,17 +548,7 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   hostnameSize->setAutoResize( FALSE );
   hostnameSize->insertItem(i18n("short"));
   hostnameSize->insertItem(i18n("full"));
-  
-  qtarch_ButtonGroup_59->insert( headertextButton );
-  qtarch_ButtonGroup_59->insert( loginButton );
-  qtarch_ButtonGroup_59->insert( fancyHeaderButton );
-  qtarch_ButtonGroup_59->insert( filenameLine );
-  qtarch_ButtonGroup_59->insert( hostnameButton );
-  qtarch_ButtonGroup_62->insert( fancyHeaderButton );
-  qtarch_ButtonGroup_61->insert( loginButton );
-  qtarch_ButtonGroup_60->insert( headertextButton );
-  qtarch_ButtonGroup_65->insert( filenameLine );
-  qtarch_ButtonGroup_66->insert( hostnameButton );
+  grid2->addWidget(hostnameSize,1,1);
 
   QWhatsThis::add(headerButton,
 	i18n("If you wish to have a page header, then check it."));
@@ -632,7 +599,7 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
 void CConfigEnscriptDlg::initTab2(QWidget*parent)
 {
   QVBoxLayout *box = new QVBoxLayout( parent );
-  box->setMargin( 5 );
+  box->setMargin( 15 );
   box->setSpacing( 10 );
 
   /**current date */
@@ -672,7 +639,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_88);
 
   QHBoxLayout *box2 = new QHBoxLayout( qtarch_ButtonGroup_88 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
   currentDatePosition = new QComboBox( FALSE,qtarch_ButtonGroup_88 , "currentDatePosition" );
@@ -699,7 +666,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_87);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_87 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
 
@@ -760,7 +727,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_90);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_90 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
   modificationDatePosition = new QComboBox( FALSE,  qtarch_ButtonGroup_90, "modificationDatePosition" );
@@ -787,7 +754,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_84);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_84 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
   modificationDateFormat = new QComboBox( FALSE, qtarch_ButtonGroup_84, "modificationDateFormat" );
@@ -842,7 +809,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_71);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_71 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
 
@@ -870,7 +837,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_85);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_85 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
   currentTimePosition = new QComboBox( FALSE, qtarch_ButtonGroup_85, "currentTimePosition" );
@@ -897,7 +864,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_89);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_89 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
 
@@ -951,7 +918,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_72);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_72 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
 
@@ -979,7 +946,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_75);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_75 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
   modificationTimePosition = new QComboBox( FALSE,  qtarch_ButtonGroup_75, "modificationTimePosition" );
@@ -1005,7 +972,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
   box1->addWidget(qtarch_ButtonGroup_86);
 
   box2 = new QHBoxLayout( qtarch_ButtonGroup_86 );
-  box2->setMargin( 5 );
+  box2->setMargin( 15 );
   box2->setSpacing( 10 );
 
   modificationTimeFormat = new QComboBox( FALSE, qtarch_ButtonGroup_86, "modificationTimeFormat" );
@@ -1055,70 +1022,9 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent)
 }
 
 void CConfigEnscriptDlg::initTab3(QWidget*parent) {
-  qtarch_ButtonGroup_20 = new QButtonGroup( parent, "ButtonGroup_20" );
-  qtarch_ButtonGroup_20->setGeometry( 20, 240, 280, 180 );
-  qtarch_ButtonGroup_20->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_20->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_20->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_20->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_20->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_20->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_20->setFrameStyle( 49 );
-  qtarch_ButtonGroup_20->setTitle(i18n("Font and TAB"));
-  qtarch_ButtonGroup_20->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_51 = new QButtonGroup( parent, "ButtonGroup_51" );
-  qtarch_ButtonGroup_51->setGeometry( 310, 130, 270, 290 );
-  qtarch_ButtonGroup_51->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_51->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_51->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_51->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_51->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_51->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_51->setFrameStyle( 49 );
-  qtarch_ButtonGroup_51->setTitle(i18n("Other options"));
-  qtarch_ButtonGroup_51->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_52 = new QButtonGroup( parent, "ButtonGroup_52" );
-  qtarch_ButtonGroup_52->setGeometry( 320, 190, 250, 110 );
-  qtarch_ButtonGroup_52->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_52->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_52->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_52->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_52->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_52->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_52->setFrameStyle( 49 );
-  qtarch_ButtonGroup_52->setTitle(i18n("Highlight bars"));
-  qtarch_ButtonGroup_52->setAlignment( 1 );
-  
-  qtarch_Label_14 = new QLabel( parent, "Label_14" );
-  qtarch_Label_14->setGeometry( 330, 250, 100, 30 );
-  qtarch_Label_14->setMinimumSize( 0, 0 );
-  qtarch_Label_14->setMaximumSize( 32767, 32767 );
-  qtarch_Label_14->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_14->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_14->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_14->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_14->setText(i18n("cycle of change"));
-  qtarch_Label_14->setAlignment( 289 );
-  qtarch_Label_14->setMargin( -1 );
+  QGridLayout *grid1 = new QGridLayout(parent,4,2,15,7);
 
-  qtarch_ButtonGroup_53 = new QButtonGroup( parent, "ButtonGroup_53" );
-  qtarch_ButtonGroup_53->setGeometry( 320, 315, 250, 100 );
-  qtarch_ButtonGroup_53->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_53->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_53->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_53->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_53->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_53->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_53->setFrameStyle( 49 );
-  qtarch_ButtonGroup_53->setTitle(i18n("Wrapped line"));
-  qtarch_ButtonGroup_53->setAlignment( 1 );
-  
   qtarch_ButtonGroup_33 = new QButtonGroup( parent, "ButtonGroup_33" );
-  qtarch_ButtonGroup_33->setGeometry( 20, 10, 280, 210 );
-  qtarch_ButtonGroup_33->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_33->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_33->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_33->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_33->setFontPropagation( QWidget::NoChildren );
@@ -1126,11 +1032,10 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_33->setFrameStyle( 49 );
   qtarch_ButtonGroup_33->setTitle(i18n("Numbering & border"));
   qtarch_ButtonGroup_33->setAlignment( 1 );
-  
-  bordersButton = new QCheckBox( parent, "bordersButton" );
-  bordersButton->setGeometry( 160, 30, 100, 30 );
-  bordersButton->setMinimumSize( 0, 0 );
-  bordersButton->setMaximumSize( 32767, 32767 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_33,0,1,0,0);
+
+  QGridLayout *grid2 = new QGridLayout(qtarch_ButtonGroup_33,4,2,15,7);
+  bordersButton = new QCheckBox( qtarch_ButtonGroup_33, "bordersButton" );
   bordersButton->setFocusPolicy( QWidget::TabFocus );
   bordersButton->setBackgroundMode( QWidget::PaletteBackground );
   bordersButton->setFontPropagation( QWidget::NoChildren );
@@ -1138,47 +1043,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   bordersButton->setText(i18n("borders"));
   bordersButton->setAutoRepeat( FALSE );
   bordersButton->setAutoResize( FALSE );
-  
-  tocButton = new QCheckBox( parent, "tocButton" );
-  tocButton->setGeometry( 330, 150, 120, 30 );
-  tocButton->setMinimumSize( 0, 0 );
-  tocButton->setMaximumSize( 32767, 32767 );
-  tocButton->setFocusPolicy( QWidget::TabFocus );
-  tocButton->setBackgroundMode( QWidget::PaletteBackground );
-  tocButton->setFontPropagation( QWidget::NoChildren );
-  tocButton->setPalettePropagation( QWidget::NoChildren );
-  tocButton->setText(i18n("table of contents"));
-  tocButton->setAutoRepeat( FALSE );
-  tocButton->setAutoResize( FALSE );
-  
-  markedWrappedLinesButton = new QCheckBox( parent, "markedWrappedLinesButton" );
-  markedWrappedLinesButton->setGeometry( 330, 330, 150, 30 );
-  markedWrappedLinesButton->setMinimumSize( 0, 0 );
-  markedWrappedLinesButton->setMaximumSize( 32767, 32767 );
-  markedWrappedLinesButton->setFocusPolicy( QWidget::TabFocus );
-  markedWrappedLinesButton->setBackgroundMode( QWidget::PaletteBackground );
-  markedWrappedLinesButton->setFontPropagation( QWidget::NoChildren );
-  markedWrappedLinesButton->setPalettePropagation( QWidget::NoChildren );
-  markedWrappedLinesButton->setText(i18n("marked wrapped lines"));
-  markedWrappedLinesButton->setAutoRepeat( FALSE );
-  markedWrappedLinesButton->setAutoResize( FALSE );
-  
-  qtarch_label = new QLabel( parent, "label" );
-  qtarch_label->setGeometry( 30, 170, 90, 30 );
-  qtarch_label->setMinimumSize( 0, 0 );
-  qtarch_label->setMaximumSize( 32767, 32767 );
-  qtarch_label->setFocusPolicy( QWidget::NoFocus );
-  qtarch_label->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_label->setFontPropagation( QWidget::NoChildren );
-  qtarch_label->setPalettePropagation( QWidget::NoChildren );
-  qtarch_label->setText(i18n("lines per page"));
-  qtarch_label->setAlignment( 289 );
-  qtarch_label->setMargin( -1 );
+  grid2->addWidget(bordersButton,0,1);
 
-  numberingPagesButton = new QCheckBox( parent, "numberingPagesButton" );
-  numberingPagesButton->setGeometry( 30, 70, 115, 30 );
-  numberingPagesButton->setMinimumSize( 0, 0 );
-  numberingPagesButton->setMaximumSize( 32767, 32767 );
+  numberingPagesButton = new QCheckBox( qtarch_ButtonGroup_33, "numberingPagesButton" );
   numberingPagesButton->setFocusPolicy( QWidget::TabFocus );
   numberingPagesButton->setBackgroundMode( QWidget::PaletteBackground );
   numberingPagesButton->setFontPropagation( QWidget::NoChildren );
@@ -1186,11 +1053,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   numberingPagesButton->setText(i18n("numbering pages"));
   numberingPagesButton->setAutoRepeat( FALSE );
   numberingPagesButton->setAutoResize( FALSE );
+  grid2->addWidget(numberingPagesButton,1,0);
   
-  qtarch_Label_8 = new QLabel( parent, "Label_8" );
-  qtarch_Label_8->setGeometry( 30, 120, 110, 30 );
-  qtarch_Label_8->setMinimumSize( 0, 0 );
-  qtarch_Label_8->setMaximumSize( 32767, 32767 );
+  qtarch_Label_8 = new QLabel( qtarch_ButtonGroup_33, "Label_8" );
   qtarch_Label_8->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_8->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_8->setFontPropagation( QWidget::NoChildren );
@@ -1198,11 +1063,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_8->setText(i18n("align files"));
   qtarch_Label_8->setAlignment( 289 );
   qtarch_Label_8->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_8,2,0);
   
-  numberingLineButton = new QCheckBox( parent, "numberingLineButton" );
-  numberingLineButton->setGeometry( 30, 30, 100, 30 );
-  numberingLineButton->setMinimumSize( 0, 0 );
-  numberingLineButton->setMaximumSize( 32767, 32767 );
+  numberingLineButton = new QCheckBox(qtarch_ButtonGroup_33 , "numberingLineButton" );
   numberingLineButton->setFocusPolicy( QWidget::TabFocus );
   numberingLineButton->setBackgroundMode( QWidget::PaletteBackground );
   numberingLineButton->setFontPropagation( QWidget::NoChildren );
@@ -1210,11 +1073,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   numberingLineButton->setText(i18n("numbering lines"));
   numberingLineButton->setAutoRepeat( FALSE );
   numberingLineButton->setAutoResize( FALSE );
+  grid2->addWidget(numberingLineButton,0,0);
   
-  linesPerPage = new QSpinBox( parent, "linesPerPage" );
-  linesPerPage->setGeometry( 160, 170, 130, 30 );
-  linesPerPage->setMinimumSize( 0, 0 );
-  linesPerPage->setMaximumSize( 32767, 32767 );
+  linesPerPage = new QSpinBox( qtarch_ButtonGroup_33, "linesPerPage" );
   linesPerPage->setFocusPolicy( QWidget::StrongFocus );
   linesPerPage->setBackgroundMode( QWidget::PaletteBackground );
   linesPerPage->setFontPropagation( QWidget::NoChildren );
@@ -1227,55 +1088,34 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   linesPerPage->setSuffix( "" );
   linesPerPage->setSpecialValueText( "" );
   linesPerPage->setWrapping( FALSE );
-  
-  valueForWrappedLine = new QComboBox( FALSE, parent, "valueForWrappedLine" );
-  valueForWrappedLine->setGeometry( 460, 370, 100, 30 );
-  valueForWrappedLine->setMinimumSize( 0, 0 );
-  valueForWrappedLine->setMaximumSize( 32767, 32767 );
-  valueForWrappedLine->setFocusPolicy( QWidget::StrongFocus );
-  valueForWrappedLine->setBackgroundMode( QWidget::PaletteBackground );
-  valueForWrappedLine->setFontPropagation( QWidget::NoChildren );
-  valueForWrappedLine->setPalettePropagation( QWidget::NoChildren );
-  valueForWrappedLine->setSizeLimit( 10 );
-  valueForWrappedLine->setAutoResize( FALSE );
-  valueForWrappedLine->insertItem( "black box" );
-  valueForWrappedLine->insertItem( "arrow" );
-  valueForWrappedLine->insertItem( "plus (+)" );
-  valueForWrappedLine->insertItem( "none" );
-  
-  cycleOfChange = new QSpinBox( parent, "cycleOfChange" );
-  cycleOfChange->setGeometry( 440, 250, 120, 30 );
-  cycleOfChange->setMinimumSize( 0, 0 );
-  cycleOfChange->setMaximumSize( 32767, 32767 );
-  cycleOfChange->setFocusPolicy( QWidget::StrongFocus );
-  cycleOfChange->setBackgroundMode( QWidget::PaletteBackground );
-  cycleOfChange->setFontPropagation( QWidget::NoChildren );
-  cycleOfChange->setPalettePropagation( QWidget::NoChildren );
-  cycleOfChange->setFrameStyle( 50 );
-  cycleOfChange->setLineWidth( 2 );
-  cycleOfChange->setRange( 1, 99 );
-  cycleOfChange->setSteps( 1, 0 );
-  cycleOfChange->setPrefix( "" );
-  cycleOfChange->setSuffix( "" );
-  cycleOfChange->setSpecialValueText( "" );
-  cycleOfChange->setWrapping( FALSE );
-  
-  qtarch_Label_13 = new QLabel( parent, "Label_13" );
-  qtarch_Label_13->setGeometry( 330, 370, 130, 30 );
-  qtarch_Label_13->setMinimumSize( 0, 0 );
-  qtarch_Label_13->setMaximumSize( 32767, 32767 );
-  qtarch_Label_13->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_13->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_13->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_13->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_13->setText(i18n("value for wrapped line"));
-  qtarch_Label_13->setAlignment( 289 );
-  qtarch_Label_13->setMargin( -1 );
-  
-  numberingPagesList = new QComboBox( FALSE, parent, "numberingPagesList" );
-  numberingPagesList->setGeometry( 160, 70, 130, 30 );
-  numberingPagesList->setMinimumSize( 0, 0 );
-  numberingPagesList->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(linesPerPage,3,1);
+
+
+
+  qtarch_label = new QLabel(qtarch_ButtonGroup_33, "label" );
+  qtarch_label->setFocusPolicy( QWidget::NoFocus );
+  qtarch_label->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_label->setFontPropagation( QWidget::NoChildren );
+  qtarch_label->setPalettePropagation( QWidget::NoChildren );
+  qtarch_label->setText(i18n("lines per page"));
+  qtarch_label->setAlignment( 289 );
+  qtarch_label->setMargin( -1 );
+  grid2->addWidget(qtarch_label,3,0);
+
+
+ alignFileList = new QComboBox( FALSE, qtarch_ButtonGroup_33, "alignFileList" );
+  alignFileList->setFocusPolicy( QWidget::StrongFocus );
+  alignFileList->setBackgroundMode( QWidget::PaletteBackground );
+  alignFileList->setFontPropagation( QWidget::AllChildren );
+  alignFileList->setPalettePropagation( QWidget::AllChildren );
+  alignFileList->setSizeLimit( 10 );
+  alignFileList->setAutoResize( FALSE );
+  alignFileList->insertItem(i18n("yes"));
+  alignFileList->insertItem(i18n("no"));
+  grid2->addWidget(alignFileList,2,1);
+
+
+  numberingPagesList = new QComboBox( FALSE, qtarch_ButtonGroup_33,"numberingPagesList" );
   numberingPagesList->setFocusPolicy( QWidget::StrongFocus );
   numberingPagesList->setBackgroundMode( QWidget::PaletteBackground );
   numberingPagesList->setFontPropagation( QWidget::NoChildren );
@@ -1285,23 +1125,24 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   numberingPagesList->insertItem(i18n("left"));
   numberingPagesList->insertItem(i18n("center"));
   numberingPagesList->insertItem(i18n("right"));
-  
-  highlightBarsButton = new QCheckBox( parent, "highlightBarsButton" );
-  highlightBarsButton->setGeometry( 330, 210, 100, 30 );
-  highlightBarsButton->setMinimumSize( 0, 0 );
-  highlightBarsButton->setMaximumSize( 32767, 32767 );
-  highlightBarsButton->setFocusPolicy( QWidget::TabFocus );
-  highlightBarsButton->setBackgroundMode( QWidget::PaletteBackground );
-  highlightBarsButton->setFontPropagation( QWidget::NoChildren );
-  highlightBarsButton->setPalettePropagation( QWidget::NoChildren );
-  highlightBarsButton->setText(i18n("highlight bars"));
-  highlightBarsButton->setAutoRepeat( FALSE );
-  highlightBarsButton->setAutoResize( FALSE );
-  
-  qtarch_Label_2 = new QLabel( parent, "Label_2" );
-  qtarch_Label_2->setGeometry( 30, 270, 100, 30 );
-  qtarch_Label_2->setMinimumSize( 0, 0 );
-  qtarch_Label_2->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(numberingPagesList,1,1);
+
+
+
+
+  qtarch_ButtonGroup_20 = new QButtonGroup( parent, "ButtonGroup_20" );
+  qtarch_ButtonGroup_20->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_20->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_20->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_20->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_20->setFrameStyle( 49 );
+  qtarch_ButtonGroup_20->setTitle(i18n("Font and TAB"));
+  qtarch_ButtonGroup_20->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_20,2,3,0,0);
+
+
+  grid2 = new QGridLayout(qtarch_ButtonGroup_20,3,2,15,7);
+  qtarch_Label_2 = new QLabel(qtarch_ButtonGroup_20 , "Label_2" );
   qtarch_Label_2->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_2->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_2->setFontPropagation( QWidget::NoChildren );
@@ -1309,11 +1150,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_2->setText(i18n("set TAB size"));
   qtarch_Label_2->setAlignment( 289 );
   qtarch_Label_2->setMargin( -1 );
-  
-  qtarch_Label_4 = new QLabel( parent, "Label_4" );
-  qtarch_Label_4->setGeometry( 30, 320, 100, 30 );
-  qtarch_Label_4->setMinimumSize( 0, 0 );
-  qtarch_Label_4->setMaximumSize( 32767, 32767 );
+  grid2->addWidget(qtarch_Label_2,0,0);
+
+  qtarch_Label_4 = new QLabel( qtarch_ButtonGroup_20, "Label_4" );
   qtarch_Label_4->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_4->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_4->setFontPropagation( QWidget::NoChildren );
@@ -1321,23 +1160,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_4->setText(i18n("font for header"));
   qtarch_Label_4->setAlignment( 289 );
   qtarch_Label_4->setMargin( -1 );
+  grid2->addWidget( qtarch_Label_4,1,0);
 
-  qtarch_Label_5 = new QLabel( parent, "Label_5" );
-  qtarch_Label_5->setGeometry( 30, 370, 100, 30 );
-  qtarch_Label_5->setMinimumSize( 0, 0 );
-  qtarch_Label_5->setMaximumSize( 32767, 32767 );
-  qtarch_Label_5->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_5->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_5->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_5->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_5->setText(i18n("font for body"));
-  qtarch_Label_5->setAlignment( 289 );
-  qtarch_Label_5->setMargin( -1 );
-  
-  setTabSize = new QSpinBox( parent, "setTabSize" );
-  setTabSize->setGeometry( 150, 270, 140, 30 );
-  setTabSize->setMinimumSize( 0, 0 );
-  setTabSize->setMaximumSize( 32767, 32767 );
+  setTabSize = new QSpinBox( qtarch_ButtonGroup_20, "setTabSize" );
   setTabSize->setFocusPolicy( QWidget::StrongFocus );
   setTabSize->setBackgroundMode( QWidget::PaletteBackground );
   setTabSize->setFontPropagation( QWidget::NoChildren );
@@ -1350,11 +1175,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   setTabSize->setSuffix( "" );
   setTabSize->setSpecialValueText( "" );
   setTabSize->setWrapping( FALSE );
+  grid2->addWidget(setTabSize,0,1);
   
-  fontForBodyButton = new QPushButton( parent, "fontForBodyButton" );
-  fontForBodyButton->setGeometry( 150, 370, 140, 30 );
-  fontForBodyButton->setMinimumSize( 0, 0 );
-  fontForBodyButton->setMaximumSize( 32767, 32767 );
+  fontForBodyButton = new QPushButton( qtarch_ButtonGroup_20, "fontForBodyButton" );
   fontForBodyButton->setFocusPolicy( QWidget::TabFocus );
   fontForBodyButton->setBackgroundMode( QWidget::PaletteBackground );
   fontForBodyButton->setFontPropagation( QWidget::NoChildren );
@@ -1362,11 +1185,21 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   fontForBodyButton->setText( "" );
   fontForBodyButton->setAutoRepeat( FALSE );
   fontForBodyButton->setAutoResize( FALSE );
+  grid2->addWidget(fontForBodyButton,2,1);
+
+  qtarch_Label_5 = new QLabel( qtarch_ButtonGroup_20, "Label_5" );
+  qtarch_Label_5->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_5->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_5->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_5->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_5->setText(i18n("font for body"));
+  qtarch_Label_5->setAlignment( 289 );
+  qtarch_Label_5->setMargin( -1 );
+  grid2->addWidget(qtarch_Label_5,2,0);
   
-  fontForHeaderButton = new QPushButton( parent, "fontForHeaderButton" );
-  fontForHeaderButton->setGeometry( 150, 320, 140, 30 );
-  fontForHeaderButton->setMinimumSize( 0, 0 );
-  fontForHeaderButton->setMaximumSize( 32767, 32767 );
+
+  
+  fontForHeaderButton = new QPushButton( qtarch_ButtonGroup_20 , "fontForHeaderButton" );
   fontForHeaderButton->setFocusPolicy( QWidget::TabFocus );
   fontForHeaderButton->setBackgroundMode( QWidget::PaletteBackground );
   fontForHeaderButton->setFontPropagation( QWidget::NoChildren );
@@ -1374,24 +1207,137 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   fontForHeaderButton->setText( "" );
   fontForHeaderButton->setAutoRepeat( FALSE );
   fontForHeaderButton->setAutoResize( FALSE );
+  grid2->addWidget(fontForHeaderButton,1,1);
 
-  alignFileList = new QComboBox( FALSE, parent, "alignFileList" );
-  alignFileList->setGeometry( 160, 120, 130, 30 );
-  alignFileList->setMinimumSize( 0, 0 );
-  alignFileList->setMaximumSize( 32767, 32767 );
-  alignFileList->setFocusPolicy( QWidget::StrongFocus );
-  alignFileList->setBackgroundMode( QWidget::PaletteBackground );
-  alignFileList->setFontPropagation( QWidget::AllChildren );
-  alignFileList->setPalettePropagation( QWidget::AllChildren );
-  alignFileList->setSizeLimit( 10 );
-  alignFileList->setAutoResize( FALSE );
-  alignFileList->insertItem(i18n("yes"));
-  alignFileList->insertItem(i18n("no"));
+
+
+  qtarch_ButtonGroup_51 = new QButtonGroup( parent, "ButtonGroup_51" );
+ 
+  qtarch_ButtonGroup_51->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_51->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_51->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_51->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_51->setFrameStyle( 49 );
+  qtarch_ButtonGroup_51->setTitle(i18n("Other options"));
+  qtarch_ButtonGroup_51->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_51,1,3,1,1);
+
+  grid2 = new QGridLayout(qtarch_ButtonGroup_51,3,1,15,7);
   
+
+  tocButton = new QCheckBox( qtarch_ButtonGroup_51, "tocButton" );
+  tocButton->setFocusPolicy( QWidget::TabFocus );
+  tocButton->setBackgroundMode( QWidget::PaletteBackground );
+  tocButton->setFontPropagation( QWidget::NoChildren );
+  tocButton->setPalettePropagation( QWidget::NoChildren );
+  tocButton->setText(i18n("table of contents"));
+  tocButton->setAutoRepeat( FALSE );
+  tocButton->setAutoResize( FALSE );
+  grid2->addWidget(tocButton,0,0);
+  
+  qtarch_ButtonGroup_52 = new QButtonGroup( qtarch_ButtonGroup_51, "ButtonGroup_52" );
+  qtarch_ButtonGroup_52->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_52->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_52->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_52->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_52->setFrameStyle( 49 );
+  qtarch_ButtonGroup_52->setTitle(i18n("Highlight bars"));
+  qtarch_ButtonGroup_52->setAlignment( 1 );
+  grid2->addWidget(qtarch_ButtonGroup_52,1,0);
+  
+  QGridLayout *grid3 = new QGridLayout(qtarch_ButtonGroup_52,2,2,15,7);
+
+
+  qtarch_Label_14 = new QLabel(qtarch_ButtonGroup_52 , "Label_14" );
+  qtarch_Label_14->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_14->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_14->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_14->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_14->setText(i18n("cycle of change"));
+  qtarch_Label_14->setAlignment( 289 );
+  qtarch_Label_14->setMargin( -1 );
+  grid3->addWidget(qtarch_Label_14,1,1);
+
+
+  highlightBarsButton = new QCheckBox(qtarch_ButtonGroup_52 , "highlightBarsButton" );
+  highlightBarsButton->setFocusPolicy( QWidget::TabFocus );
+  highlightBarsButton->setBackgroundMode( QWidget::PaletteBackground );
+  highlightBarsButton->setFontPropagation( QWidget::NoChildren );
+  highlightBarsButton->setPalettePropagation( QWidget::NoChildren );
+  highlightBarsButton->setText(i18n("highlight bars"));
+  highlightBarsButton->setAutoRepeat( FALSE );
+  highlightBarsButton->setAutoResize( FALSE );
+  grid3->addWidget(highlightBarsButton,0,0);
+
+  cycleOfChange = new QSpinBox( qtarch_ButtonGroup_52, "cycleOfChange" );
+  cycleOfChange->setFocusPolicy( QWidget::StrongFocus );
+  cycleOfChange->setBackgroundMode( QWidget::PaletteBackground );
+  cycleOfChange->setFontPropagation( QWidget::NoChildren );
+  cycleOfChange->setPalettePropagation( QWidget::NoChildren );
+  cycleOfChange->setFrameStyle( 50 );
+  cycleOfChange->setLineWidth( 2 );
+  cycleOfChange->setRange( 1, 99 );
+  cycleOfChange->setSteps( 1, 0 );
+  cycleOfChange->setPrefix( "" );
+  cycleOfChange->setSuffix( "" );
+  cycleOfChange->setSpecialValueText( "" );
+  cycleOfChange->setWrapping( FALSE );
+  grid3->addWidget(cycleOfChange,1,1);
+
+
+
+  qtarch_ButtonGroup_53 = new QButtonGroup( qtarch_ButtonGroup_51, "ButtonGroup_53" );
+  qtarch_ButtonGroup_53->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_53->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_53->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_53->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_53->setFrameStyle( 49 );
+  qtarch_ButtonGroup_53->setTitle(i18n("Wrapped line"));
+  qtarch_ButtonGroup_53->setAlignment( 1 );
+  grid2->addWidget(qtarch_ButtonGroup_53,2,0);
+  
+ 
+  grid3 = new QGridLayout(qtarch_ButtonGroup_53,2,2,15,7);
+  markedWrappedLinesButton = new QCheckBox( qtarch_ButtonGroup_53, "markedWrappedLinesButton" );
+  markedWrappedLinesButton->setFocusPolicy( QWidget::TabFocus );
+  markedWrappedLinesButton->setBackgroundMode( QWidget::PaletteBackground );
+  markedWrappedLinesButton->setFontPropagation( QWidget::NoChildren );
+  markedWrappedLinesButton->setPalettePropagation( QWidget::NoChildren );
+  markedWrappedLinesButton->setText(i18n("marked wrapped lines"));
+  markedWrappedLinesButton->setAutoRepeat( FALSE );
+  markedWrappedLinesButton->setAutoResize( FALSE );
+  grid3->addWidget(markedWrappedLinesButton,0,0);
+  
+
+
+  valueForWrappedLine = new QComboBox( FALSE, qtarch_ButtonGroup_53, "valueForWrappedLine" );
+  valueForWrappedLine->setFocusPolicy( QWidget::StrongFocus );
+  valueForWrappedLine->setBackgroundMode( QWidget::PaletteBackground );
+  valueForWrappedLine->setFontPropagation( QWidget::NoChildren );
+  valueForWrappedLine->setPalettePropagation( QWidget::NoChildren );
+  valueForWrappedLine->setSizeLimit( 10 );
+  valueForWrappedLine->setAutoResize( FALSE );
+  valueForWrappedLine->insertItem( "black box" );
+  valueForWrappedLine->insertItem( "arrow" );
+  valueForWrappedLine->insertItem( "plus (+)" );
+  valueForWrappedLine->insertItem( "none" );
+  grid3->addWidget(valueForWrappedLine,1,1);
+  
+ 
+  
+  qtarch_Label_13 = new QLabel( qtarch_ButtonGroup_53 , "Label_13" );
+  qtarch_Label_13->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_13->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_13->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_13->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_13->setText(i18n("value for wrapped line"));
+  qtarch_Label_13->setAlignment( 289 );
+  qtarch_Label_13->setMargin( -1 );
+  grid3->addWidget( qtarch_Label_13,1,0);
+  
+
+
   qtarch_ButtonGroup_21 = new QButtonGroup( parent, "ButtonGroup_174" );
-  qtarch_ButtonGroup_21->setGeometry( 310, 10, 270, 100 );
-  qtarch_ButtonGroup_21->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_21->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_21->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_21->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_21->setFontPropagation( QWidget::NoChildren );
@@ -1399,11 +1345,13 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_21->setFrameStyle( 49 );
   qtarch_ButtonGroup_21->setTitle(i18n("Textprinting"));
   qtarch_ButtonGroup_21->setAlignment( 1 );
-  
-  cutLinesButton = new QCheckBox( parent, "cutLinesButton" );
-  cutLinesButton->setGeometry( 320, 30, 250, 30 );
-  cutLinesButton->setMinimumSize( 0, 0 );
-  cutLinesButton->setMaximumSize( 32767, 32767 );
+
+  grid1->addWidget(qtarch_ButtonGroup_21,0,1);
+
+
+  grid2 = new QGridLayout(qtarch_ButtonGroup_21,2,1,15,7);
+
+  cutLinesButton = new QCheckBox( qtarch_ButtonGroup_21, "cutLinesButton" );
   cutLinesButton->setFocusPolicy( QWidget::TabFocus );
   cutLinesButton->setBackgroundMode( QWidget::PaletteBackground );
   cutLinesButton->setFontPropagation( QWidget::NoChildren );
@@ -1411,11 +1359,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   cutLinesButton->setText(i18n("cut lines"));
   cutLinesButton->setAutoRepeat( FALSE );
   cutLinesButton->setAutoResize( FALSE );
+  grid2->addWidget(cutLinesButton,0,0);
   
-  replaceButton = new QCheckBox( parent, "replaceButton" );
-  replaceButton->setGeometry( 320, 70, 250, 30 );
-  replaceButton->setMinimumSize( 0, 0 );
-  replaceButton->setMaximumSize( 32767, 32767 );
+  replaceButton = new QCheckBox( qtarch_ButtonGroup_21, "replaceButton" );
   replaceButton->setFocusPolicy( QWidget::TabFocus );
   replaceButton->setBackgroundMode( QWidget::PaletteBackground );
   replaceButton->setFontPropagation( QWidget::NoChildren );
@@ -1423,19 +1369,8 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   replaceButton->setText(i18n("replace non-printing character by space"));
   replaceButton->setAutoRepeat( FALSE );
   replaceButton->setAutoResize( FALSE );
+  grid2->addWidget(replaceButton,1,0);
   
-  qtarch_ButtonGroup_20->insert( fontForBodyButton );
-  qtarch_ButtonGroup_20->insert( fontForHeaderButton );
-  qtarch_ButtonGroup_51->insert( tocButton );
-  qtarch_ButtonGroup_51->insert( markedWrappedLinesButton );
-  qtarch_ButtonGroup_51->insert( highlightBarsButton );
-  qtarch_ButtonGroup_52->insert( highlightBarsButton );
-  qtarch_ButtonGroup_53->insert( markedWrappedLinesButton );
-  qtarch_ButtonGroup_33->insert( bordersButton );
-  qtarch_ButtonGroup_33->insert( numberingPagesButton );
-  qtarch_ButtonGroup_33->insert( numberingLineButton );
-  qtarch_ButtonGroup_21->insert( cutLinesButton );
-  qtarch_ButtonGroup_21->insert( replaceButton );
 
   QWhatsThis::add(bordersButton,
 	i18n("If button is checked, borders around columns are printed."));

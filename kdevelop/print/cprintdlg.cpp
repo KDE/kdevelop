@@ -645,7 +645,7 @@ void CPrintDlg::slotProgramActivated(int i) {
       qtarch_ButtonGroup_35->setEnabled(true);
       printingConfButton->setEnabled(true);
       previewButton->setEnabled(true);
-      printToFileDlg->setEnabled(true);
+      printToFileDlg->setEnabled(printToFileButton->isChecked());
       printToFileButton->setEnabled(true);
       qtarch_ButtonGroup_6->setEnabled(true); 
 
@@ -694,7 +694,7 @@ void CPrintDlg::slotProgramActivated(int i) {
     qtarch_ButtonGroup_35->setEnabled(true);
     printingConfButton->setEnabled(false);
     previewButton->setEnabled(true);
-    printToFileDlg->setEnabled(true);
+    printToFileDlg->setEnabled(printToFileButton->isChecked());
     printToFileButton->setEnabled(true);
     qtarch_ButtonGroup_6->setEnabled(true);
     
@@ -747,9 +747,9 @@ void CPrintDlg::slotProgramActivated(int i) {
     qtarch_ButtonGroup_35->setEnabled(false);
     printingConfButton->setEnabled(false);
     previewButton->setEnabled(false);
-    printToFileDlg->setEnabled(true);
+    printToFileDlg->setEnabled(printToFileButton->isChecked());
     printToFileButton->setEnabled(true);
-    qtarch_ButtonGroup_6->setEnabled(false);
+    qtarch_ButtonGroup_6->setEnabled(true);
     
     prettyPrintCheckBox->setChecked(false);
     prettyCombBox->setEnabled(false);
