@@ -31,8 +31,8 @@
 #include <kdebug.h>
 #include <kstddirs.h>
 
-#include <../../kate-cvs/interfaces/document.h>
-#include <../../kate-cvs/interfaces/view.h>
+#include <kate/document.h>
+#include <kate/view.h>
 #include <kparts/factory.h>
 
 #include "ckdevelop.h"
@@ -130,6 +130,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
   Kate::Document* pEditDoc = findKWriteDoc(filename);
   Kate::View* pCurEditWidget = currentEditView();
   Kate::Document* pCurEditDoc = currentEditDoc();
+  QString editWidgetName;
 
   if (pCurEditWidget) {
       if (pCurEditWidget->getDoc() == pEditDoc) {
@@ -140,23 +141,10 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
               pEditWidget = getFirstEditView(pEditDoc);
           }
       }
+      editWidgetName = pCurEditWidget->getDoc()->docName();
   }
 //  CEditWidget* pCurEditWidget = currentEditView();
 
-  QString editWidgetName;
-  CEditWidget* pEditWidget = 0L;
-  CEditWidget* pCurrentEditWidget = currentEditView();
-  if (pCurrentEditWidget) {
-    if (pCurrentEditWidget->doc() == pEditDoc) {
-      pEditWidget = pCurrentEditWidget;
-    }
-    else {
-      if (pEditDoc) {
-        pEditWidget = getFirstEditView(pEditDoc);
-      }
-    }
-    editWidgetName = pCurrentEditWidget->getDoc()->docName();
-  }
 
   // Make sure that we found the file in the editor_widget in our list
   if (pEditDoc) {
@@ -188,9 +176,9 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 //    }
     }
 
-    if (!bShowModifiedBox) {
-      pEditDoc->setLastFileModifDate(file_info.lastModified());
-    }
+//    if (!bShowModifiedBox) {
+//      pEditDoc->setLastFileModifDate(file_info.lastModified());
+//    }
 
     if (!bForceReload && pEditWidget) {
       if (line != -1)
@@ -227,7 +215,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
       // use the first view we found of this doc to show the text
       pCurEditWidget = getFirstEditView(pDoc);
       // awkward but this reloads the file;
-      pDoc->openFile();
+      pDoc->openURL(pDoc->url());
     }
     // not sure why this had to be reloaded
     // loadKWriteDoc(pDoc , filename, 1);
@@ -262,7 +250,7 @@ void DocViewMan::doOptionsEditor()
   if(currentEditView())
   {
     //currentEditView()->optDlg();
-    currentEditView()->configDialog();
+    currentEditDoc()->configDialog();
     doTakeOverOfEditorOptions();
   }
   else {
@@ -377,7 +365,7 @@ void DocViewMan::doSearch()
 void DocViewMan::doRepeatSearch(QString &/*search_text*/, int back)
 {
   if (currentEditView()) {
-      currentEditView()->searchAgain(back==1);
+      currentEditView()->findAgain(back==1);
   }
 }
 
@@ -388,7 +376,7 @@ void DocViewMan::doSearchText(QString &text)
     if (curDocIsBrowser())
       text = currentBrowserDoc()->selectedText();
     else {
-      text = currentEditView()->markedText();
+      text = currentEditDoc()->selection();
       if(text == "") {
         text = currentEditView()->currentWord();
       }
@@ -594,10 +582,10 @@ void DocViewMan::closeKWriteDoc(Kate::Document* pDoc)
 
 //  QList<Kate::View> views = pDoc->viewList();
 //  QListIterator<Kate::View>  itViews(views);
-
-  for (Kate::View* itView = pDoc->getFirstView();
+  QPtrList<KTextEditor::View> viewList = pDoc->views();
+  for (Kate::View* itView = dynamic_cast<Kate::View*>(viewList.first());
                    itView != 0L ;
-                   itView = pDoc->getNextView()) {
+                   itView = dynamic_cast<Kate::View*>(viewList.next())) {
 //    CEditWidget* pView = (CEditWidget*) itView->parentWidget();
     Kate::View* pView = (Kate::View*) itView->parentWidget();
     if (!pView) continue;
@@ -925,7 +913,7 @@ void DocViewMan::closeEditView(Kate::View* pView)
   m_pParent->removeWindowFromMdi( pMDICover);
   m_MDICoverList.remove( pMDICover);
 
-  if (pDoc->viewCount() == 0) {
+  if (pDoc->views().count() == 0) {
     closeKWriteDoc(pDoc);
   }
 }
@@ -967,7 +955,7 @@ void DocViewMan::slotResetMainFrmCaption()
 //-----------------------------------------------------------------------------
 Kate::View* DocViewMan::getFirstEditView(Kate::Document* pDoc) const
 {
-  return (dynamic_cast<Kate::View*> (pDoc->getFirstView()));
+  return (dynamic_cast<Kate::View*> (pDoc->views().getFirst()));
 }
 
 //-----------------------------------------------------------------------------
@@ -1165,7 +1153,9 @@ void DocViewMan::doFileCloseAll()
             m_pParent->switchToFile(pDoc->docName());
             handledNames.append(pDoc->docName());
             m_pParent->slotFileSave();
-            cont = !currentEditView()->isModified(); //something went wrong
+            // this doesnt work anymore (rokrau 12/09/01)
+
+            //cont = !currentEditView()->isModified(); //something went wrong
           }
           break;
         }
@@ -1413,17 +1403,17 @@ void DocViewMan::saveModifiedFiles()
 
 //      if (qYesNo == KMessageBox::Yes) {
 //        kdDebug() << " KMessageBox::Yes" << "\n";
-          bool isModified=true;
+//          bool isModified=true;
           if (Kate::View* pEditView=getFirstEditView(pDoc)) {
             pEditView->save();
             // kind of awkward way to find out whether the save succeeded
-            isModified = pEditView->isModified();
-            kdDebug() << "save document: "
-                      << pEditView->getDoc()->docName() << ", "
-                      << ((!isModified) ? "succeeded" : "failed") << "\n";
+//            isModified = pEditView->isModified();
+//            kdDebug() << "save document: "
+//                      << pEditView->getDoc()->docName() << ", "
+//                      << ((!isModified) ? "succeeded" : "failed") << "\n";
           }
 
-          if (!isModified) {
+//          if (!isModified) {
 #ifdef WITH_CPP_REPARSE
             mod = true;
 #else
@@ -1439,7 +1429,7 @@ void DocViewMan::saveModifiedFiles()
             //QFileInfo fileInfoSavedFile(pDoc->docName());
             //pDoc->setLastFileModifDate(fileInfoSavedFile.lastModified());
 
-          }
+//          }
 //        }
       }
     }
@@ -1637,8 +1627,9 @@ void DocViewMan::doBookmarksToggle()
   }
   else
   {
-    if (currentEditView())
-      currentEditView()->toggleBookmark();
+//    these are currently not available (rokrau 12/09/01)
+//    if (currentEditView())
+//      currentEditView()->toggleBookmark();
   }
 
 }
@@ -2130,14 +2121,14 @@ void DocViewMan::slotToolbarClicked(int item)
 
 void DocViewMan::slotEditUndo()
 {
-  if (currentEditView())
-    currentEditView()->undo();
+  if (currentEditDoc())
+    currentEditDoc()->undo();
 }
 
 void DocViewMan::slotEditRedo()
 {
-  if (currentEditView())
-    currentEditView()->redo();
+  if (currentEditDoc())
+    currentEditDoc()->redo();
 }
 
 void DocViewMan::slotEditCut()
@@ -2199,22 +2190,23 @@ void DocViewMan::slotEditRepeatSearchBack()
 
 void DocViewMan::slotEditSelectAll()
 {
-  if (currentEditView()) {
+  if (currentEditDoc()) {
         emit sig_newStatus(i18n("Selecting all..."));
-        currentEditView()->selectAll();
+        currentEditDoc()->selectAll();
         emit sig_newStatus(i18n("Ready."));
     }
 }
 
 void DocViewMan::slotEditInvertSelection()
 {
-  if (currentEditView())
-    currentEditView()->invertSelection();
+// this is currently not available through the interface (rokrau 12/09/01)
+//  if (currentEditView())
+//    currentEditView()->invertSelection();
 }
 void DocViewMan::slotEditDeselectAll()
 {
-  if (currentEditView())
-    currentEditView()->deselectAll();
+  if (currentEditDoc())
+    currentEditDoc()->clearSelection();
 }
 
 void DocViewMan::activateView1()
