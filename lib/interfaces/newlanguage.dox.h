@@ -42,7 +42,11 @@ Implementing methods:
 
 Should be enough for a language support to start working.
 
-KDevelop part is available as a New Project type: <code>C++->KDevelop->KDevelop Part</code>.
+\section KDevLang KDevLang project template
+KDevelop ships with KDevLang project template. It is a simple language support prototype that can be used when developing language support plugins with KDevelop.
+To use it, start a New Project and select: <code>C++->KDevelop->KDevelop Language Support Plugin</code> in the application wizard.
+The template is located in <code>parts/appwizard/kdevlang</code>, you can change it there if you need.
+
 
 \section LSupp Language Support
 
@@ -176,9 +180,6 @@ write a <B>debugger support</B>. KDevelop already provides GDB support
 \section Compiler Compiler plugins
 
 There is an ability to create compiler plugin for KDevelop. Compiler plugin provides the compiler configuration dialog which implements command line compiler options. Compiler plugins must implement KDevCompilerOptions interface.
-
-\section KDevLang KDevLang project template
-KDevelop ships with KDevLang project template. It is a simple language support prototype that can be used when developing language support plugins with KDevelop. The template is located in <code>parts/appwizard/kdevlang</code> and it can also can be found in new application wizard in KDevelop.
 
 \section MiscInf Other Info
 
