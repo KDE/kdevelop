@@ -19,6 +19,7 @@
 #include <qstatusbar.h>
 #include <qprogressbar.h>
 #include <qregexp.h>
+#include <qlabel.h>
 #include <kapp.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -70,7 +71,7 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
                                "If you are looking at an implementation file (.cpp etc.), "
                                "this brings you to the corresponding header file.") );
     action->setEnabled(false);
-    
+
     m_pParser = 0;
     m_pCompletion = 0;
     m_pEditIface = 0;
@@ -82,10 +83,8 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
 
 CppSupportPart::~CppSupportPart()
 {
-    if ( m_pParser ) delete m_pParser;
-/*    if ( m_pEditIface ) delete m_pEditIface;
-    if ( m_pCursorIface ) delete m_pCursorIface;*/
-    if ( m_pCompletion ) delete m_pCompletion;
+    delete m_pParser;
+    delete m_pCompletion;
 }
 
 
@@ -131,9 +130,17 @@ void CppSupportPart::projectOpened()
 
 void CppSupportPart::projectClosed()
 {
+	if ( !QFile::exists ( ( project()->projectDirectory() + "/classstore.pcs" ) ) )
+	{
+		if ( classStore()->open ( ( project()->projectDirectory() + "/classstore.pcs" ), IO_WriteOnly ) )
+		{
+			classStore()->storeAll();
+			classStore()->close();
+		}
+	}
 
-	if ( m_pParser) delete m_pParser;
-    if ( m_pCompletion ) delete m_pCompletion;
+	delete m_pParser;
+    delete m_pCompletion;
 
     m_pParser = 0;
     m_pCompletion = 0;
@@ -198,6 +205,35 @@ void CppSupportPart::initialParse()
     
     if (project())
 	{
+		if ( QFile::exists ( ( project()->projectDirectory() + "/classstore.pcs" ) ) )
+		{
+			if ( classStore()->open ( ( project()->projectDirectory() + "/classstore.pcs" ), IO_ReadOnly ) )
+			{
+				kdDebug ( 9007 ) << "loading persistant class store: " << ( project()->projectDirectory() + "/classstore.pcs" ) << endl;
+				
+				kapp->setOverrideCursor(waitCursor);
+
+				QLabel* label = new QLabel ( i18n ( "Loading class store..." ), core()->statusBar() );
+				//label->setMinimumWidth ( 120 );
+
+				core()->statusBar()->addWidget ( label );
+				label->setText ( "Loading class store..." );
+				label->show();
+
+				classStore()->restoreAll();
+				classStore()->close();
+
+				core()->statusBar()->removeWidget ( label );
+
+				delete label;
+
+				emit updatedSourceInfo();
+
+				kapp->restoreOverrideCursor();
+			}
+		}
+		else
+		{
 			kapp->setOverrideCursor(waitCursor);
 
 			QStringList files = project()->allSourceFiles();
@@ -222,6 +258,7 @@ void CppSupportPart::initialParse()
 
 			emit updatedSourceInfo();
 			kapp->restoreOverrideCursor();
+		}
 	}
 	else
 	{
