@@ -61,7 +61,6 @@ struct ParserPrivateData
         {}
 };
 
-
 Parser::Parser( Driver* drv, Lexer* lexer )
     : driver( drv ),
       lex( lexer )
@@ -371,10 +370,12 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
 	    parseCvQualify( cv );
 
 	    if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
+	        spec->setCvQualify( cv );
 	        parseInitDeclaratorList(declarators);
 	        ADVANCE( ';', ";" );
 
 		SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
+		ast->setStorageSpecifier( storageSpec );
 		ast->setTypeSpec( spec );
 		ast->setInitDeclaratorList( declarators );
 		UPDATE_POS( ast, start, lex->index() );
@@ -382,7 +383,7 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
 
 	        return true;
 	    }
-	
+
 	    return parseDeclaration( node );
 	}
 
@@ -618,10 +619,13 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
 	TypeSpecifierAST::Node spec;
 	if( !parseSimpleTypeSpecifier(spec) ){
 	    parseError();
+	    return false;
 	}
+        spec->setCvQualify( cv );
 
 	GroupAST::Node cv2;
 	parseCvQualify(cv2);
+        spec->setCv2Qualify( cv2 );
 
 	AST::Node ptrOp;
 	while( parsePtrOperator(ptrOp) )
@@ -838,6 +842,7 @@ bool Parser::parseCvQualify( GroupAST::Node& node )
 	    lex->nextToken();
             AST::Node word = CreateNode<AST>();
             UPDATE_POS( word, startWord, lex->index() );
+	    ast->addNode( word );
 	} else
 	    break;
     }
@@ -853,31 +858,86 @@ bool Parser::parseCvQualify( GroupAST::Node& node )
     return true;
 }
 
+#if 1
+bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
+{
+    int start = lex->index();
+    bool isIntegral = false;
+    bool done = false;
+
+    while( !done ){
+
+        switch( lex->lookAhead(0) ){
+	    case Token_char:
+	    case Token_wchar_t:
+	    case Token_bool:
+	    case Token_short:
+	    case Token_int:
+	    case Token_long:
+	    case Token_signed:
+	    case Token_unsigned:
+	    case Token_float:
+	    case Token_double:
+	    case Token_void:
+	        isIntegral = true;
+	        lex->nextToken();
+	        break;
+
+	    default:
+	        done = true;
+	}
+    }
+
+    TypeSpecifierAST::Node ast = CreateNode<TypeSpecifierAST>();
+    if( isIntegral ){
+	AST::Node n = CreateNode<AST>();
+	UPDATE_POS( n, start, lex->index() );
+
+        NameAST::Node name = CreateNode<NameAST>();
+	name->setUnqualifedName( n );
+	name->setText( toString(start, lex->index()) );
+	UPDATE_POS( name, start, lex->index() );
+	ast->setName( name );
+    } else {
+        NameAST::Node name;
+        if( !parseName(name) ){
+            lex->setIndex( start );
+	    return false;
+        }
+	ast->setName( name );
+    }
+
+    ast->setText( toString(start, lex->index()) );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    return true;
+}
+
+#else
 bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseSimpleTypeSpecifier()" << endl;
-    
+
     int start = lex->index();
     bool isIntegral = false;
-    
+
     TypeSpecifierAST::Node ast = CreateNode<TypeSpecifierAST>();
-    
+
     while( !lex->lookAhead(0).isNull() ){
 	int tk = lex->lookAhead( 0 );
-	
-	if( tk == Token_char    || tk == Token_wchar_t  || 
+
+	if( tk == Token_char    || tk == Token_wchar_t  ||
 	    tk == Token_bool    || tk == Token_short    ||
-	    tk == Token_int     || tk == Token_long     || 
+	    tk == Token_int     || tk == Token_long     ||
 	    tk == Token_signed  || tk == Token_unsigned ||
-	    tk == Token_float   || tk == Token_double   || 
-	    tk == Token_void ){  
+	    tk == Token_float   || tk == Token_double   ||
+	    tk == Token_void ){
 	    lex->nextToken();
 	    isIntegral = true;
 	} else if( isIntegral ){
 	    NameAST::Node name = CreateNode<NameAST>();
 	    UPDATE_POS( name, start, lex->index() );
 	    name->setText( toString(start, lex->index()) );
-	    
 	    ast->setName( name );
 	    break;
 	} else
@@ -888,14 +948,16 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 	NameAST::Node name;
 	if( !parseName(name) )
 	    return false;
+	name->setText( toString(start, lex->index()) );
 	ast->setName( name );
     }
-    
+
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
-    
+
     return true;
 }
+#endif
 
 bool Parser::parsePtrOperator( AST::Node& node )
 {
@@ -930,7 +992,7 @@ bool Parser::parsePtrOperator( AST::Node& node )
 bool Parser::parseTemplateArgument( AST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgument()" << endl;
-    
+
 #if 0
     if( parseTypeId() ){
 	qWarning( "token = %s", lex->lookAhead(0).toString().latin1() );
@@ -959,14 +1021,17 @@ bool Parser::parseTypeSpecifier( TypeSpecifierAST::Node& spec )
     parseCvQualify( cv );
 
     if( parseElaboratedTypeSpecifier(spec) || parseSimpleTypeSpecifier(spec) ){
+        spec->setCvQualify( cv );
+
         GroupAST::Node cv2;
 	parseCvQualify( cv2 );
+        spec->setCv2Qualify( cv2 );
+
 	return true;
     }
 
     return false;
 }
-
 bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarator()" << endl;
@@ -1152,8 +1217,13 @@ bool Parser::parseAbstractDeclarator( DeclaratorAST::Node& node )
 	} else
 	    lex->nextToken();
 
-	GroupAST::Node cv;
-	parseCvQualify( cv );
+	int startConstant = lex->index();
+	if( lex->lookAhead(0) == Token_const ){
+	    lex->nextToken();
+	    AST::Node constant = CreateNode<AST>();
+	    UPDATE_POS( constant, startConstant, lex->index() );
+	    ast->setConstant( constant );
+	}
 
 	AST::Node except;
 	if( parseExceptionSpecification(except) ){
@@ -1181,9 +1251,9 @@ update_node:
 bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumSpecifier()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != Token_enum ){
 	return false;
     }
@@ -1199,40 +1269,40 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
 	return false;
     }
     lex->nextToken();
-    
+
     EnumSpecifierAST::Node ast = CreateNode<EnumSpecifierAST>();
-            
+
     EnumeratorAST::Node enumerator;
     if( parseEnumerator(enumerator) ){
         ast->addEnumerator( enumerator );
-    
+
         while( lex->lookAhead(0) == ',' ){
 	    lex->nextToken();
-	
+
 	    if( !parseEnumerator(enumerator) ){
 	        //reportError( i18n("Enumerator expected") );
 	        break;
 	    }
-	
+
 	    ast->addEnumerator( enumerator );
         }
     }
-    
+
     if( lex->lookAhead(0) != '}' )
 	reportError( i18n("} missing") );
     else
 	lex->nextToken();
-    
+
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
-    
+
     return true;
 }
 
 bool Parser::parseTemplateParameterList( AST::Node& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateParameterList()" << endl;
-    
+
     AST::Node param;
     if( !parseTemplateParameter(param) ){
 	return false;
@@ -1734,6 +1804,8 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
 
     TypeSpecifierAST::Node spec;
     if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
+        spec->setCvQualify( cv );
+
     	InitDeclaratorListAST::Node declarators;
 	parseInitDeclaratorList( declarators );
 	ADVANCE( ';', ";" );
@@ -1770,9 +1842,9 @@ bool Parser::parseCtorInitializer( AST::Node& /*node*/ )
 bool Parser::parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseElaboratedTypeSpecifier()" << endl;
-    
+
     int start = lex->index();
-    
+
     int tk = lex->lookAhead( 0 );
     if( tk == Token_class  ||
 	tk == Token_struct ||
@@ -1780,23 +1852,25 @@ bool Parser::parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node )
 	tk == Token_enum   ||
 	tk == Token_typename )
     {
-        AST::Node kind = CreateNode<AST>();	
+        AST::Node kind = CreateNode<AST>();
 	lex->nextToken();
-	UPDATE_POS( kind, start, lex->index() );	
-	
+	UPDATE_POS( kind, start, lex->index() );
+
 	NameAST::Node name;
-	
+
 	if( parseName(name) ){
+	    name->setText( toString(start, lex->index()) );
 	    ElaboratedTypeSpecifierAST::Node ast = CreateNode<ElaboratedTypeSpecifierAST>();
 	    ast->setKind( kind );
 	    ast->setName( name );
+	    ast->setText( toString(start, lex->index()) );
 	    UPDATE_POS( ast, start, lex->index() );
 	    node = ast;
-	    
+
 	    return true;
 	}
     }
-    
+
     lex->setIndex( start );
     return false;
 }
@@ -2729,6 +2803,7 @@ bool Parser::parseBlockDeclaration( DeclarationAST::Node& node )
 	lex->setIndex( start );
 	return false;
     }
+    spec->setCvQualify( cv );
 
     InitDeclaratorListAST::Node declarators;
     parseInitDeclaratorList( declarators );
@@ -2905,6 +2980,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 
     TypeSpecifierAST::Node spec;
     if( parseTypeSpecifier(spec) ){
+        spec->setCvQualify( cv );
 
 	if( lex->lookAhead(0) == ';' ){
 	    // type definition
@@ -2980,7 +3056,6 @@ bool Parser::parseFunctionBody( StatementListAST::Node& node )
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseFunctionBody()" << endl;
 
     int start = lex->index();
-
     if( lex->lookAhead(0) != '{' ){
 	return false;
     }

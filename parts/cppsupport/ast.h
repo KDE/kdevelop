@@ -74,7 +74,8 @@ enum NodeType
     NodeType_ParameterDeclarationClause,
     NodeType_Group,
     NodeType_AccessDeclaration,
-
+    NodeType_UnqualifiedName,
+    
     NodeType_Custom = 2000
 };
 
@@ -207,6 +208,35 @@ private:
     void operator = ( const NestedNameSpecifierAST& source );
 };
 
+class UnqualifiedNameAST: public AST
+{
+public:
+    typedef std::auto_ptr<UnqualifiedNameAST> Node;
+    enum { Type = NodeType_UnqualifiedName };
+
+public:
+    UnqualifiedNameAST();
+
+    AST* name() { return m_name.get(); }
+    void setName( AST::Node& name );
+
+    bool isDestructor() const { return m_isDestructor; }
+    void setIsDestructor( bool isDestructor );
+
+    TemplateArgumentListAST* templateArgumentList() { return m_templateArgumentList.get(); }
+    void setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList );
+
+private:
+    AST::Node m_name;
+    bool m_isDestructor;
+    TemplateArgumentListAST::Node m_templateArgumentList;
+
+private:
+    UnqualifiedNameAST( const UnqualifiedNameAST& source );
+    void operator = ( const UnqualifiedNameAST& source );
+};
+
+
 class NameAST: public AST
 {
 public:
@@ -278,11 +308,19 @@ public:
     virtual NameAST* name() { return m_name.get(); }
     virtual void setName( NameAST::Node& name );
 
+    GroupAST* cvQualify() { return m_cvQualify.get(); }
+    void setCvQualify( GroupAST::Node& cvQualify );
+
+    GroupAST* cv2Qualify() { return m_cv2Qualify.get(); }
+    void setCv2Qualify( GroupAST::Node& cv2Qualify );
+
 public:
     TypeSpecifierAST();
 
 private:
     NameAST::Node m_name;
+    GroupAST::Node m_cvQualify;
+    GroupAST::Node m_cv2Qualify;
 
 private:
     TypeSpecifierAST( const TypeSpecifierAST& source );
@@ -294,24 +332,24 @@ class BaseSpecifierAST: public AST
 public:
     typedef std::auto_ptr<BaseSpecifierAST> Node;
     enum { Type = NodeType_BaseSpecifier };
-    
+
 public:
     BaseSpecifierAST();
 
     AST* isVirtual() { return m_isVirtual.get(); }
     void setIsVirtual( AST::Node& isVirtual );
-    
+
     AST* access() { return m_access.get(); }
     void setAccess( AST::Node& access );
-    
+
     NameAST* name() { return m_name.get(); }
     void setName( NameAST::Node& name );
-    
+
 private:
     AST::Node m_isVirtual;
     AST::Node m_access;
     NameAST::Node m_name;
-            
+
 private:
     BaseSpecifierAST( const BaseSpecifierAST& source );
     void operator = ( const BaseSpecifierAST& source );
@@ -1001,7 +1039,7 @@ public:
 
     QPtrList<StatementAST> statementList() { return m_statementList; }
     void addStatement( StatementAST::Node& statement );
-    
+
 private:
     QPtrList<StatementAST> m_statementList;
     

@@ -98,6 +98,8 @@ QString nodeTypeToString( NodeType type )
 	return "Group";
     case NodeType_AccessDeclaration:
 	return "AccessDeclaration";
+    case NodeType_UnqualifiedName:
+	return "UnqualifiedName";
     case NodeType_Custom:
 	return "Custom";
     }
@@ -413,6 +415,18 @@ void NestedNameSpecifierAST::addClassOrNamespaceName( ClassOrNamespaceNameAST::N
 // ------------------------------------------------------------------------
 TypeSpecifierAST::TypeSpecifierAST()
 {
+}
+
+void TypeSpecifierAST::setCvQualify( GroupAST::Node& cvQualify )
+{
+    m_cvQualify = cvQualify;
+    if( m_cvQualify.get() ) m_cvQualify->setParent( this );
+}
+
+void TypeSpecifierAST::setCv2Qualify( GroupAST::Node& cv2Qualify )
+{
+    m_cv2Qualify = cv2Qualify;
+    if( m_cv2Qualify.get() ) m_cv2Qualify->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -913,5 +927,28 @@ void AccessDeclarationAST::addAccess( AST::Node& access )
 
     access->setParent( this );
     m_accessList.append( access.release() );
+}
+
+// --------------------------------------------------------------------------
+UnqualifiedNameAST::UnqualifiedNameAST()
+    : m_isDestructor( false )
+{
+}
+
+void UnqualifiedNameAST::setName( AST::Node& name )
+{
+    m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
+}
+
+void UnqualifiedNameAST::setIsDestructor( bool isDestructor )
+{
+    m_isDestructor = isDestructor;
+}
+
+void UnqualifiedNameAST::setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList )
+{
+    m_templateArgumentList = templateArgumentList;
+    if( m_templateArgumentList.get() ) m_templateArgumentList->setParent( this );
 }
 

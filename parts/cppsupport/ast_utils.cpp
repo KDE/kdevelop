@@ -176,4 +176,82 @@ void scopeOfNode( AST* ast, QStringList& scope )
 }
 
 
+QString typeSpecToString( TypeSpecifierAST* typeSpec )
+{
+    if( !typeSpec )
+        return QString::null;
+
+    QString text;
+
+    if( typeSpec->cvQualify() ){
+        QPtrList<AST> l = typeSpec->cvQualify()->nodeList();
+        QPtrListIterator<AST> it( l );
+	while( it.current() ){
+	    text += it.current()->text();
+	    ++it;
+
+	    text += " ";
+	}
+    }
+
+    text += typeSpec->text();
+
+    if( typeSpec->cv2Qualify() ){
+        QPtrList<AST> l = typeSpec->cv2Qualify()->nodeList();
+        QPtrListIterator<AST> it( l );
+	while( it.current() ){
+	    text += it.current()->text();
+	    ++it;
+
+	    text += " ";
+	}
+    }
+
+    return text.simplifyWhiteSpace();
+}
+
+QString declaratorToString( DeclaratorAST* declarator )
+{
+   if( !declarator )
+       return QString::null;
+
+   QString text;
+
+   QPtrList<AST> ptrOpList = declarator->ptrOpList();
+   for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it ){
+       text += it.current()->text();
+       ++it;
+   }
+   text += " ";
+
+   if( declarator->declaratorId() )
+       text += declarator->declaratorId()->text() + " ";
+
+   if( declarator->parameterDeclarationClause() ){
+       text += "( ";
+
+       ParameterDeclarationListAST* l = declarator->parameterDeclarationClause()->parameterDeclarationList();
+       if( l != 0 ){
+           QPtrList<ParameterDeclarationAST> params = l->parameterList();
+	   QPtrListIterator<ParameterDeclarationAST> it( params );
+
+           while( it.current() ){
+	       text += typeSpecToString( it.current()->typeSpec() ) + " ";
+               text += declaratorToString( it.current()->declarator() );
+
+               ++it;
+
+	       if( it.current() )
+	           text += ", ";
+           }
+       }
+
+       text += " )";
+
+       if( declarator->constant() != 0 )
+           text += " const";
+   }
+
+   return text.simplifyWhiteSpace();
+}
 

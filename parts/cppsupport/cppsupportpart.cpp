@@ -52,6 +52,7 @@
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/selectioninterface.h>
+#include <ktexteditor/viewcursorinterface.h>
 
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
@@ -98,12 +99,13 @@ typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport(parent, name ? name : "CppSupportPart"), m_activeSelection( 0 ), m_activeEditor( 0 )
+    : KDevLanguageSupport(parent, name ? name : "CppSupportPart"), m_activeSelection( 0 ), m_activeEditor( 0 ),
+      m_activeViewCursor( 0 )
 {
     setInstance(CppSupportFactory::instance());
 
     setXMLFile("kdevcppsupport.rc");
- 
+
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( partController(), SIGNAL(savedFile(const QString&)),
@@ -158,11 +160,16 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setWhatsThis( i18n("Type of current expression") );
     action->setEnabled(false);
 
+    action = new KAction(i18n("Make Member"), "makermember", 0,
+                         this, SLOT(slotMakeMember()),
+                         actionCollection(), "edit_make_member");
+
     action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
                          actionCollection(), "project_newclass");
     action->setStatusText( i18n("Generate a new class") );
     action->setWhatsThis( i18n("Generate a new class") );
+
 
     m_pParser      = 0;
     m_pCCParser    = 0;
@@ -395,9 +402,10 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
     m_activeSelection = dynamic_cast<KTextEditor::SelectionInterface*>( part );
-    
+    m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( part->widget() ) : 0;
+
     m_activeFileName = QString::null;
-    
+
     if (doc) {
 	m_activeFileName = doc->url().path();
         QFileInfo fi(doc->url().path());
@@ -409,14 +417,14 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     actionCollection()->action("edit_switchheader")->setEnabled(enabled);
     actionCollection()->action("edit_complete_text")->setEnabled(enabled);
     actionCollection()->action("edit_type_of_expression")->setEnabled(enabled);
- 
+
     if( !part )
 	return;
-    
+
     KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( part->widget() );
     if( !view )
 	return;
-    
+
     KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( view );
     if( !textHintIface )
 	return;
@@ -585,6 +593,38 @@ void CppSupportPart::savedFile(const QString &fileName)
         maybeParse( fileName, classStore( ), m_pParser );
         emit updatedSourceInfo();
     }
+}
+
+QString CppSupportPart::findSourceFile()
+{
+    QFileInfo fi( m_activeFileName );
+    QString path = fi.filePath();
+    QString ext = fi.extension();
+    QString base = path.left( path.length() - ext.length() );
+    QStringList candidates;
+
+    if (ext == "h" || ext == "H" || ext == "hh" || ext == "hxx" || ext == "hpp" || ext == "tlh") {
+        candidates << (base + "c");
+        candidates << (base + "cc");
+        candidates << (base + "cpp");
+        candidates << (base + "c++");
+        candidates << (base + "cxx");
+        candidates << (base + "C");
+        candidates << (base + "m");
+        candidates << (base + "mm");
+        candidates << (base + "M");
+	candidates << (base + "inl");
+    }
+
+    QStringList::ConstIterator it;
+    for (it = candidates.begin(); it != candidates.end(); ++it) {
+        kdDebug(9007) << "Trying " << (*it) << endl;
+        if (QFileInfo(*it).exists()) {
+            return *it;
+        }
+    }
+
+    return m_activeFileName;
 }
 
 
@@ -1299,10 +1339,75 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 void CppSupportPart::slotNodeSelected( QListViewItem* item )
 {
     if( !item || !m_activeSelection )
-	return;    
-    
+	return;
+
     m_activeSelection->setSelection( item->text(1).toInt(), item->text(2).toInt(),
 				     item->text(3).toInt(), item->text(4).toInt() );
+}
+
+void CppSupportPart::slotMakeMember()
+{
+    if( !m_activeViewCursor )
+        return;
+
+    m_backgroundParser->lock();
+    TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
+    if( translationUnit ){
+        unsigned int line, column;
+	m_activeViewCursor->cursorPositionReal( &line, &column );
+
+        AST* currentNode = findNodeAt( translationUnit, line, column );
+	DeclaratorAST* declarator = 0;
+	while( currentNode && currentNode->nodeType() != NodeType_SimpleDeclaration ){
+	    if( currentNode->nodeType() == NodeType_Declarator )
+	        declarator = (DeclaratorAST*) currentNode;
+	    currentNode = currentNode->parent();
+	}
+
+	SimpleDeclarationAST* decl = currentNode ? (SimpleDeclarationAST*) currentNode : 0;
+	if( decl && !declarator ){
+	    InitDeclaratorAST* i = decl->initDeclaratorList()->initDeclaratorList().at( 0 );
+	    if( i )
+	       declarator = i->declarator();
+	}
+
+	if( currentNode && declarator && declarator->parameterDeclarationClause() ){
+	    QString text;
+
+	    text += typeSpecToString( decl->typeSpec() );
+	    if( text )
+	        text += " ";
+
+	    QStringList scope;
+	    scopeOfNode( decl, scope );
+
+	    text += scope.size() ? scope.join("::") + QString::fromLatin1("::") : QString::fromLatin1("");
+	    text += declaratorToString( declarator ).simplifyWhiteSpace() + "\n{\n}\n\n";
+
+	    QString implFile = findSourceFile();
+
+	    if( implFile ){
+	    	partController()->editDocument( implFile );
+
+	    	KTextEditor::EditInterface* editiface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
+	    	KTextEditor::ViewCursorInterface* cursoriface = dynamic_cast<KTextEditor::ViewCursorInterface*>( partController()->activePart()->widget() );
+
+		int line = editiface->numLines() - 1;
+
+	    	if( editiface )
+	        	editiface->insertText( line, 0, text );
+		if( cursoriface )
+			cursoriface->setCursorPosition( line, 0 );
+	    } else {
+	        int line = m_activeEditor->numLines() - 1;
+		if( m_activeEditor )
+	        	m_activeEditor->insertText( line, 0, text );
+		if( m_activeViewCursor )
+			m_activeViewCursor->setCursorPosition( line, 0 );
+	    }
+	}
+    }
+    m_backgroundParser->unlock();
 }
 
 #include "cppsupportpart.moc"

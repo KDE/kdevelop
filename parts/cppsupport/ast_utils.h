@@ -12,7 +12,11 @@
 #ifndef __ast_utils_h
 #define __ast_utils_h
 
+#include <qstring.h>
+
 class AST;
+class DeclaratorAST;
+class TypeSpecifierAST;
 class QListViewItem;
 class QStringList;
 
@@ -22,5 +26,7 @@ AST* findNodeAt( AST* unit, int line, int column );
 void buildView( AST* ast, KTextEditor::EditInterface*, QListViewItem* parent );
 void scopeOfNode( AST* ast, QStringList& );
 void printDeclarations( AST* ast );
+QString typeSpecToString( TypeSpecifierAST* typeSpec );
+QString declaratorToString( DeclaratorAST* declarator );
 
 #endif // __ast_utils_h

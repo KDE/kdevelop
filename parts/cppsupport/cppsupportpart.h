@@ -38,7 +38,7 @@ class KListView;
 class QListViewItem;
 
 namespace KParts { class Part; }
-namespace KTextEditor { class EditInterface; class SelectionInterface; };
+namespace KTextEditor { class EditInterface; class SelectionInterface; class ViewCursorInterface; };
 
 
 class CppSupportPart : public KDevLanguageSupport
@@ -108,6 +108,7 @@ private slots:
     void slotGotoIncludeFile();
     void slotCompleteText();
     void slotTypeOfExpression();
+    void slotMakeMember();
 
     // code completion related slots - called from config-widget
     void slotEnablePersistantClassStore( bool setEnable );
@@ -121,7 +122,7 @@ private slots:
      * loads, parses and creates both classstores needed
      */
     void initialParse( );
-    
+
     void slotNeedTextHint( int, int, QString& );
 
 private:
@@ -165,6 +166,8 @@ private:
     QString asCppCode(ParsedMethod *pm);
     QString asHeaderCode(ParsedAttribute *pa);
 
+    QString findSourceFile();
+
     CClassParser *m_pParser;
     CppCodeCompletion* m_pCompletion;
     CClassParser* m_pCCParser;
@@ -176,11 +179,12 @@ private:
     QGuardedPtr< CppSupportWidget > m_pCHWidget;
     QGuardedPtr< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
-    
+
     KTextEditor::SelectionInterface* m_activeSelection;
     KTextEditor::EditInterface* m_activeEditor;
+    KTextEditor::ViewCursorInterface* m_activeViewCursor;
     QString m_activeFileName;
-    
+
     KListView* m_astView;
 };
 
