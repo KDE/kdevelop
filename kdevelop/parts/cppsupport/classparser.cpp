@@ -19,8 +19,10 @@
 
 #include <iostream.h>
 #include <qstring.h>
-#include <qregexp.h> 
+#include <qregexp.h>
+#include <qfile.h>
 #include <kapp.h>
+#include <kdebug.h>
 #include "classparser.h"
 #include "ProgrammingByContract.h"
 
@@ -1966,17 +1968,16 @@ void CClassParser::parseFile( ifstream &file )
  * Returns:
  *   bool           Was the parsing successful.
  *-----------------------------------------------------------------*/
-bool CClassParser::parse( const char *file )
+bool CClassParser::parse( const QString &file )
 {
-  REQUIRE1( "Valid filename", file != NULL, false );
-  REQUIRE1( "Valid filename length", strlen( file ) > 0, false );
-
-  ifstream f( file );
+  ifstream f( QFile::encodeName(file) );
   currentFile = file;
 
   // Remove all items with references to this file.
   store->removeWithReferences( file );
 
+  kdDebug(9007) << "Parsing file " << file << endl;
+  
   // Parse the file.
   parseFile( f );
 

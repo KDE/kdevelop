@@ -73,6 +73,8 @@ void MakeWidget::startJob(const QString &dir, const QString &command)
     ProcessView::startJob(dir, command);
     dirstack.clear();
     dirstack.push(new QString(QDir::currentDirPath()));
+
+    emit m_part->running(true);
 }
 
 
@@ -125,6 +127,8 @@ void MakeWidget::childFinished(bool normal, int status)
     }
     
     insertItem(new ProcessListBoxItem(s, t));
+
+    emit m_part->running(false);
 }
 
 

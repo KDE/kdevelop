@@ -65,25 +65,27 @@ void MethodListAction::setClassStore(CClassStore *store)
 }
 
 
-void MethodListAction::refresh(const QString &classname)
+void MethodListAction::refresh(const QString &className)
 {
     if (!m_store)
         return;
 
-    CParsedClass *pc = m_store->getClassByName(classname);
-
+    CParsedClass *pc;
     QStringList list;
-    for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
-        QString str;
-        pc->methodIterator.current()->asString(str);
-        list << str;
+
+    if (!className.isEmpty && (pc = m_store->getClassByName(className)) != 0) {
+        for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
+            QString str;
+            pc->methodIterator.current()->asString(str);
+            list << str;
+        }
+        for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
+            QString str;
+            pc->slotIterator.current()->asString(str);
+            list << str;
+        }
+        qHeapSort(list);
     }
-    for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
-        QString str;
-        pc->slotIterator.current()->asString(str);
-        list << str;
-    }
-    qHeapSort(list);
 
     int idx = list.findIndex(currentText());
     setItems(list);

@@ -87,6 +87,7 @@ void ClassView::projectOpened(CProject *prj)
     popup_action->setEnabled(true);
 }
 
+
 void ClassView::projectClosed()
 {
     kdDebug(9003) << "ClassView::projectClosed()" << endl;
@@ -100,7 +101,10 @@ void ClassView::languageSupportOpened(KDevLanguageSupport *ls)
 {
     m_langsupport = ls;
     setupPopup();
+
+    connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
 }
+
 
 void ClassView::languageSupportClosed()
 {
@@ -114,8 +118,7 @@ void ClassView::classStoreOpened(CClassStore *store)
     kdDebug(9003) << "ClassView::classStoreOpened()" << endl;
     classes_action->setClassStore(store);
     methods_action->setClassStore(store);
-    classes_action->refresh();
-    classes_action->refresh();
+    refresh();
     m_store = store;
 }
 
@@ -125,9 +128,15 @@ void ClassView::classStoreClosed()
     kdDebug(9003) << "ClassView::classStoreClosed()" << endl;
     classes_action->setClassStore(0);
     methods_action->setClassStore(0);
-    classes_action->refresh();
-    classes_action->refresh();
+    refresh();
     m_store = 0;
+}
+
+
+void ClassView::refresh()
+{
+    classes_action->refresh();
+    methods_action->refresh(classes_action->currentText());
 }
 
 
@@ -140,7 +149,7 @@ void ClassView::selectedClass()
     if (className.isEmpty())
         return;
     
-    kdDebug(9003) << "ClassView: Class selected: " << className << endl;
+    kdDebug(9003) << "Class selected: " << className << endl;
     methods_action->refresh(className);
 }
 
@@ -155,7 +164,7 @@ void ClassView::selectedMethod()
     if (className.isEmpty() || methodName.isEmpty())
         return;
 
-    kdDebug(9003) << "ClassView: Method selected: "
+    kdDebug(9003) << "Method selected: "
                   << className << "::" << methodName << endl;
     m_cv_decl_or_impl = true;
     gotoImplementation(className, methodName, THPUBLIC_METHOD);

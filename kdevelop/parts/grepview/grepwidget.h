@@ -32,7 +32,7 @@ public:
     GrepWidget(GrepView *part);
     ~GrepWidget();
 
-    void projectOpened(CProject *prj);
+    void setProject(CProject *prj);
 
 public slots:
     void showDialog();
@@ -43,6 +43,7 @@ private slots:
     void lineHighlighted(int line);
 
 private:
+    virtual void childFinished(bool normal, int status);
     virtual void insertStdoutLine(const QString &line);
 
     GrepDialog *grepdlg;

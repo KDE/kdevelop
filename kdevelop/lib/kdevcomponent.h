@@ -62,7 +62,7 @@ public:
      */
     virtual void commandRequested(const QString &command);
     /**
-     * The user has aborted the compilation.
+     * The user has clicked the stop button.
      */
     virtual void stopButtonClicked();
     /**
@@ -120,6 +120,12 @@ signals:
      * are started in their own terminal emulator)
      */
     void executeAppCommand(const QString &command);
+    /**
+     * Marks the component as running (or not running). As long as at least one
+     * component is running, the stop button is enabled. When it is pressed,
+     * all components get a stopButtonClicked().
+     */
+    void running(bool runs);
     void gotoSourceFile(const QString &fileName, int lineNo);
     void gotoDocumentationFile(const QString &fileName);
     void gotoProjectApiDoc();

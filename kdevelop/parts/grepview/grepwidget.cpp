@@ -157,6 +157,14 @@ void GrepWidget::searchActivated()
     command += filepattern;
     command += " /dev/null";
     startJob("", command);
+
+    emit m_part->running(true);
+}
+
+
+void GrepWidget::childFinished(bool, int)
+{
+    emit m_part->running(false);
 }
 
 
@@ -191,7 +199,7 @@ void GrepWidget::insertStdoutLine(const QString &line)
 }
 
 
-void GrepWidget::projectOpened(CProject *prj)
+void GrepWidget::setProject(CProject *prj)
 {
     grepdlg->setDirectory(prj->getProjectDir());
 }

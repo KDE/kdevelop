@@ -63,9 +63,9 @@ void GrepView::configWidgetRequested(KDialogBase *dlg)
 }
 
 
-void GrepView::compilationAborted()
+void GrepView::stopButtonClicked()
 {
-    kdDebug(9001) << "GrepView::compilationAborted()" << endl;
+    kdDebug(9001) << "GrepView::stopButtonClicked()" << endl;
     m_widget->killJob();
 }
 
@@ -73,7 +73,7 @@ void GrepView::compilationAborted()
 void GrepView::projectOpened(CProject *prj)
 {
     kdDebug(9001) << "GrepView::projectOpened()" << endl;
-    m_widget->projectOpened(prj);
+    m_widget->setProject(prj);
 }
 
 

@@ -17,7 +17,7 @@ public:
 protected:
     virtual void setupGUI();
     virtual void configWidgetRequested(KDialogBase *dlg);
-    virtual void compilationAborted();
+    virtual void stopButtonClicked();
     virtual void projectClosed();
     virtual void projectOpened(CProject *prj);
     

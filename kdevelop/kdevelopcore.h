@@ -40,11 +40,13 @@ private slots:
     void slotProjectClose();
     void slotProjectAddExistingFiles();
     void slotProjectAddNewTranslationFile();
+    void slotStop();
     void slotOptionsKDevelopSetup();
 
     // Handling of component requests
     void executeMakeCommand(const QString &command);
     void executeAppCommand(const QString &command);
+    void running(bool runs);
     void gotoSourceFile(const QString &fileName, int lineNo);
     void gotoDocumentationFile(const QString &fileName);
     void gotoProjectApiDoc();

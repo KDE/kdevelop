@@ -41,6 +41,8 @@ void KDevelopCore::initComponent(KDevComponent *component)
              this, SLOT(executeMakeCommand(const QString&)) );
     connect( component, SIGNAL(executeAppCommand(const QString&)),
              this, SLOT(executeAppCommand(const QString&)) );
+    connect( component, SIGNAL(running(bool)),
+             this, SLOT(running(bool)) );
     connect( component, SIGNAL(gotoSourceFile(const QString&, int)),
              this, SLOT(gotoSourceFile(const QString&, int)) );
     connect( component, SIGNAL(gotoDocumentationFile(const QString&)),
@@ -98,6 +100,10 @@ void KDevelopCore::initActions()
     action = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
                           m_kdevelopgui->actionCollection(), "options_kdevelop_setup");
     action->setStatusText( i18n("Configures KDevelop") );
+
+    action = new KAction( i18n("&Stop"), "stop", 0, this, SLOT( slotStop() ),
+                          m_kdevelopgui->actionCollection(), "stop_everything");
+    action->setEnabled(false);
 }
 
 
@@ -137,8 +143,8 @@ void KDevelopCore::loadInitialComponents()
             kdDebug(9000) << "is app frontend" << endl;
         }
 
-        m_kdevelopgui->guiFactory()->addClient(comp);
         initComponent(comp);
+        m_kdevelopgui->guiFactory()->addClient(comp);
     }
 }
 
@@ -233,6 +239,9 @@ void KDevelopCore::loadProject(const QString &fileName)
     QString vcsystem = QString::fromLatin1("CVS");
     QString lang = QString::fromLatin1("C++");
     
+    loadVersionControl(vcsystem);
+    loadLanguageSupport(lang);
+
     QListIterator<KDevComponent> it1(m_components);
     for (; it1.current(); ++it1)
         (*it1)->projectOpened(m_project);
@@ -241,14 +250,12 @@ void KDevelopCore::loadProject(const QString &fileName)
     for (; it2.current(); ++it2)
         (*it2)->classStoreOpened(m_classstore);
 
-    loadVersionControl(vcsystem);
     if (m_versioncontrol) {
         QListIterator<KDevComponent> it3(m_components);
         for (; it3.current(); ++it3)
             (*it3)->versionControlOpened(m_versioncontrol);
     }
 
-    loadLanguageSupport(lang);
     if (m_languagesupport) {
         QListIterator<KDevComponent> it4(m_components);
         for (; it4.current(); ++it4)
@@ -267,7 +274,7 @@ void KDevelopCore::loadProject(const QString &fileName)
     // Hack to test the class viewer
     QListIterator<KDevComponent> it5(m_components);
     for (; it5.current(); ++it5)
-        (*it5)->savedFile("parts/doctreeview/doctreewidget.cpp");
+        (*it5)->savedFile("parts/doctreeview/doctreewidget.h");
 #endif
 }
 
@@ -370,6 +377,14 @@ void KDevelopCore::slotProjectAddNewTranslationFile()
 }
 
 
+void KDevelopCore::slotStop()
+{
+    QListIterator<KDevComponent> it(m_components);
+    for (; it.current(); ++it)
+        (*it)->stopButtonClicked();
+}
+
+
 void KDevelopCore::slotOptionsKDevelopSetup()
 {
     KDialogBase *dlg = new KDialogBase(KDialogBase::TreeList, i18n("Customize KDevelop"),
@@ -405,6 +420,20 @@ void KDevelopCore::executeAppCommand(const QString &command)
     }
 
     m_appfrontend->commandRequested(command);
+}
+
+
+void KDevelopCore::running(bool runs)
+{
+    const KDevComponent *comp = static_cast<const KDevComponent*>(sender());
+
+    if (runs)
+        m_runningcomponents.append(comp);
+    else
+        m_runningcomponents.remove(comp);
+
+    KActionCollection *ac = m_kdevelopgui->actionCollection();
+    ac->action("stop_everything")->setEnabled(!m_runningcomponents.isEmpty());
 }
 
 

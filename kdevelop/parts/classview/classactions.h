@@ -28,7 +28,7 @@ public:
                      const QObject *receiver, const char *methodname,
                      QObject *parent, const char *name);
     void setClassStore(CClassStore *store);
-    void refresh(const QString &classname);
+    void refresh(const QString &className);
 
 private:
     CClassStore *m_store;

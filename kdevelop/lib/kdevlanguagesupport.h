@@ -40,6 +40,13 @@ public:
      * method to the sources.
      */
     virtual void addAttributeRequested(const QString &className);
+
+signals:
+    /**
+     * Emitted when the content of the classtore has been
+     * modified
+     */
+    void updateSourceInfo();
 };
 
 

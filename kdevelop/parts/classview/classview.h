@@ -30,6 +30,7 @@ protected:
     virtual void classStoreClosed();
 
 private slots:
+    void refresh();
     void selectedClass();
     void selectedMethod();
     void switchedDeclImpl();

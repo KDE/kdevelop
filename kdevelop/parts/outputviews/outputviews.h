@@ -41,7 +41,7 @@ public:
 
 protected:
     virtual void setupGUI();
-    virtual void compilationAborted();
+    virtual void stopButtonClicked();
     
 private:
     AppOutputWidget *m_widget;

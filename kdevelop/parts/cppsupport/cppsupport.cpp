@@ -57,6 +57,8 @@ void CppSupport::addedFileToProject(const QString &fileName)
 {
     kdDebug(9007) << "CppSupport::addedFileToProject()" << endl;
     m_parser->parse(fileName);
+
+    emit updateSourceInfo();
 }
 
 
@@ -64,6 +66,8 @@ void CppSupport::removedFileFromProject(const QString &fileName)
 {
     kdDebug(9007) << "CppSupport::removedFileFromProject()" << endl;
     m_parser->removeWithReferences(fileName);
+
+    emit updateSourceInfo();
 }
 
 
@@ -74,8 +78,7 @@ void CppSupport::savedFile(const QString &fileName)
     if (CProject::getType(fileName) == CPP_HEADER)
         m_parser->parse(fileName);
 
-    // We also need a way to tell other components that the class store
-    // has changed...
+    emit updateSourceInfo();
 }
 
 
@@ -137,7 +140,7 @@ void CppSupport::addMethodRequested(const QString &className)
         else if (pm->exportScope == PIE_PRIVATE) 
             headerCode.prepend(QString("private:\n").arg(pm->isSlot? " slots" :  ""));
         else
-            kdDebug(9003) << "CppSupport::selectedAddMethod: Unknown exportScope "
+            kdDebug(9007) << "CppSupport::selectedAddMethod: Unknown exportScope "
                           << (int)pm->exportScope << endl;
 
         atLine = pc->declarationEndsOnLine;
@@ -189,7 +192,7 @@ void CppSupport::addAttributeRequested(const QString &className)
         else if (pa->exportScope == PIE_PRIVATE) 
             headerCode.prepend("private: // Private attributes\n");
         else
-            kdDebug(9003) << "CppSupport::selectedAddAttribute: Unknown exportScope "
+            kdDebug(9007) << "CppSupport::selectedAddAttribute: Unknown exportScope "
                           << (int)pa->exportScope << endl;
 
         atLine = pc->declarationEndsOnLine;

@@ -51,7 +51,7 @@ void AppOutputWidget::childFinished(bool normal, int status)
 }
 
 
-void AppOutputWidget::compilationAborted()
+void AppOutputWidget::stopButtonClicked()
 {
     if (isRunning()) {
         killJob();

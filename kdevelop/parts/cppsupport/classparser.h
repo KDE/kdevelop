@@ -70,7 +70,7 @@ public: // Public Methods
    *
    * @return If the parsing was successful.
    */
-  bool parse( const char *file = NULL );
+  bool parse( const QString &file );
 
   /** Remove all parsed classes */
   void wipeout();

@@ -195,7 +195,7 @@
   <Action name="build_rebuild_all" />
   <Action name="build_debug_delay" />
   <Action name="build_run" />
-  <Action name="build_stop" />
+  <Action name="stop_everything" />
   <Separator/>
   <Action name="view_treeview" />
   <Action name="view_output_view" />

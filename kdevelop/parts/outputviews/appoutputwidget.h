@@ -27,7 +27,7 @@ public:
     AppOutputWidget();
     ~AppOutputWidget();
 
-    void compilationAborted();
+    void stopButtonClicked();
     
 private:
     virtual void childFinished(bool normal, int status);

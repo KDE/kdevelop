@@ -99,7 +99,7 @@ void AppOutputView::setupGUI()
 }
 
 
-void AppOutputView::compilationAborted()
+void AppOutputView::stopButtonClicked()
 {
     m_widget->compilationAborted();
 }

@@ -1,3 +1,8 @@
+2000-07-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Implemented stop button and corresponding 'events'
+	* Added updateSourceInfo() signal to KDevLanguageSupport
+	* Various fixes
+
 2000-07-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* More work on the project loading/unloading framework
 	* Building classstore and projecctmanagement as convenience library
