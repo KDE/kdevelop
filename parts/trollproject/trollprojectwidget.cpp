@@ -360,7 +360,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
 void TrollProjectWidget::updateProjectFile(QListViewItem *item)
 {
   SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
-  QString relpath = spitem->path.mid(projectDirectory().length());
+  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
   FileBuffer *subBuffer=m_shownSubproject->m_FileBuffer.getSubBuffer(spitem->scopeString);
   subBuffer->removeValues("SUBDIRS");
   subBuffer->setValues("SUBDIRS",spitem->subdirs,4);
@@ -372,7 +372,7 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->setValues("FORMS",spitem->forms,4);
   subBuffer->removeValues("INTERFACES");
   subBuffer->setValues("INTERFACES",spitem->interfaces,4);
-  spitem->m_FileBuffer.saveBuffer(projectDirectory()+relpath+"/"+spitem->subdir+".pro");
+  m_shownSubproject->m_FileBuffer.saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
 }
 
 void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,QString &filename)
