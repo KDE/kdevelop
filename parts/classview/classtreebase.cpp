@@ -386,12 +386,10 @@ ClassTreeBase::ClassTreeBase(ClassViewPart *part, QWidget *parent, const char *n
 {
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
-    setFrameStyle(Panel | Sunken);
-    setLineWidth(2);
     setResizeMode(QListView::LastColumn);
     setSorting(-1);
     header()->hide();
-    addColumn("");
+    addColumn(QString::null);
 
     (void) new ClassToolTip(this);
     

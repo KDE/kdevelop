@@ -1,8 +1,14 @@
+2002-04-22  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Only program and library targets can be made active
+	* Sane resizeMode and allColumnsShowFocus settings
+	  for more list views
+
 2002-04-21  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Implemented setting active target in autoproject
 	  part and set a default one in most app templates
-	* Set resize policy of list views to LastColumn
+	* Set resize mode of some list views to LastColumn
 	* In auto project, open active directory at startup
 	* Implemented addFile in auto project
 

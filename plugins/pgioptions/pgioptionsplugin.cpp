@@ -127,7 +127,7 @@ OptimizationTab::OptimizationTab(PgiOptionsPlugin::Type type, QWidget *parent, c
 
     if (type == PgiOptionsPlugin::PGHPF) {
         optBox = new QListView(this);
-        optBox->addColumn("");
+        optBox->addColumn(QString::null);
         optBox->header()->hide();
         for (const char * const *p = optimization_flags; *p; ++p) {
             new QCheckListItem(optBox, *p, QCheckListItem::CheckBox);
@@ -202,7 +202,7 @@ HpfTab::HpfTab(QWidget *parent, const char *name)
     layout->setAutoAdd(true);
 
     hpfBox = new QListView(this);
-    hpfBox->addColumn("");
+    hpfBox->addColumn(QString::null);
     hpfBox->header()->hide();
     for (const char * const *p = hpf_flags; *p; ++p)
         new QCheckListItem(hpfBox, *p, QCheckListItem::CheckBox);

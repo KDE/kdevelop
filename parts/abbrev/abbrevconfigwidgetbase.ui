@@ -111,6 +111,9 @@
             <property name="allColumnsShowFocus">
                 <bool>true</bool>
             </property>
+            <property name="resizeMode">
+                <enum>AllColumns</enum>
+            </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
             <property name="name">

@@ -35,7 +35,7 @@
             <widget class="QListView" row="0" column="0" rowspan="2" colspan="1">
                 <column>
                     <property name="text">
-                        <string>Column 1</string>
+                        <string></string>
                     </property>
                     <property name="clickable">
                         <bool>true</bool>
@@ -55,14 +55,11 @@
                         <verstretch>1</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>32767</width>
-                        <height>32767</height>
-                    </size>
-                </property>
                 <property name="rootIsDecorated">
                     <bool>true</bool>
+                </property>
+                <property name="resizeMode">
+                    <enum>LastColumn</enum>
                 </property>
             </widget>
             <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">

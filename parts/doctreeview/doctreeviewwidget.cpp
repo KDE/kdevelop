@@ -540,11 +540,10 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 {
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
+    setResizeMode(QListView::LastColumn);
     setSorting(-1);
-    setFrameStyle(Panel | Sunken);
-    setLineWidth(2); 
     header()->hide();
-    addColumn("");
+    addColumn(QString::null);
     
     folder_bookmarks = new DocTreeBookmarksFolder(this);
     folder_bookmarks->refresh();

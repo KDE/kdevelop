@@ -103,18 +103,16 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     QSplitter *splitter = new QSplitter(Vertical, this);
 
     overview = new KListView(splitter, "project overview widget");
-    overview->setFrameStyle(Panel | Sunken);
+    overview->setResizeMode(QListView::LastColumn);
     overview->setSorting(-1);
-    overview->setLineWidth(2); 
     overview->header()->hide();
-    overview->addColumn("");
+    overview->addColumn(QString::null);
     details = new KListView(splitter, "project details widget");
     details->setRootIsDecorated(true);
-    details->setFrameStyle(Panel | Sunken);
+    details->setResizeMode(QListView::LastColumn);
     details->setSorting(-1);
-    details->setLineWidth(2); 
     details->header()->hide();
-    details->addColumn("");
+    details->addColumn(QString::null);
 
     connect( overview, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );

@@ -377,7 +377,8 @@ CTagsDialog::CTagsDialog(KDevPlugin *part)
 
     kinds_listview = new QListView(this);
     kinds_label->setBuddy(kinds_listview);
-    kinds_listview->addColumn("");
+    kinds_listview->setResizeMode(QListView::LastColumn);
+    kinds_listview->addColumn(QString::null);
     kinds_listview->header()->hide();
     kinds_listview->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
 

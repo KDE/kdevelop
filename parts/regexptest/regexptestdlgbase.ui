@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>RegexpTestDialogBase</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>regexp_test_dialog</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,256 +12,215 @@
             <height>350</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Test Regular Expression</string>
     </property>
-    <property stdset="1">
-        <name>sizeGripEnabled</name>
+    <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
     <grid>
-        <property stdset="1">
-            <name>margin</name>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
             <number>11</number>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
+        <property name="spacing">
             <number>6</number>
         </property>
-        <widget row="6"  column="0"  rowspan="1"  colspan="2" >
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="2">
+            <property name="name">
                 <cstring>Layout1</cstring>
             </property>
             <hbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>0</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property>
-                        <name>name</name>
+                    <property name="name" stdset="0">
                         <cstring>Horizontal Spacing2</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>orientation</name>
+                    <property name="orientation">
                         <enum>Horizontal</enum>
                     </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
+                    <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property>
-                        <name>sizeHint</name>
+                    <property name="sizeHint">
                         <size>
                             <width>20</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>cancelbutton</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>&amp;Close</string>
                     </property>
-                    <property stdset="1">
-                        <name>autoDefault</name>
+                    <property name="autoDefault">
                         <bool>true</bool>
                     </property>
                 </widget>
             </hbox>
         </widget>
-        <widget row="0"  column="0" >
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
                 <cstring>pattern_label</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>&amp;Regular expression:</string>
             </property>
-            <property>
-                <name>buddy</name>
+            <property name="buddy" stdset="0">
                 <cstring>pattern_edit</cstring>
             </property>
         </widget>
-        <widget row="1"  column="0"  rowspan="1"  colspan="2" >
-            <class>QButtonGroup</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
                 <cstring>flavor_group</cstring>
             </property>
-            <property stdset="1">
-                <name>title</name>
+            <property name="title">
                 <string>&amp;Flavor</string>
             </property>
             <vbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>11</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget>
-                    <class>QRadioButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QRadioButton">
+                    <property name="name">
                         <cstring>basicposix_button</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>&amp;Basic POSIX syntax (used by grep)</string>
                     </property>
-                    <property stdset="1">
-                        <name>checked</name>
+                    <property name="checked">
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget>
-                    <class>QRadioButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QRadioButton">
+                    <property name="name">
                         <cstring>extendedposix_button</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>&amp;Extended POSIX syntax (used by egrep)</string>
                     </property>
                 </widget>
             </vbox>
         </widget>
-        <widget row="5"  column="0" >
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel" row="5" column="0">
+            <property name="name">
                 <cstring>subgroups_label</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>Matched subgroups:</string>
             </property>
         </widget>
-        <widget row="5"  column="1" >
-            <class>QListView</class>
+        <widget class="QListView" row="5" column="1">
             <column>
-                <property>
-                    <name>text</name>
+                <property name="text">
                     <string>Group</string>
                 </property>
-                <property>
-                    <name>clickable</name>
+                <property name="clickable">
                     <bool>true</bool>
                 </property>
-                <property>
-                    <name>resizeable</name>
+                <property name="resizeable">
                     <bool>true</bool>
                 </property>
             </column>
             <column>
-                <property>
-                    <name>text</name>
+                <property name="text">
                     <string>Value</string>
                 </property>
-                <property>
-                    <name>clickable</name>
+                <property name="clickable">
                     <bool>true</bool>
                 </property>
-                <property>
-                    <name>resizeable</name>
+                <property name="resizeable">
                     <bool>true</bool>
                 </property>
             </column>
-            <property stdset="1">
-                <name>name</name>
+            <property name="name">
                 <cstring>subgroups_listview</cstring>
             </property>
-            <property stdset="1">
-                <name>sizePolicy</name>
+            <property name="sizePolicy">
                 <sizepolicy>
                     <hsizetype>7</hsizetype>
                     <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+            <property name="resizeMode">
+                <enum>AllColumns</enum>
+            </property>
         </widget>
-        <spacer row="2"  column="1" >
-            <property>
-                <name>name</name>
+        <spacer row="2" column="1">
+            <property name="name" stdset="0">
                 <cstring>Spacer</cstring>
             </property>
-            <property stdset="1">
-                <name>orientation</name>
+            <property name="orientation">
                 <enum>Vertical</enum>
             </property>
-            <property stdset="1">
-                <name>sizeType</name>
+            <property name="sizeType">
                 <enum>Minimum</enum>
             </property>
-            <property>
-                <name>sizeHint</name>
+            <property name="sizeHint">
                 <size>
                     <width>20</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget row="3"  column="0" >
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
                 <cstring>teststring_label</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>&amp;Test string:</string>
             </property>
-            <property>
-                <name>buddy</name>
+            <property name="buddy" stdset="0">
                 <cstring>teststring_edit</cstring>
             </property>
         </widget>
-        <widget row="3"  column="1" >
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
                 <cstring>teststring_edit</cstring>
             </property>
         </widget>
-        <widget row="0"  column="1" >
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
                 <cstring>pattern_edit</cstring>
             </property>
         </widget>
-        <widget row="4"  column="1" >
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel" row="4" column="1">
+            <property name="name">
                 <cstring>success_label</cstring>
             </property>
-            <property stdset="1">
-                <name>sizePolicy</name>
+            <property name="sizePolicy">
                 <sizepolicy>
                     <hsizetype>1</hsizetype>
                     <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
         </widget>
@@ -295,7 +251,6 @@
         <receiver>regexp_test_dialog</receiver>
         <slot>somethingChanged()</slot>
     </connection>
-    <slot access="public">somethingChanged()</slot>
 </connections>
 <tabstops>
     <tabstop>pattern_edit</tabstop>
@@ -305,4 +260,8 @@
     <tabstop>subgroups_listview</tabstop>
     <tabstop>cancelbutton</tabstop>
 </tabstops>
+<slots>
+    <slot>somethingChanged()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

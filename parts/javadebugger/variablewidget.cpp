@@ -100,11 +100,9 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     : KListView(parent, name),
       activeFlag_(0)
 {
-    setAllColumnsShowFocus(true);
     setRootIsDecorated(true);
+    setAllColumnsShowFocus(true);
     setSorting(-1);
-    setFrameStyle(Panel | Sunken);
-    setLineWidth(2);
     addColumn(i18n("Variable"));
     addColumn(i18n("Value"));
     // This may be a matter of taste...

@@ -107,12 +107,10 @@ FileGroupsWidget::FileGroupsWidget(FileViewPart *part)
 {
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
-    setFrameStyle(Panel | Sunken);
-    setLineWidth(2); 
     setResizeMode(QListView::LastColumn);
     setSorting(-1);
     header()->hide();
-    addColumn("");
+    addColumn(QString::null);
 
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );

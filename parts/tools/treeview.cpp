@@ -60,15 +60,14 @@ TreeItem::TreeItem(QListView *parent, QListViewItem *after, const QString& file)
 TreeView::TreeView( QWidget *parent, const char *name )
     : KListView(parent, name)
 {
-  setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  setAllColumnsShowFocus(true);
   setRootIsDecorated(true);
+  setAllColumnsShowFocus(true);
   setSorting( -1);
   setAcceptDrops(true);
   setDropVisualizer(true);
   setDragEnabled(true);
 
-  addColumn("");
+  addColumn(QString::null);
   header()->hide();
 
   fill();

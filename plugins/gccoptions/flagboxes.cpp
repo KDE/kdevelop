@@ -59,7 +59,7 @@ FlagListItem::FlagListItem(FlagListBox *parent, const QString &flagstr,
 FlagListBox::FlagListBox(QWidget *parent, const char *name)
     : QListView(parent, name)
 {
-    setFrameStyle(QFrame::Panel | QFrame::Sunken);  
+    setResizeMode(LastColumn);
     header()->hide();
     addColumn(i18n("Flags"));
     (void) new FlagListToolTip(this);

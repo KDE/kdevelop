@@ -85,7 +85,8 @@ QWidget *DocTreeConfigWidget::createKDevelopTab()
                            "KDevelop section \n"
                            "of the documentation tree:"), hbox);
     kdevelop_view = new QListView(hbox);
-    kdevelop_view->addColumn("");
+    kdevelop_view->setResizeMode(QListView::LastColumn);
+    kdevelop_view->addColumn(QString::null);
     kdevelop_view->header()->hide();
 
     return hbox;
@@ -103,7 +104,8 @@ QWidget *DocTreeConfigWidget::createLibrariesTab()
                                               "of the documentation tree:"), w);
     
     libraries_view = new QListView(w);
-    libraries_view->addColumn("");
+    libraries_view->setResizeMode(QListView::LastColumn);
+    libraries_view->addColumn(QString::null);
     libraries_view->header()->hide();
 
     QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());
@@ -124,6 +126,7 @@ QWidget *DocTreeConfigWidget::createBookmarksTab()
     QFontMetrics fm(bookmarks_view->fontMetrics());
     bookmarks_view->setMinimumWidth(fm.width('X')*35);
     bookmarks_view->setAllColumnsShowFocus(true);
+    bookmarks_view->setResizeMode(QListView::AllColumns);
     bookmarks_view->setColumnWidth(0, 70);
     bookmarks_view->setColumnWidth(1, 170);
     bookmarks_view->addColumn(i18n("Title"));
@@ -156,7 +159,8 @@ QWidget *DocTreeConfigWidget::createIndexTab()
     indexhiddenlibs_box = new QCheckBox(i18n("Index &other libraries"), w);
     indexbookmarks_box = new QCheckBox(i18n("Index files in the &Bookmarks section of the documentation tree"), w);
     indexedtocs_view = new QListView(w);
-    indexedtocs_view->addColumn("");
+    indexedtocs_view->setResizeMode(QListView::LastColumn);
+    indexedtocs_view->addColumn(QString::null);
     indexedtocs_view->header()->hide();
     
     QPushButton *update_button = new QPushButton(i18n("&Update Index Now"), w);

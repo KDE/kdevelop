@@ -144,12 +144,10 @@ void FileTreeItem::paintCell(QPainter *p, const QColorGroup &cg,
 FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *name)
     : KListView(parent, name)
 {
-    setFrameStyle(Panel | Sunken);
-    setLineWidth(2);
     setResizeMode(QListView::LastColumn);
     setSorting(0);
     header()->hide();
-    addColumn("");
+    addColumn(QString::null);
 
     m_part = part;
     

@@ -1,632 +1,438 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>AddServiceDialogBase</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>add_service_dialog</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>533</width>
-            <height>439</height>
+            <width>551</width>
+            <height>389</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Add Service</string>
     </property>
-    <property stdset="1">
-        <name>sizeGripEnabled</name>
+    <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Layout1</cstring>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>11</x>
-                <y>394</y>
-                <width>515</width>
-                <height>34</height>
-            </rect>
+        <property name="margin">
+            <number>11</number>
         </property>
-        <hbox>
-            <property stdset="1">
-                <name>margin</name>
-                <number>0</number>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>Layout1</cstring>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>okbutton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancelbutton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>comment_edit</cstring>
             </property>
-            <spacer>
-                <property>
-                    <name>name</name>
-                    <cstring>Horizontal Spacing2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>orientation</name>
-                    <enum>Horizontal</enum>
-                </property>
-                <property stdset="1">
-                    <name>sizeType</name>
-                    <enum>Expanding</enum>
-                </property>
-                <property>
-                    <name>sizeHint</name>
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>okbutton</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;OK</string>
-                </property>
-                <property stdset="1">
-                    <name>autoDefault</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>default</name>
-                    <bool>false</bool>
-                </property>
-            </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cancelbutton</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Cancel</string>
-                </property>
-                <property stdset="1">
-                    <name>autoDefault</name>
-                    <bool>true</bool>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>comment_edit</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>97</x>
-                <y>71</y>
-                <width>429</width>
-                <height>22</height>
-            </rect>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>comment_label</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>11</x>
-                <y>71</y>
-                <width>80</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Co&amp;mment:</string>
-        </property>
-        <property>
-            <name>buddy</name>
-            <cstring>comment_edit</cstring>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>servicetypes_label</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>11</x>
-                <y>99</y>
-                <width>80</width>
-                <height>129</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Service types:</string>
-        </property>
-        <property>
-            <name>buddy</name>
-            <cstring>chosentypes_listview</cstring>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>properties_label</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>11</x>
-                <y>234</y>
-                <width>80</width>
-                <height>154</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Properties:</string>
-        </property>
-        <property>
-            <name>buddy</name>
-            <cstring>properties_listview</cstring>
-        </property>
-    </widget>
-    <spacer>
-        <property>
-            <name>name</name>
-            <cstring>Spacer3</cstring>
-        </property>
-        <property stdset="1">
-            <name>orientation</name>
-            <enum>Vertical</enum>
-        </property>
-        <property stdset="1">
-            <name>sizeType</name>
-            <enum>Preferred</enum>
-        </property>
-        <property>
-            <name>sizeHint</name>
-            <size>
-                <width>20</width>
-                <height>20</height>
-            </size>
-        </property>
-    </spacer>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>name_label</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>11</x>
-                <y>39</y>
-                <width>80</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Name:</string>
-        </property>
-        <property>
-            <name>buddy</name>
-            <cstring>name_edit</cstring>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>filename_label</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>11</x>
-                <y>11</y>
-                <width>80</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;File name:</string>
-        </property>
-        <property>
-            <name>buddy</name>
-            <cstring>filename_edit</cstring>
-        </property>
-    </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>name_edit</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>97</x>
-                <y>41</y>
-                <width>188</width>
-                <height>22</height>
-            </rect>
-        </property>
-    </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Layout2</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>339</x>
-                <y>39</y>
-                <width>187</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <hbox>
-            <property stdset="1">
-                <name>margin</name>
-                <number>0</number>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>comment_label</cstring>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
+            <property name="text">
+                <string>Co&amp;mment:</string>
             </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>icon_button</cstring>
+            <property name="buddy" stdset="0">
+                <cstring>comment_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>servicetypes_label</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Service types:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>chosentypes_listview</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>properties_label</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Properties:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>properties_listview</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>name_label</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>name_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>filename_label</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;File name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>filename_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="1">
+            <property name="name">
+                <cstring>name_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="1" column="3">
+            <property name="name">
+                <cstring>Layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
                 </property>
-                <property stdset="1">
-                    <name>maximumSize</name>
-                    <size>
-                        <width>24</width>
-                        <height>24</height>
-                    </size>
+                <property name="margin">
+                    <number>0</number>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string></string>
+                <property name="spacing">
+                    <number>6</number>
                 </property>
-                <property stdset="1">
-                    <name>autoDefault</name>
-                    <bool>false</bool>
-                </property>
-            </widget>
-            <spacer>
-                <property>
-                    <name>name</name>
-                    <cstring>Spacer1</cstring>
-                </property>
-                <property stdset="1">
-                    <name>orientation</name>
-                    <enum>Horizontal</enum>
-                </property>
-                <property stdset="1">
-                    <name>sizeType</name>
-                    <enum>Expanding</enum>
-                </property>
-                <property>
-                    <name>sizeHint</name>
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
-        </hbox>
-    </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>filename_edit</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>97</x>
-                <y>11</y>
-                <width>188</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string></string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>icon_label</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>291</x>
-                <y>39</y>
-                <width>42</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Icon:</string>
-        </property>
-        <property>
-            <name>buddy</name>
-            <cstring>icon_button</cstring>
-        </property>
-    </widget>
-    <widget>
-        <class>QComboBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>library_combo</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>339</x>
-                <y>11</y>
-                <width>187</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>editable</name>
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>library_label</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>291</x>
-                <y>11</y>
-                <width>42</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Library:</string>
-        </property>
-        <property>
-            <name>buddy</name>
-            <cstring>library_combo</cstring>
-        </property>
-    </widget>
-    <widget>
-        <class>QListView</class>
-        <column>
-            <property>
-                <name>text</name>
-                <string>Property</string>
-            </property>
-            <property>
-                <name>clickable</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>resizeable</name>
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property>
-                <name>text</name>
-                <string>Value</string>
-            </property>
-            <property>
-                <name>clickable</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>resizeable</name>
-                <bool>true</bool>
-            </property>
-        </column>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>properties_listview</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>97</x>
-                <y>234</y>
-                <width>429</width>
-                <height>154</height>
-            </rect>
-        </property>
-    </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Layout5</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>97</x>
-                <y>114</y>
-                <width>429</width>
-                <height>114</height>
-            </rect>
-        </property>
-        <hbox>
-            <property stdset="1">
-                <name>margin</name>
-                <number>0</number>
-            </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
-            </property>
-            <widget>
-                <class>QListView</class>
-                <column>
-                    <property>
-                        <name>text</name>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>icon_button</cstring>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>24</width>
+                            <height>24</height>
+                        </size>
+                    </property>
+                    <property name="text">
                         <string></string>
                     </property>
-                    <property>
-                        <name>clickable</name>
-                        <bool>true</bool>
+                    <property name="autoDefault">
+                        <bool>false</bool>
                     </property>
-                    <property>
-                        <name>resizeable</name>
-                        <bool>true</bool>
+                </widget>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer1</cstring>
                     </property>
-                </column>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>chosentypes_listview</cstring>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>filename_edit</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="2">
+            <property name="name">
+                <cstring>icon_label</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Icon:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>icon_button</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="0" column="3">
+            <property name="name">
+                <cstring>library_combo</cstring>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="2">
+            <property name="name">
+                <cstring>library_label</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Library:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>library_combo</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="3" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>Layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
                 </property>
-            </widget>
-            <widget>
-                <class>QLayoutWidget</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>Layout3</cstring>
+                <property name="margin">
+                    <number>0</number>
                 </property>
-                <vbox>
-                    <property stdset="1">
-                        <name>margin</name>
-                        <number>0</number>
-                    </property>
-                    <property stdset="1">
-                        <name>spacing</name>
-                        <number>6</number>
-                    </property>
-                    <spacer>
-                        <property>
-                            <name>name</name>
-                            <cstring>Spacer4</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>orientation</name>
-                            <enum>Vertical</enum>
-                        </property>
-                        <property stdset="1">
-                            <name>sizeType</name>
-                            <enum>Expanding</enum>
-                        </property>
-                        <property>
-                            <name>sizeHint</name>
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget>
-                        <class>QPushButton</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>add_button</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>&lt;-</string>
-                        </property>
-                    </widget>
-                    <widget>
-                        <class>QPushButton</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>remove_button</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>-&gt;</string>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property>
-                            <name>name</name>
-                            <cstring>Spacer5</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>orientation</name>
-                            <enum>Vertical</enum>
-                        </property>
-                        <property stdset="1">
-                            <name>sizeType</name>
-                            <enum>Expanding</enum>
-                        </property>
-                        <property>
-                            <name>sizeHint</name>
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                </vbox>
-            </widget>
-            <widget>
-                <class>QListView</class>
-                <column>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                    <property>
-                        <name>clickable</name>
-                        <bool>true</bool>
-                    </property>
-                    <property>
-                        <name>resizeable</name>
-                        <bool>true</bool>
-                    </property>
-                </column>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>availtypes_listview</cstring>
+                <property name="spacing">
+                    <number>6</number>
                 </property>
-            </widget>
-        </hbox>
-    </widget>
+                <widget class="QListView">
+                    <column>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizeable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>chosentypes_listview</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="resizeMode">
+                        <enum>LastColumn</enum>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout3</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <spacer>
+                            <property name="name" stdset="0">
+                                <cstring>Spacer4</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>add_button</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;-</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>remove_button</cstring>
+                            </property>
+                            <property name="text">
+                                <string>-&gt;</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name" stdset="0">
+                                <cstring>Spacer5</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+                <widget class="QListView">
+                    <column>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizeable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>availtypes_listview</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="resizeMode">
+                        <enum>LastColumn</enum>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QListView" row="4" column="1" rowspan="1" colspan="3">
+            <column>
+                <property name="text">
+                    <string>Property</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizeable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Value</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizeable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>properties_listview</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+            <property name="resizeMode">
+                <enum>AllColumns</enum>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <connections>
     <connection>
@@ -671,10 +477,6 @@
         <receiver>add_service_dialog</receiver>
         <slot>addTypeClicked()</slot>
     </connection>
-    <slot access="protected">iconClicked()</slot>
-    <slot access="protected">addTypeClicked()</slot>
-    <slot access="protected">propertyExecuted(QListViewItem*)</slot>
-    <slot access="protected">removeTypeClicked()</slot>
 </connections>
 <tabstops>
     <tabstop>filename_edit</tabstop>
@@ -690,4 +492,11 @@
     <tabstop>okbutton</tabstop>
     <tabstop>cancelbutton</tabstop>
 </tabstops>
+<slots>
+    <slot access="protected">iconClicked()</slot>
+    <slot access="protected">addTypeClicked()</slot>
+    <slot access="protected">propertyExecuted(QListViewItem*)</slot>
+    <slot access="protected">removeTypeClicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>
