@@ -5,6 +5,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
+#include <kdebug.h>
 
 #include "kdevcore.h"
 
@@ -17,6 +18,8 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) )
 
 DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList &)
         : KDevPlugin(parent, name) {
+
+    kdDebug(9007) << "DistpartPart::DistpartPart()" << endl;
     setInstance(DistpartFactory::instance());
 
     setXMLFile("kdevpart_distpart.rc");
@@ -30,7 +33,7 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
 
     m_dialog = new DistpartDialog(this);
-    
+
     // set up package
     //KURL projectURL;  // we need to get this from the base project
     RpmPackage = new SpecSupport(this);
@@ -40,8 +43,10 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
 
 
 DistpartPart::~DistpartPart() {
+    kdDebug(9007) << "DistpartPart::~DistpartPart()" << endl;
     delete m_dialog;
     delete RpmPackage;
+
 //    delete LsmPackage;
 }
 

@@ -32,7 +32,7 @@ DistpartDialog::DistpartDialog(DistpartPart *part)
 
     plug_box = new QTabWidget( tab_2, "plug_box" );
     tabLayout_2->addWidget( plug_box, 9, 2 );
-    
+
     connect(customProjectCheckBox, SIGNAL(toggled(bool) ),
             this, SLOT(slotcustomProjectCheckBoxChanged()));
     connect(uploadCustomCheckBox, SIGNAL(toggled(bool)),
@@ -64,12 +64,12 @@ DistpartDialog::DistpartDialog(DistpartPart *part)
 
     loadSettings();
 
- 
+
 }
 
 
 DistpartDialog::~DistpartDialog() {
-    delete plug_box;
+//    delete plug_box;
 }
 
 //    QPushButton* okayPushButton;
@@ -92,9 +92,9 @@ void DistpartDialog::slothelp_PushButtonPressed() {
 //    QPushButton* createSrcArchPushButton;
 void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
     QString dist = (getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? "make dist-bzip2" : "make dist";
-    QString filename = getappNameFormatLineEditText() + 
-		       "-" + 
-		       getversionLineEditText() + 
+    QString filename = getappNameFormatLineEditText() +
+		       "-" +
+		       getversionLineEditText() +
 		       ((getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz");
     m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && " + dist);
 }
@@ -445,7 +445,7 @@ void DistpartDialog::storeSettings() {
     DomUtil::writeEntry(dom,"/dist/group",getgroupLineEditText());
     DomUtil::writeEntry(dom,"/dist/packager",getpackagerLineEditText());
     DomUtil::writeEntry(dom,"/dist/description",getprojectDescriptionMultilineEditText());
-    DomUtil::writeEntry(dom,"/dist/changelog",getprojectChangelogMultilineEditText());    
+    DomUtil::writeEntry(dom,"/dist/changelog",getprojectChangelogMultilineEditText());
     DomUtil::writeBoolEntry(dom,"/dist/devpackage",getdevPackageCheckBoxState());
     DomUtil::writeBoolEntry(dom,"/dist/docspackage",getdocsPackageCheckBoxState());
     DomUtil::writeBoolEntry(dom,"/dist/appicon",getappIconCheckBoxState());

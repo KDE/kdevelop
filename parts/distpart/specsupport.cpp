@@ -38,10 +38,6 @@ SpecSupport::SpecSupport(DistpartPart * part) : packageBase(part,"Rpm") {
 }
 
 SpecSupport::~SpecSupport() {
-    delete srcPackagePushButton;
-    delete buildAllPushButton;
-    delete exportSPECPushButton;
-    delete importSPECPushButton;
 }
 
 //    QPushButton* buildAllPushButton;
@@ -155,14 +151,14 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
                     else desc += str + "\n";
                 }
                 setAppDescription(desc);
-            } 
+            }
 	    else if (s.startsWith("%changelog")) {
 		QString change;
 		while (!stream.atEnd()) {
 		    QString str = stream.readLine();
 		    if (str.startsWith("%")) break;
                     else change += str + "\n";
-                }	
+                }
 		setAppChangelog(change);
             }
         }
