@@ -1,96 +1,176 @@
 #!/usr/bin/make -f
-# Made with the aid of debmake, by Christoph Lameter,
-# games on the sample debian/rules file for GNU hello by Ian Jackson.
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
 
-# This is the debhelper compatability version to use.
-export DH_COMPAT=3
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
 
-include debian/debiandirs
+# This is the debhelper compatibility version to use.
+export DH_COMPAT=4
 
-configkdevelop= --prefix=/usr \
- --enable-debug --enable-docbase \
- --disable-rpath --with-qt-includes=/usr/include/qt \
- --libdir=$(kde_libdir) --includedir=$(kde_includedir) --mandir=$(mandir) \
- --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html \
- --enable-gideon-qt2 --enable-docbase \
- --with-phpdocdir=/usr/share/doc/php4 \
- --with-glibdocdir=/usr/share/doc/glib-reference/html \
- --with-gdkdocdir=/usr/share/doc/gtk-reference/gdk/html \
- --with-gtkdocdir=/usr/share/doc/gtk-reference/gtk/html \
- --with-gnomedocdir=/usr/share/doc/gnome-dev-doc/html
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
 
-# we don't enable java support because we don't have that in debian
-# --enable-javasupport --with-java=/usr/lib/j2sdk1.3 \
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+DEB_HOST_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-debdir=$(shell pwd)/debian
-instdir=$(debdir)/tmp
+objdir = $(CURDIR)/obj-$(DEB_BUILD_GNU_TYPE)
+
+ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -g
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	INSTALL_PROGRAM += -s
+endif
+
+ifeq ($(DEB_BUILD_GNU_TYPE),alpha-linux)
+  export CFLAGS +=-O0 -mieee
+  export CXXFLAGS +=-O0 -mieee
+endif
+
+ifeq ($(DEB_BUILD_GNU_TYPE),i386-linux)
+  # Uncomment the following 2 lines to enable i686 optimziation
+  # You may want to tweak the settings to your likings
+  #export CFLAGS=-O3 -march=i686 -ffast-math -finline-functions
+  #export CXXFLAGS=-O3 -march=i686 -ffast-math -finline-functions
+  XINERAMA=--with-xinerama
+endif
+
+-include debian/debiandirs
+
+debian/debiandirs: admin/debianrules
+	perl -w admin/debianrules echodirs > debian/debiandirs
 
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
-	if test ! -f configure; then \
-	  $(MAKE) -f admin/Makefile.common ;\
+
+	# Apply Debian specific patches
+	if test ! -f patch-stamp; then \
+		for patch in $(CURDIR)/debian/patches/*.diff ;\
+		do \
+			echo APPLYING PATCH\: $${patch##*/};\
+			patch -p1 < $$patch ;\
+		done ;\
+		touch patch-stamp ;\
 	fi
-	./configure $(configkdevelop)
+
+	# KDE CVS does not have aclocal.m4 or configure
+	if test ! -f configure; then \
+		$(MAKE) -f admin/Makefile.common ;\
+	fi
+
+	# make build directory
+	mkdir $(objdir)
+
+	# run configure with build tree $(objdir)
+	cd $(objdir) && \
+	../configure $(configkde) --disable-final
 
 	touch configure-stamp
 
-build:  configure-stamp build-stamp
-build-stamp:
+build: build-stamp
+build-stamp: configure-stamp 
 	dh_testdir
+
+	cd $(objdir) && \
 	$(MAKE)
 
 	touch build-stamp
 
 debian-clean:
 	dh_testdir
-	rm -f build-stamp configure-stamp
+	dh_testroot
+
 	dh_clean
 
-clean: debian-clean
-	-make distclean
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp debian/debiandirs
 
+	# Remove Debian specific patches
+	if test -f patch-stamp; then \
+		for patch in $(CURDIR)/debian/patches/*.diff ;\
+		do \
+			echo REMOVING PATCH\: $${patch##*/};\
+			patch -p1 -R < $$patch ;\
+		done ;\
+		rm -f patch-stamp ;\
+	fi
+
+	# Remove build tree
+	rm -rf $(objdir)
+
+	# if Makefile exists run distclean
+	if test -f Makefile; then \
+		$(MAKE) distclean; \
+	fi
+
+#	if test -d CVS; then \
+#		$(MAKE) -f admin/Makefile.common cvs-clean ;\
+#	fi
+
+	dh_clean
+
+install: DH_OPTIONS=
 install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	install -d debian/tmp/etc/kde2
-	$(MAKE) prefix=/usr DESTDIR=$(debdir)/tmp install
-#	rm -rf $(instdir)/usr/share/doc/kde/HTML/en/kdevdoctreeview/stl
 
-deb-common:
-	dh_movefiles
-	dh_undocumented
-	dh_installmenu
-	dh_installdocs
+	cd $(objdir) && \
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+
+	dh_install --list-missing
+
+# This single target is used to build all the packages, all at once, or
+# one at a time. So keep in mind: any options passed to commands here will
+# affect _all_ packages. Anything you want to only affect one package
+# should be put in another target, such as the install target.
+binary-common:
+	dh_testdir
+	dh_testroot
 	dh_installchangelogs
+	dh_installdocs
+#	dh_installexamples
+	dh_installmenu
+#	dh_installdebconf
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+	dh_installmime
+	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+	dh_undocumented
+	dh_installman
+	dh_strip
 	dh_link
-
-binary-indep: deb-common
-	dh_compress -X.database -i
-
-binary-arch: deb-common
-	dh_strip -a
-	dh_compress -X.database -a
-
-# Below here is fairly generic really
-
-binary:	install binary-arch binary-indep
+	dh_compress -X.docbook -X.css -X-license -X.dcl -X.bz2
 	dh_fixperms
-	dh_makeshlibs
+	dh_makeshlibs -V
 	dh_installdeb
+	dh_perl
 	dh_shlibdeps
 	dh_gencontrol
-	dh_md5sums 
+	dh_md5sums
 	dh_builddeb
 
-# Install local without making a package
+# Build architecture independant packages using the common target.
+binary-indep: build install
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
-install-local:
-	$(MAKE) prefix=/usr
-	$(MAKE) prefix=/usr install
+# Build architecture dependant packages using the common target.
+binary-arch: build install
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
 
-.PHONY: binary binary-arch binary-indep clean install install-local
+# Any other binary targets build just one binary package at a time.
+binary-%: build install
+	$(MAKE) -f debian/rules binary-common DH_OPTIONS=-p$*
 
-
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure

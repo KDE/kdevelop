@@ -2,14 +2,14 @@ Source: gideon
 Section: devel
 Priority: optional
 Maintainer: Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-Build-Depends: debhelper (>> 3.0.0), kdelibs-dev (>= 4:2.1.0-0), gettext, autoconf, automake, libtool, kdoc, kdelibs3-doc | kdelibs-doc, qt-doc | qt2.2-doc, flex
-Standards-Version: 3.5.2
+Build-Depends: debhelper (>> 4.0.0), kdelibs4-dev, gettext, autoconf, automake, libtool, kdelibs4-doc | kdelibs-doc, qt-doc | qt3-doc, flex
+Standards-Version: 3.5.6.0
 
 Package: gideon
 Architecture: any
-Depends: ${shlibs:Depends}, autoconf, automake, kdebase-libs, gideon-data
+Depends: ${shlibs:Depends}, autoconf, automake, kdebase-bin, gideon-data
 Recommends: make, gideon-doc
-Suggests: libqt-dev, qt-doc, kdbg, kdelibs-dev, kdebase, kdelibs3-doc, htdig, autoconf, automake, sgmltools, gettext, a2ps, enscript, gv, qt-designer | kde-designer, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, stl-manual
+Suggests: libqt3-mt-dev, qt3-doc, kdbg, kdelibs-dev, kdebase, kdelibs4-doc, htdig, autoconf, automake, sgmltools, gettext, a2ps, enscript, gv, qt3-tools, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, stl-manual
 Description: An IDE for Unix/X11 - development version
  KDevelop is an easy to use Integrated Development Environment
  for developing C/C++ applications under X11. It features 
@@ -53,7 +53,7 @@ Package: gideon-dev
 Architecture: all
 Depends: gideon (= ${Source-Version})
 Recommends: make
-Suggests: libqt-dev, qt-doc, kdbg, kdelibs-dev, kdebase, kdelibs3-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt-designer | kde-designer, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz
+Suggests: libqt3-mt-dev, qt3-doc, kdbg, kdelibs4-dev, kdebase, kdelibs4-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt3-tools, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz
 Description: An IDE for Unix/X11 - development files
  KDevelop is an easy to use Integrated Development Environment
  for developing C/C++ applications under X11. It features 

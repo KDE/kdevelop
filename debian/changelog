@@ -1,3 +1,9 @@
+gideon (1:2.999-1) unstable; urgency=low
+
+  * Fixed for KDE3.
+
+ -- Stefan Schimanski <schimmi@kde.org>  Mon, 24 Sep 2002 00:08:15 +0200
+
 gideon (1:3.0-3) unstable; urgency=low
 
   * Removed java support as jadhar@debian.org suggests.

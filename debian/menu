@@ -2,5 +2,5 @@
         needs=x11\
         section=Apps/Programming\
         hints="KDE"\
-        title="KDevelop"\
-        command=kdevelop
+        title="Gideon"\
+        command=gideon
