@@ -445,6 +445,7 @@ void CClassView::viewGraphicalTree()
 {
   QList<CClassTreeNode> *forest = store->asForest();
   CGfxClassTreeWindow *cb = new CGfxClassTreeWindow(NULL);
+  connect(cb, SIGNAL(gotoClassDefinition(CParsedClass *)), SLOT(slotViewClassDefinition(CParsedClass *)));
   cb->setCaption(i18n("Graphical classview"));
   cb->InitializeTree(forest);
   cb->show();
@@ -493,7 +494,7 @@ void CClassView::slotViewDefinition( const char *parentPath,
   emit selectedViewDefinition( parentPath, itemName, parentType, itemType );
 }
 
-/*------------------------------------- CClassView::viewDefinition()
+/*---------------------------------- CClassView::slotViewDeclaration()
  * viewDefinition()
  *   Views a declaration of an item.
  *
@@ -785,8 +786,8 @@ void CClassView::buildInitalClassTree()
 
   // Add all parsed classes to the correct list;
   for( aPC = list->first();
-       aPC != NULL;
-       aPC = list->next() )
+       aPC !=NULL;
+       aPC = list->next())
   {
     // Try to determine if this is a subdirectory.
     str = aPC->definedInFile;
@@ -800,7 +801,6 @@ void CClassView::buildInitalClassTree()
     {
       // Remove heading /
       str = str.remove( 0, 1 );
-
       iterlist = dict.find( str );
 
       if( iterlist == NULL )
@@ -1077,6 +1077,21 @@ void CClassView::slotViewDefinition()
                                                  parentType, itemType );
 
   slotViewDefinition( parentPath, itemName, parentType, itemType );
+}
+
+void CClassView::slotViewClassDefinition(CParsedClass *pClass)
+{
+  QString toFile;
+  int toLine=-1;
+
+  //  if( validClassDecl( className, declName, type ) )
+  if (pClass)
+  {
+    toFile = pClass->declaredInFile;
+    toLine = pClass->declaredOnLine;
+
+    emit selectFile(toFile, toLine);
+  }
 }
 
 void CClassView::slotViewDeclaration()

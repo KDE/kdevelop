@@ -120,6 +120,8 @@ protected slots:
   void slotClassTool();
   void slotViewDefinition();
   void slotViewDeclaration();
+  /** Views a class definition. */
+  void slotViewClassDefinition(CParsedClass *);
   /** Views the definition. */
   void slotViewDefinition( const char *parentPath, const char *itemName, 
                            THType parentType, THType itemType );
@@ -135,6 +137,7 @@ signals:
   void selectedProjectOptions();
   void selectedViewDeclaration(const char *, const char *,THType,THType);
   void selectedViewDefinition(const char *, const char *,THType,THType);
+  void selectFile(const QString &, int );
 
   /** Emitted when a user wants to add an attribute.
    * @param aClass Class to add an attribute to.
