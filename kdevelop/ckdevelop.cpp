@@ -825,7 +825,7 @@ void CKDevelop::slotBuildDistClean(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make distclean..."));
-  output_widget->clear();
+  messages_widget->clear();
   QDir::setCurrent(prj.getProjectDir());
   process.clearArguments();
   process << "make";
@@ -850,7 +850,7 @@ void CKDevelop::slotBuildAutoconf(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf suite..."));
-  output_widget->clear();
+  messages_widget->clear();
   QDir::setCurrent(prj.getProjectDir());
   process.clearArguments();
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
@@ -1507,6 +1507,7 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
 
 
 

@@ -20,10 +20,6 @@
 
 CTabCtl::CTabCtl(QWidget* parent,char* name,QString type) : KTabCtl(parent,name){
   setFocusPolicy(QWidget::NoFocus);
-<<<<<<< ctabctl.cpp
-//  tabs->setFocusPolicy(QWidget::StrongFocus);
-  setShape(QTabBar::RoundedAbove);
-=======
   tabs->setFocusPolicy(QWidget::NoFocus);
   if(type == "normal"){
     setShape(QTabBar::RoundedAbove);
@@ -32,8 +28,7 @@ CTabCtl::CTabCtl(QWidget* parent,char* name,QString type) : KTabCtl(parent,name)
     setShape(QTabBar::RoundedAbove);
     //    tabs->setFont(QFont("helvetica",10));
   }
->>>>>>> 1.3
-  
+
 }
 void CTabCtl::setCurrentTab(int id){
 

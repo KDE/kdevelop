@@ -1,13 +1,8 @@
 /****************************************************************************
 ** CKDevelop meta object code from reading C++ file 'ckdevelop.h'
 **
-<<<<<<< ckdevelop.moc.cpp
-** Created: Sun Jan 31 21:46:01 1999
+** Created: Sun Jan 31 23:57:27 1999
 **      by: The Qt Meta Object Compiler ($Revision$)
-=======
-** Created: Sun Jan 31 19:44:07 1999
-**      by: The Qt Meta Object Compiler ($Revision$)
->>>>>>> 1.10
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -135,66 +130,38 @@ void CKDevelop::staticMetaObject()
     typedef void(CKDevelop::*m1_t76)(KHTMLView*,const char*,int,const char*);
     typedef void(CKDevelop::*m1_t77)(KProcess*,char*,int);
     typedef void(CKDevelop::*m1_t78)(KProcess*,char*,int);
-<<<<<<< ckdevelop.moc.cpp
-    typedef void(CKDevelop::*m1_t79)(KProcess*,char*,int);
-    typedef void(CKDevelop::*m1_t80)(KHTMLView*);
-    typedef void(CKDevelop::*m1_t81)(KProcess*);
-    typedef void(CKDevelop::*m1_t82)(KProcess*);
-    typedef void(CKDevelop::*m1_t83)(int);
-=======
     typedef void(CKDevelop::*m1_t79)(KProcess*,char*,int);
     typedef void(CKDevelop::*m1_t80)(KProcess*,char*,int);
-    typedef void(CKDevelop::*m1_t81)(KHTMLView*);
-    typedef void(CKDevelop::*m1_t82)(KProcess*);
+    typedef void(CKDevelop::*m1_t81)(KProcess*,char*,int);
+    typedef void(CKDevelop::*m1_t82)(KHTMLView*);
     typedef void(CKDevelop::*m1_t83)(KProcess*);
->>>>>>> 1.10
-    typedef void(CKDevelop::*m1_t84)(int);
+    typedef void(CKDevelop::*m1_t84)(KProcess*);
     typedef void(CKDevelop::*m1_t85)(int);
     typedef void(CKDevelop::*m1_t86)(int);
     typedef void(CKDevelop::*m1_t87)(int);
     typedef void(CKDevelop::*m1_t88)(int);
     typedef void(CKDevelop::*m1_t89)(int);
-<<<<<<< ckdevelop.moc.cpp
-    typedef void(CKDevelop::*m1_t90)(int);
-    typedef void(CKDevelop::*m1_t91)();
-    typedef void(CKDevelop::*m1_t92)(int);
-    typedef void(CKDevelop::*m1_t93)(int);
-    typedef void(CKDevelop::*m1_t94)(const char*);
-    typedef void(CKDevelop::*m1_t95)(const char*);
-    typedef void(CKDevelop::*m1_t96)(int);
-    typedef void(CKDevelop::*m1_t97)();
-    typedef void(CKDevelop::*m1_t98)();
-    typedef void(CKDevelop::*m1_t99)();
-    typedef int(CKDevelop::*m1_t100)(QString);
-    typedef void(CKDevelop::*m1_t101)(QString,QString);
-    typedef void(CKDevelop::*m1_t102)(QString,QString);
-    typedef int(CKDevelop::*m1_t103)(QString);
-    typedef QString(CKDevelop::*m1_t104)(QString);
-    typedef QString(CKDevelop::*m1_t105)(QString);
-    typedef void(CKDevelop::*m1_t106)();
-    typedef void(CKDevelop::*m1_t107)();
-=======
     typedef void(CKDevelop::*m1_t90)(int);
     typedef void(CKDevelop::*m1_t91)(int);
-    typedef void(CKDevelop::*m1_t92)();
-    typedef void(CKDevelop::*m1_t93)(int);
+    typedef void(CKDevelop::*m1_t92)(int);
+    typedef void(CKDevelop::*m1_t93)();
     typedef void(CKDevelop::*m1_t94)(int);
     typedef void(CKDevelop::*m1_t95)(int);
-    typedef void(CKDevelop::*m1_t96)(const char*);
+    typedef void(CKDevelop::*m1_t96)(int);
     typedef void(CKDevelop::*m1_t97)(const char*);
-    typedef void(CKDevelop::*m1_t98)(int);
-    typedef void(CKDevelop::*m1_t99)();
+    typedef void(CKDevelop::*m1_t98)(const char*);
+    typedef void(CKDevelop::*m1_t99)(int);
     typedef void(CKDevelop::*m1_t100)();
     typedef void(CKDevelop::*m1_t101)();
-    typedef int(CKDevelop::*m1_t102)(QString);
-    typedef void(CKDevelop::*m1_t103)(QString,QString);
+    typedef void(CKDevelop::*m1_t102)();
+    typedef int(CKDevelop::*m1_t103)(QString);
     typedef void(CKDevelop::*m1_t104)(QString,QString);
-    typedef int(CKDevelop::*m1_t105)(QString);
-    typedef QString(CKDevelop::*m1_t106)(QString);
+    typedef void(CKDevelop::*m1_t105)(QString,QString);
+    typedef int(CKDevelop::*m1_t106)(QString);
     typedef QString(CKDevelop::*m1_t107)(QString);
-    typedef void(CKDevelop::*m1_t108)();
+    typedef QString(CKDevelop::*m1_t108)(QString);
     typedef void(CKDevelop::*m1_t109)();
->>>>>>> 1.10
+    typedef void(CKDevelop::*m1_t110)();
     m1_t0 v1_0 = &CKDevelop::slotFileNewFile;
     m1_t1 v1_1 = &CKDevelop::slotFileOpenFile;
     m1_t2 v1_2 = &CKDevelop::slotFileSave;
@@ -258,7 +225,6 @@ void CKDevelop::staticMetaObject()
     m1_t60 v1_60 = &CKDevelop::slotDocBack;
     m1_t61 v1_61 = &CKDevelop::slotDocForward;
     m1_t62 v1_62 = &CKDevelop::slotDocSText;
-<<<<<<< ckdevelop.moc.cpp
     m1_t63 v1_63 = &CKDevelop::slotDocSText;
     m1_t64 v1_64 = &CKDevelop::slotDocQtLib;
     m1_t65 v1_65 = &CKDevelop::slotDocKDECoreLib;
@@ -275,86 +241,39 @@ void CKDevelop::staticMetaObject()
     m1_t76 v1_76 = &CKDevelop::slotURLSelected;
     m1_t77 v1_77 = &CKDevelop::slotReceivedStdout;
     m1_t78 v1_78 = &CKDevelop::slotReceivedStderr;
-    m1_t79 v1_79 = &CKDevelop::slotSearchReceivedStdout;
-    m1_t80 v1_80 = &CKDevelop::slotDocumentDone;
-    m1_t81 v1_81 = &CKDevelop::slotProcessExited;
-    m1_t82 v1_82 = &CKDevelop::slotSearchProcessExited;
-    m1_t83 v1_83 = &CKDevelop::slotLogFileTreeSelected;
-    m1_t84 v1_84 = &CKDevelop::slotRealFileTreeSelected;
-    m1_t85 v1_85 = &CKDevelop::slotDocTreeSelected;
-    m1_t86 v1_86 = &CKDevelop::slotClassTreeSelected;
-    m1_t87 v1_87 = &CKDevelop::slotCVViewDeclaration;
-    m1_t88 v1_88 = &CKDevelop::slotCVViewDefinition;
-    m1_t89 v1_89 = &CKDevelop::slotSTabSelected;
-    m1_t90 v1_90 = &CKDevelop::slotMenuBuffersSelected;
-    m1_t91 v1_91 = &CKDevelop::slotClickedOnOutputWidget;
-    m1_t92 v1_92 = &CKDevelop::slotClassChoiceCombo;
-    m1_t93 v1_93 = &CKDevelop::slotMethodChoiceCombo;
-    m1_t94 v1_94 = &CKDevelop::slotStatusMsg;
-    m1_t95 v1_95 = &CKDevelop::slotStatusHelpMsg;
-    m1_t96 v1_96 = &CKDevelop::statusCallback;
-    m1_t97 v1_97 = &CKDevelop::slotNewStatus;
-    m1_t98 v1_98 = &CKDevelop::slotNewLineColumn;
-    m1_t99 v1_99 = &CKDevelop::slotNewUndo;
-    m1_t100 v1_100 = &CKDevelop::CVGotoClassDecl;
-    m1_t101 v1_101 = &CKDevelop::CVGotoClassVarDecl;
-    m1_t102 v1_102 = &CKDevelop::CVGotoMethodeImpl;
-    m1_t103 v1_103 = &CKDevelop::searchToolGetNumber;
-    m1_t104 v1_104 = &CKDevelop::searchToolGetTitle;
-    m1_t105 v1_105 = &CKDevelop::searchToolGetURL;
-    m1_t106 v1_106 = &CKDevelop::slotCreateSearchDatabase;
-    m1_t107 v1_107 = &CKDevelop::refreshClassCombos;
-    QMetaData *slot_tbl = new QMetaData[108];
-=======
-    m1_t63 v1_63 = &CKDevelop::slotDocQtLib;
-    m1_t64 v1_64 = &CKDevelop::slotDocKDECoreLib;
-    m1_t65 v1_65 = &CKDevelop::slotDocKDEGUILib;
-    m1_t66 v1_66 = &CKDevelop::slotDocKDEKFileLib;
-    m1_t67 v1_67 = &CKDevelop::slotDocKDEHTMLLib;
-    m1_t68 v1_68 = &CKDevelop::slotDocAPI;
-    m1_t69 v1_69 = &CKDevelop::slotDocManual;
-    m1_t70 v1_70 = &CKDevelop::slotDocUpdateKDEDocumentation;
-    m1_t71 v1_71 = &CKDevelop::slotHelpContent;
-    m1_t72 v1_72 = &CKDevelop::slotHelpHomepage;
-    m1_t73 v1_73 = &CKDevelop::slotHelpAbout;
-    m1_t74 v1_74 = &CKDevelop::slotToolbarClicked;
-    m1_t75 v1_75 = &CKDevelop::slotURLSelected;
-    m1_t76 v1_76 = &CKDevelop::slotReceivedStdout;
-    m1_t77 v1_77 = &CKDevelop::slotReceivedStderr;
-    m1_t78 v1_78 = &CKDevelop::slotApplReceivedStdout;
-    m1_t79 v1_79 = &CKDevelop::slotApplReceivedStderr;
-    m1_t80 v1_80 = &CKDevelop::slotSearchReceivedStdout;
-    m1_t81 v1_81 = &CKDevelop::slotDocumentDone;
-    m1_t82 v1_82 = &CKDevelop::slotProcessExited;
-    m1_t83 v1_83 = &CKDevelop::slotSearchProcessExited;
-    m1_t84 v1_84 = &CKDevelop::slotLogFileTreeSelected;
-    m1_t85 v1_85 = &CKDevelop::slotRealFileTreeSelected;
-    m1_t86 v1_86 = &CKDevelop::slotDocTreeSelected;
-    m1_t87 v1_87 = &CKDevelop::slotClassTreeSelected;
-    m1_t88 v1_88 = &CKDevelop::slotCVViewDeclaration;
-    m1_t89 v1_89 = &CKDevelop::slotCVViewDefinition;
-    m1_t90 v1_90 = &CKDevelop::slotSTabSelected;
-    m1_t91 v1_91 = &CKDevelop::slotMenuBuffersSelected;
-    m1_t92 v1_92 = &CKDevelop::slotClickedOnMessagesWidget;
-    m1_t93 v1_93 = &CKDevelop::slotKeyPressedOnStdinStdoutWidget;
-    m1_t94 v1_94 = &CKDevelop::slotClassChoiceCombo;
-    m1_t95 v1_95 = &CKDevelop::slotMethodChoiceCombo;
-    m1_t96 v1_96 = &CKDevelop::slotStatusMsg;
-    m1_t97 v1_97 = &CKDevelop::slotStatusHelpMsg;
-    m1_t98 v1_98 = &CKDevelop::statusCallback;
-    m1_t99 v1_99 = &CKDevelop::slotNewStatus;
-    m1_t100 v1_100 = &CKDevelop::slotNewLineColumn;
-    m1_t101 v1_101 = &CKDevelop::slotNewUndo;
-    m1_t102 v1_102 = &CKDevelop::CVGotoClassDecl;
-    m1_t103 v1_103 = &CKDevelop::CVGotoClassVarDecl;
-    m1_t104 v1_104 = &CKDevelop::CVGotoMethodeImpl;
-    m1_t105 v1_105 = &CKDevelop::searchToolGetNumber;
-    m1_t106 v1_106 = &CKDevelop::searchToolGetTitle;
-    m1_t107 v1_107 = &CKDevelop::searchToolGetURL;
-    m1_t108 v1_108 = &CKDevelop::slotCreateSearchDatabase;
-    m1_t109 v1_109 = &CKDevelop::refreshClassCombos;
-    QMetaData *slot_tbl = new QMetaData[110];
->>>>>>> 1.10
+    m1_t79 v1_79 = &CKDevelop::slotApplReceivedStdout;
+    m1_t80 v1_80 = &CKDevelop::slotApplReceivedStderr;
+    m1_t81 v1_81 = &CKDevelop::slotSearchReceivedStdout;
+    m1_t82 v1_82 = &CKDevelop::slotDocumentDone;
+    m1_t83 v1_83 = &CKDevelop::slotProcessExited;
+    m1_t84 v1_84 = &CKDevelop::slotSearchProcessExited;
+    m1_t85 v1_85 = &CKDevelop::slotLogFileTreeSelected;
+    m1_t86 v1_86 = &CKDevelop::slotRealFileTreeSelected;
+    m1_t87 v1_87 = &CKDevelop::slotDocTreeSelected;
+    m1_t88 v1_88 = &CKDevelop::slotClassTreeSelected;
+    m1_t89 v1_89 = &CKDevelop::slotCVViewDeclaration;
+    m1_t90 v1_90 = &CKDevelop::slotCVViewDefinition;
+    m1_t91 v1_91 = &CKDevelop::slotSTabSelected;
+    m1_t92 v1_92 = &CKDevelop::slotMenuBuffersSelected;
+    m1_t93 v1_93 = &CKDevelop::slotClickedOnMessagesWidget;
+    m1_t94 v1_94 = &CKDevelop::slotKeyPressedOnStdinStdoutWidget;
+    m1_t95 v1_95 = &CKDevelop::slotClassChoiceCombo;
+    m1_t96 v1_96 = &CKDevelop::slotMethodChoiceCombo;
+    m1_t97 v1_97 = &CKDevelop::slotStatusMsg;
+    m1_t98 v1_98 = &CKDevelop::slotStatusHelpMsg;
+    m1_t99 v1_99 = &CKDevelop::statusCallback;
+    m1_t100 v1_100 = &CKDevelop::slotNewStatus;
+    m1_t101 v1_101 = &CKDevelop::slotNewLineColumn;
+    m1_t102 v1_102 = &CKDevelop::slotNewUndo;
+    m1_t103 v1_103 = &CKDevelop::CVGotoClassDecl;
+    m1_t104 v1_104 = &CKDevelop::CVGotoClassVarDecl;
+    m1_t105 v1_105 = &CKDevelop::CVGotoMethodeImpl;
+    m1_t106 v1_106 = &CKDevelop::searchToolGetNumber;
+    m1_t107 v1_107 = &CKDevelop::searchToolGetTitle;
+    m1_t108 v1_108 = &CKDevelop::searchToolGetURL;
+    m1_t109 v1_109 = &CKDevelop::slotCreateSearchDatabase;
+    m1_t110 v1_110 = &CKDevelop::refreshClassCombos;
+    QMetaData *slot_tbl = new QMetaData[111];
     slot_tbl[0].name = "slotFileNewFile()";
     slot_tbl[1].name = "slotFileOpenFile()";
     slot_tbl[2].name = "slotFileSave()";
@@ -388,7 +307,6 @@ void CKDevelop::staticMetaObject()
     slot_tbl[30].name = "slotFileNewAppl()";
     slot_tbl[31].name = "slotProjectNew()";
     slot_tbl[32].name = "slotFileOpenPrj()";
-<<<<<<< ckdevelop.moc.cpp
     slot_tbl[33].name = "slotProjectClose()";
     slot_tbl[34].name = "slotProjectCompileFile()";
     slot_tbl[35].name = "slotProjectAddNewFile()";
@@ -435,114 +353,38 @@ void CKDevelop::staticMetaObject()
     slot_tbl[76].name = "slotURLSelected(KHTMLView*,const char*,int,const char*)";
     slot_tbl[77].name = "slotReceivedStdout(KProcess*,char*,int)";
     slot_tbl[78].name = "slotReceivedStderr(KProcess*,char*,int)";
-    slot_tbl[79].name = "slotSearchReceivedStdout(KProcess*,char*,int)";
-    slot_tbl[80].name = "slotDocumentDone(KHTMLView*)";
-    slot_tbl[81].name = "slotProcessExited(KProcess*)";
-    slot_tbl[82].name = "slotSearchProcessExited(KProcess*)";
-    slot_tbl[83].name = "slotLogFileTreeSelected(int)";
-    slot_tbl[84].name = "slotRealFileTreeSelected(int)";
-    slot_tbl[85].name = "slotDocTreeSelected(int)";
-    slot_tbl[86].name = "slotClassTreeSelected(int)";
-    slot_tbl[87].name = "slotCVViewDeclaration(int)";
-    slot_tbl[88].name = "slotCVViewDefinition(int)";
-    slot_tbl[89].name = "slotSTabSelected(int)";
-    slot_tbl[90].name = "slotMenuBuffersSelected(int)";
-    slot_tbl[91].name = "slotClickedOnOutputWidget()";
-    slot_tbl[92].name = "slotClassChoiceCombo(int)";
-    slot_tbl[93].name = "slotMethodChoiceCombo(int)";
-    slot_tbl[94].name = "slotStatusMsg(const char*)";
-    slot_tbl[95].name = "slotStatusHelpMsg(const char*)";
-    slot_tbl[96].name = "statusCallback(int)";
-    slot_tbl[97].name = "slotNewStatus()";
-    slot_tbl[98].name = "slotNewLineColumn()";
-    slot_tbl[99].name = "slotNewUndo()";
-    slot_tbl[100].name = "CVGotoClassDecl(QString)";
-    slot_tbl[101].name = "CVGotoClassVarDecl(QString,QString)";
-    slot_tbl[102].name = "CVGotoMethodeImpl(QString,QString)";
-    slot_tbl[103].name = "searchToolGetNumber(QString)";
-    slot_tbl[104].name = "searchToolGetTitle(QString)";
-    slot_tbl[105].name = "searchToolGetURL(QString)";
-    slot_tbl[106].name = "slotCreateSearchDatabase()";
-    slot_tbl[107].name = "refreshClassCombos()";
-=======
-    slot_tbl[33].name = "slotProjectCompileFile()";
-    slot_tbl[34].name = "slotProjectAddNewFile()";
-    slot_tbl[35].name = "slotProjectAddExistingFiles()";
-    slot_tbl[36].name = "slotProjectRemoveFile()";
-    slot_tbl[37].name = "slotProjectNewClass()";
-    slot_tbl[38].name = "slotProjectFileProperties()";
-    slot_tbl[39].name = "slotProjectOptions()";
-    slot_tbl[40].name = "slotBuildRun()";
-    slot_tbl[41].name = "slotBuildDebug()";
-    slot_tbl[42].name = "slotBuildMake()";
-    slot_tbl[43].name = "slotBuildRebuildAll()";
-    slot_tbl[44].name = "slotBuildCleanRebuildAll()";
-    slot_tbl[45].name = "slotBuildDistClean()";
-    slot_tbl[46].name = "slotBuildAutoconf()";
-    slot_tbl[47].name = "slotBuildConfigure()";
-    slot_tbl[48].name = "slotBuildStop()";
-    slot_tbl[49].name = "slotBuildAPI()";
-    slot_tbl[50].name = "slotBuildManual()";
-    slot_tbl[51].name = "slotToolsKIconEdit()";
-    slot_tbl[52].name = "slotToolsKDbg()";
-    slot_tbl[53].name = "slotToolsKTranslator()";
-    slot_tbl[54].name = "slotOptionsEditor()";
-    slot_tbl[55].name = "slotOptionsEditorColors()";
-    slot_tbl[56].name = "slotOptionsSyntaxHighlighting()";
-    slot_tbl[57].name = "slotOptionsKDevelop()";
-    slot_tbl[58].name = "slotOptionsDocBrowser()";
-    slot_tbl[59].name = "slotDocBack()";
-    slot_tbl[60].name = "slotDocForward()";
-    slot_tbl[61].name = "slotDocSText()";
-    slot_tbl[62].name = "slotDocSText(QString)";
-    slot_tbl[63].name = "slotDocQtLib()";
-    slot_tbl[64].name = "slotDocKDECoreLib()";
-    slot_tbl[65].name = "slotDocKDEGUILib()";
-    slot_tbl[66].name = "slotDocKDEKFileLib()";
-    slot_tbl[67].name = "slotDocKDEHTMLLib()";
-    slot_tbl[68].name = "slotDocAPI()";
-    slot_tbl[69].name = "slotDocManual()";
-    slot_tbl[70].name = "slotDocUpdateKDEDocumentation()";
-    slot_tbl[71].name = "slotHelpContent()";
-    slot_tbl[72].name = "slotHelpHomepage()";
-    slot_tbl[73].name = "slotHelpAbout()";
-    slot_tbl[74].name = "slotToolbarClicked(int)";
-    slot_tbl[75].name = "slotURLSelected(KHTMLView*,const char*,int,const char*)";
-    slot_tbl[76].name = "slotReceivedStdout(KProcess*,char*,int)";
-    slot_tbl[77].name = "slotReceivedStderr(KProcess*,char*,int)";
-    slot_tbl[78].name = "slotApplReceivedStdout(KProcess*,char*,int)";
-    slot_tbl[79].name = "slotApplReceivedStderr(KProcess*,char*,int)";
-    slot_tbl[80].name = "slotSearchReceivedStdout(KProcess*,char*,int)";
-    slot_tbl[81].name = "slotDocumentDone(KHTMLView*)";
-    slot_tbl[82].name = "slotProcessExited(KProcess*)";
-    slot_tbl[83].name = "slotSearchProcessExited(KProcess*)";
-    slot_tbl[84].name = "slotLogFileTreeSelected(int)";
-    slot_tbl[85].name = "slotRealFileTreeSelected(int)";
-    slot_tbl[86].name = "slotDocTreeSelected(int)";
-    slot_tbl[87].name = "slotClassTreeSelected(int)";
-    slot_tbl[88].name = "slotCVViewDeclaration(int)";
-    slot_tbl[89].name = "slotCVViewDefinition(int)";
-    slot_tbl[90].name = "slotSTabSelected(int)";
-    slot_tbl[91].name = "slotMenuBuffersSelected(int)";
-    slot_tbl[92].name = "slotClickedOnMessagesWidget()";
-    slot_tbl[93].name = "slotKeyPressedOnStdinStdoutWidget(int)";
-    slot_tbl[94].name = "slotClassChoiceCombo(int)";
-    slot_tbl[95].name = "slotMethodChoiceCombo(int)";
-    slot_tbl[96].name = "slotStatusMsg(const char*)";
-    slot_tbl[97].name = "slotStatusHelpMsg(const char*)";
-    slot_tbl[98].name = "statusCallback(int)";
-    slot_tbl[99].name = "slotNewStatus()";
-    slot_tbl[100].name = "slotNewLineColumn()";
-    slot_tbl[101].name = "slotNewUndo()";
-    slot_tbl[102].name = "CVGotoClassDecl(QString)";
-    slot_tbl[103].name = "CVGotoClassVarDecl(QString,QString)";
-    slot_tbl[104].name = "CVGotoMethodeImpl(QString,QString)";
-    slot_tbl[105].name = "searchToolGetNumber(QString)";
-    slot_tbl[106].name = "searchToolGetTitle(QString)";
-    slot_tbl[107].name = "searchToolGetURL(QString)";
-    slot_tbl[108].name = "slotCreateSearchDatabase()";
-    slot_tbl[109].name = "refreshClassCombos()";
->>>>>>> 1.10
+    slot_tbl[79].name = "slotApplReceivedStdout(KProcess*,char*,int)";
+    slot_tbl[80].name = "slotApplReceivedStderr(KProcess*,char*,int)";
+    slot_tbl[81].name = "slotSearchReceivedStdout(KProcess*,char*,int)";
+    slot_tbl[82].name = "slotDocumentDone(KHTMLView*)";
+    slot_tbl[83].name = "slotProcessExited(KProcess*)";
+    slot_tbl[84].name = "slotSearchProcessExited(KProcess*)";
+    slot_tbl[85].name = "slotLogFileTreeSelected(int)";
+    slot_tbl[86].name = "slotRealFileTreeSelected(int)";
+    slot_tbl[87].name = "slotDocTreeSelected(int)";
+    slot_tbl[88].name = "slotClassTreeSelected(int)";
+    slot_tbl[89].name = "slotCVViewDeclaration(int)";
+    slot_tbl[90].name = "slotCVViewDefinition(int)";
+    slot_tbl[91].name = "slotSTabSelected(int)";
+    slot_tbl[92].name = "slotMenuBuffersSelected(int)";
+    slot_tbl[93].name = "slotClickedOnMessagesWidget()";
+    slot_tbl[94].name = "slotKeyPressedOnStdinStdoutWidget(int)";
+    slot_tbl[95].name = "slotClassChoiceCombo(int)";
+    slot_tbl[96].name = "slotMethodChoiceCombo(int)";
+    slot_tbl[97].name = "slotStatusMsg(const char*)";
+    slot_tbl[98].name = "slotStatusHelpMsg(const char*)";
+    slot_tbl[99].name = "statusCallback(int)";
+    slot_tbl[100].name = "slotNewStatus()";
+    slot_tbl[101].name = "slotNewLineColumn()";
+    slot_tbl[102].name = "slotNewUndo()";
+    slot_tbl[103].name = "CVGotoClassDecl(QString)";
+    slot_tbl[104].name = "CVGotoClassVarDecl(QString,QString)";
+    slot_tbl[105].name = "CVGotoMethodeImpl(QString,QString)";
+    slot_tbl[106].name = "searchToolGetNumber(QString)";
+    slot_tbl[107].name = "searchToolGetTitle(QString)";
+    slot_tbl[108].name = "searchToolGetURL(QString)";
+    slot_tbl[109].name = "slotCreateSearchDatabase()";
+    slot_tbl[110].name = "refreshClassCombos()";
     slot_tbl[0].ptr = *((QMember*)&v1_0);
     slot_tbl[1].ptr = *((QMember*)&v1_1);
     slot_tbl[2].ptr = *((QMember*)&v1_2);
@@ -650,18 +492,11 @@ void CKDevelop::staticMetaObject()
     slot_tbl[104].ptr = *((QMember*)&v1_104);
     slot_tbl[105].ptr = *((QMember*)&v1_105);
     slot_tbl[106].ptr = *((QMember*)&v1_106);
-<<<<<<< ckdevelop.moc.cpp
-    slot_tbl[107].ptr = *((QMember*)&v1_107);
-=======
     slot_tbl[107].ptr = *((QMember*)&v1_107);
     slot_tbl[108].ptr = *((QMember*)&v1_108);
     slot_tbl[109].ptr = *((QMember*)&v1_109);
->>>>>>> 1.10
+    slot_tbl[110].ptr = *((QMember*)&v1_110);
     metaObj = new QMetaObject( "CKDevelop", "KTMainWindow",
-<<<<<<< ckdevelop.moc.cpp
-	slot_tbl, 108,
-=======
-	slot_tbl, 110,
->>>>>>> 1.10
+	slot_tbl, 111,
 	0, 0 );
 }

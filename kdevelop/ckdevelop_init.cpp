@@ -684,45 +684,7 @@ void CKDevelop::initProject(){
   else{
     refreshTrees(); // this refresh only the documentation tab,tree
   }
-
-
-
-<<<<<<< ckdevelop_init.cpp
 }
-
-
-
-
-
-
-
-=======
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 1.13
-
 
 
 

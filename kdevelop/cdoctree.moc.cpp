@@ -1,7 +1,7 @@
 /****************************************************************************
 ** CDocTree meta object code from reading C++ file 'cdoctree.h'
 **
-** Created: Sat Jan 23 20:33:14 1999
+** Created: Sun Jan 31 23:57:07 1999
 **      by: The Qt Meta Object Compiler ($Revision$)
 **
 ** WARNING! All changes made in this file will be lost!
