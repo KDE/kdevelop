@@ -1,3 +1,6 @@
+2001-03-21  jbb <jbb@kdevelop.org>
+    * Fixed: Crash when right click on empty space in watch window.
+
 2001-03-06  jbb <jbb@kdevelop.org>
     * Fixed: Dirs containing "++" would cause kimport to fail.
 
