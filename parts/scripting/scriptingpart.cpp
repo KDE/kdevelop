@@ -72,7 +72,7 @@ scriptingPart::~scriptingPart()
 void scriptingPart::init()
 {
 // delayed initialization stuff goes here
-    m_scripts = new KScriptActionManager(actionCollection());
+    m_scripts = new KScriptActionManager(this,actionCollection());
     setupActions();
 }
 

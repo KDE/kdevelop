@@ -23,7 +23,6 @@
 #include <kapplication.h>
 #include <kdesktopfile.h>
 #include <kstandarddirs.h>
-#include <klibloader.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -33,14 +32,13 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 
-
-static QString _scriptRunner = "KScriptRunner/KScriptRunner";
-KScriptAction::KScriptAction( const QString &scriptDesktopFile, QObject *parent, KActionCollection *ac )
-  : QObject(parent, scriptDesktopFile.latin1()), KScriptClientInterface( )
+KScriptAction::KScriptAction( const QString &scriptDesktopFile, QObject *interface, KActionCollection *ac )
+    : QObject(interface), KScriptClientInterface( )
 {
     m_interface = 0L;
     m_action = 0L;
     m_isValid = false;
+    m_refs = 0;
     // Read the desktop file
     if(KDesktopFile::isDesktopFile(scriptDesktopFile))
     {
@@ -51,21 +49,24 @@ KScriptAction::KScriptAction( const QString &scriptDesktopFile, QObject *parent,
         m_scriptName = desktop.readName();
         m_scriptType = desktop.readType();
         QString scriptTypeQuery = "([X-KDE-Script-Runner] == '" + m_scriptType + "')";
-        KTrader::OfferList offers = KTrader::self()->query( _scriptRunner, scriptTypeQuery );
+	KTrader::OfferList offers = KTrader::self()->query( "KScriptRunner/KScriptRunner", scriptTypeQuery );
         if ( !offers.isEmpty() )
         {
-                m_action = new KAction(m_scriptName, KShortcut(), this, SLOT(activate()), ac, "script");
-                m_isValid = true;
-		m_timeout = new QTimer(this);
-		connect( m_timeout, SIGNAL(timeout()), SLOT(cleanup()) );
+            m_action = new KAction(m_scriptName, KShortcut(), this, SLOT(activate()), ac, "script");
+            m_isValid = true;
+            m_timeout = new QTimer(this);
+            QString icon = desktop.readIcon();
+            m_action->setStatusText(desktop.readComment());
+                if( !icon.isEmpty() ) 
+                    m_action->setIcon(icon);
+            m_action->setShortcutConfigurable(true);
+            connect( m_timeout, SIGNAL(timeout()), SLOT(cleanup()) );
         }
     }
 }
 
 KScriptAction::~KScriptAction()
 {
-  kdDebug() << "Script cleaning up" << endl;
-  
     if( m_interface ) delete m_interface;
     if( m_action ) delete m_action;
 }
@@ -77,82 +78,48 @@ KAction * KScriptAction::action( )
     return m_action;
 }
 
-void KScriptAction::done( KScriptClientInterface::Result result, const QVariant & returned )
-{
-    emit scriptDone(result,returned);
-}
-
-void KScriptAction::progress( int percent )
-{
-  kdDebug() << "Percent: " << percent << endl;
-    emit scriptProgress(percent);
-}
-
-void KScriptAction::output( const QString & msg )
-{
-  kdDebug() << "Output: " << msg << endl;
-    emit scriptOutput(msg);
-}
-
-void KScriptAction::warning( const QString & msg )
-{
-  kdDebug() << "Warning: " << msg << endl;
-    emit scriptWarning(msg);
-}
-
-void KScriptAction::error( const QString & msg )
-{
-  kdDebug() << "Error: " << msg << endl;
-    emit scriptError(msg);
-}
-
 void KScriptAction::activate( )
 {
-  kdDebug() << "Run script" << endl;
     if( m_interface == 0L)
     {
         QString scriptTypeQuery = "([X-KDE-Script-Runner] == '" + m_scriptType + "')";
-        int err = 0;
-        KTrader::OfferList offers = KTrader::self()->query( _scriptRunner, scriptTypeQuery );
-        if ( offers.isEmpty() )
-          kdDebug() << "Not found" << endl;
-        QStringList args;
-        m_interface= KParts::ComponentFactory::createInstanceFromQuery<KScriptInterface>( _scriptRunner, scriptTypeQuery, this, "kscript", args, &err );
-        if ( m_interface != 0L)
+        m_interface= KParts::ComponentFactory::createInstanceFromQuery<KScriptInterface>( "KScriptRunner/KScriptRunner", scriptTypeQuery, this );
+	if ( m_interface != 0L)
         {
             m_interface->ScriptClientInterface= this;
-            kdDebug() << "Set script file" << m_scriptFile << endl;
             if( m_scriptMethod.isEmpty() )
                 m_interface->setScript(m_scriptFile);
             else
                 m_interface->setScript(m_scriptFile, m_scriptMethod);
+            connect(this, SIGNAL(done(KScriptClientInterface::Result, const QVariant &)), this, SLOT(scriptFinished()));
         }
         else
         {
             KMessageBox::sorry(0, i18n("Unable to get KScript Runner for type \"%1\".").arg(m_scriptType), i18n("KScript Error"));
-            kdDebug() << "Query string: " << scriptTypeQuery << endl;
-            kdDebug() << "Error number: " << err << endl;
-            kdDebug() << "Lib loader: " << KLibLoader::self()->lastErrorMessage() << endl;
+	    kdDebug() << "Query string: " << scriptTypeQuery << endl;
             return;
         }
     }
     m_interface->run(parent(), QVariant());
-    m_timeout->start(60000, FALSE ); // after 1 minute go away
+    m_timeout->start(60000,FALSE); // after 1 minute unload
+    m_refs++;
 }
 
-bool KScriptAction::isValid( ) const
+void KScriptAction::cleanup() 
 {
-  return m_isValid;
+    if( m_interface && m_refs == 0)
+    {
+	delete m_interface;
+	m_interface = 0L;
+    }
 }
 
-void KScriptAction::cleanup()
+void KScriptAction::scriptFinished()
 {
-  if(m_interface)
-    delete m_interface;
-  m_interface = 0L;
+    m_refs--;
 }
 
-KScriptActionManager::KScriptActionManager( KActionCollection * ac ) : m_ac(ac)
+KScriptActionManager::KScriptActionManager(  QObject *parent, KActionCollection * ac ) : QObject(parent), m_ac(ac)
 {
     m_actions.setAutoDelete(true);
 }
@@ -181,15 +148,30 @@ QPtrList< KAction > KScriptActionManager::scripts( QObject * interface , const Q
     {
         kdDebug() << "Loading " << *it << endl;
         KScriptAction *script = new KScriptAction(*it, interface, m_ac);
-        if( script->isValid())
-        {
-          actions.append(script->action());
-          m_actions.append(script);
-        }
-        else
-          delete script;
+	if( script->isValid())
+	{
+	  actions.append(script->action());
+	  m_actions.append(script);
+	  connect(script, SIGNAL(error( const QString&)), this, 
+	  	SIGNAL(scriptError( const QString&)));
+	  connect(script, SIGNAL(warning( const QString&)), this, 
+	  	SIGNAL(scriptWarning( const QString&)));
+	  connect(script, SIGNAL(output( const QString&)), this,
+	  	SIGNAL(scriptOutput( const QString&)));
+	  connect(script, SIGNAL(progress( int )), this, 
+	  	SIGNAL(scriptProgress(int)));
+	  connect(script, SIGNAL(done( KScriptClientInterface::Result, const QVariant &)),this,
+	  	SIGNAL(scriptDone( KScriptClientInterface::Result, const QVariant &)));
+	}
+	else
+	  delete script;
     }
     return actions;
+}
+
+bool KScriptAction::isValid( ) const
+{
+  return m_isValid;
 }
 
 #include "kscriptactionmanager.moc"

@@ -27,9 +27,8 @@
 class KAction;
 class KActionCollection;
 class KScriptInterface;
+class KScriptActionManager;
 class QTimer;
-
-
 
 /**
 * Connects a KAction to a script runner.
@@ -40,7 +39,7 @@ class KScriptAction : public QObject, public KScriptClientInterface {
     Q_OBJECT
 public:
 
-    KScriptAction( const QString &scriptDesktopFile, QObject *parent, KActionCollection *ac );
+    KScriptAction( const QString &scriptDesktopFile, QObject *interface, KActionCollection *ac );
 
     virtual ~KScriptAction();
 
@@ -53,7 +52,8 @@ public:
     * Returns the validity of the current script.
      */
     bool isValid() const;
-
+    
+signals:
     // Reimplemented from KScript
     void error ( const QString &msg );
     void warning ( const QString &msg );
@@ -71,6 +71,7 @@ signals:
 private slots:
     void activate();
     void cleanup();
+    void scriptFinished();
 
 private:
     KAction *m_action;
@@ -81,6 +82,7 @@ private:
     KScriptInterface *m_interface;
     bool m_isValid;
     QTimer *m_timeout;
+    uint m_refs;
 };
 
 /**
@@ -88,12 +90,14 @@ private:
  * Scripts are not actually loaded until they are actually executed.
  * @author ian geiser <geiseri@sourcextreme.com>
  */
-class KScriptActionManager {
+class KScriptActionManager : public QObject {
+Q_OBJECT
+
 public:
     /**
     * Create a script manager that is attached to an action collection.
      */
-    KScriptActionManager( KActionCollection *ac );
+    KScriptActionManager( QObject *parent, KActionCollection *ac );
     ~KScriptActionManager();
 
     /**
@@ -105,6 +109,28 @@ public:
     * files that are scripts.
      */
     QPtrList<KAction> scripts( QObject *interface, const QStringList &dirs = QStringList() ) const;
+
+signals:
+    /**
+    * Returns an error message from a script.
+    */
+    void scriptError ( const QString &msg );
+    /**
+    * Returns a warning message from a script.
+    */
+    void scriptWarning ( const QString &msg );
+    /**
+    * Returns a standard out message from a script.
+    */
+    void scriptOutput ( const QString &msg );
+    /**
+    * Returns the percentage complete of an operation in the script.
+    */
+    void scriptProgress ( int percent );
+    /**
+    * Notifies that the script has finished.
+    */
+    void scriptDone( KScriptClientInterface::Result result, const QVariant &returned );
 
 private:
     mutable QPtrList<KScriptAction> m_actions;
