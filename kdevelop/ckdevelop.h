@@ -917,7 +917,7 @@ protected:
   virtual void resizeEvent( QResizeEvent *pRSE);
 
 private:
-  CProject* initProject( bool loadLastProject );
+  void initProject( bool loadLastProject );
 
   void printImpl(QStringList& list, KPrinter* printer);
   /** */
