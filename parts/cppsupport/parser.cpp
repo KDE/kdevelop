@@ -758,7 +758,7 @@ bool Parser::parseTemplateArgument()
     }
 #endif
     
-    return parseAssignmentExpression();
+    return skipAssignmentExpression();
 }
 
 bool Parser::parseTypeSpecifier( QDomElement& spec )
@@ -809,7 +809,7 @@ bool Parser::parseDeclarator( QDomElement& e )
 	
 	if( lex->lookAhead(0) == ':' ){
 	    lex->nextToken();
-	    if( !parseConstantExpression() ){
+	    if( !skipConstantExpression() ){
 		reportError( i18n("Constant expression expected") );
 		return true;
 	    }
@@ -819,7 +819,7 @@ bool Parser::parseDeclarator( QDomElement& e )
     
     while( lex->lookAhead(0) == '[' ){
 	lex->nextToken();
-	parseCommaExpression();
+	skipCommaExpression();
 	
 	ADVANCE( ']', "]" );
 	// TODO: add vector
@@ -1077,7 +1077,7 @@ bool Parser::parseAbstractDeclarator()
     
     while( lex->lookAhead(0) == '[' ){
 	lex->nextToken();
-	parseCommaExpression();
+	skipCommaExpression();
 	
 	ADVANCE( ']', "]" );
     }
@@ -1099,9 +1099,9 @@ bool Parser::parseAbstractDeclarator()
     return true;
 }
 
-bool Parser::parseConstantExpression()
+bool Parser::skipConstantExpression()
 {
-    //kdDebug(9007) << "Parser::parseConstantExpression()" << endl;
+    //kdDebug(9007) << "Parser::skipConstantExpression()" << endl;
     
     QStringList l;
     
@@ -1220,7 +1220,7 @@ bool Parser::parseParameterDeclaration()
     
     if( lex->lookAhead(0) == '=' ){
 	lex->nextToken();
-	if( !parseAssignmentExpression() ){
+	if( !skipAssignmentExpression() ){
 	    //reportError( i18n("Expression expected") );
 	}
     }
@@ -1473,7 +1473,7 @@ bool Parser::parseEnumerator()
     if( lex->lookAhead(0) == '=' ){
 	lex->nextToken();
 	
-	if( !parseExpression() ){
+	if( !skipExpression() ){
 	    reportError( i18n("Constant expression expected") );
 	}
     }
@@ -1494,11 +1494,11 @@ bool Parser::parseInitDeclarator( QDomElement& declarator )
     return true;
 }
 
-bool Parser::parseAssignmentExpression()
+bool Parser::skipAssignmentExpression()
 {
-    //kdDebug(9007) << "Parser::parseAssignmentExpression()" << endl;
+    //kdDebug(9007) << "Parser::skipAssignmentExpression()" << endl;
     
-#warning "TODO Parser::parseAssignmentExpression()"
+#warning "TODO Parser::skipAssignmentExpression()"
     
     while( !lex->lookAhead(0).isNull() ){
 	int tk = lex->lookAhead( 0 );
@@ -1559,7 +1559,7 @@ bool Parser::parseInitializer()
 	}
     } else if( lex->lookAhead(0) == '(' ){
 	lex->nextToken();
-	parseCommaExpression();
+	skipCommaExpression();
 	
 	ADVANCE( ')', ")" );
     }
@@ -1596,7 +1596,7 @@ bool Parser::parseMemInitializer()
 	return false;
     }
     ADVANCE( '(', '(' );
-    parseCommaExpression();
+    skipCommaExpression();
     ADVANCE( ')', ')' );
     
     return true;
@@ -1689,7 +1689,7 @@ bool Parser::parseInitializerClause()
 	} else
 	    lex->nextToken();
     } else {
-	if( !parseAssignmentExpression() ){
+	if( !skipAssignmentExpression() ){
 	    //reportError( i18n("Expression expected") );
 	}
     }
@@ -1706,17 +1706,17 @@ bool Parser::parseMemInitializerId()
 }
 
 
-bool Parser::parseCommaExpression()
+bool Parser::skipCommaExpression()
 {
-    //kdDebug(9007) << "Parser::parseCommaExpression()" << endl;
+    //kdDebug(9007) << "Parser::skipCommaExpression()" << endl;
     
-    if( !parseExpression() )
+    if( !skipExpression() )
 	return false;
     
     while( lex->lookAhead(0) == ',' ){
 	lex->nextToken();
 	
-	if( !parseExpression() ){
+	if( !skipExpression() ){
 	    reportError( i18n("expression expected") );
 	    return false;
 	}
@@ -1860,9 +1860,9 @@ bool Parser::parseStringLiteral()
     return true;
 }
 
-bool Parser::parseExpression()
+bool Parser::skipExpression()
 {
-    //kdDebug(9007) << "Parser::parseExpression()" << endl;
+    //kdDebug(9007) << "Parser::skipExpression()" << endl;
     
     while( !lex->lookAhead(0).isNull() ){
 	int tk = lex->lookAhead( 0 );
@@ -1905,10 +1905,10 @@ bool Parser::parseExpression()
 }
 
 
-bool Parser::parseExpressionStatement()
+bool Parser::skipExpressionStatement()
 {
-    //kdDebug(9007) << "Parser::parseExpressionStatement()" << endl;
-    parseCommaExpression();
+    //kdDebug(9007) << "Parser::skipExpressionStatement()" << endl;
+    skipCommaExpression();
     
     ADVANCE( ';', ";" );
     
@@ -1956,7 +1956,7 @@ bool Parser::parseStatement() // thanks to fiore@8080.it ;-)
 	
     case Token_return:
 	lex->nextToken();
-	parseCommaExpression();
+	skipCommaExpression();
 	ADVANCE( ';', ";" );
 	return true;
 	
@@ -1972,7 +1972,7 @@ bool Parser::parseStatement() // thanks to fiore@8080.it ;-)
     if ( parseDeclarationStatement() )
 	return true;
     
-    return parseExpressionStatement();
+    return skipExpressionStatement();
 }
 
 bool Parser::parseCondition()
@@ -1988,13 +1988,13 @@ bool Parser::parseCondition()
 	if( parseDeclarator(declarator) && lex->lookAhead(0) == '=' ) {
 	    lex->nextToken();
 	    
-	    if( parseAssignmentExpression() )
+	    if( skipAssignmentExpression() )
 		return true;
 	}
     }
     
     lex->setIndex( index );
-    return parseCommaExpression();
+    return skipCommaExpression();
 }
 
 
@@ -2028,7 +2028,7 @@ bool Parser::parseDoStatement()
     }
     ADVANCE( Token_while, "while" );
     ADVANCE( '(' , "(" );
-    if( !parseCommaExpression() ){
+    if( !skipCommaExpression() ){
 	reportError( i18n("expression expected") );
 	return false;
     }
@@ -2051,7 +2051,7 @@ bool Parser::parseForStatement()
     
     parseCondition();
     ADVANCE( ';', ";" );
-    parseCommaExpression();
+    skipCommaExpression();
     ADVANCE( ')', ")" );
     
     return parseStatement();
@@ -2063,7 +2063,7 @@ bool Parser::parseForInitStatement()
     
     if ( parseDeclarationStatement() )
 	return true;
-    return parseExpressionStatement();
+    return skipExpressionStatement();
 }
 
 bool Parser::parseCompoundStatement()
@@ -2152,7 +2152,7 @@ bool Parser::parseLabeledStatement()
 	
     case Token_case:
 	lex->nextToken();
-	if( !parseConstantExpression() ){
+	if( !skipConstantExpression() ){
 	    reportError( i18n("expression expected") );
 	}
 	ADVANCE( ':', ":" );
@@ -2422,3 +2422,551 @@ bool Parser::parseTryBlockStatement()
     
     return true;
 }
+
+bool Parser::parsePrimaryExpression()
+{
+    //kdDebug(9007) << "Parser::parsePrimarExpression()" << endl;
+
+    if( parseStringLiteral() )
+        return true;
+
+    switch( lex->lookAhead(0) ){
+        case Token_number_literal:
+        case Token_char_literal:
+        case Token_true:
+        case Token_false:
+            lex->nextToken();
+            return true;
+
+        case Token_this:
+            lex->nextToken();
+            return true;
+
+        case '(':
+            lex->nextToken();
+            kdDebug(9007) << "token = " << lex->lookAhead(0).toString() << endl;
+            if( !parseExpression() ){
+                reportError( i18n("expression expected") );
+            }
+            if( lex->lookAhead(0) != ')' ){
+                reportError( i18n(") expected") );
+            }
+            lex->nextToken();
+            return true;
+    }
+
+    QDomElement name;
+    return parseName( name );
+}
+
+bool Parser::parsePostfixExpression()
+{
+    //kdDebug(9007) << "Parser::parsePostfixExpression()" << endl;
+    QDomElement e;
+    switch( lex->lookAhead(0) ){
+        case Token_typename:
+            lex->nextToken();
+            if( !parseName(e) ){
+                reportError( i18n("name expected") );
+                skipUntil( '(' );
+            }
+            ADVANCE( '(', "(" );
+            parseCommaExpression();
+            ADVANCE( ')', ")" );
+            return true;
+
+        case Token_dynamic_cast:
+        case Token_static_cast:
+        case Token_reinterpret_cast:
+        case Token_const_cast:
+            lex->nextToken();
+            ADVANCE( '<', "<" );
+            parseTypeId();
+            ADVANCE( '>', ">" );
+
+            ADVANCE( '(', "(" );
+            parseCommaExpression();
+            ADVANCE( ')', ")" );
+            return true;
+
+        case Token_typeid:
+            lex->nextToken();
+            ADVANCE( '(', "(" );
+            parseCommaExpression();
+            ADVANCE( ')', ")" );
+            return true;
+
+        default:
+            if( parsePrimaryExpression() )
+                /* */ ;
+            else if( parseSimpleTypeSpecifier(e) ){
+                ADVANCE( '(', "(" );
+                parseCommaExpression();
+                ADVANCE( ')', ")" );
+            } else
+                return false;
+    }
+
+    while( !lex->lookAhead(0).isNull() ){
+        switch( lex->lookAhead(0) ){
+            case '[':
+                lex->nextToken();
+                parseCommaExpression();
+                ADVANCE( ']', "]" );
+                break;
+
+            case '(':
+                lex->nextToken();
+                parseCommaExpression();
+                ADVANCE( ')', ")" );
+                break;
+
+            case '.':
+            case Token_arrow:
+                lex->nextToken();
+                if( lex->lookAhead(0) == Token_template )
+                    lex->nextToken();
+
+                if( !parseName(e) ){
+                    reportError( i18n("name expected") );
+                    return false;
+                }
+                break;
+
+            case Token_incr:
+            case Token_decr:
+                lex->nextToken();
+                break;
+
+            default:
+                return true;
+        }
+
+    }
+
+    return true;
+}
+
+bool Parser::parseUnaryExpression()
+{
+    //kdDebug(9007) << "Parser::parseUnaryExpression()" << endl;
+    switch( lex->lookAhead(0) ){
+        case Token_incr:
+        case Token_decr:
+        case '*':
+        case '&':
+        case '+':
+        case '-':
+        case '!':
+        case '~':
+            lex->nextToken();
+            return parseCastExpression();
+
+        case Token_sizeof:
+            lex->nextToken();
+            if( lex->lookAhead(0) == '(' ){
+                lex->nextToken();
+                parseTypeId();
+                ADVANCE( ')', ")" );
+            } else {
+                return parseUnaryExpression();
+            }
+            return true;
+
+        case Token_new:
+            return parseNewExpression();
+
+        case Token_delete:
+            return parseDeleteExpression();
+    }
+
+    return parsePostfixExpression();
+}
+
+bool Parser::parseNewExpression()
+{
+    //kdDebug(9007) << "Parser::parseNewExpression()" << endl;
+    if( lex->lookAhead(0) == Token_scope && lex->lookAhead(1) == Token_new )
+        lex->nextToken();
+
+    ADVANCE( Token_new, "new");
+
+    if( lex->lookAhead(0) == '(' ){
+        lex->nextToken();
+        parseCommaExpression();
+        ADVANCE( ')', ")" );
+    }
+
+    if( lex->lookAhead(0) == '(' ){
+        lex->nextToken();
+        parseTypeId();
+        ADVANCE( ')', ")" );
+    } else {
+        parseNewTypeId();
+    }
+
+    parseNewInitializer();
+    return true;
+}
+
+bool Parser::parseNewTypeId()
+{
+    //kdDebug(9007) << "Parser::parseNewTypeId()" << endl;
+    QDomElement e;
+    if( parseTypeSpecifier(e) ){
+        parseNewDeclarator();
+        return true;
+    }
+
+    return false;
+}
+
+bool Parser::parseNewDeclarator()
+{
+    //kdDebug(9007) << "Parser::parseNewDeclarator()" << endl;
+    if( parsePtrOperator() ){
+        parseNewDeclarator();
+        return true;
+    }
+
+    if( lex->lookAhead(0) == '[' ){
+        while( lex->lookAhead(0) == '[' ){
+            lex->nextToken();
+            parseExpression();
+            ADVANCE( ']', "]" );
+        }
+        return true;
+    }
+
+    return false;
+}
+
+bool Parser::parseNewInitializer()
+{
+    //kdDebug(9007) << "Parser::parseNewInitializer()" << endl;
+    if( lex->lookAhead(0) != '(' )
+        return false;
+
+    lex->nextToken();
+    parseCommaExpression();
+    ADVANCE( ')', ")" );
+
+    return true;
+}
+
+bool Parser::parseDeleteExpression()
+{
+    //kdDebug(9007) << "Parser::parseDeleteExpression()" << endl;
+    if( lex->lookAhead(0) == Token_scope && lex->lookAhead(1) == Token_delete )
+        lex->nextToken();
+
+    ADVANCE( Token_delete, "delete" );
+
+    if( lex->lookAhead(0) == '[' ){
+        lex->nextToken();
+        ADVANCE( ']', "]" );
+    }
+
+    return parseCastExpression();
+}
+
+bool Parser::parseCastExpression()
+{
+    //kdDebug(9007) << "Parser::parseCastExpression()" << endl;
+
+#if 0
+    int index = lex->lookAhead( 0 );
+
+    if( lex->lookAhead(0) == '(' ){
+        lex->nextToken();
+        if ( parseTypeId() ) {
+            if ( lex->lookAhead(0) == '(' ) {
+                lex->nextToken();
+                return parseCastExpression();
+            }
+        }
+    }
+
+    lex->setIndex( index );
+#endif
+    return parseUnaryExpression();
+}
+
+bool Parser::parsePmExpression()
+{
+    //kdDebug(9007) << "Parser:parsePmExpression()" << endl;
+    if( !parseCastExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == Token_ptrmem ){
+        lex->nextToken();
+        if( !parseCastExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseMultiplicativeExpression()
+{
+    //kdDebug(9007) << "Parser::parseMultiplicativeExpression()" << endl;
+    if( !parsePmExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == '*' || lex->lookAhead(0) == '/' || lex->lookAhead(0) == '/' ){
+        lex->nextToken();
+
+        if( !parsePmExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool Parser::parseAdditiveExpression()
+{
+    //kdDebug(9007) << "Parser::parseAdditiveExpression()" << endl;
+    if( !parseMultiplicativeExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == '+' || lex->lookAhead(0) == '-' ){
+        lex->nextToken();
+
+        if( !parseMultiplicativeExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseShiftExpression()
+{
+    //kdDebug(9007) << "Parser::parseShiftExpression()" << endl;
+    if( !parseAdditiveExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == Token_shift ){
+        lex->nextToken();
+
+        if( !parseAdditiveExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseRelationalExpression()
+{
+    //kdDebug(9007) << "Parser::parseRelationalExpression()" << endl;
+    if( !parseShiftExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == '<' || lex->lookAhead(0) == '>' ||
+           lex->lookAhead(0) == Token_leq || lex->lookAhead(0) == Token_geq ){
+        lex->nextToken();
+
+        if( !parseShiftExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseEqualityExpression()
+{
+    //kdDebug(9007) << "Parser::parseEqualityExpression()" << endl;
+    if( !parseRelationalExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == Token_eq || lex->lookAhead(0) == Token_not_eq ){
+        lex->nextToken();
+
+        if( !parseRelationalExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseAndExpression()
+{
+    //kdDebug(9007) << "Parser::parseAndExpression()" << endl;
+    if( !parseEqualityExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == '&' ){
+        lex->nextToken();
+
+        if( !parseEqualityExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseExclusiveOrExpression()
+{
+    //kdDebug(9007) << "Parser::parseExclusiveOrExpression()" << endl;
+    if( !parseAndExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == '^' ){
+        lex->nextToken();
+
+        if( !parseAndExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseInclusiveOrExpression()
+{
+    //kdDebug(9007) << "Parser::parseInclusiveOrExpression()" << endl;
+    if( !parseExclusiveOrExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == '|' ){
+        lex->nextToken();
+
+        if( !parseExclusiveOrExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseLogicalAndExpression()
+{
+    //kdDebug(9007) << "Parser::parseLogicalAndExpression()" << endl;
+    if( !parseInclusiveOrExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == Token_and ){
+        lex->nextToken();
+
+        if( !parseInclusiveOrExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseLogicalOrExpression()
+{
+    //kdDebug(9007) << "Parser::parseLogicalOrExpression()" << endl;
+    if( !parseLogicalAndExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == Token_or ){
+        lex->nextToken();
+
+        if( !parseLogicalAndExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseConditionalExpression()
+{
+    //kdDebug(9007) << "Parser::parseConditionalExpression()" << endl;
+    if( !parseLogicalOrExpression() )
+        return false;
+
+    if( lex->lookAhead(0) == '?' ){
+        lex->nextToken();
+        parseExpression();
+        ADVANCE( ':', ":" );
+        parseAssignmentExpression();
+    }
+
+    return true;
+}
+
+bool Parser::parseAssignmentExpression()
+{
+    //kdDebug(9007) << "Parser::parseAssignmentExpression()" << endl;
+    if( lex->lookAhead(0) == Token_throw )
+        parseThrowExpression();
+    else if( !parseConditionalExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == Token_assign || lex->lookAhead(0) == '=' ){
+        lex->nextToken();
+
+        if( !parseConditionalExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseConstantExpression()
+{
+    //kdDebug(9007) << "Parser::parseConstantExpression()" << endl;
+    return parseConditionalExpression();
+}
+
+bool Parser::parseExpression()
+{
+    //kdDebug(9007) << "Parser::parseExpression()" << endl;
+
+    return parseCommaExpression();
+}
+
+bool Parser::parseCommaExpression()
+{
+    //kdDebug(9007) << "Parser::parseCommaExpression()" << endl;
+    if( !parseAssignmentExpression() )
+        return false;
+
+    while( lex->lookAhead(0) == ',' ){
+        lex->nextToken();
+
+        if( !parseAssignmentExpression() ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseThrowExpression()
+{
+    //kdDebug(9007) << "Parser::parseThrowExpression()" << endl;
+    if( lex->lookAhead(0) != Token_throw )
+        return false;
+
+    ADVANCE( Token_throw, "throw" );
+    parseAssignmentExpression();
+
+    return true;
+}
+

@@ -116,15 +116,43 @@ public /*rules*/ :
     bool parseFunctionBody();
 
     // expression
+    bool skipExpression();
+    bool skipConstantExpression();
+    bool skipCommaExpression();
+    bool skipAssignmentExpression();
+    bool skipExpressionStatement();
+
     bool parseExpression();
+    bool parsePrimaryExpression();
+    bool parsePostfixExpression();
+    bool parseUnaryExpression();
+    bool parseNewExpression();
+    bool parseNewTypeId();
+    bool parseNewDeclarator();
+    bool parseNewInitializer();
+    bool parseDeleteExpression();
+    bool parseCastExpression();
+    bool parsePmExpression();
+    bool parseMultiplicativeExpression();
+    bool parseAdditiveExpression();
+    bool parseShiftExpression();
+    bool parseRelationalExpression();
+    bool parseEqualityExpression();
+    bool parseAndExpression();
+    bool parseExclusiveOrExpression();
+    bool parseInclusiveOrExpression();
+    bool parseLogicalAndExpression();
+    bool parseLogicalOrExpression();
+    bool parseConditionalExpression();
+    bool parseAssignmentExpression();
     bool parseConstantExpression();
     bool parseCommaExpression();
-    bool parseAssignmentExpression();
+    bool parseThrowExpression();
+
 
     // statement
     bool parseCondition();
     bool parseStatement();
-    bool parseExpressionStatement();
     bool parseWhileStatement();
     bool parseDoStatement();
     bool parseForStatement();
