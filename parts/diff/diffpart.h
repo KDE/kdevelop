@@ -15,6 +15,8 @@
 #include "kdevplugin.h"
 #include "kdevdifffrontend.h"
 
+class DiffWidget;
+
 class DiffPart : public KDevDiffFrontend
 {
     Q_OBJECT
@@ -25,10 +27,13 @@ public:
 
     void openURL( const KURL& url );
     void showDiff( const QString& diff );
-    void showDiff( const KURL &url1, const KURL &url2 ) { /* TODO */ }
+    void showDiff( const KURL &, const KURL & ) { /* TODO */ }
 
 public slots:
     void slotExecDiff();
+
+private:
+    DiffWidget* diffWidget;
 
 };
 

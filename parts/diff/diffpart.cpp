@@ -18,9 +18,11 @@
 #include <kio/job.h>
 
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
 
 #include "diffpart.h"
 #include "diffdlg.h"
+#include "diffwidget.h"
 
 typedef KGenericFactory<DiffPart> DiffFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( "kdevdiff" ) );
@@ -31,6 +33,11 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   setInstance(DiffFactory::instance());
   setXMLFile("kdevdiff.rc");
 
+  diffWidget = new DiffWidget();
+  QString nm( i18n( "Difference Viewer" ) );
+  diffWidget->setCaption( nm );
+  topLevel()->embedOutputView( diffWidget, nm );
+
   (void) new KAction( i18n("Difference viewer..."), 0,
                         this, SLOT(slotExecDiff()),
                         actionCollection(), "tools_diff" );
@@ -39,24 +46,33 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
 
 DiffPart::~DiffPart()
 {
+  delete diffWidget;
 }
 
 void DiffPart::openURL( const KURL& url )
 {
+  diffWidget->openURL( url );
+  topLevel()->raiseView( diffWidget );
+/*
   DiffDlg* diffDlg = new DiffDlg( 0, "diffDlg" );
 
   diffDlg->openURL( url );
   diffDlg->exec();
   delete diffDlg;
+*/
 }
 
 void DiffPart::showDiff( const QString& diff )
 {
+  diffWidget->setDiff( diff );
+  topLevel()->raiseView( diffWidget );
+/*
   DiffDlg* diffDlg = new DiffDlg( 0, "diffDlg" );
 
   diffDlg->setDiff( diff );
   diffDlg->exec();
   delete diffDlg; 
+*/
 }
 
 void DiffPart::slotExecDiff()
