@@ -1,4 +1,6 @@
-EXTRA_DIST = tip.database welcome tutorial
+SUBDIRS = welcome tutorial
+
+EXTRA_DIST = tip.database
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/fr/kdevelop/
