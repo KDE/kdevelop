@@ -150,7 +150,10 @@ void NewMainWindow::init() {
 		menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
 	}
 	
-    m_pWindowMenu->setCheckable( TRUE);
+	actionCollection()->action( "file_close" )->plug( m_pWindowMenu );
+	actionCollection()->action( "file_close_all" )->plug( m_pWindowMenu );
+	actionCollection()->action( "file_closeother" )->plug( m_pWindowMenu );
+
 	QObject::connect( m_pWindowMenu, SIGNAL(activated(int)), this, SLOT(openURL(int )) );
     QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 			   	   
@@ -230,19 +233,7 @@ void NewMainWindow::fillWindowMenu()
 	}
 	
 	int temp = 0;
-	
-	temp = m_pWindowMenu->insertItem(i18n("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
-	m_pWindowMenu->setItemEnabled( temp, hasWidget );
-	m_windowList << qMakePair( temp, KURL() );
-	
-	temp = m_pWindowMenu->insertItem(i18n("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
-	m_pWindowMenu->setItemEnabled( temp, hasWidget );
-	m_windowList << qMakePair( temp, KURL() );
-	
-	temp = m_pWindowMenu->insertItem(i18n("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
-	m_pWindowMenu->setItemEnabled( temp, hasWidget );
-	m_windowList << qMakePair( temp, KURL() );
-	
+		
 	if	( m_mdiMode == KMdi::ChildframeMode )
 	{
 		temp = m_pWindowMenu->insertItem(i18n("&Minimize All"), this, SLOT(iconifyAllViews()));

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>404</width>
-            <height>232</height>
+            <height>248</height>
         </rect>
     </property>
     <property name="caption">
@@ -24,8 +24,8 @@
                 <cstring>text</cstring>
             </property>
             <property name="text">
-                <string>&lt;qt&gt;KDevelop could not open file &lt;b&gt;%1&lt;/b&gt;.&lt;br&gt;&lt;br&gt;
-
+                <string>&lt;qt&gt;KDevelop could not open &lt;b&gt;%1&lt;/b&gt;
+&lt;br&gt;&lt;br&gt;
 No suitable viewer was found for the &lt;b&gt;%2&lt;/b&gt; mimetype.&lt;/qt&gt;</string>
             </property>
         </widget>
