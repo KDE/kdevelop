@@ -39,6 +39,8 @@
 
 #include "qglobal.h"
 
+// no namespace needed since it is a build-time dependency
+
 #if QT_VERSION < 0x030100
 
 template <class T>
@@ -72,9 +74,6 @@ public:
 private:
     T deepcopy;
 };
-
-#else
-#include <qdeepcopy.h>
 
 #endif // QT_VERSION
 

@@ -13,8 +13,12 @@
 #include <kdeversion.h>
 
 #if !(KDE_VERSION > 305)
-# include <qguardedptr.h>
-# include <kaction.h>
+
+#include <qguardedptr.h>
+#include <kaction.h>
+
+namespace KDevCompat {
+
 //--------------------begin-of-copy-of-kde-3.1-----------
 /**
  * An action that automatically embeds a widget into a
@@ -62,6 +66,7 @@ private:
     KWidgetActionPrivate *d;
 };
 
+}; // namespace
 //--------------------end-of-copy-of-kde-3.1-----------
 #endif // !(KDE_VERSION > 305)
 

@@ -39,6 +39,8 @@
 
 #include "qglobal.h"
 
+// no namespace needed since it is a build-time dependency
+
 #if QT_VERSION < 0x030100
 
 #include <qmutex.h>

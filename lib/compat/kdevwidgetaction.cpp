@@ -10,9 +10,13 @@
 #include "kdevwidgetaction.h"
 
 #if !(KDE_VERSION > 305)
-# include <ktoolbar.h>
-# include <kdebug.h>
-# include <kapplication.h>
+
+#include <ktoolbar.h>
+#include <kdebug.h>
+#include <kapplication.h>
+
+namespace KDevCompat {
+
 //--------------------begin-of-copy-of-kde-3.1-----------
 KWidgetAction::KWidgetAction( QWidget* widget,
     const QString& text, const KShortcut& cut,
@@ -94,6 +98,8 @@ void KWidgetAction::virtual_hook( int id, void* data )
 //--------------------end-of-copy-of-kde-3.1-----------
 
 #include "kdevwidgetaction.moc"
+
+}; //namespace
 
 #endif // !(KDE_VERSION > 305)
 

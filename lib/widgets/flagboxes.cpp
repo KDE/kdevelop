@@ -26,7 +26,10 @@
 #include <qregexp.h>
 
 // only for KDE < 3.1
+#if KDE_VERSION <= 305
 #include "../compat/kdeveditlistbox.h"
+using namespace KDevCompat;
+#endif
 
 #include "flagboxes.h"
 

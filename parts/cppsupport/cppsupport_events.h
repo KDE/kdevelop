@@ -20,6 +20,7 @@
 #if QT_VERSION < 0x030100
 #include <kdevmutex.h>
 #include <kdevdeepcopy.h>
+using namespace KDevCompat;
 #else
 #include <qmutex.h>
 #include <qdeepcopy.h>

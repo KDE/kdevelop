@@ -5,13 +5,16 @@
 #include <kdeversion.h>
 
 #if KDE_VERSION <= 305
-# include <qgroupbox.h>
-# include <qobjectlist.h>
-# include <qlistbox.h>
-# include <klineedit.h>
-# include <knotifyclient.h>
-# include <kcombobox.h>
-# include <assert.h>
+
+#include <qgroupbox.h>
+#include <qobjectlist.h>
+#include <qlistbox.h>
+#include <klineedit.h>
+#include <knotifyclient.h>
+#include <kcombobox.h>
+#include <assert.h>
+
+namespace KDevCompat {
 
 class QPushButton;
 
@@ -216,6 +219,8 @@ public:
       //our lovely private d-pointer
       KEditListBoxPrivate *d;
 };
+
+}; //namespace
 
 #endif // KDE_VERSION
 

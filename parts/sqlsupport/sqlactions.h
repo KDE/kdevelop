@@ -15,7 +15,10 @@
 #include <kaction.h>
 
 //only for KDE < 3.1
+#if KDE_VERSION <= 305
 #include <kdevwidgetaction.h>
+using namespace KDevCompat;
+#endif
 
 class SQLSupportPart;
 class QComboBox;

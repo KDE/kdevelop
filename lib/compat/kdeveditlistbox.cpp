@@ -1,10 +1,13 @@
 #include <kdeveditlistbox.h>
 
 #if KDE_VERSION <= 305
-# include <qlayout.h>
-# include <qpushbutton.h>
-# include <kdialog.h>
-# include <klocale.h>
+
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <kdialog.h>
+#include <klocale.h>
+
+namespace KDevCompat {
 
 KEditListBox::KEditListBox(QWidget *parent, const char *name,
 			   bool checkAtEntering, int buttons )
@@ -347,6 +350,8 @@ KEditListBox::CustomEditor::CustomEditor( KComboBox *combo )
 }
 
 #include "kdeveditlistbox.moc"
+
+}; //namespace
 
 #endif
 //-----------------------------------------------------------------------------
