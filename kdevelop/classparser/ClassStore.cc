@@ -104,13 +104,8 @@ void CClassStore::removeWithReferences( const char *aFile )
   {
     // Remove the class if any of the files are the supplied one.
     if(aClass->declaredInFile == aFile || aClass->definedInFile == aFile)
-//    if (aClass->declaredInFile == aFile)
     {
-      QString scopedName = (aClass->declaredInScope).isEmpty()
-                            ? aClass->name
-                            : aClass->declaredInScope + "." +aClass->name;
-
-      removeClass(scopedName);
+      removeClass(aClass->path());
 
       // guard against the fact that sometimes the class might
       // _not_ be removed!! Yes, you heard me, _not_ removed. Yuk!!!
