@@ -37,7 +37,7 @@ QString MakeItem::color( bool bright_bg )
 	case Error:
 		return bright_bg ? "maroon" : "red";
 	case Warning:
-		return bright_bg ? "darkgreen" : "green";
+		return bright_bg ? "#666" : "#999";
 	case Diagnostic:
 		return bright_bg ? "black" : "white";
 	default:
