@@ -21,6 +21,7 @@
 #include <qfileinfo.h>
 #include <qheader.h>
 #include <qdir.h>
+#include <qlist.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -254,17 +255,19 @@ class DocTreeKDELibsBook : public ListViewBookItem
 public:
     DocTreeKDELibsBook( KListViewItem *parent, const char *text,
                         const char *libname);
+    void relocatehtml();
     virtual void setOpen(bool o);
 private:
     int readKdoc2Index(FILE *f);
     static QString locatehtml(const char *libname);
+    QString name;
     QString idx_filename;
 };
 
 
 DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
                                         const char *libname )
-    : ListViewBookItem(parent, text, locatehtml(libname))
+    : ListViewBookItem(parent, text, locatehtml(libname)), name(libname)
 {
     KConfig *config = kapp->getConfig();
     config->setGroup("Doc_Location");
@@ -287,6 +290,10 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
 
 }
 
+void DocTreeKDELibsBook::relocatehtml()
+{
+  setIdent(locatehtml(name));
+}
 
 QString DocTreeKDELibsBook::locatehtml(const char *libname)
 {
@@ -296,9 +303,17 @@ QString DocTreeKDELibsBook::locatehtml(const char *libname)
     QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
 
     if (!libname)
-        return qt_path + "/index.html";
+    {
+        if (qt_path.right(1) != "/")
+          qt_path= qt_path+"/";
+        return qt_path + "index.html";
+    }
     else
-        return kde_path + "/" + libname + "/index.html";
+    {
+        if (kde_path.right(1) != "/")
+          kde_path= kde_path+"/";
+        return kde_path + libname + "/index.html";
+    }
 }
 
 
@@ -366,24 +381,37 @@ void DocTreeKDELibsBook::setOpen(bool o)
 
 class DocTreeKDELibsFolder : public ListViewFolderItem
 {
+    QList<DocTreeKDELibsBook> list;
 public:
     DocTreeKDELibsFolder(DocTreeView *parent)
         : ListViewFolderItem(parent, i18n("Qt/KDE Libraries"))
-        {}
+        { list.setAutoDelete(false);}
+
+
+    void changePathes();
     virtual void refresh();
 };
 
+void DocTreeKDELibsFolder::changePathes()
+{
+    DocTreeKDELibsBook *child;
+    for ( child=list.first(); child != 0; child=list.next())
+    {
+       child->relocatehtml();
+    }
+}
 
 void DocTreeKDELibsFolder::refresh()
 {
     ListViewFolderItem::refresh();
-    (void) new DocTreeKDELibsBook(this, i18n("Qt Library"),         0);
-    (void) new DocTreeKDELibsBook(this, i18n("KDE Core Library"),   "kdecore");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE UI Library"),     "kdeui");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KFile Library"),  "kfile");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE HTMLW Library"),  "khtmlw");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KAB Library"),    "kab");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KSpell Library"), "kspell");
+    list.clear();
+    list.append(new DocTreeKDELibsBook(this, i18n("Qt Library"),         0));
+    list.append(new DocTreeKDELibsBook(this, i18n("KDE Core Library"),   "kdecore"));
+    list.append(new DocTreeKDELibsBook(this, i18n("KDE UI Library"),     "kdeui"));
+    list.append(new DocTreeKDELibsBook(this, i18n("KDE KFile Library"),  "kfile"));
+    list.append(new DocTreeKDELibsBook(this, i18n("KDE HTMLW Library"),  "khtmlw"));
+    list.append(new DocTreeKDELibsBook(this, i18n("KDE KAB Library"),    "kab"));
+    list.append(new DocTreeKDELibsBook(this, i18n("KDE KSpell Library"), "kspell"));
 }
 
 
@@ -619,13 +647,12 @@ void DocTreeView::refresh(CProject *prj)
     folder_kdelibs->refresh();
     folder_others->refresh();
     folder_project->refresh();
-    // recalculate the positions maybe some mouseEvent is still
-    //  in queue with old positions
-    folder_kdelibs->setup();
-    folder_others->setup();
-    folder_project->setup();
 }
 
+void DocTreeView::changePathes()
+{
+    folder_kdelibs->changePathes();
+}
 
 void DocTreeView::slotRightButtonPressed(QListViewItem *item,
                                          const QPoint &p, int)

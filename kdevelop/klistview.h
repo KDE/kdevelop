@@ -70,7 +70,9 @@ public:
 	{ return last; }
     QString ident() const
 	{ return idnt; }
-    
+    void setIdent(const QString &id)
+	{ idnt=id; }
+
 private:
     QListViewItem *last;
     QString idnt;

@@ -45,6 +45,7 @@ public:
 
     void refresh(CProject *prj);
     QString selectedText();
+    void changePathes();
 
 protected slots:
     void slotAddDocumentation();

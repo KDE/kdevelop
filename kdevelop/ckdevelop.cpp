@@ -1159,7 +1159,7 @@ void CKDevelop::slotOptionsKDevelop(){
   if (setup->exec())
   {
     if (setup->hasChangedPath())
-      doc_tree->refresh(prj);
+      doc_tree->changePathes();
   }
 
   delete setup;
