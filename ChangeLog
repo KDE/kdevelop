@@ -1,3 +1,11 @@
+2001-10-13  Ralf Nolden <nolden@kde.org>
+    * fixed admin.tar.gz to HEAD with changing search path for KDE from /opt/kde3 to /opt/kde2 and
+      the minimum Qt version to 2, minor version 2
+    * removed EXTRA_DIST = admin from all templates' Makefile.am in the top srcdir and changed the appwizard
+      to add admin to the line the wizard (and kdevelop) writes into that Makefile.am. This should fix all
+      automake and autoconf problems with newer versions. Additionally, the qt/embedded check is in HEAD which 
+      should enable all templates to work with qt/e now.
+
 2001-10-05  F@lk Brettschneider <falk@kdevelop.org>
     * version number is 2.0.2 (now with KDE-2.2.2 insight)
     
