@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevTrollProject" version="2">
+<kpartgui name="KDevTrollProject" version="3">
 <MenuBar>
   <Menu name="build" >
     <Action name="build_build_project" />
