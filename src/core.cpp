@@ -1142,6 +1142,7 @@ void Core::slotStop()
 
 void Core::slotUpdateStatusBar()
 {
+#ifdef NEW_EDITOR
   if (!activePart || !activePart->inherits("KEditor::Document"))
   {
 	win->statusBar()->setEditorStatusVisible(false);
@@ -1166,6 +1167,7 @@ void Core::slotUpdateStatusBar()
   }
 
   win->statusBar()->setEditorStatusVisible(true);  
+#endif
 }
 
 
