@@ -292,8 +292,19 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         const FileContext *fcontext = static_cast<const FileContext*>( context );
         // FIXME: Here we must hope that fcontext->fileName() returns an absolute path ;(
 
-        // THis stuff should end up into prepareOperation()
+        // This stuff should end up into prepareOperation()
         urls = fcontext->urls();
+        if (urls.count()==0)
+        {
+            kdDebug(9000) << "fcontext->urls() returned an empty list. I'll try to get the single file." << endl;
+            QString singleFileName = fcontext->fileName();
+            if (singleFileName.isEmpty())
+            {
+                kdDebug(9000) << "fcontext->fileName() returned an empty string. I'm sorry but I give up!" << endl;
+                return;
+            }
+            urls << KURL::fromPathOrURL( singleFileName );
+        }
         URLUtil::dump( urls );
 
         KPopupMenu *subMenu = new KPopupMenu( popup );
