@@ -5,7 +5,7 @@
 	* added CKDevelop::showOutputView(bool) and remove some doubled sourcecodes
 	* some changes in the projectmanagment,it's now possible to add files in new subdirs,
 	  please test it
-	* fixed the "/" bug in slotProjectAddExistingFiles(),it should now work
+	* fixed the "/" bug in slotProjectAddExistingFiles(),it should work now
 
 1999-02-15  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added QWhatsThis help functionality in file ckdevelop_whatsthis
