@@ -42,7 +42,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you changed your applications' classes, you should update your API documentation by selecting "Make API-Doc" from the Build-menu.
+<p>If you changed your applications' classes, you should update your API documentation by selecting "Make API-Doc" from the Build menu.
 </html>
 </tip>
 
@@ -56,7 +56,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you're searching for information on classes or classmembers, select "Search for Help on..." from the Help-menu.
+<p>If you're searching for information on classes or classmembers, select "Search for Help on..." from the Help menu.
 </html>
 </tip>
 
@@ -112,7 +112,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>To open a project, select "Open" from the Project-menu.
+<p>To open a project, select "Open" from the Project menu.
 </html>
 </tip>
 
@@ -133,7 +133,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can debug your programs within KDevelop by selecting "Debug" in the Build-menu or by choosing the Debug icon?
+<p>...that you can debug your programs within KDevelop by selecting "Debug" in the Build menu or by choosing the Debug icon?
 </html>
 </tip>
 
