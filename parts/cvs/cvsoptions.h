@@ -25,7 +25,7 @@ class CvsOptions
 public:
 	virtual ~CvsOptions();
 
-	CvsOptions *istance() const { return m_instance; }
+	static CvsOptions *instance();
 
 	void save( QDomDocument &dom );
 	void load( const QDomDocument &dom );

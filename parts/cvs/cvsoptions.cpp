@@ -31,6 +31,15 @@ CvsOptions::~CvsOptions()
 	m_instance = 0;
 }
 
+CvsOptions* CvsOptions::instance()
+{
+	if (!m_instance)
+	{
+		m_instance = new CvsOptions();
+	}
+	return m_instance;
+}
+
 void CvsOptions::save( QDomDocument &dom )
 {
 	DomUtil::writeEntry( dom, "/kdevcvs/cvsoptions", m_cvs );
