@@ -230,7 +230,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
 CppSupportPart::~CppSupportPart()
 {
-    if (project())
+    if ( !m_projectClosed )
       projectClosed();
 
     delete( m_driver );
@@ -258,6 +258,11 @@ CppSupportPart::~CppSupportPart()
 
     m_pCompletion = 0;
     m_problemReporter = 0;
+
+	delete _jd;
+	_jd = 0;
+
+	kdDebug(9007) << k_funcinfo << endl;
 }
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
@@ -427,6 +432,9 @@ void CppSupportPart::projectClosed( )
     saveProjectSourceInfo();
 
     m_pCompletionConfig->store();
+
+    delete _jd;
+    _jd = 0;
 
     delete m_pCompletion;
     m_pCompletion = 0;
@@ -826,117 +834,119 @@ uint toTime_t(QDateTime t)
 bool
 CppSupportPart::parseProject( bool force )
 {
-    //QLabel* label = new QLabel( "", mainWindow( )->statusBar( ) );
-    //label->setMinimumWidth( 600 );
-    //mainWindow( )->statusBar( )->addWidget( label );
-    //label->show( );
-
     mainWindow()->statusBar()->message( i18n("Updating...") );
 
-    kapp->processEvents( );
     kapp->setOverrideCursor( waitCursor );
 
-    QStringList files = reorder( modifiedFileList() );
+	_jd = new JobData;
+	_jd->file.setName( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
 
-    QProgressBar* bar = new QProgressBar( files.count( ), mainWindow( )->statusBar( ) );
+	QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
+
+    if( !force && !QFile::exists( skip_file_name ) && _jd->file.open(IO_ReadOnly) )
+	{
+		_jd->stream.setDevice( &(_jd->file) );
+	
+		createIgnorePCSFile();
+	
+		QString sig;
+		int pcs_version = 0;
+		_jd->stream >> sig >> pcs_version;
+		if( sig == "PCS" && pcs_version == KDEV_PCS_VERSION ){
+	
+			int numFiles = 0;
+			_jd->stream >> numFiles;
+	
+			for( int i=0; i<numFiles; ++i ){
+			QString fn;
+			uint ts;
+			Q_LONG offset;
+	
+			_jd->stream >> fn >> ts >> offset;
+			_jd->pcs[ fn ] = qMakePair( ts, offset );
+			}
+		}
+    }
+
+	_jd->files = reorder( modifiedFileList() );
+
+    QProgressBar* bar = new QProgressBar( _jd->files.count( ), mainWindow( )->statusBar( ) );
     bar->setMinimumWidth( 120 );
     bar->setCenterIndicator( true );
     mainWindow( )->statusBar( )->addWidget( bar );
     bar->show( );
+	
+	_jd->progressBar = bar;
+	_jd->dir.setPath( m_projectDirectory );
+	_jd->it = _jd->files.begin();
 
-    QDir d( m_projectDirectory );
+	QTimer::singleShot( 0, this, SLOT(slotParseFiles()) );
+	
+	return true;
+}
 
-    QDataStream stream;
-    QMap< QString, QPair<uint, Q_LONG> > pcs;
-
-    QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
-
-    QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
-    if( !force && !QFile::exists( skip_file_name ) && f.open(IO_ReadOnly) ){
-	stream.setDevice( &f );
-
-        createIgnorePCSFile();
-
-	QString sig;
-	int pcs_version = 0;
-	stream >> sig >> pcs_version;
-	if( sig == "PCS" && pcs_version == KDEV_PCS_VERSION ){
-
-	    int numFiles = 0;
-	    stream >> numFiles;
-
-	    for( int i=0; i<numFiles; ++i ){
-		QString fn;
-		uint ts;
-		Q_LONG offset;
-
-		stream >> fn >> ts >> offset;
-		pcs[ fn ] = qMakePair( ts, offset );
-	    }
-	}
-    }
-
-    int n = 0;
-    for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
-        bar->setProgress( n++ );
-	QFileInfo fileInfo( d, *it );
-
-        if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
-            QString absFilePath = URLUtil::canonicalPath(fileInfo.absFilePath() );
-
-	    if( (n%5) == 0 ){
-	        kapp->processEvents();
-
-		if( m_projectClosed ){
-		    delete( bar );
-		    return false;
+void CppSupportPart::slotParseFiles()
+{
+	// NOTE: The checking for m_projectClosed is actually (currently) not needed.
+	// When the project is closed, the language support plugin is destroyed
+	// and as a consequence, the timer job signal never arrives at this method
+	
+	if ( !m_projectClosed && _jd->it != _jd->files.end() )
+	{
+		_jd->progressBar->setProgress( _jd->progressBar->progress() +1 );
+		
+		QFileInfo fileInfo( _jd->dir, *(_jd->it) );
+		
+		if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() )
+		{
+			QString absFilePath = URLUtil::canonicalPath(fileInfo.absFilePath() );
+		
+			if( isValidSource(absFilePath) )
+			{
+				QDateTime t = fileInfo.lastModified();
+				if( ! (m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t ) )
+				{	
+					if( _jd->pcs.contains(absFilePath) && t.toTime_t() == _jd->pcs[absFilePath].first )
+					{
+						_jd->stream.device()->at( _jd->pcs[absFilePath].second );
+						FileDom file = codeModel()->create<FileModel>();
+						file->read( _jd->stream );
+						codeModel()->addFile( file );
+					} 
+					else 
+					{
+						kdDebug(9007) << "newly parsing..." << endl;
+						m_driver->parseFile( absFilePath );
+					}
+			
+					m_timestamp[ absFilePath ] = t;
+				}
+			}
 		}
-	    }
-
-	    if( isValidSource(absFilePath) ){
-		QDateTime t = fileInfo.lastModified();
-		if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
-		    continue;
-
-#if QT_VERSION >= 0x030100
-		if( pcs.contains(absFilePath) && t.toTime_t() == pcs[absFilePath].first ){
-#else
-		if( pcs.contains(absFilePath) && toTime_t(t) == pcs[absFilePath].first ){
-#endif
-		    stream.device()->at( pcs[absFilePath].second );
-		    FileDom file = codeModel()->create<FileModel>();
-		    file->read( stream );
-		    codeModel()->addFile( file );
-		} else {
-                    kdDebug(9007) << "newly parsing..." << endl;
-		    m_driver->parseFile( absFilePath );
-		}
-
-		m_timestamp[ absFilePath ] = t;
-	    }
-        }
-
-	if( m_projectClosed ){
-	    kdDebug(9007) << "ABORT" << endl;
-            kapp->restoreOverrideCursor( );
-	    return false;
+		
+		++(_jd->it);
+		QTimer::singleShot( 0, this, SLOT(slotParseFiles()) );
 	}
-    }
-
-    kdDebug( 9007 ) << "updating sourceinfo" << endl;
-    emit updatedSourceInfo();
-
-    mainWindow( )->statusBar( )->removeWidget( bar );
-    delete bar;
-    //mainWindow( )->statusBar( )->removeWidget( label );
-    //delete label;
-
-    kapp->restoreOverrideCursor( );
-    mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
-
-    QFile::remove( skip_file_name );
-
-    return true;
+	else // finished or interrupted
+	{
+		kapp->restoreOverrideCursor( );
+		mainWindow( )->statusBar( )->removeWidget( _jd->progressBar );
+			
+		if ( !m_projectClosed )
+		{
+			kdDebug( 9007 ) << "updating sourceinfo" << endl;
+			emit updatedSourceInfo();
+			mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
+			QFile::remove( project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs" );
+		}
+		else
+		{
+			kdDebug(9007) << "ABORT" << endl;
+		}
+		
+		delete _jd;
+		_jd = 0;
+	}
 }
 
 void CppSupportPart::maybeParse( const QString& fileName )
@@ -1297,7 +1307,7 @@ bool CppSupportPart::isValidSource( const QString& fileName ) const
     QFileInfo fileInfo( fileName );
     QString path = URLUtil::canonicalPath( fileInfo.absFilePath() );
 
-    return project()->isProjectFile( path )
+    return project() && project()->isProjectFile( path )
 	&& (isSource( path ) || isHeader( path ))
 	&& !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
 }

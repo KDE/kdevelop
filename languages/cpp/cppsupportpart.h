@@ -24,6 +24,8 @@
 #include <qstring.h>
 #include <qwaitcondition.h>
 #include <qdatetime.h>
+#include <qdir.h>
+#include <qprogressbar.h>
 
 class Context;
 class CppCodeCompletion;
@@ -139,6 +141,7 @@ private slots:
     void gotoLine( int line );
     void gotoDeclarationLine( int line );
     void emitFileParsed();
+    void slotParseFiles();
 
     void slotNeedTextHint( int, int, QString& );
 
@@ -213,6 +216,24 @@ private:
     
     friend class KDevCppSupportIface;
     friend class CppDriver;
+
+	struct JobData
+	{
+		QDir dir;
+		QProgressBar * progressBar;
+		QStringList::Iterator it;
+		QStringList files;
+		QMap< QString, QPair<uint, Q_LONG> > pcs;
+		QDataStream stream;
+		QFile file;
+		
+		~JobData()
+		{
+			delete progressBar;
+		}
+	};
+	
+	JobData * _jd;
 };
 
 #endif
