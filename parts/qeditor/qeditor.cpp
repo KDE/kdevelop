@@ -183,7 +183,7 @@ void QEditor::setTabStop( int tabStop )
 
 void QEditor::keyPressEvent( QKeyEvent* e )
 {
-    kdDebug(9032) << "QEditor::keyPressEvent()" << endl;
+    //kdDebug(9032) << "QEditor::keyPressEvent()" << endl;
     if( e->key() == Key_Tab ){
 	if( tabIndentEnabled() ){
 	    int parag, index;
@@ -277,7 +277,7 @@ void QEditor::zoomOut()
 
 void QEditor::updateStyles()
 {
-    kdDebug(9032) << "QEditor::updateStyles()" << endl;
+    //kdDebug(9032) << "QEditor::updateStyles()" << endl;
     int tabwidth = tabStop();
     QSourceColorizer* colorizer = dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
     if( colorizer ){
@@ -504,7 +504,7 @@ bool QEditor::event( QEvent* e )
 {
     if( isRecording() && e->type() == QEvent::KeyPress ){
         QKeyEvent* ke = (QKeyEvent*) e;
-        kdDebug(9032) << "recording" << endl;
+        //kdDebug(9032) << "recording" << endl;
         QEditorKey* k = new QEditorKey;
         k->key = ke->key();
         k->ascii = ke->ascii();
@@ -533,7 +533,7 @@ void QEditor::executeMacro()
 {
     QPtrListIterator<QEditorKey> it( m_keys );
     while( it.current() ){
-        kdDebug(9032) << "send key" << endl;
+        //kdDebug(9032) << "send key" << endl;
         QEditorKey* k = it.current();
         ++it;
 
