@@ -29,8 +29,7 @@ class KProcess;
 /**
 * Implementation for a cvs command line tool wrapper: it let to do all common
 * used cvs operations (add, commit, remove, ...).
-* Note that all cvs operations
-* TODO: Additional slots for complex stuff as revert, patch application, ...
+* TODO: Additional slots for more complex stuff as status, revert, patch creation, ...
 */
 class CvsPart : public KDevVersionControl
 {
@@ -89,80 +88,17 @@ private slots:
 	*/
 	void projectConfigWidget( KDialogBase *dlg );
 	/**
-	* Call this every time a slot for cvs operations starts!! (It will setup the
-	* state (file/dir URL, ...).
-	* It will also display proper error messages so the caller must only exit if
-	* it fails (return false); if return true than basic requisites for cvs operation
-	* are satisfied.
-	*/
-	bool prepareOperation();
-	/**
-	* Call this every time a slot for cvs operations ends!! (It will restore the state for a new
-	* operation).
-	*/
-	void doneOperation();
-
-	/**
 	 * Called when the user wishes to stop an operation.
 	 */
-	void slotStopButtonClicked(KDevPlugin*);
+	void slotStopButtonClicked( KDevPlugin* );
 
 	void processExited();
-        void receivedStdout(KProcess*,char*,int);
-	void receivedStderr(KProcess*,char*,int);
+	void receivedStdout( KProcess*, char*, int );
+	void receivedStderr( KProcess*, char*, int );
 
 private:
-	/**
-	* Setup actions.
-	*/
-	void setupActions();
-	/**
-	* Updates Url forn the currently focused document
-	*/
-	bool retrieveUrlFocusedDocument();
-	/**
-	* Retrieves the fileName and dirName from the pathUrl
-	*/
-	bool findPaths();
-	/**
-	* Returns true if the file or directory indicated in @p url has been registered in the CVS
-	* (if not, returns false since it avoid performing CVS operation)
-	*/
-	bool isRegisteredInRepository();
-        /**
-        * Display "cvs diff" results in the diff part.
-        */
-        void diffFinished( const QString& diff, const QString& err );
-
-private:
-	// The value for overriding the $CVS_RSH env variable
-	QString cvs_rsh() const;
-	// Contains the url of the file or direcly for which the service has been invoked
-	KURL pathUrl;
-	// Contains the directory name
-	QString dirName;
-	// Contains the fileName (relative to dir)
-	QString fileName;
-	// Reference to widget integrated in the "bottom tabbar" (IDEAL)
-	QGuardedPtr<CvsWidget> m_widget;
-	// This is a pointer to the form used for collecting data about CVS project creation (used
-	// by the ApplicationWizard in example)
-	CvsForm *form;
-	// True if invoked from menu, false otherwise (i.e. called from context menu)
-	// Ok this is a very bad hack but I see no other solution for now.
-	bool invokedFromMenu;
-
-	KProcess* proc;
-	QString stdOut, stdErr;
-
-	// Actions
-	KAction *actionCommit,
-		*actionDiff,
-		*actionLog,
-		*actionAdd,
-		*actionRemove,
-		*actionUpdate,
-		*actionReplace;
+	struct Private;
+	Private *d;
 };
 
 #endif

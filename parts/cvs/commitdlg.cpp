@@ -51,6 +51,18 @@ CommitDialog::CommitDialog()
 
 void CommitDialog::accept()
 {
+	if (logMessage().isEmpty()) {
+        int s = KMessageBox::warningContinueCancel( this,
+			i18n("You are committing your changes without any comment. This is not a good practice. Continue anyway?"),
+			i18n("CVS Commit Warning"),
+			KStdGuiItem::cont(),
+			i18n("askWhenCommittingEmptyLogs") );
+        if ( s != KMessageBox::Continue ) {
+			return;
+		}
+	}
+	QDialog::accept();
+/*
 	if (!logMessage().isEmpty()) {
 		QDialog::accept();
 	}
@@ -64,6 +76,7 @@ void CommitDialog::accept()
 			QDialog::accept();
 		}
     }
+*/
 }
 
 #include "commitdlg.moc"
