@@ -7,6 +7,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kapplication.h>
+#include <kglobalsettings.h>
 
 
 #include "splashscreen.h"
@@ -36,8 +37,7 @@ SplashScreen::SplashScreen()
 
   // m_splash->resize(m_splash->sizeHint());
 
-  QRect rect = QApplication::desktop()->screenGeometry(
-    QApplication::desktop()->screenNumber(QPoint(0,0)));
+  QRect rect = KGlobalSettings::splashScreenDesktopGeometry();
   m_splash->move(rect.x() + (rect.width() - m_splash->sizeHint().width()) / 2,
      rect.y() + (rect.height() - m_splash->sizeHint().height()) / 2);
   m_splash->setFixedSize(m_splash->sizeHint());

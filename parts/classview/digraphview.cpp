@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
+#include <kglobalsettings.h>
 #include <ktempfile.h>
 
 
@@ -327,7 +328,7 @@ QSize DigraphView::sizeHint() const
     if (width == -1)
         return QSize(100, 100); // arbitrary
 
-    QSize dsize = QApplication::desktop()->size();
+    QSize dsize = KGlobalSettings::desktopGeometry(viewport()).size();
     return QSize(width, height).boundedTo(QSize(dsize.width()*2/3, dsize.height()*2/3));
 }
 
