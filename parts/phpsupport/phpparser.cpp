@@ -145,9 +145,9 @@ void PHPParser::parseFile(const QString& fileName){
   QTextStream stream(&f);
 
   KRegExp classre("^[ \t]*class[ \t]+([A-Za-z_]+)[ \t]*(extends[ \t]*([A-Za-z_]+))?.*$");
-  KRegExp methodre("^[ \t]*function[ \t]*([0-9A-Za-z_]*)[ \t]*\\(([0-9A-Za-z_\\$\\, \t=&\\'\\\"]*)\\).*$");
+  KRegExp methodre("^[ \t]*function[ \t&]*([0-9A-Za-z_]*)[ \t]*\\(([0-9A-Za-z_\\$\\, \t=&\\'\\\"]*)\\).*$");
   KRegExp varre("^[ \t]*var[ \t]*([0-9A-Za-z_\\$]+)[ \t;=].*$");
-  KRegExp createMemberRe("\\$this->([0-9A-Za-z_]+)[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)");
+  KRegExp createMemberRe("\\$this->([0-9A-Za-z_]+)[ \t]*=[ \t&]*new[ \t]+([0-9A-Za-z_]+)");
 
   ParsedClass *lastClass = 0;
   QString rawline;
