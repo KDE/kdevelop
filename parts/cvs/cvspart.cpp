@@ -642,8 +642,13 @@ void CvsPart::processExited()
 {
 	core()->running( this, false );
 
-	if ( proc->normalExit() )
+	if ( proc->normalExit() ) {
+		// no output
+		if ( stdOut.isNull() && ( proc->exitStatus() == 0 ) ) {
+		     stdOut = QString( "" );
+		}
 		diffFinished( stdOut, stdErr );
+	}
 
 	stdOut = QString::null;
 	stdErr = QString::null;
@@ -694,7 +699,7 @@ QWidget* CvsPart::newProjectWidget( QWidget *parent )
 {
 	if (!form)
 	{
-    	form = new CvsForm( parent );
+		form = new CvsForm( parent );
 	}
 	return form;
 }
