@@ -138,17 +138,17 @@ protected:
   private:
     KWrite *kWrite;
     KWriteDoc *kWriteDoc;
-		KWriteView *kWriteView;
+    KWriteView *kWriteView;
 
-		KPopupMenu selectMenu;
-		/** action when user left clicks in border */
-  	bool LMBIsBreakpoint;
+    KPopupMenu selectMenu;
+    /** action when user left clicks in border */
+    bool LMBIsBreakpoint;
     /** cursor is on line number */
-	  int cursorOnLine;
-	  /** the checkable menu items */
-  	int menuId_LMBBrkpoint;
-	  int menuId_LMBBookmark;
-	  int menuId_editBrkpoint;
+    int cursorOnLine;
+    /** the checkable menu items */
+    int menuId_LMBBrkpoint;
+    int menuId_LMBBookmark;
+    int menuId_editBrkpoint;
     int menuId_enableBrkpoint;
 };
 
@@ -581,13 +581,13 @@ public slots:
     void toggleBookmark();
     /** Toggle a bookmark at line
     */
-		void toggleBookmark(int line);
+    void toggleBookmark(int line);
     /** Go to the next bookmark
     */
-		void nextBookmark();
+    void nextBookmark();
     /** Go to the previous bookmark
     */
-		void previousBookmark();
+    void previousBookmark();
     /** Clears all bookmarks
     */
     void clearBookmarks();

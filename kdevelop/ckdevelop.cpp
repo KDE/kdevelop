@@ -168,9 +168,7 @@ void CKDevelop::slotFileCloseAll()
   debug("CKDevelop::slotFileCloseAll !\n");
 
   slotStatusMsg(i18n("Closing all files..."));
-
   m_docViewManager->doFileCloseAll();
-  
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -214,14 +212,12 @@ void CKDevelop::slotFileClose()
     debug("KMessageBox::Cancel !\n");
     if (message_result == KMessageBox::Cancel) // cancel
     {
-      m_docViewManager->setInfoModified(filename, m_docViewManager->currentEditView()->isModified());
       slotStatusMsg(i18n("Ready."));
       return;
     }
   }
 
   debug("Removing file from edit list !\n");
-  m_docViewManager->removeFileFromEditlist(filename);
   setMainCaption();
   slotStatusMsg(i18n("Ready."));
 }
@@ -232,23 +228,10 @@ void CKDevelop::slotFileSave(){
   QString sShownFilename=QFileInfo(filename).fileName();
   slotStatusMsg(i18n("Saving file %1").arg(sShownFilename));
   
- 
-
-  if(isUntitled(filename)){
+   if(isUntitled(filename)){
     slotFileSaveAs();
-  }
-  else
-  {
-    m_docViewManager->saveFileFromTheCurrentEditWidget(); // save the current file
-    m_docViewManager->setInfoModified(filename, m_docViewManager->currentEditView()->isModified());
-    QStrList lSavedFile;
-    lSavedFile.append(filename);
-#ifdef WITH_CPP_REPARSE
-    if (project)
-#else
-      if (project && m_docViewManager->currentEditView()->contentsType() == DocViewMan::Header)
-#endif
-        refreshClassViewByFileList(&lSavedFile);
+  } else {
+    m_docViewManager->doFileSave(project);
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -269,13 +252,11 @@ void CKDevelop::slotFileSaveAs(){
 
 #include <iostream.h>
 
-// Added by Christian
 void CKDevelop::slotFileSaveAll()
 {
   debug("slotFileSaveAll !\n");
 
   debug("get currenttab ! \n");
-  int currentDocType = m_docViewManager->currentDocType();
 
   // ok,its a dirty implementation  :-)
   if(!bAutosave || !saveTimer->isActive())
@@ -285,25 +266,19 @@ void CKDevelop::slotFileSaveAll()
 
   //    mainSplitter->setUpdatesEnabled(false);
 
-  m_docViewManager->synchronizeDocAndInfo();
-
   m_docViewManager->saveModifiedFiles();
 
-  debug("setMainCaption ! \n");
-  setMainCaption(currentDocType);
-  if (currentDocType == DocViewMan::Header || currentDocType == DocViewMan::Source)
+  if (!m_docViewManager->curDocIsBrowser())
     {
+      setMainCaption();
       debug("currentEditView is Header or Source ! \n");
       activateView( (QextMdiChildView*) m_docViewManager->currentEditView()->parentWidget());
     }
-  else if (currentDocType == DocViewMan::HTML)
+  else 
     {
+      setMainCaption(BROWSER);
       debug("currentDocType is HTML ! \n");
       activateView( (QextMdiChildView*) m_docViewManager->currentBrowserView()->parentWidget());
-    }
-  else if (currentDocType == DocViewMan::Undefined)
-    {
-      debug("currentDocType is unknown. Means, we haven't got any view at all. If a view is still open, it's an inconsisten state in DocViewMan ! \n");
     }
 
   debug("slotStatusMsg ! \n");
@@ -346,14 +321,8 @@ void CKDevelop::slotEditCut(){
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditCopy(){
-  if (m_docViewManager->currentDocType() == DocViewMan::Undefined)
-    return;
   slotStatusMsg(i18n("Copying..."));
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
-    m_docViewManager->currentBrowserDoc()->slotCopyText();
-  }
-  else
-    m_docViewManager->currentEditView()->copyText();
+  m_docViewManager->doCopy();
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditPaste(){
@@ -368,28 +337,12 @@ void CKDevelop::slotEditInsertFile(){
 }
 void CKDevelop::slotEditSearch(){
   slotStatusMsg(i18n("Searching..."));
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
-      CFindDocTextDlg* help_srch_dlg=new CFindDocTextDlg(this,"Search_for_Help_on");
-      connect(help_srch_dlg,SIGNAL(signalFind(QString)),m_docViewManager->currentBrowserDoc(),SLOT(slotFindTextNext(QString)));
-      help_srch_dlg->exec();
-      delete help_srch_dlg;
-  }
-  else {
-      m_docViewManager->currentEditView()->search();
-  }
+  m_docViewManager->doSearch();
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditRepeatSearch(int back){
-  if (m_docViewManager->currentDocType() == DocViewMan::Undefined)
-    return;
-
   slotStatusMsg(i18n("Repeating last search..."));
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
-    m_docViewManager->currentBrowserDoc()->findTextNext(QRegExp(doc_search_text),true);
-  }
-  else{
-    m_docViewManager->currentEditView()->searchAgain(back==1);
-  }
+  m_docViewManager->doRepeatSearch(doc_search_text, back);
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditRepeatSearchBack(){
@@ -426,20 +379,8 @@ void CKDevelop::slotEditSearchInFiles(QString search){
   }
 
 void CKDevelop::slotEditSearchText(){
-  if (m_docViewManager->currentDocType() == DocViewMan::Undefined)
-    return;
-
   QString text;
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
-    text = m_docViewManager->currentBrowserDoc()->selectedText();
-  }
-  else{
-    text = m_docViewManager->currentEditView()->markedText();
-    if(text == ""){
-      text = m_docViewManager->currentEditView()->currentWord();
-    }
-  }
-
+  m_docViewManager->doSearchText(text);
   if (!text.isEmpty())
     slotEditSearchInFiles(text);
   slotStatusMsg(i18n("Ready."));
@@ -1734,69 +1675,26 @@ void CKDevelop::slotToolsTool(int tool)
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotOptionsEditor(){
-  CEditWidget* pEW = m_docViewManager->currentEditView();
-  if (!pEW)
-    return;
-
   slotStatusMsg(i18n("Setting up the Editor..."));
-  pEW->optDlg();
-  globalTakeOverOfEditorOptions(pEW);
+  m_docViewManager->doOptionsEditor();
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotOptionsEditorColors(){
-  CEditWidget* pEW = m_docViewManager->currentEditView();
-  if (!pEW)
-    return;
-
   slotStatusMsg(i18n("Setting up the Editor's colors..."));
-  pEW->colDlg();
-  globalTakeOverOfEditorOptions(pEW);
+  m_docViewManager->doOptionsEditorColors();
+  slotStatusMsg(i18n("Ready."));
 }
 
-
 void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
-  CEditWidget* pEW = m_docViewManager->currentEditView();
-  if (!pEW)
-    return;
-
   slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
-  pEW->hlDef();
-  globalTakeOverOfEditorOptions(pEW);
+  m_docViewManager->doOptionsSyntaxHighlightingDefaults();
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotOptionsSyntaxHighlighting(){
-  CEditWidget* pEW = m_docViewManager->currentEditView();
-  if (!pEW)
-    return;
-
   slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
-  pEW->hlDlg();
-  globalTakeOverOfEditorOptions(pEW);
-}
-
-// shared helper function for the 4 functions from above
-void CKDevelop::globalTakeOverOfEditorOptions( CEditWidget* pEW)
-{
-  config->setGroup("KWrite Options");
-  pEW->writeConfig(config);
-  pEW->doc()->writeConfig(config);
-
-  QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
-  QListIterator<int> docIter(allDocs);
-  // for all kwrite documents
-  for ( ; docIter.current(); ++docIter) {
-    int curDocId = *(docIter.current());
-    QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
-    QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
-    // for all views of the current kwrite document
-    for ( ; viewIter.current(); ++viewIter) {
-      CEditWidget* pCurEW = (CEditWidget*) viewIter.current();
-      pCurEW->copySettings(pEW);
-      config->setGroup("KWrite Options");
-      pCurEW->readConfig(config);
-      pCurEW->doc()->readConfig(config);
-    }
-  }
+  m_docViewManager->doOptionsSyntaxHighlighting();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -1978,7 +1876,7 @@ void CKDevelop::slotBookmarksToggle()
 {
   debug("CKDevelop::slotBookmarksToggle !\n");
 
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
+  if (m_docViewManager->curDocIsBrowser())
   {
     doc_bookmarks->clear();
 
@@ -2013,24 +1911,16 @@ void CKDevelop::slotBookmarksClear(){
 
   debug("CKDevelop::slotBookmarksClear !\n");
 
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
-    doc_bookmarks_list.clear();
-    doc_bookmarks_title_list.clear();
-    doc_bookmarks->clear();
-  }    
-  else{
-    // clear all bookmarks
-    QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
-    QListIterator<int> docIter(allDocs);
-    for ( ; docIter.current(); ++docIter) { // for all kwrite documents
-      int curDocId = *(docIter.current());
-
-      // The doc object can be a CDocBrowser or a KWriteDoc
-      KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (m_docViewManager->docPointer( curDocId));
-      if(pDoc)
-	     pDoc->clearBookmarks();
+  if (m_docViewManager->curDocIsBrowser())
+    {
+      doc_bookmarks_list.clear();
+      doc_bookmarks_title_list.clear();
+      doc_bookmarks->clear();
+    }    
+  else
+    {
+      m_docViewManager->doClearBookmarks();
     }
-  }
 }
 
 void CKDevelop::openBrowserBookmark(const QString& file)
@@ -2049,7 +1939,7 @@ void CKDevelop::slotBookmarksNext()
 {
   debug("CKDevelop::slotBookmarksNext !\n");
 
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
+  if (m_docViewManager->curDocIsBrowser())
   {
     if(doc_bookmarks_list.count() > 0)
     {
@@ -2069,7 +1959,7 @@ void CKDevelop::slotBookmarksPrevious()
 {
   debug("CKDevelop::slotBookmarksPrevious !\n");
 
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
+  if (m_docViewManager->curDocIsBrowser())
   {
     if(doc_bookmarks_list.count() > 0)
     {
@@ -2262,20 +2152,8 @@ void CKDevelop::slotHelpSearchText(QString text){
 
 void CKDevelop::slotHelpSearchText()
 {
-  if (m_docViewManager->currentDocType() == DocViewMan::Undefined)
-    return;
-
   QString text;
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML){
-    text = m_docViewManager->currentBrowserDoc()->selectedText();
-  }
-  else{
-    text = m_docViewManager->currentEditView()->markedText();
-    if(text == ""){
-      text = m_docViewManager->currentEditView()->currentWord();
-    }
-  }
-
+  m_docViewManager->doSearchText(text);
   slotHelpSearchText(text);
 }
 
@@ -2613,9 +2491,7 @@ void CKDevelop::slotNewStatus()
 
 void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
 {
-
-  int item = m_docViewManager->currentDocType();
-  if (item == DocViewMan::Source)
+  if (m_docViewManager->curDocIsCppFile())
   {
     if(bMarked){
       enableCommand(ID_EDIT_CUT);
@@ -2630,8 +2506,7 @@ void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
 
 void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
 {
-  int item = m_docViewManager->currentDocType();
-  if (item == DocViewMan::Header)
+  if (m_docViewManager->curDocIsHeaderFile())
   {
       if(bMarked){
         enableCommand(ID_EDIT_CUT);
@@ -2646,7 +2521,7 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
 
 void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
 {
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
+  if (m_docViewManager->curDocIsBrowser())
   {
       if(bMarked){
         enableCommand(ID_EDIT_COPY);
@@ -2660,7 +2535,7 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
 void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
 {
   QString text=QApplication::clipboard()->text();
-  if(!bContents || m_docViewManager->currentDocType() == DocViewMan::HTML)
+  if(!bContents || m_docViewManager->curDocIsBrowser())
     disableCommand(ID_EDIT_PASTE);
   else
     enableCommand(ID_EDIT_PASTE);
@@ -2704,30 +2579,14 @@ void CKDevelop::slotURLSelected(const QString& url,int,const char*)
   if (url_str.left(1)=="/")
      url_str=QString("file:") + url;
 
-  // use latest focused browser document or create new browser document and view
-  CDocBrowser* pCurBrowserDoc = m_docViewManager->currentBrowserDoc();
-  KHTMLView* pBrowserView = m_docViewManager->currentBrowserView();
-  if (pCurBrowserDoc) {
-    if(url_str.contains("kdevelop/search_result.html") != 0){
-      pCurBrowserDoc->showURL(url_str,true); // with reload if equal
-    }
-    else{
-      pCurBrowserDoc->showURL(url_str); // without reload if equal
-    }
-  }
-  else {
-    int docId = m_docViewManager->createDoc( DocViewMan::HTML, url_str);
-    if (docId == -1) return; // failed
-    pBrowserView = (KHTMLView*) m_docViewManager->createView( docId);
-  }
+  // Call the DocViewManager 
+  m_docViewManager->doSelectURL(url_str);
 
   QString str = history_list.current();
   //if it's a url-request from the search result jump to the correct point
   if (str.contains("kdevelop/search_result.html")){
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
-
-  activateView( (QextMdiChildView*) pBrowserView->parentWidget());  // raise
 }
 
 void CKDevelop::slotURLonURL(const QString& url )
@@ -2766,7 +2625,7 @@ void CKDevelop::slotDocumentDone()
     pCurBrowserDoc->findTextNext(QRegExp(doc_search_text),true);
   }
 
-  if (m_docViewManager->currentDocType() == DocViewMan::HTML)
+  if (m_docViewManager->curDocIsBrowser())
     setMainCaption(BROWSER);
 
   if (pos!=-1)
@@ -3295,11 +3154,11 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   
 }
 
-void CKDevelop::slotViewSelected(QWidget* pView, int docType)
+void CKDevelop::slotViewSelected(QWidget* pView, int /* docType */)
 {
-  lasttab = m_docViewManager->currentDocType();
+  debug("CKDevelop::slotViewSelected !\n");
 
-  if (docType == DocViewMan::Header || docType == DocViewMan::Source)
+  if (!(m_docViewManager->curDocIsBrowser()))
   {
    // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
     enableCommand(ID_FILE_SAVE_AS);
@@ -3327,7 +3186,7 @@ void CKDevelop::slotViewSelected(QWidget* pView, int docType)
     enableCommand(ID_EDIT_INVERT_SELECTION);
   }
 
-  if (docType == DocViewMan::Header){
+  if (m_docViewManager->curDocIsHeaderFile()){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){  
       if ( bDefaultCV)
         t_tab_view->setCurrentTab(CV);
@@ -3342,7 +3201,7 @@ void CKDevelop::slotViewSelected(QWidget* pView, int docType)
 //    setMainCaption();  is called by slotNewStatus()
     slotNewLineColumn();
   }
-  if (docType == DocViewMan::Source){
+  if (m_docViewManager->curDocIsCppFile()){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){  
       if ( bDefaultCV)
         t_tab_view->setCurrentTab(CV);
@@ -3360,7 +3219,7 @@ void CKDevelop::slotViewSelected(QWidget* pView, int docType)
     slotNewLineColumn();
   }
 
-  if (docType == DocViewMan::Header || docType == DocViewMan::Source)
+  if (!(m_docViewManager->curDocIsBrowser()))
   {
     int state;
     state = m_docViewManager->currentEditView()->undoState();
@@ -3386,7 +3245,7 @@ void CKDevelop::slotViewSelected(QWidget* pView, int docType)
     }    
   }
 
-  if (docType == DocViewMan::HTML)
+  if (m_docViewManager->curDocIsBrowser())
   {
     disableCommand(ID_BUILD_COMPILE_FILE);
 
@@ -3414,7 +3273,7 @@ void CKDevelop::slotViewSelected(QWidget* pView, int docType)
     disableCommand(ID_EDIT_INVERT_SELECTION);
   }
 
-  if (docType == DocViewMan::HTML)
+  if (m_docViewManager->curDocIsBrowser())
   {
     if(bAutoswitch)
       t_tab_view->setCurrentTab(DOC);
@@ -3427,6 +3286,8 @@ void CKDevelop::slotViewSelected(QWidget* pView, int docType)
 
     setMainCaption(BROWSER);
   }
+
+  debug("End CKDevelop::slotViewSelected !\n");
 }
 
 void CKDevelop::slotOTabSelected(int item)
@@ -3686,36 +3547,7 @@ void CKDevelop::fillWindowMenu()
 void CKDevelop::slotCreateNewViewWindow()
 {
   slotStatusMsg(i18n("Creating new view window..."));
-
-  int curDocType = m_docViewManager->currentDocType();
-  if (curDocType == DocViewMan::Undefined)
-    curDocType = DocViewMan::HTML;
-
-  QWidget* pNewView = 0L;
-  int docId = -1; // invalid
-
-  // retrieve the current document; create it, if it doesn't exist
-  switch (curDocType) {
-  case DocViewMan::Source:
-  case DocViewMan::Header:
-    {
-      KWriteDoc* pCurEditDoc = m_docViewManager->currentEditDoc();
-      if (!pCurEditDoc) break;
-      docId = m_docViewManager->findDoc( pCurEditDoc->fileName());
-    }
-    break;
-  case DocViewMan::HTML:
-    // a CDocBrowser always has got 1 view, only
-    docId = m_docViewManager->createDoc( DocViewMan::HTML, DocTreeKDevelopBook::locatehtml("about/intro.html"));
-    break;
-  }
-
-  // create a new view
-  pNewView = m_docViewManager->createView( docId);
-  // raise and activate
-  if (pNewView)
-    activateView( (QextMdiChildView*)pNewView->parentWidget());
-
+  m_docViewManager->doCreateNewView();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -3913,3 +3745,4 @@ void CKDevelop::statusCallback(int id_){
     default: slotStatusMsg(i18n("Ready"));
   }
 }
+

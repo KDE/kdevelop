@@ -35,13 +35,10 @@ public: // Constructor and destructor
    * @param doc           The pointer to the KWrite document for the KWrite constructor.
    * @param contentsType  One of the DocViewMan::ContentsType. Specifies what kind of edit widget this is (header or source file)
    */
-  CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, int contentsType);
+  CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc);
   /** Destroys the object.
    */
   ~CEditWidget();
-
-public: // Public methods to get attribute values
-  int contentsType() { return m_contentsType; };
 
 public: // Public methods to set attribute values
 
@@ -229,10 +226,9 @@ private:
 // KSpell *kspell;
 // KSpellConfig *ksc;
   int spell_offset;
-  /** one of the DocViewMan::ContentsType's (DocViewMan::Header or DocViewMan::Source) */
-  int m_contentsType;
 };
 
 #endif
+
 
 

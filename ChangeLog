@@ -1,3 +1,7 @@
+2001-03-25  Christian Couder <christian@kdevelop.org>
+    * Bid rewrite if the DocViewManager stuff.
+    * Removed the TEditInfo and DocViewNode structs.
+
 2001-03-11  bretzel <serge.lussier@videotron.ca>
     * Added: Instanciate new static attributes in cpp file.
     * Added: New feature: Read-Write property for new attribute and

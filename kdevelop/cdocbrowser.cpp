@@ -48,6 +48,7 @@
 #include <qgrid.h>
 #include <qlayout.h>
 
+#include "cfinddoctextdlg.h"
 
 #include <X11/Xlib.h>
 #undef Unsorted
@@ -69,6 +70,8 @@ bool CDocBrowser::forceDefaults;
 CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   KHTMLPart(parent, name)
 {
+  debug("Creating CDocBrowser !"); 
+
   doc_pop = new QPopupMenu();
   doc_pop->insertItem(SmallIconSet("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
   doc_pop->insertItem(SmallIconSet("forward"),i18n("Forward"),this,SLOT(slotURLForward()),0,ID_HELP_FORWARD);
@@ -85,14 +88,15 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
           this, SLOT( slotPopupMenu( const QString&, const QPoint & ) ) );
   connect(this, SIGNAL( setWindowCaption ( const QString&) ), this, SLOT( slotSetFileTitle( const QString&) ) );
 
+  debug("End CDocBrowser creation !"); 
 }
 
 CDocBrowser::~CDocBrowser(){
 
   debug("deleting CDocBrowser !");
 
-   delete doc_pop;
-   doc_pop=0l;
+  delete doc_pop;
+  doc_pop=0l;
 }
 
 
@@ -374,6 +378,10 @@ void CDocBrowser::slotSetFileTitle( const QString& title ){
 
   debug("CDocBrowser::slotSetFileTitle !\n");
 
+  debug("view : %d !\n", view());
+
+  debug("title : %s !\n", title.data());
+
   m_title= title;
 }
 
@@ -388,6 +396,16 @@ void  CDocBrowser::urlSelected ( const QString &url, int button, int state, cons
 
   KURL cURL = completeURL( url );
   showURL( cURL.url() ) ;
+}
+
+void  CDocBrowser::doSearchDialog()
+{
+  debug("CDocBrowser::doSearchDialog !\n");
+
+  CFindDocTextDlg help_srch_dlg(view(),"Search_for_Help_on");
+  connect(&help_srch_dlg, SIGNAL(signalFind(QString)),
+	  this, SLOT(slotFindTextNext(QString)));
+  help_srch_dlg.exec();
 }
 
 //
@@ -533,6 +551,7 @@ void CDocBrowserFont::addFont( QStringList &list, const char *xfont )
 
 void CDocBrowserFont::slotApplyPressed()
 {
+  debug("CDocBrowserFont::slotApplyPressed !\n");
 
   KConfig *config = KGlobal::config();
   config->setGroup( "DocBrowserAppearance" );
@@ -551,6 +570,8 @@ void CDocBrowserFont::slotApplyPressed()
 
 void CDocBrowserFont::slotFontSize( int i )
 {
+  debug("CDocBrowserFont::slotFontSize !\n");
+
   if(i==0)
     fSize=10;
   else if(i==1)
@@ -561,11 +582,15 @@ void CDocBrowserFont::slotFontSize( int i )
 
 void CDocBrowserFont::slotStandardFont( const QFont& n )
 {
+  debug("CDocBrowserFont::slotStandardFont !\n");
+
   stdName = n;
 }
 
 void CDocBrowserFont::slotFixedFont( const QFont& n )
 {
+  debug("CDocBrowserFont::slotFixedFont !\n");
+
   fixedName = n;
 }
 

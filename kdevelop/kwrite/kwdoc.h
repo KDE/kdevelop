@@ -184,6 +184,8 @@ class KWriteDoc : public QObject {
     void updateBMPopup(QPopupMenu* popup);
     void gotoBookmark(QString &text);
 
+    KWrite* getKWrite();
+
 //  void inheritFileName(KWriteDoc *doc) {
 //    fName = QString(doc->fName, doc->fName.findRev('/') +1);
 //  }
@@ -214,7 +216,12 @@ class KWriteDoc : public QObject {
 
   public:
     int getHighlight() {return hlManager->findHl(highlight);}
-  	int getFontHeight() {return fontHeight;}
+    int getFontHeight() {return fontHeight;}
+    QCString text();
+
+    QDateTime getLastFileModifDate() { return m_fileLastModifDate; };
+    void setLastFileModifDate(QDateTime modif) { m_fileLastModifDate = modif; };
+
   protected:
     void setHighlight(int n);
     void setPreHighlight(int n = -1);
@@ -244,7 +251,6 @@ class KWriteDoc : public QObject {
     void invertSelection();
     void selectWord(PointStruc &cursor, int flags);
 
-    QCString text();
     QString getWord(PointStruc &cursor);
     bool hasMarkedText() {return (selectEnd >= selectStart);}
     QString markedText(int flags);
@@ -299,8 +305,8 @@ class KWriteDoc : public QObject {
     HlManager *hlManager;
     Highlight *highlight;
     Attribute attribs[nAttribs];
-
-		KConfig* kWriteConfig;
+    
+    KConfig* kWriteConfig;
 
     int eolMode;
 
@@ -324,7 +330,7 @@ class KWriteDoc : public QObject {
     bool oldMarkState;
     QString fName;
 
-		KConfig* fileConfig;
+    KConfig* fileConfig;
 
     int foundLine;
 
@@ -336,6 +342,8 @@ class KWriteDoc : public QObject {
     int tagEnd;
 
     QWidget *pseudoModal;
+
+    QDateTime m_fileLastModifDate;
 
 #if defined(QT_I18N) && defined(HAVE_NKF_H)
     Nkf::NkfCode JPcode;

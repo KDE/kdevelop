@@ -41,9 +41,11 @@ public:
   /**show a html in a htmlview,if reload true it reload a file even it is in memory*/
   void showURL(const QString& url,bool reload=false);
   void setDocBrowserOptions();
+  void doSearchDialog();
+
   QString currentURL();
-	QString currentTitle();
-	QPopupMenu* popup(){ return doc_pop; };	
+  QString currentTitle();
+  QPopupMenu* popup(){ return doc_pop; };	
 	
 protected:	
   virtual void  urlSelected ( const QString &url, int button = 0, int state = 0, const QString &_target = QString::null );
@@ -59,11 +61,11 @@ public slots:
   void slotURLBack();
   void slotURLForward();
   void slotSearchText();
-	void slotGrepText();
-	void slotSetFileTitle(const QString& title);
-	void slotViewInKFM();
+  void slotGrepText();
+  void slotSetFileTitle(const QString& title);
+  void slotViewInKFM();
 
-	void slotFindTextNext(QString);
+  void slotFindTextNext(QString);
 		
  signals:
   void signalURLBack();

@@ -202,6 +202,12 @@ public:
   void switchToFile(QString filename, int line = -1, int col = 0,
                     bool bForceReload=false,bool bShowModifiedBox=true);
 
+  /** Helper method because activateView is protected in QextMdiMainFrm */
+  void doActivateView(QextMdiChildView *pWnd);
+
+  /** Helper function to get the config */
+  KConfig* getConfig() { return config; };
+
   /** Switch to a certain line in a certain file.
    *  @param filename Absolute filename of the file to switch to.
    *  @param lineNo   The line in the file to switch to.
@@ -733,11 +739,6 @@ public:
 
 protected: // Protected methods
 
-  /** shared helper function for the 4 slots slotOptionsEditor, slotOptionsEditorColors,
-   *  slotOptionsSyntaxHighlightingDefaults and slotOptionsSyntaxHighlighting
-   */
-  void globalTakeOverOfEditorOptions( CEditWidget* pEW);
-
   /** The user selected a class in the classcombo.
    * @param aName Name of the class.
    */
@@ -977,7 +978,6 @@ private:
   CAddExistingFileDlg* add_dlg;
   GrepDialog* grep_dlg;
 
-  int lasttab;
   QString lastfile;
   QString lastOpenDir;
 
@@ -1033,3 +1033,4 @@ private slots:
 };
 
 #endif
+

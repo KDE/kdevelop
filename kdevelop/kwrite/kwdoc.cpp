@@ -413,7 +413,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 
   contents.setAutoDelete(true);
 
-	fileConfig = new KConfig();//FB? NULL, "kdevelop_srcfiles.cfg");
+  fileConfig = new KConfig();//FB? NULL, "kdevelop_srcfiles.cfg");
 
   colors[0] = white;
   colors[1] = darkBlue;
@@ -3287,6 +3287,16 @@ void KWriteDoc::gotoBookmark(QString &text) {
       view->setFocus();
     }
   }
+}
+
+KWrite* KWriteDoc::getKWrite()
+{
+    KWriteView * view = views.first();
+    if(view) {
+      return view->kWrite;
+    } else {
+      return 0L;
+    }
 }
 
 #include "kwdoc.moc"

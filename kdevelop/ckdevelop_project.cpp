@@ -101,13 +101,7 @@ bool CKDevelop::slotProjectClose()
       toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
       
       // close all documents
-      QList<int> allDocs = m_docViewManager->docs();
-      QListIterator<int> docIter(allDocs);
-      // for all kwrite documents
-      for ( ; docIter.current(); ++docIter) {
-	int curDocId = *(docIter.current());
-	m_docViewManager->closeDoc( curDocId);
-      }
+      m_docViewManager->doCloseAllDocs();
 
       // set project to false and disable all ID_s related to project=true	
       prj->writeProject();
@@ -1347,7 +1341,7 @@ bool CKDevelop::addFileToProject(QString complete_filename,
 
 void CKDevelop::slotRemoveFileFromEditlist(const QString &absFilename)
 {
-  m_docViewManager->removeFileFromEditlist(absFilename);
+  // m_docViewManager->removeFileFromEditlist(absFilename);
   setMainCaption();
 }
 

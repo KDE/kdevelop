@@ -21,6 +21,7 @@
 //#include <kdebug.h>
 #include "kwdoc.h"
 #include "highlight.h"
+#include "cproject.h"
 #include "docviewman.h"
 
 #include <qpopupmenu.h>
@@ -51,9 +52,8 @@ HlManager hlManager; //highlight manager
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, int contentsType) :
+CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc) :
   KWrite(doc, parent, name)
-  ,m_contentsType(contentsType)
 {
   setFocusProxy (kWriteView);
   pop = new QPopupMenu();
@@ -373,3 +373,4 @@ void CEditWidget::slotAddWatchVariable(){
 }
 
 #include "ceditwidget.moc"
+

@@ -150,21 +150,25 @@ bool CKDevelop::isProjectDirty()
   if (prj->getMakefileAmChanged())
     isClean=false;
 
-  m_docViewManager->synchronizeDocAndInfo();
+  // m_docViewManager->synchronizeDocAndInfo();
 
-  for(filename=listAllPrjFiles.first(); isClean && filename != 0; filename=listAllPrjFiles.next())
+  for(filename=listAllPrjFiles.first(); 
+      isClean && filename != 0; 
+      filename=listAllPrjFiles.next())
   {
-    // only check valid names and don't check files like *kdevprj or AUTHORS etc.
+    // only check valid names and don't check files 
+    // like *kdevprj or AUTHORS etc.
     if (*filename!='\0' && CProject::getType(filename)!=DATA &&
            CProject::getType(filename)!=KDEV_DIALOG)
     {
-      TEditInfo *actual_info=m_docViewManager->getInfoFromFilename(prjDir+filename);
+      KWriteDoc* pDoc = m_docViewManager->findKWriteDoc(prjDir+filename);
       QFileInfo src_info(prjDir + filename);
 
-      if (actual_info)
+      if (pDoc)
       {
         // here we are... having the file already opened
-        if (actual_info->modified || bin_info.lastModified()<actual_info->last_modified)
+        if (pDoc->isModified() 
+	    || bin_info.lastModified() < pDoc->getLastFileModifDate())
           isClean=false;
       }
       /* here only the check if the file would be younger than the target file
@@ -172,7 +176,7 @@ bool CKDevelop::isProjectDirty()
          this should be checked always... even if the file is already loaded
          so we can check if the source was modified outside the buffer
       */
-      if (isClean && bin_info.lastModified()<src_info.lastModified())
+      if (isClean && bin_info.lastModified() < src_info.lastModified())
         isClean=false;
     }
   }
@@ -313,10 +317,10 @@ bool CKDevelop::fileSaveAs(){
   }
 
 
-  // search if we can find the new desired filename in edit_infos ...
+  // search if we can find a doc with the new desired filename  ...
   // means already loaded
-  TEditInfo* actual_info = m_docViewManager->findInfo(name);
-  TEditInfo* old_info = m_docViewManager->findInfo(oldName);
+  KWriteDoc* pActualDoc = m_docViewManager->findKWriteDoc(name);
+  KWriteDoc* pOldDoc = m_docViewManager->findKWriteDoc(oldName);
     
   // now that all cancel possibilities are handled simulate a changed file
   // m_docViewManager->currentEditView()->toggleModified(true);
@@ -328,11 +332,11 @@ bool CKDevelop::fileSaveAs(){
      return false;
   }
 
-  if (actual_info != 0l && actual_info==old_info)
+  if (pActualDoc != 0 && pActualDoc == pOldDoc)
   {
     // here we are ... saving the file with the same name
     //   so only the modified-flags have to be changed
-    actual_info->modified = false;
+    pActualDoc->setModified(false);
     m_docViewManager->currentEditView()->toggleModified(false);
   }
   else
@@ -347,7 +351,7 @@ bool CKDevelop::fileSaveAs(){
       //   and now we can remove the untitled file
       if (isUntitled(oldName))
       {
-	m_docViewManager->removeFileFromEditlist(oldName);
+	// m_docViewManager->removeFileFromEditlist(oldName);
       }
     }
     
@@ -565,8 +569,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
   debug("switching to %s !\n", filename.data());
 
-  CEditWidget* pCurEditWidget = m_docViewManager->currentEditView();
-
   if (!isUntitled(filename)) {
     // We consider only symbolic links in directories here,
     // not links in files or hardlinks. The _real_ solution
@@ -594,54 +596,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     return;
   }
 
-
   QString ext = fileInfo.extension(false);
-
-  // Load QtDesigner if clicked/loaded an User Interface file (.ui)
-//  if ( ext == "ui") {
-//    if(!CToolClass::searchProgram("designer")){
-//      return;
-//    }
-
-//		KProcess designer_process;	
-//		designer_process << "designer" << "-client" << filename;
-//		KShellProcess designer_process("/bin/sh");
-//		const QString oldGroup = config->group();
-//		config->setGroup("QT2");
-//		QString qt2dir = QString ("QTDIR=")+ config->readEntry("qt2dir",getenv("QTDIR")) +" ";
-//		config->setGroup(oldGroup);
-//		designer_process << qt2dir << "designer" << "-client" << filename;
-//		if(!designer_process.start(KProcess::DontCare)) {
-//    	debug("QtDesigner didn't start!");
-//		}
-//    return;
-//  }
-//
-//  // Load Qt linguist if the filename is a ts file
-//  if( ext == "ts") {
-//    if(!CToolClass::searchProgram("linguist")){
-//      return;
-//    }
-//
-//		KProcess linguist_process;
-//		linguist_process << "linguist" << filename;
-//		if(!linguist_process.start(KProcess::DontCare)) {
-//    	debug("Qt Linguist didn't start!");
-//		}
-//    return;
-//  }
-//
-//  // Load Qt linguist if the filename is a ts file
-//  if( ext == "po") {
-//    if(CToolClass::searchInstProgram("kbabel")){
-//   		KProcess linguist_process;
-//   		linguist_process << "kbabel" << filename;
-//   		if(!linguist_process.start(KProcess::DontCare)) {
-//       	debug("KBabel didn't start!");
-//   		}
-//      return;
-//   	}
-//  }
 
   debug("url stuffing !\n");
 
@@ -656,9 +611,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     return;
   }
 
-//FB----------anfang-vom-abschnitt-altes-behandeln----------
-
-  // set the correct pCurEditWidget
+  // Enable or disable command
   if (CProject::getType(filename) == CPP_SOURCE){
     if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
       enableCommand(ID_BUILD_COMPILE_FILE);
@@ -668,212 +621,20 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     disableCommand(ID_BUILD_COMPILE_FILE);
   }
 
-  QString editWidgetName;
-  if (pCurEditWidget) {
-    debug("getting edit widget name !");
-    editWidgetName = pCurEditWidget->getName(); //FB
-    debug("editWidgetName : '%s' !", editWidgetName.data());
-  }
-  else {
-    debug("editWidgetName : '' !");
-  }
-
-  debug("looking if file already open !\n");
-  // We need to look in the list of "open" files for the file that
-  // is currently held in the pCurEditWidget. This file needs to
-  // be taken out of the editor_widget and stored, so that we can
-  // reuse the pCurEditWidget for the new file.
-  TEditInfo* actual_info = m_docViewManager->findInfo(editWidgetName);
-
-  // Make sure that we found the file in the editor_widget in our list
-  // If we haven't then this should be fatal.
-  if(actual_info) { //FB
-
-    // handle file if it was modified on disk by another editor/cvs
-    QFileInfo file_info(editWidgetName);
-    if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox)
-      {
-	debug(" KMessageBox !\n");
-	if(KMessageBox::questionYesNo(this, i18n("The file %1 was modified outside this editor.\n"
-						 "Open the file from disk and delete the current Buffer?")
-				      .arg(editWidgetName),
-				      i18n("File modified"))==KMessageBox::Yes)
-	  {
-	    bForceReload = true;
-	    actual_info->last_modified = file_info.lastModified();
-	  }
-      }
-    
-    debug(" getting lastModified !\n");
-
-    if (!bShowModifiedBox){
-      actual_info->last_modified = file_info.lastModified(); 
-    }
-    
-    debug(" before setCursorPosition !\n");
-    
-    if (!bForceReload && filename == editWidgetName){
-      
-      if (pCurEditWidget && (line != -1))
-	pCurEditWidget->setCursorPosition(line, col);
-      
-      //    cerr << endl <<endl << "Filename:" << filename
-      // << "EDITNAME:" << pCurEditWidget->getName() <<"no action---:" << endl;
-      pCurEditWidget->setFocus();
-      return;
-    }
-
-    // store the old file
-    if (pCurEditWidget) {
-      actual_info->text = pCurEditWidget->text();
-      actual_info->modified = pCurEditWidget->isModified();
-      actual_info->cursor_line = pCurEditWidget->currentLine();
-      actual_info->cursor_col = pCurEditWidget->currentColumn();
-      // output_widget->append("auszuwechseldes file:" + actual_info->filename);
-    }
-  } //FB
-
-//FB---------ende-der-behandlung-der-alten-datei--------
-
-  // See if we already have the file wanted in our list of saved files.
-  
-  TEditInfo* info = m_docViewManager->findInfo(filename);
-
-  bool found = (info != 0);
-
-  debug("found : %d !\n", found);
-
-  debug("getting document type !\n");
-
-  // get the document type
-  int docType = DocViewMan::Header;
-  if (CProject::getType(filename) == CPP_SOURCE)
-    docType = DocViewMan::Source;
-
-  // Not found or needing a reload causes the file to be read from disk and the
-  // info reset.
-  if (!found || bForceReload)
-  {
-    debug(" document type not found !\n");
-
-    QFileInfo fileinfo(filename);
-    if (!found)
-    {
-      // not found -> generate a new edit_info,loading
-      info = new TEditInfo;
-      // info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
-      m_docViewManager->appendInfo(info); // add to the list
-    }
-
-    info->filename = filename;
-    info->modified = false;
-    info->cursor_line = 0;
-    info->cursor_col = 0;
-    info->last_modified = fileinfo.lastModified();
-
-    debug(" finding doc !\n");
-//FB    pCurEditWidget->clear();
-    int docId = m_docViewManager->findDoc( filename);
-    if (docId == -1) {
-
-      debug("doc not found !\n");
-      docId = m_docViewManager->createDoc( docType, filename);
-      if (docId != -1)
-        qDebug("createView for a new created doc");
-        pCurEditWidget = (CEditWidget*) m_docViewManager->createView( docId);
-        pCurEditWidget->setFocusPolicy(QWidget::StrongFocus);
-        pCurEditWidget->setFont(KGlobalSettings::fixedFont());
-        config->setGroup("KWrite Options");
-        pCurEditWidget->readConfig(config);
-        pCurEditWidget->doc()->readConfig(config);
-    }
-    else {
-      // a view for this doc exists, already;
-      // use the first view we found of this doc to show the text
-      pCurEditWidget = m_docViewManager->getFirstEditView(docId);
-      qDebug("found view in list of doc");
-    }
-    m_docViewManager->loadDoc( docId, filename,1);
-    qDebug("and loadDoc");
-    activateView( (QextMdiChildView*) pCurEditWidget->parentWidget());
-//FB    pCurEditWidget->loadFile(filename,1);
-  }
-  else
-  {
-    debug(" document type found !\n");
-
-    int docId = m_docViewManager->findDoc( filename);
-    pCurEditWidget = m_docViewManager->getFirstEditView(docId);
-
-    debug(" activate view !\n");
-
-    activateView( (QextMdiChildView*) pCurEditWidget->parentWidget());
-
-    // Don't use the saved text because it is useless 
-    // and removes the bookmarks
-    // pCurEditWidget->setText(info->text);
-
-    qDebug("doc (and at least 1 view) did exist, raise it");
-  }
-
-//FB  // update the pointers
-//FB  if (docType == DocViewMan::Source)
-//FB    cpp_widget = pCurEditWidget;
-//FB  else
-//FB    header_widget = pCurEditWidget;
-
-  debug(" toggle modify cur edit widget !\n");
-
-  pCurEditWidget->toggleModified(info->modified);
-
-  // If the caller wanted to be positioned at a particular place in the file
-  // then they have supplied the line and col. Otherwise we use the
-  // current info values (0 if new) for the placement.
-  if (line == -1)
-    pCurEditWidget->setCursorPosition(info->cursor_line,info->cursor_col);
-  else
-    pCurEditWidget->setCursorPosition(line, col);
-
-  pCurEditWidget->setName(filename);
-  info->text = pCurEditWidget->text();
-
-  debug(" set focus on view !\n");
-  pCurEditWidget->setFocus();
+  // Ask the doc manager
+  m_docViewManager->doSwitchToFile(filename, line, col,
+                                  bForceReload,  bShowModifiedBox);
 
   // Need to get the breakpoints displayed in this file (if any)
-	if (brkptManager)
-	  brkptManager->refreshBP(filename);
+  if (brkptManager)
+    brkptManager->refreshBP(filename);
 
-//      if (bForceReload)
-//      {
-//        QFileInfo fileinfo(filename);
-//        pCurEditWidget->clear();
-//        pCurEditWidget->loadFile(filename,1);
-//        info->modified=false;
-//        info->cursor_line=info->cursor_col=0;
-//        info->text = pCurEditWidget->text();
-//      }
-//      else
-//      {
-////         pCurEditWidget->setName(filename);     // inserted to stop flickering of caption
-//         pCurEditWidget->setText(info->text);
-//      }
-//
-//      if (line == -1)
-//        pCurEditWidget->setCursorPosition(info->cursor_line,info->cursor_col);
-//      else
-//        pCurEditWidget->setCursorPosition(line, col);
-//
-//      pCurEditWidget->toggleModified(info->modified);
-//      pCurEditWidget->setName(filename);
-//
-//      pCurEditWidget->setFocus();
-//
-//      // Need to get the breakpoints displayed in this file (if any)
-//			if (brkptManager)
-//	      brkptManager->refreshBP(filename);
-//      return;
-//    }
+}
+
+// Helper method because activateView is protected in QextMdiMainFrm
+void CKDevelop::doActivateView(QextMdiChildView *pWnd)
+{
+  activateView(pWnd);
 }
 
 //void CKDevelop::switchToFile(QString filename, int lineNo){
@@ -906,7 +667,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
 
   if (enable && project){
 
-    if (m_docViewManager->currentDocType() == DocViewMan::Source){
+    if (m_docViewManager->curDocIsCppFile()){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
     enableCommand(ID_BUILD_RUN);
@@ -1209,7 +970,7 @@ bool CKDevelop::queryClose(){
 
     config->writeEntry("project_file","");
 
-    m_docViewManager->synchronizeDocAndInfo();
+    // m_docViewManager->synchronizeDocAndInfo();
 
     int save = m_docViewManager->noInfoModified();
 
@@ -1286,7 +1047,7 @@ void CKDevelop::saveProperties(KConfig* sess_config){
 }
 
 bool  CKDevelop::isFileInBuffer(QString abs_filename){
-  return (m_docViewManager->findInfo(abs_filename) != 0);
+  return (m_docViewManager->findKWriteDoc(abs_filename) != 0);
 }
 
 /** additionally adapt the position of MDI system buttons when in maximized mode */
@@ -1295,3 +1056,4 @@ void CKDevelop::resizeEvent( QResizeEvent *pRSE)
    QextMdiMainFrm::resizeEvent( pRSE);
    setSysButtonsAtMenuPosition();
 }
+
