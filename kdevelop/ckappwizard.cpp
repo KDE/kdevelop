@@ -1782,7 +1782,7 @@ void CKAppWizard::slotApplicationClicked() {
        m_finishButton->setEnabled(true);
     }
     apphelp->setText (i18n("Create a KDE 2 Control Center Module.\n"
-    									"This template enables you to write your own modules"
+    									"This template enables you to write your own modules "
     									"to add new system-wide configuration dialogs."));
   }
   else if (kthemeitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
