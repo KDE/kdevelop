@@ -1228,14 +1228,14 @@ void CKAppWizard::okPermited() {
   copydes += "/template.tar.gz";
 
   p.clearArguments();
-bool hasTemplate = true;
+	bool hasTemplate = true;
   if (kdeminiitem->isSelected()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
   }  
   else if (kdenormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
   } 
-  if (kde2miniitem->isSelected()) {
+  else if (kde2miniitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini2.tar.gz";
   }
   else if (kde2normalitem->isSelected()) {
