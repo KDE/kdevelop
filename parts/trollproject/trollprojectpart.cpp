@@ -267,6 +267,12 @@ void TrollProjectPart::slotExecute()
 {
     QString program = mainProgram();
 
+    if ( program.isEmpty() ) {
+        KMessageBox::sorry(m_widget, i18n("Please specify the executable name in the "
+            "project options dialog first."), i18n("No executable name given"));
+        return;
+    }
+
     QDomElement docEl = projectDom()->documentElement();
     QDomElement trollprojectEl = docEl.namedItem("kdevtrollproject").toElement();
     QDomElement envvarsEl = trollprojectEl.namedItem("envvars").toElement();
