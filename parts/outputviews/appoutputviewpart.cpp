@@ -55,17 +55,29 @@ AppOutputViewPart::~AppOutputViewPart()
 void AppOutputViewPart::startAppCommand(const QString &program, bool inTerminal)
 {
     QString cmd;
+    QString dir;
+    QString exe = program;
+    int pos = program.findRev('/');
+    if (pos != -1) {
+        dir = program.left(pos+1); // Directory here the executable is
+        exe = program.mid(pos+1);  // Executable name
+    }
+
     if (inTerminal) {
-        cmd = "konsole -e /bin/sh -c '";
-        cmd += program;
+        cmd = "konsole";
+        if ( !dir.isEmpty() )
+          cmd += " --workdir " + dir;
+        cmd += " -e /bin/sh -c '";
+        cmd += exe;
         cmd += "; echo \"";
         cmd += i18n("Press Enter to continue!");
         cmd += "\";read'";
     } else {
-        cmd = program;
+        cmd = exe;
     }
 
-    m_widget->startJob(QDir::homeDirPath(), cmd);
+//    m_widget->startJob(QDir::homeDirPath(), cmd);
+    m_widget->startJob(dir, cmd);
     mainWindow()->raiseView(m_widget);
 }
 
