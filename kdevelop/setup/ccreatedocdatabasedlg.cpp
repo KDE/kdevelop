@@ -47,7 +47,8 @@
 #include <config.h>
 #endif
 
-//#include <iostream.h>
+//#include <iostream>
+//using namespace std;
 
 CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,const QString& kdeDocDir, const QString& qtDocDir, bool foundGlimpse,bool foundHtDig, bool bShowIndexingButton) : QWidget(parent,name)
 	,start_button(0L)

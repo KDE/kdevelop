@@ -20,7 +20,6 @@
 
 #include "cgeneratenewfile.h"
 #include "cproject.h"
-#include <iostream.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -38,6 +37,8 @@
 #include <qbuttongroup.h>
 #include <qwhatsthis.h>
 
+#include <iostream>
+using namespace std;
 
 CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool modal,WFlags f)
   : QDialog(parent,name,modal,f){

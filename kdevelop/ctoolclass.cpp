@@ -17,13 +17,14 @@
  ***************************************************************************/
 
 #include "ctoolclass.h"
-#include <iostream.h>
 #include <qfile.h>
 #include <kmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <iostream>
+using namespace std;
 
 bool CToolClass::searchProgram(const QString& name, bool allowWarningMsg )
 {

@@ -101,6 +101,9 @@
 #include <config.h>
 #endif
 
+#include <iostream>
+using namespace std;
+
 ///////////////////////////////////////////////////////////////////////////////////////
 // FILE-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -213,8 +216,6 @@ void CKDevelop::slotFileSaveAs(){
     setMainCaption();
     slotStatusMsg(i18n("Ready."));
 }
-
-#include <iostream.h>
 
 void CKDevelop::slotFileSaveAll()
 {

@@ -1167,15 +1167,20 @@ void CProject::updateMakefileAm(const QString& makefile)
       }
 
       if(found == false)
-        stream << str +"\n";
+        stream << str << "\n";
 
       if(!customfile && str =="####### kdevelop will overwrite this part!!! (end)############")
       {
-        stream << str + "\n";
+        stream << str << "\n";
         found = false;
       }
     } // end for
   }// end writeonly
+  else
+  {
+    kdDebug() << "ERROR: Cannot write to " << abs_filename << endl;
+  }
+
   file.close();
 }
 
@@ -1347,8 +1352,9 @@ void CProject::setKDevelopWriteArea(const QString& makefile){
     }
   }
   file.close();
+
   for(str = list.first();str != 0;str = list.next()){
-    if (str.find(QRegExp("\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
+    if (str.find(QRegExp("^\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
       customfile=true;
     if (str == "####### kdevelop will overwrite this part!!! (begin)##########"){
       found = true;
@@ -1356,11 +1362,18 @@ void CProject::setKDevelopWriteArea(const QString& makefile){
   }
   if(!found && !customfile){
     // create the writeable area
-    file.open(IO_WriteOnly);
-    stream << "####### kdevelop will overwrite this part!!! (begin)##########\n";
-    stream << "####### kdevelop will overwrite this part!!! (end)############\n";
-    for(str = list.first();str != 0;str = list.next()){
-      stream << str + "\n";
+    if (file.open(IO_WriteOnly))
+    {
+      stream << "####### kdevelop will overwrite this part!!! (begin)##########\n";
+      stream << "####### kdevelop will overwrite this part!!! (end)############\n";
+      for(str = list.first();str != 0;str = list.next())
+      {
+        stream << str << "\n";
+      }
+    }
+    else
+    {
+      kdDebug() << "ERROR: Cannot write to " << abs_filename << endl;
     }
     file.close();
   }

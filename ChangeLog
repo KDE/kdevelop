@@ -1,19 +1,23 @@
+2002-03-02  Walter Tasin <tasin@kdevelop.org>
+    * bugfix: crash on KThemes (only on KDE 3)
+    * using consequently namespace std for iostream inclusion
+
 2002-03-02  Roberto Raggi <raggi@cli.di.unipi.it>
     * codecompletion: added cast support
     * bugfix: Argument info disappears, when I start to write the arguments.
-	
+
 2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
     * codecompletion: now code completions works inside functions
-	
+
 2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
     * codecompletion: added struct support
     * added menu entries for code completion
 
 2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
     * codecompletion: added subexpression support
-	
+
 2002-03-01  F@lk Brettschneider <falk@kdevelop.org>
-    * applied a patch of Jens Zurheide <jens.zurheide@gmx.de> fixing a crash 
+    * applied a patch of Jens Zurheide <jens.zurheide@gmx.de> fixing a crash
       when opening the config dialog for the documentation browser
 
 2002-02-28  Harald Fernengel <harry@kdevelop.org>
@@ -44,7 +48,7 @@
 2002-02-26  Walter Tasin <tasin@kdevelop.org>
     * bugfix: switching between source/header considers now other source
       extensions
-      
+
 2002-02-26  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: that crash on method removeWindowFromMdi(...), thanks to QGuardedPtr
 

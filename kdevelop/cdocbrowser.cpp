@@ -59,7 +59,8 @@
 #include <X11/Xlib.h>
 #undef Unsorted
 
-//#include <iostream.h>
+//#include <iostream>
+//using namespace std;
 
 int  CDocBrowser::fSize = 12;
 QFont CDocBrowser::standardFont;

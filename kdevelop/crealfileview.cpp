@@ -38,7 +38,8 @@
 #include <qheader.h>
 
 //#include <assert.h>
-//#include <iostream.h>
+//#include <iostream>
+//using namespace std;
 
 //#include <kapp.h>
 //#include <qwidget.h>

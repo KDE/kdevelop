@@ -72,8 +72,9 @@
 #include <config.h>
 #endif
 
-#include <iostream.h>
 #include <krun.h>
+#include <iostream>
+using namespace std;
 
 CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,bStartupIsPending(true)

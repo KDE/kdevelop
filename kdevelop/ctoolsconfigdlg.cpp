@@ -25,7 +25,6 @@
 #include "ctoolsconfigdlg.h"
 #include "ctoolclass.h"
 
-#include <iostream.h>
 #include <kstddirs.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -33,6 +32,8 @@
 #include <qlayout.h>
 
 #include <kdebug.h>
+#include <iostream>
+using namespace std;
 
 CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
 	setCaption(i18n("Tools-Menu Configuration"));

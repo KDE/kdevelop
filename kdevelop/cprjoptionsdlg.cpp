@@ -53,7 +53,8 @@
 #include <qspinbox.h>
 #include <qwhatsthis.h>
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 
 // OPTIONS DIALOG
 CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj,KDevSession* session,const QString& curr, QWidget *parent, const char *name)

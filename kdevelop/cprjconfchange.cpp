@@ -25,7 +25,6 @@
 
 #include <kdevregexp.h>
 #include <kdebug.h>
-#include <iostream.h>
 
 #define COMMENT				"^dnl[\\s]+"
 #define COMMENTKDEV		".*[\\s]+dnl[\\s]+__kdevelop"
@@ -34,6 +33,8 @@
 #define ENDSUFFIX	"__"
 #define COMMENTPREFIX	"dnl "
 
+#include <iostream>
+using namespace std;
 
 CPrjConfChange::CPrjConfChange(const QString &confDir) : bChanged(false)
 {

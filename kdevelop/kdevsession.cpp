@@ -14,7 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <iostream.h>
 
 #include <qmessagebox.h>
 #include <qdom.h>
@@ -29,6 +28,10 @@
 #include "cdocbrowser.h"
 #include "khtmlview.h"
 #include "qextmdimainfrm.h"
+
+#include <iostream.h>
+using namespace std;
+
 
 KDevSession::KDevSession(DocViewMan* pDocViewMan, const QString& /*fileName*/)
   : m_pDocViewMan(pDocViewMan)
