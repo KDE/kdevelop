@@ -567,7 +567,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
       return; // to avoid later crash
   }
 
-  TopLevel::getInstance()->embedPartView(widget, url.filename(), url.url());
+  TopLevel::getInstance()->embedPartView(widget, url.fileName(), url.url());
 
   addPart(part, activate);
   
