@@ -76,8 +76,8 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
   lang_list.clear();
   lang_list << "af" << "ar" << "bg" << "bo" << "br" << "bs" << "ca" << "cs" << "cy" << "da"
             << "de" << "el" << "en_GB"   << "eo" << "es" << "et" << "eu" << "fi" << "fr"
-            << "ga" << "gl" << "gu" << "he" << "hi" << "hu" << "id" << "is" << "it" << "ja"
-            << "km" << "ko" << "lt" << "lv" << "mi" << "mk" << "mr" << "nl" << "no" << "no_NY"
+            << "ga" << "gl" << "gu" << "he" << "hi" << "hu" << "id" << "is" << "it" << "ja";
+  lang_list << "km" << "ko" << "lt" << "lv" << "mi" << "mk" << "mr" << "nl" << "no" << "no_NY"
             << "oc" << "pl" << "pt" << "pt_BR" << "ro" << "ru" << "sk" << "sl" << "sr" << "sv"
             << "ta" << "th" << "tr" << "uk" << "wa" << "zh_CN.GB2312" << "zh_TW.Big5";
 
