@@ -164,6 +164,11 @@ signals:
   void loadedFile( const KURL & );
 
   /**
+   * Emitted when a document has been closed.
+   */
+  void closedFile( const KURL & );
+
+  /**
    * Emitted when a file has been modified outside of KDevelop
    */
   void fileDirty( const KURL & );
