@@ -152,6 +152,7 @@ public:
     QValueList<Problem> problems( const QString& fileName ) const;
 
     virtual void removeMacro( const QString& macroName );
+    virtual void removeAllMacrosInFile( const QString& fileName );
 
     virtual void addIncludePath( const QString &path );
 

@@ -46,6 +46,10 @@ void Driver::clear( const QString & fileName )
 {
     m_dependences.remove( fileName );
     m_problems.remove( fileName );
+}
+
+void Driver::removeAllMacrosInFile( const QString& fileName )
+{
     QMap<QString, Macro>::Iterator it = m_macros.begin();
     while( it != m_macros.end() ){
         Macro m = *it++;

@@ -92,6 +92,7 @@ void BackgroundParser::removeFile( const QString& fileName )
 
 Unit* BackgroundParser::parseFile( const QString& fileName, const QString& contents )
 {
+    m_driver.removeAllMacrosInFile( fileName );
     TranslationUnitAST::Node translationUnit = m_driver.parseFile( fileName, contents );
 
     Unit* unit = new Unit;
