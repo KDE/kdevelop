@@ -18,6 +18,7 @@ class FlagRadioButton;
 class FlagCheckBoxController;
 class FlagRadioButtonController;
 class FlagPathEditController;
+class FlagListEditController;
 
 class FeedbackTab : public QWidget
 {
@@ -110,6 +111,34 @@ private:
 private slots:
     void setReleaseOptions();
     void setDebugOptions();
+};
+
+class CodegenTab : public QWidget
+{
+public:
+    CodegenTab( QWidget *parent=0, const char *name=0 );
+    ~CodegenTab();
+
+    void readFlags(QStringList *str);
+    void writeFlags(QStringList *str);
+
+private:
+    FlagCheckBoxController *controller;
+    FlagListEditController *listController;
+};
+
+class LinkerTab : public QWidget
+{
+public:
+    LinkerTab( QWidget *parent=0, const char *name=0 );
+    ~LinkerTab();
+
+    void readFlags(QStringList *str);
+    void writeFlags(QStringList *str);
+
+private:
+    FlagCheckBoxController *controller;
+    FlagListEditController *listController;
 };
 
 #endif

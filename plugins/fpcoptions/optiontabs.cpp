@@ -71,6 +71,8 @@ FeedbackTab::FeedbackTab(QWidget *parent, const char *name)
                      "-vb", i18n("Show all procedure declarations if an overloaded function error occurs."));
 
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    layout->addStretch();
 }
 
 FeedbackTab::~FeedbackTab()
@@ -98,13 +100,13 @@ FilesAndDirectoriesTab::FilesAndDirectoriesTab( QWidget * parent, const char * n
     layout->setAutoAdd(true);
 
     new FlagPathEdit(this, ":", pathController,
-                     "-Fu", i18n("Unit search path:"));
+                     "-Fu", i18n("Unit search path (delimited by \":\"):"));
     new FlagPathEdit(this, ":", pathController,
-                     "-Fi", i18n("Include file search path:"));
+                     "-Fi", i18n("Include file search path (delimited by \":\"):"));
     new FlagPathEdit(this, ":", pathController,
-                     "-Fo", i18n("Object file search path:"));
+                     "-Fo", i18n("Object file search path (delimited by \":\"):"));
     new FlagPathEdit(this, ":", pathController,
-                     "-Fl", i18n("Library search path:"));
+                     "-Fl", i18n("Library search path (delimited by \":\"):"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addStretch();
 }
@@ -216,14 +218,9 @@ LanguageTab::LanguageTab( QWidget * parent, const char * name )
                      "-Ss", i18n("Require the name of constuctors to be init\n and the name of destructors to be done."));
     new FlagCheckBox(lang_group, controller,
                      "-St", i18n("Allow the static keyword in objects."));
-
-    QVButtonGroup *code_group = new QVButtonGroup(i18n("Code Generation"), this);
-    new FlagCheckBox(code_group, controller,
-                     "-Sa", i18n("Include assert statements in compiled code."));
-    new FlagCheckBox(code_group, controller,
-                     "-Un", i18n("Do not check the unit name for being the same as the file name."));
-
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    layout->addStretch();
 }
 
  LanguageTab::~ LanguageTab( )
@@ -352,6 +349,7 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
                      "-pg", i18n("Generate profiler code for gprof."), "-!pg");
     layout3->addWidget(profile_group);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout3->addSpacing(10);
 
     QBoxLayout *layout4 = new QVBoxLayout(layout2, KDialog::spacingHint());
 
@@ -364,6 +362,7 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
                         "-OG", i18n("Generate faster code"));
     layout4->addWidget(optim_group1);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout4->addSpacing(10);
 
     QVButtonGroup *optim_group2 = new QVButtonGroup(i18n("Optimization Levels"), this);
     m_default2 = new QRadioButton(i18n("Default"), optim_group2);
@@ -376,6 +375,7 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
                         "-O3", i18n("Level 3"));
     layout4->addWidget(optim_group2);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout4->addSpacing(10);
 
     QHBoxLayout *layout5 = new QHBoxLayout(layout, KDialog::spacingHint());
 
@@ -383,11 +383,11 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
     m_default3 = new QRadioButton(i18n("Default"), optim_group3);
     m_default3->setChecked(true);
     new FlagRadioButton(optim_group3, optimController,
-                     "-Op1", i18n("386/486."));
+                     "-Op1", i18n("386/486"));
     new FlagRadioButton(optim_group3, optimController,
-                     "-Op2", i18n("Pentium/PentiumMMX."));
+                     "-Op2", i18n("Pentium/PentiumMMX"));
     new FlagRadioButton(optim_group3, optimController,
-                     "-Op2", i18n("PentiumPro/PII/Cyrix 6x86/K6."));
+                     "-Op2", i18n("PentiumPro/PII/Cyrix 6x86/K6"));
     layout5->addWidget(optim_group3);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
@@ -440,9 +440,125 @@ void DebugOptimTab::setReleaseOptions()
 
 void DebugOptimTab::setDebugOptions()
 {
-    QStringList sl = QStringList::split(",", "-g,-!gd,-gh,-!gc,-!pg,-!Ou,-!Or");
+    QStringList sl = QStringList::split(",", "-g,-!gd,-gh,-gc,-!pg,-!Ou,-!Or");
     readFlags(&sl);
     m_default->setChecked(true);
     m_default2->setChecked(true);
 //    m_default3->setChecked(true);
+}
+
+CodegenTab::CodegenTab( QWidget * parent, const char * name )
+    : QWidget(parent, name), controller(new FlagCheckBoxController()),
+    listController(new FlagListEditController())
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+    layout->setAutoAdd(true);
+
+    QVButtonGroup *compile_group = new QVButtonGroup(i18n("Compile Time Checks"), this);
+    new FlagCheckBox(compile_group, controller,
+                     "-Sa", i18n("Include assert statements in compiled code."));
+    new FlagCheckBox(compile_group, controller,
+                     "-Un", i18n("Do not check the unit name for being the same as the file name."));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    QVButtonGroup *run_group = new QVButtonGroup(i18n("Run Time Checks"), this);
+    new FlagCheckBox(run_group, controller,
+                     "-Cr", i18n("Range checking."));
+    new FlagCheckBox(run_group, controller,
+                     "-Ct", i18n("Stack checking."));
+    new FlagCheckBox(run_group, controller,
+                     "-Ci", i18n("Input/Output checking."));
+    new FlagCheckBox(run_group, controller,
+                     "-Co", i18n("Integer overflow checking."));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    new FlagListEdit(this, ":", listController, "-d", i18n("Conditional defines (delimited by \":\"):"));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    new FlagListEdit(this, ":", listController, "-u", i18n("Undefine conditional defines (delimited by \":\"):"));
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    layout->addStretch();
+}
+
+CodegenTab::~ CodegenTab( )
+{
+    delete controller;
+    delete listController;
+}
+
+void CodegenTab::readFlags( QStringList * str )
+{
+    controller->readFlags(str);
+    listController->readFlags(str);
+}
+
+void CodegenTab::writeFlags( QStringList * str )
+{
+    controller->writeFlags(str);
+    listController->writeFlags(str);
+}
+
+LinkerTab::LinkerTab( QWidget * parent, const char * name )
+    : QWidget(parent, name), controller(new FlagCheckBoxController()),
+    listController(new FlagListEditController())
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+
+    QBoxLayout *layout2 = new QHBoxLayout(layout, KDialog::spacingHint());
+
+    QVButtonGroup *link_group = new QVButtonGroup(i18n("Linking stage"), this);
+    new FlagCheckBox(link_group, controller,
+                     "-CD", i18n("Create dynamic library."));
+    new FlagCheckBox(link_group, controller,
+                     "-CX", i18n("Create smartlinked units."));
+    new FlagCheckBox(link_group, controller,
+                     "-Ur", i18n("Generate release units."));
+    new FlagCheckBox(link_group, controller,
+                     "-Cn", i18n("Omit the linking stage."));
+    new FlagCheckBox(link_group, controller,
+                     "-s",  i18n("Create assembling and linking script."));
+    layout2->addWidget(link_group);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    QVButtonGroup *exec_group = new QVButtonGroup(i18n("Executable generation"), this);
+    new FlagCheckBox(exec_group, controller,
+                     "-Xs",  i18n("Strip the symbols from the executable."));
+    new FlagCheckBox(exec_group, controller,
+                     "-XS",  i18n("Link with static units."));
+    new FlagCheckBox(exec_group, controller,
+                     "-XX",  i18n("Link with smartlinked units."));
+    new FlagCheckBox(exec_group, controller,
+                     "-XD",  i18n("Link with dynamic libraries."));
+    new FlagCheckBox(exec_group, controller,
+                     "-Xc",  i18n("Link with the C library."));
+    layout2->addWidget(exec_group);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    FlagListEdit *led = new FlagListEdit(this, ":", listController, "-k", i18n("Options passed to the linker (delimited by \":\"):"));
+    layout->addWidget(led);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    layout->addStretch();
+}
+
+LinkerTab::~LinkerTab( )
+{
+    delete controller;
+    delete listController;
+}
+
+void LinkerTab::readFlags( QStringList * str )
+{
+    controller->readFlags(str);
+    listController->readFlags(str);
+}
+
+void LinkerTab::writeFlags( QStringList * str )
+{
+    controller->writeFlags(str);
+    listController->writeFlags(str);
 }

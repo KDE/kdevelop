@@ -30,6 +30,7 @@ public:
 class FeedbackTab;
 class FilesAndDirectoriesTab;
 class LanguageTab;
+class CodegenTab;
 
 class FpcOptionsDialog : public KDialogBase
 {
@@ -52,7 +53,9 @@ private:
     FilesAndDirectoriesTab2 *directories2;
     DebugOptimTab *debug_optim;
     LanguageTab *language;
+    CodegenTab *codegen;
     AssemblerTab *assembler;
+    LinkerTab *linker;
     QStringList unrecognizedFlags;
 };
 

@@ -56,8 +56,14 @@ FpcOptionsDialog::FpcOptionsDialog( QWidget *parent, const char *name )
     vbox = addVBoxPage(i18n("Debug and Optimization"));
     debug_optim = new DebugOptimTab(vbox, "debug_optim tab");
 
+    vbox = addVBoxPage(i18n("Code Generation"));
+    codegen = new CodegenTab(vbox, "codegen tab");
+
     vbox = addVBoxPage(i18n("Assembler"));
     assembler = new AssemblerTab(vbox, "assembler tab");
+
+    vbox = addVBoxPage(i18n("Linker"));
+    linker = new LinkerTab(vbox, "linker tab");
 
     vbox = addVBoxPage(i18n("Feedback"));
     feedback = new FeedbackTab(vbox, "feedback tab");
@@ -74,6 +80,8 @@ void FpcOptionsDialog::setFlags(const QString &flags)
     feedback->readFlags(&flaglist);
     language->readFlags(&flaglist);
     assembler->readFlags(&flaglist);
+    linker->readFlags(&flaglist);
+    codegen->readFlags(&flaglist);
     debug_optim->readFlags(&flaglist);
     directories->readFlags(&flaglist);
     directories2->readFlags(&flaglist);
@@ -85,10 +93,12 @@ QString FpcOptionsDialog::flags() const
     QStringList flaglist;
 
     language->writeFlags(&flaglist);
-    directories2->writeFlags(&flaglist);
     directories->writeFlags(&flaglist);
+    directories2->writeFlags(&flaglist);
     debug_optim->writeFlags(&flaglist);
+    codegen->writeFlags(&flaglist);
     assembler->writeFlags(&flaglist);
+    linker->writeFlags(&flaglist);
     feedback->writeFlags(&flaglist);
 
     QString flags;
