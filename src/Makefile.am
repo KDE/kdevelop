@@ -26,6 +26,6 @@ rcdir = $(kde_datadir)/gideon
 rc_DATA = gideonui.rc
 
 # default KDevelop	 configuration
-#datadir =$(kde_confdir)
-#data_DATA =gideonrc
+datadir =$(kde_confdir)
+data_DATA =gideonrc
 

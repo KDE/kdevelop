@@ -5,6 +5,7 @@
 #include <kdebug.h>
 #include <kstatusbar.h>
 #include <kmainwindow.h>
+#include <kconfig.h>
 
 
 #include "toplevel.h"
@@ -46,6 +47,11 @@ void Core::wantsToQuit()
 
 void Core::slotQuit()
 {
+  // save the the project to open it automaticly on startup if needed
+  KConfig* config = kapp->config();
+  config->setGroup("General Options");
+  config->writeEntry("Last Project",ProjectManager::getInstance()->projectFile());
+
   ProjectManager::getInstance()->closeProject();
   if (PartController::getInstance()->readyToClose())
     TopLevel::getInstance()->realClose();
