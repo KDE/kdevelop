@@ -1,4 +1,8 @@
 2002-01-10  F@lk Brettschneider <falk@kdevelop.org>
+    * for the keyboard freaks -> better switching around tool and editor views.
+      (some tool-views need to get focus, some not. Reviewed)
+
+2002-01-10  F@lk Brettschneider <falk@kdevelop.org>
     * again synchronized with original QextMDI.
       - Should solve all focus problems, inclusively the 'disappearing editor-cursor bug'
         (now it keeps setFocus()-calls away from MDI-view activations in many cases)
