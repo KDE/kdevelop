@@ -163,7 +163,9 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
     return;
     // todo - ask for forced kill
   }
-  
+ 
+  clear();
+ 
   getActiveFiles();
   
   proc->clearArguments();  
