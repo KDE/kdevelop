@@ -461,7 +461,7 @@ void AutoProjectPart::slotBuildActiveTarget()
   else if ( titem->primary == "KDEDOCS" )
     name = "index.cache.bz2";
 
-  QString relpath = m_widget->selectedSubproject()->path.mid( projectDirectory().length() );
+  QString relpath = m_widget->activeSubproject()->path.mid( projectDirectory().length() );
   startMakeCommand( buildDirectory() + relpath, titem->name );
 }
 
