@@ -41,14 +41,14 @@ public:
     {
         hideOrShow();
     }
-    
+
     virtual void paintCell(QPainter *p, const QColorGroup &cg,
                            int column, int width, int alignment);
     void hideOrShow();
 
 protected:
-    virtual void enforceSortOrder() const;
-    
+    virtual int compare( QListViewItem *i, int col, bool ascending ) const;
+
 private:
     FileTreeWidget* listView()
     { return static_cast<FileTreeWidget*>(QListViewItem::listView()); }
@@ -57,7 +57,7 @@ private:
 void MyFileTreeViewItem::hideOrShow()
 {
     setVisible( listView()->shouldBeShown( this ) );
-    
+
     MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
     while( item ) {
         item->hideOrShow();
@@ -77,56 +77,22 @@ void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
     QListViewItem::paintCell(p, cg, column, width, alignment);
 }
 
-void MyFileTreeViewItem::enforceSortOrder() const
+
+int MyFileTreeViewItem::compare( QListViewItem *i, int col, bool ascending ) const
 {
-    // the pending flag is to avoid infinite looping
-    // (can happen when methods used in this indirectly call this again (like firstChild()))
-    static bool pending = false;
-    if (pending) return;
-    pending = true;
-
-    // call the base class stuff,
-    // unfortunately it doesn't divide the "folder" and "file" entries. The code below this will do that.
-    KFileTreeViewItem::enforceSortOrder();
-
-    // nobody's here, there's nothing to do
-    if (!firstChild()) { pending = false; return; }
-    
-    // iterate to the first item that is a file, store the last "folder" entry in lastDir
-    KFileTreeViewItem* current = dynamic_cast<KFileTreeViewItem*>(firstChild());
-    KFileTreeViewItem* lastDir = 0L;
-    while (current && current->isDir()) {
-        lastDir = current;
-        QListViewItem* lvi = current->nextSibling();
-        if (lvi) {
-            current = dynamic_cast<KFileTreeViewItem*>(lvi);
-        }
-        else { current = 0L; }
+    KFileTreeViewItem* rhs = dynamic_cast<KFileTreeViewItem*> (i);
+    if (rhs)
+    {
+        if (rhs->isDir() && !isDir())
+            return 1;
+        else
+            if (!rhs->isDir() && isDir())
+                return -1;
     }
 
-    // go on iterating, now move all next "folder" entries above the files
-    while (current) {
-        QListViewItem* lvi = current->nextSibling();
-        KFileTreeViewItem* nextCandidate = 0L;
-        if (lvi) {
-            nextCandidate = dynamic_cast<KFileTreeViewItem*>(lvi);
-        }
-        if (current->isDir()) {
-            if (lastDir) {
-                current->moveItem(lastDir);
-            }
-            else { // a trick in case the first original entry is a file 'cause there aint no moveBefore()
-                QListViewItem* f = firstChild();
-                current->moveItem(f);
-                f->moveItem(current);
-            }
-            lastDir = current;
-        }
-        current = nextCandidate;
-    }
-
-    pending = false;
+    return QListViewItem::compare( i, col, ascending );
 }
+
 
 class MyFileTreeBranch : public KFileTreeBranch
 {
@@ -137,7 +103,7 @@ public:
                view, new KFileItem( url, "inode/directory", S_IFDIR  ), this ) )
    {
    }
-   
+
    ~MyFileTreeBranch()
    {
        if( root() )
@@ -159,11 +125,11 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     setSorting(0);
     header()->hide();
     addColumn(QString::null);
-    
+
     setDragEnabled( true );
-    
+
     m_part = part;
-    
+
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(returnPressed(QListViewItem*)),
@@ -173,7 +139,7 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
 
     QDomDocument &dom = *m_part->projectDom();
     m_showNonProjectFiles = !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles");
-    
+
  // Comment out until config UI is implemented
     QString patterns; // = DomUtil::readEntry(dom, "/kdevfileview/tree/hidepatterns");
 //    if (patterns.isEmpty())
@@ -193,12 +159,12 @@ void FileTreeWidget::openDirectory( const QString& dirName )
 	QStringList::iterator it;
 
 	QStringList fileList = m_part->project()->allFiles();
-		
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
     	m_projectFiles.append ( m_part->project()->projectDirectory() + "/" + ( *it ) );
 	}
-    
+
     KURL url;
     url.setPath( dirName );
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
@@ -228,7 +194,7 @@ void FileTreeWidget::hideOrShow()
     MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
     if( !item )
       return;
-    
+
     // Need to skip the root item.
     item = static_cast<MyFileTreeViewItem*>(item->firstChild());
     while( item ) {
@@ -241,7 +207,7 @@ void FileTreeWidget::slotItemExecuted( QListViewItem* item )
 {
     if (!item)
         return;
-    
+
     KFileTreeViewItem* ftitem = static_cast<KFileTreeViewItem*>(item);
 
     if( ftitem->isDir() )
@@ -254,17 +220,17 @@ void FileTreeWidget::slotItemExecuted( QListViewItem* item )
 void FileTreeWidget::slotContextMenu( KListView*, QListViewItem* item, const QPoint &p )
 {
     KPopupMenu popup(i18n("File Tree"), this);
-    
+
     int id = popup.insertItem( i18n("Show Non-Project Files"),
                                this, SLOT(slotToggleShowNonProjectFiles()) );
     popup.setItemChecked(id, m_showNonProjectFiles);
-    
+
     if( item != 0 ) {
       KFileTreeViewItem* ftitem = static_cast<KFileTreeViewItem*>(item);
       FileContext context( ftitem->path(), ftitem->isDir() );
       m_part->core()->fillContextMenu(&popup, &context);
     }
-    
+
     popup.exec(p);
 }
 
