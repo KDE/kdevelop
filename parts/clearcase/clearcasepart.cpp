@@ -263,7 +263,7 @@ void ClearcasePart::slotDiff()
 void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err )
 {
     if ( diff.isNull() && err.isNull() ) {
-        kdDebug(9000) << i18n("clearcase diff cancelled") << endl;
+        kdDebug(9000) << "clearcase diff canceled" << endl;
         return; // user pressed cancel or an error occured
     }
 
