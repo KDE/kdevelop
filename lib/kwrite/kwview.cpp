@@ -1557,7 +1557,8 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char * name, bool HandleOw
 
   setFocusProxy( kWriteView );
   kWriteView->setFocus();
-  resize(parent->width() -4, parent->height() -4);
+  if (parent)
+    resize(parent->width() -4, parent->height() -4);
 
   m_tempSaveFile = 0;
 
