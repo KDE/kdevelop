@@ -208,11 +208,11 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<KMdiChildView> *pViews):
     QObject *pParent=it.current()->parent();
     if (!pParent) continue;
     KDockWidget * pDockWidget = 0;
-    if (pParent->inherits("KDockWidget")) pDockWidget = (KDockWidget*)pParent;
+    if (pParent->inherits("KDockWidget") || pParent->inherits("KDockWidget_Compat::KDockWidget")) pDockWidget = (KDockWidget*)pParent;
     if (!pDockWidget) continue;
     const  ToolWindowState winState(pDockWidget);
     if (!pFirstToolWindow && winState.viewMenuChecked) pFirstToolWindow = it.current();
-    if (winState.hasDockBaseWindow && !hasDockBaseWindow)   // Just take the firt dock base window
+    if (winState.hasDockBaseWindow && !hasDockBaseWindow)   // Just take the first dock base window
     {
       hasDockBaseWindow  = true;
       pDockBaseWindow    = winState.pDockBaseWindow;
@@ -234,6 +234,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_pShowOutputViews(0L)
   ,m_pShowTreeViews(0L)
   ,m_toggleViewbar(0L)
+  ,m_bUiModeSwitchPending(false)
 {
    setManagedDockPositionModeEnabled(true);
 
@@ -937,12 +938,13 @@ void MainWindow::fillToolViewsMenu(
 /** Updates the toggle state of the actions to show or hide the tool windows */
 void MainWindow::updateActionState()
 {
-    ToolDockBaseState outputToolState(&m_outputViews);
-    ToolDockBaseState treeToolState (&m_selectViews);
+    if (!m_bUiModeSwitchPending) {
+        ToolDockBaseState outputToolState(&m_outputViews);
+        ToolDockBaseState treeToolState (&m_selectViews);
 
-    m_pShowOutputViews->setChecked(outputToolState.dockBaseIsVisible);
-    m_pShowTreeViews  ->setChecked(treeToolState.dockBaseIsVisible);
-
+        m_pShowOutputViews->setChecked(outputToolState.dockBaseIsVisible);
+        m_pShowTreeViews  ->setChecked(treeToolState.dockBaseIsVisible);
+    }
 }
 
 /** Changes the show-hide state of a tool dock base (either output or tree tool view)*/
@@ -1019,7 +1021,6 @@ void MainWindow::showAllToolWin(EView eView, bool show )
 /** Changes the show-hide state of a single tree or output tool window */
 void MainWindow::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData)
 {
-#if 0
   // Determine the state of the windows inwolved
   const  ToolWindowState winState(ActionData.pDockWidget);
   QPtrList<KMdiChildView> *pViews        = 0L;             // The views to make a menu from
@@ -1087,10 +1088,12 @@ void MainWindow::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData
     }
     else // It does not have a DockWidget
     {
+      Q_ASSERT(0);
+#if 0      
          addToolViewWindow(ActionData.eView, ActionData.pChildView, ActionData.pChildView->name(), ActionData.pChildView->name());
+#endif	 
     }
   }
-#endif
 }
 
 
@@ -1109,42 +1112,62 @@ KParts::ReadOnlyPart * MainWindow::getPartFromWidget(const QWidget * pWidget) co
 
 void MainWindow::switchToToplevelMode()
 {
+  m_bUiModeSwitchPending = true;
+  
   saveMDISettings();
   m_toggleViewbar->setEnabled(true);
   if (mdiMode() == KMdi::TabPageMode || mdiMode() == KMdi::IDEAlMode) {
       slotToggleViewbar();
   }
   KMdiMainFrm::switchToToplevelMode();
+  
+  m_bUiModeSwitchPending = false;
+  updateActionState();
 }
 
 void MainWindow::switchToChildframeMode()
 {
+  m_bUiModeSwitchPending = true;
+  
   saveMDISettings();
   m_toggleViewbar->setEnabled(true);
   if (mdiMode() == KMdi::TabPageMode || mdiMode() == KMdi::IDEAlMode) {
       slotToggleViewbar();
   }
   KMdiMainFrm::switchToChildframeMode();
+  
+  m_bUiModeSwitchPending = false;
+  updateActionState();
 }
 
 void MainWindow::switchToTabPageMode()
 {
+  m_bUiModeSwitchPending = true;
+  
   saveMDISettings();
   if (isViewTaskBarOn()) {
       slotToggleViewbar();
   }
   m_toggleViewbar->setEnabled(false);
   KMdiMainFrm::switchToTabPageMode();
+  
+  m_bUiModeSwitchPending = false;
+  updateActionState();
 }
 
 void MainWindow::switchToIDEAlMode()
 {
+  m_bUiModeSwitchPending = true;
+  
   saveMDISettings();
   if (isViewTaskBarOn()) {
       slotToggleViewbar();
   }
   m_toggleViewbar->setEnabled(false);
   KMdiMainFrm::switchToIDEAlMode();
+  
+  m_bUiModeSwitchPending = false;
+  updateActionState();
 }
 
 void MainWindow::slotReactToProjectOpened()

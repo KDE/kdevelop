@@ -198,7 +198,9 @@ The newly created KMdiChildView is not yet connected to any other widget of KDev
 
   MainWindowShare*   m_pMainWindowShare;
 
-  QValueList<int> m_windowMenus;
+  QValueList<int>  m_windowMenus;
+  
+  bool             m_bUiModeSwitchPending;
 };
 
 //=========================
