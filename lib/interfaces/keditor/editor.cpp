@@ -13,6 +13,7 @@
 
 
 #include "editor.h"
+#include "KEditorIface.h"
 
 
 using namespace KEditor;
@@ -24,6 +25,14 @@ Document::Document(Editor *parent)
   KStdAction::saveAs(this, SLOT(slotSaveAs()), actionCollection(), "file_save_as");
   KStdAction::save(this, SLOT(slotSave()), actionCollection(), "file_save");
   KStdAction::revert(this, SLOT(slotRevert()), actionCollection(), "file_revert");
+
+  m_dcopIface = new KEditor::DocumentDCOPIface(this);
+}
+
+
+DCOPRef Document::dcopInterface() const
+{
+  return DCOPRef(m_dcopIface);
 }
 
 
@@ -113,6 +122,8 @@ bool Document::shouldBeSaved()
 Editor::Editor(QObject *parent, const char *name)
   : QObject(parent, name), KXMLGUIClient((KXMLGUIClient*)parent), _currentDocument(0)
 {
+  // create a DCOP interface to access the editor
+  (void) new KEditor::EditorDCOPIface(this);
 }
 
 

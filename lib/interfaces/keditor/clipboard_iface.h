@@ -11,6 +11,9 @@
 namespace KEditor {
 
 
+class ClipboardDocumentDCOPIface;
+
+
 class ClipboardDocumentIface : public KEditor::DocumentInterface
 {
   Q_OBJECT
@@ -25,6 +28,8 @@ public:
 
   virtual bool copyAvailable() = 0;
 
+  virtual DCOPRef dcopInterface() const;
+  
   static ClipboardDocumentIface *interface(KEditor::Document *doc);
 
 
@@ -50,6 +55,8 @@ private:
   KAction *_cutAction, *_copyAction, *_pasteAction;
    
   bool hasClipboard();
+
+  ClipboardDocumentDCOPIface *m_iface;
 
 };
 

@@ -7,6 +7,7 @@
 
 
 #include "undo_iface.h"
+#include "KEditorUndoIface.h"
 
 
 KEditor::UndoDocumentIface::UndoDocumentIface(Document *parent, Editor *editor)
@@ -20,6 +21,14 @@ KEditor::UndoDocumentIface::UndoDocumentIface(Document *parent, Editor *editor)
 
   _undoAction->setEnabled(false);
   _redoAction->setEnabled(false);
+
+  m_dcopIface = new KEditor::UndoDocumentDCOPIface(this);
+}
+
+
+DCOPRef KEditor::UndoDocumentIface::dcopInterface() const
+{
+  return DCOPRef(m_dcopIface);
 }
 
 

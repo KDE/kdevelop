@@ -2,11 +2,19 @@
 
 
 #include "status_iface.h"
+#include "KEditorStatusIface.h"
 
 
 KEditor::StatusDocumentIface::StatusDocumentIface(KEditor::Document *parent, KEditor::Editor *editor)
   : KEditor::DocumentInterface(parent, editor)
 {
+  m_dcopIface = new KEditor::StatusDocumentDCOPIface(this);
+}
+
+
+DCOPRef KEditor::StatusDocumentIface::dcopInterface() const
+{
+  return DCOPRef(m_dcopIface);
 }
 
 

@@ -2,11 +2,19 @@
 
 
 #include "debug_iface.h"
+#include "KEditorDebugIface.h"
 
 
 KEditor::DebugDocumentIface::DebugDocumentIface(KEditor::Document *parent, KEditor::Editor *editor)
   : KEditor::DocumentInterface(parent, editor)
 {
+  m_dcopIface = new DebugDocumentDCOPIface(this);
+}
+
+
+DCOPRef KEditor::DebugDocumentIface::dcopInterface() const
+{
+  return DCOPRef(m_dcopIface);
 }
 
 

@@ -3,6 +3,7 @@
 
 
 #include <qobject.h>
+#include <dcopref.h>
 
 
 class KActionCollection;
@@ -27,6 +28,8 @@ public:
 
   Editor *editor() const;
   
+  virtual DCOPRef dcopInterface() const = 0;
+
 
 private:
 
@@ -45,7 +48,9 @@ public:
 
   Document *document() const { return _document; };
 
+  virtual DCOPRef dcopInterface() const { return DCOPRef(); }; // TODO: make abstract!
 
+  
 private:
 
   Editor *_editor;

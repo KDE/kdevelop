@@ -8,6 +8,7 @@
 #include <qstring.h>
 
 
+#include <dcopref.h>
 #include <kxmlguiclient.h>
 #include <kparts/part.h>
 #include <kurl.h>
@@ -21,6 +22,8 @@ namespace KEditor {
         
 
 class Editor;
+class DocumentDCOPIface;
+
 
 /**
  * \brief The basic interface for a document
@@ -36,7 +39,7 @@ class Editor;
 class Document : public KParts::ReadWritePart
 {
   Q_OBJECT
-          
+
 public:
  
   /**
@@ -64,7 +67,11 @@ public:
    */
   bool modifiedOnDisc();
   
-  
+
+  /// return a reference to the DCOP interface
+  DCOPRef dcopInterface() const;
+
+
 protected:  
   
   Document(Editor *parent);
@@ -77,7 +84,7 @@ protected:
 
   /// Should the file be saved?
   bool shouldBeSaved();
-  
+ 
   
 protected slots:
 
@@ -91,7 +98,9 @@ private:
   Editor *_parent;
 
   time_t _mtime;
-  
+ 
+  DocumentDCOPIface *m_dcopIface;
+
 };
 
 

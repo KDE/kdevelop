@@ -6,7 +6,10 @@
 
 
 namespace KEditor {
-        
+
+
+class StatusDocumentDCOPIface;
+
 
 class StatusDocumentIface : public KEditor::DocumentInterface
 {
@@ -19,6 +22,9 @@ public:
   virtual bool modified() = 0;
   virtual QString status() = 0;
 
+  DCOPRef dcopInterface() const;
+
+  
   static StatusDocumentIface *interface(Document *doc);
 
 
@@ -26,6 +32,11 @@ signals:
 
   void statusChanged(KEditor::Document *doc);
   void message(KEditor::Document *doc, const QString &text);
+
+
+private:
+
+  StatusDocumentDCOPIface *m_dcopIface;
 
 };
 

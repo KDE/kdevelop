@@ -8,12 +8,21 @@
 #include "editor.h"
 #include "cursor_iface.h"
 #include "gotoline.h"
+#include "KEditorCursorIface.h"
 
 
 KEditor::CursorDocumentIface::CursorDocumentIface(Document *parent, Editor *editor)
   : KEditor::DocumentInterface(parent, editor)
 {
   KStdAction::gotoLine(this, SLOT(slotGotoLine()), parent->actionCollection(), "go_goto_line");
+
+  m_dcopIface = new CursorDocumentDCOPIface(this);
+}
+
+
+DCOPRef  KEditor::CursorDocumentIface::dcopInterface() const
+{
+  return DCOPRef(m_dcopIface);
 }
 
 

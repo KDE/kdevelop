@@ -11,6 +11,7 @@
 
 
 #include "clipboard_iface.h"
+#include "KEditorClipboardIface.h"
 
 
 KEditor::ClipboardDocumentIface::ClipboardDocumentIface(Document *parent, Editor *editor)  : KEditor::DocumentInterface(parent, editor)
@@ -32,6 +33,14 @@ KEditor::ClipboardDocumentIface::ClipboardDocumentIface(Document *parent, Editor
   // calls abstract functions, this would fail.
   QString text = QApplication::clipboard()->text();
   _pasteAction->setEnabled(!text.isEmpty());
+
+  m_iface = new KEditor::ClipboardDocumentDCOPIface(this);
+}
+
+
+DCOPRef KEditor::ClipboardDocumentIface::dcopInterface() const
+{
+  return DCOPRef(m_iface);
 }
 
 

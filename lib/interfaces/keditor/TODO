@@ -4,4 +4,3 @@ as the old one:
 o Implement a generic interface for RMB menus
 o Implement an additional multiple-view interface
 o Finish the edit_iface
-o Implement the modified-on-disk checking

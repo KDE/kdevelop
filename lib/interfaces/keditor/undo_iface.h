@@ -11,6 +11,9 @@
 namespace KEditor {
 
 
+class UndoDocumentDCOPIface;
+
+
 class UndoDocumentIface : public KEditor::DocumentInterface
 {
   Q_OBJECT
@@ -25,6 +28,9 @@ public:
   virtual bool undoAvailable() = 0;
   virtual bool redoAvailable() = 0;
 
+  virtual DCOPRef dcopInterface() const;
+
+  
   static UndoDocumentIface *interface(Document *doc);
 
 
@@ -45,6 +51,8 @@ private slots:
 private:
 
   KAction *_undoAction, *_redoAction;
+
+  UndoDocumentDCOPIface *m_dcopIface;
 
 };
 

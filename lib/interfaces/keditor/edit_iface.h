@@ -12,6 +12,9 @@
 namespace KEditor {
 
 
+class EditDocumentDCOPIface;
+
+
 class EditDocumentIface : public KEditor::DocumentInterface
 {
   Q_OBJECT
@@ -34,7 +37,14 @@ public:
   virtual bool setLine(const QString &text, uint line) = 0;
   */
 
+  virtual DCOPRef dcopInterface() const;
+
   static EditDocumentIface *interface(Document *doc);
+
+
+private:
+
+  EditDocumentDCOPIface *m_dcopIface;
 
 };
 
