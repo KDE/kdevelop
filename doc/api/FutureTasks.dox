@@ -1,0 +1,34 @@
+/** \file FutureTasks.dox
+  * \brief Future tasks and ideas for the next release of KDevelop
+  */
+/** \page FutureTasks Future tasks!
+
+adymo: ideas for KDevelop > 3.0:
+Create base classes for language support parts:
+    AntlrLanguageSupport
+    AntlrBackgroundParser
+    AntlrProblemReporter
+
+Same for
+    YaccLanguageSupport
+    YaccBackgroundParser
+    YaccProblemReporter
+
+There is a possibility to create even something like
+    LanguageSupportBase
+
+Look to java, pascal and ada support parts to get more inspiration;)
+There should be base classes for ada, java and pascal language supports - too many code duplication.
+
+Another tasks:
+Implement plugin system for doctreeview
+
+Implement language-dependant plugin system for classview:
+namespaces/classes/functions are not always applicable to a language, we need a way to correctly
+fill a class view and combo boxes - only a language support can do that properly.
+
+Custom actions for groups, targets and files for project managers:
+any menu item should be a KAction plugged into KPopupMenu, also we need to define shortcuts for any such action,
+also we should make sure those actions are properly executed from a shortcut.
+
+*/
