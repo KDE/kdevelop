@@ -37,6 +37,8 @@ apidox-am-yes:
 	## configuration options related to warning and progress messages             \
 	##--------------------------------------------------------------------------- \
 ## coolo: The following line is not working \
+## it's coorect output should be: WARN_FORMAT            = "$file:$line: $text"
+## hown can I escape a $ sign ?
 ##	echo "WARN_FORMAT            = \"$$ file:$$ line: $$ text\"" >> Doxyfile ;\
 	##--------------------------------------------------------------------------- \
 	## configuration options related to the input files                           \
@@ -73,9 +75,9 @@ apidox-am-yes:
 	##--------------------------------------------------------------------------- \
 	echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
 	echo "HTML_OUTPUT            = html" >> Doxyfile; \
-#	echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
-#	echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
-#	echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
+##	echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
+##	echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
+##	echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
 	echo "HTML_HEADER            = " >> Doxyfile ;\
 	echo "HTML_FOOTER            = " >> Doxyfile ;\
 	echo "HTML_STYLESHEET        = " >> Doxyfile ;\
