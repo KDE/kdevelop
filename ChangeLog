@@ -1,3 +1,12 @@
+2000-04-04 Walter Tasin  <tasin@kdevelop.de>
+	* adding all extensions (*.hh, *.cxx, etc.) to
+	  the messages-rule of skel/Makefile.am
+	  in all KDE application templates
+	* making NormalOGL template working and more platform independent
+	  (thx to A. Schlapbach <schlpbch@bluewin.ch> for the hint)
+	* adding GNU file NEWS to project
+	* adding README.* also to project, if present
+
 2000-04-04  Ralf Funken <rfunken@kdevelop.de>
 	* Updated de.po due to new console debugging features
 	* Updated kdevelop.pot
