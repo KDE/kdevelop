@@ -14,7 +14,7 @@
 *                                                                   *
 * ------------------------------------------------------------------*
 *********************************************************************/
-%Start COMMENT PREPARSER
+%Start COMMENT PREPARSER PPCOMMENT
 
 %{
   #include <stdlib.h>
@@ -148,6 +148,10 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"#"[acdeimpsuw ]	{BEGIN (PREPARSER);}
 <PREPARSER>"\\\n"      {line_num++;}
 <PREPARSER>"\n"	       {line_num++; BEGIN (0);}
+<PREPARSER>"/*"        {beginComment((MyLexer *) this);
+                                  BEGIN (PPCOMMENT);}
+<PPCOMMENT>"*/"        { endComment((MyLexer *) this);
+                       BEGIN (PREPARSER); }
 
     /*==============> Strip // comments <==============*/
 <INITIAL,COMMENT>"//"(.)*[\n<<EOF>>] {line_num++;}
