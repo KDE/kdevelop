@@ -580,7 +580,8 @@ void MainWindow::removeView(QWidget *view)
     }
 
     // QextMDI removes and deletes the wrapper widget
-    closeWindow(wrapper);
+    // removed by robe.. seems that this fix the crash when exit from gideon in MDI mode
+    // closeWindow(wrapper);
   }
 }
 
