@@ -134,7 +134,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     email_edit->setText(email);
     QToolTip::add( dest_edit->button(), i18n("Choose projects directory") );
     dest_edit->setURL(defaultProjectsDir);
-    dest_edit->setMode(KFile::Directory|KFile::ExistingOnly);
+    dest_edit->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
 
     /*    //add a new page (fileprops)
 	  QString projectname = "Test";

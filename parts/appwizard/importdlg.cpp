@@ -48,7 +48,7 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     author_edit->setText(author);
     email_edit->setText(email);
     QToolTip::add( urlinput_edit->button(), i18n("Choose directory to import") );
-    urlinput_edit->setMode(KFile::Directory|KFile::ExistingOnly);
+    urlinput_edit->setMode(KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly);
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     importNames = dirs->findAllResources("appimports", QString::null, false, true);
