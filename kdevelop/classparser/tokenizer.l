@@ -28,7 +28,6 @@
 
   /* Function prototypes */
   char *return_id(char *yytext_id);
-  void eat_comment();
 %}
 
 WS           [ \t\r]+
@@ -113,12 +112,10 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
     /*==============> Inrease the line counter at CR <==============*/
 "\n"         {line_num++;}
  
-    /*==============> Strip preprocessor stuff <==============*/   
-"#"[aceimpsuw ](.)*[\n|<<EOF>>] {line_num++;}
-
     /*==============> Skip defines <==============*/   
-"#define"              BEGIN(define);
+"#"[acdeimpsuw ]       BEGIN(define);
 <define>[^\\\n]*       
+<define><<EOF>>        yyterminate();
 <define>"\\"           {cont=1;}
 <define>"\n"           {if(cont==1) 
                           cont=0;
