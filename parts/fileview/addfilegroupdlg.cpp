@@ -14,6 +14,7 @@
 #include <qpushbutton.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
+#include <kstdguiitem.h>
 
 #include "addfilegroupdlg.h"
 
@@ -25,15 +26,16 @@ AddFileGroupDialog::AddFileGroupDialog(const QString& old_title, const QString& 
     title_edit = new QLineEdit(old_title, this);
     title_edit->setFocus();
     title_label->setBuddy(title_edit);
+    connect( title_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotTextChanged() ) );
 
     QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
     pattern_edit = new QLineEdit(old_pattern, this);
     pattern_label->setBuddy(pattern_edit);
     QFontMetrics fm(pattern_edit->fontMetrics());
     pattern_edit->setMinimumWidth(fm.width('X')*35);
-    
+    connect( pattern_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotTextChanged() ) );
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
-    
+
     QGridLayout *grid = new QGridLayout(2, 2);
     layout->addLayout(grid);
     grid->addWidget(title_label, 0, 0);
@@ -47,17 +49,23 @@ AddFileGroupDialog::AddFileGroupDialog(const QString& old_title, const QString& 
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-    QPushButton *ok = buttonbox->addButton(i18n("&OK"));
-    QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
-    ok->setDefault(true);
-    connect( ok, SIGNAL(clicked()), this, SLOT(accept()) );
+    m_pOk = buttonbox->addButton(KStdGuiItem::ok().text());
+    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel().text());
+    m_pOk->setDefault(true);
+    connect( m_pOk, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), this, SLOT(reject()) );
     buttonbox->layout();
     layout->addWidget(buttonbox, 0);
+    slotTextChanged();
 }
 
 
 AddFileGroupDialog::~AddFileGroupDialog()
 {}
+
+void AddFileGroupDialog::slotTextChanged()
+{
+    m_pOk->setEnabled( !title_edit->text().isEmpty() && !pattern_edit->text().isEmpty() );
+}
 
 #include "addfilegroupdlg.moc"

@@ -14,13 +14,13 @@
 
 #include <qdialog.h>
 #include <qlineedit.h>
-
+class QPushButton;
 
 class AddFileGroupDialog : public QDialog
 {
     Q_OBJECT
 
-public: 
+public:
     AddFileGroupDialog( const QString& old_title="", const QString& old_pattern="", QWidget *parent=0, const char *name=0 );
     ~AddFileGroupDialog();
 
@@ -28,10 +28,12 @@ public:
         { return title_edit->text(); }
     QString pattern() const
         { return pattern_edit->text(); }
-    
+ private slots:
+    void slotTextChanged();
 private:
     QLineEdit *title_edit;
     QLineEdit *pattern_edit;
+    QPushButton *m_pOk;
 };
 
 #endif
