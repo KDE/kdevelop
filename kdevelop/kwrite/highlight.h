@@ -80,7 +80,7 @@ class HlKeyword : public HlItemWw {
     HlKeyword(int attribute, int context);
     virtual ~HlKeyword();
     void addWord(const char *);
-    void addList(char **);
+    void addList(const char **);
     virtual const char *checkHgl(const char *);
   protected:
     QList<KeywordData> words;

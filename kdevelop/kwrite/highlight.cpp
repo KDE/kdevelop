@@ -17,19 +17,19 @@
 
 // ISO/IEC 9899:1990 (aka ANSI C)
 // "interrupt" isn´t an ANSI keyword, but an extension of some C compilers
-char *cKeywords[] = {
+const char *cKeywords[] = {
   "break", "case", "continue", "default", "do", "else", "enum", "extern",
   "for", "goto", "if", "interrupt",  "return", "sizeof", "struct", "switch",
   "typedef", "union", "while", 0L};
 
-char *cTypes[] = {
+const char *cTypes[] = {
   "auto", "char", "const", "double", "float", "int", "long", "register",
   "short", "signed", "static",
   "unsigned", "void", "volatile", 0L};
 
 //  ISO/IEC 14882:1998 . Sec. 2.11.1 (aka ANSI C++)
 // keyword "const" (apart from a type spec.) is also a keyword, so it is named inside this array
-char *cppKeywords[] = {
+const char *cppKeywords[] = {
   "asm", "catch", "class", "const", "const_cast", "delete", "dynamic_cast",
   "explicit", "export", "false", "friend", "inline", "namespace", "new", "operator",
   "private", "protected", "public", "reinterpret_cast", "static_cast", "template",
@@ -40,20 +40,20 @@ char *cppKeywords[] = {
   "xor_eq",
   0L};
 
-char *cppTypes[] = {
+const char *cppTypes[] = {
   "bool", "wchar_t", "mutable", 0L};
 
-char *idlKeywords[] = {
+const char *idlKeywords[] = {
 	"module", "interface", "struct", "case", "enum", "typedef","signal", "slot",
 	"attribute", "readonly", "context", "oneway", "union", "in", "out", "inout",
 	0L};
 
-char *idlTypes[] = {
+const char *idlTypes[] = {
 	"long", "short", "unsigned", "double", "octet", "sequence", "char", "wchar", "string",
 	"wstring", "any", "fixed", "Object", "void", "boolean", 0L};
 
 
-char *javaKeywords[] = {
+const char *javaKeywords[] = {
   "abstract", "break", "case", "cast", "catch", "class", "continue",
   "default", "do", "else", "extends", "false", "finally", "for", "future",
   "generic", "goto", "if", "implements", "import", "inner", "instanceof",
@@ -62,20 +62,20 @@ char *javaKeywords[] = {
   "synchronized", "this", "throws", "throw", "transient", "true", "try",
   "var", "volatile", "while", 0L};
 
-char *javaTypes[] = {
+const char *javaTypes[] = {
   "boolean", "byte", "char", "const", "double", "final", "float", "int",
   "long", "short", "static", "void", 0L};
 
-char *bashKeywords[] = {
+const char *bashKeywords[] = {
   "break","case","done","do","elif","else","esac","exit","export","fi","for",
   "function","if","in","return","select","then","until","while",".",0L};
 
-char *modulaKeywords[] = {
+const char *modulaKeywords[] = {
   "BEGIN","CONST","DEFINITION","DIV","DO","ELSE","ELSIF","END","FOR","FROM",
   "IF","IMPLEMENTATION","IMPORT","MODULE","MOD","PROCEDURE","RECORD","REPEAT",
   "RETURN","THEN","TYPE","VAR","WHILE","WITH","|",0L};
 
-char *pascalKeywords[] = {
+const char *pascalKeywords[] = {
   // Ancient DOS Turbo Pascal keywords:
   //"absolute", "out",
   // Generic pascal keywords:
@@ -95,7 +95,7 @@ char *pascalKeywords[] = {
   "dispose", "exit", "false", "new", "true",
   0L};
 
-char *pascalTypes[] = {
+const char *pascalTypes[] = {
   "Integer", "Cardinal",
   "ShortInt", "SmallInt", "LongInt", "Int64", "Byte", "Word", "LongWord",
   "Char", "AnsiChar", "WideChar",
@@ -106,7 +106,7 @@ char *pascalTypes[] = {
   "File", "Text",
   0L};
 
-char *adaKeywords[] = {
+const char *adaKeywords[] = {
   "abort","abs","accept","access","all","and","array","at","begin","body",
   "case","constant","declare","delay","delta","digits","do","else","elsif",
   "end","entry","exception","exit","for", "function","generic","goto","if",
@@ -115,19 +115,19 @@ char *adaKeywords[] = {
   "record","renames","return","reverse","select","separate","subtype", "task",
   "terminate","then","type","use","when","while","with","xor",0L};
 
-char *pythonKeywords[] = {
+const char *pythonKeywords[] = {
   "and","assert","break","class","continue","def","del","elif","else",
   "except","exec"," finally","for","from","global","if","import","in","is",
   "lambda","not","or","pass","print","raise","return","try","while",0L};
 
-char *perlKeywords[] = {
+const char *perlKeywords[] = {
   "and","&&", "bless","caller","cmp","continue","dbmclose","dbmopen","do",
   "die", "dump", "eval", "elsif","eq","exit", "foreach","for","ge", "goto",
   "gt","if","import", "last","le","local","lt","my","next","ne","no","not",
   "!","or","||", "package","ref","redo","require","return","sub","tied",
   "tie","unless","until","untie","use","wantarray","while","xor", 0L};
 
-char *satherKeywords[] = {
+const char *satherKeywords[] = {
   "and","assert","attr","break!","case","class","const","else","elsif",
   "end","exception","external","false","if","include","initial","is","ITER",
   "loop","new","or","post","pre","private","protect","quit","raise",
@@ -140,11 +140,11 @@ char *satherKeywords[] = {
 // are those Sather keywords, too?
 //     "nil","do@", "do"
 
-char *satherSpecClassNames[] = {
+const char *satherSpecClassNames[] = {
   "$OB","ARRAY","AREF","AVAL","BOOL","CHAR","EXT_OB","FLTDX","FLTD","FLTX",
   "FLTI","FLT","INTI","INT","$REHASH","STR","SYS",0L};
 
-char *satherSpecFeatureNames[] = {
+const char *satherSpecFeatureNames[] = {
 // real special features
   "create","invariant","main",
 // sugar feature names
@@ -156,7 +156,7 @@ char *satherSpecFeatureNames[] = {
 //char perlEscapeChars[] = "tnrfbaeluLUEQ";
 
 
-char fontSizes[] = {4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,32,48,64,0};
+const char fontSizes[] = {4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,32,48,64,0};
 
 //default item style indexes
 const int dsNormal = 0;
@@ -172,7 +172,7 @@ const int dsOthers = 9;
 
 
 bool testWw(char c) {
-  static char data[] = {0,0,0,0,0,0,255,3,254,255,255,135,254,255,255,7};
+  static unsigned char data[] = {0,0,0,0,0,0,255,3,254,255,255,135,254,255,255,7};
   if (c & 128) return false;
   return !(data[c >> 3] & (1 << (c & 7)));
 }
@@ -266,7 +266,7 @@ void HlKeyword::addWord(const char *s) {
   words.append(word);
 }
 
-void HlKeyword::addList(char **list) {
+void HlKeyword::addList(const char **list) {
 
   while (*list) {
     addWord(*list);
@@ -360,7 +360,7 @@ HlCSymbol::HlCSymbol(int attribute, int context)
 }
 
 bool isCSymbol(char c) {
-  static char data[] = {255,255,255,255,28,128,255,3,255,255,255,151,255,255,255,7};
+  static unsigned char data[] = {255,255,255,255,28,128,255,3,255,255,255,151,255,255,255,7};
   if (c & 128) return false;
   return !(data[c >> 3] & (1 << (c & 7)));
 }
@@ -1548,7 +1548,7 @@ Op Customary  Generic     Meaning    Interpolates         Modifiers
 7              y{}{}   Translation       no               cds
 */
 int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
-  static char *opList[] = {"q", "qq", "qx", "qw", "m", "s", "tr", "y"};
+  static const char *opList[] = {"q", "qq", "qx", "qw", "m", "s", "tr", "y"};
   static int opLenList[] = {1, 2, 2, 2, 1, 1, 2, 1};
   char delimiter;
   int op;
