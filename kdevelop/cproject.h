@@ -193,8 +193,11 @@ public: // Methods to store project options
   /** Store the commandline execution arguments for the project binary */
   void setExecuteArgs(const char *args)       { writeGroupEntry( "General", "execute_args", args ); }
 
+  /** Store the commandline execution arguments for debugging  */
+  void setDebugArgs(const char *args)         { writeGroupEntry( "General", "debug_args", args ); }
+
   /** Store the additional arguments for configure */
-  void setConfigureArgs(const char *args)       { writeGroupEntry( "General", "configure_args", args ); }
+  void setConfigureArgs(const char *args)     { writeGroupEntry( "General", "configure_args", args ); }
   
   void setBinPROGRAM(const char *name)        { writeGroupEntry( "Config for BinMakefileAm", "bin_program", name ); }
 
@@ -254,8 +257,11 @@ public: // Methods to fetch project options
   /** Fetch the commandline execution arguments for the project binary. */
   QString getExecuteArgs()    { return readGroupEntry( "General", "execute_args" ); }
 
+  /** Fetch the commandline execution arguments for debugging. */
+  QString getDebugArgs()      { return readGroupEntry( "General", "debug_args" ); }
+
   /** Fetch the commandline additional arguments for configure */
-  QString getConfigureArgs()    { return readGroupEntry( "General", "configure_args" ); }
+  QString getConfigureArgs()  { return readGroupEntry( "General", "configure_args" ); }
 
   QString getBinPROGRAM()     { return readGroupEntry( "Config for BinMakefileAm", "bin_program" ); }
 

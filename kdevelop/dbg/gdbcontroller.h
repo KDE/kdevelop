@@ -57,6 +57,7 @@ private:
   void parseRequestedData   (char* buf);
   void parseLine            (char* buf);
   void parseFrameSelected   (char* buf);
+//  void parseFileStart       (char* buf);
 
   char* parse               (char* buf);
   char* parseOther          (char* buf);
@@ -67,6 +68,7 @@ private:
   void destroyCmds();
   void removeInfoRequests();
   void actOnProgramPause(const QString& msg);
+  void programNoApp(const QString& msg);
 
   void setBreakpoint(const QString& BPSetCmd, int key);
   void clearBreakpoint(const QString& BPClearCmd);
@@ -78,6 +80,8 @@ private:
 
 public slots:
   void slotStart(const QString& application, const QString& args);
+  void slotCoreFile(const QString& coreFile);
+  void slotAttachTo(const QString& attachTo);
 	
 	void slotRun();																						
   void slotRunUntil(const QString& filename, int lineNo);

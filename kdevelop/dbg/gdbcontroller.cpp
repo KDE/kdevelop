@@ -277,7 +277,8 @@ void GDBController::slotStart(const QString& application, const QString& args)
     queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
   // Load the file into gdb
-  queueCmd(new GDBCommand(QString().sprintf("file %s", application.data()), NOTRUNCMD, NOTINFOCMD));
+  QString fileCmd = QString().sprintf("file %s", application.data());
+  queueCmd(new GDBCommand(fileCmd, NOTRUNCMD, NOTINFOCMD));
 
   // Organise any breakpoints.
   emit acceptPendingBPs();
@@ -285,6 +286,29 @@ void GDBController::slotStart(const QString& application, const QString& args)
   // Now gdb has been started and the application has been loaded,
   // BUT the app hasn't been started yet! A run command is about to be issued
   // by whoever is controlling us.
+}
+
+// **************************************************************************
+
+void GDBController::slotCoreFile(const QString& coreFile)
+{
+  setStateOff(s_silent);
+  queueCmd(new GDBCommand("core " + coreFile, NOTRUNCMD, NOTINFOCMD));
+  //TODO - disable run commands on menu
+  queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
+  if (stateIsOn(s_viewLocals))
+    queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+}
+
+// **************************************************************************
+
+void GDBController::slotAttachTo(const QString& attachTo)
+{
+  setStateOff(s_appNotStarted|s_programExited|s_silent);
+  queueCmd(new GDBCommand("attach "+attachTo, NOTRUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
+  if (stateIsOn(s_viewLocals))
+    queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
 }
 
 // **************************************************************************
@@ -432,7 +456,7 @@ void GDBController::actOnProgramPause(const QString& msg)
     varTree_->setActiveFlag();
 
     // These two need to be actioned immediately. The order _is_ important
-    queueCmd(new GDBCommand("backtrace", NOTRUNCMD, false, BACKTRACE), INFOCMD);
+    queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE), true);
     if (stateIsOn(s_viewLocals))
       queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
 
@@ -440,6 +464,19 @@ void GDBController::actOnProgramPause(const QString& msg)
     varTree_->findWatch()->setActive();
     emit acceptPendingBPs();
   }
+}
+
+// **************************************************************************
+
+// There is no app anymore. This can be caused by program exiting
+// an invalid program specified or ...
+// gdb is still running though, but only the run command (may) make sense
+// all other commands are disabled.
+void GDBController::programNoApp(const QString& msg)
+{
+  state_ = (s_appNotStarted|s_programExited|(state_&s_viewLocals));
+  destroyCmds();
+	emit dbgStatus (msg, state_);
 }
 
 // **************************************************************************
@@ -479,14 +516,9 @@ void GDBController::parseLine(char* buf)
       if ((strncmp(buf, "Program exited", 14) == 0) ||
           (strncmp(buf, "Program terminated", 18) == 0))
       {
-        // The app has finished - but gdb is still running.
         DBG_DISPLAY("Parsed (exit) <" + QString(buf) + ">");
-        state_ = (s_appNotStarted|s_programExited|(state_&s_viewLocals));
-        destroyCmds();
-	      emit dbgStatus (QString(buf), state_);
-	
-	      // TODO - a nasty switch - it'll not last long!!
-		    programHasExited_ = true;
+        programNoApp(QString(buf));
+        programHasExited_ = true;   // TODO - a nasty switch - this needs fixing
 	      break;
       }
 
@@ -510,6 +542,7 @@ void GDBController::parseLine(char* buf)
           DBG_DISPLAY("Parsed (SIGSEGV) <" + QString(buf) + ">");
 		      destroyCmds();
           actOnProgramPause(QString(buf));
+          programHasExited_ = true;   // TODO - a nasty switch - this needs fixing
           break;
 		    }
       }
@@ -557,24 +590,6 @@ void GDBController::parseLine(char* buf)
       break;
     }
 
-//    case START_warn:
-//    {
-      //warning: Hardware watchpoint 2: Could not insert watchpoint
-// It seems redundent to single this out, as the default case
-// is to show a message anyway
-//      if (strncmp(buf, "warning: Hardware watchpoint", 28) == 0)
-//      {
-//	      emit dbgStatus (QString(buf), state_);
-//	      break;
-//      }
-
-//      actOnProgramPause(QString(buf));
-//      setStateOff(s_appBusy);
-//      emit dbgStatus (QString(buf), state_);
-//      DBG_DISPLAY("Unparsed (START_warn)<" + QString(buf) + ">");
-//      break;
-//    }
-
     // When the watchpoint variable goes out of scope the program stops
     // and tells you. (sometimes)
     case START_Watc:
@@ -620,22 +635,6 @@ void GDBController::parseLine(char* buf)
       break;
     }
 
-//    case START_curr:
-//    {
-      // A watch point problem - show the line on status.
-      // The default does the same anyway so no need to distinguish
-      // between them.
-//      if (strncmp(buf, "current stack frame not in method", 33) == 0)
-//      {
-//        actOnProgramPause(QString(buf));
-//        break;
-//      }
-
-//      DBG_DISPLAY("Unparsed (START_curr)<" + QString(buf) + ">");
-//      actOnProgramPause(QString(buf));
-//      break;
-//    }
-
     case START_Brea:
     {
       // Starts with "Brea" so assume "Breakpoint" and just get a full
@@ -670,17 +669,17 @@ void GDBController::parseLine(char* buf)
         break;
       }
 
-      if (strstr(buf, "No such file or directory."))
+      // TODO - Only do this at start up
+      if (//strncmp(buf, "No executable file specified.", 29) ==0   ||
+          strstr(buf, "not in executable format:")                ||
+          strstr(buf, "No such file or directory.")               ||
+          strstr(buf, "is not a core dump:")                      ||
+          strncmp(buf, "ptrace: No such process.", 24)==0         ||
+          strncmp(buf, "ptrace: Operation not permitted.", 32)==0)
       {
-        // The app never got started - but gdb is running.
-        DBG_DISPLAY("Parsed (exit) <" + QString(buf) + ">");
-        state_ = (s_appNotStarted|s_programExited|(state_&s_viewLocals));
-        destroyCmds();
-	      emit dbgStatus (QString(buf), state_);
-	
-	      // TODO - a nasty switch - it'll not last long!!
-		    programHasExited_ = true;
-	      break;
+        programNoApp(QString(buf));
+        DBG_DISPLAY("Bad file <" + QString(buf) + ">");
+        break;
       }
 
       // Any other line that falls out when we are busy is a stop. We
@@ -688,16 +687,19 @@ void GDBController::parseLine(char* buf)
       if (stateIsOn(s_appBusy))
       {
         if ((strncmp(buf, "No ", 3)==0) || strstr(buf, "not meaningful"))
+        {
+          DBG_DISPLAY("Parsed (not meaningful)<" + QString(buf) + ">");
           actOnProgramPause(QString(buf));
-        else
-          actOnProgramPause(QString(" "));
+          break;
+        }
 
-        DBG_DISPLAY("Parsed (default)<" + QString(buf) + ">");
+        DBG_DISPLAY("Unparsed (default - busy)<" + QString(buf) + ">");
+        actOnProgramPause(QString(" "));
         break;
       }
 
       // All other lines are ignored
-      DBG_DISPLAY("Unparsed (default)<" + QString(buf) + ">");
+      DBG_DISPLAY("Unparsed (default - not busy)<" + QString(buf) + ">");
       break;
     }
   }
@@ -803,7 +805,20 @@ void GDBController::parseRequestedData(char* buf)
 
 // **************************************************************************
 
-// The user selects a different frame to view. We need to get and display
+// If the user gives us a bad program, catch that here.
+//void GDBController::parseFileStart(char* buf)
+//{
+//  if (strstr(buf, "not in executable format:") ||
+//      strstr(buf, "No such file or directory."))
+//  {
+//    programNoApp(QString(buf));
+//    DBG_DISPLAY("Bad file start <" + QString(buf) + ">");
+//  }
+//}
+
+// **************************************************************************
+
+// Select a different frame to view. We need to get and (maybe) display
 // where we are in the program source.
 void GDBController::parseFrameSelected(char* buf)
 {
@@ -818,10 +833,13 @@ void GDBController::parseFrameSelected(char* buf)
     }
   }
 
-  if (char* end = strchr(buf, '\n'))
-    *end = 0;      // clobber the new line
-  emit showStepInSource("", -1);
-  emit dbgStatus ("No source: "+QString(buf), state_);
+  if (!stateIsOn(s_silent))
+  {
+    if (char* end = strchr(buf, '\n'))
+      *end = 0;      // clobber the new line
+    emit showStepInSource("", -1);
+    emit dbgStatus ("No source: "+QString(buf), state_);
+  }
 }
 
 // **************************************************************************
@@ -916,6 +934,7 @@ char* GDBController::parseCmdBlock(char* buf)
       case MEMDUMP:         emit rawGDBMemoryDump     (buf);      break;
       case REGISTERS:       emit rawGDBRegisters      (buf);      break;
       case LIBRARIES:       emit rawGDBLibraries      (buf);      break;
+//      case FILE_START:      parseFileStart            (buf);      break;
       default:                                                    break;
     }
 

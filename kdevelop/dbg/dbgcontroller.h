@@ -64,6 +64,8 @@ protected:
 
 public slots:
   virtual void slotStart(const QString& application, const QString& args) = 0;
+  virtual void slotCoreFile(const QString& coreFile)                      = 0;
+  virtual void slotAttachTo(const QString& AttachTo)                      = 0;
 
 	virtual void slotRun() 																						      = 0;
   virtual void slotRunUntil(const QString& filename, int lineNo)          = 0;

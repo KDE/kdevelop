@@ -73,17 +73,17 @@ VarViewer::VarViewer( QWidget *parent, const char *name ) :
   watchEntry->addWidget( watchVarEntry_ );
 
   // just add a bit of space at the end of the entry widget
-  QLabel *blank = new QLabel( " ", this );
-  blank->setMinimumSize( blank->sizeHint() );
-  blank->setMaximumSize( blank->sizeHint() );
-  watchEntry->addWidget( blank );
+//  QLabel *blank = new QLabel( " ", this );
+//  blank->setMinimumSize( blank->sizeHint() );
+//  blank->setMaximumSize( blank->sizeHint() );
+//  watchEntry->addWidget( blank );
 
-//  QPushButton* addButton = new QPushButton( i18n("Add"), this );
-//  addButton->setMinimumSize( addButton->sizeHint() );
-//  addButton->setMaximumSize( addButton->sizeHint() );
-//  watchEntry->addWidget( addButton );
+  QPushButton* addButton = new QPushButton( i18n("Add"), this );
+  addButton->setMinimumSize( addButton->sizeHint() );
+  addButton->setMaximumSize( addButton->sizeHint() );
+  watchEntry->addWidget( addButton );
 
-//  connect(addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()));
+  connect(addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()));
   connect(watchVarEntry_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()));
 
   topLayout->activate();
@@ -101,7 +101,8 @@ void VarViewer::clear()
 void VarViewer::slotAddWatchVariable()
 {
   QString watchVar(watchVarEntry_->text());
-  varTree_->slotAddWatchVariable(watchVar);
+  if (!watchVar.isEmpty())
+    varTree_->slotAddWatchVariable(watchVar);
 }
 
 // **************************************************************************

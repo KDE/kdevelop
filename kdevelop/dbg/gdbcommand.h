@@ -36,6 +36,7 @@ enum GDBCmd
   DISASSEMBLE     = 'd',
 
   FRAME           = 'F',
+  FILE_START      = 'f',
 
   INITIALISE      = 'I',
   IDLE            = 'i',
