@@ -575,6 +575,8 @@ void TopLevelMDI::lowerAllViews()
 
 void TopLevelMDI::createGUI(KParts::Part *part)
 {
+  if ( !part )
+    setCaption( QString::null );
   QextMdiMainFrm::createGUI(part);
 }
 
