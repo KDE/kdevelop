@@ -708,6 +708,10 @@ void CKDevInstall::slotAuto() // proceed >>
   	  if(qt_dir->exists("classes.html"))
      	 qt="/usr/X11/lib/qt/doc/html/";
 
+	  if(qt_dir->cd("/usr/doc/qt-doc/html/"))
+  	  if(qt_dir->exists("classes.html"))
+    	  qt="/usr/doc/qt-doc/html/";
+
 	  if(!qt.isEmpty())
   	  qt_test=false;
 	  else
