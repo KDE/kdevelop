@@ -56,6 +56,7 @@
 class ParenMatcher;
 class QPopupMenu;
 class QSourceColorizer;
+class BackgroundParser;
 
 class QEditor: public KTextEdit
 {
@@ -65,8 +66,12 @@ public:
     virtual ~QEditor();
 
     QTextCursor* textCursor() const;
+
     QTextDocument* document() const;
     void setDocument( QTextDocument*);
+
+    BackgroundParser* parser() const;
+    void setBackgroundParser( BackgroundParser* );
 
     void drawCursor( bool visible );
     void updateStyles();
@@ -105,6 +110,9 @@ public:
 
     QSourceColorizer* colorizer() const;
 
+signals:
+    void parsed();
+
 public slots:
     void doGotoLine( int line );
     void configChanged();
@@ -120,6 +128,7 @@ protected:
 
 private:
     ParenMatcher* parenMatcher;
+    BackgroundParser* m_parser;
     bool m_tabIndent;
     bool m_completion;
     bool m_backspaceIndent;

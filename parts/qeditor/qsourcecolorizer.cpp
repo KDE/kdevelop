@@ -136,16 +136,10 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParag* parag, int,
         parag->setEndState( state );
     }
 
-    int oldLevel = extra->level();
-    int level = computeLevel( parag, startLevel );
-    if( level != oldLevel ){
-        extra->setLevel( level > 0 ? level : 0 );
-    }
-
     parag->setFirstPreProcess( FALSE );
 
     if ( invalidate && parag->next() &&
-         (state != oldState || level != oldLevel) &&
+         state != oldState &&
 	 !parag->next()->firstPreProcess() &&
          parag->next()->endState() != -1 ) {
 	parag->next()->setEndState( -1 );
@@ -175,11 +169,6 @@ QChar QSourceColorizer::matchFor( const QChar& ch ) const
         }
     }
     return QChar::null;
-}
-
-int QSourceColorizer::computeLevel( QTextParag*, int startLevel )
-{
-    return startLevel;
 }
 
 QTextFormat* QSourceColorizer::formatFromId( const QString& id )

@@ -163,31 +163,3 @@ CSharpColorizer::~CSharpColorizer()
 {
 }
 
-int CSharpColorizer::computeLevel( QTextParag* parag, int startLevel )
-{
-    int level = startLevel;
-
-    ParagData* data = (ParagData*) parag->extraData();
-    if( !data ){
-        return startLevel;
-    }
-
-    data->setBlockStart( false );
-
-    QValueList<Symbol> symbols = data->symbolList();
-    QValueList<Symbol>::Iterator it = symbols.begin();
-    while( it != symbols.end() ){
-        Symbol sym = *it++;
-        if( sym.ch() == '{' ){
-            ++level;
-        } else if( sym.ch() == '}' ){
-            --level;
-        }
-    }
-
-    if( level > startLevel ){
-        data->setBlockStart( true );
-    }
-
-    return level;
-}

@@ -31,7 +31,6 @@ public:
     PythonColorizer( QEditor* );
     virtual ~PythonColorizer();
 
-    virtual int computeLevel( QTextParag*, int );
 };
 
 #endif

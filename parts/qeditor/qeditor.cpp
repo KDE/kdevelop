@@ -41,6 +41,7 @@
 **********************************************************************/
 
 #include "qeditor.h"
+#include "cpp_parser.h"
 
 #include "qsourcecolorizer.h"
 #include "cpp_colorizer.h"
@@ -126,6 +127,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
     m_currentLine = -1;
     m_tabStop = 8;
     m_applicationMenu = 0;
+    m_parser = 0;
 
     document()->addSelection( ParenMatcher::Match );
     document()->addSelection( ParenMatcher::Mismatch );
@@ -145,9 +147,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
 
 QEditor::~QEditor()
 {
-    if( parenMatcher ){
-	delete( parenMatcher );
-    }
+    delete( parenMatcher );
 }
 
 QPopupMenu* QEditor::createPopupMenu( const QPoint& pt )
@@ -373,6 +373,7 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CppColorizer(this) );
 	document()->setIndent( new CIndent() );
+        setBackgroundParser( new CppParser(this) );
     } else if( m_language == "java" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
@@ -474,4 +475,14 @@ void QEditor::internalRefresh()
     sync();
     viewport()->repaint( true );
     ensureCursorVisible();
+}
+
+BackgroundParser* QEditor::parser() const
+{
+    return m_parser;
+}
+
+void QEditor::setBackgroundParser( BackgroundParser* parser )
+{
+    m_parser = parser;
 }

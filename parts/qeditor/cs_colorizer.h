@@ -31,7 +31,6 @@ public:
     CSharpColorizer( QEditor* );
     virtual ~CSharpColorizer();
 
-    virtual int computeLevel( QTextParag*, int );
 };
 
 #endif

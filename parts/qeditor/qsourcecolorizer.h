@@ -269,7 +269,6 @@ public:
     QStringList styleList() const;
     virtual void updateStyles( QMap<QString, QPair<QFont, QColor> >& values );
     virtual void process( QTextDocument*, QTextParag*, int, bool=FALSE );
-    virtual int computeLevel( QTextParag*, int );
 
 protected:
     QEditor* m_editor;

@@ -110,9 +110,3 @@ PythonColorizer::~PythonColorizer()
 {
 }
 
-int PythonColorizer::computeLevel( QTextParag*, int startLevel )
-{
-    int level = startLevel;
-
-    return level;
-}

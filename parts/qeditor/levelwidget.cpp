@@ -49,12 +49,10 @@
 using namespace std;
 
 const char * plus_xpm[] = {
-"12 16 3 1",
+"12 12 3 1",
 "       c None",
 ".      c #000000",
 "+      c #FFFFFF",
-"      .     ",
-"      .     ",
 " .........  ",
 " .+++++++.  ",
 " .+++++++.  ",
@@ -66,17 +64,13 @@ const char * plus_xpm[] = {
 " .+++.+++.  ",
 " .+++++++.  ",
 " .+++++++.  ",
-" .........  ",
-"      .     ",
-"      .     "};
+" .........  " };
 
 const  char * minus_xpm[] = {
-"12 16 3 1",
+"12 12 3 1",
 "       c None",
 ".      c #000000",
 "+      c #FFFFFF",
-"      .     ",
-"      .     ",
 " .........  ",
 " .+++++++.  ",
 " .+++++++.  ",
@@ -88,9 +82,7 @@ const  char * minus_xpm[] = {
 " .+++++++.  ",
 " .+++++++.  ",
 " .+++++++.  ",
-" .........  ",
-"      .     ",
-"      .     "};
+" .........  "};
 
 static QPixmap *plusPixmap = 0;
 static QPixmap *minusPixmap = 0;
@@ -110,6 +102,8 @@ LevelWidget::LevelWidget( QEditor* editor, QWidget* parent, const char* name )
     connect( m_editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ),
 	     this, SLOT( doRepaint() ) );
     connect( m_editor, SIGNAL( textChanged() ),
+	     this, SLOT( doRepaint() ) );
+    connect( m_editor, SIGNAL( parsed() ),
 	     this, SLOT( doRepaint() ) );
     doRepaint();
 }
@@ -147,6 +141,11 @@ void LevelWidget::paintEvent( QPaintEvent* /*e*/ )
 
 	    if( data->isBlockStart() ){
 		if( data->isOpen() ){
+                    painter.drawLine( minusPixmap->width() / 2 + 2,
+                                      p->rect().y() + p->rect().height() - yOffset,
+                                      minusPixmap->width() / 2 - 2,
+                                      p->rect().y() + p->rect().height() - yOffset );
+
 		    painter.drawPixmap( 0, p->rect().y() +
 					( p->rect().height() - minusPixmap->height() ) / 2 -
 					yOffset, *minusPixmap );
@@ -191,9 +190,9 @@ void LevelWidget::mousePressEvent( QMouseEvent* e )
             if( data && data->isBlockStart() ){
 
                 if( data->isOpen() ){
-                    emit collapseBlock( p );
+                    // emit collapseBlock( p );
                 } else {
-                    emit expandBlock( p );
+                    // emit expandBlock( p );
                 }
 	    }
 	    break;

@@ -1,7 +1,6 @@
 /* $Id$
  *
- *  This file is part of Klint
- *  Copyright (C) 2001 Roberto Raggi (raggi@cli.di.unipi.it)
+ *  Copyright (C) 2002 Roberto Raggi (raggi@cli.di.unipi.it)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public
@@ -11,7 +10,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Library General Public License for more details.
+ *  General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; see the file COPYING.  If not, write to
@@ -20,17 +19,20 @@
  *
  */
 
-#ifndef cpp_colorizer_h
-#define cpp_colorizer_h
+#ifndef CPP_PARSER_H
+#define CPP_PARSER_H
 
-#include <qsourcecolorizer.h>
-#include <qfont.h>
+#include "background_parser.h"
 
-class CppColorizer: public QSourceColorizer{
+class CppParser: public BackgroundParser{
 public:
-    CppColorizer( QEditor* );
-    virtual ~CppColorizer();
+    CppParser( QEditor* =0, const char* =0 );
+    virtual ~CppParser();
 
+protected:
+    virtual void parseParag( QTextParag* );
+    virtual QTextParag* findGoodStartParag( QTextParag* );
+    virtual QTextParag* findGoodEndParag( QTextParag* );
 };
 
 #endif
