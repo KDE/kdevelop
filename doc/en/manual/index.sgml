@@ -3329,6 +3329,9 @@ Pascal Krahmer 			<htmlurl url="mailto:pascal@beast.de" name="<pascal@beast.de>"
 Bernd Gehrmann 			<htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
 <quote/Main development of: Grep Dialog, CVS integration, new DOC tree/
 
+Jörgen Olsson       <htmlurl url="mailto:jorgen@cenacle.net" name="<jorgen@cenacle.net>">
+<quote/Main development of: Visual Classtree/
+
 Stefan Bartel 			<htmlurl url="mailto:bartel@rz.uni-potsdam.de" name = "<bartel@rz.uni-potsdam.de>">
 <quote/Main development of: Real-File-Viewer/
 
@@ -3346,28 +3349,29 @@ Martin Spirk 				<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>
 
 Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">			-Danish
 
-Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
-
-Massimo Morin       <htmlurl url="mailto:mmorin@schedsys.com" name="<mmorin@schedsys.com>"> -Italian
-
-Salvador Gimeno 		<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">		-Spanish
-
 Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
 
 Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
 
+Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
+
 Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
+
+Massimo Morin       <htmlurl url="mailto:mmorin@schedsys.com" name="<mmorin@schedsys.com>"> -Italian
+
+Jacek Wojdel 				<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polish
 
 Duarte Loreto 			<htmlurl url="mailto:dnloreto@esoterica.pt" name="<dnloreto@esoterica.pt>">		-Portuguese
 
 Ilmar Habibulin    	<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">				-Russian
 
-Jacek Wojdel 				<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polish
-
 Jan Prokop 					<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">				-Slovak
+
+Salvador Gimeno 		<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">		-Spanish
 
 Patrik Adolfsson 		<htmlurl url="mailto:patrik.adolfsson@iname.com" name="<patrik.adolfsson@iname.com>">		-Swedish
 
+Kaðan Kongar        <htmlurl url="mailto:kongar@doruk.net.tr" name="<kongar@doruk.net.tr>"> - Turkish
 
 <bf>Startlogo:</bf>
 
@@ -3395,6 +3399,16 @@ Matt Koss 							<htmlurl url="mailto:koss@napri.sk" name="<koss@napri.sk>">
 Jochen Wilhelmy 				<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
 
 Torsten Uhlmann 				<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
+
+Stefan Mars             <htmlurl url="mailto:mars@lysator.liu.se" name="<mars@lysator.liu.se>">
+
+Nikolay Liber           <htmlurl url="mailto:nikolay_liber@mail.ru" name="<nikolay_liber@mail.ru>">
+
+Gordon Tyler            <htmlurl url="maito:gtyler@iafrica.com" name="<gtyler@iafrica.com>">
+
+Huy Cuong Nguyen        <htmlurl url="maito:huyc@iquebec.com" name="<huyc@iquebec.com>">
+
+John R. Zedlewski       <htmlurl url="mailto:zedlwski@princeton.edu" name="<zedlwski@princeton.edu>">
 
 
 <bf>KDevelop contains sourcecode from the following applications:</bf>
@@ -3446,4 +3460,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
+
 

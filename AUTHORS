@@ -15,12 +15,20 @@
 
 ***Translations***
 
--Ilmar Habibulin <ilmar@ints.ru>              - Russian 
+-Martin Spirk <spirk@kla.pvt.cz>   			      - Czech
 -Steen Rabol <rabol@get2net.dk>               - Danish
+-Sami Kuhmonen <sami@iqs.fi>        					- Finnish
+-Herve Lefebvre <hlefebvre@easynet.fr>  			- French
 -Martin Piskernig <martin.piskernig@stuwo.at> - German
--Salvador Gimeno <salgiza@eui.upv.es>	      - Spanish
+-Pahan Szabolcs <szabczy@bigfoot.com>			    - Hungarian
+-Massimo Morin <mmorin@schedsys.com>          - Italian
 -Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>     - Polish
 -Duarte Loreto <dnloreto@esoterica.pt>	      - Portuguese
+-Ilmar Habibulin <ilmar@ints.ru>              - Russian
+-Jan Prokop <jprokop@ibl.sk>				          - Slovak
+-Salvador Gimeno <salgiza@eui.upv.es> 	      - Spanish
+-Patrik Adolfsson <patrik.adolfsson@iname.com>- Swedish
+-Kaðan Kongar <kongar@doruk.net.tr>           - Turkish
 
 ***startlogo*** 
 
@@ -50,4 +58,7 @@ KWrite 0.98	:(c) 1998 by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
 KDE Help	:(c) 1996 by Martin R. Jones <mjones@kde.org>
 KSwallow	:(c) by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
 kcmlocale	:(c) 1998 by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
+
+
+
 
