@@ -207,15 +207,14 @@ void AppWizardDialog::licenseChanged()
 {
     QString str =
         "/***************************************************************************\n"
-        " *   Copyright (C) 2001 by $AUTHOR$                                        *\n"
-        " *   $EMAIL$                                                               *\n"
+        " *   Copyright (C) %1 by %2   *\n"
+        " *   %3   *\n"
         " *                                                                         *\n";
 
     QString author = author_edit->text();
     QString email = email_edit->text();
-    str.replace(str.find("2001"), 4, QString::number(QDate::currentDate().year()));
-    str.replace(str.find("$AUTHOR$                      "), QMIN(30, author.length()), author);
-    str.replace(str.find("$EMAIL$                       "), QMIN(30, email.length()), email);
+    
+    str = str.arg(QDate::currentDate().year()).arg(author.left(45),-45).arg(email.left(67),-67);
 
     switch (license_combo->currentItem())
         {
