@@ -918,8 +918,8 @@ void TrollProjectWidget::addFile(const QString &fileName)
 void TrollProjectWidget::slotAddFiles()
 {
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-  QString  filter = i18n("Source files") + "(*.cpp *.c *.hpp *.h *.ui)";
-  filter += "\n" + i18n("All files") + " (*)";
+  QString  filter = "*.cpp *.c *.hpp *.h *.ui|" + i18n("Source files");
+  filter += "\n*|" + i18n("All files");
   KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
                                         filter,
                                         this,
@@ -1056,7 +1056,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         if (r == idInsExistingFile)
         {
           KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
-                                                title + " ("+ext+")",
+                                                "("+ext+")|" + title,
                                                 this,
                                                 "Insert existing "+ title,
                                                 TRUE);
