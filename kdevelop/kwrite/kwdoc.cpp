@@ -404,6 +404,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 
   newDocGeometry = false;
   modified = false;
+  oldMarkState=false;
 
   undoList.setAutoDelete(true);
   undoState = 0;
@@ -855,9 +856,13 @@ void KWriteDoc::del(KWriteView *view, VConfig &c) {
 
 void KWriteDoc::clipboardChanged() { //slot
 #if defined(_WS_X11_)
+  KWriteView *view;
   disconnect(QApplication::clipboard(),SIGNAL(dataChanged()),
     this,SLOT(clipboardChanged()));
   deselectAll();
+  QString text=QApplication::clipboard()->text();
+  for (view = views.first(); view != 0L; view = views.next())
+      emit view->kWrite->clipboardStatus(view, !text.isEmpty());
   updateViews();
 #endif
 }
@@ -1042,11 +1047,20 @@ void KWriteDoc::updateMaxLength(TextLine *textLine) {
 void KWriteDoc::updateViews(KWriteView *exclude) {
   KWriteView *view;
   int flags;
+  bool markState=hasMarkedText();
 
   flags = (newDocGeometry) ? ufDocGeometry : 0;
   for (view = views.first(); view != 0L; view = views.next()) {
-    if (view != exclude) view->updateView(flags);
+    if (view != exclude) {
+         view->updateView(flags);
+    }
+
+    // notify every view about the changed mark state....
+    if (oldMarkState!=markState)
+          emit view->kWrite->markStatus(view, markState);
   }
+  oldMarkState=markState;
+
   newDocGeometry = false;
 }
 
@@ -1296,7 +1310,7 @@ void KWriteDoc::clear() {
 
 
 void KWriteDoc::copy(int flags) {
-
+  KWriteView *view;
   if (selectEnd < selectStart) return;
 
   QString s = markedText(flags);
@@ -1305,6 +1319,9 @@ void KWriteDoc::copy(int flags) {
     disconnect(QApplication::clipboard(),SIGNAL(dataChanged()),this,0);
 #endif
     QApplication::clipboard()->setText(s);
+    for (view = views.first(); view != 0L; view = views.next())
+      emit view->kWrite->clipboardStatus(view, !s.isEmpty());
+
 #if defined(_WS_X11_)
     connect(QApplication::clipboard(),SIGNAL(dataChanged()),
       this,SLOT(clipboardChanged()));
