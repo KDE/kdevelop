@@ -1156,8 +1156,14 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     if (next_job == "run" && process.exitStatus() == 0){ // rest from the buildRun
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
       stdin_stdout_widget->clear();
-      o_tab_view->setCurrentTab(STDINSTDOUT);
       stderr_widget->clear();
+      if(prj->getProjectType() == "normal_cpp"){
+	o_tab_view->setCurrentTab(STDINSTDOUT);
+      }
+      else{
+	o_tab_view->setCurrentTab(STDERR);
+      }
+
       appl_process.clearArguments();
       // Warning: not every user has the current directory in his path !
       appl_process << "./" + prj->getBinPROGRAM().lower();
@@ -1239,6 +1245,21 @@ void CKDevelop::slotLogFileTreeSelected(int index){
   QString* str;
   path = log_file_tree->itemPath(index);
   str = path->pop();
+
+  // load kiconedit if clicked on a icon
+  if((*str).right(4) == ".xpm"){
+    if(!CToolClass::searchProgram("kiconedit")){
+      return;
+    }
+    showOutputView(false);
+    s_tab_view->setCurrentTab(TOOLS);
+    swallow_widget->sWClose(false);
+    swallow_widget->setExeString("kiconedit " + prj->getProjectDir() + *str);
+    swallow_widget->sWExecute();
+    swallow_widget->init();
+    return;
+  }
+
   switchToFile(prj->getProjectDir() + *str);
   //  cerr << "SELECTED2\n";
 }
@@ -1350,22 +1371,17 @@ void CKDevelop::slotDocTreeSelected(int index){
   if(file_info.isFile()){
     slotURLSelected(browser_widget,"file:" + config->readEntry(*str),1,"test");
   }
+  else{
+     KMsgBox::message(0,i18n("Not found!"),"file: \"" + config->readEntry(*str) + i18n("\" not found!"),KMsgBox::INFORMATION);
+       return;
+  }
 }
 void CKDevelop::slotToolsKIconEdit(){
 
   if(!CToolClass::searchProgram("kiconedit")){
     return;
   }
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
+  
 
   showOutputView(false);
 
@@ -1381,16 +1397,7 @@ void CKDevelop::slotToolsKDbg(){
   if(!CToolClass::searchProgram("kdbg")){
     return;
   }
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
+  
 
   showOutputView(false);
 
@@ -1437,7 +1444,7 @@ void CKDevelop::slotHelpHomepage(){
   //  slotURLSelected(browser_widget,"http://anakonda.alpha.org/~smeier/kdevelop/index.html",1,"test");
 }
 void CKDevelop::slotHelpAbout(){
-  KMsgBox::message(this,i18n("About KDevelop..."),i18n("\tKDevelop Version "+version+" \n\n\t(c) 1998,1999 KDevelop Team \n
+  KMsgBox::message(this,i18n("About KDevelop..."),i18n("\t   KDevelop Version "+version+" \n\n\t(c) 1998,1999 KDevelop Team \n
 Sandy Meier <smeier@rz.uni-potsdam.de>
 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 Stefan Bartel <bartel@rz.uni-potsdam.de>

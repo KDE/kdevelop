@@ -1,9 +1,14 @@
+1999-02-21  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* fixed the $ bug in CProject
+	* added "file not found!" msgbox to the doc-browser
+	* added better integration of KIconedit, accessable via LFV
+	
 1999-02-20  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* remove the sh-scripts "autoconfsuite","cleanrebuildall","rebuildmakefiles" and
 	replaced it with a C++ solution
-	* fixed a bug in cpp.tar.gz
+	* fixed a bug in cpp.tar.gz (doubled SOURCE in Makefile.am)
 	
-
 1999-02-19  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* replaced all #include <q*.h> with the longer version
 	* added a ring bell after a make

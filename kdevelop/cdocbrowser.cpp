@@ -16,6 +16,8 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
+
 #include "cdocbrowser.h"
 
 #include <iostream.h>
@@ -105,6 +107,10 @@ void CDocBrowser::showURL(QString url,bool reload){
            show();
       KFM::removeTempFile(str);
       file.close();
+    }
+    else{
+      KMsgBox::message(0,i18n("Not found!"),"file: \"" + str + i18n("\" not found!"),KMsgBox::INFORMATION);
+       return;
     }
   }
   

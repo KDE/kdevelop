@@ -44,18 +44,18 @@ CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name)
   //  class_pop->insertItem(i18n("Remove Class "),this,SLOT(slotClassRemove())); I think it is not
   // usefull, or? -Sandy
   // class_pop->insertItem(i18n("Delete Class..."),this,SLOT(slotClassDelete()));
-  class_pop->insertSeparator();
-  class_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
-  class_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
+  //  class_pop->insertSeparator();
+  // class_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
+  // class_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
 
 
   member_pop = new KPopupMenu();
   member_pop->setTitle(i18n("Method:"));
-  member_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
+  //member_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
   member_pop->insertItem(i18n("Definition"),this,SLOT(slotViewDefinition()));
-  member_pop->insertSeparator();
-  member_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
-  member_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
+  //member_pop->insertSeparator();
+  //member_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
+  //member_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
 
   project_pop = new KPopupMenu();
   project_pop->setTitle(i18n("Project:"));

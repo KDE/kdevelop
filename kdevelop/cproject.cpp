@@ -163,37 +163,62 @@ QString CProject::getBinPROGRAM(){
   return config->readEntry("bin_program");
 }
 void CProject::setLDFLAGS(QString flags){
+  config->setDollarExpansion(false);
   config->setGroup("Config for BinMakefileAm");
   config->writeEntry("ldflags",flags);
+  config->setDollarExpansion(true);
 }
 QString CProject::getLDFLAGS(){
+  QString str;
+  config->setDollarExpansion(false);
   config->setGroup("Config for BinMakefileAm");
-  return config->readEntry("ldflags");
+  str = config->readEntry("ldflags");
+  config->setDollarExpansion(true);
+  return str;
 }
 void CProject::setCXXFLAGS(QString flags){
+  config->setDollarExpansion(false);
   config->setGroup("Config for BinMakefileAm");
   config->writeEntry("cxxflags",flags);
+  config->setDollarExpansion(true);
 }
 QString CProject::getCXXFLAGS(){
+  QString str;
+  config->setDollarExpansion(false);
   config->setGroup("Config for BinMakefileAm");
-  return config->readEntry("cxxflags");
+  str = config->readEntry("cxxflags");
+  config->setDollarExpansion(true);
+  return str;
 }
 void CProject::setAdditCXXFLAGS(QString flags){
+  config->setDollarExpansion(false);
   config->setGroup("Config for BinMakefileAm");
   config->writeEntry("addcxxflags",flags);
+  config->setDollarExpansion(true);
 }
 QString CProject::getAdditCXXFLAGS(){
+  QString str;
+  config->setDollarExpansion(false);
   config->setGroup("Config for BinMakefileAm");
-  return config->readEntry("addcxxflags");
+  str = config->readEntry("addcxxflags");
+  config->setDollarExpansion(true);
+  return str;
 }
 /** set the librarys*/
 void CProject::setLDADD(QString libstring){
+  config->setDollarExpansion(false);
   config->setGroup("Config for BinMakefileAm");
   config->writeEntry("ldadd",libstring);
+  config->setDollarExpansion(true);
 }
+
 QString CProject::getLDADD(){
+  QString str;
+  config->setDollarExpansion(false);
   config->setGroup("Config for BinMakefileAm");
-  return config->readEntry("ldadd");
+  str = config->readEntry("ldadd");
+  config->setDollarExpansion(true);
+  return str;
 }
   
 void CProject::getAllFiles(QStrList& list){
