@@ -1524,16 +1524,40 @@ void CKDevelop::slotKDlgViewStatusbar(){
 
 }
 
-/////////////////////////////////////////////////////////////////////
-// Slots for the classbrowser wizard button
-/////////////////////////////////////////////////////////////////////
+/*********************************************************************
+ *                                                                   *
+ *             SLOTS FOR THE CLASSBROWSER WIZARD BUTTON              *
+ *                                                                   *
+ ********************************************************************/
+
+/*---------------------------- CKDevelop::slotClassbrowserViewClass()
+ * slotClassbrowserViewClass()
+ *   Event when the user wants to view the classdeclaration from the
+ *   browser toolbar.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewClass()
 {
   KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
-  CVGotoDefinition( classname, "", THCLASS );
+
+  CVGotoDeclaration( classname, "", THCLASS );
 }
 
+/*---------------------------- CKDevelop::slotClassbrowserViewDeclaration()
+ * slotClassbrowserViewDeclaration()
+ *   Event when the user wants to view a declaration from the
+ *   browser toolbar/menu.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewDeclaration()
 {
   KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
@@ -1545,6 +1569,16 @@ void CKDevelop::slotClassbrowserViewDeclaration()
                      ( methodname.isEmpty() ? THCLASS : THPUBLIC_METHOD ) );
 }
 
+/*----------------------- CKDevelop::slotClassbrowserViewDefinition()
+ * slotClassbrowserViewDefinition()
+ *   Event when the user wants to view a definition from the  browser
+ *   toolbar/menu.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewDefinition()
 {
   KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
@@ -1558,6 +1592,16 @@ void CKDevelop::slotClassbrowserViewDefinition()
     CVGotoDefinition( classname, methodname, THPUBLIC_METHOD );
 }
 
+/*------------------------------ CKDevelop::slotClassbrowserNewMethod()
+ * slotClassbrowserNewMethod()
+ *   Event when the user wants to create a new method from the browser
+ *   toolbar/menu.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserNewMethod()
 {
   KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
@@ -1567,6 +1611,16 @@ void CKDevelop::slotClassbrowserNewMethod()
     slotCVAddMethod( classname );
 }
 
+/*------------------------- CKDevelop::slotClassbrowserNewAttribute()
+ * slotClassbrowserNewAttribute()
+ *   Event when the user wants to create a new attribute from the 
+ *   browser toolbar/menu.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserNewAttribute()
 {
   KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
@@ -1575,7 +1629,6 @@ void CKDevelop::slotClassbrowserNewAttribute()
   if( !classname.isEmpty() )
     slotCVAddAttribute( classname );
 }
-
 
 /////////////////////////////////////////////////////////////////////
 // Other slots and functions needed
