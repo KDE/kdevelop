@@ -59,6 +59,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
   list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)"));
   list_cpp->insertItem(i18n("Empty Textfile"));
   list_cpp->insertItem(i18n("Qt/KDE Dialog (*.kdevdlg)"));
+  list_cpp->insertItem(i18n("Qt2 User Interface (*.ui)"));
   list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
@@ -249,7 +250,7 @@ void CNewFileDlg::slotTabSelected(int item){
 }
 void CNewFileDlg::slotOKClicked(){
   QString text = edit->text();
-  if ( (fileType() == "CPP") && 
+  if ( (fileType() == "CPP") &&
        !(text.right(4) == ".cpp" || text.right(3) == ".cc" 
 	|| text.right(2) == ".C" || text.right(2) == ".c" || text.right(4) == ".cxx" || text.right(3) == ".ec" || text.right(5) == ".ecpp" )){
     KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!")
@@ -278,6 +279,10 @@ void CNewFileDlg::slotOKClicked(){
   }
   if ( (fileType() == "DIALOG") && (text.right(8) != ".kdevdlg")){
     KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .kdevdlg !"),KMsgBox::EXCLAMATION);
+    return;
+  }
+  if ( (fileType() == "QT2DIALOG") && (text.right(3) != ".ui")){
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .ui !"),KMsgBox::EXCLAMATION);
     return;
   }
   if ( (fileType() == "ICON") && (text.right(4) != ".xpm")){
@@ -374,6 +379,12 @@ void CNewFileDlg::slotOKClicked(){
     file.open(IO_ReadWrite);
     file.close();
   }
+  if( filetype == "QT2DIALOG"){
+    QFile file(complete_filename);
+    file.remove();
+    file.open(IO_ReadWrite);
+    file.close();
+  }
   accept();
 }
 
@@ -395,6 +406,9 @@ QString CNewFileDlg::fileType(){
     }
     if(str == i18n("Qt/KDE Dialog (*.kdevdlg)")){
       return "DIALOG";
+    }
+    if(str == i18n("Qt2 User Interface (*.ui)")){
+      return "QT2DIALOG";
     }
     if(str == i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)")){
       return "LEXICAL";
@@ -492,6 +506,9 @@ void CNewFileDlg::slotEditTextChanged(const char* text){
       }
       if (filetype == "DIALOG" ) {
 	edit->setText(text + QString(".kdevdlg"));
+      }
+      if (filetype == "QT2DIALOG" ) {
+	edit->setText(text + QString(".ui"));
       }
       edit->setCursorPosition(1);
     }
