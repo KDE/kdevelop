@@ -20,6 +20,7 @@
 #include "ClassStoreIface.h"
 #include <iostream.h>
 #include <qregexp.h>
+#include <kdebug.h>
 #include "programmingbycontract.h"
 
 #include <qfile.h>
@@ -210,7 +211,7 @@ void ClassStore::out()
     ParsedStruct *aStruct;
 
     // Output all namespaces
-    cout << "Global namespaces" << endl;
+    kdDebug(9007) << "Global namespaces" << endl;
     globalScopes = globalContainer.getSortedScopeList();
     for ( aScope = globalScopes->first();
           aScope != NULL;
@@ -219,7 +220,7 @@ void ClassStore::out()
 
 
     // Output all classes.
-    cout << "Global classes\n";
+    kdDebug(9007) << "Global classes\n";
     classes = getSortedClassList();
     for ( aClass = classes->first();
           aClass != NULL;
@@ -230,7 +231,7 @@ void ClassStore::out()
     delete classes;
 
     // Global methods
-    cout << "Global functions\n";
+    kdDebug(9007) << "Global functions\n";
 
     globalMethods = globalContainer.getSortedMethodList();
     for ( aMethod = globalMethods->first();
@@ -241,7 +242,7 @@ void ClassStore::out()
     delete globalMethods;
 
     // Global structures
-/*    cout << "Global variables\n";
+/*    kdDebug(9007) << "Global variables\n";
     globalAttributes = globalContainer.getSortedAttributeList();
     for ( aAttr = globalAttributes->first();
           aAttr != NULL;
@@ -251,7 +252,7 @@ void ClassStore::out()
     delete globalAttributes;
 */
     // Global structures
-/*    cout << "Global structs\n";
+/*    kdDebug(9007) << "Global structs\n";
     globalStructs = getSortedStructList();
     for ( aStruct = globalStructs->first();
           aStruct != NULL;

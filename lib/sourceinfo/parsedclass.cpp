@@ -19,6 +19,7 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <kdebug.h>
 #include <qstrlist.h>
 #include "programmingbycontract.h"
 #include "parsedclass.h"
@@ -493,42 +494,43 @@ void ParsedClass::out()
     char *str;
 
     if ( !comment().isEmpty() )
-        cout << comment().latin1() << endl;
+        kdDebug(9007) << comment() << endl;
 
-    cout << "Class " << path().latin1() << " @ line " << declaredOnLine();
-    cout << " - " << declarationEndsOnLine() << endl;
-    cout << "  Defined in files:" << endl;
-    cout << "    " << declaredInFile().latin1() << endl;
-    cout << "    " << definedInFile().latin1() << endl;
-    cout << "  Parents:" << endl;
+
+    kdDebug(9007) << "Class " << path() << " @ line " << declaredOnLine();
+    kdDebug(9007) << " - " << declarationEndsOnLine() << endl;
+    kdDebug(9007) << "  Defined in files:" << endl;
+    kdDebug(9007) << "    " << declaredInFile() << endl;
+    kdDebug(9007) << "    " << definedInFile() << endl;
+    kdDebug(9007) << "  Parents:" << endl;
     for ( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
         aParent->out();
-    cout << "  Friends:" << endl;
+    kdDebug(9007) << "  Friends:" << endl;
     QStringList::ConstIterator friendsIt;
     for ( friendsIt = _friends.begin(); friendsIt != _friends.end(); ++friendsIt )
-        cout << "   " << (*friendsIt).latin1() << endl;
-    cout << "  Attributes:" << endl;
+        kdDebug(9007) << "   " << *friendsIt << endl;
+    kdDebug(9007) << "  Attributes:" << endl;
     for ( ait.toFirst(); ait.current(); ++ait )
         ait.current()->out();
-    cout << "  Methods:" << endl;
+    kdDebug(9007) << "  Methods:" << endl;
     for ( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() )
         aMethod->out();
-    cout << "  Signals:" << endl;
+    kdDebug(9007) << "  Signals:" << endl;
     for ( aMethod = signalList.first(); aMethod != NULL; aMethod = signalList.next() )
         aMethod->out();
-    cout << "  Slots:" << endl;
+    kdDebug(9007) << "  Slots:" << endl;
     for ( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
         aMethod->out();
-    //    cout << "  Signal to slot mappings:" << endl;
+    //    kdDebug(9007) << "  Signal to slot mappings:" << endl;
     //    for ( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
     //        aSS->out();
-    cout << "  Classes:" << endl;
+    kdDebug(9007) << "  Classes:" << endl;
     for ( classIterator.toFirst();
           classIterator.current();
           ++classIterator )
         classIterator.current()->out();
 
-    cout << endl;
+    kdDebug(9007) << endl;
 }
 
 

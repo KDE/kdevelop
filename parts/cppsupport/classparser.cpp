@@ -2352,7 +2352,7 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 		aClass = parseObjcImplementation();
 		
 		if (aClass != NULL && !store->hasClass(aClass->name())) {
-                    cout << "Storing objective implementation with path: " << aClass->path().latin1() << endl;
+                    kdDebug(9007) << "Storing objective implementation with path: " << aClass->path().latin1() << endl;
                     store->addClass(aClass);
 		}
 		break;
@@ -2361,7 +2361,7 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 		aClass = parseObjcClass();
 		
 		if (aClass != NULL && !store->hasClass(aClass->name())) {
-                    cout << "Storing objective interface with path: " << aClass->path().latin1() << endl;
+                    kdDebug(9007) << "Storing objective interface with path: " << aClass->path().latin1() << endl;
                     store->addClass(aClass);
 		}
     		break;

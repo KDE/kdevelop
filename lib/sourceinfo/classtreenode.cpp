@@ -16,7 +16,8 @@
  ***************************************************************************/
 
 #include "classtreenode.h"
-#include <iostream.h>
+#include <kdebug.h>
+//#include <iostream.h>
 #include "programmingbycontract.h"
 
 
@@ -120,17 +121,17 @@ void ClassTreeNode::out()
 {
     ClassTreeNode *aChild;
     
-    cout << "(";
-    
-    cout << theClass ? theClass->name().data() : "??";
-    
+    kdDebug(9007) << "(";
+
+    kdDebug(9007) << (theClass ? theClass->name() : "??");
+
     for ( aChild = children.first();
           aChild != NULL;
           aChild = children.next() ) {
         aChild->out();
     }
-    
-    cout << ")";
+
+    kdDebug(9007) << ")";
 }
 
 

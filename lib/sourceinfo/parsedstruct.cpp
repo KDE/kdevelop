@@ -16,7 +16,8 @@
  ***************************************************************************/
 
 #include "parsedstruct.h"
-#include <iostream.h>
+#include <kdebug.h>
+//#include <iostream.h>
 
 
 /*********************************************************************
@@ -71,9 +72,9 @@ ParsedStruct::~ParsedStruct()
 void ParsedStruct::out()
 {
     if ( !comment().isEmpty() )
-        cout << "   " << comment().latin1() << "\n";
+        kdDebug(9007) << "   " << comment() << "\n";
     
-    cout << "   " << path().latin1() << "\n";
+    kdDebug(9007) << "   " << path() << "\n";
     for ( attributeIterator.toFirst();
           attributeIterator.current();
           ++attributeIterator )

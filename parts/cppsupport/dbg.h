@@ -17,18 +17,18 @@
 using namespace std;
 
 #ifdef ENABLEDEBUGOUTPUT
-#define err( x ) cerr << x
+#define errmsg( x ) cerr << x
 #define errln( x ) cerr << x << endl
 #else
-#define err( x )
+#define errmsg( x )
 #define errln( x )
 #endif
 
 #ifdef ENABLEMESSAGEOUTPUT
-#define out( x ) cout << x
+#define outmsg( x ) cout << x
 #define outln( x ) cout << x << endl
 #else
-#define out( x )
+#define outmsg( x )
 #define outln( x )
 #endif
 

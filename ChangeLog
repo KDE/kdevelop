@@ -1,5 +1,11 @@
-2002-04-06  Roberto Raggi <raggi@cli.di.unipi.it>
-	* updated to the new gideon sdk
+2002-04-06 jbb <jbb@kdevelop.org> 
+	* Fixed some crashes, mainly to do with using .latin1() on
+      a null string.
+    * Replaced cout with kdDebug (in a lot of places -  part of
+      the above fix for crashes)
+    * fixed gcc3.0 compiler clash with define of out() in dbg.h
+    * Added K_DCOP to tokenizer, which fixed one cause of the latin1()
+      crash.
 	
 2002-04-06  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Python part can execute scripts and strings now

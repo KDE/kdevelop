@@ -475,7 +475,7 @@ CppCCParser::parseFunctionBody( )
                 outln( "{ found" );
                 m_lastScope.increase( ++iScope );
                 tmpScope.increase( iScope );
-                out( "entering scope: " ); m_lastScope.debugOutput( ); outln( "" );
+                outmsg( "entering scope: " ); m_lastScope.debugOutput( ); outln( "" );
                 break;
 
             case '}'    :
@@ -535,14 +535,14 @@ CppCCParser::postProcessVariables( )
         return;
     }
 
-    err( "   `-> m_lastScope: '" ); m_lastScope.debugOutput( ); errln( "'" );
+    errmsg( "   `-> m_lastScope: '" ); m_lastScope.debugOutput( ); errln( "'" );
     for( int i = 0; i < varList.count( ); i++ ){
         pVar = varList.at( i );
         if( !pVar->scope.isValidIn( m_lastScope ) ) {
-            err( "   `-> scope '" ); pVar->scope.debugOutput( ); errln( "' won't be added" );
+            errmsg( "   `-> scope '" ); pVar->scope.debugOutput( ); errln( "' won't be added" );
         }
         else {
-            err( "   `-> scope '" ); pVar->scope.debugOutput( ); errln( "' will be added" );
+            errmsg( "   `-> scope '" ); pVar->scope.debugOutput( ); errln( "' will be added" );
             variableList.append( pVar );
         }
     }
@@ -559,7 +559,7 @@ CppCCParser::debugPrint( )
     for( int i = 0; i < varList.count( ); i++ ){
         errln( "Variable found @line: "      << varList.at( i )->iLine );
         errln( "  Variable name          : " << varList.at( i )->sVariableName );
-        err  ( "  Variable value         : " << varList.at( i )->iVariableValue );
+        errmsg  ( "  Variable value         : " << varList.at( i )->iVariableValue );
         switch( varList.at( i )->iVariableValue ){
             case CPBOOL   : errln( " ( bool )"  ); break;
             case CPVOID   : errln( " ( void )"  ); break;
@@ -571,19 +571,19 @@ CppCCParser::debugPrint( )
             default       : errln( " *** iReturnValue default" );
         }
 
-        err( "  Variable integer type  : " << varList.at( i )->iVariableType );
+        errmsg( "  Variable integer type  : " << varList.at( i )->iVariableType );
         switch( varList.at( i )->iVariableType ){
             case CPPOINTER  : errln( " ( pointer )"   ); break;
             case CPREFERENCE: errln( " ( reference )" ); break;
             case CPNONE     : errln( " ( none )"      ); break;
             default         : errln( " *** iType default" );
         }
-        err( "  Variable string  type  : " );
+        errmsg( "  Variable string  type  : " );
         if( varList.at( i )->sVariableType == "" )
             errln( "( standard type )" );
         else
             errln( varList.at( i )->sVariableType );
-        err( "  Scope                  : " ); varList.at( i )->scope.debugOutput( ); errln ( "" );
+        errmsg( "  Scope                  : " ); varList.at( i )->scope.debugOutput( ); errln ( "" );
     }
 
     errln( "-- debugPrint end --" );

@@ -18,6 +18,7 @@
 
 #include <iostream.h>
 //#include <qdatastream.h>
+#include <kdebug.h>
 #include <qstring.h>
 #include "parsedargument.h"
 #include "programmingbycontract.h"
@@ -172,7 +173,7 @@ QString ParsedArgument::toString()
  *-----------------------------------------------------------------*/
 void ParsedArgument::out()
 {
-    cout << toString().latin1();
+    kdDebug(9007) << toString() << endl;
 }
 
 

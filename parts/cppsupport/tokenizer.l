@@ -94,6 +94,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"Q_EXPORT"       {}
 <INITIAL>"Q_EXPORTH"      {}
 <INITIAL>"Q_OBJECT"       {}
+<INITIAL>"K_DCOP"         {}
 <INITIAL>"__BEGIN_DECLS"  {}
 <INITIAL>"__END_DECLS"    {}
 <INITIAL>"inline"         {}

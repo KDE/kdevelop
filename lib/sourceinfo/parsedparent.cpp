@@ -18,6 +18,7 @@
 
 #include <iostream.h>
 //#include <qdatastream.h>
+#include <kdebug.h>
 #include "parsedparent.h"
 #include "programmingbycontract.h"
 
@@ -99,27 +100,27 @@ void ParsedParent::setAccess( PIAccess aAccess )
  *-----------------------------------------------------------------*/
 void ParsedParent::out()
 {
-    cout << "    " << name().latin1() << "(";
+    kdDebug(9007) << "    " << name() << "(";
 
     switch (access())
         {
         case PIE_PUBLIC:
-            cout << "public";
+            kdDebug(9007) << "public";
             break;
         case PIE_PROTECTED:
-            cout << "protected";
+            kdDebug(9007) << "protected";
             break;
         case PIE_PRIVATE:
-            cout << "private";
+            kdDebug(9007) << "private";
             break;
         case PIE_PACKAGE:
-            cout << "";
+            kdDebug(9007) << "";
             break;
         default:
-            cerr << "Internal error";
+            kdDebug(9007) << "Internal error";
         }
     
-    cout << ")\n";
+    kdDebug(9007) << ")\n";
 }
 
 

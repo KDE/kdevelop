@@ -20,6 +20,7 @@
 #include <iostream.h>
 //#include <qdatastream.h>
 #include <qstring.h>
+#include <kdebug.h>
 #include "parsedattribute.h"
 #include "programmingbycontract.h"
 
@@ -218,32 +219,32 @@ void ParsedAttribute::out()
     QString attrString;
     
     if ( !comment().isEmpty() )
-        cout << "    " << comment().latin1() << "\n";
+        kdDebug(9007) << "    " << comment() << "\n";
     
-    cout << "    ";
+    kdDebug(9007) << "    ";
     
     switch ( access() )
         {
         case PIE_PUBLIC:
-            cout << "public ";
+            kdDebug(9007) << "public ";
             break;
         case PIE_PROTECTED:
-            cout << "protected ";
+            kdDebug(9007) << "protected ";
             break;
         case PIE_PRIVATE:
-            cout << "private ";
+            kdDebug(9007) << "private ";
             break;
         case PIE_PACKAGE:
-            cout << "";
+            kdDebug(9007) << "";
             break;
         case PIE_GLOBAL:
-            cout << "";
+            kdDebug(9007) << "";
             break;
         }
     
-    // cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
-    cout << asString().latin1() << " @ line " << declaredOnLine()
-         << " - " << declarationEndsOnLine() << endl;
+    // kdDebug(9007) << ( type.isEmpty() ? " " : type.data() ) << " " << name;
+    kdDebug(9007) << asString() << " @ line " << declaredOnLine()
+                  << " - " << declarationEndsOnLine() << endl;
 }
 
 

@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <qdatastream.h>
 #include <qregexp.h>
+#include <kdebug.h>
 #include "parsedmethod.h"
 
 /*********************************************************************
@@ -143,55 +144,55 @@ void ParsedMethod::out()
     char buf[10];
 
     if ( !comment().isEmpty() )
-        cout << "    " << comment().latin1() << "\n";
+        kdDebug(9007) << "    " << comment() << "\n";
 
-    cout << "    ";
+    kdDebug(9007) << "    ";
     switch( access() )
         {
         case PIE_PUBLIC:
-            cout << isObjectiveC()? "" : "public ";
+            kdDebug(9007) << (isObjectiveC() ? "" : "public ");
             break;
         case PIE_PROTECTED:
-            cout << "protected ";
+            kdDebug(9007) << "protected ";
             break;
         case PIE_PRIVATE:
-            cout << "private ";
+            kdDebug(9007) << "private ";
             break;
         case PIE_PACKAGE:
-            cout << "";
+            kdDebug(9007) << "";
             break;
         case PIE_GLOBAL:
-            cout << "";
+            kdDebug(9007) << "";
             break;
         }
 
     if ( isVirtual() )
-        cout << "virtual ";
+        kdDebug(9007) << "virtual ";
 
     if ( isStatic() )
-        cout << "static ";
+        kdDebug(9007) << "static ";
 
     if ( isSlot() )
-        cout << "slot ";
+        kdDebug(9007) << "slot ";
 
     if ( isSignal() )
-        cout << "signal ";
+        kdDebug(9007) << "signal ";
 
-    cout << type().latin1()  << " " << name().latin1() << "( ";
+    kdDebug(9007) << type()  << " " << name() << "( ";
 
     for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
         if ( arg != arguments.getFirst() )
-            cout << ", ";
+            kdDebug(9007) << ", ";
 
         arg->out();
     }
 
-    cout << ( isConst()? " ) const\n" : " )\n" );
-    cout << "      declared @ line " << declaredOnLine()
-         << " - " << declarationEndsOnLine() << endl;
-    cout << "      defined(in " << ( isInHFile()? ".h" : ( isObjectiveC()? ".m" : ".cc" ) ) << ")";
-    cout << "@ line " << definedOnLine()
-         << " - " << definitionEndsOnLine() << endl;
+    kdDebug(9007) << ( isConst()? " ) const\n" : " )\n" );
+    kdDebug(9007) << "      declared @ line " << declaredOnLine()
+                  << " - " << declarationEndsOnLine() << endl;
+    kdDebug(9007) << "      defined(in " << ( isInHFile()? ".h" : ( isObjectiveC()? ".m" : ".cc" ) ) << ")";
+    kdDebug(9007) << "@ line " << definedOnLine()
+                  << " - " << definitionEndsOnLine() << endl;
 }
 
 

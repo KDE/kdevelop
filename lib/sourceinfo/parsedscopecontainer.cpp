@@ -16,7 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+//#include <iostream.h>
+#include <kdebug.h>
 #include "parsedclass.h"
 #include "parsedscopecontainer.h"
 #include "programmingbycontract.h"
@@ -196,48 +197,48 @@ QStringList *ParsedScopeContainer::getSortedScopeNameList()
 void ParsedScopeContainer::out()
 {
     if ( !comment().isEmpty() )
-        cout << comment().latin1() << endl;
+        kdDebug(9007) << comment() << endl;
     
     if ( !path().isEmpty() ) {
-        cout << "Namespace " << name().latin1() << " @ line " << declaredOnLine();
-        cout << " - " << declarationEndsOnLine() << endl;
-        cout << "  Defined in files:" << endl;
-        cout << "    " << declaredInFile().latin1() << endl;
-        cout << "    " << definedInFile().latin1() << endl;
+        kdDebug(9007) << "Namespace " << name() << " @ line " << declaredOnLine();
+        kdDebug(9007) << " - " << declarationEndsOnLine() << endl;
+        kdDebug(9007) << "  Defined in files:" << endl;
+        kdDebug(9007) << "    " << declaredInFile() << endl;
+        kdDebug(9007) << "    " << definedInFile() << endl;
     }
     
     if ( path().isEmpty() )
-        cout << "Global ";
-    cout << "Namespaces:" << endl;
+        kdDebug(9007) << "Global ";
+    kdDebug(9007) << "Namespaces:" << endl;
     for ( scopeIterator.toFirst(); 
           scopeIterator.current();
           ++scopeIterator )
         scopeIterator.current()->out();
     
     if ( path().isEmpty() )
-        cout << "Global ";
-    cout << "Classes:" << endl;
+        kdDebug(9007) << "Global ";
+    kdDebug(9007) << "Classes:" << endl;
     for ( classIterator.toFirst(); 
           classIterator.current();
           ++classIterator )
         classIterator.current()->out();
     if ( path().isEmpty() )
-        cout << "Global ";
-    cout << "Structures:" << endl;
+        kdDebug(9007) << "Global ";
+    kdDebug(9007) << "Structures:" << endl;
     for ( structIterator.toFirst(); 
           structIterator.current();
           ++structIterator )
         structIterator.current()->out();
     if ( path().isEmpty() )
-        cout << "Global ";
-    cout << "Functions:" << endl;
+        kdDebug(9007) << "Global ";
+    kdDebug(9007) << "Functions:" << endl;
     for ( methodIterator.toFirst(); 
           methodIterator.current();
           ++methodIterator )
         methodIterator.current()->out();
     if ( path().isEmpty() )
-        cout << "Global ";
-    cout << "Variables:" << endl;
+        kdDebug(9007) << "Global ";
+    kdDebug(9007) << "Variables:" << endl;
     for ( attributeIterator.toFirst(); 
           attributeIterator.current();
           ++attributeIterator )

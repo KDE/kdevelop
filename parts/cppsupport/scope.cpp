@@ -131,7 +131,7 @@ CScope::debugOutput( ) const
     outln ( "*** debug output CScope started" );
     for( int i = 0; i < MAXSCOPES; i++ ){
         if( cScope[ i ] )
-            err( static_cast <char> ( cScope[ i ] + '0' ) << "." );
+            errmsg( static_cast <char> ( cScope[ i ] + '0' ) << "." );
         else
             break;
     }
