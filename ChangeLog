@@ -1,11 +1,10 @@
+1999-03-25   Sandy Meier <smeier@rz.uni-potsdam.de>
+
+	* Converted the LFV to QListView.
+
 1999-03-24 Jonas Nordin <jonas.nordin@cenacle.se>
 	* Converted the classview from KTreeList to QListView. Minor fixes to the
 	  parser.
-	
-1999-03-23  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-  * fixed panner-devider bug in switching when Browsertoolbar is disabled
-  * fixed menubar disableCommand bug for the disabling of menuitems on startup
-    add new disablings at the end of initKDlgMenuBar()
 
 1999-03-24  Pascal Krahmer  <pascal@breast.de>
         * added some kdlg_* methods to ckdevelop in order to make it possible to get the pointers to the KDlg* widgets
@@ -17,13 +16,18 @@
 	* fixed a update bug in all slotOptionsEditor...() methods, 
 	the header widget didn't get updated
 	* fixed CKDevelop::addFileToProject():  proof if file already is included in the project file
-	* ported the CDocTree (inherited KTreeList ) to a QListView
+	* ported the CDocTree (inherited KTreeList ) to QListView
 
 1999-03-24 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed the classtooldialog. All options should work now.
 	* fixed minor glitch in the classparser. Didn't handle defaultvalues
 	        without argumentnames.
 
+1999-03-23  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+        * fixed panner-devider bug in switching when Browsertoolbar is disabled
+        * fixed menubar disableCommand bug for the disabling of menuitems on startup
+           add new disablings at the end of initKDlgMenuBar()
+	
 1999-03-23 Jonas Nordin <jonas.nordin@cenacle.se>
 	* added new classtool dialog inspired from ISE Eiffel.
 	* fixed the ClassParser. Seems to handle the Qt includes now.
