@@ -217,7 +217,7 @@ void CppAddMethodDialog::slotUpPara()
 void CppAddMethodDialog::slotDownPara()
 {
   int curr = lbPara->currentItem();
-  if (curr >= 0 && curr < lbPara->count()-1) {
+  if (curr >= 0 && curr < (int)lbPara->count()-1) {
       QString txt = lbPara->currentText();
       lbPara->removeItem(curr);
       curr++;
