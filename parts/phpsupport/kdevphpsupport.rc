@@ -2,12 +2,14 @@
 <kpartgui name="KPHPSupport" version="2">
 <MenuBar>
   <Menu name="build" >
-    <Action name="build_run" />
-    <Action name="phpbook_config" />
+    <Action name="build_execute" />
   </Menu>
   <Menu name="project" >
     <Action name="project_new_class" />
   </Menu>
 </MenuBar>
+<ToolBar name="buildToolBar">
+    <Action name="build_execute" />
+</ToolBar>
 </kpartgui>
 

@@ -1,175 +1,156 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>PHPNewClassDlgBase</class>
-<include location="global">klineedit.h</include>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
-        <cstring>NewClass</cstring>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>m_ClassDLG</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>450</width>
-            <height>292</height>
+            <width>439</width>
+            <height>386</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Form1</string>
     </property>
     <grid>
-        <property stdset="1">
-            <name>margin</name>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
             <number>11</number>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
+        <property name="spacing">
             <number>6</number>
         </property>
-        <widget row="4"  column="5" >
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_cancelButton</cstring>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Cancel</string>
+            <property name="text">
+                <string>Classname:</string>
             </property>
         </widget>
-        <widget row="0"  column="1" >
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_classNameEdit</cstring>
-            </property>
-        </widget>
-        <widget row="4"  column="3"  rowspan="1"  colspan="2" >
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_okButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>OK</string>
-            </property>
-        </widget>
-        <widget row="1"  column="0" >
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel3</cstring>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Filename:</string>
-            </property>
-        </widget>
-        <spacer row="4"  column="0"  rowspan="1"  colspan="3" >
-            <property>
-                <name>name</name>
+        <spacer row="5" column="0" rowspan="1" colspan="3">
+            <property name="name" stdset="0">
                 <cstring>Spacer1</cstring>
             </property>
-            <property stdset="1">
-                <name>orientation</name>
+            <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
-            <property stdset="1">
-                <name>sizeType</name>
+            <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
-            <property>
-                <name>sizeHint</name>
+            <property name="sizeHint">
                 <size>
                     <width>20</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget row="0"  column="2"  rowspan="1"  colspan="2" >
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QPushButton" row="5" column="3" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_okButton</cstring>
+            </property>
+            <property name="text">
+                <string>OK</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="5" column="5" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_cancelButton</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="KLineEdit" row="0" column="4" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>m_baseClassEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>m_classNameEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="2" rowspan="1" colspan="2">
+            <property name="name">
                 <cstring>TextLabel2</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>Baseclass:</string>
             </property>
         </widget>
-        <widget row="3"  column="0"  rowspan="1"  colspan="6" >
-            <class>QMultiLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_docEdit</cstring>
+        <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>TextLabel4</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>/*
-* @autor dkldf
-*/</string>
+            <property name="text">
+                <string>Class Template:</string>
             </property>
         </widget>
-        <widget row="0"  column="0" >
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1</cstring>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Classname:</string>
+            <property name="text">
+                <string>Directory:</string>
             </property>
         </widget>
-        <widget row="1"  column="1" >
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>Filename:</string>
+            </property>
+        </widget>
+        <widget class="QToolButton" row="2" column="6">
+            <property name="name">
+                <cstring>m_dirButton</cstring>
+            </property>
+            <property name="text">
+                <string>...</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="1">
+            <property name="name">
                 <cstring>m_fileNameEdit</cstring>
             </property>
         </widget>
-        <widget row="1"  column="2"  rowspan="1"  colspan="3" >
-            <class>QCheckBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_classTemplateCheckbox</cstring>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>use class template</string>
+        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>m_dirEdit</cstring>
             </property>
         </widget>
-        <widget row="2"  column="0"  rowspan="1"  colspan="2" >
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel4</cstring>
+        <widget class="QTextEdit" row="4" column="0" rowspan="1" colspan="7">
+            <property name="name">
+                <cstring>m_classTemplate</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Documentation</string>
+            <property name="font">
+                <font>
+                    <family>Fixed [Misc]</family>
+                </font>
             </property>
-        </widget>
-        <widget row="1"  column="5" >
-            <class>QToolButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_changeButton</cstring>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>change</string>
-            </property>
-        </widget>
-        <widget row="0"  column="4"  rowspan="1"  colspan="2" >
-            <class>KLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_baseClassEdit</cstring>
+            <property name="text">
+                <string>&lt;?php
+if (!defined("FILENAME")){
+define("FILENAME",0);
+/*
+* @author AUTHOR
+*/
+
+class CLASSNAME extends BASECLASS {
+  //constructor
+  function CLASSNAME(){
+   BASECLASS::BASECLASS();
+  }
+ }
+}
+?&gt;</string>
             </property>
         </widget>
     </grid>
@@ -177,15 +158,19 @@
 <connections>
     <connection>
         <sender>m_okButton</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>NewClass</receiver>
+        <signal>clicked()</signal>
+        <receiver>m_ClassDLG</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>m_cancelButton</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>NewClass</receiver>
+        <signal>clicked()</signal>
+        <receiver>m_ClassDLG</receiver>
         <slot>reject()</slot>
     </connection>
 </connections>
+<includes>
+    <include location="global" impldecl="in declaration">klineedit.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -53,7 +53,6 @@ private slots:
     void slotWebData(KIO::Job* job,const QByteArray& data);
     void slotWebResult(KIO::Job* job);
     void slotWebJobStarted(KIO::Job* job);
-    void slotPhpBook(KDialogBase *dlg);
 
     // Internal
     void initialParse();

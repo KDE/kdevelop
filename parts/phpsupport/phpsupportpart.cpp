@@ -34,7 +34,6 @@
 #include "phpsupportfactory.h"
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"
-#include "phpbookconfig.h"
 #include "phpcodecompletion.h"
 #include "phpparser.h"
 #include "phpnewclassdlg.h"
@@ -65,16 +64,13 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
 	   this, SLOT(projectConfigWidget(KDialogBase*)) );
 
   KAction *action;
-  action = new KAction( i18n("&Run"), Key_F9,
+
+  action = new KAction( i18n("&Run"), "exec",Key_F9,
 			this, SLOT(slotRun()),
-			actionCollection(), "build_run" );
+			actionCollection(), "build_execute" );
   action = new KAction( i18n("&New Class..."),0,
 			this, SLOT(slotNewClass()),
 			actionCollection(), "project_new_class" );
-
-  action = new KAction( i18n("&PhpBook"), 0,
-			this, SLOT(slotPhpBook(KDialogBase*)),
-			actionCollection(), "phpbook_config" );
 
   m_phpErrorView = new PHPErrorView(this);
   core()->embedWidget(m_phpErrorView, KDevCore::OutputView, i18n("PHP"));
@@ -135,14 +131,7 @@ void PHPSupportPart::slotTextChanged(){
 }
 
 
-void PHPSupportPart::slotPhpBook(KDialogBase *dlg){
-        cerr << "slotPhPBook" << endl;
-        QVBox *vbox = dlg->addVBoxPage(i18n("PHP Book Settings"));
-          PHPBookConfig *w_PhpBook;
-	  w_PhpBook =new PHPBookConfig(configData, vbox, "PHP Book Config");
-//	  connect(w_PhpBook, SIGNAL(slotOK), this,
-//		  SLOT(slotOK()));
-}
+
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
   cerr << endl << "kdevelop (phpsupport): slotWebResult()" << filename.latin1() << line;
@@ -160,8 +149,8 @@ void PHPSupportPart::slotNewClass(){
   for ( ParsedClass *pclass = classList->first(); pclass != 0;pclass =classList->next() ) {
     classNames.append(pclass->name());
   }
-  PHPNewClassDlg dlg(classNames);
-  dlg.show();
+  PHPNewClassDlg dlg(classNames,project()->projectDirectory());
+  dlg.exec();
  }
 void PHPSupportPart::slotRun(){
   KEditor::EditDocumentIface *e_iface = KEditor::EditDocumentIface::interface(core()->editor()->currentDocument());

@@ -388,7 +388,7 @@ void AppWizardDialog::insertCategoryIntoTreeView(QString completeCategoryPath){
 	pParentItem = new QListViewItem(pParentItem,*it);
       }
       pParentItem->setPixmap(0, SmallIcon("folder"));
-      pParentItem->setOpen(true);
+      //pParentItem->setOpen(true);
       kdDebug(9010) << "Category: " << category << endl;
       m_categoryMap.insert(category,pParentItem);
     }

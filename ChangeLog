@@ -1,3 +1,8 @@
+2001-12-20  Sandy Meier  <smeier@kdevelop.org>
+	* added "new class" dialog to the PHP support 
+	incl. Basename completion and persistent class template
+	TODO: add class to the project after generation, (at the moment KDevProject doesn't support it :-( )
+
 2001-12-15  Victor Röder <victor_roeder@gmx.de>
 
 	* Added persistence functionality to the class store

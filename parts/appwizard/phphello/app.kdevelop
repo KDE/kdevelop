@@ -5,6 +5,8 @@
   <primarylanguage>PHP</primarylanguage>
   <ignoreparts>
    <part>KDevFileView</part>
+   <part>KDevDoxygen</part>
+   <part>KDevdistpart</part>
   </ignoreparts>
  </general>
  <kdevscriptproject>

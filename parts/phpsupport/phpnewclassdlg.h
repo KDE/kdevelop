@@ -28,11 +28,13 @@
 class PHPNewClassDlg : public PHPNewClassDlgBase  {
    Q_OBJECT
 public: 
-   PHPNewClassDlg(const QStringList& baseClassNames,QWidget *parent=0, const char *name=0);
+   PHPNewClassDlg(const QStringList& baseClassNames,const QString& directory,QWidget *parent=0, const char *name=0);
    ~PHPNewClassDlg();
    protected slots:
      void classNameTextChanged(const QString&);
      void fileNameTextChanged(const QString&);
+     void accept();
+     void slotDirButtonClicked();
  protected:
    bool m_filenameModified;
 };
