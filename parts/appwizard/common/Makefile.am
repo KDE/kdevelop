@@ -1,18 +1,18 @@
 admin.tar.gz:
-	tar -cf admin.tar -C $(srcdir) admin
+	$(TAR) -cf admin.tar -C $(srcdir) admin
 	gzip admin.tar
 
 gnome.tar.gz:
-	tar -cf gnome.tar -C $(srcdir)/gnome macros
+	$(TAR) -cf gnome.tar -C $(srcdir)/gnome macros
 	gzip gnome.tar
 
 gnu.tar.gz:
-	tar -cf gnu.tar -C $(srcdir)/gnu AUTHORS  COPYING \
+	$(TAR) -cf gnu.tar -C $(srcdir)/gnu AUTHORS  COPYING \
 		ChangeLog  INSTALL  NEWS  README  TODO
 	gzip gnu.tar
 
 incadmin.tar.gz:
-	tar -cf incadmin.tar -C $(srcdir)/incadmin acconfig.h  \
+	$(TAR) -cf incadmin.tar -C $(srcdir)/incadmin acconfig.h  \
 		config.guess  config.sub  depcomp install-sh  \
 		ltconfig  ltmain.sh  missing  mkinstalldirs
 	gzip incadmin.tar
