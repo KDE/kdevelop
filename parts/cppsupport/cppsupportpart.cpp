@@ -45,9 +45,9 @@
 #include "parsedattribute.h"
 #include "parsedmethod.h"
 #include "classparser.h"
-#include "addclassmethoddlg.h"
 #include "addclassattributedlg.h"
 #include "cppnewclassdlg.h"
+#include "cppaddmethoddlg.h"
 #include "cppcodecompletion.h"
 
 // daniel
@@ -641,7 +641,7 @@ KDevLanguageSupport::Features CppSupportPart::features()
 
 void CppSupportPart::slotNewClass()
 {
-    CppNewClassDialog dlg;
+    CppNewClassDialog dlg(this);
     dlg.exec();
 }
 
@@ -653,7 +653,7 @@ void CppSupportPart::addMethod(const QString &className)
       return;
    }
 
-    AddClassMethodDialog dlg( m_pParser->getClassStore(), className, 0, "methodDlg"); //TODO: Leak ?
+    CppAddMethodDialog dlg( m_pParser->getClassStore(), className, 0, "methodDlg"); //TODO: Leak ?
     if (!dlg.exec())
         return;
 

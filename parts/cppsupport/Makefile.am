@@ -9,15 +9,15 @@ libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lktexteditor
 libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       cppsupportpart.cpp \
 			       cppsupportwidget.cpp \
+			       classparser.cpp \
+			       tokenizer.cpp \
 	                       ccconfigwidget.cpp \
 	                       ccconfigwidgetbase.ui \
 			       cppnewclassdlgbase.ui \
 			       cppnewclassdlg.cpp \
-			       classparser.cpp \
-			       tokenizer.cpp \
-			       addclassmethodui.ui \
+			       cppaddmethoddlg.cpp \
+			       cppaddmethoddlgbase.ui \
 			       cclonefunctiondlg.cpp \
-			       addclassmethoddlg.cpp \
 			       addclassattributedlg.cpp \
 			       cppcodecompletion.cpp \
 			       cppccparser.cpp \

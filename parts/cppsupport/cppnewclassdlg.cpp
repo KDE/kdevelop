@@ -21,15 +21,22 @@
 #include <qradiobutton.h>
 #include <qregexp.h>
 #include <qtextedit.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include "kdevpart.h"
+#include "kdevproject.h"
+#include "domutil.h"
+#include "filetemplate.h"
 
-CppNewClassDialog::CppNewClassDialog(QWidget *parent, const char *name)
+
+CppNewClassDialog::CppNewClassDialog(KDevPart *part, QWidget *parent, const char *name)
     : CppNewClassDialogBase(parent, name)
 {
     headerModified = false;
     implementationModified = false;
+    m_part = part;
 }
 
 
@@ -84,15 +91,15 @@ void CppNewClassDialog::accept()
         return;
     }
 
+    // FIXME
     if (header.find('/') != -1 || implementation.find('/') != -1) {
         KMessageBox::error(this, i18n("Generated files will always be added to the "
                                       "active directory, so you must not give an "
                                       "explicit sub directory."));
         return;
     }
-    
-    // header.prepend(subDir);
-    // implementation.prepend(subDir);
+
+    QString projectDir = m_part->project()->projectDirectory() + "/";
     
     if (QFileInfo(header).exists() || QFileInfo(implementation).exists()) {
         KMessageBox::error(this, i18n("Sorry, but KDevelop is not able to add classes "
@@ -101,156 +108,158 @@ void CppNewClassDialog::accept()
     }
     
     QString baseName = basename_edit->text();
-    if (baseName.isEmpty() && childclass_box->isChecked())
+    bool childClass = childclass_box->isChecked();
+    bool objc = false;
+    
+    if (baseName.isEmpty() && childClass)
         baseName = "QWidget";
+    if (objc && baseName.isEmpty())
+        baseName = "NSObject";
     
     QString doc = documentation_edit->text();
-    
-    if (filetemplate_box->isChecked()) {
-        // Copy file templates
+
+    QString istr;
+    if (filetemplate_box->isChecked())
+        istr = FileTemplate::read(m_part, "templates/cpp");
+
+    if (objc) {
+        istr += QString("\n"
+                       "#include \"$HEADER$\"\n"
+                       "@implementation $CLASSNAME$\n"
+                       "@end\n");
+    } else {
+        istr += QString("\n"
+                       "#include \"$HEADER$\"\n"
+                       "\n"
+                       "\n"
+                       "$CLASSNAME$::$CLASSNAME$($ARGS$)\n"
+                       "$BASEINITIALIZER$\n"
+                       "{\n"
+                       "}\n"
+                       "\n"
+                       "\n"
+                       "$CLASSNAME$::~$CLASSNAME$()\n"
+                       "{\n"
+                       "}\n");
     }
 
-    QStringList ilist;
-
-    // Read in the existing file
-    QFile ifile(implementation);
-    QTextStream istream(&ifile);
-    if (ifile.open(IO_ReadOnly)) {
-        while(!istream.eof())
-            ilist << istream.readLine();
-    }
-    ifile.close();
-    
-    //Added by Benoit Cerrina, Benoit.Cerrina@writeme.com
-    //computes the relative position of the header and implementation
-    //files in order for the #include statement to work correctly.
-    //without this the generated file may not compile
-    // 6 Dec 99
     QString relPath;
-									
     for (int i = implementation.findRev('/'); i != -1; i = implementation.findRev('/', --i))
     	relPath += "../";
+    QString args = childClass? "QWidget *parent, const char *name" : "";
+    QString baseInitializer;
+    if (!baseName.isEmpty())
+        baseInitializer = childClass? "  : $BASECLASS$(parent, name)" : "  : $BASECLASS$()";
+    
+    istr.replace(QRegExp("\\$HEADER\\$"), relPath+header);
+    istr.replace(QRegExp("\\$BASEINITIALIZER\\$"), baseInitializer);
+    istr.replace(QRegExp("\\$CLASSNAME\\$"), className);
+    istr.replace(QRegExp("\\$BASECLASS\\$"), baseName);
+    istr.replace(QRegExp("\\$ARGS\\$"), args);
 
-    bool objc = false;
-    if (objc) {
-        ilist << "\n#include \"" + relPath + header + "\"\n";
-        ilist << "@implementation " + className;
-        ilist << "@end\n";
-    } else {
-        ilist << "\n#include \"" + relPath + header + "\"\n";
-
-        // Constructor
-        QString cons = className + "::" + className + "(" ;
-        if (childclass_box->isChecked()) {
-            cons += "QWidget *parent, const char *name ) : ";
-            cons += baseName;
-            cons += "(parent, name";
-        }
-        cons += ")";
-        ilist << cons;
-        ilist << "{";
-
-        // Destructor
-        ilist << className + "::~" + className +"(){";
-        ilist << "{";
-        ilist << "}";
-    }
-
+    QFile ifile(projectDir + "/" + implementation);
     if (!ifile.open(IO_WriteOnly)) {
         KMessageBox::error(this, "Cannot write to implementation file");
         return;
     }
-    
-    QStringList::ConstIterator iit;
-    for (iit = ilist.begin(); iit != ilist.end(); ++iit)
-        istream << (*iit) << "\n";
+    QTextStream istream(&ifile);
+    istream << istr;
     ifile.close();
-
-    QStringList hlist;
-
-    // Read in the existing file
-    QFile hfile(header);
-    QTextStream hstream(&hfile);
-    if (hfile.open(IO_ReadOnly)) {
-        while(!hstream.eof())
-            hlist << hstream.readLine();
-    }
-    hfile.close();
-
-    QString inclusionGuard = header;
-    inclusionGuard.replace(QRegExp("\\."),"_");
-    hlist << "\n#ifndef _" + header.upper() + "_";
-    hlist << "#define "+ header.upper() + "\n";
     
-    if (childclass_box->isChecked())
-        hlist << "#include <qwidget.h>";
-    if (objc)
-        hlist << "#include <Foundation/NSObject.h>";
-    
-    if (!baseName.isEmpty()){
-        if (objc) {
-            if (baseName != "NSObject") {
-                hlist << "#include \"" + baseName + ".h\"";
-            }
-        } else {
-            hlist << "#include <" + baseName.lower() + ".h>\n";
-        }
-    }
+    QString hstr;
+    if (filetemplate_box->isChecked())
+        hstr = FileTemplate::read(m_part, "templates/h");
 
-    // FIXME: author
-    QString author;
-    
-    hlist << "\n/**" + doc + "\n";
-    hlist << "  *@author "+ author;
-    hlist << "  */\n";
     if (objc) {
-        QString classDecl = "@interface " + className + " : ";
-        if (baseName.isEmpty())
-            classDecl += "NSObject";
-        else
-            classDecl += baseName;
-        hlist << classDecl;
-        hlist << "@end ";
-        hlist << "\n#endif";
+        hstr += QString("\n"
+                        "#ifndef _$HEADERGUARD$_\n"
+                        "#define _$HEADERGUARD$_\n"
+                        "\n"
+                        "$INCLUDEBASEHEADER$\n"
+                        "#include <Foundation/NSObject.h>\n"
+                        "\n"
+                        "\n"
+                        "/**\n"
+                        " * $DOC$\n"
+                        " * $AUTHOR$\n"
+                        " **/\n"
+                        "@interface $CLASSNAME$ : $BASECLASS$\n"
+                        "@end\n"
+                        "\n"
+                        "#endif\n"
+                        );
     } else {
-        QString classDecl = "class " + className;
-        if (!baseName.isEmpty()) {
-            classDecl += " : ";
-            if (virtual_box->isChecked())
-                classDecl += "virtual ";
-            if (public_button->isChecked())
-                classDecl += "public ";
-            if (protected_button->isChecked())
-                classDecl += "protected ";
-            if (private_button->isChecked())
-                classDecl += "private ";
-            classDecl += baseName;
-        }
-        hlist << classDecl;
-        hlist << "{";
-        if (childclass_box->isChecked())
-            hlist << "  Q_OBJECT\n";
-        hlist << "public: \n";
-
-        // Constructor
-        QString cons = "  " + className + "(";
-        if (childclass_box->isChecked())
-            cons += "QWidget *parent=0, const char *name=0";
-        cons += ");";
-        hlist << cons;
-
-        // Destructor
-        hlist << "  ~" + className +"();";
-        hlist << "};\n\n#endif";
+        hstr += QString("\n"
+                        "#ifndef _$HEADERGUARD$_\n"
+                        "#define _$HEADERGUARD$_\n"
+                        "\n"
+                        "$INCLUDEBASEHEADER$\n"
+                        "\n"
+                        "/**\n"
+                        " * $DOC$\n"
+                        " * $AUTHOR$\n"
+                        " **/\n"
+                        "class $CLASSNAME$$INHERITANCE$\n"
+                        "{\n"
+                        "$QOBJECT$\n"
+                        "public:\n"
+                        "  $CLASSNAME$($ARGS$);\n"
+                        "  ~$CLASSNAME$();\n"
+                        "}\n"
+                        "\n"
+                        "#endif\n"
+                        );
+    }
+                    
+    QString headerGuard = header.upper();
+    headerGuard.replace(QRegExp("\\."),"_");
+    QString includeBaseHeader;
+    if (childClass)
+        includeBaseHeader = "#include <qwidget.h>";
+    else if (objc) {
+        if (baseName != "NSObject")
+            includeBaseHeader = "#include \"" + baseName + ".h\"";
+    } else if (!baseName.isEmpty())
+        includeBaseHeader = "#include <" + baseName.lower() + ".h>";
+    
+    QString author = DomUtil::readEntry(*m_part->projectDom(), "/general/author");
+    
+    QString inheritance;
+    if (!baseName.isEmpty()) {
+        inheritance += " : ";
+        if (virtual_box->isChecked())
+            inheritance += "virtual ";
+        if (public_button->isChecked())
+            inheritance += "public ";
+        if (protected_button->isChecked())
+            inheritance += "protected ";
+        if (private_button->isChecked())
+            inheritance += "private ";
+        inheritance += baseName;
     }
 
+    QString qobject;
+    if (childClass)
+        qobject = "  Q_OBJECT\n";
+
+    hstr.replace(QRegExp("\\$HEADERGUARD\\$"), headerGuard);
+    hstr.replace(QRegExp("\\$INCLUDEBASEHEADER\\$"), includeBaseHeader);
+    hstr.replace(QRegExp("\\$AUTHOR\\$"), author);
+    hstr.replace(QRegExp("\\$DOC\\$"), doc);
+    hstr.replace(QRegExp("\\$CLASSNAME\\$"), className);
+    hstr.replace(QRegExp("\\$BASECLASS\\$"), baseName);
+    hstr.replace(QRegExp("\\$INHERITANCE\\$"), inheritance);
+    hstr.replace(QRegExp("\\$QOBJECT\\$"), qobject);
+    hstr.replace(QRegExp("\\$ARGS\\$"), args);
+
+    QFile hfile(projectDir + "/" + header);
     if (!hfile.open(IO_WriteOnly)) {
-        KMessageBox::error(this, "Cannot write to heade file");
+        KMessageBox::error(this, "Cannot write to header file");
         return;
     }
-    
-    QStringList::ConstIterator hit;
-    for (hit = hlist.begin(); hit != hlist.end(); ++hit)
-        hstream << (*hit) << "\n";
+    QTextStream hstream(&hfile);
+    hstream << hstr;
     hfile.close();
+
+    QDialog::accept();
 }

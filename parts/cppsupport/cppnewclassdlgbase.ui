@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>478</width>
-            <height>410</height>
+            <width>486</width>
+            <height>461</height>
         </rect>
     </property>
     <property name="caption">
@@ -261,6 +261,9 @@ doxygen or similar tools.</string>
                     <property name="text">
                         <string>Use file templates</string>
                     </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
@@ -313,6 +316,9 @@ doxygen or similar tools.</string>
                     <property name="text">
                         <string>public</string>
                     </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
@@ -357,6 +363,55 @@ doxygen or similar tools.</string>
                 </widget>
             </vbox>
         </widget>
+        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>Layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer7_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>ok_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancel_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
     </grid>
 </widget>
 <connections>
@@ -371,6 +426,24 @@ doxygen or similar tools.</string>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>cpp_new_class_dialog</receiver>
         <slot>implementationChanged()</slot>
+    </connection>
+    <connection>
+        <sender>ok_button</sender>
+        <signal>clicked()</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>clicked()</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>classname_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>classNameChanged(const QString&amp;)</slot>
     </connection>
 </connections>
 <tabstops>

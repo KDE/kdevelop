@@ -17,13 +17,15 @@
 #include <qlineedit.h>
 #include "cppnewclassdlgbase.h"
 
+class KDevPart;
+
 
 class CppNewClassDialog : public CppNewClassDialogBase
 {
     Q_OBJECT
 
 public:
-    CppNewClassDialog(QWidget *parent=0, const char *name=0);
+    CppNewClassDialog(KDevPart *part, QWidget *parent=0, const char *name=0);
     ~CppNewClassDialog();
 
 protected:
@@ -35,6 +37,7 @@ protected:
 private:
     bool headerModified;
     bool implementationModified;
+    KDevPart *m_part;
 };
 
 #endif
