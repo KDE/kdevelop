@@ -23,6 +23,7 @@
 
 #include "parsedscopecontainer.h"
 #include "classtreenode.h"
+#include "parsedscript.h"
 
 class ClassStoreIface;
 
@@ -78,6 +79,7 @@ public:
      * Tells if a struct exists in the store. See hasClass().
      */
     bool hasStruct(const QString &name);
+
     /**
      * Returns a class from the store using its scoped
      * name. See getClassByName().
@@ -92,6 +94,27 @@ public:
      * Returns all structs in alphabetically sorted order. 
      */
     QValueList<ParsedClass*> getSortedStructList();
+
+    /**
+     * Tells if a script exists in the store. See hasClass().
+     */
+    bool hasScript(const QString &name);
+     
+    /**
+     * Returns a class from the store using its scoped
+     * name. See getClassByName().
+     */
+    ParsedScript *getScriptByName(const QString &name);
+    /**
+     * Returns all structs names in alphabetically sorted order.
+     * Includes global and namespaced structs.
+     */
+    QStringList getSortedScriptNameList();
+    /**
+     * Returns all structs in alphabetically sorted order.
+     */
+    QValueList<ParsedScript*> getSortedScriptList();
+
     /**
      * Checks if a scope exists in the store. The name
      * argument must specify the full scoped name in
@@ -168,6 +191,12 @@ public:
      * Adds a struct definition. See addClass().
      */
     void addStruct(ParsedClass *strukt);
+
+    /**
+     * Adds a script definition. See addClass().
+     */
+    void addScript(ParsedScript *script);
+
     /**
      * Adds a scope definition. Source parsers must use this method
      * so the class store can maintain a list of all scopes. They
@@ -227,7 +256,7 @@ private:
      * variables and structures.
      */
     ParsedScopeContainer *m_globalScope;
-    
+
     /**
      * Mapping from class name to ParsedClass objects. This container
      * holds all classes, whether global or namespaced. Note that the
@@ -245,10 +274,18 @@ private:
      * See m_allClasses.
      */
     QMap<QString, ParsedClass*> m_allStructs;
+
+    /**
+     * Mapping from script name to ParsedScript objects.
+     * also m_allscripts.
+     */
+
+    QMap<QString, ParsedScript*> m_allScripts;
     /**
      * Mapping from scope name to ParsedScopeContainer objects. See
      * also m_allClasses.
      */
+
     QMap<QString, ParsedScopeContainer*> m_allScopes;
      
     /** Store for global pre-parsed classes(like Qt and KDE). */

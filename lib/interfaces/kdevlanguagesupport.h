@@ -19,7 +19,8 @@ public:
     enum Features {
         Classes=1, Structs=2, Functions=4, Variables=8,
         Namespaces=16, Signals=32, Slots=64, Declarations=128,   /* features of the language itself       */
-        NewClass=512, AddMethod=1024, AddAttribute=2048          /* features of the language support part */
+        NewClass=512, AddMethod=1024, AddAttribute=2048,         /* features of the language support part */
+        Scripts=4096, NewScript=8192                             /* features for scripting support (perl) */
     };
 
     KDevLanguageSupport( const QString& pluginName, const QString& icon, QObject *parent, const char *name );

@@ -23,6 +23,8 @@
 
 #include <qfile.h>
 
+#include "parsedscript.h"
+
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
@@ -106,7 +108,6 @@ bool ClassStore::hasStruct(const QString &name)
     return m_allStructs.contains(name);
 }
 
-
 ParsedClass *ClassStore::getStructByName(const QString &name)
 {
     QMap<QString, ParsedClass*>::ConstIterator it;
@@ -142,6 +143,44 @@ QValueList<ParsedClass*> ClassStore::getSortedStructList()
     return retVal;
 }
 
+bool ClassStore::hasScript(const QString &name)
+{
+    return m_allScripts.contains(name);
+}
+
+ParsedScript *ClassStore::getScriptByName(const QString &name)
+{
+    QMap<QString, ParsedScript*>::ConstIterator it;
+    it = m_allScripts.find(name);
+    return (it != m_allScripts.end())? (*it) : 0;
+}
+
+
+QStringList ClassStore::getSortedScriptNameList()
+{
+    QStringList list;
+
+    QMap<QString, ParsedScript*>::ConstIterator it;
+    for (it = m_allScripts.begin(); it != m_allScripts.end(); ++it)
+        list.append(it.key());
+
+    list.sort();
+    return list;
+}
+
+QValueList<ParsedScript*> ClassStore::getSortedScriptList()
+{
+    QValueList<ParsedScript*> retVal;
+
+    QStringList list = getSortedScriptNameList();
+
+    // Now collect the list of parsed structs
+    QStringList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        retVal.append(m_allScripts[*it]);
+
+    return retVal;
+}
 
 bool ClassStore::hasScope(const QString &name)
 {
@@ -202,6 +241,15 @@ void ClassStore::addStruct(ParsedClass *strukt)
     REQUIRE( "Unique structpath", !hasStruct( strukt->path() ) );
 
     m_allStructs.insert(strukt->path(), strukt);
+}
+
+void ClassStore::addScript(ParsedScript *script)
+{
+    REQUIRE( "Valid script", script != NULL );
+    REQUIRE( "Valid scriptname", !script->name().isEmpty() );
+    REQUIRE( "Unique scriptpath", !hasScript( script->path() ) );
+
+    m_allScripts.insert(script->path(), script);
 }
 
 
@@ -477,7 +525,6 @@ void ClassStore::removeWithReferences(const QString &fileName, ParsedScopeContai
     scope->removeWithReferences( fileName );
 }
 
-
 /**
  * Removes all classes (in all namespaces) with references to
  * a certain file.
@@ -486,14 +533,22 @@ void ClassStore::removeWithReferences(const QString &fileName)
 {
     for (QMap<QString, ParsedScopeContainer*>::Iterator it = m_allScopes.begin(); it != m_allScopes.end(); ++it)
         removeWithReferences(fileName, *it);
+
     for (QMap<QString, ParsedClass*>::Iterator it = m_allClasses.begin(); it != m_allClasses.end(); ++it) {
         if ( (*it)->declaredInFile() == fileName )
             m_allClasses.remove( it );
     }
+
     for (QMap<QString, ParsedClass*>::Iterator it = m_allStructs.begin(); it != m_allStructs.end(); ++it) {
         if ( (*it)->declaredInFile() == fileName )
             m_allStructs.remove( it );
     }
+
+    for (QMap<QString, ParsedScript*>::Iterator it = m_allScripts.begin(); it != m_allScripts.end(); ++it) {
+        if ( (*it)->declaredInFile() == fileName )
+            m_allScripts.remove( it );
+    }
+    
     removeWithReferences(fileName, m_globalScope);
 }
 
@@ -505,6 +560,7 @@ void ClassStore::wipeout()
 {
     kdDebug(9005) << "ClassStore::wipeout start" << endl;
     m_globalScope->clear();
+    m_allScripts.clear();
     m_allClasses.clear();
     m_allStructs.clear();
     m_allScopes.clear();
@@ -545,6 +601,7 @@ void ClassStore::out()
     QValueList<ParsedAttribute*>::ConstIterator attrIt;
     for (attrIt = globalAttrs.begin(); attrIt != globalAttrs.end(); ++attrIt)
         (*attrIt)->out();
+
 }
 
 
