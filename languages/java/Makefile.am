@@ -12,7 +12,7 @@ INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/catalog \
 
 kde_module_LTLIBRARIES = libkdevjavasupport.la
 libkdevjavasupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevjavasupport_la_LIBADD = $(top_builddir)/bdb/libdb.la $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/antlr/src/libantlr.la $(top_builddir)/lib/catalog/libkdevcatalog.la
+libkdevjavasupport_la_LIBADD = $(top_builddir)/bdb/build_unix/libdb.a $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/antlr/src/libantlr.la $(top_builddir)/lib/catalog/libkdevcatalog.la
 
 libkdevjavasupport_la_SOURCES = JavaLexer.cpp KDevJavaSupportIface.cpp javasupportfactory.cpp \
 JavaRecognizer.cpp backgroundparser.cpp configproblemreporter.ui  javasupportpart.cpp \
