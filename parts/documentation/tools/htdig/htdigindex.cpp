@@ -237,7 +237,7 @@ bool ProgressDialog::createConfig()
         ts << "local_urls:\t\thttp://localhost/=/" << endl;
 //        ts << "local_urls:\t\tfile://=" << endl;
         ts << "local_urls_only:\ttrue" << endl;
-        ts << "limit_urls_to:\t\tfile://" << endl;
+        ts << "limit_urls_to:\t\tfile:// http://localhost/" << endl;
         ts << "maximum_pages:\t\t1" << endl;
         ts << "image_url_prefix:\t" << images << endl;
         ts << "star_image:\t\t" << images << "star.png" << endl;
