@@ -59,7 +59,7 @@ include admin/deps.am
 DOXYGEN_INPUT = src lib parts languages buildtools editors vcs doc/api
 
 ## Exclude the application wizard templates, and some file templates
-DOXYGEN_EXCLUDE = languages/ada/app_templates languages/cpp/app_templates languages/cpp/file_templates languages/cpp/subclassing_template languages/fortran/app_templates languages/haskell/app_templates languages/java/app_templates languages/pascal/app_templates languages/perl/app_templates languages/php/app_templates languages/python/app_templates languages/ruby/app_templates languages/sql/app_templates languages/xul/app_templates *Iface_skel.cpp lib/qextmdi
+DOXYGEN_EXCLUDE = languages/ada/app_templates languages/cpp/app_templates languages/cpp/file_templates languages/cpp/subclassing_template languages/fortran/app_templates languages/haskell/app_templates languages/java/app_templates languages/pascal/app_templates languages/perl/app_templates languages/php/app_templates languages/python/app_templates languages/ruby/app_templates languages/sql/app_templates languages/xul/app_templates *Iface_skel.cpp lib/qextmdi *.ui.h
 
 DOXYGEN_EXAMPLE_PATH = languages/cpp/app_templates/khello languages/cpp/app_templates/kdevpart
 
