@@ -864,49 +864,72 @@ QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
 
 void QextMdiChildFrm::resizeEvent(QResizeEvent *)
 {
+   doResize(); // an extra method because it can also called directly
+}
+
+void QextMdiChildFrm::doResize()
+{
    //Resize the caption
-   int captionHeight=m_pCaption->heightHint();
-   int captionWidth=width()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
+   int captionHeight = m_pCaption->heightHint();
+   int captionWidth = width() - QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
+   int buttonHeight = m_pClose->pixmap()->height();
+   int buttonWidth  = m_pClose->pixmap()->width();
+   int heightOffset = captionHeight/2 - buttonHeight/2;
+   int rightOffset1 = 1;
+   int rightOffset2 = 1;
+   int frmIconHeight = m_pWinIcon->pixmap()->height();
+   int frmIconWidth  = m_pWinIcon->pixmap()->width();
+   int frmIconOffset = 1;
+   QWidget* pIconWidget = m_pWinIcon;
    m_pCaption->setGeometry( QEXTMDI_MDI_CHILDFRM_BORDER, QEXTMDI_MDI_CHILDFRM_BORDER, captionWidth, captionHeight);
    //The buttons are caption children
    if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+      rightOffset2 += 2;
       m_pUnixIcon->hide();
-      m_pWinIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
-      m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
-      m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
-      m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
-      m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);
    }
    else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+      buttonWidth  += 4;
+      buttonHeight += 4;
+      heightOffset -= 2;
+      rightOffset1 = 0;
+      rightOffset2 = 0;
       m_pWinIcon->hide();
-      m_pUnixIcon->setGeometry    ( 0,                            0, captionHeight,captionHeight);
-      m_pClose->setGeometry   ( captionWidth-captionHeight,   0, captionHeight,captionHeight);
-      m_pMaximize->setGeometry( captionWidth-captionHeight*2, 0, captionHeight,captionHeight);
-      m_pMinimize->setGeometry( captionWidth-captionHeight*3, 0, captionHeight,captionHeight);
-      m_pUndock->setGeometry  ( captionWidth-captionHeight*4, 0, captionHeight,captionHeight);
+      frmIconHeight = buttonHeight;
+      frmIconWidth  = buttonWidth;
+      frmIconOffset = 0;
+      pIconWidget = m_pUnixIcon;
    }
    else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
+      buttonWidth  += 3;
+      buttonHeight += 3;
+      heightOffset -= 1;
       m_pUnixIcon->hide();
-      m_pWinIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
-      m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
-      m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
-      m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
-      m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);
    }
-   else {
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::KDE2LaptopLook) {
+      pIconWidget->setGeometry(frmIconOffset,captionHeight/2-frmIconHeight/2,frmIconWidth,frmIconHeight);
+      m_pClose->setGeometry((captionWidth-buttonWidth)-rightOffset1,heightOffset,buttonWidth,buttonHeight);
+      m_pMaximize->setGeometry((captionWidth-(buttonWidth*2))-rightOffset2,heightOffset,buttonWidth,buttonHeight);
+      m_pMinimize->setGeometry((captionWidth-(buttonWidth*3))-rightOffset2,heightOffset,buttonWidth,buttonHeight);
+      m_pUndock->setGeometry((captionWidth-(buttonWidth*4))-rightOffset2,heightOffset,buttonWidth,buttonHeight);
+   }
+   else {   // KDE2LaptopLook
       m_pWinIcon->hide();
       m_pUnixIcon->hide();
-      m_pClose->setGeometry   ( 0,                 0, 27, captionHeight);
-      m_pMaximize->setGeometry( captionWidth-27,   0, 27, captionHeight);
-      m_pMinimize->setGeometry( captionWidth-27*2, 0, 27, captionHeight);
-      m_pUndock->setGeometry  ( captionWidth-27*3, 0, 27, captionHeight);
+      buttonHeight += 5;
+      heightOffset -= 2;
+      m_pClose->setGeometry   ( 0,                 heightOffset, 27, buttonHeight);
+      m_pMaximize->setGeometry( captionWidth-27,   heightOffset, 27, buttonHeight);
+      m_pMinimize->setGeometry( captionWidth-27*2, heightOffset, 27, buttonHeight);
+      m_pUndock->setGeometry  ( captionWidth-27*3, heightOffset, 27, buttonHeight);
    }
    //Resize the client
-   if(m_pClient) {
+   if (m_pClient) {
       QSize newClientSize(captionWidth,
       height()-(QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+captionHeight+QEXTMDI_MDI_CHILDFRM_SEPARATOR));
       if (newClientSize != m_pClient->size()) {
-         m_pClient->resize(newClientSize.width(), newClientSize.height());
+         m_pClient->setGeometry(QEXTMDI_MDI_CHILDFRM_BORDER,
+                                m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER,
+                                newClientSize.width(), newClientSize.height());
       }
    }
 }

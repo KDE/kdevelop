@@ -44,9 +44,9 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
    QFontMetrics fm(m_captionFont);
    m_captionFontLineSpacing = fm.lineSpacing();
    m_captionActiveBackColor = colorGroup().highlight();//QColor(0,0,128);
-   m_captionActiveForeColor = QColor(255,255,255);
-   m_captionInactiveBackColor = QColor(160,160,164);
-   m_captionInactiveForeColor = QColor(255,255,255);
+   m_captionActiveForeColor = colorGroup().highlightedText();//QColor(255,255,255);
+   m_captionInactiveBackColor = QColor(160,160,160);
+   m_captionInactiveForeColor = QColor( 55, 55, 55);
 #if QT_VERSION < 300
    m_pZ = new QList<QextMdiChildFrm>;
 #else
@@ -198,7 +198,7 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
       if (bSetFocus) {
          if(!lpC->hasFocus())lpC->setFocus();
       }
-      lpC->m_pClient->activate();//setFocus();
+      lpC->m_pClient->setFocus();
    }
 }
 
@@ -598,6 +598,10 @@ void QextMdiChildArea::setMdiCaptionFont(const QFont &fnt)
    m_captionFont = fnt;
    QFontMetrics fm(m_captionFont);
    m_captionFontLineSpacing = fm.lineSpacing();
+
+   for (QextMdiChildFrm *pC = m_pZ->first(); pC; pC = m_pZ->next()) {
+      pC->doResize();
+   }
 }
 
 void QextMdiChildArea::setMdiCaptionActiveForeColor(const QColor &clr)
