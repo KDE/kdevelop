@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
         $(all_includes)
 METASOURCES = AUTO
 lib_LTLIBRARIES = libkdevqmakeparser.la
-libkdevqmakeparser_la_LDFLAGS = $(all_libraries)
+libkdevqmakeparser_la_LDFLAGS = $(all_libraries) $(LIB_KIO)
 libkdevqmakeparser_la_SOURCES = qmakeast.cpp qmakedriver.cpp qmake_yacc.cpp
 
 kdevelopbuildtoolsincludedir = $(includedir)/kdevelop/buildtools/parsers/qmake
