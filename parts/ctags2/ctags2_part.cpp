@@ -132,13 +132,15 @@ bool CTags2Part::createTagsFile()
 */
 	KConfig * config = kapp->config();
 	config->setGroup( "CTAGS" );
-	QString ctagsBinary = config->readEntry( "ctags binary", "ctags" );
+	QString ctagsBinary = config->readEntry( "ctags binary", "ctags" ).stripWhiteSpace();
+	if ( ctagsBinary.isEmpty() ) 
+		ctagsBinary = "ctags";
 
 	QString argsDefault = "-R --c++-types=+px --excmd=pattern --exclude=Makefile --exclude=.";
 	
 	QDomDocument & dom = *projectDom();
-	QString argsCustom = DomUtil::readEntry( dom, "/ctagspart/customArguments" );
-	QString tagsfileCustom = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" );
+	QString argsCustom = DomUtil::readEntry( dom, "/ctagspart/customArguments" ).stripWhiteSpace();
+	QString tagsfileCustom = DomUtil::readEntry( dom, "/ctagspart/customTagfilePath" ).stripWhiteSpace();
 	
 	QString commandline = ctagsBinary + " " + 
 		( argsCustom.isEmpty() ? argsDefault : argsCustom ) + 
