@@ -1138,79 +1138,81 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 	    if( !parseConstantExpression(expr) ){
 		reportError( i18n("Constant expression expected") );
 	    }
-	    goto UPDATE_POS;
+	    goto update_pos;
 	}
     }
 
     {
+	bool isVector = true;
 
-    while( lex->lookAhead(0) == '[' ){
-        int startArray = lex->index();
-	lex->nextToken();
-	AST::Node expr;
-	skipCommaExpression( expr );
-
-	ADVANCE( ']', "]" );
-	AST::Node array = CreateNode<AST>();
-	UPDATE_POS( array, startArray, lex->index() );
-	ast->addArrayDimension( array );
-    }
-
-    bool skipParen = false;
-    if( lex->lookAhead(0) == Token_identifier && lex->lookAhead(1) == '(' && lex->lookAhead(2) == '(' ){
-    	lex->nextToken();
-	lex->nextToken();
-	skipParen = true;
-    }
-
-    if( ast->subDeclarator() && lex->lookAhead(0) != '(' ){
-	lex->setIndex( start );
-	return false;
-    }
-
-    int index = lex->index();
-    if( lex->lookAhead(0) == '(' ){
-	lex->nextToken();
-
-	ParameterDeclarationClauseAST::Node params;
-	if( !parseParameterDeclarationClause(params) ){
-	    //kdDebug(9007)<< "----------------------> not a parameter declaration, maybe an initializer!?" << endl;
-	    lex->setIndex( index );
-	    goto UPDATE_POS;
-	}
-	ast->setParameterDeclarationClause( params );
-
-	if( lex->lookAhead(0) != ')' ){
-	    lex->setIndex( index );
-	    goto UPDATE_POS;
-	}
-
-	lex->nextToken();  // skip ')'
-
-	int startConstant = lex->index();
-	if( lex->lookAhead(0) == Token_const ){
+	while( lex->lookAhead(0) == '[' ){
+	    int startArray = lex->index();
 	    lex->nextToken();
-	    AST::Node constant = CreateNode<AST>();
-	    UPDATE_POS( constant, startConstant, lex->index() );
-	    ast->setConstant( constant );
+	    AST::Node expr;
+	    parseCommaExpression( expr );
+
+	    ADVANCE( ']', "]" );
+	    AST::Node array = CreateNode<AST>();
+	    UPDATE_POS( array, startArray, lex->index() );
+	    ast->addArrayDimension( array );
+	    isVector = true;
 	}
 
-	AST::Node except;
-	if( parseExceptionSpecification(except) ){
-	    ast->setExceptionSpecification( except );
-	}
-    }
-
-    if( skipParen ){
-    	if( lex->lookAhead(0) != ')' ){
-	    reportError( i18n("')' expected") );
-	} else
+	bool skipParen = false;
+	if( lex->lookAhead(0) == Token_identifier && lex->lookAhead(1) == '(' && lex->lookAhead(2) == '(' ){
 	    lex->nextToken();
-    }
+	    lex->nextToken();
+	    skipParen = true;
+	}
+
+	if( ast->subDeclarator() && (!isVector || lex->lookAhead(0) != '(') ){
+	    lex->setIndex( start );
+	    return false;
+	}
+
+	int index = lex->index();
+	if( lex->lookAhead(0) == '(' ){
+	    lex->nextToken();
+
+	    ParameterDeclarationClauseAST::Node params;
+	    if( !parseParameterDeclarationClause(params) ){
+		//kdDebug(9007)<< "----------------------> not a parameter declaration, maybe an initializer!?" << endl;
+		lex->setIndex( index );
+		goto update_pos;
+	    }
+	    ast->setParameterDeclarationClause( params );
+
+	    if( lex->lookAhead(0) != ')' ){
+		lex->setIndex( index );
+		goto update_pos;
+	    }
+
+	    lex->nextToken();  // skip ')'
+
+	    int startConstant = lex->index();
+	    if( lex->lookAhead(0) == Token_const ){
+		lex->nextToken();
+		AST::Node constant = CreateNode<AST>();
+		UPDATE_POS( constant, startConstant, lex->index() );
+		ast->setConstant( constant );
+	    }
+
+	    AST::Node except;
+	    if( parseExceptionSpecification(except) ){
+		ast->setExceptionSpecification( except );
+	    }
+	}
+
+	if( skipParen ){
+	    if( lex->lookAhead(0) != ')' ){
+		reportError( i18n("')' expected") );
+	    } else
+		lex->nextToken();
+	}
 
     }
 
-UPDATE_POS:
+update_pos:
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
 

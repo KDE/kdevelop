@@ -65,6 +65,7 @@ Driver::Driver()
 Driver::~Driver()
 {
     reset();
+    delete( m_sourceProvider );
 }
 
 SourceProvider* Driver::sourceProvider()

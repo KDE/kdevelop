@@ -23,10 +23,11 @@
 #include "driver.h"
 
 #include <qstring.h>
-#include <qmemarray.h>
 #include <qmap.h>
 #include <qvaluestack.h>
 #include <qpair.h>
+#include <qdeepcopy.h>
+#include <qptrvector.h>
 
 enum Type {
     Token_eof = 0,
@@ -148,9 +149,8 @@ class Token
 {
 public:
     Token();
-    Token( int type, int position, int length, const char* text );
+    Token( int type, int position, int length, const QCString& text );
     Token( const Token& source );
-    ~Token();
 
     Token& operator = ( const Token& source );
     bool operator == ( const Token& token ) const;
@@ -172,10 +172,8 @@ public:
     int position() const;
     void setPosition( int position );
 
-    QString toString() const;
-
-    const char* text() const;
-    void setText( const char* text );
+    const QCString& text() const;
+    void setText( const QCString& text );
 
 private:
     int m_type;
@@ -185,7 +183,7 @@ private:
     int m_startColumn;
     int m_endLine;
     int m_endColumn;
-    const char* m_text;
+    QCString m_text;
 
     friend class Lexer;
     friend class Parser;
@@ -287,7 +285,7 @@ private:
 private:
     LexerData* d;
     Driver* m_driver;
-    QMemArray< Token > m_tokens;
+    QPtrVector< Token > m_tokens;
     int m_size;
     int m_index;
     QString m_source;
@@ -323,11 +321,11 @@ inline Token::Token()
 {
 }
 
-inline Token::Token( int type, int position, int length, const char* text )
+inline Token::Token( int type, int position, int length, const QCString& text )
     : m_type( type ),
       m_position( position ),
       m_length( length ),
-      m_text( text ? qstrdup(text) : 0 )
+      m_text( text )
 {
 }
 
@@ -339,7 +337,7 @@ inline Token::Token( const Token& source )
       m_startColumn( source.m_startColumn ),
       m_endLine( source.m_endLine ),
       m_endColumn( source.m_endColumn ),
-      m_text( source.m_text ? qstrdup(source.m_text) : 0 )
+      m_text( source.m_text )
 {
 }
 
@@ -352,8 +350,7 @@ inline Token& Token::operator = ( const Token& source )
     m_startColumn = source.m_startColumn;
     m_endLine = source.m_endLine;
     m_endColumn = source.m_endColumn;
-
-    m_text = qstrdup( source.m_text );
+    m_text = source.m_text;
     return( *this );
 }
 
@@ -394,14 +391,14 @@ inline int Token::position() const
     return m_position;
 }
 
-inline const char* Token::text() const
+inline const QCString& Token::text() const
 {
     return m_text;
 }
 
-inline QString Token::toString() const
+inline void Token::setText( const QCString & text )
 {
-    return QString::fromLatin1( m_text );
+    m_text = text;
 }
 
 inline void Token::setStartPosition( int line, int column )
@@ -481,19 +478,19 @@ inline void Lexer::setIndex( int index )
 inline const Token& Lexer::nextToken()
 {
     if( m_index < m_size )
-        return (m_tokens)[ m_index++ ];
+        return *m_tokens[ m_index++ ];
 
-    return (m_tokens)[ m_index ];
+    return *m_tokens[ m_index ];
 }
 
 inline const Token& Lexer::tokenAt( int n ) const
 {
-    return (m_tokens)[ QMIN(n, m_size-1) ];
+    return *m_tokens[ QMIN(n, m_size-1) ];
 }
 
 inline const Token& Lexer::lookAhead( int n ) const
 {
-    return (m_tokens)[ QMIN(m_index + n, m_size-1) ];
+    return *m_tokens[ QMIN(m_index + n, m_size-1) ];
 }
 
 inline int Lexer::tokenPosition( const Token& token ) const

@@ -28,10 +28,10 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
-#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), (len) == 0 ? QString::fromLatin1("") : m_source.mid((start), (len)) )
+#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), (len) == 0 ? "" : m_source.mid((start), (len)).utf8() )
 #define ADD_TOKEN(tk) \
 { \
-    m_tokens[ m_size++ ] = (tk); \
+    m_tokens.insert( m_size++, new Token(tk) ); \
 }
 
 using namespace std;
@@ -98,6 +98,7 @@ Lexer::Lexer( Driver* driver )
       m_skipWordsEnabled( true ),
       m_preprocessorEnabled( true )
 {
+    m_tokens.setAutoDelete( true );
     reset();
     d->beginScope();
 }
@@ -123,8 +124,7 @@ void Lexer::reset()
 {
     m_index = 0;
     m_size = 0;
-    m_tokens.truncate( 500 );
-    m_tokens.fill( Token() );
+    m_tokens.clear();
     m_source = QString::null;
     m_ptr = 0;
     m_endPtr = 0;
@@ -490,7 +490,7 @@ QString Lexer::readArgument()
 	}
 
 	if( tk != -1 )
-            arg += tk.toString() + " ";
+            arg += tk.text() + " ";
     }
 
     return arg.stripWhiteSpace();
@@ -928,19 +928,6 @@ int Lexer::macroExpression()
 {
     readWhiteSpaces( false );
     return macroLogicalOr();
-}
-
-void Token::setText( const char * text )
-{
-    if( m_text )
-        delete [] (char*) m_text;
-    m_text = text ? qstrdup( text ) : 0;
-}
-
-Token::~ Token( )
-{
-    if( m_text )
-        delete [] m_text;
 }
 
 // *IMPORTANT*
