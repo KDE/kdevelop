@@ -19,8 +19,8 @@
 #include "kstartuplogo.h"
 #include <kapp.h>
 
-KStartupLogo::KStartupLogo(QWidget * /*parent*/, const char *name) 
-: QWidget(0,name,WStyle_Customize | WStyle_NoBorder  ) { 	
+KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
+: QWidget(parent,name,WStyle_Customize | WStyle_NoBorder  ) { 	
   QPixmap pm;
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/startlogo.bmp");
   setBackgroundPixmap(pm);
