@@ -68,16 +68,14 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     layout->addRowSpacing(4, 10);
     layout->setRowStretch(4, 0);
     
-    QGridLayout *input_layout = new QGridLayout(4, 2, 10);
+    QGridLayout *input_layout = new QGridLayout(4, 2, 4);
     layout->addLayout(input_layout, 0, 0);
-    input_layout->setColStretch(0, 1);
+    input_layout->setColStretch(0, 0);
     input_layout->setColStretch(1, 20);
 
     QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
-    pattern_label->setAlignment(AlignRight | AlignVCenter);
-    pattern_label->setMinimumSize(pattern_label->sizeHint());
-    pattern_label->setFixedHeight(pattern_label->sizeHint().height());
-    input_layout->addWidget(pattern_label, 0, 0);
+    pattern_label->setFixedSize(pattern_label->sizeHint());
+    input_layout->addWidget(pattern_label, 0, 0, AlignRight | AlignVCenter);
 
     pattern_edit = new QLineEdit(this);
     pattern_label->setBuddy(pattern_edit);
@@ -86,10 +84,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     input_layout->addWidget(pattern_edit, 0, 1);
     
     QLabel *template_label = new QLabel(i18n("&Template:"), this);
-    template_label->setAlignment(AlignRight | AlignVCenter);
-    template_label->setMinimumSize(template_label->sizeHint());
-    template_label->setFixedHeight(template_label->sizeHint().height());
-    input_layout->addWidget(template_label, 1, 0);
+    template_label->setFixedSize(template_label->sizeHint());
+    input_layout->addWidget(template_label, 1, 0, AlignRight | AlignVCenter);
 
     QBoxLayout *template_layout = new QHBoxLayout(4);
     input_layout->addLayout(template_layout, 1, 1);
@@ -107,10 +103,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     template_layout->addWidget(template_combo);
 
     QLabel *files_label = new QLabel(i18n("&Files:"), this);
-    files_label->setAlignment(AlignRight | AlignVCenter);
-    files_label->setMinimumSize(files_label->sizeHint());
-    files_label->setFixedHeight(files_label->sizeHint().height());
-    input_layout->addWidget(files_label, 2, 0);
+    files_label->setFixedSize(files_label->sizeHint());
+    input_layout->addWidget(files_label, 2, 0, AlignRight | AlignVCenter);
 
     files_combo = new QComboBox(true, this);
     files_label->setBuddy(files_combo->focusProxy());
@@ -122,10 +116,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     input_layout->addWidget(files_combo, 2, 1);
 
     QLabel *dir_label = new QLabel(i18n("&Directory:"), this);
-    dir_label->setAlignment(AlignRight | AlignVCenter);
-    dir_label->setMinimumSize(files_label->sizeHint());
-    dir_label->setFixedHeight(files_label->sizeHint().height());
-    input_layout->addWidget(dir_label, 3, 0);
+    dir_label->setFixedSize(dir_label->sizeHint());
+    input_layout->addWidget(dir_label, 3, 0, AlignRight | AlignVCenter);
 
     QBoxLayout *dir_layout = new QHBoxLayout(4);
     input_layout->addLayout(dir_layout, 3, 1);
@@ -137,15 +129,15 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     dir_layout->addWidget(dir_edit, 10);
 
     QPushButton *dir_button = new QPushButton(this, "dirButton");
-		QPixmap pix;
-  	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-		dir_button->setPixmap(pix);
+    QPixmap pix;
+    pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+    dir_button->setPixmap(pix);
     dir_button->setFixedHeight(dir_edit->sizeHint().height());
     dir_button->setFixedWidth(30);
     dir_layout->addWidget(dir_button);
     
     recursive_box = new QCheckBox(i18n("&Recursive"), this);
-    recursive_box->setMinimumSize(recursive_box->sizeHint());
+    recursive_box->setMinimumWidth(recursive_box->sizeHint().width());
     recursive_box->setChecked(true);
     dir_layout->addSpacing(10);
     dir_layout->addWidget(recursive_box);
@@ -162,7 +154,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 
     resultbox = new QListBox(this);
     QFontMetrics rb_fm(resultbox->fontMetrics());
-    resultbox->setMinimumSize(rb_fm.width("0")*45,
+    resultbox->setMinimumSize(rb_fm.width("0")*55,
 			      rb_fm.lineSpacing()*15);
     layout->addMultiCellWidget(resultbox, 2, 2, 0, 2);
 
