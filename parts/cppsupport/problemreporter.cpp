@@ -68,7 +68,7 @@ public:
 			int b = item->text( column ).toInt();
 			if( a == b )
 				return 0;
-			return( a > b ? -1 : 1 );
+			return( a > b ? 1 : -1 );
 		}
 		return KListViewItem::compare( item, column, ascending );
 	}
