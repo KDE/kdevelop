@@ -758,9 +758,6 @@ a class for the KDE libraries.</string>
                                 <verstretch>0</verstretch>
                             </sizepolicy>
                         </property>
-                        <property name="frameShape">
-                            <enum>NoFrame</enum>
-                        </property>
                         <property name="title">
                             <string></string>
                         </property>
@@ -803,18 +800,9 @@ a class for the KDE libraries.</string>
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QFrame" row="1" column="0" rowspan="1" colspan="2">
+                    <widget class="QTabWidget" row="1" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>widgetStack1</cstring>
-                        </property>
-                        <property name="frameShape">
-                            <enum>NoFrame</enum>
-                        </property>
-                        <property name="frameShadow">
-                            <enum>Plain</enum>
-                        </property>
-                        <property name="lineWidth">
-                            <number>0</number>
                         </property>
                         <widget class="QWidget">
                             <property name="name">
