@@ -257,12 +257,13 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	auto_button->setText(i18n("Proceed >>"));
 	auto_button->setAutoRepeat( false );
 	auto_button->setAutoResize( FALSE );
+	auto_button->setDefault( TRUE );
 	connect( auto_button, SIGNAL(clicked()), SLOT(slotAuto()) );
 
 	cancel_button = new QPushButton( this, "PushButton_3" );
 	cancel_button->setGeometry( 360, 310, 110, 30 );
 	connect( cancel_button, SIGNAL(clicked()), SLOT(slotCancel()) );
-	cancel_button->setText( "Cancel" );
+	cancel_button->setText(i18n("Cancel") );
 	cancel_button->setAutoRepeat( FALSE );
 	cancel_button->setAutoResize( FALSE );
 //	  setGeometry(QApplication::desktop()->width()/2-260, QApplication::desktop()->height()/2-180, 520,360);
@@ -785,6 +786,8 @@ void CKDevInstall::slotCancel()
   else
     return;
 }
+
+
 
 
 

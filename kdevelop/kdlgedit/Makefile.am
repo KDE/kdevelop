@@ -1,3 +1,17 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+INCLUDES = $(all_includes)
+
+libkdlgedit_a_METASOURCES = USE_AUTOMOC
+
+noinst_LIBRARIES = libkdlgedit.a
+
+libkdlgedit_a_SOURCES = kdlgwidgets.cpp kdlgpropwidget.cpp kdlgnewwidget.cpp kdlgitems.cpp kdlgeditwidget.cpp kdlgedit.cpp kdlgdialogs.cpp 
+
+
+EXTRA_DIST = kdlgdialogs.cpp kdlgdialogs.h kdlgedit.cpp kdlgedit.h kdlgeditwidget.cpp kdlgeditwidget.h kdlgitems.cpp kdlgitems.h kdlgnewwidget.cpp kdlgnewwidget.h kdlgproplvis.h kdlgpropwidget.cpp kdlgpropwidget.h kdlgwidgets.cpp kdlgwidgets.h 
+
+####### kdevelop will overwrite this part!!! (end)############
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)
 

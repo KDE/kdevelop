@@ -163,7 +163,8 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   ok_button = new QPushButton( this, "ok_button" );
   ok_button->setGeometry( 130, 340, 100, 30 );
   ok_button->setText("OK");
-  
+	ok_button->setDefault( TRUE );
+
   cancel_button = new QPushButton( this, "cancel_button" );
   cancel_button->setGeometry( 275, 340, 100, 30 );
   cancel_button->setText(i18n("Cancel")); 
@@ -357,3 +358,5 @@ void CNewClassDlg::slotImplEditChanged(const char*){
     impl_modified = true;
   }
 }
+
+

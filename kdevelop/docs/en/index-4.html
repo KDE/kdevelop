@@ -18,7 +18,7 @@
 <A HREF="index-3.html">Previous</A>
 <A HREF="index.html#toc4">Table of Contents</A>
 </P>
-<H3><A NAME="Overview"></A> <A NAME="s4">4. Overview</A></H3>
+<H3><A NAME="Overview"></A> <A NAME="s4">4. Overview</A> </H3>
 
 <P>The KDevelop main working interface is separated in three main windows: the main working field on the upper right, the treeviews
 on the upper left and the outputview on the bottom of the main window. Around that are the menubar, toolbars and the
@@ -73,32 +73,34 @@ such as make or a terminal application.</LI>
 <P>The integrated editor of KDevelop is based on KWrite, known as the "Extended Editor"  in KDE-1.1.
 The options dialog configures the main behavoir for the editor regarding things as selections, wrapping etc.
 <P><B>Edit Options:</B>
-<P>Auto Indent:                                                                 this sets the edior to place the cursor below the first literal when a new line is entered.
-<P>Backspace Indent:                                                    this option sets the cursor below the first literal of the line above when backspace is pressed.
-<P>Word Wrap:                                                                           words are taken into the next line after the column set in "Wrap Words At:"
-<P>Replace Tabs:                                                                        tabulators in the current text are replaced with tabulators of the "Tab Width:" value
-<P>Remove Trailing Spaces:                              removes trailing spaces
-<P>Wrap Cursor:                                                                 sets the cursor to the end of the last line when backspace enters the beginning of a line
-<P>Auto Brackets:                                                               creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
+<P><B>Auto Indent:</B>                                                                  this sets the edior to place the cursor below the first literal when a new line is entered.
+<P><B>Backspace Indent:</B>                                                     this option sets the cursor below the first literal of the line above when backspace is pressed.
+<P><B>Word Wrap:</B>                                                                            words are taken into the next line after the column set in "Wrap Words At:"
+<P><B>Replace Tabs:</B>                                                                 tabulators in the current text are replaced with tabulators of the "Tab Width:" value
+<P><B>Remove Trailing Spaces:</B>                               removes trailing spaces
+<P><B>Wrap Cursor:</B>                                                                  sets the cursor to the end of the last line when backspace enters the beginning of a line
+<P><B>Auto Brackets:</B>                                                                creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
 <P><B>Select Options:</B>
-<P>Persistent Selections:        selections made stay marked after setting the cursor to a different place
-<P>Multiple Selections:          allows multiple independent selections within the text
-<P>Vertical Selections:            when selecting multiple lines, the selection is also made horizontal and doesn't cover the whole line
-<P>Delete On Input:                 deletes a selection when writing in the selection.
-<P>Toggle Old:                          allows only one selection. A selection made gets deselected when another selection is made.
-<P>Wrap Words At:                      sets the maximum
+<P><B>Persistent Selections:</B>        selections made stay marked after setting the cursor to a different place
+<P><B>Multiple Selections:</B>          allows multiple independent selections within the text
+<P><B>Vertical Selections:</B>          when selecting multiple lines, the selection is also made horizontal and doesn't cover the
+whole line
+<B>Delete On Input:</B>              deletes a selection when writing in the selection.
+<P><B>Toggle Old:</B>                   allows only one selection. A selection made gets deselected when another selection is made.
+<P><B>Wrap Words At:</B>                sets the maximum
 <P>
 <P>
 <H3><A NAME="ss4.5">4.5 Editor Colors</A>
 </H3>
 
 <P>The editor allows to configure the general view of the editing field by choosing colors for:
-- background:                the editor's background
-- text background:        the background of displayed text
-- selected:                     the color of selected text to display the selection
-- found:                          the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".
-- selected + found:        the color of text selected to search for and found
-<P>
+<UL>
+<LI> background:              the editor's background</LI>
+<LI> text background:           the background of displayed text</LI>
+<LI> selected:                the color of selected text to display the selection</LI>
+<LI> found:                   the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".</LI>
+<LI> selected + found:        the color of text selected to search for and found</LI>
+</UL>
 <P>
 <H3><A NAME="ss4.6">4.6 Editor Defaults</A>
 </H3>
@@ -186,12 +188,12 @@ up the path to your recent kdelibs sources, which is not the include-path for KD
 <P>Then, you can choose three different installation modes, as:
 <P>
 <UL>
-<LI> - Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
+<LI> Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
 installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
 newly generated documentation into the recent path.</LI>
-<LI> - Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
+<LI> Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
 well as above, but gives you the choice to set up a new documentation place.</LI>
-<LI> - Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
+<LI> Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
 the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
 kdelibs version.</LI>
 </UL>

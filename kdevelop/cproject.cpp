@@ -464,7 +464,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info){
   if(new_subdir){
     updateConfigureIn();
   }
-  setSourcesHeaders();
+//  setSourcesHeaders();   // moved to the end because it's reading the sync'ed file for the classviewer... Ralf
   //  createMakefilesAm(); // do some magic generation
 
   // write the fileinfo
@@ -476,6 +476,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info){
   info.install_location.replace("[\\$]","$$");
   config->writeEntry("install_location",info.install_location);
   config->sync();
+  setSourcesHeaders();
   return new_subdir;
 }
 void CProject::removeFileFromProject(QString rel_name){
@@ -1009,4 +1010,6 @@ void CProject::getAllStaticLibraries(QStrList& libs){
     }
   }
 }
+
+
 

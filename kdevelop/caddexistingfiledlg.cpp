@@ -133,7 +133,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   ok_button->setText( "OK" );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
-
+	ok_button->setDefault( TRUE );
 	
   cancel_button = new QPushButton( this, "cancel_button" );
   cancel_button->setGeometry( 220, 130, 100, 30 );

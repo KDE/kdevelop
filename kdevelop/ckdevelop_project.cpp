@@ -524,6 +524,7 @@ void CKDevelop::slotProjectOpenCmdl(const char* prjname){
 
     KMsgBox::message(0,prjname,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
     readProjectFile(old_project);
+    slotViewRefresh();
     }
 
     slotStatusMsg(IDS_DEFAULT);
@@ -597,7 +598,6 @@ void CKDevelop::slotProjectAddNewTranslationFile(){
     addFileToProject(file,"PO"); 
     slotBuildMessages();
   }
-  
 }
 void CKDevelop::slotAddFileToProject(QString abs_filename){
   QString  type = "DATA";
@@ -608,6 +608,7 @@ void CKDevelop::slotAddFileToProject(QString abs_filename){
     type = "SOURCE";
   }
   addFileToProject(abs_filename,type,true);
+	refreshTrees();
 }
 
 /*********************************************************************
@@ -779,6 +780,7 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
 
 
 
