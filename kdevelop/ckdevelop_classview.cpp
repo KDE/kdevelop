@@ -1,5 +1,5 @@
 /***************************************************************************
-                          cclassview.cpp  -  description
+                          cclassview.cpp  -  implementation
                              -------------------
     begin                : Fri Mar 19 1999
     copyright            : (C) 1999 by Jonas Nordin
@@ -43,11 +43,13 @@ void CKDevelop::slotClassTreeSelected()
   // Only react on clicks on the left mousebutton.
   if( class_tree->mouseBtn == LeftButton )
   {
-    idxT = class_tree->indexType();
+    idxT = class_tree->treeH->itemType();
 
     // If this is an function of some sort, go to the declaration.
     if( idxT == THGLOBAL_FUNCTION || 
-        idxT == METHOD )
+        idxT == THPUBLIC_METHOD ||
+        idxT == THPROTECTED_METHOD ||
+        idxT == THPRIVATE_METHOD )
       CVGotoDeclaration( class_tree->currentItem() );
     else // Goto the definition.
       CVGotoDefinition( class_tree->currentItem() );
@@ -301,7 +303,7 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
   int toLine = -1;
 
   // Get the type of declaration at the index.
-  idxType = class_tree->indexType();
+  idxType = class_tree->treeH->itemType();
   switch( idxType )
   {
     case THCLASS:
@@ -309,13 +311,19 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
       toFile = aClass->hFilename;
       toLine = aClass->definedOnLine;
       break;
-    case ATTRIBUTE:
-    case METHOD:
+    case THPUBLIC_ATTR:
+    case THPROTECTED_ATTR:
+    case THPRIVATE_ATTR:
+    case THPUBLIC_METHOD:
+    case THPROTECTED_METHOD:
+    case THPRIVATE_METHOD:
       parent = item->parent();
       aClass = class_tree->store->getClassByName( parent->text(0) );
       
       // Fetch the attribute/method.
-      aAttr = ( idxType == ATTRIBUTE ? 
+      aAttr = ( idxType == THPUBLIC_ATTR || 
+                idxType == THPROTECTED_ATTR ||
+                idxType == THPRIVATE_ATTR ? 
                 aClass->getAttributeByName( item->text(0) ) :
                 aClass->getMethodByNameAndArg( item->text(0) ) );
       
@@ -357,9 +365,11 @@ void CKDevelop::CVGotoDeclaration(QListViewItem *item)
   CParsedMethod *aMethod = NULL;
   QListViewItem *parent;
 
-  switch( class_tree->indexType() )
+  switch( class_tree->treeH->itemType() )
   {
-    case METHOD:
+    case THPUBLIC_METHOD:
+    case THPROTECTED_METHOD:
+    case THPRIVATE_METHOD:
       parent = item->parent();
       aClass = class_tree->store->getClassByName( parent->text(0) );
       if( aClass )
@@ -367,6 +377,8 @@ void CKDevelop::CVGotoDeclaration(QListViewItem *item)
       break;
     case THGLOBAL_FUNCTION:
       aMethod = class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) );
+      break;
+    default:
       break;
   }
   
