@@ -12,6 +12,6 @@ Description[et]=%{APPNAMELC} ioslave
 Description[fr]=Un module d'entrée / sortie pour %{APPNAMELC}
 Description[it]=Un kioslave per %{APPNAMELC}
 Description[pt]=Um 'kioslave' para %{APPNAMELC}
-Description[pt_BR]=Um 'kioslave' para %{APPNAMELC}
+Description[pt_BR]=Um kioslave para %{APPNAMELC}
 Description[ru]=Обработчик ввода-вывода для %{APPNAMELC}
 Description[sv]=En I/O-slav för %{APPNAMELC}
