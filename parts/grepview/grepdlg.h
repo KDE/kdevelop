@@ -18,8 +18,11 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
+#include <kcombobox.h>
+
 
 class KConfig;
+class KURLRequester;
 
 class GrepDialog : public QDialog
 {
@@ -44,6 +47,12 @@ public:
 	{ return dir_combo->currentText(); }
     bool recursiveFlag() const
 	{ return recursive_box->isChecked(); }
+    void show()
+    {
+        pattern_combo->setFocus();
+        QDialog::show();
+    }
+
 #ifdef IGNORE_SCM_DIRS
     bool ignoreSCMDirsFlag() const
         { return ignore_scm_box->isChecked(); }
@@ -53,13 +62,15 @@ signals:
     void searchClicked();
 
 private slots:
-    void dirButtonClicked();
     void templateActivated(int index);
     void slotSearchClicked();
 
 private:
     QLineEdit *template_edit;
-    QComboBox *dir_combo, *pattern_combo, *files_combo;
+    QComboBox *pattern_combo, *files_combo;
+    KComboBox * dir_combo;
+    KURLRequester * url_requester;
+
     QCheckBox *recursive_box;
 #ifdef IGNORE_SCM_DIRS
     QCheckBox *ignore_scm_box;

@@ -26,6 +26,9 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <qlabel.h>
+#include <kcombobox.h>
+#include <kurlcompletion.h>
+#include <kurlrequester.h>
 
 #include "grepviewpart.h"
 
@@ -113,18 +116,18 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     QBoxLayout *dir_layout = new QHBoxLayout(4);
     layout->addLayout(dir_layout, 3, 1);
 
-    dir_combo = new QComboBox(true, this);
+    dir_combo = new KComboBox( true, this );
     dir_combo->insertStringList(config->readListEntry("LastSearchPaths"));
     dir_combo->setInsertionPolicy(QComboBox::NoInsertion);
     dir_combo->setEditText(QDir::homeDirPath());
 
-    dir_label->setBuddy(dir_combo);
-    dir_combo->setMinimumWidth(dir_combo->fontMetrics().maxWidth()*25);
-    dir_layout->addWidget(dir_combo, 10);
+    url_requester = new KURLRequester( dir_combo, this );
+    url_requester->completionObject()->setMode(KURLCompletion::DirCompletion);
+    url_requester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
-    QPushButton *dir_button = new QPushButton("...", this, "dirButton");
-    dir_button->setFixedSize(30, 25);
-    dir_layout->addWidget(dir_button);
+    dir_label->setBuddy( url_requester );
+    dir_combo->setMinimumWidth(dir_combo->fontMetrics().maxWidth()*25);
+    dir_layout->addWidget( url_requester, 10 );
 
     recursive_box = new QCheckBox(i18n("&Recursive"), this);
     recursive_box->setChecked(true);
@@ -184,8 +187,6 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 
     connect( template_combo, SIGNAL(activated(int)),
 	     SLOT(templateActivated(int)) );
-    connect( dir_button, SIGNAL(clicked()),
-	     SLOT(dirButtonClicked()) );
     connect( search_button, SIGNAL(clicked()),
 	     SLOT(slotSearchClicked()) );
     connect( done_button, SIGNAL(clicked()),
@@ -204,19 +205,12 @@ static QStringList qCombo2StringList( QComboBox* combo )
     return list;
 }
 
-
 GrepDialog::~GrepDialog()
 {
     config->setGroup("GrepDialog");
     // memorize the last patterns and paths
     config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
     config->writeEntry("LastSearchPaths", qCombo2StringList(dir_combo));
-}
-
-
-void GrepDialog::dirButtonClicked()
-{
-    dir_combo->setEditText(KFileDialog::getExistingDirectory(dir_combo->currentText()));
 }
 
 
