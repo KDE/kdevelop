@@ -1,0 +1,238 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>NewFormBase</class>
+<comment>*********************************************************************
+** Copyright (C) 2000 Trolltech AS.  All rights reserved.
+**
+** This file is part of Qt Designer.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+*********************************************************************</comment>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>NewFormBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>557</width>
+            <height>436</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>New File</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>&lt;b&gt;New Form&lt;/b&gt;&lt;p&gt;Select a template for the new form and click the &lt;b&gt;OK&lt;/b&gt;-button to create it.&lt;/p&gt;</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>helpButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Help</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Create a new form using the selected template.</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Close the dialog without creating a new form.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QIconView" row="1" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>templateView</cstring>
+            </property>
+            <property name="gridX">
+                <number>120</number>
+            </property>
+            <property name="resizeMode">
+                <enum>Adjust</enum>
+            </property>
+            <property name="itemsMovable">
+                <bool>false</bool>
+            </property>
+            <property name="wordWrapIconText">
+                <bool>true</bool>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Displays a list of the available templates.</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>labelProject</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Insert into:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>projectCombo</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="0" column="1">
+            <property name="name">
+                <cstring>projectCombo</cstring>
+            </property>
+        </widget>
+        <spacer row="0" column="2">
+            <property name="name">
+                <cstring>Spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>NewFormBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>NewFormBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>projectCombo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>NewFormBase</receiver>
+        <slot>projectChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>templateView</sender>
+        <signal>currentChanged(QIconViewItem*)</signal>
+        <receiver>NewFormBase</receiver>
+        <slot>itemChanged(QIconViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>templateView</sender>
+        <signal>doubleClicked(QIconViewItem*)</signal>
+        <receiver>NewFormBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>templateView</sender>
+        <signal>returnPressed(QIconViewItem*)</signal>
+        <receiver>NewFormBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>templateView</tabstop>
+    <tabstop>helpButton</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
+<slots>
+    <slot access="protected">itemChanged( QIconViewItem * )</slot>
+    <slot access="protected">projectChanged( const QString &amp; )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,0 +1,218 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>PixmapCollectionEditor</class>
+<comment>*********************************************************************
+** Copyright (C) 2001 Trolltech AS.  All rights reserved.
+**
+** This file is part of Qt Designer.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+*********************************************************************</comment>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>PixmapCollectionEditor</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>455</width>
+            <height>260</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Manage Image Collection</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QIconView">
+            <property name="name">
+                <cstring>viewPixmaps</cstring>
+            </property>
+            <property name="resizeMode">
+                <enum>Adjust</enum>
+            </property>
+            <property name="itemsMovable">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>PushButton2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Add...</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>PushButton3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Delete</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonClose</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;lose</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>PushButton2</sender>
+        <signal>clicked()</signal>
+        <receiver>PixmapCollectionEditor</receiver>
+        <slot>addPixmap()</slot>
+    </connection>
+    <connection>
+        <sender>PushButton3</sender>
+        <signal>clicked()</signal>
+        <receiver>PixmapCollectionEditor</receiver>
+        <slot>removePixmap()</slot>
+    </connection>
+    <connection>
+        <sender>viewPixmaps</sender>
+        <signal>currentChanged(QIconViewItem*)</signal>
+        <receiver>PixmapCollectionEditor</receiver>
+        <slot>currentChanged(QIconViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>PixmapCollectionEditor</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>PixmapCollectionEditor</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>buttonClose</sender>
+        <signal>clicked()</signal>
+        <receiver>PixmapCollectionEditor</receiver>
+        <slot>accept()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>PushButton2</tabstop>
+    <tabstop>PushButton3</tabstop>
+    <tabstop>viewPixmaps</tabstop>
+    <tabstop>buttonClose</tabstop>
+</tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">pixmapcollection.h</include>
+    <include location="local" impldecl="in implementation">pixmapchooser.h</include>
+    <include location="local" impldecl="in implementation">project.h</include>
+    <include location="global" impldecl="in implementation">qfileinfo.h</include>
+    <include location="global" impldecl="in implementation">qimage.h</include>
+    <include location="global" impldecl="in declaration">qpixmap.h</include>
+    <include location="local" impldecl="in implementation">pixmapcollectioneditor.ui.h</include>
+</includes>
+<forwards>
+    <forward>class Project;</forward>
+</forwards>
+<variables>
+    <variable>Project *project;</variable>
+    <variable>bool chooser;</variable>
+</variables>
+<slots>
+    <slot>init()</slot>
+    <slot>destroy()</slot>
+    <slot>addPixmap()</slot>
+    <slot>removePixmap()</slot>
+    <slot>updateView()</slot>
+    <slot>currentChanged(QIconViewItem * i)</slot>
+    <slot>setChooserMode(bool c)</slot>
+    <slot>setCurrentItem(const QString &amp; name)</slot>
+    <slot>setProject(Project * pro)</slot>
+    <slot returnType="QPixmap">scaledPixmap(const QPixmap &amp; p)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

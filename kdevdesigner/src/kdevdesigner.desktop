@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KDevDesigner
+Name[xx]=xxKDevDesignerxx
+Exec=kdevdesigner %i %m -caption "%c"
+Icon=kdevdesigner
+Type=Application
+DocPath=kdevdesigner/kdevdesigner.html
+Comment=GUI Designer for Qt/KDE
+Terminal=0

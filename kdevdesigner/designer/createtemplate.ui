@@ -1,0 +1,228 @@
+<!DOCTYPE UI><UI>
+<class>CreateTemplate</class><comment>*********************************************************************
+** Copyright (C) 2000 Trolltech AS.  All rights reserved.
+**
+** This file is part of Qt Designer.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+*********************************************************************</comment>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>CreateTemplate</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>347</width>
+            <height>248</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Create Template</string>
+    </property>
+    <property stdset="1">
+        <name>sizeGripEnabled</name>
+        <bool>true</bool>
+    </property>
+    <grid>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget row="0"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Template &amp;Name:</string>
+            </property>
+            <property>
+                <name>buddy</name>
+                <cstring>editName</cstring>
+            </property>
+        </widget>
+        <widget row="0"  column="1" >
+            <class>QLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>editName</cstring>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Name of the new template</string>
+            </property>
+            <property>
+                <name>whatsThis</name>
+                <string>Enter the name of the new template</string>
+            </property>
+        </widget>
+        <widget row="1"  column="1"  rowspan="2"  colspan="1" >
+            <class>QListBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>listClass</cstring>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Class of the new template</string>
+            </property>
+            <property>
+                <name>whatsThis</name>
+                <string>Enter the name of the class which should be used as the template's base class</string>
+            </property>
+        </widget>
+        <widget row="3"  column="0"  rowspan="1"  colspan="2" >
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>0</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property>
+                        <name>name</name>
+                        <cstring>Spacer1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>sizeType</name>
+                        <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>buttonCreate</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>C&amp;reate</string>
+                    </property>
+                    <property stdset="1">
+                        <name>default</name>
+                        <bool>true</bool>
+                    </property>
+                    <property>
+                        <name>whatsThis</name>
+                        <string>Creates the new template</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>PushButton1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property>
+                        <name>whatsThis</name>
+                        <string>Closes the Dialog</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget row="1"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&amp;Baseclass for Template:</string>
+            </property>
+            <property>
+                <name>buddy</name>
+                <cstring>listClass</cstring>
+            </property>
+        </widget>
+        <spacer row="2"  column="0" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer2</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Vertical</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonCreate</sender>
+        <signal>clicked()</signal>
+        <receiver>CreateTemplate</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>PushButton1</sender>
+        <signal>clicked()</signal>
+        <receiver>CreateTemplate</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+</UI>

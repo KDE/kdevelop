@@ -1,0 +1,222 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>DatabaseConnectionWidget</class>
+<comment>*********************************************************************
+** Copyright (C) 2001 Trolltech AS.  All rights reserved.
+**
+** This file is part of Qt Designer.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+*********************************************************************</comment>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>DatabaseConnectionWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>199</width>
+            <height>185</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Edit Database Connection</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Database Name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editDatabase</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>TextLabel4</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Username:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editUsername</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>TextLabel4_2</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Password:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editPassword</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>D&amp;river</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>comboDriver</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>editName</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QLabel" row="5" column="0">
+            <property name="name">
+                <cstring>TextLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Hostname:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editHostname</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="1" column="1">
+            <property name="name">
+                <cstring>comboDriver</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editName</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="5" column="1">
+            <property name="name">
+                <cstring>editHostname</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QLabel" row="6" column="0">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>P&amp;ort</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editPort</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
+                <cstring>editUsername</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="4" column="1">
+            <property name="name">
+                <cstring>editPassword</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="echoMode">
+                <enum>Password</enum>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>editDatabase</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="6" column="1">
+            <property name="name">
+                <cstring>editPort</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="specialValueText">
+                <string>Default</string>
+            </property>
+            <property name="maxValue">
+                <number>65535</number>
+            </property>
+            <property name="minValue">
+                <number>-1</number>
+            </property>
+            <property name="value">
+                <number>-1</number>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+</connections>
+<tabstops>
+    <tabstop>editName</tabstop>
+    <tabstop>comboDriver</tabstop>
+    <tabstop>editDatabase</tabstop>
+    <tabstop>editUsername</tabstop>
+    <tabstop>editPassword</tabstop>
+    <tabstop>editHostname</tabstop>
+    <tabstop>editPort</tabstop>
+</tabstops>
+<slots>
+    <slot access="protected">init()</slot>
+    <slot access="protected">destroy()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

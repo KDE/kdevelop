@@ -1,0 +1,181 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>MultiLineEditorBase</class>
+<comment>*********************************************************************
+** Copyright (C) 2002 Trolltech AS.  All rights reserved.
+**
+** This file is part of Qt Designer.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+*********************************************************************</comment>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>MultiLineEditorBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>598</width>
+            <height>307</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Edit Text</string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>&lt;b&gt;Multiline Edit&lt;/b&gt;&lt;p&gt;This is a simple richtext editor. For an easier working, it provides the most common html tags in form of toolbar items respectively shortcuts. By clicking on such an icon, the regarding tag will be written to the editor and you can insert your text. If you have already written a text and want to format it, just mark it and click on the wished tag button. For a better visualization this editor supports also a simple html syntax highlighting.</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout4</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout3</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>OkButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;OK</string>
+                            </property>
+                            <property name="on">
+                                <bool>false</bool>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
+                            <property name="default">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>applyButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Apply</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>cancelButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Cancel</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>Spacer3</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>helpButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Help</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+    </hbox>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>menuBar</cstring>
+    </property>
+</menubar>
+<toolbars>
+</toolbars>
+<connections>
+    <connection>
+        <sender>OkButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MultiLineEditorBase</receiver>
+        <slot>okClicked()</slot>
+    </connection>
+    <connection>
+        <sender>applyButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MultiLineEditorBase</receiver>
+        <slot>applyClicked()</slot>
+    </connection>
+    <connection>
+        <sender>cancelButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MultiLineEditorBase</receiver>
+        <slot>cancelClicked()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>applyClicked()</slot>
+    <slot>okClicked()</slot>
+    <slot>cancelClicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
