@@ -55,7 +55,10 @@ QStringList KDevQtImporter::includePaths()
 	return QStringList();
 
     QStringList includePaths;
-    includePaths.push_back( m_settings->qtDir() );
+    includePaths.push_back( m_settings->qtDir() + "/include" );
+    includePaths.push_back( m_settings->qtDir() + "/include/private" );
+    includePaths.push_back( m_settings->qtDir() + "/mkspecs/default" );
+    
     /// @todo add mkspec
     return includePaths;
 }
