@@ -1152,7 +1152,7 @@ void QextMdiMainFrm::fillWindowMenu()
       m_pMdiModeMenu->clear();
       m_pMdiModeMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
       m_pMdiModeMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
-//DISABLED      m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
+      m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
       switch (m_mdiMode) {
       case QextMdi::ToplevelMode:
          m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
@@ -1161,7 +1161,7 @@ void QextMdiMainFrm::fillWindowMenu()
          m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(1), TRUE);
          break;
       case QextMdi::TabPageMode:
-//DISABLED         m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
+         m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
          break;
       default:
          break;
