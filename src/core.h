@@ -32,6 +32,9 @@ public:
     Core();
     ~Core();
 
+    KParts::PartManager *partManager() const { return manager; };
+
+
 protected:
     virtual void embedWidget(QWidget *w, Role role, const QString &shortCaption);
     virtual void raiseWidget(QWidget *w);
