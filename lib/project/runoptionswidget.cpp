@@ -61,7 +61,7 @@ void RunOptionsWidget::accept()
 
 void RunOptionsWidget::browseMainProgram()
 {
-    KFileDialog *dlg = new KFileDialog(m_buildDirectory.directory(false, false), QString::null, this, QString::null, true);
+    KFileDialog *dlg = new KFileDialog(m_buildDirectory.directory(false, false), QString::null, this, 0, true);
     QStringList filters;
     filters << "application/x-executable"
     << "application/x-shellscript"
