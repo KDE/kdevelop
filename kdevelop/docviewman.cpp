@@ -485,8 +485,8 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
   for (; itViews.current() != 0; ++itViews) {
     CEditWidget* pView = (CEditWidget*) itViews.current()->parentWidget();
     if (!pView) continue;
-    disconnect(pView, SIGNAL(gotFocus(CEditWidget*)),
-               this, SLOT(slot_gotFocus(CEditWidget*)));
+    disconnect(pView, SIGNAL(gotFocus(QextMdiChildView*)),
+               this, SLOT(slot_gotFocus(QextMdiChildView*)));
     // remove the view from MDI and delete the view
     QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
     m_pParent->removeWindowFromMdi( pMDICover);
@@ -737,24 +737,26 @@ bool DocViewMan::closeView(QWidget* pWnd)
   for ( pChild = pL->first(); pChild && !pView; pChild = pL->next()) {
     if (pChild->inherits("QWidget")) {
       pView = (QWidget*) pChild;
+      if (CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView)) {
+        if (checkAndSaveFileOfCurrentEditView(true) != KMessageBox::Cancel) {
+          closeEditView(pEditView);
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      else if (KHTMLView* pHTMLView = dynamic_cast<KHTMLView*> (pView)) {
+        closeBrowserView(pHTMLView);
+        return true;
+      }
+      else {
+        kdDebug() << "expected EditView but found some unknown QWidget, keep looking\n";
+      }
     }
   }
-
-  if (CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView)) {
-    if (!pEditView)    // i dont understand this: how can this be? (rokrau)
-      return true;
-
-    if (checkAndSaveFileOfCurrentEditView(true) != KMessageBox::Cancel)
-      closeEditView(pEditView);
-    else
-      return false;
-  }
-  else if (KHTMLView* pHTMLView = dynamic_cast<KHTMLView*> (pView)) {
-    if(pHTMLView) {
-      closeBrowserView(pHTMLView);
-    }
-  }
-  return true;
+  kdDebug() << "nothing found but useless junk, life sucks\n";
+  return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -771,7 +773,8 @@ void DocViewMan::closeEditView(CEditWidget* pView)
   pMDICover->hide();
   
   // disconnect the focus signals
-  disconnect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)), this, SLOT(slot_gotFocus(QextMdiChildView*)));
+  disconnect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)),
+    this, SLOT(slot_gotFocus(QextMdiChildView*)));
 
   // remove the view from MDI and delete the view
   m_pParent->removeWindowFromMdi( pMDICover);
@@ -959,7 +962,8 @@ bool DocViewMan::doFileClose()
   QString filename = pCurEditView->getName();
 
   // close the current view of the document (this will ask the user in case of being modified)
-  bool bClosed = closeView(pCurEditView);
+  bool bClosed = closeView(m_MDICoverList.last());
+
   if (!bClosed) // action was cancelled
     return false;
 
