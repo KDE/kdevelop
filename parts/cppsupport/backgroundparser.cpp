@@ -35,7 +35,7 @@
 #include <qtextstream.h>
 
 BackgroundParser::BackgroundParser( CppSupportPart* part )
-    : m_cppSupport( part )
+    : m_cppSupport( part ), m_close( false )
 {
     m_unitDict.setAutoDelete( true );
 }
@@ -63,6 +63,7 @@ void BackgroundParser::addFile( const QString& fileName)
     Unit* unit = parseFile( fileName );
     
     lock();
+    m_unitDict.remove( fileName );
     m_unitDict.insert( fileName, unit );
     KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
     unlock();
@@ -152,8 +153,6 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 	
 	QString contents = editIface->text();
 	unit = parseFile( fileName, contents );
-
-	
     }
     kapp->unlock();
     
@@ -206,10 +205,18 @@ void BackgroundParser::reparse()
     m_changed.wakeOne();
 }
 
+void BackgroundParser::close()
+{
+    m_close = true;
+}
+
 void BackgroundParser::run()   
 {
     while( true ){
 	m_changed.wait();
+	
+	if( m_close )
+	    QThread::exit();
 	
 	kapp->lock();
 	

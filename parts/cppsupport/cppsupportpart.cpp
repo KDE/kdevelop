@@ -171,11 +171,12 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
 CppSupportPart::~CppSupportPart()
 {
+    m_backgroundParser->close();
+    m_backgroundParser->reparse();
+    m_backgroundParser->wait();
+    
     topLevel( )->removeView( m_pCHWidget );
     topLevel( )->removeView( m_problemReporter );
-
-    m_backgroundParser->terminate();
-    m_backgroundParser->wait();
     
     delete m_backgroundParser;
     delete m_pParser;

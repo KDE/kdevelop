@@ -51,6 +51,7 @@ public:
     TranslationUnitAST* translationUnit( const QString& fileName );
     QValueList<Problem> problems( const QString& fileName );
     
+    void close();
     void reparse();
     
     void lock();
@@ -68,6 +69,7 @@ private:
     QMutex m_mutex;
     
     CppSupportPart* m_cppSupport;
+    bool m_close;
     QAsciiDict<Unit> m_unitDict;
 };
 
