@@ -2,7 +2,7 @@
 
 SUBDIRS = imports common kapp kpartapp kpartplugin kappjava kcmodule kicker kioslave \
 	  kdevpart pythonhello phphello chello cpphello gnomeapp kdevpartjava kscreensaver \
-	  kofficepart
+	  kofficepart chello_gba
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
