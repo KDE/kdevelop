@@ -9,7 +9,7 @@ EXTRA_DIST = caddclassattributedlg.cpp caddclassattributedlg.h caddclassmethoddl
 
 ####### kdevelop will overwrite this part!!! (end)############
 
-INCLUDES= $(all_includes) -I$(srcdir)/kpp -Ikpp -Ikwrite -I$(srcdir)/widgets/qextmdi/include
+INCLUDES= $(all_includes) -I$(srcdir)/kpp -Ikpp -I$(srcdir)/kwrite -I$(srcdir)/widgets/qextmdi/include
 
 METASOURCES = AUTO
 
