@@ -109,7 +109,6 @@ void Driver::remove( const QString & fileName )
 
 void Driver::removeAllMacrosInFile( const QString& fileName )
 {
-    qDebug( "----------------------->Driver::removeAllMacrosInFile()" );
     QMap<QString, Macro>::Iterator it = m_macros.begin();
     while( it != m_macros.end() ){
         Macro m = *it++;
@@ -164,7 +163,6 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep )
 
 void Driver::addMacro( const Macro & macro )
 {
-    qDebug( "-----------_> add macro %s", macro.name().latin1() );
     m_macros.insert( macro.name(), macro );
 }
 
@@ -377,7 +375,6 @@ void Driver::setupParser( Parser * parser )
 
 void Driver::removeMacro( const QString& macroName )
 {
-    qDebug( "-----------_> remove macro %s", macroName.latin1() );
     m_macros.remove( macroName );
 }
 
