@@ -41,7 +41,7 @@
 #include <klibloader.h>
 #include <qlineedit.h>
 #include <iostream.h>
-
+#include "KDevCompiler.h"
 
 KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 		: AutomakeProjectSpace(parent,name)
@@ -58,7 +58,9 @@ KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 	m_language = "C++";
 	m_pAboutData=0;
 
-
+	addCompiler(KDevCompiler::Gcc);
+	addCompiler(KDevCompiler::Cpp);
+	
 	setXMLFile("kdevkdeprojectspaceui.rc");
 }
 
