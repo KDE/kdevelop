@@ -733,7 +733,7 @@ ParsedClassContainer* CppCodeCompletion::findContainer( const QString& name, Par
 
         QStringList::ConstIterator impIt = imports.begin();
         while( impIt != imports.end() ){
-            ParsedClassContainer* kl = findContainer( (*impIt) + "." + name, container, false );
+            ParsedClassContainer* kl = findContainer( (*impIt) + "." + name, container, imports );
             if( kl )
                 return kl;
             ++impIt;
