@@ -42,6 +42,7 @@
  */
 
 
+#include "qeditor_view.h"
 #include "simple_indent.h"
 #include "qsourcecolorizer.h"
 #include "paragdata.h"
@@ -121,8 +122,8 @@ void indentLine( QTextParag *p, int tabwidth, int &oldIndent, int &newIndent )
 }
 // from trolltech's editor -- END
 
-SimpleIndent::SimpleIndent( QEditor* editor )
-    : m_editor( editor )
+SimpleIndent::SimpleIndent( QEditor* ed )
+    : QEditorIndenter( ed )
 {
 
 }
@@ -151,7 +152,7 @@ static int indentForLine( QTextParag* parag, int tabwidth )
 void SimpleIndent::indent( QTextDocument* doc, QTextParag* parag,
                            int* oldIndent, int* newIndent )
 {
-    int tabwidth = m_editor->tabStop();
+    int tabwidth = editor()->tabStop();
     QString s = parag->string()->toString();
     int oi = indentation( s, tabwidth );
     int ind = indentForLine( parag, tabwidth );

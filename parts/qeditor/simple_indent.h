@@ -44,16 +44,15 @@
 #ifndef simple_indent_h
 #define simple_indent_h
 
-#include <private/qrichtext_p.h>
+#include "qeditor_indenter.h"
 
 class QEditor;
 
-class SimpleIndent: public QTextIndent{
+class SimpleIndent: public QEditorIndenter{
 public:
     SimpleIndent( QEditor* );
     virtual ~SimpleIndent();
 
-    QEditor* editor() const { return m_editor; }
     void indent( QTextDocument*, QTextParag*, int* =0, int* =0 );
 
 private:

@@ -374,21 +374,21 @@ void QEditor::setLanguage( const QString& l )
     if( m_language == "c++" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CppColorizer(this) );
-	document()->setIndent( new CIndent() );
+	document()->setIndent( new CIndent(this) );
         setBackgroundParser( new CppParser(this) );
     } else if( m_language == "java" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
-	document()->setIndent( new CIndent() );
+	document()->setIndent( new CIndent(this) );
     } else if( m_language == "csharp" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CSharpColorizer(this) );
-	document()->setIndent( new CIndent() );
+	document()->setIndent( new CIndent(this) );
 #if defined(HAVE_PERL_MODE)
     } else if( m_language == "perl" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new PerlColorizer(this) );
-	document()->setIndent( new CIndent() );
+	document()->setIndent( new CIndent(this) );
 #endif
     } else if( m_language == "python" ){
         setElectricKeys( QString::null );

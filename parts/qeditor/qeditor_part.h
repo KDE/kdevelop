@@ -38,11 +38,13 @@ class QWidget;
 class QPainter;
 class KURL;
 class QEditorView;
+class QEditorIndenter;
 class KAboutData;
 class HLMode;
 class KConfig;
 class QSourceColorizer;
 class KDialogBase;
+
 
 /**
  * This is a "Part".  It that does all the real work in a KPart
@@ -89,6 +91,7 @@ public:
     virtual bool isModified() const;
 
     QSourceColorizer* colorizer() const;
+    QEditorIndenter* indenter() const;
 
     static KAboutData *createAboutData();
 
@@ -134,12 +137,16 @@ public:
 
 // -- Document ------------------------------------------------------------------------------
 public:
+    QEditorView* currentView() const { return m_currentView; }
+
     /**
      * Create a view that will display the document data. You can create as many
      * views as you like. When the user modifies data in one view then all other
      * views will be updated as well.
      */
     virtual KTextEditor::View *createView ( QWidget *parent, const char *name = 0 );
+
+
 
     /*
      * Accessor to the list of views.
@@ -336,7 +343,7 @@ protected slots:
     void fileSaveAs();
 
 private:
-    QEditorView* m_editor;
+    QEditorView* m_currentView;
     QPtrList<KTextEditor::View> m_views;
     QPtrList<KTextEditor::Cursor> m_cursors;
 };

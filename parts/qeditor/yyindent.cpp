@@ -58,6 +58,8 @@
 */
 
 #include <qregexp.h>
+#include <qmap.h>
+#include <qvariant.h>
 
 /*
   The indenter avoids getting stuck in almost infinite loops by
@@ -82,16 +84,32 @@ static const int BigRoof = 400;
     * ppCommentOffset is the indentation within a C-style comment,
       when it cannot be picked up.
 */
-static const int ppHardwareTabSize = 8;
-static const int ppIndentSize = 4;
-static const int ppContinuationIndentSize = 8;
-static const int ppCommentOffset = 2;
+static /*const*/ int ppHardwareTabSize = 8;
+static /*const*/ int ppIndentSize = 4;
+static /*const*/ int ppContinuationIndentSize = 8;
+static /*const*/ int ppCommentOffset = 2;
 
 static QRegExp *literal = 0;
 static QRegExp *label = 0;
 static QRegExp *inlineCComment = 0;
 static QRegExp *braceX = 0;
 static QRegExp *iflikeKeyword = 0;
+
+
+void configureCIndent( const QMap<QString, QVariant>& values )
+{
+    if( values.contains("TabSize") )
+        ppHardwareTabSize = values[ "TabSize" ].toInt();
+
+    if( values.contains("IndentSize") )
+        ppIndentSize = values[ "IndentSize" ].toInt();
+
+    if( values.contains("ContinuationSize") )
+        ppContinuationIndentSize = values[ "ContinuationSize" ].toInt();
+
+    if( values.contains("CommentOffset") )
+        ppCommentOffset = values[ "CommentOffset" ].toInt();
+}
 
 /*
   Returns the first non-space character in the string t, or

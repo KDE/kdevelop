@@ -21,16 +21,18 @@
 #ifndef CINDENT_H
 #define CINDENT_H
 
-#include <private/qrichtext_p.h>
+#include "qeditor_indenter.h"
 #include "dlldefs.h"
 
-class EDITOR_EXPORT CIndent : public QTextIndent
+class EDITOR_EXPORT CIndent : public QEditorIndenter
 {
 public:
-    CIndent();
-    virtual ~CIndent() {}
-    void indent( QTextDocument *doc, QTextParag *parag, int *oldIndent, int *newIndent );
+    CIndent( QEditor* );
+    virtual ~CIndent();
 
+    void indent( QTextDocument *doc, QTextParag *parag, int *oldIndent, int *newIndent );
+    virtual QWidget* createConfigPage( QEditorPart*, KDialogBase* =0, const char* =0 );
+    virtual void updateValues( const QMap<QString, QVariant>& );
 };
 
 #endif

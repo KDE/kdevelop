@@ -25,6 +25,7 @@
 #include "paragdata.h"
 #include "highlightingconfigpage.h"
 #include "qsourcecolorizer.h"
+#include "qeditor_indenter.h"
 
 #include <kinstance.h>
 #include <kaction.h>
@@ -99,7 +100,7 @@ using namespace std;
 QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
                           QObject *parent, const char *name,
                           const QStringList & /*args*/ )
-    : KTextEditor::Document( parent, name ), m_editor( 0 )
+    : KTextEditor::Document( parent, name ), m_currentView( 0 )
 {
     kdDebug(9032) << "QEditorPart::QEditorPart()" << endl;
     // we need an instance
@@ -107,17 +108,17 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
 
     m_views.setAutoDelete( FALSE );
 
-    m_editor = new QEditorView( this, parentWidget, widgetName );
-    m_views.append( m_editor );
-    insertChildClient( m_editor );
-    setWidget( m_editor );
+    m_currentView = new QEditorView( this, parentWidget, widgetName );
+    m_views.append( m_currentView );
+    insertChildClient( m_currentView );
+    setWidget( m_currentView );
 
     setupHighlighting();
 
     // connections
-    connect( m_editor->editor(), SIGNAL(textChanged()),
+    connect( m_currentView->editor(), SIGNAL(textChanged()),
              this, SIGNAL(textChanged()) );
-    connect( m_editor->editor(), SIGNAL(selectionChanged()),
+    connect( m_currentView->editor(), SIGNAL(selectionChanged()),
              this, SIGNAL(selectionChanged()) );
 
     setupActions();
@@ -149,17 +150,17 @@ void QEditorPart::setupActions()
     KStdAction::undo( this, SLOT(undo()), actionCollection() );
     KStdAction::redo( this, SLOT(redo()), actionCollection() );
 
-    KStdAction::cut( m_editor, SLOT(cut()), actionCollection() );
-    KStdAction::copy( m_editor, SLOT(copy()), actionCollection() );
-    KStdAction::paste( m_editor, SLOT(paste()), actionCollection() );
-    KStdAction::selectAll( m_editor, SLOT(selectAll()), actionCollection() );
+    KStdAction::cut( m_currentView, SLOT(cut()), actionCollection() );
+    KStdAction::copy( m_currentView, SLOT(copy()), actionCollection() );
+    KStdAction::paste( m_currentView, SLOT(paste()), actionCollection() );
+    KStdAction::selectAll( m_currentView, SLOT(selectAll()), actionCollection() );
 
-    KStdAction::gotoLine( m_editor, SLOT(gotoLine()), actionCollection() );
-    KStdAction::find( m_editor, SLOT(doFind()), actionCollection() );
-    KStdAction::replace( m_editor, SLOT(doReplace()), actionCollection() );
+    KStdAction::gotoLine( m_currentView, SLOT(gotoLine()), actionCollection() );
+    KStdAction::find( m_currentView, SLOT(doFind()), actionCollection() );
+    KStdAction::replace( m_currentView, SLOT(doReplace()), actionCollection() );
 
     new KAction( i18n("&Indent"), CTRL + Key_I,
-		 m_editor, SLOT(indent()),
+		 m_currentView, SLOT(indent()),
                  actionCollection(), "edit_indent" );
 
     new KAction( i18n("&Configure Editor..."), 0,
@@ -170,13 +171,13 @@ void QEditorPart::setupActions()
 void QEditorPart::setReadWrite(bool rw)
 {
     // notify your internal widget of the read-write state
-    m_editor->editor()->setReadOnly(!rw);
+    m_currentView->editor()->setReadOnly(!rw);
     if (rw)
-        connect(m_editor->editor(), SIGNAL(textChanged()),
+        connect(m_currentView->editor(), SIGNAL(textChanged()),
                 this, SLOT(setModified()));
     else
     {
-        disconnect(m_editor->editor(), SIGNAL(textChanged()),
+        disconnect(m_currentView->editor(), SIGNAL(textChanged()),
                    this, SLOT(setModified()));
     }
 
@@ -197,7 +198,7 @@ void QEditorPart::setModified(bool modified)
     else
         save->setEnabled(false);
 
-    m_editor->editor()->setModified( modified );
+    m_currentView->editor()->setModified( modified );
 
     // in any event, we want our parent to do it's thing
     ReadWritePart::setModified(modified);
@@ -232,18 +233,18 @@ void QEditorPart::writeConfig()
 
 void QEditorPart::readConfig( KConfig* config )
 {
-    m_editor->setMarkerWidgetVisible( config->readBoolEntry( "ShowMarkerWidget", false ) );
-    m_editor->setLineNumberWidgetVisible( config->readBoolEntry( "ShowLineNumberWidget", true ) );
-    m_editor->setLevelWidgetVisible( config->readBoolEntry( "ShowLevelWidget", true ) );
-    m_editor->setTabStop( config->readNumEntry( "TabStop", 8 ) );
+    m_currentView->setMarkerWidgetVisible( config->readBoolEntry( "ShowMarkerWidget", false ) );
+    m_currentView->setLineNumberWidgetVisible( config->readBoolEntry( "ShowLineNumberWidget", true ) );
+    m_currentView->setLevelWidgetVisible( config->readBoolEntry( "ShowLevelWidget", true ) );
+    m_currentView->setTabStop( config->readNumEntry( "TabStop", 8 ) );
 }
 
 void QEditorPart::writeConfig( KConfig* config )
 {
-    config->writeEntry( "ShowMarkerWidget", m_editor->isMarkerWidgetVisible() );
-    config->writeEntry( "ShowLineNumberWidget", m_editor->isLineNumberWidgetVisible() );
-    config->writeEntry( "ShowLevelWidget", m_editor->isLevelWidgetVisible() );
-    config->writeEntry( "TabStop", m_editor->tabStop() );
+    config->writeEntry( "ShowMarkerWidget", m_currentView->isMarkerWidgetVisible() );
+    config->writeEntry( "ShowLineNumberWidget", m_currentView->isLineNumberWidgetVisible() );
+    config->writeEntry( "ShowLevelWidget", m_currentView->isLevelWidgetVisible() );
+    config->writeEntry( "TabStop", m_currentView->tabStop() );
 }
 
 bool QEditorPart::openFile()
@@ -262,7 +263,7 @@ bool QEditorPart::openFile()
 
     file.close();
 
-    m_editor->editor()->setText( str );
+    m_currentView->editor()->setText( str );
     int hl = findMode( m_file );
     setHlMode( hl>=0 ? hl : 0 );
 
@@ -285,7 +286,7 @@ bool QEditorPart::saveFile()
 
     // use QTextStream to dump the text to the file
     QTextStream stream(&file);
-    stream << m_editor->editor()->text();
+    stream << m_currentView->editor()->text();
 
     file.close();
 
@@ -320,16 +321,16 @@ void QEditorPart::fileSaveAs()
 // -- EditInterface Implementation -- START -------------------------------------------------------------
 QString QEditorPart::text() const
 {
-    return m_editor->editor()->text();
+    return m_currentView->editor()->text();
 }
 
 QString QEditorPart::text( unsigned int startLine, unsigned int startCol,
                            unsigned int endLine, unsigned int endCol ) const
 {
     int selNum = 1000;
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
 
-    m_editor->editor()->setSelection( startLine, startCol, endLine, endCol, selNum );
+    m_currentView->editor()->setSelection( startLine, startCol, endLine, endCol, selNum );
     QString txt = textDoc->selectedText( selNum );
     textDoc->removeSelection( selNum );
 
@@ -338,42 +339,42 @@ QString QEditorPart::text( unsigned int startLine, unsigned int startCol,
 
 QString QEditorPart::textLine( unsigned int line ) const
 {
-    return m_editor->editor()->textLine( line );
+    return m_currentView->editor()->textLine( line );
 }
 
 unsigned int QEditorPart::numLines() const
 {
-    return m_editor->editor()->lines();
+    return m_currentView->editor()->lines();
 }
 
 unsigned int QEditorPart::length() const
 {
-	return m_editor->editor()->length();
+	return m_currentView->editor()->length();
 }
 
 int QEditorPart::lineLength( unsigned int line ) const
 {
-    if( int(line) < m_editor->editor()->lines() ){
-        return m_editor->editor()->paragraphLength( line );
+    if( int(line) < m_currentView->editor()->lines() ){
+        return m_currentView->editor()->paragraphLength( line );
     }
     return -1;
 }
 
 bool QEditorPart::setText( const QString &text )
 {
-    m_editor->editor()->setText( text );
+    m_currentView->editor()->setText( text );
     return TRUE;
 }
 
 bool QEditorPart::clear()
 {
-    m_editor->editor()->clear();
+    m_currentView->editor()->clear();
     return TRUE;
 }
 
 bool QEditorPart::insertText( unsigned int line, unsigned int col, const QString &text )
 {
-    m_editor->editor()->insertAt( text, line, col );
+    m_currentView->editor()->insertAt( text, line, col );
     return TRUE;
 }
 
@@ -381,38 +382,38 @@ bool QEditorPart::removeText( unsigned int startLine, unsigned int startCol,
                               unsigned int endLine, unsigned int endCol )
 {
     int selNum = 10;
-    m_editor->editor()->setSelection( startLine, startCol, endLine, endCol, selNum );
-    m_editor->editor()->removeSelectedText( selNum );
+    m_currentView->editor()->setSelection( startLine, startCol, endLine, endCol, selNum );
+    m_currentView->editor()->removeSelectedText( selNum );
     return TRUE;
 }
 
 bool QEditorPart::insertLine( unsigned int line, const QString &text )
 {
-    m_editor->editor()->insertParagraph( text, line );
+    m_currentView->editor()->insertParagraph( text, line );
     return TRUE;
 }
 
 bool QEditorPart::removeLine( unsigned int line )
 {
-    m_editor->editor()->removeParagraph( line );
+    m_currentView->editor()->removeParagraph( line );
     return TRUE;
 }
 
-KTextEditor::View* QEditorPart::createView( QWidget *parent, const char *name )
+KTextEditor::View* QEditorPart::createView( QWidget* /*parent*/, const char* /*name*/ )
 {
 #warning "TODO: implement QEditorPart::createView()"
 
 #if 0
     QEditorView* pView = new QEditorView( this, parent, name );
-    if( m_editor ){
-        pView->editor()->setDocument( m_editor->editor()->document() );
+    if( m_currentView ){
+        pView->editor()->setDocument( m_currentView->editor()->document() );
     }
 
     m_views.append( pView );
     return pView;
 #endif
 
-    return m_editor;
+    return m_currentView;
 }
 
 QPtrList<KTextEditor::View> QEditorPart::views() const
@@ -449,29 +450,29 @@ unsigned int QEditorPart::redoCount() const
 
 unsigned int QEditorPart::undoSteps() const
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
     return textDoc->commands()->undoDepth();
 }
 
 void QEditorPart::setUndoSteps( unsigned int steps )
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
     textDoc->commands()->setUndoDepth( steps );
 }
 
 void QEditorPart::undo()
 {
-    m_editor->editor()->undo();
+    m_currentView->editor()->undo();
 }
 
 void QEditorPart::redo()
 {
-    m_editor->editor()->redo();
+    m_currentView->editor()->redo();
 }
 
 KTextEditor::Cursor* QEditorPart::createCursor( )
 {
-    KTextEditor::Cursor* c = new CursorImpl( m_editor->editor()->document() );
+    KTextEditor::Cursor* c = new CursorImpl( m_currentView->editor()->document() );
     m_cursors.append( c );
     return c;
 }
@@ -484,41 +485,41 @@ QPtrList<KTextEditor::Cursor> QEditorPart::cursors() const
 bool QEditorPart::setSelection( unsigned int startLine, unsigned int startCol,
                                 unsigned int endLine, unsigned int endCol )
 {
-    m_editor->editor()->setSelection( startLine, startCol, endLine, endCol );
+    m_currentView->editor()->setSelection( startLine, startCol, endLine, endCol );
     return TRUE;
 }
 
 bool QEditorPart::clearSelection()
 {
-    m_editor->editor()->removeSelection();
+    m_currentView->editor()->removeSelection();
     return TRUE;
 }
 
 bool QEditorPart::hasSelection() const
 {
-    return m_editor->editor()->hasSelectedText();
+    return m_currentView->editor()->hasSelectedText();
 }
 
 QString QEditorPart::selection() const
 {
-    return m_editor->editor()->selectedText();
+    return m_currentView->editor()->selectedText();
 }
 
 bool QEditorPart::removeSelectedText()
 {
-    m_editor->editor()->removeSelectedText();
+    m_currentView->editor()->removeSelectedText();
     return TRUE;
 }
 
 bool QEditorPart::selectAll()
 {
-    m_editor->editor()->selectAll();
+    m_currentView->editor()->selectAll();
     return TRUE;
 }
 
 bool QEditorPart::isModified() const
 {
-    return m_editor->editor()->isModified();
+    return m_currentView->editor()->isModified();
 }
 
 void QEditorPart::setupHighlighting()
@@ -591,7 +592,7 @@ bool QEditorPart::setHlMode(unsigned int mode)
         m_currentMode = mode;
         HLMode* m = m_modes.at( m_currentMode );
         if( m ){
-            m_editor->setLanguage( m->name );
+            m_currentView->setLanguage( m->name );
         }
         emit hlChanged();
     }
@@ -643,7 +644,7 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 			const QRegExp &regexp, unsigned int *foundAtLine,
 			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards )
 {
-    QEditor* ed = m_editor->editor();
+    QEditor* ed = m_currentView->editor();
     QTextParag* p = ed->document()->paragAt( startLine );
     while( p ){
         QString str = p->string()->toString();
@@ -672,7 +673,7 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 
 uint QEditorPart::mark (uint line)
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParag* parag = textDoc->paragAt( line );
     if( parag ){
         ParagData* data = (ParagData*) parag->extraData();
@@ -685,7 +686,7 @@ uint QEditorPart::mark (uint line)
 
 void QEditorPart::setMark (uint line, uint markType)
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParag* parag = textDoc->paragAt( line );
     if( parag ){
         ParagData* data = (ParagData*) parag->extraData();
@@ -703,7 +704,7 @@ void QEditorPart::clearMark (uint line)
 
 void QEditorPart::addMark (uint line, uint markType)
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParag* parag = textDoc->paragAt( line );
     if( parag ){
         ParagData* data = (ParagData*) parag->extraData();
@@ -716,7 +717,7 @@ void QEditorPart::addMark (uint line, uint markType)
 
 void QEditorPart::removeMark (uint line, uint markType)
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParag* parag = textDoc->paragAt( line );
     if( parag ){
         ParagData* data = (ParagData*) parag->extraData();
@@ -731,7 +732,7 @@ QPtrList<KTextEditor::Mark> QEditorPart::marks ()
 {
     QPtrList<KTextEditor::Mark> marks;
     marks.setAutoDelete( TRUE );
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParag* p = textDoc->firstParag();
     while( p ){
         ParagData* data = (ParagData*) p->extraData();
@@ -748,7 +749,7 @@ QPtrList<KTextEditor::Mark> QEditorPart::marks ()
 
 void QEditorPart::clearMarks ()
 {
-    QTextDocument* textDoc = m_editor->editor()->document();
+    QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParag* p = textDoc->firstParag();
     while( p ){
         ParagData* data = (ParagData*) p->extraData();
@@ -761,16 +762,6 @@ void QEditorPart::clearMarks ()
 
 void QEditorPart::configDialog()
 {
-#if 0
-    SettingsDialog dlg;
-    dlg.setEditor( this );
-
-    emit configWidget( &dlg );
-
-    if( dlg.exec() ){
-        m_editor->editor()->configChanged();
-    }
-#endif
     KDialogBase dlg(KDialogBase::Tabbed, i18n("QEditor Options"),
                     KDialogBase::Ok|KDialogBase::Cancel,
                     KDialogBase::Ok, 0,
@@ -780,14 +771,23 @@ void QEditorPart::configDialog()
     hlPage->setEditor( this );
     connect( &dlg, SIGNAL(okClicked()), hlPage, SLOT(accept()) );
 
+    if( indenter() ){
+        (void) indenter()->createConfigPage( this, &dlg );
+    }
+
     emit configWidget( &dlg );
 
     if( dlg.exec() ){
-        m_editor->editor()->configChanged();
+        m_currentView->editor()->configChanged();
     }
 }
 
 QSourceColorizer* QEditorPart::colorizer() const
 {
-    return m_editor->editor()->colorizer();
+    return m_currentView->editor()->colorizer();
+}
+
+QEditorIndenter* QEditorPart::indenter() const
+{
+    return dynamic_cast<QEditorIndenter*>( m_currentView->editor()->document()->indent() );
 }

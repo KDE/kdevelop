@@ -41,6 +41,7 @@ void HighlightingConfigPage::setEditor( QEditorPart* editor )
 	++it;
     }
     listElements->insertStringList( styleList );
+    listElements->setCurrentItem( 0 );
 }
 
 void HighlightingConfigPage::accept()
