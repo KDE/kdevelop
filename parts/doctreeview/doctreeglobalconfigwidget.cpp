@@ -559,7 +559,7 @@ void DocTreeGlobalConfigWidget::dhEditButton_clicked( )
                 filePath = *it;
         }
         const QString _default( DocTreeViewTool::devhelpInfo(filePath).defaultLocation );
-        LibraryDocDlg *dlg = new LibraryDocDlg( this, name, location, _default, "TocDevHelp");
+        LibraryDocDlg *dlg = new LibraryDocDlg( this, name.latin1(), location, _default, "TocDevHelp");
         dlg->libName->setEnabled(false);
         dlg->libSource->setEnabled(false);
         dlg->exec();

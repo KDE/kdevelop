@@ -214,7 +214,7 @@ void DocIndexDialog::readKDocIndex()
         if (!hiddenNames.contains(*it)) {
             FILE *f;
             if ((*it).right(3) != QString::fromLatin1(".gz")) {
-                if ( (f = fopen(*it, "r")) != 0) {
+                if ( (f = fopen(QFile::encodeName( *it ).data(), "r")) != 0) {
                     readKDocEntryList(f, &index->identNames, &index->identUrls);
                     fclose(f);
                 }

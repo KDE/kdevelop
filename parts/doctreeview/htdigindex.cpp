@@ -213,11 +213,11 @@ void ProgressDialog::scanDirectories()
 {
     KConfig config("kdevdoctreeviewrc", true);
     config.setGroup("Index");
-    bool indexKDevelop = config.readEntry("IndexKDevelop");
-    bool indexQt = config.readEntry("IndexQt");
-    bool indexKdelibs = config.readEntry("IndexKdelibs");
-    bool indexBooks = config.readEntry("IndexBooks");
-    bool indexBookmarks = config.readEntry("IndexBookmarks");
+    bool indexKDevelop = config.readBoolEntry("IndexKDevelop");
+    bool indexQt = config.readBoolEntry("IndexQt");
+    bool indexKdelibs = config.readBoolEntry("IndexKdelibs");
+    bool indexBooks = config.readBoolEntry("IndexBooks");
+    bool indexBookmarks = config.readBoolEntry("IndexBookmarks");
 
     bool indexShownLibs = true;
     bool indexHiddenLibs = true;
@@ -236,7 +236,7 @@ void ProgressDialog::scanDirectories()
         if ( (indexHiddenLibs && ishidden) || (indexShownLibs && !ishidden) ) {
             FILE *f;
             if ((*it2).right(3) != QString::fromLatin1(".gz")) {
-                if ( (f = fopen(*it2, "r")) != 0) {
+                if ( (f = fopen(QFile::encodeName( *it2 ).data(), "r")) != 0) {
                     addKdocDir(f);
                     fclose(f);
                 }

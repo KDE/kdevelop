@@ -184,7 +184,7 @@ void DocTreeKDELibsBook::readContents()
     bool success = false;
     if (idx_filename.right(3) != QString::fromLatin1(".gz"))
     {
-        if ( (f = fopen(idx_filename, "r")) != 0)
+        if ( (f = fopen(QFile::encodeName( idx_filename ).data(), "r")) != 0)
         {
             readKdoc2Index(f);
             fclose(f);
