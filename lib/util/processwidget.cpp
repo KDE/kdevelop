@@ -87,6 +87,9 @@ ProcessWidget::~ProcessWidget()
 
 void ProcessWidget::startJob(const QString &dir, const QString &command)
 {
+    procLineMaker->clearBuffers();
+    procLineMaker->blockSignals( false );
+
     clear();
     insertItem(new ProcessListBoxItem(command, ProcessListBoxItem::Diagnostic));
     childproc->clearArguments();
@@ -102,7 +105,9 @@ void ProcessWidget::startJob(const QString &dir, const QString &command)
 
 void ProcessWidget::killJob( int signo )
 {
-    childproc->kill( signo );
+    procLineMaker->blockSignals( true );
+    
+	childproc->kill( signo );
 }
 
 
@@ -173,12 +178,9 @@ QSize ProcessWidget::minimumSizeHint() const
 */
 void ProcessWidget::maybeScrollToBottom()
 {
-    if ( verticalScrollBar()->value() == verticalScrollBar()->maxValue() ) {
-        qApp->processEvents();
-        verticalScrollBar()->setValue( verticalScrollBar()->maxValue() );
-        /// \FIXME dirty hack to _actually_ scroll to the bottom
-        qApp->processEvents();
-        verticalScrollBar()->setValue( verticalScrollBar()->maxValue() );
+    if ( verticalScrollBar()->value() == verticalScrollBar()->maxValue() ) 
+    {
+        setBottomItem( count() -1 );
     }
 }
 

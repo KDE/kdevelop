@@ -31,6 +31,8 @@ Q_OBJECT
 public:
 	ProcessLineMaker();
 	ProcessLineMaker( const KProcess* );
+	
+	void clearBuffers();
 
 public slots:
 	void slotReceivedStdout(const QString&);
