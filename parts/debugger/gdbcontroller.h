@@ -132,16 +132,6 @@ private slots:
     void slotAbortTimedEvent();
 
 signals:
-    void showStepInSource     (const QString &fileName, int lineNum, const QString &address);
-    void rawGDBBreakpointList (char *buf);
-    void rawGDBBreakpointSet  (char *buf, int key);
-    void rawGDBDisassemble    (char *buf);
-    void rawGDBMemoryDump     (char *buf);
-    void rawGDBRegisters      (char *buf);
-    void rawGDBLibraries      (char *buf);
-//    void ttyStdout            (const char *output);
-//    void ttyStderr            (const char *output);
-    void dbgStatus            (const QString &status, int statusFlag);
     void acceptPendingBPs     ();
     void unableToSetBPNow     (int BPNo);
 

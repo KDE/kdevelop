@@ -137,6 +137,8 @@ signals:
     void ttyStderr            (const char *output);
     void gdbStdout            (const char *output);
     void gdbStderr            (const char *output);
+    void showStepInSource     (const QString &fileName, int lineNum, const QString &address);
+    void dbgStatus            (const QString &status, int statusFlag);
 
 protected:
     KProcess *dbgProcess_;
