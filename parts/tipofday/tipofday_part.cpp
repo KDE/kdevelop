@@ -12,6 +12,7 @@
 
 
 #include <kdevapi.h>
+#include <kdevcore.h>
 #include <ktip.h>
 
 
@@ -35,7 +36,7 @@ TipOfDayPart::TipOfDayPart(KDevApi *api, QObject *parent, const char *name)
                             "Will display another good tip \n"
                             "contributed by KDevelop users."));
 
-  connect(api->core, SIGNAL(coreInitialized()), this, SLOT(showOnStart()));
+  connect(api->core(), SIGNAL(coreInitialized()), this, SLOT(showOnStart()));
 }
 
 
