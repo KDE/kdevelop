@@ -1873,9 +1873,11 @@ int HlManager::mimeFind(const QString &contents, int len, const QString &fname)
 */
   // detect the mime type
   KMimeMagicResult *result;
-  QByteArray body = contents;
+  QByteArray body;
 
-  result = KMimeMagic::self()->findBufferFileType(body);
+  body = QCString( contents );
+
+  result = KMimeMagic::self()->findBufferFileType(body, fname);
 
   Highlight *highlight;
   int p1, p2;
@@ -2502,5 +2504,6 @@ void HighlightDialog::done(int r) {
   writeback();
   QDialog::done(r);
 }
+
 
 
