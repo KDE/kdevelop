@@ -24,6 +24,45 @@ sub customize
          move( "$filename.tmp", $filename );
 }
 
+sub customizeHTML
+{
+# HTML-escape strings for docbook stuff
+	my $H_AUTHOR = $AUTHOR;
+	my $H_EMAIL = $EMAIL;
+	my $H_VERSION = $VERSION;
+	my $H_APPNAMELC = $APPNAMELC;
+	my $H_APPNAMEUC = $APPNAMEUC;
+	my $H_APPNAME = $APPNAME;
+	my $H_LICENSE = $LICENSE;
+	my $H_LICENSEFILE = $LICENSEFILE;
+	$H_AUTHOR =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
+	$H_EMAIL =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
+	$H_VERSION =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
+	$H_APPNAMELC =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
+	$H_APPNAMEUC =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
+	$H_APPNAME =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
+	$H_LICENSE =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
+	$H_LICENSEFILE =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
+
+        my ( $filename ) = @_;
+
+        open(IN, "<$filename") || die "Could not open for reading: $filename\n";
+        open(OUT, ">$filename.tmp") || die "Could not open for writing: $filename.tmp\n";
+        while (<IN>) {
+              s/\$AUTHOR\$/$H_AUTHOR/g;
+              s/\$EMAIL\$/$H_EMAIL/g;
+              s/\$VERSION\$/$H_VERSION/g;
+              s/\$APPNAMELC\$/$H_APPNAMELC/g;
+              s/\$APPNAMEUC\$/$H_APPNAMEUC/g;
+              s/\$APPNAME\$/$H_APPNAME/g;
+              s/\$LICENSE\$/$H_LICENSE/g;
+              s/\$LICENSEFILE\$/$H_LICENSEFILE/g;
+              print OUT $_;
+         }
+         close IN;
+         close OUT;
+         move( "$filename.tmp", $filename );	
+}
 
 sub install
 {
@@ -34,6 +73,14 @@ sub install
         customize( $destfilename );
 }
 
+sub installHTML
+{
+        my ( $srcfilename, $destfilename ) = @_;
+
+        copy( $srcfilename, $destfilename )
+          || die "Could not copy $srcfilename to $destfilename: $!";
+        customizeHTML( $destfilename );
+}
 
 sub initGideon
 {
@@ -137,7 +184,7 @@ sub installDocbook()
         install( "${src}/template-common/kde-doc-Makefile.am", "${dest}/doc/Makefile.am" );
         mkdir( "${dest}/doc/en", 0777 );
         install( "${src}/template-common/kde-doc-en-Makefile.am", "${dest}/doc/en/Makefile.am" );
-        install( "${src}/template-common/kde-index.docbook", "${dest}/doc/en/index.docbook" );
+        installHTML( "${src}/template-common/kde-index.docbook", "${dest}/doc/en/index.docbook" );
 }
 
 1;
