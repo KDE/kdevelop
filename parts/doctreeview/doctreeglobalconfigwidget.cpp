@@ -418,7 +418,7 @@ void DocTreeGlobalConfigWidget::kdocremove_button_clicked( )
 
 void DocTreeGlobalConfigWidget::pushEdit_clicked()
 {
-    if (bListView->currentItem())
+/*    if (bListView->currentItem())
     {
         AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/html", false,
             kdoc_view->currentItem()->text(0), kdoc_view->currentItem()->text(1));
@@ -430,7 +430,7 @@ void DocTreeGlobalConfigWidget::pushEdit_clicked()
             kdoc_view->currentItem()->setText(1, url);
         }
         delete dialog;
-    }
+    }*/
 }
 
 
