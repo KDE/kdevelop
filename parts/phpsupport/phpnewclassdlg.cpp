@@ -102,7 +102,7 @@ void PHPNewClassDlg::accept(){
   }
 
   // generate the sourcecode for the class
-  if(m_baseClassEdit->text() == ""){
+  if(m_baseClassEdit->text().isEmpty()){
     text = text.replace(QRegExp("extends BASECLASS"),"");
     text = text.replace(QRegExp("BASECLASS\\:\\:BASECLASS\\(\\);"),"");
   }else{

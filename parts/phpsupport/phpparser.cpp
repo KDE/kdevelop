@@ -66,7 +66,7 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	lastClass->setDefinedOnLine(lineNo);
 
 	QString parentStr = classre.group(3);
-	if(parentStr !=""){
+	if(!parentStr.isEmpty()){
 	  ParsedParent *parent = new ParsedParent;
 	  parent->setName(parentStr);
 	  parent->setAccess(PIE_PUBLIC);
@@ -182,7 +182,7 @@ void PHPParser::parseFile(const QString& fileName){
       lastClass->setDefinedOnLine(lineNo);
 
       QString parentStr = classre.group(3);
-      if(parentStr !=""){
+      if(!parentStr.isEmpty()){
 	ParsedParent *parent = new ParsedParent;
 	parent->setName(parentStr);
 	parent->setAccess(PIE_PUBLIC);

@@ -22,8 +22,6 @@ FCTemplateEdit::~FCTemplateEdit()
 
 void FCTemplateEdit::accept()
 {
-    if ( templatename_edit->text() != "" )
+    if ( !templatename_edit->text().isEmpty() )
         FCTemplateEditBase::accept();
-    else
-        return;
 }

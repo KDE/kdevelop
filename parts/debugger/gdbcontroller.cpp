@@ -1346,7 +1346,7 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    if (fileName == "")
+    if (fileName.isEmpty())
         queueCmd(new GDBCommand(QCString().sprintf("until %d", lineNum), RUNCMD, NOTINFOCMD, 0));
     else
         queueCmd(new GDBCommand(QCString().sprintf("until %s:%d", fileName.latin1(), lineNum),

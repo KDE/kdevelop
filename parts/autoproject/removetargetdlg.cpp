@@ -226,7 +226,7 @@ void RemoveTargetDialog::accept ()
 			{
 				QString curCanonname = AutoProjectTool::canonicalize ( titem->name );
 
-				if ( m_spitem->variables[curCanonname + "_LIBADD"] == "" )
+				if ( m_spitem->variables[curCanonname + "_LIBADD"].isEmpty() )
 				{
 					removeMap.insert ( curCanonname + "_LIBADD", "" );
 

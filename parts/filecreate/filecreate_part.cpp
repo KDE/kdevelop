@@ -411,7 +411,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   kdDebug(9034) << "filename = " << filename << endl;
 
   // add in subtype, if specified
-  if (!subtype.isNull() && subtype!="")
+  if (!subtype.isEmpty())
     ext += "-" + subtype;
 
   // create file from template, and add it to the project

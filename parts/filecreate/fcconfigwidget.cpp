@@ -256,7 +256,7 @@ void FCConfigWidget::saveProjectConfig()
     QListViewItemIterator it2(fctemplates_view);
     while (it2.current())
     {
-        if (it2.current()->text(1) != "")
+        if (!it2.current()->text(1).isEmpty())
         {
             QString dest;
             dest = m_part->project()->projectDirectory() + "/templates/";
@@ -289,7 +289,7 @@ void FCConfigWidget::saveConfiguration(QDomDocument &dom, QDomElement &element, 
             QDomText descr = dom.createTextNode( it.current()->text(3) );
             edescr.appendChild(descr);
 
-            if (it.current()->text(4) != "")
+            if (!it.current()->text(4).isEmpty())
             {
                 QString dest;
                 if (global)
@@ -316,7 +316,7 @@ void FCConfigWidget::saveConfiguration(QDomDocument &dom, QDomElement &element, 
                 QDomText descr = dom.createTextNode( lastChild->text(3) );
                 edescr.appendChild(descr);
 
-                if (lastChild->text(4) != "")
+                if (!lastChild->text(4).isEmpty())
                 {
                     QString dest;
                     if (global)
@@ -340,7 +340,7 @@ void FCConfigWidget::saveConfiguration(QDomDocument &dom, QDomElement &element, 
 
 void FCConfigWidget::copyTemplate(QString templateUrl, QString dest, QString destName)
 {
-    if (templateUrl == "")
+    if (templateUrl.isEmpty())
     {
         QDir d(dest);
         if (!d.exists())

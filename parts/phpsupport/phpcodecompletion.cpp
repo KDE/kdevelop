@@ -259,7 +259,7 @@ QString PHPCodeCompletion::getClassName(QString varName,QString maybeInstanceOf)
   if(varName == "$this"){
     return this->searchCurrentClassName();
   }
-  if(maybeInstanceOf == ""){
+  if(maybeInstanceOf.isEmpty()){
     // ok, we need to search it
     return this->searchClassNameForVariable(varName);
   }
@@ -373,15 +373,13 @@ bool PHPCodeCompletion::checkForGlobalFunction(QString lineStr,int col){
     return false; // not enough letters
   }
   //dDebug(9018)  << "StartStr:" << startStr  << ":" << endl;
-  QString startChar = startStr.left(1);
-  if(startChar == " " || startChar == "\t" || startChar == "+" ||
-     startChar == "-" || startChar == "=" ||startChar == "/" || startChar == "*" || startChar == ";" ||
-     startChar == ")" || startChar == "(" || startChar == "}" || startChar == "{"){
+  QString extraChar = " \t+-=/*;)(}{";
+  if(extraChar.find( startStr[0] ) != -1){
     methodStart = startStr.right(2);
   }
 
   //kdDebug(9018)  << "Methodstart:" << methodStart  << ":" << endl;
-  if(methodStart != ""){
+  if(!methodStart.isEmpty()){
     return doGlobalMethodCompletion(methodStart);
   }
   return false;

@@ -1448,12 +1448,12 @@ JDBVarItem::JDBVarItem() {
 }
 
 QString JDBVarItem::toString() {
-    if (value != "") {
+    if (!value.isEmpty()) {
         cout << value <<" - ";
-        return name + QString(" = ") + value;
+        return name + " = " + value;
     } else {
         // iterate over siblings and build return string
-        QString tmp = "";
+        QString tmp;
         JDBVarItem *item;
 
         for (item = this->siblings.first(); item != 0; item = this->siblings.next()) {
@@ -1461,7 +1461,7 @@ QString JDBVarItem::toString() {
             delete item;
         }
         
-        tmp = name + QString(" = {") +tmp;
+        tmp = name + " = {" +tmp;
         tmp[tmp.length()-1] = '}'; // remove trailing comma
         return tmp;
     }

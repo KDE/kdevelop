@@ -61,12 +61,12 @@ bool PHPConfigData::validateConfig(){
   }
   if(valid){
     if(invocationMode == Web){
-      if(!(webURL != "" && (webFileMode == Default || webFileMode == Current))){
+      if(!(!webURL.isEmpty() && (webFileMode == Default || webFileMode == Current))){
 	valid = false;
       }
     }
     if(invocationMode == Shell){
-      if(phpExePath == ""){
+      if(phpExePath.isEmpty()){
 	valid = false;
       }
     }

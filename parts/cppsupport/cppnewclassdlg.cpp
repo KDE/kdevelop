@@ -850,9 +850,9 @@ void CppNewClassDialog::to_constructors_list_clicked()
             if (curr->isOn() && curr->parent())
             {
                 //fill the base classes list
-                base += base == "" ? ": " : ", ";
+                base += base.isEmpty() ? ": " : ", ";
                 base += curr->parent()->text(0);
-                params_h += params_h == "" ? "" : ", ";
+                params_h += params_h.isEmpty() ? "" : ", ";
                 
                 //fill arguments for both constructor and base class initializer
                 //parser does not allow to process default values now ?!
@@ -861,8 +861,8 @@ void CppNewClassDialog::to_constructors_list_clicked()
                 QString bparams;
                 for (arg = curr->item()->arguments.first(); arg; arg = curr->item()->arguments.next())
                 {
-                    bparams += bparams == "" ? "" : ", ";
-                    cparams += cparams == "" ? "" : ", ";
+                    bparams += bparams.isEmpty() ? "" : ", ";
+                    cparams += cparams.isEmpty() ? "" : ", ";
                     cparams += arg->type() + " ";
                     if (arg->name().isNull())
                     {                        
@@ -1011,12 +1011,12 @@ void CppNewClassDialog::ClassGenerator::common_text()
 
   advConstructorsHeader = QString::null;
   advConstructorsSource = QString::null;
-  if (dlg.constructors_h_edit->text() != "")
+  if (!dlg.constructors_h_edit->text().isEmpty())
   {
       advConstructorsHeader = "    " + dlg.constructors_h_edit->text();
-      advConstructorsHeader.replace(QRegExp("\\n"), "\n    "); 
+      advConstructorsHeader.replace("\n", "\n    "); 
   }
-  if (dlg.constructors_cpp_edit->text() != "")
+  if (!dlg.constructors_cpp_edit->text().isEmpty())
   { 
       advConstructorsSource = dlg.constructors_cpp_edit->text();
   }
@@ -1118,8 +1118,8 @@ void CppNewClassDialog::ClassGenerator::genMethodDeclaration(ParsedMethod *metho
     int unnamed = 1;
     for (arg = method->arguments.first(); arg; arg = method->arguments.next())
     {
-        bparams += bparams == "" ? "" : ", ";
-        cparams += cparams == "" ? "" : ", ";
+        bparams += bparams.isEmpty() ? "" : ", ";
+        cparams += cparams.isEmpty() ? "" : ", ";
         cparams += arg->type() + " ";
         if (arg->name().isNull())
         {
