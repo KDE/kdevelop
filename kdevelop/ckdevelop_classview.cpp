@@ -44,9 +44,11 @@ void CKDevelop::slotClassChoiceCombo(int index)
   KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->text( index );
 
-  if (classname == "") return;
-  aClass = class_tree->store->getClassByName( classname );
-  refreshMethodCombo( aClass );
+  if ( !classname.isEmpty() )
+  {
+    aClass = class_tree->store->getClassByName( classname );
+    refreshMethodCombo( aClass );
+  }
 }
 
 /*-------------------------------- CKDevelop::slotMethodChoiceCombo()
@@ -78,7 +80,7 @@ void CKDevelop::slotMethodChoiceCombo(int index)
 
     if( aMethod )
     {
-      toFile = ( aMethod->isInHFile ? aClass->hFilename : aClass->implFilename );
+      toFile = ( aMethod->isInHFile ? aClass->definedInFile : aClass->declaredInFile );
       toLine = aMethod->declaredOnLine;
       switchToFile( toFile, toLine );
     }
@@ -185,7 +187,7 @@ void CKDevelop::slotCVAddMethod( CParsedMethod *aMethod )
   edit_widget->toggleModified( true );
 
   // Switch to the .cpp file.
-  switchToFile( aClass->implFilename );
+  switchToFile( aClass->declaredInFile );
 
   // Add the code to the file.
   aMethod->asCppCode( toAdd );
@@ -353,14 +355,14 @@ void CKDevelop::CVGotoDefinition( const char *className,
   switch( type )
   {
     case THCLASS:
-      toFile = aClass->hFilename;
+      toFile = aClass->definedInFile;
       toLine = aClass->definedOnLine;
       break;
     case THSTRUCT:
       if( aClass != NULL )
         aClass->getStructByName( declName );
       else
-        aStruct = class_tree->store->getGlobalStructByName( declName );
+        aStruct = class_tree->store->globalContainer.getStructByName( declName );
 
       toFile = aStruct->definedInFile;
       toLine = aStruct->definedOnLine;
@@ -372,9 +374,9 @@ void CKDevelop::CVGotoDefinition( const char *className,
         aAttr = aClass->getAttributeByName( declName );
       else
       {
-        aStruct = class_tree->store->getGlobalStructByName( className );
+        aStruct = class_tree->store->globalContainer.getStructByName( className );
         if( aStruct != NULL )
-          aAttr = aStruct->getMemberByName( declName );
+          aAttr = aStruct->getAttributeByName( declName );
       }
       break;
     case THPUBLIC_METHOD:
@@ -394,10 +396,10 @@ void CKDevelop::CVGotoDefinition( const char *className,
       aAttr = aClass->getSignalByNameAndArg( declName );
       break;
     case THGLOBAL_FUNCTION:
-      aAttr = class_tree->store->getGlobalFunctionByNameAndArg( declName );
+      aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
       break;
     case THGLOBAL_VARIABLE:
-      aAttr = class_tree->store->getGlobalVarByName( declName );
+      aAttr = class_tree->store->globalContainer.getAttributeByName( declName );
       break;
     default:
       debug( "Clicked on unknown type." );
@@ -458,7 +460,7 @@ void CKDevelop::CVGotoDeclaration( const char *className,
       }
       break;
     case THGLOBAL_FUNCTION:
-      aMethod = class_tree->store->getGlobalFunctionByNameAndArg( declName );
+      aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
       break;
     default:
       break;
@@ -480,32 +482,39 @@ void CKDevelop::CVGotoDeclaration( const char *className,
 void CKDevelop::refreshClassCombo()
 {
   CParsedClass *aClass;
-  QListBox *lb;
+  QList<CParsedClass> *classList;
   KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
+  QString savedClass;
+  int savedIdx = -1;
+  int i;
+
+  savedClass = classCombo->currentText();
 
   // Clear the combos.
   classCombo->clear();
   methodCombo->clear();
 
-  lb = classCombo->listBox();
-  lb->setAutoUpdate( false );
+  classList = class_tree->store->getSortedClasslist();
   // Add all classes.
-  for( class_tree->store->classIterator.toFirst(); 
-       class_tree->store->classIterator.current(); 
-       ++class_tree->store->classIterator )
+  for( aClass = classList->first(),i=0;
+       aClass != NULL;
+       aClass = classList->next(), i++ )
   {
-    aClass = class_tree->store->classIterator.current();
-
-    // Add the class.
-    lb->inSort( aClass->name );
+    classCombo->insertItem( aClass->name );
+    if( aClass->name == savedClass )
+      savedIdx = i;
   }
-  lb->setAutoUpdate( true );
-  
+
+  delete classList;
+
   // Update the method combo with the class from the classcombo.
-  aClass = class_tree->store->getClassByName( classCombo->currentText() );
-  if( aClass )
+  aClass = class_tree->store->getClassByName( savedClass );
+  if( aClass && savedIdx != -1 )
+  {
+    classCombo->setCurrentItem( savedIdx );
     refreshMethodCombo( aClass );
+  }
 }
 
 /*----------------------------------- CKDevelop::refreshMethodCombo()
