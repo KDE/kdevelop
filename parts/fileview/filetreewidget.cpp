@@ -136,8 +136,8 @@ void FileTreeWidget::openDirectory( const QString& dirName )
 bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
 {
     FileTreeViewItem * i = static_cast<FileTreeViewItem *>( item );
-    return (( (m_impl->showNonProjectFiles() || i->isDir() || i->isProjectFile() )
-             && !matchesHidePattern( i->url().fileName() ) ) || (item->parent()==0));
+    return ( i->isDir() || ( (m_impl->showNonProjectFiles() || i->isProjectFile() )
+             && !matchesHidePattern( i->url().fileName() ) ) ) ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
