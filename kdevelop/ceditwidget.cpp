@@ -373,7 +373,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
       pop->setItemEnabled(ID_EDIT_PASTE,true);
     
     if(str == ""){
-      str = word(event->x(),event->y());
+      str = word(event->x()- (iconBorderWidth-2) ,event->y());
     }
 
     searchtext = str;
