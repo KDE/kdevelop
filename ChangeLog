@@ -1,3 +1,12 @@
+2004-04-14 Alexander Dymo <cloudtemple@mksat.net>
+    * Here is my gift for all Qt Designer fans! A KDevelop Assistant program is now available (run kdevassistant
+      from a command line). KDevelop Assistant is a lightweight version of KDevelop with only documentation
+      and file selector parts enabled.
+
+2004-04-12 Alexander Dymo <cloudtemple@mksat.net>
+    * Full text search in new documentation part now functional. Search results are presented in html page
+      and in listview as well.
+
 2004-04-09 Alexander Dymo <cloudtemple@mksat.net>
     * Commited new documentation part for KDevelop. It features documentation plugin system,
       it's easy now to add support for a new documentation format by implementing DocumentationPlugin interface.
