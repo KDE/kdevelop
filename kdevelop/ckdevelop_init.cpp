@@ -85,6 +85,11 @@ CKDevelop::CKDevelop(bool witharg)
   dbgEnableFloatingToolbar = config->readBoolEntry("Enable floating toolbar", false);
   // ************ END DEBUGGER STUFF
 
+  config->setGroup("General Options");
+  lastShutdownOK = config->readBoolEntry("ShutdownOK",true);
+  config->writeEntry("ShutdownOK", false);
+  config->sync();   // force this to be written back
+
   initView();
   initConnections();
   initKDlg();    // create the KDialogEditor
@@ -104,6 +109,12 @@ CKDevelop::CKDevelop(bool witharg)
 }
 
 CKDevelop::~CKDevelop(){
+  if (config)
+  {
+    config->setGroup("General Options");
+    config->writeEntry("ShutdownOK", true);
+  }
+
   // from Constructur... delete everything which is not constructed
   //   with a binding to the application
   delete error_parser;
@@ -1233,20 +1244,34 @@ void CKDevelop::initConnections(){
 
 void CKDevelop::initProject(bool witharg){
 
-  config->setGroup("General Options");
   bool bLastProject;
   if(!witharg)
     bLastProject= config->readBoolEntry("LastProject",true);
   else
     bLastProject=false;
 
-  QString filename;
-  if(bLastProject){
-    config->setGroup("Files");
-    filename = config->readEntry("project_file","");
+  QString filename="";
+  if(bLastProject)
+  {
+    if (!lastShutdownOK)
+    {
+      KMsgBox msg;
+  	  if ( 2 == msg.yesNo(this,i18n("Information"),
+  	                            i18n( "KDevelop failed to shutdown correctly previously\n"\
+  	                                  "Would you like to try and load the current project?")
+  				  													,KMsgBox::QUESTION,i18n("Yes"),i18n("No")) )
+      {
+  	    bLastProject = false;
+  	  }
+    }
+
+    if (bLastProject)
+    {  	   	
+      config->setGroup("Files");
+      filename = config->readEntry("project_file","");
+    }
   }
-  else
-    filename="";
+
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){

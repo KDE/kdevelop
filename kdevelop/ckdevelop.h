@@ -996,6 +996,7 @@ private:
 
   bool useGlimpse;
   bool useHtDig;
+  bool lastShutdownOK;
 };
 
 #endif
