@@ -1,3 +1,7 @@
+1999-05-19 Jonas Nordin <joans.nordin@cenacle.se>
+	* fixed so that when you add a method in the classview the code
+	  ends up in the .cpp file.
+
 1999-05-19  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed bug in the kdevelop setup dialog that prevented settings saving
 	* reviewed and extended the source framework for normal KDE application
