@@ -18,7 +18,7 @@
 <A HREF="index-8.html">Previous</A>
 <A HREF="index.html#toc9">Table of Contents</A>
 </P>
-<H3><A NAME="s9">9. Build Settings</A></H3>
+<H3><A NAME="Build Settings"></A> <A NAME="s9">9. Build Settings</A></H3>
 
 <P>The Project Options dialog, accessed by the project menu, lets you specify all needed parameters for your project. Those will be
 used for the Makefile.am's and the configure.in script (e.g. version number change or compiler warnings ) and thereby set the
@@ -26,6 +26,15 @@ compilation preferences as well.. After changing the project options, you should
 your project with the new options. Please mind that debugging is only available if the project options are set to create debugging
 information, the amount can be set with the debug level (0-3). If you add functions that belong to a library that is not included
 in the linker flags, your program will not link correctly if those are not updated, so keep track of your library linking.
+<P>For a release build of your application or for distributing the sourcecode package, you should watch the following standard
+settings:
+<P>
+<UL>
+<LI>disable debugging</LI>
+<LI>enable optimization and set optimization level to <B>-02</B></LI>
+<LI>set the compiler warnings to <B>-Wall</B></LI>
+<LI>for each new release, increase the version number and update the project.lsm file for version and requirements.</LI>
+</UL>
 <P>
 <H3><A NAME="ss9.1">9.1 General Options</A>
 </H3>

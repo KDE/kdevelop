@@ -18,7 +18,7 @@
 <A HREF="index-3.html">Previous</A>
 <A HREF="index.html#toc4">Table of Contents</A>
 </P>
-<H3><A NAME="Developing with KDevelop"></A> <A NAME="s4">4. Development with KDevelop</A></H3>
+<H3><A NAME="Development with KDevelop"></A> <A NAME="s4">4. Development with KDevelop</A></H3>
 
 <P>In this chapter you will get a general overview how you can use KDevelop and the internal Dialogeditor to create own applications.
 Thereby, all tools are described by their use during the development process. If you are a beginner in C++/GUI design and
@@ -28,6 +28,7 @@ created using KDevelop. Also you should have read chapter 3,
 <A HREF="index-3.html#Programs">Programs</A> to gain a general understanding
 why Unix applications should make use of provided development tools; this will make things easier when you hit references to what
 Makefiles are etc.
+<P>
 <P>
 <H3><A NAME="ss4.1">4.1 What are KDevelop Project Applications ?</A>
 </H3>
@@ -45,7 +46,6 @@ anyway to ensure consistency of the Makefiles so you don't run into trouble. Esp
 won't actually work with the source code, except in cases that require corrections for enabling translation support. Anyway, those
 will be thankful as KDevelop simplifies their work to a minimum by adding their language and reducing the work to concentrate on
 the translation.
-<P>
 <P>With using KDevelop for your own projects, you would start creating a new application with the KAppWizard. There, you can also
 set the project type according the goals of your program. Then, you would start developing the user interface by adding
 widgets that are already constructed in the libraries and only have to be called by your application, or by self-constructions
@@ -88,7 +88,9 @@ to do almost everything with the mouse allows a rapid construction of dialogs an
 transformation into C++ code, which is directly added to the project. As the dialogeditor is embedded into the rest of KDevelop's
 user interface, you have the same commands available than working in Programming mode. This allows e.g. construction of a dialog,
 generation of the code output and it's direct testing within the program by the availability of the make-commands and you still
-can control the compiler output without having to switch back to the programming view.
+can control the compiler output without having to switch back to the programming view. For a detailed description, see 
+<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>
+.
 <P>
 <H4>KAppWizard and the Classtools</H4>
 
@@ -145,7 +147,8 @@ scans all files for methods and classes and makes them available by graphical sy
 specialized functionality to work with the sources by focusing on the classes and functions.
 <P>Selecting a class will result in opening the file that contains the declaration; on methods and functions this will
 show you the implementation. For a full description, see 
-<A HREF="index-10.html#The Classbrowser">The Classbrowser</A><P>
+<A HREF="index-10.html#The Classbrowser">The Classbrowser</A>
+<P>
 <P>
 <H3><A NAME="ss4.3">4.3 The Development Process</A>
 </H3>
@@ -217,8 +220,9 @@ the Dialogeditor and the project management will take care of the rest. You can 
 Execute, this will build your application including your new sources. But don't expect that dialogs are already usable- this is a
 matter of implementation that is the usual way a developer works. Don't worry- this isn't too difficult, too. For more information
 about creating dialogs, see 
-<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>, examples and guidelines can also be found in
-<B>"The KDevelop Programming Handbook"</B>.
+<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>
+, examples and guidelines can also be found in
+<EM>"The KDevelop Programming Handbook"</EM>.
 <P>
 <H4>Binding New Elements</H4>
 
