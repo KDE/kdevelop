@@ -634,7 +634,6 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
       m_pDockbaseOfTabPage = (KDockWidget*) pWnd->parentWidget();
    }
    else {
-      pWnd->show();
       if (pWnd->isAttached()) {
          if (m_pMdi->topChild() == pWnd->mdiParent()) {
             pWnd->activate();
