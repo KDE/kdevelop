@@ -12,18 +12,24 @@
  ***************************************************************************/
 
 #include "doxygenpart.h"
+#include "doxygenconfigwidget.h"
+#include "configwidgetproxy.h"
+#include "config.h"
 
-#include <qvbox.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qpopupmenu.h>
-#include <qfileinfo.h>
+#include <kdevmainwindow.h>
+#include <kdevproject.h>
+#include <kdevmakefrontend.h>
+#include <kdevcore.h>
+#include <codemodel.h>
+#include <codemodel_utils.h>
+#include <domutil.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kmessagebox.h>
+#include <kmainwindow.h>
 #include <kparts/part.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/viewcursorinterface.h>
@@ -31,16 +37,11 @@
 #include <partcontroller.h>
 #include <kdialogbase.h>
 
-#include "kdevproject.h"
-#include "kdevmakefrontend.h"
-#include "kdevcore.h"
-#include "doxygenconfigwidget.h"
-#include "domutil.h"
-#include "codemodel.h"
-#include "codemodel_utils.h"
-#include "configwidgetproxy.h"
-
-#include "config.h"
+#include <qvbox.h>
+#include <qfile.h>
+#include <qtextstream.h>
+#include <qpopupmenu.h>
+#include <qfileinfo.h>
 
 #define PROJECTOPTIONS 1
 
@@ -192,7 +193,7 @@ void DoxygenPart::adjustDoxyfile()
   // write doxy file
   QFile f2(fileName);
   if (!f2.open(IO_WriteOnly))
-    KMessageBox::information(0, i18n("Cannot write Doxyfile."));
+    KMessageBox::information(mainWindow()->main(), i18n("Cannot write Doxyfile."));
   else
   {
     Config::instance()->writeTemplate(&f2, true, true);
@@ -343,7 +344,7 @@ void DoxygenPart::slotRunPreview( )
         return;
 
     if (m_process.isRunning()) {
-        if ( KMessageBox::warningYesNo(0, i18n("Previous Doxygen process is still running.\nDo you want to cancel that process?"))  == KMessageBox::Yes )
+        if ( KMessageBox::warningYesNo(mainWindow()->main(), i18n("Previous Doxygen process is still running.\nDo you want to cancel that process?"))  == KMessageBox::Yes )
             m_process.kill();
 	else
             return;
@@ -428,7 +429,7 @@ void DoxygenPart::slotRunPreview( )
         if (poDir != 0)
             *poDir->valueRef() = dirVal;
 
-        KMessageBox::error(0, i18n("Cannot create temporary file '" + file.name() + "'"));
+        KMessageBox::error(mainWindow()->main(), i18n("Cannot create temporary file '%1'").arg(file.name()));
         return;
     }
 
