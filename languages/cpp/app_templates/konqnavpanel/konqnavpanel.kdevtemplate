@@ -83,7 +83,7 @@ Dest=%{dest}/configure.in.in
 
 [FILE10]
 Type=install
-Source=%{src}/template-kicker/subdirs
+Source=%{src}/subdirs
 Dest=%{dest}/subdirs
 
 [FILE11]
