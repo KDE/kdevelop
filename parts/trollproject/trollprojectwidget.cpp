@@ -39,6 +39,8 @@
 #include <qmessagebox.h>
 #include <kprocess.h>
 
+#include <cstdlib>
+
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
@@ -560,12 +562,14 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 
     QString dirName = m_shownSubproject->path;
     FileItem *fitem = static_cast<FileItem*>(pvitem);
-    
+
     bool isUiFile = QFileInfo(fitem->name).extension() == "ui";
     if( m_part->isTMakeProject() && isUiFile ){
-	// start designer in your PATH
+	// start designer in QTDIR/bin
 	KShellProcess proc;
-        proc << "designer" << (dirName + "/" + QString(fitem->name));
+	QString qtdesigner_executable = getenv("QTDIR");
+	qtdesigner_executable += "/bin/designer";
+        proc << qtdesigner_executable << (dirName + "/" + QString(fitem->name));
         proc.start( KProcess::DontCare, KProcess::NoCommunication );
 
     } else
@@ -804,7 +808,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   // Config variable
   Buffer->removeValues("CONFIG");
   QStringList configList;
-  if (item->configuration.m_buildMode == QBM_RELEASE)
+  QStringList configExcludeList;
+	if (item->configuration.m_buildMode == QBM_RELEASE)
     configList.append("release");
   else if (item->configuration.m_buildMode == QBM_DEBUG)
     configList.append("debug");
@@ -824,7 +829,10 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     configList.append("staticlib");
   else if (item->configuration.m_lib == QL_PLUGIN)
       configList.append("plugin");
-  Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  if (item->configuration.m_inheritconfig == true)
+    Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  else
+    Buffer->setValues("CONFIG",configList,FileBuffer::VSM_RESET,VALUES_PER_ROW);
 
   // Config strings
   Buffer->removeValues("DESTDIR");
@@ -863,6 +871,20 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   Buffer->removeValues("MOC_DIR");
   if (!item->configuration.m_mocpath.simplifyWhiteSpace().isEmpty())
     Buffer->setValues("MOC_DIR",QString(item->configuration.m_mocpath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("LIBS");
+  if (!item->configuration.m_libs.simplifyWhiteSpace().isEmpty())
+    Buffer->setValues("LIBS",QString(item->configuration.m_libs),FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("target.path");
+  if (!item->configuration.m_installtargetpath.simplifyWhiteSpace().isEmpty())
+Buffer->setValues("target.path",QString(item->configuration.m_installtargetpath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
+
+  // Installs variable
+  Buffer->removeValues("INSTALLS");
+  QStringList installsList;
+  if (item->configuration.m_installtarget == true)
+    installsList.append("target");
+  //TODO: Extend this for other install settings
+  Buffer->setValues("INSTALLS",installsList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
 
   // Write to .pro file
 //  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
@@ -928,7 +950,7 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
       subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
   }
 //  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
-  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());  
+  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());
 }
 
 QString TrollProjectWidget::getHeader()
@@ -1278,7 +1300,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass widget..."));
         int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
         int idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
-        int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
+        int idEditUI = popup.insertItem(SmallIconSet("qtdesigner.png"),i18n("Open in QtDesigner"));
+	int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
         int idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
 
         if (fitem->uiFileLink.isEmpty())
@@ -1289,7 +1312,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         {
           popup.removeItem(idUISubclasses);
           popup.removeItem(idViewUIH);
-          popup.removeItem(idSubclassWidget);
+          popup.removeItem(idEditUI);
+	  popup.removeItem(idSubclassWidget);
         }
 
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
@@ -1318,6 +1342,16 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         else if(r == idViewUIH) {
           m_part->partController()->editDocument(KURL(m_shownSubproject->path + "/" +
              QString(fitem->name + ".h")));
+
+        }
+        else if(r == idEditUI) {
+	// start designer in QTDIR/bin
+	KShellProcess proc;
+	QString qtdesigner_executable = getenv("QTDIR");
+	qtdesigner_executable += "/bin/designer";
+        proc << qtdesigner_executable << (m_shownSubproject->path + "/" + QString(fitem->name));
+        proc.start( KProcess::DontCare, KProcess::NoCommunication );
+
 
         }
         else if (r == idSubclassWidget)
@@ -1367,18 +1401,18 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                                                     "subclass","sourcefile", "uifile");
             SubclassesDlg *sbdlg = new SubclassesDlg( QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length()),
                 list, projectDirectory());
-                
+
             if (sbdlg->exec())
             {
                 QDomElement el = DomUtil::elementByPath( dom,  "/kdevtrollproject");
                 QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevtrollproject/subclassing");
-                if ( (!el.isNull()) && (!el2.isNull()) ) 
+                if ( (!el.isNull()) && (!el2.isNull()) )
                 {
                     el.removeChild(el2);
                 }
-                
+
                 DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
-                
+
                 m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
                     "subclass","sourcefile", "uifile");
             }
@@ -1392,8 +1426,8 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
     GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
 
     emitRemovedFile(spitem->path + "/" + fitem->text(0));
-    
-    
+
+
     //remove subclassing info
     QDomDocument &dom = *(m_part->projectDom());
     DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
@@ -1415,14 +1449,14 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
     }
     QDomElement el = DomUtil::elementByPath( dom,  "/kdevtrollproject");
     QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevtrollproject/subclassing");
-    if ( (!el.isNull()) && (!el2.isNull()) ) 
+    if ( (!el.isNull()) && (!el2.isNull()) )
     {
         el.removeChild(el2);
     }
     DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
-    
-    
-    
+
+
+
     switch (gitem->groupType)
     {
       case GroupItem::Sources:
@@ -1511,12 +1545,12 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
 	subBuffer->getValues("INTERFACES",item->forms,item->forms_exclude);
     else
 	subBuffer->getValues("FORMS",item->forms,item->forms_exclude);
-    
+
     subBuffer->getValues("SOURCES",item->sources,item->sources_exclude);
     subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
 
     // Create list view items
-    GroupItem *titem = createGroupItem(GroupItem::Forms, 
+    GroupItem *titem = createGroupItem(GroupItem::Forms,
 				       (m_part->isTMakeProject() ? "INTERFACES" : "FORMS"),
 				       scopeString);
     item->groups.append(titem);
@@ -1565,10 +1599,10 @@ void TrollProjectWidget::parse(SubprojectItem *item)
 //    QString proname = item->path + "/" + fi.baseName() + ".pro";
     QDir dir(item->path);
     QStringList l = dir.entryList("*.pro");
-    
+
     item->pro_file = l.count()?l[0]:(fi.baseName() + ".pro");
     QString proname = item->path + "/" + item->pro_file;
-    
+
     kdDebug(9024) << "Parsing " << proname << endl;
 
 
@@ -1607,6 +1641,21 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.getValues("VERSION",lst,minusListDummy);
     if(lst.count())
       item->configuration.m_libraryversion = lst[0];
+
+
+    FileBuffer::ValueSetMode* configvaluesetmodes = NULL;
+    int vsm_number = item->m_FileBuffer.getVariableValueSetModes("CONFIG",configvaluesetmodes);
+    for(int i=0; i<vsm_number; ++i)
+    {
+    if(!configvaluesetmodes[i])
+    {
+    if(configvaluesetmodes[i] == FileBuffer::VSM_RESET)
+    {
+    item->configuration.m_inheritconfig = false;
+    }
+    }
+    }
+
 
     item->m_FileBuffer.getValues("CONFIG",lst,minusListDummy);
     if (lst.count())
@@ -1667,6 +1716,22 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.getValues("MOC_DIR",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_mocpath = lst[0];
+    item->m_FileBuffer.getValues("LIBS",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_libs = lst[0];
+    item->m_FileBuffer.getValues("target.path",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_installtargetpath = lst[0];
+
+    item->m_FileBuffer.getValues("INSTALLS",lst,minusListDummy);
+    if (lst.count())
+    {
+      // install target
+      if (lst.find("target")!=lst.end())
+        item->configuration.m_installtarget = true;
+	//TODO: Extend this for other install settings
+    }
+
 
     // Handle "subdirs" project
     if (item->configuration.m_template == QTMP_SUBDIRS)

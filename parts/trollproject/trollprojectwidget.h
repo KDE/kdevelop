@@ -61,6 +61,10 @@ struct ProjectConfiguration
   QStringList     m_cxxflags_release;
   QStringList     m_lflags_debug;
   QStringList     m_lflags_release;
+  QString         m_libs;
+  bool		  m_installtarget;
+  QString	  m_installtargetpath;
+  bool		  m_inheritconfig;
 };
 
 

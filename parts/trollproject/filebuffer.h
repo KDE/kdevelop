@@ -60,6 +60,7 @@ public:
   // Variable value handling
   void              removeValues(const QString &variable);
   bool              getValues(const QString &variable,QStringList &plusValues, QStringList &minusValues);
+  int               getVariableValueSetModes(const QString &variable,FileBuffer::ValueSetMode* &modes);
   void              setValues(const QString &variable,QString values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3)
                     {setValues(variable,QStringList::split(' ',values),append,valuesPerRow);}
   void              setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3);

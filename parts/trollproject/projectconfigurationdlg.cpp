@@ -16,6 +16,7 @@
 #include <qmessagebox.h>
 #include <kfiledialog.h>
 #include <klineedit.h>
+#include <klistview.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qvalidator.h>
@@ -27,7 +28,9 @@ ProjectConfigurationDlg::ProjectConfigurationDlg(ProjectConfiguration *conf,QWid
   m_projectConfiguration = conf;
   m_targetLibraryVersion->setValidator(new QRegExpValidator(
     QRegExp("\\d+(\\.\\d+)?(\\.\\d+)"), this));
+  buildProjectInstallTree(install_list);
   UpdateControls();
+  install_list->hide();
 }
 
 
@@ -35,6 +38,51 @@ ProjectConfigurationDlg::~ProjectConfigurationDlg()
 //==============================================
 {
 }
+
+void ProjectConfigurationDlg::buildProjectInstallTree(KListView *listviewControl)
+{/*
+//  if (item->configuration.m_template == QTMP_SUBDIRS)
+//    return;
+
+  // Insert all GroupItems and all of their children into the view
+  if (listviewControl)
+  {
+//    QPtrListIterator<SubprojectItem> it1(item->scopes);
+//    for (; it1.current(); ++it1)
+//    {
+//      listviewControl->insertItem(*it1);
+//      buildProjectDetailTree(*it1,NULL);
+//    }
+    QPtrListIterator<GroupItem> it2(item->groups);
+    for (; it2.current(); ++it2)
+    {
+        listviewControl->insertItem(*it2);
+        QPtrListIterator<FileItem> it3((*it2)->files);
+        for (; it3.current(); ++it3)
+            (*it2)->insertItem(*it3);
+        (*it2)->setOpen(true);
+    }
+  }
+  else
+  {
+//    QPtrListIterator<SubprojectItem> it1(item->scopes);
+//    for (; it1.current(); ++it1)
+//    {
+//      item->insertItem(*it1);
+//      buildProjectDetailTree(*it1,NULL);
+//    }
+    QPtrListIterator<GroupItem> it2(item->groups);
+    for (; it2.current(); ++it2)
+    {
+        item->insertItem(*it2);
+        QPtrListIterator<FileItem> it3((*it2)->files);
+        for (; it3.current(); ++it3)
+            (*it2)->insertItem(*it3);
+        (*it2)->setOpen(true);
+    }
+  }*/
+}
+
 
 void ProjectConfigurationDlg::radioLibrarytoggled(bool on)
 //=============================================
@@ -117,6 +165,16 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   m_projectConfiguration->m_objectpath = m_objectPath->text();
   m_projectConfiguration->m_uipath = m_uiPath->text();
   m_projectConfiguration->m_mocpath = m_mocPath->text();
+  m_projectConfiguration->m_libs = m_Libs->text();
+  m_projectConfiguration->m_installtargetpath = m_InstallTargetPath->text();
+  if (checkInstallTarget->isChecked())
+    m_projectConfiguration->m_installtarget = true;
+  else
+    m_projectConfiguration->m_installtarget = false;
+  if (checkDontInheritConfig->isChecked())
+    m_projectConfiguration->m_inheritconfig = false;
+  else
+    m_projectConfiguration->m_inheritconfig = true;
 
   QDialog::accept();
 }
@@ -207,6 +265,12 @@ void ProjectConfigurationDlg::UpdateControls()
   m_objectPath->setText(m_projectConfiguration->m_objectpath);
   m_uiPath->setText(m_projectConfiguration->m_uipath);
   m_mocPath->setText(m_projectConfiguration->m_mocpath);
+  m_Libs->setText(m_projectConfiguration->m_libs);
+  m_InstallTargetPath->setText(m_projectConfiguration->m_installtargetpath);
+  if (m_projectConfiguration->m_installtarget == true)
+    checkInstallTarget->setChecked(true);
+  if (m_projectConfiguration->m_inheritconfig == false)
+    checkDontInheritConfig->setChecked(true);
 
 }
 

@@ -29,6 +29,7 @@ public:
                          ProjectConfigurationDlg(ProjectConfiguration *conf,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
                          ~ProjectConfigurationDlg();
   void                   UpdateControls();
+  void			 buildProjectInstallTree(KListView *listviewControl);
 
 public slots:
   virtual void           radioLibrarytoggled(bool);
