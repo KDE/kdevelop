@@ -61,7 +61,7 @@ protected slots:
 
 protected:
     QString evaluateExpression( const QString& expr,
-                                const QValueList<SimpleVariable>& roo,
+                                SimpleContext* ctx,
                                 ClassStore* sigma );
     int expressionAt( const QString& text, int index );
     QStringList splitExpression( const QString& text );
@@ -72,7 +72,7 @@ protected:
     QString getNodeDelimiter ( int nNode, int nLine );
     int getNodePos ( int nLine, int nCol );
 
-    QValueList<KTextEditor::CompletionEntry> getEntryListForExpr( const QString& expr, const QValueList<SimpleVariable>& vars );
+    QValueList<KTextEditor::CompletionEntry> getEntryListForExpr( const QString& expr, SimpleContext* ctx );
 
 
     QString createTmpFileForParser (int iLine);
@@ -84,8 +84,8 @@ protected:
 
     /* methods which are called recursively by getEntryListForClass(...) */
     /* These are utility functions which add a layer above the ClassStore API */
-    QString getTypeOfMethod( ParsedClass*, const QString& );
-    QString getTypeOfAttribute( ParsedClass*, const QString& );
+    QString getTypeOfMethod( ParsedContainer*, const QString& );
+    QString getTypeOfAttribute( ParsedContainer*, const QString& );
 
     QValueList<ParsedMethod*> getMethodListForClassAndAncestors( ParsedClass* pClass );
     QValueList<ParsedAttribute*> getAttributeListForClassAndAncestors( ParsedClass* pClass );

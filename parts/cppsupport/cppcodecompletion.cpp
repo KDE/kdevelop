@@ -4,6 +4,8 @@
     begin                : Sat Jul 21 2001
     copyright            : (C) 2001 by Victor Röder
     email                : victor_roeder@gmx.de
+    copyright            : (C) 2002 by Roberto Raggi
+    email                : raggi@cli.di.unipi.it
  ***************************************************************************/
 
 /***************************************************************************
@@ -41,13 +43,12 @@
 #include "classstore.h"
 #include "parsedscopecontainer.h"
 
-
 static QValueList<KTextEditor::CompletionEntry>
 unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
 {
-    QValueList<KTextEditor::CompletionEntry> l;
+    QValueList< KTextEditor::CompletionEntry > l;
     QMap<QString, bool> map;
-    QValueList<KTextEditor::CompletionEntry>::ConstIterator it=entryList.begin();
+    QValueList< KTextEditor::CompletionEntry >::ConstIterator it=entryList.begin();
     while( it != entryList.end() ){
         KTextEditor::CompletionEntry e = *it++;
         QString key = e.type + " " +
@@ -60,17 +61,6 @@ unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
         }
     }
     return l;
-}
-
-static QString purify( const QString& decl )
-{
-    QString s = decl;
-
-    QRegExp rx1( "\\*" );
-    QRegExp rx2( "&" );
-    QRegExp rx3( "[ \t\b\f]+const[ \t\n\r\f]+" );
-    s = s.replace( rx1, "" ).replace( rx2, "" ).replace( rx3, "" ).simplifyWhiteSpace();
-    return s;
 }
 
 static QString remove( QString text, const QChar& l, const QChar& r )
@@ -92,6 +82,31 @@ static QString remove( QString text, const QChar& l, const QChar& r )
     return s;
 }
 
+static QString remove_keywords( QString text ){
+    QRegExp ide_rx( "[_a-zA-Z0-9][_a-zA-Z0-9]*" );
+    QStringList keywords = QStringList::split( "|",
+            "unsigned|signed|case|delete|return|if|then|else|for|while|do|"
+            "const|static|volatile|extern|struct" );
+
+    QString s;
+    int index = 0;
+    while( index < (int)text.length() ){
+        int len = 0;
+        int pos = ide_rx.match( text, index, &len );
+        if( pos == -1 ){
+            break;
+        }
+        s += text.mid( index, pos - index );
+        QString ide = text.mid( pos, len );
+        if( keywords.findIndex(ide) == -1 ){
+            s += ide;
+        }
+        index = pos + ide.length();
+    }
+    s += text.mid( index );
+    return s;
+}
+
 static QString remove_comment( QString text ){
     QString s;
     unsigned int index = 0;
@@ -110,6 +125,20 @@ static QString remove_comment( QString text ){
         }
         ++index;
     }
+    return s;
+}
+
+static QString purify( const QString& decl )
+{
+    QString s = decl;
+
+    QRegExp rx1( "\\*" );
+    QRegExp rx2( "&" );
+    s = s.replace( rx1, "" ).replace( rx2, "" );
+    s = remove_keywords( s );
+    s = remove( s, '[', ']' );
+    s = s.simplifyWhiteSpace();
+
     return s;
 }
 
@@ -179,7 +208,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
         kdDebug( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
         return;
     }
-    
+
     m_pCursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
     if( !m_pCursorIface ){
         kdDebug( 9007 ) << "The editor doesn't support the CursorDocumentIface!" << endl;
@@ -199,7 +228,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged() ), this,
                  SLOT( slotCursorPositionChanged() ) );
 */
-	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)), 
+	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)),
 		this, SLOT(slotTextChanged( int, int, const QString& ) ) );
 
 /*
@@ -228,6 +257,7 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 {
     kdDebug(9007) << "CppCodeCompletion::typingTypeOf( )" << endl;
 
+#if 0
     QString strCurLine = m_pEditIface->textLine( nLine );
     QValueList<KTextEditor::CompletionEntry> entries;
 
@@ -235,7 +265,7 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
     QString contents = getMethodBody( nLine, nCol, &className );
     kdDebug(9007) << "contents = " << contents << endl;
 
-    QValueList<SimpleVariable> variableList = SimpleParser::localVariables( contents );
+    SimpleVariable = SimpleParser::localVariables( contents );
     SimpleVariable v;
     v.name = "this";
     v.scope = 1;
@@ -256,6 +286,8 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
     kdDebug(9007) << "the type of expression is " << type << endl;
 
     return ( type.isEmpty() ? QString( "" ) : type );
+#endif
+    return "";
 }
 
 
@@ -401,7 +433,7 @@ CppCodeCompletion::createTmpFileForParser( int iLine )
 	    reg += "\\([\\w\\d\\&\\*\\s\t,_]*\\)"; 	// parameters
 //	    reg += "[\\s\t]*[:([\\s\t\\w\\d_])+]?[\\{]?)" ; // base class - not finished yet :)
 //	    reg += "[\\s\t]*[^;])";			// avoid static method calls
-    
+
     QRegExp regMethod( reg );
     QString strLine;
     int     iMethodBegin = 0;
@@ -676,7 +708,7 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
     // Load the attributes of the current class and its parents into the list
     QValueList<ParsedAttribute*> attrList = getAttributeListForClassAndAncestors( pClass );
     QValueList<ParsedAttribute*>::ConstIterator attrIt;
-    
+
     // trying how it looks like - symbol needed ?
     KTextEditor::CompletionEntry entry;
     entry.text = "--- attributes";
@@ -799,56 +831,83 @@ CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
 QString
 CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
 {
-    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+)[ \t]*::[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*[:{]" );
+    kdDebug(9007) << "CppCodeCompletion::getMethodBody()" << endl;
 
-    QRegExp qt_rx( "Q_[A-Z]+" );
+    // TODO: add support for function pointer arguments
+    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+[ \t]*::)?[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*(:[^{]*)?\\{" );
+
+    //QRegExp qt_rx( "Q_[A-Z]+" );
+    QRegExp strconst_rx( "\"[^\"]*\"" );
+    QRegExp chrconst_rx( "'[^']*'" );
     QRegExp newline_rx( "\n" );
-    QRegExp const_rx( "[ \t]*const[ \t]*" );
     QRegExp comment_rx( "//[^\n]*" );
     QRegExp preproc_rx( "^[ \t]*#[^\n]*$" );
 
+    QString text = m_pEditIface->textLine( iLine ).left( iCol );
+    --iLine;
+    while( iLine >= 0 ){
 
-    QString text;
-    for( int i=0; i<iLine; ++i ){
-        text += m_pEditIface->textLine( i ).simplifyWhiteSpace() + "\n";
+        text.prepend( m_pEditIface->textLine( iLine ).simplifyWhiteSpace() + "\n" );
+        if( (iLine % 50) == 0 ){
+            // kdDebug(9007) << "---> iLine = " << iLine << endl;
+
+            QString contents = text;
+
+            //kdDebug(9007) << ".... 2 " << endl;
+
+            contents = contents
+                       // .replace( qt_rx, "" )
+                       .replace( comment_rx, "" )
+                       .replace( preproc_rx, "" )
+                       .replace( strconst_rx, "\"\"" )
+                       .replace( chrconst_rx, "''" )
+                       .replace( newline_rx, " " );
+
+            contents = remove_comment( contents );
+            contents = remove_keywords( contents );
+            contents = remove( contents, '[', ']' );
+
+            //kdDebug(9007) << ".... 3 " << endl;
+
+            QValueList<KDevRegExpCap> methods = regMethod.findAll( contents );
+            if( methods.count() != 0 ){
+
+                //kdDebug(9007) << ".... 4 " << endl;
+
+                KDevRegExpCap m = methods.last();
+
+                contents = contents.mid( m.start() );
+                regMethod.search( m.text() );
+                contents.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
+                //kdDebug(9007) << "-----> text = " << m.text() << endl;
+                if( classname ){
+                    QString s = regMethod.cap( 1 ).stripWhiteSpace();
+                    if( s.length() ){
+                        // remove "::"
+                        s = s.left( s.length() - 2 ).stripWhiteSpace();
+                    }
+                    *classname = s;
+                }
+
+                return contents;
+            }
+
+            //kdDebug(9007) << ".... 5 " << endl;
+
+        }
+
+        --iLine;
     }
-    text += m_pEditIface->textLine( iLine ).left( iCol );
 
-    text = remove_comment( text );
-    text = remove( text, '[', ']' );
-
-    text = text
-           .replace( qt_rx, "" )
-           .replace( const_rx, "" )
-           .replace( comment_rx, "" )
-           .replace( preproc_rx, "" )
-           .replace( newline_rx, " " );
-
-    QValueList<KDevRegExpCap> methods = regMethod.findAll( text );
-    if( methods.count() == 0 ){
-        kdDebug( 9007 ) << "no method found!!!" << endl;
-        return QString::null;
-    }
-
-    KDevRegExpCap m = methods.last();
-
-    kdDebug( 9007 ) << "------------------------> m.start = " << m.start() << endl;
-    text = text.mid( m.start() );
-    regMethod.search( m.text() );
-    text.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
-    if( classname ){
-        *classname = regMethod.cap( 1 );
-    }
-
-    return text;
+    return QString::null;
 }
 
 QValueList<KTextEditor::CompletionEntry>
 CppCodeCompletion::getEntryListForExpr( const QString& expr,
-                                        const QValueList<SimpleVariable>& vars )
+                                        SimpleContext* ctx )
 {
-    QString type = evaluateExpression( expr, vars, m_pStore );
-    kdDebug( 9007 ) << "--------> type = " << type << endl;
+    QString type = evaluateExpression( expr, ctx, m_pStore );
+    kdDebug(9007) << "--------> type = " << type << endl;
     QValueList<KTextEditor::CompletionEntry> entries = getEntryListForClass( type );
     return entries;
 }
@@ -927,7 +986,7 @@ QStringList
 CppCodeCompletion::splitExpression( const QString& text )
 {
 #define ADD_CURRENT()\
- if( current.length() ) { l << current; /*kdDebug() << "add word " << current << endl;*/ current = ""; }
+ if( current.length() ) { l << current; /*kdDebug(9007) << "add word " << current << endl;*/ current = ""; }
 
     QStringList l;
     int index = 0;
@@ -981,23 +1040,18 @@ CppCodeCompletion::splitExpression( const QString& text )
 
 QString
 CppCodeCompletion::evaluateExpression( const QString& expr,
-                                       const QValueList<SimpleVariable>& roo,
+                                       SimpleContext* ctx,
                                        ClassStore* sigma )
 {
-    if( expr.isEmpty( ) )
-	return QString( "" );
-
     QStringList exprs = splitExpression( expr );
-    for( QStringList::Iterator it=exprs.begin(); it!=exprs.end(); ++it ){
-        kdDebug(9007) << "expr " << (*it) << endl;
-    }
+//    for( QStringList::Iterator it=exprs.begin(); it!=exprs.end(); ++it ){
+//        kdDebug(9007) << "expr " << (*it) << endl;
+//    }
 
-    SimpleVariable v_this = SimpleParser::findVariable( roo, "this" );
+
+    SimpleVariable v_this = ctx->findVariable( "this" );
+    ParsedClass* pThis = sigma->getClassByName( v_this.type );
     QString type;
-
-    ParsedClass* pThis = m_pCCStore->getClassByName( v_this.type );
-    if( !pThis )
-        pThis = sigma->getClassByName( v_this.type );
 
     if( exprs.count() == 0 ){
         return v_this.type;
@@ -1006,6 +1060,8 @@ CppCodeCompletion::evaluateExpression( const QString& expr,
     QString e1 = exprs.first().stripWhiteSpace();
     exprs.pop_front();
 
+    kdDebug(9007) << "---> e1 = " << e1 << endl;
+
     if( e1.isEmpty() ){
         type = v_this.type;
     } else if( e1.endsWith("::") ){
@@ -1013,46 +1069,89 @@ CppCodeCompletion::evaluateExpression( const QString& expr,
     } else {
         int first_paren_index = 0;
         if( (first_paren_index = e1.find('(')) != -1 ){
-            e1 = e1.left( first_paren_index ).stripWhiteSpace();
-            type = getTypeOfMethod( pThis, e1 );
+            if( first_paren_index == 0 ){
+                if( e1[e1.length()-1] == ')' ){
+                    // e1 is a subexpression
+                    QString subexpr = e1.mid( 1, e1.length() - 2 );
+                    subexpr = subexpr.stripWhiteSpace();
+                    if( subexpr[0] != '(' ){
+                        int start_expr = expressionAt( subexpr, subexpr.length()-1 );
+                        if( start_expr != (int)subexpr.length()-1 ){
+                            subexpr = subexpr.mid( start_expr );
+                            kdDebug(9007) << "subexpr = " << subexpr << endl;
+                        }
+                    }
+                    type = evaluateExpression( subexpr, ctx, sigma );
+                } else {
+                    // e1 is cast
+                    //kdDebug(9007) << "maybe a cast = " << e1 << endl;
+                    KDevRegExp cast_rx( "^\\([ \t]*([a-zA-Z_][a-zA-Z0-9_]*)[^)]*)" );
+                    if( cast_rx.search(e1) == 0 ){
+                        type = cast_rx.cap( 1 );
+                        kdDebug(9007) << "cast type = " << type << endl;
+                    } else {
+                        type = QString::null;
+                    }
+                }
+            } else {
+                e1 = e1.left( first_paren_index ).stripWhiteSpace();
+                if( pThis ){
+                    type = getTypeOfMethod( pThis, e1 );
+                }
+                if( type.isEmpty() ){
+                    type = getTypeOfMethod( m_pStore->globalScope(),
+                                            e1 );
+                }
+            }
         } else {
-            SimpleVariable v = SimpleParser::findVariable( roo, e1 );
+            SimpleVariable v = ctx->findVariable( e1 );
             if( v.type ){
+                // e1 is a local variable
                 type = v.type;
             } else {
-                type = getTypeOfAttribute( pThis, e1 );
+                // e1 is an attribute
+                if( pThis ){
+                    type = getTypeOfAttribute( pThis, e1 );
+                }
+                if( type.isEmpty() ){
+                    type = getTypeOfAttribute( m_pStore->globalScope(),
+                                               e1 );
+                }
             }
         }
     }
 
     type = purify( type );
-
-    ParsedClass* pClass = m_pCCStore->getClassByName( type );
-    if( !pClass )
-        pThis = sigma->getClassByName( type );
-
-    while( pClass && exprs.count() ){
+    ParsedContainer* pContainer = sigma->getClassByName( type );
+    if( !pContainer ){
+        pContainer = sigma->globalScope()->getStructByName( type );
+        kdDebug(9007) << "is a struct??" << endl;
+    }
+    kdDebug(9007) << "pContainer = " << pContainer << endl;
+    while( pContainer && exprs.count() ){
 
         QString e = exprs.first().stripWhiteSpace();
         exprs.pop_front();
         type = "";  // no type
 
-        // kdDebug() << "----------> evaluate " << e << endl;
+        kdDebug(9007) << "----------> evaluate " << e << endl;
 
         int first_paren_index;
         if( e.isEmpty() ){
             break;
         } else if( (first_paren_index = e.find('(')) != -1 ){
             e = e.left( first_paren_index );
-            type = getTypeOfMethod( pClass, e );
-            pClass = m_pCCStore->getClassByName( type );
-            if( !pClass )
-                pThis = sigma->getClassByName( type );
+            type = getTypeOfMethod( pContainer, e );
+            pContainer = sigma->getClassByName( type );
+            if( !pContainer ){
+                pContainer = sigma->globalScope()->getStructByName( type );
+            }
         } else {
-            type = getTypeOfAttribute( pClass, e );
-            pClass = m_pCCStore->getClassByName( type );
-            if( !pClass )
-                pThis = sigma->getClassByName( type );
+            type = getTypeOfAttribute( pContainer, e );
+            pContainer = sigma->getClassByName( type );
+            if( !pContainer ){
+                pContainer = sigma->globalScope()->getStructByName( type );
+            }
         }
     }
 
@@ -1067,6 +1166,7 @@ CppCodeCompletion::completeText( )
     kdDebug(9007) << "CppCodeCompletion::completeText()" << endl;
 
     if( !m_pCursorIface || !m_pEditIface || !m_pCompletionIface ){
+        kdDebug(9007) << "!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
         return;
     }
 
@@ -1085,19 +1185,24 @@ CppCodeCompletion::completeText( )
 
     contents = getMethodBody( nLine, nCol, &className );
     kdDebug(9007) << "contents = " << contents << endl;
-
     kdDebug(9007) << "classname = " << className << endl;
-    QValueList<SimpleVariable> variableList = SimpleParser::localVariables( contents );
+
+    SimpleContext* ctx = SimpleParser::localVariables( contents );
+    if( !ctx )
+        return;
+
+    QValueList<SimpleVariable> variableList;
     SimpleVariable v;
     v.name = "this";
-    v.scope = 1;
     v.type = className;
     variableList.append( v );
+    ctx->add( v );
 
     QString word;
     int start_expr = expressionAt( contents, contents.length() - 1 );
+    kdDebug(9007) << "start_expr = " << start_expr << endl;
     QString expr;
-    if( start_expr != (int)contents.length() - 1 ){
+    if( start_expr != int(contents.length()) - 1 ){
         expr = contents.mid( start_expr, contents.length() - start_expr );
         expr = expr.stripWhiteSpace();
     }
@@ -1106,7 +1211,7 @@ CppCodeCompletion::completeText( )
     while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
         --idx;
     }
-    if( idx != (int)expr.length() - 1 ){
+    if( idx != int(expr.length()) - 1 ){
         ++idx;
         word = expr.mid( idx ).stripWhiteSpace();
         expr = expr.left( idx ).stripWhiteSpace();
@@ -1115,24 +1220,48 @@ CppCodeCompletion::completeText( )
     kdDebug(9007) << "prefix = |" << word << "|" << endl;
     kdDebug(9007) << "expr = |" << expr << "|" << endl;
 
-    if( showArguments ){
-        QString type = evaluateExpression( expr, variableList, m_pStore );
-        QStringList functionList = getSignatureListForClass( type, word );
-        if (functionList.isEmpty())
-            functionList = getGlobalSignatureList( word );
-        m_pCompletionIface->showArgHint( functionList, "()", "," );
+    if( expr == "." || expr == "->" ){
+        kdDebug(9007) << "---------> no expression ;-)" << endl;
     } else {
-        QValueList<KTextEditor::CompletionEntry> entries;
-        entries = unique( getEntryListForExpr( expr, variableList ) );
-        if( entries.count() ){
-            m_pCompletionIface->showCompletionBox( entries, word.length() );
+        if( showArguments ){
+            QString type = evaluateExpression( expr, ctx, m_pStore );
+            QStringList functionList;
+
+            functionList = getSignatureListForClass( type, word );
+
+            if( functionList.count() == 0 ){
+                functionList = getGlobalSignatureList( word );
+            }
+
+            if( functionList.count() ){
+                m_pCompletionIface->showArgHint( functionList, "()", "," );
+            }
+        } else {
+            QValueList<KTextEditor::CompletionEntry> entries;
+            QString type;
+
+            SimpleVariable v = ctx->findVariable( word );
+            if( expr.isEmpty() && !v.type.isEmpty() ){
+                type = v.type;
+            } else {
+                type = evaluateExpression( expr, ctx, m_pStore );
+            }
+
+            entries = unique( getEntryListForClass( type ) );
+            if( entries.count() ){
+                m_pCompletionIface->showCompletionBox( entries, word.length() );
+            }
         }
     }
+
+    delete( ctx );
+    ctx = 0;
 }
 
 void
 CppCodeCompletion::typeOf( )
 {
+#if 0
     kdDebug(9007) << "CppCodeCompletion::completeText()" << endl;
 
     if( !m_pCursorIface || !m_pEditIface || !m_pCompletionIface ){
@@ -1179,6 +1308,7 @@ CppCodeCompletion::typeOf( )
     strFunction.sprintf( "type_of_expression_is(%s)", type.latin1() );
     functionList.append ( strFunction );
     m_pCompletionIface->showArgHint ( functionList, "()", "," );
+#endif
 }
 
 void
@@ -1188,24 +1318,29 @@ CppCodeCompletion::slotTextChangedRoberto( int nLine, int nCol, const QString &/
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
 
-    if ( ch == "." || ch2 == "->" || ch == "(" ){
+    if ( ch == "." || ch2 == "->" || ch2 == "::" || ch == "(" ){
         completeText();
     }
 }
 
 QString
-CppCodeCompletion::getTypeOfMethod( ParsedClass* pClass, const QString& name )
+CppCodeCompletion::getTypeOfMethod( ParsedContainer* pContainer, const QString& name )
 {
-    if( !pClass ){
+    if( !pContainer ){
         return QString::null;
     }
 
-    QValueList<ParsedMethod*> methodList = pClass->getMethodByName( name );
+    QValueList<ParsedMethod*> methodList = pContainer->getMethodByName( name );
     if( methodList.count() != 0 ){
         // TODO: check for method's arguments
         QString type = (*methodList.begin())->type();
         return purify( type );
     }
+
+
+    ParsedClass* pClass = dynamic_cast<ParsedClass*>( pContainer );
+    if( !pClass )
+        return QString::null;
 
     QPtrList<ParsedParent> parentList = pClass->parents;
     for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
@@ -1223,17 +1358,21 @@ CppCodeCompletion::getTypeOfMethod( ParsedClass* pClass, const QString& name )
 }
 
 QString
-CppCodeCompletion::getTypeOfAttribute( ParsedClass* pClass, const QString& name )
+CppCodeCompletion::getTypeOfAttribute( ParsedContainer* pContainer, const QString& name )
 {
-    if( !pClass ){
+    if( !pContainer ){
         return QString::null;
     }
 
-    ParsedAttribute* pAttr = pClass->getAttributeByName( name );
+    ParsedAttribute* pAttr = pContainer->getAttributeByName( name );
     if( pAttr ){
         QString type = pAttr->type();
         return purify( type );
     }
+
+    ParsedClass* pClass = dynamic_cast<ParsedClass*>( pContainer );
+    if( !pClass )
+        return QString::null;
 
     QPtrList<ParsedParent> parentList = pClass->parents;
     for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
@@ -1257,7 +1396,7 @@ QValueList<ParsedMethod*> CppCodeCompletion::getMethodListForClassAndAncestors( 
     QValueList<ParsedMethod*> retVal = pClass->getSortedMethodList( );
     retVal += pClass->getSortedSlotList( );
     retVal += pClass->getSortedSignalList( );
-    
+
     QPtrList<ParsedParent> parentList = pClass->parents;
 
     for ( ParsedParent* pPClass = parentList.first( ); pPClass != 0; pPClass = parentList.next( ) ) {
@@ -1277,7 +1416,7 @@ QValueList<ParsedMethod*> CppCodeCompletion::getMethodListForClassAndAncestors( 
 QValueList<ParsedAttribute*> CppCodeCompletion::getAttributeListForClassAndAncestors( ParsedClass* pClass )
 {
     QValueList<ParsedAttribute*> retVal = pClass->getSortedAttributeList( );
-    
+
     QPtrList<ParsedParent> parentList = pClass->parents;
     for( ParsedParent* pPClass = parentList.first( ); pPClass != 0; pPClass = parentList.next( ) ) {
 
@@ -1306,7 +1445,7 @@ QStringList CppCodeCompletion::getSignatureListForClass( QString strClass, QStri
          pClass = m_pStore->getClassByName ( strClass );
      if ( !pClass )
          return QStringList();
-     
+
      QStringList retVal = pClass->getSortedMethodSignatureList(strMethod);
      retVal += pClass->getSortedSlotSignatureList(strMethod);
      retVal += pClass->getSortedSignalSignatureList(strMethod);
@@ -1320,7 +1459,7 @@ QStringList CppCodeCompletion::getParentSignatureListForClass( ParsedClass* pCla
                                                                QString strMethod )
 {
     QStringList retVal;
-    
+
     QPtrList<ParsedParent> parentList = pClass->parents;
     for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {

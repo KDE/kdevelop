@@ -30,8 +30,9 @@ libkdevcppsupport_la_SOURCES = cppsupportpart.cpp \
 			       driver.cpp \
 			       errors.cpp \
 			       lexer.cpp \
-			       parser.cpp
-
+			       parser.cpp \
+			       ast.cpp \
+			       configproblemreporter.ui
 
 EXTRA_DIST = tokenizer.l tokenizer-cc.l
 DISTCLEANFILES = tokenizer.cpp

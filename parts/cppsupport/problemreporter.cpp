@@ -153,6 +153,7 @@ void ProblemReporter::configure()
 {
     kdDebug(9007) << "ProblemReporter::configure()" << endl;
     KConfig* config = kapp->config();
+    config->setGroup( "General Options" );
     m_active = config->readBoolEntry( "EnableCppBgParser", TRUE );
     m_delay = config->readNumEntry( "CppBgParserDelay", 1000 );
 }

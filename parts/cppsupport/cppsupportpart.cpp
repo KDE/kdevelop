@@ -1073,7 +1073,9 @@ void CppSupportPart::parseContents( const QString& contents,
 
     CppSupport::Parser parser( m_problemReporter, &driver, &lexer );
     parser.setFileName( fileName );
-    parser.parseTranslationUnit();
+    AST* ast = parser.parseTranslationUnit();
+    delete( ast );
+    ast = 0;
 }
 
 #include "cppsupportpart.moc"
