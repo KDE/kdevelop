@@ -10,7 +10,7 @@
   <!ENTITY ctags "<command>ctags</command>">
   <!ENTITY CVS "<application>CVS</application>">
   <!ENTITY cvs "CVS">
-  <!ENTITY doxygen "<application>doxygen</application>">
+  <!ENTITY doxygen "<application>Doxygen</application>">
   <!ENTITY doxywizard "<application>doxywizard</application>">
   <!ENTITY egrep "<command>egrep</command>">
   <!ENTITY grep "<command>grep</command>">
@@ -21,10 +21,10 @@
   <!ENTITY promanag "Project Manager">
   <!ENTITY qte "<application>Qt/embedded</application>">
   <!ENTITY ssh "<application>ssh</application>">
-  <!-- chapters in separate files -->
+  <!-- chapters in separate docbook files -->
   <!ENTITY unixdev SYSTEM "unixdev.docbook">
-  <!ENTITY kdevelop-install SYSTEM "kdevelop-install.docbook">
   <!ENTITY kdevelop-survey SYSTEM "kdevelop-survey.docbook">
+  <!ENTITY kdevelop-install SYSTEM "kdevelop-install.docbook">
   <!ENTITY setup SYSTEM "setup.docbook">
   <!ENTITY applicationwizard SYSTEM "applicationwizard.docbook">
   <!ENTITY project-management SYSTEM "project-management.docbook">
@@ -44,8 +44,8 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-02-23</date>
-  <releaseinfo>&kdevrelease;</releaseinfo>
+  <date>2004-02-28</date
+  <releaseinfo>&kdevrelease;</releaseinfo
 
   <authorgroup>
     <author>
@@ -308,8 +308,8 @@ The information in this chapter is meant as a quick reference for a head start o
 <!-- ====================================================================== -->
 
 &unixdev;            <!-- "Development on UNIX"                             -->
-&kdevelop-install;   <!-- "Installing &kdevelop";                           -->
 &kdevelop-survey;    <!-- "Survey of &kdevelop; Features"                   -->
+&kdevelop-install;   <!-- "Installing &kdevelop";                           -->
 &setup;              <!-- "Configuring &kdevelop;"                          -->
 &applicationwizard;  <!-- "Getting Started&mdash;the &appwizard;"           -->
 
