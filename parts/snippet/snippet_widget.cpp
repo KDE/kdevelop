@@ -82,7 +82,7 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
 SnippetWidget::~SnippetWidget()
 {
   writeConfig();
-
+  delete _cfg;
   _list.clear();
 }
 
