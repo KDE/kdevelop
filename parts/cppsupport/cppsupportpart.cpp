@@ -747,13 +747,17 @@ CppSupportPart::parseProject( )
             QString absFilePath = fileInfo.absFilePath();
             //kdDebug(9007) << "parse file" << absFilePath << endl;
 
-	    if( (n%5) == 0 )
+	    if( (n%5) == 0 ){
 	        kapp->processEvents();
+		
+		if( m_projectClosed )
+		    return false;
+	    }
 	    
 	    QDateTime t = fileInfo.lastModified();
 	    if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
 		continue;
-	    
+	    	    
             m_driver->parseFile( absFilePath );
 	    
 	    m_timestamp[ absFilePath ] = t;
