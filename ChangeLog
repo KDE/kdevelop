@@ -1,7 +1,11 @@
+1999-06-09 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed minor bug in the class store.
+	* prepared for graphical view in the classview.
+
 1999-06-08 Pascal Krahmer <pascal@beast.de>
-        * fixed some bugs
-        * added dialog preview (lib needed which is not yet in the cvs !!)
-        * bool properties realized as combobox again. no value also possible now.
+	* fixed some bugs
+	* added dialog preview (lib needed which is not yet in the cvs !!)
+	* bool properties realized as combobox again. no value also possible now.
 
 1999-06-08  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* added sourcecode generation to many new items
@@ -15,12 +19,12 @@
 1999-06-07 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* commited bugfix by Torsten Uhlmann <TUhlmann@debis.com> ,cprjoptions
 
-1999-06-06 Pascal Krahmer
-        * added some item properties
-        * added some new property classes (try out the qlistbox/entries for example)
-        * added info dialog for the first use of the dlgedit
-        * fixed some bugs
-        * muuuuch more !
+1999-06-06 Pascal Krahmer <pascal@beast.de>
+	* added some item properties
+	* added some new property classes (try out the qlistbox/entries for example)
+	* added info dialog for the first use of the dlgedit
+	* fixed some bugs
+	* muuuuch more !
 
 1999-06-05  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added icons for the new items of the dialog editor
@@ -30,9 +34,9 @@
 	* completed application wizard labels
 	* updated documentation for the new dialogeditor items and LFV configuration
 	
-1999-06-04 Pascal Krahmer
-        * Added A LOT of items to the dialog editor.
-        * Fixed some bugs.
+1999-06-04 Pascal Krahmer <pascal@beast.de>
+	* Added A LOT of items to the dialog editor.
+	* Fixed some bugs.
 
 1999-06-04 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed some parsing bug. Huge improvement in stability.
