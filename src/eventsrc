@@ -5,6 +5,7 @@ Comment[xx]=xxKDevelopxx
 
 [ProcessSuccess]
 Name=Process successful
+Name[ca]=Procés correcte
 Name[da]=Processen lykkedes
 Name[es]=Proceso correcto
 Name[hu]=Sikeres folyamat
@@ -14,6 +15,7 @@ Name[sr]=Процес је успео
 Name[sv]=Processen lyckades
 Name[xx]=xxProcess successfulxx
 Comment=Process finished successfully
+Comment[ca]=Procés finalitzat amb èxit
 Comment[da]=Processen afluttede med succes
 Comment[es]=Proceso finalizado con éxito
 Comment[hu]=A folyamat sikeresen befejeződött
@@ -26,6 +28,7 @@ default_presentation=0
 
 [ProcessError]
 Name=Process error
+Name[ca]=Procés fallit
 Name[da]=Procesfejl
 Name[es]=Proceso fallido
 Name[hu]=Hibás folyamat
@@ -35,6 +38,7 @@ Name[sr]=Грешка у процесу
 Name[sv]=Processfel
 Name[xx]=xxProcess errorxx
 Comment=Process finished with errors
+Comment[ca]=Procés finalitzat amb errors
 Comment[da]=Processen afsluttede med fejl
 Comment[es]=Proceso finalizado con errores
 Comment[hu]=A folyamat hibajelzéssel fejeződött be

@@ -8,6 +8,7 @@ Name=KDev$APPNAME$
 Name[sv]=KDevelop $APPNAME$
 Name[xx]=xxKDev$APPNAME$xx
 GenericName=$APPNAME$
+GenericName[xx]=xx$APPNAME$xx
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global
