@@ -31,6 +31,7 @@
 #include "KDevCppSupportIface.h"
 #include "cppsupportfactory.h"
 #include "classgeneratorconfig.h"
+#include "catalog.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -110,6 +111,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     setXMLFile("kdevcppsupport.rc");
 
     m_backgroundParser = 0;
+    m_catalog = new Catalog();
+    setupCatalog();
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
@@ -214,6 +217,7 @@ CppSupportPart::~CppSupportPart()
     delete m_structureView;
 #endif
     delete m_problemReporter;
+    delete m_catalog;
 }
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
@@ -1022,6 +1026,12 @@ KTextEditor::Document * CppSupportPart::findDocument( const KURL & url )
 
     return 0;
 }
+
+void CppSupportPart::setupCatalog( )
+{
+}
+
+
 
 
 

@@ -33,6 +33,7 @@ class Context;
 class CppCodeCompletion;
 class ProblemReporter;
 class BackgroundParser;
+class Catalog;
 class QLabel;
 class QProgressBar;
 class QStringList;
@@ -57,6 +58,8 @@ public:
 
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
+
+    Catalog* catalog() { return m_catalog; }
 
     QStringList fileExtensions( ) const;
 
@@ -93,6 +96,7 @@ private slots:
     void addedFilesToProject(const QStringList &fileList);
     void removedFilesFromProject(const QStringList &fileList);
     void slotProjectCompiled();
+    void setupCatalog();
 
     void slotNewClass();
     void slotSwitchHeader();
@@ -158,7 +162,9 @@ private:
     QStringList m_projectFileList;
     QMap<QString, QDateTime> m_timestamp;
     bool m_valid;
-    
+
+    Catalog* m_catalog;
+
     friend class KDevCppSupportIface;
 };
 
