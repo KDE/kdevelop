@@ -4,6 +4,9 @@
   * this needed a *lot* of fixes of the file handling but it works
   * we need coolo in the about box...
 
+2000-10-29 Martin Piskernig <mpiskernig@kdevelop.org>
+  * added kimport script by Ulrich Eckhardt <doomster@knuut.de> which writes a .kdevprj file for solely automake/autoconf-based projects
+
 2000-10-28 Ralf Nolden <nolden@kde.org>
   * added check for a Makefile in make clean in the base project dir, otherwise use subdir
   * added support for subdir sources translation in linugist as well as INTERFACES line (although it seems linguist
