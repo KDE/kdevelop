@@ -32,7 +32,7 @@ $APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringLis
   // if you want to embed your widget as an outputview, simply uncomment
   // the following line.
 
-  // topLevel()->embedOutputView( m_widget, "name that should appear", "name that should appear" ); 
+  // topLevel()->embedOutputView( m_widget, "name that should appear", "enter a tooltip" ); 
   
 }
 
