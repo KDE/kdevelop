@@ -506,7 +506,7 @@ bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
 
   QFileInfo info(strFileName);
   if(info.exists() && !info.isWritable()) {
-    KMessageBox::sorry(0L, i18n("You do not have write permission to this file"));
+    KMessageBox::sorry(0L, i18n("You do not have write permission to this file:\n" + strFileName));
     return false;
   }
   
