@@ -2838,6 +2838,7 @@ void CKAppWizard::slotProcessExited() {
     group_filters.append("*.kdevdlg");
     group_filters.append("*.ui");
     group_filters.append("*.rc");
+    group_filters.append("*.dlg");
     project->addLFVGroup (i18n("User Interface"),"");
     project->setFilters(i18n("User Interface"),group_filters);
   }

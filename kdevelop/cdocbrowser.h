@@ -43,7 +43,7 @@ public:
   void setDocBrowserOptions();
   void doSearchDialog();
 
-  QString currentURL();
+  inline const QString& currentURL() { return complete_url; }
   QString currentTitle();
   QPopupMenu* popup(){ return doc_pop; };	
 	
@@ -57,11 +57,7 @@ protected:
 #endif
 
 public slots:
-  void slotDocFontSize(int);
-  void slotDocStandardFont(const QFont&);
-  void slotDocFixedFont(const QFont&);
-  void slotDocColorsChanged(const QColor&, const QColor&,
-                            const QColor&, const QColor&, const bool, const bool);
+  void slotDocBrowserOptions( void );
   void slotPopupMenu( const QString&, const QPoint & );
   void slotCopyText();
   void slotURLBack();
@@ -127,23 +123,22 @@ public:
 public slots:
 	void	slotApplyPressed();
 	void	slotFontSize( int );
-	void	slotStandardFont( const QFont& n );
-	void	slotFixedFont( const QFont& n );
+	void	slotStandardFont( const QString& n );
+	void	slotFixedFont( const QString& n );
 
 signals:
-	void	fontSize( int );
-	void	standardFont( const QFont& );
-	void	fixedFont( const QFont& );
+	void  configChanged( void );
 
 private:
 	void	readOptions();
 	void	getFontList( QStringList &list, const char *pattern );
+  void  getFontList( QStringList &list, bool fixed );
 	void	addFont( QStringList &list, const char *xfont );
 
 private:
 	int	fSize;
-	QFont	stdName;
-	QFont	fixedName;
+	QString stdName;
+	QString fixedName;
 	QStringList standardFonts;
 	QStringList fixedFonts;
 };
@@ -157,9 +152,7 @@ public:
 	CDocBrowserColor( QWidget *parent = NULL, const char *name = NULL );
 
 signals:
-	void	colorsChanged( const QColor &bg, const QColor &text,
-                const QColor &link, const QColor &vlink, const bool underline,
-                const bool forceDefaults );
+	void  configChanged( void );
 
 protected slots:
 	void	slotApplyPressed();

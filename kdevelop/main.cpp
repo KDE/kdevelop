@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
   aboutData.addCredit ("Nich Hudson",I18N_NOOP("Patches/Bugfixes"), "nick@nthcliff.demon.co.uk");
   aboutData.addCredit ("R. Imura",I18N_NOOP("Patches/Bugfixes"), "imura@cs.titech.ac.jp");
   aboutData.addCredit ("Ralf Funken",I18N_NOOP("Patches/Bugfixes"), "rfunken@kdevelop.de");
-  aboutData.addCredit ("Jens Zurheide",I18N_NOOP("Patches/Bugfixes"), "zuzu@surf-callino.de");
+  aboutData.addCredit ("Jens Zurheide",I18N_NOOP("Patches/Bugfixes"), "jens.zurheide@gmx.de");
   aboutData.addCredit ("Micha Bieber",I18N_NOOP("Patches/Bugfixes"), "micha@ani.de");
   aboutData.addCredit ("August Hoerandl",I18N_NOOP("Patches/Bugfixes"), "august.hoerandl@gmx.at");
   aboutData.addCredit ("Serge Lussier",I18N_NOOP("Patches/Bugfixes"), "serge.lussier@videotron.ca");

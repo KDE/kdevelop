@@ -2274,16 +2274,8 @@ void CKDevelop::slotOptionsDocBrowser(){
    CDocBrowserOptionsDlg browserOptions;
    CDocBrowser* pDocBr = m_docViewManager->currentBrowserDoc();
 
-   connect( browserOptions.fontOptions, SIGNAL(fontSize(int)),
-     pDocBr, SLOT(slotDocFontSize( int )) );
-   connect( browserOptions.fontOptions, SIGNAL(standardFont( const QFont& )),
-     pDocBr, SLOT(slotDocStandardFont( const QFont& )) );
-   connect( browserOptions.fontOptions, SIGNAL(fixedFont( const QFont& )),
-     pDocBr, SLOT(slotDocFixedFont( const QFont& )) );
-   connect( browserOptions.colorOptions, SIGNAL(colorsChanged(const QColor&, const QColor&,
-      const QColor&, const QColor&, const bool, const bool)),
-     pDocBr, SLOT(slotDocColorsChanged(const QColor&, const QColor&,
-                const QColor&, const QColor&, const bool, const bool)) );
+   connect( browserOptions.fontOptions, SIGNAL(configChanged()),
+     pDocBr, SLOT(slotDocBrowserOptions()) );
 
    browserOptions.exec();
    slotStatusMsg(i18n("Ready."));

@@ -23,7 +23,10 @@
 #include <kconfig.h>
 #include <kcolorbtn.h>
 #include <kcursor.h>
+#include <kfontcombo.h>
+#include <kfontdialog.h>
 #include <kglobal.h>
+#include <khtml_settings.h>
 #include <khtmlview.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
@@ -42,6 +45,7 @@
 #include <qclipboard.h>
 #include <qcombobox.h>
 #include <qfile.h>
+#include <qfontdatabase.h>
 #include <qlabel.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
@@ -71,6 +75,7 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   KHTMLPart(parent, name)
 {
   kdDebug() << "Creating CDocBrowser !" << endl;
+  setDocBrowserOptions();      //  setup the options
 
   doc_pop = new QPopupMenu();
   doc_pop->insertItem(SmallIconSet("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
@@ -103,7 +108,6 @@ CDocBrowser::~CDocBrowser(){
   delete doc_pop;
   doc_pop=0l;
 }
-
 
 
 void CDocBrowser::slotViewInKFM()
@@ -168,121 +172,22 @@ void CDocBrowser::showURL(const QString& url, bool reload)
   emit completed();  // simulate documentDone to put it in history...
 }
 
-QString CDocBrowser::currentURL(){
-  return complete_url;
-}
-
 void CDocBrowser::setDocBrowserOptions()
 {
   kdDebug() << "CDocBrowser::setDocBrowserOptions called !" << endl;
-
   KConfig *config = KGlobal::config();
-  config->setGroup( "DocBrowserAppearance" );
+  config->setGroup( "HTML Settings" );          // make it consistent between KDE2 and KDE3
 
-//  setDefaultFontBase(config->readNumEntry("DefaultFontBase",3));
-//  setStandardFont(config->readEntry("StandardFont","helvetica"));
-//  setFixedFont(config->readEntry("FixedFont","courier"));
-
-  int i, diff;
-
-  fSize = config->readNumEntry( "BaseFontSize",12 );
-  config->setGroup( "HTML Settings" ); // conform to KHMTL_Settings
-  QFont font (config->readFontEntry("StandardFont"));
-  QString mBodyFamily = font.family();
-  setStandardFont(mBodyFamily);
-
-  QValueList<int> fontsizes;
-//  resetFontSizes();
-  diff = fSize - fontSizes()[3];
-  for (i=0;i<7; i++)
-    fontsizes << fontSizes()[i] + diff;
-  setFontSizes(fontsizes);
-
-
-//FB  bgColor = config->readColorEntry( "BgColor", &white );
-  config->setGroup( "General" ); // conform to KHMTL_Settings
-  textColor = config->readColorEntry( "TextColor", &black );
-  linkColor = config->readColorEntry( "linkColor", &blue );
-  vLinkColor = config->readColorEntry( "visitedLinkColor", &darkMagenta );
-  config->setGroup( "HTML Settings" ); // conform to KHMTL_Settings
-  underlineLinks = config->readBoolEntry( "UnderlineLinks", true );
-//FB  forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
-
-//  setFixedFont( fixedFont);
-//  setStandardFont( standardFont );
+  const_cast<KHTMLSettings*>(settings())->init( config, true );
   setURLCursor( KCursor::handCursor() );
-
-//XXX  KHTMLSettings* htmlsettings = settings();
-//XXX  htmlsettings->init(config); // no reset, just additionally
-//  setDefaultFontBase( fSize );
-//  htmlsettings->setUnderlineLinks(underlineLinks);
-//  setForceDefault( forceDefaults );
-//  setDefaultBGColor( bgColor );
 }
 
-void CDocBrowser::slotDocFontSize(int size){
-
-  kdDebug() << "CDocBrowser::slotDocFontSize !" << endl;
-
-  fSize = size;
-//  KHTMLView* htmlview=view();
-//  htmlview->setDefaultFontBase( size );
-//  htmlview->parse();
-  QValueList<int> fontsizes;
-//  resetFontSizes();
-  int diff = fSize - fontSizes()[3];
-  for (int i=0;i<7; i++)
-    fontsizes << fontSizes()[i] + diff;
-
-  setFontSizes(fontsizes);
-  showURL(complete_url, true);
-//  busy = true;
-//  emit enableMenuItems();
-}
-
-void CDocBrowser::slotDocStandardFont(const QFont& n){
-
-  kdDebug() << "CDocBrowser::slotDocStandardFont !" << endl;
-
-  standardFont = n;
-//  KHTMLView* htmlview=view();
-//  htmlview->setStandardFont( n );
-//  htmlview->parse();
-  showURL(complete_url, true);
-//  busy = true;
-//  emit enableMenuItems();
-}
-
-void CDocBrowser::slotDocFixedFont(const QFont& n){
-
-  kdDebug() << "CDocBrowser::slotDocFixedFont !" << endl;
-
-  fixedFont = n;
-//  KHTMLView* htmlview=view();
-//  htmlview->setFixedFont( n );
-//  htmlview->parse();
-  setDocBrowserOptions(); //FB
-  showURL(complete_url, true);
-//  busy = true;
-//  emit enableMenuItems();
-}
-
-void CDocBrowser::slotDocColorsChanged( const QColor &/*bg*/, const QColor &/*text*/,
-  const QColor &/*link*/, const QColor &/*vlink*/, const bool /*uline*/, const bool /*force*/)
+void CDocBrowser::slotDocBrowserOptions( void )
 {
+  setDocBrowserOptions();
 
-  kdDebug() << "CDocBrowser::slotDocColorsChanged !" << endl;
-
-//  KHTMLView* htmlview=view();
-//  htmlview->setForceDefault( force );
-//  htmlview->setDefaultBGColor( bg );
-//  htmlview->setDefaultTextColors( text, link, vlink );
-//  htmlview->setUnderlineLinks(uline);
-//  htmlview->parse();
-  setDocBrowserOptions();//FB
-  showURL(complete_url, true);
-//  busy = true;
-//  emit enableMenuItems();){
+  if ( !currentURL().isEmpty() )
+    showURL(currentURL(), true);
 }
 
 void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
@@ -435,56 +340,53 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
   QGridLayout *grid2 = new QGridLayout(bg,1,3,7,7);
   rb = new QRadioButton( i18n("Small"), bg );
   grid2->addWidget(rb,0,0);
-  rb->setChecked( fSize == 10 );
+  rb->setChecked( fSize == 8 );
 
   rb = new QRadioButton( i18n("Medium"), bg );
   grid2->addWidget(rb,0,1);
-  rb->setChecked( fSize == 12);
+  rb->setChecked( fSize == 10);
 
   rb = new QRadioButton( i18n("Large"), bg );
   grid2->addWidget(rb,0,2);
-  rb->setChecked( fSize == 14);
+  rb->setChecked( fSize == 12);
 
   label = new QLabel( i18n("Standard Font"), this );
   grid1->addWidget(label,1,0);
 
-  QComboBox *cb = new QComboBox( false, this );
-  grid1->addWidget(cb,1,1);
-  getFontList( standardFonts, "-*-*-*-*-*-*-*-*-*-*-p-*-*-*" );
-  cb->insertStringList( standardFonts );
+  getFontList( standardFonts, false );
+  KFontCombo *kfc = new KFontCombo( standardFonts, this, "standardfont_combo" );
+  grid1->addWidget(kfc,1,1);
 
   int i=0;
   for ( QStringList::Iterator it = standardFonts.begin(); it != standardFonts.end(); ++it, i++ )
   {
     if (stdName == *it)
     {
-      cb->setCurrentItem( i );
+      kfc->setCurrentItem( i );
       break;
     }
   }
-//FB  connect( cb, SIGNAL( activated( const QString& ) ),
-//FB            SLOT( slotStandardFont( const QString& ) ) );
+  connect( kfc, SIGNAL( activated( const QString& ) ),
+            SLOT( slotStandardFont( const QString& ) ) );
 
   label = new QLabel( i18n( "Fixed Font"), this );
   grid1->addWidget(label,2,0);
 
-  cb = new QComboBox( false, this );
-  grid1->addWidget(cb,2,1);
-  getFontList( fixedFonts, "-*-*-*-*-*-*-*-*-*-*-m-*-*-*" );
-  getFontList( fixedFonts, "-*-*-*-*-*-*-*-*-*-*-c-*-*-*" );
-  cb->insertStringList( fixedFonts );
+  getFontList( fixedFonts, true );
+  kfc = new KFontCombo( fixedFonts, this, "fixedwithfont_combo" );
+  grid1->addWidget(kfc,2,1);
 
   i=0;
   for ( QStringList::Iterator it = fixedFonts.begin(); it != fixedFonts.end(); ++it, i++ )
   {
     if ( fixedName == *it )
     {
-      cb->setCurrentItem( i );
+      kfc->setCurrentItem( i );
       break;
     }
   }
-//FB  connect( cb, SIGNAL( activated( const QString& ) ),
-//FB    SLOT( slotFixedFont( const QString& ) ) );
+  connect( kfc, SIGNAL( activated( const QString& ) ),
+    SLOT( slotFixedFont( const QString& ) ) );
 
   connect( bg, SIGNAL( clicked( int ) ), SLOT( slotFontSize( int ) ) );
 }
@@ -493,18 +395,16 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
 void CDocBrowserFont::readOptions()
 {
   KConfig *config = KGlobal::config();
-  config->setGroup( "DocBrowserAppearance" );
-
-  fSize= config->readNumEntry( "BaseFontSize",13 );
-
   config->setGroup( "HTML Settings" );
+
+  fSize= config->readNumEntry( "MediumFontSize",10 );
   stdName = config->readEntry( "StandardFont" );
-  if ( (stdName.family()).isEmpty() )
-    stdName = KGlobalSettings::generalFont();
+  if ( stdName.isEmpty() )
+    stdName = KGlobalSettings::generalFont().family();
 
   fixedName = config->readEntry( "FixedFont" );
-  if ( (fixedName.family()).isEmpty() )
-    fixedName =  KGlobalSettings::fixedFont();
+  if ( fixedName.isEmpty() )
+    fixedName =  KGlobalSettings::fixedFont().family();
 }
 
 void CDocBrowserFont::getFontList( QStringList &list, const char *pattern )
@@ -519,6 +419,43 @@ void CDocBrowserFont::getFontList( QStringList &list, const char *pattern )
   }
 
   XFreeFontNames( xFonts );
+}
+
+void CDocBrowserFont::getFontList( QStringList &list, bool fixed )
+{
+	// taken from KFontComboBox of KDE-2.2.2
+  QFontDatabase dbase;
+  QStringList lstSys(dbase.families( false ));
+
+  // Since QFontDatabase doesn't have any easy way of returning just
+  // the fixed width fonts, we'll do it in a very hacky way
+  if (fixed)
+  {
+    QStringList lstFixed;
+    for (QStringList::Iterator it = lstSys.begin(); it != lstSys.end(); ++it)
+    {
+        // To get the fixed with info (known as fixed pitch in Qt), we
+        // need to get a QFont or QFontInfo object.  To do this, we
+        // need a family name, style, and point size.
+        QStringList styles(dbase.styles(*it));
+        QStringList::Iterator astyle = styles.begin();
+
+        QFontInfo info(dbase.font(*it, *astyle, 10));
+        if (info.fixedPitch())
+          lstFixed.append(*it);
+    }
+
+    // Fallback.. if there are no fixed fonts found, it's probably a
+    // bug in the font server or Qt.  In this case, just use 'fixed'
+    if (lstFixed.count() == 0)
+      lstFixed.append("fixed");
+
+    lstSys = lstFixed;
+  }
+
+  lstSys.sort();
+
+  list = lstSys;
 }
 
 void CDocBrowserFont::addFont( QStringList &list, const char *xfont )
@@ -557,19 +494,15 @@ void CDocBrowserFont::slotApplyPressed()
   kdDebug() << "CDocBrowserFont::slotApplyPressed !" << endl;
 
   KConfig *config = KGlobal::config();
-  config->setGroup( "DocBrowserAppearance" );
+  config->setGroup( "HTML Settings" );
 
-  config->writeEntry( "BaseFontSize", fSize );
-    emit fontSize( fSize );
-
-  config->setGroup( "HTML Settings" ); // conform to KHMTL_Settings
+  config->writeEntry( "MediumFontSize", fSize );
+  config->writeEntry( "MinimumFontSize", 8 );
   config->writeEntry( "StandardFont", stdName );
-    emit standardFont( stdName );
-
   config->writeEntry( "FixedFont", fixedName );
 
   config->sync();
-  emit fixedFont( fixedName );
+  emit configChanged();
 }
 
 void CDocBrowserFont::slotFontSize( int i )
@@ -577,20 +510,20 @@ void CDocBrowserFont::slotFontSize( int i )
   kdDebug() << "CDocBrowserFont::slotFontSize !" << endl;
 
   if(i==0)
-    fSize=10;
+    fSize=8;
   else if(i==1)
-    fSize=12;
+    fSize=10;
   else
-    fSize=14;
+    fSize=12;
 }
 
-void CDocBrowserFont::slotStandardFont( const QFont& n )
+void CDocBrowserFont::slotStandardFont( const QString& n )
 {
   kdDebug() << "CDocBrowserFont::slotStandardFont !" << endl;
   stdName = n;
 }
 
-void CDocBrowserFont::slotFixedFont( const QFont& n )
+void CDocBrowserFont::slotFixedFont( const QString& n )
 {
   kdDebug() << "CDocBrowserFont::slotFixedFont !" << endl;
   fixedName = n;
@@ -658,8 +591,10 @@ void CDocBrowserColor::readOptions()
 {
   KConfig *config = KGlobal::config();
 
-//FB  bgColor = config->readColorEntry( "BgColor", &white );
+//  Colors must be in group [General]
   config->setGroup( "General" ); // conform to KHMTL_Settings
+
+//FB  bgColor = config->readColorEntry( "BgColor", &white );
   textColor = config->readColorEntry( "TextColor", &black );
   linkColor = config->readColorEntry( "linkColor", &blue );
   vLinkColor = config->readColorEntry( "visitedLinkColor", &magenta );
@@ -673,21 +608,19 @@ void CDocBrowserColor::readOptions()
 void CDocBrowserColor::slotApplyPressed()
 {
   KConfig *config = KGlobal::config();
-
+//  Colors must be in group [General]
   config->setGroup( "General" );
 //FB  config->writeEntry( "BgColor", bgColor );
   config->writeEntry( "TextColor", textColor );
+  config->writeEntry( "foreground", textColor );   // KDE 2/3 uses this one
   config->writeEntry( "linkColor", linkColor );
   config->writeEntry( "visitedLinkColor", vLinkColor );
   config->setGroup( "HTML Settings" );
   config->writeEntry( "UnderlineLinks", underlineLinks );
 //FB  config->writeEntry( "ForceDefaultColors", forceDefault );
 
-  if ( changed )
-      emit colorsChanged( /*bgColor*/QColor(), textColor, linkColor, vLinkColor,
-                underlineLinks, /*forceDefault*/false );
-
   config->sync();
+  emit configChanged();
 }
 
 void CDocBrowserColor::slotBgColorChanged( const QColor &col )
@@ -739,7 +672,7 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
   : QTabDialog( parent, name,TRUE ){
   setCaption( i18n("Documentation Browser Options") );
 
-  //resize( 350, 330 );
+  // resize( 350, 270 );
 
         setOKButton( i18n("OK") );
         setCancelButton( i18n("Cancel") );
@@ -750,6 +683,9 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
   connect( this, SIGNAL( applyButtonPressed() ),
     fontOptions, SLOT( slotApplyPressed() ) );
 
+//  colorOptions = NULL;
+//  to use the colors the KHTML settings must be written to group [General]
+//  and this will be read in setDocBrowserOptions. Volunteers to fixt it?
   colorOptions = new CDocBrowserColor( this, i18n("Colors") );
   addTab( colorOptions, i18n("Colors") );
   connect( this, SIGNAL( applyButtonPressed() ),

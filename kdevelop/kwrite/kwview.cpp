@@ -585,6 +585,7 @@ void KWriteView::changeXPos(int p) {
     scroll(dx,0);
   else
     QWidget::update();
+  this->setFocus();
 }
 
 void KWriteView::changeYPos(int p) {
@@ -608,6 +609,7 @@ void KWriteView::changeYPos(int p) {
   {
     QWidget::update();
   }
+  this->setFocus();
 }
 
 void KWriteView::getVConfig(VConfig &c) {
@@ -2313,6 +2315,7 @@ void KWrite::toggleBookmark(int line)
 
   kWriteDoc->tagLines(line, line);
   kWriteDoc->updateViews();
+  kWriteView->setFocus();
 }
 
 void KWrite::nextBookmark()
