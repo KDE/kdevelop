@@ -486,7 +486,7 @@
 <tocsect4 name="6.23.1 GNU gettext API" url="lib/node144.html"/>
 <tocsect4 name="6.23.2 Class-based API" url="lib/node145.html"/>
 <tocsect4 name="6.23.3 Internationalizing your programs and modules" url="lib/node150.html"/>
-<tocsect4 name="6.23.4 Acknowledgements" url="lib/node155.html"/>
+<tocsect4 name="6.23.4 Acknowledgments" url="lib/node155.html"/>
 </tocsect3>
 </tocsect2>
 <tocsect2 name="7. Optional Operating System Services" url="lib/someos.html">

@@ -28,7 +28,7 @@
     <tocsect3 name="Lexical Scanner" url="glib/glib-lexical-scanner.html"/>
     <tocsect3 name="Automatic String Completion" url="glib/glib-automatic-string-completion.html"/>
     <tocsect3 name="Timers" url="glib/glib-timers.html"/>
-    <tocsect3 name="Windows Compatability Functions" url="glib/glib-windows-compatability-functions.html"/>
+    <tocsect3 name="Windows Compatibility Functions" url="glib/glib-windows-compatability-functions.html"/>
   </tocsect2>
   <tocsect2 name="GLib Data Types" url="glib/glib-data-types.html">
     <tocsect3 name="Memory Chunks" url="glib/glib-memory-chunks.html"/>

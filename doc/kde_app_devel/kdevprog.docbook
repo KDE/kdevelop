@@ -504,7 +504,7 @@ that you want to connect to. The last two parameters are the receiver object tha
 by the member function which actually is the slot that will be executed on signal emission. 
 </para>
 <para>
-By using signals and slots, your program's objects can interact with each other easily without explicitely 
+By using signals and slots, your program's objects can interact with each other easily without explicitly 
 depending on the type of the receiver object. You will learn more about using this mechanism for productive 
 usage later in this handbook. More information about the Signals/Slot mechanism can also be found in 
 <ulink url="developer.kde.org/documentation/library/libraryref.html">The KDE Library Reference Guide</ulink> 
@@ -1309,7 +1309,7 @@ To add the What's This...? help to one of your widgets, use the static method
 <para>
 Due to the fact that projects often lack a complete set of user documentation, 
 all &kdevelop; projects contain a pre-build handbook that can be easily adapted; 
-therefore fulfilling another goal of KDE: providing enough online-help to support users that 
+therefore fulfiling another goal of KDE: providing enough online-help to support users that 
 are not familiar with an application. This chapter therefore introduces you on how to extend 
 the provided documentation template and what you have to do to make it available to the user. 
 </para>

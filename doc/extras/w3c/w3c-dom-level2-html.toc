@@ -42,7 +42,7 @@
  </tocsect1>
  <tocsect1 name="Appendix D: ECMAScript Language Binding" url="ecma-script-binding.html">
  </tocsect1>
- <tocsect1 name="Appendix E: Acknowledgements" url="acknowledgements.html">
+ <tocsect1 name="Appendix E: Acknowledgments" url="acknowledgements.html">
  <tocsect2 name="E.1. Production Systems" url="acknowledgements.html#Productions">
  </tocsect2>
  <tocsect2 name="E.2. DOM Level 1" url="acknowledgements.html#dom_level_1">

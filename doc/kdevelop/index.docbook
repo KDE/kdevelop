@@ -111,7 +111,7 @@ You will here find information on the following topics:
   <link linkend="kdevelopoverview">Overview: &kdevelop;'s features</link> - is some kind of a warm-up, giving a short overview of what is built-in into &kdevelop; and makes you acquainted with the look and feel of this <acronym>IDE</acronym>.
   </para></listitem>
   <listitem><para>
-  <link linkend="app-menues">Menues and toolbars overview</link> - (in the appendix) provides you with a short overview over the menue and toolbar selections available.
+  <link linkend="app-menus">Menues and toolbars overview</link> - (in the appendix) provides you with a short overview over the menue and toolbar selections available.
   </para></listitem>
   <listitem><para>
   <link linkend="initialsetup">Configuring &kdevelop;</link> - shows how you can taylor the <acronym>IDE</acronym> to suit your needs.
@@ -265,7 +265,7 @@ All these scripting languages have in common that they are widely portable betwe
 <para>
 Another evolution on UNIX-like scripting is the <emphasis>DCOP</emphasis> protocol. DCOP stands for <emphasis>Desktop COmmunikation Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional UNIX pipe mechanism.
 </para>
-<para>Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. DCOP allows elaborate graphical programs to communicate with each other in a quite similar way. This enables e.g. a &kde; programm to send messages to another &kde; program, or receive data from it for its own purposes.
+<para>Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. DCOP allows elaborate graphical programs to communicate with each other in a quite similar way. This enables e.g. a &kde; program to send messages to another &kde; program, or receive data from it for its own purposes.
 </para>
 <para>
 There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly. Yet it returns much of the power and flexibility of UNIX scripting to high-level programs which are based on a graphical user interface.
@@ -1473,7 +1473,7 @@ Only a short series of steps is necessary to start a new programming project, us
   Set up some templates for <link linkend="newprojects-start-templates">initial header and source files</link> (if applicable).
   </para></listitem>
   <listitem><para>
-  Finally tell &appwizard; to <link linkend="newprojects-start-build">set up all initial stuff</link>, directory structure, starting header/source file templates, and managment tools, like e.g. an initial make skeleton, etc.
+  Finally tell &appwizard; to <link linkend="newprojects-start-build">set up all initial stuff</link>, directory structure, starting header/source file templates, and management tools, like e.g. an initial make skeleton, etc.
   </para></listitem>
 </orderedlist>
 <para>
@@ -1695,7 +1695,7 @@ The other prominent cause of this restriction you can see at the bottom line of 
 As you type the application name you will notice that the &appwizard; repeats your input at the end of the <guilabel>Final location</guilabel> line, using lower case only characters.
 </para>
 <para>
-Thus you must select the name of your new application with care.  If you end up with an already used directory the &appwizard; will not allow you to continue to the next step, keeping the <guibutton>Next &gt;</guibutton> button deactivated (greyed). Yet, it will <emphasis>warn</emphasis> you in this case by appending <quote>(dir/file already exist)</quote> to the <guilabel>Final location</guilabel> line.
+Thus you must select the name of your new application with care.  If you end up with an already used directory the &appwizard; will not allow you to continue to the next step, keeping the <guibutton>Next &gt;</guibutton> button deactivated (grayed). Yet, it will <emphasis>warn</emphasis> you in this case by appending <quote>(dir/file already exist)</quote> to the <guilabel>Final location</guilabel> line.
 </para>
 
 <formalpara>
@@ -1747,7 +1747,7 @@ Finally enter a starting version number for your new application in the <guilabe
 </formalpara>
 
 <para>
-If you select an application type for which the &appwizard; provides common source template texts (e.g. C/C++), you may view the licence notification text on the third page of this <guilabel>Create New Project</guilabel> dialog (see the <link linkend="newprojects-start-templates">Supply header/source templates</link> chapter below).
+If you select an application type for which the &appwizard; provides common source template texts (e.g. C/C++), you may view the license notification text on the third page of this <guilabel>Create New Project</guilabel> dialog (see the <link linkend="newprojects-start-templates">Supply header/source templates</link> chapter below).
 </para>
 <para>
 If you selected <quote>Custom</quote> from the <guilabel>License</guilabel> tab you must provide a license text on your own.
@@ -1953,7 +1953,7 @@ The <guilabel>Vendor</guilabel> field is used for compatibility reasons only. Yo
 The <guilabel>Message</guilabel> field allows you to comment the initial &cvs; contents. Use any text you like or just stick to the <quote>new project</quote> default the &appwizard; did put in.
 </para>
 <para>
-The <guilabel>Release tag</guilabel> holds the name wich tags the initial state of your project. Such a <emphasis>tag</emphasis> names a certain point within the &CVS; repository by which you can later access this state of your development. (See more in  the <link linkend="cvs">Using CVS</link> chapter.)
+The <guilabel>Release tag</guilabel> holds the name which tags the initial state of your project. Such a <emphasis>tag</emphasis> names a certain point within the &CVS; repository by which you can later access this state of your development. (See more in  the <link linkend="cvs">Using CVS</link> chapter.)
 </para>
 <para>
 The &appwizard; has put a default <quote>start</quote> tag in here which is a worthy proposal. Just stick to it.
@@ -2127,7 +2127,7 @@ In IDEAl mode the <guilabel>Messages</guilabel> window might automatically have 
 </para></note>
 
 <para>
-Do not forget to initially check what the &appwizard; has provided. For example you may want to change the inital heading informations according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
+Do not forget to initially check what the &appwizard; has provided. For example you may want to change the initial heading informations according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
 </para>
 <para>
 Then it is adviceable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can make up whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
@@ -2156,7 +2156,7 @@ It is always advisable to look at the messages output and try to understand what
 
 <tip>
 <para>
-If your project was set up for local &CVS; you will have got two series of messages of which the first set most probably was gone before you could thoroughly read, as &CVS; used the <guilabel>Messages</guilabel> window for its own purposes. So we catched both series in separate runs - set up the application twice, one time without &CVS;, then removed the directory and started over, this time setting the application up with &CVS;.
+If your project was set up for local &CVS; you will have got two series of messages of which the first set most probably was gone before you could thoroughly read, as &CVS; used the <guilabel>Messages</guilabel> window for its own purposes. So we caught both series in separate runs - set up the application twice, one time without &CVS;, then removed the directory and started over, this time setting the application up with &CVS;.
 </para>
 <para>
 You may want to follow this same procedure if anything weird happened and you just could not catch the messages of the first setup step.
@@ -2238,7 +2238,7 @@ The setup scripts make use of a set of &perl; subroutines collected in the <file
 <formalpara id="appwizard-behind-app-base">
 <title>The application base directory</title>
 <para>
-When the &perl; script is run, you get a series of messages of what is <emphasis>about to be done</emphasis> in the next installation step. At first a <computeroutput>destination direcory</computeroutput> will be set up. This is the base directory of your application, just what you got displayed in the <guilabel>Final location</guilabel> line on the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page. The script uses the value of the <computeroutput>--dest</computeroutput> parameter in the &perl; command above.
+When the &perl; script is run, you get a series of messages of what is <emphasis>about to be done</emphasis> in the next installation step. At first a <computeroutput>destination directory</computeroutput> will be set up. This is the base directory of your application, just what you got displayed in the <guilabel>Final location</guilabel> line on the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page. The script uses the value of the <computeroutput>--dest</computeroutput> parameter in the &perl; command above.
 </para>
 </formalpara>
 
@@ -2824,7 +2824,7 @@ The file tree is regularly updated whenever something changes in the file
 system. For example, if you create new files or directories (even outside 
 &kdevelop;), this is immediately reflected in the file list. On Linux,
 this feature makes use of the FAM library. On other operating systems or over 
-NFS, the directories shown are polled in small intervalls.
+NFS, the directories shown are polled in small intervals.
 </para>
 
 <para>
@@ -3496,7 +3496,7 @@ they are easily readable. Alternatively, you can decide to see mangled names.
 The debugger backend <application>gdb</application> does not allow to set
 breakpoints within code that is not currently loaded. In a highly modular
 application, where often code is only loaded on demand as a plugin (using
-the libc function <function>dlopen(3)</function>), this can be incovenient. 
+the libc function <function>dlopen(3)</function>), this can be inconvenient. 
 Therefore, &kdevelop; rolls its own support for breakpoints in shared
 libraries. If you set this option, it allows you to set breakpoints in 
 libraries which are not loaded. Then, whenever <application>gdb</application>
@@ -3564,7 +3564,7 @@ made by several developers. It can of course happen that developers work on
 the same piece of code, resulting in a conflicting set of changes (in practice
 this occurs seldom, and is often a sign of a lack of communication). In this
 case &CVS; rejects a commit; only after all conflicts are resolved, a file can
-be commited.
+be committed.
 </para>
 
 <para>
@@ -3928,7 +3928,7 @@ Some of the parts are considered <link linkend="table-global-parts">global</link
 </para>
 
 <para>
-Other parts are <link linkend="table-project-parts">project specfic</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
+Other parts are <link linkend="table-project-parts">project specific</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
 </para>
 
 <para>
@@ -4029,14 +4029,14 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 
 <!-- ====================================================================== -->
 
-<appendix id="app-menues">
+<appendix id="app-menus">
 <title>Menues and toolbars overview</title>
 
 <para>
 (... to be written ...)
 </para>
 
-</appendix> <!-- app-menues -->
+</appendix> <!-- app-menus -->
 
 <!-- ====================================================================== -->
 
