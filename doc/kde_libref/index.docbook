@@ -1,29 +1,35 @@
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN">
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
+ <!ENTITY kdevelop "<application>kdevelop</application>">
+ <!ENTITY % addindex "IGNORE">
+ <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
+]>
 <book lang="en">
 <bookinfo>
-<title>The KDE Library Reference Guide</title>
+<title>The KDE Library Reference Guide
+</title>
 <subtitle>The Reference Guide to C++ Application Design for the K Desktop Environment (KDE)</subtitle>
 <authorgroup>
 <author>
 <surname>Ralf Nolden </surname>
 <affiliation>
-<address><email><ulink url="mailto:Ralf.Nolden@post.rwth-aachen.de">Ralf.Nolden@post.rwth-aachen.de</ulink></email></address>
+	  <orgname>The KDevelop Team</orgname>
+<address><email><ulink url="mailto:Ralf.Nolden@post.rwth-aachen.de">&lt;Ralf.Nolden@post.rwth-aachen.de&gt;</ulink></email></address>
 </affiliation>
-</author>
-<corpauthor>The KDevelop Team</corpauthor>
+      </author>
 </authorgroup>
-<date>Version 1.0 , July 28, 1999</date>
+<date>Version 1.2 , March 21, 2000</date>
 <releaseinfo><!-- information about this particular version --></releaseinfo>
 <abstract>
 <para>This handbook is part of the KDevelop Integrated Development Environment and is also licensed under the GNU General
 Public License; see Chapter <link linkend="Copyright">Copyright</link> for more information.</para>
-<para></para><!-- Merge this with the previous paragraph; it comes from <META NAME="description" CONTENT="..."> --></abstract>
+<para>KDE</para><!-- Merge this with the previous paragraph; it comes from <META NAME="description" CONTENT="..."> --></abstract>
+
 </bookinfo>
 
-<chapter id="Introduction">
+<chapter id="introduction">
 <title>Introduction</title>
 
-<sect1 id="WhatKDEprovides">
+<sect1 id="what-kde-provides">
 <title>What KDE provides</title>
 
 <para>The K Desktop Environment offers an easy way for application designers to equip their products with an intuitive way of user
@@ -97,7 +103,7 @@ dramatically and provide a common look.</para>
 and the signal/slot mechanism is hard to find for developers, this turned out to be a special chapter in this handbook.</para>
 </sect1>
 
-<sect1 id="NotesaboutKDE2Qt20">
+<sect1 id="notes-about-kde-2-qt-2.0">
 <title>Notes about KDE 2 / Qt 2.0</title>
 
 <para>As you may have guessed, this handbook <emphasis remap="bf">explicitely</emphasis> adresses <emphasis remap="bf">KDE 1.x</emphasis> development using the <emphasis remap="bf">Qt 1.4x</emphasis> libraries. You may
@@ -105,8 +111,8 @@ ask "Hey, Qt's 2.0 version is released already, why not talk only about that ?" 
 for a KDE 1.x reference.</para>
 
 <para>The issues that lead to this are first of all that developers should consider the KDE 1.x series the stable desktop and development
-environment. As long as KDE 2 (which introduces Qt 2.0 as well) is under development, programmers will have a hard time to follow the
-changes, which means a high time-consuming search for information and, if you experience bugs, error searching. There are projects
+environment. As long as KDE 2 (which will introduce Qt 2.0 as well) is under development, programmers will have a hard time to follow
+the changes, which means a high time-consuming search for information and, if you experience bugs, error searching. There are projects
 covered by the KDE core team that ensure the KDE 2 libraries will work - the KDE itself as well as the supplying applications and the
 KOffice suite. Nevertheless, developers who are starting or developing projects for KDE now have the choice and those that want to rely
 on the stable environment will also want to port their applications to KDE 2 to make it usable on one hand and to implement
@@ -119,7 +125,7 @@ API are left out to avoid any trouble when porting to KDE 2.</para>
 changes this implies.</para>
 </sect1>
 
-<sect1 id="AboutthisHandbook">
+<sect1 id="about-this-handbook">
 <title>About this Handbook</title>
 
 <para>This handbook has been written in order to give developers a guideline to the usage of the KDE 1.x libraries in general in conjunction
@@ -131,7 +137,7 @@ on topics.</para>
 </sect1>
 </chapter>
 
-<chapter id="ClassCategories">
+<chapter id="class-categories">
 <title>Class Categories</title>
 
 <para>The KDE/Qt C++ class libraries offer easy solutions to extend applications dramatically with a minimum amount of coding on the side of
@@ -195,7 +201,7 @@ the application programmer. This chapter sorts the classes provided towards thei
 </itemizedlist>
 </para>
 
-<sect1 id="Baseclass">
+<sect1 id="baseclass">
 <title>Baseclass</title>
 
 <para>Most of the KDE/Qt classes have <literal remap="tt">QObject</literal> as their baseclass in their inheritance hierarchy. <literal remap="tt">QObject</literal> can be described as a
@@ -203,7 +209,7 @@ baseclass because it offers the usage of Qt's signal/slot mechanism which allows
 be used as the baseclass for any self-created classes that are supposed to emit signals or can connect to signals by slots.</para>
 </sect1>
 
-<sect1 id="ApplicationArchitectureClasses">
+<sect1 id="application-architecture-classes">
 <title>Application Architecture Classes</title>
 
 <para>KDE applications usually consist of a set of objects that interact with each other. The programmer has to use the provided classes to
@@ -221,7 +227,8 @@ create a KDE application either by creating a class instance or by inheritance. 
 </listitem>
 </itemizedlist>
 </para>
-<sect2 id="ApplicationobjectsofKDE">
+
+<sect2 id="application-objects-of-kde">
 <title>Application objects of KDE</title>
 
 <para>The K Desktop Environment provides functionality that an application can use to integrate into the KDE. This functionality
@@ -268,14 +275,15 @@ inherited by <literal remap="tt">KTMainWindow</literal>)</para>
 
 <para><emphasis remap="bf">Dependencies:</emphasis> -lkdecore -lqt</para>
 
-<para><emphasis remap="bf">Includes:</emphasis> <literal remap="tt">&num;include &lt;kapp.h&gt;</literal></para>
+<para><emphasis remap="bf">Includes:</emphasis> <literal remap="tt">&&num;;include &&lt;;kapp.h&&gt;;</literal></para>
 
 <para>The <literal remap="tt">kdeui</literal> library additionally offers two classes that inherit <literal remap="tt">KApplication</literal> for specialized purposes:</para>
 </sect2>
-<sect2 id="KWMModuleApplication1">
+
+<sect2 id="kwmmoduleapplication">
 <title>KWMModuleApplication</title>
 
-<para><emphasis remap="bf">Includes:</emphasis> <literal remap="tt">&num;include &lt;kwmmapp.h&gt;</literal></para>
+<para><emphasis remap="bf">Includes:</emphasis> <literal remap="tt">&&num;;include &&lt;;kwmmapp.h&&gt;;</literal></para>
 
 <para><emphasis remap="bf">Dependencies:</emphasis> -lkdeui -lkdecore -lqt</para>
 
@@ -283,30 +291,33 @@ inherited by <literal remap="tt">KTMainWindow</literal>)</para>
 windows and changes to them (via Qt signals). There are no methods to manipulate windows. These are defined in the class KWM (see
 kwm.h). An example for using KWMModuleApplication is kcontrol.</para>
 </sect2>
-<sect2 id="KControlApplication1">
+
+<sect2 id="kcontrolapplication">
 <title>KControlApplication</title>
 
-<para><emphasis remap="bf">Includes:</emphasis> <literal remap="tt">&num;include &lt;kcontrol.h&gt;</literal></para>
+<para><emphasis remap="bf">Includes:</emphasis> <literal remap="tt">&&num;;include &&lt;;kcontrol.h&&gt;;</literal></para>
 
 <para><emphasis remap="bf">Dependencies:</emphasis> -lkdeui -lkdecore -lqt</para>
 
 <para>KControlApplication is the common base for setup applications. It provides a tab dialog and functionality common to most setup
 programs. The configuration dialogs for the KDE are examples of KControlApplications.</para>
 </sect2>
-<sect2 id="KWM">
+
+<sect2 id="kwm">
 <title>KWM</title>
 
-<para><emphasis remap="bf">Includes:</emphasis> <literal remap="tt">&num;include &lt;kwm.h&gt;</literal></para>
+<para><emphasis remap="bf">Includes:</emphasis> <literal remap="tt">&&num;;include &&lt;;kwm.h&&gt;;</literal></para>
 
 <para><emphasis remap="bf">Dependencies:</emphasis> -lkdeui -lkdecore -lqt</para>
 
 <para>The KWM class provides a set of static methods to interact with the window and session-manager. Therefore, call any member with</para>
 
-<para>KWM::&lt;method()&gt;</para>
+<para>KWM::&&lt;;method()&&gt;;</para>
 
 <para>depending on the purpose of the desired functionality.</para>
 </sect2>
-<sect2 id="ApplicationConfiguration">
+
+<sect2 id="application-configuration">
 <title>Application Configuration</title>
 
 <para>The class <literal remap="tt">KConfig</literal> provides the usage of a configuration object which can write its entries into configuration files. Dependent of
@@ -319,7 +330,8 @@ kde-directory as well as the session management file to store information betwee
 selected language. Instead of using the <literal remap="tt">klocale-&gt;translate()</literal> method, KDE applications should use the <literal remap="tt">i18n()</literal> macro that
 contains the string to be translated as the message extraction depends on this macro.</para>
 </sect2>
-<sect2 id="MainWindows">
+
+<sect2 id="main-windows">
 <title>Main Windows</title>
 
 <para>As the application's <literal remap="tt">KApplication</literal> instance is non-visible, it only provides the basic means to create a KDE application.
@@ -337,7 +349,7 @@ window that inherits <literal remap="tt">KTMainWindow</literal>.</para>
 </sect2>
 </sect1>
 
-<sect1 id="UserInterfaceObjects">
+<sect1 id="user-interface-objects">
 <title>User Interface Objects</title>
 
 <para>This section covers the user interface object the KDE libraries provide. By category, these can be divided by their purpose. A user
@@ -359,7 +371,8 @@ contents.</para>
 </listitem>
 </itemizedlist>
 </para>
-<sect2 id="Views">
+
+<sect2 id="views">
 <title>Views</title>
 
 <para>View are generally the content area of an application. Therefore it can be the main widget or a part of a main widget that additionally
@@ -393,7 +406,8 @@ offers a set of functionality such as <literal remap="tt">KTMainWindow</literal>
 functionality the view should offer. For widgets that want to offer scrolling facilities, you could inherit from <literal remap="tt">QScrollView</literal> or
 create a <literal remap="tt">QScrollView</literal> instance and set the view widget as the managed area with <literal remap="tt">addChild()</literal>.</para>
 </sect2>
-<sect2 id="Dialogs">
+
+<sect2 id="dialogs">
 <title>Dialogs</title>
 
 <para>Dialogs are a main part of the user interaction wherever the application requires parameters that have to be set by the user.
@@ -467,13 +481,16 @@ dialog either directly coded with geometry management or by creating it visually
 </sect2>
 </sect1>
 
-<sect1 id="ControlElements">
+<sect1 id="control-elements">
 <title>Control Elements</title>
 
 <para>Control elements are used within visible areas of the application and can be combined together to create a dialog or view. Beyond the
 control elements that the Qt library provides, KDE offers:</para>
 
 <para><itemizedlist>
+<listitem>
+<para>KButton: active raise-lower button</para>
+</listitem>
 <listitem>
 <para>KButtonBox: manages buttons</para>
 </listitem>
@@ -524,9 +541,10 @@ control elements that the Qt library provides, KDE offers:</para>
 </para>
 </sect1>
 
-<sect1 id="GeneralPurposeClasses">
+<sect1 id="general-purpose-classes">
 <title>General Purpose Classes</title>
-<sect2 id="FilesandDirectories">
+
+<sect2 id="files-and-directories">
 <title>Files and Directories</title>
 
 <para>Qt already offers a set of classes to work with files and directories. Those classes are:</para>
@@ -569,19 +587,22 @@ of Qt. Those are:</para>
 <para>For loading and saving files, use the class <literal remap="tt">QFile</literal> which operates with streams. If you want network transparent
 file access, consider using <literal remap="tt">KFile</literal>.</para>
 </sect2>
-<sect2 id="DataObjects">
+
+<sect2 id="data-objects">
 <title>Data Objects</title>
 
 <para>The Qt library supports data objects by classes that offer handling of lists, arrays, streams, strings and the like. See the Qt
 documentation for mor information.</para>
 </sect2>
-<sect2 id="Graphics">
+
+<sect2 id="graphics">
 <title>Graphics</title>
 
 <para>Qt supports a set of graphics formats that can be used for drawings or image programs. The graphics device for painting is
 <literal remap="tt">QPainter</literal>.</para>
 </sect2>
-<sect2 id="Processes">
+
+<sect2 id="processes">
 <title>Processes</title>
 
 <para>As applications can have different types of application communication with other programs available on the system such as standard Unix
@@ -593,7 +614,7 @@ terminated or ended. See <literal remap="tt">KProcess</literal> for details.</pa
 </sect1>
 </chapter>
 
-<chapter id="ClassesofKDEApplications">
+<chapter id="classes-of-kde-applications">
 <title>Classes of KDE Applications</title>
 
 <para>The KDE libraries, in conjunction with the Qt library, are providing developers a complete framework for application design. As KDE is
@@ -657,7 +678,7 @@ application objects, their behavior and creation.You will learn about:</para>
 
 <para>For information about Qt application design, see the Qt online reference documentation.</para>
 
-<sect1 id="TheApplicationInstance">
+<sect1 id="the-application-instance">
 <title>The Application Instance</title>
 
 <para>Generally, a KDE application has to be started by creating an instance (and only one!) of the class <literal remap="tt">KApplication</literal>, which is
@@ -676,7 +697,7 @@ application, <literal remap="tt">KApplication::getKApplication()</literal>. This
 include file <literal remap="tt">kapp.h</literal> provides a macro that can be used instead of the static function, <literal remap="tt">kapp</literal>. Whenever you need to access the
 application object, use this macro.
 <footnote>
-<para>In KDE 2, the application object can be retrieved with <literal remap="tt">KGlobal::kApp()</literal>.</para>
+<para>In KDE 2, the application object can be retrieved with <literal remap="tt">KApplication::kApplication()</literal>.</para>
 </footnote>
 </para>
 
@@ -800,7 +821,7 @@ be in most cases <literal remap="tt">saveYourself()</literal> and <literal remap
 <para>You will be able to communicate with the KWM window manager as well by the according static methods of <literal remap="tt">kwm.h</literal>.</para>
 </sect1>
 
-<sect1 id="CommandlineArgumentProcessing">
+<sect1 id="commandline-argument-processing">
 <title>Commandline Argument Processing</title>
 
 <para>An application usually wants to be able to process command line options. Those are entered by the user if he started the application from
@@ -873,8 +894,8 @@ miniicon name. The commandline options to use these values are:
 </screen>
 </para>
 
-<para>This will start the application with the value -icon something.xpm for &percnt;i and -miniicon for &percnt;m. The application caption can be set with
-the -caption value &percnt;c. The class <literal remap="tt">KApplication</literal> also provides the according methods who return the values for these commandline
+<para>This will start the application with the value -icon something.xpm for &&percnt;;i and -miniicon for &&percnt;;m. The application caption can be set with
+the -caption value &&percnt;;c. The class <literal remap="tt">KApplication</literal> also provides the according methods who return the values for these commandline
 arguments.</para>
 
 <para>Now, when it comes to your own processing of commandlines, you can either access them directly after the application object is declared
@@ -882,26 +903,27 @@ to exclude any of the above values in the <literal remap="tt">main()</literal> f
 <literal remap="tt">QApplication</literal> provides the methods <literal remap="tt">argc()</literal> and <literal remap="tt">argv()</literal> to process any other options given at the commandline. These can be
 accessed by the argument number, whereby the argument <literal remap="tt">kapp-&gt;argv()[0]</literal> is the application name; any other following arguments can
 be processed with <literal remap="tt">kapp-&gt;argv()[number]</literal>.
+<footnote>
+<para>KDE 2 has an additional class, <literal remap="tt">KCmdLineArgs</literal>, to parse additional
+command-line parameters, which is already used by KDevelop´s KDE 2 frameworks.</para>
+</footnote>
 </para>
-<para><footnote>
-<para>KDE 2 has an additional class, <literal remap="tt">KStartParams</literal>, to parse additional
-command-line parameters.</para>
-</footnote></para>
 
-<note remap="comment"><para>The <literal remap="tt">KApplication</literal> class uses different methods to change the application's style, fonts and colors by X11 Atoms which
+<para><note remap="comment"><para>The <literal remap="tt">KApplication</literal> class uses different methods to change the application's style, fonts and colors by X11 Atoms which
 call all open KDE applications to change their values recursively throughout all widgets. This is done automatically when the user
 changes values through using the KDE control center which causes these X11 events. The method <literal remap="tt">x11eventFilter()</literal> emits the
 according signals to change all values. As far as I know of, the only value not changed by KDE 1.x is the double click interval, which
-is set to 400 ms by default in <literal remap="tt">QApplication</literal>. Changes on this can be made using <literal remap="tt">QApplication::setDoubleClickInterval()</literal>.</para></note>
+is set to 400 ms by default in <literal remap="tt">QApplication</literal>. Changes on this can be made using <literal remap="tt">QApplication::setDoubleClickInterval()</literal>.</para></note></para>
 </sect1>
 
-<sect1 id="OtherApplicationClasses">
+<sect1 id="other-application-classes">
 <title>Other Application Classes</title>
 
 <para>By "Other Application Classes" we would describe any replacements of the <literal remap="tt">KApplication</literal> class. The KDE library <literal remap="tt">kdeui</literal> offers two
 more classes that inherit <literal remap="tt">KApplication</literal> for more specific use in KDE applications. Those are the class <literal remap="tt">KControlApplication</literal> and
 <literal remap="tt">KWMModuleApplication</literal>.</para>
-<sect2 id="KControlApplication2">
+
+<sect2 id="kcontrolapplication-0">
 <title>KControlApplication</title>
 
 <para>The <literal remap="tt">KControlApplication</literal> is a class for specific applications that are intended to serve as setup modules. By providing a
@@ -924,7 +946,8 @@ settings.</para>
 <para>To overwrite the virtual methods like <literal remap="tt">init()</literal>, you have to derive an application specific <literal remap="tt">KControlApplication</literal> class from
 <literal remap="tt">KControlApplication</literal>. The class is generally used for control applications such as used in the KDE as separate programs.</para>
 </sect2>
-<sect2 id="KWMModuleApplication2">
+
+<sect2 id="kwmmoduleapplication-0">
 <title>KWMModuleApplication</title>
 
 <para>KWMModuleApplication is another class that inherits <literal remap="tt">KApplication</literal> for a certain purpose: the class provides methods that allow
@@ -933,7 +956,8 @@ window manager sends out to manage the windows with the static methods of KWM.</
 
 <para>To create a KWMModuleApplication, you first have to create your application instance and then call the method <literal remap="tt">connectToKWM()</literal></para>
 </sect2>
-<sect2 id="DockingofWindows">
+
+<sect2 id="docking-of-windows">
 <title>Docking of Windows</title>
 
 <para>Another issue to general KDE application design is the use of <literal remap="tt">kpanel</literal> to display your running application symbolized. KDE users are
@@ -951,7 +975,7 @@ window by calling the constructor with 0 as parent. Include the kwm.h header fil
 </sect2>
 </sect1>
 
-<sect1 id="TheMainWindow">
+<sect1 id="the-main-window">
 <title>The Main Window</title>
 
 <para>As stated above, the first object to create for a KDE application is one instance of <literal remap="tt">KApplication</literal>. Indeed, it doesn't provide any
@@ -961,7 +985,8 @@ anywhere. Therefore, any application needs a top-widget to make itself visible.<
 <para>When it comes to the visible parts, the programmer generally is free to choose which widget he wants to derive from or use directly as
 his main window. It can be a simple <literal remap="tt">QLabel</literal> as well as the advanced <literal remap="tt">KTMainWindow</literal> that supplies all needed objects for a usual
 desktop application.</para>
-<sect2 id="GeneralRules">
+
+<sect2 id="general-rules">
 <title>General Rules</title>
 
 <para>Generally it can be said that you probably would like to use ready components that are specialized. KDE supports this with the class
@@ -983,7 +1008,8 @@ application window is closed (using <literal remap="tt">QApplication</literal>'s
 
 <para><literal remap="verb">QObject::connect(kapp, SIGNAL(lastWindowClosed()), kapp, SLOT(quit()));</literal></para>
 </sect2>
-<sect2 id="UsingKTMainWindow">
+
+<sect2 id="using-ktmainwindow">
 <title>Using KTMainWindow</title>
 
 <para>As usual desktop applications provide a complete user interface following a common design rule for GUI programs, KDE provides a class
@@ -1015,7 +1041,7 @@ have to take care of that to re-implement an application specific instance for y
 </sect1>
 </chapter>
 
-<chapter id="EventHandling">
+<chapter id="event-handling">
 <title>Event Handling</title>
 
 <para>This chapter will illuminate some of the internals of KDE/Qt programming, and will dive into the fascinating subject of event handling as well. It is meant for people who feel they need deeper insight to the more advanced topics of Qt based programming. In particular the Signals and Slots mechanism is explained in detail. This because users have indicated that resources
@@ -1030,7 +1056,7 @@ and the user. Beginners in particular have a hard time to learn the mechanisms u
 event processing often and are a major reason why simple widget elements such as buttons 
 can be usd in such a simple way.</para>
 
-<sect1 id="SignalsandSlots">
+<sect1 id="signals-and-slots">
 <title>Signals and Slots</title>
 
 <para>This section covers the Qt concept of advanced object communication. 
@@ -1068,24 +1094,25 @@ watch_out(){                        i_see_it(){
 connect (Person_1, SIGNAL(balloon_seen()), Person_2, SLOT(i_see_it()));</programlisting>
 </para>
 
-<para>This explains more about the functionality. The class that builds Person&lowbar;1 provides a signal balloon&lowbar;seen(). Also it has a
-method watch&lowbar;out() that symbolizes that he watches for something. If this method detects that a balloon is there, it emits the signal
-and transmits the message to the outside of its responsibility. After the emit, Person&lowbar;1 is not responsible for any actions that
+<para>This explains more about the functionality. The class that builds Person&&lowbar;;1 provides a signal balloon&&lowbar;;seen(). Also it has a
+method watch&&lowbar;;out() that symbolizes that he watches for something. If this method detects that a balloon is there, it emits the signal
+and transmits the message to the outside of its responsibility. After the emit, Person&&lowbar;;1 is not responsible for any actions that
 follow as a reaction to this signal; it just does the message invocation.</para>
 
-<para>Now, the table contains the other persons Person&lowbar;2 and Person&lowbar;3. Both provide methods that are slots; Person&lowbar;2 has one slot that is
-called i&lowbar;see&lowbar;it() and Person&lowbar;3 a slot not&lowbar;interested().  Those slots are just like any method with the difference that they can also be
+<para>Now, the table contains the other persons Person&&lowbar;;2 and Person&&lowbar;;3. Both provide methods that are slots; Person&&lowbar;;2 has one slot that is
+called i&&lowbar;;see&&lowbar;;it() and Person&&lowbar;;3 a slot not&&lowbar;;interested().  Those slots are just like any method with the difference that they can also be
 connected to a signal and build a receiver for the connection. They will execute the slot implementation when the object
-receives the signal message. In this case, we have a typical connection method at the last line. The connect() takes Person&lowbar;1 as a
-signaler object. It connects the signal balloon&lowbar;seen() that the object may send out when he sees a balloon with Person&lowbar;2. Person&lowbar;2 is
+receives the signal message. In this case, we have a typical connection method at the last line. The connect() takes Person&&lowbar;;1 as a
+signaler object. It connects the signal balloon&&lowbar;;seen() that the object may send out when he sees a balloon with Person&&lowbar;;2. Person&&lowbar;;2 is
 then the receiver object. Now, the receiver has to do something with the signal; we have to tell him, which method to execute whenever
-Person&lowbar;1 sees a balloon. The implementation of the slot i&lowbar;see&lowbar;it() just calls another method to make this example short. look&lowbar;where can
+Person&&lowbar;;1 sees a balloon. The implementation of the slot i&&lowbar;;see&&lowbar;;it() just calls another method to make this example short. look&&lowbar;;where can
 symbolize a method to localize the coordinates, the color, the size of the balloon or how many people the balloon carries.</para>
 
-<para>Person&lowbar;3 then is anther object. The class that builds it provides a slot as well, the method not&lowbar;interested().  The implementation
-doesn't matter for our example here, because we don't want Person&lowbar;3 to react to Person&lowbar;1's detection of a balloon. We could, if we add
-another connect though, just with Person&lowbar;3 instead of Person&lowbar;2 and the according slot Person&lowbar;3's class provides.</para>
-<sect2 id="Requirements">
+<para>Person&&lowbar;;3 then is anther object. The class that builds it provides a slot as well, the method not&&lowbar;;interested().  The implementation
+doesn't matter for our example here, because we don't want Person&&lowbar;;3 to react to Person&&lowbar;;1's detection of a balloon. We could, if we add
+another connect though, just with Person&&lowbar;;3 instead of Person&&lowbar;;2 and the according slot Person&&lowbar;;3's class provides.</para>
+
+<sect2 id="requirements">
 <title>Requirements</title>
 
 <para>This way of object communication is not provided by C++; it is a part of the Qt library.</para>
@@ -1109,7 +1136,7 @@ slots they have to be declared as such in the class-declaration for two good rea
 <para>inherit from <literal remap="tt">QObject</literal> or any subclass of <literal remap="tt">QObject</literal></para>
 </listitem>
 <listitem>
-<para>add the macro Q&lowbar;OBJECT at the beginning of the class-declaration (<emphasis remap="bf">without a semicolon !</emphasis>)</para>
+<para>add the macro Q&&lowbar;;OBJECT at the beginning of the class-declaration (<emphasis remap="bf">without a semicolon !</emphasis>)</para>
 </listitem>
 <listitem>
 <para>run <emphasis remap="bf">moc</emphasis> over the header file to produce an implementation file to be compiled</para>
@@ -1121,12 +1148,13 @@ slots they have to be declared as such in the class-declaration for two good rea
 the program <literal remap="tt">automoc</literal>, which also does everything needed to create the meta object implementation for signals and slots as well as
 incorporating the correct headers for the implementation and the inclusion into the build-process. So you don't have to take care of
 updating any moc output files after changing header file implementations nor about the integration of the moc source file output into
-the project. Those will be automatically generated by detection of the Q&lowbar;OBJECT macro in the class declaration.</para>
+the project. Those will be automatically generated by detection of the Q&&lowbar;;OBJECT macro in the class declaration.</para>
 
 <para>If you have further questions please read the page "Using The Meta Object Compiler" of you Qt Online Reference. It covers all restrictions
 on using signals and slots.</para>
 </sect2>
-<sect2 id="EmittingSignals">
+
+<sect2 id="emitting-signals">
 <title>Emitting Signals</title>
 
 <para>This part describes the several ways of signal emission. It is important to know where signals are emitted and for what
@@ -1135,7 +1163,7 @@ purpose you would do so.</para>
 <para>We separate two ways of signal usage, one which is the usual way through sub-classing <literal remap="tt">QObject</literal>, and the other to use the
 <literal remap="tt">QSignal</literal> class from within classes that don't want to inherit from <literal remap="tt">QObject</literal> but want to use the signal emission features.</para>
 
-<para>So, when deriving from <literal remap="tt">QObject</literal>, we already said that we have to add the <literal remap="tt">Q&lowbar;OBJECT</literal> macro into the class declaration. Then any
+<para>So, when deriving from <literal remap="tt">QObject</literal>, we already said that we have to add the <literal remap="tt">Q&&lowbar;;OBJECT</literal> macro into the class declaration. Then any
 signal that a class object will emit has to be inserted in the class declaration with the modifier <literal remap="tt">signals:</literal></para>
 
 <para>Example:
@@ -1154,10 +1182,10 @@ This shows the insertion into the class declaration and also shows that you can 
 
 <para>Now, this shows one half of the work. The other is: where does the signal get emitted ? For this, you have to use the keyword
 <literal remap="tt">emit</literal> in connection with the signal name and the transmitted actual parameters. The place where to emit is usually within a method
-that is processed and wants to inform about the state of the object by the signal to outside objects.</para>
-<note remap="comment"><para>The keyword <literal remap="tt">emit</literal> is technically only an empty &num;define, therefore the C++ -compiler only sees a normal method call. The
+that is processed and wants to inform about the state of the object by the signal to outside objects.
+<note remap="comment"><para>The keyword <literal remap="tt">emit</literal> is technically only an empty &&num;;define, therefore the C++ -compiler only sees a normal method call. The
 <literal remap="tt">moc</literal> takes care to add the according meta-object creation and initialization, which finally implements the signal as a member
-function in the moc output.</para></note>
+function in the moc output.</para></note></para>
 
 <para>As an example, we have a look at a snippet of code where a method of <literal remap="tt">KMyClass</literal> cuts out a part of a visible area
 the user works with:</para>
@@ -1185,7 +1213,7 @@ happened, we have also included the exact information about where we have done t
 <para>To use <literal remap="tt">QSignal</literal>, write a normal C++ class. Then add the following:</para>
 
 <para><orderedlist><listitem>
-<para>&num;include &lt;qsignal.h&gt;</para>
+<para>&&num;;include &&lt;;qsignal.h&&gt;;</para>
 </listitem>
 <listitem>
 <para>add a <literal remap="tt">QSignal</literal> member attribute to the class declaration</para>
@@ -1208,7 +1236,8 @@ happened, we have also included the exact information about where we have done t
 </orderedlist>
 </para>
 </sect2>
-<sect2 id="SlotImplementation">
+
+<sect2 id="slot-implementation">
 <title>Slot Implementation</title>
 
 <para>After explaining the ways of how to produce signals by objects, those can only be of important use if an application's classes provide
@@ -1243,7 +1272,8 @@ the Qt online reference documentation, section <emphasis>The Meta Object Compile
 </footnote>
 </para>
 </sect2>
-<sect2 id="Connections">
+
+<sect2 id="connections">
 <title>Connections</title>
 
 <para>The last section of this chapter deals with connecting signals and slots. As stated in the Signals section, there are two ways to
@@ -1262,9 +1292,9 @@ bool disconnect(const QObject* sender, const char* signal,
 receiver by certain signals and slots. The signal in these methods have to be used with the <literal remap="tt">SIGNAL()</literal> macro; the slot of the
 receiver has to be used with the macro <literal remap="tt">SLOT()</literal>.</para>
 
-<note remap="comment"><para>Note: within classes that inherit <literal remap="tt">QObject</literal> you don't have to use the static variant, so instead of using
+<para><note remap="comment"><para>Note: within classes that inherit <literal remap="tt">QObject</literal> you don't have to use the static variant, so instead of using
 <literal remap="tt">QObject::connect()</literal>, you can also use the overloaded methods that either the sender provides (such as <literal remap="tt">QMenuData</literal> to connect
-<literal remap="tt">activated()</literal> directly to the receiver's slot while inserting a menu entry) or just call <literal remap="tt">connect()</literal> directly.</para></note>
+<literal remap="tt">activated()</literal> directly to the receiver's slot while inserting a menu entry) or just call <literal remap="tt">connect()</literal> directly.</para></note></para>
 
 <para>Further, the signal and slot should have the same parameter list as parameters are translated from the signal to the slot method. Slot
 implementations that don't require using any transmitted parameter only have to declare the type but do not need a formal parameter.
@@ -1277,7 +1307,7 @@ If several slots are connected to one signal, the slots will be ececuted one aft
 </sect2>
 </sect1>
 
-<sect1 id="TheEventQueue">
+<sect1 id="the-event-queue">
 <title>The Event Queue</title>
 
 <para>The previous chapter dealt with the object communication by Qt's signal/slot mechanism and we know how an application can arrange
@@ -1303,7 +1333,8 @@ class. The event filter is processed first if one is installed and then the even
 filter returned false. If the <literal remap="tt">event()</literal> method doesn't find any event processing, it returns <emphasis>false</emphasis> and the application gets to
 know that the object didn't sign responsible for the event. If the event was successfully processed and the <literal remap="tt">event()</literal> returns
 <emphasis>true</emphasis>, the event is deleted from the event queue.</para>
-<sect2 id="ProcessingEvents">
+
+<sect2 id="processing-events">
 <title>Processing Events</title>
 
 <para>Qt and KDE applications use a graphical interface to make themselves visible to the user. Application windows are deived from <literal remap="tt">QWidget</literal>, the baseclass for any graphical object drawn in windows. Independent of how the widget
@@ -1339,7 +1370,7 @@ towards the application object.</para>
 <para>a <emphasis remap="bf">semimodal widget</emphasis> like a <literal remap="tt">QDialog</literal>, but without its own event loop</para>
 </listitem>
 <listitem>
-<para>a <emphasis remap="bf">popup widget</emphasis> when the widget flag is set to WType&lowbar;Popup, is also a top widget</para>
+<para>a <emphasis remap="bf">popup widget</emphasis> when the widget flag is set to WType&&lowbar;;Popup, is also a top widget</para>
 </listitem>
 </orderedlist>
 </para>
@@ -1396,15 +1427,16 @@ widgets. Mind that as a guideline to define own event handling, you should reimp
 not inherit <literal remap="tt">QWidget</literal> and the more specialized event handlers described below for all <literal remap="tt">QWidget</literal> inherited classes. Also, preserve
 the declarations as virtual protected to ensure reusability and consistency for your code.</para>
 </sect2>
-<sect2 id="EventTypes">
+
+<sect2 id="event-types">
 <title>Event Types</title>
 
 <para>The events sent to the application are, as described, converted by <literal remap="tt">QEvent</literal> to Qt events. The event type can be found out by using
 the <literal remap="tt">type()</literal> method of <literal remap="tt">QEvent</literal>, which can then be compared with the event that you want to know about. Now, the event type that
-<literal remap="tt">type()</literal> delivers is an integer number; those are declared with &num;define in the file <literal remap="tt">qevent.h</literal>.
+<literal remap="tt">type()</literal> delivers is an integer number; those are declared with &&num;;define in the file <literal remap="tt">qevent.h</literal>.
 <footnote>
 <para>Qt 2.0 uses an <literal remap="tt">enum</literal>
-for all available event-types whose entries are similar to the current defines but generally leave out the <literal remap="tt">Event&lowbar;</literal> prefix. The
+for all available event-types whose entries are similar to the current defines but generally leave out the <literal remap="tt">Event&&lowbar;;</literal> prefix. The
 event type can be retrieved as described above, so you only have to change the comparison of the event type.</para>
 </footnote>
 After filtering
@@ -1435,26 +1467,27 @@ contains:</para>
 
 <para><itemizedlist>
 <listitem>
-<para><link linkend="WindowEvents">Window Events</link></para>
+<para><link linkend="Window-Events">Window Events</link></para>
 </listitem>
 <listitem>
-<para><link linkend="FocusEvents">Focus Events</link></para>
+<para><link linkend="Focus-Events">Focus Events</link></para>
 </listitem>
 <listitem>
-<para><link linkend="MouseEvents">Mouse Events</link></para>
+<para><link linkend="Mouse-Events">Mouse Events</link></para>
 </listitem>
 <listitem>
-<para><link linkend="KeyboardEvents">Keyboard Events</link></para>
+<para><link linkend="Keyboard-Events">Keyboard Events</link></para>
 </listitem>
 <listitem>
-<para><link linkend="DragnDropEvents">Drag'n Drop Events</link></para>
+<para><link linkend="Dragn-Drop-Events">Drag'n Drop Events</link></para>
 </listitem>
 </itemizedlist>
 </para>
 
 <para>This will allow you to logically have a look at what might be interesting to reimplement or use before having to browse the Qt online
 documentation in depth.</para>
-<sect3 id="WindowEvents">
+
+<sect3 id="window-events">
 <title>Window Events</title>
 
 <para>By window events, all events that are produced by the window system in regards to handling any visible part of the application windows.
@@ -1487,7 +1520,7 @@ window on the desktop. This window can be manipulated by the user through action
 re-implementation and converted to the according event class that provides methods to handle the event specifically. Now, when you have a
 look at the <literal remap="tt">QWidget</literal> class, a lot of methods are provided for window manipulation, e.g. <literal remap="tt">resize()</literal>. You're using these methods,
 but you probably never thought about their way of execution. In effect, these methods work the other way round: they produce an event
-that is sent to the display by <literal remap="tt">qt&lowbar;</literal> functions to execute actions like simulating a user action. This way, events can also be
+that is sent to the display by <literal remap="tt">qt&&lowbar;;</literal> functions to execute actions like simulating a user action. This way, events can also be
 produced to gain synthetic events ( see below ).</para>
 
 <para>Within a window, the widgets are arranged somehow. As each widget is treated like a separate window internally (it always is a
@@ -1501,7 +1534,7 @@ internal parts of a window.</para>
 <para><emphasis remap="bf">QShowEvent:</emphasis> Processed by <literal remap="tt">QWidget::show()</literal>
 <itemizedlist>
 <listitem>
-<para>Event&lowbar;Show</para>
+<para>Event&&lowbar;;Show</para>
 </listitem>
 </itemizedlist>
 </para>
@@ -1510,7 +1543,7 @@ internal parts of a window.</para>
 <para><emphasis remap="bf">QHideEvent:</emphasis> Processed by <literal remap="tt">QWidget::hide()</literal>
 <itemizedlist>
 <listitem>
-<para> Event&lowbar;Hide</para>
+<para> Event&&lowbar;;Hide</para>
 </listitem>
 </itemizedlist>
 </para>
@@ -1519,7 +1552,7 @@ internal parts of a window.</para>
 <para><emphasis remap="bf">QCloseEvent:</emphasis> Processed by <literal remap="tt">QWidget::close()</literal>
 <itemizedlist>
 <listitem>
-<para>Event&lowbar;Close</para>
+<para>Event&&lowbar;;Close</para>
 </listitem>
 <listitem>
 <para>event handler: <literal remap="tt">QWidget::closeEvent(QCloseEvent*)</literal></para>
@@ -1531,7 +1564,7 @@ internal parts of a window.</para>
 <para><emphasis remap="bf">QResizeEvent:</emphasis> Processed by <literal remap="tt">QWidget::resize()</literal>
 <itemizedlist>
 <listitem>
-<para>Event&lowbar;Resize</para>
+<para>Event&&lowbar;;Resize</para>
 </listitem>
 <listitem>
 <para>event handler: <literal remap="tt">QWidget::resizeEvent(QResizeEvent*)</literal></para>
@@ -1544,7 +1577,7 @@ internal parts of a window.</para>
 generates a window system paint event.
 <itemizedlist>
 <listitem>
-<para>Event&lowbar;Paint</para>
+<para>Event&&lowbar;;Paint</para>
 </listitem>
 <listitem>
 <para>event handler: <literal remap="tt">QWidget::paintEvent(QPainEvent*)</literal></para>
@@ -1557,13 +1590,13 @@ generates a window system paint event.
 an event filter. Child events are inserting a child widget or removing it
 <itemizedlist>
 <listitem>
-<para>Event&lowbar;ChildInserted</para>
+<para>Event&&lowbar;;ChildInserted</para>
 </listitem>
 <listitem>
-<para>Event&lowbar;ChildRemoved</para>
+<para>Event&&lowbar;;ChildRemoved</para>
 </listitem>
 <listitem>
-<para>Event&lowbar;LayoutHint</para>
+<para>Event&&lowbar;;LayoutHint</para>
 </listitem>
 </itemizedlist>
 </para>
@@ -1577,7 +1610,8 @@ event-handlers already in <literal remap="tt">QWidget</literal>, see the notes f
 </footnote>
 </para>
 </sect3>
-<sect3 id="FocusEvents">
+
+<sect3 id="focus-events">
 <title>Focus Events</title>
 
 <para>Focus events are somehow special to windows, but I have added a separate section for those due to the filtering of focus events in
@@ -1589,7 +1623,7 @@ focus to the next widget. A good example for this is a dialog. If the dialog is 
 is active when it gets the focus if it is the active window. Now, on dialogs widgets can be disabled as well to prohibit any user
 input. These disabled widgets don't get the focus either and are painted disabled.</para>
 
-<para>The <literal remap="tt">QWidget</literal> class defines the focus handling already when receiving an event. If the event type is <literal remap="tt">Event&lowbar;FocusIn</literal>, the widget
+<para>The <literal remap="tt">QWidget</literal> class defines the focus handling already when receiving an event. If the event type is <literal remap="tt">Event&&lowbar;;FocusIn</literal>, the widget
 gets the keyboard focus by <literal remap="tt">event()</literal>'s conversion into a <literal remap="tt">QFocusEvent</literal>.</para>
 
 <para>This already catches a key event of the keys TAB and the combination SHIFT+TAB without processing these keys to <literal remap="tt">QKeyEvent</literal> if
@@ -1612,14 +1646,14 @@ can be set to:
 </para>
 
 <para>The <literal remap="tt">QFocusEvent</literal> class delivers information about the focus event by comparing the event type with <literal remap="tt">type()</literal>. The method
-<literal remap="tt">gotFocus()</literal> returns true on <literal remap="tt">Event&lowbar;FocusIn</literal> and <literal remap="tt">lostFocus()</literal> returns true on <literal remap="tt">Event&lowbar;FocusOut</literal>. The <literal remap="tt">QWidget</literal>
+<literal remap="tt">gotFocus()</literal> returns true on <literal remap="tt">Event&&lowbar;;FocusIn</literal> and <literal remap="tt">lostFocus()</literal> returns true on <literal remap="tt">Event&&lowbar;;FocusOut</literal>. The <literal remap="tt">QWidget</literal>
 predefined event handlers are:</para>
 
 <para><itemizedlist><listitem>
-<para>focusInEvent(QFocusEvent*) for Event&lowbar;FocusIn</para>
+<para>focusInEvent(QFocusEvent*) for Event&&lowbar;;FocusIn</para>
 </listitem>
 <listitem>
-<para>focusOutEvent(QFocusEvent*) for Event&lowbar;FocusOut</para>
+<para>focusOutEvent(QFocusEvent*) for Event&&lowbar;;FocusOut</para>
 </listitem>
 </itemizedlist></para>
 
@@ -1635,7 +1669,8 @@ focus. Therefore a simple method is to use <literal remap="tt">setFocusPolicy(No
 that are in the current window. Menubars and Toolbars do not have the tabfocus by default, so you don't have to set the focus policy
 there. An exception is the <literal remap="tt">QWhatsThis</literal> button, which although mostly used in a toolbar, receives the input focus on TAB.</para>
 </sect3>
-<sect3 id="MouseEvents">
+
+<sect3 id="mouse-events">
 <title>Mouse Events</title>
 
 <para>Mouse events are, as the word says, generated by the user's handling of the mouse. As these will only be of interest if the mouse is
@@ -1643,16 +1678,16 @@ over a widget, the best use to process mouse events is to reimplement the virtua
 window system sends the following event types to the application by mouse actions:</para>
 
 <para><itemizedlist><listitem>
-<para>Event&lowbar;MouseButtonPress</para>
+<para>Event&&lowbar;;MouseButtonPress</para>
 </listitem>
 <listitem>
-<para>Event&lowbar;MouseButtonRelease</para>
+<para>Event&&lowbar;;MouseButtonRelease</para>
 </listitem>
 <listitem>
-<para>Event&lowbar;MouseButtonDblClick</para>
+<para>Event&&lowbar;;MouseButtonDblClick</para>
 </listitem>
 <listitem>
-<para>Event&lowbar;MouseMove</para>
+<para>Event&&lowbar;;MouseMove</para>
 </listitem>
 </itemizedlist></para>
 
@@ -1719,7 +1754,7 @@ be easily determined, the <literal remap="tt">QApplication</literal> class has m
 <para>The provided event handlers are:
 <itemizedlist>
 <listitem>
-<para>Event&lowbar;MouseButtonPress
+<para>Event&&lowbar;;MouseButtonPress
 <itemizedlist>
 <listitem>
 <para>virtual void mousePressEvent ( QMouseEvent * )</para>
@@ -1728,7 +1763,7 @@ be easily determined, the <literal remap="tt">QApplication</literal> class has m
 </para>
 </listitem>
 <listitem>
-<para>Event&lowbar;MouseButtonRelease
+<para>Event&&lowbar;;MouseButtonRelease
 <itemizedlist>
 <listitem>
 <para>virtual void mouseReleaseEvent ( QMouseEvent * )</para>
@@ -1737,7 +1772,7 @@ be easily determined, the <literal remap="tt">QApplication</literal> class has m
 </para>
 </listitem>
 <listitem>
-<para>Event&lowbar;MouseButtonDblClick
+<para>Event&&lowbar;;MouseButtonDblClick
 <itemizedlist>
 <listitem>
 <para>virtual void mouseDoubleClickEvent ( QMouseEvent * )</para>
@@ -1746,7 +1781,7 @@ be easily determined, the <literal remap="tt">QApplication</literal> class has m
 </para>
 </listitem>
 <listitem>
-<para>Event&lowbar;MouseMove
+<para>Event&&lowbar;;MouseMove
 <itemizedlist>
 <listitem>
 <para>virtual void mouseMoveEvent ( QMouseEvent * )</para>
@@ -1771,7 +1806,7 @@ generating the <literal remap="tt">QMouseEvent</literal> in <literal remap="tt">
 
 <para><itemizedlist>
 <listitem>
-<para>Event&lowbar;Enter
+<para>Event&&lowbar;;Enter
 <itemizedlist>
 <listitem>
 <para>virtual void enterEvent ( QEvent * )</para>
@@ -1780,7 +1815,7 @@ generating the <literal remap="tt">QMouseEvent</literal> in <literal remap="tt">
 </para>
 </listitem>
 <listitem>
-<para>Event&lowbar;Leave
+<para>Event&&lowbar;;Leave
 <itemizedlist>
 <listitem>
 <para>virtual void leaveEvent ( QEvent * )</para>
@@ -1800,19 +1835,21 @@ handling wheel events in a separate event class <literal remap="tt">QWheelEvent<
 </footnote>
 </para>
 </sect3>
-<sect3 id="KeyboardEvents">
+
+<sect3 id="keyboard-events">
 <title>Keyboard Events</title>
 
 <para>A keyboard event is generally sent to the application if the user pressed or released a keyboard button, therefore can determine the
 event by:
 <itemizedlist><listitem>
-<para>Event&lowbar;KeyPress</para>
+<para>Event&&lowbar;;KeyPress</para>
 </listitem>
 <listitem>
-<para>Event&lowbar;KeyRelease</para>
+<para>Event&&lowbar;;KeyRelease</para>
 </listitem>
 </itemizedlist></para>
-<sect4 id="Handling">
+
+<sect4 id="handling">
 <title>Handling</title>
 
 <para>Now, the <literal remap="tt">QWidget</literal> class converts a keyboard event from <literal remap="tt">QEvent</literal> to a <literal remap="tt">QKeyEvent</literal> if the widget has the keyboard input focus;
@@ -1824,10 +1861,10 @@ I want to discuss.</para>
 
 <para><literal remap="tt">QWidget</literal> provides two event handlers for the two event types the keyboard produces:
 <itemizedlist><listitem>
-<para>virtual void keyPressEvent(QKeyEvent*) for Event&lowbar;KeyPress</para>
+<para>virtual void keyPressEvent(QKeyEvent*) for Event&&lowbar;;KeyPress</para>
 </listitem>
 <listitem>
-<para>virtual void keyReleaseEvent(QKeyEvent*) for Event&lowbar;KeyRelease</para>
+<para>virtual void keyReleaseEvent(QKeyEvent*) for Event&&lowbar;;KeyRelease</para>
 </listitem>
 </itemizedlist></para>
 
@@ -1853,9 +1890,9 @@ namespaces of the class <literal remap="tt">Qt</literal> located in <literal rem
  The key that produced the event can be
 retrieved with <literal remap="tt">key()</literal> and then compared to the defined keycode. The ASCII value can be found with <literal remap="tt">ascii()</literal>. Mind that the
 symbolic constants for key values are platform independent and allow the best usage as they are simple to remind.</para>
-
 </sect4>
-<sect4 id="KeyboardAcceleratorQuestions">
+
+<sect4 id="keyboard-accelerator-questions">
 <title>Keyboard Accelerator Questions</title>
 
 <para>A question that often occurs is the implementation of keyboard accelerators. As this handbook primarily targets KDE programming, I will
@@ -1863,7 +1900,7 @@ go into that as well.</para>
 
 <para>Qt has a class <literal remap="tt">QAccel</literal> which offers connections of key presses with actions. This is done by installing an event filter that
 filters out keyboard events that match any item inserted into the <literal remap="tt">QAccel</literal> object. The keyboard accelerator itself has to be a
-combination of the <literal remap="tt">CTRL</literal>, <literal remap="tt">SHIFT</literal> or <literal remap="tt">ALT</literal> keys with a normal keyboard key. Another value can be <literal remap="tt">ASCII&lowbar;ACCEL</literal> here to use
+combination of the <literal remap="tt">CTRL</literal>, <literal remap="tt">SHIFT</literal> or <literal remap="tt">ALT</literal> keys with a normal keyboard key. Another value can be <literal remap="tt">ASCII&&lowbar;;ACCEL</literal> here to use
 the ASCII keyboard value for the accelerator.</para>
 
 <para>An accelerator instance is then created by using the widget that it should work for as an event filter with the widget as its parent.
@@ -1891,11 +1928,11 @@ offer configurating the <literal remap="tt">KAccel</literal> object as well as s
 use dialog for configuration as well as a widget that can be used within a custom configuration dialog (most often a tab dialog) to
 configure the keys.</para>
 
-<para>For accelerator configuration dialogs, see section <link linkend="KeyboardAccelerators">Keyboard Accelerators</link>.</para>
-
+<para>For accelerator configuration dialogs, see section <link linkend="Keyboard-Accelerators">Keyboard Accelerators</link>.</para>
 </sect4>
 </sect3>
-<sect3 id="DragnDropEvents">
+
+<sect3 id="dragn-drop-events">
 <title>Drag'n Drop Events</title>
 
 <para>One of the most advanced techniques to allow application communication is drag'n drop. This offers users a cool and fast feature to
@@ -1921,7 +1958,7 @@ handlers of <literal remap="tt">QDropSite</literal>:</para>
 
 <para><itemizedlist>
 <listitem>
-<para>Event&lowbar;DragEnter
+<para>Event&&lowbar;;DragEnter
 <itemizedlist>
 <listitem>
 <para>QDragEnterEvent</para>
@@ -1933,7 +1970,7 @@ handlers of <literal remap="tt">QDropSite</literal>:</para>
 </para>
 </listitem>
 <listitem>
-<para>Event&lowbar;DragMove
+<para>Event&&lowbar;;DragMove
 <itemizedlist>
 <listitem>
 <para>QDragMoveEvent</para>
@@ -1945,7 +1982,7 @@ handlers of <literal remap="tt">QDropSite</literal>:</para>
 </para>
 </listitem>
 <listitem>
-<para>Event&lowbar;DragLeave
+<para>Event&&lowbar;;DragLeave
 <itemizedlist>
 <listitem>
 <para>QDragLeaveEvent</para>
@@ -1957,7 +1994,7 @@ handlers of <literal remap="tt">QDropSite</literal>:</para>
 </para>
 </listitem>
 <listitem>
-<para>Event&lowbar;Drop
+<para>Event&&lowbar;;Drop
 <itemizedlist>
 <listitem>
 <para>QDropEvent</para>
@@ -1972,21 +2009,21 @@ handlers of <literal remap="tt">QDropSite</literal>:</para>
 
 The event handlers are all implemented as public and reimplementations should preserve to</para>
 
-<para><emphasis remap="bf">Note:</emphasis> the system event <literal remap="tt">Event&lowbar;DragResponse</literal> is automatically handled by the application object internally through the
+<para><emphasis remap="bf">Note:</emphasis> the system event <literal remap="tt">Event&&lowbar;;DragResponse</literal> is automatically handled by the application object internally through the
 Qt implementation. It causes a <literal remap="tt">QDragResponseEvent</literal> that accepts/rejects the drag action.</para>
 
-<note remap="comment"><para>KDE also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has been
+<para><note remap="comment"><para>KDE also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has been
 left out because this will be removed in KDE 2 and only the Qt implementation is going to be used with an extended implementation of
-the XDND protocol.</para></note>
+the XDND protocol.</para></note></para>
 
-<note remap="comment"><para>There exists a zoo of DND protocols. At the moment of writing, the Qt DND protocol does
+<para><note remap="comment"><para>There exists a zoo of DND protocols. At the moment of writing, the Qt DND protocol does
 <emphasis>not</emphasis> support the Motif DND protocol (as used by for instance Netscape and GNOME).
-Please be aware of this if you reimplement the Qt DND functions.</para></note>
+Please be aware of this if you reimplement the Qt DND functions.</para></note></para>
 </sect3>
 </sect2>
 </sect1>
 
-<sect1 id="QWidgetVirtualMethods">
+<sect1 id="qwidget-virtual-methods">
 <title>QWidget Virtual Methods</title>
 
 <para>As the event handling generally is implemented by virtual protected methods, especially the <literal remap="tt">event()</literal> method provided by
@@ -2106,7 +2143,7 @@ menu to pop up at the same position the mouse cursor currently is.</para>
 program internally), call repaint() here.</para>
 </sect1>
 
-<sect1 id="EventFilters">
+<sect1 id="event-filters">
 <title>Event Filters</title>
 
 <para>In addition to the normal processing of the event queue that is provided by the application object, the programmer can influence the
@@ -2168,11 +2205,11 @@ mybutton-&gt;installEventFilter(myfilter);
 <literal remap="tt">QWidget</literal> provides. Then you have to install the event filter at the place you like to; normally this would be in the constructor of
 your class. With removeEventFilter() you can stop the event filter from processing the events any time.</para>
 
-<note remap="comment"><para>Note: <literal remap="tt">KApplication</literal> already has a global application event filter installed to filter out CTRL+ALT+F12 for
-KDebug</para></note>
+<para><note remap="comment"><para>Note: <literal remap="tt">KApplication</literal> already has a global application event filter installed to filter out CTRL+ALT+F12 for
+KDebug</para></note></para>
 </sect1>
 
-<sect1 id="SyntheticEvents">
+<sect1 id="synthetic-events">
 <title>Synthetic Events</title>
 
 <para>Before describing what synthetic events are and how they can be used by the programmer, I want to review the last sections briefly.</para>
@@ -2199,7 +2236,8 @@ the center coordinates the mouse pointer has to move to. Then the mouse pointer 
 using <literal remap="tt">setPos()</literal>. The start position can be found out in the mouse event that called the function. Then, the cursor has to move
 visually by using <literal remap="tt">setPos()</literal> in a loop where a <literal remap="tt">QTimer</literal> could be used to run between positions to slow down the move so that the
 user can follow the mouse pointer.</para>
-<sect2 id="CreatingEvents">
+
+<sect2 id="creating-events">
 <title>Creating Events</title>
 
 <para>Now, to come to the actual implementation of a synthetic event, you have to know the event you want to create. Therefore, you need the
@@ -2212,7 +2250,7 @@ constructor parameters for the event classes. The following list contains the co
 <para><literal remap="tt">type</literal> is one of the events declared in <literal remap="tt">qevent.h</literal>
 <footnote>
 <para>Qt 2.0 uses all events from an <literal remap="tt">enum</literal>
-instead of the &num;defines. See <literal remap="tt">QEvent</literal>. The types are almost the same except they leave out the <literal remap="tt">Event&lowbar;</literal> prefix.</para>
+instead of the &&num;;defines. See <literal remap="tt">QEvent</literal>. The types are almost the same except they leave out the <literal remap="tt">Event&&lowbar;;</literal> prefix.</para>
 </footnote>
 </para>
 </listitem>
@@ -2226,13 +2264,13 @@ instead of the &num;defines. See <literal remap="tt">QEvent</literal>. The types
 <varlistentry>
 <term>QFocusEvent(int type)</term>
 <listitem>
-<para><literal remap="tt">type</literal> is either <literal remap="tt">Event&lowbar;FocusIn</literal> or <literal remap="tt">Event&lowbar;FocusOut</literal>.</para>
+<para><literal remap="tt">type</literal> is either <literal remap="tt">Event&&lowbar;;FocusIn</literal> or <literal remap="tt">Event&&lowbar;;FocusOut</literal>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term>QKeyEvent(int type, int key, int ascii, int state)</term>
 <listitem>
-<para>takes <literal remap="tt">Event&lowbar;KeyPress</literal> and <literal remap="tt">Event&lowbar;KeyRelease</literal> as <literal remap="tt">type</literal>.
+<para>takes <literal remap="tt">Event&&lowbar;;KeyPress</literal> and <literal remap="tt">Event&&lowbar;;KeyRelease</literal> as <literal remap="tt">type</literal>.
 <literal remap="tt">key</literal> is one of the keys defined in <literal remap="tt">qkeycode.h</literal>. <literal remap="tt">state</literal> is <literal remap="tt">ShiftButton, ControlButton, AltButton</literal> OR'ed. 	</para>
 </listitem>
 </varlistentry>
@@ -2240,9 +2278,9 @@ instead of the &num;defines. See <literal remap="tt">QEvent</literal>. The types
 <term>QMouseEvent (int type, const QPoint & pos, int button, int state)</term>
 <listitem>
 <para>The <literal remap="tt">type</literal> parameter must be
-<literal remap="tt">Event&lowbar;MouseButtonPress, Event&lowbar;MouseButtonRelease, Event&lowbar;MouseButtonDblClick</literal> or <literal remap="tt">Event&lowbar;MouseMove</literal>. The <literal remap="tt">button</literal> is
+<literal remap="tt">Event&&lowbar;;MouseButtonPress, Event&&lowbar;;MouseButtonRelease, Event&&lowbar;;MouseButtonDblClick</literal> or <literal remap="tt">Event&&lowbar;;MouseMove</literal>. The <literal remap="tt">button</literal> is
 <literal remap="tt">LeftButton, RightButton, MidButton, NoButton</literal>. <literal remap="tt">state</literal> is <literal remap="tt">ShiftButton, ControlButton and AltButton</literal> OR'ed for event
-<literal remap="tt">Event&lowbar;MouseButtonRelease</literal>, for events <literal remap="tt">Event&lowbar;MouseButtonPress, Event&lowbar;MouseButtonDblClick</literal> <literal remap="tt">state</literal> includes <literal remap="tt">LeftButton,
+<literal remap="tt">Event&&lowbar;;MouseButtonRelease</literal>, for events <literal remap="tt">Event&&lowbar;;MouseButtonPress, Event&&lowbar;;MouseButtonDblClick</literal> <literal remap="tt">state</literal> includes <literal remap="tt">LeftButton,
 RightButton, MidButton</literal>.</para>
 </listitem>
 </varlistentry>
@@ -2276,39 +2314,39 @@ size before creating the event with <literal remap="tt">QWidget::size()</literal
 </screen>
 </para>
 
-<para>This creates a mousePressEvent() for the widget <literal remap="tt">quit&lowbar;button</literal> with the left button.</para>
+<para>This creates a mousePressEvent() for the widget <literal remap="tt">quit&&lowbar;;button</literal> with the left button.</para>
 </sect2>
-<sect2 id="SendingEvents">
+
+<sect2 id="sending-events">
 <title>Sending Events</title>
 
 <para>After creation, the event has to be sent to the application instance to call its execution. Thereby, two ways can be used: one that
 directly processes the event and one that will place the event in the event queue at the last position:</para>
 
 <para>Direct execution:
-<screen>QApplication::sendEvent(quit_button, &amp;press_quit);
+<screen>QApplication::sendEvent(quit_button, &&amp;;press_quit);
 </screen>
 
 The <literal remap="tt">sendEvent()</literal> waits for the result and returns true or false depending if the event has been accepted or not.</para>
 
 <para>Placement into event queue:
-<screen>QApplication::postEvent(quit_button, &amp;press_quit);
+<screen>QApplication::postEvent(quit_button, &&amp;;press_quit);
 </screen>
-</para>
 
-<note remap="comment"><para>The event for postEvent() must be allocated on the heap as it gets deleted immediately after the posing.</para></note>
+<note remap="comment"><para>The event for postEvent() must be allocated on the heap as it gets deleted immediately after the posing.</para></note></para>
 
-<para>To turn a posted event into a send event, use <literal remap="tt">sendPostedEvents(QObject * receiver, int event&lowbar;type)</literal>. This requires the options
+<para>To turn a posted event into a send event, use <literal remap="tt">sendPostedEvents(QObject * receiver, int event&&lowbar;;type)</literal>. This requires the options
 given at the constructor. As you may see, some constructors don't need an event type, therefore the according event type can be found
-in <link linkend="EventTypes">Event Types</link> but is also simple to guess as they are only responsible for one event type. Example:
-<literal remap="tt">QCloseEvent</literal> only takes <literal remap="tt">Event&lowbar;Close</literal>, <literal remap="tt">QPaintEvent</literal> only takes <literal remap="tt">Event&lowbar;Paint</literal>.</para>
+in <link linkend="Event-Types">Event Types</link> but is also simple to guess as they are only responsible for one event type. Example:
+<literal remap="tt">QCloseEvent</literal> only takes <literal remap="tt">Event&&lowbar;;Close</literal>, <literal remap="tt">QPaintEvent</literal> only takes <literal remap="tt">Event&&lowbar;;Paint</literal>.</para>
 </sect2>
 </sect1>
 
-<sect1 id="EventPrecedence">
+<sect1 id="event-precedence">
 <title>Event Precedence</title>
 
 <para>In relation to influence the event behavior of the application, the programmer often faces situations where long operations block the
-<literal remap="tt">Event&lowbar;Paint</literal> and lead to a scrambled look of the application windows. These situations can be solved either by using a
+<literal remap="tt">Event&&lowbar;;Paint</literal> and lead to a scrambled look of the application windows. These situations can be solved either by using a
 progressdialog that indicates the operation progress or by event precedence. This means that the current event gets stopped and the
 event queue is processed. The class <literal remap="tt">QApplication</literal> offers a solution for this by two methods which are identical except the
 parameters. One is <literal remap="tt">processEvents()</literal>, which processes pending events for 3 seconds or until there are no more events in the event
@@ -2323,7 +2361,7 @@ second longer (or even parts of a second).</para>
 I/O operations outside the application's process as multi-threading is not supported by Qt directly.</para>
 </sect1>
 
-<sect1 id="Summary">
+<sect1 id="summary">
 <title>Summary</title>
 
 <para>After this long chapter about signals, slots and events, I want to append a short summary so you can recapitulate the collected
@@ -2398,10 +2436,10 @@ therefore not granted to be exact; if you may find any misconcepted or incorrect
 </sect1>
 </chapter>
 
-<chapter id="UserControlElements">
+<chapter id="user-control-elements">
 <title>User Control Elements</title>
 
-<sect1 id="TheMenubar">
+<sect1 id="the-menubar">
 <title>The Menubar</title>
 
 <para>The menu bar is a central component of the main window. It allows the user to execute operations that the application (or to be precise:
@@ -2425,27 +2463,27 @@ The menu bar also makes use of the <literal remap="tt">KApplication</literal> he
 <programlisting>my_menubar=new KMenuBar(this,"my_menubar");
 
 file_menu = new QPopupMenu;
-file_menu-&gt;insertItem(Icon("filenew.xpm"),i18n("&amp;New..."),
+file_menu-&gt;insertItem(Icon("filenew.xpm"),i18n("&&amp;;New..."),
                       this,SLOT(slotFileNew()),0,ID_FILE_NEW);
-file_menu-&gt;insertItem(Icon("open.xpm"),i18n("&amp;Open..."),
+file_menu-&gt;insertItem(Icon("open.xpm"),i18n("&&amp;;Open..."),
                       this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
-file_menu-&gt;insertItem(i18n("&amp;Close"),
+file_menu-&gt;insertItem(i18n("&&amp;;Close"),
                       this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
 file_menu-&gt;insertSeparator();
-file_menu-&gt;insertItem(Icon("save.xpm"),i18n("&amp;Save"),
+file_menu-&gt;insertItem(Icon("save.xpm"),i18n("&&amp;;Save"),
                       this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
-file_menu-&gt;insertItem(i18n("Save &amp;As..."),
+file_menu-&gt;insertItem(i18n("Save &&amp;;As..."),
                       this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
 file_menu-&gt;insertItem(Icon("save_all.xpm"),i18n("Save All"),
                       this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
 file_menu-&gt;insertSeparator();
-file_menu-&gt;insertItem(Icon("fileprint.xpm"),i18n("&amp;Print..."),
+file_menu-&gt;insertItem(Icon("fileprint.xpm"),i18n("&&amp;;Print..."),
                       this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
 file_menu-&gt;insertSeparator();
-file_menu-&gt;insertItem(i18n("E&amp;xit"),
+file_menu-&gt;insertItem(i18n("E&&amp;;xit"),
                       this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
 
-my_menubar-&gt;insertItem(i18n("&amp;File"), file_menu);
+my_menubar-&gt;insertItem(i18n("&&amp;;File"), file_menu);
 
 setMenu(my_menubar);</programlisting>
 </para>
@@ -2454,13 +2492,13 @@ setMenu(my_menubar);</programlisting>
 here allows an implicit connection to the method to call when the popup menu emits SIGNAL(activated(int)). The zero parameters after
 the slot declaration is left out as the example assumes the program will use <literal remap="tt">KAccel</literal> to set the according keyboard accelerators
 with <literal remap="tt">changeMenuAccel()</literal>. Further you can see that the integer value ID is inserted like the method name with all uppercase letters
-and underscores to separate the words. The menu id's themselves are set with &num;define in a separate file to keep track of the used
+and underscores to separate the words. The menu id's themselves are set with &&num;;define in a separate file to keep track of the used
 numbers. You would think that you don't need the menu id if the <literal remap="tt">activated()</literal> signal is already connected - in fact the id can be
 used to forward the signal <literal remap="tt">highlighted(int)</literal> to a method that compares the id by a switch statement and sets a statusbar
 help message for the menu entry. You could as well do that for the signal <literal remap="tt">activated(int)</literal> as well to call the according method by a
 switch statement. Then you have to add a <literal remap="tt">connect()</literal> for each popup menu you want to use.</para>
 
-<para>You can as well insert a separator into the menu bar with <literal remap="tt">my&lowbar;menubar-&gt;insertSeparator()</literal>. This will align all entries inserted after
+<para>You can as well insert a separator into the menu bar with <literal remap="tt">my&&lowbar;;menubar-&gt;insertSeparator()</literal>. This will align all entries inserted after
 the separator to the right in Motif style, in windows style this has no effect.</para>
 
 <para>The creation of a separate menu bar allows the creation of several menubars which can be set as the actual menu with <literal remap="tt">setMenu()</literal>.
@@ -2470,7 +2508,7 @@ This is how we did it in KDevelop to change the menu bar when switching to the d
 character.</para>
 </sect1>
 
-<sect1 id="TheToolbar">
+<sect1 id="the-toolbar">
 <title>The Toolbar</title>
 
 <para>Toolbars are another component that enhance user interaction with symbols representing most needed functions that an application
@@ -2521,28 +2559,32 @@ it isn't installed at the correct location within the KDE FSSTD; whereas standar
 <para>The exact execution of the <literal remap="tt">Icon()</literal> macro is therefore:
 <screen>KApplication::getKApplication()-&gt;getIconLoader()-&gt;loadIcon("new.xpm")
 </screen>
+
+<footnote>
+<para>In KDE2, you have to use BarIcon() to load menu/toolbar icons</para>
+</footnote>
 </para>
 
 <para>which implicitely uses the <literal remap="tt">kapp</literal> macro to get the application object. You see that using this macro saves lots of code but offers a
 very nice way to load an icon for a toolbar button.</para>
 
 <para>The second parameter, the ID of the button, is a macro that our application specifies itself to name certain actions logically by a
-&num;define. Obviously, you could think that using another method of <literal remap="tt">KToolBar</literal> would do the same when directly specifying the receiver
+&&num;;define. Obviously, you could think that using another method of <literal remap="tt">KToolBar</literal> would do the same when directly specifying the receiver
 object and the slot to call, but this way you save a lot of code. The first place is that you only have to write one <literal remap="tt">connect()</literal>
 (line 5) to connect all toolbar elements. The other is, that by this way you can use the same ID for your toolbar items as well as for
 your menubar items. The following code completes this example with the according menubar action:</para>
 
 <para><screen>QPopupMenu* file_menu = new QPopupMenu();
-file_menu-&gt;insertItem(Icon("filenew.xpm"),i18n("&amp;New..."),0,ID_FILE_NEW);
+file_menu-&gt;insertItem(Icon("filenew.xpm"),i18n("&&amp;;New..."),0,ID_FILE_NEW);
 
 connect(file_menu, SIGNAL(activated(int)), SLOT(slotSelected(int)));
 
-menuBar()-&gt;insertItem(file_menu, i18n("&amp;File"));
+menuBar()-&gt;insertItem(file_menu, i18n("&&amp;;File"));
 </screen>
 </para>
 
-<para>By this, the <literal remap="tt">file&lowbar;menu</literal> is already connected to the <literal remap="tt">slotSelected()</literal> method and the corresponding entry "New File" executes the
-same action. Just collect all your ID's as &num;defines into one file and you can keep a good overview over the used numbers (which
+<para>By this, the <literal remap="tt">file&&lowbar;;menu</literal> is already connected to the <literal remap="tt">slotSelected()</literal> method and the corresponding entry "New File" executes the
+same action. Just collect all your ID's as &&num;;defines into one file and you can keep a good overview over the used numbers (which
 naturally have to be integer values).</para>
 
 <para>The next example in line 3 and 4 add a button that opens a popup menu when the user presses the button. This can be used if the button
@@ -2554,7 +2596,7 @@ on/off action (which in the corresponding menubar popup is represented by a chec
 more information.</para>
 </sect1>
 
-<sect1 id="TheStatusbar">
+<sect1 id="the-statusbar">
 <title>The Statusbar</title>
 
 <para>KDE also provides the pendant to Qt's <literal remap="tt">QStatusBar</literal>, <literal remap="tt">KStatusBar</literal>. The statusbar can contain labels
@@ -2562,7 +2604,7 @@ as well as widgets, such as progress bars (those have to have the statusbar as p
 about the current state of the application and gives hints about the usage of commands e.g. over toolbars and menubars.</para>
 </sect1>
 
-<sect1 id="KeyboardAccelerators">
+<sect1 id="keyboard-accelerators">
 <title>Keyboard Accelerators</title>
 
 <para>Keyboard accelerators are a good enhancement for any kind of application. GUI application designers often think that the user can
@@ -2571,7 +2613,8 @@ mouse to call actions doesn't make an application very attractive. The more a us
 miss keyboard accelerators. Fortunately, the Qt and KDE libraries provide a whole set of functions and classes to support keyboard
 accelerators in conjunction with GUI elements. This section therefore collects all these classes and shows the possible implememtation
 for various situations.</para>
-<sect2 id="MenuAccelerators">
+
+<sect2 id="menu-accelerators">
 <title>Menu Accelerators</title>
 
 <para>The first thing where keyboard accelerators are used without much effort from the programmer's side is over menuentries. The menubar,
@@ -2582,9 +2625,9 @@ the menubar.</para>
 
 <para>Example:</para>
 
-<para><literal remap="verb">menuBar()-&gt;insertItem(i18n("&amp;File"), file_menu);</literal></para>
+<para><literal remap="verb">menuBar()-&gt;insertItem(i18n("&&amp;;File"), file_menu);</literal></para>
 
-<para>Mind the ampersand in front of "File". This makes the "F" the key with which the user can pop up the popup menu <literal remap="tt">file&lowbar;menu</literal> when
+<para>Mind the ampersand in front of "File". This makes the "F" the key with which the user can pop up the popup menu <literal remap="tt">file&&lowbar;;menu</literal> when
 pressed together with the ALT-key. The same goes with entries within the popups, where the user, after a popup is active, only has to
 press the key to invoke the desired action. Selfexplaining, you should watch the usage of underlined characters very closely, because a
 key that is used twice either in the menubar or within the same popup makes the last inserted item the one that is activated and this
@@ -2595,7 +2638,8 @@ in front of it while inserting the entry. As the KDE applications get internatio
 place the keys in their translated version later. They should watch the same principles for placing the keys and shouldn't only
 translate one-to-one but test the application later if everything is accessible again by their keyboard shortcuts.</para>
 </sect2>
-<sect2 id="TabulatorandButtonAccelerators">
+
+<sect2 id="tabulator-and-button-accelerators">
 <title>Tabulator and Button Accelerators</title>
 
 <para>The keyboard accelerators with the ALT-key don't only work with the menus - they do the same over dialogs, tab-pages and on buttons.
@@ -2615,13 +2659,14 @@ KAccel</para>
 </sect2>
 </sect1>
 
-<sect1 id="OtherWidgets">
+<sect1 id="other-widgets">
 <title>Other Widgets</title>
 
 <para>Control elements are used within visible areas of the application and can be combined together to create a dialog or view. Beyond the
 control elements that the Qt library provides, KDE offers:</para>
 
-<para>KButtonBox: manages buttons
+<para>KButton: active raise-lower button
+KButtonBox: manages buttons
 KColorButton: button displaying a color setting
 KIconLoaderButton: button displaying a selected Icon
 KCombo: similar to QComboBox
@@ -2640,19 +2685,19 @@ KTabCtl: tabulator widget</para>
 </sect1>
 </chapter>
 
-<chapter id="KDEDialogs">
+<chapter id="kde-dialogs">
 <title>KDE Dialogs</title>
 
 <para>A very useful thing of the KDE libraries is that they provide already constructed dialogs for various purposes that are common to a lot
 of desktop applications. This has two reasons: a) the user feels comfortable using these dialogs if he knows them already from an
-application and b) lessens the programmer's work a lot. In section <link linkend="KeyboardAccelerators">Keyboard Accelerators</link>, you
+application and b) lessens the programmer's work a lot. In section <link linkend="Keyboard-Accelerators">Keyboard Accelerators</link>, you
 already got to know one of these dialogs that KDE provides to configure keybindings. For the other dialogs that are mostly part of the
 <literal remap="tt">kdeui</literal> library, the usage is mostly as simple as for the <literal remap="tt">KKeyDialog</literal> and enhances applications within seconds of coding
 efforts. You should always first look for an already existing solution for general value requests from the user before starting to
 implement a new dialog from scratch. Further, you don't have to care about internationalization as these dialogs are part of the KDE
 libraries and are already translated.</para>
 
-<sect1 id="KMsgBox">
+<sect1 id="kmsgbox">
 <title>KMsgBox</title>
 
 <para>The <literal remap="tt">KMsgBox</literal> class provides a whole set of message boxes that match everyday life usage in applications. Using KMsgBox has a lot of
@@ -2683,12 +2728,12 @@ static methods and will receive the correct result.</para>
 compare with <literal remap="tt">if()</literal> for the actions to execute.
 <footnote>
 <para>The KDE 2 API contains a modified version of <literal remap="tt">KMsgBox</literal>, <literal remap="tt">KMessageBox</literal>. It provides a similar functionality; the 1.x API
-is no longer available. As a replacement, you can use <literal remap="tt">QMessageBox</literal> as well, providing static methods as well.</para>
+is no longer available. As a replacement, you can use <literal remap="tt">QMessageBox</literal>, providing static methods as well.</para>
 </footnote>
 </para>
 </sect1>
 
-<sect1 id="KQuickHelp">
+<sect1 id="kquickhelp">
 <title>KQuickHelp</title>
 
 <para>The <literal remap="tt">KQuickHelp</literal> class provides a good way to add quick-help dialogs to widgets. The user can access the quick-help by a
@@ -2696,7 +2741,14 @@ context-menu entry "Quick-Help" and is therefore easy to use and gives enough in
 too much and a <literal remap="tt">QToolTip</literal> would be too less. The reason I include <literal remap="tt">KQuickHelp</literal> into the provided dialogs is that the
 class-documentation itself contains example usage, but doesn't cover all formatting possibilities, therefore these are listed in detail
 here.</para>
-<sect2 id="Usage">
+
+<para>
+<footnote>
+<para>In KDE2, KQuickHelp is no longer available and is replaced by QWhatsThis, which has almost the same API</para>
+</footnote>
+</para>
+
+<sect2 id="usage">
 <title>Usage</title>
 
 <para>A quick-help window therefore can always be added to a widget by using the static method <literal remap="tt">add()</literal>, also one help message can be used
@@ -2720,7 +2772,8 @@ MyDialog::MyDialog(QWidget* parent, const char* name): QDialog(parent, name)
 }</programlisting>
 </para>
 </sect2>
-<sect2 id="TextFormatting">
+
+<sect2 id="text-formatting">
 <title>Text Formatting</title>
 
 <para>The text inside your quick-help window can also be formatted to fit various needs, even hyperlinks. Using the KDE-FSSTD, you can also
@@ -2732,45 +2785,45 @@ quick-help window.</para>
 
 <para><programlisting>Font Attributes           Tag                                         Short-form Tag
 
-bold font                 &lt;bold&gt;&lt;/bold&gt;                   &lt;b&gt;&lt;/b&gt;
-italic font               &lt;italic&gt;&lt;/italic&gt;               &lt;i&gt;&lt;/i&gt;
-underlines                &lt;underline&gt;&lt;/underline&gt;         &lt;u&gt;&lt;/u&gt;</programlisting>
+bold font                 &&lt;;bold&&gt;;&&lt;;/bold&&gt;;                   &&lt;;b&&gt;;&&lt;;/b&&gt;;
+italic font               &&lt;;italic&&gt;;&&lt;;/italic&&gt;;               &&lt;;i&&gt;;&&lt;;/i&&gt;;
+underlines                &&lt;;underline&&gt;;&&lt;;/underline&&gt;;         &&lt;;u&&gt;;&&lt;;/u&&gt;;</programlisting>
 </para>
 
 <para><programlisting>Font Size                 Tag                                         Short-form Tag
 
-increase                  &lt;FONTSIZE +&gt;                          &lt;+&gt;
-decrease                  &lt;FONTSIZE -&gt;                          &lt;-&gt;</programlisting>
+increase                  &&lt;;FONTSIZE +&&gt;;                          &&lt;;+&&gt;;
+decrease                  &&lt;;FONTSIZE -&&gt;;                          &&lt;;-&&gt;;</programlisting>
 </para>
 
 <para><programlisting>Font Selection            Tag                                         Short-form Tag
 
-default font              &lt;FONT DEFAULT&gt;                        &lt;DEFAULT&gt;
-fixed font                &lt;FONT FIXED&gt;                          &lt;FIXED&gt;</programlisting>
+default font              &&lt;;FONT DEFAULT&&gt;;                        &&lt;;DEFAULT&&gt;;
+fixed font                &&lt;;FONT FIXED&&gt;;                          &&lt;;FIXED&&gt;;</programlisting>
 </para>
 
 <para><programlisting>Indentation               Tag                                         Short-form Tag
 
-right indent              &lt;INDENT +&gt;                            &lt;i+&gt;
-left indent               &lt;INDENT -&gt;                            &lt;i-&gt;</programlisting>
+right indent              &&lt;;INDENT +&&gt;;                            &&lt;;i+&&gt;;
+left indent               &&lt;;INDENT -&&gt;;                            &&lt;;i-&&gt;;</programlisting>
 </para>
 
 <para><programlisting>Color
 
-RGB color                 &lt;COLOR #&gt;
-red text                  &lt;COLOR RED&gt;                           &gt;&lt;red&gt;
-green text                &lt;COLOR GREEN&gt;                         &lt;green&gt;
-blue text                 &lt;COLOR BLUE&gt;                          &lt;blue&gt;
-white text                &lt;COLOR WHITE&gt;                         &lt;white&gt;
-yellow text               &lt;COLOR YELLOW&gt;                        &lt;yellow&gt;
-black text                &lt;COLOR BLACK&gt;                         &lt;black&gt;
-brown text                &lt;COLOR BROWN&gt;                         &lt;brown&gt;
-magenta text              &lt;COLOR MAGENTA&gt;                       &lt;magenta&gt;
-cyan text                 &lt;COLOR CYAN&gt;                          &lt;cyan&gt;</programlisting>
+RGB color                 &&lt;;COLOR #&&gt;;
+red text                  &&lt;;COLOR RED&&gt;;                           &&gt;;&&lt;;red&&gt;;
+green text                &&lt;;COLOR GREEN&&gt;;                         &&lt;;green&&gt;;
+blue text                 &&lt;;COLOR BLUE&&gt;;                          &&lt;;blue&&gt;;
+white text                &&lt;;COLOR WHITE&&gt;;                         &&lt;;white&&gt;;
+yellow text               &&lt;;COLOR YELLOW&&gt;;                        &&lt;;yellow&&gt;;
+black text                &&lt;;COLOR BLACK&&gt;;                         &&lt;;black&&gt;;
+brown text                &&lt;;COLOR BROWN&&gt;;                         &&lt;;brown&&gt;;
+magenta text              &&lt;;COLOR MAGENTA&&gt;;                       &&lt;;magenta&&gt;;
+cyan text                 &&lt;;COLOR CYAN&&gt;;                          &&lt;;cyan&&gt;;</programlisting>
 </para>
 
-<para><programlisting>Newline                   &lt;br&gt;
-Hyperlinks                &lt;link linkname&gt;&lt;/link&gt;</programlisting>
+<para><programlisting>Newline                   &&lt;;br&&gt;;
+Hyperlinks                &&lt;;link linkname&&gt;;&&lt;;/link&&gt;;</programlisting>
 </para>
 
 <para>Thereby, valid <literal remap="tt">linkname</literal>s are:</para>
@@ -2789,7 +2842,7 @@ Hyperlinks                &lt;link linkname&gt;&lt;/link&gt;</programlisting>
 <para>file://yourlink</para>
 </listitem>
 <listitem>
-<para>mailto:your&lowbar;address@your&lowbar;domain</para>
+<para>mailto:your&&lowbar;;address@your&&lowbar;;domain</para>
 </listitem>
 </itemizedlist>
 
@@ -2799,7 +2852,7 @@ program.</para>
 </sect2>
 </sect1>
 
-<sect1 id="FileDialogs">
+<sect1 id="file-dialogs">
 <title>File Dialogs</title>
 
 <para>As the <literal remap="tt">kfile</literal> library provides several dialogs for retrieving filenames as well as directories, those have to be separated towards
@@ -2824,7 +2877,8 @@ provides a preview module that is able to show a preview of the filecontents</pa
 <para>For general file/directory services, the classes <literal remap="tt">KFileInfo</literal> and <literal remap="tt">KDir</literal> can be used.</para>
 
 <para>The following sections will discuss the usage and handling of the according file-dialogs in applications.</para>
-<sect2 id="KFileDialog">
+
+<sect2 id="kfiledialog">
 <title>KFileDialog</title>
 
 <para>The <literal remap="tt">KFileDialog</literal> class provides four static methods to ask the user for a filename. As the filedialog itself can handle the
@@ -2856,7 +2910,8 @@ parameters to set the starting directory, mime-types and, as usual, the <literal
 <para>The parallel methods for <literal remap="tt">getSaveFile</literal> and <literal remap="tt">getOpenFile</literal> behave identically for retrieving remote and/or local files with the URL
 dialogs.</para>
 </sect2>
-<sect2 id="KFileBaseDialog">
+
+<sect2 id="kfilebasedialog">
 <title>KFileBaseDialog</title>
 
 <para>The class <literal remap="tt">KFileBaseDialog</literal> provides the basic interfaces for building filedialogs; therefore filedialogs can be customized in wide
@@ -2883,7 +2938,8 @@ consistent.</para>
 </footnote>
 </para>
 </sect2>
-<sect2 id="KFilePreviewDialog">
+
+<sect2 id="kfilepreviewdialog">
 <title>KFilePreviewDialog</title>
 
 <para>The class <literal remap="tt">KFilePreviewDialog</literal> provides another specialized, but more seldomly used filedialog. Its best feature is that it provides
@@ -2892,7 +2948,7 @@ operate on pictures.</para>
 </sect2>
 </sect1>
 
-<sect1 id="KColorDialog">
+<sect1 id="kcolordialog">
 <title>KColorDialog</title>
 
 <para>The <literal remap="tt">KColorDialog</literal> provides an easy-to use interface to receive color values from the user. Color values are always requested, if
@@ -2906,7 +2962,7 @@ your menu bar or toolbar as well to retrieve a color value from the user.</para>
 <para>Using the colordialog is very easy inside applications. The class provides a static method which can be called to retrieve the color
 value:</para>
 
-<para><programlisting>#include &lt;kcolordlg.h&gt;
+<para><programlisting>#include &&lt;;kcolordlg.h&&gt;;
 
 
 QColor myColor;
@@ -2920,7 +2976,7 @@ value. The returned integer value will probably be of no interest - its the resu
 been exited via the OK or Cancel button.</para>
 </sect1>
 
-<sect1 id="KFontDialog">
+<sect1 id="kfontdialog">
 <title>KFontDialog</title>
 
 <para>The <literal remap="tt">KFontDialog</literal> will retrieve you a value for a font currently avaliable on the system. Therefore using the fontdialog will mostly
@@ -2938,7 +2994,7 @@ and after the dialog was executed, your font will have the selected value. Then 
 type of font the user selected etc. to use the font within the application.</para>
 </sect1>
 
-<sect1 id="KIconLoaderDialog">
+<sect1 id="kiconloaderdialog">
 <title>KIconLoaderDialog</title>
 
 <para>For applications requiring an icon selection, KDE provides the <literal remap="tt">KIconLoaderDialog</literal>. The main purpose is to select an icon on the
@@ -2955,7 +3011,7 @@ constructor which one - the standard constructor uses the application's <literal
 the according methods of <literal remap="tt">KIconLoader</literal>.</para>
 </sect1>
 
-<sect1 id="KWizard">
+<sect1 id="kwizard">
 <title>KWizard</title>
 
 <para>The <literal remap="tt">KWizard</literal> class already contains a predefined dialog to construct wizards that lead the user through an input process. Thereby,
@@ -2964,7 +3020,7 @@ widgets you want to use as the single pages for the dialog and insert them in th
 wizard.</para>
 </sect1>
 
-<sect1 id="KSpellDlg">
+<sect1 id="kspelldlg">
 <title>KSpellDlg</title>
 
 <para>The <literal remap="tt">KSpellDlg</literal> is part of the <literal remap="tt">kspell</literal> library. This library contains all functionality to use the <literal remap="tt">Ispell</literal> application for
@@ -2972,13 +3028,13 @@ spell checking. The <literal remap="tt">KEdit</literal> application makes a good
 <literal remap="tt">KEdit</literal> on how to implement spell checking functionality. Using the <literal remap="tt">KSpell</literal> class should last in any case.</para>
 </sect1>
 
-<sect1 id="DatePickerDialog">
+<sect1 id="datepickerdialog">
 <title>DatePickerDialog</title>
 
 <para>(kab) date selection dialog</para>
 </sect1>
 
-<sect1 id="QtDialogs">
+<sect1 id="qt-dialogs">
 <title>Qt Dialogs</title>
 
 <para>In some cases, it may be needed to use dialogs provided by Qt. In fact, the only dialog where there are no replacements is a
@@ -2996,25 +3052,29 @@ tabdlg-&gt;setApplyButton(i18n("Apply"));
 tabdlg-&gt;setOkButton(i18n("OK"));</programlisting>
 
 This will add all four buttons to the tabdialog, so you should only set those buttons you really need.</para>
-<sect2 id="QFileDialog">
+
+<sect2 id="qfiledialog">
 <title>QFileDialog</title>
 
 <para>Using the QFileDialog, you will have the same functionality like KFileDialog. The KDE development prefers the KFileDialog for a
 consistent look of applications as it offers some nice functionality as well.</para>
 </sect2>
-<sect2 id="QMessageBox">
+
+<sect2 id="qmessagebox">
 <title>QMessageBox</title>
 
 <para>As mentioned in section KMsgBox, the QMessageBox can be used as well for messages. One situation where a QMessageBox can serve better
 is a messagebox containing a picture for example. Usage is provided through static methods which should cover most cases.</para>
 </sect2>
-<sect2 id="QPrintDialog">
+
+<sect2 id="qprintdialog">
 <title>QPrintDialog</title>
 
 <para>For printing support, you will most likely use the QPrintDialog. As a view-widget displays a document's contents, it will most likely
 offer routines for printing as well through QPainter drawing on a QPrinter instead of onto a widget.</para>
 </sect2>
-<sect2 id="QProgressDialog">
+
+<sect2 id="qprogressdialog">
 <title>QProgressDialog</title>
 
 <para>When an application is processing data that may take some time to finish, the user expects a notification about that state. For those
@@ -3024,7 +3084,7 @@ the according API documentation.</para>
 </sect1>
 </chapter>
 
-<chapter id="ProvidedViews">
+<chapter id="provided-views">
 <title>Provided Views</title>
 
 <para>As mentioned earlier, a usual application interface contains a so-called "view" or "content" area, usually the center widget surrounded
@@ -3040,7 +3100,7 @@ provide.</para>
 encapsulated in the <literal remap="tt">KEdit</literal> class of the <literal remap="tt">kdeui</literal> library; the other a HTML- interpreter widget, <literal remap="tt">KHTMLWidget</literal>. The following
 will discuss these classes and explain the interface usage by example.</para>
 
-<sect1 id="TheKEditView">
+<sect1 id="the-kedit-view">
 <title>The KEdit View</title>
 
 <para>As mentioned, the <literal remap="tt">KEdit</literal> view is a full-functional editor class that offers a complete interface to build an editor. As it inherits
@@ -3057,18 +3117,18 @@ requires the implementation of slots on the main widget that call the according 
   // create the "Edit" menu
   edit_menu= new QPopupMenu();
   // here we call a slot selectAll() provided by QMultiLineEdit to select the whole text:
-  edit_menu-&gt;insertItem(i18n("&amp;Select All"), kedit, SLOT(selectAll()), 0, ID_EDIT_SELECT_ALL);
+  edit_menu-&gt;insertItem(i18n("&&amp;;Select All"), kedit, SLOT(selectAll()), 0, ID_EDIT_SELECT_ALL);
 
   // construct a view-menu and insert a menuentry "Font"
   view_menu= new QPopupMenu();
   // we have to call a self-created slot to call
   // the public method selectFont() of KEdit
-  view_menu-&gt;insertItem(i18n("&amp;Font"), this, SLOT(slotViewFont()), 0, ID_VIEW_FONT);
+  view_menu-&gt;insertItem(i18n("&&amp;;Font"), this, SLOT(slotViewFont()), 0, ID_VIEW_FONT);
 
 
   // insert the view_menu into the menubar
-  menuBar()-&gt;insertItem(i18n("&amp;Edit"), edit_menu);
-  menuBar()-&gt;insertItem(i18n("&amp;View"), view_menu);
+  menuBar()-&gt;insertItem(i18n("&&amp;;Edit"), edit_menu);
+  menuBar()-&gt;insertItem(i18n("&&amp;;View"), view_menu);
 }
 
 void MyEditor::slotViewFont(){
@@ -3078,7 +3138,7 @@ void MyEditor::slotViewFont(){
 </para>
 </sect1>
 
-<sect1 id="TheKHTMLView">
+<sect1 id="the-khtml-view">
 <title>The KHTML View</title>
 
 <para>The second view area provided by KDE is originally the <literal remap="tt">KHTMLWidget</literal>. This class actually is the visible widget that interprets HTML
@@ -3095,11 +3155,13 @@ a reuse of this funcitionality is very certain.</para>
 and public methods as well that can be called similar to provide a user interface that handles the widget. When it comes to configuring
 the behavoir of the displaying <literal remap="tt">KHTMLWidget</literal>, you have to create a pointer to a <literal remap="tt">KHTMLWidget</literal> and retrieve the instance of your
 <literal remap="tt">KHTMLView</literal>'s widget by calling <literal remap="tt">getKHTMLWidget()</literal>. Then you can set options like color settings and font sizes for your view
-area.</para>
+area.
+<note remap="comment"><para>In KDE2 you will have an extended KHTMLWidget that directly inherits QScrollView, so scrolling is provided by default.
+KHTMLView is removed instead. Also, the new HTML widget provides support for Java Script.</para></note></para>
 </sect1>
 </chapter>
 
-<chapter id="ProcessHandling">
+<chapter id="process-handling">
 <title>Process Handling</title>
 
 <para>The KDE UI library provides the classes <literal remap="tt">KProcess</literal> and <literal remap="tt">KShellProcess</literal> to run external processes that are invoked within the
@@ -3128,7 +3190,7 @@ user-friendly GUI interface.</para>
 <para>The following sections will describe the <literal remap="tt">KProcess</literal> class first, then the usage of <literal remap="tt">KShellProcess</literal>, as this is a subclass of
 <literal remap="tt">KProcess</literal>, therefore differs only in its usage.</para>
 
-<sect1 id="KProcess">
+<sect1 id="kprocess">
 <title>KProcess</title>
 
 <para>The <literal remap="tt">KProcess</literal> class is based on <literal remap="tt">QObject</literal>, therefore able to communicate by signals and slots. It can be used to start any
@@ -3137,7 +3199,8 @@ executable binary as a child process on the local system and control it by commu
 <literal remap="tt">clearArguments()</literal> to ensure the arguments are empty before the next usage. The actual usage is to transmit the complete commandline
 argument to the process instance using the operator &lt;&lt; as strings. Then the actual process is called with <literal remap="tt">start()</literal>. This function
 has to be called with the run mode and communication.</para>
-<sect2 id="Runmode">
+
+<sect2 id="run-mode">
 <title>Run mode</title>
 
 <para>The run mode of the external application can be set when calling <literal remap="tt">start()</literal> as the first argument. The run mode can be one of
@@ -3198,7 +3261,8 @@ user that he has to install the program to ensure functionality. Another option 
 the user for the directories he uses to call applications. Then you could test with <literal remap="tt">QFile::exists()</literal>, if the binary is there even
 before trying to start it.</para>
 </sect2>
-<sect2 id="Communication">
+
+<sect2 id="communication">
 <title>Communication</title>
 
 <para>The communication with the caller process is another option that has to be set while calling <literal remap="tt">KProcess::start()</literal>. With this, you can
@@ -3239,7 +3303,7 @@ non-visible buffer which can be processed to visualize errors by messageboxes.</
 </sect2>
 </sect1>
 
-<sect1 id="KShellProcess">
+<sect1 id="kshellprocess">
 <title>KShellProcess</title>
 
 <para>The <literal remap="tt">KShellProcess</literal> class is a specialized <literal remap="tt">KProcess</literal> class. The main difference is that you can call your executable via a Unix
@@ -3267,11 +3331,11 @@ advantages:
 </sect1>
 </chapter>
 
-<chapter id="Copyright">
+<chapter id="copyright">
 <title>Copyright</title>
 
 <para><screen>
-KDevelop Copyright 1998,1999 The KDevelop Team.
+KDevelop Copyright 1998, 1999, 2000 The KDevelop Team.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -3289,11 +3353,13 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </screen>
 </para>
 </chapter>
+<![ %addindex; [ &docindex; ]]>
 </book>
 <!--
 Local Variables:
 mode: sgml
 sgml-omittag: nil
 sgml-shorttag: t
+sgml-general-insert-case: lower
 End:
 -->

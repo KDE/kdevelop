@@ -2,132 +2,132 @@
 -> Check if any important attributes have been left behind.
     INPUT                     OUTPUT
 Line Tag                  Line Tag
-   3 `BOOK'                  0 `book'
+   2 `BOOK'                  0 `book'
 ! Normally this should not be a problem, but check anyway ...
-   6 `HTMLURL'               0 `<affiliation><address><email><ulink>'
-   7 `'                      0 `'
+   5 `HTMLURL'               0 `<affiliation><address><email><ulink>'
+   6 `'                      0 `'
 ! Check the authorname (<collab><collabname> instead of <author><name>?)
-   7 `INST'                  0 `corpauthor'
+   6 `INST'                  0 `corpauthor'
 ! Use affiliation, only corpauthor, or leave this out
-  10 `REF'                   0 `<link>'
-  14 `TOC'                   0 `'
-  67 `BF'                    0 `<emphasis remap="bf">'
+   9 `REF'                   0 `<link>'
+  13 `TOC'                   0 `'
+  66 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
-  67 `BF'                    0 `<emphasis remap="bf">'
+  66 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
-  67 `BF'                    0 `<emphasis remap="bf">'
+  66 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 128 `TT'                    0 `<literal remap="tt">'
+ 127 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 128 `TT'                    0 `<literal remap="tt">'
+ 127 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 137 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
  138 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
  139 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 140 `TT'                    0 `<literal remap="tt">'
+ 145 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 146 `TT'                    0 `<literal remap="tt">'
+ 145 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 146 `TT'                    0 `<literal remap="tt">'
+ 145 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 146 `TT'                    0 `<literal remap="tt">'
+ 145 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 146 `TT'                    0 `<literal remap="tt">'
+ 153 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
  154 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 155 `TT'                    0 `<literal remap="tt">'
+ 154 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 155 `TT'                    0 `<literal remap="tt">'
+ 158 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 159 `TT'                    0 `<literal remap="tt">'
+ 166 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 167 `TT'                    0 `<literal remap="tt">'
+ 169 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 170 `BF'                    0 `<emphasis remap="bf">'
+ 171 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 172 `BF'                    0 `<emphasis remap="bf">'
+ 171 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 172 `TT'                    0 `<literal remap="tt">'
+ 173 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 174 `TT'                    0 `<literal remap="tt">'
+ 173 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 174 `TT'                    0 `<literal remap="tt">'
+ 177 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 178 `BF'                    0 `<emphasis remap="bf">'
-! Check and correct manually
- 178 `TT'                    0 `<literal remap="tt">'
+ 177 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 -> Check if any important attributes have been left behind.
     INPUT                     OUTPUT
 Line Tag                  Line Tag
- 180 `BF'                    0 `<emphasis remap="bf">'
+ 179 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 189 `BF'                    0 `<emphasis remap="bf">'
+ 188 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 189 `TT'                    0 `<literal remap="tt">'
+ 188 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 191 `BF'                    0 `<emphasis remap="bf">'
+ 190 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 198 `BF'                    0 `<emphasis remap="bf">'
+ 197 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 198 `TT'                    0 `<literal remap="tt">'
+ 197 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 200 `BF'                    0 `<emphasis remap="bf">'
+ 199 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
- 211 `TT'                    0 `<literal remap="tt">'
+ 210 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 211 `TT'                    0 `<literal remap="tt">'
+ 210 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 214 `TT'                    0 `<literal remap="tt">'
+ 213 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 217 `TT'                    0 `<literal remap="tt">'
+ 216 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 217 `TT'                    0 `<literal remap="tt">'
+ 216 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 217 `TT'                    0 `<literal remap="tt">'
+ 216 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 217 `TT'                    0 `<literal remap="tt">'
+ 216 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 223 `TT'                    0 `<literal remap="tt">'
+ 222 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 223 `TT'                    0 `<literal remap="tt">'
+ 222 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 228 `TT'                    0 `<literal remap="tt">'
+ 227 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 228 `TT'                    0 `<literal remap="tt">'
+ 227 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 228 `TT'                    0 `<literal remap="tt">'
+ 227 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 231 `TT'                    0 `<literal remap="tt">'
+ 230 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 231 `TT'                    0 `<literal remap="tt">'
+ 230 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 234 `TT'                    0 `<literal remap="tt">'
+ 233 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 252 `TT'                    0 `<literal remap="tt">'
+ 251 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 263 `TT'                    0 `<literal remap="tt">'
+ 262 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 263 `TT'                    0 `<literal remap="tt">'
+ 262 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 263 `TT'                    0 `<literal remap="tt">'
+ 262 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 266 `TT'                    0 `<literal remap="tt">'
+ 265 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 266 `TT'                    0 `<literal remap="tt">'
+ 265 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 -> Check if any important attributes have been left behind.
     INPUT                     OUTPUT
 Line Tag                  Line Tag
- 266 `TT'                    0 `<literal remap="tt">'
+ 265 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 266 `TT'                    0 `<literal remap="tt">'
+ 265 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 276 `TT'                    0 `<literal remap="tt">'
+ 275 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 276 `TT'                    0 `<literal remap="tt">'
+ 275 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
  311 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
@@ -703,10 +703,10 @@ Line Tag                  Line Tag
 ! Check and correct manually
  983 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
- 989 `Event Types'           0 `EventTypes'
+ 989 `Event Types'           0 `Event-Types'
 ! Reference changed: check if still unique
  989 `'                      0 `'
-! check if reference ID EventTypes was meant for a section (if not, change manually)
+! check if reference ID Event-Types was meant for a section (if not, eg for an anchor, change manually)
  991 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
  991 `TT'                    0 `<literal remap="tt">'
@@ -737,10 +737,10 @@ Line Tag                  Line Tag
 1025 `REF'                   0 `<link>'
 1026 `REF'                   0 `<link>'
 1027 `REF'                   0 `<link>'
-1033 `Window Events'         0 `WindowEvents'
+1033 `Window Events'         0 `Window-Events'
 ! Reference changed: check if still unique
 1033 `'                      0 `'
-! check if reference ID WindowEvents was meant for a section (if not, change manually)
+! check if reference ID Window-Events was meant for a section (if not, eg for an anchor, change manually)
 1035 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 1035 `TT'                    0 `<literal remap="tt">'
@@ -800,10 +800,10 @@ Line Tag                  Line Tag
 ! Check and correct manually
 1096 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1100 `Focus Events'          0 `FocusEvents'
+1100 `Focus Events'          0 `Focus-Events'
 ! Reference changed: check if still unique
 1100 `'                      0 `'
-! check if reference ID FocusEvents was meant for a section (if not, change manually)
+! check if reference ID Focus-Events was meant for a section (if not, eg for an anchor, change manually)
 1102 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 1111 `TT'                    0 `<literal remap="tt">'
@@ -853,10 +853,10 @@ Line Tag                  Line Tag
 ! Check and correct manually
 1140 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1145 `Mouse Events'          0 `MouseEvents'
+1145 `Mouse Events'          0 `Mouse-Events'
 ! Reference changed: check if still unique
 1145 `'                      0 `'
-! check if reference ID MouseEvents was meant for a section (if not, change manually)
+! check if reference ID Mouse-Events was meant for a section (if not, eg for an anchor, change manually)
 1147 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 1151 `LIST'                  0 `<itemizedlist>'
@@ -920,10 +920,10 @@ Line Tag                  Line Tag
 ! Check and correct manually
 1237 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1242 `Keyboard Events'       0 `KeyboardEvents'
+1242 `Keyboard Events'       0 `Keyboard-Events'
 ! Reference changed: check if still unique
 1242 `'                      0 `'
-! check if reference ID KeyboardEvents was meant for a section (if not, change manually)
+! check if reference ID Keyboard-Events was meant for a section (if not, eg for an anchor, change manually)
 1244 `LIST'                  0 `<itemizedlist>'
 ! Would <simplelist> be better? (uses <member>!)
 1253 `TT'                    0 `<literal remap="tt">'
@@ -1017,10 +1017,10 @@ Line Tag                  Line Tag
 1313 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 1320 `REF'                   0 `<link>'
-1323 `Drag'n Drop Events'    0 `DragnDropEvents'
+1323 `Drag'n Drop Events'    0 `Dragn-Drop-Events'
 ! Reference changed: check if still unique
 1323 `'                      0 `'
-! check if reference ID DragnDropEvents was meant for a section (if not, change manually)
+! check if reference ID Dragn-Drop-Events was meant for a section (if not, eg for an anchor, change manually)
 1325 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 1325 `TT'                    0 `<literal remap="tt">'
@@ -1249,10 +1249,10 @@ Line Tag                  Line Tag
 -> Check if any important attributes have been left behind.
     INPUT                     OUTPUT
 Line Tag                  Line Tag
-1669 `The Menubar'           0 `TheMenubar'
+1669 `The Menubar'           0 `The-Menubar'
 ! Reference changed: check if still unique
 1669 `'                      0 `'
-! check if reference ID TheMenubar was meant for a section (if not, change manually)
+! check if reference ID The-Menubar was meant for a section (if not, eg for an anchor, change manually)
 1671 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 1671 `TT'                    0 `<literal remap="tt">'
@@ -1332,351 +1332,352 @@ Line Tag                  Line Tag
 1786 `TSCREEN'               0 `<screen>'
 1789 `VERB'                  0 `'
 ! Because it is in TSCREEN
-1791 `TT'                    0 `<literal remap="tt">'
+1793 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1794 `TT'                    0 `<literal remap="tt">'
+1796 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1794 `TT'                    0 `<literal remap="tt">'
+1796 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1800 `TSCREEN'               0 `<screen>'
-1807 `VERB'                  0 `'
+1802 `TSCREEN'               0 `<screen>'
+1809 `VERB'                  0 `'
 ! Because it is in TSCREEN
-1809 `TT'                    0 `<literal remap="tt">'
+1811 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1809 `TT'                    0 `<literal remap="tt">'
+1811 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1817 `TT'                    0 `<literal remap="tt">'
+1819 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1823 `TT'                    0 `<literal remap="tt">'
+1825 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1823 `TT'                    0 `<literal remap="tt">'
+1825 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1827 `Keyboard               0 `KeyboardAccelerators'
+1829 `Keyboard               0 `Keyboard-Accelerators'
 ! Reference changed: check if still unique
-1827 `'                      0 `'
-! check if reference ID KeyboardAccelerators was meant for a section (if not, change manually)
-1838 `TT'                    0 `<literal remap="tt">'
+1829 `'                      0 `'
+! check if reference ID Keyboard-Accelerators was meant for a section (if not, eg for an anchor, change manually)
+1840 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1848 `VERB'                  0 `<literal remap="verb">'
+1850 `VERB'                  0 `<literal remap="verb">'
 ! Check and correct manually
-1850 `TT'                    0 `<literal remap="tt">'
+1852 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1864 `TT'                    0 `<literal remap="tt">'
+1866 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1864 `BF'                    0 `<emphasis remap="bf">'
+1866 `BF'                    0 `<emphasis remap="bf">'
 ! Check and correct manually
 -> Check if any important attributes have been left behind.
     INPUT                     OUTPUT
 Line Tag                  Line Tag
-1864 `TT'                    0 `<literal remap="tt">'
+1866 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1868 `TT'                    0 `<literal remap="tt">'
+1870 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1868 `TT'                    0 `<literal remap="tt">'
+1870 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1868 `TT'                    0 `<literal remap="tt">'
+1870 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1904 `REF'                   0 `<link>'
-1904 `TT'                    0 `<literal remap="tt">'
+1907 `REF'                   0 `<link>'
+1907 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1904 `TT'                    0 `<literal remap="tt">'
+1907 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1915 `TT'                    0 `<literal remap="tt">'
+1918 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1932 `TT'                    0 `<literal remap="tt">'
+1935 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1934 `TT'                    0 `<literal remap="tt">'
+1937 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1934 `TT'                    0 `<literal remap="tt">'
+1937 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1934 `TT'                    0 `<literal remap="tt">'
+1937 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1940 `TT'                    0 `<literal remap="tt">'
+1943 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1940 `TT'                    0 `<literal remap="tt">'
+1943 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1940 `TT'                    0 `<literal remap="tt">'
+1943 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1948 `TT'                    0 `<literal remap="tt">'
+1953 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-1968 `CODE'                  0 `<programlisting>'
+1973 `CODE'                  0 `<programlisting>'
 ! Because it contains a newline character
-1986 `CODE'                  0 `<programlisting>'
+1991 `CODE'                  0 `<programlisting>'
 ! Because it contains a newline character
-1993 `CODE'                  0 `<programlisting>'
+1998 `CODE'                  0 `<programlisting>'
 ! Because it contains a newline character
-2000 `CODE'                  0 `<programlisting>'
+2005 `CODE'                  0 `<programlisting>'
 ! Because it contains a newline character
-2007 `CODE'                  0 `<programlisting>'
-! Because it contains a newline character
-2022 `CODE'                  0 `<programlisting>'
+2012 `CODE'                  0 `<programlisting>'
 ! Because it contains a newline character
 2027 `CODE'                  0 `<programlisting>'
 ! Because it contains a newline character
-2029 `TT'                    0 `<literal remap="tt">'
+2032 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+2034 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2037 `TT'                    0 `<literal remap="tt">'
+2042 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2037 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2045 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2048 `TT'                    0 `<literal remap="tt">'
+2042 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 2050 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
--> Check if any important attributes have been left behind.
-    INPUT                     OUTPUT
-Line Tag                  Line Tag
-2050 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2052 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 2053 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2057 `TT'                    0 `<literal remap="tt">'
+2055 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2055 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 2057 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2064 `TT'                    0 `<literal remap="tt">'
+2058 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2064 `TT'                    0 `<literal remap="tt">'
+2062 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2064 `TT'                    0 `<literal remap="tt">'
+2062 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2064 `TT'                    0 `<literal remap="tt">'
+2069 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2071 `TSCREEN'               0 `<screen>'
-2081 `VERB'                  0 `'
+2069 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2069 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2069 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2076 `TSCREEN'               0 `<screen>'
+2086 `VERB'                  0 `'
 ! Because it is in TSCREEN
-2083 `TT'                    0 `<literal remap="tt">'
+2088 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2083 `TT'                    0 `<literal remap="tt">'
+2088 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2083 `TT'                    0 `<literal remap="tt">'
+2088 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2087 `TT'                    0 `<literal remap="tt">'
+2092 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2087 `TT'                    0 `<literal remap="tt">'
+2092 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2087 `TT'                    0 `<literal remap="tt">'
+2092 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2087 `TT'                    0 `<literal remap="tt">'
+2092 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2087 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2090 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2090 `TT'                    0 `<literal remap="tt">'
+2092 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 2095 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2099 `BF'                    0 `<emphasis remap="bf">'
+2095 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2101 `TT'                    0 `<literal remap="tt">'
+2100 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2103 `TSCREEN'               0 `<screen>'
-2112 `VERB'                  0 `'
+2104 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2106 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2108 `TSCREEN'               0 `<screen>'
+2117 `VERB'                  0 `'
 ! Because it is in TSCREEN
-2113 `TT'                    0 `<literal remap="tt">'
+2118 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2113 `TT'                    0 `<literal remap="tt">'
+2118 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2119 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
--> Check if any important attributes have been left behind.
-    INPUT                     OUTPUT
-Line Tag                  Line Tag
-2125 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2129 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2129 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2129 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2129 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2144 `CODE'                  0 `<programlisting>'
-! Because it contains a newline character
-2146 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2146 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2153 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2157 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2162 `CODE'                  0 `<programlisting>'
-! Because it contains a newline character
-2164 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2164 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2171 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2171 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2171 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2171 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2178 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2178 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2178 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2178 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2178 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2178 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2178 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2178 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2187 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2196 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2196 `TT'                    0 `<literal remap="tt">'
+2124 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 -> Check if any important attributes have been left behind.
     INPUT                     OUTPUT
 Line Tag                  Line Tag
-2196 `TT'                    0 `<literal remap="tt">'
+2130 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2196 `TT'                    0 `<literal remap="tt">'
+2134 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2196 `TT'                    0 `<literal remap="tt">'
+2134 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2196 `TT'                    0 `<literal remap="tt">'
+2134 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2212 `TT'                    0 `<literal remap="tt">'
+2134 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2222 `CODE'                  0 `<programlisting>'
+2149 `CODE'                  0 `<programlisting>'
 ! Because it contains a newline character
-2250 `TT'                    0 `<literal remap="tt">'
+2151 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
+2151 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2158 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2162 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2167 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+2169 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2169 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2176 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2176 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2176 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2176 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2183 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2183 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2183 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2183 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2183 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2183 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2183 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2183 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2192 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2201 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2201 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2201 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2201 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2201 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2201 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2217 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2227 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
 2255 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2255 `TT'                    0 `<literal remap="tt">'
+2260 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2259 `TT'                    0 `<literal remap="tt">'
+2260 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2259 `TT'                    0 `<literal remap="tt">'
+2264 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2259 `TT'                    0 `<literal remap="tt">'
+2264 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2259 `TT'                    0 `<literal remap="tt">'
+2264 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2265 `TT'                    0 `<literal remap="tt">'
+2264 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2265 `TT'                    0 `<literal remap="tt">'
+2270 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2269 `TT'                    0 `<literal remap="tt">'
+2270 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2269 `TT'                    0 `<literal remap="tt">'
+2274 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2273 `TT'                    0 `<literal remap="tt">'
+2274 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2298 `CODE'                  0 `<programlisting>'
+2278 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2303 `CODE'                  0 `<programlisting>'
 ! Because it contains a newline character
-2303 `TT'                    0 `<literal remap="tt">'
+2308 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2303 `TT'                    0 `<literal remap="tt">'
+2308 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2307 `TT'                    0 `<literal remap="tt">'
+2312 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2307 `TT'                    0 `<literal remap="tt">'
+2312 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2313 `TT'                    0 `<literal remap="tt">'
+2318 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2313 `TT'                    0 `<literal remap="tt">'
+2318 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2313 `TT'                    0 `<literal remap="tt">'
+2318 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2313 `TT'                    0 `<literal remap="tt">'
+2318 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2313 `TT'                    0 `<literal remap="tt">'
+2318 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 -> Check if any important attributes have been left behind.
     INPUT                     OUTPUT
 Line Tag                  Line Tag
-2313 `TT'                    0 `<literal remap="tt">'
+2318 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2322 `TT'                    0 `<literal remap="tt">'
+2318 `COMMENT'               0 `note'
+! Too conspicuous for an ex-comment.  Find a better element! (note that <comment> does not render its content in HTML)!
+2329 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2322 `TT'                    0 `<literal remap="tt">'
+2329 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2340 `TT'                    0 `<literal remap="tt">'
+2347 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2340 `TT'                    0 `<literal remap="tt">'
+2347 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2340 `TT'                    0 `<literal remap="tt">'
+2347 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2346 `TT'                    0 `<literal remap="tt">'
+2353 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2346 `TT'                    0 `<literal remap="tt">'
+2353 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2346 `TT'                    0 `<literal remap="tt">'
+2353 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2346 `TT'                    0 `<literal remap="tt">'
+2353 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2346 `TT'                    0 `<literal remap="tt">'
+2353 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2346 `TT'                    0 `<literal remap="tt">'
+2353 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2346 `TT'                    0 `<literal remap="tt">'
+2353 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2355 `TT'                    0 `<literal remap="tt">'
+2362 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2355 `TT'                    0 `<literal remap="tt">'
+2362 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2364 `TT'                    0 `<literal remap="tt">'
+2371 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2370 `TT'                    0 `<literal remap="tt">'
+2377 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2375 `TT'                    0 `<literal remap="tt">'
+2382 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2375 `TT'                    0 `<literal remap="tt">'
+2382 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2375 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2383 `TT'                    0 `<literal remap="tt">'
-! Check and correct manually
-2383 `TT'                    0 `<literal remap="tt">'
+2382 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 2390 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2394 `TT'                    0 `<literal remap="tt">'
+2390 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2394 `TT'                    0 `<literal remap="tt">'
+2397 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 2401 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2417 `TT'                    0 `<literal remap="tt">'
+2401 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2417 `TT'                    0 `<literal remap="tt">'
+2408 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2424 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
 -> Check if any important attributes have been left behind.
     INPUT                     OUTPUT
 Line Tag                  Line Tag
-2427 `TT'                    0 `<literal remap="tt">'
+2424 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2427 `TT'                    0 `<literal remap="tt">'
+2434 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2427 `TT'                    0 `<literal remap="tt">'
+2434 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2439 `TT'                    0 `<literal remap="tt">'
+2434 `TT'                    0 `<literal remap="tt">'
 ! Check and correct manually
-2442 `'                      0 `'
-! check if reference ID Copyright was meant for a section (if not, change manually)
-2444 `TSCREEN'               0 `<screen>'
-2461 `VERB'                  0 `'
+2446 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2449 `'                      0 `'
+! check if reference ID Copyright was meant for a section (if not, eg for an anchor, change manually)
+2451 `TSCREEN'               0 `<screen>'
+2468 `VERB'                  0 `'
 ! Because it is in TSCREEN
 === NIF conversion errors ========================
-Unknown META NAME value: keywords
 === Finalising errors ===========================
