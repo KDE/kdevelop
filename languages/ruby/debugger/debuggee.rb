@@ -252,6 +252,7 @@ class Context
     for c in ary
 	  str = debug_inspect(obj.module_eval(c))
       if c.to_s != str && c.to_s !~ /SCRIPT_LINES__|TRUE|FALSE|NIL|MatchingData/ &&
+        c.to_s !~ /^PLATFORM$|^RELEASE_DATE$|^VERSION$/ &&
         c.to_s !~ /IPsocket|IPserver|UDPsocket|UDPserver|TCPserver|TCPsocket|UNIXserver|UNIXsocket/
 		if c.to_s == "ENV"
       	  stdout.printf "  %s => Hash (%d element(s))\n", c, obj.module_eval(c).length
