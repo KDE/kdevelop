@@ -1,11 +1,12 @@
+# Here resides the qextmdi library.
 
-INCLUDES= $(all_includes)
+INCLUDES = $(all_includes)
 
-noinst_LIBRARIES = libqextmdi.a
+lib_LTLIBRARIES = libkdevqextmdi.la
+libkdevqextmdi_la_LDFLAGS = $(all_libraries) -version-info 1:0
 
-libqextmdi_a_METASOURCES = AUTO
-
-libqextmdi_a_SOURCES = qextmdichildarea.cpp qextmdichildfrm.cpp qextmdichildfrmcaption.cpp qextmdichildview.cpp qextmdimainfrm.cpp qextmditaskbar.cpp
+libkdevqextmdi_la_SOURCES = qextmdichildarea.cpp qextmdichildfrm.cpp qextmdichildfrmcaption.cpp qextmdichildview.cpp qextmdimainfrm.cpp qextmditaskbar.cpp
 
 noinst_HEADERS = qextmdichildarea.h qextmdichildfrm.h qextmdichildfrmcaption.h qextmdichildview.h qextmdimainfrm.h qextmditaskbar.h qextmdiiterator.h qextmdilistiterator.h qextmdinulliterator.h
 
+METASOURCES = AUTO
