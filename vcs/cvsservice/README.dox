@@ -1,7 +1,7 @@
 /** \class CvsServicePart
-This is an experimental attempt to integrate Cervisia HEAD's cvsservice into kdevelop (read FAQ).
-This part _does_ require cvsservice being installed on your system: the configure script
-in the main source directory should autodetect the presence of Cervisia and build it.
+This plugin integrates Cervisia (version >= 2.1) cvsservice DCOP service into kdevelop (read FAQ at the bottom
+of this document): so, this part _does_ require cvsservice installed on your system: the configure script
+in the main source directory should automagically detect the presence of Cervisia and build this plugin.
 If Cervisia wasn't installed in $KDEDIR than you need to specify paths for lib and include
 files, for example:
 <code>
@@ -13,10 +13,12 @@ files, for example:
 installed cervisia to try this nice piece of software, you need to re-run configure so it
 can detect cervisia installation and enable compilation for vcs/cvsservice.
 
-<b>WARNING:</b> Keep in mind that there are incoming changes in cvsservice architecture
-which could make this part quite subject to heavy modifications.
+<b>WARNING:</b> This plugin will quite surely change when the upcoming modifications in Cervisia's own
+architecture (separation of core and front-ends and user applications' library) are done (probably
+starting from kde >= 3.3). If you want to partecipate please join discussions on the cervisia@kde.org
+mailing list. Contributions are always welcome :-)
 
-<b>WARNING2:</b> If it doesn't compile try to update your cvsservice.
+<b>WARNING2:</b> If it doesn't compile try to update your cervisia installation.
 
 Implementation of this component is done by:
   - class CvsServicePart, which does provide integration within kdevelop, set-up GUI
@@ -49,7 +51,6 @@ Implementation of this component is done by:
     - Fix the "cvs update" function which behave strangely for sub-directories of the main
       project dir.
     - (> 3.0) Replace the menu entries text with shorter ones
-    - (> 3.0) Add a new state & color enntry for 'Needs Patch' CVS state :-/
     - Fix bugs on bugs.kde.org ;-)
 
 
@@ -76,5 +77,6 @@ Implementation of this component is done by:
 
 \faq <b>Does cvsservicepart support login with :pserver: or :ext: ?</b>
    Well, I dunno ;-) I have no ssh repositories to test so feel free to provide feedback on the subject :-)
-
+   Update: Ok, it seems at least one user has tried :ext: reporting it to work (with ssh-agent avoiding some
+   typing headache ;-))
 */
