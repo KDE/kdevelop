@@ -15,6 +15,10 @@ service_DATA = kdevpart_tipofday.desktop
 tip_DATA = tips
 tipdir = $(kde_datadir)/kdevelop
 
+
+rc_DATA = kdevpart_tipofday.rc
+rcdir = $(kde_datadir)/kdevtipofday
+
 messages:
 	perl ./preparetips > tips.cc
 	$(XGETTEXT) *.cpp *.h tips.cc -o $(podir)/kdevtipofday.pot
