@@ -9,7 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
-// TODO: Clean up the different usages of the different indices!
+/// @todo: Clean up the different usages of the different indices!
 
 #include <qptrlist.h>
 #include <qlayout.h>

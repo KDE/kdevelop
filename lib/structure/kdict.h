@@ -25,7 +25,7 @@ class KDict : private Structure::Trie_Impl<char, QString, type*>
   typedef Structure::Trie_Impl<char, QString, type*> Impl;
 
   KDict(bool cs = true) : Impl(' '), case_sensitive(cs), auto_delete(false) {
-    // TODO: actually handle case sensitivity
+    /// @todo: actually handle case sensitivity
     component = 0;
   }
   KDict(int sz, bool cs = true) : Impl(' '), case_sensitive(cs), auto_delete(false) {

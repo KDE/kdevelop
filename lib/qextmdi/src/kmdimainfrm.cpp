@@ -929,7 +929,7 @@ bool KMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
 	}
         else
 #else
-        // TODO implement me for Qt-only!
+        /// @todo implement me for Qt-only!
 #endif
         {
 #ifndef NO_KDE
@@ -981,8 +981,8 @@ void KMdiMainFrm::findRootDockWidgets(QPtrList<KDockWidget>* pRootDockWidgetList
    if (!pPositionList) return;
 
    // since we set some windows to toplevel, we must consider the window manager's window frame
-   const int frameBorderWidth  = 7;  // TODO: Can we / do we need to ask the window manager?
-   const int windowTitleHeight = 10; // TODO:    -"-
+   const int frameBorderWidth  = 7;  /// @todo: Can we / do we need to ask the window manager?
+   const int windowTitleHeight = 10; /// @todo: Can we / do we need to ask the window manager?
 
    QObjectList* pObjList = queryList( "KDockWidget");
    QObjectListIt it( *pObjList);
@@ -1046,7 +1046,7 @@ void KMdiMainFrm::switchToToplevelMode()
 
    KMdi::MdiMode oldMdiMode = m_mdiMode;
 
-   const int frameBorderWidth  = 7;  // TODO: Can we / do we need to ask the window manager?
+   const int frameBorderWidth  = 7;  /// @todo: Can we / do we need to ask the window manager?
    setUndockPositioningOffset( QPoint( 0, (m_pTaskBar ? m_pTaskBar->height() : 0) + frameBorderWidth));
 
    // 1.) select the dockwidgets to be undocked and store their geometry

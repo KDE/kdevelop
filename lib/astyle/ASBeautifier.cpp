@@ -936,7 +936,7 @@ string ASBeautifier::beautify(const string &originalLine)
                 if (probationHeader == &AS_CONST)
                     isImmediatelyAfterConst = true;
                 //  isInConst = true;
-                /* TODO:
+                /** @todo:
                  * There is actually no more need for the global isInConst variable.
                                * The only reason for checking const is to see if there is a const
                  * immediately before an open-bracket.

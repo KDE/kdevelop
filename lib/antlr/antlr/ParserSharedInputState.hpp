@@ -25,7 +25,7 @@ namespace antlr {
 class ANTLR_API ParserInputState {
 public:
 	/** Construct a new ParserInputState
-	 * @param input_ the TokenBuffer to read from. The object is deleted together
+	 * @param in the TokenBuffer to read from. The object is deleted together
 	 * with the ParserInputState object.
 	 */
 	ParserInputState( TokenBuffer* in )

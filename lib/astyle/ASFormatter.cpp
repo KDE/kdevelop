@@ -216,7 +216,7 @@ void ASFormatter::staticInit() {
  * deleted during the ASFormatter's destruction, and thus should not be
  * deleted elsewhere.
  *
- * @param iter     a pointer to the DYNAMICALLY CREATED ASSourceIterator object.
+ * @param si     a pointer to the DYNAMICALLY CREATED ASSourceIterator object.
  */
 void ASFormatter::init(ASSourceIterator *si) {
     ASBeautifier::init(si);
@@ -386,7 +386,7 @@ string ASFormatter::nextLine() {
             isInQuote = true;
             quoteChar = currentChar;
             ////            if (shouldPadOperators)  // BUGFIX: these two lines removed. seem to be unneeded, and interfere with L"
-            ////                appendSpacePad();    // BUFFIX:	TODO make sure the removal of these lines doesn't reopen old bugs...
+            ////                appendSpacePad();    // BUFFIX:	@todo make sure the removal of these lines doesn't reopen old bugs...
             appendCurrentChar();
             continue;
         }
