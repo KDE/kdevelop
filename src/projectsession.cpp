@@ -66,7 +66,7 @@ void ProjectSession::initXMLTree()
 }
 
 //---------------------------------------------------------------------------
-bool ProjectSession::restoreFromFile(const QString& sessionFileName, const QDict<KDevPlugin>& projectPlugins)
+bool ProjectSession::restoreFromFile( const QString & sessionFileName, const QValueList< KDevPlugin * > plugins )
 {
   bool bFileOpenOK = true;
 
@@ -101,20 +101,21 @@ bool ProjectSession::restoreFromFile(const QString& sessionFileName, const QDict
     recreateDocs(session);
   }
 
-  // now also let the project-related plugins load their session stuff
-  QDomElement pluginListEl = session.namedItem("pluginList").toElement();
-  QDictIterator<KDevPlugin> it(projectPlugins);
-  for ( ; it.current(); ++it) {
-    KDevPlugin* pPlugin = it.current();
-    Q_ASSERT(pPlugin->instance());
-    QString pluginName = pPlugin->instance()->instanceName();
-    QDomElement pluginEl = pluginListEl.namedItem(pluginName).toElement();
-    if (!pluginEl.isNull()) {
-      // now plugin, load what you find!
-      pPlugin->restorePartialProjectSession(&pluginEl);
-    }
-  }
-
+	// now also let the plugins load their session stuff
+	QDomElement pluginListEl = session.namedItem("pluginList").toElement();
+	QValueList<KDevPlugin*>::ConstIterator it = plugins.begin();
+	while( it != plugins.end() )
+	{
+		KDevPlugin* pPlugin = (*it);
+		QString pluginName = pPlugin->instance()->instanceName();
+		QDomElement pluginEl = pluginListEl.namedItem(pluginName).toElement();
+		if (!pluginEl.isNull()) {
+			// now plugin, load what you find!
+			pPlugin->restorePartialProjectSession(&pluginEl);
+		}
+		++it;
+	}
+  
   return true;
 }
 
@@ -205,7 +206,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 }
 
 //---------------------------------------------------------------------------
-bool ProjectSession::saveToFile(const QString& sessionFileName, const QDict<KDevPlugin>& projectPlugins)
+bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueList< KDevPlugin * > plugins )
 {
 
   QString section, keyword;
@@ -318,19 +319,23 @@ bool ProjectSession::saveToFile(const QString& sessionFileName, const QDict<KDev
     }
   }
 
-  QDictIterator<KDevPlugin> pluginIter(projectPlugins);
-  for ( ; pluginIter.current(); ++pluginIter) {
-    KDevPlugin* pPlugin = pluginIter.current();
-    Q_ASSERT(pPlugin->instance());
-    QString pluginName = pPlugin->instance()->instanceName();
-    QDomElement pluginEl = domdoc.createElement(pluginName);
-    // now plugin, save what you have!
-    pPlugin->savePartialProjectSession(&pluginEl);
-    // if the plugin wrote anything, accept it for the session, otherwise forget it
-    if (pluginEl.hasChildNodes() || pluginEl.hasAttributes()) {
-      pluginListEl.appendChild(pluginEl);
-    }
-  }
+	QValueList<KDevPlugin*>::ConstIterator itt = plugins.begin();
+	while( itt != plugins.end() )
+	{
+		KDevPlugin* pPlugin = (*itt);
+		QString pluginName = pPlugin->instance()->instanceName();
+		QDomElement pluginEl = domdoc.createElement(pluginName);
+		
+		// now plugin, save what you have!
+		pPlugin->savePartialProjectSession(&pluginEl);
+		
+		// if the plugin wrote anything, accept itt for the session, otherwise forget itt
+		if (pluginEl.hasChildNodes() || pluginEl.hasAttributes()) 
+		{
+			pluginListEl.appendChild(pluginEl);
+		}
+		++itt;
+	}
 
   // Write it out to the session file on disc
   QFile f(sessionFileName);
@@ -343,3 +348,4 @@ bool ProjectSession::saveToFile(const QString& sessionFileName, const QDict<KDev
 
   return true;
 }
+

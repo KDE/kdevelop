@@ -23,15 +23,16 @@
 #include <kdevappfrontend.h>
 #include <kdevdifffrontend.h>
 #include <kdevsourceformatter.h>
+#include <kdevcreatefile.h>
 #include <kaction.h>
 
 #include "core.h"
 #include "api.h"
 #include "toplevel.h"
+#include "projectmanager.h"
 #include "partselectwidget.h"
 
 #include "plugincontroller.h"
-#include "plugincontroller.moc"
 
 // a separate method in this anonymous namespace to avoid having it all
 // inline in plugincontroller.h
@@ -153,6 +154,16 @@ void PluginController::loadDefaultParts()
   } else {
     kdDebug( 9000 ) << "could not load Source formatter" << endl;
   }
+  
+  // File Create
+  emit loadingPlugin( i18n("Loading plugin: File Create") );
+  KDevCreateFile * createFile = loadDefaultPart<KDevCreateFile>( "KDevelop/CreateFile" );
+  if ( createFile ) {
+    API::getInstance()->setCreateFile( createFile );
+  } else {
+    kdDebug( 9000 ) << "Could not load CreateFile plugin" << endl;
+  }
+  
 }
 
 // a Core plugin is implicitly global, so it makes
@@ -170,7 +181,6 @@ void PluginController::loadCorePlugins()
 
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
 
-//    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
     emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
@@ -209,7 +219,6 @@ void PluginController::loadGlobalPlugins()
 
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
 
-//    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
     emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
@@ -229,6 +238,84 @@ void PluginController::unloadGlobalPlugins()
     m_globalParts.remove( it.currentKey() );
     delete part;
   }
+}
+
+void PluginController::loadLocalParts( ProjectInfo * projectInfo, QStringList const & loadPlugins, QStringList const & ignorePlugins  )
+{
+	KTrader::OfferList localOffers = pluginServices( "Project" );
+	for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
+	{
+		QString name = (*it)->name();
+		kdDebug(9000) << "-----------------------------> load part " << name << endl;
+		
+		// Check if it is already loaded or should be ignored
+		if( m_localParts[ name ] != 0 || ignorePlugins.contains( name ) )
+			continue;
+	
+		if( loadPlugins.contains( name ) || checkNewService( projectInfo, *it ) )
+		{
+			KDevPlugin *part = loadPlugin( *it );
+			if ( !part ) continue;
+		
+			integratePart( part );
+			m_localParts.insert( name, part );
+		}
+	}
+}
+
+void PluginController::unloadAllLocalParts( )
+{
+	for( QDictIterator<KDevPlugin> it(m_localParts); !it.isEmpty(); )
+	{
+		KDevPlugin* part = it.current();
+		removePart( part );
+		m_localParts.remove( it.currentKey() );
+		delete part;
+	}
+}
+
+void PluginController::unloadLocalParts( QStringList const & unloadParts )
+{
+	QStringList::ConstIterator it = unloadParts.begin();
+	while ( it != unloadParts.end() )
+	{
+		KDevPlugin* part = m_localParts[ *it ];
+		if( part ) 
+		{
+			removePart( part );
+			m_localParts.remove( *it );
+			part->deleteLater();
+		}
+		++it;
+	}
+}
+
+bool PluginController::checkNewService( ProjectInfo * projectInfo, const KService::Ptr &service )
+{
+  QVariant var = service->property("X-KDevelop-ProgrammingLanguages");
+  QStringList langlist = var.asStringList();
+
+  // empty means it supports all languages
+  if( !langlist.isEmpty() && !langlist.contains(projectInfo->m_activeLanguage) ) {
+    projectInfo->m_ignoreParts << service->name();
+    return false;
+  }
+
+  // the language is ok, now check if the keywords match
+  QStringList serviceKeywords = service->keywords();
+  for ( QStringList::Iterator is = serviceKeywords.begin();
+        is != serviceKeywords.end(); ++is )
+  {
+    if ( !projectInfo->m_keywords.contains(*is) ) {
+      // no match
+      kdDebug(9000) << "ignoreParts because Keyword does not match: " << service->name() << endl;
+      projectInfo->m_ignoreParts << service->name();
+      return false;
+    }
+  }
+
+  projectInfo->m_loadParts << service->name();
+  return true;
 }
 
 KService::List PluginController::pluginServices( const QString &scope )
@@ -282,3 +369,27 @@ void PluginController::removePart(KXMLGUIClient *part)
 {
   TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
 }
+
+const QValueList<KDevPlugin*> PluginController::loadedPlugins()
+{
+	QValueList<KDevPlugin*> plugins;
+
+	QDictIterator<KDevPlugin> it(m_localParts);
+	while( it.current() )
+	{
+		plugins.append( it.current() );
+		++it;
+	}
+
+	QDictIterator<KDevPlugin> itt(m_globalParts);
+	while( itt.current() )
+	{
+		plugins.append( itt.current() );
+		++itt;
+	}
+
+	return plugins;
+}
+
+#include "plugincontroller.moc"
+

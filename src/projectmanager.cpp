@@ -44,19 +44,6 @@ class QDomDocument;
 
 #include "projectmanager.h"
 
-
-class ProjectInfo
-{
-public:
-  KURL         m_projectURL;
-  QDomDocument m_document;
-  QString      m_projectPlugin, m_language, m_activeLanguage;
-  QStringList  m_ignoreParts, m_loadParts, m_keywords, m_secondaryLanguages;
-  QDict<KDevPlugin> m_localParts;
-
-  QString sessionFile() const;
-};
-
 QString ProjectInfo::sessionFile() const
 {
     QString sf = m_projectURL.path(-1);
@@ -192,7 +179,7 @@ void ProjectManager::switchLanguage(const QString& lang)
   // make sure there is a project loaded
   if ( !m_info ) return;
 
-  unloadLocalParts();
+  PluginController::getInstance()->unloadAllLocalParts();
   unloadLanguageSupport();
   m_info->m_loadParts.clear();
   loadLanguageSupport(lang);
@@ -211,18 +198,7 @@ void ProjectManager::saveSettings()
   if (projectLoaded())
   {
     config->setGroup("General Options");
-#if defined(KDE_IS_VERSION)
-# if KDE_IS_VERSION(3,1,3)
-#  ifndef _KDE_3_1_3_
-#   define _KDE_3_1_3_
-#  endif
-# endif
-#endif
-#if defined(_KDE_3_1_3_)
     config->writePathEntry("Last Project", ProjectManager::getInstance()->projectFile().url());
-#else
-    config->writeEntry("Last Project", ProjectManager::getInstance()->projectFile().url());
-#endif
   }
 
   m_openRecentProjectAction->saveEntries(config, "RecentProjects");
@@ -238,7 +214,6 @@ void ProjectManager::loadDefaultProject()
   {
       loadProject(KURL(project));
   }
-  kapp->processEvents();
 }
 
 bool ProjectManager::loadProject(const KURL &url)
@@ -271,16 +246,13 @@ bool ProjectManager::loadProject(const KURL &url)
   getGeneralInfo();
 
   updateActiveLangMenu();
-  loadCreateFileSupport();
 
   if( !loadLanguageSupport(m_info->m_language) ) {
-    unloadCreateFileSupport();
     delete m_info; m_info = 0;
     return false;
   }
 
   if( !loadProjectPart() ) {
-    unloadCreateFileSupport();
     unloadLanguageSupport();
     delete m_info; m_info = 0;
     return false;
@@ -288,21 +260,15 @@ bool ProjectManager::loadProject(const KURL &url)
 
   loadLocalParts();
 
-//  Core::getInstance()->doEmitProjectOpened();
-
   // shall we try to load a session file from network?? Probably not.
-  if (m_info->m_projectURL.isLocalFile()) {
-    const QDict<KDevPlugin>& globalParts = PluginController::getInstance()->globalParts();
-    QDict<KDevPlugin> allParts = m_info->m_localParts;
-    QDictIterator<KDevPlugin> it(globalParts);
-    for (; it.current(); ++it) {
-      allParts.insert(it.currentKey(), it.current());
-    }
-    // first restore the project session stored in a .kdevses file
-    if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), allParts)) {
-      kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
-    }
-  }
+	if (m_info->m_projectURL.isLocalFile()) 
+	{
+		// first restore the project session stored in a .kdevses file
+		if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() )) 
+		{
+			kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
+		}
+	}
 
   m_openRecentProjectAction->addURL(projectFile());
 
@@ -320,17 +286,13 @@ bool ProjectManager::closeProject()
     return false;
 
   Q_ASSERT( API::getInstance()->project() );
-
+  
   // save the session if it is a local file
-  if (m_info->m_projectURL.isLocalFile()) {
-    const QDict<KDevPlugin>& globalParts = PluginController::getInstance()->globalParts();
-    QDict<KDevPlugin> allParts = m_info->m_localParts;
-    QDictIterator<KDevPlugin> it(globalParts);
-    for (; it.current(); ++it) {
-      allParts.insert(it.currentKey(), it.current());
-    }
-    m_pProjectSession->saveToFile(m_info->sessionFile(), allParts);
-  }
+	if (m_info->m_projectURL.isLocalFile()) 
+	{
+		m_pProjectSession->saveToFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() );
+	}
+  
   if ( !PartController::getInstance()->closeAllWindows() )
     return false;
 
@@ -338,8 +300,7 @@ bool ProjectManager::closeProject()
 
   TopLevel::getInstance()->prepareToCloseViews();
 
-  unloadLocalParts();
-  unloadCreateFileSupport();
+  PluginController::getInstance()->unloadAllLocalParts();
   unloadLanguageSupport();
   unloadProjectPart();
 
@@ -568,120 +529,13 @@ void ProjectManager::unloadLanguageSupport()
   API::getInstance()->setLanguageSupport(0);
 }
 
-bool ProjectManager::loadCreateFileSupport() {
-  kdDebug(9000) << "Looing for CreateFile support" << endl;
-  KTrader::OfferList createFileOffers =
-    KTrader::self()->query(QString::fromLatin1("KDevelop/CreateFile"), QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
-
-  if (createFileOffers.isEmpty()) {
-    kdDebug(9000) << "No offers found" << endl;
-    API::getInstance()->setCreateFile(0);
-    return false;
-  }
-
-  KService::Ptr createFileService = *createFileOffers.begin();
-  KDevCreateFile *crfileSupport =
-    KParts::ComponentFactory::createInstanceFromService<KDevCreateFile>(createFileService,
-                                                                        API::getInstance(),
-                                                                        0,
-                                                                        PluginController::argumentsFromService(createFileService) );
-  API::getInstance()->setCreateFile(crfileSupport);
-  if (!crfileSupport) {
-    kdDebug(9000) << "Could not load CreateFile plugin" << endl;
-    return false;
-  }
-  PluginController::getInstance()->integratePart( crfileSupport );
-  kdDebug(9000) << "CreateFile support loaded OK" << endl;
-  return true;
-
-
-}
-
-void ProjectManager::unloadCreateFileSupport() {
-  KDevCreateFile *crfileSupport = API::getInstance()->createFile();
-  if (!crfileSupport) return;
-  PluginController::getInstance()->removePart(crfileSupport);
-  delete crfileSupport;
-  API::getInstance()->setCreateFile(0);
-}
-
 void ProjectManager::loadLocalParts()
 {
-  // Make sure to refresh load/ignore lists
-  getGeneralInfo();
-
-  KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
-  for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
-  {
-    QString name = (*it)->name();
-    kdDebug(9000) << "-----------------------------> load part " << name << endl;
-
-    // Unload it if it is marked as ignored and loaded
-    if (m_info->m_ignoreParts.contains(name)) {
-      KDevPlugin* part = m_info->m_localParts[name];
-      if( part ) {
-        PluginController::getInstance()->removePart( part );
-        m_info->m_localParts.remove( name );
-        part->deleteLater();
-      }
-      continue;
-    }
-
-    // Check if it is already loaded
-    if( m_info->m_localParts[ name ] != 0 )
-      continue;
-
-    if( m_info->m_loadParts.contains( name ) ||
-        checkNewService( *it ) )
-    {
-      KDevPlugin *part = PluginController::loadPlugin( *it );
-      if ( !part ) continue;
-
-      PluginController::getInstance()->integratePart( part );
-      m_info->m_localParts.insert( name, part );
-    }
-// do NOT do processEvents() here, it will delete the unloading plugins before they're ready!
-//    kapp->processEvents();
-  }
-}
-
-void ProjectManager::unloadLocalParts()
-{
-  for( QDictIterator<KDevPlugin> it( m_info->m_localParts ); !it.isEmpty(); )
-  {
-    KDevPlugin* part = it.current();
-    PluginController::getInstance()->removePart( part );
-    m_info->m_localParts.remove( it.currentKey() );
-    delete part;
-  }
-}
-
-bool ProjectManager::checkNewService(const KService::Ptr &service)
-{
-  QVariant var = service->property("X-KDevelop-ProgrammingLanguages");
-  QStringList langlist = var.asStringList();
-
-  // empty means it supports all languages
-  if( !langlist.isEmpty() && !langlist.contains(m_info->m_activeLanguage) ) {
-    m_info->m_ignoreParts << service->name();
-    return false;
-  }
-
-  // the language is ok, now check if the keywords match
-  QStringList serviceKeywords = service->keywords();
-  for ( QStringList::Iterator is = serviceKeywords.begin();
-        is != serviceKeywords.end(); ++is )
-  {
-    if ( !m_info->m_keywords.contains(*is) ) {
-      // no match
-      kdDebug(9000) << "ignoreParts because Keyword does not match: " << service->name() << endl;
-      m_info->m_ignoreParts << service->name();
-      return false;
-    }
-  }
-
-  m_info->m_loadParts << service->name();
-  return true;
+	// Make sure to refresh load/ignore lists
+	getGeneralInfo();
+	
+	PluginController::getInstance()->unloadLocalParts( m_info->m_ignoreParts );
+	PluginController::getInstance()->loadLocalParts( m_info, m_info->m_loadParts, m_info->m_ignoreParts );
 }
 
 KURL ProjectManager::projectFile() const

@@ -3,6 +3,7 @@
 
 #include <qobject.h>
 #include <qdict.h>
+#include <qvaluelist.h>
 
 #include <kservice.h>
 
@@ -10,6 +11,7 @@ class KXMLGUIClient;
 class KService;
 class KDevPlugin;
 class KDialogBase;
+class ProjectInfo;
 
 class PluginController : public QObject
 {
@@ -32,11 +34,15 @@ public:
   QString currentProfilePath() const { return m_profilePath; }
   
   void loadInitialPlugins();
-
+  
+  void loadLocalParts( ProjectInfo*, QStringList const & loadPlugins, QStringList const & ignorePlugins );	// @todo figure out a way to remove the ProjectInfo parameter
+  void unloadAllLocalParts();
+  void unloadLocalParts( QStringList const & );
+  
   void integratePart(KXMLGUIClient *part);
   void removePart(KXMLGUIClient* part);
 
-  const QDict<KDevPlugin>& globalParts() { return m_globalParts; }
+  const QValueList<KDevPlugin*> loadedPlugins();
 
 signals:
   void loadingPlugin(const QString &plugin);
@@ -52,8 +58,10 @@ private slots:
   
 private:
   void loadDefaultParts();
+  bool checkNewService( ProjectInfo *, const KService::Ptr &service );
 
   QDict<KDevPlugin> m_globalParts;
+  QDict<KDevPlugin> m_localParts;
   QString m_profile;
   QString m_profilePath;
   QString m_defaultProfile;

@@ -4,6 +4,7 @@
 
 #include <qstring.h>
 #include <qobject.h>
+#include <qdict.h>
 
 
 #include <kxmlguiclient.h>
@@ -15,6 +16,20 @@ class KService;
 class ProjectInfo;
 class ProjectSession;
 class KRecentFilesAction;
+class KDevPlugin;
+
+
+class ProjectInfo
+{
+public:
+  KURL         m_projectURL;
+  QDomDocument m_document;
+  QString      m_projectPlugin, m_language, m_activeLanguage;
+  QStringList  m_ignoreParts, m_loadParts, m_keywords, m_secondaryLanguages;
+
+  QString sessionFile() const;
+};
+
 
 class ProjectManager : public QObject, public KXMLGUIClient
 {
@@ -50,7 +65,6 @@ private slots:
   void slotProjectOptions();
 
   void loadLocalParts();
-  void unloadLocalParts();
 
   void updateActiveLangMenu();
   void switchLanguage(const QString& lang);
@@ -60,7 +74,6 @@ private:
 
   void setupActions();
   void getGeneralInfo();
-  bool checkNewService(const KService::Ptr &service);
 
   bool loadProjectFile();
   bool saveProjectFile();
@@ -70,9 +83,6 @@ private:
 
   bool loadLanguageSupport(const QString& lang);
   void unloadLanguageSupport();
-
-  bool loadCreateFileSupport();
-  void unloadCreateFileSupport();
 
   ProjectInfo *m_info;
 

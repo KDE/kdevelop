@@ -20,6 +20,7 @@
 #include <qobject.h>
 #include <qdom.h>
 #include <qdict.h>
+#include <qvaluelist.h>
 
 class QWidget;
 class KURL;
@@ -40,9 +41,10 @@ public:
   virtual ~ProjectSession();
 
   /** Opens the .kdevses file and saves the project session in XML format to it. */
-  bool saveToFile(const QString& fileName, const QDict<KDevPlugin>& projectPlugins);
+  bool saveToFile(const QString& fileName, const QValueList<KDevPlugin*> plugins );
+  
   /** Opens the .kdevses file and loads the project session from it. */
-  bool restoreFromFile(const QString& fileName, const QDict<KDevPlugin>& projectPlugins);
+  bool restoreFromFile(const QString& fileName, const QValueList<KDevPlugin*> plugins );
 
 signals:
   void sig_restoreMainWindowProperties(const QDomElement* el);
