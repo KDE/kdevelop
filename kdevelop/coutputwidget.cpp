@@ -114,7 +114,7 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     bool displayAdditions=atEnd();
     
     // escapes the string 
-    line = QStyleSheet::convertFromPlainText( line );
+    // line = QStyleSheet::convertFromPlainText( line );
 
     insertAt(line, row, col);
     if (displayAdditions)
