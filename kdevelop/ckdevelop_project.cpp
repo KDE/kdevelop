@@ -553,7 +553,9 @@ void CKDevelop::slotProjectNewAppl(){
   
   if(kappw->generatedProject()){
     readProjectFile(file);
-    slotBuildMessages();
+    if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde") {
+      slotBuildMessages();
+    }
   }
   else if (old_project != ""){ // if cancel load the old project again
     readProjectFile(old_project);

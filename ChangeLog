@@ -2,6 +2,15 @@
 	* finished work on the KDevelop User Manual, now completely covering
 	KDevelop - NOTE: the manual will be reviewed by Michael Farr and
 	updated for correctness of contents and spelling within the next week.
+
+1999-05-02 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* change the design of the application wizard
+	* registered some files
+	* you can create the project without sources and headers
+	( it's only part one from changing the application wizard )
+	  
+1999-05-02  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added "build->Make distribution" menuentry
  
 1999-05-02  Sandy Meier  <smeier@rz.uni-potsdam.de> 	
 	* added "build->Make distribution" menuentry 	

@@ -40,7 +40,7 @@ CKAppWizard::~CKAppWizard () {
 
 void CKAppWizard::init(){
   
-  setFixedSize(400,400);
+  setFixedSize(515,530);
   setCancelButton();
   cancelButton = new QButton();
   cancelButton = getCancelButton();
@@ -65,7 +65,7 @@ void CKAppWizard::initPages(){
   page0 = new KWizardPage;
   widget0 = new QWidget(this);
   page0->w = widget0;
-  page0->title = (i18n("KWizard"));
+  page0->title = (i18n("Applications"));
   addPage(page0);
   
   QPixmap iconpm;    
@@ -74,57 +74,105 @@ void CKAppWizard::initPages(){
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/kAppWizard.bmp");
   
   // create a widget and paint a picture on it
-  widget1a = new QWidget(widget0);
-  widget1a->setGeometry(0,0,400,140);
-  widget1a->setBackgroundPixmap(pm);
-  // create another widget for a picture
-  widget1b = new QWidget(widget0);
-  widget1b->setGeometry(230,150,140,140);
-  separator0 = new KSeparator (widget0);
-  separator0->setGeometry(0,140,400,5);
-  // create the RadioButtonGroup with all buttons, bubble-help and connections
-  bgroup = new QButtonGroup(i18n("Application"),widget0);
-  bgroup->setGeometry(20,150,180,140);
-  kna = new QRadioButton (i18n("KDE-Application"),widget0);
-  kna->setGeometry(30,168,145,30);
-//  QToolTip::add(kna,i18n("use for a KDE-Application with toolbar ect."));
-  KQuickHelp::add(kna,
-	i18n("Select this to create a complete framework for\n"
-		"your new application. It will contain three main\n"
-		"classes: one for the mainwindow, one for the\n"
-		"main view and one for the application's documents\n"
-  		"The main window offers a menubar, toolbar and\n"
-		"a statusbar including statusbar help and status\n"
-		"signaling."));
- 
-  connect(kna,SIGNAL(clicked()),SLOT(slotAppClicked()));
-  kma = new QRadioButton (i18n("KDE-Mini-Application"),widget0);
-  kma->setGeometry(30,196,150,30);
-//  QToolTip::add(kma,i18n("use for a minimal KDE-Application"));
-  KQuickHelp::add(kma,
-	i18n("Select this to create a mini-Application.\n"
-	 	"This will only contain the main widget\n"
-		"class which inherits QWidget until now."));
+	widget1a = new QWidget( widget0, "widget1a" );
+	widget1a->setGeometry( 0, 0, 500, 160 );
+	widget1a->setMinimumSize( 0, 0 );
+	widget1a->setMaximumSize( 32767, 32767 );
+	widget1a->setFocusPolicy( QWidget::NoFocus );
+	widget1a->setBackgroundMode( QWidget::PaletteBackground );
+	widget1a->setFontPropagation( QWidget::NoChildren );
+	widget1a->setPalettePropagation( QWidget::NoChildren );
+	widget1a->setBackgroundPixmap (pm);
 
-  connect(kma,SIGNAL(clicked()),SLOT(slotMiniClicked()));
+	applications = new QListView( widget0, "applications" );
+	applications->setGeometry( 20, 170, 170, 250 );
+	applications->setMinimumSize( 0, 0 );
+	applications->setMaximumSize( 32767, 32767 );
+	applications->setFocusPolicy( QWidget::TabFocus );
+	applications->setBackgroundMode( QWidget::PaletteBackground );
+	applications->setFontPropagation( QWidget::NoChildren );
+	applications->setPalettePropagation( QWidget::NoChildren );
+	applications->setResizePolicy( QScrollView::Manual );
+	applications->setVScrollBarMode( QScrollView::Auto );
+	applications->setHScrollBarMode( QScrollView::Auto );
+	applications->setTreeStepSize( 20 );
+	applications->setMultiSelection( FALSE );
+	applications->setAllColumnsShowFocus( FALSE );
+	applications->setItemMargin( 1 );
+	applications->setRootIsDecorated( TRUE );
+	applications->addColumn( "Applications", -1 );
+	applications->setColumnWidthMode( 0, QListView::Maximum );
+	applications->setColumnAlignment( 0, 1 );
+	applications->setSorting (-1,FALSE);
+	applications->header()->hide();
+	applications->setStyle (MotifStyle);
 
-  qta = new QRadioButton (i18n("Qt-Application"),widget0);
-  qta->setGeometry(30,224,150,30);
-  KQuickHelp::add(qta,
-	i18n("Select this to create a Qt-Application."));
+	// create another widget for a picture
+	widget1b = new QWidget( widget0, "widget1b" );
+	widget1b->setGeometry( 280, 170, 190, 140 );
+	widget1b->setMinimumSize( 0, 0 );
+	widget1b->setMaximumSize( 32767, 32767 );
+	widget1b->setFocusPolicy( QWidget::NoFocus );
+	widget1b->setBackgroundMode( QWidget::PaletteBackground );
+	widget1b->setFontPropagation( QWidget::NoChildren );
+	widget1b->setPalettePropagation( QWidget::NoChildren );
 
-  connect(qta,SIGNAL(clicked()),SLOT(slotQtClicked()));
-  ta = new QRadioButton (i18n("C/C++-Application"),widget0);
-  ta->setGeometry(30,251,150,30);
-  //  QToolTip::add(ta,i18n("use for a minimal C++-Application"));
-  KQuickHelp::add(ta,
-	i18n("Select this to create a C/C++-Terminal-Application."));
+	apphelp = new QLabel( widget0, "apphelp" );
+	apphelp->setGeometry( 230, 330, 240, 90 );
+	apphelp->setMinimumSize( 0, 0 );
+	apphelp->setMaximumSize( 32767, 32767 );
+	apphelp->setFocusPolicy( QWidget::NoFocus );
+	apphelp->setBackgroundMode( QWidget::PaletteBackground );
+	apphelp->setFontPropagation( QWidget::NoChildren );
+	apphelp->setPalettePropagation( QWidget::NoChildren );
+	apphelp->setText( "Label:" );
+	apphelp->setAlignment( 289 );
+	apphelp->setMargin( -1 );
 
-  connect(ta,SIGNAL(clicked()),SLOT(slotCPPClicked()));
-  bgroup->insert( kna );
-  bgroup->insert( kma );
-  bgroup->insert( qta );
-  bgroup->insert ( ta );
+	othersentry = new QListViewItem (applications, "others");
+	othersentry->setExpandable (true);
+	othersentry->setOpen (TRUE);
+	othersentry->sortChildItems (0,FALSE);
+	emptyprojitem = new QListViewItem (othersentry,"empty project");
+
+	/*	gtkentry = new QListViewItem (applications, "GTK");
+		gtkentry->setExpandable (true);
+		gtkentry->setOpen (TRUE);
+		gtkentry->sortChildItems (0,FALSE);	
+		gtkminiitem = new QListViewItem (gtkentry,"Mini");
+		gtknormalitem = new QListViewItem (gtkentry,"Normal");
+	*/
+	ccppentry = new QListViewItem (applications, "C/C++");
+	ccppentry->setExpandable (true);
+	ccppentry->setOpen (TRUE);
+	ccppentry->sortChildItems (0,FALSE);
+	cppitem = new QListViewItem (ccppentry,"C++");
+	//citem = new QListViewItem (ccppentry,"C");
+	
+	qtentry = new QListViewItem (applications, "QT");
+	qtentry->setExpandable (true);
+	qtentry->setOpen (TRUE);
+	qtentry->sortChildItems (0,FALSE);
+	//qtminiitem = new QListViewItem (qtentry,"Mini");
+	qtnormalitem = new QListViewItem (qtentry,"Normal");
+	
+	kdeentry = new QListViewItem (applications,"KDE");
+	kdeentry->setExpandable (true);
+	kdeentry->setOpen (TRUE);
+	kdeentry->sortChildItems (0,FALSE);
+	//komitem = new QListViewItem (kdeentry,"KOM");
+	//corbaitem = new QListViewItem (kdeentry,"Corba");
+	kdeminiitem = new QListViewItem (kdeentry,"Mini");
+	kdenormalitem = new QListViewItem (kdeentry,"Normal");
+
+	applications->setFrameStyle( QListView::Panel | QListView::Sunken );
+	applications->setLineWidth( 2 );
+
+	separator0 = new KSeparator (widget0);
+	separator0->setGeometry(0,160,515,5);
+
+	connect (applications,SIGNAL(selectionChanged ()),SLOT(slotApplicationClicked()));
+  
     
   /************************************************************/
   
@@ -132,42 +180,274 @@ void CKAppWizard::initPages(){
   page1 = new KWizardPage;
   widget1 = new QWidget(this);
   page1->w = widget1;
-  page1->title = (i18n("Names"));
+  page1->title = (i18n("Generate settings"));
   addPage(page1);  
   
-  // create Labels with LineEdit and a Button
-  name = new QLabel(i18n("Projectname:"),widget1);
-  name->move(20,10);
-  directory = new QLabel(i18n("Projectdirectory:"),widget1);
-  directory->move(20,70);
-  versionnumber = new QLabel(i18n("Versionsnumber:"),widget1);
-  versionnumber->move(20,130);
-  separator2 = new KSeparator (widget1);
-  separator2->setGeometry(0,172,400,10);
-  authorname = new QLabel(i18n("Author:"),widget1);
-  authorname->move(20,195);
-  email = new QLabel(i18n("Email:"),widget1);
-  email->move(20,255);
-  nameline = new QLineEdit(widget1);
-  nameline->setGeometry(120,10,200,30);
-//  QToolTip::add(nameline,i18n("enter the projectname"));
-  connect(nameline,SIGNAL(textChanged(const char*)),SLOT(slotProjectnameEntry()));
-  directoryline = new QLineEdit(widget1);
-  directoryline->setGeometry(120,70,200,30);
-//  QToolTip::add(directoryline,i18n("the directory, in which your project is"));
-  directoryload = new QPushButton ("...",widget1);
-  directoryload->setGeometry(330,70,30,30);
-//  QToolTip::add(directoryload,i18n("you can browse to a directory here"));
-  connect(directoryload,SIGNAL(clicked()),SLOT(slotDirDialogClicked()));
-  versionline = new QLineEdit(widget1);
-  versionline->setGeometry(120,130,200,30);
-//  QToolTip::add(versionline,i18n("the versionsnumber, with which your project should start"));
-  authorline = new QLineEdit(widget1);
-  authorline->setGeometry(120,195,200,30);
-//  QToolTip::add(authorline,i18n("enter your name"));
-  emailline = new QLineEdit(widget1);
-  emailline->setGeometry(120,255,200,30);
-//  QToolTip::add(emailline,i18n("enter your email-address"));
+	directoryload = new QPushButton( widget1, "directoryload" );
+	directoryload->setGeometry( 440, 50, 30, 30 );
+	directoryload->setMinimumSize( 0, 0 );
+	directoryload->setMaximumSize( 32767, 32767 );
+	directoryload->setFocusPolicy( QWidget::TabFocus );
+	directoryload->setBackgroundMode( QWidget::PaletteBackground );
+	directoryload->setFontPropagation( QWidget::NoChildren );
+	directoryload->setPalettePropagation( QWidget::NoChildren );
+	directoryload->setText( "..." );
+	directoryload->setAutoRepeat( FALSE );
+	directoryload->setAutoResize( FALSE );
+
+	emailline = new QLineEdit( widget1, "emailline" );
+	emailline->setGeometry( 140, 170, 290, 30 );
+	emailline->setMinimumSize( 0, 0 );
+	emailline->setMaximumSize( 32767, 32767 );
+	emailline->setFocusPolicy( QWidget::StrongFocus );
+	emailline->setBackgroundMode( QWidget::PaletteBase );
+	emailline->setFontPropagation( QWidget::NoChildren );
+	emailline->setPalettePropagation( QWidget::NoChildren );
+	emailline->setText( "" );
+	emailline->setMaxLength( 32767 );
+	emailline->setEchoMode( QLineEdit::Normal );
+	emailline->setFrame( TRUE );
+
+	authorline = new QLineEdit( widget1, "authorline" );
+	authorline->setGeometry( 140, 130, 290, 30 );
+	authorline->setMinimumSize( 0, 0 );
+	authorline->setMaximumSize( 32767, 32767 );
+	authorline->setFocusPolicy( QWidget::StrongFocus );
+	authorline->setBackgroundMode( QWidget::PaletteBase );
+	authorline->setFontPropagation( QWidget::NoChildren );
+	authorline->setPalettePropagation( QWidget::NoChildren );
+	authorline->setText( "" );
+	authorline->setMaxLength( 32767 );
+	authorline->setEchoMode( QLineEdit::Normal );
+	authorline->setFrame( TRUE );
+
+	versionline = new QLineEdit( widget1, "versionline" );
+	versionline->setGeometry( 140, 90, 290, 30 );
+	versionline->setMinimumSize( 0, 0 );
+	versionline->setMaximumSize( 32767, 32767 );
+	versionline->setFocusPolicy( QWidget::StrongFocus );
+	versionline->setBackgroundMode( QWidget::PaletteBase );
+	versionline->setFontPropagation( QWidget::NoChildren );
+	versionline->setPalettePropagation( QWidget::NoChildren );
+	versionline->setText( "" );
+	versionline->setMaxLength( 32767 );
+	versionline->setEchoMode( QLineEdit::Normal );
+	versionline->setFrame( TRUE );
+
+	nameline = new QLineEdit( widget1, "nameline" );
+	nameline->setGeometry( 140, 10, 290, 30 );
+	nameline->setMinimumSize( 0, 0 );
+	nameline->setMaximumSize( 32767, 32767 );
+	nameline->setFocusPolicy( QWidget::StrongFocus );
+	nameline->setBackgroundMode( QWidget::PaletteBase );
+	nameline->setFontPropagation( QWidget::NoChildren );
+	nameline->setPalettePropagation( QWidget::NoChildren );
+	nameline->setText( "" );
+	nameline->setMaxLength( 32767 );
+	nameline->setEchoMode( QLineEdit::Normal );
+	nameline->setFrame( TRUE );
+
+	directoryline = new QLineEdit( widget1, "directoryline" );
+	directoryline->setGeometry( 140, 50, 290, 30 );
+	directoryline->setMinimumSize( 0, 0 );
+	directoryline->setMaximumSize( 32767, 32767 );
+	directoryline->setFocusPolicy( QWidget::StrongFocus );
+	directoryline->setBackgroundMode( QWidget::PaletteBase );
+	directoryline->setFontPropagation( QWidget::NoChildren );
+	directoryline->setPalettePropagation( QWidget::NoChildren );
+	directoryline->setText( "" );
+	directoryline->setMaxLength( 32767 );
+	directoryline->setEchoMode( QLineEdit::Normal );
+	directoryline->setFrame( TRUE );
+
+	name = new QLabel( widget1, "name" );
+	name->setGeometry( 30, 10, 100, 30 );
+	name->setMinimumSize( 0, 0 );
+	name->setMaximumSize( 32767, 32767 );
+	name->setFocusPolicy( QWidget::NoFocus );
+	name->setBackgroundMode( QWidget::PaletteBackground );
+	name->setFontPropagation( QWidget::NoChildren );
+	name->setPalettePropagation( QWidget::NoChildren );
+	name->setText( "Projectname:" );
+	name->setAlignment( 289 );
+	name->setMargin( -1 );
+
+	email = new QLabel( widget1, "email" );
+	email->setGeometry( 30, 170, 100, 30 );
+	email->setMinimumSize( 0, 0 );
+	email->setMaximumSize( 32767, 32767 );
+	email->setFocusPolicy( QWidget::NoFocus );
+	email->setBackgroundMode( QWidget::PaletteBackground );
+	email->setFontPropagation( QWidget::NoChildren );
+	email->setPalettePropagation( QWidget::NoChildren );
+	email->setText( "Email:" );
+	email->setAlignment( 289 );
+	email->setMargin( -1 );
+
+	authorname = new QLabel( widget1, "authorname" );
+	authorname->setGeometry( 30, 130, 100, 30 );
+	authorname->setMinimumSize( 0, 0 );
+	authorname->setMaximumSize( 32767, 32767 );
+	authorname->setFocusPolicy( QWidget::NoFocus );
+	authorname->setBackgroundMode( QWidget::PaletteBackground );
+	authorname->setFontPropagation( QWidget::NoChildren );
+	authorname->setPalettePropagation( QWidget::NoChildren );
+	authorname->setText( "Author:" );
+	authorname->setAlignment( 289 );
+	authorname->setMargin( -1 );
+
+	versionnumber = new QLabel( widget1, "versionnumber" );
+	versionnumber->setGeometry( 30, 90, 100, 30 );
+	versionnumber->setMinimumSize( 0, 0 );
+	versionnumber->setMaximumSize( 32767, 32767 );
+	versionnumber->setFocusPolicy( QWidget::NoFocus );
+	versionnumber->setBackgroundMode( QWidget::PaletteBackground );
+	versionnumber->setFontPropagation( QWidget::NoChildren );
+	versionnumber->setPalettePropagation( QWidget::NoChildren );
+	versionnumber->setText( "Versionnumber:" );
+	versionnumber->setAlignment( 289 );
+	versionnumber->setMargin( -1 );
+
+	directory = new QLabel( widget1, "directory" );
+	directory->setGeometry( 30, 50, 100, 30 );
+	directory->setMinimumSize( 0, 0 );
+	directory->setMaximumSize( 32767, 32767 );
+	directory->setFocusPolicy( QWidget::NoFocus );
+	directory->setBackgroundMode( QWidget::PaletteBackground );
+	directory->setFontPropagation( QWidget::NoChildren );
+	directory->setPalettePropagation( QWidget::NoChildren );
+	directory->setText( "Projectdirectory:" );
+	directory->setAlignment( 289 );
+	directory->setMargin( -1 );
+
+	datalink = new QCheckBox( widget1, "datalink" );
+       	datalink->setGeometry( 30, 390, 200, 30 );
+	datalink->setMinimumSize( 0, 0 );
+	datalink->setMaximumSize( 32767, 32767 );
+	datalink->setFocusPolicy( QWidget::TabFocus );
+	datalink->setBackgroundMode( QWidget::PaletteBackground );
+	datalink->setFontPropagation( QWidget::NoChildren );
+	datalink->setPalettePropagation( QWidget::NoChildren );
+	datalink->setText( ".kdelnk-File" );
+	datalink->setAutoRepeat( FALSE );
+	datalink->setAutoResize( FALSE );
+
+	miniicon = new QCheckBox( widget1, "miniicon" );
+	miniicon->setGeometry( 290, 390, 110, 30 );
+	miniicon->setMinimumSize( 0, 0 );
+	miniicon->setMaximumSize( 32767, 32767 );
+	miniicon->setFocusPolicy( QWidget::TabFocus );
+	miniicon->setBackgroundMode( QWidget::PaletteBackground );
+	miniicon->setFontPropagation( QWidget::NoChildren );
+	miniicon->setPalettePropagation( QWidget::NoChildren );
+	miniicon->setText( "Mini-Icon" );
+	miniicon->setAutoRepeat( FALSE );
+	miniicon->setAutoResize( FALSE );
+
+	progicon = new QCheckBox( widget1, "progicon" );
+	progicon->setGeometry( 290, 330, 110, 30 );
+	progicon->setMinimumSize( 0, 0 );
+	progicon->setMaximumSize( 32767, 32767 );
+	progicon->setFocusPolicy( QWidget::TabFocus );
+	progicon->setBackgroundMode( QWidget::PaletteBackground );
+	progicon->setFontPropagation( QWidget::NoChildren );
+	progicon->setPalettePropagation( QWidget::NoChildren );
+	progicon->setText( "Program-Icon" );
+	progicon->setAutoRepeat( FALSE );
+	progicon->setAutoResize( FALSE );
+
+	gnufiles = new QCheckBox( widget1, "gnufiles" );
+	gnufiles->setGeometry( 30, 270, 440, 30 );
+	gnufiles->setMinimumSize( 0, 0 );
+	gnufiles->setMaximumSize( 32767, 32767 );
+	gnufiles->setFocusPolicy( QWidget::TabFocus );
+	gnufiles->setBackgroundMode( QWidget::PaletteBackground );
+	gnufiles->setFontPropagation( QWidget::NoChildren );
+	gnufiles->setPalettePropagation( QWidget::NoChildren );
+	gnufiles->setText( "GNU-Standart-Files (INSTALL,README,COPYING...)" );
+	gnufiles->setAutoRepeat( FALSE );
+	gnufiles->setAutoResize( FALSE );
+
+	lsmfile = new QCheckBox( widget1, "lsmfile" );
+	lsmfile->setGeometry( 30, 360, 340, 30 );
+	lsmfile->setMinimumSize( 0, 0 );
+	lsmfile->setMaximumSize( 32767, 32767 );
+	lsmfile->setFocusPolicy( QWidget::TabFocus );
+	lsmfile->setBackgroundMode( QWidget::PaletteBackground );
+	lsmfile->setFontPropagation( QWidget::NoChildren );
+	lsmfile->setPalettePropagation( QWidget::NoChildren );
+	lsmfile->setText( "lsm-File - Linux Software Map" );
+	lsmfile->setAutoRepeat( FALSE );
+	lsmfile->setAutoResize( FALSE );
+
+	userdoc = new QCheckBox( widget1, "userdoc" );
+	userdoc->setGeometry( 30, 300, 330, 30 );
+	userdoc->setMinimumSize( 0, 0 );
+	userdoc->setMaximumSize( 32767, 32767 );
+	userdoc->setFocusPolicy( QWidget::TabFocus );
+	userdoc->setBackgroundMode( QWidget::PaletteBackground );
+	userdoc->setFontPropagation( QWidget::NoChildren );
+	userdoc->setPalettePropagation( QWidget::NoChildren );
+	userdoc->setText( "User-Documentation" );
+	userdoc->setAutoRepeat( FALSE );
+	userdoc->setAutoResize( FALSE );
+
+	apidoc = new QCheckBox( widget1, "apidoc" );
+	apidoc->setGeometry( 30, 330, 200, 30 );
+	apidoc->setMinimumSize( 0, 0 );
+	apidoc->setMaximumSize( 32767, 32767 );
+	apidoc->setFocusPolicy( QWidget::TabFocus );
+	apidoc->setBackgroundMode( QWidget::PaletteBackground );
+	apidoc->setFontPropagation( QWidget::NoChildren );
+	apidoc->setPalettePropagation( QWidget::NoChildren );
+	apidoc->setText( "API-Documentation" );
+	apidoc->setAutoRepeat( FALSE );
+	apidoc->setAutoResize( FALSE );
+
+	miniload = new QPushButton( widget1, "miniload" );
+	miniload->setGeometry( 440, 390, 30, 30 );
+	miniload->setMinimumSize( 0, 0 );
+	miniload->setMaximumSize( 32767, 32767 );
+	miniload->setFocusPolicy( QWidget::TabFocus );
+	miniload->setBackgroundMode( QWidget::PaletteBackground );
+	miniload->setFontPropagation( QWidget::NoChildren );
+	miniload->setPalettePropagation( QWidget::NoChildren );
+	miniload->setText( "" );
+	miniload->setAutoRepeat( FALSE );
+	miniload->setAutoResize( FALSE );
+
+	iconload = new QPushButton( widget1, "iconload" );
+	iconload->setGeometry( 410, 310, 60, 60 );
+	iconload->setMinimumSize( 0, 0 );
+	iconload->setMaximumSize( 32767, 32767 );
+	iconload->setFocusPolicy( QWidget::TabFocus );
+	iconload->setBackgroundMode( QWidget::PaletteBackground );
+	iconload->setFontPropagation( QWidget::NoChildren );
+	iconload->setPalettePropagation( QWidget::NoChildren );
+	iconload->setText( "" );
+	iconload->setAutoRepeat( FALSE );
+	iconload->setAutoResize( FALSE );
+
+	generatesource = new QCheckBox( widget1, "generatesource" );
+	generatesource->setGeometry( 30, 220, 440, 30 );
+	generatesource->setMinimumSize( 0, 0 );
+	generatesource->setMaximumSize( 32767, 32767 );
+	generatesource->setFocusPolicy( QWidget::TabFocus );
+	generatesource->setBackgroundMode( QWidget::PaletteBackground );
+	generatesource->setFontPropagation( QWidget::NoChildren );
+	generatesource->setPalettePropagation( QWidget::NoChildren );
+	generatesource->setText( "generate sources and headers" );
+	generatesource->setAutoRepeat( FALSE );
+	generatesource->setAutoResize( FALSE );
+
+
+	separator1 = new KSeparator (widget1);
+	separator1->setGeometry(0,210,515,5);
+
+	separator2 = new KSeparator (widget1);
+	separator2->setGeometry(0,255,515,5);
+
+
   KQuickHelp::add(name,
   KQuickHelp::add(nameline,
 	i18n("Enter the Project's name here. This is\n"
@@ -193,163 +473,216 @@ void CKAppWizard::initPages(){
   	i18n("Enter your email adress here, so users\n"
 		"can send you bug reports easiely ;-))")));
 
-  /************************************************************/
-  
-  // create the third page
-  page2 = new KWizardPage;
-  widget2 = new QWidget(this);
-  page2->w = widget2;
-  page2->title = (i18n("Projectfiles & Desktopgoodies"));
-  addPage(page2);
-  
-  // create CheckBoxes  with help
-  apidoc = new QCheckBox (i18n("API-Documentation"), widget2);
-  apidoc->setGeometry(20,5,170,30);
-//  QToolTip::add(apidoc,i18n("activate, if you wish the API-Documentationfiles"));
   KQuickHelp::add(apidoc, i18n("Check this if you wish to have your API\n"
 				"Documentation generated automatically"));
-
-  userdoc = new QCheckBox (i18n("User-Documentation"), widget2);
-  userdoc->setGeometry(20,45,200,30);
-//  QToolTip::add(userdoc,i18n("activate, if you wish the User-Documentationfiles"));
   KQuickHelp::add(userdoc, i18n("Check this if you wish a general User\n"
 				"Documentation to be generated automatically."));
-
-  lsmfile = new QCheckBox (i18n("lsm-File - Linux Software Map"), widget2);
-  lsmfile->setGeometry(20,85,300,30);
-//  QToolTip::add(lsmfile,i18n("activate, if you wish the lsm-File"));
   KQuickHelp::add(lsmfile, i18n("Check this to create a lsm-File"));
-
-  gnufiles = new QCheckBox (i18n("GNU-Standard-Files (INSTALL,README,COPYING...)"), widget2);
-  gnufiles->setGeometry(20,125,350,30);
-//  QToolTip::add(gnufiles,i18n("activate, if you wish the GNU-Standard-Files"));
   KQuickHelp::add(gnufiles, i18n("Check this if you wish to have\n"
 				"the GNU-Standard files created like\n"
 				"INSTALL and README"));
-
-  separator1 = new KSeparator (widget2);
-  separator1->setGeometry(0,165,400,10);
-  progicon = new QCheckBox (i18n("Program-Icon"), widget2);
-  progicon->setGeometry(20,190,140,30);
-  connect(progicon,SIGNAL(clicked()),SLOT(slotProgIconClicked()));   
-//  QToolTip::add(progicon,i18n("activate, if you want an icon for your program"));
   KQuickHelp::add(progicon, i18n("Check this to create a sample icon for\n"
 				"your program. We suggest to do so and just\n"
 				"change it's view by using KIconEdit."));
-
-  miniicon = new QCheckBox (i18n("Mini-Icon"), widget2);
-  miniicon->setGeometry(20,250,140,30);
-  connect(miniicon,SIGNAL(clicked()),SLOT(slotMiniIconClicked()));   
-//  QToolTip::add(miniicon,i18n("activate, if you want a mini-icon for your program"));
   KQuickHelp::add(miniicon, i18n("Check this to create a sample mini-icon\n"
 				"for your program. We suggest to do so and just\n"
 				"change it's view by using KIconEdit."));
- 
-  datalink = new QCheckBox (i18n(".kdelnk-File"), widget2);
-  datalink->setGeometry(240,190,140,30);
-//  QToolTip::add(datalink,i18n("activate, if you want a link in the K-Menu"));
   KQuickHelp::add(datalink, i18n("Check this if you wish to have\n"
 				"a .kdelnk for you application in the\n"
 				"K-Menu.  The default is the Applications-\n"
 				"submenu. You can change this to other menus\n"
 				"by changing the file properties afterwards."));
-
-  // create PushButtons for the icons with help and connections
-  iconload = new QPushButton(widget2);
-  iconload->setGeometry(140,183,55,55);
-//  QToolTip::add(iconload,i18n("you can select another icon here"));
   KQuickHelp::add(iconload, i18n("Select this if you wish another\n"
 				"already created icon to be used."));
-
-  connect(iconload,SIGNAL(clicked()),SLOT(slotIconButtonClicked()));
-  miniload = new QPushButton(widget2);
-  miniload->setGeometry(165,250,30,30);
-//  QToolTip::add(miniload,i18n("you can select another mini-icon here"));
   KQuickHelp::add(miniload, i18n("Select this if you wish another\n"
  				"already created mini-icon to be used."));
-					
+ 
+
+
+
+  connect(nameline,SIGNAL(textChanged(const char*)),SLOT(slotProjectnameEntry()));
+  connect(directoryload,SIGNAL(clicked()),SLOT(slotDirDialogClicked()));
   connect(miniload,SIGNAL(clicked()),SLOT(slotMiniIconButtonClicked()));
+  connect(progicon,SIGNAL(clicked()),SLOT(slotProgIconClicked()));   
+  connect(miniicon,SIGNAL(clicked()),SLOT(slotMiniIconClicked()));   
+  connect(iconload,SIGNAL(clicked()),SLOT(slotIconButtonClicked()));
+					  
+  /************************************************************/
   
+  // create the thirth page
+  page2 = new KWizardPage;
+  widget2 = new QWidget(this);
+  page2->w = widget2;
+  page2->title = (i18n("Headertemplate for .h-files"));
+  addPage(page2);
+  
+	hload = new QPushButton( widget2, "hload" );
+	hload->setGeometry( 260, 20, 100, 30 );
+	hload->setMinimumSize( 0, 0 );
+	hload->setMaximumSize( 32767, 32767 );
+	hload->setFocusPolicy( QWidget::TabFocus );
+	hload->setBackgroundMode( QWidget::PaletteBackground );
+	hload->setFontPropagation( QWidget::NoChildren );
+	hload->setPalettePropagation( QWidget::NoChildren );
+	hload->setText( "Load..." );
+	hload->setAutoRepeat( FALSE );
+	hload->setAutoResize( FALSE );
+
+	hnew = new QPushButton( widget2, "hnew" );
+	hnew->setGeometry( 380, 20, 100, 30 );
+	hnew->setMinimumSize( 0, 0 );
+	hnew->setMaximumSize( 32767, 32767 );
+	hnew->setFocusPolicy( QWidget::TabFocus );
+	hnew->setBackgroundMode( QWidget::PaletteBackground );
+	hnew->setFontPropagation( QWidget::NoChildren );
+	hnew->setPalettePropagation( QWidget::NoChildren );
+	hnew->setText( "New" );
+	hnew->setAutoRepeat( FALSE );
+	hnew->setAutoResize( FALSE );
+
+	hheader = new QCheckBox( widget2, "hheader" );
+	hheader->setGeometry( 20, 20, 230, 30 );
+	hheader->setMinimumSize( 0, 0 );
+	hheader->setMaximumSize( 32767, 32767 );
+	hheader->setFocusPolicy( QWidget::TabFocus );
+	hheader->setBackgroundMode( QWidget::PaletteBackground );
+	hheader->setFontPropagation( QWidget::NoChildren );
+	hheader->setPalettePropagation( QWidget::NoChildren );
+	hheader->setText( "headertemplate for .h-files" );
+	hheader->setAutoRepeat( FALSE );
+	hheader->setAutoResize( FALSE );
+
+	hedit = new KEdit( kapp,widget2 );
+	QFont f("fixed",10);
+	hedit->setFont(f);
+	hedit->setGeometry( 20, 70, 460, 350 );
+	hedit->setMinimumSize( 0, 0 );
+	hedit->setMaximumSize( 32767, 32767 );
+	hedit->setFocusPolicy( QWidget::StrongFocus );
+	hedit->setBackgroundMode( QWidget::PaletteBase );
+	hedit->setFontPropagation( QWidget::SameFont );
+	hedit->setPalettePropagation( QWidget::SameFont );
+	hedit->insertLine( "" );
+	hedit->setReadOnly( FALSE );
+	hedit->setOverwriteMode( FALSE );
+
+  QToolTip::add(hload,i18n("you can load another headertemplate here"));
+  QToolTip::add(hnew,i18n("you can clear the headertemplate here"));
+  QToolTip::add(hedit,i18n("you can edit your headertemplate here"));
+
+  KQuickHelp::add(hheader, i18n("Check this if you want a standard\n"
+				"headertemplate for your headerfiles"));
+
+
+  connect(hheader,SIGNAL(clicked()),SLOT(slotHeaderHeaderClicked()));   
+  connect(hload,SIGNAL(clicked()),SLOT(slotHeaderDialogClicked()));
+  connect(hnew,SIGNAL(clicked()),SLOT(slotNewHeaderButtonClicked()));
+
   /************************************************************/
   
   // create the fourth page
   page3 = new KWizardPage;
   widget3 = new QWidget(this);
   page3->w = widget3;
-  page3->title = (i18n("Headertemplate for .h-files"));
+  page3->title = (i18n("Headertemplate for .cpp-files"));
   addPage(page3);
   
-  // create a CheckBox, two PushButtons and a KEdit for the Headertemplate
-  hheader = new QCheckBox (i18n("headertemplate for .h-files"), widget3);
-  hheader->setGeometry(20,10,190,30);
-  connect(hheader,SIGNAL(clicked()),SLOT(slotHeaderHeaderClicked()));   
-//  QToolTip::add(hheader,i18n("activate, if you want a headertemplate for your headerfiles"));
-  KQuickHelp::add(hheader, i18n("Check this if you want a standard\n"
-				"headertemplate for your headerfiles"));
+	cppnew = new QPushButton( widget3, "cppnew" );
+	cppnew->setGeometry( 380, 20, 100, 30 );
+	cppnew->setMinimumSize( 0, 0 );
+	cppnew->setMaximumSize( 32767, 32767 );
+	cppnew->setFocusPolicy( QWidget::TabFocus );
+	cppnew->setBackgroundMode( QWidget::PaletteBackground );
+	cppnew->setFontPropagation( QWidget::NoChildren );
+	cppnew->setPalettePropagation( QWidget::NoChildren );
+	cppnew->setText( "New" );
+	cppnew->setAutoRepeat( FALSE );
+	cppnew->setAutoResize( FALSE );
 
-  hload = new QPushButton (i18n("Load..."),widget3);
-  hload->setGeometry(210,10,60,30);
-  QToolTip::add(hload,i18n("you can load another headertemplate here"));
-  connect(hload,SIGNAL(clicked()),SLOT(slotHeaderDialogClicked()));
-  hnew = new QPushButton (i18n("New"),widget3);
-  hnew->setGeometry(300,10,60,30);
-  QToolTip::add(hnew,i18n("you can clear the headertemplate here"));
-  connect(hnew,SIGNAL(clicked()),SLOT(slotNewHeaderButtonClicked()));
-  hedit = new KEdit(kapp,widget3);
-  QFont f("fixed",10);
-  hedit->setFont(f);
-  hedit->setGeometry(20,60,340,230);
-  QToolTip::add(hedit,i18n("you can edit your headertemplate here"));
+	cppload = new QPushButton( widget3, "cppload" );
+	cppload->setGeometry( 260, 20, 100, 30 );
+	cppload->setMinimumSize( 0, 0 );
+	cppload->setMaximumSize( 32767, 32767 );
+	cppload->setFocusPolicy( QWidget::TabFocus );
+	cppload->setBackgroundMode( QWidget::PaletteBackground );
+	cppload->setFontPropagation( QWidget::NoChildren );
+	cppload->setPalettePropagation( QWidget::NoChildren );
+	cppload->setText( "Load..." );
+	cppload->setAutoRepeat( FALSE );
+	cppload->setAutoResize( FALSE );
+
+	cppheader = new QCheckBox( widget3, "cppheader" );
+	cppheader->setGeometry( 20, 20, 230, 30 );
+	cppheader->setMinimumSize( 0, 0 );
+	cppheader->setMaximumSize( 32767, 32767 );
+	cppheader->setFocusPolicy( QWidget::TabFocus );
+	cppheader->setBackgroundMode( QWidget::PaletteBackground );
+	cppheader->setFontPropagation( QWidget::NoChildren );
+	cppheader->setPalettePropagation( QWidget::NoChildren );
+	cppheader->setText( "headertemplate for .cpp-files" );
+	cppheader->setAutoRepeat( FALSE );
+	cppheader->setAutoResize( FALSE );
+
+	cppedit = new KEdit(kapp,widget3);
+	cppedit->setFont(f);
+	cppedit->setGeometry( 20, 70, 460, 350 );
+	cppedit->setMinimumSize( 0, 0 );
+	cppedit->setMaximumSize( 32767, 32767 );
+	cppedit->setFocusPolicy( QWidget::StrongFocus );
+	cppedit->setBackgroundMode( QWidget::PaletteBase );
+	cppedit->setFontPropagation( QWidget::SameFont );
+	cppedit->setPalettePropagation( QWidget::SameFont );
+	cppedit->insertLine( "" );
+	cppedit->setReadOnly( FALSE );
+	cppedit->setOverwriteMode( FALSE );
+
+  KQuickHelp::add(cppheader, i18n("Check this if you want a standard\n"
+				"cpp-Template for your cpp-files."));
+
+  QToolTip::add(cppload,i18n("you can load another cpptemplate here"));
+  QToolTip::add(cppnew,i18n("you can clear the cpptemplate here"));
+  QToolTip::add(cppedit,i18n("you can edit your cpptemplate here"));
   
+  connect(cppheader,SIGNAL(clicked()),SLOT(slotCppHeaderClicked()));   
+  connect(cppload,SIGNAL(clicked()),SLOT(slotCppDialogClicked()));
+  connect(cppnew,SIGNAL(clicked()),SLOT(slotNewCppButtonClicked()));   
+
   /************************************************************/
   
   // create the fifth page
   page4 = new KWizardPage;
   widget4 = new QWidget(this);
   page4->w = widget4;
-  page4->title = (i18n("Headertemplate for .cpp-files"));
+  page4->title = (i18n("Processes"));
   addPage(page4);
   
-  // create a CheckBox, two PushButtons and a KEdit for the Cpptemplate
-  cppheader = new QCheckBox (i18n("headertemplate for .cpp-files"), widget4);
-  cppheader->setGeometry(20,10,190,30);
-  connect(cppheader,SIGNAL(clicked()),SLOT(slotCppHeaderClicked()));   
-//  QToolTip::add(cppheader,i18n("activate, if you want a cpptemplate for your cppfiles"));
-  KQuickHelp::add(cppheader, i18n("Check this if you want a standard\n"
-				"cpp-Template for your cpp-files."));
-
-  cppload = new QPushButton (i18n("Load..."),widget4);
-  cppload->setGeometry(210,10,60,30);
-  QToolTip::add(cppload,i18n("you can load another cpptemplate here"));
-  connect(cppload,SIGNAL(clicked()),SLOT(slotCppDialogClicked()));
-  cppnew = new QPushButton (i18n("New"),widget4);
-  cppnew->setGeometry(300,10,60,30);
-  QToolTip::add(cppnew,i18n("you can clear the cpptemplate here"));
-  connect(cppnew,SIGNAL(clicked()),SLOT(slotNewCppButtonClicked()));   
-  cppedit = new KEdit(kapp,widget4);
-  cppedit->setFont(f);
-  cppedit->setGeometry(20,60,340,230);
-  QToolTip::add(cppedit,i18n("you can edit your cpptemplate here"));
-  
-  /************************************************************/
-  
-  // create the sixth page
-  page5 = new KWizardPage;
-  widget5 = new QWidget(this);
-  page5->w = widget5;
-  page5->title = (i18n("Processes"));
-  addPage(page5);
-  
   // create a MultiLineEdit for the processes of kAppWizard
-  output = new QMultiLineEdit(widget5);
-  output->setGeometry(5,5,375,225);
-  output->setReadOnly(false);
+	output = new QMultiLineEdit( widget4, "output" );
+	output->setGeometry( 10, 10, 480, 330 );
+	output->setMinimumSize( 0, 0 );
+	output->setMaximumSize( 32767, 32767 );
+	output->setFocusPolicy( QWidget::StrongFocus );
+	output->setBackgroundMode( QWidget::PaletteBase );
+	output->setFontPropagation( QWidget::SameFont );
+	output->setPalettePropagation( QWidget::SameFont );
+	output->insertLine( "" );
+	output->setReadOnly( FALSE );
+	output->setOverwriteMode( FALSE );
+
+	errOutput = new QMultiLineEdit( widget4, "errOutput" );
+	errOutput->setGeometry( 10, 340, 480, 80 );
+	errOutput->setMinimumSize( 0, 0 );
+	errOutput->setMaximumSize( 32767, 32767 );
+	errOutput->setFocusPolicy( QWidget::StrongFocus );
+	errOutput->setBackgroundMode( QWidget::PaletteBase );
+	errOutput->setFontPropagation( QWidget::SameFont );
+	errOutput->setPalettePropagation( QWidget::SameFont );
+	errOutput->insertLine( "" );
+	errOutput->setReadOnly( FALSE );
+	errOutput->setOverwriteMode( FALSE );
   QFont font("helvetica",10);
   output->setFont(font);
   QToolTip::add(output,i18n("you can see the normal outputs here"));
-  errOutput = new QMultiLineEdit(widget5);
-  errOutput->setGeometry(5,230,375,65);
-  errOutput->setReadOnly(false);
   errOutput->setFont(font);
   QToolTip::add(errOutput,i18n("you can see all warnings and errormessages here"));
   // go to page 2 then to page 1
@@ -443,16 +776,39 @@ void CKAppWizard::okPermited() {
   hedit->doSave();
   ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/entries");
   entries << "APPLICATION\n";
-  if (kna->isChecked()) 
-    entries << "standard\n";
-  else 
-    if (kma->isChecked())
-      entries << "mini\n";
-    else if (qta->isChecked()) {
-      entries << "qt\n";
+  if (kdenormalitem->isSelected()) {
+    entries << "kdenormal\n";
+  }
+  else if (kdeminiitem->isSelected()) {
+    entries << "kdemini\n";
+  }
+  /*  else if (corbaitem->isSelected()) {
+      entries << "corba\n";
+      }
+      else if (komitem->isSelected()) {
+      entries << "kom\n";
+      }*/
+  else if (qtnormalitem->isSelected()) {
+    entries << "qtnormal\n";
+  }
+  /* else if (qtminiitem->isSelected()) {
+     entries << "qtmini\n";
+     }*/
+  else if (cppitem->isSelected()) {
+    entries << "cpp\n";
+  }
+  /*else if (citem->isSelected()) {
+    entries << "c\n";
     }
-    else 
-      entries << "terminal\n";
+    else if (gtknormalitem->isSelected()) {
+    entries << "gtknormal\n";
+    }
+    else if (gtkminiitem->isSelected()) {
+    entries << "gtkmini\n";
+    }*/
+  else if (emptyprojitem->isSelected()) {
+    entries << "emptyproj\n";
+  }
   entries << "NAME\n";
   entries << nameline->text() << "\n";
   entries << "DIRECTORY\n";
@@ -515,26 +871,27 @@ void CKAppWizard::okPermited() {
   KShellProcess p;
   QString copysrc;
   QString copydes = directoryline->text() + QString ("/");
-  if (kma->isChecked()) { 
+  if (kdeminiitem->isSelected()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
     p << "cp " + copysrc + (QString) " " + copydes;
     p.start(KProcess::Block,KProcess::AllOutput);
-  } 
-  else if (kna->isChecked()) {
+  }  
+  else if (kdenormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
     p << "cp " + copysrc + (QString) " " + copydes;
     p.start(KProcess::Block,KProcess::AllOutput);
-  }
-  else if (qta->isChecked()) {
+  } 
+  else if (qtnormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt.tar.gz";
     p << "cp " + copysrc + (QString) " " + copydes;
     p.start(KProcess::Block,KProcess::AllOutput);
-  }
-  else {
+  } 
+  else if (cppitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
     p << "cp " + copysrc + (QString) " " + copydes;
     p.start(KProcess::Block,KProcess::AllOutput);
-  }
+  } 
+  
   q->clearArguments();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(receivedStdout(KProcess *, char *, int)),
@@ -545,14 +902,11 @@ void CKAppWizard::okPermited() {
   *q << "perl" << path + "processes.pl";
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
   okButton->setEnabled(false);
-  gotoPage(5);
+  gotoPage(4);
   int i;
   for (i=0;i<5;i++) {
     setPageEnabled(i,false);
   }
-  kma->setEnabled(false);
-  kna->setEnabled(false);
-  ta->setEnabled(false);
   apidoc->setEnabled(false);
   lsmfile->setEnabled(false);
   cppheader->setEnabled(false);
@@ -576,6 +930,9 @@ void CKAppWizard::okPermited() {
   hload->setEnabled(false);
   cppnew->setEnabled(false);
   cppload->setEnabled(false);
+  applications->setEnabled(false);
+  generatesource->setEnabled(false);
+  apphelp->setEnabled(false);
 }
 
 
@@ -616,13 +973,33 @@ void CKAppWizard::slotAppEnd() {
   delete (versionnumber);
   delete (directory);
   delete (name);
-  delete (ta);
-  delete (kma);
-  delete (kna);
-  delete (bgroup);
   delete (separator0);
   delete (widget1b);
   delete (widget1a);
+  delete (apphelp);
+  delete (generatesource);
+  kdeentry->removeItem (kdenormalitem);
+  kdeentry->removeItem (kdeminiitem);
+  delete (kdenormalitem);
+  delete (kdeminiitem);
+  //delete (corbaitem);
+  //delete (komitem);
+  delete (kdeentry);
+  qtentry->removeItem (qtnormalitem);
+  delete (qtnormalitem);
+  //delete (qtminiitem);
+  delete (qtentry);
+  //delete (citem);
+  ccppentry->removeItem (cppitem);
+  delete (cppitem);
+  delete (ccppentry);
+  //delete (gtknormalitem);
+  //delete (gtkminiitem);
+  //delete (gtkentry);
+  othersentry->removeItem (emptyprojitem);
+  delete (emptyprojitem);
+  delete (othersentry);
+  delete (applications);
   reject();
 }
 
@@ -640,77 +1017,132 @@ void CKAppWizard::slotPerlErr(KProcess*,char* buffer,int buflen) {
   errOutput->setCursorPosition(errOutput->numLines(),0);
 }
 
-// connection of kna
-void CKAppWizard::slotAppClicked() {
-  pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
-  widget1b->setBackgroundPixmap(pm);
-  apidoc->setEnabled(true);
-  apidoc->setChecked(true);
-  datalink->setEnabled(true);
-  datalink->setChecked(true);
-  progicon->setEnabled(true);
-  progicon->setChecked(true);
-  miniicon->setEnabled(true);
-  miniicon->setChecked(true);
-  miniload->setEnabled(true);
-  iconload->setEnabled(true);
-}
-
-// connection of kma
-void CKAppWizard::slotMiniClicked() {
-  pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
-  widget1b->setBackgroundPixmap(pm);
-  apidoc->setEnabled(true);
-  apidoc->setChecked(true);
-  datalink->setEnabled(true);
-  datalink->setChecked(true);
-  progicon->setEnabled(true);
-  progicon->setChecked(true);
-  miniicon->setEnabled(true);
-  miniicon->setChecked(true);
-  miniload->setEnabled(true);
-  iconload->setEnabled(true);
-}
-
-// connection of qta
-void CKAppWizard::slotQtClicked() {
-  pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
-  widget1b->setBackgroundPixmap(pm);
-  apidoc->setEnabled(false);
-  apidoc->setChecked(false);
-  datalink->setEnabled(false);
-  datalink->setChecked(false);
-  progicon->setEnabled(true);
-  progicon->setChecked(true);
-  miniicon->setEnabled(true);
-  miniicon->setChecked(true);
-  miniload->setEnabled(true);
-  iconload->setEnabled(true);
-}
-
-// connection of ta
-void CKAppWizard::slotCPPClicked() {
-  pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
-  widget1b->setBackgroundPixmap(pm);
-  apidoc->setEnabled(false);
-  apidoc->setChecked(false);
-  datalink->setEnabled(false);
-  datalink->setChecked(false);
-  progicon->setEnabled(true);
-  progicon->setChecked(true);
-  miniicon->setEnabled(true);
-  miniicon->setChecked(true);
-  miniload->setEnabled(true);
-  iconload->setEnabled(true);
+void CKAppWizard::slotApplicationClicked() {
+  if (kdenormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(true);
+    apidoc->setChecked(true);
+    datalink->setEnabled(true);
+    datalink->setChecked(true);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+  }
+  else if (kdeminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(true);
+    apidoc->setChecked(true);
+    datalink->setEnabled(true);
+    datalink->setChecked(true);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+  }
+  else if (qtnormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(false);
+    apidoc->setChecked(false);
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+  }
+  else if (cppitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(false);
+    apidoc->setChecked(false);
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+  }
+  /*  else if (citem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+      if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+      }
+      }
+      else if (corbaitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+      if (strcmp(nameline->text(), "") & strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+      }
+      }
+      else if (komitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+      if (strcmp(nameline->text(), "") & strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+      }
+      }*/
+  else if (emptyprojitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+  }
+  /*  else if (gtknormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+      if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+      }
+      }
+      else if (gtkminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+      if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+      }
+      }
+      else if (qtminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+      if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+      }
+      }*/
+  else if (kdeentry->isSelected()) {
+    okButton->setEnabled(false);
+  }
+  else if (qtentry->isSelected()) {
+    okButton->setEnabled(false);
+  }
+  else if (ccppentry->isSelected()) {
+    okButton->setEnabled(false);
+  }
+  /*  else if (gtkentry->isSelected()) {
+      okButton->setEnabled(false);
+      }*/
+  else if (othersentry->isSelected()) {
+    okButton->setEnabled(false);
+  }
 }
 
 // connection of this
 void CKAppWizard::slotDefaultClicked() {
-  kma->setChecked(false);
-  kna->setChecked(true);
-  ta->setChecked(false);
   pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
   widget1b->setBackgroundPixmap(pm);
+  applications->setSelected(kdenormalitem,true);
   apidoc->setChecked(true);
   lsmfile->setChecked(true);
   cppheader->setChecked(true);
@@ -722,6 +1154,7 @@ void CKAppWizard::slotDefaultClicked() {
   userdoc->setChecked(true);
   miniload->setEnabled(true);
   iconload->setEnabled(true);
+  generatesource->setChecked(true);  
   directoryline->setText(QDir::homeDirPath()+ QString("/"));
   dir = QDir::homeDirPath()+ QString("/");
   nameline->setText(0);
@@ -832,18 +1265,22 @@ void CKAppWizard::slotProcessExited() {
   project = new CProject(prj_str);
   project->readProject();
   project->setKDevPrjVersion("0.3");
-  if (ta->isChecked()) {
+  if (cppitem->isSelected()) {
     project->setProjectType("normal_cpp");
-  }
-  else if (kma->isChecked()) {
+  } 
+  else if (kdeminiitem->isSelected()) {
     project->setProjectType("mini_kde");  
-  }
-  else if (kna->isChecked()) {
+  } 
+  else if (kdenormalitem->isSelected()) {
     project->setProjectType("normal_kde");
-  }
-  else {
+  } 
+  else if (qtnormalitem->isSelected()) {
     project->setProjectType("normal_qt");
+  } 
+  else if (emptyprojitem->isSelected()) {
+    project->setProjectType("normal_empty");
   }
+  
   project->setProjectName (nameline->text());
   project->setSubDir (namelow + "/");
   project->setAuthor (authorline->text());
@@ -856,13 +1293,13 @@ void CKAppWizard::slotProcessExited() {
   project->setLDFLAGS (" ");
   project->setCXXFLAGS ("-O0 -g -Wall");
   
-  if (kna->isChecked()) {
+  if (kdenormalitem->isSelected()) {
     project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
   }
-  else if (kma->isChecked()) {
+  else if (kdeminiitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
   }
-  else if (qta->isChecked()) {
+  else if (qtnormalitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11");
   }
   
@@ -873,7 +1310,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
   KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
-  if (!(ta->isChecked() || qta->isChecked())) {
+  if (kdenormalitem->isSelected() || kdeminiitem->isSelected()) {
     sub_dir_list.append("po");
   }
   makeAmInfo.sub_dirs = sub_dir_list;
@@ -907,7 +1344,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
-  if (!(ta->isChecked() || qta->isChecked())) {
+  if (!(cppitem->isSelected() || qtnormalitem->isSelected())) {
     makeAmInfo.rel_name = "po/Makefile.am";
     KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
     makeAmInfo.type = "po";
@@ -916,13 +1353,21 @@ void CKAppWizard::slotProcessExited() {
     makeAmInfo.sub_dirs = sub_dir_list;
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
+  
   TFileInfo fileInfo;
-  fileInfo.rel_name = "AUTHORS";
+  fileInfo.rel_name = namelow + ".kdevprj";
   fileInfo.type = DATA;
   fileInfo.dist = true;
   fileInfo.install = false;
   fileInfo.install_location = "";
+  project->addFileToProject (namelow + ".kdevprj",fileInfo);
+
   if (gnufiles->isChecked()) {
+    fileInfo.rel_name = "AUTHORS";
+    fileInfo.type = DATA;
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
     project->addFileToProject ("AUTHORS",fileInfo);
     
     fileInfo.rel_name = "COPYING";
@@ -960,7 +1405,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install_location = "";
     project->addFileToProject ("TODO",fileInfo);
     
-  }
+  } 
 
   if (lsmfile->isChecked()) {
     fileInfo.rel_name = namelow + ".lsm";
@@ -970,66 +1415,71 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install_location = "";
     project->addFileToProject (namelow + ".lsm",fileInfo);
   }
-  fileInfo.rel_name = namelow + "/main.cpp";
-  fileInfo.type = CPP_SOURCE;
+
+  if (generatesource->isChecked()) {
+    fileInfo.rel_name = namelow + "/main.cpp";
+    fileInfo.type = CPP_SOURCE;
   fileInfo.dist = true;
   fileInfo.install = false;
   fileInfo.install_location = "";
   project->addFileToProject (namelow + "/main.cpp",fileInfo);
-  
-  if (!(ta->isChecked())) {
-    
-    fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
-    fileInfo.type = CPP_SOURCE;
-    fileInfo.dist = true;
-    fileInfo.install = false;
-    fileInfo.install_location = "";
-    project->addFileToProject (namelow + "/" + namelow + ".cpp",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/" + namelow + ".h";
-    fileInfo.type = CPP_HEADER;
-    fileInfo.dist = true;
-    fileInfo.install = false;
-    fileInfo.install_location = "";
-    project->addFileToProject (namelow + "/" + namelow + ".h",fileInfo);
   }
   
-  if (kna->isChecked() || qta->isChecked()) {
-    fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
-    fileInfo.type = CPP_SOURCE;
-    fileInfo.dist = true;
-    fileInfo.install = false;
-    fileInfo.install_location = "";
-    project->addFileToProject (namelow + "/" + namelow + "doc.cpp",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/" + namelow + "doc.h";
-    fileInfo.type = CPP_HEADER;
-    fileInfo.dist = true;
-    fileInfo.install = false;
-    fileInfo.install_location = "";
-    project->addFileToProject (namelow + "/" + namelow + "doc.h",fileInfo);
-   
-    fileInfo.rel_name = namelow + "/" + namelow + "view.cpp";
-    fileInfo.type = CPP_SOURCE;
-    fileInfo.dist = true;
-    fileInfo.install = false;
-    fileInfo.install_location = "";
-    project->addFileToProject (namelow + "/" + namelow + "view.cpp",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/" + namelow + "view.h";
-    fileInfo.type = CPP_HEADER;
-    fileInfo.dist = true;
-    fileInfo.install = false;
-    fileInfo.install_location = "";
-    project->addFileToProject (namelow + "/" + namelow + "view.h",fileInfo);
-   
-    fileInfo.rel_name = namelow + "/resource.h";
-    fileInfo.type = CPP_HEADER;
-    fileInfo.dist = true;
-    fileInfo.install = false;
-    fileInfo.install_location = "";
-    project->addFileToProject (namelow + "/resource.h",fileInfo);
-    
+  if (!(cppitem->isSelected())) {
+    if (generatesource->isChecked()) {
+      fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
+      fileInfo.type = CPP_SOURCE;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + namelow + ".cpp",fileInfo);
+      
+      fileInfo.rel_name = namelow + "/" + namelow + ".h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + namelow + ".h",fileInfo);
+    }
+  }
+  
+  if (kdenormalitem->isSelected() || qtnormalitem->isSelected()) {
+    if (generatesource->isChecked()) {
+      fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
+      fileInfo.type = CPP_SOURCE;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + namelow + "doc.cpp",fileInfo);
+      
+      fileInfo.rel_name = namelow + "/" + namelow + "doc.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + namelow + "doc.h",fileInfo);
+      
+      fileInfo.rel_name = namelow + "/" + namelow + "view.cpp";
+      fileInfo.type = CPP_SOURCE;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + namelow + "view.cpp",fileInfo);
+      
+      fileInfo.rel_name = namelow + "/" + namelow + "view.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + namelow + "view.h",fileInfo);
+      
+      fileInfo.rel_name = namelow + "/resource.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/resource.h",fileInfo);
+    }  
   }
   
   if (datalink->isChecked()) {
@@ -1039,117 +1489,152 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".kdelnk";
     project->addFileToProject (namelow + "/" + namelow + ".kdelnk",fileInfo);
-  }
+  } 
   
   if (progicon->isChecked()) {
     fileInfo.rel_name = namelow + "/" + namelow + ".xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    fileInfo.install = true;
-    fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
+    if (!qtnormalitem->isSelected()) {
+      fileInfo.install = true;
+      fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
+    }
+    else {
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+    }
     project->addFileToProject (namelow + "/" + namelow + ".xpm",fileInfo);
   }
-
+  
   if (miniicon->isChecked()) {
     fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    fileInfo.install = true;
-    QString icon = namelow + ".xpm";
-    fileInfo.install_location = "$(kde_minidir)/" + icon;
+    if (!qtnormalitem->isSelected()) {
+      fileInfo.install = true;
+      fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
+    }
+    else {
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+    }
     project->addFileToProject (namelow + "/mini-" + namelow + ".xpm",fileInfo);
   }
+
+  if (qtnormalitem->isSelected()) {
+    fileInfo.rel_name = namelow + "/filenew.xpm";
+    fileInfo.type = DATA;
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/filenew.xpm",fileInfo);
+
+    fileInfo.rel_name = namelow + "/filesave.xpm";
+    fileInfo.type = DATA;
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/filesave.xpm",fileInfo);
+
+    fileInfo.rel_name = namelow + "/fileopen.xpm";
+    fileInfo.type = DATA;
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/fileopen.xpm",fileInfo);
+  } 
   
   if (userdoc->isChecked()) {
     fileInfo.rel_name = namelow + "/docs/en/index-1.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(ta->isChecked())) {
+    if (!(cppitem->isSelected())) {
       fileInfo.install = true;
-      if (qta->isChecked()) {
+      if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
-      }
+      } 
       else 
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
-    }
+    } 
+      
     project->addFileToProject (namelow + "/docs/en/index-1.html",fileInfo);
 
     fileInfo.rel_name = namelow + "/docs/en/index-2.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(ta->isChecked())) {
+    if (!(cppitem->isSelected())) {
       fileInfo.install = true;
-      if (qta->isChecked()) {
+      if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-2.html";
-      }
+      } 
       else 
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-2.html";
-    }
+    } 
     project->addFileToProject (namelow + "/docs/en/index-2.html",fileInfo);
     
     fileInfo.rel_name = namelow + "/docs/en/index-3.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(ta->isChecked())) {
+    if (!(cppitem->isSelected())) {
       fileInfo.install = true;
-      if (qta->isChecked()) {
+      if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-3.html";
-      }
+      } 
       else 
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-3.html";
-    }
+    } 
     project->addFileToProject (namelow + "/docs/en/index-3.html",fileInfo);
     
     fileInfo.rel_name = namelow + "/docs/en/index-4.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(ta->isChecked())) {
+    if (!(cppitem->isSelected())) {
       fileInfo.install = true;
-      if (qta->isChecked()) {
+      if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-4.html";
-      }
+      } 
       else 
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-4.html";
-    }
+    } 
     project->addFileToProject (namelow + "/docs/en/index-4.html",fileInfo);
     
     fileInfo.rel_name = namelow + "/docs/en/index-5.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(ta->isChecked())) { 
+    if (!(cppitem->isSelected())) { 
       fileInfo.install = true;
-      if (qta->isChecked()) {
+      if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-5.html";
-      }
+      } 
       else 
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-5.html";
     }
     project->addFileToProject (namelow + "/docs/en/index-5.html",fileInfo);
-  
+    
     fileInfo.rel_name = namelow + "/docs/en/index-6.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(ta->isChecked())) {
+    if (!(cppitem->isSelected())) {
       fileInfo.install = true;
-      if (qta->isChecked()) {
+      if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-6.html";
-      }
+      } 
       else 
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-6.html";
-    }
+    } 
     project->addFileToProject (namelow + "/docs/en/index-6.html",fileInfo);
     
     fileInfo.rel_name = namelow + "/docs/en/index.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(ta->isChecked())) {
+    if (!(cppitem->isSelected())) {
       fileInfo.install = true;
-      if (qta->isChecked()) {
+      if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index.html";
-      }
+      } 
       else 
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
-    }
+    } 
     project->addFileToProject (namelow + "/docs/en/index.html",fileInfo);
     
   }
@@ -1174,19 +1659,19 @@ void CKAppWizard::slotProcessExited() {
     project->addLFVGroup ("GNU","");
     project->setFilters("GNU",group_filters);
   }
-
-  if (!(ta->isChecked() || qta->isChecked())) {
+ 
+  if (!(cppitem->isSelected() || qtnormalitem->isSelected())) {
     group_filters.clear();
     group_filters.append("*.po");
     project->addLFVGroup ("Translations","");
     project->setFilters("Translations",group_filters);
-  }
-  if (!ta->isChecked()) {
+  } 
+  if (!cppitem->isSelected()) {
     group_filters.clear();
     group_filters.append("*.kdevdlg");
     project->addLFVGroup ("Dialogs","");
     project->setFilters("Dialogs",group_filters);
-  }
+  } 
   
   
   group_filters.clear();
@@ -1199,25 +1684,36 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.ecpp");
   project->addLFVGroup ("Sources","");
   project->setFilters("Sources",group_filters);
- 
+  
   group_filters.clear();
   group_filters.append("*.h");
   group_filters.append("*.hxx");
   project->addLFVGroup ("Header","");
   project->setFilters("Header",group_filters);
-
   
-
   project->writeProject ();
   project->updateMakefilesAm ();
 
   disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
   
-  QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
-  q->clearArguments();
-  *q << "perl" << path1 + "processesend.pl";
-  q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+    QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
+    q->clearArguments();
+    if (generatesource->isChecked()) {
+      *q << "perl" << path1 + "processesend.pl";
+    }
+    q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+    if (!generatesource->isChecked()) {
+      q->clearArguments();
+      directorytext = directoryline->text();
+      nametext = nameline->text();
+      nametext = nametext.lower();
+      *q << "rm" << directorytext + "/" + nametext + "/*.cpp";
+      q->start(KProcess::Block,KProcess::AllOutput);      
+      q->clearArguments();
+      *q << "rm" << directorytext + "/" + nametext + "/*.h";
+      q->start(KProcess::Block,KProcess::AllOutput);      
+    }
 }
 
 // enable cancelbutton if everything is done
@@ -1247,7 +1743,6 @@ QString CKAppWizard::getProjectFile() {
   delete (widget2);
   delete (widget3);
   delete (widget4);
-  delete (widget5);
   return directorytext;
 }
 

@@ -27,6 +27,8 @@
 #include <kdatepik.h>
 #include <kbutton.h>
 #include <qfile.h>
+#include <qframe.h>
+#include <qheader.h>
 #include <qmessagebox.h>
 #include <qkeycode.h>
 #include <kiconloader.h>
@@ -34,6 +36,7 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qlistview.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qmultilinedit.h>
@@ -83,10 +86,10 @@ void slotDirDialogClicked();
   void slotNewCppButtonClicked();
   void slotOkClicked();
   void slotDefaultClicked();
-  void slotAppClicked();
-  void slotMiniClicked();
-  void slotQtClicked();
-  void slotCPPClicked();
+  //  void slotAppClicked();
+  //  void slotMiniClicked();
+  //  void slotQtClicked();
+  //  void slotCPPClicked();
   void slotProjectnameEntry();
   void slotIconButtonClicked();
   void slotMiniIconButtonClicked();
@@ -96,21 +99,45 @@ void slotDirDialogClicked();
   void slotCppHeaderClicked(); 
   void slotProcessExited();
   void slotMakeEnd();
-
+  void slotApplicationClicked();
 
 private:
 
   bool  gen_prj;
   QObject* o;
-  //  KWizard* view;
-  QWidget *widget0,*widget1,*widget2,*widget3,*widget4,*widget5,*widget1a,*widget1b;
-  KWizardPage *page0,*page1,*page2,*page3,*page4,*page5;  
-  QButtonGroup* bgroup;
-  QRadioButton *kna,*kma,*ta,*qta;
-  QLabel *name,*directory,*authorname,*email,*versionnumber;
-  QLineEdit *nameline,*directoryline,*authorline,*emailline,*versionline;
-  QCheckBox *apidoc,*userdoc,*lsmfile,*gnufiles,*progicon,*miniicon,*datalink,*hheader,*cppheader;
-  QPushButton *hload,*hnew,*directoryload,*cppload,*cppnew,*iconload,*miniload;
+  QWidget *widget0,*widget1,*widget2,*widget3,*widget4,*widget1a,*widget1b;
+  QListView* applications;
+  QLabel* apphelp;
+  QPushButton* directoryload;
+  QLineEdit* emailline;
+  QLineEdit* authorline;
+  QLineEdit* versionline;
+  QLineEdit* nameline;
+  QLineEdit* directoryline;
+  QLabel* name;
+  QLabel* email;
+  QLabel* authorname;
+  QLabel* versionnumber;
+  QLabel* directory;
+  QCheckBox* datalink;
+  QCheckBox* miniicon;
+  QCheckBox* progicon;
+  QCheckBox* gnufiles;
+  QCheckBox* lsmfile;
+  QCheckBox* userdoc;
+  QCheckBox* apidoc;
+  QPushButton* miniload;
+  QPushButton* iconload;
+  QCheckBox* generatesource;
+  QPushButton* hload;
+  QPushButton* hnew;
+  QCheckBox* hheader;
+  QPushButton* cppnew;
+  QPushButton* cppload;
+  QCheckBox* cppheader;
+  QMultiLineEdit* output;
+  QMultiLineEdit* errOutput;
+  KWizardPage *page0,*page1,*page2,*page3,*page4;  
   KSeparator *separator0,*separator1,*separator2;
   KDirDialog* dirdialog;
   KFileDialog *headerdialog,*cppdialog;
@@ -122,11 +149,26 @@ private:
   KEdit *cppedit,*hedit;
   QButton *okButton,*cancelButton,*defaultButton, *prevButton;
   KIconLoader* loader;
-  QMultiLineEdit *errOutput,*output;
   KShellProcess *q;
   KSimpleConfig* settings;
   CProject *project;
   QStrList sub_dir_list;
+  QListViewItem *kdeentry;
+  //QListViewItem *corbaitem;
+  //QListViewItem *komitem;
+  QListViewItem *kdenormalitem;
+  QListViewItem *kdeminiitem;
+  QListViewItem *qtentry;
+  QListViewItem *ccppentry;
+  //QListViewItem *gtkentry;
+  QListViewItem *othersentry;
+  //QListViewItem *citem;
+  QListViewItem *cppitem;
+  QListViewItem *emptyprojitem;
+  //QListViewItem *gtknormalitem;
+  // QListViewItem *gtkminiitem;
+  QListViewItem *qtnormalitem;
+  //  QListViewItem *qtminiitem;
 };
 
 #endif

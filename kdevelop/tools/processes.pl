@@ -34,16 +34,16 @@ $year = 1900 + $time[5];
 printflush (STDOUT,"chance directory...\n");
 chdir ($overDirectory);
 
-if ($processes{APPLICATION} eq "standard") {
+if ($processes{APPLICATION} eq "kdenormal") {
   changeNormalApp();  
 }
-elsif ($processes{APPLICATION} eq "mini") {
+elsif ($processes{APPLICATION} eq "kdemini") {
   changeMiniApp();
 }
-elsif ($processes{APPLICATION} eq "terminal") {
+elsif ($processes{APPLICATION} eq "cpp") {
   changeTerminalApp();
 }
-elsif ($processes{APPLICATION} eq "qt") {
+elsif ($processes{APPLICATION} eq "qtnormal") {
   changeQtApp();
 }
 
@@ -126,14 +126,20 @@ sub changeNormalApp() {
 
   #replaced skel with the projectname in different files
   chdir ($overDirectory);
-  $word = "skel";
+  $word = "SUBDIRS = skel";
   $oldfile = "Makefile.am";
-  $replace = $nameLittle;
+  $replace = "SUBDIRS = " . $nameLittle . " po";
   replaceOldFile($word,$replace,$oldfile);
+  $word = "skel";
+  $replace = $nameLittle;
   $oldfile = "configure.in";
   replaceOldFile($word,$replace,$oldfile);
   $word = "VERSION";
   $replace = $processes{VERSION};
+  replaceOldFile($word,$replace,$oldfile);
+  $word = $nameLittle . "/Makefile";
+  $oldfile = "configure.in";
+  $replace = $nameLittle . "/Makefile po/Makefile";
   replaceOldFile($word,$replace,$oldfile);
   
   chdir ($underDirectory);
@@ -304,11 +310,11 @@ sub changeNormalApp() {
     $oldfile = "Makefile.am";
     replaceOldFile($word,$replace,$oldfile);
     chdir ($overDirectory);
-    $word = $nameLittle . "/docs/Makefile \\";
+    $word = $nameLittle . "/docs/Makefile";
     $replace = ""; 
     $oldfile = "configure.in";
     replaceOldFile(  $word,$replace,$oldfile);
-    $word = $nameLittle . "/docs/en/Makefile \\";
+    $word = $nameLittle . "/docs/en/Makefile";
     replaceOldFile($word,$replace ,$oldfile);
   }
   
@@ -680,14 +686,18 @@ sub changeMiniApp() {
   
   #replaced skel with the projectname in different files
   chdir ($overDirectory);
-  $word = "skel";
+  $word = "SUBDIRS = skel";
   $oldfile = "Makefile.am";
-  $replace = $nameLittle;
+  $replace = "SUBDIRS = " . $nameLittle . " po";
   replaceOldFile($word,$replace,$oldfile);
   $oldfile = "configure.in";
   replaceOldFile($word,$replace,$oldfile);
   $word = "VERSION";
   $replace = $processes{VERSION};
+  replaceOldFile($word,$replace,$oldfile);
+  $word = $nameLittle . "/Makefile";
+  $oldfile = "configure.in";
+  $replace = $nameLittle . "/Makefile po/Makefile";
   replaceOldFile($word,$replace,$oldfile);
   
   chdir ($underDirectory);
@@ -824,11 +834,11 @@ sub changeMiniApp() {
     $oldfile = "Makefile.am";
     replaceOldFile($word,$replace,$oldfile);
     chdir ($overDirectory);
-    $word = $nameLittle . "/docs/Makefile \\";
+    $word = $nameLittle . "/docs/Makefile";
     $replace = ""; 
     $oldfile = "configure.in";
     replaceOldFile(  $word,$replace,$oldfile);
-    $word = $nameLittle . "/docs/en/Makefile \\";
+    $word = $nameLittle . "/docs/en/Makefile";
     replaceOldFile($word,$replace ,$oldfile);
   }
   
@@ -1164,11 +1174,11 @@ sub changeTerminalApp() {
     $oldfile = "Makefile.am";
     replaceOldFile($word,$replace,$oldfile);
     chdir ($overDirectory);
-    $word = $nameLittle . "/docs/Makefile \\";
+    $word = $nameLittle . "/docs/Makefile";
     $replace = ""; 
     $oldfile = "configure.in";
     replaceOldFile(  $word,$replace,$oldfile);
-    $word = $nameLittle . "/docs/en/Makefile \\";
+    $word = $nameLittle . "/docs/en/Makefile";
     replaceOldFile($word,$replace ,$oldfile);
   }
   
@@ -1354,13 +1364,31 @@ sub changeQtApp() {
   #replaced Bank with the projectname in different files
   $word = "Bank";
   $oldfile = "main.cpp";
-  $replace = $name;
+  $replace = $name . "App";
   replaceOldFile($word,$replace,$oldfile);
   $oldfile = "skel.cpp";
   replaceOldFile($word,$replace,$oldfile);
   $oldfile = "skel.h";
   replaceOldFile($word,$replace,$oldfile);
-  
+
+  $word = $name . "AppDoc";
+  $oldfile = "main.cpp";
+  $replace = $name . "Doc";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = "skel.cpp";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = "skel.h";
+  replaceOldFile($word,$replace,$oldfile);
+
+  $word = $name . "AppView";
+  $oldfile = "main.cpp";
+  $replace = $name . "View";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = "skel.cpp";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = "skel.h";
+  replaceOldFile($word,$replace,$oldfile);
+
   #replaced AUTHOR with the authorname in bank.cpp
   $word = "AUTHOR";
   $oldfile = "skel.cpp";
@@ -1384,10 +1412,14 @@ sub changeQtApp() {
   replaceOldFile($word,$replace,$oldfile);
   $oldfile = $nameLittle . "doc.h";
   replaceOldFile($word,$replace,$oldfile);
+  $word = "Bank";
+  $replace = $name;
   $oldfile = $nameLittle . "view.cpp";
   replaceOldFile($word,$replace,$oldfile);
   $oldfile = $nameLittle . "view.h";
   replaceOldFile($word,$replace,$oldfile);
+  $word = "Bank";
+  $replace = $name;
   $oldfile = "resource.h";
   replaceOldFile($word,$replace,$oldfile);
   $word = "BANK";
@@ -1501,11 +1533,11 @@ sub changeQtApp() {
     $oldfile = "Makefile.am";
     replaceOldFile($word,$replace,$oldfile);
     chdir ($overDirectory);
-    $word = $nameLittle . "/docs/Makefile \\";
+    $word = $nameLittle . "/docs/Makefile";
     $replace = ""; 
     $oldfile = "configure.in";
     replaceOldFile(  $word,$replace,$oldfile);
-    $word = $nameLittle . "/docs/en/Makefile \\";
+    $word = $nameLittle . "/docs/en/Makefile";
     replaceOldFile($word,$replace ,$oldfile);
   }
   
