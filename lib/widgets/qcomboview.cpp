@@ -505,11 +505,18 @@ void QComboView::keyPressEvent( QKeyEvent *e )
         }
         return;
     } else if ( e->key() == Key_Up ) {
+/*        if ((!c) && (listView()->firstChild()))
+            setCurrentItem(listView()->firstChild());*/
         if (c && c->itemAbove() )
             setCurrentItem( c->itemAbove() );
         else
             return;
     } else if ( e->key() == Key_Down ) {
+        if ((!c) && (listView()->firstChild()))
+        {
+            setCurrentItem(listView()->firstChild());
+            return;
+        }
         if ( c && c->itemBelow() )
             setCurrentItem( c->itemBelow() );
         else
