@@ -26,6 +26,7 @@
   <!ENTITY unixdev SYSTEM "unixdev.docbook">
   <!ENTITY kdevelop-survey SYSTEM "kdevelop-survey.docbook">
   <!ENTITY kdevelop-install SYSTEM "kdevelop-install.docbook">
+  <!ENTITY getting-started SYSTEM "getting-started.docbook">
   <!ENTITY setup SYSTEM "setup.docbook">
   <!ENTITY applicationwizard SYSTEM "applicationwizard.docbook">
   <!ENTITY project-advanced SYSTEM "project-advanced.docbook">
@@ -48,7 +49,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-10-25</date>
+  <date>2004-11-03</date>
   <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>
@@ -111,7 +112,7 @@ Entries which require special treatment are marked with comments starting with '
 <!-- ====================================================================== -->
 
 <chapter id="survey-manual">
-<title>About this Manual</title>
+<title>What This Manual Contains</title>
 
 <para>
 This user manual is intended to describe the contents and use of the &kdevelop; &kdevrelease; Integrated Development Environment (IDE) from a user's point of view. It is not a programming manual, nor does it describe the development process in detail. Its only aim is to guide you in the handling of the IDE.
@@ -133,7 +134,11 @@ Here you will find information on the following topics:
   </para></listitem>
 
   <listitem><para>
-  <link linkend="kdevelop-survey">Overview of the Features of &kdevelop;</link> &mdash; is a kind of a warm-up, giving a short overall view of what is built-in within &kdevelop; and gets you acquainted with the look and feel of this IDE.
+  <link linkend="getting-started">Getting Started with &kdevelop; &mdash; a Guided Tour</link> &mdash; gives you a quick start on the use of this IDE, introducing the basic steps of how to work on a project.
+  </para></listitem>
+
+  <listitem><para>
+  <link linkend="kdevelop-survey">Overview of the Features of &kdevelop;</link> &mdash; extends the guided tour in the previous chapter, giving an overall view of what is built-in within &kdevelop; and gets you acquainted with the look and feel of this IDE.
   </para></listitem>
 
   <listitem><para>
@@ -148,9 +153,9 @@ Here you will find information on the following topics:
   <link linkend="setup">Configuring &kdevelop;</link> &mdash; shows how you can tailor the IDE to suit your needs.
   </para></listitem>
 
-  <listitem><para>
+<!--  <listitem><para>
   <link linkend="applicationwizard">Getting started: the &appwizard;</link> &mdash; describes the basics of how to set up a new project in &kdevelop; using the built-in &appwizard;.
-  </para></listitem>
+  </para></listitem>-->
 
   <listitem><para>
   <link linkend="projects-advanced">Advanced Project Management</link> &mdash; shows how to load existing projects, convert projects from older &kdevelop; versions, and import other existing projects. Furthermore the configuration of a project's options to suit your needs is covered.
@@ -434,11 +439,13 @@ Information on these topics is availabe:
 </chapter> <!-- nutshell -->
 
 <!-- ====================================================================== -->
-
+<!-- External Chapters -->
 &unixdev;            <!-- "Development on &UNIX;"                           -->
+&kdevelop-install;   <!-- "Installing &kdevelop;"                           -->
+&getting-started;    <!-- "Getting Started"                                 -->
 &kdevelop-survey;    <!-- "Overview of &kdevelop; Features"                 -->
-&kdevelop-install;   <!-- "Installing &kdevelop";                           -->
 &setup;              <!-- "Configuring &kdevelop;"                          -->
+<!-- ### This chapter will be removed soon: -->
 &applicationwizard;  <!-- "Getting Started &mdash; the &appwizard;"         -->
 &project-advanced;   <!-- "Advanced Project Management"                     -->
 
@@ -2141,9 +2148,6 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes overview
 
 <para>(... to be written ...)</para>
 
-<!-- ### temporarily disabled as the <bibliography> markup is not used by KDE Docbook
-     (see: Lauri Watts: The KDE DocBook Authors guide, Revision 1.00.00: 2003,
-                        Chapter 19. Tags we do not use) -->
 <bibliography>
 
 <biblioentry>
