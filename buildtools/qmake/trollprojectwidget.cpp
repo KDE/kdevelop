@@ -1860,7 +1860,7 @@ void TrollProjectWidget::slotAddFiles()
       {
         // Copy selected files to current subproject folder
         // and add them to the filelist
-        QString filename = KURL(files[i]).filename();
+        QString filename = KURL(files[i]).fileName();
         KIO::NetAccess::file_copy(files[i], cleanSubprojectDir + "/" + filename, -1, false, false, this);
         QFile testExist(cleanSubprojectDir + "/" + filename);
 
@@ -2230,7 +2230,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             case AddFilesDialog::Copy:
                 {
                 // Copy selected files to current subproject folder
-                QString filename = KURL(files[i]).filename();
+                QString filename = KURL(files[i]).fileName();
                 KIO::NetAccess::file_copy(files[i], cleanSubprojectPath + "/" + filename, -1, true, false, this);
                 // and add them to the filelist
                 addFileToCurrentSubProject(titem, filename);

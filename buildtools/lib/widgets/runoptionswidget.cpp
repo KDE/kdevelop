@@ -197,7 +197,7 @@ void RunOptionsWidget::browseMainProgram()
 
         // pass it to the dialog
         dlg->setURL(KURL::fromPathOrURL( target.directory(false, false) ));
-        dlg->setSelection(target.filename());
+        dlg->setSelection(target.fileName());
     }
 
     if (dlg->exec()) {
