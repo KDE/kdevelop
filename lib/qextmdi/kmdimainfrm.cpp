@@ -516,6 +516,7 @@ KMdiToolViewAccessor *KMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::Do
        mtva->d->widget = pDW->getWidget();
        mtva->d->widgetContainer = pDW;
        pDW->setWidget(pWnd);
+       pWnd->show();
        dockManager->removeFromAutoCreateList(pDW);
        return mtva;
    }
@@ -999,10 +1000,12 @@ void KMdiMainFrm::activateView(KMdiChildView* pWnd)
    if (m_documentTabWidget && m_mdiMode == KMdi::TabPageMode || m_mdiMode==KMdi::IDEAlMode) {
       m_documentTabWidget->showPage(pWnd);
    }
+#if 0
    if (m_mdiMode == KMdi::TabPageMode) {
 //???      makeWidgetDockVisible(pWnd);
 //???      m_pDockbaseOfTabPage = (KMdiDockWidget*) pWnd->parentWidget();
    }
+#endif
    else {
       if (pWnd->isAttached()) {
          if (bActivateNecessary && (m_pMdi->topChild() == pWnd->mdiParent())) {
