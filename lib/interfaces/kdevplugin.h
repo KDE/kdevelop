@@ -15,6 +15,8 @@
 #include <qobject.h>
 #include <kxmlguiclient.h>
 
+#include <kdevapi.h>
+
 class KDevCore;
 class KDevProject;
 class KDevVersionControl;
@@ -22,7 +24,6 @@ class KDevLanguageSupport;
 class KDevEditorManager;
 class KDevMakeFrontend;
 class KDevAppFrontend;
-class KDevApi;
 class KDevPartController;
 class KDevMainWindow;
 class KDevDebugger;
@@ -50,6 +51,7 @@ class KDevPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 
 public:
+	typedef QMap<QString,KDevVersionControl*> VersionControlMap;
     /**
      * Constructs a component.
      */
@@ -74,12 +76,12 @@ public:
      * Returns the short description
      **/
     virtual QString shortDescription() const;
-    
+
     /**
      * Returns the description
      **/
     virtual QString description() const;
-    
+
     /**
      * Create the DCOP interface for the given @p serviceType, if this
      * plugin provides it. Return false otherwise.
@@ -143,10 +145,6 @@ public:
      * Gives a reference to the current project component
      */
     KDevProject *project();
-    /**
-     * Gives a reference to the version control component
-     */
-    KDevVersionControl *versionControl();
     /**
      * Gives a reference to the language support component
      */
@@ -214,20 +212,39 @@ public:
      */
     virtual void savePartialProjectSession(QDomElement* el);
 
-   
+	/**
+	* Add @p vcs to the list of the registered VCS.
+	*/
+	void registerVersionControl( KDevVersionControl *vcs );
+
+	/**
+	* Returns the Version Control System having the specified uinque identifier @p uid.
+	*/
+	KDevVersionControl *versionControlByName( const QString &uid ) const;
+
+	/**
+	* Returns a list with unique identifiers among the version control systems.
+	*/
+	QStringList registeredVersionControls() const;
+
+	/**
+	* Remove (<u>not</u> delete) @p vcs to the list of the registered VCS.
+	*/
+	void unregisterVersionControl( KDevVersionControl *vcs );
+
 signals:
     /**
      * Emitted when the part will be shown. If you really want to avoid that
      * the part is shown at all, you will have to reimplement showPart();
      **/
     void aboutToShowPart();
-    
+
 protected:
     /**
      * This will cause the part to show up by calling  KPart::show();
      **/
     virtual void showPart();
-    
+
 private:
     KDevApi *m_api;
     class Private;

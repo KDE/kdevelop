@@ -1,5 +1,7 @@
-#include "kdevapi.h"
+#include <kdebug.h>
 
+#include "kdevapi.h"
+#include "kdevversioncontrol.h"
 
 class KDevApiPrivate
 {
@@ -19,7 +21,7 @@ public:
   KDevVersionControl *m_versionControl;
   KDevDiffFrontend *m_diffFrontend;
   KDevCreateFile *m_createFile;
-
+  KDevApi::VersionControlMap m_registeredVcs;
 };
 
 
@@ -82,16 +84,39 @@ void KDevApi::setLanguageSupport(KDevLanguageSupport *languageSupport)
   d->m_languageSupport = languageSupport;
 }
 
-
-KDevVersionControl *KDevApi::versionControl()
+void KDevApi::registerVersionControl( KDevVersionControl *vcs )
 {
-  return d->m_versionControl;
+	d->m_registeredVcs.insert( vcs->uid(), vcs );
+}
+
+void KDevApi::unregisterVersionControl( KDevVersionControl *vcs )
+{
+	d->m_registeredVcs.remove( vcs->uid() );
 }
 
 
-void KDevApi::setVersionControl(KDevVersionControl *versionControl)
+QStringList KDevApi::registeredVersionControls() const
 {
-  d->m_versionControl = versionControl;
+	QStringList foundVersionControls;
+
+		// We query for all vcs plugins for KDevelop
+	const KDevApi::VersionControlMap &availableVcs = d->m_registeredVcs;
+
+	kdDebug( 9000 ) << "  ** Starting examining services ..." << endl;
+
+	for(KDevApi::VersionControlMap::const_iterator it( availableVcs.begin() ); it != availableVcs.end(); ++it)
+	{
+		KDevVersionControl *vcs = (*it);
+		foundVersionControls.append( vcs->uid() );
+		kdDebug( 9000 ) << "  =====> Found VCS: " << vcs->uid() << endl;
+	}
+
+	return foundVersionControls;
+}
+
+KDevVersionControl *KDevApi::versionControlByName( const QString &uid ) const
+{
+	return d->m_registeredVcs[ uid ];
 }
 
 KDevDiffFrontend *KDevApi::diffFrontend()

@@ -19,8 +19,6 @@ class KDevVersionControl : public KDevPlugin
     Q_OBJECT
 
 public:
-	typedef QMap<QString,KDevVersionControl*> VersionControlMap;
-
     enum State { invalid = -1, canBeCommited = 1, canBeAdded = 2 };
 
 	/**
@@ -53,11 +51,11 @@ public:
      */
      //    This will be replaced by a smarter solution
      //    virtual State registeredState(const QString &fileName) = 0;
-
-	 /**
-	 * Accessor to the collection of registered VCSs.
-	 */
-	static const VersionControlMap &getRegisteredVCS();
+	/**
+	* Returns the unique identifier for this plugin (so it can be used for retrieving
+	* it from collections).
+	*/
+	QString uid() const;
 };
 
 #endif

@@ -37,10 +37,10 @@ void LogForm::destroy()
 	process->kill();
 }
 
-void LogForm::start( const QString &workDir, const KURL &pathUrl )
+void LogForm::start( const QString &workDir, const QString &path )
 {
 	// "cvs log" needs to be done on relative-path basis
-	pathName = UrlFileUtilities::extractPathNameRelative( workDir, pathUrl );
+	pathName = path;
 
 	process->kill();
 	contents->clear();

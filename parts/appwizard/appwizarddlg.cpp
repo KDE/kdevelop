@@ -188,14 +188,14 @@ void AppWizardDialog::loadVcs()
     m_vcsForm->stack->addWidget( 0, i++ );
 
 	// We query for all vcs plugins for KDevelop
-	const KDevVersionControl::VersionControlMap availableVcs = KDevVersionControl::getRegisteredVCS();
+	QStringList availableVcs = m_part->registeredVersionControls();
 
 	kdDebug( 9000 ) << "  ** Starting examining services ..." << endl;
 
-	for(KDevVersionControl::VersionControlMap::const_iterator it( availableVcs.begin() ); it != availableVcs.end(); ++it)
+	for(QStringList::const_iterator it( availableVcs.begin() ); it != availableVcs.end(); ++it)
 	{
-		KDevVersionControl *vcs = (*it);
-		QString vcsName = vcs->pluginName();
+		KDevVersionControl *vcs = m_part->versionControlByName( (*it) );
+		QString vcsName = vcs->uid();
 		kdDebug( 9000 ) << "  =====> Found VCS: " << vcsName << endl;
 
 		QWidget *newProjectWidget = vcs->newProjectWidget( m_vcsForm->stack );
@@ -420,7 +420,7 @@ void AppWizardDialog::accept()
     m_part->makeFrontend()->queueCommand(QString::null, m_cmdline);
 
     if (m_vcsForm->stack->id(m_vcsForm->stack->visibleWidget())) {
-        KDevVersionControl* pVC = KDevVersionControl::getRegisteredVCS()[m_vcsForm->combo->currentText()];
+        KDevVersionControl* pVC = m_part->versionControlByName( m_vcsForm->combo->currentText() );
         if (pVC) {
 			kdDebug( 9000 ) << "Creating new project with selected VCS ..." << endl;
             pVC->createNewProject(finalLoc_label->text());

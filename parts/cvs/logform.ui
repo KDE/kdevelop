@@ -40,7 +40,6 @@
 </includes>
 <forwards>
     <forward>class QProcess;</forward>
-    <forward>class KURL;</forward>
 </forwards>
 <variables>
     <variable>QString pathName;</variable>
@@ -49,7 +48,7 @@
 <slots>
     <slot>init()</slot>
     <slot>destroy()</slot>
-    <slot>start( const QString &amp; workDir, const KURL &amp; fn )</slot>
+    <slot>start( const QString &amp; workDir, const QString &amp; fn )</slot>
     <slot>slotProcessExited()</slot>
     <slot>slotReadStdout()</slot>
     <slot>slotReadStderr()</slot>

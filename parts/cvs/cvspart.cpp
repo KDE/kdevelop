@@ -74,19 +74,19 @@ void CvsPart::setupActions()
 		this, SLOT(slotImportCvs()), actionCollection(), "cvs_import" );
 		action->setStatusText( i18n("Imports an existing Cvs repository.") );
 */
-	new KAction( i18n("Commit"), 0, this, SLOT(slotCommit()),
+	actionCommit = new KAction( i18n("Commit"), 0, this, SLOT(slotCommit()),
 		actionCollection(), "cvs_commit" );
-	new KAction( i18n("Diff"), 0, this, SLOT(slotDiff()),
+	actionDiff = new KAction( i18n("Diff"), 0, this, SLOT(slotDiff()),
 		actionCollection(), "cvs_diff" );
-	new KAction( i18n("Log"), 0, this, SLOT(slotLog()),
+	actionLog = new KAction( i18n("Log"), 0, this, SLOT(slotLog()),
 		actionCollection(), "cvs_log" );
-	new KAction( i18n("Add"), 0, this, SLOT(slotAdd()),
+	actionAdd = new KAction( i18n("Add"), 0, this, SLOT(slotAdd()),
 		actionCollection(), "cvs_add" );
-	new KAction( i18n("Remove from repository"), 0, this, SLOT(slotRemove()),
+	actionRemove = new KAction( i18n("Remove from repository"), 0, this, SLOT(slotRemove()),
 		actionCollection(), "cvs_remove" );
-	new KAction( i18n("Update"), 0, this, SLOT(slotUpdate()),
+	actionUpdate = new KAction( i18n("Update"), 0, this, SLOT(slotUpdate()),
 		actionCollection(), "cvs_update" );
-	new KAction( i18n("Replace with copy from repository"), 0, this, SLOT(slotReplace()),
+	actionReplace = new KAction( i18n("Replace with copy from repository"), 0, this, SLOT(slotReplace()),
 		actionCollection(), "cvs_replace" );
 }
 
@@ -150,19 +150,23 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 
 		kdDebug(9000) << "contextMenu() for file " << UrlFileUtilities::extractPathNameAbsolute( pathUrl ) << endl;
 
-		KPopupMenu *sub = new KPopupMenu( popup );
 		QString fileName = pathUrl.fileName();
-		sub->insertTitle( i18n("Actions for %1").arg(fileName) );
-		sub->insertItem( i18n("Commit"), this, SLOT(slotCommit()) );
-		sub->insertItem( i18n("Update"), this, SLOT(slotUpdate()) );
-		sub->insertItem( i18n("Add to Repository"), this, SLOT(slotAdd()) );
-		sub->insertItem( i18n("Remove From Repository"), this, SLOT(slotRemove()) );
-		sub->insertSeparator();
-		sub->insertItem( i18n("Replace with latest from Repository"), this, SLOT(slotReplace()) );
-		sub->insertSeparator();
-		sub->insertItem( i18n("Diff Against Repository"), this, SLOT(slotDiff()) );
-		sub->insertItem( i18n("Log"), this, SLOT(slotLog()) );
-		popup->insertItem( i18n("CVS"), sub);
+
+		KPopupMenu *subMenu = new KPopupMenu( popup );
+		subMenu->insertTitle( i18n("Actions for %1").arg(fileName) );
+
+		actionCommit->plug( subMenu );
+		actionLog->plug( subMenu );
+		actionUpdate->plug( subMenu );
+		actionAdd->plug( subMenu );
+		actionDiff->plug( subMenu );
+
+		subMenu->insertSeparator();
+
+		actionRemove->plug( subMenu );
+		actionReplace->plug( subMenu );
+
+		popup->insertItem( i18n("CVS"), subMenu );
 
 		// If we are invoked from the context menu than the file is has been already specified,
 		// otherwise we use the current focused editor/viewer part.
@@ -325,23 +329,15 @@ void CvsPart::slotLog()
 	LogForm* f = new LogForm();
 	f->show();
 	// Form will do all the work
-	f->start( project()->projectDirectory(), pathUrl );
+	f->start( project()->projectDirectory(), fileName );
 
 	doneOperation();
 }
 
 void CvsPart::slotDiff()
 {
-	if (!findPaths())
-	{
-		kdDebug(9000) << "  ** slotCommit(): aborting since findPath() == false." << endl;
+	if (!prepareOperation())
 		return;
-	}
-	if (!isRegisteredInRepository( pathUrl ))
-	{
-		kdDebug(9000) << "  ** slotDiff(): aborting since file is not is repository." << endl;
-		return;
-	}
 
 	kdDebug(9000) << "slotDiff()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
@@ -456,8 +452,24 @@ bool CvsPart::findPaths()
 		return false;
 	}
 
-    dirName = pathUrl.directory(),
-    fileName = pathUrl.fileName();
+	kdDebug(9000) << "CvsPart::findPaths(): Project directory is " << project()->projectDirectory() << endl;
+	kdDebug(9000) << "CvsPart::findPaths(): Path is " << pathUrl.path() << endl;
+
+	// Ok, this an *ugly* hack: if the operation is requested for the project directory
+	// then the path must be "customized" because of the behaviour of KURL ...
+	if ( pathUrl.path() != project()->projectDirectory() )
+	{
+	    dirName = pathUrl.directory();
+    	fileName = pathUrl.fileName();
+	}
+	else
+	{
+	    dirName = pathUrl.path();
+    	fileName = ".";
+	}
+
+	kdDebug(9000) << "CvsPart::findPaths(): dirName : " << dirName << endl;
+	kdDebug(9000) << "CvsPart::findPaths(): fileName: " << fileName << endl;
 
 	return true;
 }
@@ -469,7 +481,7 @@ bool CvsPart::prepareOperation()
 		kdDebug(9000) << "  ** slotCommit(): aborting since findPath() == false." << endl;
 		return false;
 	}
-	if (!isRegisteredInRepository( pathUrl ))
+	if (!isRegisteredInRepository())
 	{
 		kdDebug(9000) << "  ** slotDiff(): aborting since file is not is repository." << endl;
 		return false;
@@ -483,11 +495,17 @@ void CvsPart::doneOperation()
 	invokedFromMenu = true;
 }
 
-bool CvsPart::isRegisteredInRepository( const KURL &url )
+bool CvsPart::isRegisteredInRepository()
 {
 	kdDebug(9000) << "===> CvsPart::isRegisteredInRepository() here! " << endl;
 
-	QString dirName = url.directory();
+	if ( pathUrl.path() == project()->projectDirectory() )
+	{
+		kdDebug(9000) << "===> Operation requested for projectDir(): true. " << endl;
+		return true;
+	}
+
+	QString dirName = pathUrl.directory();
 	QString entriesFilePath = dirName + "/CVS/Entries";
 	// Lines in CVS/Entries are like:
 	//   /.cvsignore/1.3/Fri Aug 30 21:21:04 2002//
@@ -496,9 +514,9 @@ bool CvsPart::isRegisteredInRepository( const KURL &url )
 	// That is: <slash><filename><slash>...
 	// So we just properly "escape" the filename so that "Makefile" does not
 	// match with "Makefile.am" ;-)
-	QString whatToSearch = "/" + url.fileName() + "/";
+	QString whatToSearch = "/" + pathUrl.fileName() + "/";
 
-	kdDebug(9000) << "===> url.path()      = " << url.path() << endl;
+	kdDebug(9000) << "===> pathUrl.path()      = " << pathUrl.path() << endl;
 	kdDebug(9000) << "===> dirName             = " << dirName << endl;
 	kdDebug(9000) << "===> entriesFilePath = " << entriesFilePath << endl;
 	kdDebug(9000) << "===> whatToSearch    = " << whatToSearch << endl;

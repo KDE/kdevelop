@@ -21,6 +21,7 @@ class Context;
 class QPopupMenu;
 class KDialogBase;
 class KURL;
+class KAction;
 class CvsWidget;
 class CvsForm;
 
@@ -122,7 +123,7 @@ private:
 	* Returns true if the file or directory indicated in @p url has been registered in the CVS
 	* (if not, returns false since it avoid performing CVS operation)
 	*/
-	static bool isRegisteredInRepository( const KURL &url );
+	bool isRegisteredInRepository();
 
 private:
 	// The value for overriding the $CVS_RSH env variable
@@ -141,6 +142,16 @@ private:
 	// True if invoked from menu, false otherwise (i.e. called from context menu)
 	// Ok this is a very bad hack but I see no other solution for now.
 	bool invokedFromMenu;
+
+
+	// Actions
+	KAction *actionCommit,
+		*actionDiff,
+		*actionLog,
+		*actionAdd,
+		*actionRemove,
+		*actionUpdate,
+		*actionReplace;
 };
 
 #endif

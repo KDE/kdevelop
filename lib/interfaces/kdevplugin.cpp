@@ -3,11 +3,13 @@
 #include "kdevpartcontroller.h"
 #include "kdevapi.h"
 #include "kdevcore.h"
+#include "kdevversioncontrol.h"
 
 #include <kaction.h>
 
 #include <dcopclient.h>
 #include <qdom.h>
+#include <qmap.h>
 
 #include <assert.h>
 
@@ -106,11 +108,6 @@ QDomDocument *KDevPlugin::projectDom() const
     return m_api->projectDom();
 }
 
-KDevVersionControl *KDevPlugin::versionControl()
-{
-    return m_api->versionControl();
-}
-
 KDevLanguageSupport *KDevPlugin::languageSupport()
 {
     return m_api->languageSupport();
@@ -144,6 +141,26 @@ KDevDebugger *KDevPlugin::debugger()
 KDevCreateFile *KDevPlugin::createFileSupport()
 {
     return m_api->createFile();
+}
+
+void KDevPlugin::registerVersionControl( KDevVersionControl *vcs )
+{
+	m_api->registerVersionControl( vcs );
+}
+
+void KDevPlugin::unregisterVersionControl( KDevVersionControl *vcs )
+{
+	m_api->unregisterVersionControl( vcs );
+}
+
+QStringList KDevPlugin::registeredVersionControls() const
+{
+	return m_api->registeredVersionControls();
+}
+
+KDevVersionControl *KDevPlugin::versionControlByName( const QString &uid ) const
+{
+	return m_api->versionControlByName( uid );
 }
 
 void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)

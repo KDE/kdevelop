@@ -14,6 +14,8 @@
 
 #include <qobject.h>
 
+class QStringList;
+class QDomDocument;
 class KDevCore;
 class KDevProject;
 class KDevVersionControl;
@@ -21,7 +23,6 @@ class KDevLanguageSupport;
 class KDevMakeFrontend;
 class KDevAppFrontend;
 class ClassStore;
-class QDomDocument;
 class KDevPartController;
 class KDevMainWindow;
 class KDevDebugger;
@@ -34,6 +35,7 @@ class KDevApi : public QObject
 {
     Q_OBJECT
 public:
+	typedef QMap<QString,KDevVersionControl*> VersionControlMap;
 
     KDevApi();
     virtual ~KDevApi();
@@ -61,8 +63,10 @@ public:
     KDevLanguageSupport *languageSupport();
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
 
-    KDevVersionControl *versionControl();
-    void setVersionControl(KDevVersionControl *versionControl);
+	void registerVersionControl( KDevVersionControl *vcs );
+	void unregisterVersionControl( KDevVersionControl *vcs );
+	QStringList registeredVersionControls() const;
+	KDevVersionControl *versionControlByName( const QString &uid ) const;
 
     KDevDiffFrontend *diffFrontend();
     void setDiffFrontend(KDevDiffFrontend *diffFrontend);
