@@ -15,6 +15,7 @@
 
 #include "fortransupportpart.h"
 
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qstringlist.h>
@@ -201,10 +202,11 @@ void FortranSupportPart::initialParse()
         kapp->setOverrideCursor(waitCursor);
         QStringList files = project()->allFiles();
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
-            kdDebug(9019) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
-            maybeParse(project()->projectDirectory() + "/" + *it);
+	    QFileInfo fileInfo( project()->projectDirectory(), *it );
+            kdDebug(9019) << "maybe parse " << fileInfo.absFilePath() << endl;
+            maybeParse( fileInfo.absFilePath() );
         }
-        
+
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();
     } else {
@@ -216,14 +218,15 @@ void FortranSupportPart::initialParse()
 void FortranSupportPart::addedFilesToProject(const QStringList &fileList)
 {
     kdDebug(9019) << "addedFilesToProject()" << endl;
-	
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
+	        QFileInfo fileInfo( project()->projectDirectory(), *it );
+		maybeParse( fileInfo.absFilePath() );
 	}
-	
+
     emit updatedSourceInfo();
 }
 
@@ -231,14 +234,15 @@ void FortranSupportPart::addedFilesToProject(const QStringList &fileList)
 void FortranSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
     kdDebug(9019) << "removedFilesFromProject()" << endl;
-    
+
 	QStringList::ConstIterator it;
-	
+
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
+		QFileInfo fileInfo( project()->projectDirectory(), *it );
+		classStore()->removeWithReferences( fileInfo.absFilePath() );
 	}
-	
+
     emit updatedSourceInfo();
 }
 

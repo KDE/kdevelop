@@ -48,6 +48,9 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
 
     ParsedMethod *method = new ParsedMethod;
     method->setName(name);
+    method->setDeclaredInFile(fileName);
+    method->setDeclaredOnLine(lineNum);
+
     method->setDefinedInFile(fileName);
     method->setDefinedOnLine(lineNum);
 
