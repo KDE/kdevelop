@@ -277,7 +277,8 @@ void CKDevelop::refreshClassCombos(){
   TMethodInfo* method_info;
   KCombo* class_combo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   KCombo* method_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
-  
+	class_combo->setUpdatesEnabled(false);
+	method_combo->setUpdatesEnabled(false);
   class_combo->clear();
   method_combo->clear();
   if (class_tree->class_infos->isEmpty()) return; // no classes
@@ -291,6 +292,11 @@ void CKDevelop::refreshClassCombos(){
       method_info = class_info->method_infos.next()){
     method_combo->insertItem(method_info->name);
   }
+	class_combo->setUpdatesEnabled(true);
+	method_combo->setUpdatesEnabled(true);
+	class_combo->repaint();
+	method_combo->repaint();
+
 }
 
 

@@ -147,31 +147,29 @@
 #define ID_OPTIONS_KDEVELOP  			     16040
 
 
-///////////////////////////////////////////////////////////////////
-// Documentation-menu entries                    
-#define ID_DOC_BACK                 17010
-#define ID_DOC_FORWARD              17020
-                                     
-#define ID_DOC_SEARCH_TEXT          17030
-
-#define ID_DOC_QT_LIBRARY           17040
-#define ID_DOC_KDE_CORE_LIBRARY     17050
-#define ID_DOC_KDE_GUI_LIBRARY      17060
-#define ID_DOC_KDE_KFILE_LIBRARY    17070
-#define ID_DOC_KDE_HTML_LIBRARY     17080
-
-
-#define ID_DOC_PROJECT_API_DOC      17090
-#define ID_DOC_USER_MANUAL          17100
 
 
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
+#define ID_HELP_BACK                 17010
+#define ID_HELP_FORWARD              17020
+
+#define ID_HELP_SEARCH_TEXT          17030
 #define ID_HELP_SEARCH              18005
+
+#define ID_HELP_CONTENTS             18010
 #define ID_HELP_REFERENCE           18007
-#define ID_HELP_CONTENT             18010
+#define ID_HELP_QT_LIBRARY           17040
+#define ID_HELP_KDE_CORE_LIBRARY     17050
+#define ID_HELP_KDE_GUI_LIBRARY      17060
+#define ID_HELP_KDE_KFILE_LIBRARY    17070
+#define ID_HELP_KDE_HTML_LIBRARY     17080
+
+#define ID_HELP_PROJECT_API			      17090
+#define ID_HELP_USER_MANUAL          17100
 #define ID_HELP_HOMEPAGE            18020
 #define ID_HELP_ABOUT               18030
+
 #define ID_HELP_WHATS_THIS     			18040
 
 
@@ -256,13 +254,11 @@
 ///////////////////////////////////////////////////////////////////
 // Options-menu entries 
 
-///////////////////////////////////////////////////////////////////
-// Documentation-menu entries                    
-#define IDK_DOC_SEARCH_TEXT					Key_F2				
 
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
-#define IDK_HELP_CONTENT						Key_F1
+#define IDK_HELP_SEARCH_TEXT					Key_F2				
+#define IDK_HELP_CONTENTS						Key_F1
 
 
 
@@ -310,6 +306,7 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
 
 
 

@@ -86,6 +86,7 @@ public:
 
   void enableCommand(int id_);
   void disableCommand(int id_);
+
   void newFile(bool add_to_project);
   /** read the projectfile from the disk*/
   bool readProjectFile(QString file);
@@ -105,158 +106,218 @@ public:
   void setToolMenuProcess(bool enable);
 
  public slots:
+////////////////////////
+// FILE-Menu entries
+///////////////////////
   /** generate a new file*/
   void slotFileNew();
   /**open a file*/
-  void slotFileOpenFile();
+  void slotFileOpen();
+  /** close the cuurent file*/
+  void slotFileClose();
+  void slotFileCloseAll();
   /** save the current file,if Untitled a dialog ask for a valid name*/
   void slotFileSave();
   /** save all files*/
   void slotFileSaveAll();
   /** save the current file under a different filename*/
   void slotFileSaveAs();
-  /** close the cuurent file*/
-  void slotFileClose();
-  void slotFileCloseAll();
+  /** opens the printing dialog */
   void slotFilePrint();
   /** quit kdevelop*/
   void slotFileQuit();
 
+////////////////////////
+// EDIT-Menu entries
+///////////////////////
+	/** Undo last editing step */
   void slotEditUndo();
+  /** Redo last editing step */
   void slotEditRedo();
+	/** cuts a selection to the clipboard */
   void slotEditCut();
+  /** copies a selection to the clipboard */
   void slotEditCopy();
+  /** inserts the clipboard contents to the cursor position */
   void slotEditPaste();
-  void slotEditSelectAll();
-  void slotEditInvertSelection();
-  void slotEditDeselectAll();
+  /** inserts a file at the cursor position */
   void slotEditInsertFile();
+	/** opens the search dialog for the editing widget */
   void slotEditSearch();
+  /** repeat last search */
   void slotEditRepeatSearch();
+	/** opens the search and replace dialog */
   void slotEditReplace();
+  /** selects the whole editing widget text */
+  void slotEditSelectAll();
+  /** inverts the selection */
+  void slotEditInvertSelection();
+  /** remove all text selections */
+  void slotEditDeselectAll();
 
-
+////////////////////////
+// VIEW-Menu entries
+///////////////////////
+	/** opens the goto line dialog */
   void slotViewGotoLine();
+  /** dis-/enables the treeview */
   void slotViewTTreeView();
-  void slotViewTOutputView();
   void showTreeView(bool show=true);
+  /** dis-/enables the outputview */
+  void slotViewTOutputView();
   void showOutputView(bool show=true);
+  /** en-/disable the toolbar */
   void slotViewTStdToolbar();
+  /** en-/disable the browser toolbar */
   void slotViewTBrowserToolbar();
+  /** en-/disable the statusbar */
   void slotViewTStatusbar();
   /** refresh all trees and other widgets*/
   void slotViewRefresh();
 
- /** generate a new project with KAppWizard*/
+////////////////////////
+// PROJECT-Menu entries
+///////////////////////
+ /** generates a new project with KAppWizard*/
   void slotProjectNewAppl();
-  /** generat a new project file */
+  /** generates a new project file */
   void slotProjectNew();
-  /** open a projectfile and close the old one*/
+  /** opens a projectfile and close the old one*/
   void slotProjectOpen();
-  /** open a projec committed by comandline or kfm */
+  /** opens a project committed by comandline or kfm */
   void slotProjectOpenCmdl(const char*);
-
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
-  void  slotProjectWorkspaces(int);
+	/** add a new file to the project-same as file new */
   void slotProjectAddNewFile();
-  
+  /** opens the add existing files dialog */
+  void slotProjectAddExistingFiles();
   /** helper methods for slotProjectAddExistingFiles() */
   void slotAddExistingFiles();
-  void slotProjectAddExistingFiles();
+  /** remove a project file */
   void slotProjectRemoveFile();
+  /** opens the New class dialog */
   void slotProjectNewClass();
+  /** opens the properties dialog for the project files */
   void slotProjectFileProperties();
+	/** opens the project options dialog */
   void slotProjectOptions();
+	/** selects the project workspace */
+  void slotProjectWorkspaces(int);
 
+////////////////////////
+// BUILD-Menu entries
+///////////////////////
   /** compile the actual sourcefile using setted options */
   void slotBuildCompileFile();
-  void slotBuildRun();
-  void slotBuildDebug();
   void slotBuildMake();
   void slotBuildRebuildAll();
   void slotBuildCleanRebuildAll();
+  void slotBuildStop();
+  void slotBuildRun();
+  void slotBuildDebug();
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
-  void slotBuildStop();
   void slotBuildAPI();
   void slotBuildManual();
 
-  void slotToolsKIconEdit();
+////////////////////////
+// TOOLS-Menu entries
+///////////////////////
   void slotToolsKDbg();
+  void slotToolsKIconEdit();
   void slotToolsKTranslator();
 
+////////////////////////
+// OPTIONS-Menu entries
+///////////////////////
   void slotOptionsEditor();
   void slotOptionsEditorColors();
   void slotOptionsSyntaxHighlightingDefaults();
   void slotOptionsSyntaxHighlighting();
+  void slotOptionsDocBrowser();
   void slotOptionsConfigureEnscript();
   void slotOptionsConfigureA2ps();
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
-  void slotOptionsDocBrowser();
-  void slotOptionsAutosave(bool);
-  void slotOptionsAutosaveTime(int);
-  void slotOptionsAutoswitch(bool);
+  /** sets the make command after it is changed in the Setup dialog */
   void slotOptionsMake();
+  /** dis-/enables autosaving by setting in the Setup dialog */
+  void slotOptionsAutosave(bool);
+  /** sets the autosaving time intervall */
+  void slotOptionsAutosaveTime(int);
+  /** dis-/enalbes autoswitch by setting bAutoswitch */
+  void slotOptionsAutoswitch(bool);
+  /** shows the Update dialog and sends output to the messages widget */
+  void slotOptionsUpdateKDEDocumentation();
+	/** shows the create search database dialog called by the setup button */
+  void  slotOptionsCreateSearchDatabase();
 
-  void slotDocBack();
-  void slotDocForward();
-  void slotDocSText();
-  void slotDocSText(QString text);
-  void slotDocQtLib();
-  void slotDocKDECoreLib();
-  void slotDocKDEGUILib();
-  void slotDocKDEKFileLib();
-  void slotDocKDEHTMLLib();
-  void slotDocAPI();
-  void slotDocManual();
-  void slotDocUpdateKDEDocumentation();
-
+////////////////////////
+// HELP-Menu entries
+///////////////////////
+	/** goes one page back in the documentation browser */
+  void slotHelpBack();
+  /** goes one page forward in the documentatio browser */
+  void slotHelpForward();
+  /** search marked text */
+  void slotHelpSearchText();
+  /** search marked text with a text string */
+  void slotHelpSearchText(QString text);
+	/** shows the Search for Help on.. dialog to insert a search expression */
   void slotHelpSearch();
+  /** shows the C/C++-referenc */
   void slotHelpReference();
-  void slotHelpContent();
+  /** shows the Qt-doc */
+  void slotHelpQtLib();
+  /** shows the kdecore-doc */
+  void slotHelpKDECoreLib();
+  /** shows the kdeui-doc */
+  void slotHelpKDEGUILib();
+  /** shows the kfile-doc */
+  void slotHelpKDEKFileLib();
+  /** shows the khtml / khtmlw -doc */
+  void slotHelpKDEHTMLLib();
+  /** shows the API of the current project */
+  void slotHelpAPI();
+  /** shows the manual of the current project */
+  void slotHelpManual();
+	/** shows the KDevelop manual */
+  void slotHelpContents();
   void slotHelpHomepage();
+  /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
 
+////////////////////////
+// All slots which are used if the user clicks or selects something in the view
+///////////////////////
+	/** swich construction for the toolbar icons, selecting the right slots */
   void slotToolbarClicked(int);
-  void slotURLSelected(KHTMLView* widget,const char* url,int,const char*);
-  void slotURLonURL(KHTMLView*,const char* url);
-
-  void slotReceivedStdout(KProcess* proc,char* buffer,int buflen);
-  void slotReceivedStderr(KProcess* proc,char* buffer,int buflen);
-
-  void slotApplReceivedStdout(KProcess* proc,char* buffer,int buflen);
-  void slotApplReceivedStderr(KProcess* proc,char* buffer,int buflen);
-  
-
-  void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
-  void slotDocumentDone( KHTMLView *_view );
-  void slotProcessExited(KProcess* proc);
-  void slotSearchProcessExited(KProcess*);
-
-  void slotLogFileTreeSelected(int index);
-  void slotRealFileTreeSelected(int index);
-  void slotDocTreeSelected(int index);
-  void slotClassTreeSelected(int);
-
-  void slotCVViewDeclaration(int index);
-  void slotCVViewDefinition(int index);
-  
-  /**header,cpp,browser,tools*/
+  /** click on the main window tabs: header, source,documentation or tools*/
   void slotSTabSelected(int item);
-  /**cv,lfv,wfv,doc*/
-  void slotTTabSelected(int item);
+	/** set the window tab automatically without click */
   void slotSCurrentTab(int item);
+  /** click on the treeview tabs: cv,lfv,wfv,doc*/
+  void slotTTabSelected(int item);
+  /** set the tree tab automatically without click */
   void slotTCurrentTab(int item);
-  void slotMenuBuffersSelected(int id);
-  void slotClickedOnMessagesWidget();
-  void slotKeyPressedOnStdinStdoutWidget(int key);
-
+	
+  ///////////// -- the methods for the treeview selection
+	/** click action on classviewer */
+  void slotClassTreeSelected(int);
+  /** click action on LFV */
+  void slotLogFileTreeSelected(int index);
+	/** click action on RFV */
+  void slotRealFileTreeSelected(int index);
+	/** click action on DOC */
+  void slotDocTreeSelected(int index);
+  /** selection of classes in the browser toolbar */
   void slotClassChoiceCombo(int index);
+  /** selection of methods in the browser toolbar */
   void slotMethodChoiceCombo(int index);
 
+  //////////////// -- the methods for the statusbar items
   /** change the status message to text */
   void slotStatusMsg(const char *text);
   /** change the status message of the whole statusbar temporary */
@@ -268,18 +329,42 @@ public:
   /** change Statusbar status of Line and Column */
   void slotNewLineColumn();
   void slotNewUndo();
-  
+
+
+
+  void slotMenuBuffersSelected(int id);
+  void slotClickedOnMessagesWidget();
+  void slotKeyPressedOnStdinStdoutWidget(int key);
+
+  void slotURLSelected(KHTMLView* widget,const char* url,int,const char*);
+  void slotDocumentDone( KHTMLView *_view );
+  void slotURLonURL(KHTMLView*,const char* url);
+
+  void slotReceivedStdout(KProcess* proc,char* buffer,int buflen);
+  void slotReceivedStderr(KProcess* proc,char* buffer,int buflen);
+
+  void slotApplReceivedStdout(KProcess* proc,char* buffer,int buflen);
+  void slotApplReceivedStderr(KProcess* proc,char* buffer,int buflen);
+
+
+  void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
+  void slotProcessExited(KProcess* proc);
+  void slotSearchProcessExited(KProcess*);
+
+
   
   // return the position of the classdeclaration begin
   int CVGotoClassDecl(QString classname);
   void CVGotoClassVarDecl(QString classname,QString var_name);
   void CVGotoMethodeImpl(QString classname,QString name);
 
+  void slotCVViewDeclaration(int index);
+  void slotCVViewDefinition(int index);
+
   /** a tool meth,used in the search engine*/
   int searchToolGetNumber(QString str);
   QString searchToolGetTitle(QString str);
   QString searchToolGetURL(QString str);
-  void  slotCreateSearchDatabase();
   void refreshClassCombos();
   void  saveCurrentWorkspaceIntoProject();
   
@@ -377,6 +462,7 @@ private:
 };
 
 #endif
+
 
 
 

@@ -274,8 +274,8 @@ bool CKDevelop::slotProjectClose(){
     disableCommand(ID_FILE_NEW);
     disableCommand(ID_FILE_PRINT);
     // doc menu
-    disableCommand(ID_DOC_PROJECT_API_DOC);
-    disableCommand(ID_DOC_USER_MANUAL);
+    disableCommand(ID_HELP_PROJECT_API);
+    disableCommand(ID_HELP_USER_MANUAL);
     // build menu
     setToolMenuProcess(false);  
     disableCommand(ID_BUILD_STOP);
@@ -521,8 +521,8 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_FILE_NEW);
   enableCommand(ID_FILE_PRINT);
   // doc menu
-  enableCommand(ID_DOC_PROJECT_API_DOC);
-  enableCommand(ID_DOC_USER_MANUAL);
+  enableCommand(ID_HELP_PROJECT_API);
+  enableCommand(ID_HELP_USER_MANUAL);
   // build menu
   setToolMenuProcess(true);
 
@@ -714,6 +714,10 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 
   prj->writeWorkspace(current);
 }
+
+
+
+
 
 
 

@@ -1,3 +1,10 @@
+1999-03-10  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed saving of changed key-configuration in the Setup dialog
+	* fixed autosaving to be disabled during processes (if a process runs and then files are saved, the build process would be confused)
+	* fixed khtmlw/khtml selection and C/C++ Reference selection for the Help-menu
+	* renamed methods and resource macros to the current menubar usage
+	* fixed the refreshClassCombos with setUpdatesEnabled to avoid flickering as well
+	
 1999-03-10   Sandy Meier <smeier@rz.uni-potsdam.de>
 
 	* fixed a "choose syntaxhighlighting" (emacs/kwrite) bug
@@ -488,6 +495,8 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
+
 
 
 

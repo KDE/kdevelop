@@ -118,15 +118,15 @@ void CKDevelop::initWhatsThis(){
 	                                                    "selected class. This will switch to the "
 	                                                    "implementation of the chosen class."));
 	
-	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_DOC_BACK),i18n("Documentation-Back\n\n"
+	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_HELP_BACK),i18n("Documentation-Back\n\n"
 	                                                    "This opens the previous browser page in the "
 	                                                    "browser window. "));
 	
-	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_DOC_FORWARD),i18n("Documentation-Forward\n\n"
+	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_HELP_FORWARD),i18n("Documentation-Forward\n\n"
 	                                                    "This opens the next opened browser page after "
 	                                                    "Documentation-Back was chosen."));
 	
-	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_DOC_SEARCH_TEXT),i18n("Search Marked Text\n\n"
+	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_HELP_SEARCH_TEXT),i18n("Search Marked Text\n\n"
 	                                                    "Uses the searchdatabase to look for the selected "
 	                                                    "text string and opens a summary page of found "
 	                                                    "references for the selection in the browser window. "

@@ -158,8 +158,7 @@ void CKDevelop::switchToFile(QString filename){
   else{
     setCaption("KDevelop " + version + ": "+ filename);
   }
-  
- 
+
 }
 
 void CKDevelop::setToolMenuProcess(bool enable){
@@ -179,6 +178,9 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_STOP);
     enableCommand(ID_BUILD_MAKE_PROJECT_API);
     enableCommand(ID_BUILD_MAKE_USER_MANUAL);
+	  if(bAutosave)
+  	  saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
+
   }
   else {
     
@@ -195,6 +197,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_BUILD_STOP);
     disableCommand(ID_BUILD_MAKE_PROJECT_API);
     disableCommand(ID_BUILD_MAKE_USER_MANUAL);
+    if(bAutosave)
+    	saveTimer->stop();  // stop the autosaving if make or something is running
   }
 }
 
@@ -226,34 +230,5 @@ void CKDevelop::switchToWorkspace(int id){
   }
   else{showTreeView(false);}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

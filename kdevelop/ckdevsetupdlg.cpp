@@ -300,7 +300,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   QPushButton* update_button;
   update_button = new QPushButton( w, "update_button" );
   update_button->setGeometry( 290, 190, 110, 30 );
-  connect( update_button, SIGNAL(clicked()),parent, SLOT(slotDocUpdateKDEDocumentation()) );
+  connect( update_button, SIGNAL(clicked()),parent, SLOT(slotOptionsUpdateKDEDocumentation()) );
   update_button->setText(i18n("Update..."));
   update_button->setAutoRepeat( FALSE );
   update_button->setAutoResize( FALSE );
@@ -327,7 +327,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   QPushButton* create_button;	
   create_button = new QPushButton( w, "create_button" );
   create_button->setGeometry( 290, 230, 110, 30 );
-  connect( create_button, SIGNAL(clicked()),parent, SLOT(slotCreateSearchDatabase()) );
+  connect( create_button, SIGNAL(clicked()),parent, SLOT(slotOptionsCreateSearchDatabase()) );
   create_button->setText(i18n("Create..."));
   create_button->setAutoRepeat( FALSE );
   create_button->setAutoResize( FALSE );
@@ -443,7 +443,7 @@ void CKDevSetupDlg::ok(){
   config->writeEntry("doc_kde" , text);
   
   accel->setKeyDict( *dict);
-
+	accel->writeSettings(config);
   config->sync();
   close();
 }

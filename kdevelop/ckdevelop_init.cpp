@@ -273,7 +273,7 @@ void CKDevelop::initKeyAccel(){
   //file menu
 
   accel->connectItem( KAccel::New, this, SLOT(slotFileNew()) );
-  accel->connectItem( KAccel::Open , this, SLOT(slotFileOpenFile()) );
+  accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()) );
   accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()) );
   accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()) );
   accel->connectItem( KAccel::Print , this, SLOT(slotFilePrint()) );
@@ -327,10 +327,10 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( "Run", this, SLOT(slotBuildRun() ) );
 
   //doc menu
-  accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_DOC_SEARCH_TEXT);
-  accel->connectItem( "SearchMarkedText", this, SLOT(slotDocSText() ) );
+  accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
+  accel->connectItem( "SearchMarkedText", this, SLOT(slotHelpSearchText() ) );
 
-  accel->connectItem( KAccel::Help , this, SLOT(slotHelpContent()) );
+  accel->connectItem( KAccel::Help , this, SLOT(slotHelpContents()) );
 
   accel->readSettings();
 }
@@ -346,7 +346,7 @@ void CKDevelop::initMenu(){
   accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpenFile()),0 ,ID_FILE_OPEN);
+  file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
   accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
 
   file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
@@ -626,43 +626,43 @@ void CKDevelop::initMenu(){
   ///////////////////////////////////////////////////////////////////
   // Help-menu entries
   help_menu = new QPopupMenu();
-  help_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
-  help_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
+  help_menu->insertItem(i18n("Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
+  help_menu->insertItem(i18n("Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
   help_menu->insertSeparator();
   help_menu->insertItem(Icon("lookup.xpm"),i18n("&Search Marked Text"),this,
-				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
-  accel->changeMenuAccel(help_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
+				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
+  accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
   help_menu->insertItem(Icon("contents.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   help_menu->insertSeparator();
-  help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContent()),0 ,ID_HELP_CONTENT);
-  accel->changeMenuAccel(help_menu, ID_HELP_CONTENT, KAccel::Help );
+  help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
+  accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
 
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
-  help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
+  help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&Core-Library"),this,
-				 SLOT(slotDocKDECoreLib()),0,ID_DOC_KDE_CORE_LIBRARY);
+				 SLOT(slotHelpKDECoreLib()),0,ID_HELP_KDE_CORE_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&GUI-Library"),this,
-				 SLOT(slotDocKDEGUILib()),0,ID_DOC_KDE_GUI_LIBRARY);
+				 SLOT(slotHelpKDEGUILib()),0,ID_HELP_KDE_GUI_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&KFile-Library"),this,
-				 SLOT(slotDocKDEKFileLib()),0,ID_DOC_KDE_KFILE_LIBRARY);
+				 SLOT(slotHelpKDEKFileLib()),0,ID_HELP_KDE_KFILE_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&HTML-Library"),this,
-				 SLOT(slotDocKDEHTMLLib()),0,ID_DOC_KDE_HTML_LIBRARY);
+				 SLOT(slotHelpKDEHTMLLib()),0,ID_HELP_KDE_HTML_LIBRARY);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("Project &API-Doc"),this,
-				      SLOT(slotDocAPI()),0,ID_DOC_PROJECT_API_DOC);
+				      SLOT(slotHelpAPI()),0,ID_HELP_PROJECT_API);
 
   help_menu->insertItem(i18n("Project &User-Manual"),this,
-				      SLOT(slotDocManual()),0,ID_DOC_USER_MANUAL);
+				      SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
   //  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
   menuBar()->insertItem(i18n("&Help"), help_menu);
 
-  disableCommand(ID_DOC_BACK);
-  disableCommand(ID_DOC_FORWARD);
-  disableCommand(ID_DOC_PROJECT_API_DOC);
-  disableCommand(ID_DOC_USER_MANUAL);
+  disableCommand(ID_HELP_BACK);
+  disableCommand(ID_HELP_FORWARD);
+  disableCommand(ID_HELP_PROJECT_API);
+  disableCommand(ID_HELP_USER_MANUAL);
 
 ///////////////////////////////////////////////////////////////////
 // connects for the statusbar help
@@ -766,11 +766,11 @@ void CKDevelop::initToolbar(){
   KCombo* choice_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   choice_combo->setFocusPolicy(QWidget::NoFocus);
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("back.xpm"),ID_DOC_BACK, false,i18n("Back"));
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("forward.xpm"),ID_DOC_FORWARD, false,i18n("Forward"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("back.xpm"),ID_HELP_BACK, false,i18n("Back"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("forward.xpm"),ID_HELP_FORWARD, false,i18n("Forward"));
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("lookup.xpm"), ID_DOC_SEARCH_TEXT,
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("lookup.xpm"), ID_HELP_SEARCH_TEXT,
 					    true,i18n("Search Text in Documenation"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("contents.xpm"),ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
@@ -860,16 +860,16 @@ void CKDevelop::initConnections(){
   // connect the windowsmenu with a method
   connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
 
-  //connect the editor lookup function with slotDocSText
-  connect(cpp_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
-  connect(header_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
+  //connect the editor lookup function with slotHelpSText
+  connect(cpp_widget,SIGNAL(lookUp(QString)),this,SLOT(slotHelpSearchText(QString)));
+  connect(header_widget,SIGNAL(lookUp(QString)),this,SLOT(slotHelpSearchText(QString)));
 
   // connect Docbrowser rb menu
-  connect(browser_widget,SIGNAL(signalURLBack()),this,SLOT(slotDocBack()));
-  connect(browser_widget,SIGNAL(signalURLForward()),this,SLOT(slotDocForward()));
+  connect(browser_widget,SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
+  connect(browser_widget,SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
 
   connect(browser_widget,SIGNAL(onURL(KHTMLView *, const char *)),this,SLOT(slotURLonURL(KHTMLView *, const char *)));
-  connect(browser_widget,SIGNAL(signalSearchText()),this,SLOT(slotDocSText()));
+  connect(browser_widget,SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
 
 }
 void CKDevelop::initProject(){
@@ -910,6 +910,10 @@ void CKDevelop::initProject(){
   }
 
 }
+
+
+
+
 
 
 
