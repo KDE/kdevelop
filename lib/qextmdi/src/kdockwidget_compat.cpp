@@ -644,6 +644,9 @@ KDockWidget::KDockWidget( KDockManager* dockManager, const char* name, const QPi
   manager->childDock->append( this );
   installEventFilter( manager );
 
+  eDocking = DockFullDocking;
+  sDocking = DockFullSite;
+
   header = 0L;
   setHeader( new KDockWidgetHeader( this, "AutoCreatedDockHeader" ) );
 
@@ -657,8 +660,6 @@ KDockWidget::KDockWidget( KDockManager* dockManager, const char* name, const QPi
   else
     setTabPageLabel( strTabPageLabel);
 
-  eDocking = DockFullDocking;
-  sDocking = DockFullSite;
 
   isGroup = false;
   isTabGroup = false;
@@ -893,6 +894,8 @@ void KDockWidget::setHeader( KDockWidgetAbstractHeader* h )
     header = h;
     layout->addWidget( header );
   }
+//  kdDebug()<<caption()<<": KDockWidget::setHeader"<<endl;
+  setEnableDocking(eDocking);
 }
 
 void KDockWidget::setEnableDocking( int pos )
@@ -2530,7 +2533,7 @@ void KDockManager::writeConfig( KConfig* c, QString group )
         c->writeEntry( cname+":curTab", ((KDockTabGroup*)obj->widget)->currentPageIndex() );
 
         nameList.append( obj->name() );
-        findList.append( obj->name() ); // not realy need !!!
+        findList.append( obj->name() ); // not really need !!!
         //debug("  Save %s", nList.current());
         nList.remove(nListIt);
         nListIt=nList.begin();
@@ -2999,6 +3002,7 @@ void KDockContainer::activateOverlapMode(int nonOverlapSize) {
 }
 
 void KDockContainer::deactivateOverlapMode() {
+	if (!m_overlapMode) return;
 	m_overlapMode=false;
 	if (parentDockWidget()) {
 		if (parentDockWidget()->parent()) {
