@@ -3,7 +3,7 @@
 SUBDIRS = data
 
 # set the include path for X, qt and KDE
-INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/compat $(all_includes)
 
 # these are the headers for your project
 

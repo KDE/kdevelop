@@ -53,6 +53,8 @@
 #include <kcombobox.h>
 #include <kdeversion.h>
 
+#include "kdevkstdaction.h"
+
 QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
     : KTextEditor::View( document, parent, name ),
       m_document( document ), m_textHintToolTip( 0 )
@@ -681,13 +683,9 @@ void QEditorView::setupActions()
     action->setWhatsThis(i18n("Cuts the selected text and moves it to the clipboard."));
     action = KStdAction::copy( this, SLOT(copy()), actionCollection() );
     action->setWhatsThis(i18n("Copies the selected text to the clipboard."));
-#if KDE_IS_VERSION(3,1,90)
+
     action = KStdAction::pasteText( this, SLOT(paste()), actionCollection() );
     action->setWhatsThis(i18n("Pastes previously copied or cut clipboard contents."));
-#else
-    action = KStdAction::paste( this, SLOT(paste()), actionCollection() );
-    action->setWhatsThis(i18n("Pastes previously copied or cut clipboard contents."));
-#endif
     action = KStdAction::selectAll( this, SLOT(selectAll()), actionCollection() );
     action->setWhatsThis(i18n("Selects the entire text of the current document."));
 
