@@ -23,7 +23,7 @@
 #include <kaction.h>
 #include <kstatusbar.h>
 #include <khtml_part.h>
-
+#include <ktexteditor/view.h>
 
 #include "toplevel.h"
 #include "core.h"
@@ -146,8 +146,11 @@ void PartController::editDocument(const KURL &url, int lineNum)
 
   KParts::Factory *factory = 0;
 
-  QString services[] = {"KTextEditor/Editor", "KParts/ReadWritePart", "KParts/ReadOnlyPart"};
-  QString classnames[] = {"KTextEditor::Editor", "KParts::ReadWritePart", "KParts::ReadOnlyPart"};
+  // load the appropriate part factory like chosen in the editor-chooser part
+  // (Note: KTextEditor/Document is the editor in MDI mode. KTextEditor/Editor is the editor in SDI mode.
+  //        But KTextEditor/Editor doesn't work for the Kate part on KDE-3.0.x, so better use KTextEditor/Document anyway.)
+  QString services[] = {"KTextEditor/Document", "KParts/ReadWritePart", "KParts/ReadOnlyPart"};
+  QString classnames[] = {"KTextEditor::Document", "KParts::ReadWritePart", "KParts::ReadOnlyPart"};
   for (uint i=0; i<3; ++i)
   {
     factory = findPartFactory(mimeType, services[i], preferred);
@@ -160,6 +163,11 @@ void PartController::editDocument(const KURL &url, int lineNum)
 
   if (factory)
   {
+    // Currently, only a single view per document is supported.
+    // So fall back (downgrade) from MDI-mode editor to SDI-mode editor
+    // (Note: This always works since KTextEditor::Document inherits KTextEditor::Editor)
+    if (className == "KTextEditor::Document") className = "KTextEditor::Editor";
+    // create the object of the desired class
     KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className));
     KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
     kdDebug(9000) << "Encoding: " << encoding << ", extension: " << extension << endl;
@@ -246,6 +254,11 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
 
 void PartController::integratePart(KParts::Part *part, const KURL &url)
 {
+  if (!part->widget()) {
+    // TODO error handling
+    return; // to avoid later crash
+  }
+  
   TopLevel::getInstance()->embedPartView(part->widget(), url.fileName(), url.url());
 
   addPart(part);
