@@ -1,3 +1,6 @@
+2002-08-04 Christian Couder <christian@kdevelop.org>
+	* Fix a few appwizard bugs. 
+
 2002-08-02 Harald Fernengel <harry@kdevelop.org>
 	* Changed the diff part from a modal dialog to an outputview
 

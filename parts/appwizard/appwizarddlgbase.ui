@@ -359,16 +359,16 @@
         <slot>textChanged()</slot>
     </connection>
     <connection>
-        <sender>license_combo</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>licenseChanged()</slot>
-    </connection>
-    <connection>
         <sender>dest_button</sender>
         <signal>clicked()</signal>
         <receiver>AppWizardDlgBase</receiver>
         <slot>destButtonClicked()</slot>
+    </connection>
+    <connection>
+        <sender>license_combo</sender>
+        <signal>activated(int)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>licenseChanged()</slot>
     </connection>
 </connections>
 <tabstops>

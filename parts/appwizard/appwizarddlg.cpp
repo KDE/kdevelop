@@ -166,6 +166,7 @@ AppWizardDialog::~AppWizardDialog()
 
 void AppWizardDialog::textChanged()
 {
+    licenseChanged();
 
     bool invalid = !m_pCurrentAppInfo
         || appname_edit->text().isEmpty()
@@ -258,8 +259,6 @@ void AppWizardDialog::licenseChanged()
             
         edit->setText(text);
     }
-
-    textChanged(); // Update Next/Finish button
 }
 
 
