@@ -56,6 +56,7 @@ class CKAppWizard : public KWizard {
 
 protected:
   void removeSources(const QString &);
+  QString createConfigureArgs();
 
 public:
   CKAppWizard(QWidget* parent=0,const char* name=0,QString author_name="",QString author_email="");
