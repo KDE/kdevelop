@@ -49,21 +49,21 @@ class QEditor;
 
 class LineNumberWidget: public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	LineNumberWidget( QEditor*, QWidget* =0, const char* =0 );
-	virtual ~LineNumberWidget();
+    LineNumberWidget( QEditor*, QWidget* =0, const char* =0 );
+    virtual ~LineNumberWidget();
 
 public slots:
-	void doRepaint() { repaint( FALSE ); }
+    void doRepaint() { repaint( FALSE ); }
 
 protected:
-	virtual void resizeEvent( QResizeEvent* );
-	virtual void paintEvent( QPaintEvent* );
+    virtual void resizeEvent( QResizeEvent* );
+    virtual void paintEvent( QPaintEvent* );
 
 private:
-	QEditor* m_editor;
-	QPixmap buffer;
+    QEditor* m_editor;
+    QPixmap buffer;
 };
 
 #endif // __linenumberwidget_h

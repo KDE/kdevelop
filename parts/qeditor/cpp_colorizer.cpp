@@ -59,6 +59,7 @@ CppColorizer::CppColorizer( QEditor* editor )
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
     context0->appendChild( new RegExpHLItem( "^\\s*#", PreProcessor, 4 ) );
+    context0->appendChild( new RegExpHLItem( "\\s+", Normal, 0 ) );
     context0->appendChild( new StringHLItem( "'", String, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "/*", Comment, 3 ) );

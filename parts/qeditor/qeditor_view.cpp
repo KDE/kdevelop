@@ -47,9 +47,8 @@
 
 
 QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
-	: KTextEditor::View( document, parent, name ),
-	  m_popupMenu( 0 ),
-	  m_document( document )
+    : KTextEditor::View( document, parent, name ),
+      m_document( document )
 {
     m_findDialog = new KoFindDialog( this, "FindDialog_0", long(KoFindDialog::FromCursor) );
     m_replaceDialog = new KoReplaceDialog( this, "ReplaceDialog_0",
@@ -65,12 +64,25 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
 
     m_editor = new QEditor( this );
     m_lineNumberWidget = new LineNumberWidget( m_editor, this );
+
     m_markerWidget = new MarkerWidget( m_editor, this );
+    connect( document, SIGNAL(marksChanged()),
+             m_markerWidget, SLOT(doRepaint()) );
+
+
     m_levelWidget = new LevelWidget( m_editor, this );
     connect( m_levelWidget, SIGNAL(expandBlock(QTextParag*)),
 	     m_editor, SLOT(expandBlock(QTextParag*)) );
     connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
 	     m_editor, SLOT(collapseBlock(QTextParag*)) );
+    connect( m_levelWidget, SIGNAL(expandBlock(QTextParag*)),
+	     m_lineNumberWidget, SLOT(doRepaint()) );
+    connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
+	     m_lineNumberWidget, SLOT(doRepaint()) );
+    connect( m_levelWidget, SIGNAL(expandBlock(QTextParag*)),
+	     m_markerWidget, SLOT(doRepaint()) );
+    connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
+	     m_markerWidget, SLOT(doRepaint()) );
 
     lay->addWidget( m_markerWidget );
     lay->addWidget( m_lineNumberWidget );
@@ -248,10 +260,9 @@ void QEditorView::paste( )
     m_editor->paste();
 }
 
-void QEditorView::installPopup( class QPopupMenu *rmb_Menu )
+void QEditorView::installPopup( QPopupMenu *rmb_Menu )
 {
-    kdDebug() << "QEditorView::installPopup()" << endl;
-    m_popupMenu = rmb_Menu;
+    m_editor->setApplicationMenu( rmb_Menu );
 }
 
 void QEditorView::showArgHint(QStringList functionList,
@@ -288,11 +299,6 @@ void QEditorView::setLanguage( const QString& language )
 QString QEditorView::language() const
 {
     return m_editor->language();
-}
-
-void QEditorView::contextMenuEvent( QContextMenuEvent* e )
-{
-    e->accept();
 }
 
 void QEditorView::indent()

@@ -98,6 +98,9 @@ public:
 
     virtual int level( int ) const;
     virtual void setLevel( int, int );
+    
+    virtual void setApplicationMenu( QPopupMenu* menu ) { m_applicationMenu = menu; }
+    virtual QPopupMenu* createPopupMenu( const QPoint& );
 
 public slots:
     void refresh();
@@ -123,6 +126,7 @@ private:
     int m_currentLine;
     int m_tabStop;
     QString m_electricKeys;
+    QPopupMenu* m_applicationMenu;
 };
 
 #endif

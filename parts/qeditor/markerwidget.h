@@ -49,22 +49,22 @@ class QEditor;
 
 class MarkerWidget: public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	MarkerWidget( QEditor*, QWidget* =0, const char* =0 );
-	virtual ~MarkerWidget();
+    MarkerWidget( QEditor*, QWidget* =0, const char* =0 );
+    virtual ~MarkerWidget();
 
 public slots:
-	void doRepaint() { repaint( FALSE ); }
+    void doRepaint() { repaint( FALSE ); }
 
 protected:
-	virtual void resizeEvent( QResizeEvent* );
-	virtual void paintEvent( QPaintEvent* );
+    virtual void resizeEvent( QResizeEvent* );
+    virtual void paintEvent( QPaintEvent* );
     virtual void contextMenuEvent( QContextMenuEvent* );
 
 private:
-	QEditor* m_editor;
-	QPixmap buffer;
+    QEditor* m_editor;
+    QPixmap buffer;
 };
 
 #endif // __markerwidget_h

@@ -86,14 +86,12 @@ protected slots:
     void replace( const QString&, int, int, int, const QRect& );
 
 protected:
-    virtual void contextMenuEvent( QContextMenuEvent* );
     void proceed();
     bool find_real( QTextParag* firstParag, int firstIndex,
                     QTextParag* lastParag, int lastIndex );
     bool process( const QString& );
 
 private:
-    QPopupMenu* m_popupMenu;
     QTextParag* m_currentParag;
     KoFindDialog* m_findDialog;
     KoReplaceDialog* m_replaceDialog;

@@ -65,6 +65,7 @@
 #include <qpopupmenu.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 using namespace std;
 
@@ -123,6 +124,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
     m_backspaceIndent = TRUE;
     m_currentLine = -1;
     m_tabStop = 8;
+    m_applicationMenu = 0;
 
     document()->addSelection( ParenMatcher::Match );
     document()->addSelection( ParenMatcher::Mismatch );
@@ -146,6 +148,17 @@ QEditor::~QEditor()
 	delete( parenMatcher );
     }
 }
+
+QPopupMenu* QEditor::createPopupMenu( const QPoint& pt )
+{
+    QPopupMenu* menu = KTextEdit::createPopupMenu( pt );
+    if( m_applicationMenu ){
+	    menu->insertSeparator();
+	    menu->insertItem( i18n("&Application"), m_applicationMenu );
+	}
+    return menu;
+}
+
 
 int QEditor::tabStop() const
 {
