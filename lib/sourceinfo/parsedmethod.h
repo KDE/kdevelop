@@ -56,7 +56,11 @@ public:
     
     /** Is this a destructor? */
     bool isDestructor;
-    
+   
+    /** Is this a Objective-C method? */
+    bool isObjectiveC;
+
+
 public:
     
     /** Adds an argument to this method. */
@@ -123,7 +127,12 @@ public:
      * Is the supplied method equal to this one
      * (regarding type, name and signature)? */
     bool isEqual(ParsedMethod *method);
-    
+
+    /**
+     * Is the method an Objective-C method? 
+     */
+    void setIsObjectiveC(bool is) { isObjectiveC = is; };
+
 };
 
 #endif
