@@ -1,3 +1,7 @@
+2002-02-26  Walter Tasin <tasin@kdevelop.org>
+    * bugfix: switching between source/header considers now other source
+      extensions
+      
 2002-02-26  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: that crash on method removeWindowFromMdi(...), thanks to QGuardedPtr
 

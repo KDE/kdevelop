@@ -1755,69 +1755,96 @@ void CKDevelop::slotTagSwitchTo()
   if (!pEditView) return;
   slotStatusMsg(i18n("Switch between Source and Header Files..."));
   bool useCTags = (bCTags && hasProject())?true:false ;
+  bool bFoundInCTags=false;
+  
   QFileInfo curFileInfo = QFileInfo(pEditView->getName());
   QString curFileName = curFileInfo.fileName();
   QString curFileDir = curFileInfo.dirPath();
   QString curFileExt = curFileInfo.extension(FALSE);
   QString switchToName = curFileInfo.baseName();
-  // this assumes that your source files end in .cpp or .cxx - that's BAD !!!
-  bool bToHeader = true;
-  if (m_docViewManager->curDocIsHeaderFile()) {
-    if (useCTags) {
-      int ntags;
-      ctags_dlg->searchTags(switchToName+".cxx",&ntags);
-      if (ntags) {
-        switchToName = switchToName + ".cxx";
-      }
-      else {
-        switchToName = switchToName + ".cpp";
+  
+  QStringList srcExtensions, headerExtensions;
+  QString newExtension;
+
+  srcExtensions << ".cpp" << ".cxx" << ".C" << ".cc" << ".c";
+  headerExtensions << ".h" << ".hpp" << ".hxx";
+
+  kdDebug() << "in CKDevelop::slotTagSwitchTo():" << endl;
+  kdDebug() << "current filename: " << curFileDir << "::" << curFileName << " (" << switchToName<< ")" << endl;
+  
+  if (m_docViewManager->curDocIsHeaderFile()) 
+  {
+    if (useCTags) 
+    {
+      int ntags=0;
+      for (QStringList::Iterator it=srcExtensions.begin(); 
+           newExtension.isEmpty() && it!=srcExtensions.end(); ++it)
+      {
+         // should be fixed... it cannot find a tag, but they exist
+         ctags_dlg->searchTags(curFileDir+"/"+switchToName+(*it),&ntags);
+         if (ntags)
+         {
+            newExtension=*it;
+            bFoundInCTags=true;
+         }
       }
     }
-    else {
-      switchToName = switchToName + ".cpp";
+      
+    if (!newExtension.isEmpty()) 
+    {
+      switchToName = switchToName + newExtension;
     }
-    bToHeader=false;
-  }
-  else if (m_docViewManager->curDocIsCppFile()) {
-    switchToName = switchToName + ".h";
-  }
-  kdDebug() << "in CKDevelop::slotTagSwitchTo():\n";
-  kdDebug() << "current filename: " << curFileName << "\n";
-  kdDebug() << "switch to filename: " << switchToName << "\n";
-  // we can do this the easy...
-  if (useCTags) {
-    kdDebug() << "lookup file using CTags database, fast.\n";
-    ctags_dlg->slotGotoFile(switchToName);
-  }
-  // ...or the hard way
-  else {
-    kdDebug() << "lookup file in current Project, slow.\n";
-    CProject* pPrj=getProject();
-    bool found=false;
-    if (pPrj) {
-      QStrList* sfiles = (bToHeader?&pPrj->getHeaders():&pPrj->getSources());
-      QString fName=QString::null;
-      char* pFile=sfiles->first();
-      //kdDebug() << "selected files: \n" ;
-      while (pFile) {
-        fName = QFileInfo(pFile).fileName();
-        //kdDebug() << "fName= " << fName << " pFile= " << pFile << "\n";
-        if (fName==switchToName) {
-          //kdDebug() << "gotcha! switching to " << pFile << "\n";
-          found=true;
-          switchToFile(QString(pFile));
-          break;
+    else
+    {
+      for (QStringList::Iterator it=srcExtensions.begin(); 
+           newExtension.isEmpty() && it!=srcExtensions.end(); ++it)
+      {
+        if (QFile::exists(curFileDir+"/"+switchToName+(*it)))
+        {
+          newExtension=*it;
         }
-        pFile = sfiles->next();
       }
+      
+      if (!newExtension.isEmpty()) 
+      {
+        switchToName = switchToName + newExtension;
+      }
+    
     }
-    if (!pPrj || (pPrj&&!found)) {
-      // simple workaround for when there is no project loaded
-      QString fName = curFileDir + "/" + QFileInfo(switchToName).fileName();
-      if (!fName.isEmpty()) {
-        kdDebug() << "gotcha! switching to " << fName << "\n";
-        switchToFile(fName);
-      }
+  }
+  else if (m_docViewManager->curDocIsCppFile()) 
+  {
+    for (QStringList::Iterator it=headerExtensions.begin(); 
+         newExtension.isEmpty() && it!=headerExtensions.end(); ++it)
+    {
+       if (QFile::exists(curFileDir+"/"+switchToName+(*it)))
+       {
+          newExtension=*it;
+       }
+    }
+      
+    if (!newExtension.isEmpty()) 
+    {
+      switchToName = switchToName + newExtension;
+    }
+  }
+  
+  if (!newExtension.isEmpty())
+  {
+  
+    kdDebug() << "switch to filename: " << switchToName << endl;
+    
+    // we can do this the easy...
+    if (bFoundInCTags) 
+    {
+      kdDebug() << "lookup file using CTags database, fast." << endl;
+      ctags_dlg->slotGotoFile(switchToName);
+    }
+    // ...or the hard way
+    else 
+    {
+      kdDebug() << "file was found in tree." << endl;
+      switchToFile(curFileDir+"/"+switchToName);
     }
   }
   slotStatusMsg(i18n("Ready."));
