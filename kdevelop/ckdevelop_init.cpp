@@ -570,9 +570,9 @@ void CKDevelop::initMenuBar(){
   edit_menu->insertItem(Icon("paste.xpm"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
   edit_menu->insertSeparator();
 	edit_menu->insertItem(Icon("indent.xpm"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-	edit_menu->insertItem(Icon("unindent.xpm"),i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+	edit_menu->insertItem(Icon("unindent.xpm"),i18n("Uninden&t"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
   edit_menu->insertSeparator();
-	edit_menu->insertItem(Icon("comment.xpm"),i18n("Co&mment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
+	edit_menu->insertItem(Icon("comment.xpm"),i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
 	edit_menu->insertItem(Icon("uncomment.xpm"),i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
 
   edit_menu->insertSeparator();
@@ -580,10 +580,10 @@ void CKDevelop::initMenuBar(){
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(Icon("search.xpm"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
-  edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
+  edit_menu->insertItem(i18n("Repeat Searc&h"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
   
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
-  edit_menu->insertItem(Icon("grep.xpm"),i18n("&Search in Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
+  edit_menu->insertItem(Icon("grep.xpm"),i18n("Search in &Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
   edit_menu->insertSeparator();
@@ -611,11 +611,11 @@ void CKDevelop::initMenuBar(){
   view_menu->insertItem(i18n("&Output-View"),this,
 			SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
   view_menu->insertSeparator();
-  view_menu->insertItem(i18n("&Toolbar"),this,
+  view_menu->insertItem(i18n("Toolb&ar"),this,
 			   SLOT(slotViewTStdToolbar()),0,ID_VIEW_TOOLBAR);
   view_menu->insertItem(i18n("&Browser-Toolbar"),this,
 			   SLOT(slotViewTBrowserToolbar()),0,ID_VIEW_BROWSER_TOOLBAR);
-  view_menu->insertItem(i18n("Status&bar"),this,
+  view_menu->insertItem(i18n("&Statusbar"),this,
 			   SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
   view_menu->insertSeparator();
   view_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),this,
@@ -737,7 +737,7 @@ void CKDevelop::initMenuBar(){
   debug_menu->insertItem(Icon("dbgbreak.xpm"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
   debug_menu->insertItem(Icon("stop_proc.xpm"),   i18n("Stop"),             ID_DEBUG_STOP);
 
-  kdev_menubar->insertItem(i18n("&Debug"), debug_menu);
+  kdev_menubar->insertItem(i18n("Debu&g"), debug_menu);
   connect(debug_menu,SIGNAL(activated(int)), SLOT(slotDebugActivator(int)));
 
   ///////////////////////////////////////////////////////////////////

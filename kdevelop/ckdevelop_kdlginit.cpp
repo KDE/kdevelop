@@ -112,13 +112,13 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_view_menu->insertItem(i18n("&Output-View"),this, SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
   kdlg_view_menu->insertItem(i18n("&Properties-View"), this, SLOT(slotKDlgViewPropView()), 0, ID_KDLG_VIEW_PROPVIEW);
   kdlg_view_menu->insertSeparator();
-  kdlg_view_menu->insertItem(i18n("&Toolbar"), this, SLOT(slotKDlgViewToolbar()),0,ID_KDLG_VIEW_TOOLBAR);
-  kdlg_view_menu->insertItem(i18n("Status&bar"),this, SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
+  kdlg_view_menu->insertItem(i18n("Toolb&ar"), this, SLOT(slotKDlgViewToolbar()),0,ID_KDLG_VIEW_TOOLBAR);
+  kdlg_view_menu->insertItem(i18n("&Statusbar"),this, SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
   kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),kdlgedit,
 			   SLOT(slotViewRefresh()),0,ID_KDLG_VIEW_REFRESH);
   kdlg_view_menu->insertSeparator();
-  kdlg_view_menu->insertItem(i18n("&Preview dialog"),kdlgedit,
+  kdlg_view_menu->insertItem(i18n("Pr&eview dialog"),kdlgedit,
 			   SLOT(slotViewPreview()),0,ID_VIEW_PREVIEW);
   kdlg_view_menu->insertItem(i18n("&Grid..."),kdlgedit,
 			   SLOT(slotViewGrid()),0,ID_KDLG_VIEW_GRID);
@@ -233,7 +233,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_debug_menu->insertItem(Icon("dbgbreak.xpm"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
   kdlg_debug_menu->insertItem(Icon("stop_proc.xpm"),   i18n("Stop"),             ID_DEBUG_STOP);
 
-  kdlg_menubar->insertItem(i18n("&Debug"), kdlg_debug_menu);
+  kdlg_menubar->insertItem(i18n("Debu&g"), kdlg_debug_menu);
   connect(kdlg_debug_menu,SIGNAL(activated(int)), SLOT(slotDebugActivator(int)));
 
   ///////////////////////////////////////////////////////////////////
