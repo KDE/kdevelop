@@ -22,6 +22,11 @@ KDevTopLevel *KDevPlugin::topLevel()
     return m_api->topLevel();
 }
 
+bool KDevPlugin::topLevelValid()
+{
+    return m_api->topLevelValid();
+}
+
 KDevCore *KDevPlugin::core()
 {
     return m_api->core();

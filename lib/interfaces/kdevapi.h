@@ -39,6 +39,7 @@ public:
     virtual ~KDevApi();
 
     virtual KDevTopLevel *topLevel() = 0;
+    virtual bool topLevelValid() = 0;
     virtual KDevPartController *partController() = 0;
     virtual KDevCore *core() = 0;
     virtual ClassStore *classStore() = 0;

@@ -54,6 +54,10 @@ public:
      * Gives a reference to the toplevel widget.
      */
     KDevTopLevel *topLevel();
+    /**
+     * Indicates whether a valid toplevel widget is active.
+     */
+    bool topLevelValid();
 
     /**
      * Gives a reference to the application core
