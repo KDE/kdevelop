@@ -122,6 +122,7 @@ public:
 	cppSupport()->classStore()->removeWithReferences( fileName );
 	StoreWalker walker( fileName, cppSupport()->classStore() );
 	walker.parseTranslationUnit( ast.get() );
+	remove( fileName );
     }
 };
 
