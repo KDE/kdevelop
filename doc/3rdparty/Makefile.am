@@ -47,7 +47,7 @@ php.toc: $(srcdir)/php.toc.in
 	echo "</kdeveloptoc>" >> php.toc ; \
 	echo "" >> php.toc
 
-gnustep.toc: $(srcdir)/gnustep.toc.in
+gnustep.toc: $(srcdir)/gnustepbase.toc.in $(srcdir)/gnustepgui.toc.in           
 	echo "<!DOCTYPE kdeveloptoc>" > gnustep.toc ; \
 	echo "<kdeveloptoc>" >> gnustep.toc ; \
 	echo "<title>GNUstep</title>" >> gnustep.toc ; \
