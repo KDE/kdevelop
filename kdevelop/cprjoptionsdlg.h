@@ -115,9 +115,7 @@ protected:
   // TAB Make options
   QLineEdit* m_set_modify_line;
   QSpinBox* m_job_number;
-  QLineEdit* m_other_makefile_line;
   QPushButton* m_set_modify_dir;
-  QPushButton* m_makefile_dir;
   QCheckBox* m_print_debug_info;
   QLineEdit* m_optional_line;
   QCheckBox* m_print_data_base;
@@ -131,7 +129,6 @@ protected:
   QLabel* m_job_number_label;
   QLabel* m_optional_label;
   QLabel* m_set_modify_label;
-  QLabel* m_other_makefile_label;
 
 private:
   QString old_version;
@@ -139,12 +136,19 @@ private:
   QString old_ldadd;
   QString old_addit_flags;
   QString old_cxxflags;
+  QString old_makeoptions;
   bool need_configure_in_update;
   bool need_makefile_generation;
+  KFileDialog *filedialog;
+	KConfig *settings;
+	
 protected slots:
    /** is called, if the ok-button were clicked*/
   void  ok();
+  void slotFileDialogClicked();
 
 };
 
 #endif
+
+

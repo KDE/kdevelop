@@ -35,6 +35,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   old_ldadd = ldadd.stripWhiteSpace();
   old_addit_flags = prj->getAdditCXXFLAGS().stripWhiteSpace();
   old_cxxflags = cxxflags.stripWhiteSpace();
+  old_makeoptions = prj->getMakeOptions().stripWhiteSpace();
 
   need_configure_in_update = false;
   need_makefile_generation = false;
@@ -868,7 +869,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(w5, i18n("This dialog is for setting\nyour make options."));
 
   m_set_modify_line = new QLineEdit( w5, "m_set_modify_line" );
-  m_set_modify_line->setGeometry( 130, 200, 320, 30 );
+  m_set_modify_line->setGeometry( 130, 190, 320, 30 );
   m_set_modify_line->setMinimumSize( 0, 0 );
   m_set_modify_line->setMaximumSize( 32767, 32767 );
   m_set_modify_line->setFocusPolicy( QWidget::StrongFocus );
@@ -881,7 +882,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_line->setFrame( TRUE );
 
   m_job_number = new QSpinBox( w5, "m_job_number" );
-  m_job_number->setGeometry( 130, 120, 60, 30 );
+  m_job_number->setGeometry( 130, 140, 60, 30 );
   m_job_number->setMinimumSize( 0, 0 );
   m_job_number->setMaximumSize( 32767, 32767 );
   m_job_number->setFocusPolicy( QWidget::StrongFocus );
@@ -897,21 +898,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_job_number->setSpecialValueText( "" );
   m_job_number->setWrapping( FALSE );
   
-  m_other_makefile_line = new QLineEdit( w5, "m_other_makefile_line" );
-  m_other_makefile_line->setGeometry( 130, 160, 320, 30 );
-  m_other_makefile_line->setMinimumSize( 0, 0 );
-  m_other_makefile_line->setMaximumSize( 32767, 32767 );
-  m_other_makefile_line->setFocusPolicy( QWidget::StrongFocus );
-  m_other_makefile_line->setBackgroundMode( QWidget::PaletteBase );
-  m_other_makefile_line->setFontPropagation( QWidget::NoChildren );
-  m_other_makefile_line->setPalettePropagation( QWidget::NoChildren );
-  m_other_makefile_line->setText(i18n(""));
-  m_other_makefile_line->setMaxLength( 32767 );
-  m_other_makefile_line->setEchoMode( QLineEdit::Normal );
-  m_other_makefile_line->setFrame( TRUE );
-  
   m_set_modify_dir = new QPushButton( w5, "m_set_modify_dir" );
-  m_set_modify_dir->setGeometry( 460, 200, 30, 30 );
+  m_set_modify_dir->setGeometry( 460, 190, 30, 30 );
   m_set_modify_dir->setMinimumSize( 0, 0 );
   m_set_modify_dir->setMaximumSize( 32767, 32767 );
   m_set_modify_dir->setFocusPolicy( QWidget::TabFocus );
@@ -921,18 +909,6 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_dir->setText(i18n("..."));
   m_set_modify_dir->setAutoRepeat( FALSE );
   m_set_modify_dir->setAutoResize( FALSE );
-  
-  m_makefile_dir = new QPushButton( w5, "m_makefile_dir" );
-  m_makefile_dir->setGeometry( 460, 160, 30, 30 );
-  m_makefile_dir->setMinimumSize( 0, 0 );
-  m_makefile_dir->setMaximumSize( 32767, 32767 );
-  m_makefile_dir->setFocusPolicy( QWidget::TabFocus );
-  m_makefile_dir->setBackgroundMode( QWidget::PaletteBackground );
-  m_makefile_dir->setFontPropagation( QWidget::NoChildren );
-  m_makefile_dir->setPalettePropagation( QWidget::NoChildren );
-  m_makefile_dir->setText(i18n("..."));
-  m_makefile_dir->setAutoRepeat( FALSE );
-  m_makefile_dir->setAutoResize( FALSE );
   
   m_print_debug_info = new QCheckBox( w5, "m_print_debug_info" );
   m_print_debug_info->setGeometry( 20, 20, 150, 30 );
@@ -972,7 +948,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_print_data_base->setAutoResize( FALSE );
   
   m_no_rules = new QCheckBox( w5, "m_no_rules" );
-  m_no_rules->setGeometry( 180, 50, 150, 30 );
+  m_no_rules->setGeometry( 180, 60, 150, 30 );
   m_no_rules->setMinimumSize( 0, 0 );
   m_no_rules->setMaximumSize( 32767, 32767 );
   m_no_rules->setFocusPolicy( QWidget::TabFocus );
@@ -984,7 +960,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_no_rules->setAutoResize( FALSE );
   
   m_env_variables = new QCheckBox( w5, "m_env_variables" );
-  m_env_variables->setGeometry( 20, 50, 150, 30 );
+  m_env_variables->setGeometry( 20, 60, 150, 30 );
   m_env_variables->setMinimumSize( 0, 0 );
   m_env_variables->setMaximumSize( 32767, 32767 );
   m_env_variables->setFocusPolicy( QWidget::TabFocus );
@@ -1008,7 +984,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_cont_after_error->setAutoResize( FALSE );
   
   m_touch_files = new QCheckBox( w5, "m_touch_files" );
-  m_touch_files->setGeometry( 340, 50, 150, 30 );
+  m_touch_files->setGeometry( 340, 60, 150, 30 );
   m_touch_files->setMinimumSize( 0, 0 );
   m_touch_files->setMaximumSize( 32767, 32767 );
   m_touch_files->setFocusPolicy( QWidget::TabFocus );
@@ -1020,7 +996,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_touch_files->setAutoResize( FALSE );
   
   m_print_work_dir = new QCheckBox( w5, "m_print_work_dir" );
-  m_print_work_dir->setGeometry( 340, 80, 150, 30 );
+  m_print_work_dir->setGeometry( 340, 100, 150, 30 );
   m_print_work_dir->setMinimumSize( 0, 0 );
   m_print_work_dir->setMaximumSize( 32767, 32767 );
   m_print_work_dir->setFocusPolicy( QWidget::TabFocus );
@@ -1032,7 +1008,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_print_work_dir->setAutoResize( FALSE );
   
   m_silent_operation = new QCheckBox( w5, "m_silent_operation" );
-  m_silent_operation->setGeometry( 180, 80, 150, 30 );
+  m_silent_operation->setGeometry( 180, 100, 150, 30 );
   m_silent_operation->setMinimumSize( 0, 0 );
   m_silent_operation->setMaximumSize( 32767, 32767 );
   m_silent_operation->setFocusPolicy( QWidget::TabFocus );
@@ -1044,7 +1020,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_silent_operation->setAutoResize( FALSE );
   
   m_ignor_errors = new QCheckBox( w5, "m_ignor_errors" );
-  m_ignor_errors->setGeometry( 20, 80, 150, 30 );
+  m_ignor_errors->setGeometry( 20, 100, 150, 30 );
   m_ignor_errors->setMinimumSize( 0, 0 );
   m_ignor_errors->setMaximumSize( 32767, 32767 );
   m_ignor_errors->setFocusPolicy( QWidget::TabFocus );
@@ -1056,7 +1032,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_ignor_errors->setAutoResize( FALSE );
   
   m_job_number_label = new QLabel( w5, "m_job_number_label" );
-  m_job_number_label->setGeometry( 20, 120, 100, 30 );
+  m_job_number_label->setGeometry( 20, 140, 100, 30 );
   m_job_number_label->setMinimumSize( 0, 0 );
   m_job_number_label->setMaximumSize( 32767, 32767 );
   m_job_number_label->setFocusPolicy( QWidget::NoFocus );
@@ -1080,7 +1056,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_optional_label->setMargin( -1 );
   
   m_set_modify_label = new QLabel( w5, "m_set_modify_label" );
-  m_set_modify_label->setGeometry( 20, 200, 100, 30 );
+  m_set_modify_label->setGeometry( 20, 190, 100, 30 );
   m_set_modify_label->setMinimumSize( 0, 0 );
   m_set_modify_label->setMaximumSize( 32767, 32767 );
   m_set_modify_label->setFocusPolicy( QWidget::NoFocus );
@@ -1091,24 +1067,9 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_label->setAlignment( 289 );
   m_set_modify_label->setMargin( -1 );
   
-  m_other_makefile_label = new QLabel( w5, "m_other_makefile_label" );
-  m_other_makefile_label->setGeometry( 20, 160, 100, 30 );
-  m_other_makefile_label->setMinimumSize( 0, 0 );
-  m_other_makefile_label->setMaximumSize( 32767, 32767 );
-  m_other_makefile_label->setFocusPolicy( QWidget::NoFocus );
-  m_other_makefile_label->setBackgroundMode( QWidget::PaletteBackground );
-  m_other_makefile_label->setFontPropagation( QWidget::NoChildren );
-  m_other_makefile_label->setPalettePropagation( QWidget::NoChildren );
-  m_other_makefile_label->setText(i18n("other makefile"));
-  m_other_makefile_label->setAlignment( 289 );
-  m_other_makefile_label->setMargin( -1 );
-
   addTab(w5,i18n("Make Options"));
 
   KQuickHelp::add(m_set_modify_dir, i18n("If you click on this button, you get a\n"
-				 "filedialog, with that you can choose a file."));
-
-  KQuickHelp::add(m_makefile_dir, i18n("If you click on this button, you get a\n"
 				 "filedialog, with that you can choose a file."));
 
   KQuickHelp::add(m_print_debug_info, i18n("Print  debugging  information  in  addition to normal\n"
@@ -1120,6 +1081,9 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 					   "thing  interesting about how make decides what to do."));
 
   KQuickHelp::add(m_optional_label, i18n("Here you can add exta options for you make."));
+
+  KQuickHelp::add(m_optional_line, i18n("Here you can add exta options for you make."));
+
 
   KQuickHelp::add(m_print_data_base, i18n("Print  the data base (rules and variable values) that\n"
 					  "results from reading the makefiles; then  execute  as\n"
@@ -1158,13 +1122,69 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 					   "simultaneously. If you have a single CPU-System\n"
 					   "it is not a good idea to choose more then 2."));
 
+  KQuickHelp::add(m_job_number, i18n("Specifies the number of jobs (commands) to run\n"
+					   "simultaneously. If you have a single CPU-System\n"
+					   "it is not a good idea to choose more then 2."));
+
   KQuickHelp::add(m_set_modify_label, i18n("Pretend that the target file has just been  modified.\n"
 					   "It  is  almost the same as running a touch command on\n"
 					   "the given file before running make, except  that  the\n"
 					   "modification  time is changed only in the imagination\n"
 					   "of make."));
 
-  KQuickHelp::add(m_other_makefile_label, i18n("Use the choosen file as a makefile."));
+  connect(m_set_modify_dir,SIGNAL(clicked()),SLOT(slotFileDialogClicked()));
+
+  settings = kapp->getConfig();
+  settings->setGroup("MakeOptionsSettings");
+
+  if (settings->readBoolEntry("PrintDebugInfo")) {
+  	m_print_debug_info->setChecked(TRUE);
+  }
+ 	else m_print_debug_info->setChecked(FALSE);
+ 	
+ 	if (settings->readBoolEntry("PrintDataBase")) {
+ 	  m_print_data_base->setChecked(TRUE);
+  }
+  else m_print_data_base->setChecked(FALSE);
+
+  if (settings->readBoolEntry("NoRules")) {
+  	m_no_rules->setChecked(TRUE);
+  }
+  else m_no_rules->setChecked(FALSE);
+
+  if (settings->readBoolEntry("EnvVariables")) {
+  	m_env_variables->setChecked(TRUE);
+  }
+  else m_env_variables->setChecked(FALSE);
+
+  if (settings->readBoolEntry("ContAfterError")) {
+  	m_cont_after_error->setChecked(TRUE);
+	}
+	else m_cont_after_error->setChecked(FALSE);
+	
+	if (settings->readBoolEntry("TouchFiles")) {
+		m_touch_files->setChecked(TRUE);
+  }
+	else m_touch_files->setChecked(FALSE);
+
+	if (settings->readBoolEntry("PrintWorkDir")){
+		m_print_work_dir->setChecked(TRUE);
+	}
+	else m_print_work_dir->setChecked(FALSE);
+	
+	if (settings->readBoolEntry("SilentOperation")) {
+		m_silent_operation->setChecked(TRUE);
+	}
+	else m_silent_operation->setChecked(FALSE);
+	
+	if (settings->readBoolEntry("IgnorErrors")) {
+		m_ignor_errors->setChecked(TRUE);
+	}
+	else m_ignor_errors->setChecked(FALSE);
+	
+	m_set_modify_line->setText(settings->readEntry("SetModifyLine"));
+	m_optional_line->setText(settings->readEntry("OptionalLine"));
+	m_job_number->setValue(settings->readNumEntry ("JobNumber"));	
 
   // **************set the button*********************
   setOkButton(i18n("OK"));
@@ -1366,6 +1386,113 @@ void CPrjOptionsDlg::ok(){
   if(old_ldadd != prj_info->getLDADD().stripWhiteSpace()){
     need_makefile_generation = true;
   }
+
+  //**********make options*************
+  settings = kapp->getConfig();
+  settings->setGroup("MakeOptionsSettings");
+
+  if (m_print_debug_info->isChecked()) {
+    settings->writeEntry("PrintDebugInfo",TRUE);
+  }
+  else settings->writeEntry("PrintDebugInfo",FALSE);
+
+ 	if (m_print_data_base->isChecked()) {
+    settings->writeEntry("PrintDataBase",TRUE);
+  }
+  else settings->writeEntry("PrintDataBase",FALSE);
+
+  if (m_no_rules->isChecked()) {
+    settings->writeEntry("NoRules",TRUE);
+  }
+  else settings->writeEntry("NoRules",FALSE);
+
+  if (m_env_variables->isChecked()) {
+    settings->writeEntry("EnvVariables",TRUE);
+  }
+  else settings->writeEntry("EnvVariables",FALSE);
+
+  if (m_cont_after_error->isChecked()) {
+		settings->writeEntry("ContAfterError",TRUE);
+	}
+	else settings->writeEntry("ContAfterError",FALSE);
+	
+	if (m_touch_files->isChecked()) {
+		settings->writeEntry("TouchFiles", TRUE);
+  }
+  else settings->writeEntry("TouchFiles", FALSE);
+
+	if (m_print_work_dir->isChecked()){
+  	settings->writeEntry("PrintWorkDir", TRUE);
+	}
+	else settings->writeEntry("PrintWorkDir", FALSE);
+	
+	if (m_silent_operation->isChecked()) {
+		settings->writeEntry("SilentOperation", TRUE);
+	}
+	else settings->writeEntry("SilentOperation", FALSE);
+	
+	if (m_ignor_errors->isChecked()) {
+		settings->writeEntry("IgnorErrors", TRUE);
+	}
+	else settings->writeEntry("IgnorErrors", FALSE);
+	
+	settings->writeEntry("SetModifyLine", m_set_modify_line->text());
+	settings->writeEntry("OptionalLine", m_optional_line->text());
+	settings->writeEntry("JobNumber", m_job_number->text());	
+  settings->sync();
+  reject();	
+
+  text = "";
+
+  if (m_print_debug_info->isChecked()) {
+    text+=" -d";
+  }
+  if (m_print_data_base->isChecked()) {
+    text+=" -p";
+  }
+
+  if (m_no_rules->isChecked()) {
+    text+=" -r";
+  }
+  if (m_env_variables->isChecked()) {
+    text+=" -e";
+  }
+  if (m_cont_after_error->isChecked()) {
+    text+=" -k";
+  }
+  if (m_touch_files->isChecked()) {
+    text+=" -t";
+  }
+  if (m_print_work_dir->isChecked()) {
+    text+=" -w";
+  }
+  if (m_silent_operation->isChecked()) {
+    text+=" -s";
+  }
+  if (m_ignor_errors->isChecked()) {
+    text+=" -i";
+  }
+
+  text+=" -j";
+  text+= m_job_number->text();
+
+	QString *str = (QString*) m_set_modify_line->text();
+  if (!str->isEmpty()) {
+    text+=" -W";
+    text+= m_set_modify_line->text();
+  }
+
+	str = (QString*) m_optional_line->text();
+  if (!str->isEmpty()) {
+    text+=" ";
+    text+= m_optional_line->text();
+  }
+
+  prj_info->setMakeOptions (text);
+  if(old_makeoptions != prj_info->getMakeOptions().stripWhiteSpace()){
+    need_makefile_generation = true;
+  }
+
   // write it to the disk
   prj_info->writeProject();
   if (version_edit->text() != old_version){
@@ -1373,9 +1500,15 @@ void CPrjOptionsDlg::ok(){
   }
 }
 
+// connection to set_modify_dir
+void CPrjOptionsDlg::slotFileDialogClicked() {
+  QString file,dir;
+  dir = prj_info->getProjectDir();
+  file = filedialog->getOpenFileName(dir,"*",this,"File");
+  m_set_modify_line->setText(file);
+}
 
 
 bool CPrjOptionsDlg::needConfigureInUpdate(){
   return  need_configure_in_update;
 }
-
