@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=KDE Java SDI Application
+Name=KDE Java SDI
+ServiceTypes=KDevelop/AppWizard
+X-KDE-Library=libkdevkdejavasdiappwizard
+X-KDevelop-ProjectSpace-Name=KDE Java
+X-KDevelop-Project-Name=KDEBinaryProject
+Icon=java_src
