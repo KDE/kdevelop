@@ -1,14 +1,11 @@
-Begin3
-Title:          KDevelop
-Version:        1.0Beta2
-Entered-date:   23. August 1999  
-Description:    an IDE for X/Qt/KDE
-Keywords:       IDE, KDE, X11, Qt, development, C++,GUI Builder
-Author:         The KDevelop Team
-Maintained-by:  Sandy Meier <smeier@rz.uni-potsdam.de>
-Primary-site:   
-Home-page:      http://www.kdevelop.org
-Original-site:  
-Platform:       Linux,FreeBSD and NetBSD 
-Copying-policy: GNU Public License
+Begin4
+Title:          kdevelop
+Version:        3.0.3
+Entered-date:   2004-04-14
+Description:    Integrated Development Environment for KDE
+Keywords:       KDE X11 desktop Qt 
+Author:         http://bugs.kde.org/ (KDE Bugtracking System)
+Primary-site:   http://www.kde.org/download/
+Platforms:      Unix, Qt
+Copying-policy: GPL, Artistic
 End
