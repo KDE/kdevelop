@@ -1,6 +1,5 @@
-includedir = $(prefix)/include/antlr
 
-include_HEADERS = \
+noinst_HEADERS = \
 	ANTLRException.hpp \
 	ANTLRUtil.hpp \
 	AST.hpp \
