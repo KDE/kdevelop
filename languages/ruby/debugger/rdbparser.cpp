@@ -72,6 +72,13 @@ void RDBParser::parseVariables(LazyFetchItem *parent, char *buf)
 			}
 			
 	        DataType dataType = determineType((char *) var_re.cap(2).latin1());
+			
+			// 'self' variables don't need to be expandable, as their details are
+			// already shown in the current frame. So always make them VALUE_TYPE's.
+			if (varName == "self") {
+				dataType = VALUE_TYPE;
+			}
+			
 			setItem(parent, varName, dataType, value);
 			
 			pos  += var_re.matchedLength();
