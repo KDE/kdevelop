@@ -1,3 +1,9 @@
+kdevelop (4:2.1.5-0woody3) unstable; urgency=low
+
+  * bugfix update - this is 2.1.5 FINAL
+
+ -- Ralf Nolden (KDE) <nolden@kde.org>  Sun, 19 Jan 2003 14:25:00 +0100
+
 kdevelop (4:2.1.5-0woody2) unstable; urgency=low
 
   * fixed the order of reading the doxygen books, read
