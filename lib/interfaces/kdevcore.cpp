@@ -36,7 +36,7 @@ Context::~Context()
 
 bool Context::hasType( int aType ) const
 {
-    kdDebug() << "Context::hasType(" << aType << "). this->type() == " << this->type() << endl;
+//    kdDebug(9000) << "Context::hasType(" << aType << "). this->type() == " << this->type() << endl;
 
     return aType == this->type();
 }
