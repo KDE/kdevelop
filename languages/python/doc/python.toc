@@ -837,5 +837,735 @@
 <tocsect2 name="Index" url="lib/genindex.html"/>
 <tocsect2 name="About this document ..." url="lib/about.html"/>
 </tocsect1>
+
+<index>
+<entry name="__abs__() (numeric object method)" url="ref/numeric-types.html#l2h-209"/>
+<entry name="__add__() (numeric object method)" url="ref/numeric-types.html#l2h-183"/>
+<entry name="__add__() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="__and__() (numeric object method)" url="ref/numeric-types.html#l2h-192"/>
+<entry name="__bases__ (class attribute)" url="ref/types.html#l2h-47"/>
+<entry name="__builtin__ (built-in module)" url="ref/execframes.html#l2h-247"/>
+<entry name="__builtins__" url="ref/exec.html#l2h-399"/>
+<entry name="__call__() (object method)" url="ref/callable-types.html#l2h-163"/>
+<entry name="__class__ (instance attribute)" url="ref/types.html#l2h-49"/>
+<entry name="__cmp__() (object method)" url="ref/customization.html#l2h-137"/>
+<entry name="__coerce__() (numeric object method)" url="ref/sequence-types.html#l2h-170"/>
+<entry name="__complex__() (numeric object method)" url="ref/numeric-types.html#l2h-211"/>
+<entry name="__contains__() (sequence object method)" url="ref/sequence-methods.html#l2h-182"/>
+<entry name="__debug__" url="ref/assert.html#l2h-340"/>
+<entry name="__del__() (object method)" url="ref/customization.html#l2h-134"/>
+<entry name="__delattr__() (object method)" url="ref/attribute-access.html#l2h-162"/>
+<entry name="__delitem__() (mapping object method)" url="ref/sequence-types.html#l2h-176"/>
+<entry name="__delslice__() (sequence object method)" url="ref/sequence-methods.html#l2h-181"/>
+<entry name="__dict__ (class attribute)" url="ref/types.html#l2h-47"/>
+<entry name="__dict__ (instance attribute)" url="ref/types.html#l2h-49"/>
+<entry name="__dict__ (module attribute)" url="ref/types.html#l2h-43"/>
+<entry name="__div__() (numeric object method)" url="ref/numeric-types.html#l2h-186"/>
+<entry name="__divmod__() (numeric object method)" url="ref/numeric-types.html#l2h-188"/>
+<entry name="__doc__ (class attribute)" url="ref/types.html#l2h-47"/>
+<entry name="__doc__ (function attribute)" url="ref/types.html#l2h-35"/>
+<entry name="__doc__ (module attribute)" url="ref/types.html#l2h-45"/>
+<entry name="__file__ (module attribute)" url="ref/types.html#l2h-45"/>
+<entry name="__float__() (numeric object method)" url="ref/numeric-types.html#l2h-214"/>
+<entry name="__getattr__() (object method)" url="ref/attribute-access.html#l2h-156"/>
+<entry name="__getitem__() (mapping object method)" url="ref/specialnames.html#l2h-132"/>
+<entry name="__getslice__() (sequence object method)" url="ref/sequence-methods.html#l2h-179"/>
+<entry name="__hash__() (object method)" url="ref/customization.html#l2h-139"/>
+<entry name="__hex__() (numeric object method)" url="ref/numeric-types.html#l2h-216"/>
+<entry name="__iadd__() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="__import__() (built-in function)" url="ref/import.html#l2h-394"/>
+<entry name="__imul__() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="__init__() (object method)" url="ref/types.html#l2h-41"/>
+<entry name="__init__.py" url="ref/import.html#l2h-393"/>
+<entry name="__int__() (numeric object method)" url="ref/numeric-types.html#l2h-212"/>
+<entry name="__invert__() (numeric object method)" url="ref/numeric-types.html#l2h-210"/>
+<entry name="__len__() (mapping object method)" url="ref/customization.html#l2h-144"/>
+<entry name="__long__() (numeric object method)" url="ref/numeric-types.html#l2h-213"/>
+<entry name="__lshift__() (numeric object method)" url="ref/numeric-types.html#l2h-190"/>
+<entry name="__main__ (built-in module)" url="ref/execframes.html#l2h-235"/>
+<entry name="__members__ (built-in object attribute)" url="ref/types.html#l2h-31"/>
+<entry name="__methods__ (built-in object attribute)" url="ref/types.html#l2h-31"/>
+<entry name="__mod__() (numeric object method)" url="ref/numeric-types.html#l2h-187"/>
+<entry name="__module__ (class attribute)" url="ref/types.html#l2h-47"/>
+<entry name="__mul__() (numeric object method)" url="ref/numeric-types.html#l2h-185"/>
+<entry name="__mul__() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="__name__ (class attribute)" url="ref/types.html#l2h-47"/>
+<entry name="__name__ (function attribute)" url="ref/types.html#l2h-35"/>
+<entry name="__name__ (module attribute)" url="ref/types.html#l2h-45"/>
+<entry name="__neg__() (numeric object method)" url="ref/numeric-types.html#l2h-207"/>
+<entry name="__nonzero__() (object method)" url="ref/customization.html#l2h-142"/>
+<entry name="__oct__() (numeric object method)" url="ref/numeric-types.html#l2h-215"/>
+<entry name="__or__() (numeric object method)" url="ref/numeric-types.html#l2h-194"/>
+<entry name="__pos__() (numeric object method)" url="ref/numeric-types.html#l2h-208"/>
+<entry name="__pow__() (numeric object method)" url="ref/numeric-types.html#l2h-189"/>
+<entry name="__radd__() (numeric object method)" url="ref/numeric-types.html#l2h-195"/>
+<entry name="__radd__() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="__rand__() (numeric object method)" url="ref/numeric-types.html#l2h-204"/>
+<entry name="__rcmp__() (object method)" url="ref/customization.html#l2h-138"/>
+<entry name="__rdiv__() (numeric object method)" url="ref/numeric-types.html#l2h-198"/>
+<entry name="__rdivmod__() (numeric object method)" url="ref/numeric-types.html#l2h-200"/>
+<entry name="__repr__() (object method)" url="ref/customization.html#l2h-135"/>
+<entry name="__rlshift__() (numeric object method)" url="ref/numeric-types.html#l2h-202"/>
+<entry name="__rmod__() (numeric object method)" url="ref/numeric-types.html#l2h-199"/>
+<entry name="__rmul__() (numeric object method)" url="ref/numeric-types.html#l2h-197"/>
+<entry name="__rmul__() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="__ror__() (numeric object method)" url="ref/numeric-types.html#l2h-206"/>
+<entry name="__rpow__() (numeric object method)" url="ref/numeric-types.html#l2h-201"/>
+<entry name="__rrshift__() (numeric object method)" url="ref/numeric-types.html#l2h-203"/>
+<entry name="__rshift__() (numeric object method)" url="ref/numeric-types.html#l2h-191"/>
+<entry name="__rsub__() (numeric object method)" url="ref/numeric-types.html#l2h-196"/>
+<entry name="__rxor__() (numeric object method)" url="ref/numeric-types.html#l2h-205"/>
+<entry name="__setattr__() (object method)" url="ref/attribute-access.html#l2h-158"/>
+<entry name="__setitem__() (mapping object method)" url="ref/sequence-types.html#l2h-175"/>
+<entry name="__setslice__() (sequence object method)" url="ref/sequence-methods.html#l2h-180"/>
+<entry name="__str__() (object method)" url="ref/customization.html#l2h-136"/>
+<entry name="__sub__() (numeric object method)" url="ref/numeric-types.html#l2h-184"/>
+<entry name="__xor__() (numeric object method)" url="ref/numeric-types.html#l2h-193"/>
+<entry name="abs() (built-in function)" url="ref/numeric-types.html#l2h-224"/>
+<entry name="addition" url="ref/binary.html#l2h-311"/>
+<entry name="and, bit-wise" url="ref/bitwise.html#l2h-316"/>
+<entry name="and operator" url="ref/lambda.html#l2h-326"/>
+<entry name="anonmymous, function" url="ref/lambda.html#l2h-328"/>
+<entry name="append() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="argument, function" url="ref/types.html#l2h-102"/>
+<entry name="arithmetic, conversion" url="ref/conversions.html#l2h-260"/>
+<entry name="arithmetic, operation, binary" url="ref/binary.html#l2h-307"/>
+<entry name="arithmetic, operation, unary" url="ref/unary.html#l2h-302"/>
+<entry name="array (standard module)" url="ref/types.html#l2h-94"/>
+<entry name="ASCII" url="ref/notation.html#l2h-2"/>
+<entry name="assert statement" url="ref/assert.html#l2h-338"/>
+<entry name="AssertionError exception" url="ref/assert.html#l2h-341"/>
+<entry name="assertions, debugging" url="ref/assert.html#l2h-339"/>
+<entry name="assignment, attribute" url="ref/assignment.html#l2h-343"/>
+<entry name="assignment, augmented" url="ref/augassign.html#l2h-354"/>
+<entry name="assignment, class attribute" url="ref/types.html#l2h-112"/>
+<entry name="assignment (continued), class instance attribute" url="ref/types.html#l2h-115"/>
+<entry name="assignment (continued), slicing" url="ref/assignment.html#l2h-353"/>
+<entry name="assignment (continued), statement" url="ref/types.html#l2h-92"/>
+<entry name="assignment (continued), subscription" url="ref/assignment.html#l2h-350"/>
+<entry name="assignment (continued), target list" url="ref/assignment.html#l2h-346"/>
+<entry name="atom" url="ref/atoms.html#l2h-261"/>
+<entry name="attribute" url="ref/types.html#l2h-69"/>
+<entry name="assignment" url="ref/assignment.html#l2h-343"/>
+<entry name="assignment, class" url="ref/types.html#l2h-112"/>
+<entry name="assignment, class instance" url="ref/types.html#l2h-115"/>
+<entry name="class" url="ref/types.html#l2h-111"/>
+<entry name="class instance" url="ref/types.html#l2h-114"/>
+<entry name="deletion" url="ref/del.html#l2h-360"/>
+<entry name="generic special" url="ref/types.html#l2h-69"/>
+<entry name="reference" url="ref/attribute-references.html#l2h-282"/>
+<entry name="special" url="ref/types.html#l2h-69"/>
+<entry name="AttributeError exception" url="ref/attribute-references.html#l2h-283"/>
+<entry name="augmented, assignment" url="ref/augassign.html#l2h-354"/>
+<entry name="augmented, back-quotes" url="ref/customization.html#l2h-149"/>
+<entry name="augmented, backslash character" url="ref/explicit-joining.html#l2h-7"/>
+<entry name="backward, quotes" url="ref/customization.html#l2h-149"/>
+<entry name="binary, arithmetic operation" url="ref/binary.html#l2h-307"/>
+<entry name="binary, bit-wise operation" url="ref/bitwise.html#l2h-315"/>
+<entry name="binding, global name" url="ref/global.html#l2h-396"/>
+<entry name="binding, name" url="ref/execframes.html#l2h-241"/>
+<entry name="bit-wise, and" url="ref/bitwise.html#l2h-316"/>
+<entry name="bit-wise, operation, binary" url="ref/bitwise.html#l2h-315"/>
+<entry name="bit-wise, operation, unary" url="ref/unary.html#l2h-302"/>
+<entry name="bit-wise, or" url="ref/bitwise.html#l2h-318"/>
+<entry name="bit-wise, xor" url="ref/bitwise.html#l2h-317"/>
+<entry name="blank line" url="ref/blank-lines.html#l2h-8"/>
+<entry name="block, code" url="ref/execframes.html#l2h-238"/>
+<entry name="block, BNF" url="ref/notation.html#l2h-1"/>
+<entry name="Boolean, operation" url="ref/lambda.html#l2h-324"/>
+<entry name="break statement" url="ref/break.html#l2h-375"/>
+<entry name="bsddb (standard module)" url="ref/types.html#l2h-100"/>
+<entry name="built-in, method" url="ref/types.html#l2h-107"/>
+<entry name="built-in, module" url="ref/import.html#l2h-386"/>
+<entry name="built-in, name" url="ref/atom-identifiers.html#l2h-263"/>
+<entry name="built-in function, call" url="ref/calls.html#l2h-298"/>
+<entry name="built-in function object" url="ref/types.html#l2h-106"/>
+<entry name="built-in method, call" url="ref/calls.html#l2h-298"/>
+<entry name="built-in method object" url="ref/types.html#l2h-107"/>
+<entry name="byte" url="ref/types.html#l2h-85"/>
+<entry name="bytecode" url="ref/types.html#l2h-124"/>
+<entry name="C" url="ref/strings.html#l2h-17"/>
+<entry name="language" url="ref/types.html#l2h-68"/>
+<entry name="call" url="ref/calls.html#l2h-293"/>
+<entry name="built-in function" url="ref/calls.html#l2h-298"/>
+<entry name="built-in method" url="ref/calls.html#l2h-298"/>
+<entry name="class instance" url="ref/calls.html#l2h-300"/>
+<entry name="class object" url="ref/types.html#l2h-108"/>
+<entry name="function" url="ref/types.html#l2h-102"/>
+<entry name="instance" url="ref/callable-types.html#l2h-164"/>
+<entry name="method" url="ref/calls.html#l2h-298"/>
+<entry name="procedure" url="ref/exprstmts.html#l2h-337"/>
+<entry name="user-defined function" url="ref/calls.html#l2h-297"/>
+<entry name="callable object" url="ref/types.html#l2h-101"/>
+<entry name="chaining, comparisons" url="ref/comparisons.html#l2h-321"/>
+<entry name="character" url="ref/types.html#l2h-85"/>
+<entry name="character set" url="ref/types.html#l2h-86"/>
+<entry name="chr() (built-in function)" url="ref/types.html#l2h-83"/>
+<entry name="class, attribute" url="ref/types.html#l2h-111"/>
+<entry name="class, attribute assignment" url="ref/types.html#l2h-112"/>
+<entry name="class, constructor" url="ref/customization.html#l2h-145"/>
+<entry name="class, definition" url="ref/return.html#l2h-370"/>
+<entry name="class, instance" url="ref/types.html#l2h-114"/>
+<entry name="class, name" url="ref/class.html#l2h-434"/>
+<entry name="class instance, attribute" url="ref/types.html#l2h-114"/>
+<entry name="class instance, attribute assignment" url="ref/types.html#l2h-115"/>
+<entry name="class instance, call" url="ref/calls.html#l2h-300"/>
+<entry name="class instance object" url="ref/types.html#l2h-108"/>
+<entry name="class object" url="ref/types.html#l2h-108"/>
+<entry name="call" url="ref/types.html#l2h-108"/>
+<entry name="clause" url="ref/compound.html#l2h-403"/>
+<entry name="clear() (mapping object method)" url="ref/sequence-types.html#l2h-166"/>
+<entry name="cmp() (built-in function)" url="ref/customization.html#l2h-152"/>
+<entry name="co_argcount (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_code (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_consts (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_filename (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_firstlineno (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_flags (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_lnotab (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_name (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_names (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_nlocals (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_stacksize (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="co_varnames (code object attribute)" url="ref/types.html#l2h-57"/>
+<entry name="code, block" url="ref/execframes.html#l2h-238"/>
+<entry name="code block" url="ref/execframes.html#l2h-232"/>
+<entry name="code object" url="ref/types.html#l2h-124"/>
+<entry name="comma" url="ref/parenthesized.html#l2h-270"/>
+<entry name="trailing" url="ref/exprlists.html#l2h-331"/>
+<entry name="command line" url="ref/programs.html#l2h-439"/>
+<entry name="comment" url="ref/comments.html#l2h-6"/>
+<entry name="comparison" url="ref/comparisons.html#l2h-319"/>
+<entry name="string" url="ref/types.html#l2h-86"/>
+<entry name="comparisons" url="ref/customization.html#l2h-152"/>
+<entry name="chaining" url="ref/comparisons.html#l2h-321"/>
+<entry name="compile() (built-in function)" url="ref/global.html#l2h-397"/>
+<entry name="complex, number" url="ref/types.html#l2h-78"/>
+<entry name="complex() (built-in function)" url="ref/numeric-types.html#l2h-225"/>
+<entry name="complex literal" url="ref/numbers.html#l2h-20"/>
+<entry name="complex object" url="ref/types.html#l2h-78"/>
+<entry name="compound, statement" url="ref/compound.html#l2h-402"/>
+<entry name="comprehensions, list" url="ref/lists.html#l2h-271"/>
+<entry name="constant" url="ref/literals.html#l2h-13"/>
+<entry name="constructor, class" url="ref/customization.html#l2h-145"/>
+<entry name="container" url="ref/objects.html#l2h-29"/>
+<entry name="continue statement" url="ref/continue.html#l2h-380"/>
+<entry name="conversion, arithmetic" url="ref/conversions.html#l2h-260"/>
+<entry name="conversion, string" url="ref/customization.html#l2h-149"/>
+<entry name="copy() (mapping object method)" url="ref/sequence-types.html#l2h-166"/>
+<entry name="count() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="dangling, else" url="ref/compound.html#l2h-406"/>
+<entry name="data" url="ref/objects.html#l2h-24"/>
+<entry name="type" url="ref/types.html#l2h-68"/>
+<entry name="type, immutable" url="ref/atom-literals.html#l2h-267"/>
+<entry name="datum" url="ref/dict.html#l2h-275"/>
+<entry name="dbm (standard module)" url="ref/types.html#l2h-98"/>
+<entry name="debugging, assertions" url="ref/assert.html#l2h-339"/>
+<entry name="decimal literal" url="ref/numbers.html#l2h-20"/>
+<entry name="DEDENT token" url="ref/indentation.html#l2h-10"/>
+<entry name="default, parameter value" url="ref/function.html#l2h-430"/>
+<entry name="definition, class" url="ref/return.html#l2h-370"/>
+<entry name="definition, function" url="ref/return.html#l2h-370"/>
+<entry name="del statement" url="ref/types.html#l2h-92"/>
+<entry name="delete" url="ref/types.html#l2h-92"/>
+<entry name="deletion, attribute" url="ref/del.html#l2h-360"/>
+<entry name="deletion, target" url="ref/del.html#l2h-358"/>
+<entry name="deletion, target list" url="ref/del.html#l2h-358"/>
+<entry name="delimiters" url="ref/delimiters.html#l2h-22"/>
+<entry name="destructor" url="ref/customization.html#l2h-146"/>
+<entry name="dictionary, display" url="ref/dict.html#l2h-274"/>
+<entry name="dictionary object" url="ref/types.html#l2h-96"/>
+<entry name="display, dictionary" url="ref/dict.html#l2h-274"/>
+<entry name="display, list" url="ref/lists.html#l2h-271"/>
+<entry name="display, tuple" url="ref/parenthesized.html#l2h-270"/>
+<entry name="division" url="ref/binary.html#l2h-309"/>
+<entry name="divmod() (built-in function)" url="ref/numeric-types.html#l2h-218"/>
+<entry name="documentation string" url="ref/types.html#l2h-125"/>
+<entry name="EBCDIC" url="ref/types.html#l2h-86"/>
+<entry name="elif, keyword" url="ref/if.html#l2h-408"/>
+<entry name="Ellipsis" url="ref/types.html#l2h-71"/>
+<entry name="Ellipsis object" url="ref/types.html#l2h-71"/>
+<entry name="else, dangling" url="ref/compound.html#l2h-406"/>
+<entry name="else, keyword" url="ref/break.html#l2h-377"/>
+<entry name="empty, list" url="ref/lists.html#l2h-273"/>
+<entry name="empty, tuple" url="ref/types.html#l2h-91"/>
+<entry name="error handling" url="ref/exceptions.html#l2h-255"/>
+<entry name="errors" url="ref/exceptions.html#l2h-255"/>
+<entry name="escape sequence" url="ref/strings.html#l2h-17"/>
+<entry name="eval() (built-in function)" url="ref/global.html#l2h-397"/>
+<entry name="exc_info (in module sys)" url="ref/types.html#l2h-63"/>
+<entry name="exc_traceback (in module sys)" url="ref/types.html#l2h-63"/>
+<entry name="exc_type (in module sys)" url="ref/try.html#l2h-419"/>
+<entry name="exc_value (in module sys)" url="ref/try.html#l2h-419"/>
+<entry name="except, keyword" url="ref/try.html#l2h-421"/>
+<entry name="exception" url="ref/exceptions.html#l2h-250"/>
+<entry name="AssertionError" url="ref/assert.html#l2h-341"/>
+<entry name="AttributeError" url="ref/attribute-references.html#l2h-283"/>
+<entry name="handler" url="ref/types.html#l2h-127"/>
+<entry name="ImportError" url="ref/import.html#l2h-387"/>
+<entry name="NameError" url="ref/atom-identifiers.html#l2h-264"/>
+<entry name="exception (continued), raising" url="ref/raise.html#l2h-373"/>
+<entry name="exception (continued), RuntimeError" url="ref/print.html#l2h-367"/>
+<entry name="exception (continued), SyntaxError" url="ref/import.html#l2h-387"/>
+<entry name="exception (continued), TypeError" url="ref/unary.html#l2h-306"/>
+<entry name="exception (continued), ValueError" url="ref/shifting.html#l2h-314"/>
+<entry name="exception (continued), ZeroDivisionError" url="ref/binary.html#l2h-309"/>
+<entry name="exception handler" url="ref/exceptions.html#l2h-255"/>
+<entry name="exclusive, or" url="ref/bitwise.html#l2h-317"/>
+<entry name="exec statement" url="ref/execframes.html#l2h-249"/>
+<entry name="execfile() (built-in function)" url="ref/global.html#l2h-397"/>
+<entry name="execution, frame" url="ref/execframes.html#l2h-237"/>
+<entry name="execution, restricted" url="ref/execframes.html#l2h-248"/>
+<entry name="execution, stack" url="ref/types.html#l2h-127"/>
+<entry name="execution model" url="ref/execmodel.html#l2h-231"/>
+<entry name="expression" url="ref/expressions.html#l2h-257"/>
+<entry name="lambda" url="ref/lambda.html#l2h-328"/>
+<entry name="list" url="ref/exprlists.html#l2h-329"/>
+<entry name="statement" url="ref/exprstmts.html#l2h-334"/>
+<entry name="extended, slicing" url="ref/slicings.html#l2h-292"/>
+<entry name="extended print statement" url="ref/print.html#l2h-368"/>
+<entry name="extension, filename" url="ref/import.html#l2h-386"/>
+<entry name="extension, module" url="ref/types.html#l2h-68"/>
+<entry name="extension, f_back (frame attribute)" url="ref/types.html#l2h-59"/>
+<entry name="extension, f_builtins (frame attribute)" url="ref/types.html#l2h-59"/>
+<entry name="extension, f_code (frame attribute)" url="ref/types.html#l2h-59"/>
+<entry name="extension, f_exc_traceback (frame attribute)" url="ref/types.html#l2h-61"/>
+<entry name="extension, f_exc_type (frame attribute)" url="ref/types.html#l2h-61"/>
+<entry name="extension, f_exc_value (frame attribute)" url="ref/types.html#l2h-61"/>
+<entry name="extension, f_globals (frame attribute)" url="ref/types.html#l2h-59"/>
+<entry name="extension, f_lasti (frame attribute)" url="ref/types.html#l2h-59"/>
+<entry name="extension, f_lineno (frame attribute)" url="ref/types.html#l2h-59"/>
+<entry name="extension, f_locals (frame attribute)" url="ref/types.html#l2h-59"/>
+<entry name="extension, f_restricted (frame attribute)" url="ref/types.html#l2h-59"/>
+<entry name="extension, f_trace (frame attribute)" url="ref/types.html#l2h-61"/>
+<entry name="extension, file object" url="ref/types.html#l2h-117"/>
+<entry name="filename, extension" url="ref/import.html#l2h-386"/>
+<entry name="finally, keyword" url="ref/return.html#l2h-371"/>
+<entry name="float() (built-in function)" url="ref/numeric-types.html#l2h-228"/>
+<entry name="floating point, number" url="ref/types.html#l2h-77"/>
+<entry name="floating point literal" url="ref/numbers.html#l2h-20"/>
+<entry name="floating point object" url="ref/types.html#l2h-77"/>
+<entry name="for statement" url="ref/break.html#l2h-376"/>
+<entry name="form, lambda" url="ref/lambda.html#l2h-328"/>
+<entry name="frame, execution" url="ref/execframes.html#l2h-237"/>
+<entry name="frame object" url="ref/types.html#l2h-126"/>
+<entry name="from, keyword" url="ref/import.html#l2h-385"/>
+<entry name="from statement" url="ref/execframes.html#l2h-249"/>
+<entry name="func_code (function attribute)" url="ref/types.html#l2h-35"/>
+<entry name="func_defaults (function attribute)" url="ref/types.html#l2h-35"/>
+<entry name="func_doc (function attribute)" url="ref/types.html#l2h-35"/>
+<entry name="func_globals (function attribute)" url="ref/types.html#l2h-35"/>
+<entry name="function, anonmymous" url="ref/lambda.html#l2h-328"/>
+<entry name="function, argument" url="ref/types.html#l2h-102"/>
+<entry name="function, call" url="ref/types.html#l2h-102"/>
+<entry name="function, call, user-defined" url="ref/calls.html#l2h-297"/>
+<entry name="function, definition" url="ref/return.html#l2h-370"/>
+<entry name="function, name" url="ref/function.html#l2h-429"/>
+<entry name="function, user-defined" url="ref/types.html#l2h-103"/>
+<entry name="function object" url="ref/types.html#l2h-103"/>
+<entry name="garbage collection" url="ref/objects.html#l2h-28"/>
+<entry name="gdbm (standard module)" url="ref/types.html#l2h-99"/>
+<entry name="generic, special attribute" url="ref/types.html#l2h-69"/>
+<entry name="get() (mapping object method)" url="ref/sequence-types.html#l2h-166"/>
+<entry name="global, name" url="ref/atom-identifiers.html#l2h-263"/>
+<entry name="global, name binding" url="ref/global.html#l2h-396"/>
+<entry name="global (continued), namespace" url="ref/types.html#l2h-104"/>
+<entry name="global statement" url="ref/execframes.html#l2h-246"/>
+<entry name="globals() (built-in function)" url="ref/exec.html#l2h-400"/>
+<entry name="grammar" url="ref/notation.html#l2h-1"/>
+<entry name="grouping" url="ref/indentation.html#l2h-9"/>
+<entry name="handle an exception" url="ref/exceptions.html#l2h-254"/>
+<entry name="handler, exception" url="ref/types.html#l2h-127"/>
+<entry name="has_key() (mapping object method)" url="ref/sequence-types.html#l2h-166"/>
+<entry name="hash() (built-in function)" url="ref/customization.html#l2h-155"/>
+<entry name="hash character" url="ref/comments.html#l2h-6"/>
+<entry name="hex() (built-in function)" url="ref/numeric-types.html#l2h-230"/>
+<entry name="hexadecimal literal" url="ref/numbers.html#l2h-20"/>
+<entry name="hierarchical, module names" url="ref/import.html#l2h-391"/>
+<entry name="hierarchy, type" url="ref/types.html#l2h-68"/>
+<entry name="hierarchy, id() (built-in function)" url="ref/objects.html#l2h-25"/>
+<entry name="hierarchy, identifier" url="ref/identifiers.html#l2h-11"/>
+<entry name="identity, test" url="ref/comparisons.html#l2h-323"/>
+<entry name="identity of an object" url="ref/objects.html#l2h-27"/>
+<entry name="if statement" url="ref/if.html#l2h-407"/>
+<entry name="im_class (method attribute)" url="ref/types.html#l2h-39"/>
+<entry name="im_func (method attribute)" url="ref/types.html#l2h-37"/>
+<entry name="im_self (method attribute)" url="ref/types.html#l2h-37"/>
+<entry name="imaginary literal" url="ref/numbers.html#l2h-20"/>
+<entry name="immutable, data type" url="ref/atom-literals.html#l2h-267"/>
+<entry name="immutable, object" url="ref/atom-literals.html#l2h-267"/>
+<entry name="immutable object" url="ref/objects.html#l2h-27"/>
+<entry name="immutable sequence object" url="ref/types.html#l2h-82"/>
+<entry name="import statement" url="ref/types.html#l2h-109"/>
+<entry name="ImportError exception" url="ref/import.html#l2h-387"/>
+<entry name="importing, module" url="ref/import.html#l2h-385"/>
+<entry name="in, keyword" url="ref/for.html#l2h-414"/>
+<entry name="in operator" url="ref/comparisons.html#l2h-322"/>
+<entry name="inclusive, or" url="ref/bitwise.html#l2h-318"/>
+<entry name="INDENT token" url="ref/indentation.html#l2h-10"/>
+<entry name="indentation" url="ref/indentation.html#l2h-9"/>
+<entry name="index() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="index operation" url="ref/types.html#l2h-80"/>
+<entry name="inheritance" url="ref/class.html#l2h-434"/>
+<entry name="initialization, module" url="ref/import.html#l2h-387"/>
+<entry name="input" url="ref/expression-input.html#l2h-440"/>
+<entry name="raw" url="ref/expression-input.html#l2h-445"/>
+<entry name="input() (built-in function)" url="ref/expression-input.html#l2h-444"/>
+<entry name="insert() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="instance, call" url="ref/callable-types.html#l2h-164"/>
+<entry name="instance, class" url="ref/types.html#l2h-114"/>
+<entry name="instance object" url="ref/types.html#l2h-108"/>
+<entry name="int() (built-in function)" url="ref/numeric-types.html#l2h-226"/>
+<entry name="integer" url="ref/types.html#l2h-90"/>
+<entry name="representation" url="ref/types.html#l2h-76"/>
+<entry name="integer literal" url="ref/numbers.html#l2h-20"/>
+<entry name="integer object" url="ref/types.html#l2h-73"/>
+<entry name="interactive mode" url="ref/programs.html#l2h-438"/>
+<entry name="internal type" url="ref/types.html#l2h-123"/>
+<entry name="interpreter" url="ref/top-level.html#l2h-435"/>
+<entry name="inversion" url="ref/unary.html#l2h-305"/>
+<entry name="invocation" url="ref/types.html#l2h-102"/>
+<entry name="is not operator" url="ref/comparisons.html#l2h-323"/>
+<entry name="is operator" url="ref/comparisons.html#l2h-323"/>
+<entry name="item, sequence" url="ref/subscriptions.html#l2h-286"/>
+<entry name="item, string" url="ref/subscriptions.html#l2h-287"/>
+<entry name="item selection" url="ref/types.html#l2h-80"/>
+<entry name="items() (mapping object method)" url="ref/sequence-types.html#l2h-166"/>
+<entry name="key" url="ref/dict.html#l2h-275"/>
+<entry name="key/datum pair" url="ref/dict.html#l2h-275"/>
+<entry name="keys() (mapping object method)" url="ref/sequence-types.html#l2h-166"/>
+<entry name="keyword" url="ref/keywords.html#l2h-12"/>
+<entry name="elif" url="ref/if.html#l2h-408"/>
+<entry name="keyword (continued), else" url="ref/break.html#l2h-377"/>
+<entry name="keyword (continued), except" url="ref/try.html#l2h-421"/>
+<entry name="keyword (continued), finally" url="ref/return.html#l2h-371"/>
+<entry name="keyword (continued), from" url="ref/import.html#l2h-385"/>
+<entry name="keyword (continued), in" url="ref/for.html#l2h-414"/>
+<entry name="lambda, expression" url="ref/lambda.html#l2h-328"/>
+<entry name="lambda, form" url="ref/lambda.html#l2h-328"/>
+<entry name="language, C" url="ref/types.html#l2h-68"/>
+<entry name="language, Pascal" url="ref/for.html#l2h-416"/>
+<entry name="last_traceback (in module sys)" url="ref/types.html#l2h-63"/>
+<entry name="leading whitespace" url="ref/indentation.html#l2h-9"/>
+<entry name="len() (built-in function)" url="ref/types.html#l2h-79"/>
+<entry name="lexical analysis" url="ref/lexical.html#l2h-3"/>
+<entry name="lexical definitions" url="ref/notation.html#l2h-2"/>
+<entry name="line continuation" url="ref/explicit-joining.html#l2h-7"/>
+<entry name="line joining" url="ref/logical.html#l2h-5"/>
+<entry name="line structure" url="ref/line-structure.html#l2h-4"/>
+<entry name="list, assignment, target" url="ref/assignment.html#l2h-346"/>
+<entry name="list, comprehensions" url="ref/lists.html#l2h-271"/>
+<entry name="list, deletion target" url="ref/del.html#l2h-358"/>
+<entry name="list (continued), display" url="ref/lists.html#l2h-271"/>
+<entry name="list (continued), empty" url="ref/lists.html#l2h-273"/>
+<entry name="list (continued), expression" url="ref/exprlists.html#l2h-329"/>
+<entry name="list (continued), target" url="ref/assignment.html#l2h-345"/>
+<entry name="list object" url="ref/types.html#l2h-93"/>
+<entry name="literal" url="ref/literals.html#l2h-13"/>
+<entry name="local, namespace" url="ref/execframes.html#l2h-244"/>
+<entry name="locals() (built-in function)" url="ref/exec.html#l2h-400"/>
+<entry name="logical line" url="ref/logical.html#l2h-5"/>
+<entry name="long() (built-in function)" url="ref/numeric-types.html#l2h-227"/>
+<entry name="long integer literal" url="ref/numbers.html#l2h-20"/>
+<entry name="long integer object" url="ref/types.html#l2h-75"/>
+<entry name="loop, over mutable sequence" url="ref/for.html#l2h-417"/>
+<entry name="loop, statement" url="ref/break.html#l2h-376"/>
+<entry name="loop control, target" url="ref/break.html#l2h-378"/>
+<entry name="loop control, makefile() (socket method)" url="ref/types.html#l2h-53"/>
+<entry name="mangling, name" url="ref/atom-identifiers.html#l2h-265"/>
+<entry name="mapping object" url="ref/types.html#l2h-95"/>
+<entry name="membership, test" url="ref/comparisons.html#l2h-322"/>
+<entry name="method, built-in" url="ref/types.html#l2h-107"/>
+<entry name="method, call" url="ref/calls.html#l2h-298"/>
+<entry name="method, user-defined" url="ref/types.html#l2h-105"/>
+<entry name="method object" url="ref/types.html#l2h-105"/>
+<entry name="minus" url="ref/unary.html#l2h-303"/>
+<entry name="module, built-in" url="ref/import.html#l2h-386"/>
+<entry name="module, extension" url="ref/types.html#l2h-68"/>
+<entry name="module, importing" url="ref/import.html#l2h-385"/>
+<entry name="module, initialization" url="ref/import.html#l2h-387"/>
+<entry name="module (continued), name" url="ref/import.html#l2h-386"/>
+<entry name="module (continued), names, hierarchical" url="ref/import.html#l2h-391"/>
+<entry name="module (continued), namespace" url="ref/types.html#l2h-110"/>
+<entry name="module (continued), search path" url="ref/import.html#l2h-386"/>
+<entry name="module (continued), user-defined" url="ref/import.html#l2h-386"/>
+<entry name="module object" url="ref/types.html#l2h-109"/>
+<entry name="modules (in module sys)" url="ref/import.html#l2h-383"/>
+<entry name="modulo" url="ref/binary.html#l2h-310"/>
+<entry name="multiplication" url="ref/binary.html#l2h-308"/>
+<entry name="mutable object" url="ref/objects.html#l2h-27"/>
+<entry name="mutable sequence, loop over" url="ref/for.html#l2h-417"/>
+<entry name="mutable sequence object" url="ref/types.html#l2h-92"/>
+<entry name="name" url="ref/identifiers.html#l2h-11"/>
+<entry name="binding" url="ref/execframes.html#l2h-241"/>
+<entry name="binding, global" url="ref/global.html#l2h-396"/>
+<entry name="built-in" url="ref/atom-identifiers.html#l2h-263"/>
+<entry name="class" url="ref/class.html#l2h-434"/>
+<entry name="function" url="ref/function.html#l2h-429"/>
+<entry name="global" url="ref/atom-identifiers.html#l2h-263"/>
+<entry name="mangling" url="ref/atom-identifiers.html#l2h-265"/>
+<entry name="module" url="ref/import.html#l2h-386"/>
+<entry name="rebinding" url="ref/execframes.html#l2h-242"/>
+<entry name="unbinding" url="ref/execframes.html#l2h-243"/>
+<entry name="NameError exception" url="ref/atom-identifiers.html#l2h-264"/>
+<entry name="names, hierarchical module" url="ref/import.html#l2h-391"/>
+<entry name="names, private" url="ref/atom-identifiers.html#l2h-265"/>
+<entry name="namespace" url="ref/execframes.html#l2h-232"/>
+<entry name="global" url="ref/types.html#l2h-104"/>
+<entry name="namespace (continued), local" url="ref/execframes.html#l2h-244"/>
+<entry name="namespace (continued), module" url="ref/types.html#l2h-110"/>
+<entry name="negation" url="ref/unary.html#l2h-303"/>
+<entry name="newline, suppression" url="ref/print.html#l2h-365"/>
+<entry name="NEWLINE token" url="ref/logical.html#l2h-5"/>
+<entry name="None" url="ref/types.html#l2h-70"/>
+<entry name="None object" url="ref/types.html#l2h-70"/>
+<entry name="not in operator" url="ref/comparisons.html#l2h-322"/>
+<entry name="not operator" url="ref/lambda.html#l2h-325"/>
+<entry name="notation" url="ref/notation.html#l2h-1"/>
+<entry name="null, operation" url="ref/pass.html#l2h-356"/>
+<entry name="number" url="ref/numbers.html#l2h-20"/>
+<entry name="complex" url="ref/types.html#l2h-78"/>
+<entry name="floating point" url="ref/types.html#l2h-77"/>
+<entry name="numeric literal" url="ref/numbers.html#l2h-20"/>
+<entry name="numeric object" url="ref/types.html#l2h-72"/>
+<entry name="object" url="ref/objects.html#l2h-24"/>
+<entry name="built-in function" url="ref/types.html#l2h-106"/>
+<entry name="built-in method" url="ref/types.html#l2h-107"/>
+<entry name="callable" url="ref/types.html#l2h-101"/>
+<entry name="class" url="ref/types.html#l2h-108"/>
+<entry name="class instance" url="ref/types.html#l2h-108"/>
+<entry name="code" url="ref/types.html#l2h-124"/>
+<entry name="complex" url="ref/types.html#l2h-78"/>
+<entry name="dictionary" url="ref/types.html#l2h-96"/>
+<entry name="Ellipsis" url="ref/types.html#l2h-71"/>
+<entry name="file" url="ref/types.html#l2h-117"/>
+<entry name="floating point" url="ref/types.html#l2h-77"/>
+<entry name="frame" url="ref/types.html#l2h-126"/>
+<entry name="function" url="ref/types.html#l2h-103"/>
+<entry name="immutable" url="ref/types.html#l2h-82"/>
+<entry name="immutable sequence" url="ref/types.html#l2h-82"/>
+<entry name="instance" url="ref/types.html#l2h-108"/>
+<entry name="integer" url="ref/types.html#l2h-73"/>
+<entry name="list" url="ref/types.html#l2h-93"/>
+<entry name="long integer" url="ref/types.html#l2h-75"/>
+<entry name="mapping" url="ref/types.html#l2h-95"/>
+<entry name="method" url="ref/types.html#l2h-105"/>
+<entry name="module" url="ref/types.html#l2h-109"/>
+<entry name="mutable" url="ref/types.html#l2h-92"/>
+<entry name="mutable sequence" url="ref/types.html#l2h-92"/>
+<entry name="None" url="ref/types.html#l2h-70"/>
+<entry name="numeric" url="ref/types.html#l2h-72"/>
+<entry name="plain integer" url="ref/types.html#l2h-74"/>
+<entry name="recursive" url="ref/string-conversions.html#l2h-279"/>
+<entry name="sequence" url="ref/types.html#l2h-80"/>
+<entry name="slice" url="ref/sequence-types.html#l2h-178"/>
+<entry name="string" url="ref/types.html#l2h-85"/>
+<entry name="object (continued), traceback" url="ref/types.html#l2h-127"/>
+<entry name="object (continued), tuple" url="ref/types.html#l2h-91"/>
+<entry name="object (continued), unicode" url="ref/types.html#l2h-90"/>
+<entry name="object (continued), user-defined function" url="ref/types.html#l2h-103"/>
+<entry name="object (continued), user-defined method" url="ref/types.html#l2h-105"/>
+<entry name="oct() (built-in function)" url="ref/numeric-types.html#l2h-229"/>
+<entry name="octal literal" url="ref/numbers.html#l2h-20"/>
+<entry name="open() (built-in function)" url="ref/types.html#l2h-118"/>
+<entry name="operation, binary arithmetic" url="ref/binary.html#l2h-307"/>
+<entry name="operation, binary bit-wise" url="ref/bitwise.html#l2h-315"/>
+<entry name="operation, Boolean" url="ref/lambda.html#l2h-324"/>
+<entry name="operation, null" url="ref/pass.html#l2h-356"/>
+<entry name="operation, shifting" url="ref/shifting.html#l2h-313"/>
+<entry name="operation, unary arithmetic" url="ref/unary.html#l2h-302"/>
+<entry name="operation, unary bit-wise" url="ref/unary.html#l2h-302"/>
+<entry name="operator, and" url="ref/lambda.html#l2h-326"/>
+<entry name="operator, in" url="ref/comparisons.html#l2h-322"/>
+<entry name="operator, is" url="ref/comparisons.html#l2h-323"/>
+<entry name="operator, is not" url="ref/comparisons.html#l2h-323"/>
+<entry name="operator, not" url="ref/lambda.html#l2h-325"/>
+<entry name="operator, not in" url="ref/comparisons.html#l2h-322"/>
+<entry name="operator, or" url="ref/lambda.html#l2h-327"/>
+<entry name="operator, precedence" url="ref/summary.html#l2h-332"/>
+<entry name="operators" url="ref/operators.html#l2h-21"/>
+<entry name="or, bit-wise" url="ref/bitwise.html#l2h-318"/>
+<entry name="or, exclusive" url="ref/bitwise.html#l2h-317"/>
+<entry name="or, inclusive" url="ref/bitwise.html#l2h-318"/>
+<entry name="or operator" url="ref/lambda.html#l2h-327"/>
+<entry name="ord() (built-in function)" url="ref/types.html#l2h-84"/>
+<entry name="output" url="ref/exprstmts.html#l2h-337"/>
+<entry name="standard" url="ref/exprstmts.html#l2h-337"/>
+<entry name="OverflowError (built-in exception)" url="ref/types.html#l2h-33"/>
+<entry name="packages" url="ref/import.html#l2h-392"/>
+<entry name="parameter, value, default" url="ref/function.html#l2h-430"/>
+<entry name="parenthesized form" url="ref/parenthesized.html#l2h-268"/>
+<entry name="parser" url="ref/lexical.html#l2h-3"/>
+<entry name="Pascal, language" url="ref/for.html#l2h-416"/>
+<entry name="pass statement" url="ref/pass.html#l2h-355"/>
+<entry name="path, module search" url="ref/import.html#l2h-386"/>
+<entry name="physical line" url="ref/logical.html#l2h-5"/>
+<entry name="plain integer literal" url="ref/numbers.html#l2h-20"/>
+<entry name="plain integer object" url="ref/types.html#l2h-74"/>
+<entry name="plus" url="ref/unary.html#l2h-304"/>
+<entry name="pop() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="popen() (in module os)" url="ref/types.html#l2h-51"/>
+<entry name="pow() (built-in function)" url="ref/numeric-types.html#l2h-219"/>
+<entry name="precedence, operator" url="ref/summary.html#l2h-332"/>
+<entry name="primary" url="ref/primaries.html#l2h-281"/>
+<entry name="print statement" url="ref/customization.html#l2h-151"/>
+<entry name="private, names" url="ref/atom-identifiers.html#l2h-265"/>
+<entry name="procedure, call" url="ref/exprstmts.html#l2h-337"/>
+<entry name="program" url="ref/programs.html#l2h-436"/>
+<entry name="quotes, backward" url="ref/customization.html#l2h-149"/>
+<entry name="quotes (continued), reverse" url="ref/customization.html#l2h-149"/>
+<entry name="quotes (continued), raise an exception" url="ref/exceptions.html#l2h-253"/>
+<entry name="quotes (continued), raise statement" url="ref/raise.html#l2h-372"/>
+<entry name="raising, exception" url="ref/raise.html#l2h-373"/>
+<entry name="range() (built-in function)" url="ref/for.html#l2h-416"/>
+<entry name="raw input" url="ref/expression-input.html#l2h-445"/>
+<entry name="raw string" url="ref/strings.html#l2h-16"/>
+<entry name="raw_input() (built-in function)" url="ref/expression-input.html#l2h-445"/>
+<entry name="readline() (file method)" url="ref/expression-input.html#l2h-442"/>
+<entry name="rebinding, name" url="ref/execframes.html#l2h-242"/>
+<entry name="recursive object" url="ref/string-conversions.html#l2h-279"/>
+<entry name="reference, attribute" url="ref/attribute-references.html#l2h-282"/>
+<entry name="reference, reference counting" url="ref/objects.html#l2h-28"/>
+<entry name="reference, remove() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="reference, repr() (built-in function)" url="ref/customization.html#l2h-148"/>
+<entry name="representation, integer" url="ref/types.html#l2h-76"/>
+<entry name="reserved word" url="ref/keywords.html#l2h-12"/>
+<entry name="restricted, execution" url="ref/execframes.html#l2h-248"/>
+<entry name="return statement" url="ref/return.html#l2h-369"/>
+<entry name="reverse, quotes" url="ref/customization.html#l2h-149"/>
+<entry name="reverse() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="RuntimeError exception" url="ref/print.html#l2h-367"/>
+<entry name="search, path, module" url="ref/import.html#l2h-386"/>
+<entry name="sequence, item" url="ref/subscriptions.html#l2h-286"/>
+<entry name="sequence object" url="ref/types.html#l2h-80"/>
+<entry name="shifting, operation" url="ref/shifting.html#l2h-313"/>
+<entry name="simple, statement" url="ref/simple.html#l2h-333"/>
+<entry name="singleton, tuple" url="ref/types.html#l2h-91"/>
+<entry name="slice" url="ref/slicings.html#l2h-288"/>
+<entry name="slice() (built-in function)" url="ref/types.html#l2h-130"/>
+<entry name="slice object" url="ref/sequence-types.html#l2h-178"/>
+<entry name="slicing" url="ref/types.html#l2h-81"/>
+<entry name="assignment" url="ref/assignment.html#l2h-353"/>
+<entry name="extended" url="ref/slicings.html#l2h-292"/>
+<entry name="sort() (sequence object method)" url="ref/sequence-types.html#l2h-168"/>
+<entry name="space" url="ref/indentation.html#l2h-9"/>
+<entry name="special, attribute" url="ref/types.html#l2h-69"/>
+<entry name="special, attribute, generic" url="ref/types.html#l2h-69"/>
+<entry name="stack, execution" url="ref/types.html#l2h-127"/>
+<entry name="stack, trace" url="ref/types.html#l2h-127"/>
+<entry name="standard, output" url="ref/exprstmts.html#l2h-337"/>
+<entry name="Standard C" url="ref/strings.html#l2h-17"/>
+<entry name="standard input" url="ref/programs.html#l2h-439"/>
+<entry name="start (slice object attribute)" url="ref/types.html#l2h-67"/>
+<entry name="statement, assert" url="ref/assert.html#l2h-338"/>
+<entry name="statement, assignment" url="ref/types.html#l2h-92"/>
+<entry name="statement, assignment, augmented" url="ref/augassign.html#l2h-354"/>
+<entry name="statement, break" url="ref/break.html#l2h-375"/>
+<entry name="statement, compound" url="ref/compound.html#l2h-402"/>
+<entry name="statement, continue" url="ref/continue.html#l2h-380"/>
+<entry name="statement, del" url="ref/types.html#l2h-92"/>
+<entry name="statement, exec" url="ref/execframes.html#l2h-249"/>
+<entry name="statement, expression" url="ref/exprstmts.html#l2h-334"/>
+<entry name="statement, for" url="ref/break.html#l2h-376"/>
+<entry name="statement, from" url="ref/execframes.html#l2h-249"/>
+<entry name="statement, global" url="ref/execframes.html#l2h-246"/>
+<entry name="statement, if" url="ref/if.html#l2h-407"/>
+<entry name="statement, import" url="ref/types.html#l2h-109"/>
+<entry name="statement (continued), loop" url="ref/break.html#l2h-376"/>
+<entry name="statement (continued), pass" url="ref/pass.html#l2h-355"/>
+<entry name="statement (continued), print" url="ref/customization.html#l2h-151"/>
+<entry name="statement (continued), raise" url="ref/raise.html#l2h-372"/>
+<entry name="statement (continued), return" url="ref/return.html#l2h-369"/>
+<entry name="statement (continued), simple" url="ref/simple.html#l2h-333"/>
+<entry name="statement (continued), try" url="ref/types.html#l2h-129"/>
+<entry name="statement (continued), while" url="ref/break.html#l2h-376"/>
+<entry name="statement grouping" url="ref/indentation.html#l2h-9"/>
+<entry name="stderr (in module sys)" url="ref/types.html#l2h-55"/>
+<entry name="stdin (in module sys)" url="ref/types.html#l2h-55"/>
+<entry name="stdio" url="ref/types.html#l2h-122"/>
+<entry name="stdout (in module sys)" url="ref/types.html#l2h-55"/>
+<entry name="step (slice object attribute)" url="ref/types.html#l2h-67"/>
+<entry name="stop (slice object attribute)" url="ref/types.html#l2h-67"/>
+<entry name="str() (built-in function)" url="ref/customization.html#l2h-150"/>
+<entry name="string, comparison" url="ref/types.html#l2h-86"/>
+<entry name="string, conversion" url="ref/customization.html#l2h-149"/>
+<entry name="string, item" url="ref/subscriptions.html#l2h-287"/>
+<entry name="string literal" url="ref/strings.html#l2h-14"/>
+<entry name="string object" url="ref/types.html#l2h-85"/>
+<entry name="subscription" url="ref/types.html#l2h-80"/>
+<entry name="assignment" url="ref/assignment.html#l2h-350"/>
+<entry name="subtraction" url="ref/binary.html#l2h-312"/>
+<entry name="suite" url="ref/compound.html#l2h-403"/>
+<entry name="suppression, newline" url="ref/print.html#l2h-365"/>
+<entry name="syntax" url="ref/notation.html#l2h-1"/>
+<entry name="SyntaxError exception" url="ref/import.html#l2h-387"/>
+<entry name="sys (built-in module)" url="ref/print.html#l2h-366"/>
+<entry name="sys.exc_info" url="ref/types.html#l2h-128"/>
+<entry name="sys.exc_traceback" url="ref/types.html#l2h-128"/>
+<entry name="sys.last_traceback" url="ref/types.html#l2h-128"/>
+<entry name="sys.modules" url="ref/import.html#l2h-386"/>
+<entry name="sys.stderr" url="ref/types.html#l2h-121"/>
+<entry name="sys.stdin" url="ref/types.html#l2h-119"/>
+<entry name="sys.stdout" url="ref/types.html#l2h-120"/>
+<entry name="tab" url="ref/indentation.html#l2h-9"/>
+<entry name="target" url="ref/assignment.html#l2h-345"/>
+<entry name="deletion" url="ref/del.html#l2h-358"/>
+<entry name="list" url="ref/assignment.html#l2h-345"/>
+<entry name="list assignment" url="ref/assignment.html#l2h-346"/>
+<entry name="list, deletion" url="ref/del.html#l2h-358"/>
+<entry name="loop control" url="ref/break.html#l2h-378"/>
+<entry name="tb_frame (traceback attribute)" url="ref/types.html#l2h-65"/>
+<entry name="tb_lasti (traceback attribute)" url="ref/types.html#l2h-65"/>
+<entry name="tb_lineno (traceback attribute)" url="ref/types.html#l2h-65"/>
+<entry name="tb_next (traceback attribute)" url="ref/types.html#l2h-65"/>
+<entry name="termination model" url="ref/exceptions.html#l2h-256"/>
+<entry name="test, identity" url="ref/comparisons.html#l2h-323"/>
+<entry name="test, membership" url="ref/comparisons.html#l2h-322"/>
+<entry name="token" url="ref/lexical.html#l2h-3"/>
+<entry name="trace, stack" url="ref/types.html#l2h-127"/>
+<entry name="trace, traceback object" url="ref/types.html#l2h-127"/>
+<entry name="trailing, comma" url="ref/exprlists.html#l2h-331"/>
+<entry name="triple-quoted string" url="ref/strings.html#l2h-16"/>
+<entry name="try statement" url="ref/types.html#l2h-129"/>
+<entry name="tuple, display" url="ref/parenthesized.html#l2h-270"/>
+<entry name="tuple, empty" url="ref/types.html#l2h-91"/>
+<entry name="tuple, singleton" url="ref/types.html#l2h-91"/>
+<entry name="tuple object" url="ref/types.html#l2h-91"/>
+<entry name="type" url="ref/types.html#l2h-68"/>
+<entry name="data" url="ref/types.html#l2h-68"/>
+<entry name="hierarchy" url="ref/types.html#l2h-68"/>
+<entry name="immutable data" url="ref/atom-literals.html#l2h-267"/>
+<entry name="type() (built-in function)" url="ref/objects.html#l2h-26"/>
+<entry name="type of an object" url="ref/objects.html#l2h-27"/>
+<entry name="TypeError exception" url="ref/unary.html#l2h-306"/>
+<entry name="types, internal" url="ref/types.html#l2h-123"/>
+<entry name="unary, arithmetic operation" url="ref/unary.html#l2h-302"/>
+<entry name="unary, bit-wise operation" url="ref/unary.html#l2h-302"/>
+<entry name="unbinding, name" url="ref/execframes.html#l2h-243"/>
+<entry name="unichr() (built-in function)" url="ref/types.html#l2h-87"/>
+<entry name="Unicode" url="ref/types.html#l2h-90"/>
+<entry name="unicode() (built-in function)" url="ref/types.html#l2h-89"/>
+<entry name="unicode object" url="ref/types.html#l2h-90"/>
+<entry name="UNIX" url="ref/programs.html#l2h-439"/>
+<entry name="unreachable object" url="ref/objects.html#l2h-28"/>
+<entry name="unrecognized escape sequence" url="ref/strings.html#l2h-19"/>
+<entry name="update() (mapping object method)" url="ref/sequence-types.html#l2h-166"/>
+<entry name="user-defined, function" url="ref/types.html#l2h-103"/>
+<entry name="user-defined, function call" url="ref/calls.html#l2h-297"/>
+<entry name="user-defined, method" url="ref/types.html#l2h-105"/>
+<entry name="user-defined, module" url="ref/import.html#l2h-386"/>
+<entry name="user-defined function object" url="ref/types.html#l2h-103"/>
+<entry name="user-defined method object" url="ref/types.html#l2h-105"/>
+<entry name="value, default parameter" url="ref/function.html#l2h-430"/>
+<entry name="value of an object" url="ref/objects.html#l2h-27"/>
+<entry name="ValueError exception" url="ref/shifting.html#l2h-314"/>
+<entry name="values, writing" url="ref/exprstmts.html#l2h-337"/>
+<entry name="values() (mapping object method)" url="ref/sequence-types.html#l2h-166"/>
+<entry name="while statement" url="ref/break.html#l2h-376"/>
+<entry name="whitespace" url="ref/indentation.html#l2h-9"/>
+<entry name="writing, values" url="ref/exprstmts.html#l2h-337"/>
+<entry name="xor, bit-wise" url="ref/bitwise.html#l2h-317"/>
+<entry name="xor, ZeroDivisionError exception" url="ref/binary.html#l2h-309"/>
+</index>
 </kdeveloptoc>
 
