@@ -814,7 +814,7 @@ void KMdiMainFrm::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
       m_pDocumentViews->last()->activate(); // all other views are activated by tab switch
     }
   }
-  if (m_mdiMode == KMdi::TabPageMode) {
+  if ((m_mdiMode == KMdi::TabPageMode) || (m_mdiMode==KMdi::IDEAlMode)) {
     if (m_pDocumentViews->count() == 0) {
       if (!m_pDockbaseAreaOfDocumentViews) {
         m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
