@@ -392,7 +392,7 @@ void Warnings1Tab::readFlags(QStringList *list)
 void Warnings1Tab::writeFlags(QStringList *list)
 {
     controller->writeFlags(list);
-    wallBox->readFlags(list);
+    wallBox->writeFlags(list);
 }
 
 
