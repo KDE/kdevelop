@@ -184,9 +184,7 @@ QList<CClassTreeNode> *CClassStore::asForest()
   CClassTreeNode *childNode;
   CClassTreeNode *parentNode;
   QDict<CClassTreeNode> ctDict;
-  QStrList orderList;
   QList<CClassTreeNode> *retVal = new QList<CClassTreeNode>;
-  char *aName;
 
   // Iterate over all parsed classes.
   for( classIterator.toFirst();
@@ -195,6 +193,8 @@ QList<CClassTreeNode> *CClassStore::asForest()
   {
     aClass = classIterator.current();
 
+    debug( "Processing class %s", aClass->name.data() );
+    
     // Check if we have added the child.
     childNode = ctDict.find( aClass->name );
     
@@ -202,11 +202,16 @@ QList<CClassTreeNode> *CClassStore::asForest()
     if( childNode == NULL )
     {
       childNode = new CClassTreeNode();
+
+      debug( " Adding %s to dict", aClass->name.data() );
+
       ctDict.insert( aClass->name, childNode );
-      orderList.inSort( aClass->name );
     }
     else if( !childNode->isInSystem )
-      orderList.remove( childNode->name );
+    {
+      debug( " Removing %s from retVal", childNode->name.data() );
+      retVal->removeRef( childNode );
+    }
     
     // Set childnode values.
     childNode->setName( aClass->name );
@@ -214,8 +219,8 @@ QList<CClassTreeNode> *CClassStore::asForest()
     childNode->setIsInSystem( true );
 
     // If this class has no parent, we add it as a rootnode in the forest.
-    if( aClass->parents.count() == 0 )
-      orderList.inSort( childNode->name );
+    if( aClass->parents.count() == 0)
+      retVal->append( childNode );
     else // Has parents
     {
       // Add this class to its' parents.
@@ -223,6 +228,8 @@ QList<CClassTreeNode> *CClassStore::asForest()
            aParent != NULL;
            aParent = childNode->theClass->parents.next() )
       {
+        debug( " Processing parent %s", aParent->name.data() );
+
         // Check if we have added the parent already.
         parentNode = ctDict.find( aParent->name );
         
@@ -234,21 +241,18 @@ QList<CClassTreeNode> *CClassStore::asForest()
           parentNode->setName( aParent->name );
           parentNode->setIsInSystem( false );
 
-          orderList.inSort( parentNode->name );
+          debug( "  Appending new parent %s to retVal", aParent->name.data() );
+
+          retVal->append( parentNode );
           ctDict.insert( parentNode->name, parentNode );
         }
         
         // Add the child to the parent node.
+        debug( "   Adding %s as child of %s", childNode->name.data(),
+               parentNode->name.data() );
         parentNode->addChild( childNode );
       }
     }
-  }
-
-  for( aName = orderList.first();
-       aName != NULL;
-       aName = orderList.next() )
-  {
-    retVal->append( ctDict.find( aName ) );
   }
 
   return retVal;
