@@ -48,7 +48,7 @@ class CppCodeCompletion : public QObject
 		void slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol );
 		void slotArgHintHided();
 		void slotCompletionBoxHided();
-		void slotTextChanged();
+		void slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol );
 
 	protected:
 		QString getCompletionText ( int nLine, int nCol );
@@ -58,15 +58,17 @@ class CppCodeCompletion : public QObject
 
 		QString createTmpFileForParser (int iLine);
 
-		bool checkIfArgHintIsNeeded ( int nLine, int nCol );
-		QString getClassName ( const QString& strName );
+		//bool checkIfArgHintIsNeeded ( int nLine, int nCol );
+		//QString getClassName ( const QString& strName );
 
-		bool doCodeCompletion ( int nLine, int nCol );
+		//bool doCodeCompletion ( int nLine, int nCol );
+
 		QValueList<KEditor::CompletionEntry> getEntryListForClass ( QString strClass );
 		QValueList<KEditor::CompletionEntry> getEntryListForNamespace ( const QString& strNamespace );
 		QValueList<KEditor::CompletionEntry> getEntryListForStruct ( const QString& strStruct );
 		QValueList<KEditor::CompletionEntry> getEntryListForClassOfNamespace ( QString strClass, const QString& strNamespace );
 
+		/* methods which are called recursively by getEntryListForClass(...) */
 		QList<ParsedMethod>* getParentMethodListForClass ( ParsedClass* pClass, QList<ParsedMethod>* pList );
 		QList<ParsedAttribute>* getParentAttributeListForClass ( ParsedClass* pClass, QList<ParsedAttribute>* pList );
 	private:
@@ -76,7 +78,6 @@ class CppCodeCompletion : public QObject
 		KEditor::CursorDocumentIface* m_pCursorIface;
 		KEditor::EditDocumentIface* m_pEditIface;
 		KEditor::CodeCompletionDocumentIface* m_pCompletionIface;
-		KEditor::Document* m_pDoc;
 
 		KTempFile* m_pTmpFile;
 

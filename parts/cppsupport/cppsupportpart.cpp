@@ -69,10 +69,10 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
                                "this brings you to the corresponding header file.") );
     action->setEnabled(false);
     
-    m_pParser = NULL;
-    m_pCompletion = NULL;
-    m_pEditIface = NULL;
-    m_pCursorIface = NULL;
+    m_pParser = 0;
+    m_pCompletion = 0;
+    m_pEditIface = 0;
+    m_pCursorIface = 0;
 
     withcpp = cpp;
 }
@@ -102,8 +102,9 @@ void CppSupportPart::documentActivated(KEditor::Document *doc)
     actionCollection()->action("edit_switchheader")->setEnabled(enabled);
 
 	m_pEditIface = KEditor::EditDocumentIface::interface(doc);
-	disconnect(m_pEditIface, 0, this, 0 ); // to make sure that it is't connected twice
-	connect(m_pEditIface,SIGNAL(textChanged()),m_pCompletion,SLOT(slotTextChanged()));
+/*	disconnect(m_pEditIface, 0, this, 0 ); // to make sure that it is't connected twice
+	connect(m_pEditIface,SIGNAL(textChanged()),
+			m_pCompletion,SLOT(slotTextChanged()));*/
 
 }
 
@@ -133,8 +134,8 @@ void CppSupportPart::projectClosed()
     if ( m_pCursorIface ) delete m_pCursorIface;*/
     if ( m_pCompletion ) delete m_pCompletion;
 
-    m_pParser = NULL;
-    m_pCompletion = NULL;
+    m_pParser = 0;
+    m_pCompletion = 0;
 /*    m_pEditIface = NULL;
     m_pCursorIface = NULL;*/
 }

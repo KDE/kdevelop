@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#define CodeCompletion 0
+
 #include "cppcodecompletion.h"
 //#include "ParsedVariable.h"
 
@@ -25,6 +27,8 @@
 
 #include <qstring.h>
 #include <qfile.h>
+#include <qstringlist.h>
+#include <qdatastream.h>
 
 CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 {
@@ -34,12 +38,12 @@ CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 	connect ( m_pEditor, SIGNAL ( documentActivated ( KEditor::Document* ) ),
 		this, SLOT ( slotDocumentActivated ( KEditor::Document* ) ) );
 
-	m_pParser = NULL;
-	m_pCursorIface = NULL;
-	m_pEditIface = NULL;
-	m_pCompletionIface = NULL;
+	m_pParser = 0;
+	m_pCursorIface = 0;
+	m_pEditIface = 0;
+	m_pCompletionIface = 0;
 
-	m_pTmpFile = NULL;
+	m_pTmpFile = 0;
 
 	m_bArgHintShow = false;
 	m_bCompletionBoxShow = false;
@@ -65,25 +69,10 @@ void CppCodeCompletion::slotCompletionBoxHided()
 	m_bCompletionBoxShow = false;
 }
 
-void CppCodeCompletion::slotTextChanged()
-{
-	int nLine, nCol;
-	
-	m_pCursorIface->getCursorPosition ( nLine, nCol );
-
-	kdDebug ( 9007 ) << "CppCodeCompletion::slotTextChanged()@" << nLine << ":" << nCol << endl;
-	
-	m_pEditIface = KEditor::EditDocumentIface::interface ( m_pDoc );
-		
-	QString strCurLine = m_pEditIface->line ( nLine );
-	
-	kdDebug ( 9007 ) << "strCurLine => " << strCurLine << endl;
-}
 
 void CppCodeCompletion::slotDocumentActivated ( KEditor::Document* pDoc )
 {
-    m_pDoc = pDoc;
-	
+
 	kdDebug ( 9007 ) << "CppCodeCompletion::slotDocumentActivated" << endl;
 
 	m_pCursorIface = KEditor::CursorDocumentIface::interface ( pDoc );
@@ -93,10 +82,45 @@ void CppCodeCompletion::slotDocumentActivated ( KEditor::Document* pDoc )
 		return;
 	}
 
+	m_pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
+	if ( !m_pEditIface )
+	{
+		kdDebug ( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
+		return;
+	}
+
+	#if CodeCompletion
 	disconnect ( m_pCursorIface, 0, this, 0 ); // to make sure that it isn't connected twice
 	connect ( m_pCursorIface, SIGNAL ( cursorPositionChanged ( KEditor::Document*, int, int ) ),
 		this, SLOT ( slotCursorPositionChanged ( KEditor::Document*, int, int ) ) );
+
+	disconnect ( m_pEditIface, 0, this, 0 ); // to make sure that it isn't connected twice
+	connect ( m_pEditIface, SIGNAL ( textChanged ( KEditor::Document*, int, int ) ),
+		this, SLOT ( slotTextChanged ( KEditor::Document*, int, int ) ) );
+
+	#endif
 }
+
+
+void CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol )
+{
+	/* the code from slotCursorPositionChanged has to be placed here */
+
+	m_pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
+	if ( !m_pEditIface )
+	{
+		kdDebug ( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
+		return;
+	}
+
+	kdDebug ( 9007 ) << "CppCodeCompletion::slotTextChanged()@" << nLine << ":" << nCol << endl;
+
+
+	QString strCurLine = m_pEditIface->line ( nLine );
+
+	kdDebug ( 9007 ) << "strCurLine => " << strCurLine << endl;
+}
+
 
 void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol )
 {
@@ -123,16 +147,10 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 
 	QString strCurLine = m_pEditIface->line ( nLine );
 
-	//kdDebug ( 9007 ) << "Test" << endl;
-
 	if ( !m_pParser ) m_pParser = new CppCCParser ();
 
-	// call when cc is needed: m_pParser->parse ( "foo.tmp.cpp", nLine );
 
-	//m_pParser->setLineToBeParsed ( strCurLine );
-
-	//kdDebug ( 9007 ) << "After regexp => strNodeText: " << m_pParser->getNodeText ( 1 ) << endl;
-
+	// CC for "Namespace::" for example
 	if ( strCurLine.right ( 2 ) == "::" )
 	{
 		int nNodePos = getNodePos ( nLine, nCol );
@@ -174,6 +192,7 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 //	QValueList<KEditor::CompletionEntry> completionList = m_pParser->getReturnTypeOfMethod ( "hallo()" );
 //	pCompletionIface->showCompletionBox ( completionList );
 
+	// CC for "pointer->" for example
 	if ( strCurLine.right ( 2 ) == "->" )
 	{
 		int nNodePos = getNodePos ( nLine, nCol );
@@ -200,23 +219,14 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 		QString strDelimiter = getNodeDelimiter ( nNode, nLine );
 		QString strCText = getCompletionText ( nLine, nCol );
 		
-		kdDebug ( 9007 ) << "strNText: (" << strNText << ")\t" << "strDelimiter: (" << strDelimiter << ")\t" << "strCText: (" << strCText << ")\t" << endl;
-				
-/*		switch ( strDelimiter )
-		{
-			case ".":
-				kdDebug ( 9007 ) << "A signal '.' for code completion was demanded!" << endl;
-				
-			default:
-				kdDebug ( 9007 ) << "It's standard man! Halujulia!" << endl;
-		}*/						
-		
+		//kdDebug ( 9007 ) << "strNText: (" << strNText << ")\t" << "strDelimiter: (" << strDelimiter << ")\t" << "strCText: (" << strCText << ")\t" << endl;
+
 		if ( strDelimiter == "." && strCText.isEmpty() )
 		{
 			kdDebug ( 9007 ) << "A signal '.' for code completion was demanded!" << endl;
 			
 			if ( m_pTmpFile ) delete m_pTmpFile;
-			m_pTmpFile = NULL;
+			m_pTmpFile = 0;
 			if ( !m_pTmpFile ) m_pTmpFile = new KTempFile();
 			if ( m_pTmpFile->status() != 0 ) return;
 
@@ -249,6 +259,46 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 			
 		}
 	}
+
+	if ( strCurLine.right ( 1 ) == "x" )
+	{
+		QFile f( "xxx.txt" );
+
+		if( f.open( IO_WriteOnly ) ){
+			QDataStream s( &f );
+			ParsedClass* c;
+			QStringList* l = m_pStore->getSortedClassNameList( );
+			for( int i = 0; i < l->count( ); i++ ){
+				c = m_pStore->getClassByName( (*l->at( i )) );
+				s << *c;
+			}
+
+
+			f.close();
+
+			f.open ( IO_ReadOnly );
+			QDataStream t ( &f);
+
+			for ( int i = l->count(); i > 0; i-- )
+			{
+				t >> *c;
+				kdDebug ( 9007 ) << "Names of serialized classes: " << c->name() << endl;
+			}
+
+		f.close( );
+
+		}
+	}
+
+/*	if ( strCurLine.right ( 1 ) == "y" )
+	{
+		QFile f ("xxx.txt");
+
+		if ( f.open ( IO_ReadOnly ) )
+		{
+			QDataStream s ( &f);
+			ParsedClass* c;
+*/
 		
 
 /*	if ( strCurLine.right ( 1 ) == "." )
@@ -411,7 +461,7 @@ QString CppCodeCompletion::createTmpFileForParser (int iLine)
 }
 
 
-bool CppCodeCompletion::checkIfArgHintIsNeeded ( int nLine, int nCol )
+/*bool CppCodeCompletion::checkIfArgHintIsNeeded ( int nLine, int nCol )
 {
 	return false;
 }
@@ -476,7 +526,7 @@ bool CppCodeCompletion::doCodeCompletion ( int nLine, int nCol )
 	}
 
 	return false;
-}
+}*/
 
 
 
