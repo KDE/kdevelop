@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY kdevelop "<application>KDevelop</application>">
+  <!ENTITY kdevelop "<application>KDevelop 3.0</application>">
   <!ENTITY grep "<command>grep</command>">
   <!ENTITY egrep "<command>egrep</command>">
   <!ENTITY ctags "<command>ctags</command>">
@@ -26,7 +26,7 @@
 <bookinfo>
 <title>&kdevelop; Documentation</title>
 
-<date>2002-11-25</date>
+<date>2002-12-13</date>
 <releaseinfo>3.0</releaseinfo>
 
 <authorgroup>
@@ -68,8 +68,10 @@ Development Environment (Gideon)</para>
 
 </bookinfo>
 
-<chapter id="overview">
-<title>Overview: Development on UNIX</title>
+<chapter id="unixdev">
+<title>Development on UNIX</title>
+<sect1 id="overview-unixdev">
+<title>Overview</title>
 
 <para>
 From the beginning, UNIX has maintained two very different development
@@ -127,9 +129,8 @@ they all have implementations that are freely distributable.
 <para>
 
 </para>
-
-
-<simplesect id="overview-buildsystems">
+</sect1>
+<sect1 id="overview-buildsystems">
 <title>Build systems</title>
 
 <para>
@@ -145,7 +146,7 @@ header file, you need to compile all files which include this header file.
 </para>
 
 <para>
-A tool which takes care of recompilations is <command>make</command>.
+One tool which takes care of recompilations is <command>make</command>.
 It takes as input a so-called <filename>Makefile</filename>, which declares
 some <emphasis>targets</emphasis>, the commands which are to be executed
 to "make" the target, and a set of <emphasis>dependencies</emphasis>. We
@@ -156,16 +157,19 @@ the build system can be useful. See the <ulink url="info://make/Top">
 <citetitle>GNU Make Manual</citetitle></ulink>.
 </para>
 
-</simplesect>
+</sect1>
 
 
-<simplesect id="overview-guidevelopment">
+<sect1 id="overview-guidevelopment">
 <title>GUI Development</title>
-
 <para>
+Application development becomes even more difficult when having to design not only the
+underlying features, but also the user interface.  Creating a graphical interface that
+not only accomplishes all of the desired features of the program but is also effective,
+clean, and robust is a major challenge.
 </para>
 
-</simplesect>
+</sect1>
 
 </chapter>
 
@@ -174,10 +178,10 @@ the build system can be useful. See the <ulink url="info://make/Top">
 <title>&kdevelop; Overview</title>
 
 <sect1 id="howto">
-<title>How to obtain KDevelop</title>
+<title>How to obtain &kdevelop;</title>
 <para>
 &kdevelop; can be found via the project home page at <ulink url="http://www.kdevelop.org">
-http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">KDE ftp site</ulink>
+http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">KDE ftp site</ulink>.
 &kdevelop; is also available from many different Linux distributions.
 </para>
 
@@ -401,8 +405,8 @@ The distribution of your applications does not require the end-user to have anyt
 other than a C++ compiler and the appropriate development libraries, which is most often the case; but
 ou can as well distribut binary packages of your application.  In either way, the end-user of your product
 does not have to have &kdevelop; installed.  For giving away your sources, we advise to include the 
-project file of &kdevelop; as well, as this makes it very easy for other developerss to work with your
-sources if they use KDevelop as well.  For projects where several developers, maybe working on different
+project file of &kdevelop; as well, as this makes it very easy for other developers to work with your
+sources if they use &kdevelop; as well.  For projects where several developers, maybe working on different
 places, are involved, this should be the case anyway to ensure consistency of the Makefiles so you don't
 run into trouble.  Especially on multi language applications, translators won't actually work with the
 source code, except in cases that require correction for enabling translation support.
