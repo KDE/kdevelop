@@ -1,8 +1,10 @@
+2000-01-25 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added KDE 2 MDI frameapp to appwizard --needs qt-2.1 like KDE2 CVS version
+
 2000-01-25 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* commited patch (bugfix) by Alexis Mikhalov, (coutputwidget.cpp (insertAtEnd))
 	* fixed problem with CFLAGS und CXXFLAGS in mixed C/C++ projects
 	* removed -fsyntax-only from the project options, because of problems with configure
-	
 	
 2000-01-25 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* fixing "Add existing file to project" problem

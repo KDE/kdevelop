@@ -34,15 +34,8 @@ else {
   #start configure
   printflush (STDOUT,"make configure...\n");
   chdir ($overDirectory);
-	if ($processes{APPLICATION} eq "qt2normal") {
-	  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
-	
-	}
-	elsif ($processes{APPLICATION} eq "kde2normal") {
-	  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
-	
-	}
-	elsif ($processes{APPLICATION} eq "kde2mini") {
+	if ($processes{APPLICATION} eq "qt2normal" || $processes{APPLICATION} eq "kde2normal" ||
+			$processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2mdi") {
 	  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
 	
 	}
