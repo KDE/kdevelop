@@ -64,7 +64,7 @@
 #include "config.h"
 #include "domutil.h"
 
-#if __GLIBC__
+#if defined(__GLIBC__)
 #include <malloc.h>
 void showMemUsage()
 {
