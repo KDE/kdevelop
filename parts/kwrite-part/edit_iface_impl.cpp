@@ -11,6 +11,7 @@
 EditIfaceImpl::EditIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor::Editor *editor)
   : EditDocumentIface(parent, editor), m_edit(edit)
 {
+  connect(m_edit->doc(),SIGNAL(textChanged()),SIGNAL(textChanged()));
 }
 
 

@@ -705,6 +705,7 @@ void KWriteDoc::insert(VConfig &c, const QString &s) {
   recordInsert(c, buf);
   c.cursor.x += buf.length();
   recordEnd(c);
+  emit textChanged();
 }
 
 void KWriteDoc::insertFile(VConfig &c, QIODevice &dev)
@@ -734,6 +735,7 @@ void KWriteDoc::insertFile(VConfig &c, QIODevice &dev)
 
   recordInsert(c, buf);
   recordEnd(c);
+  emit textChanged();
 }
 
 #ifdef NEW_CODE
@@ -983,6 +985,7 @@ bool KWriteDoc::insertChars(VConfig &c, const QString &chars) {
     } while (true);
   }
   recordEnd(c);
+  emit textChanged();
   return true;
 }
 
@@ -1035,6 +1038,7 @@ void KWriteDoc::newLine(VConfig &c) {
   }
 
   recordEnd(c);
+  emit textChanged();
 }
 
 void KWriteDoc::killLine(VConfig &c) {
@@ -1046,6 +1050,7 @@ void KWriteDoc::killLine(VConfig &c) {
     recordAction(KWAction::killLine, c.cursor);
   }
   recordEnd(c);
+  emit textChanged();
 }
 
 void KWriteDoc::backspace(VConfig &c) {
@@ -1089,6 +1094,7 @@ void KWriteDoc::backspace(VConfig &c) {
     recordAction(KWAction::delLine,c.cursor);
   }
   recordEnd(c);
+  emit textChanged();
 }
 
 
@@ -1109,6 +1115,7 @@ void KWriteDoc::del(VConfig &c) {
       recordEnd(c);
     }
   }
+  emit textChanged();
 }
 
 void KWriteDoc::clear() {
@@ -1149,6 +1156,7 @@ void KWriteDoc::clear() {
   currentUndo = 0;
 //  recordReset();
   newUndo();
+  emit textChanged();
 }
 
 void KWriteDoc::cut(VConfig &c) {
@@ -1158,6 +1166,7 @@ void KWriteDoc::cut(VConfig &c) {
 //  unmarkFound();
   copy(c.flags);
   delMarkedText(c);
+  emit textChanged();
 }
 
 void KWriteDoc::copy(int flags) {
@@ -1489,6 +1498,7 @@ void KWriteDoc::doIndent(VConfig &c, int change) {
   }
   // recordEnd now removes empty undo records
   recordEnd(c.view, c.cursor, c.flags | KWrite::cfPersistent);
+  emit textChanged();
 }
 
 /*
@@ -1567,6 +1577,7 @@ void KWriteDoc::doCommentLine(PointStruc &cursor) {
     recordReplace(cursor, 0, endComment);
     cursor.x = 0;
   }
+  emit textChanged();
 }
 
 void KWriteDoc::doUncommentLine(PointStruc &cursor) {
@@ -1610,6 +1621,7 @@ void KWriteDoc::doUncommentLine(PointStruc &cursor) {
       cursor.x = 0;
     }
   }
+  emit textChanged();
 }
 
 void KWriteDoc::doComment(VConfig &c, int change) {
@@ -1644,6 +1656,7 @@ void KWriteDoc::doComment(VConfig &c, int change) {
   }
 
   recordEnd(c.view, c.cursor, c.flags | KWrite::cfPersistent);
+  emit textChanged();
 }
 
 
@@ -1783,7 +1796,7 @@ void KWriteDoc::delMarkedText(VConfig &c/*, bool undo*/) {
 
   selectEnd = -1;
   select.x = -1;
-
+  emit textChanged();
   /*if (undo)*/ recordEnd(c);
 }
 

@@ -99,6 +99,9 @@ class KDevArgHint : public QFrame
 		  /** No descriptions */
 		void updateState();
 		QString markCurArg();
+		
+ signals:
+		void argHintHided();
 };
 
 #endif

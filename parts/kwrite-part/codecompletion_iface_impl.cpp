@@ -44,6 +44,7 @@ CodeCompletionIfaceImpl::CodeCompletionIfaceImpl(KWrite *edit, KEditor::Document
   m_completionListBox->setFont(QFont(font.family(),font.pointSize()));
 
   m_pArgHint = new KDevArgHint ( m_edit );
+  connect(m_pArgHint,SIGNAL(argHintHided()),SIGNAL(argHintHided()));
 
   connect(edit, SIGNAL ( newCurPos() ), this, SLOT ( slotCursorPosChanged () ) );
 }
@@ -94,11 +95,11 @@ bool CodeCompletionIfaceImpl::eventFilter( QObject *o, QEvent *e ){
 	  int len = m_edit->currentColumn() - m_colCursor;
 	  QString currentComplText = currentLine.mid(m_colCursor,len);
 	  QString add = text.mid(currentComplText.length());
-	  if(item->m_entry.postfix == "()"){ // add ()
-	    m_edit->insertText(add + "()");
-	    VConfig c;
-	    m_edit->view()->getVConfig(c);
-	    m_edit->view()->cursorLeft(c);
+	  if(item->m_entry.postfix == "()"){ // add (
+	    m_edit->insertText(add + "(");
+	    //	    VConfig c;
+	    //	    m_edit->view()->getVConfig(c);
+	    //	    m_edit->view()->cursorLeft(c);
 	  }
 	  else{
 	    m_edit->insertText(add);
@@ -191,7 +192,7 @@ void CodeCompletionIfaceImpl::showArgHint ( QStringList functionList, const QStr
 
 		nNum++;
 	}
-
+	m_edit->view()->paintCursor();
 	m_pArgHint->move(m_edit->view()->mapToGlobal(m_edit->view()->getCursorCoordinates()));
 	m_pArgHint->show();
 

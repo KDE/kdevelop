@@ -135,12 +135,12 @@ KDevArgHint::~KDevArgHint()
 /** No descriptions */
 void KDevArgHint::gotoPrev()
 {
-	if ( m_nCurFunc > 0 )
-		m_nCurFunc--;
-	else
-		m_nCurFunc = m_nNumFunc - 1;
-
-	updateState();
+  if ( m_nCurFunc > 0 )
+    m_nCurFunc--;
+  else
+    m_nCurFunc = m_nNumFunc - 1;
+  
+  updateState();
 }
 
 /** No descriptions */
@@ -196,11 +196,9 @@ void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, in
 	if ( m_nCurLine > 0 && m_nCurLine != nLine)
 	{
 		hide();
+		emit argHintHided();
 		return;
 	}
-	else if ( m_nCurLine == nLine )
-		show();
-
 	KEditor::EditDocumentIface* pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
 	if ( !pEditIface )
 	{
@@ -211,6 +209,7 @@ void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, in
 	if ( pEditIface->hasSelectedText() )
 	{
 		hide();
+		emit argHintHided();
 		return;
 	}
 
@@ -229,16 +228,14 @@ void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, in
 	//nBegin != -1 && strLineAfterCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // the first wrap was found before the cursor and the second beyond
 	{
 		hide();
+		emit argHintHided();
 		//m_nCurLine = 0; // reset m_nCurLine so that ArgHint is finished
 	}
-	else if ( nBegin != -1 )
-		show();
-
 	int nCountDelimiter = 0;
 
 	while ( nBegin != -1 )
 	{
-		nBegin = strLineToCursor.find ( m_strArgDelimiter, nBegin + 1 );
+	  nBegin = strLineToCursor.find ( m_strArgDelimiter, nBegin + 1 );
 
 		if ( nBegin != -1 )
 			nCountDelimiter++;

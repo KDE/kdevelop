@@ -167,6 +167,7 @@ class KWriteDoc : public KTextEditor::Document {
     void selectionChanged();
     void highlightChanged();
     void modifiedChanged ();
+    void textChanged();
 
   // search stuff
   protected:
