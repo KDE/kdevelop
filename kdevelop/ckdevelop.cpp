@@ -514,7 +514,9 @@ void CKDevelop::slotEditSearchText(){
       text = edit_widget->currentWord();
     }
   }
-  slotEditSearchInFiles(text);
+
+  if (!text.isEmpty())
+    slotEditSearchInFiles(text);
   slotStatusMsg(i18n("Ready."));
 }
 
