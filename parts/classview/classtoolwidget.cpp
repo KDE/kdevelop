@@ -19,7 +19,6 @@
 #include "classstore.h"
 #include "classtoolwidget.h"
 
-
 ClassToolWidget::ClassToolWidget(ClassViewPart *part, QWidget *parent)
     : ClassTreeBase(part, parent, "class tool widget")
 {}
@@ -87,7 +86,7 @@ void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, QList<Pars
 void ClassToolWidget::addClassAndAttributes(ParsedClass *parsedClass, PIAccess filter, ClassTreeItem **lastItem)
 {
     *lastItem = new ClassTreeClassItem(this, *lastItem, parsedClass);
-    
+
     ClassTreeItem *ilastItem = 0;
     
     QList<ParsedAttribute> *attrList = parsedClass->getSortedAttributeList();
@@ -99,7 +98,7 @@ void ClassToolWidget::addClassAndAttributes(ParsedClass *parsedClass, PIAccess f
                 ilastItem = new ClassTreeAttrItem(*lastItem, ilastItem, pAttr);
         }
     delete attrList;
-    
+
     if (!(*lastItem)->firstChild())
         (*lastItem)->setExpandable(false);
     else
@@ -151,8 +150,7 @@ void ClassToolWidget::insertAllClassMethods(ParsedClass *parsedClass, PIAccess f
 
 void ClassToolWidget::insertAllClassAttributes(ParsedClass *parsedClass, PIAccess filter)
 {
-    ClassTreeItem *lastItem;
-    
+    ClassTreeItem *lastItem = 0;
     // First treat all parents.
     for ( ParsedParent *pParent = parsedClass->parents.first();
           pParent != 0;

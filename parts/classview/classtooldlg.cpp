@@ -63,13 +63,13 @@ ClassToolDialog::ClassToolDialog( ClassViewPart *part )
     QToolTip::add(suppliers_button, i18n("Show suppliers"));
     
     methods_button = new QToolButton(this);
-    methods_button->setPixmap( UserIcon("CTpublic_meth", KIcon::DefaultState, ClassViewFactory::instance()) );
+    methods_button->setPixmap( UserIcon("CVpublic_meth", KIcon::DefaultState, ClassViewFactory::instance()) );
     methods_button->setToggleButton(true);
     methods_button->setFixedSize(methods_button->sizeHint());
     QToolTip::add(methods_button, i18n("Show methods"));
     
     attributes_button = new QToolButton(this);
-    attributes_button->setPixmap( UserIcon("CTpublic_var", KIcon::DefaultState, ClassViewFactory::instance()) );
+    attributes_button->setPixmap( UserIcon("CVpublic_var", KIcon::DefaultState, ClassViewFactory::instance()) );
     attributes_button->setToggleButton(true);
     attributes_button->setFixedSize(attributes_button->sizeHint());
     QToolTip::add(attributes_button, i18n("Show attributes"));
