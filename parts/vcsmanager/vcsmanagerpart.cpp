@@ -108,14 +108,11 @@ void VCSManagerPart::loadVCSPlugin()
 	unloadVCSPlugin();
 
 	QDomDocument & dom = *projectDom();
-	QString vcsplugin = DomUtil::readEntry( dom, "/general/versioncontrol" ).stripWhiteSpace();
-	if ( vcsplugin.isEmpty() ) return;
+	m_vcsPluginName = DomUtil::readEntry( dom, "/general/versioncontrol" ).stripWhiteSpace();
+	if ( m_vcsPluginName.isEmpty() ) return;
 	
-	QString constraint = QString( "DesktopEntryName=='%1'" ).arg( vcsplugin );
-	if ( pluginController()->loadPlugin( "KDevelop/VersionControl", constraint ) )
-	{
-		m_vcsPluginName = vcsplugin;
-	}
+	QString constraint = QString( "DesktopEntryName=='%1'" ).arg( m_vcsPluginName );
+	pluginController()->loadPlugin( "KDevelop/VersionControl", constraint );
 }
 
 void VCSManagerPart::unloadVCSPlugin()
