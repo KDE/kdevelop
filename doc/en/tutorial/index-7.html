@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Application Tutorials: Copyright </TITLE>
+<TITLE>KDE Application Tutorials: Extending the GUI</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -14,36 +14,182 @@
  
 <P ALIGN="RIGHT">
 
-Next<A HREF="index-6.html">Previous</A>
+<A HREF="index-8.html">Next</A>
+<A HREF="index-6.html">Previous</A>
 <A HREF="index.html#toc7">Table of Contents</A>
 </P>
-<H3><A NAME="Copyright"></A> <A NAME="s7">7. Copyright </A> </H3>
+<H3><A NAME="s7">7. Extending the GUI</A></H3>
+
+<P>As we have seen, we have already provided KScribble the ability to open and save pictures with the document class and enabled user
+interaction by overwriting virtual methods in the view class and we gained the first functionaliy - we can draw pictures as well. But
+when we created the QPen instance in the document class, we set some pre-defined values for the pen; the color is black and the pen
+width set to 3 pixels. As you usually want to change these values in a drawing application, we have to enhance the main GUI by
+providing ways to set these, according to the currently active window and document connected to it. This chapter will therefore
+introduce you to:
+<P>
+<UL>
+<LI>adding a new menu to the menubar</LI>
+<LI>extending the toolbar with icons for the actions defined in the menubar</LI>
+<LI>creating a new dialog with the KDevelop Dialogeditor</LI>
+<LI>connecting the new commands of the menubar and toolbar to calling the dialogs.</LI>
+<LI>enabling the document class to let us change the pen values</LI>
+</UL>
+<P>Further, we also add a method to delete the document contents at all with a menubar command.
+<P>
+<H3><A NAME="ss7.1">7.1 Adding the "Pen" Menu</A>
+</H3>
 
 <P>
-<BLOCKQUOTE><CODE>
+<P>As the title of this section says, we will add a menu for setting the pen values of the documents here. Menus that are inserted into
+the menubar are instances of QPopupMenu, and you can have a look at how the current menubar is created when you switch to the
+KScribbleApp class, method <CODE>initMenubar()</CODE>. You will see that the menubar items are created in the order they appear on the
+menubar - but this isn't necessary. There are two things important on how the menubar will look like:
+<UL>
+<LI>in the menus the order of the menuitems</LI>
+<LI>in the menubar the order of inserting the popup menus.</LI>
+</UL>
+<P>Last but not least you have to create menus first with calling the constructor. The class declaration already contains the pointers to
+the popup menus, so we will have to add our "Pen" menu here first:
+<P>
+<HR>
 <PRE>
+kscribbleapp.h
 
-KDevelop Copyright 1998,1999 The KDevelop Team.
+class KScribbleApp
+{
+.
+.
+  private:
+    QPopupMenu* pPenMenu;
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+}
 </PRE>
-</CODE></BLOCKQUOTE>
+<HR>
+<P>Now we are going to create the menu itself. Change to the implementation of the method <CODE>KScribbleApp::initMenuBar()</CODE> and add the
+lines marked with an arrow:
+<P>
+<HR>
+<PRE>
+void KScribbleApp::initMenuBar()
+{
+..
+
+->  ///////////////////////////////////////////////////////////////////
+->  // menuBar entry pen-Menu
+->  pPenMenu = new QPopupMenu();
+->  pPenMenu->insertItem(i18n("&amp;Color"), ID_PEN_COLOR);
+->  pPenMenu->insertItem(i18n("&amp;Brush"), ID_PEN_BRUSH);
+
+    menuBar()->insertItem(i18n("&amp;Edit"), pEditMenu);
+->  menuBar()->insertItem(i18n("&amp;Pen"), pPenMenu);
+    menuBar()->insertItem(i18n("&amp;View"), pViewMenu);
+
+
+->  connect(pPenMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
+->  connect(pPenMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+}
+</PRE>
+<HR>
+<P>You see that we first create the menu with <CODE>new QPopupMenu()</CODE>. Then we use the insertItem methods to add two menu entries, Color
+and Brush. The visible commands are inserted with the method i18n(), which ensures that you can internationalize your appliction. So as
+a general rule, you would declare all visual text that will appear later by the method i18n(). Qt-only programs using Qt > 2.0 would
+use the according method tr() instead of i18n(), as Qt has it's own ways of internationalizing applications. The second argument is a
+macro, the ID of the menubar item. This ID is a number that we have to set using #define in the file resource.h, where you will see all
+other already used ID's declared. There are also other ways to insert menus by directly connecting a slot to the inserted entry, but
+the application framework uses ID's to select which action has been activated- and highlighted. Therefore each menu entry, independent
+of the popup menu it appears, has to be a unique number, and as we can hardly remember numbers later, setting a #define for the ID is a
+nice solution. The popup menu is now inserted into the menubar with insertItem() as well, and with the pointer to the menu as second
+argument.
+Note that we inserted the popup menu after the "Edit" menu and before the "View" menu, so it will appear between those menus later in
+the menubar. What is also important when creating menus is that they should be available to the user with shortcuts; ususally in menus
+you will see underlined characters that the user can jump to directly by pressing ALT and the according underlined letter of the
+menuitem. As a programmer, you have to set this character by a leading ampersand, so the "Pen" menu will later be accessible via the
+keyboard by pressing ALT+P. Within the menu, the user can press another button to go directly to the command he wants to, so in the
+menu all items should have this kind of shortcuts as well. Note that you should write item insertions together in groups that have the
+same visible access, so you can keep a better overview of the characters you already used so that there are no menu accelerators used
+twice. (this is also important for your translators: in other languages the used accelerator may not be available in the translated
+word, so they have to set some accelerators again.)
+<P>In the last two lines we're connecting the pen menu with two slots: one for when the menu signals that it is activated and the action
+should be executed, and one for when it is highlighted. That allows making a statusbar help message available for the user. You can
+have a look at the methods the menu is connected to, they contain switch statements where the sent menu ID is compared and the
+following action called.
+<P>What is left to do is to add the #define statements to the file resource.h:
+<P>
+<HR>
+<PRE>
+resource.h
+
+///////////////////////////////////////////////////////////////////
+// Pen-menu entries
+#define ID_PEN_COLOR                14010
+#define ID_PEN_BRUSH                14020
+</PRE>
+<HR>
+<P>You will see that the numbers are unique for these entries- you have to watch out not to set the same number for two entries- but if it
+happens by accident, there's still the compiler that informs you about redefining.
+<P>This is currently all you have to do to add a new menu for your menubar. The actions they will execute are: "Color" will call a color
+selection dialog, "Brush" will call a dialog (which we still have to create) to select the brush width.
+<P>But first we'll extend the toolbar as well by two icons for these actions in the next section.
+<P>
+<H3><A NAME="ss7.2">7.2 Adding Toolbar Buttons</A>
+</H3>
+
+<P>
+<P>Whenever you think that some new commands should be made available by toolbar buttons as well because they are often used and you want
+to offer additional functionality, you can easily do that by adding buttons in the framework's initToolBar() method of the App class.
+Here, we decide to add a button for both menu entries in the Pen-menu, but those need icons - which you can either find in the KDE
+directory /toolbar or, when you don't find an icon that matches your action, have to create yourself. KIconEdit is very suitable to
+paint icons, so we will first create them. Choose "New" from the KDevelop "File" menu and select "Icon" as the filetype. The first icon
+will be named "pencolor.xpm". Now we have to select where we want to have the icon created in our project directory. Press the
+directory selection button and change to your project directory containing the KScribble sources. Then create a new directory
+"toolbar". Change to that directory and press "OK". The new icon will then be created in the new directory "toolbar" and will be opened
+by KIconEdit within KDevelop automatically. Paint something that will signalize the user what the button is intended to do, save the
+pixmap and then switch to the RFV / LFV in KDevelop. Select the icon by a right mouse button press and select "Properties" from the
+popup menu. You will see that the icon is included in the distribution, but for your program to find the icon again later, you have to
+set the installation destination as well. Check the "install" option and enter into the line now active below:
+<P>$(kde_datadir)/kscribble/toolbar/pencolor.xpm
+<P>This will install the pixmap in the KDE file system hierarchy's data directory, where each application has its subdirectory containing
+additional files needed by the application. Icons have to be installed into another subdirectory "toolbar", so the application's icon
+loader can find the pixmaps for your program.
+<P>After you're finished, repeat all these above steps with the second icon for selecting the pen width. Name this pixmap "penwidth.xpm".
+<P>Now we only have to insert the buttons into the toolbar; add the lines marked with the arrow into your code:
+<P>
+<HR>
+<PRE>
+void KScribbleApp::initToolBar()
+{
+..
+    toolBar()->insertButton(BarIcon("editcopy"), ID_EDIT_COPY, true, i18n("Copy"));
+    toolBar()->insertButton(BarIcon("editpaste"), ID_EDIT_PASTE, true, i18n("Paste"));
+    toolBar()->insertSeparator();
+->  toolBar()->insertButton(BarIcon("pencolor"), ID_PEN_COLOR, true, i18n("Color") );
+->  toolBar()->insertButton(BarIcon("penwidth"), ID_PEN_BRUSH, true, i18n("Width") );
+->  toolBar()->insertSeparator();
+    toolBar()->insertButton(BarIcon("help"), ID_HELP_CONTENTS, SIGNAL(clicked()),
+..
+}
+</PRE>
+<HR>
+
+Here, we use the methods of KToolBar to insert buttons. The first argument, BarIcon(), tells the method to load the icon for the
+button. What seems unusual is that we don't have to care for the file extension. The preferred format for KDE 2 is *.PNG, but it works
+with xpm's as well as KIconEdit doesn't offer PNG format saving. (You could use ImageMagick for that as well which can do that- or use
+KScribble in a later step to convert your icons to PNG !)
+<P>The second argument is again the ID. The commands are then automatically activated, as the toolBar() is already connected to the same
+methods the menubar is for signal activated(). The third argument stands for "available" when true, "deactivated" when false; as we
+want to have these available, we set this to true. At last, we add a tooltip for the the buttons, which we also embrace with i18n() to
+allow internationalization.
+<P>Now you're done for now- the GUI is extended at least visually. You can compile and run KScribble again and see how it looks like- of
+course the new items in the menubar and toolbar can't execute any action - that is what we're going to add in the next chapter.
+You will also note that the toolbar icons we added are not displayed - which is because we didn't install KScribble and so they can't
+be found. All other used icons are already shipped with the KDE libraries, so these are already visible.
+<P>
+<P>
 <P>
 <P ALIGN="RIGHT">
 
-Next<A HREF="index-6.html">Previous</A>
+<A HREF="index-8.html">Next</A>
+<A HREF="index-6.html">Previous</A>
 <A HREF="index.html#toc7">Table of Contents</A>
 </P>
 <CENTER>
