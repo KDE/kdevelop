@@ -42,7 +42,9 @@ using namespace std;
  *   -
  *-----------------------------------------------------------------*/
 ParsedClass::ParsedClass()
-    : slotIterator( slotList ),
+    : slotList(),
+      signalList(),
+      slotIterator( slotList ),
       signalIterator( signalList )
 {
     setItemType( PIT_CLASS );

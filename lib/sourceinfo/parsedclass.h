@@ -40,6 +40,14 @@ public:
     ParsedClass();
     ~ParsedClass();
     
+private:
+    // those need to be defined/initialized before the iterators!
+    /** List of all slots. */
+    QPtrList<ParsedMethod> slotList;
+
+    /** List of all signals. */
+    QPtrList<ParsedMethod> signalList;
+
 public:
     
     /** List with names of parent classes(if any). */
@@ -154,14 +162,8 @@ public:
 
 private:
     
-    /** List of all slots. */
-    QPtrList<ParsedMethod> slotList;
-    
     /** All slots ordered by name and argument. */
     QDict<ParsedMethod> slotsByNameAndArg;
-    
-    /** List of all signals. */
-    QPtrList<ParsedMethod> signalList;
     
     /** All signals ordered by name and argument. */
     QDict<ParsedMethod> signalsByNameAndArg;
