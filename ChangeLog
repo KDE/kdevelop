@@ -6,6 +6,7 @@
 	  the user enters the path by line editing.
 	* Doc-Tree refresh if any path in the menu-setup-dialog
 	  is changed.
+	* solving problem with F-keys 
 
 1999-09-22 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* bug-fix: generation of new documentation
