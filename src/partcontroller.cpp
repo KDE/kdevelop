@@ -415,6 +415,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
 
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
+  connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotFileNameChanged()));
 }
 
 
@@ -422,17 +423,28 @@ void PartController::slotUploadFinished()
 {
   const KParts::ReadOnlyPart *ro_part = dynamic_cast<const KParts::ReadOnlyPart*>(sender());
 
-  if (ro_part && ro_part->url().isLocalFile()) {
-      QString path = ro_part->url().path();
-      // can't use KDirWatch's ctime here since it might not be updated yet
-//      accessTimeMap[ ro_part ] = dirWatcher->ctime( path );
-      QFileInfo fi( path );
+  if (!ro_part || !ro_part->url().isLocalFile())
+    return;
+
+  QString path = ro_part->url().path();
+  // can't use KDirWatch's ctime here since it might not be updated yet
+  QFileInfo fi( path );
 //      kdDebug(9000) << "*** uploadFinished() " << fi.lastModified().toString( "mm:ss:zzz" ) << endl;
-      accessTimeMap[ ro_part ] = fi.lastModified();
-      emit savedFile( path );
-  }
+  accessTimeMap[ ro_part ] = fi.lastModified();
+  emit savedFile( path );
 }
 
+void PartController::slotFileNameChanged()
+{
+  const KParts::ReadOnlyPart *ro_part = dynamic_cast<const KParts::ReadOnlyPart*>(sender());
+
+  if ( !ro_part || !ro_part->url().isLocalFile() )
+      return;
+
+  QString path = ro_part->url().path();
+  accessTimeMap[ ro_part ] = dirWatcher->ctime( path );
+  emit fileDirty( path );
+}
 
 QPopupMenu *PartController::contextPopupMenu()
 {
@@ -598,6 +610,8 @@ void PartController::revertFile(KParts::Part *part)
 
   if (part->inherits("KParts::ReadWritePart")) {
       KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
+      if ( rw_part->url().isLocalFile() )
+          accessTimeMap[ static_cast<KParts::ReadOnlyPart*>(part) ] = dirWatcher->ctime( rw_part->url().path() );
       rw_part->openURL(rw_part->url());
     }
 }

@@ -89,6 +89,7 @@ private slots:
   void slotSwitchTo();
 
   void slotUploadFinished();
+  void slotFileNameChanged();
 
   void updateMenuItems();
   void saveState( KParts::Part* part );
