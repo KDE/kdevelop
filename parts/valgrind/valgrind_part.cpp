@@ -223,7 +223,7 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
 
 //  proc->setWorkingDirectory(KURL(exec).directory());
   proc->clearArguments();
-  *proc << valExec << valParams << exec << params;
+  *proc << valExec << "--tool=memcheck" << valParams << exec << params;
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
   mainWindow()->raiseView( m_widget );
   core()->running( this, true );
