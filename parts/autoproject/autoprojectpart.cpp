@@ -269,7 +269,12 @@ QString AutoProjectPart::buildDirectory()
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
 
     QString builddir = DomUtil::readEntry(dom, prefix + "builddir");
-    return builddir.isEmpty()? projectDirectory() : builddir;
+    if (builddir.isEmpty())
+        return projectDirectory();
+    else if (builddir.startsWith("/"))
+        return builddir;
+    else
+        return projectDirectory() + "/" + builddir;
 }
 
 
