@@ -1,0 +1,4 @@
+Integrates Clearcase configuration management system into KDevelop.
+Based on Perforce implementation by Harald Fernengel <harry@kdevelop.org>
+
+Author: Ajay Guleria <ajay_guleria at yahoo dot com>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=ClearCase Integration
+Name=KDevClearCase
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevclearcase
+X-KDevelop-Scope=Project
