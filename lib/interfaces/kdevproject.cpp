@@ -21,6 +21,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+
+#include <kdebug.h>
+
 #include "kdevproject.h"
 #include <urlutil.h>
 #include <qfileinfo.h>
@@ -28,9 +31,13 @@
 KDevProject::KDevProject( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
     : KDevPlugin( pluginName, icon, parent, name)
 {
-    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotBuildFileMap()) );
-    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotBuildFileMap()) );
-    connect( this, SIGNAL(changedFilesInProject(const QStringList& )), this, SLOT(slotBuildFileMap()) );
+//    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotBuildFileMap()) ); // too expensive
+//    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotBuildFileMap()) ); // too expensive
+
+//    connect( this, SIGNAL(changedFilesInProject(const QStringList& )), this, SLOT(slotBuildFileMap()) ); // no reason for this one
+
+    connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotAddFilesToFileMap(const QStringList& )) ); 
+    connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotRemoveFilesFromFileMap(const QStringList& )) ); 
 }
 
 KDevProject::~KDevProject()
@@ -70,18 +77,62 @@ QString KDevProject::relativeProjectFile( const QString & absFileName )
 
 void KDevProject::slotBuildFileMap( )
 {
+	kdDebug(9000) << k_funcinfo << endl;
+
     m_absToRel.clear();
+    m_symlinkList.clear();
     const QStringList fileList = allFiles();
     for( QStringList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it )
     {
 	QFileInfo fileInfo( projectDirectory() + "/" + *it );
 	m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
+	
+        if ( URLUtil::canonicalPath( fileInfo.absFilePath() ) != fileInfo.absFilePath() )
+        {
+            m_symlinkList << *it;
+        }
     }
 }
 
 void KDevProject::openProject( const QString & /*dirName*/, const QString & /*projectName*/ )
 {
     slotBuildFileMap();
+}
+
+QStringList KDevProject::symlinkProjectFiles( )
+{
+    return m_symlinkList;
+}
+
+void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
+{
+	QStringList::ConstIterator it = fileList.begin();
+	while( it != fileList.end() )
+	{
+		QFileInfo fileInfo( projectDirectory() + "/" + *it );
+		m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
+		
+		if ( URLUtil::canonicalPath( fileInfo.absFilePath() ) != fileInfo.absFilePath() )
+		{
+			m_symlinkList << *it;
+		}
+
+		++it;
+	}
+}
+
+void KDevProject::slotRemoveFilesFromFileMap( const QStringList & fileList )
+{
+	QStringList::ConstIterator it = fileList.begin();
+	while( it != fileList.end() )
+	{
+		QFileInfo fileInfo( projectDirectory() + "/" + *it );
+		m_absToRel.remove( URLUtil::canonicalPath(fileInfo.absFilePath()) );
+		
+		m_symlinkList.remove( *it );
+
+		++it;
+	}
 }
 
 #include "kdevproject.moc"

@@ -450,7 +450,8 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
 
     // GNU make resolves symlinks. if "name" is a real path to a file the
     // project know by symlink path, we need to return the symlink path
-    QStringList projectFiles = m_part->project()->allFiles();
+//    QStringList projectFiles = m_part->project()->allFiles();
+    QStringList projectFiles = m_part->project()->symlinkProjectFiles();
     QStringList::iterator it = projectFiles.begin();
     while ( it != projectFiles.end() )
     {

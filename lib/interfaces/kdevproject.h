@@ -99,8 +99,6 @@ public:
     /**
     * Returns a list of all files in the project.
     * The files are relative to the project directory.
-    * @todo This is currently a bit broken because the
-    * autoproject part doesn't return header files here.
     */
     virtual QStringList allFiles() const = 0;
     
@@ -149,9 +147,16 @@ public:
     * of the file absFileName.
     */
     virtual QString relativeProjectFile( const QString & absFileName );
+
+    /**
+     * @return a list of files know to the project through symlinks
+     */
+    virtual QStringList symlinkProjectFiles();
     
 private slots:
     void slotBuildFileMap();
+    void slotAddFilesToFileMap(const QStringList & fileList );
+    void slotRemoveFilesFromFileMap(const QStringList & fileList );
 
 signals:
     /**
@@ -188,6 +193,7 @@ signals:
     
 private:
     QMap<QString, QString> m_absToRel;
+    QStringList m_symlinkList;
 };
 
 #endif
