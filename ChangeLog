@@ -1,7 +1,10 @@
+2002-05-20  Harald Fernengel  <harry@kdevelop.org>
+	* Outputviews: Uses bright font colors if widget background is dark
+
 2002-05-20  Roberto Raggi  <raggi@cli.di.unipi.it>
 	* Ported qeditor to ktexteditor interface
 	* Fixed text insertion in abbreviation part
-	
+
 2002-05-20  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Make sure headers are parsed before sources
