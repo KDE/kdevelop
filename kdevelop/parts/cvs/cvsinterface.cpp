@@ -16,6 +16,10 @@
 #include "main.h"
 #include "commitdialog.h"
 #include "cvsinterface.h"
+#include "kdevnodes.h"
+#include "kdevactions.h"
+#include "projectspace.h"
+#include "kdevmakefrontend.h"
 
 
 CvsInterface::CvsInterface(QObject *parent, const char *name)
@@ -29,41 +33,72 @@ CvsInterface::~CvsInterface()
 {}
 
 
-void CvsInterface::addToRepositoryRequested(const QString &fileName)
+QList<KAction> CvsInterface::kdevNodeActions(KDevNode *node)
 {
+    QList<KAction> list;
+    
+    if (node->inherits("KDevFileNode")) {
+        list.append(new KDevNodeAction(node, i18n("Add to repository"),
+                                       this, SLOT(addToRepository(KDevNode*)),
+                                       0, "add_to_repository"));
+        list.append(new KDevNodeAction(node, i18n("Remove from repository"),
+                                       this, SLOT(removeFromRepository(KDevNode*)),
+                                       0, "remove_from_repository"));
+        list.append(new KDevNodeAction(node, i18n("Update"),
+                                       this, SLOT(updateFromRepository(KDevNode*)),
+                                       0, "update_from_repository"));
+        list.append(new KDevNodeAction(node, i18n("Commit"),
+                                       this, SLOT(commitToRepository(KDevNode*)),
+                                       0, "commit_to_repository"));
+    }
+    
+    return list;
+}
+
+
+void CvsInterface::addToRepository(KDevNode *node)
+{
+    KDevFileNode *fileNode = static_cast<KDevFileNode*>(node);
+
     QString command("cd ");
-    command += m_projectpath;
+    command += projectSpace()->absolutePath();
     command += " && cvs add ";
-    command += fileName;
+    command += fileNode->absoluteFileName();
     command += " 2>&1";
-    emit executeMakeCommand(command);
+    makeFrontend()->executeMakeCommand(command);
 }
 
 
-void CvsInterface::removeFromRepositoryRequested(const QString &fileName)
+void CvsInterface::removeFromRepository(KDevNode *node)
 {
+    KDevFileNode *fileNode = static_cast<KDevFileNode*>(node);
+
     QString command("cd ");
-    command += m_projectpath;
+    command += projectSpace()->absolutePath();
     command += " && cvs remove -f ";
-    command += fileName;
+    command += fileNode->absoluteFileName();
     command += " 2>&1";
-    emit executeMakeCommand(command);
+    makeFrontend()->executeMakeCommand(command);
 }
 
 
-void CvsInterface::updateFromRepositoryRequested(const QString &fileName)
+void CvsInterface::updateFromRepository(KDevNode *node)
 {
+    KDevFileNode *fileNode = static_cast<KDevFileNode*>(node);
+
     QString command("cd ");
-    command += m_projectpath;
+    command += projectSpace()->absolutePath();
     command += " && cvs update -dP ";
-    command += fileName;
+    command += fileNode->absoluteFileName();
     command += " 2>&1";
-    emit executeMakeCommand(command);
+    makeFrontend()->executeMakeCommand(command);
 }
 
 
-void CvsInterface::commitToRepositoryRequested(const QString &fileName)
+void CvsInterface::commitToRepository(KDevNode *node)
 {
+    KDevFileNode *fileNode = static_cast<KDevFileNode*>(node);
+
     CommitDialog *d = new CommitDialog();
     if (d->exec() == QDialog::Rejected)
         return;
@@ -73,16 +108,16 @@ void CvsInterface::commitToRepositoryRequested(const QString &fileName)
         message.replace(QRegExp("'"), "'\"'\"'");
 
     QString command("cd ");
-    command += m_projectpath;
+    command += projectSpace()->absolutePath();
     command += " && cvs commit -m \'";
     command += message;
     command += "\' ";
-    command += fileName;
+    command += fileNode->absoluteFileName();
     command += " 2>&1";
 
     delete d;
 
-    emit executeMakeCommand(command);
+    makeFrontend()->executeMakeCommand(command);
 }
 
 

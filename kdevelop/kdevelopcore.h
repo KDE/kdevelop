@@ -24,7 +24,10 @@ class KDevMakeFrontend;
 class KDevAppFrontend;
 class KDevViewHandler;
 class KDevApi;
+class KDevNode;
+class KDevelopIface;
 class ProjectSpace;
+
 
 class KDevelopCore : QObject
 {
@@ -33,6 +36,8 @@ class KDevelopCore : QObject
 public:
     KDevelopCore(KDevelop *gui);
     virtual ~KDevelopCore();
+
+    KActionCollection *actionCollection();
 
     void loadGlobalComponents();
     void unloadGlobalComponents();
@@ -73,6 +78,7 @@ private:
     QList<KDevComponent> m_components;
     QList<KDevComponent> m_runningComponents;
     KDevApi *m_api;
+    KDevelopIface *m_dcop;
 };
 
 #endif

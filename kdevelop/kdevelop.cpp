@@ -20,6 +20,7 @@
 #include <qlayout.h>
 #include <qobjectlist.h>
 #include <kdebug.h>
+#include <kdcopactionproxy.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstdaction.h>

@@ -24,17 +24,14 @@ public:
     ~CvsInterface();
 
 protected:
-    virtual void projectSpaceClosed() {};
-    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace) {};
+    virtual QList<KAction> kdevNodeActions(KDevNode *node);
 
-    virtual void addToRepositoryRequested(const QString &fileName);
-    virtual void removeFromRepositoryRequested(const QString &fileName);
-    virtual void updateFromRepositoryRequested(const QString &fileName);
-    virtual void commitToRepositoryRequested(const QString &fileName);
+private slots:
+    void addToRepository(KDevNode *node);
+    void removeFromRepository(KDevNode *node);
+    void updateFromRepository(KDevNode *node);
+    void commitToRepository(KDevNode *node);
     // virtual KDevVersionControl::State registeredState(const QString &fileName);
-
-private:
-    QString m_projectpath;
 };
 
 #endif

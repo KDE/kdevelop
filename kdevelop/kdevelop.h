@@ -26,6 +26,8 @@
 
 
 class KDevelopCore;
+class DCOPObject;
+class KDCOPActionProxy;
 
 
 class KDevelop : public QextMdiMainFrm //KParts::DockMainWindow

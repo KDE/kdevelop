@@ -33,12 +33,14 @@
 #include "kdevapi.h"
 #include "partloader.h"
 #include "newprojectdlg.h"
+#include "KDevelopIface.h"
 
 
 KDevelopCore::KDevelopCore(KDevelop *pGUI)
     : QObject(pGUI, "kdevelop core")
     ,m_pKDevelopGUI(pGUI)
 {
+    m_dcop = new KDevelopIface(this);
     m_api = new KDevApi();
     m_api->classStore = new ClassStore();
     initActions();
@@ -48,6 +50,13 @@ KDevelopCore::KDevelopCore(KDevelop *pGUI)
 KDevelopCore::~KDevelopCore()
 {
     unloadGlobalComponents();
+    delete m_dcop;
+}
+
+
+KActionCollection *KDevelopCore::actionCollection()
+{
+    return m_pKDevelopGUI->actionCollection();
 }
 
 
@@ -198,7 +207,7 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
     }
 
     // Version control component (name should be retrieved from project space)
-    QString vcService = QString::null;
+    QString vcService = QString::fromLatin1("CVSInterface");
     if (!vcService.isNull()) {
         QObject *vcObj = PartLoader::loadByName(m_pKDevelopGUI, vcService, "KDevVersionControl");
         if (vcObj) {
@@ -458,6 +467,9 @@ void KDevelopCore::needKDevNodeActions(KDevNode* pNode, QList<KAction> *pList)
     QListIterator<KDevComponent> it(m_components);
     for (; it.current(); ++it){ // ask every component
         QList<KAction> pSingleList = (*it)->kdevNodeActions(pNode);
+        if (it.current() != m_components.first()
+            && !pSingleList.isEmpty())
+            pList->append(new KActionSeparator(0));
         QListIterator<KAction> it(pSingleList);
         for (; it.current(); ++it)
             pList->append(it.current());

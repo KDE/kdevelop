@@ -1,3 +1,9 @@
+2000-12-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Added KDevelopIface
+	* Reanimated cvs interface using KDevNodeActions
+	* Put action separators between each component's 
+	  contribution to a context menu
+
 2000-12-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Load editor manager at startup
 	* Initialize app frontend once instead of make frontend twice ;-)

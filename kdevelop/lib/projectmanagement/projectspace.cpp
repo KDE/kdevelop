@@ -645,7 +645,6 @@ QList<KAction> ProjectSpace::kdevNodeActions(KDevNode* pNode){
 
   KDevNodeAction* pAction=0;
   if(pNode->inherits("KDevFileNode")){
-    pList.append(new KActionSeparator());
     pAction = new KDevNodeAction(pNode,"Move to...");
     connect(pAction,SIGNAL(activated(KDevNode*)),this,
 	    SLOT(slotMoveFileTo(KDevNode*)));

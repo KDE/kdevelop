@@ -23,7 +23,9 @@ class KDevNodeAction : public KAction {
     public:
   KDevNodeAction( KDevNode* pNode,const QString& text, const QString& pix, int accel = 0, QObject* parent = 0, const char* name = 0 );
   KDevNodeAction( KDevNode* pNode,const QString& text,int accel = 0, QObject* parent = 0, const char* name = 0 );
-  int plug( QWidget *widget, int index );
+  KDevNodeAction( KDevNode* pNode,const QString& text,
+                  QObject* receiver, const char* slot,
+                  QObject* parent, const char* name );
   KDevNode kdevNode();
   virtual ~KDevNodeAction() {}
 
