@@ -1,3 +1,10 @@
+2002-02-20  Walter Tasin <tasin@kdevelop.org>
+    * implementing additional project options 
+      [which are set inside configure.in(.in)]
+      exceptions enabling, noopt-flag activation, misc tests for
+      c/c++ terminal apps, enabling (f)lex and yacc/bison tests for configure,
+      kde/qt version selection
+      
 2002-02-17  August Hörandl  <august.hoerandl@gmx.at>
     * cppcodecompletion.cpp: better regular expression for QT2/KDE2-codecompletion 
 
