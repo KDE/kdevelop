@@ -64,7 +64,7 @@
     <Action name="project_close"/>
   </Menu>
   <Menu name="build">
-    <text>&amp;Build</text>
+    <text>B&amp;uild</text>
     <Merge/>
     <Separator/>
     <Action name="stop_processes"/>
