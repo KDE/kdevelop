@@ -129,8 +129,8 @@ void CPrjAddOpts::modifyConfigureIn()
   else
     configureIn->disableOption("CXXFLAGS=", "\"$CXXFLAGS $USE_EXCEPTIONS\"", "exc");
   
-  // change exceptions string inside configure.in(.in)
-  if (exceptions->isChecked())
+  // change misc tests string inside configure.in(.in)
+  if (misc_tests->isChecked())
     configureIn->enableOption("KDE_MISC_TESTS", "");
   else
     configureIn->disableOption("KDE_MISC_TESTS", "");
