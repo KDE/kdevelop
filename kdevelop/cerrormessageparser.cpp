@@ -152,6 +152,10 @@ void CErrorMessageParser::parseInMakeMode(QString* makeoutput,QString startdir){
 	// ok we will create now a new entry
 	error_info = new TErrorMessageInfo;
 	stack_str = stack.top();
+        // make the parser robust against missing 'Entering ...'
+        QString empty;
+        if (stack_str == 0)
+            stack_str = &empty;
 	if(stack_str->right(1) != "/"){
 	  *stack_str += "/";
 	}
