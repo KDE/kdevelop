@@ -212,6 +212,13 @@ void MainWindowShare::createActions()
   connect( partController, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )) );
 }
 
+void MainWindowShare::slotReportBug()
+{
+  KAboutData d2("kdevelop", "KDevelop", VERSION);
+  KBugReport a(m_pMainWnd, true, &d2);
+  a.exec();
+}
+
 void MainWindowShare::slotToggleMainToolbar()
 {
   if (m_toggleMainToolbar->isChecked())
