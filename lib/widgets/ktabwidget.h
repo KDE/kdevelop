@@ -34,7 +34,7 @@ public:
   ~KTabWidget();
 signals:
   void closeWindow(const QWidget *);
-  void closeOthers(const QWidget *);
+  void closeOthers(QWidget *);
 private:
   KTabBar *m_pTabBar;
 };

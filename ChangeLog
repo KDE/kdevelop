@@ -1,3 +1,6 @@
+2003-01-15 Mickael Marchand <marchand@kde.org>
+  * made "Close Others" (tabs) work
+
 2003-01-15 Julian Rockey <linux@jrockey.com>
 	* parts/filecreate
 	  - added "New" option into Gideon's "File" menu
