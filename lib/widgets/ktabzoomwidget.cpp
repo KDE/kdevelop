@@ -5,7 +5,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qwidgetstack.h>
-
+#include <qguardedptr.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -39,7 +39,7 @@ public:
   QPtrList<KTZWidgetInfo>    m_info;
   bool 			     m_docked;
   QWidget		     *m_strut;
-
+  QGuardedPtr<QWidget>       m_lastActiveWidget;
 };
 
 
@@ -53,6 +53,7 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
   d->m_content = 0;
   d->m_docked = false;
   d->m_strut = 0;
+  d->m_lastActiveWidget = 0;
 
   d->m_tabBar = new KTabZoomBar(this, pos);
   connect(d->m_tabBar, SIGNAL(selected(int)), this, SLOT(selected(int)));
@@ -148,6 +149,8 @@ void KTabZoomWidget::addContent(QWidget *content)
 
 void KTabZoomWidget::selected(int index)
 {
+  qDebug( "KTabZoomWidget::selected" );
+
   calculateGeometry();
 
   if (d->m_docked)
@@ -161,6 +164,7 @@ void KTabZoomWidget::selected(int index)
     {
       d->m_popup->selected(i->m_index);
       d->m_popup->show();
+      d->m_lastActiveWidget = i->m_widget;
       return;
     }
 }
@@ -176,10 +180,14 @@ void KTabZoomWidget::unselected()
 
 void KTabZoomWidget::raiseWidget(QWidget *widget)
 {
+  qDebug( "KTabZoomWidget::raiseWidget" );
+  if ( !widget )
+    widget = d->m_lastActiveWidget;
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
-    if (i->m_widget == widget)
+    if (i->m_widget == widget || !widget)
     {
       d->m_tabBar->setActiveIndex(i->m_barIndex);
+      d->m_lastActiveWidget = i->m_widget;
       return;
     }
 }
