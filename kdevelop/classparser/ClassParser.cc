@@ -1013,7 +1013,7 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
 {
   CParsedParent *aParent; // A parent of this class.
   QString cname;          // Name of inherited class.
-  int export=-1;          // Parent import status(private/public/protected).
+  int exportit=-1;          // Parent import status(private/public/protected).
 
   // Add parents until we find a {
   while( lexem != '{' && lexem != 0 )
@@ -1023,10 +1023,10 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     
     // For classes with no scope identifier at inheritance.
     if( lexem == ID )
-      export = PRIVATE;
+      exportit = PRIVATE;
     else if( lexem == PUBLIC || lexem == PROTECTED || lexem == PRIVATE )
     {
-      export = lexem;
+      exportit = lexem;
       getNextLexem();
     }
     
@@ -1038,11 +1038,11 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     }
     
     // Add the parent.
-    if( export != -1 )
+    if( exportit != -1 )
     {
       aParent = new CParsedParent();
       aParent->setName( cname );
-      aParent->setExport( export );
+      aParent->setExport( exportit );
       
       aClass->addParent( aParent );
     }
@@ -1596,3 +1596,4 @@ void CClassParser::wipeout()
 
   reset();
 }
+

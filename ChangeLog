@@ -1,3 +1,6 @@
+1999-08-10 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* kdevelop should now compile on gcc 2.95, thanks to Christian Kirsch <ck@held.mind.de> for the infos
+
 1999-08-10  Jonas Nordin  <jonas.nordin@cenacle.se>
 	* added parsing of comments for all parsed items.
 	* fixed parsing of method and attribute declarations on multiple lines.

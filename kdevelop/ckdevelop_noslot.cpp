@@ -306,7 +306,7 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
   char ch;
   int i;
   bool bFound;
-  char *szChangingChars= (bForGrep) ? "[]\\^$" : "$^*[]|()\\;,#<>-.~{}" ;
+  char *szChangingChars= (bForGrep) ? (char*)"[]\\^$" : (char*)"$^*[]|()\\;,#<>-.~{}" ;
 
   while ((ch=*szOldText++)!='\0')
   {
