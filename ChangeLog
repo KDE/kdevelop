@@ -1,3 +1,6 @@
+2000-03-22 Martin Piskernig <mpiskernig@kdevelop.de>
+	* committed new Tip Of Day dialog (based on KDialogBase)
+
 2000-03-12 Falk Brettschneider <gigafalk@yahoo.com>
         * tab widgets in tree view and output view become DockWidgets
 	
