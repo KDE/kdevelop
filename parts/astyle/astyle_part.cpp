@@ -18,14 +18,14 @@
 #include <kdevpartcontroller.h>
 
 #include "astyle_widget.h"
-#include "astyle_adaptor.h"
+#include <astyle_adaptor.h>
 
 
 typedef KGenericFactory<AStylePart> AStyleFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( "kdevastyle" ) );
 
 AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin("AStyle", "astyle", parent, name ? name : "AStylePart")
+  : KDevSourceFormatter("AStyle", "astyle", parent, name ? name : "AStylePart")
 {
   setInstance(AStyleFactory::instance());
 
@@ -110,6 +110,22 @@ void AStylePart::activePartChanged(KParts::Part *part)
   }
 
   _action->setEnabled(enabled);
+}
+
+QString AStylePart::formatSource( const QString text )
+{
+  ASStringIterator is(text);
+  KDevFormatter formatter;
+
+  formatter.init(&is);
+
+  QString output;
+  QTextStream os(&output, IO_WriteOnly);
+
+  while (formatter.hasMoreLines())
+        os << QString::fromUtf8(formatter.nextLine().c_str()) << endl;
+
+  return output;
 }
 
 

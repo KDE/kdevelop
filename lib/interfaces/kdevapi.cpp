@@ -10,7 +10,7 @@ public:
   KDevApiPrivate()
     : m_projectDom(0), m_project(0), m_makeFrontend(0),
       m_appFrontend(0), m_languageSupport(0), m_versionControl(0),
-      m_diffFrontend(0), m_createFile(0)
+      m_diffFrontend(0), m_createFile(0), m_sourceFormatter(0)
   {}
 
   QDomDocument *m_projectDom;
@@ -21,6 +21,8 @@ public:
   KDevVersionControl *m_versionControl;
   KDevDiffFrontend *m_diffFrontend;
   KDevCreateFile *m_createFile;
+  KDevSourceFormatter *m_sourceFormatter;
+
   KDevApi::VersionControlMap m_registeredVcs;
 };
 
@@ -149,6 +151,15 @@ KDevCreateFile *KDevApi::createFile() {
   return d->m_createFile;
 }
 
+KDevSourceFormatter *KDevApi::sourceFormatter()
+{
+  return d->m_sourceFormatter;
+}
+
+void KDevApi::setSourceFormatter(KDevSourceFormatter *sourceFormatter)
+{
+  d->m_sourceFormatter = sourceFormatter;
+}
 
 #include "kdevapi.moc"
 

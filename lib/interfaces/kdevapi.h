@@ -28,6 +28,7 @@ class KDevMainWindow;
 class KDevDebugger;
 class KDevDiffFrontend;
 class KDevCreateFile;
+class KDevSourceFormatter;
 
 class KDevApiPrivate;
 
@@ -73,6 +74,9 @@ public:
 
     KDevCreateFile *createFile();
     void setCreateFile(KDevCreateFile *createFile);
+    
+    KDevSourceFormatter *sourceFormatter();
+    void setSourceFormatter(KDevSourceFormatter *sourceFormatter);
 
 private:
 

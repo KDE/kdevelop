@@ -179,4 +179,9 @@ void KDevPlugin::showPart()
         partController()->showPart( part(), d->pluginName, shortDescription() );
 }
 
+KDevSourceFormatter * KDevPlugin::sourceFormatter( )
+{
+    return m_api->sourceFormatter();
+}
+
 #include "kdevplugin.moc"

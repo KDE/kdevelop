@@ -28,6 +28,7 @@ class KDevMainWindow;
 class KDevDebugger;
 class KDevDiffFrontend;
 class KDevCreateFile;
+class KDevSourceFormatter;
 class ClassStore;
 
 class DCOPClient;
@@ -190,6 +191,11 @@ public:
      * Returns a reference to the Create File API.
      */
     KDevCreateFile *createFileSupport();
+
+    /**
+     * Returns a reference to the source formatter.
+     */
+    KDevSourceFormatter *sourceFormatter();
 
     /**
      * To restore any settings which differs from project to project,

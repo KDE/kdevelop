@@ -6,6 +6,5 @@ Comment=A plugin for formatting of sourcecode according to a specified set of ru
 Name=KDevAStyle
 GenericName=Source Code Formatter
 Icon=kdevelop
-ServiceTypes=KDevelop/Plugin
+ServiceTypes=KDevelop/SourceFormatter
 X-KDE-Library=libkdevastyle
-X-KDevelop-Scope=Global

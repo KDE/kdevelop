@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/SourceFormatter
+X-KDE-Derived=KDevelop/Plugin
+Name=Source formatter interface
+

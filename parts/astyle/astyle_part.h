@@ -9,10 +9,10 @@
 class KDialogBase;
 #include <kaction.h>
 #include <kparts/part.h>
-#include <kdevplugin.h>
+#include <kdevsourceformatter.h>
 
 
-class AStylePart : public KDevPlugin
+class AStylePart : public KDevSourceFormatter
 {
   Q_OBJECT
 
@@ -20,6 +20,8 @@ public:
    
   AStylePart(QObject *parent, const char *name, const QStringList &);
   ~AStylePart();
+
+  QString formatSource( const QString text );
 
 
 private slots:
@@ -29,6 +31,7 @@ private slots:
   void beautifySource();
  
   void configWidget(KDialogBase *dlg);
+
 
 
 private:

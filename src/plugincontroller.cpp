@@ -19,6 +19,7 @@
 #include <kdevmakefrontend.h>
 #include <kdevappfrontend.h>
 #include <kdevdifffrontend.h>
+#include <kdevsourceformatter.h>
 #include <kaction.h>
 
 #include "core.h"
@@ -111,6 +112,16 @@ void PluginController::loadDefaultParts()
     integratePart( diffFrontend );
   } else {
     kdDebug( 9000 ) << "could not load Diff frontend" << endl;
+  }
+
+  // Source formatter
+  emit loadingPlugin(i18n("Loading plugin: Source formatter"));
+  KDevSourceFormatter *sourceFormatter = loadDefaultPart< KDevSourceFormatter >( "KDevelop/SourceFormatter" );
+  if ( sourceFormatter ) {
+    API::getInstance()->setSourceFormatter( sourceFormatter );
+    integratePart( sourceFormatter );
+  } else {
+    kdDebug( 9000 ) << "could not load Source formatter" << endl;
   }
 }
 
