@@ -134,7 +134,6 @@ void CDocBrowser::showURL(QString url,bool reload){
       QString content;
 
       begin( url);
-      parse();
 
       while ( !dstream.eof() )
       {
@@ -144,6 +143,8 @@ void CDocBrowser::showURL(QString url,bool reload){
       }
 
       end();
+  #warning uncommented parse();
+//      parse();
       show();
       KIONetAccess::removeTempFile(str);
       file.close();
