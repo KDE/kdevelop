@@ -519,7 +519,7 @@ void CNewClassDlg::initQuickHelp(){
   QWhatsThis::add(doc_edit, docMsg);
 
   QString qwidgetMsg = i18n("This offers additional options to your new class.\n"
-                                    "If you check \"Use header/cpp-templatesi\", your name and\n"
+                                    "If you check \"Use header/cpp-templates\", your name and\n"
                                     "email adress will be added into the new generated files\n"
                                     "If you check \"Generate a QWidget-Childclass\", the new class\n"
                                     "will use QWidget as the baseclass. This is also useful for\n"
