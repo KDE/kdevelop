@@ -1,7 +1,0 @@
-[General]
-Name=Opie Application
-Icon=qmakeapp.png
-Category=C++/Embedded
-Comment=Generate an Opie application.
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC.cpp

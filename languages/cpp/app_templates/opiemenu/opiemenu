@@ -1,7 +1,0 @@
-[General]
-Name=Opie Menu Applet
-Icon=qmakeapp.png
-Category=C++/Embedded
-Comment=Generate an Opie menu applet.
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC.cpp

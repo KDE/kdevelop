@@ -1,8 +1,0 @@
-# TMake application
-[General]
-Name=Opie Input
-Icon=qmakeapp.png
-Category=C++/Embedded
-Comment=Generate an Opie input method plugin.
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC.cpp

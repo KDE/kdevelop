@@ -1,7 +1,0 @@
-[General]
-Name=Opie Today Plugin
-Icon=qmakeapp.png
-Category=C++/Embedded
-Comment=Generate an Opie today plugin.
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=APPNAMELC.cpp

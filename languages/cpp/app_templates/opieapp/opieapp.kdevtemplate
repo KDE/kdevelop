@@ -1,3 +1,4 @@
+# KDE Config File
 [General]
 Name=Opie Application
 Icon=qmakeapp.png
@@ -11,6 +12,10 @@ Archive=opieapp.tar.gz
 Type=install
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir0]
+Type=mkdir
+Dir=%{dest}/pics
 
 [MkDir1]
 Type=mkdir

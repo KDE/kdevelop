@@ -1,4 +1,4 @@
-# TMake application
+# KDE Config File
 [General]
 Name=Opie Networksettings
 Icon=qmakeapp.png
@@ -12,6 +12,10 @@ Archive=opienet.tar.gz
 Type=install
 Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[MkDir0]
+Type=mkdir
+Dir=%{dest}/pics
 
 [MkDir1]
 Type=mkdir
