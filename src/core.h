@@ -80,7 +80,12 @@ private slots:
     void slotProjectOpen();
     void slotProjectClose();
     void slotProjectImport();
+    //#ifdef NEW_EDITOR
     void slotBufferSelected();
+    //#else
+    void slotTextEditorBufferSelected(TextEditorDocument *doc);
+    void slotDocumentationBufferSelected(const KURL &url);
+    //#endif
     void slotSettingsCustomize();
     void slotStop();
 
@@ -116,6 +121,7 @@ private:
 #else
     QList<EditorPart> editorParts;
     QList<TextEditorDocument> editedDocs;
+    KURL::List viewedURLs;
     QList<KAction> bufferActions;
 #endif
     QString projectFile;

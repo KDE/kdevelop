@@ -4,6 +4,7 @@
 	  Now copy&paste are possible, and the view scrolls to the end of the
 	  output (unless the user has clicked otherwise)
 	* Also fixed the shortcuts
+	* Fixed buffer menu for documentation parts
 
 2001-05-11  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 

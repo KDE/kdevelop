@@ -66,9 +66,9 @@ void KonsoleViewWidget::activate()
 }
 
 
-#ifdef NEW_EDITOR
 void KonsoleViewWidget::documentActivated(KEditor::Document *doc)
 {
+#ifdef NEW_EDITOR
   if (!doc || !doc->url().isLocalFile())
 	return;
 
@@ -80,8 +80,10 @@ void KonsoleViewWidget::documentActivated(KEditor::Document *doc)
     dir = dir.left(pos);
   
   setDirectory(dir);
-}
 #endif
+}
+
+
 void KonsoleViewWidget::wentToSourceFile(const QString &fileName)
 {
   QString dir = fileName;

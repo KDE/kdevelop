@@ -45,6 +45,7 @@
 #include "editorpart.h"
 #endif
 
+#include "bufferaction.h"
 #include "filenameedit.h"
 #include "importdlg.h"
 #include "toplevel.h"
@@ -116,7 +117,7 @@ void Core::initActions()
 #ifndef NEW_EDITOR
     KStdAction::saveAs(this, SLOT(slotSaveFileAs()), actionCollection());
 #endif
-	KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
+    KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
 
     KAction *action;
     
@@ -382,17 +383,27 @@ void Core::updateBufferMenu()
 	win->plugActionList("buffer_list", bufferActions);
 	
 #else
-	win->unplugActionList("buffer_list");
+    win->unplugActionList("buffer_list");
     bufferActions.clear();
 
-    QListIterator<TextEditorDocument> it(editedDocs);
-    for (; it.current(); ++it) {
-        QString fileName = it.current()->fileName();
-        kdDebug(9000) << "Plugging " << fileName << endl;
-        KAction *action = new KAction(fileName, 0, 0, fileName.latin1());
-        connect( action, SIGNAL(activated()), this, SLOT(slotBufferSelected()) );
+    QListIterator<TextEditorDocument> it1(editedDocs);
+    for (; it1.current(); ++it1) {
+        BufferAction *action = new BufferAction(*it1);
+        connect( action, SIGNAL(activated(TextEditorDocument*)),
+                 this, SLOT(slotTextEditorBufferSelected(TextEditorDocument*)) );
         bufferActions.append(action);
     }
+
+    bufferActions.append(new KActionSeparator);
+
+    KURL::List::Iterator it2;
+    for (it2 = viewedURLs.begin(); it2 != viewedURLs.end(); ++it2) {
+        BufferAction *action = new BufferAction(*it2);
+        connect( action, SIGNAL(activated(const KURL &)),
+                 this, SLOT(slotDocumentationBufferSelected(const KURL &)) );
+        bufferActions.append(action);
+    }
+    
     win->plugActionList("buffer_list", bufferActions);
 #endif
 }
@@ -515,6 +526,18 @@ void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
 {
     kdDebug(9000) << "Goto documentation: " << url.url() << endl;
 
+    // See if we have this url already loaded.
+    KURL::List::Iterator it;
+    for (it = viewedURLs.begin(); it != viewedURLs.end(); ++it)
+        if ((*it) == url)
+            break;
+
+    if (it == viewedURLs.end()) {
+        kdDebug(9000) << "url not yet used" << endl;
+        viewedURLs.append(url);
+        updateBufferMenu();
+    }
+        
     // Find a part to load into
     DocumentationPart *part = 0;
     if (embed == Replace && activePart && activePart->inherits("DocumentationPart"))
@@ -597,10 +620,10 @@ void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 
     // See if we have this document already loaded.
     TextEditorDocument *doc = 0;
-    QListIterator<TextEditorDocument> it2(editedDocs);
-    for (; it2.current(); ++it2) {
-        if ((*it2)->isEditing(url)) {
-            doc = it2.current();
+    QListIterator<TextEditorDocument> it(editedDocs);
+    for (; it.current(); ++it) {
+        if ((*it)->isEditing(url)) {
+            doc = it.current();
             break;
         }
     }
@@ -678,7 +701,7 @@ void Core::saveAllFiles()
 		}
 		
 #else	
-	QListIterator<TextEditorDocument> it(editedDocs);
+    QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         TextEditorDocument *doc = it.current();
         if (doc->isModified() && doc->modifiedOnDisk()) {
@@ -825,6 +848,7 @@ void Core::slotSaveFile()
     // FIXME: enable/disable this action for active DocumentionPart
     if (!activePart->inherits("EditorPart"))
         return;
+
 #ifndef NEW_EDITOR
     EditorPart *part = static_cast<EditorPart*>(activePart);
     TextEditorDocument *doc = part->editorDocument();
@@ -837,6 +861,9 @@ void Core::slotSaveFile()
 
 void Core::slotSaveFileAs()
 {
+    // FIXME: enable/disable this action for active DocumentionPart
+    if (!activePart->inherits("EditorPart"))
+        return;
     
 #if 1
     
@@ -846,9 +873,6 @@ void Core::slotSaveFileAs()
 #else
     
     // currently broken
-    // FIXME: enable/disable this action for active DocumentionPart
-    if (!activePart->inherits("EditorPart"))
-        return;
 
     FileNameEdit *w = new FileNameEdit(i18n("Save file as:"), win->statusBar());
     
@@ -958,10 +982,25 @@ void Core::slotKillBuffer()
         updateBufferMenu();
         delete doc;
     } else if (activePart->inherits("DocumentationPart")) {
-        // Of course, calling a documentation window a 'buffer'
-        // is not really intuitive, but I currently have no
-        // better idea...
-        delete activePart->widget();
+        DocumentationPart *part = static_cast<DocumentationPart*>(activePart);
+        KURL url = part->browserURL();
+
+        QList<DocumentationPart> deletedParts;
+
+        QListIterator<DocumentationPart> it1(docParts);
+        for (; it1.current(); ++it1) {
+            if (it1.current()->browserURL() == url)
+                deletedParts.append(it1.current());
+        }
+
+        // Kill all parts that are still looking at this url
+        // - One may want to change this to Emacs' behaviour
+        QListIterator<DocumentationPart> it2(deletedParts);
+        for (; it2.current(); ++it2)
+            delete it2.current()->widget();
+
+        viewedURLs.remove(url);
+        updateBufferMenu();
     }
 #endif
 }
@@ -1052,10 +1091,19 @@ void Core::slotBufferSelected()
 	      win->raiseWidget(it.current()->widget());	
 		}
 	  }
-#else
-    QString fileName = sender()->name();
-    gotoSourceFile(KURL(fileName), 0);
 #endif
+}
+
+
+void Core::slotTextEditorBufferSelected(TextEditorDocument *doc)
+{
+    gotoSourceFile(doc->url(), 0);
+}
+
+
+void Core::slotDocumentationBufferSelected(const KURL &url)
+{
+    gotoDocumentationFile(url);
 }
 
 

@@ -15,6 +15,8 @@ class QVBoxLayout;
 
 #ifdef NEW_EDITOR
 #include "keditor/editor.h"
+#else
+namespace KEditor { class Document; }
 #endif
 
 
@@ -35,9 +37,7 @@ public slots:
 
 private slots:
 
-#ifdef NEW_EDITOR
   void documentActivated(KEditor::Document *doc);
-#endif
   void wentToSourceFile(const QString &fileName);
   void partDestroyed();
 

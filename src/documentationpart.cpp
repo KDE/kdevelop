@@ -102,7 +102,7 @@ DocumentationPart::DocumentationPart(QWidget *parent, const char */*name*/)
              this, SLOT(forwPopupActivated(int)) );
     forwAction->setEnabled(false);
     
-    KStdAction::print(this, SLOT(slotPrint()), actionCollection(), "documentation_print");
+    KStdAction::print(this, SLOT(slotPrint()), actionCollection(), "file_print");
     KStdAction::find(this, SLOT(slotFind()), actionCollection(), "documentation_find");
 }
 

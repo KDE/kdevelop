@@ -1,7 +1,3 @@
-# Hack
-#PYTHONINC = -I/usr/include/python2.0
-#PYTHONLIB = -L/usr/lib/python2.0/config -lpython2.0 -lpthread -ldb-3
-
 INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	   -I$(top_srcdir)/lib/sourceinfo \
 	   -I$(top_srcdir)/lib/kwrite \
@@ -11,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 bin_PROGRAMS = gideon
 
 gideon_SOURCES = main.cpp core.cpp toplevel.cpp partloader.cpp documentationpart.cpp \
-		 importdlg.cpp filenameedit.cpp \
+		 importdlg.cpp filenameedit.cpp bufferaction.cpp \
 		 statusbar.cpp 
 gideon_METASOURCES = AUTO
 gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
