@@ -94,32 +94,6 @@ void AppWizardPart::openSpecifiedFiles()
             partController()->editDocument(url);
         }
     }
-
-#if 0
-    return;
-
-    if (!languageSupport())
-        return;
-
-    CodeModel *model = languageSupport()->codeModel();
-    if (!model)
-        return;
-    NamespaceDom ns = model->globalNamespace();
-    if (!ns)
-        return;
-/*
-    FunctionList list = ns->functionByName(QString::fromLatin1("main(int, char *[])"));
-    if (list.count()) {
-        KURL url;
-        url.setPath(list.front()->fileName());
-        partController()->editDocument(url);
-    }
-*/
-    qDebug("**************************** openMainFile()");
-    FunctionList list = ns->functionList();
-    for (int i = 0; i < (int)list.count(); ++i)
-       qDebug("******** %s", list[i]->name().ascii());
-#endif
 }
 
 void AppWizardPart::slotCommandFinished(const QString &command)
