@@ -10,6 +10,9 @@ lib_LTLIBRARIES = libkdevautotoolsparser.la
 libkdevautotoolsparser_la_LDFLAGS = $(all_libraries) $(LIB_KIO)
 libkdevautotoolsparser_la_SOURCES = autotoolsast.cpp autotoolsdriver.cpp autotools_yacc.cpp
 
+kdevelopbuildtoolsincludedir = $(includedir)/kdevelop/buildtools/parsers/autotools
+kdevelopbuildtoolsinclude_HEADERS = autotoolsast.h autotoolsdriver.h
+
 parser:
 	cd $(srcdir) ; \
 	bison -d autotools.yy -o autotools_yacc.cpp ; \
