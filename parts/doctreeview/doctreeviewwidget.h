@@ -36,8 +36,6 @@ class QToolButton;
 class KListView;
 class KAction;
 class KHistoryCombo;
-class QHBox;
-class QLabel;
 
 
 class DocTreeViewWidget : public QVBox
@@ -63,7 +61,6 @@ private slots:
 	void slotStartSearching();
 	void slotHistoryReturnPressed ( const QString& );
 	void slotSelectionChanged ( QListViewItem* );
-	void slotShowButtonToggled ( bool );
 	void slotAddBookmark();
 	void slotRemoveBookmark();
 
@@ -86,13 +83,9 @@ private:
     QPtrList<DocTreeTocFolder> folder_toc;
     DocTreeViewPart *m_part;
 
-	QHBox* docToolbar;
 	QHBox* searchToolbar;
-	
-	QLabel* hLine;
 
 	QToolButton* docConfigButton;
-	QToolButton* showButton;
 	QToolButton* prevButton;
 	QToolButton* nextButton;
 	QToolButton* startButton;

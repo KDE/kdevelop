@@ -13,22 +13,14 @@
 
 #include "doctreeviewwidget.h"
 
-//#include <stdio.h>
-
-//#include <qapplication.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qhbox.h>
 #include <qheader.h>
-#include <qlabel.h>
-#include <qlayout.h>
 #include <qregexp.h>
-//#include <qsizepolicy.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qlistview.h>
-#include <qvbox.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -809,61 +801,34 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     : QVBox(0, "doc tree widget"), folder_qt( 0L ), folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
 {
     /* initializing the documentation toolbar */
-	KActionCollection* actions = new KActionCollection(this);
+    KActionCollection* actions = new KActionCollection(this);
 
-	docToolbar = new QHBox ( this, "documentation toolbar" );
-	docToolbar->setMargin ( 2 );
-	docToolbar->setSpacing ( 2 );
+    searchToolbar = new QHBox ( this, "search toolbar" );
+    searchToolbar->setMargin ( 2 );
+    searchToolbar->setSpacing ( 2 );
 
-	hLine = new QLabel ( this, "horizontal line" );
-	hLine->setFrameShape ( QLabel::HLine );
-	hLine->setFrameShadow( QLabel::Sunken );
-	hLine->setMaximumHeight ( 5 );
-	hLine->hide();
+    docConfigButton = new QToolButton ( searchToolbar, "configure button" );
+    docConfigButton->setPixmap ( SmallIcon ( "configure" ) );
+    docConfigButton->setEnabled ( false );
+    QToolTip::add ( docConfigButton, i18n ( "Customize the selected documentation tree..." ) );
 
-	searchToolbar = new QHBox ( this, "search toolbar" );
-	searchToolbar->setMargin ( 2 );
-	searchToolbar->setSpacing ( 2 );
-	searchToolbar->hide();
+    completionCombo = new KHistoryCombo ( true, searchToolbar, "completion combo box" );
 
-	docConfigButton = new QToolButton ( docToolbar, "configure button" );
-	docConfigButton->setPixmap ( SmallIcon ( "configure" ) );
-	docConfigButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, docConfigButton->sizePolicy().hasHeightForWidth() ) );
-	docConfigButton->setEnabled ( false );
-	QToolTip::add ( docConfigButton, i18n ( "Customize the selected documentation tree..." ) );
+    startButton = new QToolButton ( searchToolbar, "start searching" );
+    startButton->setPixmap ( SmallIcon ( "key_enter" ) );
+    QToolTip::add ( startButton, i18n ( "Start searching" ) );
 
-	QWidget *spacer = new QWidget(docToolbar);
-	docToolbar->setStretchFactor(spacer, 1);
+    nextButton = new QToolButton ( searchToolbar, "next match button" );
+    nextButton->setPixmap ( SmallIcon ( "next" ) );
+    QToolTip::add ( nextButton, i18n ( "Jump to next matching entry" ) );
+    nextButton->setEnabled( false );
 
-	showButton = new QToolButton ( docToolbar, "show button" );
-	showButton->setText ( i18n("Search Selected Folder...") );
-	//showButton->setPixmap ( SmallIcon ( "find" ) );
-	showButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, docConfigButton->sizePolicy().hasHeightForWidth() ) );
-	showButton->setToggleButton ( true );
-	showButton->setMinimumHeight ( 23 );
+    prevButton = new QToolButton ( searchToolbar, "previous match button" );
+    prevButton->setPixmap ( SmallIcon ( "previous" ) );
+    QToolTip::add ( prevButton, i18n ( "Jump to last matching entry" ) );
+    prevButton->setEnabled( false );
 
-	completionCombo = new KHistoryCombo ( true, searchToolbar, "completion combo box" );
-
-	startButton = new QToolButton ( searchToolbar, "start searching" );
-	startButton->setPixmap ( SmallIcon ( "key_enter" ) );
-	startButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, startButton->sizePolicy().hasHeightForWidth() ) );
-	QToolTip::add ( startButton, i18n ( "Start searching" ) );
-
-	nextButton = new QToolButton ( searchToolbar, "next match button" );
-	nextButton->setPixmap ( SmallIcon ( "next" ) );
-	nextButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, nextButton->sizePolicy().hasHeightForWidth() ) );
-	QToolTip::add ( nextButton, i18n ( "Jump to next matching entry" ) );
-	nextButton->setEnabled( false );
-
-	prevButton = new QToolButton ( searchToolbar, "previous match button" );
-	prevButton->setPixmap ( SmallIcon ( "previous" ) );
-	prevButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, prevButton->sizePolicy().hasHeightForWidth() ) );
-	QToolTip::add ( prevButton, i18n ( "Jump to last matching entry" ) );
-	prevButton->setEnabled( false );
-
-	docToolbar->setMaximumHeight ( docConfigButton->height() );
-
-	docView = new KListView ( this, "documentation list view" );
+    docView = new KListView ( this, "documentation list view" );
 
     docView->setFocusPolicy(ClickFocus);
     docView->setRootIsDecorated(true);
@@ -925,7 +890,6 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	docConfigAction = new KAction(i18n("Customize..."), "configure", 0,
 		this, SLOT(slotConfigure()), actions, "documentation options");
 
-	connect ( showButton, SIGNAL ( toggled ( bool ) ), this, SLOT ( slotShowButtonToggled ( bool ) ) );
 	connect ( docConfigButton, SIGNAL ( clicked() ), this, SLOT ( slotConfigure() ) );
 	connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
 	connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );
@@ -998,20 +962,6 @@ void DocTreeViewWidget::slotJumpToPrevMatch()
 	{
 		searchResultList.first();
 	 }
-}
-
-void DocTreeViewWidget::slotShowButtonToggled ( bool on )
-{
-	if ( on )
-	{
-		searchToolbar->show();
-		hLine->show();
-	}
-	else
-	{
-		searchToolbar->hide();
-		hLine->hide();
-	}
 }
 
 void DocTreeViewWidget::slotStartSearching()
