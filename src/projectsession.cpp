@@ -172,7 +172,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 	{
 		QDomElement viewEl = docEl.firstChild().toElement();
 		DocumentData dd;
-		dd.context = docEl.attribute("context");
+		dd.type = viewEl.attribute("Type");
 		dd.line = viewEl.attribute("line", "0").toInt();
 		dd.url = url;
 		
@@ -261,6 +261,47 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
     }
   }
 
+	QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
+	for ( ; it.current(); ++it ) 
+	{
+	
+		KParts::ReadOnlyPart* pReadOnlyPart = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+		if (!pReadOnlyPart)
+			continue; 
+	
+		QString url = pReadOnlyPart->url().url();
+	
+		docIdStr.setNum(nDocs);
+		QDomElement docEl = domdoc.createElement("Doc" + docIdStr);
+		docEl.setAttribute( "URL", url);
+		docsAndViewsEl.appendChild( docEl);
+		nDocs++;
+		docEl.setAttribute( "NumberOfViews", 1);
+		
+		QDomElement viewEl = domdoc.createElement( "View0");
+		docEl.appendChild( viewEl);
+		
+		if ( dynamic_cast<DocumentationPart*>(pReadOnlyPart) )
+		{
+			viewEl.setAttribute("Type", "Documentation");
+		}
+		else if ( pReadOnlyPart->inherits("KTextEditor::Document") )
+		{
+			viewEl.setAttribute("Type", "Source");
+			KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(pReadOnlyPart->widget());
+			if (iface) {
+				unsigned int line, col;
+				iface->cursorPosition(&line, &col);
+				viewEl.setAttribute( "line", line );
+			}
+		}
+		else
+		{
+			viewEl.setAttribute("Type", "Other");
+		}
+	}
+  
+/*
   QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
   for ( ; it.current(); ++it ) {
 ////    QString partName = it.current()->name();
@@ -317,7 +358,7 @@ bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueLi
       docEl.setAttribute( "context", pDocuPart->context() );
     }
   }
-
+*/
   docsAndViewsEl.setAttribute("NumberOfDocuments", nDocs);
 
 
@@ -374,14 +415,18 @@ void ProjectSession::loadDocument( )
 	if ( !_docDataList.isEmpty() )
 	{
 		DocumentData & dd = _docDataList.first();
-		if ( dd.context.isEmpty() )
+		if ( dd.type == "Source" )
 		{
 			PartController::getInstance()->editDocument( dd.url, dd.line );
 		}
+		else if ( dd.type == "Documentation" )
+		{
+			PartController::getInstance()->showDocument( dd.url, true );
+		}
 		else
 		{
-			PartController::getInstance()->showDocument( dd.url );
-		}
+			PartController::getInstance()->editDocument( dd.url );
+		}		
 		_docDataList.pop_front();
 		
 		QTimer::singleShot( 0, this, SLOT(loadDocument()) );

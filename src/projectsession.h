@@ -77,7 +77,7 @@ private:
 	  DocumentData() : line(0) {}
 	  KURL url;
 	  int line;
-	  QString context;
+	  QString type;
   };
   
   QValueList<DocumentData> _docDataList;
