@@ -89,6 +89,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"namespace"     {return CPNAMESPACE;}
 
     /*==============> Ignored stuff <==============*/
+    /*========== added to avoid extern "C" trouble--rnolden 03232000====*/
 <INITIAL>"Q_EXPORT"       {}
 <INITIAL>"Q_EXPORTH"      {}
 <INITIAL>"Q_OBJECT"       {}
@@ -96,6 +97,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"__END_DECLS"    {}
 <INITIAL>"inline"         {}
 <INITIAL>"afx_msg"        {}
+<INITIAL>"extern"         {}
 
     /*==============> String <==============*/
 <INITIAL>"L"?["]{SCHAR}*["]     {return STRING;}
