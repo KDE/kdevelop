@@ -1,5 +1,16 @@
-#ifndef _KDEVELOP_H_
-#define _KDEVELOP_H_
+/***************************************************************************
+ *   Copyright (C) 2000 by The KDevelop Team                               *
+ *   kdevelop-team@fara.cs.uni-potsdam.de                                  *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef _KDEVELOPCORE_H_
+#define _KDEVELOPCORE_H_
 
 
 #include <qlist.h>
