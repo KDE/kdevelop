@@ -210,13 +210,13 @@ void CPrjOptionsDlg::addCompilerWarningsPage()
 //
 void CPrjOptionsDlg::addLinkerPage()
 {
-  QString ldflags=prj_info->getLDFLAGS();
+//  QString ldflags=prj_info->getLDFLAGS();
   QString ldadd=prj_info->getLDADD();
 
   old_version = prj_info->getVersion();
-  old_ldflags =  ldflags.stripWhiteSpace();
+//  old_ldflags =  ldflags.stripWhiteSpace();
   old_ldadd = ldadd.stripWhiteSpace();
-  old_addit_flags = prj_info->getAdditCXXFLAGS().stripWhiteSpace();
+//  old_addit_flags = prj_info->getAdditCXXFLAGS().stripWhiteSpace();
 
   QFrame* linkerOptions = addPage(i18n("Linker Options"),i18n("Linker Options"),
   KGlobal::instance()->iconLoader()->loadIcon( "blockdevice", KIcon::NoGroup, KIcon::SizeMedium ));
@@ -224,53 +224,53 @@ void CPrjOptionsDlg::addLinkerPage()
   QGridLayout *grid2 = new QGridLayout(linkerOptions,2,1,15,7,"grid-g");
   QWhatsThis::add(linkerOptions, i18n("Set the Linker options and choose the "
       "libraries to add to your project."));
-  ldflags = " " + ldflags + " ";
+//  ldflags = " " + ldflags + " ";
   ldadd = " " + ldadd + " ";
-  QGroupBox* ldflags_group;
-  ldflags_group=new QGroupBox(linkerOptions,"ldflags_group");
-  QGridLayout *grid3 = new QGridLayout(ldflags_group,3,2,15,7,"grid-h");
+//  QGroupBox* ldflags_group;
+//  ldflags_group=new QGroupBox(linkerOptions,"ldflags_group");
+//  QGridLayout *grid3 = new QGridLayout(ldflags_group,3,2,15,7,"grid-h");
+//
+//  ldflags_group->setTitle(i18n("library flags"));
+//  QWhatsThis::add(ldflags_group, i18n("Set your library flags here."));
+//
+//  l_remove_symbols=new QCheckBox(ldflags_group,"l_remove_symbols");
+//  grid3->addMultiCellWidget(l_remove_symbols,0,0,0,1);
+//  l_remove_symbols->setText(i18n("remove all symbol table and relocation information from the executable"));
+//  l_remove_symbols->setChecked(ldflags.find(" -s ") != -1);
+//  if (l_remove_symbols->isChecked())
+//    ldadd = ldadd.replace( QRegExp("-s "), "" );
+//  QWhatsThis::add(l_remove_symbols, i18n("If you want to use a debugger, you "
+//      "should keep those informations in the object files. "
+//      "It's useless to let the compiler generate debug "
+//      "informations and to remove it with this option."));
+//
+//  l_static=new QCheckBox(ldflags_group,"l_static");
+//  grid3->addMultiCellWidget(l_static,1,1,0,1);
+//
+//  l_static->setText(i18n("prevent using shared libraries"));
+//  l_static->setChecked(ldflags.find(" -static ") != -1);
+//  if (l_static->isChecked())
+//    ldadd = ldadd.replace( QRegExp(" -static"), "" );
+//  QWhatsThis::add(l_static, i18n("On systems that support dynamic linking, "
+//         "this prevents linking with the shared libraries. "
+//         "On other systems, this option has no effect."));
+//
+//  QLabel* addit_ldflags_label;
+//  addit_ldflags_label=new QLabel(ldflags_group,"addit_ldflags_label");
+//  grid3->addWidget(addit_ldflags_label,2,0);
+//  addit_ldflags_label->setText(i18n("additional flags:"));
 
-  ldflags_group->setTitle(i18n("library flags"));
-  QWhatsThis::add(ldflags_group, i18n("Set your library flags here."));
+//  addit_ldflags=new QLineEdit(ldflags_group,"addit_ldflags");
+//  grid3->addWidget(addit_ldflags,2,1);
+//  ldflags=ldflags.stripWhiteSpace();
+//  addit_ldflags->setText(ldflags);
+//  grid2->addWidget(ldflags_group,0,0);
 
-  l_remove_symbols=new QCheckBox(ldflags_group,"l_remove_symbols");
-  grid3->addMultiCellWidget(l_remove_symbols,0,0,0,1);
-  l_remove_symbols->setText(i18n("remove all symbol table and relocation information from the executable"));
-  l_remove_symbols->setChecked(ldflags.find(" -s ") != -1);
-  if (l_remove_symbols->isChecked())
-    ldadd = ldadd.replace( QRegExp("-s "), "" );
-  QWhatsThis::add(l_remove_symbols, i18n("If you want to use a debugger, you "
-      "should keep those informations in the object files. "
-      "It's useless to let the compiler generate debug "
-      "informations and to remove it with this option."));
-
-  l_static=new QCheckBox(ldflags_group,"l_static");
-  grid3->addMultiCellWidget(l_static,1,1,0,1);
-
-  l_static->setText(i18n("prevent using shared libraries"));
-  l_static->setChecked(ldflags.find(" -static ") != -1);
-  if (l_static->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -static"), "" );
-  QWhatsThis::add(l_static, i18n("On systems that support dynamic linking, "
-         "this prevents linking with the shared libraries. "
-         "On other systems, this option has no effect."));
-
-  QLabel* addit_ldflags_label;
-  addit_ldflags_label=new QLabel(ldflags_group,"addit_ldflags_label");
-  grid3->addWidget(addit_ldflags_label,2,0);
-  addit_ldflags_label->setText(i18n("additional flags:"));
-
-  addit_ldflags=new QLineEdit(ldflags_group,"addit_ldflags");
-  grid3->addWidget(addit_ldflags,2,1);
-  ldflags=ldflags.stripWhiteSpace();
-  addit_ldflags->setText(ldflags);
-  grid2->addWidget(ldflags_group,0,0);
-
-  QString ldflagsMsg = i18n("Insert other linker options here "
-              "to invoke the linker with by setting the "
-              "LDFLAGS-environment variable.");
-  QWhatsThis::add(addit_ldflags_label, ldflagsMsg);
-  QWhatsThis::add(addit_ldflags, ldflagsMsg);
+//  QString ldflagsMsg = i18n("Insert other linker options here "
+//              "to invoke the linker with by setting the "
+//              "LDFLAGS-environment variable.");
+//  QWhatsThis::add(addit_ldflags_label, ldflagsMsg);
+//  QWhatsThis::add(addit_ldflags, ldflagsMsg);
 
   QGroupBox* libs_group;
   libs_group=new QGroupBox(linkerOptions,"libs_group");
@@ -394,7 +394,7 @@ void CPrjOptionsDlg::addLinkerPage()
   addit_ldadd->setText(ldadd);
   QWhatsThis::add(addit_ldadd_label, i18n("Add additional libraries here."));
   QWhatsThis::add(addit_ldadd, i18n("Add additional libraries here."));
-  grid2->addWidget(libs_group,1,0);
+  grid2->addWidget(libs_group,0,0);
   if(prj_info->isCustomProject())
     linkerOptions->setEnabled(false);
 }
@@ -795,15 +795,15 @@ void CPrjOptionsDlg::ok()
     need_makefile_generation = true;
 
   //**********linker options*************
-  text=addit_ldflags->text();
-
-  if (l_remove_symbols->isChecked())
-    text+=" -s ";
-  if (l_static->isChecked())
-    text+=" -static";
-  prj_info->setLDFLAGS(text);
-  if(old_ldflags != prj_info->getLDFLAGS().stripWhiteSpace())
-    need_makefile_generation = true;
+//  text=addit_ldflags->text();
+//
+//  if (l_remove_symbols->isChecked())
+//    text+=" -s ";
+//  if (l_static->isChecked())
+//    text+=" -static";
+//  prj_info->setLDFLAGS(text);
+//  if(old_ldflags != prj_info->getLDFLAGS().stripWhiteSpace())
+//    need_makefile_generation = true;
   text= addit_ldadd->text();
 
   if (l_math->isChecked() && !l_khtml->isChecked())

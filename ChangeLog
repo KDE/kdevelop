@@ -15,6 +15,8 @@
 		* please report bugs and wishes in regards to this particular commit to me so I can fix
 			them and complete the report for my university :)
 		* use $(LIB_QPE) by default on qt-only SDI application to create QPE apps
+		* added new crosscompiling chapter to the manual
+		* updated to version number 2.1
 			
 2001-11-21  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of August Hörandl <august.hoerandl@gmx.at>

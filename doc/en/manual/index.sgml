@@ -2,10 +2,10 @@
 <book>
 <titlepag>
 <title>The User Manual to KDevelop
-<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 2.0
+<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 2.1
 <author>Ralf Nolden <htmlurl url="mailto:nolden@kde.org" name = "<nolden@kde.org>">
 <inst>The KDevelop Team
-<date>Version 2.0 , Mar 20, 2001
+<date>Version 2.1 , Dec 2, 2001
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
@@ -134,6 +134,21 @@ by pressing F12 or via the right mouse button menu.
 by default, but you can assign a sound or a messagebox in the preferences menu.
 <item>Many more usability improvements.
 </itemize>
+
+<bf>KDevelop 2.1:</bf>
+<itemize>
+<item>compiles under KDE 2.2 and KDE 3.0
+<item>added support for crosscompiling environments to configure crosscompilers in the KDevelop setup dialog
+<item>added support for using the crosscompilers in extending the session managment to enable the user to customize
+different compile environments, each having different options such as compiler flags and
+using --host, --build and --target configure options to crosscompile
+<item>the configuration dialog allows to specify configure options individually and interprets
+the most common ones like --enable-debug, plus holds input fields to configure the Qt path, prefix and
+X includes, header files
+<item>new combobox in the toolbar to allow the user to switch between these configurations
+<item>Qt/Embedded support in the template by configure options, also covers QPE support (qpe.sourceforge.net)
+</itemize>
+
 
 Any comments about the IDE, its documentation or feature requests are welcome.
 
@@ -2890,6 +2905,51 @@ means that the file will be processed by <idx/make/ and compiled if it is a sour
 The default is to rebuild always.
 <p>
 </descrip>
+
+<chapt>Crosscompiling<label id="Crosscompiling">
+<p>
+<sect>Setup
+<p>
+To crosscompile your application, you usually have to pass the parameters --target=, --host= and
+--build= to the configure script. When using the crosscompiler to create a binary for the target,
+you should create a customized compile configuration in your project options. Before you
+can actually start with compiling, you need to:
+<itemize>
+<item>make sure your crosscompilers are installed
+<item>make sure the binaries of the crosscompilers are in your PATH environment variable
+(e.g. put export PATH=/opt/cross/bin:$PATH into .bashrc on SuSE Linux systems)
+<item>configure KDevelop to use the crosscompilers in the KDevelop setup
+<item>select the target architecture in the Project options dialog after you added a new configuration.
+</itemize>
+
+<sect>Qt/Embedded
+<p>
+To use Qt/Embedded, pass <bf>--enable-embedded</bf> to the configure options in your configuration. Additionally,
+you will need to set the path to your Qt/Embedded directory in the same dialog. When crosscompiling to e.g. arm,
+make sure you have Qt/Embedded crosscompiled and in a separate directory. Then set this
+directory as the Qt directory in the configure options, and again pass --enable-embedded. However,
+you will not be able to test a crosscompiled version, therefore you should have a natively compiled
+version installed to test your applications with. Use the program <bf>qvfb</bf> to run your applications in.
+In case the application doesn't start up, pass the -qws parameter to the Run with Arguments command.
+
+<sect>Qt Palmtop Enviroment
+<p>
+You can also compile your application for use with the Qt Palmtop Environment that is used on handheld computers such
+as the Sharp or the Compaq iPaq. Crosscompile the Qt Palmtop sources and create a native version.
+Make sure the libqpe.so is present and in your LD_LIBRARY_PATH, so that you can run the QPE in the
+<bf>qvfb</bf>. To turn your application into a QPE application, use the QPEApplication class which is
+declared in the qpeapplication.h include file in qpe/library. Make sure your include line (-I) contains
+the qpe/library directory or copy the q*.h files from qpe/library to your qt-embedded/include directory.
+
+Further, pass the parameter <bf>--enable-palmtop</bf> to the configure script of the configuration that
+you want to use for Qt/Embedded and QPE. That will add the -lqpe linker flag dynamically as a substitute
+for the $(LIB_QPE) macro in the linker flags. If you have trouble with linking to -lqpe, the first place
+to check is if your project options->linker settings dialog contains $(LIB_QPE) in the additional
+libraries line; if not, set it there and run configure again, then call make or run.
+
+Crosscompiling should work as with Qt/Embedded; so just select the target architecture in the project options
+dialog for the according configuration.
+
 
 <chapt>The Class Browser<label id="The Class Browser">
 <p>

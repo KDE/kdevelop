@@ -24,9 +24,11 @@
 #include <qpushbutton.h>
 
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kapp.h>
+#include <klocale.h>
 
 CCompConf::CCompConf(QWidget *parent, const char *name ) : CCompConfDlg(parent,name)
  ,config(kapp->config())
@@ -99,24 +101,58 @@ CCompConf::~CCompConf(){
 }
 /** No descriptions */
 void CCompConf::slotHostArchAdd(){
+
+		
+	if((hostarchs.findIndex(host_arch_cb->currentText())!=-1) ){
+		KMessageBox::error( NULL, i18n( "Can't add Architecture %1.\n\n"
+								"The list of available architectures already "
+								"contains the given architecture." ).arg(host_arch_cb->currentText()),
+                                i18n( "Error" ) );
+ 		host_arch_cb->clearEdit();
+		return;
+	}
 	hostarchs.append(host_arch_cb->currentText());
 	host_arch_cb->clear();
 	host_arch_cb->insertStringList(hostarchs);
 }
 /** No descriptions */
 void CCompConf::slotUnixVerAdd(){
+	if((unixvers.findIndex(unix_ver_cb->currentText())!=-1) ){
+		KMessageBox::error( NULL, i18n( "Can't add System %1.\n\n"
+								"The list of available systems already "
+								"contains the given system." ).arg(unix_ver_cb->currentText()),
+                                i18n( "Error" ) );
+ 		unix_ver_cb->clearEdit();
+		return;
+	}
 	unixvers.append(unix_ver_cb->currentText());
 	unix_ver_cb->clear();
 	unix_ver_cb->insertStringList(unixvers);
 }
 /** No descriptions */
 void CCompConf::slotTargetArchAdd(){
+	if((compilearchs.findIndex(target_arch_cb->currentText())!=-1) ){
+		KMessageBox::error( NULL, i18n( "Can't add Target Architecture %1.\n\n"
+								"The list of available architectures already "
+								"contains the given architecture." ).arg(target_arch_cb->currentText()),
+                                i18n( "Error" ) );
+ 		target_arch_cb->clearEdit();
+		return;
+	}
 	compilearchs.append(target_arch_cb->currentText());
 	target_arch_cb->clear();
 	target_arch_cb->insertStringList(compilearchs);
 }
 /** No descriptions */
 void CCompConf::slotTargetPlatformAdd(){
+	if((compileplatforms.findIndex(target_platform_cb->currentText())!=-1) ){
+		KMessageBox::error( NULL, i18n( "Can't add Target System %1.\n\n"
+								"The list of available systems already "
+								"contains the given system." ).arg(target_platform_cb->currentText()),
+                                i18n( "Error" ) );
+ 		target_platform_cb->clearEdit();
+		return;
+	}
 	compileplatforms.append(target_platform_cb->currentText());
 	target_platform_cb->clear();
 	target_platform_cb->insertStringList(compileplatforms);

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The User Manual to KDevelop: Using Qt Designer in your Project</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-13.html">Next</A>
+ <A HREF="index-11.html">Previous</A>
+ <A HREF="index.html#toc12">Table of Contents</A>
+</P>
+<H3><A NAME="Using Qt Designer in your Project"></A> <A NAME="s12">12. Using Qt Designer in your Project</A></H3>
+
+<P>The Qt Designer allows the easy construction of widgets and dialogs your application uses all by graphical means.
+You see the direct appearance of your dialog as it will be presented to the user. Using the Designer is usually the first step you
+would take after creating a new project with the KAppWizard to create your main view, the user interaction dialogs and, after finishing
+the graphical work, the code generation. This way, your project will contain all the usually considered "difficult" parts that normally
+would take a long time to implement. Then, the "rest" of your work is implementing the functionality in the generated code. This
+chapter deals with how to use the dialog editor to create your project widgets as well as what to do in case you see your widgets need
+corrections or additions during the further development process.
+<P>You can switch to the Designer either by selecting "Dialog Editor" from the "View" menu or by the according toolbar icon.
+When you are done, simply close the Designer window.
+<P>The following chapters give you an overview of the Designer's interface, how to create a new dialog initially and how set up the
+properties of the child widgets that your dialog contains. You also might want to have a look at the
+<A HREF="http://doc.trolltech.com/designer/book1.html">Designer tutorial by Trolltech</A> which can also be found offline in
+KDevelops documentation browser.
+<P>
+<H3><A NAME="ss12.1">12.1 Create a new dialog with the Designer</A>
+</H3>
+
+<P>If you want to create a new dialog, simply add a new Designer file.  Go to the menubar and choose File -> New. From the box choose "Qt Designer file"
+and enter a name, for example ktestdlg.ui. The .ui file is where the Designer stores the information about the dialog. Now the Designer will come
+up and ask you which kind of template you want to use for your class. Let's choose "QDialog" for our example. Now the Designer will present an
+empty form called "Form1" and the Property Editor. First, we need to give a human-readable name to our dialog, so we click on the form's
+background and choose a suitable name for it by changing the "name" property from "Form1" to something suitable. For consistancy reasons
+you might want to call the class just like the file it is stored in (or vice versa), so we call it KTestDlg.
+<P>In order to get used to the Designer, we recommend reading the  
+<A HREF="http://doc.trolltech.com/designer/book1.html">Designer handbook</A>. It provides
+vital information about the usage of the Designer ui and the concepts behind signals and slots handling inside the Designer.
+<P>
+<P>
+<H4>Excursion: How ui files become source</H4>
+
+<P>The Designer stores the dialog class in a XML-compatible format. So, how do we get a C++ file out ouf the Designer file? Answer: KDevelop takes
+care of this! It adds the .ui file to the makefile which will then ensure that a header- and a source file will be created at compiletime. So you can
+just use it without really taking care of the source.
+<P>Because the files are recreated on every compile, you cannot implement your stuff directly into the generated files but have to derive from it.
+Read the next chapter to learn how this works.
+<P>
+<P>
+<H3><A NAME="ss12.2">12.2 Using your new dialog inside KDevelop</A>
+</H3>
+
+<P>Next, we create a class inside KDevelop that will derive from the class created with the Designer. From the "Project" menu, choose "New Class".
+Enter "KTest" as classname. We we derive from KTestDlg, enter "KTestDlg" in "Baseclass". As QDialog (the baseclass for our Dialog) derives
+from QWidget, you also need to enable the "generate a QWidget-Childclass" checkbox. This are all information KDevelop requires. If you choose
+"OK", KDevelop will create two files called "ktest.cpp" and "ktest.h" which hold the "KTest" class that derives from "KTestDlg". Note that the
+"#include" statement for "ktestdlg.h" has already been inserted by KDevelop. Now you can simply implement all your functions and use the class
+inside your project.
+<P>
+<H3><A NAME="ss12.3">12.3 Dialing with virtual slots</A>
+</H3>
+
+<P>If you want to reimplement virtual slots, use the RMB Menu in the classbrower and choose "Add slot" or use the classwizzard button situated on the
+right of method combobox in KDevelops toolbar.
+<P>Note: Do NOT call the underlying virtual function (e.g. KTestDlg::slotCancel()) in the overriding method!
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-13.html">Next</A>
+ <A HREF="index-11.html">Previous</A>
+ <A HREF="index.html#toc12">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
