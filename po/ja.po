@@ -1,0 +1,7112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-08-31 17:06+0200\n"
+"PO-Revision-Date: 1999-10-31 HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+msgid "Add member variable"
+msgstr "メンバ変数を追加"
+
+msgid "Variable"
+msgstr "変数"
+
+msgid "Modifiers"
+msgstr "モディファイア"
+
+msgid "You can set modifiers for the member variable here."
+msgstr "ここでメンバ変数のモディファイアをセットできます。"
+
+msgid "Access"
+msgstr "アクセス"
+
+msgid ""
+"You can choose here whether you want the member variable\n"
+"be declared as public, protected or private."
+msgstr ""
+"ここでメンバ変数の宣言をpublicかprotectedかprivateかに\n"
+"選択できます。"
+
+msgid "Type:"
+msgstr "型:"
+
+msgid "Enter the type of the member variable here."
+msgstr "ここでメンバ変数の型を指定して下さい。"
+
+msgid "Name:"
+msgstr "名前:"
+
+msgid "Enter the name of the member variable here."
+msgstr "ここでメンバ変数名を指定して下さい。"
+
+msgid "Documentation:"
+msgstr "ドキュメント:"
+
+msgid "You can enter a description of the member variable here."
+msgstr "ここにメンバ変数についての記述を入力します。"
+
+msgid "No type"
+msgstr "型なし"
+
+msgid "You have to specify a variable type."
+msgstr "変数の型を指定しなければなりません。"
+
+msgid "No name"
+msgstr "名前なし"
+
+msgid "You have to specify a variable name."
+msgstr "変数名を指定しなければなりません。"
+
+msgid "Add class member"
+msgstr "クラスメンバを追加"
+
+msgid "Function"
+msgstr "関数"
+
+msgid ""
+"You can choose here whether you want the member function\n"
+"be declared as public, protected or private."
+msgstr ""
+"ここでメンバ関数の宣言をpublicかprotectedかprivateかに\n"
+"選択できます。"
+
+msgid "Type"
+msgstr "型:"
+
+msgid ""
+"Choose the type of member object you want to create.\n"
+"The type can be signal, slot or method."
+msgstr ""
+"あなたの作りたいメンバオブジェクトの型を選択して下さい。\n"
+"型はシグナル、スロット、メソッドになれます。"
+
+msgid "You can set modifiers for the member function here."
+msgstr "ここでメンバ関数のモディファイアをセットできます。"
+
+msgid "Enter the type of the member function here."
+msgstr "ここでメンバ関数の型を指定して下さい。"
+
+msgid "Declaration:"
+msgstr "宣言:"
+
+msgid "Enter the declaration of the member function here."
+msgstr "ここにメンバ関数の宣言を入力して下さい。"
+
+msgid "You can enter a description of the member function here."
+msgstr "ここにメンバ関数についての記述を入力します。"
+
+msgid "Method"
+msgstr "メソッド"
+
+msgid "You have to specify a function type."
+msgstr "関数の型を指定しなければなりません。"
+
+msgid "You have to specify a function name."
+msgstr "関数名を指定しなければなりません。"
+
+msgid "Add existing files to project"
+msgstr "既存のファイルをプロジェクトに追加"
+
+msgid "Sourcefile(s):"
+msgstr "ソースファイル:"
+
+msgid "Destinationdir:"
+msgstr "ディレクトリ:"
+
+msgid ""
+"Select the source files to be added\n"
+"to the project here."
+msgstr ""
+"プロジェクトに追加するファイルを\n"
+"ここで選択して下さい。"
+
+msgid ""
+"Select the directory where the new\n"
+"source files will be copied to here."
+msgstr ""
+"新しいソースファイルをコピーする\n"
+"ディレクトリを選択して下さい。"
+
+msgid "insert header/cpp-templates to added files"
+msgstr "追加されたファイルにヘッダー/cppテンプレートを挿入する"
+
+msgid "Check this if you want to insert your template to the added files."
+msgstr "追加されたファイルにテンプレートを挿入したい時はここをチェックして下さい。"
+
+msgid "Source File(s)..."
+msgstr "ソースファイル..."
+
+msgid "Destination Directory"
+msgstr "ディレクトリ"
+
+msgid "Error..."
+msgstr "エラー..."
+
+msgid "You must choose a destination, that is in your project-dir!"
+msgstr "プロジェクトディレクトリ内にdestinationを選択して下さい。"
+
+msgid "You must choose a valid dir as a destination!"
+msgstr "有効なディレクトリをdestinationとして選択して下さい!"
+
+msgid "Add new Translation File"
+msgstr "新しい翻訳ファイルを追加"
+
+msgid "Language:"
+msgstr "言語:"
+
+msgid "Your sourcecode is already translated to all supported languages."
+msgstr "あなたのソースコードは既にサポートされている全ての言語に翻訳されています。"
+
+msgid "Bug Report"
+msgstr "バグリポート"
+
+msgid ""
+"Fill in all information,\n"
+"we need to help you."
+msgstr ""
+"あなたを助けるのに必要なので\n"
+"全ての情報を埋めて下さい。"
+
+msgid "Severity"
+msgstr "重大度"
+
+msgid "Priority"
+msgstr "優先度"
+
+msgid "Your Name :"
+msgstr "あなたの名前 :"
+
+msgid "Your E-mail Address :"
+msgstr "あなたのEメールアドレス :"
+
+msgid "Subject :"
+msgstr "件名 :"
+
+msgid "Error Class :"
+msgstr "エラークラス :"
+
+msgid "low"
+msgstr "低"
+
+msgid "medium"
+msgstr "中"
+
+msgid "high"
+msgstr "高"
+
+msgid "normal"
+msgstr "普通"
+
+msgid "grave"
+msgstr "深刻"
+
+msgid "critical"
+msgstr "致命的"
+
+msgid "Error Location :"
+msgstr "エラーの場所 :"
+
+msgid "General information"
+msgstr "全般の情報"
+
+msgid "Environment"
+msgstr "環境"
+
+msgid "KDevelop version :"
+msgstr "KDevelop バージョン :"
+
+msgid "KDE version :"
+msgstr "KDE バージョン :"
+
+msgid "QT version :"
+msgstr "QT バージョン :"
+
+msgid "OS / distribution :"
+msgstr "OS / ディストリビューション :"
+
+msgid "Compiler"
+msgstr "コンパイラ"
+
+msgid "System information"
+msgstr "システム情報"
+
+msgid ""
+"Insert as much information about your\n"
+"problem, so that we are able to help by\n"
+"your description."
+msgstr ""
+"問題についての情報を入力して下さい。\n"
+"あなたの記述によって私達はあなたを助け\n"
+"られるかも知れません。"
+
+msgid "Bug Description :"
+msgstr "バグについての記述 :"
+
+msgid "How to repeat the error :"
+msgstr "どのようにエラーが繰り返されるか :"
+
+msgid "Perhaps a bugfix or workaround ?"
+msgstr "バグフィックスか作業中か ?"
+
+msgid "Problem description"
+msgstr "問題についての記述 :"
+
+msgid "Send E-Mail"
+msgstr "Eメールを送る"
+
+msgid "Please fill in at least the subject and bug description!"
+msgstr "少なくとも件名とバグについての記述は埋めて下さい!"
+
+msgid ""
+"Bugreport was successfully submitted to the KDevelop Team.\n"
+"\t\tThank you!"
+msgstr ""
+"バグリポートは KDevelopチームに無事、提出されました。 \n"
+"\t\tどうもありがとうございます!"
+
+msgid "Class Tool"
+msgstr "クラスツール"
+
+msgid "Class:"
+msgstr "クラス:"
+
+msgid "All"
+msgstr "全て"
+
+msgid "Show parents"
+msgstr "親クラスを表示"
+
+msgid "Show children"
+msgstr "子クラスを表示"
+
+msgid "Show clients"
+msgstr "クライアントを表示"
+
+msgid "Show suppliers"
+msgstr "サプライアを表示"
+
+msgid "Show attributes"
+msgstr "属性を表示"
+
+msgid "Show methods"
+msgstr "メソッドを表示"
+
+msgid "Show virtual methods"
+msgstr "仮想メソッドを表示"
+
+msgid "Parents"
+msgstr "親"
+
+msgid "Children"
+msgstr "子"
+
+msgid "Clients"
+msgstr "クライアント"
+
+msgid "Suppliers"
+msgstr "サプライア"
+
+msgid " attributes"
+msgstr " 属性"
+
+msgid " methods"
+msgstr " メソッド"
+
+msgid " virtual methods"
+msgstr " 仮想メソッド"
+
+msgid "Class Tool Dialog"
+msgstr "クラスツールダイアログ"
+
+msgid " of class "
+msgstr " のクラス"
+
+msgid "Class"
+msgstr "クラス"
+
+msgid "Go to declaration"
+msgstr "宣言へ移動"
+
+msgid "Go to definition"
+msgstr "定義へ移動"
+
+msgid "Attribute"
+msgstr "属性"
+
+msgid "Project"
+msgstr "プロジェクト"
+
+msgid "New file..."
+msgstr "新しいファイル..."
+
+msgid "New class..."
+msgstr "新しいクラス..."
+
+msgid "Add Folder..."
+msgstr "新しいフォルダ..."
+
+msgid "Options..."
+msgstr "オプション..."
+
+msgid "Graphical classview.."
+msgstr "グラフィカルクラスビュー.."
+
+msgid "Add member function..."
+msgstr "メンバ関数を追加..."
+
+msgid "Add member variable..."
+msgstr "メンバ変数を追加..."
+
+msgid "Implement virtual function..."
+msgstr "仮想関数をインプリメント..."
+
+msgid "Parent classes..."
+msgstr "親クラス..."
+
+msgid "Child classes..."
+msgstr "子クラス..."
+
+msgid "Classtool..."
+msgstr "クラスツール..."
+
+msgid "Add slot for signal"
+msgstr "スロットを追加"
+
+msgid "Delete class"
+msgstr "クラスを削除"
+
+msgid "ClassWizard"
+msgstr "クラスウィザード"
+
+msgid "Struct"
+msgstr "Struct"
+
+msgid "Delete method"
+msgstr "メソッドを削除"
+
+msgid "Delete attribute"
+msgstr "属性を削除"
+
+msgid "Slot"
+msgstr "スロット"
+
+msgid "Delete slot"
+msgstr "スロットを削除"
+
+msgid "Signal"
+msgstr "シグナル"
+
+msgid "Delete signal"
+msgstr "シグナルを削除"
+
+msgid "Folder"
+msgstr "フォルダ"
+
+msgid "Delete Folder..."
+msgstr "フォルダを削除..."
+
+msgid "Structures"
+msgstr "構造体"
+
+msgid "Functions"
+msgstr "関数"
+
+msgid "Variables"
+msgstr "変数"
+
+msgid "Graphical classview"
+msgstr "グラフィカルクラスビュー"
+
+msgid "No item selected."
+msgstr "何も選択されていません。"
+
+msgid "The class:"
+msgstr "クラス:"
+
+msgid "couldn't be found."
+msgstr "は見つかりませんでした。"
+
+msgid "The struct:"
+msgstr "構造体:"
+
+msgid "Not found"
+msgstr "見つかりません"
+
+msgid "Are you sure you want to delete this class?"
+msgstr "本当にこのクラスを削除してよろしいですか?"
+
+msgid "Are you sure you want to delete this attribute?"
+msgstr "本当にこの属性を削除してよろしいですか?"
+
+msgid "Delete folder"
+msgstr "フォルダを削除"
+
+msgid "Are you sure you want to delete this folder?"
+msgstr "本当にこのフォルダを削除してよろしいですか?"
+
+msgid "Create Search Database..."
+msgstr "検索データベースを作成..."
+
+msgid "Index Size"
+msgstr "インデックスサイズ"
+
+msgid "tiny size"
+msgstr "サイズ 極小"
+
+msgid "small size"
+msgstr "サイズ 小"
+
+msgid "medium size"
+msgstr "サイズ 中"
+
+msgid "Index Options"
+msgstr "インデックスオプション"
+
+msgid "index the QT documentation"
+msgstr "QTドキュメントインデックス"
+
+msgid "index the KDE documentation"
+msgstr "KDEドキュメントインデックス"
+
+msgid "additional directories to index"
+msgstr "インデックスディレクトリに追加"
+
+msgid "add"
+msgstr "追加"
+
+msgid "remove"
+msgstr "削除"
+
+#, c-format
+msgid ""
+"builds a medium-size index (20-30% of the size\n"
+"of all files), allowing faster search."
+msgstr ""
+"サイズ 中のインデックス(全ファイルの20-30%)は\n"
+"より速い検索が可能になります。"
+
+msgid ""
+"Build a small index rather than tiny (meaning 7-9%\n"
+"of the sizes of all files - your mileage may vary)\n"
+"allowing faster search."
+msgstr ""
+"サイズ 小のインデックス(全ファイルの7-9% - 伸びは\n"
+"変わりますが)は 極小 より速い検索が\n"
+"可能になります。"
+
+#, c-format
+msgid "a tiny index (2-3% of the total size of all files)"
+msgstr "極小 のインデックス(全ファイルの2-3%)"
+
+msgid "No Database created!"
+msgstr "データベースがありません!"
+
+msgid "The KDE-Documentation-Path isn't set correctly."
+msgstr "KDE-ドキュメントのパスが正しく設定されていません。"
+
+msgid "The Qt-Documentation-Path isn't set correctly."
+msgstr "Qt-ドキュメントのパスが正しく設定されていません。"
+
+msgid "Select Directory..."
+msgstr "ディレクトリを選択..."
+
+msgid "Add folder"
+msgstr "フォルダを追加"
+
+msgid "Folder name:"
+msgstr "フォルダ名:"
+
+msgid "You have to specify a foldername."
+msgstr "フォルダ名を指定しなければなりません。"
+
+msgid "Forward"
+msgstr "前"
+
+msgid "Add Bookmark"
+msgstr "ブックマークを追加"
+
+msgid "View in new window"
+msgstr "新しいウィンドウで表示"
+
+msgid "grep: "
+msgstr "grep: "
+
+msgid "look up: "
+msgstr "探す: "
+
+msgid "Not found!"
+msgstr "見つかりませんでした!"
+
+msgid "\" not found!"
+msgstr "\" 見つかりませんでした!"
+
+msgid "Small"
+msgstr "小"
+
+msgid "Medium"
+msgstr "中"
+
+msgid "Large"
+msgstr "大"
+
+msgid "Standard Font"
+msgstr "標準フォント"
+
+msgid "Fixed Font"
+msgstr "固定幅フォント"
+
+msgid "Background Color:"
+msgstr "背景の色:"
+
+msgid "Normal Text Color:"
+msgstr "通常のテキスト色:"
+
+msgid "URL Link Color:"
+msgstr "URLリンク色:"
+
+msgid "Followed Link Color:"
+msgstr "訪れたリンクの色:"
+
+msgid "Underline links"
+msgstr "リンクに下線"
+
+msgid "Always use my colors"
+msgstr "常に自分の色を使う"
+
+msgid "Documentation Browser Options"
+msgstr "ドキュメントブラウザオプション"
+
+msgid "Colors"
+msgstr "色"
+
+msgid "Enter the name of the entry here."
+msgstr "ここにエントリの名前を入力して下さい。"
+
+msgid "File:"
+msgstr "ファイル:"
+
+msgid "Enter the file of the entry here."
+msgstr "ここにエントリのファイルを入力して下さい。"
+
+msgid "Here you can browse through the disc to select a file for the entry."
+msgstr "ここで、選択するためにディスク中のエントリのファイルをブラウズできます。"
+
+msgid "Arguments: "
+msgstr "引数: "
+
+msgid "Clear Arguments"
+msgstr "引数をクリア"
+
+msgid "File Properties"
+msgstr "ファイルのプロパティ"
+
+msgid "Distribution"
+msgstr "配布"
+
+msgid "Filetype"
+msgstr "ファイルタイプ"
+
+msgid "Installation"
+msgstr "インストール"
+
+msgid "Size:"
+msgstr "サイズ:"
+
+msgid "include in distribution"
+msgstr "配布に含める"
+
+msgid "install"
+msgstr "インストール"
+
+msgid "Installdir + Filename:"
+msgstr "インストールディレクトリ+ファイル名:"
+
+msgid ""
+"This option sets if the actual file\n"
+"will be included in the final distri-\n"
+"bution."
+msgstr ""
+"最終的な配布に実際に\n"
+"含ませるファイルを\n"
+"セットします。"
+
+msgid ""
+"This option sets if the actual file\n"
+"will be installed to the platform during\n"
+"the installation process of make install\n"
+"If the install button is checked, you have\n"
+"to set the installation path and filename\n"
+"Possible values are e.g.:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Other values can be found in the Makefile"
+msgstr ""
+"make install のインストールプロセス中に\n"
+"実際にファイルがどこにインストールされる\n"
+"かをこのオプションでセットします。インストール\n"
+"ボタンがチェックされるとインストールパスや\n"
+"ファイルをセットする必要があります\n"
+"可能な変数の例は:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"その他の値はMakefileで見つけられます"
+
+msgid "Search for Help on..."
+msgstr "ヘルプから検索..."
+
+msgid "Search for:"
+msgstr "検索:"
+
+msgid "&Search"
+msgstr "ヘルプを検索(&S)"
+
+msgid "Groupname:"
+msgstr "グループ名:"
+
+msgid "Filters:"
+msgstr "フィルター:"
+
+msgid "Application Wizard"
+msgstr "Application Wizard"
+
+msgid "exit the CKAppWizard"
+msgstr "CKAppWizardを終了"
+
+msgid "Create"
+msgstr "作成"
+
+msgid "creating the project"
+msgstr "プロジェクトを作成中"
+
+msgid "set all changes back"
+msgstr "全ての変更を戻す"
+
+msgid "Applications"
+msgstr "アプリケーション"
+
+msgid "Label:"
+msgstr "ラベル:"
+
+msgid "Others"
+msgstr "その他"
+
+msgid "custom project"
+msgstr "カスタムプロジェクト"
+
+msgid "Terminal"
+msgstr "ターミナル"
+
+msgid "C++"
+msgstr "C++"
+
+msgid "C"
+msgstr "C"
+
+msgid "Qt"
+msgstr "Qt"
+
+msgid "Normal"
+msgstr "標準"
+
+msgid "KDE"
+msgstr "KDE"
+
+msgid "Mini"
+msgstr "ミニ"
+
+msgid "Generate settings"
+msgstr "設定を作成"
+
+msgid "Projectname:"
+msgstr "プロジェクト名:"
+
+msgid "Projectdirectory:"
+msgstr "プロジェクトディレクトリ:"
+
+msgid "Versionnumber:"
+msgstr "バージョン:"
+
+msgid "Author:"
+msgstr "作者:"
+
+msgid "Email:"
+msgstr "Eメール:"
+
+msgid "generate sources and headers"
+msgstr "ソース、ヘッダーを生成"
+
+msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
+msgstr "GNU-スタンダードファイル (INSTALL,README,COPYING...)"
+
+msgid "User-Documentation"
+msgstr "ユーザードキュメント"
+
+msgid "API-Documentation"
+msgstr "API-ドキュメント"
+
+msgid "lsm-File - Linux Software Map"
+msgstr "lsm-ファイル - Linux Software Map"
+
+msgid ".kdelnk-File"
+msgstr ".kdelnk-ファイル"
+
+msgid "Program-Icon"
+msgstr "プログラムアイコン"
+
+msgid "Mini-Icon"
+msgstr "ミニアイコン"
+
+msgid ""
+"Insert your project name here. This is\n"
+"also the name of the directory where your Project\n"
+"will be created."
+msgstr ""
+"プロジェクト名を入力して下さい。これはまた\n"
+"あなたのプロジェクトが作られた時のディレクトリ名\n"
+"でもあります。"
+
+msgid "Enter the toplevel-directory of your project.\n"
+msgstr "プロジェクトのトップディレクトリを入力して下さい\n"
+
+msgid ""
+"Set the initial version number of your project here.\n"
+"The number will be used in the about-dialog as well as for\n"
+"determining the project's package numbering for distribution."
+msgstr ""
+"あなたのプロジェクトの最初のバージョン数を入力して下さい。\n"
+"この数字はaboutダイアログや配布物のためのプロジェクトの\n"
+"パッケージナンバリングに使われます。"
+
+msgid ""
+"Insert your name or the development team name here. This will be used\n"
+"for adding your name as the author to all generated files of your project."
+msgstr ""
+"ここにあなたの名前か開発チーム名を入力して下さい。これはプロジェクトの\n"
+"全ての生成されるファイルに作者としてあなたの名前を加えるために使います。"
+
+msgid ""
+"Enter your email adress here. This will be\n"
+"used for file header information."
+msgstr ""
+"ここにあなたのメールアドレスを入力して下さい。\n"
+"この情報はヘッダーファイルに使われます。"
+
+msgid ""
+"Generate a HTML-based documentation set\n"
+"for your project classes including cross-references to\n"
+"the used libraries."
+msgstr ""
+"ここでプロジェクトクラス用にHTMLベースのドキュメントセット\n"
+"を生成します。それは使用しているライブラリへの\n"
+"クロスリファレンスを含みます。"
+
+msgid ""
+"Generate a preset documentation handbook in HTML\n"
+"by an SGML file included with your package."
+msgstr ""
+"ここであなたのパッケージに含まれるSGMLから生成されるHTML形式の\n"
+"プリセットドキュメントを生成します。"
+
+msgid ""
+"Create a lsm-file for your project. The Linux Software Map\n"
+"is a file generally used for projects for distribution purpose and contains\n"
+"a short description of the project including the requirements on the side "
+"of\n"
+"the end-user."
+msgstr ""
+"あなたのプロジェクトのlsm-ファイルを作成します。Linux Software Map\n"
+"は一般的にプロジェクトの配布目的に使われるファイルで\n"
+"エンドユーザー側から見た必要なもの"
+"等の\n"
+"プロジェクトに関する短い記述です"
+
+msgid ""
+"Generate a set of GNU standard files for your project.\n"
+"These will give the end-user of the sourcepackage an overview about\n"
+"the licensing, readme's etc, as well as a ChangeLog file for you to\n"
+"protocol your changes."
+msgstr ""
+"あなたのプロジェクトのGNUスタンダードファイルセットを生成します。\n"
+"これらはエンドユーザーに、あなたの変更を反映するChangeLog\n"
+"ファイル、ライセンス、readmeなどの\n"
+"ソースパッケージの概観を提供します。"
+
+msgid ""
+"Add a program icon to your project that represents\n"
+"your application in the window manager."
+msgstr ""
+"あなたのプロジェクトにウィンドウマネージャでアプリケーション\n"
+"を示すプログラムアイコンを追加します。"
+
+msgid ""
+"Add a mini program icon to your project that is used\n"
+"for window-manager popup menus."
+msgstr ""
+"あなたのプロジェクトにウィンドウマネージャのポップアップ\n"
+"メニューで使われるミニプログラムアイコンを追加します。"
+
+msgid ""
+"Add a KDE link file which is installed in\n"
+"the KDE panel of the end-user. By default, your application's\n"
+"link file will be installed in the Applications-menu. You can\n"
+"change this destination by editing the installation properties\n"
+"for the link file later."
+msgstr ""
+"エンドユーザー用の KDE panel にインストールされる\n"
+"KDE link ファイルを追加します。標準ではあなたのアプリケーション\n"
+"のlinkファイルはアプリケーションメニューにインストールされます。\n"
+"あなたはlinkファイルのインストールプロパティを後で変更すること\n"
+"によってこれを変更することができます。"
+
+msgid ""
+"Lets you select another icon for your program\n"
+"than the sample program icon provided by the Application\n"
+"Wizard."
+msgstr ""
+"あなたのプログラムのアプリケーションウィザード\n"
+"によって提供されるサンプルアイコンを他のアイコンに\n"
+"変更します。"
+
+msgid ""
+"Lets you select another mini-icon for your program\n"
+"than the sample program icon provided by the Application\n"
+"Wizard."
+msgstr ""
+"あなたのプログラムのアプリケーションウィザード\n"
+"によって提供されるサンプルミニアイコンを他のアイコンに\n"
+"変更します。"
+
+msgid "Version Control System Support"
+msgstr "バージョンコントロールサポート"
+
+msgid "vcs support"
+msgstr "vcsサポート"
+
+msgid "vcs location"
+msgstr "vcsの場所"
+
+msgid "repository in vcs"
+msgstr "vcsのレポジトリ"
+
+msgid "vendor tag"
+msgstr ""
+
+msgid "log message"
+msgstr "ログメッセージ"
+
+msgid "release tag"
+msgstr ""
+
+msgid ""
+"Here you can enter the log message for the\n"
+"version control system."
+msgstr ""
+"ここでバージョンコントロールシステムに\n"
+"ログメッセージを入力できます。"
+
+msgid ""
+"Here you can choose the vendor tag, which your project\n"
+"has in the version control system."
+msgstr ""
+"ここでバージョンコントロールシステムにあなたのプロジェクト\n"
+"が持つvendor tagを選択できます。"
+
+msgid ""
+"Here you can choose a special pointer for the first\n"
+"entry in the version control system."
+msgstr ""
+"ここでバージョンコントロールシステムの最初のエントリー\n"
+"のspecial pointerを選択できます。"
+
+msgid ""
+"Here you can choose the version control system,\n"
+"which you want to use."
+msgstr ""
+"ここであなたの使いたいバージョンコントロールシステム\n"
+"を選択できます。"
+
+msgid ""
+"Here you can choose where your vcsroot loction should be.\n"
+"At the moment we only support local vs. And be sure, you\n"
+"have read and write access in the location."
+msgstr ""
+"ここでvcsrootの場所を選択して下さい。\n"
+"現時点ではローカルなvsのみサポートしています。その場所で\n"
+"read と write のアクセスができます。"
+
+msgid ""
+"Here you can see the repository of your project in the\n"
+"version control system. The repository is dependend on\n"
+"the directory of your project. You can not change the\n"
+"repository direct."
+msgstr ""
+"ここであなたのプロジェクトのバージョンコントロールシステムの\n"
+"レポジトリを閲覧できます。レポジトリはあなたのプロジェクトの\n"
+"ディレクトリとは独立です。あなたは直接レポジトリを変更する\n"
+"ことはできません。"
+
+msgid "Headertemplate for .h-files"
+msgstr ".h-ファイル用のヘッダーテンプレート"
+
+msgid "headertemplate for .h-files"
+msgstr ".h-ファイル用のヘッダーテンプレート"
+
+msgid "Load..."
+msgstr "読み込み..."
+
+msgid "New"
+msgstr "新規"
+
+msgid ""
+"Press this button to select an\n"
+"existing header template file"
+msgstr ""
+"ヘッダーテンプレートを選択して\n"
+"このボタンを押して下さい"
+
+msgid "Clears the pre-set headertemplate"
+msgstr "ヘッダーテンプレートをクリア"
+
+msgid "Edit your headertemplate here"
+msgstr "ヘッダーテンプレートを編集して下さい"
+
+msgid ""
+"Use a standard\n"
+"headertemplate for your headerfiles"
+msgstr ""
+"標準のヘッダーファイル用の\n"
+"ヘッダーテンプレートを使用する"
+
+msgid "Headertemplate for .cpp-files"
+msgstr ".cpp-ファイル用のヘッダーテンプレート"
+
+msgid "headertemplate for .cpp-files"
+msgstr ".cpp-ファイル用のヘッダーテンプレート"
+
+msgid ""
+"Use a standard\n"
+"headertemplate for your implementation files"
+msgstr ""
+"標準のインプリメントファイル用の\n"
+"ヘッダーテンプレートを使用する"
+
+msgid "Processes"
+msgstr "プロセス"
+
+msgid "Displays the normal output of the project generator"
+msgstr "プロジェクトジェネレータの標準出力を表示します"
+
+msgid "Displays warnings and errormessages of the project generator"
+msgstr "プロジェクトジェネレータの警告やエラーメッセージを表示します"
+
+msgid "Directory"
+msgstr "ディレクトリ"
+
+msgid "Select your template for Header-file headers"
+msgstr "ヘッダーファイル用のテンプレートを選択してください"
+
+msgid "Select your template for C-file headers"
+msgstr "C-ファイル用のテンプレートを選択してください"
+
+msgid "Select your template for Cpp-file headers"
+msgstr "Cpp-ファイル用のテンプレートを選択してください"
+
+msgid "sgml2html and ksgml2html do not exist!"
+msgstr "sgml2html と ksgml2html が存在しません!"
+
+msgid ""
+"If you want to generate the user-documentation, you need one of these "
+"programs.\n"
+"If you do not have one, the user-documentation will not be generate."
+msgstr ""
+"ユーザードキュメントを生成したい時、これらの内一つが必要です。"
+"\n"
+"もしどれもないとユーザードキュメントは生成されません。"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid " already exists!"
+msgstr " 既に存在します!"
+
+msgid "It isn't possible to generate a new project into an existing directory."
+msgstr "存在するディレクトリに新しいプロジェクトを生成することはできません。"
+
+msgid "Exit"
+msgstr "終了"
+
+msgid ""
+"Create a KDE-application with session-management, menubar, toolbar, "
+"statusbar and support for a document-view codeframe model."
+msgstr ""
+"セッションマネージメント、メニューバー、 ツールバー、ステータスバー"
+"、ドキュメントビューサポートを含む コードフレームモデルをもつ KDEアプリケーションを生成。"
+
+msgid "Create a KDE-application with an empty main widget."
+msgstr "空のウィジェットだけを含む KDEアプリケーションを生成。"
+
+msgid ""
+"Create a Qt-Application with a main window containing a menubar, toolbar and "
+"statusbar, including support for a generic document-view model."
+msgstr ""
+"メインウィンドウにメニューバー、ツール バー、ステータスバー、一般的な ドキュメント"
+"ビューサポートを含む Qtアプリケーションを生成。"
+
+msgid "Headertemplate for .c-files"
+msgstr ".c-ファイル用のヘッダーテンプレート"
+
+msgid "headertemplate for .c-files"
+msgstr ".c-ファイル用のヘッダーテンプレート"
+
+msgid ""
+"Create a C application. The program will run in a terminal and doesn't "
+"contain any support for classes and Graphical User Interface."
+msgstr ""
+"Cアプリケーションを作成します。 このプログラムはターミナル上で実行され、 "
+"クラスやGUIのサポートは含まれません。"
+
+msgid ""
+"Create a C++ application. The program will run in a terminal and doesn't "
+"contain any support for a Graphical User Interface."
+msgstr ""
+"C++アプリケーションを作成します。 このプログラムはターミナル上で実行され、 "
+"GUIのサポートは含まれません。"
+
+msgid ""
+"Creates an empty project to work with existing development projects. "
+"KDevelop will not take care of any Makefiles as those are supposed to be "
+"included with your old project."
+msgstr ""
+"既存の開発プロジェクトを使うための空の プロジェクトを作成します。 "
+"KDevelopはあなたの古いプロジェクトで サポートされていたどんなMakefileにも "
+"関与しません。"
+
+msgid ""
+"Contains all KDE-compliant\n"
+"project types."
+msgstr ""
+"全てのKDE対応プロジェクト\n"
+"タイプを含みます。"
+
+msgid ""
+"Contains all Qt-based\n"
+"project types."
+msgstr ""
+"全てのQtベースのプロジェクト\n"
+"タイプを含みます。"
+
+msgid ""
+"Contains all C/C++-terminal\n"
+"project types."
+msgstr ""
+"全てのC/C++ターミナルプロジェクト\n"
+"タイプを含みます。"
+
+msgid "Contains all individual project types."
+msgstr "全ての個人的なプロジェクトタイプを 含みます。"
+
+msgid "Translations"
+msgstr "翻訳"
+
+msgid "Dialogs"
+msgstr "ダイアログ"
+
+msgid "Sources"
+msgstr "ソース"
+
+msgid "Headers"
+msgstr "ヘッダー"
+
+msgid "Creating new file..."
+msgstr "新しいファイル作成中..."
+
+msgid "Ready."
+msgstr "準備完了."
+
+msgid "Opening file..."
+msgstr "ファイルを開いています..."
+
+msgid "Closing file..."
+msgstr "ファイルを閉じています..."
+
+msgid "Save?"
+msgstr "保存しますか?"
+
+msgid "The document was modified,save?"
+msgstr "文書は変更されています、保存しますか?"
+
+msgid "Closing all files..."
+msgstr "すべてのファイルを閉じています..."
+
+msgid "Save changed files ?"
+msgstr "変更されたファイルを保存しますか?"
+
+msgid ""
+"The project\n"
+"\n"
+msgstr ""
+"プロジェクト\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"contains changed files. Save modified file\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"変更されたファイルを含みます。変更されたファイルを保存します\n"
+"\n"
+
+msgid "Save all"
+msgstr "全て保存"
+
+msgid "Untitled.h"
+msgstr "Untitled.h"
+
+msgid "Untitled.cpp"
+msgstr "Untitled.cpp"
+
+msgid "File modified"
+msgstr "ファイルは変更されました"
+
+msgid "Saving file "
+msgstr "ファイルを保存中 "
+
+msgid "File "
+msgstr "ファイル "
+
+msgid " not saved."
+msgstr " は保存されていません。"
+
+msgid " saved."
+msgstr " は保存されました。"
+
+msgid "Save file as..."
+msgstr "ファイルを名前をつけて保存..."
+
+msgid "Saving all changed files..."
+msgstr "変更のあったすべてのファイルを保存..."
+
+msgid "Autosaving..."
+msgstr "自動保存中..."
+
+msgid "Exiting..."
+msgstr "終了処理中..."
+
+msgid "Cutting..."
+msgstr "切り取り中..."
+
+msgid "Copying..."
+msgstr "コピー中..."
+
+msgid "Pasting selection..."
+msgstr "貼り付け中..."
+
+msgid "Inserting file contents..."
+msgstr "ファイルの中身を挿入..."
+
+msgid "Searching..."
+msgstr "検索中..."
+
+msgid "Repeating last search..."
+msgstr "最近のを検索中..."
+
+msgid "Searching in Files..."
+msgstr "ファイルの中を検索中..."
+
+msgid "Replacing..."
+msgstr "置換中..."
+
+msgid "Selecting all..."
+msgstr "全てを選択..."
+
+msgid "Switching to selected line..."
+msgstr "選択したラインに移動中..."
+
+msgid "Compiling "
+msgstr "コンパイル中 "
+
+msgid "Running "
+msgstr "実行中 "
+
+msgid "Execute with Arguments"
+msgstr "引数をつけて実行"
+
+msgid "Running  "
+msgstr "実行中  "
+
+msgid "  in KDbg"
+msgstr "  in KDbg"
+
+msgid "Running make..."
+msgstr "make を実行中..."
+
+msgid "Running make clean-command "
+msgstr "make clean を実行中"
+
+msgid "Running make clean and rebuilding all..."
+msgstr "make clean、全てをリビルド中..."
+
+msgid "Running make distclean..."
+msgstr "make distclean を実行中..."
+
+msgid "Running autoconf/automake suite..."
+msgstr "autoconf/automake を実行中..."
+
+msgid "Configure with Arguments"
+msgstr "Configure を引数をつけて実行"
+
+msgid "Running ./configure..."
+msgstr "./configure を実行中..."
+
+msgid "Killing current process..."
+msgstr "現在のプロセスをkill中..."
+
+msgid "Setting up the Editor..."
+msgstr "エディタの設定中..."
+
+msgid "Setting up the Editor's colors..."
+msgstr "エディタの配色を設定中..."
+
+msgid "Setting up syntax highlighting default colors..."
+msgstr "シンタックスハイライトの標準色を設定中..."
+
+msgid "Setting up syntax highlighting colors..."
+msgstr "シンタックスハイライトの色を設定中..."
+
+msgid "Configuring Documentation Browser..."
+msgstr "ドキュメントブラウザを設定中..."
+
+msgid "Configuring Tools-Menu entries..."
+msgstr "ツールメニューエントリーを設定中..."
+
+msgid "Setting up KDevelop..."
+msgstr "KDevelopを設定中..."
+
+msgid "Updating KDE-Libs documentation..."
+msgstr "KDE-Libsドキュメントを更新中..."
+
+msgid "Generating Documentation..."
+msgstr "ドキュメントを生成中..."
+
+msgid "Creating Search Database..."
+msgstr "検索データベースを作成中です..."
+
+msgid "Opening bookmark..."
+msgstr "ブックマークを開いています..."
+
+msgid "Switching to last page..."
+msgstr "前のページに移動中..."
+
+msgid "Switching to next page..."
+msgstr "次のページに移動中..."
+
+msgid "Opening history page..."
+msgstr "履歴のページを開く..."
+
+msgid "Reloading page..."
+msgstr "ページを再読み込み中..."
+
+msgid "You must select a text for searching the documentation!"
+msgstr "ドキュメント検索のためにテキストを選択しなければなりません!"
+
+msgid "Searching selected text in documentation..."
+msgstr "選択されたテキストがドキュメント中にあるか検索中..."
+
+msgid ""
+"KDevelop couldn't find the search database.\n"
+" Do you want to generate it now?"
+msgstr ""
+"KDevelopは検索データベースを見つけられませんでした。\n"
+"今それを生成しますか?"
+msgid "Searching for Help on..."
+msgstr "ヘルプを検索中..."
+
+msgid "No Project API documentation !"
+msgstr "プロジェクトAPIドキュメントがありません!"
+
+msgid ""
+"The Project API documentation is not present.\n"
+"Would you like to generate it now ?"
+msgstr ""
+"プロジェクトAPIドキュメントが存在しません。\n"
+"今それを生成しますか?"
+
+msgid "Switching to project API Documentation..."
+msgstr "プロジェクトAPIドキュメントに移動中..."
+
+msgid "No Project manual found !"
+msgstr "プロジェクトマニュアルがありません!"
+
+msgid ""
+"The Project manual documentation is not present.\n"
+"Would you like to generate the handbook  now ?"
+msgstr ""
+"プロジェクトマニュアルが存在しません。\n"
+"今ハンドブックを生成しますか?"
+
+msgid "Switching to project Manual..."
+msgstr "プロジェクトマニュアルに移動中..."
+
+msgid "About KDevelop..."
+msgstr "KDevelopについて..."
+
+msgid "\t   KDevelop Version "
+msgstr "\t   KDevelop Version "
+
+#, c-format
+msgid "Line: %d Col: %d"
+msgstr "行: %d 列: %d"
+
+msgid "\" not found in documentation!"
+msgstr "\" はドキュメントにありませんでした!"
+
+msgid "Search for: "
+msgstr "検索: "
+
+msgid "Title"
+msgstr "タイトル"
+
+msgid "Hits"
+msgstr "ヒット"
+
+msgid "*** failed ***\n"
+msgstr "*** 失敗 ***\n"
+
+msgid "*** success ***\n"
+msgstr "*** 成功 ***\n"
+
+#, c-format
+msgid "*** exit-code: %i ***\n"
+msgstr "*** exit-code: %i ***\n"
+
+msgid "Press Enter to continue!"
+msgstr "続けるには Enter を押して下さい!"
+
+msgid "*** process exited with error(s) ***\n"
+msgstr "*** process exited with error(s) ***\n"
+
+msgid "Qt-Library"
+msgstr "Qt ライブラリ"
+
+msgid "File not found!"
+msgstr "ファイルが見つかりません!"
+
+msgid "KDE-Core-Library"
+msgstr "KDE-Core ライブラリ"
+
+msgid "KDE-UI-Library"
+msgstr "KDE-UI ライブラリ"
+
+msgid "KDE-KFile-Library"
+msgstr "KDE-KFile ライブラリ"
+
+msgid "KDE-KHTMLW-Library"
+msgstr "KDE-KHTMLW ライブラリ"
+
+msgid "KDE-KFM-Library"
+msgstr "KDE-KFM ライブラリ"
+
+msgid "KDE-KDEutils-Library"
+msgstr "KDE-KDEutils ライブラリ"
+
+msgid "KDE-KAB-Library"
+msgstr "KDE-KAB ライブラリ"
+
+msgid "KDE-KSpell-Library"
+msgstr "KDE-KSpell ライブラリ"
+
+msgid "Creates a new file"
+msgstr "新しいファイルを作る"
+
+msgid "Opens an existing file"
+msgstr "現存するファイルを開く"
+
+msgid "Closes the actual file"
+msgstr "実際のファイルを閉じます"
+
+msgid "Save the actual document"
+msgstr "実際のドキュメントを保存します"
+
+msgid "Save the document as..."
+msgstr "ドキュメントを名前をつけて保存..."
+
+msgid "Save all changed files"
+msgstr "変更のあったすべてのファイルを保存"
+
+msgid "Prints the current document"
+msgstr "現在のドキュメントを印刷します"
+
+msgid "Exits the program"
+msgstr "プログラムを終了します"
+
+msgid "Reverts the last editing step"
+msgstr "最後の編集工程を戻す"
+
+msgid "Re-execute the last undone step"
+msgstr "もう一回戻す"
+
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr "選択された領域を切り取りクリップボードに置きます"
+
+msgid "Copys the selected section to the clipboard"
+msgstr "選択された領域をクリップボードにコピーします"
+
+msgid "Pastes the clipboard contents to actual position"
+msgstr "クリップボードの内容を実際の位置に貼りつけます"
+
+msgid "Inserts a file at the current position"
+msgstr "ファイルを現在の位置に挿入します"
+
+msgid "Searchs the file for an expression"
+msgstr "ファイルの中の表現を検索します"
+
+msgid "Repeats the last search"
+msgstr "最後の検索を繰り返します"
+
+msgid "Searchs and replace expression"
+msgstr "検索し表現を置き換えます"
+
+msgid ""
+"Opens the search in files dialog to search for expressions over several files"
+msgstr ""
+"いくつかのファイルの表現を検索するためファイルダイアログを開く"
+
+msgid "Moves the selection to the right"
+msgstr "選択を右に移動"
+
+msgid "Moves the selection to the left"
+msgstr "選択を左に移動"
+
+msgid "Selects the whole document contents"
+msgstr "全てのドキュメントの内容を選択"
+
+msgid "Deselects the whole document contents"
+msgstr "全てのドキュメントの内容を選択しない"
+
+msgid "Inverts the current selection"
+msgstr "現在の選択を反転"
+
+msgid "Goes to Line Number..."
+msgstr "指定の行に移動します..."
+
+msgid "Switches to the file and line the next error was reported"
+msgstr "次のエラーが報告されたファイルや行に移動"
+
+msgid "Switches to the file and line the previous error was reported"
+msgstr "前のエラーが報告されたファイルや行に移動"
+
+msgid "Enables / disables the treeview"
+msgstr "ツリービューのオン/オフ"
+
+msgid "Enables / disables the outputview"
+msgstr "出力ビューのオン/オフ"
+
+msgid "Enables / disables the standard toolbar"
+msgstr "通常のツールバーのオン/オフ"
+
+msgid "Enables / disables the browser toolbar"
+msgstr "ブラウザツールバーのオン/オフ"
+
+msgid "Enables / disables the statusbar"
+msgstr "ステータスバーのオン/オフ"
+
+msgid "Refreshes current view"
+msgstr "現在の表示を更新"
+
+msgid "Opens the current document in the KFM browser"
+msgstr "KFMブラウザで現在のドキュメントを開く"
+
+msgid "Generates a new project with Application Wizard"
+msgstr "KAppWizardで新しいプロジェクトを作成"
+
+msgid "Opens an existing project"
+msgstr "現存するプロジェクトを開く"
+
+msgid "Closes the current project"
+msgstr "現在のプロジェクトを閉じる"
+
+msgid "Adds an existing file to the project"
+msgstr "プロジェクトに存在するファイルを追加"
+
+msgid "Adds a new language for internationalization to the project"
+msgstr "現在のプロジェクトに新しい言語の翻訳を追加する"
+
+msgid "Removes file from the project"
+msgstr "プロジェクトからファイルを削除"
+
+msgid "Creates a new Class frame structure and files"
+msgstr "新しいクラスフレーム構造とファイルを作成"
+
+msgid "Shows the current file properties"
+msgstr "現在のファイルのプロパティを見る"
+
+msgid "Sets project and compiler options"
+msgstr "プロジェクトとコンパイラのオプションを設定する"
+
+msgid "Invokes make to create the message file by extracting all i18n() macros"
+msgstr "makeを呼び全ての i18n() マクロを展開しメッセージファイルを作成する"
+
+msgid "Creates the Project's API with KDoc"
+msgstr "プロジェクトのAPIを KDoc で作成"
+
+msgid "Creates the Project's User Manual with the sgml-file"
+msgstr "プロジェクトのユーザーマニュアルを sgml-file で作成"
+
+msgid "Creates distribution packages from the current project"
+msgstr "現在のプロジェクトからディストリビューションパッケージを作成する"
+
+msgid "Creates a tar.gz file from the current project sources"
+msgstr "現在のプロジェクトソースから tar.gz ファイル作成する"
+
+msgid "Compiles the current sourcefile"
+msgstr "現在のソースファイルをコンパイルする"
+
+msgid "Generates the sourcefiles for the dialog"
+msgstr "ダイアログのソースファイルを生成する"
+
+msgid "Invokes make-command"
+msgstr "make を呼出す"
+
+msgid "Rebuilds the program"
+msgstr "プログラムをリビルド"
+
+msgid "Invokes make clean and rebuild all"
+msgstr "make clean を呼出し全てをリビルド"
+
+msgid "Stops make immediately"
+msgstr "make を直ちに中止する"
+
+msgid "Invokes make-command and runs the program"
+msgstr "make を呼出しプログラムを実行する"
+
+msgid "Lets you set run-arguments to the binary and invokes the make-command"
+msgstr "バイナリの実行引数をセットし make を呼出す"
+
+msgid "Invokes make and KDbg debugging the binary"
+msgstr "make と KDbg を呼出しバイナリをデバッグする"
+
+msgid "Invokes make distclean and deletes all compiled files"
+msgstr "make distclean を呼出し全てのコンパイル済みファイルを削除"
+
+msgid "Invokes automake and co."
+msgstr "automake と co. を呼出す"
+
+msgid "Invokes ./configure"
+msgstr "./configure を呼出す"
+
+msgid "Changes to the KDevelop dialogeditor"
+msgstr "KDevelop ダイアログエディタを開きます"
+
+msgid "Changes to KDevelop project editor"
+msgstr "KDevelop プロジェクトエディタを開きます"
+
+msgid "Sets the Editor's behavoir"
+msgstr "エディタの振舞いを設定"
+
+msgid "Sets the Editor's colors"
+msgstr "エディタの配色を設定"
+
+msgid "Sets the highlighting default colors"
+msgstr "ハイライトの標準色を設定"
+
+msgid "Sets the highlighting colors"
+msgstr "ハイライトの色を設定"
+
+msgid "Configures the Browser options"
+msgstr "ブラウザオプションを設定"
+
+msgid "Configures the Tools-Menu entries"
+msgstr "ツールメニューエントリーを設定"
+
+msgid "Configures printing options"
+msgstr "印刷オプションを設定"
+
+msgid "Configures the printer to use enscript"
+msgstr "enscript使用のためプリンターを設定"
+
+msgid "Configures the printer to use a2ps"
+msgstr "a2ps使用のためプリンターを設定"
+
+msgid "Configures KDevelop"
+msgstr "KDevelopを設定"
+
+msgid "Sets a bookmark to the current window file"
+msgstr "現在のウィンドウのファイルをブックマークにセット"
+
+msgid "Adds a bookmark to the current window file"
+msgstr "現在のウィンドウのファイルをブックマークに追加"
+
+msgid "Clears the bookmark list for the current window"
+msgstr "現在のウィンドウのファイルをブックマークから削除"
+
+msgid "Switchs to last browser page"
+msgstr "前のブラウザページに移動"
+
+msgid "Switchs to next browser page"
+msgstr "次のブラウザページに移動"
+
+msgid "Reloads the current browser page"
+msgstr "現在のブラウザページを再読み込み"
+
+msgid "Cancels the document request"
+msgstr "ドキュメントリクエストをキャンセル"
+
+msgid "Searchs the selected text in the documentation"
+msgstr "選択されたテキストをドキュメントから検索する"
+
+msgid "Lets you search individually for an expression"
+msgstr "表現を個々に検索"
+
+msgid "Switchs to KDevelop's User Manual"
+msgstr "KDevelopユーザーマニュアルに移動"
+
+msgid "Switchs to the KDevelop Programming Handbook"
+msgstr "KDevelopプログラミングハンドブックに移動"
+
+msgid "Opens the Tip of the Day dialog with hints for using KDevelop"
+msgstr "KDevelopを使う上での今日のワンポイントを開く"
+
+msgid "Switchs to the C/C++-Reference"
+msgstr "C/C++リファレンス に移動"
+
+msgid "Switchs to the QT-Documentation"
+msgstr "QT ドキュメントに移動"
+
+msgid "Switchs to the KDE-Core-Documentation"
+msgstr "KDE-Core ドキュメントに移動"
+
+msgid "Switchs to the KDE-GUI-Documentation"
+msgstr "KDE-GUI ドキュメントに移動"
+
+msgid "Switchs to the KDE-File-Documentation"
+msgstr "KDE-File ドキュメントに移動"
+
+msgid "Switchs to the KDE-Html-Documentation"
+msgstr "KDE-Html ドキュメントに移動"
+
+msgid "Switchs to the project's API-Documentation"
+msgstr "プロジェクトのAPIドキュメントに移動"
+
+msgid "Switchs to the project's User-Manual"
+msgstr "プロジェクトのユーザーマニュアルに移動"
+
+msgid "Enter the KDevelop Homepage"
+msgstr "KDevelopホームページに移動"
+
+msgid "Sends a bug-report email to the KDevelop Team"
+msgstr "KDevelopチームにバグレポートを送る"
+
+msgid "Some information about the dialog editor..."
+msgstr "ダイアログエディタについての情報..."
+
+msgid "Programmer's Hall of Fame..."
+msgstr "プログラマーの殿堂..."
+
+msgid "Switchs to declaration/implementation"
+msgstr "宣言/インプリメントに移動"
+
+msgid "Switchs to the method's declaration"
+msgstr "メソッドの宣言に移動"
+
+msgid "Switchs to the method's definition"
+msgstr "メソッドの定義に移動"
+
+msgid "Opens the graphical inheritance tree"
+msgstr "グラフィカル継承ツリーを開く"
+
+msgid "Opens the classtool dialog"
+msgstr "クラスツールダイアログを開く"
+
+msgid "Displays the inherited classes of the current class"
+msgstr "現在のクラスが継承しているクラスを表示"
+
+msgid "Displays the classes who inherit the current class"
+msgstr "現在のクラスが継承されているクラスを表示"
+
+msgid "Creates a new folder"
+msgstr "新しいフォルダを作成"
+
+msgid "Deletes the current folder"
+msgstr "現在のフォルダを削除"
+
+msgid "Deletes the current class"
+msgstr "現在のクラスを削除"
+
+msgid "Goes to the class declaration"
+msgstr "クラスの宣言に移動"
+
+msgid "Opens the New Method dialog"
+msgstr "新しいメソッドダイアログを開く"
+
+msgid "Deletes the current class method"
+msgstr "現在のクラスメソッドを削除"
+
+msgid "Creates a new attribute for the current class"
+msgstr "現在のクラスの新しい属性を作成"
+
+msgid "Deletes the current class attribute"
+msgstr "現在のクラスの属性を削除"
+
+msgid "Creates a virtual method"
+msgstr "仮想メソッドを作成"
+
+msgid "Adds a signal/slot mechanism"
+msgstr "signal/slot を追加"
+
+msgid "Closes the current dialog"
+msgstr "現在のダイアログを閉じる"
+
+msgid "Saves the current dialog"
+msgstr "現在のダイアログを保存"
+
+msgid "Saves the current dialog under a new filename"
+msgstr "現在のダイアログを新しいファイル名で保存"
+
+msgid "Enables/Disables the properties window"
+msgstr "プロパティウィンドウをオン/オフ"
+
+msgid "Sets the grid size of the editing widget grid snap"
+msgstr "ウィジェット編集のグリッドのサイズを編集"
+
+msgid "Lets you create a new logical file group"
+msgstr "新しい論理ファイルグループを作成"
+
+msgid "Removes the selected logical file group"
+msgstr "選択された論理ファイルグループを削除"
+
+msgid "Shows the group's properties"
+msgstr "グループのプロパティを表示"
+
+msgid "Displays the absolute / relative path"
+msgstr "絶対/相対パスを表示"
+
+msgid "Deletes the selected file"
+msgstr "選択されたファイルを削除"
+
+msgid "Ready"
+msgstr "待機中"
+
+msgid "Are you sure you want to delete this method?"
+msgstr "本当にこのメソッドを削除してよろしいですか?"
+
+msgid "//Del by KDevelop: "
+msgstr "//Del by KDevelop: "
+
+msgid "Method missing"
+msgstr "メソッドを失いました"
+
+msgid "Couldn't find the method to delete."
+msgstr "削除するメソッドが見つかりませんでした。"
+
+msgid "Class missing"
+msgstr "クラスを失いました"
+
+msgid "Couldn't find the class which has the method to delete."
+msgstr "削除するメソッドを持つクラスが見つかりませんでした。"
+
+msgid "Welcome to KDevelop!"
+msgstr "KDevelopにようこそ!"
+
+msgid "messages"
+msgstr "メッセージ"
+
+msgid "stdout"
+msgstr "stdout"
+
+msgid "stderr"
+msgstr "stderr"
+
+msgid "CV"
+msgstr "CV"
+
+msgid "LFV"
+msgstr "LFV"
+
+msgid "RFV"
+msgstr "RFV"
+
+msgid "DOC"
+msgstr "DOC"
+
+msgid "Header/Reso&urce Files"
+msgstr "ヘッダー/リソースファイル(&u)"
+
+msgid "&C/C++ Files"
+msgstr "&C/C++ファイル"
+
+msgid "&Documentation-Browser"
+msgstr "ドキュメントブラウザ(&D)"
+
+msgid "Tool&s"
+msgstr "ツール(&s)"
+
+msgid "Save All"
+msgstr "全て保存"
+
+msgid "Indent"
+msgstr "インデント"
+
+msgid "Unindent"
+msgstr "インデント解除"
+
+msgid "Insert File"
+msgstr "ファイルを挿入"
+
+msgid "Repeat Search"
+msgstr "検索を繰り返す"
+
+msgid "Search in Files"
+msgstr "ファイル中から検索"
+
+msgid "Search selection in Files"
+msgstr "ファイル中から選択されたものを検索"
+
+msgid "Select All"
+msgstr "全て選択"
+
+msgid "Deselect All"
+msgstr "全て選択しない"
+
+msgid "Invert Selection"
+msgstr "選択を反転"
+
+msgid "Goto Line"
+msgstr "行に移動"
+
+msgid "Next Error"
+msgstr "次のエラー"
+
+msgid "Previous Error"
+msgstr "前のエラー"
+
+msgid "Sourcecode Editor"
+msgstr "ソースコードエディタ"
+
+msgid "Dialog Editor"
+msgstr "ダイアログエディタ"
+
+msgid "Toogle Tree-View"
+msgstr "ツリービュー"
+
+msgid "Toogle Output-View"
+msgstr "出力ビュー"
+
+msgid "Toolbar"
+msgstr "ツールバー"
+
+msgid "Browser-Toolbar"
+msgstr "ブラウザツールバー"
+
+msgid "Statusbar"
+msgstr "ステータスバー"
+
+msgid "Preview dialog"
+msgstr "ダイアログをプレビュー"
+
+msgid "Refresh"
+msgstr "リフレッシュ"
+
+msgid "Graphical Classview"
+msgstr "グラフィカルクラスビュー"
+
+msgid "New Project"
+msgstr "新しいプロジェクト"
+
+msgid "Open Project"
+msgstr "プロジェクトを開く"
+
+msgid "Close Project"
+msgstr "プロジェクトを閉じる"
+
+msgid "New Class"
+msgstr "新しいクラス"
+
+msgid "Add existing File(s)"
+msgstr "既存のファイルを追加"
+
+msgid "Make messages and merge"
+msgstr "メッセージを作成し反映"
+
+msgid "Make API-Doc"
+msgstr "API-Doc を作成"
+
+msgid "Make User-Manual..."
+msgstr "ユーザーマニュアルを作成..."
+
+msgid "Make Source-tgz"
+msgstr "tgzソースを作成"
+
+msgid "Project options"
+msgstr "プロジェクトオプション"
+
+msgid "Compile File"
+msgstr "ファイルをコンパイル"
+
+msgid "Make"
+msgstr "Make"
+
+msgid "Rebuild All"
+msgstr "全てリビルド"
+
+msgid "Clean/Rebuild all"
+msgstr "消去/全てをリビルド"
+
+msgid "Stop process"
+msgstr "プロセスを中止"
+
+msgid "Execute"
+msgstr "実行"
+
+msgid "Execute with arguments"
+msgstr "引数をつけて実行"
+
+msgid "Debug"
+msgstr "デバッグ"
+
+msgid "DistClean"
+msgstr "DistClean"
+
+msgid "Autoconf and automake"
+msgstr "Autoconf/automake"
+
+msgid "Configure..."
+msgstr "設定..."
+
+msgid "Clear Bookmarks"
+msgstr "ブックマークをクリア"
+
+msgid "Search Marked Text"
+msgstr "選択したテキストを検索"
+
+msgid "Search for Help on"
+msgstr "ヘルプを検索"
+
+msgid "Toggle Last"
+msgstr "前の操作をトグル"
+
+msgid "&New..."
+msgstr "新規(&N)..."
+
+msgid "Close All"
+msgstr "全て閉じる"
+
+msgid "Save &As..."
+msgstr "名前を付けて保存(&A)..."
+
+msgid "Save A&ll"
+msgstr "全てを保存(&l)"
+
+msgid "U&ndo"
+msgstr "元に戻す(&n)"
+
+msgid "R&edo"
+msgstr "更に戻す(&e)"
+
+msgid "In&dent"
+msgstr "インデント(&D)"
+
+msgid "&Unindent"
+msgstr "インデント解除(&U)"
+
+msgid "&Insert File..."
+msgstr "ファイルを挿入(&I)..."
+
+msgid "&Search..."
+msgstr "検索(&S)..."
+
+msgid "&Repeat Search"
+msgstr "検索を繰り返す(&R)"
+
+msgid "&Replace..."
+msgstr "置換(&R)..."
+
+msgid "&Search in Files..."
+msgstr "ファイル中から検索(&S)..."
+
+msgid "Select &All"
+msgstr "全て選択(&A)..."
+
+msgid "Goto &Line..."
+msgstr "行に移動(&L)..."
+
+msgid "&Next Error"
+msgstr "次のエラー(&N)"
+
+msgid "&Previous Error"
+msgstr "前のエラー(&P)"
+
+msgid "&Dialog Editor"
+msgstr "ダイアログエディタ(&D)"
+
+msgid "&Tree-View"
+msgstr "ツリービュー(&T)"
+
+msgid "&Output-View"
+msgstr "出力ビュー(&O)"
+
+msgid "&Toolbar"
+msgstr "ツールバー(&T)"
+
+msgid "&Browser-Toolbar"
+msgstr "ブラウザツールバー(&B)"
+
+msgid "Status&bar"
+msgstr "ステータスバー(&b)"
+
+msgid "&Refresh"
+msgstr "更新(&R)"
+
+msgid "New..."
+msgstr "新規..."
+
+msgid "Open &recent project..."
+msgstr "最近のプロジェクトを開く(&R)..."
+
+msgid "C&lose"
+msgstr "閉じる(&l)"
+
+msgid "&New Class..."
+msgstr "新しいクラス(&N)..."
+
+msgid "&Add existing File(s)..."
+msgstr "既存のファイルを追加(&A)..."
+
+msgid "Add new &Translation File..."
+msgstr "新しい翻訳ファイルを追加(&T)..."
+
+msgid "&File Properties..."
+msgstr "ファイルのプロパティ(&F)..."
+
+msgid "Make &messages and merge"
+msgstr "メッセージを作成し反映する(&M)"
+
+msgid "Make AP&I-Doc"
+msgstr "AP&I-Docを作成"
+
+msgid "Make &User-Manual..."
+msgstr "ユーザーマニュアルを作成(&U)"
+
+msgid "&Source-tgz"
+msgstr "tgzソース(&S)"
+
+msgid "Make D&istribution"
+msgstr "配布物を作成(&I)"
+
+msgid "&Options..."
+msgstr "オプション(&O)..."
+
+msgid "&Project"
+msgstr "プロジェクト(&P)"
+
+msgid "Compile &File"
+msgstr "ファイルをコンパイル(&F)"
+
+msgid "&Make"
+msgstr "&Make"
+
+msgid "&Rebuild all"
+msgstr "全てをリビルド(&R)"
+
+msgid "&Clean/Rebuild all"
+msgstr "消去/全てをリビルド(&C)"
+
+msgid "&Stop Build"
+msgstr "ビルドを中断(&S)"
+
+msgid "&Execute"
+msgstr "実行(&E)"
+
+msgid "Execute &with Arguments..."
+msgstr "引数を付けて実行(&W)..."
+
+msgid "&Debug..."
+msgstr "デバッグ(&D)..."
+
+msgid "DistC&lean"
+msgstr "DistC&lean"
+
+msgid "&Autoconf and automake"
+msgstr "&Autoconf/automake"
+
+msgid "C&onfigure..."
+msgstr "C&onfigure..."
+
+msgid "&Build"
+msgstr "ビルド(&B)"
+
+msgid "&Tools"
+msgstr "ツール(&T)"
+
+msgid "&A2ps..."
+msgstr "&A2ps..."
+
+msgid "&Enscript..."
+msgstr "&Enscript..."
+
+msgid "&Editor..."
+msgstr "エディタ(&E)..."
+
+msgid "Editor &Colors..."
+msgstr "エディタの色(&C)..."
+
+msgid "Editor &Defaults..."
+msgstr "エディタの標準(&D)..."
+
+msgid "&Syntax Highlighting..."
+msgstr "シンタックスハイライト(&S)..."
+
+msgid "Documentation &Browser..."
+msgstr "ドキュメントブラウザ(&B)..."
+
+msgid "Configure &Printer..."
+msgstr "プリンターの設定(&P)..."
+
+msgid "Tools..."
+msgstr "ツール..."
+
+msgid "&KDevelop Setup..."
+msgstr "KDevelop設定(&K)..."
+
+msgid "&Window"
+msgstr "ウィンドウ(&W)"
+
+msgid "&Set Bookmark..."
+msgstr "ブックマークのセット(&S)..."
+
+msgid "&Add Bookmark..."
+msgstr "ブックマークを追加(&A)..."
+
+msgid "&Clear Bookmarks"
+msgstr "ブックマークをクリア(&C)"
+
+msgid "&Header Window"
+msgstr "ヘッダーウィンドウ(&H)"
+
+msgid "C/C++ &Window"
+msgstr "C/C++ウィンドウ(&W)"
+
+msgid "&Browser Window"
+msgstr "ブラウザウィンドウ(&B)"
+
+msgid "Book&marks"
+msgstr "ブックマーク(&M)"
+
+msgid "&Back"
+msgstr "戻る (&B)"
+
+msgid "&Forward"
+msgstr "進む (&F)"
+
+msgid "&Search Marked Text"
+msgstr "マークしたテキストを検索(&S)"
+
+msgid "User Manual"
+msgstr "ユーザーマニュアル"
+
+msgid "Programming Handbook"
+msgstr "プログラミングハンドブック"
+
+msgid "Tip of the Day"
+msgstr "今日のワンポイント"
+
+msgid "KDevelop Homepage"
+msgstr "KDevelopホームページ"
+
+msgid "Bug Report..."
+msgstr "バグリポート..."
+
+msgid "C/C++-Reference"
+msgstr "C/C++リファレンス"
+
+msgid "&Qt-Library"
+msgstr "&Qtライブラリ"
+
+msgid "KDE-&Core-Library"
+msgstr "KDE-&Core ライブラリ"
+
+msgid "KDE-&GUI-Library"
+msgstr "KDE-&GUI ライブラリ"
+
+msgid "KDE-&KFile-Library"
+msgstr "KDE-&KFile ライブラリ"
+
+msgid "KDE-&HTML-Library"
+msgstr "KDE-&HTML ライブラリ"
+
+msgid "Project &API-Doc"
+msgstr "プロジェクト &API-Doc"
+
+msgid "Project &User-Manual"
+msgstr "プロジェクト ユーザーマニュアル(&U)"
+
+msgid "Goto declaration"
+msgstr "宣言に移動"
+
+msgid "Goto definition"
+msgstr "定義に移動"
+
+msgid "Goto class declaration"
+msgstr "クラス宣言に移動"
+
+msgid "Show graphical classview"
+msgstr "グラフィカルクラスビューを表示"
+
+msgid "Open File"
+msgstr "ファイルを開く"
+
+msgid "Save File"
+msgstr "ファイルを保存"
+
+msgid "Compile file"
+msgstr "ファイルをコンパイル"
+
+msgid "Rebuild"
+msgstr "リビルド"
+
+msgid "Run"
+msgstr "実行"
+
+msgid "Switch to the dialogeditor"
+msgstr "ダイアログエディタに移動"
+
+msgid "Tree-View"
+msgstr "ツリービュー"
+
+msgid "Output-View"
+msgstr "出力ビュー"
+
+msgid "What's this...?"
+msgstr "これは何...?"
+
+msgid "Classes"
+msgstr "クラス"
+
+msgid "Methods"
+msgstr "メソッド"
+
+msgid "Declaration/Definition"
+msgstr "宣言/定義"
+
+msgid "Search Text in Documenation"
+msgstr "ドキュメントから検索"
+
+msgid "xxxxxxxxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxxxxxxxx"
+
+msgid "Line: 00000 Col: 000"
+msgstr "行: 00000 列: 000"
+
+msgid " INS "
+msgstr "INS"
+
+msgid "yyyyyyyyyyyyyy"
+msgstr "yyyyyyyyyyyyyy"
+
+msgid "Starting..."
+msgstr "開始中..."
+
+msgid ""
+"Initializing last project...\n"
+"Please wait...\n"
+msgstr ""
+"前回のプロジェクトを初期化しています...\n"
+"しばらくお待ち下さい...\n"
+
+msgid "Widgets"
+msgstr "ウィジェット"
+
+msgid "Items"
+msgstr "アイテム"
+
+msgid "Widget Editor"
+msgstr "ウィジェットエディタ"
+
+msgid "Widget Properties"
+msgstr "ウィジェットプロパティ"
+
+msgid "&Sourcecode Editor"
+msgstr "ソースコードエディタ(&S)"
+
+msgid "&Widgets-View"
+msgstr "ウィジェットビュー(&W)"
+
+msgid "&Properties-View"
+msgstr "プロパティビュー(&P)"
+
+msgid "&Preview dialog"
+msgstr "ダイアログをプレビュー(&P)"
+
+msgid "&Grid..."
+msgstr "グリッド(&G)..."
+
+msgid "Make &messages"
+msgstr "メッセージを作成(&M)"
+
+msgid "Make &API-Doc"
+msgstr "&API-Docを作成"
+
+msgid "Make &User-Manual"
+msgstr "ユーザーマニュアルを作成(&U)"
+
+msgid "&Generate Sources..."
+msgstr "ソースを生成(&G)..."
+
+msgid "&Generate Complete Sources..."
+msgstr "新たにソースを生成(&G)..."
+
+msgid "&Execute  "
+msgstr "実行(&E)  "
+
+msgid "Execute &with Arguments"
+msgstr "引数をつけて実行(&w)"
+
+msgid "&DistClean"
+msgstr "&DistClean"
+
+msgid "&Autoconf"
+msgstr "&Autoconf"
+
+msgid "Dialog editor notes..."
+msgstr "ダイアログエディタの注意..."
+
+msgid "Save Dialog"
+msgstr "ダイアログを保存"
+
+msgid "Generate Sources"
+msgstr "ソースを生成"
+
+msgid "Switch to edit-mode"
+msgstr "編集モードに移動"
+
+msgid "Tree View"
+msgstr "ツリービュー"
+
+msgid "Output View"
+msgstr "出力ビュー"
+
+msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+msgid "xxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxx"
+
+msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+msgid "        "
+msgstr "        "
+
+msgid "Untitled.c"
+msgstr "Untitled.c"
+
+msgid "Tools"
+msgstr "ツール"
+
+msgid "Save as new type of document?"
+msgstr "新しいタイプのドキュメントとして保存しますか?"
+
+msgid ""
+"Do you really want to save the file\n"
+"as another type of document?"
+msgstr ""
+"本当に他のタイプのドキュメントとして\n"
+"保存しますか?"
+
+msgid "File exists!"
+msgstr "ファイルは存在します!"
+
+msgid ""
+"\n"
+"The file\n"
+"\n"
+msgstr ""
+"\n"
+"ファイル\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"already exists.\n"
+"Do you want overwrite the old one?\n"
+msgstr ""
+"\n"
+"\n"
+"は既に存在します。\n"
+"本当に古いのを上書きしますか?\n"
+
+msgid "Scanning project files..."
+msgstr "プロジェクトのファイルをスキャン中..."
+
+msgid "Attention"
+msgstr "注意"
+
+msgid ""
+"\n"
+"\n"
+"File does not exist!"
+msgstr ""
+"\n"
+"\n"
+"ファイルは存在しません!"
+
+msgid "Exit KDevelop"
+msgstr "KDevelopを終了"
+
+msgid ""
+"There is unsaved data.\n"
+"Do you really want to quit?"
+msgstr ""
+"保存していないデータがあります。\n"
+"本当に終了しますか?"
+
+msgid "Closing project..."
+msgstr "プロジェクトを閉じています..."
+
+msgid "Save changed project files ?"
+msgstr "変更されたプロジェクトを保存しますか?"
+
+msgid "Copying files..."
+msgstr "ファイルをコピーしています..."
+
+msgid "please wait..."
+msgstr "しばらくお待ち下さい..."
+
+msgid ""
+"You have modified the projectversion.\n"
+"We will regenerate all Makefiles now."
+msgstr ""
+"プロジェクトバージョンを変更しました。\n"
+"全てのMakefileを再生成します。"
+
+msgid "Running automake/autoconf and configure..."
+msgstr "automake/autoconf/configureを実行しています..."
+
+msgid "Running configure..."
+msgstr "configureを実行中..."
+
+msgid "Opening project..."
+msgstr "プロジェクトを開いています..."
+
+msgid "Creating a new frame application..."
+msgstr "新しいフレームアプリケーションを生成しています..."
+
+msgid "Creating pot-file in /po..."
+msgstr "potファイルを /po に生成中..."
+
+msgid "Creating project API-Documentation..."
+msgstr "プロジェクトAPIドキュメントを生成中..."
+
+msgid "Creating project Manual..."
+msgstr "プロジェクトマニュアルを生成中..."
+
+msgid "Running make dist..."
+msgstr "make dist を実行中..."
+
+msgid ""
+"You have added a new subdir to the project.\n"
+"We will regenerate all Makefiles now."
+msgstr ""
+"新しいsubdirをプロジェクトに追加しました。\n"
+"全てのMakefileを再生成します。"
+
+msgid ""
+"Open project\n"
+"\n"
+"Shows the open project dialog to select a project to be opened"
+msgstr ""
+"プロジェクトを開く\n"
+"\n"
+"プロジェクトを開くダイアログを出し 開くプロジェクトを"
+"選択します"
+
+msgid ""
+"Open file\n"
+"\n"
+"Shows the Open file dialog to select a file to be opened. Holding the button "
+"pressed will show a popup menu containing all filenames of your project's "
+"sources and header files. Selecting a filename on the menu will then open "
+"the file according to the file-type."
+msgstr ""
+"ファイルを開く\n"
+"\n"
+"ファイルを開くダイアログを出し開くプロジェクト "
+"を選択します。ボタンを押すとあなたのプロジェクトの "
+"ソース、ヘッダーの全てのファイル名を含むポップ "
+"アップメニューが表示されます。ファイル名を選択す "
+"るとファイルタイプにしたがってファイルが開きます。"
+
+msgid ""
+"Save file\n"
+"\n"
+"Saves the file opened in the actual editing view"
+msgstr ""
+"ファイルを保存\n"
+"\n"
+"編集ビューに開いているファイルを保存します"
+
+msgid ""
+"Print\n"
+"\n"
+"Opens the printing dialog. There, you can configure which printing program "
+"you wish to use, either a2ps or ensrcipt, and print your project files."
+msgstr ""
+"印刷\n"
+"\n"
+"印刷ダイアログを開きます。ここでa2ps、ensrcipt "
+"のどちらの印刷プログラムを使うか、プロジェクトの "
+"ファイルを印刷するかなどを設定します。"
+
+msgid ""
+"Undo\n"
+"\n"
+"Reverts the last editing step."
+msgstr ""
+"元に戻す\n"
+"\n"
+"最後の編集行為を元に戻す。"
+
+msgid ""
+"Redo\n"
+"\n"
+"If an editing step was undone, redo lets you do this step again."
+msgstr ""
+"更に戻す\n"
+"\n"
+"元に戻した編集行為を更にもう一度元に戻す。"
+
+msgid ""
+"Cut\n"
+"\n"
+"Cuts out the selected text and copies it to the system clipboard."
+msgstr ""
+"切り取り\n"
+"\n"
+"選択されたテキストを切り取り "
+"システムクリップボードにコピーします。"
+
+msgid ""
+"Cut\n"
+"\n"
+"Cuts out the selected widget and copies it to the system clipboard."
+msgstr ""
+"切り取り\n"
+"\n"
+"選択されたウィジェットを切り取り "
+"システムクリップボードにコピーします。"
+
+msgid ""
+"Copy\n"
+"\n"
+"Copies the selected text into the system clipboard."
+msgstr ""
+"コピー\n"
+"\n"
+"選択されたテキストをシステム "
+"クリップボードにコピーします。"
+
+msgid ""
+"Copy\n"
+"\n"
+"Copies the selected widget into the system clipboard."
+msgstr ""
+"コピー\n"
+"\n"
+"選択されたウィジェットをシステム "
+"クリップボードにコピーします。"
+
+msgid ""
+"Paste\n"
+"\n"
+"Inserts the contents of the system clipboard at the current cursor position. "
+msgstr ""
+"貼り付け\n"
+"\n"
+"システムリップボードの内容を現在の "
+"カーソル位置に挿入します。"
+
+msgid ""
+"Compile file\n"
+"\n"
+"Only compile the file opened in the C/C++ Files- window. The output is shown "
+"in the output window. If errors occur, clicking on the error line causes the "
+"file window to show you the line the error occured."
+msgstr ""
+"ファイルをコンパイル\n"
+"\n"
+"C/C++ファイルウィンドウで開いているファ "
+"イルのみをコンパイルします。出力は出力 "
+"ウィンドウに表示されます。エラーがある場合 "
+"エラー行のところをクリックするとエラーが "
+"起こった行にカーソルが移動します。"
+
+msgid ""
+"Generate files\n"
+"\n"
+"This will actually generate the source files for the current dialog opened. "
+"The sources will be added to the project if one is opened, otherwise you "
+"will be asked to select the output directory for the generated files."
+msgstr ""
+"ファイルを生成\n"
+"\n"
+"現在開いているダイアログの実際のソース "
+"ファイルを生成します。ソースはプロジェクトに "
+"追加されるか、もしくは生成先ディレクトリ "
+"を聞いてそこに追加します。"
+
+msgid ""
+"Make\n"
+"\n"
+"Invokes the make-command set in the options-menu for the current project "
+"after saving all files. This will compile all changed sources since the last "
+"compilation was invoked.\n"
+"The output window opens to show compiler messages. If errors occur, clicking "
+"on the error line will open the file where the error was found and sets the "
+"cursor to the error line."
+msgstr ""
+"Make\n"
+"\n"
+"全てのファイルを保存した後、オプションメニュー "
+"で設定されたMakeコマンドを呼び出します。 "
+"コンパイルは前のコンパイルから変更のあった "
+"ファイルのみ行なわれます。出力 "
+"ウィンドウがコンパイラメッセージを表示するため "
+"開き、エラーがある場合そのファイルを開いて "
+"エラーが起こった行にカーソルが移動します。"
+
+msgid ""
+"Rebuild all\n"
+"\n"
+"After saving all files, rebuild all invokes the make-command set with the "
+"clean-option to remove all object files. Then, configure creates new "
+"Makefiles and the make-command will rebuild the project."
+msgstr ""
+"全てリビルド\n"
+"\n"
+"全てのファイルを保存した後オプションメニュー "
+"で設定されたcleanオプションを呼び出し全ての "
+"オブジェクトファイルを消去します。そして "
+"configureで新しいMakefileを生成し、プロジェクト "
+"をMakeでリビルドします。"
+
+msgid ""
+"Execute\n"
+"\n"
+"After saving all files,the make-command is called to build the project. Then "
+"the binary is executed out of the project directory.\n"
+"Be aware that this function is only valid for programs and that references "
+"to e.g. pixmaps or html help files that are supposed to be installed will "
+"cause some strange behavoir like testing the helpmenu will open an error "
+"message that the index.html file is not found."
+msgstr ""
+"実行\n"
+"\n"
+"全てのファイルを保存した後、プロジェクトをビルド "
+"するためmakeコマンドが呼ばれます。そしてバイナリが "
+"実行されます。この機能はプログラムにのみ有効で "
+"画像ファイルやヘルプなど有効なディレクトリに入って "
+"いないものを開こうとするとエラーが出ます。"
+
+msgid ""
+"Debug program\n"
+"\n"
+"Opens KDbg in the tools window with your actualprogram and allows you to "
+"execute it step by stepby setting breakpoints in the sourcecode.Note that "
+"you have to open your sourcecodes in KDbgto access it."
+msgstr ""
+"デバッグ\n"
+"\n"
+"ツールウィンドウでプログラムとKDbgを開き、ソース "
+"コードにブレークポイントをセットしながら順次実行 "
+"していけます。ソースコードをKDbgで開いていないと "
+"アクセスできないことに注意して下さい。"
+
+msgid ""
+"Stop\n"
+"\n"
+"If activated, the stop-command will interrupt the active process. This "
+"affects make-commands as well as documentation generation."
+msgstr ""
+"中止\n"
+"\n"
+"有効にすると動いているプロセスを中止します。 "
+"これはmakeやドキュメント生成に有効です"
+
+msgid ""
+"Dialogeditor\n"
+"\n"
+"This will switch to the internal dialog editor of the KDevelop IDE. There, "
+"you can also switch back to the editing mode by choosing the Sourcecode "
+"editor button or Sourcecode-editor from the View-menu."
+msgstr ""
+"ダイアログエディタ\n"
+"\n"
+"KDevelop IDEの内蔵ダイアログエディタに切替えます。 "
+"これはソースコードエディタボタンや、メニューから "
+"もとの編集モードに切替えられます。"
+
+msgid ""
+"Sourcecode Editor\n"
+"\n"
+"This will switch to the sourcecode editor providing the usual IDE interface. "
+"You can switch back to the dialogeditor by choosing the Dialogeditor button "
+"in the KDevelop toolbar or by choosing Dialogeditor in the View-menu."
+msgstr ""
+"ソースエディタ\n"
+"\n"
+"通常のIDEインターフェースが提供するソースコード "
+"エディタに切替えます。これはツールバーのダイアログ "
+"エディタボタンや、メニューからダイアログエディタ "
+"に切替えられます。"
+
+msgid ""
+"Output-View\n"
+"\n"
+"Enables/ disables the output window. The state of the window is displayed by "
+"the toggle button: if the button is pressed, the window is open, otherwise "
+"closed."
+msgstr ""
+"出力ビュー\n"
+"\n"
+"出力ビューをオン/オフします。ウィンドウの状態は "
+"ボタンに表示されます。ボタンが押されていれば "
+"ウィンドウは開いています。"
+
+msgid ""
+"Tree-View\n"
+"\n"
+"Enables/ disables the tree window. The state of the window is displayed by "
+"the toggle button: if the button is pressed, the window is open, otherwise "
+"closed."
+msgstr ""
+"ツリービュー\n"
+"\n"
+"ツリービューをオン/オフします。ウィンドウの状態は "
+"ボタンに表示されます。ボタンが押されていれば "
+"ウィンドウは開いています。"
+
+msgid ""
+"Classes\n"
+"\n"
+"Choosing a class will switch to the header file where the class is "
+"declarated."
+msgstr ""
+"クラス\n"
+"\n"
+"クラスを選択するとクラスが宣言されているヘッダー "
+"ファイルに移動します。"
+
+msgid ""
+"Methods\n"
+"\n"
+"Allows selecting a method of the current selected class. This will switch to "
+"the implementation of the chosen class."
+msgstr ""
+"メソッド\n"
+"\n"
+"現在のクラスのメソッドを選択できます。選んだ "
+"クラスのインプリメンテーションに移動します。"
+
+msgid ""
+"Documentation-Back\n"
+"\n"
+"This opens the previously visited page in the browser window. Holding the "
+"button pressed down will open a popup menu showing the browser history. "
+"Selecting an entry will open the according page in the browser window."
+msgstr ""
+"ドキュメント-戻る\n"
+"\n"
+"ブラウザウィンドウの前に訪れたページを開きます。 "
+"ボタンを押し続けるとブラウザの履歴が表示されます。 "
+"そこのエントリを選択するとそのページに移動 "
+"できます。"
+
+msgid ""
+"Documentation-Forward\n"
+"\n"
+"This opens the next page in the history list. Holding the button pressed "
+"will show you a popup menu to browse visited pages forward."
+msgstr ""
+"ドキュメント-進む\n"
+"\n"
+"ブラウザウィンドウの次の訪れたページを開きます。 "
+"ボタンを押し続けるとブラウザの前の履歴が表示され、 "
+"エントリを選択するとそのページに移動できます。"
+
+msgid ""
+"Search Marked Text\n"
+"\n"
+"Uses the searchdatabase to look for the selected text string and opens a "
+"summary page of found references for the selection in the browser window. "
+"There, you can select a documentation page of your choice and open it by "
+"following the link."
+msgstr ""
+"マークしたテキストを検索\n"
+"\n"
+"検索データベースを使って選択されたテキストを検索 "
+"し、ブラウザウィンドウで結果の要約ページを開き "
+"ます。そこのリンクにしたがってドキュメントを "
+"選択し開きます。"
+
+msgid ""
+"Search for Help on...\n"
+"\n"
+"Opens the Search for Help on... dialog. There, you can search for a keyword "
+"in the documentation directly using the search database."
+msgstr ""
+"ヘルプから検索...\n"
+"\n"
+"ヘルプから検索ダイアログを開きます。そこで "
+"直接検索データベースを使ってキーワードを"
+"検索します。"
+
+msgid ""
+"Class Viewer\n"
+"\n"
+"The class viewer shows all classes, methods and variables of the current "
+"project files and allows switching to declarations and implementations. The "
+"right button popup-menu allows more specialized functionality."
+msgstr ""
+"Class Viewer\n"
+"\n"
+"全てのクラス、メソッド、変数を表示し、宣言や "
+"インプリメントに移動できます。右クリックをする "
+"とより細かい機能が表示されます。"
+
+msgid ""
+"Logical File Viewer\n"
+"\n"
+"The logical file viewer separates your project files into logical groups to "
+"allow easier access e.g.to header and implementation files.The right button "
+"popup-menu allows more specialized functionality."
+msgstr ""
+"Logical File Viewer\n"
+"\n"
+"このビューではヘッダーやインプリメントファイル "
+"が論理的グループに分かれます。右クリックをする "
+"とより細かい機能が表示されます。"
+
+msgid ""
+"Real File Viewer\n"
+"\n"
+"The real file viewer shows the project directory in it's real structure and "
+"gives access to all files."
+msgstr ""
+"Real File Viewer\n"
+"\n"
+"このビューでは実際のディレクトリ構造が表示され "
+"全てのファイルにアクセスできます。"
+
+msgid ""
+"Documentation Tree\n"
+"\n"
+"The documentation tree gives access to library documentation and the "
+"KDevelop manuals. Can be configured individually by right-button menu."
+msgstr ""
+"ドキュメントツリー\n"
+"\n"
+"ドキュメントツリーはライブラリドキュメントや "
+"KDevelopマニュアルにアクセスできます。右 "
+"クリックで細かい設定ができます。"
+
+msgid ""
+"Widgets\n"
+"\n"
+"Here, you can select a widget item to add to the dialog you're working on. "
+"More information about the widget items can be found by What's this help on "
+"the buttons or in the KDevelop documentation. "
+msgstr ""
+"ウィジェット\n"
+"\n"
+"ここで現在のダイアログに加えるウィジェットを選択 "
+"できます。ウィジェットに関するより細かい説明は "
+"KDevelopドキュメントを参照して下さい。"
+
+msgid ""
+"Dialogs\n"
+"\n"
+"Selecting a dialog in the list will open the dialog definition file and "
+"dispay the dialog for editing."
+msgstr ""
+"ダイアログ\n"
+"\n"
+"リスト中のダイアログ定義ファイルを選択し、 "
+"編集するダイアログを開きます。"
+
+msgid ""
+"Properties\n"
+"\n"
+"The properties window shows the properties for the currently selected widget "
+"item. You can switch to the different items by selecting them in the editing "
+"view or by using the drop-down menu at the top of the properties window "
+"containing a list with all used widget items."
+msgstr ""
+"プロパティ\n"
+"\n"
+"プロパティウィンドウは選択したウィジェットの "
+"プロパティを表示します。エディット画面で直接 "
+"選択するかアイテムから選択することにより他の "
+"ウィジェットのプロパティに移動できます。"
+
+msgid ""
+"Widget Editing Window\n"
+"\n"
+"The Widget Editing Window is the working window of the widget editor "
+"displaying a resizable widget with a grid to place selected widget items on. "
+"A click on the items will acitvate them and give a resize-frame around with "
+"draggable points to resize the item. The properties for the selected item "
+"are shown in the properties window at the right. New widget items can be "
+"added by choosing them on the widgets-window on the left."
+msgstr ""
+"ウィジェットエディットウィンドウ\n"
+"\n"
+"ウィジェットエディットウィンドウではサイズ変更 "
+"可能なウィジェットの上にアイテムを追加していき "
+"ます。アイテムをクリックするとそれが有効になり "
+"ドラッグポイントの周りにサイズ変更フレームが "
+"現われます。選択したアイテムのプロパティは右の "
+"プロパティウィンドウに表示されます。新しいアイテム "
+"は左のウィジェットウィンドウを選択し追加します。"
+
+msgid ""
+"Header/Resource Files\n"
+"\n"
+"This window shows header and all other project files except for source "
+"files. The statusbar shows the status of the insert/overwrite key as well as "
+"the cursor position by line and column."
+msgstr ""
+"ヘッダー/リソース ファイル\n"
+"\n"
+"この窓ではヘッダーやソースファイル以外の "
+"プロジェクトの全てのファイルを表示します。 "
+"ステータスバーには編集の状態が表示されます。"
+
+msgid ""
+"C/C++ Files\n"
+"\n"
+"This window shows only source files. The statusbar shows the status of the "
+"insert/overwrite key as well as the cursor position by line and column."
+msgstr ""
+"C/C++ ファイル\n"
+"\n"
+"この窓はソースファイルを表示します。 "
+"ステータスバーには編集の状態が表示されます。"
+
+msgid ""
+"Documentation Browser\n"
+"\n"
+"The documentation browser window shows the online-documentation provided "
+"with kdevelop as well as library class documentation created. Use the "
+"documentation tree to switch between various parts of the documentation."
+msgstr ""
+"ドキュメントブラウザ\n"
+"\n"
+"ドキュメントブラウザはkdevelopやライブラリクラス "
+"で作成したオンラインドキュメントが表示されます。 "
+"ドキュメントツリーを使って移動すると良いでしょう。"
+
+msgid ""
+"Messages\n"
+"\n"
+"The messages window shows the output of the compiler and used utilities like "
+"kdoc reference documentation. For compiler error messages, click on the "
+"error message. This will automatically open the source file and set the "
+"cursor to the line that caused the compiler error/warning. "
+msgstr ""
+"メッセージ\n"
+"\n"
+"メッセージウィンドウにはコンパイラやkdocなどの "
+"ユーティリティーの出力が表示されます。コンパイラの "
+"エラーメッセージの場合はメッセージのところを "
+"クリックすると自動的にエラーの部分にカーソルが "
+"移動します。"
+
+msgid ""
+"StdErr\n"
+"\n"
+"The Standard Error window displays messages of running applications using "
+"the cerr function to debug."
+msgstr ""
+"StdErr\n"
+"\n"
+"StdErr(標準エラー出力)ウィンドウにはアプリ "
+"ケーション実行時、cerr関数を使ったデバッグ "
+"のためのメッセージを表示します。"
+
+msgid ""
+"The program glimpse is not installed,\n"
+"therefore KDevelop can not index your\n"
+"documentation to provide a proper help\n"
+"functionality. We advise to install glimpse\n"
+"and create the searchdatabase later by choosing\n"
+"KDevelop Setup in the Options menu .\n"
+"\n"
+"As this is the last step of the Installation\n"
+"process, KDevelop will be started now.\n"
+"\n"
+"We hope you enjoy KDevelop and that it is a useful\n"
+"help to create new software.\n"
+"\n"
+"The KDevelop Team"
+msgstr ""
+"glimpseがインストールされていないので\n"
+"KDevelopはヘルプ機能のためのドキュメント\n"
+"インデックスを作成できません。glimpseを\n"
+"インストールしオプションメニューのKDevelop\n"
+"セットアップを選択し、ドキュメントインデックス\n"
+"を作成することをお勧めします\n"
+"\n"
+"これがインストールの最後の行程のためKDevelop\n"
+"は起動されます。\n"
+"\n"
+"私達はあなたがKDevelopを楽しく使い、これが新しい\n"
+"ソフトウェア作成の助けとなることを願っています。\n"
+"\n"
+"The KDevelop Team"
+
+msgid ""
+"Now KDevelop will perform the last step\n"
+"of the installation process with indexing\n"
+"your documentation. This will provide an extended\n"
+"help functionality and will give you the information\n"
+"you need."
+msgstr ""
+"これがインストールの最後の行程です。ドキュメントの\n"
+"インデックスを作成します。これはヘルプ機能を拡張し\n"
+"あなたに必要な情報を提供するでしょう。"
+
+msgid ""
+"                 Creating search database                                    "
+"                                                                     Please "
+"wait...                                                                      "
+"                                                                             "
+"      "
+msgstr ""
+"                 検索データベースを作成中です                                    "
+"                                                                     しばらく "
+"お待ち下さい...                                                                      "
+"                                                                             "
+"      "
+
+msgid "Installation successful !"
+msgstr "インストールは成功しました !"
+
+msgid ""
+"\n"
+"The installation process finished successfully.\n"
+"\n"
+"The KDevelop Team wishes that you will enjoy our\n"
+"program and we would be honoured for any feedback.\n"
+"\n"
+"The KDevelop Team"
+msgstr ""
+"\n"
+"インストールプロセスは無事終了しました。\n"
+"\n"
+"私達はあなたがKDevelopを楽しく使うことを願っています。\n"
+"そして何らかのフィードバックがあれば歓迎します。\n"
+"\n"
+"The KDevelop Team"
+
+msgid "KDevelop Installation"
+msgstr "KDevelop インストール"
+
+msgid "Welcome to the KDevelop Setup !"
+msgstr "KDevelopセットアップにようこそ!"
+
+msgid "Qt-Documentation Path:"
+msgstr "Qtドキュメントパス:"
+
+msgid ""
+"This installation program will check your system for helper programs needed "
+"by KDevelop. Also your documentation will be set up automatically.  Choose "
+"'Proceed` to invoke the automatic detection and the documentation generator. "
+"'Help' will give more information about the installation. Choosing 'Cancel' "
+"will stop the installation and KDevelop will be started without setting the "
+"initialvalues needed for proper functionality."
+msgstr ""
+"このインストールプログラムはKDevelopで必要なヘルプ機能のためにシステム "
+"チェックを行ないます。ドキュメントも自動的にセットされます。'進む`を "
+"押して自動生成とドキュメント生成を呼び出して下さい。'ヘルプ'でイン "
+"ストールに関するより詳しい情報が得られます。'キャンセル'を押すとイン "
+"ストールを中止し、ある機能に必要な情報をセットしないままKDevelopを "
+"立ち上げます。 "
+
+msgid "Proceed >>"
+msgstr "進む >>"
+
+msgid "The selected path is not correct!"
+msgstr "選択されたパスは間違ってます!"
+
+msgid ""
+"\n"
+"The chosen path does not lead to the\n"
+"Qt-library documentation. Please choose the\n"
+"correct path."
+msgstr ""
+"\n"
+"選択されたパスにはQtライブラリ\n"
+"ドキュメントが存在しません。\n"
+"正しいパスを選択して下さい。"
+
+msgid ""
+"\n"
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Please choose 'Proceed'\n"
+"in any case. If you don't have a documentation,\n"
+"it will be generated automatically in one of the\n"
+"next steps"
+msgstr ""
+"\n"
+"選択されたパスにはKDEライブラリ\n"
+"ドキュメントが存在しません。とりあえず\n"
+"'進む'を選択して下さい。もしドキュメントが\n"
+"ない場合は次のステップの中で自動的に\n"
+"生成されます"
+
+msgid "        Automatic installation in progress... "
+msgstr "        自動インストール 進行中... "
+
+msgid "Syntax-Highlighting"
+msgstr "シンタックスハイライト"
+
+msgid ""
+"\n"
+"Now you can choose the Syntax-Highlighting style\n"
+"KDevelop will use. The options are to set\n"
+"the highlighting to Emacs stlye or to the default\n"
+"settings of KWrite (k.a. 'Extended Editor')\n"
+"\n"
+"Which one do you want to use ?"
+msgstr ""
+"\n"
+"KDevelopが使うシンタックスハイライトスタイル\n"
+"を選択して下さい。このオプションはハイライト\n"
+"をEmacsスタイルか、通常のKWriteスタイルに\n"
+"セットできます。"
+"\n"
+"どちらを使いますか?"
+
+msgid "Emacs style"
+msgstr "Emacsスタイル"
+
+msgid "KWrite default"
+msgstr "KWriteスタイル"
+
+msgid "Checking needed programs..."
+msgstr "必要なプログラムをチェックしています..."
+
+msgid " was found."
+msgstr " が見つかりました。"
+
+msgid " was not found."
+msgstr " は見つかりません。"
+
+msgid "KPaint"
+msgstr "KPaint"
+
+msgid " -- search functionality will not be provided\n"
+msgstr " -- 検索機能は提供されません\n"
+
+msgid " -- generation of new frame applications will not be possible\n"
+msgstr " -- 新規フレームアプリケーション生成はできません\n"
+
+msgid "  -- printing available\n"
+msgstr "  -- 印刷はできません\n"
+
+msgid " -- printing can only use lpr\n"
+msgstr " -- 印刷はlprのみ使います\n"
+
+msgid "Program test results"
+msgstr "プログラムテスト結果"
+
+msgid ""
+"The following results have been determined for your system:\n"
+"\n"
+" "
+msgstr ""
+"以下があなたのシステムの測定結果です:\n"
+"\n"
+" "
+
+msgid "Qt Documentation found"
+msgstr "Qtドキュメントが見つかりました"
+
+msgid ""
+"\n"
+"The Qt-Documentation has been found at:\n"
+"\n"
+msgstr ""
+"\n"
+"Qtドキュメントが以下に見つかりました:\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"The correct path has been set.\n"
+" "
+msgstr ""
+"\n"
+"\n"
+"正しいパスがセットされました。\n"
+" "
+
+msgid ""
+"\n"
+"The Qt-library documentation could not\n"
+"be detected. Please insert the correct path\n"
+"to your Qt-documentation manually. Do you want\n"
+"to set it now ?\n"
+" "
+msgstr ""
+"\n"
+"Qtライブラリドキュメントが見つかりません\n"
+"でした。正しいドキュメントパスをあなたの\n"
+"Qtドキュメントに手動でセットして下さい。\n"
+"それを今やりますか?\n"
+" "
+
+msgid ""
+"    Please choose your Qt-Documentation path by pushing the selection button "
+"above."
+msgstr ""
+"    上の選択ボタンを押してQtドキュメントパスを選択して下さい。 "
+""
+
+msgid "KDE-Library Documentation found"
+msgstr "KDEライブラリドキュメントが見つかりました"
+
+msgid ""
+"\n"
+"The KDE-Library-Documentation has been found at:\n"
+"\n"
+msgstr ""
+"\n"
+"KDEライブラリドキュメントが以下に見つかりました::\n"
+"\n"
+
+msgid ""
+"\n"
+"The Program KDoc was not found on your system,\n"
+"a library documentation update can not be performed.\n"
+"KDoc is part of the kdesdk package that can be obtained\n"
+"from www.kde.org.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"あなたのシステムにKDocがありません。よって\n"
+"ライブラリドキュメントの更新ができません。\n"
+"KDocはkdesdkパッケージの一つで www.kde.org\n"
+"及びミラーから入手できます。\n"
+"\n"
+" "
+
+msgid ""
+"\n"
+"Now KDevelop will create a new KDE-library\n"
+"documentation. For that, you need the kdelibs\n"
+"package as the source package. If you don't have\n"
+"the kdelibs as sources, we advise to obtain them\n"
+"from www.kde.org. Mind that the sources should match\n"
+"your installed kdelibs version.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"KDevelopはKDEライブラリドキュメントを生成します。\n"
+"それにはkdelibsのソースパッケージが必要です。もし\n"
+"kdelibsのソースパッケージをもっていない場合は、\n"
+"www.kde.org 及びミラーから入手することをお勧めします。\n"
+"またソースはあなたがインストールしたkdelibsの\n"
+"バージョンと一致させることに注意して下さい。\n"
+"\n"
+" "
+
+msgid ""
+"                Creating KDE documentation                                   "
+"                                                                    Please "
+"wait...                                                                      "
+"                                                                             "
+"      "
+msgstr ""
+"                KDEドキュメントを生成しています                                   "
+"                                                                    しばらく "
+"お待ちください...                                                                      "
+"                                                                             "
+"      "
+
+msgid ""
+"\n"
+"\n"
+"This will exit the automatic installation process\n"
+"and start KDevelop with the default values !\n"
+"\n"
+"If you choose 'Continue', you will have to set all\n"
+"installation values manually in the KDevelop Setup\n"
+"dialog available in the options menu.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"\n"
+"これは自動インストールプロセスを終了し、KDevelopを\n"
+"デフォルトの値で起動させます !\n"
+"\n"
+"もし'続ける'を選択した場合は、オプションメニューの\n"
+"KDevelopセットアップダイアログにて手動ですべての\n"
+"インストール値をセットしなければいけません。\n"
+"\n"
+" "
+
+msgid "KDevelop Setup"
+msgstr "KDevelopセットアップ"
+
+msgid "Make-Command"
+msgstr "Makeコマンド"
+
+msgid "Select Make-Command:"
+msgstr "Makeコマンドを選択:"
+
+msgid ""
+"Make-Command\n"
+"\n"
+"Select your system's make-command.\n"
+"Usually, this is make, FreeBSD users\n"
+"may use gmake. Mind that you can also\n"
+"add option parameters to your make-binary\n"
+"as well."
+msgstr ""
+"Makeコマンド\n"
+"\n"
+"あなたのシステムのMakeコマンドを選択\n"
+"して下さい。通常'make'でFreeBSDなら\n"
+"'gmake'かも知れません。ここでmakeに\n"
+"オプションパラメータを加えることも\n"
+"できます。"
+
+msgid "Autosave"
+msgstr "自動保存"
+
+msgid "enable Autosave"
+msgstr "自動保存を有効にする"
+
+msgid "Select Autosave time-interval:"
+msgstr "自動保存の時間間隔を設定して下さい:"
+
+msgid "3 min"
+msgstr "3 分"
+
+msgid "5 min"
+msgstr "5 分"
+
+msgid "15 min"
+msgstr "15 分"
+
+msgid "30 min"
+msgstr "30 分"
+
+msgid ""
+"Autosave\n"
+"\n"
+"If autosave is enabled, your currently\n"
+"changed files will be saved after the\n"
+"time-interval selected times out.\n"
+"\n"
+"Please select your timeout-value.\n"
+"Available are: 3 minutes, 5 minutes,\n"
+"15 minutes and 30 minutes."
+msgstr ""
+"自動保存\n"
+"\n"
+"自動保存を有効にすると、選択された\n"
+"時間間隔で変更されたファイルを保存\n"
+"します。\n"
+"\n"
+"その時間間隔を選択して下さい。\n"
+"利用可能なのは: 3 分、5 分、15 分、\n"
+"30 分です。"
+
+msgid "Autoswitch"
+msgstr "オートスイッチ"
+
+msgid "enable Autoswitch"
+msgstr "オートスイッチを有効にする"
+
+msgid "use Class View as default"
+msgstr "クラスビューを標準にする"
+
+msgid ""
+"use Class View as default\n"
+"\n"
+"If this is enabled, KDevelop\n"
+"will automatically switch to\n"
+"the Class Viewer when switching.\n"
+"When disabled, KDevelop will\n"
+"use Logical File Viewer for\n"
+"autoswitching."
+msgstr ""
+"クラスビューを標準にする\n"
+"\n"
+"これを有効にするとKDevelopは\n"
+"スイッチする時、自動的にCVに移動\n"
+"します。無効にするとKDevelopは\n"
+"オートスイッチで自動的にLFVに\n"
+"移動します。"
+
+msgid ""
+"Autoswitch\n"
+"\n"
+"If autoswitch is enabled, KDevelop\n"
+"will open windows in the working\n"
+"view automatically according to\n"
+"most needed functionality.\n"
+"\n"
+"Disableing autoswitch means you\n"
+"will have to switch to windows\n"
+"yourself, including turning on and\n"
+"off the outputwindow."
+msgstr ""
+"オートスイッチ\n"
+"\n"
+"オートスイッチを有効にすると\n"
+"KDevelopは最も必要な機能に従って\n"
+"ワーキングビューのウィンドウを\n"
+"自動的に開きます。\n"
+"\n"
+"オートスイッチを無効にすると\n"
+"あなたは出力ビューのオン/オフを\n"
+"含めて、手動でウィンドウを切替え\n"
+"なくてはなりません。"
+
+msgid "Startup"
+msgstr "起動"
+
+msgid ""
+"Startup\n"
+"\n"
+"The Startup group offers options for\n"
+"starting KDevelop"
+msgstr ""
+"起動\n"
+"\n"
+"ここでKDevelopを起動する際の\n"
+"オプションを設定します"
+
+msgid "Startup Logo"
+msgstr "起動ロゴ"
+
+msgid ""
+"Startup Logo\n"
+"\n"
+"If Startup Logo is enabled, KDevelop will show the\n"
+"logo picture while it is starting."
+msgstr ""
+"起動ロゴ\n"
+"\n"
+"ここを有効にすると、KDevelopは起動ロゴを\n"
+"毎回起動時に表示します。"
+
+msgid "Load last project"
+msgstr "前回のプロジェクトを読み込む"
+
+msgid ""
+"Load last project\n"
+"\n"
+"If Load last project is enabled, KDevelop will load\n"
+"the last project used."
+msgstr ""
+"前回のプロジェクトを読み込む\n"
+"\n"
+"ここを有効にすると、KDevelopは前回使った\n"
+"プロジェクトを読み込みます。"
+
+msgid ""
+"Tip of the Day\n"
+"\n"
+"If Tip of the Day is enabled, KDevelop will show the\n"
+"Tip of the Day every time it starts."
+msgstr ""
+"今日のワンポイント\n"
+"\n"
+"ここを有効にすると、KDevelopは今日のワンポイントを\n"
+"起動するたびに表示します。"
+
+msgid ""
+"Enter the path to your QT and KDE-Libs\n"
+"Documentation for the Documentation Browser.\n"
+"QT usually comes with complete Documentation\n"
+"whereas for KDE you can create the Documentation\n"
+"easiely by pressing the Update button below."
+msgstr ""
+"ドキュメントブラウザのためのQTとKDEライブラリ\n"
+"ドキュメントのパスを入力して下さい。\n"
+"QTは通常、完全なドキュメントが付いてきます、\n"
+"一方KDEは下にある更新(Update)ボタンを押すことで\n"
+"ドキュメントを生成できます。"
+
+msgid "Qt-Library-Doc:"
+msgstr "Qtライブラリドキュメント:"
+
+msgid ""
+"Enter the path to your QT-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"Usually the QT-Documentation is\n"
+"located in <i><blue>$QTDIR/html</i>"
+msgstr ""
+"QTドキュメントのパスをここに入力して下さい。\n"
+"パスに簡単にアクセスするために\n"
+"右のボタンを押してディレクトリを移動して\n"
+"ください。\n"
+"\n"
+"通常QTドキュメントは\n"
+"<i><blue>$QTDIR/html</i>にあります"
+
+msgid "KDE-Libraries-Doc:"
+msgstr "KDEライブラリドキュメント:"
+
+msgid ""
+"Enter the path to your KDE-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"If you have no kdelibs Documentation installed,\n"
+"you can create it by selecting the Update button\n"
+"below."
+msgstr ""
+"KDEドキュメントのパスをここに入力して下さい。\n"
+"パスに簡単にアクセスするために\n"
+"右のボタンを押してディレクトリを移動して\n"
+"ください。\n"
+"\n"
+"もしKDEドキュメントがインストールされていないならば\n"
+"下にある更新(Update)ボタンを押して、ドキュメント\n"
+"を生成してください。"
+
+msgid "Update KDE-Documentation :"
+msgstr "KDEドキュメントを更新 :"
+
+msgid "Update..."
+msgstr "更新..."
+
+msgid ""
+"Update KDE-Documentation\n"
+"\n"
+"This lets you create or update the\n"
+"HTML-documentation of the KDE-libs.\n"
+"Mind that you have kdoc installed to\n"
+"use this function. Also, the kdelibs\n"
+"sources have to be available to create\n"
+"the documentation, as well as the \n"
+"Qt-Documentation path has to be set to\n"
+"cross-reference the KDE-Documentation\n"
+"with the Qt-classes."
+msgstr ""
+"KDEドキュメントを更新\n"
+"\n"
+"ここでKDEライブラリのHTML形式\n"
+"ドキュメントの更新、作成を行ないます。\n"
+"この機能を使うためにはkdocがインス\n"
+"トールされている必要があります。また\n"
+"kdelibsのソースも必要です。同様にQt\n"
+"クラスとKDEドキュメントとの\n"
+"クロスリファレンスをするために\n"
+"Qtドキュメントパスも設定しておく\n"
+"必要があります。"
+
+msgid "Create Search Database :"
+msgstr "検索データベースを作成 :"
+
+msgid "Create..."
+msgstr "作成..."
+
+msgid ""
+"Create Search Database\n"
+"\n"
+"This will create a search database for glimpse\n"
+"which will be used to look up marked text in\n"
+"the documentation. We recommend updating the\n"
+"database each time you've changed the documentation\n"
+"e.g. after a kdelibs-update or installing a new\n"
+"Qt-library version."
+msgstr ""
+"検索データベースを作成\n"
+"\n"
+"ドキュメントの中から選択したテキストの検索を\n"
+"するglimpseのための検索データベースを作成します。\n"
+"あなたがドキュメントを変更された時には更新する\n"
+"ことをお勧めします。例.kdelibsやQtを更新した時。"
+
+msgid "Directories"
+msgstr "ディレクトリ"
+
+msgid "General"
+msgstr "一般"
+
+msgid "Keys"
+msgstr "キー"
+
+msgid "Documentation"
+msgstr "ドキュメント"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"Qt-library documentation. Please choose the\n"
+"correct path."
+msgstr ""
+"選択されたパスにはQtライブラリ\n"
+"ドキュメントが存在しません。\n"
+"正しいパスを選択して下さい。"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Please choose the\n"
+"correct path or choose 'Update' to create a new\n"
+"documentation"
+msgstr ""
+"選択されたパスにはKDEライブラリドキュメント\n"
+"が存在しません。正しいパスを選択して、新しい\n"
+"ドキュメントを生成するために'更新'を\n"
+"してください。"
+
+msgid "Project/LFV"
+msgstr "プロジェクト/LFV"
+
+msgid "New File..."
+msgstr "新しいファイル..."
+
+msgid "New Class..."
+msgstr "新しいクラス..."
+
+msgid "New Group..."
+msgstr "新しいグループ..."
+
+msgid "Show relative path"
+msgstr "相対パスを表示"
+
+msgid "Group"
+msgstr "グループ"
+
+msgid "Remove Group"
+msgstr "グループを削除"
+
+msgid "Properties..."
+msgstr "プロパティ..."
+
+msgid "Remove File from Project..."
+msgstr "プロジェクトからファイルを削除..."
+
+msgid "Remove File from Disk..."
+msgstr "ディスクからファイルを削除..."
+
+msgid "Update"
+msgstr "Update"
+
+msgid "Commit"
+msgstr "Commit"
+
+msgid "Add to Repository"
+msgstr "レポジトリに追加"
+
+msgid "Remove from Repository (and Disk)"
+msgstr "レポジトリ(とディスク)から削除"
+
+msgid "Group Properties..."
+msgstr "グループのプロパティ..."
+
+msgid "New Group ..."
+msgstr "新しいグループ..."
+
+#, c-format
+msgid ""
+"Do you really want to remove the file\n"
+"%s\n"
+"from project?\n"
+"\t\tIt will remain on disk."
+msgstr ""
+"本当にファイル\n"
+"%s\n"
+"をプロジェクトから削除しますか?\n"
+"\t\tこれはディスクには残ります。"
+
+msgid ""
+"Do you really want to delete the selected file?\n"
+"        There is no way to restore it!"
+msgstr ""
+"本当に選択されたファイルを削除しますか?\n"
+"     元に戻す方法はありません!"
+
+msgid "You must choose an existing file!"
+msgstr "存在するファイルを選択して下さい!"
+
+msgid "Manual-File:"
+msgstr "マニュアルファイル:"
+
+msgid "Button"
+msgstr "ボタン"
+
+msgid "Class Generator"
+msgstr "クラスジェネレータ"
+
+msgid "Classname"
+msgstr "クラス名"
+
+msgid ""
+"Insert your new classname here.\n"
+"Please try to keep some standards\n"
+"like using an upper `K` as the first\n"
+"letter for your new class, if it is\n"
+"a class for a KDE-project."
+msgstr ""
+"新しいクラスの名前を入力して下さい。\n"
+"もしKDEのプロジェクトのクラスなら、\n"
+"クラスの最初の文字に大文字の'K'を\n"
+"使うという標準に従うようにして下さい。"
+
+msgid "Baseclass"
+msgstr "基本クラス"
+
+msgid ""
+"Insert the baseclass from which your new class\n"
+"will be derived from. If you have checked\n"
+"`generate a QWidget-Childclass`, the new class will\n"
+"be derived from QWidget. If no baseclass is named, the\n"
+"new class will not have a parent class."
+msgstr ""
+"新しいクラスが継承する基本クラスの名前を入力して\n"
+"下さい。もし`QWidgetの子クラスを生成'をチェックすると\n"
+"新しいクラスはQWidgetを継承します。もし基本クラス名が\n"
+"指定されないと新しいクラスは親クラスを持ちません。"
+
+msgid "Header"
+msgstr "ヘッダー"
+
+msgid ""
+"Insert your header filename here.\n"
+"It is automatically inserted while\n"
+"you select the classname, but you can\n"
+"still edit it afterwards."
+msgstr ""
+"ヘッダーファイル名を入力して下さい。\n"
+"これはクラス名を入力している間に\n"
+"自動的に挿入されますが、後で編集\n"
+"することもできます。"
+
+msgid "Impl."
+msgstr "Impl."
+
+msgid ""
+"Insert your implementation filename here.\n"
+"It is automatically inserted while\n"
+"you select the classname, but you can\n"
+"still edit it afterwards."
+msgstr ""
+"インプリメントするファイル(ソース)名を\n"
+"入力して下さい。これはクラス名を入力\n"
+"している間に自動的に挿入されますが、\n"
+"後で編集することもできます。"
+
+msgid ""
+"Insert a short description for your new class\n"
+"here for documenation purposes. This will be used\n"
+"for the API-documentation you can create or update\n"
+"after the class is created."
+msgstr ""
+"ドキュメントのために新しいクラスに関する短い\n"
+"記述をして下さい。これはクラスが作成された後\n"
+"APIドキュメントを作成・更新するために使われます。"
+
+msgid "Inheritence"
+msgstr "継承"
+
+msgid "Additional Options"
+msgstr "追加オプション"
+
+msgid "use header/cpp-templates"
+msgstr "ヘッダー/cppテンプレートを使う"
+
+msgid "generate a QWidget-Childclass"
+msgstr "QWidgetの子クラスを生成"
+
+msgid ""
+"This offers additional options to your new class.\n"
+"If you check `use header/cpp-templates`, your name and\n"
+"email adress will be added into the new generated files\n"
+"If you check `generate a QWidget-Childclass`, the new class\n"
+"will use QWidget as the baseclass. This is also useful for\n"
+"using baseclasses derived from QWidget, e.g. QDialog."
+msgstr ""
+"ここで新しいクラスの追加オプションを設定します。'ヘッダー\n"
+"/cppテンプレートを使う'をチェックすると新しく生成される\n"
+"ファイルにあなたの名前とメールアドレスが追加されます。\n"
+"'QWidgetの子クラスを生成'をチェックすると新しいクラスは\n"
+"QWidgetを基本クラスとします。これはまたQDialog等の\n"
+"QWidgetを継承する基本クラスを利用する時に便利です。"
+
+msgid ""
+"Check here your inheritance from the chosen baseclass.\n"
+"You can derive from a baseclass as public,protected\n"
+"or private."
+msgstr ""
+"選んだ基本クラスの継承を選択します。基本クラスを\n"
+"publicかprotectedかprivateとして継承できます。"
+
+msgid "You must enter a classname!"
+msgstr "クラス名を入れて下さい!"
+
+msgid "You must enter a name for the header-file!"
+msgstr "ヘッダーファイル名を入れて下さい!"
+
+msgid "You must enter a name for the implementation-file!"
+msgstr "インプリメントするファイル名を入れて下さい!"
+
+msgid "lsm File - Linux Software Map"
+msgstr "lsmファイル - Linux Software Map"
+
+msgid "kdelnk-File - for the KDE-Menu"
+msgstr "kdelnkファイル - KDE-Menu用"
+
+msgid "Icon (*.xpm)"
+msgstr "アイコン (*.xpm)"
+
+msgid "english (.sgml)"
+msgstr "英語 (.sgml)"
+
+msgid "C/C++ Header (*.h,*.hxx)"
+msgstr "C/C++ ヘッダー (*.h,*.hxx)"
+
+msgid "C/C++ File (*.cpp,*.c,*.cc,*.C ...)"
+msgstr "C/C++ ファイル (*.cpp,*.c,*.cc,*.C ...)"
+
+msgid "Empty Textfile"
+msgstr "空のテキストファイル"
+
+msgid "Qt/KDE Dialog (*.kdevdlg)"
+msgstr "Qt/KDE ダイアログ (*.kdevdlg)"
+
+msgid "Lexical File (*.l, *.ll, *.lxx, *.l++)"
+msgstr "Lex ファイル (*.l, *.ll, *.lxx, *.l++)"
+
+msgid "Choose the type of the new file here."
+msgstr "新しいファイルのタイプを選択して下さい。"
+
+msgid "Manuals"
+msgstr "マニュアル"
+
+msgid "Linux/KDE"
+msgstr "Linux/KDE"
+
+msgid "Filename:"
+msgstr "ファイル名:"
+
+msgid "Enter a name for your new file here."
+msgstr "新しいファイルの名前を入力して下さい。"
+
+msgid "use Template"
+msgstr "テンプレートを使う"
+
+msgid "Check this if you want to use a template."
+msgstr "テンプレートを使いたい場合チェックして下さい。"
+
+msgid "Project Options"
+msgstr "プロジェクトオプション"
+
+msgid "add to Project"
+msgstr "プロジェクトに追加"
+
+msgid "Check this if you want to add the new file to your project."
+msgstr "新しいファイルプロジェクトに追加したい場合はチェックして下さい。"
+
+msgid "Location:"
+msgstr "場所:"
+
+msgid "Enter the directory where the new file will be located."
+msgstr "新しいファイルが置かれる場所を入力して下さい。"
+
+msgid "Here you can choose a directory where the new file will be located."
+msgstr "ここで新しいファイルが置かれるディレクトリを入力します。"
+
+msgid "The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"
+msgstr "ファイル名は .cpp,.c,.cc,.C,.cxx,.ec,.ecpp で終らなくてはいけません!"
+
+msgid "The filename must end with .h or .hxx!"
+msgstr "ファイル名は .h,.hxx! で終らなくてはいけません!"
+
+msgid "The filename must end with .lsm !"
+msgstr "ファイル名は .lsm で終らなくてはいけません!"
+
+msgid "The filename must end with .kdelnk !"
+msgstr "ファイル名は .kdelink で終らなくてはいけません!"
+
+msgid "The filename must end with .sgml !"
+msgstr "ファイル名は .sgml で終らなくてはいけません!"
+
+msgid "The filename must end with .kdevdlg !"
+msgstr "ファイル名は .kdevdlg で終らなくてはいけません!"
+
+msgid "The filename must end with .xpm !"
+msgstr "ファイル名は .xpm で終らなくてはいけません!"
+
+msgid "The filename must end with .l, .ll, .lxx or .l++ !"
+msgstr "ファイル名は .l, .ll, .lxx, .l++ で終らなくてはいけません!"
+
+msgid "You must enter a filename!"
+msgstr "ファイル名を入力して下さい!"
+
+msgid "You must choose a location,that is in your project-dir!"
+msgstr "プロジェクトディレクトリの中で、場所を選択して下さい!"
+
+msgid "Files exists!"
+msgstr "ファイルは存在します!"
+
+msgid ""
+"You have added a file to the project that already exists.\n"
+"Do you want overwrite the old one?"
+msgstr ""
+"既に存在するファイルをプロジェクトに追加しようとしています。\n"
+"古いファイルを上書きしますか?"
+
+msgid "Information..."
+msgstr "情報..."
+
+msgid ""
+"Please make sure, that you have added\n"
+"\"AM_LEX_PROG\" to your configure.in!"
+msgstr ""
+"configure.inに\"AM_LEX_PROG\"を追加\n"
+"しました。"
+
+msgid "Set the general options of your project here."
+msgstr "ここにプロジェクトの一般的なオプションを入れます"
+
+msgid "Set the project name here."
+msgstr "ここにプロジェクト名を入れます"
+
+msgid "Version:"
+msgstr "バージョン:"
+
+msgid ""
+"Set your project version\n"
+"number here."
+msgstr ""
+"ここにプロジェクトのバージョン\n"
+"を入れます"
+
+msgid "Insert your name or the name of your team here"
+msgstr "あなたの名前かチーム名を入力して下さい"
+
+msgid "Insert your email-address here"
+msgstr "あなたのメールアドレスを入力して下さい"
+
+msgid "Modify Makefiles"
+msgstr "Makefile を変更"
+
+msgid "Version Control:"
+msgstr "バージョンコントロール:"
+
+msgid "None"
+msgstr "なし"
+
+msgid "Short Information:"
+msgstr "簡単な情報:"
+
+msgid ""
+"Insert some useful information about\n"
+"your project here. This is only for the\n"
+"information in the project file-<b>not\n"
+"\n"
+"for README etc."
+msgstr ""
+"ここにあなたのプロジェクトの有用な情報を\n"
+"入れて下さい。これは単なるプロジェクト\n"
+"ファイル中の情報で、<b>READMEなどでは\n"
+"ありません。"
+
+msgid "Set your Compiler options here"
+msgstr "コンパイラオプションを入力して下さい"
+
+msgid "Target"
+msgstr "ターゲット"
+
+msgid ""
+"Set your target options here\n"
+"by specifying your machine type\n"
+"and GCC optimization level (0-3)"
+msgstr ""
+"ここにマシンタイプと\n"
+"GCC最適化レベル(0-3)を指定して\n"
+"ターゲットオプションを設定して下さい"
+
+msgid "Target Machine"
+msgstr "ターゲットマシン"
+
+msgid "your machine"
+msgstr "あなたのマシン"
+
+msgid "i386v"
+msgstr "i386v"
+
+msgid ""
+"Specify the machine type for your program.\n"
+"Other machine types than your machine is\n"
+"usually only needed for precompiled\n"
+"distribution packages. i386v is intended for\n"
+"cross-compilers to build a binary for an intel\n"
+"machine running Unix System V."
+msgstr ""
+"プログラムのマシンタイプを指定してください。\n"
+"あなたのマシンと違うマシンタイプは\n"
+"コンパイル済み配布パッケージを作る時\n"
+"のみ必要です。i386vというのはUnix System Vを\n"
+"走らせているintelマシンのバイナリを作成する\n"
+"ためのクロスコンパイラーを意図しています。"
+
+msgid "only syntax check"
+msgstr "構文チェックのみ"
+
+msgid ""
+"This option sets the compiler\n"
+"to <i>-fsyntax-only</i>\n"
+"which lets you check your code for\n"
+"syntax-errors but doesn't do anything\n"
+"else beyond that."
+msgstr ""
+"このオプションはコンパイラに\n"
+"<i>-fsyntax-only</i>を渡し、\n"
+"コードの構文エラーはチェックするが\n"
+"それ以上はなにもしないという時\n"
+"にします。"
+
+msgid "optimize"
+msgstr "最適化"
+
+msgid "Optimization-level"
+msgstr "最適化レベル"
+
+msgid ""
+"Set the -O option for the GCC\n"
+"here. Turning off optimization\n"
+"equals -O0. The higher the level\n"
+"the more time you need to compile\n"
+"but increases program speed."
+msgstr ""
+"ここでGCCに -O オプションをセット\n"
+"します。-O0 で最適化をしません。\n"
+"レベルを上げることはコンパイルの\n"
+"速度は落ちますがプログラムの\n"
+"速度は上がります。"
+
+msgid "Debugging"
+msgstr "デバッグ"
+
+msgid "Set your debugging options here."
+msgstr "デバッグオプションをセットします。"
+
+msgid "generate debugging information"
+msgstr "デバッグ情報を生成します"
+
+msgid ""
+"Checking this turns on the -g flag\n"
+"to generate debugging information."
+msgstr ""
+"ここをチェックするとGCCの -g フラグを\n"
+"有効にし、デバッグ情報を生成します"
+
+msgid "Debug-level"
+msgstr "デバッグレベル"
+
+msgid ""
+"Set the debugging level here.\n"
+"You can choose from level 1-3 which\n"
+"sets option -g1 to -g3 debugging\n"
+"level."
+msgstr ""
+"ここでデバッグレベルをセットします。\n"
+"ここでは 1 から 3 (オプションの\n"
+" -g1 から -g3) のデバッグレベルをセット\n"
+"できます。"
+
+msgid "generate extra information for gprof"
+msgstr "gprof用の追加情報を生成"
+
+msgid ""
+"Generate extra code to write profile\n"
+"information for the analysis program\n"
+"<i>gprof</i>."
+msgstr ""
+"解析プログラム<i>gprof</i>用の\n"
+"プロフィール情報を出力するための\n"
+"追加コードを生成します。"
+
+msgid "store temporary intermediate files"
+msgstr "一時的な中間ファイルを残す"
+
+msgid ""
+"Store the usually temporary intermediate\n"
+"files in the current directory. This means\n"
+"compiling a file <i>foo.c</i> will produce\n"
+"the files <i>foo.o, foo.i</i> and<i>foo.s"
+msgstr ""
+"現在のディレクトリの一時的な中間ファイルを\n"
+"残します。これはファイル<i>foo.c</i>を\n"
+"コンパイルすることによって<i>foo.o, foo.i</i>\n"
+"<i>foo.s ができるということです。"
+
+msgid "additional options:"
+msgstr "追加オプション:"
+
+msgid ""
+"Insert other GCC-options here\n"
+"to invoke GCC with by setting the\n"
+"CXXFLAGS-environment variable."
+msgstr ""
+"その他のGCCオプションを入力する\n"
+"ことでCXXFLAGS-環境変数をセット\n"
+"したGCCを呼びます。"
+
+msgid "Compiler Options"
+msgstr "コンパイラオプション"
+
+msgid ""
+"Set the Compiler warnings here by checking\n"
+"the -W options you want to use."
+msgstr ""
+"-W オプションをセットしあなたの使いたい\n"
+"コンパイラの警告レベルをセットします。"
+
+msgid ""
+"Compile with -Wall. This option\n"
+"includes several different warning\n"
+"parameters which are recommended to\n"
+"turn on."
+msgstr ""
+"-Wallでコンパイル。このオプション\n"
+"はつけるべきである、たくさんの\n"
+"異なる警告パラメータを\n"
+"有効にします。"
+
+msgid ""
+"Compile with -W. This option\n"
+"sets options not included in -Wall\n"
+"which are very specific. Please read\n"
+"GCC-Info for more information."
+msgstr ""
+"-Wでコンパイル。このオプション\n"
+"は-Wallのとても特有なオプションを\n"
+"含みません。詳しくはGCC-Infoを\n"
+"読んで下さい。"
+
+msgid ""
+"Warn about certain constructs\n"
+"that behave differently in traditional\n"
+"and ANSI C."
+msgstr ""
+"トラディッショナルC と ANSI C で\n"
+"振舞いが異なるコンストラクトを\n"
+"警告します。"
+
+msgid ""
+"Warn if an undefined identifier is\n"
+"evaluated in an `#if' directive"
+msgstr ""
+"定義されていない識別子と`#if'が\n"
+"直接比較された時に警告します"
+
+msgid ""
+"Warn whenever a local variable\n"
+"shadows another local variable."
+msgstr ""
+"ローカル変数が他のローカル変数\n"
+"を隠した時全て警告します。"
+
+msgid ""
+"Warn about anything that\n"
+"depends on the <i>size of</i> a\n"
+"function type or of <i>void</i>.\n"
+"GNU C assigns these types a size of 1,\n"
+"for convenience in calculations with\n"
+"<i>void *</i> pointers and pointers\n"
+"to functions."
+msgstr ""
+"<i>size of</i>関数タイプ、または\n"
+"<i>void</i>に依存しているもの全て\n"
+"警告します。GNU C はこのような\n"
+"タイプを <i>void *</i> ポインタや\n"
+"関数へのポインタを計算する都合から\n"
+"size of 1 に\n"
+"割り当てます"
+
+msgid ""
+"Warn whenever a function call is\n"
+"cast to a non-matching type. For\n"
+"example, warn if <i>int malloc()</i>\n"
+"is cast to <i>anything *."
+msgstr ""
+"一致しない型へのキャストで関数が\n"
+"呼出されたとき全て警告します。\n"
+"例えば、<i>int malloc()</i>が<i>anything *</i>\n"
+"へキャストしたとき警告します。"
+
+msgid ""
+"Warn whenever a pointer is cast\n"
+"so as to remove a type qualifier\n"
+"from the target type. For example,\n"
+"warn if a <i>const char *</i> is\n"
+"cast to an ordinary <i>char *."
+msgstr ""
+"ターゲットタイプから型修飾子をとる\n"
+"ようにポインタがキャストされた場合\n"
+"全て警告します。例えば、<i>const char *</i>\n"
+"が普通の<i>char *.</i>に\n"
+"キャストされたとき警告します。"
+
+msgid ""
+"Warn whenever a pointer is cast such\n"
+"that the required alignment of the target\n"
+"is increased. For example, warn if a\n"
+"<i>char *</i> is cast to an <i>int *</i> on\n"
+"machines where integers can only be accessed\n"
+"at two- or four-byte boundaries."
+msgstr ""
+
+msgid ""
+"Give string constants the type <i>const char[LENGTH]</i>\n"
+"so that copying the address of one into a non-<i>const\n"
+"char *</i> pointer will get a warning. These warnings\n"
+"will help you find at compile time code that can try to\n"
+"write into a string constant, but only if you have been\n"
+"very careful about using <i>const</i> in declarations\n"
+"and prototypes. Otherwise, it will just be a nuisance;\n"
+"this is why we did not make <i>-Wall</i> request these\n"
+"warnings."
+msgstr ""
+
+msgid ""
+"Warn if a prototype causes a type conversion that is different\n"
+"from what would happen to the same argument in the absence\n"
+"of a prototype. This includes conversions of fixed point to\n"
+"floating and vice versa, and conversions changing the width\n"
+"or signedness of a fixed point argument except when the same\n"
+"as the default promotion.  Also warn if a negative integer\n"
+"constant expression is implicitly converted to an unsigned\n"
+"type."
+msgstr ""
+
+msgid ""
+"Warn when a comparison between signed and unsigned values\n"
+"could produce an incorrect result when the signed value\n"
+"is converted to unsigned."
+msgstr ""
+
+msgid ""
+"Warn if any functions that return structures or unions are\n"
+"defined or called. (In languages where you can return an\n"
+"array, this also elicits a warning.)"
+msgstr ""
+
+msgid ""
+"Warn if a function is declared or defined without specifying\n"
+"the argument types. (An old-style function definition is\n"
+"permitted without a warning if preceded by a declaration\n"
+"which specifies the argument types.)"
+msgstr ""
+
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"prototype declaration. This warning is issued even if\n"
+"the definition itself provides a prototype. The aim\n"
+"is to detect global functions that fail to be declared\n"
+"in header files."
+msgstr ""
+
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"declaration. Do so even if the definition itself pro-\n"
+"vides a prototype. Use this option to detect global\n"
+"functions that are not declared in header files."
+msgstr ""
+
+msgid ""
+"Warn if anything is declared more than once in the same scope\n"
+"even in cases where multiple declaration is valid and\n"
+"changes nothing."
+msgstr ""
+
+msgid ""
+"Warn if an <i>extern</i> declaration is\n"
+"encountered within a function."
+msgstr ""
+"<i>extern</i> 宣言が関数の中に\n"
+"表われた場合警告します。"
+
+msgid ""
+"Warn if a function can not be inlined, and either\n"
+"it was declared as inline, or else the\n"
+"<i>-finline-functions</i> option was given."
+msgstr ""
+
+msgid ""
+"Warn if an old-style (C-style) cast is used\n"
+"within a program"
+msgstr ""
+"古いスタイル (C-style) のキャストが\n"
+"プログラム中に表われた場合、警告します。"
+
+msgid ""
+"Warn when a derived class function declaration may be an\n"
+"error in defining a virtual function (C++ only). In\n"
+"a derived class, the definitions of virtual functions\n"
+"must match the type signature of a virtual function\n"
+"declared in the base class. With this option, the\n"
+"compiler warns when you define a function with the same\n"
+"as a virtual function, but with a type signature that\n"
+"does not match any declarations from the base class."
+msgstr ""
+
+msgid ""
+"Warn when g++'s synthesis behavoir does\n"
+"not match that of cfront."
+msgstr ""
+
+msgid "make all Warnings into errors"
+msgstr "全ての警告をエラーに出す"
+
+msgid "Make all warnings into errors."
+msgstr "全ての警告をエラーに出します。"
+
+msgid "Compiler Warnings"
+msgstr "コンパイラの警告(Warning)"
+
+msgid ""
+"Set the Linker options and choose the\n"
+"libraries to add to your project."
+msgstr ""
+"リンカのオプションをセットし、プロジェクトに\n"
+"加えるライブラリを選びます。"
+
+msgid "library flags"
+msgstr "ライブラリフラグ"
+
+msgid "Set your library flags here."
+msgstr "ライブラリフラグをセットします。"
+
+msgid "remove all symbol table and relocation information from the executable"
+msgstr "全てのsymbol tableとrelocation情報をバイナリから削除します。"
+
+msgid ""
+"If you want to use a debugger, you\n"
+"should keep those informations in the object files.\n"
+"It's useless to let the compiler generate debug\n"
+"informations and to remove it with this option."
+msgstr ""
+"もしデバッガを使いたいなら、これらの情報を\n"
+"オブジェクトファイルに残さなければなりません。\n"
+"コンパイラにデバッグ情報を生成させておいてこの\n"
+"オプションで取り除くことは意味がありません。"
+
+msgid "prevent using shared libraries"
+msgstr "シェアードライブラリを使わない"
+
+msgid ""
+"On systems that support dynamic linking,\n"
+"this prevents linking with the shared libraries.\n"
+"On other systems, this option has no effect."
+msgstr ""
+"ダイナミックリンクをサポートしているシステムで\n"
+"シェアードライブラリにリンクしないようにします。\n"
+"その他のシステムには効果がありません。"
+
+msgid "additional flags:"
+msgstr "追加フラグ:"
+
+msgid ""
+"Insert other linker options here\n"
+"to invoke the linker with by setting the\n"
+"LDFLAGS-environment variable."
+msgstr ""
+"その他のリンカオプションをここに入力すると\n"
+"LDFLAGS-環境変数をセットしてリンカを\n"
+"呼び出します。"
+
+msgid "libraries"
+msgstr "ライブラリ"
+
+msgid "Choose your libraries here."
+msgstr "ライブラリを選択して下さい。"
+
+msgid "X11 basics\n"
+msgstr "X11 basics\n"
+
+msgid "X11 extensions\n"
+msgstr "X11 extensions\n"
+
+msgid "KDE basics"
+msgstr "KDE basics"
+
+msgid "KDE user interface"
+msgstr "KDE ユーザーインターフェース"
+
+msgid ""
+"KDE HTML widget :\n"
+"this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
+"-ltiff, -lpng, -lm, -ljscript."
+msgstr ""
+"KDE HTML ウィジェット :\n"
+"this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
+"-ltiff, -lpng, -lm, -ljscript."
+
+msgid "KDE kfm functionality"
+msgstr "KDE kfm functionality"
+
+msgid "KDE file handling"
+msgstr "KDE file handling"
+
+msgid "KDE Spell checking"
+msgstr "KDE Spell checking"
+
+msgid "KDE addressbook"
+msgstr "KDE addressbook"
+
+msgid "additional libraries:"
+msgstr "追加ライブラリ:"
+
+msgid "Add additional libraries here."
+msgstr "追加のライブラリを加えます。"
+
+msgid "Linker Options"
+msgstr "リンカオプション"
+
+msgid ""
+"This dialog is for setting\n"
+"your make options."
+msgstr ""
+"Makeオプションの設定\n"
+"ダイアログです。"
+
+msgid "Print debug information"
+msgstr "デバッグ情報を表示"
+
+msgid "Continue after errors"
+msgstr "エラー後も続ける"
+
+msgid "Print the data base"
+msgstr "データベースを表示"
+
+msgid "Environment variables"
+msgstr "環境変数"
+
+msgid "No built-in rules"
+msgstr "No built-in rules"
+
+msgid "Touch files"
+msgstr "Touch files"
+
+msgid "Ignore all errors"
+msgstr "全てのエラーを無視"
+
+msgid "Silent operation"
+msgstr "Silent operation"
+
+msgid "Print working directory"
+msgstr "Print working directory"
+
+msgid "job number"
+msgstr "job number"
+
+msgid "set modified"
+msgstr "set modified"
+
+msgid "additional options"
+msgstr "追加オプション"
+
+msgid "Make Options"
+msgstr "Makeオプション"
+
+msgid ""
+"Pressing the folder button lets you choose\n"
+"a file which will be set modified. This will\n"
+"recompile the file on the next build run."
+msgstr ""
+
+msgid ""
+"Print  debugging  information  in  addition to normal\n"
+"processing. The debugging information tells you which\n"
+"files  are being considered for remaking, which file-\n"
+"times are being compared and with what results, which\n"
+"files  actually  need  to  be  remade, which implicit\n"
+"rules are considered and which  are  applied---every&#65389;\n"
+"thing  interesting about how make decides what to do."
+msgstr ""
+
+msgid ""
+"Set any other additional options for your\n"
+"make-program here."
+msgstr ""
+
+msgid ""
+"Print  the data base (rules and variable values) that\n"
+"results from reading the makefiles; then  execute  as\n"
+"usual  or  as  otherwise specified.  This also prints\n"
+"the version information."
+msgstr ""
+
+msgid ""
+"Eliminate  use  of the built-in implicit rules.  Also\n"
+"clear out the default list  of  suffixes  for  suffix\n"
+"rules."
+msgstr ""
+
+msgid ""
+"Give variables taken from the environment  precedence\n"
+"over variables from makefiles."
+msgstr ""
+
+msgid ""
+"Continue  as  much as possible after an error. While\n"
+"the target that failed, and those that depend on it,\n"
+"cannot  be  remade, the  other dependencies of these\n"
+"targets can be processed all the same."
+msgstr ""
+
+msgid ""
+"Touch  files  (mark  them  up  to date without really\n"
+"changing them) instead  of  running  their  commands.\n"
+"This  is used to pretend that the commands were done,\n"
+"in order to fool future invocations of make."
+msgstr ""
+
+msgid ""
+"Print  a  message  containing  the  working directory\n"
+"before and after other processing.  This may be  use&#65389;\n"
+"ful  for  tracking down errors from complicated nests\n"
+"of recursive make commands."
+msgstr ""
+
+msgid ""
+"Silent operation; do not print the commands as they\n"
+"are executed."
+msgstr ""
+
+msgid ""
+"Ignore all errors in commands executed to\n"
+"remake files."
+msgstr ""
+
+msgid ""
+"Specifies the number of jobs (commands) to run\n"
+"simultaneously. If you have a single CPU-System\n"
+"it is not recommended to choose more then 2."
+msgstr ""
+
+msgid ""
+"Pretend that the target file has just been  modified.\n"
+"It  is  almost the same as running a touch command on\n"
+"the given file before running make, except  that  the\n"
+"modification  time is changed only in the imagination\n"
+"of make."
+msgstr ""
+
+msgid "File (Registered)"
+msgstr "ファイル (Registered)"
+
+msgid "Add File to Project..."
+msgstr "プロジェクトにファイルを追加..."
+
+msgid "Remove from Repository (and disk)"
+msgstr "レポジトリ(とディスク)から削除"
+
+#, c-format
+msgid ""
+"Do you want to add the file\n"
+"%s\n"
+"to the project ?"
+msgstr ""
+"ファイル %s\n"
+"をプロジェクトに\n"
+"追加しますか ?"
+
+msgid "Question"
+msgstr "質問"
+
+#, c-format
+msgid ""
+"Do you really want to delete the file\n"
+"%s\n"
+"from the disk?\n"
+"There is no way to restore it!"
+msgstr ""
+"ファイル %s\n"
+"をプロジェクトから削除\n"
+"しますか ?\n"
+"それを元に戻す方法はありません!"
+
+msgid "Tools-Menu Configuration"
+msgstr "ツールメニューの設定"
+
+msgid "&Add"
+msgstr "追加(&A)"
+
+msgid "Click here to add a tool specified below."
+msgstr "ツールを追加するならここをクリック。"
+
+msgid "De&lete"
+msgstr "削除(&l)"
+
+msgid "Click here to delete an entry from the list."
+msgstr "リストからエントリを削除するにはここをクリック。"
+
+msgid "Move &Up"
+msgstr "上に移動(&U)"
+
+msgid "Click here to move up the selected entry."
+msgstr "エントリを上に移動するにはここをクリック。"
+
+msgid "Move &Down"
+msgstr "下に移動(&D)"
+
+msgid "Click here to move down the selected entry."
+msgstr "エントリを下に移動するにはここをクリック。"
+
+msgid "Executable:"
+msgstr "実行可能バイナリ:"
+
+msgid "Here you can browse through the disc to select an executable file."
+msgstr "実行可能バイナリを選択するためにここでブラウズできます。"
+
+msgid "Enter the name of the executable file here."
+msgstr "実行可能バイナリの名前を入力して下さい。"
+
+msgid "Menu Text:"
+msgstr "メニューテキスト:"
+
+msgid "Enter a menu text for the executable here."
+msgstr "実行可能バイナリのメニューテキストを入力して下さい。"
+
+msgid "Arguments:"
+msgstr "引数:"
+
+msgid "Enter arguments for the executable here."
+msgstr "実行可能バイナリの引数を入力して下さい。"
+
+msgid "Executable not set!"
+msgstr "実行可能バイナリがセットされていません!"
+
+msgid "You have to set an executable to add to the Tools-Menu first."
+msgstr "ツールメニューに追加するために実行可能バイナリをセットして下さい。"
+
+msgid ""
+"The selected file is not an executable. Please choose an executable filename."
+msgstr ""
+"選択されたファイルは実行可能バイナリではありません。実行可能バイナリを選択して下さい。"
+
+msgid ""
+"The selected executable is not in your Path. Please update your $PATH "
+"environment variableto execute the selected program as a tool."
+msgstr ""
+"選択された実行可能バイナリ にパスが通っていません。 "
+"$PATH 環境変数を設定して下さい。 "
+
+msgid "Menu text not set!"
+msgstr ""
+
+msgid ""
+"You have to insert a menuentry text to add the selected program to the "
+"Tools-Menu."
+msgstr ""
+
+msgid "KDE Library Documentation Update..."
+msgstr "KDE ライブラリドキュメント更新..."
+
+msgid "Choose installation mode:"
+msgstr "インストールモードを選択:"
+
+msgid "new KDE Libs sources path:"
+msgstr "新しい KDE Libs ソースパス:"
+
+msgid "Delete old Documentation and install to recent Documentation path"
+msgstr "古いドキュメントを削除し現在のパスにインストールする"
+
+msgid ""
+"Checking this will delete the current documentation\n"
+"and replacing it with the new generated documentation\n"
+"in the same path."
+msgstr ""
+"ここをチェックすると現在のドキュメントを削除し、\n"
+"同じパスにある新しく生成されたドキュメントに\n"
+"置換します。"
+
+msgid "Delete old Documentation and install to new Documentation path"
+msgstr "古いドキュメントを削除し新しいパスにインストールする"
+
+msgid ""
+"Checking this will delete the current documentation\n"
+"and lets you choose a path in the input field below\n"
+"where the new generated documentation will beinstalled."
+msgstr ""
+"ここをチェックすると現在のドキュメントを削除し、\n"
+"新しく生成されたドキュメントをインストールする場所\n"
+"を指定できます。"
+
+msgid "Leave old Documention untouched and install to new Documention path"
+msgstr "古いドキュメントを残し新しいパスにインストールする"
+
+msgid ""
+"This doesn't delete your current documentation and leaves it\n"
+"is now and you can select a new path for the new kdelibs\n"
+"documentation. CAUTION: Don't insert the same path where\n"
+"your recent documentation is installed- this may mess up\n"
+"the documentation by mixing old and new files!"
+msgstr ""
+"これは現在のドキュメントを削除せずそのままにし、新しい\n"
+"kdelibsドキュメントをインストールするパスを選択できます。\n"
+"注意:今のドキュメントがインストールされているパスを\n"
+"指定しないで下さい。これは新しいファイルと古いファイルが\n"
+"乱雑に混ざってしまいます。"
+
+msgid "new KDE Libs Documentation path:"
+msgstr "新しい KDE ドキュメントパス:"
+
+msgid ""
+"Insert the path to the current\n"
+"KDE-Libs sourcecodes here. This is\n"
+"where you have unpacked e.g. a kdelibs\n"
+"snapshot a la /snapshot/kdelibs."
+msgstr ""
+"現在のKDE-Libs ソースコードが\n"
+"あるパスを指定します。これは\n"
+"展開した場所です。例、kdelibs\n"
+"snapshotを /snapshot/kdelibs "
+
+msgid ""
+"Insert the path where you want to have\n"
+"the new generated documentation installed\n"
+"Note: the path information in Setup will\n"
+"be updated automatically, you don't have\n"
+"to change them to the new doc path."
+msgstr ""
+"新たに生成したドキュメントをインストールする\n"
+"パスを入れて下さい。\n"
+"注意:セットアップでのパス情報は自動的に\n"
+"更新されるので新しいドキュメントのために\n"
+"パスを変更することはありません。"
+
+msgid ""
+"The chosen path for the KDE-Libs does not\n"
+"lead to the KDE Libraries. Please choose the\n"
+"correct path.This is where you have unpacked\n"
+"e.g. a kdelibs snapshot a la /snapshot/kdelibs."
+msgstr ""
+
+msgid ""
+"The Qt-Documentation path is not set correctly.\n"
+"If you want your KDE-library documentation to\n"
+"be cross-referenced to the Qt-library, you have\n"
+"to set the correct path to your Qt-library\n"
+"documentation first.\n"
+"Do you want to set the Qt-Documentation path first ?"
+msgstr ""
+"Qtドキュメントパスが正しく設定されていません。\n"
+"もしあなたがKDEライブラリドキュメントを\n"
+"Qtライブラリのものとクロス参照したいのならば、\n"
+"まずQtライブラリドキュメントの正しいパスを\n"
+"設定しなければなりません。\n"
+"最初にQtドキュメントパスを設定しますか??"
+
+msgid "New KDE Documentation Directory..."
+msgstr "新しいKDEドキュメントディレクトリ..."
+
+msgid "KDE Libs Directory..."
+msgstr "KDE Libs ディレクトリ..."
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE Libraries. Please choose the\n"
+"correct path."
+msgstr ""
+
+msgid "KDevelop"
+msgstr "KDevelop"
+
+msgid "Welcome !"
+msgstr "ようこそ !"
+
+msgid "Tutorials"
+msgstr "チュートリアル"
+
+msgid "KDE Library Reference"
+msgstr "KDEライブラリリファレンス"
+
+msgid "KDE 2 Developer Guide"
+msgstr "KDE 2 ディベロッパーガイド"
+
+msgid "C/C++ Reference"
+msgstr "C/C++ リファレンス"
+
+msgid "Qt/KDE Libraries"
+msgstr "Qt/KDE ライブラリ"
+
+msgid "Qt Library"
+msgstr "Qt ライブラリ"
+
+msgid "KDE Core Library"
+msgstr "KDE Core ライブラリ"
+
+msgid "KDE UI Library"
+msgstr "KDE UI ライブラリ"
+
+msgid "KDE KFile Library"
+msgstr "KDE KFile ライブラリ"
+
+msgid "KDE HTMLW Library"
+msgstr "KDE HTMLW ライブラリ"
+
+msgid "KDE KAB Library"
+msgstr "KDE KAB ライブラリ"
+
+msgid "KDE KSpell Library"
+msgstr "KDE KSpell ライブラリ"
+
+msgid "Documentation Base"
+msgstr "ドキュメントベース"
+
+msgid "Add Entry..."
+msgstr "エントリを追加..."
+
+msgid "Remove Entry"
+msgstr "エントリを削除"
+
+msgid "Current Project"
+msgstr "現在のプロジェクト"
+
+msgid "API documentation"
+msgstr "API ドキュメント"
+
+msgid "User manual"
+msgstr "ユーザーマニュアル"
+
+msgid "Search in Files..."
+msgstr "ファイルから検索..."
+
+msgid "&Pattern:"
+msgstr "パターン(&P):"
+
+msgid "&Template:"
+msgstr "テンプレート(&T):"
+
+msgid "&Files:"
+msgstr "ファイル(&F):"
+
+msgid "&Directory:"
+msgstr "ディレクトリ(&D):"
+
+msgid "&Recursive"
+msgstr "&Recursive"
+
+msgid "9999 matches"
+msgstr "9999 matches"
+
+msgid "Done"
+msgstr "完了"
+
+msgid ""
+"Enter the regular expression you want to search for here.\n"
+"Possible meta characters are:\n"
+"<bold>.</bold> - Matches any character\n"
+"<bold>^</bold> - Matches the beginning of a line\n"
+"<bold>$</bold> - Matches the end of a line\n"
+"<bold>\\\\\\<</bold> - Matches the beginning of a word\n"
+"<bold>\\\\\\></bold> - Matches the end of a word\n"
+"\n"
+"The following repetition operators exist:\n"
+"<bold>?</bold> - The preceding item is matches at most once\n"
+"<bold>*</bold> - The preceding item is matched zero or more times\n"
+"<bold>+</bold> - The preceding item is matched once or more times\n"
+"<bold>{<i>n</i>}</bold> - The preceding item is matched exactly <i>n</i> "
+"times\n"
+"<bold>{<i>n</i>,}</bold> - The preceding item is matched <i>n</i> or more "
+"times\n"
+"<bold>{,<i>n</i>}</bold> - The preceding item is matched at most <i>n</i> "
+"times\n"
+"<bold>{<i>n</i>,<i>m</i>}</bold> - The preceding item is matched at least "
+"<i>n</i>,\n"
+"   but at most <i>m</i> times.\n"
+"\n"
+"Furthermore, backreferences to bracketed subexpressions are\n"
+"available via the notation \\\\<i>n</i>."
+msgstr ""
+
+msgid ""
+"Enter the file name pattern of the files to search here.\n"
+"You may give several patterns separated by commas"
+msgstr ""
+
+#, c-format
+msgid ""
+"You can choose a template for the pattern from the combo box\n"
+"and edit it here. The string %s in the template is replaced\n"
+"by the pattern input field, resulting in the regular expression\n"
+"to search for."
+msgstr ""
+
+msgid ""
+"The results of the grep run are listed here. Select a\n"
+"filename/line number combination and press Enter or doubleclick\n"
+"on the item to show the respective line in the editor."
+msgstr ""
+
+msgid " matches"
+msgstr " 個マッチ"
+
+msgid "Canceled"
+msgstr "キャンセルされました"
+
+msgid "No matches found"
+msgstr "見つかりませんでした"
+
+msgid "Syntax error in pattern"
+msgstr "パターン内に文法エラー"
+
+msgid "Did you know...?"
+msgstr "知っていますか...?"
+
+msgid "show Tip of the day on next start"
+msgstr "今日のワンポイントを次の起動時に表示"
+
+msgid "Next Tip"
+msgstr "次のワンポイント"
+
+msgid "Tipdatabase not found ! Please check your installation."
+msgstr ""
+
+msgid "ClassWizard Tool"
+msgstr "ClassWizardツール"
+
+msgid "Virtual functions"
+msgstr "仮想関数"
+
+msgid "Available:"
+msgstr "Available:"
+
+msgid "Used:"
+msgstr "Used:"
+
+msgid "Added method"
+msgstr "追加されたメソッド"
+
+msgid "The virtual method implementation has been added."
+msgstr "仮想関数が追加されました。"
+
+msgid "Print subtree"
+msgstr "subtreeを表示"
+
+msgid "Fold all"
+msgstr "Fold all"
+
+msgid "Unfold all"
+msgstr "Unfold all"
+
+msgid "Could not add item"
+msgstr "アイテムを追加できませんでした"
+
+msgid ""
+"Sorry, the maximum item count per dialog has been arrived.\n"
+"\n"
+"You may change the \"MAX_WIDGETS_PER_DIALOG\" constant in the "
+"\"kdlgedit/kdlgeditwidget.h\" file and recompile the program."
+msgstr ""
+
+msgid "New Dialog..."
+msgstr "新規ダイアログ..."
+
+msgid "Delete Dialog..."
+msgstr "ダイアログを削除..."
+
+msgid "KDevelop Dialog Editor: "
+msgstr "KDevelopダイアログエディタ: "
+
+msgid ""
+"You have modified the current dialog\n"
+"Do you want to save it?"
+msgstr ""
+"現在のダイアログは変更されています。\n"
+"保存しますか?"
+
+msgid "Dialog editor (WYSIWYG Preview)"
+msgstr "ダイアログエディタ (WYSIWYGプレビュー)"
+
+msgid ""
+"Error loading kdlgloader library (libkdlgloader.so).\n"
+"\n"
+"Normally it is supposed to be installed together\n"
+"with kdevelop (if you are running a release version).\n"
+"If so and no library was installed please send a bug\n"
+"report though the Help|Bug Report menu. However,\n"
+"you can also get the library on the KDevelop website."
+msgstr ""
+
+msgid "Error saving temporary dialog file."
+msgstr "現在のダイアログファイルの保存にエラー。"
+
+msgid ""
+"Do you really want to delete the selected dialog?\n"
+"        There is no way to restore it!"
+msgstr ""
+
+msgid "Add item"
+msgstr ""
+
+msgid ""
+"Into which widget do you want to insert this item ?\n"
+"\n"
+"You either may add it to the main widget or to the selected\n"
+"widget respectively to the selected items' parent widget."
+msgstr ""
+
+msgid "&Main"
+msgstr ""
+
+msgid "&Selected"
+msgstr ""
+
+msgid ""
+"<b><u><brown>QuickHelp<black></u></b>\n"
+"\n"
+msgstr ""
+"<b><u><brown>クイックヘルプ<black></u></b>\n"
+"\n"
+
+msgid ""
+"<b><i>Raise</i></b>\n"
+"\n"
+"Brings the item one step towards the topmost one in the hierarchy.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"<b><i>Lower</i></b>\n"
+"\n"
+"On the contrary to <i>raise</i> this function brings the item one step "
+"backwards in the hierarchy, to the bottommost item.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"<b><i>Raise to top</i></b>\n"
+"\n"
+"Sets the item to be the topmost one.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"<b><i>Raise to bottom</i></b>\n"
+"\n"
+"Makes the item to become the bottommost.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"<b><i>Copy</i></b>\n"
+"\n"
+"Selects the item to be copied. That means, if you choose paste later, this "
+"item will be inserted.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"<b><i>Delete</i></b>\n"
+"\n"
+"Removes the selected item from the dialog.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"<b><i>Cut</i></b>\n"
+"\n"
+"Copies the item and removes it from the dialog. But unlike toe delete "
+"function you will be able to insert a copy of the item using the "
+"<i>paste</i> function.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"<b>Note :</b> Since the selected item is the main widget only few of the "
+"normally available functions are enabled. Open another item's help to get "
+"information about the other functions.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"<b><i>Paste</i></b>\n"
+"\n"
+"Inserts an item you have copied before using the <i>Copy</i>function at the "
+"current position of the mouse pointer.\n"
+"\n"
+msgstr ""
+
+#, c-format
+msgid ""
+"Error reading dialog file (line %d) :\n"
+"   Could not insert item (%s). Seems like I don't know it :-("
+msgstr ""
+
+msgid "&Ignore"
+msgstr ""
+
+msgid ""
+"Error while reading the dialog file.\n"
+"\n"
+"Note : If you choose continue now the\n"
+"dialog may be loaded and saved incorrectly."
+msgstr ""
+
+msgid "Aborted reading dialog file"
+msgstr ""
+
+msgid ""
+"Reading aborted !\n"
+"\n"
+"The dialog has not been loaded completely.\n"
+"Open another dialog or create a new one\n"
+"if you don't like the result."
+msgstr ""
+
+msgid "&Raise"
+msgstr "上げる(&R)"
+
+msgid "&Lower"
+msgstr "下げる(&L)"
+
+msgid "Raise to &top"
+msgstr "最も上に(&t)"
+
+msgid "Lower to &bottom"
+msgstr "最も下に(&b)"
+
+msgid "Main Widget"
+msgstr "メインウィジェット"
+
+msgid "Dialog Class"
+msgstr "ダイアログクラス"
+
+msgid "Custom"
+msgstr "カスタム"
+
+msgid "Custom Properties:"
+msgstr "カスタムプロパティ:"
+
+msgid "Custom Class:"
+msgstr "カスタムクラス:"
+
+msgid "Custom Header:"
+msgstr "カスタムヘッダー:"
+
+msgid "Files:"
+msgstr "ファイル:"
+
+msgid "Classname:"
+msgstr "クラス名:"
+
+msgid "Header File:"
+msgstr "ヘッダー:"
+
+msgid "C++ File:"
+msgstr "C++ファイル:"
+
+msgid "Data File:"
+msgstr "データファイル:"
+
+msgid "Directory:"
+msgstr "ディレクトリ:"
+
+msgid "Generate Dialog... (C++ Sourcecode)"
+msgstr "ダイアログを生成... (C++ソースコード)"
+
+msgid "You must enter a name for the data-file!"
+msgstr ""
+
+msgid ""
+"You must enter a name for the header-file\n"
+" for the custom class!"
+msgstr ""
+
+msgid "You must enter a name for the custom class!"
+msgstr ""
+
+msgid "Horizontal Grid Size :"
+msgstr "水平グリッドサイズ :"
+
+msgid "Vertical Grid Size :"
+msgstr "垂直グリッドサイズ :"
+
+msgid "No Grid"
+msgstr "グリッドなし"
+
+msgid "Pixels"
+msgstr "ピクセル"
+
+msgid "Square Grid"
+msgstr "正方形グリッド"
+
+msgid ""
+"<brown><b>\"Set Grid\" dialog<black></b>\n"
+"\n"
+"Within this dialog you can set the desired\n"
+"grip size or disable the grid.\n"
+"\n"
+"KDlgEdit allows you to set the horizontal\n"
+"and vertical grid size independently. That\n"
+"means you can set different values for each\n"
+"direction."
+msgstr ""
+
+msgid ""
+"<brown><b>(Horizontal) Grid Size<black></b>\n"
+"\n"
+"Use this field to set the horizontal grid\n"
+"size in pixels or, if <i><u>Square Grid</u></i>is\n"
+"selected, to set both the horizontal and\n"
+"vertical grid size.\n"
+"\n"
+"A size of zero or one pixel disables the grid."
+msgstr ""
+
+msgid ""
+"<brown><b>Vertical Grid Size<black></b>\n"
+"\n"
+"Use this field to set the vertical grid\n"
+"size in pixels.\n"
+"\n"
+"A size of zero or one pixel disables the grid."
+msgstr ""
+
+msgid ""
+"<brown><b>Square Grid<black></b>\n"
+"\n"
+"If enabled the horizontal and vertical\n"
+"size will be the same value.\n"
+msgstr ""
+
+msgid ""
+"<brown><b>Ok<black></b>\n"
+"\n"
+"Closes the dialog and uses the changed values."
+msgstr ""
+
+msgid ""
+"<brown><b>Cancel<black></b>\n"
+"\n"
+"Closes the dialog <i>without</i>using the changed values."
+msgstr ""
+
+msgid "Grid Size :"
+msgstr ""
+
+msgid ""
+"<i>Group</i>\n"
+"\n"
+"This group contains general properties like <i>Name</i>or <i>Text</i>."
+msgstr ""
+
+msgid ""
+"<i>Group</i>\n"
+"\n"
+"This group contains properties having to do with the placement of the item "
+"like <i>Width</i>or <i>Height</i>."
+msgstr ""
+
+msgid ""
+"<i>Group</i>\n"
+"\n"
+"This group contains properties having to do with how the item will appear in "
+"the dialog.\n"
+"\n"
+"<i>Pixmap</i>is an example for such an appearance property."
+msgstr ""
+
+msgid ""
+"<i>Group</i>\n"
+"\n"
+"This group is a special one. It contains properties which do not effect on "
+"the item in the dialog editor but in the running program.\n"
+"\n"
+"That means if you change them you will not see any difference in the editor "
+"but there can be a big difference in the running program.\n"
+"\n"
+"<i>Connections</i>might be a pretty good example."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Helps to identify an dialog item i.e. for runtime loaded dialogs. In "
+"addition, if the constructor of the destination class has a \"name\" "
+"argument it is set to this value."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If this property is set to <i>true</i>the item will not be visible in the "
+"editor and in the program."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If disabled (=<i>false</i>) the widget will not handle user events (i.e. "
+"mouse or keyboard events)."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Used for generating sources. Defines the variable later containing the "
+"items' pointer."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the <i>SIGNAL/SLOT</i>connections for this item. (Only has effects "
+"in programs, not in this editor)"
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Is <i>true</i>this item will fill out the whole of his parent window. (Only "
+"has effects in programs, not in this editor)"
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If enabled (=<i>true</i>) the widget will accept drops from the drag&drop "
+"mechanism. (Only has effects in programs, not in this editor)"
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If <i>true</i>and if it is the only widget whose 'HasFocus' property is "
+"enabled it will have the focus by default.\n"
+"\n"
+"<b><u>Note</u></b>: Only one widget can have focus at the same time. So do "
+"<i>not</i>enable this property for more than one dialog item !"
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If you enter a widgets' variable name here it will be the focus proxy for "
+"this item (which means, if the widget you&#65396;ve entered gets the focus it "
+"transfers it to this widget)"
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The X coordinate of the widget relative to its parent widget."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The Y coordinate of the widget relative to its parent widget."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The width of the widget."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The height of the widget."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the minimum width of the widget. The widget than cannot become "
+"smaller than this value."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the minimum height of the widget. The widget than cannot become "
+"smaller than this value."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the maximum width of the widget. The widget than cannot become "
+"larger than this value."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the maximum height of the widget. The widget than cannot become "
+"larger than this value."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If <i>true</i>the widget size cannot be changed."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Sets in how many pixel steps the item should be resized."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The background mode of the widget."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The background color of the widget. Overrides the BgMode property."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The (background) palette color. This more recent method for BgColor also "
+"changes the frames etc."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Specifies the file which should be used as background pixmap. Note that not "
+"all widgets run correctly with background images. (i.e. the QLineEdit)"
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Specifies the file which should be used as mask bitmap. Note that this "
+"operation can be pretty slow."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Sets the font which should be used for drawing text in the widget."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Sets the cursor which should appear when moving the mouse pointer over the "
+"widget."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"The text which will appear on the button."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the button will be the default button. That means if the user "
+"presses return this button will receive the clicked() signal. Note that only "
+"one button can be the default button and that this value is only valid in "
+"dialogs."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the button will be an auto default button. An auto-default "
+"button becomes the default push button automatically when it receives the "
+"keyboard input focus."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the button keeps pressed until it is pressed again."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, and isToggleButton is also enabled the button will be toggled "
+"down by default."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"Tells this button to draw a menu indication triangle if enabled, and to not "
+"draw one if disabled."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the button will resize itself whenever the contents change."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the clicked() signal is emitted at regular intervals while the "
+"buttons is down. Note that this property does not have any effect if "
+"isToggleButton is enabled."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"The pixmap which will appear on the button. Leave it empty if you don't want "
+"a pixmap on the button."
+msgstr ""
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"This text is set to the lineedit after it is created."
+msgstr ""
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"Sets the singleline editor to draw itself inside a two-pixel frame if "
+"enabled, otherwise to draw itself without any frame."
+msgstr ""
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"Sets the maximum length of the text in the editor."
+msgstr ""
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"Set the cursor position for this line edit."
+msgstr ""
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"When enabled the text is initially selected."
+msgstr ""
+
+msgid ""
+"<i>Class : QGroupBox</i>\n"
+"\n"
+"Sets the groupbox title that is displayed in the box frame."
+msgstr ""
+
+msgid ""
+"<i>Class : QProgressBar</i>\n"
+"\n"
+"Sets the total steps of the progressbar. During the iteration of your action "
+"to display the progress, you have to call setProgress(int) to advance the "
+"progress step displayed to (int)"
+msgstr ""
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Sets a fixed height for the widget so that the given number of textlines are "
+"displayed using the current font."
+msgstr ""
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Sets the text of the widget."
+msgstr ""
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Used to avoid flicker during large changes; the view is not updated if "
+"disabled."
+msgstr ""
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Sets the widget text to read only; disables text input."
+msgstr ""
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Sets overwrite enabled or disabled."
+msgstr ""
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Marks the whole text selected."
+msgstr ""
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"Sets the maximum slider value; used in constructor"
+msgstr ""
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"Sets the minimum slider value; used in constructor"
+msgstr ""
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"Sets the orientation of the scrollbar to horizontal or vertical"
+msgstr ""
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"Sets the initial value of the scrollbar in the constructor"
+msgstr ""
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"If enabled, the scrollbar emits valueChanged() whenever the bar is dragged; "
+"otherwise only on mouse release."
+msgstr ""
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"sets the maximum slider value; used in constructor"
+msgstr ""
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"sets the minimum slider value; used in constructor"
+msgstr ""
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"sets the orientation of the slider to horizontal or vertical"
+msgstr ""
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"uses QRangeControl::setValue() to set the value"
+msgstr ""
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"if enabled, the slider emits valueChanged() whenever the bar is dragged; "
+"otherwise only on mouse release."
+msgstr ""
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"If auto-scrolling is enabled, the list box will scroll its contents when the "
+"user drags the mouse outside (below or above) the list box."
+msgstr ""
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"If it is enabled, then the list box will get\n"
+"a bottom scroll bar if the maximum list box item\n"
+"width exceeds the list box width."
+msgstr ""
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"Enables an automatic (vertical) scroll bar."
+msgstr ""
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"Enables a bottom scroll bar."
+msgstr ""
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"If drag-selection is enabled, the list box will highlight\n"
+"new items when the user drags the mouse inside the list box. "
+msgstr ""
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"Enables smooth list box scrolling."
+msgstr ""
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"Sets a fixed height for the widget so that the given number of textlines are "
+"displayed using the current font."
+msgstr ""
+
+msgid ""
+"<i>Class : QListbox</i>\n"
+"\n"
+"Used to avoid flicker during large changes; the view is not updated if "
+"disabled."
+msgstr ""
+
+msgid "Sorry, there is no help available for this property."
+msgstr ""
+
+msgid ""
+"\n"
+"\n"
+"<i><->See also: <link kdev>KDevelop Manual</link>, <link qt>Qt API</link>, "
+"<link kdeui>KDE User Interfaces</link>, <link KDEWEB>KDE "
+"Website</link><+></i>"
+msgstr ""
+
+msgid "Property"
+msgstr "プロパティ"
+
+msgid "Value"
+msgstr "値"
+
+msgid "(not defined)"
+msgstr "(定義されていません)"
+
+msgid "(not set)"
+msgstr "(セットされていません)"
+
+msgid "List of QStrings"
+msgstr "QString リスト"
+
+msgid "row(s) entered."
+msgstr ""
+
+msgid ""
+"PLEASE READ THIS FIRST !\n"
+"\n"
+"This dialog editor is intended for creating dialogs\n"
+"for your applications. It creates .kdevdlg files for\n"
+"saving theses dialogs (see KDevelop help).\n"
+"\n"
+"There are two possible methods for including dialogs\n"
+"in you applications :\n"
+"\n"
+"- Let KDevelop create the dialogs' sources.\n"
+"- Using the KDlgLoader for loading dialogs at run time.\n"
+"\n"
+"This is a WYSINWYG (What you see is\n"
+"NEARLY what you get) editor. That means it\n"
+"displays most of the widgets properties possible but\n"
+"not all. User \"View|Preview dialog\" if you want a\n"
+"real preview (however this is like the loader class will\n"
+"show it).\n"
+"\n"
+"We surely were not able to implement ALL possible\n"
+"widget properties but it is hopefully enough for\n"
+"designing dialogs more comfortable.\n"
+"\n"
+"By the way, you can get help on every widget and\n"
+"property by a right click. This also works in the\n"
+"editor window.\n"
+"\n"
+msgstr ""
+"最初に読んで下さい !\n"
+"\n"
+"このダイアログエディタであなたのアプリケーションの\n"
+"ダイアログを作成します。このダイアログを保存するために\n"
+".kdevdlg ファイルを作成します(KDevelopヘルプを参照)。\n"
+"\n"
+"あなたのアプリケーションにダイアログを追加するには2通り\n"
+"の方法があります :\n"
+"\n"
+"- KDevelopにダイアログのソースを生成させる。\n"
+"- 実行時にKDlgLoaderを使ってダイアログをロードする。\n"
+"\n"
+"これは WYSINWYG (What you see is NEARLY what you get)\n"
+"エディタです。これはできる限りのウィジェットプロパティ\n"
+"を表示しますが、全てではありません。もし実際の\n"
+"プレビューが必要なら\"ダイアログをプレビュー\"を使って\n"
+"下さい。\n"
+"\n"
+"全てのウィジェットプロパティをインプリメントするのは\n"
+"不可能ですが、ダイアログをより快適にデザインするには\n"
+"おそらく十分でしょう。\n"
+"\n"
+"ところで右クリックをするとそれぞれのウィジェットの\n"
+"ヘルプを得られます。この操作はエディタウィンドウでも\n"
+"有効です。\n"
+"\n"
+
+msgid "&Okay"
+msgstr "&Ok"
+
+msgid "&Show again."
+msgstr "また表示(&S)。"
+
+msgid ""
+"<brown><b>\"Widgets\" tab<black></b>\n"
+"\n"
+"In this tab you will find all items\n"
+"you can add to the dialog. They are\n"
+"sorted in two groups :\n"
+"\n"
+"The <b><i>QT-Widgets</i></b>group is\n"
+"always visible and contains all native\n"
+"Qt widgets. Your program will not need\n"
+"the KDE libraries in order to run if you\n"
+"only use these items.\n"
+"\n"
+"The <b><i>KDE-Widgets</i></b>group is\n"
+"only visible if you have created a KDE\n"
+"application because it would not be\n"
+"logical to add KDE widgets needing KDE\n"
+"libraries to a Qt project."
+msgstr ""
+
+msgid ""
+"This will insert a QWidget to the dialog.\n"
+"Such an item may have serveral children items\n"
+"or even more QWidgets as children. That means\n"
+"this item lets you create complex hierarchies\n"
+"for you dialog.\n"
+"\n"
+"Another think you will need this item type for\n"
+"are widgets like the tab view which need several\n"
+"widgets they can bring to the top."
+msgstr ""
+
+msgid ""
+"A QLabel can be used in order to display\n"
+"some text or pixmap information in the dialog."
+msgstr ""
+
+msgid ""
+"This is the normal button often used in\n"
+"dialogs (i.e. the \"Ok\"-Button)."
+msgstr ""
+
+msgid "Lets user can (de-)select some settings."
+msgstr ""
+
+msgid "Lets the user choose between several options."
+msgstr ""
+
+msgid ""
+"A combo box lets the user set a value by selecting\n"
+"it from a drop-down menu or by inserting the value,\n"
+"if the box is write enabled"
+msgstr ""
+
+msgid ""
+"Allows choosing numeric values by up-\n"
+"and down buttons or insertion if write enabled."
+msgstr ""
+
+msgid "Provides a single-column list of items that can be scrolled."
+msgstr ""
+
+msgid ""
+"Provides a groupbox frame with title to indicate that\n"
+"child widgets within the box belong together."
+msgstr ""
+
+msgid ""
+"Inserts a text field giving the user the\n"
+"possibility to enter of change a text."
+msgstr ""
+
+msgid "Offers a multi-line editor."
+msgstr ""
+
+msgid ""
+"Indicates the range of a value and sets the current value\n"
+"by a slider as well as up- and down buttons; often used\n"
+"for widgets whose contents is larger than the acutally visible\n"
+"view area. By using the scrollbar, the visible area\n"
+"can be changed to another part of the widgets' contents."
+msgstr ""
+
+msgid "Sets a value in a program-defined range by a slider."
+msgstr ""
+
+msgid ""
+"Displays the progress of an action that takes a longer time to be finished."
+msgstr ""
+
+msgid ""
+"Displays a number in the style of LC-displays\n"
+"often used in clocks."
+msgstr ""
+
+msgid "A list view lets your application display a multi-column list or tree."
+msgstr ""
+
+msgid ""
+"'KSeparator' is a small class to provide a identically look of horizontal or "
+"vertical lines in all KDE applications."
+msgstr ""
+
+msgid "Just like QComboBox."
+msgstr ""
+
+msgid "This is a button displaying the selected color."
+msgstr ""
+
+msgid "A push button that looks like a keyboard key."
+msgstr ""
+
+msgid "Restricted Editline: Only selected Characters are valid input."
+msgstr ""
+
+msgid "A Progress indicator widget."
+msgstr ""
+
+msgid "A collapsible treelist widget"
+msgstr ""
+
+msgid "A CDE-style LED lamp widget."
+msgstr ""
+
+msgid "Lets the user choose a date."
+msgstr ""
+
+msgid "Views a calendar in a tableview."
+msgstr ""
+
+msgid "QT-Widgets"
+msgstr "QTウィジェット"
+
+msgid "KDE-Widgets"
+msgstr "KDEウィジェット"
+
+msgid "Normal:"
+msgstr "通常："
+
+msgid "Selected:"
+msgstr "選択されたもの："
+
+msgid "Bold"
+msgstr "ボールド"
+
+msgid "Family:"
+msgstr "ファミリ:"
+
+msgid "Default Item Styles"
+msgstr "スタイルのデフォルト"
+
+msgid "Item:"
+msgstr "アイテム:"
+
+msgid "Default Font"
+msgstr "デフォルトフォント"
+
+msgid "Config Select"
+msgstr "コンフィグの選択"
+
+msgid "Highlight:"
+msgstr "ハイライト:"
+
+msgid "Highlight Auto Select"
+msgstr "ハイライトの自動選択"
+
+msgid "File Extensions:"
+msgstr "ファイルの拡張子:"
+
+msgid "Mime Types:"
+msgstr "Mime タイプ:"
+
+msgid "Item Style"
+msgstr "スタイル"
+
+msgid "Item Font"
+msgstr "フォント"
+
+msgid "&Text To Find:"
+msgstr "検索したい文字列(&T):"
+
+msgid "&Replace With:"
+msgstr "置換する文字列(&R):"
+
+msgid "&Case Sensitive"
+msgstr "大小文字の区別(&C)"
+
+msgid "&Whole Words Only"
+msgstr "全語一致のみ(&W)"
+
+msgid "&From Cursor"
+msgstr "カーソル位置から(&F)"
+
+msgid "Find &Backwards"
+msgstr "後ろから検索(&B)"
+
+msgid "&Selected Text"
+msgstr "選択された文章(&S)"
+
+msgid "&Prompt On Replace"
+msgstr "すぐに置換するか(&P)"
+
+msgid "Replace this occurence?"
+msgstr "この文字列を置換しますか?"
+
+msgid "&Yes"
+msgstr "はい(&Y)"
+
+msgid "&No"
+msgstr "いいえ(&N)"
+
+msgid "&All"
+msgstr "全部(&A)"
+
+msgid "&Goto Line:"
+msgstr "指定された行へワープ(&G)"
+
+msgid "Edit Options"
+msgstr "編集オプション"
+
+msgid "Auto &Indent"
+msgstr "自動字下げ(&I)"
+
+msgid "&Backspace Indent"
+msgstr "&Backspace Indent"
+
+msgid "&Word Wrap"
+msgstr "行の文字数指定(&W)"
+
+msgid "Replace &Tabs"
+msgstr "タブを使用するか(&T)"
+
+msgid "Remove Trailing &Spaces"
+msgstr "Remove Trailing &Spaces"
+
+msgid "Wrap &Cursor"
+msgstr "カーソルを行末以降行かせない(&C)"
+
+msgid "&Auto Brackets"
+msgstr "自動括弧生成(&A)"
+
+msgid "Select Options"
+msgstr "選択機能のオプション"
+
+msgid "&Persistent Selections"
+msgstr "選択領域の保存(&P)"
+
+msgid "&Multiple Selections"
+msgstr "追加選択機能(&M)"
+
+msgid "&Vertical Selections"
+msgstr "縦列選択機能(&V)"
+
+msgid "&Delete On Input"
+msgstr "キー入力で選択解除(&D)"
+
+msgid "&Toggle Old"
+msgstr ""
+
+msgid "Wrap Words At:"
+msgstr "行の文字数:"
+
+msgid "Tab Width:"
+msgstr "タブの文字数:"
+
+msgid "Undo steps:"
+msgstr "戻すステップ数:"
+
+msgid "Background:"
+msgstr "背景:"
+
+msgid "Text Background:"
+msgstr "文字の背景:"
+
+msgid "Found:"
+msgstr "見付かったもの:"
+
+msgid "Selected + Found:"
+msgstr "選択領域+検索:"
+
+msgid "Vertical Selections On"
+msgstr ""
+
+msgid "Vertical Selections Off"
+msgstr ""
+
+msgid "The specified File does not exist"
+msgstr "指定されたファイルはありません"
+
+msgid "You have specified a directory"
+msgstr "ディレクトリを指定しました"
+
+msgid "You do not have read permission to this file"
+msgstr "このファイルには読み込みパーミッションがかかっています"
+
+msgid "An Error occured while trying to open this Document"
+msgstr "この文書を開くときにエラーが発生しました"
+
+msgid "You do not have write permission to this file"
+msgstr "このファイルには書き込みパーミッションがかかっています"
+
+msgid "Loading..."
+msgstr "読込中..."
+
+msgid "Inserted"
+msgstr "挿入されたもの"
+
+msgid "Read"
+msgstr "読む"
+
+msgid ""
+"KWrite is already waiting\n"
+"for an internet job to finish\n"
+"Please wait until it has finished\n"
+"Alternatively stop the running one."
+msgstr ""
+"KWriteはインターネットの作業が\n"
+"終るのを待っています\n"
+"作業が終るまで待つか\n"
+"作業を終了させてください"
+
+msgid "Waiting for KFM..."
+msgstr "KFMの起動を待っています"
+
+msgid "Could not start or find KFM"
+msgstr "KFM起動不可もしくは見付けられません"
+
+msgid "Saving..."
+msgstr "保存中..."
+
+msgid "Wrote"
+msgstr "保存されました"
+
+msgid ""
+"The current Document has been modified.\n"
+"Would you like to save it?"
+msgstr ""
+"現在の文書は変更されています.\n"
+"保存しますか?"
+
+msgid ""
+"Could not save the document.\n"
+"Open a new document anyways?"
+msgstr ""
+"この文書を保存できませんでした\n"
+"それでも新しい文書を開きますか?"
+
+msgid "No changes need to be saved"
+msgstr "保存する必要はありません"
+
+msgid ""
+"A Document with this Name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"この名前のファイルは既に存在します\n"
+"上書きしますか?"
+
+msgid "End of document reached"
+msgstr "ドキュメントの終端です"
+
+msgid "Continue from the beginning"
+msgstr "始めから続ける"
+
+msgid "Find"
+msgstr "検索"
+
+msgid "Beginning of document reached"
+msgstr "ドキュメントの先頭です"
+
+msgid "Continue from the end"
+msgstr "終端から続ける"
+
+msgid "Search string not found!"
+msgstr "検索文字列は見つかりませんでした!"
+
+msgid "replace(s) made"
+msgstr "箇所が変更されました"
+
+msgid "Line"
+msgstr "行"
+
+msgid "Numbering"
+msgstr ""
+
+msgid "Lines per page"
+msgstr ""
+
+msgid "Printing"
+msgstr "印刷中"
+
+msgid "Textprinting"
+msgstr "テキスト印刷"
+
+msgid "bold font"
+msgstr ""
+
+msgid "align files"
+msgstr ""
+
+msgid "print non ascii character as ISO Latin 1"
+msgstr "asciiではない文字をISO Latin 1 として印刷"
+
+msgid "interpret TAB, BS and FF"
+msgstr ""
+
+msgid "Date & Time"
+msgstr ""
+
+msgid "Headertext"
+msgstr ""
+
+msgid "headertext"
+msgstr ""
+
+msgid "text"
+msgstr ""
+
+msgid "login"
+msgstr ""
+
+msgid "filename"
+msgstr "ファイル名"
+
+msgid "header"
+msgstr ""
+
+msgid "replace non-printing character by space"
+msgstr ""
+
+msgid "cut lines"
+msgstr ""
+
+msgid "set TAB size"
+msgstr ""
+
+msgid "fontsize"
+msgstr ""
+
+msgid "numbering lines"
+msgstr ""
+
+msgid "borders"
+msgstr ""
+
+msgid "file single"
+msgstr ""
+
+msgid "file together"
+msgstr ""
+
+msgid "lines per page"
+msgstr ""
+
+msgid "numbering pages"
+msgstr ""
+
+msgid "Preview"
+msgstr "プレビュー"
+
+msgid "Defaults"
+msgstr "標準"
+
+msgid "use fontsize"
+msgstr ""
+
+msgid "uses lines per page"
+msgstr ""
+
+msgid "Print using bold font."
+msgstr ""
+
+msgid ""
+"Print non ascii characters (with the high bit set)\n"
+"as ISO Latin 1 characters. These characters are\n"
+"printed as M- (for meta) followed by  the character\n"
+"of the low 7 bits."
+msgstr ""
+
+msgid ""
+"Interpret   TAB,   BS  and  FF  characters TAB\n"
+"is replaced by enough spaces  to  reach next\n"
+"tab stop while BS and FF have their meanings."
+msgstr ""
+
+msgid ""
+"Print the current date and time at the bottom of the\n"
+"page. This option is affected by the no surrounding\n"
+"border and the no header options."
+msgstr ""
+
+msgid ""
+"If button is checked, no filename is printed in the\n"
+"pages headers.Now you can use a text instead of the\n"
+"filename."
+msgstr ""
+
+msgid ""
+"Use this text instead of the file name in the page\n"
+"headers for printing next (and only next) file."
+msgstr ""
+
+msgid ""
+"Print user login ID in the upper right corner of\n"
+"the page.  (available for Unix systems only)"
+msgstr ""
+
+msgid "Print filename ,centered, at bottom of page."
+msgstr ""
+
+msgid "If button is checked ,print page headers."
+msgstr ""
+
+msgid ""
+"If button is checked ,non-printing characters are\n"
+"replaced by a space.Otherwise non-printing characters\n"
+"are replaced so that they are visible and easy to\n"
+"identify. Control characters are printed  like ^X\n"
+"for ctrl-x; the delete character is printed as ^?.\n"
+"Non ascii characters are printed as M- (for meta)\n"
+"followed by the character of the low 7 bits."
+msgstr ""
+
+msgid ""
+"If button checked ,lines too large will be truncate.\n"
+"Otherwise lines  too large will be fold and be printed\n"
+"inside the borders. Max line size depends on format\n"
+"and font size used and whether line numbering has been\n"
+"suppressed."
+msgstr ""
+
+msgid ""
+"Compact mode for a sequence of  files.  This  option\n"
+"allows  the printing of two files in the same physical\n"
+"page: last page of the first file  in  the  left\n"
+"(or  up)  side  and first page of the second file in\n"
+"the right (or down) side. This option is valid  only\n"
+"for twinpage mode (two pages per physical page)."
+msgstr ""
+
+msgid ""
+"Set TAB size to value. This option is\n"
+"ignored if TAB is not interpreted."
+msgstr ""
+
+msgid "Changes font size to this value."
+msgstr ""
+
+msgid ""
+"Output lines are preceded by line numbers,\n"
+"numbered sequentially from 1."
+msgstr ""
+
+msgid "Print page surrounding borders."
+msgstr ""
+
+msgid ""
+"Reset sheet numbering for each new file. Sheet\n"
+"numbering is used to number physical pages (sheets)\n"
+"as they are printed. Page numbering numbers the\n"
+"logical pages, of which there are usually two per\n"
+"physical page."
+msgstr ""
+
+msgid ""
+"Set  the  lines per page for printing. The font size\n"
+"is automatically scaled up to fill in the whole page.\n"
+"The  minimum number of lines per page is set at 40\n"
+"and maximum is at 160."
+msgstr ""
+
+msgid "Check this button if you wish to change the fontsize."
+msgstr ""
+
+msgid ""
+"Check this button if you wish to change the number of\n"
+"the lines per page."
+msgstr ""
+
+msgid "Program not found!"
+msgstr ""
+
+msgid ""
+"KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n"
+"\t\t    Please install one!"
+msgstr ""
+
+msgid "Underlay"
+msgstr ""
+
+msgid "Header settings"
+msgstr ""
+
+msgid "Fancy header"
+msgstr ""
+
+msgid "fancy header"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "left"
+msgstr ""
+
+msgid "center"
+msgstr ""
+
+msgid "right"
+msgstr ""
+
+msgid "position"
+msgstr ""
+
+msgid "Filename"
+msgstr "ファイル名"
+
+msgid "size of filename"
+msgstr "ファイル名のサイズ"
+
+msgid "short"
+msgstr ""
+
+msgid "full"
+msgstr ""
+
+msgid "Hostname"
+msgstr "ホスト名"
+
+msgid "hostname"
+msgstr "ホスト名"
+
+msgid "size of hostname"
+msgstr "ホスト名のサイズ"
+
+msgid "If you wish to have a page header, then check it."
+msgstr ""
+
+msgid "Here you can enter the headertext."
+msgstr ""
+
+msgid "If you wish to have a headertext, then check it."
+msgstr ""
+
+msgid "If you wish to print a userlogin, then check it."
+msgstr ""
+
+msgid "If you will a fancy header, then check it."
+msgstr ""
+
+msgid "If you wish to print the filenames, then check it."
+msgstr ""
+
+msgid ""
+"Here you can choose, if the filename from the last '/'\n"
+"is print, or if the full filename is print."
+msgstr ""
+
+msgid "Here you can set the position in the header."
+msgstr ""
+
+msgid ""
+"Here you can choose, if the hostname up to the first\n"
+"'.' is print, or the full hostname is print."
+msgstr ""
+
+msgid "If you wish to print the hostname, then check it."
+msgstr ""
+
+msgid "Current time"
+msgstr "現在の時間"
+
+msgid "Modification time"
+msgstr "変更された時間"
+
+msgid "Format"
+msgstr "書式"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Modification date"
+msgstr "変更日時"
+
+msgid "Current date"
+msgstr "現在の日時"
+
+msgid "AM/PM"
+msgstr "AM/PM"
+
+msgid "current date"
+msgstr "現在の日時"
+
+msgid "modification date"
+msgstr "変更日時"
+
+msgid "current time"
+msgstr "現在の時間"
+
+msgid "modification time"
+msgstr "変更された時間"
+
+msgid "If you wish to print the current time, then check it."
+msgstr ""
+
+msgid "If you wish to print the modification time, then check it."
+msgstr ""
+
+msgid "If you wish to print the modification date, then check it."
+msgstr ""
+
+msgid "If you wish to print the current date, then check it."
+msgstr ""
+
+msgid "Here you can set the format."
+msgstr ""
+
+msgid ""
+"Here you can choose, if you time will be printed in\n"
+"am/pm format or in 24h format."
+msgstr ""
+
+msgid "Font and TAB"
+msgstr "フォント・タブ"
+
+msgid "Other options"
+msgstr "その他のオプション"
+
+msgid "Highlight bars"
+msgstr ""
+
+msgid "cycle of change"
+msgstr ""
+
+msgid "Wrapped line"
+msgstr ""
+
+msgid "Numbering & border"
+msgstr ""
+
+msgid "table of contents"
+msgstr "目次"
+
+msgid "marked wrapped lines"
+msgstr ""
+
+msgid "value for wrapped line"
+msgstr ""
+
+msgid "highlight bars"
+msgstr ""
+
+msgid "font for header"
+msgstr ""
+
+msgid "font for body"
+msgstr ""
+
+msgid "yes"
+msgstr "はい"
+
+msgid "no"
+msgstr "いいえ"
+
+msgid "If button is checked, borders around columns are printed."
+msgstr ""
+
+msgid "If button is checked, a summary is printed at the end."
+msgstr ""
+
+msgid "If button is checked, wrapped lines are marked in the output."
+msgstr ""
+
+msgid "If button is checked, the sides are numbered."
+msgstr ""
+
+msgid "Precede each line with its line number."
+msgstr ""
+
+msgid "Print setting number lines per each page."
+msgstr ""
+
+msgid ""
+"Align separate input files to even align page count.\n"
+"This is handy for two-side and 2-up printings."
+msgstr ""
+
+msgid "Set the style of the wrap value."
+msgstr ""
+
+msgid "Specify  how high highlight bars are in lines."
+msgstr ""
+
+msgid "Set the position in the header."
+msgstr ""
+
+msgid "If button is checked, highlight bars are printed."
+msgstr ""
+
+msgid "Set tabulator size to specify number."
+msgstr ""
+
+msgid ""
+"If button is checked, lines that are too long will\n"
+"be cut. Otherwise enscript wraps long lines  so no\n"
+"information is lost."
+msgstr ""
+
+msgid ""
+"If button is checked, non printing characters are\n"
+"replace by space."
+msgstr ""
+
+msgid ""
+"If you clicked the button, a fontdialog is shown\n"
+"and you can select a font that is used for body text."
+msgstr ""
+
+msgid ""
+"If you clicked the button, a fontdialog is shown\n"
+"and you can select a font that is used for header text."
+msgstr ""
+
+msgid "Underlaytext"
+msgstr ""
+
+msgid "Underlaystyle"
+msgstr ""
+
+msgid "Underlayangle"
+msgstr ""
+
+msgid "Underlaygray"
+msgstr ""
+
+msgid "Underlayfont"
+msgstr ""
+
+msgid "Underlayposition"
+msgstr ""
+
+msgid "Y-Position"
+msgstr "Y座標"
+
+msgid "X-Position"
+msgstr "X座標"
+
+msgid "underlay"
+msgstr ""
+
+msgid "underlaystyle"
+msgstr ""
+
+msgid "angle"
+msgstr ""
+
+msgid "font"
+msgstr "フォント"
+
+msgid "underlaygray (x(1/10))"
+msgstr ""
+
+msgid "default"
+msgstr "標準"
+
+msgid "outline"
+msgstr ""
+
+msgid "filled"
+msgstr ""
+
+msgid "underlaytext"
+msgstr ""
+
+msgid "If you wish to print underlayed text, then check it."
+msgstr ""
+
+msgid "Here you can set the angle of the underlayed text."
+msgstr ""
+
+msgid "Here you can set the x-position of the underlayed text."
+msgstr ""
+
+msgid "Here you can set the y-position of the underlayed text."
+msgstr ""
+
+msgid ""
+"Here you can set the underlayed text gray.\n"
+"The lower the darker is the text."
+msgstr ""
+
+msgid ""
+"If you wish to print the underlayed text with the\n"
+"default angle, then check it."
+msgstr ""
+
+msgid "Here you can set the style of the underlayed text."
+msgstr ""
+
+msgid ""
+"If you wish to print the underlayed text with the\n"
+"default position, then check it."
+msgstr ""
+
+msgid "Here you can enter the text."
+msgstr ""
+
+msgid "Here you can set another font by clicking on it."
+msgstr ""
+
+msgid "File selection"
+msgstr "ファイル選択"
+
+msgid "current"
+msgstr ""
+
+msgid "all in project"
+msgstr "プロジェクトを全て"
+
+msgid "self choosen files"
+msgstr ""
+
+msgid "file"
+msgstr "ファイル"
+
+msgid "all headers"
+msgstr "ヘッダー全て"
+
+msgid "all cpp files"
+msgstr "cppファイル全て"
+
+msgid "changed files"
+msgstr "変更されたファイル"
+
+msgid "Changed files"
+msgstr "変更されたファイル"
+
+msgid "Between"
+msgstr ""
+
+msgid "date"
+msgstr "日付"
+
+msgid "time"
+msgstr "時間"
+
+msgid "o&#65396;clock"
+msgstr "&#65396;時"
+
+msgid "And"
+msgstr ""
+
+msgid "Self choosen files"
+msgstr ""
+
+msgid "delete"
+msgstr "削除"
+
+msgid "clear"
+msgstr "クリア"
+
+msgid ""
+"Here are the files which will be printed, if 'self\n"
+"choosen file' is checked."
+msgstr ""
+
+msgid "Cleans the 'self choosen file list'."
+msgstr ""
+
+msgid "Adds the selecte file to the choosen file to the list."
+msgstr ""
+
+msgid "Deletes the selected files in the filelist."
+msgstr ""
+
+msgid ""
+"Insert the filename and path to the file you\n"
+"want to add to the self-chosen file list.\n"
+"After insertion, press the 'add' button below\n"
+"the file list box."
+msgstr ""
+
+msgid ""
+"Selects all registered project files\n"
+"for printing, including the pixmap and\n"
+"html documentation files"
+msgstr ""
+
+msgid ""
+"Allows to set up a list of self-chosen files\n"
+"for printing. Select your files to print below\n"
+"and press the 'add' button on the file list."
+msgstr ""
+
+msgid ""
+"Lets you select files to print by their date of\n"
+"the last modification. Set the modification time\n"
+"range below by choosing the beginning and end date."
+msgstr ""
+
+msgid "Selects all registered header files for printing."
+msgstr ""
+
+msgid "Selects all registered source files for printing."
+msgstr ""
+
+msgid ""
+"Sets the end date of the interval. Press the button\n"
+"to pick a date by the calendar. After selection, the\n"
+"chosen end-date will be displayed on the button."
+msgstr ""
+
+msgid ""
+"Sets the beginning date of the interval. Press the button\n"
+"to pick a date by the calendar. After selection, the\n"
+"chosen begin-date will be displayed on the button."
+msgstr ""
+
+msgid "Sets the minute value of the beginning time."
+msgstr ""
+
+msgid "Sets the hour value of the beginning time."
+msgstr ""
+
+msgid "Sets the hour value of the end time."
+msgstr ""
+
+msgid "Sets the minute value of the end time."
+msgstr ""
+
+msgid ""
+"Pressing this button lets you select the file\n"
+"by a filedialog."
+msgstr ""
+
+msgid ""
+"Selects the current file of the visible\n"
+"editor window for printing."
+msgstr ""
+
+msgid "BeginDate"
+msgstr ""
+
+msgid "EndDate"
+msgstr ""
+
+msgid "No File to print !"
+msgstr ""
+
+msgid ""
+"You need to select at least one file for printing. This can be done by "
+"entering the filename on the left at the file entry field."
+msgstr ""
+
+msgid "Program"
+msgstr "プログラム"
+
+msgid "Printer"
+msgstr "プリンタ"
+
+msgid "printername"
+msgstr "プリンタ名"
+
+msgid "Outputlocation"
+msgstr "出力場所"
+
+msgid "print to file"
+msgstr "ファイルに出力"
+
+msgid "Paper format"
+msgstr "ページャフォーマット"
+
+msgid "portrait"
+msgstr ""
+
+msgid "landscape"
+msgstr ""
+
+msgid "Outputmedia"
+msgstr ""
+
+msgid "Outputformat"
+msgstr "出力フォーマット"
+
+msgid "Default printsettings"
+msgstr "標準の印刷設定"
+
+msgid "settings"
+msgstr "設定"
+
+msgid "Files..."
+msgstr "ファイル..."
+
+msgid "Outprinting"
+msgstr ""
+
+msgid "Page printing"
+msgstr "ページを印刷"
+
+msgid "one page per side"
+msgstr ""
+
+msgid "two pages per side"
+msgstr ""
+
+msgid "Pages"
+msgstr "ページ"
+
+msgid "all"
+msgstr "全て"
+
+msgid "odd"
+msgstr "奇数"
+
+msgid "even"
+msgstr "偶数"
+
+msgid "Pretty-print"
+msgstr ""
+
+msgid "pretty-print"
+msgstr ""
+
+msgid "color"
+msgstr "色"
+
+msgid "Pretty-print mode"
+msgstr ""
+
+msgid ""
+"If you click this button a configdialog will be shown.\n"
+"Which configdialog will be shown is depend on the\n"
+"choosen program."
+msgstr ""
+
+msgid "If you click this button a filedialog will be shown."
+msgstr ""
+
+msgid "If you click this button the fileprintdialog will be shown."
+msgstr ""
+
+msgid "In this file the printing is gone."
+msgstr ""
+
+msgid ""
+"In this line you can specify the printer, with which\n"
+"you will print. If default is written in the line, the\n"
+"default printer ($PRINTER) is choosen."
+msgstr ""
+
+msgid "Here you can change the paper direction."
+msgstr ""
+
+msgid "Here you can set the program, you whish to use."
+msgstr ""
+
+msgid "Here you can choose, if you print out in postscript or html."
+msgstr ""
+
+msgid ""
+"Here you can choose, if you print with your personal\n"
+"settings. Or with some other settings."
+msgstr ""
+
+msgid ""
+"Here you can set the sides, which you will print.\n"
+"You can also specify an interval like:\n"
+"5-    :print from side 5 to end\n"
+"5-10 :print from side 5 to side 10\n"
+"-5    :print from side 1 to side 10"
+msgstr ""
+
+msgid ""
+"Here you can choose, if you wish to print 1 page per\n"
+"physical side or 2 page."
+msgstr ""
+
+msgid "Here you can set the pretty-print-mode."
+msgstr ""
+
+msgid "Here you can change the paperformat."
+msgstr ""
+
+msgid "Here you can set, how many times you will print the files."
+msgstr ""
+
+msgid "If you wish to print in pretty-print-mode then check this button."
+msgstr ""
+
+msgid ""
+"If you wish to print in pretty-print-color-mode,\n"
+"then check this button."
+msgstr ""
+
+msgid "If you wish to print to file, then check this button."
+msgstr ""
+
+msgid "a2ps default"
+msgstr "a2ps デフォルト"
+
+msgid "lineprinter"
+msgstr "lineprinter"
+
+msgid "enscript default"
+msgstr "enscript デフォルト"
+
+msgid "CVS Commit"
+msgstr "CVS Commit"
+
+msgid "Enter log message:"
+msgstr "ログメッセージを入力:"
+
+msgid "Adding file to repository"
+msgstr "レポジトリにファイルを追加中"
+
+msgid "Removing file from repository"
+msgstr "レポジトリからファイルを削除中"
+
+msgid "Updating"
+msgstr "Update中"
+
+msgid "Commiting file"
+msgstr "ファイルをCommit中"
+
+msgid "CVS"
+msgstr "CVS"
+
