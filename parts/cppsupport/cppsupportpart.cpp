@@ -959,7 +959,13 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
     if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
         return;
     
-    QDateTime t = QFileInfo( fileName ).lastModified();
+    QFileInfo fileInfo( fileName );
+    QDateTime t = fileInfo.lastModified();
+    
+    if( !fileInfo.exists() ){
+	store->removeWithReferences( fileName );
+	return;
+    }
 	
     QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
     if( it != m_timestamp.end() && *it == t ){
