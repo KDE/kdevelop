@@ -1,0 +1,286 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>STL (sgi.com)</title>
+<base href="http://www.sgi.com/tech/stl"/>
+<tocsect1 name="Introduction" url="stl_introduction.html"/>
+<tocsect1 name="How to use the documentation" url="doc_introduction.html"/>
+<tocsect1 name="Containers" url="">
+  <tocsect2 name="Container concepts" url="">
+    <tocsect3 name="Container" url="Container.html"/>
+    <tocsect3 name="Forward Container" url="ForwardContainer.html"/>
+    <tocsect3 name="Reversible Container" url="ReversibleContainer.html"/>
+    <tocsect3 name="Random Access Container" url="RandomAccessContainer.html"/>
+  </tocsect2>
+  <tocsect2 name="Sequences concepts" url="">
+    <tocsect3 name="Sequence" url="Sequence.html"/>
+    <tocsect3 name="Front Insertion Sequence" url="FrontInsertionSequence.html"/>
+    <tocsect3 name="Back Insertion Sequence" url="BackInsertionSequence.html"/>
+  </tocsect2>
+  <tocsect2 name="Associative Containers concepts" url="">
+    <tocsect3 name="Associative Container" url="AssociativeContainer.html"/>
+    <tocsect3 name="Simple Associative Container" url="SimpleAssociativeContainer.html"/>
+    <tocsect3 name="Pair Associative Container" url="PairAssociativeContainer.html"/>
+    <tocsect3 name="Sorted Associative Container" url="SortedAssociativeContainer.html"/>
+    <tocsect3 name="Hashed Associative Container" url="HashedAssociativeContainer.html"/>
+    <tocsect3 name="HashFunction" url="HashFunction.html"/>
+    <tocsect3 name="Unique Associative Container" url="UniqueAssociativeContainer.html"/>
+    <tocsect3 name="Multiple Associative Container" url="MultipleAssociativeContainer.html"/>
+    <tocsect3 name="Unique Sorted Associative Container" url="UniqueSortedAssociativeContainer.html"/>
+    <tocsect3 name="Multiple Sorted Associative Container" url="MultipleSortedAssociativeContainer.html"/>
+    <tocsect3 name="Unique Hashed Associative Container" url="UniqueHashedAssociativeContainer.html"/>
+    <tocsect3 name="Multiple Hashed Associative Container" url="MultipleHashedAssociativeContainer.html"/>
+  </tocsect2>
+  <tocsect2 name="Container classes: Sequences" url="">
+    <tocsect3 name="vector" url="Vector.html"/>
+    <tocsect3 name="deque" url="Deque.html"/> 
+    <tocsect3 name="list" url="List.html"/>
+    <tocsect3 name="slist" url="Slist.html"/>
+    <tocsect3 name="bit_vector" url="bit_vector.html"/>
+  </tocsect2>
+  <tocsect2 name="Container classes: Associative Containers" url="">
+    <tocsect3 name="set" url="set.html"/>
+    <tocsect3 name="map" url="Map.html"/>
+    <tocsect3 name="multiset" url="multiset.html"/>
+    <tocsect3 name="multimap" url="Multimap.html"/>
+    <tocsect3 name="hash_set" url="hash_set.html"/>
+    <tocsect3 name="hash_map" url="hash_map.html"/>
+    <tocsect3 name="hash_multiset" url="hash_multiset.html"/>
+    <tocsect3 name="hash_multimap" url="hash_multimap.html"/>
+  </tocsect2>
+  <tocsect2 name="String package" url="">
+    <tocsect3 name="Character traits" url="character_traits.html"/>
+    <tocsect3 name="char_traits" url="char_traits.html"/>
+    <tocsect3 name="basic_string" url="basic_string.html"/>
+    <tocsect3 name="rope" url="Rope.html"/>
+  </tocsect2>
+  <tocsect2 name="Container adaptors" url="">
+    <tocsect3 name="stack" url="stack.html"/>
+    <tocsect3 name="queue" url="queue.html"/>
+    <tocsect3 name="bitset" url="bitset.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Iterators" url="">
+  <tocsect2 name="Introduction" url="Iterators.html"/>
+  <tocsect2 name="Iterator Concepts" url="">
+    <tocsect3 name="Trivial Iterator" url="trivial.html"/>
+    <tocsect3 name="Input Iterator" url="InputIterator.html"/>
+    <tocsect3 name="Output Iterator" url="OutputIterator.html"/>
+    <tocsect3 name="Forward Iterator" url="ForwardIterator.html"/>
+    <tocsect3 name="Bidirectional Iterator" url="BidirectionalIterator.html"/>
+    <tocsect3 name="Random Access Iterator" url="RandomAccessIterator.html"/>
+  </tocsect2>
+  <tocsect2 name="Iterator Tags" url="">
+    <tocsect3 name="Introduction" url="iterator_tags.html"/>
+    <tocsect3 name="iterator_traits" url="iterator_traits.html"/>
+    <tocsect3 name="iterator_category" url="iterator_category.html"/>
+    <tocsect3 name="distance_type" url="distance_type.html"/>
+    <tocsect3 name="value_type" url="value_type.html"/>
+  </tocsect2>
+  <tocsect2 name="Iterator tag classes" url="">
+    <tocsect3 name="input_iterator_tag" url="input_iterator_tag.html"/>
+    <tocsect3 name="output_iterator_tag" url="output_iterator_tag.html"/>
+    <tocsect3 name="forward_iterator_tag" url="forward_iterator_tag.html"/>
+    <tocsect3 name="bidirectional_iterator_tag" url="bidirectional_iterator_tag.html"/>
+    <tocsect3 name="random_access_iterator_tag" url="random_access_iterator_tag.html"/>
+  </tocsect2>
+  <tocsect2 name="Iterator base classes" url="">
+    <tocsect3 name="input_iterator" url="input_iterator.html"/>
+    <tocsect3 name="output_iterator" url="output_iterator.html"/>
+    <tocsect3 name="forward_iterator" url="forward_iterator.html"/>
+    <tocsect3 name="bidirectional_iterator" url="bidirectional_iterator.html"/>
+    <tocsect3 name="random_access_iterator" url="random_access_iterator.html"/>
+  </tocsect2>
+  <tocsect2 name="Iterator functions" url="">
+    <tocsect3 name="distance" url="distance.html"/>
+    <tocsect3 name="advance" url="advance.html"/>
+  </tocsect2>
+  <tocsect2 name="Iterator classes" url="">
+    <tocsect3 name="istream_iterator" url="istream_iterator.html"/>
+    <tocsect3 name="ostream_iterator" url="ostream_iterator.html"/>
+    <tocsect3 name="front_insert_iterator" url="front_insert_iterator.html"/>
+    <tocsect3 name="back_insert_iterator" url="back_insert_iterator.html"/>
+    <tocsect3 name="insert_iterator" url="insert_iterator.html"/>
+    <tocsect3 name="reverse_iterator" url="ReverseIterator.html"/>
+    <tocsect3 name="reverse_bidirectional_iterator" url="ReverseBidirectionalIterator.html"/>
+    <tocsect3 name="raw_storage_iterator" url="raw_storage_iterator.html"/>
+    <tocsect3 name="sequence_buffer" url="sequence_buffer.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Algorithms" url="">
+  <tocsect2 name="Non-mutating algorithms" url="">
+    <tocsect3 name="for_each" url="for_each.html"/>
+    <tocsect3 name="find" url="find.html"/>
+    <tocsect3 name="find_if" url="find_if.html"/>
+    <tocsect3 name="adjacent_find" url="adjacent_find.html"/>
+    <tocsect3 name="find_first_of" url="find_first_of.html"/>
+    <tocsect3 name="count" url="count.html"/>
+    <tocsect3 name="count_if" url="count_if.html"/>
+    <tocsect3 name="mismatch" url="mismatch.html"/>
+    <tocsect3 name="equal" url="equal.html"/>
+    <tocsect3 name="search" url="search.html"/>
+    <tocsect3 name="search_n" url="search_n.html"/>
+    <tocsect3 name="find_end" url="find_end.html"/>
+  </tocsect2>
+  <tocsect2 name="Mutating algorithms" url="">
+    <tocsect3 name="copy" url="copy.html"/>
+    <tocsect3 name="copy_n" url="copy_n.html"/>
+    <tocsect3 name="copy_backward" url="copy_backward.html"/>
+    <tocsect3 name="swap" url="swap.html"/>
+    <tocsect3 name="iter_swap" url="iter_swap.html"/>
+    <tocsect3 name="swap_ranges" url="swap_ranges.html"/>
+    <tocsect3 name="transform" url="transform.html"/>
+    <tocsect3 name="replace" url="replace.html"/>
+    <tocsect3 name="replace_if" url="replace_if.html"/>
+    <tocsect3 name="replace_copy" url="replace_copy.html"/>
+    <tocsect3 name="replace_copy_if" url="replace_copy_if.html"/>
+    <tocsect3 name="fill" url="fill.html"/>
+    <tocsect3 name="fill_n" url="fill_n.html"/>
+    <tocsect3 name="generate" url="generate.html"/>
+    <tocsect3 name="generate_n" url="generate_n.html"/>
+    <tocsect3 name="remove" url="remove.html"/>
+    <tocsect3 name="remove_if" url="remove_if.html"/>
+    <tocsect3 name="remove_copy" url="remove_copy.html"/>
+    <tocsect3 name="remove_copy_if" url="remove_copy_if.html"/>
+    <tocsect3 name="unique" url="unique.html"/>
+    <tocsect3 name="unique_copy" url="unique_copy.html"/>
+    <tocsect3 name="reverse" url="reverse.html"/>
+    <tocsect3 name="reverse_copy" url="reverse_copy.html"/>
+    <tocsect3 name="rotate" url="rotate.html"/>
+    <tocsect3 name="rotate_copy" url="rotate_copy.html"/>
+    <tocsect3 name="random_shuffle" url="random_shuffle.html"/>
+    <tocsect3 name="random_sample" url="random_sample.html"/>
+    <tocsect3 name="random_sample_n" url="random_sample_n.html"/>
+    <tocsect3 name="partition" url="partition.html"/>
+    <tocsect3 name="stable_partition" url="stable_partition.html"/>
+  </tocsect2>
+  <tocsect2 name="Sorting" url="">
+    <tocsect3 name="sort" url="sort.html"/>
+    <tocsect3 name="stable_sort" url="stable_sort.html"/>
+    <tocsect3 name="partial_sort" url="partial_sort.html"/>
+    <tocsect3 name="partial_sort_copy" url="partial_sort_copy.html"/>
+    <tocsect3 name="is_sorted" url="is_sorted.html"/>
+    <tocsect3 name="nth_element" url="nth_element.html"/>
+    <tocsect3 name="lower_bound" url="lower_bound.html"/>
+    <tocsect3 name="upper_bound" url="upper_bound.html"/>
+    <tocsect3 name="equal_range" url="equal_range.html"/>
+    <tocsect3 name="binary_search" url="binary_search.html"/>
+    <tocsect3 name="merge" url="merge.html"/>
+    <tocsect3 name="inplace_merge" url="inplace_merge.html"/>
+    <tocsect3 name="includes" url="includes.html"/>
+    <tocsect3 name="set_union" url="set_union.html"/>
+    <tocsect3 name="set_intersection" url="set_intersection.html"/>
+    <tocsect3 name="set_difference" url="set_difference.html"/>
+    <tocsect3 name="set_symmetric_difference" url="set_symmetric_difference.html"/>
+    <tocsect3 name="push_heap" url="push_heap.html"/>
+    <tocsect3 name="pop_heap" url="pop_heap.html"/>
+    <tocsect3 name="make_heap" url="make_heap.html"/>
+    <tocsect3 name="sort_heap" url="sort_heap.html"/>
+    <tocsect3 name="is_heap" url="is_heap.html"/>
+    <tocsect3 name="min" url="min.html"/>
+    <tocsect3 name="max" url="max.html"/>
+    <tocsect3 name="min_element" url="min_element.html"/>
+    <tocsect3 name="max_element" url="max_element.html"/>
+    <tocsect3 name="lexicographical_compare" url="lexicographical_compare.html"/>
+    <tocsect3 name="lexicographical_compare_3way" url="lexicographical_compare_3way.html"/>
+    <tocsect3 name="next_permutation" url="next_permutation.html"/>
+    <tocsect3 name="prev_permutation" url="prev_permutation.html"/>
+  </tocsect2>
+  <tocsect2 name="Generalized numeric algorithms" url="">
+    <tocsect3 name="iota" url="iota.html"/>
+    <tocsect3 name="accumulate" url="accumulate.html"/>
+    <tocsect3 name="inner_product" url="inner_product.html"/>
+    <tocsect3 name="partial_sum" url="partial_sum.html"/>
+    <tocsect3 name="adjacent_difference" url="adjacent_difference.html"/>
+    <tocsect3 name="power" url="power.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Function Objects" url="">
+  <tocsect2 name="Introduction" url="functors.html"/>
+  <tocsect2 name="Function Object Concepts" url="">
+    <tocsect3 name="Generator" url="Generator.html"/>
+    <tocsect3 name="UnaryFunction" url="Unary Function.html"/>
+    <tocsect3 name="BinaryFunction" url="Binary Function.html"/>
+    <tocsect3 name="AdaptableGenerator" url="Adaptable Generator.html"/>
+    <tocsect3 name="AdaptableUnaryFunction" url="Adaptable Unary Function.html"/>
+    <tocsect3 name="AdaptableBinaryFunction" url="Adaptable Binary Function.html"/>
+    <tocsect3 name="Predicate" url="Predicate.html"/>
+    <tocsect3 name="BinaryPredicate" url="Binary Predicate.html"/>
+    <tocsect3 name="AdaptablePredicate" url="Adaptable Predicate.html"/>
+    <tocsect3 name="AdaptableBinaryPredicate" url="Adaptable Binary Predicate.html"/>
+    <tocsect3 name="StrictWeakOrdering" url="StrictWeakOrdering.html"/>
+    <tocsect3 name="MonoidOperation" url="Monoid Operation.html"/>
+    <tocsect3 name="RandomNumberGenerator" url="Random Number Generator.html"/>
+  </tocsect2>
+  <tocsect2 name="Predefined function objects" url="">
+    <tocsect3 name="plus" url="plus.html"/>
+    <tocsect3 name="minus" url="minus.html"/>
+    <tocsect3 name="times" url="multiplies.html"/> (formerly called "times")
+    <tocsect3 name="divides" url="divides.html"/>
+    <tocsect3 name="modulus" url="modulus.html"/>
+    <tocsect3 name="negate" url="negate.html"/>
+    <tocsect3 name="equal_to" url="equal_to.html"/>
+    <tocsect3 name="not_equal_to" url="not_equal_to.html"/>
+    <tocsect3 name="less" url="less.html"/>
+    <tocsect3 name="greater" url="greater.html"/>
+    <tocsect3 name="less_equal" url="less_equal.html"/>
+    <tocsect3 name="greater_equal" url="greater_equal.html"/>e
+    <tocsect3 name="logical_and" url="logical_and.html"/>
+    <tocsect3 name="logical_or" url="logical_or.html"/>
+    <tocsect3 name="logical_not" url="logical_not.html"/>
+    <tocsect3 name="identity" url="identity.html"/>
+    <tocsect3 name="project1st" url="project1st.html"/>
+    <tocsect3 name="project2nd" url="project2nd.html"/>
+    <tocsect3 name="select1st" url="select1st.html"/>
+    <tocsect3 name="select2nd" url="select2nd.html"/>
+    <tocsect3 name="subtractive_rng" url="subtractive_rng.html"/>
+  </tocsect2>
+  <tocsect2 name="Function object adaptors" url="">
+    <tocsect3 name="binder1st" url="binder1st.html"/>
+    <tocsect3 name="binder2nd" url="binder2nd.html"/>
+    <tocsect3 name="ptr_fun" url="ptr_fun.html"/>
+    <tocsect3 name="pointer_to_unary_function" url="pointer_to_unary_function.html"/>
+    <tocsect3 name="pointer_to_binary_function" url="pointer_to_binary_function.html"/>
+    <tocsect3 name="unary_negate" url="unary_negate.html"/>
+    <tocsect3 name="binary_negate" url="binary_negate.html"/>
+    <tocsect3 name="unary_compose" url="unary_compose.html"/>
+    <tocsect3 name="binary_compose" url="binary_compose.html"/>
+    <tocsect3 name="mem_fun_t" url="mem_fun.html"/>
+    <tocsect3 name="mem_fun_ref_t" url="mem_fun_ref.html"/>
+    <tocsect3 name="mem_fun1_t" url="mem_fun1.html"/>
+    <tocsect3 name="mem_fun1_ref_t" url="mem_fun1_ref.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Utilities" url="">
+  <tocsect2 name="Utilities Concepts" url="">
+    <tocsect3 name="Assignable" url="Assignable.html"/>
+    <tocsect3 name="Default Constructible" url="DefaultConstructible.html"/>
+    <tocsect3 name="Equality Comparable" url="EqualityComparable.html"/>
+    <tocsect3 name="LessThan Comparable" url="LessThanComparable.html"/>
+  </tocsect2>
+  <tocsect2 name="Functions: Relational Operators" url="operators.html"/>
+  <tocsect2 name="Classes: Pair" url="pair.html"/>
+</tocsect1>
+<tocsect1 name="Memory Allocation" url="">
+  <tocsect2 name="Classes" url="">
+    <tocsect3 name="Allocators" url="Allocators.html"/>
+    <tocsect3 name="raw_storage_iterator" url="raw_storage_iterator.html"/>
+  </tocsect2>
+  <tocsect2 name="Functions" url="">
+    <tocsect3 name="construct" url="construct.html"/>
+    <tocsect3 name="destroy" url="destroy.html"/>
+    <tocsect3 name="uninitialized_copy" url="uninitialized_copy"/>
+    <tocsect3 name="uninitialized_copy_n" url="uninitialized_copy_n"/>
+    <tocsect3 name="uninitialized_fill" url="uninitialized_fill"/>
+    <tocsect3 name="uninitialized_fill_n" url="uninitialized_fill_n"/>
+    <tocsect3 name="temporary_buffer" url="temporary_buffer.html"/>
+    <tocsect3 name="get_temporary_buffer" url="get_temporary_buffer.html"/>
+    <tocsect3 name="return_temporary_buffer" url="return_temporary_buffer.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Design documents" url="">
+  <tocsect2 name="Thread safety" url="thread_safety.html"/>
+  <tocsect2 name="Complexity specifications" url="complexity.html"/>
+  <tocsect2 name="Representation of strings" url="string_discussion.html"/>
+</tocsect1>
+</kdeveloptoc>
+

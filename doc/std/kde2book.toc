@@ -1,0 +1,217 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>KDE2 Development Book (kde.org)</title>
+<base href="http://developer.kde.org/documentation/books/kde-2.0-development"/>
+<tocsect1 name="Foreword" url="f822.html">
+  <tocsect2 name="Lead Author" url="frm15.html"/>
+  <tocsect2 name="Contributing Authors" url="frm16.html"/>
+  <tocsect2 name="Acknowledgments" url="frm17.html"/>
+  <tocsect2 name="Tell Us What You Think!" url="frm17.html"/>
+</tocsect1>
+<tocsect1 name="Introduction" url="f915.html">
+  <tocsect2 name="Prerequisites" url="frm19.html"/>
+  <tocsect2 name="About the Open Publication License" url="frm20.html"/>
+  <tocsect2 name="Organization of This Book" url="frm21.html"/>
+  <tocsect2 name="Conventions Used in This Book" url="frm22.html"/>
+  <tocsect2 name="Time to Develop!" url="frm22.html"/>
+</tocsect1>
+<tocsect1 name="Fundamentals of KDE Application Programming" url="p01.html">
+  <tocsect2 name="The K Desktop Environment Background" url="ch01.html">
+    <tocsect3 name="Motivation for a Free Desktop" url="ch01lev1sec2.html"/>
+    <tocsect3 name="Why Develop with KDE?" url="ch01lev1sec3.html"/>
+    <tocsect3 name="KDE Organization and Resources" url="ch01lev1sec4.html"/>
+    <tocsect3 name="System Requirements" url="ch01lev1sec5.html"/>
+    <tocsect3 name="Obtaining and Installing KDE" url="ch01lev1sec6.html"/>
+    <tocsect3 name="Licenses and Legalities" url="ch01lev1sec7.html"/>
+    <tocsect3 name="Let's Code, Already!" url="ch01lev1sec7.html"/>
+  </tocsect2>
+  <tocsect2 name="A Simple KDE Application" url="ch02.html">
+    <tocsect3 name="The Linux/UNIX Programmer's Desktop" url="ch02lev1sec2.html"/>
+    <tocsect3 name="Compiling a KDE Program" url="ch02lev1sec3.html"/>
+    <tocsect3 name="KDE Application Structure" url="ch02lev1sec4.html"/>
+    <tocsect3 name="GUI Elements" url="ch02lev1sec5.html"/>
+    <tocsect3 name="Programming Conventions" url="ch02lev1sec6.html"/>
+    <tocsect3 name="Summary" url="ch02lev1sec7.html"/>
+    <tocsect3 name="Exercises" url="ch02lev1sec7.html"/>
+  </tocsect2>
+  <tocsect2 name="The Qt Toolkit" url="ch03.html">
+    <tocsect3 name="What It Is For (Look and Feel)" url="ch03lev1sec2.html"/>
+    <tocsect3 name="Inside the Qt Toolkit" url="ch03lev1sec3.html"/>
+    <tocsect3 name="Signals and Slots" url="ch03lev1sec4.html"/>
+    <tocsect3 name=")" url="ch03lev1sec5.html"/>
+    <tocsect3 name="The Utility Classes" url="ch03lev1sec6.html"/>
+    <tocsect3 name="Special Features (ImageIO, OpenGL, Mesa)" url="ch03lev1sec7.html"/>
+    <tocsect3 name="Summary" url="ch03lev1sec8.html"/>
+    <tocsect3 name="Exercises" url="ch03lev1sec8.html"/>
+  </tocsect2>
+  <tocsect2 name="Creating Custom KDE Widgets" url="ch04.html">
+    <tocsect3 name="Widget Basics" url="ch04lev1sec2.html"/>
+    <tocsect3 name="Painting Widgets" url="ch04lev1sec3.html"/>
+    <tocsect3 name="Using Child Widgets" url="ch04lev1sec4.html"/>
+    <tocsect3 name="Handling User Input" url="ch04lev1sec5.html"/>
+    <tocsect3 name="Summary" url="ch04lev1sec6.html"/>
+    <tocsect3 name="Exercises" url="ch04lev1sec6.html"/>
+  </tocsect2>
+  <tocsect2 name="KDE User Interface Compliance" url="ch05.html">
+    <tocsect3 name="The KDE Document-Centric Interface" url="ch05lev1sec2.html"/>
+    <tocsect3 name="Helping the User Use Your Application" url="ch05lev1sec3.html"/>
+    <tocsect3 name="Standard Dialog Boxes" url="ch05lev1sec4.html"/>
+    <tocsect3 name="Summary" url="ch05lev1sec5.html"/>
+    <tocsect3 name="Exercises" url="ch05lev1sec5.html"/>
+  </tocsect2>
+  <tocsect2 name="KDE Style Reference" url="ch06.html">
+    <tocsect3 name="Accessing the Standard Actions" url="ch06lev1sec2.html"/>
+    <tocsect3 name="Session Management" url="ch06lev1sec3.html"/>
+    <tocsect3 name="The Standard KDE Icons" url="ch06lev1sec4.html"/>
+    <tocsect3 name="Internationalization" url="ch06lev1sec5.html"/>
+    <tocsect3 name="Playing Sounds" url="ch06lev1sec6.html"/>
+    <tocsect3 name="User Notifications" url="ch06lev1sec7.html"/>
+    <tocsect3 name="Executing Other Programs" url="ch06lev1sec8.html"/>
+    <tocsect3 name="Network Transparency" url="ch06lev1sec9.html"/>
+    <tocsect3 name="User Friendliness" url="ch06lev1sec10.html"/>
+    <tocsect3 name="Summary" url="ch06lev1sec11.html"/>
+    <tocsect3 name="Exercises" url="ch06lev1sec11.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Advanced KDE Widgets and UI Design Techniques" url="p02.html">
+  <tocsect2 name="Further KDE Compliance" url="ch07.html">
+    <tocsect3 name="Drag and Drop" url="ch07lev1sec2.html"/>
+    <tocsect3 name="Application Configuration Information" url="ch07lev1sec3.html"/>
+    <tocsect3 name="Session Management" url="ch07lev1sec4.html"/>
+    <tocsect3 name="Application Resources" url="ch07lev1sec5.html"/>
+    <tocsect3 name="Network Transparency" url="ch07lev1sec6.html"/>
+    <tocsect3 name="Summary" url="ch07lev1sec7.html"/>
+    <tocsect3 name="Exercises" url="ch07lev1sec7.html"/>
+  </tocsect2>
+  <tocsect2 name="Using Dialog Boxes" url="ch08.html">
+    <tocsect3 name="Getting Started with the Dialog Widgets" url="ch08lev1sec2.html"/>
+    <tocsect3 name="Dialog Layout the Simple Way" url="ch08lev1sec3.html"/>
+    <tocsect3 name="Dialog Modality-Modal or Modeless Dialogs" url="ch08lev1sec4.html"/>
+    <tocsect3 name="KDE User-Interface Library (kdeui)" url="ch08lev1sec5.html"/>
+    <tocsect3 name="KDE User-Interface Library (kdeui)" url="ch08lev1sec6.html"/>
+    <tocsect3 name="A Larger Example: The Option Dialog in KEdit" url="ch08lev1sec7.html"/>
+    <tocsect3 name="User Interface Design Rules for Dialogs" url="ch08lev1sec8.html"/>
+    <tocsect3 name="Summary" url="ch08lev1sec9.html"/>
+    <tocsect3 name="Exercises" url="ch08lev1sec9.html"/>
+  </tocsect2>
+  <tocsect2 name="Constructing A Responsive User Interface" url="ch09.html">
+    <tocsect3 name="The Importance of Responsiveness" url="ch09lev1sec2.html"/>
+    <tocsect3 name="Speeding Up Window Updates" url="ch09lev1sec3.html"/>
+    <tocsect3 name="Performing Long Jobs" url="ch09lev1sec4.html"/>
+    <tocsect3 name="Summary" url="ch09lev1sec5.html"/>
+    <tocsect3 name="Exercises" url="ch09lev1sec5.html"/>
+  </tocsect2>
+  <tocsect2 name="Complex-Function KDE Widgets" url="ch10.html">
+    <tocsect3 name="Rendering HTML Files" url="ch10lev1sec2.html"/>
+    <tocsect3 name="Manipulating Images" url="ch10lev1sec3.html"/>
+    <tocsect3 name="Checking Spelling" url="ch10lev1sec4.html"/>
+    <tocsect3 name="Accessing the Address Book" url="ch10lev1sec5.html"/>
+    <tocsect3 name="Summary" url="ch10lev1sec6.html"/>
+    <tocsect3 name="Exercises" url="ch10lev1sec6.html"/>
+  </tocsect2>
+  <tocsect2 name="Alternative Application Types" url="ch11.html">
+    <tocsect3 name="Dialog-Based Applications" url="ch11lev1sec2.html"/>
+    <tocsect3 name="Single-Instance Applications" url="ch11lev1sec3.html"/>
+    <tocsect3 name="Panel Applets" url="ch11lev1sec4.html"/>
+    <tocsect3 name="Summary" url="ch11lev1sec5.html"/>
+    <tocsect3 name="Exercises" url="ch11lev1sec5.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Application Interaction and Integration" url="p03.html">
+  <tocsect2 name="Creating and Using Components (KParts)" url="ch12.html">
+    <tocsect3 name="The Difference Between Components and Widgets" url="ch12lev1sec2.html"/>
+    <tocsect3 name="The KDE Component Framework" url="ch12lev1sec3.html"/>
+    <tocsect3 name="Describing User Interface in XML" url="ch12lev1sec4.html"/>
+    <tocsect3 name="Read-Only and Read/Write Parts" url="ch12lev1sec5.html"/>
+    <tocsect3 name="Creating a Part" url="ch12lev1sec6.html"/>
+    <tocsect3 name="Making a Part Available Using Shared Libraries" url="ch12lev1sec7.html"/>
+    <tocsect3 name="Creating a KParts Application" url="ch12lev1sec8.html"/>
+    <tocsect3 name="Embedding More Than One Part in the Same Window" url="ch12lev1sec9.html"/>
+    <tocsect3 name="Creating a KParts Plug-in" url="ch12lev1sec10.html"/>
+    <tocsect3 name="Summary" url="ch12lev1sec10.html"/>
+  </tocsect2>
+  <tocsect2 name="DCOP-Desktop Communication Protocol" url="ch13.html">
+    <tocsect3 name="Motivation" url="ch13lev1sec2.html"/>
+    <tocsect3 name="History" url="ch13lev1sec3.html"/>
+    <tocsect3 name="Underlying Technologies" url="ch13lev1sec4.html"/>
+    <tocsect3 name="Architecture" url="ch13lev1sec5.html"/>
+    <tocsect3 name="Description of DCOP's Programming Interface" url="ch13lev1sec6.html"/>
+    <tocsect3 name="Developer Concerns and Tools in DCOP" url="ch13lev1sec7.html"/>
+    <tocsect3 name="DCOP Use in KDE 2.0-A Few Examples" url="ch13lev1sec8.html"/>
+    <tocsect3 name="Summary" url="ch13lev1sec8.html"/>
+  </tocsect2>
+  <tocsect2 name="Multimedia" url="ch14.html">
+    <tocsect3 name="Introducing aRts/MCOP" url="ch14lev1sec2.html"/>
+    <tocsect3 name="A First Glance at Writing Modules" url="ch14lev1sec3.html"/>
+    <tocsect3 name="MCOP" url="ch14lev1sec4.html"/>
+    <tocsect3 name="Standard Interfaces" url="ch14lev1sec5.html"/>
+    <tocsect3 name="Standard Interfaces" url="ch14lev1sec6.html"/>
+    <tocsect3 name="KDE Multimedia Besides MCOP" url="ch14lev1sec7.html"/>
+    <tocsect3 name="The Future of MCOP" url="ch14lev1sec8.html"/>
+    <tocsect3 name="Summary" url="ch14lev1sec9.html"/>
+    <tocsect3 name="Exercises" url="ch14lev1sec9.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Developer Tools and Support" url="p04.html">
+  <tocsect2 name="Creating Documentation" url="ch15.html">
+    <tocsect3 name="Documenting Source Code" url="ch15lev1sec2.html"/>
+    <tocsect3 name="Documenting Applications" url="ch15lev1sec3.html"/>
+    <tocsect3 name="Summary" url="ch15lev1sec3.html"/>
+  </tocsect2>
+  <tocsect2 name="Packaging and Distributing Code" url="ch16.html">
+    <tocsect3 name="The Structure of a Package" url="ch16lev1sec2.html"/>
+    <tocsect3 name="Administrative Files" url="ch16lev1sec3.html"/>
+    <tocsect3 name="Distributing Your Application" url="ch16lev1sec4.html"/>
+    <tocsect3 name="Summary" url="ch16lev1sec4.html"/>
+  </tocsect2>
+  <tocsect2 name="Managing Source Code with CVS" url="ch17.html">
+    <tocsect3 name="What Is CVS?" url="ch17lev1sec2.html"/>
+    <tocsect3 name="CVS Organization" url="ch17lev1sec3.html"/>
+    <tocsect3 name="Accessing Source Code in CVS" url="ch17lev1sec4.html"/>
+    <tocsect3 name="Installing and Using CVSup" url="ch17lev1sec5.html"/>
+    <tocsect3 name="Installing and Using cvs" url="ch17lev1sec6.html"/>
+    <tocsect3 name="Summary" url="ch17lev1sec6.html"/>
+  </tocsect2>
+  <tocsect2 name="The KDevelop IDE: The Integrated Development Environment for KDE" url="ch18.html">
+    <tocsect3 name="General Issues" url="ch18lev1sec2.html"/>
+    <tocsect3 name="Creating KDE 2.0 Applications" url="ch18lev1sec3.html"/>
+    <tocsect3 name="Getting Started with the KDE 2.0 API" url="ch18lev1sec4.html"/>
+    <tocsect3 name="The Classbrowser and Your Project" url="ch18lev1sec5.html"/>
+    <tocsect3 name="The File Viewers-The Windows to Your Project Files" url="ch18lev1sec6.html"/>
+    <tocsect3 name="The KDevelop Debugger" url="ch18lev1sec7.html"/>
+    <tocsect3 name="KDevelop 2.0-A Preview" url="ch18lev1sec8.html"/>
+    <tocsect3 name="Summary" url="ch18lev1sec8.html"/>
+  </tocsect2>
+  <tocsect2 name="Licensing Issues" url="ch19.html">
+    <tocsect3 name="Licensing Issues" url="ch19lev1sec2.html"/>
+    <tocsect3 name="License Usage by KDE" url="ch19lev1sec3.html"/>
+    <tocsect3 name="The License Usage by Qt" url="ch19lev1sec4.html"/>
+    <tocsect3 name="The KDE/Qt License History" url="ch19lev1sec5.html"/>
+    <tocsect3 name="Summary" url="ch19lev1sec5.html"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="Appendixes" url="p05.html">
+  <tocsect2 name="KDE-Related Licenses" url="ap-a.html">
+    <tocsect3 name="GNU Library General Public License (LGPL)" url="appa1.html"/>
+    <tocsect3 name="GNU General Public License" url="appa1.html"/>
+  </tocsect2>
+  <tocsect2 name="KDE Class Reference" url="ap-c.html"/>
+  <tocsect2 name="Answers" url="ap-c.html">
+    <tocsect3 name="Chapter 1" url="appc1.html"/>
+    <tocsect3 name="Chapter 2" url="appc3.html"/>
+    <tocsect3 name="Chapter 3" url="appc5.html"/>
+    <tocsect3 name="Chapter 4" url="appc7.html"/>
+    <tocsect3 name="Chapter 5" url="appc9.html"/>
+    <tocsect3 name="Chapter 6" url="appc11.html"/>
+    <tocsect3 name="Chapter 7" url="appc13.html"/>
+    <tocsect3 name="Chapter 8" url="appc15.html"/>
+    <tocsect3 name="Chapter 9" url="appc17.html"/>
+    <tocsect3 name="Chapter 10" url="appc19.html"/>
+    <tocsect3 name="Chapter 11" url="appc21.html"/>
+    <tocsect3 name="Chapter 12" url="appc22.html"/>
+    <tocsect3 name="Chapter 13" url="appc23.html"/>
+    <tocsect3 name="Chapter 14" url="ch14.html"/>
+  </tocsect2>
+</tocsect1>
+</kdeveloptoc>
+

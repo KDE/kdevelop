@@ -1,0 +1,858 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>LIBC (umn.edu)</title>
+<base href="http://epoxy.mrs.umn.edu/doc/glibc-doc/html/"/>
+<tocsect1 name="1. Introduction" url="chapters_1.html#SEC1">
+  <tocsect2 name="1.1 Getting Started" url="chapters_1.html#SEC2"/>
+  <tocsect2 name="1.2 Standards and Portability" url="chapters_1.html#SEC3">
+    <tocsect3 name="1.2.1 ISO C" url="chapters_1.html#SEC4"/>
+    <tocsect3 name="1.2.2 POSIX (The Portable Operating System Interface)" url="chapters_1.html#SEC5"/>
+    <tocsect3 name="1.2.3 Berkeley Unix" url="chapters_1.html#SEC6"/>
+    <tocsect3 name="1.2.4 SVID (The System V Interface Description)" url="chapters_1.html#SEC7"/>
+    <tocsect3 name="1.2.5 XPG (The X/Open Portability Guide)" url="chapters_1.html#SEC8"/>
+  </tocsect2>
+  <tocsect2 name="1.3 Using the Library" url="chapters_1.html#SEC9">
+    <tocsect3 name="1.3.1 Header Files" url="chapters_1.html#SEC10"/>
+    <tocsect3 name="1.3.2 Macro Definitions of Functions" url="chapters_1.html#SEC11"/>
+    <tocsect3 name="1.3.3 Reserved Names" url="chapters_1.html#SEC12"/>
+    <tocsect3 name="1.3.4 Feature Test Macros" url="chapters_1.html#SEC13"/>
+  </tocsect2>
+  <tocsect2 name="1.4 Roadmap to the Manual" url="chapters_1.html#SEC14"/>
+</tocsect1>
+<tocsect1 name="2. Error Reporting" url="chapters_2.html#SEC15">
+  <tocsect2 name="2.1 Checking for Errors" url="chapters_2.html#SEC16"/>
+  <tocsect2 name="2.2 Error Codes" url="chapters_2.html#SEC17"/>
+  <tocsect2 name="2.3 Error Messages" url="chapters_2.html#SEC18"/>
+</tocsect1>
+<tocsect1 name="3. Virtual Memory Allocation And Paging" url="chapters_3.html#SEC19">
+  <tocsect2 name="3.1 Process Memory Concepts" url="chapters_3.html#SEC20"/>
+  <tocsect2 name="3.2 Allocating Storage For Program Data" url="chapters_3.html#SEC21">
+    <tocsect3 name="3.2.1 Memory Allocation in C Programs" url="chapters_3.html#SEC22">
+      <tocsect4 name="3.2.1.1 Dynamic Memory Allocation" url="chapters_3.html#SEC23"/>
+    </tocsect3>
+    <tocsect3 name="3.2.2 Unconstrained Allocation" url="chapters_3.html#SEC24">
+      <tocsect4 name="3.2.2.1 Basic Memory Allocation" url="chapters_3.html#SEC25"/>
+      <tocsect4 name="3.2.2.2 Examples of malloc" url="chapters_3.html#SEC26"/>
+      <tocsect4 name="3.2.2.3 Freeing Memory Allocated with malloc" url="chapters_3.html#SEC27"/>
+      <tocsect4 name="3.2.2.4 Changing the Size of a Block" url="chapters_3.html#SEC28"/>
+      <tocsect4 name="3.2.2.5 Allocating Cleared Space" url="chapters_3.html#SEC29"/>
+      <tocsect4 name="3.2.2.6 Efficiency Considerations for malloc" url="chapters_3.html#SEC30"/>
+      <tocsect4 name="3.2.2.7 Allocating Aligned Memory Blocks" url="chapters_3.html#SEC31"/>
+      <tocsect4 name="3.2.2.8 Malloc Tunable Parameters" url="chapters_3.html#SEC32"/>
+      <tocsect4 name="3.2.2.9 Heap Consistency Checking" url="chapters_3.html#SEC33"/>
+      <tocsect4 name="3.2.2.10 Memory Allocation Hooks" url="chapters_3.html#SEC34"/>
+      <tocsect4 name="3.2.2.11 Statistics for Memory Allocation with malloc" url="chapters_3.html#SEC35"/>
+      <tocsect4 name="3.2.2.12 Summary of malloc-Related Functions" url="chapters_3.html#SEC36"/>
+    </tocsect3>
+    <tocsect3 name="3.2.3 Allocation Debugging" url="chapters_3.html#SEC37">
+      <tocsect4 name="3.2.3.1 How to install the tracing functionality" url="chapters_3.html#SEC38"/>
+      <tocsect4 name="3.2.3.2 Example program excerpts" url="chapters_3.html#SEC39"/>
+      <tocsect4 name="3.2.3.3 Some more or less clever ideas" url="chapters_3.html#SEC40"/>
+      <tocsect4 name="3.2.3.4 Interpreting the traces" url="chapters_3.html#SEC41"/>
+    </tocsect3>
+    <tocsect3 name="3.2.4 Obstacks" url="chapters_3.html#SEC42">
+      <tocsect4 name="3.2.4.1 Creating Obstacks" url="chapters_3.html#SEC43"/>
+      <tocsect4 name="3.2.4.2 Preparing for Using Obstacks" url="chapters_3.html#SEC44"/>
+      <tocsect4 name="3.2.4.3 Allocation in an Obstack" url="chapters_3.html#SEC45"/>
+      <tocsect4 name="3.2.4.4 Freeing Objects in an Obstack" url="chapters_3.html#SEC46"/>
+      <tocsect4 name="3.2.4.5 Obstack Functions and Macros" url="chapters_3.html#SEC47"/>
+      <tocsect4 name="3.2.4.6 Growing Objects" url="chapters_3.html#SEC48"/>
+      <tocsect4 name="3.2.4.7 Extra Fast Growing Objects" url="chapters_3.html#SEC49"/>
+      <tocsect4 name="3.2.4.8 Status of an Obstack" url="chapters_3.html#SEC50"/>
+      <tocsect4 name="3.2.4.9 Alignment of Data in Obstacks" url="chapters_3.html#SEC51"/>
+      <tocsect4 name="3.2.4.10 Obstack Chunks" url="chapters_3.html#SEC52"/>
+      <tocsect4 name="3.2.4.11 Summary of Obstack Functions" url="chapters_3.html#SEC53"/>
+    </tocsect3>
+    <tocsect3 name="3.2.5 Automatic Storage with Variable Size" url="chapters_3.html#SEC54">
+      <tocsect4 name="3.2.5.1 alloca Example" url="chapters_3.html#SEC55"/>
+      <tocsect4 name="3.2.5.2 Advantages of alloca" url="chapters_3.html#SEC56"/>
+      <tocsect4 name="3.2.5.3 Disadvantages of alloca" url="chapters_3.html#SEC57"/>
+      <tocsect4 name="3.2.5.4 GNU C Variable-Size Arrays" url="chapters_3.html#SEC58"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="3.3 Resizing the Data Segment" url="chapters_3.html#SEC59"/>
+  <tocsect2 name="3.4 Locking Pages" url="chapters_3.html#SEC60">
+    <tocsect3 name="3.4.1 Why Lock Pages" url="chapters_3.html#SEC61"/>
+    <tocsect3 name="3.4.2 Locked Memory Details" url="chapters_3.html#SEC62"/>
+    <tocsect3 name="3.4.3 Functions To Lock And Unlock Pages" url="chapters_3.html#SEC63"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="4. Character Handling" url="chapters_4.html#SEC64">
+  <tocsect2 name="4.1 Classification of Characters" url="chapters_4.html#SEC65"/>
+  <tocsect2 name="4.2 Case Conversion" url="chapters_4.html#SEC66"/>
+  <tocsect2 name="4.3 Character class determination for wide characters" url="chapters_4.html#SEC67"/>
+  <tocsect2 name="4.4 Notes on using the wide character classes" url="chapters_4.html#SEC68"/>
+  <tocsect2 name="4.5 Mapping of wide characters." url="chapters_4.html#SEC69"/>
+</tocsect1>
+<tocsect1 name="5. String and Array Utilities" url="chapters_5.html#SEC70">
+  <tocsect2 name="5.1 Representation of Strings" url="chapters_5.html#SEC71"/>
+  <tocsect2 name="5.2 String and Array Conventions" url="chapters_5.html#SEC72"/>
+  <tocsect2 name="5.3 String Length" url="chapters_5.html#SEC73"/>
+  <tocsect2 name="5.4 Copying and Concatenation" url="chapters_5.html#SEC74"/>
+  <tocsect2 name="5.5 String/Array Comparison" url="chapters_5.html#SEC75"/>
+  <tocsect2 name="5.6 Collation Functions" url="chapters_5.html#SEC76"/>
+  <tocsect2 name="5.7 Search Functions" url="chapters_5.html#SEC77">
+    <tocsect3 name="5.7.1 Compatibility String Search Functions" url="chapters_5.html#SEC78"/>
+  </tocsect2>
+  <tocsect2 name="5.8 Finding Tokens in a String" url="chapters_5.html#SEC79"/>
+  <tocsect2 name="5.9 strfry" url="chapters_5.html#SEC80"/>
+  <tocsect2 name="5.10 Trivial Encryption" url="chapters_5.html#SEC81"/>
+  <tocsect2 name="5.11 Encode Binary Data" url="chapters_5.html#SEC82"/>
+  <tocsect2 name="5.12 Argz and Envz Vectors" url="chapters_5.html#SEC83">
+    <tocsect3 name="5.12.1 Argz Functions" url="chapters_5.html#SEC84"/>
+    <tocsect3 name="5.12.2 Envz Functions" url="chapters_5.html#SEC85"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="6. Character Set Handling" url="chapters_6.html#SEC86">
+  <tocsect2 name="6.1 Introduction to Extended Characters" url="chapters_6.html#SEC87"/>
+  <tocsect2 name="6.2 Overview about Character Handling Functions" url="chapters_6.html#SEC88"/>
+  <tocsect2 name="6.3 Restartable Multibyte Conversion Functions" url="chapters_6.html#SEC89">
+    <tocsect3 name="6.3.1 Selecting the conversion and its properties" url="chapters_6.html#SEC90"/>
+    <tocsect3 name="6.3.2 Representing the state of the conversion" url="chapters_6.html#SEC91"/>
+    <tocsect3 name="6.3.3 Converting Single Characters" url="chapters_6.html#SEC92"/>
+    <tocsect3 name="6.3.4 Converting Multibyte and Wide Character Strings" url="chapters_6.html#SEC93"/>
+    <tocsect3 name="6.3.5 A Complete Multibyte Conversion Example" url="chapters_6.html#SEC94"/>
+  </tocsect2>
+  <tocsect2 name="6.4 Non-reentrant Conversion Function" url="chapters_6.html#SEC95">
+    <tocsect3 name="6.4.1 Non-reentrant Conversion of Single Characters" url="chapters_6.html#SEC96"/>
+    <tocsect3 name="6.4.2 Non-reentrant Conversion of Strings" url="chapters_6.html#SEC97"/>
+    <tocsect3 name="6.4.3 States in Non-reentrant Functions" url="chapters_6.html#SEC98"/>
+  </tocsect2>
+  <tocsect2 name="6.5 Generic Charset Conversion" url="chapters_6.html#SEC99">
+    <tocsect3 name="6.5.1 Generic Character Set Conversion Interface" url="chapters_6.html#SEC100"/>
+    <tocsect3 name="6.5.2 A complete iconv example" url="chapters_6.html#SEC101"/>
+    <tocsect3 name="6.5.3 Some Details about other iconv Implementations" url="chapters_6.html#SEC102"/>
+    <tocsect3 name="6.5.4 The iconv Implementation in the GNU C library" url="chapters_6.html#SEC103">
+      <tocsect4 name="6.5.4.1 Format of `gconv-modules' files" url="chapters_6.html#SEC104"/>
+      <tocsect4 name="6.5.4.2 Finding the conversion path in iconv" url="chapters_6.html#SEC105"/>
+      <tocsect4 name="6.5.4.3 iconv module data structures" url="chapters_6.html#SEC106"/>
+      <tocsect4 name="6.5.4.4 iconv module interfaces" url="chapters_6.html#SEC107"/>
+    </tocsect3>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="7. Locales and Internationalization" url="chapters_7.html#SEC108">
+  <tocsect2 name="7.1 What Effects a Locale Has" url="chapters_7.html#SEC109"/>
+  <tocsect2 name="7.2 Choosing a Locale" url="chapters_7.html#SEC110"/>
+  <tocsect2 name="7.3 Categories of Activities that Locales Affect" url="chapters_7.html#SEC111"/>
+  <tocsect2 name="7.4 How Programs Set the Locale" url="chapters_7.html#SEC112"/>
+  <tocsect2 name="7.5 Standard Locales" url="chapters_7.html#SEC113"/>
+  <tocsect2 name="7.6 Accessing Locale Information" url="chapters_7.html#SEC114">
+    <tocsect3 name="7.6.1 localeconv: It is portable but small...small" url="chapters_7.html#SEC115">
+      <tocsect4 name="7.6.1.1 Generic Numeric Formatting Parameters" url="chapters_7.html#SEC116"/>
+      <tocsect4 name="7.6.1.2 Printing the Currency Symbol" url="chapters_7.html#SEC117"/>
+      <tocsect4 name="7.6.1.3 Printing the Sign of a Monetary Amount" url="chapters_7.html#SEC118"/>
+    </tocsect3>
+    <tocsect3 name="7.6.2 Pinpoint Access to Locale Data" url="chapters_7.html#SEC119"/>
+  </tocsect2>
+  <tocsect2 name="7.7 A dedicated function to format numbers" url="chapters_7.html#SEC120"/>
+  <tocsect2 name="7.8 Yes-or-No Questions" url="chapters_7.html#SEC121"/>
+</tocsect1>
+<tocsect1 name="8. Message Translation" url="chapters_8.html#SEC122">
+  <tocsect2 name="8.1 X/Open Message Catalog Handling" url="chapters_8.html#SEC123">
+    <tocsect3 name="8.1.1 The catgets function family" url="chapters_8.html#SEC124"/>
+    <tocsect3 name="8.1.2 Format of the message catalog files" url="chapters_8.html#SEC125"/>
+    <tocsect3 name="8.1.3 Generate Message Catalogs files" url="chapters_8.html#SEC126"/>
+    <tocsect3 name="8.1.4 How to use the catgets interface" url="chapters_8.html#SEC127">
+      <tocsect4 name="8.1.4.1 Not using symbolic names" url="chapters_8.html#SEC128"/>
+      <tocsect4 name="8.1.4.2 Using symbolic names" url="chapters_8.html#SEC129"/>
+      <tocsect4 name="8.1.4.3 How does to this allow to develop" url="chapters_8.html#SEC130"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="8.2 The Uniforum approach to Message Translation" url="chapters_8.html#SEC131">
+    <tocsect3 name="8.2.1 The gettext family of functions" url="chapters_8.html#SEC132">
+      <tocsect4 name="8.2.1.1 What has to be done to translate a message?" url="chapters_8.html#SEC133"/>
+      <tocsect4 name="8.2.1.2 How to determine which catalog to be used" url="chapters_8.html#SEC134"/>
+      <tocsect4 name="8.2.1.3 Additional functions for more complicated situations" url="chapters_8.html#SEC135"/>
+      <tocsect4 name="8.2.1.4 How to specify the output character set gettext uses" url="chapters_8.html#SEC137"/>
+      <tocsect4 name="8.2.1.5 How to use gettext in GUI programs" url="chapters_8.html#SEC138"/>
+      <tocsect4 name="8.2.1.6 User influence on gettext" url="chapters_8.html#SEC139"/>
+    </tocsect3>
+    <tocsect3 name="8.2.2 Programs to handle message catalogs for gettext" url="chapters_8.html#SEC140"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="9. Searching and Sorting" url="chapters_9.html#SEC141">
+  <tocsect2 name="9.1 Defining the Comparison Function" url="chapters_9.html#SEC142"/>
+  <tocsect2 name="9.2 Array Search Function" url="chapters_9.html#SEC143"/>
+  <tocsect2 name="9.3 Array Sort Function" url="chapters_9.html#SEC144"/>
+  <tocsect2 name="9.4 Searching and Sorting Example" url="chapters_9.html#SEC145"/>
+  <tocsect2 name="9.5 The hsearch function." url="chapters_9.html#SEC146"/>
+  <tocsect2 name="9.6 The tsearch function." url="chapters_9.html#SEC147"/>
+</tocsect1>
+<tocsect1 name="10. Pattern Matching" url="chapters_10.html#SEC148">
+  <tocsect2 name="10.1 Wildcard Matching" url="chapters_10.html#SEC149"/>
+  <tocsect2 name="10.2 Globbing" url="chapters_10.html#SEC150">
+    <tocsect3 name="10.2.1 Calling glob" url="chapters_10.html#SEC151"/>
+    <tocsect3 name="10.2.2 Flags for Globbing" url="chapters_10.html#SEC152"/>
+    <tocsect3 name="10.2.3 More Flags for Globbing" url="chapters_10.html#SEC153"/>
+  </tocsect2>
+  <tocsect2 name="10.3 Regular Expression Matching" url="chapters_10.html#SEC154">
+    <tocsect3 name="10.3.1 POSIX Regular Expression Compilation" url="chapters_10.html#SEC155"/>
+    <tocsect3 name="10.3.2 Flags for POSIX Regular Expressions" url="chapters_10.html#SEC156"/>
+    <tocsect3 name="10.3.3 Matching a Compiled POSIX Regular Expression" url="chapters_10.html#SEC157"/>
+    <tocsect3 name="10.3.4 Match Results with Subexpressions" url="chapters_10.html#SEC158"/>
+    <tocsect3 name="10.3.5 Complications in Subexpression Matching" url="chapters_10.html#SEC159"/>
+    <tocsect3 name="10.3.6 POSIX Regexp Matching Cleanup" url="chapters_10.html#SEC160"/>
+  </tocsect2>
+  <tocsect2 name="10.4 Shell-Style Word Expansion" url="chapters_10.html#SEC161">
+    <tocsect3 name="10.4.1 The Stages of Word Expansion" url="chapters_10.html#SEC162"/>
+    <tocsect3 name="10.4.2 Calling wordexp" url="chapters_10.html#SEC163"/>
+    <tocsect3 name="10.4.3 Flags for Word Expansion" url="chapters_10.html#SEC164"/>
+    <tocsect3 name="10.4.4 wordexp Example" url="chapters_10.html#SEC165"/>
+    <tocsect3 name="10.4.5 Details of Tilde Expansion" url="chapters_10.html#SEC166"/>
+    <tocsect3 name="10.4.6 Details of Variable Substitution" url="chapters_10.html#SEC167"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="11. Input/Output Overview" url="chapters_11.html#SEC168">
+  <tocsect2 name="11.1 Input/Output Concepts" url="chapters_11.html#SEC169">
+    <tocsect3 name="11.1.1 Streams and File Descriptors" url="chapters_11.html#SEC170"/>
+    <tocsect3 name="11.1.2 File Position" url="chapters_11.html#SEC171"/>
+  </tocsect2>
+  <tocsect2 name="11.2 File Names" url="chapters_11.html#SEC172">
+    <tocsect3 name="11.2.1 Directories" url="chapters_11.html#SEC173"/>
+    <tocsect3 name="11.2.2 File Name Resolution" url="chapters_11.html#SEC174"/>
+    <tocsect3 name="11.2.3 File Name Errors" url="chapters_11.html#SEC175"/>
+    <tocsect3 name="11.2.4 Portability of File Names" url="chapters_11.html#SEC176"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="12. Input/Output on Streams" url="chapters_12.html#SEC177">
+  <tocsect2 name="12.1 Streams" url="chapters_12.html#SEC178"/>
+  <tocsect2 name="12.2 Standard Streams" url="chapters_12.html#SEC179"/>
+  <tocsect2 name="12.3 Opening Streams" url="chapters_12.html#SEC180"/>
+  <tocsect2 name="12.4 Closing Streams" url="chapters_12.html#SEC181"/>
+  <tocsect2 name="12.5 Streams and Threads" url="chapters_12.html#SEC182"/>
+  <tocsect2 name="12.6 Streams in Internationalized Applications" url="chapters_12.html#SEC183"/>
+  <tocsect2 name="12.7 Simple Output by Characters or Lines" url="chapters_12.html#SEC184"/>
+  <tocsect2 name="12.8 Character Input" url="chapters_12.html#SEC185"/>
+  <tocsect2 name="12.9 Line-Oriented Input" url="chapters_12.html#SEC186"/>
+  <tocsect2 name="12.10 Unreading" url="chapters_12.html#SEC187">
+    <tocsect3 name="12.10.1 What Unreading Means" url="chapters_12.html#SEC188"/>
+    <tocsect3 name="12.10.2 Using ungetc To Do Unreading" url="chapters_12.html#SEC189"/>
+  </tocsect2>
+  <tocsect2 name="12.11 Block Input/Output" url="chapters_12.html#SEC190"/>
+  <tocsect2 name="12.12 Formatted Output" url="chapters_12.html#SEC191">
+    <tocsect3 name="12.12.1 Formatted Output Basics" url="chapters_12.html#SEC192"/>
+    <tocsect3 name="12.12.2 Output Conversion Syntax" url="chapters_12.html#SEC193"/>
+    <tocsect3 name="12.12.3 Table of Output Conversions" url="chapters_12.html#SEC194"/>
+    <tocsect3 name="12.12.4 Integer Conversions" url="chapters_12.html#SEC195"/>
+    <tocsect3 name="12.12.5 Floating-Point Conversions" url="chapters_12.html#SEC196"/>
+    <tocsect3 name="12.12.6 Other Output Conversions" url="chapters_12.html#SEC197"/>
+    <tocsect3 name="12.12.7 Formatted Output Functions" url="chapters_12.html#SEC198"/>
+    <tocsect3 name="12.12.8 Dynamically Allocating Formatted Output" url="chapters_12.html#SEC199"/>
+    <tocsect3 name="12.12.9 Variable Arguments Output Functions" url="chapters_12.html#SEC200"/>
+    <tocsect3 name="12.12.10 Parsing a Template String" url="chapters_12.html#SEC201"/>
+    <tocsect3 name="12.12.11 Example of Parsing a Template String" url="chapters_12.html#SEC202"/>
+  </tocsect2>
+  <tocsect2 name="12.13 Customizing printf" url="chapters_12.html#SEC203">
+    <tocsect3 name="12.13.1 Registering New Conversions" url="chapters_12.html#SEC204"/>
+    <tocsect3 name="12.13.2 Conversion Specifier Options" url="chapters_12.html#SEC205"/>
+    <tocsect3 name="12.13.3 Defining the Output Handler" url="chapters_12.html#SEC206"/>
+    <tocsect3 name="12.13.4 printf Extension Example" url="chapters_12.html#SEC207"/>
+    <tocsect3 name="12.13.5 Predefined printf Handlers" url="chapters_12.html#SEC208"/>
+  </tocsect2>
+  <tocsect2 name="12.14 Formatted Input" url="chapters_12.html#SEC209">
+    <tocsect3 name="12.14.1 Formatted Input Basics" url="chapters_12.html#SEC210"/>
+    <tocsect3 name="12.14.2 Input Conversion Syntax" url="chapters_12.html#SEC211"/>
+    <tocsect3 name="12.14.3 Table of Input Conversions" url="chapters_12.html#SEC212"/>
+    <tocsect3 name="12.14.4 Numeric Input Conversions" url="chapters_12.html#SEC213"/>
+    <tocsect3 name="12.14.5 String Input Conversions" url="chapters_12.html#SEC214"/>
+    <tocsect3 name="12.14.6 Dynamically Allocating String Conversions" url="chapters_12.html#SEC215"/>
+    <tocsect3 name="12.14.7 Other Input Conversions" url="chapters_12.html#SEC216"/>
+    <tocsect3 name="12.14.8 Formatted Input Functions" url="chapters_12.html#SEC217"/>
+    <tocsect3 name="12.14.9 Variable Arguments Input Functions" url="chapters_12.html#SEC218"/>
+  </tocsect2>
+  <tocsect2 name="12.15 End-Of-File and Errors" url="chapters_12.html#SEC219"/>
+  <tocsect2 name="12.16 Recovering from errors" url="chapters_12.html#SEC220"/>
+  <tocsect2 name="12.17 Text and Binary Streams" url="chapters_12.html#SEC221"/>
+  <tocsect2 name="12.18 File Positioning" url="chapters_12.html#SEC222"/>
+  <tocsect2 name="12.19 Portable File-Position Functions" url="chapters_12.html#SEC223"/>
+  <tocsect2 name="12.20 Stream Buffering" url="chapters_12.html#SEC224">
+    <tocsect3 name="12.20.1 Buffering Concepts" url="chapters_12.html#SEC225"/>
+    <tocsect3 name="12.20.2 Flushing Buffers" url="chapters_12.html#SEC226"/>
+    <tocsect3 name="12.20.3 Controlling Which Kind of Buffering" url="chapters_12.html#SEC227"/>
+  </tocsect2>
+  <tocsect2 name="12.21 Other Kinds of Streams" url="chapters_12.html#SEC228">
+    <tocsect3 name="12.21.1 String Streams" url="chapters_12.html#SEC229"/>
+    <tocsect3 name="12.21.2 Obstack Streams" url="chapters_12.html#SEC230"/>
+    <tocsect3 name="12.21.3 Programming Your Own Custom Streams" url="chapters_12.html#SEC231">
+      <tocsect4 name="12.21.3.1 Custom Streams and Cookies" url="chapters_12.html#SEC232"/>
+      <tocsect4 name="12.21.3.2 Custom Stream Hook Functions" url="chapters_12.html#SEC233"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="12.22 Formatted Messages" url="chapters_12.html#SEC234">
+    <tocsect3 name="12.22.1 Printing Formatted Messages" url="chapters_12.html#SEC235"/>
+    <tocsect3 name="12.22.2 Adding Severity Classes" url="chapters_12.html#SEC236"/>
+    <tocsect3 name="12.22.3 How to use fmtmsg and addseverity" url="chapters_12.html#SEC237"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="13. Low-Level Input/Output" url="chapters_13.html#SEC238">
+  <tocsect2 name="13.1 Opening and Closing Files" url="chapters_13.html#SEC239"/>
+  <tocsect2 name="13.2 Input and Output Primitives" url="chapters_13.html#SEC240"/>
+  <tocsect2 name="13.3 Setting the File Position of a Descriptor" url="chapters_13.html#SEC241"/>
+  <tocsect2 name="13.4 Descriptors and Streams" url="chapters_13.html#SEC242"/>
+  <tocsect2 name="13.5 Dangers of Mixing Streams and Descriptors" url="chapters_13.html#SEC243">
+    <tocsect3 name="13.5.1 Linked Channels" url="chapters_13.html#SEC244"/>
+    <tocsect3 name="13.5.2 Independent Channels" url="chapters_13.html#SEC245"/>
+    <tocsect3 name="13.5.3 Cleaning Streams" url="chapters_13.html#SEC246"/>
+  </tocsect2>
+  <tocsect2 name="13.6 Fast Scatter-Gather I/O" url="chapters_13.html#SEC247"/>
+  <tocsect2 name="13.7 Memory-mapped I/O" url="chapters_13.html#SEC248"/>
+  <tocsect2 name="13.8 Waiting for Input or Output" url="chapters_13.html#SEC249"/>
+  <tocsect2 name="13.9 Synchronizing I/O operations" url="chapters_13.html#SEC250"/>
+  <tocsect2 name="13.10 Perform I/O Operations in Parallel" url="chapters_13.html#SEC251">
+    <tocsect3 name="13.10.1 Asynchronous Read and Write Operations" url="chapters_13.html#SEC252"/>
+    <tocsect3 name="13.10.2 Getting the Status of AIO Operations" url="chapters_13.html#SEC253"/>
+    <tocsect3 name="13.10.3 Getting into a Consistent State" url="chapters_13.html#SEC254"/>
+    <tocsect3 name="13.10.4 Cancellation of AIO Operations" url="chapters_13.html#SEC255"/>
+    <tocsect3 name="13.10.5 How to optimize the AIO implementation" url="chapters_13.html#SEC256"/>
+  </tocsect2>
+  <tocsect2 name="13.11 Control Operations on Files" url="chapters_13.html#SEC257"/>
+  <tocsect2 name="13.12 Duplicating Descriptors" url="chapters_13.html#SEC258"/>
+  <tocsect2 name="13.13 File Descriptor Flags" url="chapters_13.html#SEC259"/>
+  <tocsect2 name="13.14 File Status Flags" url="chapters_13.html#SEC260">
+    <tocsect3 name="13.14.1 File Access Modes" url="chapters_13.html#SEC261"/>
+    <tocsect3 name="13.14.2 Open-time Flags" url="chapters_13.html#SEC262"/>
+    <tocsect3 name="13.14.3 I/O Operating Modes" url="chapters_13.html#SEC263"/>
+    <tocsect3 name="13.14.4 Getting and Setting File Status Flags" url="chapters_13.html#SEC264"/>
+  </tocsect2>
+  <tocsect2 name="13.15 File Locks" url="chapters_13.html#SEC265"/>
+  <tocsect2 name="13.16 Interrupt-Driven Input" url="chapters_13.html#SEC266"/>
+  <tocsect2 name="13.17 Generic I/O Control operations" url="chapters_13.html#SEC267"/>
+</tocsect1>
+<tocsect1 name="14. File System Interface" url="chapters_14.html#SEC268">
+  <tocsect2 name="14.1 Working Directory" url="chapters_14.html#SEC269"/>
+  <tocsect2 name="14.2 Accessing Directories" url="chapters_14.html#SEC270">
+    <tocsect3 name="14.2.1 Format of a Directory Entry" url="chapters_14.html#SEC271"/>
+    <tocsect3 name="14.2.2 Opening a Directory Stream" url="chapters_14.html#SEC272"/>
+    <tocsect3 name="14.2.3 Reading and Closing a Directory Stream" url="chapters_14.html#SEC273"/>
+    <tocsect3 name="14.2.4 Simple Program to List a Directory" url="chapters_14.html#SEC274"/>
+    <tocsect3 name="14.2.5 Random Access in a Directory Stream" url="chapters_14.html#SEC275"/>
+    <tocsect3 name="14.2.6 Scanning the Content of a Directory" url="chapters_14.html#SEC276"/>
+    <tocsect3 name="14.2.7 Simple Program to List a Directory, Mark II" url="chapters_14.html#SEC277"/>
+  </tocsect2>
+  <tocsect2 name="14.3 Working with Directory Trees" url="chapters_14.html#SEC278"/>
+  <tocsect2 name="14.4 Hard Links" url="chapters_14.html#SEC279"/>
+  <tocsect2 name="14.5 Symbolic Links" url="chapters_14.html#SEC280"/>
+  <tocsect2 name="14.6 Deleting Files" url="chapters_14.html#SEC281"/>
+  <tocsect2 name="14.7 Renaming Files" url="chapters_14.html#SEC282"/>
+  <tocsect2 name="14.8 Creating Directories" url="chapters_14.html#SEC283"/>
+  <tocsect2 name="14.9 File Attributes" url="chapters_14.html#SEC284">
+    <tocsect3 name="14.9.1 The meaning of the File Attributes" url="chapters_14.html#SEC285"/>
+    <tocsect3 name="14.9.2 Reading the Attributes of a File" url="chapters_14.html#SEC286"/>
+    <tocsect3 name="14.9.3 Testing the Type of a File" url="chapters_14.html#SEC287"/>
+    <tocsect3 name="14.9.4 File Owner" url="chapters_14.html#SEC288"/>
+    <tocsect3 name="14.9.5 The Mode Bits for Access Permission" url="chapters_14.html#SEC289"/>
+    <tocsect3 name="14.9.6 How Your Access to a File is Decided" url="chapters_14.html#SEC290"/>
+    <tocsect3 name="14.9.7 Assigning File Permissions" url="chapters_14.html#SEC291"/>
+    <tocsect3 name="14.9.8 Testing Permission to Access a File" url="chapters_14.html#SEC292"/>
+    <tocsect3 name="14.9.9 File Times" url="chapters_14.html#SEC293"/>
+    <tocsect3 name="14.9.10 File Size" url="chapters_14.html#SEC294"/>
+  </tocsect2>
+  <tocsect2 name="14.10 Making Special Files" url="chapters_14.html#SEC295"/>
+  <tocsect2 name="14.11 Temporary Files" url="chapters_14.html#SEC296"/>
+</tocsect1>
+<tocsect1 name="15. Pipes and FIFOs" url="chapters_15.html#SEC297">
+  <tocsect2 name="15.1 Creating a Pipe" url="chapters_15.html#SEC298"/>
+  <tocsect2 name="15.2 Pipe to a Subprocess" url="chapters_15.html#SEC299"/>
+  <tocsect2 name="15.3 FIFO Special Files" url="chapters_15.html#SEC300"/>
+  <tocsect2 name="15.4 Atomicity of Pipe I/O" url="chapters_15.html#SEC301"/>
+</tocsect1>
+<tocsect1 name="16. Sockets" url="chapters_16.html#SEC302">
+  <tocsect2 name="16.1 Socket Concepts" url="chapters_16.html#SEC303"/>
+  <tocsect2 name="16.2 Communication Styles" url="chapters_16.html#SEC304"/>
+  <tocsect2 name="16.3 Socket Addresses" url="chapters_16.html#SEC305">
+    <tocsect3 name="16.3.1 Address Formats" url="chapters_16.html#SEC306"/>
+    <tocsect3 name="16.3.2 Setting the Address of a Socket" url="chapters_16.html#SEC307"/>
+    <tocsect3 name="16.3.3 Reading the Address of a Socket" url="chapters_16.html#SEC308"/>
+  </tocsect2>
+  <tocsect2 name="16.4 Interface Naming" url="chapters_16.html#SEC309"/>
+  <tocsect2 name="16.5 The Local Namespace" url="chapters_16.html#SEC310">
+    <tocsect3 name="16.5.1 Local Namespace Concepts" url="chapters_16.html#SEC311"/>
+    <tocsect3 name="16.5.2 Details of Local Namespace" url="chapters_16.html#SEC312"/>
+    <tocsect3 name="16.5.3 Example of Local-Namespace Sockets" url="chapters_16.html#SEC313"/>
+  </tocsect2>
+  <tocsect2 name="16.6 The Internet Namespace" url="chapters_16.html#SEC314">
+    <tocsect3 name="16.6.1 Internet Socket Address Formats" url="chapters_16.html#SEC315"/>
+    <tocsect3 name="16.6.2 Host Addresses" url="chapters_16.html#SEC316">
+      <tocsect4 name="16.6.2.1 Internet Host Addresses" url="chapters_16.html#SEC317"/>
+      <tocsect4 name="16.6.2.2 Host Address Data Type" url="chapters_16.html#SEC320"/>
+      <tocsect4 name="16.6.2.3 Host Address Functions" url="chapters_16.html#SEC321"/>
+      <tocsect4 name="16.6.2.4 Host Names" url="chapters_16.html#SEC322"/>
+    </tocsect3>
+    <tocsect3 name="16.6.3 Internet Ports" url="chapters_16.html#SEC323"/>
+    <tocsect3 name="16.6.4 The Services Database" url="chapters_16.html#SEC324"/>
+    <tocsect3 name="16.6.5 Byte Order Conversion" url="chapters_16.html#SEC325"/>
+    <tocsect3 name="16.6.6 Protocols Database" url="chapters_16.html#SEC326"/>
+    <tocsect3 name="16.6.7 Internet Socket Example" url="chapters_16.html#SEC327"/>
+  </tocsect2>
+  <tocsect2 name="16.7 Other Namespaces" url="chapters_16.html#SEC328"/>
+  <tocsect2 name="16.8 Opening and Closing Sockets" url="chapters_16.html#SEC329">
+    <tocsect3 name="16.8.1 Creating a Socket" url="chapters_16.html#SEC330"/>
+    <tocsect3 name="16.8.2 Closing a Socket" url="chapters_16.html#SEC331"/>
+    <tocsect3 name="16.8.3 Socket Pairs" url="chapters_16.html#SEC332"/>
+  </tocsect2>
+  <tocsect2 name="16.9 Using Sockets with Connections" url="chapters_16.html#SEC333">
+    <tocsect3 name="16.9.1 Making a Connection" url="chapters_16.html#SEC334"/>
+    <tocsect3 name="16.9.2 Listening for Connections" url="chapters_16.html#SEC335"/>
+    <tocsect3 name="16.9.3 Accepting Connections" url="chapters_16.html#SEC336"/>
+    <tocsect3 name="16.9.4 Who is Connected to Me?" url="chapters_16.html#SEC337"/>
+    <tocsect3 name="16.9.5 Transferring Data" url="chapters_16.html#SEC338">
+      <tocsect4 name="16.9.5.1 Sending Data" url="chapters_16.html#SEC339"/>
+      <tocsect4 name="16.9.5.2 Receiving Data" url="chapters_16.html#SEC340"/>
+      <tocsect4 name="16.9.5.3 Socket Data Options" url="chapters_16.html#SEC341"/>
+    </tocsect3>
+    <tocsect3 name="16.9.6 Byte Stream Socket Example" url="chapters_16.html#SEC342"/>
+    <tocsect3 name="16.9.7 Byte Stream Connection Server Example" url="chapters_16.html#SEC343"/>
+    <tocsect3 name="16.9.8 Out-of-Band Data" url="chapters_16.html#SEC344"/>
+  </tocsect2>
+  <tocsect2 name="16.10 Datagram Socket Operations" url="chapters_16.html#SEC345">
+    <tocsect3 name="16.10.1 Sending Datagrams" url="chapters_16.html#SEC346"/>
+    <tocsect3 name="16.10.2 Receiving Datagrams" url="chapters_16.html#SEC347"/>
+    <tocsect3 name="16.10.3 Datagram Socket Example" url="chapters_16.html#SEC348"/>
+    <tocsect3 name="16.10.4 Example of Reading Datagrams" url="chapters_16.html#SEC349"/>
+  </tocsect2>
+  <tocsect2 name="16.11 The inetd Daemon" url="chapters_16.html#SEC350">
+    <tocsect3 name="16.11.1 inetd Servers" url="chapters_16.html#SEC351"/>
+    <tocsect3 name="16.11.2 Configuring inetd" url="chapters_16.html#SEC352"/>
+  </tocsect2>
+  <tocsect2 name="16.12 Socket Options" url="chapters_16.html#SEC353">
+    <tocsect3 name="16.12.1 Socket Option Functions" url="chapters_16.html#SEC354"/>
+    <tocsect3 name="16.12.2 Socket-Level Options" url="chapters_16.html#SEC355"/>
+  </tocsect2>
+  <tocsect2 name="16.13 Networks Database" url="chapters_16.html#SEC356"/>
+</tocsect1>
+<tocsect1 name="17. Low-Level Terminal Interface" url="chapters_17.html#SEC357">
+  <tocsect2 name="17.1 Identifying Terminals" url="chapters_17.html#SEC358"/>
+  <tocsect2 name="17.2 I/O Queues" url="chapters_17.html#SEC359"/>
+  <tocsect2 name="17.3 Two Styles of Input: Canonical or Not" url="chapters_17.html#SEC360"/>
+  <tocsect2 name="17.4 Terminal Modes" url="chapters_17.html#SEC361">
+    <tocsect3 name="17.4.1 Terminal Mode Data Types" url="chapters_17.html#SEC362"/>
+    <tocsect3 name="17.4.2 Terminal Mode Functions" url="chapters_17.html#SEC363"/>
+    <tocsect3 name="17.4.3 Setting Terminal Modes Properly" url="chapters_17.html#SEC364"/>
+    <tocsect3 name="17.4.4 Input Modes" url="chapters_17.html#SEC365"/>
+    <tocsect3 name="17.4.5 Output Modes" url="chapters_17.html#SEC366"/>
+    <tocsect3 name="17.4.6 Control Modes" url="chapters_17.html#SEC367"/>
+    <tocsect3 name="17.4.7 Local Modes" url="chapters_17.html#SEC368"/>
+    <tocsect3 name="17.4.8 Line Speed" url="chapters_17.html#SEC369"/>
+    <tocsect3 name="17.4.9 Special Characters" url="chapters_17.html#SEC370">
+      <tocsect4 name="17.4.9.1 Characters for Input Editing" url="chapters_17.html#SEC371"/>
+      <tocsect4 name="17.4.9.2 Characters that Cause Signals" url="chapters_17.html#SEC372"/>
+      <tocsect4 name="17.4.9.3 Special Characters for Flow Control" url="chapters_17.html#SEC373"/>
+      <tocsect4 name="17.4.9.4 Other Special Characters" url="chapters_17.html#SEC374"/>
+    </tocsect3>
+    <tocsect3 name="17.4.10 Noncanonical Input" url="chapters_17.html#SEC375"/>
+  </tocsect2>
+  <tocsect2 name="17.5 BSD Terminal Modes" url="chapters_17.html#SEC376"/>
+  <tocsect2 name="17.6 Line Control Functions" url="chapters_17.html#SEC377"/>
+  <tocsect2 name="17.7 Noncanonical Mode Example" url="chapters_17.html#SEC378"/>
+  <tocsect2 name="17.8 Pseudo-Terminals" url="chapters_17.html#SEC379">
+    <tocsect3 name="17.8.1 Allocating Pseudo-Terminals" url="chapters_17.html#SEC380"/>
+    <tocsect3 name="17.8.2 Opening a Pseudo-Terminal Pair" url="chapters_17.html#SEC381"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="18. Syslog" url="chapters_18.html#SEC382">
+  <tocsect2 name="18.1 Overview of Syslog" url="chapters_18.html#SEC383"/>
+  <tocsect2 name="18.2 Submitting Syslog Messages" url="chapters_18.html#SEC384">
+    <tocsect3 name="18.2.1 openlog" url="chapters_18.html#SEC385"/>
+    <tocsect3 name="18.2.2 syslog, vsyslog" url="chapters_18.html#SEC386"/>
+    <tocsect3 name="18.2.3 closelog" url="chapters_18.html#SEC387"/>
+    <tocsect3 name="18.2.4 setlogmask" url="chapters_18.html#SEC388"/>
+    <tocsect3 name="18.2.5 Syslog Example" url="chapters_18.html#SEC389"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="19. Mathematics" url="chapters_19.html#SEC390">
+  <tocsect2 name="19.1 Predefined Mathematical Constants" url="chapters_19.html#SEC391"/>
+  <tocsect2 name="19.2 Trigonometric Functions" url="chapters_19.html#SEC392"/>
+  <tocsect2 name="19.3 Inverse Trigonometric Functions" url="chapters_19.html#SEC393"/>
+  <tocsect2 name="19.4 Exponentiation and Logarithms" url="chapters_19.html#SEC394"/>
+  <tocsect2 name="19.5 Hyperbolic Functions" url="chapters_19.html#SEC395"/>
+  <tocsect2 name="19.6 Special Functions" url="chapters_19.html#SEC396"/>
+  <tocsect2 name="19.7 Known Maximum Errors in Math Functions" url="chapters_19.html#SEC397"/>
+  <tocsect2 name="19.8 Pseudo-Random Numbers" url="chapters_19.html#SEC398">
+    <tocsect3 name="19.8.1 ISO C Random Number Functions" url="chapters_19.html#SEC399"/>
+    <tocsect3 name="19.8.2 BSD Random Number Functions" url="chapters_19.html#SEC400"/>
+    <tocsect3 name="19.8.3 SVID Random Number Function" url="chapters_19.html#SEC401"/>
+  </tocsect2>
+  <tocsect2 name="19.9 Is Fast Code or Small Code preferred?" url="chapters_19.html#SEC402"/>
+</tocsect1>
+<tocsect1 name="20. Arithmetic Functions" url="chapters_20.html#SEC403">
+  <tocsect2 name="20.1 Integers" url="chapters_20.html#SEC404"/>
+  <tocsect2 name="20.2 Integer Division" url="chapters_20.html#SEC405"/>
+  <tocsect2 name="20.3 Floating Point Numbers" url="chapters_20.html#SEC406"/>
+  <tocsect2 name="20.4 Floating-Point Number Classification Functions" url="chapters_20.html#SEC407"/>
+  <tocsect2 name="20.5 Errors in Floating-Point Calculations" url="chapters_20.html#SEC408">
+    <tocsect3 name="20.5.1 FP Exceptions" url="chapters_20.html#SEC409"/>
+    <tocsect3 name="20.5.2 Infinity and NaN" url="chapters_20.html#SEC410"/>
+    <tocsect3 name="20.5.3 Examining the FPU status word" url="chapters_20.html#SEC411"/>
+    <tocsect3 name="20.5.4 Error Reporting by Mathematical Functions" url="chapters_20.html#SEC412"/>
+  </tocsect2>
+  <tocsect2 name="20.6 Rounding Modes" url="chapters_20.html#SEC413"/>
+  <tocsect2 name="20.7 Floating-Point Control Functions" url="chapters_20.html#SEC414"/>
+  <tocsect2 name="20.8 Arithmetic Functions" url="chapters_20.html#SEC415">
+    <tocsect3 name="20.8.1 Absolute Value" url="chapters_20.html#SEC416"/>
+    <tocsect3 name="20.8.2 Normalization Functions" url="chapters_20.html#SEC417"/>
+    <tocsect3 name="20.8.3 Rounding Functions" url="chapters_20.html#SEC418"/>
+    <tocsect3 name="20.8.4 Remainder Functions" url="chapters_20.html#SEC419"/>
+    <tocsect3 name="20.8.5 Setting and modifying single bits of FP values" url="chapters_20.html#SEC420"/>
+    <tocsect3 name="20.8.6 Floating-Point Comparison Functions" url="chapters_20.html#SEC421"/>
+    <tocsect3 name="20.8.7 Miscellaneous FP arithmetic functions" url="chapters_20.html#SEC422"/>
+  </tocsect2>
+  <tocsect2 name="20.9 Complex Numbers" url="chapters_20.html#SEC423"/>
+  <tocsect2 name="20.10 Projections, Conjugates, and Decomposing of Complex Numbers" url="chapters_20.html#SEC424"/>
+  <tocsect2 name="20.11 Parsing of Numbers" url="chapters_20.html#SEC425">
+    <tocsect3 name="20.11.1 Parsing of Integers" url="chapters_20.html#SEC426"/>
+    <tocsect3 name="20.11.2 Parsing of Floats" url="chapters_20.html#SEC427"/>
+  </tocsect2>
+  <tocsect2 name="20.12 Old-fashioned System V number-to-string functions" url="chapters_20.html#SEC428"/>
+</tocsect1>
+<tocsect1 name="21. Date and Time" url="chapters_21.html#SEC429">
+  <tocsect2 name="21.1 Time Basics" url="chapters_21.html#SEC430"/>
+  <tocsect2 name="21.2 Elapsed Time" url="chapters_21.html#SEC431"/>
+  <tocsect2 name="21.3 Processor And CPU Time" url="chapters_21.html#SEC432">
+    <tocsect3 name="21.3.1 CPU Time Inquiry" url="chapters_21.html#SEC433"/>
+    <tocsect3 name="21.3.2 Processor Time Inquiry" url="chapters_21.html#SEC434"/>
+  </tocsect2>
+  <tocsect2 name="21.4 Calendar Time" url="chapters_21.html#SEC435">
+    <tocsect3 name="21.4.1 Simple Calendar Time" url="chapters_21.html#SEC436"/>
+    <tocsect3 name="21.4.2 High-Resolution Calendar" url="chapters_21.html#SEC437"/>
+    <tocsect3 name="21.4.3 Broken-down Time" url="chapters_21.html#SEC438"/>
+    <tocsect3 name="21.4.4 High Accuracy Clock" url="chapters_21.html#SEC439"/>
+    <tocsect3 name="21.4.5 Formatting Calendar Time" url="chapters_21.html#SEC440"/>
+    <tocsect3 name="21.4.6 Convert textual time and date information back" url="chapters_21.html#SEC441">
+      <tocsect4 name="21.4.6.1 Interpret string according to given format" url="chapters_21.html#SEC442"/>
+      <tocsect4 name="21.4.6.2 A More User-friendly Way to Parse Times and Dates" url="chapters_21.html#SEC443"/>
+    </tocsect3>
+    <tocsect3 name="21.4.7 Specifying the Time Zone with TZ" url="chapters_21.html#SEC444"/>
+    <tocsect3 name="21.4.8 Functions and Variables for Time Zones" url="chapters_21.html#SEC445"/>
+    <tocsect3 name="21.4.9 Time Functions Example" url="chapters_21.html#SEC446"/>
+  </tocsect2>
+  <tocsect2 name="21.5 Setting an Alarm" url="chapters_21.html#SEC447"/>
+  <tocsect2 name="21.6 Sleeping" url="chapters_21.html#SEC448"/>
+</tocsect1>
+<tocsect1 name="22. Resource Usage And Limitation" url="chapters_22.html#SEC449">
+  <tocsect2 name="22.1 Resource Usage" url="chapters_22.html#SEC450"/>
+  <tocsect2 name="22.2 Limiting Resource Usage" url="chapters_22.html#SEC451"/>
+  <tocsect2 name="22.3 Process CPU Priority And Scheduling" url="chapters_22.html#SEC452">
+    <tocsect3 name="22.3.1 Absolute Priority" url="chapters_22.html#SEC453">
+      <tocsect4 name="22.3.1.1 Using Absolute Priority" url="chapters_22.html#SEC454"/>
+    </tocsect3>
+    <tocsect3 name="22.3.2 Realtime Scheduling" url="chapters_22.html#SEC455"/>
+    <tocsect3 name="22.3.3 Basic Scheduling Functions" url="chapters_22.html#SEC456"/>
+    <tocsect3 name="22.3.4 Traditional Scheduling" url="chapters_22.html#SEC457">
+      <tocsect4 name="22.3.4.1 Introduction To Traditional Scheduling" url="chapters_22.html#SEC458"/>
+      <tocsect4 name="22.3.4.2 Functions For Traditional Scheduling" url="chapters_22.html#SEC459"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="22.4 Querying memory available resources" url="chapters_22.html#SEC460">
+    <tocsect3 name="22.4.1 Overview about traditional Unix memory handling" url="chapters_22.html#SEC461"/>
+    <tocsect3 name="22.4.2 How to get information about the memory subsystem?" url="chapters_22.html#SEC462"/>
+  </tocsect2>
+  <tocsect2 name="22.5 Learn about the processors available" url="chapters_22.html#SEC463"/>
+</tocsect1>
+<tocsect1 name="23. Non-Local Exits" url="chapters_23.html#SEC464">
+  <tocsect2 name="23.1 Introduction to Non-Local Exits" url="chapters_23.html#SEC465"/>
+  <tocsect2 name="23.2 Details of Non-Local Exits" url="chapters_23.html#SEC466"/>
+  <tocsect2 name="23.3 Non-Local Exits and Signals" url="chapters_23.html#SEC467"/>
+  <tocsect2 name="23.4 Complete Context Control" url="chapters_23.html#SEC468"/>
+</tocsect1>
+<tocsect1 name="24. Signal Handling" url="chapters_24.html#SEC470">
+  <tocsect2 name="24.1 Basic Concepts of Signals" url="chapters_24.html#SEC471">
+    <tocsect3 name="24.1.1 Some Kinds of Signals" url="chapters_24.html#SEC472"/>
+    <tocsect3 name="24.1.2 Concepts of Signal Generation" url="chapters_24.html#SEC473"/>
+    <tocsect3 name="24.1.3 How Signals Are Delivered" url="chapters_24.html#SEC474"/>
+  </tocsect2>
+  <tocsect2 name="24.2 Standard Signals" url="chapters_24.html#SEC475">
+    <tocsect3 name="24.2.1 Program Error Signals" url="chapters_24.html#SEC476"/>
+    <tocsect3 name="24.2.2 Termination Signals" url="chapters_24.html#SEC477"/>
+    <tocsect3 name="24.2.3 Alarm Signals" url="chapters_24.html#SEC478"/>
+    <tocsect3 name="24.2.4 Asynchronous I/O Signals" url="chapters_24.html#SEC479"/>
+    <tocsect3 name="24.2.5 Job Control Signals" url="chapters_24.html#SEC480"/>
+    <tocsect3 name="24.2.6 Operation Error Signals" url="chapters_24.html#SEC481"/>
+    <tocsect3 name="24.2.7 Miscellaneous Signals" url="chapters_24.html#SEC482"/>
+    <tocsect3 name="24.2.8 Signal Messages" url="chapters_24.html#SEC483"/>
+  </tocsect2>
+  <tocsect2 name="24.3 Specifying Signal Actions" url="chapters_24.html#SEC484">
+    <tocsect3 name="24.3.1 Basic Signal Handling" url="chapters_24.html#SEC485"/>
+    <tocsect3 name="24.3.2 Advanced Signal Handling" url="chapters_24.html#SEC486"/>
+    <tocsect3 name="24.3.3 Interaction of signal and sigaction" url="chapters_24.html#SEC487"/>
+    <tocsect3 name="24.3.4 sigaction Function Example" url="chapters_24.html#SEC488"/>
+    <tocsect3 name="24.3.5 Flags for sigaction" url="chapters_24.html#SEC489"/>
+    <tocsect3 name="24.3.6 Initial Signal Actions" url="chapters_24.html#SEC490"/>
+  </tocsect2>
+  <tocsect2 name="24.4 Defining Signal Handlers" url="chapters_24.html#SEC491">
+    <tocsect3 name="24.4.1 Signal Handlers that Return" url="chapters_24.html#SEC492"/>
+    <tocsect3 name="24.4.2 Handlers That Terminate the Process" url="chapters_24.html#SEC493"/>
+    <tocsect3 name="24.4.3 Nonlocal Control Transfer in Handlers" url="chapters_24.html#SEC494"/>
+    <tocsect3 name="24.4.4 Signals Arriving While a Handler Runs" url="chapters_24.html#SEC495"/>
+    <tocsect3 name="24.4.5 Signals Close Together Merge into One" url="chapters_24.html#SEC496"/>
+    <tocsect3 name="24.4.6 Signal Handling and Nonreentrant Functions" url="chapters_24.html#SEC497"/>
+    <tocsect3 name="24.4.7 Atomic Data Access and Signal Handling" url="chapters_24.html#SEC498">
+      <tocsect4 name="24.4.7.1 Problems with Non-Atomic Access" url="chapters_24.html#SEC499"/>
+      <tocsect4 name="24.4.7.2 Atomic Types" url="chapters_24.html#SEC500"/>
+      <tocsect4 name="24.4.7.3 Atomic Usage Patterns" url="chapters_24.html#SEC501"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="24.5 Primitives Interrupted by Signals" url="chapters_24.html#SEC502"/>
+  <tocsect2 name="24.6 Generating Signals" url="chapters_24.html#SEC503">
+    <tocsect3 name="24.6.1 Signaling Yourself" url="chapters_24.html#SEC504"/>
+    <tocsect3 name="24.6.2 Signaling Another Process" url="chapters_24.html#SEC505"/>
+    <tocsect3 name="24.6.3 Permission for using kill" url="chapters_24.html#SEC506"/>
+    <tocsect3 name="24.6.4 Using kill for Communication" url="chapters_24.html#SEC507"/>
+  </tocsect2>
+  <tocsect2 name="24.7 Blocking Signals" url="chapters_24.html#SEC508">
+    <tocsect3 name="24.7.1 Why Blocking Signals is Useful" url="chapters_24.html#SEC509"/>
+    <tocsect3 name="24.7.2 Signal Sets" url="chapters_24.html#SEC510"/>
+    <tocsect3 name="24.7.3 Process Signal Mask" url="chapters_24.html#SEC511"/>
+    <tocsect3 name="24.7.4 Blocking to Test for Delivery of a Signal" url="chapters_24.html#SEC512"/>
+    <tocsect3 name="24.7.5 Blocking Signals for a Handler" url="chapters_24.html#SEC513"/>
+    <tocsect3 name="24.7.6 Checking for Pending Signals" url="chapters_24.html#SEC514"/>
+    <tocsect3 name="24.7.7 Remembering a Signal to Act On Later" url="chapters_24.html#SEC515"/>
+  </tocsect2>
+  <tocsect2 name="24.8 Waiting for a Signal" url="chapters_24.html#SEC516">
+    <tocsect3 name="24.8.1 Using pause" url="chapters_24.html#SEC517"/>
+    <tocsect3 name="24.8.2 Problems with pause" url="chapters_24.html#SEC518"/>
+    <tocsect3 name="24.8.3 Using sigsuspend" url="chapters_24.html#SEC519"/>
+  </tocsect2>
+  <tocsect2 name="24.9 Using a Separate Signal Stack" url="chapters_24.html#SEC520"/>
+  <tocsect2 name="24.10 BSD Signal Handling" url="chapters_24.html#SEC521">
+    <tocsect3 name="24.10.1 BSD Function to Establish a Handler" url="chapters_24.html#SEC522"/>
+    <tocsect3 name="24.10.2 BSD Functions for Blocking Signals" url="chapters_24.html#SEC523"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="25. The Basic Program/System Interface" url="chapters_25.html#SEC524">
+  <tocsect2 name="25.1 Program Arguments" url="chapters_25.html#SEC525">
+    <tocsect3 name="25.1.1 Program Argument Syntax Conventions" url="chapters_25.html#SEC526"/>
+    <tocsect3 name="25.1.2 Parsing Program Arguments" url="chapters_25.html#SEC527"/>
+  </tocsect2>
+  <tocsect2 name="25.2 Parsing program options using getopt" url="chapters_25.html#SEC528">
+    <tocsect3 name="25.2.1 Using the getopt function" url="chapters_25.html#SEC529"/>
+    <tocsect3 name="25.2.2 Example of Parsing Arguments with getopt" url="chapters_25.html#SEC530"/>
+    <tocsect3 name="25.2.3 Parsing Long Options with getopt_long" url="chapters_25.html#SEC531"/>
+    <tocsect3 name="25.2.4 Example of Parsing Long Options with getopt_long" url="chapters_25.html#SEC532"/>
+  </tocsect2>
+  <tocsect2 name="25.3 Parsing Program Options with Argp" url="chapters_25.html#SEC533">
+    <tocsect3 name="25.3.1 The argp_parse Function" url="chapters_25.html#SEC534"/>
+    <tocsect3 name="25.3.2 Argp Global Variables" url="chapters_25.html#SEC535"/>
+    <tocsect3 name="25.3.3 Specifying Argp Parsers" url="chapters_25.html#SEC536"/>
+    <tocsect3 name="25.3.4 Specifying Options in an Argp Parser" url="chapters_25.html#SEC537">
+      <tocsect4 name="25.3.4.1 Flags for Argp Options" url="chapters_25.html#SEC538"/>
+    </tocsect3>
+    <tocsect3 name="25.3.5 Argp Parser Functions" url="chapters_25.html#SEC539">
+      <tocsect4 name="25.3.5.1 Special Keys for Argp Parser Functions" url="chapters_25.html#SEC540"/>
+      <tocsect4 name="25.3.5.2 Functions For Use in Argp Parsers" url="chapters_25.html#SEC541"/>
+      <tocsect4 name="25.3.5.3 Argp Parsing State" url="chapters_25.html#SEC542"/>
+    </tocsect3>
+    <tocsect3 name="25.3.6 Combining Multiple Argp Parsers" url="chapters_25.html#SEC543"/>
+    <tocsect3 name="25.3.7 Flags for argp_parse" url="chapters_25.html#SEC544"/>
+    <tocsect3 name="25.3.8 Customizing Argp Help Output" url="chapters_25.html#SEC545">
+      <tocsect4 name="25.3.8.1 Special Keys for Argp Help Filter Functions" url="chapters_25.html#SEC546"/>
+    </tocsect3>
+    <tocsect3 name="25.3.9 The argp_help Function" url="chapters_25.html#SEC547"/>
+    <tocsect3 name="25.3.10 Flags for the argp_help Function" url="chapters_25.html#SEC548"/>
+    <tocsect3 name="25.3.11 Argp Examples" url="chapters_25.html#SEC549">
+      <tocsect4 name="25.3.11.1 A Minimal Program Using Argp" url="chapters_25.html#SEC550"/>
+      <tocsect4 name="25.3.11.2 A Program Using Argp with Only Default Options" url="chapters_25.html#SEC551"/>
+      <tocsect4 name="25.3.11.3 A Program Using Argp with User Options" url="chapters_25.html#SEC552"/>
+      <tocsect4 name="25.3.11.4 A Program Using Multiple Combined Argp Parsers" url="chapters_25.html#SEC553"/>
+    </tocsect3>
+    <tocsect3 name="25.3.12 Argp User Customization" url="chapters_25.html#SEC554">
+      <tocsect4 name="25.3.12.1 Parsing of Suboptions" url="chapters_25.html#SEC555"/>
+    </tocsect3>
+    <tocsect3 name="25.3.13 Parsing of Suboptions Example" url="chapters_25.html#SEC556"/>
+  </tocsect2>
+  <tocsect2 name="25.4 Environment Variables" url="chapters_25.html#SEC557">
+    <tocsect3 name="25.4.1 Environment Access" url="chapters_25.html#SEC558"/>
+    <tocsect3 name="25.4.2 Standard Environment Variables" url="chapters_25.html#SEC559"/>
+  </tocsect2>
+  <tocsect2 name="25.5 System Calls" url="chapters_25.html#SEC560"/>
+  <tocsect2 name="25.6 Program Termination" url="chapters_25.html#SEC561">
+    <tocsect3 name="25.6.1 Normal Termination" url="chapters_25.html#SEC562"/>
+    <tocsect3 name="25.6.2 Exit Status" url="chapters_25.html#SEC563"/>
+    <tocsect3 name="25.6.3 Cleanups on Exit" url="chapters_25.html#SEC564"/>
+    <tocsect3 name="25.6.4 Aborting a Program" url="chapters_25.html#SEC565"/>
+    <tocsect3 name="25.6.5 Termination Internals" url="chapters_25.html#SEC566"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="26. Processes" url="chapters_26.html#SEC567">
+  <tocsect2 name="26.1 Running a Command" url="chapters_26.html#SEC568"/>
+  <tocsect2 name="26.2 Process Creation Concepts" url="chapters_26.html#SEC569"/>
+  <tocsect2 name="26.3 Process Identification" url="chapters_26.html#SEC570"/>
+  <tocsect2 name="26.4 Creating a Process" url="chapters_26.html#SEC571"/>
+  <tocsect2 name="26.5 Executing a File" url="chapters_26.html#SEC572"/>
+  <tocsect2 name="26.6 Process Completion" url="chapters_26.html#SEC573"/>
+  <tocsect2 name="26.7 Process Completion Status" url="chapters_26.html#SEC574"/>
+  <tocsect2 name="26.8 BSD Process Wait Functions" url="chapters_26.html#SEC575"/>
+  <tocsect2 name="26.9 Process Creation Example" url="chapters_26.html#SEC576"/>
+</tocsect1>
+<tocsect1 name="27. Job Control" url="chapters_27.html#SEC577">
+  <tocsect2 name="27.1 Concepts of Job Control" url="chapters_27.html#SEC578"/>
+  <tocsect2 name="27.2 Job Control is Optional" url="chapters_27.html#SEC579"/>
+  <tocsect2 name="27.3 Controlling Terminal of a Process" url="chapters_27.html#SEC580"/>
+  <tocsect2 name="27.4 Access to the Controlling Terminal" url="chapters_27.html#SEC581"/>
+  <tocsect2 name="27.5 Orphaned Process Groups" url="chapters_27.html#SEC582"/>
+  <tocsect2 name="27.6 Implementing a Job Control Shell" url="chapters_27.html#SEC583">
+    <tocsect3 name="27.6.1 Data Structures for the Shell" url="chapters_27.html#SEC584"/>
+    <tocsect3 name="27.6.2 Initializing the Shell" url="chapters_27.html#SEC585"/>
+    <tocsect3 name="27.6.3 Launching Jobs" url="chapters_27.html#SEC586"/>
+    <tocsect3 name="27.6.4 Foreground and Background" url="chapters_27.html#SEC587"/>
+    <tocsect3 name="27.6.5 Stopped and Terminated Jobs" url="chapters_27.html#SEC588"/>
+    <tocsect3 name="27.6.6 Continuing Stopped Jobs" url="chapters_27.html#SEC589"/>
+    <tocsect3 name="27.6.7 The Missing Pieces" url="chapters_27.html#SEC590"/>
+  </tocsect2>
+  <tocsect2 name="27.7 Functions for Job Control" url="chapters_27.html#SEC591">
+    <tocsect3 name="27.7.1 Identifying the Controlling Terminal" url="chapters_27.html#SEC592"/>
+    <tocsect3 name="27.7.2 Process Group Functions" url="chapters_27.html#SEC593"/>
+    <tocsect3 name="27.7.3 Functions for Controlling Terminal Access" url="chapters_27.html#SEC594"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="28. System Databases and Name Service Switch" url="chapters_28.html#SEC595">
+  <tocsect2 name="28.1 NSS Basics" url="chapters_28.html#SEC596"/>
+  <tocsect2 name="28.2 The NSS Configuration File" url="chapters_28.html#SEC597">
+    <tocsect3 name="28.2.1 Services in the NSS configuration File" url="chapters_28.html#SEC598"/>
+    <tocsect3 name="28.2.2 Actions in the NSS configuration" url="chapters_28.html#SEC599"/>
+    <tocsect3 name="28.2.3 Notes on the NSS Configuration File" url="chapters_28.html#SEC600"/>
+  </tocsect2>
+  <tocsect2 name="28.3 NSS Module Internals" url="chapters_28.html#SEC601">
+    <tocsect3 name="28.3.1 The Naming Scheme of the NSS Modules" url="chapters_28.html#SEC602"/>
+    <tocsect3 name="28.3.2 The Interface of the Function in NSS Modules" url="chapters_28.html#SEC603"/>
+  </tocsect2>
+  <tocsect2 name="28.4 Extending NSS" url="chapters_28.html#SEC604">
+    <tocsect3 name="28.4.1 Adding another Service to NSS" url="chapters_28.html#SEC605"/>
+    <tocsect3 name="28.4.2 Internals of the NSS Module Functions" url="chapters_28.html#SEC606"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="29. Users and Groups" url="chapters_29.html#SEC607">
+  <tocsect2 name="29.1 User and Group IDs" url="chapters_29.html#SEC608"/>
+  <tocsect2 name="29.2 The Persona of a Process" url="chapters_29.html#SEC609"/>
+  <tocsect2 name="29.3 Why Change the Persona of a Process?" url="chapters_29.html#SEC610"/>
+  <tocsect2 name="29.4 How an Application Can Change Persona" url="chapters_29.html#SEC611"/>
+  <tocsect2 name="29.5 Reading the Persona of a Process" url="chapters_29.html#SEC612"/>
+  <tocsect2 name="29.6 Setting the User ID" url="chapters_29.html#SEC613"/>
+  <tocsect2 name="29.7 Setting the Group IDs" url="chapters_29.html#SEC614"/>
+  <tocsect2 name="29.8 Enabling and Disabling Setuid Access" url="chapters_29.html#SEC615"/>
+  <tocsect2 name="29.9 Setuid Program Example" url="chapters_29.html#SEC616"/>
+  <tocsect2 name="29.10 Tips for Writing Setuid Programs" url="chapters_29.html#SEC617"/>
+  <tocsect2 name="29.11 Identifying Who Logged In" url="chapters_29.html#SEC618"/>
+  <tocsect2 name="29.12 The User Accounting Database" url="chapters_29.html#SEC619">
+    <tocsect3 name="29.12.1 Manipulating the User Accounting Database" url="chapters_29.html#SEC620"/>
+    <tocsect3 name="29.12.2 XPG User Accounting Database Functions" url="chapters_29.html#SEC621"/>
+    <tocsect3 name="29.12.3 Logging In and Out" url="chapters_29.html#SEC622"/>
+  </tocsect2>
+  <tocsect2 name="29.13 User Database" url="chapters_29.html#SEC623">
+    <tocsect3 name="29.13.1 The Data Structure that Describes a User" url="chapters_29.html#SEC624"/>
+    <tocsect3 name="29.13.2 Looking Up One User" url="chapters_29.html#SEC625"/>
+    <tocsect3 name="29.13.3 Scanning the List of All Users" url="chapters_29.html#SEC626"/>
+    <tocsect3 name="29.13.4 Writing a User Entry" url="chapters_29.html#SEC627"/>
+  </tocsect2>
+  <tocsect2 name="29.14 Group Database" url="chapters_29.html#SEC628">
+    <tocsect3 name="29.14.1 The Data Structure for a Group" url="chapters_29.html#SEC629"/>
+    <tocsect3 name="29.14.2 Looking Up One Group" url="chapters_29.html#SEC630"/>
+    <tocsect3 name="29.14.3 Scanning the List of All Groups" url="chapters_29.html#SEC631"/>
+  </tocsect2>
+  <tocsect2 name="29.15 User and Group Database Example" url="chapters_29.html#SEC632"/>
+  <tocsect2 name="29.16 Netgroup Database" url="chapters_29.html#SEC633">
+    <tocsect3 name="29.16.1 Netgroup Data" url="chapters_29.html#SEC634"/>
+    <tocsect3 name="29.16.2 Looking up one Netgroup" url="chapters_29.html#SEC635"/>
+    <tocsect3 name="29.16.3 Testing for Netgroup Membership" url="chapters_29.html#SEC636"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="30. System Management" url="chapters_30.html#SEC637">
+  <tocsect2 name="30.1 Host Identification" url="chapters_30.html#SEC638"/>
+  <tocsect2 name="30.2 Platform Type Identification" url="chapters_30.html#SEC639"/>
+  <tocsect2 name="30.3 Controlling and Querying Mounts" url="chapters_30.html#SEC640">
+    <tocsect3 name="30.3.1 Mount Information" url="chapters_30.html#SEC641">
+      <tocsect4 name="30.3.1.1 The `fstab' file" url="chapters_30.html#SEC642"/>
+      <tocsect4 name="30.3.1.2 The `mtab' file" url="chapters_30.html#SEC643"/>
+      <tocsect4 name="30.3.1.3 Other (Non-libc) Sources of Mount Information" url="chapters_30.html#SEC644"/>
+    </tocsect3>
+    <tocsect3 name="30.3.2 Mount, Unmount, Remount" url="chapters_30.html#SEC645"/>
+  </tocsect2>
+  <tocsect2 name="30.4 System Parameters" url="chapters_30.html#SEC646"/>
+</tocsect1>
+<tocsect1 name="31. System Configuration Parameters" url="chapters_31.html#SEC647">
+  <tocsect2 name="31.1 General Capacity Limits" url="chapters_31.html#SEC648"/>
+  <tocsect2 name="31.2 Overall System Options" url="chapters_31.html#SEC649"/>
+  <tocsect2 name="31.3 Which Version of POSIX is Supported" url="chapters_31.html#SEC650"/>
+  <tocsect2 name="31.4 Using sysconf" url="chapters_31.html#SEC651">
+    <tocsect3 name="31.4.1 Definition of sysconf" url="chapters_31.html#SEC652"/>
+    <tocsect3 name="31.4.2 Constants for sysconf Parameters" url="chapters_31.html#SEC653"/>
+    <tocsect3 name="31.4.3 Examples of sysconf" url="chapters_31.html#SEC654"/>
+  </tocsect2>
+  <tocsect2 name="31.5 Minimum Values for General Capacity Limits" url="chapters_31.html#SEC655"/>
+  <tocsect2 name="31.6 Limits on File System Capacity" url="chapters_31.html#SEC656"/>
+  <tocsect2 name="31.7 Optional Features in File Support" url="chapters_31.html#SEC657"/>
+  <tocsect2 name="31.8 Minimum Values for File System Limits" url="chapters_31.html#SEC658"/>
+  <tocsect2 name="31.9 Using pathconf" url="chapters_31.html#SEC659"/>
+  <tocsect2 name="31.10 Utility Program Capacity Limits" url="chapters_31.html#SEC660"/>
+  <tocsect2 name="31.11 Minimum Values for Utility Limits" url="chapters_31.html#SEC661"/>
+  <tocsect2 name="31.12 String-Valued Parameters" url="chapters_31.html#SEC662"/>
+</tocsect1>
+<tocsect1 name="32. DES Encryption and Password Handling" url="chapters_32.html#SEC663">
+  <tocsect2 name="32.1 Legal Problems" url="chapters_32.html#SEC664"/>
+  <tocsect2 name="32.2 Reading Passwords" url="chapters_32.html#SEC665"/>
+  <tocsect2 name="32.3 Encrypting Passwords" url="chapters_32.html#SEC666"/>
+  <tocsect2 name="32.4 DES Encryption" url="chapters_32.html#SEC667"/>
+</tocsect1>
+<tocsect1 name="33. Debugging support" url="chapters_33.html#SEC668">
+  <tocsect2 name="33.1 Backtraces" url="chapters_33.html#SEC669"/>
+</tocsect1>
+<tocsect1 name="34. POSIX Threads" url="chapters_34.html#SEC670">
+  <tocsect2 name="34.1 Basic Thread Operations" url="chapters_34.html#SEC671"/>
+  <tocsect2 name="34.2 Thread Attributes" url="chapters_34.html#SEC672"/>
+  <tocsect2 name="34.3 Cancellation" url="chapters_34.html#SEC673"/>
+  <tocsect2 name="34.4 Cleanup Handlers" url="chapters_34.html#SEC674"/>
+  <tocsect2 name="34.5 Mutexes" url="chapters_34.html#SEC675"/>
+  <tocsect2 name="34.6 Condition Variables" url="chapters_34.html#SEC676"/>
+  <tocsect2 name="34.7 POSIX Semaphores" url="chapters_34.html#SEC677"/>
+  <tocsect2 name="34.8 Thread-Specific Data" url="chapters_34.html#SEC678"/>
+  <tocsect2 name="34.9 Threads and Signal Handling" url="chapters_34.html#SEC679"/>
+  <tocsect2 name="34.10 Threads and Fork" url="chapters_34.html#SEC680"/>
+  <tocsect2 name="34.11 Streams and Fork" url="chapters_34.html#SEC681"/>
+  <tocsect2 name="34.12 Miscellaneous Thread Functions" url="chapters_34.html#SEC682"/>
+</tocsect1>
+<tocsect1 name="A. C Language Facilities in the Library" url="chapters_35.html#SEC683">
+  <tocsect2 name="A.1 Explicitly Checking Internal Consistency" url="chapters_35.html#SEC684"/>
+  <tocsect2 name="A.2 Variadic Functions" url="chapters_35.html#SEC685">
+    <tocsect3 name="A.2.1 Why Variadic Functions are Used" url="chapters_35.html#SEC686"/>
+    <tocsect3 name="A.2.2 How Variadic Functions are Defined and Used" url="chapters_35.html#SEC687">
+      <tocsect4 name="A.2.2.1 Syntax for Variable Arguments" url="chapters_35.html#SEC688"/>
+      <tocsect4 name="A.2.2.2 Receiving the Argument Values" url="chapters_35.html#SEC689"/>
+      <tocsect4 name="A.2.2.3 How Many Arguments Were Supplied" url="chapters_35.html#SEC690"/>
+      <tocsect4 name="A.2.2.4 Calling Variadic Functions" url="chapters_35.html#SEC691"/>
+      <tocsect4 name="A.2.2.5 Argument Access Macros" url="chapters_35.html#SEC692"/>
+    </tocsect3>
+    <tocsect3 name="A.2.3 Example of a Variadic Function" url="chapters_35.html#SEC693">
+      <tocsect4 name="A.2.3.1 Old-Style Variadic Functions" url="chapters_35.html#SEC694"/>
+    </tocsect3>
+  </tocsect2>
+  <tocsect2 name="A.3 Null Pointer Constant" url="chapters_35.html#SEC695"/>
+  <tocsect2 name="A.4 Important Data Types" url="chapters_35.html#SEC696"/>
+  <tocsect2 name="A.5 Data Type Measurements" url="chapters_35.html#SEC697">
+    <tocsect3 name="A.5.1 Computing the Width of an Integer Data Type" url="chapters_35.html#SEC698"/>
+    <tocsect3 name="A.5.2 Range of an Integer Type" url="chapters_35.html#SEC699"/>
+    <tocsect3 name="A.5.3 Floating Type Macros" url="chapters_35.html#SEC700">
+      <tocsect4 name="A.5.3.1 Floating Point Representation Concepts" url="chapters_35.html#SEC701"/>
+      <tocsect4 name="A.5.3.2 Floating Point Parameters" url="chapters_35.html#SEC702"/>
+      <tocsect4 name="A.5.3.3 IEEE Floating Point" url="chapters_35.html#SEC703"/>
+    </tocsect3>
+    <tocsect3 name="A.5.4 Structure Field Offset Measurement" url="chapters_35.html#SEC704"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="B. Summary of Library Facilities" url="chapters_36.html#SEC705"/>
+<tocsect1 name="C. Installing the GNU C Library" url="chapters_37.html#SEC706">
+  <tocsect2 name="C.1 Configuring and compiling GNU Libc" url="chapters_37.html#SEC707"/>
+  <tocsect2 name="C.2 Installing the C Library" url="chapters_37.html#SEC708"/>
+  <tocsect2 name="C.3 Recommended Tools for Compilation" url="chapters_37.html#SEC709"/>
+  <tocsect2 name="C.4 Supported Configurations" url="chapters_37.html#SEC710"/>
+  <tocsect2 name="C.5 Specific advice for Linux systems" url="chapters_37.html#SEC711"/>
+  <tocsect2 name="C.6 Reporting Bugs" url="chapters_37.html#SEC712"/>
+</tocsect1>
+<tocsect1 name="D. Library Maintenance" url="chapters_38.html#SEC713">
+  <tocsect2 name="D.1 Adding New Functions" url="chapters_38.html#SEC714"/>
+  <tocsect2 name="D.2 Porting the GNU C Library" url="chapters_38.html#SEC715">
+    <tocsect3 name="D.2.1 Layout of the `sysdeps' Directory Hierarchy" url="chapters_38.html#SEC716"/>
+    <tocsect3 name="D.2.2 Porting the GNU C Library to Unix Systems" url="chapters_38.html#SEC717"/>
+  </tocsect2>
+</tocsect1>
+<tocsect1 name="E. Contributors to the GNU C Library" url="chapters_39.html#SEC718"/>
+</kdeveloptoc>
+
