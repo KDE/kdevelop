@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,6 +28,7 @@
 #include "trollprojectwidget.h"
 #include "trollprojectpart.h"
 #include "config.h"
+
 
 typedef KGenericFactory<TrollProjectPart> TrollProjectFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevtrollproject, TrollProjectFactory( "kdevtrollproject" ) );
@@ -85,15 +86,28 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 }
 
 
-void TrollProjectPart::openProject(const QString &dirName)
+void TrollProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
     m_widget->openProject(dirName);
+    m_projectName = projectName;
 }
 
 
 void TrollProjectPart::closeProject()
 {
     m_widget->closeProject();
+}
+
+
+QString TrollProjectPart::projectDirectory()
+{
+    return m_widget->projectDirectory();
+}
+
+
+QString TrollProjectPart::projectName()
+{
+    return m_projectName;
 }
 
 
@@ -105,9 +119,11 @@ QString TrollProjectPart::mainProgram()
 }
 
 
-QString TrollProjectPart::projectDirectory()
+QString TrollProjectPart::activeDirectory()
 {
-    return m_widget->projectDirectory();
+    QDomDocument &dom = *projectDom();
+
+    return DomUtil::readEntry(dom, "/kdevtrollproject/general/activedir");
 }
 
 

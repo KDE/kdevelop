@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,11 +31,13 @@ public:
     ~AutoProjectPart();
 
 protected:
-    virtual void openProject(const QString &dirName);
+    virtual void openProject(const QString &dirName, const QString &projectName);
     virtual void closeProject();
 
-    virtual QString mainProgram();
     virtual QString projectDirectory();
+    virtual QString projectName();
+    virtual QString mainProgram();
+    virtual QString activeDirectory();
     virtual QStringList allSourceFiles();
 
 private slots:
@@ -54,6 +56,7 @@ private:
     void startMakeCommand(const QString &dir, const QString &target);
     
     QGuardedPtr<AutoProjectWidget> m_widget;
+    QString m_projectName;
     friend class AutoProjectWidget;
     friend class CompilerOptionsWidget;
     friend class AddTranslationDialog;
@@ -62,4 +65,3 @@ private:
 typedef KGenericFactory<AutoProjectPart> AutoProjectFactory;
 
 #endif
-

@@ -213,7 +213,7 @@ void PartController::setLineNumber(int lineNum)
 
 KParts::Factory *PartController::findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName)
 {
-  kdDebug() << "Preferred Name: " << preferredName << endl;
+  kdDebug(9000) << "Preferred Name: " << preferredName << endl;
   KTrader::OfferList offers = KTrader::self()->query(mimeType, QString("'%1' in ServiceTypes").arg(partType));
 
   if (offers.count() > 0)
@@ -627,7 +627,7 @@ void PartController::clearExecutionPoint()
     for (KTextEditor::Mark *mark = iface->marks().first(); mark != 0; mark = iface->marks().next())
       if (mark->type == KTextEditor::MarkInterface::markType05)
       {
-	kdDebug() << "removing mark in line " << mark->line << " from: " << ((KParts::ReadOnlyPart*)it.current()->part())->url().url() << endl;
+	kdDebug(9000) << "removing mark in line " << mark->line << " from: " << ((KParts::ReadOnlyPart*)it.current()->part())->url().url() << endl;
 	iface->removeMark(mark->line, mark->type);
       }
   }
@@ -650,7 +650,7 @@ void PartController::gotoExecutionPoint(const KURL &url, int lineNum)
   KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(part);
   if (iface)
   {
-    kdDebug() << "set execution point to " << lineNum << endl;
+    kdDebug(9000) << "set execution point to " << lineNum << endl;
     iface->setMark(lineNum, KTextEditor::MarkInterface::markType05);
   }
 }

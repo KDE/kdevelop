@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,6 +32,7 @@
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
 #include "config.h"
+
 
 K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) );
 
@@ -94,11 +95,11 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
         action->setEnabled(false);
 
     QDomDocument &dom = *projectDom();
-    if(DomUtil::readEntry(dom, "/kdevautoproject/run/default_implementation") != "no"){
-      //ok we handle the execute in this kpart
-      action = new KAction( i18n("Execute program"), "exec", 0,
-			    this, SLOT(slotExecute()),
-			    actionCollection(), "build_execute" );
+    if (DomUtil::readBoolEntry(dom, "/kdevautoproject/run/default_implementation")) {
+        //ok we handle the execute in this kpart
+        action = new KAction( i18n("Execute program"), "exec", 0,
+                              this, SLOT(slotExecute()),
+                              actionCollection(), "build_execute" );
     }
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
@@ -126,27 +127,40 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
     ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
     QDomDocument &dom = *projectDom();
-    if(DomUtil::readEntry(dom, "/kdevautoproject/run/default_implementation") != "no"){
-      //ok we handle the execute in this kpart
-      vbox = dlg->addVBoxPage(i18n("Run Options"));
-      RunOptionsWidget *w3 = new RunOptionsWidget(this, vbox);
-      connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
+    if (DomUtil::readEntry(dom, "/kdevautoproject/run/default_implementation")) {
+        //ok we handle the execute in this kpart
+        vbox = dlg->addVBoxPage(i18n("Run Options"));
+        RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", vbox);
+        connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
     }
     vbox = dlg->addVBoxPage(i18n("Make Options"));
-    MakeOptionsWidget *w4 = new MakeOptionsWidget(this, vbox);
+    MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevautoproject", vbox);
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
 }
 
 
-void AutoProjectPart::openProject(const QString &dirName)
+void AutoProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
     m_widget->openProject(dirName);
+    m_projectName = projectName;
 }
 
 
 void AutoProjectPart::closeProject()
 {
     m_widget->closeProject();
+}
+
+
+QString AutoProjectPart::projectDirectory()
+{
+    return m_widget->projectDirectory();
+}
+
+
+QString AutoProjectPart::projectName()
+{
+    return m_projectName;
 }
 
 
@@ -158,9 +172,11 @@ QString AutoProjectPart::mainProgram()
 }
 
 
-QString AutoProjectPart::projectDirectory()
+QString AutoProjectPart::activeDirectory()
 {
-    return m_widget->projectDirectory();
+    QDomDocument &dom = *projectDom();
+
+    return DomUtil::readEntry(dom, "/kdevautoproject/general/activedir");
 }
 
 
@@ -325,21 +341,17 @@ void AutoProjectPart::slotExecute()
         terminal += "\";read'";
         program = terminal;
     }
-    
-    QDomElement docEl = projectDom()->documentElement();
-    QDomElement autoprojectEl = docEl.namedItem("kdevautoproject").toElement();
-    QDomElement envvarsEl = autoprojectEl.namedItem("envvars").toElement();
-    
+
+    DomUtil::PairList envvars = 
+        DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/envvars", "envvar", "name", "value");
+
     QString environstr;
-    QDomElement childEl = envvarsEl.firstChild().toElement();
-    while (!childEl.isNull()) {
-        if (childEl.tagName() == "envvar") {
-            environstr += childEl.attribute("name");
-            environstr += "=";
-            environstr += childEl.attribute("value");
-            environstr += " ";
-        }
-        childEl = childEl.nextSibling().toElement();
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+        environstr += (*it).second;
+        environstr += " ";
     }
     program.prepend(environstr);
 

@@ -13,6 +13,9 @@
   </ignoreparts>
  </general>
  <kdevscriptproject>
+  <general>
+   <activedir>src</activedir>
+  </general>
   <run>
    <mainprogram>$APPNAMELC$.py</mainprogram>
   </run>

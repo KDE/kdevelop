@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,30 +9,35 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _RUNOPTIONSWIDGET_H_
-#define _RUNOPTIONSWIDGET_H_
+#ifndef _FILEGROUPSCONFIGWIDGET_H_
+#define _FILEGROUPSCONFIGWIDGET_H_
 
-#include "runoptionswidgetbase.h"
+#include "filegroupsconfigwidgetbase.h"
 
-class AutoProjectPart;
+class FileViewPart;
 
 
-class RunOptionsWidget : public RunOptionsWidgetBase
+class FileGroupsConfigWidget : public FileGroupsConfigWidgetBase
 {
     Q_OBJECT
-    
+
 public:
-    RunOptionsWidget( CustomProjectPart *part, QWidget *parent=0, const char *name=0 );
-    ~RunOptionsWidget();
+    FileGroupsConfigWidget( FileViewPart *widget, QWidget *parent, const char *name=0 );
+    ~FileGroupsConfigWidget();
 
 public slots:
-    void accept();
+     void accept();
 
 private:
-    virtual void addVarClicked();
-    virtual void removeVarClicked();
+    virtual void addGroup();
+    virtual void removeGroup();
+    virtual void moveUp();
+    virtual void moveDown();
     
-    CustomProjectPart *m_part;
+    void readConfig();
+    void storeConfig();
+    
+    FileViewPart *m_part;
 };
 
 #endif

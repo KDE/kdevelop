@@ -15,6 +15,7 @@
  </general>
  <kdevautoproject>
   <general>
+   <activedir>src</activedir>
   </general>
  </kdevautoproject>
  <kdevfileview>

@@ -49,3 +49,5 @@ QString AddTemplateDialog::suffixes() const
 {
     return comboSuffixes->currentText();
 }
+
+#include "addtemplatedlg.moc"

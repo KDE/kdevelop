@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,35 +9,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWCONFIGWIDGET_H_
-#define _FILEVIEWCONFIGWIDGET_H_
+#ifndef _MAKEOPTIONSWIDGET_H_
+#define _MAKEOPTIONSWIDGET_H_
 
-#include "fileviewconfigwidgetbase.h"
+#include "makeoptionswidgetbase.h"
 
-class FileViewPart;
+#include <qdom.h>
 
 
-class FileViewConfigWidget : public FileViewConfigWidgetBase
+class MakeOptionsWidget : public MakeOptionsWidgetBase
 {
     Q_OBJECT
-
+    
 public:
-    FileViewConfigWidget( FileViewPart *widget, QWidget *parent, const char *name=0 );
-    ~FileViewConfigWidget();
+    MakeOptionsWidget( QDomDocument &dom, const QString &configGroup,
+                       QWidget *parent=0, const char *name=0 );
+    ~MakeOptionsWidget();
 
 public slots:
-     void accept();
+    void accept();
 
 private:
-    virtual void addGroup();
-    virtual void removeGroup();
-    virtual void moveUp();
-    virtual void moveDown();
-    
-    void readConfig();
-    void storeConfig();
-    
-    FileViewPart *m_part;
+    QDomDocument &m_dom;
+    QString m_configGroup;
 };
 
 #endif

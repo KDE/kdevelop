@@ -13,8 +13,9 @@
    <keyword>kioslave</keyword>
   </keywords>
  </general>
- <kdevautoproject>
+<kdevautoproject>
   <general>
+   <activedir>src</activedir>
   </general>
  </kdevautoproject>
  <kdevfileview>

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,20 +30,19 @@ public:
     ~ScriptProjectPart();
 
 protected:
-    virtual void openProject(const QString &dirName);
+    virtual void openProject(const QString &dirName, const QString &projectName);
     virtual void closeProject();
 
-    virtual QString mainProgram();
     virtual QString projectDirectory();
+    virtual QString projectName();
+    virtual QString mainProgram();
+    virtual QString activeDirectory();
     virtual QStringList allSourceFiles();
 
-private slots:
-    void slotItemExecuted(QListViewItem *item);
-
 private:
-    QGuardedPtr<ScriptProjectWidget> m_widget;
-    friend class ScriptProjectWidget;
+    QString m_projectDirectory;
+    QString m_projectName;
+    QStringList m_sourceFiles;
 };
 
 #endif
-

@@ -13,6 +13,11 @@
    <keyword>Kicker</keyword>
   </keywords>
  </general>
+ <kdevautoproject>
+  <general>
+   <activedir>src</activedir>
+  </general>
+ </kdevautoproject>
  <kdevfileview>
   <groups>
    <group pattern="*.cpp;*.cxx;*.h" name="Sources" />

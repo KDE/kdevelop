@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,27 +9,25 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "runoptionswidget.h"
+
 #include <qlineedit.h>
 #include <qlistview.h>
 
 #include "domutil.h"
 #include "addenvvardlg.h"
-#include "autoprojectpart.h"
-#include "runoptionswidget.h"
 
 
-RunOptionsWidget::RunOptionsWidget(AutoProjectPart *part, QWidget *parent, const char *name)
-    : RunOptionsWidgetBase(parent, name)
+RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup,
+                                   QWidget *parent, const char *name)
+    : RunOptionsWidgetBase(parent, name),
+      m_dom(dom), m_configGroup(configGroup)
 {
-    m_part = part;
+    mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
+    progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
 
-    QDomDocument dom = *m_part->projectDom();
-
-    mainprogram_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram"));
-    progargs_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/run/programargs"));
-
-    DomUtil::PairList list = DomUtil::readPairListEntry(dom, "/kdevautoproject/envvars", "envvar",
-                                                        "name", "value");
+    DomUtil::PairList list =
+        DomUtil::readPairListEntry(dom, configGroup + "/envvars", "envvar", "name", "value");
     
     QListViewItem *lastItem = 0;
 
@@ -49,10 +47,8 @@ RunOptionsWidget::~RunOptionsWidget()
 
 void RunOptionsWidget::accept()
 {
-    QDomDocument dom = *m_part->projectDom();
-
-    DomUtil::writeEntry(dom, "/kdevautoproject/run/mainprogram", mainprogram_edit->text());
-    DomUtil::writeEntry(dom, "/kdevautoproject/run/programargs", progargs_edit->text());
+    DomUtil::writeEntry(m_dom, m_configGroup + "/run/mainprogram", mainprogram_edit->text());
+    DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", progargs_edit->text());
 
     DomUtil::PairList list;
     QListViewItem *item = listview->firstChild();
@@ -61,8 +57,7 @@ void RunOptionsWidget::accept()
         item = item->nextSibling();
     }
 
-    DomUtil::writePairListEntry(dom, "/kdevcustomproject/envvars", "envvar",
-                                "name", "value", list);
+    DomUtil::writePairListEntry(m_dom, m_configGroup + "/envvars", "envvar", "name", "value", list);
 }
 
 

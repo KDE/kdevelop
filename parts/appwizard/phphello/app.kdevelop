@@ -16,6 +16,7 @@
  </general>
  <kdevscriptproject>
   <general>
+   <activedir>src</activedir>
   </general>
  </kdevscriptproject>
  <kdevdoctreeview>

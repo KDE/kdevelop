@@ -13,7 +13,21 @@ public:
     KDevProject( QObject *parent=0, const char *name=0 );
     ~KDevProject();
 
-    virtual void openProject(const QString &dirName) = 0;
+    /**
+     * This method is invoked when the project is opened
+     * (i.e. actually just after this class has been
+     * instantiated). The first parameter is the project
+     * directory, which should afterwards be returned by
+     * the projectDirectory() method. The second parameter
+     * is the project name, which is equivalent with the
+     * project file name without the .kdevelop suffix.
+     */
+    virtual void openProject(const QString &dirName,
+                             const QString &projectName) = 0;
+    /**
+     * This method is invoked when the project is about
+     * to be closed.
+     */
     virtual void closeProject() = 0;
 
     /**
@@ -26,21 +40,25 @@ public:
      */
     virtual QString projectDirectory() = 0;
     /**
+     * Returns the name of the project.
+     */
+    virtual QString projectName() = 0;
+    /**
+     * Returns the path (relative to the project directory)
+     * of the active directory. All newly generated classes
+     * are added here.
+     */
+    virtual QString activeDirectory() = 0;
+    /**
      * Returns a list of all source files.
      * TODO: This is currently a bit broken because the
      * autoproject part doesn't return header files here.
      */
     virtual QStringList allSourceFiles() = 0;
 
-	void setProjectName ( const QString& name ) { m_projectName = name; };
-	QString projectName() { return m_projectName; };
-
 signals:
     void addedFileToProject(const QString &fileName);
     void removedFileFromProject(const QString &fileName);
-
-private:
-	QString m_projectName;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,10 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "domutil.h"
+
 #include <kdebug.h>
 #include <qstringlist.h>
-
-#include "domutil.h"
 
 
 static QDomElement elementByPath(const QDomDocument &doc, const QString &path)

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,27 +9,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _MAKEOPTIONSWIDGET_H_
-#define _MAKEOPTIONSWIDGET_H_
+#ifndef _RUNOPTIONSWIDGET_H_
+#define _RUNOPTIONSWIDGET_H_
 
-#include "makeoptionswidgetbase.h"
+#include "runoptionswidgetbase.h"
 
-class AutoProjectPart;
+#include <qdom.h>
 
 
-class MakeOptionsWidget : public MakeOptionsWidgetBase
+class RunOptionsWidget : public RunOptionsWidgetBase
 {
     Q_OBJECT
     
 public:
-    MakeOptionsWidget( AutoProjectPart *part, QWidget *parent=0, const char *name=0 );
-    ~MakeOptionsWidget();
+    RunOptionsWidget( QDomDocument &dom, const QString &configGroup,
+                      QWidget *parent=0, const char *name=0 );
+    ~RunOptionsWidget();
 
 public slots:
     void accept();
 
 private:
-    AutoProjectPart *m_part;
+    virtual void addVarClicked();
+    virtual void removeVarClicked();
+    
+    QDomDocument &m_dom;
+    QString m_configGroup;
 };
 
 #endif

@@ -275,8 +275,7 @@ void ProjectManager::initializeProjectSupport()
   QString projectName = fi.baseName();
   kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << projectName << endl;
 
-  API::getInstance()->project()->openProject(projectDir);
-  API::getInstance()->project()->setProjectName(projectName);
+  API::getInstance()->project()->openProject(projectDir, projectName);
 
   Core::getInstance()->doEmitProjectOpened();
 }

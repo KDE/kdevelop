@@ -1,3 +1,18 @@
+2002-04-15  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Share code between project management parts by
+	  moving stuff to lib/project
+	* Separated file tree from custom and scripting
+	  project parts into file view part, so that the 
+	  project parts do not have widgets themselves.
+	  Hierchical file tree is KDirWatch'ed
+	* Builddir and build tool can be configured in
+	  custom project now
+	* Merged KDevProject::openProject() and setProjectName()
+	* Added the notion of an activeDirectory() in which
+	  new files are stored
+	* cerr -> kdDebug
+
 2002-04-15  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	
 	* moved window menu code from src to a plugin
@@ -91,12 +106,12 @@
 
 2002-04-06 jbb <jbb@kdevelop.org> 
 	* Fixed some crashes, mainly to do with using .latin1() on
-      a null string.
-    * Replaced cout with kdDebug (in a lot of places -  part of
-      the above fix for crashes)
-    * fixed gcc3.0 compiler clash with define of out() in dbg.h
-    * Added K_DCOP to tokenizer, which fixed one cause of the latin1()
-      crash.
+	  a null string.
+    	* Replaced cout with kdDebug (in a lot of places -  part of
+      	  the above fix for crashes)
+    	* fixed gcc3.0 compiler clash with define of out() in dbg.h
+    	* Added K_DCOP to tokenizer, which fixed one cause of the latin1()
+          crash.
 	
 2002-04-06  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Python part can execute scripts and strings now
@@ -196,7 +211,7 @@
         * fileselect part reacts now on signal KDevCore::projectOpen()
 
 2001-12-12  August Hörandl <august.hoerandl@gmx.at>
-        * Add Class dialog rewritten using designer
+        * Add method dialog rewritten using designer
 
 2001-12-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * Added a preliminary Trie code to structure lib
@@ -364,7 +379,7 @@
           see HACKING how you can use it
         
 2001-07-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-        * Added for CustomProject part for projects not based
+        * Added CustomProject part for projects not based
           on either automake or tmake/qmake
         * Templates for C and C++ imports with custom Makefiles
         * Fix in import dialog to substitute APPNAMELC correctly
@@ -474,6 +489,7 @@
           LDFLAGS now. Will add a context menu item 'Add KDE plugin'
           later which will set KDE_PLUGIN stuff as default
         * Added a special kde mode to autoproject part. 
+
 2001-06-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * New part regexptest for testing regular expressions
         * Fixed make frontend to recognize ftnchek messages
@@ -780,12 +796,10 @@
         * Rewritten the icon border stuff from 1.x for use
           with multiple views per document
         * Ported the debugger frontend
+
 2001-04-06  Richard Dale <duke@tipitina.demon.co.uk>
         * Added Java and Objective-C class browsing, and Java KDE project template and
         automake support (ie the _JAVA primary). Fixed bug in class browser where a 
         method's arguments were not being displayed (was that a bug or a feature?). 
         Clicking on a class's instance variables in the class browser now works and 
-        takes you to the source file.
-
-ing on a class's instance variables in the class browser now works and 
         takes you to the source file.

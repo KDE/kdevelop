@@ -99,9 +99,14 @@ void CppNewClassDialog::accept()
         return;
     }
 
-    QString projectDir = m_part->project()->projectDirectory() + "/";
+    KDevProject *project = m_part->project();
+    QString subDir = project->projectDirectory() + "/";
+    if (!project->activeDirectory().isEmpty())
+        subDir += project->activeDirectory() + "/";
+    QString headerPath = subDir + header;
+    QString implementationPath = subDir + implementation;
     
-    if (QFileInfo(header).exists() || QFileInfo(implementation).exists()) {
+    if (QFileInfo(headerPath).exists() || QFileInfo(implementationPath).exists()) {
         KMessageBox::error(this, i18n("Sorry, but KDevelop is not able to add classes "
                                       "to existing header or implementation files."));
         return;
@@ -157,7 +162,7 @@ void CppNewClassDialog::accept()
     istr.replace(QRegExp("\\$BASECLASS\\$"), baseName);
     istr.replace(QRegExp("\\$ARGS\\$"), args);
 
-    QFile ifile(projectDir + "/" + implementation);
+    QFile ifile(implementationPath);
     if (!ifile.open(IO_WriteOnly)) {
         KMessageBox::error(this, "Cannot write to implementation file");
         return;
@@ -252,7 +257,7 @@ void CppNewClassDialog::accept()
     hstr.replace(QRegExp("\\$QOBJECT\\$"), qobject);
     hstr.replace(QRegExp("\\$ARGS\\$"), args);
 
-    QFile hfile(projectDir + "/" + header);
+    QFile hfile(headerPath);
     if (!hfile.open(IO_WriteOnly)) {
         KMessageBox::error(this, "Cannot write to header file");
         return;
@@ -263,3 +268,5 @@ void CppNewClassDialog::accept()
 
     QDialog::accept();
 }
+
+#include "cppnewclassdlg.moc"

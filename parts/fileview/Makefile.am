@@ -10,10 +10,11 @@ libkdevfileview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevfileview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevfileview_la_SOURCES = fileviewpart.cpp \
-			     fileviewwidget.cpp \
+			     filetreewidget.cpp \
+			     filegroupswidget.cpp \
 			     addfilegroupdlg.cpp \
-			     fileviewconfigwidget.cpp \
-			     fileviewconfigwidgetbase.ui
+			     filegroupsconfigwidget.cpp \
+			     filegroupsconfigwidgetbase.ui
 
 METASOURCES = AUTO
 

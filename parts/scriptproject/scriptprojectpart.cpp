@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,6 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "scriptprojectpart.h"
+
+#include <qdir.h>
+#include <qvaluestack.h>
 #include <qwhatsthis.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -20,8 +24,7 @@
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
 #include "kdevpartcontroller.h"
-#include "scriptprojectwidget.h"
-#include "scriptprojectpart.h"
+
 
 typedef KGenericFactory<ScriptProjectPart> ScriptProjectFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( "kdevscriptproject" ) );
@@ -32,34 +35,62 @@ ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QS
     setInstance(ScriptProjectFactory::instance());
 
     //    setXMLFile("kdevscriptproject.rc");
-
-    m_widget = new ScriptProjectWidget();
-    m_widget->setIcon(SmallIcon("make"));
-    m_widget->setCaption(i18n("Project"));
-    
-    topLevel()->embedSelectView(m_widget, i18n("Project"));
-
-    connect( m_widget, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
 }
 
 
 ScriptProjectPart::~ScriptProjectPart()
-{
-    topLevel()->removeView(m_widget);
-    delete m_widget;
-}
+{}
 
 
-void ScriptProjectPart::openProject(const QString &dirName)
+void ScriptProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
-    m_widget->openProject(dirName);
+    m_projectDirectory = dirName;
+    m_projectName = projectName;
+
+    // Put all files from all subdirectories into file list
+    QValueStack<QString> s;
+    int prefixlen = m_projectDirectory.length()+1;
+    s.push(m_projectDirectory);
+    
+    QDir dir;
+    do {
+        dir.setPath(s.pop());
+        kdDebug(9025) << "Examining: " << dir.path() << endl;
+        const QFileInfoList *dirEntries = dir.entryInfoList();
+        QListIterator<QFileInfo> it(*dirEntries);
+        for (; it.current(); ++it) {
+            QString fileName = it.current()->fileName();
+            if (fileName == "." || fileName == "..")
+                continue;
+            QString path = it.current()->absFilePath();
+            if (it.current()->isDir()) {
+                kdDebug(9025) << "Pushing: " << path << endl;
+                s.push(path);
+            }
+            else {
+                kdDebug(9025) << "Adding: " << path << endl;
+                m_sourceFiles.append(path.mid(prefixlen));
+            }
+        }
+    } while (!s.isEmpty());
+
 }
 
 
 void ScriptProjectPart::closeProject()
 {
-    m_widget->closeProject();
+}
+
+
+QString ScriptProjectPart::projectDirectory()
+{
+    return m_projectDirectory;
+}
+
+
+QString ScriptProjectPart::projectName()
+{
+    return m_projectName;
 }
 
 
@@ -71,23 +102,23 @@ QString ScriptProjectPart::mainProgram()
 }
 
 
-QString ScriptProjectPart::projectDirectory()
+QString ScriptProjectPart::activeDirectory()
 {
-    return m_widget->projectDirectory();
+    QDomDocument &dom = *projectDom();
+
+    return DomUtil::readEntry(dom, "/kdevscriptproject/general/activedir");
 }
 
 
 QStringList ScriptProjectPart::allSourceFiles()
 {
-    return m_widget->allSourceFiles();
-}
+    QStringList res;
 
+    QStringList::ConstIterator it;
+    for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it)
+        res += (m_projectDirectory + "/" + (*it));
 
-void ScriptProjectPart::slotItemExecuted(QListViewItem *item)
-{
-    ScriptProjectItem *spitem = static_cast<ScriptProjectItem*>(item);
-    if (spitem->type() == ScriptProjectItem::File)
-        partController()->editDocument(KURL(spitem->path()));
+    return res;
 }
 
 #include "scriptprojectpart.moc"

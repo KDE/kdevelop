@@ -13,6 +13,9 @@
  </general>
  <kdevautoproject>
   <general>
+   <activedir>src</activedir>
+  </general>
+  <general>
    <mainprogram>src/$APPNAMELC$</mainprogram>
   </general>
  </kdevautoproject>

@@ -9,18 +9,19 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "filegroupsconfigwidget.h"
+
 #include <qlistview.h>
 #include <knotifyclient.h>
 
 #include "domutil.h"
 #include "addfilegroupdlg.h"
 #include "fileviewpart.h"
-#include "fileviewconfigwidget.h"
 
 
-FileViewConfigWidget::FileViewConfigWidget(FileViewPart *part,
-                                           QWidget *parent, const char *name)
-    : FileViewConfigWidgetBase(parent, name)
+FileGroupsConfigWidget::FileGroupsConfigWidget(FileViewPart *part,
+                                               QWidget *parent, const char *name)
+    : FileGroupsConfigWidgetBase(parent, name)
 {
     m_part = part;
 
@@ -30,15 +31,15 @@ FileViewConfigWidget::FileViewConfigWidget(FileViewPart *part,
 }
 
 
-FileViewConfigWidget::~FileViewConfigWidget()
+FileGroupsConfigWidget::~FileGroupsConfigWidget()
 {}
 
 
-void FileViewConfigWidget::readConfig()
+void FileGroupsConfigWidget::readConfig()
 {
     QDomDocument &dom = *m_part->projectDom();
-    DomUtil::PairList list = DomUtil::readPairListEntry(dom, "/kdevfileview/groups", "group",
-                                                        "name", "pattern");
+    DomUtil::PairList list = DomUtil::readPairListEntry(dom, "/kdevfileview/groups",
+                                                        "group", "name", "pattern");
 
     QListViewItem *lastItem = 0;
 
@@ -52,7 +53,7 @@ void FileViewConfigWidget::readConfig()
 }
 
 
-void FileViewConfigWidget::storeConfig()
+void FileGroupsConfigWidget::storeConfig()
 {
     DomUtil::PairList list;
     
@@ -67,7 +68,7 @@ void FileViewConfigWidget::storeConfig()
 }
 
 
-void FileViewConfigWidget::addGroup()
+void FileGroupsConfigWidget::addGroup()
 {
     AddFileGroupDialog dlg;
     if (!dlg.exec())
@@ -77,13 +78,13 @@ void FileViewConfigWidget::addGroup()
 }
 
 
-void FileViewConfigWidget::removeGroup()
+void FileGroupsConfigWidget::removeGroup()
 {
     delete listview->currentItem();
 }
 
 
-void FileViewConfigWidget::moveUp()
+void FileGroupsConfigWidget::moveUp()
 {
     if (listview->currentItem() == listview->firstChild()) {
         KNotifyClient::beep();
@@ -97,7 +98,7 @@ void FileViewConfigWidget::moveUp()
 }
 
 
-void FileViewConfigWidget::moveDown()
+void FileGroupsConfigWidget::moveDown()
 {
    if (listview->currentItem()->nextSibling() == 0) {
         KNotifyClient::beep();
@@ -108,10 +109,10 @@ void FileViewConfigWidget::moveDown()
 }
 
 
-void FileViewConfigWidget::accept()
+void FileGroupsConfigWidget::accept()
 {
     storeConfig();
     m_part->refresh();
 }
 
-#include "fileviewconfigwidget.moc"
+#include "filegroupsconfigwidget.moc"

@@ -11,6 +11,9 @@
   </keywords>
  </general>
  <kdevautoproject>
+  <general>
+   <activedir>src</activedir>
+  </general>
   <run>
    <mainprogram>src/$APPNAMELC</mainprogram>
    <terminal>true</terminal>

@@ -14,6 +14,9 @@
   </ignoreparts>
  </general>
  <kdevautoproject>
+  <general>
+   <activedir>src</activedir>
+  </general>
   <run>
    <default_implementation>no</default_implementation>
   </run>

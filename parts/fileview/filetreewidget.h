@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,34 +9,41 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWWIDGET_H_
-#define _FILEVIEWWIDGET_H_
+#ifndef _FILETREEWIDGET_H_
+#define _FILETREEWIDGET_H_
 
+#include <qstringlist.h>
 #include <klistview.h>
 
 class FileViewPart;
-class KDevProject;
+class KDirWatch;
 
 
-class FileViewWidget : public KListView
+class FileTreeWidget : public KListView
 {
     Q_OBJECT
-    
-public:
-    FileViewWidget(FileViewPart *part);
-    ~FileViewWidget();
 
-public slots:
-    void refresh();
-    void addFile(const QString &fileName);
-    void removeFile(const QString &fileName);
+public:
+    FileTreeWidget( FileViewPart *part, QWidget *parent=0, const char *name=0 );
+    ~FileTreeWidget();
+
+    void openDirectory(const QString &dirName);
+    void watchDir(const QString &dirName);
     
 private slots:
+    void slotDirectoryDirty(const QString &dirName);
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotToggleShowNonProjectFiles();
 
 private:
+    bool matchesHidePattern(const QString &fileName);
+    void hideOrShow();
+    
     FileViewPart *m_part;
+    KDirWatch *m_dirWatch;
+    QStringList m_hidePatterns;
+    bool m_showNonProjectFiles;
 };
 
 #endif

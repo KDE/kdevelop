@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -16,7 +16,8 @@
 #include <kdialogbase.h>
 #include "kdevplugin.h"
 
-class FileViewWidget;
+class FileGroupsWidget;
+class FileTreeWidget;
 
 
 class FileViewPart : public KDevPlugin
@@ -28,14 +29,16 @@ public:
     ~FileViewPart();
 
 public slots:
-    void projectChanged();
+    void projectOpened();
+    void projectClosed();
     void refresh();
     
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
 
 private:
-    QGuardedPtr<FileViewWidget> m_filetree;
+    QGuardedPtr<FileTreeWidget> m_filetree;
+    QGuardedPtr<FileGroupsWidget> m_filegroups;
 };
 
 #endif

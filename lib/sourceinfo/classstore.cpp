@@ -18,7 +18,7 @@
 
 #include "classstore.h"
 #include "ClassStoreIface.h"
-#include <iostream>
+//#include <iostream>
 #include <qregexp.h>
 #include <kdebug.h>
 #include "programmingbycontract.h"
@@ -95,10 +95,10 @@ ClassStore::~ClassStore()
  *-----------------------------------------------------------------*/
 void ClassStore::wipeout()
 {
-    cerr << "ClassStore::wipeout start" << endl;
+    kdDebug(9005) << "ClassStore::wipeout start" << endl;
     ScopeLevel = 0;
     globalContainer.clear( );
-    cerr << "ClassStore::wipeout end" << endl;
+    kdDebug(9005) << "ClassStore::wipeout end" << endl;
 }
 
 
@@ -792,7 +792,7 @@ void ClassStore::storeAll()
 	ParsedStruct* pStruct;
 
 	/* serialize the global scopes, their scopes and their classes, methods, structs, attributes */
-	cerr << "Number of globals to store : " << globalContainer.getSortedScopeList().count() << endl;
+	kdDebug(9005) << "Number of globals to store : " << globalContainer.getSortedScopeList().count() << endl;
 
 	/* serialize global classes */
 	( *m_pStream ) << globalContainer.getSortedClassList().count();
@@ -909,7 +909,7 @@ void ClassStore::storeScope ( ParsedScopeContainer * pScope )
 		pScope = pScope->scopeIterator.current();
 
 		/* serialize the classes of current scope */
-		cerr << "Storing scope classes" << endl;
+		kdDebug(9005) << "Storing scope classes" << endl;
 		( *m_pStream ) << pScope->getSortedClassList().count();
 		for ( pScope->classIterator.toFirst();
 				pScope->classIterator.current();
@@ -920,7 +920,7 @@ void ClassStore::storeScope ( ParsedScopeContainer * pScope )
 		}
 
 		/* serialize the methods of current scope */
-		cerr << "Storing scope methods" << endl;
+		kdDebug(9005) << "Storing scope methods" << endl;
 		( *m_pStream ) << pScope->getSortedMethodList().count();
 		for ( pScope->methodIterator.toFirst();
 				pScope->methodIterator.current();
@@ -931,7 +931,7 @@ void ClassStore::storeScope ( ParsedScopeContainer * pScope )
 		}
 
 		/* serialize the structs of current scope */
-		cerr << "Storing scope structs" << endl;
+		kdDebug(9005) << "Storing scope structs" << endl;
 		( *m_pStream ) << pScope->getSortedStructList().count();
 		for ( pScope->structIterator.toFirst();
 				pScope->structIterator.current();
@@ -942,7 +942,7 @@ void ClassStore::storeScope ( ParsedScopeContainer * pScope )
 		}
 
 		/* serialize the attributes of current scope */
-		cerr << "Storing scope attributes" << endl;
+		kdDebug(9005) << "Storing scope attributes" << endl;
 		( *m_pStream ) << pScope->getSortedAttributeList().count();
 		for ( pScope->attributeIterator.toFirst();
 				pScope->attributeIterator.current();
@@ -953,7 +953,7 @@ void ClassStore::storeScope ( ParsedScopeContainer * pScope )
 		}
 
 		/* Serialize the scopes within a scope */
-		cerr << "Storing scope scope" << endl;
+		kdDebug(9005) << "Storing scope scope" << endl;
 		storeScope ( pScope );
 	}
 }

@@ -1,6 +1,9 @@
 # Here resides the automake project part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces \
+	   -I$(top_srcdir)/lib/project \
+	   -I$(top_srcdir)/lib/util \
+	   $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevautoproject.la
 libkdevautoproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
@@ -10,10 +13,6 @@ libkdevautoproject_la_SOURCES = autoprojectpart.cpp \
 				autoprojectwidget.cpp \
 				compileroptionswidget.cpp \
 				compileroptionswidgetbase.ui \
-				makeoptionswidget.cpp \
-				makeoptionswidgetbase.ui \
-				runoptionswidget.cpp \
-				runoptionswidgetbase.ui \
 				configureoptionswidget.cpp \
 				configureoptionswidgetbase.ui \
 				subprojectoptionsdlg.cpp \
@@ -30,7 +29,6 @@ libkdevautoproject_la_SOURCES = autoprojectpart.cpp \
 				addfiledlg.cpp \
 				removefiledlg.cpp \
 				addprefixdlg.cpp \
-				addenvvardlg.cpp \
 				addtranslationdlg.cpp \
 				misc.cpp
 

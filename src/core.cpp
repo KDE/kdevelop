@@ -54,13 +54,13 @@ void Core::slotQuit()
 
 void Core::setBreakpoint(const QString &fileName, int lineNum, int id, bool enabled, bool pending)
 {
-  kdDebug() << "Core::setBreakpoint" << endl;
+  kdDebug(9000) << "Core::setBreakpoint" << endl;
 }
 
 
 void Core::running(KDevPlugin *which, bool runs)
 {
-  kdDebug() << "Core::running " << endl;
+  kdDebug(9000) << "Core::running " << endl;
 }
 
 

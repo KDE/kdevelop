@@ -1,9 +1,9 @@
 # Here resides the script project part.
 # This is a generic part for various scripting languages that simply 
-# displays all files related to that language in a tree. File operations
-# may be implemented in the future. If a language needs more specific
-# features, it deserves its own part (or the respective features should
-# be added to the language support part)
+# includes all files from the project directory without managing
+# them. If a language needs more specific features, it deserves 
+# its own part (or the respective features should be added to the
+# language support part)
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
@@ -11,8 +11,7 @@ kde_module_LTLIBRARIES = libkdevscriptproject.la
 libkdevscriptproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevscriptproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevscriptproject_la_SOURCES = scriptprojectpart.cpp \
-				  scriptprojectwidget.cpp
+libkdevscriptproject_la_SOURCES = scriptprojectpart.cpp
 
 METASOURCES = AUTO
 

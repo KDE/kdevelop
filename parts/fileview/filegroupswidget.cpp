@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+#include "filegroupswidget.h"
 
 #include <qfileinfo.h>
 #include <qheader.h>
@@ -24,10 +26,10 @@
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
 #include "kdevpartcontroller.h"
+#include "domutil.h"
 
 #include "fileviewpart.h"
-#include "fileviewconfigwidget.h"
-#include "fileviewwidget.h"
+#include "filegroupsconfigwidget.h"
 
 
 // Translations for strings in the project file
@@ -39,10 +41,10 @@ static const char *translations[] = {
 };
 
 
-class FileViewGroupItem : public QListViewItem
+class FileViewFolderItem : public QListViewItem
 {
 public:
-    FileViewGroupItem(QListView *parent, const QString &name, const QString &pattern);
+    FileViewFolderItem(QListView *parent, const QString &name, const QString &pattern);
     bool matches(const QString &fileName);
 
 private:
@@ -50,7 +52,7 @@ private:
 };
 
 
-FileViewGroupItem::FileViewGroupItem(QListView *parent, const QString &name, const QString &pattern)
+FileViewFolderItem::FileViewFolderItem(QListView *parent, const QString &name, const QString &pattern)
     : QListViewItem(parent, name)
 {
     setPixmap(0, SmallIcon("folder"));
@@ -58,12 +60,14 @@ FileViewGroupItem::FileViewGroupItem(QListView *parent, const QString &name, con
 }
 
 
-bool FileViewGroupItem::matches(const QString &fileName)
+bool FileViewFolderItem::matches(const QString &fileName)
 {
     QStringList::ConstIterator it;
     for (it = patterns.begin(); it != patterns.end(); ++it) {
+        // The regexp objects could be created already
+        // in the constructor
         QRegExp re(*it, true, true);
-        if (re.match(fileName) == 0)
+        if (re.search(fileName) == 0)
             return true;
     }
 
@@ -71,10 +75,10 @@ bool FileViewGroupItem::matches(const QString &fileName)
 }
 
 
-class FileViewFileItem : public QListViewItem
+class FileGroupsFileItem : public QListViewItem
 {
 public:
-    FileViewFileItem(QListViewItem *parent, const QString &fileName);
+    FileGroupsFileItem(QListViewItem *parent, const QString &fileName);
     QString fileName() const
     { return fullname; }
     
@@ -84,21 +88,21 @@ private:
 };
 
 
-FileViewFileItem::FileViewFileItem(QListViewItem *parent, const QString &fileName)
+FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fileName)
     : QListViewItem(parent, extractName(fileName)), fullname(fileName)
 {
     setPixmap(0, SmallIcon("document"));
 }
 
 
-QString FileViewFileItem::extractName(const QString &fileName)
+QString FileGroupsFileItem::extractName(const QString &fileName)
 {
     QFileInfo fi(fileName);
     return fi.fileName();
 }
 
 
-FileViewWidget::FileViewWidget(FileViewPart *part)
+FileGroupsWidget::FileGroupsWidget(FileViewPart *part)
     : KListView(0, "file view widget")
 {
     setFocusPolicy(ClickFocus);
@@ -111,7 +115,7 @@ FileViewWidget::FileViewWidget(FileViewPart *part)
 
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( this, SIGNAL( returnPressed(QListViewItem*)),
+    connect( this, SIGNAL(returnPressed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
@@ -120,11 +124,11 @@ FileViewWidget::FileViewWidget(FileViewPart *part)
 }
 
 
-FileViewWidget::~FileViewWidget()
+FileGroupsWidget::~FileGroupsWidget()
 {}
 
 
-void FileViewWidget::slotItemExecuted(QListViewItem *item)
+void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
 {
     if (!item)
         return;
@@ -133,70 +137,67 @@ void FileViewWidget::slotItemExecuted(QListViewItem *item)
     if (!item->parent())
         return;
 
-    FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(item);
-    m_part->partController()->editDocument(QString("file://") + fvfitem->fileName());
+    FileGroupsFileItem *fgfitem = static_cast<FileGroupsFileItem*>(item);
+    m_part->partController()->editDocument(QString("file://") + fgfitem->fileName());
     m_part->topLevel()->lowerView(this);
 }
 
 
-void FileViewWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
     if (!item)
         return;
-    KPopupMenu popup(i18n("File View"));
+    KPopupMenu popup(i18n("File Groups"), this);
     // TODO: Add, remove groups
     int customizeId = popup.insertItem(i18n("Customize..."));
     popup.insertSeparator();
     if (item->parent()) {
         // Not for group items
-        FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(item);
+        FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);
         FileContext context(fvfitem->fileName());
         m_part->core()->fillContextMenu(&popup, &context);
     }
     
     int res = popup.exec(p);
     if (res == customizeId) {
-        KDialogBase dlg(KDialogBase::TreeList, i18n("Customize File Tree"),
+        KDialogBase dlg(KDialogBase::TreeList, i18n("Customize File Groups"),
                         KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                         "customization dialog");
-        QVBox *vbox = dlg.addVBoxPage(i18n("File View"));
-        FileViewConfigWidget *w = new FileViewConfigWidget(m_part, vbox, "fileview config widget");
+        QVBox *vbox = dlg.addVBoxPage(i18n("File Groups"));
+        FileGroupsConfigWidget *w = new FileGroupsConfigWidget(m_part, vbox, "file groups config widget");
         connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()));
         dlg.exec();
     }
 }
 
 
-void FileViewWidget::refresh()
+void FileGroupsWidget::refresh()
 {
     while (firstChild())
         delete firstChild();
 
-    QDomElement docEl = m_part->projectDom()->documentElement();
-    QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
-    QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
+    QDomDocument &dom = *m_part->projectDom();
+    DomUtil::PairList list =
+        DomUtil::readPairListEntry(dom, "/kdevfileview/groups", "group", "name", "pattern");
 
-    FileViewGroupItem *lastGroup = 0;
-    QDomElement groupEl = groupsEl.firstChild().toElement();
-    while (!groupEl.isNull()) {
-        if (groupEl.tagName() == "group") {
-            FileViewGroupItem *newItem =
-                new FileViewGroupItem(this, groupEl.attribute("name"), groupEl.attribute("pattern"));
-            if (lastGroup)
-                newItem->moveItem(lastGroup);
-            lastGroup = newItem;
-        }
-        groupEl = groupEl.nextSibling().toElement();
+    FileViewFolderItem *lastGroup = 0;
+    
+    DomUtil::PairList::ConstIterator git;
+    for (git = list.begin(); git != list.end(); ++git) {
+        FileViewFolderItem *newItem = new FileViewFolderItem(this, (*git).first, (*git).second);
+        if (lastGroup)
+            newItem->moveItem(lastGroup);
+        lastGroup = newItem;
     }
 
     QStringList allFiles = m_part->project()->allSourceFiles();
-    QStringList::ConstIterator it;
-    for (it = allFiles.begin(); it != allFiles.end(); ++it) {
+    QStringList::ConstIterator fit;
+    for (fit = allFiles.begin(); fit != allFiles.end(); ++fit) {
         QListViewItem *item = firstChild();
         while (item) {
-            FileViewGroupItem *fvgitem = static_cast<FileViewGroupItem*>(item);
-            if (fvgitem->matches(*it)) {
-                (void) new FileViewFileItem(fvgitem, *it);
+            FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
+            if (fvgitem->matches(*fit)) {
+                (void) new FileGroupsFileItem(fvgitem, *fit);
                 break;
             }
             item = item->nextSibling();
@@ -211,15 +212,15 @@ void FileViewWidget::refresh()
 }
 
 
-void FileViewWidget::addFile(const QString &fileName)
+void FileGroupsWidget::addFile(const QString &fileName)
 {
     kdDebug(9017) << "FileView add " << fileName << endl;
     
     QListViewItem *item = firstChild();
     while (item) {
-        FileViewGroupItem *fvgitem = static_cast<FileViewGroupItem*>(item);
+        FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
         if (fvgitem->matches(fileName)) {
-            (void) new FileViewFileItem(fvgitem, fileName);
+            (void) new FileGroupsFileItem(fvgitem, fileName);
             fvgitem->sortChildItems(0, true);
             break;
         }
@@ -228,19 +229,18 @@ void FileViewWidget::addFile(const QString &fileName)
 }
 
 
-void FileViewWidget::removeFile(const QString &fileName)
+void FileGroupsWidget::removeFile(const QString &fileName)
 {
     kdDebug(9017) << "FileView remove " << fileName << endl;
     
     QListViewItem *item = firstChild();
     while (item) {
-        FileViewGroupItem *fvgitem = static_cast<FileViewGroupItem*>(item);
+        FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
         QListViewItem *childItem = fvgitem->firstChild();
         while (childItem) {
-            FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(childItem);
+            FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(childItem);
             if (fvfitem->fileName() == fileName) {
                 delete fvfitem;
-                //                fvgitem->sortChildItems(0, true);
                 return;
             }
             childItem = childItem->nextSibling();
@@ -249,5 +249,4 @@ void FileViewWidget::removeFile(const QString &fileName)
     }
 }
 
-#include "fileviewwidget.moc"
-    
+#include "filegroupswidget.moc"

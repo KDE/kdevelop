@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
-<class>FileViewConfigWidgetBase</class>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
-        <cstring>fileview_config_widget</cstring>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>FileGroupsConfigWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>filegroups_config_widget</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,223 +12,181 @@
             <height>494</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>File view configuration</string>
+    <property name="caption">
+        <string>File Group View</string>
     </property>
     <hbox>
-        <property stdset="1">
-            <name>margin</name>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
             <number>11</number>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
+        <property name="spacing">
             <number>6</number>
         </property>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLayoutWidget">
+            <property name="name">
                 <cstring>Layout3</cstring>
             </property>
             <vbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>0</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>TextLabel1</cstring>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>title_label</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Groups in the file view and their corresponding patterns:</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QListView</class>
+                <widget class="QListView">
                     <column>
-                        <property>
-                            <name>text</name>
+                        <property name="text">
                             <string>Group</string>
                         </property>
-                        <property>
-                            <name>clickable</name>
+                        <property name="clickable">
                             <bool>true</bool>
                         </property>
-                        <property>
-                            <name>resizeable</name>
+                        <property name="resizeable">
                             <bool>true</bool>
                         </property>
                     </column>
                     <column>
-                        <property>
-                            <name>text</name>
+                        <property name="text">
                             <string>Pattern</string>
                         </property>
-                        <property>
-                            <name>clickable</name>
+                        <property name="clickable">
                             <bool>true</bool>
                         </property>
-                        <property>
-                            <name>resizeable</name>
+                        <property name="resizeable">
                             <bool>true</bool>
                         </property>
                     </column>
-                    <property stdset="1">
-                        <name>name</name>
+                    <property name="name">
                         <cstring>listview</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>allColumnsShowFocus</name>
+                    <property name="allColumnsShowFocus">
                         <bool>true</bool>
                     </property>
                 </widget>
             </vbox>
         </widget>
         <spacer>
-            <property>
-                <name>name</name>
+            <property name="name" stdset="0">
                 <cstring>Spacer5</cstring>
             </property>
-            <property stdset="1">
-                <name>orientation</name>
+            <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
-            <property stdset="1">
-                <name>sizeType</name>
+            <property name="sizeType">
                 <enum>Preferred</enum>
             </property>
-            <property>
-                <name>sizeHint</name>
+            <property name="sizeHint">
                 <size>
                     <width>20</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLayoutWidget">
+            <property name="name">
                 <cstring>Layout3</cstring>
             </property>
             <vbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>0</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property>
-                        <name>name</name>
+                    <property name="name" stdset="0">
                         <cstring>Spacer6</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>orientation</name>
+                    <property name="orientation">
                         <enum>Vertical</enum>
                     </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
+                    <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property>
-                        <name>sizeHint</name>
+                    <property name="sizeHint">
                         <size>
                             <width>20</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>addgroup_button</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>&amp;Add group</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>deletegroup_button</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>&amp;Delete group</string>
                     </property>
                 </widget>
                 <spacer>
-                    <property>
-                        <name>name</name>
+                    <property name="name" stdset="0">
                         <cstring>Spacer3</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>orientation</name>
+                    <property name="orientation">
                         <enum>Vertical</enum>
                     </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
+                    <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property>
-                        <name>sizeHint</name>
+                    <property name="sizeHint">
                         <size>
                             <width>20</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>moveup_button</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Move &amp;Up</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>movedown_button</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Move &amp;Down</string>
                     </property>
                 </widget>
                 <spacer>
-                    <property>
-                        <name>name</name>
+                    <property name="name" stdset="0">
                         <cstring>Spacer4</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>orientation</name>
+                    <property name="orientation">
                         <enum>Vertical</enum>
                     </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
+                    <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property>
-                        <name>sizeHint</name>
+                    <property name="sizeHint">
                         <size>
                             <width>20</width>
                             <height>20</height>
@@ -241,20 +196,16 @@
             </vbox>
         </widget>
         <spacer>
-            <property>
-                <name>name</name>
+            <property name="name" stdset="0">
                 <cstring>Spacer7</cstring>
             </property>
-            <property stdset="1">
-                <name>orientation</name>
+            <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
-            <property stdset="1">
-                <name>sizeType</name>
+            <property name="sizeType">
                 <enum>Preferred</enum>
             </property>
-            <property>
-                <name>sizeHint</name>
+            <property name="sizeHint">
                 <size>
                     <width>20</width>
                     <height>20</height>
@@ -267,30 +218,33 @@
     <connection>
         <sender>moveup_button</sender>
         <signal>clicked()</signal>
-        <receiver>fileview_config_widget</receiver>
+        <receiver>filegroups_config_widget</receiver>
         <slot>moveUp()</slot>
     </connection>
     <connection>
         <sender>deletegroup_button</sender>
         <signal>clicked()</signal>
-        <receiver>fileview_config_widget</receiver>
+        <receiver>filegroups_config_widget</receiver>
         <slot>removeGroup()</slot>
     </connection>
     <connection>
         <sender>addgroup_button</sender>
         <signal>clicked()</signal>
-        <receiver>fileview_config_widget</receiver>
+        <receiver>filegroups_config_widget</receiver>
         <slot>addGroup()</slot>
     </connection>
     <connection>
         <sender>movedown_button</sender>
         <signal>clicked()</signal>
-        <receiver>fileview_config_widget</receiver>
+        <receiver>filegroups_config_widget</receiver>
         <slot>moveDown()</slot>
     </connection>
-    <slot access="public">addGroup()</slot>
-    <slot access="protected">moveUp()</slot>
-    <slot access="public">moveDown()</slot>
-    <slot access="protected">removeGroup()</slot>
 </connections>
+<slots>
+    <slot>addGroup()</slot>
+    <slot access="protected">moveUp()</slot>
+    <slot>moveDown()</slot>
+    <slot access="protected">removeGroup()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>
