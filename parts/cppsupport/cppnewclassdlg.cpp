@@ -791,18 +791,9 @@ void CppNewClassDialog::access_view_mouseButtonPressed( int button, QListViewIte
 
 void CppNewClassDialog::methods_view_mouseButtonPressed(int button ,QListViewItem * item, const QPoint&p ,int c)
 {
-//    if (item && ( (button == LeftButton) || (button == RightButton)) && (item->depth() > 1) )
     if (item && ( button == RightButton ) && (item->depth() > 1) && (! item->text(1).isNull()) )
     {
-/*        int boxsize = item->listView()->style().pixelMetric(QStyle::PM_CheckListButtonSize, item->listView());
-        QRect r(item->listView()->itemRect(item));
-        r.setLeft(r.left() + boxsize);
-        qWarning("item rect: %d, %d - %d, %d", r.left(), r.top(), r.right(), r.bottom());
-        qWarning("point: %d, %d", p.x(), p.y());
-        QPoint pr = item->listView()->viewport()->mapFromGlobal(p);
-        qWarning("point mapped: %d, %d", pr.x(), pr.y());
-        if (r.contains(pr))*/
-            overMenu->exec(p);
+        overMenu->exec(p);
     }
 }
 
@@ -896,35 +887,6 @@ void CppNewClassDialog::updateClassStore()
 
 
         
-/*    if (baseclasses_view->firstChild())
-    {
-        qWarning("parsing class %s:", baseclasses_view->firstChild()->text(0).latin1());
-            qWarning("myclass obtained");d
-            ParsedMethod *method = 0;
-            myClass->methodIterator.toFirst();
-            while ( (method = myClass->methodIterator.current()) != 0)
-            {
-                qWarning("passing %s", method->asString().latin1());
-                if (method->isConstructor())
-                {
-                    qWarning("constructor: %s", method->asString().latin1());
-                    qWarning("  type: %s", method->type().latin1());
-                    qWarning("  name: %s", method->name().latin1());
-                    QPtrListIterator<ParsedArgument> it(method->arguments);
-                    ParsedArgument *arg = 0;
-                    it.toFirst();
-                    while ( (arg = it.current()) != 0 )
-                    {
-                        qWarning("  arg name: %s, type %s", arg->name().latin1(), arg->type().latin1());
-                        ++it;
-                    }
-                }
-                ++(myClass->methodIterator);
-            }
-        }
-    }
-}
-*/
 
 bool CppNewClassDialog::ClassGenerator::validateInput()
 {
