@@ -189,6 +189,9 @@ void ProjectManager::updateActiveLangMenu()
 
 void ProjectManager::switchLanguage(const QString& lang)
 {
+  // make sure there is a project loaded
+  if ( !m_info ) return;
+
   unloadLocalParts();
   unloadLanguageSupport();
   m_info->m_loadParts.clear();
@@ -344,7 +347,8 @@ bool ProjectManager::closeProject()
 
   m_closeProjectAction->setEnabled(false);
   m_projectOptionsAction->setEnabled(false);
-
+  m_activeLanguage->setEnabled(false);
+  
   PartController::getInstance()->slotCloseAllWindows();
 
   return true;
