@@ -1032,11 +1032,10 @@ Configure again.<p>
 
 <sect2>Calling Tools
 <p>
-The Tools-menu contains by default the entries for the internal Dialog Editor (which can also be started by the toolbar button) and
-the following programs if installed: KDbg, KIconEdit and KTranslator. These are checked by the KDevelop installation program and
-inserted in the given order into the menu. Invoking a tool will open the "Tools"-window and start the selected program inside this
-window. The Tools menu can be edited by the Tools-entry in the Options-menu; see <ref id="Configuring the &dquot;Tools&dquot; Menu"
-name="Configuring the &dquot;Tools&dquot; Menu">).
+The Tools-menu contains by default the entries for the following programs if installed: KDbg, KIconEdit and KTranslator. These are
+checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
+"Tools"-window and start the selected program inside this window. The Tools menu can be edited by the Tools-entry in the Options-menu;
+see <ref id="Configuring the &dquot;Tools&dquot; Menu" name="Configuring the &dquot;Tools&dquot; Menu">.
 
 <sect2>Changing KDevelop's settings
 <p>
@@ -1048,7 +1047,7 @@ with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
 <item><bf/Editor Colors.../ Here, you can set the color-configuration of the editor like e.g. the background.<p>
 <item><bf/Editor Defaults.../ This sets the default display like font and fontsize for the editor<p>
 <item><bf/Syntax-Highlighting / This dialog lets you configure the fonts and colors for the highlighting of several programming
-languages, including HTML, and the mime-types highlighting will be enabled to.<p>
+languages, including HTML.<p>
 <item><bf/Documentation Browser/ In this tab-dialog, you can set the fonts, sizes and colors for the internal Helpbrowser<p>
 <item><bf/Configure Printer.../ Contains the entries for the printer configuration dialogs according to the used printing program, a2ps
 or enscript.<p>
@@ -1065,7 +1064,7 @@ HTML-library documentation and the rebuilding of the search index for the Helpbr
 
 <sect2>The Window Menu
 <p>
-The Window menu contains a list with all currently open files. This allows a quick swith to another file you're currently working
+The Window menu contains a list with all currently open files. This allows a quick switch to another file you're currently working
 on.
 
 <sect2>Managing Bookmarks
@@ -1251,12 +1250,12 @@ delete selected text                             Select text, then Backspace or 
 <sect3>Searching Text within the Editor
 <p>
 <code>
-open Goto Line... dialog                         STRG+G
-open Find Text dialog                            STRG+F
+open Goto Line... dialog                         CTRL+G
+open Find Text dialog                            CTRL+F
 repeat last search                               F3
-open Search and Replace dialog                   STRG+R
+open Search and Replace dialog                   CTRL+R
 
-open Search in Files dialog (grep)               STRG+ALT+F
+open Search in Files dialog (grep)               CTRL+ALT+F
 search marked Text with Grep                     SHIFT+F2
 
 locate next error                                F4
@@ -1287,27 +1286,27 @@ next page																				 Alt+ Right Arrow
 <sect3>Managing Bookmarks
 <p>
 <code>
-add bookmark                                     STRG+ALT+A
-clear bookmark list                              STRG+ALT+C
+add bookmark                                     CTRL+ALT+A
+clear bookmark list                              CTRL+ALT+C
 </code>
 <p>	
 
 <sect2>Shortcuts for Toolbar Symbols
 <p>
 <code>
-Symbol "Open File"                               STRG+O
-Symbol "Save File"                               STRG+S
-Symbol "Print File"                              STRG+P
-Symbol "Undo"                                    STRG+Z
-Symbol "Redo"                                    STRG+Y
-Symbol "Cut"                                     STRG+X
-Symbol "Copy"                                    STRG+C
-Symbol "Paste"                                   STRG+V
-Symbol "Compile File"                            STRG+F8
+Symbol "Open File"                               CTRL+O
+Symbol "Save File"                               CTRL+S
+Symbol "Print File"                              CTRL+P
+Symbol "Undo"                                    CTRL+Z
+Symbol "Redo"                                    CTRL+Y
+Symbol "Cut"                                     CTRL+X
+Symbol "Copy"                                    CTRL+C
+Symbol "Paste"                                   CTRL+V
+Symbol "Compile File"                            CTRL+F8
 Symbol "Make"                                    F8
 Symbol "Execute"                                 F9
 Symbol "Execute with Arguments"                  ALT+F9
-Symbol "Dialog Editor"                           STRG+D
+Symbol "Dialog Editor"                           CTRL+D
 Symbol "Back"                                    ALT+Left Arrow, if browser opened
 Symbol "Forward"                                 ALT+Right Arrow, if browser opened
 Symbol "Search Marked Text"                      F2
@@ -1322,9 +1321,9 @@ To switch to a certain window, press ALT plus the underlined letter in the windo
 <sect2>Shortcuts to Compilation Processes
 <p>
 <code>
-Compile current sourcefile                       STRG+F8
+Compile current sourcefile                       CTRL+F8
 Build current project target                     F8
-Execute target after Build process               STRG+F9
+Execute target after Build process               CTRL+F9
 Exectue target with Arguments                    ALT+F9
 Stop the current process                         F10
 </code>
@@ -1595,7 +1594,7 @@ The following gives you a general guideline how to locate certain positions with
 <bf>&raquo How to find a certain line in a file</bf>
 
 <enum>
-<item>Select "Line" in the "View"-menu or press STRG+L. The dialogfiled "Goto Line" appears.
+<item>Select "Line" in the "View"-menu or press CTRL+L. The dialogfiled "Goto Line" appears.
 <item>Insert the linenumber you want to go to.
 <item>Press OK.
 </enum>
@@ -1748,7 +1747,7 @@ used by the editor.
 
 <sect1>Searching and Replacing
 <p>
-<sect2>Sigle File Search
+<sect2>Single File Search
 <p>
 <bf>&raquo How to find one or more characters in the actual editing window</bf>
 <enum>
@@ -3338,6 +3337,11 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 </article>
+
+
+
+
+
 
 
 

@@ -1,3 +1,7 @@
+1999-06-29  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added more german docs and fixed some misspellings in the english original
+	* added internationalized Cancel button for the initial progressdialog
+
 1999-06-24  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added documentation to the handbooks
 	* removed khtmlw/khtml question on docupdate dialog, only khtmlw supported (due to KDE 1.1.2)

@@ -1070,6 +1070,7 @@ void CKDevelop::initProject(){
       connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
       progressDlg->setCaption(i18n("Starting..."));
       progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
+      progressDlg->setCancelButtonText(i18n("Cancel"));
       progressDlg->setProgress(0);
       progressDlg->show();
       setCursor(KCursor::arrowCursor());
@@ -1231,6 +1232,7 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
 
 
 

@@ -297,11 +297,11 @@ Configure again.<P>
 <P>
 <H4>Calling Tools</H4>
 
-<P>The Tools-menu contains by default the entries for the internal Dialog Editor (which can also be started by the toolbar button) and
-the following programs if installed: KDbg, KIconEdit and KTranslator. These are checked by the KDevelop installation program and
-inserted in the given order into the menu. Invoking a tool will open the "Tools"-window and start the selected program inside this
-window. The Tools menu can be edited by the Tools-entry in the Options-menu; see 
-<A HREF="index-12.html#Configuring the &quot;Tools&quot; Menu">Configuring the &quot;Tools&quot; Menu</A>).
+<P>The Tools-menu contains by default the entries for the following programs if installed: KDbg, KIconEdit and KTranslator. These are
+checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
+"Tools"-window and start the selected program inside this window. The Tools menu can be edited by the Tools-entry in the Options-menu;
+see 
+<A HREF="index-12.html#Configuring the &quot;Tools&quot; Menu">Configuring the &quot;Tools&quot; Menu</A>.
 <P>
 <H4>Changing KDevelop's settings</H4>
 
@@ -317,7 +317,7 @@ with the
 <LI><B>Editor Defaults...</B> This sets the default display like font and fontsize for the editor<P>
 </LI>
 <LI><B>Syntax-Highlighting </B> This dialog lets you configure the fonts and colors for the highlighting of several programming
-languages, including HTML, and the mime-types highlighting will be enabled to.<P>
+languages, including HTML.<P>
 </LI>
 <LI><B>Documentation Browser</B> In this tab-dialog, you can set the fonts, sizes and colors for the internal Helpbrowser<P>
 </LI>
@@ -340,7 +340,7 @@ HTML-library documentation and the rebuilding of the search index for the Helpbr
 <P>
 <H4>The Window Menu</H4>
 
-<P>The Window menu contains a list with all currently open files. This allows a quick swith to another file you're currently working
+<P>The Window menu contains a list with all currently open files. This allows a quick switch to another file you're currently working
 on.
 <P>
 <H4>Managing Bookmarks</H4>
@@ -568,12 +568,12 @@ delete selected text                             Select text, then Backspace or 
 <P>
 <HR>
 <PRE>
-open Goto Line... dialog                         STRG+G
-open Find Text dialog                            STRG+F
+open Goto Line... dialog                         CTRL+G
+open Find Text dialog                            CTRL+F
 repeat last search                               F3
-open Search and Replace dialog                   STRG+R
+open Search and Replace dialog                   CTRL+R
 
-open Search in Files dialog (grep)               STRG+ALT+F
+open Search in Files dialog (grep)               CTRL+ALT+F
 search marked Text with Grep                     SHIFT+F2
 
 locate next error                                F4
@@ -612,8 +612,8 @@ next page                                                                       
 <P>
 <HR>
 <PRE>
-add bookmark                                     STRG+ALT+A
-clear bookmark list                              STRG+ALT+C
+add bookmark                                     CTRL+ALT+A
+clear bookmark list                              CTRL+ALT+C
 </PRE>
 <HR>
 <P>     
@@ -623,19 +623,19 @@ clear bookmark list                              STRG+ALT+C
 <P>
 <HR>
 <PRE>
-Symbol "Open File"                               STRG+O
-Symbol "Save File"                               STRG+S
-Symbol "Print File"                              STRG+P
-Symbol "Undo"                                    STRG+Z
-Symbol "Redo"                                    STRG+Y
-Symbol "Cut"                                     STRG+X
-Symbol "Copy"                                    STRG+C
-Symbol "Paste"                                   STRG+V
-Symbol "Compile File"                            STRG+F8
+Symbol "Open File"                               CTRL+O
+Symbol "Save File"                               CTRL+S
+Symbol "Print File"                              CTRL+P
+Symbol "Undo"                                    CTRL+Z
+Symbol "Redo"                                    CTRL+Y
+Symbol "Cut"                                     CTRL+X
+Symbol "Copy"                                    CTRL+C
+Symbol "Paste"                                   CTRL+V
+Symbol "Compile File"                            CTRL+F8
 Symbol "Make"                                    F8
 Symbol "Execute"                                 F9
 Symbol "Execute with Arguments"                  ALT+F9
-Symbol "Dialog Editor"                           STRG+D
+Symbol "Dialog Editor"                           CTRL+D
 Symbol "Back"                                    ALT+Left Arrow, if browser opened
 Symbol "Forward"                                 ALT+Right Arrow, if browser opened
 Symbol "Search Marked Text"                      F2
@@ -653,9 +653,9 @@ Symbol "Search Marked Text"                      F2
 <P>
 <HR>
 <PRE>
-Compile current sourcefile                       STRG+F8
+Compile current sourcefile                       CTRL+F8
 Build current project target                     F8
-Execute target after Build process               STRG+F9
+Execute target after Build process               CTRL+F9
 Exectue target with Arguments                    ALT+F9
 Stop the current process                         F10
 </PRE>
