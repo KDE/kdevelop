@@ -1641,6 +1641,7 @@ void CKDevelop::slotTagSwitchTo()
   bool useCTags = (bCTags && hasProject())?true:false ;
   QFileInfo curFileInfo = QFileInfo(pEditView->getName());
   QString curFileName = curFileInfo.fileName();
+  QString curFileDir = curFileInfo.dirPath();
   QString curFileExt = curFileInfo.extension(FALSE);
   QString switchToName = curFileInfo.baseName();
   // this assumes that your source files end in .cpp or .cxx - that's BAD !!!
@@ -1685,7 +1686,7 @@ void CKDevelop::slotTagSwitchTo()
         fName = QFileInfo(pFile).fileName();
         //kdDebug() << "fName= " << fName << " pFile= " << pFile << "\n";
         if (fName==switchToName) {
-          kdDebug() << "gotcha! switching to " << pFile << "\n";
+          //kdDebug() << "gotcha! switching to " << pFile << "\n";
           switchToFile(QString(pFile));
           break;
         }
@@ -1693,10 +1694,12 @@ void CKDevelop::slotTagSwitchTo()
       }
     }
     else {
-      // simple workaround for when no project is loaded
-      QString fName=QFileInfo(switchToName).fileName();
-      if (!fName.isEmpty())
+      // simple workaround for when there is no project loaded
+      QString fName = curFileDir + "/" + QFileInfo(switchToName).fileName();
+      if (!fName.isEmpty()) {
+        kdDebug() << "gotcha! switching to " << fName << "\n";
         switchToFile(fName);
+      }
     }
   }
   slotStatusMsg(i18n("Ready."));
