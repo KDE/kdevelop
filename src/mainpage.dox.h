@@ -35,7 +35,7 @@ Currently it supports:
   - PHP
   - Ruby
   - Pascal
-  - ADA
+  - Ada
   .
 
 For more info goto: http://www.kdevelop.org
@@ -178,6 +178,12 @@ operation of KDevelop.
     .
   - parts/rubysupport = Support for Ruby
     - (see RubySupportPart)
+    .
+  - parts/pascalsupport = Support for Pascal
+    - (see PascalSupportPart)
+    .
+  - parts/adasupport = Support for Ada
+    - (see AdaSupportPart)
     .
   .
 
