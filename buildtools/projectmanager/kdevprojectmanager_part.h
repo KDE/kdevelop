@@ -42,6 +42,8 @@ public:
     inline ProjectModel *projectModel() const
     { return m_projectModel; }  
 
+    bool computeChanged(const QStringList &oldFileList, const QStringList &newFileList);
+    
 //
 // KDevProject interface
 //    

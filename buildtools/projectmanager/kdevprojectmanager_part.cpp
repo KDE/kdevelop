@@ -100,6 +100,8 @@ void KDevProjectManagerPart::openProject(const QString &dirName, const QString &
 
 void KDevProjectManagerPart::import()
 {
+    QStringList oldFileList = allFiles();
+    
     QDomDocument &dom = *projectDom();
     QString kind = DomUtil::readEntry(dom, "/general/importer");
     Q_ASSERT(!kind.isEmpty());
@@ -120,7 +122,11 @@ void KDevProjectManagerPart::import()
         }
     }
     
-    emit refresh();
+    
+    QStringList newFileList = allFiles();
+
+    if (computeChanged(oldFileList, newFileList))
+        emit refresh();
 }
 
 void KDevProjectManagerPart::closeProject()
@@ -267,5 +273,32 @@ void KDevProjectManagerPart::fileCreated(const QString &fileName)
         import();
 }
 
+bool KDevProjectManagerPart::computeChanged(const QStringList &oldFileList, const QStringList &newFileList)
+{
+    QMap<QString, bool> oldFiles, newFiles;
+    
+    for (QStringList::ConstIterator it = oldFileList.begin(); it != oldFileList.end(); ++it)
+        oldFiles.insert(*it, true);
+        
+    for (QStringList::ConstIterator it = newFileList.begin(); it != newFileList.end(); ++it)
+        newFiles.insert(*it, true);
+        
+    // created files: oldFiles - newFiles
+    for (QStringList::ConstIterator it = oldFileList.begin(); it != oldFileList.end(); ++it)
+        newFiles.remove(*it);        
+        
+    // removed files: newFiles - oldFiles
+    for (QStringList::ConstIterator it = newFileList.begin(); it != newFileList.end(); ++it)
+        oldFiles.remove(*it); 
+        
+
+    if (!newFiles.isEmpty())
+        emit addedFilesToProject(newFiles.keys());
+        
+    if (!oldFiles.isEmpty())
+        emit removedFilesFromProject(oldFiles.keys());       
+    
+    return !(newFiles.isEmpty() && oldFiles.isEmpty());
+}
 
 #include "kdevprojectmanager_part.moc"

@@ -35,6 +35,10 @@ public:
     virtual ProjectTargetDom addTarget(ProjectFolderDom folder, const QString &name) = 0;
     virtual ProjectFileDom addFile(ProjectFolderDom target, const QString &name) = 0;
     virtual ProjectFileDom addFile(ProjectTargetDom target, const QString &name) = 0;
+    
+    virtual void removeFolder(ProjectFolderDom folder) = 0;
+    virtual void removeTarget(ProjectTargetDom target) = 0;
+    virtual void removeFile(ProjectFileDom file) = 0;
 };
 
 #endif
