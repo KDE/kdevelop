@@ -4485,6 +4485,7 @@ via the context menu.
 <title>Breakpoints</title>
 <indexterm zone="debugger"><primary>breakpoints</primary></indexterm>
 <para>
+(... to be written ...)
 </para>
 </formalpara>
 </listitem>
@@ -4494,6 +4495,7 @@ via the context menu.
 <title>Frame Stack</title>
 <indexterm zone="debugger"><primary>frame stack</primary></indexterm>
 <para>
+(... to be written ...)
 </para>
 </formalpara>
 </listitem>
@@ -4503,6 +4505,7 @@ via the context menu.
 <title>Disassemble</title>
 <indexterm zone="debugger"><primary>disassemble</primary></indexterm>
 <para>
+(... to be written ...)
 </para>
 </formalpara>
 </listitem>
@@ -4969,6 +4972,7 @@ the content of the matched subgroups will be shown in a list box.
 <indexterm zone="plugintools"><primary>terminal</primary><secondary>embedded</secondary></indexterm>
 
 <para>
+(... to be written ...)
 </para>
 </formalpara>
 </listitem>
@@ -5211,12 +5215,14 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <sect1 id="gettinginformation">
 <title>Getting Information</title>
 <para>
+(... to be written ...)
 </para>
 </sect1> <!-- gettinginformation -->
 
 <sect1 id="app-reporting-bugs">
 <title>Reporting Bugs</title>
 <para>
+(... to be written ...)
 </para>
 </sect1> <!-- app-reporting-bugs -->
 
