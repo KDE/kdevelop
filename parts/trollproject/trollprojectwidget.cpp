@@ -435,7 +435,25 @@ QString TrollProjectWidget::getCurrentTarget()
 {
   if (!m_shownSubproject)
     return "";
-  return m_shownSubproject->configuration.m_destdir+m_shownSubproject->configuration.m_target;
+  if (m_shownSubproject->configuration.m_destdir.right(1)=='/'||
+      m_shownSubproject->configuration.m_destdir.isEmpty())
+    return m_shownSubproject->configuration.m_destdir+m_shownSubproject->configuration.m_target;
+  else
+    return m_shownSubproject->configuration.m_destdir+'/'+m_shownSubproject->configuration.m_target;
+}
+
+QString TrollProjectWidget::getCurrentDestDir()
+{
+  if (!m_shownSubproject)
+    return "";
+  return m_shownSubproject->configuration.m_destdir;
+}
+
+QString TrollProjectWidget::getCurrentOutputFilename()
+{
+  if (!m_shownSubproject)
+    return "";
+  return m_shownSubproject->configuration.m_target;
 }
 
 void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
@@ -554,9 +572,9 @@ void TrollProjectWidget::slotRunProject()
   if (m_shownSubproject->configuration.m_template!=QTMP_APPLICATION)
     return;
 
-  QString dircmd = "cd "+subprojectDirectory() + " && " ;
-  QString program = getCurrentTarget();
-  m_part->execute(dircmd + program);
+  QString dircmd = "cd "+subprojectDirectory() + "/" + getCurrentDestDir() + " && ";
+  QString program = getCurrentOutputFilename();
+  m_part->execute(dircmd + "./"+program);
 
 }
 
@@ -1396,7 +1414,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     }
     item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
     if (lst.count())
-      item->configuration.m_target = lst[0];
+      item->configuration.m_destdir = lst[0];
     item->m_FileBuffer.getValues("TARGET",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_target = lst[0];
@@ -1413,7 +1431,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->configuration.m_lflags_debug = lst;
     item->m_FileBuffer.getValues("QMAKE_LFLAGS_RELEASE",lst,minusListDummy);
     item->configuration.m_lflags_release = lst;
-    item->m_FileBuffer.getValues("QMAKE_LIBPATH",lst,minusListDummy);
+    item->m_FileBuffer.getValues("QMAKE_LIBDIR",lst,minusListDummy);
     item->configuration.m_librarypath = lst;
 
     // Handle "subdirs" project

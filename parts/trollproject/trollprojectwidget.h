@@ -177,6 +177,10 @@ public:
      */
     QString getCurrentTarget();
 
+    QString getCurrentDestDir();
+
+    QString getCurrentOutputFilename();
+
     GroupItem *createGroupItem(GroupItem::GroupType groupType, const QString &name, const QString &scopeName);
     FileItem *createFileItem(const QString &name);
 
