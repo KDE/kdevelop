@@ -778,10 +778,7 @@ void MainWindow::gotoLastWindow()
 //=============== fillWindowMenu ===============//
 // This is more or less a verbatim copy from what is implemented in KMdiMainFrm
 void MainWindow::fillWindowMenu()
-{
-    KMdiMainFrm::fillWindowMenu();
-    return;
-    
+{  
    bool bTabPageMode = FALSE;
    if (m_mdiMode == KMdi::TabPageMode)
       bTabPageMode = TRUE;
