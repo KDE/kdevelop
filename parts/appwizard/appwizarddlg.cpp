@@ -875,6 +875,12 @@ void AppWizardDialog::openAfterGeneration()
 ////////////////////////	
 
 	QStringList loadList = QStringList::split( ',', "KDevBookmarks,KDevCTags2,KDevClassView,KDevFileView,KDevQuickOpen" );
+	QString lang = DomUtil::readEntry(projectDOM, "/general/primarylanguage");
+	if ((lang == "C") || (lang == "C++"))
+		loadList << "KDevDebugger" << "KDevDoxygen";
+	QString bs = DomUtil::readEntry(projectDOM, "/general/projectmanagement");
+	if ((bs == "KDevAutoProject") || (bs == "KDevKDEAutoProject"))
+		loadList << "KDevdistpart";
 	QStringList ignoreList;
 
 	KTrader::OfferList offers = KTrader::self()->query("KDevelop/Plugin", "[X-KDevelop-Scope] == 'Project'");
