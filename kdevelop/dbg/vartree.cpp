@@ -457,7 +457,7 @@ VarItem::~VarItem()
 
 QString VarItem::varPath() const
 {
-  QString varPath("");
+  QString vPath("");
   const VarItem* item = this;
 
   // This stops at the root item (FrameRoot or WatchRoot)
@@ -465,15 +465,18 @@ QString VarItem::varPath() const
   {
     if (item->getDataType() != typeArray)
     {
-      if ((item->text(VarNameCol))[1] != '<')
+      if ((item->text(VarNameCol))[0] != '<')
       {
-        QString itemName(item->text(VarNameCol));
-        varPath = itemName.replace(QRegExp("^static "), "") + "." + varPath;
+        QString itemName = item->text(VarNameCol);
+        if (vPath.isEmpty())
+          vPath = itemName.replace(QRegExp("^static "), "");
+        else
+          vPath = itemName.replace(QRegExp("^static "), "") + "." + vPath;
       }
     }
   }
 
-  return varPath;
+  return vPath;
 }
 
 // **************************************************************************
@@ -482,10 +485,14 @@ QString VarItem::fullName() const
 {
   QString itemName(getName());
   ASSERT (itemName);
+  QString vPath = varPath();
   if (itemName[0] == '<')
-    return varPath();
+    return vPath;
 
-  return varPath() + itemName.replace(QRegExp("^static "), "");
+  if (vPath.isEmpty())
+    return itemName.replace(QRegExp("^static "), "");
+
+  return varPath() + "." + itemName.replace(QRegExp("^static "), "");
 }
 
 // **************************************************************************

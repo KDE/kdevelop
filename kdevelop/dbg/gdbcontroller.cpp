@@ -767,7 +767,7 @@ void GDBController::parseLine(char* buf)
       // might blank a previous message or display this message
       if (stateIsOn(s_appBusy))
       {
-        if ((strncmp(buf, "No ", 3)==0) || strstr(buf, "not meaningful"))
+        if ((strncmp(buf, "No ", 3)==0) && strstr(buf, "not meaningful"))
         {
           DBG_DISPLAY("Parsed (not meaningful)<" + QString(buf) + ">");
           actOnProgramPause(QString(buf));
@@ -888,8 +888,13 @@ void GDBController::parseRequestedData(char* buf)
   {
     // Fish out the item from the command and let it deal with the data
     VarItem* item = gdbItemCommand->getItem();
-    item->updateValue(buf);
-    item->trim();
+    // Hack due to my bad QString implementation - this just tidies up the display
+    if ((strncmp(buf, "There is no member named len.", 29) != 0) &&
+        (strncmp(buf, "There is no member or method named len.", 39) != 0))
+    {
+      item->updateValue(buf);
+      item->trim();
+    }
   }
 }
 
