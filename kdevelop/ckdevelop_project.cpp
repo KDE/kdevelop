@@ -25,22 +25,48 @@
 #include "cfilepropdlg.h"
 #include "cnewfiledlg.h"
 #include "cnewclassdlg.h"
+#include "cnewprojectdlg.h"
 
 void CKDevelop::slotProjectNew(){
+  QString old_project="";
+  if(!CToolClass::searchProgram("perl")){
+    return;
+  }
+  if(!CToolClass::searchProgram("autoconf")){
+    return;
+  }
+  if(!CToolClass::searchProgram("automake")){
+    return;
+  }
+  if(project){
+    old_project = prj->getProjectFile();
+    if(!slotProjectClose()){
+      return;
+    }
+  }
 	// Currently a project open ?
-  if(project)
-			slotProjectClose();      // close current project
-
-/* TODO:
-  add a dialog to create empty project file, just set
-  the project name, directory and project Type (application (KDE; QT; X11; Terminal; Library)).
-  Then create directory and project file
-  - then call slotProjectAddExistingFiles to add all files needed by the new app.
-  Makefile.am - don't know yet how to create it for the project Type. Maybe Prototypes ?
-  Ralf 
+	slotStatusMsg(i18n("Creating new project..."));
+			
+//	CNewEmptyProject  *dlg = new CNewEmptyProject(this,"NewEmptyProject");
+	CNewProjectDlg *new_dlg = new CNewProjectDlg(this,"NewEmptyProject");
+/*	if(dlg->exec())
+	{
+		dlg->CreateNewEmptyProject();
+	}
 */
-  		
+  new_dlg->exec();
+  QString file = new_dlg->getNewProjectFile();
 
+  if(new_dlg->generatedNewProject()){
+      readProjectFile(file);
+  }
+  else if (old_project != ""){ // if cancel load the old project again
+    readProjectFile(old_project);
+  }
+	
+//	delete(dlg);
+	
+	slotStatusMsg(IDS_DEFAULT);
 }
 
 
@@ -523,7 +549,9 @@ void CKDevelop::slotProjectOpen(){
   
   if (info.isFile()){
     if(!(readProjectFile(str))){
-      KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+
+    KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+    readProjectFile(old_project);
     }
     
     slotStatusMsg(IDS_DEFAULT);
@@ -606,6 +634,18 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 
   prj->writeWorkspace(current);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

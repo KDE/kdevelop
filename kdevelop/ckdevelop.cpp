@@ -954,8 +954,7 @@ void CKDevelop::slotBuildDistClean(){
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
   process.clearArguments();
-  process << make_cmd;
-  process << "distclean";
+  process << make_cmd << "distclean";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 void CKDevelop::slotBuildAutoconf(){
@@ -1409,7 +1408,6 @@ void CKDevelop::slotToolsKIconEdit(){
   if(!CToolClass::searchProgram("kiconedit")){
     return;
   }
-  
 
   showOutputView(false);
 
@@ -1425,7 +1423,6 @@ void CKDevelop::slotToolsKDbg(){
   if(!CToolClass::searchProgram("kdbg")){
     return;
   }
-  
 
   showOutputView(false);
 
@@ -1723,6 +1720,11 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
 
 
 

@@ -1,10 +1,3 @@
-####### kdevelop will overwrite this part!!! (begin)##########
-
-SUBDIRS = docs 
-
-EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm Makefile.am Makefile.in api.kdoc caddexistingfiledlg.cpp caddexistingfiledlg.h cclassview.cpp cclassview.h ccreatedocdatabasedlg.cpp ccreatedocdatabasedlg.h cdocbrowser.cpp cdocbrowser.h cdoctree.cpp cdoctree.h ceditwidget.cpp ceditwidget.h cfilepropdlg.cpp cfilepropdlg.h cgeneratenewfile.cpp cgeneratenewfile.h cgrouppropertiesdlg.cpp cgrouppropertiesdlg.h ckappwizard.cpp ckappwizard.h ckdevelop.cpp ckdevelop.cpp~ ckdevelop.h ckdevelop_classview.cpp ckdevelop_init.cpp ckdevelop_init.cpp~ ckdevelop_noslot.cpp ckdevelop_project.cpp ckdevsetupdlg.cpp ckdevsetupdlg.h clogfileview.cpp clogfileview.h cnewclassdlg.cpp cnewclassdlg.h cnewfiledlg.cpp cnewfiledlg.h coutputwidget.cpp coutputwidget.h cprjoptionsdlg.cpp cprjoptionsdlg.h cproject.cpp cproject.h crealfileview.cpp crealfileview.h ctabctl.cpp ctabctl.h ctoolclass.cpp ctoolclass.h cupdatekdedocdlg.cpp cupdatekdedocdlg.h kdevelop.kdelnk kdevelop.xpm kdeveloprc kswallow.cpp kswallow.h main.cpp mini-kdevelop.xpm resource.h structdef.h todo.html ckdevelop_whatsthis.cpp cconfigprintdlg.cpp cconfigprintdlg.h cdoctreepropdlg.cpp cdoctreepropdlg.h cfileprintdlg.cpp cfileprintdlg.h cprintdlg.cpp cprintdlg.h debug.h 
-
-####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)
 # kde_appsdir       Where your application file (.kdelnk) should go to. 
@@ -40,7 +33,7 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
 		   cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
 		   ctoolclass.cpp cdoctreepropdlg.cpp cprintdlg.cpp cfileprintdlg.cpp \
-		   cconfigprintdlg.cpp ckdevelop_whatsthis.cpp
+		   cconfigprintdlg.cpp ckdevelop_whatsthis.cpp cnewprojectdlg.cpp
 
 
 kdevelop_METASOURCES = USE_AUTOMOC
@@ -58,7 +51,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		cdoctree.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
 		cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
 		ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
-		cprintdlg.h cfileprintdlg.h cconfigprintdlg.h debug.h
+		cprintdlg.h cfileprintdlg.h cconfigprintdlg.h debug.h cnewprojectdlg.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc
 
@@ -91,6 +84,7 @@ uninstall-local:
 	-rm -f $(APPSDIR)/kdevelop.kdelnk
 	-rm -f $(kde_icondir)/kdevelop.xpm
 	-rm -f $(kde_minidir)/kdevelop.xpm
+
 
 
 
