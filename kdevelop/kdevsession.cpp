@@ -24,6 +24,8 @@
 #include "kwdoc.h"
 #include "kdevsession.h"
 #include "ceditwidget.h"
+#include "cdocbrowser.h"
+#include "khtmlview.h"
 
 KDevSession::KDevSession(DocViewMan* pDocViewMan, const QString& /*fileName*/)
   : m_pDocViewMan(pDocViewMan)
@@ -35,7 +37,6 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
 {
   QString section, keyword;
 
-  // create a config file manager
   QDomDocument* pOutFile = new QDomDocument( "KDevelopSession");
   pOutFile->appendChild( pOutFile->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
   QDomElement session = pOutFile->createElement("KDevelopSession");
@@ -45,7 +46,6 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
   QString docIdStr;
 
   if (m_pDocViewMan->docCount() > 0) {
-    // loop over all docs using the doc ids
     QList<KWriteDoc> kWriteDocList = m_pDocViewMan->getKWriteDocList();
     for (kWriteDocList.first(); kWriteDocList.current() != 0; kWriteDocList.next()) {
       KWriteDoc* pDoc = kWriteDocList.current();
@@ -77,10 +77,38 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
           docEl.appendChild( viewEl);
           // focus?
           viewEl.setAttribute("Focus", (((CEditWidget*)pView->parentWidget()) == m_pDocViewMan->currentEditView()));
+          viewEl.setAttribute("Type", "KWriteView");
           // save geometry of current view
-          saveViewGeometry( pView, viewEl);
+          saveViewGeometry( pView->parentWidget(), viewEl);
         }
       }
+    }
+    QList<CDocBrowser> kDocBrowserList = m_pDocViewMan->getDocBrowserList();
+    for (kDocBrowserList.first(); kDocBrowserList.current() != 0; kDocBrowserList.next()) {
+      CDocBrowser* pDoc = kDocBrowserList.current();
+      if (!pDoc->currentURL()) {
+        // TODO: ask for filename
+      }
+      docIdStr.setNum(nDocs);
+      QDomElement docEl = pOutFile->createElement("Doc" + docIdStr);
+      docEl.setAttribute( "FileName", pDoc->currentURL());
+      session.appendChild( docEl);
+      // save the document itself
+//???         if (pDoc->bIsModified())
+      nDocs++;
+//???            pDoc->saveFile(docFileName, 0L, "Synchronization");
+      docEl.setAttribute( "Type", "CDocBrowser");
+      // get the view
+      KHTMLView* pView = pDoc->view();
+      // write the number of views
+      docEl.setAttribute( "NumberOfViews", 1);  // there's only one view possible for a CDocBrowser
+      QDomElement viewEl = pOutFile->createElement( "View");
+      docEl.appendChild( viewEl);
+      // focus?
+      viewEl.setAttribute("Focus", (((KHTMLView*)pView->parentWidget()) == m_pDocViewMan->currentBrowserView()));
+      viewEl.setAttribute("Type", "KHTMLView");
+      // save geometry of current view
+      saveViewGeometry( pView, viewEl);
     }
   }
 
@@ -134,35 +162,46 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
   QDomElement docEl;
   for (docEl = session.firstChild().toElement(), nDoc = 0; nDoc < nNrOfDocs; nDoc++, docEl = docEl.nextSibling().toElement()) {
     // read the document name and type
-    QString docName  = docEl.attribute( "FileName", "Unnamed");
+    QString docName = docEl.attribute( "FileName", "");
+    QString docType = docEl.attribute( "Type", "Unknown");
     if (!docName.isEmpty()) {
       // create the document
-      KWriteDoc* pDoc = m_pDocViewMan->createKWriteDoc(docName);
-      if (pDoc) {
-        // load contents from file
-        if(QFile::exists(docName)) {
-          QFile f(docName);
-          if (f.open(IO_ReadOnly)) {
-            pDoc->loadFile(f);
-            f.close();
+      if (docType == QString("KWriteDoc")) {
+        KWriteDoc* pDoc = m_pDocViewMan->createKWriteDoc(docName);
+        if (pDoc) {
+          // load contents from file
+          if(QFile::exists(docName)) {
+            QFile f(docName);
+            if (f.open(IO_ReadOnly)) {
+              pDoc->loadFile(f);
+              f.close();
+            }
           }
-        }
-        // views
-        recreateKWriteViews( pDoc, docEl);
+          // views
+          recreateViews( pDoc, docEl);
 //???        pDoc->setModified(false);
-        bFound = true;
+          bFound = true;
+        }
+      }
+      else if (docType == QString("CDocBrowser")) {
+        CDocBrowser* pDoc = m_pDocViewMan->createCDocBrowser(docName);
+        if (pDoc) {
+          // views
+          recreateViews( pDoc, docEl);
+//???        pDoc->setModified(false);
+          bFound = true;
         }
       }
     }
-    if (bFound == false) {
-    return false;
   }
+  if (bFound == false)
+    return false;
 
   return true;
 }
 
 //------------------------------------------------------------------------------
-void KDevSession::recreateKWriteViews( KWriteDoc* pDoc, QDomElement docEl)
+void KDevSession::recreateViews( QObject* pDoc, QDomElement docEl)
 {
   // read information about the views
   int nNrOfViews = docEl.attribute( "NumberOfViews", "0").toInt();
@@ -172,7 +211,12 @@ void KDevSession::recreateKWriteViews( KWriteDoc* pDoc, QDomElement docEl)
   QWidget* pFocusedView = 0L;
   for (viewEl = docEl.firstChild().toElement(), nView = 0; nView < nNrOfViews; nView++, viewEl = viewEl.nextSibling().toElement()) {
     // create the view
-    CEditWidget* pView = m_pDocViewMan->createEditView( pDoc);
+    QWidget* pView = 0L;
+    QString viewType = viewEl.attribute( "Type", "Unknown");
+    if (viewType == QString("KWriteView"))
+      pView = m_pDocViewMan->createEditView( (KWriteDoc*) pDoc);
+    else if (viewType == QString("KHTMLView"))
+      pView = m_pDocViewMan->createBrowserView( (CDocBrowser*) pDoc);
     if (pView != 0L) {
       // is it the focused view? (XXX well, this only refers to the module instance)
       if (viewEl.attribute( "Focus", "0").toInt()) {
@@ -193,7 +237,7 @@ void KDevSession::saveViewGeometry( QWidget* pView, QDomElement viewEl)
 {
   if (!pView) return;
   if (!pView->parentWidget()) return;
-  QextMdiChildView* pMDICover = dynamic_cast<QextMdiChildView*>(pView->parentWidget()->parentWidget());
+  QextMdiChildView* pMDICover = dynamic_cast<QextMdiChildView*>(pView->parentWidget());
   if (!pMDICover) return;
 
   // write the view position and size

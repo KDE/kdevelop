@@ -186,7 +186,8 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 
     debug(" focus view !\n");
 
-    pCurEditWidget->parentWidget()->setFocus();
+    if (pCurEditWidget)
+      pCurEditWidget->parentWidget()->setFocus();
 
     // Don't use the saved text because it is useless
     // and removes the bookmarks
@@ -194,6 +195,9 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 
     qDebug("doc (and at least 1 view) did exist, raise it");
   }
+
+  if (!pCurEditWidget)
+    return;
 
   // debug(" toggle modify cur edit widget !\n");
   // pCurEditWidget->toggleModified(info->modified);
@@ -525,6 +529,7 @@ KWriteDoc* DocViewMan::findKWriteDoc()
 void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
 {
   debug("DocViewMan::closeKWriteDoc !\n");
+  if (!pDoc) return;
 
   QList<KWriteView> views = pDoc->viewList();
   QListIterator<KWriteView>  itViews(views);
@@ -788,6 +793,7 @@ void DocViewMan::closeView(QWidget* pView)
 void DocViewMan::closeEditView(CEditWidget* pView)
 {
   debug("DocViewMan::closeEditView !\n");
+  if (!pView) return;
 
   // Get the document
   KWriteDoc* pDoc = pView->doc();
@@ -1481,6 +1487,20 @@ QList<KWriteDoc> DocViewMan::getKWriteDocList() const
 
   for (; itDoc.current() != 0; ++itDoc) {
     KWriteDoc* doc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    if (doc) {
+      resultList.append(doc);
+    }
+  }
+  return resultList;
+}
+
+QList<CDocBrowser> DocViewMan::getDocBrowserList() const
+{
+  QListIterator<QObject> itDoc(m_documentList);
+  QList<CDocBrowser> resultList;
+
+  for (; itDoc.current() != 0; ++itDoc) {
+    CDocBrowser* doc = dynamic_cast<CDocBrowser*> (itDoc.current());
     if (doc) {
       resultList.append(doc);
     }

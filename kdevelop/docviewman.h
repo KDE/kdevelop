@@ -192,6 +192,8 @@ public:
   /** Get a list of all the KWriteDoc */
   QList<KWriteDoc> getKWriteDocList() const;
   /** */
+  QList<CDocBrowser> getDocBrowserList() const;
+  /** */
   QObject* getDocFromFilename(const QString& strFileName) const;
   /** */
   KWriteDoc* getKWDocFromFilename(const QString& strFileName) const;

@@ -41,7 +41,7 @@ public:
   bool restoreFromFile(const QString& fileName);
 
   /** recreates views of a document and their properties */
-  void recreateKWriteViews( KWriteDoc* pDoc, QDomElement docEl);
+  void recreateViews( QObject* pDoc, QDomElement docEl);
   /** */
   void saveViewGeometry( QWidget* pView, QDomElement viewEl);
   /** */
