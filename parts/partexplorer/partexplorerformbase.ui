@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>514</width>
-            <height>574</height>
+            <width>589</width>
+            <height>478</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -27,72 +27,127 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
-        <widget class="QGroupBox">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>groupBox1</cstring>
+                <cstring>layout1</cstring>
             </property>
-            <property name="title">
-                <string>Query Criteria</string>
-            </property>
-            <widget class="QLineEdit">
+            <grid>
                 <property name="name">
-                    <cstring>lineEditCostraints</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>114</y>
-                        <width>418</width>
-                        <height>24</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>lineEditType</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>45</y>
-                        <width>418</width>
-                        <height>24</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>22</y>
-                        <width>418</width>
-                        <height>17</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Type (i.e. KDevelop/Plugin, KParts/ReadWritePart, ...):</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>91</y>
-                        <width>418</width>
-                        <height>17</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Additional constraints (i.e. [X-KDevelop-Scope]='Global'):</string>
-                </property>
-            </widget>
+                <widget class="QGroupBox" row="0" column="0" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>groupBox1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="title">
+                        <string>Query Criteria</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Type (i.e. KDevelop/Plugin, KParts/ReadWritePart, ...):</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>lineEditType</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Additional constraints (i.e. [X-KDevelop-Scope]='Global'):</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>lineEditCostraints</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>buttonSearch</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Search</string>
+                    </property>
+                </widget>
+                <spacer row="1" column="1">
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Fixed</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>80</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
         </widget>
         <widget class="QLabel">
             <property name="name">
@@ -139,69 +194,22 @@
             <property name="name">
                 <cstring>listViewResults</cstring>
             </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout25</cstring>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer17</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>310</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonSearch</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Search</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonClose</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Close</string>
-                    </property>
-                </widget>
-            </hbox>
         </widget>
     </vbox>
 </widget>
-<connections>
-    <connection>
-        <sender>buttonClose</sender>
-        <signal>clicked()</signal>
-        <receiver>PartExplorerFormBase</receiver>
-        <slot>close()</slot>
-    </connection>
-</connections>
 <tabstops>
     <tabstop>lineEditType</tabstop>
     <tabstop>lineEditCostraints</tabstop>
     <tabstop>buttonSearch</tabstop>
     <tabstop>listViewResults</tabstop>
-    <tabstop>buttonClose</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
@@ -209,7 +217,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>qwidget.h</includehint>
     <includehint>klistview.h</includehint>
 </includehints>
 </UI>

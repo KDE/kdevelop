@@ -12,7 +12,6 @@
 #ifndef _PARTEXPLORERPLUGIN_H_
 #define _PARTEXPLORERPLUGIN_H_
 
-#include <ktrader.h>
 #include "kdevplugin.h"
 
 class QWidget;
@@ -33,41 +32,37 @@ class PartExplorerPlugin : public KDevPlugin
     Q_OBJECT
 public:
     /**
-     * Default constructor
-     */
+    * Default constructor
+    */
     PartExplorerPlugin(  QObject *parent, const char *name, const QStringList & );
 
     /**
-     * Destructor
-     */
+    * Destructor
+    */
     virtual ~PartExplorerPlugin();
 
 signals:
-	/**
-	* This signal is connected to the m_widget, so the form will be the only encharged
-	* for displaying error messages.
-	*/
-	void displayError( QString );
+    /**
+    * This signal is connected to the m_widget, so the form will be the only encharged
+    * for displaying error messages.
+    */
+    void displayError( QString );
 
 public slots:
-	/**
-	* Query KDE for registered services matching the query costraints.
-	*/
-	void slotSearchServices( QString, QString );
-	/**
-	* Show PartEplorer form.
-	*/
-	void slotShowWidget();
+    /**
+    * Query KDE for registered services matching the query costraints.
+    */
+    void slotSearchServices( QString, QString );
+    /**
+    * Show PartEplorer form.
+    */
+    void slotShowWidget();
 
 private:
-	/**
-	* Fills the widget with data gathered for system's query.
-	*/
-	void fillWidget( const KTrader::OfferList &services );
-	/**
-	* The dialog for user interaction, so the plugin is usable too ;)
-	*/
-	PartExplorerForm *m_widget;
+    /**
+    * The dialog for user interaction, so the plugin is usable too ;)
+    */
+    PartExplorerForm *m_widget;
 };
 
 #endif // _PARTEXPLORERPLUGIN_H_
