@@ -395,12 +395,12 @@ void QextMdiChildView::activate()
      emit focusInEventOccurs( this);
    }
 
-   // check if someone wants that we interrupt the method (because it's probably unnecessary)
+   // if this method was called directly, check if the mainframe wants that we interrupt
    if(m_bInterruptActivation) {
       m_bInterruptActivation = FALSE;
    }
    else {
-      if(!m_bFocusInEventIsPending) {
+	    if(!m_bFocusInEventIsPending) {
          setFocus();
       }
       qDebug("QextMdiChildView::activate() called!");
@@ -590,48 +590,6 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       }
    }
    return FALSE;                           // standard event processing
-}
-
-/** Interpose in event loop of all current child widgets. Must be recalled after dynamic adding of new child widgets!
-  * and
-  * get first and last TAB-focusable widget of this child frame
-  */
-void QextMdiChildView::installEventFilterForAllChildren()
-{
-   QObjectList *list = queryList( "QWidget" );
-   QObjectListIt it( *list );          // iterate over all child widgets
-   QObject * obj;
-   while ( (obj=it.current()) != 0 ) { // for each found object...
-      QWidget* widg = (QWidget*)obj;
-      ++it;
-      widg->installEventFilter(this);
-      if((widg->focusPolicy() == QWidget::StrongFocus) ||
-         (widg->focusPolicy() == QWidget::TabFocus   ) ||
-         (widg->focusPolicy() == QWidget::WheelFocus ))
-      {
-         if(m_firstFocusableChildWidget == 0) {
-            m_firstFocusableChildWidget = widg;  // first widget
-         }
-         m_lastFocusableChildWidget = widg; // last widget
-         //qDebug("*** %s (%s)",widg->name(),widg->className());
-      }
-   }
-   //qDebug("### |%s|", m_lastFocusableChildWidget->name());
-   if(m_lastFocusableChildWidget != 0) {
-      if(QString(m_lastFocusableChildWidget->name()) == QString("qt_viewport")) {
-         // bad Qt hack :-( to avoid setting a listbox viewport as last focusable widget
-         it.toFirst();
-         // search widget
-         while( (obj=it.current()) != m_lastFocusableChildWidget) ++it;
-         --it;
-         --it;
-         --it;// three steps back
-         m_lastFocusableChildWidget = (QWidget*) it.current();
-         //qDebug("Qt hack");
-      }
-   }
-   //qDebug("### |%s|", m_lastFocusableChildWidget->name());
-   delete list;                        // delete the list, not the objects
 }
 
 /** Switches interposing in event loop of all current child widgets off. */

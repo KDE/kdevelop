@@ -413,14 +413,6 @@ public slots:
    virtual void activatePrevWin();
 
 protected:
-//   /**
-//   * Calls the destructor by delete.
-//   */
-//   virtual void closeEvent(QCloseEvent *e);
-   /** 
-   * Redirect the focus to the MDI area widget ( @ref QextMdiChildArea ).
-   */
-//   virtual void focusInEvent(QFocusEvent *);
    /**
    *
    */

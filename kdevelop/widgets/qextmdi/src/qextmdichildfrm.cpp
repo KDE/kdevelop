@@ -788,7 +788,7 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
    m_pMaximize->installEventFilter(this);
    m_pClose->installEventFilter(this);
    m_pClient->installEventFilter(this);
-   m_pClient->installEventFilterForAllChildren();
+//   m_pClient->installEventFilterForAllChildren();
 }
 
 //============== unlinkChildren =============//

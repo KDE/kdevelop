@@ -202,11 +202,7 @@ protected:
    * Internally used for the tile algorithm 
    */
    void tileAllInternal(int maxWnds);
-   /** 
-   * Automatically focuses the attached MDI view which is on top of all other attached MDI view. 
-   */
-   virtual void focusInEvent(QFocusEvent *);
-   /** 
+   /**
    * Automatically resizes a maximized MDI view and layouts the positions of minimized MDI views. 
    */
    virtual void resizeEvent(QResizeEvent *);

@@ -419,9 +419,6 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       resize( width(), m_oldMainFrmHeight);
       m_oldMainFrmHeight = 0;
       switchToChildframeMode();
-//      m_mdiMode = QextMdi::ChildframeMode;
-      //qDebug("TopLevelMode off");
-      emit leftTopLevelMode();
    }
 
    m_pMdi->manageChild(lpC,FALSE,bCascade);
@@ -664,12 +661,14 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
 {
    pWnd->m_bMainframesActivateViewIsPending = TRUE;
 
+	 bool bActivateNecessary = TRUE;
    if (m_pCurrentWindow != pWnd) {
       m_pCurrentWindow = pWnd;
    }
    else {
-      // XXX TDODO: IMHO it would be sufficient not to call activate() later.
-      //            So we wouldn't need the pWnd->m_bInterruptActivation flag at all.
+      bActivateNecessary = FALSE;
+			// if this method is called as answer to view->activate(),
+			// interrupt it because it's not necessary
       pWnd->m_bInterruptActivation = TRUE;
    }
 
@@ -683,22 +682,22 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
    }
    else {
       if (pWnd->isAttached()) {
-         if (m_pMdi->topChild() == pWnd->mdiParent()) {
+         if (bActivateNecessary && (m_pMdi->topChild() == pWnd->mdiParent())) {
             pWnd->activate();
          }
          pWnd->mdiParent()->raiseAndActivate();
       }
       if (!pWnd->isAttached()) {
-         pWnd->activate();
+				 if (bActivateNecessary)
+	         pWnd->activate();
          m_pMdi->setTopChild(0L); // lose focus in the mainframe window
          if (!pWnd->isActiveWindow()) {
-            pWnd->m_bInterruptActivation = TRUE;
             pWnd->setActiveWindow();
          }
          pWnd->raise();
-         if (!pWnd->hasFocus()) {
-            pWnd->setFocus();
-         }
+//         if (!pWnd->hasFocus()) {
+//            pWnd->setFocus();
+//         }
       }
    }
    pWnd->m_bMainframesActivateViewIsPending = FALSE;
@@ -716,12 +715,6 @@ void QextMdiMainFrm::childWindowCloseRequest(QextMdiChildView *pWnd)
    QextMdiViewCloseEvent* ce = new QextMdiViewCloseEvent( pWnd);
    QApplication::postEvent( this, ce);
 }
-
-//void QextMdiMainFrm::focusInEvent(QFocusEvent *)
-//{
-//   qDebug("QextMdiMainFrm::focusInEvent");
-//???   m_pMdi->setFocus();
-//}
 
 bool QextMdiMainFrm::event( QEvent* e)
 {

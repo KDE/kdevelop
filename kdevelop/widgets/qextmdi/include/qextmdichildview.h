@@ -92,6 +92,7 @@ private:
    /**
    * Internally used by QextMdiMainFrm to store a temporary information that the method
    * activate() is unnecessary and that it can by escaped.
+   * This saves from unnecessary calls when activate is called directly.
    */
    bool m_bInterruptActivation;
    /**
@@ -224,11 +225,6 @@ public:
    * Sets the geometry that will be restored by calling restore().
    */
    void  setRestoreGeometry(const QRect& newRestGeo);
-   /**
-   * Interpose in event loop of all current child widgets.
-   * Must be recalled after dynamic adding of new child widgets!
-   */
-   void installEventFilterForAllChildren();
    /**
    * Switches interposing in event loop of all current child widgets off.
    */
