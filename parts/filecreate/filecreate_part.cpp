@@ -73,7 +73,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   newAction->setWhatsThis( i18n("<b>New file</b><p>Creates a new file. Also adds it the project if the <b>Add to project</b> checkbox is turned on.") );
   newAction->setToolTip( i18n("Create a new file") );
 
-  m_filetypes.setAutoDelete(true);
+//  m_filetypes.setAutoDelete(true);
 
   m_availableWidgets[0] = new FriendlyWidget(this);
   m_availableWidgets[1] = new ListWidget(this);
@@ -88,6 +88,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
 
 FileCreatePart::~FileCreatePart()
 {
+/*
   for(int c=0;c<m_numWidgets;c++){
     if (TypeChooser* chooser = m_availableWidgets[c]) {
 
@@ -97,6 +98,7 @@ FileCreatePart::~FileCreatePart()
        delete chooser;
     }
   }
+*/  
   delete _configProxy;
 }
 
@@ -489,7 +491,7 @@ void FileCreatePart::slotInitialize( )
   }
 
   // read in the list of file types for this project
-  if ( readTypes( *projectDom(), m_filetypes, true )==0  ) {
+  if ( project() && readTypes( *projectDom(), m_filetypes, true )==0  ) {
     // default by scanning the templates directory if no template info
     // found in project file
     QDir templDir( project()->projectDirectory() + "/templates/" );
