@@ -15,15 +15,15 @@
 #include <Python.h>
 #include <qdom.h>
 #include <qguardedptr.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 
-class ScriptingPart : public KDevPart
+class ScriptingPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    ScriptingPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    ScriptingPart( QObject *parent, const char *name, const QStringList & );
     ~ScriptingPart();
 
     PyObject *addMenuItem(PyObject *args);

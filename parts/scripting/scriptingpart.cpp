@@ -14,9 +14,10 @@
 #include <dcopclient.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
-#include "scriptingfactory.h"
 #include "scriptingpart.h"
 
 
@@ -26,9 +27,11 @@ extern "C" {
     void initpydcopc();
 }
 
+typedef KGenericFactory<ScriptingPart> ScriptingFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevscripting, ScriptingFactory( "kdevscripting" ) );
 
-ScriptingPart::ScriptingPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringList &)
+    : KDevPlugin(parent, name)
 {
     setInstance(ScriptingFactory::instance());
     
@@ -163,7 +166,7 @@ extern "C" {
         { NULL,                 NULL,                0,            NULL }
     };
 
-    static void initkdevelopc()
+    void initkdevelopc()
     {
         (void) Py_InitModule((char*)"kdevelopc", kdevelopc_methods);
     }
