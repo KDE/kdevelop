@@ -69,7 +69,9 @@ void AppWizardPart::slotNewProject()
     dlg.templates_listview->setFocus();
     if (dlg.exec()) {
         m_creationCommand = dlg.getCommandLine();
-        m_projectFileName = dlg.getProjectLocation() + "/" + dlg.getProjectName().lower() + ".kdevelop";
+        m_projectLocation = dlg.getProjectLocation() + "/";
+        m_projectFileName = m_projectLocation + dlg.getProjectName().lower() + ".kdevelop";
+        m_openFilesAfterGeneration = dlg.getFilesToOpenAfterGeneration();
     } else {
       disconnect(makeFrontend(), 0, this, 0);
     }
@@ -82,8 +84,17 @@ void AppWizardPart::slotImportProject()
     dlg.exec();
 }
 
-void AppWizardPart::openMainFile()
+void AppWizardPart::openSpecifiedFiles()
 {
+    for ( QStringList::Iterator it = m_openFilesAfterGeneration.begin();
+          it != m_openFilesAfterGeneration.end(); ++it ) {
+        if ( !(*it).isNull() ) {
+            KURL url(m_projectLocation + *it);
+            kdDebug(9010) << "Try to open: " << url << endl;
+            partController()->editDocument(url);
+        }
+    }
+
 #if 0
     return;
 
@@ -117,7 +128,7 @@ void AppWizardPart::slotCommandFinished(const QString &command)
         // load the created project and maybe the first file (README...)
         core()->openProject(m_projectFileName);  // opens the project
 
-        openMainFile();
+        openSpecifiedFiles();
 
         disconnect(makeFrontend(), 0, this, 0);
     }

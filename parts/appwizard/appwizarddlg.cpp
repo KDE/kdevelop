@@ -93,6 +93,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         info->icon = config.readEntry("Icon");
         info->comment = config.readEntry("Comment");
         info->fileTemplates = config.readEntry("FileTemplates");
+        info->openFilesAfterGeneration = config.readListEntry("ShowFilesAfterGeneration");
         QString destDir = config.readPathEntry("DefaultDestinatonDir", defaultProjectsDir);
         destDir.replace(QRegExp("HOMEDIR"), QDir::homeDirPath());
         info->defaultDestDir = destDir;
@@ -611,4 +612,16 @@ ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
     return 0;
 }
 
+QStringList AppWizardDialog::getFilesToOpenAfterGeneration()
+{
+    for ( QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
+          it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it ) {
+        (*it).replace("APPNAMEUC", getProjectName().upper());
+        (*it).replace("APPNAMELC", getProjectName().lower());
+        (*it).replace("APPNAME", getProjectName());
+    }
+    return m_pCurrentAppInfo->openFilesAfterGeneration;
+}
+
 #include "appwizarddlg.moc"
+

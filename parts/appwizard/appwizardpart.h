@@ -15,6 +15,7 @@
 #include <qguardedptr.h>
 #include "kdevplugin.h"
 #include <qstring.h>
+#include <qstringlist.h>
 
 class AppWizardDialog;
 
@@ -33,11 +34,13 @@ private slots:
     void slotCommandFinished(const QString &command);
 
 private:
-    //! opens the file where the "main" function is in
-    void openMainFile();
+    //! opens all files specified in the template-information file with "ShowFilesAfterGeneration="
+    void openSpecifiedFiles();
     AppWizardDialog *m_dialog;
+    QStringList m_openFilesAfterGeneration;
     QString m_creationCommand;
     QString m_projectFileName;
+    QString m_projectLocation;
 };
 
 #endif

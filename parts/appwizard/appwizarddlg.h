@@ -26,6 +26,7 @@ class QVBox;
 #include <qlistview.h>
 #include <qlineedit.h>
 #include <qlabel.h>
+#include <qstringlist.h>
 
 #include "kdevversioncontrol.h"
 #include "appwizarddlgbase.h"
@@ -40,6 +41,7 @@ struct ApplicationInfo
     QString category;
     QString defaultDestDir;
     QString fileTemplates;
+    QStringList openFilesAfterGeneration;
 
     QListViewItem *item; // item pointer to the listview
 
@@ -71,6 +73,7 @@ public:
     QString getProjectName() { return appname_edit->text(); }
     QString getProjectLocation() { return finalLoc_label->text(); }
     QString getCommandLine() { return m_cmdline; }
+    QStringList getFilesToOpenAfterGeneration();
 
 protected:
     virtual void templatesTreeViewClicked(QListViewItem*);
