@@ -68,7 +68,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name ) 
 void CKDevSetupDlg::addGeneralTab()
 {
   // ****************** the General Tab ********************
-  generalPage = addPage(i18n("General"));
+  generalPage = addPage(i18n("General"),i18n("KDevelop General Configuration"),
+		KGlobal::instance()->iconLoader()->loadIcon( "gear", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(generalPage,4,1,15,7);
 
   QButtonGroup* makeGroup;
@@ -282,7 +283,8 @@ void CKDevSetupDlg::addKeysTab()
 {
 
   keyMap = m_accel->keyDict();
-  keysPage = addPage(i18n("Keys"));
+  keysPage = addPage(i18n("Keys"),i18n("Configuration of KDevelop Hot-Keys"),
+		KGlobal::instance()->iconLoader()->loadIcon( "key_bindings", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(keysPage,2,1,15,7);
 
   keyChooser = new KKeyChooser ( &keyMap, keysPage, true);
@@ -292,7 +294,10 @@ void CKDevSetupDlg::addKeysTab()
 void CKDevSetupDlg::addDocTab()
 {
   // ****************** the Documentation Tab ********************
-  QFrame* docPage = addPage(i18n("Documentation"));
+
+  QFrame* docPage = addPage(i18n("Documentation"),i18n("Path to KDE 2/Qt 2 API Documentation"),
+		KGlobal::instance()->iconLoader()->loadIcon( "contents", KIcon::NoGroup, KIcon::SizeMedium ));
+
   QGridLayout *grid = new QGridLayout(docPage,2,1,15,7);
 
   config->setGroup("Doc_Location");
@@ -586,7 +591,10 @@ void CKDevSetupDlg::addDebuggerTab()
 //
 void CKDevSetupDlg::addQT2Tab()
 {
-  QFrame* QT2Page = addPage(i18n("Path"));
+
+  QFrame* QT2Page = addPage(i18n("Path"),i18n("Path to KDE 2 / Qt 2 installation"),
+		KGlobal::instance()->iconLoader()->loadIcon( "fileopen", KIcon::NoGroup, KIcon::SizeMedium ));
+
   config->setGroup("QT2");
   QGridLayout *grid = new QGridLayout(QT2Page,2,1,15,7);
 

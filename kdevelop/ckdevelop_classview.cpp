@@ -82,7 +82,6 @@ void CKDevelop::slotClassChoiceCombo(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-#include <iostream.h>
 void CKDevelop::slotMethodChoiceCombo(int index)
 {
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);

@@ -80,7 +80,8 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 //
 void CPrjOptionsDlg::addGeneralPage()
 {
-  QFrame* generalPage = addPage(i18n("General"));
+  QFrame* generalPage = addPage(i18n("General"),i18n("General Project Information"),
+		KGlobal::instance()->iconLoader()->loadIcon( "readme", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(generalPage,9,6,15,7);
   QWhatsThis::add(generalPage, i18n("Set the general options of your project here."));
 
@@ -184,7 +185,9 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   need_configure_in_update = false;
   need_makefile_generation = false;
 
-  QFrame* compilerOptions = addPage(i18n("Compiler Options"));
+  QFrame* compilerOptions = addPage(i18n("Compiler Options"),i18n("General Compiler Options"),
+		KGlobal::instance()->iconLoader()->loadIcon( "pipe", KIcon::NoGroup, KIcon::SizeMedium ));
+
   QWhatsThis::add(compilerOptions, i18n("Set your Compiler options here"));
 
   QGroupBox* target_group;
@@ -356,7 +359,9 @@ void CPrjOptionsDlg::addCompilerWarningsPage()
   old_addit_flags = prj_info->getAdditCXXFLAGS().stripWhiteSpace();
   old_cxxflags = cxxflags.stripWhiteSpace();
 
-  QFrame* compilerWarnings = addPage(i18n("Compiler Warnings"));
+  QFrame* compilerWarnings = addPage(i18n("Compiler Warnings"),i18n("Compiler Warning Settings"),
+		KGlobal::instance()->iconLoader()->loadIcon( "core", KIcon::NoGroup, KIcon::SizeMedium ));
+		
   QWhatsThis::add(compilerWarnings, i18n("Set the Compiler warnings here by checking "
       "the -W options you want to use."));
 
@@ -995,7 +1000,8 @@ void CPrjOptionsDlg::addLinkerPage()
 //
 void CPrjOptionsDlg::addMakePage()
 {
-  QFrame* makeOptions = addPage(i18n("Make Options"));
+  QFrame* makeOptions = addPage(i18n("Make Options"),i18n("Build Program Settings"),
+		KGlobal::instance()->iconLoader()->loadIcon( "make", KIcon::NoGroup, KIcon::SizeMedium ));
   QWhatsThis::add(makeOptions, i18n("This dialog is for setting your make options."));
 
   m_print_debug_info = new QCheckBox( makeOptions, "m_print_debug_info" );
