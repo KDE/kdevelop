@@ -257,7 +257,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 	
   qt_edit = new QLineEdit( w, "qt_edit" );
   qt_edit->setGeometry( 170, 40, 190, 30 );
-  qt_edit->setText( config->readEntry("doc_qt"));
+  qt_edit->setText( config->readEntry("doc_qt", QT_DOCDIR));
   qt_edit->setMaxLength( 32767 );
   
   QPushButton* qt_button;
@@ -285,7 +285,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   kde_edit = new QLineEdit( w, "kde_edit");
   kde_edit->setGeometry( 170, 90, 190, 30 );
-  kde_edit->setText(config->readEntry("doc_kde"));
+  kde_edit->setText(config->readEntry("doc_kde", KDELIBS_DOCDIR));
   kde_edit->setMaxLength( 32767 );
   kde_edit->setEchoMode( QLineEdit::Normal );
   kde_edit->setFrame( TRUE );
@@ -475,7 +475,7 @@ void CKDevSetupDlg::ok(){
 
 void CKDevSetupDlg::slotQtClicked(){
   QString dir;
-  dir = KFileDialog::getDirectory(config->readEntry("doc_qt"));
+  dir = KFileDialog::getDirectory(config->readEntry("doc_qt", QT_DOCDIR));
   if (!dir.isEmpty()){
     qt_edit->setText(dir);
     config->setGroup("Doc_Location");
@@ -492,7 +492,7 @@ void CKDevSetupDlg::slotQtClicked(){
 }
 void CKDevSetupDlg::slotKDEClicked(){
   QString dir;
-  dir = KFileDialog::getDirectory(config->readEntry("doc_kde"));
+  dir = KFileDialog::getDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
   if (!dir.isEmpty()){
     kde_edit->setText(dir);
     config->setGroup("Doc_Location");

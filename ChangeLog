@@ -1,3 +1,8 @@
+1999-07-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Use KDELIBS_DOCDIR and QT_DOCDIR as defaults everywhere
+	* Fixed relative path of user manual
+	* Fixed KListView::clear(), although it's never used...
+
 1999-07-24  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* Bernd: I commented out the #include "commitdilalog.moc" in commitdialog.cpp to make it compile and added
 	  Q_OBJECT to commitdialog.h instead.

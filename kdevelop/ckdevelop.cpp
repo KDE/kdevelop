@@ -1295,30 +1295,45 @@ void CKDevelop::slotHelpReference(){
   }
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
+
+
 void CKDevelop::slotHelpQtLib(){
   config->setGroup("Doc_Location");
   QString doc_qt = config->readEntry("doc_qt", QT_DOCDIR);
   slotURLSelected(browser_widget,"file:" + doc_qt + "/index.html",1,"test");
 }
-void CKDevelop::slotHelpKDECoreLib(){
+
+
+void CKDevelop::showLibsDoc(const char *libname)
+{
   config->setGroup("Doc_Location");
   QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-  slotURLSelected(browser_widget,"file:" + doc_kde + "kdecore/index.html",1,"test");
+  QString url = "file:" + doc_kde + libname + "/index.html";
+  slotURLSelected(browser_widget, url,1,"test");
 }
+    
+void CKDevelop::slotHelpKDECoreLib(){
+  showLibsDoc("kdecore");
+}
+
+
 void CKDevelop::slotHelpKDEGUILib(){
-  config->setGroup("Doc_Location");
-  slotURLSelected(browser_widget,"file:" +  config->readEntry("doc_kde") + "kdeui/index.html",1,"test");
+  showLibsDoc("kdeui");
 }
+
+
 void CKDevelop::slotHelpKDEKFileLib(){
-  config->setGroup("Doc_Location");
-  slotURLSelected(browser_widget,"file:" +  config->readEntry("doc_kde") + "kfile/index.html",1,"test");
+  showLibsDoc("kfile");
 }
+
+
 void CKDevelop::slotHelpKDEHTMLLib(){
   config->setGroup("Doc_Location");
-	QString file=config->readEntry("doc_kde") + "khtmlw/index.html";
+  QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+  QString file = doc_kde + "khtmlw/index.html";
   if( !QFileInfo( file ).exists() ){
     // not found: use khtml
-    file =config->readEntry("doc_kde") + "khtml/index.html";
+    file = doc_kde + "khtml/index.html";
   }
   slotURLSelected(browser_widget,"file:" +file  ,1,"test");
 }

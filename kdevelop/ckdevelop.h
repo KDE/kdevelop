@@ -410,6 +410,7 @@ public:
   void slotHelpReference();
   /** shows the Qt-doc */
   void slotHelpQtLib();
+  void showLibsDoc(const char *libname);
   /** shows the kdecore-doc */
   void slotHelpKDECoreLib();
   /** shows the kdeui-doc */

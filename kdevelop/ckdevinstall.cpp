@@ -165,7 +165,7 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	qt_label->setMargin( -1 );
 
 	config->setGroup("Doc_Location");
-	QString qt_doc=config->readEntry("doc_qt","");
+	QString qt_doc=config->readEntry("doc_qt", QT_DOCDIR);
 	if(qt_doc.isEmpty())
 	  qt_test=true;
 	qt_edit = new QLineEdit( this, "LineEdit_1" );
@@ -279,7 +279,7 @@ CKDevInstall::~CKDevInstall(){
 void CKDevInstall::slotQTpressed()
 {
   QString dir;
-  dir = KFileDialog::getDirectory(config->readEntry("doc_qt"));
+  dir = KFileDialog::getDirectory(config->readEntry("doc_qt", QT_DOCDIR));
   if (!dir.isEmpty()){
     qt_edit->setText(dir);
     config->setGroup("Doc_Location");
@@ -303,7 +303,7 @@ void CKDevInstall::slotQTpressed()
 void CKDevInstall::slotKDEpressed()
 {
   QString dir;
-  dir = KFileDialog::getDirectory(config->readEntry("doc_kde"));
+  dir = KFileDialog::getDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
   if (!dir.isEmpty()){
     kde_edit->setText(dir);
     config->setGroup("Doc_Location");

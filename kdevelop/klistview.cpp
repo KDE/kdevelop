@@ -38,6 +38,13 @@ void KListView::insertItem(QListViewItem *item)
 }
 
 
+void KListView::clear()
+{
+    last = 0;
+    QListView::clear();
+}
+
+
 KListViewItem::KListViewItem(KListView *parent, const char *text, const char *id)
     : QListViewItem(parent, parent->lastChild(), text), last(0), idnt(id)
 {}

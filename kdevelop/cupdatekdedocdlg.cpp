@@ -32,7 +32,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     
     conf = config;
     config->setGroup("Doc_Location");
-    this->doc_path = config->readEntry("doc_kde");
+    this->doc_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);
     this->proc = proc;
     
     setCaption(i18n("KDE Library Documentation Update..."));
@@ -284,7 +284,7 @@ void CUpdateKDEDocDlg::OK(){
   QDir().mkdir(new_doc_path.data());
   
   conf->setGroup("Doc_Location");
-  QString qtPath=conf->readEntry("doc_qt");
+  QString qtPath=conf->readEntry("doc_qt", QT_DOCDIR);
   bool qt_test=false;
   QString qt_testfile=qtPath+"classes.html";
   if(QFileInfo(qt_testfile).exists()){

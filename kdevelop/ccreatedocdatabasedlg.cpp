@@ -266,12 +266,12 @@ CCreateDocDatabaseDlg::~CCreateDocDatabaseDlg(){
 
 void CCreateDocDatabaseDlg::slotOkClicked(){
   conf->setGroup("Doc_Location");
-  QString filename = conf->readEntry("doc_kde") +"/kdeui/KDialog.html";
+  QString filename = conf->readEntry("doc_kde", KDELIBS_DOCDIR) +"/kdeui/KDialog.html";
   if(!QFile::exists(filename) && kde_checkbox->isChecked()){
     KMsgBox::message(0,i18n("No Database created!"),i18n("The KDE-Documentation-Path isn't set correctly."));
     return;
   }
-  filename = conf->readEntry("doc_qt") +"/qtabbar.html";
+  filename = conf->readEntry("doc_qt", QT_DOCDIR) +"/qtabbar.html";
   if(!QFile::exists(filename) && qt_checkbox->isChecked()){
     KMsgBox::message(0,i18n("No Database created!"),i18n("The Qt-Documentation-Path isn't set correctly."));
     return;
@@ -280,8 +280,8 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   QDir dir(KApplication::localkdedir()+"/share/apps/");
   dir.mkdir("kdevelop");
  
-  QString kde_doc_dir = conf->readEntry("doc_kde");
-  QString qt_doc_dir = conf->readEntry("doc_qt");
+  QString kde_doc_dir = conf->readEntry("doc_kde", KDELIBS_DOCDIR);
+  QString qt_doc_dir = conf->readEntry("doc_qt", QT_DOCDIR);
   
   QString dirs;
   if(kde_checkbox->isChecked()){
