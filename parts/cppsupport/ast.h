@@ -506,7 +506,7 @@ public:
     void addPtrOp( AST::Node& ptrOp );
     
     DeclaratorAST* subDeclarator();
-    void setSubDeclarator( auto_ptr<DeclaratorAST>& subDeclarator );
+    void setSubDeclarator( std::auto_ptr<DeclaratorAST>& subDeclarator );
     
     NameAST* declaratorId();
     void setDeclaratorId( NameAST::Node& declaratorId );
@@ -528,7 +528,7 @@ public:
     
 private:
     QPtrList<AST> m_ptrOpList;
-    auto_ptr<DeclaratorAST> m_subDeclarator;
+    std::auto_ptr<DeclaratorAST> m_subDeclarator;
     NameAST::Node m_declaratorId;
     AST::Node m_bitfieldInitialization;
     QPtrList<AST> m_arrayDimensionList;

@@ -922,7 +922,6 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
     
     AST::Node ptrOp;
     while( parsePtrOperator(ptrOp) ){
-        // TODO: add ptr operator do current declarator
 	ast->addPtrOp( ptrOp );
     }
     
