@@ -1,7 +1,7 @@
 #ifndef INC_PascalLexer_hpp_
 #define INC_PascalLexer_hpp_
 
-#line 28 "pascal.g"
+#line 29 "pascal.g"
 
         #include "problemreporter.h"
         #include "PascalAST.hpp"
@@ -25,7 +25,7 @@
 #include <antlr/CharScanner.hpp>
 class PascalLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public PascalTokenTypes
 {
-#line 1066 "pascal.g"
+#line 1067 "pascal.g"
 
 private:
         ProblemReporter* m_problemReporter;

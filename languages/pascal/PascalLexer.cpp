@@ -713,7 +713,7 @@ void PascalLexer::mDOT(bool _createToken) {
 	{
 	if ((LA(1) == static_cast<unsigned char>('.'))) {
 		match(static_cast<unsigned char>('.'));
-#line 1123 "pascal.g"
+#line 1124 "pascal.g"
 		_ttype = DOTDOT;
 #line 719 "PascalLexer.cpp"
 	}
@@ -853,7 +853,7 @@ void PascalLexer::mWS(bool _createToken) {
 		}
 		
 		}
-#line 1141 "pascal.g"
+#line 1142 "pascal.g"
 		newline();
 #line 859 "PascalLexer.cpp"
 		break;
@@ -864,7 +864,7 @@ void PascalLexer::mWS(bool _createToken) {
 	}
 	}
 	}
-#line 1143 "pascal.g"
+#line 1144 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
 #line 870 "PascalLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -886,7 +886,7 @@ void PascalLexer::mCOMMENT_1(bool _createToken) {
 		if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n')) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && ((LA(4) >= static_cast<unsigned char>('\0') && LA(4) <= static_cast<unsigned char>('\377')))) {
 			match(static_cast<unsigned char>('\r'));
 			match(static_cast<unsigned char>('\n'));
-#line 1151 "pascal.g"
+#line 1152 "pascal.g"
 			newline();
 #line 892 "PascalLexer.cpp"
 		}
@@ -895,13 +895,13 @@ void PascalLexer::mCOMMENT_1(bool _createToken) {
 		}
 		else if ((LA(1) == static_cast<unsigned char>('\r')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377'))) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && (true)) {
 			match(static_cast<unsigned char>('\r'));
-#line 1152 "pascal.g"
+#line 1153 "pascal.g"
 			newline();
 #line 901 "PascalLexer.cpp"
 		}
 		else if ((LA(1) == static_cast<unsigned char>('\n'))) {
 			match(static_cast<unsigned char>('\n'));
-#line 1153 "pascal.g"
+#line 1154 "pascal.g"
 			newline();
 #line 907 "PascalLexer.cpp"
 		}
@@ -918,7 +918,7 @@ void PascalLexer::mCOMMENT_1(bool _createToken) {
 	_loop426:;
 	} // ( ... )*
 	match("*)");
-#line 1157 "pascal.g"
+#line 1158 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
 #line 924 "PascalLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -940,19 +940,19 @@ void PascalLexer::mCOMMENT_2(bool _createToken) {
 		if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n')) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && (true)) {
 			match(static_cast<unsigned char>('\r'));
 			match(static_cast<unsigned char>('\n'));
-#line 1163 "pascal.g"
+#line 1164 "pascal.g"
 			newline();
 #line 946 "PascalLexer.cpp"
 		}
 		else if ((LA(1) == static_cast<unsigned char>('\r')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377'))) && (true) && (true)) {
 			match(static_cast<unsigned char>('\r'));
-#line 1164 "pascal.g"
+#line 1165 "pascal.g"
 			newline();
 #line 952 "PascalLexer.cpp"
 		}
 		else if ((LA(1) == static_cast<unsigned char>('\n'))) {
 			match(static_cast<unsigned char>('\n'));
-#line 1165 "pascal.g"
+#line 1166 "pascal.g"
 			newline();
 #line 958 "PascalLexer.cpp"
 		}
@@ -969,7 +969,7 @@ void PascalLexer::mCOMMENT_2(bool _createToken) {
 	_loop430:;
 	} // ( ... )*
 	match(static_cast<unsigned char>('}'));
-#line 1169 "pascal.g"
+#line 1170 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
 #line 975 "PascalLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -999,7 +999,7 @@ void PascalLexer::mCOMMENT_3(bool _createToken) {
 	_loop433:;
 	} // ( ... )*
 	match(static_cast<unsigned char>('\n'));
-#line 1174 "pascal.g"
+#line 1175 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
 #line 1005 "PascalLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -1147,7 +1147,7 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 	{
 	if ((LA(1) == static_cast<unsigned char>('e'))) {
 		mEXPONENT(false);
-#line 1203 "pascal.g"
+#line 1204 "pascal.g"
 		_ttype = NUM_REAL;
 #line 1153 "PascalLexer.cpp"
 	}
@@ -1155,7 +1155,7 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 		{
 		if (((LA(1) == static_cast<unsigned char>('.')))&&((LA(2)!='.')&&(LA(2)!=')'))) {
 			match(static_cast<unsigned char>('.'));
-#line 1200 "pascal.g"
+#line 1201 "pascal.g"
 			_ttype = NUM_REAL;
 #line 1161 "PascalLexer.cpp"
 			{ // ( ... )+

@@ -22,7 +22,7 @@ void AdaStoreWalker::compilation_unit(RefAdaAST _t) {
 		context_items_opt(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case LIBRARY_ITEM:
@@ -39,13 +39,13 @@ void AdaStoreWalker::compilation_unit(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == PRAGMA)) {
 				pragma(_t);
@@ -61,7 +61,7 @@ void AdaStoreWalker::compilation_unit(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -73,11 +73,11 @@ void AdaStoreWalker::context_items_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t67 = _t;
 		RefAdaAST tmp1_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CONTEXT_CLAUSE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CONTEXT_CLAUSE);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -112,7 +112,7 @@ void AdaStoreWalker::context_items_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -120,28 +120,28 @@ void AdaStoreWalker::context_items_opt(RefAdaAST _t) {
 
 void AdaStoreWalker::library_item(RefAdaAST _t) {
 	RefAdaAST library_item_AST_in = _t;
-	RefAdaAST pb = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	RefAdaAST gpi = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	RefAdaAST ps = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	RefAdaAST prd = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pb = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
+	RefAdaAST gpi = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
+	RefAdaAST ps = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
+	RefAdaAST prd = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		RefAdaAST __t17 = _t;
 		RefAdaAST tmp2_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),LIBRARY_ITEM);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),LIBRARY_ITEM);
 		_t = _t->getFirstChild();
 		RefAdaAST __t18 = _t;
 		RefAdaAST tmp3_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),MODIFIERS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),MODIFIERS);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PRIVATE:
 		{
 			RefAdaAST tmp4_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PRIVATE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PRIVATE);
 			_t = _t->getNextSibling();
 #line 132 "expandedada.store.g"
 			m_currentAccess = CodeModelItem::Protected;
@@ -154,14 +154,14 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 		_t = __t18;
 		_t = _t->getNextSibling();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ABSTRACT_FUNCTION_DECLARATION:
@@ -185,9 +185,9 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t21 = _t;
 			RefAdaAST tmp5_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PACKAGE_BODY);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PACKAGE_BODY);
 			_t = _t->getFirstChild();
-			pb = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+			pb = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 			def_id(_t);
 			_t = _retTree;
 			pkg_body_part(_t);
@@ -200,9 +200,9 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t22 = _t;
 			RefAdaAST tmp6_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_PACKAGE_INSTANTIATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_PACKAGE_INSTANTIATION);
 			_t = _t->getFirstChild();
-			gpi = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+			gpi = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 			def_id(_t);
 			_t = _retTree;
 #line 136 "expandedada.store.g"
@@ -220,9 +220,9 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t23 = _t;
 			RefAdaAST tmp7_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PACKAGE_SPECIFICATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PACKAGE_SPECIFICATION);
 			_t = _t->getFirstChild();
-			ps = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+			ps = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 			def_id(_t);
 			_t = _retTree;
 #line 142 "expandedada.store.g"
@@ -255,9 +255,9 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t24 = _t;
 			RefAdaAST tmp8_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PACKAGE_RENAMING_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PACKAGE_RENAMING_DECLARATION);
 			_t = _t->getFirstChild();
-			prd = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+			prd = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 			def_id(_t);
 			_t = _retTree;
 #line 161 "expandedada.store.g"
@@ -284,7 +284,7 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -293,7 +293,7 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -305,12 +305,12 @@ void AdaStoreWalker::subunit(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t508 = _t;
 		RefAdaAST tmp9_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SUBUNIT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SUBUNIT);
 		_t = _t->getFirstChild();
 		compound_name(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case FUNCTION_BODY:
@@ -340,7 +340,7 @@ void AdaStoreWalker::subunit(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -349,7 +349,7 @@ void AdaStoreWalker::subunit(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -361,14 +361,14 @@ void AdaStoreWalker::pragma(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t61 = _t;
 		RefAdaAST tmp10_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PRAGMA);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PRAGMA);
 		_t = _t->getFirstChild();
 		RefAdaAST tmp11_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 		_t = _t->getNextSibling();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_tokenSet_0.member(_t->getType()))) {
 				pragma_arg(_t);
@@ -386,7 +386,7 @@ void AdaStoreWalker::pragma(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -398,19 +398,19 @@ void AdaStoreWalker::with_clause(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t6 = _t;
 		RefAdaAST tmp12_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),WITH_CLAUSE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),WITH_CLAUSE);
 		_t = _t->getFirstChild();
 		{ // ( ... )+
 		int _cnt8=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == IDENTIFIER || _t->getType() == DOT)) {
 				compound_name(_t);
 				_t = _retTree;
 			}
 			else {
-				if ( _cnt8>=1 ) { goto _loop8; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt8>=1 ) { goto _loop8; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt8++;
@@ -422,7 +422,7 @@ void AdaStoreWalker::with_clause(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -432,13 +432,13 @@ void AdaStoreWalker::compound_name(RefAdaAST _t) {
 	RefAdaAST compound_name_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
 		{
 			RefAdaAST tmp13_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -446,12 +446,12 @@ void AdaStoreWalker::compound_name(RefAdaAST _t) {
 		{
 			RefAdaAST __t71 = _t;
 			RefAdaAST tmp14_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DOT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DOT);
 			_t = _t->getFirstChild();
 			compound_name(_t);
 			_t = _retTree;
 			RefAdaAST tmp15_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			_t = __t71;
 			_t = _t->getNextSibling();
@@ -459,13 +459,13 @@ void AdaStoreWalker::compound_name(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -473,29 +473,29 @@ void AdaStoreWalker::compound_name(RefAdaAST _t) {
 
 void AdaStoreWalker::use_clause(RefAdaAST _t) {
 	RefAdaAST use_clause_AST_in = _t;
-	RefAdaAST c = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST c = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case USE_TYPE_CLAUSE:
 		{
 			RefAdaAST __t10 = _t;
 			RefAdaAST tmp16_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),USE_TYPE_CLAUSE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),USE_TYPE_CLAUSE);
 			_t = _t->getFirstChild();
 			{ // ( ... )+
 			int _cnt12=0;
 			for (;;) {
-				if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+				if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 					_t = ASTNULL;
 				if ((_t->getType() == IDENTIFIER || _t->getType() == DOT || _t->getType() == TIC)) {
 					subtype_mark(_t);
 					_t = _retTree;
 				}
 				else {
-					if ( _cnt12>=1 ) { goto _loop12; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+					if ( _cnt12>=1 ) { goto _loop12; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 				}
 				
 				_cnt12++;
@@ -510,15 +510,15 @@ void AdaStoreWalker::use_clause(RefAdaAST _t) {
 		{
 			RefAdaAST __t13 = _t;
 			RefAdaAST tmp17_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),USE_CLAUSE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),USE_CLAUSE);
 			_t = _t->getFirstChild();
 			{ // ( ... )+
 			int _cnt15=0;
 			for (;;) {
-				if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+				if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 					_t = ASTNULL;
 				if ((_t->getType() == IDENTIFIER || _t->getType() == DOT)) {
-					c = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+					c = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 					compound_name(_t);
 					_t = _retTree;
 #line 127 "expandedada.store.g"
@@ -526,7 +526,7 @@ void AdaStoreWalker::use_clause(RefAdaAST _t) {
 #line 527 "AdaStoreWalker.cpp"
 				}
 				else {
-					if ( _cnt15>=1 ) { goto _loop15; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+					if ( _cnt15>=1 ) { goto _loop15; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 				}
 				
 				_cnt15++;
@@ -539,13 +539,13 @@ void AdaStoreWalker::use_clause(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -555,7 +555,7 @@ void AdaStoreWalker::subtype_mark(RefAdaAST _t) {
 	RefAdaAST subtype_mark_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -569,7 +569,7 @@ void AdaStoreWalker::subtype_mark(RefAdaAST _t) {
 		{
 			RefAdaAST __t73 = _t;
 			RefAdaAST tmp18_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TIC);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TIC);
 			_t = _t->getFirstChild();
 			compound_name(_t);
 			_t = _retTree;
@@ -581,13 +581,13 @@ void AdaStoreWalker::subtype_mark(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -601,7 +601,7 @@ void AdaStoreWalker::lib_subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t) {
 		m_addToStore = true;
 #line 603 "AdaStoreWalker.cpp"
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ABSTRACT_FUNCTION_DECLARATION:
@@ -633,7 +633,7 @@ void AdaStoreWalker::lib_subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -643,7 +643,7 @@ void AdaStoreWalker::lib_subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -651,10 +651,10 @@ void AdaStoreWalker::lib_subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t) {
 
 void AdaStoreWalker::def_id(RefAdaAST _t) {
 	RefAdaAST def_id_AST_in = _t;
-	RefAdaAST cn = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST cn = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		cn = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+		cn = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 		compound_name(_t);
 		_t = _retTree;
 #line 189 "expandedada.store.g"
@@ -691,7 +691,7 @@ void AdaStoreWalker::def_id(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -708,7 +708,7 @@ void AdaStoreWalker::pkg_body_part(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -721,7 +721,7 @@ void AdaStoreWalker::generic_inst(RefAdaAST _t) {
 		compound_name(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case VALUES:
@@ -736,14 +736,14 @@ void AdaStoreWalker::generic_inst(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -756,7 +756,7 @@ void AdaStoreWalker::pkg_spec_part(RefAdaAST _t) {
 		basic_declarative_items_opt(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case BASIC_DECLARATIVE_ITEMS_OPT:
@@ -777,14 +777,14 @@ void AdaStoreWalker::pkg_spec_part(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -794,20 +794,20 @@ void AdaStoreWalker::renames(RefAdaAST _t) {
 	RefAdaAST renames_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case CHARACTER_STRING:
 		{
 			RefAdaAST tmp19_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CHARACTER_STRING);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CHARACTER_STRING);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case OPERATOR_SYMBOL:
 		{
 			RefAdaAST tmp20_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OPERATOR_SYMBOL);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OPERATOR_SYMBOL);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -822,13 +822,13 @@ void AdaStoreWalker::renames(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -836,17 +836,17 @@ void AdaStoreWalker::renames(RefAdaAST _t) {
 
 void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 	RefAdaAST generic_decl_AST_in = _t;
-	RefAdaAST gpd = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST gpd = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case GENERIC_PACKAGE_RENAMING:
 		{
 			RefAdaAST __t46 = _t;
 			RefAdaAST tmp21_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_PACKAGE_RENAMING);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_PACKAGE_RENAMING);
 			_t = _t->getFirstChild();
 			generic_formal_part_opt(_t);
 			_t = _retTree;
@@ -862,11 +862,11 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t47 = _t;
 			RefAdaAST tmp22_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_PACKAGE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_PACKAGE_DECLARATION);
 			_t = _t->getFirstChild();
 			generic_formal_part_opt(_t);
 			_t = _retTree;
-			gpd = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+			gpd = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 			def_id(_t);
 			_t = _retTree;
 #line 280 "expandedada.store.g"
@@ -897,7 +897,7 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t48 = _t;
 			RefAdaAST tmp23_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_PROCEDURE_RENAMING);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_PROCEDURE_RENAMING);
 			_t = _t->getFirstChild();
 			generic_formal_part_opt(_t);
 			_t = _retTree;
@@ -915,7 +915,7 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t49 = _t;
 			RefAdaAST tmp24_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_PROCEDURE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_PROCEDURE_DECLARATION);
 			_t = _t->getFirstChild();
 			generic_formal_part_opt(_t);
 			_t = _retTree;
@@ -931,7 +931,7 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t50 = _t;
 			RefAdaAST tmp25_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_FUNCTION_RENAMING);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_FUNCTION_RENAMING);
 			_t = _t->getFirstChild();
 			generic_formal_part_opt(_t);
 			_t = _retTree;
@@ -949,7 +949,7 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t51 = _t;
 			RefAdaAST tmp26_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_FUNCTION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_FUNCTION_DECLARATION);
 			_t = _t->getFirstChild();
 			generic_formal_part_opt(_t);
 			_t = _retTree;
@@ -963,13 +963,13 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -990,7 +990,7 @@ void AdaStoreWalker::subprog_def_id(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1000,14 +1000,14 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 	RefAdaAST subprog_decl_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case GENERIC_PROCEDURE_INSTANTIATION:
 		{
 			RefAdaAST __t27 = _t;
 			RefAdaAST tmp27_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_PROCEDURE_INSTANTIATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_PROCEDURE_INSTANTIATION);
 			_t = _t->getFirstChild();
 			subprog_def_id(_t);
 			_t = _retTree;
@@ -1021,7 +1021,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t28 = _t;
 			RefAdaAST tmp28_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROCEDURE_RENAMING_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROCEDURE_RENAMING_DECLARATION);
 			_t = _t->getFirstChild();
 			subprog_def_id(_t);
 			_t = _retTree;
@@ -1037,7 +1037,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t29 = _t;
 			RefAdaAST tmp29_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROCEDURE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROCEDURE_DECLARATION);
 			_t = _t->getFirstChild();
 			subprog_def_id(_t);
 			_t = _retTree;
@@ -1051,7 +1051,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t30 = _t;
 			RefAdaAST tmp30_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROCEDURE_BODY_STUB);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROCEDURE_BODY_STUB);
 			_t = _t->getFirstChild();
 			subprog_def_id(_t);
 			_t = _retTree;
@@ -1065,7 +1065,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t31 = _t;
 			RefAdaAST tmp31_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ABSTRACT_PROCEDURE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ABSTRACT_PROCEDURE_DECLARATION);
 			_t = _t->getFirstChild();
 			subprog_def_id(_t);
 			_t = _retTree;
@@ -1079,7 +1079,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t32 = _t;
 			RefAdaAST tmp32_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_FUNCTION_INSTANTIATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_FUNCTION_INSTANTIATION);
 			_t = _t->getFirstChild();
 			def_designator(_t);
 			_t = _retTree;
@@ -1093,7 +1093,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t33 = _t;
 			RefAdaAST tmp33_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FUNCTION_RENAMING_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FUNCTION_RENAMING_DECLARATION);
 			_t = _t->getFirstChild();
 			def_designator(_t);
 			_t = _retTree;
@@ -1109,7 +1109,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t34 = _t;
 			RefAdaAST tmp34_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FUNCTION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FUNCTION_DECLARATION);
 			_t = _t->getFirstChild();
 			def_designator(_t);
 			_t = _retTree;
@@ -1123,7 +1123,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t35 = _t;
 			RefAdaAST tmp35_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FUNCTION_BODY_STUB);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FUNCTION_BODY_STUB);
 			_t = _t->getFirstChild();
 			def_designator(_t);
 			_t = _retTree;
@@ -1137,7 +1137,7 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t36 = _t;
 			RefAdaAST tmp36_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ABSTRACT_FUNCTION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ABSTRACT_FUNCTION_DECLARATION);
 			_t = _t->getFirstChild();
 			subprog_def_id(_t);
 			_t = _retTree;
@@ -1149,13 +1149,13 @@ void AdaStoreWalker::subprog_decl(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1167,11 +1167,11 @@ void AdaStoreWalker::formal_part_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t102 = _t;
 		RefAdaAST tmp37_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_PART_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_PART_OPT);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == PARAMETER_SPECIFICATION)) {
 				parameter_specification(_t);
@@ -1189,7 +1189,7 @@ void AdaStoreWalker::formal_part_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1197,16 +1197,16 @@ void AdaStoreWalker::formal_part_opt(RefAdaAST _t) {
 
 void AdaStoreWalker::def_designator(RefAdaAST _t) {
 	RefAdaAST def_designator_AST_in = _t;
-	RefAdaAST cn = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST cn = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
 		case DOT:
 		{
-			cn = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+			cn = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 			compound_name(_t);
 			_t = _retTree;
 #line 221 "expandedada.store.g"
@@ -1245,13 +1245,13 @@ void AdaStoreWalker::def_designator(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1268,7 +1268,7 @@ void AdaStoreWalker::function_tail(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1279,12 +1279,12 @@ void AdaStoreWalker::definable_operator_symbol(RefAdaAST _t) {
 	
 	try {      // for error handling
 		RefAdaAST tmp38_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OPERATOR_SYMBOL);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OPERATOR_SYMBOL);
 		_t = _t->getNextSibling();
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1292,17 +1292,17 @@ void AdaStoreWalker::definable_operator_symbol(RefAdaAST _t) {
 
 void AdaStoreWalker::spec_decl_part(RefAdaAST _t) {
 	RefAdaAST spec_decl_part_AST_in = _t;
-	RefAdaAST ps = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST ps = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case GENERIC_PACKAGE_INSTANTIATION:
 		{
 			RefAdaAST __t40 = _t;
 			RefAdaAST tmp39_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_PACKAGE_INSTANTIATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_PACKAGE_INSTANTIATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -1316,9 +1316,9 @@ void AdaStoreWalker::spec_decl_part(RefAdaAST _t) {
 		{
 			RefAdaAST __t41 = _t;
 			RefAdaAST tmp40_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PACKAGE_SPECIFICATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PACKAGE_SPECIFICATION);
 			_t = _t->getFirstChild();
-			ps = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+			ps = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 			def_id(_t);
 			_t = _retTree;
 #line 250 "expandedada.store.g"
@@ -1351,7 +1351,7 @@ void AdaStoreWalker::spec_decl_part(RefAdaAST _t) {
 		{
 			RefAdaAST __t42 = _t;
 			RefAdaAST tmp41_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PACKAGE_RENAMING_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PACKAGE_RENAMING_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -1363,13 +1363,13 @@ void AdaStoreWalker::spec_decl_part(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1381,11 +1381,11 @@ void AdaStoreWalker::basic_declarative_items_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t126 = _t;
 		RefAdaAST tmp42_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),BASIC_DECLARATIVE_ITEMS_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),BASIC_DECLARATIVE_ITEMS_OPT);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_tokenSet_1.member(_t->getType()))) {
 				basic_decl_item(_t);
@@ -1403,7 +1403,7 @@ void AdaStoreWalker::basic_declarative_items_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1415,11 +1415,11 @@ void AdaStoreWalker::generic_formal_part_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t284 = _t;
 		RefAdaAST tmp43_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GENERIC_FORMAL_PART);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GENERIC_FORMAL_PART);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -1470,7 +1470,7 @@ void AdaStoreWalker::generic_formal_part_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1482,7 +1482,7 @@ void AdaStoreWalker::procedure_body(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t308 = _t;
 		RefAdaAST tmp44_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROCEDURE_BODY);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROCEDURE_BODY);
 		_t = _t->getFirstChild();
 		def_id(_t);
 		_t = _retTree;
@@ -1495,7 +1495,7 @@ void AdaStoreWalker::procedure_body(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1507,7 +1507,7 @@ void AdaStoreWalker::function_body(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t310 = _t;
 		RefAdaAST tmp45_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FUNCTION_BODY);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FUNCTION_BODY);
 		_t = _t->getFirstChild();
 		def_designator(_t);
 		_t = _retTree;
@@ -1520,7 +1520,7 @@ void AdaStoreWalker::function_body(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1530,7 +1530,7 @@ void AdaStoreWalker::subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t) {
 	RefAdaAST subprog_decl_or_rename_or_inst_or_body_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ABSTRACT_FUNCTION_DECLARATION:
@@ -1562,13 +1562,13 @@ void AdaStoreWalker::subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1578,7 +1578,7 @@ void AdaStoreWalker::subprog_decl_or_body(RefAdaAST _t) {
 	RefAdaAST subprog_decl_or_body_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PROCEDURE_BODY:
@@ -1591,7 +1591,7 @@ void AdaStoreWalker::subprog_decl_or_body(RefAdaAST _t) {
 		{
 			RefAdaAST __t56 = _t;
 			RefAdaAST tmp46_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROCEDURE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROCEDURE_DECLARATION);
 			_t = _t->getFirstChild();
 			subprog_def_id(_t);
 			_t = _retTree;
@@ -1611,7 +1611,7 @@ void AdaStoreWalker::subprog_decl_or_body(RefAdaAST _t) {
 		{
 			RefAdaAST __t57 = _t;
 			RefAdaAST tmp47_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FUNCTION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FUNCTION_DECLARATION);
 			_t = _t->getFirstChild();
 			def_designator(_t);
 			_t = _retTree;
@@ -1623,13 +1623,13 @@ void AdaStoreWalker::subprog_decl_or_body(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1637,14 +1637,14 @@ void AdaStoreWalker::subprog_decl_or_body(RefAdaAST _t) {
 
 void AdaStoreWalker::package_body(RefAdaAST _t) {
 	RefAdaAST package_body_AST_in = _t;
-	RefAdaAST id = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST id = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		RefAdaAST __t59 = _t;
 		RefAdaAST tmp48_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PACKAGE_BODY);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PACKAGE_BODY);
 		_t = _t->getFirstChild();
-		id = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) : _t;
+		id = (_t == ASTNULL) ? static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) : _t;
 		def_id(_t);
 		_t = _retTree;
 		pkg_body_part(_t);
@@ -1654,7 +1654,7 @@ void AdaStoreWalker::package_body(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1664,17 +1664,17 @@ void AdaStoreWalker::pragma_arg(RefAdaAST _t) {
 	RefAdaAST pragma_arg_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case RIGHT_SHAFT:
 		{
 			RefAdaAST __t65 = _t;
 			RefAdaAST tmp49_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RIGHT_SHAFT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RIGHT_SHAFT);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp50_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			expression(_t);
 			_t = _retTree;
@@ -1725,13 +1725,13 @@ void AdaStoreWalker::pragma_arg(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1741,14 +1741,14 @@ void AdaStoreWalker::expression(RefAdaAST _t) {
 	RefAdaAST expression_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case AND:
 		{
 			RefAdaAST __t466 = _t;
 			RefAdaAST tmp51_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),AND);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),AND);
 			_t = _t->getFirstChild();
 			expression(_t);
 			_t = _retTree;
@@ -1762,7 +1762,7 @@ void AdaStoreWalker::expression(RefAdaAST _t) {
 		{
 			RefAdaAST __t467 = _t;
 			RefAdaAST tmp52_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),AND_THEN);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),AND_THEN);
 			_t = _t->getFirstChild();
 			expression(_t);
 			_t = _retTree;
@@ -1776,7 +1776,7 @@ void AdaStoreWalker::expression(RefAdaAST _t) {
 		{
 			RefAdaAST __t468 = _t;
 			RefAdaAST tmp53_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OR);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OR);
 			_t = _t->getFirstChild();
 			expression(_t);
 			_t = _retTree;
@@ -1790,7 +1790,7 @@ void AdaStoreWalker::expression(RefAdaAST _t) {
 		{
 			RefAdaAST __t469 = _t;
 			RefAdaAST tmp54_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OR_ELSE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OR_ELSE);
 			_t = _t->getFirstChild();
 			expression(_t);
 			_t = _retTree;
@@ -1804,7 +1804,7 @@ void AdaStoreWalker::expression(RefAdaAST _t) {
 		{
 			RefAdaAST __t470 = _t;
 			RefAdaAST tmp55_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),XOR);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),XOR);
 			_t = _t->getFirstChild();
 			expression(_t);
 			_t = _retTree;
@@ -1852,13 +1852,13 @@ void AdaStoreWalker::expression(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1868,53 +1868,53 @@ void AdaStoreWalker::attribute_id(RefAdaAST _t) {
 	RefAdaAST attribute_id_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case RANGE:
 		{
 			RefAdaAST tmp56_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RANGE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RANGE);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case DIGITS:
 		{
 			RefAdaAST tmp57_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DIGITS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DIGITS);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case DELTA:
 		{
 			RefAdaAST tmp58_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DELTA);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DELTA);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case ACCESS:
 		{
 			RefAdaAST tmp59_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ACCESS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ACCESS);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case IDENTIFIER:
 		{
 			RefAdaAST tmp60_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			break;
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -1926,94 +1926,94 @@ void AdaStoreWalker::modifiers(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t76 = _t;
 		RefAdaAST tmp61_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),MODIFIERS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),MODIFIERS);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case ABSTRACT:
 			{
 				RefAdaAST tmp62_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ABSTRACT);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ABSTRACT);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case ACCESS:
 			{
 				RefAdaAST tmp63_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ACCESS);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ACCESS);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case ALIASED:
 			{
 				RefAdaAST tmp64_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ALIASED);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ALIASED);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case ALL:
 			{
 				RefAdaAST tmp65_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ALL);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ALL);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case CONSTANT:
 			{
 				RefAdaAST tmp66_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CONSTANT);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CONSTANT);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case IN:
 			{
 				RefAdaAST tmp67_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IN);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IN);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case LIMITED:
 			{
 				RefAdaAST tmp68_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),LIMITED);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),LIMITED);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case OUT:
 			{
 				RefAdaAST tmp69_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OUT);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OUT);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case PRIVATE:
 			{
 				RefAdaAST tmp70_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PRIVATE);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PRIVATE);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case PROTECTED:
 			{
 				RefAdaAST tmp71_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROTECTED);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROTECTED);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case REVERSE:
 			{
 				RefAdaAST tmp72_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),REVERSE);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),REVERSE);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case TAGGED:
 			{
 				RefAdaAST tmp73_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TAGGED);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TAGGED);
 				_t = _t->getNextSibling();
 				break;
 			}
@@ -2030,7 +2030,7 @@ void AdaStoreWalker::modifiers(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2042,19 +2042,19 @@ void AdaStoreWalker::value_s(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t462 = _t;
 		RefAdaAST tmp74_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),VALUES);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),VALUES);
 		_t = _t->getFirstChild();
 		{ // ( ... )+
 		int _cnt464=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_tokenSet_2.member(_t->getType()))) {
 				value(_t);
 				_t = _retTree;
 			}
 			else {
-				if ( _cnt464>=1 ) { goto _loop464; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt464>=1 ) { goto _loop464; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt464++;
@@ -2066,7 +2066,7 @@ void AdaStoreWalker::value_s(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2076,14 +2076,14 @@ void AdaStoreWalker::value(RefAdaAST _t) {
 	RefAdaAST value_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case OTHERS:
 		{
 			RefAdaAST __t82 = _t;
 			RefAdaAST tmp75_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OTHERS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OTHERS);
 			_t = _t->getFirstChild();
 			expression(_t);
 			_t = _retTree;
@@ -2095,7 +2095,7 @@ void AdaStoreWalker::value(RefAdaAST _t) {
 		{
 			RefAdaAST __t83 = _t;
 			RefAdaAST tmp76_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RIGHT_SHAFT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RIGHT_SHAFT);
 			_t = _t->getFirstChild();
 			ranged_expr_s(_t);
 			_t = _retTree;
@@ -2151,13 +2151,13 @@ void AdaStoreWalker::value(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2167,14 +2167,14 @@ void AdaStoreWalker::ranged_expr_s(RefAdaAST _t) {
 	RefAdaAST ranged_expr_s_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PIPE:
 		{
 			RefAdaAST __t85 = _t;
 			RefAdaAST tmp77_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PIPE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PIPE);
 			_t = _t->getFirstChild();
 			ranged_expr_s(_t);
 			_t = _retTree;
@@ -2229,13 +2229,13 @@ void AdaStoreWalker::ranged_expr_s(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2245,14 +2245,14 @@ void AdaStoreWalker::ranged_expr(RefAdaAST _t) {
 	RefAdaAST ranged_expr_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
 		{
 			RefAdaAST __t87 = _t;
 			RefAdaAST tmp78_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DOT_DOT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DOT_DOT);
 			_t = _t->getFirstChild();
 			expression(_t);
 			_t = _retTree;
@@ -2266,7 +2266,7 @@ void AdaStoreWalker::ranged_expr(RefAdaAST _t) {
 		{
 			RefAdaAST __t88 = _t;
 			RefAdaAST tmp79_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RANGE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RANGE);
 			_t = _t->getFirstChild();
 			expression(_t);
 			_t = _retTree;
@@ -2319,13 +2319,13 @@ void AdaStoreWalker::ranged_expr(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2335,14 +2335,14 @@ void AdaStoreWalker::simple_expression(RefAdaAST _t) {
 	RefAdaAST simple_expression_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PLUS:
 		{
 			RefAdaAST __t482 = _t;
 			RefAdaAST tmp80_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PLUS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PLUS);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -2356,7 +2356,7 @@ void AdaStoreWalker::simple_expression(RefAdaAST _t) {
 		{
 			RefAdaAST __t483 = _t;
 			RefAdaAST tmp81_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),MINUS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),MINUS);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -2370,7 +2370,7 @@ void AdaStoreWalker::simple_expression(RefAdaAST _t) {
 		{
 			RefAdaAST __t484 = _t;
 			RefAdaAST tmp82_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CONCAT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CONCAT);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -2407,13 +2407,13 @@ void AdaStoreWalker::simple_expression(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2424,7 +2424,7 @@ void AdaStoreWalker::range(RefAdaAST _t) {
 	
 	try {      // for error handling
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
@@ -2441,14 +2441,14 @@ void AdaStoreWalker::range(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2463,7 +2463,7 @@ void AdaStoreWalker::range_constraint(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2475,7 +2475,7 @@ void AdaStoreWalker::range_dots(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t93 = _t;
 		RefAdaAST tmp83_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DOT_DOT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DOT_DOT);
 		_t = _t->getFirstChild();
 		simple_expression(_t);
 		_t = _retTree;
@@ -2486,7 +2486,7 @@ void AdaStoreWalker::range_dots(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2498,12 +2498,12 @@ void AdaStoreWalker::range_attrib_ref(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t95 = _t;
 		RefAdaAST tmp84_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RANGE_ATTRIBUTE_REFERENCE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RANGE_ATTRIBUTE_REFERENCE);
 		_t = _t->getFirstChild();
 		prefix(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -2553,7 +2553,7 @@ void AdaStoreWalker::range_attrib_ref(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -2562,7 +2562,7 @@ void AdaStoreWalker::range_attrib_ref(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2572,13 +2572,13 @@ void AdaStoreWalker::prefix(RefAdaAST _t) {
 	RefAdaAST prefix_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
 		{
 			RefAdaAST tmp85_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -2586,31 +2586,31 @@ void AdaStoreWalker::prefix(RefAdaAST _t) {
 		{
 			RefAdaAST __t98 = _t;
 			RefAdaAST tmp86_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DOT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DOT);
 			_t = _t->getFirstChild();
 			prefix(_t);
 			_t = _retTree;
 			{
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case ALL:
 			{
 				RefAdaAST tmp87_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ALL);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ALL);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case IDENTIFIER:
 			{
 				RefAdaAST tmp88_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 				_t = _t->getNextSibling();
 				break;
 			}
 			default:
 			{
-				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 			}
 			}
 			}
@@ -2622,7 +2622,7 @@ void AdaStoreWalker::prefix(RefAdaAST _t) {
 		{
 			RefAdaAST __t100 = _t;
 			RefAdaAST tmp89_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),INDEXED_COMPONENT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),INDEXED_COMPONENT);
 			_t = _t->getFirstChild();
 			prefix(_t);
 			_t = _retTree;
@@ -2634,13 +2634,13 @@ void AdaStoreWalker::prefix(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2652,7 +2652,7 @@ void AdaStoreWalker::parameter_specification(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t106 = _t;
 		RefAdaAST tmp90_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PARAMETER_SPECIFICATION);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PARAMETER_SPECIFICATION);
 		_t = _t->getFirstChild();
 		defining_identifier_list(_t);
 		_t = _retTree;
@@ -2667,7 +2667,7 @@ void AdaStoreWalker::parameter_specification(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2679,20 +2679,20 @@ void AdaStoreWalker::defining_identifier_list(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t108 = _t;
 		RefAdaAST tmp91_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DEFINING_IDENTIFIER_LIST);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DEFINING_IDENTIFIER_LIST);
 		_t = _t->getFirstChild();
 		{ // ( ... )+
 		int _cnt110=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == IDENTIFIER)) {
 				RefAdaAST tmp92_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 				_t = _t->getNextSibling();
 			}
 			else {
-				if ( _cnt110>=1 ) { goto _loop110; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt110>=1 ) { goto _loop110; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt110++;
@@ -2704,7 +2704,7 @@ void AdaStoreWalker::defining_identifier_list(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2716,10 +2716,10 @@ void AdaStoreWalker::init_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t145 = _t;
 		RefAdaAST tmp93_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),INIT_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),INIT_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -2769,7 +2769,7 @@ void AdaStoreWalker::init_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -2778,7 +2778,7 @@ void AdaStoreWalker::init_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2788,13 +2788,13 @@ void AdaStoreWalker::name(RefAdaAST _t) {
 	RefAdaAST name_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
 		{
 			RefAdaAST tmp94_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -2802,45 +2802,45 @@ void AdaStoreWalker::name(RefAdaAST _t) {
 		{
 			RefAdaAST __t113 = _t;
 			RefAdaAST tmp95_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DOT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DOT);
 			_t = _t->getFirstChild();
 			name(_t);
 			_t = _retTree;
 			{
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case ALL:
 			{
 				RefAdaAST tmp96_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ALL);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ALL);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case IDENTIFIER:
 			{
 				RefAdaAST tmp97_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case CHARACTER_LITERAL:
 			{
 				RefAdaAST tmp98_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CHARACTER_LITERAL);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CHARACTER_LITERAL);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case OPERATOR_SYMBOL:
 			{
 				RefAdaAST tmp99_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OPERATOR_SYMBOL);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OPERATOR_SYMBOL);
 				_t = _t->getNextSibling();
 				break;
 			}
 			default:
 			{
-				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 			}
 			}
 			}
@@ -2852,7 +2852,7 @@ void AdaStoreWalker::name(RefAdaAST _t) {
 		{
 			RefAdaAST __t115 = _t;
 			RefAdaAST tmp100_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),INDEXED_COMPONENT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),INDEXED_COMPONENT);
 			_t = _t->getFirstChild();
 			name(_t);
 			_t = _retTree;
@@ -2866,7 +2866,7 @@ void AdaStoreWalker::name(RefAdaAST _t) {
 		{
 			RefAdaAST __t116 = _t;
 			RefAdaAST tmp101_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TIC);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TIC);
 			_t = _t->getFirstChild();
 			name(_t);
 			_t = _retTree;
@@ -2878,13 +2878,13 @@ void AdaStoreWalker::name(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2896,16 +2896,16 @@ void AdaStoreWalker::parenthesized_primary(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t119 = _t;
 		RefAdaAST tmp102_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PARENTHESIZED_PRIMARY);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PARENTHESIZED_PRIMARY);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case NuLL:
 		{
 			RefAdaAST tmp103_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NuLL);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NuLL);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -2919,7 +2919,7 @@ void AdaStoreWalker::parenthesized_primary(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -2928,7 +2928,7 @@ void AdaStoreWalker::parenthesized_primary(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2940,16 +2940,16 @@ void AdaStoreWalker::extension_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t122 = _t;
 		RefAdaAST tmp104_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),EXTENSION_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),EXTENSION_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case NuLL:
 		{
 			RefAdaAST tmp105_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NuLL);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NuLL);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -2965,7 +2965,7 @@ void AdaStoreWalker::extension_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -2974,7 +2974,7 @@ void AdaStoreWalker::extension_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -2984,7 +2984,7 @@ void AdaStoreWalker::basic_decl_item(RefAdaAST _t) {
 	RefAdaAST basic_decl_item_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PACKAGE_RENAMING_DECLARATION:
@@ -3066,13 +3066,13 @@ void AdaStoreWalker::basic_decl_item(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3082,14 +3082,14 @@ void AdaStoreWalker::task_type_or_single_decl(RefAdaAST _t) {
 	RefAdaAST task_type_or_single_decl_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case TASK_TYPE_DECLARATION:
 		{
 			RefAdaAST __t131 = _t;
 			RefAdaAST tmp106_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TASK_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TASK_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -3105,7 +3105,7 @@ void AdaStoreWalker::task_type_or_single_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t132 = _t;
 			RefAdaAST tmp107_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SINGLE_TASK_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SINGLE_TASK_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -3117,13 +3117,13 @@ void AdaStoreWalker::task_type_or_single_decl(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3133,14 +3133,14 @@ void AdaStoreWalker::prot_type_or_single_decl(RefAdaAST _t) {
 	RefAdaAST prot_type_or_single_decl_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PROTECTED_TYPE_DECLARATION:
 		{
 			RefAdaAST __t173 = _t;
 			RefAdaAST tmp108_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROTECTED_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROTECTED_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -3156,7 +3156,7 @@ void AdaStoreWalker::prot_type_or_single_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t174 = _t;
 			RefAdaAST tmp109_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SINGLE_PROTECTED_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SINGLE_PROTECTED_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -3168,13 +3168,13 @@ void AdaStoreWalker::prot_type_or_single_decl(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3184,17 +3184,17 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 	RefAdaAST decl_common_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ENUMERATION_TYPE_DECLARATION:
 		{
 			RefAdaAST __t191 = _t;
 			RefAdaAST tmp110_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ENUMERATION_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ENUMERATION_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp111_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			enum_id_s(_t);
 			_t = _retTree;
@@ -3206,10 +3206,10 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t192 = _t;
 			RefAdaAST tmp112_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SIGNED_INTEGER_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SIGNED_INTEGER_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp113_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			range(_t);
 			_t = _retTree;
@@ -3221,10 +3221,10 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t193 = _t;
 			RefAdaAST tmp114_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),MODULAR_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),MODULAR_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp115_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			expression(_t);
 			_t = _retTree;
@@ -3236,10 +3236,10 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t194 = _t;
 			RefAdaAST tmp116_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FLOATING_POINT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FLOATING_POINT_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp117_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			expression(_t);
 			_t = _retTree;
@@ -3253,10 +3253,10 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t195 = _t;
 			RefAdaAST tmp118_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ORDINARY_FIXED_POINT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ORDINARY_FIXED_POINT_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp119_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			expression(_t);
 			_t = _retTree;
@@ -3270,10 +3270,10 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t196 = _t;
 			RefAdaAST tmp120_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DECIMAL_FIXED_POINT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DECIMAL_FIXED_POINT_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp121_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			expression(_t);
 			_t = _retTree;
@@ -3303,10 +3303,10 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t197 = _t;
 			RefAdaAST tmp122_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),INCOMPLETE_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),INCOMPLETE_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp123_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			discrim_part_opt(_t);
 			_t = _retTree;
@@ -3318,7 +3318,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t198 = _t;
 			RefAdaAST tmp124_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PRIVATE_EXTENSION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PRIVATE_EXTENSION_DECLARATION);
 			_t = _t->getFirstChild();
 			id_and_discrim(_t);
 			_t = _retTree;
@@ -3334,7 +3334,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t199 = _t;
 			RefAdaAST tmp125_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DERIVED_RECORD_EXTENSION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DERIVED_RECORD_EXTENSION);
 			_t = _t->getFirstChild();
 			id_and_discrim(_t);
 			_t = _retTree;
@@ -3352,7 +3352,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t200 = _t;
 			RefAdaAST tmp126_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ORDINARY_DERIVED_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ORDINARY_DERIVED_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			id_and_discrim(_t);
 			_t = _retTree;
@@ -3366,7 +3366,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t201 = _t;
 			RefAdaAST tmp127_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PRIVATE_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PRIVATE_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			id_and_discrim(_t);
 			_t = _retTree;
@@ -3380,7 +3380,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t202 = _t;
 			RefAdaAST tmp128_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RECORD_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RECORD_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			id_and_discrim(_t);
 			_t = _retTree;
@@ -3396,10 +3396,10 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t203 = _t;
 			RefAdaAST tmp129_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SUBTYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SUBTYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp130_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			subtype_ind(_t);
 			_t = _retTree;
@@ -3438,7 +3438,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t204 = _t;
 			RefAdaAST tmp131_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),EXCEPTION_RENAMING_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),EXCEPTION_RENAMING_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -3452,7 +3452,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t205 = _t;
 			RefAdaAST tmp132_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OBJECT_RENAMING_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OBJECT_RENAMING_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -3468,7 +3468,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t206 = _t;
 			RefAdaAST tmp133_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),EXCEPTION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),EXCEPTION_DECLARATION);
 			_t = _t->getFirstChild();
 			defining_identifier_list(_t);
 			_t = _retTree;
@@ -3480,7 +3480,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t207 = _t;
 			RefAdaAST tmp134_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NUMBER_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NUMBER_DECLARATION);
 			_t = _t->getFirstChild();
 			defining_identifier_list(_t);
 			_t = _retTree;
@@ -3494,7 +3494,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t208 = _t;
 			RefAdaAST tmp135_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ARRAY_OBJECT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ARRAY_OBJECT_DECLARATION);
 			_t = _t->getFirstChild();
 			defining_identifier_list(_t);
 			_t = _retTree;
@@ -3512,7 +3512,7 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		{
 			RefAdaAST __t209 = _t;
 			RefAdaAST tmp136_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OBJECT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OBJECT_DECLARATION);
 			_t = _t->getFirstChild();
 			defining_identifier_list(_t);
 			_t = _retTree;
@@ -3528,13 +3528,13 @@ void AdaStoreWalker::decl_common(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3546,16 +3546,16 @@ void AdaStoreWalker::discrim_part_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t136 = _t;
 		RefAdaAST tmp137_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DISCRIM_PART_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DISCRIM_PART_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case BOX:
 		{
 			RefAdaAST tmp138_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),BOX);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),BOX);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -3571,7 +3571,7 @@ void AdaStoreWalker::discrim_part_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -3580,7 +3580,7 @@ void AdaStoreWalker::discrim_part_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3591,7 +3591,7 @@ void AdaStoreWalker::task_definition_opt(RefAdaAST _t) {
 	
 	try {      // for error handling
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case TASK_ITEMS_OPT:
@@ -3608,14 +3608,14 @@ void AdaStoreWalker::task_definition_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3627,7 +3627,7 @@ void AdaStoreWalker::task_items_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t148 = _t;
 		RefAdaAST tmp139_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TASK_ITEMS_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TASK_ITEMS_OPT);
 		_t = _t->getFirstChild();
 		entrydecls_repspecs_opt(_t);
 		_t = _retTree;
@@ -3636,7 +3636,7 @@ void AdaStoreWalker::task_items_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3648,7 +3648,7 @@ void AdaStoreWalker::private_task_items_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t171 = _t;
 		RefAdaAST tmp140_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PRIVATE_TASK_ITEMS_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PRIVATE_TASK_ITEMS_OPT);
 		_t = _t->getFirstChild();
 		entrydecls_repspecs_opt(_t);
 		_t = _retTree;
@@ -3657,7 +3657,7 @@ void AdaStoreWalker::private_task_items_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3669,11 +3669,11 @@ void AdaStoreWalker::discriminant_specifications(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t139 = _t;
 		RefAdaAST tmp141_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DISCRIMINANT_SPECIFICATIONS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DISCRIMINANT_SPECIFICATIONS);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == DISCRIMINANT_SPECIFICATION)) {
 				discriminant_specification(_t);
@@ -3691,7 +3691,7 @@ void AdaStoreWalker::discriminant_specifications(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3703,7 +3703,7 @@ void AdaStoreWalker::discriminant_specification(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t143 = _t;
 		RefAdaAST tmp142_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DISCRIMINANT_SPECIFICATION);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DISCRIMINANT_SPECIFICATION);
 		_t = _t->getFirstChild();
 		defining_identifier_list(_t);
 		_t = _retTree;
@@ -3718,7 +3718,7 @@ void AdaStoreWalker::discriminant_specification(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3730,7 +3730,7 @@ void AdaStoreWalker::entrydecls_repspecs_opt(RefAdaAST _t) {
 	try {      // for error handling
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case ENTRY_DECLARATION:
@@ -3765,7 +3765,7 @@ void AdaStoreWalker::entrydecls_repspecs_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3777,10 +3777,10 @@ void AdaStoreWalker::entry_declaration(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t153 = _t;
 		RefAdaAST tmp143_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ENTRY_DECLARATION);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ENTRY_DECLARATION);
 		_t = _t->getFirstChild();
 		RefAdaAST tmp144_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 		_t = _t->getNextSibling();
 		discrete_subtype_def_opt(_t);
 		_t = _retTree;
@@ -3791,7 +3791,7 @@ void AdaStoreWalker::entry_declaration(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3801,14 +3801,14 @@ void AdaStoreWalker::rep_spec(RefAdaAST _t) {
 	RefAdaAST rep_spec_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case RECORD_REPRESENTATION_CLAUSE:
 		{
 			RefAdaAST __t159 = _t;
 			RefAdaAST tmp145_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RECORD_REPRESENTATION_CLAUSE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RECORD_REPRESENTATION_CLAUSE);
 			_t = _t->getFirstChild();
 			subtype_mark(_t);
 			_t = _retTree;
@@ -3824,7 +3824,7 @@ void AdaStoreWalker::rep_spec(RefAdaAST _t) {
 		{
 			RefAdaAST __t160 = _t;
 			RefAdaAST tmp146_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),AT_CLAUSE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),AT_CLAUSE);
 			_t = _t->getFirstChild();
 			subtype_mark(_t);
 			_t = _retTree;
@@ -3838,7 +3838,7 @@ void AdaStoreWalker::rep_spec(RefAdaAST _t) {
 		{
 			RefAdaAST __t161 = _t;
 			RefAdaAST tmp147_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ATTRIBUTE_DEFINITION_CLAUSE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ATTRIBUTE_DEFINITION_CLAUSE);
 			_t = _t->getFirstChild();
 			subtype_mark(_t);
 			_t = _retTree;
@@ -3852,7 +3852,7 @@ void AdaStoreWalker::rep_spec(RefAdaAST _t) {
 		{
 			RefAdaAST __t162 = _t;
 			RefAdaAST tmp148_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ENUMERATION_REPESENTATION_CLAUSE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ENUMERATION_REPESENTATION_CLAUSE);
 			_t = _t->getFirstChild();
 			local_enum_name(_t);
 			_t = _retTree;
@@ -3864,13 +3864,13 @@ void AdaStoreWalker::rep_spec(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3882,10 +3882,10 @@ void AdaStoreWalker::discrete_subtype_def_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t155 = _t;
 		RefAdaAST tmp149_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DISCRETE_SUBTYPE_DEF_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DISCRETE_SUBTYPE_DEF_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
@@ -3902,7 +3902,7 @@ void AdaStoreWalker::discrete_subtype_def_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -3911,7 +3911,7 @@ void AdaStoreWalker::discrete_subtype_def_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3921,7 +3921,7 @@ void AdaStoreWalker::discrete_subtype_definition(RefAdaAST _t) {
 	RefAdaAST discrete_subtype_definition_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
@@ -3939,13 +3939,13 @@ void AdaStoreWalker::discrete_subtype_definition(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3957,7 +3957,7 @@ void AdaStoreWalker::subtype_ind(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t228 = _t;
 		RefAdaAST tmp150_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SUBTYPE_INDICATION);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SUBTYPE_INDICATION);
 		_t = _t->getFirstChild();
 		subtype_mark(_t);
 		_t = _retTree;
@@ -3968,7 +3968,7 @@ void AdaStoreWalker::subtype_ind(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -3980,10 +3980,10 @@ void AdaStoreWalker::align_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t164 = _t;
 		RefAdaAST tmp151_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),MOD_CLAUSE_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),MOD_CLAUSE_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -4033,7 +4033,7 @@ void AdaStoreWalker::align_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -4042,7 +4042,7 @@ void AdaStoreWalker::align_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4054,11 +4054,11 @@ void AdaStoreWalker::comp_loc_s(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t167 = _t;
 		RefAdaAST tmp152_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),COMPONENT_CLAUSES_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),COMPONENT_CLAUSES_OPT);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -4092,7 +4092,7 @@ void AdaStoreWalker::comp_loc_s(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4103,12 +4103,12 @@ void AdaStoreWalker::local_enum_name(RefAdaAST _t) {
 	
 	try {      // for error handling
 		RefAdaAST tmp153_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 		_t = _t->getNextSibling();
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4120,7 +4120,7 @@ void AdaStoreWalker::enumeration_aggregate(RefAdaAST _t) {
 	try {      // for error handling
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_tokenSet_2.member(_t->getType()))) {
 				value(_t);
@@ -4136,7 +4136,7 @@ void AdaStoreWalker::enumeration_aggregate(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4149,7 +4149,7 @@ void AdaStoreWalker::protected_definition(RefAdaAST _t) {
 		prot_op_decl_s(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PROT_MEMBER_DECLARATIONS:
@@ -4164,14 +4164,14 @@ void AdaStoreWalker::protected_definition(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4183,11 +4183,11 @@ void AdaStoreWalker::prot_op_decl_s(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t178 = _t;
 		RefAdaAST tmp154_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROT_OP_DECLARATIONS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROT_OP_DECLARATIONS);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_tokenSet_3.member(_t->getType()))) {
 				prot_op_decl(_t);
@@ -4205,7 +4205,7 @@ void AdaStoreWalker::prot_op_decl_s(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4217,11 +4217,11 @@ void AdaStoreWalker::prot_member_decl_s(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t185 = _t;
 		RefAdaAST tmp155_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROT_MEMBER_DECLARATIONS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROT_MEMBER_DECLARATIONS);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -4256,7 +4256,7 @@ void AdaStoreWalker::prot_member_decl_s(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4266,7 +4266,7 @@ void AdaStoreWalker::prot_op_decl(RefAdaAST _t) {
 	RefAdaAST prot_op_decl_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ENTRY_DECLARATION:
@@ -4279,7 +4279,7 @@ void AdaStoreWalker::prot_op_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t182 = _t;
 			RefAdaAST tmp156_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROCEDURE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROCEDURE_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -4293,7 +4293,7 @@ void AdaStoreWalker::prot_op_decl(RefAdaAST _t) {
 		{
 			RefAdaAST __t183 = _t;
 			RefAdaAST tmp157_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FUNCTION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FUNCTION_DECLARATION);
 			_t = _t->getFirstChild();
 			def_designator(_t);
 			_t = _retTree;
@@ -4320,13 +4320,13 @@ void AdaStoreWalker::prot_op_decl(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4338,7 +4338,7 @@ void AdaStoreWalker::comp_decl(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t189 = _t;
 		RefAdaAST tmp158_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),COMPONENT_DECLARATION);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),COMPONENT_DECLARATION);
 		_t = _t->getFirstChild();
 		defining_identifier_list(_t);
 		_t = _retTree;
@@ -4351,7 +4351,7 @@ void AdaStoreWalker::comp_decl(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4368,7 +4368,7 @@ void AdaStoreWalker::component_subtype_def(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4381,14 +4381,14 @@ void AdaStoreWalker::enum_id_s(RefAdaAST _t) {
 		{ // ( ... )+
 		int _cnt213=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == IDENTIFIER || _t->getType() == CHARACTER_LITERAL)) {
 				enumeration_literal_specification(_t);
 				_t = _retTree;
 			}
 			else {
-				if ( _cnt213>=1 ) { goto _loop213; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt213>=1 ) { goto _loop213; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt213++;
@@ -4398,7 +4398,7 @@ void AdaStoreWalker::enum_id_s(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4409,7 +4409,7 @@ void AdaStoreWalker::range_constraint_opt(RefAdaAST _t) {
 	
 	try {      // for error handling
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
@@ -4425,14 +4425,14 @@ void AdaStoreWalker::range_constraint_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4444,10 +4444,10 @@ void AdaStoreWalker::array_type_declaration(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t219 = _t;
 		RefAdaAST tmp159_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ARRAY_TYPE_DECLARATION);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ARRAY_TYPE_DECLARATION);
 		_t = _t->getFirstChild();
 		RefAdaAST tmp160_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 		_t = _t->getNextSibling();
 		array_type_definition(_t);
 		_t = _retTree;
@@ -4456,7 +4456,7 @@ void AdaStoreWalker::array_type_declaration(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4466,17 +4466,17 @@ void AdaStoreWalker::access_type_declaration(RefAdaAST _t) {
 	RefAdaAST access_type_declaration_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ACCESS_TO_PROCEDURE_DECLARATION:
 		{
 			RefAdaAST __t252 = _t;
 			RefAdaAST tmp161_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ACCESS_TO_PROCEDURE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ACCESS_TO_PROCEDURE_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp162_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			modifiers(_t);
 			_t = _retTree;
@@ -4490,10 +4490,10 @@ void AdaStoreWalker::access_type_declaration(RefAdaAST _t) {
 		{
 			RefAdaAST __t253 = _t;
 			RefAdaAST tmp163_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ACCESS_TO_FUNCTION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ACCESS_TO_FUNCTION_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp164_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			modifiers(_t);
 			_t = _retTree;
@@ -4507,10 +4507,10 @@ void AdaStoreWalker::access_type_declaration(RefAdaAST _t) {
 		{
 			RefAdaAST __t254 = _t;
 			RefAdaAST tmp165_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ACCESS_TO_OBJECT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ACCESS_TO_OBJECT_DECLARATION);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp166_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			modifiers(_t);
 			_t = _retTree;
@@ -4522,13 +4522,13 @@ void AdaStoreWalker::access_type_declaration(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4539,14 +4539,14 @@ void AdaStoreWalker::id_and_discrim(RefAdaAST _t) {
 	
 	try {      // for error handling
 		RefAdaAST tmp167_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 		_t = _t->getNextSibling();
 		discrim_part_opt(_t);
 		_t = _retTree;
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4557,7 +4557,7 @@ void AdaStoreWalker::record_definition(RefAdaAST _t) {
 	
 	try {      // for error handling
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case COMPONENT_ITEMS:
@@ -4572,14 +4572,14 @@ void AdaStoreWalker::record_definition(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4596,7 +4596,7 @@ void AdaStoreWalker::array_type_definition(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4606,32 +4606,32 @@ void AdaStoreWalker::enumeration_literal_specification(RefAdaAST _t) {
 	RefAdaAST enumeration_literal_specification_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
 		{
 			RefAdaAST tmp168_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case CHARACTER_LITERAL:
 		{
 			RefAdaAST tmp169_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CHARACTER_LITERAL);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CHARACTER_LITERAL);
 			_t = _t->getNextSibling();
 			break;
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4641,7 +4641,7 @@ void AdaStoreWalker::index_or_discrete_range_s(RefAdaAST _t) {
 	RefAdaAST index_or_discrete_range_s_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -4678,7 +4678,7 @@ void AdaStoreWalker::index_or_discrete_range_s(RefAdaAST _t) {
 		{
 			RefAdaAST __t221 = _t;
 			RefAdaAST tmp170_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),COMMA);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),COMMA);
 			_t = _t->getFirstChild();
 			index_or_discrete_range_s(_t);
 			_t = _retTree;
@@ -4690,13 +4690,13 @@ void AdaStoreWalker::index_or_discrete_range_s(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4706,14 +4706,14 @@ void AdaStoreWalker::index_or_discrete_range(RefAdaAST _t) {
 	RefAdaAST index_or_discrete_range_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
 		{
 			RefAdaAST __t223 = _t;
 			RefAdaAST tmp171_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DOT_DOT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DOT_DOT);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -4727,18 +4727,18 @@ void AdaStoreWalker::index_or_discrete_range(RefAdaAST _t) {
 		{
 			RefAdaAST __t224 = _t;
 			RefAdaAST tmp172_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RANGE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RANGE);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
 			{
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case BOX:
 			{
 				RefAdaAST tmp173_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),BOX);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),BOX);
 				_t = _t->getNextSibling();
 				break;
 			}
@@ -4751,7 +4751,7 @@ void AdaStoreWalker::index_or_discrete_range(RefAdaAST _t) {
 			}
 			default:
 			{
-				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 			}
 			}
 			}
@@ -4789,13 +4789,13 @@ void AdaStoreWalker::index_or_discrete_range(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4806,7 +4806,7 @@ void AdaStoreWalker::constraint_opt(RefAdaAST _t) {
 	
 	try {      // for error handling
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
@@ -4846,14 +4846,14 @@ void AdaStoreWalker::constraint_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4865,7 +4865,7 @@ void AdaStoreWalker::digits_constraint(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t232 = _t;
 		RefAdaAST tmp174_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DIGITS_CONSTRAINT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DIGITS_CONSTRAINT);
 		_t = _t->getFirstChild();
 		expression(_t);
 		_t = _retTree;
@@ -4876,7 +4876,7 @@ void AdaStoreWalker::digits_constraint(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4888,7 +4888,7 @@ void AdaStoreWalker::delta_constraint(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t234 = _t;
 		RefAdaAST tmp175_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DELTA_CONSTRAINT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DELTA_CONSTRAINT);
 		_t = _t->getFirstChild();
 		expression(_t);
 		_t = _retTree;
@@ -4899,7 +4899,7 @@ void AdaStoreWalker::delta_constraint(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4911,19 +4911,19 @@ void AdaStoreWalker::index_constraint(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t236 = _t;
 		RefAdaAST tmp176_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),INDEX_CONSTRAINT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),INDEX_CONSTRAINT);
 		_t = _t->getFirstChild();
 		{ // ( ... )+
 		int _cnt238=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == DOT_DOT || _t->getType() == RANGE_ATTRIBUTE_REFERENCE || _t->getType() == SUBTYPE_INDICATION)) {
 				discrete_range(_t);
 				_t = _retTree;
 			}
 			else {
-				if ( _cnt238>=1 ) { goto _loop238; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt238>=1 ) { goto _loop238; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt238++;
@@ -4935,7 +4935,7 @@ void AdaStoreWalker::index_constraint(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4947,19 +4947,19 @@ void AdaStoreWalker::discriminant_constraint(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t241 = _t;
 		RefAdaAST tmp177_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DISCRIMINANT_CONSTRAINT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DISCRIMINANT_CONSTRAINT);
 		_t = _t->getFirstChild();
 		{ // ( ... )+
 		int _cnt243=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == DISCRIMINANT_ASSOCIATION)) {
 				discriminant_association(_t);
 				_t = _retTree;
 			}
 			else {
-				if ( _cnt243>=1 ) { goto _loop243; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt243>=1 ) { goto _loop243; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt243++;
@@ -4971,7 +4971,7 @@ void AdaStoreWalker::discriminant_constraint(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -4981,7 +4981,7 @@ void AdaStoreWalker::discrete_range(RefAdaAST _t) {
 	RefAdaAST discrete_range_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
@@ -4999,13 +4999,13 @@ void AdaStoreWalker::discrete_range(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5017,7 +5017,7 @@ void AdaStoreWalker::discriminant_association(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t245 = _t;
 		RefAdaAST tmp178_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DISCRIMINANT_ASSOCIATION);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DISCRIMINANT_ASSOCIATION);
 		_t = _t->getFirstChild();
 		selector_names_opt(_t);
 		_t = _retTree;
@@ -5028,7 +5028,7 @@ void AdaStoreWalker::discriminant_association(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5040,11 +5040,11 @@ void AdaStoreWalker::selector_names_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t247 = _t;
 		RefAdaAST tmp179_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SELECTOR_NAMES_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SELECTOR_NAMES_OPT);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == IDENTIFIER)) {
 				selector_name(_t);
@@ -5062,7 +5062,7 @@ void AdaStoreWalker::selector_names_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5073,12 +5073,12 @@ void AdaStoreWalker::selector_name(RefAdaAST _t) {
 	
 	try {      // for error handling
 		RefAdaAST tmp180_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 		_t = _t->getNextSibling();
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5091,7 +5091,7 @@ void AdaStoreWalker::component_list(RefAdaAST _t) {
 		component_items(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case VARIANT_PART:
@@ -5106,14 +5106,14 @@ void AdaStoreWalker::component_list(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5125,11 +5125,11 @@ void AdaStoreWalker::component_items(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t260 = _t;
 		RefAdaAST tmp181_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),COMPONENT_ITEMS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),COMPONENT_ITEMS);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -5157,7 +5157,7 @@ void AdaStoreWalker::component_items(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5169,7 +5169,7 @@ void AdaStoreWalker::variant_part(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t264 = _t;
 		RefAdaAST tmp182_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),VARIANT_PART);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),VARIANT_PART);
 		_t = _t->getFirstChild();
 		discriminant_direct_name(_t);
 		_t = _retTree;
@@ -5180,7 +5180,7 @@ void AdaStoreWalker::variant_part(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5191,12 +5191,12 @@ void AdaStoreWalker::discriminant_direct_name(RefAdaAST _t) {
 	
 	try {      // for error handling
 		RefAdaAST tmp183_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 		_t = _t->getNextSibling();
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5208,19 +5208,19 @@ void AdaStoreWalker::variant_s(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t267 = _t;
 		RefAdaAST tmp184_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),VARIANTS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),VARIANTS);
 		_t = _t->getFirstChild();
 		{ // ( ... )+
 		int _cnt269=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == VARIANT)) {
 				variant(_t);
 				_t = _retTree;
 			}
 			else {
-				if ( _cnt269>=1 ) { goto _loop269; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt269>=1 ) { goto _loop269; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt269++;
@@ -5232,7 +5232,7 @@ void AdaStoreWalker::variant_s(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5244,12 +5244,12 @@ void AdaStoreWalker::variant(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t271 = _t;
 		RefAdaAST tmp185_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),VARIANT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),VARIANT);
 		_t = _t->getFirstChild();
 		choice_s(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case COMPONENT_ITEMS:
@@ -5264,7 +5264,7 @@ void AdaStoreWalker::variant(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -5273,7 +5273,7 @@ void AdaStoreWalker::variant(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5283,14 +5283,14 @@ void AdaStoreWalker::choice_s(RefAdaAST _t) {
 	RefAdaAST choice_s_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PIPE:
 		{
 			RefAdaAST __t274 = _t;
 			RefAdaAST tmp186_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PIPE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PIPE);
 			_t = _t->getFirstChild();
 			choice_s(_t);
 			_t = _retTree;
@@ -5347,13 +5347,13 @@ void AdaStoreWalker::choice_s(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5363,13 +5363,13 @@ void AdaStoreWalker::choice(RefAdaAST _t) {
 	RefAdaAST choice_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case OTHERS:
 		{
 			RefAdaAST tmp187_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OTHERS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OTHERS);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -5424,13 +5424,13 @@ void AdaStoreWalker::choice(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5440,7 +5440,7 @@ void AdaStoreWalker::discrete_with_range(RefAdaAST _t) {
 	RefAdaAST discrete_with_range_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case MARK_WITH_CONSTRAINT:
@@ -5458,13 +5458,13 @@ void AdaStoreWalker::discrete_with_range(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5476,7 +5476,7 @@ void AdaStoreWalker::mark_with_constraint(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t278 = _t;
 		RefAdaAST tmp188_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),MARK_WITH_CONSTRAINT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),MARK_WITH_CONSTRAINT);
 		_t = _t->getFirstChild();
 		subtype_mark(_t);
 		_t = _retTree;
@@ -5487,7 +5487,7 @@ void AdaStoreWalker::mark_with_constraint(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5497,14 +5497,14 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 	RefAdaAST generic_formal_parameter_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case FORMAL_DISCRETE_TYPE_DECLARATION:
 		{
 			RefAdaAST __t288 = _t;
 			RefAdaAST tmp189_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_DISCRETE_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_DISCRETE_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5516,7 +5516,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t289 = _t;
 			RefAdaAST tmp190_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_SIGNED_INTEGER_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_SIGNED_INTEGER_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5528,7 +5528,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t290 = _t;
 			RefAdaAST tmp191_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_MODULAR_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_MODULAR_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5540,7 +5540,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t291 = _t;
 			RefAdaAST tmp192_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_DECIMAL_FIXED_POINT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_DECIMAL_FIXED_POINT_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5552,7 +5552,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t292 = _t;
 			RefAdaAST tmp193_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_ORDINARY_FIXED_POINT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_ORDINARY_FIXED_POINT_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5564,7 +5564,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t293 = _t;
 			RefAdaAST tmp194_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_FLOATING_POINT_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_FLOATING_POINT_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5590,7 +5590,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t294 = _t;
 			RefAdaAST tmp195_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_PRIVATE_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_PRIVATE_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			id_part(_t);
 			_t = _retTree;
@@ -5604,7 +5604,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t295 = _t;
 			RefAdaAST tmp196_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_ORDINARY_DERIVED_TYPE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_ORDINARY_DERIVED_TYPE_DECLARATION);
 			_t = _t->getFirstChild();
 			id_part(_t);
 			_t = _retTree;
@@ -5618,7 +5618,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t296 = _t;
 			RefAdaAST tmp197_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_PRIVATE_EXTENSION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_PRIVATE_EXTENSION_DECLARATION);
 			_t = _t->getFirstChild();
 			id_part(_t);
 			_t = _retTree;
@@ -5634,7 +5634,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t297 = _t;
 			RefAdaAST tmp198_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_PROCEDURE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_PROCEDURE_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5650,7 +5650,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t298 = _t;
 			RefAdaAST tmp199_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_FUNCTION_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_FUNCTION_DECLARATION);
 			_t = _t->getFirstChild();
 			def_designator(_t);
 			_t = _retTree;
@@ -5666,7 +5666,7 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		{
 			RefAdaAST __t299 = _t;
 			RefAdaAST tmp200_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FORMAL_PACKAGE_DECLARATION);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FORMAL_PACKAGE_DECLARATION);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5686,13 +5686,13 @@ void AdaStoreWalker::generic_formal_parameter(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5707,7 +5707,7 @@ void AdaStoreWalker::formal_array_type_declaration(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5722,7 +5722,7 @@ void AdaStoreWalker::formal_access_type_declaration(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5739,7 +5739,7 @@ void AdaStoreWalker::id_part(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5750,13 +5750,13 @@ void AdaStoreWalker::subprogram_default_opt(RefAdaAST _t) {
 	
 	try {      // for error handling
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case BOX:
 		{
 			RefAdaAST tmp201_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),BOX);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),BOX);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -5775,14 +5775,14 @@ void AdaStoreWalker::subprogram_default_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5793,13 +5793,13 @@ void AdaStoreWalker::formal_package_actual_part_opt(RefAdaAST _t) {
 	
 	try {      // for error handling
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case BOX:
 		{
 			RefAdaAST tmp202_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),BOX);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),BOX);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -5815,14 +5815,14 @@ void AdaStoreWalker::formal_package_actual_part_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5839,7 +5839,7 @@ void AdaStoreWalker::body_part(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5851,11 +5851,11 @@ void AdaStoreWalker::declarative_part(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t313 = _t;
 		RefAdaAST tmp203_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DECLARATIVE_PART);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DECLARATIVE_PART);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -5942,7 +5942,7 @@ void AdaStoreWalker::declarative_part(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5954,7 +5954,7 @@ void AdaStoreWalker::block_body(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t332 = _t;
 		RefAdaAST tmp204_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),BLOCK_BODY);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),BLOCK_BODY);
 		_t = _t->getFirstChild();
 		handled_stmt_s(_t);
 		_t = _retTree;
@@ -5963,7 +5963,7 @@ void AdaStoreWalker::block_body(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -5973,14 +5973,14 @@ void AdaStoreWalker::declarative_item(RefAdaAST _t) {
 	RefAdaAST declarative_item_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PACKAGE_BODY_STUB:
 		{
 			RefAdaAST __t317 = _t;
 			RefAdaAST tmp205_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PACKAGE_BODY_STUB);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PACKAGE_BODY_STUB);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -5992,7 +5992,7 @@ void AdaStoreWalker::declarative_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t318 = _t;
 			RefAdaAST tmp206_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PACKAGE_BODY);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PACKAGE_BODY);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -6014,7 +6014,7 @@ void AdaStoreWalker::declarative_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t319 = _t;
 			RefAdaAST tmp207_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TASK_BODY_STUB);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TASK_BODY_STUB);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -6026,7 +6026,7 @@ void AdaStoreWalker::declarative_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t320 = _t;
 			RefAdaAST tmp208_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TASK_BODY);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TASK_BODY);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -6047,7 +6047,7 @@ void AdaStoreWalker::declarative_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t321 = _t;
 			RefAdaAST tmp209_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROTECTED_BODY_STUB);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROTECTED_BODY_STUB);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -6059,7 +6059,7 @@ void AdaStoreWalker::declarative_item(RefAdaAST _t) {
 		{
 			RefAdaAST __t322 = _t;
 			RefAdaAST tmp210_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROTECTED_BODY);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROTECTED_BODY);
 			_t = _t->getFirstChild();
 			def_id(_t);
 			_t = _retTree;
@@ -6135,13 +6135,13 @@ void AdaStoreWalker::declarative_item(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6153,11 +6153,11 @@ void AdaStoreWalker::prot_op_bodies_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t328 = _t;
 		RefAdaAST tmp211_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROT_OP_BODIES_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROT_OP_BODIES_OPT);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -6194,7 +6194,7 @@ void AdaStoreWalker::prot_op_bodies_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6206,10 +6206,10 @@ void AdaStoreWalker::block_body_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t325 = _t;
 		RefAdaAST tmp212_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),BLOCK_BODY_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),BLOCK_BODY_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case HANDLED_SEQUENCE_OF_STATEMENTS:
@@ -6224,7 +6224,7 @@ void AdaStoreWalker::block_body_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -6233,7 +6233,7 @@ void AdaStoreWalker::block_body_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6245,7 +6245,7 @@ void AdaStoreWalker::handled_stmt_s(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t334 = _t;
 		RefAdaAST tmp213_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),HANDLED_SEQUENCE_OF_STATEMENTS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),HANDLED_SEQUENCE_OF_STATEMENTS);
 		_t = _t->getFirstChild();
 		statements(_t);
 		_t = _retTree;
@@ -6256,7 +6256,7 @@ void AdaStoreWalker::handled_stmt_s(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6268,7 +6268,7 @@ void AdaStoreWalker::entry_body(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t391 = _t;
 		RefAdaAST tmp214_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ENTRY_BODY);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ENTRY_BODY);
 		_t = _t->getFirstChild();
 		def_id(_t);
 		_t = _retTree;
@@ -6283,7 +6283,7 @@ void AdaStoreWalker::entry_body(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6295,12 +6295,12 @@ void AdaStoreWalker::statements(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t336 = _t;
 		RefAdaAST tmp215_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SEQUENCE_OF_STATEMENTS);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SEQUENCE_OF_STATEMENTS);
 		_t = _t->getFirstChild();
 		{ // ( ... )+
 		int _cnt338=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -6317,7 +6317,7 @@ void AdaStoreWalker::statements(RefAdaAST _t) {
 			}
 			default:
 			{
-				if ( _cnt338>=1 ) { goto _loop338; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt338>=1 ) { goto _loop338; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			}
 			_cnt338++;
@@ -6329,7 +6329,7 @@ void AdaStoreWalker::statements(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6341,11 +6341,11 @@ void AdaStoreWalker::except_handler_part_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t442 = _t;
 		RefAdaAST tmp216_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),EXCEPT_HANDLER_PART_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),EXCEPT_HANDLER_PART_OPT);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == EXCEPTION_HANDLER)) {
 				exception_handler(_t);
@@ -6363,7 +6363,7 @@ void AdaStoreWalker::except_handler_part_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6375,12 +6375,12 @@ void AdaStoreWalker::statement(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t340 = _t;
 		RefAdaAST tmp217_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),STATEMENT);
 		_t = _t->getFirstChild();
 		def_label_opt(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case NULL_STATEMENT:
@@ -6479,7 +6479,7 @@ void AdaStoreWalker::statement(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -6488,7 +6488,7 @@ void AdaStoreWalker::statement(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6500,16 +6500,16 @@ void AdaStoreWalker::def_label_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t343 = _t;
 		RefAdaAST tmp218_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),LABEL_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),LABEL_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
 		{
 			RefAdaAST tmp219_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -6519,7 +6519,7 @@ void AdaStoreWalker::def_label_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -6528,7 +6528,7 @@ void AdaStoreWalker::def_label_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6539,12 +6539,12 @@ void AdaStoreWalker::null_stmt(RefAdaAST _t) {
 	
 	try {      // for error handling
 		RefAdaAST tmp220_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NULL_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NULL_STATEMENT);
 		_t = _t->getNextSibling();
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6556,10 +6556,10 @@ void AdaStoreWalker::exit_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t378 = _t;
 		RefAdaAST tmp221_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),EXIT_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),EXIT_STATEMENT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -6575,18 +6575,18 @@ void AdaStoreWalker::exit_stmt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case WHEN:
 		{
 			RefAdaAST tmp222_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),WHEN);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),WHEN);
 			_t = _t->getNextSibling();
 			condition(_t);
 			_t = _retTree;
@@ -6598,7 +6598,7 @@ void AdaStoreWalker::exit_stmt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -6607,7 +6607,7 @@ void AdaStoreWalker::exit_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6619,10 +6619,10 @@ void AdaStoreWalker::return_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t383 = _t;
 		RefAdaAST tmp223_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RETURN_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RETURN_STATEMENT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -6672,7 +6672,7 @@ void AdaStoreWalker::return_stmt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -6681,7 +6681,7 @@ void AdaStoreWalker::return_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6693,7 +6693,7 @@ void AdaStoreWalker::goto_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t386 = _t;
 		RefAdaAST tmp224_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GOTO_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GOTO_STATEMENT);
 		_t = _t->getFirstChild();
 		label_name(_t);
 		_t = _retTree;
@@ -6702,7 +6702,7 @@ void AdaStoreWalker::goto_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6714,7 +6714,7 @@ void AdaStoreWalker::delay_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t406 = _t;
 		RefAdaAST tmp225_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DELAY_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DELAY_STATEMENT);
 		_t = _t->getFirstChild();
 		modifiers(_t);
 		_t = _retTree;
@@ -6725,7 +6725,7 @@ void AdaStoreWalker::delay_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6737,19 +6737,19 @@ void AdaStoreWalker::abort_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t438 = _t;
 		RefAdaAST tmp226_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ABORT_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ABORT_STATEMENT);
 		_t = _t->getFirstChild();
 		{ // ( ... )+
 		int _cnt440=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_tokenSet_4.member(_t->getType()))) {
 				name(_t);
 				_t = _retTree;
 			}
 			else {
-				if ( _cnt440>=1 ) { goto _loop440; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt440>=1 ) { goto _loop440; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt440++;
@@ -6761,7 +6761,7 @@ void AdaStoreWalker::abort_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6773,10 +6773,10 @@ void AdaStoreWalker::raise_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t454 = _t;
 		RefAdaAST tmp227_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),RAISE_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),RAISE_STATEMENT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -6792,7 +6792,7 @@ void AdaStoreWalker::raise_stmt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -6801,7 +6801,7 @@ void AdaStoreWalker::raise_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6813,18 +6813,18 @@ void AdaStoreWalker::requeue_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t457 = _t;
 		RefAdaAST tmp228_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),REQUEUE_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),REQUEUE_STATEMENT);
 		_t = _t->getFirstChild();
 		name(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ABORT:
 		{
 			RefAdaAST tmp229_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ABORT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ABORT);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -6834,7 +6834,7 @@ void AdaStoreWalker::requeue_stmt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -6843,7 +6843,7 @@ void AdaStoreWalker::requeue_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6855,7 +6855,7 @@ void AdaStoreWalker::accept_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t400 = _t;
 		RefAdaAST tmp230_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ACCEPT_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ACCEPT_STATEMENT);
 		_t = _t->getFirstChild();
 		def_id(_t);
 		_t = _retTree;
@@ -6864,7 +6864,7 @@ void AdaStoreWalker::accept_stmt(RefAdaAST _t) {
 		formal_part_opt(_t);
 		_t = _retTree;
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case HANDLED_SEQUENCE_OF_STATEMENTS:
@@ -6879,7 +6879,7 @@ void AdaStoreWalker::accept_stmt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -6888,7 +6888,7 @@ void AdaStoreWalker::accept_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6898,14 +6898,14 @@ void AdaStoreWalker::select_stmt(RefAdaAST _t) {
 	RefAdaAST select_stmt_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ASYNCHRONOUS_SELECT:
 		{
 			RefAdaAST __t408 = _t;
 			RefAdaAST tmp231_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ASYNCHRONOUS_SELECT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ASYNCHRONOUS_SELECT);
 			_t = _t->getFirstChild();
 			triggering_alternative(_t);
 			_t = _retTree;
@@ -6919,7 +6919,7 @@ void AdaStoreWalker::select_stmt(RefAdaAST _t) {
 		{
 			RefAdaAST __t409 = _t;
 			RefAdaAST tmp232_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),SELECTIVE_ACCEPT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),SELECTIVE_ACCEPT);
 			_t = _t->getFirstChild();
 			selective_accept(_t);
 			_t = _retTree;
@@ -6931,7 +6931,7 @@ void AdaStoreWalker::select_stmt(RefAdaAST _t) {
 		{
 			RefAdaAST __t410 = _t;
 			RefAdaAST tmp233_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TIMED_ENTRY_CALL);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TIMED_ENTRY_CALL);
 			_t = _t->getFirstChild();
 			entry_call_alternative(_t);
 			_t = _retTree;
@@ -6945,7 +6945,7 @@ void AdaStoreWalker::select_stmt(RefAdaAST _t) {
 		{
 			RefAdaAST __t411 = _t;
 			RefAdaAST tmp234_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CONDITIONAL_ENTRY_CALL);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CONDITIONAL_ENTRY_CALL);
 			_t = _t->getFirstChild();
 			entry_call_alternative(_t);
 			_t = _retTree;
@@ -6957,13 +6957,13 @@ void AdaStoreWalker::select_stmt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -6975,7 +6975,7 @@ void AdaStoreWalker::if_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t347 = _t;
 		RefAdaAST tmp235_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IF_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IF_STATEMENT);
 		_t = _t->getFirstChild();
 		cond_clause(_t);
 		_t = _retTree;
@@ -6988,7 +6988,7 @@ void AdaStoreWalker::if_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7000,7 +7000,7 @@ void AdaStoreWalker::case_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t359 = _t;
 		RefAdaAST tmp236_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CASE_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CASE_STATEMENT);
 		_t = _t->getFirstChild();
 		expression(_t);
 		_t = _retTree;
@@ -7011,7 +7011,7 @@ void AdaStoreWalker::case_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7023,7 +7023,7 @@ void AdaStoreWalker::loop_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t366 = _t;
 		RefAdaAST tmp237_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),LOOP_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),LOOP_STATEMENT);
 		_t = _t->getFirstChild();
 		iteration_scheme_opt(_t);
 		_t = _retTree;
@@ -7034,7 +7034,7 @@ void AdaStoreWalker::loop_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7046,7 +7046,7 @@ void AdaStoreWalker::block(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t373 = _t;
 		RefAdaAST tmp238_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),BLOCK_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),BLOCK_STATEMENT);
 		_t = _t->getFirstChild();
 		declare_opt(_t);
 		_t = _retTree;
@@ -7057,7 +7057,7 @@ void AdaStoreWalker::block(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7067,14 +7067,14 @@ void AdaStoreWalker::call_or_assignment(RefAdaAST _t) {
 	RefAdaAST call_or_assignment_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ASSIGNMENT_STATEMENT:
 		{
 			RefAdaAST __t388 = _t;
 			RefAdaAST tmp239_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ASSIGNMENT_STATEMENT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ASSIGNMENT_STATEMENT);
 			_t = _t->getFirstChild();
 			name(_t);
 			_t = _retTree;
@@ -7088,7 +7088,7 @@ void AdaStoreWalker::call_or_assignment(RefAdaAST _t) {
 		{
 			RefAdaAST __t389 = _t;
 			RefAdaAST tmp240_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CALL_STATEMENT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CALL_STATEMENT);
 			_t = _t->getFirstChild();
 			name(_t);
 			_t = _retTree;
@@ -7098,13 +7098,13 @@ void AdaStoreWalker::call_or_assignment(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7116,7 +7116,7 @@ void AdaStoreWalker::cond_clause(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t349 = _t;
 		RefAdaAST tmp241_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),COND_CLAUSE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),COND_CLAUSE);
 		_t = _t->getFirstChild();
 		condition(_t);
 		_t = _retTree;
@@ -7127,7 +7127,7 @@ void AdaStoreWalker::cond_clause(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7139,11 +7139,11 @@ void AdaStoreWalker::elsifs_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t352 = _t;
 		RefAdaAST tmp242_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ELSIFS_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ELSIFS_OPT);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == COND_CLAUSE)) {
 				cond_clause(_t);
@@ -7161,7 +7161,7 @@ void AdaStoreWalker::elsifs_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7173,10 +7173,10 @@ void AdaStoreWalker::else_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t356 = _t;
 		RefAdaAST tmp243_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ELSE_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ELSE_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case SEQUENCE_OF_STATEMENTS:
@@ -7191,7 +7191,7 @@ void AdaStoreWalker::else_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -7200,7 +7200,7 @@ void AdaStoreWalker::else_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7215,7 +7215,7 @@ void AdaStoreWalker::condition(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7228,14 +7228,14 @@ void AdaStoreWalker::alternative_s(RefAdaAST _t) {
 		{ // ( ... )+
 		int _cnt362=0;
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == CASE_STATEMENT_ALTERNATIVE)) {
 				case_statement_alternative(_t);
 				_t = _retTree;
 			}
 			else {
-				if ( _cnt362>=1 ) { goto _loop362; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));}
+				if ( _cnt362>=1 ) { goto _loop362; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
 			
 			_cnt362++;
@@ -7245,7 +7245,7 @@ void AdaStoreWalker::alternative_s(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7257,7 +7257,7 @@ void AdaStoreWalker::case_statement_alternative(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t364 = _t;
 		RefAdaAST tmp244_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CASE_STATEMENT_ALTERNATIVE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CASE_STATEMENT_ALTERNATIVE);
 		_t = _t->getFirstChild();
 		choice_s(_t);
 		_t = _retTree;
@@ -7268,7 +7268,7 @@ void AdaStoreWalker::case_statement_alternative(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7280,17 +7280,17 @@ void AdaStoreWalker::iteration_scheme_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t368 = _t;
 		RefAdaAST tmp245_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ITERATION_SCHEME_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ITERATION_SCHEME_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case WHILE:
 		{
 			RefAdaAST __t370 = _t;
 			RefAdaAST tmp246_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),WHILE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),WHILE);
 			_t = _t->getFirstChild();
 			condition(_t);
 			_t = _retTree;
@@ -7302,10 +7302,10 @@ void AdaStoreWalker::iteration_scheme_opt(RefAdaAST _t) {
 		{
 			RefAdaAST __t371 = _t;
 			RefAdaAST tmp247_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),FOR);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),FOR);
 			_t = _t->getFirstChild();
 			RefAdaAST tmp248_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			modifiers(_t);
 			_t = _retTree;
@@ -7321,7 +7321,7 @@ void AdaStoreWalker::iteration_scheme_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -7330,7 +7330,7 @@ void AdaStoreWalker::iteration_scheme_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7342,10 +7342,10 @@ void AdaStoreWalker::declare_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t375 = _t;
 		RefAdaAST tmp249_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DECLARE_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DECLARE_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DECLARATIVE_PART:
@@ -7360,7 +7360,7 @@ void AdaStoreWalker::declare_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -7369,7 +7369,7 @@ void AdaStoreWalker::declare_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7380,12 +7380,12 @@ void AdaStoreWalker::label_name(RefAdaAST _t) {
 	
 	try {      // for error handling
 		RefAdaAST tmp250_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 		_t = _t->getNextSibling();
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7402,7 +7402,7 @@ void AdaStoreWalker::entry_body_formal_part(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7417,7 +7417,7 @@ void AdaStoreWalker::entry_barrier(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7429,10 +7429,10 @@ void AdaStoreWalker::entry_index_spec_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t394 = _t;
 		RefAdaAST tmp251_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ENTRY_INDEX_SPECIFICATION);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ENTRY_INDEX_SPECIFICATION);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -7450,7 +7450,7 @@ void AdaStoreWalker::entry_index_spec_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -7459,7 +7459,7 @@ void AdaStoreWalker::entry_index_spec_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7471,7 +7471,7 @@ void AdaStoreWalker::entry_call_stmt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t398 = _t;
 		RefAdaAST tmp252_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ENTRY_CALL_STATEMENT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ENTRY_CALL_STATEMENT);
 		_t = _t->getFirstChild();
 		name(_t);
 		_t = _retTree;
@@ -7480,7 +7480,7 @@ void AdaStoreWalker::entry_call_stmt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7492,10 +7492,10 @@ void AdaStoreWalker::entry_index_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t403 = _t;
 		RefAdaAST tmp253_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ENTRY_INDEX_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ENTRY_INDEX_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -7545,7 +7545,7 @@ void AdaStoreWalker::entry_index_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -7554,7 +7554,7 @@ void AdaStoreWalker::entry_index_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7566,10 +7566,10 @@ void AdaStoreWalker::triggering_alternative(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t413 = _t;
 		RefAdaAST tmp254_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TRIGGERING_ALTERNATIVE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TRIGGERING_ALTERNATIVE);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DELAY_STATEMENT:
@@ -7586,7 +7586,7 @@ void AdaStoreWalker::triggering_alternative(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -7597,7 +7597,7 @@ void AdaStoreWalker::triggering_alternative(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7609,7 +7609,7 @@ void AdaStoreWalker::abortable_part(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t416 = _t;
 		RefAdaAST tmp255_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ABORTABLE_PART);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ABORTABLE_PART);
 		_t = _t->getFirstChild();
 		stmts_opt(_t);
 		_t = _retTree;
@@ -7618,7 +7618,7 @@ void AdaStoreWalker::abortable_part(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7639,7 +7639,7 @@ void AdaStoreWalker::selective_accept(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7651,7 +7651,7 @@ void AdaStoreWalker::entry_call_alternative(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t418 = _t;
 		RefAdaAST tmp256_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ENTRY_CALL_ALTERNATIVE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ENTRY_CALL_ALTERNATIVE);
 		_t = _t->getFirstChild();
 		entry_call_stmt(_t);
 		_t = _retTree;
@@ -7662,7 +7662,7 @@ void AdaStoreWalker::entry_call_alternative(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7674,7 +7674,7 @@ void AdaStoreWalker::delay_alternative(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t429 = _t;
 		RefAdaAST tmp257_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DELAY_ALTERNATIVE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DELAY_ALTERNATIVE);
 		_t = _t->getFirstChild();
 		delay_stmt(_t);
 		_t = _retTree;
@@ -7685,7 +7685,7 @@ void AdaStoreWalker::delay_alternative(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7697,7 +7697,7 @@ void AdaStoreWalker::stmts_opt(RefAdaAST _t) {
 	try {      // for error handling
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PRAGMA:
@@ -7723,7 +7723,7 @@ void AdaStoreWalker::stmts_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7735,10 +7735,10 @@ void AdaStoreWalker::guard_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t421 = _t;
 		RefAdaAST tmp258_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GUARD_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GUARD_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -7782,7 +7782,7 @@ void AdaStoreWalker::guard_opt(RefAdaAST _t) {
 			_t = _retTree;
 			{ // ( ... )*
 			for (;;) {
-				if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+				if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 					_t = ASTNULL;
 				if ((_t->getType() == PRAGMA)) {
 					pragma(_t);
@@ -7803,7 +7803,7 @@ void AdaStoreWalker::guard_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -7812,7 +7812,7 @@ void AdaStoreWalker::guard_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7822,7 +7822,7 @@ void AdaStoreWalker::select_alternative(RefAdaAST _t) {
 	RefAdaAST select_alternative_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case ACCEPT_ALTERNATIVE:
@@ -7840,19 +7840,19 @@ void AdaStoreWalker::select_alternative(RefAdaAST _t) {
 		case TERMINATE_ALTERNATIVE:
 		{
 			RefAdaAST tmp259_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TERMINATE_ALTERNATIVE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TERMINATE_ALTERNATIVE);
 			_t = _t->getNextSibling();
 			break;
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7864,11 +7864,11 @@ void AdaStoreWalker::or_select_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t434 = _t;
 		RefAdaAST tmp260_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OR_SELECT_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OR_SELECT_OPT);
 		_t = _t->getFirstChild();
 		{ // ( ... )*
 		for (;;) {
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			if ((_t->getType() == GUARD_OPT)) {
 				guard_opt(_t);
@@ -7888,7 +7888,7 @@ void AdaStoreWalker::or_select_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7900,7 +7900,7 @@ void AdaStoreWalker::accept_alternative(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t427 = _t;
 		RefAdaAST tmp261_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ACCEPT_ALTERNATIVE);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ACCEPT_ALTERNATIVE);
 		_t = _t->getFirstChild();
 		accept_stmt(_t);
 		_t = _retTree;
@@ -7911,7 +7911,7 @@ void AdaStoreWalker::accept_alternative(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7923,7 +7923,7 @@ void AdaStoreWalker::exception_handler(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t446 = _t;
 		RefAdaAST tmp262_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),EXCEPTION_HANDLER);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),EXCEPTION_HANDLER);
 		_t = _t->getFirstChild();
 		identifier_colon_opt(_t);
 		_t = _retTree;
@@ -7936,7 +7936,7 @@ void AdaStoreWalker::exception_handler(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7948,16 +7948,16 @@ void AdaStoreWalker::identifier_colon_opt(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t448 = _t;
 		RefAdaAST tmp263_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER_COLON_OPT);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER_COLON_OPT);
 		_t = _t->getFirstChild();
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
 		{
 			RefAdaAST tmp264_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -7967,7 +7967,7 @@ void AdaStoreWalker::identifier_colon_opt(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
@@ -7976,7 +7976,7 @@ void AdaStoreWalker::identifier_colon_opt(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -7986,14 +7986,14 @@ void AdaStoreWalker::except_choice_s(RefAdaAST _t) {
 	RefAdaAST except_choice_s_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PIPE:
 		{
 			RefAdaAST __t451 = _t;
 			RefAdaAST tmp265_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PIPE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PIPE);
 			_t = _t->getFirstChild();
 			except_choice_s(_t);
 			_t = _retTree;
@@ -8013,13 +8013,13 @@ void AdaStoreWalker::except_choice_s(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8029,7 +8029,7 @@ void AdaStoreWalker::exception_choice(RefAdaAST _t) {
 	RefAdaAST exception_choice_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -8042,19 +8042,19 @@ void AdaStoreWalker::exception_choice(RefAdaAST _t) {
 		case OTHERS:
 		{
 			RefAdaAST tmp266_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OTHERS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OTHERS);
 			_t = _t->getNextSibling();
 			break;
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8066,7 +8066,7 @@ void AdaStoreWalker::operator_call(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t460 = _t;
 		RefAdaAST tmp267_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OPERATOR_SYMBOL);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OPERATOR_SYMBOL);
 		_t = _t->getFirstChild();
 		value_s(_t);
 		_t = _retTree;
@@ -8075,7 +8075,7 @@ void AdaStoreWalker::operator_call(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8085,14 +8085,14 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 	RefAdaAST relation_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IN:
 		{
 			RefAdaAST __t472 = _t;
 			RefAdaAST tmp268_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IN);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IN);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -8106,7 +8106,7 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 		{
 			RefAdaAST __t473 = _t;
 			RefAdaAST tmp269_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NOT_IN);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NOT_IN);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -8120,7 +8120,7 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 		{
 			RefAdaAST __t474 = _t;
 			RefAdaAST tmp270_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),EQ);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),EQ);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -8134,7 +8134,7 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 		{
 			RefAdaAST __t475 = _t;
 			RefAdaAST tmp271_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NE);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -8148,7 +8148,7 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 		{
 			RefAdaAST __t476 = _t;
 			RefAdaAST tmp272_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),LT_);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),LT_);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -8162,7 +8162,7 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 		{
 			RefAdaAST __t477 = _t;
 			RefAdaAST tmp273_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),LE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),LE);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -8176,7 +8176,7 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 		{
 			RefAdaAST __t478 = _t;
 			RefAdaAST tmp274_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GT);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -8190,7 +8190,7 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 		{
 			RefAdaAST __t479 = _t;
 			RefAdaAST tmp275_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),GE);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),GE);
 			_t = _t->getFirstChild();
 			simple_expression(_t);
 			_t = _retTree;
@@ -8230,13 +8230,13 @@ void AdaStoreWalker::relation(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8246,7 +8246,7 @@ void AdaStoreWalker::range_or_mark(RefAdaAST _t) {
 	RefAdaAST range_or_mark_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case DOT_DOT:
@@ -8266,13 +8266,13 @@ void AdaStoreWalker::range_or_mark(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8282,14 +8282,14 @@ void AdaStoreWalker::signed_term(RefAdaAST _t) {
 	RefAdaAST signed_term_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case UNARY_PLUS:
 		{
 			RefAdaAST __t486 = _t;
 			RefAdaAST tmp276_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),UNARY_PLUS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),UNARY_PLUS);
 			_t = _t->getFirstChild();
 			term(_t);
 			_t = _retTree;
@@ -8301,7 +8301,7 @@ void AdaStoreWalker::signed_term(RefAdaAST _t) {
 		{
 			RefAdaAST __t487 = _t;
 			RefAdaAST tmp277_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),UNARY_MINUS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),UNARY_MINUS);
 			_t = _t->getFirstChild();
 			term(_t);
 			_t = _retTree;
@@ -8334,13 +8334,13 @@ void AdaStoreWalker::signed_term(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8350,14 +8350,14 @@ void AdaStoreWalker::term(RefAdaAST _t) {
 	RefAdaAST term_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case STAR:
 		{
 			RefAdaAST __t489 = _t;
 			RefAdaAST tmp278_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),STAR);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),STAR);
 			_t = _t->getFirstChild();
 			term(_t);
 			_t = _retTree;
@@ -8371,7 +8371,7 @@ void AdaStoreWalker::term(RefAdaAST _t) {
 		{
 			RefAdaAST __t490 = _t;
 			RefAdaAST tmp279_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DIV);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DIV);
 			_t = _t->getFirstChild();
 			term(_t);
 			_t = _retTree;
@@ -8385,7 +8385,7 @@ void AdaStoreWalker::term(RefAdaAST _t) {
 		{
 			RefAdaAST __t491 = _t;
 			RefAdaAST tmp280_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),MOD);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),MOD);
 			_t = _t->getFirstChild();
 			term(_t);
 			_t = _retTree;
@@ -8399,7 +8399,7 @@ void AdaStoreWalker::term(RefAdaAST _t) {
 		{
 			RefAdaAST __t492 = _t;
 			RefAdaAST tmp281_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),REM);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),REM);
 			_t = _t->getFirstChild();
 			term(_t);
 			_t = _retTree;
@@ -8430,13 +8430,13 @@ void AdaStoreWalker::term(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8446,14 +8446,14 @@ void AdaStoreWalker::factor(RefAdaAST _t) {
 	RefAdaAST factor_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case NOT:
 		{
 			RefAdaAST __t494 = _t;
 			RefAdaAST tmp282_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NOT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NOT);
 			_t = _t->getFirstChild();
 			primary(_t);
 			_t = _retTree;
@@ -8465,7 +8465,7 @@ void AdaStoreWalker::factor(RefAdaAST _t) {
 		{
 			RefAdaAST __t495 = _t;
 			RefAdaAST tmp283_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ABS);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ABS);
 			_t = _t->getFirstChild();
 			primary(_t);
 			_t = _retTree;
@@ -8477,7 +8477,7 @@ void AdaStoreWalker::factor(RefAdaAST _t) {
 		{
 			RefAdaAST __t496 = _t;
 			RefAdaAST tmp284_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),EXPON);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),EXPON);
 			_t = _t->getFirstChild();
 			primary(_t);
 			_t = _retTree;
@@ -8505,13 +8505,13 @@ void AdaStoreWalker::factor(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8522,7 +8522,7 @@ void AdaStoreWalker::primary(RefAdaAST _t) {
 	
 	try {      // for error handling
 		{
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
@@ -8549,28 +8549,28 @@ void AdaStoreWalker::primary(RefAdaAST _t) {
 		case NuLL:
 		{
 			RefAdaAST tmp285_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NuLL);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NuLL);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case NUMERIC_LIT:
 		{
 			RefAdaAST tmp286_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),NUMERIC_LIT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NUMERIC_LIT);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case CHARACTER_LITERAL:
 		{
 			RefAdaAST tmp287_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CHARACTER_LITERAL);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CHARACTER_LITERAL);
 			_t = _t->getNextSibling();
 			break;
 		}
 		case CHAR_STRING:
 		{
 			RefAdaAST tmp288_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CHAR_STRING);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CHAR_STRING);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -8582,14 +8582,14 @@ void AdaStoreWalker::primary(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8599,13 +8599,13 @@ void AdaStoreWalker::name_or_qualified(RefAdaAST _t) {
 	RefAdaAST name_or_qualified_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case IDENTIFIER:
 		{
 			RefAdaAST tmp289_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 			_t = _t->getNextSibling();
 			break;
 		}
@@ -8613,45 +8613,45 @@ void AdaStoreWalker::name_or_qualified(RefAdaAST _t) {
 		{
 			RefAdaAST __t500 = _t;
 			RefAdaAST tmp290_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),DOT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),DOT);
 			_t = _t->getFirstChild();
 			name_or_qualified(_t);
 			_t = _retTree;
 			{
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case ALL:
 			{
 				RefAdaAST tmp291_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ALL);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ALL);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case IDENTIFIER:
 			{
 				RefAdaAST tmp292_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),IDENTIFIER);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENTIFIER);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case CHARACTER_LITERAL:
 			{
 				RefAdaAST tmp293_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),CHARACTER_LITERAL);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),CHARACTER_LITERAL);
 				_t = _t->getNextSibling();
 				break;
 			}
 			case OPERATOR_SYMBOL:
 			{
 				RefAdaAST tmp294_AST_in = _t;
-				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),OPERATOR_SYMBOL);
+				match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),OPERATOR_SYMBOL);
 				_t = _t->getNextSibling();
 				break;
 			}
 			default:
 			{
-				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 			}
 			}
 			}
@@ -8663,7 +8663,7 @@ void AdaStoreWalker::name_or_qualified(RefAdaAST _t) {
 		{
 			RefAdaAST __t502 = _t;
 			RefAdaAST tmp295_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),INDEXED_COMPONENT);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),INDEXED_COMPONENT);
 			_t = _t->getFirstChild();
 			name_or_qualified(_t);
 			_t = _retTree;
@@ -8677,12 +8677,12 @@ void AdaStoreWalker::name_or_qualified(RefAdaAST _t) {
 		{
 			RefAdaAST __t503 = _t;
 			RefAdaAST tmp296_AST_in = _t;
-			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TIC);
+			match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TIC);
 			_t = _t->getFirstChild();
 			name_or_qualified(_t);
 			_t = _retTree;
 			{
-			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				_t = ASTNULL;
 			switch ( _t->getType()) {
 			case PARENTHESIZED_PRIMARY:
@@ -8703,7 +8703,7 @@ void AdaStoreWalker::name_or_qualified(RefAdaAST _t) {
 			}
 			default:
 			{
-				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 			}
 			}
 			}
@@ -8713,13 +8713,13 @@ void AdaStoreWalker::name_or_qualified(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8731,7 +8731,7 @@ void AdaStoreWalker::allocator(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t506 = _t;
 		RefAdaAST tmp297_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),ALLOCATOR);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),ALLOCATOR);
 		_t = _t->getFirstChild();
 		name_or_qualified(_t);
 		_t = _retTree;
@@ -8740,7 +8740,7 @@ void AdaStoreWalker::allocator(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8750,7 +8750,7 @@ void AdaStoreWalker::subprogram_body(RefAdaAST _t) {
 	RefAdaAST subprogram_body_AST_in = _t;
 	
 	try {      // for error handling
-		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if (_t == static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
 		switch ( _t->getType()) {
 		case PROCEDURE_BODY:
@@ -8767,13 +8767,13 @@ void AdaStoreWalker::subprogram_body(RefAdaAST _t) {
 		}
 		default:
 		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t));
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));
 		}
 		}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8785,7 +8785,7 @@ void AdaStoreWalker::task_body(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t512 = _t;
 		RefAdaAST tmp298_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),TASK_BODY);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),TASK_BODY);
 		_t = _t->getFirstChild();
 		def_id(_t);
 		_t = _retTree;
@@ -8796,7 +8796,7 @@ void AdaStoreWalker::task_body(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;
@@ -8808,7 +8808,7 @@ void AdaStoreWalker::protected_body(RefAdaAST _t) {
 	try {      // for error handling
 		RefAdaAST __t514 = _t;
 		RefAdaAST tmp299_AST_in = _t;
-		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t),PROTECTED_BODY);
+		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),PROTECTED_BODY);
 		_t = _t->getFirstChild();
 		def_id(_t);
 		_t = _retTree;
@@ -8819,7 +8819,7 @@ void AdaStoreWalker::protected_body(RefAdaAST _t) {
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		reportError(ex);
-		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+		if ( _t != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = _t->getNextSibling();
 	}
 	_retTree = _t;

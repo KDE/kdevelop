@@ -1,7 +1,7 @@
 #ifndef INC_PascalParser_hpp_
 #define INC_PascalParser_hpp_
 
-#line 28 "pascal.g"
+#line 29 "pascal.g"
 
         #include "problemreporter.h"
         #include "PascalAST.hpp"
@@ -25,7 +25,7 @@
 
 class PascalParser : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public PascalTokenTypes
 {
-#line 89 "pascal.g"
+#line 90 "pascal.g"
 
 private:
         unsigned int m_numberOfErrors;

@@ -31,14 +31,14 @@ AdaParser::AdaParser(const ANTLR_USE_NAMESPACE(antlr)ParserSharedInputState& sta
 }
 
 void AdaParser::compilation_unit() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST compilation_unit_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST compilation_unit_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		context_items_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -50,7 +50,7 @@ void AdaParser::compilation_unit() {
 		{
 			library_item();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -58,7 +58,7 @@ void AdaParser::compilation_unit() {
 		{
 			subunit();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -73,7 +73,7 @@ void AdaParser::compilation_unit() {
 			if ((LA(1) == PRAGMA)) {
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -83,7 +83,7 @@ void AdaParser::compilation_unit() {
 		}
 		_loop4:;
 		} // ( ... )*
-		compilation_unit_AST = static_cast<RefAdaAST>(currentAST.root);
+		compilation_unit_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -98,9 +98,9 @@ void AdaParser::compilation_unit() {
 }
 
 void AdaParser::context_items_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST context_items_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST context_items_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -108,7 +108,7 @@ void AdaParser::context_items_opt() {
 			if ((LA(1) == PRAGMA)) {
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -123,7 +123,7 @@ void AdaParser::context_items_opt() {
 			if ((LA(1) == WITH)) {
 				with_clause();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{ // ( ... )*
 				for (;;) {
@@ -132,7 +132,7 @@ void AdaParser::context_items_opt() {
 					{
 						use_clause();
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						break;
 					}
@@ -140,7 +140,7 @@ void AdaParser::context_items_opt() {
 					{
 						pragma();
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						break;
 					}
@@ -164,17 +164,17 @@ void AdaParser::context_items_opt() {
 			context_items_opt_AST = RefAdaAST(currentAST.root);
 #line 86 "ada.g"
 			context_items_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(CONTEXT_CLAUSE,"CONTEXT_CLAUSE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(context_items_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(CONTEXT_CLAUSE,"CONTEXT_CLAUSE").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(context_items_opt_AST.get()))));
 #line 169 "AdaParser.cpp"
 			currentAST.root = context_items_opt_AST;
-			if ( context_items_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				context_items_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( context_items_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				context_items_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = context_items_opt_AST->getFirstChild();
 			else
 				currentAST.child = context_items_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		context_items_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		context_items_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -189,14 +189,14 @@ void AdaParser::context_items_opt() {
 }
 
 void AdaParser::library_item() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST library_item_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST library_item_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		private_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -204,7 +204,7 @@ void AdaParser::library_item() {
 		{
 			lib_pkg_spec_or_body();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -213,7 +213,7 @@ void AdaParser::library_item() {
 		{
 			subprog_decl_or_rename_or_inst_or_body(true);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -221,7 +221,7 @@ void AdaParser::library_item() {
 		{
 			generic_decl(true);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -234,17 +234,17 @@ void AdaParser::library_item() {
 		if ( inputState->guessing==0 ) {
 			library_item_AST = RefAdaAST(currentAST.root);
 #line 133 "ada.g"
-			library_item_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(LIBRARY_ITEM,"LIBRARY_ITEM")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(library_item_AST))));
+			library_item_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(LIBRARY_ITEM,"LIBRARY_ITEM").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(library_item_AST.get()))));
 #line 239 "AdaParser.cpp"
 			currentAST.root = library_item_AST;
-			if ( library_item_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				library_item_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( library_item_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				library_item_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = library_item_AST->getFirstChild();
 			else
 				currentAST.child = library_item_AST;
 			currentAST.advanceChildToEnd();
 		}
-		library_item_AST = static_cast<RefAdaAST>(currentAST.root);
+		library_item_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -259,23 +259,23 @@ void AdaParser::library_item() {
 }
 
 void AdaParser::subunit() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST subunit_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST subunit_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  sep = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST sep_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST sep_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		sep = LT(1);
 		if ( inputState->guessing == 0 ) {
 			sep_AST = astFactory->create(sep);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(sep_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(sep_AST.get()));
 		}
 		match(SEPARATE);
 		match(LPAREN);
 		compound_name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(RPAREN);
 		if ( inputState->guessing==0 ) {
@@ -290,7 +290,7 @@ void AdaParser::subunit() {
 		{
 			subprogram_body();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -298,7 +298,7 @@ void AdaParser::subunit() {
 		{
 			package_body();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -306,7 +306,7 @@ void AdaParser::subunit() {
 		{
 			task_body();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -314,7 +314,7 @@ void AdaParser::subunit() {
 		{
 			protected_body();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -324,7 +324,7 @@ void AdaParser::subunit() {
 		}
 		}
 		}
-		subunit_AST = static_cast<RefAdaAST>(currentAST.root);
+		subunit_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -339,29 +339,29 @@ void AdaParser::subunit() {
 }
 
 void AdaParser::pragma() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST pragma_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pragma_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		RefAdaAST tmp3_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp3_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp3_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp3_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp3_AST.get()));
 		}
 		match(PRAGMA);
-		RefAdaAST tmp4_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp4_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp4_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp4_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp4_AST.get()));
 		}
 		match(IDENTIFIER);
 		pragma_args_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
-		pragma_AST = static_cast<RefAdaAST>(currentAST.root);
+		pragma_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -376,9 +376,9 @@ void AdaParser::pragma() {
 }
 
 void AdaParser::pragma_args_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST pragma_args_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pragma_args_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -388,7 +388,7 @@ void AdaParser::pragma_args_opt() {
 			match(LPAREN);
 			pragma_arg();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{ // ( ... )*
 			for (;;) {
@@ -396,7 +396,7 @@ void AdaParser::pragma_args_opt() {
 					match(COMMA);
 					pragma_arg();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 				}
 				else {
@@ -419,7 +419,7 @@ void AdaParser::pragma_args_opt() {
 		}
 		}
 		}
-		pragma_args_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		pragma_args_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -434,23 +434,23 @@ void AdaParser::pragma_args_opt() {
 }
 
 void AdaParser::pragma_arg() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST pragma_arg_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pragma_arg_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		if ((LA(1) == IDENTIFIER) && (LA(2) == RIGHT_SHAFT)) {
-			RefAdaAST tmp9_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp9_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp9_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp9_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp9_AST.get()));
 			}
 			match(IDENTIFIER);
-			RefAdaAST tmp10_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp10_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp10_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp10_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp10_AST.get()));
 			}
 			match(RIGHT_SHAFT);
 		}
@@ -463,9 +463,9 @@ void AdaParser::pragma_arg() {
 		}
 		expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		pragma_arg_AST = static_cast<RefAdaAST>(currentAST.root);
+		pragma_arg_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -480,18 +480,18 @@ void AdaParser::pragma_arg() {
 }
 
 void AdaParser::expression() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST expression_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST expression_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  a = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST a_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST a_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  o = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST o_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST o_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		relation();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -501,7 +501,7 @@ void AdaParser::expression() {
 				a = LT(1);
 				if ( inputState->guessing == 0 ) {
 					a_AST = astFactory->create(a);
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(a_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(a_AST.get()));
 				}
 				match(AND);
 				{
@@ -538,7 +538,7 @@ void AdaParser::expression() {
 				}
 				relation();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -547,7 +547,7 @@ void AdaParser::expression() {
 				o = LT(1);
 				if ( inputState->guessing == 0 ) {
 					o_AST = astFactory->create(o);
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(o_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(o_AST.get()));
 				}
 				match(OR);
 				{
@@ -584,21 +584,21 @@ void AdaParser::expression() {
 				}
 				relation();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
 			case XOR:
 			{
-				RefAdaAST tmp13_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp13_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp13_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp13_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp13_AST.get()));
 				}
 				match(XOR);
 				relation();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -610,7 +610,7 @@ void AdaParser::expression() {
 		}
 		_loop445:;
 		} // ( ... )*
-		expression_AST = static_cast<RefAdaAST>(currentAST.root);
+		expression_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -625,22 +625,22 @@ void AdaParser::expression() {
 }
 
 void AdaParser::with_clause() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST with_clause_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST with_clause_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  w = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST w_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST w_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		w = LT(1);
 		if ( inputState->guessing == 0 ) {
 			w_AST = astFactory->create(w);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(w_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(w_AST.get()));
 		}
 		match(WITH);
 		c_name_list();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
 		if ( inputState->guessing==0 ) {
@@ -648,7 +648,7 @@ void AdaParser::with_clause() {
 			Set(w_AST, WITH_CLAUSE);
 #line 650 "AdaParser.cpp"
 		}
-		with_clause_AST = static_cast<RefAdaAST>(currentAST.root);
+		with_clause_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -663,17 +663,17 @@ void AdaParser::with_clause() {
 }
 
 void AdaParser::use_clause() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST use_clause_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST use_clause_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  u = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST u_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST u_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		u = LT(1);
 		if ( inputState->guessing == 0 ) {
 			u_AST = astFactory->create(u);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(u_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(u_AST.get()));
 		}
 		match(USE);
 		{
@@ -683,7 +683,7 @@ void AdaParser::use_clause() {
 			match(TYPE);
 			subtype_mark();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{ // ( ... )*
 			for (;;) {
@@ -691,7 +691,7 @@ void AdaParser::use_clause() {
 					match(COMMA);
 					subtype_mark();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 				}
 				else {
@@ -712,7 +712,7 @@ void AdaParser::use_clause() {
 		{
 			c_name_list();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 109 "ada.g"
@@ -728,7 +728,7 @@ void AdaParser::use_clause() {
 		}
 		}
 		match(SEMI);
-		use_clause_AST = static_cast<RefAdaAST>(currentAST.root);
+		use_clause_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -743,14 +743,14 @@ void AdaParser::use_clause() {
 }
 
 void AdaParser::c_name_list() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST c_name_list_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST c_name_list_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		compound_name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -758,7 +758,7 @@ void AdaParser::c_name_list() {
 				match(COMMA);
 				compound_name();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -768,7 +768,7 @@ void AdaParser::c_name_list() {
 		}
 		_loop22:;
 		} // ( ... )*
-		c_name_list_AST = static_cast<RefAdaAST>(currentAST.root);
+		c_name_list_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -783,30 +783,30 @@ void AdaParser::c_name_list() {
 }
 
 void AdaParser::compound_name() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST compound_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST compound_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		RefAdaAST tmp19_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp19_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp19_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp19_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp19_AST.get()));
 		}
 		match(IDENTIFIER);
 		{ // ( ... )*
 		for (;;) {
 			if ((LA(1) == DOT)) {
-				RefAdaAST tmp20_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp20_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp20_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp20_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp20_AST.get()));
 				}
 				match(DOT);
-				RefAdaAST tmp21_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp21_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp21_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp21_AST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp21_AST.get()));
 				}
 				match(IDENTIFIER);
 			}
@@ -817,7 +817,7 @@ void AdaParser::compound_name() {
 		}
 		_loop25:;
 		} // ( ... )*
-		compound_name_AST = static_cast<RefAdaAST>(currentAST.root);
+		compound_name_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -832,28 +832,28 @@ void AdaParser::compound_name() {
 }
 
 void AdaParser::subtype_mark() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST subtype_mark_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST subtype_mark_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		compound_name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
 		case TIC:
 		{
-			RefAdaAST tmp22_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp22_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp22_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp22_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp22_AST.get()));
 			}
 			match(TIC);
 			attribute_id();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -887,7 +887,7 @@ void AdaParser::subtype_mark() {
 		}
 		}
 		}
-		subtype_mark_AST = static_cast<RefAdaAST>(currentAST.root);
+		subtype_mark_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -902,65 +902,65 @@ void AdaParser::subtype_mark() {
 }
 
 void AdaParser::attribute_id() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST attribute_id_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST attribute_id_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
 		case RANGE:
 		{
-			RefAdaAST tmp23_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp23_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp23_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp23_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp23_AST.get()));
 			}
 			match(RANGE);
-			attribute_id_AST = static_cast<RefAdaAST>(currentAST.root);
+			attribute_id_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case DIGITS:
 		{
-			RefAdaAST tmp24_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp24_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp24_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp24_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp24_AST.get()));
 			}
 			match(DIGITS);
-			attribute_id_AST = static_cast<RefAdaAST>(currentAST.root);
+			attribute_id_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case DELTA:
 		{
-			RefAdaAST tmp25_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp25_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp25_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp25_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp25_AST.get()));
 			}
 			match(DELTA);
-			attribute_id_AST = static_cast<RefAdaAST>(currentAST.root);
+			attribute_id_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case ACCESS:
 		{
-			RefAdaAST tmp26_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp26_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp26_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp26_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp26_AST.get()));
 			}
 			match(ACCESS);
-			attribute_id_AST = static_cast<RefAdaAST>(currentAST.root);
+			attribute_id_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case IDENTIFIER:
 		{
-			RefAdaAST tmp27_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp27_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp27_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp27_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp27_AST.get()));
 			}
 			match(IDENTIFIER);
-			attribute_id_AST = static_cast<RefAdaAST>(currentAST.root);
+			attribute_id_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -982,19 +982,19 @@ void AdaParser::attribute_id() {
 }
 
 void AdaParser::private_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST private_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST private_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case PRIVATE:
 		{
-			RefAdaAST tmp28_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp28_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp28_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp28_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp28_AST.get()));
 			}
 			match(PRIVATE);
 			break;
@@ -1015,17 +1015,17 @@ void AdaParser::private_opt() {
 		if ( inputState->guessing==0 ) {
 			private_opt_AST = RefAdaAST(currentAST.root);
 #line 137 "ada.g"
-			private_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(private_opt_AST))));
+			private_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(private_opt_AST.get()))));
 #line 1020 "AdaParser.cpp"
 			currentAST.root = private_opt_AST;
-			if ( private_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				private_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( private_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				private_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = private_opt_AST->getFirstChild();
 			else
 				currentAST.child = private_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		private_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		private_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -1040,17 +1040,17 @@ void AdaParser::private_opt() {
 }
 
 void AdaParser::lib_pkg_spec_or_body() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST lib_pkg_spec_or_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST lib_pkg_spec_or_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  pkg = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST pkg_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pkg_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		pkg = LT(1);
 		if ( inputState->guessing == 0 ) {
 			pkg_AST = astFactory->create(pkg);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pkg_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pkg_AST.get()));
 		}
 		match(PACKAGE);
 		{
@@ -1060,12 +1060,12 @@ void AdaParser::lib_pkg_spec_or_body() {
 			match(BODY);
 			def_id(true);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(IS);
 			pkg_body_part();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			end_id_opt();
 			match(SEMI);
@@ -1080,11 +1080,11 @@ void AdaParser::lib_pkg_spec_or_body() {
 		{
 			def_id(true);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			spec_decl_part(pkg_AST);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -1094,7 +1094,7 @@ void AdaParser::lib_pkg_spec_or_body() {
 		}
 		}
 		}
-		lib_pkg_spec_or_body_AST = static_cast<RefAdaAST>(currentAST.root);
+		lib_pkg_spec_or_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -1111,13 +1111,13 @@ void AdaParser::lib_pkg_spec_or_body() {
 void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 	bool lib_level
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST subprog_decl_or_rename_or_inst_or_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST subprog_decl_or_rename_or_inst_or_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  f = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 #line 930 "ada.g"
 	RefAdaAST t;
 #line 1124 "AdaParser.cpp"
@@ -1129,18 +1129,18 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 			p = LT(1);
 			if ( inputState->guessing == 0 ) {
 				p_AST = astFactory->create(p);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 			}
 			match(PROCEDURE);
 			def_id(lib_level);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			if ((LA(1) == IS) && (LA(2) == NEW)) {
 				generic_subp_inst();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 934 "ada.g"
@@ -1151,7 +1151,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 			else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_16.member(LA(2)))) {
 				formal_part_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{
 				switch ( LA(1)) {
@@ -1159,7 +1159,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 				{
 					renames();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 936 "ada.g"
@@ -1178,7 +1178,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 					{
 						separate_or_abstract(p_AST);
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						break;
 					}
@@ -1198,7 +1198,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 					{
 						body_part();
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						if ( inputState->guessing==0 ) {
 #line 938 "ada.g"
@@ -1238,7 +1238,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 			}
 			
 			}
-			subprog_decl_or_rename_or_inst_or_body_AST = static_cast<RefAdaAST>(currentAST.root);
+			subprog_decl_or_rename_or_inst_or_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case FUNCTION:
@@ -1246,12 +1246,12 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 			f = LT(1);
 			if ( inputState->guessing == 0 ) {
 				f_AST = astFactory->create(f);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST.get()));
 			}
 			match(FUNCTION);
 			def_designator(lib_level);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -1259,7 +1259,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 			{
 				generic_subp_inst();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 947 "ada.g"
@@ -1273,7 +1273,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 			{
 				function_tail();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{
 				switch ( LA(1)) {
@@ -1281,7 +1281,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 				{
 					renames();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 949 "ada.g"
@@ -1300,7 +1300,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 					{
 						separate_or_abstract(f_AST);
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						break;
 					}
@@ -1320,7 +1320,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 					{
 						body_part();
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						if ( inputState->guessing==0 ) {
 #line 951 "ada.g"
@@ -1362,7 +1362,7 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 			}
 			}
 			}
-			subprog_decl_or_rename_or_inst_or_body_AST = static_cast<RefAdaAST>(currentAST.root);
+			subprog_decl_or_rename_or_inst_or_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -1386,22 +1386,22 @@ void AdaParser::subprog_decl_or_rename_or_inst_or_body(
 void AdaParser::generic_decl(
 	bool lib_level
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST generic_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST generic_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  g = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST g_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST g_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		g = LT(1);
 		if ( inputState->guessing == 0 ) {
 			g_AST = astFactory->create(g);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(g_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(g_AST.get()));
 		}
 		match(GENERIC);
 		generic_formal_part_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -1410,7 +1410,7 @@ void AdaParser::generic_decl(
 			match(PACKAGE);
 			def_id(lib_level);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -1418,7 +1418,7 @@ void AdaParser::generic_decl(
 			{
 				renames();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 851 "ada.g"
@@ -1432,7 +1432,7 @@ void AdaParser::generic_decl(
 				match(IS);
 				pkg_spec_part();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 852 "ada.g"
@@ -1454,11 +1454,11 @@ void AdaParser::generic_decl(
 			match(PROCEDURE);
 			def_id(lib_level);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			formal_part_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -1466,7 +1466,7 @@ void AdaParser::generic_decl(
 			{
 				renames();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 855 "ada.g"
@@ -1497,11 +1497,11 @@ void AdaParser::generic_decl(
 			match(FUNCTION);
 			def_designator(lib_level);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			function_tail();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -1509,7 +1509,7 @@ void AdaParser::generic_decl(
 			{
 				renames();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 861 "ada.g"
@@ -1542,7 +1542,7 @@ void AdaParser::generic_decl(
 		}
 		}
 		match(SEMI);
-		generic_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+		generic_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -1559,32 +1559,32 @@ void AdaParser::generic_decl(
 void AdaParser::def_id(
 	bool lib_level
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST def_id_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	RefAdaAST cn_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST def_id_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
+	RefAdaAST cn_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  n = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		if (((LA(1) == IDENTIFIER) && (_tokenSet_19.member(LA(2))))&&( lib_level )) {
 			compound_name();
 			if (inputState->guessing==0) {
 				cn_AST = returnAST;
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 171 "ada.g"
 				push_def_id(cn_AST);
 #line 1580 "AdaParser.cpp"
 			}
-			def_id_AST = static_cast<RefAdaAST>(currentAST.root);
+			def_id_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if (((LA(1) == IDENTIFIER) && (_tokenSet_20.member(LA(2))))&&( !lib_level )) {
 			n = LT(1);
 			if ( inputState->guessing == 0 ) {
 				n_AST = astFactory->create(n);
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST.get()));
 			}
 			match(IDENTIFIER);
 			if ( inputState->guessing==0 ) {
@@ -1592,7 +1592,7 @@ void AdaParser::def_id(
 				push_def_id(n_AST);
 #line 1594 "AdaParser.cpp"
 			}
-			def_id_AST = static_cast<RefAdaAST>(currentAST.root);
+			def_id_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -1612,20 +1612,20 @@ void AdaParser::def_id(
 }
 
 void AdaParser::pkg_body_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST pkg_body_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pkg_body_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		declarative_part();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		block_body_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		pkg_body_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		pkg_body_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -1640,17 +1640,17 @@ void AdaParser::pkg_body_part() {
 }
 
 void AdaParser::end_id_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST end_id_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST end_id_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(END);
 		id_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		end_id_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		end_id_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -1667,9 +1667,9 @@ void AdaParser::end_id_opt() {
 void AdaParser::spec_decl_part(
 	RefAdaAST pkg
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST spec_decl_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST spec_decl_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -1683,7 +1683,7 @@ void AdaParser::spec_decl_part(
 			{
 				generic_inst();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 363 "ada.g"
@@ -1709,7 +1709,7 @@ void AdaParser::spec_decl_part(
 			{
 				pkg_spec_part();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 364 "ada.g"
@@ -1730,7 +1730,7 @@ void AdaParser::spec_decl_part(
 		{
 			renames();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 366 "ada.g"
@@ -1746,7 +1746,7 @@ void AdaParser::spec_decl_part(
 		}
 		}
 		match(SEMI);
-		spec_decl_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		spec_decl_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -1763,13 +1763,13 @@ void AdaParser::spec_decl_part(
 void AdaParser::subprog_decl(
 	bool lib_level
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST subprog_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST subprog_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  f = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 #line 148 "ada.g"
 	RefAdaAST t;
 #line 1776 "AdaParser.cpp"
@@ -1781,18 +1781,18 @@ void AdaParser::subprog_decl(
 			p = LT(1);
 			if ( inputState->guessing == 0 ) {
 				p_AST = astFactory->create(p);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 			}
 			match(PROCEDURE);
 			def_id(lib_level);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			if ((LA(1) == IS) && (LA(2) == NEW)) {
 				generic_subp_inst();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 152 "ada.g"
@@ -1803,7 +1803,7 @@ void AdaParser::subprog_decl(
 			else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_22.member(LA(2)))) {
 				formal_part_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{
 				switch ( LA(1)) {
@@ -1811,7 +1811,7 @@ void AdaParser::subprog_decl(
 				{
 					renames();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 154 "ada.g"
@@ -1825,7 +1825,7 @@ void AdaParser::subprog_decl(
 				{
 					is_separate_or_abstract_or_decl(p_AST);
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -1842,7 +1842,7 @@ void AdaParser::subprog_decl(
 			}
 			
 			}
-			subprog_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			subprog_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case FUNCTION:
@@ -1850,12 +1850,12 @@ void AdaParser::subprog_decl(
 			f = LT(1);
 			if ( inputState->guessing == 0 ) {
 				f_AST = astFactory->create(f);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST.get()));
 			}
 			match(FUNCTION);
 			def_designator(lib_level);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -1863,7 +1863,7 @@ void AdaParser::subprog_decl(
 			{
 				generic_subp_inst();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 161 "ada.g"
@@ -1877,7 +1877,7 @@ void AdaParser::subprog_decl(
 			{
 				function_tail();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{
 				switch ( LA(1)) {
@@ -1885,7 +1885,7 @@ void AdaParser::subprog_decl(
 				{
 					renames();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 163 "ada.g"
@@ -1899,7 +1899,7 @@ void AdaParser::subprog_decl(
 				{
 					is_separate_or_abstract_or_decl(f_AST);
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -1918,7 +1918,7 @@ void AdaParser::subprog_decl(
 			}
 			}
 			}
-			subprog_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			subprog_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -1940,18 +1940,18 @@ void AdaParser::subprog_decl(
 }
 
 void AdaParser::generic_subp_inst() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST generic_subp_inst_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST generic_subp_inst_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(IS);
 		generic_inst();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
-		generic_subp_inst_AST = static_cast<RefAdaAST>(currentAST.root);
+		generic_subp_inst_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -1966,9 +1966,9 @@ void AdaParser::generic_subp_inst() {
 }
 
 void AdaParser::formal_part_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST formal_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST formal_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -1978,7 +1978,7 @@ void AdaParser::formal_part_opt() {
 			match(LPAREN);
 			parameter_specification();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{ // ( ... )*
 			for (;;) {
@@ -1986,7 +1986,7 @@ void AdaParser::formal_part_opt() {
 					match(SEMI);
 					parameter_specification();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 				}
 				else {
@@ -2016,17 +2016,17 @@ void AdaParser::formal_part_opt() {
 		if ( inputState->guessing==0 ) {
 			formal_part_opt_AST = RefAdaAST(currentAST.root);
 #line 234 "ada.g"
-			formal_part_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(FORMAL_PART_OPT,"FORMAL_PART_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(formal_part_opt_AST))));
+			formal_part_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(FORMAL_PART_OPT,"FORMAL_PART_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(formal_part_opt_AST.get()))));
 #line 2021 "AdaParser.cpp"
 			currentAST.root = formal_part_opt_AST;
-			if ( formal_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				formal_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( formal_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				formal_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = formal_part_opt_AST->getFirstChild();
 			else
 				currentAST.child = formal_part_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		formal_part_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		formal_part_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2041,9 +2041,9 @@ void AdaParser::formal_part_opt() {
 }
 
 void AdaParser::renames() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST renames_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST renames_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 #line 257 "ada.g"
 	RefAdaAST dummy;
 #line 2050 "AdaParser.cpp"
@@ -2056,7 +2056,7 @@ void AdaParser::renames() {
 		{
 			name();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -2064,7 +2064,7 @@ void AdaParser::renames() {
 		{
 			dummy=definable_operator_symbol();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -2079,7 +2079,7 @@ void AdaParser::renames() {
 			pop_def_id();
 #line 2081 "AdaParser.cpp"
 		}
-		renames_AST = static_cast<RefAdaAST>(currentAST.root);
+		renames_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2096,9 +2096,9 @@ void AdaParser::renames() {
 void AdaParser::is_separate_or_abstract_or_decl(
 	RefAdaAST t
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST is_separate_or_abstract_or_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST is_separate_or_abstract_or_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -2143,10 +2143,10 @@ void AdaParser::is_separate_or_abstract_or_decl(
 void AdaParser::def_designator(
 	bool lib_level
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST def_designator_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST def_designator_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
+	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 #line 329 "ada.g"
 	RefAdaAST d;
 #line 2153 "AdaParser.cpp"
@@ -2156,26 +2156,26 @@ void AdaParser::def_designator(
 			compound_name();
 			if (inputState->guessing==0) {
 				n_AST = returnAST;
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 331 "ada.g"
 				push_def_id(n_AST);
 #line 2165 "AdaParser.cpp"
 			}
-			def_designator_AST = static_cast<RefAdaAST>(currentAST.root);
+			def_designator_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if (((LA(1) == IDENTIFIER || LA(1) == CHAR_STRING) && (LA(2) == LPAREN || LA(2) == IS || LA(2) == RETURN))&&( !lib_level )) {
 			d=designator();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 332 "ada.g"
 				push_def_id(d);
 #line 2177 "AdaParser.cpp"
 			}
-			def_designator_AST = static_cast<RefAdaAST>(currentAST.root);
+			def_designator_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -2195,21 +2195,21 @@ void AdaParser::def_designator(
 }
 
 void AdaParser::function_tail() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST function_tail_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST function_tail_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		func_formal_part_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(RETURN);
 		subtype_mark();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		function_tail_AST = static_cast<RefAdaAST>(currentAST.root);
+		function_tail_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2224,15 +2224,15 @@ void AdaParser::function_tail() {
 }
 
 void AdaParser::generic_inst() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST generic_inst_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST generic_inst_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(NEW);
 		compound_name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -2241,7 +2241,7 @@ void AdaParser::generic_inst() {
 			match(LPAREN);
 			value_s();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(RPAREN);
 			break;
@@ -2261,7 +2261,7 @@ void AdaParser::generic_inst() {
 			pop_def_id();
 #line 2263 "AdaParser.cpp"
 		}
-		generic_inst_AST = static_cast<RefAdaAST>(currentAST.root);
+		generic_inst_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2276,14 +2276,14 @@ void AdaParser::generic_inst() {
 }
 
 void AdaParser::value_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST value_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST value_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		value();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -2291,7 +2291,7 @@ void AdaParser::value_s() {
 				match(COMMA);
 				value();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -2304,17 +2304,17 @@ void AdaParser::value_s() {
 		if ( inputState->guessing==0 ) {
 			value_s_AST = RefAdaAST(currentAST.root);
 #line 1380 "ada.g"
-			value_s_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(VALUES,"VALUES")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(value_s_AST))));
+			value_s_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(VALUES,"VALUES").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(value_s_AST.get()))));
 #line 2309 "AdaParser.cpp"
 			currentAST.root = value_s_AST;
-			if ( value_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				value_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( value_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				value_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = value_s_AST->getFirstChild();
 			else
 				currentAST.child = value_s_AST;
 			currentAST.advanceChildToEnd();
 		}
-		value_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		value_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2329,15 +2329,15 @@ void AdaParser::value_s() {
 }
 
 void AdaParser::parenth_values() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST parenth_values_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST parenth_values_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(LPAREN);
 		value();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -2345,7 +2345,7 @@ void AdaParser::parenth_values() {
 				match(COMMA);
 				value();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -2356,7 +2356,7 @@ void AdaParser::parenth_values() {
 		_loop50:;
 		} // ( ... )*
 		match(RPAREN);
-		parenth_values_AST = static_cast<RefAdaAST>(currentAST.root);
+		parenth_values_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2371,25 +2371,25 @@ void AdaParser::parenth_values() {
 }
 
 void AdaParser::value() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST value_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST value_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case OTHERS:
 		{
-			RefAdaAST tmp61_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp61_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp61_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp61_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp61_AST.get()));
 			}
 			match(OTHERS);
 			match(RIGHT_SHAFT);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -2407,21 +2407,21 @@ void AdaParser::value() {
 		{
 			ranged_expr_s();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
 			case RIGHT_SHAFT:
 			{
-				RefAdaAST tmp63_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp63_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp63_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp63_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp63_AST.get()));
 				}
 				match(RIGHT_SHAFT);
 				expression();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -2445,7 +2445,7 @@ void AdaParser::value() {
 		}
 		}
 		}
-		value_AST = static_cast<RefAdaAST>(currentAST.root);
+		value_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2460,27 +2460,27 @@ void AdaParser::value() {
 }
 
 void AdaParser::ranged_expr_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST ranged_expr_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST ranged_expr_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		ranged_expr();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
 			if ((LA(1) == PIPE)) {
-				RefAdaAST tmp64_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp64_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp64_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp64_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp64_AST.get()));
 				}
 				match(PIPE);
 				ranged_expr();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -2490,7 +2490,7 @@ void AdaParser::ranged_expr_s() {
 		}
 		_loop56:;
 		} // ( ... )*
-		ranged_expr_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		ranged_expr_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2505,42 +2505,42 @@ void AdaParser::ranged_expr_s() {
 }
 
 void AdaParser::ranged_expr() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST ranged_expr_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST ranged_expr_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
 		case DOT_DOT:
 		{
-			RefAdaAST tmp65_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp65_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp65_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp65_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp65_AST.get()));
 			}
 			match(DOT_DOT);
 			simple_expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case RANGE:
 		{
-			RefAdaAST tmp66_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp66_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp66_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp66_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp66_AST.get()));
 			}
 			match(RANGE);
 			range();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -2558,7 +2558,7 @@ void AdaParser::ranged_expr() {
 		}
 		}
 		}
-		ranged_expr_AST = static_cast<RefAdaAST>(currentAST.root);
+		ranged_expr_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2573,57 +2573,57 @@ void AdaParser::ranged_expr() {
 }
 
 void AdaParser::simple_expression() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST simple_expression_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST simple_expression_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		signed_term();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
 			switch ( LA(1)) {
 			case PLUS:
 			{
-				RefAdaAST tmp67_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp67_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp67_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp67_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp67_AST.get()));
 				}
 				match(PLUS);
 				signed_term();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
 			case MINUS:
 			{
-				RefAdaAST tmp68_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp68_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp68_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp68_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp68_AST.get()));
 				}
 				match(MINUS);
 				signed_term();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
 			case CONCAT:
 			{
-				RefAdaAST tmp69_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp69_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp69_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp69_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp69_AST.get()));
 				}
 				match(CONCAT);
 				signed_term();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -2635,7 +2635,7 @@ void AdaParser::simple_expression() {
 		}
 		_loop453:;
 		} // ( ... )*
-		simple_expression_AST = static_cast<RefAdaAST>(currentAST.root);
+		simple_expression_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2650,9 +2650,9 @@ void AdaParser::simple_expression() {
 }
 
 void AdaParser::range() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST range_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST range_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -2675,13 +2675,13 @@ void AdaParser::range() {
 		if ( synPredMatched63 ) {
 			range_dots();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 		}
 		else if ((LA(1) == IDENTIFIER) && (LA(2) == LPAREN || LA(2) == DOT || LA(2) == TIC)) {
 			range_attrib_ref();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 		}
 		else {
@@ -2689,7 +2689,7 @@ void AdaParser::range() {
 		}
 		
 		}
-		range_AST = static_cast<RefAdaAST>(currentAST.root);
+		range_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2704,17 +2704,17 @@ void AdaParser::range() {
 }
 
 void AdaParser::range_constraint() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST range_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST range_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(RANGE);
 		range();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		range_constraint_AST = static_cast<RefAdaAST>(currentAST.root);
+		range_constraint_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2729,26 +2729,26 @@ void AdaParser::range_constraint() {
 }
 
 void AdaParser::range_dots() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST range_dots_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST range_dots_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		simple_expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		RefAdaAST tmp71_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp71_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp71_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp71_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp71_AST.get()));
 		}
 		match(DOT_DOT);
 		simple_expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		range_dots_AST = static_cast<RefAdaAST>(currentAST.root);
+		range_dots_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2763,22 +2763,22 @@ void AdaParser::range_dots() {
 }
 
 void AdaParser::range_attrib_ref() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST range_attrib_ref_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST range_attrib_ref_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  r = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		prefix();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(TIC);
 		r = LT(1);
 		if ( inputState->guessing == 0 ) {
 			r_AST = astFactory->create(r);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST.get()));
 		}
 		match(RANGE);
 		{
@@ -2788,7 +2788,7 @@ void AdaParser::range_attrib_ref() {
 			match(LPAREN);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(RPAREN);
 			break;
@@ -2823,7 +2823,7 @@ void AdaParser::range_attrib_ref() {
 			Set(r_AST, RANGE_ATTRIBUTE_REFERENCE);
 #line 2825 "AdaParser.cpp"
 		}
-		range_attrib_ref_AST = static_cast<RefAdaAST>(currentAST.root);
+		range_attrib_ref_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2838,17 +2838,17 @@ void AdaParser::range_attrib_ref() {
 }
 
 void AdaParser::prefix() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST prefix_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST prefix_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		RefAdaAST tmp75_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp75_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp75_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp75_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp75_AST.get()));
 		}
 		match(IDENTIFIER);
 		{ // ( ... )*
@@ -2856,30 +2856,30 @@ void AdaParser::prefix() {
 			switch ( LA(1)) {
 			case DOT:
 			{
-				RefAdaAST tmp76_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp76_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp76_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp76_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp76_AST.get()));
 				}
 				match(DOT);
 				{
 				switch ( LA(1)) {
 				case ALL:
 				{
-					RefAdaAST tmp77_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp77_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp77_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp77_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp77_AST.get()));
 					}
 					match(ALL);
 					break;
 				}
 				case IDENTIFIER:
 				{
-					RefAdaAST tmp78_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp78_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp78_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp78_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp78_AST.get()));
 					}
 					match(IDENTIFIER);
 					break;
@@ -2897,12 +2897,12 @@ void AdaParser::prefix() {
 				p = LT(1);
 				if ( inputState->guessing == 0 ) {
 					p_AST = astFactory->create(p);
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 				}
 				match(LPAREN);
 				value_s();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(RPAREN);
 				if ( inputState->guessing==0 ) {
@@ -2920,7 +2920,7 @@ void AdaParser::prefix() {
 		}
 		_loop70:;
 		} // ( ... )*
-		prefix_AST = static_cast<RefAdaAST>(currentAST.root);
+		prefix_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2935,42 +2935,42 @@ void AdaParser::prefix() {
 }
 
 void AdaParser::parameter_specification() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST parameter_specification_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST parameter_specification_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		def_ids_colon();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		mode_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		subtype_mark();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		init_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			parameter_specification_AST = RefAdaAST(currentAST.root);
 #line 239 "ada.g"
 			parameter_specification_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PARAMETER_SPECIFICATION,"PARAMETER_SPECIFICATION")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(parameter_specification_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PARAMETER_SPECIFICATION,"PARAMETER_SPECIFICATION").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(parameter_specification_AST.get()))));
 #line 2965 "AdaParser.cpp"
 			currentAST.root = parameter_specification_AST;
-			if ( parameter_specification_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				parameter_specification_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( parameter_specification_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				parameter_specification_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = parameter_specification_AST->getFirstChild();
 			else
 				currentAST.child = parameter_specification_AST;
 			currentAST.advanceChildToEnd();
 		}
-		parameter_specification_AST = static_cast<RefAdaAST>(currentAST.root);
+		parameter_specification_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -2985,17 +2985,17 @@ void AdaParser::parameter_specification() {
 }
 
 void AdaParser::def_ids_colon() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST def_ids_colon_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST def_ids_colon_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		defining_identifier_list();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(COLON);
-		def_ids_colon_AST = static_cast<RefAdaAST>(currentAST.root);
+		def_ids_colon_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3010,29 +3010,29 @@ void AdaParser::def_ids_colon() {
 }
 
 void AdaParser::mode_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST mode_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST mode_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case IN:
 		{
-			RefAdaAST tmp81_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp81_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp81_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp81_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp81_AST.get()));
 			}
 			match(IN);
 			{
 			switch ( LA(1)) {
 			case OUT:
 			{
-				RefAdaAST tmp82_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp82_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp82_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp82_AST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp82_AST.get()));
 				}
 				match(OUT);
 				break;
@@ -3051,20 +3051,20 @@ void AdaParser::mode_opt() {
 		}
 		case OUT:
 		{
-			RefAdaAST tmp83_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp83_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp83_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp83_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp83_AST.get()));
 			}
 			match(OUT);
 			break;
 		}
 		case ACCESS:
 		{
-			RefAdaAST tmp84_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp84_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp84_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp84_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp84_AST.get()));
 			}
 			match(ACCESS);
 			break;
@@ -3082,17 +3082,17 @@ void AdaParser::mode_opt() {
 		if ( inputState->guessing==0 ) {
 			mode_opt_AST = RefAdaAST(currentAST.root);
 #line 254 "ada.g"
-			mode_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(mode_opt_AST))));
+			mode_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(mode_opt_AST.get()))));
 #line 3087 "AdaParser.cpp"
 			currentAST.root = mode_opt_AST;
-			if ( mode_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				mode_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( mode_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				mode_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = mode_opt_AST->getFirstChild();
 			else
 				currentAST.child = mode_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		mode_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		mode_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3107,9 +3107,9 @@ void AdaParser::mode_opt() {
 }
 
 void AdaParser::init_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST init_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST init_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -3119,7 +3119,7 @@ void AdaParser::init_opt() {
 			match(ASSIGN);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -3137,17 +3137,17 @@ void AdaParser::init_opt() {
 		if ( inputState->guessing==0 ) {
 			init_opt_AST = RefAdaAST(currentAST.root);
 #line 460 "ada.g"
-			init_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(INIT_OPT,"INIT_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(init_opt_AST))));
+			init_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(INIT_OPT,"INIT_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(init_opt_AST.get()))));
 #line 3142 "AdaParser.cpp"
 			currentAST.root = init_opt_AST;
-			if ( init_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				init_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( init_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				init_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = init_opt_AST->getFirstChild();
 			else
 				currentAST.child = init_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		init_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		init_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3162,25 +3162,25 @@ void AdaParser::init_opt() {
 }
 
 void AdaParser::defining_identifier_list() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST defining_identifier_list_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST defining_identifier_list_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		RefAdaAST tmp86_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp86_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp86_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp86_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp86_AST.get()));
 		}
 		match(IDENTIFIER);
 		{ // ( ... )*
 		for (;;) {
 			if ((LA(1) == COMMA)) {
 				match(COMMA);
-				RefAdaAST tmp88_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp88_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp88_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp88_AST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp88_AST.get()));
 				}
 				match(IDENTIFIER);
 			}
@@ -3195,17 +3195,17 @@ void AdaParser::defining_identifier_list() {
 			defining_identifier_list_AST = RefAdaAST(currentAST.root);
 #line 248 "ada.g"
 			defining_identifier_list_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DEFINING_IDENTIFIER_LIST,"DEFINING_IDENTIFIER_LIST")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(defining_identifier_list_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DEFINING_IDENTIFIER_LIST,"DEFINING_IDENTIFIER_LIST").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(defining_identifier_list_AST.get()))));
 #line 3200 "AdaParser.cpp"
 			currentAST.root = defining_identifier_list_AST;
-			if ( defining_identifier_list_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				defining_identifier_list_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( defining_identifier_list_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				defining_identifier_list_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = defining_identifier_list_AST->getFirstChild();
 			else
 				currentAST.child = defining_identifier_list_AST;
 			currentAST.advanceChildToEnd();
 		}
-		defining_identifier_list_AST = static_cast<RefAdaAST>(currentAST.root);
+		defining_identifier_list_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3220,20 +3220,20 @@ void AdaParser::defining_identifier_list() {
 }
 
 void AdaParser::name() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 #line 264 "ada.g"
 	RefAdaAST dummy;
 #line 3231 "AdaParser.cpp"
 	
 	try {      // for error handling
-		RefAdaAST tmp89_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp89_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp89_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp89_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp89_AST.get()));
 		}
 		match(IDENTIFIER);
 		{ // ( ... )*
@@ -3241,40 +3241,40 @@ void AdaParser::name() {
 			switch ( LA(1)) {
 			case DOT:
 			{
-				RefAdaAST tmp90_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp90_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp90_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp90_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp90_AST.get()));
 				}
 				match(DOT);
 				{
 				switch ( LA(1)) {
 				case ALL:
 				{
-					RefAdaAST tmp91_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp91_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp91_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp91_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp91_AST.get()));
 					}
 					match(ALL);
 					break;
 				}
 				case IDENTIFIER:
 				{
-					RefAdaAST tmp92_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp92_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp92_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp92_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp92_AST.get()));
 					}
 					match(IDENTIFIER);
 					break;
 				}
 				case CHARACTER_LITERAL:
 				{
-					RefAdaAST tmp93_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp93_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp93_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp93_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp93_AST.get()));
 					}
 					match(CHARACTER_LITERAL);
 					break;
@@ -3283,7 +3283,7 @@ void AdaParser::name() {
 				{
 					dummy=is_operator();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -3300,12 +3300,12 @@ void AdaParser::name() {
 				p = LT(1);
 				if ( inputState->guessing == 0 ) {
 					p_AST = astFactory->create(p);
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 				}
 				match(LPAREN);
 				value_s();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(RPAREN);
 				if ( inputState->guessing==0 ) {
@@ -3317,15 +3317,15 @@ void AdaParser::name() {
 			}
 			case TIC:
 			{
-				RefAdaAST tmp95_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp95_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp95_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp95_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp95_AST.get()));
 				}
 				match(TIC);
 				attribute_id();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -3337,7 +3337,7 @@ void AdaParser::name() {
 		}
 		_loop88:;
 		} // ( ... )*
-		name_AST = static_cast<RefAdaAST>(currentAST.root);
+		name_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3355,11 +3355,11 @@ RefAdaAST  AdaParser::definable_operator_symbol() {
 #line 284 "ada.g"
 	RefAdaAST d;
 #line 3358 "AdaParser.cpp"
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST definable_operator_symbol_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST definable_operator_symbol_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  op = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST op_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST op_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		if (!( definable_operator(LT(1)->getText().c_str()) ))
@@ -3367,7 +3367,7 @@ RefAdaAST  AdaParser::definable_operator_symbol() {
 		op = LT(1);
 		if ( inputState->guessing == 0 ) {
 			op_AST = astFactory->create(op);
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(op_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(op_AST.get()));
 		}
 		match(CHAR_STRING);
 		if ( inputState->guessing==0 ) {
@@ -3375,7 +3375,7 @@ RefAdaAST  AdaParser::definable_operator_symbol() {
 			op_AST->setType(OPERATOR_SYMBOL); d=op_AST;
 #line 3377 "AdaParser.cpp"
 		}
-		definable_operator_symbol_AST = static_cast<RefAdaAST>(currentAST.root);
+		definable_operator_symbol_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3394,11 +3394,11 @@ RefAdaAST  AdaParser::is_operator() {
 #line 279 "ada.g"
 	RefAdaAST d;
 #line 3397 "AdaParser.cpp"
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST is_operator_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST is_operator_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  op = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST op_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST op_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		if (!( is_operator_symbol(LT(1)->getText().c_str()) ))
@@ -3406,7 +3406,7 @@ RefAdaAST  AdaParser::is_operator() {
 		op = LT(1);
 		if ( inputState->guessing == 0 ) {
 			op_AST = astFactory->create(op);
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(op_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(op_AST.get()));
 		}
 		match(CHAR_STRING);
 		if ( inputState->guessing==0 ) {
@@ -3414,7 +3414,7 @@ RefAdaAST  AdaParser::is_operator() {
 			op_AST->setType(OPERATOR_SYMBOL); d=op_AST;
 #line 3416 "AdaParser.cpp"
 		}
-		is_operator_AST = static_cast<RefAdaAST>(currentAST.root);
+		is_operator_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3430,25 +3430,25 @@ RefAdaAST  AdaParser::is_operator() {
 }
 
 void AdaParser::parenthesized_primary() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST parenthesized_primary_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST parenthesized_primary_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  pp = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST pp_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pp_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		pp = LT(1);
 		if ( inputState->guessing == 0 ) {
 			pp_AST = astFactory->create(pp);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pp_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pp_AST.get()));
 		}
 		match(LPAREN);
 		{
 		if ((LA(1) == NuLL) && (LA(2) == RECORD)) {
-			RefAdaAST tmp96_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp96_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp96_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp96_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp96_AST.get()));
 			}
 			match(NuLL);
 			match(RECORD);
@@ -3456,11 +3456,11 @@ void AdaParser::parenthesized_primary() {
 		else if ((_tokenSet_44.member(LA(1))) && (_tokenSet_45.member(LA(2)))) {
 			value_s();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			extension_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 		}
 		else {
@@ -3474,7 +3474,7 @@ void AdaParser::parenthesized_primary() {
 			Set(pp_AST, PARENTHESIZED_PRIMARY);
 #line 3476 "AdaParser.cpp"
 		}
-		parenthesized_primary_AST = static_cast<RefAdaAST>(currentAST.root);
+		parenthesized_primary_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3489,9 +3489,9 @@ void AdaParser::parenthesized_primary() {
 }
 
 void AdaParser::extension_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST extension_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST extension_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -3501,10 +3501,10 @@ void AdaParser::extension_opt() {
 			match(WITH);
 			{
 			if ((LA(1) == NuLL) && (LA(2) == RECORD)) {
-				RefAdaAST tmp100_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp100_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp100_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp100_AST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp100_AST.get()));
 				}
 				match(NuLL);
 				match(RECORD);
@@ -3512,7 +3512,7 @@ void AdaParser::extension_opt() {
 			else if ((_tokenSet_44.member(LA(1))) && (_tokenSet_46.member(LA(2)))) {
 				value_s();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -3536,17 +3536,17 @@ void AdaParser::extension_opt() {
 			extension_opt_AST = RefAdaAST(currentAST.root);
 #line 298 "ada.g"
 			extension_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(EXTENSION_OPT,"EXTENSION_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(extension_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(EXTENSION_OPT,"EXTENSION_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(extension_opt_AST.get()))));
 #line 3541 "AdaParser.cpp"
 			currentAST.root = extension_opt_AST;
-			if ( extension_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				extension_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( extension_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				extension_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = extension_opt_AST->getFirstChild();
 			else
 				currentAST.child = extension_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		extension_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		extension_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3563,9 +3563,9 @@ void AdaParser::extension_opt() {
 void AdaParser::separate_or_abstract(
 	RefAdaAST t
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST separate_or_abstract_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST separate_or_abstract_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -3621,11 +3621,11 @@ RefAdaAST  AdaParser::designator() {
 #line 335 "ada.g"
 	RefAdaAST d;
 #line 3624 "AdaParser.cpp"
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST designator_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST designator_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  n = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 #line 335 "ada.g"
 	RefAdaAST op;
 #line 3632 "AdaParser.cpp"
@@ -3636,14 +3636,14 @@ RefAdaAST  AdaParser::designator() {
 		{
 			op=definable_operator_symbol();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 337 "ada.g"
 				d = op;
 #line 3645 "AdaParser.cpp"
 			}
-			designator_AST = static_cast<RefAdaAST>(currentAST.root);
+			designator_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case IDENTIFIER:
@@ -3651,7 +3651,7 @@ RefAdaAST  AdaParser::designator() {
 			n = LT(1);
 			if ( inputState->guessing == 0 ) {
 				n_AST = astFactory->create(n);
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST.get()));
 			}
 			match(IDENTIFIER);
 			if ( inputState->guessing==0 ) {
@@ -3659,7 +3659,7 @@ RefAdaAST  AdaParser::designator() {
 				d = n_AST;
 #line 3661 "AdaParser.cpp"
 			}
-			designator_AST = static_cast<RefAdaAST>(currentAST.root);
+			designator_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -3682,9 +3682,9 @@ RefAdaAST  AdaParser::designator() {
 }
 
 void AdaParser::func_formal_part_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST func_formal_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST func_formal_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -3694,7 +3694,7 @@ void AdaParser::func_formal_part_opt() {
 			match(LPAREN);
 			func_param();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{ // ( ... )*
 			for (;;) {
@@ -3702,7 +3702,7 @@ void AdaParser::func_formal_part_opt() {
 					match(SEMI);
 					func_param();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 				}
 				else {
@@ -3729,17 +3729,17 @@ void AdaParser::func_formal_part_opt() {
 			func_formal_part_opt_AST = RefAdaAST(currentAST.root);
 #line 347 "ada.g"
 			func_formal_part_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(FORMAL_PART_OPT,"FORMAL_PART_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(func_formal_part_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(FORMAL_PART_OPT,"FORMAL_PART_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(func_formal_part_opt_AST.get()))));
 #line 3734 "AdaParser.cpp"
 			currentAST.root = func_formal_part_opt_AST;
-			if ( func_formal_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				func_formal_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( func_formal_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				func_formal_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = func_formal_part_opt_AST->getFirstChild();
 			else
 				currentAST.child = func_formal_part_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		func_formal_part_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		func_formal_part_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3754,42 +3754,42 @@ void AdaParser::func_formal_part_opt() {
 }
 
 void AdaParser::func_param() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST func_param_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST func_param_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		def_ids_colon();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		in_access_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		subtype_mark();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		init_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			func_param_AST = RefAdaAST(currentAST.root);
 #line 353 "ada.g"
 			func_param_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PARAMETER_SPECIFICATION,"PARAMETER_SPECIFICATION")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(func_param_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PARAMETER_SPECIFICATION,"PARAMETER_SPECIFICATION").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(func_param_AST.get()))));
 #line 3784 "AdaParser.cpp"
 			currentAST.root = func_param_AST;
-			if ( func_param_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				func_param_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( func_param_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				func_param_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = func_param_AST->getFirstChild();
 			else
 				currentAST.child = func_param_AST;
 			currentAST.advanceChildToEnd();
 		}
-		func_param_AST = static_cast<RefAdaAST>(currentAST.root);
+		func_param_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3804,9 +3804,9 @@ void AdaParser::func_param() {
 }
 
 void AdaParser::in_access_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST in_access_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST in_access_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -3818,10 +3818,10 @@ void AdaParser::in_access_opt() {
 		}
 		case ACCESS:
 		{
-			RefAdaAST tmp108_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp108_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp108_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp108_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp108_AST.get()));
 			}
 			match(ACCESS);
 			break;
@@ -3839,17 +3839,17 @@ void AdaParser::in_access_opt() {
 		if ( inputState->guessing==0 ) {
 			in_access_opt_AST = RefAdaAST(currentAST.root);
 #line 359 "ada.g"
-			in_access_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(in_access_opt_AST))));
+			in_access_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(in_access_opt_AST.get()))));
 #line 3844 "AdaParser.cpp"
 			currentAST.root = in_access_opt_AST;
-			if ( in_access_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				in_access_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( in_access_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				in_access_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = in_access_opt_AST->getFirstChild();
 			else
 				currentAST.child = in_access_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		in_access_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		in_access_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3864,14 +3864,14 @@ void AdaParser::in_access_opt() {
 }
 
 void AdaParser::pkg_spec_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST pkg_spec_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pkg_spec_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		basic_declarative_items_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -3880,7 +3880,7 @@ void AdaParser::pkg_spec_part() {
 			match(PRIVATE);
 			basic_declarative_items_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -3895,7 +3895,7 @@ void AdaParser::pkg_spec_part() {
 		}
 		}
 		end_id_opt();
-		pkg_spec_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		pkg_spec_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3910,9 +3910,9 @@ void AdaParser::pkg_spec_part() {
 }
 
 void AdaParser::basic_declarative_items_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST basic_declarative_items_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST basic_declarative_items_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -3932,7 +3932,7 @@ void AdaParser::basic_declarative_items_opt() {
 			{
 				basic_decl_item();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -3940,7 +3940,7 @@ void AdaParser::basic_declarative_items_opt() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -3956,17 +3956,17 @@ void AdaParser::basic_declarative_items_opt() {
 			basic_declarative_items_opt_AST = RefAdaAST(currentAST.root);
 #line 377 "ada.g"
 			basic_declarative_items_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(BASIC_DECLARATIVE_ITEMS_OPT,"BASIC_DECLARATIVE_ITEMS_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(basic_declarative_items_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(BASIC_DECLARATIVE_ITEMS_OPT,"BASIC_DECLARATIVE_ITEMS_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(basic_declarative_items_opt_AST.get()))));
 #line 3961 "AdaParser.cpp"
 			currentAST.root = basic_declarative_items_opt_AST;
-			if ( basic_declarative_items_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				basic_declarative_items_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( basic_declarative_items_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				basic_declarative_items_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = basic_declarative_items_opt_AST->getFirstChild();
 			else
 				currentAST.child = basic_declarative_items_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		basic_declarative_items_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		basic_declarative_items_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -3981,15 +3981,15 @@ void AdaParser::basic_declarative_items_opt() {
 }
 
 void AdaParser::basic_decl_item() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST basic_decl_item_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST basic_decl_item_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  pkg = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST pkg_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pkg_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  tsk = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST tsk_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST tsk_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  pro = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST pro_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pro_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -3998,18 +3998,18 @@ void AdaParser::basic_decl_item() {
 			pkg = LT(1);
 			if ( inputState->guessing == 0 ) {
 				pkg_AST = astFactory->create(pkg);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pkg_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pkg_AST.get()));
 			}
 			match(PACKAGE);
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			spec_decl_part(pkg_AST);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			basic_decl_item_AST = static_cast<RefAdaAST>(currentAST.root);
+			basic_decl_item_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case TASK:
@@ -4017,14 +4017,14 @@ void AdaParser::basic_decl_item() {
 			tsk = LT(1);
 			if ( inputState->guessing == 0 ) {
 				tsk_AST = astFactory->create(tsk);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tsk_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tsk_AST.get()));
 			}
 			match(TASK);
 			task_type_or_single_decl(tsk_AST);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			basic_decl_item_AST = static_cast<RefAdaAST>(currentAST.root);
+			basic_decl_item_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case PROTECTED:
@@ -4032,15 +4032,15 @@ void AdaParser::basic_decl_item() {
 			pro = LT(1);
 			if ( inputState->guessing == 0 ) {
 				pro_AST = astFactory->create(pro);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pro_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pro_AST.get()));
 			}
 			match(PROTECTED);
 			prot_type_or_single_decl(pro_AST);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(SEMI);
-			basic_decl_item_AST = static_cast<RefAdaAST>(currentAST.root);
+			basic_decl_item_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case PROCEDURE:
@@ -4048,9 +4048,9 @@ void AdaParser::basic_decl_item() {
 		{
 			subprog_decl(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			basic_decl_item_AST = static_cast<RefAdaAST>(currentAST.root);
+			basic_decl_item_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case IDENTIFIER:
@@ -4062,9 +4062,9 @@ void AdaParser::basic_decl_item() {
 		{
 			decl_common();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			basic_decl_item_AST = static_cast<RefAdaAST>(currentAST.root);
+			basic_decl_item_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -4086,9 +4086,9 @@ void AdaParser::basic_decl_item() {
 }
 
 void AdaParser::basic_declarative_items() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST basic_declarative_items_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST basic_declarative_items_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )+
@@ -4109,7 +4109,7 @@ void AdaParser::basic_declarative_items() {
 			{
 				basic_decl_item();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -4117,7 +4117,7 @@ void AdaParser::basic_declarative_items() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -4134,17 +4134,17 @@ void AdaParser::basic_declarative_items() {
 			basic_declarative_items_AST = RefAdaAST(currentAST.root);
 #line 384 "ada.g"
 			basic_declarative_items_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(BASIC_DECLARATIVE_ITEMS_OPT,"BASIC_DECLARATIVE_ITEMS_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(basic_declarative_items_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(BASIC_DECLARATIVE_ITEMS_OPT,"BASIC_DECLARATIVE_ITEMS_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(basic_declarative_items_AST.get()))));
 #line 4139 "AdaParser.cpp"
 			currentAST.root = basic_declarative_items_AST;
-			if ( basic_declarative_items_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				basic_declarative_items_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( basic_declarative_items_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				basic_declarative_items_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = basic_declarative_items_AST->getFirstChild();
 			else
 				currentAST.child = basic_declarative_items_AST;
 			currentAST.advanceChildToEnd();
 		}
-		basic_declarative_items_AST = static_cast<RefAdaAST>(currentAST.root);
+		basic_declarative_items_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -4161,9 +4161,9 @@ void AdaParser::basic_declarative_items() {
 void AdaParser::task_type_or_single_decl(
 	RefAdaAST tsk
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST task_type_or_single_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST task_type_or_single_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -4172,40 +4172,40 @@ void AdaParser::task_type_or_single_decl(
 			match(TYPE);
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			discrim_part_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			task_definition_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 400 "ada.g"
 				Set(tsk, TASK_TYPE_DECLARATION);
 #line 4189 "AdaParser.cpp"
 			}
-			task_type_or_single_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			task_type_or_single_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case IDENTIFIER:
 		{
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			task_definition_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 402 "ada.g"
 				Set(tsk, SINGLE_TASK_DECLARATION);
 #line 4207 "AdaParser.cpp"
 			}
-			task_type_or_single_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			task_type_or_single_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -4229,9 +4229,9 @@ void AdaParser::task_type_or_single_decl(
 void AdaParser::prot_type_or_single_decl(
 	RefAdaAST pro
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST prot_type_or_single_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST prot_type_or_single_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -4240,40 +4240,40 @@ void AdaParser::prot_type_or_single_decl(
 			match(TYPE);
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			discrim_part_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			protected_definition();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 531 "ada.g"
 				Set(pro, PROTECTED_TYPE_DECLARATION);
 #line 4257 "AdaParser.cpp"
 			}
-			prot_type_or_single_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			prot_type_or_single_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case IDENTIFIER:
 		{
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			protected_definition();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 533 "ada.g"
 				Set(pro, SINGLE_PROTECTED_DECLARATION);
 #line 4275 "AdaParser.cpp"
 			}
-			prot_type_or_single_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			prot_type_or_single_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -4295,21 +4295,21 @@ void AdaParser::prot_type_or_single_decl(
 }
 
 void AdaParser::decl_common() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST decl_common_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST decl_common_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  t = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST t_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST t_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  r = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  erd = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST erd_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST erd_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  ord = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST ord_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST ord_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  od = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST od_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST od_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -4318,13 +4318,13 @@ void AdaParser::decl_common() {
 			t = LT(1);
 			if ( inputState->guessing == 0 ) {
 				t_AST = astFactory->create(t);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(t_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(t_AST.get()));
 			}
 			match(TYPE);
-			RefAdaAST tmp113_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp113_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp113_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp113_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp113_AST.get()));
 			}
 			match(IDENTIFIER);
 			{
@@ -4334,7 +4334,7 @@ void AdaParser::decl_common() {
 				match(IS);
 				type_def(t_AST);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -4347,7 +4347,7 @@ void AdaParser::decl_common() {
 				{
 					discrim_part();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					{
 					switch ( LA(1)) {
@@ -4356,7 +4356,7 @@ void AdaParser::decl_common() {
 						match(IS);
 						derived_or_private_or_record(t_AST, true);
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						break;
 					}
@@ -4381,7 +4381,7 @@ void AdaParser::decl_common() {
 				{
 					empty_discrim_opt();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 576 "ada.g"
@@ -4405,7 +4405,7 @@ void AdaParser::decl_common() {
 			}
 			}
 			match(SEMI);
-			decl_common_AST = static_cast<RefAdaAST>(currentAST.root);
+			decl_common_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case SUBTYPE:
@@ -4413,19 +4413,19 @@ void AdaParser::decl_common() {
 			s = LT(1);
 			if ( inputState->guessing == 0 ) {
 				s_AST = astFactory->create(s);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 			}
 			match(SUBTYPE);
-			RefAdaAST tmp117_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp117_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp117_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp117_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp117_AST.get()));
 			}
 			match(IDENTIFIER);
 			match(IS);
 			subtype_ind();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(SEMI);
 			if ( inputState->guessing==0 ) {
@@ -4433,25 +4433,25 @@ void AdaParser::decl_common() {
 				Set(s_AST, SUBTYPE_DECLARATION);
 #line 4435 "AdaParser.cpp"
 			}
-			decl_common_AST = static_cast<RefAdaAST>(currentAST.root);
+			decl_common_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case GENERIC:
 		{
 			generic_decl(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			decl_common_AST = static_cast<RefAdaAST>(currentAST.root);
+			decl_common_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case USE:
 		{
 			use_clause();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			decl_common_AST = static_cast<RefAdaAST>(currentAST.root);
+			decl_common_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case FOR:
@@ -4459,7 +4459,7 @@ void AdaParser::decl_common() {
 			r = LT(1);
 			if ( inputState->guessing == 0 ) {
 				r_AST = astFactory->create(r);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST.get()));
 			}
 			match(FOR);
 			{
@@ -4484,12 +4484,12 @@ void AdaParser::decl_common() {
 			if ( synPredMatched182 ) {
 				local_enum_name();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(USE);
 				enumeration_aggregate();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 595 "ada.g"
@@ -4500,12 +4500,12 @@ void AdaParser::decl_common() {
 			else if ((LA(1) == IDENTIFIER) && (LA(2) == DOT || LA(2) == USE || LA(2) == TIC)) {
 				subtype_mark();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(USE);
 				rep_spec_part(r_AST);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -4514,7 +4514,7 @@ void AdaParser::decl_common() {
 			
 			}
 			match(SEMI);
-			decl_common_AST = static_cast<RefAdaAST>(currentAST.root);
+			decl_common_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -4538,23 +4538,23 @@ void AdaParser::decl_common() {
 				inputState->guessing--;
 			}
 			if ( synPredMatched184 ) {
-				RefAdaAST tmp123_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp123_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp123_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp123_AST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp123_AST.get()));
 				}
 				match(IDENTIFIER);
 				erd = LT(1);
 				if ( inputState->guessing == 0 ) {
 					erd_AST = astFactory->create(erd);
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(erd_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(erd_AST.get()));
 				}
 				match(COLON);
 				match(EXCEPTION);
 				match(RENAMES);
 				compound_name();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(SEMI);
 				if ( inputState->guessing==0 ) {
@@ -4562,7 +4562,7 @@ void AdaParser::decl_common() {
 					Set(erd_AST, EXCEPTION_RENAMING_DECLARATION);
 #line 4564 "AdaParser.cpp"
 				}
-				decl_common_AST = static_cast<RefAdaAST>(currentAST.root);
+				decl_common_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			}
 			else {
 				bool synPredMatched186 = false;
@@ -4585,26 +4585,26 @@ void AdaParser::decl_common() {
 					inputState->guessing--;
 				}
 				if ( synPredMatched186 ) {
-					RefAdaAST tmp127_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp127_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp127_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp127_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp127_AST.get()));
 					}
 					match(IDENTIFIER);
 					ord = LT(1);
 					if ( inputState->guessing == 0 ) {
 						ord_AST = astFactory->create(ord);
-						astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(ord_AST));
+						astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(ord_AST.get()));
 					}
 					match(COLON);
 					subtype_mark();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					match(RENAMES);
 					name();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					match(SEMI);
 					if ( inputState->guessing==0 ) {
@@ -4612,17 +4612,17 @@ void AdaParser::decl_common() {
 						Set(ord_AST, OBJECT_RENAMING_DECLARATION);
 #line 4614 "AdaParser.cpp"
 					}
-					decl_common_AST = static_cast<RefAdaAST>(currentAST.root);
+					decl_common_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 				}
 				else if ((LA(1) == IDENTIFIER) && (LA(2) == COMMA || LA(2) == COLON)) {
 					defining_identifier_list();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					od = LT(1);
 					if ( inputState->guessing == 0 ) {
 						od_AST = astFactory->create(od);
-						astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(od_AST));
+						astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(od_AST.get()));
 					}
 					match(COLON);
 					{
@@ -4657,7 +4657,7 @@ void AdaParser::decl_common() {
 							match(ASSIGN);
 							expression();
 							if (inputState->guessing==0) {
-								astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+								astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 							}
 							if ( inputState->guessing==0 ) {
 #line 609 "ada.g"
@@ -4668,7 +4668,7 @@ void AdaParser::decl_common() {
 						else if ((_tokenSet_50.member(LA(1))) && (_tokenSet_51.member(LA(2)))) {
 							aliased_constant_opt();
 							if (inputState->guessing==0) {
-								astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+								astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 							}
 							{
 							switch ( LA(1)) {
@@ -4676,11 +4676,11 @@ void AdaParser::decl_common() {
 							{
 								array_type_definition(od_AST);
 								if (inputState->guessing==0) {
-									astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+									astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 								}
 								init_opt();
 								if (inputState->guessing==0) {
-									astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+									astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 								}
 								if ( inputState->guessing==0 ) {
 #line 612 "ada.g"
@@ -4693,11 +4693,11 @@ void AdaParser::decl_common() {
 							{
 								subtype_ind();
 								if (inputState->guessing==0) {
-									astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+									astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 								}
 								init_opt();
 								if (inputState->guessing==0) {
-									astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+									astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 								}
 								if ( inputState->guessing==0 ) {
 #line 616 "ada.g"
@@ -4719,7 +4719,7 @@ void AdaParser::decl_common() {
 					}
 					}
 					match(SEMI);
-					decl_common_AST = static_cast<RefAdaAST>(currentAST.root);
+					decl_common_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 				}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -4739,9 +4739,9 @@ void AdaParser::decl_common() {
 }
 
 void AdaParser::discrim_part_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discrim_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discrim_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -4750,7 +4750,7 @@ void AdaParser::discrim_part_opt() {
 		{
 			discrim_part_text();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -4769,17 +4769,17 @@ void AdaParser::discrim_part_opt() {
 			discrim_part_opt_AST = RefAdaAST(currentAST.root);
 #line 412 "ada.g"
 			discrim_part_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIM_PART_OPT,"DISCRIM_PART_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discrim_part_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIM_PART_OPT,"DISCRIM_PART_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discrim_part_opt_AST.get()))));
 #line 4774 "AdaParser.cpp"
 			currentAST.root = discrim_part_opt_AST;
-			if ( discrim_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				discrim_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( discrim_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				discrim_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = discrim_part_opt_AST->getFirstChild();
 			else
 				currentAST.child = discrim_part_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		discrim_part_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		discrim_part_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -4794,9 +4794,9 @@ void AdaParser::discrim_part_opt() {
 }
 
 void AdaParser::task_definition_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST task_definition_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST task_definition_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -4805,15 +4805,15 @@ void AdaParser::task_definition_opt() {
 			match(IS);
 			task_items_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			private_task_items_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			end_id_opt();
 			match(SEMI);
-			task_definition_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+			task_definition_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case SEMI:
@@ -4824,7 +4824,7 @@ void AdaParser::task_definition_opt() {
 				pop_def_id();
 #line 4826 "AdaParser.cpp"
 			}
-			task_definition_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+			task_definition_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -4846,9 +4846,9 @@ void AdaParser::task_definition_opt() {
 }
 
 void AdaParser::task_items_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST task_items_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST task_items_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -4856,7 +4856,7 @@ void AdaParser::task_items_opt() {
 			if ((LA(1) == PRAGMA)) {
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -4868,23 +4868,23 @@ void AdaParser::task_items_opt() {
 		} // ( ... )*
 		entrydecls_repspecs_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			task_items_opt_AST = RefAdaAST(currentAST.root);
 #line 465 "ada.g"
 			task_items_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(TASK_ITEMS_OPT,"TASK_ITEMS_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(task_items_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(TASK_ITEMS_OPT,"TASK_ITEMS_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(task_items_opt_AST.get()))));
 #line 4879 "AdaParser.cpp"
 			currentAST.root = task_items_opt_AST;
-			if ( task_items_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				task_items_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( task_items_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				task_items_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = task_items_opt_AST->getFirstChild();
 			else
 				currentAST.child = task_items_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		task_items_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		task_items_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -4899,9 +4899,9 @@ void AdaParser::task_items_opt() {
 }
 
 void AdaParser::private_task_items_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST private_task_items_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST private_task_items_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -4914,7 +4914,7 @@ void AdaParser::private_task_items_opt() {
 				if ((LA(1) == PRAGMA)) {
 					pragma();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 				}
 				else {
@@ -4926,7 +4926,7 @@ void AdaParser::private_task_items_opt() {
 			} // ( ... )*
 			entrydecls_repspecs_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -4944,17 +4944,17 @@ void AdaParser::private_task_items_opt() {
 			private_task_items_opt_AST = RefAdaAST(currentAST.root);
 #line 522 "ada.g"
 			private_task_items_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PRIVATE_TASK_ITEMS_OPT,"PRIVATE_TASK_ITEMS_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(private_task_items_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PRIVATE_TASK_ITEMS_OPT,"PRIVATE_TASK_ITEMS_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(private_task_items_opt_AST.get()))));
 #line 4949 "AdaParser.cpp"
 			currentAST.root = private_task_items_opt_AST;
-			if ( private_task_items_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				private_task_items_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( private_task_items_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				private_task_items_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = private_task_items_opt_AST->getFirstChild();
 			else
 				currentAST.child = private_task_items_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		private_task_items_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		private_task_items_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -4969,9 +4969,9 @@ void AdaParser::private_task_items_opt() {
 }
 
 void AdaParser::discrim_part_text() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discrim_part_text_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discrim_part_text_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(LPAREN);
@@ -4979,10 +4979,10 @@ void AdaParser::discrim_part_text() {
 		switch ( LA(1)) {
 		case BOX:
 		{
-			RefAdaAST tmp139_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp139_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp139_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp139_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp139_AST.get()));
 			}
 			match(BOX);
 			break;
@@ -4991,7 +4991,7 @@ void AdaParser::discrim_part_text() {
 		{
 			discriminant_specifications();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -5002,7 +5002,7 @@ void AdaParser::discrim_part_text() {
 		}
 		}
 		match(RPAREN);
-		discrim_part_text_AST = static_cast<RefAdaAST>(currentAST.root);
+		discrim_part_text_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5017,14 +5017,14 @@ void AdaParser::discrim_part_text() {
 }
 
 void AdaParser::discriminant_specifications() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discriminant_specifications_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discriminant_specifications_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		discriminant_specification();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -5032,7 +5032,7 @@ void AdaParser::discriminant_specifications() {
 				match(SEMI);
 				discriminant_specification();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -5046,17 +5046,17 @@ void AdaParser::discriminant_specifications() {
 			discriminant_specifications_AST = RefAdaAST(currentAST.root);
 #line 442 "ada.g"
 			discriminant_specifications_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIMINANT_SPECIFICATIONS,"DISCRIMINANT_SPECIFICATIONS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discriminant_specifications_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIMINANT_SPECIFICATIONS,"DISCRIMINANT_SPECIFICATIONS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discriminant_specifications_AST.get()))));
 #line 5051 "AdaParser.cpp"
 			currentAST.root = discriminant_specifications_AST;
-			if ( discriminant_specifications_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				discriminant_specifications_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( discriminant_specifications_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				discriminant_specifications_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = discriminant_specifications_AST->getFirstChild();
 			else
 				currentAST.child = discriminant_specifications_AST;
 			currentAST.advanceChildToEnd();
 		}
-		discriminant_specifications_AST = static_cast<RefAdaAST>(currentAST.root);
+		discriminant_specifications_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5071,32 +5071,32 @@ void AdaParser::discriminant_specifications() {
 }
 
 void AdaParser::known_discrim_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST known_discrim_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST known_discrim_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(LPAREN);
 		discriminant_specifications();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(RPAREN);
 		if ( inputState->guessing==0 ) {
 			known_discrim_part_AST = RefAdaAST(currentAST.root);
 #line 422 "ada.g"
 			known_discrim_part_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIM_PART_OPT,"DISCRIM_PART_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(known_discrim_part_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIM_PART_OPT,"DISCRIM_PART_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(known_discrim_part_AST.get()))));
 #line 5091 "AdaParser.cpp"
 			currentAST.root = known_discrim_part_AST;
-			if ( known_discrim_part_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				known_discrim_part_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( known_discrim_part_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				known_discrim_part_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = known_discrim_part_AST->getFirstChild();
 			else
 				currentAST.child = known_discrim_part_AST;
 			currentAST.advanceChildToEnd();
 		}
-		known_discrim_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		known_discrim_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5111,26 +5111,26 @@ void AdaParser::known_discrim_part() {
 }
 
 void AdaParser::empty_discrim_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST empty_discrim_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST empty_discrim_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		if ( inputState->guessing==0 ) {
 			empty_discrim_opt_AST = RefAdaAST(currentAST.root);
 #line 428 "ada.g"
 			empty_discrim_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIM_PART_OPT,"DISCRIM_PART_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(empty_discrim_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIM_PART_OPT,"DISCRIM_PART_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(empty_discrim_opt_AST.get()))));
 #line 5125 "AdaParser.cpp"
 			currentAST.root = empty_discrim_opt_AST;
-			if ( empty_discrim_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				empty_discrim_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( empty_discrim_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				empty_discrim_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = empty_discrim_opt_AST->getFirstChild();
 			else
 				currentAST.child = empty_discrim_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		empty_discrim_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		empty_discrim_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5145,30 +5145,30 @@ void AdaParser::empty_discrim_opt() {
 }
 
 void AdaParser::discrim_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discrim_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discrim_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		discrim_part_text();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			discrim_part_AST = RefAdaAST(currentAST.root);
 #line 435 "ada.g"
 			discrim_part_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIM_PART_OPT,"DISCRIM_PART_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discrim_part_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIM_PART_OPT,"DISCRIM_PART_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discrim_part_AST.get()))));
 #line 5163 "AdaParser.cpp"
 			currentAST.root = discrim_part_AST;
-			if ( discrim_part_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				discrim_part_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( discrim_part_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				discrim_part_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = discrim_part_AST->getFirstChild();
 			else
 				currentAST.child = discrim_part_AST;
 			currentAST.advanceChildToEnd();
 		}
-		discrim_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		discrim_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5183,42 +5183,42 @@ void AdaParser::discrim_part() {
 }
 
 void AdaParser::discriminant_specification() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discriminant_specification_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discriminant_specification_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		def_ids_colon();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		access_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		subtype_mark();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		init_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			discriminant_specification_AST = RefAdaAST(currentAST.root);
 #line 449 "ada.g"
 			discriminant_specification_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIMINANT_SPECIFICATION,"DISCRIMINANT_SPECIFICATION")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discriminant_specification_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIMINANT_SPECIFICATION,"DISCRIMINANT_SPECIFICATION").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discriminant_specification_AST.get()))));
 #line 5213 "AdaParser.cpp"
 			currentAST.root = discriminant_specification_AST;
-			if ( discriminant_specification_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				discriminant_specification_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( discriminant_specification_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				discriminant_specification_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = discriminant_specification_AST->getFirstChild();
 			else
 				currentAST.child = discriminant_specification_AST;
 			currentAST.advanceChildToEnd();
 		}
-		discriminant_specification_AST = static_cast<RefAdaAST>(currentAST.root);
+		discriminant_specification_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5233,19 +5233,19 @@ void AdaParser::discriminant_specification() {
 }
 
 void AdaParser::access_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST access_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST access_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case ACCESS:
 		{
-			RefAdaAST tmp144_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp144_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp144_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp144_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp144_AST.get()));
 			}
 			match(ACCESS);
 			break;
@@ -5263,17 +5263,17 @@ void AdaParser::access_opt() {
 		if ( inputState->guessing==0 ) {
 			access_opt_AST = RefAdaAST(currentAST.root);
 #line 456 "ada.g"
-			access_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(access_opt_AST))));
+			access_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(access_opt_AST.get()))));
 #line 5268 "AdaParser.cpp"
 			currentAST.root = access_opt_AST;
-			if ( access_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				access_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( access_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				access_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = access_opt_AST->getFirstChild();
 			else
 				currentAST.child = access_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		access_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		access_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5288,9 +5288,9 @@ void AdaParser::access_opt() {
 }
 
 void AdaParser::entrydecls_repspecs_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entrydecls_repspecs_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entrydecls_repspecs_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -5298,7 +5298,7 @@ void AdaParser::entrydecls_repspecs_opt() {
 			if ((LA(1) == ENTRY)) {
 				entry_declaration();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{ // ( ... )*
 				for (;;) {
@@ -5307,7 +5307,7 @@ void AdaParser::entrydecls_repspecs_opt() {
 					{
 						pragma();
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						break;
 					}
@@ -5315,7 +5315,7 @@ void AdaParser::entrydecls_repspecs_opt() {
 					{
 						rep_spec();
 						if (inputState->guessing==0) {
-							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 						}
 						break;
 					}
@@ -5335,7 +5335,7 @@ void AdaParser::entrydecls_repspecs_opt() {
 		}
 		_loop144:;
 		} // ( ... )*
-		entrydecls_repspecs_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		entrydecls_repspecs_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5350,32 +5350,32 @@ void AdaParser::entrydecls_repspecs_opt() {
 }
 
 void AdaParser::entry_declaration() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entry_declaration_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entry_declaration_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  e = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST e_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST e_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		e = LT(1);
 		if ( inputState->guessing == 0 ) {
 			e_AST = astFactory->create(e);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(e_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(e_AST.get()));
 		}
 		match(ENTRY);
-		RefAdaAST tmp145_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp145_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp145_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp145_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp145_AST.get()));
 		}
 		match(IDENTIFIER);
 		discrete_subtype_def_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		formal_part_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
 		if ( inputState->guessing==0 ) {
@@ -5383,7 +5383,7 @@ void AdaParser::entry_declaration() {
 			Set (e_AST, ENTRY_DECLARATION);
 #line 5385 "AdaParser.cpp"
 		}
-		entry_declaration_AST = static_cast<RefAdaAST>(currentAST.root);
+		entry_declaration_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5398,30 +5398,30 @@ void AdaParser::entry_declaration() {
 }
 
 void AdaParser::rep_spec() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST rep_spec_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST rep_spec_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  r = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		r = LT(1);
 		if ( inputState->guessing == 0 ) {
 			r_AST = astFactory->create(r);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST.get()));
 		}
 		match(FOR);
 		subtype_mark();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(USE);
 		rep_spec_part(r_AST);
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
-		rep_spec_AST = static_cast<RefAdaAST>(currentAST.root);
+		rep_spec_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5436,9 +5436,9 @@ void AdaParser::rep_spec() {
 }
 
 void AdaParser::discrete_subtype_def_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discrete_subtype_def_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discrete_subtype_def_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -5464,7 +5464,7 @@ void AdaParser::discrete_subtype_def_opt() {
 			match(LPAREN);
 			discrete_subtype_definition();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(RPAREN);
 		}
@@ -5479,17 +5479,17 @@ void AdaParser::discrete_subtype_def_opt() {
 			discrete_subtype_def_opt_AST = RefAdaAST(currentAST.root);
 #line 481 "ada.g"
 			discrete_subtype_def_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRETE_SUBTYPE_DEF_OPT,"DISCRETE_SUBTYPE_DEF_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discrete_subtype_def_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRETE_SUBTYPE_DEF_OPT,"DISCRETE_SUBTYPE_DEF_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discrete_subtype_def_opt_AST.get()))));
 #line 5484 "AdaParser.cpp"
 			currentAST.root = discrete_subtype_def_opt_AST;
-			if ( discrete_subtype_def_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				discrete_subtype_def_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( discrete_subtype_def_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				discrete_subtype_def_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = discrete_subtype_def_opt_AST->getFirstChild();
 			else
 				currentAST.child = discrete_subtype_def_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		discrete_subtype_def_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		discrete_subtype_def_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5504,9 +5504,9 @@ void AdaParser::discrete_subtype_def_opt() {
 }
 
 void AdaParser::discrete_subtype_definition() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discrete_subtype_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discrete_subtype_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -5529,13 +5529,13 @@ void AdaParser::discrete_subtype_definition() {
 		if ( synPredMatched153 ) {
 			range();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 		}
 		else if ((LA(1) == IDENTIFIER) && (_tokenSet_56.member(LA(2)))) {
 			subtype_ind();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 		}
 		else {
@@ -5543,7 +5543,7 @@ void AdaParser::discrete_subtype_definition() {
 		}
 		
 		}
-		discrete_subtype_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+		discrete_subtype_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5558,33 +5558,33 @@ void AdaParser::discrete_subtype_definition() {
 }
 
 void AdaParser::subtype_ind() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST subtype_ind_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST subtype_ind_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		subtype_mark();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		constraint_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			subtype_ind_AST = RefAdaAST(currentAST.root);
 #line 679 "ada.g"
-			subtype_ind_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(SUBTYPE_INDICATION,"SUBTYPE_INDICATION")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(subtype_ind_AST))));
+			subtype_ind_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(SUBTYPE_INDICATION,"SUBTYPE_INDICATION").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(subtype_ind_AST.get()))));
 #line 5579 "AdaParser.cpp"
 			currentAST.root = subtype_ind_AST;
-			if ( subtype_ind_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				subtype_ind_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( subtype_ind_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				subtype_ind_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = subtype_ind_AST->getFirstChild();
 			else
 				currentAST.child = subtype_ind_AST;
 			currentAST.advanceChildToEnd();
 		}
-		subtype_ind_AST = static_cast<RefAdaAST>(currentAST.root);
+		subtype_ind_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5601,9 +5601,9 @@ void AdaParser::subtype_ind() {
 void AdaParser::rep_spec_part(
 	RefAdaAST t
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST rep_spec_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST rep_spec_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -5612,11 +5612,11 @@ void AdaParser::rep_spec_part(
 			match(RECORD);
 			align_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			comp_loc_s();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(END);
 			match(RECORD);
@@ -5625,7 +5625,7 @@ void AdaParser::rep_spec_part(
 				Set(t, RECORD_REPRESENTATION_CLAUSE);
 #line 5627 "AdaParser.cpp"
 			}
-			rep_spec_part_AST = static_cast<RefAdaAST>(currentAST.root);
+			rep_spec_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case AT:
@@ -5633,14 +5633,14 @@ void AdaParser::rep_spec_part(
 			match(AT);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 506 "ada.g"
 				Set(t, AT_CLAUSE);
 #line 5642 "AdaParser.cpp"
 			}
-			rep_spec_part_AST = static_cast<RefAdaAST>(currentAST.root);
+			rep_spec_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case IDENTIFIER:
@@ -5657,14 +5657,14 @@ void AdaParser::rep_spec_part(
 		{
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 509 "ada.g"
 				Set(t, ATTRIBUTE_DEFINITION_CLAUSE);
 #line 5666 "AdaParser.cpp"
 			}
-			rep_spec_part_AST = static_cast<RefAdaAST>(currentAST.root);
+			rep_spec_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -5686,9 +5686,9 @@ void AdaParser::rep_spec_part(
 }
 
 void AdaParser::align_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST align_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST align_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -5699,7 +5699,7 @@ void AdaParser::align_opt() {
 			match(MOD);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(SEMI);
 			break;
@@ -5719,17 +5719,17 @@ void AdaParser::align_opt() {
 		if ( inputState->guessing==0 ) {
 			align_opt_AST = RefAdaAST(currentAST.root);
 #line 513 "ada.g"
-			align_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MOD_CLAUSE_OPT,"MOD_CLAUSE_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(align_opt_AST))));
+			align_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MOD_CLAUSE_OPT,"MOD_CLAUSE_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(align_opt_AST.get()))));
 #line 5724 "AdaParser.cpp"
 			currentAST.root = align_opt_AST;
-			if ( align_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				align_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( align_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				align_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = align_opt_AST->getFirstChild();
 			else
 				currentAST.child = align_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		align_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		align_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5744,9 +5744,9 @@ void AdaParser::align_opt() {
 }
 
 void AdaParser::comp_loc_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST comp_loc_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST comp_loc_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -5756,7 +5756,7 @@ void AdaParser::comp_loc_s() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -5764,17 +5764,17 @@ void AdaParser::comp_loc_s() {
 			{
 				subtype_mark();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(AT);
 				expression();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(RANGE);
 				range();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(SEMI);
 				break;
@@ -5790,17 +5790,17 @@ void AdaParser::comp_loc_s() {
 		if ( inputState->guessing==0 ) {
 			comp_loc_s_AST = RefAdaAST(currentAST.root);
 #line 517 "ada.g"
-			comp_loc_s_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(COMPONENT_CLAUSES_OPT,"COMPONENT_CLAUSES_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(comp_loc_s_AST))));
+			comp_loc_s_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(COMPONENT_CLAUSES_OPT,"COMPONENT_CLAUSES_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(comp_loc_s_AST.get()))));
 #line 5795 "AdaParser.cpp"
 			currentAST.root = comp_loc_s_AST;
-			if ( comp_loc_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				comp_loc_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( comp_loc_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				comp_loc_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = comp_loc_s_AST->getFirstChild();
 			else
 				currentAST.child = comp_loc_s_AST;
 			currentAST.advanceChildToEnd();
 		}
-		comp_loc_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		comp_loc_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5815,15 +5815,15 @@ void AdaParser::comp_loc_s() {
 }
 
 void AdaParser::protected_definition() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST protected_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST protected_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(IS);
 		prot_op_decl_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -5832,7 +5832,7 @@ void AdaParser::protected_definition() {
 			match(PRIVATE);
 			prot_member_decl_s();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -5847,7 +5847,7 @@ void AdaParser::protected_definition() {
 		}
 		}
 		end_id_opt();
-		protected_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+		protected_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5862,9 +5862,9 @@ void AdaParser::protected_definition() {
 }
 
 void AdaParser::prot_op_decl_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST prot_op_decl_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST prot_op_decl_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -5872,7 +5872,7 @@ void AdaParser::prot_op_decl_s() {
 			if ((_tokenSet_60.member(LA(1)))) {
 				prot_op_decl();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -5885,17 +5885,17 @@ void AdaParser::prot_op_decl_s() {
 		if ( inputState->guessing==0 ) {
 			prot_op_decl_s_AST = RefAdaAST(currentAST.root);
 #line 541 "ada.g"
-			prot_op_decl_s_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PROT_OP_DECLARATIONS,"PROT_OP_DECLARATIONS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(prot_op_decl_s_AST))));
+			prot_op_decl_s_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PROT_OP_DECLARATIONS,"PROT_OP_DECLARATIONS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(prot_op_decl_s_AST.get()))));
 #line 5890 "AdaParser.cpp"
 			currentAST.root = prot_op_decl_s_AST;
-			if ( prot_op_decl_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				prot_op_decl_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( prot_op_decl_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				prot_op_decl_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = prot_op_decl_s_AST->getFirstChild();
 			else
 				currentAST.child = prot_op_decl_s_AST;
 			currentAST.advanceChildToEnd();
 		}
-		prot_op_decl_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		prot_op_decl_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5910,9 +5910,9 @@ void AdaParser::prot_op_decl_s() {
 }
 
 void AdaParser::prot_member_decl_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST prot_member_decl_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST prot_member_decl_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -5926,7 +5926,7 @@ void AdaParser::prot_member_decl_s() {
 			{
 				prot_op_decl();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -5934,7 +5934,7 @@ void AdaParser::prot_member_decl_s() {
 			{
 				comp_decl();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -5950,17 +5950,17 @@ void AdaParser::prot_member_decl_s() {
 			prot_member_decl_s_AST = RefAdaAST(currentAST.root);
 #line 555 "ada.g"
 			prot_member_decl_s_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PROT_MEMBER_DECLARATIONS,"PROT_MEMBER_DECLARATIONS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(prot_member_decl_s_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PROT_MEMBER_DECLARATIONS,"PROT_MEMBER_DECLARATIONS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(prot_member_decl_s_AST.get()))));
 #line 5955 "AdaParser.cpp"
 			currentAST.root = prot_member_decl_s_AST;
-			if ( prot_member_decl_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				prot_member_decl_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( prot_member_decl_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				prot_member_decl_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = prot_member_decl_s_AST->getFirstChild();
 			else
 				currentAST.child = prot_member_decl_s_AST;
 			currentAST.advanceChildToEnd();
 		}
-		prot_member_decl_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		prot_member_decl_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -5975,13 +5975,13 @@ void AdaParser::prot_member_decl_s() {
 }
 
 void AdaParser::prot_op_decl() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST prot_op_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST prot_op_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  f = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -5989,9 +5989,9 @@ void AdaParser::prot_op_decl() {
 		{
 			entry_declaration();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			prot_op_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			prot_op_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case PROCEDURE:
@@ -5999,16 +5999,16 @@ void AdaParser::prot_op_decl() {
 			p = LT(1);
 			if ( inputState->guessing == 0 ) {
 				p_AST = astFactory->create(p);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 			}
 			match(PROCEDURE);
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			formal_part_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(SEMI);
 			if ( inputState->guessing==0 ) {
@@ -6016,7 +6016,7 @@ void AdaParser::prot_op_decl() {
 				pop_def_id(); Set(p_AST, PROCEDURE_DECLARATION);
 #line 6018 "AdaParser.cpp"
 			}
-			prot_op_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			prot_op_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case FUNCTION:
@@ -6024,16 +6024,16 @@ void AdaParser::prot_op_decl() {
 			f = LT(1);
 			if ( inputState->guessing == 0 ) {
 				f_AST = astFactory->create(f);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST.get()));
 			}
 			match(FUNCTION);
 			def_designator(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			function_tail();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(SEMI);
 			if ( inputState->guessing==0 ) {
@@ -6041,25 +6041,25 @@ void AdaParser::prot_op_decl() {
 				pop_def_id(); Set(f_AST, FUNCTION_DECLARATION);
 #line 6043 "AdaParser.cpp"
 			}
-			prot_op_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			prot_op_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case FOR:
 		{
 			rep_spec();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			prot_op_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			prot_op_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case PRAGMA:
 		{
 			pragma();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			prot_op_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+			prot_op_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -6081,39 +6081,39 @@ void AdaParser::prot_op_decl() {
 }
 
 void AdaParser::comp_decl() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST comp_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST comp_decl_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		def_ids_colon();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		component_subtype_def();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		init_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
 		if ( inputState->guessing==0 ) {
 			comp_decl_AST = RefAdaAST(currentAST.root);
 #line 561 "ada.g"
 			comp_decl_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(COMPONENT_DECLARATION,"COMPONENT_DECLARATION")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(comp_decl_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(COMPONENT_DECLARATION,"COMPONENT_DECLARATION").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(comp_decl_AST.get()))));
 #line 6108 "AdaParser.cpp"
 			currentAST.root = comp_decl_AST;
-			if ( comp_decl_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				comp_decl_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( comp_decl_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				comp_decl_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = comp_decl_AST->getFirstChild();
 			else
 				currentAST.child = comp_decl_AST;
 			currentAST.advanceChildToEnd();
 		}
-		comp_decl_AST = static_cast<RefAdaAST>(currentAST.root);
+		comp_decl_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6128,20 +6128,20 @@ void AdaParser::comp_decl() {
 }
 
 void AdaParser::component_subtype_def() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST component_subtype_def_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST component_subtype_def_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		aliased_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		subtype_ind();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		component_subtype_def_AST = static_cast<RefAdaAST>(currentAST.root);
+		component_subtype_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6158,9 +6158,9 @@ void AdaParser::component_subtype_def() {
 void AdaParser::type_def(
 	RefAdaAST t
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST type_def_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST type_def_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -6169,7 +6169,7 @@ void AdaParser::type_def(
 			match(LPAREN);
 			enum_id_s();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(RPAREN);
 			if ( inputState->guessing==0 ) {
@@ -6177,7 +6177,7 @@ void AdaParser::type_def(
 				Set(t, ENUMERATION_TYPE_DECLARATION);
 #line 6179 "AdaParser.cpp"
 			}
-			type_def_AST = static_cast<RefAdaAST>(currentAST.root);
+			type_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case RANGE:
@@ -6185,14 +6185,14 @@ void AdaParser::type_def(
 			match(RANGE);
 			range();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 626 "ada.g"
 				Set(t, SIGNED_INTEGER_TYPE_DECLARATION);
 #line 6194 "AdaParser.cpp"
 			}
-			type_def_AST = static_cast<RefAdaAST>(currentAST.root);
+			type_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case MOD:
@@ -6200,14 +6200,14 @@ void AdaParser::type_def(
 			match(MOD);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 628 "ada.g"
 				Set(t, MODULAR_TYPE_DECLARATION);
 #line 6209 "AdaParser.cpp"
 			}
-			type_def_AST = static_cast<RefAdaAST>(currentAST.root);
+			type_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case DIGITS:
@@ -6215,18 +6215,18 @@ void AdaParser::type_def(
 			match(DIGITS);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			range_constraint_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 630 "ada.g"
 				Set(t, FLOATING_POINT_DECLARATION);
 #line 6228 "AdaParser.cpp"
 			}
-			type_def_AST = static_cast<RefAdaAST>(currentAST.root);
+			type_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case DELTA:
@@ -6234,7 +6234,7 @@ void AdaParser::type_def(
 			match(DELTA);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -6243,7 +6243,7 @@ void AdaParser::type_def(
 				match(RANGE);
 				range();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 633 "ada.g"
@@ -6257,11 +6257,11 @@ void AdaParser::type_def(
 				match(DIGITS);
 				expression();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				range_constraint_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 635 "ada.g"
@@ -6276,25 +6276,25 @@ void AdaParser::type_def(
 			}
 			}
 			}
-			type_def_AST = static_cast<RefAdaAST>(currentAST.root);
+			type_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case ARRAY:
 		{
 			array_type_definition(t);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			type_def_AST = static_cast<RefAdaAST>(currentAST.root);
+			type_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case ACCESS:
 		{
 			access_type_definition(t);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			type_def_AST = static_cast<RefAdaAST>(currentAST.root);
+			type_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case PRIVATE:
@@ -6307,13 +6307,13 @@ void AdaParser::type_def(
 		{
 			empty_discrim_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			derived_or_private_or_record(t, false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			type_def_AST = static_cast<RefAdaAST>(currentAST.root);
+			type_def_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -6337,9 +6337,9 @@ void AdaParser::type_def(
 void AdaParser::derived_or_private_or_record(
 	RefAdaAST t, bool has_discrim
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST derived_or_private_or_record_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST derived_or_private_or_record_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		bool synPredMatched244 = false;
@@ -6380,12 +6380,12 @@ void AdaParser::derived_or_private_or_record(
 		if ( synPredMatched244 ) {
 			abstract_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(NEW);
 			subtype_ind();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(WITH);
 			{
@@ -6405,7 +6405,7 @@ void AdaParser::derived_or_private_or_record(
 			{
 				record_definition(has_discrim);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 760 "ada.g"
@@ -6420,25 +6420,25 @@ void AdaParser::derived_or_private_or_record(
 			}
 			}
 			}
-			derived_or_private_or_record_AST = static_cast<RefAdaAST>(currentAST.root);
+			derived_or_private_or_record_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if ((LA(1) == NEW) && (LA(2) == IDENTIFIER)) {
 			match(NEW);
 			subtype_ind();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 762 "ada.g"
 				Set(t, ORDINARY_DERIVED_TYPE_DECLARATION);
 #line 6435 "AdaParser.cpp"
 			}
-			derived_or_private_or_record_AST = static_cast<RefAdaAST>(currentAST.root);
+			derived_or_private_or_record_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if ((_tokenSet_63.member(LA(1))) && (_tokenSet_64.member(LA(2)))) {
 			abstract_tagged_limited_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -6457,7 +6457,7 @@ void AdaParser::derived_or_private_or_record(
 			{
 				record_definition(has_discrim);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 766 "ada.g"
@@ -6472,7 +6472,7 @@ void AdaParser::derived_or_private_or_record(
 			}
 			}
 			}
-			derived_or_private_or_record_AST = static_cast<RefAdaAST>(currentAST.root);
+			derived_or_private_or_record_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -6492,18 +6492,18 @@ void AdaParser::derived_or_private_or_record(
 }
 
 void AdaParser::local_enum_name() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST local_enum_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST local_enum_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		RefAdaAST tmp179_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp179_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp179_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp179_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp179_AST.get()));
 		}
 		match(IDENTIFIER);
-		local_enum_name_AST = static_cast<RefAdaAST>(currentAST.root);
+		local_enum_name_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6518,16 +6518,16 @@ void AdaParser::local_enum_name() {
 }
 
 void AdaParser::enumeration_aggregate() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST enumeration_aggregate_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST enumeration_aggregate_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		parenth_values();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		enumeration_aggregate_AST = static_cast<RefAdaAST>(currentAST.root);
+		enumeration_aggregate_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6542,19 +6542,19 @@ void AdaParser::enumeration_aggregate() {
 }
 
 void AdaParser::aliased_constant_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST aliased_constant_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST aliased_constant_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case ALIASED:
 		{
-			RefAdaAST tmp180_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp180_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp180_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp180_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp180_AST.get()));
 			}
 			match(ALIASED);
 			break;
@@ -6575,10 +6575,10 @@ void AdaParser::aliased_constant_opt() {
 		switch ( LA(1)) {
 		case CONSTANT:
 		{
-			RefAdaAST tmp181_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp181_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp181_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp181_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp181_AST.get()));
 			}
 			match(CONSTANT);
 			break;
@@ -6598,17 +6598,17 @@ void AdaParser::aliased_constant_opt() {
 			aliased_constant_opt_AST = RefAdaAST(currentAST.root);
 #line 844 "ada.g"
 			aliased_constant_opt_AST =
-				  RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(aliased_constant_opt_AST))));
+				  RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(aliased_constant_opt_AST.get()))));
 #line 6603 "AdaParser.cpp"
 			currentAST.root = aliased_constant_opt_AST;
-			if ( aliased_constant_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				aliased_constant_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( aliased_constant_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				aliased_constant_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = aliased_constant_opt_AST->getFirstChild();
 			else
 				currentAST.child = aliased_constant_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		aliased_constant_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		aliased_constant_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6625,29 +6625,29 @@ void AdaParser::aliased_constant_opt() {
 void AdaParser::array_type_definition(
 	RefAdaAST t
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST array_type_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST array_type_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(ARRAY);
 		match(LPAREN);
 		index_or_discrete_range_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(RPAREN);
 		match(OF);
 		component_subtype_def();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 655 "ada.g"
 			Set(t, ARRAY_TYPE_DECLARATION);
 #line 6649 "AdaParser.cpp"
 		}
-		array_type_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+		array_type_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6662,14 +6662,14 @@ void AdaParser::array_type_definition(
 }
 
 void AdaParser::enum_id_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST enum_id_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST enum_id_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		enumeration_literal_specification();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -6677,7 +6677,7 @@ void AdaParser::enum_id_s() {
 				match(COMMA);
 				enumeration_literal_specification();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -6687,7 +6687,7 @@ void AdaParser::enum_id_s() {
 		}
 		_loop195:;
 		} // ( ... )*
-		enum_id_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		enum_id_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6702,9 +6702,9 @@ void AdaParser::enum_id_s() {
 }
 
 void AdaParser::range_constraint_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST range_constraint_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST range_constraint_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -6713,7 +6713,7 @@ void AdaParser::range_constraint_opt() {
 		{
 			range_constraint();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -6732,7 +6732,7 @@ void AdaParser::range_constraint_opt() {
 		}
 		}
 		}
-		range_constraint_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		range_constraint_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6749,9 +6749,9 @@ void AdaParser::range_constraint_opt() {
 void AdaParser::access_type_definition(
 	RefAdaAST t
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST access_type_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST access_type_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(ACCESS);
@@ -6763,7 +6763,7 @@ void AdaParser::access_type_definition(
 		{
 			protected_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -6772,7 +6772,7 @@ void AdaParser::access_type_definition(
 				match(PROCEDURE);
 				formal_part_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 737 "ada.g"
@@ -6786,12 +6786,12 @@ void AdaParser::access_type_definition(
 				match(FUNCTION);
 				func_formal_part_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(RETURN);
 				subtype_mark();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 739 "ada.g"
@@ -6814,11 +6814,11 @@ void AdaParser::access_type_definition(
 		{
 			constant_all_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			subtype_ind();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 742 "ada.g"
@@ -6833,7 +6833,7 @@ void AdaParser::access_type_definition(
 		}
 		}
 		}
-		access_type_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+		access_type_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6848,32 +6848,32 @@ void AdaParser::access_type_definition(
 }
 
 void AdaParser::enumeration_literal_specification() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST enumeration_literal_specification_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST enumeration_literal_specification_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
 		case IDENTIFIER:
 		{
-			RefAdaAST tmp191_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp191_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp191_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp191_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp191_AST.get()));
 			}
 			match(IDENTIFIER);
-			enumeration_literal_specification_AST = static_cast<RefAdaAST>(currentAST.root);
+			enumeration_literal_specification_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case CHARACTER_LITERAL:
 		{
-			RefAdaAST tmp192_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp192_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp192_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp192_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp192_AST.get()));
 			}
 			match(CHARACTER_LITERAL);
-			enumeration_literal_specification_AST = static_cast<RefAdaAST>(currentAST.root);
+			enumeration_literal_specification_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -6895,27 +6895,27 @@ void AdaParser::enumeration_literal_specification() {
 }
 
 void AdaParser::index_or_discrete_range_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST index_or_discrete_range_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST index_or_discrete_range_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		index_or_discrete_range();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
 			if ((LA(1) == COMMA)) {
-				RefAdaAST tmp193_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp193_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp193_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp193_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp193_AST.get()));
 				}
 				match(COMMA);
 				index_or_discrete_range();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -6925,7 +6925,7 @@ void AdaParser::index_or_discrete_range_s() {
 		}
 		_loop202:;
 		} // ( ... )*
-		index_or_discrete_range_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		index_or_discrete_range_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -6940,47 +6940,47 @@ void AdaParser::index_or_discrete_range_s() {
 }
 
 void AdaParser::index_or_discrete_range() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST index_or_discrete_range_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST index_or_discrete_range_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		simple_expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
 		case DOT_DOT:
 		{
-			RefAdaAST tmp194_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp194_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp194_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp194_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp194_AST.get()));
 			}
 			match(DOT_DOT);
 			simple_expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case RANGE:
 		{
-			RefAdaAST tmp195_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp195_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp195_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp195_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp195_AST.get()));
 			}
 			match(RANGE);
 			{
 			switch ( LA(1)) {
 			case BOX:
 			{
-				RefAdaAST tmp196_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp196_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp196_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp196_AST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp196_AST.get()));
 				}
 				match(BOX);
 				break;
@@ -6999,7 +6999,7 @@ void AdaParser::index_or_discrete_range() {
 			{
 				range();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -7022,7 +7022,7 @@ void AdaParser::index_or_discrete_range() {
 		}
 		}
 		}
-		index_or_discrete_range_AST = static_cast<RefAdaAST>(currentAST.root);
+		index_or_discrete_range_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7037,19 +7037,19 @@ void AdaParser::index_or_discrete_range() {
 }
 
 void AdaParser::aliased_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST aliased_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST aliased_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case ALIASED:
 		{
-			RefAdaAST tmp197_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp197_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp197_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp197_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp197_AST.get()));
 			}
 			match(ALIASED);
 			break;
@@ -7067,17 +7067,17 @@ void AdaParser::aliased_opt() {
 		if ( inputState->guessing==0 ) {
 			aliased_opt_AST = RefAdaAST(currentAST.root);
 #line 675 "ada.g"
-			aliased_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(aliased_opt_AST))));
+			aliased_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(aliased_opt_AST.get()))));
 #line 7072 "AdaParser.cpp"
 			currentAST.root = aliased_opt_AST;
-			if ( aliased_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				aliased_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( aliased_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				aliased_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = aliased_opt_AST->getFirstChild();
 			else
 				currentAST.child = aliased_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		aliased_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		aliased_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7092,9 +7092,9 @@ void AdaParser::aliased_opt() {
 }
 
 void AdaParser::constraint_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST constraint_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST constraint_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -7103,7 +7103,7 @@ void AdaParser::constraint_opt() {
 		{
 			range_constraint();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -7111,7 +7111,7 @@ void AdaParser::constraint_opt() {
 		{
 			digits_constraint();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -7119,7 +7119,7 @@ void AdaParser::constraint_opt() {
 		{
 			delta_constraint();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -7152,13 +7152,13 @@ void AdaParser::constraint_opt() {
 			if ( synPredMatched213 ) {
 				index_constraint();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else if ((LA(1) == LPAREN) && (_tokenSet_5.member(LA(2)))) {
 				discriminant_constraint();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 		else {
@@ -7166,7 +7166,7 @@ void AdaParser::constraint_opt() {
 		}
 		}
 		}
-		constraint_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		constraint_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7181,33 +7181,33 @@ void AdaParser::constraint_opt() {
 }
 
 void AdaParser::digits_constraint() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST digits_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST digits_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  d = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST d_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST d_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		d = LT(1);
 		if ( inputState->guessing == 0 ) {
 			d_AST = astFactory->create(d);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(d_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(d_AST.get()));
 		}
 		match(DIGITS);
 		expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		range_constraint_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 692 "ada.g"
 			Set(d_AST, DIGITS_CONSTRAINT);
 #line 7209 "AdaParser.cpp"
 		}
-		digits_constraint_AST = static_cast<RefAdaAST>(currentAST.root);
+		digits_constraint_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7222,33 +7222,33 @@ void AdaParser::digits_constraint() {
 }
 
 void AdaParser::delta_constraint() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST delta_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST delta_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  d = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST d_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST d_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		d = LT(1);
 		if ( inputState->guessing == 0 ) {
 			d_AST = astFactory->create(d);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(d_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(d_AST.get()));
 		}
 		match(DELTA);
 		expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		range_constraint_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 696 "ada.g"
 			Set(d_AST, DELTA_CONSTRAINT);
 #line 7250 "AdaParser.cpp"
 		}
-		delta_constraint_AST = static_cast<RefAdaAST>(currentAST.root);
+		delta_constraint_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7263,22 +7263,22 @@ void AdaParser::delta_constraint() {
 }
 
 void AdaParser::index_constraint() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST index_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST index_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		p = LT(1);
 		if ( inputState->guessing == 0 ) {
 			p_AST = astFactory->create(p);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 		}
 		match(LPAREN);
 		discrete_range();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -7286,7 +7286,7 @@ void AdaParser::index_constraint() {
 				match(COMMA);
 				discrete_range();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -7302,7 +7302,7 @@ void AdaParser::index_constraint() {
 			Set(p_AST, INDEX_CONSTRAINT);
 #line 7304 "AdaParser.cpp"
 		}
-		index_constraint_AST = static_cast<RefAdaAST>(currentAST.root);
+		index_constraint_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7317,22 +7317,22 @@ void AdaParser::index_constraint() {
 }
 
 void AdaParser::discriminant_constraint() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discriminant_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discriminant_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		p = LT(1);
 		if ( inputState->guessing == 0 ) {
 			p_AST = astFactory->create(p);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 		}
 		match(LPAREN);
 		discriminant_association();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -7340,7 +7340,7 @@ void AdaParser::discriminant_constraint() {
 				match(COMMA);
 				discriminant_association();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -7356,7 +7356,7 @@ void AdaParser::discriminant_constraint() {
 			Set(p_AST, DISCRIMINANT_CONSTRAINT);
 #line 7358 "AdaParser.cpp"
 		}
-		discriminant_constraint_AST = static_cast<RefAdaAST>(currentAST.root);
+		discriminant_constraint_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7371,9 +7371,9 @@ void AdaParser::discriminant_constraint() {
 }
 
 void AdaParser::discrete_range() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discrete_range_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discrete_range_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		bool synPredMatched221 = false;
@@ -7395,16 +7395,16 @@ void AdaParser::discrete_range() {
 		if ( synPredMatched221 ) {
 			range();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			discrete_range_AST = static_cast<RefAdaAST>(currentAST.root);
+			discrete_range_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if ((LA(1) == IDENTIFIER) && (_tokenSet_67.member(LA(2)))) {
 			subtype_ind();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			discrete_range_AST = static_cast<RefAdaAST>(currentAST.root);
+			discrete_range_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -7424,34 +7424,34 @@ void AdaParser::discrete_range() {
 }
 
 void AdaParser::discriminant_association() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discriminant_association_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discriminant_association_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		selector_names_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			discriminant_association_AST = RefAdaAST(currentAST.root);
 #line 714 "ada.g"
 			discriminant_association_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIMINANT_ASSOCIATION,"DISCRIMINANT_ASSOCIATION")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discriminant_association_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DISCRIMINANT_ASSOCIATION,"DISCRIMINANT_ASSOCIATION").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(discriminant_association_AST.get()))));
 #line 7446 "AdaParser.cpp"
 			currentAST.root = discriminant_association_AST;
-			if ( discriminant_association_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				discriminant_association_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( discriminant_association_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				discriminant_association_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = discriminant_association_AST->getFirstChild();
 			else
 				currentAST.child = discriminant_association_AST;
 			currentAST.advanceChildToEnd();
 		}
-		discriminant_association_AST = static_cast<RefAdaAST>(currentAST.root);
+		discriminant_association_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7466,9 +7466,9 @@ void AdaParser::discriminant_association() {
 }
 
 void AdaParser::selector_names_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST selector_names_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST selector_names_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -7491,7 +7491,7 @@ void AdaParser::selector_names_opt() {
 		if ( synPredMatched229 ) {
 			association_head();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 		}
 		else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_6.member(LA(2)))) {
@@ -7505,17 +7505,17 @@ void AdaParser::selector_names_opt() {
 			selector_names_opt_AST = RefAdaAST(currentAST.root);
 #line 722 "ada.g"
 			selector_names_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(SELECTOR_NAMES_OPT,"SELECTOR_NAMES_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(selector_names_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(SELECTOR_NAMES_OPT,"SELECTOR_NAMES_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(selector_names_opt_AST.get()))));
 #line 7510 "AdaParser.cpp"
 			currentAST.root = selector_names_opt_AST;
-			if ( selector_names_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				selector_names_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( selector_names_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				selector_names_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = selector_names_opt_AST->getFirstChild();
 			else
 				currentAST.child = selector_names_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		selector_names_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		selector_names_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7530,14 +7530,14 @@ void AdaParser::selector_names_opt() {
 }
 
 void AdaParser::association_head() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST association_head_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST association_head_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		selector_name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -7545,7 +7545,7 @@ void AdaParser::association_head() {
 				match(PIPE);
 				selector_name();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -7556,7 +7556,7 @@ void AdaParser::association_head() {
 		_loop232:;
 		} // ( ... )*
 		match(RIGHT_SHAFT);
-		association_head_AST = static_cast<RefAdaAST>(currentAST.root);
+		association_head_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7571,18 +7571,18 @@ void AdaParser::association_head() {
 }
 
 void AdaParser::selector_name() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST selector_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST selector_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		RefAdaAST tmp204_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp204_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp204_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp204_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp204_AST.get()));
 		}
 		match(IDENTIFIER);
-		selector_name_AST = static_cast<RefAdaAST>(currentAST.root);
+		selector_name_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7597,19 +7597,19 @@ void AdaParser::selector_name() {
 }
 
 void AdaParser::protected_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST protected_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST protected_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case PROTECTED:
 		{
-			RefAdaAST tmp205_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp205_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp205_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp205_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp205_AST.get()));
 			}
 			match(PROTECTED);
 			break;
@@ -7628,17 +7628,17 @@ void AdaParser::protected_opt() {
 		if ( inputState->guessing==0 ) {
 			protected_opt_AST = RefAdaAST(currentAST.root);
 #line 747 "ada.g"
-			protected_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(protected_opt_AST))));
+			protected_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(protected_opt_AST.get()))));
 #line 7633 "AdaParser.cpp"
 			currentAST.root = protected_opt_AST;
-			if ( protected_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				protected_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( protected_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				protected_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = protected_opt_AST->getFirstChild();
 			else
 				currentAST.child = protected_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		protected_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		protected_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7653,29 +7653,29 @@ void AdaParser::protected_opt() {
 }
 
 void AdaParser::constant_all_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST constant_all_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST constant_all_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case CONSTANT:
 		{
-			RefAdaAST tmp206_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp206_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp206_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp206_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp206_AST.get()));
 			}
 			match(CONSTANT);
 			break;
 		}
 		case ALL:
 		{
-			RefAdaAST tmp207_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp207_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp207_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp207_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp207_AST.get()));
 			}
 			match(ALL);
 			break;
@@ -7694,17 +7694,17 @@ void AdaParser::constant_all_opt() {
 			constant_all_opt_AST = RefAdaAST(currentAST.root);
 #line 751 "ada.g"
 			constant_all_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(constant_all_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(constant_all_opt_AST.get()))));
 #line 7699 "AdaParser.cpp"
 			currentAST.root = constant_all_opt_AST;
-			if ( constant_all_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				constant_all_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( constant_all_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				constant_all_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = constant_all_opt_AST->getFirstChild();
 			else
 				currentAST.child = constant_all_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		constant_all_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		constant_all_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7719,19 +7719,19 @@ void AdaParser::constant_all_opt() {
 }
 
 void AdaParser::abstract_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST abstract_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST abstract_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case ABSTRACT:
 		{
-			RefAdaAST tmp208_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp208_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp208_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp208_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp208_AST.get()));
 			}
 			match(ABSTRACT);
 			break;
@@ -7749,17 +7749,17 @@ void AdaParser::abstract_opt() {
 		if ( inputState->guessing==0 ) {
 			abstract_opt_AST = RefAdaAST(currentAST.root);
 #line 771 "ada.g"
-			abstract_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(abstract_opt_AST))));
+			abstract_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(abstract_opt_AST.get()))));
 #line 7754 "AdaParser.cpp"
 			currentAST.root = abstract_opt_AST;
-			if ( abstract_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				abstract_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( abstract_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				abstract_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = abstract_opt_AST->getFirstChild();
 			else
 				currentAST.child = abstract_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		abstract_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		abstract_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7776,9 +7776,9 @@ void AdaParser::abstract_opt() {
 void AdaParser::record_definition(
 	bool has_discrim
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST record_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST record_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -7787,18 +7787,18 @@ void AdaParser::record_definition(
 			match(RECORD);
 			component_list(has_discrim);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(END);
 			match(RECORD);
-			record_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+			record_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case NuLL:
 		{
 			match(NuLL);
 			match(RECORD);
-			record_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+			record_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -7820,19 +7820,19 @@ void AdaParser::record_definition(
 }
 
 void AdaParser::abstract_tagged_limited_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST abstract_tagged_limited_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST abstract_tagged_limited_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case ABSTRACT:
 		{
-			RefAdaAST tmp214_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp214_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp214_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp214_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp214_AST.get()));
 			}
 			match(ABSTRACT);
 			match(TAGGED);
@@ -7840,10 +7840,10 @@ void AdaParser::abstract_tagged_limited_opt() {
 		}
 		case TAGGED:
 		{
-			RefAdaAST tmp216_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp216_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp216_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp216_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp216_AST.get()));
 			}
 			match(TAGGED);
 			break;
@@ -7865,10 +7865,10 @@ void AdaParser::abstract_tagged_limited_opt() {
 		switch ( LA(1)) {
 		case LIMITED:
 		{
-			RefAdaAST tmp217_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp217_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp217_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp217_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp217_AST.get()));
 			}
 			match(LIMITED);
 			break;
@@ -7889,17 +7889,17 @@ void AdaParser::abstract_tagged_limited_opt() {
 			abstract_tagged_limited_opt_AST = RefAdaAST(currentAST.root);
 #line 833 "ada.g"
 			abstract_tagged_limited_opt_AST =
-				  RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(abstract_tagged_limited_opt_AST))));
+				  RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(abstract_tagged_limited_opt_AST.get()))));
 #line 7894 "AdaParser.cpp"
 			currentAST.root = abstract_tagged_limited_opt_AST;
-			if ( abstract_tagged_limited_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				abstract_tagged_limited_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( abstract_tagged_limited_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				abstract_tagged_limited_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = abstract_tagged_limited_opt_AST->getFirstChild();
 			else
 				currentAST.child = abstract_tagged_limited_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		abstract_tagged_limited_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		abstract_tagged_limited_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -7916,9 +7916,9 @@ void AdaParser::abstract_tagged_limited_opt() {
 void AdaParser::component_list(
 	bool has_discrim
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST component_list_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST component_list_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -7926,7 +7926,7 @@ void AdaParser::component_list(
 		{
 			match(NuLL);
 			match(SEMI);
-			component_list_AST = static_cast<RefAdaAST>(currentAST.root);
+			component_list_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case PRAGMA:
@@ -7934,7 +7934,7 @@ void AdaParser::component_list(
 		{
 			component_items();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -7942,7 +7942,7 @@ void AdaParser::component_list(
 			{
 				variant_part();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if (!( has_discrim ))
 					throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" has_discrim ");
@@ -7959,22 +7959,22 @@ void AdaParser::component_list(
 			}
 			}
 			}
-			component_list_AST = static_cast<RefAdaAST>(currentAST.root);
+			component_list_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case CASE:
 		{
 			empty_component_items();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			variant_part();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if (!( has_discrim ))
 				throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" has_discrim ");
-			component_list_AST = static_cast<RefAdaAST>(currentAST.root);
+			component_list_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -7996,9 +7996,9 @@ void AdaParser::component_list(
 }
 
 void AdaParser::component_items() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST component_items_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST component_items_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )+
@@ -8009,7 +8009,7 @@ void AdaParser::component_items() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -8017,7 +8017,7 @@ void AdaParser::component_items() {
 			{
 				comp_decl();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -8034,17 +8034,17 @@ void AdaParser::component_items() {
 			component_items_AST = RefAdaAST(currentAST.root);
 #line 786 "ada.g"
 			component_items_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(COMPONENT_ITEMS,"COMPONENT_ITEMS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(component_items_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(COMPONENT_ITEMS,"COMPONENT_ITEMS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(component_items_AST.get()))));
 #line 8039 "AdaParser.cpp"
 			currentAST.root = component_items_AST;
-			if ( component_items_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				component_items_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( component_items_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				component_items_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = component_items_AST->getFirstChild();
 			else
 				currentAST.child = component_items_AST;
 			currentAST.advanceChildToEnd();
 		}
-		component_items_AST = static_cast<RefAdaAST>(currentAST.root);
+		component_items_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8059,27 +8059,27 @@ void AdaParser::component_items() {
 }
 
 void AdaParser::variant_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST variant_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST variant_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  c = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST c_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST c_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		c = LT(1);
 		if ( inputState->guessing == 0 ) {
 			c_AST = astFactory->create(c);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(c_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(c_AST.get()));
 		}
 		match(CASE);
 		discriminant_direct_name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(IS);
 		variant_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(END);
 		match(CASE);
@@ -8089,7 +8089,7 @@ void AdaParser::variant_part() {
 			Set (c_AST, VARIANT_PART);
 #line 8091 "AdaParser.cpp"
 		}
-		variant_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		variant_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8104,26 +8104,26 @@ void AdaParser::variant_part() {
 }
 
 void AdaParser::empty_component_items() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST empty_component_items_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST empty_component_items_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		if ( inputState->guessing==0 ) {
 			empty_component_items_AST = RefAdaAST(currentAST.root);
 #line 792 "ada.g"
 			empty_component_items_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(COMPONENT_ITEMS,"COMPONENT_ITEMS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(empty_component_items_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(COMPONENT_ITEMS,"COMPONENT_ITEMS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(empty_component_items_AST.get()))));
 #line 8118 "AdaParser.cpp"
 			currentAST.root = empty_component_items_AST;
-			if ( empty_component_items_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				empty_component_items_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( empty_component_items_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				empty_component_items_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = empty_component_items_AST->getFirstChild();
 			else
 				currentAST.child = empty_component_items_AST;
 			currentAST.advanceChildToEnd();
 		}
-		empty_component_items_AST = static_cast<RefAdaAST>(currentAST.root);
+		empty_component_items_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8138,18 +8138,18 @@ void AdaParser::empty_component_items() {
 }
 
 void AdaParser::discriminant_direct_name() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discriminant_direct_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discriminant_direct_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		RefAdaAST tmp224_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp224_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp224_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp224_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp224_AST.get()));
 		}
 		match(IDENTIFIER);
-		discriminant_direct_name_AST = static_cast<RefAdaAST>(currentAST.root);
+		discriminant_direct_name_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8164,9 +8164,9 @@ void AdaParser::discriminant_direct_name() {
 }
 
 void AdaParser::variant_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST variant_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST variant_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )+
@@ -8175,7 +8175,7 @@ void AdaParser::variant_s() {
 			if ((LA(1) == WHEN)) {
 				variant();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -8189,17 +8189,17 @@ void AdaParser::variant_s() {
 		if ( inputState->guessing==0 ) {
 			variant_s_AST = RefAdaAST(currentAST.root);
 #line 805 "ada.g"
-			variant_s_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(VARIANTS,"VARIANTS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(variant_s_AST))));
+			variant_s_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(VARIANTS,"VARIANTS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(variant_s_AST.get()))));
 #line 8194 "AdaParser.cpp"
 			currentAST.root = variant_s_AST;
-			if ( variant_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				variant_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( variant_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				variant_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = variant_s_AST->getFirstChild();
 			else
 				currentAST.child = variant_s_AST;
 			currentAST.advanceChildToEnd();
 		}
-		variant_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		variant_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8214,34 +8214,34 @@ void AdaParser::variant_s() {
 }
 
 void AdaParser::variant() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST variant_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST variant_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  w = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST w_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST w_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		w = LT(1);
 		if ( inputState->guessing == 0 ) {
 			w_AST = astFactory->create(w);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(w_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(w_AST.get()));
 		}
 		match(WHEN);
 		choice_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(RIGHT_SHAFT);
 		component_list(true);
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 809 "ada.g"
 			Set (w_AST, VARIANT);
 #line 8243 "AdaParser.cpp"
 		}
-		variant_AST = static_cast<RefAdaAST>(currentAST.root);
+		variant_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8256,27 +8256,27 @@ void AdaParser::variant() {
 }
 
 void AdaParser::choice_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST choice_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST choice_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		choice();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
 			if ((LA(1) == PIPE)) {
-				RefAdaAST tmp226_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp226_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp226_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp226_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp226_AST.get()));
 				}
 				match(PIPE);
 				choice();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -8286,7 +8286,7 @@ void AdaParser::choice_s() {
 		}
 		_loop264:;
 		} // ( ... )*
-		choice_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		choice_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8301,19 +8301,19 @@ void AdaParser::choice_s() {
 }
 
 void AdaParser::choice() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST choice_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST choice_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		if ((LA(1) == OTHERS)) {
-			RefAdaAST tmp227_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp227_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp227_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp227_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp227_AST.get()));
 			}
 			match(OTHERS);
-			choice_AST = static_cast<RefAdaAST>(currentAST.root);
+			choice_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else {
 			bool synPredMatched267 = false;
@@ -8335,16 +8335,16 @@ void AdaParser::choice() {
 			if ( synPredMatched267 ) {
 				discrete_with_range();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
-				choice_AST = static_cast<RefAdaAST>(currentAST.root);
+				choice_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			}
 			else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_78.member(LA(2)))) {
 				expression();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
-				choice_AST = static_cast<RefAdaAST>(currentAST.root);
+				choice_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -8364,9 +8364,9 @@ void AdaParser::choice() {
 }
 
 void AdaParser::discrete_with_range() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discrete_with_range_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discrete_with_range_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		bool synPredMatched270 = false;
@@ -8388,16 +8388,16 @@ void AdaParser::discrete_with_range() {
 		if ( synPredMatched270 ) {
 			mark_with_constraint();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			discrete_with_range_AST = static_cast<RefAdaAST>(currentAST.root);
+			discrete_with_range_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if ((_tokenSet_5.member(LA(1))) && (_tokenSet_33.member(LA(2)))) {
 			range();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			discrete_with_range_AST = static_cast<RefAdaAST>(currentAST.root);
+			discrete_with_range_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -8417,34 +8417,34 @@ void AdaParser::discrete_with_range() {
 }
 
 void AdaParser::mark_with_constraint() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST mark_with_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST mark_with_constraint_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		subtype_mark();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		range_constraint();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			mark_with_constraint_AST = RefAdaAST(currentAST.root);
 #line 825 "ada.g"
 			mark_with_constraint_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MARK_WITH_CONSTRAINT,"MARK_WITH_CONSTRAINT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(mark_with_constraint_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MARK_WITH_CONSTRAINT,"MARK_WITH_CONSTRAINT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(mark_with_constraint_AST.get()))));
 #line 8439 "AdaParser.cpp"
 			currentAST.root = mark_with_constraint_AST;
-			if ( mark_with_constraint_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				mark_with_constraint_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( mark_with_constraint_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				mark_with_constraint_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = mark_with_constraint_AST->getFirstChild();
 			else
 				currentAST.child = mark_with_constraint_AST;
 			currentAST.advanceChildToEnd();
 		}
-		mark_with_constraint_AST = static_cast<RefAdaAST>(currentAST.root);
+		mark_with_constraint_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8459,9 +8459,9 @@ void AdaParser::mark_with_constraint() {
 }
 
 void AdaParser::generic_formal_part_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST generic_formal_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST generic_formal_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -8471,7 +8471,7 @@ void AdaParser::generic_formal_part_opt() {
 			{
 				use_clause();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -8479,7 +8479,7 @@ void AdaParser::generic_formal_part_opt() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -8489,7 +8489,7 @@ void AdaParser::generic_formal_part_opt() {
 			{
 				generic_formal_parameter();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -8505,17 +8505,17 @@ void AdaParser::generic_formal_part_opt() {
 			generic_formal_part_opt_AST = RefAdaAST(currentAST.root);
 #line 871 "ada.g"
 			generic_formal_part_opt_AST =
-						RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(GENERIC_FORMAL_PART,"GENERIC_FORMAL_PART")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(generic_formal_part_opt_AST))));
+						RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(GENERIC_FORMAL_PART,"GENERIC_FORMAL_PART").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(generic_formal_part_opt_AST.get()))));
 #line 8510 "AdaParser.cpp"
 			currentAST.root = generic_formal_part_opt_AST;
-			if ( generic_formal_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				generic_formal_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( generic_formal_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				generic_formal_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = generic_formal_part_opt_AST->getFirstChild();
 			else
 				currentAST.child = generic_formal_part_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		generic_formal_part_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		generic_formal_part_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8530,13 +8530,13 @@ void AdaParser::generic_formal_part_opt() {
 }
 
 void AdaParser::generic_formal_parameter() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST generic_formal_parameter_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST generic_formal_parameter_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  t = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST t_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST t_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  w = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST w_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST w_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -8546,12 +8546,12 @@ void AdaParser::generic_formal_parameter() {
 			t = LT(1);
 			if ( inputState->guessing == 0 ) {
 				t_AST = astFactory->create(t);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(t_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(t_AST.get()));
 			}
 			match(TYPE);
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -8643,7 +8643,7 @@ void AdaParser::generic_formal_parameter() {
 				{
 					array_type_definition(t_AST);
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -8651,7 +8651,7 @@ void AdaParser::generic_formal_parameter() {
 				{
 					access_type_definition(t_AST);
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -8663,11 +8663,11 @@ void AdaParser::generic_formal_parameter() {
 				{
 					empty_discrim_opt();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					discriminable_type_definition(t_AST);
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -8683,12 +8683,12 @@ void AdaParser::generic_formal_parameter() {
 			{
 				discrim_part();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(IS);
 				discriminable_type_definition(t_AST);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -8710,7 +8710,7 @@ void AdaParser::generic_formal_parameter() {
 			w = LT(1);
 			if ( inputState->guessing == 0 ) {
 				w_AST = astFactory->create(w);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(w_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(w_AST.get()));
 			}
 			match(WITH);
 			{
@@ -8720,15 +8720,15 @@ void AdaParser::generic_formal_parameter() {
 				match(PROCEDURE);
 				def_id(false);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				formal_part_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				subprogram_default_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 901 "ada.g"
@@ -8742,15 +8742,15 @@ void AdaParser::generic_formal_parameter() {
 				match(FUNCTION);
 				def_designator(false);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				function_tail();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				subprogram_default_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 903 "ada.g"
@@ -8764,17 +8764,17 @@ void AdaParser::generic_formal_parameter() {
 				match(PACKAGE);
 				def_id(false);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(IS);
 				match(NEW);
 				compound_name();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				formal_package_actual_part_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 905 "ada.g"
@@ -8800,7 +8800,7 @@ void AdaParser::generic_formal_parameter() {
 		{
 			parameter_specification();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -8811,7 +8811,7 @@ void AdaParser::generic_formal_parameter() {
 		}
 		}
 		match(SEMI);
-		generic_formal_parameter_AST = static_cast<RefAdaAST>(currentAST.root);
+		generic_formal_parameter_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8828,9 +8828,9 @@ void AdaParser::generic_formal_parameter() {
 void AdaParser::discriminable_type_definition(
 	RefAdaAST t
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST discriminable_type_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST discriminable_type_definition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		bool synPredMatched297 = false;
@@ -8871,12 +8871,12 @@ void AdaParser::discriminable_type_definition(
 		if ( synPredMatched297 ) {
 			abstract_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(NEW);
 			subtype_ind();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(WITH);
 			match(PRIVATE);
@@ -8885,25 +8885,25 @@ void AdaParser::discriminable_type_definition(
 				Set (t, FORMAL_PRIVATE_EXTENSION_DECLARATION);
 #line 8887 "AdaParser.cpp"
 			}
-			discriminable_type_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+			discriminable_type_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if ((LA(1) == NEW) && (LA(2) == IDENTIFIER)) {
 			match(NEW);
 			subtype_ind();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 918 "ada.g"
 				Set (t, FORMAL_ORDINARY_DERIVED_TYPE_DECLARATION);
 #line 8900 "AdaParser.cpp"
 			}
-			discriminable_type_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+			discriminable_type_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if ((_tokenSet_81.member(LA(1))) && (_tokenSet_82.member(LA(2)))) {
 			abstract_tagged_limited_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(PRIVATE);
 			if ( inputState->guessing==0 ) {
@@ -8911,7 +8911,7 @@ void AdaParser::discriminable_type_definition(
 				Set (t, FORMAL_PRIVATE_TYPE_DECLARATION);
 #line 8913 "AdaParser.cpp"
 			}
-			discriminable_type_definition_AST = static_cast<RefAdaAST>(currentAST.root);
+			discriminable_type_definition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -8931,9 +8931,9 @@ void AdaParser::discriminable_type_definition(
 }
 
 void AdaParser::subprogram_default_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST subprogram_default_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST subprogram_default_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -8945,10 +8945,10 @@ void AdaParser::subprogram_default_opt() {
 			switch ( LA(1)) {
 			case BOX:
 			{
-				RefAdaAST tmp255_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp255_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp255_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp255_AST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp255_AST.get()));
 				}
 				match(BOX);
 				break;
@@ -8957,7 +8957,7 @@ void AdaParser::subprogram_default_opt() {
 			{
 				name();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -8979,7 +8979,7 @@ void AdaParser::subprogram_default_opt() {
 		}
 		}
 		}
-		subprogram_default_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		subprogram_default_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -8994,9 +8994,9 @@ void AdaParser::subprogram_default_opt() {
 }
 
 void AdaParser::formal_package_actual_part_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST formal_package_actual_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST formal_package_actual_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -9008,10 +9008,10 @@ void AdaParser::formal_package_actual_part_opt() {
 			switch ( LA(1)) {
 			case BOX:
 			{
-				RefAdaAST tmp257_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp257_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp257_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp257_AST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp257_AST.get()));
 				}
 				match(BOX);
 				break;
@@ -9020,7 +9020,7 @@ void AdaParser::formal_package_actual_part_opt() {
 			{
 				defining_identifier_list();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9043,7 +9043,7 @@ void AdaParser::formal_package_actual_part_opt() {
 		}
 		}
 		}
-		formal_package_actual_part_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		formal_package_actual_part_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9058,21 +9058,21 @@ void AdaParser::formal_package_actual_part_opt() {
 }
 
 void AdaParser::body_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST body_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST body_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		declarative_part();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		block_body();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		end_id_opt();
-		body_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		body_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9087,9 +9087,9 @@ void AdaParser::body_part() {
 }
 
 void AdaParser::declarative_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST declarative_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST declarative_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -9099,7 +9099,7 @@ void AdaParser::declarative_part() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9117,7 +9117,7 @@ void AdaParser::declarative_part() {
 			{
 				declarative_item();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9133,17 +9133,17 @@ void AdaParser::declarative_part() {
 			declarative_part_AST = RefAdaAST(currentAST.root);
 #line 964 "ada.g"
 			declarative_part_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DECLARATIVE_PART,"DECLARATIVE_PART")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(declarative_part_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DECLARATIVE_PART,"DECLARATIVE_PART").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(declarative_part_AST.get()))));
 #line 9138 "AdaParser.cpp"
 			currentAST.root = declarative_part_AST;
-			if ( declarative_part_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				declarative_part_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( declarative_part_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				declarative_part_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = declarative_part_AST->getFirstChild();
 			else
 				currentAST.child = declarative_part_AST;
 			currentAST.advanceChildToEnd();
 		}
-		declarative_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		declarative_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9158,29 +9158,29 @@ void AdaParser::declarative_part() {
 }
 
 void AdaParser::block_body() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST block_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST block_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  b = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST b_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST b_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		b = LT(1);
 		if ( inputState->guessing == 0 ) {
 			b_AST = astFactory->create(b);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(b_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(b_AST.get()));
 		}
 		match(BEGIN);
 		handled_stmt_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 1044 "ada.g"
 			Set(b_AST, BLOCK_BODY);
 #line 9182 "AdaParser.cpp"
 		}
-		block_body_AST = static_cast<RefAdaAST>(currentAST.root);
+		block_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9195,15 +9195,15 @@ void AdaParser::block_body() {
 }
 
 void AdaParser::declarative_item() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST declarative_item_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST declarative_item_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  pkg = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST pkg_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pkg_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  tsk = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST tsk_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST tsk_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  pro = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST pro_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST pro_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -9213,7 +9213,7 @@ void AdaParser::declarative_item() {
 			pkg = LT(1);
 			if ( inputState->guessing == 0 ) {
 				pkg_AST = astFactory->create(pkg);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pkg_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pkg_AST.get()));
 			}
 			match(PACKAGE);
 			{
@@ -9222,7 +9222,7 @@ void AdaParser::declarative_item() {
 			{
 				body_is();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{
 				switch ( LA(1)) {
@@ -9230,7 +9230,7 @@ void AdaParser::declarative_item() {
 				{
 					separate();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 972 "ada.g"
@@ -9256,7 +9256,7 @@ void AdaParser::declarative_item() {
 				{
 					pkg_body_part();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					end_id_opt();
 					if ( inputState->guessing==0 ) {
@@ -9279,11 +9279,11 @@ void AdaParser::declarative_item() {
 			{
 				def_id(false);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				spec_decl_part(pkg_AST);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9300,7 +9300,7 @@ void AdaParser::declarative_item() {
 			tsk = LT(1);
 			if ( inputState->guessing == 0 ) {
 				tsk_AST = astFactory->create(tsk);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tsk_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tsk_AST.get()));
 			}
 			match(TASK);
 			{
@@ -9309,7 +9309,7 @@ void AdaParser::declarative_item() {
 			{
 				body_is();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{
 				switch ( LA(1)) {
@@ -9317,7 +9317,7 @@ void AdaParser::declarative_item() {
 				{
 					separate();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 980 "ada.g"
@@ -9342,7 +9342,7 @@ void AdaParser::declarative_item() {
 				{
 					body_part();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 981 "ada.g"
@@ -9365,7 +9365,7 @@ void AdaParser::declarative_item() {
 			{
 				task_type_or_single_decl(tsk_AST);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9382,7 +9382,7 @@ void AdaParser::declarative_item() {
 			pro = LT(1);
 			if ( inputState->guessing == 0 ) {
 				pro_AST = astFactory->create(pro);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pro_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(pro_AST.get()));
 			}
 			match(PROTECTED);
 			{
@@ -9391,7 +9391,7 @@ void AdaParser::declarative_item() {
 			{
 				body_is();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{
 				switch ( LA(1)) {
@@ -9399,7 +9399,7 @@ void AdaParser::declarative_item() {
 				{
 					separate();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					if ( inputState->guessing==0 ) {
 #line 988 "ada.g"
@@ -9416,7 +9416,7 @@ void AdaParser::declarative_item() {
 				{
 					prot_op_bodies_opt();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					end_id_opt();
 					if ( inputState->guessing==0 ) {
@@ -9439,7 +9439,7 @@ void AdaParser::declarative_item() {
 			{
 				prot_type_or_single_decl(pro_AST);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9457,7 +9457,7 @@ void AdaParser::declarative_item() {
 		{
 			subprog_decl_or_rename_or_inst_or_body(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -9470,7 +9470,7 @@ void AdaParser::declarative_item() {
 		{
 			decl_common();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -9480,7 +9480,7 @@ void AdaParser::declarative_item() {
 		}
 		}
 		}
-		declarative_item_AST = static_cast<RefAdaAST>(currentAST.root);
+		declarative_item_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9495,18 +9495,18 @@ void AdaParser::declarative_item() {
 }
 
 void AdaParser::body_is() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST body_is_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST body_is_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(BODY);
 		def_id(false);
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(IS);
-		body_is_AST = static_cast<RefAdaAST>(currentAST.root);
+		body_is_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9521,9 +9521,9 @@ void AdaParser::body_is() {
 }
 
 void AdaParser::separate() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST separate_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST separate_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(SEPARATE);
@@ -9532,7 +9532,7 @@ void AdaParser::separate() {
 			pop_def_id();
 #line 9534 "AdaParser.cpp"
 		}
-		separate_AST = static_cast<RefAdaAST>(currentAST.root);
+		separate_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9547,9 +9547,9 @@ void AdaParser::separate() {
 }
 
 void AdaParser::prot_op_bodies_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST prot_op_bodies_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST prot_op_bodies_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -9559,7 +9559,7 @@ void AdaParser::prot_op_bodies_opt() {
 			{
 				entry_body();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9568,7 +9568,7 @@ void AdaParser::prot_op_bodies_opt() {
 			{
 				subprog_decl_or_body();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9576,7 +9576,7 @@ void AdaParser::prot_op_bodies_opt() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9592,17 +9592,17 @@ void AdaParser::prot_op_bodies_opt() {
 			prot_op_bodies_opt_AST = RefAdaAST(currentAST.root);
 #line 1025 "ada.g"
 			prot_op_bodies_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PROT_OP_BODIES_OPT,"PROT_OP_BODIES_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(prot_op_bodies_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(PROT_OP_BODIES_OPT,"PROT_OP_BODIES_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(prot_op_bodies_opt_AST.get()))));
 #line 9597 "AdaParser.cpp"
 			currentAST.root = prot_op_bodies_opt_AST;
-			if ( prot_op_bodies_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				prot_op_bodies_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( prot_op_bodies_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				prot_op_bodies_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = prot_op_bodies_opt_AST->getFirstChild();
 			else
 				currentAST.child = prot_op_bodies_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		prot_op_bodies_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		prot_op_bodies_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9617,9 +9617,9 @@ void AdaParser::prot_op_bodies_opt() {
 }
 
 void AdaParser::block_body_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST block_body_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST block_body_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -9629,7 +9629,7 @@ void AdaParser::block_body_opt() {
 			match(BEGIN);
 			handled_stmt_s();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -9647,17 +9647,17 @@ void AdaParser::block_body_opt() {
 			block_body_opt_AST = RefAdaAST(currentAST.root);
 #line 1016 "ada.g"
 			block_body_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(BLOCK_BODY_OPT,"BLOCK_BODY_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(block_body_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(BLOCK_BODY_OPT,"BLOCK_BODY_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(block_body_opt_AST.get()))));
 #line 9652 "AdaParser.cpp"
 			currentAST.root = block_body_opt_AST;
-			if ( block_body_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				block_body_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( block_body_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				block_body_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = block_body_opt_AST->getFirstChild();
 			else
 				currentAST.child = block_body_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		block_body_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		block_body_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9672,34 +9672,34 @@ void AdaParser::block_body_opt() {
 }
 
 void AdaParser::handled_stmt_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST handled_stmt_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST handled_stmt_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		statements();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		except_handler_part_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			handled_stmt_s_AST = RefAdaAST(currentAST.root);
 #line 1048 "ada.g"
 			handled_stmt_s_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(HANDLED_SEQUENCE_OF_STATEMENTS,"HANDLED_SEQUENCE_OF_STATEMENTS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(handled_stmt_s_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(HANDLED_SEQUENCE_OF_STATEMENTS,"HANDLED_SEQUENCE_OF_STATEMENTS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(handled_stmt_s_AST.get()))));
 #line 9694 "AdaParser.cpp"
 			currentAST.root = handled_stmt_s_AST;
-			if ( handled_stmt_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				handled_stmt_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( handled_stmt_s_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				handled_stmt_s_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = handled_stmt_s_AST->getFirstChild();
 			else
 				currentAST.child = handled_stmt_s_AST;
 			currentAST.advanceChildToEnd();
 		}
-		handled_stmt_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		handled_stmt_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9714,35 +9714,35 @@ void AdaParser::handled_stmt_s() {
 }
 
 void AdaParser::entry_body() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entry_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entry_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  e = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST e_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST e_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		e = LT(1);
 		if ( inputState->guessing == 0 ) {
 			e_AST = astFactory->create(e);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(e_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(e_AST.get()));
 		}
 		match(ENTRY);
 		def_id(false);
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		entry_body_formal_part();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		entry_barrier();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(IS);
 		body_part();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
 		if ( inputState->guessing==0 ) {
@@ -9750,7 +9750,7 @@ void AdaParser::entry_body() {
 			Set (e_AST, ENTRY_BODY);
 #line 9752 "AdaParser.cpp"
 		}
-		entry_body_AST = static_cast<RefAdaAST>(currentAST.root);
+		entry_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9765,13 +9765,13 @@ void AdaParser::entry_body() {
 }
 
 void AdaParser::subprog_decl_or_body() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST subprog_decl_or_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST subprog_decl_or_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  f = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -9780,16 +9780,16 @@ void AdaParser::subprog_decl_or_body() {
 			p = LT(1);
 			if ( inputState->guessing == 0 ) {
 				p_AST = astFactory->create(p);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 			}
 			match(PROCEDURE);
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			formal_part_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -9798,7 +9798,7 @@ void AdaParser::subprog_decl_or_body() {
 				match(IS);
 				body_part();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 1032 "ada.g"
@@ -9823,7 +9823,7 @@ void AdaParser::subprog_decl_or_body() {
 			}
 			}
 			match(SEMI);
-			subprog_decl_or_body_AST = static_cast<RefAdaAST>(currentAST.root);
+			subprog_decl_or_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case FUNCTION:
@@ -9831,16 +9831,16 @@ void AdaParser::subprog_decl_or_body() {
 			f = LT(1);
 			if ( inputState->guessing == 0 ) {
 				f_AST = astFactory->create(f);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST.get()));
 			}
 			match(FUNCTION);
 			def_designator(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			function_tail();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -9849,7 +9849,7 @@ void AdaParser::subprog_decl_or_body() {
 				match(IS);
 				body_part();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 1037 "ada.g"
@@ -9874,7 +9874,7 @@ void AdaParser::subprog_decl_or_body() {
 			}
 			}
 			match(SEMI);
-			subprog_decl_or_body_AST = static_cast<RefAdaAST>(currentAST.root);
+			subprog_decl_or_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -9896,9 +9896,9 @@ void AdaParser::subprog_decl_or_body() {
 }
 
 void AdaParser::statements() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST statements_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST statements_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )+
@@ -9909,7 +9909,7 @@ void AdaParser::statements() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9935,7 +9935,7 @@ void AdaParser::statements() {
 			{
 				statement();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -9951,17 +9951,17 @@ void AdaParser::statements() {
 		if ( inputState->guessing==0 ) {
 			statements_AST = RefAdaAST(currentAST.root);
 #line 1054 "ada.g"
-			statements_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(SEQUENCE_OF_STATEMENTS,"SEQUENCE_OF_STATEMENTS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(statements_AST))));
+			statements_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(SEQUENCE_OF_STATEMENTS,"SEQUENCE_OF_STATEMENTS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(statements_AST.get()))));
 #line 9956 "AdaParser.cpp"
 			currentAST.root = statements_AST;
-			if ( statements_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				statements_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( statements_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				statements_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = statements_AST->getFirstChild();
 			else
 				currentAST.child = statements_AST;
 			currentAST.advanceChildToEnd();
 		}
-		statements_AST = static_cast<RefAdaAST>(currentAST.root);
+		statements_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -9976,9 +9976,9 @@ void AdaParser::statements() {
 }
 
 void AdaParser::except_handler_part_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST except_handler_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST except_handler_part_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -9992,7 +9992,7 @@ void AdaParser::except_handler_part_opt() {
 				if ((LA(1) == WHEN)) {
 					exception_handler();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 				}
 				else {
@@ -10019,17 +10019,17 @@ void AdaParser::except_handler_part_opt() {
 			except_handler_part_opt_AST = RefAdaAST(currentAST.root);
 #line 1340 "ada.g"
 			except_handler_part_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(EXCEPT_HANDLER_PART_OPT,"EXCEPT_HANDLER_PART_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(except_handler_part_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(EXCEPT_HANDLER_PART_OPT,"EXCEPT_HANDLER_PART_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(except_handler_part_opt_AST.get()))));
 #line 10024 "AdaParser.cpp"
 			currentAST.root = except_handler_part_opt_AST;
-			if ( except_handler_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				except_handler_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( except_handler_part_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				except_handler_part_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = except_handler_part_opt_AST->getFirstChild();
 			else
 				currentAST.child = except_handler_part_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		except_handler_part_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		except_handler_part_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10044,14 +10044,14 @@ void AdaParser::except_handler_part_opt() {
 }
 
 void AdaParser::statement() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST statement_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST statement_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		def_label_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -10059,7 +10059,7 @@ void AdaParser::statement() {
 		{
 			null_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10067,7 +10067,7 @@ void AdaParser::statement() {
 		{
 			exit_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10075,7 +10075,7 @@ void AdaParser::statement() {
 		{
 			return_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10083,7 +10083,7 @@ void AdaParser::statement() {
 		{
 			goto_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10091,7 +10091,7 @@ void AdaParser::statement() {
 		{
 			delay_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10099,7 +10099,7 @@ void AdaParser::statement() {
 		{
 			abort_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10107,7 +10107,7 @@ void AdaParser::statement() {
 		{
 			raise_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10115,7 +10115,7 @@ void AdaParser::statement() {
 		{
 			requeue_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10123,7 +10123,7 @@ void AdaParser::statement() {
 		{
 			accept_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10131,7 +10131,7 @@ void AdaParser::statement() {
 		{
 			select_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10139,7 +10139,7 @@ void AdaParser::statement() {
 		{
 			if_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10147,7 +10147,7 @@ void AdaParser::statement() {
 		{
 			case_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10157,7 +10157,7 @@ void AdaParser::statement() {
 		{
 			loop_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(SEMI);
 			break;
@@ -10167,7 +10167,7 @@ void AdaParser::statement() {
 		{
 			block();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(END);
 			match(SEMI);
@@ -10177,7 +10177,7 @@ void AdaParser::statement() {
 			if ((LA(1) == IDENTIFIER) && (LA(2) == COLON)) {
 				statement_identifier();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				{
 				switch ( LA(1)) {
@@ -10187,7 +10187,7 @@ void AdaParser::statement() {
 				{
 					loop_stmt();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					id_opt();
 					match(SEMI);
@@ -10198,7 +10198,7 @@ void AdaParser::statement() {
 				{
 					block();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					end_id_opt();
 					match(SEMI);
@@ -10214,7 +10214,7 @@ void AdaParser::statement() {
 			else if ((LA(1) == IDENTIFIER) && (_tokenSet_88.member(LA(2)))) {
 				call_or_assignment();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 		else {
@@ -10225,17 +10225,17 @@ void AdaParser::statement() {
 		if ( inputState->guessing==0 ) {
 			statement_AST = RefAdaAST(currentAST.root);
 #line 1080 "ada.g"
-			statement_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(STATEMENT,"STATEMENT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(statement_AST))));
+			statement_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(STATEMENT,"STATEMENT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(statement_AST.get()))));
 #line 10230 "AdaParser.cpp"
 			currentAST.root = statement_AST;
-			if ( statement_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				statement_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( statement_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				statement_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = statement_AST->getFirstChild();
 			else
 				currentAST.child = statement_AST;
 			currentAST.advanceChildToEnd();
 		}
-		statement_AST = static_cast<RefAdaAST>(currentAST.root);
+		statement_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10250,9 +10250,9 @@ void AdaParser::statement() {
 }
 
 void AdaParser::def_label_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST def_label_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST def_label_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -10260,10 +10260,10 @@ void AdaParser::def_label_opt() {
 		case LT_LT:
 		{
 			match(LT_LT);
-			RefAdaAST tmp279_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp279_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp279_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp279_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp279_AST.get()));
 			}
 			match(IDENTIFIER);
 			match(GT_GT);
@@ -10299,17 +10299,17 @@ void AdaParser::def_label_opt() {
 		if ( inputState->guessing==0 ) {
 			def_label_opt_AST = RefAdaAST(currentAST.root);
 #line 1084 "ada.g"
-			def_label_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(LABEL_OPT,"LABEL_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(def_label_opt_AST))));
+			def_label_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(LABEL_OPT,"LABEL_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(def_label_opt_AST.get()))));
 #line 10304 "AdaParser.cpp"
 			currentAST.root = def_label_opt_AST;
-			if ( def_label_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				def_label_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( def_label_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				def_label_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = def_label_opt_AST->getFirstChild();
 			else
 				currentAST.child = def_label_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		def_label_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		def_label_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10324,17 +10324,17 @@ void AdaParser::def_label_opt() {
 }
 
 void AdaParser::null_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST null_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST null_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		s = LT(1);
 		if ( inputState->guessing == 0 ) {
 			s_AST = astFactory->create(s);
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 		}
 		match(NuLL);
 		match(SEMI);
@@ -10343,7 +10343,7 @@ void AdaParser::null_stmt() {
 			Set(s_AST, NULL_STATEMENT);
 #line 10345 "AdaParser.cpp"
 		}
-		null_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		null_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10358,17 +10358,17 @@ void AdaParser::null_stmt() {
 }
 
 void AdaParser::exit_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST exit_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST exit_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		s = LT(1);
 		if ( inputState->guessing == 0 ) {
 			s_AST = astFactory->create(s);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 		}
 		match(EXIT);
 		{
@@ -10377,7 +10377,7 @@ void AdaParser::exit_stmt() {
 		{
 			label_name();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10396,15 +10396,15 @@ void AdaParser::exit_stmt() {
 		switch ( LA(1)) {
 		case WHEN:
 		{
-			RefAdaAST tmp282_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp282_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp282_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp282_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp282_AST.get()));
 			}
 			match(WHEN);
 			condition();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10424,7 +10424,7 @@ void AdaParser::exit_stmt() {
 			Set(s_AST, EXIT_STATEMENT);
 #line 10426 "AdaParser.cpp"
 		}
-		exit_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		exit_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10439,17 +10439,17 @@ void AdaParser::exit_stmt() {
 }
 
 void AdaParser::return_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST return_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST return_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		s = LT(1);
 		if ( inputState->guessing == 0 ) {
 			s_AST = astFactory->create(s);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 		}
 		match(RETURN);
 		{
@@ -10468,7 +10468,7 @@ void AdaParser::return_stmt() {
 		{
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10488,7 +10488,7 @@ void AdaParser::return_stmt() {
 			Set(s_AST, RETURN_STATEMENT);
 #line 10490 "AdaParser.cpp"
 		}
-		return_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		return_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10503,22 +10503,22 @@ void AdaParser::return_stmt() {
 }
 
 void AdaParser::goto_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST goto_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST goto_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		s = LT(1);
 		if ( inputState->guessing == 0 ) {
 			s_AST = astFactory->create(s);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 		}
 		match(GOTO);
 		label_name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
 		if ( inputState->guessing==0 ) {
@@ -10526,7 +10526,7 @@ void AdaParser::goto_stmt() {
 			Set(s_AST, GOTO_STATEMENT);
 #line 10528 "AdaParser.cpp"
 		}
-		goto_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		goto_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10541,26 +10541,26 @@ void AdaParser::goto_stmt() {
 }
 
 void AdaParser::delay_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST delay_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST delay_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  d = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST d_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST d_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		d = LT(1);
 		if ( inputState->guessing == 0 ) {
 			d_AST = astFactory->create(d);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(d_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(d_AST.get()));
 		}
 		match(DELAY);
 		until_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
 		if ( inputState->guessing==0 ) {
@@ -10568,7 +10568,7 @@ void AdaParser::delay_stmt() {
 			Set (d_AST, DELAY_STATEMENT);
 #line 10570 "AdaParser.cpp"
 		}
-		delay_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		delay_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10583,22 +10583,22 @@ void AdaParser::delay_stmt() {
 }
 
 void AdaParser::abort_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST abort_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST abort_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  a = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST a_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST a_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		a = LT(1);
 		if ( inputState->guessing == 0 ) {
 			a_AST = astFactory->create(a);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(a_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(a_AST.get()));
 		}
 		match(ABORT);
 		name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
@@ -10606,7 +10606,7 @@ void AdaParser::abort_stmt() {
 				match(COMMA);
 				name();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -10622,7 +10622,7 @@ void AdaParser::abort_stmt() {
 			Set (a_AST, ABORT_STATEMENT);
 #line 10624 "AdaParser.cpp"
 		}
-		abort_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		abort_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10637,17 +10637,17 @@ void AdaParser::abort_stmt() {
 }
 
 void AdaParser::raise_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST raise_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST raise_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  r = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		r = LT(1);
 		if ( inputState->guessing == 0 ) {
 			r_AST = astFactory->create(r);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST.get()));
 		}
 		match(RAISE);
 		{
@@ -10656,7 +10656,7 @@ void AdaParser::raise_stmt() {
 		{
 			compound_name();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -10676,7 +10676,7 @@ void AdaParser::raise_stmt() {
 			Set (r_AST, RAISE_STATEMENT);
 #line 10678 "AdaParser.cpp"
 		}
-		raise_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		raise_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10691,32 +10691,32 @@ void AdaParser::raise_stmt() {
 }
 
 void AdaParser::requeue_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST requeue_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST requeue_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  r = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST r_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		r = LT(1);
 		if ( inputState->guessing == 0 ) {
 			r_AST = astFactory->create(r);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(r_AST.get()));
 		}
 		match(REQUEUE);
 		name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
 		case WITH:
 		{
 			match(WITH);
-			RefAdaAST tmp291_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp291_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp291_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp291_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp291_AST.get()));
 			}
 			match(ABORT);
 			break;
@@ -10737,7 +10737,7 @@ void AdaParser::requeue_stmt() {
 			Set (r_AST, REQUEUE_STATEMENT);
 #line 10739 "AdaParser.cpp"
 		}
-		requeue_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		requeue_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10752,30 +10752,30 @@ void AdaParser::requeue_stmt() {
 }
 
 void AdaParser::accept_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST accept_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST accept_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  a = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST a_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST a_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		a = LT(1);
 		if ( inputState->guessing == 0 ) {
 			a_AST = astFactory->create(a);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(a_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(a_AST.get()));
 		}
 		match(ACCEPT);
 		def_id(false);
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		entry_index_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		formal_part_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -10784,7 +10784,7 @@ void AdaParser::accept_stmt() {
 			match(DO);
 			handled_stmt_s();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			end_id_opt();
 			match(SEMI);
@@ -10811,7 +10811,7 @@ void AdaParser::accept_stmt() {
 			Set (a_AST, ACCEPT_STATEMENT);
 #line 10813 "AdaParser.cpp"
 		}
-		accept_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		accept_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10826,17 +10826,17 @@ void AdaParser::accept_stmt() {
 }
 
 void AdaParser::select_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST select_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST select_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		s = LT(1);
 		if ( inputState->guessing == 0 ) {
 			s_AST = astFactory->create(s);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 		}
 		match(SELECT);
 		{
@@ -10861,13 +10861,13 @@ void AdaParser::select_stmt() {
 		if ( synPredMatched398 ) {
 			triggering_alternative();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(THEN);
 			match(ABORT);
 			abortable_part();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 1272 "ada.g"
@@ -10878,7 +10878,7 @@ void AdaParser::select_stmt() {
 		else if ((_tokenSet_92.member(LA(1))) && (_tokenSet_93.member(LA(2)))) {
 			selective_accept();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 1274 "ada.g"
@@ -10889,7 +10889,7 @@ void AdaParser::select_stmt() {
 		else if ((LA(1) == IDENTIFIER) && (_tokenSet_94.member(LA(2)))) {
 			entry_call_alternative();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
@@ -10898,7 +10898,7 @@ void AdaParser::select_stmt() {
 				match(OR);
 				delay_alternative();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 1276 "ada.g"
@@ -10912,7 +10912,7 @@ void AdaParser::select_stmt() {
 				match(ELSE);
 				statements();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				if ( inputState->guessing==0 ) {
 #line 1277 "ada.g"
@@ -10936,7 +10936,7 @@ void AdaParser::select_stmt() {
 		match(END);
 		match(SELECT);
 		match(SEMI);
-		select_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		select_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10951,30 +10951,30 @@ void AdaParser::select_stmt() {
 }
 
 void AdaParser::if_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST if_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST if_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		s = LT(1);
 		if ( inputState->guessing == 0 ) {
 			s_AST = astFactory->create(s);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 		}
 		match(IF);
 		cond_clause();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		elsifs_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		else_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(END);
 		match(IF);
@@ -10984,7 +10984,7 @@ void AdaParser::if_stmt() {
 			Set(s_AST, IF_STATEMENT);
 #line 10986 "AdaParser.cpp"
 		}
-		if_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		if_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -10999,27 +10999,27 @@ void AdaParser::if_stmt() {
 }
 
 void AdaParser::case_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST case_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST case_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		s = LT(1);
 		if ( inputState->guessing == 0 ) {
 			s_AST = astFactory->create(s);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 		}
 		match(CASE);
 		expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(IS);
 		alternative_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(END);
 		match(CASE);
@@ -11029,7 +11029,7 @@ void AdaParser::case_stmt() {
 			Set(s_AST, CASE_STATEMENT);
 #line 11031 "AdaParser.cpp"
 		}
-		case_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		case_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11044,36 +11044,36 @@ void AdaParser::case_stmt() {
 }
 
 void AdaParser::loop_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST loop_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST loop_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		iteration_scheme_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(LOOP);
 		statements();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(END);
 		match(LOOP);
 		if ( inputState->guessing==0 ) {
 			loop_stmt_AST = RefAdaAST(currentAST.root);
 #line 1126 "ada.g"
-			loop_stmt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(LOOP_STATEMENT,"LOOP_STATEMENT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(loop_stmt_AST))));
+			loop_stmt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(LOOP_STATEMENT,"LOOP_STATEMENT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(loop_stmt_AST.get()))));
 #line 11068 "AdaParser.cpp"
 			currentAST.root = loop_stmt_AST;
-			if ( loop_stmt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				loop_stmt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( loop_stmt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				loop_stmt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = loop_stmt_AST->getFirstChild();
 			else
 				currentAST.child = loop_stmt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		loop_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		loop_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11088,33 +11088,33 @@ void AdaParser::loop_stmt() {
 }
 
 void AdaParser::block() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST block_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST block_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		declare_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		block_body();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			block_AST = RefAdaAST(currentAST.root);
 #line 1173 "ada.g"
-			block_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(BLOCK_STATEMENT,"BLOCK_STATEMENT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(block_AST))));
+			block_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(BLOCK_STATEMENT,"BLOCK_STATEMENT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(block_AST.get()))));
 #line 11109 "AdaParser.cpp"
 			currentAST.root = block_AST;
-			if ( block_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				block_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( block_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				block_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = block_AST->getFirstChild();
 			else
 				currentAST.child = block_AST;
 			currentAST.advanceChildToEnd();
 		}
-		block_AST = static_cast<RefAdaAST>(currentAST.root);
+		block_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11129,11 +11129,11 @@ void AdaParser::block() {
 }
 
 void AdaParser::statement_identifier() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST statement_identifier_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST statement_identifier_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  n = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		n = LT(1);
@@ -11161,10 +11161,10 @@ void AdaParser::statement_identifier() {
 }
 
 void AdaParser::id_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST id_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST id_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
+	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 #line 1141 "ada.g"
 	RefAdaAST endid;
 #line 11171 "AdaParser.cpp"
@@ -11175,11 +11175,11 @@ void AdaParser::id_opt() {
 		{
 			endid=definable_operator_symbol();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if (!( end_id_matches_def_id (endid) ))
 				throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" end_id_matches_def_id (endid) ");
-			id_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+			id_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case IDENTIFIER:
@@ -11187,11 +11187,11 @@ void AdaParser::id_opt() {
 			compound_name();
 			if (inputState->guessing==0) {
 				n_AST = returnAST;
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if (!( end_id_matches_def_id (n_AST) ))
 				throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" end_id_matches_def_id (n_AST) ");
-			id_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+			id_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case SEMI:
@@ -11201,7 +11201,7 @@ void AdaParser::id_opt() {
 				pop_def_id();
 #line 11203 "AdaParser.cpp"
 			}
-			id_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+			id_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -11223,14 +11223,14 @@ void AdaParser::id_opt() {
 }
 
 void AdaParser::call_or_assignment() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST call_or_assignment_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST call_or_assignment_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
@@ -11239,17 +11239,17 @@ void AdaParser::call_or_assignment() {
 			match(ASSIGN);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 				call_or_assignment_AST = RefAdaAST(currentAST.root);
 #line 1197 "ada.g"
 				call_or_assignment_AST =
-							RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ASSIGNMENT_STATEMENT,"ASSIGNMENT_STATEMENT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(call_or_assignment_AST))));
+							RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ASSIGNMENT_STATEMENT,"ASSIGNMENT_STATEMENT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(call_or_assignment_AST.get()))));
 #line 11250 "AdaParser.cpp"
 				currentAST.root = call_or_assignment_AST;
-				if ( call_or_assignment_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-					call_or_assignment_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+				if ( call_or_assignment_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+					call_or_assignment_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 					  currentAST.child = call_or_assignment_AST->getFirstChild();
 				else
 					currentAST.child = call_or_assignment_AST;
@@ -11263,11 +11263,11 @@ void AdaParser::call_or_assignment() {
 				call_or_assignment_AST = RefAdaAST(currentAST.root);
 #line 1200 "ada.g"
 				call_or_assignment_AST =
-							RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(CALL_STATEMENT,"CALL_STATEMENT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(call_or_assignment_AST))));
+							RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(CALL_STATEMENT,"CALL_STATEMENT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(call_or_assignment_AST.get()))));
 #line 11268 "AdaParser.cpp"
 				currentAST.root = call_or_assignment_AST;
-				if ( call_or_assignment_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-					call_or_assignment_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+				if ( call_or_assignment_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+					call_or_assignment_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 					  currentAST.child = call_or_assignment_AST->getFirstChild();
 				else
 					currentAST.child = call_or_assignment_AST;
@@ -11282,7 +11282,7 @@ void AdaParser::call_or_assignment() {
 		}
 		}
 		match(SEMI);
-		call_or_assignment_AST = static_cast<RefAdaAST>(currentAST.root);
+		call_or_assignment_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11297,33 +11297,33 @@ void AdaParser::call_or_assignment() {
 }
 
 void AdaParser::cond_clause() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST cond_clause_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST cond_clause_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  c = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST c_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST c_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		condition();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		c = LT(1);
 		if ( inputState->guessing == 0 ) {
 			c_AST = astFactory->create(c);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(c_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(c_AST.get()));
 		}
 		match(THEN);
 		statements();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 1098 "ada.g"
 			Set(c_AST, COND_CLAUSE);
 #line 11325 "AdaParser.cpp"
 		}
-		cond_clause_AST = static_cast<RefAdaAST>(currentAST.root);
+		cond_clause_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11338,9 +11338,9 @@ void AdaParser::cond_clause() {
 }
 
 void AdaParser::elsifs_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST elsifs_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST elsifs_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -11349,7 +11349,7 @@ void AdaParser::elsifs_opt() {
 				match(ELSIF);
 				cond_clause();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -11362,17 +11362,17 @@ void AdaParser::elsifs_opt() {
 		if ( inputState->guessing==0 ) {
 			elsifs_opt_AST = RefAdaAST(currentAST.root);
 #line 1106 "ada.g"
-			elsifs_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ELSIFS_OPT,"ELSIFS_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(elsifs_opt_AST))));
+			elsifs_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ELSIFS_OPT,"ELSIFS_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(elsifs_opt_AST.get()))));
 #line 11367 "AdaParser.cpp"
 			currentAST.root = elsifs_opt_AST;
-			if ( elsifs_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				elsifs_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( elsifs_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				elsifs_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = elsifs_opt_AST->getFirstChild();
 			else
 				currentAST.child = elsifs_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		elsifs_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		elsifs_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11387,9 +11387,9 @@ void AdaParser::elsifs_opt() {
 }
 
 void AdaParser::else_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST else_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST else_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -11399,7 +11399,7 @@ void AdaParser::else_opt() {
 			match(ELSE);
 			statements();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -11416,17 +11416,17 @@ void AdaParser::else_opt() {
 		if ( inputState->guessing==0 ) {
 			else_opt_AST = RefAdaAST(currentAST.root);
 #line 1110 "ada.g"
-			else_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ELSE_OPT,"ELSE_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(else_opt_AST))));
+			else_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ELSE_OPT,"ELSE_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(else_opt_AST.get()))));
 #line 11421 "AdaParser.cpp"
 			currentAST.root = else_opt_AST;
-			if ( else_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				else_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( else_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				else_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = else_opt_AST->getFirstChild();
 			else
 				currentAST.child = else_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		else_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		else_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11441,16 +11441,16 @@ void AdaParser::else_opt() {
 }
 
 void AdaParser::condition() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST condition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST condition_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		condition_AST = static_cast<RefAdaAST>(currentAST.root);
+		condition_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11465,9 +11465,9 @@ void AdaParser::condition() {
 }
 
 void AdaParser::alternative_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST alternative_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST alternative_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )+
@@ -11476,7 +11476,7 @@ void AdaParser::alternative_s() {
 			if ((LA(1) == WHEN)) {
 				case_statement_alternative();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -11487,7 +11487,7 @@ void AdaParser::alternative_s() {
 		}
 		_loop356:;
 		}  // ( ... )+
-		alternative_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		alternative_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11502,34 +11502,34 @@ void AdaParser::alternative_s() {
 }
 
 void AdaParser::case_statement_alternative() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST case_statement_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST case_statement_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  s = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		s = LT(1);
 		if ( inputState->guessing == 0 ) {
 			s_AST = astFactory->create(s);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST.get()));
 		}
 		match(WHEN);
 		choice_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(RIGHT_SHAFT);
 		statements();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 1121 "ada.g"
 			Set(s_AST, CASE_STATEMENT_ALTERNATIVE);
 #line 11531 "AdaParser.cpp"
 		}
-		case_statement_alternative_AST = static_cast<RefAdaAST>(currentAST.root);
+		case_statement_alternative_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11544,49 +11544,49 @@ void AdaParser::case_statement_alternative() {
 }
 
 void AdaParser::iteration_scheme_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST iteration_scheme_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST iteration_scheme_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case WHILE:
 		{
-			RefAdaAST tmp319_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp319_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp319_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp319_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp319_AST.get()));
 			}
 			match(WHILE);
 			condition();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case FOR:
 		{
-			RefAdaAST tmp320_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp320_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp320_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp320_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp320_AST.get()));
 			}
 			match(FOR);
-			RefAdaAST tmp321_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp321_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp321_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp321_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp321_AST.get()));
 			}
 			match(IDENTIFIER);
 			match(IN);
 			reverse_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			discrete_subtype_definition();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -11604,17 +11604,17 @@ void AdaParser::iteration_scheme_opt() {
 			iteration_scheme_opt_AST = RefAdaAST(currentAST.root);
 #line 1132 "ada.g"
 			iteration_scheme_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ITERATION_SCHEME_OPT,"ITERATION_SCHEME_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(iteration_scheme_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ITERATION_SCHEME_OPT,"ITERATION_SCHEME_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(iteration_scheme_opt_AST.get()))));
 #line 11609 "AdaParser.cpp"
 			currentAST.root = iteration_scheme_opt_AST;
-			if ( iteration_scheme_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				iteration_scheme_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( iteration_scheme_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				iteration_scheme_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = iteration_scheme_opt_AST->getFirstChild();
 			else
 				currentAST.child = iteration_scheme_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		iteration_scheme_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		iteration_scheme_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11629,19 +11629,19 @@ void AdaParser::iteration_scheme_opt() {
 }
 
 void AdaParser::reverse_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST reverse_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST reverse_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case REVERSE:
 		{
-			RefAdaAST tmp323_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp323_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp323_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp323_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp323_AST.get()));
 			}
 			match(REVERSE);
 			break;
@@ -11669,17 +11669,17 @@ void AdaParser::reverse_opt() {
 		if ( inputState->guessing==0 ) {
 			reverse_opt_AST = RefAdaAST(currentAST.root);
 #line 1138 "ada.g"
-			reverse_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(reverse_opt_AST))));
+			reverse_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(reverse_opt_AST.get()))));
 #line 11674 "AdaParser.cpp"
 			currentAST.root = reverse_opt_AST;
-			if ( reverse_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				reverse_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( reverse_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				reverse_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = reverse_opt_AST->getFirstChild();
 			else
 				currentAST.child = reverse_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		reverse_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		reverse_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11694,9 +11694,9 @@ void AdaParser::reverse_opt() {
 }
 
 void AdaParser::declare_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST declare_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST declare_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -11706,7 +11706,7 @@ void AdaParser::declare_opt() {
 			match(DECLARE);
 			declarative_part();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -11723,17 +11723,17 @@ void AdaParser::declare_opt() {
 		if ( inputState->guessing==0 ) {
 			declare_opt_AST = RefAdaAST(currentAST.root);
 #line 1177 "ada.g"
-			declare_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DECLARE_OPT,"DECLARE_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(declare_opt_AST))));
+			declare_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DECLARE_OPT,"DECLARE_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(declare_opt_AST.get()))));
 #line 11728 "AdaParser.cpp"
 			currentAST.root = declare_opt_AST;
-			if ( declare_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				declare_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( declare_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				declare_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = declare_opt_AST->getFirstChild();
 			else
 				currentAST.child = declare_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		declare_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		declare_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11748,18 +11748,18 @@ void AdaParser::declare_opt() {
 }
 
 void AdaParser::label_name() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST label_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST label_name_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
-		RefAdaAST tmp325_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp325_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp325_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp325_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp325_AST.get()));
 		}
 		match(IDENTIFIER);
-		label_name_AST = static_cast<RefAdaAST>(currentAST.root);
+		label_name_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11774,20 +11774,20 @@ void AdaParser::label_name() {
 }
 
 void AdaParser::entry_body_formal_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entry_body_formal_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entry_body_formal_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		entry_index_spec_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		formal_part_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		entry_body_formal_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		entry_body_formal_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11802,17 +11802,17 @@ void AdaParser::entry_body_formal_part() {
 }
 
 void AdaParser::entry_barrier() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entry_barrier_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entry_barrier_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(WHEN);
 		condition();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		entry_barrier_AST = static_cast<RefAdaAST>(currentAST.root);
+		entry_barrier_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11827,9 +11827,9 @@ void AdaParser::entry_barrier() {
 }
 
 void AdaParser::entry_index_spec_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entry_index_spec_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entry_index_spec_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -11855,12 +11855,12 @@ void AdaParser::entry_index_spec_opt() {
 			match(FOR);
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(IN);
 			discrete_subtype_definition();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(RPAREN);
 		}
@@ -11875,17 +11875,17 @@ void AdaParser::entry_index_spec_opt() {
 			entry_index_spec_opt_AST = RefAdaAST(currentAST.root);
 #line 1222 "ada.g"
 			entry_index_spec_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ENTRY_INDEX_SPECIFICATION,"ENTRY_INDEX_SPECIFICATION")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(entry_index_spec_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ENTRY_INDEX_SPECIFICATION,"ENTRY_INDEX_SPECIFICATION").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(entry_index_spec_opt_AST.get()))));
 #line 11880 "AdaParser.cpp"
 			currentAST.root = entry_index_spec_opt_AST;
-			if ( entry_index_spec_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				entry_index_spec_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( entry_index_spec_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				entry_index_spec_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = entry_index_spec_opt_AST->getFirstChild();
 			else
 				currentAST.child = entry_index_spec_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		entry_index_spec_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		entry_index_spec_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11900,31 +11900,31 @@ void AdaParser::entry_index_spec_opt() {
 }
 
 void AdaParser::entry_call_stmt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entry_call_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entry_call_stmt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		name();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
 		if ( inputState->guessing==0 ) {
 			entry_call_stmt_AST = RefAdaAST(currentAST.root);
 #line 1232 "ada.g"
 			entry_call_stmt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ENTRY_CALL_STATEMENT,"ENTRY_CALL_STATEMENT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(entry_call_stmt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ENTRY_CALL_STATEMENT,"ENTRY_CALL_STATEMENT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(entry_call_stmt_AST.get()))));
 #line 11919 "AdaParser.cpp"
 			currentAST.root = entry_call_stmt_AST;
-			if ( entry_call_stmt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				entry_call_stmt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( entry_call_stmt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				entry_call_stmt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = entry_call_stmt_AST->getFirstChild();
 			else
 				currentAST.child = entry_call_stmt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		entry_call_stmt_AST = static_cast<RefAdaAST>(currentAST.root);
+		entry_call_stmt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -11939,9 +11939,9 @@ void AdaParser::entry_call_stmt() {
 }
 
 void AdaParser::entry_index_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entry_index_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entry_index_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -11967,7 +11967,7 @@ void AdaParser::entry_index_opt() {
 			match(LPAREN);
 			expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(RPAREN);
 		}
@@ -11982,17 +11982,17 @@ void AdaParser::entry_index_opt() {
 			entry_index_opt_AST = RefAdaAST(currentAST.root);
 #line 1251 "ada.g"
 			entry_index_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ENTRY_INDEX_OPT,"ENTRY_INDEX_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(entry_index_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ENTRY_INDEX_OPT,"ENTRY_INDEX_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(entry_index_opt_AST.get()))));
 #line 11987 "AdaParser.cpp"
 			currentAST.root = entry_index_opt_AST;
-			if ( entry_index_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				entry_index_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( entry_index_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				entry_index_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = entry_index_opt_AST->getFirstChild();
 			else
 				currentAST.child = entry_index_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		entry_index_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		entry_index_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12007,19 +12007,19 @@ void AdaParser::entry_index_opt() {
 }
 
 void AdaParser::until_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST until_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST until_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case UNTIL:
 		{
-			RefAdaAST tmp334_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp334_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp334_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp334_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp334_AST.get()));
 			}
 			match(UNTIL);
 			break;
@@ -12047,17 +12047,17 @@ void AdaParser::until_opt() {
 		if ( inputState->guessing==0 ) {
 			until_opt_AST = RefAdaAST(currentAST.root);
 #line 1261 "ada.g"
-			until_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(until_opt_AST))));
+			until_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(MODIFIERS,"MODIFIERS").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(until_opt_AST.get()))));
 #line 12052 "AdaParser.cpp"
 			currentAST.root = until_opt_AST;
-			if ( until_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				until_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( until_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				until_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = until_opt_AST->getFirstChild();
 			else
 				currentAST.child = until_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		until_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		until_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12072,9 +12072,9 @@ void AdaParser::until_opt() {
 }
 
 void AdaParser::triggering_alternative() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST triggering_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST triggering_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -12083,7 +12083,7 @@ void AdaParser::triggering_alternative() {
 		{
 			delay_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -12091,7 +12091,7 @@ void AdaParser::triggering_alternative() {
 		{
 			entry_call_stmt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -12103,23 +12103,23 @@ void AdaParser::triggering_alternative() {
 		}
 		stmts_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			triggering_alternative_AST = RefAdaAST(currentAST.root);
 #line 1285 "ada.g"
 			triggering_alternative_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(TRIGGERING_ALTERNATIVE,"TRIGGERING_ALTERNATIVE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(triggering_alternative_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(TRIGGERING_ALTERNATIVE,"TRIGGERING_ALTERNATIVE").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(triggering_alternative_AST.get()))));
 #line 12114 "AdaParser.cpp"
 			currentAST.root = triggering_alternative_AST;
-			if ( triggering_alternative_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				triggering_alternative_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( triggering_alternative_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				triggering_alternative_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = triggering_alternative_AST->getFirstChild();
 			else
 				currentAST.child = triggering_alternative_AST;
 			currentAST.advanceChildToEnd();
 		}
-		triggering_alternative_AST = static_cast<RefAdaAST>(currentAST.root);
+		triggering_alternative_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12134,30 +12134,30 @@ void AdaParser::triggering_alternative() {
 }
 
 void AdaParser::abortable_part() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST abortable_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST abortable_part_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		stmts_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			abortable_part_AST = RefAdaAST(currentAST.root);
 #line 1291 "ada.g"
 			abortable_part_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ABORTABLE_PART,"ABORTABLE_PART")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(abortable_part_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ABORTABLE_PART,"ABORTABLE_PART").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(abortable_part_AST.get()))));
 #line 12152 "AdaParser.cpp"
 			currentAST.root = abortable_part_AST;
-			if ( abortable_part_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				abortable_part_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( abortable_part_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				abortable_part_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = abortable_part_AST->getFirstChild();
 			else
 				currentAST.child = abortable_part_AST;
 			currentAST.advanceChildToEnd();
 		}
-		abortable_part_AST = static_cast<RefAdaAST>(currentAST.root);
+		abortable_part_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12172,28 +12172,28 @@ void AdaParser::abortable_part() {
 }
 
 void AdaParser::selective_accept() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST selective_accept_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST selective_accept_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		guard_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		select_alternative();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		or_select_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		else_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		selective_accept_AST = static_cast<RefAdaAST>(currentAST.root);
+		selective_accept_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12208,34 +12208,34 @@ void AdaParser::selective_accept() {
 }
 
 void AdaParser::entry_call_alternative() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST entry_call_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST entry_call_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		entry_call_stmt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		stmts_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			entry_call_alternative_AST = RefAdaAST(currentAST.root);
 #line 1297 "ada.g"
 			entry_call_alternative_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ENTRY_CALL_ALTERNATIVE,"ENTRY_CALL_ALTERNATIVE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(entry_call_alternative_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ENTRY_CALL_ALTERNATIVE,"ENTRY_CALL_ALTERNATIVE").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(entry_call_alternative_AST.get()))));
 #line 12230 "AdaParser.cpp"
 			currentAST.root = entry_call_alternative_AST;
-			if ( entry_call_alternative_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				entry_call_alternative_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( entry_call_alternative_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				entry_call_alternative_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = entry_call_alternative_AST->getFirstChild();
 			else
 				currentAST.child = entry_call_alternative_AST;
 			currentAST.advanceChildToEnd();
 		}
-		entry_call_alternative_AST = static_cast<RefAdaAST>(currentAST.root);
+		entry_call_alternative_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12250,34 +12250,34 @@ void AdaParser::entry_call_alternative() {
 }
 
 void AdaParser::delay_alternative() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST delay_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST delay_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		delay_stmt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		stmts_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			delay_alternative_AST = RefAdaAST(currentAST.root);
 #line 1322 "ada.g"
 			delay_alternative_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DELAY_ALTERNATIVE,"DELAY_ALTERNATIVE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(delay_alternative_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(DELAY_ALTERNATIVE,"DELAY_ALTERNATIVE").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(delay_alternative_AST.get()))));
 #line 12272 "AdaParser.cpp"
 			currentAST.root = delay_alternative_AST;
-			if ( delay_alternative_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				delay_alternative_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( delay_alternative_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				delay_alternative_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = delay_alternative_AST->getFirstChild();
 			else
 				currentAST.child = delay_alternative_AST;
 			currentAST.advanceChildToEnd();
 		}
-		delay_alternative_AST = static_cast<RefAdaAST>(currentAST.root);
+		delay_alternative_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12292,9 +12292,9 @@ void AdaParser::delay_alternative() {
 }
 
 void AdaParser::stmts_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST stmts_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST stmts_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -12304,7 +12304,7 @@ void AdaParser::stmts_opt() {
 			{
 				pragma();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -12330,7 +12330,7 @@ void AdaParser::stmts_opt() {
 			{
 				statement();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -12342,7 +12342,7 @@ void AdaParser::stmts_opt() {
 		}
 		_loop414:;
 		} // ( ... )*
-		stmts_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		stmts_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12357,9 +12357,9 @@ void AdaParser::stmts_opt() {
 }
 
 void AdaParser::guard_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST guard_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST guard_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -12369,7 +12369,7 @@ void AdaParser::guard_opt() {
 			match(WHEN);
 			condition();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(RIGHT_SHAFT);
 			{ // ( ... )*
@@ -12377,7 +12377,7 @@ void AdaParser::guard_opt() {
 				if ((LA(1) == PRAGMA)) {
 					pragma();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 				}
 				else {
@@ -12404,17 +12404,17 @@ void AdaParser::guard_opt() {
 		if ( inputState->guessing==0 ) {
 			guard_opt_AST = RefAdaAST(currentAST.root);
 #line 1306 "ada.g"
-			guard_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(GUARD_OPT,"GUARD_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(guard_opt_AST))));
+			guard_opt_AST = RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(GUARD_OPT,"GUARD_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(guard_opt_AST.get()))));
 #line 12409 "AdaParser.cpp"
 			currentAST.root = guard_opt_AST;
-			if ( guard_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				guard_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( guard_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				guard_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = guard_opt_AST->getFirstChild();
 			else
 				currentAST.child = guard_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		guard_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		guard_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12429,11 +12429,11 @@ void AdaParser::guard_opt() {
 }
 
 void AdaParser::select_alternative() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST select_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST select_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  t = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST t_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST t_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -12441,18 +12441,18 @@ void AdaParser::select_alternative() {
 		{
 			accept_alternative();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			select_alternative_AST = static_cast<RefAdaAST>(currentAST.root);
+			select_alternative_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case DELAY:
 		{
 			delay_alternative();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			select_alternative_AST = static_cast<RefAdaAST>(currentAST.root);
+			select_alternative_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case TERMINATE:
@@ -12460,7 +12460,7 @@ void AdaParser::select_alternative() {
 			t = LT(1);
 			if ( inputState->guessing == 0 ) {
 				t_AST = astFactory->create(t);
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(t_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(t_AST.get()));
 			}
 			match(TERMINATE);
 			match(SEMI);
@@ -12469,7 +12469,7 @@ void AdaParser::select_alternative() {
 				Set(t_AST, TERMINATE_ALTERNATIVE);
 #line 12471 "AdaParser.cpp"
 			}
-			select_alternative_AST = static_cast<RefAdaAST>(currentAST.root);
+			select_alternative_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -12491,9 +12491,9 @@ void AdaParser::select_alternative() {
 }
 
 void AdaParser::or_select_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST or_select_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST or_select_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{ // ( ... )*
@@ -12502,11 +12502,11 @@ void AdaParser::or_select_opt() {
 				match(OR);
 				guard_opt();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				select_alternative();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -12520,17 +12520,17 @@ void AdaParser::or_select_opt() {
 			or_select_opt_AST = RefAdaAST(currentAST.root);
 #line 1331 "ada.g"
 			or_select_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(OR_SELECT_OPT,"OR_SELECT_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(or_select_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(OR_SELECT_OPT,"OR_SELECT_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(or_select_opt_AST.get()))));
 #line 12525 "AdaParser.cpp"
 			currentAST.root = or_select_opt_AST;
-			if ( or_select_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				or_select_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( or_select_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				or_select_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = or_select_opt_AST->getFirstChild();
 			else
 				currentAST.child = or_select_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		or_select_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		or_select_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12545,34 +12545,34 @@ void AdaParser::or_select_opt() {
 }
 
 void AdaParser::accept_alternative() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST accept_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST accept_alternative_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		accept_stmt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		stmts_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 			accept_alternative_AST = RefAdaAST(currentAST.root);
 #line 1316 "ada.g"
 			accept_alternative_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ACCEPT_ALTERNATIVE,"ACCEPT_ALTERNATIVE")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(accept_alternative_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(ACCEPT_ALTERNATIVE,"ACCEPT_ALTERNATIVE").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(accept_alternative_AST.get()))));
 #line 12567 "AdaParser.cpp"
 			currentAST.root = accept_alternative_AST;
-			if ( accept_alternative_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				accept_alternative_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( accept_alternative_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				accept_alternative_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = accept_alternative_AST->getFirstChild();
 			else
 				currentAST.child = accept_alternative_AST;
 			currentAST.advanceChildToEnd();
 		}
-		accept_alternative_AST = static_cast<RefAdaAST>(currentAST.root);
+		accept_alternative_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12587,38 +12587,38 @@ void AdaParser::accept_alternative() {
 }
 
 void AdaParser::exception_handler() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST exception_handler_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST exception_handler_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  w = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST w_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST w_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		w = LT(1);
 		if ( inputState->guessing == 0 ) {
 			w_AST = astFactory->create(w);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(w_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(w_AST.get()));
 		}
 		match(WHEN);
 		identifier_colon_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		except_choice_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(RIGHT_SHAFT);
 		statements();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 1347 "ada.g"
 			Set (w_AST, EXCEPTION_HANDLER);
 #line 12620 "AdaParser.cpp"
 		}
-		exception_handler_AST = static_cast<RefAdaAST>(currentAST.root);
+		exception_handler_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12633,17 +12633,17 @@ void AdaParser::exception_handler() {
 }
 
 void AdaParser::identifier_colon_opt() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST identifier_colon_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST identifier_colon_opt_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		if ((LA(1) == IDENTIFIER) && (LA(2) == COLON)) {
-			RefAdaAST tmp340_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp340_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp340_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp340_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp340_AST.get()));
 			}
 			match(IDENTIFIER);
 			match(COLON);
@@ -12659,17 +12659,17 @@ void AdaParser::identifier_colon_opt() {
 			identifier_colon_opt_AST = RefAdaAST(currentAST.root);
 #line 1351 "ada.g"
 			identifier_colon_opt_AST =
-					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(IDENTIFIER_COLON_OPT,"IDENTIFIER_COLON_OPT")))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(identifier_colon_opt_AST))));
+					RefAdaAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(IDENTIFIER_COLON_OPT,"IDENTIFIER_COLON_OPT").get()))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(identifier_colon_opt_AST.get()))));
 #line 12664 "AdaParser.cpp"
 			currentAST.root = identifier_colon_opt_AST;
-			if ( identifier_colon_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				identifier_colon_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+			if ( identifier_colon_opt_AST!=static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) &&
+				identifier_colon_opt_AST->getFirstChild() != static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 				  currentAST.child = identifier_colon_opt_AST->getFirstChild();
 			else
 				currentAST.child = identifier_colon_opt_AST;
 			currentAST.advanceChildToEnd();
 		}
-		identifier_colon_opt_AST = static_cast<RefAdaAST>(currentAST.root);
+		identifier_colon_opt_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12684,27 +12684,27 @@ void AdaParser::identifier_colon_opt() {
 }
 
 void AdaParser::except_choice_s() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST except_choice_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST except_choice_s_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		exception_choice();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
 			if ((LA(1) == PIPE)) {
-				RefAdaAST tmp342_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp342_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp342_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp342_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp342_AST.get()));
 				}
 				match(PIPE);
 				exception_choice();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 			}
 			else {
@@ -12714,7 +12714,7 @@ void AdaParser::except_choice_s() {
 		}
 		_loop430:;
 		} // ( ... )*
-		except_choice_s_AST = static_cast<RefAdaAST>(currentAST.root);
+		except_choice_s_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12729,9 +12729,9 @@ void AdaParser::except_choice_s() {
 }
 
 void AdaParser::exception_choice() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST exception_choice_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST exception_choice_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -12739,20 +12739,20 @@ void AdaParser::exception_choice() {
 		{
 			compound_name();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			exception_choice_AST = static_cast<RefAdaAST>(currentAST.root);
+			exception_choice_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case OTHERS:
 		{
-			RefAdaAST tmp343_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp343_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp343_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp343_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp343_AST.get()));
 			}
 			match(OTHERS);
-			exception_choice_AST = static_cast<RefAdaAST>(currentAST.root);
+			exception_choice_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -12774,24 +12774,24 @@ void AdaParser::exception_choice() {
 }
 
 void AdaParser::operator_call() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST operator_call_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST operator_call_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  cs = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST cs_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST cs_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		cs = LT(1);
 		if ( inputState->guessing == 0 ) {
 			cs_AST = astFactory->create(cs);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(cs_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(cs_AST.get()));
 		}
 		match(CHAR_STRING);
 		operator_call_tail(cs_AST);
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
-		operator_call_AST = static_cast<RefAdaAST>(currentAST.root);
+		operator_call_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12808,9 +12808,9 @@ void AdaParser::operator_call() {
 void AdaParser::operator_call_tail(
 	RefAdaAST opstr
 ) {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST operator_call_tail_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST operator_call_tail_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		match(LPAREN);
@@ -12818,7 +12818,7 @@ void AdaParser::operator_call_tail(
 			throw ANTLR_USE_NAMESPACE(antlr)SemanticException(" is_operator_symbol(opstr->getText().c_str()) ");
 		value_s();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(RPAREN);
 		if ( inputState->guessing==0 ) {
@@ -12826,7 +12826,7 @@ void AdaParser::operator_call_tail(
 			opstr->setType(OPERATOR_SYMBOL);
 #line 12828 "AdaParser.cpp"
 		}
-		operator_call_tail_AST = static_cast<RefAdaAST>(currentAST.root);
+		operator_call_tail_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -12841,30 +12841,30 @@ void AdaParser::operator_call_tail(
 }
 
 void AdaParser::relation() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST relation_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST relation_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  n = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		simple_expression();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{
 		switch ( LA(1)) {
 		case IN:
 		{
-			RefAdaAST tmp346_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp346_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp346_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp346_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp346_AST.get()));
 			}
 			match(IN);
 			range_or_mark();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -12873,13 +12873,13 @@ void AdaParser::relation() {
 			n = LT(1);
 			if ( inputState->guessing == 0 ) {
 				n_AST = astFactory->create(n);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST.get()));
 			}
 			match(NOT);
 			match(IN);
 			range_or_mark();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 1400 "ada.g"
@@ -12890,85 +12890,85 @@ void AdaParser::relation() {
 		}
 		case EQ:
 		{
-			RefAdaAST tmp348_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp348_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp348_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp348_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp348_AST.get()));
 			}
 			match(EQ);
 			simple_expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case NE:
 		{
-			RefAdaAST tmp349_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp349_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp349_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp349_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp349_AST.get()));
 			}
 			match(NE);
 			simple_expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case LT_:
 		{
-			RefAdaAST tmp350_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp350_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp350_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp350_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp350_AST.get()));
 			}
 			match(LT_);
 			simple_expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case LE:
 		{
-			RefAdaAST tmp351_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp351_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp351_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp351_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp351_AST.get()));
 			}
 			match(LE);
 			simple_expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case GT:
 		{
-			RefAdaAST tmp352_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp352_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp352_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp352_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp352_AST.get()));
 			}
 			match(GT);
 			simple_expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case GE:
 		{
-			RefAdaAST tmp353_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp353_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp353_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp353_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp353_AST.get()));
 			}
 			match(GE);
 			simple_expression();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -12997,7 +12997,7 @@ void AdaParser::relation() {
 		}
 		}
 		}
-		relation_AST = static_cast<RefAdaAST>(currentAST.root);
+		relation_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -13012,9 +13012,9 @@ void AdaParser::relation() {
 }
 
 void AdaParser::range_or_mark() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST range_or_mark_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST range_or_mark_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		bool synPredMatched450 = false;
@@ -13036,16 +13036,16 @@ void AdaParser::range_or_mark() {
 		if ( synPredMatched450 ) {
 			range();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			range_or_mark_AST = static_cast<RefAdaAST>(currentAST.root);
+			range_or_mark_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else if ((LA(1) == IDENTIFIER) && (_tokenSet_114.member(LA(2)))) {
 			subtype_mark();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			range_or_mark_AST = static_cast<RefAdaAST>(currentAST.root);
+			range_or_mark_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -13065,13 +13065,13 @@ void AdaParser::range_or_mark() {
 }
 
 void AdaParser::signed_term() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST signed_term_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST signed_term_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  m = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST m_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST m_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -13080,19 +13080,19 @@ void AdaParser::signed_term() {
 			p = LT(1);
 			if ( inputState->guessing == 0 ) {
 				p_AST = astFactory->create(p);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 			}
 			match(PLUS);
 			term();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 1422 "ada.g"
 				Set(p_AST, UNARY_PLUS);
 #line 13094 "AdaParser.cpp"
 			}
-			signed_term_AST = static_cast<RefAdaAST>(currentAST.root);
+			signed_term_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case MINUS:
@@ -13100,19 +13100,19 @@ void AdaParser::signed_term() {
 			m = LT(1);
 			if ( inputState->guessing == 0 ) {
 				m_AST = astFactory->create(m);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(m_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(m_AST.get()));
 			}
 			match(MINUS);
 			term();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			if ( inputState->guessing==0 ) {
 #line 1423 "ada.g"
 				Set(m_AST, UNARY_MINUS);
 #line 13114 "AdaParser.cpp"
 			}
-			signed_term_AST = static_cast<RefAdaAST>(currentAST.root);
+			signed_term_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case IDENTIFIER:
@@ -13127,9 +13127,9 @@ void AdaParser::signed_term() {
 		{
 			term();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
-			signed_term_AST = static_cast<RefAdaAST>(currentAST.root);
+			signed_term_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -13151,71 +13151,71 @@ void AdaParser::signed_term() {
 }
 
 void AdaParser::term() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST term_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST term_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		factor();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		{ // ( ... )*
 		for (;;) {
 			switch ( LA(1)) {
 			case STAR:
 			{
-				RefAdaAST tmp354_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp354_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp354_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp354_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp354_AST.get()));
 				}
 				match(STAR);
 				factor();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
 			case DIV:
 			{
-				RefAdaAST tmp355_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp355_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp355_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp355_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp355_AST.get()));
 				}
 				match(DIV);
 				factor();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
 			case MOD:
 			{
-				RefAdaAST tmp356_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp356_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp356_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp356_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp356_AST.get()));
 				}
 				match(MOD);
 				factor();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
 			case REM:
 			{
-				RefAdaAST tmp357_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp357_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp357_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp357_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp357_AST.get()));
 				}
 				match(REM);
 				factor();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -13227,7 +13227,7 @@ void AdaParser::term() {
 		}
 		_loop457:;
 		} // ( ... )*
-		term_AST = static_cast<RefAdaAST>(currentAST.root);
+		term_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -13242,38 +13242,38 @@ void AdaParser::term() {
 }
 
 void AdaParser::factor() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST factor_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST factor_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
 		switch ( LA(1)) {
 		case NOT:
 		{
-			RefAdaAST tmp358_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp358_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp358_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp358_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp358_AST.get()));
 			}
 			match(NOT);
 			primary();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case ABS:
 		{
-			RefAdaAST tmp359_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp359_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp359_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp359_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp359_AST.get()));
 			}
 			match(ABS);
 			primary();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -13287,21 +13287,21 @@ void AdaParser::factor() {
 		{
 			primary();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			{
 			switch ( LA(1)) {
 			case EXPON:
 			{
-				RefAdaAST tmp360_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp360_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp360_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp360_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp360_AST.get()));
 				}
 				match(EXPON);
 				primary();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -13353,7 +13353,7 @@ void AdaParser::factor() {
 		}
 		}
 		}
-		factor_AST = static_cast<RefAdaAST>(currentAST.root);
+		factor_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -13368,11 +13368,11 @@ void AdaParser::factor() {
 }
 
 void AdaParser::primary() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST primary_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST primary_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  cs = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST cs_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST cs_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		{
@@ -13381,7 +13381,7 @@ void AdaParser::primary() {
 		{
 			name_or_qualified();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -13389,7 +13389,7 @@ void AdaParser::primary() {
 		{
 			parenthesized_primary();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
@@ -13397,36 +13397,36 @@ void AdaParser::primary() {
 		{
 			allocator();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			break;
 		}
 		case NuLL:
 		{
-			RefAdaAST tmp361_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp361_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp361_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp361_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp361_AST.get()));
 			}
 			match(NuLL);
 			break;
 		}
 		case NUMERIC_LIT:
 		{
-			RefAdaAST tmp362_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp362_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp362_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp362_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp362_AST.get()));
 			}
 			match(NUMERIC_LIT);
 			break;
 		}
 		case CHARACTER_LITERAL:
 		{
-			RefAdaAST tmp363_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefAdaAST tmp363_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 			if ( inputState->guessing == 0 ) {
 				tmp363_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp363_AST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp363_AST.get()));
 			}
 			match(CHARACTER_LITERAL);
 			break;
@@ -13436,7 +13436,7 @@ void AdaParser::primary() {
 			cs = LT(1);
 			if ( inputState->guessing == 0 ) {
 				cs_AST = astFactory->create(cs);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(cs_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(cs_AST.get()));
 			}
 			match(CHAR_STRING);
 			{
@@ -13445,7 +13445,7 @@ void AdaParser::primary() {
 			{
 				operator_call_tail(cs_AST);
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				break;
 			}
@@ -13498,7 +13498,7 @@ void AdaParser::primary() {
 		}
 		}
 		}
-		primary_AST = static_cast<RefAdaAST>(currentAST.root);
+		primary_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -13513,20 +13513,20 @@ void AdaParser::primary() {
 }
 
 void AdaParser::name_or_qualified() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST name_or_qualified_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST name_or_qualified_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 #line 1454 "ada.g"
 	RefAdaAST dummy;
 #line 13524 "AdaParser.cpp"
 	
 	try {      // for error handling
-		RefAdaAST tmp364_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefAdaAST tmp364_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 		if ( inputState->guessing == 0 ) {
 			tmp364_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp364_AST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp364_AST.get()));
 		}
 		match(IDENTIFIER);
 		{ // ( ... )*
@@ -13534,40 +13534,40 @@ void AdaParser::name_or_qualified() {
 			switch ( LA(1)) {
 			case DOT:
 			{
-				RefAdaAST tmp365_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp365_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp365_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp365_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp365_AST.get()));
 				}
 				match(DOT);
 				{
 				switch ( LA(1)) {
 				case ALL:
 				{
-					RefAdaAST tmp366_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp366_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp366_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp366_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp366_AST.get()));
 					}
 					match(ALL);
 					break;
 				}
 				case IDENTIFIER:
 				{
-					RefAdaAST tmp367_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp367_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp367_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp367_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp367_AST.get()));
 					}
 					match(IDENTIFIER);
 					break;
 				}
 				case CHARACTER_LITERAL:
 				{
-					RefAdaAST tmp368_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					RefAdaAST tmp368_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 					if ( inputState->guessing == 0 ) {
 						tmp368_AST = astFactory->create(LT(1));
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp368_AST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp368_AST.get()));
 					}
 					match(CHARACTER_LITERAL);
 					break;
@@ -13576,7 +13576,7 @@ void AdaParser::name_or_qualified() {
 				{
 					dummy=is_operator();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -13593,12 +13593,12 @@ void AdaParser::name_or_qualified() {
 				p = LT(1);
 				if ( inputState->guessing == 0 ) {
 					p_AST = astFactory->create(p);
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 				}
 				match(LPAREN);
 				value_s();
 				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 				}
 				match(RPAREN);
 				if ( inputState->guessing==0 ) {
@@ -13610,10 +13610,10 @@ void AdaParser::name_or_qualified() {
 			}
 			case TIC:
 			{
-				RefAdaAST tmp370_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefAdaAST tmp370_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 				if ( inputState->guessing == 0 ) {
 					tmp370_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp370_AST));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp370_AST.get()));
 				}
 				match(TIC);
 				{
@@ -13622,7 +13622,7 @@ void AdaParser::name_or_qualified() {
 				{
 					parenthesized_primary();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -13634,7 +13634,7 @@ void AdaParser::name_or_qualified() {
 				{
 					attribute_id();
 					if (inputState->guessing==0) {
-						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 					}
 					break;
 				}
@@ -13654,7 +13654,7 @@ void AdaParser::name_or_qualified() {
 		}
 		_loop468:;
 		} // ( ... )*
-		name_or_qualified_AST = static_cast<RefAdaAST>(currentAST.root);
+		name_or_qualified_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -13669,29 +13669,29 @@ void AdaParser::name_or_qualified() {
 }
 
 void AdaParser::allocator() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST allocator_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST allocator_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  n = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST n_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		n = LT(1);
 		if ( inputState->guessing == 0 ) {
 			n_AST = astFactory->create(n);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST.get()));
 		}
 		match(NEW);
 		name_or_qualified();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		if ( inputState->guessing==0 ) {
 #line 1468 "ada.g"
 			Set(n_AST, ALLOCATOR);
 #line 13693 "AdaParser.cpp"
 		}
-		allocator_AST = static_cast<RefAdaAST>(currentAST.root);
+		allocator_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -13706,13 +13706,13 @@ void AdaParser::allocator() {
 }
 
 void AdaParser::subprogram_body() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST subprogram_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST subprogram_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  f = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST f_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		switch ( LA(1)) {
@@ -13721,21 +13721,21 @@ void AdaParser::subprogram_body() {
 			p = LT(1);
 			if ( inputState->guessing == 0 ) {
 				p_AST = astFactory->create(p);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 			}
 			match(PROCEDURE);
 			def_id(false);
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			formal_part_opt();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(IS);
 			body_part();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(SEMI);
 			if ( inputState->guessing==0 ) {
@@ -13743,7 +13743,7 @@ void AdaParser::subprogram_body() {
 				Set(p_AST, PROCEDURE_BODY);
 #line 13745 "AdaParser.cpp"
 			}
-			subprogram_body_AST = static_cast<RefAdaAST>(currentAST.root);
+			subprogram_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		case FUNCTION:
@@ -13751,17 +13751,17 @@ void AdaParser::subprogram_body() {
 			f = LT(1);
 			if ( inputState->guessing == 0 ) {
 				f_AST = astFactory->create(f);
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(f_AST.get()));
 			}
 			match(FUNCTION);
 			function_tail();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(IS);
 			body_part();
 			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 			}
 			match(SEMI);
 			if ( inputState->guessing==0 ) {
@@ -13769,7 +13769,7 @@ void AdaParser::subprogram_body() {
 				Set(f_AST, FUNCTION_BODY);
 #line 13771 "AdaParser.cpp"
 			}
-			subprogram_body_AST = static_cast<RefAdaAST>(currentAST.root);
+			subprogram_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 			break;
 		}
 		default:
@@ -13791,26 +13791,26 @@ void AdaParser::subprogram_body() {
 }
 
 void AdaParser::package_body() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST package_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST package_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		p = LT(1);
 		if ( inputState->guessing == 0 ) {
 			p_AST = astFactory->create(p);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 		}
 		match(PACKAGE);
 		body_is();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		pkg_body_part();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		end_id_opt();
 		match(SEMI);
@@ -13819,7 +13819,7 @@ void AdaParser::package_body() {
 			Set(p_AST, PACKAGE_BODY);
 #line 13821 "AdaParser.cpp"
 		}
-		package_body_AST = static_cast<RefAdaAST>(currentAST.root);
+		package_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -13834,26 +13834,26 @@ void AdaParser::package_body() {
 }
 
 void AdaParser::task_body() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST task_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST task_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  t = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST t_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST t_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		t = LT(1);
 		if ( inputState->guessing == 0 ) {
 			t_AST = astFactory->create(t);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(t_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(t_AST.get()));
 		}
 		match(TASK);
 		body_is();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		body_part();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		match(SEMI);
 		if ( inputState->guessing==0 ) {
@@ -13861,7 +13861,7 @@ void AdaParser::task_body() {
 			Set(t_AST, TASK_BODY);
 #line 13863 "AdaParser.cpp"
 		}
-		task_body_AST = static_cast<RefAdaAST>(currentAST.root);
+		task_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -13876,26 +13876,26 @@ void AdaParser::task_body() {
 }
 
 void AdaParser::protected_body() {
-	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	returnAST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefAdaAST protected_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST protected_body_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	ANTLR_USE_NAMESPACE(antlr)RefToken  p = ANTLR_USE_NAMESPACE(antlr)nullToken;
-	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefAdaAST p_AST = static_cast<RefAdaAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get());
 	
 	try {      // for error handling
 		p = LT(1);
 		if ( inputState->guessing == 0 ) {
 			p_AST = astFactory->create(p);
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(p_AST.get()));
 		}
 		match(PROTECTED);
 		body_is();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		prot_op_bodies_opt();
 		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST.get()));
 		}
 		end_id_opt();
 		match(SEMI);
@@ -13904,7 +13904,7 @@ void AdaParser::protected_body() {
 			Set(p_AST, PROTECTED_BODY);
 #line 13906 "AdaParser.cpp"
 		}
-		protected_body_AST = static_cast<RefAdaAST>(currentAST.root);
+		protected_body_AST = /*static_cast<RefAdaAST>*/(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
