@@ -37,7 +37,8 @@ public: // Constructor & Destructor
 
 public: // Public attributes
 
-  /** Tells which(if any) of the buttons where pressed. */
+  /** Tells which(if any) of the buttons was pressed,
+      (rokrau: this needs to be thrown out, 06/18/01) */
   int mouseBtn;
 
   /** The utilityclass to draw the tree. */
@@ -56,23 +57,20 @@ public: // Public methods
 
 protected: // Protected attributes
 
-  /** The position at the last mousepress-event. */
+  /** The position at the last mousepress-event.
+      (rokrau: this needs to be thrown out, 06/18/01) */
   QPoint mousePos;
 
 protected: // Protected methods
 
-  /** Event to be executed on a mousepress. */
-//  void contentsMousePressEvent(QMouseEvent* event);
-
-  /** Initialize popupmenus. */
-    //  virtual void initPopups() = 0;
-
   /** Get the current popupmenu. */
   virtual KPopupMenu *getCurrentPopup() = 0;
 
-  protected slots: // Protected slots 
-    void slotMouseButtonClicked(int button, QListViewItem * item, const QPoint & pos, int c );
-//    void slotRightButtonPressed(QListViewItem *,const QPoint &,int);
+protected slots: // Protected slots
+  /** KDE conforming signal contextMenu() connects to this slot
+      Note, that the signal executed() has to be connected in each derived class,
+      whereas signal contextMenu() can be handled in a generic way */
+  void slotContextMenu (KListView* listview, QListViewItem* item, const QPoint& pos);
 };
 
 #endif

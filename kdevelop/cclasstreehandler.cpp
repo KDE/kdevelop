@@ -784,6 +784,7 @@ void CClassTreeHandler::getCurrentNames( QString &parentPath,
   parent = item->parent();
 
   aItemType = itemType();
+  parentType = itemType(parent);
 
   // Set the container flag
   isContainer  = ( aItemType ==THCLASS || 

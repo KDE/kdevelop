@@ -20,6 +20,8 @@
 
 #include <kpopupmenu.h>
 
+#include <kdebug.h>
+
 #include <qheader.h>
 
 #include <assert.h>
@@ -49,15 +51,11 @@ CTreeView::CTreeView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
   setRootIsDecorated( true );
   header()->hide();
   setSorting(-1,false);
-
   setFrameStyle( Panel | Sunken );
   setLineWidth( 2 );
-
-  // Add callback for clicks in the listview.
-  connect(this,
-          SIGNAL(mouseButtonClicked(int, QListViewItem *, const QPoint &, int)),
-          SLOT(slotMouseButtonClicked(int, QListViewItem *,const QPoint &,int)));
-
+  // remember, there is only this one, KDE conforming signal to connect
+  connect (this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
+           SLOT(slotContextMenu (KListView *, QListViewItem *, const QPoint &)));
   // Initialize the treehandler.
   treeH = new CTreeHandler();
   treeH->setTree( this );
@@ -119,108 +117,21 @@ QListViewItem *CTreeView::findByName( const char */*aName*/ )
   return NULL;
 }
 
-/*********************************************************************
- *                                                                   *
- *                              EVENTS                               *
- *                                                                   *
- ********************************************************************/
-
-/*------------------------------------- CTreeView::mousePressEvent()
- * mousePressEvent()
- *   Handles mousepressevents(duh!). If the left or right mouse 
- *   button is pressed the coordinate and the mousebutton is saved.
- *
- * Parameters:
- *   event           The event.
- *
- * Returns:
- *   -
+/*--------------------------------- CClassView::slotExecuted()
+ * slotExecuted()
+ *   Event when a user causes the KDE-2 conforming contextMenu() signal
+ *   i.e. probably a right mouse click
  *-----------------------------------------------------------------*/
-//void CTreeView::contentsMousePressEvent(QMouseEvent * event)
-//{
-//  // Save the mousebutton.
-//  mouseBtn = event->button();
-//
-//  //if( mouseBtn == LeftButton || mouseBtn == RightButton || mouseBtn == MidButton)
-//  mousePos = event->pos();
-//
-//  // set the item selected if midButton clicked, QListView doesn't do this by default
-//  QListViewItem* item;
-//  item = itemAt(mousePos);
-//  if (isSelected(item) && mouseBtn != RightButton){
-//      emit selectionChanged ();
-//      emit selectionChanged(item);
-//  }
-//
-//  if(mouseBtn == MidButton){		
-//      setSelected(item,true);
-//  }
-//  QListView::mousePressEvent( event );
-//
-//  // reset the saved mousebutton.
-//  mouseBtn = NoButton;
-//
-//}
-
-/*********************************************************************
- *                                                                   *
- *                              SLOTS                                *
- *                                                                   *
- ********************************************************************/
-
-/*--------------------------------- CClassView::slotRightButtonPressed()
- * slotRightButtonPressed()
- *   Event when a user selects someting in the tree.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CTreeView::slotMouseButtonClicked(int button, QListViewItem * item, const QPoint & pos, int /*c*/ )
+void CTreeView::slotContextMenu (KListView* listview, QListViewItem* item, const QPoint& pos)
 {
-  if (item)
-  {
-    // These make other stuff work - absolutely crazy though :(
-    mouseBtn = button;
-    mousePos = pos;
-
-    switch (button)
-    {
-      case RightButton:
-      {
-        // Set the sent item as active.
-        setSelected( item, true );
-
-        // Fetch the popupmenu for the current item.
-        KPopupMenu* popup = getCurrentPopup();
-
-        // If the exists a popupmenu we show it.
-        if( popup )
-          popup->popup( mousePos ); //this->mapToGlobal( mousePos ) );
-
-        break;
-      }
-
-      case LeftButton:
-      {
-        emit selectionChanged ();
-        emit selectionChanged(item);
-        break;
-      }
-
-      case MidButton:
-      {
-        setSelected(item,true);
-        break;
-      }
-
-      default:
-        break;
-    }
-    // Reset for unknown reasons :(
-    mouseBtn = NoButton;
-  }
+  if (!listview||!item) return;
+  kdDebug() << "in CTreeView::slotContextMenu(), item= " << item << "\n";
+  // Set the sent item as active.
+  setSelected( item, true );
+  // Fetch the popupmenu for the current item and show it if it exists
+  KPopupMenu* popup = getCurrentPopup();
+  if( popup )
+    popup->popup( pos );
 }
 
 /*-----------------------------------------------------------------*/

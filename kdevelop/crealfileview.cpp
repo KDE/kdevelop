@@ -75,7 +75,7 @@ CRealFileView::CRealFileView(QWidget*parent,const char* name)
   showNonPrjFiles=true;
   file_col = 0;
   connect(this,
-          SIGNAL(selectionChanged(QListViewItem*)), 
+          SIGNAL(executed(QListViewItem*)),
           SLOT(slotSelectionChanged(QListViewItem*)));
 }
 
@@ -419,8 +419,8 @@ void CRealFileView::slotSelectionChanged(QListViewItem* selection)
 {
   THType itemType=treeH->itemType();
 
-  if( itemType!=THFOLDER && itemType!=THPROJECT &&
-	(mouseBtn == LeftButton || mouseBtn == MidButton))
+  if( itemType!=THFOLDER && itemType!=THPROJECT /*&&
+	(mouseBtn == LeftButton || mouseBtn == MidButton)*/)
     emit fileSelected(getFullFilename(selection));
 }
 

@@ -132,8 +132,11 @@ CClassView::CClassView(QWidget* parent, const char* name) :
   setTreeHandler( new CClassTreeHandler() );
   ((CClassTreeHandler *)treeH)->setStore( store );
 
-  connect(this, SIGNAL(selectionChanged()), SLOT(slotClassViewSelected()));
-
+  connect (this, SIGNAL(executed(QListViewItem *, const QPoint &, int )),
+           SLOT(slotClassViewSelected()));
+  // the signal used to be reemitted from CTreeView, it doesnt make sense
+  // any longer and it's therefore replaced (rokrau 6/18/01)
+  //connect(this, SIGNAL(selectionChanged()), SLOT(slotClassViewSelected()));
 }
 
 /*------------------------------------------ CClassView::~CClassView()
@@ -1197,32 +1200,35 @@ void CClassView::slotClassDelete()
 
 void CClassView::slotClassViewSelected()
 {
-  THType type;
+  THType type = treeH->itemType();
 
-  type = treeH->itemType();
+  kdDebug() << "in CClassView::slotClassViewSelected(): \n";
+
+  /*  well, there is no middle mouse button action here any longer, we are now fully
+      KDE-2 conform and dont want to confuse our windows lusers */
 
   // Take care of left-button clicks.
-  if( mouseBtn == LeftButton && type != THFOLDER )
-  {
+//  if( mouseBtn == LeftButton && type != THFOLDER )
+//  {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR ||
         type == THPRIVATE_ATTR || type == THSIGNAL || type == THSCOPE )
       slotViewDeclaration();
     else
       slotViewDefinition();
-  }
-  else if( mouseBtn == MidButton && type != THFOLDER ) // Middle button clicks
-  {
-    if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
-        type == THPUBLIC_ATTR || type == THPROTECTED_ATTR ||
-        type == THPRIVATE_ATTR  || type == THSIGNAL || type == THSCOPE )
-      slotViewDefinition();
-    else
-      slotViewDeclaration();
-  }
+//  }
+//  else if( mouseBtn == MidButton && type != THFOLDER ) // Middle button clicks
+//  {
+//    if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
+//        type == THPUBLIC_ATTR || type == THPROTECTED_ATTR ||
+//        type == THPRIVATE_ATTR  || type == THSIGNAL || type == THSCOPE )
+//      slotViewDefinition();
+//    else
+//      slotViewDeclaration();
+//  }
 
   // Set it back, so next time only if user clicks again we react.
-  mouseBtn = RightButton;
+  //mouseBtn = RightButton;
 }
 
 void CClassView::slotMethodNew()

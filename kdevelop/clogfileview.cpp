@@ -52,11 +52,8 @@ CLogFileView::CLogFileView(bool s_path, QWidget*parent,const char* name)
   show_path = s_path;
   // Create the popupmenus.
   popup = 0;
- 
-  connect(this,
-          SIGNAL(selectionChanged(QListViewItem*)),
+  connect(this,SIGNAL(executed(QListViewItem*)),
           SLOT(slotSelectionChanged(QListViewItem *)));
-
   preselectitem = ""; // no preselect
   firstitemselect = false;
   allgroups_opened= false;
@@ -301,8 +298,8 @@ KPopupMenu *CLogFileView::getCurrentPopup()
 
 void CLogFileView::slotSelectionChanged( QListViewItem* item)
 {
-  if ( (mouseBtn == LeftButton || mouseBtn == MidButton)
-       && treeH->itemType() == THC_FILE )
+  if ( /*(mouseBtn == LeftButton || mouseBtn == MidButton)
+       &&*/ treeH->itemType() == THC_FILE )
     emit logFileTreeSelected(getFullFilename(item));
 }
 

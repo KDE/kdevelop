@@ -88,7 +88,6 @@ public: // Public refreshmethods
    */
   void refresh( QStrList& iHeaderList, QStrList& iSourceList );
 
-
   /** Refresh the whole view. */
   void refresh();
 

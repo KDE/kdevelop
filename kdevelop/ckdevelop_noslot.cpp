@@ -428,7 +428,7 @@ void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
               default:
                   break;
           }
-        }
+      }
       class_tree->refresh(lHeaderList, lSourceList);
 }
 
@@ -441,15 +441,13 @@ void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::refreshTrees(QStrList * iFileList){
-//    time_t lStart = time(NULL);
-//    clock_t lStartClock = clock();
+void CKDevelop::refreshTrees(QStrList * iFileList)
+{
+  CProject* pPrj=getProject();
+  if (!pPrj)
+    return;
   kapp->processEvents(100);
-  doc_tree->refresh(prj);
-  if (!project){
-    return; // no project
-  }
-
+  doc_tree->refresh(pPrj);
   // Update the classview.
   slotStatusMsg(i18n("Scanning project files..."));
     setCursor(KCursor::waitCursor());
@@ -457,20 +455,13 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
   if (iFileList)
   {
     refreshClassViewByFileList(iFileList);
-    }
-    else
-    {
-//        time_t lStart = time(NULL);
-//        clock_t lStartClock = clock();
+  }
+  else
+  {
     kapp->processEvents(100);
-        class_tree->refresh(prj);
-//        kdDebug() << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
-//          kdDebug() << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
-
-    }
-
+    class_tree->refresh(pPrj);
+  }
   statProg->reset();
-//  statProg->hide();
 
   // Update the classcombo.
   kapp->processEvents(100);
@@ -478,21 +469,21 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
 
   // Update LFV.
   kapp->processEvents(100);
-  log_file_tree->storeState(prj);
+  log_file_tree->storeState(pPrj);
   kapp->processEvents(100);
-  log_file_tree->refresh(prj);
+  log_file_tree->refresh(pPrj);
 
   // Update RFV.
   kapp->processEvents(100);
-  real_file_tree->refresh(prj);
+  real_file_tree->refresh(pPrj);
 
   kapp->processEvents(100);
 
   statusBar()->repaint();
   setCursor(KCursor::arrowCursor());    
   // update the file_open_menu
-  file_open_list=prj->getHeaders();
-  QStrList sources=prj->getSources();
+  file_open_list=pPrj->getHeaders();
+  QStrList sources=pPrj->getSources();
   uint j;
   for( j=0; j< sources.count(); j++){
     file_open_list.append(sources.at(j));
@@ -504,10 +495,7 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
     QFileInfo fileInfo (file_open_list.at(i));
     file_open_popup->insertItem(fileInfo.fileName());
   }
-  
   slotStatusMsg(i18n("Ready."));
-//  kdDebug() << "refreshTree took " << (time(NULL) - lStart) << "ms to complete" << endl;
-//  kdDebug() << "refrehTree took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 }
  
 /*------------------------------------------ CKDevelop::refreshTrees()
@@ -523,31 +511,32 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
  *-----------------------------------------------------------------*/
 void CKDevelop::refreshTrees(TFileInfo *info)
 {
+  CProject* pPrj=getProject();
+  if (!pPrj)
+    return;
 
-  if( project )
-  {
-    kapp->processEvents(100);
-    // If this is a sourcefile we parse it and update the classview.
-    if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
-        {
-            class_tree->addFile( prj->getProjectDir() + info->rel_name );
-            CVRefreshClassCombo();
-        }
+  kapp->processEvents(100);
+  // If this is a sourcefile we parse it and update the classview.
+  if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
+      {
+          class_tree->addFile( pPrj->getProjectDir() + info->rel_name );
+          CVRefreshClassCombo();
+      }
 
-    // Update LFV.
-    kapp->processEvents(100);
-    log_file_tree->storeState(prj);
-    log_file_tree->refresh(prj);
+  // Update LFV.
+  kapp->processEvents(100);
+  log_file_tree->storeState(pPrj);
+  log_file_tree->refresh(pPrj);
 
-    // Update RFV.
-    kapp->processEvents(100);
-    real_file_tree->refresh(prj);
-    // update dialogs tree
-    kapp->processEvents(100);
-  }
+  // Update RFV.
+  kapp->processEvents(100);
+  real_file_tree->refresh(pPrj);
+  // update dialogs tree
+  kapp->processEvents(100);
+
   // refresh the file_open_list
-  file_open_list=prj->getHeaders();
-  QStrList sources=prj->getSources();
+  file_open_list=pPrj->getHeaders();
+  QStrList sources=pPrj->getSources();
   uint j;
   for( j=0; j< sources.count(); j++){
     file_open_list.append(sources.at(j));
