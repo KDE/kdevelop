@@ -359,7 +359,7 @@ return a.exec();
 </code></tscreen>
 
 You see, the only addition to give the button more interaction is to use a <tt/connect()/ method:
-<tt/connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );/ is all you have to add. What is the meaning now ? The class
+<tt/connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));/ is all you have to add. What is the meaning now ? The class
 declaration of <tt/QObject/ says about the <tt/connect()/ method:
 
 <tt/bool connect ( const QObject * sender, const char * signal, const QObject * receiver, const char * member )/
@@ -417,7 +417,7 @@ hello.resize( 100, 30 );
 
 a.setTopWidget( &amp;hello );
 
-connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );
+connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));
 
 hello.show();
 return a.exec();
@@ -1347,10 +1347,10 @@ where we will find some useful things first. For creating new applications, the 
 <enum>
 <item><tt/<cdx/KTabListBox//: offers a multi-column list box where the user can change the rows with <idx/drag'n drop/.
 <item><tt/<cdx/KTreeList//: inherited from <tt/<cdx/QTableView//, offering a collapsible tree. This could be used instead of
-<tt/QListView/.
+<tt/QListView/. In KDE 2.0, this class will disappear.
 <item><tt/<cdx/KEdit//: the base classes for the <em/KEdit/ application offered with KDE. This could be used instead of
 <tt/<cdx/QMultiLineEdit//.
-<item><tt/<cdx/KNewPanner//: manage two child widgets like <tt/<cdx/QSplitter//.
+<item><tt/<cdx/KNewPanner//: manage two child widgets like <tt/<cdx/QSplitter//. In KDE 2.0, this class will disappear.
 </enum>
 
 The <tt/khtmlw/ library on the other hand offers a complete HTML-interpreting widget that is ready to use. It is scrollable already,
@@ -2132,7 +2132,7 @@ Constructing a new dialog is very easy if you already have experience with graph
 create a widget visually and displays the look as it will be shown to the user directly. Further, you can have a preview of your widget
 by selecting "Preview" from the "View" menu.
 
-To begin constructing a dialog or any other widget, switch to the Dialogeditor and select "New Dialog" from the "File" menu. Then enter
+To begin constructing a dialog or any other widget, switch to the Dialogeditor and select "New" from the "File" menu. Then enter
 all needed information to the "New Dialog" dialog. Those are:
 
 <enum>

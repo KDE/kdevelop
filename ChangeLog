@@ -5,6 +5,7 @@
 	  trick with shell=="/bin/bash" was not portable.
 	* Some cleanup in html file searching
 	* Fixed KNewPanner related stuff
+	* Fixed documentation bugs #1906 and #1913
 
 1999-09-08  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* added cvs version (HEAD) of KWrite, thanks to Jochen Wilhelmy for the port some days ago
