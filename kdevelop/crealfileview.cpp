@@ -348,8 +348,10 @@ bool CRealFileView::isInstalledFile(QString filename)
 
 void CRealFileView::slotSelectionChanged(QListViewItem* selection) 
 {
-  if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER ||
-      mouseBtn == MidButton && treeH->itemType() != THFOLDER)
+  THType itemType=treeH->itemType();
+
+  if( itemType!=THFOLDER && itemType!=THPROJECT &&
+	(mouseBtn == LeftButton || mouseBtn == MidButton))
     emit fileSelected(getFullFilename(selection));
 }
 
