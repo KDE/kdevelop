@@ -48,7 +48,7 @@ PHPCodeCompletion::~PHPCodeCompletion(){
 void PHPCodeCompletion::readGlobalPHPFunctionsFile(){
   KStandardDirs *dirs = PHPSupportFactory::instance()->dirs();
   QString phpFuncFile = dirs->findResource("data","kdevphpsupport/phpfunctions");
-  KRegExp lineReg(":([0-9A-Za-z_]+) ([0-9A-Za-z_]+)(\\(.*\\))");
+  QRegExp lineReg(":([0-9A-Za-z_]+) ([0-9A-Za-z_]+)(\\(.*\\))");
   FunctionCompletionEntry e;
   QFile f(phpFuncFile);
   if ( f.open(IO_ReadOnly) ) {    // file opened successfully
@@ -56,17 +56,17 @@ void PHPCodeCompletion::readGlobalPHPFunctionsFile(){
       QString s;
       while ( !t.eof() ) {        // until end of file...
 	  s = t.readLine();       // line of text excluding '\n'
-	  if(lineReg.match(s.local8Bit())){
-	      e.prefix = lineReg.group(1);
-	      e.text = lineReg.group(2);
-	      //	      if(QString(lineReg.group(3)) == "void"){
+	  if(lineReg.search(s.local8Bit()) != -1){
+	      e.prefix = lineReg.cap(1);
+	      e.text = lineReg.cap(2);
+	      //	      if(QString(lineReg.cap(3)) == "void"){
 		e.postfix ="()";
 		//	      }
 		//	      else{
 		//	      e.postfix ="(...)";
 		//	      }
-	      e.prototype = QString(lineReg.group(1)) + " " + QString(lineReg.group(2)) +
-		  "(" + QString(lineReg.group(3)) + ")";
+	      e.prototype = QString(lineReg.cap(1)) + " " + QString(lineReg.cap(2)) +
+		  "(" + QString(lineReg.cap(3)) + ")";
 	      m_globalFunctions.append(e);
 	  }
 
@@ -290,13 +290,13 @@ QString PHPCodeCompletion::getClassName(QString varName,QString maybeInstanceOf)
 
 QString PHPCodeCompletion::searchClassNameForVariable(QString varName){
   kdDebug(9018) << "enter PHPCodeCompletion::searchClassNameForVariable:" << varName << ":" << endl;
-  KRegExp createVarRe(QString("\\$" + varName.mid(1) + "[ \t]*=[& \t]*new[ \t]+([0-9A-Za-z_]+)").local8Bit());
+  QRegExp createVarRe(QString("\\$" + varName.mid(1) + "[ \t]*=[& \t]*new[ \t]+([0-9A-Za-z_]+)").local8Bit());
   for(int i=m_currentLine;i>=0;i--){
     QString lineStr = m_editInterface->textLine(i);
     if(!lineStr.isNull()){
-      if(createVarRe.match(lineStr.local8Bit())) { // ok found
+      if(createVarRe.search(lineStr.local8Bit()) != -1) { // ok found
 	//      cerr << endl << "match in searchClassNameForVariable:";
-	return createVarRe.group(1);
+	return createVarRe.cap(1);
       }
     }
   }
@@ -305,12 +305,12 @@ QString PHPCodeCompletion::searchClassNameForVariable(QString varName){
 
 QString PHPCodeCompletion::searchCurrentClassName(){
   kdDebug(9018) << "enter PHPCodeCompletion::searchCurrentClassName:" << endl;
-  KRegExp classre("^[ \t]*class[ \t]+([A-Za-z_]+)[ \t]*(extends[ \t]*([A-Za-z_]+))?.*$");
+  QRegExp classre("^[ \t]*class[ \t]+([A-Za-z_]+)[ \t]*(extends[ \t]*([A-Za-z_]+))?.*$");
   for(int i=m_currentLine;i>=0;i--){
     QString lineStr = m_editInterface->textLine(i);
     if(!lineStr.isNull()){
-      if(classre.match(lineStr.local8Bit())) { // ok found
-          return classre.group(1);
+      if(classre.search(lineStr.local8Bit()) != -1) { // ok found
+          return classre.cap(1);
       }
     }
   }
@@ -334,9 +334,9 @@ bool PHPCodeCompletion::checkForGlobalFunctionArgHint(QString lineStr,int col,in
   if(rightBracket>leftBracket) return false; // we are out of (..)
   methodStart = methodStart.left(leftBracket+1);
   //  cerr << methodStart << endl;
-  KRegExp functionre("([A-Za-z_]+)[ \t]*\\(");
-  if(functionre.match(methodStart.local8Bit())){ // check for global functions
-    QString name = functionre.group(1);
+  QRegExp functionre("([A-Za-z_]+)[ \t]*\\(");
+  if(functionre.search(methodStart.local8Bit()) != -1){ // check for global functions
+    QString name = functionre.cap(1);
     int startMethod = lineStr.findRev(name,col);
     QString startString = lineStr.mid(0,startMethod);
     if(startString.right(2) != "->"){
@@ -444,14 +444,14 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /
   if(rightBracket>leftBracket) return false; // we are out of (..)
   start = start.mid(equal,leftBracket-equal+1);
   //  cerr << "NEW: " << start << endl;
-  KRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)[ \t]*\\(");
-  if(newre.match(start.local8Bit())){
-    if( m_model->globalNamespace()->hasClass(newre.group(1)) ){ // exists this class?
-      ClassDom pClass = m_model->globalNamespace()->classByName(newre.group(1))[ 0 ];
+  QRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)[ \t]*\\(");
+  if(newre.exactMatch(start.local8Bit()) != -1){
+    if( m_model->globalNamespace()->hasClass(newre.cap(1)) ){ // exists this class?
+      ClassDom pClass = m_model->globalNamespace()->classByName(newre.cap(1))[ 0 ];
       FunctionList methodList = pClass->functionList();
       FunctionList::Iterator methodIt;
       for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
-        if((*methodIt)->name() == newre.group(1)){
+        if((*methodIt)->name() == newre.cap(1)){
 	  ArgumentDom pArg = (*methodIt)->argumentList().first();
 	  m_argWidgetShow = true;
 	  QValueList <QString> functionList;
@@ -469,9 +469,9 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /
 bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/){
   //  cerr  << "enter checkForNewInstance" << endl;
   QString start = lineStr.left(col);
-  KRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)");
-  if(newre.match(start.local8Bit())){
-    QString classStart = newre.group(1);
+  QRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)");
+  if(newre.exactMatch(start.local8Bit()) != -1 ){
+    QString classStart = newre.cap(1);
     if(start.right(2) == classStart){
       QValueList<KTextEditor::CompletionEntry> list;
 

@@ -32,6 +32,7 @@
 #include <kprocess.h>
 #include <kregexp.h>
 #include <kstatusbar.h>
+#include <kparts/browserextension.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>
@@ -194,7 +195,7 @@ void PHPSupportPart::slotConfigStored(){
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
   kdDebug(9018) << endl << "slotWebResult()" << filename.latin1() << line;
-  partController()->editDocument(filename,line);
+  partController()->editDocument(KURL( filename ),line);
 }
 void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
   QVBox *vbox = dlg->addVBoxPage(i18n("PHP Settings"));
@@ -246,6 +247,11 @@ bool PHPSupportPart::validateConfig(){
 }
 
 void PHPSupportPart::executeOnWebserver(){
+
+  // Save all files once
+  partController()->saveAllFiles();
+  
+  // Figure out the name of the remote file
   QString file;
   PHPConfigData::WebFileMode mode = configData->getWebFileMode();
   QString weburl = configData->getWebURL();
@@ -258,6 +264,16 @@ void PHPSupportPart::executeOnWebserver(){
   if(mode == PHPConfigData::Default){
     file = configData->getWebDefaultFile();
   }
+  
+  // Force KHTMLPart to reload the page
+  KParts::BrowserExtension* be = m_htmlView->browserExtension();
+  if(be){
+    KParts::URLArgs urlArgs( be->urlArgs() );
+    urlArgs.reload = true;
+    be->setURLArgs( urlArgs );
+  }
+
+  // Acutally do the request
   m_phpExeOutput="";
   m_htmlView->openURL(KURL(weburl + file));
   m_htmlView->show();
@@ -287,6 +303,10 @@ void PHPSupportPart::slotWebResult(KIO::Job* /*job*/){
 
 void PHPSupportPart::executeInTerminal(){
   kdDebug(9018) << "slotExecuteInTerminal()" << endl;
+
+  // Save all files once
+  partController()->saveAllFiles();
+      
   QString file;
   if(m_htmlView==0){
     m_htmlView = new PHPHTMLView();
