@@ -18,7 +18,7 @@ APPSDIR = $(kde_appsdir)
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard
+SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard plugins widgets
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
@@ -49,7 +49,7 @@ kdevelop_METASOURCES = USE_AUTOMOC
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a -lkfile -lkio -lkspell -lkhtml -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl -ldb -ldl
+kdevelop_LDADD   = ./plugins/libkdevplugin.a ./widgets/checklistbox/libchecklistbox.a ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a -lkfile -lkio -lkspell -lkhtml -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl -ldb -ldl
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \

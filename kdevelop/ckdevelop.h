@@ -395,6 +395,11 @@ public:
   void  slotOptionsCreateSearchDatabase();
   
   ////////////////////////
+  // Plugin-Menu entries
+  ///////////////////////
+  void slotPluginPluginManager();
+
+  ////////////////////////
   // BOOKMARKS-Menu entries
   ///////////////////////
   void slotBookmarksSet();
@@ -693,6 +698,7 @@ private:
   QPopupMenu* build_menu;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
+  QPopupMenu* plugin_menu;
   QPopupMenu* menu_buffers;
   QPopupMenu* help_menu;
     //  QWhatsThis* whats_this;

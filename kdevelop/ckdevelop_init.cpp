@@ -666,6 +666,14 @@ void CKDevelop::initMenuBar(){
   menu_buffers = new QPopupMenu;
   kdev_menubar->insertItem(i18n("&Window"), menu_buffers);
   kdev_menubar->insertSeparator();
+
+  ///////////////////////////////////////////////////////////////////
+  // PlugIns menu
+  plugin_menu= new QPopupMenu;
+  plugin_menu->insertItem(i18n("&Plugin Manager..."),this,SLOT(slotPluginPluginManager()),0,ID_PLUGIN_MANAGER);
+  plugin_menu->insertSeparator();
+
+  kdev_menubar->insertItem(i18n("&Plugins"),plugin_menu);
   
   ///////////////////////////////////////////////////////////////////
   // Bookmarks-menu entries

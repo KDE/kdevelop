@@ -23,6 +23,9 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
+class CKDevelop;
+class QPopupMenu;
+
 /** (struct) contains the internal representation of a textfile
   *@author Sandy Meier
   */
@@ -44,5 +47,11 @@ struct TBugReportInfo {
     QString qt_version;
     QString os;
     QString compiler;
+};
+struct TImportantPtrInfo{
+	CKDevelop* kdev;
+	QPopupMenu* plugin_menu;
+	
+
 };
 #endif

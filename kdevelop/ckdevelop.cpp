@@ -70,6 +70,7 @@
 #include "vc/versioncontrol.h"
 #include "print/cconfigenscriptdlg.h"
 #include "print/cconfiga2psdlg.h"
+#include "plugins/pluginmanagerdlg.h"
 
 
 extern KGuiCmdManager cmdMngr;
@@ -1398,6 +1399,11 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
 
 }
 	
+void CKDevelop::slotPluginPluginManager(){
+    PluginManagerDlg dlg;
+    dlg.show();
+}
+
 void CKDevelop::slotBookmarksSet(){
 	if(s_tab_view->getCurrentTab()==BROWSER)
 		slotBookmarksAdd();
@@ -1762,7 +1768,8 @@ void CKDevelop::slotHelpAbout(){
 			"Bernd Gehrmann <bernd@physik.hu-berlin.de>\n"
                         "Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
 			"Jörgen Olsson<jorgen@cenacle.net>\n"
-                        "Martin Piskernig <martin.piskernig@stuwo.at>\n\n"
+                        "Martin Piskernig <martin.piskernig@stuwo.at>\n"
+			"Walter Tasin <tasin@e-technik.fh-muenchen.de>\n\n"
                         "See The KDevelop User Manual, Chapter Authors\n"
                         "for further information.\n\n"
                         "This program is free software; you can\n"
