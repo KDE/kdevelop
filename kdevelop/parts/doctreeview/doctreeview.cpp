@@ -27,7 +27,7 @@ void DocTreeView::setupGUI()
     m_widget->setIcon(SmallIcon("mini-book1"));
     m_widget->setCaption(i18n("Documentation"));
     
-    emit embedWidget(m_widget, SelectView, i18n("DOC"));
+    emit embedWidget(m_widget, SelectView, i18n("DOC"), i18n("documentation tree view"));
 }
 
 

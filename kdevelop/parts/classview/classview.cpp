@@ -34,7 +34,7 @@ void ClassView::setupGUI()
     w->display(42);
     //    w->setIcon()
     w->setCaption(i18n("Class view"));
-    embedWidget(w, SelectView, i18n("CV"));
+    embedWidget(w, SelectView, i18n("CV"), i18n("class tree view"));
     
     classes_action = new ClassListAction(i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");

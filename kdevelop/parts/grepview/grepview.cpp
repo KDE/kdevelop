@@ -29,7 +29,7 @@ void GrepView::setupGUI()
     m_widget->setIcon(SmallIcon("find"));
     m_widget->setCaption(i18n("Grep"));
 
-    emit embedWidget(m_widget, OutputView, i18n("Grep"));
+    emit embedWidget(m_widget, OutputView, i18n("Grep"), i18n("grep output view"));
 
     KAction *action;
     action = new KAction(i18n("Grep"), CTRL+ALT+Key_F, m_widget, SLOT(showDialog()),

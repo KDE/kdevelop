@@ -31,7 +31,7 @@ void MakeView::setupGUI()
     m_widget = new MakeWidget(this);
     m_widget->setCaption(i18n("Compiler messages"));
 
-    emit embedWidget(m_widget, OutputView, i18n("Messages"));
+    emit embedWidget(m_widget, OutputView, i18n("Messages"), i18n("messages output view"));
 
     KAction *action;
     action = new KAction( i18n("&Next error"), Key_F4, m_widget, SLOT(nextError()),
@@ -86,7 +86,7 @@ void AppOutputView::setupGUI()
     m_widget = new AppOutputWidget();
     m_widget->setCaption(i18n("Application output"));
 
-    emit embedWidget(m_widget, OutputView, i18n("Application"));
+    emit embedWidget(m_widget, OutputView, i18n("Application"), i18n("application output view"));
 }
 
 
