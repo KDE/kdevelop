@@ -281,8 +281,13 @@ QString AntProjectPart::runArguments() const
 
 QString AntProjectPart::activeDirectory() const
 {
-  /// @todo Fix this
-  return m_projectDirectory;
+  /// @fixme
+  
+//  return m_projectDirectory;
+
+	// returning m_projectDirectory is wrong, the path returned should be _relative_ to the project dir
+	// returning an empty string until antproject supports the idea of an active directory
+	return QString("");
 }
 
 
@@ -335,7 +340,7 @@ void AntProjectPart::removeFile(const QString &fileName)
 	QStringList fileList;
 	fileList.append ( fileName );
 	
-	this->addFiles ( fileList );
+	this->removeFiles ( fileList );
 }
 
 void AntProjectPart::removeFiles ( const QStringList& fileList )
@@ -537,7 +542,7 @@ void AntProjectPart::optionsAccepted()
 
 void AntProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-  if (!context->hasType( Context::EditorContext ))
+  if (!context->hasType( Context::FileContext ))
     return;
 
   const FileContext *fcontext = static_cast<const FileContext*>(context);
