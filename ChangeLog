@@ -1,3 +1,7 @@
+2004-02-07 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Moved all of the plugin loading logic to PluginController
+	* Moved FileCreatePart to the globally loaded "default parts"
+
 2004-02-06 jbb <jbb@kdevelop.org>
     * Add (global) Output radix to debugger options.
     * Robert Gruber's patch to add hex/dec toggle to watch window items
