@@ -1710,6 +1710,11 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
     accel = new CKDevAccel( pTopLevelWidget );
   }
 
+  accel->insertItem( i18n("Goto Previous Window"), "GotoPrevWin", IDK_GOTO_PREVWIN);
+  accel->connectItem("GotoPrevWin", m_pParent, SLOT(activatePrevWin()), true, 0);
+  accel->insertItem( i18n("Goto Next Window"), "GotoNextWin", IDK_GOTO_NEXTWIN);
+  accel->connectItem("GotoNextWin", m_pParent, SLOT(activateNextWin()), true, 0);
+
   //file menu
   accel->connectItem( KStdAccel::New, m_pParent, SLOT(slotFileNew()), true, ID_FILE_NEW );
   accel->connectItem( KStdAccel::Open , m_pParent, SLOT(slotFileOpen()), true, ID_FILE_OPEN );

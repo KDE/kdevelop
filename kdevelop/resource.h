@@ -417,7 +417,8 @@
 #define IDK_EDIT_REDO	       					CTRL+Key_Y						
 #define IDK_EDIT_UNDO	       					CTRL+Key_Z						// standard key
 
-
+#define IDK_GOTO_PREVWIN                                        ALT+Key_Prior
+#define IDK_GOTO_NEXTWIN                                        ALT+Key_Next
 ///////////////////////////////////////////////////////////////////
 // MACROS FOR THE CONNECT OF YOUR SIGNALS TO CORRESPONDENT SLOTS
 // IN YOUR MAIN IMPLEMENTATION OF MENUBAR AND TOOLBAR
