@@ -26,5 +26,3 @@ rc_DATA = kidewrite_browser.rc kidewriteui.rc
 
 EXTRA_DIST = $(apps_DATA)
 
-messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/kwrite.pot
