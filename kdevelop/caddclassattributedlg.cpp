@@ -32,6 +32,8 @@ CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name 
     typeEdit( this, "typeEdit" ),
     nameLbl( this, "nameLbl" ),
     nameEdit( this, "nameEdit" ),
+    docLbl( this, "docLbl" ),
+    docEdit( this, "docEdit" ),
     publicRb( this, "publicRb" ),
     protectedRb( this, "protectedRb" ),
     privateRb( this, "privateRb" ),
@@ -48,7 +50,7 @@ CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name 
 
 void CAddClassAttributeDlg::setWidgetValues()
 {
-  modifierGrp.setGeometry( 10, 240, 260, 60 );
+  modifierGrp.setGeometry( 10, 310, 260, 50 );
   modifierGrp.setMinimumSize( 0, 0 );
   modifierGrp.setMaximumSize( 32767, 32767 );
   modifierGrp.setFocusPolicy( QWidget::NoFocus );
@@ -59,7 +61,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   modifierGrp.setTitle( "Modifiers" );
   modifierGrp.setAlignment( 1 );
 
-  varGrp.setGeometry( 10, 10, 260, 150 );
+  varGrp.setGeometry( 10, 10, 260, 230 );
   varGrp.setMinimumSize( 0, 0 );
   varGrp.setMaximumSize( 32767, 32767 );
   varGrp.setFocusPolicy( QWidget::NoFocus );
@@ -70,7 +72,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   varGrp.setTitle( "Variable" );
   varGrp.setAlignment( 1 );
 
-  accessGrp.setGeometry( 10, 170, 260, 60 );
+  accessGrp.setGeometry( 10, 250, 260, 50 );
   accessGrp.setMinimumSize( 0, 0 );
   accessGrp.setMaximumSize( 32767, 32767 );
   accessGrp.setFocusPolicy( QWidget::NoFocus );
@@ -104,7 +106,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   typeEdit.setEchoMode( QLineEdit::Normal );
   typeEdit.setFrame( TRUE );
 
-  nameLbl.setGeometry( 20, 90, 70, 20 );
+  nameLbl.setGeometry( 20, 80, 70, 20 );
   nameLbl.setMinimumSize( 0, 0 );
   nameLbl.setMaximumSize( 32767, 32767 );
   nameLbl.setFocusPolicy( QWidget::NoFocus );
@@ -115,7 +117,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   nameLbl.setAlignment( 289 );
   nameLbl.setMargin( -1 );
 
-  nameEdit.setGeometry( 20, 110, 240, 30 );
+  nameEdit.setGeometry( 20, 100, 240, 30 );
   nameEdit.setMinimumSize( 0, 0 );
   nameEdit.setMaximumSize( 32767, 32767 );
   nameEdit.setFocusPolicy( QWidget::StrongFocus );
@@ -127,7 +129,29 @@ void CAddClassAttributeDlg::setWidgetValues()
   nameEdit.setEchoMode( QLineEdit::Normal );
   nameEdit.setFrame( TRUE );
 
-  publicRb.setGeometry( 20, 190, 70, 30 );
+  docLbl.setGeometry( 20, 130, 100, 20 );
+  docLbl.setMinimumSize( 0, 0 );
+  docLbl.setMaximumSize( 32767, 32767 );
+  docLbl.setFocusPolicy( QWidget::NoFocus );
+  docLbl.setBackgroundMode( QWidget::PaletteBackground );
+  docLbl.setFontPropagation( QWidget::NoChildren );
+  docLbl.setPalettePropagation( QWidget::NoChildren );
+  docLbl.setText( "Documentation:" );
+  docLbl.setAlignment( 289 );
+  docLbl.setMargin( -1 );
+
+  docEdit.setGeometry( 20, 150, 240, 80 );
+  docEdit.setMinimumSize( 0, 0 );
+  docEdit.setMaximumSize( 32767, 32767 );
+  docEdit.setFocusPolicy( QWidget::StrongFocus );
+  docEdit.setBackgroundMode( QWidget::PaletteBase );
+  docEdit.setFontPropagation( QWidget::SameFont );
+  docEdit.setPalettePropagation( QWidget::SameFont );
+  docEdit.insertLine( "" );
+  docEdit.setReadOnly( FALSE );
+  docEdit.setOverwriteMode( FALSE );
+
+  publicRb.setGeometry( 20, 270, 70, 20 );
   publicRb.setMinimumSize( 0, 0 );
   publicRb.setMaximumSize( 32767, 32767 );
   publicRb.setFocusPolicy( QWidget::TabFocus );
@@ -138,7 +162,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   publicRb.setAutoRepeat( FALSE );
   publicRb.setAutoResize( FALSE );
 
-  protectedRb.setGeometry( 110, 190, 80, 30 );
+  protectedRb.setGeometry( 110, 270, 80, 20 );
   protectedRb.setMinimumSize( 0, 0 );
   protectedRb.setMaximumSize( 32767, 32767 );
   protectedRb.setFocusPolicy( QWidget::TabFocus );
@@ -149,7 +173,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   protectedRb.setAutoRepeat( FALSE );
   protectedRb.setAutoResize( FALSE );
 
-  privateRb.setGeometry( 200, 190, 60, 30 );
+  privateRb.setGeometry( 200, 270, 60, 20 );
   privateRb.setMinimumSize( 0, 0 );
   privateRb.setMaximumSize( 32767, 32767 );
   privateRb.setFocusPolicy( QWidget::TabFocus );
@@ -160,7 +184,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   privateRb.setAutoRepeat( FALSE );
   privateRb.setAutoResize( FALSE );
  
-  staticCb.setGeometry( 20, 260, 60, 30 );
+  staticCb.setGeometry( 20, 330, 60, 20 );
   staticCb.setMinimumSize( 0, 0 );
   staticCb.setMaximumSize( 32767, 32767 );
   staticCb.setFocusPolicy( QWidget::TabFocus );
@@ -171,7 +195,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   staticCb.setAutoRepeat( FALSE );
   staticCb.setAutoResize( FALSE );
  
-  constCb.setGeometry( 110, 260, 60, 30 );
+  constCb.setGeometry( 110, 330, 60, 20 );
   constCb.setMinimumSize( 0, 0 );
   constCb.setMaximumSize( 32767, 32767 );
   constCb.setFocusPolicy( QWidget::TabFocus );
@@ -182,7 +206,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   constCb.setAutoRepeat( FALSE );
   constCb.setAutoResize( FALSE );
 
-  okBtn.setGeometry( 290, 10, 100, 30 );
+  okBtn.setGeometry( 10, 370, 100, 30 );
   okBtn.setMinimumSize( 0, 0 );
   okBtn.setMaximumSize( 32767, 32767 );
   okBtn.setFocusPolicy( QWidget::TabFocus );
@@ -193,7 +217,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   okBtn.setAutoRepeat( FALSE );
   okBtn.setAutoResize( FALSE );
 
-  cancelBtn.setGeometry( 290, 50, 100, 30 );
+  cancelBtn.setGeometry( 170, 370, 100, 30 );
   cancelBtn.setMinimumSize( 0, 0 );
   cancelBtn.setMaximumSize( 32767, 32767 );
   cancelBtn.setFocusPolicy( QWidget::TabFocus );
@@ -223,6 +247,26 @@ void CAddClassAttributeDlg::setCallbacks()
   connect( &cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );
 }
 
+
+CParsedAttribute *CAddClassAttributeDlg::asSystemObj()
+{
+  CParsedAttribute *aAttr = new CParsedAttribute();
+  aAttr->setType( typeEdit.text() );
+  aAttr->setName( nameEdit.text() );
+
+  if( publicRb.isChecked() )
+    aAttr->setExport( PUBLIC );
+  else if( protectedRb.isChecked() )
+    aAttr->setExport( PROTECTED );
+  else if( privateRb.isChecked() )
+    aAttr->setExport( PRIVATE );
+  
+  aAttr->setIsStatic( staticCb.isChecked() );
+  aAttr->setIsConst( constCb.isChecked() );
+  aAttr->setComment( docEdit.text() );
+
+  return aAttr;
+}
 
 void CAddClassAttributeDlg::OK()
 {

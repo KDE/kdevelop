@@ -32,6 +32,8 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
     typeEdit( this, "typeEdit" ),
     declLbl( this, "declLbl" ),
     declEdit( this, "declEdit" ),
+    docLbl( this, "docLbl" ),
+    docEdit( this, "docEdit" ),
     publicRb( this, "publicRb" ),
     protectedRb( this, "protectedRb" ),
     privateRb( this, "privateRb" ),
@@ -49,7 +51,7 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
 
 void CAddClassMethodDlg::setWidgetValues()
 {
-  modifierGrp.setGeometry( 10, 240, 260, 60 );
+  modifierGrp.setGeometry( 10, 310, 260, 50 );
   modifierGrp.setMinimumSize( 0, 0 );
   modifierGrp.setMaximumSize( 32767, 32767 );
   modifierGrp.setFocusPolicy( QWidget::NoFocus );
@@ -60,7 +62,7 @@ void CAddClassMethodDlg::setWidgetValues()
   modifierGrp.setTitle( "Modifiers" );
   modifierGrp.setAlignment( 1 );
 
-  functionGrp.setGeometry( 10, 10, 260, 150 );
+  functionGrp.setGeometry( 10, 10, 260, 230 );
   functionGrp.setMinimumSize( 0, 0 );
   functionGrp.setMaximumSize( 32767, 32767 );
   functionGrp.setFocusPolicy( QWidget::NoFocus );
@@ -71,7 +73,7 @@ void CAddClassMethodDlg::setWidgetValues()
   functionGrp.setTitle( "Function" );
   functionGrp.setAlignment( 1 );
 
-  accessGrp.setGeometry( 10, 170, 260, 60 );
+  accessGrp.setGeometry( 10, 250, 260, 50 );
   accessGrp.setMinimumSize( 0, 0 );
   accessGrp.setMaximumSize( 32767, 32767 );
   accessGrp.setFocusPolicy( QWidget::NoFocus );
@@ -105,7 +107,7 @@ void CAddClassMethodDlg::setWidgetValues()
   typeEdit.setEchoMode( QLineEdit::Normal );
   typeEdit.setFrame( TRUE );
 
-  declLbl.setGeometry( 20, 90, 70, 20 );
+  declLbl.setGeometry( 20, 80, 70, 20 );
   declLbl.setMinimumSize( 0, 0 );
   declLbl.setMaximumSize( 32767, 32767 );
   declLbl.setFocusPolicy( QWidget::NoFocus );
@@ -116,7 +118,7 @@ void CAddClassMethodDlg::setWidgetValues()
   declLbl.setAlignment( 289 );
   declLbl.setMargin( -1 );
 
-  declEdit.setGeometry( 20, 110, 240, 30 );
+  declEdit.setGeometry( 20, 100, 240, 30 );
   declEdit.setMinimumSize( 0, 0 );
   declEdit.setMaximumSize( 32767, 32767 );
   declEdit.setFocusPolicy( QWidget::StrongFocus );
@@ -128,7 +130,29 @@ void CAddClassMethodDlg::setWidgetValues()
   declEdit.setEchoMode( QLineEdit::Normal );
   declEdit.setFrame( TRUE );
 
-  publicRb.setGeometry( 20, 190, 70, 30 );
+  docLbl.setGeometry( 20, 130, 100, 20 );
+  docLbl.setMinimumSize( 0, 0 );
+  docLbl.setMaximumSize( 32767, 32767 );
+  docLbl.setFocusPolicy( QWidget::NoFocus );
+  docLbl.setBackgroundMode( QWidget::PaletteBackground );
+  docLbl.setFontPropagation( QWidget::NoChildren );
+  docLbl.setPalettePropagation( QWidget::NoChildren );
+  docLbl.setText( "Documentation:" );
+  docLbl.setAlignment( 289 );
+  docLbl.setMargin( -1 );
+
+  docEdit.setGeometry( 20, 150, 240, 80 );
+  docEdit.setMinimumSize( 0, 0 );
+  docEdit.setMaximumSize( 32767, 32767 );
+  docEdit.setFocusPolicy( QWidget::StrongFocus );
+  docEdit.setBackgroundMode( QWidget::PaletteBase );
+  docEdit.setFontPropagation( QWidget::SameFont );
+  docEdit.setPalettePropagation( QWidget::SameFont );
+  docEdit.insertLine( "" );
+  docEdit.setReadOnly( FALSE );
+  docEdit.setOverwriteMode( FALSE );
+
+  publicRb.setGeometry( 20, 270, 70, 20 );
   publicRb.setMinimumSize( 0, 0 );
   publicRb.setMaximumSize( 32767, 32767 );
   publicRb.setFocusPolicy( QWidget::TabFocus );
@@ -139,7 +163,7 @@ void CAddClassMethodDlg::setWidgetValues()
   publicRb.setAutoRepeat( FALSE );
   publicRb.setAutoResize( FALSE );
 
-  protectedRb.setGeometry( 110, 190, 80, 30 );
+  protectedRb.setGeometry( 110, 270, 80, 20 );
   protectedRb.setMinimumSize( 0, 0 );
   protectedRb.setMaximumSize( 32767, 32767 );
   protectedRb.setFocusPolicy( QWidget::TabFocus );
@@ -150,7 +174,7 @@ void CAddClassMethodDlg::setWidgetValues()
   protectedRb.setAutoRepeat( FALSE );
   protectedRb.setAutoResize( FALSE );
 
-  privateRb.setGeometry( 200, 190, 60, 30 );
+  privateRb.setGeometry( 200, 270, 60, 20 );
   privateRb.setMinimumSize( 0, 0 );
   privateRb.setMaximumSize( 32767, 32767 );
   privateRb.setFocusPolicy( QWidget::TabFocus );
@@ -161,7 +185,7 @@ void CAddClassMethodDlg::setWidgetValues()
   privateRb.setAutoRepeat( FALSE );
   privateRb.setAutoResize( FALSE );
  
-  virtualCb.setGeometry( 20, 260, 60, 30 );
+  virtualCb.setGeometry( 20, 330, 60, 20 );
   virtualCb.setMinimumSize( 0, 0 );
   virtualCb.setMaximumSize( 32767, 32767 );
   virtualCb.setFocusPolicy( QWidget::TabFocus );
@@ -172,7 +196,7 @@ void CAddClassMethodDlg::setWidgetValues()
   virtualCb.setAutoRepeat( FALSE );
   virtualCb.setAutoResize( FALSE );
 
-  staticCb.setGeometry( 110, 260, 60, 30 );
+  staticCb.setGeometry( 110, 330, 60, 20 );
   staticCb.setMinimumSize( 0, 0 );
   staticCb.setMaximumSize( 32767, 32767 );
   staticCb.setFocusPolicy( QWidget::TabFocus );
@@ -183,7 +207,7 @@ void CAddClassMethodDlg::setWidgetValues()
   staticCb.setAutoRepeat( FALSE );
   staticCb.setAutoResize( FALSE );
  
-  constCb.setGeometry( 200, 260, 60, 30 );
+  constCb.setGeometry( 200, 330, 60, 20 );
   constCb.setMinimumSize( 0, 0 );
   constCb.setMaximumSize( 32767, 32767 );
   constCb.setFocusPolicy( QWidget::TabFocus );
@@ -194,7 +218,7 @@ void CAddClassMethodDlg::setWidgetValues()
   constCb.setAutoRepeat( FALSE );
   constCb.setAutoResize( FALSE );
 
-  okBtn.setGeometry( 290, 10, 100, 30 );
+  okBtn.setGeometry( 10, 370, 100, 30 );
   okBtn.setMinimumSize( 0, 0 );
   okBtn.setMaximumSize( 32767, 32767 );
   okBtn.setFocusPolicy( QWidget::TabFocus );
@@ -205,7 +229,7 @@ void CAddClassMethodDlg::setWidgetValues()
   okBtn.setAutoRepeat( FALSE );
   okBtn.setAutoResize( FALSE );
 
-  cancelBtn.setGeometry( 290, 50, 100, 30 );
+  cancelBtn.setGeometry( 170, 370, 100, 30 );
   cancelBtn.setMinimumSize( 0, 0 );
   cancelBtn.setMaximumSize( 32767, 32767 );
   cancelBtn.setFocusPolicy( QWidget::TabFocus );
@@ -234,6 +258,39 @@ void CAddClassMethodDlg::setCallbacks()
   // Ok and cancel buttons.
   connect( &okBtn, SIGNAL( clicked() ), SLOT( OK() ) );
   connect( &cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );
+}
+
+CParsedMethod *CAddClassMethodDlg::asSystemObj()
+{
+  int lpPos;
+  QString decl;
+  CParsedMethod *aMethod = new CParsedMethod();
+
+  aMethod->setType( typeEdit.text() );
+  
+  decl = declEdit.text();
+  lpPos = decl.find( '(' );
+
+  // If no arguments the whole declaration is the name
+  if( lpPos == -1 )
+    aMethod->setName( decl );
+  else // Else just until the (.
+    aMethod->setName( decl.left( lpPos ) );
+  
+  if( publicRb.isChecked() )
+    aMethod->setExport( PUBLIC );
+  else if( protectedRb.isChecked() )
+    aMethod->setExport( PROTECTED );
+  else if( privateRb.isChecked() )
+    aMethod->setExport( PRIVATE );
+  
+  aMethod->setIsStatic( staticCb.isChecked() );
+  aMethod->setIsConst( constCb.isChecked() );
+  aMethod->setIsVirtual( virtualCb.isChecked() );
+
+  aMethod->setComment( docEdit.text() );
+
+  return aMethod;
 }
 
 void CAddClassMethodDlg::OK()

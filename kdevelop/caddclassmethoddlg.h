@@ -30,13 +30,19 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include "cproject.h"
+#include <qmultilinedit.h>
+#include "./classparser/ParsedMethod.h"
 
 class CAddClassMethodDlg : public QDialog
 {
   Q_OBJECT
 public: // Constructor & Destructor
+
   CAddClassMethodDlg( QWidget *parent=0, const char *name=0 );
+
+public: // Public queries
+
+  CParsedMethod *asSystemObj();
 
 protected: // Private widgets
 
@@ -48,6 +54,8 @@ protected: // Private widgets
   QLineEdit typeEdit;
   QLabel declLbl;
   QLineEdit declEdit;
+  QLabel docLbl;
+  QMultiLineEdit docEdit;
 
   QRadioButton publicRb;
   QRadioButton protectedRb;

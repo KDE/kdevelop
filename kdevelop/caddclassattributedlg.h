@@ -30,13 +30,20 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include "cproject.h"
+#include <qmultilinedit.h>
+#include "./classparser/ParsedAttribute.h"
 
 class CAddClassAttributeDlg : public QDialog
 {
   Q_OBJECT
+
 public: // Constructor & Destructor
+
   CAddClassAttributeDlg( QWidget *parent=0, const char *name=0 );
+
+public: // Public queries
+
+  CParsedAttribute *asSystemObj();
 
 public: // Public widgets
 
@@ -48,6 +55,8 @@ public: // Public widgets
   QLineEdit typeEdit;
   QLabel nameLbl;
   QLineEdit nameEdit;
+  QLabel docLbl;
+  QMultiLineEdit docEdit;
 
   QRadioButton publicRb;
   QRadioButton protectedRb;
