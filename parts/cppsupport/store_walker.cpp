@@ -72,9 +72,9 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
     ParsedScopeContainer* old_scope = m_currentScopeContainer;
     m_currentScopeContainer = ns;
     m_currentScope.push_back( nsName );
-    
+
     TreeParser::parseNamespace( ast );
-    
+
     m_currentScope.pop_back();
     m_currentScopeContainer = old_scope;
 }
@@ -204,16 +204,15 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     
     bool isConstructor = cl && typeSpec == 0 && id == cl->name();
     method->setIsConstructor( isConstructor );
-    
-    if( isConstructor || isDestructor )
+
+    if( cl && (isConstructor || isDestructor) )
 	method->setType( cl->name() + "*" );
     else
 	method->setType( typeOfDeclaration(typeSpec, d) );
-    
+
     ParsedMethod* m = c->getMethod( method );
     bool isStored = m != 0;
-    kdDebug(9007) << "-----------------> isStored = " << isStored << endl;
-    
+
     if( m != 0 )
     {
 	delete( method );
@@ -489,12 +488,12 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 	
 	bool isConstructor = typeSpec == 0 && id == m_currentClass->name();
 	method->setIsConstructor( isConstructor );
-	
-	if( isConstructor || isDestructor )
-	    method->setType( m_currentClass->name() + "*" );	
+
+	if( m_currentClass && (isConstructor || isDestructor) )
+	    method->setType( m_currentClass->name() + "*" );
     }
     method->setIsConst( d->constant() != 0 );
- 
+
     ParsedClassContainer* c = m_currentClass ? (ParsedClassContainer*) m_currentClass : (ParsedClassContainer*) m_currentScopeContainer;
     ParsedMethod* m = c->getMethod( method );
     if( m != 0 ){
