@@ -59,6 +59,14 @@ int main( int argc, char **argv )
         new Property( Property::Double, "Double",
                       "sample double", 7.0 ) );
 
+    QStringList things;
+    things += "Thing 1";
+    things += "Thing 2";
+
+    currentList->addProperty(
+       new Property( Property::StringList, "StringList",
+                     "sample stringlist", things ) );
+
     editor->populateProperties( currentList );
 
     app.setMainWidget( editor );
