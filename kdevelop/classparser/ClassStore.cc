@@ -535,7 +535,7 @@ QList<CParsedClass> *CClassStore::getSortedClassList()
  *-----------------------------------------------------------------*/
 QStrList *CClassStore::getSortedClassNameList()
 {
-  return globalContainer.getSortedClassNameList();
+  return globalContainer.getSortedClassNameList(true);
 }
 
 /*-------------------------- CClassStore::getVirtualMethodsForClass()
