@@ -2964,31 +2964,24 @@ start_decl:
     if( parseTypeSpecifier(spec) ){
         spec->setCvQualify( cv );
 
-	if( lex->lookAhead(0) == ';' ){
-	    // type definition
-	    lex->nextToken();
-	    DeclarationAST::Node ast = CreateNode<DeclarationAST>();
-	    node = ast;
-	    UPDATE_POS( node, start, lex->index() );
-	    return true;
-	}
-
 	InitDeclaratorListAST::Node declarators;
 
 	InitDeclaratorAST::Node decl;
 	int startDeclarator = lex->index();
 	bool maybeFunctionDefinition = false;
 
-	if( parseInitDeclarator(decl) && lex->lookAhead(0) == '{' ){
-	    // function definition
-	    maybeFunctionDefinition = true;
-	} else {
-	    lex->setIndex( startDeclarator );
-	    if( !parseInitDeclaratorList(declarators) ){
-	        syntaxError();
-	        return false;
-	    }
-	}
+        if( lex->lookAhead(0) != ';' ){
+            if( parseInitDeclarator(decl) && lex->lookAhead(0) == '{' ){
+                // function definition
+                maybeFunctionDefinition = true;
+            } else {
+                lex->setIndex( startDeclarator );
+                if( !parseInitDeclaratorList(declarators) ){
+                    syntaxError();
+                    return false;
+                }
+            }
+        }
 
 	int endSignature = lex->index();
 	switch( lex->lookAhead(0) ){
