@@ -29,7 +29,7 @@
 PascalProjectOptionsDlg::PascalProjectOptionsDlg(PascalProjectPart *part, QWidget* parent, const char* name, WFlags fl)
     : PascalProjectOptionsDlgBase(parent,name, fl), m_part(part)
 {
-    config_combo->setValidator(new QRegExpValidator(QRegExp("^[A-Za-z]*"), this));
+    config_combo->setValidator(new QRegExpValidator(QRegExp("^\\D.*"), this));
 
     offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Pascal'");
 

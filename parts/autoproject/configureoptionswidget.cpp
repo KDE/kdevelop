@@ -70,7 +70,7 @@ public:
 ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *parent, const char *name)
     : ConfigureOptionsWidgetBase(parent, name)
 {
-    config_combo->setValidator(new QRegExpValidator(QRegExp("^[A-Za-z]*"), this));
+    config_combo->setValidator(new QRegExpValidator(QRegExp("^\\D.*"), this));
 
     m_part = part;
 
