@@ -1,6 +1,6 @@
 2000-04-11 Walter Tasin  <tasin@kdevelop.de>
 	* first created Makefile.am for shared libs
-	  uses the project settings for the _LDADD flag
+	  uses the project settings for the _la_LIBADD flag
 
 2000-04-10 Walter Tasin  <tasin@kdevelop.de>
 	* shared library support
