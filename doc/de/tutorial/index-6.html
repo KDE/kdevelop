@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>KDE Anwendungs Tutorials: Application Concepts</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-7.html">Weiter</A>
+ <A HREF="index-5.html">Zurück</A>
+ <A HREF="index.html#toc6">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="s6">6. Application Concepts</A></H3>
+
+<P>This chapter now introduces you into the ideas of the application models mentioned already: the MDI (Multiple Document Interface) and
+the Document-View model. A basic introduction into the Document-View model and the generating of a project with KDevelop is already
+given in 
+<A HREF="../programming/index.html">The KDevelop Programming Handbook</A>, but based on a Single Document Interface
+(SDI). In any case, you should be familiar with the basics of the KDE and Qt classes that are explained in 
+<A HREF="../kde_libref/index.html">The KDE Library Reference Guide</A>, there the base classes of the underlying libraries are
+explained in detail and how to use them, with an additional description of the Qt signal-slot mechanism and event handling.
+<P>As a guideline, you should know already:
+<UL>
+<LI>that every KDE application needs one instance of <CODE>KApplication</CODE> (for a Qt application one instance of
+<CODE>QApplication</CODE>)</LI>
+<LI>generally a main window is inherited from <CODE>KTMainWindow</CODE> for KDE (for a Qt application inherited from
+<CODE>QMainWindow</CODE>)</LI>
+<LI>that events (e.g. keyboard presses or mouse movements) are sent to the application by the underlying window system</LI>
+<LI>that <CODE>QWidget</CODE> as the base class for all visible Graphical User Interface (GUI) components provides specialized event
+handlers by virtual functions that filter out the according events by reimplementing <CODE>QObject::event()</CODE></LI>
+<LI>that the Qt signal-slot mechanism means basically that a component can send out signals and a receiver can connect to those
+signals to process some actions</LI>
+<LI>that this mechanism avoids inheriting classes for GUI components because the signals inform you about e.g. mouse presses  where
+appropriate for a wiget</LI>
+</UL>
+<P>
+<H3><A NAME="ss6.1">6.1 The Document-View Model</A>
+</H3>
+
+<P>The Document-View Model is one of the most basic concepts in application design that rely on graphical user interfaces. Therefore, a
+certain understanding of the why is needed to see that although the programmer has other possibilities, it makes sense to make use of
+it. But first let's follow the usual design of a typical KDE / Qt application:
+<P>Your application instance provides the first connection to your application and is the starting point of the event handling for a
+program. The program itself represents itself to the user by a Graphical User Interface which is most often called a main-window. The
+main window then provides the appropriate functions for the user such as key accelerators, a menubar, toolbar and a statusbar. In the
+center it contains a so-called "view-area" which means that this part is an instance of another class, usually called a "View". The
+view instance is created when the main window gets constructed at program start and has to be set as the view area component with a
+method provided by the main window: <CODE>setView(your_view)</CODE> for KDE applications using <CODE>KTMainWindow</CODE>,
+<CODE>setCentralWidget(your_view)</CODE> for a Qt application using <CODE>QMainWindow</CODE>. Now, the view obviously is the area that is
+responsible for interacting with the user to manipulate the data that it represents. As an example, you could use a
+<CODE>QMultiLineEdit</CODE> as a view and you will have an editor. Then you can use the provided slots of the view for connections to
+menubar or toolbar command like this:
+<P>While creating the menubar, you want to provide a method for the command "cut" in the "Edit" menu:
+<BLOCKQUOTE><CODE>
+<PRE>
+  pEditMenu->insertItem(BarIcon("editcut"), i18n("Cu&amp;t"),view, SLOT(cut()),KAccel::Cut, ID_EDIT_CUT);
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>This creates a menu item in the "Edit" menu, that, when activated, directly calls the slot <CODE>cut()</CODE> of the instance
+<CODE>view</CODE>, whereby we suppose you have created this instance as a <CODE>QMultiLineEdit</CODE> and set as the view area. The
+multilineedit's slot gets called and cuts out the selected text as a reaction, the functionality is already provided by the class
+itself and so there is no need to inherit from <CODE>QMultiLineEdit</CODE> to create a view area that is capable of such actions. They are
+ready to use and make application development very fast- you just need the application instance and the main window including the
+connections to your view area and you're done ! That means, a simple editor can be written by creating one single class that defines
+the main window behavoir and how to save and read files into the editor - just some basic slots your main view has to implement itself.
+<P>But here is the reason why we're now introducing this mysterious Document-View model: You have to provide methods by your own to read
+and write the actual files you want to edit with the <CODE>QMultiLineEdit</CODE> view-area <B>within</B> the main window's interface.
+Yes, this is obviously the easiest thing to do in this case, and the most logic. Now, if we have a look at the files and their contents
+as a so-called "Document", which we can subscribe with the attribute of an "Object" in C++ terminology, the next step is just a little
+one: If I have a document, a view and a main window- why don't I separate these three objects from each other ? We could easily create
+a small class that is responsible for reading in a file into a text stream and then call the view to draw the text visible to the user.
+The same applies to saving the file again- the document class should then provide a saving method that retrieves the text from the view
+again and saves it as a file. In the example these two methods would be the only actions that are needed to be done by a document
+class, because the edit-view already provides all methods basically needed for and editor by slots and you can manipulate the content
+of the view by them directly.
+<P>Now, the main idea behind the need for this separation into three objects (document, view, main window) instead of the minimum of two,
+the view and the main window, is the question: what if I want to give the user the possibility to work with a file by <B>two</B> or
+even more views ? Such things can even be done within one main window by splitters or deviders containing two view instances which
+shall both display <B>one</B> file. There it is: the solution can only be that if the user manipulates the file contents in one view,
+the other view has to be notified about that and to actualize its contents. Otherwise a bad scenario will occur: if the user closes one
+view where he added something at the end of the file which he cutted out at the beginning of the file <B>in</B> the other view, the
+file will be saved later by still containing the cutted section, because if the second and last view did not recognize this, it still
+contains the text without modification from the beginning plus the inserted one. This means that both views have to be synchronized by
+their contents they are displaying and that can be done if all views get notified about each action that the user does, which view he
+actually uses should be equal. That means that finally a document class is needed to be the one and only holder of the true contents of
+the document and is providing the views the possibility to manipulate the contents.
+<P>I hope this has given some insight into this model, although in most cases it seems that the programmer can live without it - equally
+to just using a provided class as the view area or writing a widget on his own to handle user interaction, as long as you represent
+<B>one</B> document or file by <B>one</B> view area, the view can be responsible for the data as well and only provide methods to
+retrieve or set the document contents for actions like reading a file or saving it. The next model to describe, the Multiple Document
+Interface, will make a difference at this point- there you will see the actual need and the functionality the Document-View model
+provides.
+<P>
+<H3><A NAME="ss6.2">6.2 The Multiple Document Interface (MDI)</A>
+</H3>
+
+<P>As the last section described the Document-View model, you will probably guess what MDI means. Users that come from other Operating
+Systems than Unix/Linux are used to it as well as programmers developing for those platforms. While X-Window applications traditionally
+are more targeting towards functionality and stability, Unix users are used to single windows that provide functionality, therefore
+even the Document-View model is often not needed to create applications. With Qt as a multi-platform toolkit, developers are having
+even more choice - developing for MS Windows(tm) as well as for Unix systems. While on Windows the lack of creating applications that
+are capable of handling so-called child windows has been getting to some kind of standard, this is adressed by the Qt 2.1 library, but
+on the other hand Unix users can profit from this architecture as well.
+<P>What is now the meaning of MDI ? An MDI application generally has the same concept of a usual application that has, as described above,
+one application instance and a main window. The view area now make the difference: you don't directly use a view that represents data
+and provides interaction to manipulate that data but a view that handles other windows looking like top-level windows. These windows
+are now representing the former view area and the main difference is that the interaction chain changes from
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+application instance -> main window -> view
+
+to
+
+appliation instance -> main window -> view -> active child window
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>The view now is capable of several actions:
+<UL>
+<LI>creating as much child windows as the user requests</LI>
+<LI>providing methods to retrieve the currently active child window</LI>
+<LI>maintaining a list of open views</LI>
+<LI>managing the child window behavoir for maximize, minimize such as a window manager does for top-level windows</LI>
+</UL>
+<P>Now, you can use "complete" widgets like the <CODE>QMultiLineEdit</CODE> as child windows like for an application that only provides one
+window and each child window is responsible for it's own data. That could be described as "Multiple Document Interface", whereby each
+child window is equal to a single document. The application then manages the usual actions such as providing methods for the child
+window interaction such as cut or copy. Extending this concept with the document-view model enhances the possibilities by far: imagine
+that you can open as much windows as you like within the main window and that a new child window can be a new view of a document that
+is already shown by another child window. The management for this requires a separation into the already described three objects model,
+but doesn't limit the actual number of instances of the documents as well as the views.
+<P>Fortunately, Qt 2.1 contains the possibility to create such applications and KDevelop provides you with the according application
+frameworks for both, Qt-only programs as well as KDE 2 applications with the same interface methods- so it is adequate wether you want
+to develop for one of these. Using KDE 2 interfaces will offer you still more possibilites by library functions as well as
+inter-process communication, but those are special aspects that are to cover by separate introductions to these techniques.
+<P>Now you are prepared for following the development for KDE 2 - just follow the next chapter to get a first look at the functionality
+already provided by KDevelop when creating applications. There, we will generate the framework for our tutorial application
+<EM>KScribble</EM> and describe the practical aspects of programming MDI applications.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-7.html">Weiter</A>
+ <A HREF="index-5.html">Zurück</A>
+ <A HREF="index.html#toc6">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

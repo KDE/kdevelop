@@ -1,0 +1,298 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>KDE Anwendungs Tutorials: Extended Views</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-12.html">Weiter</A>
+ <A HREF="index-10.html">Zurück</A>
+ <A HREF="index.html#toc11">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="s11">11. Extended Views</A></H3>
+
+<P>
+<P>In this chapter we´re going to extend the functionality of our view widget by two enhancements: syncronized views and scrollviews.
+<P>
+<H3><A NAME="ss11.1">11.1 Syncronizing Views</A>
+</H3>
+
+<P>Let´s first explain what this will bring us and how we´re going to do it. While playing with <EM>KScribble</EM>, you may have noticed, that if
+you open another view of a document by calling "Window"->"New Window", this new view works with the same data as the first view, and
+does like any other view you create with that command. But when it comes to painting into the document, you can only do that in one
+view - the other views are not displaying the document contents at the same time. If you obscure one view that doesn´t contain the
+actual contents with another window and then bring it up to the front again, it will display the acutal contents. That comes because
+after a widget has been obscured and then activated again, it receives a paint event from the window system, which will call
+<CODE>KScribbleView::paintEvent()</CODE> again and that finally redraws the contents of the area that has been obscured. What we want to
+achieve is that all views should paint syncronous with the one the user actually paints to. In fact, you will see that this enhancement
+is a really easy task. The document class already provides us a method <CODE>updateAllViews()</CODE>, which calls the <CODE>update()</CODE>
+method on each view in the document´s view list. This makes it very easy to syncronize the document contents - every time the contents
+is changed, here by mouse movements (where we copy the changings to the buffer with <CODE>bitBlt()</CODE>), we just have to call
+updateAllViews(this). The this pointer is needed, because the calling view doesn´t need a repaint and the <CODE>update()</CODE> method is
+only executed if the sender view is not the same as it´s own.
+<P>What you´ve got to do here is only to call updateAllViews(this) at the end of the virtual methods <CODE>mousePressEvent()</CODE>,
+<CODE>mouseMoveEvent()</CODE> and <CODE>mouseReleaseEvent()</CODE> - and you´re done !  Take this as a general rule in your applications: each
+time the contents of the document is changed by a view, call <CODE>updateAllViews()</CODE>. How the update has to be executed has to be
+implemented in the widget´s <CODE>update()</CODE> method; one may be content by setting e.g. the changed text in an editor, in our
+application we just call <CODE>repaint()</CODE>, which generates a paint event and copies the contents of the document into the view again.
+<P>
+<H3><A NAME="ss11.2">11.2 Scrolled Views</A>
+</H3>
+
+<P>
+<P>In this section we will add a functionality that is most often a thread to developers - if you can´t use an already implemented widget
+that provides the scrolling already. What does scrolling mean ? In our context, the problem begins where we want to open a picture that
+is bigger than a view can display. therefore, the result will be that you can only see as much as the view provides, beginning from the
+topleft corner; the rest will be cut away from the user´s view. A scrollview on the other hand is a widget that provides a scrollbar on
+the right side and on the bottom of the widget by which the user can "move" the contents. In fact, it shows the same size of the
+document contents, but the view area can be moved within the document, so each part can be displayed if the user wants to by moving the
+scrollbar sliders up and down, left and right. Fortunately, Qt provides a class <CODE>QScrollView</CODE> that itself inherits from
+<CODE>QWidget</CODE> and offers the same base functionality as an ordinary widget but manages the contents by scrollbars automatically -
+with the additional option that the programmer can either just use an instance of the <CODE>QScrollView</CODE>, create the child widgets
+to manage with the scrollview as parent and add them to the scrollview with <CODE>addChild()</CODE> or create a view by inheriting
+<CODE>QScrollView</CODE> and draw into the viewport, which is a defined area inside the scrollview, instead of directly to the widget. The
+difference here is that <CODE>QScrollView</CODE> provides a set of event handlers similar to the <CODE>QWidget</CODE> event handlers especially for the
+viewport. So what was formerly a <CODE>mousePressEvent()</CODE> in our view will become a viewportMousePressEvent, a <CODE>paintEvent()</CODE>
+will become a viewportPaintEvent etc. The second possibility will suite our needs to make KScribbleView a scrollable widget and so we
+will have to make the following modifications:
+<P>
+<UL>
+<LI>first we have to make the document use a size of its contents. This can be done by getting the size for an opened picture, for a
+new picture we have to define a default start size. In other painting applications, this size can be changed most often by a command
+provided by the user interface, e.g. a dialog that asks for the new width and height as well as a method to shrink the picture
+contents to fit into that new size.</LI>
+<LI>changing the inheritance of KScribbleView from <CODE>QWidget</CODE> to <CODE>QScrollView</CODE></LI>
+<LI>renaming the virtual methods to the according viewport methods of <CODE>QScrollView</CODE></LI>
+<LI>adapt the virtual event handlers to act on the geometry of the viewport. This means that the old implementation relies on the
+geometries of <CODE>QWidget</CODE> starting at the topleft corner of a widget. If the view is scrolled and the topleft corner is not visible, we
+have to ensure the positions retrieved from the <CODE>QWidget</CODE> coordinates are translated to viewport coordinates</LI>
+</UL>
+<P>
+<H4>Sizing the Document Contents</H4>
+
+<P>
+<P>As already mentioned, we have to set a size to the document contents as well as to initialize this size and provide a method to
+retrieve the size by the views. For this, we add a variable <CODE>QSize size</CODE> to <CODE>KScribbleDoc</CODE> as well as the method
+<CODE>docSize()</CODE>:
+<P>
+<HR>
+<PRE>
+kscribbledoc.h:
+
+#include &lt;qsize.h>
+
+...
+public:
+  const QSize docSize(){ return size;};
+
+private:
+  QSize size;
+</PRE>
+<HR>
+<P>Now we have to modify all methods that deal with initializing and opening the document contents - <CODE>newDocument()</CODE> and
+<CODE>openDocument()</CODE>:
+<HR>
+<PRE>
+  bool KScribbleDoc::newDocument()
+  {
+    /////////////////////////////////////////////////
+    // TODO: Add your document initialization code here
+->  size=QSize(300,200 );
+        pen=QPen( Qt::black, 3 );
+->  buffer.resize(size);
+->  buffer.fill( Qt::white );
+    /////////////////////////////////////////////////
+    modified=false;
+    return true;
+  }
+
+  bool KScribbleDoc::openDocument(const QString &amp;filename, const char *format /*=0*/)
+  {
+
+        QFile f( filename );
+  //    if ( !f.open( IO_ReadOnly ) )
+  //            return false;
+    /////////////////////////////////////////////////
+    // TODO: Add your document opening code here
+        if(!buffer.load( filename, format ))
+                return false;
+->  size=buffer.size();
+    /////////////////////////////////////////////////
+  //    f.close();
+        
+    modified=false;
+    m_filename=filename;
+        m_title=QFileInfo(f).fileName();
+    return true;
+  }
+</PRE>
+<HR>
+<P>In <CODE>newDocument()</CODE>, we initialize the size with a default value of 300 pixels wide and 200 pixels high. This is enough for a
+small picture for now and we could add a dialog for resizing as well if we want.
+When it comes to opening a picture, we have to set the size to the size of the picture. This can be done by calling
+<CODE>QPixmap::size()</CODE>, which we used in <CODE>openDocument()</CODE>. Then we´re done with setting the sizes and we can move on to
+reimplementing KScribbleView and make it a scrollview.
+<P>
+<H3><A NAME="ss11.3">11.3 Adapting the View</A>
+</H3>
+
+<P>
+<P>As said above, we first have to change some things in the interface of KScribbleView. The following code shows these changings:
+<P>
+<HR>
+<PRE>
+#include &lt;qscrollview.h>
+
+class KScribbleView : public QScrollView
+{
+  Q_OBJECT
+
+  protected:
+    /** changed from mousePressEvent() overwriting QScrollView method */
+    virtual void viewportMousePressEvent( QMouseEvent* );
+    /** changed from mouseReleaseEvent() overwriting QScrollView method */
+    virtual void viewportMouseReleaseEvent( QMouseEvent* );
+    /** changed from mouseMoveEvent() overwriting QScrollView method */
+    virtual void viewportMouseMoveEvent( QMouseEvent* );
+
+    /** commeted out because we have a document size defined */
+//    resizeEvent( QResizeEvent* );
+
+    /** changed from paintEvent() overwriting QScrollView method */
+    virtual void viewportPaintEvent( QPaintEvent* );
+}
+</PRE>
+<HR>
+<P>Here, we changed the inheritance from <CODE>QWidget</CODE> to <CODE>QScrollView</CODE> first and added the according include file we need. Also we changed all
+implemented event handlers that deal with interaction on the contents of the scrollview to the according methods <CODE>QScrollView</CODE> provides
+for this purpose and commented out the resizeEvent. Now we can go over to the implementation of these methods and make use of the size
+our picture has. As a view is always created after the document exists, we can resize the widget directly in the constructor to fit
+this size and as well resize the contents (which is the viewport size):
+<HR>
+<PRE>
+#include &lt;qsize.h>
+
+KScribbleView::KScribbleView(KScribbleDoc* pDoc, QWidget *parent, const char* name, int wflags)
+ : QScrollView(parent, name, wflags | WPaintClever | WNorthWestGravity | WRepaintNoErase)
+{
+    doc=pDoc;
+                mousePressed=false;
+    polyline=QPointArray(3);
+
+->  setResizePolicy ( QScrollView::ResizeOne );
+->  viewport()->setCursor( Qt::crossCursor );
+
+->    QSize size=doc->docSize();
+      // resize the viewport - this makes the resizeEvent obsolete
+->    resizeContents(size.width(), size.height());
+      // resize the widget to show up with the document size
+->    resize(size);
+}
+</PRE>
+<HR>
+<P>Note that formerly, the <CODE>resizeEvent()</CODE> took care of resizing the drawing area to the same as the widget size. At the same time,
+this changed the document size as well, so the document picture had always the same size as the widget. With the already initialized
+size of the document (which we set in <CODE>newDocument()</CODE> and <CODE>openDocument()</CODE>), we just resize the contents by calling
+<CODE>resizeContents()</CODE> provided by <CODE>QScrollView</CODE> with the size of the document. You may also notice that we changed the
+cursor over the widget from the overall widget to the viewport widget, which we can retrieve with <CODE>viewport()</CODE>. Now we can
+reimplement the event handlers. At first, we should take care for the paintEvent, as this is one of the most important ones, because it
+gets called whenever the widget shows up or is resized.
+<P><B>Attention:</B> take care to comment out the <CODE>resizeEvent()</CODE> implementation!
+<P>Now, the paint event will have to copy the pixmap in the buffer to the according position in the view. For this, we have to change the
+destination of <CODE>bitBlt()</CODE> from this to <CODE>viewport()</CODE>, set the topleft position to 0,0 and set the target (the buffer) to
+copy from the contentsX and contentsY position on into the viewport:
+<HR>
+<PRE>
+void KScribbleView::viewportPaintEvent( QPaintEvent *e )
+{
+  bitBlt( viewport(),0,0, &amp;doc->buffer,contentsX() ,contentsY() );
+}
+</PRE>
+<HR>
+
+The <CODE>contentsX()</CODE> thereby is the position in x-direction of the scrollview´s contents - which goes to position 0 in the
+viewport´s absolute position, which is the topleft point visible in the scrollview. The same applies to the y-direction. This part is
+sometimes hard to understand and you may have to do a bit "try and error" when implementing your own scrollviews. The other possible
+call of <CODE>bitBlt()</CODE> would be to switch the values of the positions and inverting the contents values:
+<P>bitBlt( viewport(), -contentsX(), -contentsY(), &amp;doc->buffer, 0, 0 );
+<P>
+<P>The last changes we need to do are changing the mouse event handlers. First, the <CODE>mouseMoveEvent()</CODE>, which changes to
+<CODE>viewportMouseMoveEvent()</CODE>, has a <CODE>bitBlt()</CODE> call as well. Here, we have to apply the same chages as in the paint event.
+Further, in the <CODE>mousePressEvent()</CODE> and the <CODE>mouseMoveEvent()</CODE>, we have retrieved the position of the mouse events with
+<CODE>e->pos()</CODE>. This position now will deliver us a widget position - not the contents position, so we have to translate this to
+draw into the correct position of the document with <CODE>viewportToContents()</CODE>:
+<HR>
+<PRE>
+  void KScribbleView::viewportMousePressEvent( QMouseEvent *e )
+  {
+    mousePressed = TRUE;
+->  doc->polyline[2] = doc->polyline[1] = doc->polyline[0] = viewportToContents(e->pos());
+    doc->updateAllViews(this);
+  }
+
+  void KScribbleView::viewportMouseMoveEvent( QMouseEvent *e )
+  {
+    if ( mousePressed ) {
+  ....
+      doc->polyline[1] = doc->polyline[0];
+->    doc->polyline[0] = viewportToContents(e->pos());
+      painter.drawPolyline( doc->polyline );
+  ....
+      r.setBottom( r.bottom() + doc->penWidth() );
+
+          doc->setModified();
+->    bitBlt(viewport(), r.x()-contentsX(), r.y()-contentsY() ,
+->            &amp;doc->buffer, r.x(), r.y(), r.width(), r.height() );
+          doc->updateAllViews(this);
+    }
+  }
+</PRE>
+<HR>
+<P>In the <CODE>viewportMouseMoveEvent()</CODE>, we had to change the destination again from this to <CODE>viewport()</CODE> - and with that
+translate the positions. This time, we used the second version of the call we used in <CODE>viewportPaintEvent()</CODE>, with subtracting
+the contentsX and contentsY values to copy the rectangle containing the current painting into the correct position of the viewport.
+<P>At last, we will apply a small change in conjunction with the <CODE>update()</CODE> method: why should we repaint the whole widget every
+time ? This will reduce performance most often and lead to a so-called "flicker" effect. This effect sometimes occurs with widgets, but
+there are some ways to reduce this behavoir. Instead of calling <CODE>repaint()</CODE>, we could call <CODE>repaint(false)</CODE> as well. This
+will not erase the widget contents before redrawing it. As we copy the document contents directly into the widget, we don´t need to
+erase it anyway, because all the data will be overwritten anyway. In conjunction with <CODE>QScrollView</CODE>, we will reduce the painting
+even more: we limit the update method to call <CODE>repaintContents()</CODE>, which allows us to define where to repaint. For that, we use
+the <CODE>visibleRect()</CODE> method and, like <CODE>repaint(false)</CODE>, we can prevent erasing the area to repaint before copying the
+document data into the viewport:
+<HR>
+<PRE>
+void KScribbleView::update(KScribbleView* pSender){
+        if(pSender != this)
+          repaintContents(viewport()->visibleRect(), false);
+}
+</PRE>
+<HR>
+<P>Now you´re ready !  This chapter has been one of the hardest to implement and understand - especially when it comes to the geometries
+that change. But on the other hand, we gave our application a whole new functionality by the new scrollview and the syncronized views.
+<P>With that, we´re moving on to the last chapter of our tutorial. There, we will apply only a few changes by making use of some new
+methods of the KDE2 libraries, but as usual, this will bring us some interesting functionality - <EM>KScribble</EM> will be able to open and
+save a whole range of picture formats and thereby we will remove the restriction of operating only on the png file format.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-12.html">Weiter</A>
+ <A HREF="index-10.html">Zurück</A>
+ <A HREF="index.html#toc11">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

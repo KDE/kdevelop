@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Anwendungs Tutorials: Copyright </TITLE>
+<TITLE>KDE Anwendungs Tutorials: Creating KDE Applications</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -14,38 +14,44 @@
  
 <P ALIGN="RIGHT">
 
-Weiter <A HREF="index-3.html">Zurück</A>
+<A HREF="index-5.html">Weiter</A>
+ <A HREF="index-3.html">Zurück</A>
  <A HREF="index.html#toc4">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="Copyright"></A> <A NAME="s4">4. Copyright </A> </H3>
+<H3><A NAME="s4">4. Creating KDE Applications</A></H3>
 
-<P> 
+<P>This handbook will try to teach you KDE/Qt application design by creating an example application step-by-step. The major intention is
+to gain a certain understanding how two of the most important ideas of graphical user interface programming work: the document-view
+model and the multiple document interface (MDI) model.
+<P>By this, you will also get a good idea of concepts that are coming up ahead: KDE 2 and the Qt 2.1 library, bringing new enhancements
+and technology to the programmer's hands that will improve application design and widen the possibilities that are open to use.
+Keywords such as widget themes, Inter-Process Communication and embedded applications are popularly talked about and will allow even
+more than one can think about right now.
+<P>Therefore, KDevelop 1.1, still based on KDE 1.1.x, provides developers some of the most requested possibilities: developing
+applications for KDE 2, while still running a stable desktop environment. This also implies that this tutorial will be based on a KDE 2
+application that already makes use of Qt-2.1, offering a solution for the mentioned MDI model - which we provide as a ready-to-go frame
+application. During this tutorial you will get a clear insight on how it works and this will also make it much easier to understand the
+document-view model as well - which is hard to understand even for advanced programmers. That will help you create other type of
+applications, which use the document-view model even if they only contain one window and you wouldn't obviously see a need for it. But
+let's just go inside it - you will see what's coming up on you and how easy it actually is.
+<P>The further chapters of the tutorial cover the following several steps:
+<UL>
+<LI>installing KDE 2 (libraries) and setting up KDevelop to create KDE 2 applications.</LI>
+<LI>understanding the basic concepts of MDI and document-view model.</LI>
+<LI>creating the generic framework for <EM>KScribble</EM> and explaining the concept of the framework.</LI>
+<LI>implementing the document class, who will provide the interface to read and write the document data as well as maintaining the
+document.</LI>
+<LI>implementing the view class to visualize the data. This class also takes over the interaction with the user.</LI>
+<LI>adding dialogs to set the pen width and color of the pen to draw with, including their integration into the toolbar and menubar</LI>
+<LI>changing the view from the default <CODE>QWidget</CODE> inheritance to a scrollable view.</LI>
+</UL>
+<P>The tutorial example itself is based on the code found in the scribble example application that comes with the Qt library. The source
+of the original example can also be found within the Qt documentation, section examples.
 <P>
-<BLOCKQUOTE><CODE>
-<PRE>
- 
-
-KDevelop Copyright 1998,1999 The KDevelop Team.
-
-Dieses Programm ist Freie Software; Sie können Sie  
-weitergeben und/oder  verändern entsprechend den 
-Bestimmungen der GNU General Public License, wie von der 
-Free Software Foundation veröffentlicht, entweder 
-entsprechend Version 2 der Bestimmungen oder (nach ihrer 
-Wahl) jeder späteren Version. Dieses Programm wird in der 
-Hoffnung, daß es nützlich ist, aber OHNE EINE GARANTIE 
-verbreitet; sogar ohne die implizite Garantie der 
-MARKTGÄNGIGKEIT oder EIGNUNG FüR EINEN BESTIMMTEN ZWECK. 
-Lesen Sie die GNU General Public License, um weitere Details 
-zu erfahren. Sie sollten eine Kopie der GNU General Public 
-License zusammen mit diesem Programm erhalten haben; wenn 
-nicht, so schreiben Sie an die Free Software Foundation, 
-Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
-</PRE>
-</CODE></BLOCKQUOTE>
 <P ALIGN="RIGHT">
 
-Weiter <A HREF="index-3.html">Zurück</A>
+<A HREF="index-5.html">Weiter</A>
+ <A HREF="index-3.html">Zurück</A>
  <A HREF="index.html#toc4">Inhaltsverzeichnis</A>
 </P>
 <CENTER>
