@@ -64,18 +64,25 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     setInstance( FileViewFactory::instance() );
     //    setXMLFile("kdevfileview.rc");
 
-    m_widget = new PartWidget( this );
-	m_widget->setIcon( SmallIcon( info()->icon() ) );
-    mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("File tree view in the project directory") );
-
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("File Tree"), FILETREE_OPTIONS, info()->icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
+		
+	QTimer::singleShot( 1000, this, SLOT(init()) );
+}
 
-    loadSettings();
+///////////////////////////////////////////////////////////////////////////////
 
-    m_widget->showProjectFiles();
+void FileViewPart::init( )
+{
+	m_widget = new PartWidget( this );
+	m_widget->setIcon( SmallIcon( info()->icon() ) );
+	mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("File tree view in the project directory") );
+		
+	loadSettings();
+	
+	m_widget->showProjectFiles();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

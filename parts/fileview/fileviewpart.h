@@ -36,6 +36,7 @@ public:
 
 private slots:
 	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );
+    void init();
 
 private:
     void loadSettings();
