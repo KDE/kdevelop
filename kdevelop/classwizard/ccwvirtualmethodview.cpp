@@ -281,8 +281,8 @@ void CCWVirtualMethodView::slotAddMethod()
       // Remove the method from the available listbox.
       availLb.removeItem( availLb.currentItem() );
 
-      QMessageBox::information( this, i18n( "Added method" ),
-                                i18n( "The virtual method implementation has been added." ) );
+      QMessageBox::information( this, i18n( "The virtual method implementation has been added." ),
+                                i18n( "Added Method" ));
     }
   }
 }
