@@ -148,16 +148,25 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	} else if( m_preprocessorEnabled && m_driver->macros().contains(ide) ){
+	    
+	    QMap<QString, QString> map;
+	    
 	    Macro m = m_driver->macros()[ ide ];
 	    if( m.hasArguments() ){
 		readWhiteSpaces();
 		if( currentChar() == '(' ){
 		    nextChar();
-		    while( currentChar() && currentChar() != '\n' ){
+		    int argIdx = 0;
+		    int argCount = m.argumentList().size();
+		    while( currentChar() && currentChar() != '\n' && argIdx<argCount ){
 			readWhiteSpaces( false );
-			QString arg = readArgument();
+			
+			QString arg = readArgument();			
+			map[ m.argumentList()[argIdx] ] = arg;
+			
 			if( currentChar() == ',' ){
 			    nextChar();
+			    ++argIdx;
 			} else if( currentChar() == ')' ){
 			    break;
 			}
@@ -178,11 +187,28 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
             while( !currentChar().isNull() ){
                 Token tok;
                 nextToken( tok );
-                if( tok == -1 || tok == Token_eof )
+		
+		if( tok == Token_identifier && map.contains(toString(tok)) ){
+		    QString s = toString( tok );
+		    QString v = map[ s ];
+		    
+		    m_source.insert( currentPosition(), v );
+		    
+		    int svEndPtr = m_endPtr;
+		    m_endPtr = currentPosition() + v.length();
+		    while( !currentChar().isNull() ){
+			Token tok2;
+			nextToken( tok2 );
+			if( tok2 != -1 )
+			    addToken( tok2 );
+		    }
+		    
+		    m_endPtr = svEndPtr + v.length();
+		} else if( tok == -1 || tok == Token_eof )
                     break;
-
-                addToken( tok );
-
+		else {
+		    addToken( tok );
+		}
             }
             m_preprocessorEnabled = d;
 	    m_endPtr = m_source.length();
@@ -312,16 +338,22 @@ QString Lexer::readArgument()
     QString arg;
     int count = 0;
  
+    readWhiteSpaces( false );
     while( currentChar() ){
-	
-	readWhiteSpaces( false );
-	
+		
 	QChar ch = currentChar();
+	
+	if( ch.isSpace() ){
+	    readWhiteSpaces( false );
+	    arg += " ";
+	    ch = currentChar();
+	}
+	
 	if( ch == '\n' ){
 	    break;
-	} else if( ch == ',' || ch == ')' && !count ){
+	} else if( (ch == ',' || ch == ')') && !count ){
 	    break;
-	} 
+	}
 	
 	Token tk;
 	nextToken( tk, true );
@@ -330,9 +362,11 @@ QString Lexer::readArgument()
 	    ++count;
 	} else if( tk == ')' ){
 	    --count;
-	}
+	} 
 	
-	arg += toString( tk );
+	if( tk != -1 ){
+	    arg += toString( tk );	
+	}
     }
     return arg;
 }
@@ -422,7 +456,7 @@ void Lexer::processDefine( Macro& m )
 	    readIdentifier();
 	    QString arg = m_source.mid( startArg, int(currentPosition()-startArg) );
 
-	    m.addArgument( Macro::Argument(arg, 0) );
+	    m.addArgument( Macro::Argument(arg) );
 
 	    readWhiteSpaces( false );
 	    if( currentChar().isNull() || currentChar() != ',' )
@@ -457,8 +491,6 @@ void Lexer::processDefine( Macro& m )
 
     m.setBody( body );
     m_driver->addMacro( m );
-
-    // qDebug( "add macro %s with body %s", m.name().latin1(), m.body().latin1() );
 }
 
 void Lexer::processElse()
@@ -575,7 +607,6 @@ void Lexer::processUndef()
     readIdentifier();
     QString word = m_source.mid( startWord, currentPosition() - startWord );
     m_driver->removeMacro( word );
-    // qDebug( "remove definition for %s", word.latin1() );
 }
 
 int Lexer::macroPrimary()

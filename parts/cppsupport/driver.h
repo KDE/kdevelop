@@ -73,7 +73,7 @@ typedef QPair<QString, int> Dependence;
 class Macro
 {
 public:
-    typedef QPair<QString,int> Argument;
+    typedef QString Argument;
 
 public:
     Macro( bool hasArguments = false ): m_hasArguments( hasArguments ) {}
