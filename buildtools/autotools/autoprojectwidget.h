@@ -42,7 +42,7 @@ class QToolButton;
 class QStringList;
 class KListViewItem;
 class QListViewItem;
-
+class MakefileHandler;
 
 class AutoProjectWidget : public QVBox
 {
@@ -194,6 +194,8 @@ public:
 
 	enum AutoProjectView { SubprojectView, DetailsView };
 	void setLastFocusedView( AutoProjectView view );
+
+	MakefileHandler* makefileHandler();
 
 public slots:
 	void slotOverviewSelectionChanged( QListViewItem *item );

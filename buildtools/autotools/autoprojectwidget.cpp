@@ -699,5 +699,9 @@ void AutoProjectWidget::setLastFocusedView( AutoProjectView view )
 
 #include "autoprojectwidget.moc"
 
+MakefileHandler* AutoProjectWidget::makefileHandler()
+{
+	return m_makefileHandler;
+}
 //kate: indent-mode csands; tab-width 4; space-indent off;
 
