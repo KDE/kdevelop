@@ -207,6 +207,8 @@ void TrollProjectPart::removeFiles ( const QStringList& fileList )
 
 void TrollProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
+    emit compilationStarted();
+
     partController()->saveAllFiles();
 
     QFileInfo fi(dir + "/Makefile");
@@ -256,6 +258,8 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 
 void TrollProjectPart::startQMakeCommand(const QString &dir)
 {
+    emit compilationStarted();
+
     QFileInfo fi(dir);
 
     QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
@@ -277,7 +281,6 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
 
 void TrollProjectPart::slotBuild()
 {
-    mainWindow()->raiseView(makeFrontend()->widget());
     startMakeCommand(m_widget->projectDirectory(), QString::fromLatin1(""));
 }
 

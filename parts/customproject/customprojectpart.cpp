@@ -328,6 +328,8 @@ QString CustomProjectPart::buildDirectory()
 
 void CustomProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
+    emit compilationStarted();
+
     partController()->saveAllFiles();
 
     QDomDocument &dom = *projectDom();
@@ -374,7 +376,6 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
 
 void CustomProjectPart::slotBuild()
 {
-    mainWindow()->raiseView(makeFrontend()->widget());
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
 }
 

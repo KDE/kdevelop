@@ -33,6 +33,7 @@
 #include <kdialogbase.h>
 #include <kkeydialog.h>
 #include <kmessagebox.h>
+#include <kdevproject.h>
 
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
@@ -124,6 +125,8 @@ MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
     m_raiseBottomBar->setEnabled( false );
 
     m_timeStamps.clear();
+
+    previous_bottom_view = NULL;
 }
 
 
@@ -167,6 +170,7 @@ void MainWindowIDEAl::init() {
     }
     kdDebug(9000) << "-> kapp = " << kapp << endl;
     kapp->installEventFilter( new IDEAlEventFilter(this) );
+    connect( API::getInstance()->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 }
 
 MainWindowIDEAl::~MainWindowIDEAl() {
@@ -679,6 +683,47 @@ bool MainWindowIDEAl::eventFilter( QObject * /*obj*/, QEvent *e )
       }
   }
   return FALSE;  // standard event processing
+}
+
+/**
+ * When a new project gets opened, connect the signals to the project manager
+ */
+void MainWindowIDEAl::slotProjectOpened() {
+    connect( API::getInstance()->project(), SIGNAL(compilationStarted()), this, SLOT(slotCompilationStarted()) );
+    connect( API::getInstance()->project(), SIGNAL(projectCompiled()), this, SLOT(slotCompilationSucessful()) );
+}
+
+
+/**
+ * Store the bottom view status when the compilation starts
+ */
+void MainWindowIDEAl::slotCompilationStarted()
+{
+  if (m_bottomBar->isRaised()) {
+    // If m_bottomBar->isRaised then store the current view
+    // so that it can be restored after a sucessfull compilation
+    previous_bottom_view = m_bottomBar->current();
+  }else {
+    // If not hide the bottom view by storing NULL
+    previous_bottom_view = NULL;
+  }
+}
+
+
+/**
+ * Restore the bottom view status to the state it had when the compilation started
+ */
+void MainWindowIDEAl::slotCompilationSucessful()
+{
+  if ( previous_bottom_view == NULL) {
+    // If no previous exists then hide current
+    if (m_bottomBar->current())
+      lowerView(m_bottomBar->current());
+  } else {
+    // previous exist, so raise it
+    m_bottomBar->raiseWidget(previous_bottom_view);
+  }
+  previous_bottom_view = NULL;
 }
 
 #include "mainwindowideal.moc"

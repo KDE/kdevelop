@@ -1,3 +1,6 @@
+2003-03-29  Amilcar Lucas  <a.lucas@tu-bs.de>
+  * Implemented intelegent bottom view autohide.
+
 2003-03-26  Roland Krause  <roland@ca.wai.com>
 	* Renamed main.f77 to main.f and adopted the various files. 
 	  The simple hello world fortran application now works. 

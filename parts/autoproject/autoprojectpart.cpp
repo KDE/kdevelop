@@ -439,6 +439,8 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
 
 void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
+    emit compilationStarted();
+
     partController()->saveAllFiles();
 
     m_buildCommand = constructMakeCommandLine(dir, target);
@@ -502,6 +504,8 @@ void AutoProjectPart::buildTarget(QString relpath, TargetItem* titem)
 
   if ( !titem )
     return;
+
+  emit compilationStarted();
 
   // Calculate the complete name of the target and store it in name
   QString name = titem->name;

@@ -90,6 +90,15 @@ public slots:
   void raiseBottomTabbar();
   void raiseEditor();
 
+/** When a new project gets opened, connect the signals to the project manager */
+  void slotProjectOpened();
+
+/** Store the bottom view status when the compilation starts */
+  void slotCompilationStarted();
+
+/** Restore the bottom view status to the state it had when the compilation started */
+  void slotCompilationSucessful();
+
 private slots:
   void slotQuit();
   void slotBufferSelected();      // One entry of the Windows menu has been selected
@@ -128,6 +137,8 @@ private:
   
   QMap<QWidget*, QDateTime> m_timeStamps;
   bool m_bSwitching;
+
+  QWidget *previous_bottom_view;
 
   friend class IDEAlEventFilter;
 };
