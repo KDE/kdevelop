@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Kurt Granroth", "KDE application templates", "kurth@granroth.org");
   aboutData.addAuthor("Ian Reinhart Geiser", "Application templates", "geiseri@yahoo.com");
   aboutData.addAuthor("Matthias Hoelzer-Kluepfel", "Several parts, htdig indexing", "hoelzer@kde.org");
-  aboutData.addAuthor("Victor Roeder", "Help with Automake manager", "<victor_roeder@gmx.de>");
+  aboutData.addAuthor("Victor Roeder", "Help with Automake manager and persistant class store", "victor_roeder@gmx.de");
+  aboutData.addAuthor("Daniel Engelschalt", "C++ code completion, persistant class store", "daniel.engelschalt@gmx.net");
   aboutData.addAuthor("The KWrite authors", "editor component", "kwrite-devel@kde.org");
   aboutData.addAuthor("Robert Moniot", "ftnchek documentation", "moniot@fordham.edu");
   aboutData.addAuthor("Ka-Ping Yee", "pydoc utility", "ping@lfw.org");
