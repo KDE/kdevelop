@@ -12,11 +12,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "ast.h"
-
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qdom.h>
 
 class ProblemReporter;
 
@@ -37,7 +34,7 @@ public:
 
     int errors() const;
 
-    virtual void resetErrors();
+    virtual void resetErrors(); 
     virtual bool reportError( const Error& err );
     /*TODO: remove*/ virtual bool reportError( const QString& msg );
     /*TODO: remove*/ virtual void syntaxError();
@@ -74,14 +71,14 @@ public /*rules*/ :
     bool parsePtrOperator();
     bool parseTemplateArgument();
     bool parseTypeSpecifier();
-    bool parseDeclarator();
+    bool parseDeclarator( QString& name, int& start, int& end );
     bool parseTemplateParameterList();
     bool parseTemplateParameter();
     bool parseStorageClassSpecifier();
     bool parseFunctionSpecifier();
     bool parseConstantExpression();
-    bool parseInitDeclaratorList();
-    bool parseInitDeclarator();
+    bool parseInitDeclaratorList( SymbolTable* symtab );
+    bool parseInitDeclarator( SymbolTable* symtab );
     bool parseParameterDeclarationClause();
     bool parseCtorInitializer();
     bool parsePtrToMember();
@@ -133,16 +130,16 @@ public /*rules*/ :
     bool skipUntil( int token );
     bool skipUntilDeclaration();
     bool skip( int l, int r );
+	QString toString( int start, int end, const QString& sep="" );
 
 private:
     ProblemReporter* m_problemReporter;
     Driver* driver;
     Lexer* lex;
-    QDomDocument* dom;
-    QDomElement translationUnit;
     QString m_fileName;
     int m_errors;
     int m_maxErrors;
+	SymbolTable* m_globalSymbolTable;
 };
 
 inline QString Parser::fileName() const
