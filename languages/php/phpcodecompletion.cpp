@@ -140,7 +140,7 @@ void PHPCodeCompletion::cursorPositionChanged(){
   QString lineStr = m_editInterface->textLine(line);
   if(lineStr.isNull() || lineStr.isEmpty()) return; // nothing to do
   //kdDebug(9018) << "ZEILE:" << lineStr <<":" << endl;
-  //  kdDebug(9018) << "Länge:" << lineStr.length() <<":" << endl;
+  //  kdDebug(9018) << "Length:" << lineStr.length() <<":" << endl;
   //  lineStr.replace(QRegExp("\t"),"_");
   //  kdDebug(9018) << "ZEILEohneTAB:" << lineStr <<":" << endl;
 
@@ -445,7 +445,7 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /
   start = start.mid(equal,leftBracket-equal+1);
   //  cerr << "NEW: " << start << endl;
   QRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)[ \t]*\\(");
-  if(newre.exactMatch(start.local8Bit())){
+  if(newre.search(start.local8Bit()) != -1){
     if( m_model->globalNamespace()->hasClass(newre.cap(1)) ){ // exists this class?
       ClassDom pClass = m_model->globalNamespace()->classByName(newre.cap(1))[ 0 ];
       FunctionList methodList = pClass->functionList();
@@ -470,7 +470,7 @@ bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/
   //  cerr  << "enter checkForNewInstance" << endl;
   QString start = lineStr.left(col);
   QRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)");
-  if(newre.exactMatch(start.local8Bit())){
+  if(newre.search(start.local8Bit()) != -1){
     QString classStart = newre.cap(1);
     if(start.right(2) == classStart){
       QValueList<KTextEditor::CompletionEntry> list;
