@@ -178,11 +178,10 @@ void CToolsConfigDlg::slotToolAdd()
 	  return;
 	}
 	
-	tools_argument.prepend(" ");
 	tools_listbox->insertItem(menutext);
 	tools_exe.append(executable);
 	tools_entry.append(menutext);
-	tools_argument.append(arguments_edit->text());
+	tools_argument.append(QString(" ") + arguments_edit->text());
 		
 }
 
