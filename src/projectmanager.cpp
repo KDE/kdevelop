@@ -267,7 +267,10 @@ bool ProjectManager::loadProject(const KURL &url)
   }
 
   if( projectLoaded() && !closeProject() )
+  {
+    m_openRecentProjectAction->setCurrentItem( -1 );
     return false;
+  }
 
   m_info = new ProjectInfo;
   m_info->m_projectURL = url;
