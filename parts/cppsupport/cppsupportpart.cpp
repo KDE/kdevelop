@@ -119,9 +119,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
              this, SLOT(activePartChanged(KParts::Part*)));
     connect( partController(), SIGNAL(partRemoved(KParts::Part*)),
              this, SLOT(partRemoved(KParts::Part*)));
-    
-    connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
-	     this, SLOT(slotCommandFinished(const QString&)) );
 
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
@@ -325,6 +322,8 @@ CppSupportPart::projectOpened( )
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
     connect( project( ), SIGNAL( removedFilesFromProject( const QStringList &) ),
              this, SLOT( removedFilesFromProject( const QStringList & ) ) );
+    connect( project(), SIGNAL(projectCompiled()),
+	     this, SLOT(slotProjectCompiled()) );	     
 
     // code completion working class
     m_timestamp.clear();
@@ -1200,11 +1199,9 @@ void CppSupportPart::partRemoved( KParts::Part* part )
     }
 }
 
-void CppSupportPart::slotCommandFinished( const QString& command )
+void CppSupportPart::slotProjectCompiled()
 {
-    kdDebug(9007) << "CppSupportPart::slotCommandFinished()" << endl;
-    
-    Q_UNUSED( command );
+    kdDebug(9007) << "CppSupportPart::slotProjectCompiled()" << endl;
     parseProject();
 }
 
