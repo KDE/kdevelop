@@ -17,12 +17,14 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
+#include <kparts/part.h>
 
 #include "kdevproject.h"
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "outputviewsfactory.h"
 #include "appoutputwidget.h"
+#include "kdevpartcontroller.h"
 
 
 AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QStringList &)
@@ -74,6 +76,8 @@ void AppOutputViewPart::stopApplication()
 void AppOutputViewPart::slotProcessExited()
 {
     core()->running( this, false );
+    if ( partController()->activePart() && partController()->activePart()->widget() )
+        partController()->activePart()->widget()->setFocus();
 }
 
 /**
