@@ -20,14 +20,15 @@
 #define CTABCTL_H
 
 
-#include <ktabctl.h>
+#include <qtabwidget.h>
 
 /**
   *this class provide the functionality to switchs the tabs, without a mouseclick
   *@author Sandy Meier
   */
-class CTabCtl : public KTabCtl {
+class CTabCtl : public QTabWidget {
   Q_OBJECT
+
 public:
   /**constructor
    type = normal,output_widget
@@ -36,11 +37,19 @@ public:
   CTabCtl(QWidget* parent=0, const char* name=0, const QString& type="normal");
   /**destructor*/
   ~CTabCtl(){};
- 
-public:
+
   /** set the top tab*/
   void setCurrentTab(int id);
   int getCurrentTab();
+
+//  void addTab(QWidget* widget, const QString& label);
+  void setTabEnabled(const char* name, bool enabled);
+
+public slots:
+  void slotCurrentChanged(QWidget *widget);
+
+signals:
+  void selected(int id);
 };
 
 #endif

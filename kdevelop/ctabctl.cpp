@@ -19,29 +19,58 @@
 
 #include "ctabctl.h"
 
+#include <qobjectlist.h>
+#include <qtabbar.h>
+
 CTabCtl::CTabCtl( QWidget* parent, const char* name, const QString& type) :
-  KTabCtl(parent,name)
+  QTabWidget(parent,name)
 {
   setFocusPolicy(QWidget::NoFocus);
-  tabs->setFocusPolicy(QWidget::NoFocus);
+//  tabs->setFocusPolicy(QWidget::NoFocus);
+  setTabPosition(Top);
   if(type == "normal"){
-    setShape(QTabBar::RoundedAbove);
+    setTabShape(Rounded);
   }
   if(type == "output_widget"){
-    setShape(QTabBar::RoundedAbove);
+    setTabShape(Rounded);
     //    tabs->setFont(QFont("helvetica",10));
   }
+
+  connect(this, SIGNAL(currentChanged(QWidget *)), SLOT(slotCurrentChanged(QWidget *)));
 }
 
 void CTabCtl::setCurrentTab(int id)
 {
-  tabs->setCurrentTab(id);
-  tabSelected(id);
-  showTab(id);
+  tabBar()->setCurrentTab(id);
 }
 
 int CTabCtl::getCurrentTab()
 {
-  int currentTab=tabs->currentTab();
-  return currentTab;
+  return tabBar()->currentTab();
+}
+
+void CTabCtl::setTabEnabled(const char* name, bool enabled)
+{
+  if ( !name )
+    return;
+
+  QObjectList * l
+      = this->queryList( "QWidget", name, FALSE, TRUE );
+
+  if ( l && l->first() )
+  {
+    QObjectListIt it(*l);
+    QObject *o;
+    while( (o = it.current()) )
+    {
+      ++it;
+      if( o->isWidgetType() )
+        QTabWidget::setTabEnabled( (QWidget*)o, enabled );
+    }
+  }
+}
+
+void CTabCtl::slotCurrentChanged(QWidget *)
+{
+  emit selected(currentPageIndex());
 }

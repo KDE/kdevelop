@@ -41,7 +41,6 @@
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qlineedit.h>
-#include <qmessagebox.h>
 #include <qmultilinedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
@@ -1771,12 +1770,12 @@ void CPrjOptionsDlg::ok(){
       // absolute directory path here.
       if (makeDir[0] == '/')
       {
-        if(QMessageBox::warning(this, i18n("Path decision"),
+        if(KMessageBox::warningYesNo(this,
                     i18n("The path\n\n") + makeDir +
                       i18n("\n\nwhich you set as directory where make should "
                             "run is not a relative path.\nThis can cause problems, "
                             "if you move the project. What path do you want to save "
-                            "to your project file?"),
+                            "to your project file?"), i18n("Path decision"),
                     i18n("&Absolute path"), i18n("&Relative path")))
         {
           makeDir = CToolClass::getRelativePath(prj_info->getProjectDir(), makeDir);
@@ -1791,12 +1790,12 @@ void CPrjOptionsDlg::ok(){
   QString binaryPath = binary_edit->text();
   if (!binaryPath.isEmpty()) {
     if (binaryPath[0] == '/') {
-      if(QMessageBox::warning(this,i18n("Path decision"),
+      if(KMessageBox::warningYesNo(this,
                 i18n("The path\n\n") + binaryPath +
                 i18n("\n\nto your binary which should be run on 'Execute' "
                       "is not a relative path. This can cause problems, "
                       "if you move the project. What path do you want to "
-                      "save to your project file?"),
+                      "save to your project file?"),i18n("Path decision"),
                 i18n("&Absolute path"),i18n("&Relative path")))
         binaryPath = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryPath);
     }
@@ -1842,13 +1841,13 @@ void CPrjOptionsDlg::slotBinaryClicked(){
       if ('/' != dir[0])
         isRelativePath = true;
     if (!isRelativePath) {
-      if(QMessageBox::warning(this,
-                              i18n("Path decision"),
+      if(KMessageBox::warningYesNo(this,
                               i18n("The path\n\n") + dir +
                                 i18n("\n\nto your binary which should be run on "
                                 "'Execute' is not a relative path. This can cause "
                                 "problems, if you move the project. What path do "
                                 "you want to save to your project file?"),
+                              i18n("Path decision"),
                               i18n("&Absolute path"),
                               i18n("&Relative path")))
         dir = CToolClass::getRelativePath(prj_info->getProjectDir(), dir);
@@ -1867,13 +1866,13 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked() {
       if ('/' != dir[0])
         isRelativePath = true;
     if (!isRelativePath) {
-      if(QMessageBox::warning(this,
-                              i18n("Path decision"),
+      if(KMessageBox::warningYesNo(this,
                               i18n("The path\n\n") + file +
                               i18n("\n\nwhich you set as directory where make should "
                                 "run is not a relative path. This can cause problems, "
                                 "if you move the project. What path do you want "
                                 "to save to your project file?"),
+                              i18n("Path decision"),
                               i18n("&Absolute path"),
                               i18n("&Relative path")))
         file = CToolClass::getRelativePath(prj_info->getProjectDir(), file);
