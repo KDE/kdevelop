@@ -2,7 +2,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdi
 
 kde_module_LTLIBRARIES = libkdevquickopen.la
 libkdevquickopen_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevquickopen_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la
+libkdevquickopen_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML)
 
 libkdevquickopen_la_SOURCES = quickopen_part.cpp quickopendialog.cpp quickopenclassdialog.cpp quickopenbase.ui quickopenfiledialog.cpp quickopenfunctiondialog.cpp quickopenfunctionchooseformbase.ui quickopenfunctionchooseform.cpp
 
