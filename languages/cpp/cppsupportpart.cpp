@@ -469,7 +469,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
                candidate = sourceOrHeaderCandidate();
            else
                candidate = m_activeFileName;
-           kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
+//           kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
            if (!candidate.isEmpty() && codeModel()->hasFile(candidate) )
            {
                 QPopupMenu* m2 = new QPopupMenu( popup );
@@ -478,12 +478,12 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
                     "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
 
                 FileDom file2 = codeModel()->fileByName( candidate );
-                kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
+//                kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
 
                 FunctionList functionList2 = CodeModelUtils::allFunctions(file2);
                 for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it ){
                     QString text = (*it)->scope().join( "::");
-                    kdDebug() << "CppSupportPart::contextMenu 3 text: " << text << endl;
+//                    kdDebug() << "CppSupportPart::contextMenu 3 text: " << text << endl;
 		    if( !text.isEmpty() )
 			text += "::";
 		    text += formatModelItem( *it, true );
@@ -497,7 +497,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 		    (*it)->getStartPosition( &line, &column );
 		    m2->setItemParameter( id, line );
                 }
-                kdDebug() << "CppSupportPart::contextMenu 4" << endl;
+//                kdDebug() << "CppSupportPart::contextMenu 4" << endl;
            }
 
            QString candidate1;
@@ -505,7 +505,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
                candidate1 = sourceOrHeaderCandidate();
            else
                candidate1 = m_activeFileName;
-           kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
+//           kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
 
            if( codeModel()->hasFile(candidate1) ){
                QPopupMenu* m = new QPopupMenu( popup );
