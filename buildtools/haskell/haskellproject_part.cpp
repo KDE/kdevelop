@@ -263,7 +263,7 @@ void HaskellProjectPart::listOfFiles(QStringList &result, QString path)
     QFileInfoList *entries = const_cast<QFileInfoList*>(d.entryInfoList(QDir::Dirs |
     														QDir::Files | QDir::Hidden));
     for (QFileInfo *it = entries->first(); it; it = entries->next()) {
-        if ((it->isDir()) && (!it->filePath() == path)) {
+        if ((it->isDir()) && (!(it->filePath() == path))) {
             listOfFiles(result, it->dirPath());
         }
         else

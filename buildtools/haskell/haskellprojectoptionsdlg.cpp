@@ -31,8 +31,8 @@
 #include "haskellproject_part.h"
 #include "haskellprojectoptionsdlg.h"
 
-HaskellProjectOptionsDlg::HaskellProjectOptionsDlg( HaskellProjectPart *part, QWidget* parent = 0,
-  				 							   const char* name = 0, WFlags fl = 0 )
+HaskellProjectOptionsDlg::HaskellProjectOptionsDlg( HaskellProjectPart *part, QWidget* parent,
+  				 							   const char* name, WFlags fl )
     : HaskellProjectOptionsDlgBase( parent, name, fl ),
       _part( part )          
 {
