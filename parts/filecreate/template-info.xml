@@ -75,6 +75,12 @@
       <type ext="fpp" name="Fortran source" create="template" icon="source_f">
         <descr>A new empty Fortran source file.</descr>
       </type>
+      <type ext="pl" name="Perl script" create="template" icon="source_f">
+        <descr>A new Perl script.</descr>
+      </type>
+      <type ext="pm" name="Perl module" create="template" icon="source_f">
+        <descr>A new perl module.</descr>
+      </type>
     </filetypes>
   </kdevfilecreate>
 </kdevelop>
