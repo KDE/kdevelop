@@ -216,7 +216,6 @@ void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
     rx.setMinimal( true );
     QString strippedDiff = diff;
     strippedDiff.replace( rx, QString::null );
-    qDebug ( "got diff:\n" + strippedDiff );
 
     Q_ASSERT( diffFrontend() );
     diffFrontend()->showDiff( strippedDiff );

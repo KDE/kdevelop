@@ -27,6 +27,9 @@ public:
     PerforcePart( QObject *parent, const char *name, const QStringList & );
     ~PerforcePart();
 
+    virtual QString shortDescription() const 
+    { return "Perforce is a version control system"; };
+
 private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
     void slotCommit();
