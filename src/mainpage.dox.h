@@ -157,6 +157,9 @@ operation of KDevelop.
   - parts/customproject = Custom Project Manager
     - (see CustomProjectPart)
     .
+  - parts/genericproject = Generic Project Manager
+    - (see GenericProjectPart)
+    .
   - parts/pascalproject = Pascal Project Manager
     - (see PascalProjectPart)
     .
