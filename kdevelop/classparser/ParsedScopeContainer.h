@@ -99,6 +99,12 @@ public: // Public methods
    */
   void removeScope( const char *aName );
 
+  /** 
+   * Clear the internal state. 
+   *
+   */
+  void clear();
+
 };
 
 #endif

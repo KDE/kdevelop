@@ -61,6 +61,22 @@ CParsedScopeContainer::~CParsedScopeContainer()
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------ CParsedScopeContainer::clear()
+ * clear()
+ *   Clear the internal state.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedScopeContainer::clear()
+{
+  CParsedClassContainer::clear();
+
+  scopes.clear();
+}
+
 /*--------------------------------- CParsedScopeContainer::hasScope()
  * hasScope()
  *   Check for a scope is defined in this scope.
@@ -161,3 +177,4 @@ QStrList *CParsedScopeContainer::getSortedScopeNameList()
 {
   return getSortedIteratorNameList<CParsedScopeContainer>( scopeIterator );
 }
+
