@@ -174,17 +174,20 @@ The newly created KMdiChildView is not yet connected to any other widget of KDev
   void loadMDISettings();
 
   void clearWindowMenu();
+  void checkAndFixToolViewObjectName(QWidget* view, const QString& shortName);
+  
+// attributes (private)
 
-  QMap<QWidget*,KMdiChildView*> m_widgetMap;    //!< Key: QWidget* --> Data:KMdiChildView*.\n
+  QMap<QWidget*,KMdiChildView*> m_widgetMap;       //!< Key: QWidget* --> Data:KMdiChildView*.\n
                                                    //!< Contains the same pairs as \ref MainWindow::m_childViewMap "m_childViewMap"
-  QMap<KMdiChildView*,QWidget*> m_childViewMap; //!< Key: KMdiChildView* --> Data:QWidget*.\n
+  QMap<KMdiChildView*,QWidget*> m_childViewMap;    //!< Key: KMdiChildView* --> Data:QWidget*.\n
                                                    //!< Contains the same pairs as \ref MainWindow::m_widgetMap "m_widgetMap"
-  QDict<KMdiChildView>          m_captionDict;  //!< Key: caption string --> Data:KMdiChildView*
+  QDict<KMdiChildView>          m_captionDict;     //!< Key: caption string --> Data:KMdiChildView*
 
-  QPtrList<KMdiChildView> m_outputViews;        //!< Lists all output views
-  QPtrList<KMdiChildView> m_selectViews;        //!< Lists all select views
-  QPtrList<KMdiChildView> m_partViews;          //!< Lists all part views
-  QPtrList<KMdiChildView> m_unavailableViews;   //!< Lists all views set to unavailable
+  QPtrList<QWidget> m_outputViews;                 //!< Lists all output tool views
+  QPtrList<QWidget> m_selectViews;                 //!< Lists all select tool views
+  QPtrList<KMdiChildView> m_partViews;             //!< Lists all part views
+  QPtrList<QWidget> m_unavailableViews;            //!< Lists all tool views set to unavailable
 
   // Members for dealing with the tool views
   bool             m_myWindowsReady;               //!< true: kdevelop s windows are ready
@@ -209,7 +212,7 @@ The newly created KMdiChildView is not yet connected to any other widget of KDev
 struct ViewMenuActionPrivateData
 {
   KDockWidget * pDockWidget;                        //!< Pointer to the KDockWidget to hide or show
-  KMdiChildView *pChildView;
+  QWidget *pChildView;
   MainWindow::EView eView;                         //!< Which tool view the action is for
 };
 
