@@ -51,6 +51,7 @@ public:
   KStatusBar *statusBar();
 
   virtual void prepareToCloseViews() = 0;
+  virtual void guiRestoringFinished() = 0;
 
   virtual void setUserInterfaceMode(const QString& /*uiMode*/) {}
 
