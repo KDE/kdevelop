@@ -784,7 +784,7 @@ void JDBController::analyzeDump(QString data)
           item->value="null";
       }
       if (!localData[name]) {
-          kdDebug() << "inserting local var " << name << " at " << (int)item << endl;
+          kdDebug() << "inserting local var " << name << " at " << (long)item << endl;
           localData.insert(name, item);
       } else { /* The object is already being referred to as a property */ }
 
@@ -810,7 +810,7 @@ void JDBController::analyzeDump(QString data)
       if (!localData[name]) {
           /** oops, we should already have added that object @todo insert assertion */
           item = new JDBVarItem();
-          kdDebug() << "NAME: " << name << " - " << (int)item << endl;
+          kdDebug() << "NAME: " << name << " - " << (long)item << endl;
           item->name = name;
           localData.insert(name, item);
       } else {
@@ -885,7 +885,7 @@ void JDBController::analyzeDump(QString data)
                      localData.insert(fullName, subItem);
                  } else { /* Oops */ }  /// @todo insert assertion
 
-                 kdDebug() << "appending: " << fullName << " as " << (int)subItem << endl;
+                 kdDebug() << "appending: " << fullName << " as " << (long)subItem << endl;
 
                  // item.insertSibling(subItem);
                  item->siblings.append(subItem);

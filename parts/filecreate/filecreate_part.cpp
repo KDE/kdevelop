@@ -192,7 +192,7 @@ void FileCreatePart::slotAboutToShowNewPopupMenu()
 					KIcon::DefaultState, NULL, true);
 				m_newPopupMenu->insertItem(iconPix, filetype->name(), this,
 					SLOT(slotNewFilePopup(int)), 0, ++id );
-				m_newPopupMenu->setItemParameter( id, (int)filetype );
+				m_newPopupMenu->setItemParameter( id, (long)filetype );
 			} else
 			{
 				KPopupMenu* subMenu = NULL;
@@ -207,7 +207,7 @@ void FileCreatePart::slotAboutToShowNewPopupMenu()
 							KIcon::DefaultState, NULL, true);
 						subMenu->insertItem(iconPix, subtype->name(), this,
 							SLOT(slotNewFilePopup(int)), 0, ++id );
-						subMenu->setItemParameter( id, (int)subtype );
+						subMenu->setItemParameter( id, (long)subtype );
 					}
 				}
 				if( subMenu )
