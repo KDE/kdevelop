@@ -1,36 +1,24 @@
-/********************************************************************
-* Name    : Implementation of a parsed parent.                      *
-* ------------------------------------------------------------------*
-* File    : ParsedParent.cc                                         *
-* Author  : Jonas Nordin (jonas.nordin@cenacle.se)                  *
-* Date    : Mon Mar 15 14:09:29 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedParent.cc  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
 
-#include <assert.h>
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #include <iostream.h>
 #include "ParsedParent.h"
+#include "ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -82,11 +70,8 @@ CParsedParent::~CParsedParent()
  *-----------------------------------------------------------------*/
 void CParsedParent::setName( const char *aName )
 {
-  //  assert( aName != NULL && strlen( aName ) > 0 );
-  if(aName == 0 ){
-    cerr << "ERROR!!! in parser void CParsedParent::setName(: \n";
-    return;
-  }
+  REQUIRE( "Valid name", aName != NULL );
+  REQUIRE( "Valid name length", strlen( aName ) > 0 );
 
   name = aName;
 }
@@ -103,7 +88,7 @@ void CParsedParent::setName( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedParent::setExport( int aExport )
 {
-  //  assert( aExport == PUBLIC || aExport == PRIVATE || aExport == PROTECTED );
+  REQUIRE( "Valid export", aExport == CPPUBLIC || aExport == CPPRIVATE || aExport == CPPROTECTED );
 
   exportattr = aExport;
 }
@@ -129,13 +114,13 @@ void CParsedParent::out()
 
   switch(exportattr)
   {
-    case PUBLIC:
+    case CPPUBLIC:
       cout << "public";
       break;
-    case PROTECTED:
+    case CPPROTECTED:
       cout << "protected";
       break;
-    case PRIVATE:
+    case CPPRIVATE:
       cout << "private";
       break;
   }
@@ -158,13 +143,13 @@ void CParsedParent::asPersistantString( QString &dataStr )
 
   switch(exportattr)
   {
-    case PUBLIC:
+    case CPPUBLIC:
       dataStr += "public";
       break;
-    case PROTECTED:
+    case CPPROTECTED:
       dataStr += "protected";
       break;
-    case PRIVATE:
+    case CPPRIVATE:
       dataStr += "private";
       break;
   }

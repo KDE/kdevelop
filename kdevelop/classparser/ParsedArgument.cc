@@ -1,37 +1,25 @@
-/********************************************************************
-* Name    : Implementation of a parsed argument.                    *
-* ------------------------------------------------------------------*
-* File    : ParsedArgument.cc                                       *
-* Author  : Jonas Nordin (jonas.nordin@cenacle.se)                  *
-* Date    : Mon Mar 15 14:03:38 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedArgument.cc  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
 
-#include <assert.h>
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #include <iostream.h>
 #include <qstring.h>
 #include "ParsedArgument.h"
+#include "ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -84,8 +72,8 @@ CParsedArgument::~CParsedArgument()
  *-----------------------------------------------------------------*/
 void CParsedArgument::setName( const char *aName )
 {
-  //  assert( aName != NULL && strlen( aName ) > 0 );
-  
+  REQUIRE( "Valid name", aName != NULL );
+  REQUIRE( "Valid name length", strlen( aName ) > 0 );
 
   name = aName;
   name = name.stripWhiteSpace();
@@ -103,12 +91,9 @@ void CParsedArgument::setName( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedArgument::setType( const char *aType )
 {
-  //  assert( aType != NULL && strlen( aType ) > 0 );
+  REQUIRE( "Valid type", aType != NULL );
+  REQUIRE( "Valid type length", strlen( aType ) > 0 );
   
-  if(aType == 0 ){
-    cerr << "ERROR!!! in parser  CParsedArgument::setType: \n";
-    return;
-  }
   type = aType;
   type = type.stripWhiteSpace();
 }
@@ -147,11 +132,7 @@ void CParsedArgument::setNamePos( int pos )
  *-----------------------------------------------------------------*/
 void CParsedArgument::copy( CParsedArgument *anArg )
 {
-  //  assert( anArg != NULL );
-  if(anArg == 0 ){
-    cerr << "ERROR!!! in parser  void CParsedArgument::copy( CParsedArgument *anArg ): \n";
-    return;
-  }
+  REQUIRE( "Valid argument", anArg != NULL );
 
   setNamePos( anArg->posName );
   setName( anArg->name );

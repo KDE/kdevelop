@@ -1,9 +1,9 @@
 /***************************************************************************
-                 ParsedClassContainer.cpp  -  implementation
+                 ParsedClassContainer.cc  -  implementation
                              -------------------
     begin                : Tue Aug 27 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
    
  ***************************************************************************/
 
@@ -18,6 +18,8 @@
 
 #include "ParsedClassContainer.h"
 #include <iostream.h>
+#include "ProgrammingByContract.h"
+
 
 /*********************************************************************
  *                                                                   *
@@ -87,44 +89,17 @@ void CParsedClassContainer::clear()
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::addClass( CParsedClass *aClass )
 {
-  //  assert( aClass != NULL );
-  //  assert( !aClass->name.isEmpty() );
-  //  assert( !hasClass( aClass->name ) );
-  if(aClass == 0 ){
-    cerr << "ERROR!!! in parser  CParsedClassContainer::addClass: \n";
-    return;
-  }
+  REQUIRE( "Valid class", aClass != NULL );
+  REQUIRE( "Valid classname", !aClass->name.isEmpty() );
+  REQUIRE( "Unique class", !hasClass( useFullPath ? aClass->path() : aClass->name ) );
 
-  classes.insert( aClass->name, aClass );
-}
+  aClass->setDeclaredInScope( path() );
 
-/*------------------------------- CParsedClassContainer::addSubClass()
- * addSubClass()
- *   Store a subclass pointer using its' hierarchy as the key.
- *
- * Parameters:
- *   key           The hierarchy.
- *   aClass        The subclass to store.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClassContainer::addSubClass( const char *key, 
-                                         CParsedClass *aClass )
-{
-  //  assert( aClass != NULL );
-  //  assert( !aClass->name.isEmpty() );
-  //  assert( key != NULL );
-  if(aClass == 0 ){
-    cerr << "ERROR!!! in parser  CParsedClassContainer::addSubClass: \n";
-    return;
-  }
-  if(key == 0 ){
-    cerr << "ERROR!!! in parser  CParsedClassContainer::addSubClass: \n";
-    return;
-  }
+  // If this is a class, and we're adding another class that class
+  // is a subclass.
+  aClass->setIsSubClass( itemType == PIT_CLASS );
 
-  classes.insert( key, aClass );
+  classes.insert( useFullPath ? aClass->path() : aClass->name, aClass );
 }
 
 /*------------------------------ CParsedClassContainer::removeClass()
@@ -139,13 +114,9 @@ void CParsedClassContainer::addSubClass( const char *key,
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::removeClass( const char *aName )
 {
-  //  assert( aName != NULL );
-  //  assert( strlen( aName ) > 0 );
-  //  assert( hasClass( aName ) );
-  if(aName == 0 ){
-    cerr << "ERROR!!! in parser void CParsedClassContainer::removeClass( const char *aName ): \n";
-    return;
-  }
+  REQUIRE( "Valid classname", aName != NULL );
+  REQUIRE( "Valid classname", strlen( aName ) > 0 );
+  REQUIRE( "Class exists", hasClass( aName ) );
 
   classes.remove( aName );
 }
@@ -162,6 +133,9 @@ void CParsedClassContainer::removeClass( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::removeWithReferences( const char *aFile )
 {
+  REQUIRE( "Valid filename", aFile != NULL );
+  REQUIRE( "Valid filename length", strlen( aFile ) > 0 );
+
   CParsedContainer::removeWithReferences( aFile );
 }
 
@@ -183,6 +157,9 @@ void CParsedClassContainer::removeWithReferences( const char *aFile )
  *-----------------------------------------------------------------*/
 bool CParsedClassContainer::hasClass( const char *aName )
 {
+  REQUIRE1( "Valid classname", aName != NULL, false );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, false );
+
   return classes.find( aName ) != NULL;
 }
 
@@ -199,17 +176,10 @@ bool CParsedClassContainer::hasClass( const char *aName )
  *-----------------------------------------------------------------*/
 CParsedClass *CParsedClassContainer::getClassByName( const char *aName )
 {
-  //  assert( aName != NULL );
-   if(aName == 0 ){
-    cerr << "ERROR!!! in parser CParsedClass *CParsedClassContainer::getClassByName( const char *aName )  \n";
-    return 0;
-  }
+  REQUIRE1( "Valid classname", aName != NULL, NULL );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, NULL );
 
-  CParsedClass *aClass;
-
-  aClass = classes.find( aName );
-
-  return aClass;
+  return classes.find( aName );
 }
 
 /*------------------------ CParsedClassContainer::getSortedClassList()
@@ -223,30 +193,7 @@ CParsedClass *CParsedClassContainer::getClassByName( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CParsedClassContainer::getSortedClassList()
 {
-  QList<CParsedClass> *retVal = new QList<CParsedClass>();
-  QStrList srted;
-  char *str;
-
-  retVal->setAutoDelete( false );
-
-  // Ok... This sucks. But I'm lazy.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
-  {
-    // Only add non-subclasses.
-    if( !classIterator.current()->isSubClass() )
-      srted.inSort( classIterator.current()->name );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getClassByName( str ) );
-  }
-
-  return retVal;
+  return getSortedDictList<CParsedClass>( classes );
 }
 
 /*-------------------- CParsedClassContainer::getSortedClassNameList()
@@ -260,17 +207,5 @@ QList<CParsedClass> *CParsedClassContainer::getSortedClassList()
  *-----------------------------------------------------------------*/
 QStrList *CParsedClassContainer::getSortedClassNameList()
 {
-  QStrList * retVal = new QStrList();
-  
-  // Iterate over all classes in the store.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
-  {
-    // Only add non-subclasses.
-    if( !classIterator.current()->isSubClass() )
-      retVal->inSort( classIterator.current()->name );
-  }
-
-  return retVal;
+  return getSortedIteratorNameList( classIterator );
 }

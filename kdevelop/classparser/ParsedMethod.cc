@@ -1,37 +1,25 @@
-/********************************************************************
-* Name    : Implementation of a parsed method.                      *
-* ------------------------------------------------------------------*
-* File    : ParsedMethod.cc                                         *
-* Author  : Jonas Nordin (jonas.nordin@cenacle.se)                  *
-* Date    : Mon Mar 15 13:51:21 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedMethod.cc  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
 
-#include <assert.h>
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #include <iostream.h>
 #include <stdio.h>
 #include "ParsedMethod.h"
+#include <qregexp.h> 
 
 /*********************************************************************
  *                                                                   *
@@ -91,11 +79,7 @@ CParsedMethod::~CParsedMethod()
  *-----------------------------------------------------------------*/
 void CParsedMethod::addArgument( CParsedArgument *anArg )
 {
-  //  assert( anArg != NULL );
-  if(anArg == 0 ){
-    cerr << "ERROR!!! in parser void CParsedMethod::addArgument(   : \n";
-    return;
-  }
+  ASSERT( anArg != NULL );
   
   if( anArg->type != "void" )
     arguments.append( anArg );
@@ -228,11 +212,7 @@ void CParsedMethod::out()
  *-----------------------------------------------------------------*/
 void CParsedMethod::copy( CParsedMethod *aMethod )
 {
-  //  assert( aMethod != NULL );
-  if(aMethod == 0 ){
-    cerr << "ERROR!!! in parser  void CParsedMethod::copy( CParsedMethod *aMethod ) \n";
-    return;
-  }
+  ASSERT( aMethod != NULL );
 
   CParsedArgument *newArg;
   CParsedArgument *anArg;
@@ -299,12 +279,18 @@ void CParsedMethod::asHeaderCode( QString &str )
  *-----------------------------------------------------------------*/
 void CParsedMethod::asCppCode( QString &str )
 {
+  QString aPath;
+
   if( isPure || isSignal )
     str = "";
   else
   {
     str = comment + "\n";
-    str += type + " " + declaredInClass + "::" + name;
+
+    // Take the path and replace all . with ::
+    aPath = path();
+    aPath.replace( QRegExp( "\\." ), "::" );
+    str += type + " " + aPath + "::" + name;
     
     if( isConst )
       str += " const";

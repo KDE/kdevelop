@@ -3,7 +3,7 @@
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -25,7 +25,7 @@
 typedef enum
 { 
   PIT_UNKNOWN, PIT_CLASS, PIT_METHOD, 
-  PIT_ATTRIBUTE, PIT_STRUCT 
+  PIT_ATTRIBUTE, PIT_STRUCT, PIT_SCOPE
 } PIType;
 
 /** Export of a CParsedItem. */
@@ -37,24 +37,25 @@ typedef enum
 
 /** Abstract class for all items that are parsed in the classparser. 
  * The smallest common items shared by all items are name, export
- * and the files/lines they are declared/defined on.
+ * and the files/lines they are declared/defined from/to.
+ *
  * @author Jonas Nordin
  */
 class CParsedItem
 {
 public: // Constructor and destructor. */
 
-  CParsedItem() 
-  { 
-    itemType = PIT_UNKNOWN; 
-    exportScope = PIE_GLOBAL; 
-    declaredOnLine = -1; 
-    declarationEndsOnLine = -1;
-    definedOnLine = -1; 
-    definitionEndsOnLine = -1;
-  }
+  /**
+   * Constructor
+   *
+   */
+  CParsedItem();
 
-  virtual ~CParsedItem() {}
+  /**
+   * Destructor
+   *
+   */
+  virtual ~CParsedItem();
 
 public: // Public attributes
 
@@ -63,6 +64,9 @@ public: // Public attributes
 
   /** Name of this item */
   QString name;
+
+  /** Current scope of this item. If it's empty it's a global item. */
+  QString declaredInScope;
 
   /** Export scope of this method. */
   PIExport exportScope;
@@ -93,59 +97,73 @@ public: // Public queries
   /** Is this a public item? 
    * @return If this a public item or not.
    */
-  bool isPublic()    { return ( exportScope == PIE_PUBLIC ); }
+  inline bool isPublic()    { return ( exportScope == PIE_PUBLIC ); }
 
   /** Is this a protected item? 
    * @return If this a protected item or not.
    */
-  bool isProtected() { return ( exportScope == PIE_PROTECTED ); }
+  inline bool isProtected() { return ( exportScope == PIE_PROTECTED ); }
 
   /** Is this a public item? 
    * @return If this a private item or not.
    */
-  bool isPrivate()   { return ( exportScope == PIE_PRIVATE ); }
+  inline bool isPrivate()   { return ( exportScope == PIE_PRIVATE ); }
 
   /** Is this a global variable?
    * @return If this a global item or not.
    */
-  bool isGlobal()    { return ( exportScope = PIE_GLOBAL ); }
+  inline bool isGlobal()    { return ( exportScope = PIE_GLOBAL ); }
+
+  /**
+   * The path is the scope + "." + the name of the item.
+   *
+   * @return The path of this item.
+   */
+  QString path();
 
 public: // Public methods to set attribute values
 
   /** Set the item type. 
    * @param aType The new type.
    */
-  void setItemType( PIType aType )            { itemType = aType; }
+  inline void setItemType( PIType aType )            { itemType = aType; }
 
   /** Set the name. 
    * @param aName The new name.
    */
-  void setName( const char *aName )           { name = aName; }
+  inline void setName( const char *aName )           { name = aName; }
 
   /** Set the export scope. 
    * @param aExport The new export status.
    */
-  void setExport( PIExport aExport )          { exportScope = aExport; }
+  inline void setExport( PIExport aExport )          { exportScope = aExport; }
+
+  /** 
+   * Set the scope this item is declared in.
+   *
+   * @param aScope The scope-
+   */
+  inline void setDeclaredInScope( const char *aScope ) { declaredInScope = aScope; }
 
   /** Set the line where the item was defined. 
    * @param aLine 0-based line on which the item is defined.
    */
-  void setDefinedOnLine( uint aLine )         { definedOnLine = aLine; }
+  inline void setDefinedOnLine( uint aLine )         { definedOnLine = aLine; }
 
   /** Set the line where the declaration ends.
    * @param aLine 0-based line on which the item definition ends.
    */
-  void setDefinitionEndsOnLine( uint aLine )  { definitionEndsOnLine = aLine; }
+  inline void setDefinitionEndsOnLine( uint aLine ) { definitionEndsOnLine = aLine; }
 
   /** Set the line where the item was declared. 
    * @param aLine 0-based line on which the item is declared.
    */
-  void setDeclaredOnLine( uint aLine )        { declaredOnLine = aLine; }
+  inline void setDeclaredOnLine( uint aLine )      { declaredOnLine = aLine; }
 
   /** Set the line where the declaration ends.
    * @param aLine 0-based line on which the declaration ends. 
    */
-  void setDeclarationEndsOnLine( uint aLine ) {declarationEndsOnLine = aLine; }
+  inline void setDeclarationEndsOnLine( uint aLine ) {declarationEndsOnLine = aLine; }
 
   /** Set the line where the item was defined. 
    * @param aFile Absoulute filename of the file the item is defined in.
@@ -162,19 +180,15 @@ public: // Public methods to set attribute values
    */
   void setComment( const char *aComment )     { comment = aComment; }
 
-public: // Virtual methods to be defined by children.
-
-  /** Make this object a copy of the supplied object. 
+  /** 
+   * Make this object a copy of the supplied object. 
+   *
    * @param anItem Item to copy.
    */
-  virtual void copy( CParsedItem *anItem )
-  {
-    assert( anItem != NULL );
-    
-    setName( anItem->name );
-    setExport( anItem->exportScope );
-    setComment( anItem->comment );
-  }
+  void copy( CParsedItem *anItem );
+
+public: // Virtual methods to be defined by children.
+
 
   /** Return the object as a string(for tooltips etc) 
    * @param str String to store the result in.
@@ -204,17 +218,7 @@ protected: // Protected methods
    * @param toRead String to interpret.
    * @param start Position in toRead to start at.
    */
-  int getSubString( char *buf, const char *toRead, int start )
-  {
-    int endPos=0;
-
-    buf[ 0 ] = '\0';
-    while( toRead[ start + endPos ] != '\n' )
-      endPos++;
-    strncpy( buf, &toRead[ start ], endPos );
-
-    return start + endPos + 1;
-  }
+  int getSubString( char *buf, const char *toRead, int start );
 };
 
 #endif 
