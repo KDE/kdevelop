@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="$APPNAME$rc"/>
+  <group name="Preferences">
+    <entry name="col_background" type="Color">
+	    <label>color of the background</label>
+	    <default>black</default>
+    </entry>
+    <entry name="col_foreground" type="Color">
+	    <label>color of the foreground</label>
+	    <default>yellow</default>
+    </entry>
+    <entry name="val_time" type="Int">
+	    <label>size of a ball</label>
+	    <default>2</default>
+    </entry>
+  </group>
+</kcfg>
