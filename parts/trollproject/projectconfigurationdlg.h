@@ -1,8 +1,10 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Thomas Hasart                                   *
- *   thasart@gmx.de                                                        *
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
  *   jsgaarde@tdcspace.dk                                                  *
+ *   Copyright (C) 2002-2003 by Alexander Dymo                             *
+ *   cloudtemple@mksat.net                                                 *
+ *   Copyright (C) 2003 by Thomas Hasart                                   *
+ *   thasart@gmx.de                                                        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

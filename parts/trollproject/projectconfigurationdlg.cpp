@@ -1,8 +1,10 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Thomas Hasart                                   *
- *   thasart@gmx.de                                                        *
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
  *   jsgaarde@tdcspace.dk                                                  *
+ *   Copyright (C) 2002-2003 by Alexander Dymo                             *
+ *   cloudtemple@mksat.net                                                 *
+ *   Copyright (C) 2003 by Thomas Hasart                                   *
+ *   thasart@gmx.de                                                        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -206,12 +208,12 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
       QString tmpLib=insideItem->prjItem->getLibAddObject(myProjectItem->getDownDirs());
       if(insideItem->prjItem->configuration.m_requirements & QD_SHARED)
       {
-        tmpLib="-l"+tmpLib;
+        tmpLib=/*"-l"+*/tmpLib;
 
         //add path if shared lib is linked
         QString tmpPath=insideItem->prjItem->getLibAddPath(myProjectItem->getDownDirs());
         if(tmpPath!=""){
-          myProjectItem->configuration.m_librarypath.append("-L"+tmpPath);
+          myProjectItem->configuration.m_librarypath.append(/*"-L"+*/tmpPath);
         }
       }else if(insideItem->prjItem->configuration.m_requirements & QD_STATIC)
       {
@@ -488,7 +490,7 @@ void ProjectConfigurationDlg::updateLibaddControl()
               {
                 // create lib string
                   QString tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
-                  if(sItem->configuration.m_requirements & QD_SHARED) tmpLib="-l"+tmpLib;
+                  if(sItem->configuration.m_requirements & QD_SHARED) tmpLib=/*"-l"+*/tmpLib;
                   if(tmpLib==(*it)){
                     InsideCheckListItem *newItem=new InsideCheckListItem(insidelib_listview,insidelib_listview->lastItem(),sItem);
                     libList.remove(it);
@@ -520,7 +522,7 @@ void ProjectConfigurationDlg::updateLibaddControl()
         {
           // create lib string
           QString tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
-          if(sItem->configuration.m_requirements & QD_SHARED) tmpLib="-l"+tmpLib;
+          if(sItem->configuration.m_requirements & QD_SHARED) tmpLib=/*"-l"+*/tmpLib;
           InsideCheckListItem *newItem=new InsideCheckListItem(insidelib_listview,insidelib_listview->lastItem(),sItem);
           newItem->setOn(false);
         }

@@ -99,7 +99,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
 
 
-    action = new KAction( i18n("&Build Target Project"), "make_kdevelop", Key_F8,
+    action = new KAction( i18n("&Build Target Project"), "make_kdevelop", 0,
                           m_widget, SLOT(slotBuildTarget()),
                           actionCollection(), "build_build_target" );
 

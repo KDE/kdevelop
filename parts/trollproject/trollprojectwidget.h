@@ -1,10 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Thomas Hasart                                   *
- *   thasart@gmx.de                                                        *
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
  *   jakob@jsg.dk                                                          *
+ *   Copyright (C) 2002-2003 by Alexander Dymo                             *
+ *   cloudtemple@mksat.net                                                 *
+ *   Copyright (C) 2003 by Thomas Hasart                                   *
+ *   thasart@gmx.de                                                        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +28,8 @@
 #include <klocale.h>
 #include <kdeversion.h>
 #include <qbutton.h>
+#include <qfileinfo.h>
+#include <qptrlist.h>
 #include "filebuffer.h"
 #include "projectconfigurationdlg.h"
 #include "filepropertydlg.h"
@@ -132,7 +136,7 @@ public:
     QStringList idls_exclude;
 
 
-    
+
     ProjectConfiguration configuration;
 
     FileBuffer m_FileBuffer;
@@ -157,9 +161,9 @@ public:
   }
   InsideCheckListItem(QListView *parent,QListViewItem *after,SubprojectItem *item):
       QCheckListItem(parent,
-#if KDE_VERSION > 305		     
+#if KDE_VERSION > 305
 		     after,
-#endif		     
+#endif
 		     item->text(0),QCheckListItem::CheckBox)
   {
     prjItem=item;
@@ -183,7 +187,7 @@ public:
     QString             install_path;
     QPtrList<GroupItem> installs;
     QPtrList<FileItem>  files;
-    
+
     QStringList         str_files;
     QStringList         str_files_exclude;
     // end qmake INSTALLS support
@@ -253,7 +257,7 @@ public:
     void updateInstallObjects(SubprojectItem* item, FileBuffer *subBuffer);
     void addFileToCurrentSubProject(GroupItem *titem,const QString &filename);
     void addFileToCurrentSubProject(GroupItem::GroupType gtype,const QString &filename);
-    void addFile(const QString &fileName);
+    void addFile(const QString &fileName, bool noPathTruncate = false);
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
 
@@ -298,6 +302,10 @@ private:
     QString getHeader();
     QString constructMakeCommandLine(const QString makeFileName = QString::null);
     void startMakeCommand(const QString &dir, const QString &target);
+
+    /*fileName: full base file name like QFileInfo::baseName ( true )*/
+    QPtrList<SubprojectItem> findSubprojectForFile( QFileInfo fi );
+    void findSubprojectForFile( QPtrList<SubprojectItem> &list, SubprojectItem * item, QString absFilePath );
 //    QString makeEnvironment();
 
     QVBox     *overviewContainer;

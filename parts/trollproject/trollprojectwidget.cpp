@@ -1,12 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Thomas Hasart                                   *
- *   thasart@gmx.de                                                        *
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2000-2001 by Trolltech AS.                              *
  *   info@trolltech.com                                                    *
  *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
  *   jakob@jsg.dk                                                          *
+ *   Copyright (C) 2002-2003 by Alexander Dymo                             *
+ *   cloudtemple@mksat.net                                                 *
+ *   Copyright (C) 2003 by Thomas Hasart                                   *
+ *   thasart@gmx.de                                                        *
  *                                                                         *
  *   Part of this file is taken from Qt Designer.                          *
  *                                                                         *
@@ -27,6 +29,7 @@
 #include <qsplitter.h>
 #include <qptrstack.h>
 #include <qtextstream.h>
+#include <qcombobox.h>
 #include <qprocess.h>
 #include <qtimer.h>
 #include <qdir.h>
@@ -46,6 +49,7 @@
 #include <kaction.h>
 #include <kprocess.h>
 #include <klineeditdlg.h>
+#include <kdeversion.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -56,6 +60,8 @@
 #include "kdevlanguagesupport.h"
 #include "kdevcreatefile.h"
 #include "subclassesdlg.h"
+#include "addfilesdialog.h"
+#include "urlutil.h"
 
 #define VALUES_PER_ROW  1
 
@@ -125,7 +131,7 @@ QString SubprojectItem::getLibAddObject(QString downDirs)
     {
       tmpPath=downDirs+this->subdir+configuration.m_destdir;
     }else{
-      tmpPath=downDirs+this->getRelativPath()+"/";      
+      tmpPath=downDirs+this->getRelativPath()+"/";
     }
 
     tmpPath=QDir::cleanDirPath(tmpPath);
@@ -153,7 +159,7 @@ QString SubprojectItem::getLibAddPath(QString downDirs)
     QString tmpPath;
     if(configuration.m_destdir!="")
     {
-      tmpPath=downDirs+this->subdir+configuration.m_destdir;
+      tmpPath=downDirs+this->subdir+"/"+configuration.m_destdir;
     }else{
       tmpPath=downDirs+this->getRelativPath()+"/";
     }
@@ -213,6 +219,8 @@ GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
         return Headers;
     else if (ext == "ui")
         return Forms;
+    else if (ext == "idl")
+        return IDLs;
     else
         return NoType;
 }
@@ -757,13 +765,28 @@ void TrollProjectWidget::slotExecuteTarget()
     return;
 
   QString dircmd = "cd "+subprojectDirectory() + "/" + getCurrentDestDir() + " && ";
-  QString program = getCurrentOutputFilename();
+  QString program = "./" + getCurrentOutputFilename();
+
+    // Build environment variables to prepend to the executable path
+    QString runEnvVars = QString::null;
+    DomUtil::PairList list =
+        DomUtil::readPairListEntry( *(m_part->projectDom()), "/kdevtrollproject/run/envvars", "envvar", "name", "value" );
+
+    DomUtil::PairList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        const DomUtil::Pair &pair = (*it);
+        if ( (!pair.first.isEmpty()) && (!pair.second.isEmpty()) )
+            runEnvVars += pair.first + "=" + pair.second + " ";
+    }
+    program.prepend(runEnvVars);
+
+    program.append(" " + DomUtil::readEntry( *(m_part->projectDom()), "/kdevtrollproject/run/programargs" ) + " ");
 //  std::cerr<<dircmd + "./"+program<<std::endl;
 //  m_part->execute(dircmd + "./"+program);
 //  m_part->appFrontend()->startAppCommand(dircmd +"./"+program,true);
 
   bool inTerminal = DomUtil::readBoolEntry(*m_part->projectDom(), "/kdevtrollproject/run/terminal");
-  m_part->appFrontend()->startAppCommand(subprojectDirectory() + "/" + getCurrentDestDir(), "./" + getCurrentOutputFilename(),inTerminal );
+  m_part->appFrontend()->startAppCommand(subprojectDirectory() + "/" + getCurrentDestDir(), program, inTerminal );
 
 }
 
@@ -1237,14 +1260,14 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
 
   subBuffer->removeValues("IDLS");
   subBuffer->setValues("IDLS",spitem->idls,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  //subBuffer->setValues("IDLS",spitem->idls_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+  subBuffer->setValues("IDLS",spitem->idls_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
 
   subBuffer->removeValues("IMAGES");
   subBuffer->setValues("IMAGES",spitem->images,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
-  //subBuffer->setValues("IMAGES",spitem->images_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
+  subBuffer->setValues("IMAGES",spitem->images_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
 
-  
-  
+
+
   if( m_part->isTMakeProject() ) {
       subBuffer->removeValues("INTERFACES");
       subBuffer->setValues("INTERFACES",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
@@ -1424,7 +1447,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
 * Method adds a file to the current project by grouped
 * by file extension
 */
-void TrollProjectWidget::addFile(const QString &fileName)
+void TrollProjectWidget::addFile(const QString &fileName, bool noPathTruncate)
 {
   if (!m_shownSubproject)
     return;
@@ -1448,7 +1471,11 @@ void TrollProjectWidget::addFile(const QString &fileName)
 
   QFileInfo info(fileName);
   QString ext = info.extension(false).simplifyWhiteSpace();
-  QString noPathFileName = info.fileName();
+  QString noPathFileName;
+  if (noPathTruncate)
+    noPathFileName = fileName;
+  else
+    noPathFileName = info.fileName();
 
   addFileToCurrentSubProject(GroupItem::groupTypeForExtension(ext), noPathFileName);
   updateProjectFile(m_shownSubproject);
@@ -1462,28 +1489,65 @@ void TrollProjectWidget::slotAddFiles()
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
   QString  filter = "*.cpp *.cc *.c *.hpp *.h *.ui|" + i18n("Source files");
   filter += "\n*|" + i18n("All files");
-  KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
+#if KDE_VERSION >= 310
+  AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
+                                        filter,
+                                        this,
+                                        "Insert existing files",
+                                        true, new QComboBox(false));
+#else
+  AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
                                         filter,
                                         this,
                                         "Insert existing files",
                                         true);
+#endif
   dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
   dialog->exec();
   QStringList files = dialog->selectedFiles();
   for (unsigned int i=0;i<files.count();i++)
   {
-    // Copy selected files to current subproject folder
-    QProcess *proc = new QProcess( this );
-    proc->addArgument( "cp" );
-    proc->addArgument( "-f" );
-    proc->addArgument( files[i] );
-    proc->addArgument( projectDirectory()+relpath );
-    proc->start();
-    QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
-    // and add them to the filelist
-    QFile testExist(projectDirectory()+relpath+"/"+filename);
-    if (testExist.exists())
-      addFile(filename);
+    switch (dialog->mode())
+    {
+      case AddFilesDialog::Copy:
+        {
+        // Copy selected files to current subproject folder
+        QProcess *proc = new QProcess( this );
+        proc->addArgument( "cp" );
+        proc->addArgument( "-f" );
+        proc->addArgument( files[i] );
+        proc->addArgument( projectDirectory()+relpath );
+        proc->start();
+        QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
+        // and add them to the filelist
+        QFile testExist(projectDirectory()+relpath+"/"+filename);
+        if (testExist.exists())
+          addFile(filename);
+        }
+        break;
+
+      case AddFilesDialog::Link:
+        {
+        // Link selected files to current subproject folder
+        QProcess *proc = new QProcess( this );
+        proc->addArgument( "ln" );
+        proc->addArgument( "-s" );
+        proc->addArgument( files[i] );
+        proc->addArgument( projectDirectory()+relpath );
+        proc->start();
+        QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
+        // and add them to the filelist
+        QFile testExist(projectDirectory()+relpath+"/"+filename);
+        if (testExist.exists())
+          addFile(filename);
+        }
+        break;
+
+      case AddFilesDialog::Relative:
+        // Form relative path to current subproject folder
+        addFile(URLUtil::relativePathToFile(projectDirectory()+relpath , files[i]), true);
+        break;
+    }
   }
 }
 
@@ -1738,7 +1802,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int idSetInstObjPath = popup.insertItem(SmallIconSet("fileopen"),i18n("Choose install path..."));
 
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
-        if (titem->groupType == GroupItem::InstallRoot)            
+        if (titem->groupType == GroupItem::InstallRoot)
         {
           popup.removeItem(idInsExistingFile);
           popup.removeItem(idInsNewFile);
@@ -1753,19 +1817,19 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         else // File group containing files
         {
-          popup.removeItem(idInsNewFilepatternItem);        
+          popup.removeItem(idInsNewFilepatternItem);
           popup.removeItem(idInsInstallObject);
           popup.removeItem(idSetInstObjPath);
         }
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-        
+
         if (r == idSetInstObjPath)
         {
           titem->install_path = (KFileDialog::getExistingDirectory());
           updateProjectFile(titem->owner);
         }
-        
+
         if (r == idInsNewFilepatternItem)
         {
           // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
@@ -1773,7 +1837,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           QString filepattern = KLineEditDlg::getText(
                               i18n( "Insert new filepattern" ),
                               i18n( "Please enter a filepattern relative the current "
-                                    "subproject (example docs/*.html):" ), 
+                                    "subproject (example docs/*.html):" ),
                               QString::null, &ok, this );
           if ( ok && !filepattern.isEmpty() )
           {
@@ -1784,27 +1848,62 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         if (r == idInsExistingFile)
         {
-          KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
+#if KDE_VERSION >= 310
+          AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
+                                                ext + "|" + title + " (" + ext + ")",
+                                                this,
+                                                "Insert existing",
+                                                true, new QComboBox(false));
+#else
+          AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
                                                 ext + "|" + title + " (" + ext + ")",
                                                 this,
                                                 "Insert existing",
                                                 true);
+#endif
           dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
           if ( dialog->exec() == QDialog::Rejected )
-	    return;
+            return;
           QStringList files = dialog->selectedFiles();
           for (unsigned int i=0;i<files.count();i++)
           {
-            // Copy selected files to current subproject folder
-            QProcess *proc = new QProcess( this );
-            proc->addArgument( "cp" );
-            proc->addArgument( "-f" );
-            proc->addArgument( files[i] );
-            proc->addArgument( projectDirectory()+relpath );
-            proc->start();
-            QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
-            // and add them to the filelist
-            addFileToCurrentSubProject(titem,filename);
+            switch (dialog->mode())
+            {
+            case AddFilesDialog::Copy:
+                {
+                // Copy selected files to current subproject folder
+                QProcess *proc = new QProcess( this );
+                proc->addArgument( "cp" );
+                proc->addArgument( "-f" );
+                proc->addArgument( files[i] );
+                proc->addArgument( projectDirectory()+relpath );
+                proc->start();
+                QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
+                // and add them to the filelist
+                addFileToCurrentSubProject(titem,filename);
+                }
+                break;
+
+            case AddFilesDialog::Link:
+                {
+                // Link selected files to current subproject folder
+                QProcess *proc = new QProcess( this );
+                proc->addArgument( "ln" );
+                proc->addArgument( "-s" );
+                proc->addArgument( files[i] );
+                proc->addArgument( projectDirectory()+relpath );
+                proc->start();
+                QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
+                // and add them to the filelist
+                addFileToCurrentSubProject(titem,filename);
+                }
+                break;
+
+            case AddFilesDialog::Relative:
+                // Form relative path to current subproject folder
+                addFileToCurrentSubProject(titem,URLUtil::relativePathToFile(projectDirectory()+relpath , files[i]));
+                break;
+            }
           }
           // Update project file
           if ( titem && titem->owner )
@@ -2000,8 +2099,8 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
     GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
 
     emitRemovedFile(spitem->path + "/" + fitem->text(0));
-    
-    
+
+
     //remove subclassing info
     QDomDocument &dom = *(m_part->projectDom());
     DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
@@ -2023,14 +2122,14 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
     }
     QDomElement el = DomUtil::elementByPath( dom,  "/kdevtrollproject");
     QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevtrollproject/subclassing");
-    if ( (!el.isNull()) && (!el2.isNull()) ) 
+    if ( (!el.isNull()) && (!el2.isNull()) )
     {
         el.removeChild(el2);
     }
     DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
-    
-    
-    
+
+
+
     switch (gitem->groupType)
     {
       case GroupItem::Sources:
@@ -2041,6 +2140,12 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
         break;
       case GroupItem::Forms:
         spitem->forms.remove(fitem->text(0));
+        break;
+      case GroupItem::Images:
+        spitem->images.remove(fitem->text(0));
+        break;
+      case GroupItem::IDLs:
+        spitem->idls.remove(fitem->text(0));
         break;
       default: ;
     }
@@ -2441,7 +2546,22 @@ void TrollProjectWidget::slotBuildFile()
     m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
 //    m_part->startMakeCommand(buildDir, target);
 
-    startMakeCommand(buildDir, target);
+    kdDebug(9020) << "searching for the subproject" << endl;
+    QPtrList<SubprojectItem> list = findSubprojectForFile(fi);
+    kdDebug(9020) << "searching for the subproject: success" << endl;
+
+    SubprojectItem *spitem;
+    for ( spitem = list.first(); spitem; spitem = list.next() )
+    {
+        QString buildcmd = constructMakeCommandLine(spitem->configuration.m_makefile);
+        QString dircmd = "cd " + spitem->path + " && " ;
+        kdDebug(9020) << "builddir " << spitem->path << ", cmd " << dircmd + buildcmd + " " + target << endl;
+        m_part->queueCmd(spitem->path, dircmd + buildcmd + " " + target);
+    }
+
+    m_part->mainWindow()->lowerView(this);
+
+//    startMakeCommand(buildDir, target);
 
 }
 
@@ -2456,29 +2576,26 @@ void TrollProjectWidget::slotExecuteProject()
         return;
     }
 
-    QDomElement docEl = m_part->projectDom()->documentElement();
-    QDomElement trollprojectEl = docEl.namedItem("kdevtrollproject").toElement();
-    QDomElement envvarsEl = trollprojectEl.namedItem("envvars").toElement();
+    // Build environment variables to prepend to the executable path
+    QString runEnvVars = QString::null;
+    DomUtil::PairList list =
+        DomUtil::readPairListEntry( *(m_part->projectDom()), "/kdevtrollproject/run/envvars", "envvar", "name", "value" );
 
-    QString environstr;
-    QDomElement childEl = envvarsEl.firstChild().toElement();
-    while (!childEl.isNull()) {
-        if (childEl.tagName() == "envvar") {
-            environstr += childEl.attribute("name");
-            environstr += "=";
-            environstr += childEl.attribute("value");
-            environstr += " ";
-        }
-        childEl = childEl.nextSibling().toElement();
+    DomUtil::PairList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        const DomUtil::Pair &pair = (*it);
+        if ( (!pair.first.isEmpty()) && (!pair.second.isEmpty()) )
+            runEnvVars += pair.first + "=" + pair.second + " ";
     }
-    program.prepend(environstr);
+    program.prepend(runEnvVars);
+    program.append(" " + DomUtil::readEntry( *(m_part->projectDom()), "/kdevtrollproject/run/programargs" ) + " ");
 
     QString dircmd = "cd "+this->projectDirectory() + " && " ;
 
     bool inTerminal = DomUtil::readBoolEntry(*(m_part->projectDom()), "/kdevtrollproject/run/terminal");
 //    m_part->appFrontend()->startAppCommand(dircmd + program, inTerminal);
 //    m_part->execute(this->projectDirectory(), "./"+program );
-  m_part->appFrontend()->startAppCommand(this->projectDirectory(), program,inTerminal );
+    m_part->appFrontend()->startAppCommand(this->projectDirectory(), program,inTerminal );
 }
 
 
@@ -2651,6 +2768,64 @@ void TrollProjectWidget::startMakeCommand( const QString & dir, const QString & 
     cmdline.prepend(m_part->makeEnvironment());
     m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
+
+QPtrList<SubprojectItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )
+{
+    QPtrList<SubprojectItem> list;
+    findSubprojectForFile(list, m_rootSubproject, fi.absFilePath());
+    return list;
+}
+
+void TrollProjectWidget::findSubprojectForFile( QPtrList<SubprojectItem> &list, SubprojectItem * item, QString absFilePath )
+{
+    QDir d(item->path);
+    kdDebug(9020) << "searching withing subproject: " << item->path << endl;
+
+    for (QStringList::Iterator it = item->sources.begin(); it != item->sources.end(); ++it )
+    {
+        QFileInfo fi2(d, *it);
+        kdDebug(9020) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
+        if (absFilePath == fi2.absFilePath())
+            list.append(item);
+    }
+
+    for (QStringList::Iterator it = item->headers.begin(); it != item->headers.end(); ++it )
+    {
+        QFileInfo fi2(d, *it);
+        kdDebug(9020) << "subproject item: key: " << absFilePath << " value:" << fi2.absFilePath() << endl;
+        if (absFilePath == fi2.absFilePath())
+            list.append(item);
+    }
+
+    QListViewItem * child = item->firstChild();
+    while( child )
+    {
+        SubprojectItem *spitem = dynamic_cast<SubprojectItem*>(child);
+
+        if (spitem)
+        {
+            kdDebug(9020) << "next subproject item with profile = " << spitem->pro_file << endl;
+            findSubprojectForFile(list, spitem, absFilePath);
+        }
+
+        child = child->nextSibling();
+    }
+
+/*    QListViewItemIterator it( item );
+    while ( it.current() )
+    {
+        SubprojectItem *spitem = dynamic_cast<SubprojectItem*>(it.current());
+
+        if (spitem)
+        {
+            kdDebug(9020) << "next subproject item with profile = " << spitem->pro_file << endl;
+            findSubprojectForFile(list, spitem, absFilePath);
+        }
+
+        ++it;
+    }*/
+}
+
 
 
 #include "trollprojectwidget.moc"

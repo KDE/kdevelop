@@ -101,12 +101,16 @@ QStringList* FilePropertyDlg::getExcludeList(SubprojectItem *spitem)
       return &(spitem->headers_exclude);
     if (m_gtype == GroupItem::Forms)
       return &(spitem->forms_exclude);
+    if (m_gtype == GroupItem::Images)
+      return &(spitem->images_exclude);
+    if (m_gtype == GroupItem::IDLs)
+      return &(spitem->idls_exclude);
     if (m_gtype == GroupItem::InstallObject)
     {
       GroupItem* gitem = getInstallObject(spitem,m_installObjectName);
       if (gitem)
         return &(gitem->str_files_exclude);
-      return &m_dummy;            
+      return &m_dummy;
     }
     return NULL;
 }
