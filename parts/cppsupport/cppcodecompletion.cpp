@@ -843,6 +843,10 @@ CppCodeCompletion::completeText( )
 	
 	kdDebug(9007) << "expr = " << expr << endl;
 	kdDebug(9007) << "word = " << word << endl;
+	
+	if( word.isEmpty() )
+	    word = expr;
+	
 	if( showArguments && word.length() ){
 	    
 	    QStringList functionList = getSignatureListForClass( QString::null, word, false );
@@ -855,7 +859,7 @@ CppCodeCompletion::completeText( )
 		m_activeCompletion->showArgHint( unique(functionList), "()", "," );
 	    }
 	    
-	} else if( !showArguments ) {
+	} else if( !showArguments && word.length() ) {
 	    QValueList<KTextEditor::CompletionEntry> entryList = m_repository->getEntriesInScope( QStringList(), false );
 	    
 	    if( entryList.size() )
