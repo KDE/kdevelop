@@ -142,15 +142,15 @@ public:
    * Returns TRUE if the MDI view is a child window within the MDI mainframe widget
    * or FALSE if the MDI view is in toplevel mode
    */
-   bool isAttached() { return (mdiParent() != 0L); };
+   bool isAttached() const { return (mdiParent() != 0L); };
    /**
    * Returns the caption of the child window (different from the caption on the button in the taskbar)
    */
-   const QString& caption() { return m_szCaption; };
+   const QString& caption() const { return m_szCaption; };
    /**
    * Returns the caption of the button on the taskbar
    */
-   const QString& tabCaption() { return m_sTabCaption; };
+   const QString& tabCaption() const { return m_sTabCaption; };
    /**
    * Sets the window caption string...
    * Calls updateButton on the taskbar button if it has been set.
@@ -167,17 +167,17 @@ public:
    /**
    * Returns the QextMdiChildFrm parent widget (or 0 if the window is not attached)
    */
-   QextMdiChildFrm *mdiParent();
+   QextMdiChildFrm *mdiParent() const;
    /**
    * Tells if the window is minimized when attached to the Mdi manager,
    * or if it is VISIBLE when 'floating'.
    */
-   bool isMinimized();
+   bool isMinimized() const;
    /**
    * Tells if the window is minimized when attached to the Mdi manager,
    * otherwise returns FALSE.
    */
-   bool isMaximized();
+   bool isMaximized() const;
    /**
     * Returns the geometry of this MDI child window as QWidget::geometry() does.
     */
@@ -252,7 +252,7 @@ public:
    /** 
    * Returns if this is added as MDI tool-view 
    */
-   bool isToolView() { return m_bToolView; };
+   bool isToolView() const { return m_bToolView; };
 
 public slots:
    /**
@@ -427,9 +427,17 @@ signals:
    * Signals this has been restored (normalized) 
    */
    void isRestoredNow();
+   /** 
+   * Signals this has been attached
+   */
+   void isAttachedNow();
+   /** 
+   * Signals this has been detached
+   */
+   void isDetachedNow();
 };
 
-inline QextMdiChildFrm *QextMdiChildView::mdiParent()
+inline QextMdiChildFrm *QextMdiChildView::mdiParent() const
 {
    QWidget* pw = parentWidget();
    if( pw != 0L)
