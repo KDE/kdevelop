@@ -28,13 +28,13 @@ Document::Document(Editor *parent)
 DocumentInterface *Document::queryInterface(const QString &ifname)
 {
   if (!children())
-	return 0;
-		   
+    return 0;
+           
   QObjectListIt it(*children());
   for ( ; it.current(); ++it)
     if (it.current()->inherits("KEditor::DocumentInterface") && it.current()->inherits(ifname))
       return (DocumentInterface*)it.current();
-  			   
+                 
   return 0;
 }
 
@@ -69,12 +69,12 @@ Editor::~Editor()
 EditorInterface *Editor::queryInterface(const QString &ifname)
 {
   if (!children())
-	return 0;
+    return 0;
 
   QObjectListIt it(*children());
   for ( ; it.current(); ++it)
-	if (it.current()->inherits("KEditor::EditorInterface") && it.current()->inherits(ifname))
-	  return (EditorInterface*)it.current();
+    if (it.current()->inherits("KEditor::EditorInterface") && it.current()->inherits(ifname))
+      return (EditorInterface*)it.current();
 
   return 0;  
 }
@@ -89,9 +89,9 @@ Document *Editor::currentDocument()
 void Editor::activePartChanged(KParts::Part *part)
 {
   if (!part || !part->inherits("KEditor::Document"))
-	_currentDocument = 0;
+    _currentDocument = 0;
   else 
-	_currentDocument = static_cast<Document*>(part);
+    _currentDocument = static_cast<Document*>(part);
   
   emit documentActivated(_currentDocument);
 }
