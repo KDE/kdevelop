@@ -1,3 +1,7 @@
+1999-06-03 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed some parsing bugs.
+	* redesigned the class hierarchy in the classparser. More flexible now.
+
 1999-06-02 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed minor parsing bug.
 
