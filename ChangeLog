@@ -1,3 +1,7 @@
+2004-06-21 Robert Gruber <rgruber@users.sourceforge.net>
+    * Added drag and drop support to SnippetPart
+    * Added filter support to AppOutputView
+
 2004-06-17 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added optional automatic reload on external file modification. This is only available with katepart.
     * Added CopyTo plugin. A small utility to do network transparent file copying using KIO.
