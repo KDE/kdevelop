@@ -24,7 +24,8 @@
 #include <kprocess.h>
 #include <qstringlist.h>
 #include <kmessagebox.h>
-#include "keditor/editor.h"
+#include <qstatusbar.h>
+#include <qprogressbar.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -104,29 +105,32 @@ PHPSupportPart::~PHPSupportPart()
 {}
 
 void PHPSupportPart::documentActivated(KEditor::Document* doc){
-  return;
+  //  return;
   m_cursorInterface = KEditor::CursorDocumentIface::interface(doc);
   if (!m_cursorInterface) { // no CursorDocument available
     cerr << endl << "editor doesn't support the CursorDocumentIface";
     return;
   } 
-  disconnect(m_cursorInterface, 0, this, 0 ); // to make sure that it is't connected twice
-  connect(m_cursorInterface,SIGNAL(cursorPositionChanged(KEditor::Document*, int, int)),
-	  this,SLOT(cursorPositionChanged(KEditor::Document*, int, int))); 
+  m_editInterface = KEditor::EditDocumentIface::interface(doc);
+  disconnect(m_editInterface, 0, this, 0 ); // to make sure that it is't connected twice
+  connect(m_editInterface,SIGNAL(textChanged()),this,SLOT(slotTextChanged()));
 }
 
-void PHPSupportPart::cursorPositionChanged(KEditor::Document *doc, int line, int col){
-  cerr << endl << "PHPSupportPart::cursor";
-  QString fileName = core()->editor()->currentDocument()->url().url();
-  QStringList list;
-  KEditor::EditDocumentIface* m_editInterface = KEditor::EditDocumentIface::interface(doc);
-  for(int i=line;i>=0;i--){
-    list.append( m_editInterface->line(i));  
+void PHPSupportPart::slotTextChanged(){
+  cerr << "text changed" << endl;
+  QString fileName = core()->editor()->currentDocument()->url().directory() + "/" + 
+    core()->editor()->currentDocument()->url().fileName();
+  int numLines = m_cursorInterface->numberOfLines();
+
+  QStringList lines;
+  for(int i=0;i<numLines;i++){
+    lines.append(m_editInterface->line(i));  
   }
   classStore()->removeWithReferences(fileName);
-  m_parser->parseLines(&list,fileName);
+  m_parser->parseLines(&lines,fileName);
   emit updatedSourceInfo();
 }
+
 
 void PHPSupportPart::slotPhpBook(KDialogBase *dlg){
         cerr << "slotPhPBook" << endl;
@@ -295,8 +299,9 @@ void PHPSupportPart::maybeParse(const QString fileName)
     if ((fi.extension().contains("inc") || fi.extension().contains("php")
 	|| fi.extension().contains("html")
 	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
+      cerr << "remove and parse" << fileName << endl;
         classStore()->removeWithReferences(fileName);
-        m_parser->parseFile(fileName);
+        m_parser->parseFile(fileName); 
     }
 }
 
@@ -309,10 +314,22 @@ void PHPSupportPart::initialParse()
       //  kdDebug(9016) << "project" << endl;
         kapp->setOverrideCursor(waitCursor);
         QStringList files = project()->allSourceFiles();
+	int n = 0;
+        QProgressBar *bar = new QProgressBar(files.count(), core()->statusBar());
+        bar->setMinimumWidth(120);
+        bar->setCenterIndicator(true);
+        core()->statusBar()->addWidget(bar);
+        bar->show();
+
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
 	  //kdDebug(9016) << "maybe parse " << (*it) << endl;
+	  bar->setProgress(n);
+	  kapp->processEvents();
 	  maybeParse(*it);
+	  ++n;
         }
+        core()->statusBar()->removeWidget(bar);
+        delete bar;
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();
     } else {

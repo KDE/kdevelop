@@ -45,10 +45,13 @@ public:
 protected slots:  
   void documentActivated(KEditor::Document* doc);
   void cursorPositionChanged(KEditor::Document *doc, int line, int col);
+  void argHintHided();
+  void completionBoxHided();
 
  protected:
   bool checkForVariable(KEditor::Document *doc,QString lineStr,int col,int line);
   bool checkForArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
+  bool checkForMethodArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
   bool checkForGlobalFunction(KEditor::Document *doc,QString lineStr,int col);
   bool checkForNewInstance(KEditor::Document *doc,QString lineStr,int col,int line);
   QValueList<KEditor::CompletionEntry> getClassMethodsAndVariables(QString className);
@@ -64,6 +67,8 @@ protected slots:
   KEditor::CursorDocumentIface* m_cursorInterface;
   KEditor::EditDocumentIface* m_editInterface;
   KEditor::CodeCompletionDocumentIface* m_codeInterface;
+  bool m_argWidgetShow;
+  bool m_completionBoxShow;
 };
 
 #endif
