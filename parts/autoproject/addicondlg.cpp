@@ -18,6 +18,7 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
+#include <kicontheme.h>
 
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
@@ -83,7 +84,7 @@ void AddIconDialog::accept()
     QString destpath = destdir + "/" + name;
 
     QString size = size_combo->currentText();
-    QString unknown = "hicolor/" + size + "x" + size + "/mimetypes/unknown.png";
+    QString unknown = KIconTheme::defaultThemeName()+ "/" + size + "x" + size + "/mimetypes/unknown.png";
     QString templateFileName = locate("icon", unknown);
     kdDebug(9020) << "Unknown: " << unknown << ", template: " << templateFileName << endl;
 
