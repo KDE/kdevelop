@@ -1,0 +1,7 @@
+# KDE Config File
+[General]
+Name=Konqueror Navigation Panel Plugin
+Icon=konqnavpanel.png
+Category=C++/KDE
+Comment=Generates a framework for a plugin  that embeds into Konqueror's navigation panel
+FileTemplates=h,CStyle,cpp,CStyle
