@@ -1,0 +1,151 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>SvnOptionsWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>svn_options_widget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>448</width>
+            <height>384</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>SVN Options</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>svn_label</cstring>
+            </property>
+            <property name="text">
+                <string>SVN options:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>svn_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>commit_label</cstring>
+            </property>
+            <property name="text">
+                <string>Commit options:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>commit_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>update_label</cstring>
+            </property>
+            <property name="text">
+                <string>Update options:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>update_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>add_label</cstring>
+            </property>
+            <property name="text">
+                <string>Add options:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>add_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>remove_label</cstring>
+            </property>
+            <property name="text">
+                <string>Remove options:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>remove_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>diff_label</cstring>
+            </property>
+            <property name="text">
+                <string>Diff options:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>diff_edit</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>log_label</cstring>
+            </property>
+            <property name="text">
+                <string>Log options:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>log_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>rsh_label</cstring>
+            </property>
+            <property name="text">
+                <string>Remote shell (SVN_RSH):</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>rsh_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>sets the SVN_RSH variable</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Set this option to "ssh" to use ssh as remote shell for SVN. Note that you need password-less login (see the ssh howtos how to generate a public/private key pair) otherwise SVN will just hang forever.</string>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<tabstops>
+    <tabstop>svn_edit</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>
