@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Matthias Hoelzer-Kluepfel", "Several components, htdig indexing", "hoelzer@kde.org");
   aboutData.addAuthor("Victor Roeder", "Help with Automake manager and persistant class store", "victor_roeder@gmx.de");
   aboutData.addAuthor("Daniel Engelschalt", "C++ code completion, persistant class store", "daniel.engelschalt@gmx.net");
-  aboutData.addAuthor("Harald Fernengel", "Ported to Qt 3, patches, Valgrind support", "harry@kdevelop.org");
+  aboutData.addAuthor("Harald Fernengel", "Ported to Qt 3, patches, valgrind, diff and perforce support", "harry@kdevelop.org");
   aboutData.addAuthor("Roberto Raggi", "QEditor component, code completion, Abbrev component, C++ support, Java support", "roberto@kdevelop.org");
   aboutData.addAuthor("Simon Hausmann", "Help with KParts infrastructure", "hausmann@kde.org");
   aboutData.addAuthor("Jakob Simon-Gaarde", "QMake projectmanager", "jsgaarde@tdcspace.dk");
@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Matt Newell", "Fileselector component", "newellm@proaxis.com");
   aboutData.addCredit("Jonas Nordin", "C++ source parser", "jonas.nordin@syncom.se");
   aboutData.addCredit("Trolltech AS", "Designer code", "info@trolltech.com");
+  aboutData.addCredit("Stephane ANCELOT", "Patches", "<sancelot@free.fr>");
   
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
