@@ -57,6 +57,8 @@ public slots:
 	void slotEditProperties();
 	/** refreshes the view */
 	void slotViewRefresh();
+	/** pops up a dialog allowing the user to change the grid sizes */
+	void slotViewGrid();
 
 	/** generates the sources for the current edited widget */
 	void  slotBuildGenerate();

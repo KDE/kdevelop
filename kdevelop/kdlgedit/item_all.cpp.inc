@@ -3,6 +3,7 @@
 #include "../ckdevelop.h"
 #include "kdlgproplv.h"
 
+
 void CALLER_ITEMCLASS_NAME::MyWidget::mousePressEvent ( QMouseEvent *e )
 {
   selectMe();
@@ -56,6 +57,13 @@ void CALLER_ITEMCLASS_NAME::MyWidget::moveRulers( QMouseEvent *e )
   y = ((int)(y/gy))*gy;
   parentObject->getEditWidget()->horizontalRuler()->slotNewValue(x);
   parentObject->getEditWidget()->verticalRuler()->slotNewValue(y);
+
+  if (!isMBPressed)
+    {
+      QString xy = QString().sprintf(i18n("X:%.3d Y:%.3d "), x, y);
+      parentObject->getEditWidget()->getCKDevel()->kdlg_get_statusbar()->changeItem((const char*)xy, ID_KDLG_STATUS_XY);
+      parentObject->getEditWidget()->getCKDevel()->kdlg_get_statusbar()->changeItem("", ID_KDLG_STATUS_WH);
+    }
 }
 
 void CALLER_ITEMCLASS_NAME::MyWidget::mouseReleaseEvent ( QMouseEvent * )
@@ -76,7 +84,9 @@ void CALLER_ITEMCLASS_NAME::MyWidget::mouseMoveEvent ( QMouseEvent *e )
        if (isMBPressed) pE = pressedEdge; else pE = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), width(), height());
        KDlgItemsSetMouseCursor(this, pE);
     }
-  else setCursor(KCursor::arrowCursor());
+  else
+    setCursor(KCursor::arrowCursor());
+
   if ((!isMBPressed) || (e->pos() == lastPnt)) return;
   int gx = parentObject->getEditWidget()->gridSizeX();
   int gy = parentObject->getEditWidget()->gridSizeY();
@@ -90,27 +100,35 @@ void CALLER_ITEMCLASS_NAME::MyWidget::mouseMoveEvent ( QMouseEvent *e )
   diffy = ((int)(diffy/gy))*gy;
   bool noMainWidget;
   noMainWidget = KDlgItemsGetResizeCoords(pressedEdge, x, y, w, h, diffx, diffy);
-  if (w<0) w=0;
-  if (h<0) h=0;
+
+  if ((x!=origRect.x()) || (y!=origRect.y()))
+    {
+      x = ((int)(x/gx))*gx;
+      y = ((int)(y/gy))*gy;
+    }
+  if ((w!=origRect.width()) || (h!=origRect.height()))
+    {
+      w = ((int)(w/gx))*gx;
+      h = ((int)(h/gy))*gy;
+    }
+  if (!parentObject->parentWidgetItem)
+    {
+      if (x<0) x = 0;
+      if (y<0) y = 0;
+    }
+  if (w<10) w = 10;
+  if (h<10) h = 10;
+
+  if (isMBPressed)
+    {
+      QString xy = QString().sprintf(i18n("X:%.3d Y:%.3d "), x, y);
+      QString wh = QString().sprintf(i18n("W:%.3d H:%.3d "), w, h);
+      parentObject->getEditWidget()->getCKDevel()->kdlg_get_statusbar()->changeItem((const char*)xy, ID_KDLG_STATUS_XY);
+      parentObject->getEditWidget()->getCKDevel()->kdlg_get_statusbar()->changeItem((const char*)wh, ID_KDLG_STATUS_WH);
+    }
+
   if ((!noMainWidget) || (!isMainwidget))
     {
-      if ((x!=origRect.x()) || (y!=origRect.y()))
-        {
-          x = ((int)(x/gx))*gx;
-          y = ((int)(y/gy))*gy;
-        }
-      if ((w!=origRect.width()) || (h!=origRect.height()))
-        {
-          w = ((int)(w/gx))*gx;
-          h = ((int)(h/gy))*gy;
-        }
-      if (!parentObject->parentWidgetItem)
-        {
-          if (x<0) x = 0;
-          if (y<0) y = 0;
-        }
-      if (w<10) w = 10;
-      if (h<10) h = 10;
       setGeometry(x,y,w,h);
       if (isMainwidget)
         {

@@ -20,6 +20,7 @@
 #include <kapp.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
+#include <kquickhelp.h>
 #include "../ckdevelop.h"
 #include "kdlgeditwidget.h"
 
@@ -30,6 +31,22 @@ KDlgWidgets::KDlgWidgets(CKDevelop *parCKD, QWidget *parent, const char *name ) 
 {
   pCKDevel = parCKD;
   scrview = new myScrollView(this);
+
+  KQuickHelp::add(scrview->viewport(),
+    i18n("<brown><b>\"Widgets\" tab<black></b>\n\n"
+         "In this tab you will find all items\n"
+         "you can add to the dialog. They are\n"
+         "sorted in two groups :\n\n"
+         "The <b><i>QT-Widgets</i></b>group is\n"
+         "always visible and contains all native\n"
+         "Qt widgets. Your program will not need\n"
+         "the KDE libraries in order to run if you\n"
+         "only use these items.\n\n"
+         "The <b><i>KDE-Widgets</i></b>group is\n"
+         "only visible if you have created a KDE\n"
+         "application because it would not be\n"
+         "logical to add KDE widgets needing KDE\n"
+         "libraries to a Qt project."));
 }
 
 KDlgWidgets::~KDlgWidgets()
@@ -93,6 +110,15 @@ void KDlgWidgets::clicked_QRadioButton()
   pCKDevel->kdlg_get_edit_widget()->addItem("QRadioButton");
 }
 
+KDlgWidgets::myScrollView::~myScrollView()
+{
+  int i;
+  for (i = 0; i<MAX_BUTTONS; i++)
+    {
+      if (buttons[i]);
+        delete buttons[i];
+    }
+}
 
 KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WFlags f )
   : QScrollView(parent,name,f)
@@ -111,17 +137,27 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
 
   btnsCount = 0;
 
-  #define macroAddButton(fn, wd, mt) \
+  #define macroAddButton(fn, wd, mt, ht) \
     addButton(QPixmap(KApplication::kde_datadir() + QString("/kdevelop/pics/mini/") + fn), wd); \
-    connect(buttons[btnsCount-1], SIGNAL(clicked()), parent, SLOT(mt()));
+    connect(buttons[btnsCount-1], SIGNAL(clicked()), parent, SLOT(mt())); \
+    KQuickHelp::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht));
 
-  macroAddButton("kdlg_QWidget.xpm",        "QWidget",         clicked_QWidget);
-  macroAddButton("kdlg_QLabel.xpm",         "QLabel",          clicked_QLabel);
-  macroAddButton("kdlg_QPushButton.xpm",    "QPushButton",     clicked_QPushButton);
-  macroAddButton("kdlg_QLineEdit.xpm",      "QLineEdit",       clicked_QLineEdit);
-  macroAddButton("kdlg_QCheckBox.xpm",      "QCheckBox",       clicked_QCheckBox);
-  macroAddButton("kdlg_QLCDNumer.xpm",      "QLCDNumber",      clicked_QLCDNumber);
-  macroAddButton("kdlg_QRadioButton.xpm",   "QRadioButton",    clicked_QRadioButton);
+  macroAddButton("kdlg_QWidget.xpm",        "QWidget",         clicked_QWidget        ,i18n(
+                 "This will insert a QWidget to the dialog.\n"
+                 "Such an item may have serveral children items\n"
+                 "or even more QWidgets as children. That means\n"
+                 "this item lets you create complex hierarchies\n"
+                 "for you dialog.\n\n"
+                 "Another think you will need this item type for\n"
+                 "are widgets like the tab view which need several\n"
+                 "widgets they can bring to the top."));
+
+  macroAddButton("kdlg_QLabel.xpm",         "QLabel",          clicked_QLabel         ,i18n("A QLabel can be used in order to display\nsome text or pixmap information in the dialog."));
+  macroAddButton("kdlg_QPushButton.xpm",    "QPushButton",     clicked_QPushButton    ,i18n("This is the normal button often used in\ndialogs (i.e. the \"Ok\"-Button)."));
+  macroAddButton("kdlg_QLineEdit.xpm",      "QLineEdit",       clicked_QLineEdit      ,i18n("Inserts a text field giving the user the\npossibility to enter of change a text."));
+  macroAddButton("kdlg_QCheckBox.xpm",      "QCheckBox",       clicked_QCheckBox      ,i18n("Lets user can (de-)select some settings."));
+  macroAddButton("kdlg_QLCDNumer.xpm",      "QLCDNumber",      clicked_QLCDNumber     ,i18n("Displays a number in the style of LC-displays\noften used in clocks."));
+  macroAddButton("kdlg_QRadioButton.xpm",   "QRadioButton",    clicked_QRadioButton   ,i18n("Lets the user choose between several options."));
 
   #undef macroAddButton
 

@@ -557,6 +557,8 @@ void KDlgEditWidget::resizeEvent ( QResizeEvent *e )
 {
   QWidget::resizeEvent(e);
 
+  rulh->setFixedHeight(RULER_WIDTH);
+  rulv->setFixedWidth(RULER_HEIGHT);
   rulh->setGeometry(RULER_WIDTH,0,  width()-RULER_WIDTH, RULER_HEIGHT);
   rulv->setGeometry(0,RULER_HEIGHT, RULER_WIDTH, height()-RULER_HEIGHT);
 }

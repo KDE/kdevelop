@@ -39,6 +39,7 @@ class KDlgWidgets : public QWidget  {
        {
          public:
            myScrollView (QWidget * parent=0, const char * name=0, WFlags f=0 );
+           ~myScrollView();
 
            void addButton(const QPixmap &, QString, bool isKDE = false);
            void setIsKDEProject(bool isKDE = true) { isKDEProject = isKDE; }

@@ -44,6 +44,11 @@ KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWi
   connect ( treelist, SIGNAL(selectionChanged ()), SLOT(itemSelected()));
 }
 
+KDlgItems::~KDlgItems()
+{
+  delete treelist;
+}
+
 KDlgItems::MyTreeListItem::MyTreeListItem(MyTreeListItem* parent, KDlgItem_Widget *itemp, const QString& theText , const QPixmap *thePixmap )
   : QListViewItem((QListViewItem*)parent)
 {
@@ -58,10 +63,6 @@ KDlgItems::MyTreeListItem::MyTreeListItem(QListView* parent, KDlgItem_Widget *it
   setText( 0, (const char*)theText );
   setPixmap( 0, *thePixmap );
   itemptr = itemp;
-}
-
-KDlgItems::~KDlgItems()
-{
 }
 
 void KDlgItems::refreshList()

@@ -633,6 +633,11 @@ KDlgPropWidget::KDlgPropWidget(CKDevelop* parCKD, QWidget *parent, const char *n
   lv->setRootIsDecorated(false);
 }
 
+KDlgPropWidget::~KDlgPropWidget()
+{
+  delete lv;
+}
+
 void KDlgPropWidget::refillList(KDlgItem_Base* source)
 {
   if (!source)
@@ -713,10 +718,6 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
     }
 
   lv->restoreOpenStats();
-}
-
-KDlgPropWidget::~KDlgPropWidget()
-{
 }
 
 void KDlgPropWidget::resizeEvent ( QResizeEvent *e )

@@ -69,12 +69,12 @@ void KDlgItem_Widget::MyWidget::paintEvent ( QPaintEvent *e )
           p.setPen(newpen);
           if (gx <= 1)
             {
-              for (y = gy; y < height(); y+=gy)
-                p.drawLine(3,y,width(),y-6);
+              for (y = 0; y < height(); y+=gy)
+                p.drawLine(3,y,width()-6,y);
             }
           else
             {
-              for (x = gx; x < width(); x+=gx)
+              for (x = 0; x < width(); x+=gx)
                 p.drawLine(x,3,x,height()-6);
             }
           p.setPen(oldpen);
@@ -82,8 +82,8 @@ void KDlgItem_Widget::MyWidget::paintEvent ( QPaintEvent *e )
     }
   else
     {
-      for (x = gx; x < width(); x+=gx)
-       for (y = gx; y < height(); y+=gy)
+      for (x = 0; x < width(); x+=gx)
+       for (y = 0; y < height(); y+=gy)
          p.drawPoint(x,y);
     }
 

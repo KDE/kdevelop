@@ -131,6 +131,7 @@ public:
   KDlgWidgets* kdlg_get_widgets_view() { return kdlg_widgets_view; }
   KDlgDialogs* kdlg_get_dialogs_view() { return kdlg_dialogs_view; }
   KDlgItems*   kdlg_get_items_view() { return kdlg_items_view; }
+  KStatusBar*  kdlg_get_statusbar() { return kdlg_statusbar; }
 
 
  public slots:

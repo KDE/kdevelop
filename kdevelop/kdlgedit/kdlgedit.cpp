@@ -22,6 +22,7 @@
 #include "kdlgitems.h"
 #include "kdlgpropwidget.h"
 #include "items.h"
+#include "kdlgotherdlgs.h"
 
 KDlgEdit::KDlgEdit(QObject *parent, const char *name ) : QObject(parent,name)
 {
@@ -96,6 +97,17 @@ void KDlgEdit::slotViewRefresh()
 
 void KDlgEdit::slotBuildGenerate()
 {
+}
+
+void KDlgEdit::slotViewGrid()
+{
+  KDlgGridDialog dlg((QWidget*)parent());
+
+  if (dlg.exec())
+    {
+      ((CKDevelop*)parent())->kdlg_get_edit_widget()->setGridSize(dlg.getGridX(), dlg.getGridY());
+      ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->repaintItem();
+    }
 }
 
 
