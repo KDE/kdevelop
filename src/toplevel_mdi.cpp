@@ -97,6 +97,11 @@ void TopLevelMDI::createStatusBar()
 
 void TopLevelMDI::createFramework()
 {
+  if (!isFakingSDIApplication())
+  {
+    menuBar()->insertItem( tr("&Window"), windowMenu());
+  }
+
   PartController::createInstance(this);
 
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
@@ -200,7 +205,7 @@ void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
 
   QextMdiChildView *child = wrapper(view, name);
 
-  if (!first)
+  if (!first)  // If there is no selected view yet ...
   {
     if (mdiMode() == QextMdi::TabPageMode)
       first = m_partViews.first();
@@ -228,7 +233,7 @@ void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
 
   QextMdiChildView *child = wrapper(view, name);
 
-  if (!first)
+  if (!first)   // If there is no output view yet ...
   {
     if (mdiMode() == QextMdi::TabPageMode)
       first = m_partViews.first();
@@ -450,4 +455,166 @@ void TopLevelMDI::gotoPreviousWindow()
   activatePrevWin();
 }
 
+//=============== fillWindowMenu ===============//
+void TopLevelMDI::fillWindowMenu()
+{
+   bool bTabPageMode = FALSE;
+   if (m_mdiMode == QextMdi::TabPageMode)
+      bTabPageMode = TRUE;
+
+   bool bNoViewOpened = FALSE;
+   if (m_pWinList->isEmpty()) {
+      bNoViewOpened = TRUE;
+   }
+   // construct the menu and its submenus
+   if (!m_bClearingOfWindowMenuBlocked) {
+      m_pWindowMenu->clear();
+   }
+   int closeId         = m_pWindowMenu->insertItem(tr("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
+   int closeAllId      = m_pWindowMenu->insertItem(tr("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
+   int closeAllOtherId = m_pWindowMenu->insertItem(tr("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
+   if (bNoViewOpened) {
+      m_pWindowMenu->setItemEnabled(closeId, FALSE);
+      m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
+      m_pWindowMenu->setItemEnabled(closeAllOtherId, FALSE);
+   }
+   if (!bTabPageMode) {
+      int iconifyId = m_pWindowMenu->insertItem(tr("&Minimize All"), this, SLOT(iconifyAllViews()));
+      if (bNoViewOpened) {
+         m_pWindowMenu->setItemEnabled(iconifyId, FALSE);
+      }
+   }
+   m_pWindowMenu->insertSeparator();
+   m_pWindowMenu->insertItem(tr("&MDI Mode..."), m_pMdiModeMenu);
+   m_pMdiModeMenu->clear();
+   m_pMdiModeMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
+   m_pMdiModeMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
+   m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
+   switch (m_mdiMode) {
+   case QextMdi::ToplevelMode:
+      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
+      break;
+   case QextMdi::ChildframeMode:
+      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(1), TRUE);
+      break;
+   case QextMdi::TabPageMode:
+      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
+      break;
+   default:
+      break;
+   }
+   m_pWindowMenu->insertSeparator();
+   if (!bTabPageMode) {
+      int placMenuId = m_pWindowMenu->insertItem(tr("&Tile..."), m_pPlacingMenu);
+      m_pPlacingMenu->clear();
+      m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
+      m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
+      m_pPlacingMenu->insertItem(tr("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
+      m_pPlacingMenu->insertItem(tr("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
+      m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
+      m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
+      m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+      if (m_mdiMode == QextMdi::ToplevelMode) {
+         m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
+      }
+      m_pWindowMenu->insertSeparator();
+      int dockUndockId = m_pWindowMenu->insertItem(tr("&Dock/Undock..."), m_pDockMenu);
+         m_pDockMenu->clear();
+      m_pWindowMenu->insertSeparator();
+      if (bNoViewOpened) {
+         m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
+         m_pWindowMenu->setItemEnabled(dockUndockId, FALSE);
+      }
+   }
+   int entryCount = m_pWindowMenu->count();
+
+   // for all child frame windows: give an ID to every window and connect them in the end with windowMenuItemActivated()
+   int i=100;
+   QextMdiChildView* pView = 0L;
+   QPtrListIterator<QextMdiChildView> it(*m_pWinList);
+   for( ; it.current(); ++it) {
+
+      pView = it.current();
+      if( pView->isToolView())
+         continue;
+
+      KParts::ReadOnlyPart * ro_part = getPartFromWidget(m_childViewMap[pView]);
+
+      QString name = (ro_part==0L)?pView->caption():ro_part->url().url();
+      QString item;
+      // set titles of minimized windows in brackets
+      if( pView->isMinimized()) {
+         item += "(";
+         item += name;
+         item += ")";
+      }
+      else {
+         item += " ";
+         item += name;
+       }
+
+      // insert the window entry sorted in alphabetical order
+      unsigned int indx;
+      unsigned int windowItemCount = m_pWindowMenu->count() - entryCount;
+      bool inserted = FALSE;
+      QString tmpString;
+      for (indx = 0; indx <= windowItemCount; indx++) {
+         tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+entryCount));
+         if (tmpString.right( tmpString.length()-2) > item.right( item.length()-2)) {
+            m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, indx+entryCount);
+            if (pView == m_pCurrentWindow)
+               m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+entryCount), TRUE);
+            pView->setWindowMenuID( i);
+            if (!bTabPageMode) {
+               m_pDockMenu->insertItem( item, pView, SLOT(slot_clickedInDockMenu()), 0, -1, indx);
+               if (pView->isAttached())
+                  m_pDockMenu->setItemChecked( m_pDockMenu->idAt( indx), TRUE);
+            }
+            inserted = TRUE;
+            indx = windowItemCount+1;  // break the loop
+         }
+      }
+      if (!inserted) {  // append it
+         m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, windowItemCount+entryCount);
+         if (pView == m_pCurrentWindow)
+            m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt(windowItemCount+entryCount), TRUE);
+         pView->setWindowMenuID( i);
+         if (!bTabPageMode) {
+            m_pDockMenu->insertItem( item, pView, SLOT(slot_clickedInDockMenu()), 0, -1, windowItemCount);
+            if (pView->isAttached())
+               m_pDockMenu->setItemChecked( m_pDockMenu->idAt(windowItemCount), TRUE);
+         }
+      }
+      i++;
+   }
+}
+
+KParts::ReadOnlyPart * TopLevelMDI::getPartFromWidget(const QWidget * pWidget) const
+{
+  // Loop over all parts to search for a matching widget
+  QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+  for ( ; it.current(); ++it)
+  {
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+    if (ro_part->widget() == pWidget) return ro_part;
+  }
+  return (0L);
+}
+
+void TopLevelMDI::switchToToplevelMode(void)
+{
+  QextMdiMainFrm::switchToToplevelMode();
+  saveMDISettings();
+}
+
+void TopLevelMDI::switchToChildframeMode(void)
+{
+  QextMdiMainFrm::switchToChildframeMode();
+  saveMDISettings();
+}
+void TopLevelMDI::switchToTabPageMode(void)
+{
+  QextMdiMainFrm::switchToTabPageMode();
+  saveMDISettings();
+}
 #include "toplevel_mdi.moc"

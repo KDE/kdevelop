@@ -1,3 +1,7 @@
+2002-10-07 F@lk Brettschneider <falk@kdevelop.org>
+        * applied patch of Heinz Hornung <Hornung-Heinz@t-online.de>
+	  improved window menu, old windowmenu part removed
+	  
 2002-09-25 Yann Hodique <Yann.Hodique@lifl.fr>
 	* Implemented some features in distpart
 	* Fixed a few bugs

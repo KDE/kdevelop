@@ -28,18 +28,24 @@
 
 #include "projectmanager.h"
 #include "partcontroller.h"
+#include "kdevpartcontroller.h"
 #include "partselectwidget.h"
 #include "api.h"
 #include "core.h"
 #include "settingswidget.h"
 #include "statusbar.h"
+#include "kpopupmenu.h"
+#include "kmenubar.h"
+
 
 #include "toplevel.h"
 #include "toplevel_sdi.h"
 
 
 TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
-  : KParts::MainWindow(parent, name), m_closing(false)
+  : KParts::MainWindow(parent, name),
+  m_pWindowMenu(0L),
+  m_closing(false)
 {
   KAction * action;
 
@@ -52,6 +58,13 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
                         this, SLOT(gotoPreviousWindow()),
                         actionCollection(), "view_previous_window");
   action->setStatusText( i18n("Switches to the previous window") );
+
+   // Add window menu to the menu bar
+   m_pWindowMenu = new QPopupMenu( main(), "window_menu");
+   m_pWindowMenu->setCheckable( TRUE);
+   menuBar()->insertItem(tr("&Window"),m_pWindowMenu);
+   QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotfillWindowMenu()) );
+
 }
 
 
@@ -67,12 +80,15 @@ void TopLevelSDI::init()
   createStatusBar();
 
   createGUI(0);
+  slotFillWindowMenu();  // Just in case there is no file open. The menu would then be empty.
+
 }
 
 
 TopLevelSDI::~TopLevelSDI()
 {
   TopLevel::invalidateInstance( this );
+  delete m_pWindowMenu;
 }
 
 
@@ -131,7 +147,12 @@ void TopLevelSDI::createFramework()
 
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(createGUI(KParts::Part*)));
+
+  connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+  connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+  connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
 }
+
 
 
 void TopLevelSDI::createActions()
@@ -359,5 +380,69 @@ void TopLevelSDI::slotSettings()
 }
 
 
+//=============== slotFillWindowMenu ===============//
+void TopLevelSDI::slotFillWindowMenu()
+{
+  // construct the menu and its submenus
+  bool bNoViewOpened = true;    // Assume no view is open yet
+  m_pWindowMenu->clear();       // Erase whole window menu
+
+  // Construct fixed enties of the window menu
+  int closeId         = m_pWindowMenu->insertItem(tr("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
+  int closeAllId      = m_pWindowMenu->insertItem(tr("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
+  int closeAllOtherId = m_pWindowMenu->insertItem(tr("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
+  m_pWindowMenu->insertSeparator();
+
+  // Loop over all parts and add them to the window menu
+  QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+  for ( ; it.current(); ++it)
+  {
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+    if (!ro_part)
+      continue;
+    // We fond a KPart to add
+    QString name = ro_part->url().url();
+    KToggleAction *action = new KToggleAction(name, 0, 0, name.latin1());
+    action->setChecked(ro_part == PartController::getInstance()->activePart());
+    connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
+    action->plug(m_pWindowMenu);
+    bNoViewOpened = false;   // Now we know that at least one view exists.
+   }
+
+   if (bNoViewOpened) { // If there is no view open all fixed window menu entries will be disabled
+      m_pWindowMenu->setItemEnabled(closeId, FALSE);
+      m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
+      m_pWindowMenu->setItemEnabled(closeAllOtherId, FALSE);
+   }
+}
+
+//=============== slotBufferSelected ===============//
+void TopLevelSDI::slotBufferSelected()
+{
+
+  // Get the URL of the sender
+  QString SenderName = sender()->name();
+  KURL SenderUrl(SenderName);
+
+  // Loop over all KParts
+  QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+  for ( ; it.current(); ++it)
+  {
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+    if (ro_part) {
+      KURL PartUrl=ro_part->url();
+      QString PartName=PartUrl.path();
+      if (SenderUrl == PartUrl)  { // Found part to activate
+        PartController::getInstance()->setActivePart(ro_part);
+        if (ro_part->widget()) {
+          raiseView(ro_part->widget());
+          ro_part->widget()->setFocus();
+        }
+        break;
+      }
+    }
+  }
+  slotFillWindowMenu();  // To check the correct entry
+}
 
 #include "toplevel_sdi.moc"

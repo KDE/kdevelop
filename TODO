@@ -60,7 +60,6 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
   - no possibility of bringing back closed toolviews
   - no possibility of switching toolviews on and off
   - toplevel UI mode broken
-  - Window menu allows switching files only; standard functionality missing
   - [Modified] missing in mainframe caption
   - captions missing for toolbar buttons
   

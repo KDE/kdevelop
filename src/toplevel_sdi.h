@@ -47,6 +47,11 @@ signals:
 
   void wantsToQuit();
 
+protected:
+   /**
+   * Pointer to the Window menu. SDI specific. MDI uses the feature of qextmdimainfrm.
+   */
+   QPopupMenu              *m_pWindowMenu;
 
 public slots:
 
@@ -66,6 +71,8 @@ private slots:
   void slotNewToolbarConfig();
   void slotShowMenuBar();
 
+  void slotBufferSelected();      // One entry of the Windows menu has been selected
+  void slotFillWindowMenu();
 private:
 
   virtual bool queryClose();
