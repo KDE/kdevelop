@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Exec=pghpf
 Comment=Portland Group High Performance Fortran compiler

@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Exec=pgf77
 Comment=Portland Group Fortran77 compiler

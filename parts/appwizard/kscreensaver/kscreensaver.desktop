@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=$APPNAME$
 Exec=$APPNAMELC$ %i %m -caption "%c"
 Icon=$APPNAMELC$

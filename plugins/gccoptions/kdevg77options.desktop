@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Exec=g77
 Comment=GNU Fortran 77 compiler
