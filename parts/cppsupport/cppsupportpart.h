@@ -185,7 +185,7 @@ private:
     KTextEditor::ViewCursorInterface* m_activeViewCursor;
     QString m_activeFileName;
 
-    KListView* m_astView;
+    KListView* m_structureView;
 };
 
 #endif

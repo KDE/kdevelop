@@ -2886,7 +2886,6 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     GroupAST::Node storageSpec;
     parseStorageClassSpecifier( storageSpec );
 
-    kdDebug(9007) << "------------------------> current token is = " << lex->lookAhead(0).toString() << endl;
     GroupAST::Node cv;
     parseCvQualify( cv );
 

@@ -211,20 +211,22 @@ QString typeSpecToString( TypeSpecifierAST* typeSpec )
     return text.stripWhiteSpace();
 }
 
-QString declaratorToString( DeclaratorAST* declarator, const QString& scope )
+QString declaratorToString( DeclaratorAST* declarator, const QString& scope, bool skipPtrOp )
 {
    if( !declarator )
        return QString::null;
 
    QString text;
 
-   QPtrList<AST> ptrOpList = declarator->ptrOpList();
-   for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it ){
-       text += it.current()->text();
-       ++it;
+   if( !skipPtrOp ){
+       QPtrList<AST> ptrOpList = declarator->ptrOpList();
+       for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it ){
+	   text += it.current()->text();
+	   ++it;
+       }
+       text += " ";
    }
-   text += " ";
-
+   
    text += scope;
 
    if( declarator->declaratorId() )

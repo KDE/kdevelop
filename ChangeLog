@@ -1,5 +1,6 @@
 2003-02-20 Roberto Raggi <roberto@kdevelop.org>
 	* Added Make-member feature to c++ support.
+	* Added Realtime class browser
 
 2003-02-19 F@lk Brettschneider <falkbr@kdevelop.org>
 	* QEditor find dialog improved:
