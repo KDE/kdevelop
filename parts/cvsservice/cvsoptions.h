@@ -13,6 +13,7 @@
 #include <qdom.h>
 
 class CvsPart;
+class KConfig;
 
 /* This class represents the command line options for the used cvs commands.
  * It uses the singleton pattern.
@@ -55,8 +56,21 @@ public:
     void setRsh( const QString &p );
     QString rsh();
 
+    /**
+    * Set server path string
+    * @param p (i.e. :pserver:marios@cvs.kde.org:/home/kde)
+    */
+    void setLocation( const QString &p );
+    /**
+    * @result remote path (i.e. :pserver:marios@cvs.kde.org:/home/kde)
+    */
+    QString location();
+
     void setContextLines( unsigned int contextLines );
     unsigned int contextLines() const;
+
+    void setCompressionLevel( unsigned int compressionLevel = 0 );
+    unsigned int compressionLevel() const;
 
 private:
     // Cache
@@ -69,20 +83,12 @@ private:
     QString m_diff;
     QString m_log;
     QString m_rsh;
-
+    QString m_location;
+    unsigned int m_compressionLevel;
     unsigned int m_contextLines;
+    // So we can access cvssservice configuration (repositories first of all)
+    KConfig *m_serviceConfig;
 
     static CvsOptions *m_instance;
     CvsOptions();
 };
-/*
-#define default_cvs     QString::fromLatin1("-f")
-#define default_commit    QString::fromLatin1("")
-#define default_update    QString::fromLatin1("-dP")
-#define default_add        QString::fromLatin1("")
-#define default_remove    QString::fromLatin1("-f")
-#define default_replace    QString::fromLatin1("-C -d -P")
-#define default_diff    QString::fromLatin1("-u3 -p")
-#define default_log        QString::fromLatin1("")
-#define default_rsh        QString::fromLatin1("")
-*/

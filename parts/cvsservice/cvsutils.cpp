@@ -72,24 +72,27 @@ void CvsUtils::validateURLs( const QString &projectDirectory, KURL::List &urls, 
     // If files are to be added, we can avoid to check them to see if they are registered in the
     // repository ;)
     if (op == opAdd)
+    {
+        kdDebug(9000) << "This is a Cvs Add operation and will not be checked against repository ;-)" << endl;
         return;
-
+    }
     QValueList<KURL>::iterator it = urls.begin();
     while (it != urls.end())
     {
         if (!CvsUtils::isRegisteredInRepository( projectDirectory, (*it) ))
         {
-            kdDebug(9000) << "Warning: KURL " << (*it).path() << " will be removed" << endl;
+            kdDebug(9000) << "Warning: file " << (*it).path() << " does NOT belong to repository and will not be used" << endl;
 
             it = urls.erase( it );
         }
         else
         {
-            kdDebug(9000) << "Warning: KURL " << (*it).path() << " will be accepted" << endl;
+            kdDebug(9000) << "Warning: file " << (*it).path() << " is in repository and will be accepted" << endl;
 
             ++it;
         }
     }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -119,12 +122,12 @@ void CvsUtils::addToIgnoreList( const QString &projectDirectory, const KURL &url
         while (!t.eof() && !found)
         {
             fileName = t.readLine();
-            kdDebug(9000) << "** Examining file: " << fileName << endl;
+            kdDebug(9000) << "** Examining line: " << fileName << endl;
             found = fileName == relPathName;
         }
         if (!found) {
             t << relPathName << "\n";
-            kdDebug(9000) << "** File is not present. Adding it." << endl;
+            kdDebug(9000) << "** File is not present. So it can be added to " << ignoreFilePath << endl;
         }
     }
     f.close();
@@ -168,13 +171,13 @@ void CvsUtils::removeFromIgnoreList( const QString &/*projectDirectory*/, const 
     // 2. Look up for filename
     if (ignoreLines.remove( relPathName ) == 0) // Ok, file is not in list, so nothing to do!
     {
-        kdDebug(9000) << "** File was not found! So no point in removing it!" << endl;
+        kdDebug(9000) << "** File is not present in " << ignoreFilePath << "! So no point in removing it ..." << endl;
         return;
     }
     // 3. If present, remove it and write the lines in memory back to file!
-    if (!f.open( IO_WriteOnly ))
+    if (!f.open( IO_WriteOnly )) // Who nows
     {
-        kdDebug(9000) << "Argh!! Could not open " << ignoreFilePath << " for writing!!!" << endl;
+        kdDebug(9000) << "Argh!! Could not open " << ignoreFilePath << " for appending the filename!!!" << endl;
         return; //
     }
 

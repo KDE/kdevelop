@@ -58,7 +58,6 @@
 #include <cvsservice_stub.h>
 #include <cvsjob_stub.h>
 
-
 QStringList quoted( const QStringList &args )
 {
     QStringList qNames;
@@ -89,8 +88,8 @@ const QString changeLogFileName = "ChangeLog";
 // Global vars
 ///////////////////////////////////////////////////////////////////////////////
 
-// This is an ugly hack for being able to pass CVS_RSH from CvsPart::create
-QString g_tempEnvRsh( "" );
+//
+bool g_projectWasJustCreated = false;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Plugin factory
@@ -104,11 +103,12 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( "kdevcvsservice" ) );
 ///////////////////////////////////////////////////////////////////////////////
 
 CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
-    : KDevVersionControl( "KDevCvsServicePart", "kdevcvsservicepart", parent, name ? name : "CvsService" ),
-    proc( 0 ),
-    actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ), actionRemove( 0 ),
-    actionUpdate( 0 ), actionRevert( 0 ),
-    actionAddToIgnoreList( 0 ), actionRemoveFromIgnoreList( 0 )
+    : KDevVersionControl( "KDevCvsServicePart", "kdevcvsservicepart", parent,
+        name ? name : "CvsService" ),
+    actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ),
+    actionAddBinary( 0 ), actionRemove( 0 ), actionUpdate( 0 ),
+    actionRevert( 0 ), actionAddToIgnoreList( 0 ),
+    actionRemoveFromIgnoreList( 0 )
 {
     setInstance( CvsFactory::instance() );
 
@@ -123,7 +123,8 @@ CvsPart::~CvsPart()
 {
     if (m_widget)
     {
-        mainWindow()->removeView( m_widget ); // Inform toplevel, that the output view is gone
+        // Inform toplevel, that the output view is gone
+        mainWindow()->removeView( m_widget );
     }
     delete m_widget;
     delete m_cvsConfigurationForm;
@@ -136,15 +137,20 @@ void CvsPart::init()
 {
     setupActions();
 
-    // Load / store project configuration every time the project is opened/closed
+    // Load / store project configuration every time project is opened/closed
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 
     // Context menu
-    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)), this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
-    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
-    connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)), this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
+    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+        this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+        this, SLOT(projectConfigWidget(KDialogBase*)) );
+    connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+        this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 
+    // ask for a DCOP CvsService
+    // FIXME: should check for success/failure
     requestCvsService();
 
     m_widget = new CvsProcessWidget( appId, this, 0, "cvsprocesswidget" );
@@ -157,27 +163,44 @@ void CvsPart::init()
 void CvsPart::setupActions()
 {
 
-    KAction * action = new KAction( i18n("CVS repository"), 0, this, SLOT(slotCheckOut()),
-        actionCollection(), "cvsservice_checkout" );
+    KAction * action = new KAction( i18n("CVS repository"), 0,
+        this, SLOT(slotCheckOut()), actionCollection(), "cvsservice_checkout" );
     action->setStatusText( i18n("Check-out from an existing CVS repository") );
-    actionCommit = new KAction( i18n("Commit"), 0, this, SLOT(slotActionCommit()),
-        actionCollection(), "cvsservice_commit" );
-    actionDiff = new KAction( i18n("Diff"), 0, this, SLOT(slotActionDiff()),
+
+    actionCommit = new KAction( i18n("&Commit"), 0, this,
+        SLOT(slotActionCommit()), actionCollection(), "cvsservice_commit" );
+
+    actionDiff = new KAction( i18n("&Diff"), 0, this, SLOT(slotActionDiff()),
         actionCollection(), "cvsservice_diff" );
-    actionLog = new KAction( i18n("Log"), 0, this, SLOT(slotActionLog()),
+
+    actionLog = new KAction( i18n("&Log"), 0, this, SLOT(slotActionLog()),
         actionCollection(), "cvsservice_log" );
-    actionAdd = new KAction( i18n("Add"), 0, this, SLOT(slotActionAdd()),
+
+    actionAdd = new KAction( i18n("&Add"), 0, this, SLOT(slotActionAdd()),
         actionCollection(), "cvsservice_add" );
-    actionRemove = new KAction( i18n("Remove From Repository"), 0, this, SLOT(slotActionRemove()),
-        actionCollection(), "cvsservice_remove" );
-    actionUpdate = new KAction( i18n("Update"), 0, this, SLOT(slotActionUpdate()),
-        actionCollection(), "cvsservice_update" );
-    actionRevert = new KAction( i18n("Replace with Copy From Repository"), 0, this, SLOT(slotActionRevert()),
-        actionCollection(), "cvsservice_revert" );
-    actionAddToIgnoreList = new KAction( i18n("Ignore this file when doing cvs operation"), 0,
-        this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "cvsservice_ignore" );
-    actionRemoveFromIgnoreList = new KAction( i18n("Do not Ignore this file when doing cvs operation"), 0,
-        this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "cvsservice_donot_ignore" );
+
+    actionAddBinary = new KAction( i18n("Add as &binary"), 0, this,
+        SLOT(slotActionAddBinary()), actionCollection(), "cvsservice_add_bin" );
+
+    actionRemove = new KAction( i18n("&Remove From Repository"), 0, this,
+        SLOT(slotActionRemove()), actionCollection(), "cvsservice_remove" );
+
+    actionUpdate = new KAction( i18n("&Update"), 0, this,
+        SLOT(slotActionUpdate()), actionCollection(), "cvsservice_update" );
+
+    actionRevert = new KAction( i18n("R&eplace with Copy From Repository"), 0,
+        this, SLOT(slotActionRevert()), actionCollection(),
+        "cvsservice_revert" );
+
+    actionAddToIgnoreList = new KAction(
+        i18n("&Ignore this file when doing cvs operation"), 0,
+        this, SLOT(slotActionAddToIgnoreList()), actionCollection(),
+        "cvsservice_ignore" );
+
+    actionRemoveFromIgnoreList = new KAction(
+        i18n("Do &not Ignore this file when doing cvs operation"), 0,
+        this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(),
+        "cvsservice_donot_ignore" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -284,27 +307,32 @@ void CvsPart::createNewProject( const QString& dirName )
 
     // FIXME: Store rsh setting. Here doesn't store it in CvsOptions because:
     // createNewProject() is called _before_ projectOpened() signal is emitted.
-    g_tempEnvRsh = m_cvsConfigurationForm->cvs_rsh->text();
-    QString rsh;
-    if ( !g_tempEnvRsh.isEmpty() )
-        rsh = "CVS_RSH=" + KShellProcess::quote( g_tempEnvRsh );
+    CvsOptions *options = CvsOptions::instance();
+    options->setRsh( m_cvsConfigurationForm->cvsRsh() );
+    options->setLocation( m_cvsConfigurationForm->location() );
 
+    QString rsh_preamble;
+    if ( !options->rsh().isEmpty() )
+        rsh_preamble = "CVS_RSH=" + KShellProcess::quote( options->rsh() );
 
-    if (m_cvsConfigurationForm->init_check->isChecked())
+    if (m_cvsConfigurationForm->mustInitRoot())
     {
-        QString cvs_rsh = m_cvsConfigurationForm->root_edit->text();
-        init = rsh + " cvs -d " + KShellProcess::quote(cvs_rsh) + " init && ";
+        init = rsh_preamble + " cvs -d " + KShellProcess::quote( options->location() ) + " init && ";
     }
     QString command = init + "cd " + KShellProcess::quote(dirName) +
-        " && " + rsh +
-        " cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->root_edit->text()) +
-        " import -m " + KShellProcess::quote(m_cvsConfigurationForm->message_edit->text()) + " " +
-        KShellProcess::quote(m_cvsConfigurationForm->repository_edit->text()) + " " +
-        KShellProcess::quote(m_cvsConfigurationForm->vendor_edit->text()) + " " +
-        KShellProcess::quote(m_cvsConfigurationForm->release_edit->text()) + " && sh " +
+        " && " + rsh_preamble +
+        " cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->location()) +
+        " import -m " + KShellProcess::quote(m_cvsConfigurationForm->message()) + " " +
+        KShellProcess::quote(m_cvsConfigurationForm->module()) + " " +
+        KShellProcess::quote(m_cvsConfigurationForm->vendor()) + " " +
+        KShellProcess::quote(m_cvsConfigurationForm->release()) +
+        // CVS build-up magic here ...
+        " && sh " +
         locate("data","kdevcvsservice/buildcvs.sh") + " . " +
-        KShellProcess::quote(m_cvsConfigurationForm->repository_edit->text()) + " " +
-        KShellProcess::quote(m_cvsConfigurationForm->root_edit->text());
+        KShellProcess::quote(m_cvsConfigurationForm->module()) + " " +
+        KShellProcess::quote(m_cvsConfigurationForm->location());
+
+    g_projectWasJustCreated = true;
 
     kdDebug( 9000 ) << "  ** Will run the following command: " << endl << command << endl;
     kdDebug( 9000 ) << "  ** on directory: " << dirName << endl;
@@ -336,6 +364,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
         subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
         subMenu->insertItem( actionAdd->text(), this, SLOT(slotAdd()) );
+        subMenu->insertItem( actionAddBinary->text(), this, SLOT(slotAddBinary()) );
         subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
         subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
 
@@ -355,6 +384,19 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         popup->insertSeparator();
         popup->insertItem( i18n("CvsService"), subMenu );
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::slotActionLogin()
+{
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::slotActionLogout()
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -389,7 +431,19 @@ void CvsPart::slotActionAdd()
     if (urlFocusedDocument( currDocument ))
     {
         urls << currDocument;
-        add( urls );
+        add( urls, false );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::slotActionAddBinary()
+{
+    KURL currDocument;
+    if (urlFocusedDocument( currDocument ))
+    {
+        urls << currDocument;
+        add( urls, true );
     }
 }
 
@@ -483,7 +537,14 @@ void CvsPart::slotUpdate()
 
 void CvsPart::slotAdd()
 {
-    add( urls );
+    add( urls, false );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::slotAddBinary()
+{
+    add( urls, true );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -532,8 +593,6 @@ void CvsPart::slotRemoveFromIgnoreList()
 
 void CvsPart::slotDiffFinished( bool normalExit, int exitStatus )
 {
-    Q_ASSERT( proc );
-
     core()->running( this, false );
 
     QString diff = m_widget->output(),
@@ -546,9 +605,6 @@ void CvsPart::slotDiffFinished( bool normalExit, int exitStatus )
         kdDebug( 9999 ) << " *** Process died nicely with exit status = " << exitStatus << endl;
     else
         kdDebug( 9999 ) << " *** Process was killed with exit status = " << exitStatus << endl;
-
-    // delete proc
-    delete proc; proc = 0;
 
     // Now show a message about operation ending status
     if (diff.isEmpty() && (exitStatus != 0))
@@ -588,14 +644,18 @@ void CvsPart::slotStopButtonClicked( KDevPlugin* which )
         return;
 
     m_widget->cancelJob();
-/*
-    if ( !proc )
-        return;
-    if ( !proc->kill() ) {
-        KMessageBox::sorry( 0, i18n("Unable to kill process, you might want to kill it by hand.") );
-        return;
-    }
-*/
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::login( const CvsLoginData &data )
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::logout()
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -616,7 +676,7 @@ void CvsPart::commit( const KURL::List& urlList )
     CvsOptions *options = CvsOptions::instance();
     QString logString = dlg.logMessage().join( "\n" );
     DCOPRef cvsJob = m_cvsService->commit( fileList, logString, false );
-    if (options->rsh().isEmpty())
+    if (!options->rsh().isEmpty())
     {
         cvsJob.call( "setRSH", options->rsh() );
     }
@@ -654,7 +714,7 @@ void CvsPart::update( const KURL::List& urlList )
 
     CvsOptions *options = CvsOptions::instance();
     DCOPRef cvsJob = m_cvsService->update( fileList, true, true, true, options->update() );
-    if (options->rsh().isEmpty())
+    if (!options->rsh().isEmpty())
     {
         cvsJob.call( "setRSH", options->rsh() );
     }
@@ -667,7 +727,7 @@ void CvsPart::update( const KURL::List& urlList )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::add( const KURL::List& urlList )
+void CvsPart::add( const KURL::List& urlList, bool binary )
 {
     if (!prepareOperation( opAdd ))
         return;
@@ -679,8 +739,8 @@ void CvsPart::add( const KURL::List& urlList )
     CvsOptions *options = CvsOptions::instance();
     // FIXME: We must commit in separate runs binary and _non_ binary files. For now we assume
     // they are _non_ binary.
-    DCOPRef cvsJob = m_cvsService->add( fileList, false );
-    if (options->rsh().isEmpty())
+    DCOPRef cvsJob = m_cvsService->add( fileList, binary );
+    if (!options->rsh().isEmpty())
     {
         cvsJob.call( "setRSH", options->rsh() );
     }
@@ -704,7 +764,7 @@ void CvsPart::remove( const KURL::List& urlList )
 
     CvsOptions *options = CvsOptions::instance();
     DCOPRef cvsJob = m_cvsService->remove( fileList, true  );
-    if (options->rsh().isEmpty())
+    if (!options->rsh().isEmpty())
     {
         cvsJob.call( "setRSH", options->rsh() );
     }
@@ -728,7 +788,7 @@ void CvsPart::revert( const KURL::List& urlList )
 
     CvsOptions *options = CvsOptions::instance();
     DCOPRef cvsJob = m_cvsService->update( fileList, true, true, true, options->revert() );
-    if (options->rsh().isEmpty())
+    if (!options->rsh().isEmpty())
     {
         cvsJob.call( "setRSH", options->rsh() );
     }
@@ -772,7 +832,7 @@ void CvsPart::diff( const KURL::List& urlList )
     CvsOptions *options = CvsOptions::instance();
     DCOPRef cvsJob = m_cvsService->diff( fileList[0], QString::null /* revA */,
                 QString::null /* revB */, options->diff(), options->contextLines() );
-    if (options->rsh().isEmpty())
+    if (!options->rsh().isEmpty())
     {
         cvsJob.call( "setRSH", options->rsh() );
     }
@@ -854,16 +914,14 @@ void CvsPart::slotProjectOpened()
     kdDebug(9000) << "CvsPart::slotProjectOpened() here!" << endl;
 
     CvsOptions *options = CvsOptions::instance();
-    options->load( *projectDom() );
 
     // If createNewProject() has set this var then we have to get it.
-    if (!g_tempEnvRsh.isEmpty())
+    if (g_projectWasJustCreated)
     {
-        options->setRsh( g_tempEnvRsh );
-        // Reset so next since this var is plugin global and may affect other
-        // projects that could be loaded after the current one
-        g_tempEnvRsh = "";
+        options->save( *projectDom() );
+        g_projectWasJustCreated = false;
     }
+    options->load( *projectDom() );
 
     // When files are added to project they may be added to/removed from repository too
     connect( project(), SIGNAL(addedFilesToProject(const QStringList&)), this, SLOT(slotAddFilesToProject(const QStringList &)) );
@@ -888,7 +946,7 @@ void CvsPart::slotProjectClosed()
 
 void CvsPart::slotJobFinished( bool normalExit, int exitStatus )
 {
-    /// @todo Display something?
+    // @todo Display something ?
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -17,6 +17,7 @@
                 <Action name="cvsservice_diff" />
                 <Action name="cvsservice_log" />
                 <Action name="cvsservice_add" />
+                <Action name="cvsservice_add_bin" />
                 <Action name="cvsservice_remove" />
                 <Separator />
                 <Action name="cvsservice_update" />

@@ -19,19 +19,16 @@ know who said what and elaborate :-)
 
 Current features:
 * because this is a (buggy) direct conversion, as in parts/cvs.
+* it is possbile to 'add as binary' files to repository
 
 To Do list
 
 (Ok, this is based on cvsservice so we have already the features: we need only to
 integrate them ;-)
 
-1. When committing files must be committed differently by their type: binary
-   files must be committed with "-kb" command line option. A list of file
-   extension is what fits better: when committing two file lists will be
-   separately committed, the one with binary files, the others with text files.
-   This will make easier switching to cvsservice when time arises :-)
-2. Adding the import feature for checking out modules from repositories: fetch
+1. Adding the import feature for checking out modules from repositories: fetch
    a modules list and ask the user which one he wants to commit
+2. login and logount from :ext: repositories
 
 F.A.Q.
 

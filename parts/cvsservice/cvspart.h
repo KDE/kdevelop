@@ -27,12 +27,16 @@ class KURL::List;
 class KAction;
 class CvsProcessWidget;
 class CvsForm;
-class KProcess;
+class CvsLoginData;
+
 class CvsService_stub;
 class Repository_stub;
 
 // Available Cvs operations
 enum CvsOperation { opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff };
+
+// Supported repositories
+enum CvsRepositoryType { repoExt, repoPserver, repoLocal };
 
 /**
 * Implementation for the CvsPart command line tool wrapper: it let to do all common
@@ -67,9 +71,13 @@ private slots:
     void contextMenu( QPopupMenu *popup, const Context *context );
 
     // Cvs operations (menubar)
+    void slotActionLogin();
+    void slotActionLogout();
+
     void slotActionCommit();
     void slotActionUpdate();
     void slotActionAdd();
+    void slotActionAddBinary();
     void slotActionRemove();
     void slotActionRevert();
     void slotActionLog();
@@ -81,6 +89,7 @@ private slots:
     void slotCommit();
     void slotUpdate();
     void slotAdd();
+    void slotAddBinary();
     void slotRemove();
     void slotRevert();
     void slotLog();
@@ -108,10 +117,13 @@ private slots:
     void slotDiffFinished( bool normalExit, int exitStatus );
 
 private:
+    void login( const CvsLoginData &data );
+    void logout();
+
     // Implementation of CvsOperations
     void commit( const KURL::List& urlList );
     void update( const KURL::List& urlList );
-    void add( const KURL::List& urlList );
+    void add( const KURL::List& urlList, bool binary = false );
     void remove( const KURL::List& urlList );
     void revert( const KURL::List& urlList );
     void log( const KURL::List& urlList );
@@ -146,16 +158,12 @@ private:
     // by the ApplicationWizard in example)
     QGuardedPtr<CvsForm> m_cvsConfigurationForm;
 
-    // Shell process reference (i.e. used by 'cvs diff')
-    KProcess* proc;
-    // Buffers for process' standard output and error
-    QString stdOut, stdErr;
-
     // Actions
     KAction *actionCommit,
         *actionDiff,
         *actionLog,
         *actionAdd,
+        *actionAddBinary,
         *actionRemove,
         *actionUpdate,
         *actionRevert,
