@@ -1,3 +1,11 @@
+2001-03-07  jbb <jbb@kdevelop.org>
+    * add sharedlib_rootname and sharedlib_LDFLAGS to project file. These can
+      be set against each sharedlib, which allows us to use kdevelop to
+      regenerate the Makefile.am for kdevelop.
+      Regenerate the Makefile.ams and restore the project file.
+      Add Roland's buildmake patch. This tidies up the buildmake process a good
+      deal.
+      
 2001-03-06  F@lk Brettschneider <falk@kdevelop.org>
     * initial code for QextMDI-based MDI feature added:
         - The DocViewMan is the MDI manager which is responsible for creating documents and multiple views on such documents ;

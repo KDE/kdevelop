@@ -1657,427 +1657,141 @@ void CKDevelop::setupInternalDebugger()
   slotTTabSelected(VAR);
 }
 
-void CKDevelop::slotBuildMake(){
-  if(!CToolClass::searchProgram(make_cmd)){
-    return;
-  }
 
-  // reset to the project's root directory
-  QString defaultMakefileDir = prj->getProjectDir();
-  QDir::setCurrent(defaultMakefileDir);
+/*
+ * void CKDevelop::RunMake(const CProject::Makefiletype type, const QString& target)
+ *
+ * Purpose: Run the make command according to type for the project
+ *          with the given target.
+ *          This function find the correct make command, make options,
+ *          compiler and linker options then calls the correct makefile with
+ *          the correct target.
+ *          This is an attempt to clean up some of the source to build the current
+ *          project and to get rid of code duplication.
+ * Author:  rokrau, 3/2001
+ * In:
+ *          const CProject::Makefiletype type,
+ *          the type of Makefile, i.e. whether we are calling the toplevel makefile
+ *          or a cvs makefile.
+ *          const QString& target,
+ *          the maefile target. Can be QString::null
+ * Out:     N/A
+ * Return:  void
+ */
+bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
+{
+	// first, lets set the make command
+	if(!CToolClass::searchProgram(make_cmd)){
+		QMessageBox::warning(this,i18n("Running Make"),
+		                     i18n("Make command not found"));
+		return false;
+	}
+	// second, lets take care of compiler and linker flags
+	QString flags;
+	if ((prj->getProjectType()!="normal_empty") && (type!=CMakefile::cvs))
+	{
+		// compiler flags
+		if ((!prj->getCXXFLAGS().isEmpty()) ||
+		    (!prj->getAdditCXXFLAGS().isEmpty())) {
+			flags = ((prj->getProjectType()=="normal_c") ?
+			            "CFLAGS=\"" : "CXXFLAGS=\"");
+			// regular CXXFLAGS
+			if (!prj->getCXXFLAGS().isEmpty())
+				flags = flags
+				      + prj->getCXXFLAGS().simplifyWhiteSpace()
+				      + " ";
+			// additional CXXFLAGS
+			if (!prj->getAdditCXXFLAGS().isEmpty())
+				flags = flags
+				      + prj->getAdditCXXFLAGS().simplifyWhiteSpace()
+				      + " ";
+			flags = flags + "\"";
+		}
+		// linker flags
+		if (!prj->getLDFLAGS().isEmpty())
+			flags = flags + "LDFLAGS=\""
+			      + prj->getLDFLAGS().simplifyWhiteSpace()
+			      + "\"";
+	}
+	// finding the makefile is now real easy
+	QString makefile;
+	if (type==CMakefile::cvs) {
+		makefile=prj->getCvsMakefile();
+	}
+	else {
+		makefile=prj->getTopMakefile();
+	}
+	// set the path where make will run
+	QString makefileDir=QFileInfo(makefile).dirPath(TRUE);
+	QDir::setCurrent(makefileDir);
+	// Kill the debugger if it's running
+	if (dbgController)
+		slotDebugStop();
+	// save/generate dialog if needed
+	error_parser->setStartDir(makefileDir);
+	error_parser->reset();
+	error_parser->toogleOn();
+	showOutputView(true);
+	setToolMenuProcess(false);
+	slotFileSaveAll();
+	messages_widget->clear();
+	
+	// set the make arguments
+	process.clearArguments();
+	process << flags;
+	process << make_cmd << "-f" << makefile;
+	process << target;
+	
+	// why is this beeping business necessary? shouldn't there be a switch?
+	beep = true;
 
-  // Kill the debugger if it's running
-  if (dbgController)
-    slotDebugStop();
+	if (next_job.isEmpty())
+		next_job="make_end";
 
-  //save/generate dialog if needed
-  error_parser->reset();
-  error_parser->toogleOn();
-  showOutputView(true);
-  setToolMenuProcess(false);
-  slotFileSaveAll();
-  slotStatusMsg(i18n("Running make..."));
-  messages_widget->clear();
-
-  // get the path where make will run
-  QString makefileDir = prj->getDirWhereMakeWillBeCalled(defaultMakefileDir);
-  if (makefileDir == "./")
-    makefileDir = prj->getProjectDir(); // avoid a "." subdir
-  if (makefileDir[0] != '/')  // in case of a relative path
-    makefileDir = prj->getProjectDir() + makefileDir; // complete the path to an absolute one
-
-  // set the path where make will run
-  QDir::setCurrent(makefileDir);
-  error_parser->setStartDir(makefileDir);
-
-  // check if there's a Makefile, if not: grumble about it
-  if (!QFileInfo(makefileDir + "Makefile").exists()) {
-    QString makefileGenerator;
-    if (prj->getProjectType() != "normal_empty")
-      makefileGenerator = i18n(" by Build->Configure!");
-    else
-      makefileGenerator = i18n(". Possibly by tmake?");
-    QMessageBox::warning(this,i18n("Makefile not found"),
-                             i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
-                                  "You want to make (by running 'make') in\n\n %1\n\n"
-                                  "but there is no Makefile in this directory.\n\n"
-                                  "Hints:\n"
-                                  "1. Possibly you forgot to create the Makefiles.\n"
-                                  "   In that case create them%2\n\n"
-                                  "2. Or this directory does not belong to your project.\n"
-                                  "   Check the settings in Project->Options->MakeOptions!")
-                                  .arg(makefileDir).arg(makefileGenerator));
-    setToolMenuProcess(true);
-    return;
-  }
-
-  // set the make arguments
-  process.clearArguments();
-  if (prj->getProjectType()!="normal_empty")
-  {
-    QString flaglabel=
-          ((prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"") +
-          prj->getCXXFLAGS() + prj->getAdditCXXFLAGS() + "\"";
-
-    process << flaglabel;
-
-//    if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-//    {
-//      if (!prj->getCXXFLAGS().isEmpty())
-//        process << prj->getCXXFLAGS();
-//      if (!prj->getAdditCXXFLAGS().isEmpty())
-//        process << prj->getAdditCXXFLAGS();
-//    }
-
-    process  << "LDFLAGS=\""+prj->getLDFLAGS()+"\"";
-
-//   if (!prj->getLDFLAGS().isEmpty())
-//                process << prj->getLDFLAGS();
-//   process  << "\"";
-  }
-
-  // feed the shell process with a make command and possibly with some arguments
-//  if(!prj->getMakeOptions().isEmpty())
-    process << make_cmd << prj->getMakeOptions();
-//  else
-//    process << make_cmd;
-
-  beep = true;
-
-  // start make
-  if (next_job.isEmpty())
-    next_job="make_end";
-
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	// rock'n roll
+	bool success=process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	return success;
 }
-
-// void CKDevelop::slotBuildMakeWith(){
-//   KLineEditDlg *box = new KLineEditDlg(i18n("Make with :"), make_with_cmd.data(), this, true);
-//   box->show();
-
-//   if (!box->result())   /* cancelled */
-//     return;
-
-//   make_with_cmd = box->text();
-//   delete box;
-
-//   showOutputView(true);
-//   setToolMenuProcess(false);
-//   slotFileSaveAll();
-//   slotStatusMsg(i18n("Running make..."));
-//   messages_widget->clear();
-
-//   if ( prj->getProjectType() == "normal_empty" ||
-//        prj->getProjectType() == "normal_java")
-//     QDir::setCurrent(prj->getProjectDir()); 
-//   else
-//     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-
-//   process.clearArguments();
-//   process << make_with_cmd;
-
-//   beep = true;
-//   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-// }
-
-void CKDevelop::slotBuildRebuildAll(){
-  if(!CToolClass::searchProgram(make_cmd)){
-    return;
-  }
-
-  // reset to the project's root directory
-  QString defaultMakefileDir = prj->getProjectDir();
-  QDir::setCurrent(defaultMakefileDir);
-
-  slotDebugStop();
-  error_parser->reset();
-  error_parser->toogleOn();
-  showOutputView(true);
-
-  setToolMenuProcess(false);
-  slotFileSaveAll();
-  slotStatusMsg(i18n("Running make clean-command and rebuilding..."));
-  messages_widget->clear();
-
-  // get the path where rebuild will run
-  QString makefileDir = prj->getDirWhereMakeWillBeCalled(defaultMakefileDir);
-  if (makefileDir == "./")
-    makefileDir = prj->getProjectDir(); // avoid a "." subdir
-  if (makefileDir[0] != '/')  // in case of a relative path
-    makefileDir = prj->getProjectDir() + makefileDir; // complete the path to an absolute one
-
-  // set the path where rebuild will run
-  QDir::setCurrent(makefileDir);
-  error_parser->setStartDir(makefileDir);
-
-  // check if there's a Makefile, if not: grumble about it
-  if (!QFileInfo(makefileDir + "Makefile").exists()) {
-    QString makefileGenerator;
-    if (prj->getProjectType() != "normal_empty")
-      makefileGenerator = i18n(" by Build->Configure!");
-    else
-      makefileGenerator = i18n(". Possibly by tmake?");
-    QMessageBox::warning(this,i18n("Makefile not found"),
-                             i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
-                                "You want to rebuild (by running 'make clean;make') in\n\n%1\n\n"
-                                "but there is no Makefile in this directory.\n\n"
-                                "Hints:\n"
-                                "1. Possibly you forgot to create the Makefiles.\n"
-                                "   In that case create them%2\n\n"
-                                "2. Or this directory does not belong to your project.\n"
-                                "   Check the settings in Project->Options->MakeOptions!")
-                                .arg(makefileDir).arg(makefileGenerator));
-    setToolMenuProcess(true);
-    return;
-  }
-  else {
-    process.clearArguments();
-    process << make_cmd;
-    process << "clean";
-    next_job = make_cmd; // checked in slotProcessExited()
-    beep = true;
-    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  }
+void CKDevelop::slotBuildMake()
+{
+	slotStatusMsg(i18n("Running make..."));
+	RunMake(CMakefile::toplevel,"all");
 }
-
-void CKDevelop::slotBuildCleanRebuildAll(){
-  if(!CToolClass::searchProgram(make_cmd)){
-    return;
-  }
-
-  // reset to the project's root directory
-  QString defaultMakefileDir = prj->getProjectDir();
-  QDir::setCurrent(defaultMakefileDir);
-
-  prj->updateMakefilesAm();
-  slotDebugStop();
-  //  QString shell = getenv("SHELL");
-  QString flaglabel;
-  //  if(shell == "/bin/bash"){
-      flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-      //  }
-      //  else{
-      //      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
-      //  }
-  
-  error_parser->reset();
-  error_parser->toogleOn();
-  showOutputView(true);
-  setToolMenuProcess(false);
-  slotFileSaveAll();
-  messages_widget->clear();
-  slotStatusMsg(i18n("Running make clean and rebuilding all..."));
-
-  // get the path where make distclean&make will run
-  QString makefileDir = prj->getDirWhereMakeWillBeCalled(defaultMakefileDir);
-  if (makefileDir == "./")
-    makefileDir = prj->getProjectDir(); // avoid a "." subdir
-  if (makefileDir[0] != '/')  // in case of a relative path
-    makefileDir = prj->getProjectDir() + makefileDir; // complete the path to an absolute one
-
-  // set the path where make distclean&make will run
-  QDir::setCurrent(makefileDir);
-  error_parser->setStartDir(makefileDir);
-
-  // check if there's a Makefile, if not: grumble about it
-  QString makefile("Makefile.dist");
-  if (!QFileInfo(makefileDir + makefile).exists()) {
-    makefile="Makefile.cvs";
-    if (!QFileInfo(makefileDir + makefile).exists()) {
-      makefile="Makefile";
-      if (!QFileInfo(makefileDir + makefile).exists()) {
-        QString makefileGenerator;
-        if (prj->getProjectType() != "normal_empty")
-          makefileGenerator = i18n(" by Build->Configure!");
-        else
-          makefileGenerator = i18n(". Possibly by tmake?");
-        QMessageBox::warning(this, i18n("%1 not found").arg(makefile),
-                             i18n("%3 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
-                                  "You want to distclean and build (by running 'make distclean;make') in\n\n%1\n\n"
-                                  "but there is no %2 in this directory.\n\n"
-                                  "Hints:\n"
-                                  "1. Possibly you forgot to create them%3\n\n"
-                                  "2. Or this directory does not belong to your project.\n"
-                                  "   Check the settings in Project->Options->MakeOptions!")
-                                  .arg(makefileDir).arg(makefile).arg(makefileGenerator));
-        setToolMenuProcess(true);
-        return;
-      }
-    }
-  }
-  makefile = "Makefile.dist";
-  if (!QFileInfo(prj->getProjectDir() + makefile).exists())
-    makefile="Makefile.cvs";
-
-  // running make -f Makefile.dist/cvs
-  shell_process.clearArguments();
-  shell_process << make_cmd << "distclean && " << " cd " << prj->getProjectDir() << " && " << make_cmd
-    << " -f "+makefile+" && ";
-  shell_process << flaglabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-  {
-    if (!prj->getCXXFLAGS().isEmpty())
-      shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-    if (!prj->getAdditCXXFLAGS().isEmpty())
-      shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-  }
-  shell_process  << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty())
-    shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-  //  shell_process  << "\" "<< "./configure && " << make_cmd;
-  QDir::setCurrent(prj->getProjectDir()); // configure is only in the project's root directory
-  shell_process  << "\" "<< "./configure " << prj->getConfigureArgs() << " && " << make_cmd;
-  beep = true;
-
-  next_job="make_end";
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+void CKDevelop::slotBuildMakeClean()
+{
+	slotStatusMsg(i18n("Running make clean..."));
+	RunMake(CMakefile::toplevel,"clean");
 }
-
-void CKDevelop::slotBuildDistClean(){
-  if(!CToolClass::searchProgram(make_cmd)){
-    return;
-  }
-
-  // reset to the project's root directory
-  QString defaultMakefileDir = prj->getProjectDir();
-  QDir::setCurrent(defaultMakefileDir);
-
-  slotDebugStop();
-  error_parser->reset();
-  error_parser->toogleOn();
-  showOutputView(true);
-  setToolMenuProcess(false);
-  slotFileSaveAll();
-  slotStatusMsg(i18n("Running make distclean..."));
-  messages_widget->clear();
-
-  // get the path where make distclean will run
-  QString makefileDir = prj->getDirWhereMakeWillBeCalled(defaultMakefileDir);
-  if (makefileDir == "./")
-    makefileDir = prj->getProjectDir(); // avoid a "." subdir
-  if (makefileDir[0] != '/')  // in case of a relative path
-    makefileDir = prj->getProjectDir() + makefileDir; // complete the path to an absolute one
-
-  // set the path where make distclean will run
-  QDir::setCurrent(makefileDir);
-  error_parser->setStartDir(makefileDir);
-
-  // check if there's a Makefile, if not: grumble about it
-  if (!QFileInfo(makefileDir + "Makefile").exists()) {
-    QString makefileGenerator;
-    if (prj->getProjectType() != "normal_empty")
-      makefileGenerator = i18n(" by Build->Configure!");
-    else
-      makefileGenerator = i18n(". Possibly by tmake?");
-    QMessageBox::warning(this,i18n("Makefile not found"),
-                             i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
-                                  "You want to distclean (by running 'make distclean') in\n\n%1\n\n"
-                                  "but there is no Makefile in this directory.\n\n"
-                                  "Hints:\n"
-                                  "1. Possibly you forgot to create the Makefiles.\n"
-                                  "   In that case create them%2\n\n"
-                                  "2. Or this directory does not belong to your project.\n"
-                                  "   Check the settings in Project->Options->MakeOptions!")
-                                  .arg(makefileDir).arg(makefileGenerator));
-    setToolMenuProcess(true);
-    return;
-  }
-  else {
-    // run distclean
-    process.clearArguments();
-    process << make_cmd << "distclean";
-    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  }
+void CKDevelop::slotBuildRebuildAll()
+{
+	slotStatusMsg(i18n("Running make clean and make all..."));
+	RunMake(CMakefile::toplevel,"clean");
+	RunMake(CMakefile::toplevel,"all");
 }
-
-void CKDevelop::slotBuildMakeClean(){
-  if(!CToolClass::searchProgram(make_cmd)){
-    return;
-  }
-
-  slotDebugStop();
-  error_parser->reset();
-  error_parser->toogleOn();
-  showOutputView(true);
-  setToolMenuProcess(false);
-  slotFileSaveAll();
-  slotStatusMsg(i18n("Running make clean..."));
-  messages_widget->clear();
-
-  // reset to the project's root directory
-  QString defaultMakefileDir = prj->getProjectDir();
-  QDir::setCurrent(defaultMakefileDir);
-
-  // get the path where make clean will run
-  QString makefileDir = prj->getDirWhereMakeWillBeCalled(defaultMakefileDir);
-  if (makefileDir == "./")
-    makefileDir = prj->getProjectDir(); // avoid a "." subdir
-  if (makefileDir[0] != '/')  // in case of a relative path
-    makefileDir = prj->getProjectDir() + makefileDir; // complete the path to an absolute one
-
-  // set the path where make will run
-  QDir::setCurrent(makefileDir);
-  error_parser->setStartDir(makefileDir);
-
-  // check if there's a Makefile, if not: grumble about it
-  if (!QFileInfo(makefileDir + "Makefile").exists()) {
-    QString makefileGenerator;
-    if (prj->getProjectType() != "normal_empty")
-      makefileGenerator = i18n(" by Build->Configure!");
-    else
-      makefileGenerator = i18n(". Possibly by tmake?");
-    QMessageBox::warning(this,i18n("Makefile not found"),
-                             i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
-                                  "You want to clean up (by running 'make clean') in\n\n%1\n\n"
-                                  "but there is no Makefile in this directory.\n\n"
-                                  "Hints:\n"
-                                  "1. Possibly you forgot to create the Makefiles.\n"
-                                  "   In that case create them%2\n\n"
-                                  "2. Or this directory does not belong to your project.\n"
-                                  "   Check the settings in Project->Options->MakeOptions!")
-                                  .arg(makefileDir).arg(makefileGenerator));
-    setToolMenuProcess(true);
-    return;
-  }
-  else {
-    // Cool - there's a Makefile. Now run make clean
-    error_parser->setStartDir(makefileDir);
-    process.clearArguments();
-    process << make_cmd << "clean";
-    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  }
+void CKDevelop::slotBuildDistClean()
+{
+	slotStatusMsg(i18n("Running make distclean..."));
+	RunMake(CMakefile::toplevel,"distclean");
 }
-
-void CKDevelop::slotBuildAutoconf(){
-  if(!CToolClass::searchProgram("automake")){
-    return;
-  }
-  if(!CToolClass::searchProgram("autoconf")){
-    return;
-  }
-
-  slotDebugStop();
-  showOutputView(true);
-  error_parser->toogleOff();
-  setToolMenuProcess(false);
-  slotFileSaveAll();
-  slotStatusMsg(i18n("Running autoconf/automake suite..."));
-  messages_widget->clear();
-  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled(prj->getProjectDir()));
-  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled(prj->getProjectDir()));
-
-  shell_process.clearArguments();
-  QString makefile("Makefile.dist");
-  if(!QFileInfo(QDir::current(), makefile).exists())
-    makefile="Makefile.cvs";
-
-  shell_process << make_cmd << " -f "+makefile;
-
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  beep = true;
+void CKDevelop::slotBuildAutoconf()
+{
+	slotStatusMsg(i18n("Rebuilding autoconf..."));
+	if(!CToolClass::searchProgram("automake")){
+		return;
+	}
+	if(!CToolClass::searchProgram("autoconf")){
+		return;
+	}
+	RunMake(CMakefile::cvs,"all");
 }
-
-
+void CKDevelop::slotBuildCleanRebuildAll()
+{
+	prj->updateMakefilesAm();
+	slotBuildDistClean();
+	slotBuildAutoconf();
+	slotBuildConfigure();
+	slotBuildMake();
+}
 void CKDevelop::slotBuildConfigure(){
     //    QString shell = getenv("SHELL");
 
@@ -2127,13 +1841,13 @@ void CKDevelop::slotBuildConfigure(){
 
 
 void CKDevelop::slotBuildStop(){
-  slotStatusMsg(i18n("Killing current process..."));
-  slotDebugStop();
-  setToolMenuProcess(true);
-  process.kill();
-  shell_process.kill();
-  appl_process.kill();
-  slotStatusMsg(i18n("Ready."));
+	slotStatusMsg(i18n("Killing current process..."));
+	slotDebugStop();
+	setToolMenuProcess(true);
+	process.kill();
+	shell_process.kill();
+	appl_process.kill();
+	slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -2251,13 +1965,14 @@ void CKDevelop::slotOptionsDocBrowser(){
 }
 
 void CKDevelop::slotOptionsToolsConfigDlg(){
-  slotStatusMsg(i18n("Configuring Tools-Menu entries..."));
-  CToolsConfigDlg* configdlg= new CToolsConfigDlg(this,"configdlg");
-  configdlg->show();
+	slotStatusMsg(i18n("Configuring Tools-Menu entries..."));
+//  CToolsConfigDlg* configdlg= new CToolsConfigDlg(this,"configdlg");
+	CToolsConfigDlg configdlg(this,"configdlg");
+	configdlg.show();
 
-  tools_menu->clear();
-  setToolmenuEntries();
-  slotStatusMsg(i18n("Ready."));
+	tools_menu->clear();
+	setToolmenuEntries();
+	slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotOptionsSpellchecker(){

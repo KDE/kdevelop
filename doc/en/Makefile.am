@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = addendum cref kde_libref manual programming tutorial welcome about 
+SUBDIRS = cref kde_libref manual programming tutorial about 
 
 EXTRA_DIST = tip.database 
 

@@ -371,25 +371,29 @@ public:
   void slotProjectMakeDistSourceTgz();
   void slotProjectMakeDistRPM();
   void slotConfigMakeDistRPM();
+  void slotProjectMakeTags();
   ////////////////////////
   // BUILD-Menu entries
   ///////////////////////
-  /** compile the actual sourcefile using setted options */
-  void slotBuildCompileFile();
+  /** compile the actual sourcefile using preset options */
+  bool RunMake(const CMakefile::Type type, const QString& target);
+
   void slotBuildMake();
-  //   void slotBuildMakeWith();
+  void slotBuildMakeClean();
+  void slotBuildCompileFile();
   void slotBuildRebuildAll();
+  void slotBuildDistClean();
+  void slotBuildAutoconf();
   void slotBuildCleanRebuildAll();
+
   void slotBuildStop();
   void slotBuildRun();
   void slotBuildRunWithArgs();
   void slotStartRun(bool bWithArgs=false);
   void slotBuildDebug(bool bWithArgs=false);
   void slotBuildDebugStart();
-  void slotBuildDistClean();
-  void slotBuildMakeClean();
-  void slotBuildAutoconf();
   void slotBuildConfigure();
+  //   void slotBuildMakeWith();
 
   /** connects the menu AND toolbar up to the debug functions
       Most functions are in dbgController which is constructed when

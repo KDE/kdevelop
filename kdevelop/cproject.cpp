@@ -1,6 +1,6 @@
 /***************************************************************************
-                 cproject.cpp - the projectproperties
-                             -------------------                                         
+		 cproject.cpp - the projectproperties
+		 -------------------                                         
 
     begin                : 28 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
@@ -27,9 +27,11 @@
 #include <kdebug.h>
 #include <kstddirs.h>
 #include <ksimpleconfig.h>
+#include <klocale.h>
 
 #include <qdir.h>
 #include <qregexp.h>
+#include <qmessagebox.h>
 
 #define PROJECT_VERSION_STR "KDevelop Project File Version 0.3 #DO NOT EDIT#"
 
@@ -38,7 +40,9 @@ CProject::CProject(const QString& file) :
   dir(QString::null),
   vc(0),
   config(0),
-  valid(false)
+  valid(false),
+  topMakefile(QString::null),
+  cvsMakefile(QString::null)
 {
   ptStringMap = new QString[(unsigned)PT_END_POS];
   ptStringMap[ CORBA_SOURCE ] = "CORBA_SOURCE";
@@ -839,12 +843,19 @@ void CProject::updateMakefileAm(const QString& makefile)
           for(str= source_files.first();str !=0;str = source_files.next())
             sources =  str + " " + sources ;
 
-          QDir dir(getDir(makefile));
+          config->setGroup(makefile);
+          QString libRootName = config->readEntry("sharedlib_rootname");
+          if(libRootName.isEmpty())
+          {
+            QDir dir(getDir(makefile));
+            libRootName = dir.dirName();
+          }
+
           QString type=getProjectType();
           if( (type == "kio_slave") )
-            stream << "kde_module_LTLIBRARIES = kio_" << dir.dirName() << ".la\n\n";
+            stream << "kde_module_LTLIBRARIES = kio_" << libRootName << ".la\n\n";
           else
-            stream << "lib_LTLIBRARIES = lib" << dir.dirName() << ".la\n\n";
+            stream << "lib_LTLIBRARIES = lib" << libRootName << ".la\n\n";
 
           if (type!="normal_cpp" && type != "normal_c")
           {
@@ -853,36 +864,42 @@ void CProject::updateMakefileAm(const QString& makefile)
             if( type == "kpart_plugin")
             {
               stream << "\nLDADD = " << getLDADD() << "\n\n";
-              stream << "\nlib" << dir.dirName() << "_la_LIBADD = " << getLDADD() << "\n\n";
-              stream << "\nlib" << dir.dirName() << "_la_LDFLAGS = -avoid-version -module -no-undefined\n\n";
+              stream << "\nlib" << libRootName << "_la_LIBADD = " << getLDADD() << "\n\n";
+              stream << "\nlib" << libRootName << "_la_LDFLAGS = -avoid-version -module -no-undefined\n\n";
             }
           }
+
+          config->setGroup(makefile);
+          QString sharedlibLDFLAGS = config->readEntry("sharedlib_LDFLAGS");
+          if (!sharedlibLDFLAGS.isEmpty())
+            stream << "\nlib" << libRootName << "_la_LDFLAGS = " << sharedlibLDFLAGS << "\n\n";
+
           if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
           {
             if( (type == "kio_slave") )
-              stream << "kio_" << dir.dirName() << "_la_METASOURCES=AUTO\n\n";
+              stream << "kio_" << libRootName << "_la_METASOURCES=AUTO\n\n";
             else
-              stream << "lib" << dir.dirName() << "_la_METASOURCES = AUTO\n\n";
+              stream << "lib" << libRootName << "_la_METASOURCES = AUTO\n\n";
           }
           else
           {
             if (QFileInfo(getProjectDir() + "automoc").exists())
             {
               if( (type == "kio_slave") )
-                stream << "kio_" << dir.dirName() <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
+                stream << "kio_" << libRootName <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
               else
-                stream << "lib" << dir.dirName() << "_la_METASOURCES = USE_AUTOMOC\n\n";
+                stream << "lib" << libRootName << "_la_METASOURCES = USE_AUTOMOC\n\n";
             }
           }
 
           if( (type == "kio_slave") )
           {
-            stream << "kio_" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
-            stream << "kio_" << dir.dirName() << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
-            stream << "kio_" << dir.dirName() << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            stream << "kio_" << libRootName << "_la_SOURCES = " << sources << "\n";
+            stream << "kio_" << libRootName << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
+            stream << "kio_" << libRootName << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
           }
           else
-            stream << "lib" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
+            stream << "lib" << libRootName << "_la_SOURCES = " << sources << "\n";
 
           if(isQt2Project())
             // am_edit used only for qt apps requires this switch in Makefile.am´s to use tr instead of i18n and other specific stuff
@@ -1353,7 +1370,6 @@ TWorkspace CProject::getWorkspace(int id){
 }
 
 void CProject::getAllStaticLibraries(QStrList& libs){
-  QDir dir;
   QStrList makefiles;
   QString makefile;
 
@@ -1362,17 +1378,25 @@ void CProject::getAllStaticLibraries(QStrList& libs){
 
   config->readListEntry("makefiles",makefiles);
 
-  for(makefile=makefiles.first();makefile != 0;makefile=makefiles.next()){
+  for(makefile=makefiles.first();makefile != 0;makefile=makefiles.next())
+  {
     config->setGroup(makefile);
-    if(config->readEntry("type") == "static_library"){
-
-      dir.setPath(getDir(makefile));
+    if(config->readEntry("type") == "static_library")
+    {
+      QDir dir(getDir(makefile));
       libs.append(getDir(makefile) + "lib" + dir.dirName() + ".a");
     }
-    if(config->readEntry("type") == "shared_library"){
 
-      dir.setPath(getDir(makefile));
-      libs.append(getDir(makefile) + "lib" + dir.dirName() + ".la");
+    if(config->readEntry("type") == "shared_library")
+    {
+      QString libRootName = config->readEntry("sharedlib_rootname");
+      if(libRootName.isEmpty())
+      {
+        QDir dir(getDir(makefile));
+        libRootName = dir.dirName();
+      }
+
+      libs.append(getDir(makefile) + "lib" + libRootName + ".la");
     }
   }
 }
@@ -1662,4 +1686,151 @@ bool CProject::isAScript(const QString &filename)
   }
 
   return bIsWrapper;
+}
+
+/*
+ * void CProject::findMakefile(const MakefileType type, const QString& name)
+ *
+ * Purpose: A private (could well be just protected) helper function that
+ * tries to find an existing makefile.
+ * The makefile is looked for either in the user specified makefile directory
+ * and, if the former is not specified, in the default project directory.
+ * The parameter type specifies what kind of makefile we are looking for.
+ * This function can easily be extended for "custom" projects.
+ * The parameter name is the name of a makefile that we look for in the
+ * directory. If name is given all the function does is to check whether
+ * it really exists.
+ * If name is null, then we try to guess the makefile from a list.
+ * This should be very obvious, once it's found the function returns.
+ *
+ * Author: rokrau
+ *
+ * In:
+ * MakefileType type,        the type of makefile we are looking for
+ *                           from the enum in CProject
+ * QString& name,            the name of the makefile we are looking for.
+ *                           Can be QString::null
+ * Out: N/A
+ * Return: QString makefile, the absolute name of the makefile if found,
+ *                           QString::null otherwise.
+ */
+QString CProject::findMakefile(const CMakefile::Type type, const QString& name)
+{
+	// these are the guesses for toplevel makefile names
+	QStringList guess_top;
+	guess_top.append("makefile");
+	guess_top.append("Makefile");
+	// these are the guesses for cvs makefile names
+	QStringList guess_cvs;
+	guess_cvs.append("Makefile.cvs");
+	guess_cvs.append("Makefile.dist");
+	guess_cvs.append("makefile.cvs");
+	guess_cvs.append("makefile.dist");
+	guess_cvs.append("autogen.sh"); // hmmm...
+	// the string we are looking for
+	QString makefile=QString::null;
+	/*
+	 * first, we find the correct directory where the makefile
+	 * will be called
+	 * then reset to the project's root directory
+	 */
+	QDir::setCurrent(dir);
+	// get the path where make will run
+	QString makefileDir = getDirWhereMakeWillBeCalled(dir);
+	// avoid a "." subdir
+	if (makefileDir == "./") {
+		makefileDir = dir;
+	}
+	// in case of a relative path complete the path to an absolute one
+	if (makefileDir[0] != '/') {
+		makefileDir = dir + makefileDir;
+	}
+	// if we know the makefile name we can short circuit the whole affair
+	if (!name.isNull()&&!name.isEmpty()) {
+		// since we dont trust users we need to check
+		if (QFileInfo(makefileDir + name).exists()) {
+			makefile = makefileDir + name;
+			return makefile;
+		}
+		else {
+			QMessageBox::warning(0,i18n("Makefile not found"),
+			    i18n("the makefile you specified does not exist or could not be accessed",
+			         "You may want to check your settings in Project->Options->MakeOptions!"),
+			    QMessageBox::Ok,
+			    QMessageBox::NoButton,
+			    QMessageBox::NoButton);
+			return makefile; // still QString::null
+		}
+	}
+	// if we dont know anything, we can try to find a valid makefile by guessing
+	QStringList* list = &guess_top;
+	if (type==CMakefile::cvs) list = &guess_cvs;
+	for ( QStringList::Iterator it = list->begin(); it != list->end(); ++it ) {
+		QString guess = makefileDir + (*it);
+		if (QFileInfo(guess).exists()) {
+			makefile = guess;
+			return makefile ; // done when first match found
+		}
+	}
+	/*
+	 * finally, if we are still around, something is wrong and we let the
+	 * user know about it
+	 */
+	QString makefileGenerator;
+	if (getProjectType() != "normal_empty") {
+		makefileGenerator = i18n(" by Build->Configure!");
+	}
+	else {
+		makefileGenerator = i18n(". Possibly by tmake?");
+	}
+	QMessageBox::warning(0,i18n("Makefile not found"),
+		i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
+		"You want to make (by running 'make') in\n\n %1\n\n"
+		"but there is no Makefile in this directory.\n\n"
+		"Hints:\n"
+		"1. Possibly you forgot to create the Makefiles.\n"
+		"   In that case create them%2\n\n"
+		"2. Or this directory does not belong to your project.\n"
+		"   Check the settings in Project->Options->MakeOptions!")
+		 .arg(makefileDir).arg(makefileGenerator),	
+		QMessageBox::Ok,
+		QMessageBox::NoButton,
+		QMessageBox::NoButton);
+	return makefile; // still QString::null
+}
+/*
+ * void CProject::setTopMakefile(const QString& name)
+ *
+ * Purpose: Find and set the toplevel makefile, that is, the makefile
+ *          that is called to build the application
+ *
+ * Author:  rokrau
+ *
+ * In:      QString& name,
+ *          the name of the makefile if specified by the user.
+ *          Can be QString::null
+ * Out:     N/A
+ * Return:  void
+ */
+void CProject::setTopMakefile(const QString& name)
+{
+	topMakefile=findMakefile(CMakefile::toplevel, name);
+}
+/*
+ * void CProject::setCvsMakefile(const QString& name)
+ *
+ * Purpose: Find and set the cvs makefile, that is, the makefile
+ *          that is called to build the configure script
+ *
+ * Author:  rokrau
+ *
+ * In:      QString& name,
+ *          the name of the makefile if specified by the user.
+ *          Can be QString::null
+ * Out:     N/A
+ * Return:  void
+ */
+void CProject::setCvsMakefile(const QString& name)
+{
+	cvsMakefile=findMakefile(CMakefile::cvs, name);
 }

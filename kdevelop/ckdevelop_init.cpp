@@ -808,6 +808,9 @@ void CKDevelop::initMenuBar(){
   p2->insertItem(SmallIconSet("rpm"),i18n("&Configure RPM Package"), this, SLOT(slotConfigMakeDistRPM()),0,ID_PROJECT_CONFIG_DISTRIBUTION_RPM);
 
   project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
+  // create a tags file
+  project_menu->insertItem(SmallIconSet("tags"),i18n("Make &tags file"), this, SLOT(slotProjectMakeTags()),0, ID_PROJECT_MAKE_TAGS);
+
   project_menu->insertSeparator();
 
   project_menu->insertItem(SmallIconSet("configure"),i18n("O&ptions..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);

@@ -118,6 +118,14 @@ struct TWorkspace {
   QString activeTarget;
 };
 
+class CMakefile {
+public:
+	/** known Makefile types that are called somewhat differently
+	 *  this is kind of a poor man's RTTI, not really how it should be */
+	enum Type {toplevel, regular, custom, cvs} ;
+	CMakefile(){}
+	~CMakefile(){}
+};
 /** this class includes the properties of a project and some methods to read
   * and write these props,all Makefiles.am are registered in the [General] Group,every Makefile.am
   * has it own group and every file in the project too
@@ -217,6 +225,12 @@ public: // Methods to store project options
 
   /** Store the projectname. */
   void setProjectName(const QString& name)       { writeGroupEntry( "General", "project_name", name ); }
+
+  /** Set the toplevel makefile, that builds the application. */
+  void setTopMakefile(const QString& name=QString::null) ;
+
+  /** Return the autoconf makefile, that builds the configure script. */
+  void setCvsMakefile(const QString& name=QString::null) ;
 
   /** the mainsubdir, not "po"*/
   void setSubDir(const QString& dirname)         { writeGroupEntry( "General", "sub_dir", dirname ); }
@@ -371,6 +385,12 @@ public: // Public queries
   /** Return the project dir. */
   QString getProjectDir()  { return dir; }
 
+  /** Return the toplevel makefile, that builds the application. */
+  QString getTopMakefile() { return topMakefile; }
+
+  /** Return the autoconf makefile, that builds the configure script. */
+  QString getCvsMakefile() { return cvsMakefile; }
+
   /** Return the version control object */
   VersionControl *getVersionControl() { return vc; }
   /* return the sources(.cpp,.c,.C,.cxx) */
@@ -518,5 +538,12 @@ private: // Protected attributes
 
   /** true if the project was read*/
   bool valid;
+
+  /** private helper function to find an appropriate makefile */
+  QString findMakefile(const CMakefile::Type type, const QString& name) ;
+  /** the toplevel makefile for a project */
+  QString topMakefile;
+  /** makefile that calls autoconf automake to create a configure script */
+  QString cvsMakefile;
 };
 #endif

@@ -26,8 +26,8 @@
 
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
-#define ID_FILE_NEW			            10010
-#define ID_FILE_OPEN    			      10020
+#define ID_FILE_NEW		    10010
+#define ID_FILE_OPEN    	    10020
 
 #define ID_FILE_SAVE                10030
 #define ID_FILE_SAVE_AS             10040
@@ -39,7 +39,7 @@
 #define ID_FILE_PRINT               10070
 
 #define ID_FILE_QUIT                10080
-#define ID_FILE_DELETE							10090
+#define ID_FILE_DELETE		    10090
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
@@ -133,6 +133,8 @@
 #define ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ  14210
 #define ID_PROJECT_MAKE_DISTRIBUTION_RPM  14211
 #define ID_PROJECT_CONFIG_DISTRIBUTION_RPM 14212
+
+#define ID_PROJECT_MAKE_TAGS		14215
 
 #define ID_PROJECT_CVS_UPDATE         14220
 #define ID_PROJECT_CVS_COMMIT         14230

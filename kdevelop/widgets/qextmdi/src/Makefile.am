@@ -1,3 +1,9 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+
+EXTRA_DIST = qextmdichildarea.cpp qextmdichildfrm.cpp qextmdichildfrmcaption.cpp qextmdichildview.cpp qextmdimainfrm.cpp qextmditaskbar.cpp 
+
+####### kdevelop will overwrite this part!!! (end)############
 # Here resides the qextmdi library.
 
 INCLUDES = $(all_includes) -I$(top_srcdir)/kdevelop/widgets/qextmdi/include -I$(top_srcdir)/kdevelop/widgets/qextmdi/res

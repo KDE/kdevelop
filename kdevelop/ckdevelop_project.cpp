@@ -603,56 +603,54 @@ void CKDevelop::slotProjectOpenRecent(int id)
 
 void CKDevelop::slotProjectOpenCmdl(QString prjname)
 {
-  prjname.replace(QRegExp("file:"),"");
-  QFileInfo info(prjname);
+	prjname.replace(QRegExp("file:"),"");
+	QFileInfo info(prjname);
 
-  //if the new project file is not valid, do nothing
-  if (!info.isFile())
-    return;
+	//if the new project file is not valid, do nothing
+	if (!info.isFile())
+		return;
 
-  // Make sure we have the right permissions to read and write to the prj file
-  if (!(info.isWritable() && info.isReadable()))
-  {
-    KMessageBox::error(0,
-                      i18n("Unable to read the project file because you\n"
-                            "do not have read/write permissions for this project"),
-                            prjname);
-    return;
-  }
+	// Make sure we have the right permissions to read and write to the prj file
+	if (!(info.isWritable() && info.isReadable()))
+	{
+		KMessageBox::error(0,
+		    i18n("Unable to read the project file because you\n"
+		    "do not have read/write permissions for this project"),
+		    prjname);
+		return;
+	}
 
-  project_menu->setEnabled(false);
-  disableCommand(ID_PROJECT_OPEN);
-  accel->setEnabled(false);
+	project_menu->setEnabled(false);
+	disableCommand(ID_PROJECT_OPEN);
+	accel->setEnabled(false);
 
-  QString old_project;
-  if (project)
-  {
-    old_project = prj->getProjectFile();
+	QString old_project;
+	if (project)
+	{
+		old_project = prj->getProjectFile();
+		//the user may have pressed cancel in which case we want to reload
+		// the old project
+		if (!slotProjectClose())
+			prjname = old_project; // just reset the prjname to the old one
+	}
+	if (readProjectFile(prjname))
+		slotViewRefresh();
+	else
+	{
+		KMessageBox::error(0,
+		i18n("This does not appear to be a valid or\n"
+		    "supported kdevelop project file"),
+		    prjname);
+	}
+	// If there is an old project then try to restore it. (I wonder why - jbb)
+	// I believe the logic here is a bit screwed up, this needs a little revamp (rokrau)
+	if (!old_project.isEmpty() && readProjectFile(old_project))
+		slotViewRefresh();
 
-    //the user may have pressed cancel in which case we want to reload
-    // the old project
-    if (!slotProjectClose())
-      prjname = old_project;      // just reset the prjname to the old one
-  }
-
-  if (readProjectFile(prjname))
-    slotViewRefresh();
-  else
-  {
-    KMessageBox::error(0,
-                      i18n("This does not appear to be a valid or\n"
-                            "supported kdevelop project file"),
-                            prjname);
-
-    // If there is an old project then try to restore it. (I wonder why - jbb)
-    if (!old_project.isEmpty() && readProjectFile(old_project))
-      slotViewRefresh();
-  }
-
-  project_menu->setEnabled(true);
-  enableCommand(ID_PROJECT_OPEN);
-  accel->setEnabled(true);
-  slotStatusMsg(i18n("Ready."));
+	project_menu->setEnabled(true);
+	enableCommand(ID_PROJECT_OPEN);
+	accel->setEnabled(true);
+	slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotProjectNewAppl(){
@@ -705,17 +703,6 @@ void CKDevelop::slotProjectNewAppl(){
       return;
 
     QString type=prj->getProjectType();
-
-    /* transferred to processesend.pl
-      to insert the created pot file also into the repository (if necessary)
-    */
-    /*
-    if (type == "normal_kde" || type == "mini_kde" || type == "normalogl_kde" ||
-        type =="normal_kde2" || type=="mini_kde2" || type == "mdi_kde2")
-    {
-      slotProjectMessages();
-    }
-   */
 
     slotViewRefresh();		// a new project started, this is legitimate
   }
@@ -1019,14 +1006,14 @@ void CKDevelop::slotConfigureDoxygen(){
   QString file= prj->getProjectDir()+"/"+prj->getProjectName().lower()+".doxygen";
   if(!QFileInfo(file).exists())
   {
-  	// create default
-		process.clearArguments();
-    process << QString("cd '")+ dir + "' && ";
-    process << "doxygen -s -g "+prj->getProjectName().lower()+".doxygen";
-    process.start(KProcess::Block,KProcess::AllOutput);
- 	
-    // fill file with default projectname directories, etc.
- 	  QFile f( file );
+	// create default
+	process.clearArguments();
+	process << QString("cd '")+ dir + "' && ";
+	process << "doxygen -s -g "+prj->getProjectName().lower()+".doxygen";
+	process.start(KProcess::Block,KProcess::AllOutput);
+	
+	// fill file with default projectname directories, etc.
+	 QFile f( file );
     if ( !f.open( IO_ReadOnly ) )
         return;
     QTextStream t(&f);
@@ -1178,19 +1165,20 @@ void CKDevelop::slotProjectMakeDistRPM(){
 	QString qsShortInfo = "";
 	for ( uint idx= 0; idx < shortInfo.count();  idx++ )
 		qsShortInfo += shortInfo.at(idx);
- rpmbuilder->setProjectData(    prj->getProjectName(),
+		rpmbuilder->setProjectData(
+				prj->getProjectName(),
                                 prj->getVersion(),
                                 prj->getAuthor(),
                                 prj->getEmail(),
                                 prj->getConfigureArgs(),
                                 qsShortInfo,
-																prj->getKPPRPMVersion(),
-																prj->getKPPLicenceType(),
-																prj->getKPPURL(),
-																prj->getKPPAppGroup(),
-																prj->getKPPBuildRoot(),
-																prj->getKPPSummary(),
-																prj->getKPPIcon());
+				prj->getKPPRPMVersion(),
+				prj->getKPPLicenceType(),
+				prj->getKPPURL(),
+				prj->getKPPAppGroup(),
+				prj->getKPPBuildRoot(),
+				prj->getKPPSummary(),
+				prj->getKPPIcon());
 	rpmbuilder->startBuild();
 }
 
@@ -1215,15 +1203,59 @@ void CKDevelop::slotConfigMakeDistRPM()
                                 prj->getEmail(),
                                 prj->getConfigureArgs(),
                                 qsShortInfo,
-																prj->getKPPRPMVersion(),
-																prj->getKPPLicenceType(),
-																prj->getKPPURL(),
-																prj->getKPPAppGroup(),
-																prj->getKPPBuildRoot(),
-																prj->getKPPSummary(),
-																prj->getKPPIcon());
-																	
- rpmbuilder->show();
+				prj->getKPPRPMVersion(),
+				prj->getKPPLicenceType(),
+				prj->getKPPURL(),
+				prj->getKPPAppGroup(),
+				prj->getKPPBuildRoot(),
+				prj->getKPPSummary(),
+				prj->getKPPIcon());
+	rpmbuilder->show();
+}
+
+
+void CKDevelop::slotProjectMakeTags()
+{
+	slotStatusMsg(i18n("Creating tags file..."));
+	
+	// set up command line options for exuberant ctags
+	//cerr << "in CKDevelop::slotProjectMakeTags \n";
+	QString ctags_cmd = "/devl/rkrause/bin/ctags";
+	QString ctags_opt_tot = "--totals=yes" ;
+	QString ctags_opt_excmd = "--excmd=pattern" ;
+	QString ctags_opt_scope = "--file-scope=no" ;
+	QString ctags_opt_file = "--file-tags=yes" ;
+	QString ctags_opt_ctypes = "--c-types=+C+p" ;
+	QString prj_dir = prj->getProjectDir();
+	QString tag_file = prj_dir + "/tags";
+	//cerr << "project directory: " << prj_dir << "\n";
+	
+	// collect all files belonging to the project
+	QString files;
+	QStrListIterator isrc(prj->getSources());
+	while (!isrc.atLast())
+	{
+		files = files + *isrc + " ";
+		++isrc;
+	}
+	QStrListIterator ihdr(prj->getHeaders());
+	while (!ihdr.atLast())
+	{
+		files = files + *ihdr + " ";
+		++ihdr;
+	}
+	// we are a shell_process that was already set up
+	shell_process.clearArguments();
+	shell_process << ctags_cmd ;
+	shell_process << ctags_opt_tot ;
+	shell_process << ctags_opt_excmd ;
+	shell_process << ctags_opt_scope ;
+	shell_process << ctags_opt_file ;
+	shell_process << ctags_opt_ctypes ;
+	shell_process << "-f" ;
+	shell_process << tag_file ;
+	shell_process << files ;
+	shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
 void CKDevelop::slotAddSpec(QString path)
@@ -1410,6 +1442,10 @@ bool CKDevelop::readProjectFile(QString file)
   // Ok - valid project file - we hope
   project=true;
   prj = lNewProject;
+
+  // set the top level and autoconf makefiles
+  lNewProject->setTopMakefile();
+  lNewProject->setCvsMakefile();
 
   // if this is a c project then change Untitled.cpp to Untitled.c
   if (prj->getProjectType()=="normal_c")
