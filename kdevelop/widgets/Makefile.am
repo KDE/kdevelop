@@ -1,1 +1,1 @@
-SUBDIRS = qextmdi dockwidgets
+SUBDIRS = qextmdi

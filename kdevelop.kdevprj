@@ -30,12 +30,12 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/ckdevelop.cpp,/home/rnolden/Development/kdevelop/kdevelop/cnewfiledlg.cpp,
+openfiles=Untitled.h,Untitled.cpp,/home/falk/Projekte/kde2src/kdevelop/kdevelop/main.cpp,/home/falk/Projekte/kde2src/kdevelop/kdevelop/ckdevelop_init.cpp,/home/falk/Projekte/kde2src/kdevelop/kdevelop/ckdevelop_classview.cpp,
 show_outputview=true
 show_treeview=true
-header_file=Unbenannt.h
-cpp_file=/home/rnolden/Development/kdevelop/kdevelop/cnewfiledlg.cpp
-browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/programming/index-15.html
+header_file=Untitled.h
+cpp_file=/home/falk/Projekte/kde2src/kdevelop/kdevelop/ckdevelop_init.cpp
+browser_file=file:/usr/lib/qt-copy/doc/html/qnamespace-h.html
 [kdevelop/caddclassmethoddlg.h]
 install_location=
 dist=true
@@ -559,7 +559,7 @@ dist=true
 install=false
 type=DATA
 [kdevelop/widgets/dockwidgets/Makefile.am]
-files=kdevelop/widgets/dockwidgets/b_left.xpm,kdevelop/widgets/dockwidgets/close.xpm,kdevelop/widgets/dockwidgets/dock_close_bottom.xpm,kdevelop/widgets/dockwidgets/dock_close_left.xpm,kdevelop/widgets/dockwidgets/dock_close_right.xpm,kdevelop/widgets/dockwidgets/dock_close_top.xpm,kdevelop/widgets/dockwidgets/dockback.xpm,kdevelop/widgets/dockwidgets/dockmainwindow.cpp,kdevelop/widgets/dockwidgets/dockmainwindow.h,kdevelop/widgets/dockwidgets/dockmanager.cpp,kdevelop/widgets/dockwidgets/dockmanager.h,kdevelop/widgets/dockwidgets/dockmovemanager.cpp,kdevelop/widgets/dockwidgets/dockmovemanager.h,kdevelop/widgets/dockwidgets/docksplitter.cpp,kdevelop/widgets/dockwidgets/docksplitter.h,kdevelop/widgets/dockwidgets/knewpanner.cpp,kdevelop/widgets/dockwidgets/knewpanner.h,kdevelop/widgets/dockwidgets/notclose.xpm,kdevelop/widgets/dockwidgets/stabbar.cpp,kdevelop/widgets/dockwidgets/stabbar.h,kdevelop/widgets/dockwidgets/stabctl.cpp,kdevelop/widgets/dockwidgets/stabctl.h,
+files=kdevelop/widgets/dockwidgets/close.xpm,kdevelop/widgets/dockwidgets/dock_close_bottom.xpm,kdevelop/widgets/dockwidgets/dock_close_left.xpm,kdevelop/widgets/dockwidgets/dock_close_right.xpm,kdevelop/widgets/dockwidgets/dock_close_top.xpm,kdevelop/widgets/dockwidgets/dockback.xpm,kdevelop/widgets/dockwidgets/dockmainwindow.cpp,kdevelop/widgets/dockwidgets/dockmainwindow.h,kdevelop/widgets/dockwidgets/dockmanager.cpp,kdevelop/widgets/dockwidgets/dockmanager.h,kdevelop/widgets/dockwidgets/dockmovemanager.cpp,kdevelop/widgets/dockwidgets/dockmovemanager.h,kdevelop/widgets/dockwidgets/docksplitter.cpp,kdevelop/widgets/dockwidgets/docksplitter.h,kdevelop/widgets/dockwidgets/knewpanner.cpp,kdevelop/widgets/dockwidgets/knewpanner.h,kdevelop/widgets/dockwidgets/notclose.xpm,kdevelop/widgets/dockwidgets/stabbar.cpp,kdevelop/widgets/dockwidgets/stabbar.h,kdevelop/widgets/dockwidgets/stabctl.cpp,kdevelop/widgets/dockwidgets/stabctl.h,
 type=static_library
 sub_dirs=
 [kdevelop/widgets/dockwidgets/dockmanager.h]
@@ -1336,7 +1336,7 @@ version_control=None
 author=Ralf Nolden
 project_type=mini_kde
 sub_dir=kdevelop/
-lfv_open_groups=Sources,
+lfv_open_groups=
 workspace=1
 project_name=KDevelop
 version=0.1
@@ -1344,7 +1344,7 @@ AMChanged=false
 short_info=,
 email=Ralf.Nolden@post.rwth-aachen.de
 kdevprj_version=1.0beta2
-configure_args=
+configure_args=--enable-debug
 modifyMakefiles=false
 [kdevelop/ccvaddfolderdlg.cpp]
 install_location=
@@ -1816,11 +1816,6 @@ install_location=
 dist=true
 install=false
 type=HEADER
-[kdevelop/widgets/dockwidgets/b_left.xpm]
-install_location=
-dist=true
-install=false
-type=DATA
 [kdevelop/classwizard/cclasswizarddlg.h]
 install_location=
 dist=true
