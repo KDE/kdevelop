@@ -16,6 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qregexp.h>
 #include "ParsedClassContainer.h"
 #include <iostream.h>
 #include "ProgrammingByContract.h"
@@ -213,7 +214,40 @@ QList<CParsedClass> *CParsedClassContainer::getSortedClassList()
  * Returns:
  *   QStrList * The classnames.
  *-----------------------------------------------------------------*/
+/*
+    obsolete    W. Tasin
 QStrList *CParsedClassContainer::getSortedClassNameList()
 {
   return getSortedIteratorNameList( classIterator );
+}
+*/
+/*-------------------- CParsedClassContainer::getSortedClassNameList()
+ * getSortedClassNameList()
+ *   Get all classnames in sorted order.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QStrList * The classnames.
+ *-----------------------------------------------------------------*/
+QStrList *CParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
+{
+  QStrList *ret_val = new QStrList();
+  CParsedClass *act;
+
+  for (classIterator.toFirst();
+       (act=classIterator.current());
+        ++classIterator)
+  {
+     if (bUseFullPath)
+       ret_val->append(classIterator.currentKey());
+     else
+     {
+       QString path=act->path();
+    //   path.replace(QRegExp("."),"::");
+       ret_val->append(path);
+     }
+  };
+
+  return ret_val;
 }
