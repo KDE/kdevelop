@@ -30,7 +30,6 @@
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
 
-#include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 
@@ -127,10 +126,7 @@ Dbg_PS_Dialog::~Dbg_PS_Dialog()
 int Dbg_PS_Dialog::pidSelected()
 {
     QString pidText = pids_->text(pids_->currentItem());
-    if (!pidText.isEmpty())
-        return atoi(pidText.latin1());
-
-    return 0;
+    return pidText.toInt();
 }
 
 /***************************************************************************/

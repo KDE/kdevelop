@@ -41,7 +41,6 @@
 
 #include <iostream>
 #include <ctype.h>
-#include <stdlib.h>
 
 using namespace std;
 
@@ -431,7 +430,7 @@ char* JDBController::parseLine(char *buf)
 
 
                     emit showStepInSource(QString(classpath_ + "/" + mainclass_ + ".java").latin1(),
-                                          atoi(ex.cap(3).latin1()), "");
+                                          ex.cap(3).toInt(), "");
                     actOnProgramPause(QString("Reached Breakpoint in line ")+ex.cap(3));
 
                     char *retStr;
