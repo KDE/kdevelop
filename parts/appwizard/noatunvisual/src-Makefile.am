@@ -1,12 +1,13 @@
-INCLUDES= `$(SDL_CONFIG) --cflags` $(all_includes)
+INCLUDES= $(all_includes)
 METASOURCES = AUTO
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = noatun_$APPNAMELC$plugin.la
 
 noatun_$APPNAMELC$plugin_la_SOURCES = plugin_$APPNAMELC$.cpp plugin_$APPNAMELC$_impl.cpp
-noatun_$APPNAMELC$plugin_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined `$(SDL_CONFIG) --libs`
-noatun_$APPNAMELC$plugin_la_LIBADD = $(LIB_KFILE) -lnoatun -lm
+noatun_$APPNAMELC$plugin_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined $(LIBSDL_RPATH)
+noatun_$APPNAMELC$plugin_la_CXXFLAGS = $(LIBSDL_CFLAGS)
+noatun_$APPNAMELC$plugin_la_LIBADD = $(LIB_KFILE) $(LIBSDL_LIBS) -lnoatun -lm
 
 pluginsdir = $(kde_datadir)/noatun
 plugins_DATA = $APPNAMELC$.plugin

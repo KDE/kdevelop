@@ -3,7 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 noatunplugindir = ${appwizarddatadir}/template-noatunvisual
 templatedir = ${appwizarddatadir}/templates
 
-noatunplugin_DATA = src-Makefile.am plugin_app.cpp plugin_app.h plugin_impl.cpp plugin_impl.h noatunplugin.png plugin.plugin plugin.kdevelop subdirs
+noatunplugin_DATA = src-Makefile.am plugin_app.cpp plugin_app.h plugin_impl.cpp plugin_impl.h noatunplugin.png plugin.plugin plugin.kdevelop subdirs noatunvisual-configure.in.in
 template_DATA = noatunvisual
 
 DISTCLEANFILES = script.local

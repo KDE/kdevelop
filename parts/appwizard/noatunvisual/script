@@ -23,6 +23,7 @@ install( "${src}/template-common/kde-po-Makefile.am",          "${dest}/po/Makef
 install( "${src}/template-noatunvisual/subdirs",               "${dest}/subdirs" );
 
 print "Installing application sources\n";
+install( "${src}/template-noatunvisual/noatunvisual-configure.in.in", "${dest}/configure.in.in" );
 install( "${src}/template-noatunvisual/src-Makefile.am",       "${dest}/src/Makefile.am" );
 install( "${src}/template-noatunvisual/plugin_app.cpp",        "${dest}/src/plugin_${APPNAMELC}.cpp" );
 install( "${src}/template-noatunvisual/plugin_app.h",          "${dest}/src/plugin_${APPNAMELC}.h" );
