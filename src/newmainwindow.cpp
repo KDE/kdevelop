@@ -56,7 +56,6 @@
 #include "partselectwidget.h"
 #include "api.h"
 #include "core.h"
-#include "settingswidget.h"
 #include "statusbar.h"
 
 #include "kpopupmenu.h"
@@ -86,10 +85,10 @@ NewMainWindow::NewMainWindow(QWidget *parent, const char *name, KMdi::MdiMode md
 // ,m_bSwitching(false)
 {
     resize( 800, 600 ); // starts kdevelop at 800x600 the first time
-  
+
 	// isn't it fun with stuff you have no idea what it does?
     this->setManagedDockPositionModeEnabled(true);
-	
+
 	// does this work at all?
     this->setStandardMDIMenuEnabled( false );
 
@@ -98,16 +97,16 @@ NewMainWindow::NewMainWindow(QWidget *parent, const char *name, KMdi::MdiMode md
     int mdiStyle = config->readNumEntry("MDIStyle", 1);
 
     this->setToolviewStyle( mdiStyle ); // KDEV3 style of KMultiTabBar
-    
+
     m_pMainWindowShare = new MainWindowShare(this);
-    
+
 	m_raiseEditor = new KAction( i18n("Raise &Editor"), ALT+Key_C,
                                  this, SLOT(raiseEditor()),
                                  actionCollection(), "raise_editor");
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
-        
-   
+
+
 	//@fixme why is this part of KDevMainWindow?
 //    previous_output_view = NULL;
 }
@@ -137,30 +136,30 @@ void NewMainWindow::init() {
 	readDockConfig( &uiConfig );*/
 
     m_pMainWindowShare->init();
-	
+
 	// remove the kmdi-created menu
 	delete m_pWindowMenu;
-	
+
 	// get the xmlgui created one instead
     m_pWindowMenu = static_cast<QPopupMenu*>(main()->child( "window", "KPopupMenu" ));
 
     if( !m_pWindowMenu )
 	{
 		kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
-		
+
 		m_pWindowMenu = new QPopupMenu( main(), "window");
 		menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
 	}
-	
+
 	actionCollection()->action( "file_close" )->plug( m_pWindowMenu );
 	actionCollection()->action( "file_close_all" )->plug( m_pWindowMenu );
 	actionCollection()->action( "file_closeother" )->plug( m_pWindowMenu );
 
 	QObject::connect( m_pWindowMenu, SIGNAL(activated(int)), this, SLOT(openURL(int )) );
     QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
-			   	   
+
 	menuBar()->setEnabled( false );
-	
+
     //FIXME: this checks only for global offers which is not quite correct because
     //a profile can offer core plugins and no global plugins.
     if ( PluginController::getInstance()->engine().allOffers(ProfileEngine::Global).isEmpty() ) {
@@ -170,13 +169,13 @@ void NewMainWindow::init() {
                                        "Example for BASH users:\nexport KDEDIRS=/path/to/kdevelop:$KDEDIRS && kbuildsycoca"),
                             i18n("Could Not Find Plugins") );
     }
-	
+
 	connect( Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()) );
 	connect( Core::getInstance(), SIGNAL(projectOpened()), this, SLOT( projectOpened()) );
 	connect( PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )),
 		this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )) );
-	
-	connect( PartController::getInstance(), SIGNAL(documentChangedState(const KURL &, DocumentState)), 
+
+	connect( PartController::getInstance(), SIGNAL(documentChangedState(const KURL &, DocumentState)),
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
 
 
@@ -184,19 +183,19 @@ void NewMainWindow::init() {
 	{
 		KConfig *config = kapp->config();
 		config->setGroup("UI");
-		
+
 		int tabvisibility = config->readNumEntry( "TabWidgetVisibility", KMdi::AlwaysShowTabs );
 		setTabWidgetVisibility( (KMdi::TabWidgetVisibility)tabvisibility );
-		
+
 		bool CloseOnHover = config->readBoolEntry( "CloseOnHover", false );
 		tabWidget()->setHoverCloseButton( CloseOnHover );
-		
+
 		bool CloseOnHoverDelay = config->readBoolEntry( "CloseOnHoverDelay", false );
 		tabWidget()->setHoverCloseButtonDelayed( CloseOnHoverDelay );
-		
+
 		openNewTabAfterCurrent = config->readBoolEntry( "OpenNewTabAfterCurrent", false );
 		showTabIcons = config->readBoolEntry( "ShowTabIcons", true );
-  
+
 		if (config->readBoolEntry( "ShowCloseTabsButton", true ))
 		{
 			QToolButton *but = new QToolButton(tabWidget());
@@ -208,7 +207,7 @@ void NewMainWindow::init() {
 		}
 		tabWidget()->setTabReorderingEnabled(true);
 		connect(tabWidget(), SIGNAL(movedTab(int, int)), this, SLOT(tabMoved(int, int)));
-		connect(tabWidget(), SIGNAL(contextMenu(QWidget*,const QPoint &)), this, SLOT(tabContext(QWidget*,const QPoint &)));		
+		connect(tabWidget(), SIGNAL(contextMenu(QWidget*,const QPoint &)), this, SLOT(tabContext(QWidget*,const QPoint &)));
 	}
 }
 
@@ -302,7 +301,7 @@ void NewMainWindow::tabContextActivated(int id)
 
 }
 
-NewMainWindow::~NewMainWindow() 
+NewMainWindow::~NewMainWindow()
 {
 	TopLevel::invalidateInstance( this );
 }
@@ -333,7 +332,7 @@ void NewMainWindow::openURL( int id )
 void NewMainWindow::fillWindowMenu()
 {
 	bool hasWidget = ( PartController::getInstance()->activeWidget() != 0 );	// hmmm... works??
-	
+
 	// clear menu
 	QValueList< QPair< int, KURL > >::ConstIterator it = m_windowList.begin();
 	while ( it != m_windowList.end() )
@@ -341,21 +340,21 @@ void NewMainWindow::fillWindowMenu()
 		m_pWindowMenu->removeItem( (*it).first );
 		++it;
 	}
-	
+
 	int temp = 0;
-		
+
 	if	( m_mdiMode == KMdi::ChildframeMode )
 	{
 		temp = m_pWindowMenu->insertItem(i18n("&Minimize All"), this, SLOT(iconifyAllViews()));
 		m_pWindowMenu->setItemEnabled( temp, hasWidget );
 		m_windowList << qMakePair( temp, KURL() );
-		
+
 		m_windowList << qMakePair( m_pWindowMenu->insertSeparator(), KURL() );
-		
+
 		temp = m_pWindowMenu->insertItem(i18n("&Tile..."), m_pPlacingMenu);
 		m_windowList << qMakePair( temp, KURL() );
 		m_pWindowMenu->setItemEnabled( temp, hasWidget );
-	
+
 		m_pPlacingMenu->clear();
 		m_pPlacingMenu->insertItem(i18n("Ca&scade Windows"), m_pMdi,SLOT(cascadeWindows()));
 		m_pPlacingMenu->insertItem(i18n("Cascade &Maximized"), m_pMdi,SLOT(cascadeMaximized()));
@@ -367,10 +366,10 @@ void NewMainWindow::fillWindowMenu()
 	}
 
 	m_windowList << qMakePair( m_pWindowMenu->insertSeparator(), KURL() );
-	
-	QMap<QString, KURL> map;    
+
+	QMap<QString, KURL> map;
 	QStringList string_list;
-	KURL::List list = PartController::getInstance()->openURLs();	
+	KURL::List list = PartController::getInstance()->openURLs();
 	KURL::List::Iterator itt = list.begin();
 	while ( itt != list.end() )
 	{
@@ -379,11 +378,11 @@ void NewMainWindow::fillWindowMenu()
 		++itt;
 	}
 	string_list.sort();
-	
+
 	list.clear();
 	for(uint i = 0; i != string_list.size(); ++i)
 		list.append(map[string_list[i]]);
-	
+
 	itt = list.begin();
 	int i = 0;
 	while ( itt != list.end() )
@@ -432,11 +431,11 @@ void NewMainWindow::slotViewActivated(KMdiChildView* child)
     kdDebug(9000) << "======> view activated: " << child << endl;
     if( !child || !child->focusedChildWidget() )
         return;
-    
+
     emit currentChanged( child->focusedChildWidget() );
 }
 
-void NewMainWindow::createActions() 
+void NewMainWindow::createActions()
 {
     m_pMainWindowShare->createActions();
 
@@ -446,7 +445,7 @@ void NewMainWindow::createActions()
     connect(m_pMainWindowShare, SIGNAL(gotoLastWindow()), this, SLOT(activateLastWin()) );
 }
 
-void NewMainWindow::embedPartView(QWidget *view, const QString &name, const QString& ) 
+void NewMainWindow::embedPartView(QWidget *view, const QString &name, const QString& )
 {
 	if( !view ) return;
 
@@ -454,7 +453,7 @@ void NewMainWindow::embedPartView(QWidget *view, const QString &name, const QStr
     shortName = shortName.right( shortName.length() - (shortName.findRev('/') +1));
 
     KMdiChildView * child = createWrapper(view, name, shortName);
-    
+
     if (showTabIcons)
     {
         const QPixmap* wndIcon = view->icon();
@@ -472,12 +471,12 @@ void NewMainWindow::embedPartView(QWidget *view, const QString &name, const QStr
     addWindow(child, mdiFlags, tabIndex);
 }
 
-void NewMainWindow::embedSelectView(QWidget *view, const QString &name, const QString &toolTip) 
+void NewMainWindow::embedSelectView(QWidget *view, const QString &name, const QString &toolTip)
 {
 	embedView( KDockWidget::DockLeft, view, name, toolTip );
 }
 
-void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, const QString &toolTip) 
+void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, const QString &toolTip)
 {
 	embedView( KDockWidget::DockRight, view, name, toolTip );
 	//FIXME: ok, this is a rude hack
@@ -485,7 +484,7 @@ void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, c
 		raiseView(view);
 }
 
-void NewMainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) 
+void NewMainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip)
 {
 	embedView( KDockWidget::DockBottom, view, name, toolTip );
 }
@@ -540,7 +539,7 @@ void NewMainWindow::embedView( KDockWidget::DockPosition pos, QWidget *view, con
 	{
 		pos = recallToolViewPosition( view->name(), pos );	// we have a new view. where should it go?
 	}
-	
+
 	KMdiMainFrm::addToolWindow( view, pos, getMainDockWidget(), 20, toolTip, name );
 	m_availableToolViews.insert( view, ToolViewData( pos, name, toolTip ) );
 }
@@ -583,18 +582,18 @@ static KDockWidget::DockPosition getDockWidgetDockingBorder( QWidget * w )
 void NewMainWindow::removeView( QWidget * view )
 {
     kdDebug(9000) << k_funcinfo << " - view: " << view << endl;
-    
+
 	if( !view || !view->parentWidget() )
         return;
-    
+
 	kdDebug(9000) << "parentWidget: " << view->parentWidget() << endl;
 
-	if( KMdiChildView * childView = static_cast<KMdiChildView*>(view->parentWidget()->qt_cast("KMdiChildView")) ) 
+	if( KMdiChildView * childView = static_cast<KMdiChildView*>(view->parentWidget()->qt_cast("KMdiChildView")) )
 	{
 		(void) view->reparent(0, QPoint(0,0), false );
 		closeWindow( childView );
-	} 
-	else if( view->parentWidget()->qt_cast("KDockWidget") ) 
+	}
+	else if( view->parentWidget()->qt_cast("KDockWidget") )
 	{
 		rememberToolViewPosition( view->name(), getDockWidgetDockingBorder( view ) );
 		(void) view->reparent(0, QPoint(0,0), false );
@@ -602,7 +601,7 @@ void NewMainWindow::removeView( QWidget * view )
 	}
 }
 
-void NewMainWindow::setViewAvailable(QWidget * view, bool bEnabled) 
+void NewMainWindow::setViewAvailable(QWidget * view, bool bEnabled)
 {
 	if ( !view ) return;
 
@@ -637,10 +636,10 @@ void NewMainWindow::setViewAvailable(QWidget * view, bool bEnabled)
 	}
 }
 
-void NewMainWindow::raiseView(QWidget *view) 
+void NewMainWindow::raiseView(QWidget *view)
 {
 	kdDebug(9000) << k_funcinfo << endl;
-    
+
     if( !view || !view->parentWidget() )
         return;
 
@@ -676,7 +675,7 @@ void NewMainWindow::loadSettings() {
 }
 
 
-void NewMainWindow::saveSettings() 
+void NewMainWindow::saveSettings()
 {
     KConfig *config = kapp->config();
 
@@ -694,7 +693,7 @@ void NewMainWindow::saveSettings()
 	QValueList<QWidget*>::Iterator it = widgetList.begin();
 	while( it != widgetList.end() )
 	{
-		rememberToolViewPosition( (*it)->name(), getDockWidgetDockingBorder( *it ) );	
+		rememberToolViewPosition( (*it)->name(), getDockWidgetDockingBorder( *it ) );
 		++it;
 	}
 }
@@ -702,7 +701,7 @@ void NewMainWindow::saveSettings()
 void NewMainWindow::raiseEditor( )
 {
 	kdDebug() << k_funcinfo << endl;
-	
+
 	KDevPartController * partcontroller = API::getInstance()->partController();
 	if ( partcontroller->activePart() && partcontroller->activePart()->widget() )
 	{
@@ -734,7 +733,7 @@ void NewMainWindow::setCaption( const QString & caption )
 	}
 }
 
-void NewMainWindow::projectOpened() 
+void NewMainWindow::projectOpened()
 {
 	setCaption(QString::null);
 	// why would we reload mainwindow settings on project load?
@@ -745,14 +744,14 @@ void NewMainWindow::projectOpened()
 void NewMainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
 {
 	kdDebug() << k_funcinfo << endl;
-	
+
 	if ( QWidget * widget = EditorProxy::getInstance()->topWidgetForPart( ro_part ) )
 	{
 		KMdiChildView * childView = dynamic_cast<KMdiChildView*>( widget->parentWidget() );
 		if ( childView )
 		{
 			childView->setMDICaption( ro_part->url().fileName() );
-			
+
 		}
 	}
 }
@@ -778,7 +777,7 @@ void NewMainWindow::documentChangedState( const KURL & url, DocumentState state 
 			case Clean:
 				if (showTabIcons)
 					widget->setIcon( SmallIcon("kdevelop", isize));
-				else    
+				else
 					widget->setIcon(QPixmap());
 				break;
 			case Modified:

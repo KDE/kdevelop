@@ -40,7 +40,8 @@
 #include "designeraction.h"
 #include "formwindow.h"
 
-KDevDesignerPart::KDevDesignerPart( QWidget *parentWidget, const char *widgetName,
+KDevDesignerPart::KDevDesignerPart( QWidget *parentWidget, const char *// widgetName
+                                    ,
                                   QObject *parent, const char *name, const QStringList &args )
     : KInterfaceDesigner::Designer(parent, name)
 {
@@ -60,7 +61,7 @@ KDevDesignerPart::KDevDesignerPart( QWidget *parentWidget, const char *widgetNam
 
     setReadWrite(true);
     setModified(false);
-    
+
     connect(m_widget, SIGNAL(formModified(bool )), this, SLOT(formModified(bool)));
 }
 
@@ -97,7 +98,7 @@ void KDevDesignerPart::setupActions( )
     action = new KAction(i18n("Save Al&l"), 0, this, SLOT(fileSaveAs()), actionCollection(), "file_saveall");
     stateSync(action, m_widget->actionFileSaveAll);
     new KAction(i18n("Create &Template..."), 0, this, SLOT(fileCreateTemplate()), actionCollection(), "file_createtemplate");
-    
+
     action = KStdAction::undo(this, SLOT(editUndo()), actionCollection());
     stateSync(action, m_widget->actionEditUndo);
     action = KStdAction::redo(this, SLOT(editRedo()), actionCollection());
@@ -122,14 +123,14 @@ void KDevDesignerPart::setupActions( )
     stateSync(action, m_widget->actionEditFormSettings);
 
     action = new KAction(i18n("&Add File..."), 0, this, SLOT(projectAddFile()), actionCollection(), "project_addfile");
-    stateSync(action, m_widget->actionProjectAddFile);   
+    stateSync(action, m_widget->actionProjectAddFile);
     action = new KAction(i18n("&Image Collection..."), 0, this, SLOT(projectImageCollection()), actionCollection(), "project_imagecollection");
     stateSync(action, m_widget->actionEditPixmapCollection);
     action = new KAction(i18n("&Database Connections..."), 0, this, SLOT(projectDatabaseCollections()), actionCollection(), "project_databasecollections");
-    stateSync(action, m_widget->actionEditDatabaseConnections);   
+    stateSync(action, m_widget->actionEditDatabaseConnections);
     action = new KAction(i18n("&Designer Project Settings..."), 0, this, SLOT(projectSettings()), actionCollection(), "project_settings");
-    stateSync(action, m_widget->actionEditProjectSettings);   
-    
+    stateSync(action, m_widget->actionEditProjectSettings);
+
     KRadioAction *toggle;
     toggle = new KRadioAction(i18n("&Pointer"), createPartIconSet("designer_pointer.png"), Key_F2, actionCollection(), "tools_pointer");
     setupToolsAction(toggle, m_widget->actionPointerTool);
@@ -165,7 +166,7 @@ void KDevDesignerPart::setupActions( )
     stateSync(action, m_widget->actionWindowNext);
     action = new KAction(i18n("Pre&vious Form"), CTRL + SHIFT + Key_F6, this, SLOT(windowPrev()), actionCollection(), "window_prev");
     stateSync(action, m_widget->actionWindowPrevious);
-    
+
     action = KStdAction::preferences(this, SLOT(editPreferences()), actionCollection());
     action->setText(i18n("Configure &KDevDesigner..."));
     stateSync(action, m_widget->actionEditPreferences);
@@ -222,7 +223,7 @@ void KDevDesignerPart::setupToolsAction( KRadioAction * toggle, QAction * action
 {
     if (!action)
         return;
-    
+
     toggle->setGroup("tools");
     toggle->setExclusiveGroup("tools");
     connect(action, SIGNAL(toggled(bool )), this, SLOT(setToggleActionChecked(bool )));
@@ -288,7 +289,7 @@ extern "C"
     }
 };
 
-//actions 
+//actions
 
 void KDevDesignerPart::fileNew( )
 {
@@ -377,7 +378,7 @@ void KDevDesignerPart::editFormSettings( )
 
 void KDevDesignerPart::editPreferences( )
 {
-    m_widget->actionEditPreferences->activate();    
+    m_widget->actionEditPreferences->activate();
 }
 
 void KDevDesignerPart::projectAddFile( )
@@ -498,7 +499,8 @@ void KDevDesignerPart::setToggleActionOn( bool b )
     connect(qaction, SIGNAL(toggled(bool )), this, SLOT(setToggleActionChecked(bool )));
 }
 
-void KDevDesignerPart::openProject( const QString & projectFile )
+void KDevDesignerPart::openProject( const QString & // projectFile
+                                    )
 {
     //TODO: implement
     return;
@@ -523,11 +525,11 @@ void KDevDesignerPart::emitRemovedFunction( const QString & form, KInterfaceDesi
 
 void KDevDesignerPart::emitEditedFunction( const QString & form, KInterfaceDesigner::Function oldFunc, KInterfaceDesigner::Function func )
 {
-    kdDebug() << "KDevDesignerPart::emitEditedFunction: form " << form 
+    kdDebug() << "KDevDesignerPart::emitEditedFunction: form " << form
         << ", old function: " << oldFunc.function
         << ", function: " << func.function << endl;
-    
-//    m_widget->formWindow()->clearSelection(false);    
+
+//    m_widget->formWindow()->clearSelection(false);
     emit editedFunction(designerType(), form, oldFunc, func);
 }
 

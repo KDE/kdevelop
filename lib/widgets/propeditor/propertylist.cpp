@@ -43,7 +43,7 @@ MultiProperty *PropertyList::operator[](const QString &name)
 {
     if (m_list.contains(name))
         return m_list[name];
-    else 
+    else
         return new MultiProperty(this);
 }
 
@@ -51,7 +51,7 @@ MultiProperty *PropertyList::property( const QString &name )
 {
 	if (m_list.contains(name))
 		return m_list[name];
-	else 
+	else
 		return new MultiProperty(this);
 }
 
@@ -164,7 +164,7 @@ void PropertyList::addToGroup(const QString &group, MultiProperty *property)
     //do not add same property to the group twice
     if (m_groupOfProperty.contains(property) && (m_groupOfProperty[property] == group))
         return;
-    
+
     QPair<QString, QValueList<QString> > *groupPair = 0;
     for(QValueList<QPair<QString, QValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
         it != m_propertiesOfGroup.end(); ++it)
@@ -249,7 +249,8 @@ PropertyList::Iterator::Iterator(PropertyList *list)
     current = m_list->m_list.begin();
 }
 
-PropertyList::Iterator::Iterator(PropertyList *list, bool end)
+PropertyList::Iterator::Iterator(PropertyList *list, bool // end
+                                 )
     :m_list(list)
 {
     current = m_list->m_list.end();
@@ -335,7 +336,7 @@ void PropertyBuffer::intersectedValueChanged(Property *property)
     QString propertyName = property->name();
     if (!contains(propertyName))
         return;
-    
+
     MultiProperty mp(property);
     if (mp == *m_list[propertyName])
     {
@@ -360,7 +361,7 @@ PropertyBuffer::PropertyBuffer(PropertyList *list)
     }
     connect(list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(intersectedValueChanged(Property*)));
 }
-    
+
 }
 
 #ifndef PURE_QT

@@ -48,7 +48,7 @@
 #include "indexview.h"
 #include "docutils.h"
 
-DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part, 
+DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
     DocumentationWidget *widget, QWidget *parent, const char *name, WFlags fl)
     :DocGlobalConfigWidgetBase(parent, name, fl), m_part(part), m_widget(widget)
 {
@@ -67,7 +67,7 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
         m_pluginViews[box] = view;
         (*it)->loadCatalogConfiguration(m_pluginViews[box]);
     }
-    
+
     KConfig *config = m_part->config();
     //read full text search settings
     config->setGroup("htdig");
@@ -95,19 +95,19 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
                 htsearchbinEdit->setURL("/usr/lib/cgi-bin/htsearch");
         }
     }
-    
+
     find_box->setChecked(m_part->hasContextFeature(DocumentationPart::Finder));
     index_box->setChecked(m_part->hasContextFeature(DocumentationPart::IndexLookup));
     search_box->setChecked(m_part->hasContextFeature(DocumentationPart::FullTextSearch));
     man_box->setChecked(m_part->hasContextFeature(DocumentationPart::GotoMan));
     info_box->setChecked(m_part->hasContextFeature(DocumentationPart::GotoInfo));
-    
+
     useAssistant_box->setChecked(m_part->isAssistantUsed());
-    
+
     // Having app-specific settings isn't pretty, but this setting is nonsensical in kdevassistant
     if ( kapp->instanceName().find("kdevassistant") != -1 )
         useAssistant_box->hide();
-    
+
     //font sizes and zoom levels
     KHTMLPart htmlpart;
     KConfig *appConfig = KGlobal::config();
@@ -124,7 +124,8 @@ DocGlobalConfigWidget::~DocGlobalConfigWidget()
 }
 
 /*$SPECIALIZATION$*/
-void DocGlobalConfigWidget::collectionsBoxCurrentChanged(int box)
+void DocGlobalConfigWidget::collectionsBoxCurrentChanged(int // box
+                                                         )
 {
 }
 
@@ -184,8 +185,8 @@ void DocGlobalConfigWidget::accept()
     config->writePathEntry("htdigbin", DocUtils::envURL(htdigbinEdit));
     config->writePathEntry("htmergebin", DocUtils::envURL(htmergebinEdit));
     config->writePathEntry("htsearchbin", DocUtils::envURL(htsearchbinEdit));
-    
-    //write full text search locations file    
+
+    //write full text search locations file
     QString ftsLocationsFile = locateLocal("data", "kdevdocumentation/search/locations.txt");
     QFile f(ftsLocationsFile);
     QStringList locs;
@@ -207,29 +208,29 @@ void DocGlobalConfigWidget::accept()
 
         f.close();
     }
-    
+
     //write editor context menu configuration
     m_part->setContextFeature(DocumentationPart::Finder, find_box->isChecked());
     m_part->setContextFeature(DocumentationPart::IndexLookup, index_box->isChecked());
     m_part->setContextFeature(DocumentationPart::FullTextSearch, search_box->isChecked());
     m_part->setContextFeature(DocumentationPart::GotoMan, man_box->isChecked());
     m_part->setContextFeature(DocumentationPart::GotoInfo, info_box->isChecked());
-    
+
     m_part->setAssistantUsed(useAssistant_box->isChecked());
 
     //font sizes and zoom levels
     KConfig *appConfig = KGlobal::config();
     appConfig->setGroup("KHTMLPart");
     appConfig->writeEntry("StandardFont", standardFont_combo->currentText());
-    appConfig->writeEntry("FixedFont", fixedFont_combo->currentText());    
+    appConfig->writeEntry("FixedFont", fixedFont_combo->currentText());
     appConfig->writeEntry("Zoom", zoom_combo->currentText());
-    
+
     appConfig->sync();
-    updateConfigForHTMLParts();        
+    updateConfigForHTMLParts();
     config->sync();
-    
+
     //refill the index
-    kdDebug() << "refill the index" << endl;    
+    kdDebug() << "refill the index" << endl;
     if (m_part->m_hasIndex)
     {
         kdDebug() << "m_part->m_hasIndex" << endl;

@@ -59,7 +59,7 @@ void AutoForm::buildGUI( AutoPropertyMap *map )
 		// Key Name | Property Edit
 		QString name =  QString("%1 %2").arg( idx.key().widget ).arg( idx.key().property );
 		new QLabel(idx.key().label, line, name.latin1() );
-		PropertyLib::PropertyWidgetProxy *prop = new PropertyLib::PropertyWidgetProxy( line, idx.key().widget.latin1() );
+//		PropertyLib::PropertyWidgetProxy *prop = new PropertyLib::PropertyWidgetProxy( line, idx.key().widget.latin1() );
 		line->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed ) );
 		m_mainBox->setSpacing( KDialog::spacingHint() );
 	}

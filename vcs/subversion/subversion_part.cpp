@@ -180,7 +180,7 @@ void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
 // want to confuse the user with a SVN popup menu.
 if(!project() || !isValidDirectory(project()->projectDirectory()))
   return;
-  
+
 	kdDebug() << "contextMenu()" << endl;
 	if (context->hasType( Context::FileContext ) ||
 			context->hasType( Context::EditorContext ))
@@ -375,7 +375,8 @@ void subversionPart::restorePartialProjectSession(const QDomElement* dom) {
 	base = svn.attribute( "base", "" );
 }
 
-bool subversionPart::isValidDirectory( const QString & dirPath ) const
+bool subversionPart::isValidDirectory( const QString & // dirPath
+                                       ) const
 {
     return false;
 }

@@ -14,7 +14,7 @@ PascalStoreWalker::PascalStoreWalker()
 
 void PascalStoreWalker::program(RefPascalAST _t) {
 	RefPascalAST program_AST_in = _t;
-	
+
 	try {      // for error handling
 		programHeading(_t);
 		_t = _retTree;
@@ -31,7 +31,7 @@ void PascalStoreWalker::program(RefPascalAST _t) {
 
 void PascalStoreWalker::programHeading(RefPascalAST _t) {
 	RefPascalAST programHeading_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -80,7 +80,7 @@ void PascalStoreWalker::programHeading(RefPascalAST _t) {
 
 void PascalStoreWalker::block(RefPascalAST _t) {
 	RefPascalAST block_AST_in = _t;
-	
+
 	try {      // for error handling
 		{ // ( ... )*
 		for (;;) {
@@ -152,7 +152,7 @@ void PascalStoreWalker::block(RefPascalAST _t) {
 
 void PascalStoreWalker::identifierList(RefPascalAST _t) {
 	RefPascalAST identifierList_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t104 = _t;
 		RefPascalAST tmp6_AST_in = _t;
@@ -171,7 +171,7 @@ void PascalStoreWalker::identifierList(RefPascalAST _t) {
 			else {
 				if ( _cnt106>=1 ) { goto _loop106; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt106++;
 		}
 		_loop106:;
@@ -189,7 +189,7 @@ void PascalStoreWalker::identifierList(RefPascalAST _t) {
 
 void PascalStoreWalker::identifier(RefPascalAST _t) {
 	RefPascalAST identifier_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST tmp8_AST_in = _t;
 		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),IDENT);
@@ -205,7 +205,7 @@ void PascalStoreWalker::identifier(RefPascalAST _t) {
 
 void PascalStoreWalker::labelDeclarationPart(RefPascalAST _t) {
 	RefPascalAST labelDeclarationPart_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t12 = _t;
 		RefPascalAST tmp9_AST_in = _t;
@@ -223,7 +223,7 @@ void PascalStoreWalker::labelDeclarationPart(RefPascalAST _t) {
 			else {
 				if ( _cnt14>=1 ) { goto _loop14; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt14++;
 		}
 		_loop14:;
@@ -241,7 +241,7 @@ void PascalStoreWalker::labelDeclarationPart(RefPascalAST _t) {
 
 void PascalStoreWalker::constantDefinitionPart(RefPascalAST _t) {
 	RefPascalAST constantDefinitionPart_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t17 = _t;
 		RefPascalAST tmp10_AST_in = _t;
@@ -259,7 +259,7 @@ void PascalStoreWalker::constantDefinitionPart(RefPascalAST _t) {
 			else {
 				if ( _cnt19>=1 ) { goto _loop19; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt19++;
 		}
 		_loop19:;
@@ -277,7 +277,7 @@ void PascalStoreWalker::constantDefinitionPart(RefPascalAST _t) {
 
 void PascalStoreWalker::typeDefinitionPart(RefPascalAST _t) {
 	RefPascalAST typeDefinitionPart_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t31 = _t;
 		RefPascalAST tmp11_AST_in = _t;
@@ -295,7 +295,7 @@ void PascalStoreWalker::typeDefinitionPart(RefPascalAST _t) {
 			else {
 				if ( _cnt33>=1 ) { goto _loop33; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt33++;
 		}
 		_loop33:;
@@ -314,7 +314,7 @@ void PascalStoreWalker::typeDefinitionPart(RefPascalAST _t) {
 /** Yields a list of VARDECL-rooted subtrees with VAR at the overall root */
 void PascalStoreWalker::variableDeclarationPart(RefPascalAST _t) {
 	RefPascalAST variableDeclarationPart_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t83 = _t;
 		RefPascalAST tmp12_AST_in = _t;
@@ -332,7 +332,7 @@ void PascalStoreWalker::variableDeclarationPart(RefPascalAST _t) {
 			else {
 				if ( _cnt85>=1 ) { goto _loop85; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt85++;
 		}
 		_loop85:;
@@ -350,7 +350,7 @@ void PascalStoreWalker::variableDeclarationPart(RefPascalAST _t) {
 
 void PascalStoreWalker::procedureAndFunctionDeclarationPart(RefPascalAST _t) {
 	RefPascalAST procedureAndFunctionDeclarationPart_AST_in = _t;
-	
+
 	try {      // for error handling
 		procedureOrFunctionDeclaration(_t);
 		_t = _retTree;
@@ -365,7 +365,7 @@ void PascalStoreWalker::procedureAndFunctionDeclarationPart(RefPascalAST _t) {
 
 void PascalStoreWalker::usesUnitsPart(RefPascalAST _t) {
 	RefPascalAST usesUnitsPart_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t10 = _t;
 		RefPascalAST tmp13_AST_in = _t;
@@ -386,7 +386,7 @@ void PascalStoreWalker::usesUnitsPart(RefPascalAST _t) {
 
 void PascalStoreWalker::compoundStatement(RefPascalAST _t) {
 	RefPascalAST compoundStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		statements(_t);
 		_t = _retTree;
@@ -401,7 +401,7 @@ void PascalStoreWalker::compoundStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::label(RefPascalAST _t) {
 	RefPascalAST label_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST tmp14_AST_in = _t;
 		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),NUM_INT);
@@ -417,7 +417,7 @@ void PascalStoreWalker::label(RefPascalAST _t) {
 
 void PascalStoreWalker::constantDefinition(RefPascalAST _t) {
 	RefPascalAST constantDefinition_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t21 = _t;
 		RefPascalAST tmp15_AST_in = _t;
@@ -441,7 +441,7 @@ void PascalStoreWalker::constantDefinition(RefPascalAST _t) {
 
 void PascalStoreWalker::constant(RefPascalAST _t) {
 	RefPascalAST constant_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -606,7 +606,7 @@ void PascalStoreWalker::constant(RefPascalAST _t) {
 
 void PascalStoreWalker::string(RefPascalAST _t) {
 	RefPascalAST string_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST tmp32_AST_in = _t;
 		match(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()),STRING_LITERAL);
@@ -622,7 +622,7 @@ void PascalStoreWalker::string(RefPascalAST _t) {
 
 void PascalStoreWalker::typeDefinition(RefPascalAST _t) {
 	RefPascalAST typeDefinition_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t35 = _t;
 		RefPascalAST tmp33_AST_in = _t;
@@ -740,7 +740,7 @@ void PascalStoreWalker::typeDefinition(RefPascalAST _t) {
 
 void PascalStoreWalker::type(RefPascalAST _t) {
 	RefPascalAST type_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -820,7 +820,7 @@ void PascalStoreWalker::type(RefPascalAST _t) {
 
 void PascalStoreWalker::formalParameterList(RefPascalAST _t) {
 	RefPascalAST formalParameterList_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t94 = _t;
 		RefPascalAST tmp40_AST_in = _t;
@@ -838,7 +838,7 @@ void PascalStoreWalker::formalParameterList(RefPascalAST _t) {
 			else {
 				if ( _cnt96>=1 ) { goto _loop96; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt96++;
 		}
 		_loop96:;
@@ -856,7 +856,7 @@ void PascalStoreWalker::formalParameterList(RefPascalAST _t) {
 
 void PascalStoreWalker::resultType(RefPascalAST _t) {
 	RefPascalAST resultType_AST_in = _t;
-	
+
 	try {      // for error handling
 		typeIdentifier(_t);
 		_t = _retTree;
@@ -871,7 +871,7 @@ void PascalStoreWalker::resultType(RefPascalAST _t) {
 
 void PascalStoreWalker::typeIdentifier(RefPascalAST _t) {
 	RefPascalAST typeIdentifier_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -972,7 +972,7 @@ void PascalStoreWalker::typeIdentifier(RefPascalAST _t) {
 
 void PascalStoreWalker::structuredType(RefPascalAST _t) {
 	RefPascalAST structuredType_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1014,7 +1014,7 @@ void PascalStoreWalker::structuredType(RefPascalAST _t) {
 
 void PascalStoreWalker::unpackedStructuredType(RefPascalAST _t) {
 	RefPascalAST unpackedStructuredType_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1063,7 +1063,7 @@ void PascalStoreWalker::unpackedStructuredType(RefPascalAST _t) {
  */
 void PascalStoreWalker::arrayType(RefPascalAST _t) {
 	RefPascalAST arrayType_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t52 = _t;
 		RefPascalAST tmp51_AST_in = _t;
@@ -1086,7 +1086,7 @@ void PascalStoreWalker::arrayType(RefPascalAST _t) {
 
 void PascalStoreWalker::recordType(RefPascalAST _t) {
 	RefPascalAST recordType_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t58 = _t;
 		RefPascalAST tmp52_AST_in = _t;
@@ -1107,7 +1107,7 @@ void PascalStoreWalker::recordType(RefPascalAST _t) {
 
 void PascalStoreWalker::setType(RefPascalAST _t) {
 	RefPascalAST setType_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t78 = _t;
 		RefPascalAST tmp53_AST_in = _t;
@@ -1128,7 +1128,7 @@ void PascalStoreWalker::setType(RefPascalAST _t) {
 
 void PascalStoreWalker::fileType(RefPascalAST _t) {
 	RefPascalAST fileType_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t80 = _t;
 		RefPascalAST tmp54_AST_in = _t;
@@ -1180,7 +1180,7 @@ void PascalStoreWalker::fileType(RefPascalAST _t) {
 
 void PascalStoreWalker::typeList(RefPascalAST _t) {
 	RefPascalAST typeList_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t54 = _t;
 		RefPascalAST tmp55_AST_in = _t;
@@ -1198,7 +1198,7 @@ void PascalStoreWalker::typeList(RefPascalAST _t) {
 			else {
 				if ( _cnt56>=1 ) { goto _loop56; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt56++;
 		}
 		_loop56:;
@@ -1216,7 +1216,7 @@ void PascalStoreWalker::typeList(RefPascalAST _t) {
 
 void PascalStoreWalker::fieldList(RefPascalAST _t) {
 	RefPascalAST fieldList_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t60 = _t;
 		RefPascalAST tmp56_AST_in = _t;
@@ -1277,7 +1277,7 @@ void PascalStoreWalker::fieldList(RefPascalAST _t) {
 
 void PascalStoreWalker::fixedPart(RefPascalAST _t) {
 	RefPascalAST fixedPart_AST_in = _t;
-	
+
 	try {      // for error handling
 		{ // ( ... )+
 		int _cnt65=0;
@@ -1291,7 +1291,7 @@ void PascalStoreWalker::fixedPart(RefPascalAST _t) {
 			else {
 				if ( _cnt65>=1 ) { goto _loop65; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt65++;
 		}
 		_loop65:;
@@ -1307,7 +1307,7 @@ void PascalStoreWalker::fixedPart(RefPascalAST _t) {
 
 void PascalStoreWalker::variantPart(RefPascalAST _t) {
 	RefPascalAST variantPart_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t69 = _t;
 		RefPascalAST tmp57_AST_in = _t;
@@ -1327,7 +1327,7 @@ void PascalStoreWalker::variantPart(RefPascalAST _t) {
 			else {
 				if ( _cnt71>=1 ) { goto _loop71; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt71++;
 		}
 		_loop71:;
@@ -1345,7 +1345,7 @@ void PascalStoreWalker::variantPart(RefPascalAST _t) {
 
 void PascalStoreWalker::recordSection(RefPascalAST _t) {
 	RefPascalAST recordSection_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t67 = _t;
 		RefPascalAST tmp58_AST_in = _t;
@@ -1368,7 +1368,7 @@ void PascalStoreWalker::recordSection(RefPascalAST _t) {
 
 void PascalStoreWalker::tag(RefPascalAST _t) {
 	RefPascalAST tag_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1415,7 +1415,7 @@ void PascalStoreWalker::tag(RefPascalAST _t) {
 
 void PascalStoreWalker::variant(RefPascalAST _t) {
 	RefPascalAST variant_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t76 = _t;
 		RefPascalAST tmp61_AST_in = _t;
@@ -1438,7 +1438,7 @@ void PascalStoreWalker::variant(RefPascalAST _t) {
 
 void PascalStoreWalker::constList(RefPascalAST _t) {
 	RefPascalAST constList_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t108 = _t;
 		RefPascalAST tmp62_AST_in = _t;
@@ -1456,7 +1456,7 @@ void PascalStoreWalker::constList(RefPascalAST _t) {
 			else {
 				if ( _cnt110>=1 ) { goto _loop110; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt110++;
 		}
 		_loop110:;
@@ -1474,7 +1474,7 @@ void PascalStoreWalker::constList(RefPascalAST _t) {
 
 void PascalStoreWalker::variableDeclaration(RefPascalAST _t) {
 	RefPascalAST variableDeclaration_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t87 = _t;
 		RefPascalAST tmp63_AST_in = _t;
@@ -1497,7 +1497,7 @@ void PascalStoreWalker::variableDeclaration(RefPascalAST _t) {
 
 void PascalStoreWalker::procedureOrFunctionDeclaration(RefPascalAST _t) {
 	RefPascalAST procedureOrFunctionDeclaration_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1530,7 +1530,7 @@ void PascalStoreWalker::procedureOrFunctionDeclaration(RefPascalAST _t) {
 
 void PascalStoreWalker::procedureDeclaration(RefPascalAST _t) {
 	RefPascalAST procedureDeclaration_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t91 = _t;
 		RefPascalAST tmp64_AST_in = _t;
@@ -1582,7 +1582,7 @@ void PascalStoreWalker::procedureDeclaration(RefPascalAST _t) {
 
 void PascalStoreWalker::functionDeclaration(RefPascalAST _t) {
 	RefPascalAST functionDeclaration_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t112 = _t;
 		RefPascalAST tmp66_AST_in = _t;
@@ -1633,7 +1633,7 @@ void PascalStoreWalker::functionDeclaration(RefPascalAST _t) {
 
 void PascalStoreWalker::formalParameterSection(RefPascalAST _t) {
 	RefPascalAST formalParameterSection_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1696,7 +1696,7 @@ void PascalStoreWalker::formalParameterSection(RefPascalAST _t) {
 
 void PascalStoreWalker::parameterGroup(RefPascalAST _t) {
 	RefPascalAST parameterGroup_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t102 = _t;
 		RefPascalAST tmp71_AST_in = _t;
@@ -1719,7 +1719,7 @@ void PascalStoreWalker::parameterGroup(RefPascalAST _t) {
 
 void PascalStoreWalker::statement(RefPascalAST _t) {
 	RefPascalAST statement_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1769,7 +1769,7 @@ void PascalStoreWalker::statement(RefPascalAST _t) {
 
 void PascalStoreWalker::unlabelledStatement(RefPascalAST _t) {
 	RefPascalAST unlabelledStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1810,7 +1810,7 @@ void PascalStoreWalker::unlabelledStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::simpleStatement(RefPascalAST _t) {
 	RefPascalAST simpleStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1849,7 +1849,7 @@ void PascalStoreWalker::simpleStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::structuredStatement(RefPascalAST _t) {
 	RefPascalAST structuredStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -1897,7 +1897,7 @@ void PascalStoreWalker::structuredStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::assignmentStatement(RefPascalAST _t) {
 	RefPascalAST assignmentStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t120 = _t;
 		RefPascalAST tmp73_AST_in = _t;
@@ -1920,7 +1920,7 @@ void PascalStoreWalker::assignmentStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::procedureStatement(RefPascalAST _t) {
 	RefPascalAST procedureStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t166 = _t;
 		RefPascalAST tmp74_AST_in = _t;
@@ -1962,7 +1962,7 @@ void PascalStoreWalker::procedureStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::gotoStatement(RefPascalAST _t) {
 	RefPascalAST gotoStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t170 = _t;
 		RefPascalAST tmp76_AST_in = _t;
@@ -1998,7 +1998,7 @@ void PascalStoreWalker::gotoStatement(RefPascalAST _t) {
  */
 void PascalStoreWalker::variable(RefPascalAST _t) {
 	RefPascalAST variable_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -2023,7 +2023,7 @@ void PascalStoreWalker::variable(RefPascalAST _t) {
 				else {
 					if ( _cnt124>=1 ) { goto _loop124; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 				}
-				
+
 				_cnt124++;
 			}
 			_loop124:;
@@ -2052,7 +2052,7 @@ void PascalStoreWalker::variable(RefPascalAST _t) {
 				else {
 					if ( _cnt127>=1 ) { goto _loop127; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 				}
-				
+
 				_cnt127++;
 			}
 			_loop127:;
@@ -2124,7 +2124,7 @@ void PascalStoreWalker::variable(RefPascalAST _t) {
 
 void PascalStoreWalker::expression(RefPascalAST _t) {
 	RefPascalAST expression_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -2543,7 +2543,7 @@ void PascalStoreWalker::expression(RefPascalAST _t) {
 
 void PascalStoreWalker::functionDesignator(RefPascalAST _t) {
 	RefPascalAST functionDesignator_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t153 = _t;
 		RefPascalAST tmp107_AST_in = _t;
@@ -2585,7 +2585,7 @@ void PascalStoreWalker::functionDesignator(RefPascalAST _t) {
 
 void PascalStoreWalker::set(RefPascalAST _t) {
 	RefPascalAST set_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t160 = _t;
 		RefPascalAST tmp109_AST_in = _t;
@@ -2602,7 +2602,7 @@ void PascalStoreWalker::set(RefPascalAST _t) {
 			else {
 				goto _loop162;
 			}
-			
+
 		}
 		_loop162:;
 		} // ( ... )*
@@ -2619,7 +2619,7 @@ void PascalStoreWalker::set(RefPascalAST _t) {
 
 void PascalStoreWalker::parameterList(RefPascalAST _t) {
 	RefPascalAST parameterList_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t156 = _t;
 		RefPascalAST tmp110_AST_in = _t;
@@ -2637,7 +2637,7 @@ void PascalStoreWalker::parameterList(RefPascalAST _t) {
 			else {
 				if ( _cnt158>=1 ) { goto _loop158; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt158++;
 		}
 		_loop158:;
@@ -2655,7 +2655,7 @@ void PascalStoreWalker::parameterList(RefPascalAST _t) {
 
 void PascalStoreWalker::actualParameter(RefPascalAST _t) {
 	RefPascalAST actualParameter_AST_in = _t;
-	
+
 	try {      // for error handling
 		expression(_t);
 		_t = _retTree;
@@ -2670,7 +2670,7 @@ void PascalStoreWalker::actualParameter(RefPascalAST _t) {
 
 void PascalStoreWalker::element(RefPascalAST _t) {
 	RefPascalAST element_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -2739,7 +2739,7 @@ void PascalStoreWalker::element(RefPascalAST _t) {
 
 void PascalStoreWalker::conditionalStatement(RefPascalAST _t) {
 	RefPascalAST conditionalStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -2772,7 +2772,7 @@ void PascalStoreWalker::conditionalStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::repetetiveStatement(RefPascalAST _t) {
 	RefPascalAST repetetiveStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -2811,7 +2811,7 @@ void PascalStoreWalker::repetetiveStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::withStatement(RefPascalAST _t) {
 	RefPascalAST withStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t201 = _t;
 		RefPascalAST tmp112_AST_in = _t;
@@ -2834,7 +2834,7 @@ void PascalStoreWalker::withStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::statements(RefPascalAST _t) {
 	RefPascalAST statements_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t174 = _t;
 		RefPascalAST tmp113_AST_in = _t;
@@ -2851,7 +2851,7 @@ void PascalStoreWalker::statements(RefPascalAST _t) {
 			else {
 				goto _loop176;
 			}
-			
+
 		}
 		_loop176:;
 		} // ( ... )*
@@ -2868,7 +2868,7 @@ void PascalStoreWalker::statements(RefPascalAST _t) {
 
 void PascalStoreWalker::ifStatement(RefPascalAST _t) {
 	RefPascalAST ifStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t179 = _t;
 		RefPascalAST tmp114_AST_in = _t;
@@ -2921,7 +2921,7 @@ void PascalStoreWalker::ifStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::caseStatement(RefPascalAST _t) {
 	RefPascalAST caseStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t182 = _t;
 		RefPascalAST tmp115_AST_in = _t;
@@ -2941,7 +2941,7 @@ void PascalStoreWalker::caseStatement(RefPascalAST _t) {
 			else {
 				if ( _cnt184>=1 ) { goto _loop184; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt184++;
 		}
 		_loop184:;
@@ -2979,7 +2979,7 @@ void PascalStoreWalker::caseStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::caseListElement(RefPascalAST _t) {
 	RefPascalAST caseListElement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t187 = _t;
 		RefPascalAST tmp116_AST_in = _t;
@@ -3002,7 +3002,7 @@ void PascalStoreWalker::caseListElement(RefPascalAST _t) {
 
 void PascalStoreWalker::whileStatement(RefPascalAST _t) {
 	RefPascalAST whileStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t190 = _t;
 		RefPascalAST tmp117_AST_in = _t;
@@ -3025,7 +3025,7 @@ void PascalStoreWalker::whileStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::repeatStatement(RefPascalAST _t) {
 	RefPascalAST repeatStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t192 = _t;
 		RefPascalAST tmp118_AST_in = _t;
@@ -3048,7 +3048,7 @@ void PascalStoreWalker::repeatStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::forStatement(RefPascalAST _t) {
 	RefPascalAST forStatement_AST_in = _t;
-	
+
 	try {      // for error handling
 		RefPascalAST __t194 = _t;
 		RefPascalAST tmp119_AST_in = _t;
@@ -3074,7 +3074,7 @@ void PascalStoreWalker::forStatement(RefPascalAST _t) {
 
 void PascalStoreWalker::forList(RefPascalAST _t) {
 	RefPascalAST forList_AST_in = _t;
-	
+
 	try {      // for error handling
 		if (_t == static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST.get()) )
 			_t = ASTNULL;
@@ -3123,7 +3123,7 @@ void PascalStoreWalker::forList(RefPascalAST _t) {
 
 void PascalStoreWalker::initialValue(RefPascalAST _t) {
 	RefPascalAST initialValue_AST_in = _t;
-	
+
 	try {      // for error handling
 		expression(_t);
 		_t = _retTree;
@@ -3138,7 +3138,7 @@ void PascalStoreWalker::initialValue(RefPascalAST _t) {
 
 void PascalStoreWalker::finalValue(RefPascalAST _t) {
 	RefPascalAST finalValue_AST_in = _t;
-	
+
 	try {      // for error handling
 		expression(_t);
 		_t = _retTree;
@@ -3153,7 +3153,7 @@ void PascalStoreWalker::finalValue(RefPascalAST _t) {
 
 void PascalStoreWalker::recordVariableList(RefPascalAST _t) {
 	RefPascalAST recordVariableList_AST_in = _t;
-	
+
 	try {      // for error handling
 		{ // ( ... )+
 		int _cnt204=0;
@@ -3167,7 +3167,7 @@ void PascalStoreWalker::recordVariableList(RefPascalAST _t) {
 			else {
 				if ( _cnt204>=1 ) { goto _loop204; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(_t.get()));}
 			}
-			
+
 			_cnt204++;
 		}
 		_loop204:;
@@ -3186,7 +3186,8 @@ RefPascalAST PascalStoreWalker::getAST()
 	return returnAST;
 }
 
-void PascalStoreWalker::initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory )
+void PascalStoreWalker::initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& // factory
+                                              )
 {
 }
 const char* PascalStoreWalker::tokenNames[] = {
@@ -3384,31 +3385,31 @@ const char* PascalStoreWalker::tokenNames[] = {
 };
 
 const unsigned long PascalStoreWalker::_tokenSet_0_data_[] = { 262144UL, 172032UL, 0UL, 0UL, 0UL, 0UL };
-// ARGDECL "var" "procedure" "function" 
+// ARGDECL "var" "procedure" "function"
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_0(_tokenSet_0_data_,6);
 const unsigned long PascalStoreWalker::_tokenSet_1_data_[] = { 512UL, 262144UL, 3641384976UL, 1UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SCALARTYPE "array" "integer" "boolean" "char" DOTDOT "real" "string" 
-// "packed" "record" "set" "file" POINTER IDENT 
+// SCALARTYPE "array" "integer" "boolean" "char" DOTDOT "real" "string"
+// "packed" "record" "set" "file" POINTER IDENT
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_1(_tokenSet_1_data_,12);
 const unsigned long PascalStoreWalker::_tokenSet_2_data_[] = { 0UL, 0UL, 8UL, 50331648UL, 2147483648UL, 13UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// NUM_INT PLUS MINUS STRING_LITERAL "chr" NUM_REAL IDENT 
+// NUM_INT PLUS MINUS STRING_LITERAL "chr" NUM_REAL IDENT
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_2(_tokenSet_2_data_,12);
 const unsigned long PascalStoreWalker::_tokenSet_3_data_[] = { 4194432UL, 2048UL, 1107296264UL, 4152229889UL, 2155872329UL, 15UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// FUNC_CALL DOT EQUAL NUM_INT LBRACK "set" POINTER LE GE LTH GT NOT_EQUAL 
-// "in" PLUS MINUS "or" STAR SLASH "div" "mod" "and" "not" AT LBRACK2 STRING_LITERAL 
-// "chr" "nil" NUM_REAL IDENT 
+// FUNC_CALL DOT EQUAL NUM_INT LBRACK "set" POINTER LE GE LTH GT NOT_EQUAL
+// "in" PLUS MINUS "or" STAR SLASH "div" "mod" "and" "not" AT LBRACK2 STRING_LITERAL
+// "chr" "nil" NUM_REAL IDENT
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_3(_tokenSet_3_data_,12);
 const unsigned long PascalStoreWalker::_tokenSet_4_data_[] = { 4194432UL, 2048UL, 1107427336UL, 4152229889UL, 2155872329UL, 15UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// FUNC_CALL DOT EQUAL NUM_INT DOTDOT LBRACK "set" POINTER LE GE LTH GT 
-// NOT_EQUAL "in" PLUS MINUS "or" STAR SLASH "div" "mod" "and" "not" AT 
-// LBRACK2 STRING_LITERAL "chr" "nil" NUM_REAL IDENT 
+// FUNC_CALL DOT EQUAL NUM_INT DOTDOT LBRACK "set" POINTER LE GE LTH GT
+// NOT_EQUAL "in" PLUS MINUS "or" STAR SLASH "div" "mod" "and" "not" AT
+// LBRACK2 STRING_LITERAL "chr" "nil" NUM_REAL IDENT
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_4(_tokenSet_4_data_,12);
 const unsigned long PascalStoreWalker::_tokenSet_5_data_[] = { 272UL, 16384UL, 537133056UL, 0UL, 4888576UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// BLOCK PROC_CALL COLON ASSIGN "case" "goto" "if" "while" "repeat" "for" 
-// "with" 
+// BLOCK PROC_CALL COLON ASSIGN "case" "goto" "if" "while" "repeat" "for"
+// "with"
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_5(_tokenSet_5_data_,12);
 const unsigned long PascalStoreWalker::_tokenSet_6_data_[] = { 4194304UL, 0UL, 33554432UL, 1UL, 8388672UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// DOT LBRACK POINTER AT LBRACK2 IDENT 
+// DOT LBRACK POINTER AT LBRACK2 IDENT
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_6(_tokenSet_6_data_,12);
 
 

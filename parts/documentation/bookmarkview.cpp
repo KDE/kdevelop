@@ -98,7 +98,7 @@ public:
     }
     void setBookmark(const KBookmark &bm) { m_bm = bm; }
     KBookmark bookmark() const { return m_bm; }
-    
+
 private:
     KBookmark m_bm;
 };
@@ -113,7 +113,7 @@ BookmarkView::BookmarkView(DocumentationWidget *parent, const char *name)
     m_bmManager = new DocBookmarkManager(m_widget->part());
     m_bmOwner = new DocBookmarkOwner(m_widget->part());
 
-    QVBoxLayout *l = new QVBoxLayout(this, 0, KDialog::spacingHint());    
+    QVBoxLayout *l = new QVBoxLayout(this, 0, KDialog::spacingHint());
     m_view = new KListView(this);
     m_view->addColumn(i18n("Title"));
     m_view->setSorting(-1);
@@ -137,7 +137,7 @@ BookmarkView::BookmarkView(DocumentationWidget *parent, const char *name)
     connect(m_addButton, SIGNAL(pressed()), this, SLOT(addBookmark()));
     connect(m_editButton, SIGNAL(clicked()), this, SLOT(editBookmark()));
     connect(m_removeButton, SIGNAL(clicked()), this, SLOT(removeBookmark()));
-    
+
     connect(m_widget->part(), SIGNAL(bookmarkLocation(const QString&, const KURL& )),
         this, SLOT(addBookmark(const QString&, const KURL& )));
     connect(m_view, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
@@ -165,7 +165,9 @@ void BookmarkView::showBookmarks()
     }
 }
 
-void BookmarkView::itemExecuted(QListViewItem *item, const QPoint &p, int col)
+void BookmarkView::itemExecuted(QListViewItem *item, const QPoint &// p
+                                , int // col
+                                )
 {
     DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
     if (!docItem)
@@ -190,7 +192,7 @@ void BookmarkView::editBookmark()
     DocBookmarkItem *item = dynamic_cast<DocBookmarkItem*>(m_view->currentItem());
     if (!item)
         return;
-    
+
     EditBookmarkDlg dlg(this);
     dlg.setCaption(i18n("Edit Bookmark"));
     dlg.nameEdit->setText(item->bookmark().fullText());
@@ -198,10 +200,10 @@ void BookmarkView::editBookmark()
     dlg.nameEdit->setFocus();
     if (dlg.exec())
     {
-        item->bookmark().internalElement().namedItem("title").firstChild().toText().setData(dlg.nameEdit->text());        
+        item->bookmark().internalElement().namedItem("title").firstChild().toText().setData(dlg.nameEdit->text());
         item->bookmark().internalElement().setAttribute("href", KURL(dlg.locationEdit->url()).url());
         m_bmManager->save();
-        
+
         item->setText(0, item->bookmark().fullText());
         item->setURL(item->bookmark().url());
     }
@@ -211,7 +213,7 @@ void BookmarkView::addBookmark()
 {
     QString title = m_bmOwner->currentTitle();
     QString url = m_bmOwner->currentURL();
-    
+
     KPopupMenu menu;
     bool useMenu = false;
     if (!title.isEmpty() && !url.isEmpty())
@@ -250,7 +252,7 @@ void BookmarkView::addBookmark(const QString &title, const KURL &url)
 {
     KBookmark bm = m_bmManager->root().addBookmark(m_bmManager, title, url);
     m_bmManager->save();
-    
+
     DocBookmarkItem *item = 0;
     if (m_view->lastItem())
         item = dynamic_cast<DocBookmarkItem*>(m_view->lastItem());
@@ -262,14 +264,15 @@ void BookmarkView::addBookmark(const QString &title, const KURL &url)
     item->setBookmark(bm);
 }
 
-void BookmarkView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c)
+void BookmarkView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int // c
+                                          )
 {
     if ((button != Qt::RightButton) || (!item))
         return;
     DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
     if (!docItem)
         return;
-    
+
     DocUtils::docItemPopup(m_widget->part(), docItem, pos, false, true);
 }
 

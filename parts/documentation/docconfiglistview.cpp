@@ -30,7 +30,7 @@ DocConfigListView::DocConfigListView(QWidget *parent, const char *name)
     addColumn(i18n("TOC"));
     addColumn(i18n("Index"));
     addColumn(i18n("Search"));
-    addColumn(i18n("Title"));    
+    addColumn(i18n("Title"));
 //    addColumn(i18n("URL"));
     setColumnWidthMode(0, QListView::Maximum);
     setColumnWidthMode(1, QListView::Maximum);
@@ -47,7 +47,8 @@ DocConfigListView::~DocConfigListView()
 {
 }
 
-void DocConfigListView::clickedItem(QListViewItem *item, const QPoint &pnt, int c)
+void DocConfigListView::clickedItem(QListViewItem *item, const QPoint &// pnt
+                                    , int c)
 {
     if (!item)
         return;

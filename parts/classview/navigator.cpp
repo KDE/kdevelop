@@ -62,20 +62,20 @@ private:
 class FunctionNavItem: public QListViewItem {
 public:
     enum Type { Declaration, Definition };
-    
+
     FunctionNavItem(ClassViewPart *part, QListView *parent, QString name, Type type)
         :QListViewItem(parent, name), m_part(part), m_type(type) {}
     FunctionNavItem(ClassViewPart *part, QListViewItem *parent, QString name, Type type)
         :QListViewItem(parent, name), m_part(part), m_type(type) {}
     ~FunctionNavItem() {}
-    
+
     virtual void setup()
     {
         QListViewItem::setup();
         setPixmap( 0, UserIcon("CVpublic_meth", KIcon::DefaultState, m_part->instance()) );
     }
     Type type() { return m_type; }
-    
+
 private:
     ClassViewPart *m_part;
     Type m_type;
@@ -105,7 +105,7 @@ void Navigator::selectFunctionNav(QListViewItem *item)
     FileDom file = m_part->codeModel()->fileByName(m_part->m_activeFileName);
     if (!file)
         return;
-        
+
     switch (nav->type())
     {
         case FunctionNavItem::Definition: //jump to definition
@@ -116,7 +116,7 @@ void Navigator::selectFunctionNav(QListViewItem *item)
             CodeModelUtils::findFunctionDefinitions(NavOp(this, nav->text(0)), files, deflist);
             if (deflist.count() < 1)
                 return;
-            
+
             FunctionDefinitionDom fun = deflist.first();
             if (!fun)
                 return;
@@ -133,7 +133,7 @@ void Navigator::selectFunctionNav(QListViewItem *item)
             CodeModelUtils::findFunctionDeclarations(NavOp(this, nav->text(0)), files, declist);
             if (declist.count() < 1)
                 return;
-            
+
             FunctionDom fun = declist.first();
             if (!fun)
                 return;
@@ -170,7 +170,7 @@ void Navigator::slotCursorPositionChanged()
     KConfig* config = kapp->config();
     config->setGroup( "General Options" );
     int m_delay = config->readNumEntry( "BgParserDelay", 250 );
-    
+
     m_syncTimer->changeInterval(500 >= m_delay+100 ? 500 : m_delay+100 );
 }
 
@@ -187,7 +187,7 @@ void Navigator::syncFunctionNavDelayed(int delay)
 void Navigator::syncFunctionNav()
 {
     m_syncTimer->stop();
-    
+
     if (FunctionDefinitionDom fun = currentFunctionDefinition())
     {
         if (m_functionNavDefs[fullFunctionDefinitionName(fun)])
@@ -248,7 +248,7 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
     QMap<QString, QListViewItem*>::iterator it = m_functionNavDecls.begin();
     while ( it != m_functionNavDecls.end() )
     {
-        QMap<QString, QListViewItem*>::iterator it2 = it;     
+        QMap<QString, QListViewItem*>::iterator it2 = it;
         ++it;
         if ( !toLeave.contains( it2.key() ) )
         {
@@ -256,10 +256,10 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
             {
                 m_part->m_functionsnav->view()->removeItem(it2.data());
             }
-            m_functionNavDecls.remove(it2);        
+            m_functionNavDecls.remove(it2);
         }
     }
-    
+
     toLeave.clear();
     FunctionDefinitionList list = CodeModelUtils::allFunctionDefinitionsDetailed(file).functionList;
     for (FunctionDefinitionList::const_iterator it = list.begin(); it != list.end(); ++it)
@@ -289,7 +289,7 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
     QMap<QString, QListViewItem*>::iterator itt = m_functionNavDefs.begin();
     while ( itt != m_functionNavDefs.end() )
     {
-        QMap<QString, QListViewItem*>::iterator it2 = itt;     
+        QMap<QString, QListViewItem*>::iterator it2 = itt;
         ++itt;
         if ( !toLeave.contains( it2.key() ) )
         {
@@ -297,9 +297,9 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
             {
                 m_part->m_functionsnav->view()->removeItem(it2.data());
             }
-            m_functionNavDefs.remove(it2);        
+            m_functionNavDefs.remove(it2);
         }
-    }    
+    }
 }
 
 void Navigator::refresh()
@@ -394,7 +394,8 @@ FunctionDefinitionDom Navigator::functionDefinitionAt(ClassDom klass, int line, 
     return FunctionDefinitionDom();
 }
 
-FunctionDefinitionDom Navigator::functionDefinitionAt(FunctionDefinitionDom fun, int line, int column)
+FunctionDefinitionDom Navigator::functionDefinitionAt(FunctionDefinitionDom fun, int line, int // column
+                                                      )
 {
     int startLine, startColumn;
     int endLine, endColumn;
@@ -486,7 +487,8 @@ FunctionDom Navigator::functionDeclarationAt(ClassDom klass, int line, int colum
     return FunctionDom();
 }
 
-FunctionDom Navigator::functionDeclarationAt(FunctionDom fun, int line, int column)
+FunctionDom Navigator::functionDeclarationAt(FunctionDom fun, int line, int // column
+                                             )
 {
     int startLine, startColumn;
     int endLine, endColumn;
@@ -513,7 +515,7 @@ QString Navigator::fullFunctionDefinitionName(FunctionDefinitionDom fun)
     QString funName = scope.join(".");
     if (!funName.isEmpty())
         funName += ".";
-    funName += m_part->languageSupport()->formatModelItem(fun, true);   
+    funName += m_part->languageSupport()->formatModelItem(fun, true);
     funName = m_part->languageSupport()->formatClassName(funName);
 
     return funName;
@@ -525,7 +527,7 @@ QString Navigator::fullFunctionDeclarationName(FunctionDom fun)
     QString funName = scope.join(".");
     if (!funName.isEmpty())
         funName += ".";
-    funName += m_part->languageSupport()->formatModelItem(fun, true);   
+    funName += m_part->languageSupport()->formatModelItem(fun, true);
     funName = m_part->languageSupport()->formatClassName(funName);
 
     return funName;

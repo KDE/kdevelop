@@ -32,7 +32,8 @@ static const KDevPluginInfo data("doccustomplugin");
 typedef KDevGenericFactory<DocCustomPlugin> DocCustomPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libdoccustomplugin, DocCustomPluginFactory(data) )
 
-DocCustomPlugin::DocCustomPlugin(QObject* parent, const char* name, const QStringList args)
+DocCustomPlugin::DocCustomPlugin(QObject* parent, const char* name, const QStringList // args
+                                 )
     :DocumentationPlugin(DocCustomPluginFactory::instance()->config(), parent, name)
 {
     setCapabilities(CustomDocumentationTitles | ProjectUserManual);
@@ -43,7 +44,8 @@ DocCustomPlugin::~DocCustomPlugin()
 {
 }
 
-bool DocCustomPlugin::needRefreshIndex(DocumentationCatalogItem* item)
+bool DocCustomPlugin::needRefreshIndex(DocumentationCatalogItem* // item
+                                       )
 {
     return false;
 }

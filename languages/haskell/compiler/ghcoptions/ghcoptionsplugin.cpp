@@ -52,7 +52,7 @@ QString GhcOptionsPlugin::exec( QWidget *parent, const QString &flags )
 GhcOptionsDialog::GhcOptionsDialog( QWidget *parent, const char *name )
     : KDialogBase(Tabbed, i18n("Glasgow Haskell Compiler"), Ok|Cancel, Ok, parent, name, true)
 {
-    QVBox *vbox;
+//    QVBox *vbox;
 
 /*    vbox = addVBoxPage(i18n("Language"));
     language = new LanguageTab(vbox, "language tab");

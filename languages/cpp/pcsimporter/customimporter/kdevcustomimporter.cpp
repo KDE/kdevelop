@@ -19,7 +19,8 @@
 
 K_EXPORT_COMPONENT_FACTORY( libkdevcustompcsimporter, KGenericFactory<KDevCustomImporter>( "kdevcustompcsimporter" ) )
 
-KDevCustomImporter::KDevCustomImporter(QObject* parent, const char* name, const QStringList &args)
+KDevCustomImporter::KDevCustomImporter(QObject* parent, const char* name, const QStringList &// args
+                                       )
     : KDevPCSImporter(parent, name)
 {
 }

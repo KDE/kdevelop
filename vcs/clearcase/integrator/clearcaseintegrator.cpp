@@ -29,7 +29,8 @@ typedef KDevGenericFactory<ClearcaseIntegrator> ClearcaseIntegratorFactory;
 K_EXPORT_COMPONENT_FACTORY( libclearcaseintegrator, ClearcaseIntegratorFactory(data) )
 
 ClearcaseIntegrator::ClearcaseIntegrator(QObject* parent, const char* name,
-    const QStringList args)
+    const QStringList // args
+                                         )
     :KDevVCSIntegrator(parent, name)
 {
 }
@@ -38,7 +39,8 @@ ClearcaseIntegrator::~ClearcaseIntegrator()
 {
 }
 
-VCSDialog* ClearcaseIntegrator::fetcher(QWidget* parent)
+VCSDialog* ClearcaseIntegrator::fetcher(QWidget* // parent
+                                        )
 {
     return 0;
 }

@@ -37,7 +37,7 @@
 #include "implementationwidget.h"
 
 QtDesignerIntegration::QtDesignerIntegration(KDevLanguageSupport *part, ImplementationWidget *impl, bool classHasDefinitions, const char* name)
-    :KDevDesignerIntegration(part, name), m_part(part), m_impl(impl), 
+    :KDevDesignerIntegration(part, name), m_part(part), m_impl(impl),
     m_classHasDefinitions(classHasDefinitions)
 {
 }
@@ -50,11 +50,11 @@ QtDesignerIntegration::~QtDesignerIntegration()
 void QtDesignerIntegration::addFunction(const QString& formName, KInterfaceDesigner::Function function)
 {
     kdDebug() << "QtDesignerIntegration::addFunction: form: " << formName << ", function: " << function.function << endl;
-    
+
     if (!m_implementations[formName])
         if (!selectImplementation(formName))
             return;
-    
+
     ClassDom klass = m_implementations[formName];
     if (!klass)
     {
@@ -67,7 +67,7 @@ void QtDesignerIntegration::addFunction(const QString& formName, KInterfaceDesig
 
 void QtDesignerIntegration::editFunction(const QString& formName, KInterfaceDesigner::Function oldFunction, KInterfaceDesigner::Function function)
 {
-    kdDebug() << "QtDesignerIntegration::editFunction: form: " << formName 
+    kdDebug() << "QtDesignerIntegration::editFunction: form: " << formName
         << ", old function: " << oldFunction.function
         << ", function: " << function.function << endl;
 }
@@ -82,7 +82,7 @@ bool QtDesignerIntegration::selectImplementation(const QString &formName)
     QFileInfo fi(formName);
     if (!fi.exists())
         return false;
-    
+
     if (m_impl->exec(formName))
     {
         m_implementations[formName] = m_impl->selectedClass();
@@ -115,7 +115,7 @@ void QtDesignerIntegration::saveSettings(QDomDocument dom, QString path)
 {
     kdDebug() << "QtDesignerIntegration::saveSettings" << endl;
     QDomElement el = DomUtil::createElementByPath(dom, path + "/qtdesigner");
-    for (QMap<QString, ClassDom>::const_iterator it = m_implementations.begin(); 
+    for (QMap<QString, ClassDom>::const_iterator it = m_implementations.begin();
         it != m_implementations.end(); ++it)
     {
         QDomElement il = dom.createElement("implementation");
@@ -128,20 +128,20 @@ void QtDesignerIntegration::saveSettings(QDomDocument dom, QString path)
 
 void QtDesignerIntegration::openFunction(const QString &formName, const QString &functionName)
 {
-    kdDebug() << "QtDesignerIntegration::openFunction, formName = " << formName 
+    kdDebug() << "QtDesignerIntegration::openFunction, formName = " << formName
         << ", functionName = " << functionName << endl;
     QString fn = functionName;
     if (fn.find("(") > 0)
         fn.remove(fn.find("("), fn.length());
-    
+
     if (!m_implementations[formName])
         return;
 
     int line = -1, col = -1;
-    
+
     QString impl = m_implementations[formName]->fileName();
     processImplementationName(impl);
-    
+
     if (m_part->codeModel()->hasFile(impl))
     {
         if (m_classHasDefinitions)
@@ -165,11 +165,12 @@ void QtDesignerIntegration::openFunction(const QString &formName, const QString 
             }
         }
     }
-    
+
     m_part->partController()->editDocument(KURL(impl), line, col);
 }
 
-void QtDesignerIntegration::processImplementationName(QString &name)
+void QtDesignerIntegration::processImplementationName(QString &// name
+                                                      )
 {
 }
 

@@ -38,8 +38,8 @@ public:
     /**Type of documentation which is represented by this item.*/
     enum Type {
         Collection    /**<Collection - a collection of catalogs, folder with catalogs.*/,
-        Catalog       /**<Catalog - a term which defines a document or a group of documents.*/, 
-        Book          /**<Book - a document with nested documents.*/, 
+        Catalog       /**<Catalog - a term which defines a document or a group of documents.*/,
+        Book          /**<Book - a document with nested documents.*/,
         Document      /**<Document.*/
     };
 
@@ -50,12 +50,12 @@ public:
 
     virtual void setURL(const KURL &url) { m_url = url; }
     virtual KURL url() const { return m_url; }
-    
+
     Type type() const { return m_type; }
 
 private:
     void init();
-        
+
     KURL m_url;
     Type m_type;
 };
@@ -69,18 +69,18 @@ public:
     DocumentationCatalogItem(DocumentationPlugin* plugin, KListView *parent, const QString &name);
     DocumentationCatalogItem(DocumentationPlugin* plugin, DocumentationItem *parent, const QString &name);
     virtual ~DocumentationCatalogItem();
-    
+
     DocumentationPlugin* plugin() const { return m_plugin; }
-    
+
     virtual void setOpen(bool o);
     void load();
-    
+
     virtual bool isProjectDocumentationItem() const { return m_isProjectDocumentationItem; }
     virtual void setProjectDocumentationItem(bool b) { m_isProjectDocumentationItem = b; }
-    
+
 protected:
     virtual void activate();
-    
+
 private:
     DocumentationPlugin* m_plugin;
     bool isLoaded;
@@ -103,7 +103,7 @@ public:
     KURL url() const { return m_url; }
     QString text() const { return m_text; }
     QString description() const { return m_description; }
-    
+
 private:
     KURL m_url;
     IndexBox *m_listbox;
@@ -116,7 +116,7 @@ class IndexItem: public QListBoxText {
 public:
     typedef QPair<QString, KURL> URL;
     typedef QValueList<URL> List;
-    
+
     IndexItem(IndexBox *listbox, const QString &text);
 
     List urls() const;
@@ -129,18 +129,18 @@ private:
 class IndexBox: public KListBox{
 public:
     IndexBox(QWidget *parent = 0, const char *name = 0);
-    
+
     virtual void addIndexItem(IndexItemProto *item);
     virtual void removeIndexItem(IndexItemProto *item);
     virtual void fill();
     virtual void refill();
     virtual void setDirty(bool dirty);
 //    virtual void refill(QValueList<IndexItemProto*> &items);
-    
+
 private:
     QMap<QString, QValueList<IndexItemProto*> > items;
     friend class IndexItem;
-    
+
     bool m_dirty;
 };
 
@@ -172,7 +172,7 @@ public:
     void setIndex(bool index) { m_index = index; }
     bool fullTextSearch() const { return m_fullTextSearch; }
     void setFullTextSearch(bool fullTextSearch) { m_fullTextSearch = fullTextSearch; }
-    
+
     bool indexPossible() const { return m_indexPossible; }
     bool fullTextSearchPossible() const { return m_fullTextSearchPossible; }
 
@@ -184,7 +184,7 @@ private:
     bool m_contents;
     bool m_index;
     bool m_fullTextSearch;
-    
+
     bool m_indexPossible;
     bool m_fullTextSearchPossible;
 };
@@ -213,7 +213,7 @@ public:
                       ProjectUserManual=16 /**<plugin can handle project user manual*/ };
     /**Possible project documentation types.*/
     enum ProjectDocType { APIDocs, UserManual };
-    
+
     /**Constructor. Should initialize capabilities of the plugin by using setCapabilities
     protected method. For example,
     @code
@@ -222,13 +222,13 @@ public:
     */
     DocumentationPlugin(KConfig *pluginConfig, QObject *parent =0, const char *name =0);
     virtual ~DocumentationPlugin();
-    
+
     /**Returns the i18n name of the plugin.*/
     virtual QString pluginName() const = 0;
-    
+
     /**Creates documentation catalog with given title and url.*/
     virtual DocumentationCatalogItem *createCatalog(KListView *contents, const QString &title, const QString &url) = 0;
-    
+
     /**Initialize a list of catalogs.
     @param contents the listview to fill with catalogs
     */
@@ -253,7 +253,7 @@ public:
     virtual bool catalogEnabled(const QString &name) const;
     /**Enables or disables documentation catalog.*/
     virtual void setCatalogEnabled(const QString &name, bool e);
-    
+
     /**Indicates if an index of given catalog should be rebuilt. This method
     is used by index caching algorythm to make a descision to rebuild index
     or to load it from cache.*/
@@ -283,32 +283,32 @@ public:
 
     /**Loads catalog configuration and fills configurationView with ConfigurationItem objects.*/
     virtual void loadCatalogConfiguration(KListView *configurationView);
-    /**Saves catalog configuration basing on configurationView and 
+    /**Saves catalog configuration basing on configurationView and
     deletedConfigurationItems contents. If you use KConfig to store configuration,
     it is important that you call KConfig::sync() method after saving.*/
     virtual void saveCatalogConfiguration(KListView *configurationView);
     /**Adds new catalog to a configuration.*/
-    virtual void addCatalogConfiguration(KListView *configurationView, 
+    virtual void addCatalogConfiguration(KListView *configurationView,
         const QString &title, const QString &url);
     /**Edits catalog configuration.*/
     virtual void editCatalogConfiguration(ConfigurationItem *configurationItem,
         const QString &title, const QString &url);
     /**Removes catalog from configuration. configurationItem should not be removed here.*/
     virtual void deleteCatalogConfiguration(const ConfigurationItem *const configurationItem);
-    
+
     /**Returns a mode and a filter for catalog locator dialogs.*/
     virtual QPair<KFile::Mode, QString> catalogLocatorProps() = 0;
     /**Returns a title of catalog defined by an url parameter.*/
     virtual QString catalogTitle(const QString &url) = 0;
-    
+
     /**Reloads documentation catalogs and indices.*/
     virtual void reload();
     /**Clears documentation catalogs and indices.*/
     virtual void clear();
-    
+
     /**Checks if documentation plugin has given capability.*/
     bool hasCapability(Capability cap) const { return m_capabilities & cap; }
-    
+
     /**Sets dirty flag for all indices. Index caching algorythm will update
     the cache next time @ref createIndex is called.*/
     void setDirtyIndex(bool dirty) { m_indexCreated = dirty; }
@@ -321,17 +321,17 @@ public:
     caching algorythm is used (do not forget to reimplement also @ref cacheIndex
     and @ref createIndex).*/
     virtual bool loadCachedIndex(IndexBox *index, DocumentationCatalogItem *item);
-    
+
     /**Returns associated project documentation plugin. Default implementation returns zero.
     Reimplement this if the documentation plugin can also handle project documentation.*/
-    virtual ProjectDocumentationPlugin *projectDocumentationPlugin(ProjectDocType type) { return 0; }
-    
+    virtual ProjectDocumentationPlugin *projectDocumentationPlugin(ProjectDocType /* type */) { return 0; }
+
 public slots:
     /**Creates index and fills index listbox. Reimplement this only if custom
     caching algorythm is used (do not forget to reimplement also @ref cacheIndex
     and @ref loadCachedIndex).*/
     virtual void createIndex(IndexBox *index);
-        
+
 protected:
     /**A list of loaded documentation catalogs.*/
     QValueList<DocumentationCatalogItem*> catalogs;
@@ -346,23 +346,23 @@ protected:
     virtual void clearCatalogIndex(DocumentationCatalogItem *item);
     /**Loads index from cache or creates and caches it if does not exist.*/
     void loadIndex(IndexBox *index, DocumentationCatalogItem *item);
-    
+
     /**Stores items deleted from configuration. @ref saveCatalogConfiguration
     uses this to remove entries from configuration file.*/
     QStringList deletedConfigurationItems;
 
     /**Configuration object used by a plugin.*/
     KConfig *config;
-        
+
 private:
     /**Adds catalog item to catalogs, namedCatalogs and indexes lists and maps.*/
     virtual void addCatalog(DocumentationCatalogItem *item);
     /**Removes catalog item from catalogs, namedCatalogs and indexes lists and maps.*/
     virtual void clearCatalog(DocumentationCatalogItem *item);
-    
+
     int m_capabilities;
     bool m_indexCreated;
-    
+
 
 friend class IndexItemProto;
 friend class DocumentationCatalogItem;
@@ -384,18 +384,18 @@ public:
     virtual void init(KListView *contents, IndexBox *index, const QString &url);
     /**Deinitializes project documentation plugin - removes documentation catalog.*/
     virtual void deinit();
-    
+
     QString pluginName() const;
     QString catalogURL() const;
 
 public slots:
     /**Performs reinitialization if project documentation has changed (after building api documentation).*/
     virtual void reinit();
-        
+
 protected:
     DocumentationPlugin *m_docPlugin;
     DocumentationCatalogItem *m_catalog;
-    
+
 private:
     DocumentationPlugin::ProjectDocType m_type;
 

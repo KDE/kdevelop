@@ -205,7 +205,8 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
     fileParsed( fileName );
 }
 
-void Driver::setupLexer( JavaLexer * lexer )
+void Driver::setupLexer( JavaLexer * // lexer
+                         )
 {
 }
 

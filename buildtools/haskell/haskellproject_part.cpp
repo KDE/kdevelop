@@ -75,7 +75,7 @@ HaskellProjectPart::HaskellProjectPart(QObject *parent, const char *name, const 
              this, SLOT( projectConfigWidget( KDialogBase* ) ) );
 
   	connect( core(), SIGNAL( configWidget( KDialogBase* ) ),
-     	     this, SLOT( configWidget( KDialogBase* ) ) );                          
+     	     this, SLOT( configWidget( KDialogBase* ) ) );
 }
 
 
@@ -168,7 +168,7 @@ QString HaskellProjectPart::mainProgram( bool relative ) const
 	    	}
 	  	}
 	}
-	return QString::null;      
+	return QString::null;
 }
 
 QString HaskellProjectPart::runDirectory() const
@@ -359,10 +359,10 @@ void HaskellProjectPart::projectConfigWidget( KDialogBase * dlg )
     QVBox *vbox;
     vbox = dlg->addVBoxPage( i18n("Haskell Options") );
     HaskellProjectOptionsDlg *optionsDlg = new HaskellProjectOptionsDlg( this, vbox );
-    
+
     connect( dlg, SIGNAL( okClicked() ),
     				 optionsDlg, SLOT( accept() ) );
-         
+
     connect( dlg, SIGNAL( okClicked() ),
     				 this, SLOT( loadProjectConfig() ) );
 
@@ -408,7 +408,8 @@ void HaskellProjectPart::loadProjectConfig()
 //  }
 }
 
-void HaskellProjectPart::configWidget( KDialogBase * dlg )
+void HaskellProjectPart::configWidget( KDialogBase * // dlg
+                                       )
 {
 	// @todo create config page for KDevelop Settings
     /*QVBox *vbox;

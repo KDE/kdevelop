@@ -58,7 +58,7 @@ void PFontButton::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r,
     p->setBrush(cg.background());
     p->drawRect(r);
     QFontInfo fi(value.toFont());
-    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, 
+    p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
         fi.family() + (fi.bold() ? i18n(" Bold") : QString("")) +
         (fi.italic() ? i18n(" Italic") : QString("")) +
         " " + QString("%1").arg(fi.pointSize()) );
@@ -73,7 +73,8 @@ void PFontButton::setValue(const QVariant& value, bool emitChange)
         emit propertyChanged(m_property, value);
 }
 
-void PFontButton::updateProperty(const QFont &font)
+void PFontButton::updateProperty(const QFont &// font
+                                 )
 {
     emit propertyChanged(m_property, value());
 }

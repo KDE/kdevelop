@@ -47,18 +47,18 @@ public:
         m_changed(false)
     {
     }
-    
+
     PropertyItem(PropertyEditor *editor, KListViewItem *parent, MultiProperty *property)
         :KListViewItem(parent, property->description()), m_editor(editor),
         m_property(property), m_changed(false)
     {
     }
-    
+
 /*    int type() const
     {
         return m_property->type();
     }
-    
+
     QString name() const
     {
         return m_property->name();
@@ -68,7 +68,7 @@ public:
     {
         return m_property;
     }
-    
+
     virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align)
     {
         if ((column == 0) && m_changed)
@@ -99,13 +99,13 @@ public:
         }
         KListViewItem::paintCell(p, cg, column, width, align);
     }
-    
+
     virtual void setup()
     {
         KListViewItem::setup();
         setHeight(static_cast<int>(height()*1.5));
     }
-    
+
     void setChanged(bool changed)
     {
         m_changed = changed;
@@ -130,7 +130,7 @@ public:
     {
         init();
     }
-        
+
     virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align)
     {
         if (column == 0)
@@ -168,7 +168,7 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
     :KListView(parent, name)
 {
     setSorting(-1);
-    
+
     addColumn(i18n("Name"));
     addColumn(i18n("Value"));
     setAllColumnsShowFocus(true);
@@ -184,10 +184,10 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
 
     m_currentEditItem = 0;
     m_doubleClickForEdit = true;
-    m_lastClickedItem = 0;    
+    m_lastClickedItem = 0;
     m_currentEditWidget = 0;
     m_list = 0;
-    
+
     m_currentEditArea = new QWidget(viewport());
     m_currentEditArea->hide();
     m_undoButton = new QPushButton(m_currentEditArea);
@@ -269,7 +269,7 @@ void PropertyEditor::addChildProperties(PropertyItem *parent)
         //FIXME: find better solution
         machine(prop);
     }
-        
+
 //     qWarning("seeking children: count: %d", prop->details.count());
 
     parent->setOpen(true);
@@ -285,9 +285,9 @@ void PropertyEditor::clearProperties()
     m_detailedList.clear();
     if (!m_list)
         return;
-    
+
     hideEditor();
-    
+
     disconnect(m_list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(propertyValueChanged(Property*)));
     clear();
     delete m_list;
@@ -315,19 +315,19 @@ void PropertyEditor::propertyChanged(MultiProperty *property, const QVariant &va
 {
     if (!property)
         return;
-    
+
     qWarning("editor: assign %s to %s", property->name().latin1(), value.toString().latin1());
     property->setValue(value, false);
-    
+
     //highlight changed properties
     if (m_currentEditItem && (m_currentEditItem->property() == property))
     {
         m_currentEditItem->setChanged(true);
         repaintItem(m_currentEditItem);
     }
-    
+
     emit changed();
-    
+
 /*    if (m_list->contains(name))
     {
         (*m_list)[name]->setValue(value, false);
@@ -397,7 +397,7 @@ PropertyWidget* PropertyEditor::prepareEditor(PropertyItem *item)
     PropertyWidget *editorWidget = 0;
 /*    if (item->depth() >= 2)
     {
-        editorWidget = machine(item->name())->propertyEditor;    
+        editorWidget = machine(item->name())->propertyEditor;
         editorWidget->setValue(m_accessor->value(item->name()), false);
     }
     else
@@ -439,7 +439,7 @@ void PropertyEditor::slotClicked(QListViewItem *item)
 
 Machine *PropertyEditor::machine(MultiProperty *property)
 {
-    int type = property->type();
+//    int type = property->type();
     QString name = property->name();
     QMap<QString, QVariant> values = property->valueList();
     if (m_registeredForType[name] == 0)
@@ -467,7 +467,7 @@ void PropertyEditor::undo()
     if ((m_currentEditItem == 0) || (m_currentEditWidget == 0)
         || (!m_currentEditWidget->isVisible()))
         return;
-    
+
     m_currentEditWidget->undo();
     m_currentEditItem->setChanged(false);
     repaintItem(m_currentEditItem);

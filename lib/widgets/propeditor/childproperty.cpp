@@ -27,7 +27,7 @@
 #include "multiproperty.h"
 
 namespace PropertyLib{
- 
+
 ChildProperty::ChildProperty(MultiProperty *parent, int type, ChildPropertyType childType, const QString &name,
     const QString &description, const QVariant &value, bool save, bool readOnly)
     :Property(type, name, description, value, save, readOnly), m_parent(parent), m_childType(childType)
@@ -41,7 +41,8 @@ ChildProperty::ChildProperty(MultiProperty *parent, const QString & name, ChildP
 {
 }
 
-void ChildProperty::setValue(const QVariant &value, bool rememberOldValue)
+void ChildProperty::setValue(const QVariant &value, bool // rememberOldValue
+                             )
 {
     qWarning("ChildProperty::setValue");
     if (!m_parent->valid())

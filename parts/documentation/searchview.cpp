@@ -53,7 +53,7 @@ SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *nam
     :QWidget(parent, name), m_part(part)
 {
     QVBoxLayout *l = new QVBoxLayout(this, 0, KDialog::spacingHint());
-    
+
     QVBoxLayout *l2 = new QVBoxLayout(l, 0);
     QLabel *editLabel = new QLabel(i18n("Wor&ds to search:"), this);
     l2->addWidget(editLabel);
@@ -63,7 +63,7 @@ SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *nam
     m_goSearchButton = new KPushButton(i18n("Se&arch"), this);
     l21->addWidget(m_edit);
     l21->addWidget(m_goSearchButton);
-        
+
     QGridLayout *l3 = new QGridLayout(l, 2, 2, 0);
     m_searchMethodBox = new KComboBox(this);
     m_searchMethodBox->insertItem(i18n("and"));
@@ -78,13 +78,13 @@ SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *nam
     l3->addWidget(m_searchMethodBox, 0, 1);
     l3->addWidget(rmLabel, 1, 0);
     l3->addWidget(m_sortMethodBox, 1, 1);
-    
+
     QVBoxLayout *l4 = new QVBoxLayout(l, 0);
     m_view = new KListView(this);
     QLabel *vLabel = new QLabel(m_view, i18n("Search &results:"), this);
     l4->addWidget(vLabel);
     l4->addWidget(m_view);
-    
+
     QHBoxLayout *l5 = new QHBoxLayout(l, KDialog::spacingHint());
     m_configButton = new KPushButton(i18n("Update Config"), this);
     m_indexButton = new KPushButton(i18n("Update Index"), this);
@@ -93,7 +93,7 @@ SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *nam
     l5->addItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
     l->addSpacing(2);
-    
+
     m_view->setSorting(-1);
     m_view->addColumn(i18n("Relevance"));
     m_view->addColumn(i18n("Title"));
@@ -160,11 +160,11 @@ void SearchView::search()
     QDir d;
     if (indexdir.isEmpty() || !QFile::exists(indexdir + "/htdig.conf"))
     {
-        if (QFile::exists("/var/lib/kdevelop3/helpindex/htdig.conf")) 
+        if (QFile::exists("/var/lib/kdevelop3/helpindex/htdig.conf"))
             indexdir = "/var/lib/kdevelop3/helpindex";
         else if (QFile::exists("/var/lib/kdevelop/helpindex/htdig.conf"))
             indexdir = "/var/lib/kdevelop/helpindex";
-        
+
         if (!QFile::exists(indexdir + "/htdig.conf"))
         {
             KMessageBox::error(this, i18n("Can not find the htdig configuration file."));
@@ -198,7 +198,7 @@ void SearchView::search()
 
     searchResult = "";
 
-    if (!proc->start(KProcess::NotifyOnExit, KProcess::Stdout)) 
+    if (!proc->start(KProcess::NotifyOnExit, KProcess::Stdout))
     {
         KMessageBox::error(this, i18n("Cannot start the htsearch executable."));
         kdDebug() << "process start failed" << endl;
@@ -261,21 +261,21 @@ void SearchView::analyseSearchResults()
     while (!str.eof())
     {
         QString line = str.readLine();
-        
+
         QRegExp starsExp("alt=\"\\*\"");
         starsExp.setMinimal(true);
         int stars = line.contains(starsExp);
-        
+
         QRegExp urlExp("<strong><a href=\"(.*)\">(.*)</a></strong>");
         if (urlExp.search(line)==-1)
             continue;
         QString url = urlExp.cap(1);
         QString title = urlExp.cap(2);
-        
+
         QString starsStr;
         for (int i = 0; i < stars; ++i)
             starsStr += "*";
-        
+
         if (former)
             former = new DocumentationItem(DocumentationItem::Document, m_view, former, starsStr);
         else
@@ -290,18 +290,19 @@ void SearchView::executed(QListViewItem *item)
     DocumentationItem *d = dynamic_cast<DocumentationItem*>(item);
     if (!d)
         return;
-    
+
     m_part->partController()->showDocument(d->url());
 }
 
-void SearchView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c)
+void SearchView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int // c
+                                        )
 {
     if ((button != Qt::RightButton) || (!item))
         return;
     DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
     if (!docItem)
         return;
-    
+
     DocUtils::docItemPopup(m_part, docItem, pos, true, false, 1);
 }
 

@@ -40,14 +40,14 @@ KDevCustomImporter::KDevCustomImporter(QObject *parent, const char *name, const 
 {
     m_project = ::qt_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
-    
+
     QDomDocument &dom = *project()->projectDom();
     includes = DomUtil::readListEntry(dom, customImporter, "include");
     excludes = DomUtil::readListEntry(dom, customImporter, "exclude");
-    
+
     if (includes.isEmpty())
         includes << "*.h" << "*.cpp" << "*.c";   // ### remove me
-        
+
     excludes << "CVS" << "moc_*.cpp"; // ### remove me
 }
 
@@ -63,7 +63,7 @@ KDevProject *KDevCustomImporter::project() const
 bool KDevCustomImporter::isValid(const QFileInfo &fileInfo) const
 {
     QString fileName = fileInfo.fileName();
-    
+
     bool ok = fileInfo.isDir();
     for (QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it) {
         QRegExp rx(*it, true, true);
@@ -71,17 +71,17 @@ bool KDevCustomImporter::isValid(const QFileInfo &fileInfo) const
             ok = true;
         }
     }
-    
+
     if (!ok)
         return false;
-        
+
     for (QStringList::ConstIterator it = excludes.begin(); it != excludes.end(); ++it) {
         QRegExp rx(*it, true, true);
         if (rx.exactMatch(fileName)) {
             return false;
         }
     }
-    
+
     return true;
 }
 
@@ -91,17 +91,17 @@ ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
     static const QString &dotdot = KGlobal::staticQString("..");
 
     QDir dir(item->name());
-    
+
     ProjectTargetDom target = item->projectModel()->create<ProjectTargetModel>();
     target->setName("files");
     item->addTarget(target);
-    
+
     ProjectFolderList folder_list;
     if (const QFileInfoList *entries = dir.entryInfoList()) {
         QFileInfoListIterator it(*entries);
         while (const QFileInfo *fileInfo = it.current()) {
             ++it;
-            
+
             if (!isValid(*fileInfo)) {
                 //kdDebug(9000) << "skip:" << fileInfo->absFilePath() << endl;
             } else if (fileInfo->isDir() && fileInfo->fileName() != dot && fileInfo->fileName() != dotdot) {
@@ -116,7 +116,7 @@ ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
             }
         }
     }
-    
+
     return folder_list;
 }
 
@@ -132,7 +132,7 @@ ProjectItemDom KDevCustomImporter::import(ProjectModel *model, const QString &fi
         file->setName(fileName);
         return file->toItem();
     }
-    
+
     return ProjectItemDom();
 }
 
@@ -148,42 +148,58 @@ QStringList KDevCustomImporter::findMakefiles(ProjectFolderDom dom) const
     return QStringList();
 }
 
-bool KDevCustomImporter::addFolder(ProjectFolderDom folder, ProjectFolderDom parent)
+bool KDevCustomImporter::addFolder(ProjectFolderDom // folder
+                                   , ProjectFolderDom // parent
+                                   )
 {
     return false;
 }
 
-bool KDevCustomImporter::addTarget(ProjectTargetDom target, ProjectFolderDom parent)
+bool KDevCustomImporter::addTarget(ProjectTargetDom // target
+                                   , ProjectFolderDom // parent
+                                   )
 {
     return false;
 }
 
-bool KDevCustomImporter::addFile(ProjectFileDom file, ProjectFolderDom parent)
+bool KDevCustomImporter::addFile(ProjectFileDom // file
+                                 , ProjectFolderDom // parent
+                                 )
 {
     return false;
 }
 
-bool KDevCustomImporter::addFile(ProjectFileDom file, ProjectTargetDom parent)
+bool KDevCustomImporter::addFile(ProjectFileDom // file
+                                 , ProjectTargetDom // parent
+                                 )
 {
     return false;
 }
 
-bool KDevCustomImporter::removeFolder(ProjectFolderDom folder, ProjectFolderDom parent)
+bool KDevCustomImporter::removeFolder(ProjectFolderDom // folder
+                                      , ProjectFolderDom // parent
+                                      )
 {
     return false;
 }
 
-bool KDevCustomImporter::removeTarget(ProjectTargetDom target, ProjectFolderDom parent)
+bool KDevCustomImporter::removeTarget(ProjectTargetDom // target
+                                      , ProjectFolderDom // parent
+                                      )
 {
     return false;
 }
 
-bool KDevCustomImporter::removeFile(ProjectFileDom file, ProjectFolderDom parent)
+bool KDevCustomImporter::removeFile(ProjectFileDom // file
+                                    , ProjectFolderDom // parent
+                                    )
 {
     return false;
 }
 
-bool KDevCustomImporter::removeFile(ProjectFileDom file, ProjectTargetDom parent)
+bool KDevCustomImporter::removeFile(ProjectFileDom // file
+                                    , ProjectTargetDom // parent
+                                    )
 {
     return false;
 }

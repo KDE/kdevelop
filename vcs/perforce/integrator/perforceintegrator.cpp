@@ -29,7 +29,8 @@ typedef KDevGenericFactory<PerforceIntegrator> PerforceIntegratorFactory;
 K_EXPORT_COMPONENT_FACTORY( libperforceintegrator, PerforceIntegratorFactory(data) )
 
 PerforceIntegrator::PerforceIntegrator(QObject* parent, const char* name,
-    const QStringList args)
+    const QStringList // args
+                                       )
     :KDevVCSIntegrator(parent, name)
 {
 }
@@ -38,7 +39,8 @@ PerforceIntegrator::~PerforceIntegrator()
 {
 }
 
-VCSDialog* PerforceIntegrator::fetcher(QWidget* parent)
+VCSDialog* PerforceIntegrator::fetcher(QWidget* // parent
+                                       )
 {
     return 0;
 }

@@ -61,7 +61,8 @@ SettingsDialog::~SettingsDialog()
 }
 
 /*$SPECIALIZATION$*/
-void SettingsDialog::slotSelectionChanged(QListBoxItem* item)
+void SettingsDialog::slotSelectionChanged(QListBoxItem* // item
+                                          )
 {
 #if QT_VERSION < 0x030100
     if( !QListBox_selectedItem(qtListBox) ){

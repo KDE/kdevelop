@@ -53,7 +53,6 @@
 #include "partcontroller.h"
 #include "projectmanager.h"
 #include "core.h"
-#include "settingswidget.h"
 #include "api.h"
 #include "kdevmakefrontend.h"
 #include "toplevel.h"
@@ -307,15 +306,15 @@ void MainWindowShare::slotSettings()
     dlg.setHelp("setup");
 
     ShellExtension::getInstance()->createGlobalSettingsPage(&dlg);
-    
+
     KConfig* config = kapp->config();
 
     config->setGroup("Global Settings Dialog");
     int height = config->readNumEntry( "Height", 600 );
     int width = config->readNumEntry( "Width", 800 );
-    
+
     dlg.resize( width, height );
-  
+
     Core::getInstance()->doEmitConfigWidget(&dlg);
     dlg.exec();
 
@@ -383,7 +382,7 @@ void MainWindowShare::slotGUICreated( KParts::Part * part )
         kdDebug(9000) << " *** found \"set_confdlg\" action - unplugging" << endl;
         action->unplugAll();
     }
-	
+
 	if ( KAction * action = part->action("file_save") )
 	{
 		kdDebug(9000) << " *** found \"file_save\" action - disconnecting" << endl;
@@ -440,7 +439,7 @@ void MainWindowShare::slotKeyBindings()
             }
             ++it;
         }
-    }  
+    }
   }
 }
 

@@ -125,7 +125,8 @@ void KDevLanguageSupport::removeFunction( DesignerType type, const QString & for
     designerIntegration->removeFunction(formName, function);
 }
 
-KDevDesignerIntegration * KDevLanguageSupport::designer( DesignerType type )
+KDevDesignerIntegration * KDevLanguageSupport::designer( DesignerType // type
+                                                         )
 {
     return 0;
 }
@@ -138,7 +139,9 @@ void KDevLanguageSupport::openFunction( DesignerType type, const QString & formN
     designerIntegration->openFunction(formName, functionName);
 }
 
-void KDevLanguageSupport::createAccessMethods( ClassDom theClass, VariableDom theVariable )
+void KDevLanguageSupport::createAccessMethods( ClassDom // theClass
+                                               , VariableDom // theVariable
+                                               )
 {
 }
 

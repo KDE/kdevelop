@@ -57,7 +57,7 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
     while( it != catalogs.end() ){
         Catalog* catalog = *it;
         ++it;
-	
+
 	if( !catalog->enabled() )
 	    continue;
 
@@ -89,7 +89,8 @@ QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileNa
     return QValueList<Tag>();
 }
 
-QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & scope, bool isInstance )
+QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & scope, bool // isInstance
+                                                           )
 {
     kdDebug(9007) << "CodeInformationRepository::getTagsInScope()" << endl;
 

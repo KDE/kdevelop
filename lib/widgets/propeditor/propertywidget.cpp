@@ -46,7 +46,8 @@ void PropertyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect 
     p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toString());
 }
 
-void PropertyWidget::setValueList(const QMap<QString, QVariant> &valueList)
+void PropertyWidget::setValueList(const QMap<QString, QVariant> &// valueList
+                                  )
 {
     //this does nothing
 }

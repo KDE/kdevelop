@@ -34,7 +34,8 @@ static const KDevPluginInfo data("docchmplugin");
 typedef KDevGenericFactory<DocCHMPlugin> DocCHMPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libdocchmplugin, DocCHMPluginFactory(data) )
 
-DocCHMPlugin::DocCHMPlugin(QObject* parent, const char* name, QStringList args)
+DocCHMPlugin::DocCHMPlugin(QObject* parent, const char* name, QStringList // args
+                           )
     :DocumentationPlugin(DocCHMPluginFactory::instance()->config(), parent, name)
 {
     setCapabilities(CustomDocumentationTitles);
@@ -57,7 +58,8 @@ QPair<KFile::Mode, QString> DocCHMPlugin::catalogLocatorProps()
     return QPair<KFile::Mode, QString>(KFile::File, "*.chm");
 }
 
-QString DocCHMPlugin::catalogTitle(const QString& url)
+QString DocCHMPlugin::catalogTitle(const QString& // url
+                                   )
 {
     return QString::null;
 }
@@ -72,7 +74,8 @@ QStringList DocCHMPlugin::fullTextSearchLocations()
     return QStringList();
 }
 
-bool DocCHMPlugin::needRefreshIndex(DocumentationCatalogItem* item)
+bool DocCHMPlugin::needRefreshIndex(DocumentationCatalogItem* // item
+                                    )
 {
     return false;
 }
@@ -82,12 +85,15 @@ void DocCHMPlugin::autoSetupPlugin()
     return;
 }
 
-void DocCHMPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* item)
+void DocCHMPlugin::createIndex(IndexBox* // index
+                               , DocumentationCatalogItem* // item
+                               )
 {
     return;
 }
 
-void DocCHMPlugin::createTOC(DocumentationCatalogItem* item)
+void DocCHMPlugin::createTOC(DocumentationCatalogItem* // item
+                             )
 {
     return;
 }

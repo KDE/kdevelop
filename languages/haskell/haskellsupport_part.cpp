@@ -104,7 +104,8 @@ void HaskellSupportPart::projectConfigWidget( KDialogBase *dlg )
 	return;
 }
 
-void HaskellSupportPart::contextMenu( QPopupMenu *popup, const Context *context )
+void HaskellSupportPart::contextMenu( QPopupMenu *popup, const Context *// context
+                                      )
 {
 	Q_UNUSED( popup );
 	return;

@@ -29,7 +29,8 @@ typedef KDevGenericFactory<SubversionIntegrator> SubversionIntegratorFactory;
 K_EXPORT_COMPONENT_FACTORY( libsubversionintegrator, SubversionIntegratorFactory(data) )
 
 SubversionIntegrator::SubversionIntegrator(QObject* parent, const char* name,
-    const QStringList args)
+    const QStringList // args
+                                           )
     :KDevVCSIntegrator(parent, name)
 {
 }
@@ -38,7 +39,8 @@ SubversionIntegrator::~SubversionIntegrator()
 {
 }
 
-VCSDialog* SubversionIntegrator::fetcher(QWidget* parent)
+VCSDialog* SubversionIntegrator::fetcher(QWidget* // parent
+                                         )
 {
     return 0;
 }

@@ -169,7 +169,7 @@ void subversionCore::slotEndCheckout( KIO::Job * job ) {
 		if ( job->error() ) {
 			job->showErrorDialog( m_part->mainWindow()->main() );
 			emit checkoutFinished( QString::null );
-		} else 
+		} else
 			emit checkoutFinished(wcPath);
 }
 
@@ -178,7 +178,10 @@ void subversionCore::slotResult( KIO::Job * job ) {
 			job->showErrorDialog( m_part->mainWindow()->main() );
 }
 
-void subversionCore::createNewProject( const QString& dirName, const KURL& importURL, bool init ) {
+void subversionCore::createNewProject( const QString& // dirName
+                                       , const KURL& // importURL
+                                       , bool // init
+                                       ) {
 
 }
 

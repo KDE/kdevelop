@@ -58,7 +58,9 @@ ContentsView::~ContentsView()
         m_widget->index()->clear();
 }
 
-void ContentsView::itemExecuted(QListViewItem *item, const QPoint &p, int col)
+void ContentsView::itemExecuted(QListViewItem *item, const QPoint &// p
+                                , int // col
+                                )
 {
     DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
     if (!docItem)
@@ -69,7 +71,8 @@ void ContentsView::itemExecuted(QListViewItem *item, const QPoint &p, int col)
     m_widget->part()->partController()->showDocument(url);
 }
 
-void ContentsView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c)
+void ContentsView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int // c
+                                          )
 {
     if ((button != Qt::RightButton) || (!item))
         return;
