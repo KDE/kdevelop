@@ -23,48 +23,6 @@
 #include <qlist.h>
 #include <qstring.h>
 
-/** (struct) for the classview
-  *@author Sandy Meier
-  */
-struct TStreamedFile {
-  QString filename;
-  QString stream;
-};
-/** (struct) for the classview
-  *@author Sandy Meier
-  */
-struct TMethodInfo {
-  QString name;
-  QString visibility; // protected,private or public
-};
-/** (struct) for the classview
-  *@author Sandy Meier
-  */
-struct TVarInfo{
-  QString name;
-  QString visibility;
-};
-/** (struct) for the classview
-  *@author Sandy Meier
-  */
-struct TClassInfo {
-  QString filename; // in which file was the class declared
-  /** struct or class*/
-  QString type; 
-  QString classname; // the name of the class
-  /**the cursorpostion in the file, at Position {, only correct at parsing*/
-  int begin;    
-  /** the cursorpostion in the file, at Position }*/
-  int end;     
-  /** methods informations*/
-  QList<TMethodInfo> method_infos;
-  /** variables informations*/
-  QList<TVarInfo> variable_infos;
-};
-
-
-
-
 /** (struct) contains the internal representation of a textfile
   *@author Sandy Meier
   */
