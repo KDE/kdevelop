@@ -502,7 +502,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     
     if (hasmatch) {
         kdDebug(9004) << "Error in " << fn << " " << row << ": " << text << endl;
-        if (dirstack.top() && fn[0] !cd = '/')
+        if (dirstack.top() && fn[0] != '/')
             fn.prepend("/").prepend(*dirstack.top());
         // consolidate /../
         QFileInfo info(fn);
