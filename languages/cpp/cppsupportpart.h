@@ -35,6 +35,7 @@ class QLabel;
 class QProgressBar;
 class QStringList;
 class QListViewItem;
+class QTimer;
 class KListView;
 class Driver;
 
@@ -68,12 +69,17 @@ public:
     void removeCatalog( const QString& dbName );
 
     bool isValidSource( const QString& fileName ) const;
-    QStringList fileExtensions( ) const;
 
     virtual void customEvent( QCustomEvent* ev );
 
     virtual QStringList subclassWidget(const QString& formName);
     virtual QStringList updateWidget(const QString& formName, const QString& fileName);
+    
+    FunctionDefinitionDom currentFunctionDefinition();
+    FunctionDefinitionDom functionDefinitionAt( int line, int column );
+    FunctionDefinitionDom functionDefinitionAt( NamespaceDom ns, int line, int column );
+    FunctionDefinitionDom functionDefinitionAt( ClassDom klass, int line, int column );
+    FunctionDefinitionDom functionDefinitionAt( FunctionDefinitionDom fun, int line, int column );
 
     KTextEditor::Document* findDocument( const KURL& url );
 
@@ -85,8 +91,8 @@ public:
 
     QString extractInterface( const ClassDom& klass );
 
-    bool isHeader(const QString fileName);
-    bool isSource(const QString fileName);
+    bool isHeader(const QString& fileName) const;
+    bool isSource(const QString& fileName) const;
 
 signals:
     void fileParsed( const QString& fileName );
@@ -121,6 +127,8 @@ private slots:
     void slotCompleteText();
     void slotMakeMember();
     void slotExtractInterface();
+    void slotCursorPositionChanged( unsigned int line, unsigned int column );
+    void slotFunctionHint();
     void gotoLine( int line );
     void gotoDeclarationLine( int line );
     void emitFileParsed();
@@ -186,7 +194,15 @@ private:
     ClassDom m_activeClass;
     FunctionDom m_activeFunction;
     VariableDom m_activeVariable;
+    
+    QTimer* m_functionHintTimer;
+    
+    static QStringList m_sourceMimeTypes;
+    static QStringList m_headerMimeTypes;
 
+    static QStringList m_sourceExtensions;
+    static QStringList m_headerExtensions;
+    
     friend class KDevCppSupportIface;
     friend class CppDriver;
 };

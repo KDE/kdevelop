@@ -99,6 +99,12 @@
 enum { KDEV_DB_VERSION = 5 };
 enum { KDEV_PCS_VERSION = 4 };
 
+QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";
+QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" << "text/x-c++hdr";;
+
+QStringList CppSupportPart::m_sourceExtensions = QStringList::split( ",", "c,C,cc,cpp,c++,cxx,m,mm,M" );
+QStringList CppSupportPart::m_headerExtensions = QStringList::split( ",", "h,H,hh,hxx,hpp,inl,tlh,diff,ui.h" );
+    
 class CppDriver: public KDevDriver
 {
 public:
@@ -149,6 +155,9 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_driver = new CppDriver( this );
     m_problemReporter = 0;
 
+    m_functionHintTimer = new QTimer( this );
+    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
+    
     setXMLFile( "kdevcppsupport.rc" );
 
     m_catalogList.setAutoDelete( true );
@@ -256,12 +265,14 @@ CppSupportPart::~CppSupportPart()
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
-    kdDebug(9007) << "CppSupportPart::customEvent()" << endl;
+    kdDebug(9007) << "CppSupportPart::customEvent(" << ev->type() << ")" << endl;
 
+    QTime t;
+    t.start();
+    
     if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName = event->fileName();
-
         if( m_problemReporter ){
 	    m_problemReporter->removeAllProblems( fileName );
 
@@ -275,7 +286,6 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 
 	        m_problemReporter->reportProblem( fileName, p );
 	    }
-
             recomputeCodeModel( fileName );
 	    //QTimer::singleShot( 0, this, SLOT(recomputeCodeModel()) );
 	}
@@ -306,6 +316,8 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     bool enabled = false;
 
+    m_functionHintTimer->stop();
+    
     m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
     m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
@@ -318,10 +330,10 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 	m_activeFileName = URLUtil::canonicalPath( m_activeDocument->url().path() );
         QFileInfo fi( m_activeFileName );
         QString ext = fi.extension();
-        if (fileExtensions().contains(ext))
-            enabled = true;
+        if( isSource(m_activeFileName) || isHeader(m_activeFileName) )
+	    enabled = true;
     }
-
+    
     actionCollection()->action( "edit_switchheader" )->setEnabled( enabled );
     actionCollection()->action( "edit_complete_text" )->setEnabled( enabled );
     actionCollection()->action( "edit_make_member" )->setEnabled( enabled );
@@ -331,7 +343,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     if( !m_activeView )
 	return;
-
+    
 #if 0
     KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
     if( !textHintIface )
@@ -719,23 +731,6 @@ QString CppSupportPart::unformatClassName(const QString &name)
     return name;
 }
 
-QStringList CppSupportPart::fileExtensions() const
-{
-    QStringList patterns;
-    
-    KMimeType::List lst = const_cast<CppSupportPart*>( this )->mimeTypes();
-    for( KMimeType::List::Iterator it=lst.begin(); it!=lst.end(); ++it )
-    {
-	KMimeType::Ptr ptr = *it;
-	if( !ptr )
-	    continue;
-	
-	patterns += ptr->patterns();
-    }
-    
-    return patterns;
-}
-
 void CppSupportPart::slotNewClass()
 {
     CppNewClassDialog dlg(this);
@@ -1106,13 +1101,13 @@ QStringList CppSupportPart::modifiedFileList()
 	++it;
 
 	QFileInfo fileInfo( m_projectDirectory, fileName );
-
-	if( !fileExtensions().contains(fileInfo.extension()) )
+	QString path = URLUtil::canonicalPath(fileInfo.absFilePath());
+	
+	if( !(isSource(path) || isHeader(path)) )
 	    continue;
 
 	QDateTime t = fileInfo.lastModified();
 
-	QString path = URLUtil::canonicalPath(fileInfo.absFilePath());
 	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( path );
 	if( fileInfo.exists() && dictIt != m_timestamp.end() && *dictIt == t )
 	    continue;
@@ -1194,11 +1189,9 @@ void CppSupportPart::setupCatalog( )
 
 KMimeType::List CppSupportPart::mimeTypes( )
 {
-    QStringList mimeList = QStringList() 
-			   << "text/x-csrc"
-			   << "text/x-c++src"
-			   << "text/x-chdr"
-			   << "text/x-c++hdr";
+    QStringList mimeList;
+    mimeList += m_headerMimeTypes;
+    mimeList += m_sourceMimeTypes;
     
     KMimeType::List list;
     for( QStringList::Iterator it=mimeList.begin(); it!=mimeList.end(); ++it )
@@ -1276,8 +1269,10 @@ void CppSupportPart::removeWithReferences( const QString & fileName )
 bool CppSupportPart::isValidSource( const QString& fileName ) const
 {
     QFileInfo fileInfo( fileName );
-    return fileExtensions().contains( fileInfo.extension() )
-	&& project()->isProjectFile( URLUtil::canonicalPath( fileInfo.absFilePath() ) )
+    QString path = URLUtil::canonicalPath( fileInfo.absFilePath() );
+ 
+    return project()->isProjectFile( path )
+	&& (isSource( path ) || isHeader( path ))
 	&& !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
 }
 
@@ -1482,24 +1477,22 @@ void CppSupportPart::emitFileParsed( )
     emit fileParsed( m_activeFileName );
 }
 
-bool CppSupportPart::isHeader( const QString fileName )
+bool CppSupportPart::isHeader( const QString& fileName ) const
 {
-    QFileInfo fi(fileName);
-    QString ext = fi.extension();
-    if (ext == "h" || ext == "H" || ext == "hh" || ext == "hxx" || ext == "hpp" || ext == "tlh")
-        return true;
-    else
-        return false;
+    KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
+    if( ptr && m_sourceMimeTypes.contains( ptr->name() ) )
+	return true;
+    
+    return m_headerExtensions.contains( QFileInfo(fileName).extension() );
 }
 
-bool CppSupportPart::isSource( const QString fileName )
+bool CppSupportPart::isSource( const QString& fileName ) const
 {
-    QFileInfo fi(fileName);
-    QString ext = fi.extension();
-    if (QStringList::split(',', "c,cc,cpp,c++,cxx,C,m,mm,M,inl").contains(ext))
-        return true;
-    else
-        return false;
+    KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
+    if( ptr && m_sourceMimeTypes.contains( ptr->name() ) )
+	return true;
+    
+    return m_sourceExtensions.contains( QFileInfo(fileName).extension() );
 }
 
 void CppSupportPart::gotoDeclarationLine( int line )
@@ -1551,6 +1544,112 @@ void CppSupportPart::addCatalog( Catalog * catalog )
 {
     m_catalogList.append( catalog );
     codeRepository()->registerCatalog( catalog );
+}
+
+FunctionDefinitionDom CppSupportPart::functionDefinitionAt( int line, int column )
+{
+    if( !codeModel()->hasFile(m_activeFileName) )
+	return FunctionDefinitionDom();
+    
+    FileDom file = codeModel()->fileByName( m_activeFileName );
+    return functionDefinitionAt( model_cast<NamespaceDom>(file), line, column );
+}
+
+FunctionDefinitionDom CppSupportPart::currentFunctionDefinition( )
+{
+    if( !this->m_activeViewCursor )
+	return FunctionDefinitionDom();
+    
+    unsigned int line, column;
+    this->m_activeViewCursor->cursorPositionReal( &line, &column );
+    return functionDefinitionAt( line, column );
+}
+
+FunctionDefinitionDom CppSupportPart::functionDefinitionAt( NamespaceDom ns, int line, int column )
+{
+    NamespaceList namespaceList = ns->namespaceList();
+    for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
+    {
+	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
+	    return def;
+    }
+    
+    ClassList classList = ns->classList();
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+    {
+	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
+	    return def;
+    }
+    
+    FunctionDefinitionList functionDefinitionList = ns->functionDefinitionList();
+    for( FunctionDefinitionList::Iterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
+    {
+	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
+	    return def;
+    }
+    
+    return FunctionDefinitionDom();
+}
+
+FunctionDefinitionDom CppSupportPart::functionDefinitionAt( ClassDom klass, int line, int column )
+{
+    ClassList classList = klass->classList();
+    for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
+    {
+	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
+	    return def;
+    }
+    
+    FunctionDefinitionList functionDefinitionList = klass->functionDefinitionList();
+    for( FunctionDefinitionList::Iterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
+    {
+	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
+	    return def;
+    }
+    
+    return FunctionDefinitionDom();
+}
+
+FunctionDefinitionDom CppSupportPart::functionDefinitionAt( FunctionDefinitionDom fun, int line, int column )
+{
+    int startLine, startColumn;
+    int endLine, endColumn;
+    
+    fun->getStartPosition( &startLine, &startColumn );
+    fun->getEndPosition( &endLine, &endColumn );
+    
+    if( ! (line >= startLine && line <= endLine) )
+	return FunctionDefinitionDom();
+    
+    if( line == startLine && column < startColumn )
+	return FunctionDefinitionDom();
+    
+    if( line == endLine && column > endColumn )
+	return FunctionDefinitionDom();
+    
+    return fun;
+}
+
+void CppSupportPart::slotCursorPositionChanged( unsigned int /*line*/, unsigned int /*column*/ )
+{
+    kdDebug(9007) << "=======> cursor position changed" << endl;
+    m_functionHintTimer->changeInterval( 1000 );
+}
+
+void CppSupportPart::slotFunctionHint( )
+{
+    kdDebug(9007) << "=======> compute current function definition" << endl;
+    if( FunctionDefinitionDom fun = currentFunctionDefinition() )
+    {
+	QStringList scope = fun->scope();
+	QString funName = scope.join( "::" );
+	if( !funName.isEmpty() )
+	    funName += "::";
+	
+	funName += fun->name();
+	
+	mainWindow()->statusBar()->message( funName, 2000 );
+    }
 }
 
 #include "cppsupportpart.moc"
