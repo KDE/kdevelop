@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>510</width>
-            <height>610</height>
+            <height>698</height>
         </rect>
     </property>
     <property name="caption">
@@ -380,23 +380,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <enum>AllColumns</enum>
                                 </property>
                             </widget>
-                            <spacer row="6" column="0">
-                                <property name="name">
-                                    <cstring>spacer13</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>16</height>
-                                    </size>
-                                </property>
-                            </spacer>
                             <widget class="KLineEdit" row="0" column="1">
                                 <property name="name">
                                     <cstring>basename_edit</cstring>
@@ -1287,7 +1270,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>classgeneratorconfig.h</includehint>
 </includehints>
