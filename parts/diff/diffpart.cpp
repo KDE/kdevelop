@@ -142,7 +142,7 @@ void DiffPart::localDiff()
   proc = new KProcess();
 
   *proc << "diff";
-  *proc << "-u3" << popupFile.path() << "-";
+  *proc << "-u" << popupFile.path() << "-";
   proc->setWorkingDirectory( popupFile.directory() );
 
   connect( proc, SIGNAL(processExited( KProcess* )),
