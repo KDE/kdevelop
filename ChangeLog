@@ -1,3 +1,5 @@
+2002-06-10  F@lk Brettschneider <falk@kdevelop.org>
+    * applied patch of Kuba Ober fixing the single-compile functionality for Custom projects
 2002-06-07  Roland Krause  <roland@ca.wai.com>
     * Reapplied Kuba Ober's patch for indentation in first line of file. 
       This is what happends when you apply patches instead using CVS!!!
