@@ -470,7 +470,12 @@ void CClassToolDlg::changeCaption()
       break;
   }
 
-  caption += i18n(" of class ");
+  // ** Martin
+  // gettext doesnt recognize whitespaces correctly?!
+  
+  caption += " ";
+  caption += i18n("of class");
+  caption += " ";
 
   if( currentClass != NULL )
     caption += currentClass->name;
