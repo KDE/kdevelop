@@ -377,7 +377,7 @@ if test -x "$SVNCONFIG"; then
   SVNLD="`$SVNCONFIG --ldflags`"
   SVNLIBS="`$SVNCONFIG --libs --cppflags`"
   dnl ugly hack for subversion svn-config problems in 0.14.x, to be removed when svn-config is fixed
-  SVNINC="`$SVNCONFIG --includes` -I$_SVNCONFIG/include/subversion-1/"
+  SVNINC="`$SVNCONFIG --includes` -I`$SVNCONFIG --prefix`/include/subversion-1/"
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(svn-config not found)
