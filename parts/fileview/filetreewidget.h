@@ -56,7 +56,7 @@ private:
     QStringList m_projectFiles;
     bool m_showNonProjectFiles;
 
-    QPtrList<QListViewItem> m_selectedItems;
+    QPtrList<KFileTreeViewItem> m_selectedItems;
 };
 
 #endif

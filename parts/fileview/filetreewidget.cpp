@@ -359,8 +359,6 @@ void FileTreeWidget::removeProjectFiles( QStringList const & fileList )
 
 void FileTreeWidget::slotSelectionChanged()
 {
-    //FIXME: m_selectedItems will grow to the infinite: we must clean it up in some way!!!
-
     kdDebug(9017) << "FileTreeWidget::slotSelectionChanged()" << endl;
 
     // Check for this item
@@ -387,11 +385,11 @@ void FileTreeWidget::slotSelectionChanged()
 
     // Now we clean-up the selection of old elements which are no more selected.
     // FIXME: Any better way?
-    QListViewItem *it = m_selectedItems.first();
+    KFileTreeViewItem *it = m_selectedItems.first();
     while (it != 0)
     {
         if (!it->isSelected()) {
-            QListViewItem *toDelete = it;
+            KFileTreeViewItem *toDelete = it;
             it = m_selectedItems.next();
             m_selectedItems.remove( toDelete );
         }
@@ -415,6 +413,7 @@ KURL::List FileTreeWidget::selectedPathUrls()
         if (item->isSelected())
         {
             pathUrls << item->path();
+
             kdDebug(9017) << "Added path " << item->path() << endl;
         }
         item = static_cast<MyFileTreeViewItem *>( m_selectedItems.next() );
