@@ -113,6 +113,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
 
 	m_tabIndent = FALSE;
 	m_backspaceIndent = TRUE;
+	m_currentLine = -1;
 
 	document()->addSelection( ParenMatcher::Match );
 	document()->addSelection( ParenMatcher::Mismatch );
@@ -128,6 +129,8 @@ QEditor::QEditor( QWidget* parent, const char* name )
 
 	connect( this, SIGNAL(cursorPositionChanged(QTextCursor*) ),
 			 this, SLOT(doMatch(QTextCursor*)) );
+	connect( this, SIGNAL(cursorPositionChanged(int, int) ),
+			 this, SLOT(slotCursorPositionChanged(int, int)) );
 }
 
 QEditor::~QEditor()
@@ -372,4 +375,18 @@ void QEditor::setText( const QString& text )
 	tabify( s );
 	QTextEdit::setText( s );
 	setTextFormat( QTextEdit::AutoText );
+}
+
+void QEditor::slotCursorPositionChanged( int line, int )
+{
+#if 0
+	if( line != m_currentLine ){
+		if( m_currentLine != -1 ){
+			clearParagraphBackground( m_currentLine );
+		}
+		m_currentLine = line;
+		setParagraphBackgroundColor( m_currentLine,
+											 palette().active().mid() );
+	}
+#endif
 }

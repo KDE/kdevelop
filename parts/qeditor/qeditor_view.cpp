@@ -20,31 +20,46 @@
  */
 
 #include "qeditor_view.h"
+#include "qeditor_part.h"
 #include "qeditor.h"
 #include "qeditorcodecompletion_iface_impl.h"
 #include "linenumberwidget.h"
 #include "markerwidget.h"
+#include "gotolinedialog.h"
+#include "koFind.h"
+#include "koReplace.h"
 
+#include <qregexp.h>
 #include <qlayout.h>
 #include <qpopupmenu.h>
 #include <private/qrichtext_p.h>
 
 #include <kdebug.h>
+#include <kapplication.h>
 
-QEditorView::QEditorView( KTextEditor::Document* document, QWidget* parent, const char* name )
+
+QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
 	: KTextEditor::View( document, parent, name ),
 	  m_document( document ),
-          m_popupMenu( 0 )
+	  m_popupMenu( 0 )
 {
-	QHBoxLayout* lay = new QHBoxLayout( this );
+    m_findDialog = new KoFindDialog();
+    m_findDialog->setOptions( KoFindDialog::FromCursor );
+    connect( m_findDialog, SIGNAL(okClicked()),
+             this, SLOT(slotStartFind()) );
 
+    m_replaceDialog = new KoReplaceDialog();
+    connect( m_replaceDialog, SIGNAL(okClicked()),
+             this, SLOT(slotStartReplace()) );
+
+	QHBoxLayout* lay = new QHBoxLayout( this );
 
 	m_editor = new QEditor( this );
 	m_lineNumberWidget = new LineNumberWidget( m_editor, this );
-        m_markerWidget = new MarkerWidget( m_editor, this );
+	m_markerWidget = new MarkerWidget( m_editor, this );
 
 	lay->addWidget( m_lineNumberWidget );
-        lay->addWidget( m_markerWidget );
+	lay->addWidget( m_markerWidget );
 	lay->addWidget( m_editor );
 
 	setFocusProxy( m_editor );
@@ -102,14 +117,16 @@ void QEditorView::cursorPositionReal(unsigned int *line, unsigned int *col)
 bool QEditorView::setCursorPosition(unsigned int line, unsigned int col)
 {
 #warning "TODO: implement QEditorView::setCursorPosition"
-    kdDebug() << "TODO: implement QEditorView::setCursorPosition" << endl;
-    m_editor->setCursorPosition( line, col );
+	kdDebug() << "TODO: implement QEditorView::setCursorPosition" << endl;
+	m_editor->setCursorPosition( line, col );
+	m_editor->ensureCursorVisible();
 	return FALSE;
 }
 
 bool QEditorView::setCursorPositionReal(unsigned int line, unsigned int col)
 {
 	m_editor->setCursorPosition( line, col );
+	m_editor->ensureCursorVisible();
 	return true;
 }
 
@@ -164,7 +181,7 @@ void QEditorView::paste( )
 void QEditorView::installPopup( class QPopupMenu *rmb_Menu )
 {
 	kdDebug() << "QEditorView::installPopup()" << endl;
-        m_popupMenu = rmb_Menu;
+		m_popupMenu = rmb_Menu;
 }
 
 void QEditorView::showArgHint(QStringList functionList,
@@ -206,4 +223,63 @@ QString QEditorView::language() const
 void QEditorView::contextMenuEvent( QContextMenuEvent* e )
 {
 	e->accept();
+}
+
+void QEditorView::gotoLine()
+{
+    GotoLineDialog dlg;
+    dlg.setEditor( m_editor );
+    dlg.exec();
+}
+
+void QEditorView::doFind()
+{
+    m_findDialog->exec();
+}
+
+void QEditorView::doReplace()
+{
+    m_replaceDialog->exec();
+}
+
+void QEditorView::slotStartFind()
+{
+    int startLine = 0;
+    int startCol = 0;
+    int endLine = -1;
+    int endCol = -1;
+
+    if( m_findDialog->options() & KoReplaceDialog::FromCursor ){
+        m_editor->getCursorPosition( &startLine, &startCol );
+    }
+
+    if( m_findDialog->options() & KoFindDialog::SelectedText ){
+        m_editor->getSelection( &startLine, &startCol, &endLine, &endCol );
+    }
+
+    QRegExp regexp( m_findDialog->pattern() );
+    unsigned int foundAtLine = 0;
+    unsigned int foundAtCol = 0;
+    unsigned int matchLen = 0;
+    bool backwards = m_findDialog->options() & KoFindDialog::FindBackwards ? true : 0;
+
+    bool found = m_document->searchText( startLine, startCol, regexp,
+                                         &foundAtLine, &foundAtCol,
+                                         &matchLen, backwards );
+    if( found && (endLine == -1 ||
+                  (!backwards && foundAtLine<=endLine && foundAtCol<=endCol) ||
+                  (backwards && startLine>=foundAtLine && startCol>=foundAtLine) ) ){
+        if( backwards ){
+            m_document->setSelection( foundAtLine, foundAtCol+matchLen, foundAtLine, foundAtCol );
+        } else {
+            m_document->setSelection( foundAtLine, foundAtCol, foundAtLine, foundAtCol+matchLen );
+        }
+    } else {
+        kapp->beep();
+    }
+}
+
+void QEditorView::slotStartReplace()
+{
+
 }

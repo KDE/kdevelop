@@ -64,7 +64,7 @@ void PartController::setupActions()
 {
   KActionCollection *ac = TopLevel::getInstance()->main()->actionCollection();
 
-  (void) KStdAction::open(this, SLOT(slotOpenFile()), 
+  (void) KStdAction::open(this, SLOT(slotOpenFile()),
     ac, "file_open");
 
   m_saveAllFilesAction = new KAction(i18n("Save &All"), 0,
@@ -120,7 +120,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
     encoding = m_presetEncoding;
     m_presetEncoding = QString::null;
   }
-  
+
   if (mimeType.startsWith("text/")
       || mimeType == "application/x-desktop")
   {
@@ -193,7 +193,7 @@ DocumentationPart *PartController::findDocPart(const QString &context)
     if (part && (part->context() == context))
       return part;
   }
-  
+
   return 0;
 }
 
@@ -284,7 +284,7 @@ KParts::Part *PartController::partForURL(const KURL &url)
     if (urlIsEqual(url, ro_part->url()))
       return ro_part;
   }
-  
+
   return 0;
 }
 
@@ -337,7 +337,7 @@ bool PartController::closePart(KParts::Part *part)
 
   if (part->widget())
     TopLevel::getInstance()->removeView(part->widget());
-  
+
   delete part;
 
   return true;
@@ -379,9 +379,11 @@ void PartController::saveAllFiles()
     if (it.current()->inherits("KParts::ReadWritePart"))
     {
       KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
-      rw_part->save();
+      if( rw_part->isModified() ){
+          rw_part->save();
+          TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
+      }
 
-      TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
     }
 }
 
@@ -463,7 +465,7 @@ bool PartController::closeDocuments(const QStringList &documents)
 
     if (!part)
       continue;
-    
+
     if(!closePart(part))
       return false;
   }

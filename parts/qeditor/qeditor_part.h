@@ -84,10 +84,13 @@ public:
 	virtual bool isModified() const;
 
 	static KAboutData *createAboutData();
+	
+private:
+	void setupActions();
 
 signals:
 	void fileNameChanged();
-
+	
 // -- MarkInterface ------------------------------------------------------------------------
 public:
 	virtual uint mark (uint line);

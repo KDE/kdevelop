@@ -113,12 +113,7 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
 	connect( m_editor->editor(), SIGNAL(selectionChanged()),
 			 this, SIGNAL(selectionChanged()) );
 
-	// create our actions
-	KStdAction::open(this, SLOT(fileOpen()), actionCollection());
-	KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
-	KStdAction::save(this, SLOT(save()), actionCollection());
-	KStdAction::undo( this, SLOT(undo()), actionCollection());
-	KStdAction::redo( this, SLOT(redo()), actionCollection());
+	setupActions();
 
 	// set our XML-UI resource file
 	setXMLFile("qeditor_part.rc");
@@ -132,6 +127,24 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
 
 QEditorPart::~QEditorPart()
 {
+}
+
+void QEditorPart::setupActions()
+{
+	// create our actions
+	KStdAction::open( this, SLOT(fileOpen()), actionCollection() );
+	KStdAction::saveAs( this, SLOT(fileSaveAs()), actionCollection() );
+	KStdAction::save( this, SLOT(save()), actionCollection() );
+
+	KStdAction::undo( this, SLOT(undo()), actionCollection() );
+	KStdAction::redo( this, SLOT(redo()), actionCollection() );
+	KStdAction::cut( m_editor, SLOT(cut()), actionCollection() );
+	KStdAction::copy( m_editor, SLOT(copy()), actionCollection() );
+	KStdAction::paste( m_editor, SLOT(paste()), actionCollection() );
+	KStdAction::selectAll( m_editor, SLOT(selectAll()), actionCollection() );
+	KStdAction::gotoLine( m_editor, SLOT(gotoLine()), actionCollection() );
+        KStdAction::find( m_editor, SLOT(doFind()), actionCollection() );
+        KStdAction::replace( m_editor, SLOT(doReplace()), actionCollection() );
 }
 
 void QEditorPart::setReadWrite(bool rw)
@@ -342,34 +355,40 @@ QPtrList<KTextEditor::View> QEditorPart::views() const
 // UndoInterface -------------------------------------------------------------------------
 void QEditorPart::clearUndo()
 {
+#warning "TODO: void QEditorPart::clearUndo()"
 	kdDebug() << "QEditorPart::clearUndo() -- not implemented yet!!" << endl;
 }
 
 void QEditorPart::clearRedo()
 {
+#warning "TODO: void QEditorPart::clearRedo()"
 	kdDebug() << "QEditorPart::clearRedo() -- not implemented yet!!" << endl;
 }
 
 unsigned int QEditorPart::undoCount() const
 {
+#warning "TODO: unsigned int QEditorPart::undoCount() const"
 	kdDebug() << "QEditorPart::undoCount() -- not implemented yet!!" << endl;
 	return 0;
 }
 
 unsigned int QEditorPart::redoCount() const
 {
+#warning "TODO: unsigned int QEditorPart::redoCount() const"
 	kdDebug() << "QEditorPart::redoCount() -- not implemented yet!!" << endl;
 	return 0;
 }
 
 unsigned int QEditorPart::undoSteps() const
 {
+#warning "TODO: unsigned int QEditorPart::undoSteps() const"
 	kdDebug() << "QEditorPart::undoSteps() -- not implemented yet!!" << endl;
 	return 0;
 }
 
 void QEditorPart::setUndoSteps( unsigned int steps )
 {
+#warning "TODO: void QEditorPart::setUndoSteps( unsigned int steps )"
 	kdDebug() << "QEditorPart::setUndoSteps() -- not implemented yet!!" << endl;
 }
 
@@ -534,15 +553,39 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 			const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol,
 			unsigned int *matchLen, bool casesensitive, bool backwards )
 {
-#warning "TODO: implement QEditorPart::searchText()"
-	return false;
+#warning "TODO: QEditorPart::searchText()"
+    kdDebug() << "TODO: QEditorPart::searchText()" << endl;
+    return false;
 }
 
 bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 			const QRegExp &regexp, unsigned int *foundAtLine,
 			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards )
 {
-#warning "TODO: implement QEditorPart::searchText()"
+	QEditor* ed = m_editor->editor();
+	QTextParag* p = ed->document()->paragAt( startLine );
+	while( p ){
+		QString str = p->string()->toString();
+		int pos = -1;
+		if( backwards ){
+			pos = regexp.searchRev( str, p->paragId() == startLine ? startCol : p->length() );
+		} else {
+			pos = regexp.search( str, p->paragId() == startLine ? startCol : 0 );
+		}
+
+		if( pos != -1 ){
+			*foundAtLine = p->paragId();
+			*foundAtCol = pos;
+			*matchLen = regexp.matchedLength();
+			return true;
+		}
+
+		if( backwards ){
+			p = p->prev();
+		} else {
+			p = p->next();
+		}
+	}
 	return false;
 }
 

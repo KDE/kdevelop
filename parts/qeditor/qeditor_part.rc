@@ -1,24 +1,45 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="qeditor_part" version="1">
-<MenuBar>
-  <Menu name="file">
-	<Action name="file_open"/>
-	<Separator/>
-	<Action name="file_save"/>
-	<Action name="file_save_as"/>
+<kpartgui name="qeditor_part" version="10">
+<MenuBar noMerge="1">
+
+  <Menu name="file" noMerge="1"><text>&amp;File</text>
+    <Action name="file_save" group="save_operations" />
+    <Action name="file_save_as" group="save_operations" />
   </Menu>
-  <Menu name="edit">
-	  <Action name="edit_undo"/>
-	  <Action name="edit_redo"/>
+
+  <Menu name="edit" noMerge="1"><text>&amp;Edit</text>
+    <Action name="edit_undo" group="edit_operations" />
+    <Action name="edit_redo" group="edit_operations" />
+    <Separator group="edit_operations" />
+    <Action name="edit_cut" group="edit_operations" />
+    <Action name="edit_copy" group="edit_operations" />
+    <Action name="edit_paste" group="edit_operations" />
+    <Separator group="edit_operations" />
+    <Action name="go_goto_line" group="edit_operations" />
+    <Action name="edit_find" group="find_operations" />
+  </Menu>
+
+  <Menu name="view" noMerge="1"><text>&amp;View</text>
+  </Menu>
+
+  <Action name="bookmarks" />
+
+  <Menu name="tools" noMerge="1"><text>&amp;Tools</text>
+  </Menu>
+
+  <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
   </Menu>
 </MenuBar>
-<ToolBar name="mainToolBar">
-  <Action name="file_open"/>
-  <Action name="file_save"/>
-  <Action name="file_print"/>
-  <Separator/>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
-  <Separator/>
+
+<ToolBar name="mainToolBar" noMerge="1"><text>Main Toolbar</text>
+  <Action name="file_save" group="file_operations" />
+  <Action name="file_save_as" group="file_operations" />
+  <Action name="edit_undo" group="edit_operations" />
+  <Action name="edit_redo" group="edit_operations" />
+  <Action name="edit_cut" group="edit_operations" />
+  <Action name="edit_copy" group="edit_operations" />
+  <Action name="edit_paste" group="edit_operations" />
+  <Action name="edit_find" group="find_operations" />
 </ToolBar>
+
 </kpartgui>

@@ -31,9 +31,12 @@ class QPopupMenu;
 #include <ktexteditor/codecompletioninterface.h>
 
 class QEditor;
+class QEditorPart;
 class CodeCompletion_Impl;
 class LineNumberWidget;
 class MarkerWidget;
+class KoFindDialog;
+class KoReplaceDialog;
 
 class QEditorView: public KTextEditor::View,
 				   public KTextEditor::ClipboardInterface,
@@ -43,7 +46,7 @@ class QEditorView: public KTextEditor::View,
 {
 	Q_OBJECT
 public:
-	QEditorView( KTextEditor::Document*, QWidget*, const char* =0 );
+	QEditorView( QEditorPart*, QWidget*, const char* =0 );
 	virtual ~QEditorView();
 
 	virtual KTextEditor::Document* document() const;
@@ -55,13 +58,22 @@ public:
 	virtual QString language() const;
 
 public slots:
+	virtual void gotoLine();
 	virtual void setLanguage( const QString& );
+    virtual void doFind();
+    virtual void doReplace();
+
+private slots:
+    void slotStartFind();
+    void slotStartReplace();
 
 protected:
-    virtual void contextMenuEvent( QContextMenuEvent* );
+	virtual void contextMenuEvent( QContextMenuEvent* );
 
 private:
-    QPopupMenu* m_popupMenu;
+	QPopupMenu* m_popupMenu;
+    KoFindDialog* m_findDialog;
+    KoReplaceDialog* m_replaceDialog;
 
 
 // ViewCursorInterface ----------------------------------------------------------------------
@@ -207,11 +219,11 @@ signals:
 	void filterInsertString(KTextEditor::CompletionEntry*,QString*);
 
 private:
-	KTextEditor::Document* m_document;
+	QEditorPart* m_document;
 	QEditor* m_editor;
 	CodeCompletion_Impl* m_pCodeCompletion;
-    LineNumberWidget* m_lineNumberWidget;
-    MarkerWidget* m_markerWidget;
+	LineNumberWidget* m_lineNumberWidget;
+	MarkerWidget* m_markerWidget;
 };
 
 #endif

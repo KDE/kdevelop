@@ -50,56 +50,58 @@ class ParenMatcher;
 class QPopupMenu;
 
 class QEditor: public QTextEdit{
-    Q_OBJECT
+	Q_OBJECT
 public:
-    QEditor( QWidget* parent=0, const char* name=0 );
-    virtual ~QEditor();
+	QEditor( QWidget* parent=0, const char* name=0 );
+	virtual ~QEditor();
 
-    QTextCursor* textCursor() const;
-    QTextDocument* document() const;
-    void setDocument( QTextDocument*);
+	QTextCursor* textCursor() const;
+	QTextDocument* document() const;
+	void setDocument( QTextDocument*);
 
-    void drawCursor( bool visible );
-    void updateStyles();
-    void repaintChanged();
+	void drawCursor( bool visible );
+	void updateStyles();
+	void repaintChanged();
 
-    virtual void zoomIn();
-    virtual void zoomOut();
+	virtual void zoomIn();
+	virtual void zoomOut();
 
-    virtual bool tabIndentEnabled() const { return m_tabIndent; }
-    virtual void setTabIndentEnabled( bool b ) { m_tabIndent = b; }
+	virtual bool tabIndentEnabled() const { return m_tabIndent; }
+	virtual void setTabIndentEnabled( bool b ) { m_tabIndent = b; }
 
-    virtual bool backspaceIndentEnabled() const { return m_backspaceIndent; }
-    virtual void setBackspaceIndentEnabled( bool b ) { m_backspaceIndent = b; }
+	virtual bool backspaceIndentEnabled() const { return m_backspaceIndent; }
+	virtual void setBackspaceIndentEnabled( bool b ) { m_backspaceIndent = b; }
 
-    virtual bool replace( const QString &find, const QString &replace,
-                          bool cs, bool wo, bool forward, bool startAtCursor,
-                          bool replaceAll );
-    virtual QString textLine( uint ) const;
+	virtual bool replace( const QString &find, const QString &replace,
+						  bool cs, bool wo, bool forward, bool startAtCursor,
+						  bool replaceAll );
+	virtual QString textLine( uint ) const;
 
-    virtual void setLanguage( const QString& );
-    virtual QString language() const;
+	virtual void setLanguage( const QString& );
+	virtual QString language() const;
 
-    virtual void setText( const QString& );
+	virtual void setText( const QString& );
 
 public slots:
-    void refresh();
-    void doGotoLine( int line );
-    void configChanged();
+	void refresh();
+	void doGotoLine( int line );
+	void configChanged();
 
 private slots:
-    void doMatch( QTextCursor* );
+	void doMatch( QTextCursor* );
+	void slotCursorPositionChanged( int, int );
 
 protected:
-    virtual void keyPressEvent( QKeyEvent* );
-    virtual void backspaceIndent( QKeyEvent* );
+	virtual void keyPressEvent( QKeyEvent* );
+	virtual void backspaceIndent( QKeyEvent* );
 
 private:
-    ParenMatcher* parenMatcher;
-    bool m_tabIndent;
-    bool m_completion;
-    bool m_backspaceIndent;
-    QString m_language;
+	ParenMatcher* parenMatcher;
+	bool m_tabIndent;
+	bool m_completion;
+	bool m_backspaceIndent;
+	QString m_language;
+	int m_currentLine;
 };
 
 #endif

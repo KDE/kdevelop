@@ -1,5 +1,6 @@
 2002-05-21  Roberto Raggi  <raggi@cli.di.unipi.it>
 	* qeditor: Implemented markinterface
+	* qeditor: Implemented searchinterface	
 
 2002-05-20  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* Welcome in the 2000's: the Tools menu config
