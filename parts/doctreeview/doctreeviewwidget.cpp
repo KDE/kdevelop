@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 1999-2001 by Bernd Gehrmann and the KDevelop Team       *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -15,6 +15,8 @@
 #include <qheader.h>
 #include <qlayout.h>
 #include <qvbox.h>
+#include <qregexp.h>
+#include <qtimer.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kglobal.h>
