@@ -1389,11 +1389,11 @@ void CKDevelop::slotHelpTutorial(){
   QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
   // first try the locale setting
-  file = strpath + klocale->language() + '/' + "kdevelop/programming.html";
+  file = strpath + klocale->language() + '/' + "kdevelop/programming/index.html";
 
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
-    file = strpath + "default/" + "kdevelop/programming.html";
+    file = strpath + "default/" + "kdevelop/programming/index.html";
   }
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 	

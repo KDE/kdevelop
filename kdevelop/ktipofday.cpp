@@ -155,10 +155,10 @@ void KTipofDay::slotNext()
   QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
 
-  file = strpath + klocale->language() + '/' + "kdevelop/tipdatabase";
+  file = strpath + klocale->language() + '/' + "kdevelop/tip.database";
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
-    file = strpath + "default/" + "kdevelop/tipdatabase";
+    file = strpath + "default/" + "kdevelop/tip.database";
   }
   if( !QFileInfo( file ).exists() ){
     tip_label->setText(i18n("Tipdatabase not found ! Please check your installation."));

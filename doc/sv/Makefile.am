@@ -1,8 +1,11 @@
-docs_DATA = tip.database
+EXTRA_DIST = tip.database
 
-datadir = $(kde_htmldir)/sv/kdevelop
+SUBDIRS = .
+		
+install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/sv/kdevelop/
+	$(INSTALL_DATA) tip.database $(DESTDIR)$(kde_htmldir)/sv/kdevelop/tip.database
 
-EXTRA_DIST = $(docs_DATA)
-
-SUBDIRS = . 
+uninstall-local:
+	-rm -f $(kde_htmldir)/sv/kdevelop/tip.database
 

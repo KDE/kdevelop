@@ -221,15 +221,15 @@ void DocTreeKDevelopFolder::refresh()
     (void) new DocTreeKDevelopBook(this, i18n("User Manual"),
                                    "index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("Programming Handbook"),
-                                   "programming.html", true);
+                                   "programming/index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("Tutorials"),
-                                   "tutorial.html", true);
+                                   "tutorial/index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("KDE Library Reference"),
-                                   "kde_libref.html", true);
+                                   "kde_libref/index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("KDE 2 Developer Guide"),
-                                   "add_kdedoc.html", true);
+                                   "addendum/index.html", true);
     (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
-                                   "cref.html");
+                                   "reference/C/cref.html");
 }
 
 

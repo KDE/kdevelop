@@ -1,8 +1,10 @@
-docs_DATA = cref.html tip.database
+EXTRA_DIST =tip.database
 
-datadir = $(kde_htmldir)/en/kdevelop
+SUBDIRS = . addendum kde_libref manual programming tutorial cref
+		
+install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) tip.database $(DESTDIR)$(kde_htmldir)/en/kdevelop/tip.database
 
-EXTRA_DIST = $(docs_DATA)
-
-SUBDIRS = . addendum kde_libref manual programming tutorial
-
+uninstall-local:
+	-rm -f $(kde_htmldir)/en/kdevelop/tip.database

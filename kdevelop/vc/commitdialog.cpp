@@ -5,7 +5,6 @@
 #include <klocale.h>
 
 #include "commitdialog.h"
-//#include "commitdialog.moc"
 
 
 CommitDialog::CommitDialog()

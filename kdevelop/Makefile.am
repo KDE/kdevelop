@@ -18,7 +18,7 @@ APPSDIR = $(kde_appsdir)/Development
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools docs templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard
+SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 

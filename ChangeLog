@@ -1,6 +1,8 @@
 1999-07-24  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-	* Bernd: I commented out the #include "commitdilalog.moc" in
-commitdialog.cpp to make it compile.
+	* Bernd: I commented out the #include "commitdilalog.moc" in commitdialog.cpp to make it compile and added
+	  Q_OBJECT to commitdialog.h instead.
+  * updated Makefile.am's for new documentation package structure done by Eric Bishoff
+  * fixed errors that rely to the update
 
 1999-07-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Combobox for version control in project options

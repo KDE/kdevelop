@@ -7,6 +7,8 @@
 
 class CommitDialog : public QDialog
 {
+  Q_OBJECT
+
 public:
     CommitDialog();
     QString logMessage()
