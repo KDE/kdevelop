@@ -612,7 +612,7 @@ void MakeWidget::insertItem( MakeItem* item )
 
 void MakeWidget::slotDocumentOpened( const QString & filename )
 {
-	KParts::Part* part = m_part->partController()->findOpenDocument(KURL( filename ));
+	KParts::Part* part = m_part->partController()->partForURL(KURL( filename ));
 	KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part);
 
 	if (!doc) {
@@ -640,7 +640,7 @@ void MakeWidget::createCursor(ErrorItem* e, KTextEditor::Document* doc)
 	// try to get a KTextEditor::Cursor, so that we can retain position in
 	// a document even when it is edited
 	if (!doc)
-		doc = dynamic_cast<KTextEditor::Document*>(m_part->partController()->findOpenDocument(KURL( guessFileName(e->fileName, m_paragraphs + 1 ))));
+		doc = dynamic_cast<KTextEditor::Document*>(m_part->partController()->partForURL(KURL( guessFileName(e->fileName, m_paragraphs + 1 ))));
 
 	if (doc) {
 		KTextEditor::EditInterface* edit = dynamic_cast<KTextEditor::EditInterface*>(doc);
