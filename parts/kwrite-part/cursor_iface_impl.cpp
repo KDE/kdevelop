@@ -10,13 +10,12 @@
 CursorIfaceImpl::CursorIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor::Editor *editor)
   : CursorDocumentIface(parent, editor), m_edit(edit)
 {
+  connect(edit, SIGNAL(newCurPos()), this, SLOT(slotCursorChanged()));
 }
 
 
 bool CursorIfaceImpl::setCursorPosition(int line, int col)
 {
-kdDebug() << "Set cursor position: " << line << ", " << col << endl;
-
   m_edit->setCursorPosition(line, col);
   m_edit->setFocus();
 
@@ -39,6 +38,12 @@ int CursorIfaceImpl::lengthOfLine(int line) const
 void CursorIfaceImpl::getCursorPosition(int &line, int &col)
 {
   m_edit->getCursorPosition(&line, &col);
+}
+
+
+void CursorIfaceImpl::slotCursorChanged()
+{
+  emit CursorDocumentIface::cursorPositionChanged(m_edit->currentLine(), m_edit->currentColumn());
 }
 
 

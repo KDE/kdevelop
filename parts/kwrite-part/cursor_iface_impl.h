@@ -23,6 +23,11 @@ public:
   virtual int lengthOfLine(int line) const;
   
 
+private slots:
+
+  void slotCursorChanged();
+
+
 private:
 
   KWrite *m_edit;

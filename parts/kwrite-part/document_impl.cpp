@@ -13,6 +13,7 @@
 #include "undo_iface_impl.h"
 #include "cursor_iface_impl.h"
 #include "edit_iface_impl.h"
+#include "status_iface_impl.h"
 
 
 #include "kwrite/kwdoc.h"
@@ -33,6 +34,7 @@ DocumentImpl::DocumentImpl(KEditor::Editor *parent, QWidget *parentWidget)
   new CursorIfaceImpl(m_view, this, parent);
   new UndoIfaceImpl(m_view, this, parent);
   new EditIfaceImpl(m_view, this, parent);
+  new StatusIfaceImpl(m_view, this, parent);
 
   setXMLFile("kwriteeditor_part.rc", true);
    
