@@ -155,7 +155,9 @@ CppCodeCompletion::slotCompletionBoxHided( /* int completionTextLine */ )
     // m_pCompletionIface->showArgHint( functionList, "( )", "," );
     // hint form josef wenninger: the new KTextEditor has an additional signal which
     // returns the selected entry - there we can store the index
-    m_pSupport->getCHWidget( )->setCHText( "Note: That's currently a test and NOT real\n\n" + m_CHCommentList[ 0 ] );
+    if ( m_pSupport->getCHWidget() ) {
+        m_pSupport->getCHWidget( )->setCHText( "Note: That's currently a test and NOT real\n\n" + m_CHCommentList[ 0 ] );
+    }
     m_CHCommentList.clear( );
 
     kdDebug( 9007 ) << "m_bCompletionBoxShow = false;" << endl;
