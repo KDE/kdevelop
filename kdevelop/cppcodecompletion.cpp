@@ -914,6 +914,8 @@ void CppCodeCompletion::completeText()
     kdDebug() << "classname = " << className << endl;
 
     SimpleContext* ctx = SimpleParser::localVariables( contents );
+    if ( !ctx )
+        return;
     QValueList<SimpleVariable> variableList;
     SimpleVariable v;
     v.name = "this";
