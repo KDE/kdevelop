@@ -40,3 +40,4 @@
 #undef KDOC_INDEXDIR
 #undef WITH_DOCBASE
 #undef WITH_KDOC2
+#undef WITH_CPP_REPARSE

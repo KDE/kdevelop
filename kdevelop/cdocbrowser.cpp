@@ -89,13 +89,26 @@ void CDocBrowser::slotViewInKFM(){
 	
 }
 
-void CDocBrowser::showURL(QString url,bool reload){
+#include <iostream.h>
+void CDocBrowser::showURL(QString url, bool reload){
  //read the htmlfile
   //cerr << "URL:" << url << "\n";
+
   QString url_wo_ref=url; // without ref
   QString ref;
+        // in some cases KHTMLView return "file:/file:/...."
+        //  this will be here workarounded... and also on
+        //  slotURLonUrl in ckdevelop.cpp
+  QString corr=url;
+
+  if (corr.left(6)=="file:/")
+    corr=corr.mid(6, corr.length());
+
+  if (corr.left(5)=="file:")
+    url=corr;
 
   complete_url=url;
+
   int pos = url.findRev('#');
   int len = url.length();
 
@@ -120,8 +133,9 @@ void CDocBrowser::showURL(QString url,bool reload){
 
   if( (url_wo_ref != old_url) || reload){
     QString str="";
+
     KFM::download(url,str);
-    
+
     //cerr << endl << "STR:" << str;
     
     char buffer[256+1];
