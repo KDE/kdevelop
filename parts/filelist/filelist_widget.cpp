@@ -230,54 +230,17 @@ KURL::List FileListWidget::getSelectedURLs( )
 
 void FileListWidget::closeSelectedFiles( )
 {
-	kdDebug() << k_funcinfo << endl;
-	
-	KURL::List list = getSelectedURLs();
-	KURL::List::iterator it = list.begin();
-	while ( it != list.end() )
-	{
-		kdDebug() << "Closeing " << (*it).prettyURL() << endl;
-		_part->partController()->closePart( _part->partController()->partForURL( *it ) );
-		++it;
-	}
+	_part->partController()->closeFiles( getSelectedURLs() );
 }
 
-// this is a bad idea - should be done by partController
 void FileListWidget::saveSelectedFiles( )
 {
-	kdDebug() << k_funcinfo << endl;
-	
-	KURL::List list = getSelectedURLs();
-	KURL::List::iterator it = list.begin();
-	while ( it != list.end() )
-	{
-		kdDebug() << "Saving " << (*it).prettyURL() << endl;
-		KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( _part->partController()->partForURL( *it ) );
-		if ( rw_part )
-		{
-			rw_part->save();
-		}
-		++it;
-	}
+	_part->partController()->saveFiles( getSelectedURLs() );
 }
 
-// this is a bad idea - should be done by partController
 void FileListWidget::reloadSelectedFiles( )
 {
-	kdDebug() << k_funcinfo << endl;
-	
-	KURL::List list = getSelectedURLs();
-	KURL::List::iterator it = list.begin();
-	while ( it != list.end() )
-	{
-		kdDebug() << "Reloading " << (*it).prettyURL() << endl;
-		KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( _part->partController()->partForURL( *it ) );
-		if ( ro_part )
-		{
-			ro_part->openURL( *it );
-		}
-		++it;
-	}
+	_part->partController()->revertFiles( getSelectedURLs() );
 }
 			
 #include "filelist_widget.moc"
