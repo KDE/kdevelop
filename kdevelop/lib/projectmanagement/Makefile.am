@@ -1,3 +1,5 @@
+UIC = uic
+
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general
 
@@ -5,15 +7,17 @@ noinst_LTLIBRARIES = libkdevprojectmanagement.la
 
 METASOURCES = AUTO
 
-appwizardbase.h : appwizard.ui
-	uic -o appwizardbase.h appwizard.ui
-appwizardbase.cpp : appwizard.ui
-	uic -i appwizardbase.h -o appwizardbase.cpp appwizard.ui
+appwizardbase.h : $(srcdir)/appwizard.ui
+	$(UIC) -o appwizardbase.h $(srcdir)/appwizard.ui
+	$(MOC) appwizardbase.h -o appwizardbase.moc.cpp
+appwizardbase.cpp : $(srcdir)/appwizard.ui
+	$(UIC) -i appwizardbase.h -o appwizardbase.cpp $(srcdir)/appwizard.ui
 
-filepropspagebase.h : filepropspage.ui
-	uic -o filepropspagebase.h filepropspage.ui
-filepropspagebase.cpp : filepropspage.ui
-	uic -i filepropspagebase.h -o filepropspagebase.cpp filepropspage.ui
+filepropspagebase.h : $(srcdir)/filepropspage.ui
+	$(UIC) -o filepropspagebase.h $(srcdir)/filepropspage.ui
+	$(MOC) filepropspagebase.h -o filepropspagebase.moc.cpp
+filepropspagebase.cpp : $(srcdir)/filepropspage.ui
+	$(UIC) -i filepropspagebase.h -o filepropspagebase.cpp $(srcdir)/filepropspage.ui
 
 EXTRA_DIST = appwizard.ui filepropspage.ui
 
