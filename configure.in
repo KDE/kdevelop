@@ -53,6 +53,7 @@ AC_FIND_GIF
 AC_FIND_JPEG
 AC_FIND_TIFF
 KDE_CHECK_KIMGIO 
+AC_CHECK_HEADERS(nkf.h)
 
 dnl in this space add everything you want to check for
 dnl examples are specific headers, libraries, etc.

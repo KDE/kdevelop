@@ -7,6 +7,10 @@
 
 #include <kcharsets.h>
 
+#ifdef QT_I18N
+#include <kapp.h>
+#endif
+
 #include "kwview.h"
 #include "kwdoc.h"
 
@@ -159,7 +163,7 @@ int TextLine::firstChar() {
   int z;
 
   z = 0;
-  while (z < len && text[z] <= 32) z++;
+  while (z < len && (unsigned char) text[z] <= 32) z++;
   return (z < len) ? z : -1;
 }
 
@@ -423,6 +427,10 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   clear();
   clearFileName();
 
+#if defined(QT_I18N) && defined(HAVE_NKF_H)
+  JPcode = Nkf::EUC;
+#endif
+
   setHighlight(0); //calls updateFontData()
   connect(hlManager,SIGNAL(changed()),SLOT(hlChanged()));
 }
@@ -675,6 +683,55 @@ void KWriteDoc::loadFile(QIODevice &dev) {
   clear();
 
   textLine = contents.getFirst();
+#if defined(QT_I18N) && defined(HAVE_NKF_H)
+  StringNkf *nkf = NULL;
+  char *nkfstr = NULL;
+  KLocale *kl = KApplication::getKApplication()->getLocale();
+  if (strncmp(kl->language(), "ja", 2) == 0) {
+    nkf = new StringNkf();
+    // "true" to convert hankaku-kana to zenkaku-kana,
+    // "false" to preserve hankaku-kana.
+    nkf->setAssumeHankakuKana(false);
+    nkf->setOutputCode(Nkf::EUC);
+    nkf->begin();
+  }
+
+  int newline = 0;
+  while ((len = dev.readLine(buf, sizeof(buf))) > 0) {
+    if (buf[len-1] == '\n') {
+      newline = 1;
+      buf[--len] = '\0';
+    }
+    if (buf[len-1] == '\r') {
+      printf("dos text\n");
+    }
+    if (nkf) {
+      nkfstr = nkf->convert(buf);
+    }
+    if (nkfstr) {
+      s = nkfstr;
+    } else {
+      s = buf;
+    }
+    while (*s) {
+      textLine->append(*s++);
+    }
+    if (nkfstr) {
+      free(nkfstr);
+    }
+    if (newline) {
+      textLine = new TextLine();
+      contents.append(textLine);
+      newline = 0;
+    }
+  }
+  
+  if (nkf) {
+    JPcode = nkf->InputCode();
+    nkf->end();
+    delete nkf;
+  }
+#else
   do {
     len = dev.readBlock(buf,512);
     s = buf;
@@ -697,6 +754,7 @@ void KWriteDoc::loadFile(QIODevice &dev) {
       len--;
     }
   } while (s != buf);
+#endif
 
 //  updateLines();
 }
@@ -705,6 +763,47 @@ void KWriteDoc::writeFile(QIODevice &dev) {
   TextLine *textLine;
 
   textLine = contents.first();
+#if defined(QT_I18N) && defined(HAVE_NKF_H)
+  StringNkf *nkf = NULL;
+  char *nkfstr = NULL;
+  const char *s;
+  int l;
+  KLocale *kl = KApplication::getKApplication()->getLocale();
+  if (strncmp(kl->language(), "ja", 2) == 0) {
+    nkf = new StringNkf();
+    // "true" to convert hankaku-kana to zenkaku-kana,
+    // "false" to preserve hankaku-kana.
+    nkf->setOutputCode(JPcode);
+    nkf->setInputCode(Nkf::EUC);
+    nkf->setAssumeHankakuKana(false);
+    nkf->begin();
+  }
+
+  do {
+    s = textLine->getText();
+    l = textLine->length();
+    if (nkf && s && l) {
+      nkfstr = nkf->convert(s, l);
+    }
+    if (nkfstr) {
+      dev.writeBlock(nkfstr, strlen(nkfstr));
+      free(nkfstr);
+      nkfstr = NULL;
+      free(nkf->convert("\n"));
+    } else {
+      dev.writeBlock(s, l);
+    }
+    textLine = contents.next();
+    if (!textLine) break;
+    dev.putch('\n');
+  } while (true);
+
+  if (nkf) {
+    nkf->end();
+    delete nkf;
+  }
+
+#else
   do {
     dev.writeBlock(textLine->getText(),textLine->length());
     textLine = contents.next();
@@ -713,9 +812,83 @@ void KWriteDoc::writeFile(QIODevice &dev) {
     if(eolMode != eolMacintosh) dev.putch('\n');
   } while (true);
 
+#endif
 	// Write bookmarks, breakpoints, ...
 	writeFileConfig();
 }
+
+#ifdef QT_I18N
+void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char *str, int len) {
+  TextLine *textLine;
+  int l, z, l2;
+  char *buf;
+
+  buf = str;
+  z = l = len;
+
+  textLine = contents.at(c.cursor.y);
+
+  recordStart(c.cursor);
+
+  const char *s = textLine->getText();;
+  if (s && iseucchar(s[c.cursor.x])) {
+      l2 = 2;
+  } else {
+      l2 = 1;
+  }
+  recordReplace(c.cursor,(c.flags & cfOvr) ? l2 : 0,buf,l);
+  c.cursor.x += z;
+
+  if (c.flags & cfWordWrap) {
+    int line;
+    const unsigned char *s;
+    int pos;
+    PointStruc actionCursor;
+
+    if (!(c.flags & cfPersistent)) deselectAll();
+    line = c.cursor.y;
+    do {
+      textLine = contents.at(line);
+      s = (unsigned char *) textLine->getText();
+      l = textLine->length();
+      for (z = c.wrapAt; z < l; z++) if (s[z] > 32) break; //search for text to wrap
+      if (z >= l) break; // nothing more to wrap
+      pos = c.wrapAt;
+      for (; z >= 0; z--) { //find wrap position
+        if (s[z] <= 32) {
+          pos = z + 1;
+          break;
+        }
+      }
+      //pos = wrap position
+
+      if (line == c.cursor.y && pos <= c.cursor.x) {
+        //wrap cursor
+        c.cursor.y++;
+        c.cursor.x -= pos;
+      }
+
+      if (textLine == contents.getLast()) {
+        //at end of doc: create new line
+        actionCursor.x = pos;
+        actionCursor.y = line;
+        recordAction(KWAction::newLine,actionCursor);
+      } else {
+        //wrap
+        actionCursor.y = line + 1;
+        if (s[l - 1] > 32) { //add space in next line if necessary
+          actionCursor.x = 0;
+          recordReplace(actionCursor,0," ",1);
+        }
+        actionCursor.x = textLine->length() - pos;
+        recordAction(KWAction::wordWrap,actionCursor);
+      }
+      line++;
+    } while (true);
+  }
+  recordEnd(view,c);
+}
+#endif
 
 void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
   TextLine *textLine;
@@ -771,7 +944,18 @@ void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
   }
 
   recordStart(c.cursor);
+#ifdef QT_I18N
+  int l2;
+  const char *s = textLine->getText();;
+  if (s && iseucchar(s[c.cursor.x])) {
+      l2 = 2;
+  } else {
+      l2 = l;
+  }
+  recordReplace(c.cursor,(c.flags & cfOvr) ? l2 : 0,buf,l);
+#else
   recordReplace(c.cursor,(c.flags & cfOvr) ? l : 0,buf,l);
+#endif
   c.cursor.x += z;
 
   if (c.flags & cfWordWrap) {
@@ -872,29 +1056,29 @@ void KWriteDoc::backspace(KWriteView *view, VConfig &c) {
 
   if (c.cursor.x <= 0 && c.cursor.y <= 0) return;
   recordStart(c.cursor);
-  if (c.cursor.x > 0) {
-    if (!(c.flags & cfBackspaceIndent)) {
-      c.cursor.x--;
-      recordReplace(c.cursor,1);
-    } else {
-      TextLine *textLine;
-      int pos, l;
 
-      textLine = contents.at(c.cursor.y);
+  TextLine *textLine = contents.at(c.cursor.y);
+  int pos, l = 1;
+
+  if (c.cursor.x > 0) {
+#ifdef QT_I18N
+    if (c.cursor.x > 1)
+      if (iseucchar(textLine->getChar(c.cursor.x - 1)))
+        l = 2;
+#endif
+    if ((c.flags & cfBackspaceIndent) && l == 1) {
       pos = textLine->firstChar();
       if (pos >= 0 && pos < c.cursor.x) pos = 0;
       while ((textLine = contents.prev()) && pos != 0) {
         pos = textLine->firstChar();
         if (pos >= 0 && pos < c.cursor.x) {
           l = c.cursor.x - pos;
-          goto found;
+          break;
         }
       }
-      l = 1;//del one char
-      found:
-      c.cursor.x -= l;
-      recordReplace(c.cursor,l);
     }
+    c.cursor.x -= l;
+    recordReplace(c.cursor,l);
   } else {
     c.cursor.y--;
     c.cursor.x = contents.at(c.cursor.y)->length();
@@ -905,10 +1089,18 @@ void KWriteDoc::backspace(KWriteView *view, VConfig &c) {
 
 
 void KWriteDoc::del(KWriteView *view, VConfig &c) {
-
-  if (c.cursor.x < contents.at(c.cursor.y)->length()) {
+  TextLine *textLine = contents.at(c.cursor.y);
+  if (c.cursor.x < textLine->length()) {
     recordStart(c.cursor);
+#ifdef QT_I18N
+    if (iseucchar(textLine->getChar(c.cursor.x))) {
+      recordReplace(c.cursor,2);
+    } else {
+      recordReplace(c.cursor,1);
+    }
+#else
     recordReplace(c.cursor,1);
+#endif
     recordEnd(view,c);
   } else {
     if (c.cursor.y < (int) contents.count() -1) {
@@ -1137,11 +1329,40 @@ int KWriteDoc::textWidth(TextLine *textLine, int cursorX) {
   Attribute *a;
 
   x = 0;
+#ifdef QT_I18N
+  char *buf = new char[cursorX+2];
+  char *p;
+  int attr;
+  z = 0;
+  while (z < cursorX) {
+    ch = textLine->getChar(z);
+    if (ch == '\t') {
+      x += tabWidth - (x % tabWidth);
+      z++;
+    } else {
+      attr = textLine->getRawAttr(z);
+      a = &attribs[textLine->getAttr(z)];
+      p = buf;
+      do {
+	*p++ = ch;
+	ch = textLine->getChar(++z);
+      } while (z < cursorX &&
+	  attr == textLine->getRawAttr(z) &&
+	  textLine->getChar(z) != '\t');
+      // z--;
+      *p = '\0';
+      x += a->fm.width(buf);
+    }
+    // z++;
+  }
+  delete[] buf;
+#else
   for (z = 0; z < cursorX; z++) {
     ch = textLine->getChar(z);
     a = &attribs[textLine->getAttr(z)];
     x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
   }
+#endif
   return x;
 }
 
@@ -1166,6 +1387,23 @@ int KWriteDoc::textWidth(bool wrapCursor, PointStruc &cursor, int xPos) {
   len = textLine->length();
 
   x = oldX = z = 0;
+#ifdef QT_I18N
+  char buf[3];
+  buf[2] = '\0';
+  while (x < xPos && (!wrapCursor || z < len)) {
+    oldX = x;
+    ch = textLine->getChar(z);
+    a = &attribs[textLine->getAttr(z)];
+    if (iseucchar(ch)) {
+      buf[0] = ch;
+      buf[1] = textLine->getChar(++z);
+      x += a->fm.width(buf);
+    } else {
+      x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
+    }
+    z++;
+  }
+#else
   while (x < xPos && (!wrapCursor || z < len)) {
     oldX = x;
     ch = textLine->getChar(z);
@@ -1173,8 +1411,14 @@ int KWriteDoc::textWidth(bool wrapCursor, PointStruc &cursor, int xPos) {
     x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
     z++;
   }
+#endif
   if (xPos - oldX < x - xPos && z > 0) {
     z--;
+#ifdef QT_I18N
+    if (iseucchar(textLine->getChar(z))) {
+      z--;
+    }
+#endif
     x = oldX;
   }
   cursor.x = z;
@@ -1191,6 +1435,29 @@ int KWriteDoc::textPos(TextLine *textLine, int xPos) {
   len = textLine->length();
 
   x = oldX = z = 0;
+#ifdef QT_I18N
+  char buf[3];
+  buf[2] = '\0';
+  while (x < xPos) { // && z < len) {
+    oldX = x;
+    ch = textLine->getChar(z);
+    a = &attribs[textLine->getAttr(z)];
+    if (iseucchar(ch)) {
+      buf[0] = ch;
+      buf[1] = textLine->getChar(++z);
+      x += a->fm.width(buf);
+    } else {
+      x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
+    }
+    z++;
+  }
+  if (xPos - oldX < x - xPos && z > 0) {
+    z--;
+    if (iseucchar(textLine->getChar(z))) {
+      z--;
+    }
+  }
+#else
   while (x < xPos) { // && z < len) {
     oldX = x;
     ch = textLine->getChar(z);
@@ -1199,6 +1466,7 @@ int KWriteDoc::textPos(TextLine *textLine, int xPos) {
     z++;
   }
   if (xPos - oldX < x - xPos && z > 0) z--;
+#endif
   return z;
 }
 
@@ -1855,11 +2123,28 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
           x += tabWidth - (x % tabWidth);
       } else {
           a = &attribs[textLine->getAttr(z)];
+#ifdef QT_I18N
+      if (iseucchar(ch)) {
+	char buf[3];
+	buf[0] = ch;
+	buf[1] = textLine->getChar(++z);
+	buf[2] = '\0';
+	x += a->fm.width(buf);
+      } else {
+	x += a->fm.width(&ch,1);
+      }
+#else
           x += a->fm.width(&ch,1);
+#endif
       }
       z++;
   } while (x <= xStart);
   zc = z - 1;
+#ifdef QT_I18N
+  if (iseucchar(textLine->getChar(zc))) {
+    zc--;
+  }
+#endif
 
   xs = xStart;
   attr = textLine->getRawAttr(zc);
@@ -1875,7 +2160,19 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
           x += tabWidth - (x % tabWidth);
       } else {
           a = &attribs[attr & taAttrMask];
+#ifdef QT_I18N
+      if (iseucchar(ch)) {
+ 	char buf[3];
+ 	buf[0] = ch;
+ 	buf[1] = textLine->getChar(++z);
+	buf[2] = '\0';
+	x += a->fm.width(buf);
+      } else {
+	x += a->fm.width(&ch,1);
+      }
+#else
           x += a->fm.width(&ch,1);
+#endif
       }
       z++;
   }
@@ -1914,7 +2211,19 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
               if (attr & taSelectMask) paint.setPen(a->selCol); else paint.setPen(a->col);
               paint.setFont(a->font);
           }
-          
+#ifdef QT_I18N
+      if (iseucchar(ch)) {
+         char buf[3];
+ 	buf[0] = ch;
+ 	buf[1] = textLine->getChar(++zc);
+ 	buf[2] = '\0';
+ 	paint.drawText(xc - xStart,y+1,buf);
+	xc += a->fm.width(buf);
+      } else {
+        paint.drawText(xc - xStart,y,&ch,1);
+	xc += a->fm.width(&ch,1);
+      }
+#else
           aLB[aCnt++] = ch;
           xc += a->fm.width(&ch,1);
 
@@ -1923,7 +2232,7 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
               aCnt = 0;
               xcp  = xc;
           }
-
+#endif
       }
       zc++;
   }
@@ -2023,8 +2332,8 @@ void KWriteDoc::setFileName(const char *s) {
   }
 
   //highlight detection
+  if (fName.isEmpty()) return;
   pos = fName.findRev('/') +1;
-  if (pos >= (int) fName.length()) return; //no filename
   hl = hlManager->wildcardFind(&s[pos]);
   if (hl == -1) {
     // fill the detection buffer with the contents of the text
@@ -2128,11 +2437,21 @@ bool KWriteDoc::doSearch(SConfig &sc, const char *searchFor) {
           if (!highlight->isInWord(t[col-1]) && !highlight->isInWord(t[col+slen])) {
             if (memcmp(&t[col],s,slen) == 0) goto found;
           }
+#ifdef QT_I18N
+	  if (iseucchar(t[col])) {
+            col++;
+	  }
+#endif
           col++;
         }
       } else {
         while (col <= tlen) {
           if (memcmp(&t[col],s,slen) == 0) goto found;
+#ifdef QT_I18N
+	  if (iseucchar(t[col])) {
+            col++;
+	  }
+#endif
           col++;
         }
       }
@@ -2182,11 +2501,21 @@ bool KWriteDoc::doSearch(SConfig &sc, const char *searchFor) {
             if (memcmp(&t[col],s,slen) == 0) goto found;
           }
           col--;
+#ifdef QT_I18N
+	  if (iseucchar(t[col])) {
+            col--;
+	  }
+#endif
         }
       } else {
         while (col >= 0) {
           if (memcmp(&t[col],s,slen) == 0) goto found;
           col--;
+#ifdef QT_I18N
+	  if (iseucchar(t[col])) {
+            col--;
+	  }
+#endif
         }
       }
       line--;

@@ -341,6 +341,10 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
   setMouseTracking(true);   //dbg
   setBackgroundMode(NoBackground);
   setFocusPolicy(StrongFocus);
+#ifdef QT_I18N
+  setInputMethodEnabled( TRUE );
+  setInputMethodSpotLocation(0, kWriteDoc->fontAscent);
+#endif
   move(iconBorderWidth+2,2);
 
   leftBorder = new KIconBorder(kWrite, kWriteDoc, this);
@@ -392,6 +396,12 @@ bool KWriteView::event( QEvent *e )
 void KWriteView::cursorLeft(VConfig &c) {
 
   cursor.x--;
+#ifdef QT_I18N
+  if (cursor.x > 0 &&
+      iseucchar(kWriteDoc->textLine(cursor.y)->getChar(cursor.x))) {
+    cursor.x--;
+  }
+#endif
   if (c.flags & cfWrapCursor && cursor.x < 0 && cursor.y > 0) {
     cursor.y--;
     cursor.x = kWriteDoc->textLength(cursor.y);
@@ -409,6 +419,12 @@ void KWriteView::cursorRight(VConfig &c) {
       cursor.x = -1;
     }
   }  
+#ifdef QT_I18N
+  if (cursor.x >= 0 &&
+      iseucchar(kWriteDoc->textLine(cursor.y)->getChar(cursor.x))) {
+    cursor.x++;
+  }
+#endif
   cursor.x++;
   cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
   update(c);
@@ -574,6 +590,15 @@ void KWriteView::update(VConfig &c) {
     tagLines(c.cursor.y,c.cursor.y);
     cursorOn = false;
   }
+#ifdef QT_I18N
+#if 0
+  int h, x, y;
+  h = kWriteDoc->fontHeight;
+  y = h*cursor.y - yPos + kWriteDoc->fontAscent;
+  x = cXPos - (xPos-2);
+  setInputMethodSpotLocation(x, y);
+#endif
+#endif
 
   if (c.flags & cfMark) {
     kWriteDoc->selectTo(c.cursor,cursor,c.flags);
@@ -846,6 +871,13 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
 
   exposeCursor = false;
   updateState = 0;
+#ifdef QT_I18N
+  int x, y;
+  h = kWriteDoc->fontHeight;
+  y = h*cursor.y - yPos + kWriteDoc->fontAscent;
+  x = cXPos - (xPos-2);
+  setInputMethodSpotLocation(x, y);
+#endif
 }
 
 /*
@@ -1026,6 +1058,26 @@ X      : cut
 
   getVConfig(c);
 
+#ifdef QT_I18N
+  if ( (e->key() == 0) && (e->text().length() > 0) ) {
+    if (c.flags & cfDelOnInput) {
+      kWriteDoc->delMarkedText(this,c);
+      getVConfig(c);
+    }
+    int i, len;
+    len = e->text().length();
+    char* mbuf = e->text().data();
+    for (i = 0; i < len; i++) {
+	if (iseucchar(*mbuf)) {
+	    kWriteDoc->insertChar(this,c, mbuf, 2);
+	    mbuf += 2;
+	    i++;
+	} else {
+	    kWriteDoc->insertChar(this,c, *mbuf++);
+	}
+    }
+  } else
+#endif
   if ((e->ascii() >= 32 || e->ascii() == '\t')
     && e->key() != Key_Delete && e->key() != Key_Backspace) {
 //    printf("input %d\n",e->ascii());
@@ -1078,6 +1130,14 @@ X      : cut
         case Key_V:
             kWriteDoc->paste(c);
             break;   */
+        case Key_Home:
+            top(c);
+            home(c);
+            break;
+        case Key_End:
+            bottom(c);
+            end(c);
+            break;
         case Key_Delete:
 //        case Key_X:
             kWriteDoc->cut(this,c);
