@@ -152,6 +152,11 @@ void QextMdiMainFrm::closeEvent(QCloseEvent *e)
 
 void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
 {
+   if( windowExists( pWnd)) {
+      // is already added to the MDI system
+      return;
+   }
+
    if( flags & QextMdi::ToolWindow) {
       addToolWindow( pWnd);
       return;
@@ -207,6 +212,9 @@ void QextMdiMainFrm::addToolWindow( QextMdiChildView* pWnd)
 {
    QRect r = pWnd->geometry();
    pWnd->reparent(this,WType_TopLevel | WStyle_StaysOnTop,r.topLeft(),pWnd->isVisible());
+   QObject::connect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
+   m_pWinList->append(pWnd);
+   pWnd->m_bToolView = true;
 }
 
 //============ attachWindow ============//
@@ -311,7 +319,11 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    QObject::disconnect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
    m_pTaskBar->removeWinButton(pWnd);
    
-   if(pWnd->isAttached())m_pMdi->destroyChildButNotItsView(pWnd->mdiParent());
+   if(pWnd->isAttached())
+      m_pMdi->destroyChildButNotItsView(pWnd->mdiParent());
+
+   if(pWnd->isToolView())
+      pWnd->m_bToolView = false;
 }
 
 //============== closeWindow ==============//
@@ -484,7 +496,8 @@ void QextMdiMainFrm::closeAllViews()
 void QextMdiMainFrm::iconifyAllViews()
 {
    for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
-      w->minimize();
+      if(!w->isToolView())
+         w->minimize();
    }
 }
 
@@ -505,6 +518,8 @@ void QextMdiMainFrm::switchToToplevelMode()
    QListIterator<QextMdiChildView> it( *m_pWinList);
    for( ; it.current(); ++it) {
       QextMdiChildView* pView = it.current();
+      if( pView->isToolView())
+         continue;
       if( pView->isAttached()) {
          if( pView->isMaximized())
             pView->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
@@ -521,8 +536,9 @@ void QextMdiMainFrm::switchToChildframeMode()
    QListIterator<QextMdiChildView> it( *m_pWinList);
    for( ; it.current(); ++it) {
       QextMdiChildView* pView = it.current();
-      if( !pView->isAttached())
-         attachWindow( pView, TRUE);
+      if( !pView->isToolView())
+         if( !pView->isAttached())
+            attachWindow( pView, TRUE);
    }
 }
 
@@ -713,7 +729,11 @@ void QextMdiMainFrm::fillWindowMenu()
    QextMdiChildView* pView = 0L;
    QListIterator<QextMdiChildView> it(*m_pWinList);
    for( ; it.current(); ++it) {
+
       pView = it.current();
+      if( pView->isToolView())
+         continue;
+
       QString item;
       // set titles of minimized windows in brackets
       if( pView->isMinimized()) {
