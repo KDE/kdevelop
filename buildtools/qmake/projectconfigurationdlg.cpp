@@ -84,8 +84,8 @@ KGuiItem edit()
 KGuiItem add()
 {
 	KGuiItem returnItem;
-	returnItem.setText(i18n("Remove"));
-	returnItem.setIconName("remove");
+	returnItem.setText(i18n("Add"));
+	returnItem.setIconName("add");
 	returnItem.setToolTip(i18n("Remove value"));
 	return returnItem;
 }
@@ -94,8 +94,8 @@ KGuiItem add()
 KGuiItem remove()
 {
 	KGuiItem returnItem;
-	returnItem.setText(i18n("Add"));
-	returnItem.setIconName("add");
+	returnItem.setText(i18n("Remove"));
+	returnItem.setIconName("remove");
 	returnItem.setToolTip(i18n("Remove value"));
 	return returnItem;
 }
