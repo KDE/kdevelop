@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Mario Scalas (VCS Support)                      *
+ *   mario.scalas@libero.it                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,19 +62,15 @@ KURL KURL_fromPathOrURL(const QString& text )
 class MyFileTreeViewItem : public KFileTreeViewItem
 {
 public:
-    MyFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch, bool pf,
-        const VCSFileInfo &vcsInfo = VCSFileInfo() )
+    MyFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch, bool pf )
        : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( pf )//, m_fileInfoProvider( fip )
     {
         hideOrShow();
-        //setVCSInfo( vcsInfo );
     }
-    MyFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch,
-        const VCSFileInfo &vcsInfo = VCSFileInfo() )
+    MyFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
        : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( false )//, m_fileInfoProvider( fip )
     {
         hideOrShow();
-        //setVCSInfo( vcsInfo );
     }
 
     virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
@@ -87,15 +85,15 @@ public:
     QString workingRev() const { return text( WORKREVISION_COLUMN ); }
     QString repositoryRev() const { return text( REPOREVISION_COLUMN ); }
     QString status() const { return text( STATUS_COLUMN ); }
-protected:
-    virtual int compare( QListViewItem *i, int col, bool ascending ) const;
-
-private:
     void setFileName( const QString &p ) { setText( FILENAME_COLUMN, p ); }
     void setWorkingRev( const QString &p ) { setText( WORKREVISION_COLUMN, p ); }
     void setRepositoryRev( const QString &p ) { setText( REPOREVISION_COLUMN, p ); }
     void setStatus( const QString &p ) { setText( STATUS_COLUMN, p ); }
 
+protected:
+    virtual int compare( QListViewItem *i, int col, bool ascending ) const;
+
+private:
     bool m_isProjectFile;
 //    KDevVCSFileInfoProvider *m_fileInfoProvider;
 };
@@ -214,29 +212,32 @@ public:
             return 0;
 
         FileTreeWidget *lv = static_cast<MyFileTreeViewItem*>( parent )->listView();
-        bool isDirectory = lv->projectFiles().contains( fileItem->url().path() ) > 0;
+        const KURL fileURL = fileItem->url();
+        bool isDirectory = lv->projectFiles().contains( fileURL.path() ) > 0;
         KDevVCSFileInfoProvider *infoProvider = lv->vcsFileInfoProvider();
-        VCSFileInfo vcsFileInfo;
-/*
+
+        MyFileTreeViewItem *newItem = new MyFileTreeViewItem( parent, fileItem, this, isDirectory );
+
         if (infoProvider)
         {
-            QString fileName = fileItem->url().fileName();
-            QString dirName = URLUtil::extractPathNameRelative( lv->projectDirectory(), fileItem->url().directory() );
-            kdDebug(9017) << "searching for file: " + fileName + "in directory " + dirName << endl;
+            QString fileName = fileURL.fileName();
+            QString dirName = URLUtil::extractPathNameRelative( lv->projectDirectory(), fileURL.directory() );
+            kdDebug(9017) << "searching for file: " + fileName + " in directory " + dirName << endl;
 
-            VCSFileInfoMap vcsFiles = infoProvider->status( dirName );
+            const VCSFileInfoMap &vcsFiles = *infoProvider->status( dirName );
             kdDebug(9017) << "Dir has " << vcsFiles.count() << " registered files!" << endl;
 
             if (vcsFiles.contains( fileName ))
             {
-                vcsFileInfo = vcsFiles[ fileName ];
-                kdDebug(9017) << "Found vcs info: " << vcsFileInfo.toString() << endl;
+                newItem->setVCSInfo( vcsFiles[ fileName ] );
+                //kdDebug(9017) << "Found vcs info: " << vcsFileInfo.toString() << endl;
+                if (URLUtil::isDirectory(fileURL))
+                    newItem->setStatus( "directory" );
             }
             else
                 kdDebug(9017) << "!!!No VCS info for this file!!!" << endl;
         }
- */
-        return new MyFileTreeViewItem( parent, fileItem, this, isDirectory, vcsFileInfo );
+        return newItem;
     }
 };
 
@@ -249,7 +250,7 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     m_isReloadingTree( false ),
     m_actionToggleShowVCSFields( 0 ), m_actionToggleShowNonProjectFiles( 0 )
 {
-    setResizeMode( QListView::LastColumn );
+    //setResizeMode( QListView::LastColumn );
     setSorting( 0 );
     setAllColumnsShowFocus( true );
     setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
@@ -277,11 +278,10 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     }
     // Update the #define order on top if you change this order!
     addColumn( "Filename" );
-/*
     addColumn( "Status" );
-    addColumn( "Working Rev." );
-    addColumn( "Repository Rev." );
-*/
+    addColumn( "Work" );
+    addColumn( "Repo." );
+
     // Actions
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
@@ -295,8 +295,8 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     // Reload ol' good settings
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles") );
-//    m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
-//    slotToggleShowVCSFields( showVCSFields() );
+    m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
+    slotToggleShowVCSFields( showVCSFields() );
 
     // Hide pattern for files
     QString defaultHidePattern = "*.o,*.lo,CVS";
@@ -310,7 +310,7 @@ FileTreeWidget::~FileTreeWidget()
 {
     QDomDocument &dom = *m_part->projectDom();
     DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/hidenonprojectfiles", !showNonProjectFiles() );
-//    DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/showvcsfields", showVCSFields() );
+    DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/showvcsfields", showVCSFields() );
     DomUtil::writeEntry( dom, "/kdevfileview/tree/hidepatterns", hidePatterns() );
 }
 
@@ -431,7 +431,7 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
     }
 
     // Submenu for visualization options
-//    m_actionToggleShowVCSFields->plug( &popup );
+    m_actionToggleShowVCSFields->plug( &popup );
     m_actionToggleShowNonProjectFiles->plug( &popup );
 
     if (item != 0)

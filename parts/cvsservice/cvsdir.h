@@ -50,6 +50,7 @@ public:
     /**
     */
     VCSFileInfoMap dirStatus() const;
+    VCSFileInfoMap *cacheableDirStatus() const;
     /**
     * @return true if the file is registered into repository, false otherwise
     */

@@ -31,7 +31,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 CVSFileInfoProvider::CVSFileInfoProvider( CvsServicePart *parent, CvsService_stub *cvsService )
-    : KDevVCSFileInfoProvider( parent ), m_requestStatusJob( 0 ), m_cvsService( cvsService )
+    : KDevVCSFileInfoProvider( parent ), m_requestStatusJob( 0 ), m_cvsService( cvsService ),
+    m_cachedDirEntries( 0 )
 {
 }
 
@@ -43,11 +44,18 @@ CVSFileInfoProvider::~CVSFileInfoProvider()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-VCSFileInfoMap CVSFileInfoProvider::status( const QString &dirPath ) const
+const VCSFileInfoMap *CVSFileInfoProvider::status( const QString &dirPath ) const
 {
-    CVSDir cvsdir( projectDirectory() + QDir::separator() + dirPath );
-    // Returns an empty map if dir is invalid
-    return cvsdir.dirStatus();
+    // Same dir: we can do with cache ...
+    if (dirPath != m_previousDirPath)
+    {
+        // ... different dir: flush old cache and cache new dir
+        delete m_cachedDirEntries;
+        CVSDir cvsdir( projectDirectory() + QDir::separator() + dirPath );
+        m_previousDirPath = dirPath;
+        m_cachedDirEntries = cvsdir.cacheableDirStatus();
+    }
+    return m_cachedDirEntries;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,7 +81,7 @@ bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CVSFileInfoProvider::slotJobExited( bool normalExit, int exitStatus )
+void CVSFileInfoProvider::slotJobExited( bool normalExit, int /*exitStatus*/ )
 {
     kdDebug(9006) << "CVSFileInfoProvider::slotJobExited(bool,int)" << endl;
     if (!normalExit)
@@ -134,30 +142,24 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
     for (QStringList::const_iterator it=stringStream.begin(); it != stringStream.end(); ++it)
     {
         const QString &s = (*it);
-
         //qDebug( s );
 
         if (state == 0 && rx_recordStart.exactMatch( s ))
             ++state;
         else if (state == 1 && rx_fileName.search( s ) >= 0 && rx_fileStatus.search( s ) >= 0)    // FileName
         {
-            fileName = rx_fileName.cap();
-            fileStatus = rx_fileStatus.cap();
-
-            fileName = fileName.replace( "File:", "" ).stripWhiteSpace();
-            fileStatus = fileStatus.replace( "Status:", "" ).stripWhiteSpace();
+            fileName = rx_fileName.cap().replace( "File:", "" ).stripWhiteSpace();;
+            fileStatus = rx_fileStatus.cap().replace( "Status:", "" ).stripWhiteSpace();
             ++state; // Next state
         }
         else if (state == 2 && rx_fileWorkRev.search( s ) >= 0)
         {
-            workingRevision = rx_fileWorkRev.cap();
-            workingRevision = workingRevision.replace( "Working revision:", "" ).stripWhiteSpace();
+            workingRevision = rx_fileWorkRev.cap().replace( "Working revision:", "" ).stripWhiteSpace();
             ++state;
         }
         else if (state == 3 && rx_fileRepoRev.search( s ) >= 0)
         {
-            repositoryRevision = rx_fileRepoRev.cap();
-            repositoryRevision = repositoryRevision.replace( "Repository revision:", "" ).stripWhiteSpace();
+            repositoryRevision = rx_fileRepoRev.cap().replace( "Repository revision:", "" ).stripWhiteSpace();
             ++state; // Reset so we skip all other stuff for this record
         }
 /*
@@ -170,11 +172,10 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
         else if (state >= lastAcceptableState)
         {
             // Package stuff and put into map
-            VCSFileInfo vcsInfo(
-                fileName, workingRevision, repositoryRevision,
+            VCSFileInfo vcsInfo( fileName, workingRevision, repositoryRevision,
                 String2EnumState( fileStatus ) );
 
-            kdDebug(9006) << vcsInfo.toString() << endl;;
+//            kdDebug(9006) << vcsInfo.toString() << endl;;
 
             vcsStates.insert( fileName, vcsInfo );
             state = 0;
@@ -187,8 +188,8 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
 
 VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsString )
 {
-    // @todo add more status as "Conflict" (but I dunno how CVS writes it so I awaint
-    // until I have a conflict or somebody else fix it ;-)
+    // @todo add more status as "Conflict" (but I dunno how CVS writes it so I'm going
+    // to await until I have a conflict or somebody else fix it ;-)
     if (stateAsString == "Up-to-date")
         return VCSFileInfo::Uptodate;
     if (stateAsString == "Locally Modified")
@@ -196,7 +197,7 @@ VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsStr
     if (stateAsString == "Locally Added")
         return VCSFileInfo::Added;
     else
-        return VCSFileInfo::Unknown;
+        return VCSFileInfo::Unknown; // @fixme: exhaust all the previous cases first ;-)
 }
 
 

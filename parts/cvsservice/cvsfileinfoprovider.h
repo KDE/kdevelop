@@ -35,7 +35,7 @@ public:
     virtual ~CVSFileInfoProvider();
 
 // -- Sync interface
-    virtual VCSFileInfoMap status( const QString &dirPath ) const;
+    virtual const VCSFileInfoMap *status( const QString &dirPath ) const;
 
 // -- Async interface for requesting data
     virtual bool requestStatus( const QString &dirPath, void *callerData );
@@ -55,6 +55,10 @@ private:
     mutable void *m_savedCallerData;
     mutable CvsJob_stub *m_requestStatusJob;
     CvsService_stub *m_cvsService;
+
+    //! Caching
+    mutable QString m_previousDirPath;
+    mutable VCSFileInfoMap *m_cachedDirEntries;
 };
 
 #endif

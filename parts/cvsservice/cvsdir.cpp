@@ -299,3 +299,20 @@ VCSFileInfoMap CVSDir::dirStatus() const
     return vcsInfo;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+VCSFileInfoMap *CVSDir::cacheableDirStatus() const
+{
+    VCSFileInfoMap *vcsInfo = new VCSFileInfoMap;
+    // Convert to VCSFileInfoMap: @fixme : any speed improvement here?
+    QStringList entries = registeredEntryList();
+    for (QStringList::const_iterator it = entries.begin(); it != entries.end(); ++it)
+    {
+        const QString &fileName = (*it);
+        const CVSEntry entry = fileStatus( fileName );
+
+        vcsInfo->insert( fileName, entry.toVCSFileInfo() );
+    }
+
+    return vcsInfo;
+}

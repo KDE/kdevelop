@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCppSupport" version="3">
+<kpartgui name="KDevCppSupport" version="6">
 <MenuBar>
  <Menu name="edit">
   <Action name="edit_complete_text"/>
@@ -18,8 +18,7 @@
  </Menu>
 </MenuBar>
 
-<ToolBar name="browserToolBar" position="Top" iconText="IconOnly" >
-  <text>Browser Toolbar</text>
+<ToolBar name="classBrowserToolBar" position="Top" iconText="IconOnly">
   <Action name="project_newclass"/>
   <Separator />
 </ToolBar>

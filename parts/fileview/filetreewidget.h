@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Mario Scalas (VCS Support)                      *
+ *   mario.scalas@libero.it                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,9 +25,6 @@ class KToggleAction;
 class FileTreeWidget : public KFileTreeView
 {
     Q_OBJECT
-
-    friend class MyFileTreeViewItem;
-
 public:
     FileTreeWidget( FileViewPart *part, QWidget *parent, const char *name=0 );
     virtual ~FileTreeWidget();
