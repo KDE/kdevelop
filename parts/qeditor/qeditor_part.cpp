@@ -102,8 +102,11 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     // we need an instance
     setInstance( QEditorPartFactory::instance() );
 
-    m_editor = (QEditorView*) createView( parentWidget, widgetName );
-    m_editor->editor()->show();
+    m_views.setAutoDelete( FALSE );
+
+    m_editor = new QEditorView( this, parentWidget, widgetName );
+    m_views.append( m_editor );
+    insertChildClient( m_editor );
     setWidget( m_editor );
 
     setupHighlighting();
@@ -394,6 +397,9 @@ bool QEditorPart::removeLine( unsigned int line )
 
 KTextEditor::View* QEditorPart::createView( QWidget *parent, const char *name )
 {
+#warning "TODO: implement QEditorPart::createView()"
+
+#if 0
     QEditorView* pView = new QEditorView( this, parent, name );
     if( m_editor ){
         pView->editor()->setDocument( m_editor->editor()->document() );
@@ -401,6 +407,9 @@ KTextEditor::View* QEditorPart::createView( QWidget *parent, const char *name )
 
     m_views.append( pView );
     return pView;
+#endif
+
+    return m_editor;
 }
 
 QPtrList<KTextEditor::View> QEditorPart::views() const
