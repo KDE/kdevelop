@@ -98,4 +98,5 @@ doc/en/kde_libref/Makefile \
 doc/en/manual/Makefile \
 doc/en/programming/Makefile \
 doc/en/tutorial/Makefile \
-doc/en/welcome/Makefile ) 
+doc/en/welcome/Makefile \
+doc/zh_CN.GB2312/Makefile ) 
