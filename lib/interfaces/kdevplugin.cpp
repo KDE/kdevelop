@@ -33,6 +33,8 @@
 #include "kdevplugincontroller.h"
 
 #include <kaction.h>
+#include <kglobal.h>
+#include <kiconloader.h>
 
 #include <qdom.h>
 #include <qmap.h>
@@ -61,6 +63,7 @@ KDevPlugin::KDevPlugin(const KDevPluginInfo *info, QObject *parent, const char *
     actionCollection()->setHighlightingEnabled( true );
 
     d->info = info;
+    KGlobal::iconLoader()->addAppDir("kdevelop");    
 }
 
 KDevPlugin::~KDevPlugin()
