@@ -1623,6 +1623,9 @@ void CKDevelop::setupInternalDebugger()
   connect(  dbgController,  SIGNAL(rawGDBDisassemble(char*)),
             disassemble,    SLOT(slotDisassemble(char*)));
 
+  // switch to the VAR tab automatically when starting
+  slotTCurrentTab(VAR);
+  slotTTabSelected(VAR);  
 }
 
 void CKDevelop::slotBuildMake(){
