@@ -1240,6 +1240,86 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
   }
 }
 
+/*--------------------------------- CClassParser::fillInParsedObjcMethod()
+ * fillInParsedObjcMethod()
+ *   Initialize an Objective-C method.
+ *
+ * Parameters:
+ *   aMethod        The method to initialize.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::fillInParsedObjcMethod(CParsedMethod *aMethod)
+{
+	QString			methodSignature;
+	CParsedLexem *	aLexem;
+	QString			type;
+
+	PUSH_LEXEM();
+	aLexem = lexemStack.pop();
+	methodSignature = aLexem->text;
+	delete aLexem;
+
+	// Set some attributes of the parsed method.
+	aMethod->setExport(declaredScope);
+	aMethod->setIsVirtual(true);
+	aMethod->setIsObjectiveC(true);
+
+	getNextLexem();
+
+	// Skip any type specifier
+	if (lexem == '(') {
+		while (lexem != 0 && lexem != ')') {
+			getNextLexem();
+		}
+		getNextLexem();
+	}
+
+	while (lexem != 0 && lexem != ';' && lexem != '{') {
+		PUSH_LEXEM();
+		aLexem = lexemStack.pop();
+		methodSignature += aLexem->text;
+		delete aLexem;
+		getNextLexem();
+ 	
+		if (lexem == 0 || lexem == ';' || lexem == '{') {
+			break;
+		}
+  	
+		while (lexem == ':') {
+			methodSignature += ":";
+			getNextLexem();
+			
+			// Skip any type specifier
+			if (lexem == '(') {
+				while (lexem != 0 && lexem != ')') {
+					getNextLexem();
+				}
+				getNextLexem();
+			}
+			
+			getNextLexem();
+		}
+
+		// Ignore any comma followed by three periods in varargs style methods
+		if (lexem == ',') {
+			if (lexem == '.')
+				getNextLexem();
+			if (lexem == '.')
+				getNextLexem();
+			if (lexem == '.')
+				getNextLexem();
+			break;
+		}
+	}
+	
+	// Set the method name
+	aMethod->setName(methodSignature);
+	
+	return;
+}
+
 /*********************************************************************
  *                                                                   *
  *                           CLASS METHODS                           *
@@ -1684,6 +1764,364 @@ CParsedClass *CClassParser::parseClass( CParsedClass * aClass)
   return aClass;
 }
 
+ /*------------------------------------ CClassParser::parseObjcCategory()
+ * parseObjcCategory()
+ *   Handle lexem for a category.
+ *
+ * Parameters:
+ *   aClass         The name of the class which we are parsing.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CParsedClass * CClassParser::parseObjcCategory(QString &aClassName)
+{
+	CParsedClass *	aClass;
+	CParsedParent *	aParent;
+	CParsedLexem *	aCategoryName;
+	QString 			aName;
+  	
+	// A category
+	getNextLexem();
+	PUSH_LEXEM();
+	aCategoryName = lexemStack.pop();
+  	getNextLexem();
+  	
+	if (lexem == ')') {
+  	  getNextLexem();
+ 	}
+   	
+	aName = aClassName + "(" + aCategoryName->text + ")";
+	aClass = store.getClassByName(aName);
+
+    if (aClass == NULL) {
+		aClass = new CParsedClass();
+		aClass->setName(aName);
+		aClass->setDeclaredOnLine(declStart);
+		aClass->setDeclaredInFile(currentFile);
+	}
+  	
+	// Assume a category is a kind of subclass
+	if (!aClass->hasParent(aClassName)) {
+		aParent = new CParsedParent();
+		aParent->setName(aClassName);
+		aParent->setExport(CPPUBLIC);
+		aClass->addParent(aParent);
+    }
+  	
+  	return aClass;
+}
+
+ /*------------------------------------ CClassParser::parseObjcImplemention()
+ * parseObjcImplementation()
+ *   Handle lexem for instance variables of an Objective-C class.
+ *
+ * Parameters:
+ *   aClass         The class which we are parsing.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CParsedClass *CClassParser::parseObjcImplementation()
+{
+	CParsedClass *	aClass;
+	CParsedLexem *	aLexem;
+	CParsedMethod *	aMethod;
+	CParsedMethod *	pm;
+
+	// Skip to the identifier
+	if (lexem == CPOBJCIMPLEMENTATION) {
+		getNextLexem();
+	}
+
+	declStart = getLineno();
+	
+	// Get the classname.
+	PUSH_LEXEM();
+	aLexem = lexemStack.pop();
+	
+	getNextLexem();
+
+	if (lexem == '(') {
+		// A category name in brackets after the classname
+		aClass = parseObjcCategory(aLexem->text);
+	} else {
+		aClass = store.getClassByName(aLexem->text);
+
+		if (aClass == NULL) {
+			aClass = new CParsedClass();
+			aClass->setName(aLexem->text);
+			aClass->setDeclaredOnLine(declStart);
+			aClass->setDeclaredInFile(currentFile);
+		}
+	}
+
+	delete aLexem;
+	aClass->setDefinedOnLine(declStart);
+	aClass->setDefinedInFile(currentFile);
+	declaredScope = PIE_PUBLIC;
+
+	// Iterate through the method definitions
+	while (lexem != 0 && lexem != CPOBJCEND) {
+		if (lexem == '+' || lexem == '-') {
+			aMethod = new CParsedMethod();
+			declStart = getLineno();
+			fillInParsedObjcMethod(aMethod);
+ 	
+			// A semi-colon after a method definition, before the opening curly brace
+			//	should really be a syntax error in Objective-C, but it's not..
+			if (lexem == ';') {
+				getNextLexem();
+			}
+			
+			// Skip implementation.
+			if (lexem == '{') {
+				skipBlock();
+			}
+			
+			pm = aClass->getMethod(*aMethod);
+
+			if (pm == NULL) {
+				aClass->addMethod(aMethod);
+				pm = aMethod;
+				pm->setDeclaredInFile(currentFile);
+				pm->setDeclaredOnLine(declStart);
+				pm->setDeclarationEndsOnLine(getLineno());
+			} else {
+				delete aMethod;
+			}
+
+			pm->setDefinedInFile(currentFile);
+			pm->setDefinedOnLine(declStart);
+			pm->setDefinitionEndsOnLine(getLineno());
+
+			// Set the comment if in range.
+			if (commentInRange(pm)) {
+				pm->setComment(comment);
+			}
+		} else if (isGenericLexem()) {
+			parseGenericLexem(aClass);
+		}
+		
+		getNextLexem();
+	}
+
+	return aClass;
+}
+
+ /*------------------------------------ CClassParser::parseObjcClassLexem()
+ * parseObjcClassLexem()
+ *   Handle lexem for instance variables of an Objective-C class.
+ *
+ * Parameters:
+ *   aClass         The class which instance variables we are parsing.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+bool CClassParser::parseObjcClassLexem(CParsedClass *aClass)
+{
+	bool exit = false;
+
+	switch(lexem) {
+	case CPOBJCPUBLIC:
+		declaredScope = PIE_PUBLIC;
+		methodType = 0;
+		break;
+	case CPOBJCPROTECTED:
+		declaredScope = PIE_PROTECTED;
+		methodType = 0;
+		break;
+	case CPOBJCPRIVATE:
+		declaredScope = PIE_PRIVATE;
+		methodType = 0;
+		break;
+    case CPSTRUCT:
+    case CPCONST:
+    case ID:
+		parseMethodAttributes(aClass);
+		isStatic=false;
+		break;
+    case 0:
+		exit = true;
+		break;
+    default:
+		break;
+	}
+
+	return exit;
+}
+
+ /*------------------------------ CClassParser::parseObjcClassHeader()
+ * parseObjcClassHeader()
+ *   Parse an Objective-C class header, i.e find out classname and possible
+ *   parents.
+ *
+ * Parameters:
+ *   list
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CParsedClass *CClassParser::parseObjcClassHeader()
+{
+	CParsedClass *	aClass;
+	QString       	parentTree;
+	CParsedParent *	aParent;
+	CParsedLexem *	aLexem;
+
+	// Skip to the identifier
+	if (lexem == CPOBJCINTERFACE || lexem == CPOBJCPROTOCOL) {
+		getNextLexem();
+	}
+
+	declStart = getLineno();
+	
+	// Get the classname.
+	PUSH_LEXEM();
+	getNextLexem();
+	aLexem = lexemStack.pop();
+
+	if (lexem == '(') {
+		aClass = parseObjcCategory(aLexem->text);
+	} else {
+		aClass = store.getClassByName(aLexem->text);
+
+		if (aClass == NULL) {
+			aClass = new CParsedClass();
+			aClass->setName(aLexem->text);
+		}
+	}
+
+	delete aLexem;
+	aClass->setDeclaredOnLine(declStart);
+	aClass->setDeclaredInFile(currentFile);
+
+	if (lexem == ':' ) {
+		// Check for inheritance
+		getNextLexem();
+		PUSH_LEXEM();
+		aLexem = lexemStack.pop();
+		aParent = new CParsedParent();
+		aParent->setName(aLexem->text);
+		aParent->setExport(CPPUBLIC);
+		aClass->addParent(aParent);
+		delete aLexem;
+		getNextLexem();
+	}
+
+	// Step through the protocol list
+	if (lexem != 0 && lexem == '<' ) {
+		getNextLexem();
+
+		while (lexem != 0 && lexem != '>') {
+			PUSH_LEXEM();
+			aLexem = lexemStack.pop();
+			// Assume a protocol is a kind of superclass
+			//	...but not for now unfortunately - the graphical class view
+			//	works for small diagrams with multiple inheritance, but
+			//	gets stuck with large ones. So stick with just single
+			//	inheritance, and ignore any protocol hierarchy.
+//			aParent = new CParsedParent();
+//			aParent->setName(aLexem->text);
+//			aParent->setExport(CPPUBLIC);
+//			aClass->addParent(aParent);
+			delete aLexem;
+			getNextLexem();
+
+			if ( lexem == ',' ) {
+				getNextLexem();
+			}
+		}
+
+		getNextLexem();
+	}
+
+	return aClass;
+}
+
+/*---------------------------------------- CClassParser::parseObjcClass()
+ * parseObjcClass()
+ *   Parse an Objective-C class declaration.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CParsedClass *CClassParser::parseObjcClass()
+{
+	CParsedClass *	aClass;
+	CParsedMethod *	aMethod;
+	CParsedMethod *	pm;
+
+	aClass = parseObjcClassHeader();
+
+	if (aClass == NULL) {
+		return NULL;
+	}
+	
+	// Set the comment if in range.
+	if (commentInRange(aClass)) {
+		aClass->setComment(comment);
+	}
+
+	declaredScope = PIE_PUBLIC;
+
+    // Iterate until the end of the instance variables.
+	if (lexem == '{') {
+		getNextLexem();
+		
+		while (lexem != 0 && lexem != '}' && lexem != CPOBJCEND) {
+			declStart = getLineno();
+
+			if (isGenericLexem()) {
+				parseGenericLexem(aClass);
+			} else {
+				parseObjcClassLexem(aClass);
+			}
+			
+			getNextLexem();
+		}
+	}
+
+	// Iterate through the method declarations until the end of the class.
+	declaredScope = PIE_PUBLIC;
+
+	while (lexem != 0 && lexem != CPOBJCEND) {
+		if ( lexem == '+' || lexem == '-' ) {
+			declStart = getLineno();
+			aMethod = new CParsedMethod();
+			fillInParsedObjcMethod(aMethod);
+			pm = aClass->getMethod(*aMethod);
+
+			if (pm == NULL) {
+				aClass->addMethod(aMethod);
+				pm = aMethod;
+				pm->setDefinedInFile(currentFile);
+				pm->setDefinedOnLine(declStart);
+				pm->setDefinitionEndsOnLine(getLineno());
+			} else {
+				delete aMethod;
+			}
+
+			// Set end of declaration.
+			pm->setDeclaredInFile(currentFile);
+			pm->setDeclaredOnLine(declStart);
+			pm->setDeclarationEndsOnLine(getLineno());
+
+			// Set the comment if in range.
+			if (commentInRange(pm)) {
+				pm->setComment(comment);
+			}
+		} else {
+			getNextLexem();
+		}
+	}
+
+	return aClass;
+}
+
 /*********************************************************************
  *                                                                   *
  *                         TOP LEVEL METHODS                         *
@@ -1954,6 +2392,26 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
       m_isParsingClassDeclaration = false;
       parseMethodAttributes( scope );
       break;
+	case CPOBJCIMPLEMENTATION:
+		aClass = parseObjcImplementation();
+		
+		if (aClass != NULL && !store.hasClass(aClass->name)) {
+			store.addClass(aClass);
+		}
+		break;
+	case CPOBJCINTERFACE:
+	case CPOBJCPROTOCOL:
+		aClass = parseObjcClass();
+		
+		if (aClass != NULL && !store.hasClass(aClass->name)) {
+			store.addClass(aClass);
+		}
+    		break;
+    case CPOBJCCLASS:
+      // Skip the @class list.
+      while( lexem != ';' && lexem != 0)
+        getNextLexem();
+      break;
     default:
       break;
   }
@@ -2061,6 +2519,10 @@ bool CClassParser::parse( const char *file )
 
   return true;
 }
+
+
+
+
 
 /*-------------------------------------------- CClassParser::wipeout()
  * wipeout()

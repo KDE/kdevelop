@@ -39,6 +39,15 @@ const char *cTypes[] = {
   "short", "signed", "static",
   "unsigned", "void", "volatile", 0L};
 
+const char *objcKeywords[] = {
+  "@class", "@defs", "@encode", "@end", "@implementation", "@interface", "@private", "@protected",
+  "@protocol", "@public","@selector", 0L};
+
+const char *objcTypes[] = {
+  "auto", "BOOL", "char", "const", "double", "float", "id", "int", "long", "register",
+  "short", "signed", "static",
+  "unsigned", "void", "volatile", 0L};
+
 //  ISO/IEC 14882:1998 . Sec. 2.11.1 (aka ANSI C++)
 // keyword "const" (apart from a type spec.) is also a keyword, so it is named inside this array
 const char *cppKeywords[] = {
@@ -1194,6 +1203,28 @@ GenHighlight::GenHighlight(const char *name) : Highlight(name) {
   for ( int z = 0; z < nContexts; z++) contextList[z] = 0L;
 }
 
+ObjcHighlight::ObjcHighlight(const char *name) : CHighlight(name) {
+  dw = "*.m";
+  dm = "text/x-objc-src;text/x-c-hdr";
+}
+
+ObjcHighlight::~ObjcHighlight() {
+}
+
+void ObjcHighlight::makeContextList() {
+  HlContext *c;
+
+  CHighlight::makeContextList();
+  c = contextList[0];
+  c->items.append(new Hl2CharDetect(8,1,"@\""));
+}
+
+void ObjcHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
+  keyword->addList(cKeywords);
+  keyword->addList(objcKeywords);
+  dataType->addList(cTypes);
+  dataType->addList(objcTypes);
+}
 
 int GenHighlight::doHighlight(int ctxNum, TextLine *textLine){
   if (!textLine) return 0;
@@ -2072,6 +2103,7 @@ HlManager::HlManager() : QObject(0L) {
   hlList.append(new Highlight("Normal"));
   hlList.append(new CHighlight("C"));
   hlList.append(new CppHighlight("C++"));
+  hlList.append(new ObjcHighlight("Objective-C"));
   hlList.append(new JavaHighlight("Java"));
   hlList.append(new HtmlHighlight("HTML"));
   hlList.append(new BashHighlight("Bash"));
@@ -2658,6 +2690,9 @@ void HighlightDialog::writeback() {
     hlData->mimetypes = mimetypes->text();
   }
 }
+
+
+
 
 void HighlightDialog::done(int r) {
   writeback();

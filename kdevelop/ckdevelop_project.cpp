@@ -1590,7 +1590,7 @@ void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
   enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
   enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE);
 
-  if (prj->getProjectType()!="normal_c")  // activate class wizard unless it is a normal C project
+  if (prj->getProjectType()!="normal_c" && prj->getProjectType()!="normal_objc")  // activate class wizard unless it is a normal C project
   {
     enableCommand(ID_PROJECT_NEW_CLASS);
     enableCommand(ID_CV_WIZARD);
@@ -1772,7 +1772,7 @@ void CKDevelop::slotTagSwitchTo()
   QString newExtension;
 
   srcExtensions << ".cpp" << ".cxx" << ".C" << ".cc" << ".ecpp" << ".c" << ".ec"
-                << ".inl";
+                << ".inl" << ".m";
   headerExtensions << ".h" << ".hpp" << ".hxx" << ".H" << ".hh" << ".tlh";
 
   kdDebug() << "in CKDevelop::slotTagSwitchTo():" << endl;

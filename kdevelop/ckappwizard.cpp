@@ -175,6 +175,7 @@ void CKAppWizard::initPages()
   ccppentry->setExpandable (true);
   ccppentry->setOpen (TRUE);
   ccppentry->sortChildItems (0,FALSE);
+  objcitem = new QListViewItem (ccppentry,i18n("Objective-C"));
   cppitem = new QListViewItem (ccppentry,i18n("C++"));
   citem = new QListViewItem (ccppentry,i18n("C"));
   //sharedlibitem = new QListViewItem(ccppentry, i18n("C++ Shared Library"));
@@ -186,6 +187,7 @@ void CKAppWizard::initPages()
   qextmdiitem = new QListViewItem( qtentry, i18n("QextMDI"));
   qt2mdiitem = new QListViewItem( qtentry, i18n("Qt 2.2 MDI"));
   qt2normalitem = new QListViewItem( qtentry, i18n("Qt 2.2 SDI"));
+  qtobjcnormalitem = new QListViewItem( qtentry,i18n("Normal Objective-C"));
 
   gnomeentry = new QListViewItem (applications, "GNOME");
   gnomeentry->setExpandable (true);
@@ -206,6 +208,8 @@ void CKAppWizard::initPages()
   kde2mdiitem = new QListViewItem (kdeentry,i18n("KDE 2 MDI"));
   kde2normalitem = new QListViewItem (kdeentry,i18n("KDE 2 Normal"));
   kde2miniitem = new QListViewItem (kdeentry,i18n("KDE 2 Mini"));
+  kdeobjcnormalitem = new QListViewItem (kdeentry,i18n("KDE 2 Normal Objective-C"));
+  kdeobjcminiitem = new QListViewItem (kdeentry,i18n("Mini Objective-C"));
   applications->setFrameStyle( QListView::Panel | QListView::Sunken );
   applications->setLineWidth( 2 );
 
@@ -886,9 +890,12 @@ void CKAppWizard::slotCppDialogClicked()
   QString fileName = KFileDialog::getOpenFileName(QDir::homeDirPath(),
                                         "*",
                                         0,
-                                        (citem->isSelected())
-                                            ? i18n("Select your template for C-file headers")
-                                            : i18n("Select your template for Cpp-file headers"));
+                           ((objcitem->isSelected() || qtobjcnormalitem->isSelected() || kdeobjcminiitem->isSelected() || kdeobjcnormalitem->isSelected() ) ?
+												  i18n("Select your template for Objc-file headers")
+													:
+		                                        (citem->isSelected())
+		                                            ? i18n("Select your template for C-file headers")
+		                                            : i18n("Select your template for Cpp-file headers")));
   if (!fileName.isEmpty())
   {
     QFile fileIODev(fileName);
@@ -1071,8 +1078,14 @@ void CKAppWizard::generateEntries(const QString &filename) {
     if (kde2miniitem->isSelected()) {
       entries << "kde2mini\n";
     }
+    else if (kdeobjcminiitem->isSelected()) {
+      entries << "kdeobjcmini\n";
+    }
     else if (kde2normalitem->isSelected()) {
       entries << "kde2normal\n";
+    }
+    else if (kdeobjcnormalitem->isSelected()) {
+      entries << "kdeobjcnormal\n";
     }
     else if (kde2mdiitem->isSelected()) {
       entries << "kde2mdi\n";
@@ -1323,11 +1336,20 @@ void CKAppWizard::okPermited()
   if (kde2miniitem->isSelected()) {
     copysrc = locate("appdata", "templates/mini2.tar.gz");
   }
+  else if (kdeobjcminiitem->isSelected()) {
+    copysrc = locate("appdata", "templates/objcmini.tar.gz");
+  }
   else if (kde2normalitem->isSelected()) {
     copysrc = locate("appdata", "templates/normal2.tar.gz");
   }
+  else if (kdeobjcnormalitem->isSelected()) {
+    copysrc = locate("appdata", "templates/objcnormal.tar.gz");
+  }
   else if (kde2mdiitem->isSelected()) {
     copysrc = locate("appdata", "templates/kdemdi.tar.gz");
+  }
+  else if (qtobjcnormalitem->isSelected()) {
+    copysrc = locate("appdata", "templates/qtobjc.tar.gz");
   }
   else if (qt2normalitem->isSelected()) {
     copysrc = locate("appdata", "templates/qt2.tar.gz");
@@ -1343,6 +1365,9 @@ void CKAppWizard::okPermited()
   }
   else if (citem->isSelected()) {
     copysrc = locate("appdata", "templates/c.tar.gz");
+  }
+  else if (objcitem->isSelected()) {
+    copysrc = locate("appdata", "templates/objc.tar.gz");
   }
   else if (gnomenormalitem->isSelected()) {
     copysrc = locate("appdata", "templates/gnome.tar.gz");
@@ -1501,7 +1526,7 @@ void CKAppWizard::removeSources(const QString &dir)
   nametext = nametext.lower();
   QFile file;
   file.remove (dir + "/" + nametext + "/main."+extension);
-  if (!citem->isSelected() && !cppitem->isSelected())
+  if (!citem->isSelected() && !cppitem->isSelected() && !objcitem->isSelected())
   {
     file.remove (dir + "/" + nametext + "/" + nametext + ".cpp");
     file.remove (dir + "/" + nametext + "/" + nametext + ".h");
@@ -1553,13 +1578,19 @@ void CKAppWizard::slotPerlErr(KProcess*,char* buffer,int buflen) {
 
 void CKAppWizard::slotApplicationClicked() {
   // reset some titles
-  setTitle(page4, i18n("Headertemplate for .cpp-files"));
-  cppheader->setText( i18n("headertemplate for .cpp-files") );
+  if (kdeobjcnormalitem->isSelected() || kdeobjcminiitem->isSelected() || qtobjcnormalitem->isSelected()) {
+    setTitle(page4, i18n("Headertemplate for .m-files"));
+    cppheader->setText( i18n("headertemplate for .m-files") );
+  } else {
+    setTitle(page4, i18n("Headertemplate for .cpp-files"));
+    cppheader->setText( i18n("headertemplate for .cpp-files") );
+  }
 
   apidoc->setEnabled(!citem->isSelected() && !customprojitem->isSelected());
   userdoc->setEnabled(!customprojitem->isSelected());
 
-  if (kde2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+  if (	(kde2normalitem->isSelected() || kdeobjcnormalitem->isSelected())
+   		&& strcmp (m_cancelButton->text(), i18n("Exit")))
   {
     pm.load(locate("appdata", "pics/normalApp.png"));
     widget1b->setBackgroundPixmap(pm);
@@ -1584,7 +1615,8 @@ void CKAppWizard::slotApplicationClicked() {
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
   }
-  else if (kde2miniitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+  else if (	(kde2miniitem->isSelected() || kdeobjcminiitem->isSelected())
+  			&& strcmp (m_cancelButton->text(), i18n("Exit")))
   {
     pm.load(locate("appdata", "pics/miniApp.png"));
     widget1b->setBackgroundPixmap(pm);
@@ -1776,7 +1808,8 @@ void CKAppWizard::slotApplicationClicked() {
     										"Use this template to create native KDE-2 widget themes in C++."));
 	}
     										
-  else if (qt2normalitem->isSelected() &&strcmp (m_cancelButton->text(), i18n("Exit")))
+  else if (	(qt2normalitem->isSelected() || qtobjcnormalitem->isSelected())
+  			&& strcmp (m_cancelButton->text(), i18n("Exit")))
   {
     pm.load(locate("appdata", "pics/qtApp.png"));
     widget1b->setBackgroundPixmap(pm);
@@ -1858,7 +1891,7 @@ void CKAppWizard::slotApplicationClicked() {
                           "and libqextmdi.so in: $(QEXTMDIDIR)/lib"),
                     i18n("Important hint for a QextMDI project"));
   }
-  else if ((citem->isSelected() || cppitem->isSelected())
+  else if ((citem->isSelected() || cppitem->isSelected() || objcitem->isSelected())
             && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
     pm.load(locate("appdata", "pics/terminalApp.png"));
@@ -1867,7 +1900,11 @@ void CKAppWizard::slotApplicationClicked() {
     {
       setTitle(page4, i18n("Headertemplate for .c-files"));
       cppheader->setText( i18n("headertemplate for .c-files") );
-    }
+    } else if (objcitem->isSelected())
+ 	{
+       setTitle(page4, i18n("Headertemplate for .m-files"));
+       cppheader->setText( i18n("headertemplate for .m-files") );
+ 	}
     apidoc->setChecked(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
@@ -1889,9 +1926,11 @@ void CKAppWizard::slotApplicationClicked() {
     apphelp->setText ( (citem->isSelected()) ?
         i18n("Create a C application. The program will run in a terminal "
            "and doesn't contain any support for classes and Graphical User Interface.")
-                    :
-                    i18n("Create a C++ application. The program will run in a terminal "
-           "and doesn't contain any support for a Graphical User Interface."));
+                      :  ((cppitem->isSelected()) ?
+                          i18n("Create a C++ application. The program will run in a terminal "
+    			   "and doesn't contain any support for a Graphical User Interface.")
+											  : i18n("Create an Objective-C application. The program will run in a terminal "
+    			   "and doesn't contain any support for a Graphical User Interface.")));
   }
   else if (customprojitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1958,7 +1997,7 @@ void CKAppWizard::slotApplicationClicked() {
   else if (ccppentry->isSelected())
   {
     m_finishButton->setEnabled(false);
-    apphelp->setText (i18n("Contains all C/C++-terminal\nproject types."));
+    apphelp->setText (i18n("Contains all C/C++/Objective-C-terminal\nproject types."));
   }
   else if (gnomeentry->isSelected())
   {
@@ -2245,17 +2284,29 @@ void CKAppWizard::slotProcessExited() {
   else if (citem->isSelected()) {
     project->setProjectType("normal_c");
   }
+  else if (objcitem->isSelected()) {
+    project->setProjectType("normal_objc");
+  }
   else if (kde2miniitem->isSelected()) {
     project->setProjectType("mini_kde2");
   }
+  else if (kdeobjcminiitem->isSelected()) {
+    project->setProjectType("mini_kdeobjc");
+  }
   else if (kde2normalitem->isSelected()) {
     project->setProjectType("normal_kde2");
+  }
+  else if (kdeobjcnormalitem->isSelected()) {
+    project->setProjectType("normal_kdeobjc");
   }
   else if (kde2mdiitem->isSelected()) {
     project->setProjectType("mdi_kde2");
   }
   else if (qt2normalitem->isSelected()) {
     project->setProjectType("normal_qt2");
+  }
+  else if (qtobjcnormalitem->isSelected()) {
+    project->setProjectType("normal_qtobjc");
   }
   else if (qt2mdiitem->isSelected()) {
     project->setProjectType("mdi_qt2");
@@ -2323,11 +2374,23 @@ void CKAppWizard::slotProcessExited() {
   if ( kde2miniitem->isSelected()) {
     project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) ");
   }
+  else if (kdeobjcminiitem->isSelected()) {
+    project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) -lgnustep-base -lobjc -lqtobjc -lqtc -lkdeobjc -lkdec -lpthread -ldl");
+  }
   else if (kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
     project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KFILE) ");
   }
+  else if (kdeobjcnormalitem->isSelected()) {
+    project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KFILE) -lgnustep-base -lobjc -lqtobjc -lqtc -lkdeobjc -lkdec -lpthread -ldl");
+  }
   else if (qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
     project->setLDADD (" $(LIB_QPE) $(LIB_QT)");
+  }
+  else if (qtobjcnormalitem->isSelected()) {
+     project->setLDADD (" $(LIB_QPE) $(LIB_QT) -lgnustep-base -lobjc -lqtobjc -lqtc -lpthread -ldl");
+  }
+  else if (objcitem->isSelected()) {
+      project->setLDADD (" -lgnustep-base -lobjc -lpthread -ldl");
   }
   else if (qextmdiitem->isSelected()) {
     project->setLDADD (" $(LIB_QT) -lqextmdi");
@@ -2506,7 +2569,7 @@ void CKAppWizard::slotProcessExited() {
   if (generatesource->isChecked() &&!kickeritem->isSelected()&&!kpartitem->isSelected()
   	&&!kioslaveitem->isSelected()&&!kthemeitem->isSelected()&&  !kcmoduleitem->isSelected())
   {
-    QString extension= (citem->isSelected() || gnomenormalitem->isSelected()) ? "c" : "cpp";
+    QString extension= (citem->isSelected() || gnomenormalitem->isSelected()) ? "c" : ((objcitem->isSelected() || qtobjcnormalitem->isSelected() || kdeobjcminiitem->isSelected() || kdeobjcnormalitem->isSelected()) ? "m" : "cpp");
     fileInfo.rel_name = namelow + "/main."+extension;
     fileInfo.type = CPP_SOURCE;
     fileInfo.dist = true;
@@ -2568,8 +2631,23 @@ void CKAppWizard::slotProcessExited() {
       project->addFileToProject ("pixmaps/" + namelow +"-logo.png",fileInfo);
     }
   }
-  if (!citem->isSelected() && !cppitem->isSelected() && !gnomenormalitem->isSelected()) {
-    if (generatesource->isChecked()) {
+   if (!citem->isSelected() && !cppitem->isSelected() && !gnomenormalitem->isSelected() && !objcitem->isSelected()) {
+      if (generatesource->isChecked()) {
+       if (qtobjcnormalitem->isSelected() || kdeobjcminiitem->isSelected() || kdeobjcnormalitem->isSelected()) {
+       fileInfo.rel_name = namelow + "/" + nameline->text() + ".m";
+       fileInfo.type = CPP_SOURCE;
+       fileInfo.dist = true;
+       fileInfo.install = false;
+       fileInfo.install_location = "";
+       project->addFileToProject (namelow + "/" + nameline->text() + ".m",fileInfo);
+
+       fileInfo.rel_name = namelow + "/" + nameline->text() + ".h";
+       fileInfo.type = CPP_HEADER;
+       fileInfo.dist = true;
+       fileInfo.install = false;
+       fileInfo.install_location = "";
+       project->addFileToProject (namelow + "/" + nameline->text() + ".h",fileInfo);
+       } else {
       fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
       fileInfo.type = CPP_SOURCE;
       fileInfo.dist = true;
@@ -2583,6 +2661,7 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install = false;
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/" + namelow + ".h",fileInfo);
+      }
     }
   }
 
@@ -2688,6 +2767,45 @@ void CKAppWizard::slotProcessExited() {
         project->addFileToProject (namelow + "/" +  namelow + ".themerc",fileInfo);
   }
 
+  if (kdeobjcnormalitem->isSelected()  || qtobjcnormalitem->isSelected()) {
+     if (generatesource->isChecked()) {
+      fileInfo.rel_name = namelow + "/" + nameline->text() + "Doc.m";
+      fileInfo.type = CPP_SOURCE;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + nameline->text() + "Doc.m",fileInfo);
+
+      fileInfo.rel_name = namelow + "/" + nameline->text() + "Doc.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + nameline->text() + "Doc.h",fileInfo);
+
+      fileInfo.rel_name = namelow + "/" + nameline->text() + "View.m";
+      fileInfo.type = CPP_SOURCE;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + nameline->text() + "View.m",fileInfo);
+
+      fileInfo.rel_name = namelow + "/" + nameline->text() + "View.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/" + nameline->text() + "View.h",fileInfo);
+
+      fileInfo.rel_name = namelow + "/resource.h";
+      fileInfo.type = CPP_HEADER;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      fileInfo.install_location = "";
+      project->addFileToProject (namelow + "/resource.h",fileInfo);
+    }
+  }
+  
   if (datalink->isChecked()) {
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2749,7 +2867,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/lo16-app-" + namelow + ".png",fileInfo);
   }
 
-  if ( qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
+  if ( qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected() || qtobjcnormalitem->isSelected()) {
     fileInfo.rel_name = namelow + "/filenew.xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2782,7 +2900,7 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.rel_name = namelow + "/docs/en/index"+num+".html";
       fileInfo.type = DATA;
       fileInfo.dist = true;
-      if (!cppitem->isSelected() && !citem->isSelected()) {
+      if (!cppitem->isSelected() && !citem->isSelected() && !objcitem->isSelected()) {
         fileInfo.install = true;
         if ( project->isQt2Project() || qextmdiitem->isSelected())
           fileInfo.install_location = "$(prefix)/doc/";
@@ -2836,7 +2954,7 @@ void CKAppWizard::slotProcessExited() {
     project->setFilters(i18n("Translations"),group_filters);
   }
 
-  if (!cppitem->isSelected() && !citem->isSelected() &&!gnomenormalitem->isSelected()) {
+  if (!cppitem->isSelected() && !citem->isSelected() && !objcitem->isSelected() &&!gnomenormalitem->isSelected()) {
     group_filters.clear();
     group_filters.append("*.kdevdlg");
     group_filters.append("*.ui");
@@ -2859,6 +2977,7 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.l++");
   group_filters.append("*.ll");
   group_filters.append("*.l");
+  group_filters.append("*.m");
   project->addLFVGroup (i18n("Sources"),"");
   project->setFilters(i18n("Sources"),group_filters);
 

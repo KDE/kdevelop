@@ -80,7 +80,7 @@ void CKDevelop::initWhatsThis(){
   
   whats_this->add(toolBar()->getButton(ID_BUILD_COMPILE_FILE),i18n("Compile file\n\n"
         "Only compile the file opened in "
-        "the C/C++ Files- window. The output "
+        "the C/C++/Source Files- window. The output "
         "is shown in the output window. If "
         "errors occur, clicking on the error line "
         "causes the file window to show you the "

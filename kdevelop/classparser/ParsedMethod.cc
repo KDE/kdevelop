@@ -47,6 +47,7 @@ CParsedMethod::CParsedMethod()
   isSignal = false;
   isConstructor = false;
   isDestructor = false;
+  isObjectiveC = false;
 }
 
 /*----------------------------------- CParsedMethod::~CParsedMethod()
@@ -108,6 +109,10 @@ QString CParsedMethod::asString( QString &str )
   QString argString;
 
   str = name;
+
+  if ( isObjectiveC )
+  	return str;
+
   str += "(";
 
   for( arg = arguments.first(); arg != NULL; arg = arguments.next() )
@@ -148,7 +153,7 @@ void CParsedMethod::out()
   switch( exportScope )
   {
     case PIE_PUBLIC:
-      s += "public ";
+      s += (isObjectiveC ? "" : "public ");
       break;
     case PIE_PROTECTED:
       s += "protected ";
@@ -186,7 +191,7 @@ void CParsedMethod::out()
   kdDebug() << s << QString( isConst ? " ) const" : " )" ) << endl;
   s = QString("      declared @ line %d").arg(declaredOnLine) + " - ";
   kdDebug() << s << declarationEndsOnLine << endl;
-  s = QString("      defined(in ") + ( isInHFile ? ".h" : ".cc" ) + ")";
+  s = QString("      defined(in ") + ( isInHFile ? ".h" : ( isObjectiveC ? ".m" : ".cc" ) ) + ")";
   s += QString("@ line %d").arg(definedOnLine) + " - ";
   kdDebug() << s << definitionEndsOnLine << endl;
 }
@@ -219,6 +224,7 @@ void CParsedMethod::copy( CParsedMethod *aMethod )
   setIsVirtual( aMethod->isVirtual );
   setIsSlot( aMethod->isSlot );
   setIsSignal( aMethod->isSignal );
+  setIsObjectiveC( aMethod->isObjectiveC );
 
   for( anArg = aMethod->arguments.first();
        anArg != NULL;
@@ -370,3 +376,6 @@ bool CParsedMethod::isEqual( CParsedMethod &method )
 
   return retVal;
 }
+
+
+

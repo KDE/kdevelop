@@ -150,6 +150,12 @@ void CNewClassDlg::initDialog(const char* dir /*=0*/){
   layout->addWidget( private_button );
   layout->addStretch( 1 );
 
+  public_objc_button = new QRadioButton( inher_group, "public_objc_button" );
+  public_objc_button->setText( "objective-c public" );
+  public_objc_button->setMinimumSize( public_objc_button->sizeHint() );
+  layout->addWidget( public_objc_button );
+  layout->addStretch( 1 );
+
   add_group = new QButtonGroup( this, "add_group" );
   add_group->setTitle(i18n("Additional Options") );
   main_layout->addWidget( add_group, 2, 1 );
@@ -330,23 +336,29 @@ void CNewClassDlg::ok(){
     {
     	lDirBackup += "../";
     }
-    stream << "\n#include \"" + lDirBackup + QString(header_edit->text()) + "\"\n\n" ;
+    if (public_objc_button->isChecked()){
+      stream << "\n#include \"" + lDirBackup + QString(header_edit->text()) + "\"\n\n" ;
+      stream << "@implementation " + classname + "\n";
+      stream << "@end\n\n";
+    } else {
+      stream << "\n#include \"" + lDirBackup + QString(header_edit->text()) + "\"\n\n" ;
 
 
 //    stream << "\n#include \"" + QString(headerfile) + "\"\n\n" ;
 // end modification
 
-    stream << classname + "::" + classname +"(" ;
-    if (qwidget_check->isChecked()){
-      stream << "QWidget *parent, const char *name ) : ";
-      stream << basename + "(parent,name) {\n";
+      stream << classname + "::" + classname +"(" ;
+      if (qwidget_check->isChecked()){
+        stream << "QWidget *parent, const char *name ) : ";
+        stream << basename + "(parent,name) {\n";
+      }
+      else{
+        stream << "){\n";
+      }
+      stream << "}\n";
+      stream << classname + "::~" + classname +"(){\n";
+      stream << "}\n";
     }
-    else{
-      stream << "){\n";
-    }
-    stream << "}\n";
-    stream << classname + "::~" + classname +"(){\n";
-    stream << "}\n";
   }
   file.close();
 
@@ -371,38 +383,59 @@ void CNewClassDlg::ok(){
     if (qwidget_check->isChecked() && basename != "QWidget"){
       stream << "#include <qwidget.h>\n";
     }
+    if(public_objc_button->isChecked()){
+        stream << "#include <Foundation/NSObject.h>\n";
+		}
     if(!basename.isEmpty()){
-      stream << "#include <" + basename.lower() + ".h>\n";
+      if(public_objc_button->isChecked()){
+				if (basename != "NSObject") {
+        		stream << "#include \"" + basename + ".h\"\n";
+				}
+      } else {
+        stream << "#include <" + basename.lower() + ".h>\n";
+      }
     }
     stream << "\n/**" + doc + "\n";
     stream << "  *@author "+ prj_info->getAuthor() + "\n";
     stream << "  */\n\n";
-    stream << "class " + classname;
-    if(!basename.isEmpty()){
-      stream << " : ";
-      if(public_button->isChecked()){
-	stream << "public ";
-      }
-      if(protected_button->isChecked()){
-	stream << "protected ";
-      }
-      if(private_button->isChecked()){
-	stream << "private ";
-      }
-      stream << basename + " ";
+    if (public_objc_button->isChecked()){
+     stream << "@interface " + classname;
+     stream << " : ";
+			if (basename.isEmpty()) {
+       stream << "NSObject\n";
+			} else {
+       stream << basename + "\n";
+			}
+     stream << "@end ";
+     stream << "\n\n#endif\n";
+    } else {
+     stream << "class " + classname;
+     if(!basename.isEmpty()){
+       stream << " : ";
+       if(public_button->isChecked()){
+      stream << "public ";
+       }
+       if(protected_button->isChecked()){
+      stream << "protected ";
+       }
+       if(private_button->isChecked()){
+      stream << "private ";
+       }
+       stream << basename + " ";
+     }
+     stream << " {\n";
+     if(qwidget_check->isChecked()){
+       stream << "   Q_OBJECT\n";
+     }
+     stream << "public: \n";
+     stream << "\t" + classname+"(";
+     if (qwidget_check->isChecked()){
+       stream << "QWidget *parent=0, const char *name=0";
+     }
+     stream << ");\n";
+     stream << "\t~" + classname +"();\n";
+     stream << "};\n\n#endif\n";
     }
-    stream << " {\n";
-    if(qwidget_check->isChecked()){
-      stream << "   Q_OBJECT\n";
-    }
-    stream << "public: \n";
-    stream << "\t" + classname+"(";
-    if (qwidget_check->isChecked()){
-      stream << "QWidget *parent=0, const char *name=0";
-    }
-    stream << ");\n";
-    stream << "\t~" + classname +"();\n";
-    stream << "};\n\n#endif\n";
   }
   file.close();
 
@@ -420,10 +453,16 @@ QString CNewClassDlg::getImplFile(){
 void CNewClassDlg::slotClassEditChanged(const QString& text){
   QString str = text;
   if(!header_modified){
-    header_edit->setText(str.lower() + ".h");
+   if(public_objc_button->isChecked())
+     header_edit->setText(str + ".h");
+   else
+     header_edit->setText(str.lower() + ".h");
   }
   if(!impl_modified){
-    impl_edit->setText(str.lower() +".cpp");
+    if (public_objc_button->isChecked())
+      impl_edit->setText(str + ".m");
+    else
+      impl_edit->setText(str.lower() +".cpp");
   }
   
 }

@@ -437,6 +437,7 @@ public: // Public queries
   bool isQtProject();
   bool isQt2Project();
   bool isCustomProject();
+  bool isObjcProject();
   /** check if a subdir is in the project (registered). */
 //  bool isDirInProject(const QString& rel_name);
 

@@ -158,7 +158,9 @@ private:
   QStrList sub_dir_list;
   QListViewItem *kdeentry;
   QListViewItem *kde2normalitem;
+  QListViewItem *kdeobjcnormalitem;
   QListViewItem *kde2miniitem;
+  QListViewItem *kdeobjcminiitem;
   QListViewItem *kde2mdiitem;
   QListViewItem *qtentry;
   QListViewItem *ccppentry;
@@ -166,9 +168,11 @@ private:
   QListViewItem *othersentry;
   QListViewItem *citem;
   QListViewItem *cppitem;
+  QListViewItem *objcitem;
   QListViewItem *customprojitem;
   QListViewItem *gnomenormalitem;
   QListViewItem *qt2normalitem;
+  QListViewItem *qtobjcnormalitem;
   QListViewItem *qt2mdiitem;
   QListViewItem *qextmdiitem;
   QListViewItem *kickeritem;
