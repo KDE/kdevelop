@@ -55,6 +55,7 @@
 #define ID_EDIT_SEARCH              11070
 #define ID_EDIT_REPEAT_SEARCH       11080
 #define ID_EDIT_REPLACE             11090
+#define ID_EDIT_SEARCH_IN_FILES     11130
 
 #define ID_EDIT_INDENT             	11091
 #define ID_EDIT_UNINDENT            11092

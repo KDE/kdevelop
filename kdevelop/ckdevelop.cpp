@@ -51,6 +51,7 @@
 #include "./kwrite/kwdoc.h"
 #include "kswallow.h"
 #include "cerrormessageparser.h"
+#include "grepdialog.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -339,6 +340,13 @@ void CKDevelop::slotEditRepeatSearch(){
     edit_widget->searchAgain();
   }
   slotStatusMsg(IDS_DEFAULT); 
+}
+void CKDevelop::slotEditSearchInFiles(){
+  slotStatusMsg(i18n("Searching in Files..."));
+  if(project){
+    grep_dlg->setDirName(prj->getProjectDir());
+  }
+  grep_dlg->show();
 }
 void CKDevelop::slotEditReplace(){
   slotStatusMsg(i18n("Replacing..."));
@@ -1824,6 +1832,9 @@ void CKDevelop::slotBufferMenu( const QPoint& point ) {
   menu_buffers->popup( point );
 }
 
+void CKDevelop::slotGrepDialogItemSelected(QString filename,int linenumber){
+  switchToFile(filename,linenumber);
+}
 
 void CKDevelop::slotToolbarClicked(int item){
   switch (item) {

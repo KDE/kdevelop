@@ -16,6 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qdir.h>
 #include <iostream.h>
 #include <kmsgbox.h>
 #include <kaccel.h>
@@ -28,6 +29,7 @@
 #include "kswallow.h"
 #include "ctabctl.h"
 #include "cerrormessageparser.h"
+#include "grepdialog.h"
 
 CKDevelop::CKDevelop(){
   QString filename;
@@ -248,6 +250,8 @@ void CKDevelop::init(){
   output_view_pos=view->separatorPos();
   tree_view_pos=top_panner->separatorPos();
 
+  
+
   // set the mainwidget
   setView(view);
   initKeyAccel();
@@ -298,6 +302,11 @@ void CKDevelop::init(){
   edit2->modified=false;
   edit_infos.append(edit1);
   edit_infos.append(edit2);
+  
+  // init some dialogs
+  grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
+  
+  connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
 }
 void CKDevelop::initKeyAccel(){
   accel = new KAccel( this );
@@ -478,6 +487,7 @@ void CKDevelop::initMenu(){
   edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
   
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
+  edit_menu->insertItem(i18n("&Search in Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
   edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);

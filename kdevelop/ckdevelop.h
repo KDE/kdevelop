@@ -53,6 +53,7 @@ class KSwallowWidget;
 class CAddExistingFileDlg;
 class QListViewItem;
 class CErrorMessageParser;
+class GrepDialog;
 #include "ceditwidget.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
@@ -114,12 +115,13 @@ public:
    * return true if a new subdir was added to the project
    */
   bool addFileToProject(QString complete_filename,QString type,bool refreshTrees=true);
+  void switchToWorkspace(int id);
+  int getTabLocation(QString filename);
+
   /**@param filename the absolute filename*/
   void switchToFile(QString filename); // filename = abs
   /** Switch to a certain line in a certain file. */
   void switchToFile(QString filename, int lineNo);
-  void switchToWorkspace(int id);
-  int getTabLocation(QString filename);
 
   /** set the correct toolbar and menubar,if a process is running
     * @param enable if true than enable,otherwise disable
@@ -178,6 +180,8 @@ public:
   void slotEditSearch();
   /** repeat last search */
   void slotEditRepeatSearch();
+  /** search in files, use grep and find*/
+  void slotEditSearchInFiles();
   /** opens the search and replace dialog */
   void slotEditReplace();
   void slotEditIndent();
@@ -344,6 +348,7 @@ public:
   /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
 
+  void slotGrepDialogItemSelected(QString filename,int linenumber);
   
   ////////////////////////
   // KDlgEdit-View-Menu entries -- managed by kdevelop
@@ -395,6 +400,8 @@ public:
   /** change Statusbar status of Line and Column */
   void slotNewLineColumn();
   void slotNewUndo();
+
+ 
 
   void slotBufferMenu(const QPoint& pos);
   void slotShowC();
@@ -574,6 +581,7 @@ private:
   CConfigA2psDlg* a2psconf;
 
   CAddExistingFileDlg* add_dlg;
+  GrepDialog* grep_dlg;
 
   enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE};
 
