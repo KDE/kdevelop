@@ -281,6 +281,9 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	     this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
 
     connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
+    
+    if( part->partController()->activePart() )
+        slotActivePartChanged( part->partController()->activePart() );
 }
 
 CppCodeCompletion::~CppCodeCompletion( )
@@ -311,7 +314,7 @@ void CppCodeCompletion::slotTimeout()
 void
 CppCodeCompletion::slotArgHintHided( )
 {
-    kdDebug(9007) << "CppCodeCompletion::slotArgHintHided()" << endl;
+    //kdDebug(9007) << "CppCodeCompletion::slotArgHintHided()" << endl;
     m_bArgHintShow = false;
 }
 

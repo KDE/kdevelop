@@ -119,6 +119,18 @@ public:
     {
 	kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
 	TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
+	
+        if( cppSupport()->problemReporter() ){
+	    cppSupport()->problemReporter()->removeAllErrors( fileName );
+
+	    QValueList<Problem> pl = problems( fileName );
+	    QValueList<Problem>::ConstIterator it = pl.begin();
+	    while( it != pl.end() ){
+	        const Problem& p = *it++;
+	        cppSupport()->problemReporter()->reportError( p.text(), fileName, p.line(), p.column() );
+	    }
+	}
+	
 	cppSupport()->classStore()->removeWithReferences( fileName );
 	StoreWalker walker( fileName, cppSupport()->classStore() );
 	walker.parseTranslationUnit( ast.get() );
@@ -133,8 +145,11 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 {
     setInstance(CppSupportFactory::instance());
 
+    m_driver = new CppDriver( this );
+    
     setXMLFile("kdevcppsupport.rc");
 
+    m_projectCatalog = 0;
     m_catalogList.setAutoDelete( true );
     m_backgroundParser = 0;
     setupCatalog();
@@ -224,6 +239,9 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
 CppSupportPart::~CppSupportPart()
 {
+    delete( m_driver );
+    m_driver = 0;
+    
     if( m_backgroundParser ){
 	//    while( m_backgroundParser->filesInQueue() > 0 )
 	//       m_backgroundParser->isEmpty().wait();
@@ -385,6 +403,7 @@ CppSupportPart::projectOpened( )
     QDir::setCurrent( project()->projectDirectory() );
 
     m_timestamp.clear();
+    
     m_pCompletion = new CppCodeCompletion( this );
     m_projectClosed = false;
 
@@ -471,9 +490,6 @@ static QStringList reorder(const QStringList &list)
     return headers + others;
 }
 
-
-
-
 void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 {
     QStringList::ConstIterator it;
@@ -493,7 +509,6 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 
     emit updatedSourceInfo();
 }
-
 
 void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
@@ -533,9 +548,7 @@ void CppSupportPart::savedFile(const QString &fileName)
 
     QStringList projectFileList = project()->allFiles();
     if (projectFileList.contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
-	// changed - daniel
 	maybeParse( fileName );
-	emit updatedSourceInfo();
     }
 }
 
@@ -731,8 +744,6 @@ CppSupportPart::parseProject( )
     int n = 0;
     QDir d( project()->projectDirectory() );
 
-    CppDriver driver( this );
-    
     for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
         bar->setProgress( n++ );
 	QFileInfo fileInfo( d, *it );
@@ -748,7 +759,8 @@ CppSupportPart::parseProject( )
 	    if( m_timestamp.contains(absFilePath) && m_timestamp[absFilePath] == t )
 		continue;
 	    
-            driver.parseFile( absFilePath );
+            m_driver->parseFile( absFilePath );
+	    
 	    m_timestamp[ absFilePath ] = t;
         }
 
@@ -793,8 +805,7 @@ CppSupportPart::maybeParse( const QString& fileName )
     }
 
     m_timestamp[ fileName ] = t;
-
-    m_backgroundParser->addFile( fileName );
+    m_driver->parseFile( fileName );
 }
 
 void CppSupportPart::implementVirtualMethods( const QString& className )
@@ -860,7 +871,7 @@ void CppSupportPart::slotMakeMember()
 {
     if( !m_activeViewCursor || !m_valid )
         return;
-
+    
     // sync
     while( m_backgroundParser->filesInQueue() > 0 )
          m_backgroundParser->isEmpty().wait();

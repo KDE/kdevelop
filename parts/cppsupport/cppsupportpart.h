@@ -39,6 +39,7 @@ class QProgressBar;
 class QStringList;
 class QListViewItem;
 class KListView;
+class Driver;
 
 namespace KParts { class Part; }
 namespace KTextEditor { class EditInterface; class SelectionInterface; class ViewCursorInterface; class Document; };
@@ -52,6 +53,8 @@ public:
     virtual ~CppSupportPart();
 
     bool isValid() const { return m_valid; }
+    
+    Catalog* projectCatalog() { return m_projectCatalog; }
 
     void setCodeCompletionEnabled( bool b ){ m_bEnableCC = b;    };
     bool codeCompletionEnabled( void   ){ return m_bEnableCC; };
@@ -160,6 +163,8 @@ private:
     bool m_valid;
 
     QPtrList<Catalog> m_catalogList;
+    Catalog* m_projectCatalog;
+    Driver* m_driver;
 
     friend class KDevCppSupportIface;
 };
