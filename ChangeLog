@@ -1,3 +1,6 @@
+2002-05-28
+	* Added ProjectWorkspace. Save and restore opened files with project.
+
 2002-05-29  Harald Fernengel <harry@kdevelop.org>
         * perforce part: implemented edit and revert
         * perforce part: added submit dialog

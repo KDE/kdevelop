@@ -32,7 +32,7 @@ class QDomDocument;
 #include "partcontroller.h"
 #include "classstore.h"
 #include "partselectwidget.h"
-
+#include "projectworkspace.h"
 
 #include "projectmanager.h"
 
@@ -191,6 +191,8 @@ void ProjectManager::loadProject(const KURL &url)
   loadLocalParts();
 
   initializeProjectSupport();
+  
+  ProjectWorkspace::restore();
 
   m_openRecentProjectAction->addURL(KURL(projectFile()));
   m_closeProjectAction->setEnabled(true);
@@ -409,6 +411,8 @@ void ProjectManager::closeProject()
 
   if (API::getInstance()->project())
   {
+    ProjectWorkspace::save();
+    
     if (!closeProjectSources())
       return;
       
@@ -494,6 +498,5 @@ bool ProjectManager::projectLoaded() const
 {
   return m_info != 0;
 }
-
 
 #include "projectmanager.moc"
