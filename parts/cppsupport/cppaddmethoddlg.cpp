@@ -122,6 +122,14 @@ ParsedMethod *CppAddMethodDialog::asSystemObj()
 
 void CppAddMethodDialog::slotToggleModifier()
 {
+    if (rbSignal->isChecked()) {
+        rbPublic->setEnabled(false);
+        rbPrivate->setEnabled(false);
+        rbProtected->setChecked(true);
+    } else {
+        rbPublic->setEnabled(true);
+        rbPrivate->setEnabled(true);
+    }
     if (rbSlot->isChecked() || rbSignal->isChecked()) {
         cbStatic->setEnabled(false);
         cbConst->setEnabled(false);
