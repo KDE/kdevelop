@@ -28,6 +28,70 @@ class QPopupMenu;
 class KCompletion;
 class ClassStore;
 
+
+template<class T>
+class PCheckListItem: public QCheckListItem{
+public:
+   
+    PCheckListItem ( T item, QCheckListItem * parent, const QString & text, Type tt = Controller ):
+	QCheckListItem ( parent, text, tt ), m_item(item) {}
+    
+    PCheckListItem ( T item, QCheckListItem * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
+	QCheckListItem ( parent, after, text, tt ), m_item(item) {}
+    
+    PCheckListItem ( T item,  QListViewItem * parent, const QString & text, Type tt = Controller ):
+	QCheckListItem ( parent, text, tt ), m_item(item) {}
+    
+    PCheckListItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
+	QCheckListItem ( parent, after, text, tt ), m_item(item) {}
+    
+    PCheckListItem ( T item, QListView * parent, const QString & text, Type tt = Controller ):
+	QCheckListItem ( parent, text, tt ), m_item(item) {}
+    
+    PCheckListItem ( T item, QListView * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
+	QCheckListItem ( parent, after, text, tt ), m_item(item) {}
+    
+    PCheckListItem ( T item, QListViewItem * parent, const QString & text, const QPixmap & p ):
+	QCheckListItem ( parent, text, p ), m_item(item) {}
+    
+    PCheckListItem ( T item, QListView * parent, const QString & text, const QPixmap & p ):
+	QCheckListItem ( parent, text, p ), m_item(item) {}
+    
+    T item()
+    {
+	return m_item;
+    }
+    
+private:
+    T m_item;
+};
+
+template<class T>
+class PListViewItem: public QListViewItem{
+public:
+    
+    PListViewItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text ):
+	QListViewItem ( parent, after, text ), m_item(item) {}
+    
+    PListViewItem ( T item,  QListViewItem * parent, const QString & text ):
+	QListViewItem ( parent, text ), m_item(item) {}
+    
+    PListViewItem ( T item, QListView * parent, const QString & text ):
+	QListViewItem ( parent, text ), m_item(item) {}
+    
+    PListViewItem ( T item, QListView * parent, QListViewItem * after, const QString & text ):
+	QListViewItem ( parent, after, text ), m_item(item) {}
+    
+    T item()
+    {
+	return m_item;
+    }
+    
+private:
+    T m_item;
+};
+
+
 class CppNewClassDialog : public CppNewClassDialogBase
 {
     Q_OBJECT
@@ -162,69 +226,7 @@ private:
 
       CppNewClassDialog& dlg;
     };
-    
-    template<class T>
-    class PCheckListItem: public QCheckListItem{
-    public:
-   
-        PCheckListItem ( T item, QCheckListItem * parent, const QString & text, Type tt = Controller ):
-            QCheckListItem ( parent, text, tt ), m_item(item) {}
-
-        PCheckListItem ( T item, QCheckListItem * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
-            QCheckListItem ( parent, after, text, tt ), m_item(item) {}
-
-        PCheckListItem ( T item,  QListViewItem * parent, const QString & text, Type tt = Controller ):
-            QCheckListItem ( parent, text, tt ), m_item(item) {}
-
-        PCheckListItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
-            QCheckListItem ( parent, after, text, tt ), m_item(item) {}
-
-        PCheckListItem ( T item, QListView * parent, const QString & text, Type tt = Controller ):
-            QCheckListItem ( parent, text, tt ), m_item(item) {}
-
-        PCheckListItem ( T item, QListView * parent, QListViewItem * after, const QString & text, Type tt = Controller ):
-            QCheckListItem ( parent, after, text, tt ), m_item(item) {}
-
-        PCheckListItem ( T item, QListViewItem * parent, const QString & text, const QPixmap & p ):
-            QCheckListItem ( parent, text, p ), m_item(item) {}
-
-        PCheckListItem ( T item, QListView * parent, const QString & text, const QPixmap & p ):
-            QCheckListItem ( parent, text, p ), m_item(item) {}
-
-        T item()
-        {
-            return m_item;
-        }
         
-    private:
-        T m_item;
-    };
-
-    template<class T>
-    class PListViewItem: public QListViewItem{
-    public:
-   
-        PListViewItem ( T item, QListViewItem * parent, QListViewItem * after, const QString & text ):
-            QListViewItem ( parent, after, text ), m_item(item) {}
-
-        PListViewItem ( T item,  QListViewItem * parent, const QString & text ):
-            QListViewItem ( parent, text ), m_item(item) {}
-
-        PListViewItem ( T item, QListView * parent, const QString & text ):
-            QListViewItem ( parent, text ), m_item(item) {}
-
-        PListViewItem ( T item, QListView * parent, QListViewItem * after, const QString & text ):
-            QListViewItem ( parent, after, text ), m_item(item) {}
-
-        T item()
-        {
-            return m_item;
-        }
-        
-    private:
-        T m_item;
-    };
-    
         
     // workaround to make gcc 2.95.x happy
     friend class CppNewClassDialog::ClassGenerator;

@@ -1341,11 +1341,11 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
       + ( advConstructorsHeader.isNull() ? QString("    $CLASSNAME$($ARGS$);\n") : advConstructorsHeader )
       + QString("\n    ~$CLASSNAME$();\n")
       + advH_public
-      + (advH_public_slots.isNull() ? "" : ("\n\npublic slots:" + advH_public_slots))
-      + (advH_protected.isNull() ? "" : ("\n\nprotected:" + advH_protected))
-      + (advH_protected_slots.isNull() ? "" : ("\n\nprotected slots:" + advH_protected_slots))
-      + (advH_private.isNull() ? "" : ("\n\nprivate:" + advH_private))
-      + (advH_private_slots.isNull() ? "" : ("\n\nprivate slots:" + advH_private_slots))
+      + (advH_public_slots.isNull() ? QString::fromLatin1("") : ("\n\npublic slots:" + advH_public_slots))
+      + (advH_protected.isNull() ? QString::fromLatin1("") : ("\n\nprotected:" + advH_protected))
+      + (advH_protected_slots.isNull() ? QString::fromLatin1("") : ("\n\nprotected slots:" + advH_protected_slots))
+      + (advH_private.isNull() ? QString::fromLatin1("") : ("\n\nprivate:" + advH_private))
+      + (advH_private_slots.isNull() ? QString::fromLatin1("") : ("\n\nprivate slots:" + advH_private_slots))
       + QString("};\n"
 		"\n")
       + namespaceEnd
