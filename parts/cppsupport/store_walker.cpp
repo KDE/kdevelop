@@ -247,6 +247,8 @@ void StoreWalker::parseTypeSpecifier( TypeSpecifierAST* ast )
 
 void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 {
+    static int anon = 0;
+    
     int startLine, startColumn;
     int endLine, endColumn;
     ast->getStartPosition( &startLine, &startColumn );
@@ -270,7 +272,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	QFileInfo fileInfo( m_fileName );
 	QString shortFileName = fileInfo.baseName();
 	
-	className = QString::fromLatin1("(") + shortFileName + QString::fromLatin1(")");
+	className = QString::fromLatin1("(") + shortFileName + QString::number(anon++) + QString::fromLatin1(")");
     } else {
 	className = ast->name()->text();
     }
