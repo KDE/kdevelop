@@ -31,10 +31,10 @@ PHPParser::~PHPParser(){
 }
 void PHPParser::parseLines(QStringList* lines,const QString& fileName){
   kdDebug(9018) << "enter parsedLines" << endl;
-  KRegExp classre("^[ \t]*class[ \t]+([A-Za-z_]+)[ \t]*(extends[ \t]*([A-Za-z_]+))?.*$");
-  KRegExp methodre("^[ \t]*function[ \t]*([0-9A-Za-z_]*)[ \t]*\\(([0-9A-Za-z_\\$\\, \t=&\\'\\\"]*)\\).*$");
-  KRegExp varre("^[ \t]*var[ \t]*([0-9A-Za-z_\\$]+)[ \t;=].*$");
-  KRegExp createMemberRe("\\$this->([0-9A-Za-z_]+)[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)");
+  KRegExp classre("^[ \t]*class[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*(extends[ \t]*([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*))?.*$");
+  KRegExp methodre("^[ \t]*function[ \t]*([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*\\(([a-zA-Z_\x7f-\xff]*[0-9A-Za-z_\x7f-\xff\\$\\, \t=&\\'\\\"]*)\\).*$");
+  KRegExp varre("^[ \t]*var[ \t]*\\$([a-zA-Z_\x7f-\xff][0-9A-Za-z_\x7f-\xff]*)[ \t;=].*$");
+  KRegExp createMemberRe("\\$this->([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)[ \t]*=[\t]*new[ \t]+([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)");
 
   ParsedClass *lastClass = 0;
   QString rawline;
