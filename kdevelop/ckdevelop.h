@@ -537,6 +537,12 @@ public:
   void slotCVAddMethod( const char *aClassName );
   /** Added attribute in the classview. */
   void slotCVAddAttribute( const char *aClassName );
+  
+  /** Delete an method.
+   * @param aClassName Name of the class holding the method. NULL for global functions.
+   * @param aMethodName Name of the method(with arguments) to delete.
+   */
+  void slotCVDeleteMethod( const char *aClassName,const char *aMethodName );
   /** The user wants to view the declaration of a method. */
   void slotCVViewDeclaration( const char *className, 
                               const char *declName, 
