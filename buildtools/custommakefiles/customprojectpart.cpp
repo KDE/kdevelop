@@ -139,7 +139,7 @@ CustomProjectPart::~CustomProjectPart()
 void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
-    vbox = dlg->addVBoxPage(i18n("Run Options"));
+    vbox = dlg->addVBoxPage(i18n("Run Options"), i18n("Run Options"), BarIcon( "make", KIcon::SizeMedium ));
     RunOptionsWidget *w1 = new RunOptionsWidget(*projectDom(), "/kdevcustomproject", buildDirectory(), vbox);
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
     vbox = dlg->addVBoxPage(i18n("Build Options"), i18n("Build Options"), BarIcon( "make", KIcon::SizeMedium ));
