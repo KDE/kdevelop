@@ -34,9 +34,9 @@ class VarItem;
 enum RDBCmd
 {
   CONSTANTS     = 'C',
-  CVARS         = 'V',    
-  IVARS         = 'I',    
-  LOCALS        = 'L',
+  CVARS         = 'V',
+  IVARS         = 'I',
+  LOCALS        = 'L'
 };
 
 #define RUNCMD      (true)
