@@ -150,6 +150,9 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	} else if( m_preprocessorEnabled && m_driver->macros().contains(ide) ){
 	    
 	    QMap<QString, QString> map;
+	  
+	    int svLine = currentLine();
+	    int svColumn = currentColumn();
 	    
 	    Macro m = m_driver->macros()[ ide ];
 	    if( m.hasArguments() ){
@@ -176,6 +179,10 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		if( currentChar() == ')' )
 		    nextChar();
 	    }
+	    
+	    int argsEndAtLine = currentLine();
+	    int argsEndAtColumn = currentColumn();
+	    	    
             QString body = QString(" ") + m.body() + QString(" ");
 	    m_source.insert( currentPosition(), body );
 
@@ -199,8 +206,12 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		    while( !currentChar().isNull() ){
 			Token tok2;
 			nextToken( tok2 );
-			if( tok2 != -1 )
+			if( tok2 != -1 ){
+			    // fix the token position
+			    tok2.setStartPosition( svLine, svColumn );
+			    tok2.setEndPosition( svLine, svColumn );
 			    addToken( tok2 );
+			}
 		    }
 		    
 		    m_endPtr = svEndPtr + v.length();
@@ -211,6 +222,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		}
             }
             m_preprocessorEnabled = d;
+	    m_currentLine = argsEndAtLine;
+	    m_currentColumn = argsEndAtColumn;
 	    m_endPtr = m_source.length();
 	} else if( m_skipWordsEnabled ){
 	    QMap< QString, QPair<SkipType, QString> >::Iterator pos = m_words.find( ide );
