@@ -60,6 +60,7 @@ protected:
 protected slots:
 
   void slotSaveAs();
+  void slotSave();
 
 
 private:
@@ -157,7 +158,7 @@ public:
   EditorInterface *queryInterface(const QString &ifname);
 
   virtual Document *document(const KURL &url) = 0;
-  virtual Document *createDocument(const KURL &url="") = 0;
+  virtual Document *createDocument(QWidget *parentWidget=0, const KURL &url="") = 0;
   virtual Document *currentDocument() = 0;
 
 };

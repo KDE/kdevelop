@@ -15,7 +15,7 @@ class DocumentImpl : public KEditor::Document
 
 public:
 
-  DocumentImpl(KEditor::Editor *parent);
+  DocumentImpl(KEditor::Editor *parent, QWidget *parentWidget=0);
   virtual ~DocumentImpl();
   
   virtual bool saveFile();

@@ -18,13 +18,13 @@
 #include "kwrite/kwview.h"
 
 
-DocumentImpl::DocumentImpl(KEditor::Editor *parent)
+DocumentImpl::DocumentImpl(KEditor::Editor *parent, QWidget *parentWidget)
   : KEditor::Document(parent)
 {
   setInstance( KWritePartFactory::instance() );
   
   m_document = new KWriteDoc(HlManager::self(), "");
-  m_view = static_cast<KWrite*>(m_document->createView(0, ""));
+  m_view = static_cast<KWrite*>(m_document->createView(parentWidget, ""));
   setWidget(m_view);
 
   // create interfaces

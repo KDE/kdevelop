@@ -21,6 +21,7 @@ Document::Document(Editor *parent)
   : KParts::ReadWritePart(0), _parent(parent)
 {
   KStdAction::saveAs(this, SLOT(slotSaveAs()), actionCollection(), "file_save_as");
+  KStdAction::save(this, SLOT(slotSave()), actionCollection(), "file_save");
 }
 
 
@@ -40,11 +41,17 @@ DocumentInterface *Document::queryInterface(const QString &ifname)
 
 void Document::slotSaveAs()
 {
-  QString fname = KFileDialog::getSaveFileName();
-  if (fname.isEmpty())
+  KURL url = KFileDialog::getSaveURL();
+  if (url.isEmpty())
     return;
 
-  saveAs(fname);
+  saveAs(url);
+}
+
+
+void Document::slotSave()
+{
+  save();
 }
 
 

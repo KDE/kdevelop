@@ -1,5 +1,5 @@
-#ifndef __EDITORTEST_PART_H__
-#define __EDITORTEST_PART_H__
+#ifndef __KWRITE_PART_H__
+#define __KWRITE_PART_H__
 
 
 #include <qlist.h>
@@ -25,7 +25,7 @@ public:
   virtual ~KWritePart();
 
   virtual KEditor::Document *document(const KURL &url);
-  virtual KEditor::Document *createDocument(const KURL &url="");
+  virtual KEditor::Document *createDocument(QWidget *parentWidget=0, const KURL &url="");
   virtual KEditor::Document *currentDocument();
 
 

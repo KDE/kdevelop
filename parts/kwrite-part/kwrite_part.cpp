@@ -35,9 +35,9 @@ KEditor::Document *KWritePart::document(const KURL &url)
 }
 
 
-KEditor::Document *KWritePart::createDocument(const KURL &url)
+KEditor::Document *KWritePart::createDocument(QWidget *parentWidget, const KURL &url)
 {
-  DocumentImpl *impl = new DocumentImpl(this);
+  DocumentImpl *impl = new DocumentImpl(this, parentWidget);
   if (!url.isEmpty())
     impl->openURL(url);
 

@@ -1,6 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="kwriteeditor_part" version="1">
 <MenuBar>
+  <Menu name="file"><text>&amp;File</text>
+    <Action name="file_save"/>
+    <Action name="file_save_as"/>
+  </Menu>
   <Menu name="edit"><text>&amp;Edit</text>
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
