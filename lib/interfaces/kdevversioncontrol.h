@@ -30,8 +30,6 @@ class KDevVersionControl : public KDevPlugin
     Q_OBJECT
 
 public:
-    enum State { invalid = -1, canBeCommited = 1, canBeAdded = 2 };
-
     /**
     * Builds the object.
     *   @p pluginName   this _is_ *** unique *** identintifier between all available version controls.
