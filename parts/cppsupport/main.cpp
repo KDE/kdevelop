@@ -115,17 +115,17 @@ void parseDirectory( Driver& driver, QDir& dir, bool rec, bool parseAllFiles )
 	    fileList = dir.entryList( QDir::Files );
 	else
 	    fileList = dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tlh" );
-	    
+
 	QStringList::Iterator it = fileList.begin();
 	while( it != fileList.end() ){
 	    QString fn = dir.path() + "/" + (*it);
 	    ++it;
-	    
-	    std::cout << "parsing file " << fn << std::endl; 
+
+	    std::cout << "parsing file " << fn << std::endl;
 	    driver.parseFile( fn );
 	}
     }
-    
+
     if( rec ) {
 	QStringList fileList = dir.entryList( QDir::Dirs );
 	QStringList::Iterator it = fileList.begin();
@@ -134,10 +134,10 @@ void parseDirectory( Driver& driver, QDir& dir, bool rec, bool parseAllFiles )
 		++it;
 		continue;
 	    }
-	    
+
 	    QDir subdir( dir.path() + "/" + (*it) );
-	    ++it; 
-	    
+	    ++it;
+
 	    parseDirectory( driver, subdir, rec, parseAllFiles );
 	}
     }
@@ -150,12 +150,13 @@ int main( int argc, char* argv[] )
     KStandardDirs stddir;
 
     if( argc < 3 ){
-        std::cerr << "usage: r++ dbname directories..." << std::endl << std::endl;     
+        std::cerr << "usage: r++ dbname directories..." << std::endl << std::endl;
         return -1;
     }
 
     bool rec = false;
     bool parseAllFiles = false;
+    bool generateTags = true;
 
     QString datadir = stddir.localkdedir() + "/" + KStandardDirs::kde_default( "data" );
 
@@ -163,7 +164,7 @@ int main( int argc, char* argv[] )
         std::cerr << "*error* " << datadir + "/kdevcppsupport/pcs/" << " doesn't exists!!" << std::endl << std::endl;
         return -1;
     }
-    
+
     QString dbFileName = datadir + "/kdevcppsupport/pcs/" + argv[ 1 ] + ".db";
     // std::cout << "dbFileName = " << dbFileName << std::endl;
     if( QFile::exists(dbFileName) ){
@@ -180,7 +181,10 @@ int main( int argc, char* argv[] )
 	   parseAllFiles = true;
 	   continue;
        } else if( s == "-f" || s == "--fast" ){
-	   driver.setResolveDependencesEnabled( false );	   
+	   driver.setResolveDependencesEnabled( false );
+	   continue;
+       } else if( s == "-c" || s == "--check-only" ){
+           generateTags = false;
 	   continue;
        }
 
@@ -192,6 +196,9 @@ int main( int argc, char* argv[] )
         parseDirectory( driver, dir, rec, parseAllFiles );
     }
 
+    if( !generateTags )
+        return 0;
+
     Catalog catalog;
     catalog.open( dbFileName );
     catalog.addIndex( "kind" );
@@ -200,7 +207,7 @@ int main( int argc, char* argv[] )
     catalog.addIndex( "fileName" );
 
     std::cout << "generating the pcs database" << std::endl;
-    
+
     QMap<QString, TranslationUnitAST*> units = driver.parsedUnits();
     QMap<QString, TranslationUnitAST*>::Iterator unitIt = units.begin();
     while( unitIt != units.end() ){
@@ -209,7 +216,7 @@ int main( int argc, char* argv[] )
 
         TranslationUnitAST::Node node = driver.takeTranslationUnit( unitIt.key() );
         node.reset();
-	
+
 	std::cout << ".";
 	std::flush( std::cout );
 
