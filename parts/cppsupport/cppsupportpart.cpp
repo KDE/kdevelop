@@ -130,9 +130,9 @@ void CppSupportPart::projectOpened()
 
 void CppSupportPart::projectClosed()
 {
-	if ( !QFile::exists ( ( project()->projectDirectory() + "/classstore.pcs" ) ) )
+	if ( !QFile::exists ( ( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" ) ) )
 	{
-		if ( classStore()->open ( ( project()->projectDirectory() + "/classstore.pcs" ), IO_WriteOnly ) )
+		if ( classStore()->open ( ( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" ), IO_WriteOnly ) )
 		{
 			classStore()->storeAll();
 			classStore()->close();
@@ -205,19 +205,19 @@ void CppSupportPart::initialParse()
     
     if (project())
 	{
-		if ( QFile::exists ( ( project()->projectDirectory() + "/classstore.pcs" ) ) )
+		if ( QFile::exists ( ( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" ) ) )
 		{
-			if ( classStore()->open ( ( project()->projectDirectory() + "/classstore.pcs" ), IO_ReadOnly ) )
+			if ( classStore()->open ( ( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" ), IO_ReadOnly ) )
 			{
-				kdDebug ( 9007 ) << "loading persistant class store: " << ( project()->projectDirectory() + "/classstore.pcs" ) << endl;
-				
+				kdDebug ( 9007 ) << "loading persistant class store: " << ( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" ) << endl;
+
+				kapp->processEvents();
 				kapp->setOverrideCursor(waitCursor);
 
 				QLabel* label = new QLabel ( i18n ( "Loading class store..." ), core()->statusBar() );
 				//label->setMinimumWidth ( 120 );
 
 				core()->statusBar()->addWidget ( label );
-				label->setText ( "Loading class store..." );
 				label->show();
 
 				classStore()->restoreAll();
