@@ -1,4 +1,12 @@
+2001-07-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Store relative instead of absolute file names in custom project
+	* Use gotoFile() instead of gotoSourceFile() in custom and
+	  script project
+	* Added Doxyfile for libkdevelop api
+
 2001-07-12  Sandy Meier   <smeier@kdevelop.org>
+
 	* implemented extended plugin loading as discussed on Linuxtag 2001
 	  see HACKING how you can use it
 	

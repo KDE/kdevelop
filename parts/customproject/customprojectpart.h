@@ -16,6 +16,7 @@
 
 #include "kdevproject.h"
 
+class QListViewItem;
 class KDialogBase;
 class CustomProjectWidget;
 
@@ -38,6 +39,7 @@ protected:
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
+    void slotItemExecuted(QListViewItem *item);
     void slotBuild();
     void slotClean();
     void slotExecute();

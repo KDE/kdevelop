@@ -82,7 +82,7 @@ void ScriptProjectPart::slotItemExecuted(QListViewItem *item)
 {
     ScriptProjectItem *spitem = static_cast<ScriptProjectItem*>(item);
     if (spitem->type() == ScriptProjectItem::File)
-        core()->gotoSourceFile(KURL(spitem->path()));
+        core()->gotoFile(KURL(spitem->path()));
 }
 
 #include "scriptprojectpart.moc"

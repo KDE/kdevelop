@@ -43,6 +43,9 @@ CustomProjectPart::CustomProjectPart(KDevApi *api, QObject *parent, const char *
     
     core()->embedWidget(m_widget, KDevCore::SelectView, i18n("Project"));
 
+    connect( m_widget, SIGNAL(executed(QListViewItem*)),
+             this, SLOT(slotItemExecuted(QListViewItem*)) );
+
     KAction *action;
 
     action = new KAction( i18n("&Build project"), "make_kdevelop", Key_F8,
@@ -109,6 +112,14 @@ QString CustomProjectPart::projectDirectory()
 QStringList CustomProjectPart::allSourceFiles()
 {
     return m_widget->allSourceFiles();
+}
+
+
+void CustomProjectPart::slotItemExecuted(QListViewItem *item)
+{
+    CustomProjectItem *spitem = static_cast<CustomProjectItem*>(item);
+    if (spitem->type() == CustomProjectItem::File)
+        core()->gotoFile(KURL(spitem->path()));
 }
 
 

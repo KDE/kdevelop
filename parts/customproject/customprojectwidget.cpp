@@ -146,6 +146,7 @@ void CustomProjectWidget::populateProject()
 
     QStringList fileList;
     QValueStack<QString> s;
+    int prefixlen = m_projectDirectory.length()+1;
     s.push(m_projectDirectory);
     
     QDir dir;
@@ -165,7 +166,7 @@ void CustomProjectWidget::populateProject()
             }
             else {
                 kdDebug(9025) << "Adding: " << path << endl;
-                fileList.append(path);
+                fileList.append(path.mid(prefixlen));
             }
         }
     } while (!s.isEmpty());
@@ -190,7 +191,13 @@ void CustomProjectWidget::closeProject()
 
 QStringList CustomProjectWidget::allSourceFiles()
 {
-    return m_sourceFiles;
+    QStringList res;
+
+    QStringList::ConstIterator it;
+    for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it)
+        res += (m_projectDirectory + "/" + (*it));
+
+    return res;
 }
 
 
