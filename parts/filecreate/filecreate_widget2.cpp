@@ -81,7 +81,11 @@ namespace FileCreate {
       kdDebug(9034) << "Found row, setting current to row " << changeToRow << endl;
       slotCellSelected(changeToRow,0);
       clearSelection();
+#if KDE_VERSION > 305      
       selectRow(changeToRow);
+#else
+  // TODO Qt-3.0.5 doesn't proved QTable::selectRow()
+#endif      
     }
 
   }
