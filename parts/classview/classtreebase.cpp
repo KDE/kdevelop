@@ -14,6 +14,7 @@
 
 #include <qtooltip.h>
 #include <qheader.h>
+#include <qregexp.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kpopupmenu.h>
