@@ -219,9 +219,16 @@ public:
     void registerVersionControl( KDevVersionControl *vcs );
 
     /**
-     * Add @p vcs to the list of the registered VCS.
+     * Add to the list of the registered VCS.
+     * @return a reference to the current vcs, 0 if no VCS is used
      */
     KDevVersionControl *versionControl() const;
+
+    /**
+     * Use the specified version control object as default vcs
+     * @param vcsToUse
+     */
+    void setVersionControl( KDevVersionControl *vcsToUse );
 
     /**
      * Returns the Version Control System having the specified uinque identifier @p uid.

@@ -1,86 +1,41 @@
-//
-// C++ Implementation: kdevversioncontrolfeedback
-//
-// Description:
-//
-//
-// Author: KDevelop Authors <kdevelop-devel@kdevelop.org>, (C) 2003
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/***************************************************************************
+ *   Copyright (C) 2003 by Mario Scalas                                    *
+ *   mario.scalas@libero.it                                                *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include <kdevversioncontrol.h>
 #include "kdevvcsfileinfoprovider.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-// struct KDevVCSFileInfo::Private
+// struct VCSFileInfo
 ///////////////////////////////////////////////////////////////////////////////
 
-struct KDevVCSFileInfo::Private
+QString VCSFileInfo::toString() const
 {
-    Private() {}
-    Private( QString aFileName, QString aRevision, QString aTimestamp, QString aTag )
-        : fileName(aFileName), revision(aRevision), timestamp(aTimestamp), tag(aTag) {}
-
-    QString fileName;
-    QString revision;
-    QString timestamp;
-    QString tag;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// struct KDevVCSFileInfo::Private
-///////////////////////////////////////////////////////////////////////////////
-
-KDevVCSFileInfo::KDevVCSFileInfo()
-    : d(new Private)
-{
+    return "(" + fileName + ", " + workRevision + ", " + repoRevision + ", " + state2String() + ")";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevVCSFileInfo::KDevVCSFileInfo(
-    QString aFileName, QString aRevision, QString aTimestamp, QString aTag )
-    : d(new Private( aFileName, aRevision, aTimestamp, aTag ))
+QString VCSFileInfo::state2String() const
 {
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevVCSFileInfo::~KDevVCSFileInfo()
-{
-    delete d;
-}
-
-QString KDevVCSFileInfo::fileName() const
-{
-    return d->fileName;
-}
-
-QString KDevVCSFileInfo::revision() const
-{
-    return d->revision;
-}
-
-QString KDevVCSFileInfo::timestamp() const
-{
-    return d->timestamp;
-}
-
-QString KDevVCSFileInfo::tag() const
-{
-    return d->tag;
-}
-
-bool KDevVCSFileInfo::isModified() const
-{
-    return false;
-}
-
-bool KDevVCSFileInfo::isRegisteredInRepository() const
-{
-    return false;
+    switch (state)
+    {
+        case Added: return "added";
+        case Uptodate: return "up-to-date";
+        case Modified: return "modified";
+        case Conflict: return "conflict";
+        case Sticky: return "sticky";
+        case Unknown:
+        default:
+            return "unknown";
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -110,4 +65,12 @@ KDevVCSFileInfoProvider::~KDevVCSFileInfoProvider()
     delete d;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+KDevVersionControl *KDevVCSFileInfoProvider::owner() const
+{
+    return d->m_owner;
+}
+
+#include "kdevvcsfileinfoprovider.moc"
 

@@ -16,10 +16,10 @@
 #include <qstring.h>
 #include <qwidget.h>
 #include <qmap.h>
+#include <qvaluelist.h>
 
 #include "kdevplugin.h"
-
-class KDevVCSFileInfoProvider;
+#include "kdevvcsfileinfoprovider.h"
 
 /**
 * This is the abstract base class which encapsulates everything
@@ -61,7 +61,6 @@ public:
     * @return the file info provider for this version control (0 if none is available)
     */
     virtual KDevVCSFileInfoProvider *fileInfoProvider() const;
-
     /**
     * Checks if the directory is valid for this version control (for example
     * CVS may check for the presence of "<dirPath>/CVS/" subdir and something else)
@@ -83,6 +82,13 @@ signals:
     * @param destinationDir is the directory where the module has been fetched
     */
     void finishedFetching( QString destinationDir );
+    /**
+    * Emitted when files registered into repository have been modified: registered
+    * clients can update their state accordingly with the info provided
+    * @param modifiedFiles files which have got modified
+    * @deprecated
+    */
+//    void fileStateChanged( const VCSFileInfoMap &modifiedFiles );
 };
 
 #endif

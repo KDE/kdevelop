@@ -1,14 +1,14 @@
-//
-// C++ Interface: kdevversioncontrolfeedback
-//
-// Description:
-//
-//
-// Author: KDevelop Authors <kdevelop-devel@kdevelop.org>, (C) 2003
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/***************************************************************************
+ *   Copyright (C) 2003 by Mario Scalas                                    *
+ *   mario.scalas@libero.it                                                *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef KDEVVCSFILEINFOPROVIDER_H
 #define KDEVVCSFILEINFOPROVIDER_H
 
@@ -18,51 +18,43 @@ state in respect to repository.
 
 @author KDevelop Authors
 */
-
-#include <qvaluelist.h>
+#include <qobject.h>
+#include <qmap.h>
 
 /**
-*
+* Info about file state
 */
-struct KDevVCSFileInfo
+
+struct VCSFileInfo
 {
-    KDevVCSFileInfo();
-    KDevVCSFileInfo( QString aFileName, QString aRevision, QString aTimestamp, QString aTag );
-    virtual ~KDevVCSFileInfo();
+    enum FileState { Unknown, Added, Uptodate, Modified, Conflict, Sticky };
 
-    QString fileName() const;
-    QString revision() const;
-    QString timestamp() const;
-    QString tag() const;
+    VCSFileInfo() {}
+    VCSFileInfo( QString fn, QString workRev, QString repoRev, FileState aState )
+        : fileName(fn), workRevision(workRev), repoRevision(repoRev), state(aState) {}
 
-    // Reimplements these two methods (they return false by default)
-    virtual bool isModified() const;
-    virtual bool isRegisteredInRepository() const;
+    QString fileName;   // Yeah, _just_ the file name ;-)
+    QString workRevision;
+    QString repoRevision;
+    FileState state;
 
-protected:
-    struct Private;
-    Private *d;
-
-private:
-    // Verboten!
-    KDevVCSFileInfo( const KDevVCSFileInfo & );
-    KDevVCSFileInfo &operator=( const KDevVCSFileInfo & );
+    QString toString() const;
+    QString state2String() const;
 };
 
 /**
-*
+* Info for a bunch of files that got modified
 */
-typedef QValueList<KDevVCSFileInfo> KDevVCSFileInfoList;
+typedef QMap<QString,VCSFileInfo> VCSFileInfoMap;
 
 class KDevVersionControl;
-class KURL;
 
 /**
 *  A basic interface for providing info on file registered in a version control repository repository
 */
-class KDevVCSFileInfoProvider
+class KDevVCSFileInfoProvider : public QObject
 {
-
+    Q_OBJECT
 public:
     /**
     * Constructor
@@ -74,24 +66,44 @@ public:
     virtual ~KDevVCSFileInfoProvider();
 
     /**
+    * <b>Sync interface</b>
+    * Status for the local files in the specified directory: the info are collected locally so they are
+    * necessarly in sync with the repository
+    * @param dirPath directory to stat
+    * @return status for all <u>registered</u> files
+    */
+    virtual VCSFileInfoMap status( const QString &dirPath ) const = 0;
+
+    /**
+    * <b>Async interface for requesting data</b>
+    * Start a request for directory status to the remote repository. Requests and answers are asynchronous
+    * for obvious reasons: the caller must connect the statusReady() signal and check for the return
+    * value of this method.
+    * @param dirPath the directory which status you are asking for
+    * @param callerData a pointer to some data you want the provider will return to you when it has done
+    * @return true if the request has been successfully started, false otherwise
+    */
+    virtual bool requestStatus( const QString &dirPath, void *callerData ) = 0;
+signals:
+    /**
+    * Emitted when the status request to remote repository has finished
+    * @param fileInfoMap status for <u>registered in repository</u> files
+    * @param callerData @see requestStatus.
+    */
+    void statusReady( const VCSFileInfoMap &fileInfoMap, void *callerData );
+
+protected:
+    /**
     * @return the version control which owns this version control
     */
     KDevVersionControl *owner() const;
-
-    /**
-    * @param filePath absolute path of the fileName
-    * @return file info for a single file.
-    */
-    virtual KDevVCSFileInfo fileInfo( const KURL &fileUrl ) = 0;
-
-    virtual KDevVCSFileInfo dirInfo( const KURL &dirUrl ) = 0;
 
 private:
     struct Private;
     Private *d;
 
-private:
     // Verboten!
+private:
     KDevVCSFileInfoProvider( const KDevVCSFileInfoProvider & );
     KDevVCSFileInfoProvider &operator=( const KDevVCSFileInfoProvider & );
 };

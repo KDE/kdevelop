@@ -119,7 +119,7 @@ signals:
     * Emitted when a new list of files has been added to the
     * project. Provided for convenience when many files were added. The file names are relative to the project directory.
     */
-    void addedFilesToProject ( const QStringList& fileList );
+    void addedFilesToProject( const QStringList& fileList );
     /**
     * Emitted when a file has been removed from the
     * project. The fileName is relative to the project directory.

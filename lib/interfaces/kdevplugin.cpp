@@ -192,6 +192,13 @@ KDevVersionControl *KDevPlugin::versionControl() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
+void KDevPlugin::setVersionControl( KDevVersionControl *vcsToUse )
+{
+    return m_api->setVersionControl( vcsToUse );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 void KDevPlugin::registerVersionControl( KDevVersionControl *vcs )
 {
     m_api->registerVersionControl( vcs );
