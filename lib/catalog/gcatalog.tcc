@@ -115,7 +115,7 @@ inline void GCatalog<Tp>::addIndex( const QCString& name )
 	}
 
         if ((ret = dbp->open(
-	    dbp BDB_OPEN_HACK, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+	    dbp, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	    kdDebug() << "db_open: " << db_strerror(ret) << endl;
 	    dbp->close( dbp, 0 );
 	    return;
@@ -190,7 +190,7 @@ inline void GCatalog<Tp>::open( const QString& dbName )
     }
 
     if ((ret = d->dbp->open(
-	d->dbp  BDB_OPEN_HACK, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+	d->dbp, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	kdDebug() << "db_open: " << db_strerror(ret) << endl;
 	close();
 	return;
