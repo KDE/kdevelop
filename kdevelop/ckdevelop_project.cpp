@@ -233,7 +233,6 @@ void CKDevelop::slotProjectAddNewFile(){
 
 void CKDevelop::slotAddExistingFiles(){
   QString temp_template;
-  QFileInfo fi;
   CGenerateNewFile genfile;
   bool copy = false;
   ProjectFileType type = DATA;
@@ -253,6 +252,7 @@ void CKDevelop::slotAddExistingFiles(){
     dest = dest + "/";
   }
   QString source_name;
+  QString temp_name;
   QString dest_name ;
   QString file;
   QFileInfo file_info;
@@ -276,7 +276,8 @@ void CKDevelop::slotAddExistingFiles(){
     file_info.setFile(file);
     source_name = file_info.fileName();
     dest_name = dest + source_name;
-   
+    temp_name = dest + "temp.tmp";
+
     // Fetch the type of the file
     type = CProject::getType( dest_name );
 
@@ -289,23 +290,23 @@ void CKDevelop::slotAddExistingFiles(){
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
-         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,fi.fileName());
+         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,source_name);
          process << temp_template;
         }
         else if (CProject::getType(file)==CPP_SOURCE)
               {
-               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, fi.fileName());
+               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, source_name);
                process << temp_template;
               }
       }
       process << file;
       process << ">";
 
-      process << "temp.tmp";
+      process << temp_name;
       process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important 
       process.clearArguments();
       process << "mv";
-      process << "temp.tmp";
+      process << temp_name;
       process << dest_name;
       process.start(KProcess::Block,KProcess::AllOutput);
     }
@@ -332,25 +333,23 @@ void CKDevelop::slotAddExistingFiles(){
       process.clearArguments();
       process << "cat"; // copy is your friend :-) ...cat, too
 
-      fi.setFile(file);
-
       if (add_dlg->isTemplateChecked())
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
-         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,fi.fileName());
+         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,source_name);
          process << temp_template;
         }
         else if (CProject::getType(file)==CPP_SOURCE)
               {
-               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, fi.fileName());
+               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, source_name);
                process << temp_template;
               }
       }
       process << file;
       process << ">";
 
-      process << dest+fi.fileName();
+      process << dest+source_name;
       process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
     }
 
@@ -365,7 +364,6 @@ void CKDevelop::slotAddExistingFiles(){
     newSubDir();
   }
 
-  delete add_dlg;
 }
 
 void CKDevelop::slotProjectAddExistingFiles(){
@@ -374,8 +372,11 @@ void CKDevelop::slotProjectAddExistingFiles(){
   add_dlg->destination_edit->setText(prj->getProjectDir()+ prj->getSubDir());
 
   if(add_dlg->exec()){
-    QTimer::singleShot(100,this,SLOT(slotAddExistingFiles()));
+//    QTimer::singleShot(100,this,SLOT(slotAddExistingFiles()));
+      slotAddExistingFiles();
   }
+  delete add_dlg;
+  add_dlg=0;
 }
 
 void CKDevelop::slotProjectRemoveFile(){
