@@ -31,6 +31,7 @@
 #include <kapplication.h>
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qtextstream.h>
 
 BackgroundParser::BackgroundParser( CppSupportPart* part )
@@ -225,7 +226,7 @@ void BackgroundParser::run()
 	
 	kapp->unlock();
 	
-	if( editIface ){
+	if( editIface && m_cppSupport->fileExtensions().contains(QFileInfo(fileName).extension()) ){
 	    Unit* unit = parseFile( fileName, contents );
 	    QValueList<Problem> problems = unit->problems;
 	    
