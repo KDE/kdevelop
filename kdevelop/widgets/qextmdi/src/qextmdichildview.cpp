@@ -358,6 +358,16 @@ void QextMdiChildView::activate()
      emit focusInEventOccurs( this);
    }
 
+   // check if someone wants that we interrupt the method (because it's probably unnecessary)
+   if (m_bInterruptActivation) {
+      m_bInterruptActivation = FALSE;
+      return;   // nothing to do, we are the active childview, already
+   }
+   else {
+     emit gotFocus(this);
+   }
+
+   // me must set the focus on the currently focused subwidget after we signaled gotFocus(this) to the outside world
    if( m_focusedChildWidget != 0L) {
       m_focusedChildWidget->setFocus();
    }
@@ -366,15 +376,6 @@ void QextMdiChildView::activate()
          m_firstFocusableChildWidget->setFocus();
          m_focusedChildWidget = m_firstFocusableChildWidget;
       }
-   }
-
-   // check if someone wants that we interrupt the method (because it's probably unnecessary)
-   if (m_bInterruptActivation) {
-      m_bInterruptActivation = FALSE;
-      return;   // nothing to do, we are the active childview, already
-   }
-   else {
-     emit gotFocus(this);
    }
 }
 
