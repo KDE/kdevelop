@@ -418,7 +418,7 @@ void RubySupportPart::parse(const QString &fileName)
        attr->setType( "Range" );
 	 } else if (variablere.cap(2) == "true" || variablere.cap(2) == "false") {
        attr->setType( "Boolean" );
-	 } else if (  QRegExp("[0-9_]+").exactMatch(variablere.cap(2))
+	 } else if (  QRegExp("^[-+]?[0-9_]+").exactMatch(variablere.cap(2))
 	              || QRegExp("^[-+]?(0x|0|0b|\\?)").search(variablere.cap(2)) != -1 ) 
 	 {
        attr->setType( "Integer" );
