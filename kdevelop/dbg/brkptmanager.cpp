@@ -23,7 +23,7 @@
 #include <qheader.h>
 
 #include <klocale.h>
-#include <kpopmenu.h>
+#include <kpopupmenu.h>
 #include <kapp.h>
 
 #include <stdlib.h>

@@ -20,7 +20,7 @@
 
 #include <qlistview.h>
 #include <qheader.h>
-#include <kpopmenu.h>
+#include <kpopupmenu.h>
 #include <qpoint.h> 
 #include "ctreehandler.h"
 

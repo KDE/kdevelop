@@ -23,7 +23,7 @@
 
 #include <qwidget.h>
 #include <kapp.h>
-#include <kpopmenu.h>
+#include <kpopupmenu.h>
 #include <qptrdict.h>
 #include "ctreeview.h"
 #include "component.h"

@@ -19,7 +19,7 @@
 #include "gdbparser.h"
 
 #include <klocale.h>
-#include <kpopmenu.h>
+#include <kpopupmenu.h>
 
 #include <qheader.h>
 #include <qlabel.h>
