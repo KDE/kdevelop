@@ -30,6 +30,7 @@
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 #include "subprojectoptionsdlg.h"
+#include <qpushbutton.h>
 
 
 SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProjectWidget *widget,

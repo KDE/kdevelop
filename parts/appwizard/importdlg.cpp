@@ -27,6 +27,8 @@
 
 #include "appwizardfactory.h"
 #include "importdlg.h"
+#include <qpushbutton.h>
+#include <kinstance.h>
 
 
 ImportDialog::ImportDialog(QWidget *parent, const char *name)

@@ -17,7 +17,6 @@
 
 #include "dbgpsdlg.h"
 
-//#include <kapp.h>
 #include <kbuttonbox.h>
 #include <kdialog.h>
 #include <kglobalsettings.h>
@@ -29,6 +28,7 @@
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qtoolbutton.h>
+#include <qpushbutton.h>
 
 #include <stdlib.h>
 #include <unistd.h>

@@ -33,6 +33,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "ctagsdlg.h"
+#include <qpushbutton.h>
 
 
 struct CTagsKindMapping {

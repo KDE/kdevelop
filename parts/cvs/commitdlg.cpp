@@ -16,6 +16,7 @@
 #include <klocale.h>
 
 #include "commitdlg.h"
+#include <qpushbutton.h>
 
 
 CommitDialog::CommitDialog()

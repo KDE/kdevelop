@@ -29,6 +29,7 @@
 #include <kstddirs.h>
 
 #include "docsearchdlg.h"
+#include <qpushbutton.h>
 
 
 DocSearchDialog::DocSearchDialog(QWidget *parent, const char *name)

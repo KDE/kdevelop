@@ -28,6 +28,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <klocale.h>
+#include <qpushbutton.h>
 
 #include <algorithm>
 
