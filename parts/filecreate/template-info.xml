@@ -63,11 +63,14 @@
       <type ext="f95" name="Fortran95 source" create="template" icon="source_f">
         <descr>A new empty Fortran95 source file.</descr>
       </type>
-      <type ext="for" name="RatFor source" create="template" icon="source_f">
+      <type ext="for" name="Preprocessed Fortran" create="template" icon="source_f">
         <descr>A new empty RatFor source file.</descr>
       </type>
       <type ext="ftn" name="Fortran77 source" create="template" icon="source_f">
         <descr>A new empty Fortran77 source file.</descr>
+      </type>
+      <type ext="fpp" name="Fortran source" create="template" icon="source_f">
+        <descr>A new empty Fortran source file.</descr>
       </type>
     </filetypes>
   </kdevfilecreate>
