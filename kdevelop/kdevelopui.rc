@@ -216,19 +216,16 @@
   </Menu>
 </MenuBar>
 
-<State name="file_new>
-  <enable>
-    <Action name="file_new" />
-  </enable>
-</State>
-<State name="no_src">
+<State name="disable_file_save">
   <disable>
-    <Action name="file_new" />
-    <Action name="file_close" />
-    <Action name="file_close_all" />
     <Action name="file_save" />
     <Action name="file_save_as" />
-    <Action name="file_save_all" />
+  </disable>
+</State>
+<State name="edit_src">
+  <enable>
+    <Action name="file_close" />
+    <Action name="file_close_all" />
     <Action name="file_print" />
     <Action name="edit_undo" />
     <Action name="edit_redo" />
@@ -248,20 +245,19 @@
     <Action name="edit_select_all" />
     <Action name="edit_deselect_all" />
     <Action name="edit_invert_selection" />
+    <Action name="view_goto" />
     <Action name="options_editor" />
-  </disable>
-  <enable>
-    <Action name="file_open" />
-    <Action name="file_quit" />
   </enable>
 </State>
-<State name="project_make_msg">
+<State name="project_load">
   <enable>
-    <Action name="project_make_msg" />
+    <Action name="project_new" />
+    <Action name="project_generate" />
+    <Action name="project_open" />
+    <Action name="project_open_recent" />
   </enable>
 </State>
-
-<State name="project">
+<State name="project_open">
   <enable>
     <Action name="file_new" />
     <Action name="view_goto" />
@@ -282,29 +278,21 @@
     <Action name="project_build_rpm" />
     <Action name="project_conf_rpm" />
     <Action name="project_load_tags" />
-  </enable>
-</State>
-<State name="no_project">
-  <enable>
-    <Action name="project_new" />
-    <Action name="project_generate" />
-    <Action name="project_open" />
-    <Action name="project_open_recent" />
     <Action name="project_options" />
   </enable>
 </State>
-<State name="build_stop">
+<State name="build">
   <enable>
     <Action name="build_stop" />
   </enable>
 </State>
-<State name="build_compile">
+<State name="build_file">
   <enable>
     <Action name="build_compile" />
   </enable>
 </State>
-<State name="build">
-  <disable>
+<State name="build_project">
+  <enable>
     <Action name="build_compile" />
     <Action name="build_make" />
     <Action name="build_clean" />
@@ -315,13 +303,12 @@
     <Action name="build_distclean" />
     <Action name="build_autoconf" />
     <Action name="build_configure" />
-  </disable>
-  <enable>
-    <Action name="build_stop" />
   </enable>
+  <disable>
+    <Action name="build_stop" />
+  </disable>
 </State>
-
-<State name="debugging">
+<State name="debug">
   <enable>
     <Action name="debug_run" />
     <Action name="debug_run_cursor" />
@@ -336,13 +323,14 @@
   </enable>
   <disable>
     <Action name="debug_start" />
-    <Menu name="debug_start_other">
-      <Action name="debug_examine_core" />
-      <Action name="debug_other_exec" />
-      <Action name="debug_attach_process" />
-      <Action name="debug_with_args" />
-    </Menu>
+    <Action name="debug_examine_core" />
+    <Action name="debug_other_exec" />
+    <Action name="debug_attach_process" />
+    <Action name="debug_with_args" />
   </disable>
 </State>
+
+
+
 
 </kpartgui>

@@ -168,10 +168,15 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   }
 
 	createGUI(0L);
-
-	stateChanged("no_src");
-	stateChanged("no_project");
 	show();
+
+	stateChanged("disable_file_save");
+	stateChanged("edit_src",StateReverse);
+	stateChanged("project_load");
+	stateChanged("project_open",StateReverse);
+	stateChanged("build_project",StateReverse);
+	stateChanged("build",StateReverse);
+	stateChanged("debug",StateReverse);
 
 	adjustTTreesToolButtonState();
 	adjustTOutputToolButtonState();

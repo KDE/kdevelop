@@ -124,8 +124,9 @@ bool CKDevelop::slotProjectClose()
       delete prj;
       prj = 0;
 
-      stateChanged("no_file");
-      stateChanged("no_project");
+//      stateChanged("no_file");
+//      stateChanged("no_project");
+
 //      KAction* pFileNewAction = actionCollection()->action("file_new");
 //      pFileNewAction->setEnabled(false);
       //disableCommand(ID_FILE_NEW);
@@ -654,8 +655,9 @@ CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
       prjname);
 
     // enable the GUI again
-		stateChanged("no_file");
-		stateChanged("no_project");
+//		stateChanged("no_file");
+//		stateChanged("no_project");
+
 //    project_menu->setEnabled(true);
 //    enableCommand(ID_PROJECT_OPEN);
 //    accel->setEnabled(true);
@@ -677,11 +679,10 @@ void CKDevelop::projectOpenCmdl_Part2(CProject* pProj)
   }
 
   // enable the GUI again
-	stateChanged("no_file");
-	stateChanged("no_project");
 //  project_menu->setEnabled(true);
 //  enableCommand(ID_PROJECT_OPEN);
-//  accel->setEnabled(true);
+
+	//  accel->setEnabled(true);
   slotStatusMsg(i18n("Ready."));
 }
 

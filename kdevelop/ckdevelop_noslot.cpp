@@ -610,21 +610,22 @@ void CKDevelop::startDesigner()
 void CKDevelop::setToolMenuProcess(bool enable){
 
 	if (enable)
-		stateChanged("build_stop",true);
+//		stateChanged("build_stop",StateReverse);
 		//disableCommand(ID_BUILD_STOP);
-	else
-		stateChanged("build_stop");
+//	else
+//		stateChanged("build_stop");
 		//enableCommand(ID_BUILD_STOP);
 
 	if (enable && project){
 
-		if (m_docViewManager->curDocIsCppFile())
-			stateChanged("build_compile");
+//		if (m_docViewManager->curDocIsCppFile())
+//			stateChanged("build_compile");
 			//enableCommand(ID_BUILD_COMPILE_FILE);
 
 		enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // enable switching project configs
 
-		stateChanged("build",true);
+//		stateChanged("build",StateReverse);
+
 //    enableCommand(ID_BUILD_RUN);
 //    enableCommand(ID_BUILD_RUN_WITH_ARGS);
 //    enableCommand(ID_DEBUG_START);
@@ -638,20 +639,23 @@ void CKDevelop::setToolMenuProcess(bool enable){
 //    enableCommand(ID_BUILD_CONFIGURE);
 
 		QString type=prj->getProjectType();
-		if (!(prj->isKDEProject()||prj->isKDE2Project()||prj->isQt2Project()))
-			stateChanged("project_make_msg");
+//		if (!(prj->isKDEProject()||prj->isKDE2Project()||prj->isQt2Project()))
+//			stateChanged("project_make_msg");
 			//disableCommand(ID_PROJECT_MESSAGES);
-		else
-			stateChanged("project_make_msg",true);
+//		else
+//			stateChanged("project_make_msg",StateReverse);
 			//enableCommand(ID_PROJECT_MESSAGES);
-		stateChanged("project");
+//		stateChanged("project");
+
 //    enableCommand(ID_PROJECT_CLOSE);
 //    enableCommand(ID_PROJECT_NEW_CLASS);
 //    enableCommand(ID_PROJECT_ADD_FILE_EXIST);
 //    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 //    enableCommand(ID_PROJECT_FILE_PROPERTIES);
 //    enableCommand(ID_PROJECT_OPTIONS);
-		stateChanged("file_new");
+
+//		stateChanged("file_new");
+
 //    enableCommand(ID_FILE_NEW);
 
   //MB
@@ -663,7 +667,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
 //    enableCommand(ID_PROJECT_MAKE_TAGS);
 //    enableCommand(ID_PROJECT_LOAD_TAGS);
   }
-  else
+  else	
 //  if (!enable)
   {
     // set the popupmenus enable or disable
