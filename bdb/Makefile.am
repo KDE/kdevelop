@@ -2,7 +2,7 @@ noinst_LTLIBRARIES = libdb.la
 
 KDE_CFLAGS = -w
 	 
-libdb_la_CFLAGS = -I$(top_builddir)/bdb/build_unix -I$(top_builddir)/bdb/include -D_REENTRANT -D_GNU_SOURCE -ansi -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -DNDEBUG
+libdb_la_CFLAGS = -I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include -D_REENTRANT -D_GNU_SOURCE -ansi -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -DNDEBUG -fPIC
 
 libdb_la_LDFLAGS = $(LIBPTHREAD)
 
