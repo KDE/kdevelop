@@ -10,15 +10,26 @@
 ERROR:</h1>
 &nbsp;
 <h4>
-The C/C++ Reference is not installed.&nbsp; Please get the package "c_c++_reference.tar.gz"
-from the KDevelop Homepage at</h4>
+The C/C++ Reference is not installed.&nbsp; Please get the package "c_cpp_reference-1.0.tar.gz"
+from one of KDevelop's ftp mirrors. For a list of those web sites look at:</h4>
 
 <h4>
 <a href="http://www.kdevelop.org">www.kdevelop.org</a></h4>
 
 <h4>
-and copy it to your KDE-directory.&nbsp;&nbsp; Untar it with&nbsp; "tar
-zxvf&nbsp; c_c++_reference.tar.gz "&nbsp; to install the reference.</h4>
+Do these steps to install the reference:</h4>
+
+<OL>
+<LI>If you have got an already installed old version of KDevelop, it is recommented to remove (as root) a
+probably earlier installed reference that is not working correctly.
+You can find those 2 sub-directories C and CPLUSPLUS in share/doc/HTML/your-language/kdevelop/reference
+of the global KDE directory and in the appropriate English sub-directory. Delete both ones.</LI>
+<LI>Now extract the new downloaded file with: "tar xvzf c_cpp_reference-1.0.tar.gz"</LI>
+<LI>Go to the new created directory: "cd c_cpp_reference-1.0"</LI>
+<LI>Now make the package ready for installation: "./configure; make"</LI>
+<LI>Install the package (as root): "make install"</LI>
+<LI>Restart KDevelop</LI>
+</OL>
 
 </body>
 </html>

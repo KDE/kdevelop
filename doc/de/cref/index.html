@@ -10,15 +10,27 @@
 FEHLER:</h1>
 &nbsp;
 <h4>
-Die C/C++ Referenz ist nicht installiert.&nbsp; Bitte holen Sie sich das Paket "c_c++_reference.tar.gz"
-von der KDevelop Homepage auf</h4>
+Die C/C++ Referenz ist nicht installiert.&nbsp; Bitte holen Sie sich das Paket "c_cpp_reference-1.0.tar.gz"
+von einem der ftp-Mirrors von KDevelop. Eine entsprechende Liste von solchen Web-Servern finden Sie auf:</h4>
 
 <h4>
 <a href="http://www.kdevelop.org">www.kdevelop.org</a></h4>
 
-<h4>
-und kopieren es in Ihr KDE-Verzeichnis.&nbsp;&nbsp; Entpacken Sie es mit&nbsp; "tar
-zxvf&nbsp; c_c++_reference.tar.gz "&nbsp;, um die Referenz zu installieren.</h4>
+<h4>F&uuml;hren Sie folgende Schritte aus, um die Referenz zu installieren:</h4>
+
+<ol>
+<li>Wenn Sie eine schon installierte alte Version von KDevelop haben, ist es
+empfohlen, eine m&ouml;glicherweise fr&uuml;her schon installierte alte
+Referenz, die nicht korrekt funktioniert, zu l&ouml;schen (als root). Sie
+k&ouml;nnen solche 2 Unterverzeichnisse C und CPLUSPLUS in share/doc/HTML/ihre-sprache/kdevelop/reference
+des globalen KDE-Verzeichnisses und im entsprechenden englischen Unterverzeichnis
+finden. L&ouml;schen Sie beide.</li>
+<li>Entpacken Sie die neu heruntergeladene Datei mit: "tar xvzf c_cpp_reference-1.0.tar.gz"</li>
+<li>Gehen Sie in das so neu erstellte Verzeichnis: "cd c_cpp_reference-1.0"</li>
+<li>Machen Sie das Paket f&uuml;r die Installation fertig: "./configure; make"</li>
+<li>Installieren Sie das Paket (als root): "make install"</li>
+<li>Starten Sie KDevelop neu.</li>
+</ol>
 
 </body>
 </html>
