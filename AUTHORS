@@ -15,6 +15,9 @@ Framework, dialogs, PHP support:
 Several parts, htdig searching & indexing:
   Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
 
+Help with Automake manager:
+  Victor Roeder <victor_roeder@gmx.de>
+
 KDE application templates:
   Kurth Granroth <kurt@granroth.org>
 
@@ -24,8 +27,12 @@ editing component:
 QEditor part, help for code-completion, abbrev part:
   Roberto Raggi <raggi@cli.di.unipi.it>
 
-Qt 3 port, various patches
+Qt 3 port, various patches:
   Harald Fernengel <harry@kdevelop.org>
+
+Help with KParts, KGenericFactory and other KDE infrastructure:
+  Simon Hausmann <hausmann@kde.org>
+
 
 Patches:
 domseichter@t-online.de (Dominik Seichter)

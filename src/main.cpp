@@ -31,12 +31,14 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Kurt Granroth", "KDE application templates", "kurth@granroth.org");
   aboutData.addAuthor("Ian Reinhart Geiser", "Application templates", "geiseri@yahoo.com");
   aboutData.addAuthor("Matthias Hoelzer-Kluepfel", "Several parts, htdig indexing", "hoelzer@kde.org");
+  aboutData.addAuthor("Victor Roeder", "Help with Automake manager", "<victor_roeder@gmx.de>");
   aboutData.addAuthor("The KWrite authors", "editor component", "kwrite-devel@kde.org");
   aboutData.addAuthor("Robert Moniot", "ftnchek documentation", "moniot@fordham.edu");
   aboutData.addAuthor("Ka-Ping Yee", "pydoc utility", "ping@lfw.org");
   aboutData.addAuthor("Dimitri van Heesch", "doxywizard", "dimitri@stack.nl");
   aboutData.addAuthor("Harald Fernengel", "Qt 3 port, patches", "harry@kdevelop.org");
   aboutData.addAuthor("Roberto Raggi", "QEditor part, code completion, abbrev part", "raggi@cli.di.unipi.it");
+  aboutData.addAuthor("Simon Hausmann", "Help with KParts infrastructure", "hausmann@kde.org");
   aboutData.addAuthor("Trolltech AS", "Designer code", "info@trolltech.com");
   aboutData.addAuthor("Hugo Varotto", "Fileselector part", "hugo@varotto-usa.com");
   aboutData.addAuthor("Matt Newell", "Fileselector part", "newellm@proaxis.com");
