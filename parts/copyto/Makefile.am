@@ -12,5 +12,4 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevpart_copyto.desktop
 
 rcdir = $(kde_datadir)/kdevcopyto
-rc_DATA = kdevpart_copyto.rc
 noinst_HEADERS = copytodialog.h
