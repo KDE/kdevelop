@@ -3,14 +3,14 @@ require ("flush.pl");
 use File::Copy;
 
 $homedirectory = $ENV{HOME};
-printflush (STDOUT,"Starting with installation\n");
+printflush (STDOUT,"Starting with configuration\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") || die "kann Datei nicht öffnen: $!";
+open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") 
+  || die "can not open file \"entries\" in your local app-data-dir:\n  $!";
 while ( defined ($name = <PROCESSLIST> )) {
   chomp ($name);
-  $process = <PROCESSLIST>;
-  chomp ($process);
+  chomp ($process = <PROCESSLIST>);
   $processes{$name} = $process;
 }
 close (PROCESSLIST);
@@ -21,13 +21,13 @@ $nameBig = $processes{NAME};
 $nameBig =~ tr/a-z/A-Z/;
 $name =  $processes{NAME};
 
-$overDirectory = $processes{DIRECTORY} . "/" . $processes{PRJVSLOCATION} . "/";
+$overDirectory = $processes{DIRECTORY} . "/";
 $underDirectory = $overDirectory . $nameLittle;
 
 if ($processes{APPLICATION} eq "customproj") {}
 else {
   #start make -f Makefile.dist
-  printflush (STDOUT,"create configurationfiles...\n");
+  printflush (STDOUT,"create configuration files...\n");
   chdir ($overDirectory);
   system ("make -f Makefile.dist");
   
@@ -54,19 +54,3 @@ chdir ($underDirectory);
 printflush (STDOUT,"READY\n");
 
 exit;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -475,41 +475,41 @@ void CKAppWizard::initPages(){
   KQuickHelp::add(authorname,
 		  KQuickHelp::add(authorline,
 				  i18n("Insert your name or the development team name here. This will be used\n"
-				  			"for adding your name as the author to all generated files of your project.")));
+				       "for adding your name as the author to all generated files of your project.")));
   KQuickHelp::add(email,
 		  KQuickHelp::add(emailline,
 				  i18n("Enter your email adress here. This will be\n"
-				  "used for file header information.")));
+				       "used for file header information.")));
   
   KQuickHelp::add(apidoc, i18n("Generate a HTML-based documentation set\n"
-  													"for your project classes including cross-references to\n"
-  													"the used libraries."));
-  													
+			       "for your project classes including cross-references to\n"
+			       "the used libraries."));
+  
   KQuickHelp::add(userdoc, i18n("Generate a preset documentation handbook in HTML\n"
-  																"by an SGML file included with your package."));
+				"by an SGML file included with your package."));
   KQuickHelp::add(lsmfile, i18n("Create a lsm-file for your project. The Linux Software Map\n"
-  														"is a file generally used for projects for distribution purpose and contains\n"
-  														"a short description of the project including the requirements on the side of\n"
-  														"the end-user."));
+				"is a file generally used for projects for distribution purpose and contains\n"
+				"a short description of the project including the requirements on the side of\n"
+				"the end-user."));
   KQuickHelp::add(gnufiles, i18n("Generate a set of GNU standard files for your project.\n"
-  																"These will give the end-user of the sourcepackage an overview about\n"
-  																"the licensing, readme's etc, as well as a ChangeLog file for you to\n"
-  																"protocol your changes."));
+				 "These will give the end-user of the sourcepackage an overview about\n"
+				 "the licensing, readme's etc, as well as a ChangeLog file for you to\n"
+				 "protocol your changes."));
   KQuickHelp::add(progicon, i18n("Add a program icon to your project that represents\n"
-  														"your application in the window manager."));
+				 "your application in the window manager."));
   KQuickHelp::add(miniicon, i18n("Add a mini program icon to your project that is used\n"
-  															"for window-manager popup menus."));
+				 "for window-manager popup menus."));
   KQuickHelp::add(datalink, i18n("Add a KDE link file which is installed in\n"
-  															"the KDE panel of the end-user. By default, your application's\n"
-  															"link file will be installed in the Applications-menu. You can\n"
-  															"change this destination by editing the installation properties\n"
-  															"for the link file later."));
+				 "the KDE panel of the end-user. By default, your application's\n"
+				 "link file will be installed in the Applications-menu. You can\n"
+				 "change this destination by editing the installation properties\n"
+				 "for the link file later."));
   KQuickHelp::add(iconload, i18n("Lets you select another icon for your program\n"
-  														"than the sample program icon provided by the Application\n"
-  														"Wizard."));
+				 "than the sample program icon provided by the Application\n"
+				 "Wizard."));
   KQuickHelp::add(miniload, i18n("Lets you select another mini-icon for your program\n"
-  														"than the sample program icon provided by the Application\n"
-  														"Wizard."));
+				 "than the sample program icon provided by the Application\n"
+				 "Wizard."));
   
   
 
@@ -531,222 +531,222 @@ void CKAppWizard::initPages(){
   page1a->enabled = true;
   addPage(page1a);
 
-	qtarch_ButtonGroup_1 = new QButtonGroup( widget1c, "ButtonGroup_1" );
-	qtarch_ButtonGroup_1->setGeometry( 20, 50, 460, 360 );
-	qtarch_ButtonGroup_1->setMinimumSize( 0, 0 );
-	qtarch_ButtonGroup_1->setMaximumSize( 32767, 32767 );
-	qtarch_ButtonGroup_1->setFocusPolicy( QWidget::NoFocus );
-	qtarch_ButtonGroup_1->setBackgroundMode( QWidget::PaletteBackground );
-	qtarch_ButtonGroup_1->setFontPropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_1->setPalettePropagation( QWidget::NoChildren );
-	qtarch_ButtonGroup_1->setFrameStyle( 49 );
-	qtarch_ButtonGroup_1->setAlignment( 1 );
-
-	vsSupport = new QLabel( widget1c, "vsSupport" );
-	vsSupport->setGeometry( 30, 10, 150, 30 );
-	vsSupport->setMinimumSize( 0, 0 );
-	vsSupport->setMaximumSize( 32767, 32767 );
-	vsSupport->setFocusPolicy( QWidget::NoFocus );
-	vsSupport->setBackgroundMode( QWidget::PaletteBackground );
-	vsSupport->setFontPropagation( QWidget::NoChildren );
-	vsSupport->setPalettePropagation( QWidget::NoChildren );
-	vsSupport->setText(i18n( "vcs support" ));
-	vsSupport->setAlignment( 289 );
-	vsSupport->setMargin( -1 );	
+  qtarch_ButtonGroup_1 = new QButtonGroup( widget1c, "ButtonGroup_1" );
+  qtarch_ButtonGroup_1->setGeometry( 20, 50, 460, 360 );
+  qtarch_ButtonGroup_1->setMinimumSize( 0, 0 );
+  qtarch_ButtonGroup_1->setMaximumSize( 32767, 32767 );
+  qtarch_ButtonGroup_1->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_1->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_1->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_1->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_1->setFrameStyle( 49 );
+  qtarch_ButtonGroup_1->setAlignment( 1 );
+  
+  vsSupport = new QLabel( widget1c, "vsSupport" );
+  vsSupport->setGeometry( 30, 10, 150, 30 );
+  vsSupport->setMinimumSize( 0, 0 );
+  vsSupport->setMaximumSize( 32767, 32767 );
+  vsSupport->setFocusPolicy( QWidget::NoFocus );
+  vsSupport->setBackgroundMode( QWidget::PaletteBackground );
+  vsSupport->setFontPropagation( QWidget::NoChildren );
+  vsSupport->setPalettePropagation( QWidget::NoChildren );
+  vsSupport->setText(i18n( "vcs support" ));
+  vsSupport->setAlignment( 289 );
+  vsSupport->setMargin( -1 );	
+  
+  vsBox = new QComboBox( FALSE, widget1c, "vsBox" );
+  vsBox->setGeometry( 180, 10, 100, 30 );
+  vsBox->setMinimumSize( 0, 0 );
+  vsBox->setMaximumSize( 32767, 32767 );
+  vsBox->setFocusPolicy( QWidget::StrongFocus );
+  vsBox->setBackgroundMode( QWidget::PaletteBackground );
+  vsBox->setFontPropagation( QWidget::AllChildren );
+  vsBox->setPalettePropagation( QWidget::AllChildren );
+  vsBox->setSizeLimit( 10 );
+  vsBox->setAutoResize( FALSE );
+  vsBox->insertItem( "NONE" );
+  vsBox->insertItem( "CVS" );	
+  
+  vsInstall = new QLabel( widget1c, "vsInstall" );
+  vsInstall->setGeometry( 40, 80, 140, 30 );
+  vsInstall->setMinimumSize( 0, 0 );
+  vsInstall->setMaximumSize( 32767, 32767 );
+  vsInstall->setFocusPolicy( QWidget::NoFocus );
+  vsInstall->setBackgroundMode( QWidget::PaletteBackground );
+  vsInstall->setFontPropagation( QWidget::NoChildren );
+  vsInstall->setPalettePropagation( QWidget::NoChildren );
+  vsInstall->setText(i18n( "vcs location") );
+  vsInstall->setAlignment( 289 );
+  vsInstall->setMargin( -1 );
+  
+  vsLocation = new QLineEdit( widget1c, "vsLocation" );
+  vsLocation->setGeometry( 180, 80, 240, 30 );
+  vsLocation->setMinimumSize( 0, 0 );
+  vsLocation->setMaximumSize( 32767, 32767 );
+  vsLocation->setFocusPolicy( QWidget::StrongFocus );
+  vsLocation->setBackgroundMode( QWidget::PaletteBase );
+  vsLocation->setFontPropagation( QWidget::NoChildren );
+  vsLocation->setPalettePropagation( QWidget::NoChildren );
+  vsLocation->setText( "" );
+  vsLocation->setMaxLength( 32767 );
+  vsLocation->setEchoMode( QLineEdit::Normal );
+  vsLocation->setFrame( TRUE );
+  
+  locationbutton = new QPushButton( widget1c, "locationbutton" );
+  locationbutton->setGeometry( 430, 80, 30, 30 );
+  locationbutton->setMinimumSize( 0, 0 );
+  locationbutton->setMaximumSize( 32767, 32767 );
+  locationbutton->setFocusPolicy( QWidget::TabFocus );
+  locationbutton->setBackgroundMode( QWidget::PaletteBackground );
+  locationbutton->setFontPropagation( QWidget::NoChildren );
+  locationbutton->setPalettePropagation( QWidget::NoChildren );
+  locationbutton->setText( "..." );
+  locationbutton->setAutoRepeat( FALSE );
+  locationbutton->setAutoResize( FALSE );	
+  
+  projectVSLocation = new QLabel( widget1c, "projectVSLocation" );
+  projectVSLocation->setGeometry( 40, 150, 140, 30 );
+  projectVSLocation->setMinimumSize( 0, 0 );
+  projectVSLocation->setMaximumSize( 32767, 32767 );
+  projectVSLocation->setFocusPolicy( QWidget::NoFocus );
+  projectVSLocation->setBackgroundMode( QWidget::PaletteBackground );
+  projectVSLocation->setFontPropagation( QWidget::NoChildren );
+  projectVSLocation->setPalettePropagation( QWidget::NoChildren );
+  projectVSLocation->setText(i18n( "repository in vcs") );
+  projectVSLocation->setAlignment( 289 );
+  projectVSLocation->setMargin( -1 );	
 	
-	vsBox = new QComboBox( FALSE, widget1c, "vsBox" );
-	vsBox->setGeometry( 180, 10, 100, 30 );
-	vsBox->setMinimumSize( 0, 0 );
-	vsBox->setMaximumSize( 32767, 32767 );
-	vsBox->setFocusPolicy( QWidget::StrongFocus );
-	vsBox->setBackgroundMode( QWidget::PaletteBackground );
-	vsBox->setFontPropagation( QWidget::AllChildren );
-	vsBox->setPalettePropagation( QWidget::AllChildren );
-	vsBox->setSizeLimit( 10 );
-	vsBox->setAutoResize( FALSE );
-	vsBox->insertItem( "NONE" );
-	vsBox->insertItem( "CVS" );	
-
-	vsInstall = new QLabel( widget1c, "vsInstall" );
-	vsInstall->setGeometry( 40, 80, 140, 30 );
-	vsInstall->setMinimumSize( 0, 0 );
-	vsInstall->setMaximumSize( 32767, 32767 );
-	vsInstall->setFocusPolicy( QWidget::NoFocus );
-	vsInstall->setBackgroundMode( QWidget::PaletteBackground );
-	vsInstall->setFontPropagation( QWidget::NoChildren );
-	vsInstall->setPalettePropagation( QWidget::NoChildren );
-	vsInstall->setText(i18n( "vcs location") );
-	vsInstall->setAlignment( 289 );
-	vsInstall->setMargin( -1 );
-	
-	vsLocation = new QLineEdit( widget1c, "vsLocation" );
-	vsLocation->setGeometry( 180, 80, 240, 30 );
-	vsLocation->setMinimumSize( 0, 0 );
-	vsLocation->setMaximumSize( 32767, 32767 );
-	vsLocation->setFocusPolicy( QWidget::StrongFocus );
-	vsLocation->setBackgroundMode( QWidget::PaletteBase );
-	vsLocation->setFontPropagation( QWidget::NoChildren );
-	vsLocation->setPalettePropagation( QWidget::NoChildren );
-	vsLocation->setText( "" );
-	vsLocation->setMaxLength( 32767 );
-	vsLocation->setEchoMode( QLineEdit::Normal );
-	vsLocation->setFrame( TRUE );
-
-	locationbutton = new QPushButton( widget1c, "locationbutton" );
-	locationbutton->setGeometry( 430, 80, 30, 30 );
-	locationbutton->setMinimumSize( 0, 0 );
-	locationbutton->setMaximumSize( 32767, 32767 );
-	locationbutton->setFocusPolicy( QWidget::TabFocus );
-	locationbutton->setBackgroundMode( QWidget::PaletteBackground );
-	locationbutton->setFontPropagation( QWidget::NoChildren );
-	locationbutton->setPalettePropagation( QWidget::NoChildren );
-	locationbutton->setText( "..." );
-	locationbutton->setAutoRepeat( FALSE );
-	locationbutton->setAutoResize( FALSE );	
-
-	projectVSLocation = new QLabel( widget1c, "projectVSLocation" );
-	projectVSLocation->setGeometry( 40, 150, 140, 30 );
-	projectVSLocation->setMinimumSize( 0, 0 );
-	projectVSLocation->setMaximumSize( 32767, 32767 );
-	projectVSLocation->setFocusPolicy( QWidget::NoFocus );
-	projectVSLocation->setBackgroundMode( QWidget::PaletteBackground );
-	projectVSLocation->setFontPropagation( QWidget::NoChildren );
-	projectVSLocation->setPalettePropagation( QWidget::NoChildren );
-	projectVSLocation->setText(i18n( "repository in vcs") );
-	projectVSLocation->setAlignment( 289 );
-	projectVSLocation->setMargin( -1 );	
-	
-	projectlocationline = new QLineEdit( widget1c, "projectlocationline" );
-	projectlocationline->setGeometry( 180, 150, 280, 30 );
-	projectlocationline->setMinimumSize( 0, 0 );
-	projectlocationline->setMaximumSize( 32767, 32767 );
-	projectlocationline->setFocusPolicy( QWidget::StrongFocus );
-	projectlocationline->setBackgroundMode( QWidget::PaletteBase );
-	projectlocationline->setFontPropagation( QWidget::NoChildren );
-	projectlocationline->setPalettePropagation( QWidget::NoChildren );
-	projectlocationline->setText( "" );
-	projectlocationline->setMaxLength( 32767 );
-	projectlocationline->setEchoMode( QLineEdit::Normal );
-	projectlocationline->setFrame( TRUE );
-
-	vendorTag = new QLabel( widget1c, "vendorTag" );
-	vendorTag->setGeometry( 40, 220, 140, 30 );
-	vendorTag->setMinimumSize( 0, 0 );
-	vendorTag->setMaximumSize( 32767, 32767 );
-	vendorTag->setFocusPolicy( QWidget::NoFocus );
-	vendorTag->setBackgroundMode( QWidget::PaletteBackground );
-	vendorTag->setFontPropagation( QWidget::NoChildren );
-	vendorTag->setPalettePropagation( QWidget::NoChildren );
-	vendorTag->setText(i18n( "vendor tag") );
-	vendorTag->setAlignment( 289 );
-	vendorTag->setMargin( -1 );
-
-	vendorline = new QLineEdit( widget1c, "vendorline" );
-	vendorline->setGeometry( 180, 220, 280, 30 );
-	vendorline->setMinimumSize( 0, 0 );
-	vendorline->setMaximumSize( 32767, 32767 );
-	vendorline->setFocusPolicy( QWidget::StrongFocus );
-	vendorline->setBackgroundMode( QWidget::PaletteBase );
-	vendorline->setFontPropagation( QWidget::NoChildren );
-	vendorline->setPalettePropagation( QWidget::NoChildren );
-	vendorline->setText( "" );
-	vendorline->setMaxLength( 32767 );
-	vendorline->setEchoMode( QLineEdit::Normal );
-	vendorline->setFrame( TRUE );
-							
-	logMessage = new QLabel( widget1c, "logMessage" );
-	logMessage->setGeometry( 40, 290, 140, 30 );
-	logMessage->setMinimumSize( 0, 0 );
-	logMessage->setMaximumSize( 32767, 32767 );
-	logMessage->setFocusPolicy( QWidget::NoFocus );
-	logMessage->setBackgroundMode( QWidget::PaletteBackground );
-	logMessage->setFontPropagation( QWidget::NoChildren );
-	logMessage->setPalettePropagation( QWidget::NoChildren );
-	logMessage->setText(i18n( "log message") );
-	logMessage->setAlignment( 289 );
-	logMessage->setMargin( -1 );
-	
-	messageline = new QLineEdit( widget1c, "messageline" );
-	messageline->setGeometry( 180, 290, 280, 30 );
-	messageline->setMinimumSize( 0, 0 );
-	messageline->setMaximumSize( 32767, 32767 );
-	messageline->setFocusPolicy( QWidget::StrongFocus );
-	messageline->setBackgroundMode( QWidget::PaletteBase );
-	messageline->setFontPropagation( QWidget::NoChildren );
-	messageline->setPalettePropagation( QWidget::NoChildren );
-	messageline->setText( "" );
-	messageline->setMaxLength( 32767 );
-	messageline->setEchoMode( QLineEdit::Normal );
-	messageline->setFrame( TRUE );
-	
-	releaseTag = new QLabel( widget1c, "releaseTag" );
-	releaseTag->setGeometry( 40, 360, 140, 30 );
-	releaseTag->setMinimumSize( 0, 0 );
-	releaseTag->setMaximumSize( 32767, 32767 );
-	releaseTag->setFocusPolicy( QWidget::NoFocus );
-	releaseTag->setBackgroundMode( QWidget::PaletteBackground );
-	releaseTag->setFontPropagation( QWidget::NoChildren );
-	releaseTag->setPalettePropagation( QWidget::NoChildren );
-	releaseTag->setText(i18n( "release tag") );
-	releaseTag->setAlignment( 289 );
-	releaseTag->setMargin( -1 );
-
-	releaseline = new QLineEdit( widget1c, "releaseline" );
-	releaseline->setGeometry( 180, 360, 280, 30 );
-	releaseline->setMinimumSize( 0, 0 );
-	releaseline->setMaximumSize( 32767, 32767 );
-	releaseline->setFocusPolicy( QWidget::StrongFocus );
-	releaseline->setBackgroundMode( QWidget::PaletteBase );
-	releaseline->setFontPropagation( QWidget::NoChildren );
-	releaseline->setPalettePropagation( QWidget::NoChildren );
-	releaseline->setText( "" );
-	releaseline->setMaxLength( 32767 );
-	releaseline->setEchoMode( QLineEdit::Normal );
-	releaseline->setFrame( TRUE );			
-		
-	qtarch_ButtonGroup_1->insert( locationbutton );
-  					
-	connect(locationbutton,SIGNAL(clicked()),SLOT(slotLocationButtonClicked()));
-	connect(vsBox,SIGNAL(activated(int)),SLOT(slotVSBoxChanged(int)));
-	connect(vendorline,SIGNAL(textChanged(const char*)),SLOT(slotVendorEntry()));
-	
-	projectlocationline->setEnabled(false);
-	
-	KQuickHelp::add(messageline,
+  projectlocationline = new QLineEdit( widget1c, "projectlocationline" );
+  projectlocationline->setGeometry( 180, 150, 280, 30 );
+  projectlocationline->setMinimumSize( 0, 0 );
+  projectlocationline->setMaximumSize( 32767, 32767 );
+  projectlocationline->setFocusPolicy( QWidget::StrongFocus );
+  projectlocationline->setBackgroundMode( QWidget::PaletteBase );
+  projectlocationline->setFontPropagation( QWidget::NoChildren );
+  projectlocationline->setPalettePropagation( QWidget::NoChildren );
+  projectlocationline->setText( "" );
+  projectlocationline->setMaxLength( 32767 );
+  projectlocationline->setEchoMode( QLineEdit::Normal );
+  projectlocationline->setFrame( TRUE );
+  
+  vendorTag = new QLabel( widget1c, "vendorTag" );
+  vendorTag->setGeometry( 40, 220, 140, 30 );
+  vendorTag->setMinimumSize( 0, 0 );
+  vendorTag->setMaximumSize( 32767, 32767 );
+  vendorTag->setFocusPolicy( QWidget::NoFocus );
+  vendorTag->setBackgroundMode( QWidget::PaletteBackground );
+  vendorTag->setFontPropagation( QWidget::NoChildren );
+  vendorTag->setPalettePropagation( QWidget::NoChildren );
+  vendorTag->setText(i18n( "vendor tag") );
+  vendorTag->setAlignment( 289 );
+  vendorTag->setMargin( -1 );
+  
+  vendorline = new QLineEdit( widget1c, "vendorline" );
+  vendorline->setGeometry( 180, 220, 280, 30 );
+  vendorline->setMinimumSize( 0, 0 );
+  vendorline->setMaximumSize( 32767, 32767 );
+  vendorline->setFocusPolicy( QWidget::StrongFocus );
+  vendorline->setBackgroundMode( QWidget::PaletteBase );
+  vendorline->setFontPropagation( QWidget::NoChildren );
+  vendorline->setPalettePropagation( QWidget::NoChildren );
+  vendorline->setText( "" );
+  vendorline->setMaxLength( 32767 );
+  vendorline->setEchoMode( QLineEdit::Normal );
+  vendorline->setFrame( TRUE );
+  
+  logMessage = new QLabel( widget1c, "logMessage" );
+  logMessage->setGeometry( 40, 290, 140, 30 );
+  logMessage->setMinimumSize( 0, 0 );
+  logMessage->setMaximumSize( 32767, 32767 );
+  logMessage->setFocusPolicy( QWidget::NoFocus );
+  logMessage->setBackgroundMode( QWidget::PaletteBackground );
+  logMessage->setFontPropagation( QWidget::NoChildren );
+  logMessage->setPalettePropagation( QWidget::NoChildren );
+  logMessage->setText(i18n( "log message") );
+  logMessage->setAlignment( 289 );
+  logMessage->setMargin( -1 );
+  
+  messageline = new QLineEdit( widget1c, "messageline" );
+  messageline->setGeometry( 180, 290, 280, 30 );
+  messageline->setMinimumSize( 0, 0 );
+  messageline->setMaximumSize( 32767, 32767 );
+  messageline->setFocusPolicy( QWidget::StrongFocus );
+  messageline->setBackgroundMode( QWidget::PaletteBase );
+  messageline->setFontPropagation( QWidget::NoChildren );
+  messageline->setPalettePropagation( QWidget::NoChildren );
+  messageline->setText( "" );
+  messageline->setMaxLength( 32767 );
+  messageline->setEchoMode( QLineEdit::Normal );
+  messageline->setFrame( TRUE );
+  
+  releaseTag = new QLabel( widget1c, "releaseTag" );
+  releaseTag->setGeometry( 40, 360, 140, 30 );
+  releaseTag->setMinimumSize( 0, 0 );
+  releaseTag->setMaximumSize( 32767, 32767 );
+  releaseTag->setFocusPolicy( QWidget::NoFocus );
+  releaseTag->setBackgroundMode( QWidget::PaletteBackground );
+  releaseTag->setFontPropagation( QWidget::NoChildren );
+  releaseTag->setPalettePropagation( QWidget::NoChildren );
+  releaseTag->setText(i18n( "release tag") );
+  releaseTag->setAlignment( 289 );
+  releaseTag->setMargin( -1 );
+  
+  releaseline = new QLineEdit( widget1c, "releaseline" );
+  releaseline->setGeometry( 180, 360, 280, 30 );
+  releaseline->setMinimumSize( 0, 0 );
+  releaseline->setMaximumSize( 32767, 32767 );
+  releaseline->setFocusPolicy( QWidget::StrongFocus );
+  releaseline->setBackgroundMode( QWidget::PaletteBase );
+  releaseline->setFontPropagation( QWidget::NoChildren );
+  releaseline->setPalettePropagation( QWidget::NoChildren );
+  releaseline->setText( "" );
+  releaseline->setMaxLength( 32767 );
+  releaseline->setEchoMode( QLineEdit::Normal );
+  releaseline->setFrame( TRUE );			
+  
+  qtarch_ButtonGroup_1->insert( locationbutton );
+  
+  connect(locationbutton,SIGNAL(clicked()),SLOT(slotLocationButtonClicked()));
+  connect(vsBox,SIGNAL(activated(int)),SLOT(slotVSBoxChanged(int)));
+  connect(vendorline,SIGNAL(textChanged(const char*)),SLOT(slotVendorEntry()));
+  
+  projectlocationline->setEnabled(false);
+  
+  KQuickHelp::add(messageline,
 		  KQuickHelp::add(logMessage,
 				  i18n("Here you can enter the log message for the\n"
-				  		 "version control system.")));
-				
-	KQuickHelp::add(vendorTag,
+				       "version control system.")));
+  
+  KQuickHelp::add(vendorTag,
 		  KQuickHelp::add(vendorline,
 				  i18n("Here you can choose the vendor tag, which your project\n"
-				  		 "has in the version control system.")));
-				
-	KQuickHelp::add(releaseTag,
+				       "has in the version control system.")));
+  
+  KQuickHelp::add(releaseTag,
 		  KQuickHelp::add(releaseline,
 				  i18n("Here you can choose a special pointer for the first\n"
-				  		 "entry in the version control system.")));
-				
-	KQuickHelp::add(vsBox,
+				       "entry in the version control system.")));
+  
+  KQuickHelp::add(vsBox,
 		  KQuickHelp::add(vsSupport,
 				  i18n("Here you can choose the version control system,\n"
-				  		 "which you want to use.")));
-				
-	KQuickHelp::add(vsInstall,
+				       "which you want to use.")));
+  
+  KQuickHelp::add(vsInstall,
 		  KQuickHelp::add(vsLocation,
-		  		KQuickHelp::add(locationbutton,
+				  KQuickHelp::add(locationbutton,
 				  		i18n("Here you can choose where your vcsroot loction should be.\n"
-				  				 "At the moment we only support local vs. And be sure, you\n"
-				  				 "have read and write access in the location."))));
-				
-	KQuickHelp::add(projectVSLocation,
+						     "At the moment we only support local vs. And be sure, you\n"
+						     "have read and write access in the location."))));
+  
+  KQuickHelp::add(projectVSLocation,
 		  KQuickHelp::add(projectlocationline,
 				  i18n("Here you can see the repository of your project in the\n"
-				  		 "version control system. The repository is dependend on\n"
-				  		 "the directory of your project. You can not change the\n"
-				  		 "repository direct.")));
-				
-				
+				       "version control system. The repository is dependend on\n"
+				       "the directory of your project. You can not change the\n"
+				       "repository direct.")));
+  
+  
   /************************************************************/
   
   // create the forth page
@@ -808,7 +808,7 @@ void CKAppWizard::initPages(){
   hedit->setOverwriteMode( FALSE );
   
   QToolTip::add(hload,i18n("Press this button to select an\n"
-  													"existing header template file"));
+			   "existing header template file"));
   QToolTip::add(hnew,i18n("Clears the pre-set headertemplate"));
   QToolTip::add(hedit,i18n("Edit your headertemplate here"));
   
@@ -880,13 +880,13 @@ void CKAppWizard::initPages(){
   cppedit->setOverwriteMode( FALSE );
   
   QToolTip::add(cppload,i18n("Press this button to select an\n"
-  													"existing header template file"));
+			     "existing header template file"));
   QToolTip::add(cppnew,i18n("Clears the pre-set headertemplate"));
   QToolTip::add(cppedit,i18n("Edit your headertemplate here"));
 
   KQuickHelp::add(cppheader, i18n("Use a standard\n"
-				"headertemplate for your implementation files"));
-
+				  "headertemplate for your implementation files"));
+  
 
   connect(cppheader,SIGNAL(clicked()),SLOT(slotCppHeaderClicked()));   
   connect(cppload,SIGNAL(clicked()),SLOT(slotCppDialogClicked()));
@@ -1014,14 +1014,15 @@ void CKAppWizard::slotOkClicked() {
   direct.resize (direct.length() - (direct.length() - direct.findRev('/') - 1));
   dir.setPath(direct);
 
-  KShellProcess p;
+ 
   if (!dir.exists()) {
+    KShellProcess p;
  		p.clearArguments();
 		p << "mkdirhier";
 		p << direct;
 		p.start(KProcess::Block,KProcess::AllOutput);	
   }
-
+  // Error if project directory already exists
   dir.setPath(directoryline->text());
   if (dir.exists()) {
     QMessageBox::information ( this, directoryline->text() + (QString) i18n(" already exists!"), i18n("It isn't possible to generate a new project into an existing directory."), QMessageBox::Ok);
@@ -1033,26 +1034,7 @@ void CKAppWizard::slotOkClicked() {
   }
 }
 
-void CKAppWizard::okPermited() {
-  cancelButton->setFixedWidth(75);
-  cancelButton->setEnabled(false);
-  defaultButton->setEnabled(false);
-  setCancelButton(i18n("Exit"));
-  errOutput->clear();
-  output->clear();
-  QDir kdevelop;
-  kdevelop.setPath(QDir::homeDirPath() + "/.kde/share/apps");
-  if (!kdevelop.exists()) {
-    kdevelop.mkdir (QDir::homeDirPath() + "/.kde/share/apps");
-  }
-  kdevelop.setPath(QDir::homeDirPath());
-  kdevelop.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop");
-  cppedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/cpp");
-  cppedit->toggleModified(true);
-  cppedit->doSave();
-  hedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/header");
-  hedit->toggleModified(true);
-  hedit->doSave();
+void CKAppWizard::generateEntries() {
   ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/entries");
   entries << "APPLICATION\n";
   if (kdenormalitem->isSelected()) {
@@ -1078,7 +1060,7 @@ void CKAppWizard::okPermited() {
   }
   else if (citem->isSelected()) {
     entries << "c\n";
-    }
+  }
   /*  else if (gtknormalitem->isSelected()) {
     entries << "gtknormal\n";
     }
@@ -1092,20 +1074,20 @@ void CKAppWizard::okPermited() {
   entries << nameline->text() << "\n";
   entries << "DIRECTORY\n";
 
-	QString direct = directoryline->text();
+  QString direct = directoryline->text();
   if (direct.right(1) == "/") {
-		direct = direct.left(direct.length() - 1);
+    direct = direct.left(direct.length() - 1);
+		/* }
+		   int pos;
+		   pos = direct.findRev ("/");
+		   direct = direct.left (pos);
+		   if(direct.right(1) == "/"){
+		   entries << direct << "\n";*/
   }
-	int pos;
-	pos = direct.findRev ("/");
-	direct = direct.left (pos);
-  if(direct.right(1) == "/"){
-    entries << direct << "\n";
-  }
-  else{
-    entries << direct << "/\n";
-  }
-  
+  //		   else{
+  //		   entries << direct << "/\n";
+  //		   }
+  entries << direct << "\n";
   
   entries << "AUTHOR\n";
   entries << authorline->text() << "\n";
@@ -1164,59 +1146,86 @@ void CKAppWizard::okPermited() {
   entries << QString(messageline->text()) + "\n";
 
   entries.close();
+}
+
+void CKAppWizard::okPermited() {
+  cancelButton->setFixedWidth(75);
+  cancelButton->setEnabled(false);
+  defaultButton->setEnabled(false);
+  setCancelButton(i18n("Exit"));
+  errOutput->clear();
+  output->clear();
+  QDir kdevelop;
+  kdevelop.setPath(QDir::homeDirPath() + "/.kde/share/apps");
+  if (!kdevelop.exists()) {
+    kdevelop.mkdir (QDir::homeDirPath() + "/.kde/share/apps");
+  } 
+  kdevelop.setPath(QDir::homeDirPath());
+  kdevelop.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop");
+  cppedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/cpp");
+  cppedit->toggleModified(true);
+  cppedit->doSave();
+  hedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/header");
+  hedit->toggleModified(true);
+  hedit->doSave();
+
+  generateEntries();
 
   namelow = nameline->text();
   namelow = namelow.lower();
+
+  QString prjdir = directoryline->text();
   QDir dir;
-  dir.mkdir(directoryline->text() + QString("/"));
+
+  dir.mkdir(prjdir);
   if (!dir.exists())
-     dir.setCurrent(directoryline->text() + QString("/"));
+     dir.setCurrent(prjdir);
+
   KShellProcess p;
   QString copysrc;
   QString copydes;
   QString vcsInit;
   if (vsBox->currentItem() == 1) {
-  	copydes = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
-  	dir.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
-  	dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
-  	vcsInit = (QString) "cvs -d " + vsLocation->text() + (QString) " init";
-  	p.clearArguments();
-	  p << vcsInit;
-	  p.start(KProcess::Block,KProcess::AllOutput);
+    copydes = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
+    dir.mkdir(copydes);
+    dir.setCurrent(copydes);
+    
+    vcsInit = (QString) "cvs -d " + vsLocation->text() + (QString) " init";
+    p.clearArguments();
+    p << vcsInit;
+    p.start(KProcess::Block,KProcess::AllOutput);
+    
+  }
+  else {
+    copydes = prjdir;
+  }
+  copydes += "/template.tar.gz";
 
- 	}
- 	else {
- 	  copydes = directoryline->text() + QString ("/");
- 	}
- 	
- 	p.clearArguments();
+  p.clearArguments();
+bool hasTemplate = true;
   if (kdeminiitem->isSelected()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
-    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
-    p.start(KProcess::Block,KProcess::AllOutput);
   }  
   else if (kdenormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
-    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
-    p.start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (qtnormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt.tar.gz";
-    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
-    p.start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (cppitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
-    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
-    p.start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (citem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/c.tar.gz";
-    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
-    p.start(KProcess::Block,KProcess::AllOutput);
+  }
+  else {
+    hasTemplate = false;
   }
 
-  dir.setCurrent("/");
+  if (hasTemplate) {
+    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
+    p.start (KProcess::Block,KProcess::AllOutput);
+  }
 
   q->clearArguments();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
@@ -1224,7 +1233,7 @@ void CKAppWizard::okPermited() {
 	  this,SLOT(slotPerlOut(KProcess *, char *, int)));
   connect(q,SIGNAL(receivedStderr(KProcess *, char *, int)),
 	  this,SLOT(slotPerlErr(KProcess *, char *, int)));
-  QString path = kapp->kde_datadir()+"/kdevelop/tools/";
+  QString path = KApplication::kde_datadir()+"/kdevelop/tools/";
   *q << "perl" << path + "processes.pl";
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
   okButton->setEnabled(false);
@@ -1260,18 +1269,18 @@ void CKAppWizard::okPermited() {
   generatesource->setEnabled(false);
   apphelp->setEnabled(false);
   messageline->setEnabled(false);
- 	logMessage->setEnabled(false);
- 	vendorline->setEnabled(false);
- 	vendorTag->setEnabled(false);
- 	releaseline->setEnabled(false);
- 	releaseTag->setEnabled(false);
- 	vsInstall->setEnabled(false);
- 	projectVSLocation->setEnabled(false);
- 	vsLocation->setEnabled(false);
- 	locationbutton->setEnabled(false);
- 	qtarch_ButtonGroup_1->setEnabled(false);
-	vsBox->setEnabled(false);
-	vsSupport->setEnabled(false);
+  logMessage->setEnabled(false);
+  vendorline->setEnabled(false);
+  vendorTag->setEnabled(false);
+  releaseline->setEnabled(false);
+  releaseTag->setEnabled(false);
+  vsInstall->setEnabled(false);
+  projectVSLocation->setEnabled(false);
+  vsLocation->setEnabled(false);
+  locationbutton->setEnabled(false);
+  qtarch_ButtonGroup_1->setEnabled(false);
+  vsBox->setEnabled(false);
+  vsSupport->setEnabled(false);
   name->setEnabled(false);
   email->setEnabled(false);
   authorname->setEnabled(false);
@@ -1406,8 +1415,8 @@ void CKAppWizard::slotApplicationClicked() {
       okButton->setEnabled(true);
     }
     apphelp->setText (i18n("Create a KDE-application with session-management, "
-    												"menubar, toolbar, statusbar and support for a "
-    												"document-view codeframe model."));
+			   "menubar, toolbar, statusbar and support for a "
+			   "document-view codeframe model."));
   }
   else if (kdeminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
@@ -1530,16 +1539,16 @@ void CKAppWizard::slotApplicationClicked() {
       okButton->setEnabled(true);
     }
     apphelp->setText (i18n("Creates an empty project to work with existing development projects. "
-    											"KDevelop will not take care of any Makefiles as those are supposed to "
-    											"be included with your old project."));
+			   "KDevelop will not take care of any Makefiles as those are supposed to "
+			   "be included with your old project."));
   }
   /*  else if (gtknormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
       if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
       }
       apphelp->setText (i18n("With this framework you can\n"
-			   "generate a program with toolsbar\n"
-			   "and mainmenus"));
+      "generate a program with toolsbar\n"
+      "and mainmenus"));
       }
       else if (gtkminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
       if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
@@ -1636,7 +1645,7 @@ void CKAppWizard::slotDefaultClicked(int page) {
 
 // connection of nameline
 void CKAppWizard::slotProjectnameEntry() {
-	int position = nameline->cursorPosition();
+  int position = nameline->cursorPosition();
   nametext = nameline->text();
   nametext = nametext.stripWhiteSpace();
   int length = nametext.length();

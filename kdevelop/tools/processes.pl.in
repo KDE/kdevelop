@@ -17,10 +17,10 @@ printflush (STDOUT,"Starting with installation\n");
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
 open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") 
   || die "can not open file \"entries\" in your local app-data-dir:\n  $!";
-while ( defined ($name = <PROCESSLIST> )) {
+while (defined($name = <PROCESSLIST>)) {
   chomp ($name);
-  $process = <PROCESSLIST>;
-  chomp ($process);
+  chomp ($process = <PROCESSLIST>);
+
   $processes{$name} = $process;
 }
 close (PROCESSLIST);
@@ -32,7 +32,7 @@ $nameBig =~ tr/a-z/A-Z/;
 $name =  $processes{NAME};
 
 if ($processes{VSSUPPORT} eq "none") {
-	$overDirectory = $processes{DIRECTORY} . "/" . $processes{PRJVSLOCATION} . "/";
+	$overDirectory = $processes{DIRECTORY} . "/";
 	$underDirectory = $overDirectory . $nameLittle;
 }
 else {
@@ -41,9 +41,10 @@ else {
 }
 	
 	
-#create the projectdirectory 
+# change to work/project directory 
 printflush (STDOUT, "change directory...\n");
-chdir ($overDirectory);
+chdir ($overDirectory) || die "Couldn't change to directory $overDirectory: $!";
+
 $date = `date`;
 chomp($date);
 @time = localtime();
@@ -54,56 +55,80 @@ setupDefaultChangings();
 printflush (STDOUT,"change directory...\n");
 chdir ($overDirectory);
 
-if ($processes{APPLICATION} eq "kdenormal") {
-  changeNormalApp();  
+if ($processes{APPLICATION} eq "customproj") {
+  changeCustomApp();  
 }
-elsif ($processes{APPLICATION} eq "kdemini") {
-  changeMiniApp();
-}
-elsif ($processes{APPLICATION} eq "cpp") {
-  changeTerminalCPPApp();
-}
-elsif ($processes{APPLICATION} eq "c") {
-  changeTerminalCApp();
-}
-elsif ($processes{APPLICATION} eq "qtnormal") {
-  changeQtApp();
-}
-elsif ($processes{APPLICATION} eq "customproj") {
-  changeCustomApp();
+else {
+  unpackFiles ("template.tar");	
+  if ($processes{APPLICATION} eq "kdemini") {
+    changeMiniApp();
+  }
+  elsif ($processes{APPLICATION} eq "cpp") {
+    changeTerminalCPPApp();
+  }
+  elsif ($processes{APPLICATION} eq "c") {
+    changeTerminalCApp();
+  }
+  elsif ($processes{APPLICATION} eq "qtnormal") {
+    changeQtApp();
+  }
+  elsif ($processes{APPLICATION} eq "kdenormal") {
+    changeNormalApp();
+  }
 }
 
 if ($processes{VSSUPPORT} eq "cvs") {
-	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/");
-  $copysrc = $ENV{KDEDIR} . "/share/apps/kdevelop/templates/cvsignore_template";
-	$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/.cvsignore";
-  system ("cp $copysrc $copydes");
-
-  chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/");
-  $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
-  system ("cp $copysrc $copydes");
-
- 	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/");
-	$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/.cvsignore";
-	system ("cp $copysrc $copydes");
+#  chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/");
+#  $copysrc = $ENV{KDEDIR} . "/share/apps/kdevelop/templates/cvsignore_template";
+#  $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/.cvsignore";
+#  system ("cp $copysrc $copydes");
+  
+#  chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/");
+#  $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
+#  system ("cp $copysrc $copydes");
+  
+#  chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/");
+#  $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/.cvsignore";
+#  system ("cp $copysrc $copydes");
+ 
+  $copysrc = $templatedir . "/cvsignore_template";
+  copy ("$copysrc", "$copydes");
+  
+  $copydes = $underDirectory . "/templates/.cvsignore";
+  copy ("$copysrc", "$copydes");
+  
+  $copydes = $underDirectory . "/.cvsignore";
+  copy ("$copysrc", "$copydes");
 
   if ($processes{APPLICATION} ne "customproj") {
-   	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/");
-		$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/.cvsignore";
-		system ("cp $copysrc $copydes");
+#    chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/");
+#    $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/.cvsignore";
+#    system ("cp $copysrc $copydes");
+    
+#    chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/en/");
+#    $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/en/.cvsignore";
+#    system ("cp $copysrc $copydes");
+ 
+    $copydes = $underDirectory . "/docs/.cvsignore";
+    copy ("$copysrc", "$copydes");
+    
+    $copydes = $underDirectory . "/docs/en/.cvsignore";
+    copy ("$copysrc", "$copydes");
 
-   	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/en/");
-   	$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/en/.cvsignore";
-   	system ("cp $copysrc $copydes");
-  			
-  	if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal") {	
-			chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/");				
-			$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/.cvsignore";
-			system ("cp $copysrc $copydes");
-				
-    	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/po/");
-			$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/po/.cvsignore";
-			system ("cp $copysrc $copydes");
+    if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal") {	
+#      chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/");				
+#      $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/.cvsignore";
+#      system ("cp $copysrc $copydes");
+ 
+      $copydes = $underDirectory . "/api/.cvsignore";
+      copy ("$copysrc", "$copydes");
+
+#      chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/po/");
+#      $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/po/.cvsignore";
+#      system ("cp $copysrc $copydes");
+#    }
+      $copydes = $underDirectory . "/po/.cvsignore";
+      copy ("$copysrc", "$copydes");
     }
   }
 }
@@ -182,7 +207,7 @@ sub unpackFiles {
 
     my ( $tarfile ) = @_;
 
-    chdir ($overDirectory);
+#    chdir ($overDirectory);
     printflush (STDOUT, "unzip file...\n");
     system ("gunzip $tarfile.gz");
     printflush (STDOUT, "untar file...\n");
@@ -227,8 +252,9 @@ sub condCopyGNUFiles {
     	copy ("INSTALL_template",   "$overDirectory/INSTALL"  );
     	copy ("README_template",    "$overDirectory/README"   );
     	copy ("TODO_template",      "$overDirectory/TODO"     );
-        chdir($overDirectory);
-        # replaced AUTHOR and EMAIL
+
+	# replace AUTHOR and EMAIL 
+       chdir($overDirectory);
         replaceValuesInFile(\%changings, "AUTHORS");
     }
 }
@@ -400,8 +426,8 @@ sub processHeaderTemplate {
 
 sub changeNormalApp {
 
-    unpackFiles("normal.tar");
-    
+#    unpackFiles("normal.tar");
+#    
     #renamed the directory
     printflush (STDOUT, "change files...\n");
     chdir ($overDirectory);
@@ -475,8 +501,8 @@ sub changeNormalApp {
 
 sub changeMiniApp {
 
-    unpackFiles("mini.tar");
-    
+#   unpackFiles("mini.tar");
+#    
     #renamed the directory
     printflush (STDOUT, "change files...\n");
     chdir ($overDirectory);
@@ -535,8 +561,8 @@ sub changeMiniApp {
 
 sub changeTerminalCPPApp {
 
-    unpackFiles("cpp.tar");
-    
+#    unpackFiles("cpp.tar");
+#    
     #renamed the directory
     printflush (STDOUT, "change files...\n");
     chdir ($overDirectory);
@@ -574,8 +600,8 @@ sub changeTerminalCPPApp {
 
 sub changeTerminalCApp {
 
-    unpackFiles("c.tar");
-
+#    unpackFiles("c.tar");
+#
     #renamed the directory
     printflush (STDOUT, "change files...\n");
     chdir ($overDirectory);
@@ -612,8 +638,8 @@ sub changeTerminalCApp {
 
 sub changeQtApp {
 
-    unpackFiles("qt.tar");
-    
+#    unpackFiles("qt.tar");
+#    
     #renamed the directory
     printflush (STDOUT, "change files...\n");
     chdir ($overDirectory);
