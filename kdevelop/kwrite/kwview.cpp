@@ -1241,10 +1241,15 @@ void KWriteView::mousePressEvent(QMouseEvent *e) {
     placeCursor(e->x(),e->y(),0);
     kWrite->paste();
   }
-  if (kWrite->popup && e->button() == RightButton) {
-    kWrite->popup->popup(mapToGlobal(e->pos()));
-  }
-  kWrite->mousePressEvent(e);
+//  if (kWrite->popup && e->button() == RightButton) {
+////    // kWrite->popup->popup(mapToGlobal(e->pos()));
+////    kWrite->popup->exec(mapToGlobal(QPoint(e->x() + iconBorderWidth, e->y())));
+//		kWrite->popup->exec();
+//  }
+
+	// Call CEditWidget::mousePressEvent to handle the RightButton case
+	QMouseEvent ee(Event_MouseButtonPress, mapToParent(e->pos()), e->button(), e->state());
+  kWrite->mousePressEvent(&ee);
 }
 
 void KWriteView::mouseDoubleClickEvent(QMouseEvent *e) {
@@ -1421,7 +1426,7 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char *name)
   searchFlags = 0;
   replacePrompt = 0L;
   kfm = 0L;
-  popup = 0L;
+//  popup = 0L;
 //  bookmarks.setAutoDelete(true);
 
   kWriteView->setFocus();
@@ -1429,7 +1434,7 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char *name)
 
 KWrite::~KWrite() {
   delete kWriteView;
-  delete popup; //right mouse button popup
+//  delete popup; //right mouse button popup
 }
 
 
@@ -2322,8 +2327,6 @@ void KWrite::exposeFound(PointStruc &cursor, int slen, int flags, bool replace) 
 
 	if(xPos < 0) xPos = 0;
 
-	debug("KWrite::exposefound: xPos: %d, yPos: %d\n", xPos, yPos);
-
   kWriteView->updateView(flags | ufPos,xPos,yPos);
   kWriteDoc->updateViews(kWriteView);
 }
@@ -2410,11 +2413,17 @@ void KWrite::replaceSlot() {
   delete dlg;
 }            */
 
+/*
 void KWrite::installRBPopup(QPopupMenu *p) {
+
+	debug("KWrite::installRBPopup");
+
   popup = p;
 }
+*/
 
 void KWrite::installBMPopup(QPopupMenu *p/*KWBookPopup *p*/) {
+
 //  bookPopup = p;
   connect(p,SIGNAL(aboutToShow()),SLOT(updateBMPopup()));
   connect(p,SIGNAL(activated(int)),SLOT(gotoBookmark(int)));
