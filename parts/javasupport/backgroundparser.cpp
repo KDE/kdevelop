@@ -49,6 +49,12 @@ void BackgroundParser::run()
     parser.setFilename( fn );
     parser.setProblemReporter( m_reporter );
 
+    // make an ast factory
+    antlr::ASTFactory ast_factory;
+    // initialize and put it in the parser...
+    parser.initializeASTFactory (ast_factory);
+    parser.setASTFactory (&ast_factory);
+
     try{
         lexer.resetErrors();
         parser.resetErrors();
