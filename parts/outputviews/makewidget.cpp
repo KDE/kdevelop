@@ -633,11 +633,11 @@ void MakeWidget::insertLine2(const QString &line, Type type)
 
     QString icon;
     if (type == Error)
-        icon = "<img src=\"error\"><nobr> </nobr>";
+        icon = "<img src=\"error\"></img><nobr> </nobr>";
     else if (type == Diagnostic)
-        icon = "<img src=\"warning\"><nobr> </nobr>";
+        icon = "<img src=\"warning\"></img><nobr> </nobr>";
     else
-        icon = "<img src=\"message\"><nobr> </nobr>";
+        icon = "<img src=\"message\"></img><nobr> </nobr>";
 
     QString color = getOutputColor( type );
     QString eLine = QStyleSheet::escape( line );
